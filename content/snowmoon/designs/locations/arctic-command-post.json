@@ -1,0 +1,25 @@
+{
+  "kind": "location",
+  "name": "Deluin's Arctic command post",
+  "slug": "arctic-command-post",
+  "status": "starting point",
+  "setting": "arctic",
+  "about": "Where Deluin sits during the battle. The book never places him (adaptations/dog-dawn/brief.md, section 2); it says only what is listed below. Everything else, the room, its glass wall and the sentries beyond it, is invented for the dog-dawn adaptation, and contributors are welcome to replace it.",
+  "facts": [
+    {
+      "chapter": 29,
+      "idx": 114,
+      "quote": "We are being heavily surveilled",
+      "fact": "He is watched while he works."
+    },
+    {
+      "chapter": 30,
+      "idx": 29,
+      "quote": "if I can see it, the sentries might be able to as well",
+      "fact": "There are sentries who can see what his systems see."
+    }
+  ],
+  "descriptor": "a narrow Arctic command room walled in pale faceted crystalline panels, a single sleek console with a glowing screen and one chair, and across the back of the room a wall of frosted glass with a dim corridor beyond it",
+  "plate": "locations/arctic-command-post-plate",
+  "plate_prompt": "Establishing view of a narrow Arctic command room walled in pale faceted crystalline panels, a single sleek console with a glowing screen and one chair, and across the back of the room a wall of frosted glass with a dim corridor beyond it. Seen from just inside the doorway at night, lit only by the cold blue glow of the screen; a tall side window shows a black starry sky. No people."
+}

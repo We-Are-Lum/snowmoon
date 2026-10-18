@@ -1,0 +1,155 @@
+{
+  "about": "Fifteen Days pre-production: establishing plates for each place (owner's re-shoot notes, 2026-10-16). Text DRAFTED by the coding agent from the book (hall c4-b78–b82, corridor c4-b59, courtyard c14-b102–b105, lobby c15-b51) and the owner's notes. The holograms are this edition's invention (broadcast imagined).",
+  "out": "images-out/preprod/places",
+  "ledger": "images-out/preprod/ledger.json",
+  "cap_usd": 5.0,
+  "style": "Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands. Shop fronts and walls carry no lettered signs at all: at most a plain glowing panel with one single large simple pictogram (a cup, a leaf, a bowl) and nothing else. Screens show only abstract shapes. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character.",
+  "jobs": [
+    {
+      "id": "est-hall-a",
+      "prompt": "Extreme wide establishing shot of a vast dark game hall hollowed inside a mountain, seen from high in the back of the stands: steep tiers of seats on every side packed with over a thousand spectators. The audience is varied: people of many ages, builds, heights and skin tones, in everyday clothes of many muted colours, some leaning forward, some talking, a few standing; small and far away, none of them in focus. In the middle of the open floor, glowing three-dimensional holograms of the game play out in the air above the floor: thin black pillar towers topped by glowing cube clusters, rings of coloured light on the floor, streams of small lit gliders. Far apart on opposite sides of the floor, at the very edges, two small dark player pods, each with one tiny seated silhouette at a glowing console, facing outward toward the wall with their backs to the holograms, cut off from each other. Thin beams of light cross the dark air; a lit path on the floor leads to each pod from an elevator door in the wall.",
+      "width": 1536,
+      "height": 864,
+      "seed": 9701
+    },
+    {
+      "id": "est-hall-b",
+      "prompt": "Extreme wide establishing shot of a vast dark game hall hollowed inside a mountain, seen from high in the back of the stands: steep tiers of seats on every side packed with over a thousand spectators. The audience is varied: people of many ages, builds, heights and skin tones, in everyday clothes of many muted colours, some leaning forward, some talking, a few standing; small and far away, none of them in focus. In the middle of the open floor, glowing three-dimensional holograms of the game play out in the air above the floor: thin black pillar towers topped by glowing cube clusters, rings of coloured light on the floor, streams of small lit gliders. Far apart on opposite sides of the floor, at the very edges, two small dark player pods, each with one tiny seated silhouette at a glowing console, facing outward toward the wall with their backs to the holograms, cut off from each other. Thin beams of light cross the dark air; a lit path on the floor leads to each pod from an elevator door in the wall.",
+      "width": 1536,
+      "height": 864,
+      "seed": 9802
+    },
+    {
+      "id": "est-gallery-a",
+      "prompt": "Establishing shot along a high gallery at the top of a vast dark game hall inside a mountain: a long waist-high metal railing curving away, a narrow walkway behind it with the rock wall and a few doors; just below the railing the top rows of the stands, crowded with seated spectators, the backs of their heads close; far below, the open floor where glowing three-dimensional holograms of the game play out in the air, small lit gliders and pillar towers with glowing tops. The audience is varied: people of many ages, builds, heights and skin tones, in everyday clothes of many muted colours, some leaning forward, some talking, a few standing; small and far away, none of them in focus. Nobody stands at the railing.",
+      "width": 1536,
+      "height": 864,
+      "seed": 9703
+    },
+    {
+      "id": "est-gallery-b",
+      "prompt": "Establishing shot along a high gallery at the top of a vast dark game hall inside a mountain: a long waist-high metal railing curving away, a narrow walkway behind it with the rock wall and a few doors; just below the railing the top rows of the stands, crowded with seated spectators, the backs of their heads close; far below, the open floor where glowing three-dimensional holograms of the game play out in the air, small lit gliders and pillar towers with glowing tops. The audience is varied: people of many ages, builds, heights and skin tones, in everyday clothes of many muted colours, some leaning forward, some talking, a few standing; small and far away, none of them in focus. Nobody stands at the railing.",
+      "width": 1536,
+      "height": 864,
+      "seed": 9804
+    },
+    {
+      "id": "est-corridor-a",
+      "prompt": "Establishing shot down a corridor deep inside a mountain: about two metres wide and three metres tall, straight walls rising into a round-topped semicircular vault, the stone polished clean and pale like the inside of any well-kept building, no windows at all; on one wall a row of sleek metal elevator doors with small round lights; cool indirect light from a strip along the base of the vault; the corridor stretching away to a bend. A few small distant people in plain dark clothes walk far down the corridor.",
+      "width": 1536,
+      "height": 864,
+      "seed": 9705
+    },
+    {
+      "id": "est-corridor-b",
+      "prompt": "Establishing shot down a corridor deep inside a mountain: about two metres wide and three metres tall, straight walls rising into a round-topped semicircular vault, the stone polished clean and pale like the inside of any well-kept building, no windows at all; on one wall a row of sleek metal elevator doors with small round lights; cool indirect light from a strip along the base of the vault; the corridor stretching away to a bend. A few small distant people in plain dark clothes walk far down the corridor.",
+      "width": 1536,
+      "height": 864,
+      "seed": 9806
+    },
+    {
+      "id": "est-courtyard-a",
+      "prompt": "Wide establishing shot of a small open-air courtyard cafe at night between low, dense shop buildings with plain walls: a shade tree strung with little warm lights, small cafe tables set close together, most of them taken by people eating and talking in plain everyday clothes; in the middle ground one larger empty rectangular table for four with four chairs, and just beyond it, a little to the right, an empty small round table for one; shop windows glowing softly pink and cyan with no signs above them; a little humanoid serving robot gliding between tables; the street gate in the far corner; above the rooftops, enormous megastructures and towering stone mountain pyramids with lit windows.",
+      "width": 1536,
+      "height": 864,
+      "seed": 9707
+    },
+    {
+      "id": "est-courtyard-b",
+      "prompt": "Wide establishing shot of a small open-air courtyard cafe at night between low, dense shop buildings with plain walls: a shade tree strung with little warm lights, small cafe tables set close together, most of them taken by people eating and talking in plain everyday clothes; in the middle ground one larger empty rectangular table for four with four chairs, and just beyond it, a little to the right, an empty small round table for one; shop windows glowing softly pink and cyan with no signs above them; a little humanoid serving robot gliding between tables; the street gate in the far corner; above the rooftops, enormous megastructures and towering stone mountain pyramids with lit windows.",
+      "width": 1536,
+      "height": 864,
+      "seed": 9808
+    },
+    {
+      "id": "est-gate-a",
+      "prompt": "Establishing shot at dusk of the open street gate of a small courtyard cafe: a low wall and an open gate of dark metal bars, a lamp post just switching on with a warm glow, the courtyard's string lights behind the wall, and beyond the gate a quiet street lined with plain building fronts with no signs, a few distant people walking home; on the horizon, enormous megastructures and a towering stone mountain pyramid with the first lit windows against a deep blue and violet dusk sky.",
+      "width": 1536,
+      "height": 864,
+      "seed": 9709
+    },
+    {
+      "id": "est-gate-b",
+      "prompt": "Establishing shot at dusk of the open street gate of a small courtyard cafe: a low wall and an open gate of dark metal bars, a lamp post just switching on with a warm glow, the courtyard's string lights behind the wall, and beyond the gate a quiet street lined with plain building fronts with no signs, a few distant people walking home; on the horizon, enormous megastructures and a towering stone mountain pyramid with the first lit windows against a deep blue and violet dusk sky.",
+      "width": 1536,
+      "height": 864,
+      "seed": 9810
+    },
+    {
+      "id": "est-lobby-a",
+      "prompt": "Wide establishing shot of a modest, cozy hotel lobby restaurant late at night, nearly empty: warm wooden tables and chairs, soft table lamps, a glowing strip of light along one wall, plain walls, a little humanoid serving robot standing by a counter, a sealed car-docking door at the edge of the lobby, and tall windows with far-off megastructures glowing against the night. One table by the window is set with a tea cup and a bowl; nobody at it.",
+      "width": 1536,
+      "height": 864,
+      "seed": 9711
+    },
+    {
+      "id": "est-lobby-b",
+      "prompt": "Wide establishing shot of a modest, cozy hotel lobby restaurant late at night, nearly empty: warm wooden tables and chairs, soft table lamps, a glowing strip of light along one wall, plain walls, a little humanoid serving robot standing by a counter, a sealed car-docking door at the edge of the lobby, and tall windows with far-off megastructures glowing against the night. One table by the window is set with a tea cup and a bowl; nobody at it.",
+      "width": 1536,
+      "height": 864,
+      "seed": 9812
+    },
+    {
+      "id": "est2-hall-a",
+      "prompt": "Extreme wide establishing shot of a vast dark game hall hollowed inside a mountain, seen from high in the back of the stands: steep tiers of seats on every side packed with over a thousand spectators. The audience is varied: people of many ages, builds, heights and skin tones, in everyday clothes of many muted colours, some leaning forward, some talking, a few standing; small and far away, none of them in focus. In the middle of the open floor, glowing three-dimensional holograms of the game play out in the air above the floor: thin black pillar towers topped by glowing cube clusters, rings of coloured light on the floor, streams of small lit gliders. Far apart on opposite sides of the floor, at the very edges, two small dark player pods, each with one tiny seated silhouette at a glowing console, facing outward toward the wall with their backs to the holograms, cut off from each other. Thin beams of light cross the dark air; a lit path on the floor leads to each pod from an elevator door in the wall. Entirely enclosed deep inside the mountain: a solid rock ceiling overhead, no sky, no windows, no openings to the outside anywhere. One single continuous picture, not split into panels. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Shop fronts and walls carry no lettered signs at all: at most a plain glowing panel with one single large simple pictogram (a cup, a leaf, a bowl) and nothing else. Screens show only abstract shapes. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character.",
+      "width": 1536,
+      "height": 864,
+      "seed": 10201,
+      "no_style": true
+    },
+    {
+      "id": "est2-hall-b",
+      "prompt": "Extreme wide establishing shot of a vast dark game hall hollowed inside a mountain, seen from high in the back of the stands: steep tiers of seats on every side packed with over a thousand spectators. The audience is varied: people of many ages, builds, heights and skin tones, in everyday clothes of many muted colours, some leaning forward, some talking, a few standing; small and far away, none of them in focus. In the middle of the open floor, glowing three-dimensional holograms of the game play out in the air above the floor: thin black pillar towers topped by glowing cube clusters, rings of coloured light on the floor, streams of small lit gliders. Far apart on opposite sides of the floor, at the very edges, two small dark player pods, each with one tiny seated silhouette at a glowing console, facing outward toward the wall with their backs to the holograms, cut off from each other. Thin beams of light cross the dark air; a lit path on the floor leads to each pod from an elevator door in the wall. Entirely enclosed deep inside the mountain: a solid rock ceiling overhead, no sky, no windows, no openings to the outside anywhere. One single continuous picture, not split into panels. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Shop fronts and walls carry no lettered signs at all: at most a plain glowing panel with one single large simple pictogram (a cup, a leaf, a bowl) and nothing else. Screens show only abstract shapes. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character.",
+      "width": 1536,
+      "height": 864,
+      "seed": 10302,
+      "no_style": true
+    },
+    {
+      "id": "est2-gallery-a",
+      "prompt": "Establishing shot along a high gallery at the top of a vast dark game hall inside a mountain: a long waist-high metal railing curving away, a narrow walkway behind it with the rock wall and a few doors; just below the railing the top rows of the stands, crowded with seated spectators, the backs of their heads close; far below, the open floor where glowing three-dimensional holograms of the game play out in the air, small lit gliders and pillar towers with glowing tops. The audience is varied: people of many ages, builds, heights and skin tones, in everyday clothes of many muted colours, some leaning forward, some talking, a few standing; small and far away, none of them in focus. Nobody stands at the railing. Entirely enclosed deep inside the mountain: a solid rock ceiling overhead, no sky, no windows, no openings to the outside anywhere. One single continuous picture, not split into panels. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Shop fronts and walls carry no lettered signs at all: at most a plain glowing panel with one single large simple pictogram (a cup, a leaf, a bowl) and nothing else. Screens show only abstract shapes. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character.",
+      "width": 1536,
+      "height": 864,
+      "seed": 10203,
+      "no_style": true
+    },
+    {
+      "id": "est2-gallery-b",
+      "prompt": "Establishing shot along a high gallery at the top of a vast dark game hall inside a mountain: a long waist-high metal railing curving away, a narrow walkway behind it with the rock wall and a few doors; just below the railing the top rows of the stands, crowded with seated spectators, the backs of their heads close; far below, the open floor where glowing three-dimensional holograms of the game play out in the air, small lit gliders and pillar towers with glowing tops. The audience is varied: people of many ages, builds, heights and skin tones, in everyday clothes of many muted colours, some leaning forward, some talking, a few standing; small and far away, none of them in focus. Nobody stands at the railing. Entirely enclosed deep inside the mountain: a solid rock ceiling overhead, no sky, no windows, no openings to the outside anywhere. One single continuous picture, not split into panels. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Shop fronts and walls carry no lettered signs at all: at most a plain glowing panel with one single large simple pictogram (a cup, a leaf, a bowl) and nothing else. Screens show only abstract shapes. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character.",
+      "width": 1536,
+      "height": 864,
+      "seed": 10304,
+      "no_style": true
+    },
+    {
+      "id": "est2-corridor-a",
+      "prompt": "Establishing shot down a corridor deep inside a mountain: about two metres wide and three metres tall, straight walls rising into a round-topped semicircular vault, the stone polished clean and pale like the inside of any well-kept building, no windows at all; on one wall a row of sleek metal elevator doors with small round lights; cool indirect light from a strip along the base of the vault; the corridor stretching away to a closed bend in the rock. A few small distant people in plain dark clothes walk far down the corridor. Entirely enclosed deep inside the mountain: a solid rock ceiling overhead, no sky, no windows, no openings to the outside anywhere. One single continuous picture, not split into panels. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Shop fronts and walls carry no lettered signs at all: at most a plain glowing panel with one single large simple pictogram (a cup, a leaf, a bowl) and nothing else. Screens show only abstract shapes. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character.",
+      "width": 1536,
+      "height": 864,
+      "seed": 10205,
+      "no_style": true
+    },
+    {
+      "id": "est2-corridor-b",
+      "prompt": "Establishing shot down a corridor deep inside a mountain: about two metres wide and three metres tall, straight walls rising into a round-topped semicircular vault, the stone polished clean and pale like the inside of any well-kept building, no windows at all; on one wall a row of sleek metal elevator doors with small round lights; cool indirect light from a strip along the base of the vault; the corridor stretching away to a closed bend in the rock. A few small distant people in plain dark clothes walk far down the corridor. Entirely enclosed deep inside the mountain: a solid rock ceiling overhead, no sky, no windows, no openings to the outside anywhere. One single continuous picture, not split into panels. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Shop fronts and walls carry no lettered signs at all: at most a plain glowing panel with one single large simple pictogram (a cup, a leaf, a bowl) and nothing else. Screens show only abstract shapes. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character.",
+      "width": 1536,
+      "height": 864,
+      "seed": 10306,
+      "no_style": true
+    },
+    {
+      "id": "est2-gate-a",
+      "prompt": "Establishing shot at dusk of the open street gate of a small courtyard cafe: a low wall and an open gate of dark metal bars, a lamp post just switching on with a warm glow, the courtyard's string lights behind the wall, and beyond the gate a quiet street lined with plain building fronts with no signs, a few distant people walking home; on the horizon, enormous megastructures and a towering stone mountain pyramid with the first lit windows against a deep blue and violet dusk sky. One single continuous picture, not split into panels or frames.",
+      "width": 1536,
+      "height": 864,
+      "seed": 10209
+    },
+    {
+      "id": "est2-gate-b",
+      "prompt": "Establishing shot at dusk of the open street gate of a small courtyard cafe: a low wall and an open gate of dark metal bars, a lamp post just switching on with a warm glow, the courtyard's string lights behind the wall, and beyond the gate a quiet street lined with plain building fronts with no signs, a few distant people walking home; on the horizon, enormous megastructures and a towering stone mountain pyramid with the first lit windows against a deep blue and violet dusk sky. One single continuous picture, not split into panels or frames.",
+      "width": 1536,
+      "height": 864,
+      "seed": 10310
+    }
+  ]
+}

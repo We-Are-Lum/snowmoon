@@ -1,0 +1,271 @@
+{
+  "about": "Style test, round two (owner, 2026-10-14): the owner's starred styles (techno-vistas, fork-night, new-screen-print) on four more frames. Frame subjects are model-drafted test prompts, labelled, never published; style prompts are round one's; no artist or studio is named. FLUX.2 [klein] with the character sheets as references, to lock the faces.",
+  "style": {
+    "prompt": "(each job carries its own style)"
+  },
+  "jobs": [
+    {
+      "id": "r2-techno-vistas-f4-corridor",
+      "style": {
+        "prompt": "Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers."
+      },
+      "style_slug": "techno-vistas",
+      "frame": "f4-corridor",
+      "prompt": "Three eighteen-year-olds stand together in a bright corridor outside a game hall just after a match: on the left the tall pale young man smiles, relaxed; in the middle the slim spiky-haired young man grins and talks with his hands; on the right the young woman folds her arms, unimpressed. Medium shot at eye level.",
+      "characters": [
+        "designs/characters/deluin.json",
+        "designs/characters/zei.json",
+        "designs/characters/bai.json"
+      ],
+      "references": [
+        "cast/deluin-sheet",
+        "cast/zei-sheet",
+        "cast/bai-sheet"
+      ],
+      "seed": 404,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "r2-techno-vistas-f5-menu",
+      "style": {
+        "prompt": "Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers."
+      },
+      "style_slug": "techno-vistas",
+      "frame": "f5-menu",
+      "prompt": "At a small table in an open-air courtyard cafe, two young men lean over a glowing menu screen held up by a little wheeled serving robot; the spiky-haired one stares at it in wonder, the tall pale one looks on, curious. The screen shows only abstract glowing shapes. Medium close shot. The place: a small open-air courtyard cafe enclosed by low, dense shop buildings, with scattered small tables and stools beneath a shade tree and strings of little lights, a playful cartoon animal mural on one wall, glowing blank shop panels in pink and cyan, a little wheeled serving robot with a screen face, and an open entrance onto a busy street with a lamp post.",
+      "characters": [
+        "designs/characters/zei.json",
+        "designs/characters/deluin.json"
+      ],
+      "references": [
+        "cast/zei-sheet",
+        "cast/deluin-sheet"
+      ],
+      "seed": 505,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "r2-techno-vistas-f6-headphones",
+      "style": {
+        "prompt": "Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers."
+      },
+      "style_slug": "techno-vistas",
+      "frame": "f6-headphones",
+      "prompt": "At a cafe table a young woman pulls one side of a pair of big headphones away from her ear and shouts across to the next table, grinning, a handheld game device in her other hand; behind her, softer, two young men at the next table turn to look. Medium shot. The place: a small open-air courtyard cafe enclosed by low, dense shop buildings, with scattered small tables and stools beneath a shade tree and strings of little lights, a playful cartoon animal mural on one wall, glowing blank shop panels in pink and cyan, a little wheeled serving robot with a screen face, and an open entrance onto a busy street with a lamp post.",
+      "characters": [
+        "designs/characters/bai.json",
+        "designs/characters/zei.json",
+        "designs/characters/deluin.json"
+      ],
+      "references": [
+        "cast/bai-sheet",
+        "cast/zei-sheet",
+        "cast/deluin-sheet"
+      ],
+      "seed": 606,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "r2-techno-vistas-f7-gate",
+      "style": {
+        "prompt": "Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers."
+      },
+      "style_slug": "techno-vistas",
+      "frame": "f7-gate",
+      "prompt": "Dusk at the gate of an open-air courtyard cafe, the lamps just coming on. The tall pale young man stands alone in the foreground looking down at a small handheld device in his hand, his thumb hovering; far behind him, the slim spiky-haired young man walks away toward a table. Wide shot. The place: a small open-air courtyard cafe enclosed by low, dense shop buildings, with scattered small tables and stools beneath a shade tree and strings of little lights, a playful cartoon animal mural on one wall, glowing blank shop panels in pink and cyan, a little wheeled serving robot with a screen face, and an open entrance onto a busy street with a lamp post.",
+      "characters": [
+        "designs/characters/deluin.json",
+        "designs/characters/zei.json"
+      ],
+      "references": [
+        "cast/deluin-sheet",
+        "cast/zei-sheet"
+      ],
+      "seed": 707,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "r2-fork-night-f4-corridor",
+      "style": {
+        "prompt": "Detailed science fiction comic art: precise fine uniform linework, cel-shaded flat color, deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, rich mechanical detail picked out by the lights, clear readable faces and hands."
+      },
+      "style_slug": "fork-night",
+      "frame": "f4-corridor",
+      "prompt": "Three eighteen-year-olds stand together in a bright corridor outside a game hall just after a match: on the left the tall pale young man smiles, relaxed; in the middle the slim spiky-haired young man grins and talks with his hands; on the right the young woman folds her arms, unimpressed. Medium shot at eye level.",
+      "characters": [
+        "designs/characters/deluin.json",
+        "designs/characters/zei.json",
+        "designs/characters/bai.json"
+      ],
+      "references": [
+        "cast/deluin-sheet",
+        "cast/zei-sheet",
+        "cast/bai-sheet"
+      ],
+      "seed": 404,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "r2-fork-night-f5-menu",
+      "style": {
+        "prompt": "Detailed science fiction comic art: precise fine uniform linework, cel-shaded flat color, deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, rich mechanical detail picked out by the lights, clear readable faces and hands."
+      },
+      "style_slug": "fork-night",
+      "frame": "f5-menu",
+      "prompt": "At a small table in an open-air courtyard cafe, two young men lean over a glowing menu screen held up by a little wheeled serving robot; the spiky-haired one stares at it in wonder, the tall pale one looks on, curious. The screen shows only abstract glowing shapes. Medium close shot. The place: a small open-air courtyard cafe enclosed by low, dense shop buildings, with scattered small tables and stools beneath a shade tree and strings of little lights, a playful cartoon animal mural on one wall, glowing blank shop panels in pink and cyan, a little wheeled serving robot with a screen face, and an open entrance onto a busy street with a lamp post.",
+      "characters": [
+        "designs/characters/zei.json",
+        "designs/characters/deluin.json"
+      ],
+      "references": [
+        "cast/zei-sheet",
+        "cast/deluin-sheet"
+      ],
+      "seed": 505,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "r2-fork-night-f6-headphones",
+      "style": {
+        "prompt": "Detailed science fiction comic art: precise fine uniform linework, cel-shaded flat color, deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, rich mechanical detail picked out by the lights, clear readable faces and hands."
+      },
+      "style_slug": "fork-night",
+      "frame": "f6-headphones",
+      "prompt": "At a cafe table a young woman pulls one side of a pair of big headphones away from her ear and shouts across to the next table, grinning, a handheld game device in her other hand; behind her, softer, two young men at the next table turn to look. Medium shot. The place: a small open-air courtyard cafe enclosed by low, dense shop buildings, with scattered small tables and stools beneath a shade tree and strings of little lights, a playful cartoon animal mural on one wall, glowing blank shop panels in pink and cyan, a little wheeled serving robot with a screen face, and an open entrance onto a busy street with a lamp post.",
+      "characters": [
+        "designs/characters/bai.json",
+        "designs/characters/zei.json",
+        "designs/characters/deluin.json"
+      ],
+      "references": [
+        "cast/bai-sheet",
+        "cast/zei-sheet",
+        "cast/deluin-sheet"
+      ],
+      "seed": 606,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "r2-fork-night-f7-gate",
+      "style": {
+        "prompt": "Detailed science fiction comic art: precise fine uniform linework, cel-shaded flat color, deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, rich mechanical detail picked out by the lights, clear readable faces and hands."
+      },
+      "style_slug": "fork-night",
+      "frame": "f7-gate",
+      "prompt": "Dusk at the gate of an open-air courtyard cafe, the lamps just coming on. The tall pale young man stands alone in the foreground looking down at a small handheld device in his hand, his thumb hovering; far behind him, the slim spiky-haired young man walks away toward a table. Wide shot. The place: a small open-air courtyard cafe enclosed by low, dense shop buildings, with scattered small tables and stools beneath a shade tree and strings of little lights, a playful cartoon animal mural on one wall, glowing blank shop panels in pink and cyan, a little wheeled serving robot with a screen face, and an open entrance onto a busy street with a lamp post.",
+      "characters": [
+        "designs/characters/deluin.json",
+        "designs/characters/zei.json"
+      ],
+      "references": [
+        "cast/deluin-sheet",
+        "cast/zei-sheet"
+      ],
+      "seed": 707,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "r2-new-screen-print-f4-corridor",
+      "style": {
+        "prompt": "Limited-palette screen print: three to four flat ink colours layered with slight misregistration, bold simplified shapes, visible paper texture, halftone-free solid areas, crisp edges, warm off-white paper showing through."
+      },
+      "style_slug": "new-screen-print",
+      "frame": "f4-corridor",
+      "prompt": "Three eighteen-year-olds stand together in a bright corridor outside a game hall just after a match: on the left the tall pale young man smiles, relaxed; in the middle the slim spiky-haired young man grins and talks with his hands; on the right the young woman folds her arms, unimpressed. Medium shot at eye level.",
+      "characters": [
+        "designs/characters/deluin.json",
+        "designs/characters/zei.json",
+        "designs/characters/bai.json"
+      ],
+      "references": [
+        "cast/deluin-sheet",
+        "cast/zei-sheet",
+        "cast/bai-sheet"
+      ],
+      "seed": 404,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "r2-new-screen-print-f5-menu",
+      "style": {
+        "prompt": "Limited-palette screen print: three to four flat ink colours layered with slight misregistration, bold simplified shapes, visible paper texture, halftone-free solid areas, crisp edges, warm off-white paper showing through."
+      },
+      "style_slug": "new-screen-print",
+      "frame": "f5-menu",
+      "prompt": "At a small table in an open-air courtyard cafe, two young men lean over a glowing menu screen held up by a little wheeled serving robot; the spiky-haired one stares at it in wonder, the tall pale one looks on, curious. The screen shows only abstract glowing shapes. Medium close shot. The place: a small open-air courtyard cafe enclosed by low, dense shop buildings, with scattered small tables and stools beneath a shade tree and strings of little lights, a playful cartoon animal mural on one wall, glowing blank shop panels in pink and cyan, a little wheeled serving robot with a screen face, and an open entrance onto a busy street with a lamp post.",
+      "characters": [
+        "designs/characters/zei.json",
+        "designs/characters/deluin.json"
+      ],
+      "references": [
+        "cast/zei-sheet",
+        "cast/deluin-sheet"
+      ],
+      "seed": 505,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "r2-new-screen-print-f6-headphones",
+      "style": {
+        "prompt": "Limited-palette screen print: three to four flat ink colours layered with slight misregistration, bold simplified shapes, visible paper texture, halftone-free solid areas, crisp edges, warm off-white paper showing through."
+      },
+      "style_slug": "new-screen-print",
+      "frame": "f6-headphones",
+      "prompt": "At a cafe table a young woman pulls one side of a pair of big headphones away from her ear and shouts across to the next table, grinning, a handheld game device in her other hand; behind her, softer, two young men at the next table turn to look. Medium shot. The place: a small open-air courtyard cafe enclosed by low, dense shop buildings, with scattered small tables and stools beneath a shade tree and strings of little lights, a playful cartoon animal mural on one wall, glowing blank shop panels in pink and cyan, a little wheeled serving robot with a screen face, and an open entrance onto a busy street with a lamp post.",
+      "characters": [
+        "designs/characters/bai.json",
+        "designs/characters/zei.json",
+        "designs/characters/deluin.json"
+      ],
+      "references": [
+        "cast/bai-sheet",
+        "cast/zei-sheet",
+        "cast/deluin-sheet"
+      ],
+      "seed": 606,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "r2-new-screen-print-f7-gate",
+      "style": {
+        "prompt": "Limited-palette screen print: three to four flat ink colours layered with slight misregistration, bold simplified shapes, visible paper texture, halftone-free solid areas, crisp edges, warm off-white paper showing through."
+      },
+      "style_slug": "new-screen-print",
+      "frame": "f7-gate",
+      "prompt": "Dusk at the gate of an open-air courtyard cafe, the lamps just coming on. The tall pale young man stands alone in the foreground looking down at a small handheld device in his hand, his thumb hovering; far behind him, the slim spiky-haired young man walks away toward a table. Wide shot. The place: a small open-air courtyard cafe enclosed by low, dense shop buildings, with scattered small tables and stools beneath a shade tree and strings of little lights, a playful cartoon animal mural on one wall, glowing blank shop panels in pink and cyan, a little wheeled serving robot with a screen face, and an open entrance onto a busy street with a lamp post.",
+      "characters": [
+        "designs/characters/deluin.json",
+        "designs/characters/zei.json"
+      ],
+      "references": [
+        "cast/deluin-sheet",
+        "cast/zei-sheet"
+      ],
+      "seed": 707,
+      "width": 1024,
+      "height": 576
+    }
+  ],
+  "assist": {
+    "model": "claude-coding-agent",
+    "by": "the coding agent",
+    "drafted": [
+      "frame subjects",
+      "motion prompt",
+      "reference choices"
+    ],
+    "note": "test prompts for a style test, never published; the style prompts are round one's",
+    "see": "config/models.json drafting; principle 3"
+  }
+}

@@ -1,0 +1,522 @@
+{
+  "about": "The video of fifteen-days: the mix recipe's resolved timeline, rendered frame by frame (moves, cuts, dissolves, lettering on cue).",
+  "placeholder": true,
+  "mix_recipe": "scenes-out/fifteen-days/cuts/coverage-v6/recipe.json",
+  "mix_recipe_sha256": "cfb6188d6b5d364c8e9f7b2e95bf0447dbaf608a3324b899568f351c4b056d12",
+  "mix": {
+    "file": "scenes-out/fifteen-days/cuts/coverage-v6/coverage-v6-mix.wav",
+    "sha256": "ed56ff4de490229ee5f61d56525e8aa1571c1169650133266eee427de51038b4"
+  },
+  "images": [
+    {
+      "shot": "0-EST",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6/lettered-cov-game-EST.png",
+      "sha256": "66c115e2365224ae1ab6cb08e625e6c720eec0fa848ac2568504e0ecc4559ec2"
+    },
+    {
+      "shot": "1-FLOOR",
+      "file": "images-out/preprod/pass3/cov-game-FLOOR-live-E40.png",
+      "sha256": "ae6da7974bb23366cf7d14f87a10d0121ad7a43d037a6d2130591533099e1b4c"
+    },
+    {
+      "shot": "2-PIT-D",
+      "file": "images-out/preprod/pass3/cov-game-PIT-D-playing-K7.png",
+      "sha256": "fc4cc0b26ab8062e16d73d734def5ccca515f2138c3fd71b752db78a464b9e29"
+    },
+    {
+      "shot": "3-PIT-K",
+      "file": "images-out/preprod/pass3/H05-K6.png",
+      "sha256": "18c16dc35d7290f99f0b0679f798a291ffe638ee955ef19892312055851bbfdd"
+    },
+    {
+      "shot": "4-SCREEN",
+      "file": "images-out/preprod/pass3/cov-game-SCREEN-face-E18.png",
+      "sha256": "5b6770471fd047d25ee6d35d75afbd5f445d04af72324c9f235dd4c7726c4e92"
+    },
+    {
+      "shot": "5-b1-1",
+      "file": "images-out/preprod/pass3/cov-overlook-MASTER-watch-K9.png",
+      "sha256": "6f35ce0506d92c14cfae7e797586d7c69884f001057bc5b19c34a19550981997"
+    },
+    {
+      "shot": "6-b1-2",
+      "file": "images-out/preprod/pass3/cov-overlook-OTS-Z-dry-K7.png",
+      "sha256": "cff7d9ddc74ebc183e45fd2908e8e2e8d3ec9db5721be33820f1cdebc9d46322"
+    },
+    {
+      "shot": "7-CU-Z",
+      "file": "images-out/preprod/pass3/cov-overlook-CU-Z-look-E40.png",
+      "sha256": "fc34f3b2549bb0e0cd32ed6a7d72f6c45333f7b3664cec3e8825b19d7e3681b3"
+    },
+    {
+      "shot": "8-b1-3",
+      "file": "images-out/preprod/pass3/cov-overlook-OTS-Z-shrug-E16.png",
+      "sha256": "ca49f7ec1874ef1bca072b17419c0417aeb03b488731d8feedf717966a4ac7f5"
+    },
+    {
+      "shot": "9-POV",
+      "file": "images-out/preprod/pass3/G08-K2.png",
+      "sha256": "dc4856b6d2eaff7f713e354f76b4675cc6f4a1ca7d20a8150233cf657a0c1218"
+    },
+    {
+      "shot": "10-game/PIT-D",
+      "file": "images-out/preprod/pass3/cov-game-PIT-D-playing-K7.png",
+      "sha256": "fc4cc0b26ab8062e16d73d734def5ccca515f2138c3fd71b752db78a464b9e29"
+    },
+    {
+      "shot": "11-b1-4",
+      "file": "images-out/preprod/pass3/cov-overlook-MASTER-watch-K9.png",
+      "sha256": "6f35ce0506d92c14cfae7e797586d7c69884f001057bc5b19c34a19550981997"
+    },
+    {
+      "shot": "12-b1-5",
+      "file": "images-out/preprod/pass3/cov-overlook-OTS-Z-wry-E16.png",
+      "sha256": "571d19aa4592d71bc83829cf6601a536fb5c638f7e311591b3d7229be8f44918"
+    },
+    {
+      "shot": "13-MASTER",
+      "file": "images-out/preprod/pass3/cov-overlook-MASTER-lean-K8.png",
+      "sha256": "1612b1239f84c74dfba395404d6fac1281e21b8e011d8e52eb65e68b36c1d101"
+    },
+    {
+      "shot": "14-b1-6",
+      "file": "images-out/preprod/pass3/cov-overlook-CU-B-toast-K10.png",
+      "sha256": "be77d18c06e3a707abd5ec5b79e7595ffcea8ca20569e9fd758e6ff82ae7f2c7"
+    },
+    {
+      "shot": "15-game/SCREEN",
+      "file": "images-out/preprod/pass3/cov-game-SCREEN-face-E18.png",
+      "sha256": "5b6770471fd047d25ee6d35d75afbd5f445d04af72324c9f235dd4c7726c4e92"
+    },
+    {
+      "shot": "16-game/PIT-D",
+      "file": "images-out/preprod/pass3/cov-game-PIT-D-glasses-K7.png",
+      "sha256": "0148c76f4181af3f249b3f1160feb4538313098e0ce7846a9817f8afcbc40d62"
+    },
+    {
+      "shot": "17-MASTER",
+      "file": "images-out/preprod/pass3/cov-corridor-MASTER-arrive-K8.png",
+      "sha256": "e7a1fbeebad8749a41f29a6fb91fda91645e8652a116aafa00744f4a2c264dc1"
+    },
+    {
+      "shot": "18-b2-1",
+      "file": "images-out/preprod/pass3/cov-corridor-OTS-D-eager-K7.png",
+      "sha256": "b80ab9479b204e6034b0fe65ba6198575eb4c40abc33fd3a1d80ee981aa2b638"
+    },
+    {
+      "shot": "19-b2-2",
+      "file": "images-out/preprod/pass3/cov-corridor-OTS-Z-easy-K8.png",
+      "sha256": "e862d46f66823fba234a4f65436f6f6a5e052bfcc32d14deddc9a957c20ea5d4"
+    },
+    {
+      "shot": "20-b2-3",
+      "file": "images-out/preprod/pass3/cov-corridor-OTS-D-eager-K7.png",
+      "sha256": "b80ab9479b204e6034b0fe65ba6198575eb4c40abc33fd3a1d80ee981aa2b638"
+    },
+    {
+      "shot": "21-CU-B",
+      "file": "images-out/preprod/pass3/cov-corridor-CU-B-sour-K9.png",
+      "sha256": "6dc5d45027767dd26cdadf84406df9fcf4f88bf562a1f72a474b8cb4cd54b75e"
+    },
+    {
+      "shot": "22-b2-4",
+      "file": "images-out/preprod/pass3/cov-corridor-OTS-Z-warm-E40.png",
+      "sha256": "6a1317ec44ecb344ccf90c75ee79c6a155f9f59f1ea95586b0ab91ef009ad812"
+    },
+    {
+      "shot": "23-b2-5",
+      "file": "images-out/preprod/pass3/cov-corridor-OTS-D-eager-K7.png",
+      "sha256": "b80ab9479b204e6034b0fe65ba6198575eb4c40abc33fd3a1d80ee981aa2b638"
+    },
+    {
+      "shot": "24-b2-6",
+      "file": "images-out/preprod/pass3/cov-corridor-OTS-Z-warm-E40.png",
+      "sha256": "6a1317ec44ecb344ccf90c75ee79c6a155f9f59f1ea95586b0ab91ef009ad812"
+    },
+    {
+      "shot": "24-b2-6-cut",
+      "file": "images-out/preprod/pass3/cov-corridor-CU-B-sour-K9.png",
+      "sha256": "6dc5d45027767dd26cdadf84406df9fcf4f88bf562a1f72a474b8cb4cd54b75e"
+    },
+    {
+      "shot": "25-b2-7",
+      "file": "images-out/preprod/pass3/cov-corridor-OTS-D-eager-K7.png",
+      "sha256": "b80ab9479b204e6034b0fe65ba6198575eb4c40abc33fd3a1d80ee981aa2b638"
+    },
+    {
+      "shot": "26-pre",
+      "file": "images-out/preprod/pass3/C17-K4.png",
+      "sha256": "2af7254381904b6ec9ca97b707f4d7d350be163ea5e47a737f2098569d461b95"
+    },
+    {
+      "shot": "26-b2-7",
+      "file": "images-out/preprod/pass3/C17-K4.png",
+      "sha256": "2af7254381904b6ec9ca97b707f4d7d350be163ea5e47a737f2098569d461b95"
+    },
+    {
+      "shot": "27-b2-8",
+      "file": "images-out/preprod/pass3/cov-walk-CU-B-serious-K9.png",
+      "sha256": "66c3bd87b635dcaa37eb6088b3c16101cd75f0098787e9a6850251ee879765e5"
+    },
+    {
+      "shot": "28-b2-9",
+      "file": "images-out/preprod/pass3/cov-walk-CU-Z-tease-K8.png",
+      "sha256": "e8ffae9ae640225c81518a3820637c9a48190ea16aae0639136eb3f1c2594367"
+    },
+    {
+      "shot": "29-b2-10",
+      "file": "images-out/preprod/pass3/cov-walk-CU-B-serious-K9.png",
+      "sha256": "66c3bd87b635dcaa37eb6088b3c16101cd75f0098787e9a6850251ee879765e5"
+    },
+    {
+      "shot": "30-b2-11",
+      "file": "images-out/preprod/pass3/cov-walk-CU-B-serious-K9.png",
+      "sha256": "66c3bd87b635dcaa37eb6088b3c16101cd75f0098787e9a6850251ee879765e5"
+    },
+    {
+      "shot": "31-b2-12",
+      "file": "images-out/preprod/pass3/C17-K4.png",
+      "sha256": "2af7254381904b6ec9ca97b707f4d7d350be163ea5e47a737f2098569d461b95"
+    },
+    {
+      "shot": "32-pre",
+      "file": "images-out/preprod/pass3/cov-cafe-MASTER-laugh-E40.png",
+      "sha256": "7b3e6c906ed6ac0c9fbbec01c0022522139ddf8bd132efc5868ba80486e09d9b"
+    },
+    {
+      "shot": "32-b3-1",
+      "file": "images-out/preprod/pass3/cov-cafe-MASTER-wave-K7.png",
+      "sha256": "5519aeecab1238e57f3881ea0fbc19807e7957cbe054531598421b055f5d9428"
+    },
+    {
+      "shot": "33-b3-2",
+      "file": "images-out/preprod/pass3/cov-cafe-OTS-Z-robot-E50.png",
+      "sha256": "52cfddafb2eb989678491f1f91960669d7db840b17586697066193e9dfef74dc"
+    },
+    {
+      "shot": "34-b3-3",
+      "file": "images-out/preprod/pass3/cov-cafe-CU-Z0-whoa-E17.png",
+      "sha256": "7021defae434d28bb6d7054459c6e865c378aa2c36bb9a1e59daf9df04afbb4b"
+    },
+    {
+      "shot": "35-b3-4",
+      "file": "images-out/preprod/pass3/cov-cafe-OTS-Z-menu-E40.png",
+      "sha256": "b860f349f39eef457c095c38c3abf014e80c46abc0ca975e91cbb877f1e2654a"
+    },
+    {
+      "shot": "36-MENU",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6/framed-cov-cafe-MENU.png",
+      "sha256": "6329cae0c57fdd09562286be192e5e5876407b2f181eec136baf2d886dbd32d6"
+    },
+    {
+      "shot": "37-b3-5",
+      "file": "images-out/preprod/pass3/cov-cafe-CU-Z0-explain-K13.png",
+      "sha256": "e4e2a3c58f9a8780bfa8b8a4329750c26e6411be31f235faf90e2c76ecb099ee"
+    },
+    {
+      "shot": "38-OTS-Z",
+      "file": "images-out/preprod/pass3/cov-cafe-OTS-Z-menu-E40.png",
+      "sha256": "b860f349f39eef457c095c38c3abf014e80c46abc0ca975e91cbb877f1e2654a"
+    },
+    {
+      "shot": "39-b3-6",
+      "file": "images-out/preprod/pass3/cov-cafe-CU-Z0-explain-K13.png",
+      "sha256": "e4e2a3c58f9a8780bfa8b8a4329750c26e6411be31f235faf90e2c76ecb099ee"
+    },
+    {
+      "shot": "40-b3-7",
+      "file": "images-out/preprod/pass3/cov-cafe-OTS-Z-menu-E40.png",
+      "sha256": "b860f349f39eef457c095c38c3abf014e80c46abc0ca975e91cbb877f1e2654a"
+    },
+    {
+      "shot": "41-b3-8",
+      "file": "images-out/preprod/pass3/cov-cafe-CU-Z0-explain-K13.png",
+      "sha256": "e4e2a3c58f9a8780bfa8b8a4329750c26e6411be31f235faf90e2c76ecb099ee"
+    },
+    {
+      "shot": "42-b3-9",
+      "file": "images-out/preprod/pass3/cov-cafe-OTS-Z-menu-E40.png",
+      "sha256": "b860f349f39eef457c095c38c3abf014e80c46abc0ca975e91cbb877f1e2654a"
+    },
+    {
+      "shot": "43-b3-10",
+      "file": "images-out/preprod/pass3/cov-cafe-CU-Z0-astonished-K13.png",
+      "sha256": "34c19df02bcbd9d4783f226863bea87c27f40844d9056635070919c71e42ee23"
+    },
+    {
+      "shot": "44-b3-11",
+      "file": "images-out/preprod/pass3/cov-cafe-OTS-Z-stern-E42.png",
+      "sha256": "5ce9443f0bddf8de3e2fb82e75bdefeac551eaadd0cb6dce1f7e6472f6dd4616"
+    },
+    {
+      "shot": "45-b3-12",
+      "file": "images-out/preprod/pass3/cov-cafe-CU-Z0-astonished-K13.png",
+      "sha256": "34c19df02bcbd9d4783f226863bea87c27f40844d9056635070919c71e42ee23"
+    },
+    {
+      "shot": "46-b3-13",
+      "file": "images-out/preprod/pass3/cov-cafe-CU-B-menu-K9.png",
+      "sha256": "5cd135926675458de0b6747a2788ff217b931245154e93acf298009d148dc06f"
+    },
+    {
+      "shot": "46-b3-13-cut",
+      "file": "images-out/preprod/pass3/cov-cafe-CU-B-standing-K7.png",
+      "sha256": "967dd46a66d948735242521481991dfd88ea412350c7a2649abbaffca23dd22d"
+    },
+    {
+      "shot": "47-BAI",
+      "file": "images-out/preprod/pass3/cov-cafe-BAI-sideeye-R20.png",
+      "sha256": "ea4d003905272bac90d6adb7916955678d3fbbee156f486c4a47cb89f75360a1"
+    },
+    {
+      "shot": "48-b4-1",
+      "file": "images-out/preprod/pass3/cov-cafe-OTS-Z-talk-K7.png",
+      "sha256": "46a381d0a0111486f8b5b2cfd6e4c169f6f61b66219ce8827f2c92425e2bc51f"
+    },
+    {
+      "shot": "48-b4-1-cut",
+      "file": "images-out/preprod/pass3/cov-cafe-SUGAR-stack-E16.png",
+      "sha256": "f9af9901020458a07c7c6b2d45666fbd42555d7f9bafb2794bd1c55a98152b43"
+    },
+    {
+      "shot": "48-b4-1-back",
+      "file": "images-out/preprod/pass3/cov-cafe-OTS-Z-talk-K7.png",
+      "sha256": "46a381d0a0111486f8b5b2cfd6e4c169f6f61b66219ce8827f2c92425e2bc51f"
+    },
+    {
+      "shot": "49-b4-2",
+      "file": "images-out/preprod/pass3/cov-cafe-CU-Z-amused-K7.png",
+      "sha256": "78cc86ffab061b3dcfd33d2ead47a10fe2c9e872bad96fe67a9cd7cac2946c98"
+    },
+    {
+      "shot": "50-b4-3",
+      "file": "images-out/preprod/pass3/cov-cafe-CU-D-warm-E16.png",
+      "sha256": "9e560cd933b40d2c83102f642a5ac4ea3bbdc96645d45b845d2ab06e7919dc1b"
+    },
+    {
+      "shot": "51-b4-4",
+      "file": "images-out/preprod/pass3/cov-cafe-CU-Z-amused-K7.png",
+      "sha256": "78cc86ffab061b3dcfd33d2ead47a10fe2c9e872bad96fe67a9cd7cac2946c98"
+    },
+    {
+      "shot": "52-b4-5",
+      "file": "images-out/preprod/pass3/cov-cafe-SUGAR-wall-K9.png",
+      "sha256": "25a4ebddd2044bb9e84f247d2600ca5bccadbceb6f322a68b3156a53acbb7064"
+    },
+    {
+      "shot": "52-b4-5-cut",
+      "file": "images-out/preprod/pass3/cov-cafe-CU-D-warm-E16.png",
+      "sha256": "9e560cd933b40d2c83102f642a5ac4ea3bbdc96645d45b845d2ab06e7919dc1b"
+    },
+    {
+      "shot": "53-SUGAR",
+      "file": "images-out/preprod/pass3/cov-cafe-SUGAR-door-K7.png",
+      "sha256": "e16b2f2bf49bc1d6e344d733c61b98e9eab22e376052c29bec0f93cbfeee1039"
+    },
+    {
+      "shot": "54-CU-Z",
+      "file": "images-out/preprod/pass3/cov-cafe-CU-Z-amused-K7.png",
+      "sha256": "78cc86ffab061b3dcfd33d2ead47a10fe2c9e872bad96fe67a9cd7cac2946c98"
+    },
+    {
+      "shot": "55-BAI",
+      "file": "images-out/preprod/pass3/cov-cafe-BAI-sideeye-R20.png",
+      "sha256": "ea4d003905272bac90d6adb7916955678d3fbbee156f486c4a47cb89f75360a1"
+    },
+    {
+      "shot": "56-b5-1",
+      "file": "images-out/preprod/pass3/cov-cafe-OTS-Z-eager-K7.png",
+      "sha256": "c80f0eb216e7cc312566d46e16029247b4f1c1cbc1b36f6a91922128c247a94e"
+    },
+    {
+      "shot": "57-b5-2",
+      "file": "images-out/preprod/pass3/cov-cafe-CU-Z-smile-K14.png",
+      "sha256": "551ea7f37111792ad16d4ea8a0a3046834f4e290ee419488c0cea3ffcde0f9d2"
+    },
+    {
+      "shot": "58-b5-3",
+      "file": "images-out/preprod/pass3/cov-cafe-OTS-Z-eager-K7.png",
+      "sha256": "c80f0eb216e7cc312566d46e16029247b4f1c1cbc1b36f6a91922128c247a94e"
+    },
+    {
+      "shot": "59-BAI",
+      "file": "images-out/preprod/pass3/cov-cafe-BAI-sideeye-R20.png",
+      "sha256": "ea4d003905272bac90d6adb7916955678d3fbbee156f486c4a47cb89f75360a1"
+    },
+    {
+      "shot": "60-b5-4",
+      "file": "images-out/preprod/pass3/cov-cafe-OTS-Z-talk-K7.png",
+      "sha256": "46a381d0a0111486f8b5b2cfd6e4c169f6f61b66219ce8827f2c92425e2bc51f"
+    },
+    {
+      "shot": "61-b5-5",
+      "file": "images-out/preprod/pass3/cov-cafe-BAI-what-E47.png",
+      "sha256": "85a6ace4cbcc262f7e7df895a130063b8bce72c354e6d880a47c3456448badd6"
+    },
+    {
+      "shot": "62-pre",
+      "file": "images-out/preprod/pass3/cov-gate-MASTER-fingers-K11.png",
+      "sha256": "b869a4b054a55072af3d16ad67efcb4879a33347b049d56c4240e041049ad970"
+    },
+    {
+      "shot": "62-b6-1",
+      "file": "images-out/preprod/pass3/cov-gate-MASTER-fingers-K11.png",
+      "sha256": "b869a4b054a55072af3d16ad67efcb4879a33347b049d56c4240e041049ad970"
+    },
+    {
+      "shot": "63-CU-Z",
+      "file": "images-out/preprod/pass3/cov-gate-CU-Z-smile-K7.png",
+      "sha256": "dd4276a3907b8e8b58e84cb04047878b119027c72e98898550fc01c5303c4506"
+    },
+    {
+      "shot": "64-MASTER",
+      "file": "images-out/preprod/pass3/cov-gate-MASTER-wave-K7.png",
+      "sha256": "c4f82ba9831d3970688b8b464dd636855f1c7115e433af271c1e1984a10257a5"
+    },
+    {
+      "shot": "65-MASTER",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6/lettered-cov-dusk-MASTER-talk.png",
+      "sha256": "bd95f2546a7423d66556fef13b79869f1a80f48764a85d995f0e2edb1893df27"
+    },
+    {
+      "shot": "BLACK",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6/black.png",
+      "sha256": "0f52608dd021e7069ef19f9d8f46f6d651aaf5cbac5154465092de3574cf8514"
+    },
+    {
+      "shot": "66-EST",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6/lettered-cov-lobby-EST.png",
+      "sha256": "03208dc714e458d1af6c29409ad54663f4a39566de824575868ff864a8591250"
+    },
+    {
+      "shot": "67-CU-Z",
+      "file": "images-out/preprod/pass3/cov-lobby-CU-Z-down-K8.png",
+      "sha256": "54ad4ed36b47feed82bc3b5c7e0f08d064249f028d16891ec63c63dc4daab488"
+    },
+    {
+      "shot": "68-SCREEN",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6/screen-L03.png",
+      "sha256": "f18456ef81952237a71a8a322e9ed3abe2b9de24b10eb3eafa3ff226fd656fe3"
+    },
+    {
+      "shot": "69-MASTER",
+      "file": "images-out/preprod/pass3/cov-lobby-MASTER-sits-E18.png",
+      "sha256": "7a89d50737983b4b18e206bd42a50be2ce8376202ad7573d61d7b488ad49b1ab"
+    },
+    {
+      "shot": "70-CU-Z",
+      "file": "images-out/preprod/pass3/cov-lobby-CU-Z-down-K8.png",
+      "sha256": "54ad4ed36b47feed82bc3b5c7e0f08d064249f028d16891ec63c63dc4daab488"
+    },
+    {
+      "shot": "71-SCREEN",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6/screen-L07.png",
+      "sha256": "d921411802b9982860669a7d3ba793459cc6dfec05aa4d3de709a11ba769c0de"
+    },
+    {
+      "shot": "72-CU-Z",
+      "file": "images-out/preprod/pass3/cov-lobby-CU-Z-relief-K10.png",
+      "sha256": "beb0aa031ce8c985b93b7a162728c45395d7682c9db4be7a32830be0aba32caa"
+    },
+    {
+      "shot": "73-SCREEN",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6/screen-L09.png",
+      "sha256": "3f75fe4d229537a53524add7a506b5def7a0d9404a988031912bd3cddff93f1e"
+    },
+    {
+      "shot": "74-OTS-Z",
+      "file": "images-out/preprod/pass3/cov-lobby-OTS-Z-turns-K9.png",
+      "sha256": "20cc511b20c30b8a437e0dc29bea7fddc66b631ad41b90b058097259f5b9e976"
+    },
+    {
+      "shot": "BLACK",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6/black.png",
+      "sha256": "0f52608dd021e7069ef19f9d8f46f6d651aaf5cbac5154465092de3574cf8514"
+    }
+  ],
+  "settings": {
+    "width": 1920,
+    "height": 1080,
+    "fps": 30,
+    "resample": "Lanczos, one pass per frame from the source",
+    "lettering_scale": 2,
+    "codec": "H.264 crf 18 preset slow yuv420p + AAC 256k"
+  },
+  "script": "scripts/render-scene.py",
+  "commit": "cfc1aba4f2fa9ff17643ae2852b6fc63dfc7bafc",
+  "ffmpeg": "ffmpeg version 9.0.1 Copyright (c) 2000-2026 the FFmpeg developers",
+  "command": [
+    "ffmpeg",
+    "-y",
+    "-hide_banner",
+    "-loglevel",
+    "error",
+    "-f",
+    "rawvideo",
+    "-pix_fmt",
+    "rgb24",
+    "-s",
+    "1920x1080",
+    "-r",
+    "30",
+    "-i",
+    "-",
+    "-ss",
+    "0.000",
+    "-t",
+    "287.851",
+    "-i",
+    "scenes-out/fifteen-days/cuts/coverage-v6/coverage-v6-mix.wav",
+    "-map",
+    "0:v",
+    "-map",
+    "1:a",
+    "-c:v",
+    "libx264",
+    "-preset",
+    "slow",
+    "-crf",
+    "18",
+    "-pix_fmt",
+    "yuv420p",
+    "-c:a",
+    "aac",
+    "-b:a",
+    "256k",
+    "-shortest",
+    "-movflags",
+    "+faststart",
+    "scenes-out/fifteen-days/cuts/coverage-v6/coverage-v6.mp4"
+  ],
+  "measured": {
+    "duration_s": 287.851,
+    "streams": [
+      {
+        "codec_name": "h264",
+        "width": 1920,
+        "height": 1080,
+        "r_frame_rate": "30/1"
+      },
+      {
+        "codec_name": "aac",
+        "r_frame_rate": "0/0"
+      }
+    ],
+    "loudness": {
+      "integrated_lufs": -16.2,
+      "true_peak_dbfs": -3.9
+    }
+  },
+  "output": {
+    "file": "scenes-out/fifteen-days/cuts/coverage-v6/coverage-v6.mp4",
+    "sha256": "9391f90d6dcad7906fed8553c57abb42503517d41d8305dc06e057e8faaf4d93"
+  },
+  "render_seconds": 289.8,
+  "generated_at": "2026-10-18T07:17:42+00:00",
+  "cost_usd": 0,
+  "subtitles": {
+    "burned_in": 64,
+    "font": "Arial Bold (macOS system font)",
+    "from": "the mix recipe's resolved subtitles"
+  }
+}

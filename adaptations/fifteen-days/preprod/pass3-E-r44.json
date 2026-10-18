@@ -1,0 +1,35 @@
+{
+ "about": "Fifteen Days v6, third round: the robot brings the menus with all three at the table (Deluin kept). DRAFTED prompt.",
+ "out": "images-out/preprod/pass3",
+ "ledger": "images-out/preprod/ledger-s7.json",
+ "cap_usd": 25.0,
+ "style": "",
+ "jobs": [
+  {
+   "id": "cov-cafe-MASTER-robot-E44",
+   "shot": "cov-cafe-MASTER-wave",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-cafe-MASTER-laugh-E40.png",
+    "images-out/preprod/cards2/zei.png"
+   ],
+   "prompt": "Keep both seated people of picture 1 exactly where they are: the young woman with the magenta ponytail seated on the left of the table, and the tall young man in the cream cable-knit tunic seated on the right of the table, now both with small closed-mouth smiles, looking up. Add the young man from picture 2 (spiky black hair with one blue streak, orange cropped zip jacket over a black top), standing at the near left end of the table, pulling out a chair to sit down, drawn once. Add the serving robot: a machine, not a person: a rounded white head with a dark face screen showing two small kind glowing eyes, slim white shoulders and jointed arms holding a flat tray, and no legs: below the waist a smooth white column down to a round gliding base, small, gliding up behind the table in the background between the young woman and the tall young man, holding out a tray with two small glowing menu tablets. Keep picture 1's drawing, colours, courtyard, lights and camera exactly. Exactly three people and one robot. No letters or numbers anywhere.",
+   "width": 1344,
+   "height": 752,
+   "seed": 44
+  },
+  {
+   "id": "cov-cafe-MASTER-robot-E45",
+   "shot": "cov-cafe-MASTER-wave",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-cafe-MASTER-laugh-E40.png",
+    "images-out/preprod/cards2/zei.png"
+   ],
+   "prompt": "Keep both seated people of picture 1 exactly where they are: the young woman with the magenta ponytail seated on the left of the table, and the tall young man in the cream cable-knit tunic seated on the right of the table, now both with small closed-mouth smiles, looking up. Add the young man from picture 2 (spiky black hair with one blue streak, orange cropped zip jacket over a black top), standing at the near left end of the table, pulling out a chair to sit down, drawn once. Add the serving robot: a machine, not a person: a rounded white head with a dark face screen showing two small kind glowing eyes, slim white shoulders and jointed arms holding a flat tray, and no legs: below the waist a smooth white column down to a round gliding base, small, gliding up behind the table in the background between the young woman and the tall young man, holding out a tray with two small glowing menu tablets. Keep picture 1's drawing, colours, courtyard, lights and camera exactly. Exactly three people and one robot. No letters or numbers anywhere.",
+   "width": 1344,
+   "height": 752,
+   "seed": 45
+  }
+ ]
+}

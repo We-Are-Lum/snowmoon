@@ -1,0 +1,33 @@
+{
+ "about": "Fifteen Days v6: Bai's 'What?!' from E30 (surprised face), the ear cup lifted clear (owner's answers, 2026-10-17 late). DRAFTED prompts.",
+ "out": "images-out/preprod/pass3",
+ "ledger": "images-out/preprod/ledger-s7.json",
+ "cap_usd": 25.0,
+ "style": "",
+ "jobs": [
+  {
+   "id": "cov-cafe-BAI-what-E33",
+   "shot": "cov-cafe-BAI-what",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-cafe-BAI-what-E30.png"
+   ],
+   "prompt": "Her raised hand pulls the headphone ear cup off her ear and holds it out a hand's width away from the side of her head, so her bare ear shows and a clear gap shows between the ear cup and her ear; the headband stays on her head. Keep her surprised face exactly: eyebrows raised, eyes wide, mouth open. Her other hand stays on the table with the phone. Exactly two arms and two hands, one set of headphones. Keep the drawing, colours, camera, framing and crop exactly as they are; she keeps her hair, vest, tattoos and her head turned over her shoulder in profile toward the left. Nobody else anywhere. No letters or numbers.",
+   "width": 1344,
+   "height": 752,
+   "seed": 33
+  },
+  {
+   "id": "cov-cafe-BAI-what-E34",
+   "shot": "cov-cafe-BAI-what",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-cafe-BAI-what-E30.png"
+   ],
+   "prompt": "Her raised hand pulls the headphone ear cup off her ear and holds it out a hand's width away from the side of her head, so her bare ear shows and a clear gap shows between the ear cup and her ear; the headband stays on her head. Keep her surprised face exactly: eyebrows raised, eyes wide, mouth open. Her other hand stays on the table with the phone. Exactly two arms and two hands, one set of headphones. Keep the drawing, colours, camera, framing and crop exactly as they are; she keeps her hair, vest, tattoos and her head turned over her shoulder in profile toward the left. Nobody else anywhere. No letters or numbers.",
+   "width": 1344,
+   "height": 752,
+   "seed": 34
+  }
+ ]
+}

@@ -1,0 +1,1468 @@
+{
+  "about": "Fifteen Days, new shot options (owner's notes, 2026-10-15 night). Prompts DRAFTED by the coding agent from shots.json and the owner's notes; people described, never named.",
+  "style": {
+    "prompt": "Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands."
+  },
+  "style_draft": true,
+  "jobs": [
+    {
+      "id": "s28-o1",
+      "shot": "s28",
+      "prompt": "Over-the-shoulder two-shot: in the foreground, seen from behind and a little out of focus, the spiky-haired young man sits at a cafe table; at the next table the young woman sits with big headphones on her ears and glances back over her shoulder at him. Medium shot. Exactly two main people: reference image 1 is the young woman (a magenta ponytail and a lime-green vest); reference image 2 is the spiky-haired young man (spiky black hair with a blue streak and an orange jacket). Each appears exactly once; only one person has a magenta ponytail and a lime-green vest. only one person has spiky black hair with a blue streak and an orange jacket. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. Any other people are small and far in the background, in plain dark clothes, and look nothing like the main people. The place: a small open-air courtyard cafe at night, enclosed by low dense shop buildings with plain walls, small tables and stools under a shade tree hung with strings of little lights, shop windows glowing softly pink and cyan, with no signs above them, little wheeled serving robots, and far above the rooftops enormous megastructures and towering stone mountain pyramids with lit windows against the night sky. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/bai",
+        "cast/front/zei"
+      ],
+      "cast": [
+        "bai",
+        "zei"
+      ],
+      "seed": 7281,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s28-o2",
+      "shot": "s28",
+      "prompt": "Over-the-shoulder two-shot: in the foreground, seen from behind and a little out of focus, the spiky-haired young man sits at a cafe table; at the next table the young woman sits with big headphones on her ears and glances back over her shoulder at him. Medium shot. Exactly two main people: reference image 1 is the young woman (a magenta ponytail and a lime-green vest); reference image 2 is the spiky-haired young man (spiky black hair with a blue streak and an orange jacket). Each appears exactly once; only one person has a magenta ponytail and a lime-green vest. only one person has spiky black hair with a blue streak and an orange jacket. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. Any other people are small and far in the background, in plain dark clothes, and look nothing like the main people. The place: a small open-air courtyard cafe at night, enclosed by low dense shop buildings with plain walls, small tables and stools under a shade tree hung with strings of little lights, shop windows glowing softly pink and cyan, with no signs above them, little wheeled serving robots, and far above the rooftops enormous megastructures and towering stone mountain pyramids with lit windows against the night sky. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/bai",
+        "cast/front/zei"
+      ],
+      "cast": [
+        "bai",
+        "zei"
+      ],
+      "seed": 7282,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s28-o3",
+      "shot": "s28",
+      "prompt": "Over-the-shoulder two-shot: in the foreground, seen from behind and a little out of focus, the spiky-haired young man sits at a cafe table; at the next table the young woman sits with big headphones on her ears and glances back over her shoulder at him. Medium shot. Exactly two main people: reference image 1 is the young woman (a magenta ponytail and a lime-green vest); reference image 2 is the spiky-haired young man (spiky black hair with a blue streak and an orange jacket). Each appears exactly once; only one person has a magenta ponytail and a lime-green vest. only one person has spiky black hair with a blue streak and an orange jacket. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. Any other people are small and far in the background, in plain dark clothes, and look nothing like the main people. The place: a small open-air courtyard cafe at night, enclosed by low dense shop buildings with plain walls, small tables and stools under a shade tree hung with strings of little lights, shop windows glowing softly pink and cyan, with no signs above them, little wheeled serving robots, and far above the rooftops enormous megastructures and towering stone mountain pyramids with lit windows against the night sky. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/bai",
+        "cast/front/zei"
+      ],
+      "cast": [
+        "bai",
+        "zei"
+      ],
+      "seed": 7283,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s28-o4",
+      "shot": "s28",
+      "prompt": "Over-the-shoulder two-shot: in the foreground, seen from behind and a little out of focus, the spiky-haired young man sits at a cafe table; at the next table the young woman sits with big headphones on her ears and glances back over her shoulder at him. Medium shot. Exactly two main people: reference image 1 is the young woman (a magenta ponytail and a lime-green vest); reference image 2 is the spiky-haired young man (spiky black hair with a blue streak and an orange jacket). Each appears exactly once; only one person has a magenta ponytail and a lime-green vest. only one person has spiky black hair with a blue streak and an orange jacket. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. Any other people are small and far in the background, in plain dark clothes, and look nothing like the main people. The place: a small open-air courtyard cafe at night, enclosed by low dense shop buildings with plain walls, small tables and stools under a shade tree hung with strings of little lights, shop windows glowing softly pink and cyan, with no signs above them, little wheeled serving robots, and far above the rooftops enormous megastructures and towering stone mountain pyramids with lit windows against the night sky. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/bai",
+        "cast/front/zei"
+      ],
+      "cast": [
+        "bai",
+        "zei"
+      ],
+      "seed": 7284,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s05-o1",
+      "shot": "s05",
+      "prompt": "Seated on the low stone bench, the young woman leans sideways mid-motion and spits something into a small bin beside her, nonchalant, her eyes still on the wall screen. Medium shot from a low angle. Exactly one main person: reference image 1 is the young woman (a magenta ponytail and a lime-green vest). Each appears exactly once; only one person has a magenta ponytail and a lime-green vest. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. No other people anywhere in the picture. The place: a windowless players' waiting room carved deep inside a mountain pyramid, polished pale stone walls and a vaulted round-topped ceiling, a doorway of stone bricks curving into an arch whose top bears a carved emblem of two horizontal arms meeting in the middle with clashing fists, sleek elevator doors in one wall, low stone benches, a big wall screen showing the game, warm indirect light. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/bai"
+      ],
+      "cast": [
+        "bai"
+      ],
+      "seed": 7051,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s05-o2",
+      "shot": "s05",
+      "prompt": "Seated on the low stone bench, the young woman leans sideways mid-motion and spits something into a small bin beside her, nonchalant, her eyes still on the wall screen. Medium shot from a low angle. Exactly one main person: reference image 1 is the young woman (a magenta ponytail and a lime-green vest). Each appears exactly once; only one person has a magenta ponytail and a lime-green vest. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. No other people anywhere in the picture. The place: a windowless players' waiting room carved deep inside a mountain pyramid, polished pale stone walls and a vaulted round-topped ceiling, a doorway of stone bricks curving into an arch whose top bears a carved emblem of two horizontal arms meeting in the middle with clashing fists, sleek elevator doors in one wall, low stone benches, a big wall screen showing the game, warm indirect light. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/bai"
+      ],
+      "cast": [
+        "bai"
+      ],
+      "seed": 7052,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s05-o3",
+      "shot": "s05",
+      "prompt": "Seated on the low stone bench, the young woman leans sideways mid-motion and spits something into a small bin beside her, nonchalant, her eyes still on the wall screen. Medium shot from a low angle. Exactly one main person: reference image 1 is the young woman (a magenta ponytail and a lime-green vest). Each appears exactly once; only one person has a magenta ponytail and a lime-green vest. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. No other people anywhere in the picture. The place: a windowless players' waiting room carved deep inside a mountain pyramid, polished pale stone walls and a vaulted round-topped ceiling, a doorway of stone bricks curving into an arch whose top bears a carved emblem of two horizontal arms meeting in the middle with clashing fists, sleek elevator doors in one wall, low stone benches, a big wall screen showing the game, warm indirect light. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/bai"
+      ],
+      "cast": [
+        "bai"
+      ],
+      "seed": 7053,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s05-o4",
+      "shot": "s05",
+      "prompt": "Seated on the low stone bench, the young woman leans sideways mid-motion and spits something into a small bin beside her, nonchalant, her eyes still on the wall screen. Medium shot from a low angle. Exactly one main person: reference image 1 is the young woman (a magenta ponytail and a lime-green vest). Each appears exactly once; only one person has a magenta ponytail and a lime-green vest. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. No other people anywhere in the picture. The place: a windowless players' waiting room carved deep inside a mountain pyramid, polished pale stone walls and a vaulted round-topped ceiling, a doorway of stone bricks curving into an arch whose top bears a carved emblem of two horizontal arms meeting in the middle with clashing fists, sleek elevator doors in one wall, low stone benches, a big wall screen showing the game, warm indirect light. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/bai"
+      ],
+      "cast": [
+        "bai"
+      ],
+      "seed": 7054,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s14-o1",
+      "shot": "s14",
+      "prompt": "Both seated at a small cafe table: the tall pale young man half turns in his chair, one arm raised mid-wave, calling someone over with a big smile; beside him the young woman is still laughing, a hand over her mouth. Medium two-shot. Exactly two main people: reference image 1 is the tall pale young man (wavy light-brown hair and a cream cable-knit sweater); reference image 2 is the young woman (a magenta ponytail and a lime-green vest). Each appears exactly once; only one person has wavy light-brown hair and a cream cable-knit sweater. only one person has a magenta ponytail and a lime-green vest. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. Any other people are small and far in the background, in plain dark clothes, and look nothing like the main people. The place: a small open-air courtyard cafe at night, enclosed by low dense shop buildings with plain walls, small tables and stools under a shade tree hung with strings of little lights, shop windows glowing softly pink and cyan, with no signs above them, little wheeled serving robots, and far above the rooftops enormous megastructures and towering stone mountain pyramids with lit windows against the night sky. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/deluin",
+        "cast/front/bai"
+      ],
+      "cast": [
+        "deluin",
+        "bai"
+      ],
+      "seed": 7141,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s14-o2",
+      "shot": "s14",
+      "prompt": "Both seated at a small cafe table: the tall pale young man half turns in his chair, one arm raised mid-wave, calling someone over with a big smile; beside him the young woman is still laughing, a hand over her mouth. Medium two-shot. Exactly two main people: reference image 1 is the tall pale young man (wavy light-brown hair and a cream cable-knit sweater); reference image 2 is the young woman (a magenta ponytail and a lime-green vest). Each appears exactly once; only one person has wavy light-brown hair and a cream cable-knit sweater. only one person has a magenta ponytail and a lime-green vest. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. Any other people are small and far in the background, in plain dark clothes, and look nothing like the main people. The place: a small open-air courtyard cafe at night, enclosed by low dense shop buildings with plain walls, small tables and stools under a shade tree hung with strings of little lights, shop windows glowing softly pink and cyan, with no signs above them, little wheeled serving robots, and far above the rooftops enormous megastructures and towering stone mountain pyramids with lit windows against the night sky. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/deluin",
+        "cast/front/bai"
+      ],
+      "cast": [
+        "deluin",
+        "bai"
+      ],
+      "seed": 7142,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s14-o3",
+      "shot": "s14",
+      "prompt": "Both seated at a small cafe table: the tall pale young man half turns in his chair, one arm raised mid-wave, calling someone over with a big smile; beside him the young woman is still laughing, a hand over her mouth. Medium two-shot. Exactly two main people: reference image 1 is the tall pale young man (wavy light-brown hair and a cream cable-knit sweater); reference image 2 is the young woman (a magenta ponytail and a lime-green vest). Each appears exactly once; only one person has wavy light-brown hair and a cream cable-knit sweater. only one person has a magenta ponytail and a lime-green vest. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. Any other people are small and far in the background, in plain dark clothes, and look nothing like the main people. The place: a small open-air courtyard cafe at night, enclosed by low dense shop buildings with plain walls, small tables and stools under a shade tree hung with strings of little lights, shop windows glowing softly pink and cyan, with no signs above them, little wheeled serving robots, and far above the rooftops enormous megastructures and towering stone mountain pyramids with lit windows against the night sky. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/deluin",
+        "cast/front/bai"
+      ],
+      "cast": [
+        "deluin",
+        "bai"
+      ],
+      "seed": 7143,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s14-o4",
+      "shot": "s14",
+      "prompt": "Both seated at a small cafe table: the tall pale young man half turns in his chair, one arm raised mid-wave, calling someone over with a big smile; beside him the young woman is still laughing, a hand over her mouth. Medium two-shot. Exactly two main people: reference image 1 is the tall pale young man (wavy light-brown hair and a cream cable-knit sweater); reference image 2 is the young woman (a magenta ponytail and a lime-green vest). Each appears exactly once; only one person has wavy light-brown hair and a cream cable-knit sweater. only one person has a magenta ponytail and a lime-green vest. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. Any other people are small and far in the background, in plain dark clothes, and look nothing like the main people. The place: a small open-air courtyard cafe at night, enclosed by low dense shop buildings with plain walls, small tables and stools under a shade tree hung with strings of little lights, shop windows glowing softly pink and cyan, with no signs above them, little wheeled serving robots, and far above the rooftops enormous megastructures and towering stone mountain pyramids with lit windows against the night sky. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/deluin",
+        "cast/front/bai"
+      ],
+      "cast": [
+        "deluin",
+        "bai"
+      ],
+      "seed": 7144,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s20-o1",
+      "shot": "s20",
+      "prompt": "Seated at a cafe table, the young woman pulls big headphones over her ears with both hands, a small handheld device on the table in front of her, her back half turned to the table behind. Medium shot from the side. Exactly one main person: reference image 1 is the young woman (a magenta ponytail and a lime-green vest). Each appears exactly once; only one person has a magenta ponytail and a lime-green vest. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. Any other people are small and far in the background, in plain dark clothes, and look nothing like the main people. The place: a small open-air courtyard cafe at night, enclosed by low dense shop buildings with plain walls, small tables and stools under a shade tree hung with strings of little lights, shop windows glowing softly pink and cyan, with no signs above them, little wheeled serving robots, and far above the rooftops enormous megastructures and towering stone mountain pyramids with lit windows against the night sky. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/bai"
+      ],
+      "cast": [
+        "bai"
+      ],
+      "seed": 7201,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s20-o2",
+      "shot": "s20",
+      "prompt": "Seated at a cafe table, the young woman pulls big headphones over her ears with both hands, a small handheld device on the table in front of her, her back half turned to the table behind. Medium shot from the side. Exactly one main person: reference image 1 is the young woman (a magenta ponytail and a lime-green vest). Each appears exactly once; only one person has a magenta ponytail and a lime-green vest. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. Any other people are small and far in the background, in plain dark clothes, and look nothing like the main people. The place: a small open-air courtyard cafe at night, enclosed by low dense shop buildings with plain walls, small tables and stools under a shade tree hung with strings of little lights, shop windows glowing softly pink and cyan, with no signs above them, little wheeled serving robots, and far above the rooftops enormous megastructures and towering stone mountain pyramids with lit windows against the night sky. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/bai"
+      ],
+      "cast": [
+        "bai"
+      ],
+      "seed": 7202,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s20-o3",
+      "shot": "s20",
+      "prompt": "Seated at a cafe table, the young woman pulls big headphones over her ears with both hands, a small handheld device on the table in front of her, her back half turned to the table behind. Medium shot from the side. Exactly one main person: reference image 1 is the young woman (a magenta ponytail and a lime-green vest). Each appears exactly once; only one person has a magenta ponytail and a lime-green vest. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. Any other people are small and far in the background, in plain dark clothes, and look nothing like the main people. The place: a small open-air courtyard cafe at night, enclosed by low dense shop buildings with plain walls, small tables and stools under a shade tree hung with strings of little lights, shop windows glowing softly pink and cyan, with no signs above them, little wheeled serving robots, and far above the rooftops enormous megastructures and towering stone mountain pyramids with lit windows against the night sky. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/bai"
+      ],
+      "cast": [
+        "bai"
+      ],
+      "seed": 7203,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s20-o4",
+      "shot": "s20",
+      "prompt": "Seated at a cafe table, the young woman pulls big headphones over her ears with both hands, a small handheld device on the table in front of her, her back half turned to the table behind. Medium shot from the side. Exactly one main person: reference image 1 is the young woman (a magenta ponytail and a lime-green vest). Each appears exactly once; only one person has a magenta ponytail and a lime-green vest. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. Any other people are small and far in the background, in plain dark clothes, and look nothing like the main people. The place: a small open-air courtyard cafe at night, enclosed by low dense shop buildings with plain walls, small tables and stools under a shade tree hung with strings of little lights, shop windows glowing softly pink and cyan, with no signs above them, little wheeled serving robots, and far above the rooftops enormous megastructures and towering stone mountain pyramids with lit windows against the night sky. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/bai"
+      ],
+      "cast": [
+        "bai"
+      ],
+      "seed": 7204,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s26-o1",
+      "shot": "s26",
+      "prompt": "Over-the-shoulder shot across a small cafe table: the tall pale young man, seated, leans forward on his elbows, eager and inviting; in the foreground the spiky-haired young man, seated, seen from behind his shoulder, listens. Exactly two main people: reference image 1 is the tall pale young man (wavy light-brown hair and a cream cable-knit sweater); reference image 2 is the spiky-haired young man (spiky black hair with a blue streak and an orange jacket). Each appears exactly once; only one person has wavy light-brown hair and a cream cable-knit sweater. only one person has spiky black hair with a blue streak and an orange jacket. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. Any other people are small and far in the background, in plain dark clothes, and look nothing like the main people. The place: a small open-air courtyard cafe at night, enclosed by low dense shop buildings with plain walls, small tables and stools under a shade tree hung with strings of little lights, shop windows glowing softly pink and cyan, with no signs above them, little wheeled serving robots, and far above the rooftops enormous megastructures and towering stone mountain pyramids with lit windows against the night sky. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/deluin",
+        "cast/front/zei"
+      ],
+      "cast": [
+        "deluin",
+        "zei"
+      ],
+      "seed": 7261,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s26-o2",
+      "shot": "s26",
+      "prompt": "Over-the-shoulder shot across a small cafe table: the tall pale young man, seated, leans forward on his elbows, eager and inviting; in the foreground the spiky-haired young man, seated, seen from behind his shoulder, listens. Exactly two main people: reference image 1 is the tall pale young man (wavy light-brown hair and a cream cable-knit sweater); reference image 2 is the spiky-haired young man (spiky black hair with a blue streak and an orange jacket). Each appears exactly once; only one person has wavy light-brown hair and a cream cable-knit sweater. only one person has spiky black hair with a blue streak and an orange jacket. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. Any other people are small and far in the background, in plain dark clothes, and look nothing like the main people. The place: a small open-air courtyard cafe at night, enclosed by low dense shop buildings with plain walls, small tables and stools under a shade tree hung with strings of little lights, shop windows glowing softly pink and cyan, with no signs above them, little wheeled serving robots, and far above the rooftops enormous megastructures and towering stone mountain pyramids with lit windows against the night sky. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/deluin",
+        "cast/front/zei"
+      ],
+      "cast": [
+        "deluin",
+        "zei"
+      ],
+      "seed": 7262,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s26-o3",
+      "shot": "s26",
+      "prompt": "Over-the-shoulder shot across a small cafe table: the tall pale young man, seated, leans forward on his elbows, eager and inviting; in the foreground the spiky-haired young man, seated, seen from behind his shoulder, listens. Exactly two main people: reference image 1 is the tall pale young man (wavy light-brown hair and a cream cable-knit sweater); reference image 2 is the spiky-haired young man (spiky black hair with a blue streak and an orange jacket). Each appears exactly once; only one person has wavy light-brown hair and a cream cable-knit sweater. only one person has spiky black hair with a blue streak and an orange jacket. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. Any other people are small and far in the background, in plain dark clothes, and look nothing like the main people. The place: a small open-air courtyard cafe at night, enclosed by low dense shop buildings with plain walls, small tables and stools under a shade tree hung with strings of little lights, shop windows glowing softly pink and cyan, with no signs above them, little wheeled serving robots, and far above the rooftops enormous megastructures and towering stone mountain pyramids with lit windows against the night sky. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/deluin",
+        "cast/front/zei"
+      ],
+      "cast": [
+        "deluin",
+        "zei"
+      ],
+      "seed": 7263,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s26-o4",
+      "shot": "s26",
+      "prompt": "Over-the-shoulder shot across a small cafe table: the tall pale young man, seated, leans forward on his elbows, eager and inviting; in the foreground the spiky-haired young man, seated, seen from behind his shoulder, listens. Exactly two main people: reference image 1 is the tall pale young man (wavy light-brown hair and a cream cable-knit sweater); reference image 2 is the spiky-haired young man (spiky black hair with a blue streak and an orange jacket). Each appears exactly once; only one person has wavy light-brown hair and a cream cable-knit sweater. only one person has spiky black hair with a blue streak and an orange jacket. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. Any other people are small and far in the background, in plain dark clothes, and look nothing like the main people. The place: a small open-air courtyard cafe at night, enclosed by low dense shop buildings with plain walls, small tables and stools under a shade tree hung with strings of little lights, shop windows glowing softly pink and cyan, with no signs above them, little wheeled serving robots, and far above the rooftops enormous megastructures and towering stone mountain pyramids with lit windows against the night sky. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/deluin",
+        "cast/front/zei"
+      ],
+      "cast": [
+        "deluin",
+        "zei"
+      ],
+      "seed": 7264,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s27-o1",
+      "shot": "s27",
+      "prompt": "Seated at the cafe table, the spiky-haired young man laughs and turns his wrist to glance at the watch on it. Medium close-up. Exactly one main person: reference image 1 is the spiky-haired young man (spiky black hair with a blue streak and an orange jacket). Each appears exactly once; only one person has spiky black hair with a blue streak and an orange jacket. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. Any other people are small and far in the background, in plain dark clothes, and look nothing like the main people. The place: a small open-air courtyard cafe at night, enclosed by low dense shop buildings with plain walls, small tables and stools under a shade tree hung with strings of little lights, shop windows glowing softly pink and cyan, with no signs above them, little wheeled serving robots, and far above the rooftops enormous megastructures and towering stone mountain pyramids with lit windows against the night sky. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/zei"
+      ],
+      "cast": [
+        "zei"
+      ],
+      "seed": 7271,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s27-o2",
+      "shot": "s27",
+      "prompt": "Seated at the cafe table, the spiky-haired young man laughs and turns his wrist to glance at the watch on it. Medium close-up. Exactly one main person: reference image 1 is the spiky-haired young man (spiky black hair with a blue streak and an orange jacket). Each appears exactly once; only one person has spiky black hair with a blue streak and an orange jacket. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. Any other people are small and far in the background, in plain dark clothes, and look nothing like the main people. The place: a small open-air courtyard cafe at night, enclosed by low dense shop buildings with plain walls, small tables and stools under a shade tree hung with strings of little lights, shop windows glowing softly pink and cyan, with no signs above them, little wheeled serving robots, and far above the rooftops enormous megastructures and towering stone mountain pyramids with lit windows against the night sky. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/zei"
+      ],
+      "cast": [
+        "zei"
+      ],
+      "seed": 7272,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s27-o3",
+      "shot": "s27",
+      "prompt": "Seated at the cafe table, the spiky-haired young man laughs and turns his wrist to glance at the watch on it. Medium close-up. Exactly one main person: reference image 1 is the spiky-haired young man (spiky black hair with a blue streak and an orange jacket). Each appears exactly once; only one person has spiky black hair with a blue streak and an orange jacket. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. Any other people are small and far in the background, in plain dark clothes, and look nothing like the main people. The place: a small open-air courtyard cafe at night, enclosed by low dense shop buildings with plain walls, small tables and stools under a shade tree hung with strings of little lights, shop windows glowing softly pink and cyan, with no signs above them, little wheeled serving robots, and far above the rooftops enormous megastructures and towering stone mountain pyramids with lit windows against the night sky. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/zei"
+      ],
+      "cast": [
+        "zei"
+      ],
+      "seed": 7273,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s27-o4",
+      "shot": "s27",
+      "prompt": "Seated at the cafe table, the spiky-haired young man laughs and turns his wrist to glance at the watch on it. Medium close-up. Exactly one main person: reference image 1 is the spiky-haired young man (spiky black hair with a blue streak and an orange jacket). Each appears exactly once; only one person has spiky black hair with a blue streak and an orange jacket. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. Any other people are small and far in the background, in plain dark clothes, and look nothing like the main people. The place: a small open-air courtyard cafe at night, enclosed by low dense shop buildings with plain walls, small tables and stools under a shade tree hung with strings of little lights, shop windows glowing softly pink and cyan, with no signs above them, little wheeled serving robots, and far above the rooftops enormous megastructures and towering stone mountain pyramids with lit windows against the night sky. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/zei"
+      ],
+      "cast": [
+        "zei"
+      ],
+      "seed": 7274,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s01-o1",
+      "shot": "s01",
+      "prompt": "Wide shot of the vast game hall, its dark tiers packed with a crowd of small, plainly dressed spectators. In the middle of the floor two game stations face each other across a glowing board: the tall pale young man sits at one, calm and cool, seen from behind and to one side; across the board, facing him, sits his opponent, a young man in plain dark clothes, sweating. Overhead the enormous display shows a ring of luminous walls holding against streams of small glowing gliders. Exactly two main people: reference image 1 is the tall pale young man (wavy light-brown hair and a cream cable-knit sweater); his opponent has no reference image and looks nothing like him. Each appears exactly once; only one person has wavy light-brown hair and a cream cable-knit sweater. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. The tiers are full of spectators: many small people in plain dark clothes, none of them looking like the main people. The place: a vast dark game hall hollowed inside a mountain pyramid, steep tiers of seats rising into shadow, an enormous glowing display hung overhead showing the game as a dark field of tiny glowing dots, walls and gliders, hand-sized drones hovering, thin beams of light crossing the air. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/deluin"
+      ],
+      "cast": [
+        "deluin"
+      ],
+      "seed": 7011,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s01-o2",
+      "shot": "s01",
+      "prompt": "Wide shot of the vast game hall, its dark tiers packed with a crowd of small, plainly dressed spectators. In the middle of the floor two game stations face each other across a glowing board: the tall pale young man sits at one, calm and cool, seen from behind and to one side; across the board, facing him, sits his opponent, a young man in plain dark clothes, sweating. Overhead the enormous display shows a ring of luminous walls holding against streams of small glowing gliders. Exactly two main people: reference image 1 is the tall pale young man (wavy light-brown hair and a cream cable-knit sweater); his opponent has no reference image and looks nothing like him. Each appears exactly once; only one person has wavy light-brown hair and a cream cable-knit sweater. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. The tiers are full of spectators: many small people in plain dark clothes, none of them looking like the main people. The place: a vast dark game hall hollowed inside a mountain pyramid, steep tiers of seats rising into shadow, an enormous glowing display hung overhead showing the game as a dark field of tiny glowing dots, walls and gliders, hand-sized drones hovering, thin beams of light crossing the air. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/deluin"
+      ],
+      "cast": [
+        "deluin"
+      ],
+      "seed": 7012,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s01-o3",
+      "shot": "s01",
+      "prompt": "Wide shot of the vast game hall, its dark tiers packed with a crowd of small, plainly dressed spectators. In the middle of the floor two game stations face each other across a glowing board: the tall pale young man sits at one, calm and cool, seen from behind and to one side; across the board, facing him, sits his opponent, a young man in plain dark clothes, sweating. Overhead the enormous display shows a ring of luminous walls holding against streams of small glowing gliders. Exactly two main people: reference image 1 is the tall pale young man (wavy light-brown hair and a cream cable-knit sweater); his opponent has no reference image and looks nothing like him. Each appears exactly once; only one person has wavy light-brown hair and a cream cable-knit sweater. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. The tiers are full of spectators: many small people in plain dark clothes, none of them looking like the main people. The place: a vast dark game hall hollowed inside a mountain pyramid, steep tiers of seats rising into shadow, an enormous glowing display hung overhead showing the game as a dark field of tiny glowing dots, walls and gliders, hand-sized drones hovering, thin beams of light crossing the air. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/deluin"
+      ],
+      "cast": [
+        "deluin"
+      ],
+      "seed": 7013,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s01-o4",
+      "shot": "s01",
+      "prompt": "Wide shot of the vast game hall, its dark tiers packed with a crowd of small, plainly dressed spectators. In the middle of the floor two game stations face each other across a glowing board: the tall pale young man sits at one, calm and cool, seen from behind and to one side; across the board, facing him, sits his opponent, a young man in plain dark clothes, sweating. Overhead the enormous display shows a ring of luminous walls holding against streams of small glowing gliders. Exactly two main people: reference image 1 is the tall pale young man (wavy light-brown hair and a cream cable-knit sweater); his opponent has no reference image and looks nothing like him. Each appears exactly once; only one person has wavy light-brown hair and a cream cable-knit sweater. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. The tiers are full of spectators: many small people in plain dark clothes, none of them looking like the main people. The place: a vast dark game hall hollowed inside a mountain pyramid, steep tiers of seats rising into shadow, an enormous glowing display hung overhead showing the game as a dark field of tiny glowing dots, walls and gliders, hand-sized drones hovering, thin beams of light crossing the air. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/deluin"
+      ],
+      "cast": [
+        "deluin"
+      ],
+      "seed": 7014,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s02-o1",
+      "shot": "s02",
+      "prompt": "Medium close-up of the tall pale young man seated at his game station, calm and cool, the board's glow on his face; across the board behind him, out of focus, his opponent in plain dark clothes wipes sweat from his brow; beyond, the crowd in the dark tiers. Exactly two main people: reference image 1 is the tall pale young man (wavy light-brown hair and a cream cable-knit sweater); his opponent has no reference image and looks nothing like him. Each appears exactly once; only one person has wavy light-brown hair and a cream cable-knit sweater. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. The tiers are full of spectators: many small people in plain dark clothes, none of them looking like the main people. The place: a vast dark game hall hollowed inside a mountain pyramid, steep tiers of seats rising into shadow, an enormous glowing display hung overhead showing the game as a dark field of tiny glowing dots, walls and gliders, hand-sized drones hovering, thin beams of light crossing the air. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/deluin"
+      ],
+      "cast": [
+        "deluin"
+      ],
+      "seed": 7021,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s02-o2",
+      "shot": "s02",
+      "prompt": "Medium close-up of the tall pale young man seated at his game station, calm and cool, the board's glow on his face; across the board behind him, out of focus, his opponent in plain dark clothes wipes sweat from his brow; beyond, the crowd in the dark tiers. Exactly two main people: reference image 1 is the tall pale young man (wavy light-brown hair and a cream cable-knit sweater); his opponent has no reference image and looks nothing like him. Each appears exactly once; only one person has wavy light-brown hair and a cream cable-knit sweater. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. The tiers are full of spectators: many small people in plain dark clothes, none of them looking like the main people. The place: a vast dark game hall hollowed inside a mountain pyramid, steep tiers of seats rising into shadow, an enormous glowing display hung overhead showing the game as a dark field of tiny glowing dots, walls and gliders, hand-sized drones hovering, thin beams of light crossing the air. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/deluin"
+      ],
+      "cast": [
+        "deluin"
+      ],
+      "seed": 7022,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s02-o3",
+      "shot": "s02",
+      "prompt": "Medium close-up of the tall pale young man seated at his game station, calm and cool, the board's glow on his face; across the board behind him, out of focus, his opponent in plain dark clothes wipes sweat from his brow; beyond, the crowd in the dark tiers. Exactly two main people: reference image 1 is the tall pale young man (wavy light-brown hair and a cream cable-knit sweater); his opponent has no reference image and looks nothing like him. Each appears exactly once; only one person has wavy light-brown hair and a cream cable-knit sweater. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. The tiers are full of spectators: many small people in plain dark clothes, none of them looking like the main people. The place: a vast dark game hall hollowed inside a mountain pyramid, steep tiers of seats rising into shadow, an enormous glowing display hung overhead showing the game as a dark field of tiny glowing dots, walls and gliders, hand-sized drones hovering, thin beams of light crossing the air. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/deluin"
+      ],
+      "cast": [
+        "deluin"
+      ],
+      "seed": 7023,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s02-o4",
+      "shot": "s02",
+      "prompt": "Medium close-up of the tall pale young man seated at his game station, calm and cool, the board's glow on his face; across the board behind him, out of focus, his opponent in plain dark clothes wipes sweat from his brow; beyond, the crowd in the dark tiers. Exactly two main people: reference image 1 is the tall pale young man (wavy light-brown hair and a cream cable-knit sweater); his opponent has no reference image and looks nothing like him. Each appears exactly once; only one person has wavy light-brown hair and a cream cable-knit sweater. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. The tiers are full of spectators: many small people in plain dark clothes, none of them looking like the main people. The place: a vast dark game hall hollowed inside a mountain pyramid, steep tiers of seats rising into shadow, an enormous glowing display hung overhead showing the game as a dark field of tiny glowing dots, walls and gliders, hand-sized drones hovering, thin beams of light crossing the air. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/deluin"
+      ],
+      "cast": [
+        "deluin"
+      ],
+      "seed": 7024,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s03-o1",
+      "shot": "s03",
+      "prompt": "The slim spiky-haired young man and the young woman sit side by side on a low stone bench, watching the big wall screen showing the game; a small bin stands beside her. Medium two-shot. Exactly two main people: reference image 1 is the spiky-haired young man (spiky black hair with a blue streak and an orange jacket); reference image 2 is the young woman (a magenta ponytail and a lime-green vest). Each appears exactly once; only one person has spiky black hair with a blue streak and an orange jacket. only one person has a magenta ponytail and a lime-green vest. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. No other people anywhere in the picture. The place: a windowless players' waiting room carved deep inside a mountain pyramid, polished pale stone walls and a vaulted round-topped ceiling, a doorway of stone bricks curving into an arch whose top bears a carved emblem of two horizontal arms meeting in the middle with clashing fists, sleek elevator doors in one wall, low stone benches, a big wall screen showing the game, warm indirect light. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/zei",
+        "cast/front/bai"
+      ],
+      "cast": [
+        "zei",
+        "bai"
+      ],
+      "seed": 7031,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s03-o2",
+      "shot": "s03",
+      "prompt": "The slim spiky-haired young man and the young woman sit side by side on a low stone bench, watching the big wall screen showing the game; a small bin stands beside her. Medium two-shot. Exactly two main people: reference image 1 is the spiky-haired young man (spiky black hair with a blue streak and an orange jacket); reference image 2 is the young woman (a magenta ponytail and a lime-green vest). Each appears exactly once; only one person has spiky black hair with a blue streak and an orange jacket. only one person has a magenta ponytail and a lime-green vest. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. No other people anywhere in the picture. The place: a windowless players' waiting room carved deep inside a mountain pyramid, polished pale stone walls and a vaulted round-topped ceiling, a doorway of stone bricks curving into an arch whose top bears a carved emblem of two horizontal arms meeting in the middle with clashing fists, sleek elevator doors in one wall, low stone benches, a big wall screen showing the game, warm indirect light. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/zei",
+        "cast/front/bai"
+      ],
+      "cast": [
+        "zei",
+        "bai"
+      ],
+      "seed": 7032,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s04-o1",
+      "shot": "s04",
+      "prompt": "Both sitting on the low stone bench: the slim spiky-haired young man turns to the young woman beside him with one eyebrow raised; she keeps her eyes on the wall screen, unimpressed. Medium close two-shot. Exactly two main people: reference image 1 is the spiky-haired young man (spiky black hair with a blue streak and an orange jacket); reference image 2 is the young woman (a magenta ponytail and a lime-green vest). Each appears exactly once; only one person has spiky black hair with a blue streak and an orange jacket. only one person has a magenta ponytail and a lime-green vest. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. No other people anywhere in the picture. The place: a windowless players' waiting room carved deep inside a mountain pyramid, polished pale stone walls and a vaulted round-topped ceiling, a doorway of stone bricks curving into an arch whose top bears a carved emblem of two horizontal arms meeting in the middle with clashing fists, sleek elevator doors in one wall, low stone benches, a big wall screen showing the game, warm indirect light. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/zei",
+        "cast/front/bai"
+      ],
+      "cast": [
+        "zei",
+        "bai"
+      ],
+      "seed": 7041,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s04-o2",
+      "shot": "s04",
+      "prompt": "Both sitting on the low stone bench: the slim spiky-haired young man turns to the young woman beside him with one eyebrow raised; she keeps her eyes on the wall screen, unimpressed. Medium close two-shot. Exactly two main people: reference image 1 is the spiky-haired young man (spiky black hair with a blue streak and an orange jacket); reference image 2 is the young woman (a magenta ponytail and a lime-green vest). Each appears exactly once; only one person has spiky black hair with a blue streak and an orange jacket. only one person has a magenta ponytail and a lime-green vest. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. No other people anywhere in the picture. The place: a windowless players' waiting room carved deep inside a mountain pyramid, polished pale stone walls and a vaulted round-topped ceiling, a doorway of stone bricks curving into an arch whose top bears a carved emblem of two horizontal arms meeting in the middle with clashing fists, sleek elevator doors in one wall, low stone benches, a big wall screen showing the game, warm indirect light. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/zei",
+        "cast/front/bai"
+      ],
+      "cast": [
+        "zei",
+        "bai"
+      ],
+      "seed": 7042,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s06-o1",
+      "shot": "s06",
+      "prompt": "The young woman finally gives the game on the wall screen a serious look, studying it, chin on her hand, the screen's glow on her face. Close-up. Exactly one main person: reference image 1 is the young woman (a magenta ponytail and a lime-green vest). Each appears exactly once; only one person has a magenta ponytail and a lime-green vest. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. No other people anywhere in the picture. The place: a windowless players' waiting room carved deep inside a mountain pyramid, polished pale stone walls and a vaulted round-topped ceiling, a doorway of stone bricks curving into an arch whose top bears a carved emblem of two horizontal arms meeting in the middle with clashing fists, sleek elevator doors in one wall, low stone benches, a big wall screen showing the game, warm indirect light. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/bai"
+      ],
+      "cast": [
+        "bai"
+      ],
+      "seed": 7061,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s06-o2",
+      "shot": "s06",
+      "prompt": "The young woman finally gives the game on the wall screen a serious look, studying it, chin on her hand, the screen's glow on her face. Close-up. Exactly one main person: reference image 1 is the young woman (a magenta ponytail and a lime-green vest). Each appears exactly once; only one person has a magenta ponytail and a lime-green vest. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. No other people anywhere in the picture. The place: a windowless players' waiting room carved deep inside a mountain pyramid, polished pale stone walls and a vaulted round-topped ceiling, a doorway of stone bricks curving into an arch whose top bears a carved emblem of two horizontal arms meeting in the middle with clashing fists, sleek elevator doors in one wall, low stone benches, a big wall screen showing the game, warm indirect light. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/bai"
+      ],
+      "cast": [
+        "bai"
+      ],
+      "seed": 7062,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s07-o1",
+      "shot": "s07",
+      "prompt": "Elevator doors slide open and the tall pale young man steps out, easy and bright, toward the slim spiky-haired young man and the young woman, who stand waiting in the corridor. Wide shot. Exactly three main people: reference image 1 is the tall pale young man (wavy light-brown hair and a cream cable-knit sweater); reference image 2 is the spiky-haired young man (spiky black hair with a blue streak and an orange jacket); reference image 3 is the young woman (a magenta ponytail and a lime-green vest). Each appears exactly once; only one person has wavy light-brown hair and a cream cable-knit sweater. only one person has spiky black hair with a blue streak and an orange jacket. only one person has a magenta ponytail and a lime-green vest. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. No other people anywhere in the picture. The place: a quiet corridor deep inside a mountain pyramid, rough rock walls finished with clean pale panels, a row of sleek elevator doors, cool indirect light. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/deluin",
+        "cast/front/zei",
+        "cast/front/bai"
+      ],
+      "cast": [
+        "deluin",
+        "zei",
+        "bai"
+      ],
+      "seed": 7071,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s07-o2",
+      "shot": "s07",
+      "prompt": "Elevator doors slide open and the tall pale young man steps out, easy and bright, toward the slim spiky-haired young man and the young woman, who stand waiting in the corridor. Wide shot. Exactly three main people: reference image 1 is the tall pale young man (wavy light-brown hair and a cream cable-knit sweater); reference image 2 is the spiky-haired young man (spiky black hair with a blue streak and an orange jacket); reference image 3 is the young woman (a magenta ponytail and a lime-green vest). Each appears exactly once; only one person has wavy light-brown hair and a cream cable-knit sweater. only one person has spiky black hair with a blue streak and an orange jacket. only one person has a magenta ponytail and a lime-green vest. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. No other people anywhere in the picture. The place: a quiet corridor deep inside a mountain pyramid, rough rock walls finished with clean pale panels, a row of sleek elevator doors, cool indirect light. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/deluin",
+        "cast/front/zei",
+        "cast/front/bai"
+      ],
+      "cast": [
+        "deluin",
+        "zei",
+        "bai"
+      ],
+      "seed": 7072,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s08-o1",
+      "shot": "s08",
+      "prompt": "In the corridor the tall pale young man and the slim spiky-haired young man talk face to face, friendly and a little shy. Medium two-shot. Exactly two main people: reference image 1 is the tall pale young man (wavy light-brown hair and a cream cable-knit sweater); reference image 2 is the spiky-haired young man (spiky black hair with a blue streak and an orange jacket). Each appears exactly once; only one person has wavy light-brown hair and a cream cable-knit sweater. only one person has spiky black hair with a blue streak and an orange jacket. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. No other people anywhere in the picture. The place: a quiet corridor deep inside a mountain pyramid, rough rock walls finished with clean pale panels, a row of sleek elevator doors, cool indirect light. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/deluin",
+        "cast/front/zei"
+      ],
+      "cast": [
+        "deluin",
+        "zei"
+      ],
+      "seed": 7081,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s08-o2",
+      "shot": "s08",
+      "prompt": "In the corridor the tall pale young man and the slim spiky-haired young man talk face to face, friendly and a little shy. Medium two-shot. Exactly two main people: reference image 1 is the tall pale young man (wavy light-brown hair and a cream cable-knit sweater); reference image 2 is the spiky-haired young man (spiky black hair with a blue streak and an orange jacket). Each appears exactly once; only one person has wavy light-brown hair and a cream cable-knit sweater. only one person has spiky black hair with a blue streak and an orange jacket. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. No other people anywhere in the picture. The place: a quiet corridor deep inside a mountain pyramid, rough rock walls finished with clean pale panels, a row of sleek elevator doors, cool indirect light. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/deluin",
+        "cast/front/zei"
+      ],
+      "cast": [
+        "deluin",
+        "zei"
+      ],
+      "seed": 7082,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s09-o1",
+      "shot": "s09",
+      "prompt": "In the corridor the tall pale young man turns to the young woman with an open, friendly smile; she shrugs with a disgruntled look. Medium two-shot. Exactly two main people: reference image 1 is the tall pale young man (wavy light-brown hair and a cream cable-knit sweater); reference image 2 is the young woman (a magenta ponytail and a lime-green vest). Each appears exactly once; only one person has wavy light-brown hair and a cream cable-knit sweater. only one person has a magenta ponytail and a lime-green vest. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. No other people anywhere in the picture. The place: a quiet corridor deep inside a mountain pyramid, rough rock walls finished with clean pale panels, a row of sleek elevator doors, cool indirect light. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/deluin",
+        "cast/front/bai"
+      ],
+      "cast": [
+        "deluin",
+        "bai"
+      ],
+      "seed": 7091,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s09-o2",
+      "shot": "s09",
+      "prompt": "In the corridor the tall pale young man turns to the young woman with an open, friendly smile; she shrugs with a disgruntled look. Medium two-shot. Exactly two main people: reference image 1 is the tall pale young man (wavy light-brown hair and a cream cable-knit sweater); reference image 2 is the young woman (a magenta ponytail and a lime-green vest). Each appears exactly once; only one person has wavy light-brown hair and a cream cable-knit sweater. only one person has a magenta ponytail and a lime-green vest. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. No other people anywhere in the picture. The place: a quiet corridor deep inside a mountain pyramid, rough rock walls finished with clean pale panels, a row of sleek elevator doors, cool indirect light. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/deluin",
+        "cast/front/bai"
+      ],
+      "cast": [
+        "deluin",
+        "bai"
+      ],
+      "seed": 7092,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s10-o1",
+      "shot": "s10",
+      "prompt": "In the empty corridor, the young woman gives the slim spiky-haired young man a hard look; he looks back, sheepish. The corridor stretches away behind them, empty. Medium two-shot. (Redrafted: the tall pale young man has already gone; three people in one shot kept getting mixed up.) Exactly two main people: reference image 1 is the young woman (a magenta ponytail and a lime-green vest); reference image 2 is the spiky-haired young man (spiky black hair with a blue streak and an orange jacket). Each appears exactly once; only one person has a magenta ponytail and a lime-green vest. only one person has spiky black hair with a blue streak and an orange jacket. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. No other people anywhere in the picture. The place: a quiet corridor deep inside a mountain pyramid, rough rock walls finished with clean pale panels, a row of sleek elevator doors, cool indirect light. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/bai",
+        "cast/front/zei"
+      ],
+      "cast": [
+        "bai",
+        "zei"
+      ],
+      "seed": 7101,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s10-o2",
+      "shot": "s10",
+      "prompt": "In the empty corridor, the young woman gives the slim spiky-haired young man a hard look; he looks back, sheepish. The corridor stretches away behind them, empty. Medium two-shot. (Redrafted: the tall pale young man has already gone; three people in one shot kept getting mixed up.) Exactly two main people: reference image 1 is the young woman (a magenta ponytail and a lime-green vest); reference image 2 is the spiky-haired young man (spiky black hair with a blue streak and an orange jacket). Each appears exactly once; only one person has a magenta ponytail and a lime-green vest. only one person has spiky black hair with a blue streak and an orange jacket. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. No other people anywhere in the picture. The place: a quiet corridor deep inside a mountain pyramid, rough rock walls finished with clean pale panels, a row of sleek elevator doors, cool indirect light. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/bai",
+        "cast/front/zei"
+      ],
+      "cast": [
+        "bai",
+        "zei"
+      ],
+      "seed": 7102,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s11-o1",
+      "shot": "s11",
+      "prompt": "The young woman says something sharp with a smile, one hand on her hip. Medium close-up. Exactly one main person: reference image 1 is the young woman (a magenta ponytail and a lime-green vest). Each appears exactly once; only one person has a magenta ponytail and a lime-green vest. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. No other people anywhere in the picture. The place: a quiet corridor deep inside a mountain pyramid, rough rock walls finished with clean pale panels, a row of sleek elevator doors, cool indirect light. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/bai"
+      ],
+      "cast": [
+        "bai"
+      ],
+      "seed": 7111,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s11-o2",
+      "shot": "s11",
+      "prompt": "The young woman says something sharp with a smile, one hand on her hip. Medium close-up. Exactly one main person: reference image 1 is the young woman (a magenta ponytail and a lime-green vest). Each appears exactly once; only one person has a magenta ponytail and a lime-green vest. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. No other people anywhere in the picture. The place: a quiet corridor deep inside a mountain pyramid, rough rock walls finished with clean pale panels, a row of sleek elevator doors, cool indirect light. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/bai"
+      ],
+      "cast": [
+        "bai"
+      ],
+      "seed": 7112,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s12-o1",
+      "shot": "s12",
+      "prompt": "The slim spiky-haired young man grins and nudges the young woman, who rolls her eyes but half smiles. Medium two-shot. Exactly two main people: reference image 1 is the spiky-haired young man (spiky black hair with a blue streak and an orange jacket); reference image 2 is the young woman (a magenta ponytail and a lime-green vest). Each appears exactly once; only one person has spiky black hair with a blue streak and an orange jacket. only one person has a magenta ponytail and a lime-green vest. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. No other people anywhere in the picture. The place: a quiet corridor deep inside a mountain pyramid, rough rock walls finished with clean pale panels, a row of sleek elevator doors, cool indirect light. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/zei",
+        "cast/front/bai"
+      ],
+      "cast": [
+        "zei",
+        "bai"
+      ],
+      "seed": 7121,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s12-o2",
+      "shot": "s12",
+      "prompt": "The slim spiky-haired young man grins and nudges the young woman, who rolls her eyes but half smiles. Medium two-shot. Exactly two main people: reference image 1 is the spiky-haired young man (spiky black hair with a blue streak and an orange jacket); reference image 2 is the young woman (a magenta ponytail and a lime-green vest). Each appears exactly once; only one person has spiky black hair with a blue streak and an orange jacket. only one person has a magenta ponytail and a lime-green vest. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. No other people anywhere in the picture. The place: a quiet corridor deep inside a mountain pyramid, rough rock walls finished with clean pale panels, a row of sleek elevator doors, cool indirect light. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/zei",
+        "cast/front/bai"
+      ],
+      "cast": [
+        "zei",
+        "bai"
+      ],
+      "seed": 7122,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s13-o1",
+      "shot": "s13",
+      "prompt": "The slim spiky-haired young man runs into the courtyard and pulls up short; at a small table the tall pale young man and the young woman are already sitting together, both laughing. Wide shot. Exactly three main people: reference image 1 is the spiky-haired young man (spiky black hair with a blue streak and an orange jacket); reference image 2 is the tall pale young man (wavy light-brown hair and a cream cable-knit sweater); reference image 3 is the young woman (a magenta ponytail and a lime-green vest). Each appears exactly once; only one person has spiky black hair with a blue streak and an orange jacket. only one person has wavy light-brown hair and a cream cable-knit sweater. only one person has a magenta ponytail and a lime-green vest. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. A few other people sit at other tables, small and plainly dressed in dark clothes, none of them looking like the main people. The place: a small open-air courtyard cafe at night, enclosed by low dense shop buildings with plain walls, small tables and stools under a shade tree hung with strings of little lights, shop windows glowing softly pink and cyan, with no signs above them, little wheeled serving robots, and far above the rooftops enormous megastructures and towering stone mountain pyramids with lit windows against the night sky. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/zei",
+        "cast/front/deluin",
+        "cast/front/bai"
+      ],
+      "cast": [
+        "zei",
+        "deluin",
+        "bai"
+      ],
+      "seed": 7131,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s13-o2",
+      "shot": "s13",
+      "prompt": "The slim spiky-haired young man runs into the courtyard and pulls up short; at a small table the tall pale young man and the young woman are already sitting together, both laughing. Wide shot. Exactly three main people: reference image 1 is the spiky-haired young man (spiky black hair with a blue streak and an orange jacket); reference image 2 is the tall pale young man (wavy light-brown hair and a cream cable-knit sweater); reference image 3 is the young woman (a magenta ponytail and a lime-green vest). Each appears exactly once; only one person has spiky black hair with a blue streak and an orange jacket. only one person has wavy light-brown hair and a cream cable-knit sweater. only one person has a magenta ponytail and a lime-green vest. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. A few other people sit at other tables, small and plainly dressed in dark clothes, none of them looking like the main people. The place: a small open-air courtyard cafe at night, enclosed by low dense shop buildings with plain walls, small tables and stools under a shade tree hung with strings of little lights, shop windows glowing softly pink and cyan, with no signs above them, little wheeled serving robots, and far above the rooftops enormous megastructures and towering stone mountain pyramids with lit windows against the night sky. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/zei",
+        "cast/front/deluin",
+        "cast/front/bai"
+      ],
+      "cast": [
+        "zei",
+        "deluin",
+        "bai"
+      ],
+      "seed": 7132,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s15-o1",
+      "shot": "s15",
+      "prompt": "A plain, boxy little wheeled serving robot with a flat tray on top and a small dark screen for a face slides up to the small cafe table where the two young men sit. Medium shot. Exactly two main people: reference image 1 is the spiky-haired young man (spiky black hair with a blue streak and an orange jacket); reference image 2 is the tall pale young man (wavy light-brown hair and a cream cable-knit sweater). Each appears exactly once; only one person has spiky black hair with a blue streak and an orange jacket. only one person has wavy light-brown hair and a cream cable-knit sweater. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. A few other people sit at other tables, small and plainly dressed in dark clothes, none of them looking like the main people. The place: a small open-air courtyard cafe at night, enclosed by low dense shop buildings with plain walls, small tables and stools under a shade tree hung with strings of little lights, shop windows glowing softly pink and cyan, with no signs above them, little wheeled serving robots, and far above the rooftops enormous megastructures and towering stone mountain pyramids with lit windows against the night sky. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/zei",
+        "cast/front/deluin"
+      ],
+      "cast": [
+        "zei",
+        "deluin"
+      ],
+      "seed": 7151,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s15-o2",
+      "shot": "s15",
+      "prompt": "A plain, boxy little wheeled serving robot with a flat tray on top and a small dark screen for a face slides up to the small cafe table where the two young men sit. Medium shot. Exactly two main people: reference image 1 is the spiky-haired young man (spiky black hair with a blue streak and an orange jacket); reference image 2 is the tall pale young man (wavy light-brown hair and a cream cable-knit sweater). Each appears exactly once; only one person has spiky black hair with a blue streak and an orange jacket. only one person has wavy light-brown hair and a cream cable-knit sweater. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. A few other people sit at other tables, small and plainly dressed in dark clothes, none of them looking like the main people. The place: a small open-air courtyard cafe at night, enclosed by low dense shop buildings with plain walls, small tables and stools under a shade tree hung with strings of little lights, shop windows glowing softly pink and cyan, with no signs above them, little wheeled serving robots, and far above the rooftops enormous megastructures and towering stone mountain pyramids with lit windows against the night sky. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/zei",
+        "cast/front/deluin"
+      ],
+      "cast": [
+        "zei",
+        "deluin"
+      ],
+      "seed": 7152,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s17-o1",
+      "shot": "s17",
+      "prompt": "The two young men lean over the screen of a plain, boxy little wheeled serving robot with a flat tray on top and a small dark screen for a face at their table; the spiky-haired one stares at it in wonder, the tall pale one curious. The robot's screen shows four rounded square tiles, each with one simple pale-blue line drawing on dark blue: a cup, a leaf, a small animal face, a fish. Medium close shot. Exactly two main people: reference image 1 is the spiky-haired young man (spiky black hair with a blue streak and an orange jacket); reference image 2 is the tall pale young man (wavy light-brown hair and a cream cable-knit sweater). Each appears exactly once; only one person has spiky black hair with a blue streak and an orange jacket. only one person has wavy light-brown hair and a cream cable-knit sweater. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. A few other people sit at other tables, small and plainly dressed in dark clothes, none of them looking like the main people. The place: a small open-air courtyard cafe at night, enclosed by low dense shop buildings with plain walls, small tables and stools under a shade tree hung with strings of little lights, shop windows glowing softly pink and cyan, with no signs above them, little wheeled serving robots, and far above the rooftops enormous megastructures and towering stone mountain pyramids with lit windows against the night sky. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/zei",
+        "cast/front/deluin"
+      ],
+      "cast": [
+        "zei",
+        "deluin"
+      ],
+      "seed": 7171,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s17-o2",
+      "shot": "s17",
+      "prompt": "The two young men lean over the screen of a plain, boxy little wheeled serving robot with a flat tray on top and a small dark screen for a face at their table; the spiky-haired one stares at it in wonder, the tall pale one curious. The robot's screen shows four rounded square tiles, each with one simple pale-blue line drawing on dark blue: a cup, a leaf, a small animal face, a fish. Medium close shot. Exactly two main people: reference image 1 is the spiky-haired young man (spiky black hair with a blue streak and an orange jacket); reference image 2 is the tall pale young man (wavy light-brown hair and a cream cable-knit sweater). Each appears exactly once; only one person has spiky black hair with a blue streak and an orange jacket. only one person has wavy light-brown hair and a cream cable-knit sweater. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. A few other people sit at other tables, small and plainly dressed in dark clothes, none of them looking like the main people. The place: a small open-air courtyard cafe at night, enclosed by low dense shop buildings with plain walls, small tables and stools under a shade tree hung with strings of little lights, shop windows glowing softly pink and cyan, with no signs above them, little wheeled serving robots, and far above the rooftops enormous megastructures and towering stone mountain pyramids with lit windows against the night sky. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/zei",
+        "cast/front/deluin"
+      ],
+      "cast": [
+        "zei",
+        "deluin"
+      ],
+      "seed": 7172,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s18-o1",
+      "shot": "s18",
+      "prompt": "At the cafe table the tall pale young man explains with one finger raised, a little lecturing; the spiky-haired young man watches him, impressed and a bit put out. Medium two-shot. Exactly two main people: reference image 1 is the tall pale young man (wavy light-brown hair and a cream cable-knit sweater); reference image 2 is the spiky-haired young man (spiky black hair with a blue streak and an orange jacket). Each appears exactly once; only one person has wavy light-brown hair and a cream cable-knit sweater. only one person has spiky black hair with a blue streak and an orange jacket. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. A few other people sit at other tables, small and plainly dressed in dark clothes, none of them looking like the main people. The place: a small open-air courtyard cafe at night, enclosed by low dense shop buildings with plain walls, small tables and stools under a shade tree hung with strings of little lights, shop windows glowing softly pink and cyan, with no signs above them, little wheeled serving robots, and far above the rooftops enormous megastructures and towering stone mountain pyramids with lit windows against the night sky. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/deluin",
+        "cast/front/zei"
+      ],
+      "cast": [
+        "deluin",
+        "zei"
+      ],
+      "seed": 7181,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s18-o2",
+      "shot": "s18",
+      "prompt": "At the cafe table the tall pale young man explains with one finger raised, a little lecturing; the spiky-haired young man watches him, impressed and a bit put out. Medium two-shot. Exactly two main people: reference image 1 is the tall pale young man (wavy light-brown hair and a cream cable-knit sweater); reference image 2 is the spiky-haired young man (spiky black hair with a blue streak and an orange jacket). Each appears exactly once; only one person has wavy light-brown hair and a cream cable-knit sweater. only one person has spiky black hair with a blue streak and an orange jacket. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. A few other people sit at other tables, small and plainly dressed in dark clothes, none of them looking like the main people. The place: a small open-air courtyard cafe at night, enclosed by low dense shop buildings with plain walls, small tables and stools under a shade tree hung with strings of little lights, shop windows glowing softly pink and cyan, with no signs above them, little wheeled serving robots, and far above the rooftops enormous megastructures and towering stone mountain pyramids with lit windows against the night sky. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/deluin",
+        "cast/front/zei"
+      ],
+      "cast": [
+        "deluin",
+        "zei"
+      ],
+      "seed": 7182,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s19-o1",
+      "shot": "s19",
+      "prompt": "The young woman whips round from the cafe table, already getting up, with a half-baked excuse; the spiky-haired young man, seated, looks up at her. Medium two-shot. Exactly two main people: reference image 1 is the young woman (a magenta ponytail and a lime-green vest); reference image 2 is the spiky-haired young man (spiky black hair with a blue streak and an orange jacket). Each appears exactly once; only one person has a magenta ponytail and a lime-green vest. only one person has spiky black hair with a blue streak and an orange jacket. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. A few other people sit at other tables, small and plainly dressed in dark clothes, none of them looking like the main people. The place: a small open-air courtyard cafe at night, enclosed by low dense shop buildings with plain walls, small tables and stools under a shade tree hung with strings of little lights, shop windows glowing softly pink and cyan, with no signs above them, little wheeled serving robots, and far above the rooftops enormous megastructures and towering stone mountain pyramids with lit windows against the night sky. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/bai",
+        "cast/front/zei"
+      ],
+      "cast": [
+        "bai",
+        "zei"
+      ],
+      "seed": 7191,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s19-o2",
+      "shot": "s19",
+      "prompt": "The young woman whips round from the cafe table, already getting up, with a half-baked excuse; the spiky-haired young man, seated, looks up at her. Medium two-shot. Exactly two main people: reference image 1 is the young woman (a magenta ponytail and a lime-green vest); reference image 2 is the spiky-haired young man (spiky black hair with a blue streak and an orange jacket). Each appears exactly once; only one person has a magenta ponytail and a lime-green vest. only one person has spiky black hair with a blue streak and an orange jacket. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. A few other people sit at other tables, small and plainly dressed in dark clothes, none of them looking like the main people. The place: a small open-air courtyard cafe at night, enclosed by low dense shop buildings with plain walls, small tables and stools under a shade tree hung with strings of little lights, shop windows glowing softly pink and cyan, with no signs above them, little wheeled serving robots, and far above the rooftops enormous megastructures and towering stone mountain pyramids with lit windows against the night sky. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/bai",
+        "cast/front/zei"
+      ],
+      "cast": [
+        "bai",
+        "zei"
+      ],
+      "seed": 7192,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s21-o1",
+      "shot": "s21",
+      "prompt": "Seen from above a small cafe table: tea in two cups; the tall pale young man starts stacking white sugar cubes as he talks, the spiky-haired young man across from him. Close shot. Exactly two main people: reference image 1 is the tall pale young man (wavy light-brown hair and a cream cable-knit sweater); reference image 2 is the spiky-haired young man (spiky black hair with a blue streak and an orange jacket). Each appears exactly once; only one person has wavy light-brown hair and a cream cable-knit sweater. only one person has spiky black hair with a blue streak and an orange jacket. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. No other people anywhere in the picture. The place: a small open-air courtyard cafe at night, enclosed by low dense shop buildings with plain walls, small tables and stools under a shade tree hung with strings of little lights, shop windows glowing softly pink and cyan, with no signs above them, little wheeled serving robots, and far above the rooftops enormous megastructures and towering stone mountain pyramids with lit windows against the night sky. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/deluin",
+        "cast/front/zei"
+      ],
+      "cast": [
+        "deluin",
+        "zei"
+      ],
+      "seed": 7211,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s21-o2",
+      "shot": "s21",
+      "prompt": "Seen from above a small cafe table: tea in two cups; the tall pale young man starts stacking white sugar cubes as he talks, the spiky-haired young man across from him. Close shot. Exactly two main people: reference image 1 is the tall pale young man (wavy light-brown hair and a cream cable-knit sweater); reference image 2 is the spiky-haired young man (spiky black hair with a blue streak and an orange jacket). Each appears exactly once; only one person has wavy light-brown hair and a cream cable-knit sweater. only one person has spiky black hair with a blue streak and an orange jacket. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. No other people anywhere in the picture. The place: a small open-air courtyard cafe at night, enclosed by low dense shop buildings with plain walls, small tables and stools under a shade tree hung with strings of little lights, shop windows glowing softly pink and cyan, with no signs above them, little wheeled serving robots, and far above the rooftops enormous megastructures and towering stone mountain pyramids with lit windows against the night sky. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/deluin",
+        "cast/front/zei"
+      ],
+      "cast": [
+        "deluin",
+        "zei"
+      ],
+      "seed": 7212,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s22-o1",
+      "shot": "s22",
+      "prompt": "The spiky-haired young man talks with his hands, warm and easy; across the table the tall pale young man listens, a growing stack of white sugar cubes in front of him. Medium two-shot. Exactly two main people: reference image 1 is the spiky-haired young man (spiky black hair with a blue streak and an orange jacket); reference image 2 is the tall pale young man (wavy light-brown hair and a cream cable-knit sweater). Each appears exactly once; only one person has spiky black hair with a blue streak and an orange jacket. only one person has wavy light-brown hair and a cream cable-knit sweater. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. A few other people sit at other tables, small and plainly dressed in dark clothes, none of them looking like the main people. The place: a small open-air courtyard cafe at night, enclosed by low dense shop buildings with plain walls, small tables and stools under a shade tree hung with strings of little lights, shop windows glowing softly pink and cyan, with no signs above them, little wheeled serving robots, and far above the rooftops enormous megastructures and towering stone mountain pyramids with lit windows against the night sky. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/zei",
+        "cast/front/deluin"
+      ],
+      "cast": [
+        "zei",
+        "deluin"
+      ],
+      "seed": 7221,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s22-o2",
+      "shot": "s22",
+      "prompt": "The spiky-haired young man talks with his hands, warm and easy; across the table the tall pale young man listens, a growing stack of white sugar cubes in front of him. Medium two-shot. Exactly two main people: reference image 1 is the spiky-haired young man (spiky black hair with a blue streak and an orange jacket); reference image 2 is the tall pale young man (wavy light-brown hair and a cream cable-knit sweater). Each appears exactly once; only one person has spiky black hair with a blue streak and an orange jacket. only one person has wavy light-brown hair and a cream cable-knit sweater. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. A few other people sit at other tables, small and plainly dressed in dark clothes, none of them looking like the main people. The place: a small open-air courtyard cafe at night, enclosed by low dense shop buildings with plain walls, small tables and stools under a shade tree hung with strings of little lights, shop windows glowing softly pink and cyan, with no signs above them, little wheeled serving robots, and far above the rooftops enormous megastructures and towering stone mountain pyramids with lit windows against the night sky. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/zei",
+        "cast/front/deluin"
+      ],
+      "cast": [
+        "zei",
+        "deluin"
+      ],
+      "seed": 7222,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s23-o1",
+      "shot": "s23",
+      "prompt": "Close on a small cafe table at night: a neat little wall of white sugar cubes stands between two tea cups, string lights soft in the background. Extreme close-up, no people. No people. The place: a small open-air courtyard cafe at night, enclosed by low dense shop buildings with plain walls, small tables and stools under a shade tree hung with strings of little lights, shop windows glowing softly pink and cyan, with no signs above them, little wheeled serving robots, and far above the rooftops enormous megastructures and towering stone mountain pyramids with lit windows against the night sky. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [],
+      "cast": [],
+      "seed": 7231,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s23-o2",
+      "shot": "s23",
+      "prompt": "Close on a small cafe table at night: a neat little wall of white sugar cubes stands between two tea cups, string lights soft in the background. Extreme close-up, no people. No people. The place: a small open-air courtyard cafe at night, enclosed by low dense shop buildings with plain walls, small tables and stools under a shade tree hung with strings of little lights, shop windows glowing softly pink and cyan, with no signs above them, little wheeled serving robots, and far above the rooftops enormous megastructures and towering stone mountain pyramids with lit windows against the night sky. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [],
+      "cast": [],
+      "seed": 7232,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s24-o1",
+      "shot": "s24",
+      "prompt": "The tall pale young man sits at a small cafe table, both hands resting on the table either side of a little wall of white sugar cubes, looking down at it and smiling. Close-up. Exactly one main person: reference image 1 is the tall pale young man (wavy light-brown hair and a cream cable-knit sweater). Each appears exactly once; only one person has wavy light-brown hair and a cream cable-knit sweater. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. No other people anywhere in the picture. The place: a small open-air courtyard cafe at night, enclosed by low dense shop buildings with plain walls, small tables and stools under a shade tree hung with strings of little lights, shop windows glowing softly pink and cyan, with no signs above them, little wheeled serving robots, and far above the rooftops enormous megastructures and towering stone mountain pyramids with lit windows against the night sky. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/deluin"
+      ],
+      "cast": [
+        "deluin"
+      ],
+      "seed": 7241,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s24-o2",
+      "shot": "s24",
+      "prompt": "The tall pale young man sits at a small cafe table, both hands resting on the table either side of a little wall of white sugar cubes, looking down at it and smiling. Close-up. Exactly one main person: reference image 1 is the tall pale young man (wavy light-brown hair and a cream cable-knit sweater). Each appears exactly once; only one person has wavy light-brown hair and a cream cable-knit sweater. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. No other people anywhere in the picture. The place: a small open-air courtyard cafe at night, enclosed by low dense shop buildings with plain walls, small tables and stools under a shade tree hung with strings of little lights, shop windows glowing softly pink and cyan, with no signs above them, little wheeled serving robots, and far above the rooftops enormous megastructures and towering stone mountain pyramids with lit windows against the night sky. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/deluin"
+      ],
+      "cast": [
+        "deluin"
+      ],
+      "seed": 7242,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s25-o1",
+      "shot": "s25",
+      "prompt": "Seen from across a small cafe table: the spiky-haired young man, seated, flicks one sugar cube out of the bottom row of a little wall of sugar cubes, leaving a doorway; the tall pale young man, seated opposite, laughs with him. Medium close two-shot. Exactly two main people: reference image 1 is the spiky-haired young man (spiky black hair with a blue streak and an orange jacket); reference image 2 is the tall pale young man (wavy light-brown hair and a cream cable-knit sweater). Each appears exactly once; only one person has spiky black hair with a blue streak and an orange jacket. only one person has wavy light-brown hair and a cream cable-knit sweater. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. A few other people sit at other tables, small and plainly dressed in dark clothes, none of them looking like the main people. The place: a small open-air courtyard cafe at night, enclosed by low dense shop buildings with plain walls, small tables and stools under a shade tree hung with strings of little lights, shop windows glowing softly pink and cyan, with no signs above them, little wheeled serving robots, and far above the rooftops enormous megastructures and towering stone mountain pyramids with lit windows against the night sky. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/zei",
+        "cast/front/deluin"
+      ],
+      "cast": [
+        "zei",
+        "deluin"
+      ],
+      "seed": 7251,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s25-o2",
+      "shot": "s25",
+      "prompt": "Seen from across a small cafe table: the spiky-haired young man, seated, flicks one sugar cube out of the bottom row of a little wall of sugar cubes, leaving a doorway; the tall pale young man, seated opposite, laughs with him. Medium close two-shot. Exactly two main people: reference image 1 is the spiky-haired young man (spiky black hair with a blue streak and an orange jacket); reference image 2 is the tall pale young man (wavy light-brown hair and a cream cable-knit sweater). Each appears exactly once; only one person has spiky black hair with a blue streak and an orange jacket. only one person has wavy light-brown hair and a cream cable-knit sweater. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. A few other people sit at other tables, small and plainly dressed in dark clothes, none of them looking like the main people. The place: a small open-air courtyard cafe at night, enclosed by low dense shop buildings with plain walls, small tables and stools under a shade tree hung with strings of little lights, shop windows glowing softly pink and cyan, with no signs above them, little wheeled serving robots, and far above the rooftops enormous megastructures and towering stone mountain pyramids with lit windows against the night sky. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/zei",
+        "cast/front/deluin"
+      ],
+      "cast": [
+        "zei",
+        "deluin"
+      ],
+      "seed": 7252,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s29-o1",
+      "shot": "s29",
+      "prompt": "The young woman makes a big show of pulling one side of her big headphones off, mid-shout, pointing across at the next table, a small handheld device in her other hand. Medium shot. Exactly one main person: reference image 1 is the young woman (a magenta ponytail and a lime-green vest). Each appears exactly once; only one person has a magenta ponytail and a lime-green vest. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. A few other people sit at other tables, small and plainly dressed in dark clothes, none of them looking like the main people. The place: a small open-air courtyard cafe at night, enclosed by low dense shop buildings with plain walls, small tables and stools under a shade tree hung with strings of little lights, shop windows glowing softly pink and cyan, with no signs above them, little wheeled serving robots, and far above the rooftops enormous megastructures and towering stone mountain pyramids with lit windows against the night sky. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/bai"
+      ],
+      "cast": [
+        "bai"
+      ],
+      "seed": 7291,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s29-o2",
+      "shot": "s29",
+      "prompt": "The young woman makes a big show of pulling one side of her big headphones off, mid-shout, pointing across at the next table, a small handheld device in her other hand. Medium shot. Exactly one main person: reference image 1 is the young woman (a magenta ponytail and a lime-green vest). Each appears exactly once; only one person has a magenta ponytail and a lime-green vest. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. A few other people sit at other tables, small and plainly dressed in dark clothes, none of them looking like the main people. The place: a small open-air courtyard cafe at night, enclosed by low dense shop buildings with plain walls, small tables and stools under a shade tree hung with strings of little lights, shop windows glowing softly pink and cyan, with no signs above them, little wheeled serving robots, and far above the rooftops enormous megastructures and towering stone mountain pyramids with lit windows against the night sky. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/bai"
+      ],
+      "cast": [
+        "bai"
+      ],
+      "seed": 7292,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s30-o1",
+      "shot": "s30",
+      "prompt": "At the cafe's street gate, the tall pale young man holds up both hands with all ten fingers spread wide toward the spiky-haired young man, smiling. Medium two-shot. Exactly two main people: reference image 1 is the tall pale young man (wavy light-brown hair and a cream cable-knit sweater); reference image 2 is the spiky-haired young man (spiky black hair with a blue streak and an orange jacket). Each appears exactly once; only one person has wavy light-brown hair and a cream cable-knit sweater. only one person has spiky black hair with a blue streak and an orange jacket. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. A few other people sit at other tables, small and plainly dressed in dark clothes, none of them looking like the main people. The place: the open street gate of a courtyard cafe at night, a lamp post glowing, a quiet street beyond lined with plain building fronts with no signs, and on the horizon enormous megastructures and a towering stone mountain pyramid with lit windows. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/deluin",
+        "cast/front/zei"
+      ],
+      "cast": [
+        "deluin",
+        "zei"
+      ],
+      "seed": 7301,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s30-o2",
+      "shot": "s30",
+      "prompt": "At the cafe's street gate, the tall pale young man holds up both hands with all ten fingers spread wide toward the spiky-haired young man, smiling. Medium two-shot. Exactly two main people: reference image 1 is the tall pale young man (wavy light-brown hair and a cream cable-knit sweater); reference image 2 is the spiky-haired young man (spiky black hair with a blue streak and an orange jacket). Each appears exactly once; only one person has wavy light-brown hair and a cream cable-knit sweater. only one person has spiky black hair with a blue streak and an orange jacket. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. A few other people sit at other tables, small and plainly dressed in dark clothes, none of them looking like the main people. The place: the open street gate of a courtyard cafe at night, a lamp post glowing, a quiet street beyond lined with plain building fronts with no signs, and on the horizon enormous megastructures and a towering stone mountain pyramid with lit windows. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/deluin",
+        "cast/front/zei"
+      ],
+      "cast": [
+        "deluin",
+        "zei"
+      ],
+      "seed": 7302,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s31-o1",
+      "shot": "s31",
+      "prompt": "At the street gate the tall pale young man holds up one open hand with all five fingers spread wide, palm toward us, smiling. Medium close-up from the waist up. Exactly one main person: reference image 1 is the tall pale young man (wavy light-brown hair and a cream cable-knit sweater). Each appears exactly once; only one person has wavy light-brown hair and a cream cable-knit sweater. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. A few other people sit at other tables, small and plainly dressed in dark clothes, none of them looking like the main people. The place: the open street gate of a courtyard cafe at night, a lamp post glowing, a quiet street beyond lined with plain building fronts with no signs, and on the horizon enormous megastructures and a towering stone mountain pyramid with lit windows. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/deluin"
+      ],
+      "cast": [
+        "deluin"
+      ],
+      "seed": 7311,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s31-o2",
+      "shot": "s31",
+      "prompt": "At the street gate the tall pale young man holds up one open hand with all five fingers spread wide, palm toward us, smiling. Medium close-up from the waist up. Exactly one main person: reference image 1 is the tall pale young man (wavy light-brown hair and a cream cable-knit sweater). Each appears exactly once; only one person has wavy light-brown hair and a cream cable-knit sweater. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. A few other people sit at other tables, small and plainly dressed in dark clothes, none of them looking like the main people. The place: the open street gate of a courtyard cafe at night, a lamp post glowing, a quiet street beyond lined with plain building fronts with no signs, and on the horizon enormous megastructures and a towering stone mountain pyramid with lit windows. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/deluin"
+      ],
+      "cast": [
+        "deluin"
+      ],
+      "seed": 7312,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s32-o1",
+      "shot": "s32",
+      "prompt": "Close-up, framed from the chest up: the tall pale young man stands alone at the street gate, looking down at a small handheld device held in both hands, thumbs hovering over it, its screen turned away from us; he hesitates. Exactly one main person: reference image 1 is the tall pale young man (wavy light-brown hair and a cream cable-knit sweater). Each appears exactly once; only one person has wavy light-brown hair and a cream cable-knit sweater. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. No other people anywhere in the picture. The place: the open street gate of a courtyard cafe at night, a lamp post glowing, a quiet street beyond lined with plain building fronts with no signs, and on the horizon enormous megastructures and a towering stone mountain pyramid with lit windows. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/deluin"
+      ],
+      "cast": [
+        "deluin"
+      ],
+      "seed": 7321,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s32-o2",
+      "shot": "s32",
+      "prompt": "Close-up, framed from the chest up: the tall pale young man stands alone at the street gate, looking down at a small handheld device held in both hands, thumbs hovering over it, its screen turned away from us; he hesitates. Exactly one main person: reference image 1 is the tall pale young man (wavy light-brown hair and a cream cable-knit sweater). Each appears exactly once; only one person has wavy light-brown hair and a cream cable-knit sweater. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. No other people anywhere in the picture. The place: the open street gate of a courtyard cafe at night, a lamp post glowing, a quiet street beyond lined with plain building fronts with no signs, and on the horizon enormous megastructures and a towering stone mountain pyramid with lit windows. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/deluin"
+      ],
+      "cast": [
+        "deluin"
+      ],
+      "seed": 7322,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s33-o1",
+      "shot": "s33",
+      "prompt": "The spiky-haired young man walks across the courtyard toward the young woman, who sits alone at a small table, the string lights glowing. Wide shot. Exactly two main people: reference image 1 is the spiky-haired young man (spiky black hair with a blue streak and an orange jacket); reference image 2 is the young woman (a magenta ponytail and a lime-green vest). Each appears exactly once; only one person has spiky black hair with a blue streak and an orange jacket. only one person has a magenta ponytail and a lime-green vest. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. A few other people sit at other tables, small and plainly dressed in dark clothes, none of them looking like the main people. The place: a small open-air courtyard cafe at night, enclosed by low dense shop buildings with plain walls, small tables and stools under a shade tree hung with strings of little lights, shop windows glowing softly pink and cyan, with no signs above them, little wheeled serving robots, and far above the rooftops enormous megastructures and towering stone mountain pyramids with lit windows against the night sky. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/zei",
+        "cast/front/bai"
+      ],
+      "cast": [
+        "zei",
+        "bai"
+      ],
+      "seed": 7331,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s33-o2",
+      "shot": "s33",
+      "prompt": "The spiky-haired young man walks across the courtyard toward the young woman, who sits alone at a small table, the string lights glowing. Wide shot. Exactly two main people: reference image 1 is the spiky-haired young man (spiky black hair with a blue streak and an orange jacket); reference image 2 is the young woman (a magenta ponytail and a lime-green vest). Each appears exactly once; only one person has spiky black hair with a blue streak and an orange jacket. only one person has a magenta ponytail and a lime-green vest. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. A few other people sit at other tables, small and plainly dressed in dark clothes, none of them looking like the main people. The place: a small open-air courtyard cafe at night, enclosed by low dense shop buildings with plain walls, small tables and stools under a shade tree hung with strings of little lights, shop windows glowing softly pink and cyan, with no signs above them, little wheeled serving robots, and far above the rooftops enormous megastructures and towering stone mountain pyramids with lit windows against the night sky. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/zei",
+        "cast/front/bai"
+      ],
+      "cast": [
+        "zei",
+        "bai"
+      ],
+      "seed": 7332,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s34-o1",
+      "shot": "s34",
+      "prompt": "The spiky-haired young man sits alone at a table, upset, distraught; in front of him an untouched bowl of rice and vegetables, a tea cup, and his small handheld device, its screen lit. Medium close shot. Exactly one main person: reference image 1 is the spiky-haired young man (spiky black hair with a blue streak and an orange jacket). Each appears exactly once; only one person has spiky black hair with a blue streak and an orange jacket. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. No other people anywhere in the picture. The place: a modest, cozy hotel lobby restaurant late at night, warm wooden tables and chairs, soft lamps, a glowing strip of light along one wall, plain walls, a little wheeled serving robot, a sealed car-docking door at the edge of the lobby, and through tall windows far-off megastructures glowing against the night. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/zei"
+      ],
+      "cast": [
+        "zei"
+      ],
+      "seed": 7341,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s34-o2",
+      "shot": "s34",
+      "prompt": "The spiky-haired young man sits alone at a table, upset, distraught; in front of him an untouched bowl of rice and vegetables, a tea cup, and his small handheld device, its screen lit. Medium close shot. Exactly one main person: reference image 1 is the spiky-haired young man (spiky black hair with a blue streak and an orange jacket). Each appears exactly once; only one person has spiky black hair with a blue streak and an orange jacket. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. No other people anywhere in the picture. The place: a modest, cozy hotel lobby restaurant late at night, warm wooden tables and chairs, soft lamps, a glowing strip of light along one wall, plain walls, a little wheeled serving robot, a sealed car-docking door at the edge of the lobby, and through tall windows far-off megastructures glowing against the night. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/zei"
+      ],
+      "cast": [
+        "zei"
+      ],
+      "seed": 7342,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s36-o1",
+      "shot": "s36",
+      "prompt": "The young woman sits down across the table from the spiky-haired young man without a word. Medium two-shot. Exactly two main people: reference image 1 is the young woman (a magenta ponytail and a lime-green vest); reference image 2 is the spiky-haired young man (spiky black hair with a blue streak and an orange jacket). Each appears exactly once; only one person has a magenta ponytail and a lime-green vest. only one person has spiky black hair with a blue streak and an orange jacket. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. No other people anywhere in the picture. The place: a modest, cozy hotel lobby restaurant late at night, warm wooden tables and chairs, soft lamps, a glowing strip of light along one wall, plain walls, a little wheeled serving robot, a sealed car-docking door at the edge of the lobby, and through tall windows far-off megastructures glowing against the night. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/bai",
+        "cast/front/zei"
+      ],
+      "cast": [
+        "bai",
+        "zei"
+      ],
+      "seed": 7361,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s36-o2",
+      "shot": "s36",
+      "prompt": "The young woman sits down across the table from the spiky-haired young man without a word. Medium two-shot. Exactly two main people: reference image 1 is the young woman (a magenta ponytail and a lime-green vest); reference image 2 is the spiky-haired young man (spiky black hair with a blue streak and an orange jacket). Each appears exactly once; only one person has a magenta ponytail and a lime-green vest. only one person has spiky black hair with a blue streak and an orange jacket. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. No other people anywhere in the picture. The place: a modest, cozy hotel lobby restaurant late at night, warm wooden tables and chairs, soft lamps, a glowing strip of light along one wall, plain walls, a little wheeled serving robot, a sealed car-docking door at the edge of the lobby, and through tall windows far-off megastructures glowing against the night. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/bai",
+        "cast/front/zei"
+      ],
+      "cast": [
+        "bai",
+        "zei"
+      ],
+      "seed": 7362,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s38-o1",
+      "shot": "s38",
+      "prompt": "Close-up of his face, from the shoulders up, seated at the table: the spiky-haired young man breathes out in relief, eyes closed. Exactly one main person: reference image 1 is the spiky-haired young man (spiky black hair with a blue streak and an orange jacket). Each appears exactly once; only one person has spiky black hair with a blue streak and an orange jacket. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. No other people anywhere in the picture. The place: a modest, cozy hotel lobby restaurant late at night, warm wooden tables and chairs, soft lamps, a glowing strip of light along one wall, plain walls, a little wheeled serving robot, a sealed car-docking door at the edge of the lobby, and through tall windows far-off megastructures glowing against the night. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/zei"
+      ],
+      "cast": [
+        "zei"
+      ],
+      "seed": 7381,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s38-o2",
+      "shot": "s38",
+      "prompt": "Close-up of his face, from the shoulders up, seated at the table: the spiky-haired young man breathes out in relief, eyes closed. Exactly one main person: reference image 1 is the spiky-haired young man (spiky black hair with a blue streak and an orange jacket). Each appears exactly once; only one person has spiky black hair with a blue streak and an orange jacket. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. No other people anywhere in the picture. The place: a modest, cozy hotel lobby restaurant late at night, warm wooden tables and chairs, soft lamps, a glowing strip of light along one wall, plain walls, a little wheeled serving robot, a sealed car-docking door at the edge of the lobby, and through tall windows far-off megastructures glowing against the night. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/zei"
+      ],
+      "cast": [
+        "zei"
+      ],
+      "seed": 7382,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s40-o1",
+      "shot": "s40",
+      "prompt": "At the table the spiky-haired young man turns his small handheld device's screen toward the young woman across from him. Medium two-shot. Exactly two main people: reference image 1 is the spiky-haired young man (spiky black hair with a blue streak and an orange jacket); reference image 2 is the young woman (a magenta ponytail and a lime-green vest). Each appears exactly once; only one person has spiky black hair with a blue streak and an orange jacket. only one person has a magenta ponytail and a lime-green vest. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. No other people anywhere in the picture. The place: a modest, cozy hotel lobby restaurant late at night, warm wooden tables and chairs, soft lamps, a glowing strip of light along one wall, plain walls, a little wheeled serving robot, a sealed car-docking door at the edge of the lobby, and through tall windows far-off megastructures glowing against the night. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/zei",
+        "cast/front/bai"
+      ],
+      "cast": [
+        "zei",
+        "bai"
+      ],
+      "seed": 7401,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s40-o2",
+      "shot": "s40",
+      "prompt": "At the table the spiky-haired young man turns his small handheld device's screen toward the young woman across from him. Medium two-shot. Exactly two main people: reference image 1 is the spiky-haired young man (spiky black hair with a blue streak and an orange jacket); reference image 2 is the young woman (a magenta ponytail and a lime-green vest). Each appears exactly once; only one person has spiky black hair with a blue streak and an orange jacket. only one person has a magenta ponytail and a lime-green vest. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. No other people anywhere in the picture. The place: a modest, cozy hotel lobby restaurant late at night, warm wooden tables and chairs, soft lamps, a glowing strip of light along one wall, plain walls, a little wheeled serving robot, a sealed car-docking door at the edge of the lobby, and through tall windows far-off megastructures glowing against the night. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/zei",
+        "cast/front/bai"
+      ],
+      "cast": [
+        "zei",
+        "bai"
+      ],
+      "seed": 7402,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s41-o1",
+      "shot": "s41",
+      "prompt": "Close-up of her face, from the shoulders up, seated at the table: the young woman reads a small handheld screen, its light on her face; her expression neutral and unreadable, not smiling. Her vest has no markings. Exactly one main person: reference image 1 is the young woman (a magenta ponytail and a lime-green vest). Each appears exactly once; only one person has a magenta ponytail and a lime-green vest. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. No other people anywhere in the picture. The place: a modest, cozy hotel lobby restaurant late at night, warm wooden tables and chairs, soft lamps, a glowing strip of light along one wall, plain walls, a little wheeled serving robot, a sealed car-docking door at the edge of the lobby, and through tall windows far-off megastructures glowing against the night. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/bai"
+      ],
+      "cast": [
+        "bai"
+      ],
+      "seed": 7411,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s41-o2",
+      "shot": "s41",
+      "prompt": "Close-up of her face, from the shoulders up, seated at the table: the young woman reads a small handheld screen, its light on her face; her expression neutral and unreadable, not smiling. Her vest has no markings. Exactly one main person: reference image 1 is the young woman (a magenta ponytail and a lime-green vest). Each appears exactly once; only one person has a magenta ponytail and a lime-green vest. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. No other people anywhere in the picture. The place: a modest, cozy hotel lobby restaurant late at night, warm wooden tables and chairs, soft lamps, a glowing strip of light along one wall, plain walls, a little wheeled serving robot, a sealed car-docking door at the edge of the lobby, and through tall windows far-off megastructures glowing against the night. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/bai"
+      ],
+      "cast": [
+        "bai"
+      ],
+      "seed": 7412,
+      "width": 1024,
+      "height": 576
+    }
+  ],
+  "assist": {
+    "model": "claude-coding-agent",
+    "drafted": [
+      "subjects",
+      "framing",
+      "people counts",
+      "place text"
+    ]
+  }
+}

@@ -1,0 +1,1811 @@
+{
+ "cov-cafe-BAI-sideeye-K7": {
+  "pass": true,
+  "score": 8,
+  "fails": [],
+  "note": "Bai matches her card (magenta ponytail, shaved side, lime vest, tattoos, headphones) at her small round table with a handheld, three-quarter and glancing left. Clean MCU; the handheld reads a little like a paper pad."
+ },
+ "cov-cafe-CU-D-cubes-K7": {
+  "pass": false,
+  "score": 3,
+  "fails": [
+   1,
+   2,
+   "size"
+  ],
+  "note": "Deluin looks down with a nice closed-mouth smile, but an extra man stands at the left and a legged humanoid robot is in the background, which the empty courtyard forbids. He wears a turtleneck sweater, not the long tunic, and the framing is closer to a medium shot than a CU."
+ },
+ "cov-cafe-MASTER-apart-K7": {
+  "pass": false,
+  "score": 2,
+  "fails": [
+   1,
+   2,
+   "action"
+  ],
+  "note": "Bai appears twice at two round tables and neither copy is small and far behind, Zei wears headphones that belong to Bai, and the robot is a strange blob. No tea is being poured into two cups."
+ },
+ "cov-cafe-MASTER-robot-K7": {
+  "pass": false,
+  "score": 2,
+  "fails": [
+   1,
+   2
+  ],
+  "note": "Zei is doubled (two orange-jacket boys, one holding a laptop) and the robot has legs, a lime vest and trousers. The long table and skyline are right."
+ },
+ "cov-cafe-OTS-D-explain-K7": {
+  "pass": false,
+  "score": 2,
+  "fails": [
+   1,
+   2
+  ],
+  "note": "Zei appears twice: the foreground figure seen from behind on the right is a second Zei, not Deluin, and Deluin stands on the far left. Everyone is standing, and the glowing menu shows text-like lines."
+ },
+ "cov-cafe-OTS-D-whoa-K7": {
+  "pass": false,
+  "score": 2,
+  "fails": [
+   1,
+   2
+  ],
+  "note": "Same problem as explain: the right foreground figure is a second Zei, so there are two Zeis plus Deluin. Zei's surprise reads well, but the shot cannot be used."
+ },
+ "cov-cafe-OTS-Z-talk-K7": {
+  "pass": true,
+  "score": 8,
+  "fails": [],
+  "note": "A clean OTS: Zei's back and blue-streaked hair are on the left, and Deluin is at the long wooden table facing left in three-quarter with a warm closed smile. He wears a sweater rather than the long tunic, which is minor."
+ },
+ "cov-cafe-SUGAR-wall-K7": {
+  "pass": false,
+  "score": 5,
+  "fails": [
+   4
+  ],
+  "note": "A neat two-row wall of sugar cubes between two cups with a skyline behind is right, but the right-hand cup sinks into the table (broken perspective). The setting looks indoors behind windows, not the open courtyard."
+ },
+ "cov-corridor-MASTER-arrive-K7": {
+  "pass": false,
+  "score": 4,
+  "fails": [
+   2,
+   "action"
+  ],
+  "note": "Deluin on the right facing left looks good, but Bai wears an orange jacket over her vest, Zei has his arms crossed (that is Bai's action), and Bai stands beside Zei, not behind him. There is a wooden door instead of open elevator doors."
+ },
+ "cov-corridor-OTS-Z-easy-K7": {
+  "pass": false,
+  "score": 3,
+  "fails": [
+   2
+  ],
+  "note": "Deluin's face is right, but he wears Zei's orange jacket over a knit skirt-like tunic, a costume mix-up. The OTS framing and the corridor are fine."
+ },
+ "cov-game-PIT-D-glasses-K7": {
+  "pass": true,
+  "score": 6,
+  "fails": [],
+  "note": "Deluin at his console in the hall, turned toward the left, with a private closed smile and a crowd in the tiers. He is adjusting his glasses rather than lifting them off, the glasses are not cabled, and the pit reads only weakly."
+ },
+ "cov-gate-CU-Z-smile-K7": {
+  "pass": true,
+  "score": 8,
+  "fails": [],
+  "note": "Zei matches his card, with a closed-mouth smile, three-quarter, looking toward the right, and the gate and skyline at dusk. Reads as a loose CU, close to MCU."
+ },
+ "cov-lobby-CU-Z-down-K7": {
+  "pass": false,
+  "score": 5,
+  "fails": [
+   5
+  ],
+  "note": "Zei is worried and looks down at a lit device, which is right, but the single is straight-on to camera, which the owner forbids. Framing is nearer MCU than CU."
+ },
+ "cov-lobby-OTS-Z-turns-K7": {
+  "pass": false,
+  "score": 2,
+  "fails": [
+   1,
+   2
+  ],
+  "note": "Bai is doubled: two magenta-ponytail women sit side by side across the table. Zei's OTS foreground and the glowing device are fine."
+ },
+ "cov-overlook-MASTER-lean-K7": {
+  "pass": false,
+  "score": 5,
+  "fails": [
+   "action"
+  ],
+  "note": "Zei on the left and Bai on the right match their cards, and her gadget is on the rail in the hall. But they face each other instead of Bai leaning out studying the board and Zei watching the game, and Zei looks cross."
+ },
+ "cov-overlook-OTS-Z-wry-K7": {
+  "pass": true,
+  "score": 8,
+  "fails": [],
+  "note": "A good OTS: Zei's shoulder and streaked hair are on the left, and Bai glances at him with a wry closed-mouth smile, matching her card, with the hall behind. A few standing spectators are acceptable for the hall."
+ },
+ "cov-walk-CU-Z-tease-K7": {
+  "pass": false,
+  "score": 6,
+  "fails": [
+   7
+  ],
+  "note": "Zei's teasing closed smile, three-quarter toward the right, is right and on-card, but the end of the corridor opens onto night sky and skyline, which the corridor must not show."
+ },
+ "cov-cafe-BAI-what-K7": {
+  "pass": false,
+  "score": 5,
+  "fails": [
+   7,
+   "action"
+  ],
+  "note": "Bai looks right (magenta ponytail, lime vest, tattoos), sits at her own small round table and turns toward the left. But the sky shows mountains instead of the megastructure skyline, and she only touches her headphones with a calm smile instead of lifting one side off loudly."
+ },
+ "cov-cafe-CU-D-warm-K7": {
+  "pass": false,
+  "score": 3,
+  "fails": [
+   1,
+   "size"
+  ],
+  "note": "Deluin's face and knit match, he looks to the left, and his smile is warm and closed. But this is a medium shot, not a close-up, and a grey humanoid robot with legs stands in the background, which is wrong for the café robot."
+ },
+ "cov-cafe-MASTER-call-K7": {
+  "pass": false,
+  "score": 2,
+  "fails": [
+   1,
+   5,
+   6,
+   7,
+   "action"
+  ],
+  "note": "Deluin's wave reads clearly. But Zei sits alone at a small round table on the far left, Bai sits right beside Deluin at a small square table instead of small and far away, there is no long table, and the sky shows no megastructure."
+ },
+ "cov-cafe-MASTER-up-K7": {
+  "pass": false,
+  "score": 2,
+  "fails": [
+   2,
+   6,
+   8,
+   "action"
+  ],
+  "note": "Zei has been given Bai's magenta ponytail (a look-alike hybrid). Bai stays seated instead of standing, the table is short and square, and the glowing menus show lines of text."
+ },
+ "cov-cafe-OTS-D-smile-K7": {
+  "pass": false,
+  "score": 2,
+  "fails": [
+   1,
+   2,
+   6
+  ],
+  "note": "Deluin appears twice: two light-brown heads in cream knits frame the foreground. Bai sits right behind Zei instead of small and far away at her own table, and the shared table is square."
+ },
+ "cov-cafe-OTS-Z-eager-K7": {
+  "pass": true,
+  "score": 7,
+  "fails": [],
+  "note": "A clean over-the-shoulder shot: Zei's back and blue streak sit on the left, and Deluin leans in eager with a closed-mouth smile, under string lights with the tower skyline behind. One small problem: Deluin's knit is drawn as an open cardigan over a black top, not the long tunic."
+ },
+ "cov-cafe-SUGAR-door-K7": {
+  "pass": true,
+  "score": 6,
+  "fails": [],
+  "note": "A clear table-height insert: a small wall of white cubes between two cups, with the doorway gap in the middle of the bottom row, and the megastructure skyline behind. The cups are oversized and look like pots, and the setting reads as indoors by a window rather than the courtyard."
+ },
+ "cov-cafe-WATCH-watch-K7": {
+  "pass": false,
+  "score": 3,
+  "fails": [
+   "size"
+  ],
+  "note": "Zei matches his card and the plain round watch is there. But this is a medium shot of all of him, not a very-close insert of his wrist, and the sleeve is not pushed back."
+ },
+ "cov-corridor-OTS-D-delighted-K7": {
+  "pass": false,
+  "score": 5,
+  "fails": [
+   9
+  ],
+  "note": "Good over-the-shoulder setup: Deluin's back in the foreground, Zei in the centre and Bai on the right with her arms crossed, in an empty corridor, and everyone matches their card. But Zei grins open-mouthed with his teeth showing, where the action asks for a closed-mouth smile."
+ },
+ "cov-corridor-OTS-Z-warm-K7": {
+  "pass": false,
+  "score": 3,
+  "fails": [
+   2
+  ],
+  "note": "The over-the-shoulder framing and the warm closed smile work. But Deluin wears an orange-and-knit version of Zei's jacket with grey trousers (a costume hybrid), and the elevator doorway is beside Zei, not behind Deluin."
+ },
+ "cov-game-PIT-D-playing-K7": {
+  "pass": true,
+  "score": 7,
+  "fails": [],
+  "note": "Deluin is side-on, facing left, calm and patient at a glowing console in a sunken pit, with the crowd in the tiers and no sky. It is framed a little wider than an MCU, and his hands rest on the console rather than being clearly still."
+ },
+ "cov-gate-MASTER-fingers-K7": {
+  "pass": false,
+  "score": 4,
+  "fails": [
+   "action",
+   9
+  ],
+  "note": "The gate at dusk, the lamps, the profiles and the left/right sides are all right. But nobody holds up ten fingers: they make loose open-palm gestures, Zei shows only one arm, and Zei's smile looks parted."
+ },
+ "cov-lobby-CU-Z-relief-K7": {
+  "pass": false,
+  "score": 3,
+  "fails": [
+   1,
+   5,
+   "size"
+  ],
+  "note": "Zei's closed eyes and relieved expression are right, and he holds his device. But it is a frontal, straight-on single, framed nearer a medium shot, and a humanoid robot with legs stands in the lobby behind him."
+ },
+ "cov-overlook-CU-B-toast-K7": {
+  "pass": false,
+  "score": 4,
+  "fails": [
+   5
+  ],
+  "note": "A strong close-up: Bai is serious, eyes narrowed, lit from below by the holograms, with the crowd in the tiers. But she faces the camera straight on, which the owner's rule forbids for singles."
+ },
+ "cov-overlook-MASTER-watch-K7": {
+  "pass": false,
+  "score": 5,
+  "fails": [
+   "action"
+  ],
+  "note": "Zei is on the left and Bai on the right, bent over a gadget, both on card, with the hall behind and no sky. But it is shot side-on from the walkway rather than from out over the hall, and Zei looks at Bai instead of leaning on the railing watching the game."
+ },
+ "cov-walk-CU-B-serious-K7": {
+  "pass": false,
+  "score": 4,
+  "fails": [
+   5
+  ],
+  "note": "Bai is serious and worried, not smiling, in the empty corridor, at the right size. But she faces the camera straight on, and her vest is drawn as panelled armour rather than the zip vest."
+ },
+ "cov-cafe-CU-B-menu-K7": {
+  "pass": false,
+  "score": 3,
+  "fails": [
+   5,
+   "action"
+  ],
+  "note": "Bai matches her card and the menu is blank light, but she faces the camera straight on, and the background is a street of houses, not the café courtyard."
+ },
+ "cov-cafe-CU-Z-amused-K7": {
+  "pass": true,
+  "score": 8,
+  "fails": [],
+  "note": "A good close-up: Zei in three-quarter view looking right with an amused closed-mouth smile, the skyline behind. The empty round tables in the background are spare café tables, not the shared table."
+ },
+ "cov-cafe-MASTER-laugh-K7": {
+  "pass": false,
+  "score": 5,
+  "fails": [
+   9,
+   "action"
+  ],
+  "note": "The layout is right: Zei on the left, Deluin on the right, a long rectangular table and the skyline. But Deluin laughs with an open mouth showing teeth, the sugar is a loose pile rather than a wall, and Bai sits fairly close and large with no headphones."
+ },
+ "cov-cafe-MASTER-wave-K7": {
+  "pass": true,
+  "score": 7,
+  "fails": [],
+  "note": "Deluin is on the right, waving with a soft closed smile; Bai looks over from her side of the long rectangular table, and the left chair is empty. Small issues: Deluin is standing rather than seated, and the legs under the table are green, not Bai's black trousers."
+ },
+ "cov-cafe-OTS-D-talk-K7": {
+  "pass": false,
+  "score": 2,
+  "fails": [
+   1,
+   2,
+   "size"
+  ],
+  "note": "There are two Deluin back-of-heads in the foreground, one on each side, plus a third head at the bottom. Bai sits right behind Zei rather than small and far away; Zei himself reads well."
+ },
+ "cov-cafe-OTS-Z-menu-K7": {
+  "pass": true,
+  "score": 6,
+  "fails": [],
+  "note": "A clean over-the-shoulder shot from behind Zei's back, with Deluin at the long rectangular table under string lights. But the 'menu' is a glowing box with a stylus rather than a thin glowing menu, and Deluin seems to be standing."
+ },
+ "cov-cafe-SUGAR-flick-K7": {
+  "pass": true,
+  "score": 6,
+  "fails": [],
+  "note": "A clear insert at table height: two cups, a little wall of sugar cubes, and a finger at a bottom cube. The finger presses rather than flicks, and the cube is not flying yet."
+ },
+ "cov-corridor-CU-B-sour-K7": {
+  "pass": false,
+  "score": 4,
+  "fails": [
+   5
+  ],
+  "note": "Her arms are crossed and her expression is sour, in an empty corridor, but she faces the camera straight on with her eyes closed. Her hair reads more like a mohawk than the card's ponytail."
+ },
+ "cov-corridor-OTS-D-eager-K7": {
+  "pass": true,
+  "score": 7,
+  "fails": [],
+  "note": "A clean over-the-shoulder shot from behind Deluin in an empty corridor: Zei in the centre and Bai on the right, arms crossed and bored. Zei looks flat rather than eager, and Bai's tattoos are hidden under green sleeves."
+ },
+ "cov-dusk-MASTER-talk-K7": {
+  "pass": true,
+  "score": 8,
+  "fails": [],
+  "note": "Strong frame: Zei stands on the left in profile facing right; Bai sits on the right at her small round table with headphones around her neck, looking up. The courtyard is empty."
+ },
+ "cov-game-SCREEN-face-K7": {
+  "pass": true,
+  "score": 6,
+  "fails": [],
+  "note": "The arena works: a glowing play floor, Deluin from behind in his sunken pit, tiers of crowd and no sky. But his face is on two small screens cropped at the top right instead of one huge screen above the floor, and the top-rim figures look like grey mannequins."
+ },
+ "cov-gate-MASTER-wave-K7": {
+  "pass": true,
+  "score": 7,
+  "fails": [],
+  "note": "Zei is on the left and Deluin on the right, both in profile waving, with a rectangular table and the skyline. Deluin faces Zei rather than turning to leave, and the street gate is barely visible."
+ },
+ "cov-lobby-MASTER-refill-K7": {
+  "pass": false,
+  "score": 2,
+  "fails": [
+   1,
+   2
+  ],
+  "note": "The robot is clean and on-style, but there are two more orange-jacket Zei look-alikes at the left table and several extra people, inside and through the window, in a lobby that should be nearly empty."
+ },
+ "cov-overlook-CU-Z-admire-K7": {
+  "pass": false,
+  "score": 3,
+  "fails": [
+   2,
+   5
+  ],
+  "note": "The closed-mouth smile and hologram light are right, but Zei faces the camera straight on, and both big screens behind him show Zei-like faces, which makes doubles."
+ },
+ "cov-overlook-OTS-Z-dry-K7": {
+  "pass": true,
+  "score": 8,
+  "fails": [],
+  "note": "A clean over-the-shoulder shot: Zei's back and shoulder on the left; Bai in the centre holds the gadget and glances at him, dry and unsmiling. The hologram hall shows behind."
+ },
+ "cov-walk-CU-B-sly-K7": {
+  "pass": true,
+  "score": 8,
+  "fails": [],
+  "note": "A good close-up: Bai in three-quarter view glancing left with a sly closed-mouth smile, in an empty corridor, and her hair matches the card."
+ },
+ "cov-cafe-CU-B-standing-K7": {
+  "pass": true,
+  "score": 6,
+  "fails": [],
+  "note": "Bai matches her card, serious with a straight face, looking down toward the left with the headphones in hand. It reads more as a medium close-up than a close-up, and the background feels like an indoor room with windows rather than the open courtyard."
+ },
+ "cov-cafe-EST-night-K7": {
+  "pass": false,
+  "score": 4,
+  "fails": [
+   "size",
+   6
+  ],
+  "note": "The courtyard, string lights and gate are nice, and Deluin and Bai are right. But this is a medium-wide shot from near eye level, not a high, extreme-wide establishing shot with them small, and the table is short and almost square."
+ },
+ "cov-cafe-MASTER-menus-K7": {
+  "pass": false,
+  "score": 5,
+  "fails": [
+   8,
+   "action"
+  ],
+  "note": "All three are right and on the right sides at a rectangular table, and Bai looks unimpressed. The menus and the sign at top right show lines that read as text, and it is Zei who points at his own menu while Deluin does not lean over to point."
+ },
+ "cov-cafe-OTS-D-astonished-K7": {
+  "pass": false,
+  "score": 2,
+  "fails": [
+   1,
+   2
+  ],
+  "note": "Zei's astonished look is good, but Deluin appears twice: two backs of him frame the shot, left and right."
+ },
+ "cov-cafe-OTS-D-watch-K7": {
+  "pass": false,
+  "score": 2,
+  "fails": [
+   1,
+   2,
+   "action"
+  ],
+  "note": "There are two Deluin backs plus an extra head at the bottom. Bai sits right beside Zei instead of small and far behind, and Zei is not looking at a watch."
+ },
+ "cov-cafe-OTS-Z-stern-K7": {
+  "pass": false,
+  "score": 2,
+  "fails": [
+   1,
+   2
+  ],
+  "note": "Zei appears twice: once from behind in the foreground and again standing beside Deluin. Deluin is also standing rather than seated at the table, and his expression is not clearly mock-stern."
+ },
+ "cov-cafe-SUGAR-stack-K7": {
+  "pass": false,
+  "score": 1,
+  "fails": [
+   8,
+   "style"
+  ],
+  "note": "It is split into two panels, has lettering in the corner ('ECCL INTERT') and shows no second tea cup. Unusable."
+ },
+ "cov-corridor-EST-wait-K7": {
+  "pass": false,
+  "score": 3,
+  "fails": [
+   1,
+   "size",
+   5
+  ],
+  "note": "There is an extra figure in the far corridor, there are elevators on both walls, and Zei and Bai stand close to the camera and face it head-on instead of being small in the middle distance."
+ },
+ "cov-corridor-OTS-D-sheepish-K7": {
+  "pass": false,
+  "score": 5,
+  "fails": [
+   "anatomy"
+  ],
+  "note": "Good setup: Deluin's back on the left, Zei smiling with his mouth closed, Bai with her arms crossed and serious. Deluin's arm tangles with Zei's, so the hand at Zei's neck reads as Deluin's rather than Zei rubbing his own neck."
+ },
+ "cov-game-FLOOR-hold-K7": {
+  "pass": false,
+  "score": 4,
+  "fails": [
+   2
+  ],
+  "note": "The hall, crowd and bursts on the holographic walls work. Deluin's face appears on two screens, and the lower screen sits on the play floor rather than one huge screen hanging above."
+ },
+ "cov-gate-CU-D-chant-K7": {
+  "pass": false,
+  "score": 3,
+  "fails": [
+   "size",
+   1,
+   "border"
+  ],
+  "note": "Deluin looks right, with a closed-mouth smile and a glance to the left. But it is a medium shot rather than a close-up, a legged humanoid robot stands in the background, and there are white borders around the frame."
+ },
+ "cov-lobby-CU-Z-distraught-K7": {
+  "pass": false,
+  "score": 3,
+  "fails": [
+   "size",
+   "action",
+   8,
+   1,
+   5
+  ],
+  "note": "It is a medium shot rather than a close-up. Zei faces the camera and is eating the rice instead of tapping his device, there is a legged grey robot behind him, and the wall screen shows text lines."
+ },
+ "cov-lobby-MASTER-sits-K7": {
+  "pass": false,
+  "score": 5,
+  "fails": [
+   1
+  ],
+  "note": "Screen direction and expressions are right: Zei on the left looks worried and Bai on the right looks concerned. But faint extra people stand in the background of the lobby, and there is an odd object in the middle of the table."
+ },
+ "cov-overlook-CU-Z-eyebrow-K7": {
+  "pass": false,
+  "score": 3,
+  "fails": [
+   2,
+   5
+  ],
+  "note": "Zei is frontal and looks straight into the lens with no clear raised eyebrow, and his face appears twice more on the big screens behind."
+ },
+ "cov-overlook-OTS-Z-shrug-K7": {
+  "pass": true,
+  "score": 7,
+  "fails": [],
+  "note": "A clean over-the-shoulder shot: Zei from behind on the left, Bai on the right turned to him with a closed-mouth smile, holding the gadget, with the hall and crowd behind. The shrug itself barely reads."
+ },
+ "cov-walk-CU-Z-hopeful-K7": {
+  "pass": false,
+  "score": 4,
+  "fails": [
+   5
+  ],
+  "note": "The corridor setting and the closed-mouth hopeful smile are right, but Zei faces the camera straight on instead of turning toward her."
+ },
+ "cov-cafe-BAI-what-K8": {
+  "pass": true,
+  "score": 7,
+  "fails": [],
+  "note": "Bai matches her card at her small round table, turned toward the left with a closed-mouth smile, and the size is right. She holds the headphones with both hands instead of lifting one side off an ear."
+ },
+ "cov-cafe-CU-D-cubes-K9": {
+  "pass": false,
+  "score": 3,
+  "fails": [
+   1,
+   5,
+   "size"
+  ],
+  "note": "Deluin's face and closed smile are good, but this is a waist-up medium shot, not a close-up, and he faces right instead of left. A legged humanoid robot stands at a counter in the background."
+ },
+ "cov-cafe-MASTER-apart-K8": {
+  "pass": false,
+  "score": 4,
+  "fails": [
+   1,
+   "action"
+  ],
+  "note": "Zei on the left and Deluin on the right at a long table are right, and Bai sits small at her own round table. An extra diner sits beside the robot, and the robot is not pouring tea."
+ },
+ "cov-cafe-MASTER-laugh-K9": {
+  "pass": false,
+  "score": 3,
+  "fails": [
+   9,
+   "action"
+  ],
+  "note": "Both laugh with open mouths and show teeth. Bai sits right behind Deluin instead of small and far back at her own table."
+ },
+ "cov-cafe-MASTER-up-K8": {
+  "pass": false,
+  "score": 2,
+  "fails": [
+   2,
+   "action"
+  ],
+  "note": "Costumes are swapped: the magenta-haired figure wears Zei's orange jacket, and a Zei-haired figure wears Bai's lime vest and tattoos. Nobody stands up."
+ },
+ "cov-cafe-OTS-D-explain-K9": {
+  "pass": false,
+  "score": 2,
+  "fails": [
+   1,
+   "style"
+  ],
+  "note": "A bald grey mannequin head left over from the layout fills the right foreground, and Deluin is also shown from behind on the left. Zei with the glowing menu is fine, but the frame cannot be used."
+ },
+ "cov-cafe-OTS-D-watch-K8": {
+  "pass": false,
+  "score": 2,
+  "fails": [
+   1,
+   2
+  ],
+  "note": "A magenta-ponytail look-alike in Zei's orange jacket sits at the table next to Zei, and Bai also appears at the back, so there are doubles. The watch glance is not clear."
+ },
+ "cov-cafe-OTS-Z-stern-K9": {
+  "pass": true,
+  "score": 8,
+  "fails": [],
+  "note": "A clean OTS: Zei's shoulder on the left, and Deluin in his belted cable-knit tunic in three-quarter view, mock-stern with a closed smile. The skyline shows at the top."
+ },
+ "cov-cafe-WATCH-watch-K8": {
+  "pass": false,
+  "score": 3,
+  "fails": [
+   "size"
+  ],
+  "note": "This should be an extreme close-up of the wrist and watch, but it is a medium shot of Zei at the table."
+ },
+ "cov-corridor-EST-wait-K9": {
+  "pass": false,
+  "score": 4,
+  "fails": [
+   4,
+   "size"
+  ],
+  "note": "Zei and Bai are correct and alone in a round stone corridor, but they stand large in the foreground rather than small in an extreme wide shot. There is no row of elevators, just one oversized door and one tiny one."
+ },
+ "cov-corridor-OTS-D-sheepish-K8": {
+  "pass": false,
+  "score": 2,
+  "fails": [
+   1,
+   2
+  ],
+  "note": "Deluin appears twice: once from behind in the foreground and once as a second sweater figure with a blue streak beside Zei. Zei's sheepish smile and Bai behind with a serious face are fine."
+ },
+ "cov-corridor-OTS-Z-warm-K9": {
+  "pass": true,
+  "score": 8,
+  "fails": [],
+  "note": "A good OTS: Zei's shoulder on the left, and Deluin warm and three-quarter in the open elevator doorway. The corridor is empty."
+ },
+ "cov-gate-MASTER-fingers-K8": {
+  "pass": false,
+  "score": 5,
+  "fails": [
+   "action"
+  ],
+  "note": "Zei on the left and Deluin on the right in profile at a lamplit gate are right. Both just hold out one open palm, with no ten-fingers-then-five count."
+ },
+ "cov-lobby-CU-Z-down-K9": {
+  "pass": false,
+  "score": 3,
+  "fails": [
+   1,
+   5,
+   "size"
+  ],
+  "note": "Zei looks down at the glowing device, worried and on-model, but faces left, and the framing is wider than a close-up. A legged grey mannequin robot stands in the empty lobby behind him."
+ },
+ "cov-lobby-MASTER-sits-K8": {
+  "pass": false,
+  "score": 4,
+  "fails": [
+   1
+  ],
+  "note": "Zei on the left and Bai on the right face each other in profile, both serious. Several other diners fill the background, and the lobby should be empty."
+ },
+ "cov-overlook-CU-B-toast-K9": {
+  "pass": false,
+  "score": 5,
+  "fails": [
+   "style"
+  ],
+  "note": "A close-up of Bai over the railing, studying, mostly serious, with the crowd in the tiers. A white bar cuts the bottom-right edge, and there is little hologram light from below."
+ },
+ "cov-overlook-MASTER-lean-K8": {
+  "pass": true,
+  "score": 7,
+  "fails": [],
+  "note": "Zei on the left and Bai on the right at the railing, with her gadget on the rail and the glowing floor below. She leans only slightly rather than out over the rail."
+ },
+ "cov-walk-CU-B-serious-K9": {
+  "pass": true,
+  "score": 8,
+  "fails": [],
+  "note": "A good close-up of Bai in the corridor, three-quarter, serious and worried. Her lime top reads more like a panelled tank than a vest."
+ },
+ "cov-cafe-BAI-what-K9": {
+  "pass": false,
+  "score": 4,
+  "fails": [
+   5,
+   "action"
+  ],
+  "note": "Bai matches her card well at her small round table, hand on her headphones, in good comic style. But she faces screen-right instead of turning to the left, and she looks calm and smiling rather than lifting the ear-cup off loudly."
+ },
+ "cov-cafe-CU-D-warm-K8": {
+  "pass": false,
+  "score": 5,
+  "fails": [
+   "size"
+  ],
+  "note": "Deluin is right, warm, in three-quarter view looking left, with a closed mouth. The framing reaches mid-chest with a lot of courtyard showing, so it is a loose medium shot, not a close-up."
+ },
+ "cov-cafe-MASTER-apart-K9": {
+  "pass": false,
+  "score": 5,
+  "fails": [
+   2,
+   3
+  ],
+  "note": "Good staging: Zei left and Deluin right face each other at a long table, Bai small in the back with headphones, and the skyline behind. The robot is a small chrome teapot gadget sitting on the table, not a clean white legless serving robot gliding beside it."
+ },
+ "cov-cafe-MASTER-menus-K8": {
+  "pass": false,
+  "score": 4,
+  "fails": [
+   2,
+   8,
+   "action"
+  ],
+  "note": "All three are at the long table and Bai looks down, unimpressed. Both menus show text-like lines, Zei's jacket is a sleeveless orange vest over black sleeves, and Deluin is not leaning over or pointing at Zei's menu."
+ },
+ "cov-cafe-MASTER-up-K9": {
+  "pass": false,
+  "score": 2,
+  "fails": [
+   2,
+   5,
+   8,
+   "action"
+  ],
+  "note": "Bai wears an orange jacket like Zei's instead of her lime vest, and she stays seated holding a menu with writing on it. Zei sits centre, facing the camera, not on the left."
+ },
+ "cov-cafe-OTS-D-smile-K8": {
+  "pass": false,
+  "score": 2,
+  "fails": [
+   1,
+   2,
+   9
+  ],
+  "note": "Deluin's back appears twice, once on each side of the frame, and Zei grins with his teeth showing. Bai sits right behind Zei, not small and far away at her own table."
+ },
+ "cov-cafe-OTS-D-watch-K9": {
+  "pass": false,
+  "score": 3,
+  "fails": [
+   1,
+   2
+  ],
+  "note": "Zei's embarrassed closed-eye smile and the watch on his wrist work. But Deluin's back is doubled on both sides of the frame, and Bai is right behind Zei, not small and far back."
+ },
+ "cov-cafe-SUGAR-stack-K8": {
+  "pass": true,
+  "score": 6,
+  "fails": [],
+  "note": "A usable ECU: a cream knit sleeve and fingers placing sugar cubes at table height, with the skyline behind. There is only one cup or bowl instead of two tea cups, and a strange mechanical arm in the background distracts."
+ },
+ "cov-cafe-WATCH-watch-K9": {
+  "pass": false,
+  "score": 1,
+  "fails": [
+   1,
+   2,
+   "size",
+   "style"
+  ],
+  "note": "Two Zei-like boys appear (one a brown-haired double), the shot is a two-shot instead of a wrist ECU, and the frame has a black border."
+ },
+ "cov-corridor-MASTER-arrive-K8": {
+  "pass": true,
+  "score": 6,
+  "fails": [],
+  "note": "The right people sit on the right sides: Zei left in profile facing right, Bai with her arms crossed and bored, Deluin right facing left, in an empty corridor. The elevator doors look closed and Deluin stands beside them rather than stepping out, and Bai is beside Zei rather than behind him."
+ },
+ "cov-corridor-OTS-D-sheepish-K9": {
+  "pass": false,
+  "score": 3,
+  "fails": [
+   2,
+   "action"
+  ],
+  "note": "Zei's small closed-mouth smile is good and Bai has her arms crossed behind him. But Deluin's back is doubled on both sides of the frame, Zei is not rubbing his neck, and Bai sits at a table with an odd blue post."
+ },
+ "cov-game-FLOOR-hold-K8": {
+  "pass": false,
+  "score": 5,
+  "fails": [
+   2
+  ],
+  "note": "There is good spectacle: gliders burst against the holograms, the crowd fills the tiers and there is no sky. Deluin's face appears on two screens instead of one, the crowd is not rising, and the holographic walls read weakly."
+ },
+ "cov-gate-MASTER-fingers-K9": {
+  "pass": false,
+  "score": 5,
+  "fails": [
+   "action"
+  ],
+  "note": "Zei left and Deluin right face each other with closed smiles by the gate, with the lamps lit and the skyline behind. They show open palms instead of counting fingers (ten, then five), and only one arm each is clearly drawn."
+ },
+ "cov-lobby-CU-Z-relief-K8": {
+  "pass": false,
+  "score": 5,
+  "fails": [
+   1,
+   "size"
+  ],
+  "note": "Zei breathes out with his eyes closed, holding his device, and matches his card. A robot figure stands at the lobby counter behind him, the framing is a loose medium close-up, and there are thin white margins at the sides."
+ },
+ "cov-lobby-MASTER-sits-K9": {
+  "pass": false,
+  "score": 6,
+  "fails": [
+   1
+  ],
+  "note": "Strong staging: Zei left, worried, faces right and Bai right, serious, faces left at a lobby table with the skyline in the window. A stranger sits in the background by the window, where the lobby should be empty."
+ },
+ "cov-overlook-CU-Z-admire-K8": {
+  "pass": false,
+  "score": 5,
+  "fails": [
+   2
+  ],
+  "note": "Zei looks down with a small closed smile in hologram light, with the crowd in the tiers. A second Zei appears on the big screen at the top left, and the framing is closer to a medium close-up."
+ },
+ "cov-overlook-MASTER-lean-K9": {
+  "pass": true,
+  "score": 6,
+  "fails": [],
+  "note": "Zei is left and Bai right at the railing, both on-model, with her gadget on the rail and the glowing floor below. They look at each other instead of at the game, and Bai is not really leaning out over the board."
+ },
+ "cov-walk-CU-Z-hopeful-K8": {
+  "pass": true,
+  "score": 6,
+  "fails": [],
+  "note": "A real close-up of Zei, hopeful, with a closed-mouth smile and his eyes turned right, in an empty corridor. The face is nearly frontal, and an odd blue teardrop shape sits on his temple."
+ },
+ "cov-cafe-CU-B-menu-K8": {
+  "pass": false,
+  "score": 5,
+  "fails": [
+   8
+  ],
+  "note": "Bai matches her card well, glancing down unimpressed and facing left in three-quarter. But the glowing menu has letter-like marks and lines of writing on it."
+ },
+ "cov-cafe-CU-D-warm-K9": {
+  "pass": true,
+  "score": 6,
+  "fails": [],
+  "note": "Deluin matches his card. He is warm and looks toward the left, with skyline and string lights behind him. The framing is loose for a close-up (more of a medium close-up), and the knit top reads as a turtleneck sweater rather than a long tunic."
+ },
+ "cov-cafe-MASTER-call-K8": {
+  "pass": false,
+  "score": 2,
+  "fails": [
+   1,
+   2,
+   6,
+   "action"
+  ],
+  "note": "There is an extra look-alike of Zei (a dark-haired boy in an orange jacket) sitting with Bai at a square table, and Deluin stands behind them. Bai is not small and apart, and Zei sits alone at a round table."
+ },
+ "cov-cafe-MASTER-menus-K9": {
+  "pass": false,
+  "score": 4,
+  "fails": [
+   8,
+   "action"
+  ],
+  "note": "All three are present and look right, seated in the right order. But the menus and the wall screen are covered in text lines, and Deluin sits upright instead of leaning over to point at Zei's menu."
+ },
+ "cov-cafe-OTS-D-astonished-K8": {
+  "pass": false,
+  "score": 2,
+  "fails": [
+   1,
+   2
+  ],
+  "note": "Zei is astonished, as asked. But the foreground shoulder belongs to a bald stranger in an orange shirt, and a second long-haired figure in a cream sweater stands beside Zei, so there are extra and wrong people."
+ },
+ "cov-cafe-OTS-D-smile-K9": {
+  "pass": false,
+  "score": 2,
+  "fails": [
+   1,
+   2,
+   "action"
+  ],
+  "note": "Zei's closed-mouth smile is good. But Deluin appears twice (two backs of his head), and Bai sits right beside Zei instead of far behind at her own small table."
+ },
+ "cov-cafe-OTS-D-whoa-K8": {
+  "pass": false,
+  "score": 2,
+  "fails": [
+   1,
+   2,
+   8
+  ],
+  "note": "Zei is surprised with his menu. But the foreground shoulder is a bald stranger, an extra cream-sweater figure stands on the left, and both menus show text-like lines."
+ },
+ "cov-cafe-SUGAR-stack-K9": {
+  "pass": false,
+  "score": 3,
+  "fails": [
+   1,
+   2,
+   "size",
+   "action"
+  ],
+  "note": "This should be an insert of fingers only, but it shows Deluin's face plus a second knit-sleeved person at top right. Three cubes are stacked, and there is a bowl instead of two tea cups."
+ },
+ "cov-corridor-CU-B-sour-K8": {
+  "pass": true,
+  "score": 8,
+  "fails": [],
+  "note": "A strong close-up of Bai: arms crossed, a sour closed-mouth twist, three-quarter facing left, tattoos and ponytail on card, and the corridor is empty. It could be a touch tighter."
+ },
+ "cov-corridor-MASTER-arrive-K9": {
+  "pass": false,
+  "score": 3,
+  "fails": [
+   2,
+   "action"
+  ],
+  "note": "Deluin in the elevator doorway is very good. But Bai is wearing Zei's orange jacket with her arms crossed in front, while Zei is hidden behind her, so he is not shown eager and stepping forward."
+ },
+ "cov-corridor-OTS-Z-easy-K8": {
+  "pass": true,
+  "score": 8,
+  "fails": [],
+  "note": "Zei's spiky streaked hair and shoulder are in the foreground, and Deluin (belted cream tunic) stands easy and friendly by the elevator with a closed-mouth smile. The corridor is empty. Zei's jacket reads slightly brown."
+ },
+ "cov-game-FLOOR-hold-K9": {
+  "pass": false,
+  "score": 4,
+  "fails": [
+   1,
+   2,
+   "action"
+  ],
+  "note": "The crowd, bursts and the screen of Deluin's calm face are good. But his face appears twice (a second screen on the floor), a lone man stands on the play floor, the gliders look like flying cars and there are few holographic walls."
+ },
+ "cov-lobby-CU-Z-distraught-K8": {
+  "pass": false,
+  "score": 5,
+  "fails": [
+   "size",
+   "action"
+  ],
+  "note": "Zei is on card, facing right, with rice, vegetables and tea in an empty late-night lobby. But this is a medium shot, not a close-up. He looks mildly pensive rather than distraught, and the device looks like it is poking into the food."
+ },
+ "cov-lobby-CU-Z-relief-K9": {
+  "pass": false,
+  "score": 5,
+  "fails": [
+   1,
+   "size"
+  ],
+  "note": "A nice relief beat: eyes closed, closed-mouth smile, device in his hands, facing right. But a robot stands in the background of a lobby that should be empty, and the framing is a medium close-up rather than a close-up."
+ },
+ "cov-lobby-OTS-Z-turns-K8": {
+  "pass": false,
+  "score": 5,
+  "fails": [
+   "action"
+  ],
+  "note": "The over-the-shoulder setup is good: Zei's back of head on the left, Bai on card across the table, the lobby empty. But Bai holds a stylus and writes on the tablet instead of leaning in to read, and Zei's top reads as a brown shirt."
+ },
+ "cov-overlook-CU-Z-admire-K9": {
+  "pass": false,
+  "score": 3,
+  "fails": [
+   2,
+   7,
+   "action"
+  ],
+  "note": "Zei's face, smile and facing are good. But the big screen shows two Zei look-alikes, a starry sky shows in the hall ceiling, there is no hologram light from below, and a standing crowd crowds the overlook."
+ },
+ "cov-overlook-MASTER-watch-K8": {
+  "pass": false,
+  "score": 5,
+  "fails": [
+   "action"
+  ],
+  "note": "Both match their cards, Zei is on the left and Bai is on the right working on her gadget. But the camera is on the walkway with the railing behind them, so Zei is not leaning on it watching the game below; he looks toward the camera."
+ },
+ "cov-walk-CU-Z-hopeful-K9": {
+  "pass": false,
+  "score": 6,
+  "fails": [
+   5
+  ],
+  "note": "A good close-up of Zei with a hopeful closed-mouth smile in the empty corridor. But he faces and looks toward screen-left, breaking the rule that Zei looks right."
+ },
+ "cov-cafe-CU-B-menu-K9": {
+  "pass": true,
+  "score": 7,
+  "fails": [],
+  "note": "Bai matches the card and is serious in three-quarter profile, looking down at a glowing menu that has no letters. The background looks more like an open town street than the walled courtyard, and the menu shows small icon marks."
+ },
+ "cov-cafe-EST-night-K8": {
+  "pass": false,
+  "score": 3,
+  "fails": [
+   2,
+   6
+  ],
+  "note": "The high night view, string lights and skyline are good. But Bai is wearing Deluin's cream knit tunic, the brown-haired figure has Bai's tattooed arms and a vest, and the table is a short square one, not the long one."
+ },
+ "cov-cafe-MASTER-call-K9": {
+  "pass": false,
+  "score": 2,
+  "fails": [
+   1,
+   2,
+   "action"
+  ],
+  "note": "Zei appears twice, once at the round table and once at the main table, and Bai sits at the main table instead of small and apart. Deluin's wave reads well, but the staging is wrong."
+ },
+ "cov-cafe-MASTER-robot-K8": {
+  "pass": false,
+  "score": 2,
+  "fails": [
+   1,
+   2,
+   "action"
+  ],
+  "note": "Zei appears twice (the second one is holding a laptop) and there is no robot. The skyline and the long wooden table are good."
+ },
+ "cov-cafe-OTS-D-astonished-K9": {
+  "pass": false,
+  "score": 3,
+  "fails": [
+   1,
+   2
+  ],
+  "note": "Zei's astonished look reads well, but there are two foreground backs: Deluin on the left and an extra bald man in blue on the right. Zei also faces the camera almost straight on."
+ },
+ "cov-cafe-OTS-D-talk-K8": {
+  "pass": false,
+  "score": 2,
+  "fails": [
+   1,
+   2
+  ],
+  "note": "Deluin is doubled (two brown-haired backs in cable knit) and a third head pokes up at the bottom. Bai is right next to Zei, not small and far behind, and she has no headphones."
+ },
+ "cov-cafe-OTS-D-whoa-K9": {
+  "pass": false,
+  "score": 3,
+  "fails": [
+   1,
+   2
+  ],
+  "note": "Zei with the glowing menu, surprised, is right, but an extra bald man in blue fills the right foreground beside Deluin's back."
+ },
+ "cov-cafe-SUGAR-wall-K8": {
+  "pass": true,
+  "score": 6,
+  "fails": [],
+  "note": "A neat two-row wall of sugar cubes on the wooden table, with the skyline beyond. The tea cups look like wide handleless bowls."
+ },
+ "cov-corridor-CU-B-sour-K9": {
+  "pass": true,
+  "score": 8,
+  "fails": [],
+  "note": "A good close-up: Bai matches the card, faces screen-left in three-quarter view, arms crossed with a sour mouth, in an empty corridor."
+ },
+ "cov-corridor-OTS-D-delighted-K8": {
+  "pass": false,
+  "score": 2,
+  "fails": [
+   1,
+   2,
+   9
+  ],
+  "note": "Deluin appears twice (a back in the middle and a back in the right foreground), Zei grins with his teeth showing, and an odd blue post stands beside him. Bai in the background is fine."
+ },
+ "cov-corridor-OTS-Z-easy-K9": {
+  "pass": true,
+  "score": 7,
+  "fails": [],
+  "note": "A clean over-the-shoulder shot: Zei's back is on the left and Deluin, friendly with a closed-mouth smile, faces screen-left in his cable-knit tunic. No elevator doorway is clearly shown, and Zei's jacket reads more like a shirt collar."
+ },
+ "cov-gate-CU-D-chant-K8": {
+  "pass": false,
+  "score": 4,
+  "fails": [
+   1,
+   "size"
+  ],
+  "note": "Deluin in profile facing left with a closed-mouth smile is right. But a legged android stands in the background, there are white borders around the frame, and it is a medium shot, not a close-up."
+ },
+ "cov-lobby-CU-Z-distraught-K9": {
+  "pass": false,
+  "score": 5,
+  "fails": [
+   1,
+   "size"
+  ],
+  "note": "Zei looks distraught over his rice bowl, tea and device. But a dark robot figure lurks by the window, there are white borders on the sides, and it is a medium shot rather than a close-up."
+ },
+ "cov-lobby-MASTER-refill-K8": {
+  "pass": false,
+  "score": 3,
+  "fails": [
+   1,
+   2
+  ],
+  "note": "Zei slumped on the left is fine, but the robot has legs and a 3D-ish look, and a crowd of people stands outside the window although the restaurant should be nearly empty."
+ },
+ "cov-lobby-OTS-Z-turns-K9": {
+  "pass": true,
+  "score": 8,
+  "fails": [],
+  "note": "Zei's back is on the left and Bai, matching her card, leans in over the glowing tablet with an unreadable face. The screen shows only icons and no text."
+ },
+ "cov-overlook-CU-Z-eyebrow-K8": {
+  "pass": false,
+  "score": 4,
+  "fails": [
+   2
+  ],
+  "note": "Zei's raised brow and sideways eyes are good, but the big screens show look-alike Zei faces, and a starry top edge may read as sky in the hall."
+ },
+ "cov-overlook-MASTER-watch-K9": {
+  "pass": true,
+  "score": 7,
+  "fails": [],
+  "note": "Zei on the left and Bai on the right bent over her gadget, both matching their cards, with the glowing floor below. But Zei looks at Bai instead of down at the game."
+ },
+ "cov-walk-CU-Z-tease-K8": {
+  "pass": true,
+  "score": 8,
+  "fails": [],
+  "note": "A good close-up: Zei in three-quarter view toward the right with a teasing closed-mouth smile, in an empty corridor."
+ },
+ "cov-cafe-CU-D-cubes-K8": {
+  "pass": false,
+  "score": 5,
+  "fails": [
+   1,
+   2
+  ],
+  "note": "Deluin looks right: he looks down with a soft closed-mouth smile, in profile toward the left. But a grey metal robot with legs stands at a counter in the background, which is the wrong robot design and an extra figure, and the framing is nearer a medium close-up."
+ },
+ "cov-cafe-EST-night-K9": {
+  "pass": false,
+  "score": 4,
+  "fails": [
+   "size",
+   6
+  ],
+  "note": "Bai and Deluin are on model, sitting across from each other, and nobody else is there. But this is a low wide shot, not a high corner establishing shot with them small, and the table is short and nearly square rather than long."
+ },
+ "cov-cafe-MASTER-laugh-K8": {
+  "pass": false,
+  "score": 5,
+  "fails": [
+   9,
+   6
+  ],
+  "note": "The staging is good: Zei on the left, Deluin on the right, the sugar-cube wall between the cups, and Bai small behind at a round table with headphones. But Deluin laughs with his mouth open and teeth showing, and the shared table reads square rather than long."
+ },
+ "cov-cafe-MASTER-robot-K9": {
+  "pass": false,
+  "score": 4,
+  "fails": [
+   2,
+   "action"
+  ],
+  "note": "All three are on model and placed correctly at a rectangular table with the skyline behind. The robot holds a laptop with a screen instead of a tray, it has orange arms that blend into Zei, and Bai's legs under the table are tangled."
+ },
+ "cov-cafe-OTS-D-explain-K8": {
+  "pass": false,
+  "score": 2,
+  "fails": [
+   1,
+   2
+  ],
+  "note": "Zei with the glowing menu is good. But the foreground has two people: Deluin's back on the left and a bald stranger in orange on the right. The menus also carry text-like lines."
+ },
+ "cov-cafe-OTS-D-talk-K9": {
+  "pass": false,
+  "score": 2,
+  "fails": [
+   1,
+   2
+  ],
+  "note": "Zei relaxed, with Bai small behind at a round table, is right. But Deluin appears twice from behind (left and right), and a third brown-haired head sits at the bottom of the frame."
+ },
+ "cov-cafe-OTS-Z-stern-K8": {
+  "pass": true,
+  "score": 8,
+  "fails": [],
+  "note": "A clean over-the-shoulder shot: the back of Zei's head is on the left, and Deluin in the belted cable tunic gives a mock-stern closed-mouth smile, three-quarter toward the left. The table is rectangular and the skyline shows. He is standing rather than seated, which is minor."
+ },
+ "cov-cafe-SUGAR-wall-K9": {
+  "pass": true,
+  "score": 6,
+  "fails": [],
+  "note": "A neat two-row wall of sugar cubes on wooden planks, with the skyline behind and no lettering. The cups look like handleless bowls and are oversized, so the scale is slightly off."
+ },
+ "cov-corridor-EST-wait-K8": {
+  "pass": false,
+  "score": 5,
+  "fails": [
+   "size"
+  ],
+  "note": "Zei on the left facing right and Bai on the right facing left are on model in an empty round tunnel. But they are large in the foreground, not small in the middle distance as an extreme wide shot needs, and there is only one elevator door rather than a row."
+ },
+ "cov-corridor-OTS-D-delighted-K9": {
+  "pass": false,
+  "score": 3,
+  "fails": [
+   9,
+   5
+  ],
+  "note": "Deluin's shoulder and Bai with her arms crossed are good. But Zei grins with his teeth showing, Bai stands on the left instead of the right, and odd blue posts flank Zei."
+ },
+ "cov-corridor-OTS-Z-warm-K8": {
+  "pass": true,
+  "score": 8,
+  "fails": [],
+  "note": "A strong over-the-shoulder shot: the back of Zei's head is on the left, and Deluin stands warm and open in a doorway in his belted tunic, three-quarter to the left. The doorway is a wooden door rather than an elevator door; elevator doors show at the left."
+ },
+ "cov-gate-CU-D-chant-K9": {
+  "pass": false,
+  "score": 3,
+  "fails": [
+   5,
+   2,
+   "size"
+  ],
+  "note": "Deluin gestures playfully and is on model. But he looks toward the right instead of left toward Zei, the shot is a medium shot rather than a close-up, and a grey robot with legs stands in the background."
+ },
+ "cov-lobby-CU-Z-down-K8": {
+  "pass": true,
+  "score": 8,
+  "fails": [],
+  "note": "Zei is worried and not smiling, eyes down on the glowing device, three-quarter toward the right, on model. The lobby and the skyline through the windows are fine; the framing is a loose close-up."
+ },
+ "cov-lobby-MASTER-refill-K9": {
+  "pass": false,
+  "score": 2,
+  "fails": [
+   1,
+   2
+  ],
+  "note": "Zei slumped over his tea on the left is right. But a second Zei-like man in an orange jacket stands nearby, other people fill the room, and the robot has legs."
+ },
+ "cov-overlook-CU-B-toast-K8": {
+  "pass": false,
+  "score": 5,
+  "fails": [
+   "action"
+  ],
+  "note": "A good close-up of Bai on model, leaning on the railing over the glowing pieces, with the crowd in the tiers. But she wears a small smirk where the action needs her serious, and the dark ceiling reads a bit like a night sky."
+ },
+ "cov-overlook-CU-Z-eyebrow-K9": {
+  "pass": false,
+  "score": 5,
+  "fails": [
+   8
+  ],
+  "note": "Zei is on model with a raised eyebrow, eyes turned right, three-quarter, and the crowd in the tiers is fine. But the big screens show faces and graphics instead of blank light."
+ },
+ "cov-walk-CU-B-serious-K8": {
+  "pass": true,
+  "score": 8,
+  "fails": [],
+  "note": "Bai is serious and worried, not smiling, three-quarter toward the left in an empty corridor, a true close-up. The vest is drawn over a black turtleneck, which is a small departure from the card."
+ },
+ "cov-walk-CU-Z-tease-K9": {
+  "pass": false,
+  "score": 5,
+  "fails": [
+   1
+  ],
+  "note": "Zei is on model, with a teasing closed-mouth smile, three-quarter toward the right. But dark silhouettes of several people stand down the corridor, where nobody else should be."
+ },
+ "cov-cafe-CU-D-cubes-K12": {
+  "pass": false,
+  "score": 2,
+  "fails": [
+   1,
+   2,
+   "style"
+  ],
+  "note": "Deluin appears twice, mirrored face to face, and there is a white bar along the bottom edge. The courtyard and the soft closed-mouth smile are good, but the frame can't be used."
+ },
+ "cov-cafe-MASTER-apart-K10": {
+  "pass": false,
+  "score": 4,
+  "fails": [
+   1,
+   "action"
+  ],
+  "note": "Zei on the left, Deluin on the right, the long table and the skyline are all right. But there's no robot: Bai pours the tea herself at a mid-distance table instead of sitting small and far off putting on her headphones."
+ },
+ "cov-cafe-MASTER-call-K11": {
+  "pass": false,
+  "score": 2,
+  "fails": [
+   1,
+   2,
+   "action"
+  ],
+  "note": "Bai appears twice in the background, and there's an extra man at her table. Zei and Deluin are standing, with no long table. Deluin's wave reads well, but the cast is wrong."
+ },
+ "cov-cafe-MASTER-menus-K10": {
+  "pass": false,
+  "score": 6,
+  "fails": [
+   "action"
+  ],
+  "note": "This is the right cast in the right places, at a long table under the skyline, with Bai serious and looking down at her menu. But Deluin isn't leaning over or pointing at Zei's menu, and the menus carry lines that read like text. It would pass after a fix to the action."
+ },
+ "cov-cafe-MASTER-robot-K11": {
+  "pass": false,
+  "score": 1,
+  "fails": [
+   1,
+   2,
+   4
+  ],
+  "note": "The figures are scrambled: an orange-jacket Zei/Bai hybrid with a magenta ponytail, a second Zei, a robot head on Bai's tattooed body, Deluin twice, and a stray monitor on the table. Unusable."
+ },
+ "cov-cafe-OTS-D-astonished-K10": {
+  "pass": false,
+  "score": 1,
+  "fails": [
+   1,
+   2,
+   5
+  ],
+  "note": "The middle figure has Deluin's light-brown hair and cream sweater with Zei's blue streak, and faces away from the camera. The foreground shoulder is a stranger with a dark bob and a blue shirt. Zei's face isn't shown at all."
+ },
+ "cov-cafe-OTS-D-explain-K11": {
+  "pass": false,
+  "score": 3,
+  "fails": [
+   1,
+   2,
+   8
+  ],
+  "note": "Zei is on model and keen, holding a glowing menu. But there are two foreground figures (Deluin from behind on the left plus a stranger with a brown bob on the right), and the menu shows written letters."
+ },
+ "cov-cafe-OTS-D-talk-K10": {
+  "pass": false,
+  "score": 3,
+  "fails": [
+   1,
+   2
+  ],
+  "note": "There are two over-the-shoulder figures (Deluin on the left and a beanie-headed stranger on the right). Zei has a smooth blue headband look instead of spiky hair, and Bai sits right beside him rather than small and far behind."
+ },
+ "cov-cafe-OTS-D-watch-K11": {
+  "pass": false,
+  "score": 2,
+  "fails": [
+   1,
+   2,
+   "action"
+  ],
+  "note": "Same problems as the talk frame: two foreground figures, Zei off model, Bai right behind him rather than far away. Zei's eyes are closed and he isn't glancing at a watch."
+ },
+ "cov-corridor-EST-wait-K10": {
+  "pass": false,
+  "score": 2,
+  "fails": [
+   1,
+   2,
+   4,
+   "size"
+  ],
+  "note": "The round stone corridor and elevator doors are right. But Zei appears twice (two orange jackets), there are extra people in the distance, and Bai is huge in the foreground. It isn't an extreme wide shot with both of them waiting in the middle distance."
+ },
+ "cov-corridor-OTS-D-sheepish-K12": {
+  "pass": false,
+  "score": 3,
+  "fails": [
+   1,
+   2,
+   5,
+   "action"
+  ],
+  "note": "Zei's closed-mouth smile and face are good. But Deluin appears twice (back views on both sides), the neck rub is done by the Deluin figure rather than Zei, and Bai is on the left instead of the right."
+ },
+ "cov-gate-CU-D-chant-K10": {
+  "pass": false,
+  "score": 2,
+  "fails": [
+   1,
+   2,
+   "size",
+   "style"
+  ],
+  "note": "Deluin appears twice, with an extra humanoid robot and a person behind a counter. The shot is a medium rather than a close-up, it has a drawn panel border, and the background Deluin has an open grin."
+ },
+ "cov-gate-MASTER-fingers-K11": {
+  "pass": true,
+  "score": 8,
+  "fails": [],
+  "note": "This is the right cast with correct screen direction: Zei on the left facing right with a closed smile, Deluin on the right facing left, both open hands clearly drawn, a long table and the skyline. Minor: Deluin's top reads as a short sweater rather than a long tunic."
+ },
+ "cov-lobby-CU-Z-relief-K10": {
+  "pass": true,
+  "score": 8,
+  "fails": [],
+  "note": "Zei is on model, in three-quarter view, eyes closed with a calm closed-mouth relief, phone in hand, in an empty lobby with the skyline through the glass. Good."
+ },
+ "cov-lobby-MASTER-refill-K11": {
+  "pass": false,
+  "score": 3,
+  "fails": [
+   1,
+   2,
+   "action"
+  ],
+  "note": "The mood and lobby are nice, but there are many extra people at the back and outside. The robot has legs and serves the next table instead of refilling Zei's cup, and Zei wears a hoodie rather than his cropped jacket."
+ },
+ "cov-overlook-CU-B-toast-K10": {
+  "pass": true,
+  "score": 7,
+  "fails": [],
+  "note": "Bai is on model, in profile facing left, lit from below, eyes narrowed and serious with her mouth closed. The screens show only abstract graphics and the crowd is in the tiers. Her faint smirk is slightly less serious than asked."
+ },
+ "cov-overlook-CU-Z-admire-K11": {
+  "pass": false,
+  "score": 4,
+  "fails": [
+   5,
+   "action"
+  ],
+  "note": "Zei is on model with a nice closed-mouth smile and hologram light. But two big screens show faces, which the action forbids, and he looks down toward screen-left instead of toward the right."
+ },
+ "cov-cafe-EST-night-K10": {
+  "pass": false,
+  "score": 3,
+  "fails": [
+   7,
+   "action",
+   "size"
+  ],
+  "note": "Nice high corner view with string lights, gate and a rectangular table, and Bai matches. But Deluin stands instead of sitting across from her, there is no megastructure skyline (only dark trees), and it reads as a wide shot rather than an extreme wide."
+ },
+ "cov-cafe-MASTER-apart-K11": {
+  "pass": false,
+  "score": 4,
+  "fails": [
+   1,
+   "action"
+  ],
+  "note": "Zei left and Deluin right in profile at a long table with the skyline, which is good. But there is no robot (Zei pours the tea himself), and Bai sits close in the middle between them instead of small and far behind."
+ },
+ "cov-cafe-MASTER-laugh-K10": {
+  "pass": false,
+  "score": 3,
+  "fails": [
+   9
+  ],
+  "note": "Good placement: Zei left, Deluin right, sugar cubes between the cups and Bai small behind with her ponytail. But both laugh with wide-open mouths showing teeth, and Bai's headphones are not visible."
+ },
+ "cov-cafe-MASTER-menus-K11": {
+  "pass": false,
+  "score": 4,
+  "fails": [
+   8,
+   "action"
+  ],
+  "note": "All three look right and the glowing menus are there. But the menus show lines of text, Deluin does not lean over or point at Zei's menu, and Bai sits beside the others rather than across."
+ },
+ "cov-cafe-MASTER-up-K10": {
+  "pass": false,
+  "score": 2,
+  "fails": [
+   1,
+   2,
+   8,
+   "action"
+  ],
+  "note": "The characters are mixed up: Bai's ponytail figure wears Zei's orange in his seat, and a Zei-headed figure has Bai's tattoos and green top. Nobody stands, and the menu has text on it."
+ },
+ "cov-cafe-OTS-D-astonished-K11": {
+  "pass": false,
+  "score": 3,
+  "fails": [
+   1,
+   2
+  ],
+  "note": "Zei's astonished face is good. But there are two foreground people (Deluin at left plus an extra dark-haired back of head at right), and odd grey robot-like arm shapes stick up behind Zei's shoulders."
+ },
+ "cov-cafe-OTS-D-smile-K10": {
+  "pass": false,
+  "score": 2,
+  "fails": [
+   1,
+   2,
+   9
+  ],
+  "note": "Deluin appears twice in the foreground (both sides), Zei grins with teeth showing, and Bai sits right behind his shoulder instead of small and far away."
+ },
+ "cov-cafe-OTS-D-talk-K11": {
+  "pass": false,
+  "score": 3,
+  "fails": [
+   1,
+   2
+  ],
+  "note": "Zei is relaxed with a closed smile, and Bai sits small at a round table behind him with headphones, which is right. But there are two cable-knit backs of heads in the foreground, so Deluin is doubled."
+ },
+ "cov-cafe-OTS-D-whoa-K10": {
+  "pass": false,
+  "score": 2,
+  "fails": [
+   1,
+   2,
+   8
+  ],
+  "note": "Zei's surprise is good. But there are two foreground figures (Deluin plus an extra), the menu is held by the foreground figure rather than Zei, and it shows letters."
+ },
+ "cov-corridor-EST-wait-K11": {
+  "pass": false,
+  "score": 5,
+  "fails": [
+   "size"
+  ],
+  "note": "This is the right pair in a round-topped corridor with nobody else, and both match their cards. But they stand big and frontal near the camera, so it is a full shot, not the extreme wide the layout shows, and there is not a row of elevator doors."
+ },
+ "cov-game-FLOOR-hold-K10": {
+  "pass": false,
+  "score": 3,
+  "fails": [
+   "action"
+  ],
+  "note": "The hall, crowd and bursts of light read well. But Deluin's face appears on two screens (the upper one and the box on the floor) where only one is allowed, the crowd is not rising, and there are no sunken pits."
+ },
+ "cov-gate-CU-D-chant-K11": {
+  "pass": false,
+  "score": 3,
+  "fails": [
+   1,
+   5,
+   "style"
+  ],
+  "note": "Deluin looks good with a closed smile. But he faces screen-right instead of left, a legged humanoid robot stands in the background, the sign glows like lettering, and the frame has a white border."
+ },
+ "cov-lobby-CU-Z-distraught-K10": {
+  "pass": false,
+  "score": 5,
+  "fails": [
+   1
+  ],
+  "note": "Zei is on-model and three-quarter to the right with his device, rice bowl and tea, which is right. But a legged chrome humanoid robot stands in the lobby (not the white gliding robot), and he reads as mildly concerned rather than distraught."
+ },
+ "cov-lobby-CU-Z-relief-K11": {
+  "pass": false,
+  "score": 4,
+  "fails": [
+   1,
+   5,
+   "style"
+  ],
+  "note": "Closed eyes and relief read well, and Zei is on-model. But his head turns toward screen-left, a legged robot stands on the counter, and the frame has a white border."
+ },
+ "cov-lobby-MASTER-sits-K10": {
+  "pass": false,
+  "score": 6,
+  "fails": [
+   1
+  ],
+  "note": "This is the strongest of the batch: Zei left and Bai right in profile, both serious, with the skyline through the windows. But small passers-by show outside the glass behind Bai, and she is already seated rather than sitting down."
+ },
+ "cov-overlook-CU-B-toast-K11": {
+  "pass": false,
+  "score": 6,
+  "fails": [
+   "style"
+  ],
+  "note": "Very good Bai: serious, narrowed eyes, lit from below, three-quarter to the left, and the screens show only abstract graphics. It fails only on a thin white border around the frame."
+ },
+ "cov-overlook-CU-Z-eyebrow-K10": {
+  "pass": false,
+  "score": 2,
+  "fails": [
+   5,
+   "action",
+   "style"
+  ],
+  "note": "Zei is near frontal (straight on), both big screens show faces (Zei look-alikes), and the frame has a white border. The raised eyebrow is right."
+ },
+ "cov-cafe-EST-night-K11": {
+  "pass": false,
+  "score": 3,
+  "fails": [
+   2,
+   "size"
+  ],
+  "note": "Nice night courtyard with long table and skyline, but the costumes are swapped: the light-brown-haired person wears Bai's lime vest and Bai wears Deluin's cream knit. It is a low medium-wide, not a high extreme-wide establishing shot."
+ },
+ "cov-cafe-MASTER-call-K10": {
+  "pass": false,
+  "score": 3,
+  "fails": [
+   2,
+   5,
+   "action"
+  ],
+  "note": "Deluin waving is good, but Zei has grown Bai's magenta ponytail (a look-alike blend). Bai is close, not small and far behind, and Zei sits at a round table rather than the long one."
+ },
+ "cov-cafe-MASTER-laugh-K11": {
+  "pass": false,
+  "score": 3,
+  "fails": [
+   1,
+   9
+  ],
+  "note": "Good layout with the sugar-cube wall, long table and Bai small behind, but both Zei and Deluin laugh with open mouths and teeth. There is also an extra figure in the background at left."
+ },
+ "cov-cafe-MASTER-robot-K10": {
+  "pass": false,
+  "score": 2,
+  "fails": [
+   1,
+   2,
+   "action"
+  ],
+  "note": "Zei appears twice (a second Zei sits behind a laptop). The robot stands on a pole rather than a round gliding base and holds no tray."
+ },
+ "cov-cafe-MASTER-up-K11": {
+  "pass": false,
+  "score": 5,
+  "fails": [
+   5,
+   8,
+   "action"
+  ],
+  "note": "Bai is standing, serious, with the long table and skyline. But Zei faces the camera straight on instead of looking up at her, and the menu on the table is covered in text-like marks. Bai is on the left of frame."
+ },
+ "cov-cafe-OTS-D-explain-K10": {
+  "pass": false,
+  "score": 2,
+  "fails": [
+   1,
+   2,
+   8,
+   "action"
+  ],
+  "note": "Two foreground people: a Deluin-like figure holds the menu and a stranger with dark brown hair is in the right foreground. Zei is not holding the menu, and the menu shows writing."
+ },
+ "cov-cafe-OTS-D-smile-K11": {
+  "pass": false,
+  "score": 2,
+  "fails": [
+   1,
+   2,
+   9
+  ],
+  "note": "Deluin appears twice in the foreground (once as a bare mannequin-like head), and Zei grins with teeth. Bai is behind, but close rather than small and far."
+ },
+ "cov-cafe-OTS-D-watch-K10": {
+  "pass": false,
+  "score": 2,
+  "fails": [
+   1,
+   2,
+   "action"
+  ],
+  "note": "Deluin appears twice in the foreground (once as a mannequin-like head). Zei has closed eyes and looks at no watch, and Bai is right behind him, not small and far."
+ },
+ "cov-cafe-OTS-D-whoa-K11": {
+  "pass": false,
+  "score": 2,
+  "fails": [
+   1,
+   2,
+   8,
+   "action"
+  ],
+  "note": "Zei's surprise is good, but there are two foreground people (a Deluin and a dark-haired stranger), and the stranger, not Zei, holds the menu. The menu has letters on it."
+ },
+ "cov-corridor-OTS-D-delighted-K12": {
+  "pass": false,
+  "score": 4,
+  "fails": [
+   5,
+   9
+  ],
+  "note": "The Deluin OTS works and Bai has her arms crossed, but Zei grins with teeth and Bai is on the left instead of the right. Odd blue pillars stand behind Zei."
+ },
+ "cov-game-FLOOR-hold-K11": {
+  "pass": false,
+  "score": 4,
+  "fails": [
+   "action"
+  ],
+  "note": "Lively hall with the crowd and glider bursts, but Deluin's face is on two screens, not one, and the holographic walls barely read. There is an unexplained man in the left foreground."
+ },
+ "cov-gate-MASTER-fingers-K10": {
+  "pass": false,
+  "score": 6,
+  "fails": [
+   "action"
+  ],
+  "note": "Right people, sides and facing, closed-mouth smile, long table and skyline: the best of this batch. But Zei's hand is a palm-up reach rather than five fingers held up, and the lamps show night rather than dusk."
+ },
+ "cov-lobby-CU-Z-distraught-K11": {
+  "pass": false,
+  "score": 4,
+  "fails": [
+   1,
+   4
+  ],
+  "note": "Zei's distress and the tapping on his device are right, but a humanoid robot with legs stands in the background. The rice bowl is oversized and dominates the frame."
+ },
+ "cov-lobby-MASTER-refill-K10": {
+  "pass": false,
+  "score": 3,
+  "fails": [
+   1,
+   2,
+   "action"
+  ],
+  "note": "Mood and skyline are good, but the robot is a humanoid with legs and is not pouring tea at his table. Several other diners and passers-by fill the room."
+ },
+ "cov-lobby-MASTER-sits-K11": {
+  "pass": false,
+  "score": 6,
+  "fails": [
+   1
+  ],
+  "note": "Strong: Zei on the left is worried and Bai on the right is serious and caring, both in profile, matching the cards. Only failure: a few other diners in the background, though nobody else is described."
+ },
+ "cov-overlook-CU-Z-admire-K10": {
+  "pass": false,
+  "score": 4,
+  "fails": [
+   "action"
+  ],
+  "note": "A good three-quarter close-up with a closed-mouth smile and hologram glow, but both big screens show faces (one looks like Zei)."
+ },
+ "cov-overlook-CU-Z-eyebrow-K11": {
+  "pass": false,
+  "score": 4,
+  "fails": [
+   2,
+   "action"
+  ],
+  "note": "Nice close-up with sideways eyes, but the eyebrow raise is weak and a big screen shows two faces. A small orange-jacket look-alike stands in the crowd."
+ },
+ "cov-cafe-CU-Z-smile-K14": {
+  "pass": true,
+  "score": 7,
+  "fails": [],
+  "note": "Zei matches his card: a three-quarter view looking right with a closed-mouth, slightly shy smile. It is a good close-up. The café reads more like an indoor room than a courtyard, and the empty table behind is small and square, but it is not the shared table."
+ },
+ "cov-cafe-CU-Z-talk-K14": {
+  "pass": false,
+  "score": 4,
+  "fails": [
+   8,
+   "style"
+  ],
+  "note": "Zei's face and look to the right are good. But the neon sign behind him has letter-like glyphs, and the frame has a black panel border with a white gap along the bottom."
+ },
+ "cov-cafe-CU-Z-watch-K14": {
+  "pass": false,
+  "score": 5,
+  "fails": [
+   "style",
+   "size"
+  ],
+  "note": "The action is right: a profile glancing down at the watch with a closed-mouth smile, and his hands are clean. But the frame is drawn inside a black panel border, and it is framed as a medium shot rather than a close-up."
+ },
+ "cov-cafe-CU-Z0-astonished-K13": {
+  "pass": true,
+  "score": 8,
+  "fails": [],
+  "note": "A clear astonished three-quarter view looking right, in the outdoor courtyard with the skyline. His jacket and hair match the card, and it is a good close-up."
+ },
+ "cov-cafe-CU-Z0-astonished-K15": {
+  "pass": true,
+  "score": 7,
+  "fails": [],
+  "note": "Zei is on the left looking right, matching his card, with a good courtyard and skyline. His expression reads more worried than astonished."
+ },
+ "cov-cafe-CU-Z0-explain-K13": {
+  "pass": true,
+  "score": 8,
+  "fails": [],
+  "note": "A keen closed-mouth smile at the glowing menu, held in two hands, looking right. The menu shows only blank light bars. The framing is slightly loose for a close-up but acceptable."
+ },
+ "cov-cafe-CU-Z0-explain-K15": {
+  "pass": true,
+  "score": 7,
+  "fails": [],
+  "note": "Keen, holding the menu and facing right, with a correct look. It is a little wider than a close-up, and he looks more at the menu than toward Deluin."
+ },
+ "cov-cafe-CU-Z0-listen-K13": {
+  "pass": false,
+  "score": 5,
+  "fails": [
+   6
+  ],
+  "note": "Looking up to the right, a little surprised, with the menu in hand: the action is good. But the table edge in the foreground is round, not the long rectangular table."
+ },
+ "cov-cafe-CU-Z0-listen-K15": {
+  "pass": true,
+  "score": 8,
+  "fails": [],
+  "note": "Zei looks up to the right with the menu in two hands at a rectangular table, with the skyline behind. A clean close-up that matches his card."
+ },
+ "cov-cafe-CU-Z0-whoa-K13": {
+  "pass": true,
+  "score": 7,
+  "fails": [],
+  "note": "Surprised, with his eyes on the menu, a slightly open mouth (no teeth) and a good card match. A round table shows behind, but he sits at a rectangular one."
+ },
+ "cov-cafe-CU-Z0-whoa-K15": {
+  "pass": true,
+  "score": 8,
+  "fails": [],
+  "note": "Strong surprise at the menu, clean hands, and the skyline through the window. It is a good close-up and matches his card."
+ }
+}

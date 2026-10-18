@@ -1,0 +1,33 @@
+{
+ "about": "Fifteen Days v5: Bai's turn (K18), cleaned: a background figure removed, and her headphones for 'What?!'. DRAFTED prompts. Second wording for 'What?!' (the first was flagged by fal's content checker).",
+ "out": "images-out/preprod/pass3",
+ "ledger": "images-out/preprod/ledger-s7.json",
+ "cap_usd": 25.0,
+ "style": "",
+ "jobs": [
+  {
+   "id": "cov-cafe-BAI-what-E21",
+   "shot": "cov-cafe-BAI-what",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-cafe-BAI-what-K18.png"
+   ],
+   "prompt": "Add large dark over-ear headphones on her head, with a dark band over the top of her head; with her raised hand she holds the nearer headphone cup lifted away from her ear. Keep the drawing, colours, camera, framing and crop exactly as they are; she keeps her face, hair, vest, pose and her head turned over her shoulder. No letters or numbers.",
+   "width": 1344,
+   "height": 752,
+   "seed": 21
+  },
+  {
+   "id": "cov-cafe-BAI-what-E22",
+   "shot": "cov-cafe-BAI-what",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-cafe-BAI-what-K18.png"
+   ],
+   "prompt": "Add large dark over-ear headphones on her head, with a dark band over the top of her head; with her raised hand she holds the nearer headphone cup lifted away from her ear. Keep the drawing, colours, camera, framing and crop exactly as they are; she keeps her face, hair, vest, pose and her head turned over her shoulder. No letters or numbers.",
+   "width": 1344,
+   "height": 752,
+   "seed": 22
+  }
+ ]
+}

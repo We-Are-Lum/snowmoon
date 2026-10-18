@@ -1,0 +1,13 @@
+{
+  "cue": "dreadnaught",
+  "about": "Dreadnaught, the band in Bai's headphones (beat 5). The owner, 2026-10-15: instrumental with a harsh wordless scream, 10-15 seconds, so it sits under Bai's \"Dreadnaught!!\" instead of competing with it; four versions to pick from. Captions describe qualities; no artist or band is named.",
+  "assist": {"model": "claude-coding-agent", "by": "the coding agent", "drafted": ["captions", "the scream marking", "seeds"], "note": "per-cue prompts, model-drafted and labelled (principles: per-cue prompts may be drafted); the owner picks a version", "see": "config/models.json drafting; principle 3"},
+  "duration": 12,
+  "bpm": 150,
+  "versions": [
+    {"id": "dreadnaught-v1", "seed": 1101, "caption": "aggressive metalcore and industrial techno hybrid, down-tuned heavily distorted guitars, pounding four-on-the-floor techno kick with blast-beat snare fills, gritty distorted synth bass, glitchy electronic stabs, one harsh wordless screamed vocal, raw, loud and angry", "lyrics": "[Instrumental]\n[Scream]\nAaaaaaaaaaah!"},
+    {"id": "dreadnaught-v2", "seed": 2202, "caption": "aggressive metalcore and industrial techno hybrid, down-tuned heavily distorted guitars, pounding four-on-the-floor techno kick with blast-beat snare fills, gritty distorted synth bass, glitchy electronic stabs, one harsh wordless screamed vocal, raw, loud and angry", "lyrics": "[Instrumental]\n[Scream]\nAaaaaaaaaaah!"},
+    {"id": "dreadnaught-v3", "seed": 3303, "caption": "frantic electronic hardcore with heavy metal guitars, fast distorted techno kick, chugging palm-muted down-tuned riffs, screeching synth leads, bitcrushed glitch fills, a harsh wordless scream over the top, chaotic and furious", "lyrics": "[Instrumental]\n[Scream]\nRaaaaaaaaaagh!"},
+    {"id": "dreadnaught-v4", "seed": 4404, "caption": "frantic electronic hardcore with heavy metal guitars, fast distorted techno kick, chugging palm-muted down-tuned riffs, screeching synth leads, bitcrushed glitch fills, a harsh wordless scream over the top, chaotic and furious", "lyrics": "[Instrumental]\n[Scream]\nRaaaaaaaaaagh!"}
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "about": "The owner's voice picks (pre-production review, 2026-10-16). Used when the takes are converted again after the re-record.",
+  "zei": {"sheet": "zei-v3", "tempo": 1.0, "note": "the new sheet; the 5% speed-up dropped (owner: words got lost)"},
+  "bai": {"sheet": "bai", "tempo": 1.0, "eq": "highpass=f=140,equalizer=f=250:t=q:w=1.2:g=-4,equalizer=f=3200:t=q:w=1.5:g=2", "note": "the current sheet with less low end; never sped up; re-record for enunciation"},
+  "deluin": {"sheet": "deluin-v2", "tempo": 0.94, "note": "the new sheet, 6% slower; approved"},
+  "robot": {"sheet": "robot", "tempo": 1.0}
+}
