@@ -196,13 +196,24 @@ try {
     const page = await newPage(browser);
     const res = await page.goto(BASE + url);
     const t = await mainText(page);
-    const player = await page.locator('video.scene-video').evaluate((v) => ({ src: v.getAttribute('src'), poster: v.getAttribute('poster') })).catch(() => null);
+    const player = await page
+      .locator('video.scene-video')
+      .evaluate((v) => ({ src: v.getAttribute('src') ?? v.getAttribute('data-cut'), poster: v.getAttribute('poster'), sources: [...v.querySelectorAll('source')].map((s) => `${s.getAttribute('media') ?? 'any'} ${s.getAttribute('src')}`) }))
+      .catch(() => null);
+    // The delivery copies (src/lib/scene-delivery.ts): the 720p one for phones, the re-wrapped cut, then the cut itself.
+    const sourcesOk =
+      JSON.stringify(player?.sources) ===
+      JSON.stringify([
+        '(max-width: 800px) https://media.snowmoon.party/scenes/fifteen-days/v1/fifteen-days-phone-6a5de81bbece.mp4',
+        'any https://media.snowmoon.party/scenes/fifteen-days/v1/fifteen-days-wide-3e425205b1a4.mp4',
+        'any https://media.snowmoon.party/scenes/fifteen-days/v1/fifteen-days-9391f90d6dca.mp4',
+      ]);
     const canonical = await page.locator('link[rel="canonical"]').getAttribute('href').catch(() => null);
     const embedRaw = await page.locator('meta[name="fc:miniapp"]').getAttribute('content').catch(() => null);
     const embed = embedRaw ? (JSON.parse(embedRaw) as { button?: { title?: string; action?: { url?: string } } }) : null;
     const headOk = canonical === `${PUBLIC}/@naaate/1` && embed?.button?.action?.url === `${PUBLIC}/@naaate/1` && embed?.button?.title === 'Watch it';
-    const pass = headOk && h.status === 200 && res?.status() === 200 && /Fifteen Days/i.test(t) && /@naaate.s chosen version/i.test(t) && player?.src === 'https://media.snowmoon.party/scenes/fifteen-days/v1/fifteen-days-9391f90d6dca.mp4' && player?.poster === 'https://media.snowmoon.party/scenes/fifteen-days/v1/fifteen-days-poster-3caad9b75656.jpg' && /Version 1 /i.test(t) && /AI-generated, not by the author/i.test(t);
-    await record(1, 'owner page', url, `200; title Fifteen Days; @naaate's chosen version; version 1; the AI label; the player plays v1's cut from media.snowmoon.party with the café master as its poster; canonical and fc:miniapp embed point at ${PUBLIC}/@naaate/1`, page, { status: h.status, player, canonical, embedUrl: embed?.button?.action?.url ?? null }, pass);
+    const pass = headOk && sourcesOk && h.status === 200 && res?.status() === 200 && /Fifteen Days/i.test(t) && /@naaate.s chosen version/i.test(t) && player?.src === 'https://media.snowmoon.party/scenes/fifteen-days/v1/fifteen-days-9391f90d6dca.mp4' && player?.poster === 'https://media.snowmoon.party/scenes/fifteen-days/v1/fifteen-days-poster-3caad9b75656.jpg' && /Version 1 /i.test(t) && /AI-generated, not by the author/i.test(t);
+    await record(1, 'owner page', url, `200; title Fifteen Days; @naaate's chosen version; version 1; the AI label; the player plays v1's cut from media.snowmoon.party (its 720p copy on phones, its re-wrapped copy wider, the cut last) with the café master as its poster; canonical and fc:miniapp embed point at ${PUBLIC}/@naaate/1`, page, { status: h.status, player, canonical, embedUrl: embed?.button?.action?.url ?? null }, pass);
     await page.context().close();
   }
 
