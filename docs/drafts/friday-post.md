@@ -84,27 +84,36 @@ repo root works now.
 
 ## Farcaster cast (under 320 characters)
 
+**Updated 2026-10-18 (owner: "the editor is for REMIX, and everything stays on the site"; Q5 "yes for the cast").**
+Fork → Remix, and no GitHub link in the cast: "Remix the next shot (live editor below)." and "Every layer is open
+on the site" (DRAFT, the coding agent's; the RECIPE tab of every shot in the editor is that layer list). The earlier
+versions below are kept for reference.
+
 **Updated 2026-10-17 late (owner: "'Fork the next shot' links the live editor, and the prototype link becomes 'where
 it's going'").** "Fork the next shot (live editor below)." is approved (owner, 2026-10-18 ~00:20 UTC); "Where it's
 going" with the prototype link in the text is part of the same change.
 
 > Fifteen Days: one scene from Vitalik's Snowmoon.
 >
-> Fork the next shot (live editor below).
+> Remix the next shot (live editor below).
 >
-> Every layer is already open in the repo: script, voices, 3D sets, cameras, prompts, frames, sound, timeline. GPL v3. github.com/We-Are-Lum/snowmoon
+> Every layer is open on the site: script, voices, 3D sets, cameras, prompts, frames, sound, timeline. GPL v3.
 >
 > Where it's going: claude.ai/artifact/NAuaFhUtoQKx8zHuANxwhU
 
 Embeds (the cast's two, not in the text):
 1. the scene: `https://snowmoon.party/@naaate/1` (the page with the video);
 2. the live editor: `https://snowmoon.party/@naaate/1/shot/first` (opens on the first shot with a camera and a line;
-   FORK on the scene page goes to the same place).
+   REMIX on the scene page goes to the same place).
 
-299 characters of text, the repo and prototype links included (counted 2026-10-17); 21 to spare.
+261 characters of text, the prototype link included (counted 2026-10-18); 59 to spare.
 Earlier approved line, for reference: "Fork the next shot (editor prototype below)." (owner, 2026-10-17).
 
 ## Bounty post (longer)
+
+**Updated 2026-10-18 (owner: "Keep one "Source (GPL-3.0)" link in the longer bounty post, since openness is part of
+the pitch").** Fork → Remix; "save your fork" is gone (no fork file); the one GitHub link is "Source (GPL-3.0)" at
+the end, with the fresh-clone line folded into it (its separate make-a-scene.md link is dropped). DRAFT.
 
 > **Fifteen Days**, one scene from *Snowmoon* by Vitalik Buterin
 >
@@ -112,11 +121,11 @@ Earlier approved line, for reference: "Fork the next shot (editor prototype belo
 >
 > [One line on the scene, in Nate's words.]
 >
-> **Fork the next shot.** Live editor: https://snowmoon.party/@naaate/1/shot/first
-> Pick a shot, move its camera and people, play its lines, and save your fork. Where it's going (a prototype of the
-> whole editor): https://claude.ai/artifact/NAuaFhUtoQKx8zHuANxwhU
+> **Remix the next shot.** Live editor: https://snowmoon.party/@naaate/1/shot/first
+> Pick a shot, move its camera and people, and play its lines. Remixing opens this week. Where it's going (a
+> prototype of the whole editor): https://claude.ai/artifact/NAuaFhUtoQKx8zHuANxwhU
 > You don't have to start from nothing: every layer of this scene is
-> already open in the repo, under GPL v3 like the book.
+> open on the site, under GPL v3 like the book.
 >
 > **Every layer, open:**
 > - the script, with every line's author (34 lines I wrote, 9 from the novel, each tagged);
@@ -128,12 +137,10 @@ Earlier approved line, for reference: "Fork the next shot (editor prototype belo
 > - the sound: CC0 recordings, credited, and device sounds made in code;
 > - the timeline, the mixer and the renderer, as scripts.
 >
-> A fresh clone renders our example scene to a 1080p video with no keys and no AI models, so you can see the pipeline
-> work before you spend anything: [link to docs/make-a-scene.md]
->
 > Everything AI made is labelled as AI.
 >
 > *Snowmoon* is by Vitalik Buterin: <https://vitalik.eth.limo/snowmoon/>. This is an independent fan project, not
 > affiliated with him.
 >
-> Repo: <https://github.com/We-Are-Lum/snowmoon>
+> Source (GPL-3.0): <https://github.com/We-Are-Lum/snowmoon>. A fresh clone renders our example scene to a 1080p video
+> with no keys and no AI models.
