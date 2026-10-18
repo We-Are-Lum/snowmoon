@@ -89,7 +89,8 @@ export async function POST(request: Request) {
       output_sha256: sha256,
       cost_usd: made.costUsd,
       checks: { prompt: { model: IMAGES.guardModel, verdict: 'ok' }, host_safety_checker: 'passed', blocked_names: 'none' },
-      shot: { id: shot.id, n: shot.n, version_frame: shot.recipeId, version_frame_sha256: shot.recipeSha256 },
+      // version_frame_of: the version whose frame and prompt were sent (version 1's, for a shot of version 2, the GPT cut, while Remix draws with the open-weight model).
+      shot: { id: shot.id, n: shot.n, version_frame: shot.recipeId, version_frame_sha256: shot.recipeSha256, version_frame_of: shot.from },
       pictures: pictures.map((p, i) => ({ n: i + 1, role: p.role, name: p.name, sent_sha256: p.sha256, width: p.width, height: p.height, served: p.src, made_from: p.file, made_from_sha256: p.fileSha256 })),
       camera: cameraOf(body.camera),
       // The shot's own prompt and the plate's sentence were drafted by the coding agent; the person's words are theirs.

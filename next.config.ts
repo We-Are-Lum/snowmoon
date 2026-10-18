@@ -65,6 +65,9 @@ const nextConfig: NextConfig = {
   async rewrites() {
     return [
       { source: '/@:handle/:id/v/:n', destination: '/adaptation/:id/by/:handle/v/:n' },
+      // A fixed version's own editor and storyboard (its frames and labels, whatever the chosen version is).
+      { source: '/@:handle/:id/v/:n/shot/:shot', destination: '/adaptation/:id/by/:handle/v/:n/shot/:shot' },
+      { source: '/@:handle/:id/v/:n/storyboard', destination: '/adaptation/:id/by/:handle/v/:n/storyboard' },
       { source: '/@:handle/:id/shot/:shot', destination: '/adaptation/:id/by/:handle/shot/:shot' },
       { source: '/@:handle/:id/storyboard', destination: '/adaptation/:id/by/:handle/storyboard' },
       { source: '/@:handle/:id', destination: '/adaptation/:id/by/:handle' },

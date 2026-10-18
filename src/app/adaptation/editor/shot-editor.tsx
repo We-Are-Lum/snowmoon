@@ -36,7 +36,7 @@ interface Pic {
 }
 interface ChainStep {
   id: string;
-  model: { id: string; name: string; licence: string; weights: string | null; host?: string } | null;
+  model: { id: string; name: string; licence: string; weights: string | null; host?: string; closed?: boolean; maker?: string } | null;
   seed: number | null;
   size: string | null;
   cost_usd: number;
@@ -69,7 +69,7 @@ interface Shot {
   camera: (ShotCamera & { set: string; key: string | null }) | null;
   plate: (Pic & { name: string }) | null;
   cards: (Pic & { who: string })[];
-  recipe: { id: string; file: string | null; sha256: string; sentSha256: string | null; prompt: string | null; set: { file: string; sha256: string } | null; chain: ChainStep[]; cost_usd: number } | null;
+  recipe: { id: string; file: string | null; sha256: string; sentSha256: string | null; prompt: string | null; set: { file: string; sha256: string } | null; chain: ChainStep[]; cost_usd: number; closed?: boolean } | null;
   lines: Line[];
 }
 interface Preset {
@@ -92,6 +92,17 @@ export interface EditorData {
   sets: Record<string, string>;
   presets: Record<string, Preset[]>;
   shots: Shot[];
+  /** A closed model that drew the version's pictures (scripts/editor-data.mjs). */
+  closedModel?: { name: string; maker: string; endpoint: string; date: string; openness: string } | null;
+  /** The open-weight version this one was redrawn from, if any. */
+  openFrom?: number | null;
+}
+/** The version's closed model, as its recipe names it (src/lib/adaptation-pages.ts ClosedModel). */
+export interface ClosedModelLine {
+  name: string;
+  maker: string;
+  date: string;
+  made: string;
 }
 
 const NAMES: Record<string, string> = { Z: 'Zei', B: 'Bai', D: 'Deluin', K: 'Kau', R: 'The robot waiter' };
@@ -109,12 +120,14 @@ export function ShotEditor({
   handle,
   scenePath,
   aiLabel,
+  closedModel = null,
 }: {
   dataUrl: string;
   shotId: string;
   handle: string;
   scenePath: string;
   aiLabel: string | null;
+  closedModel?: ClosedModelLine | null;
 }) {
   const [data, setData] = useState<EditorData | null>(null);
   const [failed, setFailed] = useState(false);
@@ -161,6 +174,7 @@ export function ShotEditor({
       handle={handle}
       scenePath={scenePath}
       aiLabel={aiLabel}
+      closedModel={closedModel}
     />
   );
 }
@@ -173,6 +187,7 @@ function Editor({
   handle,
   scenePath,
   aiLabel,
+  closedModel,
 }: {
   data: EditorData;
   shot: Shot;
@@ -181,6 +196,7 @@ function Editor({
   handle: string;
   scenePath: string;
   aiLabel: string | null;
+  closedModel: ClosedModelLine | null;
 }) {
   const orbitRef = useRef<HTMLCanvasElement>(null);
   const shotRef = useRef<HTMLCanvasElement>(null);
@@ -194,6 +210,9 @@ function Editor({
   const [prompt, setPrompt] = useState(shot.recipe?.prompt ?? '');
   const [lineText, setLineText] = useState<Record<string, string>>(() => Object.fromEntries(shot.lines.map((l) => [l.cue, l.text ?? ''])));
   const shotPath = (s: Shot) => `${scenePath}/shot/${s.id}`;
+  // A frame a closed model drew carries its own label naming the model (owner, 2026-10-18). DRAFT wording.
+  const closedStep = shot.recipe?.closed ? shot.recipe.chain.find((c) => c.model?.closed) : undefined;
+  const frameLabel = closedStep?.model ? `AI-generated with ${closedStep.model.name}, not by the author` : shot.recipe ? 'AI-generated image, not by the author' : null;
   const presets = useMemo(() => {
     const all = (shot.camera && data.presets[shot.camera.set]) || [];
     const same = all.filter((p) => p.scene === shot.scene);
@@ -376,6 +395,7 @@ function Editor({
               <figcaption className="label">
                 The shot&rsquo;s frame · version {data.version}
                 {shot.made ? ` · ${shot.made}` : ''}
+                {frameLabel ? ` · ${frameLabel}` : ''}
               </figcaption>
             </figure>
             <figure className="ed-fig">
@@ -392,6 +412,12 @@ function Editor({
             <AddToStoryboard adaptation={data.adaptation} version={data.version} shot={shot.id} seconds={shot.to - shot.from} frame={null} boardPath={`${scenePath}/storyboard`} label={`Add this frame to a storyboard`} />
           )}
           {aiLabel && <p className="label ed-muted">{aiLabel}</p>}
+          {closedModel && (
+            // As on the scene page: the closed model with its maker, the date and that it is closed (owner, 2026-10-18). DRAFT wording.
+            <p className="label ed-muted ed-closed">
+              Inputs open, model closed: {closedModel.made} by {closedModel.name} ({closedModel.maker}, a closed model), {closedModel.date}.
+            </p>
+          )}
           <p className="label ed-recipe-link">
             <a
               href="#recipe"

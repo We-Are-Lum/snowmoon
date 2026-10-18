@@ -3,6 +3,8 @@
 // Writes public/editor/<adaptation>/v<n>/: data.json (every shot: its frame, set frame, camera, people, the scene's camera
 // setups, lines, voices, plate, cast cards and full recipe), web copies of the pictures (frames 1280 px and 320 px thumbs,
 // set frames, plates, cards; sharp when it is installed, else the files as committed) and the converted voice lines.
+// A version whose pictures were redrawn from another's (versions/2.json, editor.builds_on: the GPT cut) gets the other's
+// shots, sets, cameras, lines and voices with its own committed pictures and recipes (redrawn() below).
 // Nothing is fetched and nothing is generated: a fork that clones the repo gets the same editor. public/editor is not committed.
 import fs from 'node:fs';
 import path from 'node:path';
@@ -45,18 +47,28 @@ for (const seed of fs.readdirSync(rel('adaptations'))) {
   if (!exists(vdir)) continue;
   for (const vf of fs.readdirSync(rel(vdir)).filter((f) => f.endsWith('.json'))) {
     const V = readJson(`${vdir}/${vf}`);
-    // A version whose pictures aren't committed here (version 2, the GPT cut): the editor reads another version's.
+    // A version whose pictures aren't committed here: the editor reads another version's.
     if (V.editor?.reads_version) {
       console.log(`editor-data: ${V.seed} v${V.version}: no editor files of its own; the editor reads version ${V.editor.reads_version}`);
+      continue;
+    }
+    // A version made from another's files with its pictures redrawn (version 2, the GPT cut, from version 1's):
+    // the other version's shots, sets, cameras, lines and voices, with this version's own pictures and recipes.
+    if (V.editor?.builds_on) {
+      await build(readJson(`${vdir}/${V.editor.builds_on}.json`), V);
       continue;
     }
     await build(V);
   }
 }
 
-async function build(V) {
-  const OUT = rel(`public/editor/${V.adaptation}/v${V.version}`);
-  const url = (p) => `/editor/${V.adaptation}/v${V.version}/${p}`;
+/** V: the version whose files the shots are read from; as: the version the editor data is for (V itself, or one that builds on it). */
+async function build(V, as = V) {
+  const OUT = rel(`public/editor/${as.adaptation}/v${as.version}`);
+  const url = (p) => `/editor/${as.adaptation}/v${as.version}/${p}`;
+  // The sound is the same files in a version built on another (the GPT cut has version 1's mix): served once, from the other's folder.
+  const SOUND_OUT = rel(`public/editor/${V.adaptation}/v${V.version}`);
+  const soundUrl = (p) => `/editor/${V.adaptation}/v${V.version}/${p}`;
   fs.mkdirSync(OUT, { recursive: true });
   const tl = readJson(V.timeline);
   const recipes = readJson(V.frames_recipe).images;
@@ -204,7 +216,7 @@ async function build(V) {
         at: +c.at.offset.toFixed(2),
         speaker: l?.speaker ?? null,
         text: l?.text ?? subs[c.id] ?? null,
-        by: book ? { kind: 'book', cite: book[1] } : /FID 6786/.test(tag) ? { kind: 'person', handle: V.author.handle, on: tag.split(' on ')[1] ?? null } : { kind: 'unknown' },
+        by: book ? { kind: 'book', cite: book[1] } : /FID 6786/.test(tag) ? { kind: 'person', handle: as.author.handle, on: tag.split(' on ')[1] ?? null } : { kind: 'unknown' },
         note: l?.note ?? null,
         voice: exists(voiceFile) ? { src: await copyVoice(voiceFile, c.id), name: c.source?.voice ?? null, sha256: sha(voiceFile), file: voiceFile, model: c.source?.voice ? { id: 'chatterbox-vc', name: MODELS['chatterbox-vc']?.repo, licence: MODELS['chatterbox-vc']?.license } : null } : null,
         // The other existing converted takes of this line (scripts/remix-takes.py), for the storyboard.
@@ -223,19 +235,21 @@ async function build(V) {
 
   async function copyTake(file, cue, id) {
     const name = `takes/${cue}/${id}${path.extname(file)}`;
-    const dst = path.join(OUT, name);
+    const dst = path.join(SOUND_OUT, name);
     fs.mkdirSync(path.dirname(dst), { recursive: true });
     if (!fs.existsSync(dst)) fs.copyFileSync(rel(file), dst);
-    return url(name);
+    return soundUrl(name);
   }
 
   async function copyVoice(file, cue) {
     const name = `voice/${cue}${path.extname(file)}`;
-    const dst = path.join(OUT, name);
+    const dst = path.join(SOUND_OUT, name);
     fs.mkdirSync(path.dirname(dst), { recursive: true });
     if (!fs.existsSync(dst)) fs.copyFileSync(rel(file), dst);
-    return url(name);
+    return soundUrl(name);
   }
+
+  if (as !== V) await redrawn(as, V, tl, shots, copyOnce);
 
   // The scene's camera setups (presets): every coverage layout in the same set, with its camera.
   const presets = {};
@@ -249,18 +263,112 @@ async function build(V) {
   for (const n of setNames) fs.writeFileSync(path.join(OUT, `set-${n}.json`), JSON.stringify(setOf(n).set));
 
   const data = {
-    about: `Made by scripts/editor-data.mjs from ${path.relative(ROOT, rel(`adaptations/${V.seed}/versions/${V.version}.json`))}; every file named here is committed.`,
-    adaptation: V.adaptation,
-    version: V.version,
-    seed: V.seed,
-    title: V.title,
-    author: V.author,
-    recipeFolder: `adaptations/${V.seed}`,
+    about:
+      as === V
+        ? `Made by scripts/editor-data.mjs from ${path.relative(ROOT, rel(`adaptations/${V.seed}/versions/${V.version}.json`))}; every file named here is committed.`
+        : `Made by scripts/editor-data.mjs from adaptations/${as.seed}/versions/${as.version}.json: version ${V.version}'s shots, sets, cameras, lines and voices, with version ${as.version}'s own pictures and recipes; every file named here is committed.`,
+    adaptation: as.adaptation,
+    version: as.version,
+    seed: as.seed,
+    title: as.title,
+    author: as.author,
+    recipeFolder: as.recipe_folder ?? `adaptations/${as.seed}`,
+    // A closed model that drew the version's pictures, named with its maker and date (principle 3; owner, 2026-10-18).
+    closedModel: as.closed_model ? { name: as.closed_model.name, maker: as.closed_model.maker, endpoint: as.closed_model.endpoint, date: as.closed_model.date, openness: as.openness ?? 'inputs open, model closed' } : null,
+    // The open-weight version this one was redrawn from: Remix reads its shot from there unless it draws with this version's model (src/lib/remix/shot.ts).
+    openFrom: as === V ? null : V.version,
     sets: Object.fromEntries(setNames.map((n) => [n, url(`set-${n}.json`)])),
     presets: Object.fromEntries(setNames.map((n) => [n, presets[n] ?? []])),
     shots,
   };
   fs.writeFileSync(path.join(OUT, 'data.json'), JSON.stringify(data));
   const withCam = shots.filter((s) => s.camera).length;
-  console.log(`editor-data: ${V.seed} v${V.version}: ${shots.length} shots (${withCam} with a camera, ${shots.filter((s) => s.lines.length).length} with lines), sets ${setNames.join(', ')} -> public/editor/${V.adaptation}/v${V.version}`);
+  console.log(`editor-data: ${as.seed} v${as.version}: ${shots.length} shots (${withCam} with a camera, ${shots.filter((s) => s.lines.length).length} with lines${as === V ? '' : `, ${shots.filter((s) => s.recipe?.closed).length} pictures redrawn from version ${V.version}'s`}), sets ${setNames.join(', ')} -> public/editor/${as.adaptation}/v${as.version}`);
+}
+
+/**
+ * A version whose pictures were redrawn from another's (version 2, the GPT cut: every model-drawn picture of version 1
+ * redrawn by a closed model): each shot gets this version's picture (adaptations/<seed>/versions/<n>.json, editor.frames,
+ * committed as sent back, its sha256 checked against its recipe and the cut's timeline), the pictures sent with it
+ * (its set frame, cast cards and plate, the committed copies, sha256 checked) and its own recipe. Shots drawn in code
+ * stay as they are. Any mismatch stops the build: the editor never shows a picture its recipe doesn't name.
+ */
+async function redrawn(as, V, tl, shots, copyOnce) {
+  const E = as.editor;
+  const tl2 = readJson(as.timeline);
+  const checks = readJson(E.figure_check);
+  const byLettered = Object.fromEntries(readJson(E.plan).filter((j) => j.lettered_frame).map((j) => [j.lettered_frame, j.id]));
+  const M = MODELS[E.model];
+  if (!M || M.open_weights !== false) throw new Error(`editor-data: v${as.version}: ${E.model} is not a closed model on the allowlist (config/models.json)`);
+  if (tl2.shots.length !== shots.length) throw new Error(`editor-data: v${as.version}: ${tl2.shots.length} shots, version ${V.version} has ${shots.length}`);
+  const committed = (file) => {
+    const b = path.basename(file);
+    if (file.startsWith('adaptations/')) return exists(file) ? file : null;
+    for (const d of ['cards', 'plates']) if (file.includes(d) && exists(`${V.sent}/${d}/${b}`)) return `${V.sent}/${d}/${b}`;
+    return null;
+  };
+  for (const [i, s2] of tl2.shots.entries()) {
+    const shot = shots[i];
+    if (s2.id !== shot.cutId || Math.abs(s2.at.offset - tl.shots[i].at.offset) > 1e-6) throw new Error(`editor-data: v${as.version}: shot ${i + 1} is ${s2.id}, version ${V.version}'s is ${shot.cutId}`);
+    const name = path.basename(s2.image, '.png');
+    const fid = name.startsWith('gpt-') ? name.slice(4) : name.startsWith('lettered-') ? byLettered[s2.frame] : null;
+    if (!fid) {
+      if (shot.recipe) throw new Error(`editor-data: v${as.version}: ${s2.id} is model-drawn in version ${V.version} but has no picture of its own`);
+      continue;
+    }
+    const rid = `${fid}-${checks[fid].tag}`;
+    const r = readJson(`${E.recipes}/${rid}.recipe.json`);
+    const file = `${E.frames}/${rid}.png`;
+    const fileSha = sha(file);
+    if (r.closed_model !== true || r.model !== M.repo) throw new Error(`editor-data: ${rid}: its recipe doesn't name ${M.repo} as a closed model`);
+    if (fileSha !== r.output.sha256) throw new Error(`editor-data: ${file}: sha256 ${fileSha} is not its recipe's ${r.output.sha256}`);
+    if (name.startsWith('gpt-') && s2.image_sha256 !== fileSha) throw new Error(`editor-data: ${s2.id}: the cut's picture ${s2.image_sha256} is not ${file}`);
+    const was = shot.recipe?.id ?? null;
+    shot.picture = `${M.name} (${M.maker}, a closed model)${name.startsWith('lettered-') ? ', lettered in code' : ''}`;
+    shot.frame = await copyOnce(file, `frames/${rid}${ext()}`, 1280);
+    shot.thumb = await copyOnce(file, `thumbs/${rid}${ext()}`, 320);
+    // The pictures sent with it, in the order sent: the set frame (a depth map or a look), the cast cards, then the plate.
+    const sent = r.references.map((f) => {
+      const c = committed(f.file);
+      if (!c || sha(c) !== f.sha256) throw new Error(`editor-data: ${rid}: ${f.file} has no committed copy with sha256 ${f.sha256}`);
+      return { ...f, committed: c };
+    });
+    const sf = sent.find((f) => f.file.includes('/set-frames/'));
+    shot.setFrame = sf ? { src: await copyOnce(sf.committed, `set/${path.basename(sf.file, '.png')}${ext()}`, 1280), mode: /\.depth\./.test(sf.file) ? 'depth' : /\.look\./.test(sf.file) ? 'look' : 'set', file: sf.file, sha256: sf.sha256 } : null;
+    const old = { cards: Object.fromEntries(shot.cards.map((c) => [c.file, c])), plate: shot.plate };
+    shot.cards = [];
+    shot.plate = null;
+    for (const f of sent) {
+      if (f.file.includes('cards')) shot.cards.push({ src: await copyOnce(f.committed, `cards/${path.basename(f.file, '.png')}${ext()}`, 768), who: path.basename(f.file, '.png'), file: f.file, sha256: f.sha256, source: old.cards[f.file]?.source ?? null });
+      else if (f.file.includes('plates')) shot.plate = { src: await copyOnce(f.committed, `plates/${path.basename(f.file, '.png')}${ext()}`, 1024), name: old.plate?.file === f.file ? old.plate.name : path.basename(f.file, '.png'), file: f.file, sha256: f.sha256, source: old.plate?.file === f.file ? old.plate.source : null };
+    }
+    const model = { id: E.model, name: `${M.name} (${M.maker}, a closed model)`, licence: `${M.license}; weights not published`, weights: null, host: `${M.hosted?.host ?? 'hosted'} ${r.model}`, closed: true, maker: M.maker };
+    shot.recipe = {
+      id: rid,
+      file,
+      sha256: r.output.sha256,
+      sentSha256: fileSha,
+      prompt: r.prompt,
+      set: shot.recipe?.set ?? null,
+      closed: true,
+      chain: [
+        {
+          id: rid,
+          model,
+          seed: null,
+          size: r.request?.size ?? null,
+          cost_usd: r.cost_usd ?? 0,
+          served_at: r.date ?? null,
+          request_id: r.response_meta?.providerMetadata?.gateway?.generationId ?? null,
+          sha256: r.output.sha256,
+          kind: 'redraw',
+          // DRAFT wording (coding agent, 2026-10-18).
+          note: `Redrawn for version ${as.version} from version ${V.version}'s frame${was ? ` ${was}` : ''}: its prompt, joined by ${E.plan.replace(/plan\.json$/, 'build_plan.py')}. Inputs open, model closed: the prompt and every picture sent are here by sha256; the model's weights are not published. Recipe: ${E.recipes}/${rid}.recipe.json.`,
+          prompt: r.prompt,
+          references: r.references.map((f) => ({ file: f.file, sha256: f.sha256 })),
+        },
+      ],
+      cost_usd: +(r.cost_usd ?? 0).toFixed(4),
+    };
+  }
 }

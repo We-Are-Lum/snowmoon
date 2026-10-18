@@ -167,10 +167,11 @@ export async function getVersion(id: number): Promise<Version | null> {
 
 /**
  * Versions whose pictures aren't committed here, so the live editor and Remix (public/editor/<id>/v<n>/,
- * made by scripts/editor-data.mjs) read another version's: version 2, the GPT cut, reads version 1's
- * (adaptations/fifteen-days/versions/2.json, "editor"). Every page that links into the editor says so.
+ * made by scripts/editor-data.mjs) read another version's; every page that links into the editor says so.
+ * None now: version 2, the GPT cut, has its own pictures and recipes in the editor since 2026-10-18
+ * (adaptations/fifteen-days/versions/2.json, "editor"); until then it read version 1's.
  */
-const EDITOR_READS: Record<number, number> = { 2: 1 };
+const EDITOR_READS: Record<number, number> = {};
 
 /** The version whose committed files the live editor, the shot strip and Remix read for this one. */
 export async function editorVersion(v: Version): Promise<Version> {

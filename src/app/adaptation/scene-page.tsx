@@ -121,10 +121,12 @@ export async function ScenePage({ adaptation, version, handle, fixed }: { adapta
   const poster = posterFor(video, ownMedia(version.recipe.poster_url)) ?? undefined;
   const delivery = deliveryFor(video);
   const r = version.recipe;
-  // The live editor, the shot strip and Remix read a version's committed pictures; version 2's aren't
-  // committed here, so they show version 1's shots, and say so (src/lib/adaptation-pages.ts editorVersion).
+  // The live editor, the shot strip and Remix read a version's committed pictures; a version whose pictures
+  // aren't committed here shows another's, and says so (src/lib/adaptation-pages.ts editorVersion; none now).
   const ed = await editorVersion(version);
   const otherShots = ed.id !== version.id;
+  // A fixed link's editor is that version's own (/@<name>/<id>/v/<n>/shot/<shot>); the chosen version's is /@<name>/<id>/shot/<shot>.
+  const editorPath = fixed ? fixedPath : latestPath;
 
   return (
     <div className="scene">
@@ -203,7 +205,7 @@ export async function ScenePage({ adaptation, version, handle, fixed }: { adapta
                   </span>
                 )}
                 {/* On the site (owner, 2026-10-18: no GitHub in the flow): every shot's recipe, in the editor. */}
-                <Link href={`${latestPath}/shot/first#recipe`}>{otherShots ? `Version ${ed.id}\u2019s shots and recipes, in the editor` : 'Read it'}</Link>
+                <Link href={`${editorPath}/shot/first#recipe`}>{otherShots ? `Version ${ed.id}\u2019s shots and recipes, in the editor` : 'Read it'}</Link>
               </dd>
             </div>
           </dl>
@@ -213,7 +215,7 @@ export async function ScenePage({ adaptation, version, handle, fixed }: { adapta
             title={adaptation.title}
             latestUrl={`${appUrl()}${latestPath}`}
             fixedUrl={`${appUrl()}${fixedPath}`}
-            remixUrl={`${latestPath}/shot/first`}
+            remixUrl={`${editorPath}/shot/first`}
             remixNote={otherShots ? `The editor has version ${ed.id}\u2019s shots for now.` : undefined}
           />
           {fixed && (
@@ -228,7 +230,7 @@ export async function ScenePage({ adaptation, version, handle, fixed }: { adapta
 
       <ShotStrip
         dataUrl={`/editor/${adaptation.id}/v${ed.id}/data.json`}
-        scenePath={latestPath}
+        scenePath={editorPath}
         heading={otherShots ? `Version ${ed.id}\u2019s shots, open-weight pictures \u00b7 open one in the live editor` : undefined}
       />
 

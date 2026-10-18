@@ -26,6 +26,14 @@ export interface RemixPicture {
 export interface RemixShot {
   adaptation: number;
   version: number;
+  /**
+   * The version whose shot (prompt, cast cards, plate) is sent: the version itself, or, for a version whose
+   * pictures a closed model redrew from an open-weight one (version 2, the GPT cut), that open-weight version,
+   * since Remix draws with the open-weight model (2026-10-18).
+   */
+  from: number;
+  /** A closed model that drew the version's own pictures, if any (named in the panel). */
+  versionModel: { name: string; maker: string } | null;
   id: string;
   n: number;
   who: string[];
@@ -41,7 +49,8 @@ type Pic = { src: string; file: string; sha256: string; who?: string; name?: str
 type DataLine = { cue: string; takes?: { id: string }[] };
 type DataShot = { id: string; n: number; from: number; to: number; who: string[]; camera: unknown; plate: Pic | null; cards: Pic[]; recipe: { id: string; sha256: string; prompt: string | null } | null; lines: DataLine[] };
 
-const cache = new Map<string, { shots: DataShot[] } | null>();
+type Data = { shots: DataShot[]; openFrom?: number | null; closedModel?: { name: string; maker: string } | null };
+const cache = new Map<string, Data | null>();
 const root = () => path.join(process.cwd(), 'public');
 
 function editorData(adaptation: number, version: number) {
@@ -87,13 +96,19 @@ function served(p: Pic, role: 'card' | 'plate', name: string): RemixPicture | nu
 }
 
 export function remixShot(adaptation: number, version: number, shotId: string): RemixShot | null {
-  const d = editorData(adaptation, version);
+  const own = editorData(adaptation, version);
+  if (!own?.shots.some((x) => x.id === shotId)) return null;
+  // A version redrawn by a closed model from an open-weight one: Remix sends the open-weight version's shot.
+  const from = own.openFrom ?? version;
+  const d = from === version ? own : editorData(adaptation, from);
   const s = d?.shots.find((x) => x.id === shotId);
   if (!s) return null;
   const cards = s.cards.map((c) => served(c, 'card', c.who ?? 'cast')).filter((c): c is RemixPicture => c !== null);
   return {
     adaptation,
     version,
+    from,
+    versionModel: own.closedModel ? { name: own.closedModel.name, maker: own.closedModel.maker } : null,
     id: s.id,
     n: s.n,
     who: s.who,
