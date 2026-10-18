@@ -2,7 +2,7 @@ import { notFound, redirect } from 'next/navigation';
 import type { Metadata } from 'next';
 import { NothingHere, loadScene, type SceneParams } from '../../../../scene-page';
 import { StoryboardEditor } from '../../../../editor/storyboard-editor';
-import { ownMedia } from '~/lib/adaptation-pages';
+import { editorVersion, ownMedia } from '~/lib/adaptation-pages';
 import '../../../../editor/editor.css';
 import '../../../../../remix/remix.css';
 
@@ -26,12 +26,14 @@ export default async function StoryboardPage({ params }: Props) {
   if (s.kind === 'not-found') notFound();
   if (s.kind === 'hidden') return <NothingHere />;
   if (s.kind === 'nothing') return <NothingHere title={s.adaptation.title} handle={s.handle} />;
+  // The version whose committed shots and mix the storyboard reads (version 2, the GPT cut, reads version 1's).
+  const ed = await editorVersion(s.version);
   return (
     <StoryboardEditor
-      dataUrl={`/editor/${s.adaptation.id}/v${s.version.id}/data.json`}
+      dataUrl={`/editor/${s.adaptation.id}/v${ed.id}/data.json`}
       scenePath={`/@${s.handle}/${s.adaptation.id}`}
-      aiLabel={s.version.recipe.ai_label ?? null}
-      mixUrl={ownMedia(s.version.recipe.video_url)}
+      aiLabel={ed.recipe.ai_label ?? null}
+      mixUrl={ownMedia(ed.recipe.video_url)}
     />
   );
 }

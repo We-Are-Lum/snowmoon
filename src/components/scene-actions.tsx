@@ -16,12 +16,15 @@ export function SceneActions({
   latestUrl,
   fixedUrl,
   remixUrl,
+  remixNote,
 }: {
   handle: string;
   title: string;
   latestUrl: string;
   fixedUrl: string;
   remixUrl: string;
+  /** Said under Remix when the editor shows another version's shots (version 2 reads version 1's). */
+  remixNote?: string;
 }) {
   const [open, setOpen] = useState(false);
   const [copied, setCopied] = useState<'latest' | 'fixed' | 'failed-latest' | 'failed-fixed' | null>(null);
@@ -93,7 +96,7 @@ export function SceneActions({
 
       <a className="scene-btn scene-remix" href={remixUrl}>
         <span>Remix</span>
-        <span className="scene-btn-sub">Open the live editor: move the camera, play the lines. Remixing opens this week.</span>
+        <span className="scene-btn-sub">Open the live editor: move the camera, play the lines. Remixing opens this week.{remixNote ? ` ${remixNote}` : ''}</span>
       </a>
 
       {/* Not built yet: visible, announced as unavailable, does nothing. */}

@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import { NothingHere, loadScene, type SceneParams } from '../../../../../scene-page';
 import { ShotEditor } from '../../../../../editor/shot-editor';
 import { EDITOR_PROTOTYPE_URL } from '~/lib/config';
+import { editorVersion } from '~/lib/adaptation-pages';
 import '../../../../../editor/editor.css';
 import '../../../../../../remix/remix.css';
 
@@ -33,13 +34,15 @@ export default async function ShotPage({ params }: Props) {
   if (s.kind === 'hidden') return <NothingHere />;
   if (s.kind === 'nothing') return <NothingHere title={s.adaptation.title} handle={s.handle} />;
   const scenePath = `/@${s.handle}/${s.adaptation.id}`;
+  // The version whose committed shots the editor reads (version 2, the GPT cut, reads version 1's), and its label.
+  const ed = await editorVersion(s.version);
   return (
     <ShotEditor
-      dataUrl={`/editor/${s.adaptation.id}/v${s.version.id}/data.json`}
+      dataUrl={`/editor/${s.adaptation.id}/v${ed.id}/data.json`}
       shotId={shot}
       handle={s.handle}
       scenePath={scenePath}
-      aiLabel={s.version.recipe.ai_label ?? null}
+      aiLabel={ed.recipe.ai_label ?? null}
       prototypeUrl={EDITOR_PROTOTYPE_URL}
     />
   );

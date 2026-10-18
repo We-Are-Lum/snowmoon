@@ -43,7 +43,15 @@ const ext = () => (sharp ? '.jpg' : '.png');
 for (const seed of fs.readdirSync(rel('adaptations'))) {
   const vdir = `adaptations/${seed}/versions`;
   if (!exists(vdir)) continue;
-  for (const vf of fs.readdirSync(rel(vdir)).filter((f) => f.endsWith('.json'))) await build(readJson(`${vdir}/${vf}`));
+  for (const vf of fs.readdirSync(rel(vdir)).filter((f) => f.endsWith('.json'))) {
+    const V = readJson(`${vdir}/${vf}`);
+    // A version whose pictures aren't committed here (version 2, the GPT cut): the editor reads another version's.
+    if (V.editor?.reads_version) {
+      console.log(`editor-data: ${V.seed} v${V.version}: no editor files of its own; the editor reads version ${V.editor.reads_version}`);
+      continue;
+    }
+    await build(V);
+  }
 }
 
 async function build(V) {

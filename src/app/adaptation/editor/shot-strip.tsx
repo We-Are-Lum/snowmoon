@@ -9,7 +9,7 @@ import Link from 'next/link';
  */
 type Strip = { id: string; n: number; from: number; thumb: string | null; setup: string | null; variant: string | null; made: string | null; lines: { speaker: string | null; text: string | null }[] };
 
-export function ShotStrip({ dataUrl, scenePath }: { dataUrl: string; scenePath: string }) {
+export function ShotStrip({ dataUrl, scenePath, heading = 'Every shot \u00b7 open one in the live editor' }: { dataUrl: string; scenePath: string; heading?: string }) {
   const [shots, setShots] = useState<Strip[] | null>(null);
   useEffect(() => {
     let alive = true;
@@ -25,7 +25,7 @@ export function ShotStrip({ dataUrl, scenePath }: { dataUrl: string; scenePath: 
   const t = (s: number) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
   return (
     <section className="scene-shots" aria-label="Every shot">
-      <h2 className="label">Every shot · open one in the live editor</h2>
+      <h2 className="label">{heading}</h2>
       <ol className="scene-shot-list">
         {shots.map((s) => (
           <li key={s.id}>

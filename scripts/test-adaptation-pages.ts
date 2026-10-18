@@ -17,7 +17,7 @@
  * - The browser: the locally installed Chrome (playwright-core). Every request that isn't to the
  *   local site is refused, so no page reaches out.
  *
- * Checks: /@naaate/1, /@naaate/1/v/1, /1, a renamed name, a slug, a wallet address (and its
+ * Checks: /@naaate/1 (version 2, the GPT cut), /@naaate/1/v/1 (version 1, the open-weight cut), /1, a renamed name, a slug, a wallet address (and its
  * checksum case), "nothing here yet", SHARE and copy link, the cast composer (website and inside a
  * Farcaster client), the phone width, and the live shot editor (13-17: loading, playing (nothing is saved:
  * no fork file, no download), the layers, a phone with a touch drag, and the scene page's links into it, REMIX and the recipe). Version 1's video
@@ -189,7 +189,7 @@ async function record(n: number, name: string, url: string, expected: string, pa
 
 const browser = await chromium.launch({ channel: 'chrome', args: ['--disable-features=LocalNetworkAccessChecks,BlockInsecurePrivateNetworkRequests,PrivateNetworkAccessForNavigations'] });
 try {
-  // 1. The owner's page.
+  // 1. The owner's page: version 2, the GPT cut (owner, 2026-10-18; migration 0014).
   {
     const url = '/@naaate/1';
     const h = await head(url);
@@ -204,28 +204,51 @@ try {
     const sourcesOk =
       JSON.stringify(player?.sources) ===
       JSON.stringify([
-        '(max-width: 800px) https://media.snowmoon.party/scenes/fifteen-days/v1/fifteen-days-phone-6a5de81bbece.mp4',
-        'any https://media.snowmoon.party/scenes/fifteen-days/v1/fifteen-days-wide-3e425205b1a4.mp4',
-        'any https://media.snowmoon.party/scenes/fifteen-days/v1/fifteen-days-9391f90d6dca.mp4',
+        '(max-width: 800px) https://media.snowmoon.party/scenes/fifteen-days/v2/fifteen-days-phone-3f91cf56859f.mp4',
+        'any https://media.snowmoon.party/scenes/fifteen-days/v2/fifteen-days-wide-b64332cf553c.mp4',
+        'any https://media.snowmoon.party/scenes/fifteen-days/v2/fifteen-days-58da1b6d582e.mp4',
       ]);
+    // The closed model is named with its maker, the date and that it is closed, in the label and the recipe line;
+    // the shot strip and Remix say the editor has version 1's shots.
+    const strip = await page.locator('.scene-shots h2').innerText({ timeout: 10000 }).catch(() => '');
+    const closedOk =
+      /AI-generated with GPT Image \(OpenAI, a closed model\), not by the author/i.test(t) &&
+      /Inputs open, model closed: the pictures by GPT Image 2\.5 Sunburst \(OpenAI, a closed model\), 2026-10-18/i.test(t) &&
+      /Version 1.s shots and recipes, in the editor/i.test(t) && /The editor has version 1.s shots for now/i.test(t) && /Version 1.s shots, open-weight pictures/i.test(strip) &&
+      !/remixed from/i.test(t);
     const canonical = await page.locator('link[rel="canonical"]').getAttribute('href').catch(() => null);
     const embedRaw = await page.locator('meta[name="fc:miniapp"]').getAttribute('content').catch(() => null);
     const embed = embedRaw ? (JSON.parse(embedRaw) as { button?: { title?: string; action?: { url?: string } } }) : null;
     const headOk = canonical === `${PUBLIC}/@naaate/1` && embed?.button?.action?.url === `${PUBLIC}/@naaate/1` && embed?.button?.title === 'Watch it';
-    const pass = headOk && sourcesOk && h.status === 200 && res?.status() === 200 && /Fifteen Days/i.test(t) && /@naaate.s chosen version/i.test(t) && player?.src === 'https://media.snowmoon.party/scenes/fifteen-days/v1/fifteen-days-9391f90d6dca.mp4' && player?.poster === 'https://media.snowmoon.party/scenes/fifteen-days/v1/fifteen-days-poster-3caad9b75656.jpg' && /Version 1 /i.test(t) && /AI-generated, not by the author/i.test(t);
-    await record(1, 'owner page', url, `200; title Fifteen Days; @naaate's chosen version; version 1; the AI label; the player plays v1's cut from media.snowmoon.party (its 720p copy on phones, its re-wrapped copy wider, the cut last) with the café master as its poster; canonical and fc:miniapp embed point at ${PUBLIC}/@naaate/1`, page, { status: h.status, player, canonical, embedUrl: embed?.button?.action?.url ?? null }, pass);
+    const pass = headOk && sourcesOk && h.status === 200 && res?.status() === 200 && /Fifteen Days/i.test(t) && /@naaate.s chosen version/i.test(t) && player?.src === 'https://media.snowmoon.party/scenes/fifteen-days/v2/fifteen-days-58da1b6d582e.mp4' && player?.poster === 'https://media.snowmoon.party/scenes/fifteen-days/v2/fifteen-days-poster-5d38a729cda4.jpg' && /Version 2 /i.test(t) && closedOk;
+    await record(1, 'owner page', url, `200; title Fifteen Days; @naaate's chosen version; version 2 (the GPT cut, no parent); its AI label naming GPT Image (OpenAI, a closed model); "Inputs open, model closed" with the model, maker and date; the shot strip, the recipe link and Remix say the editor has version 1's shots; the player plays v2's cut from media.snowmoon.party (its 720p copy on phones, its re-wrapped copy wider, the cut last) with the GPT café master as its poster; canonical and fc:miniapp embed point at ${PUBLIC}/@naaate/1`, page, { status: h.status, player, strip, canonical, embedUrl: embed?.button?.action?.url ?? null }, pass);
     await page.context().close();
   }
 
-  // 2. A fixed version.
+  // 2. A fixed version: version 1, the open-weight cut, still at its own link.
   {
     const url = '/@naaate/1/v/1';
     const h = await head(url);
     const page = await newPage(browser);
     await page.goto(BASE + url);
     const t = await mainText(page);
-    const pass = h.status === 200 && /this version, fixed/i.test(t) && /See @naaate.s latest chosen version/i.test(t);
-    await record(2, 'fixed version', url, "200; 'this version, fixed'; a link to the latest chosen version", page, { status: h.status }, pass);
+    const player = await page
+      .locator('video.scene-video')
+      .evaluate((v) => ({ src: v.getAttribute('data-cut') ?? v.getAttribute('src'), poster: v.getAttribute('poster'), sources: [...v.querySelectorAll('source')].map((s) => `${s.getAttribute('media') ?? 'any'} ${s.getAttribute('src')}`) }))
+      .catch(() => null);
+    const strip = await page.locator('.scene-shots h2').innerText({ timeout: 10000 }).catch(() => '');
+    const v1Ok =
+      player?.src === 'https://media.snowmoon.party/scenes/fifteen-days/v1/fifteen-days-9391f90d6dca.mp4' &&
+      player?.poster === 'https://media.snowmoon.party/scenes/fifteen-days/v1/fifteen-days-poster-3caad9b75656.jpg' &&
+      JSON.stringify(player?.sources) ===
+        JSON.stringify([
+          '(max-width: 800px) https://media.snowmoon.party/scenes/fifteen-days/v1/fifteen-days-phone-6a5de81bbece.mp4',
+          'any https://media.snowmoon.party/scenes/fifteen-days/v1/fifteen-days-wide-3e425205b1a4.mp4',
+          'any https://media.snowmoon.party/scenes/fifteen-days/v1/fifteen-days-9391f90d6dca.mp4',
+        ]) &&
+      /Version 1 /i.test(t) && /Pictures: AI-generated, not by the author/i.test(t) && !/closed model/i.test(t) && /^Every shot/i.test(strip) && /Read it/i.test(t);
+    const pass = h.status === 200 && /this version, fixed/i.test(t) && /See @naaate.s latest chosen version/i.test(t) && v1Ok;
+    await record(2, 'fixed version', url, "200; 'this version, fixed'; a link to the latest chosen version; it plays version 1, the open-weight cut (its copies, its poster, its own AI label, no closed model named), with every shot of its own under it", page, { status: h.status, player, strip }, pass);
     await page.context().close();
   }
 
@@ -316,9 +339,9 @@ try {
     await page.locator('.scene-fixed button').click();
     const copiedFixed = await page.evaluate(() => navigator.clipboard.readText());
     const panel = (await page.locator('.scene-share-panel').innerText()).replace(/\s+/g, ' ');
-    const pass = copiedLatest === `${PUBLIC}/@naaate/1` && copiedFixed === `${PUBLIC}/@naaate/1/v/1` && labelAfter.toLowerCase() === 'copied';
+    const pass = copiedLatest === `${PUBLIC}/@naaate/1` && copiedFixed === `${PUBLIC}/@naaate/1/v/2` && labelAfter.toLowerCase() === 'copied';
     results.push({
-      n: 8, name: 'SHARE and copy link', url, expected: `the panel opens; Copy link copies ${PUBLIC}/@naaate/1 and says Copied; the fixed link copies ${PUBLIC}/@naaate/1/v/1`,
+      n: 8, name: 'SHARE and copy link', url, expected: `the panel opens; Copy link copies ${PUBLIC}/@naaate/1 and says Copied; the fixed link of the version on screen (2) copies ${PUBLIC}/@naaate/1/v/2`,
       got: { status: 200, finalUrl: local(page.url()), text: panel, copiedLatest, copiedFixed, labelAfter }, pass, screenshot: path.join(OUT, '08-share-copy-link.png'),
     });
     if (!pass) failures.push(`8 SHARE: copied ${copiedLatest} / ${copiedFixed}, label ${labelAfter}`);
@@ -466,8 +489,10 @@ try {
       res?.status() === 200 && layoutDrawn && imgs.length === 2 && imgs.every((w) => w > 0) &&
       recipe === '#recipe' && github === 0 && proto === 'https://claude.ai/artifact/NAuaFhUtoQKx8zHuANxwhU' && gen === 'true' &&
       /Remixing opens this week/.test(t) && !/fork/i.test(t) && /Remix makes an AI frame from your camera/i.test(t) && /AI-generated, not by the author/i.test(t) &&
+      // /@naaate/1 is version 2, but the editor has version 1's shots: version 1's own label, no closed model named.
+      !/closed model/i.test(t) && /in version 1\b/i.test(t) &&
       /why does Dzego like Minpentai so much/.test(t) && f.small.length === 0 && f.tiny.length === 0;
-    await record(13, 'editor loads a shot', ED, 'the 3D set and the live layout draw; the frame and its set frame load; Generate is disabled ("Remixing opens this week.") where Remix is not set up, as in this test (no image key); the banner names Remix; no "fork" anywhere; the AI label, the recipe link (on the site, #recipe; no GitHub link) and the prototype link as "where it\'s going"; no text under 12px, no control under 44px', page, { status: res?.status() ?? null, layoutDrawn, images: imgs, recipe, githubLinks: github, proto, generateDisabled: gen, under12px: f.small, under44px: f.tiny }, pass);
+    await record(13, 'editor loads a shot', ED, 'the 3D set and the live layout draw; the frame and its set frame load; Generate is disabled ("Remixing opens this week.") where Remix is not set up, as in this test (no image key); the banner names Remix; no "fork" anywhere; version 1\'s shots with version 1\'s AI label (the page\'s chosen version is 2, whose pictures the editor does not have), the recipe link (on the site, #recipe; no GitHub link) and the prototype link as "where it\'s going"; no text under 12px, no control under 44px', page, { status: res?.status() ?? null, layoutDrawn, images: imgs, recipe, githubLinks: github, proto, generateDisabled: gen, under12px: f.small, under44px: f.tiny }, pass);
     await page.context().close();
   }
 

@@ -3,7 +3,7 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 import { APP_NAME, adaptationPagesShown, appUrl } from '~/lib/config';
 import { PAPER } from '~/lib/tokens';
-import { type Adaptation, type Version, getAdaptation, getVersion, handleFor, ownMedia, parseId, resolveHandle, shownVersion, titleSlug } from '~/lib/adaptation-pages';
+import { type Adaptation, type Version, editorVersion, getAdaptation, getVersion, handleFor, ownMedia, parseId, resolveHandle, shownVersion, titleSlug } from '~/lib/adaptation-pages';
 import { deliveryFor } from '~/lib/scene-delivery';
 import { ShotStrip } from './editor/shot-strip';
 import { SceneActions } from '~/components/scene-actions';
@@ -113,7 +113,7 @@ export function NothingHere({ title, handle }: { title?: string; handle?: string
   );
 }
 
-export function ScenePage({ adaptation, version, handle, fixed }: { adaptation: Adaptation; version: Version; handle: string; fixed: boolean }) {
+export async function ScenePage({ adaptation, version, handle, fixed }: { adaptation: Adaptation; version: Version; handle: string; fixed: boolean }) {
   const latestPath = `/@${handle}/${adaptation.id}`;
   const fixedPath = `${latestPath}/v/${version.id}`;
   const host = appUrl().replace(/^https?:\/\//, '');
@@ -121,6 +121,10 @@ export function ScenePage({ adaptation, version, handle, fixed }: { adaptation: 
   const poster = ownMedia(version.recipe.poster_url) ?? undefined;
   const delivery = deliveryFor(video);
   const r = version.recipe;
+  // The live editor, the shot strip and Remix read a version's committed pictures; version 2's aren't
+  // committed here, so they show version 1's shots, and say so (src/lib/adaptation-pages.ts editorVersion).
+  const ed = await editorVersion(version);
+  const otherShots = ed.id !== version.id;
 
   return (
     <div className="scene">
@@ -187,8 +191,14 @@ export function ScenePage({ adaptation, version, handle, fixed }: { adaptation: 
             <div>
               <dt className="label">Recipe</dt>
               <dd>
+                {r.closed_model && (
+                  // A closed model is named with its maker, the date and that it is closed (owner, 2026-10-18). DRAFT wording.
+                  <span className="scene-closed">
+                    Inputs open, model closed: {r.closed_model.made} by {r.closed_model.name} ({r.closed_model.maker}, a closed model), {r.closed_model.date}.{' '}
+                  </span>
+                )}
                 {/* On the site (owner, 2026-10-18: no GitHub in the flow): every shot's recipe, in the editor. */}
-                <Link href={`${latestPath}/shot/first#recipe`}>Read it</Link>
+                <Link href={`${latestPath}/shot/first#recipe`}>{otherShots ? `Version ${ed.id}\u2019s shots and recipes, in the editor` : 'Read it'}</Link>
               </dd>
             </div>
           </dl>
@@ -199,6 +209,7 @@ export function ScenePage({ adaptation, version, handle, fixed }: { adaptation: 
             latestUrl={`${appUrl()}${latestPath}`}
             fixedUrl={`${appUrl()}${fixedPath}`}
             remixUrl={`${latestPath}/shot/first`}
+            remixNote={otherShots ? `The editor has version ${ed.id}\u2019s shots for now.` : undefined}
           />
           {fixed && (
             <p className="label">
@@ -210,7 +221,11 @@ export function ScenePage({ adaptation, version, handle, fixed }: { adaptation: 
         </div>
       </section>
 
-      <ShotStrip dataUrl={`/editor/${adaptation.id}/v${version.id}/data.json`} scenePath={latestPath} />
+      <ShotStrip
+        dataUrl={`/editor/${adaptation.id}/v${ed.id}/data.json`}
+        scenePath={latestPath}
+        heading={otherShots ? `Version ${ed.id}\u2019s shots, open-weight pictures \u00b7 open one in the live editor` : undefined}
+      />
 
       <p className="provenance scene-provenance">
         Snowmoon by Vitalik Buterin, GPL v3. An independent adaptation, not affiliated with the author.

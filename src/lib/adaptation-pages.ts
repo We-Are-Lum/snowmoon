@@ -26,6 +26,26 @@ export interface VersionRecipe {
   after_chapter?: number | null;
   /** The last chapter the version gives away. */
   spoilers_through?: number | null;
+  /**
+   * A closed model that made part of the version (principle 3: reported; owner, 2026-10-18: closed models
+   * are allowed when the recipe and label name the model, its maker, the date and that it is closed).
+   */
+  closed_model?: ClosedModel | null;
+}
+
+export interface ClosedModel {
+  name: string;
+  maker: string;
+  /** Its id on the host, as in config/models.json. */
+  endpoint: string;
+  host: string;
+  /** When it was used (YYYY-MM-DD). */
+  date: string;
+  /** What it made: "the pictures". */
+  made: string;
+  weights: string;
+  /** "inputs open, model closed". */
+  openness: string;
 }
 
 export interface Adaptation {
@@ -45,8 +65,9 @@ export interface Version {
 }
 
 /**
- * Sunday's fallback (owner, 2026-10-17): adaptation 1 is Fifteen Days, by FID 6786 (@naaate), and
- * the owner's page shows version 1. The same rows are seeded by 0012.
+ * Sunday's fallback (owner, 2026-10-17): adaptation 1 is Fifteen Days, by FID 6786 (@naaate). Version 1
+ * (the open-weight cut) is seeded by 0012; version 2 (the GPT cut) and the owner's page at version 2 by
+ * 0014 (owner, 2026-10-18: "Chat gpt version is so much better. Let's go with that one").
  * The cut and its poster are named by their sha256 on media.snowmoon.party and uploaded in publish
  * step (b) (npm run publish:scene-video); until then the player finds nothing there.
  */
@@ -71,8 +92,37 @@ const STATIC = {
       createdAt: '2026-10-18',
       hidden: false,
     },
+    {
+      // The GPT cut, as is: version 1's cut with every model-drawn picture redrawn by GPT Image 2.5 Sunburst
+      // (OpenAI, a closed model). The owner's own second version, not a remix of version 1: no parent.
+      id: 2,
+      adaptationId: 1,
+      parentId: null,
+      author: 6786,
+      recipe: {
+        video_url: 'https://media.snowmoon.party/scenes/fifteen-days/v2/fifteen-days-58da1b6d582e.mp4',
+        poster_url: 'https://media.snowmoon.party/scenes/fifteen-days/v2/fifteen-days-poster-5d38a729cda4.jpg',
+        recipe_url: 'https://github.com/We-Are-Lum/snowmoon/tree/main/adaptations/fifteen-days',
+        // DRAFT wording for the owner to approve (2026-10-18).
+        ai_label: "Pictures: AI-generated with GPT Image (OpenAI, a closed model), not by the author · Voices: @naaate's performances, AI-converted.",
+        after_chapter: 14,
+        spoilers_through: 19,
+        closed_model: {
+          name: 'GPT Image 2.5 Sunburst',
+          maker: 'OpenAI',
+          endpoint: 'openai/gpt-image-2.5-sunburst',
+          host: 'Vercel AI Gateway',
+          date: '2026-10-18',
+          made: 'the pictures',
+          weights: 'not published',
+          openness: 'inputs open, model closed',
+        },
+      },
+      createdAt: '2026-10-18',
+      hidden: false,
+    },
   ] as Version[],
-  pages: [{ person: 6786, adaptationId: 1, versionId: 1 }],
+  pages: [{ person: 6786, adaptationId: 1, versionId: 2 }],
   names: { naaate: 6786 } as Record<string, number>,
 };
 
@@ -113,6 +163,21 @@ export async function getVersion(id: number): Promise<Version | null> {
     from studio.adaptation_versions where id = ${id}`);
   if (rows) return rows[0] ? toVersion(rows[0]) : null;
   return STATIC.versions.find((v) => v.id === id) ?? null;
+}
+
+/**
+ * Versions whose pictures aren't committed here, so the live editor and Remix (public/editor/<id>/v<n>/,
+ * made by scripts/editor-data.mjs) read another version's: version 2, the GPT cut, reads version 1's
+ * (adaptations/fifteen-days/versions/2.json, "editor"). Every page that links into the editor says so.
+ */
+const EDITOR_READS: Record<number, number> = { 2: 1 };
+
+/** The version whose committed files the live editor, the shot strip and Remix read for this one. */
+export async function editorVersion(v: Version): Promise<Version> {
+  const other = EDITOR_READS[v.id];
+  if (!other) return v;
+  const e = await getVersion(other);
+  return e && e.adaptationId === v.adaptationId && !e.hidden ? e : v;
 }
 
 /**

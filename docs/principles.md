@@ -140,7 +140,10 @@ for each place, and style texts are the owner's words; until the owner sends
 them they are marked placeholders, and nothing is published with one.
 Per-shot and per-cue prompts (image, motion, sound effect) may be drafted by a
 model, and each recipe labels them model-drafted in `assist`, as image
-prompts are. Published scene assets use open-weight models only.
+prompts are. **DRAFT, for the owner (replaces "Published scene assets use
+open-weight models only"):** Published scene assets may use closed models when
+every recipe and label names the model, its maker, the date and that it is
+closed (owner, 2026-10-18).
 
 **Recorded exception.** The house narration keeps 148 model-drafted spoken
 descriptions of screens, figures and lyric cards. Each is preceded by a tone
@@ -243,7 +246,17 @@ they drafted published text and inputs: the spoken descriptions of screens and
 figures, the pronunciation word lists, the character and location profiles,
 and the image prompts (their instructions are in
 `docs/prompts/008a-agent-prompts.md`). No closed model generated any image or
-audio.
+audio, except the one below.
+
+**DRAFT, for the owner:** GPT Image 2.5 Sunburst (OpenAI), a closed model
+(`config/models.json` `gpt-image-2.5-sunburst`, `open_weights: false`), drew
+every model-drawn picture of Fifteen Days version 2, the GPT cut, on
+2026-10-18, through the Vercel AI Gateway (owner, 2026-10-18: "Chat gpt
+version is so much better. Let's go with that one and change the site to allow
+closed models"). Inputs open, model closed: its prompts, the pictures sent and
+every call's recipe are committed (`adaptations/fifteen-days/versions/2.json`);
+its weights are not published. The version's AI label names it. Version 1, the
+open-weight cut, stays at its own fixed link. `P3b` prints it as a note.
 
 ## 4. No model output is published without a signed-in person's action.
 

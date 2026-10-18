@@ -1,0 +1,59 @@
+{
+ "about": "Version 2 of Fifteen Days, the GPT cut (owner, 2026-10-18: \"Chat gpt version is so much better. Let's go with that one and change the site to allow closed models\"; the cut as is). Version 1's cut with every model-drawn picture redrawn by GPT Image 2.5 Sunburst (OpenAI), a closed model; the words, voices, sound, timing, mix and the pictures drawn in code are version 1's. Inputs open, model closed: the prompts, the reference pictures sent (by sha256), the scripts and every call's recipe and cost are committed; the model's weights are not published by its maker. Its files are on the branch scenes-sound (cc9590d) until it is merged.",
+ "adaptation": 1,
+ "version": 2,
+ "seed": "fifteen-days",
+ "title": "Fifteen Days",
+ "parent": null,
+ "made_from": "version 1's picture recipes (adaptations/fifteen-days/versions/1.json), one GPT picture per picture in cut v6",
+ "closed_model": {
+  "name": "GPT Image 2.5 Sunburst",
+  "maker": "OpenAI",
+  "endpoint": "openai/gpt-image-2.5-sunburst",
+  "host": "Vercel AI Gateway (/v1/images/edits, 1536x864)",
+  "date": "2026-10-18",
+  "made": "the pictures",
+  "weights": "not published",
+  "allowlist": "config/models.json gpt-image-2.5-sunburst (open_weights: false)"
+ },
+ "openness": "inputs open, model closed",
+ "recipe_folder": "adaptations/fifteen-days/preprod/gpt",
+ "recipes": "adaptations/fifteen-days/preprod/gpt/recipes",
+ "plan": "adaptations/fifteen-days/preprod/gpt/plan.json",
+ "costs": "adaptations/fifteen-days/preprod/gpt/costs.jsonl",
+ "cost_usd": 2.21,
+ "figure_check": "adaptations/fifteen-days/preprod/gpt/figure-check.json",
+ "cut": "scenes-out/fifteen-days/cuts/coverage-v6-gpt",
+ "cut_file": {
+  "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/coverage-v6-gpt.mp4",
+  "sha256": "58da1b6d582ec1061a823b9f3f8e8da753bb355674a180eb3418f7c4ef8f9079"
+ },
+ "timeline": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/timeline.json",
+ "poster": {
+  "file": "adaptations/fifteen-days/versions/2-poster.jpg",
+  "sha256": "5d38a729cda4b8814fef455056aa8fa21a4efd6fea2d3a9a85de0d6fb1c803f5",
+  "what": "the GPT café master (cov-cafe-MASTER-wave-K7-g1)"
+ },
+ "editor": {
+  "reads_version": 1,
+  "why": "The live editor and Remix read a version's committed pictures and recipes (scripts/editor-data.mjs). Version 2's pictures are not committed on main, so the editor stays on version 1's shots for now, and says so."
+ },
+ "author": {
+  "fid": 6786,
+  "handle": "naaate"
+ },
+ "delivery": {
+  "about": "The same cut, packaged to start sooner, as version 1's (src/lib/scene-delivery.ts); made in the scenes checkout and uploaded by npm run publish:scene-video -- --version 2.",
+  "wide": {
+   "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/delivery/wide.mp4",
+   "sha256": "b64332cf553ca4164770833281519733508a19a82439157140ab04d0ce0555bc",
+   "same_as_cut": "video and audio streams bit-identical (ffmpeg -f streamhash, checked by npm run publish:scene-video)"
+  },
+  "phone": {
+   "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/delivery/phone.mp4",
+   "sha256": "3f91cf56859fb3d2a680852b06bee2e8155d787ce9b32eb05d9b0db116700372",
+   "what": "1280x720 H.264, the cut's audio",
+   "for": "screens up to 800px wide"
+  }
+ }
+}

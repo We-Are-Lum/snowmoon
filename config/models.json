@@ -600,6 +600,37 @@
       "license": "Apache-2.0",
       "open_weights": true,
       "weights": "https://huggingface.co/Qwen/Qwen-Image-Edit-2509"
+    },
+    {
+      "id": "gpt-image-2.5-sunburst",
+      "kind": "image",
+      "name": "GPT Image 2.5 Sunburst",
+      "maker": "OpenAI",
+      "repo": "openai/gpt-image-2.5-sunburst",
+      "revision": null,
+      "license_line": "proprietary: OpenAI's terms; weights not published",
+      "license_checked": {
+        "by": "coding agent; the owner decided to allow it (2026-10-18)",
+        "on": "2026-10-18",
+        "source": "OpenAI's terms (not quoted here yet: owner to review that they allow publishing the pictures under GPL-3.0)"
+      },
+      "notes": "A closed model (principle 3: reported). Owner decision, 2026-10-18: \"Chat gpt version is so much better. Let's go with that one and change the site to allow closed models.\" It drew every model-drawn picture of Fifteen Days version 2 (the GPT cut; adaptations/fifteen-days/versions/2.json), through the Vercel AI Gateway /v1/images/edits at 1536x864, $2.21 for the cut. Inputs open, model closed: the prompts, the reference pictures sent (by sha256), the scripts and every call's recipe are committed (adaptations/fifteen-days/preprod/gpt/); the weights are not published by its maker, so no one can rerun it outside OpenAI.",
+      "added": "2026-10-18",
+      "runs_on": "hosted",
+      "hosted": {
+        "host": "Vercel AI Gateway",
+        "endpoints": {
+          "openai/gpt-image-2.5-sunburst": null
+        },
+        "price_unit": "USD per image, as the gateway reports it per call",
+        "price_seen": "2026-10-18",
+        "note": "Costs per call are in adaptations/fifteen-days/preprod/gpt/costs.jsonl (on scenes-sound)."
+      },
+      "model_record": "gateway model id, date and the gateway's response metadata (the host exposes no weights revision; there are no public weights)",
+      "cost_usd_per_unit": null,
+      "license": "proprietary (OpenAI)",
+      "open_weights": false,
+      "weights": null
     }
   ],
   "candidates": [
