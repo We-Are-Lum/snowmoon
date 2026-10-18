@@ -1,0 +1,105 @@
+{
+ "about": "Fifteen Days v6, fourth round (owner raised the ceiling, 2026-10-18 ~07:20 UTC): the robot bringing the menus in the menu shot; Bai pulling her headphone off. DRAFTED prompts.",
+ "out": "images-out/preprod/pass3",
+ "ledger": "images-out/preprod/ledger-s7.json",
+ "cap_usd": 35.0,
+ "style": "",
+ "jobs": [
+  {
+   "id": "cov-cafe-OTS-Z-robot-E46",
+   "shot": "cov-cafe-OTS-Z-menu",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-cafe-OTS-Z-menu-K7.png"
+   ],
+   "prompt": "Add the serving robot: a machine, not a person: a rounded white head with a dark face screen showing two small kind glowing eyes, slim white shoulders and jointed arms holding a flat tray, and no legs at all: below the waist a smooth white column down to a round gliding base, standing beside the far right end of the wooden table next to the tall young man in the cream tunic, bending slightly and holding out the tray with two small glowing menu tablets toward the table. The young man in the orange jacket seen from behind on the left and the tall young man in the cream tunic stay exactly as they are. Keep the drawing, colours, courtyard, string lights, tree, camera, framing and crop exactly. Exactly two people and one robot. No letters or numbers anywhere.",
+   "width": 1344,
+   "height": 752,
+   "seed": 46
+  },
+  {
+   "id": "cov-cafe-OTS-Z-robot-E47",
+   "shot": "cov-cafe-OTS-Z-menu",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-cafe-OTS-Z-menu-K7.png"
+   ],
+   "prompt": "Add the serving robot: a machine, not a person: a rounded white head with a dark face screen showing two small kind glowing eyes, slim white shoulders and jointed arms holding a flat tray, and no legs at all: below the waist a smooth white column down to a round gliding base, standing beside the far right end of the wooden table next to the tall young man in the cream tunic, bending slightly and holding out the tray with two small glowing menu tablets toward the table. The young man in the orange jacket seen from behind on the left and the tall young man in the cream tunic stay exactly as they are. Keep the drawing, colours, courtyard, string lights, tree, camera, framing and crop exactly. Exactly two people and one robot. No letters or numbers anywhere.",
+   "width": 1344,
+   "height": 752,
+   "seed": 47
+  },
+  {
+   "id": "cov-cafe-OTS-Z-robot-E48",
+   "shot": "cov-cafe-OTS-Z-menu",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-cafe-OTS-Z-menu-K7.png"
+   ],
+   "prompt": "Add the serving robot: a machine, not a person: a rounded white head with a dark face screen showing two small kind glowing eyes, slim white shoulders and jointed arms holding a flat tray, and no legs at all: below the waist a smooth white column down to a round gliding base, standing beside the far right end of the wooden table next to the tall young man in the cream tunic, bending slightly and holding out the tray with two small glowing menu tablets toward the table. The young man in the orange jacket seen from behind on the left and the tall young man in the cream tunic stay exactly as they are. Keep the drawing, colours, courtyard, string lights, tree, camera, framing and crop exactly. Exactly two people and one robot. No letters or numbers anywhere.",
+   "width": 1344,
+   "height": 752,
+   "seed": 48
+  },
+  {
+   "id": "cov-cafe-OTS-Z-robot-E49",
+   "shot": "cov-cafe-OTS-Z-menu",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-cafe-OTS-Z-menu-K7.png"
+   ],
+   "prompt": "Add the serving robot: a machine, not a person: a rounded white head with a dark face screen showing two small kind glowing eyes, slim white shoulders and jointed arms holding a flat tray, and no legs at all: below the waist a smooth white column down to a round gliding base, standing beside the far right end of the wooden table next to the tall young man in the cream tunic, bending slightly and holding out the tray with two small glowing menu tablets toward the table. The young man in the orange jacket seen from behind on the left and the tall young man in the cream tunic stay exactly as they are. Keep the drawing, colours, courtyard, string lights, tree, camera, framing and crop exactly. Exactly two people and one robot. No letters or numbers anywhere.",
+   "width": 1344,
+   "height": 752,
+   "seed": 49
+  },
+  {
+   "id": "cov-cafe-BAI-what-E46",
+   "shot": "cov-cafe-BAI-what",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-cafe-BAI-what-R27.png"
+   ],
+   "prompt": "Change only her raised arm and the headphones: her arm on the far side of her body is lifted with the elbow pointing out and up, and that hand grips the outside of the headphone ear cup and pulls it a hand's width away from her head, so her bare ear shows and there is clear space between the ear cup and her ear. Her near arm rests on the table holding the phone. One raised arm, one arm on the table: exactly two arms and two hands in total, natural shoulders. Keep her face, surprised look, magenta ponytail, lime-green vest, tattoos, the table, the courtyard, the camera, framing and crop exactly. Nobody else. No letters or numbers anywhere.",
+   "width": 1344,
+   "height": 752,
+   "seed": 46
+  },
+  {
+   "id": "cov-cafe-BAI-what-E47",
+   "shot": "cov-cafe-BAI-what",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-cafe-BAI-what-R27.png"
+   ],
+   "prompt": "Change only her raised arm and the headphones: her arm on the far side of her body is lifted with the elbow pointing out and up, and that hand grips the outside of the headphone ear cup and pulls it a hand's width away from her head, so her bare ear shows and there is clear space between the ear cup and her ear. Her near arm rests on the table holding the phone. One raised arm, one arm on the table: exactly two arms and two hands in total, natural shoulders. Keep her face, surprised look, magenta ponytail, lime-green vest, tattoos, the table, the courtyard, the camera, framing and crop exactly. Nobody else. No letters or numbers anywhere.",
+   "width": 1344,
+   "height": 752,
+   "seed": 47
+  },
+  {
+   "id": "cov-cafe-BAI-what-E48",
+   "shot": "cov-cafe-BAI-what",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-cafe-BAI-what-R27.png"
+   ],
+   "prompt": "Change only her raised arm and the headphones: her arm on the far side of her body is lifted with the elbow pointing out and up, and that hand grips the outside of the headphone ear cup and pulls it a hand's width away from her head, so her bare ear shows and there is clear space between the ear cup and her ear. Her near arm rests on the table holding the phone. One raised arm, one arm on the table: exactly two arms and two hands in total, natural shoulders. Keep her face, surprised look, magenta ponytail, lime-green vest, tattoos, the table, the courtyard, the camera, framing and crop exactly. Nobody else. No letters or numbers anywhere.",
+   "width": 1344,
+   "height": 752,
+   "seed": 48
+  },
+  {
+   "id": "cov-cafe-BAI-what-E49",
+   "shot": "cov-cafe-BAI-what",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-cafe-BAI-what-R27.png"
+   ],
+   "prompt": "Change only her raised arm and the headphones: her arm on the far side of her body is lifted with the elbow pointing out and up, and that hand grips the outside of the headphone ear cup and pulls it a hand's width away from her head, so her bare ear shows and there is clear space between the ear cup and her ear. Her near arm rests on the table holding the phone. One raised arm, one arm on the table: exactly two arms and two hands in total, natural shoulders. Keep her face, surprised look, magenta ponytail, lime-green vest, tattoos, the table, the courtyard, the camera, framing and crop exactly. Nobody else. No letters or numbers anywhere.",
+   "width": 1344,
+   "height": 752,
+   "seed": 49
+  }
+ ]
+}

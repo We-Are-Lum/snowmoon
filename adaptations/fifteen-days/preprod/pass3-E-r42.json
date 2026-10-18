@@ -1,0 +1,61 @@
+{
+ "about": "Fifteen Days v6, second round: Bai at the table in the stern menu shot; Zei pulling up a chair as the robot brings the menus (owner's comments on coverage-v5, 2026-10-18). DRAFTED prompts.",
+ "out": "images-out/preprod/pass3",
+ "ledger": "images-out/preprod/ledger-s7.json",
+ "cap_usd": 25.0,
+ "style": "",
+ "jobs": [
+  {
+   "id": "cov-cafe-OTS-Z-stern-E42",
+   "shot": "cov-cafe-OTS-Z-stern",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-cafe-OTS-Z-stern-K9.png",
+    "images-out/preprod/cards2/bai.png"
+   ],
+   "prompt": "Add the young woman from picture 2 sitting on a chair at the far side of the same wooden table, between the two young men in the middle distance, looking down at a glowing menu in her hands: warm brown skin, shaved sides, tall magenta ponytail, lime-green vest, tattooed arms. She is seated at her real size, drawn once. Picture 1's drawing, colours, camera, framing and crop stay exactly the same; the young man in the orange jacket seen from behind on the left and the tall young man in the cream tunic stay exactly as they are. Exactly three people. No letters or numbers anywhere.",
+   "width": 1344,
+   "height": 752,
+   "seed": 42
+  },
+  {
+   "id": "cov-cafe-OTS-Z-stern-E43",
+   "shot": "cov-cafe-OTS-Z-stern",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-cafe-OTS-Z-stern-K9.png",
+    "images-out/preprod/cards2/bai.png"
+   ],
+   "prompt": "Add the young woman from picture 2 sitting on a chair at the far side of the same wooden table, between the two young men in the middle distance, looking down at a glowing menu in her hands: warm brown skin, shaved sides, tall magenta ponytail, lime-green vest, tattooed arms. She is seated at her real size, drawn once. Picture 1's drawing, colours, camera, framing and crop stay exactly the same; the young man in the orange jacket seen from behind on the left and the tall young man in the cream tunic stay exactly as they are. Exactly three people. No letters or numbers anywhere.",
+   "width": 1344,
+   "height": 752,
+   "seed": 43
+  },
+  {
+   "id": "cov-cafe-MASTER-robot-E42",
+   "shot": "cov-cafe-MASTER-wave",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-cafe-MASTER-laugh-E40.png",
+    "images-out/preprod/cards2/zei.png"
+   ],
+   "prompt": "The young man from picture 2 (spiky black hair with one blue streak, orange cropped zip jacket over a black top) stands at the near left end of the table pulling out a chair to sit down, drawn once. Behind the table on the right glides up the serving robot: a machine, not a person: a rounded white head with a dark face screen showing two small kind glowing eyes, slim white shoulders and jointed arms holding a flat tray, and no legs: below the waist a smooth white column down to a round gliding base, holding out a tray with two small glowing menu tablets. The young woman and the tall young man in the cream tunic stay seated exactly as they are, now with small closed-mouth smiles, looking up at the newcomer. Keep picture 1's drawing, colours, courtyard, lights and camera exactly. Exactly three people and one robot. No letters or numbers anywhere.",
+   "width": 1344,
+   "height": 752,
+   "seed": 42
+  },
+  {
+   "id": "cov-cafe-MASTER-robot-E43",
+   "shot": "cov-cafe-MASTER-wave",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-cafe-MASTER-laugh-E40.png",
+    "images-out/preprod/cards2/zei.png"
+   ],
+   "prompt": "The young man from picture 2 (spiky black hair with one blue streak, orange cropped zip jacket over a black top) stands at the near left end of the table pulling out a chair to sit down, drawn once. Behind the table on the right glides up the serving robot: a machine, not a person: a rounded white head with a dark face screen showing two small kind glowing eyes, slim white shoulders and jointed arms holding a flat tray, and no legs: below the waist a smooth white column down to a round gliding base, holding out a tray with two small glowing menu tablets. The young woman and the tall young man in the cream tunic stay seated exactly as they are, now with small closed-mouth smiles, looking up at the newcomer. Keep picture 1's drawing, colours, courtyard, lights and camera exactly. Exactly three people and one robot. No letters or numbers anywhere.",
+   "width": 1344,
+   "height": 752,
+   "seed": 43
+  }
+ ]
+}

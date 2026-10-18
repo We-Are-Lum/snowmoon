@@ -2,6 +2,7 @@
 
   python3 scripts/coverage-plan.py <seed>            computes every setup's camera, checks the rules, writes the layouts
   python3 scripts/coverage-plan.py <seed> --check    only checks and prints the plan
+  python3 scripts/coverage-plan.py <seed> --plan v6  another version's plan: coverage-v6.json -> coverage-board-v6.json
 
 Reads adaptations/<seed>/preprod/coverage.json: who is on the left, then per scene its set, who is where, its setups and
 the sequence (each line or wordless beat, and the setup and variant it cuts to). Setup kinds:
@@ -186,7 +187,8 @@ def solve(scene: Scene, key: str, st: dict, later: bool, over: dict | None) -> d
 def main() -> None:
     seed = sys.argv[1]
     pre = ROOT / "adaptations" / seed / "preprod"
-    plan = json.loads((pre / "coverage.json").read_text())
+    pv = sys.argv[sys.argv.index("--plan") + 1] if "--plan" in sys.argv else None  # another version's plan (coverage-<v>.json), its own board
+    plan = json.loads((pre / (f"coverage-{pv}.json" if pv else "coverage.json")).read_text())
     v4 = {s["id"]: s for s in json.loads((pre / "storyboard-v4.json").read_text())["shots"]}
     left = plan["left"]
     shots_by_set, layouts, frames, seq, problems = {}, {}, {}, [], []
@@ -271,7 +273,7 @@ def main() -> None:
     board = {"about": "Coverage board (scripts/coverage-plan.py from coverage.json): layouts, frames (setup x variant), sequence. DRAFTED.",
              "layouts": layouts, "frames": frames, "sequence": seq}
     if "--check" not in sys.argv:
-        (pre / "coverage-board.json").write_text(json.dumps(board, indent=1, ensure_ascii=False) + "\n")
+        (pre / (f"coverage-board-{pv}.json" if pv else "coverage-board.json")).write_text(json.dumps(board, indent=1, ensure_ascii=False) + "\n")
     new = [l for l in layouts.values() if not l.get("existing")]
     draw = [f for f in frames.values() if f.get("layout")]
     print(f"{len(plan['scenes'])} scenes; {len(layouts)} layouts ({len(new)} new); {len(frames)} frames: {len(draw)} to draw, "

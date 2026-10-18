@@ -1,0 +1,181 @@
+{
+ "about": "Fifteen Days v6: edits for the owner's comments on coverage-v5 (2026-10-18 overnight: faces on the blocks, the corridor door, Bai's headphone with her left hand, Bai at the table, Deluin laughing seated, all three with menus, Zei's close-up on the overlook). DRAFTED prompts.",
+ "out": "images-out/preprod/pass3",
+ "ledger": "images-out/preprod/ledger-s7.json",
+ "cap_usd": 25.0,
+ "style": "",
+ "jobs": [
+  {
+   "id": "cov-game-FLOOR-live-E40",
+   "shot": "cov-game-FLOOR-live",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/H02-B2.png"
+   ],
+   "prompt": "Remove every face and portrait from the floating glowing blocks and the hanging screens: they become plain softly glowing cubes and blank glowing screens with no faces, no people, no pictures on them. Keep the drawing, colours, camera, framing and crop exactly as they are. The audience, the glass arena, the beams of light and everything else stay exactly the same. No letters or numbers anywhere.",
+   "width": 1344,
+   "height": 752,
+   "seed": 40
+  },
+  {
+   "id": "cov-game-FLOOR-live-E41",
+   "shot": "cov-game-FLOOR-live",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/H02-B2.png"
+   ],
+   "prompt": "Remove every face and portrait from the floating glowing blocks and the hanging screens: they become plain softly glowing cubes and blank glowing screens with no faces, no people, no pictures on them. Keep the drawing, colours, camera, framing and crop exactly as they are. The audience, the glass arena, the beams of light and everything else stay exactly the same. No letters or numbers anywhere.",
+   "width": 1344,
+   "height": 752,
+   "seed": 41
+  },
+  {
+   "id": "cov-corridor-OTS-Z-warm-E40",
+   "shot": "cov-corridor-OTS-Z-warm",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-corridor-OTS-Z-warm-K9.png"
+   ],
+   "prompt": "Remove the open door on the right: where it stands open there is only the plain curved corridor wall, smooth and unbroken, in the same blue night light. Keep the drawing, colours, camera, framing and crop exactly as they are. The young man with the orange jacket seen from behind on the left and the tall young man in the cream cable-knit tunic stay exactly as they are, with the same faces and poses. Nobody else. No letters or numbers anywhere.",
+   "width": 1344,
+   "height": 752,
+   "seed": 40
+  },
+  {
+   "id": "cov-corridor-OTS-Z-warm-E41",
+   "shot": "cov-corridor-OTS-Z-warm",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-corridor-OTS-Z-warm-K9.png"
+   ],
+   "prompt": "Remove the open door on the right: where it stands open there is only the plain curved corridor wall, smooth and unbroken, in the same blue night light. Keep the drawing, colours, camera, framing and crop exactly as they are. The young man with the orange jacket seen from behind on the left and the tall young man in the cream cable-knit tunic stay exactly as they are, with the same faces and poses. Nobody else. No letters or numbers anywhere.",
+   "width": 1344,
+   "height": 752,
+   "seed": 41
+  },
+  {
+   "id": "cov-cafe-BAI-what-E40",
+   "shot": "cov-cafe-BAI-what",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-cafe-BAI-what-R27.png"
+   ],
+   "prompt": "With her left hand she lifts the headphone ear cup off her ear, pulling it a hand's width away from the side of her head so her bare ear shows; the headband stays on her head. Her arm and hand are drawn naturally: exactly two arms and two hands, fingers holding the ear cup. Her other hand stays on the table holding the phone. Keep her face and expression, her magenta ponytail, lime-green vest and tattoos. Keep the drawing, colours, camera, framing and crop exactly as they are. Nobody else anywhere. No letters or numbers anywhere.",
+   "width": 1344,
+   "height": 752,
+   "seed": 40
+  },
+  {
+   "id": "cov-cafe-BAI-what-E41",
+   "shot": "cov-cafe-BAI-what",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-cafe-BAI-what-R27.png"
+   ],
+   "prompt": "With her left hand she lifts the headphone ear cup off her ear, pulling it a hand's width away from the side of her head so her bare ear shows; the headband stays on her head. Her arm and hand are drawn naturally: exactly two arms and two hands, fingers holding the ear cup. Her other hand stays on the table holding the phone. Keep her face and expression, her magenta ponytail, lime-green vest and tattoos. Keep the drawing, colours, camera, framing and crop exactly as they are. Nobody else anywhere. No letters or numbers anywhere.",
+   "width": 1344,
+   "height": 752,
+   "seed": 41
+  },
+  {
+   "id": "cov-cafe-OTS-Z-menu-E40",
+   "shot": "cov-cafe-OTS-Z-menu",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-cafe-OTS-Z-menu-K7.png",
+    "images-out/preprod/cards2/bai.png"
+   ],
+   "prompt": "Add the young woman from picture 2 sitting on a chair at the same wooden table, on the far side of the table to the left of the tall young man, small in the middle distance, looking down at a glowing menu in her hands: warm brown skin, shaved sides, tall magenta ponytail, lime-green vest, tattooed arms. She is seated at her real size. Picture 1's drawing, colours, camera, framing and crop stay exactly the same; the young man in the orange jacket seen from behind on the left and the tall young man in the cream tunic stay exactly as they are. Exactly three people. No letters or numbers anywhere.",
+   "width": 1344,
+   "height": 752,
+   "seed": 40
+  },
+  {
+   "id": "cov-cafe-OTS-Z-menu-E41",
+   "shot": "cov-cafe-OTS-Z-menu",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-cafe-OTS-Z-menu-K7.png",
+    "images-out/preprod/cards2/bai.png"
+   ],
+   "prompt": "Add the young woman from picture 2 sitting on a chair at the same wooden table, on the far side of the table to the left of the tall young man, small in the middle distance, looking down at a glowing menu in her hands: warm brown skin, shaved sides, tall magenta ponytail, lime-green vest, tattooed arms. She is seated at her real size. Picture 1's drawing, colours, camera, framing and crop stay exactly the same; the young man in the orange jacket seen from behind on the left and the tall young man in the cream tunic stay exactly as they are. Exactly three people. No letters or numbers anywhere.",
+   "width": 1344,
+   "height": 752,
+   "seed": 41
+  },
+  {
+   "id": "cov-cafe-MASTER-laugh-E40",
+   "shot": "cov-cafe-MASTER-wave",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-cafe-MASTER-wave-K7.png"
+   ],
+   "prompt": "The tall young man in the cream cable-knit tunic is now sitting on a chair at the wooden table beside the young woman, both arms resting on the table, laughing with her: a warm closed-mouth laugh, eyes half closed, his head tipped toward her. She smiles at him, closed-mouthed. Nobody waves. Keep the drawing, colours, camera, framing and crop exactly as they are. Same courtyard, table, lights and city behind. Exactly two people. Every mouth is closed, no teeth. No letters or numbers anywhere.",
+   "width": 1344,
+   "height": 752,
+   "seed": 40
+  },
+  {
+   "id": "cov-cafe-MASTER-laugh-E41",
+   "shot": "cov-cafe-MASTER-wave",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-cafe-MASTER-wave-K7.png"
+   ],
+   "prompt": "The tall young man in the cream cable-knit tunic is now sitting on a chair at the wooden table beside the young woman, both arms resting on the table, laughing with her: a warm closed-mouth laugh, eyes half closed, his head tipped toward her. She smiles at him, closed-mouthed. Nobody waves. Keep the drawing, colours, camera, framing and crop exactly as they are. Same courtyard, table, lights and city behind. Exactly two people. Every mouth is closed, no teeth. No letters or numbers anywhere.",
+   "width": 1344,
+   "height": 752,
+   "seed": 41
+  },
+  {
+   "id": "cov-cafe-MASTER-menus-E40",
+   "shot": "cov-cafe-MASTER-wave",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-cafe-MASTER-wave-K7.png",
+    "images-out/preprod/cards2/zei.png"
+   ],
+   "prompt": "All three now sit on chairs around the long wooden table, each looking down at a small glowing menu screen in their hands: the young woman on the left where she sits now; the tall young man in the cream tunic sitting on the right side of the table; and the young man from picture 2 (spiky black hair with one blue streak, orange cropped zip jacket over a black top) sitting at the near end of the table with his back half to us. Nobody waves. Keep picture 1's drawing, colours, courtyard, lights and camera exactly. Exactly three people. Every mouth is closed. No letters or numbers anywhere.",
+   "width": 1344,
+   "height": 752,
+   "seed": 40
+  },
+  {
+   "id": "cov-cafe-MASTER-menus-E41",
+   "shot": "cov-cafe-MASTER-wave",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-cafe-MASTER-wave-K7.png",
+    "images-out/preprod/cards2/zei.png"
+   ],
+   "prompt": "All three now sit on chairs around the long wooden table, each looking down at a small glowing menu screen in their hands: the young woman on the left where she sits now; the tall young man in the cream tunic sitting on the right side of the table; and the young man from picture 2 (spiky black hair with one blue streak, orange cropped zip jacket over a black top) sitting at the near end of the table with his back half to us. Nobody waves. Keep picture 1's drawing, colours, courtyard, lights and camera exactly. Exactly three people. Every mouth is closed. No letters or numbers anywhere.",
+   "width": 1344,
+   "height": 752,
+   "seed": 41
+  },
+  {
+   "id": "cov-overlook-CU-Z-look-E40",
+   "shot": "cov-overlook-MASTER-watch",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-overlook-MASTER-watch-K9-crop.png"
+   ],
+   "prompt": "Redraw this as a clean, sharp close-up in the same hand-drawn comic style, ink linework and flat cel-shaded colour: the young man with spiky black hair with a blue streak and an orange jacket, looking to the right of frame at someone beside him, a small closed-mouth smile. Keep his face, hair, clothes, pose, colours and the dark arena behind him exactly; only make it crisp and detailed. Nobody else in front. No letters or numbers anywhere.",
+   "width": 1344,
+   "height": 752,
+   "seed": 40
+  },
+  {
+   "id": "cov-overlook-CU-Z-look-E41",
+   "shot": "cov-overlook-MASTER-watch",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-overlook-MASTER-watch-K9-crop.png"
+   ],
+   "prompt": "Redraw this as a clean, sharp close-up in the same hand-drawn comic style, ink linework and flat cel-shaded colour: the young man with spiky black hair with a blue streak and an orange jacket, looking to the right of frame at someone beside him, a small closed-mouth smile. Keep his face, hair, clothes, pose, colours and the dark arena behind him exactly; only make it crisp and detailed. Nobody else in front. No letters or numbers anywhere.",
+   "width": 1344,
+   "height": 752,
+   "seed": 41
+  }
+ ]
+}
