@@ -80,7 +80,7 @@ export const PRIVACY: LegalDoc = {
         [
           'Quote cards you save, and your likes. A saved card\'s page is public. Your individual likes are private; only totals are shown.',
           'That you agreed to the terms for publishing, and any of your own work you have hidden.',
-          'Images you publish, with their prompt, your Farcaster username and the record of how they were made. These are public.',
+          'Images you publish, with their prompt, your name (Farcaster name or wallet address) and the record of how they were made. These are public.',
           'How many images you make each day, to count the daily limit, and the reports you make.',
           'The Farcaster usernames we have seen for your ID, so a link with an old name still finds your pages after you rename.',
           'If you play Minpentai: your progress against the computer and the people you block, kept until you ask us to delete them; your matches, deleted 30 days after they end; and invites, deleted when they expire after 24 hours. Challenges you send or receive, deleted an hour after they are answered or expire; and a count of today\'s Play requests and when you last opened a match or the lobby, deleted the next day. While you say you are ready to play, other signed-in players see your Farcaster username.',
