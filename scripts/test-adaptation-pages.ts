@@ -404,7 +404,7 @@ try {
   }
 
   // --- The live editor (owner, 2026-10-17): read and play only, from the version's committed files.
-  const ED = '/@naaate/1/shot/46-b4-1';
+  const ED = '/@naaate/1/shot/48-b4-1';
   const outside: string[] = [];
   // The site's own media domain (version 1's video and poster) is the site's, as P6a allows; anything else is outside.
   const ownMedia = (u: string) => /^https:\/\/([a-z0-9-]+\.)?snowmoon\.party\//.test(u);
@@ -578,8 +578,8 @@ try {
     await page.locator('canvas.ed-layout').waitFor();
     await page.waitForTimeout(300);
     const landed = local(page.url());
-    const pass = links.length === 84 && links.every((h) => /^\/@naaate\/1\/shot\/[\w-]+$/.test(h ?? '')) && remixHref === '/@naaate/1/shot/first' && recipeHref === '/@naaate/1/shot/first#recipe' && github === 0 && !/\bfork/i.test(sceneText) && /^\/@naaate\/1\/shot\/(?!first)[\w-]+$/.test(landed);
-    await record(17, 'scene page to the editor', '/@naaate/1', 'all 84 shots link to /@naaate/1/shot/<shot>; REMIX opens the editor on the first shot with a camera and a line, and the address shows that shot; the Recipe link opens its RECIPE tab on the site; no GitHub link and no "fork" in the page', page, { status: 200, shotLinks: links.length, remixHref, recipeHref, githubLinks: github, landed }, pass);
+    const pass = links.length === 85 && links.every((h) => /^\/@naaate\/1\/shot\/[\w-]+$/.test(h ?? '')) && remixHref === '/@naaate/1/shot/first' && recipeHref === '/@naaate/1/shot/first#recipe' && github === 0 && !/\bfork/i.test(sceneText) && /^\/@naaate\/1\/shot\/(?!first)[\w-]+$/.test(landed);
+    await record(17, 'scene page to the editor', '/@naaate/1', 'all 85 shots link to /@naaate/1/shot/<shot>; REMIX opens the editor on the first shot with a camera and a line, and the address shows that shot; the Recipe link opens its RECIPE tab on the site; no GitHub link and no "fork" in the page', page, { status: 200, shotLinks: links.length, remixHref, recipeHref, githubLinks: github, landed }, pass);
     await page.context().close();
   }
   if (outside.length) failures.push(`the editor asked for things outside the site: ${[...new Set(outside)].slice(0, 5).join(', ')}`);
