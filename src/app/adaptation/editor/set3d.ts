@@ -397,7 +397,7 @@ export class SetStage {
     return { x: ((v.x + 1) / 2) * this.orbitCanvas.clientWidth, y: ((1 - v.y) / 2) * this.orbitCanvas.clientHeight };
   }
 
-  /** The shot camera's view as a PNG data URL (for the fork file's preview). */
+  /** The shot camera's view as a PNG data URL . */
   snapshot(): string {
     this.shotR.render(this.scene, this.shotCam);
     return this.shotCanvas.toDataURL('image/png');

@@ -123,7 +123,7 @@ export function ScenePage({ adaptation, version, handle, fixed }: { adaptation: 
           <div className="scene-under label">
             <span>
               Version {version.id} · {version.createdAt}
-              {version.parentId !== null && ` · forked from version ${version.parentId}`}
+              {version.parentId !== null && ` · remixed from version ${version.parentId}`}
             </span>
             {r.ai_label && <span>{r.ai_label}</span>}
           </div>
@@ -164,7 +164,10 @@ export function ScenePage({ adaptation, version, handle, fixed }: { adaptation: 
             </div>
             <div>
               <dt className="label">Recipe</dt>
-              <dd>{r.recipe_url ? <a href={r.recipe_url}>Read it</a> : 'Not published yet'}</dd>
+              <dd>
+                {/* On the site (owner, 2026-10-18: no GitHub in the flow): every shot's recipe, in the editor. */}
+                <Link href={`${latestPath}/shot/first#recipe`}>Read it</Link>
+              </dd>
             </div>
           </dl>
 
@@ -173,7 +176,7 @@ export function ScenePage({ adaptation, version, handle, fixed }: { adaptation: 
             title={adaptation.title}
             latestUrl={`${appUrl()}${latestPath}`}
             fixedUrl={`${appUrl()}${fixedPath}`}
-            forkUrl={`${latestPath}/shot/first`}
+            remixUrl={`${latestPath}/shot/first`}
           />
           {fixed && (
             <p className="label">

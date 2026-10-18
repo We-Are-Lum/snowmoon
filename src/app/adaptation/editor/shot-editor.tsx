@@ -3,14 +3,16 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import type { SetStage, ShotCamera, PersonSpec } from './set3d';
-import { ForkTextField } from '~/components/fork-text-field';
+import { LocalTextField } from '~/components/local-text-field';
 
 /**
  * The live shot editor (owner, 2026-10-17: "Ship a live editor on the site by Sunday"; boards 1-3 of
  * the editor prototype). Read and play only: it reads a version's committed files (made into
  * public/editor/<id>/v<n>/ by scripts/editor-data.mjs), moves the camera and the people in the 3D
  * set, plays the converted lines, and lets the visitor edit the prompt and the line in this browser
- * only. MAKE MY FORK saves fork.json on the visitor's own device. Nothing is uploaded, stored or charged.
+ * only. Nothing is uploaded, stored or charged. Named Remix (owner, 2026-10-18): Generate opens with Remix,
+ * as its own merge; until then it is shown, disabled, as "Remixing opens this week." The recipe is on the
+ * site (the RECIPE tab, also opened by #recipe); the repository is only the footer's Source link.
  */
 
 type Vec3 = [number, number, number];
@@ -104,20 +106,14 @@ export function ShotEditor({
   handle,
   scenePath,
   aiLabel,
-  recipeUrl,
   prototypeUrl,
-  forkGuideUrl,
-  versionUrl,
 }: {
-  versionUrl: string;
   dataUrl: string;
   shotId: string;
   handle: string;
   scenePath: string;
   aiLabel: string | null;
-  recipeUrl: string | null;
   prototypeUrl: string;
-  forkGuideUrl: string;
 }) {
   const [data, setData] = useState<EditorData | null>(null);
   const [failed, setFailed] = useState(false);
@@ -145,7 +141,7 @@ export function ShotEditor({
         <p className="label">Loading the shot…</p>
       </div>
     );
-  // FORK on the scene page opens /shot/first: the first shot with a camera to move.
+  // REMIX on the scene page opens /shot/first: the first shot with a camera to move.
   const i = shotId === 'first' ? Math.max(0, data.shots.findIndex((s) => s.camera && s.lines.length)) : data.shots.findIndex((s) => s.id === shotId);
   if (i < 0)
     return (
@@ -164,10 +160,7 @@ export function ShotEditor({
       handle={handle}
       scenePath={scenePath}
       aiLabel={aiLabel}
-      recipeUrl={recipeUrl}
       prototypeUrl={prototypeUrl}
-      forkGuideUrl={forkGuideUrl}
-      versionUrl={versionUrl}
     />
   );
 }
@@ -180,12 +173,8 @@ function Editor({
   handle,
   scenePath,
   aiLabel,
-  recipeUrl,
   prototypeUrl,
-  forkGuideUrl,
-  versionUrl,
 }: {
-  versionUrl: string;
   data: EditorData;
   shot: Shot;
   prev: Shot | null;
@@ -193,9 +182,7 @@ function Editor({
   handle: string;
   scenePath: string;
   aiLabel: string | null;
-  recipeUrl: string | null;
   prototypeUrl: string;
-  forkGuideUrl: string;
 }) {
   const orbitRef = useRef<HTMLCanvasElement>(null);
   const shotRef = useRef<HTMLCanvasElement>(null);
@@ -204,10 +191,10 @@ function Editor({
   const [cam, setCam] = useState<ShotCamera | null>(null);
   const [setError, setSetError] = useState(false);
   const [who, setWho] = useState<string | null>(null);
-  const [tab, setTab] = useState<Tab>('Line');
+  // #recipe (the scene page's Recipe link) opens on the RECIPE tab.
+  const [tab, setTab] = useState<Tab>(() => (typeof location !== 'undefined' && location.hash === '#recipe' ? 'Recipe' : 'Line'));
   const [prompt, setPrompt] = useState(shot.recipe?.prompt ?? '');
   const [lineText, setLineText] = useState<Record<string, string>>(() => Object.fromEntries(shot.lines.map((l) => [l.cue, l.text ?? ''])));
-  const [saved, setSaved] = useState<'' | 'saved' | 'copied' | 'copy-failed'>('');
   const shotPath = (s: Shot) => `${scenePath}/shot/${s.id}`;
   const presets = useMemo(() => {
     const all = (shot.camera && data.presets[shot.camera.set]) || [];
@@ -241,9 +228,9 @@ function Editor({
     };
   }, [data, shot]);
 
-  // /shot/first (FORK on the scene page) shows the real shot's address once it is known.
+  // /shot/first (REMIX on the scene page) shows the real shot's address once it is known.
   useEffect(() => {
-    if (location.pathname.endsWith('/shot/first')) history.replaceState(history.state, '', `${scenePath}/shot/${shot.id}`);
+    if (location.pathname.endsWith('/shot/first')) history.replaceState(history.state, '', `${scenePath}/shot/${shot.id}${location.hash}`);
   }, [scenePath, shot.id]);
 
   const stage = () => stageRef.current;
@@ -255,42 +242,6 @@ function Editor({
   const person = who && cam ? (cam.people[who] as PersonSpec | undefined) : undefined;
   const firstLine = shot.lines[0];
   const where = [shot.scene, shot.size && (SIZES[shot.size] ?? shot.size), `${(shot.to - shot.from).toFixed(1)} s`].filter(Boolean).join(' · ');
-
-  const fork = () => ({
-    format: 'snowmoon-fork/1',
-    about: 'One shot of a Snowmoon adaptation, forked in the live editor. Nothing was uploaded, stored or charged. To render it, follow "How to fork" in the repository.',
-    how_to_fork: forkGuideUrl,
-    adaptation: { id: data.adaptation, title: data.title },
-    parent_version: { id: data.version, url: versionUrl, by: `@${data.author.handle}` },
-    shot: { id: shot.id, cut_id: shot.cutId, n: shot.n, frame: shot.frameId, from_s: shot.from, to_s: shot.to, recipe: shot.recipe?.id ?? null, frame_sha256: shot.recipe?.sha256 ?? null },
-    changes: {
-      ...(camChanged && cam && start ? { camera: { from: { cam: start.cam, look: start.look, fov: start.fov }, to: { cam: cam.cam, look: cam.look, fov: cam.fov } } } : {}),
-      ...(peopleChanged && cam && start ? { people: { from: start.people, to: cam.people } } : {}),
-      ...(promptChanged ? { prompt: { from_recipe: shot.recipe?.id, to: prompt } } : {}),
-      ...(lineChanges.length ? { lines: lineChanges.map((l) => ({ cue: l.cue, speaker: l.speaker, from: l.text, to: lineText[l.cue] })) } : {}),
-    },
-    made_at: new Date().toISOString(),
-  });
-
-  const saveFork = () => {
-    const blob = new Blob([JSON.stringify(fork(), null, 1) + '\n'], { type: 'application/json' });
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = `fork-${data.seed}-v${data.version}-${shot.id}.json`;
-    document.body.append(a);
-    a.click();
-    a.remove();
-    setTimeout(() => URL.revokeObjectURL(a.href), 2000);
-    setSaved('saved');
-  };
-  const copyFork = async () => {
-    try {
-      await navigator.clipboard.writeText(JSON.stringify(fork(), null, 1));
-      setSaved('copied');
-    } catch {
-      setSaved('copy-failed');
-    }
-  };
 
   return (
     <div className="ed">
@@ -442,7 +393,16 @@ function Editor({
           </div>
           {aiLabel && <p className="label ed-muted">{aiLabel}</p>}
           <p className="label ed-recipe-link">
-            {recipeUrl ? <a href={recipeUrl}>The recipe: every file this shot was made from</a> : 'The recipe is not published yet'}
+            <a
+              href="#recipe"
+              onClick={(e) => {
+                e.preventDefault();
+                setTab('Recipe');
+                document.getElementById('ed-tabs')?.scrollIntoView({ block: 'start' });
+              }}
+            >
+              The recipe: every file this shot was made from
+            </a>
           </p>
 
           <div className="ed-generate">
@@ -450,11 +410,11 @@ function Editor({
               Generate
             </button>
             <p id="ed-gen-note" className="ed-help">
-              Generating forks opens next.
+              Remixing opens this week.
             </p>
           </div>
 
-          <div className="ed-tabs">
+          <div className="ed-tabs" id="ed-tabs">
             <div role="tablist" aria-label="Layers" className="ed-tablist">
               {TABS.map((t) => (
                 <button key={t} id={`ed-tab-${t}`} role="tab" type="button" aria-selected={tab === t} aria-controls={`ed-pane-${t}`} className="ed-tab" onClick={() => setTab(t)}>
@@ -467,7 +427,7 @@ function Editor({
                 (shot.lines.length ? (
                   shot.lines.map((l) => (
                     <div key={l.cue} className="ed-line">
-                      <ForkTextField
+                      <LocalTextField
                         id={`ed-line-${l.cue}`}
                         rows={2}
                         value={lineText[l.cue] ?? ''}
@@ -479,7 +439,7 @@ function Editor({
                         }
                       />
                       <p className="ed-help">
-                        {l.by.kind === 'book' ? "The book's own words." : `@${l.by.kind === 'person' ? l.by.handle : '?'}'s words, as performed.`} An edit is yours, credited to you in your fork. Models never write lines.
+                        {l.by.kind === 'book' ? "The book's own words." : `@${l.by.kind === 'person' ? l.by.handle : '?'}'s words, as performed.`} Your edit stays in this browser. Models never write lines.
                       </p>
                     </div>
                   ))
@@ -527,7 +487,7 @@ function Editor({
               {tab === 'Prompt' &&
                 (shot.recipe?.prompt ? (
                   <div className="ed-line">
-                    <ForkTextField id="ed-prompt" rows={10} value={prompt} onChange={setPrompt} label={<>Prompt for {shot.recipe.id} {promptChanged ? '· edited' : ''}</>} />
+                    <LocalTextField id="ed-prompt" rows={10} value={prompt} onChange={setPrompt} label={<>Prompt for {shot.recipe.id} {promptChanged ? '· edited' : ''}</>} />
                     <div className="ed-row">
                       <button type="button" className="ed-small" onClick={() => setPrompt(shot.recipe!.prompt!)} disabled={!promptChanged}>
                         Reset
@@ -622,31 +582,11 @@ function Editor({
                         Voice {l.cue}: <code>{l.voice!.file}</code> · sha256 <code>{short(l.voice!.sha256)}</code>
                       </p>
                     ))}
-                  {recipeUrl && (
-                    <p>
-                      <a href={recipeUrl}>The whole recipe folder</a>
-                    </p>
-                  )}
                 </div>
               )}
             </div>
           </div>
 
-          <div className="ed-fork">
-            <button type="button" className="ed-btn" onClick={saveFork}>
-              Make my fork
-              <span className="ed-btn-sub">{anyChange ? 'Saves fork.json with your changes' : 'Saves fork.json (change the camera, people, prompt or line first)'}</span>
-            </button>
-            <button type="button" className="ed-small" onClick={copyFork}>
-              Copy fork.json
-            </button>
-            <p className="ed-help" aria-live="polite">
-              {saved === 'saved' && 'fork.json is saved on your device. '}
-              {saved === 'copied' && 'fork.json is copied. '}
-              {saved === 'copy-failed' && 'Copying was blocked here; use Make my fork. '}
-              Nothing is uploaded, stored or charged. To render it, follow <a href={forkGuideUrl}>How to fork</a> in the repository.
-            </p>
-          </div>
         </section>
       </div>
     </div>

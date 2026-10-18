@@ -19,8 +19,8 @@
  *
  * Checks: /@naaate/1, /@naaate/1/v/1, /1, a renamed name, a slug, a wallet address (and its
  * checksum case), "nothing here yet", SHARE and copy link, the cast composer (website and inside a
- * Farcaster client), the phone width, and the live shot editor (13-17: loading, playing and MAKE MY
- * FORK, the layers, a phone with a touch drag, and the scene page's links into it). Version 1's video
+ * Farcaster client), the phone width, and the live shot editor (13-17: loading, playing (nothing is saved:
+ * no fork file, no download), the layers, a phone with a touch drag, and the scene page's links into it, REMIX and the recipe). Version 1's video
  * and poster are named on media.snowmoon.party (uploaded in publish step (b)); the browser here is
  * refused anything outside the local site, so the check reads the player's src and poster rather than playing it.
  */
@@ -52,7 +52,7 @@ await pg.exec(`create role anon nologin; create role authenticated nologin; crea
 for (const f of readdirSync(path.join(ROOT, 'supabase/migrations')).filter((f) => f.endsWith('.sql')).sort()) {
   await pg.exec(readFileSync(path.join(ROOT, 'supabase/migrations', f), 'utf8'));
 }
-// Seed (as postgres): a wallet account with its own version of adaptation 1 (a fork of version 1)
+// Seed (as postgres): a wallet account with its own version of adaptation 1 (a remix of version 1)
 // on its page; the owner's old name, seen before a rename; a second adaptation with no versions.
 const w = await pg.query<{ id: number }>(`insert into studio.wallet_accounts (address) values ($1) returning id`, [WALLET]);
 const walletPerson = -Number(w.rows[0].id);
@@ -272,8 +272,8 @@ try {
     const pass =
       overflow.length === 0 && phoneSideways <= 0 &&
       h.status === 200 && [307, 308].includes(hc.status) && hc.location === url && local(page.url()) === url &&
-      new RegExp(`Version ${v2} .*forked from version 1`, 'i').test(t) && t.includes(`@${WALLET}`) && where.includes(`/@${WALLET}/1`) && where.includes(`@${WALLET}`);
-    await record(6, 'wallet address', `/@${WALLET_CHECKSUM}/1 and ${url}`, `checksum case redirects to ${url}; that page shows the wallet's version ${v2}, forked from version 1; the address shows lowercase, in the capitals label too; it stays inside its column (desktop) and the page has no sideways scroll at 390px`, page, { status: h.status, checksumStatus: hc.status, checksumLocation: hc.location, label: where, overflowing: overflow, phoneSidewaysPx: phoneSideways }, pass);
+      new RegExp(`Version ${v2} .*remixed from version 1`, 'i').test(t) && t.includes(`@${WALLET}`) && where.includes(`/@${WALLET}/1`) && where.includes(`@${WALLET}`);
+    await record(6, 'wallet address', `/@${WALLET_CHECKSUM}/1 and ${url}`, `checksum case redirects to ${url}; that page shows the wallet's version ${v2}, remixed from version 1; the address shows lowercase, in the capitals label too; it stays inside its column (desktop) and the page has no sideways scroll at 390px`, page, { status: h.status, checksumStatus: hc.status, checksumLocation: hc.location, label: where, overflowing: overflow, phoneSidewaysPx: phoneSideways }, pass);
     await page.context().close();
   }
 
@@ -415,10 +415,6 @@ try {
     const p = await page.locator('canvas.ed-orbit').evaluate((c, k) => (c as HTMLCanvasElement & { edStage?: Stage }).edStage?.screenOf(k) ?? null, kind);
     return box && p ? { x: box.x + p.x, y: box.y + p.y } : null;
   };
-  const forkOf = async (page: Page) => {
-    const [dl] = await Promise.all([page.waitForEvent('download'), page.getByRole('button', { name: /^Make my fork/ }).click()]);
-    return { name: dl.suggestedFilename(), json: JSON.parse(readFileSync((await dl.path())!, 'utf8')) };
-  };
   /** Text under 12px and controls under 44px tall, inside the editor. */
   const floors = (page: Page) =>
     page.evaluate(() => {
@@ -450,23 +446,26 @@ try {
     await page.waitForFunction(() => Array.from(document.querySelectorAll('.ed-pair img')).every((i) => (i as HTMLImageElement).complete), null, { timeout: 10000 }).catch(() => {});
     const imgs = await page.locator('.ed-pair img').evaluateAll((els) => els.map((e) => (e as HTMLImageElement).naturalWidth));
     const recipe = await page.getByRole('link', { name: /The recipe/ }).getAttribute('href');
+    const github = await page.locator('.ed a[href*="github.com"]').count();
     const proto = await page.getByRole('link', { name: /where it.s going/i }).getAttribute('href');
     const gen = await page.getByRole('button', { name: 'Generate' }).getAttribute('aria-disabled');
     const t = await mainText(page);
     const f = await floors(page);
     const pass =
       res?.status() === 200 && layoutDrawn && imgs.length === 2 && imgs.every((w) => w > 0) &&
-      recipe === 'https://github.com/We-Are-Lum/snowmoon/tree/main/adaptations/fifteen-days' && proto === 'https://claude.ai/artifact/NAuaFhUtoQKx8zHuANxwhU' && gen === 'true' &&
-      /Generating forks opens next/.test(t) && /Generate and publish come next/i.test(t) && /AI-generated, not by the author/i.test(t) &&
+      recipe === '#recipe' && github === 0 && proto === 'https://claude.ai/artifact/NAuaFhUtoQKx8zHuANxwhU' && gen === 'true' &&
+      /Remixing opens this week/.test(t) && !/fork/i.test(t) && /Generate and publish come next/i.test(t) && /AI-generated, not by the author/i.test(t) &&
       /why does Dzego like Minpentai so much/.test(t) && f.small.length === 0 && f.tiny.length === 0;
-    await record(13, 'editor loads a shot', ED, 'the 3D set and the live layout draw; the frame and its set frame load; Generate is disabled ("Generating forks opens next"); the AI label, the recipe link and the prototype link as "where it\'s going"; no text under 12px, no control under 44px', page, { status: res?.status() ?? null, layoutDrawn, images: imgs, recipe, proto, generateDisabled: gen, under12px: f.small, under44px: f.tiny }, pass);
+    await record(13, 'editor loads a shot', ED, 'the 3D set and the live layout draw; the frame and its set frame load; Generate is disabled ("Remixing opens this week."); no "fork" anywhere; the AI label, the recipe link (on the site, #recipe; no GitHub link) and the prototype link as "where it\'s going"; no text under 12px, no control under 44px', page, { status: res?.status() ?? null, layoutDrawn, images: imgs, recipe, githubLinks: github, proto, generateDisabled: gen, under12px: f.small, under44px: f.tiny }, pass);
     await page.context().close();
   }
 
-  // 14. Play with it: drag a person and the camera, a slider, a preset, edit the prompt and the line; MAKE MY FORK saves fork.json.
+  // 14. Play with it: drag a person and the camera, a slider, a preset, edit the prompt and the line; nothing is saved or downloaded.
   {
     const page = await newPage(browser, { width: 1440, height: 1000 });
     watchOutside(page);
+    const downloads: string[] = [];
+    page.on('download', (d) => downloads.push(d.suggestedFilename()));
     await page.goto(BASE + ED);
     await page.locator('canvas.ed-layout').waitFor();
     await page.waitForTimeout(1200);
@@ -496,19 +495,15 @@ try {
     await page.locator('#ed-prompt').fill('A test prompt, edited here only.');
     await page.getByRole('tab', { name: 'Line' }).click();
     await page.locator('.ed-line textarea').first().fill('A test line, edited here only.');
-    const fork = await forkOf(page);
-    const ch = fork.json.changes ?? {};
+    const promptLabel = await page.getByRole('tab', { name: 'Prompt' }).click().then(() => page.locator('label[for="ed-prompt"]').innerText());
+    const forkControls = await page.getByRole('button', { name: /fork/i }).count();
     const pass =
-      !!d0 && !!c0 && before !== after && /changed/i.test(caption) && fork.name === 'fork-fifteen-days-v1-46-b4-1.json' &&
-      fork.json.format === 'snowmoon-fork/1' && fork.json.parent_version?.id === 1 && fork.json.shot?.id === '46-b4-1' &&
-      !!ch.camera && ch.camera.to.fov !== ch.camera.from.fov && ch.camera.to.cam.join() !== ch.camera.from.cam.join() &&
-      !!ch.people && ch.people.to.B.at.join() !== ch.people.from.B.at.join() &&
-      ch.prompt?.to === 'A test prompt, edited here only.' && ch.lines?.[0]?.to === 'A test line, edited here only.' && ch.lines?.[0]?.cue === 'b4-1';
+      !!d0 && !!c0 && before !== after && /changed/i.test(caption) && /edited/i.test(promptLabel) && forkControls === 0 && downloads.length === 0;
     // A preset, then reset: back to version 1.
     await page.getByRole('button', { name: /^MASTER-wave/ }).click();
     await page.getByRole('button', { name: /^Reset to version 1/ }).click();
     const resetCaption = await page.locator('.ed-look figcaption').first().innerText();
-    await record(14, 'editor play and make my fork', ED, 'dragging Bai and the camera, the field of view and a turn change the live layout; MAKE MY FORK saves fork.json with the camera, people, prompt and line changes; Reset returns to version 1', page, { status: 200, dragged: { bai: d0, camera: c0 }, layoutChanged: before !== after, caption, file: fork.name, changes: Object.keys(ch), resetCaption }, pass && /as version 1/i.test(resetCaption));
+    await record(14, 'editor play, nothing saved', ED, 'dragging Bai and the camera, the field of view and a turn change the live layout; the prompt and the line edit in the browser; no fork control and no download; Reset returns to version 1', page, { status: 200, dragged: { bai: d0, camera: c0 }, layoutChanged: before !== after, caption, promptLabel, forkControls, downloads: downloads.length, resetCaption }, pass && /as version 1/i.test(resetCaption));
     await page.context().close();
   }
 
@@ -560,28 +555,31 @@ try {
     }
     await page.waitForTimeout(300);
     const caption = await page.locator('.ed-look figcaption').first().innerText();
-    const order = await page.evaluate(() => ['.ed-orbit', '.ed-layout', '.ed-pair', '.ed-tabs', '.ed-fork'].map((s) => Math.round(document.querySelector(s)!.getBoundingClientRect().top + scrollY)));
+    const order = await page.evaluate(() => ['.ed-orbit', '.ed-layout', '.ed-pair', '.ed-generate', '.ed-tabs'].map((s) => Math.round(document.querySelector(s)!.getBoundingClientRect().top + scrollY)));
     const f = await floors(page);
     const pass = sideways <= 0 && !!b0 && /changed/i.test(caption) && order.every((y, i) => i === 0 || y > order[i - 1]) && f.small.length === 0 && f.tiny.length === 0;
     await page.screenshot({ path: path.join(OUT, '16b-editor-phone-full.png'), fullPage: true });
-    await record(16, 'editor on a phone', `${ED} at 390x844`, 'no sideways scroll; set, layout, frames, layers and MAKE MY FORK stacked in that order; a touch drag moves Bai; no text under 12px, no control under 44px', page, { status: 200, sidewaysScrollPx: sideways, touched: b0, caption, order, under12px: f.small, under44px: f.tiny }, pass);
+    await record(16, 'editor on a phone', `${ED} at 390x844`, 'no sideways scroll; set, layout, frames, Generate and the layers stacked in that order; a touch drag moves Bai; no text under 12px, no control under 44px', page, { status: 200, sidewaysScrollPx: sideways, touched: b0, caption, order, under12px: f.small, under44px: f.tiny }, pass);
     await page.context().close();
   }
 
-  // 17. The scene page reaches the editor: every shot links to it, and so does FORK.
+  // 17. The scene page reaches the editor: every shot links to it, and so do REMIX and the recipe (on the site, no GitHub).
   {
     const page = await newPage(browser, { width: 1280, height: 900 });
     watchOutside(page);
     await page.goto(BASE + '/@naaate/1');
     await page.locator('.scene-shot').first().waitFor();
     const links = await page.locator('.scene-shot').evaluateAll((els) => els.map((e) => (e as HTMLAnchorElement).getAttribute('href')));
-    const forkHref = await page.getByRole('link', { name: /^Fork/ }).getAttribute('href');
-    await page.getByRole('link', { name: /^Fork/ }).click();
+    const remixHref = await page.getByRole('link', { name: /^Remix/ }).getAttribute('href');
+    const recipeHref = await page.locator('.scene-facts a').getAttribute('href');
+    const github = await page.locator('main a[href*="github.com"]').count();
+    const sceneText = await mainText(page);
+    await page.getByRole('link', { name: /^Remix/ }).click();
     await page.locator('canvas.ed-layout').waitFor();
     await page.waitForTimeout(300);
     const landed = local(page.url());
-    const pass = links.length === 84 && links.every((h) => /^\/@naaate\/1\/shot\/[\w-]+$/.test(h ?? '')) && forkHref === '/@naaate/1/shot/first' && /^\/@naaate\/1\/shot\/(?!first)[\w-]+$/.test(landed);
-    await record(17, 'scene page to the editor', '/@naaate/1', 'all 84 shots link to /@naaate/1/shot/<shot>; FORK opens the editor on the first shot with a camera and a line, and the address shows that shot', page, { status: 200, shotLinks: links.length, forkHref, landed }, pass);
+    const pass = links.length === 84 && links.every((h) => /^\/@naaate\/1\/shot\/[\w-]+$/.test(h ?? '')) && remixHref === '/@naaate/1/shot/first' && recipeHref === '/@naaate/1/shot/first#recipe' && github === 0 && !/\bfork/i.test(sceneText) && /^\/@naaate\/1\/shot\/(?!first)[\w-]+$/.test(landed);
+    await record(17, 'scene page to the editor', '/@naaate/1', 'all 84 shots link to /@naaate/1/shot/<shot>; REMIX opens the editor on the first shot with a camera and a line, and the address shows that shot; the Recipe link opens its RECIPE tab on the site; no GitHub link and no "fork" in the page', page, { status: 200, shotLinks: links.length, remixHref, recipeHref, githubLinks: github, landed }, pass);
     await page.context().close();
   }
   if (outside.length) failures.push(`the editor asked for things outside the site: ${[...new Set(outside)].slice(0, 5).join(', ')}`);

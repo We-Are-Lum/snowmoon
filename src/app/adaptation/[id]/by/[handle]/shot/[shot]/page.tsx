@@ -2,14 +2,14 @@ import { notFound, redirect } from 'next/navigation';
 import type { Metadata } from 'next';
 import { NothingHere, loadScene, type SceneParams } from '../../../../../scene-page';
 import { ShotEditor } from '../../../../../editor/shot-editor';
-import { EDITOR_PROTOTYPE_URL, REPO_URL, appUrl } from '~/lib/config';
+import { EDITOR_PROTOTYPE_URL } from '~/lib/config';
 import '../../../../../editor/editor.css';
 
 /**
  * /@<fname>/<id>/shot/<shot>: the live shot editor for that person's chosen version (rewritten here
  * by next.config.ts). Read and play only: the shot's data comes from the version's committed files
  * (public/editor/<id>/v<n>/, made by scripts/editor-data.mjs), so a preview without the production
- * database and any fork show the same editor.
+ * database and any remix show the same editor.
  */
 export const dynamic = 'force-dynamic';
 
@@ -39,10 +39,7 @@ export default async function ShotPage({ params }: Props) {
       handle={s.handle}
       scenePath={scenePath}
       aiLabel={s.version.recipe.ai_label ?? null}
-      recipeUrl={s.version.recipe.recipe_url ?? null}
       prototypeUrl={EDITOR_PROTOTYPE_URL}
-      forkGuideUrl={`${REPO_URL}#how-to-fork`}
-      versionUrl={`${appUrl()}${scenePath}/v/${s.version.id}`}
     />
   );
 }
