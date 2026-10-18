@@ -41,7 +41,9 @@ export const LEGAL: {
   // covering both pages at these words.
   ownerReread: {
     terms: { words: '5wwopt', on: '2026-10-18', by: 'FID 6786' },
-    privacy: { words: '1wfmhnv', on: '2026-10-18', by: 'FID 6786' },
+    // Plus one sentence the drafted list missed (Privacy §4, images): "your name (Farcaster name or wallet
+    // address)", the owner's own words for tonight's publish (2026-10-18), so the page stays true for wallet accounts.
+    privacy: { words: '1y9sys0', on: '2026-10-18', by: 'FID 6786' },
   },
 };
 
