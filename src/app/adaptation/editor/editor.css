@@ -42,6 +42,8 @@
 .ed-slider { display: flex; flex-direction: column; gap: 4px; }
 .ed-slider input { width: 100%; min-height: var(--tap); accent-color: var(--ink); }
 .ed-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; }
+.ed-describe-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.ed-describe-left { margin: 0; }
 .ed-pose { display: flex; align-items: center; gap: 8px; }
 .ed-pose select { min-height: var(--tap); padding: 0 10px; font: inherit; font-size: 16px; border: 1px solid var(--faint); border-radius: var(--radius); background: var(--paper); color: var(--ink); }
 :where(.ed-chip, .ed-small, .ed-tab, .ed-btn, .ed-orbit, .ed select, .ed textarea, .ed input):focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }

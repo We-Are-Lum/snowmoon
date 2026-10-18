@@ -316,6 +316,21 @@ add({
         if (/fetch\(|supabase|\/api\//.test(text)) problems.push(`${file}: the editor's box must not send its text anywhere itself`);
         continue;
       }
+      if (file.endsWith('components/describe-text-field.tsx')) {
+        // "Describe the shot" in the live shot editor (branch describe-shot, 2026-10-18): sent with the shot's camera
+        // and people to the model's host (the gateway named while it is the fallback) to work out the move; not kept;
+        // never published.
+        for (const [what, re] of [
+          ['sent to the provider (CHAT.providerName) to work out the move', /to \{CHAT\.providerName\}/],
+          ['naming the gateway while it is the fallback', /CHAT\.gatewayFallback \? ` \(through \$\{CHAT\.host\}/],
+          ['not kept', /Not kept\./],
+          ['never published', /Never published/],
+          ['described to screen readers', /aria-describedby/],
+        ] as const)
+          if (!re.test(text)) problems.push(`${file}: the describe box must say it is ${what}`);
+        if (/fetch\(|supabase|\/api\//.test(text)) problems.push(`${file}: the describe box must not send its text anywhere itself`);
+        continue;
+      }
       if (file.endsWith('components/search-field.tsx')) {
         // "Make an image" (2026-10-10): a search of the book's own text, run on the reader's device over the text
         // served whole by GET /api/book/text; the query is never sent anywhere, kept or published.

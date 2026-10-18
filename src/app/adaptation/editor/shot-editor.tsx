@@ -8,6 +8,8 @@ import { RemixPanel } from './remix-panel';
 import { AddToStoryboard } from './add-to-storyboard';
 import { LAYOUT_SIZE, readChanges, saveLayout } from './my-changes';
 import { PlayChanges } from '../play-changes';
+import { DescribeShot, type DescribePlace } from './describe-shot';
+import { RANGES } from '~/lib/describe/shot';
 
 /**
  * The live shot editor (owner, 2026-10-17: "Ship a live editor on the site by Sunday"; boards 1-3 of
@@ -103,6 +105,18 @@ type Tab = (typeof TABS)[number];
 const sec = (s: number) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
 const short = (h: string | null | undefined) => (h ? `${h.slice(0, 12)}…` : 'none');
 const cmp = (a: unknown, b: unknown) => JSON.stringify(a) === JSON.stringify(b);
+/** The set's ground width and its named places (objects with an id and a place on the floor), for "Describe the shot". */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function describeInfo(set: any): { ground: number; places: DescribePlace[] } {
+  const places: DescribePlace[] = [];
+  for (const o of set?.objects ?? []) {
+    if (typeof o?.id !== 'string' || !/^[\w -]{1,40}$/.test(o.id) || typeof o.kind !== 'string' || !/^[a-z]{1,20}$/.test(o.kind)) continue;
+    if (!Array.isArray(o.at) || o.at.length < 2 || !o.at.slice(0, 2).every((v: unknown) => typeof v === 'number' && Number.isFinite(v))) continue;
+    const what = typeof o.landmark === 'string' && o.landmark.length <= 100 ? o.landmark : undefined;
+    places.push({ name: o.id, kind: o.kind, at: [o.at[0], o.at[1]], ...(what ? { what } : {}) });
+  }
+  return { ground: Number(set?.ground?.w) || 30, places: places.slice(0, 40) };
+}
 const round = (c: ShotCamera): ShotCamera => JSON.parse(JSON.stringify(c, (_k, v) => (typeof v === 'number' ? +v.toFixed(3) : v)));
 
 export function ShotEditor({
@@ -210,6 +224,8 @@ function Editor({
   const [cam, setCam] = useState<ShotCamera | null>(null);
   const [setError, setSetError] = useState(false);
   const [who, setWho] = useState<string | null>(null);
+  // The set's size and named places, for "Describe the shot" (describe-shot.tsx).
+  const [setInfo, setSetInfo] = useState<{ ground: number; places: DescribePlace[] } | null>(null);
   // #recipe (the scene page's Recipe link) opens on the RECIPE tab.
   const [tab, setTab] = useState<Tab>(() => (typeof location !== 'undefined' && location.hash === '#recipe' ? 'Recipe' : 'Line'));
   const [prompt, setPrompt] = useState(shot.recipe?.prompt ?? '');
@@ -239,6 +255,7 @@ function Editor({
         setStart(first);
         setCam(mine ?? first);
         setWho(Object.keys(first.people)[0] ?? null);
+        setSetInfo(describeInfo(set));
       } catch {
         if (alive) setSetError(true);
       }
@@ -345,11 +362,11 @@ function Editor({
                 </div>
                 <label className="ed-slider">
                   <span className="label">Field of view {cam ? `${Math.round(cam.fov)}°` : ''}</span>
-                  <input type="range" min={10} max={90} step={1} value={cam?.fov ?? 40} onChange={(e) => stage()?.setFov(+e.target.value)} disabled={!cam} />
+                  <input type="range" min={RANGES.fov.min} max={RANGES.fov.max} step={1} value={cam?.fov ?? 40} onChange={(e) => stage()?.setFov(+e.target.value)} disabled={!cam} />
                 </label>
                 <label className="ed-slider">
                   <span className="label">Height {cam ? `${cam.cam[1].toFixed(2)} m` : ''}</span>
-                  <input type="range" min={0.3} max={8} step={0.05} value={cam?.cam[1] ?? 1.5} onChange={(e) => stage()?.setHeight(+e.target.value)} disabled={!cam} />
+                  <input type="range" min={RANGES.height.min} max={RANGES.height.max} step={0.05} value={cam?.cam[1] ?? 1.5} onChange={(e) => stage()?.setHeight(+e.target.value)} disabled={!cam} />
                 </label>
                 <div className="ed-row">
                   <span className="label ed-muted">
@@ -360,6 +377,18 @@ function Editor({
                   </button>
                 </div>
               </fieldset>
+
+              {setInfo && (
+                <DescribeShot
+                  camera={cam}
+                  set={shot.camera.set}
+                  ground={setInfo.ground}
+                  places={setInfo.places}
+                  size={shot.size}
+                  setup={shot.setup}
+                  apply={(c) => stage()?.setCamera(c)}
+                />
+              )}
 
               {cam && Object.keys(cam.people).length > 0 && (
                 <fieldset className="ed-controls">
