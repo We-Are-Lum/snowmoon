@@ -24,8 +24,10 @@ async function load(id: string) {
   if (!b) return null;
   const [adaptation, version, frames] = await Promise.all([getAdaptation(b.adaptationId), getVersion(b.versionId), boardFrames(sql, b)]);
   const handle = version ? await handleFor(version.author) : null;
+  // The maker's public profile, which the byline links to (owner, 2026-10-18).
+  const maker = await handleFor(b.person).catch(() => null);
   const by = b.byName ? (b.person < 0 ? b.byName : `@${b.byName}`) : b.person > 0 ? `FID ${b.person}` : 'a wallet account';
-  return { b, title: adaptation?.title ?? 'a scene', version, handle, frames, by };
+  return { b, title: adaptation?.title ?? 'a scene', version, handle, frames, by, maker };
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -38,7 +40,7 @@ export default async function BoardPage({ params }: Props) {
   const { id } = await params;
   const l = await load(id);
   if (!l) notFound();
-  const { b, title, version, handle, frames, by } = l;
+  const { b, title, version, handle, frames, by, maker } = l;
   const scenePath = handle ? `/@${handle}/${b.adaptationId}` : `/${b.adaptationId}`;
   if (b.hidden)
     return (
@@ -53,7 +55,7 @@ export default async function BoardPage({ params }: Props) {
   return (
     <main className="rx">
       <p className="label rx-kicker">
-        A storyboard of {title}, version {b.versionId} · by {by}
+        A storyboard of {title}, version {b.versionId} · by {maker ? <Link href={`/@${maker}`}>{by}</Link> : by}
       </p>
       <h1 className="rx-title">{b.title || 'Untitled storyboard'}</h1>
       <p className="label rx-kicker">

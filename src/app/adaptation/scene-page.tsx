@@ -182,7 +182,12 @@ export async function ScenePage({ adaptation, version, handle, fixed }: { adapta
             </div>
             <div>
               <dt className="label">Adaptation</dt>
-              <dd>@{handle}</dd>
+              <dd>
+                {/* The byline links to the person's public profile (owner, 2026-10-18). */}
+                <Link href={`/@${handle}`}>
+                  <Handle handle={handle} />
+                </Link>
+              </dd>
             </div>
             <div>
               <dt className="label">Licence</dt>
