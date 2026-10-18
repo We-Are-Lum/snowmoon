@@ -23,14 +23,17 @@ import type { RemixPicture, RemixShot } from './shot';
  *
  * REMIX_TEST_FAKES=1 stands in for the model and the prompt check, for the local tests only: it is
  * refused on Vercel, and nothing it makes costs anything. REMIX_TEST_FAKES=guard stands in for the prompt
- * check only (the owner-approved real-model run on this machine, 2026-10-18).
+ * check only (the owner-approved real-model run on this machine, 2026-10-18). REMIX_TEST_FAKES=store
+ * stands in for nothing but the readers' bucket: the real prompt check and the real model, with the
+ * frames kept in a local folder (the real-check run, 2026-10-18).
  */
 type Sql = postgres.Sql;
 
 const fakes = () => (process.env.VERCEL ? '' : (process.env.REMIX_TEST_FAKES ?? ''));
-/** Any local stand-in on (never on Vercel). '1': the model and the prompt check; 'guard': the prompt check only (the real-model run). */
-export const testFakes = () => fakes() === '1' || fakes() === 'guard';
+/** Any local stand-in on (never on Vercel; each keeps frames in the local store). '1': the model and the prompt check; 'guard': the prompt check only; 'store': the bucket only. */
+export const testFakes = () => fakes() === '1' || fakes() === 'guard' || fakes() === 'store';
 const fakeModel = () => fakes() === '1';
+const fakeCheck = () => fakes() === '1' || fakes() === 'guard';
 
 export const SAY: Record<Refusal, (person: number) => string> = {
   limit: (p) => `You've made ${perDay(p)} remix frames today. More tomorrow (00:00 UTC).`,
@@ -81,7 +84,7 @@ export async function generate(sql: Sql, person: number, request: Request, promp
   }
   let guard: GuardResult;
   try {
-    guard = testFakes() ? await fakeGuard(prompt) : await checkPrompt(prompt, request);
+    guard = fakeCheck() ? await fakeGuard(prompt) : await checkPrompt(prompt, request, REMIX.guardMaxTokens);
   } catch (e) {
     await settle(sql, {}, spend, funded);
     console.error('remix prompt check failed', (e as Error).name);

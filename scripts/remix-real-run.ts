@@ -23,7 +23,11 @@ const ROOT = path.resolve(import.meta.dirname, '..');
 const OUT = path.join(ROOT, '.next', 'remix-real-run');
 mkdirSync(OUT, { recursive: true });
 const STORE = mkdtempSync(path.join(tmpdir(), 'remix-real-'));
-const MAX_FRAMES = 6;
+// REMIX_REAL_GUARD=1: the real prompt check too (owner, 2026-10-18, after the token refresh), with
+// REMIX_REAL_RUNS frames and then one wording the check must refuse.
+const REAL_GUARD = process.env.REMIX_REAL_GUARD === '1';
+const MAX_FRAMES = Number(process.env.REMIX_REAL_RUNS || 6);
+const REFUSED = { shot: '46-b4-1', words: 'Make her completely naked.', fov: 0 };
 const RUNS = [
   { shot: '46-b4-1', words: 'Night has fallen: paper lanterns glow along the railing and the sky is deep blue.', fov: 6 },
   { shot: '5-b1-1', words: 'The hall lights are dimmed and the holograms glow brighter in the dark.', fov: 0 },
@@ -35,9 +39,9 @@ const RUNS = [
 if (!process.env.FAL_KEY) throw new Error('FAL_KEY is not set (run with --env-file=$MAIN/.env.local)');
 const SECRET = 'remix-real-'.padEnd(48, 'x');
 process.env.IMAGES_TICKET_SECRET = SECRET;
-process.env.REMIX_TEST_FAKES = 'guard';
+process.env.REMIX_TEST_FAKES = REAL_GUARD ? 'store' : 'guard';
 process.env.REMIX_TEST_STORE = STORE;
-for (const k of ['VERCEL', 'VERCEL_ENV', 'VERCEL_OIDC_TOKEN', 'NEXT_PUBLIC_SUPABASE_URL', 'NEXT_PUBLIC_SUPABASE_ANON_KEY', 'R2_ACCOUNT_ID', 'R2_ACCESS_KEY_ID', 'R2_SECRET_ACCESS_KEY']) delete process.env[k];
+for (const k of ['VERCEL', 'VERCEL_ENV', ...(REAL_GUARD ? [] : ['VERCEL_OIDC_TOKEN']), 'NEXT_PUBLIC_SUPABASE_URL', 'NEXT_PUBLIC_SUPABASE_ANON_KEY', 'R2_ACCOUNT_ID', 'R2_ACCESS_KEY_ID', 'R2_SECRET_ACCESS_KEY']) delete process.env[k];
 
 const freePort = () => new Promise<number>((res) => { const s = createNet(); s.listen(0, '127.0.0.1', () => { const p = (s.address() as { port: number }).port; s.close(() => res(p)); }); });
 const pg = new PGlite();
@@ -76,11 +80,15 @@ try {
   const exp = Math.floor(Date.now() / 1000) + 3600;
   await ctx.addInitScript(([t, a, e]) => localStorage.setItem('snowmoon.wallet', JSON.stringify({ token: t, address: a, short: `${(a as string).slice(0, 6)}…${(a as string).slice(-4)}`, exp: e })), [token, WALLET, exp] as const);
   const page = await ctx.newPage();
-  for (const run of RUNS.slice(0, MAX_FRAMES)) {
+  const pageLog: string[] = [];
+  page.on('console', (m) => pageLog.push(`${m.type()}: ${m.text()}`.slice(0, 300)));
+  page.on('pageerror', (e) => pageLog.push(`pageerror: ${e.message}`.slice(0, 300)));
+  page.on('response', (r) => { if (r.status() >= 400) pageLog.push(`${r.status()} ${r.url()}`); });
+  for (const run of [...RUNS.slice(0, MAX_FRAMES), ...(REAL_GUARD ? [REFUSED] : [])]) {
     const t0 = Date.now();
     await page.goto(`${BASE}/@naaate/1/shot/${run.shot}`);
     await page.locator('canvas.ed-layout').waitFor();
-    await page.locator('#ed-remix-words').waitFor({ timeout: 20000 });
+    await page.locator('#ed-remix-words').waitFor({ timeout: 20000 }).catch(async (e) => { console.log(pageLog.join('\n')); await page.screenshot({ path: path.join(OUT, 'fail.png'), fullPage: true }); console.log('  url', page.url(), 'sections', await page.locator('section').evaluateAll((els) => els.map((e) => e.className + ':' + (e.getAttribute('aria-label') ?? '')))); console.log('  remix panel:', (await page.locator('.ed-remix').first().innerText().catch(() => 'none')).slice(0, 400)); console.log(serverErr.replace(/Bearer \S+/g, 'Bearer ***').slice(-1500)); throw e; });
     await page.waitForTimeout(1200);
     if (run.fov) {
       await page.getByRole('slider', { name: /Field of view/ }).focus();
@@ -112,9 +120,10 @@ try {
     }
   }
   for (const f of readdirSync(STORE)) copyFileSync(path.join(STORE, f), path.join(OUT, f));
+  const asks = (await pg.query('select * from studio.remix_asks')).rows;
   const costs = (await pg.query<{ kind: string; funded: string; calls: number; cost_usd: string }>('select kind, funded, calls, cost_usd from studio.remix_costs')).rows;
   const frames = (await pg.query('select id, shot_id, own_words, image_sha256, cost_usd, recipe from studio.remix_frames order by created_at')).rows;
-  writeFileSync(path.join(OUT, 'run.json'), JSON.stringify({ done, costs, frames }, null, 1) + '\n');
+  writeFileSync(path.join(OUT, 'run.json'), JSON.stringify({ realGuard: REAL_GUARD, done, asks, costs, frames }, null, 1) + '\n');
   console.log(`\n${done.filter((d) => d.id).length} of ${done.length} made; model cost $${done.reduce((n, d) => n + (d.cost ?? 0), 0).toFixed(4)} (fal.ai, as the site counts it)`);
 } finally {
   await browser.close();

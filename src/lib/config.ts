@@ -141,6 +141,13 @@ export const REMIX = {
   maxPictures: 4,
   /** The exact prompt sent: the shot's own prompt from the version's recipe, the plate's line and their words. */
   promptMaxChars: 6000,
+  /**
+   * Tokens for the prompt check on a Remix prompt (the shot's own prompt and the person's words, up to
+   * 4,400 characters). At Pictures' 400 the check sometimes spent them all reasoning and gave no
+   * answer, which counts as a refusal: 6 of 78 plain prompts in the real check of 2026-10-18. Only the
+   * tokens used are billed (about 200 to 400).
+   */
+  guardMaxTokens: 1200,
   /** The worst case reserved before a Generate: every picture and the output rounded up to 1 MP, plus the prompt check. */
   reserveUsd: (pictures: number) => (1 + pictures) * 0.01 + 0.0015,
   /** Storyboards: frames per board and each frame's length (seconds). */

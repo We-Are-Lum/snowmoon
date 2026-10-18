@@ -96,7 +96,7 @@ export async function POST(request: Request) {
       assist: { shot_prompt: 'the version\'s own prompt for this shot, drafted by the coding agent', plate_line: 'drafted by the coding agent', own_words: 'the remixer\'s, unchanged' },
       by_name: by.name,
       by_name_source: by.source,
-      ...(testFakes() ? { test: process.env.REMIX_TEST_FAKES === '1' ? 'made by the local test stand-in, not a model' : 'a local test run: the real model, with the prompt check stood in' } : {}),
+      ...(testFakes() ? { test: process.env.REMIX_TEST_FAKES === '1' ? 'made by the local test stand-in, not a model' : process.env.REMIX_TEST_FAKES === 'store' ? 'a local test run: the real model and prompt check, kept on this machine' : 'a local test run: the real model, with the prompt check stood in' } : {}),
     },
     imageUrl: url,
     imageSha256: sha256,
