@@ -1,0 +1,45 @@
+{
+ "about": "Fifteen Days v6, fifth round: the robot bringing the menus, Bai at the table. DRAFTED prompt.",
+ "out": "images-out/preprod/pass3",
+ "ledger": "images-out/preprod/ledger-s7.json",
+ "cap_usd": 35.0,
+ "style": "",
+ "jobs": [
+  {
+   "id": "cov-cafe-OTS-Z-robot-E50",
+   "shot": "cov-cafe-OTS-Z-menu",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-cafe-OTS-Z-menu-E40.png"
+   ],
+   "prompt": "Add the serving robot: a machine, not a person: a rounded white head with a dark face screen showing two small kind glowing eyes, slim white shoulders and jointed arms holding a flat tray, and no legs at all: below the waist a smooth white column down to a round gliding base, standing beside the far right end of the wooden table next to the tall young man in the cream tunic, holding out the tray with two small glowing menu tablets toward the table. The young man in the orange jacket seen from behind on the left, the young woman with the magenta ponytail seated at the table, and the tall young man in the cream tunic all stay exactly as they are. Keep the drawing, colours, courtyard, string lights, tree, camera, framing and crop exactly. Exactly three people and one robot. No letters or numbers anywhere.",
+   "width": 1344,
+   "height": 752,
+   "seed": 50
+  },
+  {
+   "id": "cov-cafe-OTS-Z-robot-E51",
+   "shot": "cov-cafe-OTS-Z-menu",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-cafe-OTS-Z-menu-E40.png"
+   ],
+   "prompt": "Add the serving robot: a machine, not a person: a rounded white head with a dark face screen showing two small kind glowing eyes, slim white shoulders and jointed arms holding a flat tray, and no legs at all: below the waist a smooth white column down to a round gliding base, standing beside the far right end of the wooden table next to the tall young man in the cream tunic, holding out the tray with two small glowing menu tablets toward the table. The young man in the orange jacket seen from behind on the left, the young woman with the magenta ponytail seated at the table, and the tall young man in the cream tunic all stay exactly as they are. Keep the drawing, colours, courtyard, string lights, tree, camera, framing and crop exactly. Exactly three people and one robot. No letters or numbers anywhere.",
+   "width": 1344,
+   "height": 752,
+   "seed": 51
+  },
+  {
+   "id": "cov-cafe-OTS-Z-robot-E52",
+   "shot": "cov-cafe-OTS-Z-menu",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-cafe-OTS-Z-menu-E40.png"
+   ],
+   "prompt": "Add the serving robot: a machine, not a person: a rounded white head with a dark face screen showing two small kind glowing eyes, slim white shoulders and jointed arms holding a flat tray, and no legs at all: below the waist a smooth white column down to a round gliding base, standing beside the far right end of the wooden table next to the tall young man in the cream tunic, holding out the tray with two small glowing menu tablets toward the table. The young man in the orange jacket seen from behind on the left, the young woman with the magenta ponytail seated at the table, and the tall young man in the cream tunic all stay exactly as they are. Keep the drawing, colours, courtyard, string lights, tree, camera, framing and crop exactly. Exactly three people and one robot. No letters or numbers anywhere.",
+   "width": 1344,
+   "height": 752,
+   "seed": 52
+  }
+ ]
+}

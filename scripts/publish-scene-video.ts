@@ -18,9 +18,9 @@ const ROOT = path.resolve(import.meta.dirname, '..');
 const VERSION = {
   seed: 'fifteen-days',
   version: 1,
-  // The cut as committed on scenes-sound (publish step (a), cfc1aba), and its sha256.
-  mp4: 'scenes-out/fifteen-days/cuts/coverage-v5/coverage-v5.mp4',
-  mp4Sha256: 'f76a3312e1fdc8ee9bc6adaded52dcb9c29fb7338ac0743746a8b069fd527bf5',
+  // The cut as committed on scenes-sound (publish step (a), v6: 7ee4580), and its sha256.
+  mp4: 'scenes-out/fifteen-days/cuts/coverage-v6/coverage-v6.mp4',
+  mp4Sha256: '9391f90d6dcad7906fed8553c57abb42503517d41d8305dc06e057e8faaf4d93',
   // The café master (cov-cafe-MASTER-wave-K7), as a JPEG.
   poster: 'adaptations/fifteen-days/versions/1-poster.jpg',
   posterSha256: '3caad9b7565656b388992b7fa81a078a1e2612d28bb2923729cf6505af584a32',

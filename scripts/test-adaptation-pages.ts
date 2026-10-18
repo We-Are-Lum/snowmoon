@@ -201,7 +201,7 @@ try {
     const embedRaw = await page.locator('meta[name="fc:miniapp"]').getAttribute('content').catch(() => null);
     const embed = embedRaw ? (JSON.parse(embedRaw) as { button?: { title?: string; action?: { url?: string } } }) : null;
     const headOk = canonical === `${PUBLIC}/@naaate/1` && embed?.button?.action?.url === `${PUBLIC}/@naaate/1` && embed?.button?.title === 'Watch it';
-    const pass = headOk && h.status === 200 && res?.status() === 200 && /Fifteen Days/i.test(t) && /@naaate.s chosen version/i.test(t) && player?.src === 'https://media.snowmoon.party/scenes/fifteen-days/v1/fifteen-days-f76a3312e1fd.mp4' && player?.poster === 'https://media.snowmoon.party/scenes/fifteen-days/v1/fifteen-days-poster-3caad9b75656.jpg' && /Version 1 /i.test(t) && /AI-generated, not by the author/i.test(t);
+    const pass = headOk && h.status === 200 && res?.status() === 200 && /Fifteen Days/i.test(t) && /@naaate.s chosen version/i.test(t) && player?.src === 'https://media.snowmoon.party/scenes/fifteen-days/v1/fifteen-days-9391f90d6dca.mp4' && player?.poster === 'https://media.snowmoon.party/scenes/fifteen-days/v1/fifteen-days-poster-3caad9b75656.jpg' && /Version 1 /i.test(t) && /AI-generated, not by the author/i.test(t);
     await record(1, 'owner page', url, `200; title Fifteen Days; @naaate's chosen version; version 1; the AI label; the player plays v1's cut from media.snowmoon.party with the café master as its poster; canonical and fc:miniapp embed point at ${PUBLIC}/@naaate/1`, page, { status: h.status, player, canonical, embedUrl: embed?.button?.action?.url ?? null }, pass);
     await page.context().close();
   }
@@ -404,7 +404,7 @@ try {
   }
 
   // --- The live editor (owner, 2026-10-17): read and play only, from the version's committed files.
-  const ED = '/@naaate/1/shot/46-b4-1';
+  const ED = '/@naaate/1/shot/48-b4-1';
   const outside: string[] = [];
   // The site's own media domain (version 1's video and poster) is the site's, as P6a allows; anything else is outside.
   const ownMedia = (u: string) => /^https:\/\/([a-z0-9-]+\.)?snowmoon\.party\//.test(u);
@@ -578,8 +578,8 @@ try {
     await page.locator('canvas.ed-layout').waitFor();
     await page.waitForTimeout(300);
     const landed = local(page.url());
-    const pass = links.length === 84 && links.every((h) => /^\/@naaate\/1\/shot\/[\w-]+$/.test(h ?? '')) && remixHref === '/@naaate/1/shot/first' && recipeHref === '/@naaate/1/shot/first#recipe' && github === 0 && !/\bfork/i.test(sceneText) && /^\/@naaate\/1\/shot\/(?!first)[\w-]+$/.test(landed);
-    await record(17, 'scene page to the editor', '/@naaate/1', 'all 84 shots link to /@naaate/1/shot/<shot>; REMIX opens the editor on the first shot with a camera and a line, and the address shows that shot; the Recipe link opens its RECIPE tab on the site; no GitHub link and no "fork" in the page', page, { status: 200, shotLinks: links.length, remixHref, recipeHref, githubLinks: github, landed }, pass);
+    const pass = links.length === 85 && links.every((h) => /^\/@naaate\/1\/shot\/[\w-]+$/.test(h ?? '')) && remixHref === '/@naaate/1/shot/first' && recipeHref === '/@naaate/1/shot/first#recipe' && github === 0 && !/\bfork/i.test(sceneText) && /^\/@naaate\/1\/shot\/(?!first)[\w-]+$/.test(landed);
+    await record(17, 'scene page to the editor', '/@naaate/1', 'all 85 shots link to /@naaate/1/shot/<shot>; REMIX opens the editor on the first shot with a camera and a line, and the address shows that shot; the Recipe link opens its RECIPE tab on the site; no GitHub link and no "fork" in the page', page, { status: 200, shotLinks: links.length, remixHref, recipeHref, githubLinks: github, landed }, pass);
     await page.context().close();
   }
   if (outside.length) failures.push(`the editor asked for things outside the site: ${[...new Set(outside)].slice(0, 5).join(', ')}`);

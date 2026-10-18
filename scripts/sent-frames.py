@@ -54,6 +54,7 @@ DEST = {
     "images-out/preprod/plates-small/": f"{SENT}/plates/",
     "images-out/preprod/cards-small/": f"{SENT}/cards/",
     "images-out/preprod/edit-src/": f"{SENT}/edit-src/",  # a finished frame resized as sent to an edit (v5, 2026-10-17)
+    "images-out/preprod/cards2/": f"{SENT}/cards-full/",  # v6 edits that add a person sent the full cast card itself (2026-10-18)
 }
 
 copies: dict[str, str] = {}      # source -> destination
@@ -82,8 +83,8 @@ def want(rel: str, expect: str | None) -> None:
             return
         copies[rel] = DEST[prefix] + rel[len(prefix):]
     rid = Path(rel).stem
-    if rel.startswith("images-out/preprod/edit-src/"):  # resized from the finished frame of the same name
-        want(f"images-out/preprod/pass3/{rid}.png", None)
+    if rel.startswith("images-out/preprod/edit-src/"):  # resized (or, "-crop", cropped and resized) from the finished frame of the same name
+        want(f"images-out/preprod/pass3/{rid.removesuffix('-crop')}.png", None)
         return
     r = recipes.get(rid)
     if rel.startswith("images-out/preprod/pass3/"):
@@ -129,7 +130,7 @@ out = [
     f"# {len(copies)} files to copy into {SENT}/, {len(to_add_in_place)} set frames to add in place; run from {ROOT}",
     "set -euo pipefail",
     f"cd {shlex.quote(str(ROOT))}",
-    f"mkdir -p {SENT}/frames {SENT}/plates {SENT}/cards {SENT}/edit-src",
+    f"mkdir -p {SENT}/frames {SENT}/plates {SENT}/cards {SENT}/cards-full {SENT}/edit-src",
 ]
 for src, dst in sorted(copies.items()):
     out.append(f"cp -p {src} {dst}")
