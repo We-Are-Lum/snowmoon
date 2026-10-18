@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { readingPlace } from '~/lib/glossary-view';
 import { sdk } from '@farcaster/miniapp-sdk';
-import { inMiniApp, signOut, useAuth, type AuthState } from '~/lib/client-auth';
+import { inMiniApp, signOut, signOutWallet, useAuth, useWalletSession, type AuthState } from '~/lib/client-auth';
 import { lastChapter, openedChapters } from '~/lib/chat/device';
 import { COMING, navItems, type NavItem } from '~/lib/nav';
 import type { Intro } from '~/lib/intro';
@@ -15,6 +15,7 @@ import { ExternalLinks } from './external-links';
 import { LegalLine } from './legal-line';
 import { SignInButton } from './sign-in';
 import { ThemeSwitch } from './theme-switch';
+import { WalletSignInButton } from './wallet';
 import '../app/assistant/assistant.css';
 
 /**
@@ -251,9 +252,16 @@ function Nav({ items, path, current }: { items: ReturnType<typeof navItems>; pat
   );
 }
 
+/**
+ * Who is signed in, at the foot of the rail and the menu sheet. Signed out, it offers Farcaster first,
+ * then a wallet (owner, 2026-10-18: the simple step; the editor's own wallet sign-in, reused). A wallet
+ * session (no Farcaster one) shows its shortened address and a Sign out that ends it. Farcaster-only
+ * features keep their own sign-in prompts. Inside a Farcaster app there is no wallet option.
+ */
 function Account({ auth }: { auth: AuthState }) {
+  const wallet = useWalletSession();
   return (
-    <div className="account">
+    <div className={auth.kind === 'signed-out' && !wallet ? 'account account-out' : 'account'}>
       {auth.kind === 'signed-in' ? (
         <>
           <span className="account-name">{auth.username ? `@${auth.username}` : `FID ${auth.fid}`}</span>
@@ -263,10 +271,18 @@ function Account({ auth }: { auth: AuthState }) {
             </button>
           )}
         </>
+      ) : auth.kind === 'signed-out' && wallet ? (
+        <>
+          <span className="account-name">{wallet.short}</span>
+          <button type="button" className="account-action" onClick={signOutWallet}>
+            Sign out
+          </button>
+        </>
       ) : auth.kind === 'signed-out' ? (
         <>
           <span className="account-name">Signed out</span>
-          <SignInButton className="account-action" label="Sign in" />
+          <SignInButton className="account-action" />
+          {!auth.inApp && <WalletSignInButton className="account-action" />}
         </>
       ) : (
         <span className="account-name">…</span>
