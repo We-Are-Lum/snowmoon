@@ -29,7 +29,7 @@
 /* A wallet account's handle is a 42-character address with no break in it: let it wrap anywhere. */
 .scene-facts dd { margin: 0; overflow-wrap: anywhere; }
 
-/* The buttons. Desktop: one column, SHARE, its panel, FORK, MAKE YOUR OWN. */
+/* The buttons. Desktop: one column, SHARE, its panel, REMIX, MAKE YOUR OWN. */
 .scene-actions { display: flex; flex-direction: column; gap: 10px; }
 .scene-btn {
   display: flex; flex-direction: column; align-items: flex-start; gap: 2px;
@@ -41,8 +41,8 @@
 .scene-btn-sub { font-family: var(--reading); font-size: 15px; letter-spacing: 0; text-transform: none; line-height: 1.3; overflow-wrap: anywhere; }
 .scene-share { border: 0; background: var(--btn); color: var(--btn-ink); }
 .scene-share .scene-btn-sub { color: var(--rule); }
-.scene-fork { border: 2px solid var(--ink); color: var(--ink); }
-.scene-fork .scene-btn-sub { color: var(--body); }
+.scene-remix { border: 2px solid var(--ink); color: var(--ink); }
+.scene-remix .scene-btn-sub { color: var(--body); }
 .scene-soon { border: 1px dashed var(--muted); background: transparent; color: var(--body); cursor: default; }
 :where(.scene-btn, .scene-small):focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
 
@@ -75,7 +75,7 @@
 /* A wallet address in a capitals label keeps its lowercase (owner, 2026-10-17). */
 .scene-addr { text-transform: none; }
 
-/* Phone: the player edge to edge, SHARE and FORK side by side, the panel under them, then MAKE YOUR OWN. */
+/* Phone: the player edge to edge, SHARE and REMIX side by side, the panel under them, then MAKE YOUR OWN. */
 @media (max-width: 719px) {
   .scene { padding-top: 0; }
   .scene-top { gap: 18px; }
@@ -87,7 +87,20 @@
   .scene-btn { min-height: 56px; align-items: center; justify-content: center; text-align: center; font-size: 14px; padding: 8px 10px; }
   .scene-btn .scene-btn-sub { display: none; }
   .scene-share { order: 1; }
-  .scene-fork { order: 2; }
+  .scene-remix { order: 2; }
   .scene-share-panel { order: 3; grid-column: 1 / -1; }
   .scene-soon { order: 4; grid-column: 1 / -1; min-height: 52px; font-size: 13px; }
 }
+
+/* Every shot, each a link into the live editor. */
+.scene-shots { margin-top: var(--space-6); display: flex; flex-direction: column; gap: 10px; }
+.scene-shots h2 { margin: 0; font-weight: 400; color: var(--muted); }
+.scene-shot-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
+.scene-shot { display: flex; flex-direction: column; gap: 4px; min-height: var(--tap); color: var(--ink); text-decoration: none; }
+.scene-shot:hover { text-decoration: none; }
+.scene-shot:hover .scene-shot-what { text-decoration: underline; }
+.scene-shot img, .scene-shot-made { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; background: var(--night); }
+.scene-shot-cap { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.scene-shot-cap .label { color: var(--muted); }
+.scene-shot-what { font-size: 14px; line-height: 1.3; color: var(--body); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.scene-shot:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }

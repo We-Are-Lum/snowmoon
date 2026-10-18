@@ -8,20 +8,20 @@ import { inMiniApp } from '~/lib/client-auth';
  * The buttons under an adaptation's player (docs/proposals/adaptation-urls.md; the owner's mockup,
  * board "1 · Scene page" and "8 · Phone: watch"). SHARE opens a panel: the always-latest link,
  * cast it (the cast composer inside the Farcaster app) or copy it, and the fixed link of the
- * version on screen. FORK goes to the repository's "How to fork" for now. MAKE YOUR OWN is not built.
+ * version on screen. REMIX opens the live shot editor (owner, 2026-10-17; named Remix, 2026-10-18). MAKE YOUR OWN is not built.
  */
 export function SceneActions({
   handle,
   title,
   latestUrl,
   fixedUrl,
-  forkUrl,
+  remixUrl,
 }: {
   handle: string;
   title: string;
   latestUrl: string;
   fixedUrl: string;
-  forkUrl: string;
+  remixUrl: string;
 }) {
   const [open, setOpen] = useState(false);
   const [copied, setCopied] = useState<'latest' | 'fixed' | 'failed-latest' | 'failed-fixed' | null>(null);
@@ -91,9 +91,9 @@ export function SceneActions({
         </div>
       )}
 
-      <a className="scene-btn scene-fork" href={forkUrl}>
-        <span>Fork</span>
-        <span className="scene-btn-sub">Get the code and the guide to make your own version</span>
+      <a className="scene-btn scene-remix" href={remixUrl}>
+        <span>Remix</span>
+        <span className="scene-btn-sub">Open the live editor: move the camera, play the lines. Remixing opens this week.</span>
       </a>
 
       {/* Not built yet: visible, announced as unavailable, does nothing. */}

@@ -42,7 +42,10 @@ const nextConfig: NextConfig = {
       // A glossary word's share card (src/app/api/glossary-card) reads the glossary on request.
       './content/snowmoon/glossary.json',
       './config/**',
-      './adaptations/**',
+      // Only the scene docs read at request time (src/lib/adaptations.ts), not the frames and sound
+      // committed beside them (publish step (a)): those would add ~150 MB to every function.
+      './adaptations/*/*.md',
+      './adaptations/*/*.json',
       './node_modules/@fontsource/crimson-pro/files/crimson-pro-latin-*-normal.woff',
       './node_modules/@fontsource/crimson-pro/files/crimson-pro-latin-*-italic.woff',
       './node_modules/@fontsource/dm-mono/files/dm-mono-latin-*-normal.woff',
@@ -59,6 +62,7 @@ const nextConfig: NextConfig = {
   async rewrites() {
     return [
       { source: '/@:handle/:id/v/:n', destination: '/adaptation/:id/by/:handle/v/:n' },
+      { source: '/@:handle/:id/shot/:shot', destination: '/adaptation/:id/by/:handle/shot/:shot' },
       { source: '/@:handle/:id', destination: '/adaptation/:id/by/:handle' },
       { source: '/:id(\\d{1,9})', destination: '/adaptation/:id' },
     ];

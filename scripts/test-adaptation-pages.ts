@@ -19,9 +19,10 @@
  *
  * Checks: /@naaate/1, /@naaate/1/v/1, /1, a renamed name, a slug, a wallet address (and its
  * checksum case), "nothing here yet", SHARE and copy link, the cast composer (website and inside a
- * Farcaster client), and the phone width. Version 1's video and poster are named on media.snowmoon.party
- * (uploaded in publish step (b)); the browser here is refused anything outside the local site, so the
- * check reads the player's src and poster rather than playing it.
+ * Farcaster client), the phone width, and the live shot editor (13-17: loading, playing (nothing is saved:
+ * no fork file, no download), the layers, a phone with a touch drag, and the scene page's links into it, REMIX and the recipe). Version 1's video
+ * and poster are named on media.snowmoon.party (uploaded in publish step (b)); the browser here is
+ * refused anything outside the local site, so the check reads the player's src and poster rather than playing it.
  */
 import path from 'node:path';
 import { mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
@@ -51,7 +52,7 @@ await pg.exec(`create role anon nologin; create role authenticated nologin; crea
 for (const f of readdirSync(path.join(ROOT, 'supabase/migrations')).filter((f) => f.endsWith('.sql')).sort()) {
   await pg.exec(readFileSync(path.join(ROOT, 'supabase/migrations', f), 'utf8'));
 }
-// Seed (as postgres): a wallet account with its own version of adaptation 1 (a fork of version 1)
+// Seed (as postgres): a wallet account with its own version of adaptation 1 (a remix of version 1)
 // on its page; the owner's old name, seen before a rename; a second adaptation with no versions.
 const w = await pg.query<{ id: number }>(`insert into studio.wallet_accounts (address) values ($1) returning id`, [WALLET]);
 const walletPerson = -Number(w.rows[0].id);
@@ -271,8 +272,8 @@ try {
     const pass =
       overflow.length === 0 && phoneSideways <= 0 &&
       h.status === 200 && [307, 308].includes(hc.status) && hc.location === url && local(page.url()) === url &&
-      new RegExp(`Version ${v2} .*forked from version 1`, 'i').test(t) && t.includes(`@${WALLET}`) && where.includes(`/@${WALLET}/1`) && where.includes(`@${WALLET}`);
-    await record(6, 'wallet address', `/@${WALLET_CHECKSUM}/1 and ${url}`, `checksum case redirects to ${url}; that page shows the wallet's version ${v2}, forked from version 1; the address shows lowercase, in the capitals label too; it stays inside its column (desktop) and the page has no sideways scroll at 390px`, page, { status: h.status, checksumStatus: hc.status, checksumLocation: hc.location, label: where, overflowing: overflow, phoneSidewaysPx: phoneSideways }, pass);
+      new RegExp(`Version ${v2} .*remixed from version 1`, 'i').test(t) && t.includes(`@${WALLET}`) && where.includes(`/@${WALLET}/1`) && where.includes(`@${WALLET}`);
+    await record(6, 'wallet address', `/@${WALLET_CHECKSUM}/1 and ${url}`, `checksum case redirects to ${url}; that page shows the wallet's version ${v2}, remixed from version 1; the address shows lowercase, in the capitals label too; it stays inside its column (desktop) and the page has no sideways scroll at 390px`, page, { status: h.status, checksumStatus: hc.status, checksumLocation: hc.location, label: where, overflowing: overflow, phoneSidewaysPx: phoneSideways }, pass);
     await page.context().close();
   }
 
@@ -401,6 +402,187 @@ try {
     await record(10, 'phone width', url, 'at 390x844: no sideways scroll; SHARE in view horizontally and at least 44px tall', page, { status: 200, sidewaysScrollPx: sideways, shareBox: share }, pass);
     await page.context().close();
   }
+
+  // --- The live editor (owner, 2026-10-17): read and play only, from the version's committed files.
+  const ED = '/@naaate/1/shot/48-b4-1';
+  const outside: string[] = [];
+  // The site's own media domain (version 1's video and poster) is the site's, as P6a allows; anything else is outside.
+  const ownMedia = (u: string) => /^https:\/\/([a-z0-9-]+\.)?snowmoon\.party\//.test(u);
+  const watchOutside = (page: Page) => page.on('request', (r) => !r.url().startsWith(BASE) && !r.url().startsWith('data:') && !r.url().startsWith('blob:') && !ownMedia(r.url()) && outside.push(r.url()));
+  type Stage = { screenOf(k: string): { x: number; y: number } | null };
+  const handleAt = async (page: Page, kind: string) => {
+    const box = await page.locator('canvas.ed-orbit').boundingBox();
+    const p = await page.locator('canvas.ed-orbit').evaluate((c, k) => (c as HTMLCanvasElement & { edStage?: Stage }).edStage?.screenOf(k) ?? null, kind);
+    return box && p ? { x: box.x + p.x, y: box.y + p.y } : null;
+  };
+  /** Text under 12px and controls under 44px tall, inside the editor. */
+  const floors = (page: Page) =>
+    page.evaluate(() => {
+      const small = new Set<string>();
+      const tiny: string[] = [];
+      for (const el of Array.from(document.querySelectorAll('.ed *'))) {
+        const cs = getComputedStyle(el);
+        const own = Array.from(el.childNodes).some((n) => n.nodeType === 3 && n.textContent!.trim());
+        if (own && cs.display !== 'none' && parseFloat(cs.fontSize) < 12) small.add(`${el.tagName.toLowerCase()}.${(el as HTMLElement).className} ${cs.fontSize}`);
+      }
+      for (const el of Array.from(document.querySelectorAll('.ed button, .ed select, .ed-nav a, .ed input[type=range]'))) {
+        const r = el.getBoundingClientRect();
+        if (r.width && r.height < 43.5) tiny.push(`${el.tagName.toLowerCase()} "${(el as HTMLElement).innerText?.slice(0, 20)}" ${Math.round(r.height)}px`);
+      }
+      return { small: [...small], tiny };
+    });
+
+  // 13. The editor loads one shot: 3D set and live layout drawn, the frame and its set frame, the labels.
+  {
+    const page = await newPage(browser, { width: 1440, height: 1000 });
+    watchOutside(page);
+    const res = await page.goto(BASE + ED);
+    await page.locator('canvas.ed-layout').waitFor();
+    await page.waitForTimeout(1500);
+    const layoutDrawn = await page.locator('canvas.ed-layout').evaluate((c) => {
+      const d = (c as HTMLCanvasElement).toDataURL('image/png');
+      return d.length > 20000;
+    });
+    await page.waitForFunction(() => Array.from(document.querySelectorAll('.ed-pair img')).every((i) => (i as HTMLImageElement).complete), null, { timeout: 10000 }).catch(() => {});
+    const imgs = await page.locator('.ed-pair img').evaluateAll((els) => els.map((e) => (e as HTMLImageElement).naturalWidth));
+    const recipe = await page.getByRole('link', { name: /The recipe/ }).getAttribute('href');
+    const github = await page.locator('.ed a[href*="github.com"]').count();
+    const proto = await page.getByRole('link', { name: /where it.s going/i }).getAttribute('href');
+    const gen = await page.getByRole('button', { name: 'Generate' }).getAttribute('aria-disabled');
+    const t = await mainText(page);
+    const f = await floors(page);
+    const pass =
+      res?.status() === 200 && layoutDrawn && imgs.length === 2 && imgs.every((w) => w > 0) &&
+      recipe === '#recipe' && github === 0 && proto === 'https://claude.ai/artifact/NAuaFhUtoQKx8zHuANxwhU' && gen === 'true' &&
+      /Remixing opens this week/.test(t) && !/fork/i.test(t) && /Generate and publish come next/i.test(t) && /AI-generated, not by the author/i.test(t) &&
+      /why does Dzego like Minpentai so much/.test(t) && f.small.length === 0 && f.tiny.length === 0;
+    await record(13, 'editor loads a shot', ED, 'the 3D set and the live layout draw; the frame and its set frame load; Generate is disabled ("Remixing opens this week."); no "fork" anywhere; the AI label, the recipe link (on the site, #recipe; no GitHub link) and the prototype link as "where it\'s going"; no text under 12px, no control under 44px', page, { status: res?.status() ?? null, layoutDrawn, images: imgs, recipe, githubLinks: github, proto, generateDisabled: gen, under12px: f.small, under44px: f.tiny }, pass);
+    await page.context().close();
+  }
+
+  // 14. Play with it: drag a person and the camera, a slider, a preset, edit the prompt and the line; nothing is saved or downloaded.
+  {
+    const page = await newPage(browser, { width: 1440, height: 1000 });
+    watchOutside(page);
+    const downloads: string[] = [];
+    page.on('download', (d) => downloads.push(d.suggestedFilename()));
+    await page.goto(BASE + ED);
+    await page.locator('canvas.ed-layout').waitFor();
+    await page.waitForTimeout(1200);
+    const before = await page.locator('canvas.ed-layout').evaluate((c) => (c as HTMLCanvasElement).toDataURL());
+    const d0 = await handleAt(page, 'B'); // Bai: Deluin has the look ring on him in this shot
+    if (d0) {
+      await page.mouse.move(d0.x, d0.y);
+      await page.mouse.down();
+      await page.mouse.move(d0.x + 40, d0.y + 25, { steps: 8 });
+      await page.mouse.up();
+    }
+    const c0 = await handleAt(page, 'cam');
+    if (c0) {
+      await page.mouse.move(c0.x, c0.y);
+      await page.mouse.down();
+      await page.mouse.move(c0.x - 30, c0.y + 20, { steps: 8 });
+      await page.mouse.up();
+    }
+    const fov = page.getByRole('slider', { name: /Field of view/ });
+    await fov.focus();
+    for (let i = 0; i < 6; i++) await page.keyboard.press('ArrowRight');
+    await page.getByRole('button', { name: 'Turn ⟳' }).click().catch(() => {});
+    await page.waitForTimeout(300);
+    const after = await page.locator('canvas.ed-layout').evaluate((c) => (c as HTMLCanvasElement).toDataURL());
+    const caption = await page.locator('.ed-look figcaption').first().innerText();
+    await page.getByRole('tab', { name: 'Prompt' }).click();
+    await page.locator('#ed-prompt').fill('A test prompt, edited here only.');
+    await page.getByRole('tab', { name: 'Line' }).click();
+    await page.locator('.ed-line textarea').first().fill('A test line, edited here only.');
+    const promptLabel = await page.getByRole('tab', { name: 'Prompt' }).click().then(() => page.locator('label[for="ed-prompt"]').innerText());
+    const forkControls = await page.getByRole('button', { name: /fork/i }).count();
+    const pass =
+      !!d0 && !!c0 && before !== after && /changed/i.test(caption) && /edited/i.test(promptLabel) && forkControls === 0 && downloads.length === 0;
+    // A preset, then reset: back to version 1.
+    await page.getByRole('button', { name: /^MASTER-wave/ }).click();
+    await page.getByRole('button', { name: /^Reset to version 1/ }).click();
+    const resetCaption = await page.locator('.ed-look figcaption').first().innerText();
+    await record(14, 'editor play, nothing saved', ED, 'dragging Bai and the camera, the field of view and a turn change the live layout; the prompt and the line edit in the browser; no fork control and no download; Reset returns to version 1', page, { status: 200, dragged: { bai: d0, camera: c0 }, layoutChanged: before !== after, caption, promptLabel, forkControls, downloads: downloads.length, resetCaption }, pass && /as version 1/i.test(resetCaption));
+    await page.context().close();
+  }
+
+  // 15. VOICE plays the converted line (never a raw take); PICTURE shows the plate and cast cards; RECIPE lists hashes, models, licences, seeds and cost.
+  {
+    const page = await newPage(browser, { width: 1280, height: 900 });
+    watchOutside(page);
+    await page.goto(BASE + ED);
+    await page.getByRole('tab', { name: 'Voice' }).click();
+    const src = await page.locator('.ed-pane audio').first().getAttribute('src');
+    const a = src ? await fetch(BASE + src) : null;
+    const played = await page.locator('.ed-pane audio').first().evaluate(async (el) => {
+      const au = el as HTMLAudioElement;
+      au.muted = true;
+      await au.play().catch(() => {});
+      await new Promise((r) => setTimeout(r, 600));
+      return { duration: au.duration, time: au.currentTime };
+    });
+    const voiceText = await page.locator('.ed-pane').innerText();
+    await page.getByRole('tab', { name: 'Picture' }).click();
+    await page.waitForFunction(() => Array.from(document.querySelectorAll('.ed-pane img')).every((i) => (i as HTMLImageElement).complete), null, { timeout: 10000 }).catch(() => {});
+    const pics = await page.locator('.ed-pane img').evaluateAll((els) => els.map((e) => (e as HTMLImageElement).naturalWidth));
+    await page.getByRole('tab', { name: 'Recipe' }).click();
+    const rt = await page.locator('.ed-pane').innerText();
+    const pass =
+      !!src && /\/voice\/b4-1\.wav$/.test(src) && a?.status === 200 && /audio/.test(a.headers.get('content-type') ?? '') && played.duration > 1 && played.time > 0 &&
+      /raw take stays private/i.test(voiceText) && pics.length >= 2 && pics.every((w) => w > 0) &&
+      /46a381d0a0111486f8b5b2cfd6e4c169f6f61b66219ce8827f2c92425e2bc51f/.test(rt) && /Apache-2\.0/.test(rt) && /seed \d+/.test(rt) && /\$0\.\d{4}/.test(rt);
+    await record(15, 'editor layers', `${ED} (Voice, Picture, Recipe)`, 'VOICE plays the converted line b4-1 from this site; PICTURE shows the plate and the cast cards; RECIPE gives the frame\'s sha256, the models and licences, seeds and cost', page, { status: 200, voice: src, voiceStatus: a?.status ?? null, played, pictures: pics }, pass);
+    await page.context().close();
+  }
+
+  // 16. Phone: the same page stacked; the 3D set takes a touch drag.
+  {
+    const page = await newPage(browser, { width: 390, height: 844 });
+    watchOutside(page);
+    await page.goto(BASE + ED);
+    await page.locator('canvas.ed-layout').waitFor();
+    await page.waitForTimeout(1200);
+    const sideways = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+    await page.locator('canvas.ed-orbit').scrollIntoViewIfNeeded();
+    const b0 = await handleAt(page, 'B');
+    const cdp = await page.context().newCDPSession(page);
+    if (b0) {
+      const pt = (x: number, y: number) => [{ x, y, id: 1, radiusX: 4, radiusY: 4, force: 1 }];
+      await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: pt(b0.x, b0.y) });
+      for (let i = 1; i <= 8; i++) await cdp.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: pt(b0.x + i * 4, b0.y + i * 3) });
+      await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+    }
+    await page.waitForTimeout(300);
+    const caption = await page.locator('.ed-look figcaption').first().innerText();
+    const order = await page.evaluate(() => ['.ed-orbit', '.ed-layout', '.ed-pair', '.ed-generate', '.ed-tabs'].map((s) => Math.round(document.querySelector(s)!.getBoundingClientRect().top + scrollY)));
+    const f = await floors(page);
+    const pass = sideways <= 0 && !!b0 && /changed/i.test(caption) && order.every((y, i) => i === 0 || y > order[i - 1]) && f.small.length === 0 && f.tiny.length === 0;
+    await page.screenshot({ path: path.join(OUT, '16b-editor-phone-full.png'), fullPage: true });
+    await record(16, 'editor on a phone', `${ED} at 390x844`, 'no sideways scroll; set, layout, frames, Generate and the layers stacked in that order; a touch drag moves Bai; no text under 12px, no control under 44px', page, { status: 200, sidewaysScrollPx: sideways, touched: b0, caption, order, under12px: f.small, under44px: f.tiny }, pass);
+    await page.context().close();
+  }
+
+  // 17. The scene page reaches the editor: every shot links to it, and so do REMIX and the recipe (on the site, no GitHub).
+  {
+    const page = await newPage(browser, { width: 1280, height: 900 });
+    watchOutside(page);
+    await page.goto(BASE + '/@naaate/1');
+    await page.locator('.scene-shot').first().waitFor();
+    const links = await page.locator('.scene-shot').evaluateAll((els) => els.map((e) => (e as HTMLAnchorElement).getAttribute('href')));
+    const remixHref = await page.getByRole('link', { name: /^Remix/ }).getAttribute('href');
+    const recipeHref = await page.locator('.scene-facts a').getAttribute('href');
+    const github = await page.locator('main a[href*="github.com"]').count();
+    const sceneText = await mainText(page);
+    await page.getByRole('link', { name: /^Remix/ }).click();
+    await page.locator('canvas.ed-layout').waitFor();
+    await page.waitForTimeout(300);
+    const landed = local(page.url());
+    const pass = links.length === 85 && links.every((h) => /^\/@naaate\/1\/shot\/[\w-]+$/.test(h ?? '')) && remixHref === '/@naaate/1/shot/first' && recipeHref === '/@naaate/1/shot/first#recipe' && github === 0 && !/\bfork/i.test(sceneText) && /^\/@naaate\/1\/shot\/(?!first)[\w-]+$/.test(landed);
+    await record(17, 'scene page to the editor', '/@naaate/1', 'all 85 shots link to /@naaate/1/shot/<shot>; REMIX opens the editor on the first shot with a camera and a line, and the address shows that shot; the Recipe link opens its RECIPE tab on the site; no GitHub link and no "fork" in the page', page, { status: 200, shotLinks: links.length, remixHref, recipeHref, githubLinks: github, landed }, pass);
+    await page.context().close();
+  }
+  if (outside.length) failures.push(`the editor asked for things outside the site: ${[...new Set(outside)].slice(0, 5).join(', ')}`);
 
   // The site read as studio_writer, and viewing pages stored no names: only the four seeded
   // (owner, 2026-10-17: names are remembered at sign-in or publish, never on a page view).

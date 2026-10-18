@@ -56,7 +56,7 @@ export function ConsentScreen({ wording, name, onAgree, onCancel, error }: { wor
         {wording.text.map((t, i) => (
           <p key={i}>{t}</p>
         ))}
-        <p>{name ? `Your words will be shown as @${name}.` : 'Your words will be shown with your Farcaster name.'}</p>
+        <p>{name ? `Your words will be shown as @${name}.` : 'Your words will be shown with your name (Farcaster name or wallet address).'}</p>
         {error && <p className="consent-error">{error}</p>}
         <div className="consent-actions">
           <button type="button" className="consent-cancel" onClick={onCancel}>
