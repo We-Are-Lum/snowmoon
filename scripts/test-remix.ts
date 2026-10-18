@@ -122,7 +122,7 @@ try {
     check('R5a', 'no person in the cost totals; nothing readable by anon', !cols.some((c) => /person|fid|id$|at$/.test(c)) && !(anon as { f: boolean }).f && !(anon as { s: boolean }).s, { cols, anon });
   }
   {
-    const f = await saveFrame(sql, { adaptationId: 1, versionId: 1, shotId: '46-b4-1', person: 7373, ownWords: 'test', prompt: 'p', recipe: {}, imageUrl: '/x', imageSha256: 'a'.repeat(64), costUsd: 0, byName: null });
+    const f = await saveFrame(sql, { adaptationId: 1, versionId: 1, shotId: '48-b4-1', person: 7373, ownWords: 'test', prompt: 'p', recipe: {}, imageUrl: '/x', imageSha256: 'a'.repeat(64), costUsd: 0, byName: null });
     const byOther = await setHidden(sql, 8484, f.id, true);
     const byMaint = await setHidden(sql, 6786, f.id, true);
     const makerUndo = await setHidden(sql, 7373, f.id, false);
@@ -151,7 +151,7 @@ try {
     if ((await fetch(BASE + '/about').catch(() => null))?.ok) break;
     await new Promise((r) => setTimeout(r, 500));
   }
-  const ED = '/@naaate/1/shot/46-b4-1';
+  const ED = '/@naaate/1/shot/48-b4-1';
   browser = await chromium.launch({ channel: 'chrome', args: ['--disable-features=LocalNetworkAccessChecks,BlockInsecurePrivateNetworkRequests,PrivateNetworkAccessForNavigations'] });
   const outside: string[] = [];
   const composer: string[] = [];
@@ -243,7 +243,7 @@ try {
     await page.locator('.ed-remix .ed-warn').waitFor({ timeout: 15000 });
     const warn = await page.locator('.ed-remix .ed-warn').innerText();
     const n1 = (await q1(`select count(*)::int as n from studio.remix_frames`)) as { n: number };
-    const bad = await fetch(BASE + '/api/remix/generate', { method: 'POST', headers: { 'content-type': 'application/json', authorization: `Bearer ${token}` }, body: JSON.stringify({ adaptation: 1, version: 1, shot: '46-b4-1', words: 'x', layout: 'data:image/png;base64,AAAA' }) });
+    const bad = await fetch(BASE + '/api/remix/generate', { method: 'POST', headers: { 'content-type': 'application/json', authorization: `Bearer ${token}` }, body: JSON.stringify({ adaptation: 1, version: 1, shot: '48-b4-1', words: 'x', layout: 'data:image/png;base64,AAAA' }) });
     check('R9', 'a blocked prompt is refused and nothing saved; a bad layout is refused (400)', /rules don.t allow/.test(warn) && n1.n === n0.n && bad.status === 400, { warn, saved: n1.n - n0.n, bad: bad.status }, await shot(page, 'R9-blocked'));
 
     // R10 share and hide
@@ -327,7 +327,7 @@ try {
     const cast = composer.filter((u) => decodeURIComponent(u).includes(`/storyboard/${sbId}`)).length;
     check('S2', 'save: its own page plays it, with title, maker, AI label, Share and the cast composer', !!row && row.title === 'Night at the café' && row.items.length === 2 && row.items.some((i) => i.frame) && Object.keys(row.takes).length === 1 && row.person === -acct && /Night at the café/.test(t) && /by 0x5aae…eaed/i.test(t) && /AI-generated/i.test(t) && cast >= 1, { row, cast }, pageShot);
 
-    const bad = await fetch(`${BASE}/api/remix/storyboard`, { method: 'POST', headers: { 'content-type': 'application/json', authorization: `Bearer ${otherToken}` }, body: JSON.stringify({ adaptation: 1, version: 1, items: [{ shot: '46-b4-1', frame: row?.items.find((i) => i.frame)?.frame, seconds: 2 }] }) });
+    const bad = await fetch(`${BASE}/api/remix/storyboard`, { method: 'POST', headers: { 'content-type': 'application/json', authorization: `Bearer ${otherToken}` }, body: JSON.stringify({ adaptation: 1, version: 1, items: [{ shot: '48-b4-1', frame: row?.items.find((i) => i.frame)?.frame, seconds: 2 }] }) });
     const otherHide = await fetch(`${BASE}/api/remix/storyboard/${sbId}/hide`, { method: 'POST', headers: { 'content-type': 'application/json', authorization: `Bearer ${otherToken}` }, body: '{}' });
     await page.getByRole('button', { name: 'Hide this' }).click();
     await page.waitForLoadState('load');
@@ -376,8 +376,8 @@ try {
         await new Promise((r) => setTimeout(r, 500));
       }
     };
-    const status = async () => (await (await fetch(`${BASE}/api/remix/status?adaptation=1&version=1&shot=46-b4-1`, { headers: { authorization: `Bearer ${token}` } })).json()) as { ready: boolean; free: boolean };
-    const gen = async () => (await fetch(BASE + '/api/remix/generate', { method: 'POST', headers: { 'content-type': 'application/json', authorization: `Bearer ${token}` }, body: JSON.stringify({ adaptation: 1, version: 1, shot: '46-b4-1', words: 'x', layout: 'data:image/png;base64,AAAA' }) })).status;
+    const status = async () => (await (await fetch(`${BASE}/api/remix/status?adaptation=1&version=1&shot=48-b4-1`, { headers: { authorization: `Bearer ${token}` } })).json()) as { ready: boolean; free: boolean };
+    const gen = async () => (await fetch(BASE + '/api/remix/generate', { method: 'POST', headers: { 'content-type': 'application/json', authorization: `Bearer ${token}` }, body: JSON.stringify({ adaptation: 1, version: 1, shot: '48-b4-1', words: 'x', layout: 'data:image/png;base64,AAAA' }) })).status;
     await restart({ REMIX_GENERATE: 'off' });
     const offStatus = await status();
     const offGen = await gen();
