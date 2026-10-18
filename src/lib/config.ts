@@ -104,11 +104,13 @@ export const CHAT = {
 
 /** Moderation only: these FIDs may hide content. They never promote or rank anything. */
 /**
- * Adaptations are out of view (owner, 2026-10-08: image generation first). Off: no Adaptations in
- * the rail, menu, intro or About; no "cited in" marks in the reader; /adaptations and its pages say
- * nothing is published yet. Every file stays in the repo; set to true to bring them back.
+ * Adaptations were out of view from 2026-10-08 (owner: image generation first). Back in view on
+ * 2026-10-18 (owner: "adaptations isn't in the main menu or on the homepage yet"): `visible` puts
+ * Adaptations in the rail and menu, opens /adaptations (Fifteen Days first, then the seed briefs)
+ * and the home card. `inReader` stays off: no "cited in" marks or planning line in the reader, which
+ * the owner hasn't asked back.
  */
-export const ADAPTATIONS = { visible: false };
+export const ADAPTATIONS = { visible: true, inReader: false };
 
 /**
  * Adaptation pages (/@<fname>/<id>, /@<fname>/<id>/v/<n>, /<id>; docs/proposals/adaptation-urls.md).

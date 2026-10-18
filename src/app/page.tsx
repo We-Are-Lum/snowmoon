@@ -14,6 +14,7 @@ import { HomeStart } from '~/components/home-start';
 import { HomeMomentCard } from '~/components/home-moment';
 import { HomeFeed, type HomeFeedItem } from '~/components/home-feed';
 import { HomeMinpentai } from '~/components/home-minpentai';
+import { SceneCard } from '~/components/scene-card';
 import '../styles/home.css';
 
 // Rendered per request, like /images: "Just made" is the newest images now. (With ISR, revalidate = 60,
@@ -58,6 +59,8 @@ export default async function Home() {
   ];
   const more = [
     { href: '/assistant', name: 'Assistant', what: 'Ask about the book, privately', meta: '→' },
+    // Model-drafted (coding agent, 2026-10-18), for the owner.
+    { href: '/adaptations', name: 'Adaptations', what: 'Scenes made from the book: watch them, and remix a shot', meta: 'Watch · remix →' },
     { href: '/minpentai', name: 'Minpentai', what: 'The game from the book', meta: 'Learn · play →' },
     { href: '/images', name: 'Pictures', what: 'Images readers made for passages, each with how it was made', meta: 'Trial →' },
   ];
@@ -103,6 +106,7 @@ export default async function Home() {
 
       <div className="home-body">
         <div className="home-cards">
+          <SceneCard />
           <HomeMomentCard moments={HOME_MOMENTS} />
           <HomeFeed items={items} unavailable={images === null} />
           <HomeMinpentai />
