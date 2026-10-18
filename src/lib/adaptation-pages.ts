@@ -59,7 +59,7 @@ const STATIC = {
       parentId: null,
       author: 6786,
       recipe: {
-        video_url: 'https://media.snowmoon.party/scenes/fifteen-days/v1/fifteen-days-f76a3312e1fd.mp4',
+        video_url: 'https://media.snowmoon.party/scenes/fifteen-days/v1/fifteen-days-9391f90d6dca.mp4',
         poster_url: 'https://media.snowmoon.party/scenes/fifteen-days/v1/fifteen-days-poster-3caad9b75656.jpg',
         // The scene's recipe folder on main (owner, 2026-10-17); it loads once scenes-sound is merged.
         recipe_url: 'https://github.com/We-Are-Lum/snowmoon/tree/main/adaptations/fifteen-days',
