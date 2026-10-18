@@ -159,9 +159,12 @@ export function RemixPanel({
       ) : !status.consented ? (
         <>
           {status.prepaid && status.prepaid.balanceUsd < status.prepaid.priceUsd && <WalletPanel onChange={() => void refresh()} />}
-          <div className="ed-row">
-            <p className="ed-help">Before your first frame: how your words are published.</p>
-            <button type="button" className="ed-small" onClick={startConsent}>
+          <div className="ed-consent-step">
+            {/* Drafted by the coding agent (2026-10-18): once paid, this is the next step. */}
+            <p className={status.prepaid && status.prepaid.balanceUsd > 0 ? 'ed-help ed-next' : 'ed-help'}>
+              {status.prepaid && status.prepaid.balanceUsd > 0 ? 'Next: agree to how your words are published.' : 'Before your first frame: how your words are published.'}
+            </p>
+            <button type="button" className="ed-btn ed-btn-full" onClick={startConsent}>
               Read and agree
             </button>
           </div>
