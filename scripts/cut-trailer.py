@@ -28,7 +28,7 @@ MOMENTS = [
     ("fifteen days", "line:b5-2", "line:b5-2"),
     ("the vigil", "shot:cov-lobby-CU-Z-down", "shot:cov-lobby-SCREEN"),
 ]
-CARD = ["Fifteen Days", "one scene from Snowmoon by Vitalik Buterin", "Fork the next shot"]  # DRAFTED wording
+CARD = ["Fifteen Days", "one scene from Snowmoon by Vitalik Buterin", "Remix the next shot"]  # DRAFTED wording; Fork renamed Remix (owner, 2026-10-18)
 
 
 def main() -> None:
@@ -91,7 +91,7 @@ def main() -> None:
     lst = work / "list.txt"
     lst.write_text("".join(f"file '{p}'\n" for p in parts))
     dst = cuts / f"trailer{tag}.mp4"
-    subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "concat", "-safe", "0", "-i", str(lst), "-c", "copy", str(dst)], check=True)
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "concat", "-safe", "0", "-i", str(lst), "-c", "copy", "-movflags", "+faststart", str(dst)], check=True)
     (cuts / f"trailer{tag}.json").write_text(json.dumps({"about": "Trailer moments (DRAFTED by the coding agent), times in the coverage cut.", "moments": out, "card": CARD}, indent=1) + "\n")
     print(f"trailer: {len(out)} moments, about {total:.0f} s -> {dst.relative_to(ROOT)}")
     for m in out:

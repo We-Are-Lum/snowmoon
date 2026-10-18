@@ -1,10 +1,14 @@
 """Cut a scene from its coverage plan (docs/coverage.md; scripts/coverage-plan.py writes coverage-board.json).
 
-  python scripts/cut-coverage.py <seed> [--render] [--name v5]
+  python scripts/cut-coverage.py <seed> [--render] [--name v5] [--plan v6]
 
 --name v5 builds another version beside the first (cuts/coverage-v5/, cuts/coverage-v5.mp4) with the same plan, timing,
 words and audio, and pictures from overnight/coverage-pictures.json overlaid by overnight/coverage-pictures-v5.json
 (the frames changed in that version). The first cut's files are not touched.
+--plan v6 reads that version's own plan and board (coverage-v6.json, coverage-board-v6.json, from coverage-plan.py --plan v6).
+A plan may carry "trim" {line: [start, end]} and "rooms" {room: filter} over cut-v4.py's; a sequence item may carry
+"part": {"from": s, "to": s, "text": "..."} (one part of a take, with its own subtitle: a line split across two shots) and,
+with "laugh", "laugh_trim": [a, b] and "laugh_from": "pre" (the laugh in the pause before the line, not over it).
 
 Writes scenes-out/<seed>/cuts/coverage/timeline.json and, with --render, mixes and renders it to cuts/coverage.mp4.
 The edit follows the rules: picture cuts on the dialogue, with the next speaker's voice starting just before the cut when the
@@ -47,8 +51,12 @@ def main() -> None:
     seed = sys.argv[1]
     adir, sout = ROOT / "adaptations" / seed, ROOT / "scenes-out" / seed
     pre = adir / "preprod"
-    board = json.loads((pre / "coverage-board.json").read_text())
-    plan = {s["id"]: s for s in json.loads((pre / "coverage.json").read_text())["scenes"]}
+    pv = sys.argv[sys.argv.index("--plan") + 1] if "--plan" in sys.argv else None
+    board = json.loads((pre / (f"coverage-board-{pv}.json" if pv else "coverage-board.json")).read_text())
+    plan_raw = json.loads((pre / (f"coverage-{pv}.json" if pv else "coverage.json")).read_text())
+    plan = {s["id"]: s for s in plan_raw["scenes"]}
+    TRIM = {**C.TRIM, **{k: tuple(v) for k, v in plan_raw.get("trim", {}).items()}}
+    ROOMS = {**C.ROOMS, **plan_raw.get("rooms", {})}
     lines = {l["ref"]: l for l in json.loads((adir / "recording-lines.json").read_text())["lines"]}
     sounds = {x["effect"]: x for x in json.loads((adir / "sounds" / "recipe.json").read_text())["sounds"]}
     pk = pre / "overnight" / "coverage-pictures.json"
@@ -136,6 +144,7 @@ def main() -> None:
         else:
             first_of_scene = False
         trans = {"type": "dissolve", "seconds": 0.6} if first_of_scene and sc.get("fade_in") else None
+        pre_at = t
         if it.get("pre"):
             p = it["pre"]
             add_shot(frame_id(it["scene"], p), t, transition=trans, label=f"{n}-pre")
@@ -148,14 +157,16 @@ def main() -> None:
             folder, vid = C.VOICE[l["speaker"]]
             src = sout / folder / f"L{l['n']:02d}-{r}.{vid}.wav"
             take = src
-            if r in C.TRIM:
-                a0, a1 = C.TRIM[r]
-                take = stems / f"{r}.trim.wav"
+            part = it.get("part")
+            cue_id = r + (f"-p{n}" if part else "")
+            if part or r in TRIM:
+                a0, a1 = (part["from"], part["to"]) if part else TRIM[r]
+                take = stems / f"{cue_id}.trim.wav"
                 C.ff(src, take, f"atrim=start={a0 or 0}" + (f":end={a1}" if a1 else "") + ",asetpts=PTS-STARTPTS")
-            tight = stems / f"{r}.tight.wav"
+            tight = stems / f"{cue_id}.tight.wav"
             C.tighten(take, tight, GAP_IN)
-            dst = stems / f"{r}.wav"
-            room = C.ROOMS[sc["room"]]
+            dst = stems / f"{cue_id}.wav"
+            room = ROOMS[sc["room"]]
             C.ff(tight, dst, f"{C.ROBOT_FX},{room}" if l["speaker"] == "Robot" else room)
             tight.unlink()
             if take != src:
@@ -167,13 +178,13 @@ def main() -> None:
             else:
                 cut, voice = t, t + 0.1
             add_shot(frame_id(it["scene"], it), cut, transition=trans, label=f"{n}-{r}")
-            cues.append({"id": r, "track": "voice", "stem": str(dst.relative_to(ROOT)), "at": {"cue": "@start", "offset": round(voice, 3)},
-                         "room": sc["room"], "source": {"converted": str(src.relative_to(ROOT)), "voice": vid}})
-            pieces = C.chunks(l["text"])
+            cues.append({"id": cue_id, "track": "voice", "stem": str(dst.relative_to(ROOT)), "at": {"cue": "@start", "offset": round(voice, 3)},
+                         "room": sc["room"], "source": {"converted": str(src.relative_to(ROOT)), "voice": vid, **({"part": [part["from"], part["to"]]} if part else {})}})
+            pieces = C.chunks(part["text"] if part else l["text"])
             total = sum(len(p) for p in pieces)
             acc = 0
             for p in pieces:
-                subs.append({"cue": r, "text": p, "from": round(acc / total, 4), "to": round((acc + len(p)) / total, 4)})
+                subs.append({"cue": cue_id, "text": p, "from": round(acc / total, 4), "to": round((acc + len(p)) / total, 4)})
                 acc += len(p)
             if it.get("cut_at"):  # a cut inside the line (a reaction, an insert), and back to the speaker after `back` s
                 ca = it["cut_at"]
@@ -184,8 +195,10 @@ def main() -> None:
                         add_shot(frame_id(it["scene"], it), at + ca["back"], label=f"{n}-{r}-back")
             if it.get("laugh") is not None:
                 lp = stems / "laugh.wav"
-                C.ff(sout / "lines-v2" / "X-laugh-3.deluin-v2.wav", lp, C.ROOMS["courtyard"])
-                cues.append({"id": "laugh", "track": "voice", "stem": str(lp.relative_to(ROOT)), "at": {"cue": "@start", "offset": round(max(0, cut + it["laugh"]), 3)},
+                lt = it.get("laugh_trim")
+                C.ff(sout / "lines-v2" / "X-laugh-3.deluin-v2.wav", lp, (f"atrim={lt[0]}:{lt[1]},asetpts=PTS-STARTPTS,afade=t=out:st={max(lt[1] - lt[0] - 0.3, 0)}:d=0.3," if lt else "") + ROOMS["courtyard"])
+                la = (pre_at if it.get("laugh_from") == "pre" else cut) + it["laugh"]
+                cues.append({"id": "laugh", "track": "voice", "stem": str(lp.relative_to(ROOT)), "at": {"cue": "@start", "offset": round(max(0, la), 3)},
                              "level_db": -5, "note": "Deluin laughing at the table as Zei arrives"})
             if it.get("music"):  # Dreadnaught from her lifted headphone, after "What", until the line ends (owner)
                 music = json.loads((adir / "music" / "recipe.json").read_text())
@@ -207,7 +220,7 @@ def main() -> None:
             if it.get("bye"):
                 sid, off, src, a0, a1 = C.FIVE_BYE
                 dst = stems / "bye.wav"
-                C.ff(sout / src, dst, f"atrim={a0}:{a1},asetpts=PTS-STARTPTS,{C.ROOMS['gate']}")
+                C.ff(sout / src, dst, f"atrim={a0}:{a1},asetpts=PTS-STARTPTS,{ROOMS['gate']}")
                 cues.append({"id": "bye", "track": "voice", "stem": str(dst.relative_to(ROOT)), "at": {"cue": "@start", "offset": round(start + 0.25, 3)},
                              "note": "Deluin's 'Bye' at the gate: the owner's own word from the end of L12's take (owner, 2026-10-17)"})
                 subs.append({"cue": "bye", "text": "Bye!", "from": 0.0, "to": 1.0})
@@ -226,21 +239,22 @@ def main() -> None:
                      "at": {"cue": "@start", "offset": round(max(0, a - 0.5), 3)}, "until": {"cue": "@start", "offset": round(b + 0.5, 3)},
                      "level_db": lvl, "fade_in": 1.0, "fade_out": 1.0,
                      "source": {"effect": effect, "url": src["source"].get("url"), "author": src["source"].get("author"), "licence": src["source"]["licence"]}})
-    end_card = adir / "end-card.json"
+    ec = plan_raw.get("end_card", {})
+    end_card = ROOT / ec["file"] if ec.get("file") else adir / "end-card.json"
     timeline = {
         "about": "Fifteen Days, the coverage cut (owner's rules, 2026-10-17; docs/coverage.md; scripts/cut-coverage.py from coverage-board.json). "
                  "Setups, variants, cut points and sound places DRAFTED by the coding agent.",
         "seed": seed, "placeholder": True, "placeholder_reason": "frames drawn and self-reviewed, for the owner's final watch",
         "video": {"width": 1920, "height": 1080, "fps": 30}, "loudness": {"integrated_lufs": -16, "true_peak_db": -1, "lra": 11},
         "tail_s": 1.0, "tracks": {"voice": {"level_db": 0}, "bed": {"level_db": -24}, "foley": {"level_db": -10}, "music": {"level_db": -16}},
-        "rooms": C.ROOMS, "cues": cues, "shots": shots, "lettering": [], "subtitles": subs,
-        "end_card": {"file": str(end_card.relative_to(ROOT)), "seconds": 8, "fade_s": 0.8}, "notes": notes,
+        "rooms": ROOMS, "cues": cues, "shots": shots, "lettering": [], "subtitles": subs,
+        "end_card": {"file": str(end_card.relative_to(ROOT)), "seconds": ec.get("seconds", 8), "fade_s": 0.8}, "notes": notes,
     }
     (work / "timeline.json").write_text(json.dumps(timeline, indent=1, ensure_ascii=False) + "\n")
     by = {}
     for s in shots:
         by[s["picture"]] = by.get(s["picture"], 0) + 1
-    print(f"coverage: {len(shots)} shots, {sum(1 for c in cues if c['track'] == 'voice' and c['id'] in lines)} lines, about {t + 1 + 8:.0f} s with the end card; pictures {by}")
+    print(f"coverage: {len(shots)} shots, {sum(1 for c in cues if c['track'] == 'voice' and c['id'].split('-p')[0] in lines)} voice cues, about {t + 1 + ec.get('seconds', 8):.0f} s with the end card; pictures {by}")
     for x in notes:
         print("  ", x)
     if "--render" in sys.argv:

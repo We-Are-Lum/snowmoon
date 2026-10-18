@@ -124686,9 +124686,855 @@
       "cost_usd": 0.0606,
       "file": "images-out/preprod/pass3/cov-cafe-BAI-what-E34.png",
       "sha256": "fb60cb54396309682733caf92f303ef5d72853d11ab23ac6ee27053dff2de932"
+    },
+    "cov-game-FLOOR-live-E40": {
+      "endpoint": "fal-ai/qwen-image-edit-2509",
+      "request_id": "01a14dc6-01bb-7d92-ba93-700a9e01fb73",
+      "served_at": "2026-10-18T06:51:17+00:00",
+      "prompt": "Remove every face and portrait from the floating glowing blocks and the hanging screens: they become plain softly glowing cubes and blank glowing screens with no faces, no people, no pictures on them. Keep the drawing, colours, camera, framing and crop exactly as they are. The audience, the glass arena, the beams of light and everything else stay exactly the same. No letters or numbers anywhere.",
+      "seed": 40,
+      "width": 1376,
+      "height": 768,
+      "references": [
+        {
+          "file": "images-out/preprod/edit-src/H02-B2.png",
+          "sha256": "8e0dc44433b8f484418241e6655f2b0c0fa6193c69ad47e6ac34118ab3d4664b"
+        }
+      ],
+      "model": {
+        "id": "qwen-image-edit-2509",
+        "weights": "https://huggingface.co/Qwen/Qwen-Image-Edit-2509",
+        "license_line": "License: apache-2.0",
+        "license_checked": "coding agent, 2026-10-16 (model card); provisional until the owner confirms",
+        "host": "fal.ai",
+        "weights_revision": "not exposed by fal"
+      },
+      "cost_usd": 0.0606,
+      "file": "images-out/preprod/pass3/cov-game-FLOOR-live-E40.png",
+      "sha256": "ae6da7974bb23366cf7d14f87a10d0121ad7a43d037a6d2130591533099e1b4c"
+    },
+    "cov-game-FLOOR-live-E41": {
+      "endpoint": "fal-ai/qwen-image-edit-2509",
+      "request_id": "01a14dc6-01d3-7bd3-a22d-ecd1f3f72005",
+      "served_at": "2026-10-18T06:51:31+00:00",
+      "prompt": "Remove every face and portrait from the floating glowing blocks and the hanging screens: they become plain softly glowing cubes and blank glowing screens with no faces, no people, no pictures on them. Keep the drawing, colours, camera, framing and crop exactly as they are. The audience, the glass arena, the beams of light and everything else stay exactly the same. No letters or numbers anywhere.",
+      "seed": 41,
+      "width": 1376,
+      "height": 768,
+      "references": [
+        {
+          "file": "images-out/preprod/edit-src/H02-B2.png",
+          "sha256": "8e0dc44433b8f484418241e6655f2b0c0fa6193c69ad47e6ac34118ab3d4664b"
+        }
+      ],
+      "model": {
+        "id": "qwen-image-edit-2509",
+        "weights": "https://huggingface.co/Qwen/Qwen-Image-Edit-2509",
+        "license_line": "License: apache-2.0",
+        "license_checked": "coding agent, 2026-10-16 (model card); provisional until the owner confirms",
+        "host": "fal.ai",
+        "weights_revision": "not exposed by fal"
+      },
+      "cost_usd": 0.0606,
+      "file": "images-out/preprod/pass3/cov-game-FLOOR-live-E41.png",
+      "sha256": "a62b9cdeae3923a8701d371ae207c59c1912394690d7a15128532de963147741"
+    },
+    "cov-corridor-OTS-Z-warm-E41": {
+      "endpoint": "fal-ai/qwen-image-edit-2509",
+      "request_id": "01a14dc6-024f-7920-9db8-147cd3c8cc02",
+      "served_at": "2026-10-18T06:51:38+00:00",
+      "prompt": "Remove the open door on the right: where it stands open there is only the plain curved corridor wall, smooth and unbroken, in the same blue night light. Keep the drawing, colours, camera, framing and crop exactly as they are. The young man with the orange jacket seen from behind on the left and the tall young man in the cream cable-knit tunic stay exactly as they are, with the same faces and poses. Nobody else. No letters or numbers anywhere.",
+      "seed": 41,
+      "width": 1376,
+      "height": 768,
+      "references": [
+        {
+          "file": "images-out/preprod/edit-src/cov-corridor-OTS-Z-warm-K9.png",
+          "sha256": "c78a7a0516b9bcfe6e640a54656b6cfa85025756108447a6ee0eb0cabf3d8c6b"
+        }
+      ],
+      "model": {
+        "id": "qwen-image-edit-2509",
+        "weights": "https://huggingface.co/Qwen/Qwen-Image-Edit-2509",
+        "license_line": "License: apache-2.0",
+        "license_checked": "coding agent, 2026-10-16 (model card); provisional until the owner confirms",
+        "host": "fal.ai",
+        "weights_revision": "not exposed by fal"
+      },
+      "cost_usd": 0.0606,
+      "file": "images-out/preprod/pass3/cov-corridor-OTS-Z-warm-E41.png",
+      "sha256": "46c5c07d8d97d72fdae3af47e6dbe8df3f127912d41300097d713867109fb92f"
+    },
+    "cov-corridor-OTS-Z-warm-E40": {
+      "endpoint": "fal-ai/qwen-image-edit-2509",
+      "request_id": "01a14dc6-0263-7600-8e7e-5318c29acbee",
+      "served_at": "2026-10-18T06:51:44+00:00",
+      "prompt": "Remove the open door on the right: where it stands open there is only the plain curved corridor wall, smooth and unbroken, in the same blue night light. Keep the drawing, colours, camera, framing and crop exactly as they are. The young man with the orange jacket seen from behind on the left and the tall young man in the cream cable-knit tunic stay exactly as they are, with the same faces and poses. Nobody else. No letters or numbers anywhere.",
+      "seed": 40,
+      "width": 1376,
+      "height": 768,
+      "references": [
+        {
+          "file": "images-out/preprod/edit-src/cov-corridor-OTS-Z-warm-K9.png",
+          "sha256": "c78a7a0516b9bcfe6e640a54656b6cfa85025756108447a6ee0eb0cabf3d8c6b"
+        }
+      ],
+      "model": {
+        "id": "qwen-image-edit-2509",
+        "weights": "https://huggingface.co/Qwen/Qwen-Image-Edit-2509",
+        "license_line": "License: apache-2.0",
+        "license_checked": "coding agent, 2026-10-16 (model card); provisional until the owner confirms",
+        "host": "fal.ai",
+        "weights_revision": "not exposed by fal"
+      },
+      "cost_usd": 0.0606,
+      "file": "images-out/preprod/pass3/cov-corridor-OTS-Z-warm-E40.png",
+      "sha256": "6a1317ec44ecb344ccf90c75ee79c6a155f9f59f1ea95586b0ab91ef009ad812"
+    },
+    "cov-cafe-BAI-what-E40": {
+      "endpoint": "fal-ai/qwen-image-edit-2509",
+      "request_id": "01a14dc7-6c83-7b13-8a41-52820c50ae0f",
+      "served_at": "2026-10-18T06:52:07+00:00",
+      "prompt": "With her left hand she lifts the headphone ear cup off her ear, pulling it a hand's width away from the side of her head so her bare ear shows; the headband stays on her head. Her arm and hand are drawn naturally: exactly two arms and two hands, fingers holding the ear cup. Her other hand stays on the table holding the phone. Keep her face and expression, her magenta ponytail, lime-green vest and tattoos. Keep the drawing, colours, camera, framing and crop exactly as they are. Nobody else anywhere. No letters or numbers anywhere.",
+      "seed": 40,
+      "width": 1376,
+      "height": 768,
+      "references": [
+        {
+          "file": "images-out/preprod/edit-src/cov-cafe-BAI-what-R27.png",
+          "sha256": "f12f84f532aa906cc5d594c1e2e1b60bc0d1f1c4c0d37920645408a378dfecbb"
+        }
+      ],
+      "model": {
+        "id": "qwen-image-edit-2509",
+        "weights": "https://huggingface.co/Qwen/Qwen-Image-Edit-2509",
+        "license_line": "License: apache-2.0",
+        "license_checked": "coding agent, 2026-10-16 (model card); provisional until the owner confirms",
+        "host": "fal.ai",
+        "weights_revision": "not exposed by fal"
+      },
+      "cost_usd": 0.0606,
+      "file": "images-out/preprod/pass3/cov-cafe-BAI-what-E40.png",
+      "sha256": "6d65df5234dae256bfc7a871a9d20c337276902f20550a152ff1871260ffd8a5"
+    },
+    "cov-cafe-BAI-what-E41": {
+      "endpoint": "fal-ai/qwen-image-edit-2509",
+      "request_id": "01a14dc7-a6bb-7993-af80-53ba5d5ae69c",
+      "served_at": "2026-10-18T06:52:12+00:00",
+      "prompt": "With her left hand she lifts the headphone ear cup off her ear, pulling it a hand's width away from the side of her head so her bare ear shows; the headband stays on her head. Her arm and hand are drawn naturally: exactly two arms and two hands, fingers holding the ear cup. Her other hand stays on the table holding the phone. Keep her face and expression, her magenta ponytail, lime-green vest and tattoos. Keep the drawing, colours, camera, framing and crop exactly as they are. Nobody else anywhere. No letters or numbers anywhere.",
+      "seed": 41,
+      "width": 1376,
+      "height": 768,
+      "references": [
+        {
+          "file": "images-out/preprod/edit-src/cov-cafe-BAI-what-R27.png",
+          "sha256": "f12f84f532aa906cc5d594c1e2e1b60bc0d1f1c4c0d37920645408a378dfecbb"
+        }
+      ],
+      "model": {
+        "id": "qwen-image-edit-2509",
+        "weights": "https://huggingface.co/Qwen/Qwen-Image-Edit-2509",
+        "license_line": "License: apache-2.0",
+        "license_checked": "coding agent, 2026-10-16 (model card); provisional until the owner confirms",
+        "host": "fal.ai",
+        "weights_revision": "not exposed by fal"
+      },
+      "cost_usd": 0.0606,
+      "file": "images-out/preprod/pass3/cov-cafe-BAI-what-E41.png",
+      "sha256": "613ec79d08bfaf7904bcea76ac35c7485efbe6d27e115fea22e75d8c11a2745b"
+    },
+    "cov-cafe-OTS-Z-menu-E40": {
+      "endpoint": "fal-ai/qwen-image-edit-2509",
+      "request_id": "01a14dc7-d0f8-77b2-a807-171754046abe",
+      "served_at": "2026-10-18T06:52:24+00:00",
+      "prompt": "Add the young woman from picture 2 sitting on a chair at the same wooden table, on the far side of the table to the left of the tall young man, small in the middle distance, looking down at a glowing menu in her hands: warm brown skin, shaved sides, tall magenta ponytail, lime-green vest, tattooed arms. She is seated at her real size. Picture 1's drawing, colours, camera, framing and crop stay exactly the same; the young man in the orange jacket seen from behind on the left and the tall young man in the cream tunic stay exactly as they are. Exactly three people. No letters or numbers anywhere.",
+      "seed": 40,
+      "width": 1376,
+      "height": 768,
+      "references": [
+        {
+          "file": "images-out/preprod/edit-src/cov-cafe-OTS-Z-menu-K7.png",
+          "sha256": "660678e1d4702e042798a374a3220940816850d41cb5f6eb5326862ca3e666b9"
+        },
+        {
+          "file": "images-out/preprod/cards2/bai.png",
+          "sha256": "99f8fbe3c4edf2caa4f3e99201d3961f5ddbd20fbeccc223a5684b8cde2a431e"
+        }
+      ],
+      "model": {
+        "id": "qwen-image-edit-2509",
+        "weights": "https://huggingface.co/Qwen/Qwen-Image-Edit-2509",
+        "license_line": "License: apache-2.0",
+        "license_checked": "coding agent, 2026-10-16 (model card); provisional until the owner confirms",
+        "host": "fal.ai",
+        "weights_revision": "not exposed by fal"
+      },
+      "cost_usd": 0.0741,
+      "file": "images-out/preprod/pass3/cov-cafe-OTS-Z-menu-E40.png",
+      "sha256": "b860f349f39eef457c095c38c3abf014e80c46abc0ca975e91cbb877f1e2654a"
+    },
+    "cov-cafe-OTS-Z-menu-E41": {
+      "endpoint": "fal-ai/qwen-image-edit-2509",
+      "request_id": "01a14dc7-d89a-7d61-b26a-74afe6d3f80e",
+      "served_at": "2026-10-18T06:52:28+00:00",
+      "prompt": "Add the young woman from picture 2 sitting on a chair at the same wooden table, on the far side of the table to the left of the tall young man, small in the middle distance, looking down at a glowing menu in her hands: warm brown skin, shaved sides, tall magenta ponytail, lime-green vest, tattooed arms. She is seated at her real size. Picture 1's drawing, colours, camera, framing and crop stay exactly the same; the young man in the orange jacket seen from behind on the left and the tall young man in the cream tunic stay exactly as they are. Exactly three people. No letters or numbers anywhere.",
+      "seed": 41,
+      "width": 1376,
+      "height": 768,
+      "references": [
+        {
+          "file": "images-out/preprod/edit-src/cov-cafe-OTS-Z-menu-K7.png",
+          "sha256": "660678e1d4702e042798a374a3220940816850d41cb5f6eb5326862ca3e666b9"
+        },
+        {
+          "file": "images-out/preprod/cards2/bai.png",
+          "sha256": "99f8fbe3c4edf2caa4f3e99201d3961f5ddbd20fbeccc223a5684b8cde2a431e"
+        }
+      ],
+      "model": {
+        "id": "qwen-image-edit-2509",
+        "weights": "https://huggingface.co/Qwen/Qwen-Image-Edit-2509",
+        "license_line": "License: apache-2.0",
+        "license_checked": "coding agent, 2026-10-16 (model card); provisional until the owner confirms",
+        "host": "fal.ai",
+        "weights_revision": "not exposed by fal"
+      },
+      "cost_usd": 0.0741,
+      "file": "images-out/preprod/pass3/cov-cafe-OTS-Z-menu-E41.png",
+      "sha256": "d870128ed863c656087c8c9ad38b23ebfda4af020b2a565f94782c2e667d7a39"
+    },
+    "cov-cafe-MASTER-laugh-E40": {
+      "endpoint": "fal-ai/qwen-image-edit-2509",
+      "request_id": "01a14dc8-34a4-7ea1-b451-1e3aa7ed827a",
+      "served_at": "2026-10-18T06:52:36+00:00",
+      "prompt": "The tall young man in the cream cable-knit tunic is now sitting on a chair at the wooden table beside the young woman, both arms resting on the table, laughing with her: a warm closed-mouth laugh, eyes half closed, his head tipped toward her. She smiles at him, closed-mouthed. Nobody waves. Keep the drawing, colours, camera, framing and crop exactly as they are. Same courtyard, table, lights and city behind. Exactly two people. Every mouth is closed, no teeth. No letters or numbers anywhere.",
+      "seed": 40,
+      "width": 1376,
+      "height": 768,
+      "references": [
+        {
+          "file": "images-out/preprod/edit-src/cov-cafe-MASTER-wave-K7.png",
+          "sha256": "7d184a4d3bfd2eab016200d19ad0abcc48d13dcce95cccd6da28e51928f976da"
+        }
+      ],
+      "model": {
+        "id": "qwen-image-edit-2509",
+        "weights": "https://huggingface.co/Qwen/Qwen-Image-Edit-2509",
+        "license_line": "License: apache-2.0",
+        "license_checked": "coding agent, 2026-10-16 (model card); provisional until the owner confirms",
+        "host": "fal.ai",
+        "weights_revision": "not exposed by fal"
+      },
+      "cost_usd": 0.0606,
+      "file": "images-out/preprod/pass3/cov-cafe-MASTER-laugh-E40.png",
+      "sha256": "7b3e6c906ed6ac0c9fbbec01c0022522139ddf8bd132efc5868ba80486e09d9b"
+    },
+    "cov-cafe-MASTER-laugh-E41": {
+      "endpoint": "fal-ai/qwen-image-edit-2509",
+      "request_id": "01a14dc8-46c7-7eb0-a1aa-cd86b13a6127",
+      "served_at": "2026-10-18T06:52:57+00:00",
+      "prompt": "The tall young man in the cream cable-knit tunic is now sitting on a chair at the wooden table beside the young woman, both arms resting on the table, laughing with her: a warm closed-mouth laugh, eyes half closed, his head tipped toward her. She smiles at him, closed-mouthed. Nobody waves. Keep the drawing, colours, camera, framing and crop exactly as they are. Same courtyard, table, lights and city behind. Exactly two people. Every mouth is closed, no teeth. No letters or numbers anywhere.",
+      "seed": 41,
+      "width": 1376,
+      "height": 768,
+      "references": [
+        {
+          "file": "images-out/preprod/edit-src/cov-cafe-MASTER-wave-K7.png",
+          "sha256": "7d184a4d3bfd2eab016200d19ad0abcc48d13dcce95cccd6da28e51928f976da"
+        }
+      ],
+      "model": {
+        "id": "qwen-image-edit-2509",
+        "weights": "https://huggingface.co/Qwen/Qwen-Image-Edit-2509",
+        "license_line": "License: apache-2.0",
+        "license_checked": "coding agent, 2026-10-16 (model card); provisional until the owner confirms",
+        "host": "fal.ai",
+        "weights_revision": "not exposed by fal"
+      },
+      "cost_usd": 0.0606,
+      "file": "images-out/preprod/pass3/cov-cafe-MASTER-laugh-E41.png",
+      "sha256": "aed7b07cd42adc0b5c1f14ff550fc840424a4da51daa50de3845eea5da93066f"
+    },
+    "cov-overlook-CU-Z-look-E40": {
+      "endpoint": "fal-ai/qwen-image-edit-2509",
+      "request_id": "01a14dc8-a981-77c2-a4ce-66130ec10bb8",
+      "served_at": "2026-10-18T06:53:12+00:00",
+      "prompt": "Redraw this as a clean, sharp close-up in the same hand-drawn comic style, ink linework and flat cel-shaded colour: the young man with spiky black hair with a blue streak and an orange jacket, looking to the right of frame at someone beside him, a small closed-mouth smile. Keep his face, hair, clothes, pose, colours and the dark arena behind him exactly; only make it crisp and detailed. Nobody else in front. No letters or numbers anywhere.",
+      "seed": 40,
+      "width": 1376,
+      "height": 768,
+      "references": [
+        {
+          "file": "images-out/preprod/edit-src/cov-overlook-MASTER-watch-K9-crop.png",
+          "sha256": "7742c766b3233b167191a74555990c70a86b6af5b05e42f2d2e162e2490d70a6"
+        }
+      ],
+      "model": {
+        "id": "qwen-image-edit-2509",
+        "weights": "https://huggingface.co/Qwen/Qwen-Image-Edit-2509",
+        "license_line": "License: apache-2.0",
+        "license_checked": "coding agent, 2026-10-16 (model card); provisional until the owner confirms",
+        "host": "fal.ai",
+        "weights_revision": "not exposed by fal"
+      },
+      "cost_usd": 0.0606,
+      "file": "images-out/preprod/pass3/cov-overlook-CU-Z-look-E40.png",
+      "sha256": "fc34f3b2549bb0e0cd32ed6a7d72f6c45333f7b3664cec3e8825b19d7e3681b3"
+    },
+    "cov-overlook-CU-Z-look-E41": {
+      "endpoint": "fal-ai/qwen-image-edit-2509",
+      "request_id": "01a14dc8-f6b2-70b2-b855-143f38fdefaf",
+      "served_at": "2026-10-18T06:53:16+00:00",
+      "prompt": "Redraw this as a clean, sharp close-up in the same hand-drawn comic style, ink linework and flat cel-shaded colour: the young man with spiky black hair with a blue streak and an orange jacket, looking to the right of frame at someone beside him, a small closed-mouth smile. Keep his face, hair, clothes, pose, colours and the dark arena behind him exactly; only make it crisp and detailed. Nobody else in front. No letters or numbers anywhere.",
+      "seed": 41,
+      "width": 1376,
+      "height": 768,
+      "references": [
+        {
+          "file": "images-out/preprod/edit-src/cov-overlook-MASTER-watch-K9-crop.png",
+          "sha256": "7742c766b3233b167191a74555990c70a86b6af5b05e42f2d2e162e2490d70a6"
+        }
+      ],
+      "model": {
+        "id": "qwen-image-edit-2509",
+        "weights": "https://huggingface.co/Qwen/Qwen-Image-Edit-2509",
+        "license_line": "License: apache-2.0",
+        "license_checked": "coding agent, 2026-10-16 (model card); provisional until the owner confirms",
+        "host": "fal.ai",
+        "weights_revision": "not exposed by fal"
+      },
+      "cost_usd": 0.0606,
+      "file": "images-out/preprod/pass3/cov-overlook-CU-Z-look-E41.png",
+      "sha256": "b53176b31f357715821c5159c23279504a3864c285145896805afecebf9cbd2e"
+    },
+    "cov-cafe-MASTER-menus-E41": {
+      "endpoint": "fal-ai/qwen-image-edit-2509",
+      "request_id": "01a14dc8-855b-7403-bddc-2806df0baae9",
+      "served_at": "2026-10-18T06:53:20+00:00",
+      "prompt": "All three now sit on chairs around the long wooden table, each looking down at a small glowing menu screen in their hands: the young woman on the left where she sits now; the tall young man in the cream tunic sitting on the right side of the table; and the young man from picture 2 (spiky black hair with one blue streak, orange cropped zip jacket over a black top) sitting at the near end of the table with his back half to us. Nobody waves. Keep picture 1's drawing, colours, courtyard, lights and camera exactly. Exactly three people. Every mouth is closed. No letters or numbers anywhere.",
+      "seed": 41,
+      "width": 1376,
+      "height": 768,
+      "references": [
+        {
+          "file": "images-out/preprod/edit-src/cov-cafe-MASTER-wave-K7.png",
+          "sha256": "7d184a4d3bfd2eab016200d19ad0abcc48d13dcce95cccd6da28e51928f976da"
+        },
+        {
+          "file": "images-out/preprod/cards2/zei.png",
+          "sha256": "0081e5f5c2ca95ad5cd5a9cbbc92ef6480779b092ac31792d4bc291f8c5abd12"
+        }
+      ],
+      "model": {
+        "id": "qwen-image-edit-2509",
+        "weights": "https://huggingface.co/Qwen/Qwen-Image-Edit-2509",
+        "license_line": "License: apache-2.0",
+        "license_checked": "coding agent, 2026-10-16 (model card); provisional until the owner confirms",
+        "host": "fal.ai",
+        "weights_revision": "not exposed by fal"
+      },
+      "cost_usd": 0.075,
+      "file": "images-out/preprod/pass3/cov-cafe-MASTER-menus-E41.png",
+      "sha256": "277462e76d09ac498a0b96ec557232db2d0c3b54e46c11e514b45ba9309c677d"
+    },
+    "cov-cafe-MASTER-menus-E40": {
+      "endpoint": "fal-ai/qwen-image-edit-2509",
+      "request_id": "01a14dc8-7a3f-74b2-9713-b9130803d811",
+      "served_at": "2026-10-18T06:53:22+00:00",
+      "prompt": "All three now sit on chairs around the long wooden table, each looking down at a small glowing menu screen in their hands: the young woman on the left where she sits now; the tall young man in the cream tunic sitting on the right side of the table; and the young man from picture 2 (spiky black hair with one blue streak, orange cropped zip jacket over a black top) sitting at the near end of the table with his back half to us. Nobody waves. Keep picture 1's drawing, colours, courtyard, lights and camera exactly. Exactly three people. Every mouth is closed. No letters or numbers anywhere.",
+      "seed": 40,
+      "width": 1376,
+      "height": 768,
+      "references": [
+        {
+          "file": "images-out/preprod/edit-src/cov-cafe-MASTER-wave-K7.png",
+          "sha256": "7d184a4d3bfd2eab016200d19ad0abcc48d13dcce95cccd6da28e51928f976da"
+        },
+        {
+          "file": "images-out/preprod/cards2/zei.png",
+          "sha256": "0081e5f5c2ca95ad5cd5a9cbbc92ef6480779b092ac31792d4bc291f8c5abd12"
+        }
+      ],
+      "model": {
+        "id": "qwen-image-edit-2509",
+        "weights": "https://huggingface.co/Qwen/Qwen-Image-Edit-2509",
+        "license_line": "License: apache-2.0",
+        "license_checked": "coding agent, 2026-10-16 (model card); provisional until the owner confirms",
+        "host": "fal.ai",
+        "weights_revision": "not exposed by fal"
+      },
+      "cost_usd": 0.075,
+      "file": "images-out/preprod/pass3/cov-cafe-MASTER-menus-E40.png",
+      "sha256": "6bb8d27634c96a0a5311cc5cb9ce97122ab92b6380bd0cceb92419d860948d3c"
+    },
+    "cov-cafe-MASTER-robot-E42": {
+      "endpoint": "fal-ai/qwen-image-edit-2509",
+      "request_id": "01a14dca-4e4a-7c92-a287-28c7903efa01",
+      "served_at": "2026-10-18T06:55:09+00:00",
+      "prompt": "The young man from picture 2 (spiky black hair with one blue streak, orange cropped zip jacket over a black top) stands at the near left end of the table pulling out a chair to sit down, drawn once. Behind the table on the right glides up the serving robot: a machine, not a person: a rounded white head with a dark face screen showing two small kind glowing eyes, slim white shoulders and jointed arms holding a flat tray, and no legs: below the waist a smooth white column down to a round gliding base, holding out a tray with two small glowing menu tablets. The young woman and the tall young man in the cream tunic stay seated exactly as they are, now with small closed-mouth smiles, looking up at the newcomer. Keep picture 1's drawing, colours, courtyard, lights and camera exactly. Exactly three people and one robot. No letters or numbers anywhere.",
+      "seed": 42,
+      "width": 1376,
+      "height": 768,
+      "references": [
+        {
+          "file": "images-out/preprod/edit-src/cov-cafe-MASTER-laugh-E40.png",
+          "sha256": "cbb9a91856646fcbcad08dcf3aae6eaf8c373ead03ae4b1b9cd90a398f012572"
+        },
+        {
+          "file": "images-out/preprod/cards2/zei.png",
+          "sha256": "0081e5f5c2ca95ad5cd5a9cbbc92ef6480779b092ac31792d4bc291f8c5abd12"
+        }
+      ],
+      "model": {
+        "id": "qwen-image-edit-2509",
+        "weights": "https://huggingface.co/Qwen/Qwen-Image-Edit-2509",
+        "license_line": "License: apache-2.0",
+        "license_checked": "coding agent, 2026-10-16 (model card); provisional until the owner confirms",
+        "host": "fal.ai",
+        "weights_revision": "not exposed by fal"
+      },
+      "cost_usd": 0.075,
+      "file": "images-out/preprod/pass3/cov-cafe-MASTER-robot-E42.png",
+      "sha256": "70564a59a74861d7603f50a46006eb0d18c0065504ca35ab7295404fe5c957cd"
+    },
+    "cov-cafe-MASTER-robot-E43": {
+      "endpoint": "fal-ai/qwen-image-edit-2509",
+      "request_id": "01a14dca-4e3a-78f1-96d6-389b7fcac269",
+      "served_at": "2026-10-18T06:55:15+00:00",
+      "prompt": "The young man from picture 2 (spiky black hair with one blue streak, orange cropped zip jacket over a black top) stands at the near left end of the table pulling out a chair to sit down, drawn once. Behind the table on the right glides up the serving robot: a machine, not a person: a rounded white head with a dark face screen showing two small kind glowing eyes, slim white shoulders and jointed arms holding a flat tray, and no legs: below the waist a smooth white column down to a round gliding base, holding out a tray with two small glowing menu tablets. The young woman and the tall young man in the cream tunic stay seated exactly as they are, now with small closed-mouth smiles, looking up at the newcomer. Keep picture 1's drawing, colours, courtyard, lights and camera exactly. Exactly three people and one robot. No letters or numbers anywhere.",
+      "seed": 43,
+      "width": 1376,
+      "height": 768,
+      "references": [
+        {
+          "file": "images-out/preprod/edit-src/cov-cafe-MASTER-laugh-E40.png",
+          "sha256": "cbb9a91856646fcbcad08dcf3aae6eaf8c373ead03ae4b1b9cd90a398f012572"
+        },
+        {
+          "file": "images-out/preprod/cards2/zei.png",
+          "sha256": "0081e5f5c2ca95ad5cd5a9cbbc92ef6480779b092ac31792d4bc291f8c5abd12"
+        }
+      ],
+      "model": {
+        "id": "qwen-image-edit-2509",
+        "weights": "https://huggingface.co/Qwen/Qwen-Image-Edit-2509",
+        "license_line": "License: apache-2.0",
+        "license_checked": "coding agent, 2026-10-16 (model card); provisional until the owner confirms",
+        "host": "fal.ai",
+        "weights_revision": "not exposed by fal"
+      },
+      "cost_usd": 0.075,
+      "file": "images-out/preprod/pass3/cov-cafe-MASTER-robot-E43.png",
+      "sha256": "97bd91df4926abb232f59f30ca32405640ecc17e292415ac952cce6d57e643ad"
+    },
+    "cov-cafe-OTS-Z-stern-E42": {
+      "endpoint": "fal-ai/qwen-image-edit-2509",
+      "request_id": "01a14dca-4dba-72f1-b278-c70943819607",
+      "served_at": "2026-10-18T06:55:18+00:00",
+      "prompt": "Add the young woman from picture 2 sitting on a chair at the far side of the same wooden table, between the two young men in the middle distance, looking down at a glowing menu in her hands: warm brown skin, shaved sides, tall magenta ponytail, lime-green vest, tattooed arms. She is seated at her real size, drawn once. Picture 1's drawing, colours, camera, framing and crop stay exactly the same; the young man in the orange jacket seen from behind on the left and the tall young man in the cream tunic stay exactly as they are. Exactly three people. No letters or numbers anywhere.",
+      "seed": 42,
+      "width": 1376,
+      "height": 768,
+      "references": [
+        {
+          "file": "images-out/preprod/edit-src/cov-cafe-OTS-Z-stern-K9.png",
+          "sha256": "0ef201e2f42afa145e22a36e58fb1f9feb43f1774f15fc32dbf1d77b45f1bed8"
+        },
+        {
+          "file": "images-out/preprod/cards2/bai.png",
+          "sha256": "99f8fbe3c4edf2caa4f3e99201d3961f5ddbd20fbeccc223a5684b8cde2a431e"
+        }
+      ],
+      "model": {
+        "id": "qwen-image-edit-2509",
+        "weights": "https://huggingface.co/Qwen/Qwen-Image-Edit-2509",
+        "license_line": "License: apache-2.0",
+        "license_checked": "coding agent, 2026-10-16 (model card); provisional until the owner confirms",
+        "host": "fal.ai",
+        "weights_revision": "not exposed by fal"
+      },
+      "cost_usd": 0.0741,
+      "file": "images-out/preprod/pass3/cov-cafe-OTS-Z-stern-E42.png",
+      "sha256": "5ce9443f0bddf8de3e2fb82e75bdefeac551eaadd0cb6dce1f7e6472f6dd4616"
+    },
+    "cov-cafe-OTS-Z-stern-E43": {
+      "endpoint": "fal-ai/qwen-image-edit-2509",
+      "request_id": "01a14dca-4dff-7f51-a775-ae2016151781",
+      "served_at": "2026-10-18T06:55:19+00:00",
+      "prompt": "Add the young woman from picture 2 sitting on a chair at the far side of the same wooden table, between the two young men in the middle distance, looking down at a glowing menu in her hands: warm brown skin, shaved sides, tall magenta ponytail, lime-green vest, tattooed arms. She is seated at her real size, drawn once. Picture 1's drawing, colours, camera, framing and crop stay exactly the same; the young man in the orange jacket seen from behind on the left and the tall young man in the cream tunic stay exactly as they are. Exactly three people. No letters or numbers anywhere.",
+      "seed": 43,
+      "width": 1376,
+      "height": 768,
+      "references": [
+        {
+          "file": "images-out/preprod/edit-src/cov-cafe-OTS-Z-stern-K9.png",
+          "sha256": "0ef201e2f42afa145e22a36e58fb1f9feb43f1774f15fc32dbf1d77b45f1bed8"
+        },
+        {
+          "file": "images-out/preprod/cards2/bai.png",
+          "sha256": "99f8fbe3c4edf2caa4f3e99201d3961f5ddbd20fbeccc223a5684b8cde2a431e"
+        }
+      ],
+      "model": {
+        "id": "qwen-image-edit-2509",
+        "weights": "https://huggingface.co/Qwen/Qwen-Image-Edit-2509",
+        "license_line": "License: apache-2.0",
+        "license_checked": "coding agent, 2026-10-16 (model card); provisional until the owner confirms",
+        "host": "fal.ai",
+        "weights_revision": "not exposed by fal"
+      },
+      "cost_usd": 0.0741,
+      "file": "images-out/preprod/pass3/cov-cafe-OTS-Z-stern-E43.png",
+      "sha256": "08bcd8a6c0af9cf2bfe1fbce959882ccd044a5601d10aba8593d3e22c755587a"
+    },
+    "cov-cafe-MASTER-robot-E44": {
+      "endpoint": "fal-ai/qwen-image-edit-2509",
+      "request_id": "01a14dcb-9037-70d0-bf80-3639ed9935ab",
+      "served_at": "2026-10-18T06:56:19+00:00",
+      "prompt": "Keep both seated people of picture 1 exactly where they are: the young woman with the magenta ponytail seated on the left of the table, and the tall young man in the cream cable-knit tunic seated on the right of the table, now both with small closed-mouth smiles, looking up. Add the young man from picture 2 (spiky black hair with one blue streak, orange cropped zip jacket over a black top), standing at the near left end of the table, pulling out a chair to sit down, drawn once. Add the serving robot: a machine, not a person: a rounded white head with a dark face screen showing two small kind glowing eyes, slim white shoulders and jointed arms holding a flat tray, and no legs: below the waist a smooth white column down to a round gliding base, small, gliding up behind the table in the background between the young woman and the tall young man, holding out a tray with two small glowing menu tablets. Keep picture 1's drawing, colours, courtyard, lights and camera exactly. Exactly three people and one robot. No letters or numbers anywhere.",
+      "seed": 44,
+      "width": 1376,
+      "height": 768,
+      "references": [
+        {
+          "file": "images-out/preprod/edit-src/cov-cafe-MASTER-laugh-E40.png",
+          "sha256": "cbb9a91856646fcbcad08dcf3aae6eaf8c373ead03ae4b1b9cd90a398f012572"
+        },
+        {
+          "file": "images-out/preprod/cards2/zei.png",
+          "sha256": "0081e5f5c2ca95ad5cd5a9cbbc92ef6480779b092ac31792d4bc291f8c5abd12"
+        }
+      ],
+      "model": {
+        "id": "qwen-image-edit-2509",
+        "weights": "https://huggingface.co/Qwen/Qwen-Image-Edit-2509",
+        "license_line": "License: apache-2.0",
+        "license_checked": "coding agent, 2026-10-16 (model card); provisional until the owner confirms",
+        "host": "fal.ai",
+        "weights_revision": "not exposed by fal"
+      },
+      "cost_usd": 0.075,
+      "file": "images-out/preprod/pass3/cov-cafe-MASTER-robot-E44.png",
+      "sha256": "e1d10ff8d5312af8a09c39fc327cbb2f0a444e2d4b35c49d866f668b2043bdb2"
+    },
+    "cov-cafe-MASTER-robot-E45": {
+      "endpoint": "fal-ai/qwen-image-edit-2509",
+      "request_id": "01a14dcb-9007-73f0-bb2e-17cb39b8918b",
+      "served_at": "2026-10-18T06:56:31+00:00",
+      "prompt": "Keep both seated people of picture 1 exactly where they are: the young woman with the magenta ponytail seated on the left of the table, and the tall young man in the cream cable-knit tunic seated on the right of the table, now both with small closed-mouth smiles, looking up. Add the young man from picture 2 (spiky black hair with one blue streak, orange cropped zip jacket over a black top), standing at the near left end of the table, pulling out a chair to sit down, drawn once. Add the serving robot: a machine, not a person: a rounded white head with a dark face screen showing two small kind glowing eyes, slim white shoulders and jointed arms holding a flat tray, and no legs: below the waist a smooth white column down to a round gliding base, small, gliding up behind the table in the background between the young woman and the tall young man, holding out a tray with two small glowing menu tablets. Keep picture 1's drawing, colours, courtyard, lights and camera exactly. Exactly three people and one robot. No letters or numbers anywhere.",
+      "seed": 45,
+      "width": 1376,
+      "height": 768,
+      "references": [
+        {
+          "file": "images-out/preprod/edit-src/cov-cafe-MASTER-laugh-E40.png",
+          "sha256": "cbb9a91856646fcbcad08dcf3aae6eaf8c373ead03ae4b1b9cd90a398f012572"
+        },
+        {
+          "file": "images-out/preprod/cards2/zei.png",
+          "sha256": "0081e5f5c2ca95ad5cd5a9cbbc92ef6480779b092ac31792d4bc291f8c5abd12"
+        }
+      ],
+      "model": {
+        "id": "qwen-image-edit-2509",
+        "weights": "https://huggingface.co/Qwen/Qwen-Image-Edit-2509",
+        "license_line": "License: apache-2.0",
+        "license_checked": "coding agent, 2026-10-16 (model card); provisional until the owner confirms",
+        "host": "fal.ai",
+        "weights_revision": "not exposed by fal"
+      },
+      "cost_usd": 0.075,
+      "file": "images-out/preprod/pass3/cov-cafe-MASTER-robot-E45.png",
+      "sha256": "7d6baaba4ade175f2fe9072005709f2f2a5fa8351069fba07c54337855187f23"
+    },
+    "cov-cafe-OTS-Z-robot-E49": {
+      "endpoint": "fal-ai/qwen-image-edit-2509",
+      "request_id": "01a14dd7-c1cf-7452-af30-5bfb1bf0b3ec",
+      "served_at": "2026-10-18T07:10:00+00:00",
+      "prompt": "Add the serving robot: a machine, not a person: a rounded white head with a dark face screen showing two small kind glowing eyes, slim white shoulders and jointed arms holding a flat tray, and no legs at all: below the waist a smooth white column down to a round gliding base, standing beside the far right end of the wooden table next to the tall young man in the cream tunic, bending slightly and holding out the tray with two small glowing menu tablets toward the table. The young man in the orange jacket seen from behind on the left and the tall young man in the cream tunic stay exactly as they are. Keep the drawing, colours, courtyard, string lights, tree, camera, framing and crop exactly. Exactly two people and one robot. No letters or numbers anywhere.",
+      "seed": 49,
+      "width": 1376,
+      "height": 768,
+      "references": [
+        {
+          "file": "images-out/preprod/edit-src/cov-cafe-OTS-Z-menu-K7.png",
+          "sha256": "660678e1d4702e042798a374a3220940816850d41cb5f6eb5326862ca3e666b9"
+        }
+      ],
+      "model": {
+        "id": "qwen-image-edit-2509",
+        "weights": "https://huggingface.co/Qwen/Qwen-Image-Edit-2509",
+        "license_line": "License: apache-2.0",
+        "license_checked": "coding agent, 2026-10-16 (model card); provisional until the owner confirms",
+        "host": "fal.ai",
+        "weights_revision": "not exposed by fal"
+      },
+      "cost_usd": 0.0606,
+      "file": "images-out/preprod/pass3/cov-cafe-OTS-Z-robot-E49.png",
+      "sha256": "fb82061ac0f994b54bd6e8e40dd495c185e9b96b5fb2c0bb3a46e42674a27bf9"
+    },
+    "cov-cafe-OTS-Z-robot-E46": {
+      "endpoint": "fal-ai/qwen-image-edit-2509",
+      "request_id": "01a14dd7-c20c-74b1-bb80-2d0307ebb1dd",
+      "served_at": "2026-10-18T07:10:05+00:00",
+      "prompt": "Add the serving robot: a machine, not a person: a rounded white head with a dark face screen showing two small kind glowing eyes, slim white shoulders and jointed arms holding a flat tray, and no legs at all: below the waist a smooth white column down to a round gliding base, standing beside the far right end of the wooden table next to the tall young man in the cream tunic, bending slightly and holding out the tray with two small glowing menu tablets toward the table. The young man in the orange jacket seen from behind on the left and the tall young man in the cream tunic stay exactly as they are. Keep the drawing, colours, courtyard, string lights, tree, camera, framing and crop exactly. Exactly two people and one robot. No letters or numbers anywhere.",
+      "seed": 46,
+      "width": 1376,
+      "height": 768,
+      "references": [
+        {
+          "file": "images-out/preprod/edit-src/cov-cafe-OTS-Z-menu-K7.png",
+          "sha256": "660678e1d4702e042798a374a3220940816850d41cb5f6eb5326862ca3e666b9"
+        }
+      ],
+      "model": {
+        "id": "qwen-image-edit-2509",
+        "weights": "https://huggingface.co/Qwen/Qwen-Image-Edit-2509",
+        "license_line": "License: apache-2.0",
+        "license_checked": "coding agent, 2026-10-16 (model card); provisional until the owner confirms",
+        "host": "fal.ai",
+        "weights_revision": "not exposed by fal"
+      },
+      "cost_usd": 0.0606,
+      "file": "images-out/preprod/pass3/cov-cafe-OTS-Z-robot-E46.png",
+      "sha256": "e79f36eef630f4f0c7c69c605779b20e7449abd8b6639b5b024f719e22968e19"
+    },
+    "cov-cafe-OTS-Z-robot-E48": {
+      "endpoint": "fal-ai/qwen-image-edit-2509",
+      "request_id": "01a14dd7-c23b-79b3-a7da-2a0f898c2acc",
+      "served_at": "2026-10-18T07:10:07+00:00",
+      "prompt": "Add the serving robot: a machine, not a person: a rounded white head with a dark face screen showing two small kind glowing eyes, slim white shoulders and jointed arms holding a flat tray, and no legs at all: below the waist a smooth white column down to a round gliding base, standing beside the far right end of the wooden table next to the tall young man in the cream tunic, bending slightly and holding out the tray with two small glowing menu tablets toward the table. The young man in the orange jacket seen from behind on the left and the tall young man in the cream tunic stay exactly as they are. Keep the drawing, colours, courtyard, string lights, tree, camera, framing and crop exactly. Exactly two people and one robot. No letters or numbers anywhere.",
+      "seed": 48,
+      "width": 1376,
+      "height": 768,
+      "references": [
+        {
+          "file": "images-out/preprod/edit-src/cov-cafe-OTS-Z-menu-K7.png",
+          "sha256": "660678e1d4702e042798a374a3220940816850d41cb5f6eb5326862ca3e666b9"
+        }
+      ],
+      "model": {
+        "id": "qwen-image-edit-2509",
+        "weights": "https://huggingface.co/Qwen/Qwen-Image-Edit-2509",
+        "license_line": "License: apache-2.0",
+        "license_checked": "coding agent, 2026-10-16 (model card); provisional until the owner confirms",
+        "host": "fal.ai",
+        "weights_revision": "not exposed by fal"
+      },
+      "cost_usd": 0.0606,
+      "file": "images-out/preprod/pass3/cov-cafe-OTS-Z-robot-E48.png",
+      "sha256": "c31cbe750295d54cfc060a056a3e9ab050ab66c4d5845b81667a824118bb82fa"
+    },
+    "cov-cafe-OTS-Z-robot-E47": {
+      "endpoint": "fal-ai/qwen-image-edit-2509",
+      "request_id": "01a14dd7-c292-7f51-a991-e77a1341aeb1",
+      "served_at": "2026-10-18T07:10:15+00:00",
+      "prompt": "Add the serving robot: a machine, not a person: a rounded white head with a dark face screen showing two small kind glowing eyes, slim white shoulders and jointed arms holding a flat tray, and no legs at all: below the waist a smooth white column down to a round gliding base, standing beside the far right end of the wooden table next to the tall young man in the cream tunic, bending slightly and holding out the tray with two small glowing menu tablets toward the table. The young man in the orange jacket seen from behind on the left and the tall young man in the cream tunic stay exactly as they are. Keep the drawing, colours, courtyard, string lights, tree, camera, framing and crop exactly. Exactly two people and one robot. No letters or numbers anywhere.",
+      "seed": 47,
+      "width": 1376,
+      "height": 768,
+      "references": [
+        {
+          "file": "images-out/preprod/edit-src/cov-cafe-OTS-Z-menu-K7.png",
+          "sha256": "660678e1d4702e042798a374a3220940816850d41cb5f6eb5326862ca3e666b9"
+        }
+      ],
+      "model": {
+        "id": "qwen-image-edit-2509",
+        "weights": "https://huggingface.co/Qwen/Qwen-Image-Edit-2509",
+        "license_line": "License: apache-2.0",
+        "license_checked": "coding agent, 2026-10-16 (model card); provisional until the owner confirms",
+        "host": "fal.ai",
+        "weights_revision": "not exposed by fal"
+      },
+      "cost_usd": 0.0606,
+      "file": "images-out/preprod/pass3/cov-cafe-OTS-Z-robot-E47.png",
+      "sha256": "53556c8823684219c896ab6adc0e8524c0a89ae5255d48cf4a6d7a82bd2aff27"
+    },
+    "cov-cafe-BAI-what-E46": {
+      "endpoint": "fal-ai/qwen-image-edit-2509",
+      "request_id": "01a14dd8-93a6-70d1-b419-784a5d2f5f21",
+      "served_at": "2026-10-18T07:10:33+00:00",
+      "prompt": "Change only her raised arm and the headphones: her arm on the far side of her body is lifted with the elbow pointing out and up, and that hand grips the outside of the headphone ear cup and pulls it a hand's width away from her head, so her bare ear shows and there is clear space between the ear cup and her ear. Her near arm rests on the table holding the phone. One raised arm, one arm on the table: exactly two arms and two hands in total, natural shoulders. Keep her face, surprised look, magenta ponytail, lime-green vest, tattoos, the table, the courtyard, the camera, framing and crop exactly. Nobody else. No letters or numbers anywhere.",
+      "seed": 46,
+      "width": 1376,
+      "height": 768,
+      "references": [
+        {
+          "file": "images-out/preprod/edit-src/cov-cafe-BAI-what-R27.png",
+          "sha256": "f12f84f532aa906cc5d594c1e2e1b60bc0d1f1c4c0d37920645408a378dfecbb"
+        }
+      ],
+      "model": {
+        "id": "qwen-image-edit-2509",
+        "weights": "https://huggingface.co/Qwen/Qwen-Image-Edit-2509",
+        "license_line": "License: apache-2.0",
+        "license_checked": "coding agent, 2026-10-16 (model card); provisional until the owner confirms",
+        "host": "fal.ai",
+        "weights_revision": "not exposed by fal"
+      },
+      "cost_usd": 0.0606,
+      "file": "images-out/preprod/pass3/cov-cafe-BAI-what-E46.png",
+      "sha256": "8c1df55d3fd16e04cacaba26f12bdef09fdc87f9f631f210228001b3e0c6b28a"
+    },
+    "cov-cafe-BAI-what-E47": {
+      "endpoint": "fal-ai/qwen-image-edit-2509",
+      "request_id": "01a14dd8-a8c2-7382-8843-4fb645dfd948",
+      "served_at": "2026-10-18T07:10:37+00:00",
+      "prompt": "Change only her raised arm and the headphones: her arm on the far side of her body is lifted with the elbow pointing out and up, and that hand grips the outside of the headphone ear cup and pulls it a hand's width away from her head, so her bare ear shows and there is clear space between the ear cup and her ear. Her near arm rests on the table holding the phone. One raised arm, one arm on the table: exactly two arms and two hands in total, natural shoulders. Keep her face, surprised look, magenta ponytail, lime-green vest, tattoos, the table, the courtyard, the camera, framing and crop exactly. Nobody else. No letters or numbers anywhere.",
+      "seed": 47,
+      "width": 1376,
+      "height": 768,
+      "references": [
+        {
+          "file": "images-out/preprod/edit-src/cov-cafe-BAI-what-R27.png",
+          "sha256": "f12f84f532aa906cc5d594c1e2e1b60bc0d1f1c4c0d37920645408a378dfecbb"
+        }
+      ],
+      "model": {
+        "id": "qwen-image-edit-2509",
+        "weights": "https://huggingface.co/Qwen/Qwen-Image-Edit-2509",
+        "license_line": "License: apache-2.0",
+        "license_checked": "coding agent, 2026-10-16 (model card); provisional until the owner confirms",
+        "host": "fal.ai",
+        "weights_revision": "not exposed by fal"
+      },
+      "cost_usd": 0.0606,
+      "file": "images-out/preprod/pass3/cov-cafe-BAI-what-E47.png",
+      "sha256": "85a6ace4cbcc262f7e7df895a130063b8bce72c354e6d880a47c3456448badd6"
+    },
+    "cov-cafe-BAI-what-E49": {
+      "endpoint": "fal-ai/qwen-image-edit-2509",
+      "request_id": "01a14dd8-ce46-75f3-ad8c-4d2943e493fc",
+      "served_at": "2026-10-18T07:10:56+00:00",
+      "prompt": "Change only her raised arm and the headphones: her arm on the far side of her body is lifted with the elbow pointing out and up, and that hand grips the outside of the headphone ear cup and pulls it a hand's width away from her head, so her bare ear shows and there is clear space between the ear cup and her ear. Her near arm rests on the table holding the phone. One raised arm, one arm on the table: exactly two arms and two hands in total, natural shoulders. Keep her face, surprised look, magenta ponytail, lime-green vest, tattoos, the table, the courtyard, the camera, framing and crop exactly. Nobody else. No letters or numbers anywhere.",
+      "seed": 49,
+      "width": 1376,
+      "height": 768,
+      "references": [
+        {
+          "file": "images-out/preprod/edit-src/cov-cafe-BAI-what-R27.png",
+          "sha256": "f12f84f532aa906cc5d594c1e2e1b60bc0d1f1c4c0d37920645408a378dfecbb"
+        }
+      ],
+      "model": {
+        "id": "qwen-image-edit-2509",
+        "weights": "https://huggingface.co/Qwen/Qwen-Image-Edit-2509",
+        "license_line": "License: apache-2.0",
+        "license_checked": "coding agent, 2026-10-16 (model card); provisional until the owner confirms",
+        "host": "fal.ai",
+        "weights_revision": "not exposed by fal"
+      },
+      "cost_usd": 0.0606,
+      "file": "images-out/preprod/pass3/cov-cafe-BAI-what-E49.png",
+      "sha256": "09490a07173477bdc5d78412d40a2f36d08b83948b56a0fca0c0ea4a14e320ce"
+    },
+    "cov-cafe-BAI-what-E48": {
+      "endpoint": "fal-ai/qwen-image-edit-2509",
+      "request_id": "01a14dd8-b1b2-7483-a001-06c348bcaf91",
+      "served_at": "2026-10-18T07:10:57+00:00",
+      "prompt": "Change only her raised arm and the headphones: her arm on the far side of her body is lifted with the elbow pointing out and up, and that hand grips the outside of the headphone ear cup and pulls it a hand's width away from her head, so her bare ear shows and there is clear space between the ear cup and her ear. Her near arm rests on the table holding the phone. One raised arm, one arm on the table: exactly two arms and two hands in total, natural shoulders. Keep her face, surprised look, magenta ponytail, lime-green vest, tattoos, the table, the courtyard, the camera, framing and crop exactly. Nobody else. No letters or numbers anywhere.",
+      "seed": 48,
+      "width": 1376,
+      "height": 768,
+      "references": [
+        {
+          "file": "images-out/preprod/edit-src/cov-cafe-BAI-what-R27.png",
+          "sha256": "f12f84f532aa906cc5d594c1e2e1b60bc0d1f1c4c0d37920645408a378dfecbb"
+        }
+      ],
+      "model": {
+        "id": "qwen-image-edit-2509",
+        "weights": "https://huggingface.co/Qwen/Qwen-Image-Edit-2509",
+        "license_line": "License: apache-2.0",
+        "license_checked": "coding agent, 2026-10-16 (model card); provisional until the owner confirms",
+        "host": "fal.ai",
+        "weights_revision": "not exposed by fal"
+      },
+      "cost_usd": 0.0606,
+      "file": "images-out/preprod/pass3/cov-cafe-BAI-what-E48.png",
+      "sha256": "167bccc14719c1cfaafe6b10cca6fa53e5fd671d80fef10bf1d2d851c2e6a109"
+    },
+    "cov-cafe-OTS-Z-robot-E51": {
+      "endpoint": "fal-ai/qwen-image-edit-2509",
+      "request_id": "01a14dd9-e352-70c0-afa8-e7572539c58b",
+      "served_at": "2026-10-18T07:12:05+00:00",
+      "prompt": "Add the serving robot: a machine, not a person: a rounded white head with a dark face screen showing two small kind glowing eyes, slim white shoulders and jointed arms holding a flat tray, and no legs at all: below the waist a smooth white column down to a round gliding base, standing beside the far right end of the wooden table next to the tall young man in the cream tunic, holding out the tray with two small glowing menu tablets toward the table. The young man in the orange jacket seen from behind on the left, the young woman with the magenta ponytail seated at the table, and the tall young man in the cream tunic all stay exactly as they are. Keep the drawing, colours, courtyard, string lights, tree, camera, framing and crop exactly. Exactly three people and one robot. No letters or numbers anywhere.",
+      "seed": 51,
+      "width": 1376,
+      "height": 768,
+      "references": [
+        {
+          "file": "images-out/preprod/edit-src/cov-cafe-OTS-Z-menu-E40.png",
+          "sha256": "934f79a9a80ef06250ee127a750c96f6e613feb8aa5368f507bd966ad904d44c"
+        }
+      ],
+      "model": {
+        "id": "qwen-image-edit-2509",
+        "weights": "https://huggingface.co/Qwen/Qwen-Image-Edit-2509",
+        "license_line": "License: apache-2.0",
+        "license_checked": "coding agent, 2026-10-16 (model card); provisional until the owner confirms",
+        "host": "fal.ai",
+        "weights_revision": "not exposed by fal"
+      },
+      "cost_usd": 0.0606,
+      "file": "images-out/preprod/pass3/cov-cafe-OTS-Z-robot-E51.png",
+      "sha256": "aa1e202c0ed1b12f45c6dd2df0027a1e39e7aef117ebe0a04db1674ea81b2f71"
+    },
+    "cov-cafe-OTS-Z-robot-E52": {
+      "endpoint": "fal-ai/qwen-image-edit-2509",
+      "request_id": "01a14dd9-e3d3-7a72-b1ad-f70cd4d3167c",
+      "served_at": "2026-10-18T07:12:06+00:00",
+      "prompt": "Add the serving robot: a machine, not a person: a rounded white head with a dark face screen showing two small kind glowing eyes, slim white shoulders and jointed arms holding a flat tray, and no legs at all: below the waist a smooth white column down to a round gliding base, standing beside the far right end of the wooden table next to the tall young man in the cream tunic, holding out the tray with two small glowing menu tablets toward the table. The young man in the orange jacket seen from behind on the left, the young woman with the magenta ponytail seated at the table, and the tall young man in the cream tunic all stay exactly as they are. Keep the drawing, colours, courtyard, string lights, tree, camera, framing and crop exactly. Exactly three people and one robot. No letters or numbers anywhere.",
+      "seed": 52,
+      "width": 1376,
+      "height": 768,
+      "references": [
+        {
+          "file": "images-out/preprod/edit-src/cov-cafe-OTS-Z-menu-E40.png",
+          "sha256": "934f79a9a80ef06250ee127a750c96f6e613feb8aa5368f507bd966ad904d44c"
+        }
+      ],
+      "model": {
+        "id": "qwen-image-edit-2509",
+        "weights": "https://huggingface.co/Qwen/Qwen-Image-Edit-2509",
+        "license_line": "License: apache-2.0",
+        "license_checked": "coding agent, 2026-10-16 (model card); provisional until the owner confirms",
+        "host": "fal.ai",
+        "weights_revision": "not exposed by fal"
+      },
+      "cost_usd": 0.0606,
+      "file": "images-out/preprod/pass3/cov-cafe-OTS-Z-robot-E52.png",
+      "sha256": "42655f0269d4bcae84b60186d573e6591e75d40e422cde0155d34771a2391350"
+    },
+    "cov-cafe-OTS-Z-robot-E50": {
+      "endpoint": "fal-ai/qwen-image-edit-2509",
+      "request_id": "01a14dd9-e5ab-7ab1-b02d-4771e188f3a7",
+      "served_at": "2026-10-18T07:12:13+00:00",
+      "prompt": "Add the serving robot: a machine, not a person: a rounded white head with a dark face screen showing two small kind glowing eyes, slim white shoulders and jointed arms holding a flat tray, and no legs at all: below the waist a smooth white column down to a round gliding base, standing beside the far right end of the wooden table next to the tall young man in the cream tunic, holding out the tray with two small glowing menu tablets toward the table. The young man in the orange jacket seen from behind on the left, the young woman with the magenta ponytail seated at the table, and the tall young man in the cream tunic all stay exactly as they are. Keep the drawing, colours, courtyard, string lights, tree, camera, framing and crop exactly. Exactly three people and one robot. No letters or numbers anywhere.",
+      "seed": 50,
+      "width": 1376,
+      "height": 768,
+      "references": [
+        {
+          "file": "images-out/preprod/edit-src/cov-cafe-OTS-Z-menu-E40.png",
+          "sha256": "934f79a9a80ef06250ee127a750c96f6e613feb8aa5368f507bd966ad904d44c"
+        }
+      ],
+      "model": {
+        "id": "qwen-image-edit-2509",
+        "weights": "https://huggingface.co/Qwen/Qwen-Image-Edit-2509",
+        "license_line": "License: apache-2.0",
+        "license_checked": "coding agent, 2026-10-16 (model card); provisional until the owner confirms",
+        "host": "fal.ai",
+        "weights_revision": "not exposed by fal"
+      },
+      "cost_usd": 0.0606,
+      "file": "images-out/preprod/pass3/cov-cafe-OTS-Z-robot-E50.png",
+      "sha256": "52cfddafb2eb989678491f1f91960669d7db840b17586697066193e9dfef74dc"
     }
   },
-  "spent_usd_ledger": 12.1045,
+  "spent_usd_ledger": 14.1235,
   "superseded": {
     "G02-A1": {
       "endpoint": "fal-ai/qwen-image-edit-2509",
