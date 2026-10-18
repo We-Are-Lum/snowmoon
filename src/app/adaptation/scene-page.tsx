@@ -55,15 +55,25 @@ export const loadScene = cache(async ({ id: idSeg, handle: raw, n }: SceneParams
   return { kind: 'scene', adaptation, version, handle: who.handle, fixed: true };
 });
 
+/**
+ * Share images made for one adaptation (owner, 2026-10-18): the Farcaster embed (3:2) and the link preview
+ * (1200 × 630), on its owner's scene page and that page's version and slug URLs. Every other adaptation keeps
+ * its poster card.
+ */
+const SHARE_IMAGES: Record<number, { handle: string; embed: string; og: string }> = {
+  1: { handle: 'naaate', embed: '/share/fifteen-days-embed-3x2.png', og: '/share/fifteen-days-og-1200x630.png' },
+};
+
 export async function sceneMetadata(params: SceneParams): Promise<Metadata> {
   const s = await loadScene(params);
   if (s.kind !== 'scene' && s.kind !== 'nothing') return { title: 'Nothing here yet', robots: { index: false } };
   const path = s.kind === 'scene' && s.fixed ? `/@${s.handle}/${s.adaptation.id}/v/${s.version.id}` : `/@${s.handle}/${s.adaptation.id}`;
   const url = `${appUrl()}${path}`;
   const image = (s.kind === 'scene' && ownMedia(s.version.recipe.poster_url)) || `${appUrl()}/embed.png`;
+  const share = SHARE_IMAGES[s.adaptation.id]?.handle === s.handle ? SHARE_IMAGES[s.adaptation.id] : null;
   const embed = JSON.stringify({
     version: '1',
-    imageUrl: image,
+    imageUrl: share ? `${appUrl()}${share.embed}` : image,
     button: {
       title: 'Watch it',
       action: { type: 'launch_frame', name: APP_NAME, url, splashImageUrl: `${appUrl()}/splash.png`, splashBackgroundColor: PAPER },
@@ -73,7 +83,8 @@ export async function sceneMetadata(params: SceneParams): Promise<Metadata> {
   return {
     title,
     alternates: { canonical: path },
-    openGraph: { title, images: [{ url: image }] },
+    openGraph: { title, images: share ? [{ url: `${appUrl()}${share.og}`, width: 1200, height: 630 }] : [{ url: image }] },
+    ...(share ? { twitter: { card: 'summary_large_image' as const, images: [`${appUrl()}${share.og}`] } } : {}),
     other: { 'fc:miniapp': embed, 'fc:frame': embed },
   };
 }
