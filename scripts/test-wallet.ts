@@ -130,6 +130,17 @@ check('someone else also paid payTo in that block: refused', (await why(base({ t
 check('no rise in payTo\'s balance: nothing paid', (await why(base({ to: EP7, from: BUNDLER, logs: [userOp(me.address, true)], rise: 0n }))) === 'not-to-us');
 check('an ordinary wallet\'s plain ETH payment still works without a balance read', (await why(base({ value: 2n * 10n ** 15n }))) === 'ok');
 
+// --- A payment's hash, as pasted (owner, 2026-10-15) ------------------------------------
+{
+  const { txHashFrom } = await import('../src/lib/wallet/hash');
+  const h = '0x' + 'aB'.repeat(32);
+  check('a pasted hash is read, lower case, spaces trimmed', txHashFrom(`  ${h}\n`) === h.toLowerCase());
+  check('a block explorer link gives its hash', txHashFrom(`https://basescan.org/tx/${h}?x=1`) === h.toLowerCase());
+  check('too short, too long or not hex is refused', txHashFrom(h.slice(0, -1)) === null && txHashFrom(h + 'a') === null && txHashFrom('0x' + 'g'.repeat(64)) === null);
+  check('two different hashes are refused; the same one twice is fine', txHashFrom(`${h} 0x${'cd'.repeat(32)}`) === null && txHashFrom(`${h} ${h.toLowerCase()}`) === h.toLowerCase());
+  check('an address is not a hash', txHashFrom(me.address) === null);
+}
+
 // --- The balance -----------------------------------------------------------------------
 const db = new PGlite();
 await db.exec(`create role anon nologin; create role authenticated nologin; create role service_role nologin bypassrls;`);
@@ -185,6 +196,51 @@ const writable = await sql`select c.relname as t from pg_class c join pg_namespa
 check('accounts, payments and debits are append-only for the app', writable.length === 0, writable.map((r) => r.t).join(', '));
 
 await sql.end();
+// --- Adding a payment by its hash: the claim route, end to end (owner, 2026-10-15) ---------
+{
+  // One connection at a time: the test's own is closed, and the route's (src/lib/db.ts) is used.
+  process.env.STUDIO_DATABASE_URL = `postgres://studio_writer@127.0.0.1:${PORT}/postgres`;
+  const { db: routeDb } = await import('../src/lib/db');
+  const D = routeDb()!;
+  await D`set role studio_writer`;
+  const S = D as unknown as Sql;
+  const sql = D;
+  const { useChainForTests } = await import('../src/lib/wallet/chain');
+  const { POST } = await import('../src/app/api/wallet/claim/route');
+  const mine = await accountFor(S, me.address);
+  const theirs = await accountFor(S, other.address);
+  const as = (account: number, address: string, body: unknown) =>
+    POST(new Request('https://snowmoon.party/api/wallet/claim', { method: 'POST', headers: { 'content-type': 'application/json', authorization: `Bearer ${signSession(account, address)}` }, body: JSON.stringify(body) }));
+  const lost = keccak256(toHex('lost payment')) as `0x${string}`;
+  const before = await balanceUsd(S, mine);
+
+  useChainForTests(base({ logs: [usdcLog(other.address, US, 2_000_000n)] }));
+  const fromOther = await as(mine, me.address, { txHash: lost });
+  check('a payment sent from another wallet is refused and adds nothing', fromOther.status === 422 && (await fromOther.json()).reason === 'not-from-you' && (await balanceUsd(S, mine)) === before);
+
+  useChainForTests({ ...base(), getBlockNumber: async () => { throw new Error('429 Too Many Requests'); } } as unknown as PublicClient);
+  const limited = await as(mine, me.address, { txHash: lost });
+  const lj = await limited.json();
+  check('a Base read that fails (a rate limit) says retry and adds nothing', limited.status === 503 && lj.retry === true && (await balanceUsd(S, mine)) === before, JSON.stringify(lj));
+
+  useChainForTests(base({ logs: [usdcLog(me.address, US, 2_000_000n)] }));
+  const good = await as(mine, me.address, { txHash: lost.toUpperCase().replace('0X', '0x') });
+  const gj = await good.json();
+  check('my own payment, pasted later, is added once for its amount', good.ok && gj.added === 2 && Math.abs((await balanceUsd(S, mine)) - (before + 2)) < 1e-6, JSON.stringify(gj));
+  const again = await as(mine, me.address, { txHash: lost });
+  check('the same hash again is refused as already added', again.status === 409 && (await again.json()).reason === 'already' && Math.abs((await balanceUsd(S, mine)) - (before + 2)) < 1e-6);
+  const theirTry = await as(theirs, other.address, { txHash: lost });
+  check('another wallet pasting my hash gets nothing', !theirTry.ok && (await balanceUsd(S, theirs)) === 0);
+
+  const anon = await POST(new Request('https://snowmoon.party/api/wallet/claim', { method: 'POST', body: JSON.stringify({ txHash: lost }) }));
+  check('adding a payment needs a wallet sign-in', anon.status === 401);
+  const bad = await as(mine, me.address, { txHash: 'basescan.org/tx/' + lost });
+  check('the route takes only a bare hash (the box extracts it first)', bad.status === 400);
+  const [rows] = await sql`select count(*)::int as n from studio.wallet_payments where tx_hash = ${lost}`;
+  check('one payment row for the hash, whatever was tried', rows.n === 1);
+}
+
+{ const { db: d } = await import('../src/lib/db'); await d()?.end(); }
 await server.stop();
 await db.close();
 if (failures.length) {
