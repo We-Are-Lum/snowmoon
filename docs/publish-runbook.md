@@ -201,3 +201,30 @@ Not merged into main (owner, 2026-10-17). It stays a branch.
   as in `docs/restore-point-2026-10-07.md`). Nothing on main is force-pushed.
 - The pages: set `ADAPTATION_PAGES.live` back to false and push. The pages then say "Nothing here yet".
 - 0012: it only adds tables and its seed. Drop them in the SQL Editor only after asking.
+
+## Later: the Remix merge (its own merge, after the baseline; owner, 2026-10-18)
+
+Only after the owner's Terms and Privacy reread, with the Remix lines and consent own-words-v4 (the list is
+in the viewer, "The Remix merge").
+
+1. Restore point: note the current production deployment, as in (b).
+2. Migration 0013, by hand in the SQL Editor as `postgres`, after 0012, with a dry run first:
+
+       cd $MAIN
+       git fetch origin && git show origin/remix-v1:supabase/migrations/0013_remix.sql | sed 's/^commit;$/rollback;/' | pbcopy   # dry run
+       git show origin/remix-v1:supabase/migrations/0013_remix.sql | pbcopy                                                    # apply
+
+   The check query must show four rows (remix_frames, remix_asks, remix_costs, storyboards), each with
+   `rls = true`, `anon_reads = false` and `anon_writes = false`.
+3. Merge remix-v1 (it holds editor-live):
+
+       git merge --no-ff origin/remix-v1
+       npx tsc --noEmit -p . && npm run check:principles && npm run test:remix   # 16 of 16
+       git push origin main
+
+4. Smoke test on production, signed in as the owner: open `/@naaate/1/shot/first`, agree (own-words-v4),
+   write a change, Generate. Check the frame's page `/remix/<id>`, its image on pictures.snowmoon.party,
+   and the prompt check's verdict in its recipe. Then Hide it. This is the first real prompt check for
+   Remix: the local run had it stood in.
+5. Off switches: `REMIX_FREE=off` (free frames) and `REMIX_GENERATE=off` (every Generate), set in Vercel's
+   Production environment by the owner only if needed.

@@ -47,7 +47,7 @@ export function PublishedTextField({
 }
 
 /** The blocking consent screen: shown before a person's first contribution of their own words. */
-export function ConsentScreen({ wording, name, onAgree, onCancel, error }: { wording: Wording; name: string | null; onAgree: () => void; onCancel: () => void; error: string | null }) {
+export function ConsentScreen({ wording, name, wallet, onAgree, onCancel, error }: { wording: Wording; name: string | null; /** A wallet account's shortened address, shown in place of a Farcaster name. */ wallet?: string | null; onAgree: () => void; onCancel: () => void; error: string | null }) {
   return (
     <div className="consent-overlay">
       <div className="consent-screen" role="dialog" aria-modal="true" aria-labelledby="consent-title">
@@ -56,7 +56,7 @@ export function ConsentScreen({ wording, name, onAgree, onCancel, error }: { wor
         {wording.text.map((t, i) => (
           <p key={i}>{t}</p>
         ))}
-        <p>{name ? `Your words will be shown as @${name}.` : 'Your words will be shown with your name (Farcaster name or wallet address).'}</p>
+        <p>{name ? `Your words will be shown as @${name}.` : wallet ? `Your words will be shown with your address, ${wallet}.` : 'Your words will be shown with your name (Farcaster name or wallet address).'}</p>
         {error && <p className="consent-error">{error}</p>}
         <div className="consent-actions">
           <button type="button" className="consent-cancel" onClick={onCancel}>

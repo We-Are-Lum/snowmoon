@@ -4,6 +4,7 @@ import { NothingHere, loadScene, type SceneParams } from '../../../../../scene-p
 import { ShotEditor } from '../../../../../editor/shot-editor';
 import { EDITOR_PROTOTYPE_URL } from '~/lib/config';
 import '../../../../../editor/editor.css';
+import '../../../../../../remix/remix.css';
 
 /**
  * /@<fname>/<id>/shot/<shot>: the live shot editor for that person's chosen version (rewritten here

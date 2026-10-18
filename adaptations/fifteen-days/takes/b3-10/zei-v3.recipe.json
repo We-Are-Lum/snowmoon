@@ -1,0 +1,51 @@
+{
+  "line": "L28-b3-10",
+  "voice": "zei-v3",
+  "stand_in": false,
+  "script_line": {
+    "n": 28,
+    "ref": "b3-10",
+    "take": 1,
+    "of": 3,
+    "rerecorded": false,
+    "tempo": 1.0
+  },
+  "model": "chatterbox-vc",
+  "weights": "https://huggingface.co/ResembleAI/chatterbox",
+  "revision": "5bb1f6ee58e50c3b8d408bc82a6d3740c2db6e18",
+  "license": "MIT",
+  "weights_sha256": {
+    "s3gen.safetensors": "2b78103c654207393955e4900aac14a12de8ef25f4b09424f1ef91941f161d4e",
+    "conds.pt": "6552d70568833628ba019c6b03459e77fe71ca197d5c560cef9411bee9d87f4e"
+  },
+  "runs_on": "the performer's machine (cpu)",
+  "take": {
+    "sha256": "0147396e4e39d265adc1b651970402cb42c1142fbfc6e5bc0e45155da511025f",
+    "duration_s": 1.7,
+    "kept": "private, outside the repository; never copied or uploaded"
+  },
+  "reference": {
+    "file": "scenes-out/fifteen-days/voices/zei-v3.ref.wav",
+    "sha256": "38d171fff49891e23e613ae7fa305f654a8d1fc32e1e2805d154ca8a46cdf46c",
+    "recipe": "adaptations/fifteen-days/voices/zei-v3.recipe.json"
+  },
+  "watermark": {
+    "applied": "Perth implicit watermark, applied in Chatterbox's own code (ChatterboxVC.generate calls PerthImplicitWatermarker.apply_watermark on every output)",
+    "verified": false,
+    "detector": "not evidence: on 2026-10-14 Perth's detector scored clean audio as watermarked (a 220 Hz sine 0.98; the owner's raw take 0.67, which rounds to 1), though clean white noise scored 0.00 and freshly watermarked speech 1.00, also after -5.3 dB of gain. A score of 1.00 here is consistent with the watermark but does not prove it."
+  },
+  "seconds_taken": 17.0,
+  "sample_rate": 24000,
+  "format": "32-bit float WAV",
+  "level": {
+    "vocoder_clamp": "lifted",
+    "peak_before": 0.431,
+    "gain_db": 0.0,
+    "peak_after": 0.431
+  },
+  "file": "scenes-out/fifteen-days/lines-v2/L28-b3-10.zei-v3.wav",
+  "sha256": "0be0cd9691b3373b7a249b9cc47f22fb2ba1f90ee501c6fbb76d403ca26b2b64",
+  "duration_s": 1.72,
+  "made_at": "2026-10-16T22:31:43+00:00",
+  "cost_usd": 0
+}
