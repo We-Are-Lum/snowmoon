@@ -4,6 +4,8 @@ import { useCallback, useEffect, useState } from 'react';
 import { authFetch, signOutWallet } from '~/lib/client-auth';
 import { IMAGE_WORDING } from '~/lib/images/wording';
 import { claim, hasWallet, pay, signInWithWallet, WalletError } from '~/lib/wallet/client';
+import { txHashFrom } from '~/lib/wallet/hash';
+import { TxHashField } from './tx-hash-field';
 
 /**
  * Wallet sign-in and the prepaid balance (owner, 2026-10-13). Wording drafted by the coding agent
@@ -58,6 +60,7 @@ export function WalletPanel({ onChange }: { onChange?: () => void }) {
   const [token, setToken] = useState<'USDC' | 'ETH'>('USDC');
   const [note, setNote] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [pasted, setPasted] = useState('');
   // A payment sent but not yet added (kept on this device, so a closed tab doesn't lose it).
   const [pending, setPending] = useState<`0x${string}` | null>(null);
   useEffect(() => {
@@ -122,6 +125,22 @@ export function WalletPanel({ onChange }: { onChange?: () => void }) {
     }
   };
 
+  // A payment that reached us but wasn't added (owner, 2026-10-15): the same server check, by its hash.
+  const recover = async () => {
+    const h = txHashFrom(pasted);
+    if (!h) return setNote(W.recoverBad);
+    setBusy(true);
+    setNote(W.waiting);
+    try {
+      done(await claim(h, 3));
+      setPasted('');
+    } catch (e) {
+      setNote((e as Error).message);
+    } finally {
+      setBusy(false);
+    }
+  };
+
   return (
     <div className="wallet-panel">
       <p className="wallet-balance">
@@ -164,6 +183,23 @@ export function WalletPanel({ onChange }: { onChange?: () => void }) {
             {W.tryAgain}
           </button>
         </p>
+      )}
+      {b.open && (
+        <details className="wallet-recover" open={pending !== null}>
+          <summary>{W.recover}</summary>
+          <p className="ic-note">{W.recoverNote}</p>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              void recover();
+            }}
+          >
+            <TxHashField id="wallet-recover-hash" label={W.recoverLabel} value={pasted} onChange={setPasted} />
+            <button type="submit" className="ic-secondary" disabled={busy || !pasted.trim()}>
+              {W.recoverButton}
+            </button>
+          </form>
+        </details>
       )}
       {note && (
         <p className="ic-note" role="status">

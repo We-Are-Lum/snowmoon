@@ -436,3 +436,9 @@ a.ia-button:hover { text-decoration: none; }
 .wallet-add { display: flex; flex-direction: column; gap: 8px; }
 .wallet-tokens, .wallet-packs { display: flex; flex-wrap: wrap; gap: 8px; }
 .wallet-tokens button, .wallet-packs button, .wallet-panel > .ic-secondary { width: auto; padding: 6px 14px; }
+/* A payment by its transaction hash (owner, 2026-10-15). */
+.wallet-recover summary { min-height: var(--tap); display: flex; align-items: center; cursor: pointer; font-size: var(--text-label); }
+.wallet-recover form { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
+.wallet-recover input { font: inherit; font-size: 16px; min-height: var(--tap); padding: 6px 10px; border: 1px solid var(--rule, currentColor); border-radius: 4px; background: transparent; color: inherit; }
+.wallet-recover input:focus-visible { outline: 2px solid var(--ink); outline-offset: 1px; }
+.wallet-recover .ic-secondary { align-self: flex-start; width: auto; padding: 6px 14px; }
