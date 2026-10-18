@@ -1,0 +1,101 @@
+{
+ "closed_model": true,
+ "label": "closed model",
+ "model": "openai/gpt-image-2.5-sunburst",
+ "model_name": "GPT Image 2.5 Sunburst (OpenAI)",
+ "route": "Vercel AI Gateway /v1/images/edits (AI_GATEWAY_API_KEY)",
+ "date": "2026-10-18T09:12:38.959Z",
+ "purpose": "gpt-cut: a private full-cut comparison for the owner (2026-10-18); not in the cut or on the site",
+ "v6_picture": "images-out/preprod/pass3/cov-cafe-SUGAR-door-K7.png",
+ "from": {
+  "base": "cov-cafe-SUGAR-door-A7",
+  "finish": "cov-cafe-SUGAR-door-K7",
+  "edits": []
+ },
+ "prompt": "A hand-drawn science fiction comic book panel, ink linework and flat cel-shaded colour, not a 3D render, not a photograph. Insert close-up (ECU INSERT). Very close at table height: the little wall of small white sugar cubes between two tea cups, now with one cube missing from the middle of the bottom row: a doorway. Picture 1 is a depth map of this exact frame rendered from a 3D model (near is light, far is dark): follow its camera, angle, lens and perspective exactly; every person, chair, table, wall and railing goes exactly where and as big as its shape stands there, people sitting on the chairs and standing on the floor; the simple mannequin shapes are only where the people go. Draw nothing grey from it. Nobody else in the picture at all: no other diners, no passers-by, no figures in the windows. The table they share is a long rectangular wooden table, never round. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands. Shop windows and panels glow plainly, at most with one simple pictogram (a cup, a leaf, a bowl); no lettered signs at all. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character. Draw it as a finished comic panel: inked outlines, painted flat colour, glowing lights. Picture 2 shows how the place looks: take its colours, materials and night light; it has nobody in it. The picture is 16:9, landscape.",
+ "references": [
+  {
+   "file": "adaptations/fifteen-days/preprod/set-frames/cov-cafe-SUGAR-door.depth.png",
+   "sha256": "55edcc420cf0fb81836c4524c72f2cc4734bf948afaf6a87a4e8e9e2d5707005"
+  },
+  {
+   "file": "images-out/preprod/plates-small/courtyard.png",
+   "sha256": "c4e6d9b1b60e358dd71d0321462453467f47598a5912b03910a5e34fa0ab1ff5"
+  }
+ ],
+ "request": {
+  "size": "1536x864",
+  "n": 1
+ },
+ "response_meta": {
+  "created": 1792314699,
+  "usage": {
+   "total_tokens": 2348,
+   "input_tokens": 2068,
+   "output_tokens": 280,
+   "input_tokens_details": {
+    "text_tokens": 468,
+    "image_tokens": 1600
+   }
+  },
+  "providerMetadata": {
+   "openai": {
+    "images": [
+     {
+      "imageTokens": 1600,
+      "textTokens": 468,
+      "created": 1792314699,
+      "size": "1536x864",
+      "quality": "medium",
+      "background": "opaque",
+      "outputFormat": "png"
+     }
+    ]
+   },
+   "gateway": {
+    "routing": {
+     "originalModelId": "openai/gpt-image-2.5-sunburst",
+     "resolvedProvider": "openai",
+     "fallbacksAvailable": [],
+     "planningReasoning": "System credentials planned for: openai. Total execution order: openai(system)",
+     "canonicalSlug": "openai/gpt-image-2.5-sunburst",
+     "finalProvider": "openai",
+     "modelAttemptCount": 1,
+     "modelAttempts": [
+      {
+       "canonicalSlug": "openai/gpt-image-2.5-sunburst",
+       "success": true,
+       "providerAttemptCount": 1,
+       "providerAttempts": [
+        {
+         "provider": "openai",
+         "credentialType": "system",
+         "success": true,
+         "startTime": 1792314679497,
+         "endTime": 1792314699583,
+         "statusCode": 200
+        }
+       ]
+      }
+     ],
+     "totalProviderAttemptCount": 1
+    },
+    "cost": "0.02354",
+    "marketCost": "0.02354",
+    "surchargeCost": "0",
+    "gatewayCost": "0.02354",
+    "inferenceCost": "0.02354",
+    "inputInferenceCost": "0",
+    "outputInferenceCost": "0.02354",
+    "generationId": "gen_01M574F8542M7FNMR4NNWAMR9J"
+   }
+  }
+ },
+ "cost_usd": 0.02354,
+ "output": {
+  "file": "/private/tmp/claude-501/-Users-nathan-snowmoon/9334ff32-2377-4150-8bc0-c96cfb5e0d3f/scratchpad/gptcut/raw/cov-cafe-SUGAR-door-K7-g1.png",
+  "sha256": "77d477fe1d44b367b925d70ef88ef5af7029ceca320bf9fce430cba789a8a553",
+  "bytes": 1785618
+ },
+ "ms": 86189
+}
