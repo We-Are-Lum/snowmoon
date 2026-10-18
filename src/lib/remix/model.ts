@@ -82,6 +82,14 @@ export function remixFrameLabel(model: { name?: string; maker?: string; closed?:
   return model?.closed ? `AI-generated with ${model.name} (${model.maker}, a closed model), not by the author` : 'AI-generated image, not by the author';
 }
 
+/**
+ * A remix of an open-weight version listed on a version GPT Image drew (owner, 2026-10-18, decision 2d: list version
+ * 1's remixes on version 2's panel, labelled "version 1 · open-weight"): its tag, and its own label naming its open
+ * model. DRAFT wording.
+ */
+export const openWeightTag = (version: number) => `version ${version} · open-weight`;
+export const openFrameLabel = (modelName: string | undefined) => `AI-generated with ${modelName ?? 'an open-weight model'} (open weights), not by the author`;
+
 /** The model as a remix frame's recipe records it: a closed one with its maker, the date and "closed model". */
 export function closedRecipeModel(madeAt: string) {
   const m = REMIX_GPT.model;

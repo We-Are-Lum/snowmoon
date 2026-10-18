@@ -11,8 +11,9 @@ import { ImageUnavailable, type Made } from './fal';
  * project's OIDC token on Vercel, as the prompt check uses); no new key or environment variable. Nothing that
  * identifies the person is sent. The cost is the one the gateway reports for the call.
  *
- * Not yet run against the gateway from the site (no paid call was made to build it): one owner-approved test
- * generation (about $0.04 to $0.07) should confirm the four pictures, output_format and the refusal shape.
+ * Not yet run against the gateway from the site with a picture made: the one owner-approved test (2026-10-18), sent
+ * with zeroDataRetention, was refused before any provider was tried (see below). A successful call has still to confirm
+ * the four pictures, output_format and how a moderation refusal looks.
  */
 type Ref = { bytes: Buffer; contentType: string; width: number; height: number };
 
@@ -24,6 +25,11 @@ export async function makeGptEdit(prompt: string, references: Ref[], request: Re
   const token = gatewayToken(request);
   if (!token) throw new ImageUnavailable('no gateway credential');
   const size = `${REMIX_GPT.size.width}x${REMIX_GPT.size.height}`;
+  // No zeroDataRetention here, on purpose. The owner asked for it (2026-10-18, decision 2c), and the one test call sent
+  // with it was refused by the gateway: HTTP 400, type "no_zdr_providers_available", "openai/gpt-image-2.5-sunburst is
+  // ineligible for Zero Data Retention (ZDR). This model retains data and cannot be used with ZDR configurations."
+  // ($0, no provider attempted). With it, every call would be refused. What OpenAI keeps is said in the Privacy draft
+  // (docs/legal/remix-gpt-draft.md) instead.
   const settings = { model: REMIX_GPT.model.endpoint, n: 1, size, output_format: REMIX_GPT.outputFormat };
   const res = await fetch(REMIX_GPT.url, {
     method: 'POST',

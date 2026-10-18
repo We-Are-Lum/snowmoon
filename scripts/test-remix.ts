@@ -26,6 +26,7 @@
  *         hidden; another account can't hide it.
  *  R11:   a phone: no sideways scroll, text at least 12px, controls at least 44px.
  *  R12:   the off switches both ways (REMIX_GENERATE=off, REMIX_FREE=off, then neither).
+ *  R13:   version 2's panel also lists the person's version 1 remixes of the shot, tagged "version 1 · open-weight".
  */
 import path from 'node:path';
 import { mkdirSync, mkdtempSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
@@ -333,6 +334,28 @@ try {
     await page.waitForLoadState('load');
     await page.locator('.rx-title').filter({ hasText: 'Hidden' }).waitFor({ timeout: 10000 });
     check('S3', 'another account can\'t use your remix frame or hide your board; you can hide it', bad.status === 400 && otherHide.status === 403, { bad: bad.status, otherHide: otherHide.status }, await shot(page, 'S3-storyboard-hidden'));
+    await page.context().close();
+  }
+
+  // R13 version 2's panel also lists the person's version 1 remixes of the shot (owner, 2026-10-18, decision 2d), each
+  // tagged "version 1 · open-weight" with its own label naming FLUX.2 [klein]; they can't join version 2's storyboard.
+  {
+    // Its picture is the latest test frame's file (a frame's sha256 is unique, so this row records it reversed).
+    const src = (await q1(`select image_url, image_sha256 from studio.remix_frames where person = $1 order by created_at desc limit 1`, [-acct])) as { image_url: string; image_sha256: string };
+    const v1 = (await q1(
+      `insert into studio.remix_frames (adaptation_id, version_id, shot_id, person, own_words, prompt, recipe, image_url, image_sha256, cost_usd, by_name)
+       values (1, 1, '48-b4-1', $1, 'An earlier remix, of version 1.', 'test prompt', $2, $3, $4, 0, '0x5aae…eaed') returning id`,
+      [-acct, JSON.stringify({ kind: 'remix-frame', model: { id: 'flux2-klein-4b-edit', name: 'FLUX.2 [klein] 4B', licence: 'Apache-2.0', endpoint: 'fal-ai/flux-2/klein/4b/edit', host: 'fal.ai' }, test: 'inserted by test:remix R13' }), src.image_url, src.image_sha256.split('').reverse().join('')],
+    )) as { id: string };
+    const page = await newPage({ width: 1280, height: 900 }, token);
+    await page.goto(BASE + ED);
+    await page.locator('.ed-mine').waitFor({ timeout: 20000 });
+    const fig = page.locator(`.ed-mine figure[data-version="1"]`);
+    const figText = (await fig.first().innerText().catch(() => '')).replace(/\s+/g, ' ');
+    const addButtons = await fig.first().getByRole('button', { name: /storyboard/i }).count();
+    const ownText = (await page.locator('.ed-mine figure[data-version="2"]').first().innerText().catch(() => '')).replace(/\s+/g, ' ');
+    const ok = /version 1 · open-weight/i.test(figText) && /AI-generated with FLUX\.2 \[klein\] 4B \(open weights\), not by the author/i.test(figText) && /An earlier remix, of version 1/.test(figText) && addButtons === 0 && !/open-weight/i.test(ownText);
+    check('R13', 'version 2\'s panel lists the version 1 remix of the shot, tagged "version 1 · open-weight", its label naming FLUX.2 [klein] (open weights), not addable to version 2\'s storyboard', ok, { id: v1.id, figText: figText.slice(0, 200), addButtons, ownText: ownText.slice(0, 120) }, await shot(page, 'R13-version-1-remixes'));
     await page.context().close();
   }
 

@@ -8,7 +8,7 @@ import { SignInButton } from '~/components/sign-in';
 import { WalletPanel, WalletSignInButton } from '~/components/wallet';
 import { HideButton, ShareRow } from '../../remix/remix-actions';
 import { AddToStoryboard } from './add-to-storyboard';
-import { remixFrameLabel } from '~/lib/remix/model';
+import { openFrameLabel, openWeightTag, remixFrameLabel } from '~/lib/remix/model';
 
 /**
  * Remix in the shot editor (owner, 2026-10-18): Generate from the camera the person set. Sign in
@@ -27,6 +27,8 @@ interface Mine {
   page: string;
   at: string;
   model?: { name?: string; maker?: string; closed?: boolean } | null;
+  /** The version the frame was made from: another one's (version 1 on version 2's panel) is tagged and can't join this version's storyboard. */
+  version?: number;
 }
 interface Status {
   ready: boolean;
@@ -218,8 +220,10 @@ export function RemixPanel({
         <div className="ed-line">
           <p className="label">My remixes of this shot · {frames.length}</p>
           <div className="ed-mine">
-            {frames.map((f) => (
-              <figure key={f.id} className={f.hidden ? 'is-hidden' : undefined}>
+            {frames.map((f) => {
+              const other = f.version !== undefined && f.version !== version;
+              return (
+              <figure key={f.id} className={f.hidden ? 'is-hidden' : undefined} data-version={f.version}>
                 {f.hidden ? (
                   <div className="ed-noimg label">Hidden</div>
                 ) : (
@@ -227,13 +231,16 @@ export function RemixPanel({
                   <img src={f.url} alt={`Your remix: ${f.words}`} width={1024} height={576} loading="lazy" />
                 )}
                 <figcaption>
+                  {other && <span className="label ed-remix-version">{openWeightTag(f.version!)} · </span>}
                   <span className="label">AI image · by {by}</span>
-                  {f.model?.closed ? ` · ${remixFrameLabel(f.model)}` : ''} · {f.hidden ? 'hidden' : <Link href={f.page}>page and recipe</Link>} · &ldquo;{f.words}&rdquo;
+                  {/* Each frame keeps its own model's label: a closed one named with its maker; another version's open one by name (DRAFT). */}
+                  {f.model?.closed ? ` · ${remixFrameLabel(f.model)}` : other ? ` · ${openFrameLabel(f.model?.name)}` : ''} · {f.hidden ? 'hidden' : <Link href={f.page}>page and recipe</Link>} · &ldquo;{f.words}&rdquo;
                 </figcaption>
-                {!f.hidden && <AddToStoryboard adaptation={adaptation} version={version} shot={shotId} seconds={seconds} frame={{ id: f.id, url: f.url }} boardPath={boardPath} />}
+                {!f.hidden && !other && <AddToStoryboard adaptation={adaptation} version={version} shot={shotId} seconds={seconds} frame={{ id: f.id, url: f.url }} boardPath={boardPath} />}
                 <HideButton id={f.id} onChange={() => void refresh()} />
               </figure>
-            ))}
+              );
+            })}
           </div>
         </div>
       )}

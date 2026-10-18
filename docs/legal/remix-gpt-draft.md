@@ -23,11 +23,24 @@ means a reader's prompt and pictures go to a new outside party, OpenAI, through 
 
 ## Privacy, section 7 ("Outside services and what they receive"): one new item
 
-> DRAFT: OpenAI receives, through Vercel AI Gateway, the prompt and pictures for a frame you make in Remix from a
-> version whose pictures OpenAI's GPT Image drew (in Fifteen Days, version 2). That is a depth picture of the
-> camera you set, the shot's place and cast pictures, the shot's prompt and your words. OpenAI makes the frame.
-> Nothing that identifies you is sent with it. OpenAI keeps what it receives under its own terms for its API
-> customers; we cannot ask it to keep nothing, as we ask fal.ai.
+The owner's fallback wording (2026-10-18), since zero data retention is refused for this model (see "The ZDR test"
+below):
+
+> DRAFT: If you make a Remix frame of a version drawn by GPT Image, your prompt and the pictures sent with it (the
+> shot's layout, the character cards and the set's plate; nothing that identifies you) go to OpenAI through Vercel
+> AI Gateway to draw it. OpenAI does not train on them [TO VERIFY], and may keep them for up to 30 days [TO VERIFY]
+> to monitor for abuse. Vercel AI Gateway does not keep them [UNVERIFIED].
+
+Three claims in it must be checked before it ships:
+
+- **"up to 30 days" (TO VERIFY):** check against OpenAI's current API data-usage terms.
+- **"does not train" (TO VERIFY):** check against the same terms.
+- **"Vercel AI Gateway does not keep them" (UNVERIFIED until checked against Vercel's AI Gateway data terms):**
+  - The lead to check is Vercel's AI Gateway ZDR docs, https://vercel.com/docs/ai-gateway/security-and-compliance/zdr
+    (last updated 2026-09-22; read by the coordinator on 2026-10-19).
+  - Under its "Vercel" heading, the page says the gateway doesn't retain prompts or outputs and deletes user data
+    once a request completes.
+  - The docs are not a contract term. The owner should confirm the clause applies to this team's plan.
 
 The fal.ai item changes to cover only the cases still sent there:
 
@@ -35,10 +48,21 @@ The fal.ai item changes to cover only the cases still sent there:
 > version drawn with open-weight models: a depth picture of the camera you set, and the shot's place and cast
 > pictures), and makes the image. It is asked to keep no copy.
 
-**Open point for the owner:** OpenAI's API data-retention terms (abuse monitoring, zero-data-retention
-eligibility) have not been checked by the agent. The last sentence of the OpenAI item has to match what is
-actually true on the day it goes live. Check OpenAI's terms and the gateway's settings for this model before
-that sentence ships.
+## The ZDR test (2026-10-18)
+
+The owner approved one test call (decision 2c: "Send it with the gateway's zeroDataRetention: true"), and the
+coordinator ran it.
+
+- **Request:** `POST https://ai-gateway.vercel.sh/v1/images/edits` with `model: "openai/gpt-image-2.5-sunburst"`,
+  a prompt, the pictures as data: URIs, `n: 1`, `size: "1536x864"`, and the gateway's `zeroDataRetention: true`.
+- **Answer:** HTTP 400, type `no_zdr_providers_available`: "openai/gpt-image-2.5-sunburst is ineligible for Zero
+  Data Retention (ZDR). This model retains data and cannot be used with ZDR configurations."
+- **Cost:** $0. No provider was attempted.
+
+So `makeGptEdit` (src/lib/images/gateway-image.ts) does not send zeroDataRetention; with it, every call would be
+refused. A comment there records why. The Privacy line says what OpenAI may keep instead. No picture has been made
+from the site yet: a successful call has still to confirm the four pictures, `output_format` and how a moderation
+refusal looks.
 
 ## Terms: section 6a (prepaid) is unchanged; section 8 gets one clause
 
@@ -57,7 +81,20 @@ Section 9 ("Outside services") is unchanged. It already points to the Privacy Po
 
 ## Consent: a new wording, own-words-v5 (everyone is asked again)
 
-`config/consent.json` is append-only, and a new wording asks again. Only the last paragraph changes from v4:
+`config/consent.json` is append-only, and a new wording asks again. The owner's ruling: "Fold the remix and
+storyboard listing into consent v5 with Part 2, so everyone is asked again once, not twice". So v5 covers two
+things:
+- OpenAI, for Remix on a version drawn by GPT Image.
+- The public profile listing a person's remix frames and storyboards. That listing is built on branch `you-page`,
+  behind `PROFILE_LISTS_REMIXES` in src/lib/you-flags.ts (not touched here).
+
+v5 must ship when both are on. If one goes live first, the wording has to match what is live that day.
+
+Two paragraphs change from v4:
+
+> DRAFT (own-words-v5, the "shown with your name" paragraph): It is shown with your name: your Farcaster name, or,
+> for a wallet account, its address shortened. Your public profile lists the Remix frames and storyboards you
+> make, until you hide them.
 
 > DRAFT (own-words-v5, last paragraph): To make an image, your prompt is sent to Groq to be checked (through
 > Vercel AI Gateway when Groq is busy), and to fal.ai, or, in Remix for a version drawn by GPT Image, to OpenAI
@@ -83,6 +120,9 @@ These are drafted in src/lib/remix/model.ts (`remixFrameLabel`, `REMIX_GPT`).
   - the gateway's generation id and reported cost
   - every picture sent, by sha256
 - Name order on the byline is unchanged: Farcaster name, then Basename, then shortened address.
+- **Version 1's remixes on version 2's panel** (decision 2d; built, live with part 2's code even with the flag
+  off): each is tagged "version 1 · open-weight" and keeps its own label, "AI-generated with FLUX.2 [klein] 4B
+  (open weights), not by the author". They can't be added to version 2's storyboard; they belong to version 1's.
 
 ## Price per Remix frame (estimate + 30%)
 
@@ -142,14 +182,20 @@ The caps are in src/lib/config.ts, and they are not changed here:
 - Readers pay for this in advance at cost + 30%: up to $975 a month paid in. It is never a net cost to the
   project.
 
-## Open questions for the owner
+## The owner's decisions (2026-10-18)
 
-1. OpenAI's API retention and terms: can the Privacy item say what OpenAI keeps? And do OpenAI's terms allow
-   publishing remix frames under GPL-3.0? This is already open in config/models.json for the cut.
-2. Should GPT remix frames be 1536×864, like the cut, or 1024×576, like today's remix frames? The estimate
-   assumes 1536×864.
-3. Is the free cap ($10 a day across everyone) still right when each frame costs about 50% more than with
-   FLUX?
-4. A test generation. One real call would confirm three things: that the gateway passes the four pictures and
-   `output_format: "jpeg"`, the real cost of a Remix-sized request, and how OpenAI refuses a flagged prompt.
-   It costs about $0.04 to $0.07. It has **not** been run. It needs the owner's go.
+- **2a:** 1536×864, to match version 2's frames. `REMIX_GPT.size` is already so.
+- **2b:** keep the $10 a day free cap. `REMIX.dailyFreeCapUsd` is already 10; nothing changed.
+- **2c:** one test, with zeroDataRetention. It was refused (see "The ZDR test").
+- **2d:** list version 1's remixes on version 2's panel, labelled "version 1 · open-weight". Built.
+
+## Still open
+
+- **G7:** GPL-3.0 and OpenAI's terms. Do OpenAI's terms allow publishing remix frames (and the cut's pictures)
+  under GPL-3.0? This is open in config/models.json too.
+- **C1:** open (not acted on here).
+- **C2:** open (not acted on here).
+- **TO VERIFY / UNVERIFIED before the Privacy line ships:** "up to 30 days", "does not train", and "Vercel AI
+  Gateway does not keep them" (above).
+- **A successful test call:** none has drawn a picture yet. It would cost about $0.04 to $0.07, needs the owner's
+  go, and must be sent without zeroDataRetention.

@@ -55,9 +55,15 @@ export async function GET(request: Request) {
       hasConsented(person),
       generationsLeft(sql, person, reserveUsd),
       invited || person < 0 ? Promise.resolve(null) : keptValue(sql, person),
-      shot ? myFrames(sql, person, version, shot.id) : Promise.resolve([]),
+      // Version 2's panel also lists the person's remixes of the same shot of version 1, the open-weight version it was
+      // redrawn from (owner, 2026-10-18, decision 2d); newest first, each marked with its version.
+      shot
+        ? Promise.all([myFrames(sql, person, version, shot.id), shot.openFrom && shot.openFrom !== version ? myFrames(sql, person, shot.openFrom, shot.id) : Promise.resolve([])]).then(([own, open]) =>
+            [...own, ...open].sort((a, b) => b.createdAt.localeCompare(a.createdAt)),
+          )
+        : Promise.resolve([]),
     ]);
-    const mine = frames.map((f) => ({ id: f.id, url: f.imageUrl, words: f.ownWords, hidden: f.hidden, hiddenRole: f.hiddenRole, at: f.createdAt, page: `/remix/${f.id}`, model: (f.recipe as { model?: { name?: string; maker?: string; closed?: boolean } }).model ?? null }));
+    const mine = frames.map((f) => ({ id: f.id, url: f.imageUrl, words: f.ownWords, hidden: f.hidden, hiddenRole: f.hiddenRole, at: f.createdAt, page: `/remix/${f.id}`, version: f.versionId, model: (f.recipe as { model?: { name?: string; maker?: string; closed?: boolean } }).model ?? null }));
     if (person < 0) {
       const open = prepaidOpen() && openToEveryone().open;
       const prepaid = { balanceUsd: await balanceUsd(sql, -person), priceUsd: priceUsd(reserveUsd), markup: IMAGES.prepaid.markup };

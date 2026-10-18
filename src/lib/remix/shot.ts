@@ -33,6 +33,8 @@ export interface RemixShot {
    * since Remix draws with the open-weight model (2026-10-18).
    */
   from: number;
+  /** The open-weight version this one was redrawn from (version 1 for version 2), whose remixes of the shot its panel also lists. */
+  openFrom: number | null;
   /** A closed model that drew the version's own pictures, if any (named in the panel). */
   versionModel: { name: string; maker: string } | null;
   /** What Remix draws this shot with (src/lib/remix/model.ts): 'gpt' only with the flag on, for a version GPT Image drew. */
@@ -113,6 +115,7 @@ export function remixShot(adaptation: number, version: number, shotId: string): 
     adaptation,
     version,
     from,
+    openFrom: own.openFrom ?? null,
     versionModel: own.closedModel ? { name: own.closedModel.name, maker: own.closedModel.maker } : null,
     model,
     id: s.id,
