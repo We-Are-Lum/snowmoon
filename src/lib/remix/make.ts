@@ -4,6 +4,8 @@ import type postgres from 'postgres';
 import { IMAGES, REMIX } from '../config';
 import { checkPrompt, type GuardResult } from '../images/guard';
 import { ImageUnavailable, makeEdit, type Made } from '../images/fal';
+import { makeGptEdit } from '../images/gateway-image';
+import { gptReserveUsd, REMIX_GPT, type RemixModelKind } from './model';
 import { blockedName } from '../images/rules';
 import { IMAGE_WORDING } from '../images/wording';
 import { fundedBy, perDay, reserve, settle, type Refusal, type Spend } from './limits';
@@ -13,7 +15,8 @@ import type { RemixPicture, RemixShot } from './shot';
  * One Remix Generate, in the Pictures order (src/lib/images/paid.ts): counted and its worst case
  * reserved; the blocked-names list, then the prompt check, on the whole prompt as it will be sent;
  * then the picture, from the Pictures reference-picture model (IMAGES.editModel, FLUX.2 [klein] 4B
- * edit) with the host's safety checker on; then the real costs in place of the reservation. A frame
+ * edit) with the host's safety checker on, or, with REMIX_MODEL = 'gpt' and a version GPT Image drew, from that
+ * model through Vercel AI Gateway (src/lib/images/gateway-image.ts; OpenAI's own moderation in place of the checker); then the real costs in place of the reservation. A frame
  * the checker flags is dropped.
  *
  * The prompt sent: the shot's own prompt from the version's recipe (drafted by the coding agent for
@@ -51,13 +54,17 @@ export function remixPictures(layout: RemixPicture, shot: RemixShot): RemixPictu
 export function remixPrompt(shot: RemixShot, pictures: RemixPicture[], ownWords: string): string {
   const plateAt = pictures.findIndex((p) => p.role === 'plate');
   const parts = [shot.prompt!.trim()];
-  if (plateAt >= 0) parts.push(`Picture ${plateAt + 1} is the place itself, empty, as drawn for this version: match its look, materials and light; draw nothing from it that the layout doesn't place.`);
+  // A GPT shot's own prompt already says what each picture is, the plate included (build_plan.py); FLUX's gets this line.
+  if (plateAt >= 0 && shot.model !== 'gpt') parts.push(`Picture ${plateAt + 1} is the place itself, empty, as drawn for this version: match its look, materials and light; draw nothing from it that the layout doesn't place.`);
   parts.push(`Changes for this remix, in the remixer's own words: ${ownWords.trim()}`);
   parts.push(IMAGES.suffix);
   return parts.join(' ');
 }
 
-export const remixSpend = (pictures: number): Spend => ({ model: IMAGES.editModel, reserveUsd: REMIX.reserveUsd(pictures) });
+export const remixSpend = (pictures: number, model: RemixModelKind = 'flux'): Spend =>
+  model === 'gpt' ? { model: REMIX_GPT.model, reserveUsd: gptReserveUsd() } : { model: IMAGES.editModel, reserveUsd: REMIX.reserveUsd(pictures) };
+/** The longest prompt sent: GPT shots' own prompts are longer (up to 7,397 characters in version 2). */
+export const remixPromptMax = (model: RemixModelKind) => (model === 'gpt' ? REMIX_GPT.promptMaxChars : REMIX.promptMaxChars);
 
 export type Generated =
   | { ok: true; made: Made; guard: GuardResult; left: number }
@@ -73,8 +80,8 @@ async function fakeMake(prompt: string, pictures: RemixPicture[]): Promise<Made>
   return { bytes, contentType: 'image/jpeg', seed: 1, requestId: `test-${randomBytes(4).toString('hex')}`, nsfw: prompt.includes('TEST-NSFW'), costUsd: 0, settings: { test: true } };
 }
 
-export async function generate(sql: Sql, person: number, request: Request, prompt: string, pictures: RemixPicture[]): Promise<Generated> {
-  const spend = remixSpend(pictures.length);
+export async function generate(sql: Sql, person: number, request: Request, prompt: string, pictures: RemixPicture[], model: RemixModelKind = 'flux'): Promise<Generated> {
+  const spend = remixSpend(pictures.length, model);
   const funded = fundedBy(person);
   const r = await reserve(sql, person, spend);
   if (!r.ok) return { ok: false, status: r.refusal === 'free-off' ? 503 : 429, error: SAY[r.refusal](person), extra: { reason: r.refusal } };
@@ -98,7 +105,7 @@ export async function generate(sql: Sql, person: number, request: Request, promp
   let made: Made;
   try {
     const refs = pictures.map((p) => ({ bytes: p.bytes, contentType: p.contentType, width: p.width, height: p.height }));
-    made = fakeModel() ? await fakeMake(prompt, pictures) : await makeEdit(prompt, refs, IMAGES.size, REMIX.maxPictures);
+    made = fakeModel() ? await fakeMake(prompt, pictures) : model === 'gpt' ? await makeGptEdit(prompt, refs, request, REMIX.maxPictures) : await makeEdit(prompt, refs, IMAGES.size, REMIX.maxPictures);
   } catch (e) {
     await settle(sql, { guard: checked }, spend, funded);
     console.error('remix generation failed', e instanceof ImageUnavailable ? e.message : (e as Error).name);

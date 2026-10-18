@@ -2,6 +2,7 @@ import 'server-only';
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
+import { remixModelFor, type RemixModelKind } from './model';
 
 /**
  * A shot as Generate needs it, read from the version's editor data (public/editor/<id>/v<n>/, made at
@@ -34,6 +35,8 @@ export interface RemixShot {
   from: number;
   /** A closed model that drew the version's own pictures, if any (named in the panel). */
   versionModel: { name: string; maker: string } | null;
+  /** What Remix draws this shot with (src/lib/remix/model.ts): 'gpt' only with the flag on, for a version GPT Image drew. */
+  model: RemixModelKind;
   id: string;
   n: number;
   who: string[];
@@ -49,7 +52,7 @@ type Pic = { src: string; file: string; sha256: string; who?: string; name?: str
 type DataLine = { cue: string; takes?: { id: string }[] };
 type DataShot = { id: string; n: number; from: number; to: number; who: string[]; camera: unknown; plate: Pic | null; cards: Pic[]; recipe: { id: string; sha256: string; prompt: string | null } | null; lines: DataLine[] };
 
-type Data = { shots: DataShot[]; openFrom?: number | null; closedModel?: { name: string; maker: string } | null };
+type Data = { shots: DataShot[]; openFrom?: number | null; closedModel?: { name: string; maker: string; endpoint?: string } | null };
 const cache = new Map<string, Data | null>();
 const root = () => path.join(process.cwd(), 'public');
 
@@ -98,8 +101,10 @@ function served(p: Pic, role: 'card' | 'plate', name: string): RemixPicture | nu
 export function remixShot(adaptation: number, version: number, shotId: string): RemixShot | null {
   const own = editorData(adaptation, version);
   if (!own?.shots.some((x) => x.id === shotId)) return null;
-  // A version redrawn by a closed model from an open-weight one: Remix sends the open-weight version's shot.
-  const from = own.openFrom ?? version;
+  // A version redrawn by a closed model from an open-weight one: with that model (flag on), its own shot; otherwise
+  // the open-weight version's shot, for the open-weight model.
+  const model = remixModelFor(own.closedModel?.endpoint);
+  const from = model === 'gpt' ? version : (own.openFrom ?? version);
   const d = from === version ? own : editorData(adaptation, from);
   const s = d?.shots.find((x) => x.id === shotId);
   if (!s) return null;
@@ -109,6 +114,7 @@ export function remixShot(adaptation: number, version: number, shotId: string): 
     version,
     from,
     versionModel: own.closedModel ? { name: own.closedModel.name, maker: own.closedModel.maker } : null,
+    model,
     id: s.id,
     n: s.n,
     who: s.who,

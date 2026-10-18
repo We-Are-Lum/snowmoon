@@ -8,6 +8,7 @@ import { SignInButton } from '~/components/sign-in';
 import { WalletPanel, WalletSignInButton } from '~/components/wallet';
 import { HideButton, ShareRow } from '../../remix/remix-actions';
 import { AddToStoryboard } from './add-to-storyboard';
+import { remixFrameLabel } from '~/lib/remix/model';
 
 /**
  * Remix in the shot editor (owner, 2026-10-18): Generate from the camera the person set. Sign in
@@ -25,11 +26,12 @@ interface Mine {
   hidden: boolean;
   page: string;
   at: string;
+  model?: { name?: string; maker?: string; closed?: boolean } | null;
 }
 interface Status {
   ready: boolean;
   free: boolean;
-  model: { name: string; licence: string; host: string };
+  model: { name: string; licence: string; host: string; maker?: string; closed?: boolean };
   shot: { id: string; remixable: boolean; pictures: number } | null;
   drawnFrom?: { version: number; versionModel: { name: string; maker: string } | null } | null;
   ownWordsMaxChars: number;
@@ -182,7 +184,7 @@ export function RemixPanel({
           {status.prepaid && status.prepaid.balanceUsd < status.prepaid.priceUsd && <WalletPanel onChange={() => void refresh()} />}
           <PublishedTextField id="ed-remix-words" label="What to change, in your words" value={words} onChange={setWords} rows={3} maxLength={status.ownWordsMaxChars} />
           <p className="ed-help">
-            Sent with the camera you set (as a depth picture), this shot&rsquo;s cast cards and plate, and {status.drawnFrom ? <>version {status.drawnFrom.version}&rsquo;s prompt for this shot</> : <>the shot&rsquo;s own prompt (the Prompt tab shows it; edits there stay in this browser)</>}. Made with {status.model.name} ({status.model.licence}) on {status.model.host}. Your frame is saved to your remix of this shot, public at its own link, with your words and {by}.
+            Sent with the camera you set (as a depth picture), this shot&rsquo;s cast cards and plate, and {status.drawnFrom ? <>version {status.drawnFrom.version}&rsquo;s prompt for this shot</> : <>the shot&rsquo;s own prompt (the Prompt tab shows it; edits there stay in this browser)</>}. Made with {status.model.closed ? <>{status.model.name} ({status.model.maker}, a closed model; weights not published) on {status.model.host}, the model that drew this version&rsquo;s pictures</> : <>{status.model.name} ({status.model.licence}) on {status.model.host}</>}. Your frame is saved to your remix of this shot, public at its own link, with your words and {by}.
           </p>
           <div className="ed-generate">
             <button type="button" className="ed-btn" onClick={generate} disabled={busy || !words.trim()}>
@@ -202,7 +204,8 @@ export function RemixPanel({
         <figure className="ed-fig" aria-live="polite">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={made.url} alt={`Your remix of shot ${shotN}: ${made.words}`} width={1024} height={576} />
-          <figcaption className="label">AI image · by {by} · AI-generated image, not by the author</figcaption>
+          {/* The frame's label names a closed model with its maker (src/lib/remix/model.ts remixFrameLabel; DRAFT wording). */}
+          <figcaption className="label">AI image · by {by} · {remixFrameLabel(status?.model)}</figcaption>
           <ShareRow url={`${location.origin}${made.page}`} text={`A remix of ${title}, shot ${shotN}`} />
           <p className="ed-help">
             <Link href={made.page}>Its page and recipe</Link>
@@ -224,7 +227,8 @@ export function RemixPanel({
                   <img src={f.url} alt={`Your remix: ${f.words}`} width={1024} height={576} loading="lazy" />
                 )}
                 <figcaption>
-                  <span className="label">AI image · by {by}</span> · {f.hidden ? 'hidden' : <Link href={f.page}>page and recipe</Link>} · &ldquo;{f.words}&rdquo;
+                  <span className="label">AI image · by {by}</span>
+                  {f.model?.closed ? ` · ${remixFrameLabel(f.model)}` : ''} · {f.hidden ? 'hidden' : <Link href={f.page}>page and recipe</Link>} · &ldquo;{f.words}&rdquo;
                 </figcaption>
                 {!f.hidden && <AddToStoryboard adaptation={adaptation} version={version} shot={shotId} seconds={seconds} frame={{ id: f.id, url: f.url }} boardPath={boardPath} />}
                 <HideButton id={f.id} onChange={() => void refresh()} />

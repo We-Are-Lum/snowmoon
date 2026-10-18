@@ -11,6 +11,8 @@ import { generationsLeft, perDay } from '~/lib/remix/limits';
 import { remixPictures, testFakes } from '~/lib/remix/make';
 import { frameStorageReady, isMaintainer, myFrames } from '~/lib/remix/frames';
 import { remixShot } from '~/lib/remix/shot';
+import { gptReserveUsd, REMIX_GPT } from '~/lib/remix/model';
+import { gatewayToken } from '~/lib/chat/model';
 
 /**
  * What the shot editor needs before Generate (as /api/images/status does for Pictures): is Remix set
@@ -25,13 +27,17 @@ export async function GET(request: Request) {
   const adaptation = Number(q.get('adaptation')), version = Number(q.get('version')), shotId = q.get('shot') ?? '';
   const shot = Number.isInteger(adaptation) && Number.isInteger(version) && /^[\w-]{1,64}$/.test(shotId) ? remixShot(adaptation, version, shotId) : null;
   const sql = db();
-  const keys = process.env.REMIX_TEST_FAKES === '1' && testFakes() ? true : Boolean(process.env.FAL_KEY);
+  const gpt = shot?.model === 'gpt';
+  const keys = process.env.REMIX_TEST_FAKES === '1' && testFakes() ? true : gpt ? Boolean(gatewayToken(request)) : Boolean(process.env.FAL_KEY);
   const ready = Boolean(remixGenerateOn() && sql && keys && frameStorageReady());
   const pictures = shot ? remixPictures({ role: 'layout' } as never, shot).length : 0;
   const base = {
     ready,
     free: remixFreeOn(),
-    model: { name: IMAGES.editModel.name, licence: IMAGES.editModel.licence, host: IMAGES.editModel.host },
+    // The model this shot is drawn with; a closed one is named with its maker and that it is closed.
+    model: gpt
+      ? { name: REMIX_GPT.model.name, licence: REMIX_GPT.model.licence, host: REMIX_GPT.model.host, maker: REMIX_GPT.model.maker, closed: true }
+      : { name: IMAGES.editModel.name, licence: IMAGES.editModel.licence, host: IMAGES.editModel.host },
     shot: shot ? { id: shot.id, remixable: Boolean(shot.hasCamera && shot.prompt), pictures } : null,
     // The version's own pictures were drawn by a closed model, and Remix sends another version's shot: said in the panel.
     drawnFrom: shot && shot.from !== version ? { version: shot.from, versionModel: shot.versionModel } : null,
@@ -44,14 +50,14 @@ export async function GET(request: Request) {
   const invited = IMAGES.invited.includes(person);
   if (!sql) return NextResponse.json({ ...base, signedIn: true, eligible: invited ? true : null, consented: false, frames: [] }, { headers: noStore });
   try {
-    const reserveUsd = REMIX.reserveUsd(pictures || REMIX.maxPictures);
+    const reserveUsd = gpt ? gptReserveUsd() : REMIX.reserveUsd(pictures || REMIX.maxPictures);
     const [consented, left, kept, frames] = await Promise.all([
       hasConsented(person),
       generationsLeft(sql, person, reserveUsd),
       invited || person < 0 ? Promise.resolve(null) : keptValue(sql, person),
       shot ? myFrames(sql, person, version, shot.id) : Promise.resolve([]),
     ]);
-    const mine = frames.map((f) => ({ id: f.id, url: f.imageUrl, words: f.ownWords, hidden: f.hidden, hiddenRole: f.hiddenRole, at: f.createdAt, page: `/remix/${f.id}` }));
+    const mine = frames.map((f) => ({ id: f.id, url: f.imageUrl, words: f.ownWords, hidden: f.hidden, hiddenRole: f.hiddenRole, at: f.createdAt, page: `/remix/${f.id}`, model: (f.recipe as { model?: { name?: string; maker?: string; closed?: boolean } }).model ?? null }));
     if (person < 0) {
       const open = prepaidOpen() && openToEveryone().open;
       const prepaid = { balanceUsd: await balanceUsd(sql, -person), priceUsd: priceUsd(reserveUsd), markup: IMAGES.prepaid.markup };

@@ -27,6 +27,7 @@ import { LiveScreen } from '../src/components/live-screen';
 import { CHAT, IMAGES, REPO_URL } from '../src/lib/config';
 import { NOTICE_REVIEW, currentNoticeItems, noticeKey } from '../src/lib/chat/notice';
 import { LEGAL, PRIVACY, TERMS, legalKey } from '../src/lib/legal';
+import { REMIX_GPT, REMIX_MODEL, closedRecipeModel, remixFrameLabel } from '../src/lib/remix/model';
 import { LEARN_TEXT } from '../src/lib/minpentai/learn-text';
 import { BOOK_TAG, NARRATION_MAX_WORDS, PERSON_TAG, parseBeats } from '../src/lib/script-beats';
 import { GLOSSARY_FILE, loadBlocks, verifyGlossary, type Glossary } from './lib/glossary';
@@ -907,10 +908,26 @@ add({
     endpoints.set(IMAGES.guardModel, 'src/lib/config.ts IMAGES.guardModel');
     // Step 4: reference pictures (a sheet's side and back views; images made with a sheet's views).
     endpoints.set(IMAGES.editModel.endpoint, 'src/lib/config.ts IMAGES.editModel');
-    return { models: json('config/models.json').models, used: [...used.entries()], endpoints: [...endpoints.entries()] };
+    // Remix with a closed model (src/lib/remix/model.ts, 2026-10-18): wired behind REMIX_MODEL, default 'flux'. With the
+    // flag on, its endpoint is in use; on or off, the label under its frames and the model its recipes record must name
+    // it, its maker and that it is closed, with the date (owner, 2026-10-18), so turning the flag on can't drop them.
+    if (REMIX_MODEL === 'gpt') endpoints.set(REMIX_GPT.model.endpoint, 'src/lib/remix/model.ts REMIX_GPT (REMIX_MODEL = gpt)');
+    const remixClosed = { flag: REMIX_MODEL as string, model: REMIX_GPT.model as { endpoint: string; name: string; maker: string; closed: boolean }, label: remixFrameLabel(REMIX_GPT.model), recipe: closedRecipeModel('2026-10-18T12:00:00.000Z') as Record<string, unknown> };
+    return { models: json('config/models.json').models, used: [...used.entries()], endpoints: [...endpoints.entries()], remixClosed };
   },
-  run: ({ models, used, endpoints }) => {
+  run: ({ models, used, endpoints, remixClosed: rc }) => {
     const problems: string[] = [];
+    {
+      const m = models.find((x: { hosted?: { endpoints?: Record<string, number | null> } }) => x.hosted?.endpoints && rc.model.endpoint in x.hosted.endpoints);
+      const where = `Remix's closed model ${rc.model.endpoint} (src/lib/remix/model.ts, REMIX_MODEL = ${rc.flag})`;
+      if (!m) problems.push(`${where} is not on the allowlist`);
+      else if (m.open_weights !== false || !m.maker) problems.push(`${where}: the allowlist must record it as closed (open_weights: false) with its maker`);
+      if (!rc.model.closed || !rc.label.includes(rc.model.name) || !rc.label.includes(rc.model.maker) || !/closed model/.test(rc.label) || !/AI-generated/.test(rc.label) || !/not by the author/.test(rc.label))
+        problems.push(`${where}: its frames' label "${rc.label}" must say AI-generated, not by the author, and name the model, its maker and "closed model"`);
+      const r = rc.recipe;
+      if (r.closed !== true || r.maker !== rc.model.maker || r.name !== rc.model.name || r.label !== 'closed model' || !/^\d{4}-\d{2}-\d{2}$/.test(String(r.date)))
+        problems.push(`${where}: its frames' recipes must record the model, its maker, the date and "closed model" (got ${JSON.stringify(r)})`);
+    }
     for (const [endpoint, file] of endpoints) {
       const m = models.find((x: { hosted?: { endpoints?: Record<string, number | null> } }) => x.hosted?.endpoints && endpoint in x.hosted.endpoints);
       if (!m) problems.push(`hosted endpoint ${endpoint} (used in ${file}) is not on the allowlist`);
@@ -926,6 +943,8 @@ add({
   plant: (c) => {
     c.used.push(['example/closed-model', 'planted']);
     c.endpoints.push(['fal-ai/not-allowlisted', 'planted']);
+    // With the flag on, a frame label that drops the model's name must fail.
+    c.remixClosed = { ...c.remixClosed, flag: 'gpt', label: 'AI-generated image, not by the author' };
   },
 });
 

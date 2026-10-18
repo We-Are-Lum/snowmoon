@@ -40,14 +40,15 @@ const testStore = () => (testFakes() && process.env.REMIX_TEST_STORE ? process.e
 export const frameStorageReady = () => Boolean(testStore()) || storageReady();
 export const isMaintainer = (person: number) => person === SYSTEM_FID;
 
-export async function putFrame(sha256: string, bytes: Buffer): Promise<string> {
+/** A frame's bytes to the readers' bucket, served as the type it is (a GPT frame may come back as PNG). */
+export async function putFrame(sha256: string, bytes: Buffer, contentType = 'image/jpeg'): Promise<string> {
   const dir = testStore();
   if (dir) {
     mkdirSync(dir, { recursive: true });
     writeFileSync(path.join(dir, `${sha256}.jpg`), bytes);
     return `/api/remix/test-file/${sha256}`;
   }
-  return putPublic(sha256, bytes, 'image/jpeg');
+  return putPublic(sha256, bytes, contentType);
 }
 export function readTestFile(sha256: string): Buffer | null {
   const dir = testStore();

@@ -624,8 +624,15 @@
         },
         "price_unit": "USD per image, as the gateway reports it per call",
         "price_seen": "2026-10-18",
-        "note": "Costs per call are in adaptations/fifteen-days/preprod/gpt/costs.jsonl (on scenes-sound)."
+        "note": "Costs per call are in adaptations/fifteen-days/preprod/gpt/costs.jsonl (on scenes-sound).",
+        "price_per_mtok": {
+          "text_in": 5,
+          "image_in": 8,
+          "out": 30,
+          "how": "fitted to the 51 recipes in adaptations/fifteen-days/preprod/gpt/recipes (usage tokens and the gateway's reported cost; exact, largest error 1e-17), 2026-10-18"
+        }
       },
+      "remix": "Wired into Remix behind a flag that is off: src/lib/remix/model.ts REMIX_MODEL = 'flux' (default). With 'gpt', a version this model drew (Fifteen Days version 2) is remixed with it through the same gateway endpoint; recipes record the model, maker, date and 'closed model', and frames carry a label naming it (check:principles P3b). Turning it on waits for the owner's reread of docs/legal/remix-gpt-draft.md.",
       "model_record": "gateway model id, date and the gateway's response metadata (the host exposes no weights revision; there are no public weights)",
       "cost_usd_per_unit": null,
       "license": "proprietary (OpenAI)",

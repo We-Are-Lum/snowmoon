@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { db } from '~/lib/db';
 import { APP_NAME, appUrl } from '~/lib/config';
 import { AI_DECLARED } from '~/lib/ai-declared';
+import { remixFrameLabel } from '~/lib/remix/model';
 import { getAdaptation, handleFor } from '~/lib/adaptation-pages';
 import { frameById, type Frame } from '~/lib/remix/frames';
 import { HideButton, ShareRow } from '../remix-actions';
@@ -53,7 +54,7 @@ export default async function RemixFramePage({ params }: Props) {
   if (!l) notFound();
   const { f, title, handle } = l;
   const r = f.recipe as {
-    model?: { name?: string; licence?: string; endpoint?: string; host?: string };
+    model?: { name?: string; licence?: string; endpoint?: string; host?: string; maker?: string; closed?: boolean; date?: string };
     seed?: number | null;
     request_id?: string | null;
     made_at?: string;
@@ -85,7 +86,8 @@ export default async function RemixFramePage({ params }: Props) {
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={f.imageUrl} alt={`A remix of shot ${r.shot?.n ?? f.shotId}, made by ${who}: ${f.ownWords}`} width={r.size?.width ?? 1024} height={r.size?.height ?? 576} />
         <figcaption className="label">
-          AI image · by {who} · <span>{AI_DECLARED.image}</span>
+          {/* A closed model is named with its maker and that it is closed (src/lib/remix/model.ts; DRAFT wording). */}
+          AI image · by {who} · <span>{r.model?.closed ? remixFrameLabel(r.model) : AI_DECLARED.image}</span>
         </figcaption>
       </figure>
       <section className="rx-words" aria-label="Their words">
@@ -105,7 +107,7 @@ export default async function RemixFramePage({ params }: Props) {
         <dl>
           <dt className="label">Model</dt>
           <dd>
-            {r.model?.name} · {r.model?.licence} · on {r.model?.host} ({r.model?.endpoint})
+            {r.model?.closed ? `${r.model.name} (${r.model.maker}, a closed model, ${r.model.date})` : r.model?.name} · {r.model?.licence} · on {r.model?.host} ({r.model?.endpoint})
           </dd>
           <dt className="label">Seed · request</dt>
           <dd>
@@ -142,7 +144,16 @@ export default async function RemixFramePage({ params }: Props) {
         <p className="label">The exact prompt sent</p>
         <p className="rx-prompt">{f.prompt}</p>
         <p className="rx-note">
-          The shot&rsquo;s own prompt and the plate&rsquo;s sentence were drafted by the coding agent for this version. &ldquo;Changes for this remix&rdquo; are {who}&rsquo;s words, unchanged. Checked before it was made: the blocked-names list and the prompt check; then the host&rsquo;s safety checker.
+          {r.model?.closed ? (
+            // DRAFT wording (2026-10-18): a GPT shot's prompt carries no separate plate sentence, and OpenAI's own moderation stands in for the host's checker.
+            <>
+              The shot&rsquo;s own prompt was drafted by the coding agent for this version. &ldquo;Changes for this remix&rdquo; are {who}&rsquo;s words, unchanged. Checked before it was made: the blocked-names list and the prompt check; then {r.model.maker}&rsquo;s own moderation.
+            </>
+          ) : (
+            <>
+              The shot&rsquo;s own prompt and the plate&rsquo;s sentence were drafted by the coding agent for this version. &ldquo;Changes for this remix&rdquo; are {who}&rsquo;s words, unchanged. Checked before it was made: the blocked-names list and the prompt check; then the host&rsquo;s safety checker.
+            </>
+          )}
         </p>
       </details>
     </main>
