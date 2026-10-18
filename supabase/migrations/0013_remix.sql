@@ -1,7 +1,7 @@
 -- 0013_remix.sql — Remix: frames people generate from a shot, their own daily count and costs,
 -- and storyboards (owner's direction, 2026-10-18: "the editor is for REMIX, and everything stays
 -- on the site").
--- NOT APPLIED. DRAFT until the owner says so. Change it freely until then.
+-- APPLIED on production by the coding agent on the owner's go, 2026-10-18, after the real prompt check passed (SQL Editor, as postgres; dry run first, rolled back).
 --
 -- MUST RUN AS postgres (the role that owns the `studio` schema), in the Supabase SQL Editor.
 -- Requires 0008 (image tables, for the same shape of counting), 0011 (wallet accounts) and 0012
