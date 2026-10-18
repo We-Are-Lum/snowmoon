@@ -7,6 +7,7 @@ import { ConsentScreen, PublishedTextField } from '~/components/publish-words';
 import { SignInButton } from '~/components/sign-in';
 import { WalletPanel, WalletSignInButton } from '~/components/wallet';
 import { HideButton, ShareRow } from '../../remix/remix-actions';
+import { AddToStoryboard } from './add-to-storyboard';
 
 /**
  * Remix in the shot editor (owner, 2026-10-18): Generate from the camera the person set. Sign in
@@ -53,6 +54,8 @@ export function RemixPanel({
   title,
   depth,
   camera,
+  seconds,
+  boardPath,
 }: {
   adaptation: number;
   version: number;
@@ -62,6 +65,8 @@ export function RemixPanel({
   /** The live layout as a depth map, at the size Generate sends; null while the 3D set isn't ready. */
   depth: (w: number, h: number) => string | null;
   camera: unknown;
+  seconds: number;
+  boardPath: string;
 }) {
   const auth = useAuth();
   const wallet = useWalletSession();
@@ -191,6 +196,7 @@ export function RemixPanel({
           <p className="ed-help">
             <Link href={made.page}>Its page and recipe</Link>
           </p>
+          <AddToStoryboard adaptation={adaptation} version={version} shot={shotId} seconds={seconds} frame={{ id: made.id, url: made.url }} boardPath={boardPath} />
         </figure>
       )}
 
@@ -209,6 +215,7 @@ export function RemixPanel({
                 <figcaption>
                   <span className="label">AI image · by {by}</span> · {f.hidden ? 'hidden' : <Link href={f.page}>page and recipe</Link>} · &ldquo;{f.words}&rdquo;
                 </figcaption>
+                {!f.hidden && <AddToStoryboard adaptation={adaptation} version={version} shot={shotId} seconds={seconds} frame={{ id: f.id, url: f.url }} boardPath={boardPath} />}
                 <HideButton id={f.id} onChange={() => void refresh()} />
               </figure>
             ))}

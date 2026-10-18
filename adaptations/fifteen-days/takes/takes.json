@@ -1,0 +1,1629 @@
+{
+ "about": "Existing converted takes per line, for the storyboard (scripts/remix-takes.py). Each is the performer's own take converted to a designed voice; raw takes stay private.",
+ "takes": {
+  "b1-1": [
+   {
+    "id": "zei",
+    "voice": "zei",
+    "file": "adaptations/fifteen-days/takes/b1-1/zei.m4a",
+    "sha256": "0ab2dbc30046c4eed8539dc92467c44d9316bd10b3a4430a63f6a64b63b4c84a",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines/L01-b1-1.zei.wav",
+     "sha256": "fd0cd160cbc153fa08539db00109100faed5db3c5c88ed6954d3793d9ec4b4eb"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b1-1/zei.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "39562a97e43406030c77f102674a327189d1922f53b93645bf436d0e4e930367"
+   },
+   {
+    "id": "zei-v3",
+    "voice": "zei-v3",
+    "file": "adaptations/fifteen-days/takes/b1-1/zei-v3.m4a",
+    "sha256": "6298e7aef1851583cbd7e7fc5a6aace6b1e1bea73ccc7098537b5a03ef8f275b",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines-v2/L01-b1-1.zei-v3.wav",
+     "sha256": "3246ad55389a45d8a7e0a55791ff4250f982866dd7f1a16d55566a5a18f1f7d6"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b1-1/zei-v3.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "9ebd884c3a4d75e009c60ab83e3861d84ce7784be94a3689c26c5c3bd20eb828"
+   },
+   {
+    "id": "zei-v4b",
+    "voice": "zei-v4b",
+    "file": "adaptations/fifteen-days/takes/b1-1/zei-v4b.m4a",
+    "sha256": "7f2eb18790c4df6c7ca31e774344480899354ca4969c47ec2fc9254624e8c13d",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines-v3/L01-b1-1.zei-v4b.wav",
+     "sha256": "e38a16172af2202af9df2d6f68cfa68b86942eda6ca239fd9a61af831b8cc6d3"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b1-1/zei-v4b.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "9ebd884c3a4d75e009c60ab83e3861d84ce7784be94a3689c26c5c3bd20eb828"
+   }
+  ],
+  "b1-2": [
+   {
+    "id": "bai",
+    "voice": "bai",
+    "file": "adaptations/fifteen-days/takes/b1-2/bai.m4a",
+    "sha256": "423331873befdc375aba5608f971bccb5dcbd60d6a2974c3a9412e8f44a10247",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines/L02-b1-2.bai.wav",
+     "sha256": "a3da24b892cdc99176f31c3e4a7ed12805d873a0c0addab24def3096fb5e1994"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b1-2/bai.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "5527304144699276a31627a43935d5a11d72164e6537b3c1c2a0a8829e9362db"
+   },
+   {
+    "id": "bai-lines-v2",
+    "voice": "bai",
+    "file": "adaptations/fifteen-days/takes/b1-2/bai-lines-v2.m4a",
+    "sha256": "5973928b81397ee1e2cc88d7673b780b42a61ed1cf3c303c119c087dbbbdae82",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines-v2/L02-b1-2.bai.wav",
+     "sha256": "48d6158beb9460cb0652a26ec687ec5f9101ca8474f4c0dbc0ddb35331799013"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b1-2/bai-lines-v2.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "81d95c33762772e76c71cc2fa2cdc9f478355e475f8737785c78ca2f266352d8"
+   },
+   {
+    "id": "bai-v3b",
+    "voice": "bai-v3b",
+    "file": "adaptations/fifteen-days/takes/b1-2/bai-v3b.m4a",
+    "sha256": "fd3ff347484edc64da6b195e7876a869c9ac890c13ba92bde0169ca4515f183f",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines-v3/L02-b1-2.bai-v3b.wav",
+     "sha256": "f68404b6a48efa39a916542c5773d2093f9cb3a8a5bb8c77e059d6a0824889bd"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b1-2/bai-v3b.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "81d95c33762772e76c71cc2fa2cdc9f478355e475f8737785c78ca2f266352d8"
+   }
+  ],
+  "b1-3": [
+   {
+    "id": "bai",
+    "voice": "bai",
+    "file": "adaptations/fifteen-days/takes/b1-3/bai.m4a",
+    "sha256": "7301fa861774336a3df3d070910258562c7473b4fc440f0998dabdef4a2809f3",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines/L03-b1-3.bai.wav",
+     "sha256": "05bed8ddeae6613d271fb373392c7d6fabbb319e7786bfff2ed9626d76de51ac"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b1-3/bai.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "3af19459ff9414085baa9bcfcbb564113e183481e55c28d4e33ad2020df5f9d4"
+   },
+   {
+    "id": "bai-lines-v2",
+    "voice": "bai",
+    "file": "adaptations/fifteen-days/takes/b1-3/bai-lines-v2.m4a",
+    "sha256": "aaeff9e0cc6ea1d9448c65a84b844bdb7cf494af2c1413d4fd6a3bf947d17f15",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines-v2/L03-b1-3.bai.wav",
+     "sha256": "dda8076d417e371b6656125566894b5ca0792d980ae011ca70a06886ab5f52c8"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b1-3/bai-lines-v2.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "c41442230e559e2b20d6bfd21f62a00e4981dda8f1b7ddd1ae8af1c1ae101bbe"
+   },
+   {
+    "id": "bai-v3b",
+    "voice": "bai-v3b",
+    "file": "adaptations/fifteen-days/takes/b1-3/bai-v3b.m4a",
+    "sha256": "3a4b6e3a52d0279586ff53b901d7c13f4ff78fe906b5715308436caeffe65cf5",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines-v3/L03-b1-3.bai-v3b.wav",
+     "sha256": "59e8bbaa51c29890ce618efde6b81cc1f4336c82adc448520ada459add29ed24"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b1-3/bai-v3b.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "c41442230e559e2b20d6bfd21f62a00e4981dda8f1b7ddd1ae8af1c1ae101bbe"
+   }
+  ],
+  "b1-4": [
+   {
+    "id": "zei",
+    "voice": "zei",
+    "file": "adaptations/fifteen-days/takes/b1-4/zei.m4a",
+    "sha256": "cc57597f00d9b6479f94cab23d4f3ff157e91de77176708d260f29f64d989aad",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines/L04-b1-4.zei.wav",
+     "sha256": "529d0a79685994f7c48a8845c84dd06e19c5c970c30966c917c934937102543e"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b1-4/zei.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "e0e3a56fe56a04a9d63f38b0d6a07a6b20bc6ba66a820cf46231323ae515c1b3"
+   },
+   {
+    "id": "zei-v3",
+    "voice": "zei-v3",
+    "file": "adaptations/fifteen-days/takes/b1-4/zei-v3.m4a",
+    "sha256": "e29d5ae5db581a648986012b1223aead07940405477ff37a8ae056a0454e8abe",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines-v2/L04-b1-4.zei-v3.wav",
+     "sha256": "062315c7ee257ad2493c660b1c2c7c47937122ab463edc65dad604d33ca01895"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b1-4/zei-v3.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "0b4ba1ecc767d39db191342d644f460cffeeaba0e68cf5a7ba42f80cafcd173c"
+   },
+   {
+    "id": "zei-v4b",
+    "voice": "zei-v4b",
+    "file": "adaptations/fifteen-days/takes/b1-4/zei-v4b.m4a",
+    "sha256": "95f26284d1820a46b26ab2127caa508b6585455b2daab4821a38249affe8980a",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines-v3/L04-b1-4.zei-v4b.wav",
+     "sha256": "555a5b2b9af4ec62cec0180b5f8ca6b61fdbe2b06beda41afd279174a7e10a2b"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b1-4/zei-v4b.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "0b4ba1ecc767d39db191342d644f460cffeeaba0e68cf5a7ba42f80cafcd173c"
+   }
+  ],
+  "b1-5": [
+   {
+    "id": "bai",
+    "voice": "bai",
+    "file": "adaptations/fifteen-days/takes/b1-5/bai.m4a",
+    "sha256": "ac78a97f673f7e00adf424366342754ad6fbd0303975fa01f2bee879e5b8679c",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines/L05-b1-5.bai.wav",
+     "sha256": "e88ef3fa51ed1db91d3206e7c07a88e875b08b10ef11a8ec5538b517a9e55d7c"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b1-5/bai.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "52bf3f185d5cdf69b1cb3d2671a9f12c4093e3c01b0634633c3898744284e937"
+   },
+   {
+    "id": "bai-lines-v2",
+    "voice": "bai",
+    "file": "adaptations/fifteen-days/takes/b1-5/bai-lines-v2.m4a",
+    "sha256": "229ad32455e668adf0f2de0def7af487bc86ed3f41f8d2bce5695199f792a6c4",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines-v2/L05-b1-5.bai.wav",
+     "sha256": "b2f4fee8ad03cfafd86197597211606a8a4e72d086ceacbc83c13cc55065c742"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b1-5/bai-lines-v2.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "e2bf6ccd2ea6aafa2386662015132ff4daa98e9be180aebd4dbd0d419fce6e5f"
+   },
+   {
+    "id": "bai-v3b",
+    "voice": "bai-v3b",
+    "file": "adaptations/fifteen-days/takes/b1-5/bai-v3b.m4a",
+    "sha256": "5be899a48a807e8bcc9d8a92bde1050233c8fb2439eebdce54f42eb454a5cf74",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines-v3/L05-b1-5.bai-v3b.wav",
+     "sha256": "9015aafa822955f1d97a9b88183477a489b789c856366b2c9ac85ff167e56137"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b1-5/bai-v3b.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "e2bf6ccd2ea6aafa2386662015132ff4daa98e9be180aebd4dbd0d419fce6e5f"
+   }
+  ],
+  "b1-6": [
+   {
+    "id": "bai",
+    "voice": "bai",
+    "file": "adaptations/fifteen-days/takes/b1-6/bai.m4a",
+    "sha256": "d395b575d66ae84d6e339bfc5a0eaa780d6fb36cebc22bf9b9dc3085fa526954",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines/L06-b1-6.bai.wav",
+     "sha256": "a4b07c38bad25932622a25c88155d976eb479faaa253cb5ccafcd417e1135df2"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b1-6/bai.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "6764924a6be4385e580ecb173f73b8ad9899601ad7bf17e31594039c425efb1c"
+   },
+   {
+    "id": "bai-lines-v2",
+    "voice": "bai",
+    "file": "adaptations/fifteen-days/takes/b1-6/bai-lines-v2.m4a",
+    "sha256": "2cdde556100998270ff0d309ad1fae304a2d865dc2abdfa23d0dc292ea06e126",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines-v2/L06-b1-6.bai.wav",
+     "sha256": "58a76e69d8e1187c17668d499e86046c96b0c92f4089ec85120e75fa51221506"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b1-6/bai-lines-v2.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "2ec08a14af0d59f96d6b8378887c3d6d17eec5d193370de5e813b57d1caa8d23"
+   },
+   {
+    "id": "bai-v3b",
+    "voice": "bai-v3b",
+    "file": "adaptations/fifteen-days/takes/b1-6/bai-v3b.m4a",
+    "sha256": "d9732ff8530777cf1304cbe649d5949765d02bbee2e20de84c7bd8fb492d1f4d",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines-v3/L06-b1-6.bai-v3b.wav",
+     "sha256": "3a8516b99cd8ee04d3e1cde85802de0c1c68fa36425ccd5cac8d9cba8b66ecba"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b1-6/bai-v3b.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "2ec08a14af0d59f96d6b8378887c3d6d17eec5d193370de5e813b57d1caa8d23"
+   }
+  ],
+  "b2-1": [
+   {
+    "id": "zei",
+    "voice": "zei",
+    "file": "adaptations/fifteen-days/takes/b2-1/zei.m4a",
+    "sha256": "92597b0f20c0f445f875e8892cf02953da2cac0a0489efa8de265eec53d5af2a",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines/L07-b2-1.zei.wav",
+     "sha256": "ccc5bbae09cd6eced4cf3df44fe663bb63dafc7da461932cdadee84768e9f826"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b2-1/zei.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "2ed129ae58ae4b038fe43ba7e30f537dd1ef829162247836d7c8d0bc52e23047"
+   },
+   {
+    "id": "zei-v3",
+    "voice": "zei-v3",
+    "file": "adaptations/fifteen-days/takes/b2-1/zei-v3.m4a",
+    "sha256": "ec8d48488c1d06caea7ce9cef100b2221cefcac8f592b446a13afeee3b58c424",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines-v2/L07-b2-1.zei-v3.wav",
+     "sha256": "2c49fd6fbbe3ddee64192ee3c04c325aea91ae808881b6b40aa567e5375e7d44"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b2-1/zei-v3.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "44ae3acf9ef6117493060372955b5a9bdf18faf61533bfda1f4d0a2bf23121a5"
+   },
+   {
+    "id": "zei-v4b",
+    "voice": "zei-v4b",
+    "file": "adaptations/fifteen-days/takes/b2-1/zei-v4b.m4a",
+    "sha256": "cd5e7764c4a782ca9c21ca1eba1e398c2a500042a4a85a0b1493a2f88699a78e",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines-v3/L07-b2-1.zei-v4b.wav",
+     "sha256": "a7101f1c28604b0455579d4302136378f02b705c13cdc7b2001ff548f425632d"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b2-1/zei-v4b.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "44ae3acf9ef6117493060372955b5a9bdf18faf61533bfda1f4d0a2bf23121a5"
+   }
+  ],
+  "b2-2": [
+   {
+    "id": "deluin",
+    "voice": "deluin",
+    "file": "adaptations/fifteen-days/takes/b2-2/deluin.m4a",
+    "sha256": "08388eb95ea7e54b82f99c76ac8d31795568741154602a41bd2770f6b2f7aa69",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines/L08-b2-2.deluin.wav",
+     "sha256": "910270ea94d0109437c9ed2447b9209b6dc2116fe7b93a0ec7811574d7277f88"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b2-2/deluin.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "cea9f6d9007a8c0345b0cf32a5ae694ce62ff26fe35d2abe797475a64070bd52"
+   },
+   {
+    "id": "deluin-v2",
+    "voice": "deluin-v2",
+    "file": "adaptations/fifteen-days/takes/b2-2/deluin-v2.m4a",
+    "sha256": "a47204f9c6b21d20eb81ec85a7bafe54b4bb7f862d5c95cd2891e702b437aa32",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines-v2/L08-b2-2.deluin-v2.wav",
+     "sha256": "aded8f18b5d05139cab1dc225ecc5e316cdb0707328f8668e827f3c26c10059e"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b2-2/deluin-v2.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "e3e8b3ef38bb80f64f2051cebc6720a67b0fb4fd3454b4363fa2525f5c75de0b"
+   }
+  ],
+  "b2-3": [
+   {
+    "id": "zei",
+    "voice": "zei",
+    "file": "adaptations/fifteen-days/takes/b2-3/zei.m4a",
+    "sha256": "06951379131d7672ad1aea0d0f38d6b40c3144713ecec4fb212f387dcd6e25f9",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines/L09-b2-3.zei.wav",
+     "sha256": "acccdede91b0ded5f87c598b9a0ec1ad7aaf5b04af5e82fc5724c6d44314d2ce"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b2-3/zei.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "6cb2cbcd36aa4f215a1a9b47d9880356a2d4bf1fe1ec4039d77487e0fbe71294"
+   },
+   {
+    "id": "zei-v3",
+    "voice": "zei-v3",
+    "file": "adaptations/fifteen-days/takes/b2-3/zei-v3.m4a",
+    "sha256": "88648a668e0cf7f17ff55ca1d8c925c851b27cf3cb016fcfa892dc42be9836ef",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines-v2/L09-b2-3.zei-v3.wav",
+     "sha256": "a76864fe41b70804fb8af97b17b97ec72fd51693a454263e37aa34110dd10c9f"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b2-3/zei-v3.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "39ded66170d64ce1c457c22b6755127f52a41de187edadd5b03936c09d3a097d"
+   },
+   {
+    "id": "zei-v4b",
+    "voice": "zei-v4b",
+    "file": "adaptations/fifteen-days/takes/b2-3/zei-v4b.m4a",
+    "sha256": "2681b3eb3cf519c2a43868c2af17739996d40638d66d91941d8f650b03659673",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines-v3/L09-b2-3.zei-v4b.wav",
+     "sha256": "fbf2f6f98b46c6fc9841441943a0b7ead7f9e9617723efc2cb2f1fe8a5b15b09"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b2-3/zei-v4b.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "39ded66170d64ce1c457c22b6755127f52a41de187edadd5b03936c09d3a097d"
+   }
+  ],
+  "b2-4": [
+   {
+    "id": "deluin",
+    "voice": "deluin",
+    "file": "adaptations/fifteen-days/takes/b2-4/deluin.m4a",
+    "sha256": "1bae5087fc2807a0b846ffba743b54aa688d936a10a5503693b166fbaeb3f3f4",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines/L10-b2-4.deluin.wav",
+     "sha256": "2194afc76afcc98c92fd8e24fd525893a21d44f29d9a779ea0c1009e318f3604"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b2-4/deluin.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "ce4fcb579c88899dca22b73712167584f1fe184c36ebd98f74007f18c4b901b0"
+   },
+   {
+    "id": "deluin-v2",
+    "voice": "deluin-v2",
+    "file": "adaptations/fifteen-days/takes/b2-4/deluin-v2.m4a",
+    "sha256": "73451fbaa0af672aa59a3077c12347a3c04d14bce2d181a52df09dd41ded3a5b",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines-v2/L10-b2-4.deluin-v2.wav",
+     "sha256": "818901f29533f1fac8ca474054726bcb63387c1b6b3e62e78fa72a2a48994fd2"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b2-4/deluin-v2.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "73f3745779957d6bcadbd129d190ec9c3d44868987195def6be0e6a225052f48"
+   }
+  ],
+  "b2-5": [
+   {
+    "id": "zei",
+    "voice": "zei",
+    "file": "adaptations/fifteen-days/takes/b2-5/zei.m4a",
+    "sha256": "57ec7c881781019a9187036d10cf78dac9956821d5c08bedd9da9ca19bbad889",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines/L11-b2-5.zei.wav",
+     "sha256": "1e937f4616d6b236f424c8254188be1b95ebca3281e847f4606d294c172caaac"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b2-5/zei.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "ec569a1e80e83cf87cad6b77f5e8ad52dc2e076d95bdd1e5d5babc97cf507dbe"
+   },
+   {
+    "id": "zei-v3",
+    "voice": "zei-v3",
+    "file": "adaptations/fifteen-days/takes/b2-5/zei-v3.m4a",
+    "sha256": "e542e7f4cb3f937a21debb3736966f965a265e8db57bdd6ba84e21028bd8b97e",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines-v2/L11-b2-5.zei-v3.wav",
+     "sha256": "8670bfa556db2271823eac3d2d5d19d484f4123e99f70110b9c32dc8f7255482"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b2-5/zei-v3.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "de73e0322d267c1b4ef8a19270642bd60487d5497e42af62b1d7b9b0c00a3eac"
+   },
+   {
+    "id": "zei-v4b",
+    "voice": "zei-v4b",
+    "file": "adaptations/fifteen-days/takes/b2-5/zei-v4b.m4a",
+    "sha256": "5a5467d461caa2434ae5b58c4219d73f1b03ae73d695bdd922bb7e2403dfcfcf",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines-v3/L11-b2-5.zei-v4b.wav",
+     "sha256": "87103f0896636e414bb4966aec6e1fe3b92a07469051a2a2d86d5362237a3d00"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b2-5/zei-v4b.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "de73e0322d267c1b4ef8a19270642bd60487d5497e42af62b1d7b9b0c00a3eac"
+   }
+  ],
+  "b2-6": [
+   {
+    "id": "deluin",
+    "voice": "deluin",
+    "file": "adaptations/fifteen-days/takes/b2-6/deluin.m4a",
+    "sha256": "65bc47638aa8a6370dd0dc6e0efffc7cde26868757db5a207dc7c27f1d4c6691",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines/L12-b2-6.deluin.wav",
+     "sha256": "4024b94be4f1a4163d75facdb91eef4efbc5d5092c332b5d92b133c939904e0c"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b2-6/deluin.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "bf3b641bfe061f617ffaaeed36eeba3b8ea443b1fbc2c9e0d0e94c5911909fdb"
+   },
+   {
+    "id": "deluin-v2",
+    "voice": "deluin-v2",
+    "file": "adaptations/fifteen-days/takes/b2-6/deluin-v2.m4a",
+    "sha256": "0031387e9f417f30fc7469f48a29aa939fb43e0243eb44de8866c15108893ab0",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines-v2/L12-b2-6.deluin-v2.wav",
+     "sha256": "e80a258a61444783095a68ea04dcc9d852f315fcb0588d0c3630e92abc2fcd7c"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b2-6/deluin-v2.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "0c49852307151ddaf72304a9caa075d4483ffdab4f4d02bf84d66442f019c1f7"
+   }
+  ],
+  "b2-7": [
+   {
+    "id": "zei",
+    "voice": "zei",
+    "file": "adaptations/fifteen-days/takes/b2-7/zei.m4a",
+    "sha256": "249a3120e4e91b6a2fc389f34f16ad9effd0d2cfafc8648756a18083341a5954",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines/L13-b2-7.zei.wav",
+     "sha256": "fbc1ff904460c4aef424fd4718df254b0d3a2451637d2c674c55ede41a2b58b4"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b2-7/zei.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "2535c835ace4d1f69ee9d9fbaa7326c7e4d5f76de0b861452da41aa6e70fc30e"
+   },
+   {
+    "id": "zei-v3",
+    "voice": "zei-v3",
+    "file": "adaptations/fifteen-days/takes/b2-7/zei-v3.m4a",
+    "sha256": "9d7e2126c6d845e40dbea4179f9d6201888c573e77215c79ce43e7abf73d09a2",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines-v2/L13-b2-7.zei-v3.wav",
+     "sha256": "e08755e6efbaf52e06b4da843c0778a31b6d82b28017a1b5931a2352f2dd4020"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b2-7/zei-v3.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "24609dfc2c48befa6ca42ff979c135d768a0938e7000aa8263f40a78f53cee1d"
+   },
+   {
+    "id": "zei-v4b",
+    "voice": "zei-v4b",
+    "file": "adaptations/fifteen-days/takes/b2-7/zei-v4b.m4a",
+    "sha256": "30608fec0b571a6ca161faa7bdbb06c8d558bbcb61cb42a63bdcc43b38102613",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines-v3/L13-b2-7.zei-v4b.wav",
+     "sha256": "07cd99be173b5ecec5e3be46c08a701dbc25e787c4dede89b2cd32a57db21692"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b2-7/zei-v4b.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "24609dfc2c48befa6ca42ff979c135d768a0938e7000aa8263f40a78f53cee1d"
+   }
+  ],
+  "b2-8": [
+   {
+    "id": "bai",
+    "voice": "bai",
+    "file": "adaptations/fifteen-days/takes/b2-8/bai.m4a",
+    "sha256": "71d9cb531e9bea353837c401a49b34d726b0fe74406e85cbd631cf092c781bc5",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines/L14-b2-8.bai.wav",
+     "sha256": "a4f61f4bc8c69cd1dc5213064b8475e4fd8a528effca8d9148f2efec68a1f9b5"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b2-8/bai.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "656930e60b84f16d90c7eb15e58d2c6263da80724aaceac18d6c7606af2c6a49"
+   },
+   {
+    "id": "bai-lines-v2",
+    "voice": "bai",
+    "file": "adaptations/fifteen-days/takes/b2-8/bai-lines-v2.m4a",
+    "sha256": "1d414423bde776ddee43e7ad4de5301176317324df4e8bea08bb78b26a870189",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines-v2/L14-b2-8.bai.wav",
+     "sha256": "a399ead10484ae4fe9d9785ee814d5105fa8c09e5f18b6433b2c3490ab54440e"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b2-8/bai-lines-v2.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "8adbaccd8bb84a3c1a1ae15f455048584d5b1cac449b0210a20cbd05f5f67ba5"
+   },
+   {
+    "id": "bai-v3b",
+    "voice": "bai-v3b",
+    "file": "adaptations/fifteen-days/takes/b2-8/bai-v3b.m4a",
+    "sha256": "c8b0ed9ae7b3f165fb42b59c61f12899296ba8e908a6039a9d7d357a752e9825",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines-v3/L14-b2-8.bai-v3b.wav",
+     "sha256": "2e0ba4bbb4004772ab28ec09eb3393b6f6cd0dd187268bb16c2a0a6b0785567c"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b2-8/bai-v3b.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "8adbaccd8bb84a3c1a1ae15f455048584d5b1cac449b0210a20cbd05f5f67ba5"
+   }
+  ],
+  "b2-9": [
+   {
+    "id": "zei",
+    "voice": "zei",
+    "file": "adaptations/fifteen-days/takes/b2-9/zei.m4a",
+    "sha256": "9d4ffe0b6da3feec3956472e7cbdccdbbfc46188aa89efbd672d85a8868b8db3",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines/L15-b2-9.zei.wav",
+     "sha256": "5454a5e6f19f5bfd4b0d193d843a20c8970812f334dd40db16242de2ccb0e042"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b2-9/zei.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "c0513325f2bb7c069c7a2bc767320531a60a4f58f21605644c50c02384b8e37e"
+   },
+   {
+    "id": "zei-v3",
+    "voice": "zei-v3",
+    "file": "adaptations/fifteen-days/takes/b2-9/zei-v3.m4a",
+    "sha256": "fe3636776e7b2d9bd4835db63af9f0141656b60bc662998043d182d0aca3438e",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines-v2/L15-b2-9.zei-v3.wav",
+     "sha256": "cd851fd0d231e290846e03f3f4ccd91405afd488b17ba1bfbb3f0dc5b022df52"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b2-9/zei-v3.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "6b843527b1c597b63e7644f98639f8a64d674154b946f557f15d46916a7f5d76"
+   },
+   {
+    "id": "zei-v4b",
+    "voice": "zei-v4b",
+    "file": "adaptations/fifteen-days/takes/b2-9/zei-v4b.m4a",
+    "sha256": "1b8e4f020ccbb5a96db35effd334d37035a785b6927c56052d814e04c96f63e7",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines-v3/L15-b2-9.zei-v4b.wav",
+     "sha256": "12cd37ff8ad9f54e3665dda1c7e9bdfa1b65e834b986ceafe6dddb09508c5368"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b2-9/zei-v4b.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "6b843527b1c597b63e7644f98639f8a64d674154b946f557f15d46916a7f5d76"
+   }
+  ],
+  "b2-10": [
+   {
+    "id": "bai",
+    "voice": "bai",
+    "file": "adaptations/fifteen-days/takes/b2-10/bai.m4a",
+    "sha256": "fc17865aa82b70788fb0920be2c44315b3b62feece611f7f140b9448a92114ef",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines/L16-b2-10.bai.wav",
+     "sha256": "005e5f1bb581a1ba34287f893631103c854998ef9bc50a099c74c4680143b2a3"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b2-10/bai.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "15f5a22ad00521faf45dd072f63c80bef370b9603b8bbe65ec3821d55f83b4e7"
+   },
+   {
+    "id": "bai-lines-v2",
+    "voice": "bai",
+    "file": "adaptations/fifteen-days/takes/b2-10/bai-lines-v2.m4a",
+    "sha256": "b48f1948fa750789306f66a4464c3deb154a761b09fb4995f45a768ab2925627",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines-v2/L16-b2-10.bai.wav",
+     "sha256": "71f1a5a1238d02e4c34f4c21122a3ef2d9eece53be53eb5031b2377c3501d758"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b2-10/bai-lines-v2.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "3ea0c2245c27a62fe8ff9ea8f27e01aded8044c06575d0865f041aa4136d8636"
+   },
+   {
+    "id": "bai-v3b",
+    "voice": "bai-v3b",
+    "file": "adaptations/fifteen-days/takes/b2-10/bai-v3b.m4a",
+    "sha256": "b045f83559af229f0f6c67dc81c2793049767f77c52346e738a494630b875085",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines-v3/L16-b2-10.bai-v3b.wav",
+     "sha256": "69c20d3a0897eba433b16d951bc57a9fdfb0ac2bc37ba66535009d6fd77e8c66"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b2-10/bai-v3b.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "3ea0c2245c27a62fe8ff9ea8f27e01aded8044c06575d0865f041aa4136d8636"
+   }
+  ],
+  "b2-11": [
+   {
+    "id": "bai",
+    "voice": "bai",
+    "file": "adaptations/fifteen-days/takes/b2-11/bai.m4a",
+    "sha256": "c2befe528c4474d822f7ad6bbe13f1debd11531b7eae3d8b5b97522e8b10cae2",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines/L17-b2-11.bai.wav",
+     "sha256": "ce9ec870965aadc6fae47ecbcce7e364db7568210846fafd7d9fea6f1f8afd13"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b2-11/bai.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "e41c5ec9b73fd150099bb55b352114472b6505dbf94659ca26902ed5c314cae7"
+   },
+   {
+    "id": "bai-lines-v2",
+    "voice": "bai",
+    "file": "adaptations/fifteen-days/takes/b2-11/bai-lines-v2.m4a",
+    "sha256": "f02fea68a44f7f757f99988217eb5af0d824a151ddf3e032b0f123ff1e9a4ea1",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines-v2/L17-b2-11.bai.wav",
+     "sha256": "030a6b41022f2b6143504a10a75b983261f703fa58a4ddd128df9a304593be49"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b2-11/bai-lines-v2.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "b283ba07be642a035f4d565ec1e00831324090a00c1bd71c05177bf3b746be47"
+   },
+   {
+    "id": "bai-v3b",
+    "voice": "bai-v3b",
+    "file": "adaptations/fifteen-days/takes/b2-11/bai-v3b.m4a",
+    "sha256": "7f52dd01722d4aeb1521075edbeadc33958400c35c4de07b2d712d6af116411f",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines-v3/L17-b2-11.bai-v3b.wav",
+     "sha256": "7e2e6c2c195836fd94f1b03f5619401a337f98f6d8c5d091127fa1480a7533d4"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b2-11/bai-v3b.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "b283ba07be642a035f4d565ec1e00831324090a00c1bd71c05177bf3b746be47"
+   }
+  ],
+  "b2-12": [
+   {
+    "id": "zei",
+    "voice": "zei",
+    "file": "adaptations/fifteen-days/takes/b2-12/zei.m4a",
+    "sha256": "38c6960305004aac3d2e8d1db0db0943dd6faaea2a3b80e6b2d5c067a76e6f59",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines/L18-b2-12.zei.wav",
+     "sha256": "5d212032d5ca3d1c0d95d425bbb78663c55f5d68bb65df518e598b15e6b390a8"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b2-12/zei.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "b6d05e5e2160921e6615dc41ec549804b86c4802414fe345717a0b826ee75c98"
+   },
+   {
+    "id": "zei-v3",
+    "voice": "zei-v3",
+    "file": "adaptations/fifteen-days/takes/b2-12/zei-v3.m4a",
+    "sha256": "d396cac47d1131395551b87badf642c006fb8bcffd259fa82eb3ef45d5c8d528",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines-v2/L18-b2-12.zei-v3.wav",
+     "sha256": "78e8aaa51799024db9a961a8bd26c548de5f4eb15484e337588d039a909c55a8"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b2-12/zei-v3.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "509227a3ad72a0c2a388dd3b6b19b89267d102ef810f87b03c1b81d105267081"
+   },
+   {
+    "id": "zei-v4b",
+    "voice": "zei-v4b",
+    "file": "adaptations/fifteen-days/takes/b2-12/zei-v4b.m4a",
+    "sha256": "96e8579d9c513d677286b04e0b437d75127df00c1d374d347b69a6608fb628ca",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines-v3/L18-b2-12.zei-v4b.wav",
+     "sha256": "c7bcf91e882f07101502222c6941487a2c330f516d1eddb007abe1b2b6972688"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b2-12/zei-v4b.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "509227a3ad72a0c2a388dd3b6b19b89267d102ef810f87b03c1b81d105267081"
+   }
+  ],
+  "b3-1": [
+   {
+    "id": "deluin",
+    "voice": "deluin",
+    "file": "adaptations/fifteen-days/takes/b3-1/deluin.m4a",
+    "sha256": "17ba5504c1d5a8bfe948710a8f8aa1eeb7ffe7272fa121e2b2d69b2784041f93",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines/L19-b3-1.deluin.wav",
+     "sha256": "80ad6f158b3d071ba75311422bcce41c96d442e411f13d7d4e92abe7b2760ec3"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b3-1/deluin.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "7c867e58092a80da00e309d57f6aed3164a515f7375c345d69fed4c76b1c7144"
+   },
+   {
+    "id": "deluin-v2",
+    "voice": "deluin-v2",
+    "file": "adaptations/fifteen-days/takes/b3-1/deluin-v2.m4a",
+    "sha256": "9e216543efd492466618d6b518f3a4215099c8213749cd4ed217592c6cf768ce",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines-v2/L19-b3-1.deluin-v2.wav",
+     "sha256": "bb6bb281faa3a9431cfc77f112be6a2fd361898eb1bb6101c44516f616560a65"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b3-1/deluin-v2.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "e35ce44e95ea0ac9bb37c4283f3cb9f26888503067ca6207841941588285978e"
+   }
+  ],
+  "b3-2": [
+   {
+    "id": "robot",
+    "voice": "robot",
+    "file": "adaptations/fifteen-days/takes/b3-2/robot.m4a",
+    "sha256": "e30719500f4e618916018c48200df4970bce85df6ace17c1210ae112c55831dd",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines/L20-b3-2.robot.wav",
+     "sha256": "68a1df0040e21bc6dbb318f105f39965f093d2c781c1a477b88f7c70c72ed748"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b3-2/robot.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "84328a8890b5d4eb480bbfc83b7b68a0ee2078f719c7a589d49a32d590853a50"
+   },
+   {
+    "id": "robot-lines-v2",
+    "voice": "robot",
+    "file": "adaptations/fifteen-days/takes/b3-2/robot-lines-v2.m4a",
+    "sha256": "db2846a44c90b13a18c3ed45a91cba8b8fe364737334cebc74f35f2de8cc6a69",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines-v2/L20-b3-2.robot.wav",
+     "sha256": "733b9f695ab533d96d6b370907a05609a8bda339f6dab90263a7bc50132d7a5f"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b3-2/robot-lines-v2.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "84328a8890b5d4eb480bbfc83b7b68a0ee2078f719c7a589d49a32d590853a50"
+   }
+  ],
+  "b3-3": [
+   {
+    "id": "zei",
+    "voice": "zei",
+    "file": "adaptations/fifteen-days/takes/b3-3/zei.m4a",
+    "sha256": "27f85b05b09a7b019b2480803ba9b49b1f7c89d4f50637cd823e39ba14041c01",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines/L21-b3-3.zei.wav",
+     "sha256": "188b34ced93114a003421d3544f7ef27a45c882b004762bbf8a2f0c2a33a85af"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b3-3/zei.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "b9112a444d5b65bd50a5d3ca00c4d9d11dd0fc0df8f83e951bbc384c380efe2a"
+   },
+   {
+    "id": "zei-v3",
+    "voice": "zei-v3",
+    "file": "adaptations/fifteen-days/takes/b3-3/zei-v3.m4a",
+    "sha256": "9017e0af4dc7e0c2fc538b67ecc2ea898a743349182ee47677bad4986c054e50",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines-v2/L21-b3-3.zei-v3.wav",
+     "sha256": "70b876d637c70c701f4f270a701cbdea79f3e3a29369236b1a6c32527f41e47a"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b3-3/zei-v3.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "b9112a444d5b65bd50a5d3ca00c4d9d11dd0fc0df8f83e951bbc384c380efe2a"
+   },
+   {
+    "id": "zei-v4b",
+    "voice": "zei-v4b",
+    "file": "adaptations/fifteen-days/takes/b3-3/zei-v4b.m4a",
+    "sha256": "0ae4fe246fcdb52a9495b54f58e10027c45b28632ceb802351e5ae715c7c3526",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines-v3/L21-b3-3.zei-v4b.wav",
+     "sha256": "18689f84cb178d74aaa04468543c2c2245641d6ab1721ed4f0071d73d26e4e6f"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b3-3/zei-v4b.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "b9112a444d5b65bd50a5d3ca00c4d9d11dd0fc0df8f83e951bbc384c380efe2a"
+   }
+  ],
+  "b3-4": [
+   {
+    "id": "deluin",
+    "voice": "deluin",
+    "file": "adaptations/fifteen-days/takes/b3-4/deluin.m4a",
+    "sha256": "2084b4c44c3e82627d8514806e5280c40613031d84d9f142de479b3d62606669",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines/L22-b3-4.deluin.wav",
+     "sha256": "cf17db778e181c48a9bd071e56e1cc37b8968f1857f2a8c1a51e946a6a208ebd"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b3-4/deluin.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "baf0937778b00dbc56c5e1b63193ef8765ebdda2bb29a4632daf259376667710"
+   },
+   {
+    "id": "deluin-v2",
+    "voice": "deluin-v2",
+    "file": "adaptations/fifteen-days/takes/b3-4/deluin-v2.m4a",
+    "sha256": "f97fb4073da46c8b7f4c25075f1d5c46f71514fcf5fc1174fc5f8292eb5cef50",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines-v2/L22-b3-4.deluin-v2.wav",
+     "sha256": "9c9b5fce7f8b5d28dee7dd0694eee2454969ff091a1c11a3cb1c1e36e1bf4978"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b3-4/deluin-v2.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "f0af8c247a38e693f349e5c1e3582a919d295ed8bb45e72c81808e58143f7bdd"
+   }
+  ],
+  "b3-5": [
+   {
+    "id": "zei",
+    "voice": "zei",
+    "file": "adaptations/fifteen-days/takes/b3-5/zei.m4a",
+    "sha256": "e3659def296969bdfd52785105817782e219d23e9a0e0dff9cb764856bc828c9",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines/L23-b3-5.zei.wav",
+     "sha256": "d40d5ff153b3501d603f986d50193e03bf52d2f3a42997ba2d93364298c81bd2"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b3-5/zei.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "446acb311feb8bc0b7082cf5e356c132fdfde4b718972a2a8b41eade7935dea3"
+   },
+   {
+    "id": "zei-v3",
+    "voice": "zei-v3",
+    "file": "adaptations/fifteen-days/takes/b3-5/zei-v3.m4a",
+    "sha256": "b52bd8506b54183b3b8919e282e6a166f6e9401d5968da15b831d96bdd83ff1b",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines-v2/L23-b3-5.zei-v3.wav",
+     "sha256": "e43a4ea512ca44022edd5b938a75962ff85ad524c20b578aee945ea8855b5b89"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b3-5/zei-v3.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "41494477eff67fefcebc08ac055e4310a6c49fa78be4ed958426c733faa1e81c"
+   },
+   {
+    "id": "zei-v4b",
+    "voice": "zei-v4b",
+    "file": "adaptations/fifteen-days/takes/b3-5/zei-v4b.m4a",
+    "sha256": "73c6a0218c1d83214fdff1a3c93a9e1a2658f4cf471524820dc9e5958181dc5f",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines-v3/L23-b3-5.zei-v4b.wav",
+     "sha256": "1684eed704792d36aeae544cefd9856f6b7f2d5e162d3dc2f5cfabe98118a29c"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b3-5/zei-v4b.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "41494477eff67fefcebc08ac055e4310a6c49fa78be4ed958426c733faa1e81c"
+   }
+  ],
+  "b3-6": [
+   {
+    "id": "zei",
+    "voice": "zei",
+    "file": "adaptations/fifteen-days/takes/b3-6/zei.m4a",
+    "sha256": "5ad4edfce87ec52a4c8d970f6a09e2908c69341fef484e9b6ad7a161988a11aa",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines/L24-b3-6.zei.wav",
+     "sha256": "6dd57ab5032556f50b58ddd577238648f37c1119f1eecc71a3957b7b74afdd4a"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b3-6/zei.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "2595ae81fcd67b02cc0cd448bab9236d4bea12164c3daf23080170749c728339"
+   },
+   {
+    "id": "zei-v3",
+    "voice": "zei-v3",
+    "file": "adaptations/fifteen-days/takes/b3-6/zei-v3.m4a",
+    "sha256": "1ea9650906999be0fe5200ad63dc008c19932100c7062f940b25789c920a352c",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines-v2/L24-b3-6.zei-v3.wav",
+     "sha256": "8f3538c1847fad3ed66993ac7f4ea03ad667a5d58b347cad0b4732499615f530"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b3-6/zei-v3.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "7223d6db5f6aed18eb88e34055887d30bb7c75dcc242f6164d6376b4129f7efc"
+   },
+   {
+    "id": "zei-v4b",
+    "voice": "zei-v4b",
+    "file": "adaptations/fifteen-days/takes/b3-6/zei-v4b.m4a",
+    "sha256": "e0f0710732a0dd995c684de391540c74e4b91c2f8ed3247d0312e7d6f73c82e0",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines-v3/L24-b3-6.zei-v4b.wav",
+     "sha256": "ab25695410c9c2cdee01e05a2892d5c17082a9c37ebc6cd621e67f572fa76f8d"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b3-6/zei-v4b.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "7223d6db5f6aed18eb88e34055887d30bb7c75dcc242f6164d6376b4129f7efc"
+   }
+  ],
+  "b3-7": [
+   {
+    "id": "deluin",
+    "voice": "deluin",
+    "file": "adaptations/fifteen-days/takes/b3-7/deluin.m4a",
+    "sha256": "8e3c25492de88c7400e0b059a1f9a848196594584e84192f7319e00a20d6c9f5",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines/L25-b3-7.deluin.wav",
+     "sha256": "19aba41cc9d1fcfc7a049fec57664f399173bb14555e728bcd08d587ce222ab6"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b3-7/deluin.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "3ccaf6e3826e2845389a37a3aaf9c83c7c992eb44449486cdcb37229379e6baa"
+   },
+   {
+    "id": "deluin-v2",
+    "voice": "deluin-v2",
+    "file": "adaptations/fifteen-days/takes/b3-7/deluin-v2.m4a",
+    "sha256": "5f0f34d54919e743f415ea54b56897fe21c1fb87dc90b086f468989cca38e37b",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines-v2/L25-b3-7.deluin-v2.wav",
+     "sha256": "c0a69d07b2ce8690facb6ed8bb02849fcc1c893dad910310ef7039cff7fb18c8"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b3-7/deluin-v2.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "1813c38a1ca5a2a2c8109688879212bbda01401db8dbbfc3e82a1f93f1c0b4bf"
+   }
+  ],
+  "b3-8": [
+   {
+    "id": "zei",
+    "voice": "zei",
+    "file": "adaptations/fifteen-days/takes/b3-8/zei.m4a",
+    "sha256": "1940f0e1563fca6d23b38ec8d57d746362ce2ad3d6e61b2c25743f7be43234f9",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines/L26-b3-8.zei.wav",
+     "sha256": "9d43ed68f2252dc74fd23a08cf601bb568f97396e844aa03880eee682047ca71"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b3-8/zei.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "72860818ba04861283f6c1d36012df0dee75a69bea392b29a572d9961fda8ea0"
+   },
+   {
+    "id": "zei-v3",
+    "voice": "zei-v3",
+    "file": "adaptations/fifteen-days/takes/b3-8/zei-v3.m4a",
+    "sha256": "ee0f370829d5deffe2a9b39904c2703baa58501b253eaa798edaa7d36f53004e",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines-v2/L26-b3-8.zei-v3.wav",
+     "sha256": "d9af95708cefec6427968a4319fdb931a46a69b6cebbf434e49a42e2d51e027b"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b3-8/zei-v3.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "4103b6faf5ac20085ffb3d83c970533723042914bf2d590aedb5f5368ccfc2d5"
+   },
+   {
+    "id": "zei-v4b",
+    "voice": "zei-v4b",
+    "file": "adaptations/fifteen-days/takes/b3-8/zei-v4b.m4a",
+    "sha256": "32a6dbfaf65e3ebad3b8be08bdd8cf5711546bc89a2adb5fa972341d96ccada3",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines-v3/L26-b3-8.zei-v4b.wav",
+     "sha256": "2a0426a848d8881158359d85d3901669a1f4274bc221932d511ccc9db88a07a6"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b3-8/zei-v4b.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "4103b6faf5ac20085ffb3d83c970533723042914bf2d590aedb5f5368ccfc2d5"
+   }
+  ],
+  "b3-9": [
+   {
+    "id": "deluin",
+    "voice": "deluin",
+    "file": "adaptations/fifteen-days/takes/b3-9/deluin.m4a",
+    "sha256": "aca37a6a59545e17557358edf7b0ed6e4cf2302ff33877fb2006ee772c4488ba",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines/L27-b3-9.deluin.wav",
+     "sha256": "b4651e323fe781dc258c417ef6c8b6b035d063d814c21bca0dc70ea959dcbefe"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b3-9/deluin.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "835460f2ae03085c66f2f1d6012bffa9c7755a422bbe77d7c4494e1dfaea6079"
+   },
+   {
+    "id": "deluin-v2",
+    "voice": "deluin-v2",
+    "file": "adaptations/fifteen-days/takes/b3-9/deluin-v2.m4a",
+    "sha256": "381060bcc8c0936affc230587aaa79e266e04947b9bb582646d13fc2ac2241de",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines-v2/L27-b3-9.deluin-v2.wav",
+     "sha256": "b2a5e50505c7df719d7d948da5e44730c54b54203139af61f2e961afa0797e60"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b3-9/deluin-v2.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "4872d0c353b24e83d2c85f50423738422f6f0e397588b91ffbeacb3f0a5ad849"
+   }
+  ],
+  "b3-10": [
+   {
+    "id": "zei",
+    "voice": "zei",
+    "file": "adaptations/fifteen-days/takes/b3-10/zei.m4a",
+    "sha256": "95343c86bdb11d317d980965cd82d31bee9236a1196ab52c45f8f0344fc788fa",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines/L28-b3-10.zei.wav",
+     "sha256": "c306c5503cb35c6ed85c4bd19f146e067fdccc1064463878738a8a1140d3b492"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b3-10/zei.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "e2aa51871be24bf71f431a3c017bb60b8502ed7e6b80e45c843c08d5efef8a61"
+   },
+   {
+    "id": "zei-v3",
+    "voice": "zei-v3",
+    "file": "adaptations/fifteen-days/takes/b3-10/zei-v3.m4a",
+    "sha256": "fd2a63b9ac83a69fd1a94d97f4b41203686cd61d4657531f294e5b56ef1e53da",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines-v2/L28-b3-10.zei-v3.wav",
+     "sha256": "0be0cd9691b3373b7a249b9cc47f22fb2ba1f90ee501c6fbb76d403ca26b2b64"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b3-10/zei-v3.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "0147396e4e39d265adc1b651970402cb42c1142fbfc6e5bc0e45155da511025f"
+   },
+   {
+    "id": "zei-v4b",
+    "voice": "zei-v4b",
+    "file": "adaptations/fifteen-days/takes/b3-10/zei-v4b.m4a",
+    "sha256": "44561b4f907633866777f2bd485afd4a3a336ebd8633af370e23123ba0e6b3b9",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines-v3/L28-b3-10.zei-v4b.wav",
+     "sha256": "0bb5629cf789798681200c1f61ef75bbe2aa9df4b1275e5396b0918b09f1af31"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b3-10/zei-v4b.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "0147396e4e39d265adc1b651970402cb42c1142fbfc6e5bc0e45155da511025f"
+   }
+  ],
+  "b3-11": [
+   {
+    "id": "deluin",
+    "voice": "deluin",
+    "file": "adaptations/fifteen-days/takes/b3-11/deluin.m4a",
+    "sha256": "a9c0a0a8054c1024e0847472c70c9d4785c3d60a2c543d16f09d5c998971f437",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines/L29-b3-11.deluin.wav",
+     "sha256": "175892a94e83db9b0a2c8fd2e0057c5c39b4fcf8126ff4a05a2ecbe23dd8c0d1"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b3-11/deluin.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "1cde1379c4c9edc77e019b2e068d2c09988c5de987c0b60b215a09c72e258b0c"
+   },
+   {
+    "id": "deluin-v2",
+    "voice": "deluin-v2",
+    "file": "adaptations/fifteen-days/takes/b3-11/deluin-v2.m4a",
+    "sha256": "e4b8575a593ca2b2cad923143e1d654ca5b6953ae4d117afcc4940107d20e7f6",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines-v2/L29-b3-11.deluin-v2.wav",
+     "sha256": "f28e90c46f7a1ca4cd0d5c48c129168f0c08a98d2070ac2dd2112e769e2c0b72"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b3-11/deluin-v2.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "a5dd58116d7569472d32f19c710db085bcbfcbcdc37700175cda11b48e7e8a1a"
+   }
+  ],
+  "b3-12": [
+   {
+    "id": "zei",
+    "voice": "zei",
+    "file": "adaptations/fifteen-days/takes/b3-12/zei.m4a",
+    "sha256": "8a292e277185519dff5b7a84dd8738d19bda9f79fa86d0d16da4a85cba69e556",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines/L30-b3-12.zei.wav",
+     "sha256": "4cdc990e9d55a8b27f69657ae8df8935b8db2f6b5e8ab244d5334e7e5a2d1f9c"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b3-12/zei.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "3b29668d699cbd6988d1d8618d6a61ed99ca6ec359c2fb7de37d610122cdbed1"
+   },
+   {
+    "id": "zei-v3",
+    "voice": "zei-v3",
+    "file": "adaptations/fifteen-days/takes/b3-12/zei-v3.m4a",
+    "sha256": "bf06927a76b5606672fe9e2e1acf0ced21738789f10a68e905d33b609f2a2210",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines-v2/L30-b3-12.zei-v3.wav",
+     "sha256": "547435cfc169f9621c9d0a25052d0304a8303525055db05078c63c3b11bde6de"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b3-12/zei-v3.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "5ba2a1e9a46f2e7dff5fec1d977a1a08aa3faa3486b28b5a7b4836fc9eccc04c"
+   },
+   {
+    "id": "zei-v4b",
+    "voice": "zei-v4b",
+    "file": "adaptations/fifteen-days/takes/b3-12/zei-v4b.m4a",
+    "sha256": "a9470c5d469f0b80a5952dfcb35044d3cb4e09bfbf8c948c5c3ec7f0d5b10440",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines-v3/L30-b3-12.zei-v4b.wav",
+     "sha256": "9b0e085612765379e1f8dedef01c94229eb543cd95d3ddd6e900beee7c56e075"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b3-12/zei-v4b.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "5ba2a1e9a46f2e7dff5fec1d977a1a08aa3faa3486b28b5a7b4836fc9eccc04c"
+   }
+  ],
+  "b3-13": [
+   {
+    "id": "bai",
+    "voice": "bai",
+    "file": "adaptations/fifteen-days/takes/b3-13/bai.m4a",
+    "sha256": "5a6aab9d2dc3750c23d878f78ce9e4b11aeeff4c891be3b08fbdb1b0bbdf8277",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines/L31-b3-13.bai.wav",
+     "sha256": "8f8d4b298632c897ed553a3d9800bdb8c01a43df791e194352f8d93249213047"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b3-13/bai.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "5b1678af5a534dd7845582f21df03e6497e79105ac501ade8e046558c00c1f61"
+   },
+   {
+    "id": "bai-lines-v2",
+    "voice": "bai",
+    "file": "adaptations/fifteen-days/takes/b3-13/bai-lines-v2.m4a",
+    "sha256": "51893882032b188e00ccb1d44cb5029a490f66f6621c63247be368805a410aa3",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines-v2/L31-b3-13.bai.wav",
+     "sha256": "04f3030be82d64467f1be28fcb26f4be06fa50dae1aee5ea14447c709018fd0f"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b3-13/bai-lines-v2.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "ed60d40302f6126f72e60f6bec756d4622637dd13d4619c243413ffe70593aff"
+   },
+   {
+    "id": "bai-v3b",
+    "voice": "bai-v3b",
+    "file": "adaptations/fifteen-days/takes/b3-13/bai-v3b.m4a",
+    "sha256": "767caa65aba393072db1f20bfcf75f5520445248ee4e25b2533f1f3a80036e2c",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines-v3/L31-b3-13.bai-v3b.wav",
+     "sha256": "3103d2689611deeaa14989e834efcefa5d1ee740c0a5524d101fd07c66427d4b"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b3-13/bai-v3b.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "ed60d40302f6126f72e60f6bec756d4622637dd13d4619c243413ffe70593aff"
+   }
+  ],
+  "b4-1": [
+   {
+    "id": "deluin",
+    "voice": "deluin",
+    "file": "adaptations/fifteen-days/takes/b4-1/deluin.m4a",
+    "sha256": "7c6793984ce9b395ffffd36ac0a9a2f6ef971c69cbe3275fd98db9d138bf591b",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines/L32-b4-1.deluin.wav",
+     "sha256": "6e104b6f8664ce94ee19bdddd2fc65d845a6072b629f1466898e98ea1e90117d"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b4-1/deluin.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "cf9b0410b111170aa4c58bafbd0eadbe49d6f8688948848c9a1566f8c6bc6636"
+   },
+   {
+    "id": "deluin-v2",
+    "voice": "deluin-v2",
+    "file": "adaptations/fifteen-days/takes/b4-1/deluin-v2.m4a",
+    "sha256": "12359e221f840f0ffffff8cd77b33871e2ff2a69176a879070bf134b93b037e0",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines-v2/L32-b4-1.deluin-v2.wav",
+     "sha256": "12f8eafc01c79366051d837ce49abb4f15908907a2322b47b8fae6597375a913"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b4-1/deluin-v2.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "f9daf1d6ba58048e9a3fd1faebf557e57ed440403df39fc6fdc1d113c7bc633a"
+   }
+  ],
+  "b4-2": [
+   {
+    "id": "zei",
+    "voice": "zei",
+    "file": "adaptations/fifteen-days/takes/b4-2/zei.m4a",
+    "sha256": "375e2a3829dec9606b67f3f82e88ee028b2c61be837737db965ba7999c53e07b",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines/L33-b4-2.zei.wav",
+     "sha256": "8ff270e4f4719e8a7c85ecd21b6a5c68d54245fe1d566d4ea64a62b12c8d376b"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b4-2/zei.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "ba150df8b5f99008827f7260ffc1b9bac1bb9bce4341432164491e50283fd14d"
+   },
+   {
+    "id": "zei-v3",
+    "voice": "zei-v3",
+    "file": "adaptations/fifteen-days/takes/b4-2/zei-v3.m4a",
+    "sha256": "59fd8132b648358fd4da2efb952fd42c461353893abe5b8432777e272562d56f",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines-v2/L33-b4-2.zei-v3.wav",
+     "sha256": "eefdb9151875667adc1593ab738052d6908383c1ccb74bd0500751fa6360d98d"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b4-2/zei-v3.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "ad88e7796ec150abd073ab882fe823e509107b27a948c92408bc0eb06942ce0f"
+   },
+   {
+    "id": "zei-v4b",
+    "voice": "zei-v4b",
+    "file": "adaptations/fifteen-days/takes/b4-2/zei-v4b.m4a",
+    "sha256": "88a4c1063a9ba7d39bf92cf69841f7d7d89aa0f430a0bd58011a7fac01a7ce37",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines-v3/L33-b4-2.zei-v4b.wav",
+     "sha256": "9f989a6cf9571554c3138d4cdf6e984aa6d9f75e3221b3de592de81fef946edf"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b4-2/zei-v4b.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "ad88e7796ec150abd073ab882fe823e509107b27a948c92408bc0eb06942ce0f"
+   }
+  ],
+  "b4-3": [
+   {
+    "id": "deluin",
+    "voice": "deluin",
+    "file": "adaptations/fifteen-days/takes/b4-3/deluin.m4a",
+    "sha256": "9e80ba3453cb3211265823bd887f7c37137bd939d2c654e429d047f572c676fa",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines/L34-b4-3.deluin.wav",
+     "sha256": "79991e532ed454c5e339636fb2b091b369e3814d5f6ba97042a532f37d2de695"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b4-3/deluin.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "941c24fdf7cad550a2c6eb36562edcae03188b20c53204767d8dd9fede43e0d2"
+   },
+   {
+    "id": "deluin-v2",
+    "voice": "deluin-v2",
+    "file": "adaptations/fifteen-days/takes/b4-3/deluin-v2.m4a",
+    "sha256": "942e13b9b8befa712400bd78d75ccc4778b316f05b5218dda1ea878ec38d8fab",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines-v2/L34-b4-3.deluin-v2.wav",
+     "sha256": "5a9a275591b952aefaa88ee436360b49ef033351c889ae47052b54935f504152"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b4-3/deluin-v2.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "546d43631ac81074a980a0d9552f8e2635534b7cc8f4bbcdda410f659bd4296b"
+   }
+  ],
+  "b4-4": [
+   {
+    "id": "zei",
+    "voice": "zei",
+    "file": "adaptations/fifteen-days/takes/b4-4/zei.m4a",
+    "sha256": "aface51913e51f502f038a20a1852c003411591f065bd374899fb3702a5de976",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines/L35-b4-4.zei.wav",
+     "sha256": "580ca749da5635295a8b0cd89a169c323857ce001a41f28a9c6966e5cf133547"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b4-4/zei.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "b3a2c4ece06d2aaa0a4714c48859a056228ed7b81bfc3c3cb472da08ec3a2a84"
+   },
+   {
+    "id": "zei-v3",
+    "voice": "zei-v3",
+    "file": "adaptations/fifteen-days/takes/b4-4/zei-v3.m4a",
+    "sha256": "ace8b5aca411f742201825ff8709f8aac8d84cac745b801ec3fb903de6009908",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines-v2/L35-b4-4.zei-v3.wav",
+     "sha256": "f90c1903011e3cd5002774d38a8c51f2a1140d75632e358a622c21a021a3bd5c"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b4-4/zei-v3.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "df24db5e75a91574a7e0af25c06cb8c38880d4fbb9efbe04c74b038f256e929e"
+   },
+   {
+    "id": "zei-v4b",
+    "voice": "zei-v4b",
+    "file": "adaptations/fifteen-days/takes/b4-4/zei-v4b.m4a",
+    "sha256": "38941de3d72efe2b75898cdb5dccbd93aaea67e1aebf7ae15b2a67f9c3ef6930",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines-v3/L35-b4-4.zei-v4b.wav",
+     "sha256": "ad9b38e52fd76dd0f4f7f4f96fc3f73581887508e8eaedb9dfc080596268119a"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b4-4/zei-v4b.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "df24db5e75a91574a7e0af25c06cb8c38880d4fbb9efbe04c74b038f256e929e"
+   }
+  ],
+  "b4-5": [
+   {
+    "id": "deluin",
+    "voice": "deluin",
+    "file": "adaptations/fifteen-days/takes/b4-5/deluin.m4a",
+    "sha256": "e03d300c75319e72e3cde1b8fa1212368cec0eafeb8961737f1aad4f42edb854",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines/L36-b4-5.deluin.wav",
+     "sha256": "9cb5972b97b431c08df4c673528e02185e0741041e86e3d1a10155f61b8efe32"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b4-5/deluin.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "ec2306f30a86112b50b9697ff676531eb7a672b4301d34ecc93295870e88adec"
+   },
+   {
+    "id": "deluin-v2",
+    "voice": "deluin-v2",
+    "file": "adaptations/fifteen-days/takes/b4-5/deluin-v2.m4a",
+    "sha256": "2958f0ba4d7ade51288e85f17a7e5b4a9871b0cd29490d59f39017382fb1eff7",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines-v2/L36-b4-5.deluin-v2.wav",
+     "sha256": "085c7fdb4c2ac42e1ea82b148684c62dbcdf982d24045ba29b33d12967c036f7"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b4-5/deluin-v2.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "fd0791536ed77fcd484eca1a17ee51e0c5d619517f613534f68bb5b84da0834e"
+   }
+  ],
+  "b5-1": [
+   {
+    "id": "deluin",
+    "voice": "deluin",
+    "file": "adaptations/fifteen-days/takes/b5-1/deluin.m4a",
+    "sha256": "8fe80eba17072777b6b543b8913d3021096718ed6a9ab74322a52f32da85beb5",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines/L37-b5-1.deluin.wav",
+     "sha256": "3d81823850e208cc4ce5fa0618249db63ad0dd9302c1f2e22e41c41e0d23c83e"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b5-1/deluin.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "e8f61c1ad3c47a24ca4a1cbca599703b45c959f5737de4838a2bc78af1121e02"
+   },
+   {
+    "id": "deluin-v2",
+    "voice": "deluin-v2",
+    "file": "adaptations/fifteen-days/takes/b5-1/deluin-v2.m4a",
+    "sha256": "5cd0d71364da044dcd5b11ed5898318b041b55eb60d74e69c6127752803b572c",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines-v2/L37-b5-1.deluin-v2.wav",
+     "sha256": "1836203af6a167fa51ae47ad0a62b817f1d2643ab7af868042bfa61b6a99fcfa"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b5-1/deluin-v2.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "258ee1378529e8bf17eb16ff7a430cee9b6b0d9f9124fe8dbf91e301fa33e67c"
+   }
+  ],
+  "b5-2": [
+   {
+    "id": "zei",
+    "voice": "zei",
+    "file": "adaptations/fifteen-days/takes/b5-2/zei.m4a",
+    "sha256": "fa9c0e4bdc2e3a5480d9c69976c0da6b1287be67ed85141c14029fab15f25079",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines/L38-b5-2.zei.wav",
+     "sha256": "10e342bae05bd8eaba639e3af582095bc2d711e70510e5dfa7af7e21f7f13acd"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b5-2/zei.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "33bd073c9df736d6fa42bb56ac0efeda8eb24de3de8757ee57acc3dc26493d58"
+   },
+   {
+    "id": "zei-v3",
+    "voice": "zei-v3",
+    "file": "adaptations/fifteen-days/takes/b5-2/zei-v3.m4a",
+    "sha256": "2c94c0d7f25c6dd28752d5ff8c1be6214852ea44add14f3d6497913a690a2717",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines-v2/L38-b5-2.zei-v3.wav",
+     "sha256": "bdef59b2e8da2e07a721b56ce760caa0c78e6864de5fb167b76ee6d0943d657d"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b5-2/zei-v3.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "68a6cbaaef07e8e66c304de7e5fd4a21afbb870dc8094605a6f30063cfd18417"
+   },
+   {
+    "id": "zei-v4b",
+    "voice": "zei-v4b",
+    "file": "adaptations/fifteen-days/takes/b5-2/zei-v4b.m4a",
+    "sha256": "7791d1b3abbeec4bd9f68b09456f56d3d7c2bf2693c0fcbc427c389c587fce5a",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines-v3/L38-b5-2.zei-v4b.wav",
+     "sha256": "4fec38d379588984fbac6bf7bcd3f846fbf225591b856a612f4535a20a965c0c"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b5-2/zei-v4b.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "68a6cbaaef07e8e66c304de7e5fd4a21afbb870dc8094605a6f30063cfd18417"
+   }
+  ],
+  "b5-3": [
+   {
+    "id": "deluin",
+    "voice": "deluin",
+    "file": "adaptations/fifteen-days/takes/b5-3/deluin.m4a",
+    "sha256": "9c8d1816252baebf1fe0de314a9f3100f808542f3c40c635fbf1158fae35f37b",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines/L39-b5-3.deluin.wav",
+     "sha256": "735139a295764a07eaacd7c877c39d8902639bd52a83019679d84cb1d71e3cc9"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b5-3/deluin.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "a2562768562eec6c61140824d82e37e7d9f941e2da9263295e10dad5a29d46e6"
+   },
+   {
+    "id": "deluin-v2",
+    "voice": "deluin-v2",
+    "file": "adaptations/fifteen-days/takes/b5-3/deluin-v2.m4a",
+    "sha256": "ca9fe21204721e66ffaeb7f7216219dce21af5e290be0a9fb28b9c8bd201260c",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines-v2/L39-b5-3.deluin-v2.wav",
+     "sha256": "25ae3d8ecfa7d56e9f81411aeeb0f7cad88b693efc6ddb9170b96672a6df6e36"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b5-3/deluin-v2.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "28df81e6765f152282c13e5fa8549da11dce98a8923e436ecacd42ccb759fe7a"
+   }
+  ],
+  "b5-4": [
+   {
+    "id": "deluin",
+    "voice": "deluin",
+    "file": "adaptations/fifteen-days/takes/b5-4/deluin.m4a",
+    "sha256": "253e3dbf26e681adb3413c8465d307b3eb85d258ab0d8d0c4e75ca09289ea1ae",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines/L40-b5-4.deluin.wav",
+     "sha256": "127a700f0a06518ffb8f7e4f0140f89e5d182af5b9ed3d1d6b255540d960ca27"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b5-4/deluin.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "b2941ae5f2e50a73ba413c871bd4b4a5f6be1be28b63b0b55095c5f89af558c3"
+   },
+   {
+    "id": "deluin-v2",
+    "voice": "deluin-v2",
+    "file": "adaptations/fifteen-days/takes/b5-4/deluin-v2.m4a",
+    "sha256": "b7d1a530444bca68c42bb597a737716a0e7bdeb56f5a73a28bf425ec496f11a4",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines-v2/L40-b5-4.deluin-v2.wav",
+     "sha256": "2d198c3acb2d0171ad8812ef88209c1f6939faa924dd4ab60dc232ad652704a3"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b5-4/deluin-v2.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "52afab108f9043b1e3ed6650bd3284eba941f3727ec4685a04014125e0dc6e86"
+   }
+  ],
+  "b5-5": [
+   {
+    "id": "bai",
+    "voice": "bai",
+    "file": "adaptations/fifteen-days/takes/b5-5/bai.m4a",
+    "sha256": "4f30e66752f78580fbca05c2abd3a2f162073cc82e8841808b74edca544aca1e",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines/L41-b5-5.bai.wav",
+     "sha256": "326bb39098552a6f11fa429809f348c10732a4f7b7e80fc556ad050a0d22575b"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b5-5/bai.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "1dc4dc2330965c2f8a1c930ad8aabaf503d64acc73391a5a98f0712b81d282ac"
+   },
+   {
+    "id": "bai-lines-v2",
+    "voice": "bai",
+    "file": "adaptations/fifteen-days/takes/b5-5/bai-lines-v2.m4a",
+    "sha256": "da07af93c302b36b2154dc64b58601a518d510c93ca8a60a72ed70cf37061008",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines-v2/L41-b5-5.bai.wav",
+     "sha256": "d63ab04e8a9d25b787715279a78bd078fec5ff93a7bd07994d03f83cd832bf08"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b5-5/bai-lines-v2.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "d9e17e12ec1ed0b39ddbf56330faddc5dc59d4ba337fde56a0daa6ab09414b66"
+   },
+   {
+    "id": "bai-v3b",
+    "voice": "bai-v3b",
+    "file": "adaptations/fifteen-days/takes/b5-5/bai-v3b.m4a",
+    "sha256": "400f05c171d2726e3417595f061b068541e2e6546525715c62bfc1879174d764",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines-v3/L41-b5-5.bai-v3b.wav",
+     "sha256": "40b19babba08af71f655b9da7c15963fc0ed43727676930b2b2d03ec6eb26263"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b5-5/bai-v3b.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "d9e17e12ec1ed0b39ddbf56330faddc5dc59d4ba337fde56a0daa6ab09414b66"
+   }
+  ],
+  "b6-1": [
+   {
+    "id": "deluin",
+    "voice": "deluin",
+    "file": "adaptations/fifteen-days/takes/b6-1/deluin.m4a",
+    "sha256": "2cd05e5c371d7ed864137d19a5c0b288f57b5c1e11fcb8fa5c00166c665fe51e",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines/L42-b6-1.deluin.wav",
+     "sha256": "45d516ea20f0cde792fffb8a4d8b73b33800d617ac169ab8395e07057b5d5236"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b6-1/deluin.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "6f996ff645d5d64e3c210e69b13b3ff51395171faad301f1ed3ae8f63912e782"
+   },
+   {
+    "id": "deluin-v2",
+    "voice": "deluin-v2",
+    "file": "adaptations/fifteen-days/takes/b6-1/deluin-v2.m4a",
+    "sha256": "a1ce99a214755133d7fd0d9d3befb55ebf9f674d91ccd325389fd829a2639695",
+    "converted": {
+     "file": "scenes-out/fifteen-days/lines-v2/L42-b6-1.deluin-v2.wav",
+     "sha256": "c054cbffd771fb4e4053515c0aa9d4f078c9b2a3d2acc14f35c864528845a012"
+    },
+    "recipe": "adaptations/fifteen-days/takes/b6-1/deluin-v2.recipe.json",
+    "model": "chatterbox-vc",
+    "licence": "MIT",
+    "take_sha256": "6c69f3744edbbc6c9807a78d1578c30e7a8de4665253839570903040e3ff26ca"
+   }
+  ]
+ }
+}

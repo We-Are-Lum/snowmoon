@@ -21,6 +21,8 @@ try {
 }
 
 const MODELS = Object.fromEntries(readJson('config/models.json').models.map((m) => [m.id, m]));
+// Existing converted takes per line (scripts/remix-takes.py), if committed.
+const TAKES = exists('adaptations/fifteen-days/takes/takes.json') ? readJson('adaptations/fifteen-days/takes/takes.json').takes : {};
 /** A recipe's endpoint to the allowlisted model it ran (config/models.json). */
 function modelOf(endpoint) {
   if (!endpoint) return null;
@@ -197,9 +199,19 @@ async function build(V) {
         by: book ? { kind: 'book', cite: book[1] } : /FID 6786/.test(tag) ? { kind: 'person', handle: V.author.handle, on: tag.split(' on ')[1] ?? null } : { kind: 'unknown' },
         note: l?.note ?? null,
         voice: exists(voiceFile) ? { src: await copyVoice(voiceFile, c.id), name: c.source?.voice ?? null, sha256: sha(voiceFile), file: voiceFile, model: c.source?.voice ? { id: 'chatterbox-vc', name: MODELS['chatterbox-vc']?.repo, licence: MODELS['chatterbox-vc']?.license } : null } : null,
+        // The other existing converted takes of this line (scripts/remix-takes.py), for the storyboard.
+        takes: await Promise.all((TAKES[c.id] ?? []).filter((t) => exists(t.file)).map(async (t) => ({ id: t.id, voice: t.voice, src: await copyTake(t.file, c.id, t.id), sha256: t.sha256, file: t.file, recipe: t.recipe, model: t.model, licence: t.licence }))),
       });
     }
     shots.push(shot);
+  }
+
+  async function copyTake(file, cue, id) {
+    const name = `takes/${cue}/${id}${path.extname(file)}`;
+    const dst = path.join(OUT, name);
+    fs.mkdirSync(path.dirname(dst), { recursive: true });
+    if (!fs.existsSync(dst)) fs.copyFileSync(rel(file), dst);
+    return url(name);
   }
 
   async function copyVoice(file, cue) {

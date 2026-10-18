@@ -64,6 +64,8 @@ const OTHER = '0x' + 'ab'.repeat(20);
 const acct = Number((await pg.query<{ id: number }>(`insert into studio.wallet_accounts (address) values ($1) returning id`, [WALLET])).rows[0].id);
 const other = Number((await pg.query<{ id: number }>(`insert into studio.wallet_accounts (address) values ($1) returning id`, [OTHER])).rows[0].id);
 await pg.query(`insert into studio.wallet_payments (tx_hash, account_id, chain_id, token, amount, usd, block_number) values ($1, $2, 8453, 'USDC', 5000000, 5, 1)`, ['0x' + '1'.repeat(64), acct]);
+// The other account has agreed already, so its storyboard is refused for the frame it names, not for consent.
+await pg.query(`insert into studio.contributor_consents (fid, kind, consent_text_sha256) values ($1, 'own_words', $2)`, [-other, (await import('../src/lib/consent')).consentWording().sha256]);
 await pg.exec('set role studio_writer');
 const dbPort = await freePort();
 const dbServer = new PGLiteSocketServer({ db: pg, port: dbPort, host: '127.0.0.1' });
@@ -158,7 +160,8 @@ try {
       const u = r.request().url();
       if (u.startsWith(BASE) || u.startsWith('data:') || u.startsWith('blob:')) return r.continue();
       if (u.startsWith('https://farcaster.xyz/~/compose')) composer.push(u);
-      else outside.push(u);
+      // The site's own media host (the version's cut, for the storyboard's mix) is not outside (P6a); refused here all the same.
+      else if (!/^https:\/\/([a-z0-9-]+\.)?snowmoon\.party\//.test(u)) outside.push(u);
       return r.abort();
     });
     if (signedIn) {
@@ -270,6 +273,65 @@ try {
     await page.locator('.rx-fig img').waitFor();
     await page.waitForTimeout(500);
     check('R10b', 'the frame\'s own page: frame, label, their words, share, recipe', (await page.locator('.rx').innerText()).includes('Golden hour light; Deluin laughing.'), null, await shot(page, 'R10b-frame-page', true));
+    await page.context().close();
+  }
+
+  // S1–S3 storyboard: add the version's frame and a remix frame, edit, play, save, share, hide.
+  {
+    const page = await newPage({ width: 1440, height: 1000 }, token);
+    await page.goto(BASE + ED);
+    await page.locator('#ed-remix-words').waitFor({ timeout: 20000 });
+    await page.getByRole('button', { name: 'Add this frame to a storyboard' }).click();
+    await page.locator('.ed-mine').getByRole('button', { name: 'Add to storyboard' }).first().click();
+    await page.goto(`${BASE}/@naaate/1/shot/5-b1-1`);
+    await page.getByRole('button', { name: 'Add this frame to a storyboard' }).waitFor({ timeout: 20000 });
+    await page.getByRole('button', { name: 'Add this frame to a storyboard' }).click();
+    await page.goto(`${BASE}/@naaate/1/storyboard`);
+    await page.locator('.sb-item').first().waitFor({ timeout: 20000 });
+    const n0 = await page.locator('.sb-item').count();
+    // Lengths, order, remove, a take.
+    for (const k of [0, 1]) {
+      const r = page.locator('.sb-item input[type=range]').nth(k);
+      await r.focus();
+      await page.keyboard.press('Home');
+      for (let j = 0; j < 1; j++) await page.keyboard.press('ArrowRight');
+    }
+    await page.getByRole('button', { name: 'Move frame 3 up' }).click();
+    const order = await page.locator('.sb-item .label').allInnerTexts();
+    await page.getByRole('button', { name: 'Remove frame 2' }).click();
+    const takeSelect = page.locator('.sb-take select').first();
+    const takeOptions = await takeSelect.locator('option').count();
+    await takeSelect.selectOption({ index: 1 });
+    const n1 = await page.locator('.sb-item').count();
+    // Play: the slideshow moves on by itself after the first frame's 0.6 s.
+    await page.getByRole('button', { name: 'Play' }).click();
+    await page.waitForTimeout(1400);
+    const at = await page.locator('.sb-screen figcaption').innerText();
+    await page.getByRole('button', { name: 'Pause' }).click().catch(() => {});
+    const editShot = await shot(page, 'S1-storyboard-editor');
+    check('S1', 'storyboard: add (version frame and remix frame), length, reorder, remove, a take, play', n0 === 3 && n1 === 2 && /^3\. Shot 50/i.test(order[2] ?? '') === false && takeOptions >= 2 && /^2 \/ 2/.test(at), { n0, n1, order, takeOptions, at }, editShot);
+
+    await page.locator('#sb-title').fill('Night at the café');
+    await page.getByRole('button', { name: /^Save storyboard/ }).click();
+    await page.getByRole('link', { name: /Its page/ }).waitFor({ timeout: 15000 });
+    const href = (await page.getByRole('link', { name: /Its page/ }).getAttribute('href')) ?? '';
+    const sbId = href.split('/').pop() ?? '';
+    const row = (await q1(`select title, items, takes, person from studio.storyboards where id = $1`, [sbId])) as { title: string; items: { frame: string | null; seconds: number }[]; takes: Record<string, string>; person: number } | undefined;
+    await page.goto(BASE + href);
+    await page.locator('.sb-screen').waitFor();
+    const t = await page.locator('.rx').innerText();
+    const pageShot = await shot(page, 'S2-storyboard-page', true);
+    await page.getByRole('button', { name: 'Cast it' }).click();
+    await page.waitForTimeout(600);
+    const cast = composer.filter((u) => decodeURIComponent(u).includes(`/storyboard/${sbId}`)).length;
+    check('S2', 'save: its own page plays it, with title, maker, AI label, Share and the cast composer', !!row && row.title === 'Night at the café' && row.items.length === 2 && row.items.some((i) => i.frame) && Object.keys(row.takes).length === 1 && row.person === -acct && /Night at the café/.test(t) && /by 0x5aae…eaed/i.test(t) && /AI-generated/i.test(t) && cast >= 1, { row, cast }, pageShot);
+
+    const bad = await fetch(`${BASE}/api/remix/storyboard`, { method: 'POST', headers: { 'content-type': 'application/json', authorization: `Bearer ${otherToken}` }, body: JSON.stringify({ adaptation: 1, version: 1, items: [{ shot: '46-b4-1', frame: row?.items.find((i) => i.frame)?.frame, seconds: 2 }] }) });
+    const otherHide = await fetch(`${BASE}/api/remix/storyboard/${sbId}/hide`, { method: 'POST', headers: { 'content-type': 'application/json', authorization: `Bearer ${otherToken}` }, body: '{}' });
+    await page.getByRole('button', { name: 'Hide this' }).click();
+    await page.waitForLoadState('load');
+    await page.locator('.rx-title').filter({ hasText: 'Hidden' }).waitFor({ timeout: 10000 });
+    check('S3', 'another account can\'t use your remix frame or hide your board; you can hide it', bad.status === 400 && otherHide.status === 403, { bad: bad.status, otherHide: otherHide.status }, await shot(page, 'S3-storyboard-hidden'));
     await page.context().close();
   }
 

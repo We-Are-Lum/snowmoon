@@ -66,6 +66,7 @@ const nextConfig: NextConfig = {
     return [
       { source: '/@:handle/:id/v/:n', destination: '/adaptation/:id/by/:handle/v/:n' },
       { source: '/@:handle/:id/shot/:shot', destination: '/adaptation/:id/by/:handle/shot/:shot' },
+      { source: '/@:handle/:id/storyboard', destination: '/adaptation/:id/by/:handle/storyboard' },
       { source: '/@:handle/:id', destination: '/adaptation/:id/by/:handle' },
       { source: '/:id(\\d{1,9})', destination: '/adaptation/:id' },
     ];

@@ -46,19 +46,19 @@ export function ShareRow({ url, text }: { url: string; text: string }) {
   );
 }
 
-export function HideButton({ id, onChange }: { id: string; onChange?: (hidden: boolean) => void }) {
+export function HideButton({ id, onChange, base = '/api/remix' }: { id: string; onChange?: (hidden: boolean) => void; base?: string }) {
   const [state, setState] = useState<{ canHide: boolean; hidden: boolean; canUnhide: boolean; as: string | null } | null>(null);
   const [note, setNote] = useState<string | null>(null);
   useEffect(() => {
-    void authFetch(`/api/remix/${id}/hide`)
+    void authFetch(`${base}/${id}/hide`)
       .then((r) => r.json())
       .then(setState)
       .catch(() => setState(null));
-  }, [id]);
+  }, [id, base]);
   if (!state?.canHide) return null;
   const act = async (hide: boolean) => {
     setNote(null);
-    const r = await authFetch(`/api/remix/${id}/hide`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ hide }) });
+    const r = await authFetch(`${base}/${id}/hide`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ hide }) });
     const out = (await r.json().catch(() => ({}))) as { hidden?: boolean; error?: string };
     if (!r.ok) return setNote(out.error ?? 'Could not change it');
     setState({ ...state, hidden: !!out.hidden, canUnhide: !!out.hidden });

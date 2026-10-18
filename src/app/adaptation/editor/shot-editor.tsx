@@ -5,6 +5,7 @@ import Link from 'next/link';
 import type { SetStage, ShotCamera, PersonSpec } from './set3d';
 import { LocalTextField } from '~/components/local-text-field';
 import { RemixPanel } from './remix-panel';
+import { AddToStoryboard } from './add-to-storyboard';
 
 /**
  * The live shot editor (owner, 2026-10-17: "Ship a live editor on the site by Sunday"; boards 1-3 of
@@ -393,6 +394,9 @@ function Editor({
               <figcaption className="label">Its set frame · as sent to the model{shot.setFrame ? ` · ${shot.setFrame.mode}` : ''}</figcaption>
             </figure>
           </div>
+          {shot.frame && (
+            <AddToStoryboard adaptation={data.adaptation} version={data.version} shot={shot.id} seconds={shot.to - shot.from} frame={null} boardPath={`${scenePath}/storyboard`} label={`Add this frame to a storyboard`} />
+          )}
           {aiLabel && <p className="label ed-muted">{aiLabel}</p>}
           <p className="label ed-recipe-link">
             <a
@@ -413,6 +417,8 @@ function Editor({
             shotId={shot.id}
             shotN={shot.n}
             title={data.title}
+            seconds={shot.to - shot.from}
+            boardPath={`${scenePath}/storyboard`}
             depth={(w, h) => stageRef.current?.layoutPictures(w, h).depth ?? null}
             camera={cam}
           />

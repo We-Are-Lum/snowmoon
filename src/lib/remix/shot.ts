@@ -38,7 +38,8 @@ export interface RemixShot {
 }
 
 type Pic = { src: string; file: string; sha256: string; who?: string; name?: string };
-type DataShot = { id: string; n: number; who: string[]; camera: unknown; plate: Pic | null; cards: Pic[]; recipe: { id: string; sha256: string; prompt: string | null } | null };
+type DataLine = { cue: string; takes?: { id: string }[] };
+type DataShot = { id: string; n: number; from: number; to: number; who: string[]; camera: unknown; plate: Pic | null; cards: Pic[]; recipe: { id: string; sha256: string; prompt: string | null } | null; lines: DataLine[] };
 
 const cache = new Map<string, { shots: DataShot[] } | null>();
 const root = () => path.join(process.cwd(), 'public');
@@ -114,4 +115,17 @@ export function layoutPicture(dataUrl: unknown, limits: { width: number; height:
   const size = pictureSize(bytes);
   if (!size || size.contentType !== 'image/png' || size.width !== limits.width || size.height !== limits.height) return null;
   return { role: 'layout', name: 'live layout (depth)', src: null, file: null, fileSha256: null, bytes, sha256: sha(bytes), ...size };
+}
+
+/** What a storyboard may name in a version: its shots (with their length) and, per line, the takes it may pick. */
+export function versionIndex(adaptation: number, version: number): { shots: Map<string, { seconds: number; cues: string[] }>; takes: Map<string, Set<string>> } | null {
+  const d = editorData(adaptation, version);
+  if (!d) return null;
+  const shots = new Map<string, { seconds: number; cues: string[] }>();
+  const takes = new Map<string, Set<string>>();
+  for (const s of d.shots) {
+    shots.set(s.id, { seconds: +(s.to - s.from).toFixed(2), cues: s.lines.map((l) => l.cue) });
+    for (const l of s.lines) takes.set(l.cue, new Set(['version', ...(l.takes ?? []).map((t) => t.id)]));
+  }
+  return { shots, takes };
 }
