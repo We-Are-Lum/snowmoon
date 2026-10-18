@@ -1,0 +1,429 @@
+/**
+ * Adaptation pages end to end, against a LOCAL database only (docs/proposals/adaptation-urls.md).
+ * Fails (exit 1) on any problem. Nothing touches the hosted database or Farcaster.
+ *
+ *   npm run test:adaptation-pages              (builds first: `next build`, then this script)
+ *   npx tsx scripts/test-adaptation-pages.ts --out=/some/dir   screenshots and results.json there
+ *
+ * - The database: every migration (0012 included) in an in-memory Postgres (PGlite), served on a
+ *   local socket, as test:images-gate and check:minpentai-live do. Rows are seeded as postgres;
+ *   then the session is set to studio_writer, so the site reads and writes as the production role.
+ * - Farcaster's name API: a local stand-in (FARCASTER_API_URL, honoured off production only)
+ *   that knows @naaate = FID 6786 and says "no such name" for @oldnaaate (a rename).
+ * - The site: this checkout's production build (`next start`), with NEXT_PUBLIC_URL as production
+ *   has it, so the links it copies and casts read as they will on snowmoon.party. The pages are
+ *   shown because VERCEL_ENV is unset here (adaptationPagesShown in src/lib/config.ts);
+ *   ADAPTATION_PAGES.live stays false.
+ * - The browser: the locally installed Chrome (playwright-core). Every request that isn't to the
+ *   local site is refused, so no page reaches out.
+ *
+ * Checks: /@naaate/1, /@naaate/1/v/1, /1, a renamed name, a slug, a wallet address (and its
+ * checksum case), "nothing here yet", SHARE and copy link, the cast composer (website and inside a
+ * Farcaster client), and the phone width. Version 1's video and poster are named on media.snowmoon.party
+ * (uploaded in publish step (b)); the browser here is refused anything outside the local site, so the
+ * check reads the player's src and poster rather than playing it.
+ */
+import path from 'node:path';
+import { mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { spawn } from 'node:child_process';
+import { createServer as createHttp } from 'node:http';
+import { createServer as createNet } from 'node:net';
+import { PGlite } from '@electric-sql/pglite';
+import { PGLiteSocketServer } from '@electric-sql/pglite-socket';
+import { build } from 'esbuild';
+import { chromium, type Browser, type Frame, type Page } from 'playwright-core';
+
+const ROOT = path.resolve(import.meta.dirname, '..');
+const arg = (name: string) => process.argv.slice(2).find((a) => a.startsWith(`--${name}=`))?.split('=').slice(1).join('=');
+const OUT = path.resolve(arg('out') ?? path.join(ROOT, '.next', 'test-adaptation-pages'));
+mkdirSync(OUT, { recursive: true });
+const PUBLIC = 'https://snowmoon.party';
+
+const freePort = () => new Promise<number>((res) => { const s = createNet(); s.listen(0, '127.0.0.1', () => { const p = (s.address() as { port: number }).port; s.close(() => res(p)); }); });
+
+// The wallet account: EIP-55's own example address, so its checksum case is known.
+const WALLET_CHECKSUM = '0x5aAeb6053F3E94C9b9A09f33669435E7Ef1BeAed';
+const WALLET = WALLET_CHECKSUM.toLowerCase();
+
+// --- the database ----------------------------------------------------------------------
+const pg = new PGlite();
+await pg.exec(`create role anon nologin; create role authenticated nologin; create role service_role nologin bypassrls;`);
+for (const f of readdirSync(path.join(ROOT, 'supabase/migrations')).filter((f) => f.endsWith('.sql')).sort()) {
+  await pg.exec(readFileSync(path.join(ROOT, 'supabase/migrations', f), 'utf8'));
+}
+// Seed (as postgres): a wallet account with its own version of adaptation 1 (a fork of version 1)
+// on its page; the owner's old name, seen before a rename; a second adaptation with no versions.
+const w = await pg.query<{ id: number }>(`insert into studio.wallet_accounts (address) values ($1) returning id`, [WALLET]);
+const walletPerson = -Number(w.rows[0].id);
+await pg.query(
+  `insert into studio.adaptation_versions (adaptation_id, parent_version_id, author_person, recipe) values (1, 1, $1, $2)`,
+  [walletPerson, JSON.stringify({ video_url: null, ai_label: 'Pictures: AI-generated, not by the author.', after_chapter: 14 })],
+);
+const v2 = (await pg.query<{ id: number }>(`select id from studio.adaptation_versions where author_person = $1`, [walletPerson])).rows[0].id;
+await pg.query(`insert into studio.adaptation_pages (person, adaptation_id, version_id) values ($1, 1, $2)`, [walletPerson, v2]);
+await pg.exec(`insert into studio.account_names (fname, person) values ('oldnaaate', 6786)`);
+const a2 = (await pg.query<{ id: number }>(`insert into studio.adaptations (owner_person, title) values (6786, 'Second Scene') returning id`)).rows[0].id;
+// A third adaptation by FID 7777, whose name we saw as @zeiwriter, for when Farcaster doesn't answer.
+const a3 = (await pg.query<{ id: number }>(`insert into studio.adaptations (owner_person, title) values (7777, 'Third Scene') returning id`)).rows[0].id;
+await pg.query(`insert into studio.adaptation_versions (adaptation_id, author_person, recipe) values ($1, 7777, '{"video_url": null}')`, [a3]);
+await pg.exec(`insert into studio.account_names (fname, person) values ('zeiwriter', 7777)`);
+// A fourth by FID 8888, @oldie, who renames to @newie during the test (check 12).
+const a4 = (await pg.query<{ id: number }>(`insert into studio.adaptations (owner_person, title) values (8888, 'Fourth Scene') returning id`)).rows[0].id;
+await pg.query(`insert into studio.adaptation_versions (adaptation_id, author_person, recipe) values ($1, 8888, '{"video_url": null}')`, [a4]);
+await pg.exec(`insert into studio.account_names (fname, person) values ('oldie', 8888)`);
+// From here on the site talks to the database as the production role.
+await pg.exec('set role studio_writer');
+
+const dbPort = await freePort();
+const dbServer = new PGLiteSocketServer({ db: pg, port: dbPort, host: '127.0.0.1' });
+await dbServer.start();
+
+// --- Farcaster's name API, stood in ------------------------------------------------------
+const NAMES: Record<string, number> = { naaate: 6786, oldie: 8888 };
+const asked: string[] = [];
+let farcasterDown = false;
+const stub = createHttp((req, res) => {
+  const u = new URL(req.url ?? '/', 'http://stub');
+  asked.push(u.pathname + u.search);
+  if (farcasterDown) return (res.writeHead(503), res.end());
+  const send = (status: number, body: unknown) => (res.writeHead(status, { 'content-type': 'application/json' }), res.end(JSON.stringify(body)));
+  if (u.pathname === '/v2/user-by-username') {
+    const name = u.searchParams.get('username') ?? '';
+    return NAMES[name] ? send(200, { result: { user: { fid: NAMES[name], username: name } } }) : send(404, { errors: [{ message: 'not found' }] });
+  }
+  if (u.pathname === '/v2/user') {
+    const fid = Number(u.searchParams.get('fid'));
+    const name = Object.entries(NAMES).find(([, f]) => f === fid)?.[0];
+    return name ? send(200, { result: { user: { fid, username: name } } }) : send(404, { errors: [{ message: 'not found' }] });
+  }
+  send(404, {});
+});
+await new Promise<void>((r) => stub.listen(0, '127.0.0.1', r));
+const stubPort = (stub.address() as { port: number }).port;
+
+// --- the site ------------------------------------------------------------------------------
+const port = await freePort();
+const BASE = `http://localhost:${port}`;
+const { VERCEL_ENV: _drop, ...env } = process.env;
+const next = spawn(path.join(ROOT, 'node_modules/.bin/next'), ['start', '-p', String(port)], {
+  cwd: ROOT,
+  env: {
+    ...env,
+    NODE_ENV: 'production',
+    NEXT_PUBLIC_URL: PUBLIC,
+    STUDIO_DATABASE_URL: `postgres://studio_writer@127.0.0.1:${dbPort}/postgres`,
+    FARCASTER_API_URL: `http://127.0.0.1:${stubPort}`,
+  },
+  stdio: ['ignore', 'ignore', 'pipe'],
+});
+let serverErr = '';
+next.stderr.on('data', (d) => (serverErr += d));
+for (let i = 0; i < 80; i++) {
+  const r = await fetch(BASE + '/about').catch(() => null);
+  if (r?.ok) break;
+  await new Promise((r2) => setTimeout(r2, 500));
+}
+
+// --- the checks ------------------------------------------------------------------------------
+type Result = { n: number; name: string; url: string; expected: string; got: { status: number | null; finalUrl: string; text: string; [k: string]: unknown }; pass: boolean; screenshot: string };
+const results: Result[] = [];
+const failures: string[] = [];
+
+/** The first response, unfollowed: status and where it points. */
+async function head(p: string) {
+  const r = await fetch(BASE + p, { redirect: 'manual' });
+  const loc = r.headers.get('location');
+  return { status: r.status, location: loc ? new URL(loc, BASE).pathname : null };
+}
+
+const mainText = (page: Page | Frame) => page.locator('main, body').first().innerText().then((t) => t.replace(/\s+/g, ' ').trim());
+const short = (t: string, n = 400) => (t.length > n ? t.slice(0, n) + '…' : t);
+const local = (u: string) => u.replace(BASE, '');
+
+async function newPage(browser: Browser, viewport = { width: 1280, height: 800 }) {
+  const ctx = await browser.newContext({ viewport, permissions: ['clipboard-read', 'clipboard-write'] });
+  await ctx.grantPermissions(['clipboard-read', 'clipboard-write'], { origin: BASE });
+  // No page reaches outside this machine.
+  await ctx.route('**/*', (r) => (r.request().url().startsWith(BASE) ? r.continue() : r.abort()));
+  const page = await ctx.newPage();
+  page.on('pageerror', (e) => failures.push(`page error on ${local(page.url())}: ${e.message}`));
+  return page;
+}
+
+async function record(n: number, name: string, url: string, expected: string, page: Page, got: { status: number | null; text?: string; [k: string]: unknown }, pass: boolean) {
+  const file = `${String(n).padStart(2, '0')}-${name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')}.png`;
+  await page.screenshot({ path: path.join(OUT, file), fullPage: false });
+  const text = got.text ?? short(await mainText(page));
+  results.push({ n, name, url, expected, got: { ...got, finalUrl: local(page.url()), text }, pass, screenshot: path.join(OUT, file) });
+  if (!pass) failures.push(`${n} ${name}: expected ${expected}; got ${JSON.stringify({ ...got, finalUrl: local(page.url()), text: short(text, 200) })}`);
+  console.log(`  ${pass ? 'PASS' : 'FAIL'} ${n} ${name}`);
+}
+
+// 11 (run first, before the site has cached any name). Farcaster isn't answering: /<id> still finds
+// the owner's page under the name we last saw on them, and that page still shows.
+{
+  farcasterDown = true;
+  const h = await head(`/${a3}`);
+  const h2 = await head(`/@zeiwriter/${a3}`);
+  farcasterDown = false;
+  const pass = h.status === 307 && h.location === `/@zeiwriter/${a3}` && h2.status === 200;
+  results.push({ n: 11, name: 'Farcaster not answering', url: `/${a3}`, expected: `307 to /@zeiwriter/${a3} (the name last seen on FID 7777), and that page 200`, got: { status: h.status, finalUrl: h.location ?? '', text: '', pageStatus: h2.status }, pass, screenshot: '' });
+  if (!pass) failures.push(`11 Farcaster not answering: /${a3} gave ${h.status} ${h.location}; /@zeiwriter/${a3} gave ${h2.status}`);
+  console.log(`  ${pass ? 'PASS' : 'FAIL'} 11 Farcaster not answering`);
+}
+
+// 12. A rename while the site still holds the old name for that FID (cached a day in names.ts):
+// /<id> is visited first (the site caches FID 8888 = @oldie), then @oldie renames to @newie.
+// A link with the old name must redirect to the new one, not 404 until the cache expires.
+{
+  const before = await head(`/${a4}`);
+  delete NAMES.oldie;
+  NAMES.newie = 8888;
+  const h = await head(`/@oldie/${a4}`);
+  const pass = before.location === `/@oldie/${a4}` && [307, 308].includes(h.status) && h.location === `/@newie/${a4}`;
+  results.push({ n: 12, name: 'rename with a warm name cache', url: `/@oldie/${a4}`, expected: `redirect to /@newie/${a4}`, got: { status: h.status, finalUrl: h.location ?? '', text: '', before: before.location }, pass, screenshot: '' });
+  if (!pass) failures.push(`12 rename with a warm cache: /${a4} went to ${before.location}; /@oldie/${a4} gave ${h.status} ${h.location}`);
+  console.log(`  ${pass ? 'PASS' : 'FAIL'} 12 rename with a warm name cache`);
+}
+
+const browser = await chromium.launch({ channel: 'chrome', args: ['--disable-features=LocalNetworkAccessChecks,BlockInsecurePrivateNetworkRequests,PrivateNetworkAccessForNavigations'] });
+try {
+  // 1. The owner's page.
+  {
+    const url = '/@naaate/1';
+    const h = await head(url);
+    const page = await newPage(browser);
+    const res = await page.goto(BASE + url);
+    const t = await mainText(page);
+    const player = await page.locator('video.scene-video').evaluate((v) => ({ src: v.getAttribute('src'), poster: v.getAttribute('poster') })).catch(() => null);
+    const canonical = await page.locator('link[rel="canonical"]').getAttribute('href').catch(() => null);
+    const embedRaw = await page.locator('meta[name="fc:miniapp"]').getAttribute('content').catch(() => null);
+    const embed = embedRaw ? (JSON.parse(embedRaw) as { button?: { title?: string; action?: { url?: string } } }) : null;
+    const headOk = canonical === `${PUBLIC}/@naaate/1` && embed?.button?.action?.url === `${PUBLIC}/@naaate/1` && embed?.button?.title === 'Watch it';
+    const pass = headOk && h.status === 200 && res?.status() === 200 && /Fifteen Days/i.test(t) && /@naaate.s chosen version/i.test(t) && player?.src === 'https://media.snowmoon.party/scenes/fifteen-days/v1/fifteen-days-9391f90d6dca.mp4' && player?.poster === 'https://media.snowmoon.party/scenes/fifteen-days/v1/fifteen-days-poster-3caad9b75656.jpg' && /Version 1 /i.test(t) && /AI-generated, not by the author/i.test(t);
+    await record(1, 'owner page', url, `200; title Fifteen Days; @naaate's chosen version; version 1; the AI label; the player plays v1's cut from media.snowmoon.party with the café master as its poster; canonical and fc:miniapp embed point at ${PUBLIC}/@naaate/1`, page, { status: h.status, player, canonical, embedUrl: embed?.button?.action?.url ?? null }, pass);
+    await page.context().close();
+  }
+
+  // 2. A fixed version.
+  {
+    const url = '/@naaate/1/v/1';
+    const h = await head(url);
+    const page = await newPage(browser);
+    await page.goto(BASE + url);
+    const t = await mainText(page);
+    const pass = h.status === 200 && /this version, fixed/i.test(t) && /See @naaate.s latest chosen version/i.test(t);
+    await record(2, 'fixed version', url, "200; 'this version, fixed'; a link to the latest chosen version", page, { status: h.status }, pass);
+    await page.context().close();
+  }
+
+  // 3. /1 goes to the page of the person who started adaptation 1.
+  {
+    const url = '/1';
+    const h = await head(url);
+    const page = await newPage(browser);
+    await page.goto(BASE + url);
+    const pass = h.status === 307 && h.location === '/@naaate/1' && local(page.url()) === '/@naaate/1';
+    await record(3, 'id redirect', url, '307 to /@naaate/1', page, { status: h.status, location: h.location }, pass);
+    await page.context().close();
+  }
+
+  // 4. A name Farcaster no longer knows, seen on FID 6786 before a rename.
+  {
+    const url = '/@oldnaaate/1';
+    const h = await head(url);
+    const page = await newPage(browser);
+    await page.goto(BASE + url);
+    const pass = [307, 308].includes(h.status) && h.location === '/@naaate/1' && local(page.url()) === '/@naaate/1';
+    await record(4, 'renamed fname redirect', url, 'redirect to /@naaate/1 (the new name)', page, { status: h.status, location: h.location }, pass);
+    await page.context().close();
+  }
+
+  // 5. Words after the id redirect to the title's slug.
+  {
+    const url = '/@naaate/1-anything';
+    const h = await head(url);
+    const page = await newPage(browser);
+    await page.goto(BASE + url);
+    const t = await mainText(page);
+    const pass = [307, 308].includes(h.status) && h.location === '/@naaate/1-fifteen-days' && local(page.url()) === '/@naaate/1-fifteen-days' && /Fifteen Days/i.test(t);
+    await record(5, 'slug redirect', url, 'redirect to /@naaate/1-fifteen-days, which shows the scene', page, { status: h.status, location: h.location }, pass);
+    await page.context().close();
+  }
+
+  // 6. A wallet account's page, and its checksum-case address redirecting to lowercase.
+  {
+    const url = `/@${WALLET}/1`;
+    const h = await head(url);
+    const hc = await head(`/@${WALLET_CHECKSUM}/1`);
+    const page = await newPage(browser);
+    await page.goto(BASE + `/@${WALLET_CHECKSUM}/1`);
+    const t = await mainText(page);
+    // The address as shown, after CSS: lowercase in the capitals label too (owner, 2026-10-17).
+    const where = await page.evaluate(() => (document.querySelector('.scene-where') as HTMLElement | null)?.innerText ?? '');
+    // The 42-character handle stays inside its column (desktop here, phone below).
+    const overflow = await page.evaluate(() => Array.from(document.querySelectorAll('.scene-facts dd, .scene-where, .scene-btn-sub')).filter((e) => e.scrollWidth > e.clientWidth + 1 || e.getBoundingClientRect().right > (document.querySelector('.scene') as HTMLElement).getBoundingClientRect().right + 1).map((e) => e.className || e.tagName));
+    const phone = await newPage(browser, { width: 390, height: 844 });
+    await phone.goto(BASE + url);
+    const phoneSideways = await phone.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+    await phone.screenshot({ path: path.join(OUT, '06b-wallet-address-phone.png') });
+    await phone.context().close();
+    const pass =
+      overflow.length === 0 && phoneSideways <= 0 &&
+      h.status === 200 && [307, 308].includes(hc.status) && hc.location === url && local(page.url()) === url &&
+      new RegExp(`Version ${v2} .*forked from version 1`, 'i').test(t) && t.includes(`@${WALLET}`) && where.includes(`/@${WALLET}/1`) && where.includes(`@${WALLET}`);
+    await record(6, 'wallet address', `/@${WALLET_CHECKSUM}/1 and ${url}`, `checksum case redirects to ${url}; that page shows the wallet's version ${v2}, forked from version 1; the address shows lowercase, in the capitals label too; it stays inside its column (desktop) and the page has no sideways scroll at 390px`, page, { status: h.status, checksumStatus: hc.status, checksumLocation: hc.location, label: where, overflowing: overflow, phoneSidewaysPx: phoneSideways }, pass);
+    await page.context().close();
+  }
+
+  // 7. An adaptation with no version to show.
+  {
+    const url = `/@naaate/${a2}`;
+    const h = await head(url);
+    const page = await newPage(browser);
+    await page.goto(BASE + url);
+    const t = await mainText(page);
+    const pass = h.status === 200 && /Nothing here yet/i.test(t) && /Second Scene/i.test(t) && /@naaate has no version of this to show/i.test(t);
+    await record(7, 'nothing here yet', url, "'Nothing here yet', the title, '@naaate has no version of this to show'", page, { status: h.status }, pass);
+    await page.context().close();
+  }
+
+  // 8. SHARE, then both copy buttons; read the clipboard back.
+  {
+    const url = '/@naaate/1';
+    const page = await newPage(browser);
+    await page.goto(BASE + url);
+    await page.getByRole('button', { name: /^Share/ }).click();
+    await page.locator('.scene-share-panel').waitFor();
+    const copyButtons = page.locator('.scene-share-panel').getByRole('button', { name: 'Copy link' });
+    await copyButtons.first().click();
+    await page.getByRole('button', { name: 'Copied' }).first().waitFor({ timeout: 5000 }).catch(() => undefined);
+    const copiedLatest = await page.evaluate(() => navigator.clipboard.readText());
+    const labelAfter = await page.locator('.scene-share-panel .scene-small-solid').innerText();
+    await page.screenshot({ path: path.join(OUT, '08-share-copy-link.png') });
+    await page.locator('.scene-fixed button').click();
+    const copiedFixed = await page.evaluate(() => navigator.clipboard.readText());
+    const panel = (await page.locator('.scene-share-panel').innerText()).replace(/\s+/g, ' ');
+    const pass = copiedLatest === `${PUBLIC}/@naaate/1` && copiedFixed === `${PUBLIC}/@naaate/1/v/1` && labelAfter.toLowerCase() === 'copied';
+    results.push({
+      n: 8, name: 'SHARE and copy link', url, expected: `the panel opens; Copy link copies ${PUBLIC}/@naaate/1 and says Copied; the fixed link copies ${PUBLIC}/@naaate/1/v/1`,
+      got: { status: 200, finalUrl: local(page.url()), text: panel, copiedLatest, copiedFixed, labelAfter }, pass, screenshot: path.join(OUT, '08-share-copy-link.png'),
+    });
+    if (!pass) failures.push(`8 SHARE: copied ${copiedLatest} / ${copiedFixed}, label ${labelAfter}`);
+    console.log(`  ${pass ? 'PASS' : 'FAIL'} 8 SHARE and copy link`);
+    await page.context().close();
+  }
+
+  // 9. Cast it: on the website it opens Farcaster's composer in a new tab; inside a Farcaster
+  //    client it asks the client's composer (sdk.actions.composeCast).
+  {
+    const url = '/@naaate/1';
+    const page = await newPage(browser);
+    await page.addInitScript(() => {
+      (window as unknown as { __opened: string[] }).__opened = [];
+      window.open = ((u: string) => ((window as unknown as { __opened: string[] }).__opened.push(String(u)), null)) as typeof window.open;
+    });
+    await page.goto(BASE + url);
+    await page.getByRole('button', { name: /^Share/ }).click();
+    await page.getByRole('button', { name: 'Cast it' }).click();
+    await page.waitForFunction(() => (window as unknown as { __opened: string[] }).__opened.length > 0, null, { timeout: 5000 }).catch(() => undefined);
+    const opened = await page.evaluate(() => (window as unknown as { __opened: string[] }).__opened);
+    const web = opened[0] ? new URL(opened[0]) : null;
+    const webOk = !!web && web.origin + web.pathname === 'https://farcaster.xyz/~/compose' && web.searchParams.get('text') === 'Fifteen Days, a scene from Snowmoon' && web.searchParams.getAll('embeds[]').join() === `${PUBLIC}/@naaate/1`;
+    await page.context().close();
+
+    // Inside a stand-in Farcaster client (as check:miniapp does), recording what composeCast is asked.
+    const HOST = 'http://localhost:3199/';
+    const hostCode = `
+      import { exposeToIframe } from '@farcaster/miniapp-host';
+      const target = new URLSearchParams(location.search).get('url');
+      const iframe = document.createElement('iframe');
+      iframe.src = target; iframe.style.cssText = 'width:424px;height:695px;border:0';
+      document.body.appendChild(iframe);
+      window.__host = { composed: [], other: [] };
+      const impl = {
+        context: { user: { fid: 6786, username: 'naaate' }, client: { clientFid: 9152, added: false, safeAreaInsets: { top: 0, bottom: 0, left: 0, right: 0 } }, location: { type: 'launcher' }, features: { haptics: false } },
+        ready: () => {},
+        composeCast: async (o) => { window.__host.composed.push(o); return { cast: null }; },
+        getCapabilities: async () => ['actions.ready', 'actions.composeCast'],
+        getChains: async () => [],
+      };
+      const sdk = new Proxy(impl, { get: (t, k) => (k in t ? t[k] : () => { window.__host.other.push(String(k)); return undefined; }) });
+      exposeToIframe({ iframe, sdk, miniAppOrigin: new URL(target).origin });`;
+    const bundle = (await build({ stdin: { contents: hostCode, resolveDir: ROOT, loader: 'js' }, bundle: true, format: 'iife', write: false, logLevel: 'error' })).outputFiles[0].text;
+    const ctx = await browser.newContext({ viewport: { width: 480, height: 1000 } });
+    await ctx.route('**/*', (r) => {
+      const u = r.request().url();
+      if (u.startsWith(HOST)) return r.fulfill({ contentType: 'text/html', body: `<!doctype html><body style="margin:0"><script>${bundle.replace(/<\/script>/g, '<\\/script>')}</script></body>` });
+      return u.startsWith(BASE) ? r.continue() : r.abort();
+    });
+    const hp = await ctx.newPage();
+    await hp.goto(`${HOST}?url=${encodeURIComponent(BASE + url)}`);
+    const frame = await new Promise<Frame>((resolve) => {
+      const t = setInterval(() => {
+        const f = hp.frames().find((x) => x !== hp.mainFrame() && x.url().startsWith(BASE));
+        if (f) (clearInterval(t), resolve(f));
+      }, 100);
+    });
+    await frame.getByRole('button', { name: /^Share/ }).click();
+    await frame.getByRole('button', { name: 'Cast it' }).click();
+    await hp.waitForFunction(() => (window as unknown as { __host: { composed: unknown[] } }).__host.composed.length > 0, null, { timeout: 8000 }).catch(() => undefined);
+    const composed = await hp.evaluate(() => (window as unknown as { __host: { composed: unknown[] } }).__host.composed);
+    const c = composed[0] as { text?: string; embeds?: string[] } | undefined;
+    const appOk = !!c && c.text === 'Fifteen Days, a scene from Snowmoon' && (c.embeds ?? []).join() === `${PUBLIC}/@naaate/1`;
+    await hp.evaluate((shown) => {
+      const pre = document.createElement('pre');
+      pre.style.cssText = 'margin:8px;white-space:pre-wrap;font:12px monospace';
+      pre.textContent = shown;
+      document.body.appendChild(pre);
+    }, `Stand-in Farcaster client. composeCast was asked:\n${JSON.stringify(c ?? null, null, 1)}\n\nOn the website, Cast it opens:\n${opened[0] ?? '(nothing)'}`);
+    await hp.screenshot({ path: path.join(OUT, '09-cast-composer.png'), fullPage: true });
+    const pass = webOk && appOk;
+    results.push({
+      n: 9, name: 'cast composer', url,
+      expected: `website: opens https://farcaster.xyz/~/compose?text=Fifteen Days, a scene from Snowmoon&embeds[]=${PUBLIC}/@naaate/1 in a new tab; in a Farcaster client: composeCast({ text, embeds: [${PUBLIC}/@naaate/1] })`,
+      got: { status: 200, finalUrl: url, text: 'see website and miniapp', website: opened[0] ?? null, miniapp: c ?? null }, pass, screenshot: path.join(OUT, '09-cast-composer.png'),
+    });
+    if (!pass) failures.push(`9 cast: website ${opened[0]}; miniapp ${JSON.stringify(c)}`);
+    console.log(`  ${pass ? 'PASS' : 'FAIL'} 9 cast composer`);
+    await ctx.close();
+  }
+
+  // 10. Phone width.
+  {
+    const url = '/@naaate/1';
+    const page = await newPage(browser, { width: 390, height: 844 });
+    await page.goto(BASE + url);
+    const sideways = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+    const share = await page.getByRole('button', { name: /^Share/ }).boundingBox();
+    const t = await mainText(page);
+    const pass = sideways <= 0 && !!share && share.height >= 44 && share.x >= 0 && share.x + share.width <= 390 && /Fifteen Days/i.test(t);
+    await record(10, 'phone width', url, 'at 390x844: no sideways scroll; SHARE in view horizontally and at least 44px tall', page, { status: 200, sidewaysScrollPx: sideways, shareBox: share }, pass);
+    await page.context().close();
+  }
+
+  // The site read as studio_writer, and viewing pages stored no names: only the four seeded
+  // (owner, 2026-10-17: names are remembered at sign-in or publish, never on a page view).
+  const names = await pg.query<{ fname: string }>('select fname from studio.account_names order by fname');
+  const seeded = 'naaate,oldie,oldnaaate,zeiwriter';
+  if (names.rows.map((r) => r.fname).join(',') !== seeded) failures.push(`viewing pages stored names: ${names.rows.map((r) => r.fname).join(',')} (expected ${seeded})`);
+  const who = await pg.query<{ u: string }>('select current_user as u');
+  if (who.rows[0].u !== 'studio_writer') failures.push(`the session was ${who.rows[0].u}, not studio_writer`);
+  if (!asked.some((a) => a.startsWith('/v2/user-by-username?username=oldnaaate'))) failures.push('the rename was not looked up on the stand-in');
+} finally {
+  results.sort((x, y) => x.n - y.n);
+  writeFileSync(path.join(OUT, 'results.json'), JSON.stringify(results, null, 1) + '\n');
+  await browser.close();
+  next.kill();
+  stub.close();
+  await dbServer.stop();
+}
+
+if (/Error|error:/.test(serverErr)) console.log('server stderr:\n' + serverErr.slice(0, 3000));
+console.log(`\n${results.filter((r) => r.pass).length} of ${results.length} pass; results and screenshots in ${OUT}`);
+if (failures.length) {
+  console.log('\nFAILURES:\n' + failures.map((f) => '- ' + f).join('\n'));
+  process.exit(1);
+}
+console.log('test:adaptation-pages: all checks pass');
+process.exit(0);

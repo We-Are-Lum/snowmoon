@@ -30,6 +30,7 @@
     "check:miniapp": "tsx scripts/check-miniapp.ts",
     "publish:podcast": "tsx --env-file-if-exists=.env.local scripts/publish-podcast.ts",
     "check:podcast": "tsx scripts/check-podcast.ts",
+    "publish:scene-video": "tsx --env-file-if-exists=.env.local scripts/publish-scene-video.ts",
     "publish:podcast-cover": "tsx --env-file-if-exists=.env.local scripts/publish-podcast-cover.ts",
     "test:chat-route": "tsx --conditions=react-server scripts/test-chat-route.ts",
     "build:glossary": "tsx scripts/build-glossary.ts",
@@ -38,7 +39,8 @@
     "test:minpentai-play-server": "tsx --conditions=react-server scripts/test-minpentai-play-server.ts",
     "check:minpentai-live": "tsx --conditions=react-server scripts/check-minpentai-live.ts",
     "designs:scenes": "tsx scripts/designs-scenes.ts",
-    "check:chapter-summaries": "tsx scripts/chapter-summaries.ts check"
+    "check:chapter-summaries": "tsx scripts/chapter-summaries.ts check",
+    "test:adaptation-pages": "NEXT_PUBLIC_URL=https://snowmoon.party next build && tsx scripts/test-adaptation-pages.ts"
   },
   "license": "GPL-3.0-only",
   "description": "",

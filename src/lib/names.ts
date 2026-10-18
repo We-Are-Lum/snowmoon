@@ -44,6 +44,15 @@ export function readName(proof: unknown, fid: number): string | null {
   return p.username;
 }
 
+/**
+ * Farcaster's public API. FARCASTER_API_URL points it at a local stand-in for tests only
+ * (scripts/test-adaptation-pages.ts); it is ignored on production, which always asks api.farcaster.xyz.
+ */
+function farcasterApi(): string {
+  const local = process.env.VERCEL_ENV !== 'production' ? process.env.FARCASTER_API_URL : undefined;
+  return (local || 'https://api.farcaster.xyz').replace(/\/$/, '');
+}
+
 const cache = new Map<number, { name: string | null; unfit: string | null; at: number }>();
 const DAY = 86400_000;
 
@@ -51,11 +60,15 @@ const DAY = 86400_000;
 export async function lookupName(fid: number): Promise<string | null> {
   return (await lookup(fid)).name;
 }
+/** Drop the cached name for a FID, so the next lookupName asks Farcaster again (after a rename). */
+export function forgetName(fid: number): void {
+  cache.delete(fid);
+}
 /** The lookup, and, when Farcaster has a name for this FID that doesn't fit NAME, that name (`unfit`). */
 async function lookup(fid: number): Promise<{ name: string | null; unfit: string | null }> {
   const hit = cache.get(fid);
   if (hit && Date.now() - hit.at < DAY) return hit;
-  const res = await fetch(`https://api.farcaster.xyz/v2/user?fid=${fid}`, { signal: AbortSignal.timeout(5000) }).catch(() => null);
+  const res = await fetch(`${farcasterApi()}/v2/user?fid=${fid}`, { signal: AbortSignal.timeout(5000) }).catch(() => null);
   if (!res?.ok) return hit ?? { name: null, unfit: null };
   const j = (await res.json().catch(() => ({}))) as { result?: { user?: { username?: unknown } } };
   const raw = typeof j.result?.user?.username === 'string' && j.result.user.username ? j.result.user.username : null;
@@ -72,4 +85,30 @@ export async function bylineName(fid: number, proof: unknown): Promise<{ name: s
   const looked = await lookup(fid);
   if (looked.name) return { name: looked.name, source: 'farcaster-api' };
   return looked.unfit ? { name: null, source: null, unfit: looked.unfit } : { name: null, source: null };
+}
+
+const byName = new Map<string, { fid: number | null; username: string | null; at: number }>();
+const HOUR = 3600_000;
+
+/**
+ * The other way round, for adaptation pages (/@<fname>/<id>, docs/proposals/adaptation-urls.md):
+ * Farcaster's public API, GET api.farcaster.xyz/v2/user-by-username?username=… → result.user.fid.
+ * Sends only the name in the URL, never anything about the visitor. Cached an hour (a name that
+ * isn't found, five minutes), so a rename shows up within the hour. `failed` is true when Farcaster
+ * didn't answer, so the caller can fall back on names it has seen instead of saying "no such name".
+ */
+export async function lookupFid(name: string): Promise<{ fid: number | null; username: string | null; failed?: boolean }> {
+  const key = name.toLowerCase();
+  if (!NAME.test(key)) return { fid: null, username: null };
+  const hit = byName.get(key);
+  if (hit && Date.now() - hit.at < (hit.fid ? HOUR : 5 * 60_000)) return hit;
+  const res = await fetch(`${farcasterApi()}/v2/user-by-username?username=${encodeURIComponent(key)}`, { signal: AbortSignal.timeout(5000) }).catch(() => null);
+  // Farcaster answers an unknown name with 400 or 404; anything else that isn't ok means it didn't answer.
+  if (!res || (!res.ok && res.status !== 400 && res.status !== 404)) return hit ?? { fid: null, username: null, failed: true };
+  const j = res.ok ? ((await res.json().catch(() => ({}))) as { result?: { user?: { fid?: unknown; username?: unknown } } }) : {};
+  const fid = typeof j.result?.user?.fid === 'number' && j.result.user.fid > 0 ? j.result.user.fid : null;
+  const raw = typeof j.result?.user?.username === 'string' ? j.result.user.username.toLowerCase() : null;
+  const out = { fid, username: fid && raw && NAME.test(raw) ? raw : null, at: Date.now() };
+  byName.set(key, out);
+  return out;
 }

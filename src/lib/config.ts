@@ -108,6 +108,16 @@ export const CHAT = {
  */
 export const ADAPTATIONS = { visible: false };
 
+/**
+ * Adaptation pages (/@<fname>/<id>, /@<fname>/<id>/v/<n>, /<id>; docs/proposals/adaptation-urls.md).
+ * Off on production until the owner says "publish": there they say "Nothing here yet". Local builds
+ * and preview deployments (behind Vercel Authentication) show them, so they can be checked.
+ */
+export const ADAPTATION_PAGES = { live: false };
+export function adaptationPagesShown(): boolean {
+  return ADAPTATION_PAGES.live || process.env.VERCEL_ENV !== 'production';
+}
+
 /** Moderation only: these FIDs may hide content or dismiss a report. They never promote or rank anything. Owner, 2026-10-08 (decision 20). */
 export const MODERATOR_FIDS: readonly number[] = [6786];
 
