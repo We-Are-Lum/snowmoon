@@ -96,28 +96,36 @@ LETTERS = {"H01": "Sadzu Du, Dzego · 3724 Firemoon 10",  # script beat 1 (book 
            "D09": "That day was his last Minpentai game- the last day when his life was somewhat normal."}  # beat 6, on screen
 
 
-def lettered(src: Path, dst: Path, text: str) -> None:
-    """On-screen words baked into a still (the cut has no camera moves, so they stay put): lower left, white, soft shadow."""
+def lettered(src: Path, dst: Path, text: str, style: str = "card") -> None:
+    """On-screen words baked into a still (the cut has no camera moves, so they stay put): lower left, white, soft shadow.
+    style "caption": larger words over a dark band across the bottom, for a line that must be read (owner on v6's dusk line,
+    2026-10-18: "small, and easy to get lost")."""
     from PIL import Image, ImageDraw, ImageFilter, ImageFont
     img = Image.open(src).convert("RGB").resize((1920, 1080), Image.LANCZOS)
-    font = ImageFont.truetype(str(ROOT / "node_modules/@fontsource/crimson-pro/files/crimson-pro-latin-600-normal.woff"), 46)
+    big = style == "caption"
+    size, step, wrap = (62, 80, 44) if big else (46, 60, 52)
+    font = ImageFont.truetype(str(ROOT / "node_modules/@fontsource/crimson-pro/files/crimson-pro-latin-600-normal.woff"), size)
     rows = []
     for para in text.split("\n"):
         rows.append("")
         for w in para.split():
-            if rows[-1] and len(rows[-1]) + 1 + len(w) > 52:
+            if rows[-1] and len(rows[-1]) + 1 + len(w) > wrap:
                 rows.append(w)
             else:
                 rows[-1] = (rows[-1] + " " + w).strip()
-    y0 = 1080 - 110 - 60 * (len(rows) - 1)
+    y0 = 1080 - (130 if big else 110) - step * (len(rows) - 1)
+    if big:
+        band = Image.new("L", img.size, 0)
+        ImageDraw.Draw(band).rectangle((0, y0 - 44, 1920, 1080), fill=150)
+        img.paste((0, 0, 0), (0, 0), band.filter(ImageFilter.GaussianBlur(28)))
     shade = Image.new("L", img.size, 0)
     ds = ImageDraw.Draw(shade)
     for i, r in enumerate(rows):
-        ds.text((96, y0 + 60 * i), r, font=font, fill=200)
+        ds.text((96, y0 + step * i), r, font=font, fill=220 if big else 200)
     img.paste((0, 0, 0), (0, 0), shade.filter(ImageFilter.GaussianBlur(6)))
     d = ImageDraw.Draw(img)
     for i, r in enumerate(rows):
-        d.text((96, y0 + 60 * i), r, font=font, fill=(244, 240, 230))
+        d.text((96, y0 + step * i), r, font=font, fill=(250, 247, 238) if big else (244, 240, 230))
     img.save(dst)
 
 

@@ -1,0 +1,129 @@
+{
+ "about": "Fifteen Days v7 (owner's 6 comments on v6, decisions 2026-10-18 ~15:05 UTC): Bai straight-faced and down at her device (sideeye, used twice), one more open-weight try at the casual ear-cup lift ('What?!'), everyone seated in the menus over-the-shoulder with Deluin at the table's scale. Qwen-Image-Edit-2509 edits of the v6 frames, sent at 1344x752. DRAFTED prompts.",
+ "out": "images-out/preprod/pass3",
+ "ledger": "images-out/preprod/ledger-s7.json",
+ "cap_usd": 25.0,
+ "style": "",
+ "jobs": [
+  {
+   "id": "cov-cafe-BAI-sideeye-E60",
+   "shot": "cov-cafe-BAI-sideeye",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-cafe-BAI-sideeye-R20.png"
+   ],
+   "prompt": "She now looks down at the glowing phone in her hands: her head tilted forward and down, her eyes on the screen, her face calm and straight, mouth closed, no smile, focused and a little bored. Keep the drawing, line work, colours, lighting, camera, framing and crop exactly as they are; she keeps her hair, headphones, vest, tattoos, earring and the phone in her hands. Exactly two arms and two hands, one set of headphones. Nobody else anywhere. No letters or numbers.",
+   "width": 1344,
+   "height": 752,
+   "seed": 60
+  },
+  {
+   "id": "cov-cafe-BAI-sideeye-E61",
+   "shot": "cov-cafe-BAI-sideeye",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-cafe-BAI-sideeye-R20.png"
+   ],
+   "prompt": "She now looks down at the glowing phone in her hands: her head tilted forward and down, her eyes on the screen, her face calm and straight, mouth closed, no smile, focused and a little bored. Keep the drawing, line work, colours, lighting, camera, framing and crop exactly as they are; she keeps her hair, headphones, vest, tattoos, earring and the phone in her hands. Exactly two arms and two hands, one set of headphones. Nobody else anywhere. No letters or numbers.",
+   "width": 1344,
+   "height": 752,
+   "seed": 61
+  },
+  {
+   "id": "cov-cafe-BAI-sideeye-E62",
+   "shot": "cov-cafe-BAI-sideeye",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-cafe-BAI-sideeye-R20.png"
+   ],
+   "prompt": "Her head is tilted forward and down toward the glowing phone in her hands, her face calm and straight, mouth closed, no smile; only her eyes glance sideways toward the left edge of the frame, a casual side-eye, as if half-listening while pretending to read. Keep the drawing, line work, colours, lighting, camera, framing and crop exactly as they are; she keeps her hair, headphones, vest, tattoos, earring and the phone in her hands. Exactly two arms and two hands, one set of headphones. Nobody else anywhere. No letters or numbers.",
+   "width": 1344,
+   "height": 752,
+   "seed": 62
+  },
+  {
+   "id": "cov-cafe-BAI-sideeye-E63",
+   "shot": "cov-cafe-BAI-sideeye",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-cafe-BAI-sideeye-R20.png"
+   ],
+   "prompt": "Her head is tilted forward and down toward the glowing phone in her hands, her face calm and straight, mouth closed, no smile; only her eyes glance sideways toward the left edge of the frame, a casual side-eye, as if half-listening while pretending to read. Keep the drawing, line work, colours, lighting, camera, framing and crop exactly as they are; she keeps her hair, headphones, vest, tattoos, earring and the phone in her hands. Exactly two arms and two hands, one set of headphones. Nobody else anywhere. No letters or numbers.",
+   "width": 1344,
+   "height": 752,
+   "seed": 63
+  },
+  {
+   "id": "cov-cafe-BAI-what-E64",
+   "shot": "cov-cafe-BAI-what",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-cafe-BAI-sideeye-R20.png"
+   ],
+   "prompt": "Her head is tilted forward and down toward the glowing phone in her left hand, her face calm and straight, mouth closed, no smile, eyes glancing sideways toward the left. Her right hand is raised to her head and casually lifts the near headphone ear cup a little off her ear, so a small gap shows between the ear cup and her ear; the headband stays on her head. Keep the drawing, line work, colours, lighting, camera, framing and crop exactly as they are; she keeps her hair, headphones, vest, tattoos, earring and the phone in her hands. Exactly two arms and two hands, one set of headphones. Nobody else anywhere. No letters or numbers.",
+   "width": 1344,
+   "height": 752,
+   "seed": 64
+  },
+  {
+   "id": "cov-cafe-BAI-what-E65",
+   "shot": "cov-cafe-BAI-what",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-cafe-BAI-sideeye-R20.png"
+   ],
+   "prompt": "Her head is tilted forward and down toward the glowing phone in her left hand, her face calm and straight, mouth closed, no smile, eyes glancing sideways toward the left. Her right hand is raised to her head and casually lifts the near headphone ear cup a little off her ear, so a small gap shows between the ear cup and her ear; the headband stays on her head. Keep the drawing, line work, colours, lighting, camera, framing and crop exactly as they are; she keeps her hair, headphones, vest, tattoos, earring and the phone in her hands. Exactly two arms and two hands, one set of headphones. Nobody else anywhere. No letters or numbers.",
+   "width": 1344,
+   "height": 752,
+   "seed": 65
+  },
+  {
+   "id": "cov-cafe-BAI-what-E66",
+   "shot": "cov-cafe-BAI-what",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-cafe-BAI-sideeye-R20.png"
+   ],
+   "prompt": "Her head is tilted forward and down toward the glowing phone in her left hand, her face calm and straight, mouth closed, no smile, eyes glancing sideways toward the left. Her right hand is raised to her head and casually lifts the near headphone ear cup a little off her ear, so a small gap shows between the ear cup and her ear; the headband stays on her head. Keep the drawing, line work, colours, lighting, camera, framing and crop exactly as they are; she keeps her hair, headphones, vest, tattoos, earring and the phone in her hands. Exactly two arms and two hands, one set of headphones. Nobody else anywhere. No letters or numbers.",
+   "width": 1344,
+   "height": 752,
+   "seed": 66
+  },
+  {
+   "id": "cov-cafe-OTS-Z-stern-E67",
+   "shot": "cov-cafe-OTS-Z-stern",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-cafe-OTS-Z-stern-E42.png"
+   ],
+   "prompt": "The tall young man in the long cream knitted tunic now sits on a wooden chair at the right end of the table, beside the woman with pink hair, at the same scale as her, his forearms on the table and his face toward the young man in the orange jacket in the foreground, a stern, serious look, mouth closed. Nobody stands; everyone at the table is seated. Keep the young man in the orange jacket in the foreground exactly as he is, seen from behind on the left. Keep the drawing, line work, colours, lighting, camera, framing and crop exactly as they are, the tree with string lights, the houses and the table with its cups; the woman with pink hair keeps her pose and the glowing menu. Nobody else anywhere. No letters or numbers.",
+   "width": 1344,
+   "height": 752,
+   "seed": 67
+  },
+  {
+   "id": "cov-cafe-OTS-Z-stern-E68",
+   "shot": "cov-cafe-OTS-Z-stern",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-cafe-OTS-Z-stern-E42.png"
+   ],
+   "prompt": "The tall young man in the long cream knitted tunic now sits on a wooden chair at the right end of the table, beside the woman with pink hair, at the same scale as her, his forearms on the table and his face toward the young man in the orange jacket in the foreground, a stern, serious look, mouth closed. Nobody stands; everyone at the table is seated. Keep the young man in the orange jacket in the foreground exactly as he is, seen from behind on the left. Keep the drawing, line work, colours, lighting, camera, framing and crop exactly as they are, the tree with string lights, the houses and the table with its cups; the woman with pink hair keeps her pose and the glowing menu. Nobody else anywhere. No letters or numbers.",
+   "width": 1344,
+   "height": 752,
+   "seed": 68
+  },
+  {
+   "id": "cov-cafe-OTS-Z-stern-E69",
+   "shot": "cov-cafe-OTS-Z-stern",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-cafe-OTS-Z-stern-E42.png"
+   ],
+   "prompt": "The tall young man in the long cream knitted tunic now sits on a wooden chair at the right end of the table, beside the woman with pink hair, at the same scale as her, his forearms on the table and his face toward the young man in the orange jacket in the foreground, a stern, serious look, mouth closed. Nobody stands; everyone at the table is seated. Keep the young man in the orange jacket in the foreground exactly as he is, seen from behind on the left. Keep the drawing, line work, colours, lighting, camera, framing and crop exactly as they are, the tree with string lights, the houses and the table with its cups; the woman with pink hair keeps her pose and the glowing menu. Nobody else anywhere. No letters or numbers.",
+   "width": 1344,
+   "height": 752,
+   "seed": 69
+  }
+ ]
+}
