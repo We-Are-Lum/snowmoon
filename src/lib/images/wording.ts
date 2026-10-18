@@ -301,6 +301,8 @@ export const IMAGE_WORDING = {
       'not-to-us': 'That transaction didn’t pay this project’s address.',
       'not-from-you': 'That payment came from a different wallet than the one signed in.',
       'too-small': 'That payment is below the smallest amount added.',
+      // Drafted by the coding agent (2026-10-18), for the owner.
+      'shared-block': 'Someone else paid this address in the same block, so this payment can’t be told apart. Ask the maintainer.',
       already: 'That payment was already added.',
     },
   },

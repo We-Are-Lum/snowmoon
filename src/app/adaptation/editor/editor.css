@@ -63,6 +63,9 @@
   font-family: var(--label); font-size: 15px; letter-spacing: var(--ls-label); text-transform: uppercase;
 }
 .ed-btn-sub { font-family: var(--reading); font-size: 15px; letter-spacing: 0; text-transform: none; color: var(--rule); }
+.ed-btn-full { width: 100%; min-height: 48px; align-items: center; justify-content: center; text-align: center; }
+.ed-consent-step { display: flex; flex-direction: column; gap: 8px; }
+.ed-next { font-weight: 600; color: var(--ink); }
 .ed-btn-off { background: transparent; color: var(--body); border: 1px dashed var(--muted); cursor: default; }
 
 .ed-tabs { border: 1px solid var(--rule); border-radius: var(--radius); background: var(--card); min-width: 0; }
