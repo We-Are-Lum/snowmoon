@@ -35,7 +35,7 @@ export async function POST(request: Request) {
   if (person === null) return NextResponse.json({ error: 'Sign in to remix' }, { status: 401 });
   if (!remixGenerateOn()) return no('Remixing is switched off for now', 503);
   const sql = db();
-  if (!sql || !(testFakes() || process.env.FAL_KEY) || !frameStorageReady()) return no('Remixing is not set up on this deployment', 503);
+  if (!sql || !((process.env.REMIX_TEST_FAKES === '1' && testFakes()) || process.env.FAL_KEY) || !frameStorageReady()) return no('Remixing is not set up on this deployment', 503);
 
   let body: { adaptation?: unknown; version?: unknown; shot?: unknown; words?: unknown; layout?: unknown; camera?: unknown; nameProof?: unknown };
   try {
@@ -96,7 +96,7 @@ export async function POST(request: Request) {
       assist: { shot_prompt: 'the version\'s own prompt for this shot, drafted by the coding agent', plate_line: 'drafted by the coding agent', own_words: 'the remixer\'s, unchanged' },
       by_name: by.name,
       by_name_source: by.source,
-      ...(testFakes() ? { test: 'made by the local test stand-in, not a model' } : {}),
+      ...(testFakes() ? { test: process.env.REMIX_TEST_FAKES === '1' ? 'made by the local test stand-in, not a model' : 'a local test run: the real model, with the prompt check stood in' } : {}),
     },
     imageUrl: url,
     imageSha256: sha256,

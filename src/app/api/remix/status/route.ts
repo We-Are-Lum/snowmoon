@@ -25,7 +25,7 @@ export async function GET(request: Request) {
   const adaptation = Number(q.get('adaptation')), version = Number(q.get('version')), shotId = q.get('shot') ?? '';
   const shot = Number.isInteger(adaptation) && Number.isInteger(version) && /^[\w-]{1,64}$/.test(shotId) ? remixShot(adaptation, version, shotId) : null;
   const sql = db();
-  const keys = testFakes() || Boolean(process.env.FAL_KEY);
+  const keys = process.env.REMIX_TEST_FAKES === '1' && testFakes() ? true : Boolean(process.env.FAL_KEY);
   const ready = Boolean(remixGenerateOn() && sql && keys && frameStorageReady());
   const pictures = shot ? remixPictures({ role: 'layout' } as never, shot).length : 0;
   const base = {

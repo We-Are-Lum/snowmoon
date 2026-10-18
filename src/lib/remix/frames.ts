@@ -36,7 +36,7 @@ export interface Frame {
   createdAt: string;
 }
 
-const testStore = () => (testFakes() && process.env.REMIX_TEST_STORE ? process.env.REMIX_TEST_STORE : null);
+const testStore = () => (testFakes() && process.env.REMIX_TEST_STORE ? process.env.REMIX_TEST_STORE : null); // never on Vercel (testFakes)
 export const frameStorageReady = () => Boolean(testStore()) || storageReady();
 export const isMaintainer = (person: number) => person === SYSTEM_FID;
 
