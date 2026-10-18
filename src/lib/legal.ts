@@ -82,7 +82,7 @@ export const PRIVACY: LegalDoc = {
         [
           'Quote cards you save, and your likes. A saved card\'s page is public. Your individual likes are private; only totals are shown.',
           'That you agreed to the terms for publishing, and any of your own work you have hidden.',
-          'Images you publish, with their prompt, your Farcaster username and the record of how they were made. These are public.',
+          'Images you publish, with their prompt, your name (Farcaster name or wallet address) and the record of how they were made. These are public.',
           'Frames you make in Remix, each with your words, the full prompt sent, the camera and people you set, the pictures sent with it, what it cost and your name. Anyone with a frame\'s link can see it, with your words and name. You can hide your own frames at any time.',
           'Storyboards you save: the frames in order, how long each is shown and the voice takes you chose. Anyone with a storyboard\'s link can see it, with your name. You can hide it.',
           'How many images and Remix frames you make each day, to count the daily limits, and the reports you make.',
