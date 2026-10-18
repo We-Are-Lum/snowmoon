@@ -1,6 +1,6 @@
 -- 0012_adaptations.sql — adaptations, their versions, and each person's page per adaptation
 -- (owner's URL scheme, 2026-10-17; design: docs/proposals/adaptation-urls.md).
--- NOT APPLIED. DRAFT until the owner says "publish". Change it freely until then.
+-- APPLIED on production by the coding agent on the owner's "publish", 2026-10-18 (SQL Editor, as postgres; dry run first, with 0013, rolled back).
 --
 -- MUST RUN AS postgres (the role that owns the `studio` schema), in the
 -- Supabase SQL Editor. Requires 0001 (roles, studio schema) and 0011 (wallet accounts,

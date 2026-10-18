@@ -113,7 +113,7 @@ export const ADAPTATIONS = { visible: false };
  * Off on production until the owner says "publish": there they say "Nothing here yet". Local builds
  * and preview deployments (behind Vercel Authentication) show them, so they can be checked.
  */
-export const ADAPTATION_PAGES = { live: false };
+export const ADAPTATION_PAGES = { live: true };
 export function adaptationPagesShown(): boolean {
   return ADAPTATION_PAGES.live || process.env.VERCEL_ENV !== 'production';
 }
