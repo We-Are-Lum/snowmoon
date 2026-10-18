@@ -1,0 +1,101 @@
+{
+ "closed_model": true,
+ "label": "closed model",
+ "model": "openai/gpt-image-2.5-sunburst",
+ "model_name": "GPT Image 2.5 Sunburst (OpenAI)",
+ "route": "Vercel AI Gateway /v1/images/edits (AI_GATEWAY_API_KEY)",
+ "date": "2026-10-18T09:06:22.064Z",
+ "purpose": "gpt-cut: a private full-cut comparison for the owner (2026-10-18); not in the cut or on the site",
+ "v6_picture": "images-out/preprod/pass3/G08-K2.png",
+ "from": {
+  "base": "G08-A1",
+  "finish": "G08-K2",
+  "edits": []
+ },
+ "prompt": "A hand-drawn science fiction comic book panel, ink linework and flat cel-shaded colour, not a 3D render, not a photograph. Extreme wide shot (EWS POV, straight down over the railing). Straight down past the crowd's heads to the floor far below: the holographic ring of walls holding against streams of gliders. Picture 1 is a depth map of this exact frame rendered from a 3D model (near is light, far is dark): follow its camera, angle, lens and perspective exactly; every person, chair, table, wall and railing goes exactly where and as big as its shape stands there, people sitting on the chairs and standing on the floor; the simple mannequin shapes are only where the people go. Draw nothing grey from it. Behind them, as the layout shows: tiers of seats rising all around the hall, full of a varied crowd; the standing ring around the top of the hall, crowded behind a railing; the broad walkway spanning the hall high above the floor, with a railing on each side; a few slim, light hologram towers on small gliding bases, drifting across the floor, glowing cube clusters on top; the whole play space alive with glowing holograms: gliders streaking past with light trails, little ships and walls of light cubes in cyan and amber; Deluin's sunken pit at the edge of the floor. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. No signs, no panels with pictograms, no icons, no symbols anywhere: walls are bare. Screens show only what the shot describes, or are blank and softly glowing. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character. Draw it as a finished comic panel: inked outlines, painted flat colour, glowing lights. Picture 2 shows how the place looks: take its colours, materials and night light; it has nobody in it. The picture is 16:9, landscape.",
+ "references": [
+  {
+   "file": "adaptations/fifteen-days/preprod/set-frames/G08.depth.png",
+   "sha256": "55f067ca4f41aef49ddaa3573f7ed1eb677e9960ee99553c0555a3f20b2ceac7"
+  },
+  {
+   "file": "images-out/preprod/plates-small/plate-hall-V-ak.png",
+   "sha256": "2f36f430bb34a2b24cb08a41beae4811efef4b21fb911ff4e2648c953173771c"
+  }
+ ],
+ "request": {
+  "size": "1536x864",
+  "n": 1
+ },
+ "response_meta": {
+  "created": 1792314371,
+  "usage": {
+   "total_tokens": 2720,
+   "input_tokens": 1642,
+   "output_tokens": 1078,
+   "input_tokens_details": {
+    "text_tokens": 490,
+    "image_tokens": 1152
+   }
+  },
+  "providerMetadata": {
+   "openai": {
+    "images": [
+     {
+      "imageTokens": 1152,
+      "textTokens": 490,
+      "created": 1792314371,
+      "size": "1536x864",
+      "quality": "high",
+      "background": "opaque",
+      "outputFormat": "png"
+     }
+    ]
+   },
+   "gateway": {
+    "routing": {
+     "originalModelId": "openai/gpt-image-2.5-sunburst",
+     "resolvedProvider": "openai",
+     "fallbacksAvailable": [],
+     "planningReasoning": "System credentials planned for: openai. Total execution order: openai(system)",
+     "canonicalSlug": "openai/gpt-image-2.5-sunburst",
+     "finalProvider": "openai",
+     "modelAttemptCount": 1,
+     "modelAttempts": [
+      {
+       "canonicalSlug": "openai/gpt-image-2.5-sunburst",
+       "success": true,
+       "providerAttemptCount": 1,
+       "providerAttempts": [
+        {
+         "provider": "openai",
+         "credentialType": "system",
+         "success": true,
+         "startTime": 1792314339917,
+         "endTime": 1792314371740,
+         "statusCode": 200
+        }
+       ]
+      }
+     ],
+     "totalProviderAttemptCount": 1
+    },
+    "cost": "0.044006",
+    "marketCost": "0.044006",
+    "surchargeCost": "0",
+    "gatewayCost": "0.044006",
+    "inferenceCost": "0.044006",
+    "inputInferenceCost": "0",
+    "outputInferenceCost": "0.044006",
+    "generationId": "gen_01M5744WHJSNDQRBPG8E0Z1MCQ"
+   }
+  }
+ },
+ "cost_usd": 0.044006,
+ "output": {
+  "file": "/private/tmp/claude-501/-Users-nathan-snowmoon/9334ff32-2377-4150-8bc0-c96cfb5e0d3f/scratchpad/gptcut/raw/G08-K2-g1.png",
+  "sha256": "e360f3fb2175e3a0c064682a8a4873f5d354b936d08c369733b9aac87fdee87a",
+  "bytes": 2417044
+ },
+ "ms": 45274
+}

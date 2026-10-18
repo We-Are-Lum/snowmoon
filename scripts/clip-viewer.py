@@ -78,7 +78,7 @@ def main() -> None:
                 dst.parent.mkdir(parents=True, exist_ok=True)
                 dst.write_bytes(src.read_bytes())
                 t["img"] = str(dst.relative_to(out))
-    LABELS = {"coverage": "v4", "coverage-v5": "v5"}
+    LABELS = {"coverage": "v4", "coverage-v5": "v5", "coverage-v6": "v6", "coverage-v7": "v7", "coverage-v6-gpt": "v6 · GPT Image (closed model)"}
     for cut in argv or ("tight", "full"):
         cdir = ROOT / "scenes-out" / seed / "cuts" / cut
         tl = json.loads((cdir / "timeline.json").read_text())

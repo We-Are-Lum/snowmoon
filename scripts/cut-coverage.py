@@ -7,7 +7,7 @@ words and audio, and pictures from overnight/coverage-pictures.json overlaid by 
 (the frames changed in that version). The first cut's files are not touched.
 --plan v6 reads that version's own plan and board (coverage-v6.json, coverage-board-v6.json, from coverage-plan.py --plan v6).
 A plan may carry "trim" {line: [start, end]} and "rooms" {room: filter} over cut-v4.py's; a sequence item may carry
-"part": {"from": s, "to": s, "text": "..."} (one part of a take, with its own subtitle: a line split across two shots) and,
+"letter_style": "caption" (larger lettering on a dark band), "part": {"from": s, "to": s, "text": "..."} (one part of a take, with its own subtitle: a line split across two shots) and,
 with "laugh", "laugh_trim": [a, b] and "laugh_from": "pre" (the laugh in the pause before the line, not over it).
 
 Writes scenes-out/<seed>/cuts/coverage/timeline.json and, with --render, mixes and renders it to cuts/coverage.mp4.
@@ -93,7 +93,7 @@ def main() -> None:
     prev = None       # the previous item's kind: ("line", speaker) or ("still",)
     scene_id = None
 
-    def add_shot(fid: str, at: float, letter: str | None = None, screen: str | None = None, transition: dict | None = None, label: str = "") -> None:
+    def add_shot(fid: str, at: float, letter: str | None = None, screen: str | None = None, transition: dict | None = None, label: str = "", letter_style: str = "card") -> None:
         if screen:
             dst = work / f"screen-{screen}.png"
             C.device(C.SCREENS[screen], dst)
@@ -102,7 +102,7 @@ def main() -> None:
             img, what = picture(fid)
         if letter:
             dst = work / f"lettered-{fid}.png"
-            C.lettered(ROOT / img, dst, letter)
+            C.lettered(ROOT / img, dst, letter, letter_style)
             img = str(dst.relative_to(ROOT))
         shots.append({"id": label or fid, "frame": fid, "image": img, "picture": what, "at": {"cue": "@start", "offset": round(at, 3)},
                       "transition": transition or {"type": "cut"},
@@ -215,7 +215,7 @@ def main() -> None:
             start = t + (TAIL if prev and prev[0] == "line" else 0) - it.get("over", 0)
             code = "/" not in it["setup"] and sc["setups"][it["setup"]]["kind"] == "code"
             add_shot(f"cov-{it['scene']}-{it['setup']}" if code else frame_id(it["scene"], it), start, letter=it.get("letter"),
-                     screen=it.get("v") if code else None, transition=trans, label=f"{n}-{it['setup']}")
+                     screen=it.get("v") if code else None, transition=trans, label=f"{n}-{it['setup']}", letter_style=it.get("letter_style", "card"))
             fx(it.get("fx", []), start, n)
             if it.get("bye"):
                 sid, off, src, a0, a1 = C.FIVE_BYE

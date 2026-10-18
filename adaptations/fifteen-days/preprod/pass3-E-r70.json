@@ -1,0 +1,45 @@
+{
+ "about": "Fifteen Days v7 follow-up (owner's comment on v7, 2026-10-18 15:54 UTC): Deluin is joking, not frowning; Zei seated at the table too. Qwen-Image-Edit-2509 from E69. DRAFTED prompt.",
+ "out": "images-out/preprod/pass3",
+ "ledger": "images-out/preprod/ledger-s7.json",
+ "cap_usd": 25.0,
+ "style": "",
+ "jobs": [
+  {
+   "id": "cov-cafe-OTS-Z-stern-E70",
+   "shot": "cov-cafe-OTS-Z-stern",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-cafe-OTS-Z-stern-E69.png"
+   ],
+   "prompt": "The young man in the orange jacket in the foreground, seen from behind on the left, now sits on a wooden chair at the near side of the table: his shoulders and head lower in the frame, at the same height as the others' heads, his forearm resting on the table edge; still seen from behind, his face not shown. The tall young man in the long cream knitted tunic, seated at the right end of the table, now wears a dry, playful half-smile and raised eyebrows, as if he has just made a joke; no frown, mouth closed or barely open, no teeth. The woman with pink hair keeps her pose, her calm face and the glowing menu. Everyone is seated; three people only. Keep the drawing, line work, colours, lighting, camera, framing and crop exactly as they are, the tree with string lights, the houses and the table with its cups. Nobody else anywhere. No letters or numbers.",
+   "width": 1344,
+   "height": 752,
+   "seed": 70
+  },
+  {
+   "id": "cov-cafe-OTS-Z-stern-E71",
+   "shot": "cov-cafe-OTS-Z-stern",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-cafe-OTS-Z-stern-E69.png"
+   ],
+   "prompt": "The young man in the orange jacket in the foreground, seen from behind on the left, now sits on a wooden chair at the near side of the table: his shoulders and head lower in the frame, at the same height as the others' heads, his forearm resting on the table edge; still seen from behind, his face not shown. The tall young man in the long cream knitted tunic, seated at the right end of the table, now wears a dry, playful half-smile and raised eyebrows, as if he has just made a joke; no frown, mouth closed or barely open, no teeth. The woman with pink hair keeps her pose, her calm face and the glowing menu. Everyone is seated; three people only. Keep the drawing, line work, colours, lighting, camera, framing and crop exactly as they are, the tree with string lights, the houses and the table with its cups. Nobody else anywhere. No letters or numbers.",
+   "width": 1344,
+   "height": 752,
+   "seed": 71
+  },
+  {
+   "id": "cov-cafe-OTS-Z-stern-E72",
+   "shot": "cov-cafe-OTS-Z-stern",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-cafe-OTS-Z-stern-E69.png"
+   ],
+   "prompt": "The young man in the orange jacket in the foreground, seen from behind on the left, now sits on a wooden chair at the near side of the table: his shoulders and head lower in the frame, at the same height as the others' heads, his forearm resting on the table edge; still seen from behind, his face not shown. The tall young man in the long cream knitted tunic, seated at the right end of the table, now wears a dry, playful half-smile and raised eyebrows, as if he has just made a joke; no frown, mouth closed or barely open, no teeth. The woman with pink hair keeps her pose, her calm face and the glowing menu. Everyone is seated; three people only. Keep the drawing, line work, colours, lighting, camera, framing and crop exactly as they are, the tree with string lights, the houses and the table with its cups. Nobody else anywhere. No letters or numbers.",
+   "width": 1344,
+   "height": 752,
+   "seed": 72
+  }
+ ]
+}
