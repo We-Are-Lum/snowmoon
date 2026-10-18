@@ -607,7 +607,7 @@ try {
     await page.locator('.scene-shot').first().waitFor();
     const links = await page.locator('.scene-shot').evaluateAll((els) => els.map((e) => (e as HTMLAnchorElement).getAttribute('href')));
     const remixHref = await page.getByRole('link', { name: /^Remix/ }).getAttribute('href');
-    const recipeHref = await page.locator('.scene-facts a').getAttribute('href');
+    const recipeHref = await page.locator('.scene-facts a[href*="#recipe"]').getAttribute('href');
     const github = await page.locator('main a[href*="github.com"]').count();
     const sceneText = await mainText(page);
     await page.getByRole('link', { name: /^Remix/ }).click();
