@@ -35,6 +35,9 @@ type PublishedVersion = {
   wideSha256: string;
   phone: string;
   phoneSha256: string;
+  /** A poster shown in place of the recipe's (src/lib/scene-delivery.ts), if any. */
+  shownPoster?: string;
+  shownPosterSha256?: string;
 };
 const VERSIONS: Record<number, PublishedVersion> = {
   1: {
@@ -68,6 +71,10 @@ const VERSIONS: Record<number, PublishedVersion> = {
     wideSha256: 'b64332cf553ca4164770833281519733508a19a82439157140ab04d0ce0555bc',
     phone: 'scenes-out/fifteen-days/cuts/coverage-v6-gpt/delivery/phone.mp4',
     phoneSha256: '3f91cf56859fb3d2a680852b06bee2e8155d787ce9b32eb05d9b0db116700372',
+    // The poster shown in place of the recipe's: the same three close-ups, no text (owner, 2026-10-18;
+    // src/lib/scene-delivery.ts, adaptations/fifteen-days/versions/2.json "poster_shown").
+    shownPoster: 'adaptations/fifteen-days/versions/2-poster-shown.jpg',
+    shownPosterSha256: '4fc80109065bfa4b8aa35334f865f518fc96aa4b4b33dd7860c11b492e79ee0f',
   },
 };
 const arg = process.argv.indexOf('--version');
@@ -78,12 +85,13 @@ if (!VERSION) {
   process.exit(1);
 }
 const PUBLIC = 'https://media.snowmoon.party';
-type Kind = 'cut' | 'poster' | 'wide' | 'phone';
-const key = (kind: Kind, sha: string) => `scenes/${VERSION.seed}/v${VERSION.version}/${VERSION.seed}-${kind === 'cut' ? '' : `${kind}-`}${sha.slice(0, 12)}.${kind === 'poster' ? 'jpg' : 'mp4'}`;
+type Kind = 'cut' | 'poster' | 'poster-shown' | 'wide' | 'phone';
+const key = (kind: Kind, sha: string) => `scenes/${VERSION.seed}/v${VERSION.version}/${VERSION.seed}-${kind === 'cut' ? '' : `${kind}-`}${sha.slice(0, 12)}.${kind.startsWith('poster') ? 'jpg' : 'mp4'}`;
 export const VIDEO_URL = `${PUBLIC}/${key('cut', VERSION.mp4Sha256)}`;
 export const POSTER_URL = `${PUBLIC}/${key('poster', VERSION.posterSha256)}`;
 export const WIDE_URL = `${PUBLIC}/${key('wide', VERSION.wideSha256)}`;
 export const PHONE_URL = `${PUBLIC}/${key('phone', VERSION.phoneSha256)}`;
+export const SHOWN_POSTER_URL = VERSION.shownPosterSha256 ? `${PUBLIC}/${key('poster-shown', VERSION.shownPosterSha256)}` : null;
 
 const dry = process.argv.includes('--dry');
 const problems: string[] = [];
@@ -95,9 +103,10 @@ for (const f of VERSION.seededIn) {
 }
 {
   const t = await readFile(path.join(ROOT, 'src/lib/scene-delivery.ts'), 'utf8');
-  for (const u of [VIDEO_URL, WIDE_URL, PHONE_URL]) if (!t.includes(u)) problems.push(`src/lib/scene-delivery.ts does not name ${u}`);
+  for (const u of [VIDEO_URL, WIDE_URL, PHONE_URL, ...(SHOWN_POSTER_URL ? [SHOWN_POSTER_URL] : [])]) if (!t.includes(u)) problems.push(`src/lib/scene-delivery.ts does not name ${u}`);
 }
-for (const [file, want] of [[VERSION.mp4, VERSION.mp4Sha256], [VERSION.poster, VERSION.posterSha256], [VERSION.wide, VERSION.wideSha256], [VERSION.phone, VERSION.phoneSha256]] as const) {
+const SHOWN: [string, string][] = VERSION.shownPoster && VERSION.shownPosterSha256 ? [[VERSION.shownPoster, VERSION.shownPosterSha256]] : [];
+for (const [file, want] of [[VERSION.mp4, VERSION.mp4Sha256], [VERSION.poster, VERSION.posterSha256], [VERSION.wide, VERSION.wideSha256], [VERSION.phone, VERSION.phoneSha256], ...SHOWN] as const) {
   const p = path.join(ROOT, file);
   if (!existsSync(p)) problems.push(`${file} is not here (merge scenes-sound first, or copy it from the scenes checkout)`);
   else if ((await sha256File(p)) !== want) problems.push(`${file}: sha256 is not ${want}`);
@@ -120,7 +129,7 @@ if (existsSync(path.join(ROOT, VERSION.mp4)) && existsSync(path.join(ROOT, VERSI
   const hash = (f: string) => execFileSync('ffmpeg', ['-hide_banner', '-loglevel', 'error', '-i', path.join(ROOT, f), '-map', '0', '-c', 'copy', '-f', 'streamhash', '-hash', 'sha256', '-'], { encoding: 'utf8' });
   if (hash(VERSION.mp4) !== hash(VERSION.wide)) problems.push(`${VERSION.wide}: its streams differ from the cut's`);
 }
-console.log(`video  ${VIDEO_URL}\nposter ${POSTER_URL}\nwide   ${WIDE_URL}\nphone  ${PHONE_URL}`);
+console.log(`video  ${VIDEO_URL}\nposter ${POSTER_URL}\nwide   ${WIDE_URL}\nphone  ${PHONE_URL}${SHOWN_POSTER_URL ? `\nshown  ${SHOWN_POSTER_URL}` : ''}`);
 if (problems.length) {
   console.error(problems.map((p) => `- ${p}`).join('\n'));
   process.exit(1);
@@ -131,7 +140,9 @@ if (dry) {
 }
 const store = r2();
 if (store.publicUrl !== PUBLIC) throw new Error(`R2_PUBLIC_URL is ${store.publicUrl}, expected ${PUBLIC}`);
-for (const [kind, file, sha, type] of [['cut', VERSION.mp4, VERSION.mp4Sha256, 'video/mp4'], ['poster', VERSION.poster, VERSION.posterSha256, 'image/jpeg'], ['wide', VERSION.wide, VERSION.wideSha256, 'video/mp4'], ['phone', VERSION.phone, VERSION.phoneSha256, 'video/mp4']] as const) {
+const uploads: [Kind, string, string, string][] = [['cut', VERSION.mp4, VERSION.mp4Sha256, 'video/mp4'], ['poster', VERSION.poster, VERSION.posterSha256, 'image/jpeg'], ['wide', VERSION.wide, VERSION.wideSha256, 'video/mp4'], ['phone', VERSION.phone, VERSION.phoneSha256, 'video/mp4']];
+if (VERSION.shownPoster && VERSION.shownPosterSha256) uploads.push(['poster-shown', VERSION.shownPoster, VERSION.shownPosterSha256, 'image/jpeg']);
+for (const [kind, file, sha, type] of uploads) {
   const { url, uploaded } = await store.put(key(kind, sha), path.join(ROOT, file), type);
   console.log(`${uploaded ? 'uploaded' : 'already there'}: ${url}`);
 }
