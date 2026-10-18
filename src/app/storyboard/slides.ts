@@ -19,7 +19,7 @@ export interface BoardData {
       speaker: string | null;
       text: string | null;
       voice: { src: string; name: string | null } | null;
-      takes?: { id: string; voice: string; src: string }[];
+      takes?: { id: string; voice: string; inVersion?: boolean; src: string }[];
     }[];
   }[];
 }

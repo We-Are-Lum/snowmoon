@@ -208,7 +208,14 @@ async function build(V) {
         note: l?.note ?? null,
         voice: exists(voiceFile) ? { src: await copyVoice(voiceFile, c.id), name: c.source?.voice ?? null, sha256: sha(voiceFile), file: voiceFile, model: c.source?.voice ? { id: 'chatterbox-vc', name: MODELS['chatterbox-vc']?.repo, licence: MODELS['chatterbox-vc']?.license } : null } : null,
         // The other existing converted takes of this line (scripts/remix-takes.py), for the storyboard.
-        takes: await Promise.all((TAKES[c.id] ?? []).filter((t) => exists(t.file)).map(async (t) => ({ id: t.id, voice: t.voice, src: await copyTake(t.file, c.id, t.id), sha256: t.sha256, file: t.file, recipe: t.recipe, model: t.model, licence: t.licence }))),
+        // The take the version itself uses is listed first and marked (owner, 2026-10-18: "keep all, with the chosen take listed first").
+        takes: await Promise.all(
+          (TAKES[c.id] ?? [])
+            .filter((t) => exists(t.file))
+            .map((t) => ({ ...t, inVersion: !!c.source?.voice && t.voice === c.source.voice }))
+            .sort((a, b) => Number(b.inVersion) - Number(a.inVersion))
+            .map(async (t) => ({ id: t.id, voice: t.voice, inVersion: t.inVersion, src: await copyTake(t.file, c.id, t.id), sha256: t.sha256, file: t.file, recipe: t.recipe, model: t.model, licence: t.licence })),
+        ),
       });
     }
     shots.push(shot);
