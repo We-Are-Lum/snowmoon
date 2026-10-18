@@ -15,3 +15,7 @@ and cost, and the cut are here. The model's weights are not published by its mak
 - costs.jsonl: what each call cost ($2.21 for the cut).
 - recipes/: one recipe per picture used, labelled "closed model".
 - The cut: scenes-out/fifteen-days/cuts/coverage-v6-gpt/ (mp4, timeline, recipe, poster).
+
+**Note on the recipes' "purpose" field.** Each per-picture recipe was written when the GPT cut was a private comparison
+("not in the cut or on the site"). On 2026-10-18 the owner chose this cut as version 2, so that line is out of date. The
+recipes are kept exactly as written at the time; this note is the correction.
