@@ -43,7 +43,8 @@
     "designs:scenes": "tsx scripts/designs-scenes.ts",
     "check:chapter-summaries": "tsx scripts/chapter-summaries.ts check",
     "test:remix": "node scripts/editor-data.mjs && NEXT_PUBLIC_URL=https://snowmoon.party next build && tsx --conditions=react-server scripts/test-remix.ts",
-    "test:adaptation-pages": "node scripts/editor-data.mjs && NEXT_PUBLIC_URL=https://snowmoon.party next build && tsx scripts/test-adaptation-pages.ts"
+    "test:adaptation-pages": "node scripts/editor-data.mjs && NEXT_PUBLIC_URL=https://snowmoon.party next build && tsx scripts/test-adaptation-pages.ts",
+    "test:play-changes": "node scripts/editor-data.mjs && NEXT_PUBLIC_URL=https://snowmoon.party next build && tsx scripts/test-play-changes.ts"
   },
   "license": "GPL-3.0-only",
   "description": "",

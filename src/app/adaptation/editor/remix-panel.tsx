@@ -8,6 +8,7 @@ import { SignInButton } from '~/components/sign-in';
 import { WalletPanel, WalletSignInButton } from '~/components/wallet';
 import { HideButton, ShareRow } from '../../remix/remix-actions';
 import { AddToStoryboard } from './add-to-storyboard';
+import { saveRemix } from './my-changes';
 
 /**
  * Remix in the shot editor (owner, 2026-10-18): Generate from the camera the person set. Sign in
@@ -111,7 +112,10 @@ export function RemixPanel({
         body: JSON.stringify({ adaptation, version, shot: shotId, words, layout, camera, nameProof: webNameProof() }),
       });
       const out = (await r.json().catch(() => ({}))) as { id?: string; url?: string; page?: string; words?: string; error?: string };
-      if (r.ok && out.id && out.url && out.page) setMade({ id: out.id, url: out.url, page: out.page, words: out.words ?? words });
+      if (r.ok && out.id && out.url && out.page) {
+        setMade({ id: out.id, url: out.url, page: out.page, words: out.words ?? words });
+        keep({ id: out.id, url: out.url, page: out.page, words: out.words ?? words, at: Date.now() });
+      }
       else setNote(out.error ?? 'Could not make the frame');
     } catch {
       setNote('No connection. Try again.');
@@ -121,6 +125,16 @@ export function RemixPanel({
     }
   };
 
+  // "Play with my changes" shows your newest Remix frame of this shot: its address is kept in this browser (my-changes.ts).
+  const keep = (f: { id: string; url: string; page: string; words: string; at: number } | null) =>
+    saveRemix(adaptation, version, shotId, f && { ...f, by, model: status ? { name: status.model.name, licence: status.model.licence, where: `on ${status.model.host}, a hosted service` } : null });
+  useEffect(() => {
+    // Only from a full answer about your own frames: a hidden frame drops out, the newest shown one is kept.
+    if (!status?.ready || !status.signedIn || !status.frames) return;
+    const f = status.frames.find((x) => !x.hidden);
+    keep(f ? { id: f.id, url: f.url, page: f.page, words: f.words, at: Date.parse(f.at) || Date.now() } : null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [status]);
   const by = auth.kind === 'signed-in' ? (auth.username ? `@${auth.username}` : `FID ${auth.fid}`) : wallet ? wallet.short : 'you';
   const left = status?.prepaid ? `Balance $${status.prepaid.balanceUsd.toFixed(2)} · $${status.prepaid.priceUsd.toFixed(4)} a frame` : status?.left !== undefined ? `${status.left} of ${status.perDay ?? 10} left today` : '';
   const frames = status?.frames ?? [];

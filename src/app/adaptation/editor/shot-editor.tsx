@@ -6,6 +6,8 @@ import type { SetStage, ShotCamera, PersonSpec } from './set3d';
 import { LocalTextField } from '~/components/local-text-field';
 import { RemixPanel } from './remix-panel';
 import { AddToStoryboard } from './add-to-storyboard';
+import { LAYOUT_SIZE, readChanges, saveLayout } from './my-changes';
+import { PlayChanges } from '../play-changes';
 
 /**
  * The live shot editor (owner, 2026-10-17: "Ship a live editor on the site by Sunday"; boards 1-3 of
@@ -110,6 +112,8 @@ export function ShotEditor({
   scenePath,
   aiLabel,
   prototypeUrl,
+  videoUrl = null,
+  poster,
 }: {
   dataUrl: string;
   shotId: string;
@@ -117,6 +121,9 @@ export function ShotEditor({
   scenePath: string;
   aiLabel: string | null;
   prototypeUrl: string;
+  /** The version's video, for "Play with my changes". */
+  videoUrl?: string | null;
+  poster?: string;
 }) {
   const [data, setData] = useState<EditorData | null>(null);
   const [failed, setFailed] = useState(false);
@@ -164,6 +171,9 @@ export function ShotEditor({
       scenePath={scenePath}
       aiLabel={aiLabel}
       prototypeUrl={prototypeUrl}
+      dataUrl={dataUrl}
+      videoUrl={videoUrl}
+      poster={poster}
     />
   );
 }
@@ -177,6 +187,9 @@ function Editor({
   scenePath,
   aiLabel,
   prototypeUrl,
+  dataUrl,
+  videoUrl,
+  poster,
 }: {
   data: EditorData;
   shot: Shot;
@@ -186,6 +199,9 @@ function Editor({
   scenePath: string;
   aiLabel: string | null;
   prototypeUrl: string;
+  dataUrl: string;
+  videoUrl: string | null;
+  poster?: string;
 }) {
   const orbitRef = useRef<HTMLCanvasElement>(null);
   const shotRef = useRef<HTMLCanvasElement>(null);
@@ -215,10 +231,13 @@ function Editor({
         const [{ SetStage, normalise }, set] = await Promise.all([import('./set3d'), fetch(data.sets[shot.camera!.set]).then((r) => r.json())]);
         if (!alive || !orbitRef.current || !shotRef.current) return;
         const first = round(normalise(shot.camera!, set));
-        stage = new SetStage(orbitRef.current, shotRef.current, set, first, (c) => setCam(round(c)));
+        // The camera you set for this shot last time, kept in this browser (my-changes.ts).
+        const kept = readChanges(data.adaptation, data.version)[shot.id]?.camera as ShotCamera | undefined;
+        const mine = kept ? round(normalise(kept, set)) : null;
+        stage = new SetStage(orbitRef.current, shotRef.current, set, mine ?? first, (c) => setCam(round(c)));
         stageRef.current = stage;
         setStart(first);
-        setCam(first);
+        setCam(mine ?? first);
         setWho(Object.keys(first.people)[0] ?? null);
       } catch {
         if (alive) setSetError(true);
@@ -235,6 +254,26 @@ function Editor({
   useEffect(() => {
     if (location.pathname.endsWith('/shot/first')) history.replaceState(history.state, '', `${scenePath}/shot/${shot.id}${location.hash}`);
   }, [scenePath, shot.id]);
+
+  // Keep your change to this shot in this browser, with its grey layout, for "Play with my changes";
+  // back at the version's camera, the kept change is cleared. Only once you've stopped moving things.
+  useEffect(() => {
+    if (!cam || !start || !stageRef.current) return;
+    const changed = !cmp(cam, start);
+    const t = window.setTimeout(() => {
+      const s = stageRef.current;
+      if (!s) return;
+      // Reopening a shot with a kept change: it is already kept (and keeps its time, so a newer Remix frame still wins).
+      const kept = readChanges(data.adaptation, data.version)[shot.id];
+      if (changed && kept?.layout && cmp(kept.camera, cam)) return;
+      try {
+        saveLayout(data.adaptation, data.version, shot.id, changed ? { camera: cam, src: s.layoutImage(LAYOUT_SIZE.width, LAYOUT_SIZE.height, LAYOUT_SIZE.quality) } : null);
+      } catch {
+        /* no WebGL or no storage: the editor still works, the change just isn't kept */
+      }
+    }, 600);
+    return () => window.clearTimeout(t);
+  }, [cam, start, data.adaptation, data.version, shot.id]);
 
   const stage = () => stageRef.current;
   const camChanged = !!(cam && start) && !cmp({ cam: cam.cam, look: cam.look, fov: cam.fov }, { cam: start.cam, look: start.look, fov: start.fov });
@@ -367,10 +406,11 @@ function Editor({
             <figure className="ed-fig">
               <canvas ref={shotRef} className="ed-layout" aria-label="Live grey layout: what your camera sees" />
               <figcaption className="label">
-                Live layout from your camera {camChanged || peopleChanged ? '· changed' : `· as version ${data.version}`}
+                Live layout from your camera {camChanged || peopleChanged ? '· changed · kept in this browser' : `· as version ${data.version}`}
               </figcaption>
             </figure>
           )}
+          <PlayChanges adaptation={data.adaptation} version={data.version} dataUrl={dataUrl} videoUrl={videoUrl} poster={poster} startAt={Math.max(0, shot.from - 1)} variant="editor" />
           <div className="ed-pair">
             <figure className="ed-fig">
               {shot.frame ? (

@@ -404,6 +404,32 @@ export class SetStage {
   }
 
   /**
+   * The grey layout alone, at a fixed size, as a JPEG data URL (no handles): the picture "Play with my
+   * changes" shows for a shot you changed (my-changes.ts). Drawn here in the browser; no model.
+   */
+  layoutImage(width: number, height: number, quality: number): string {
+    const canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+    const r = new THREE.WebGLRenderer({ canvas, antialias: true, preserveDrawingBuffer: true });
+    r.setPixelRatio(1);
+    r.setSize(width, height, false);
+    const cam = this.shotCam.clone();
+    cam.aspect = width / height;
+    cam.updateProjectionMatrix();
+    this.frustum.visible = false;
+    try {
+      r.render(this.scene, cam);
+      return canvas.toDataURL('image/jpeg', quality);
+    } finally {
+      this.frustum.visible = true;
+      r.dispose();
+      r.forceContextLoss();
+      this.render();
+    }
+  }
+
+  /**
    * What Generate sends (Remix): the shot camera's view at a fixed size, as the grey layout and as
    * a depth map (near light, far dark), drawn the way scripts/set-render.html drew the set frames
    * the version's frames were made from (log depth, 2nd and 98th percentiles, normalised

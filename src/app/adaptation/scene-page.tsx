@@ -6,6 +6,7 @@ import { PAPER } from '~/lib/tokens';
 import { type Adaptation, type Version, getAdaptation, getVersion, handleFor, ownMedia, parseId, resolveHandle, shownVersion, titleSlug } from '~/lib/adaptation-pages';
 import { ShotStrip } from './editor/shot-strip';
 import { SceneActions } from '~/components/scene-actions';
+import { PlayChanges } from './play-changes';
 import './scene.css';
 
 /**
@@ -189,6 +190,8 @@ export function ScenePage({ adaptation, version, handle, fixed }: { adaptation: 
             fixedUrl={`${appUrl()}${fixedPath}`}
             remixUrl={`${latestPath}/shot/first`}
           />
+          {/* Shown only when this browser holds a change to this version (made in the live editor). */}
+          <PlayChanges adaptation={adaptation.id} version={version.id} dataUrl={`/editor/${adaptation.id}/v${version.id}/data.json`} videoUrl={video} poster={poster} />
           {fixed && (
             <p className="label">
               <Link className="scene-latest" href={latestPath}>

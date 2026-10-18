@@ -1,0 +1,60 @@
+/* "Play with my changes" (play-changes.tsx): the button, and the replay sheet over the page. In the
+   site's tokens and floors: Crimson Pro and DM Mono only, text at least 12px, tap targets 44px. */
+
+.pc-open {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 2px; box-sizing: border-box;
+  min-height: 56px; padding: 10px 18px; border: 2px solid var(--ink); border-radius: var(--radius);
+  background: var(--paper); color: var(--ink); cursor: pointer; text-align: left;
+  font-family: var(--label); font-size: 15px; letter-spacing: var(--ls-label); text-transform: uppercase;
+}
+.pc-open-scene { width: 100%; min-height: 64px; }
+.pc-open-sub { font-family: var(--reading); font-size: 15px; letter-spacing: 0; text-transform: none; color: var(--body); line-height: 1.3; }
+
+.pc-overlay {
+  position: fixed; inset: 0; z-index: 92; display: flex; align-items: center; justify-content: center;
+  background: var(--scrim); padding: 16px; box-sizing: border-box;
+}
+.pc-sheet {
+  width: min(960px, 100%); max-height: 100%; overflow-y: auto; box-sizing: border-box;
+  display: flex; flex-direction: column; gap: 10px; padding: 14px 16px 16px;
+  background: var(--paper); color: var(--ink); border-radius: var(--radius);
+}
+.pc-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.pc-title { margin: 0; font-family: var(--label); font-size: var(--text-label); letter-spacing: var(--ls-label); text-transform: uppercase; font-weight: 400; }
+.pc-close {
+  min-width: var(--tap); min-height: var(--tap); border: 1px solid var(--faint); border-radius: var(--radius);
+  background: var(--paper); color: var(--ink); font-family: var(--label); font-size: 20px; cursor: pointer;
+}
+
+/* The picture: the video and, over it, your version of the shot, both letterboxed the same way. */
+.pc-screen { position: relative; width: 100%; aspect-ratio: 16 / 9; background: var(--night); overflow: hidden; }
+.pc-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; display: block; background: var(--night); }
+.pc-over { position: absolute; inset: 0; margin: 0; pointer-events: none; }
+.pc-over img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; display: block; }
+.pc-tag {
+  position: absolute; left: 8px; top: 8px; max-width: calc(100% - 16px); box-sizing: border-box;
+  padding: 4px 8px; border-radius: var(--radius); background: var(--paper); color: var(--ink); pointer-events: auto;
+  font-family: var(--label); font-size: var(--text-label); letter-spacing: var(--ls-label); text-transform: uppercase;
+  overflow-wrap: anywhere;
+}
+.pc-tag .ai-label { min-height: 0; }
+
+.pc-controls { display: flex; align-items: center; gap: 10px; }
+.pc-btn {
+  min-height: var(--tap); padding: 0 14px; border: 1px solid var(--faint); border-radius: var(--radius);
+  background: var(--paper); color: var(--ink); cursor: pointer;
+  font-family: var(--label); font-size: var(--text-label); letter-spacing: var(--ls-label); text-transform: uppercase;
+}
+.pc-play { min-width: 88px; border: 0; background: var(--btn); color: var(--btn-ink); }
+.pc-seek { flex: 1 1 auto; min-width: 0; min-height: var(--tap); accent-color: var(--ink); }
+.pc-time { font-family: var(--label); font-size: var(--text-label); color: var(--muted); white-space: nowrap; }
+.pc-now { margin: 0; font-family: var(--label); font-size: var(--text-label); letter-spacing: var(--ls-label); text-transform: uppercase; color: var(--muted); }
+.pc-list { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.pc-jump[aria-current='true'] { border: 2px solid var(--ink); background: var(--card); }
+.pc-help { margin: 0; color: var(--body); font-size: 15px; }
+:where(.pc-open, .pc-close, .pc-btn, .pc-seek):focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
+
+@media (max-width: 600px) {
+  .pc-overlay { padding: 0; align-items: stretch; }
+  .pc-sheet { border-radius: 0; padding: 10px 16px 16px; }
+}
