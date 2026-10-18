@@ -82,11 +82,12 @@ const usdcLog = (from: string, to: string, value: bigint) => ({
   address: IMAGES.prepaid.usdc, data: encodeAbiParameters([{ type: 'uint256' }], [value]),
   topics: [transferTopic, pad(from as `0x${string}`), pad(to as `0x${string}`)],
 });
-function base(o: { status?: string; logs?: unknown[]; head?: bigint; ageDays?: number; to?: string; from?: string; value?: bigint } = {}) {
+function base(o: { status?: string; logs?: unknown[]; head?: bigint; ageDays?: number; to?: string; from?: string; value?: bigint; rise?: bigint; blockTxs?: { hash: string; to: string | null }[] } = {}) {
   return {
     getTransactionReceipt: async () => ({ status: o.status ?? 'success', blockNumber: 100n, logs: o.logs ?? [] }),
     getBlockNumber: async () => o.head ?? 110n,
-    getBlock: async () => ({ timestamp: BigInt(Math.floor(Date.now() / 1000 - (o.ageDays ?? 0) * 86400)) }),
+    getBlock: async () => ({ timestamp: BigInt(Math.floor(Date.now() / 1000 - (o.ageDays ?? 0) * 86400)), transactions: o.blockTxs ?? [{ hash, to: o.to ?? US }] }),
+    getBalance: async ({ blockNumber }: { blockNumber: bigint }) => (blockNumber === 100n ? 10n ** 18n + (o.rise ?? 0n) : 10n ** 18n),
     getTransaction: async () => ({ to: o.to ?? US, from: o.from ?? me.address, value: o.value ?? 0n }),
     readContract: async () => [1n, 250000000000n, 0n, 0n, 1n], // $2,500.00000000
   } as unknown as PublicClient;
@@ -109,6 +110,25 @@ check('a failed transaction pays nothing', (await why(base({ status: 'reverted' 
 check('a payment still confirming waits', (await why(base({ head: 101n, logs: [usdcLog(me.address, US, 5_000_000n)] }))) === 'pending');
 check('an old payment is not added here', (await why(base({ ageDays: 8, logs: [usdcLog(me.address, US, 5_000_000n)] }))) === 'old');
 check('a payment under the minimum is too small', (await why(base({ logs: [usdcLog(me.address, US, 100_000n)] }))) === 'too-small');
+
+// Smart wallets: ETH arrives as an internal transfer (2026-10-18, the owner's first ETH payment).
+const EP7 = '0x0000000071727De22E5E9d8BAf0edAc6f37da032';
+const opTopic = keccak256(toHex('UserOperationEvent(bytes32,address,address,uint256,bool,uint256,uint256)'));
+const userOp = (sender: string, success: boolean, ep = EP7) => ({
+  address: ep,
+  data: encodeAbiParameters([{ type: 'uint256' }, { type: 'bool' }, { type: 'uint256' }, { type: 'uint256' }], [1n, success, 1000n, 1000n]),
+  topics: [opTopic, keccak256(toHex('op')), pad(sender as `0x${string}`), pad('0x0000000000000000000000000000000000000000')],
+});
+const BUNDLER = '0x00000000000000000000000000000000000b0b1e';
+const sw = await readPayment(hash, me.address, base({ to: '0x0000000071727De22E5E9d8BAf0edAc6f37da032', from: BUNDLER, logs: [userOp(me.address, true)], rise: 2n * 10n ** 15n }));
+check('smart wallet (4337): ETH credited from payTo\'s rise, $5', sw.ok && sw.token === 'ETH' && sw.usd === 5 && sw.amount === 2n * 10n ** 15n, JSON.stringify(sw, (_, v) => (typeof v === 'bigint' ? String(v) : v)));
+check('smart wallet (4337, EntryPoint v0.6) too', (await why(base({ to: '0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789', from: BUNDLER, logs: [userOp(me.address, true, '0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789')], rise: 2n * 10n ** 15n }))) === 'ok');
+check('smart wallet (7702, the wallet sends a batch to itself): credited', (await why(base({ to: me.address, from: me.address, rise: 2n * 10n ** 15n }))) === 'ok');
+check('a failed user operation pays nothing', (await why(base({ to: EP7, from: BUNDLER, logs: [userOp(me.address, false)], rise: 2n * 10n ** 15n }))) === 'not-to-us');
+check('another wallet\'s user operation is not mine', (await why(base({ to: EP7, from: BUNDLER, logs: [userOp(other.address, true)], rise: 2n * 10n ** 15n }))) === 'not-to-us');
+check('someone else also paid payTo in that block: refused', (await why(base({ to: EP7, from: BUNDLER, logs: [userOp(me.address, true)], rise: 4n * 10n ** 15n, blockTxs: [{ hash, to: EP7 }, { hash: keccak256(toHex('other')), to: US }] }))) === 'shared-block');
+check('no rise in payTo\'s balance: nothing paid', (await why(base({ to: EP7, from: BUNDLER, logs: [userOp(me.address, true)], rise: 0n }))) === 'not-to-us');
+check('an ordinary wallet\'s plain ETH payment still works without a balance read', (await why(base({ value: 2n * 10n ** 15n }))) === 'ok');
 
 // --- The balance -----------------------------------------------------------------------
 const db = new PGlite();
