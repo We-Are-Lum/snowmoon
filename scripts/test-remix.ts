@@ -25,6 +25,7 @@
  *  R10:   share (the cast composer with the frame's page) and hide from My remixes; the page then says
  *         hidden; another account can't hide it.
  *  R11:   a phone: no sideways scroll, text at least 12px, controls at least 44px.
+ *  R12:   the off switches both ways (REMIX_GENERATE=off, REMIX_FREE=off, then neither).
  */
 import path from 'node:path';
 import { mkdirSync, mkdtempSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
@@ -358,6 +359,41 @@ try {
     });
     check('R11', 'phone: no sideways scroll; text ≥ 12px, controls ≥ 44px', sideways <= 0 && f.small.length === 0 && f.tiny.length === 0, { sideways, ...f }, await shot(page, 'R11-phone'));
     await page.context().close();
+  }
+  // R12 the off switches, both ways: the site again with REMIX_GENERATE=off, then REMIX_FREE=off, then neither.
+  {
+    const restart = async (extra: Record<string, string>) => {
+      next?.kill();
+      await new Promise((r) => setTimeout(r, 800));
+      next = spawn(path.join(ROOT, 'node_modules/.bin/next'), ['start', '-p', String(port)], {
+        cwd: ROOT,
+        env: { ...env, ...extra, NODE_ENV: 'production', NEXT_PUBLIC_URL: 'https://snowmoon.party', STUDIO_DATABASE_URL: DB_URL, SNOWMOON_ALERT_URL: 'http://127.0.0.1:9/never', FARCASTER_API_URL: 'http://127.0.0.1:9' },
+        stdio: ['ignore', 'ignore', 'pipe'],
+      });
+      next.stderr!.on('data', (d) => (serverErrAll += d));
+      for (let i = 0; i < 80; i++) {
+        if ((await fetch(BASE + '/about').catch(() => null))?.ok) break;
+        await new Promise((r) => setTimeout(r, 500));
+      }
+    };
+    const status = async () => (await (await fetch(`${BASE}/api/remix/status?adaptation=1&version=1&shot=46-b4-1`, { headers: { authorization: `Bearer ${token}` } })).json()) as { ready: boolean; free: boolean };
+    const gen = async () => (await fetch(BASE + '/api/remix/generate', { method: 'POST', headers: { 'content-type': 'application/json', authorization: `Bearer ${token}` }, body: JSON.stringify({ adaptation: 1, version: 1, shot: '46-b4-1', words: 'x', layout: 'data:image/png;base64,AAAA' }) })).status;
+    await restart({ REMIX_GENERATE: 'off' });
+    const offStatus = await status();
+    const offGen = await gen();
+    const page = await newPage(undefined, token);
+    await page.goto(BASE + ED);
+    await page.locator('#ed-gen-note').waitFor({ timeout: 20000 });
+    const offText = await page.locator('#ed-gen-note').innerText();
+    const offShot = await shot(page, 'R12-generate-off');
+    await page.context().close();
+    await restart({ REMIX_FREE: 'off' });
+    const freeOff = await status();
+    await restart({});
+    const back = await status();
+    check('R12', 'off switches both ways: REMIX_GENERATE=off closes Generate (503, "opens this week"); REMIX_FREE=off stops free frames only; unset, both back on',
+      !offStatus.ready && offGen === 503 && /opens this week/i.test(offText) && freeOff.ready && !freeOff.free && back.ready && back.free,
+      { offStatus, offGen, offText: offText.slice(0, 120), freeOff, back }, offShot);
   }
   if (outside.length) failures.push(`asked for things outside the site: ${[...new Set(outside)].slice(0, 5).join(', ')}`);
   if (/Error:/.test(serverErr)) console.log('server stderr (first lines):\n' + serverErr.split('\n').slice(0, 8).join('\n'));
