@@ -6,6 +6,7 @@ import { createSiweMessage } from 'viem/siwe';
 import { authFetch, saveWalletSession } from '../client-auth';
 import { IMAGES } from '../config';
 import { IMAGE_WORDING } from '../images/wording';
+import { forgetsPending } from './pending';
 
 /**
  * The wallet in this browser (owner, 2026-10-13): an injected EIP-1193 provider (a wallet extension,
@@ -27,7 +28,7 @@ async function connect() {
 }
 
 export class WalletError extends Error {
-  /** final: this payment can't be added (already added, not to us, not from this wallet…), so stop offering to retry. */
+  /** final: this payment can never be added (already added, failed onchain, too old; forgetsPending), so stop offering to retry. */
   constructor(public why: 'no-wallet' | 'declined' | 'server' | 'pay-failed', message?: string, public final = false) {
     super(message ?? why);
   }
@@ -87,9 +88,9 @@ export async function pay(opts: { usd: number; token: 'USDC' | 'ETH'; payTo: `0x
 export async function claim(hash: `0x${string}`, tries = 20): Promise<{ added: number; balanceUsd: number }> {
   for (let i = 0; i < tries; i++) {
     const res = await authFetch('/api/wallet/claim', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ txHash: hash }) }).catch(() => null);
-    const out = (await res?.json().catch(() => ({}))) as { added?: number; balanceUsd?: number; error?: string; retry?: boolean };
+    const out = (await res?.json().catch(() => ({}))) as { added?: number; balanceUsd?: number; error?: string; retry?: boolean; reason?: string };
     if (res?.ok && out.added !== undefined) return { added: out.added, balanceUsd: out.balanceUsd ?? 0 };
-    if (!out.retry) throw new WalletError('server', out.error, res !== null && res.status !== 503 && res.status !== 401);
+    if (!out.retry) throw new WalletError('server', out.error, forgetsPending(out.reason));
     await new Promise((r) => setTimeout(r, 3000));
   }
   throw new WalletError('server', IMAGE_WORDING.prepaid.claimLater);
