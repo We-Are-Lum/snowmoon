@@ -1,14 +1,16 @@
 import 'server-only';
 import { createHash } from 'node:crypto';
-import { TAKES, appUrl } from '../config';
+import { readFileSync } from 'node:fs';
+import path from 'node:path';
+import { TAKES } from '../config';
 
 /**
- * One voice conversion on fal.ai (owner, 2026-10-19): the person's recording in, the character's voice
- * out. The recording goes in the request itself as a data: URI, so fal fetches nothing and nothing is
- * uploaded to its CDN; X-Fal-Store-IO: 0 asks it to keep no copy of the request or reply; the converted
- * file it puts on its CDN is set to expire after TAKES.falOutputSeconds, and we copy it at once. The
- * recording is never written to disk or storage here, and never logged: only its sha256 leaves this
- * function, for the recipe. Needs FAL_KEY. TAKES_TEST_FAKES=1 (never on Vercel) stands in for fal.
+ * One voice conversion, on our own Chatterbox deployment on Modal (owner, 2026-10-19: option (c); modal/chatterbox_vc.py).
+ * Modal's terms forbid it to train any AI model on what we send. Our server sends the person's recording and the
+ * character's published voice (read from this deployment's own files) in one request, with our shared key; the
+ * converted take comes back in the answer. The recording is never written to storage or a log here; only its sha256
+ * leaves this function, for the recipe. Needs MODAL_TAKES_URL and MODAL_TAKES_KEY. TAKES_TEST_FAKES=1 (never on
+ * Vercel) stands in for Modal.
  */
 export interface Converted {
   bytes: Buffer;
@@ -44,36 +46,33 @@ export function silentWav(seconds: number): Buffer {
   return Buffer.concat([h, Buffer.alloc(n * 2)]);
 }
 
+const EXT: Record<string, string> = { 'audio/webm': 'webm', 'audio/ogg': 'ogg', 'audio/mp4': 'mp4', 'audio/mpeg': 'mp3', 'audio/wav': 'wav' };
+
 export async function convertTake(raw: Buffer, contentType: string, targetSrc: string): Promise<Converted> {
   const rawSha256 = createHash('sha256').update(raw).digest('hex');
-  const price = (s: number) => Math.round((s / 60) * TAKES.model.usdPerMinute * 1e6) / 1e6;
+  const price = (gpuSeconds: number) => Math.round(gpuSeconds * TAKES.model.usdPerGpuSecond * 1e6) / 1e6;
   if (takesFakes()) {
     const bytes = silentWav(3);
-    return { bytes, contentType: 'audio/wav', seconds: 3, costUsd: price(3), requestId: 'test-stand-in', rawSha256 };
+    return { bytes, contentType: 'audio/wav', seconds: 3, costUsd: price(2), requestId: 'test-stand-in', rawSha256 };
   }
-  const key = process.env.FAL_KEY;
-  if (!key) throw new ConvertUnavailable('FAL_KEY is not set');
-  const res = await fetch(`https://fal.run/${TAKES.model.endpoint}`, {
+  const url = process.env.MODAL_TAKES_URL, key = process.env.MODAL_TAKES_KEY;
+  if (!url || !key) throw new ConvertUnavailable('MODAL_TAKES_URL or MODAL_TAKES_KEY is not set');
+  let target: Buffer;
+  try {
+    target = readFileSync(path.join(process.cwd(), 'public', targetSrc));
+  } catch {
+    throw new ConvertUnavailable('the target voice is not in this deployment');
+  }
+  const res = await fetch(url, {
     method: 'POST',
-    headers: {
-      Authorization: `Key ${key}`,
-      'Content-Type': 'application/json',
-      'X-Fal-Store-IO': '0',
-      'X-Fal-Object-Lifecycle-Preference': JSON.stringify({ expiration_duration_seconds: TAKES.falOutputSeconds }),
-    },
-    body: JSON.stringify({
-      source_audio_url: `data:${contentType};base64,${raw.toString('base64')}`,
-      target_voice_audio_url: `${appUrl()}${targetSrc}`,
-    }),
-    signal: AbortSignal.timeout(90_000),
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ key, source_b64: raw.toString('base64'), source_ext: EXT[contentType] ?? 'webm', target_b64: target.toString('base64') }),
+    signal: AbortSignal.timeout(110_000),
   }).catch(() => null);
-  if (!res || !res.ok) throw new ConvertUnavailable(`fal answered ${res?.status ?? 'nothing'}`);
-  const out = (await res.json()) as { audio?: { url?: string; content_type?: string } };
-  const url = out.audio?.url;
-  if (!url || !/^https:\/\//.test(url)) throw new ConvertUnavailable('no audio in the answer');
-  const got = await fetch(url, { signal: AbortSignal.timeout(30_000) }).catch(() => null);
-  if (!got?.ok) throw new ConvertUnavailable('the converted file could not be fetched');
-  const bytes = Buffer.from(await got.arrayBuffer());
+  if (!res || !res.ok) throw new ConvertUnavailable(`the voice model answered ${res?.status ?? 'nothing'}`);
+  const out = (await res.json().catch(() => ({}))) as { wav_b64?: string; gpu_seconds?: number };
+  if (!out.wav_b64) throw new ConvertUnavailable('no audio in the answer');
+  const bytes = Buffer.from(out.wav_b64, 'base64');
   const seconds = wavSeconds(bytes) ?? TAKES.maxSeconds;
-  return { bytes, contentType: out.audio?.content_type ?? 'audio/wav', seconds, costUsd: price(Math.max(seconds, 1)), requestId: res.headers.get('x-fal-request-id'), rawSha256 };
+  return { bytes, contentType: 'audio/wav', seconds, costUsd: price(Math.max(out.gpu_seconds ?? 0, 1)), requestId: res.headers.get('modal-function-call-id'), rawSha256 };
 }

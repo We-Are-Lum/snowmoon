@@ -1,80 +1,86 @@
-# DRAFT: "Record your own takes" v1: research, Privacy and consent lines
+# DRAFT: "Record your own takes" v1, self-hosted (option c): host, terms, Privacy and consent lines
 
-Branch `record-takes`, 2026-10-19. Drafted by the coding agent for the owner's reread. Nothing here
-is in `src/lib/legal.ts` or `config/consent.json`. The feature is off (`TAKES.enabled = false`), and
-migration 0016 is a draft that has not been applied.
+Branch `record-takes`, 2026-10-19. Drafted by the coding agent for the owner's reread. Nothing here is in
+`src/lib/legal.ts` or `config/consent.json`. The feature is switched off (`TAKES.enabled = false`). Migration 0016 is
+a draft and hasn't been applied.
 
-## Where Chatterbox voice conversion can run on a server
+**Owner's decision (2026-10-19):** option (c), "Run Chatterbox ourselves on a serverless GPU host whose terms forbid
+using our data … Raw audio never stored." fal.ai is no longer used for takes.
 
-| Host | Endpoint | Price (seen 2026-10-19) | Custom target voice | Notes |
-|---|---|---|---|---|
-| fal.ai | `fal-ai/chatterbox/speech-to-speech` | **$0.015 per minute** of audio | yes, `target_voice_audio_url` | **Chosen.** We already have a key and it's already named in Privacy §7. Tested once (below). |
-| fal.ai | `resemble-ai/chatterboxhd/speech-to-speech` | $0.02 per minute | yes | Resemble's hosted "HD" version. Its weights aren't stated as open. |
-| Replicate | (none found for voice conversion) | — | — | Only text-to-speech variants are listed. |
-| Self-hosted (Modal or similar) | ChatterboxVC (MIT) | GPU time | yes | No third party sees the recording at all. More work, and an idle cost or a cold start. |
+## The host: Modal
 
-**Cost per take:** a take is at most 15 s, so 0.25 min × $0.015 = **$0.00375** at most. The real test call, 4.2 s, was billed in our estimate at $0.00105. We reserve $0.015 per take, a full minute, in case fal rounds up.
-- Free takes: the cap is $2 a day across everyone, so at least 533 takes a day.
-- Wallet accounts: cost plus 30%, as for pictures.
+**Why Modal:** its current terms forbid training on what customers send.
 
-### fal's terms, quoted (fetched 2026-10-19)
+Quoted from modal.com/legal/terms ("Effective May 2026"; earlier versions are from October 2025 and March 2024):
+- **§5.5:** "Modal will not, except with Customer's prior written consent: (i) train any AI model using Customer Data, or (ii) export Customer Data into, or cause Customer Data to be ingested by, large language models."
+- **§1.8:** "Customer Data" shall mean "any data, information or other material provided, uploaded, or submitted by Customer to the Service in the course of using the Service."
+- **§1.11 and Schedule 2:** Modal "may collect and use Service Metrics for its own business purposes", used "in an aggregate and/or permanently anonymized manner", and collected "only in aggregate, de-identified form which is not linked specifically to Customer or any individual". These are usage metrics, not the recordings.
+- **The Data Processing Addendum's Schedule 1** lists personal data in requests as a category it processes, so recordings fall under the DPA.
 
-**What fal keeps** (fal.ai/docs/model-apis/data-retention):
-- "Request inputs and outputs are stored in the platform for 90 days by default."
-- The `X-Fal-Store-IO: 0` header controls "request-history payload storage only".
-- "When a model generates output files, they are uploaded to the fal CDN." The `X-Fal-Object-Lifecycle-Preference` header sets how long they stay, and "Expired files are permanently deleted and cannot be recovered."
+**The other hosts considered:**
 
-**What we send to limit that:**
-- The recording goes *inside the request* as a `data:` URI. Nothing is uploaded to fal's CDN, and fal fetches nothing from us except the published target voice.
-- `X-Fal-Store-IO: 0`, so fal keeps no request history.
-- The converted file on fal's CDN expires after 600 s. We copy it at once.
+| Host | Training terms | Why not chosen |
+|---|---|---|
+| Replicate | Its privacy policy reportedly promises inputs and outputs aren't used to train its models. | Only third-party summaries were found; the primary text wasn't checked. |
+| RunPod | No contractual no-training clause found; a 2024 sales sheet says "no data usage", but that isn't a term. | No contractual promise found. |
+| fal.ai | Its terms allow "Usage Data" derived from inputs to be used for its models. | That's why (c) was chosen. |
 
-**Training** (fal.ai/legal/terms-of-service):
-- "Customer hereby grants Company a non-exclusive, non-sublicensable, royalty-free license to reproduce, use, access, store, and otherwise process any Customer Input to provide the Services."
-- **But also:** "Usage Data", defined as "anonymized or aggregated data" that "may include data based on or derived from Customer Input", may be used "to design, develop, and offer Company products, services, and AI models".
-- fal's privacy policy has no sentence about training on inputs.
+**Price:** Modal's T4 GPU is $0.000164 a second, and the Starter plan includes $30 a month free.
+- A warm 15 s take is about 3–6 s of GPU, about **$0.001**.
+- A cold start (the model loads) adds about 30–40 s, about **$0.007**.
+- We reserve $0.01 per take. The free cap is $2 a day across everyone, so at least 200 takes a day.
+- These timings are estimates. The first real run will measure them.
 
-**⚠ Decision for the owner (D-takes-1): voice recordings are personal data.** fal's terms allow anonymised or aggregated data derived from them to be used for fal's own models. We can't truthfully say "fal doesn't train on your recording". The options:
-- **a)** Use fal and say what's true, as in the lines below.
-- **b)** Ask fal for a zero-retention or no-training agreement first.
-- **c)** Self-host ChatterboxVC, so no third party gets the recording.
+## How it runs
 
-The build works with (a). Moving to (c) changes only `src/lib/takes/convert.ts`.
+- `modal/chatterbox_vc.py` is one POST endpoint, on a T4, scaled to zero after 2 minutes idle. Our server is the only
+  caller, with a shared key.
+- The model is Chatterbox voice conversion (ResembleAI/chatterbox, MIT), with its weights baked into the image at
+  build time.
+- **Our server sends:** the person's recording, and the character's voice as already published with the version (read
+  from this deployment's own files).
+- **It returns:** the converted take, and the GPU seconds it took.
+- **The recording on Modal:** it's held in memory and, because the model reads files, in the container's temporary
+  directory for the seconds the conversion takes. Both files are deleted before the answer is sent. Nothing is logged,
+  kept in a volume, or sent anywhere else.
+- **On our side:** the recording is never written to storage, the database or a log. Only its sha256 goes into the
+  take's recipe, marked `kept: false`. test:takes checks this with a marker and fails if it's stored.
+- **Watermark:** every converted take carries Resemble AI's Perth implicit watermark, applied by Chatterbox's own code.
+  The recipe says so.
 
-### The one real call (2026-10-19)
-- **Sent:** no human recording. The source was a take *already published* with version 1 (Bai's b2-8, the `bai-v3b` take, 52,760 bytes, m4a). The target was Zei's published voice for b1-1.
-- **Result:** HTTP 200 in 3.0 s. A 4.2 s WAV, 24 kHz mono, speech (mean −31 dB). Request 01a15519-f7ad-7840-ab1d-d8cec6df63a3.
-- **Cost:** about $0.001 by our estimate. fal's own bill hasn't been checked.
-- **Confirmed:** fal accepts the recording as a `data:` URI.
+## To switch it on (owner's steps, one at a time)
 
-## What the feature keeps
+1. Create a Modal account on the Starter plan, then log in on this Mac (`modal token new` opens the browser).
+2. The coding agent runs two commands:
+   - `modal secret create snowmoon-takes SNOWMOON_TAKES_KEY=<random>`
+   - `modal deploy modal/chatterbox_vc.py`
 
-- **Kept:** the converted take, public with the maker's name at its link and on the line's list, as Remix frames are. Its recipe holds the model, endpoint, target voice (by sha256), length and cost, plus the recording's **sha256 only**, marked `kept: false`.
-- **Never kept:** the recording itself. Not in storage, not in the database, not in any log. test:takes checks this with a marker, and fails if the code is changed to store it.
-- **Counts:** one row per conversion per person per day (`take_asks`), and costs as daily totals with no person (`take_costs`).
-- **The target voice** is the character's converted voice already published with the version. The private voice-sheet recordings ("never published") are not used.
+   It then runs one real test conversion of a published take (about $0.01) and measures cold and warm times.
+3. Set `MODAL_TAKES_URL` and `MODAL_TAKES_KEY` in Vercel production.
+4. Reread the lines below. Apply migration 0016 (dry run first). Set `TAKES.enabled = true`.
 
-## Privacy (src/lib/legal.ts), drafted lines
+**To check at deploy:** the `chatterbox-tts` version pinned in the Modal image (0.1.2). Confirm it, or pin it to the
+revision the cut used (config/models.json), before the first deploy.
 
-**§4, kept when you sign in, one item:**
+## Privacy (src/lib/legal.ts), drafted
+
+**§4, kept when you sign in:**
 > Takes you record and convert: the converted take, in the character's voice, with the line it belongs to, your name, its recipe and when you made it; and how many you make each day, to count the daily limit. Your own recording is not kept: only a fingerprint (a sha256) of it, in the take's recipe.
 
-**§6, what you publish, appended:**
+**§6, what you publish:**
 > A take you convert is public at once, at its link and with its line, in the character's voice, with your name, labelled as AI-converted.
 
-**§7, the fal.ai item, extended:**
-> fal.ai receives … and, when you record a take, your recording and the character's published voice, and returns your take in that voice. Your recording is sent inside the request, so nothing is uploaded to its storage; it is asked to keep no copy of the request, and its copy of the converted take is deleted after ten minutes. Under its terms, fal may use anonymised or aggregated data derived from what it receives to develop its services and models.
+**§7, a new item:**
+> Modal, where we run the open-weight voice model ourselves, receives your recording and the character's published voice when you convert a take, and returns the take. The recording is held only for the seconds the conversion takes and then deleted; Modal's terms forbid it to train any AI model on what we send.
 
-(The last sentence is needed under option (a). Remove it under (b) or (c).)
+**§9:** add "takes" to the work you can hide yourself, once hiding takes is built (D-takes-2, still open).
 
-**§9, keeping and deleting:** add "takes" to the list of your own work you can hide yourself at once. Hiding isn't built in v1, so this waits for it. **Decision D-takes-2:** ship hiding with v1, or ship without it.
+## Consent own-words-v5, the takes paragraph
 
-## Consent own-words-v5, a paragraph for recording
-
-> If you record a take, your recording is sent to fal.ai to be converted into the character's voice, and only the converted take is kept: public at once, with your name, labelled as AI-converted, under the same licence as your words. Your recording itself is never kept or published. Under fal.ai's terms, anonymised or aggregated data derived from it may be used to develop its services.
+> If you record a take, your recording is converted into the character's voice by an open-weight model we run ourselves on Modal, which may not train on it. Only the converted take is kept: public at once, with your name, labelled as AI-converted, under the same licence as your words. Your recording itself is never kept or published.
 
 ## Still open
-- **D-takes-1:** fal (a), an agreement with fal (b), or self-hosting (c). See above.
 - **D-takes-2:** hiding takes in v1.
-- **D-takes-3:** do takes need the Neynar score bar for Farcaster accounts? As built, they use the Pictures gate, the same as Remix.
-- **D-takes-4:** should one recording be sendable to more than one character's voice? As built, a take is always in the line's own speaker's voice.
+- **D-takes-3:** whether takes use the Farcaster score bar, the same gate as Pictures and Remix (as built).
+- **D-takes-4:** should one recording be convertible into more than one character's voice? (As built, it's always the
+  line's own speaker.)

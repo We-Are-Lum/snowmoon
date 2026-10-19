@@ -77,7 +77,7 @@ check('a recording is converted and saved to the line', ok.status === 200 && !!j
 const [row] = await S`select cue, speaker, person, recipe, audio_sha256, seconds, cost_usd from studio.line_takes where id = ${j.id ?? '00000000-0000-0000-0000-000000000000'}`;
 const recipe = row?.recipe as Record<string, any> | undefined;
 check('the take is attached to its line and maker', row?.cue === 'b1-1' && row?.speaker === 'Zei' && Number(row?.person) === -acct);
-check('the recipe says AI-converted, names the model and the published target voice', /AI-converted/.test(recipe?.label ?? '') && recipe?.model?.endpoint === 'fal-ai/chatterbox/speech-to-speech' && /^\/editor\/1\/v\d+\/.+\.(wav|m4a)$/.test(recipe?.target_voice?.served ?? '') && /^[0-9a-f]{64}$/.test(recipe?.target_voice?.sha256 ?? ''));
+check('the recipe says AI-converted, names the model and the published target voice', /AI-converted/.test(recipe?.label ?? '') && /our own deployment/.test(recipe?.model?.endpoint ?? '') && /^Modal/.test(recipe?.model?.host ?? '') && /^\/editor\/1\/v\d+\/.+\.(wav|m4a)$/.test(recipe?.target_voice?.served ?? '') && /^[0-9a-f]{64}$/.test(recipe?.target_voice?.sha256 ?? ''));
 check('the recording is in the recipe only as a sha256, marked not kept', recipe?.performance?.kept === false && recipe?.performance?.sha256 === createHash('sha256').update(raw).digest('hex'));
 const dump = (await S`select row_to_json(t)::text as t from studio.line_takes t`).map((r) => r.t).join('\n') + (await S`select row_to_json(t)::text as t from studio.take_costs t`).map((r) => r.t).join('\n');
 check('the recording never reaches the database', !dump.includes(MARK) && !dump.includes(raw.toString('base64').slice(0, 40)));
@@ -104,6 +104,7 @@ check('the free cap across everyone holds', !capped.ok && capped.refusal === 'sp
 // The route sends the recording only to the converter and its sha256; it never stores or logs it.
 const route = readFileSync(path.join(ROOT, 'src/app/api/takes/route.ts'), 'utf8');
 const convert = readFileSync(path.join(ROOT, 'src/lib/takes/convert.ts'), 'utf8');
+check('the recording goes only to our own Modal deployment, never to fal', !/fal\.run|fal\.ai|FAL_KEY/.test(convert) && /MODAL_TAKES_URL/.test(convert));
 check('the code never stores or logs the recording', !/putTake\(\s*raw|writeFileSync|console\.[a-z]+\([^)]*raw/.test(route + convert) && /putTake\(sha256, made\.bytes/.test(route));
 
 await S.end({ timeout: 1 });

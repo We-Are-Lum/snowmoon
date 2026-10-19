@@ -103,7 +103,7 @@ export function RecordTake({ adaptation, version, cue, speaker }: { adaptation: 
         </div>
       )}
       <p className="ed-help">
-        Your recording is sent to our server and on to fal.ai, which converts it into {speaker}&rsquo;s voice with Chatterbox (open weights). Only the converted take is kept, public with your name; your own recording is never kept or published.
+        Your recording is sent to our server and converted into {speaker}&rsquo;s voice by Chatterbox (open weights), which we run ourselves on Modal; Modal may not train on it. Only the converted take is kept, public with your name; your own recording is never kept or published.
       </p>
       {note && <p className="ed-help" role="status">{note}</p>}
       {takes.length > 0 && (

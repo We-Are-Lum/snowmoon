@@ -15,7 +15,7 @@ import { lineTakes, putTake, reserveTake, saveTake, settleTake, takeStorageReady
 /**
  * "Record your own takes", v1 (owner, 2026-10-19). POST: the person's recording of one line, as the raw
  * request body (audio/webm, audio/ogg, audio/mp4, audio/mpeg or audio/wav, at most TAKES.maxBytes),
- * with ?adaptation=&version=&cue= . The order is Remix's: sign-in, consent, the Pictures gate, the daily
+ * with ?adaptation=&version=&cue= . It is converted on our own Chatterbox deployment on Modal. The order is Remix's: sign-in, consent, the Pictures gate, the daily
  * count and free cap (or a wallet's prepaid balance). The recording is sent to the conversion model and
  * dropped: it is never written to storage, the database or a log; only its sha256 is kept, in the
  * recipe. The converted take is stored, labelled AI-converted, and attached to the line. GET: the line's
@@ -51,7 +51,7 @@ export async function POST(request: Request) {
   const person = await getPerson(request);
   if (person === null) return NextResponse.json({ error: 'Sign in to record a take' }, { status: 401 });
   const sql = db();
-  if (!sql || !(takesFakes() || process.env.FAL_KEY) || !takeStorageReady()) return no('Recording takes is not set up on this deployment', 503);
+  if (!sql || !(takesFakes() || (process.env.MODAL_TAKES_URL && process.env.MODAL_TAKES_KEY)) || !takeStorageReady()) return no('Recording takes is not set up on this deployment', 503);
   const l = lineOf(new URL(request.url));
   if (!l) return no('No such line', 404);
   const type = (request.headers.get('content-type') ?? '').split(';')[0].trim().toLowerCase();
@@ -111,7 +111,8 @@ export async function POST(request: Request) {
         output_sha256: sha256,
         seconds: made.seconds,
         cost_usd: made.costUsd,
-        host_settings: { store_io: false, output_expires_seconds: TAKES.falOutputSeconds },
+        host_terms: 'Modal may not train any AI model on what we send (its terms, effective May 2026, section 5.5)',
+        watermark: "Resemble AI's Perth implicit watermark, applied by Chatterbox's own code to every output",
         ...(takesFakes() ? { test: 'made by the local test stand-in, not a model' } : {}),
       },
     });

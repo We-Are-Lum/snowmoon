@@ -148,15 +148,15 @@ export const TAKES = {
     name: 'Chatterbox (Resemble AI), voice conversion',
     licence: 'MIT (open weights)',
     weights: 'https://huggingface.co/ResembleAI/chatterbox',
-    endpoint: 'fal-ai/chatterbox/speech-to-speech',
-    host: 'fal.ai',
-    /** fal's listed price, seen 2026-10-19: $0.015 per minute of audio. */
-    usdPerMinute: 0.015,
+    /** Run by us on Modal (owner, 2026-10-19: option (c)); modal/chatterbox_vc.py. */
+    endpoint: 'snowmoon-chatterbox-vc (our own deployment)',
+    host: 'Modal (run by Snowmoon Party; Modal may not train on it)',
+    gpu: 'T4',
+    /** Modal's listed T4 price, seen 2026-10-19: $0.000164 a second. */
+    usdPerGpuSecond: 0.000164,
   },
-  /** The worst case reserved before a conversion: a full-length take, rounded up to a whole minute. */
-  reserveUsd: 0.015,
-  /** How long fal keeps the converted file on its CDN before deleting it (we copy it at once). */
-  falOutputSeconds: 600,
+  /** The worst case reserved before a conversion: a cold start (about 40 s of GPU) plus the take. */
+  reserveUsd: 0.01,
   label: 'AI-converted voice: a person\'s own performance, converted into the character\'s voice, not by the author',
 };
 
