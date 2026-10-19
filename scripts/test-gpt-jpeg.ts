@@ -11,6 +11,8 @@
  *  J5: a PNG with transparency is flattened (the JPEG decodes, 3 channels, no alpha); no metadata is carried over.
  *  J6: a JPEG from the model is stored as sent: both sha256s are the same, converted null.
  *  J7: anything else is refused (makeGptEdit throws ImageUnavailable; nothing to store).
+ *  J11: every request carries providerOptions.gateway.disallowPromptTraining = true, and no zeroDataRetention (this
+ *       model has none: the gateway refuses it); the frame's recipe records the flag.
  *  J8: a FLUX frame's recipe is unchanged: no model_output, output_sha256 of its bytes.
  *  J9: the stand-in gateway was called once per make, at the gateway's URL, asking for output_format "jpeg".
  *  J10: the flag is still off: REMIX_MODEL is 'flux'.
@@ -47,11 +49,11 @@ const png = await sharp(raw, { raw: { width: W, height: H, channels: 3 } }).png(
 const pngAlpha = await sharp({ create: { width: W, height: H, channels: 4, background: { r: 200, g: 40, b: 40, alpha: 0.4 } } }).png().toBuffer();
 const jpegFromModel = await sharp(raw, { raw: { width: W, height: H, channels: 3 } }).jpeg({ quality: 80 }).toBuffer();
 
-const calls: { url: string; outputFormat: unknown }[] = [];
+const calls: { url: string; outputFormat: unknown; gateway: Record<string, unknown> | null }[] = [];
 let answer: Buffer = png;
 globalThis.fetch = (async (url: string | URL, init?: RequestInit) => {
   const body = JSON.parse(String(init?.body ?? '{}'));
-  calls.push({ url: String(url), outputFormat: body.output_format });
+  calls.push({ url: String(url), outputFormat: body.output_format, gateway: body.providerOptions?.gateway ?? null });
   return new Response(JSON.stringify({ data: [{ b64_json: answer.toString('base64') }], providerMetadata: { gateway: { cost: '0.026908', generationId: 'gen_test' } } }), { status: 200 });
 }) as typeof fetch;
 
@@ -102,8 +104,11 @@ check('J8', "a FLUX frame's recipe has no model_output and its own sha256", !('m
 // J9
 check('J9', 'the stand-in gateway was called once per make, at the gateway URL, asking for JPEG', calls.length === 4 && calls.every((c) => c.url === REMIX_GPT.url && c.outputFormat === 'jpeg'), calls);
 
+// J11
+check('J11', 'every request asks the gateway not to route to a provider that trains on prompts (disallowPromptTraining), and never asks for ZDR; the recipe records it', calls.length === 4 && calls.every((c) => c.gateway?.disallowPromptTraining === true && !('zeroDataRetention' in (c.gateway ?? {}))) && (made.settings as { providerOptions?: { gateway?: { disallowPromptTraining?: boolean } } })?.providerOptions?.gateway?.disallowPromptTraining === true, { calls, settings: made.settings });
+
 // J10
 check('J10', "the flag is still off (REMIX_MODEL 'flux')", REMIX_MODEL === 'flux', REMIX_MODEL);
 
-console.log(`\ntest:gpt-jpeg: ${10 - failed}/10 passed (PNG ${png.length.toLocaleString()} bytes → JPEG ${made.bytes.length.toLocaleString()} bytes)`);
+console.log(`\ntest:gpt-jpeg: ${11 - failed}/11 passed (PNG ${png.length.toLocaleString()} bytes → JPEG ${made.bytes.length.toLocaleString()} bytes)`);
 process.exit(failed ? 1 : 0);

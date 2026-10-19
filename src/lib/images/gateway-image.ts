@@ -28,7 +28,11 @@ export async function makeGptEdit(prompt: string, references: Ref[], request: Re
   // ineligible for Zero Data Retention (ZDR). This model retains data and cannot be used with ZDR configurations."
   // ($0, no provider attempted). With it, every call would be refused. What OpenAI keeps is said in the Privacy draft
   // (docs/legal/remix-gpt-draft.md) instead.
-  const settings = { model: REMIX_GPT.model.endpoint, n: 1, size, output_format: REMIX_GPT.outputFormat };
+  //
+  // disallowPromptTraining, on every request (owner, 2026-10-19): the gateway routes only to providers that don't train
+  // on prompts, and refuses the call (no_providers_available) rather than send it to one that does. Free; enforced by
+  // the gateway. It is in the settings, so each frame's recipe records that it was asked.
+  const settings = { model: REMIX_GPT.model.endpoint, n: 1, size, output_format: REMIX_GPT.outputFormat, providerOptions: { gateway: { disallowPromptTraining: true } } };
   const res = await fetch(REMIX_GPT.url, {
     method: 'POST',
     headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },

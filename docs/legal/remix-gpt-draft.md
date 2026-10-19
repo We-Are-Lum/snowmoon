@@ -228,6 +228,11 @@ The caps are in src/lib/config.ts, and they are not changed here:
   deletes a frame (the site's role has no delete on `studio.remix_frames`, 0013); the one deletion is the maintainer's
   erasure (docs/removal.md step 2), whose files step, `scripts/erase-remix-frame.ts`, deletes the PNG with the picture.
   Tested by `npm run test:gpt-png-private` (no network, no database, no key).
+- **No prompt training, asked on every request** (owner, 2026-10-19): `makeGptEdit` sends
+  `providerOptions.gateway.disallowPromptTraining: true`, so the gateway routes only to a provider that doesn't train
+  on prompts, or refuses the call (no_providers_available). It is in the call's settings, so each frame's recipe
+  records it. Still no `zeroDataRetention` (the model has none; the gateway refuses it). Tested by
+  `npm run test:gpt-jpeg` (J11, a stand-in gateway; no real call made).
 - **When the PNG is erased: decided** (owner, 2026-10-19, D5: "erase the PNG when its frame is deleted or on
   request"). Built: with the frame (eraseFrameFiles, P6), or on its own on request (eraseOriginalPng,
   `scripts/erase-remix-frame.ts <frame id> --png-only --delete`, P11; the frame stays). Both are the maintainer's,
