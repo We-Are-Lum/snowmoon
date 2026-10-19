@@ -5,7 +5,8 @@
  * the site, and only after the frame is hidden and the erasure is approved and recorded.
  *
  * --png-only (owner, 2026-10-19, D5: "erase the PNG when its frame is deleted or on request"): only a GPT Image
- * frame's original PNG, on request. The frame stays as it is (it need not be hidden); its picture is not touched.
+ * frame's original PNG, on its maker's request or the maintainer's own decision (D5a: "maker + me"). The frame
+ * stays as it is (it need not be hidden); its picture is not touched.
  *
  *   npx tsx --conditions=react-server scripts/erase-remix-frame.ts <frame id>                       what would be deleted
  *   npx tsx --conditions=react-server scripts/erase-remix-frame.ts <frame id> --delete              deletes it

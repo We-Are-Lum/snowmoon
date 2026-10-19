@@ -83,8 +83,9 @@ anything is erased.
 
 **A GPT Image frame's original PNG, on request** (owner, 2026-10-19, D5: "erase the PNG when its frame is deleted
 or on request"). DRAFT, on branch editor-v2. Not an erasure of the frame: the frame, its picture and its row stay,
-and it need not be hidden. When the frame's maker asks (from the account that made it, or by writing to us), the
-maintainer records the request in `studio.removal_log` with the frame id, runs
+and it need not be hidden. Who: the frame's maker (from the account that made it, or by writing to us), or the
+maintainer on their own decision (owner, 2026-10-19, D5a: "maker + me"). The maintainer records the request or the
+decision in `studio.removal_log` with the frame id and who asked, runs
 `scripts/erase-remix-frame.ts <frame id> --png-only` (a dry listing; then `--png-only --delete`), and records the
 key and its sha256 as deleted. The frame's recipe still says the PNG was kept (rows are fixed once written); the log
 is the record that it was erased.

@@ -234,6 +234,7 @@ The caps are in src/lib/config.ts, and they are not changed here:
   run on their machine; no route deletes either (P9). Procedure: docs/removal.md.
   Drafted Privacy line (for §4, what we keep; DRAFT, for the owner's reread):
   > For a Remix frame drawn with GPT Image, we also keep the model's original picture (a PNG) privately; it is
-  > never public. We erase it when the frame is deleted, or when you ask us to.
+  > never public. We erase it when the frame is deleted, when you ask us to, or when we decide to.
+  Who can ask (owner, 2026-10-19, D5a: "maker + me"): the frame's maker, or the maintainer on their own decision.
 - **A moderation refusal:** its shape is still unseen. It is handled as a dropped frame by matching "moderation" or
   "safety" in the error.
