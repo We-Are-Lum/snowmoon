@@ -45,7 +45,8 @@ const clock = (t: number) => `${Math.floor(t / 60)}:${String(Math.floor(t % 60))
 /** The version's AI label, short (as under the scene's player). */
 function aiShort(v: Version) {
   const c = v.recipe.closed_model;
-  return `AI pictures: ${c ? `${c.name.replace(/\s+\d.*$/, '')} (${c.maker}, closed model), ` : ''}not by the author`;
+  const model = c ? c.name.replace(/\s+\d.*$/, '') + ' (' + c.maker + ', closed model), ' : '';
+  return 'AI pictures: ' + model + 'not by the author';
 }
 
 export async function momentMetadata(p: MomentParams): Promise<Metadata> {
