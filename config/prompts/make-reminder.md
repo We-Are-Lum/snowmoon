@@ -1,0 +1,3 @@
+<!-- Sent as one more user turn when the "Make your own" checks flag a coach reply, before the one retry (src/lib/make/coach.ts). {{REASON}} is what was found. The flagged reply is not shown and is not sent back. Model-drafted by the coding agent, 2026-10-19. -->
+
+Your previous reply was not shown: a check found that it wrote for the person ({{REASON}}). Reply again with questions and notes only: no lines, dialogue, narration, description, beats, shots, titles, examples or rewrites, nothing in quotation marks except the person's own words, and no headings like "Beat 2:". If they asked you to write, say in one sentence that you don't, then ask one question that helps them write it.
