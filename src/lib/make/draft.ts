@@ -41,10 +41,16 @@ export const MAKE = {
   messageMax: 1500,
   /**
    * Coach messages per person per UTC day: the coach's own count, apart from the reading assistant's
-   * CHAT.messagesPerDay (owner, 2026-10-19: "coach 50 a day"). The day's spend cap is still the assistant's
-   * (CHAT.dailySpendCapUsd, across everyone), since both use the same models and route.
+   * CHAT.messagesPerDay (owner, 2026-10-19: "coach 50 a day"). Farcaster accounts and wallets with a payment.
    */
   coachPerDay: 50,
+  /** For a wallet account that has never paid (owner, 2026-10-19: "never-paid wallets 10 coach messages a day"). */
+  coachPerDayUnpaidWallet: 10,
+  /**
+   * The coach's own spend cap per UTC day, across everyone, in USD (owner, 2026-10-19: "coach gets its own $1 a
+   * day"), apart from the assistant's CHAT.dailySpendCapUsd; summed from its own cost rows, studio.coach_costs.
+   */
+  coachSpendCapUsd: 1,
   /** Days a coach message's count row (person and time, nothing else) is kept before it is deleted. */
   coachCountDays: 2,
 };

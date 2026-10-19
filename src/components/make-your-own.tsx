@@ -324,8 +324,14 @@ function CoachPanel({ stage, id, draft, intro }: { stage: Stage; id: string | nu
 }
 
 function CoachReply({ r }: { r: CoachResult }) {
-  if (r.state === 'limit') return <p>You&rsquo;ve used today&rsquo;s {MAKE.coachPerDay} messages to the coach. More at 00:00 UTC.</p>;
-  if (r.state === 'spend') return <p>The assistant has reached today&rsquo;s spending limit for everyone. It comes back at 00:00 UTC.</p>;
+  if (r.state === 'limit')
+    return (
+      <p>
+        You&rsquo;ve used today&rsquo;s {r.perDay} messages to the coach. More at 00:00 UTC.
+        {r.perDay < MAKE.coachPerDay && ` A wallet account with a payment gets ${MAKE.coachPerDay} a day.`}
+      </p>
+    );
+  if (r.state === 'spend') return <p>The coach has reached today&rsquo;s spending limit for everyone. It comes back at 00:00 UTC.</p>;
   if (r.state === 'declined') return <p>The coach&rsquo;s reply wasn&rsquo;t shown: it tried to write for you, which it doesn&rsquo;t do. Ask it a question about your own draft instead.</p>;
   return (
     <>

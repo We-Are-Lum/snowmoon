@@ -10,8 +10,10 @@
 --
 -- studio.coach_calls: the coach's own daily count (owner, 2026-10-19: "coach 50 a day"; src/lib/make/limits.ts). One
 -- row per coach message: the person and the time, nothing else (no message, no reply, no cost). Rows older than two
--- days are deleted by the site as new ones come in. The coach's model costs go to studio.chat_costs with the
--- assistant's, as daily totals with no person (0007).
+-- days are deleted by the site as new ones come in.
+--
+-- studio.coach_costs: the coach's own cost rows, for its own spend cap (owner, 2026-10-19: "coach gets its own $1 a
+-- day"). Daily totals of model calls, with no person, no request id and no time of day, like studio.chat_costs (0007).
 --
 -- People: a FID (positive) or minus a wallet account's number (negative), as getPerson gives it (owner, 2026-10-19:
 -- "open to wallet accounts"), the same numbering as the image tables.
@@ -66,11 +68,32 @@ revoke all on studio.coach_calls from anon, authenticated;
 grant select, insert, delete on studio.coach_calls to studio_writer;
 revoke update, truncate, references, trigger on studio.coach_calls from studio_writer;
 
+create table studio.coach_costs (
+  day date not null default ((now() at time zone 'utc')::date),
+  kind text not null check (kind in ('answer', 'guard')),
+  model text not null,
+  provider text not null default '',
+  guard text not null default '' check (guard in ('', 'ok', 'flagged', 'none')),
+  calls int not null default 0 check (calls >= 0),
+  prompt_tokens bigint not null default 0 check (prompt_tokens >= 0),
+  completion_tokens bigint not null default 0 check (completion_tokens >= 0),
+  cost_usd numeric(14, 8) not null default 0 check (cost_usd >= 0),
+  primary key (day, kind, model, provider, guard)
+);
+-- Totals are added to (update), never removed.
+alter table studio.coach_costs enable row level security;
+create policy writer_read on studio.coach_costs for select to studio_writer using (true);
+create policy writer_insert on studio.coach_costs for insert to studio_writer with check (true);
+create policy writer_update on studio.coach_costs for update to studio_writer using (true) with check (true);
+revoke all on studio.coach_costs from anon, authenticated;
+grant select, insert, update on studio.coach_costs to studio_writer;
+revoke delete, truncate, references, trigger on studio.coach_costs from studio_writer;
+
 commit;
 
--- Check: two rows (adaptation_drafts, coach_calls), each rls = true, anon_reads = false, anon_writes = false.
+-- Check: three rows (adaptation_drafts, coach_calls, coach_costs), each rls = true, anon_reads = false, anon_writes = false.
 select c.relname as table, c.relrowsecurity as rls,
        has_table_privilege('anon', c.oid, 'select') as anon_reads,
        has_table_privilege('anon', c.oid, 'insert') as anon_writes
 from pg_class c join pg_namespace n on n.oid = c.relnamespace
-where n.nspname = 'studio' and c.relname in ('adaptation_drafts', 'coach_calls');
+where n.nspname = 'studio' and c.relname in ('adaptation_drafts', 'coach_calls', 'coach_costs');

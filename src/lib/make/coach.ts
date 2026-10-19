@@ -3,17 +3,18 @@ import { CHAT } from '../config';
 import { renderMarkdown } from '../render';
 import { blocksById, labels, retrieve, type Passage } from '../chat/retrieve';
 import { sanitizeReply, type Part } from '../chat/sanitize';
-import { record, worstCaseUsd } from '../chat/limits';
-import { reserveCoach } from './limits';
+import { worstCaseUsd } from '../chat/limits';
+import { recordCoach, reserveCoach } from './limits';
 import type { Complete, Quote } from '../chat/ask';
 import { checkNoWriting } from './no-writing';
 import { cleanDraft, MAKE, ownWords, type Draft } from './draft';
 
 /**
  * The coach in "Make your own" (owner's long run 2, item 5). It reuses the reading assistant: the same model and
- * guard model (CHAT.model, CHAT.guardModel), the same route to them (src/lib/chat/model.ts), the same daily spend cap,
- * the same spoiler limit and book search, and the same citation handling (quotes come from the database, never the
- * model). Its daily count is its own: MAKE.coachPerDay per person (src/lib/make/limits.ts; owner, 2026-10-19).
+ * guard model (CHAT.model, CHAT.guardModel), the same route to them (src/lib/chat/model.ts), the same spoiler limit
+ * and book search, and the same citation handling (quotes come from the database, never the model). Its limits are
+ * its own (src/lib/make/limits.ts; owner, 2026-10-19): 50 messages a day (10 for a wallet that has never paid) and
+ * $1 a day across everyone, with its own cost rows.
  * Signed in with Farcaster or a wallet (owner, 2026-10-19: "open to wallet accounts").
  *
  * Owner's rule: "can cite the book, but never writes prose, dialogue or narration", and (2026-10-19) "coach may suggest
@@ -40,7 +41,7 @@ export interface CoachInput {
 export type CoachResult =
   | { state: 'note'; parts: Part[]; quotes: Quote[]; left: number; checks: { pattern: 'ok'; guard: 'ok' | 'none' }; regenerated: boolean }
   | { state: 'declined'; left: number }
-  | { state: 'limit' }
+  | { state: 'limit'; perDay: number }
   | { state: 'spend' };
 
 export interface CoachDeps {
@@ -99,7 +100,7 @@ export async function coach(deps: CoachDeps, raw: unknown): Promise<CoachResult>
   const { sql, person } = deps;
   // Worst case: two replies (the retry) and four guard calls (each may be asked twice).
   const slot = await reserveCoach(sql, person, worstCaseUsd(2 * ANSWER_TOKENS, 4 * GUARD_TOKENS, 20000));
-  if (!slot.ok) return { state: slot.reason };
+  if (!slot.ok) return slot.reason === 'limit' ? { state: 'limit', perDay: slot.perDay ?? MAKE.coachPerDay } : { state: 'spend' };
 
   const limit = input.draft.upTo;
   const { passages } = await retrieve(sql, `${input.message} ${input.draft.idea}`.slice(0, 600), limit).catch((e) => {
@@ -144,7 +145,7 @@ export async function coach(deps: CoachDeps, raw: unknown): Promise<CoachResult>
 
 async function replyOnce(deps: CoachDeps, messages: Message[], allowed: Set<string>) {
   const r = await deps.complete(CHAT.model, messages, { maxTokens: ANSWER_TOKENS, temperature: 0.5 });
-  await record(deps.sql, { kind: 'answer', model: r.model, provider: r.provider, promptTokens: r.promptTokens, completionTokens: r.completionTokens, costUsd: r.costUsd });
+  await recordCoach(deps.sql, { kind: 'answer', model: r.model, provider: r.provider, promptTokens: r.promptTokens, completionTokens: r.completionTokens, costUsd: r.costUsd });
   const clean = sanitizeReply(r.text, allowed);
   return { ...clean, raw: r.text, shown: clean.parts.map((p) => (p.type === 'text' ? p.text : `[${p.id}]`)).join('') };
 }
@@ -169,7 +170,7 @@ async function check(deps: CoachDeps, message: string, shown: string, own: strin
     );
     const first = g.text.trim().split(/\s+/)[0]?.toUpperCase() ?? '';
     const verdict = first.startsWith('VIOLATION') ? 'flagged' : first.startsWith('OK') ? 'ok' : 'none';
-    await record(deps.sql, { kind: 'guard', model: g.model, provider: g.provider, promptTokens: g.promptTokens, completionTokens: g.completionTokens, costUsd: g.costUsd, guard: verdict });
+    await recordCoach(deps.sql, { kind: 'guard', model: g.model, provider: g.provider, promptTokens: g.promptTokens, completionTokens: g.completionTokens, costUsd: g.costUsd, guard: verdict });
     if (verdict === 'ok') return { verdict: 'ok', reason: '' };
     if (verdict === 'flagged') return { verdict: 'flagged', reason: g.text.trim().slice(first.length).replace(/^[\s:.-]+/, '').slice(0, 200) || 'it wrote for them' };
   }

@@ -14,8 +14,9 @@
  *  M4  the coach: a note is shown; a reply that writes a line is never shown (the pattern check catches it, one retry
  *      with the reminder, then a decline if it writes again); prose the patterns miss is caught by the guard model;
  *      a guard with no verdict counts as flagged (fails closed); every message counts in the coach's own count
- *      (MAKE.coachPerDay, apart from the assistant's), for a wallet account too; nothing about the message or reply
- *      is stored; count rows older than two days are deleted.
+ *      (MAKE.coachPerDay, apart from the assistant's; MAKE.coachPerDayUnpaidWallet for a wallet that has never paid);
+ *      its own spend cap (MAKE.coachSpendCapUsd) and cost rows (studio.coach_costs); nothing about the message or
+ *      reply is stored; count rows older than two days are deleted.
  *  M5  the flag: off, /make-your-own and every /api/make route answer 404; the end card's /make still redirects to
  *      the repository (next.config), untouched.
  *  M6  the screens (MAKE_TEST_ON=1, MAKE_TEST_FAKES=1, a local stand-in sign-in): idea, talk it through, beats,
@@ -136,6 +137,7 @@ try {
 const tableMeta = async (t: string) => (await pg.query<{ rls: boolean; anon_reads: boolean; anon_writes: boolean }>(`select c.relrowsecurity as rls, has_table_privilege('anon', c.oid, 'select') as anon_reads, has_table_privilege('anon', c.oid, 'insert') as anon_writes from pg_class c join pg_namespace n on n.oid = c.relnamespace where n.nspname = 'studio' and c.relname = $1`, [t])).rows[0];
 const meta = await tableMeta('adaptation_drafts');
 const coachMeta = await tableMeta('coach_calls');
+const costMeta = await tableMeta('coach_costs');
 await pg.exec('set role studio_writer');
 const dbPort = await freePort();
 const dbServer = new PGLiteSocketServer({ db: pg, port: dbPort, host: '127.0.0.1' });
@@ -180,7 +182,7 @@ try {
     await pg.exec('set role studio_writer');
     const ok = (m?: { rls: boolean; anon_reads: boolean; anon_writes: boolean }) => !!m?.rls && !m.anon_reads && !m.anon_writes;
     if (d.ok) await deleteDraft(sql, A, id);
-    check('M2', 'migration 0017 (draft, PGlite only): both tables RLS on, nothing for anon; owner fixed; size and person checked; wallet persons kept; only old count rows deletable', applied === 'ok' && ok(meta) && ok(coachMeta) && moved === 'refused' && big === 'refused' && zero === 'refused' && wallet === 'kept' && coachZero === 'refused' && del.length === 1 && !del[0].fresh, { applied, meta, coachMeta, moved, big, zero, wallet, coachZero, del });
+    check('M2', 'migration 0017 (draft, PGlite only): its three tables RLS on, nothing for anon; owner fixed; size and person checked; wallet persons kept; only old count rows deletable', applied === 'ok' && ok(meta) && ok(coachMeta) && ok(costMeta) && moved === 'refused' && big === 'refused' && zero === 'refused' && wallet === 'kept' && coachZero === 'refused' && del.length === 1 && !del[0].fresh, { applied, meta, coachMeta, costMeta, moved, big, zero, wallet, coachZero, del });
   }
 
   // M3 drafts
@@ -240,20 +242,44 @@ try {
     const cols = (await sql`select table_name || '.' || column_name as c from information_schema.columns where table_schema = 'studio' and table_name in ('chat_calls', 'chat_costs', 'coach_calls')`).map((r) => r.c as string);
     check('M4', "the coach: notes shown; written lines, prose and described shots never shown (retry, then decline); a question about a visual detail shown; a silent guard fails closed; counted in the coach's own count, not the assistant's; nothing stored", note.state === 'note' && lineOnce.state === 'note' && lineOnce.regenerated && reminded && lineTwice.state === 'declined' && prose.state === 'declined' && silent.state === 'declined' && described.state === 'note' && described.regenerated && /clenched jaw show it/.test(describedShown) && !/let you win|glitter|flicker/.test(shownTexts) && calls === 6 && asks === 0 && !cols.some((c) => /text|message|question|prompt_text|content/.test(c.split('.')[1])) && cols.filter((c) => c.startsWith('coach_calls.')).sort().join() === 'coach_calls.at,coach_calls.person', { note: note.state, lineOnce, reminded, lineTwice: lineTwice.state, prose: prose.state, silent: silent.state, described, calls, asks, cols });
 
-    // Its own count: the assistant's 30 used up doesn't stop the coach; the coach's 50 used up does, and says so.
+    // Its own count and its own spend (owner, 2026-10-19): the assistant's 30 used up, and its $2 spent, don't stop
+    // the coach; the coach's costs go to its own rows (studio.coach_costs), never the assistant's.
+    const [{ coachRows }] = await sql`select coalesce(sum(calls), 0)::int as "coachRows" from studio.coach_costs`;
+    const [{ chatRows }] = await sql`select count(*)::int as "chatRows" from studio.chat_costs`;
     await sql`insert into studio.chat_calls (fid, kind, model) select ${FID}, 'ask', ${CHAT.model} from generate_series(1, ${CHAT.messagesPerDay})`;
+    await sql`insert into studio.chat_costs (kind, model, calls, cost_usd) values ('answer', 'test-assistant-spend', 1, ${CHAT.dailySpendCapUsd})`;
     const afterAssistant = await coach(deps(make([], [])), input('More notes?'));
-    const WALLET = -7;
-    for (let i = 0; i < MAKE.coachPerDay - 1; i++) await sql`insert into studio.coach_calls (person) values (${WALLET})`;
-    const walletLast = await coach(deps(make([], []), WALLET), input('Notes?'));
-    const walletOver = await coach(deps(make([], []), WALLET), input('Notes?'));
+
+    // A wallet that has never paid: 10 a day. One with a payment: 50, like a Farcaster account.
+    await pg.exec('reset role');
+    const unpaid = -Number((await pg.query<{ id: number }>(`insert into studio.wallet_accounts (address) values ('0x00000000000000000000000000000000000000b7') returning id`)).rows[0].id);
+    const paid = -Number((await pg.query<{ id: number }>(`insert into studio.wallet_accounts (address) values ('0x00000000000000000000000000000000000000b8') returning id`)).rows[0].id);
+    await pg.query(`insert into studio.wallet_payments (tx_hash, account_id, chain_id, token, amount, usd, block_number) values ($1, $2, 8453, 'USDC', 5000000, 5, 1)`, ['0x' + 'ab'.repeat(32), -paid]);
+    await pg.exec('set role studio_writer');
+    const fill = async (person: number, n: number) => { if (n > 0) await sql`insert into studio.coach_calls (person) select ${person} from generate_series(1, ${n})`; };
+    await fill(unpaid, MAKE.coachPerDayUnpaidWallet - 1);
+    const unpaidLast = await coach(deps(make([], []), unpaid), input('Notes?'));
+    const unpaidOver = await coach(deps(make([], []), unpaid), input('Notes?'));
+    await fill(paid, MAKE.coachPerDay - 1);
+    const paidLast = await coach(deps(make([], []), paid), input('Notes?'));
+    const paidOver = await coach(deps(make([], []), paid), input('Notes?'));
     // Count rows older than two days go as new ones come in (as the site's role).
     await pg.exec('reset role');
     await pg.query(`insert into studio.coach_calls (person, at) values (555, now() - interval '3 days')`);
     await pg.exec('set role studio_writer');
     await coach(deps(make([], []), 556), input('Notes?'));
     const [{ old }] = await sql`select count(*)::int as old from studio.coach_calls where person = 555`;
-    check('M4b', `the coach's own ${MAKE.coachPerDay} a day: not stopped by the assistant's ${CHAT.messagesPerDay}; a wallet account gets its ${MAKE.coachPerDay}th and then the limit; old count rows deleted`, afterAssistant.state === 'note' && walletLast.state === 'note' && walletLast.left === 0 && walletOver.state === 'limit' && old === 0, { afterAssistant: afterAssistant.state, walletLast, walletOver, old });
+    check('M4b', `the coach's own count: ${MAKE.coachPerDay} a day (a wallet with a payment too), ${MAKE.coachPerDayUnpaidWallet} for a wallet that has never paid, then the limit with its number; not stopped by the assistant's ${CHAT.messagesPerDay} or its spend; costs in its own rows; old count rows deleted`, coachRows > 0 && chatRows === 0 && afterAssistant.state === 'note' && unpaidLast.state === 'note' && unpaidLast.left === 0 && unpaidOver.state === 'limit' && unpaidOver.perDay === MAKE.coachPerDayUnpaidWallet && paidLast.state === 'note' && paidLast.left === 0 && paidOver.state === 'limit' && paidOver.perDay === MAKE.coachPerDay && old === 0, { coachRows, chatRows, afterAssistant: afterAssistant.state, unpaidLast, unpaidOver, paidLast, paidOver, old });
+
+    // The coach's own $1 a day: with it (nearly) spent, the coach stops for everyone and says so.
+    const [{ spent }] = await sql`select coalesce(sum(cost_usd), 0)::float8 as spent from studio.coach_costs where day = (now() at time zone 'utc')::date`;
+    await sql`insert into studio.coach_costs (kind, model, calls, cost_usd) values ('answer', 'test-coach-spend', 1, ${MAKE.coachSpendCapUsd - spent - 0.001})`;
+    const spentOut = await coach(deps(make([], []), 557), input('Notes?'));
+    const [{ c557 }] = await sql`select count(*)::int as c557 from studio.coach_calls where person = 557`;
+    await pg.exec('reset role');
+    await pg.query(`delete from studio.coach_costs where model = 'test-coach-spend'`);
+    await pg.exec('set role studio_writer');
+    check('M4c', `the coach's own $${MAKE.coachSpendCapUsd} a day across everyone: near it, a message is refused before any model call and not counted`, spentOut.state === 'spend' && c557 === 0, { spentOut, c557 });
   }
 
   await sql.end({ timeout: 1 });
