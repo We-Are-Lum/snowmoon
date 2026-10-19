@@ -79,7 +79,8 @@ coordinator's machine only and is not published.
   cut's own call for this recipe (also $0.026908).
 - **output_format "jpeg": ignored.** OpenAI's metadata says `outputFormat: png`, and a 1536×864 PNG came back,
   1,535,122 bytes. The owner chose JPEG (2026-10-19): the site converts it on our server before storing
-  (`src/lib/images/stored-jpeg.ts`, sharp, quality 90; this PNG became a 160,935-byte JPEG). The PNG is not kept.
+  (`src/lib/images/stored-jpeg.ts`, sharp, quality 90; this PNG became a 160,935-byte JPEG). The PNG is kept
+  privately in R2 (owner, 2026-10-19; see "The original PNG" below).
 - **Still unseen:** what a moderation refusal looks like.
 
 ## Terms: section 6a (prepaid) is unchanged; section 8 gets one clause
@@ -219,6 +220,14 @@ The caps are in src/lib/config.ts, and they are not changed here:
 - **JPEG or PNG: decided** (owner, 2026-10-19: "JPEG for GPT Remix frames: yes, converted on our server, with the
   recipe recording both the original PNG's sha256 and the stored JPEG's"). Built: the recipe's `output_sha256` is the
   stored JPEG's (the frame's `image_sha256`, as for every frame) and `model_output` records the PNG the gateway sent
-  (type, size, sha256, how it was converted, `kept: false`). Tested by `npm run test:gpt-jpeg` (no network, no key).
+  (type, size, sha256, how it was converted). Tested by `npm run test:gpt-jpeg` (no network, no key).
+- **The original PNG: kept privately** (owner, 2026-10-19: "Keep the original PNGs privately in R2. Delete a PNG
+  whenever its frame is deleted, and tell me the Privacy wording that needs."). Built: the PNG goes to the private
+  bucket only, under `remix/model-output/<sha256>.png`, before the JPEG is made public; `model_output` records
+  `kept: true` and that key, never a URL. A hide (the maker's or the maintainer's) leaves it there, unchanged. No route
+  deletes a frame (the site's role has no delete on `studio.remix_frames`, 0013); the one deletion is the maintainer's
+  erasure (docs/removal.md step 2), whose files step, `scripts/erase-remix-frame.ts`, deletes the PNG with the picture.
+  Tested by `npm run test:gpt-png-private` (no network, no database, no key). The Privacy wording for it is the
+  other session's draft, to be added here after the owner's reread.
 - **A moderation refusal:** its shape is still unseen. It is handled as a dropped frame by matching "moderation" or
   "safety" in the error.

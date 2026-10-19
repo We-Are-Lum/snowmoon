@@ -1,4 +1,3 @@
-import { createHash } from 'node:crypto';
 import { NextResponse } from 'next/server';
 import { getPerson, getWallet } from '~/lib/auth';
 import { db } from '~/lib/db';
@@ -9,9 +8,8 @@ import { bylineName } from '~/lib/names';
 import { shortAddress } from '~/lib/wallet/session';
 import { generate, remixPictures, remixPrompt, remixPromptMax, testFakes } from '~/lib/remix/make';
 import { closedRecipeModel, REMIX_GPT } from '~/lib/remix/model';
-import { outputRecord } from '~/lib/images/stored-jpeg';
 import { gatewayToken } from '~/lib/chat/model';
-import { frameStorageReady, putFrame, saveFrame } from '~/lib/remix/frames';
+import { frameStorageReady, putFrameFiles, saveFrame } from '~/lib/remix/frames';
 import { layoutPicture, remixShot } from '~/lib/remix/shot';
 
 /**
@@ -73,10 +71,10 @@ export async function POST(request: Request) {
   if (!g.ok) return no(g.error, g.status, g.extra);
   const made = g.made;
 
-  const sha256 = createHash('sha256').update(made.bytes).digest('hex');
   const wallet = person < 0 ? getWallet(request) : null;
   const by = wallet ? { name: shortAddress(wallet.address), source: 'wallet' as const } : await bylineName(person, body.nameProof);
-  const url = await putFrame(sha256, made.bytes, made.contentType);
+  // The stored picture, and a GPT Image frame's original PNG in the private bucket (owner, 2026-10-19).
+  const { sha256, url, record: pictureRecord } = await putFrameFiles(made);
   const madeAt = new Date().toISOString();
   const flux = IMAGES.editModel;
   // A closed model is recorded with its maker, the date and "closed model" (principle 3; owner, 2026-10-18).
@@ -97,9 +95,9 @@ export async function POST(request: Request) {
       made_at: madeAt,
       size: shot.model === 'gpt' ? REMIX_GPT.size : IMAGES.size,
       // content_type and output_sha256: the stored picture (output_sha256 is the frame's image_sha256). For GPT Image,
-      // model_output is what the model sent (a PNG, with its own sha256), converted to this JPEG on our server and not
-      // kept (owner, 2026-10-19).
-      ...outputRecord(made),
+      // model_output is what the model sent (a PNG, with its own sha256), converted to this JPEG on our server and kept
+      // in the private bucket under private_key, never at a URL (owner, 2026-10-19).
+      ...pictureRecord,
       cost_usd: made.costUsd,
       checks: { prompt: { model: IMAGES.guardModel, verdict: 'ok' }, ...(shot.model === 'gpt' ? { model_moderation: "passed (OpenAI's own)" } : { host_safety_checker: 'passed' }), blocked_names: 'none' },
       // version_frame_of: the version whose frame and prompt were sent (version 1's, for a shot of version 2, the GPT cut, while Remix draws with the open-weight model).

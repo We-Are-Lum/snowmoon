@@ -8,8 +8,10 @@ import sharp from 'sharp';
  * PNG for output_format "jpeg").
  *
  * What the model sent is recorded as model_output (its type, size and sha256); the stored JPEG's sha256 is the recipe's
- * output_sha256 and the frame's image_sha256, as for every other frame. The PNG itself is not kept anywhere. A JPEG
- * from the model is stored as sent, unconverted, so its two sha256s are the same.
+ * output_sha256 and the frame's image_sha256, as for every other frame. The PNG itself is kept in the private bucket
+ * only, under a key named by its sha256 (owner, 2026-10-19: "Keep the original PNGs privately in R2. Delete a PNG
+ * whenever its frame is deleted"; putFrameFiles in src/lib/remix/frames.ts), and model_output records that key, never
+ * a URL. A JPEG from the model is stored as sent, unconverted, so its two sha256s are the same and nothing else is kept.
  *
  * Plain module (no 'server-only'), so scripts/test-gpt-jpeg.ts can run it.
  */
@@ -23,13 +25,17 @@ export interface ModelOutput {
   height: number | null;
   /** How it became the stored JPEG; null when the model's own JPEG is stored as sent. */
   converted: string | null;
-  kept: false;
+  /** True once the original is in the private bucket; private_key is its key there (never a URL). */
+  kept: boolean;
+  private_key: string | null;
 }
 
 export interface Stored {
   bytes: Buffer;
   contentType: 'image/jpeg';
   modelOutput: ModelOutput;
+  /** The model's PNG, to keep privately; absent when the model's JPEG is stored as sent. */
+  original?: Buffer;
 }
 
 const sha = (b: Buffer) => createHash('sha256').update(b).digest('hex');
@@ -50,6 +56,7 @@ export async function storedJpeg(bytes: Buffer): Promise<Stored | null> {
     height: meta.height ?? null,
     converted,
     kept: false,
+    private_key: null,
   });
   if (!png) return { bytes, contentType: 'image/jpeg', modelOutput: modelOutput(null) };
   // Flattened onto black in case the PNG has an alpha channel; no metadata is copied (sharp's default).
@@ -57,7 +64,8 @@ export async function storedJpeg(bytes: Buffer): Promise<Stored | null> {
   return {
     bytes: jpeg,
     contentType: 'image/jpeg',
-    modelOutput: modelOutput(`to JPEG on our server (sharp, quality ${STORED_JPEG.quality}, mozjpeg); the PNG is not kept`),
+    modelOutput: modelOutput(`to JPEG on our server (sharp, quality ${STORED_JPEG.quality}, mozjpeg)`),
+    original: bytes,
   };
 }
 

@@ -87,6 +87,30 @@ export async function moveToPrivate(sha256: string): Promise<void> {
   await client.send(new DeleteObjectCommand({ Bucket: pub, Key: key }));
 }
 
+/**
+ * A GPT Image remix frame's original PNG (owner, 2026-10-19: "Keep the original PNGs privately in R2"): kept in the
+ * private bucket only, under a key named by its sha256, never given a public address. Deleted with its frame
+ * (eraseFrameFiles in src/lib/remix/frames.ts); a hide leaves it where it is.
+ */
+export const modelOutputKey = (sha256: string) => {
+  if (!/^[0-9a-f]{64}$/.test(sha256)) throw new Error('not a sha256');
+  return `remix/model-output/${sha256}.png`;
+};
+
+export async function putPrivate(key: string, bytes: Buffer, contentType: string): Promise<void> {
+  const { client, priv } = r2();
+  await client.send(new PutObjectCommand({ Bucket: priv, Key: key, Body: bytes, ContentType: contentType }));
+}
+
+/** Erasure only (docs/removal.md step 2): the frame's file from both buckets, and any private-only keys given. */
+export async function deleteObjects(sha256: string, privateKeys: string[] = []): Promise<void> {
+  const { client, pub, priv } = r2();
+  const key = keyFor(sha256);
+  await client.send(new DeleteObjectCommand({ Bucket: pub, Key: key }));
+  await client.send(new DeleteObjectCommand({ Bucket: priv, Key: key }));
+  for (const k of privateKeys) await client.send(new DeleteObjectCommand({ Bucket: priv, Key: k }));
+}
+
 /** Unhide (the author's own hide only): put the public copy back. */
 export async function restorePublic(sha256: string): Promise<void> {
   const { client, pub, priv } = r2();

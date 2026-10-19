@@ -18,6 +18,8 @@ export interface Made {
   settings: Record<string, unknown>;
   /** What the model sent, when the stored bytes were converted from it (GPT Image: src/lib/images/stored-jpeg.ts). */
   modelOutput?: ModelOutput;
+  /** The model's own bytes when they differ from the stored ones (GPT Image's PNG), kept privately. */
+  original?: Buffer;
 }
 
 export class ImageUnavailable extends Error {}

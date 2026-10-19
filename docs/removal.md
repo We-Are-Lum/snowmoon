@@ -75,7 +75,11 @@ anything is erased.
    nothing else breaks, re-enable the trigger, and write step `erased` to the
    log. A dry run with `rollback;` first, as with every migration.
 3. Delete the media objects from R2 (`snowmoon-media`) by key, and record each
-   key and its sha256 in the log.
+   key and its sha256 in the log. For a Remix frame (readers' buckets), run
+   `scripts/erase-remix-frame.ts <frame id>` (a dry listing; then `--delete`): it deletes the
+   frame's picture from the readers' bucket and the private bucket and, for a GPT Image frame, its
+   original PNG from the private bucket (owner, 2026-10-19: "Delete a PNG whenever its frame is
+   deleted"). No route deletes a frame; a hide never deletes the PNG. DRAFT, on branch editor-v2.
 4. If the content is in the public git repository: replace it in a new commit
    with the same tombstone. Rewriting history (and asking forks to do the same)
    is a separate decision, recorded in the log, because it affects everyone

@@ -1,9 +1,12 @@
 import 'server-only';
-import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
+import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import type postgres from 'postgres';
 import { SYSTEM_FID } from '../config';
-import { moveToPrivate, putPublic, restorePublic, storageReady } from '../images/store';
+import { deleteObjects, modelOutputKey, moveToPrivate, putPrivate, putPublic, restorePublic, storageReady } from '../images/store';
+import { outputRecord, type ModelOutput } from '../images/stored-jpeg';
+import type { Made } from '../images/fal';
 import { testFakes } from './make';
 
 /**
@@ -11,10 +14,14 @@ import { testFakes } from './make';
  * remix of the shot. Shown at /remix/<id> to anyone with the link, with the maker's words and name,
  * its AI label and its recipe, until it is hidden: by its maker ("Hide", undone only by them) or by
  * the maintainer (SYSTEM_FID; undone only by the maintainer). A hidden frame's public file moves to the
- * private bucket, as Pictures does (docs/removal.md).
+ * private bucket, as Pictures does (docs/removal.md). A GPT Image frame's original PNG lives in the private bucket
+ * only, from the start; a hide leaves it there, and only erasure (eraseFrameFiles) deletes it with the frame.
+ *
+ * No route deletes a frame: the site's database role has no delete on studio.remix_frames (0013), and a frame's row is
+ * fixed once written (remix_frame_fixed). Deleting one is the maintainer's erasure procedure (docs/removal.md, step 2).
  *
  * The local tests keep the files in REMIX_TEST_STORE instead of R2 (with REMIX_TEST_FAKES only, never
- * on Vercel), served by /api/remix/test-file/<sha256>.
+ * on Vercel), served by /api/remix/test-file/<sha256>; a private file goes in its private/ folder, never served.
  */
 type Sql = postgres.Sql;
 
@@ -50,6 +57,56 @@ export async function putFrame(sha256: string, bytes: Buffer, contentType = 'ima
   }
   return putPublic(sha256, bytes, contentType);
 }
+/**
+ * A new frame's files, before its row is written: a GPT Image frame's original PNG to the private bucket (first, so a
+ * frame is never public without its original kept), then the stored picture to the readers' bucket. Returns the
+ * stored picture's sha256 and address, and the recipe's picture fields (stored-jpeg.ts outputRecord) with model_output
+ * marked kept and its private key: a bucket key, never a URL.
+ */
+export async function putFrameFiles(made: Pick<Made, 'bytes' | 'contentType' | 'modelOutput' | 'original'>): Promise<{ sha256: string; url: string; record: ReturnType<typeof outputRecord> }> {
+  let modelOutput: ModelOutput | undefined = made.modelOutput;
+  if (made.original && modelOutput) {
+    if (createHash('sha256').update(made.original).digest('hex') !== modelOutput.sha256) throw new Error('the original does not match its recorded sha256');
+    const key = modelOutputKey(modelOutput.sha256);
+    const dir = testStore();
+    if (dir) {
+      mkdirSync(path.join(dir, 'private', path.dirname(key)), { recursive: true });
+      writeFileSync(path.join(dir, 'private', key), made.original);
+    } else {
+      await putPrivate(key, made.original, modelOutput.content_type);
+    }
+    modelOutput = { ...modelOutput, kept: true, private_key: key };
+  }
+  const record = outputRecord({ bytes: made.bytes, contentType: made.contentType, modelOutput });
+  const url = await putFrame(record.output_sha256, made.bytes, made.contentType);
+  return { sha256: record.output_sha256, url, record };
+}
+
+/** The private key a frame's recipe records for its original, checked against the sha256 beside it; null if none. */
+export function originalKeyOf(recipe: Record<string, unknown>): string | null {
+  const mo = recipe.model_output as Partial<ModelOutput> | undefined;
+  if (!mo?.private_key) return null;
+  if (!mo.sha256 || mo.private_key !== modelOutputKey(mo.sha256)) throw new Error('the recipe\'s private key does not match its sha256');
+  return mo.private_key;
+}
+
+/**
+ * Erasure only (docs/removal.md, step 2; run by the maintainer, never from a route): deletes the frame's picture from
+ * both buckets and, for a GPT Image frame, its original PNG from the private bucket. The row is tombstoned separately,
+ * in the SQL Editor, as the procedure says.
+ */
+export async function eraseFrameFiles(f: Pick<Frame, 'imageSha256' | 'recipe'>): Promise<{ deleted: string[] }> {
+  const original = originalKeyOf(f.recipe);
+  const dir = testStore();
+  if (dir) {
+    const files = [path.join(dir, `${f.imageSha256}.jpg`), ...(original ? [path.join(dir, 'private', original)] : [])];
+    for (const file of files) if (existsSync(file)) rmSync(file);
+    return { deleted: files.map((x) => path.relative(dir, x)) };
+  }
+  await deleteObjects(f.imageSha256, original ? [original] : []);
+  return { deleted: ['picture (public and private copies)', ...(original ? [original] : [])] };
+}
+
 export function readTestFile(sha256: string): Buffer | null {
   const dir = testStore();
   if (!dir || !/^[0-9a-f]{64}$/.test(sha256)) return null;

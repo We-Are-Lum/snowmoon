@@ -13,8 +13,8 @@ import { storedJpeg } from './stored-jpeg';
  * identifies the person is sent. The cost is the one the gateway reports for the call.
  *
  * The owner-approved test without ZDR (2026-10-19, as a script) took all four pictures and ignored output_format: a PNG
- * came back. The picture is stored as a JPEG converted on our server (src/lib/images/stored-jpeg.ts), and the recipe
- * records both sha256s. How a moderation refusal looks is still to confirm.
+ * came back. The picture is stored as a JPEG converted on our server (src/lib/images/stored-jpeg.ts), the PNG is kept
+ * in the private bucket, and the recipe records both sha256s. How a moderation refusal looks is still to confirm.
  */
 type Ref = { bytes: Buffer; contentType: string; width: number; height: number };
 
@@ -55,6 +55,7 @@ export async function makeGptEdit(prompt: string, references: Ref[], request: Re
     bytes: stored.bytes,
     contentType: stored.contentType,
     modelOutput: stored.modelOutput,
+    original: stored.original,
     seed: null,
     requestId: body.providerMetadata?.gateway?.generationId ?? null,
     nsfw: false,
