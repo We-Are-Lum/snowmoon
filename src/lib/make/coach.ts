@@ -3,18 +3,21 @@ import { CHAT } from '../config';
 import { renderMarkdown } from '../render';
 import { blocksById, labels, retrieve, type Passage } from '../chat/retrieve';
 import { sanitizeReply, type Part } from '../chat/sanitize';
-import { record, reserve, worstCaseUsd } from '../chat/limits';
+import { record, worstCaseUsd } from '../chat/limits';
+import { reserveCoach } from './limits';
 import type { Complete, Quote } from '../chat/ask';
 import { checkNoWriting } from './no-writing';
 import { cleanDraft, MAKE, ownWords, type Draft } from './draft';
 
 /**
  * The coach in "Make your own" (owner's long run 2, item 5). It reuses the reading assistant: the same model and
- * guard model (CHAT.model, CHAT.guardModel), the same route to them (src/lib/chat/model.ts), the same daily limit
- * and spend cap (each message counts as one of the assistant's CHAT.messagesPerDay), the same spoiler limit and
- * book search, and the same citation handling (quotes come from the database, never the model).
+ * guard model (CHAT.model, CHAT.guardModel), the same route to them (src/lib/chat/model.ts), the same daily spend cap,
+ * the same spoiler limit and book search, and the same citation handling (quotes come from the database, never the
+ * model). Its daily count is its own: MAKE.coachPerDay per person (src/lib/make/limits.ts; owner, 2026-10-19).
+ * Signed in with Farcaster or a wallet (owner, 2026-10-19: "open to wallet accounts").
  *
- * Owner's rule: "can cite the book, but never writes prose, dialogue or narration". Every reply passes two checks
+ * Owner's rule: "can cite the book, but never writes prose, dialogue or narration", and (2026-10-19) "coach may suggest
+ * visual details as questions or options, never written description". Every reply passes two checks
  * before anyone sees it: the pattern check (src/lib/make/no-writing.ts), then the guard model with
  * config/prompts/make-guard.md. A flagged reply is never shown or sent back; one retry with a reminder, then a
  * decline. Nothing about the message or the reply is stored here; the device keeps the conversation.
@@ -24,7 +27,7 @@ export type Stage = 'talk' | 'beats' | 'storyboard';
 const STAGES: Record<Stage, string> = {
   talk: 'they are talking their idea through. Ask about what the characters want, what is at stake, where the tension is, and how it could be shown rather than said. Don\'t suggest beats.',
   beats: 'they are writing their beats, in their own words. Give notes on the beats they wrote: what each one does, what repeats, what is missing, where the turn is. Never write a beat or reword one.',
-  storyboard: 'they are writing a text storyboard: for each beat, shots with a shot type, who\'s in frame, what we see and the line. Give notes on their shots: whether the shot type shows what the beat needs, who we should be looking at, what the audience learns. Never write a shot, what we see, or a line.',
+  storyboard: 'they are writing a text storyboard: for each beat, shots with a shot type, who\'s in frame, what we see and the line. Give notes on their shots: whether the shot type shows what the beat needs, who we should be looking at, what the audience learns. Never write a shot, what we see, or a line. You may suggest a visual detail only as a question or as short options for them to choose from.',
 };
 
 export interface CoachInput {
@@ -42,7 +45,8 @@ export type CoachResult =
 
 export interface CoachDeps {
   sql: postgres.Sql;
-  fid: number;
+  /** A FID, or minus a wallet account's number (getPerson). */
+  person: number;
   complete: Complete;
   systemPrompt: string;
   guardPolicy: string;
@@ -92,9 +96,9 @@ const passagesText = (ps: Passage[]) => ps.map((p) => `[${p.id}] ${p.content.rep
 
 export async function coach(deps: CoachDeps, raw: unknown): Promise<CoachResult> {
   const input = validateCoach(raw);
-  const { sql, fid } = deps;
+  const { sql, person } = deps;
   // Worst case: two replies (the retry) and four guard calls (each may be asked twice).
-  const slot = await reserve(sql, fid, worstCaseUsd(2 * ANSWER_TOKENS, 4 * GUARD_TOKENS, 20000));
+  const slot = await reserveCoach(sql, person, worstCaseUsd(2 * ANSWER_TOKENS, 4 * GUARD_TOKENS, 20000));
   if (!slot.ok) return { state: slot.reason };
 
   const limit = input.draft.upTo;

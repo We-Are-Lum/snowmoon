@@ -5,19 +5,22 @@
  *  M1  the pattern check (src/lib/make/no-writing.ts): a red-team set of written replies (lines, dialogue, script,
  *      filled fields, beat and shot lists, quoted lines in other languages) is flagged; plain notes and questions,
  *      quoting the person's own words, and naming shot types pass.
- *  M2  migration 0017 (a DRAFT in supabase/drafts/, dry-run here on PGlite only): the table, RLS on, nothing for anon,
- *      a draft's owner, id and creation time fixed, size capped.
- *  M3  drafts: private to their person (another person's reads as missing, and can't update or delete it); at most
- *      20 per person; delete removes the row; a draft that isn't clean (bad shot type, unknown beat, too long) refused.
+ *  M2  migration 0017 (a DRAFT in supabase/drafts/, dry-run here on PGlite only): both tables, RLS on, nothing for
+ *      anon, a draft's owner, id and creation time fixed, size capped, person 0 refused; a coach count row can't be
+ *      deleted until it is two days old.
+ *  M3  drafts: private to their person (another person's reads as missing, and can't update or delete it), wallet
+ *      accounts (negative person numbers) included; at most 20 per person; delete removes the row; a draft that
+ *      isn't clean (bad shot type, unknown beat, too long) refused.
  *  M4  the coach: a note is shown; a reply that writes a line is never shown (the pattern check catches it, one retry
  *      with the reminder, then a decline if it writes again); prose the patterns miss is caught by the guard model;
- *      a guard with no verdict counts as flagged (fails closed); every message counts against the assistant's daily
- *      limit; nothing about the message or reply is stored.
+ *      a guard with no verdict counts as flagged (fails closed); every message counts in the coach's own count
+ *      (MAKE.coachPerDay, apart from the assistant's), for a wallet account too; nothing about the message or reply
+ *      is stored; count rows older than two days are deleted.
  *  M5  the flag: off, /make-your-own and every /api/make route answer 404; the end card's /make still redirects to
  *      the repository (next.config), untouched.
  *  M6  the screens (MAKE_TEST_ON=1, MAKE_TEST_FAKES=1, a local stand-in sign-in): idea, talk it through, beats,
  *      storyboard and save, at 390 wide, light and dark; the coach's decline when asked to "just write the line";
- *      no sideways scroll; nothing fetched from outside the site.
+ *      no sideways scroll; nothing fetched from outside the site. A wallet sign-in (stand-in) saves its own draft.
  */
 import { readFileSync, readdirSync, mkdirSync } from 'node:fs';
 import path from 'node:path';
@@ -29,7 +32,7 @@ import { PGLiteSocketServer } from '@electric-sql/pglite-socket';
 import postgres from 'postgres';
 import { chromium, type Browser, type Page } from 'playwright-core';
 import { checkNoWriting } from '../src/lib/make/no-writing';
-import { cleanDraft, emptyDraft, type Draft } from '../src/lib/make/draft';
+import { cleanDraft, emptyDraft, MAKE, type Draft } from '../src/lib/make/draft';
 import { coach, type CoachDeps } from '../src/lib/make/coach';
 import { createDraft, deleteDraft, getDraft, listDrafts, updateDraft } from '../src/lib/make/drafts';
 import { CHAT } from '../src/lib/config';
@@ -84,6 +87,14 @@ const prompt = (f: string) => readFileSync(path.join(ROOT, 'config/prompts', f),
     'Here is a line for you: "The walls held, and so did I."',
     'Dialogue: "Why did you help him?"',
     'Monologue: I spent fifteen days...',
+    // Visual suggestions written as description, not asked (owner, 2026-10-19).
+    "We see Zei's jaw clench as the lights of the city flicker below.",
+    'Close on her hands, trembling on the railing.',
+    'The camera pushes in slowly as Bai turns away.',
+    'Open on the overlook at dusk, snow drifting past the lights.',
+    'Option 1: Zei stares at the board in silence. Option 2: Bai slams the railing.',
+    'In the foreground, Bai grips the railing while Zei watches the match.',
+    'Good idea. We hear the crowd roar as Zei wins.',
   ];
   const mustPass = [
     'What does Zei want in this beat, and what would she lose by saying it out loud? The book shows her hiding it [c14-b97].',
@@ -96,6 +107,13 @@ const prompt = (f: string) => readFileSync(path.join(ROOT, 'config/prompts', f),
     'In your third shot, who should we be looking at when Deluin speaks?',
     'The book says the café is on the roof [c19-b40]. Does your wide shot need to show the city?',
     'Your idea has a want and a cost, but no clock. What makes this moment urgent?',
+    // Visual suggestions as questions or options (owner, 2026-10-19).
+    'Would a clenched jaw show it?',
+    'A storm cloud, or bright sun?',
+    'What could we see that tells us she is angry: her hands, her eyes, the board?',
+    'Maybe a clenched jaw, or her looking away? Which feels more like Zei?',
+    'Hold on her face, or cut to Bai?',
+    'In your shot 1, we see Bai turn: is that the moment the friendship breaks?',
   ];
   const flagged = mustFlag.filter((t) => !checkNoWriting(t, own).ok).length;
   const wrongly = mustPass.filter((t) => !checkNoWriting(t, own).ok);
@@ -115,7 +133,9 @@ try {
 } catch (e) {
   applied = (e as Error).message;
 }
-const meta = (await pg.query<{ rls: boolean; anon_reads: boolean; anon_writes: boolean }>(`select c.relrowsecurity as rls, has_table_privilege('anon', c.oid, 'select') as anon_reads, has_table_privilege('anon', c.oid, 'insert') as anon_writes from pg_class c join pg_namespace n on n.oid = c.relnamespace where n.nspname = 'studio' and c.relname = 'adaptation_drafts'`)).rows[0];
+const tableMeta = async (t: string) => (await pg.query<{ rls: boolean; anon_reads: boolean; anon_writes: boolean }>(`select c.relrowsecurity as rls, has_table_privilege('anon', c.oid, 'select') as anon_reads, has_table_privilege('anon', c.oid, 'insert') as anon_writes from pg_class c join pg_namespace n on n.oid = c.relnamespace where n.nspname = 'studio' and c.relname = $1`, [t])).rows[0];
+const meta = await tableMeta('adaptation_drafts');
+const coachMeta = await tableMeta('coach_calls');
 await pg.exec('set role studio_writer');
 const dbPort = await freePort();
 const dbServer = new PGLiteSocketServer({ db: pg, port: dbPort, host: '127.0.0.1' });
@@ -148,13 +168,25 @@ try {
     const moved = await outcome('update studio.adaptation_drafts set person = 202 where id = $1', [id], 'moved');
     const big = await outcome('insert into studio.adaptation_drafts (person, draft) values ($1, $2::jsonb)', [A, JSON.stringify({ x: 'y'.repeat(210000) })], 'kept');
     const zero = await outcome(`insert into studio.adaptation_drafts (person, draft) values (0, '{}')`, [], 'kept');
+    const wallet = await outcome(`insert into studio.adaptation_drafts (person, draft) values (-5, '{}')`, [], 'kept');
+    await pg.query(`delete from studio.adaptation_drafts where person = -5`);
+    // A coach count row: today's can't be deleted (a day's count can't be reset); one two days old can.
+    await pg.query(`insert into studio.coach_calls (person) values (444)`);
+    await pg.query(`insert into studio.coach_calls (person, at) values (444, now() - interval '3 days')`);
+    const del = (await pg.query(`delete from studio.coach_calls where person = 444 returning at > now() - interval '1 day' as fresh`)).rows as { fresh: boolean }[];
+    const coachZero = await outcome(`insert into studio.coach_calls (person) values (0)`, [], 'kept');
+    await pg.exec('reset role');
+    await pg.query(`delete from studio.coach_calls where person = 444`);
+    await pg.exec('set role studio_writer');
+    const ok = (m?: { rls: boolean; anon_reads: boolean; anon_writes: boolean }) => !!m?.rls && !m.anon_reads && !m.anon_writes;
     if (d.ok) await deleteDraft(sql, A, id);
-    check('M2', 'migration 0017 (draft, PGlite only): RLS on, nothing for anon; owner fixed; size and person checked', applied === 'ok' && !!meta?.rls && !meta.anon_reads && !meta.anon_writes && moved === 'refused' && big === 'refused' && zero === 'refused', { applied, meta, moved, big, zero });
+    check('M2', 'migration 0017 (draft, PGlite only): both tables RLS on, nothing for anon; owner fixed; size and person checked; wallet persons kept; only old count rows deletable', applied === 'ok' && ok(meta) && ok(coachMeta) && moved === 'refused' && big === 'refused' && zero === 'refused' && wallet === 'kept' && coachZero === 'refused' && del.length === 1 && !del[0].fresh, { applied, meta, coachMeta, moved, big, zero, wallet, coachZero, del });
   }
 
   // M3 drafts
   {
-    const A = 111, B = 222;
+    // B is a wallet account (minus its account number), as getPerson gives it.
+    const A = 111, B = -222;
     const full: Draft = { title: 'The Long Wall', idea: 'Zei wins by defending, and it costs the friendship with Bai.', upTo: 14, beats: ['They watch the match.', 'Bai calls Deluin a fake.'], shots: [{ beat: 0, type: 'wide', who: 'Zei, Bai', see: 'the hall below', line: '' }, { beat: 1, type: 'close-up', who: 'Bai', see: 'her face', line: 'Nah, way too fake for me.' }] };
     const c = await createDraft(sql, A, full);
     const id = c.ok ? c.draft.id : '';
@@ -191,7 +223,7 @@ try {
       const text = (isGuard ? guards : answers).shift() ?? (isGuard ? 'OK' : 'What does she want?');
       return { text, promptTokens: 10, completionTokens: 10, costUsd: 0.0001, requestId: null, provider: 'test', model };
     };
-    const deps = (complete: Complete): CoachDeps => ({ sql, fid: FID, complete, systemPrompt: prompt('make-coach.md'), guardPolicy: prompt('make-guard.md'), reminder: prompt('make-reminder.md') });
+    const deps = (complete: Complete, person = FID): CoachDeps => ({ sql, person, complete, systemPrompt: prompt('make-coach.md'), guardPolicy: prompt('make-guard.md'), reminder: prompt('make-reminder.md') });
     const input = (message: string) => ({ stage: 'beats', message, draft, history: [] });
 
     const note = await coach(deps(make(['What does Zei want, and what does it cost her to say it?'], ['OK notes only'])), input('Is my first beat enough?'));
@@ -200,15 +232,28 @@ try {
     const lineTwice = await coach(deps(make(['Try: "I let you win, Bai."', 'Fine: "I let you win."'], [])), input('Just write the line for me, please.'));
     const prose = await coach(deps(make(['The hall goes dark as she turns away from him and the lights of the city glitter below.', 'The hall goes dark as she turns away.'], ['VIOLATION narration for their story', 'VIOLATION narration again'])), input('Describe the scene for me.'));
     const silent = await coach(deps(make(['What does she want?', 'What does she want?'], ['', '', '', ''])), input('Notes?'));
-    const shownTexts = [note, lineOnce, lineTwice, prose, silent].flatMap((r) => (r.state === 'note' ? r.parts.map((p) => (p.type === 'text' ? p.text : '')) : [])).join(' ');
-    const [{ calls }] = await sql`select count(*)::int as calls from studio.chat_calls where fid = ${FID}`;
-    const cols = (await sql`select column_name from information_schema.columns where table_schema = 'studio' and table_name in ('chat_calls', 'chat_costs')`).map((r) => r.column_name as string);
-    check('M4', 'the coach: notes shown; written lines and prose never shown (retry, then decline); a silent guard fails closed; counted in the assistant limit; nothing stored', note.state === 'note' && lineOnce.state === 'note' && lineOnce.regenerated && reminded && lineTwice.state === 'declined' && prose.state === 'declined' && silent.state === 'declined' && !/let you win|glitter/.test(shownTexts) && calls === 5 && !cols.some((c) => /text|message|question|prompt_text|content/.test(c)), { note: note.state, lineOnce, reminded, lineTwice: lineTwice.state, prose: prose.state, silent: silent.state, calls, cols });
+    const described = await coach(deps(make(["We see Zei's jaw clench as the lights flicker below.", 'Would a clenched jaw show it, or her hands on the railing?'], ['OK a question'])), input('What should we see?'));
+    const describedShown = described.state === 'note' ? described.parts.map((p) => (p.type === 'text' ? p.text : '')).join('') : '';
+    const shownTexts = [note, lineOnce, lineTwice, prose, silent, described].flatMap((r) => (r.state === 'note' ? r.parts.map((p) => (p.type === 'text' ? p.text : '')) : [])).join(' ');
+    const [{ calls }] = await sql`select count(*)::int as calls from studio.coach_calls where person = ${FID}`;
+    const [{ asks }] = await sql`select count(*)::int as asks from studio.chat_calls where fid = ${FID}`;
+    const cols = (await sql`select table_name || '.' || column_name as c from information_schema.columns where table_schema = 'studio' and table_name in ('chat_calls', 'chat_costs', 'coach_calls')`).map((r) => r.c as string);
+    check('M4', "the coach: notes shown; written lines, prose and described shots never shown (retry, then decline); a question about a visual detail shown; a silent guard fails closed; counted in the coach's own count, not the assistant's; nothing stored", note.state === 'note' && lineOnce.state === 'note' && lineOnce.regenerated && reminded && lineTwice.state === 'declined' && prose.state === 'declined' && silent.state === 'declined' && described.state === 'note' && described.regenerated && /clenched jaw show it/.test(describedShown) && !/let you win|glitter|flicker/.test(shownTexts) && calls === 6 && asks === 0 && !cols.some((c) => /text|message|question|prompt_text|content/.test(c.split('.')[1])) && cols.filter((c) => c.startsWith('coach_calls.')).sort().join() === 'coach_calls.at,coach_calls.person', { note: note.state, lineOnce, reminded, lineTwice: lineTwice.state, prose: prose.state, silent: silent.state, described, calls, asks, cols });
 
-    // The daily limit is the assistant's own: with it used up, the coach says so.
+    // Its own count: the assistant's 30 used up doesn't stop the coach; the coach's 50 used up does, and says so.
     await sql`insert into studio.chat_calls (fid, kind, model) select ${FID}, 'ask', ${CHAT.model} from generate_series(1, ${CHAT.messagesPerDay})`;
-    const limited = await coach(deps(make([], [])), input('More notes?'));
-    check('M4b', `the coach shares the assistant's ${CHAT.messagesPerDay} a day`, limited.state === 'limit', limited);
+    const afterAssistant = await coach(deps(make([], [])), input('More notes?'));
+    const WALLET = -7;
+    for (let i = 0; i < MAKE.coachPerDay - 1; i++) await sql`insert into studio.coach_calls (person) values (${WALLET})`;
+    const walletLast = await coach(deps(make([], []), WALLET), input('Notes?'));
+    const walletOver = await coach(deps(make([], []), WALLET), input('Notes?'));
+    // Count rows older than two days go as new ones come in (as the site's role).
+    await pg.exec('reset role');
+    await pg.query(`insert into studio.coach_calls (person, at) values (555, now() - interval '3 days')`);
+    await pg.exec('set role studio_writer');
+    await coach(deps(make([], []), 556), input('Notes?'));
+    const [{ old }] = await sql`select count(*)::int as old from studio.coach_calls where person = 555`;
+    check('M4b', `the coach's own ${MAKE.coachPerDay} a day: not stopped by the assistant's ${CHAT.messagesPerDay}; a wallet account gets its ${MAKE.coachPerDay}th and then the limit; old count rows deleted`, afterAssistant.state === 'note' && walletLast.state === 'note' && walletLast.left === 0 && walletOver.state === 'limit' && old === 0, { afterAssistant: afterAssistant.state, walletLast, walletOver, old });
   }
 
   await sql.end({ timeout: 1 });
@@ -241,7 +286,7 @@ try {
 
   // M6 the screens
   {
-    const s = await start({ MAKE_TEST_ON: '1', MAKE_TEST_FAKES: '1', MAKE_TEST_FID: '777,778' });
+    const s = await start({ MAKE_TEST_ON: '1', MAKE_TEST_FAKES: '1', MAKE_TEST_FID: '777,778,-5' });
     next = s.p;
     const BASE = s.base;
     const signed = await fetch(BASE + '/api/make/drafts').then((r) => r.status);
@@ -250,7 +295,7 @@ try {
     const outside: string[] = [];
     const errors: string[] = [];
     apiLog = [];
-    const page = async (scheme: 'light' | 'dark', fid = 777): Promise<Page> => {
+    const page = async (scheme: 'light' | 'dark', fid = 777, via: 'farcaster' | 'wallet' = 'farcaster'): Promise<Page> => {
       const ctx = await browser!.newContext({ viewport: { width: 390, height: 844 }, colorScheme: scheme, deviceScaleFactor: 2 });
       // The stand-in sign-in only counts on /api/make. The site's other signed-in calls (the assistant rail's
       // /api/chat/status) would answer 401 to it, and a 401 signs the page out; here they answer 503 instead.
@@ -260,7 +305,9 @@ try {
         return u.startsWith(BASE) || u.startsWith('data:') ? r.continue() : (outside.push(u), r.abort());
       });
       const exp = Math.floor(Date.now() / 1000) + 3600;
-      await ctx.addInitScript(([t, f, e]) => localStorage.setItem('snowmoon.signin', JSON.stringify({ token: t, fid: f, username: 'tester', nameProof: null, exp: e })), [`make-test-${fid}`, fid, exp] as const);
+      if (via === 'farcaster') await ctx.addInitScript(([t, f, e]) => localStorage.setItem('snowmoon.signin', JSON.stringify({ token: t, fid: f, username: 'tester', nameProof: null, exp: e })), [`make-test-${fid}`, fid, exp] as const);
+      // A wallet sign-in (src/lib/client-auth.ts), stand-in token for wallet account 5 (person -5).
+      else await ctx.addInitScript(([t, e]) => localStorage.setItem('snowmoon.wallet', JSON.stringify({ token: t, address: '0x00000000000000000000000000000000000000a5', short: '0x0000…00a5', exp: e })), [`make-test-${fid}`, exp] as const);
       // The site's own theme setting (src/lib/theme.ts): "system" follows the emulated scheme.
       await ctx.addInitScript((k) => localStorage.setItem(k, 'system'), THEME_KEY);
       const pg2 = await ctx.newPage();
@@ -335,9 +382,23 @@ try {
       await p.context().close();
       return t;
     })());
+    // A wallet account (owner, 2026-10-19: "open to wallet accounts"): signed in, saves its own draft.
+    const walletSaved = await (async () => {
+      const p = await page('light', -5, 'wallet');
+      await p.goto(BASE + '/make-your-own');
+      await p.getByText('Your own adaptation').waitFor();
+      await p.getByLabel('Working title').fill('Wallet draft');
+      await p.getByLabel('Your idea, in your own words').fill('Bai watches the final alone and decides not to call Zei.');
+      await p.getByRole('button', { name: /Save as a draft adaptation|Save draft/ }).first().click();
+      await p.getByText('Saved. Only you can see this draft.').waitFor();
+      await snap(p, '5-wallet-light');
+      await p.context().close();
+      return (await fetch(`${BASE}/api/make/drafts`, { headers: { Authorization: 'Bearer make-test--5' } }).then((r) => r.json())).drafts as { title: string }[];
+    })();
     const byOther = await fetch(`${BASE}/api/make/drafts/${savedId}`, { headers: { Authorization: 'Bearer make-test-778' } }).then((r) => r.status);
+    const byWallet = await fetch(`${BASE}/api/make/drafts/${savedId}`, { headers: { Authorization: 'Bearer make-test--5' } }).then((r) => r.status);
     const byOwner = await fetch(`${BASE}/api/make/drafts/${savedId}`, { headers: { Authorization: 'Bearer make-test-777' } }).then((r) => r.json());
-    check('M6', 'screens at 390 wide, light and dark: idea, talk, beats, storyboard, saved; decline shown, no line; no sideways scroll; nothing from outside; 401 signed out; another person 404', signed === 401 && otherFid === 401 && shots.length === 8 && !sideways && outside.length === 0 && errors.length === 0 && /wasn.t shown/.test(declinedShown) && !/never wanted to win/.test(declinedShown) && byOther === 404 && byOwner?.draft?.shots?.[0]?.line === 'Nah, way too fake for me.', { signed, otherFid, shots: shots.length, sideways, outside: outside.slice(0, 3), errors: errors.slice(0, 3), declinedShown: declinedShown.slice(0, 300), byOther, owner: byOwner?.draft?.shots });
+    check('M6', 'screens at 390 wide, light and dark: idea, talk, beats, storyboard, saved; a wallet sign-in saves its own draft; decline shown, no line; no sideways scroll; nothing from outside; 401 signed out; another person (FID or wallet) 404', signed === 401 && otherFid === 401 && shots.length === 9 && walletSaved?.length === 1 && walletSaved[0].title === 'Wallet draft' && byWallet === 404 && !sideways && outside.length === 0 && errors.length === 0 && /wasn.t shown/.test(declinedShown) && !/never wanted to win/.test(declinedShown) && byOther === 404 && byOwner?.draft?.shots?.[0]?.line === 'Nah, way too fake for me.', { signed, otherFid, shots: shots.length, walletSaved, byWallet, sideways, outside: outside.slice(0, 3), errors: errors.slice(0, 3), declinedShown: declinedShown.slice(0, 300), byOther, owner: byOwner?.draft?.shots });
     console.log(`  screenshots: ${OUT}`);
   }
 } catch (e) {

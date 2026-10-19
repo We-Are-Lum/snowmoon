@@ -2,8 +2,9 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
-import { authFetch, useAuth } from '~/lib/client-auth';
+import { authFetch, useAuth, useWalletSession } from '~/lib/client-auth';
 import { SignInButton } from './sign-in';
+import { WalletSignInButton } from './wallet';
 import { PrivateDraftField } from './private-draft-field';
 import { PrivateTextField } from './private-text-field';
 import { CHAT } from '~/lib/config';
@@ -46,8 +47,11 @@ function saveTurns(id: string | null, stage: Stage, turns: Turn[]) {
 }
 const noteText = (r: CoachResult) => (r.state === 'note' ? r.parts.map((p) => (p.type === 'text' ? p.text : `[${p.id}]`)).join('') : '');
 
-export function MakeYourOwn() {
+/** walletSignIn: offer the wallet sign-in too (only while it is open on this deployment; owner, 2026-10-19). */
+export function MakeYourOwn({ walletSignIn = false }: { walletSignIn?: boolean }) {
   const auth = useAuth();
+  const wallet = useWalletSession();
+  const signedIn = auth.kind === 'signed-in' || wallet !== null;
   const [drafts, setDrafts] = useState<Saved[] | null>(null);
   const [id, setId] = useState<string | null>(null);
   const [draft, setDraft] = useState<Draft>(emptyDraft());
@@ -60,8 +64,8 @@ export function MakeYourOwn() {
     if (r.ok) setDrafts(((await r.json()) as { drafts: Saved[] }).drafts);
   }, []);
   useEffect(() => {
-    if (auth.kind === 'signed-in') void refresh();
-  }, [auth.kind, refresh]);
+    if (signedIn) void refresh();
+  }, [signedIn, wallet?.address, refresh]);
 
   const edit = (d: Partial<Draft>) => {
     setDraft((x) => ({ ...x, ...d }));
@@ -107,12 +111,13 @@ export function MakeYourOwn() {
   }
 
   if (auth.kind === 'loading') return <p className="mk-muted">Loading…</p>;
-  if (auth.kind !== 'signed-in')
+  if (!signedIn)
     return (
       <section className="mk">
         <Header />
-        <p>Sign in with Farcaster to start a draft. It stays private to you.</p>
+        <p>{walletSignIn && auth.kind === 'signed-out' && !auth.inApp ? 'Sign in with Farcaster or a wallet' : 'Sign in with Farcaster'} to start a draft. It stays private to you.</p>
         <SignInButton />
+        {walletSignIn && auth.kind === 'signed-out' && !auth.inApp && <WalletSignInButton />}
       </section>
     );
 
@@ -319,7 +324,7 @@ function CoachPanel({ stage, id, draft, intro }: { stage: Stage; id: string | nu
 }
 
 function CoachReply({ r }: { r: CoachResult }) {
-  if (r.state === 'limit') return <p>You&rsquo;ve used today&rsquo;s {CHAT.messagesPerDay} messages, shared with the reading assistant. More at 00:00 UTC.</p>;
+  if (r.state === 'limit') return <p>You&rsquo;ve used today&rsquo;s {MAKE.coachPerDay} messages to the coach. More at 00:00 UTC.</p>;
   if (r.state === 'spend') return <p>The assistant has reached today&rsquo;s spending limit for everyone. It comes back at 00:00 UTC.</p>;
   if (r.state === 'declined') return <p>The coach&rsquo;s reply wasn&rsquo;t shown: it tried to write for you, which it doesn&rsquo;t do. Ask it a question about your own draft instead.</p>;
   return (

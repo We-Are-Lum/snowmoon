@@ -7,13 +7,21 @@
 -- role can read it, and the site shows a draft only to the person who wrote it. The assistant's notes and the
 -- conversation are never stored. The person can delete a draft; delete removes the row (nothing is kept).
 -- Not an adaptation yet: publishing one is a later step (studio.adaptations), with its own consent.
+--
+-- studio.coach_calls: the coach's own daily count (owner, 2026-10-19: "coach 50 a day"; src/lib/make/limits.ts). One
+-- row per coach message: the person and the time, nothing else (no message, no reply, no cost). Rows older than two
+-- days are deleted by the site as new ones come in. The coach's model costs go to studio.chat_costs with the
+-- assistant's, as daily totals with no person (0007).
+--
+-- People: a FID (positive) or minus a wallet account's number (negative), as getPerson gives it (owner, 2026-10-19:
+-- "open to wallet accounts"), the same numbering as the image tables.
 
 begin;
 
 create table studio.adaptation_drafts (
   id uuid primary key default gen_random_uuid(),
-  -- A FID (Farcaster sign-in; the assistant's sign-in). Positive.
-  person bigint not null check (person > 0),
+  -- A FID (positive), or minus a wallet account's number (negative). Never 0.
+  person bigint not null check (person <> 0),
   title text not null default '' check (length(title) <= 120),
   draft jsonb not null check (jsonb_typeof(draft) = 'object' and octet_length(draft::text) <= 200000),
   created_at timestamptz not null default now(),
@@ -42,11 +50,27 @@ end $$;
 create trigger adaptation_draft_owner_fixed before update on studio.adaptation_drafts for each row execute function studio.adaptation_draft_owner_fixed();
 revoke execute on function studio.adaptation_draft_owner_fixed() from public;
 
+create table studio.coach_calls (
+  person bigint not null check (person <> 0),
+  at timestamptz not null default now()
+);
+create index coach_calls_person_at on studio.coach_calls (person, at);
+create index coach_calls_at on studio.coach_calls (at);
+
+alter table studio.coach_calls enable row level security;
+create policy writer_read on studio.coach_calls for select to studio_writer using (true);
+create policy writer_insert on studio.coach_calls for insert to studio_writer with check (true);
+-- Only old rows can be deleted (the two-day clean-up); a day's count can't be reset.
+create policy writer_delete_old on studio.coach_calls for delete to studio_writer using (at < now() - interval '2 days');
+revoke all on studio.coach_calls from anon, authenticated;
+grant select, insert, delete on studio.coach_calls to studio_writer;
+revoke update, truncate, references, trigger on studio.coach_calls from studio_writer;
+
 commit;
 
--- Check: one row, rls = true, anon_reads = false, anon_writes = false.
+-- Check: two rows (adaptation_drafts, coach_calls), each rls = true, anon_reads = false, anon_writes = false.
 select c.relname as table, c.relrowsecurity as rls,
        has_table_privilege('anon', c.oid, 'select') as anon_reads,
        has_table_privilege('anon', c.oid, 'insert') as anon_writes
 from pg_class c join pg_namespace n on n.oid = c.relnamespace
-where n.nspname = 'studio' and c.relname = 'adaptation_drafts';
+where n.nspname = 'studio' and c.relname in ('adaptation_drafts', 'coach_calls');

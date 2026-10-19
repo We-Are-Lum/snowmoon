@@ -14,12 +14,13 @@ export const MAKE_YOUR_OWN = false;
 export const makeOn = () => MAKE_YOUR_OWN || (!process.env.VERCEL && process.env.MAKE_TEST_ON === '1');
 
 /**
- * The local screenshot test's sign-in (a Farcaster sign-in can't be made offline): with MAKE_TEST_ON=1 and
- * MAKE_TEST_FID set, never on Vercel, the bearer token "make-test-<fid>" counts as that FID on the /api/make routes
- * only. Everywhere else, and always on Vercel, only a real Quick Auth token counts.
+ * The local screenshot test's sign-in (a Farcaster or wallet sign-in can't be made offline): with MAKE_TEST_ON=1 and
+ * MAKE_TEST_FID set, never on Vercel, the bearer token "make-test-<person>" counts as that person on the /api/make
+ * routes only (a FID, or minus a wallet account's number, as getPerson gives it). Everywhere else, and always on
+ * Vercel, only a real Quick Auth token or wallet session counts.
  */
-export function testFid(request: Request): number | null {
+export function testPerson(request: Request): number | null {
   if (process.env.VERCEL || process.env.MAKE_TEST_ON !== '1' || !process.env.MAKE_TEST_FID) return null;
-  const m = (request.headers.get('authorization') ?? '').match(/^Bearer\s+make-test-(\d+)$/i);
+  const m = (request.headers.get('authorization') ?? '').match(/^Bearer\s+make-test-(-?[1-9]\d*)$/i);
   return m && process.env.MAKE_TEST_FID.split(',').includes(m[1]) ? Number(m[1]) : null;
 }

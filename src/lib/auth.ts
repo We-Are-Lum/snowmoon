@@ -38,7 +38,7 @@ export function getWallet(request: Request): WalletSession | null {
 
 /**
  * Who is signed in, for the routes that also take a wallet sign-in (making and publishing images,
- * and agreeing to how one's words are published; owner, 2026-10-13): a Farcaster FID, or minus a
+ * and agreeing to how one's words are published; owner, 2026-10-13; "Make your own", owner, 2026-10-19): a Farcaster FID, or minus a
  * wallet account's number (never a FID, which is positive). Every other route uses getFid.
  */
 export async function getPerson(request: Request): Promise<number | null> {

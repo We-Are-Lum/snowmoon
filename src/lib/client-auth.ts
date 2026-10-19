@@ -18,7 +18,7 @@ const EVENT = 'snowmoon:signin';
  * of Farcaster. A Farcaster sign-in, when there is one, wins.
  */
 const WALLET_KEY = 'snowmoon.wallet';
-const WALLET_ROUTES = ['/api/images/status', '/api/images/generate', '/api/images/publish', '/api/consent', '/api/wallet/', '/api/remix/'];
+const WALLET_ROUTES = ['/api/images/status', '/api/images/generate', '/api/images/publish', '/api/consent', '/api/wallet/', '/api/remix/', '/api/make/'];
 
 interface WebSession {
   token: string;

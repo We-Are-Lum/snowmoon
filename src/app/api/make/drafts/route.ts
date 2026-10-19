@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server';
-import { getFid } from '~/lib/auth';
+import { getPerson } from '~/lib/auth';
 import { db } from '~/lib/db';
 import { DraftError } from '~/lib/make/draft';
 import { createDraft, listDrafts } from '~/lib/make/drafts';
-import { makeOn, testFid } from '~/lib/make/flag';
+import { makeOn, testPerson } from '~/lib/make/flag';
 
 /** "Make your own": your drafts (GET) and a new one (POST). Private to you. Off (404) unless MAKE_YOUR_OWN is on. */
 const off = () => NextResponse.json({ error: 'Not found' }, { status: 404 });
@@ -11,21 +11,21 @@ const noStore = { 'Cache-Control': 'no-store' };
 
 export async function GET(request: Request) {
   if (!makeOn()) return off();
-  const fid = testFid(request) ?? (await getFid(request));
-  if (fid === null) return NextResponse.json({ error: 'Sign in with Farcaster first' }, { status: 401 });
+  const person = testPerson(request) ?? (await getPerson(request));
+  if (person === null) return NextResponse.json({ error: 'Sign in first' }, { status: 401 });
   const sql = db();
   if (!sql) return NextResponse.json({ error: 'Not available here' }, { status: 503 });
-  return NextResponse.json({ drafts: await listDrafts(sql, fid) }, { headers: noStore });
+  return NextResponse.json({ drafts: await listDrafts(sql, person) }, { headers: noStore });
 }
 
 export async function POST(request: Request) {
   if (!makeOn()) return off();
-  const fid = testFid(request) ?? (await getFid(request));
-  if (fid === null) return NextResponse.json({ error: 'Sign in with Farcaster first' }, { status: 401 });
+  const person = testPerson(request) ?? (await getPerson(request));
+  if (person === null) return NextResponse.json({ error: 'Sign in first' }, { status: 401 });
   const sql = db();
   if (!sql) return NextResponse.json({ error: 'Not available here' }, { status: 503 });
   try {
-    const r = await createDraft(sql, fid, await request.json().catch(() => ({})));
+    const r = await createDraft(sql, person, await request.json().catch(() => ({})));
     if (!r.ok) return NextResponse.json({ error: r.error }, { status: 409 });
     return NextResponse.json(r.draft, { headers: noStore });
   } catch (e) {

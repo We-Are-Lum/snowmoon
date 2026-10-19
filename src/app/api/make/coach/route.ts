@@ -1,20 +1,21 @@
 import { NextResponse } from 'next/server';
-import { getFid } from '~/lib/auth';
+import { getPerson } from '~/lib/auth';
 import { db } from '~/lib/db';
 import { complete, directKey, gatewayToken, promptFile, servingAllowed, ModelUnavailable } from '~/lib/chat/model';
 import { coach, CoachError } from '~/lib/make/coach';
-import { makeOn, testFid } from '~/lib/make/flag';
+import { makeOn, testPerson } from '~/lib/make/flag';
 import { fakeComplete } from '~/lib/make/test-model';
 
 /**
  * "Make your own": one message to the coach (src/lib/make/coach.ts). Off (404) unless MAKE_YOUR_OWN is on.
- * Signed-in Farcaster accounts, like the reading assistant whose model, limits and guard it uses. The message,
- * the draft text sent with it and the reply pass through and are not stored.
+ * Signed in with Farcaster or a wallet (getPerson; owner, 2026-10-19). The reading assistant's models, guard and spend
+ * cap; its own daily count (MAKE.coachPerDay). The message, the draft text sent with it and the reply pass through
+ * and are not stored.
  */
 export async function POST(request: Request) {
   if (!makeOn()) return NextResponse.json({ error: 'Not found' }, { status: 404 });
-  const fid = testFid(request) ?? (await getFid(request));
-  if (fid === null) return NextResponse.json({ error: 'Sign in with Farcaster to use the coach' }, { status: 401 });
+  const person = testPerson(request) ?? (await getPerson(request));
+  if (person === null) return NextResponse.json({ error: 'Sign in to use the coach' }, { status: 401 });
   const sql = db();
   const token = gatewayToken(request);
   const fake = fakeComplete();
@@ -23,7 +24,7 @@ export async function POST(request: Request) {
     const result = await coach(
       {
         sql,
-        fid,
+        person,
         complete: fake ?? ((model, messages, opts) => complete(token, model, messages, opts)),
         systemPrompt: promptFile('make-coach.md'),
         guardPolicy: promptFile('make-guard.md'),

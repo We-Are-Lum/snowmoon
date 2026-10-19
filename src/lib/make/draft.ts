@@ -39,6 +39,14 @@ export const MAKE = {
   draftsMax: 20,
   /** One message to the assistant. */
   messageMax: 1500,
+  /**
+   * Coach messages per person per UTC day: the coach's own count, apart from the reading assistant's
+   * CHAT.messagesPerDay (owner, 2026-10-19: "coach 50 a day"). The day's spend cap is still the assistant's
+   * (CHAT.dailySpendCapUsd, across everyone), since both use the same models and route.
+   */
+  coachPerDay: 50,
+  /** Days a coach message's count row (person and time, nothing else) is kept before it is deleted. */
+  coachCountDays: 2,
 };
 
 export class DraftError extends Error {}
