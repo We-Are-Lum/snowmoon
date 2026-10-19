@@ -65,6 +65,9 @@ origin/moment-pages (two commits: a047614, 41d053b).
   - Consent paragraph 4's words "like everything in this edition" are marked.
   - Terms §3 ("The text, pictures, audio and code … are offered under that same licence") and §5 ("it remains
     yours, and you license it … under GPL version 3") may need the same exception.
+- **D7. Recording your own takes (paragraph 8).** Waiting on item 4's provider facts. Owner decisions likely
+  to follow from them: whether raw recordings are ever stored or published (the owner's rule so far: "my raw
+  recordings stay private"), the takes' licence, and whether a provider that keeps audio is acceptable.
 - **D5. "Erased on request."** Under docs/removal.md, erasure is the maintainer's decision. It is for a legal
   requirement, personal data or a safety risk, after the work is hidden. It does not happen on a person's
   request alone. Should the PNG sentence say "if we erase the frame (you can ask; see the removal policy)", as
@@ -126,6 +129,13 @@ origin/moment-pages (two commits: a047614, 41d053b).
    a day, within a limit for all such accounts together; once it has paid, it has the same limits as a
    Farcaster account. [Only if built: the same limits apply to attaching X posts.]
 
+8. [RECORDING YOUR OWN TAKES — placeholder, owner's long run 2, item 4 (being researched and built in another
+   session). To be written from that build and its provider facts, with quotes, once they arrive: what is
+   recorded and where it is processed (on your device or by a named provider, named first, and whether that
+   provider keeps or trains on it), what is published (the converted take, the raw recording, or neither),
+   its licence, whether a take can be hidden or erased, and who can hear it before it is published. Ships only
+   with that feature. Nothing here is guessed.]
+
 **For `about` in config/consent.json (suggested):** own-words-v5 ships with Remix on GPT Image
 (`REMIX_MODEL = 'gpt'`), the profile listing (`PROFILE_LISTS_REMIXES`) and Basenames (`SHOW_BASENAMES`), all
 on the same day. It names OpenAI and Vercel AI Gateway for GPT Remix (P6j), the private PNG, the /@ page
@@ -145,6 +155,7 @@ listing and the Basename. Everyone is asked again, once.
   - The v4 sentence is split into short ones. Groq, the gateway fallback, Neynar, Remix being public at once,
     and drafts staying on the device are all unchanged.
 - **Paragraph 4:** adds that notes on moments are CC0 (owner: "Notes CC0."), only if notes ship.
+- **Paragraph 8:** new, a placeholder for recording your own takes (D7).
 - **Paragraph 7:** new: notes on moments are public, with your name, CC0; @mentions resolve to Farcaster names,
   Basenames and addresses and reach the person in a Mentions list on /you and, if they added the mini app, as
   a notification; the owner's spam brake for wallets that have never paid. Ships only with notes (D1).
