@@ -119,8 +119,8 @@ origin/record-takes (814f390), `docs/legal/record-takes-draft.md` (Modal's terms
    goes to OpenAI's GPT Image 2.5 Sunburst (a closed model) through Vercel AI Gateway. OpenAI receives your
    words, the shot's prompt, and the pictures sent with it (the layout of the camera you set, the character
    cards and the set's plate), but nothing that identifies you. OpenAI may keep the prompt and pictures for up
-   to 30 days for abuse monitoring [TO VERIFY against OpenAI's terms]. It doesn't train on them [TO VERIFY
-   against OpenAI's terms]. We store that frame as a JPEG, converted on our server. We keep the model's
+   to 30 days for abuse monitoring [TO VERIFY against OpenAI's terms]. It doesn't train on them [verified 2026-10-19, item 2;
+   holds while disallowPromptTraining is sent]. We store that frame as a JPEG, converted on our server. We keep the model's
    original picture (a PNG) privately; it is never public. We erase it when the frame is deleted, when you ask
    us to, or when we decide to. Your Farcaster ID is sent to Neynar to check your account's score. In Remix, every frame you make
    is saved and public at its link as soon as it is made, with your words. Elsewhere, drafts you don't publish
@@ -146,7 +146,8 @@ once.
 - **Paragraph 6:**
   - New: GPT Remix sends the person's words, the shot's prompt and the pictures to OpenAI, through Vercel AI
     Gateway. The provider is named first, and the model is labelled closed.
-  - New: what OpenAI may keep and doesn't train on (both TO VERIFY), and that nothing identifying is sent.
+  - New: what OpenAI may keep (TO VERIFY) and doesn't train on (verified, item 2), and that nothing identifying is
+    sent.
   - New: the frame is stored as a JPEG; the PNG is kept privately and erased when the frame is deleted, on the
     maker's request, or on our own decision (D5, D5a).
   - The v4 sentence is split into short ones. Groq, the gateway fallback, Neynar, Remix being public at once,
