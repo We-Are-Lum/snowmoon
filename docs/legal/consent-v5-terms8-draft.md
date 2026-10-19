@@ -48,11 +48,16 @@ origin/moment-pages (two commits: a047614, 41d053b).
   `src/lib/moments.ts` says "Nothing is stored". The branch has no note form, no licence for notes, no CC0 and
   no way to tell people who are mentioned. So the text leaves a placeholder: [NOTES ON MOMENTS]. Either the
   notes are built first, and the paragraph describes what they do, or the paragraph is dropped from v5.
-- **D2. The licence for notes.** CC0 is not found anywhere on moment-pages. Everything else a person writes is
-  GPL-3.0 (v4, paragraph 4; Terms §5). Is CC0 for notes still the plan? It would be the one exception to
-  "like everything in this edition".
-- **D3. How mentioned people are told.** This is not built anywhere (by a Farcaster mention, a notification
-  on the site, or something else). It is a placeholder.
+- **D2. The licence for notes: ANSWERED** (owner, in their approval of the moment pages, relayed 2026-10-19:
+  "Notes CC0."). Notes are CC0, the one exception to "like everything in this edition"; paragraph 4 now says so.
+- **D3. How mentioned people are told: ANSWERED** (owner: "Add a Mentions list on /you, and let @mentions
+  resolve to Farcaster names, Basenames and addresses (ships with consent v5)"; earlier, a Farcaster mini app
+  notification when the tagged person has added the app). Drafted into paragraph 7. Still to build on
+  moment-pages, so the paragraph ships only with it (D1).
+- **Spam brake for notes** (owner, relayed 2026-10-19: "Wallets that have never paid: 3 notes a day each and a
+  site-wide cap of 20 an hour across all of them. Wallets with at least one payment: the same limits as
+  Farcaster accounts. No Basename requirement. The same rule applies to attaching X posts."). Drafted into
+  paragraph 7. The Farcaster accounts' limit for notes isn't in the repo yet, so the text names no number for it.
 - **D4. The licence of closed-model output (open item G7).** Do OpenAI's terms allow publishing GPT Image
   pictures, both the cut's and remix frames, under GPL-3.0? `config/models.json` says "owner to review". Until
   that is settled:
@@ -70,6 +75,10 @@ origin/moment-pages (two commits: a047614, 41d053b).
   - Privacy §6 needs the you-page draft's line A, and §7 needs lines B and B2 and the editor-v2 OpenAI and
     fal.ai items.
   - Privacy now has no line for the private PNG. The editor-v2 draft says that wording is still to be added.
+  - Notes (if they ship): Privacy needs lines for notes, the Mentions list, and the mini app notification (the
+    notification goes through Farcaster's mini app notification service, so that service is told who is
+    notified and receives the notification's text). The consent **line** ("Public, permanent, GPL-3.0") would
+    need "GPL-3.0 (notes CC0)" or similar. Terms §5 (GPL-3.0 for what you write) needs the CC0 exception.
 
 ---
 
@@ -90,6 +99,7 @@ origin/moment-pages (two commits: a047614, 41d053b).
 
 4. It is licensed GPL-3.0, like everything in this edition [D4: keep "like everything in this edition" only if
    G7 settles closed-model output as GPL-3.0], so others may copy and adapt it under the same license.
+   Notes on moments are the exception: they are released under CC0 (paragraph 7) [D1: only if notes ship].
 
 5. It is shown with your name: your Farcaster name; for a wallet account, its Basename if it has one,
    otherwise its address shortened. Your public page, at /@ and your name (or your address, for a wallet
@@ -108,9 +118,13 @@ origin/moment-pages (two commits: a047614, 41d053b).
    account's score. In Remix, every frame you make is saved and public at its link as soon as it is made, with
    your words. Elsewhere, drafts you don't publish stay on your device.
 
-7. [NOTES ON MOMENTS — D1, D2, D3. Not built on moment-pages. When it is built, say only what it does, for
-   example: "A note you write on a moment is public and released [CC0 or GPL-3.0: D2]. If you mention
-   someone in it, they are told [how: D3]." Drop this paragraph if notes do not ship with v5.]
+7. [D1: ships only if notes ship with v5; otherwise drop this paragraph, and the CC0 clause in paragraph 4.]
+   A note you write on a moment is public, shown with your name, and released under CC0: anyone may use it
+   for anything, without asking. If you @mention someone (by Farcaster name, Basename or address), the
+   mention is shown to them in a Mentions list on their You page and, if they have added the Snowmoon mini
+   app on Farcaster, sent to them as a notification. A wallet account that has never paid can write 3 notes
+   a day, within a limit for all such accounts together; once it has paid, it has the same limits as a
+   Farcaster account. [Only if built: the same limits apply to attaching X posts.]
 
 **For `about` in config/consent.json (suggested):** own-words-v5 ships with Remix on GPT Image
 (`REMIX_MODEL = 'gpt'`), the profile listing (`PROFILE_LISTS_REMIXES`) and Basenames (`SHOW_BASENAMES`), all
@@ -130,7 +144,10 @@ listing and the Basename. Everyone is asked again, once.
   - New: the frame is stored as a JPEG, and the PNG is kept privately until the frame is erased.
   - The v4 sentence is split into short ones. Groq, the gateway fallback, Neynar, Remix being public at once,
     and drafts staying on the device are all unchanged.
-- **Paragraph 7:** new, a placeholder for notes on moments (not built).
+- **Paragraph 4:** adds that notes on moments are CC0 (owner: "Notes CC0."), only if notes ship.
+- **Paragraph 7:** new: notes on moments are public, with your name, CC0; @mentions resolve to Farcaster names,
+  Basenames and addresses and reach the person in a Mentions list on /you and, if they added the mini app, as
+  a notification; the owner's spam brake for wallets that have never paid. Ships only with notes (D1).
 - **Line and title:** unchanged.
 
 ---
