@@ -1,0 +1,107 @@
+{
+ "kind": "speaking-mouth test edit",
+ "candidate_only": "not in any cut or on the site (owner, 2026-10-19)",
+ "closed_model": true,
+ "label": "closed model",
+ "model": "openai/gpt-image-2.5-sunburst",
+ "model_name": "GPT Image 2.5 Sunburst (OpenAI)",
+ "host": "Vercel AI Gateway /v1/images/edits",
+ "date": "2026-10-19T16:31:07.866Z",
+ "job": {
+  "id": "explain",
+  "frame": "cov-cafe-CU-Z0-explain-K13-g1.png",
+  "shots": [
+   "37-b3-5",
+   "39-b3-6",
+   "41-b3-8"
+  ],
+  "speaker": "zei",
+  "listeners": [],
+  "kind": "close-up",
+  "speaker_desc": "the young man with spiky black hair with a blue streak, in the orange jacket",
+  "manner": "explaining something thoughtfully, mid-word: lips parted, mouth a little open, a hint of upper teeth"
+ },
+ "prompt": "Edit this hand-drawn science fiction comic book panel (ink linework, flat cel-shaded colour). Change only one thing: the mouth of the young man with spiky black hair with a blue streak, in the orange jacket. He or she is explaining something thoughtfully, mid-word: lips parted, mouth a little open, a hint of upper teeth. Keep everything else exactly as it is: the same framing and crop, the same faces, eyes, eyebrows, hair, pose, hands, clothes, linework, colours, lighting and background. Draw nothing new. No text, letters or speech balloons.",
+ "prompt_by": "drafted by the coding agent",
+ "references": [
+  {
+   "file": "adaptations/fifteen-days/preprod/gpt/frames/cov-cafe-CU-Z0-explain-K13-g1.png",
+   "sha256": "cee6d5fa585beca123db6149664306c84cf65fdc06c11cf51dc1135e8fb32b12"
+  }
+ ],
+ "request": {
+  "size": "1536x864",
+  "n": 1
+ },
+ "response_meta": {
+  "created": 1792427467,
+  "usage": {
+   "total_tokens": 2513,
+   "input_tokens": 1435,
+   "output_tokens": 1078,
+   "input_tokens_details": {
+    "text_tokens": 139,
+    "image_tokens": 1296
+   }
+  },
+  "providerMetadata": {
+   "openai": {
+    "images": [
+     {
+      "imageTokens": 1296,
+      "textTokens": 139,
+      "created": 1792427467,
+      "size": "1536x864",
+      "quality": "high",
+      "background": "opaque",
+      "outputFormat": "png"
+     }
+    ]
+   },
+   "gateway": {
+    "routing": {
+     "originalModelId": "openai/gpt-image-2.5-sunburst",
+     "resolvedProvider": "openai",
+     "fallbacksAvailable": [],
+     "planningReasoning": "System credentials planned for: openai. Total execution order: openai(system)",
+     "canonicalSlug": "openai/gpt-image-2.5-sunburst",
+     "finalProvider": "openai",
+     "modelAttemptCount": 1,
+     "modelAttempts": [
+      {
+       "canonicalSlug": "openai/gpt-image-2.5-sunburst",
+       "success": true,
+       "providerAttemptCount": 1,
+       "providerAttempts": [
+        {
+         "provider": "openai",
+         "credentialType": "system",
+         "success": true,
+         "startTime": 1792427440743,
+         "endTime": 1792427467439,
+         "statusCode": 200
+        }
+       ]
+      }
+     ],
+     "totalProviderAttemptCount": 1
+    },
+    "cost": "0.043403",
+    "marketCost": "0.043403",
+    "surchargeCost": "0",
+    "gatewayCost": "0.043403",
+    "inferenceCost": "0.043403",
+    "inputInferenceCost": "0",
+    "outputInferenceCost": "0.043403",
+    "generationId": "gen_01M5AG0EDWEWXXJ6R129T04HK7"
+   }
+  }
+ },
+ "cost_usd": 0.043403,
+ "output": {
+  "file": "candidates/explain-t1.png",
+  "sha256": "0908180ff877b0a4b31911f30f9bf51abe4474a7bbbb64d9d458f45070788c4e",
+  "bytes": 1614037
+ },
+ "ms": 28835
+}

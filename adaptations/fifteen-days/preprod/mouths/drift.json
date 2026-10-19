@@ -1,0 +1,22 @@
+{
+ "explain": {
+  "mean_abs_diff": 2.57,
+  "changed_pct": 0.11
+ },
+ "serious": {
+  "mean_abs_diff": 2.48,
+  "changed_pct": 0.28
+ },
+ "warm": {
+  "mean_abs_diff": 5.21,
+  "changed_pct": 0.66
+ },
+ "amused": {
+  "mean_abs_diff": 2.8,
+  "changed_pct": 0.22
+ },
+ "eager": {
+  "mean_abs_diff": 2.15,
+  "changed_pct": 0.15
+ }
+}

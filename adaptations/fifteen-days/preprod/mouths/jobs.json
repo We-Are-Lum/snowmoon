@@ -1,0 +1,18 @@
+[
+ {"id": "explain", "frame": "cov-cafe-CU-Z0-explain-K13-g1.png", "shots": ["37-b3-5", "39-b3-6", "41-b3-8"], "speaker": "zei", "listeners": [], "kind": "close-up",
+  "speaker_desc": "the young man with spiky black hair with a blue streak, in the orange jacket",
+  "manner": "explaining something thoughtfully, mid-word: lips parted, mouth a little open, a hint of upper teeth"},
+ {"id": "serious", "frame": "cov-walk-CU-B-serious-K9-g1.png", "shots": ["27-b2-8", "29-b2-10", "30-b2-11"], "speaker": "bai", "listeners": [], "kind": "close-up",
+  "speaker_desc": "the young woman with the magenta ponytail and shaved sides, in the lime-green vest",
+  "manner": "speaking firmly, mid-word: lips parted, mouth open as when saying a word, a hint of teeth; her frown stays"},
+ {"id": "warm", "frame": "cov-cafe-CU-D-warm-E16-g2.png", "shots": ["50-b4-3", "52-b4-5-cut"], "speaker": "deluin", "listeners": [], "kind": "close-up",
+  "speaker_desc": "the young man with shoulder-length light brown hair, in the cream cable-knit sweater",
+  "manner": "talking warmly, mid-word: lips parted, mouth softly open as when saying a word, a hint of upper teeth; his warm look stays"},
+ {"id": "amused", "frame": "cov-cafe-CU-Z-amused-K7-g1.png", "shots": ["49-b4-2", "51-b4-4"], "speaker": "zei", "listeners": [], "kind": "close-up",
+  "speaker_desc": "the young man with spiky black hair with a blue streak, in the orange jacket",
+  "manner": "talking with a slight amused smile, mid-word: lips parted, mouth a little open, a hint of upper teeth"},
+ {"id": "eager", "frame": "cov-corridor-OTS-D-eager-K7-g1.png", "shots": ["18-b2-1", "20-b2-3", "23-b2-5"], "speaker": "zei", "listeners": ["bai", "deluin (back to camera)"], "kind": "mid shot, over the shoulder",
+  "speaker_desc": "the young man with spiky black hair with a blue streak, in the orange jacket, standing in the middle",
+  "listener_desc": "the young woman with the magenta ponytail, arms crossed, beside him: her mouth stays closed, exactly as drawn",
+  "manner": "speaking, mid-word: lips parted, mouth open as when saying a word, a hint of upper teeth; his easy expression stays"}
+]

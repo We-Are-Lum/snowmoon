@@ -1,0 +1,111 @@
+{
+ "kind": "speaking-mouth test edit",
+ "candidate_only": "not in any cut or on the site (owner, 2026-10-19)",
+ "closed_model": true,
+ "label": "closed model",
+ "model": "openai/gpt-image-2.5-sunburst",
+ "model_name": "GPT Image 2.5 Sunburst (OpenAI)",
+ "host": "Vercel AI Gateway /v1/images/edits",
+ "date": "2026-10-19T16:33:11.230Z",
+ "job": {
+  "id": "eager",
+  "frame": "cov-corridor-OTS-D-eager-K7-g1.png",
+  "shots": [
+   "18-b2-1",
+   "20-b2-3",
+   "23-b2-5"
+  ],
+  "speaker": "zei",
+  "listeners": [
+   "bai",
+   "deluin (back to camera)"
+  ],
+  "kind": "mid shot, over the shoulder",
+  "speaker_desc": "the young man with spiky black hair with a blue streak, in the orange jacket, standing in the middle",
+  "listener_desc": "the young woman with the magenta ponytail, arms crossed, beside him: her mouth stays closed, exactly as drawn",
+  "manner": "speaking, mid-word: lips parted, mouth open as when saying a word, a hint of upper teeth; his easy expression stays"
+ },
+ "prompt": "Edit this hand-drawn science fiction comic book panel (ink linework, flat cel-shaded colour). Change only one thing: the mouth of the young man with spiky black hair with a blue streak, in the orange jacket, standing in the middle. He or she is speaking, mid-word: lips parted, mouth open as when saying a word, a hint of upper teeth; his easy expression stays. Every other visible face keeps a closed mouth: the young woman with the magenta ponytail, arms crossed, beside him: her mouth stays closed, exactly as drawn. Keep everything else exactly as it is: the same framing and crop, the same faces, eyes, eyebrows, hair, pose, hands, clothes, linework, colours, lighting and background. Draw nothing new. No text, letters or speech balloons.",
+ "prompt_by": "drafted by the coding agent",
+ "references": [
+  {
+   "file": "adaptations/fifteen-days/preprod/gpt/frames/cov-corridor-OTS-D-eager-K7-g1.png",
+   "sha256": "b7e80087bc7b69ee416f2b27e249187f7272fbaca2406b51e0b8b7c9e265eb80"
+  }
+ ],
+ "request": {
+  "size": "1536x864",
+  "n": 1
+ },
+ "response_meta": {
+  "created": 1792427590,
+  "usage": {
+   "total_tokens": 2558,
+   "input_tokens": 1480,
+   "output_tokens": 1078,
+   "input_tokens_details": {
+    "text_tokens": 184,
+    "image_tokens": 1296
+   }
+  },
+  "providerMetadata": {
+   "openai": {
+    "images": [
+     {
+      "imageTokens": 1296,
+      "textTokens": 184,
+      "created": 1792427590,
+      "size": "1536x864",
+      "quality": "high",
+      "background": "opaque",
+      "outputFormat": "png"
+     }
+    ]
+   },
+   "gateway": {
+    "routing": {
+     "originalModelId": "openai/gpt-image-2.5-sunburst",
+     "resolvedProvider": "openai",
+     "fallbacksAvailable": [],
+     "planningReasoning": "System credentials planned for: openai. Total execution order: openai(system)",
+     "canonicalSlug": "openai/gpt-image-2.5-sunburst",
+     "finalProvider": "openai",
+     "modelAttemptCount": 1,
+     "modelAttempts": [
+      {
+       "canonicalSlug": "openai/gpt-image-2.5-sunburst",
+       "success": true,
+       "providerAttemptCount": 1,
+       "providerAttempts": [
+        {
+         "provider": "openai",
+         "credentialType": "system",
+         "success": true,
+         "startTime": 1792427562981,
+         "endTime": 1792427590757,
+         "statusCode": 200
+        }
+       ]
+      }
+     ],
+     "totalProviderAttemptCount": 1
+    },
+    "cost": "0.043628",
+    "marketCost": "0.043628",
+    "surchargeCost": "0",
+    "gatewayCost": "0.043628",
+    "inferenceCost": "0.043628",
+    "inputInferenceCost": "0",
+    "outputInferenceCost": "0.043628",
+    "generationId": "gen_01M5AG45WJG4TXJENAWKH7SSNQ"
+   }
+  }
+ },
+ "cost_usd": 0.043628,
+ "output": {
+  "file": "candidates/eager-t1.png",
+  "sha256": "6b047ecd0902681e5facbf5c436bb70eea394c13180b9c9ffe5f1851b7ae1b4d",
+  "bytes": 1527208
+ },
+ "ms": 29560
+}

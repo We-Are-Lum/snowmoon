@@ -1,0 +1,106 @@
+{
+ "kind": "speaking-mouth test edit",
+ "candidate_only": "not in any cut or on the site (owner, 2026-10-19)",
+ "closed_model": true,
+ "label": "closed model",
+ "model": "openai/gpt-image-2.5-sunburst",
+ "model_name": "GPT Image 2.5 Sunburst (OpenAI)",
+ "host": "Vercel AI Gateway /v1/images/edits",
+ "date": "2026-10-19T16:32:09.907Z",
+ "job": {
+  "id": "warm",
+  "frame": "cov-cafe-CU-D-warm-E16-g2.png",
+  "shots": [
+   "50-b4-3",
+   "52-b4-5-cut"
+  ],
+  "speaker": "deluin",
+  "listeners": [],
+  "kind": "close-up",
+  "speaker_desc": "the young man with shoulder-length light brown hair, in the cream cable-knit sweater",
+  "manner": "talking warmly, mid-word: lips parted, mouth softly open as when saying a word, a hint of upper teeth; his warm look stays"
+ },
+ "prompt": "Edit this hand-drawn science fiction comic book panel (ink linework, flat cel-shaded colour). Change only one thing: the mouth of the young man with shoulder-length light brown hair, in the cream cable-knit sweater. He or she is talking warmly, mid-word: lips parted, mouth softly open as when saying a word, a hint of upper teeth; his warm look stays. Keep everything else exactly as it is: the same framing and crop, the same faces, eyes, eyebrows, hair, pose, hands, clothes, linework, colours, lighting and background. Draw nothing new. No text, letters or speech balloons.",
+ "prompt_by": "drafted by the coding agent",
+ "references": [
+  {
+   "file": "adaptations/fifteen-days/preprod/gpt/frames/cov-cafe-CU-D-warm-E16-g2.png",
+   "sha256": "803d4a0ad180f9a7e55e04a75e3af48643615cd8cb4e5b2fbd9143831a22421c"
+  }
+ ],
+ "request": {
+  "size": "1536x864",
+  "n": 1
+ },
+ "response_meta": {
+  "created": 1792427529,
+  "usage": {
+   "total_tokens": 2520,
+   "input_tokens": 1442,
+   "output_tokens": 1078,
+   "input_tokens_details": {
+    "text_tokens": 146,
+    "image_tokens": 1296
+   }
+  },
+  "providerMetadata": {
+   "openai": {
+    "images": [
+     {
+      "imageTokens": 1296,
+      "textTokens": 146,
+      "created": 1792427529,
+      "size": "1536x864",
+      "quality": "high",
+      "background": "opaque",
+      "outputFormat": "png"
+     }
+    ]
+   },
+   "gateway": {
+    "routing": {
+     "originalModelId": "openai/gpt-image-2.5-sunburst",
+     "resolvedProvider": "openai",
+     "fallbacksAvailable": [],
+     "planningReasoning": "System credentials planned for: openai. Total execution order: openai(system)",
+     "canonicalSlug": "openai/gpt-image-2.5-sunburst",
+     "finalProvider": "openai",
+     "modelAttemptCount": 1,
+     "modelAttempts": [
+      {
+       "canonicalSlug": "openai/gpt-image-2.5-sunburst",
+       "success": true,
+       "providerAttemptCount": 1,
+       "providerAttempts": [
+        {
+         "provider": "openai",
+         "credentialType": "system",
+         "success": true,
+         "startTime": 1792427503082,
+         "endTime": 1792427529440,
+         "statusCode": 200
+        }
+       ]
+      }
+     ],
+     "totalProviderAttemptCount": 1
+    },
+    "cost": "0.043438",
+    "marketCost": "0.043438",
+    "surchargeCost": "0",
+    "gatewayCost": "0.043438",
+    "inferenceCost": "0.043438",
+    "inputInferenceCost": "0",
+    "outputInferenceCost": "0.043438",
+    "generationId": "gen_01M5AG2BDBGWHBF36HMPFRZ7G0"
+   }
+  }
+ },
+ "cost_usd": 0.043438,
+ "output": {
+  "file": "candidates/warm-t1.png",
+  "sha256": "1f1ed38254ee02f42c087ef3c4baf12e30a55513468b599ab32d4776de6abfae",
+  "bytes": 2130877
+ },
+ "ms": 28661
+}

@@ -1,0 +1,106 @@
+{
+ "kind": "speaking-mouth test edit",
+ "candidate_only": "not in any cut or on the site (owner, 2026-10-19)",
+ "closed_model": true,
+ "label": "closed model",
+ "model": "openai/gpt-image-2.5-sunburst",
+ "model_name": "GPT Image 2.5 Sunburst (OpenAI)",
+ "host": "Vercel AI Gateway /v1/images/edits",
+ "date": "2026-10-19T16:32:41.673Z",
+ "job": {
+  "id": "amused",
+  "frame": "cov-cafe-CU-Z-amused-K7-g1.png",
+  "shots": [
+   "49-b4-2",
+   "51-b4-4"
+  ],
+  "speaker": "zei",
+  "listeners": [],
+  "kind": "close-up",
+  "speaker_desc": "the young man with spiky black hair with a blue streak, in the orange jacket",
+  "manner": "talking with a slight amused smile, mid-word: lips parted, mouth a little open, a hint of upper teeth"
+ },
+ "prompt": "Edit this hand-drawn science fiction comic book panel (ink linework, flat cel-shaded colour). Change only one thing: the mouth of the young man with spiky black hair with a blue streak, in the orange jacket. He or she is talking with a slight amused smile, mid-word: lips parted, mouth a little open, a hint of upper teeth. Keep everything else exactly as it is: the same framing and crop, the same faces, eyes, eyebrows, hair, pose, hands, clothes, linework, colours, lighting and background. Draw nothing new. No text, letters or speech balloons.",
+ "prompt_by": "drafted by the coding agent",
+ "references": [
+  {
+   "file": "adaptations/fifteen-days/preprod/gpt/frames/cov-cafe-CU-Z-amused-K7-g1.png",
+   "sha256": "2ed81d665f29bda28b5e78edc22b9fa71b6f72e0a61aeb32e59de02ac9a8ac50"
+  }
+ ],
+ "request": {
+  "size": "1536x864",
+  "n": 1
+ },
+ "response_meta": {
+  "created": 1792427558,
+  "usage": {
+   "total_tokens": 2516,
+   "input_tokens": 1438,
+   "output_tokens": 1078,
+   "input_tokens_details": {
+    "text_tokens": 142,
+    "image_tokens": 1296
+   }
+  },
+  "providerMetadata": {
+   "openai": {
+    "images": [
+     {
+      "imageTokens": 1296,
+      "textTokens": 142,
+      "created": 1792427557,
+      "size": "1536x864",
+      "quality": "high",
+      "background": "opaque",
+      "outputFormat": "png"
+     }
+    ]
+   },
+   "gateway": {
+    "routing": {
+     "originalModelId": "openai/gpt-image-2.5-sunburst",
+     "resolvedProvider": "openai",
+     "fallbacksAvailable": [],
+     "planningReasoning": "System credentials planned for: openai. Total execution order: openai(system)",
+     "canonicalSlug": "openai/gpt-image-2.5-sunburst",
+     "finalProvider": "openai",
+     "modelAttemptCount": 1,
+     "modelAttempts": [
+      {
+       "canonicalSlug": "openai/gpt-image-2.5-sunburst",
+       "success": true,
+       "providerAttemptCount": 1,
+       "providerAttempts": [
+        {
+         "provider": "openai",
+         "credentialType": "system",
+         "success": true,
+         "startTime": 1792427531063,
+         "endTime": 1792427558093,
+         "statusCode": 200
+        }
+       ]
+      }
+     ],
+     "totalProviderAttemptCount": 1
+    },
+    "cost": "0.043418",
+    "marketCost": "0.043418",
+    "surchargeCost": "0",
+    "gatewayCost": "0.043418",
+    "inferenceCost": "0.043418",
+    "inputInferenceCost": "0",
+    "outputInferenceCost": "0.043418",
+    "generationId": "gen_01M5AG36R1KCZDCGF3QBEVP57F"
+   }
+  }
+ },
+ "cost_usd": 0.043418,
+ "output": {
+  "file": "candidates/amused-t1.png",
+  "sha256": "f0c79b73f5d64925b7773dd9f237311e496e7c3e5e4869409f7de19de7512ed0",
+  "bytes": 1637459
+ },
+ "ms": 31762
+}

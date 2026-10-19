@@ -1,0 +1,502 @@
+[
+ {
+  "shot": "5-b1-1",
+  "t": "7.6\u201312.4s",
+  "line": "b1-1",
+  "speaker": "Zei",
+  "face": "face",
+  "listeners": "Bai (face)",
+  "frame": "cov-overlook-MASTER-watch-K9",
+  "edited": ""
+ },
+ {
+  "shot": "6-b1-2",
+  "t": "12.4\u201315.8s",
+  "line": "b1-2",
+  "speaker": "Bai",
+  "face": "face",
+  "listeners": "Zei (back)",
+  "frame": "cov-overlook-OTS-Z-dry-K7",
+  "edited": ""
+ },
+ {
+  "shot": "8-b1-3",
+  "t": "17.2\u201320.2s",
+  "line": "b1-3",
+  "speaker": "Bai",
+  "face": "face",
+  "listeners": "Zei (back)",
+  "frame": "cov-overlook-OTS-Z-shrug-E16",
+  "edited": ""
+ },
+ {
+  "shot": "11-b1-4",
+  "t": "22.9\u201325.2s",
+  "line": "b1-4",
+  "speaker": "Zei",
+  "face": "face",
+  "listeners": "Bai (face)",
+  "frame": "cov-overlook-MASTER-watch-K9",
+  "edited": ""
+ },
+ {
+  "shot": "12-b1-5",
+  "t": "25.2\u201329.9s",
+  "line": "b1-5",
+  "speaker": "Bai",
+  "face": "face",
+  "listeners": "Zei (back)",
+  "frame": "cov-overlook-OTS-Z-wry-E16",
+  "edited": ""
+ },
+ {
+  "shot": "14-b1-6",
+  "t": "31.1\u201337.4s",
+  "line": "b1-6",
+  "speaker": "Bai",
+  "face": "face",
+  "listeners": "\u2014",
+  "frame": "cov-overlook-CU-B-toast-K10",
+  "edited": ""
+ },
+ {
+  "shot": "18-b2-1",
+  "t": "41.7\u201343.2s",
+  "line": "b2-1",
+  "speaker": "Zei",
+  "face": "face",
+  "listeners": "Bai (face), Deluin (back)",
+  "frame": "cov-corridor-OTS-D-eager-K7",
+  "edited": "eager"
+ },
+ {
+  "shot": "19-b2-2",
+  "t": "43.2\u201351.3s",
+  "line": "b2-2",
+  "speaker": "Deluin",
+  "face": "face",
+  "listeners": "Zei (back)",
+  "frame": "cov-corridor-OTS-Z-easy-K8",
+  "edited": ""
+ },
+ {
+  "shot": "20-b2-3",
+  "t": "51.3\u201359.2s",
+  "line": "b2-3",
+  "speaker": "Zei",
+  "face": "face",
+  "listeners": "Bai (face), Deluin (back)",
+  "frame": "cov-corridor-OTS-D-eager-K7",
+  "edited": "eager"
+ },
+ {
+  "shot": "21-CU-B",
+  "t": "59.2\u201360.2s",
+  "line": "b2-3",
+  "speaker": "Zei",
+  "face": "off screen",
+  "listeners": "Bai (face)",
+  "frame": "cov-corridor-CU-B-sour-K9",
+  "edited": ""
+ },
+ {
+  "shot": "22-b2-4",
+  "t": "60.2\u201369.6s",
+  "line": "b2-4",
+  "speaker": "Deluin",
+  "face": "face",
+  "listeners": "Zei (back)",
+  "frame": "cov-corridor-OTS-Z-warm-E40",
+  "edited": ""
+ },
+ {
+  "shot": "23-b2-5",
+  "t": "69.6\u201371.7s",
+  "line": "b2-5",
+  "speaker": "Zei",
+  "face": "face",
+  "listeners": "Bai (face), Deluin (back)",
+  "frame": "cov-corridor-OTS-D-eager-K7",
+  "edited": "eager"
+ },
+ {
+  "shot": "24-b2-6",
+  "t": "71.7\u201373.8s",
+  "line": "b2-6",
+  "speaker": "Deluin",
+  "face": "face",
+  "listeners": "Zei (back)",
+  "frame": "cov-corridor-OTS-Z-warm-E40",
+  "edited": ""
+ },
+ {
+  "shot": "24-b2-6-cut",
+  "t": "73.8\u201378.0s",
+  "line": "b2-6",
+  "speaker": "Deluin",
+  "face": "off screen",
+  "listeners": "Bai (face)",
+  "frame": "cov-corridor-CU-B-sour-K9",
+  "edited": ""
+ },
+ {
+  "shot": "25-b2-7",
+  "t": "78.0\u201378.8s",
+  "line": "b2-7-p25",
+  "speaker": "Zei",
+  "face": "face",
+  "listeners": "Bai (face), Deluin (back)",
+  "frame": "cov-corridor-OTS-D-eager-K7",
+  "edited": "eager"
+ },
+ {
+  "shot": "26-b2-7",
+  "t": "79.5\u201383.2s",
+  "line": "b2-7-p26",
+  "speaker": "Zei",
+  "face": "face",
+  "listeners": "Bai (face)",
+  "frame": "C17-K4",
+  "edited": ""
+ },
+ {
+  "shot": "27-b2-8",
+  "t": "83.2\u201386.8s",
+  "line": "b2-8",
+  "speaker": "Bai",
+  "face": "face",
+  "listeners": "\u2014",
+  "frame": "cov-walk-CU-B-serious-K9",
+  "edited": "serious"
+ },
+ {
+  "shot": "28-b2-9",
+  "t": "86.8\u201390.3s",
+  "line": "b2-9",
+  "speaker": "Zei",
+  "face": "face",
+  "listeners": "\u2014",
+  "frame": "cov-walk-CU-Z-tease-K8",
+  "edited": ""
+ },
+ {
+  "shot": "29-b2-10",
+  "t": "90.3\u201395.4s",
+  "line": "b2-10",
+  "speaker": "Bai",
+  "face": "face",
+  "listeners": "\u2014",
+  "frame": "cov-walk-CU-B-serious-K9",
+  "edited": "serious"
+ },
+ {
+  "shot": "30-b2-11",
+  "t": "95.4\u201398.1s",
+  "line": "b2-11",
+  "speaker": "Bai",
+  "face": "face",
+  "listeners": "\u2014",
+  "frame": "cov-walk-CU-B-serious-K9",
+  "edited": "serious"
+ },
+ {
+  "shot": "31-b2-12",
+  "t": "98.1\u2013102.0s",
+  "line": "b2-12",
+  "speaker": "Zei",
+  "face": "face",
+  "listeners": "Bai (face)",
+  "frame": "C17-K4",
+  "edited": ""
+ },
+ {
+  "shot": "32-pre",
+  "t": "102.0\u2013104.6s",
+  "line": "laugh",
+  "speaker": "Deluin (laugh)",
+  "face": "face",
+  "listeners": "Bai (face)",
+  "frame": "cov-cafe-MASTER-laugh-E40",
+  "edited": ""
+ },
+ {
+  "shot": "32-b3-1",
+  "t": "104.6\u2013109.9s",
+  "line": "b3-1",
+  "speaker": "Deluin",
+  "face": "face (profile)",
+  "listeners": "Bai (face)",
+  "frame": "cov-cafe-MASTER-wave-K7",
+  "edited": ""
+ },
+ {
+  "shot": "33-b3-2",
+  "t": "109.9\u2013112.8s",
+  "line": "b3-2",
+  "speaker": "robot",
+  "face": "screen face",
+  "listeners": "Zei (back), Bai (face (small, looking down)), Deluin (face)",
+  "frame": "cov-cafe-OTS-Z-robot-E50",
+  "edited": ""
+ },
+ {
+  "shot": "34-b3-3",
+  "t": "112.8\u2013114.6s",
+  "line": "b3-3",
+  "speaker": "Zei",
+  "face": "face",
+  "listeners": "\u2014",
+  "frame": "cov-cafe-CU-Z0-whoa-E17",
+  "edited": ""
+ },
+ {
+  "shot": "35-b3-4",
+  "t": "114.6\u2013115.4s",
+  "line": "b3-4",
+  "speaker": "Deluin",
+  "face": "face (looking down)",
+  "listeners": "Zei (back), Bai (face (small, looking down))",
+  "frame": "cov-cafe-OTS-Z-menu-E40",
+  "edited": ""
+ },
+ {
+  "shot": "37-b3-5",
+  "t": "117.4\u2013123.8s",
+  "line": "b3-5",
+  "speaker": "Zei",
+  "face": "face",
+  "listeners": "\u2014",
+  "frame": "cov-cafe-CU-Z0-explain-K13",
+  "edited": "explain"
+ },
+ {
+  "shot": "39-b3-6",
+  "t": "125.2\u2013127.2s",
+  "line": "b3-6",
+  "speaker": "Zei",
+  "face": "face",
+  "listeners": "\u2014",
+  "frame": "cov-cafe-CU-Z0-explain-K13",
+  "edited": "explain"
+ },
+ {
+  "shot": "40-b3-7",
+  "t": "127.2\u2013131.7s",
+  "line": "b3-7",
+  "speaker": "Deluin",
+  "face": "face (looking down)",
+  "listeners": "Zei (back), Bai (face (small, looking down))",
+  "frame": "cov-cafe-OTS-Z-menu-E40",
+  "edited": ""
+ },
+ {
+  "shot": "41-b3-8",
+  "t": "131.7\u2013139.8s",
+  "line": "b3-8",
+  "speaker": "Zei",
+  "face": "face",
+  "listeners": "\u2014",
+  "frame": "cov-cafe-CU-Z0-explain-K13",
+  "edited": "explain"
+ },
+ {
+  "shot": "42-b3-9",
+  "t": "139.8\u2013153.8s",
+  "line": "b3-9",
+  "speaker": "Deluin",
+  "face": "face (looking down)",
+  "listeners": "Zei (back), Bai (face (small, looking down))",
+  "frame": "cov-cafe-OTS-Z-menu-E40",
+  "edited": ""
+ },
+ {
+  "shot": "43-b3-10",
+  "t": "153.8\u2013155.5s",
+  "line": "b3-10",
+  "speaker": "Zei",
+  "face": "face",
+  "listeners": "\u2014",
+  "frame": "cov-cafe-CU-Z0-astonished-K13",
+  "edited": ""
+ },
+ {
+  "shot": "44-b3-11",
+  "t": "155.5\u2013160.4s",
+  "line": "b3-11",
+  "speaker": "Deluin",
+  "face": "face",
+  "listeners": "Zei (back), Bai (face (looking down))",
+  "frame": "cov-cafe-OTS-Z-stern-E42",
+  "edited": ""
+ },
+ {
+  "shot": "45-b3-12",
+  "t": "160.4\u2013163.9s",
+  "line": "b3-12",
+  "speaker": "Zei",
+  "face": "face",
+  "listeners": "\u2014",
+  "frame": "cov-cafe-CU-Z0-astonished-K13",
+  "edited": ""
+ },
+ {
+  "shot": "46-b3-13",
+  "t": "163.9\u2013166.4s",
+  "line": "b3-13",
+  "speaker": "Bai",
+  "face": "face",
+  "listeners": "\u2014",
+  "frame": "cov-cafe-CU-B-menu-K9",
+  "edited": ""
+ },
+ {
+  "shot": "46-b3-13-cut",
+  "t": "166.4\u2013173.3s",
+  "line": "b3-13",
+  "speaker": "Bai",
+  "face": "face",
+  "listeners": "\u2014",
+  "frame": "cov-cafe-CU-B-standing-K7",
+  "edited": ""
+ },
+ {
+  "shot": "48-b4-1",
+  "t": "174.6\u2013178.7s",
+  "line": "b4-1",
+  "speaker": "Deluin",
+  "face": "face",
+  "listeners": "Zei (back)",
+  "frame": "cov-cafe-OTS-Z-talk-K7",
+  "edited": ""
+ },
+ {
+  "shot": "48-b4-1-cut",
+  "t": "178.7\u2013179.9s",
+  "line": "b4-1",
+  "speaker": "Deluin",
+  "face": "hand only",
+  "listeners": "\u2014",
+  "frame": "cov-cafe-SUGAR-stack-E16",
+  "edited": ""
+ },
+ {
+  "shot": "48-b4-1-back",
+  "t": "179.9\u2013187.3s",
+  "line": "b4-1",
+  "speaker": "Deluin",
+  "face": "face",
+  "listeners": "Zei (back)",
+  "frame": "cov-cafe-OTS-Z-talk-K7",
+  "edited": ""
+ },
+ {
+  "shot": "49-b4-2",
+  "t": "187.3\u2013198.6s",
+  "line": "b4-2",
+  "speaker": "Zei",
+  "face": "face",
+  "listeners": "\u2014",
+  "frame": "cov-cafe-CU-Z-amused-K7",
+  "edited": "amused"
+ },
+ {
+  "shot": "50-b4-3",
+  "t": "198.6\u2013212.9s",
+  "line": "b4-3",
+  "speaker": "Deluin",
+  "face": "face",
+  "listeners": "\u2014",
+  "frame": "cov-cafe-CU-D-warm-E16",
+  "edited": "warm"
+ },
+ {
+  "shot": "51-b4-4",
+  "t": "212.9\u2013215.7s",
+  "line": "b4-4",
+  "speaker": "Zei",
+  "face": "face",
+  "listeners": "\u2014",
+  "frame": "cov-cafe-CU-Z-amused-K7",
+  "edited": "amused"
+ },
+ {
+  "shot": "52-b4-5",
+  "t": "215.7\u2013216.8s",
+  "line": "b4-5",
+  "speaker": "Deluin",
+  "face": "off screen",
+  "listeners": "\u2014",
+  "frame": "cov-cafe-SUGAR-wall-K9",
+  "edited": ""
+ },
+ {
+  "shot": "52-b4-5-cut",
+  "t": "216.8\u2013221.3s",
+  "line": "b4-5",
+  "speaker": "Deluin",
+  "face": "face",
+  "listeners": "\u2014",
+  "frame": "cov-cafe-CU-D-warm-E16",
+  "edited": "warm"
+ },
+ {
+  "shot": "56-b5-1",
+  "t": "224.7\u2013233.7s",
+  "line": "b5-1",
+  "speaker": "Deluin",
+  "face": "face",
+  "listeners": "Zei (back)",
+  "frame": "cov-cafe-OTS-Z-eager-K7",
+  "edited": ""
+ },
+ {
+  "shot": "57-b5-2",
+  "t": "233.7\u2013242.1s",
+  "line": "b5-2",
+  "speaker": "Zei",
+  "face": "face",
+  "listeners": "\u2014",
+  "frame": "cov-cafe-CU-Z-smile-K14",
+  "edited": ""
+ },
+ {
+  "shot": "58-b5-3",
+  "t": "242.1\u2013247.2s",
+  "line": "b5-3",
+  "speaker": "Deluin",
+  "face": "face",
+  "listeners": "Zei (back)",
+  "frame": "cov-cafe-OTS-Z-eager-K7",
+  "edited": ""
+ },
+ {
+  "shot": "60-b5-4",
+  "t": "248.2\u2013250.7s",
+  "line": "b5-4",
+  "speaker": "Deluin",
+  "face": "face",
+  "listeners": "Zei (back)",
+  "frame": "cov-cafe-OTS-Z-talk-K7",
+  "edited": ""
+ },
+ {
+  "shot": "61-b5-5",
+  "t": "250.7\u2013255.3s",
+  "line": "b5-5",
+  "speaker": "Bai",
+  "face": "face (three-quarter, from behind)",
+  "listeners": "\u2014",
+  "frame": "cov-cafe-BAI-what-E47",
+  "edited": ""
+ },
+ {
+  "shot": "62-b6-1",
+  "t": "255.9\u2013257.7s",
+  "line": "b6-1",
+  "speaker": "Deluin",
+  "face": "face (profile)",
+  "listeners": "Zei (face (profile))",
+  "frame": "cov-gate-MASTER-fingers-K11",
+  "edited": ""
+ }
+]

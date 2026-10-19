@@ -1,0 +1,107 @@
+{
+ "kind": "speaking-mouth test edit",
+ "candidate_only": "not in any cut or on the site (owner, 2026-10-19)",
+ "closed_model": true,
+ "label": "closed model",
+ "model": "openai/gpt-image-2.5-sunburst",
+ "model_name": "GPT Image 2.5 Sunburst (OpenAI)",
+ "host": "Vercel AI Gateway /v1/images/edits",
+ "date": "2026-10-19T16:31:41.244Z",
+ "job": {
+  "id": "serious",
+  "frame": "cov-walk-CU-B-serious-K9-g1.png",
+  "shots": [
+   "27-b2-8",
+   "29-b2-10",
+   "30-b2-11"
+  ],
+  "speaker": "bai",
+  "listeners": [],
+  "kind": "close-up",
+  "speaker_desc": "the young woman with the magenta ponytail and shaved sides, in the lime-green vest",
+  "manner": "speaking firmly, mid-word: lips parted, mouth open as when saying a word, a hint of teeth; her frown stays"
+ },
+ "prompt": "Edit this hand-drawn science fiction comic book panel (ink linework, flat cel-shaded colour). Change only one thing: the mouth of the young woman with the magenta ponytail and shaved sides, in the lime-green vest. He or she is speaking firmly, mid-word: lips parted, mouth open as when saying a word, a hint of teeth; her frown stays. Keep everything else exactly as it is: the same framing and crop, the same faces, eyes, eyebrows, hair, pose, hands, clothes, linework, colours, lighting and background. Draw nothing new. No text, letters or speech balloons.",
+ "prompt_by": "drafted by the coding agent",
+ "references": [
+  {
+   "file": "adaptations/fifteen-days/preprod/gpt/frames/cov-walk-CU-B-serious-K9-g1.png",
+   "sha256": "32eb9c82c91aa3a801516a549fdf7499788a59290683c40c22b777c147e9a6a4"
+  }
+ ],
+ "request": {
+  "size": "1536x864",
+  "n": 1
+ },
+ "response_meta": {
+  "created": 1792427498,
+  "usage": {
+   "total_tokens": 2520,
+   "input_tokens": 1442,
+   "output_tokens": 1078,
+   "input_tokens_details": {
+    "text_tokens": 146,
+    "image_tokens": 1296
+   }
+  },
+  "providerMetadata": {
+   "openai": {
+    "images": [
+     {
+      "imageTokens": 1296,
+      "textTokens": 146,
+      "created": 1792427497,
+      "size": "1536x864",
+      "quality": "high",
+      "background": "opaque",
+      "outputFormat": "png"
+     }
+    ]
+   },
+   "gateway": {
+    "routing": {
+     "originalModelId": "openai/gpt-image-2.5-sunburst",
+     "resolvedProvider": "openai",
+     "fallbacksAvailable": [],
+     "planningReasoning": "System credentials planned for: openai. Total execution order: openai(system)",
+     "canonicalSlug": "openai/gpt-image-2.5-sunburst",
+     "finalProvider": "openai",
+     "modelAttemptCount": 1,
+     "modelAttempts": [
+      {
+       "canonicalSlug": "openai/gpt-image-2.5-sunburst",
+       "success": true,
+       "providerAttemptCount": 1,
+       "providerAttempts": [
+        {
+         "provider": "openai",
+         "credentialType": "system",
+         "success": true,
+         "startTime": 1792427469201,
+         "endTime": 1792427498039,
+         "statusCode": 200
+        }
+       ]
+      }
+     ],
+     "totalProviderAttemptCount": 1
+    },
+    "cost": "0.043438",
+    "marketCost": "0.043438",
+    "surchargeCost": "0",
+    "gatewayCost": "0.043438",
+    "inferenceCost": "0.043438",
+    "inputInferenceCost": "0",
+    "outputInferenceCost": "0.043438",
+    "generationId": "gen_01M5AG1AAK208457AHF1R5JB41"
+   }
+  }
+ },
+ "cost_usd": 0.043438,
+ "output": {
+  "file": "candidates/serious-t1.png",
+  "sha256": "a47e898992639bbe9daca1e1ed4a37047eb4289bce6cae71c1ebfc67887e4a2c",
+  "bytes": 1454576
+ },
+ "ms": 33375
+}

@@ -1,0 +1,1707 @@
+[
+ {
+  "shot": "0-EST",
+  "frame": "cov-game-EST",
+  "img": "lettered-cov-game-EST.png",
+  "plan": null,
+  "a": 0.0,
+  "b": 2.2,
+  "cards": [],
+  "lines": [],
+  "file": null
+ },
+ {
+  "shot": "1-FLOOR",
+  "frame": "cov-game-FLOOR-live",
+  "img": "gpt-cov-game-FLOOR-live-E40.png",
+  "plan": "cov-game-FLOOR-live-E40",
+  "a": 2.2,
+  "b": 3.6,
+  "cards": [],
+  "lines": [],
+  "file": "adaptations/fifteen-days/preprod/gpt/frames/cov-game-FLOOR-live-E40-g1.png"
+ },
+ {
+  "shot": "2-PIT-D",
+  "frame": "cov-game-PIT-D-playing",
+  "img": "gpt-cov-game-PIT-D-playing-K7.png",
+  "plan": "cov-game-PIT-D-playing-K7",
+  "a": 3.6,
+  "b": 4.9,
+  "cards": [
+   "deluin"
+  ],
+  "lines": [],
+  "file": "adaptations/fifteen-days/preprod/gpt/frames/cov-game-PIT-D-playing-K7-g1.png"
+ },
+ {
+  "shot": "3-PIT-K",
+  "frame": "cov-game-PIT-K",
+  "img": "gpt-H05-K6.png",
+  "plan": "H05-K6",
+  "a": 4.9,
+  "b": 6.2,
+  "cards": [
+   "kau"
+  ],
+  "lines": [],
+  "file": "adaptations/fifteen-days/preprod/gpt/frames/H05-K6-g1.png"
+ },
+ {
+  "shot": "4-SCREEN",
+  "frame": "cov-game-SCREEN-face",
+  "img": "gpt-cov-game-SCREEN-face-E18.png",
+  "plan": "cov-game-SCREEN-face-E18",
+  "a": 6.2,
+  "b": 7.6,
+  "cards": [
+   "deluin"
+  ],
+  "lines": [],
+  "file": "adaptations/fifteen-days/preprod/gpt/frames/cov-game-SCREEN-face-E18-g1.png"
+ },
+ {
+  "shot": "5-b1-1",
+  "frame": "cov-overlook-MASTER-watch",
+  "img": "gpt-cov-overlook-MASTER-watch-K9.png",
+  "plan": "cov-overlook-MASTER-watch-K9",
+  "a": 7.6,
+  "b": 12.44,
+  "cards": [
+   "zei",
+   "bai"
+  ],
+  "lines": [
+   [
+    "b1-1",
+    "zei-v4b",
+    7.7,
+    12.2,
+    "You'd think after making it this far, they'd stop underestim"
+   ],
+   [
+    "b1-2",
+    "bai-v3b",
+    12.32,
+    15.58,
+    "It wouldn't be so annoying if he wasn't so damn pretty."
+   ]
+  ],
+  "file": "adaptations/fifteen-days/preprod/gpt/frames/cov-overlook-MASTER-watch-K9-g1.png"
+ },
+ {
+  "shot": "6-b1-2",
+  "frame": "cov-overlook-OTS-Z-dry",
+  "img": "gpt-cov-overlook-OTS-Z-dry-K7.png",
+  "plan": "cov-overlook-OTS-Z-dry-K7",
+  "a": 12.44,
+  "b": 15.83,
+  "cards": [
+   "zei",
+   "bai"
+  ],
+  "lines": [
+   [
+    "b1-2",
+    "bai-v3b",
+    12.32,
+    15.58,
+    "It wouldn't be so annoying if he wasn't so damn pretty."
+   ]
+  ],
+  "file": "adaptations/fifteen-days/preprod/gpt/frames/cov-overlook-OTS-Z-dry-K7-g1.png"
+ },
+ {
+  "shot": "7-CU-Z",
+  "frame": "cov-overlook-CU-Z",
+  "img": "gpt-cov-overlook-CU-Z-look-E40.png",
+  "plan": "cov-overlook-CU-Z-look-E40",
+  "a": 15.83,
+  "b": 17.23,
+  "cards": [
+   "zei"
+  ],
+  "lines": [],
+  "file": "adaptations/fifteen-days/preprod/gpt/frames/cov-overlook-CU-Z-look-E40-g1.png"
+ },
+ {
+  "shot": "8-b1-3",
+  "frame": "cov-overlook-OTS-Z-shrug",
+  "img": "gpt-cov-overlook-OTS-Z-shrug-E16.png",
+  "plan": "cov-overlook-OTS-Z-shrug-E16",
+  "a": 17.23,
+  "b": 20.23,
+  "cards": [
+   "zei",
+   "bai"
+  ],
+  "lines": [
+   [
+    "b1-3",
+    "bai-v3b",
+    17.33,
+    19.98,
+    "Nah, way too fake for me."
+   ]
+  ],
+  "file": "adaptations/fifteen-days/preprod/gpt/frames/cov-overlook-OTS-Z-shrug-E16-g1.png"
+ },
+ {
+  "shot": "9-POV",
+  "frame": "cov-overlook-POV",
+  "img": "gpt-G08-K2.png",
+  "plan": "G08-K2",
+  "a": 20.23,
+  "b": 21.73,
+  "cards": [],
+  "lines": [],
+  "file": "adaptations/fifteen-days/preprod/gpt/frames/G08-K2-g1.png"
+ },
+ {
+  "shot": "10-game/PIT-D",
+  "frame": "cov-game-PIT-D-playing",
+  "img": "gpt-cov-game-PIT-D-playing-K7.png",
+  "plan": "cov-game-PIT-D-playing-K7",
+  "a": 21.73,
+  "b": 22.93,
+  "cards": [
+   "deluin"
+  ],
+  "lines": [],
+  "file": "adaptations/fifteen-days/preprod/gpt/frames/cov-game-PIT-D-playing-K7-g1.png"
+ },
+ {
+  "shot": "11-b1-4",
+  "frame": "cov-overlook-MASTER-watch",
+  "img": "gpt-cov-overlook-MASTER-watch-K9.png",
+  "plan": "cov-overlook-MASTER-watch-K9",
+  "a": 22.93,
+  "b": 25.2,
+  "cards": [
+   "zei",
+   "bai"
+  ],
+  "lines": [
+   [
+    "b1-4",
+    "zei-v4b",
+    23.03,
+    24.96,
+    "Such patience..."
+   ],
+   [
+    "b1-5",
+    "bai-v3b",
+    25.08,
+    29.66,
+    "Total wimp, just like you. But it gets you guys the W."
+   ]
+  ],
+  "file": "adaptations/fifteen-days/preprod/gpt/frames/cov-overlook-MASTER-watch-K9-g1.png"
+ },
+ {
+  "shot": "12-b1-5",
+  "frame": "cov-overlook-OTS-Z-wry",
+  "img": "gpt-cov-overlook-OTS-Z-wry-E16.png",
+  "plan": "cov-overlook-OTS-Z-wry-E16",
+  "a": 25.2,
+  "b": 29.91,
+  "cards": [
+   "zei",
+   "bai"
+  ],
+  "lines": [
+   [
+    "b1-5",
+    "bai-v3b",
+    25.08,
+    29.66,
+    "Total wimp, just like you. But it gets you guys the W."
+   ]
+  ],
+  "file": "adaptations/fifteen-days/preprod/gpt/frames/cov-overlook-OTS-Z-wry-E16-g1.png"
+ },
+ {
+  "shot": "13-MASTER",
+  "frame": "cov-overlook-MASTER-lean",
+  "img": "gpt-cov-overlook-MASTER-lean-K8.png",
+  "plan": "cov-overlook-MASTER-lean-K8",
+  "a": 29.91,
+  "b": 31.11,
+  "cards": [
+   "zei",
+   "bai"
+  ],
+  "lines": [],
+  "file": "adaptations/fifteen-days/preprod/gpt/frames/cov-overlook-MASTER-lean-K8-g1.png"
+ },
+ {
+  "shot": "14-b1-6",
+  "frame": "cov-overlook-CU-B-toast",
+  "img": "gpt-cov-overlook-CU-B-toast-K10.png",
+  "plan": "cov-overlook-CU-B-toast-K10",
+  "a": 31.11,
+  "b": 37.4,
+  "cards": [
+   "bai"
+  ],
+  "lines": [
+   [
+    "b1-6",
+    "bai-v3b",
+    31.21,
+    37.14,
+    "That other loser's toast. He should have already thrown in t"
+   ]
+  ],
+  "file": "adaptations/fifteen-days/preprod/gpt/frames/cov-overlook-CU-B-toast-K10-g1.png"
+ },
+ {
+  "shot": "15-game/SCREEN",
+  "frame": "cov-game-SCREEN-face",
+  "img": "gpt-cov-game-SCREEN-face-E18.png",
+  "plan": "cov-game-SCREEN-face-E18",
+  "a": 37.4,
+  "b": 38.9,
+  "cards": [
+   "deluin"
+  ],
+  "lines": [],
+  "file": "adaptations/fifteen-days/preprod/gpt/frames/cov-game-SCREEN-face-E18-g1.png"
+ },
+ {
+  "shot": "16-game/PIT-D",
+  "frame": "cov-game-PIT-D-glasses",
+  "img": "gpt-cov-game-PIT-D-glasses-K7.png",
+  "plan": "cov-game-PIT-D-glasses-K7",
+  "a": 38.9,
+  "b": 40.3,
+  "cards": [
+   "deluin"
+  ],
+  "lines": [],
+  "file": "adaptations/fifteen-days/preprod/gpt/frames/cov-game-PIT-D-glasses-K7-g1.png"
+ },
+ {
+  "shot": "17-MASTER",
+  "frame": "cov-corridor-MASTER-arrive",
+  "img": "gpt-cov-corridor-MASTER-arrive-K8.png",
+  "plan": "cov-corridor-MASTER-arrive-K8",
+  "a": 40.3,
+  "b": 41.7,
+  "cards": [
+   "cast"
+  ],
+  "lines": [],
+  "file": "adaptations/fifteen-days/preprod/gpt/frames/cov-corridor-MASTER-arrive-K8-g1.png"
+ },
+ {
+  "shot": "18-b2-1",
+  "frame": "cov-corridor-OTS-D-eager",
+  "img": "gpt-cov-corridor-OTS-D-eager-K7.png",
+  "plan": "cov-corridor-OTS-D-eager-K7",
+  "a": 41.7,
+  "b": 43.16,
+  "cards": [
+   "cast"
+  ],
+  "lines": [
+   [
+    "b2-1",
+    "zei-v4b",
+    41.8,
+    42.92,
+    "Good job out there."
+   ],
+   [
+    "b2-2",
+    "deluin-v2",
+    43.03,
+    51.06,
+    "Thanks. Yeah, the walls held out. Haven't yet watched your r"
+   ]
+  ],
+  "file": "adaptations/fifteen-days/preprod/gpt/frames/cov-corridor-OTS-D-eager-K7-g1.png"
+ },
+ {
+  "shot": "19-b2-2",
+  "frame": "cov-corridor-OTS-Z-easy",
+  "img": "gpt-cov-corridor-OTS-Z-easy-K8.png",
+  "plan": "cov-corridor-OTS-Z-easy-K8",
+  "a": 43.16,
+  "b": 51.3,
+  "cards": [
+   "zei",
+   "deluin"
+  ],
+  "lines": [
+   [
+    "b2-2",
+    "deluin-v2",
+    43.03,
+    51.06,
+    "Thanks. Yeah, the walls held out. Haven't yet watched your r"
+   ],
+   [
+    "b2-3",
+    "zei-v4b",
+    51.17,
+    59.97,
+    "Yeah, please ignore the ugly style. I also won by defense th"
+   ]
+  ],
+  "file": "adaptations/fifteen-days/preprod/gpt/frames/cov-corridor-OTS-Z-easy-K8-g1.png"
+ },
+ {
+  "shot": "20-b2-3",
+  "frame": "cov-corridor-OTS-D-eager",
+  "img": "gpt-cov-corridor-OTS-D-eager-K7.png",
+  "plan": "cov-corridor-OTS-D-eager-K7",
+  "a": 51.3,
+  "b": 59.22,
+  "cards": [
+   "cast"
+  ],
+  "lines": [
+   [
+    "b2-3",
+    "zei-v4b",
+    51.17,
+    59.97,
+    "Yeah, please ignore the ugly style. I also won by defense th"
+   ]
+  ],
+  "file": "adaptations/fifteen-days/preprod/gpt/frames/cov-corridor-OTS-D-eager-K7-g1.png"
+ },
+ {
+  "shot": "21-CU-B",
+  "frame": "cov-corridor-CU-B-sour",
+  "img": "gpt-cov-corridor-CU-B-sour-K9.png",
+  "plan": "cov-corridor-CU-B-sour-K9",
+  "a": 59.22,
+  "b": 60.22,
+  "cards": [
+   "bai"
+  ],
+  "lines": [
+   [
+    "b2-3",
+    "zei-v4b",
+    51.17,
+    59.97,
+    "Yeah, please ignore the ugly style. I also won by defense th"
+   ]
+  ],
+  "file": "adaptations/fifteen-days/preprod/gpt/frames/cov-corridor-CU-B-sour-K9-g1.png"
+ },
+ {
+  "shot": "22-b2-4",
+  "frame": "cov-corridor-OTS-Z-warm",
+  "img": "gpt-cov-corridor-OTS-Z-warm-E40.png",
+  "plan": "cov-corridor-OTS-Z-warm-E40",
+  "a": 60.22,
+  "b": 69.57,
+  "cards": [
+   "zei",
+   "deluin"
+  ],
+  "lines": [
+   [
+    "b2-4",
+    "deluin-v2",
+    60.32,
+    69.33,
+    "Patience often does, until you win. Hey, do you want to get "
+   ],
+   [
+    "b2-5",
+    "zei-v4b",
+    69.45,
+    71.43,
+    "Sure, yeah, that works well for me!"
+   ]
+  ],
+  "file": "adaptations/fifteen-days/preprod/gpt/frames/cov-corridor-OTS-Z-warm-E40-g1.png"
+ },
+ {
+  "shot": "23-b2-5",
+  "frame": "cov-corridor-OTS-D-eager",
+  "img": "gpt-cov-corridor-OTS-D-eager-K7.png",
+  "plan": "cov-corridor-OTS-D-eager-K7",
+  "a": 69.57,
+  "b": 71.67,
+  "cards": [
+   "cast"
+  ],
+  "lines": [
+   [
+    "b2-5",
+    "zei-v4b",
+    69.45,
+    71.43,
+    "Sure, yeah, that works well for me!"
+   ],
+   [
+    "b2-6",
+    "deluin-v2",
+    71.55,
+    77.79,
+    "Great, I'll see you then. Bai, you're welcome to come too. H"
+   ]
+  ],
+  "file": "adaptations/fifteen-days/preprod/gpt/frames/cov-corridor-OTS-D-eager-K7-g1.png"
+ },
+ {
+  "shot": "24-b2-6",
+  "frame": "cov-corridor-OTS-Z-warm",
+  "img": "gpt-cov-corridor-OTS-Z-warm-E40.png",
+  "plan": "cov-corridor-OTS-Z-warm-E40",
+  "a": 71.67,
+  "b": 73.75,
+  "cards": [
+   "zei",
+   "deluin"
+  ],
+  "lines": [
+   [
+    "b2-6",
+    "deluin-v2",
+    71.55,
+    77.79,
+    "Great, I'll see you then. Bai, you're welcome to come too. H"
+   ]
+  ],
+  "file": "adaptations/fifteen-days/preprod/gpt/frames/cov-corridor-OTS-Z-warm-E40-g1.png"
+ },
+ {
+  "shot": "24-b2-6-cut",
+  "frame": "cov-corridor-CU-B-sour",
+  "img": "gpt-cov-corridor-CU-B-sour-K9.png",
+  "plan": "cov-corridor-CU-B-sour-K9",
+  "a": 73.75,
+  "b": 78.03,
+  "cards": [
+   "bai"
+  ],
+  "lines": [
+   [
+    "b2-6",
+    "deluin-v2",
+    71.55,
+    77.79,
+    "Great, I'll see you then. Bai, you're welcome to come too. H"
+   ],
+   [
+    "b2-7-p25",
+    "zei-v4b",
+    77.91,
+    78.84,
+    "See you."
+   ]
+  ],
+  "file": "adaptations/fifteen-days/preprod/gpt/frames/cov-corridor-CU-B-sour-K9-g1.png"
+ },
+ {
+  "shot": "25-b2-7",
+  "frame": "cov-corridor-OTS-D-eager",
+  "img": "gpt-cov-corridor-OTS-D-eager-K7.png",
+  "plan": "cov-corridor-OTS-D-eager-K7",
+  "a": 78.03,
+  "b": 78.84,
+  "cards": [
+   "cast"
+  ],
+  "lines": [
+   [
+    "b2-7-p25",
+    "zei-v4b",
+    77.91,
+    78.84,
+    "See you."
+   ]
+  ],
+  "file": "adaptations/fifteen-days/preprod/gpt/frames/cov-corridor-OTS-D-eager-K7-g1.png"
+ },
+ {
+  "shot": "26-pre",
+  "frame": "cov-walk-MASTER",
+  "img": "gpt-C17-K4.png",
+  "plan": "C17-K4",
+  "a": 78.84,
+  "b": 79.54,
+  "cards": [
+   "zei",
+   "bai"
+  ],
+  "lines": [],
+  "file": "adaptations/fifteen-days/preprod/gpt/frames/C17-K4-g1.png"
+ },
+ {
+  "shot": "26-b2-7",
+  "frame": "cov-walk-MASTER",
+  "img": "gpt-C17-K4.png",
+  "plan": "C17-K4",
+  "a": 79.54,
+  "b": 83.19,
+  "cards": [
+   "zei",
+   "bai"
+  ],
+  "lines": [
+   [
+    "b2-7-p26",
+    "zei-v4b",
+    79.64,
+    82.95,
+    "So are you gonna come? Should be fun!"
+   ],
+   [
+    "b2-8",
+    "bai-v3b",
+    83.07,
+    86.59,
+    "He's your competition, remember?"
+   ]
+  ],
+  "file": "adaptations/fifteen-days/preprod/gpt/frames/C17-K4-g1.png"
+ },
+ {
+  "shot": "27-b2-8",
+  "frame": "cov-walk-CU-B-serious",
+  "img": "gpt-cov-walk-CU-B-serious-K9.png",
+  "plan": "cov-walk-CU-B-serious-K9",
+  "a": 83.19,
+  "b": 86.83,
+  "cards": [
+   "bai"
+  ],
+  "lines": [
+   [
+    "b2-8",
+    "bai-v3b",
+    83.07,
+    86.59,
+    "He's your competition, remember?"
+   ],
+   [
+    "b2-9",
+    "zei-v4b",
+    86.71,
+    90.1,
+    "Take it easy, you're my competition too."
+   ]
+  ],
+  "file": "adaptations/fifteen-days/preprod/gpt/frames/cov-walk-CU-B-serious-K9-g1.png"
+ },
+ {
+  "shot": "28-b2-9",
+  "frame": "cov-walk-CU-Z-tease",
+  "img": "gpt-cov-walk-CU-Z-tease-K8.png",
+  "plan": "cov-walk-CU-Z-tease-K8",
+  "a": 86.83,
+  "b": 90.34,
+  "cards": [
+   "zei"
+  ],
+  "lines": [
+   [
+    "b2-9",
+    "zei-v4b",
+    86.71,
+    90.1,
+    "Take it easy, you're my competition too."
+   ],
+   [
+    "b2-10",
+    "bai-v3b",
+    90.22,
+    95.3,
+    "'Was.' And you know I hate you. And I know all your tricks a"
+   ]
+  ],
+  "file": "adaptations/fifteen-days/preprod/gpt/frames/cov-walk-CU-Z-tease-K8-g1.png"
+ },
+ {
+  "shot": "29-b2-10",
+  "frame": "cov-walk-CU-B-serious",
+  "img": "gpt-cov-walk-CU-B-serious-K9.png",
+  "plan": "cov-walk-CU-B-serious-K9",
+  "a": 90.34,
+  "b": 95.42,
+  "cards": [
+   "bai"
+  ],
+  "lines": [
+   [
+    "b2-10",
+    "bai-v3b",
+    90.22,
+    95.3,
+    "'Was.' And you know I hate you. And I know all your tricks a"
+   ]
+  ],
+  "file": "adaptations/fifteen-days/preprod/gpt/frames/cov-walk-CU-B-serious-K9-g1.png"
+ },
+ {
+  "shot": "30-b2-11",
+  "frame": "cov-walk-CU-B-serious",
+  "img": "gpt-cov-walk-CU-B-serious-K9.png",
+  "plan": "cov-walk-CU-B-serious-K9",
+  "a": 95.42,
+  "b": 98.08,
+  "cards": [
+   "bai"
+  ],
+  "lines": [
+   [
+    "b2-11",
+    "bai-v3b",
+    95.42,
+    97.84,
+    "We don't know anything about this guy."
+   ],
+   [
+    "b2-12",
+    "zei-v4b",
+    97.96,
+    101.98,
+    "So let's get to know him, it'll be fun! Maybe he won't be so"
+   ]
+  ],
+  "file": "adaptations/fifteen-days/preprod/gpt/frames/cov-walk-CU-B-serious-K9-g1.png"
+ },
+ {
+  "shot": "31-b2-12",
+  "frame": "cov-walk-MASTER",
+  "img": "gpt-C17-K4.png",
+  "plan": "C17-K4",
+  "a": 98.08,
+  "b": 101.98,
+  "cards": [
+   "zei",
+   "bai"
+  ],
+  "lines": [
+   [
+    "b2-12",
+    "zei-v4b",
+    97.96,
+    101.98,
+    "So let's get to know him, it'll be fun! Maybe he won't be so"
+   ]
+  ],
+  "file": "adaptations/fifteen-days/preprod/gpt/frames/C17-K4-g1.png"
+ },
+ {
+  "shot": "32-pre",
+  "frame": "cov-cafe-MASTER-laugh",
+  "img": "gpt-cov-cafe-MASTER-laugh-E40.png",
+  "plan": "cov-cafe-MASTER-laugh-E40",
+  "a": 101.98,
+  "b": 104.58,
+  "cards": [
+   "bai",
+   "deluin"
+  ],
+  "lines": [
+   [
+    "laugh",
+    "Deluin laughing at the table as Zei arrives",
+    102.18,
+    104.43,
+    ""
+   ]
+  ],
+  "file": "adaptations/fifteen-days/preprod/gpt/frames/cov-cafe-MASTER-laugh-E40-g1.png"
+ },
+ {
+  "shot": "32-b3-1",
+  "frame": "cov-cafe-MASTER-wave",
+  "img": "gpt-cov-cafe-MASTER-wave-K7.png",
+  "plan": "cov-cafe-MASTER-wave-K7",
+  "a": 104.58,
+  "b": 109.88,
+  "cards": [
+   "bai",
+   "deluin"
+  ],
+  "lines": [
+   [
+    "b3-1",
+    "deluin-v2",
+    104.68,
+    109.64,
+    "Hey, over here! We were just talking about you!"
+   ],
+   [
+    "b3-2",
+    "robot",
+    109.76,
+    112.57,
+    "jie mo kai tu jie hei ja ma?"
+   ]
+  ],
+  "file": "adaptations/fifteen-days/preprod/gpt/frames/cov-cafe-MASTER-wave-K7-g1.png"
+ },
+ {
+  "shot": "33-b3-2",
+  "frame": "cov-cafe-OTS-Z-robot",
+  "img": "gpt-cov-cafe-OTS-Z-robot-E50.png",
+  "plan": "cov-cafe-OTS-Z-robot-E50",
+  "a": 109.88,
+  "b": 112.81,
+  "cards": [
+   "zei",
+   "deluin"
+  ],
+  "lines": [
+   [
+    "b3-2",
+    "robot",
+    109.76,
+    112.57,
+    "jie mo kai tu jie hei ja ma?"
+   ],
+   [
+    "b3-3",
+    "zei-v4b",
+    112.69,
+    114.38,
+    "Whoa"
+   ]
+  ],
+  "file": "adaptations/fifteen-days/preprod/gpt/frames/cov-cafe-OTS-Z-robot-E50-g1.png"
+ },
+ {
+  "shot": "34-b3-3",
+  "frame": "cov-cafe-CU-Z0-whoa",
+  "img": "gpt-cov-cafe-CU-Z0-whoa-E17.png",
+  "plan": "cov-cafe-CU-Z0-whoa-E17",
+  "a": 112.81,
+  "b": 114.62,
+  "cards": [
+   "zei"
+  ],
+  "lines": [
+   [
+    "b3-3",
+    "zei-v4b",
+    112.69,
+    114.38,
+    "Whoa"
+   ],
+   [
+    "b3-4",
+    "deluin-v2",
+    114.5,
+    115.18,
+    "What is it?"
+   ]
+  ],
+  "file": "adaptations/fifteen-days/preprod/gpt/frames/cov-cafe-CU-Z0-whoa-E17-g1.png"
+ },
+ {
+  "shot": "35-b3-4",
+  "frame": "cov-cafe-OTS-Z-menu",
+  "img": "gpt-cov-cafe-OTS-Z-menu-E40.png",
+  "plan": "cov-cafe-OTS-Z-menu-E40",
+  "a": 114.62,
+  "b": 115.43,
+  "cards": [
+   "zei",
+   "deluin"
+  ],
+  "lines": [
+   [
+    "b3-4",
+    "deluin-v2",
+    114.5,
+    115.18,
+    "What is it?"
+   ]
+  ],
+  "file": "adaptations/fifteen-days/preprod/gpt/frames/cov-cafe-OTS-Z-menu-E40-g1.png"
+ },
+ {
+  "shot": "36-MENU",
+  "frame": "cov-cafe-MENU",
+  "img": "framed-cov-cafe-MENU.png",
+  "plan": null,
+  "a": 115.43,
+  "b": 117.43,
+  "cards": [],
+  "lines": [],
+  "file": null
+ },
+ {
+  "shot": "37-b3-5",
+  "frame": "cov-cafe-CU-Z0-explain",
+  "img": "gpt-cov-cafe-CU-Z0-explain-K13.png",
+  "plan": "cov-cafe-CU-Z0-explain-K13",
+  "a": 117.43,
+  "b": 123.76,
+  "cards": [
+   "zei"
+  ],
+  "lines": [
+   [
+    "b3-5",
+    "zei-v4b",
+    117.53,
+    123.51,
+    "I think these are some of the new symbols that they're A/B t"
+   ]
+  ],
+  "file": "adaptations/fifteen-days/preprod/gpt/frames/cov-cafe-CU-Z0-explain-K13-g1.png"
+ },
+ {
+  "shot": "38-OTS-Z",
+  "frame": "cov-cafe-OTS-Z-menu",
+  "img": "gpt-cov-cafe-OTS-Z-menu-E40.png",
+  "plan": "cov-cafe-OTS-Z-menu-E40",
+  "a": 123.76,
+  "b": 125.16,
+  "cards": [
+   "zei",
+   "deluin"
+  ],
+  "lines": [],
+  "file": "adaptations/fifteen-days/preprod/gpt/frames/cov-cafe-OTS-Z-menu-E40-g1.png"
+ },
+ {
+  "shot": "39-b3-6",
+  "frame": "cov-cafe-CU-Z0-explain",
+  "img": "gpt-cov-cafe-CU-Z0-explain-K13.png",
+  "plan": "cov-cafe-CU-Z0-explain-K13",
+  "a": 125.16,
+  "b": 127.25,
+  "cards": [
+   "zei"
+  ],
+  "lines": [
+   [
+    "b3-6",
+    "zei-v4b",
+    125.26,
+    127.01,
+    "Have you heard about version nine?"
+   ],
+   [
+    "b3-7",
+    "deluin-v2",
+    127.13,
+    131.44,
+    "I had a couple people mention it to me. Making the language "
+   ]
+  ],
+  "file": "adaptations/fifteen-days/preprod/gpt/frames/cov-cafe-CU-Z0-explain-K13-g1.png"
+ },
+ {
+  "shot": "40-b3-7",
+  "frame": "cov-cafe-OTS-Z-menu",
+  "img": "gpt-cov-cafe-OTS-Z-menu-E40.png",
+  "plan": "cov-cafe-OTS-Z-menu-E40",
+  "a": 127.25,
+  "b": 131.69,
+  "cards": [
+   "zei",
+   "deluin"
+  ],
+  "lines": [
+   [
+    "b3-7",
+    "deluin-v2",
+    127.13,
+    131.44,
+    "I had a couple people mention it to me. Making the language "
+   ],
+   [
+    "b3-8",
+    "zei-v4b",
+    131.56,
+    139.55,
+    "Hmmm. More straight horizontal lines than usual, and the thr"
+   ]
+  ],
+  "file": "adaptations/fifteen-days/preprod/gpt/frames/cov-cafe-OTS-Z-menu-E40-g1.png"
+ },
+ {
+  "shot": "41-b3-8",
+  "frame": "cov-cafe-CU-Z0-explain",
+  "img": "gpt-cov-cafe-CU-Z0-explain-K13.png",
+  "plan": "cov-cafe-CU-Z0-explain-K13",
+  "a": 131.69,
+  "b": 139.79,
+  "cards": [
+   "zei"
+  ],
+  "lines": [
+   [
+    "b3-8",
+    "zei-v4b",
+    131.56,
+    139.55,
+    "Hmmm. More straight horizontal lines than usual, and the thr"
+   ],
+   [
+    "b3-9",
+    "deluin-v2",
+    139.67,
+    153.6,
+    "Top right is 'kai', right? The extra vertical vein on the le"
+   ]
+  ],
+  "file": "adaptations/fifteen-days/preprod/gpt/frames/cov-cafe-CU-Z0-explain-K13-g1.png"
+ },
+ {
+  "shot": "42-b3-9",
+  "frame": "cov-cafe-OTS-Z-menu",
+  "img": "gpt-cov-cafe-OTS-Z-menu-E40.png",
+  "plan": "cov-cafe-OTS-Z-menu-E40",
+  "a": 139.79,
+  "b": 153.84,
+  "cards": [
+   "zei",
+   "deluin"
+  ],
+  "lines": [
+   [
+    "b3-9",
+    "deluin-v2",
+    139.67,
+    153.6,
+    "Top right is 'kai', right? The extra vertical vein on the le"
+   ],
+   [
+    "b3-10",
+    "zei-v4b",
+    153.72,
+    155.27,
+    "Wait, you know Dzegoban?"
+   ]
+  ],
+  "file": "adaptations/fifteen-days/preprod/gpt/frames/cov-cafe-OTS-Z-menu-E40-g1.png"
+ },
+ {
+  "shot": "43-b3-10",
+  "frame": "cov-cafe-CU-Z0-astonished",
+  "img": "gpt-cov-cafe-CU-Z0-astonished-K13.png",
+  "plan": "cov-cafe-CU-Z0-astonished-K13",
+  "a": 153.84,
+  "b": 155.51,
+  "cards": [
+   "zei"
+  ],
+  "lines": [
+   [
+    "b3-10",
+    "zei-v4b",
+    153.72,
+    155.27,
+    "Wait, you know Dzegoban?"
+   ],
+   [
+    "b3-11",
+    "deluin-v2",
+    155.39,
+    160.2,
+    "Zei, the whole point of Dzegoban is that you can learn it in"
+   ]
+  ],
+  "file": "adaptations/fifteen-days/preprod/gpt/frames/cov-cafe-CU-Z0-astonished-K13-g1.png"
+ },
+ {
+  "shot": "44-b3-11",
+  "frame": "cov-cafe-OTS-Z-stern",
+  "img": "gpt-cov-cafe-OTS-Z-stern-E42.png",
+  "plan": "cov-cafe-OTS-Z-stern-E42",
+  "a": 155.51,
+  "b": 160.44,
+  "cards": [
+   "zei",
+   "deluin"
+  ],
+  "lines": [
+   [
+    "b3-11",
+    "deluin-v2",
+    155.39,
+    160.2,
+    "Zei, the whole point of Dzegoban is that you can learn it in"
+   ],
+   [
+    "b3-12",
+    "zei-v4b",
+    160.32,
+    163.69,
+    "I'm impressed, you're almost a local already."
+   ]
+  ],
+  "file": "adaptations/fifteen-days/preprod/gpt/frames/cov-cafe-OTS-Z-stern-E42-g1.png"
+ },
+ {
+  "shot": "45-b3-12",
+  "frame": "cov-cafe-CU-Z0-astonished",
+  "img": "gpt-cov-cafe-CU-Z0-astonished-K13.png",
+  "plan": "cov-cafe-CU-Z0-astonished-K13",
+  "a": 160.44,
+  "b": 163.94,
+  "cards": [
+   "zei"
+  ],
+  "lines": [
+   [
+    "b3-12",
+    "zei-v4b",
+    160.32,
+    163.69,
+    "I'm impressed, you're almost a local already."
+   ],
+   [
+    "b3-13",
+    "bai-v3b",
+    163.81,
+    173.09,
+    "Actually, I don't think I want anything. Plus, I've got a lo"
+   ]
+  ],
+  "file": "adaptations/fifteen-days/preprod/gpt/frames/cov-cafe-CU-Z0-astonished-K13-g1.png"
+ },
+ {
+  "shot": "46-b3-13",
+  "frame": "cov-cafe-CU-B-menu",
+  "img": "gpt-cov-cafe-CU-B-menu-K9.png",
+  "plan": "cov-cafe-CU-B-menu-K9",
+  "a": 163.94,
+  "b": 166.41,
+  "cards": [
+   "bai"
+  ],
+  "lines": [
+   [
+    "b3-13",
+    "bai-v3b",
+    163.81,
+    173.09,
+    "Actually, I don't think I want anything. Plus, I've got a lo"
+   ]
+  ],
+  "file": "adaptations/fifteen-days/preprod/gpt/frames/cov-cafe-CU-B-menu-K9-g1.png"
+ },
+ {
+  "shot": "46-b3-13-cut",
+  "frame": "cov-cafe-CU-B-standing",
+  "img": "gpt-cov-cafe-CU-B-standing-K7.png",
+  "plan": "cov-cafe-CU-B-standing-K7",
+  "a": 166.41,
+  "b": 173.34,
+  "cards": [
+   "bai"
+  ],
+  "lines": [
+   [
+    "b3-13",
+    "bai-v3b",
+    163.81,
+    173.09,
+    "Actually, I don't think I want anything. Plus, I've got a lo"
+   ]
+  ],
+  "file": "adaptations/fifteen-days/preprod/gpt/frames/cov-cafe-CU-B-standing-K7-g1.png"
+ },
+ {
+  "shot": "47-BAI",
+  "frame": "cov-cafe-BAI-sideeye",
+  "img": "gpt-cov-cafe-BAI-sideeye-R20.png",
+  "plan": "cov-cafe-BAI-sideeye-R20",
+  "a": 173.34,
+  "b": 174.64,
+  "cards": [
+   "bai"
+  ],
+  "lines": [],
+  "file": "adaptations/fifteen-days/preprod/gpt/frames/cov-cafe-BAI-sideeye-R20-g1.png"
+ },
+ {
+  "shot": "48-b4-1",
+  "frame": "cov-cafe-OTS-Z-talk",
+  "img": "gpt-cov-cafe-OTS-Z-talk-K7.png",
+  "plan": "cov-cafe-OTS-Z-talk-K7",
+  "a": 174.64,
+  "b": 178.74,
+  "cards": [
+   "zei",
+   "deluin"
+  ],
+  "lines": [
+   [
+    "b4-1",
+    "deluin-v2",
+    174.74,
+    187.07,
+    "So while visiting, I've been wondering about the differences"
+   ]
+  ],
+  "file": "adaptations/fifteen-days/preprod/gpt/frames/cov-cafe-OTS-Z-talk-K7-g1.png"
+ },
+ {
+  "shot": "48-b4-1-cut",
+  "frame": "cov-cafe-SUGAR-stack",
+  "img": "gpt-cov-cafe-SUGAR-stack-E16.png",
+  "plan": "cov-cafe-SUGAR-stack-E16",
+  "a": 178.74,
+  "b": 179.94,
+  "cards": [
+   "deluin"
+  ],
+  "lines": [
+   [
+    "b4-1",
+    "deluin-v2",
+    174.74,
+    187.07,
+    "So while visiting, I've been wondering about the differences"
+   ]
+  ],
+  "file": "adaptations/fifteen-days/preprod/gpt/frames/cov-cafe-SUGAR-stack-E16-g1.png"
+ },
+ {
+  "shot": "48-b4-1-back",
+  "frame": "cov-cafe-OTS-Z-talk",
+  "img": "gpt-cov-cafe-OTS-Z-talk-K7.png",
+  "plan": "cov-cafe-OTS-Z-talk-K7",
+  "a": 179.94,
+  "b": 187.31,
+  "cards": [
+   "zei",
+   "deluin"
+  ],
+  "lines": [
+   [
+    "b4-1",
+    "deluin-v2",
+    174.74,
+    187.07,
+    "So while visiting, I've been wondering about the differences"
+   ],
+   [
+    "b4-2",
+    "zei-v4b",
+    187.19,
+    198.33,
+    "Kids get into it pretty young here, I guess. Whole family in"
+   ]
+  ],
+  "file": "adaptations/fifteen-days/preprod/gpt/frames/cov-cafe-OTS-Z-talk-K7-g1.png"
+ },
+ {
+  "shot": "49-b4-2",
+  "frame": "cov-cafe-CU-Z-amused",
+  "img": "gpt-cov-cafe-CU-Z-amused-K7.png",
+  "plan": "cov-cafe-CU-Z-amused-K7",
+  "a": 187.31,
+  "b": 198.57,
+  "cards": [
+   "zei"
+  ],
+  "lines": [
+   [
+    "b4-2",
+    "zei-v4b",
+    187.19,
+    198.33,
+    "Kids get into it pretty young here, I guess. Whole family in"
+   ],
+   [
+    "b4-3",
+    "deluin-v2",
+    198.45,
+    212.65,
+    "Sure. Yeah, we have our fair share. We care a lot about natu"
+   ]
+  ],
+  "file": "adaptations/fifteen-days/preprod/gpt/frames/cov-cafe-CU-Z-amused-K7-g1.png"
+ },
+ {
+  "shot": "50-b4-3",
+  "frame": "cov-cafe-CU-D-warm",
+  "img": "gpt-cov-cafe-CU-D-warm-E16.png",
+  "plan": "cov-cafe-CU-D-warm-E16",
+  "a": 198.57,
+  "b": 212.89,
+  "cards": [
+   "deluin"
+  ],
+  "lines": [
+   [
+    "b4-3",
+    "deluin-v2",
+    198.45,
+    212.65,
+    "Sure. Yeah, we have our fair share. We care a lot about natu"
+   ],
+   [
+    "b4-4",
+    "zei-v4b",
+    212.77,
+    215.49,
+    "I see where you get your love of walls then."
+   ]
+  ],
+  "file": "adaptations/fifteen-days/preprod/gpt/frames/cov-cafe-CU-D-warm-E16-g2.png"
+ },
+ {
+  "shot": "51-b4-4",
+  "frame": "cov-cafe-CU-Z-amused",
+  "img": "gpt-cov-cafe-CU-Z-amused-K7.png",
+  "plan": "cov-cafe-CU-Z-amused-K7",
+  "a": 212.89,
+  "b": 215.73,
+  "cards": [
+   "zei"
+  ],
+  "lines": [
+   [
+    "b4-4",
+    "zei-v4b",
+    212.77,
+    215.49,
+    "I see where you get your love of walls then."
+   ],
+   [
+    "b4-5",
+    "deluin-v2",
+    215.61,
+    221.09,
+    "Yes. Simple, straightforward, useful."
+   ]
+  ],
+  "file": "adaptations/fifteen-days/preprod/gpt/frames/cov-cafe-CU-Z-amused-K7-g1.png"
+ },
+ {
+  "shot": "52-b4-5",
+  "frame": "cov-cafe-SUGAR-wall",
+  "img": "gpt-cov-cafe-SUGAR-wall-K9.png",
+  "plan": "cov-cafe-SUGAR-wall-K9",
+  "a": 215.73,
+  "b": 216.81,
+  "cards": [],
+  "lines": [
+   [
+    "b4-5",
+    "deluin-v2",
+    215.61,
+    221.09,
+    "Yes. Simple, straightforward, useful."
+   ]
+  ],
+  "file": "adaptations/fifteen-days/preprod/gpt/frames/cov-cafe-SUGAR-wall-K9-g1.png"
+ },
+ {
+  "shot": "52-b4-5-cut",
+  "frame": "cov-cafe-CU-D-warm",
+  "img": "gpt-cov-cafe-CU-D-warm-E16.png",
+  "plan": "cov-cafe-CU-D-warm-E16",
+  "a": 216.81,
+  "b": 221.34,
+  "cards": [
+   "deluin"
+  ],
+  "lines": [
+   [
+    "b4-5",
+    "deluin-v2",
+    215.61,
+    221.09,
+    "Yes. Simple, straightforward, useful."
+   ]
+  ],
+  "file": "adaptations/fifteen-days/preprod/gpt/frames/cov-cafe-CU-D-warm-E16-g2.png"
+ },
+ {
+  "shot": "53-SUGAR",
+  "frame": "cov-cafe-SUGAR-door",
+  "img": "gpt-cov-cafe-SUGAR-door-K7.png",
+  "plan": "cov-cafe-SUGAR-door-K7",
+  "a": 221.34,
+  "b": 222.54,
+  "cards": [],
+  "lines": [],
+  "file": "adaptations/fifteen-days/preprod/gpt/frames/cov-cafe-SUGAR-door-K7-g1.png"
+ },
+ {
+  "shot": "54-CU-Z",
+  "frame": "cov-cafe-CU-Z-amused",
+  "img": "gpt-cov-cafe-CU-Z-amused-K7.png",
+  "plan": "cov-cafe-CU-Z-amused-K7",
+  "a": 222.54,
+  "b": 223.64,
+  "cards": [
+   "zei"
+  ],
+  "lines": [],
+  "file": "adaptations/fifteen-days/preprod/gpt/frames/cov-cafe-CU-Z-amused-K7-g1.png"
+ },
+ {
+  "shot": "55-BAI",
+  "frame": "cov-cafe-BAI-sideeye",
+  "img": "gpt-cov-cafe-BAI-sideeye-R20.png",
+  "plan": "cov-cafe-BAI-sideeye-R20",
+  "a": 223.64,
+  "b": 224.74,
+  "cards": [
+   "bai"
+  ],
+  "lines": [],
+  "file": "adaptations/fifteen-days/preprod/gpt/frames/cov-cafe-BAI-sideeye-R20-g1.png"
+ },
+ {
+  "shot": "56-b5-1",
+  "frame": "cov-cafe-OTS-Z-eager",
+  "img": "gpt-cov-cafe-OTS-Z-eager-K7.png",
+  "plan": "cov-cafe-OTS-Z-eager-K7",
+  "a": 224.74,
+  "b": 233.7,
+  "cards": [
+   "zei",
+   "deluin"
+  ],
+  "lines": [
+   [
+    "b5-1",
+    "deluin-v2",
+    224.84,
+    233.46,
+    "Why don't you come visit? My parents just told me I need to "
+   ],
+   [
+    "b5-2",
+    "zei-v4b",
+    233.58,
+    241.82,
+    "Well, budget will be pretty tight for... about fifteen days."
+   ]
+  ],
+  "file": "adaptations/fifteen-days/preprod/gpt/frames/cov-cafe-OTS-Z-eager-K7-g1.png"
+ },
+ {
+  "shot": "57-b5-2",
+  "frame": "cov-cafe-CU-Z-smile",
+  "img": "gpt-cov-cafe-CU-Z-smile-K14.png",
+  "plan": "cov-cafe-CU-Z-smile-K14",
+  "a": 233.7,
+  "b": 242.06,
+  "cards": [
+   "zei"
+  ],
+  "lines": [
+   [
+    "b5-2",
+    "zei-v4b",
+    233.58,
+    241.82,
+    "Well, budget will be pretty tight for... about fifteen days."
+   ],
+   [
+    "b5-3",
+    "deluin-v2",
+    241.94,
+    246.95,
+    "Oh yeah, then I can use some of my winnings to pay for your "
+   ]
+  ],
+  "file": "adaptations/fifteen-days/preprod/gpt/frames/cov-cafe-CU-Z-smile-K14-g1.png"
+ },
+ {
+  "shot": "58-b5-3",
+  "frame": "cov-cafe-OTS-Z-eager",
+  "img": "gpt-cov-cafe-OTS-Z-eager-K7.png",
+  "plan": "cov-cafe-OTS-Z-eager-K7",
+  "a": 242.06,
+  "b": 247.2,
+  "cards": [
+   "zei",
+   "deluin"
+  ],
+  "lines": [
+   [
+    "b5-3",
+    "deluin-v2",
+    241.94,
+    246.95,
+    "Oh yeah, then I can use some of my winnings to pay for your "
+   ]
+  ],
+  "file": "adaptations/fifteen-days/preprod/gpt/frames/cov-cafe-OTS-Z-eager-K7-g1.png"
+ },
+ {
+  "shot": "59-BAI",
+  "frame": "cov-cafe-BAI-sideeye",
+  "img": "gpt-cov-cafe-BAI-sideeye-R20.png",
+  "plan": "cov-cafe-BAI-sideeye-R20",
+  "a": 247.2,
+  "b": 248.2,
+  "cards": [
+   "bai"
+  ],
+  "lines": [],
+  "file": "adaptations/fifteen-days/preprod/gpt/frames/cov-cafe-BAI-sideeye-R20-g1.png"
+ },
+ {
+  "shot": "60-b5-4",
+  "frame": "cov-cafe-OTS-Z-talk",
+  "img": "gpt-cov-cafe-OTS-Z-talk-K7.png",
+  "plan": "cov-cafe-OTS-Z-talk-K7",
+  "a": 248.2,
+  "b": 250.71,
+  "cards": [
+   "zei",
+   "deluin"
+  ],
+  "lines": [
+   [
+    "b5-4",
+    "deluin-v2",
+    248.3,
+    250.47,
+    "You're welcome to come too, Bai!"
+   ],
+   [
+    "b5-5",
+    "bai-v3b",
+    250.59,
+    255.31,
+    "What?!! Dreadnaught!! It's good! You should check it out."
+   ]
+  ],
+  "file": "adaptations/fifteen-days/preprod/gpt/frames/cov-cafe-OTS-Z-talk-K7-g1.png"
+ },
+ {
+  "shot": "61-b5-5",
+  "frame": "cov-cafe-BAI-what",
+  "img": "gpt-cov-cafe-BAI-what-E47.png",
+  "plan": "cov-cafe-BAI-what-E47",
+  "a": 250.71,
+  "b": 255.31,
+  "cards": [
+   "bai"
+  ],
+  "lines": [
+   [
+    "b5-5",
+    "bai-v3b",
+    250.59,
+    255.31,
+    "What?!! Dreadnaught!! It's good! You should check it out."
+   ]
+  ],
+  "file": "adaptations/fifteen-days/preprod/gpt/frames/cov-cafe-BAI-what-E47-g1.png"
+ },
+ {
+  "shot": "62-pre",
+  "frame": "cov-gate-MASTER-fingers",
+  "img": "gpt-cov-gate-MASTER-fingers-K11.png",
+  "plan": "cov-gate-MASTER-fingers-K11",
+  "a": 255.31,
+  "b": 255.91,
+  "cards": [
+   "zei",
+   "deluin"
+  ],
+  "lines": [],
+  "file": "adaptations/fifteen-days/preprod/gpt/frames/cov-gate-MASTER-fingers-K11-g1.png"
+ },
+ {
+  "shot": "62-b6-1",
+  "frame": "cov-gate-MASTER-fingers",
+  "img": "gpt-cov-gate-MASTER-fingers-K11.png",
+  "plan": "cov-gate-MASTER-fingers-K11",
+  "a": 255.91,
+  "b": 257.7,
+  "cards": [
+   "zei",
+   "deluin"
+  ],
+  "lines": [
+   [
+    "b6-1",
+    "deluin-v2",
+    256.0,
+    257.45,
+    "Dze go ba fau gie"
+   ]
+  ],
+  "file": "adaptations/fifteen-days/preprod/gpt/frames/cov-gate-MASTER-fingers-K11-g1.png"
+ },
+ {
+  "shot": "63-CU-Z",
+  "frame": "cov-gate-CU-Z-smile",
+  "img": "gpt-cov-gate-CU-Z-smile-K7.png",
+  "plan": "cov-gate-CU-Z-smile-K7",
+  "a": 257.7,
+  "b": 258.9,
+  "cards": [
+   "zei"
+  ],
+  "lines": [],
+  "file": "adaptations/fifteen-days/preprod/gpt/frames/cov-gate-CU-Z-smile-K7-g1.png"
+ },
+ {
+  "shot": "64-MASTER",
+  "frame": "cov-gate-MASTER-wave",
+  "img": "gpt-cov-gate-MASTER-wave-K7.png",
+  "plan": "cov-gate-MASTER-wave-K7",
+  "a": 258.9,
+  "b": 260.3,
+  "cards": [
+   "zei",
+   "deluin"
+  ],
+  "lines": [],
+  "file": "adaptations/fifteen-days/preprod/gpt/frames/cov-gate-MASTER-wave-K7-g1.png"
+ },
+ {
+  "shot": "65-MASTER",
+  "frame": "cov-dusk-MASTER-talk",
+  "img": "lettered-cov-dusk-MASTER-talk.png",
+  "plan": null,
+  "a": 260.3,
+  "b": 264.55,
+  "cards": [],
+  "lines": [],
+  "file": null
+ },
+ {
+  "shot": "BLACK",
+  "frame": "black",
+  "img": "black.png",
+  "plan": null,
+  "a": 264.55,
+  "b": 265.55,
+  "cards": [],
+  "lines": [],
+  "file": null
+ },
+ {
+  "shot": "66-EST",
+  "frame": "cov-lobby-EST",
+  "img": "lettered-cov-lobby-EST.png",
+  "plan": null,
+  "a": 265.55,
+  "b": 268.55,
+  "cards": [],
+  "lines": [],
+  "file": null
+ },
+ {
+  "shot": "67-CU-Z",
+  "frame": "cov-lobby-CU-Z-down",
+  "img": "gpt-cov-lobby-CU-Z-down-K8.png",
+  "plan": "cov-lobby-CU-Z-down-K8",
+  "a": 268.55,
+  "b": 269.95,
+  "cards": [
+   "zei"
+  ],
+  "lines": [],
+  "file": "adaptations/fifteen-days/preprod/gpt/frames/cov-lobby-CU-Z-down-K8-g1.png"
+ },
+ {
+  "shot": "68-SCREEN",
+  "frame": "cov-lobby-SCREEN",
+  "img": "screen-L03.png",
+  "plan": null,
+  "a": 269.95,
+  "b": 272.45,
+  "cards": [],
+  "lines": [],
+  "file": null
+ },
+ {
+  "shot": "69-MASTER",
+  "frame": "cov-lobby-MASTER-sits",
+  "img": "gpt-cov-lobby-MASTER-sits-E18.png",
+  "plan": "cov-lobby-MASTER-sits-E18",
+  "a": 272.45,
+  "b": 273.95,
+  "cards": [
+   "zei",
+   "bai"
+  ],
+  "lines": [],
+  "file": "adaptations/fifteen-days/preprod/gpt/frames/cov-lobby-MASTER-sits-E18-g1.png"
+ },
+ {
+  "shot": "70-CU-Z",
+  "frame": "cov-lobby-CU-Z-down",
+  "img": "gpt-cov-lobby-CU-Z-down-K8.png",
+  "plan": "cov-lobby-CU-Z-down-K8",
+  "a": 273.95,
+  "b": 275.15,
+  "cards": [
+   "zei"
+  ],
+  "lines": [],
+  "file": "adaptations/fifteen-days/preprod/gpt/frames/cov-lobby-CU-Z-down-K8-g1.png"
+ },
+ {
+  "shot": "71-SCREEN",
+  "frame": "cov-lobby-SCREEN",
+  "img": "screen-L07.png",
+  "plan": null,
+  "a": 275.15,
+  "b": 278.65,
+  "cards": [],
+  "lines": [],
+  "file": null
+ },
+ {
+  "shot": "72-CU-Z",
+  "frame": "cov-lobby-CU-Z-relief",
+  "img": "gpt-cov-lobby-CU-Z-relief-K10.png",
+  "plan": "cov-lobby-CU-Z-relief-K10",
+  "a": 278.65,
+  "b": 280.15,
+  "cards": [
+   "zei"
+  ],
+  "lines": [],
+  "file": "adaptations/fifteen-days/preprod/gpt/frames/cov-lobby-CU-Z-relief-K10-g1.png"
+ },
+ {
+  "shot": "73-SCREEN",
+  "frame": "cov-lobby-SCREEN",
+  "img": "screen-L09.png",
+  "plan": null,
+  "a": 280.15,
+  "b": 284.65,
+  "cards": [],
+  "lines": [],
+  "file": null
+ },
+ {
+  "shot": "74-OTS-Z",
+  "frame": "cov-lobby-OTS-Z-turns",
+  "img": "gpt-cov-lobby-OTS-Z-turns-K9.png",
+  "plan": "cov-lobby-OTS-Z-turns-K9",
+  "a": 284.65,
+  "b": 287.45,
+  "cards": [
+   "zei",
+   "bai"
+  ],
+  "lines": [],
+  "file": "adaptations/fifteen-days/preprod/gpt/frames/cov-lobby-OTS-Z-turns-K9-g1.png"
+ },
+ {
+  "shot": "BLACK",
+  "frame": "black",
+  "img": "black.png",
+  "plan": null,
+  "a": 287.45,
+  "b": 259.45,
+  "cards": [],
+  "lines": [],
+  "file": null
+ }
+]
