@@ -32,3 +32,9 @@ pictures are AI-generated, not by the author.
 **Open for the owner:** whether to use them, and how. A still with the mouth open held over a whole line (up to 14 s
 in `warm`) may read as frozen mid-word. Options: swap the open and closed frames while the line plays, use the open
 frame only for the first second or two of a line, or don't use them. Nothing goes into a cut without the owner's say.
+
+**No prompt training (owner, 2026-10-19).** mouths.mjs and ../gpt/gpt.mjs send
+`providerOptions.gateway.disallowPromptTraining: true` on every call, and record it in each recipe's `request`. The
+gateway then routes only to a provider that doesn't train on prompts, or refuses the call. No zeroDataRetention (the
+model has none). The candidates above were made before the flag was added. Checked with a stand-in gateway (a preload
+that replaces fetch and exits before any write): both scripts send it. No real call was made.

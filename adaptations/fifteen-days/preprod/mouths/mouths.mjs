@@ -10,6 +10,9 @@ const HERE = new URL('.', import.meta.url).pathname;
 const FRAMES = HERE + '../gpt/frames/';
 const MODEL = 'openai/gpt-image-2.5-sunburst';
 const SIZE = '1536x864';
+// On every call (owner, 2026-10-19): the gateway routes only to a provider that doesn't train on prompts, or refuses
+// the call (no_providers_available). No zeroDataRetention: this model has none, and the gateway refuses it.
+const GATEWAY_OPTIONS = { gateway: { disallowPromptTraining: true } };
 const CAP = 4.0;
 const WORST = 0.08;
 const [tag = 't1', only] = process.argv.slice(2);
@@ -38,7 +41,7 @@ for (const j of jobs) {
   const t0 = Date.now();
   let r, body;
   for (let a = 0; a < 3; a++) {
-    r = await fetch('https://ai-gateway.vercel.sh/v1/images/edits', { method: 'POST', headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ model: MODEL, prompt, images: [{ image_url: 'data:image/png;base64,' + src.toString('base64') }], n: 1, size: SIZE }) });
+    r = await fetch('https://ai-gateway.vercel.sh/v1/images/edits', { method: 'POST', headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ model: MODEL, prompt, images: [{ image_url: 'data:image/png;base64,' + src.toString('base64') }], n: 1, size: SIZE, providerOptions: GATEWAY_OPTIONS }) });
     const text = await r.text();
     try { body = JSON.parse(text); } catch { body = { raw: text.slice(0, 300) }; }
     if (r.ok && body.data?.[0]?.b64_json) break;
@@ -54,7 +57,7 @@ for (const j of jobs) {
     kind: 'speaking-mouth test edit', candidate_only: 'not in any cut or on the site (owner, 2026-10-19)',
     closed_model: true, label: 'closed model', model: MODEL, model_name: 'GPT Image 2.5 Sunburst (OpenAI)', host: 'Vercel AI Gateway /v1/images/edits',
     date: new Date().toISOString(), job: j, prompt, prompt_by: 'drafted by the coding agent',
-    references: [{ file: `adaptations/fifteen-days/preprod/gpt/frames/${j.frame}`, sha256: sha(src) }], request: { size: SIZE, n: 1 },
+    references: [{ file: `adaptations/fifteen-days/preprod/gpt/frames/${j.frame}`, sha256: sha(src) }], request: { size: SIZE, n: 1, providerOptions: GATEWAY_OPTIONS },
     response_meta: { ...body, data: undefined }, cost_usd: cost, output: { file: `candidates/${j.id}-${tag}.png`, sha256: sha(buf), bytes: buf.length }, ms: Date.now() - t0,
   };
   writeFileSync(`${HERE}candidates/${j.id}-${tag}.recipe.json`, JSON.stringify(rec, null, 1));
