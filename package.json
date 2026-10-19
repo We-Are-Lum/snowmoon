@@ -31,6 +31,7 @@
     "probe:pooler-echo": "tsx --env-file-if-exists=.env.local scripts/probe-pooler-echo.ts",
     "test:pglite-gate": "tsx scripts/test-pglite-gate.ts",
     "test:try-again": "tsx --conditions=react-server scripts/test-try-again.ts",
+    "test:agent-api-live": "node scripts/editor-data.mjs && NEXT_PUBLIC_URL=https://snowmoon.party next build && tsx scripts/test-agent-api-live.ts",
     "test:agent-api": "tsx --conditions=react-server scripts/test-agent-api.ts",
     "test:wallet": "tsx --conditions=react-server scripts/test-wallet.ts",
     "seed:designs": "tsx --conditions=react-server --env-file-if-exists=.env.local scripts/seed-designs.ts",

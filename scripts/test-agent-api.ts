@@ -31,8 +31,10 @@ failOnProtocolErrors(gatePglite(db), 'test:agent-api');
 const server = new PGLiteSocketServer({ db, port: PORT, host: '127.0.0.1' });
 await server.start();
 process.env.STUDIO_DATABASE_URL = `postgres://studio_writer@127.0.0.1:${PORT}/postgres`;
-const { db: siteDb } = await import('../src/lib/db');
-const S = siteDb()!;
+process.env.AGENT_DATABASE_URL = process.env.STUDIO_DATABASE_URL;
+// PGlite's socket takes one connection: the test reads through the agent connection too (the session is studio_writer here).
+const { db: siteDb, asAgentReader } = await import('../src/lib/db');
+const S = (await asAgentReader(async () => siteDb()))!;
 
 const counts = async () => {
   const t = await S<{ table_name: string }[]>`select table_name from information_schema.tables where table_schema = 'studio' and table_type = 'BASE TABLE' and table_name <> 'api_rate' order by 1`;

@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { AGENT_API } from '~/lib/config';
 import { ToolInputError, TOOLS, toolByName } from '~/lib/agent/tools';
 import { agentApiOn, rateOk } from '~/lib/agent/rate';
+import { asAgentReader } from '~/lib/agent/reader';
 
 /**
  * The agent read API as an MCP server (owner, 2026-10-19), over Streamable HTTP: one POST per JSON-RPC message,
@@ -22,6 +23,10 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
+  return asAgentReader(() => handle(request));
+}
+
+async function handle(request: Request) {
   if (!agentApiOn()) return new NextResponse('Not found', { status: 404 });
   let msg: Msg;
   try {

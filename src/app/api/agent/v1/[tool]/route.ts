@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { ToolInputError, TOOLS, toolByName } from '~/lib/agent/tools';
 import { agentApiOn, rateOk } from '~/lib/agent/rate';
+import { asAgentReader } from '~/lib/agent/reader';
 import { tryAgain } from '~/lib/try-again';
 
 /**
@@ -11,7 +12,11 @@ import { tryAgain } from '~/lib/try-again';
 const headers = { 'Cache-Control': 'no-store', 'Access-Control-Allow-Origin': '*' };
 const no = (error: string, status: number, extra: Record<string, string> = {}) => NextResponse.json({ error }, { status, headers: { ...headers, ...extra } });
 
-export async function GET(request: Request, { params }: { params: Promise<{ tool: string }> }) {
+export async function GET(request: Request, ctx: { params: Promise<{ tool: string }> }) {
+  return asAgentReader(() => handle(request, ctx));
+}
+
+async function handle(request: Request, { params }: { params: Promise<{ tool: string }> }) {
   if (!agentApiOn()) return no('Not found', 404);
   const name = (await params).tool;
   try {

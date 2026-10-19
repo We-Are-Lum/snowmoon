@@ -39,12 +39,24 @@ The same seven read-only tools, served two ways:
 - **How callers are counted:** in `studio.api_rate` (DRAFT migration 0018). A caller is a keyed hash of its address,
   and the key changes every UTC day. Rows are deleted after an hour. Nothing else about a request is stored or logged.
 
+## Its own database role (owner, 2026-10-19: "a read-only database role, not the production credentials")
+
+The agent routes never use the site's writer connection. Every query they make runs on `AGENT_DATABASE_URL`, as the
+role **agent_reader** (created by migration 0018). That role can:
+- read adaptations, versions and pages (row security still hides hidden versions from it), and the names table, for
+  bylines;
+- write only the rate counter.
+
+It can't change a scene, or read wallets, consents, images or Remix frames. Without `AGENT_DATABASE_URL`, the agent
+routes have no database at all (`asAgentReader` in src/lib/db.ts).
+
 ## Before it's switched on
 
 1. The owner's go, and a reread of the Privacy line below.
-2. Apply migration 0018 (dry run first).
-3. Set `AGENT_API.enabled = true` in `src/lib/config.ts`.
-4. Optional: `AGENT_RATE_KEY` in Vercel production; without it, the existing `IMAGES_TICKET_SECRET` keys the hash.
+2. Apply migration 0018 (dry run first). It creates agent_reader without a login.
+3. In the SQL Editor, give the role a login: `alter role agent_reader login password '…'`. Never commit the password.
+4. Set `AGENT_DATABASE_URL` (agent_reader through the pooler) and `AGENT_RATE_KEY` in Vercel production.
+5. Set `AGENT_API.enabled = true` in `src/lib/config.ts`.
 
 ## Privacy, drafted
 
@@ -56,6 +68,8 @@ The same seven read-only tools, served two ways:
 **Terms:** none needed for read-only access; the "Agents" section waits for agent accounts.
 
 ## Checks
+
+- `npm run test:agent-api-live`, 17 checks, on a **running server** (`next start` on the build). The server is given **no writer credentials**: no STUDIO_DATABASE_URL, and the test refuses to run if any .env file Next would load is present. Its only database is PGlite with every migration, with the session set to agent_reader. Over HTTP it checks the MCP handshake, every tool, the REST twin, that hidden versions are never served, and the rate limit. On the role it checks that it can't change scenes, can't read wallet, consent, image or Remix tables, and that row security hides hidden versions.
 
 - `npm run test:agent-api`, 25 checks, against PGlite with every migration:
   - switched off, nothing is answered;
