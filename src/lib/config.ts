@@ -126,6 +126,26 @@ export const ADAPTATION_PAGES = { live: true };
  * migration 0013). REMIX_FREE=off in the environment stops free generations at once (prepaid
  * still works); REMIX_GENERATE=off stops every Generate.
  */
+/**
+ * The agent interface, read-only part (owner, 2026-10-19: "build only the read-only MCP/API now … switched off").
+ * MCP at /api/mcp and the same tools at /api/agent/v1/<tool>. Open without sign-in at a low rate. Reads only what
+ * the site already shows anyone: the book (GPL-3.0), published scenes, shots and recipes. SWITCHED OFF until the
+ * owner's go, the Privacy line is reread and the draft migration 0018 (the rate counter) is applied.
+ */
+export const AGENT_API = {
+  enabled: false,
+  /** Requests a minute per address, without sign-in. */
+  perMinute: 20,
+  /** The most blocks one passage can return. */
+  maxBlocks: 40,
+  /** The most search hits one call can return. */
+  maxHits: 20,
+  /** How long a rate row is kept (minutes). */
+  keepMinutes: 60,
+  /** MCP protocol revisions answered, newest first. */
+  protocolVersions: ['2025-06-18', '2025-03-26'] as const,
+};
+
 export const REMIX = {
   /** Across everyone, per UTC day, for free generations (owner: "$10/day to start"). */
   dailyFreeCapUsd: 10,
