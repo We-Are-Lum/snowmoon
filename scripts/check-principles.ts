@@ -1128,7 +1128,9 @@ add({
 // ---------------------------------------------------------------------------
 const PAGES = ['/', '/chapter/1', '/chapter/30', '/about', '/cards', '/adaptations', '/adaptations/dog-dawn', '/share/1/4?img=c1-b005-toy-drone', '/images', '/moderate', '/glossary', '/glossary/zei', '/terms', '/privacy', '/images?show=moments',
   // Step 4: styles and character sheets.
-  '/images/designs', '/images/designs?tab=characters', '/images/designs/character/gladias', '/images/picks'];
+  '/images/designs', '/images/designs?tab=characters', '/images/designs/character/gladias', '/images/picks',
+  // The You page and a public profile (owner, 2026-10-18).
+  '/you', '/@naaate'];
 add({
   id: 'P6a',
   principle: 6,

@@ -71,6 +71,8 @@ const nextConfig: NextConfig = {
       { source: '/@:handle/:id/shot/:shot', destination: '/adaptation/:id/by/:handle/shot/:shot' },
       { source: '/@:handle/:id/storyboard', destination: '/adaptation/:id/by/:handle/storyboard' },
       { source: '/@:handle/:id', destination: '/adaptation/:id/by/:handle' },
+      // A person's public profile (owner, 2026-10-18, the You page): one segment only, so /@<handle>/<id> above is never caught here.
+      { source: '/@:handle', destination: '/profile/:handle' },
       { source: '/:id(\\d{1,9})', destination: '/adaptation/:id' },
     ];
   },

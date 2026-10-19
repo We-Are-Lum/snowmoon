@@ -92,6 +92,14 @@
 
 .account { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-family: var(--label); font-size: var(--text-label); }
 .account-name { color: var(--ink); }
+/* The signed-in name opens the You page (owner, 2026-10-18): it reads as the name, underlined as a link. */
+a.account-name { text-decoration: underline; text-decoration-color: var(--faint); text-underline-offset: 0.2em; }
+a.account-name:hover, a.account-name[aria-current='page'] { text-decoration-color: currentColor; }
+/* The top bar's avatar, opening the You page (owner, 2026-10-18). */
+.topbar-avatar { display: inline-flex; align-items: center; justify-content: center; }
+.topbar-avatar img, .topbar-avatar .avatar-letter, .topbar-avatar .avatar-wallet { width: 28px; height: 28px; border-radius: 50%; display: block; object-fit: cover; background: var(--card); box-shadow: 0 0 0 1px var(--rule); }
+.topbar-avatar .avatar-letter { display: grid; place-items: center; font-family: var(--label); font-size: 13px; color: var(--ink); }
+.topbar-avatar[aria-current='page'] img, .topbar-avatar[aria-current='page'] span { box-shadow: 0 0 0 2px var(--ink); }
 .account-action { padding: 0; background: none; border: 0; color: var(--link); cursor: pointer; font-family: var(--label); font-size: var(--text-label); }
 /* Signed out: Farcaster, then a wallet with its note (src/components/wallet.tsx), stacked. */
 .account.account-out { flex-direction: column; align-items: flex-start; gap: 10px; }
