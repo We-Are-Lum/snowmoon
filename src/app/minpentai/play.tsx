@@ -25,6 +25,7 @@ import type { LadderProgress } from '~/lib/minpentai/play-game/live-types';
 import { PlayBoard } from './play-board';
 import { PlayPerson } from './play-live';
 import { SignInButton } from '~/components/sign-in';
+import { ShareResult } from './share-result';
 
 /** The Book label's explanation where a match's new rule is drawn (model-drafted). */
 const PLAY_BOOK_RULE = 'In the book, "every game there\'s always some kind of new rule" (c4-b84). Here, one of four rules invented for this edition is drawn at random for each match.';
@@ -302,6 +303,7 @@ export function Play({ start, onLearn }: { start: 'home' | 'free' | 'ladder' | '
                         <div className="mp-opened"><span className="mp-rung-icon on">{v.resCardN}</span><span className="mp-rung-main"><span className="mp-rung-name">{v.resCardT}</span><span className="mp-rung-desc">{v.resCardD}</span></span></div>
                       )}
                       {v.resNote && <p className="mp-text">{v.resNote}</p>}
+                      {v.share && <ShareResult rung={v.share.rung} steps={v.share.steps} />}
                       <div className="mp-grow" />
                       <div className="mp-btns">{v.resBtns!.map((b) => <button key={b.label} className={`mp-btn${b.primary ? ' primary' : ''}`} onClick={b.click}>{b.label}</button>)}</div>
                     </div>

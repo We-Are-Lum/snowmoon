@@ -184,3 +184,4 @@ html:has(.mp-play.is-desk.is-fs) :is(.rail, .panel, .panel-reopen) { display: no
 .mp-rules-note p { margin: 0; }
 /* Play's short labels (Book, Invented, Draft) are tap targets: the site's 44px floor. */
 .mp-play .ml-tag.info-label, .mp-rules-note .ml-tag.info-label { min-height: 44px; }
+.mp-share { display: flex; flex-direction: column; gap: 6px; margin-top: 12px; }
