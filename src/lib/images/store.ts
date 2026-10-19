@@ -111,6 +111,12 @@ export async function deleteObjects(sha256: string, privateKeys: string[] = []):
   for (const k of privateKeys) await client.send(new DeleteObjectCommand({ Bucket: priv, Key: k }));
 }
 
+/** Delete private objects only (a GPT Image frame's original PNG erased on request; the frame's picture stays). */
+export async function deletePrivate(keys: string[]): Promise<void> {
+  const { client, priv } = r2();
+  for (const k of keys) await client.send(new DeleteObjectCommand({ Bucket: priv, Key: k }));
+}
+
 /** Unhide (the author's own hide only): put the public copy back. */
 export async function restorePublic(sha256: string): Promise<void> {
   const { client, pub, priv } = r2();

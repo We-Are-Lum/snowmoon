@@ -80,6 +80,14 @@ anything is erased.
    frame's picture from the readers' bucket and the private bucket and, for a GPT Image frame, its
    original PNG from the private bucket (owner, 2026-10-19: "Delete a PNG whenever its frame is
    deleted"). No route deletes a frame; a hide never deletes the PNG. DRAFT, on branch editor-v2.
+
+**A GPT Image frame's original PNG, on request** (owner, 2026-10-19, D5: "erase the PNG when its frame is deleted
+or on request"). DRAFT, on branch editor-v2. Not an erasure of the frame: the frame, its picture and its row stay,
+and it need not be hidden. When the frame's maker asks (from the account that made it, or by writing to us), the
+maintainer records the request in `studio.removal_log` with the frame id, runs
+`scripts/erase-remix-frame.ts <frame id> --png-only` (a dry listing; then `--png-only --delete`), and records the
+key and its sha256 as deleted. The frame's recipe still says the PNG was kept (rows are fixed once written); the log
+is the record that it was erased.
 4. If the content is in the public git repository: replace it in a new commit
    with the same tombstone. Rewriting history (and asking forks to do the same)
    is a separate decision, recorded in the log, because it affects everyone

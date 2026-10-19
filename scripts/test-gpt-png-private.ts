@@ -13,6 +13,8 @@
  *  P5: hiding the frame (setHidden, the maker's hide and then the maintainer's) moves the JPEG to the private bucket
  *      and leaves the PNG there, unchanged; unhiding leaves it too.
  *  P6: erasing the frame (eraseFrameFiles, the maintainer's procedure) deletes the PNG and the JPEG from both buckets.
+ *  P11: on request (eraseOriginalPng, the maintainer's; owner, 2026-10-19, D5), only the PNG is deleted; the frame's
+ *       JPEG stays public. A FLUX frame has no PNG to delete.
  *  P7: a recipe whose private key doesn't match its sha256 is refused, so erasure can't be pointed at another object.
  *  P8: a FLUX frame keeps nothing private on creation, and its erasure deletes only its own picture.
  *  P9: no route deletes a frame: no remix route calls eraseFrameFiles or deleteObjects, and 0013 gives the site's
@@ -26,7 +28,7 @@ import { S3Client, PutObjectCommand, CopyObjectCommand, DeleteObjectCommand } fr
 import sharp from 'sharp';
 import { makeGptEdit } from '../src/lib/images/gateway-image';
 import { modelOutputKey, keyFor } from '../src/lib/images/store';
-import { eraseFrameFiles, putFrameFiles, setHidden, type Frame } from '../src/lib/remix/frames';
+import { eraseFrameFiles, eraseOriginalPng, putFrameFiles, setHidden, type Frame } from '../src/lib/remix/frames';
 import { REMIX_GPT, REMIX_MODEL } from '../src/lib/remix/model';
 import { SYSTEM_FID } from '../src/lib/config';
 
@@ -148,6 +150,14 @@ try {
 }
 check('P7', "a private key that doesn't match its sha256 is refused", refused);
 
+// ---- on request: the PNG only (owner, 2026-10-19, D5) ----
+const again = await putFrameFiles(made);
+const againKey = keyFor(again.sha256);
+const onRequest = await eraseOriginalPng({ recipe: { kind: 'remix-frame', ...again.record } });
+const fluxNone = await eraseOriginalPng({ recipe: { kind: 'remix-frame', content_type: 'image/jpeg', output_sha256: again.sha256 } });
+check('P11', 'on request, only the PNG is erased: the frame\'s JPEG stays public; a FLUX frame has none', !priv.has(key) && pub.get(againKey)?.body.equals(made.bytes) === true && onRequest.deleted.join() === key && fluxNone.deleted.length === 0, { onRequest, fluxNone, priv: [...priv.keys()], pub: [...pub.keys()] });
+await eraseFrameFiles({ imageSha256: again.sha256, recipe: { kind: 'remix-frame', ...again.record } });
+
 // ---- a FLUX frame ----
 const before = priv.size;
 const flux = await putFrameFiles({ bytes: ref.bytes, contentType: 'image/jpeg' });
@@ -167,7 +177,7 @@ const walk = (d: string) => {
   }
 };
 walk(path.join(ROOT, 'src/app'));
-const callers = routeFiles.filter((f) => /eraseFrameFiles|deleteObjects\(/.test(readFileSync(f, 'utf8'))).map((f) => path.relative(ROOT, f));
+const callers = routeFiles.filter((f) => /eraseFrameFiles|eraseOriginalPng|deleteObjects\(|deletePrivate\(/.test(readFileSync(f, 'utf8'))).map((f) => path.relative(ROOT, f));
 const m13 = readFileSync(path.join(ROOT, 'supabase/migrations/0013_remix.sql'), 'utf8');
 const noDelete = /revoke delete, truncate, references, trigger on studio\.remix_frames/.test(m13) && !/grant[^;]*delete[^;]*remix_frames/i.test(m13);
 check('P9', 'no route deletes a frame (no caller of eraseFrameFiles in src/app; no delete grant in 0013)', callers.length === 0 && noDelete, { callers, noDelete });

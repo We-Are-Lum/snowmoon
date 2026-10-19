@@ -4,7 +4,7 @@ import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node
 import path from 'node:path';
 import type postgres from 'postgres';
 import { SYSTEM_FID } from '../config';
-import { deleteObjects, modelOutputKey, moveToPrivate, putPrivate, putPublic, restorePublic, storageReady } from '../images/store';
+import { deleteObjects, deletePrivate, modelOutputKey, moveToPrivate, putPrivate, putPublic, restorePublic, storageReady } from '../images/store';
 import { outputRecord, type ModelOutput } from '../images/stored-jpeg';
 import type { Made } from '../images/fal';
 import { testFakes } from './make';
@@ -15,7 +15,8 @@ import { testFakes } from './make';
  * its AI label and its recipe, until it is hidden: by its maker ("Hide", undone only by them) or by
  * the maintainer (SYSTEM_FID; undone only by the maintainer). A hidden frame's public file moves to the
  * private bucket, as Pictures does (docs/removal.md). A GPT Image frame's original PNG lives in the private bucket
- * only, from the start; a hide leaves it there, and only erasure (eraseFrameFiles) deletes it with the frame.
+ * only, from the start; a hide leaves it there. It is deleted when the frame is erased (eraseFrameFiles), or on its own
+ * on request (eraseOriginalPng; owner, 2026-10-19, D5).
  *
  * No route deletes a frame: the site's database role has no delete on studio.remix_frames (0013), and a frame's row is
  * fixed once written (remix_frame_fixed). Deleting one is the maintainer's erasure procedure (docs/removal.md, step 2).
@@ -105,6 +106,24 @@ export async function eraseFrameFiles(f: Pick<Frame, 'imageSha256' | 'recipe'>):
   }
   await deleteObjects(f.imageSha256, original ? [original] : []);
   return { deleted: ['picture (public and private copies)', ...(original ? [original] : [])] };
+}
+
+/**
+ * On request (owner, 2026-10-19, D5: "erase the PNG when its frame is deleted or on request"; run by the maintainer,
+ * never from a route): deletes only a GPT Image frame's original PNG from the private bucket. The frame, its JPEG and
+ * its row stay as they are; the frame need not be hidden. Returns what was deleted (nothing for a FLUX frame).
+ */
+export async function eraseOriginalPng(f: Pick<Frame, 'recipe'>): Promise<{ deleted: string[] }> {
+  const original = originalKeyOf(f.recipe);
+  if (!original) return { deleted: [] };
+  const dir = testStore();
+  if (dir) {
+    const file = path.join(dir, 'private', original);
+    if (existsSync(file)) rmSync(file);
+    return { deleted: [original] };
+  }
+  await deletePrivate([original]);
+  return { deleted: [original] };
 }
 
 export function readTestFile(sha256: string): Buffer | null {

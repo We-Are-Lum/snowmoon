@@ -227,7 +227,13 @@ The caps are in src/lib/config.ts, and they are not changed here:
   `kept: true` and that key, never a URL. A hide (the maker's or the maintainer's) leaves it there, unchanged. No route
   deletes a frame (the site's role has no delete on `studio.remix_frames`, 0013); the one deletion is the maintainer's
   erasure (docs/removal.md step 2), whose files step, `scripts/erase-remix-frame.ts`, deletes the PNG with the picture.
-  Tested by `npm run test:gpt-png-private` (no network, no database, no key). The Privacy wording for it is the
-  other session's draft, to be added here after the owner's reread.
+  Tested by `npm run test:gpt-png-private` (no network, no database, no key).
+- **When the PNG is erased: decided** (owner, 2026-10-19, D5: "erase the PNG when its frame is deleted or on
+  request"). Built: with the frame (eraseFrameFiles, P6), or on its own on request (eraseOriginalPng,
+  `scripts/erase-remix-frame.ts <frame id> --png-only --delete`, P11; the frame stays). Both are the maintainer's,
+  run on their machine; no route deletes either (P9). Procedure: docs/removal.md.
+  Drafted Privacy line (for §4, what we keep; DRAFT, for the owner's reread):
+  > For a Remix frame drawn with GPT Image, we also keep the model's original picture (a PNG) privately; it is
+  > never public. We erase it when the frame is deleted, or when you ask us to.
 - **A moderation refusal:** its shape is still unseen. It is handled as a dropped frame by matching "moderation" or
   "safety" in the error.
