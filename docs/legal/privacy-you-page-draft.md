@@ -110,3 +110,12 @@ before their next Generate or publish. A drafted line for v5, replacing v4's fif
 Until then, the two simplest ways to keep today's texts true are: merge these pages only together
 with A–C and v5; or drop the Basename (src/lib/you.ts `whoIs`) and the frames and storyboards from
 the profile (src/lib/you.ts `publicWork`), leaving it to scenes, which are public pages already.
+
+## Wallet sign-in tied to prepaid, for now (owner, 2026-10-19)
+
+The owner said "ok for now": wallet sign-in stays tied to prepaid images (`prepaidOpen()`). Once wallets use the coach
+and the You page, wallet sign-in should always show, not only while prepaid is open.
+
+That change touches:
+- `/api/wallet/sign-in` and `/api/wallet/nonce`, which answer 503 while prepaid is closed;
+- the Privacy text, which ties wallet accounts to prepaid images.
