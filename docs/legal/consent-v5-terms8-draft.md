@@ -31,9 +31,13 @@ origin/record-takes (814f390), `docs/legal/record-takes-draft.md` (Modal's terms
 
 1. **"OpenAI may keep prompts and pictures for up to 30 days for abuse monitoring."** TO VERIFY against
    OpenAI's current API data-usage terms. The owner's wording (2026-10-19), not yet checked.
-2. **"OpenAI does not train on them."** Supported by OpenAI's Services Agreement §4.2 (quoted under "OpenAI's terms"
-   below). Still TO VERIFY: we reach OpenAI through Vercel AI Gateway, so the gateway's own terms, and how it passes
-   OpenAI's through, are what bind us.
+2. **"OpenAI does not train on them."** Verified against docs and model metadata, 2026-10-19: OpenAI's Services
+   Agreement §4.2; the gateway's docs ("AI Gateway does not use your prompts or responses for training purposes"); the
+   gateway's OpenAI row (No prompt training ✓); and the model's `no_training: "all"` in the gateway's model list.
+   Through the gateway, OpenAI's terms govern what OpenAI does (Vercel AI Product Terms §8.1, §14, quoted below).
+   Conditional on the per-request flag: `makeGptEdit` sends `providerOptions.gateway.disallowPromptTraining: true` on
+   every request (editor-v2, 4f09e1d, test J11), so the gateway refuses the call rather than route to a provider that
+   trains. The wording holds only while that flag is sent.
 3. **"Vercel AI Gateway does not keep them."** UNVERIFIED. It is not used in the texts below. It appears only
    in the Privacy §7 draft on editor-v2. The lead is Vercel's AI Gateway ZDR docs. Those docs are not a
    contract term, so the owner must confirm the clause applies to this team's plan.
@@ -47,9 +51,9 @@ origin/record-takes (814f390), `docs/legal/record-takes-draft.md` (Modal's terms
 6. **The prompt check route.** The live text says Groq, through Vercel AI Gateway when Groq is busy. The
    editor-v2 draft says the check is "Groq through Vercel AI Gateway, as today". The text below keeps the live
    wording. Check which is true on the day.
-7. **GPL-3.0 for GPT Image pictures (D4).** The owner has decided GPL-3.0. OpenAI's Services Agreement §4.1 (quoted
-   below) says the customer "owns all Output", so nothing there stops us licensing it under GPL-3.0. Same caveat as
-   item 2: we are Vercel AI Gateway's customer, so its terms are the ones that bind us directly.
+7. **GPL-3.0 for GPT Image pictures (D4).** The owner has decided GPL-3.0. OpenAI's Services Agreement §4.1 says the
+   customer "owns all Output", and Vercel AI Product Terms §6.2 assigns Vercel's rights, if any, in the Output to us
+   (both quoted below). Nothing in either stops us licensing it under GPL-3.0.
 8. **Takes on Modal.** The paragraph says the model is run "ourselves on Modal". That is true only once it is
    deployed on the owner's Modal account (record-takes-draft.md, "To check at deploy").
 
@@ -211,7 +215,7 @@ before the shortened address (Basenames, D6).
 > GPL version 3 (section 3). AI-made material can be wrong. The assistant's commentary is not the book and is not
 > advice of any kind.
 
-### OpenAI's terms (for §3, §5 and §8)
+### OpenAI's and Vercel's terms (for §3, §5 and §8)
 
 Read 2026-10-19 by the other session from OpenAI's own page, https://openai.com/policies/services-agreement/
 ("Updated: December 1, 2025"):
@@ -230,10 +234,35 @@ Notes:
   Gateway: the gateway's own terms, and how it passes these through, are what bind us.
 - **§3.3(e)** says we may not "use Output to develop artificial intelligence models that compete with OpenAI's
   products and services". That binds us as the customer. It doesn't stop us licensing the frames under GPL-3.0
-  (§4.1), but it's worth recording: people who copy the frames under GPL-3.0 aren't OpenAI's customers through us.
+  (§4.1), but it's worth recording.
 - The consumer Terms of Use say the same about ownership ("you … (b) own the Output. We hereby assign to you all our
   right, title, and interest, if any, in and to Output"; "Effective: January 1, 2026"). The API Services Agreement is
   the one that applies to us.
+
+Vercel AI Product Terms, vercel.com/legal/ai-product-terms ("Last Updated March 17, 2026", effective March 31,
+2026), quoted from the page by the owner's check, relayed 2026-10-19:
+
+> **§6.2:** As between you and Vercel, and to the extent permitted by applicable law, you own Customer Content and
+> Vercel assigns to you Vercel's rights, if any, in the Output.
+
+> **§8.1:** AI Gateway enables you to interact with your selected third-party AI providers. Any Customer Content
+> provided to or received from such Non-Vercel Service is subject to the terms and conditions and privacy notices of
+> the applicable third party. Your access to and use of Non-Vercel Services in AI Gateway must comply with the terms of
+> any applicable third-party AI provider as disclosed or made available within the Services or the Notices and License
+> Information ("NLI"), each of which are incorporated by reference.
+
+> **§14** (first two sentences): Vercel or third parties may distribute Non-Vercel Services. Your use or purchase of
+> any Non-Vercel Services, and any data exchanged in connection with Non-Vercel Services, is solely between you and the
+> applicable third-party provider, and governed by the terms of service, end user license agreement, privacy notice,
+> and/or any other terms or policies between you and that third party as disclosed or made available within the
+> Services or the NLI.
+
+- **Not a Stealth Model (§1.7, §8.2.1):** `openai/gpt-image-2.5-sunburst` isn't one. The gateway's public model list
+  (GET https://ai-gateway.vercel.sh/v1/models, read 2026-10-19) gives `owned_by: "openai"`, no "stealth" tag,
+  `no_training: "all"`, `zdr: "none"`, released 2026-09-08. The one model labelled stealth is `stealth/glyph-cluster`
+  (`owned_by: "stealth"`). The model page lists the provider as "openai" and doesn't mention stealth.
+- So OpenAI's own terms (§4.1, §4.2 above) are the ones that govern OpenAI's handling of what we send (§8.1, §14), and
+  Vercel's §6.2 leaves the Output's rights with us.
 
 ### What changed from the live §8
 
