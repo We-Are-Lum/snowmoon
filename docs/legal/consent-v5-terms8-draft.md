@@ -31,7 +31,9 @@ origin/record-takes (814f390), `docs/legal/record-takes-draft.md` (Modal's terms
 
 1. **"OpenAI may keep prompts and pictures for up to 30 days for abuse monitoring."** TO VERIFY against
    OpenAI's current API data-usage terms. The owner's wording (2026-10-19), not yet checked.
-2. **"OpenAI does not train on them."** TO VERIFY against the same terms.
+2. **"OpenAI does not train on them."** Supported by OpenAI's Services Agreement §4.2 (quoted under "OpenAI's terms"
+   below). Still TO VERIFY: we reach OpenAI through Vercel AI Gateway, so the gateway's own terms, and how it passes
+   OpenAI's through, are what bind us.
 3. **"Vercel AI Gateway does not keep them."** UNVERIFIED. It is not used in the texts below. It appears only
    in the Privacy §7 draft on editor-v2. The lead is Vercel's AI Gateway ZDR docs. Those docs are not a
    contract term, so the owner must confirm the clause applies to this team's plan.
@@ -45,9 +47,9 @@ origin/record-takes (814f390), `docs/legal/record-takes-draft.md` (Modal's terms
 6. **The prompt check route.** The live text says Groq, through Vercel AI Gateway when Groq is busy. The
    editor-v2 draft says the check is "Groq through Vercel AI Gateway, as today". The text below keeps the live
    wording. Check which is true on the day.
-7. **GPL-3.0 for GPT Image pictures (D4).** The owner has decided GPL-3.0. Still to read: whether OpenAI's current
-   terms leave the output's rights with us, the customer, with nothing that stops us licensing it under GPL-3.0.
-   This is a check of the wording, not the decision.
+7. **GPL-3.0 for GPT Image pictures (D4).** The owner has decided GPL-3.0. OpenAI's Services Agreement §4.1 (quoted
+   below) says the customer "owns all Output", so nothing there stops us licensing it under GPL-3.0. Same caveat as
+   item 2: we are Vercel AI Gateway's customer, so its terms are the ones that bind us directly.
 8. **Takes on Modal.** The paragraph says the model is run "ourselves on Modal". That is true only once it is
    deployed on the owner's Modal account (record-takes-draft.md, "To check at deploy").
 
@@ -67,15 +69,13 @@ origin/record-takes (814f390), `docs/legal/record-takes-draft.md` (Modal's terms
   Built on editor-v2 (bc00ffe): erasing a frame deletes its PNG (`eraseFrameFiles`, test P6), and on request the PNG
   alone is deleted while the frame stays (`eraseOriginalPng`, `scripts/erase-remix-frame.ts <id> --png-only`, test
   P11). Both are the maintainer's, run by hand; no route deletes either (P9). Procedure in docs/removal.md.
+- **D5a. Who can ask for the PNG to be erased:** "maker + me": the frame's maker, or the maintainer on their own
+  decision. In docs/removal.md (editor-v2, d82a852), consent ¶6 and the Privacy line.
 - **D7 / D-takes-1. Takes: option (c)**, Chatterbox run by us on Modal, whose terms say it will not "train any AI
   model using Customer Data". Consent ¶7 is the other session's wording, with no mention of fal.
 
 ## Still needs the owner's decision
 
-- **D5a. Who can ask for the PNG to be erased.** The drafted procedure takes the request from the frame's maker
-  (from the account that made it, or by writing to us). Should anyone else be able to ask (for example, someone
-  whose likeness or words are in the frame)? Under the removal policy they can already ask for the whole frame to
-  be erased.
 - **D6. Other live texts these features touch** (outside this file, listed so none is missed):
   - Privacy §4 and §6 need the Basename (Terms §5 has it below).
   - Privacy §6 needs the you-page draft's line A; §7 needs lines B and B2 and the editor-v2 OpenAI item.
@@ -117,8 +117,8 @@ origin/record-takes (814f390), `docs/legal/record-takes-draft.md` (Modal's terms
    cards and the set's plate), but nothing that identifies you. OpenAI may keep the prompt and pictures for up
    to 30 days for abuse monitoring [TO VERIFY against OpenAI's terms]. It doesn't train on them [TO VERIFY
    against OpenAI's terms]. We store that frame as a JPEG, converted on our server. We keep the model's
-   original picture (a PNG) privately; it is never public. We erase it when the frame is deleted, or when you
-   ask us to. Your Farcaster ID is sent to Neynar to check your account's score. In Remix, every frame you make
+   original picture (a PNG) privately; it is never public. We erase it when the frame is deleted, when you ask
+   us to, or when we decide to. Your Farcaster ID is sent to Neynar to check your account's score. In Remix, every frame you make
    is saved and public at its link as soon as it is made, with your words. Elsewhere, drafts you don't publish
    stay on your device.
 
@@ -143,8 +143,8 @@ once.
   - New: GPT Remix sends the person's words, the shot's prompt and the pictures to OpenAI, through Vercel AI
     Gateway. The provider is named first, and the model is labelled closed.
   - New: what OpenAI may keep and doesn't train on (both TO VERIFY), and that nothing identifying is sent.
-  - New: the frame is stored as a JPEG; the PNG is kept privately and erased when the frame is deleted or on
-    request (D5).
+  - New: the frame is stored as a JPEG; the PNG is kept privately and erased when the frame is deleted, on the
+    maker's request, or on our own decision (D5, D5a).
   - The v4 sentence is split into short ones. Groq, the gateway fallback, Neynar, Remix being public at once,
     and drafts staying on the device are all unchanged.
 - **Paragraph 7:** new: recording your own takes, converted by an open-weight model we run on Modal, which may not
@@ -211,6 +211,30 @@ before the shortened address (Basenames, D6).
 > GPL version 3 (section 3). AI-made material can be wrong. The assistant's commentary is not the book and is not
 > advice of any kind.
 
+### OpenAI's terms (for §3, §5 and §8)
+
+Read 2026-10-19 by the other session from OpenAI's own page, https://openai.com/policies/services-agreement/
+("Updated: December 1, 2025"):
+
+> 4. Customer Content. 4.1. Generally. Customer and Customer's End Users may provide Input and receive Output. As
+> between Customer and OpenAI, to the extent permitted by applicable law, Customer: (a) retains all ownership rights
+> in Input; and (b) owns all Output. OpenAI hereby assigns to Customer all OpenAI's right, title, and interest, if
+> any, in and to Output.
+
+> 4.2. OpenAI Obligations. OpenAI will only use Customer Content as necessary to provide Customer with the Services,
+> comply with applicable law, enforce the OpenAI Policies, and prevent abuse. OpenAI will not use Customer Content to
+> develop or improve the Services, unless Customer explicitly agrees to such use.
+
+Notes:
+- **§4.2** supports "doesn't train on them" (consent ¶6). It stays TO VERIFY because we reach OpenAI through Vercel AI
+  Gateway: the gateway's own terms, and how it passes these through, are what bind us.
+- **§3.3(e)** says we may not "use Output to develop artificial intelligence models that compete with OpenAI's
+  products and services". That binds us as the customer. It doesn't stop us licensing the frames under GPL-3.0
+  (§4.1), but it's worth recording: people who copy the frames under GPL-3.0 aren't OpenAI's customers through us.
+- The consumer Terms of Use say the same about ownership ("you … (b) own the Output. We hereby assign to you all our
+  right, title, and interest, if any, in and to Output"; "Effective: January 1, 2026"). The API Services Agreement is
+  the one that applies to us.
+
 ### What changed from the live §8
 
 - **New:** some pictures come from a closed model. The text names the provider and model (OpenAI's GPT Image
@@ -229,7 +253,7 @@ before the shortened address (Basenames, D6).
 **§4 (what we keep), new item, with GPT Remix (D5):**
 
 > For a Remix frame drawn with GPT Image, we also keep the model's original picture (a PNG) privately; it is
-> never public. We erase it when the frame is deleted, or when you ask us to.
+> never public. We erase it when the frame is deleted, when you ask us to, or when we decide to.
 
 **§7 (outside services), new item, with recording takes** (the other session's wording, record-takes 814f390):
 
