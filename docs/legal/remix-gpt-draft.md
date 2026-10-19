@@ -23,13 +23,14 @@ means a reader's prompt and pictures go to a new outside party, OpenAI, through 
 
 ## Privacy, section 7 ("Outside services and what they receive"): one new item
 
-The owner's fallback wording (2026-10-18), since zero data retention is refused for this model (see "The ZDR test"
-below):
+The owner's wording (2026-10-19: "say OpenAI may keep the prompt and pictures up to 30 days for abuse monitoring
+and doesn't train on them"), since zero data retention is refused for this model (see "The test calls" below):
 
 > DRAFT: If you make a Remix frame of a version drawn by GPT Image, your prompt and the pictures sent with it (the
 > shot's layout, the character cards and the set's plate; nothing that identifies you) go to OpenAI through Vercel
-> AI Gateway to draw it. OpenAI does not train on them [TO VERIFY], and may keep them for up to 30 days [TO VERIFY]
-> to monitor for abuse. Vercel AI Gateway does not keep them [UNVERIFIED].
+> AI Gateway to draw it. OpenAI may keep the prompt and pictures for up to 30 days for abuse monitoring
+> [TO VERIFY against OpenAI's terms] and doesn't train on them [TO VERIFY against OpenAI's terms]. Vercel AI Gateway
+> does not keep them [UNVERIFIED].
 
 Three claims in it must be checked before it ships:
 
@@ -48,7 +49,9 @@ The fal.ai item changes to cover only the cases still sent there:
 > version drawn with open-weight models: a depth picture of the camera you set, and the shot's place and cast
 > pictures), and makes the image. It is asked to keep no copy.
 
-## The ZDR test (2026-10-18)
+## The test calls
+
+### 1. With zero data retention (2026-10-18)
 
 The owner approved one test call (decision 2c: "Send it with the gateway's zeroDataRetention: true"), and the
 coordinator ran it.
@@ -60,9 +63,24 @@ coordinator ran it.
 - **Cost:** $0. No provider was attempted.
 
 So `makeGptEdit` (src/lib/images/gateway-image.ts) does not send zeroDataRetention; with it, every call would be
-refused. A comment there records why. The Privacy line says what OpenAI may keep instead. No picture has been made
-from the site yet: a successful call has still to confirm the four pictures, `output_format` and how a moderation
-refusal looks.
+refused. A comment there records why. The Privacy line says what OpenAI may keep instead.
+
+### 2. Without zero data retention (2026-10-19, the owner's go: "test without ZDR, as a script, no database")
+
+One call, made by the coordinator from a standalone script, with no database. The picture is kept on the
+coordinator's machine only and is not published.
+- **Request:** the same four pictures (recipe C17-K4-g1: the depth set frame, the Zei and Bai cards, the corridor
+  plate; every sha256 matched its recipe) and the same prompt; `size: "1536x864"`, `output_format: "jpeg"`, `n: 1`;
+  no zeroDataRetention.
+- **Answer:** HTTP 200 in 21 s, routed to openai (system credentials). Generation id
+  gen_01M58RSHNQGF5CXXA8YHCTYKJ0.
+- **Cost:** $0.026908, recorded in the GPT ledger, which is now $2.3423 in all.
+- **The four pictures:** taken. The usage is 732 text tokens, 1,856 image tokens and 280 out, identical to the
+  cut's own call for this recipe (also $0.026908).
+- **output_format "jpeg": ignored.** OpenAI's metadata says `outputFormat: png`, and a 1536×864 PNG came back,
+  1,535,122 bytes. `makeGptEdit` already keeps a PNG reply as PNG. If remix frames should stay JPEG like the
+  bucket's others, the site would have to convert it before storing (not built).
+- **Still unseen:** what a moderation refusal looks like.
 
 ## Terms: section 6a (prepaid) is unchanged; section 8 gets one clause
 
@@ -98,9 +116,10 @@ Two paragraphs change from v4:
 
 > DRAFT (own-words-v5, last paragraph): To make an image, your prompt is sent to Groq to be checked (through
 > Vercel AI Gateway when Groq is busy), and to fal.ai, or, in Remix for a version drawn by GPT Image, to OpenAI
-> through Vercel AI Gateway, to make it. Your Farcaster ID is sent to Neynar to check your account's score. In
-> Remix, every frame you make is saved and public at its link as soon as it is made, with your words. Elsewhere,
-> drafts you don't publish stay on your device.
+> through Vercel AI Gateway, to make it. OpenAI may keep the prompt and pictures up to 30 days for abuse monitoring
+> and doesn't train on them [TO VERIFY against OpenAI's terms]. Your Farcaster ID is sent to Neynar to check your
+> account's score. In Remix, every frame you make is saved and public at its link as soon as it is made, with your
+> words. Elsewhere, drafts you don't publish stay on your device.
 
 P6j checks that the consent screen names exactly the services that receive the prompt at Generate. With the flag
 on, that means OpenAI and Vercel AI Gateway must be named, so v5 has to ship with the flag.
@@ -197,5 +216,7 @@ The caps are in src/lib/config.ts, and they are not changed here:
 - **C2:** open (not acted on here).
 - **TO VERIFY / UNVERIFIED before the Privacy line ships:** "up to 30 days", "does not train", and "Vercel AI
   Gateway does not keep them" (above).
-- **A successful test call:** none has drawn a picture yet. It would cost about $0.04 to $0.07, needs the owner's
-  go, and must be sent without zeroDataRetention.
+- **JPEG or PNG:** the gateway ignores `output_format: jpeg` for this model (test 2, 2026-10-19), so GPT remix
+  frames would be stored as PNG, about 1.5 MB each, unless the site converts them. Owner's call.
+- **A moderation refusal:** its shape is still unseen. It is handled as a dropped frame by matching "moderation" or
+  "safety" in the error.
