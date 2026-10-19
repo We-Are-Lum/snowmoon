@@ -27,7 +27,7 @@
  */
 import path from 'node:path';
 import { mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
-import { spawn } from 'node:child_process';
+import { execFileSync, spawn } from 'node:child_process';
 import { createServer as createHttp } from 'node:http';
 import { createServer as createNet } from 'node:net';
 import { PGlite } from '@electric-sql/pglite';
@@ -651,6 +651,44 @@ try {
       /^\/@naaate\/1\/v\/1\/shot\/[\w-]+$/.test(back ?? '') &&
       /46a381d0a0111486f8b5b2cfd6e4c169f6f61b66219ce8827f2c92425e2bc51f/.test(rt) && /Apache-2\.0/.test(rt) && /seed \d+/.test(rt);
     await record(18, "version 1's own editor", url, "version 1's open-weight frame (sha256 46a381d0…, Apache-2.0, a seed), version 1's AI label, no closed model or GPT named; its shot links stay under /@naaate/1/v/1", page, { status: res?.status() ?? null, frameSrc, shotLink: back }, pass);
+    await page.context().close();
+  }
+  // 19. A moment page (owner, 2026-10-19): one shot, every version side by side, chosen first; read only.
+  {
+    const url = '/@naaate/1/m/11-b1-4';
+    const page = await newPage(browser, { width: 1280, height: 900 });
+    watchOutside(page);
+    // The cuts live on media.snowmoon.party, which this test never reaches: a 40 s stand-in plays in their place.
+    const standIn = path.join(OUT, 'stand-in-40s.mp4');
+    execFileSync('ffmpeg', ['-hide_banner', '-loglevel', 'error', '-f', 'lavfi', '-i', 'color=c=black:s=320x180:d=40:r=10', '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-movflags', '+faststart', '-y', standIn]);
+    const clip = readFileSync(standIn);
+    await page.route('https://media.snowmoon.party/**/*.mp4', (r) => r.fulfill({ status: 200, contentType: 'video/mp4', headers: { 'accept-ranges': 'bytes' }, body: clip }));
+    const res = await page.goto(BASE + url);
+    const t = await mainText(page);
+    const cols = await page.locator('.moment-version').evaluateAll((els) => els.map((e) => ({ head: (e.querySelector('.label') as HTMLElement).innerText, poster: e.querySelector('video')?.getAttribute('poster') ?? null, links: [...e.querySelectorAll('a')].map((a) => a.getAttribute('href')) })));
+    const preload = await page.locator('video.moment-video').evaluateAll((els) => els.map((v) => v.getAttribute('preload')));
+    // Play this moment: version 2's cut from the shot's start, and it stops at the shot's end (25.2 s).
+    await page.locator('.moment-play-btn').first().click();
+    const v = page.locator('video.moment-video').first();
+    await page.waitForFunction(() => { const x = document.querySelector('video.moment-video') as HTMLVideoElement; return x && (x.paused && x.currentTime > 23) ; }, null, { timeout: 20000 }).catch(() => {});
+    const played = await v.evaluate((x: HTMLVideoElement) => ({ t: x.currentTime, paused: x.paused })).catch(() => null);
+    const nav = await page.locator('.moment-nav a').evaluateAll((els) => els.map((a) => a.getAttribute('href')));
+    const tiny = await page.evaluate(() => [...document.querySelectorAll('.moment a, .moment button')].filter((e) => { const r = e.getBoundingClientRect(); return r.width && r.height < 43.5; }).map((e) => (e as HTMLElement).innerText.slice(0, 30)));
+    const bad = await Promise.all(['/@naaate/1/m/no-such-shot', '/@naaate/1/m/..%2f', '/@nobody/1/m/11-b1-4'].map(async (u) => (await head(u)).status));
+    const phone = await newPage(browser, { width: 390, height: 844 });
+    await phone.goto(BASE + url);
+    const sideways = await phone.evaluate(() => document.documentElement.scrollWidth - innerWidth);
+    await phone.context().close();
+    const canonical = await page.locator('link[rel="canonical"]').getAttribute('href').catch(() => null);
+    const pass =
+      res?.status() === 200 && cols.length === 2 && /^Version 2 · @naaate.s chosen version$/i.test(cols[0].head) && /^Version 1$/i.test(cols[1].head) &&
+      cols[0].poster === '/editor/1/v2/frames/' + cols[0].poster?.split('/').pop() && !!cols[0].poster?.startsWith('/editor/1/v2/frames/') && !!cols[1].poster?.startsWith('/editor/1/v1/frames/') &&
+      cols[0].links.includes('/@naaate/1/v/1') && cols[0].links.includes('/@naaate/1/v/2/shot/11-b1-4#recipe') && cols[1].links.includes('/@naaate/1/v/1/shot/11-b1-4#recipe') && !cols[1].links.includes('/@naaate/1/v/1') &&
+      /AI pictures: GPT Image \(OpenAI, closed model\), not by the author/i.test(t) && /AI pictures: not by the author/i.test(t) && /Such patience/.test(t) && /written by @naaate/i.test(t) &&
+      preload.every((p) => p === 'none') && !!played && played.paused && played.t >= 25.1 && played.t < 26.5 &&
+      nav.includes('/@naaate/1/m/10-game-PIT-D') && nav.includes('/@naaate/1/m/12-b1-5') && nav.includes('/@naaate/1') &&
+      tiny.length === 0 && bad.every((s) => s === 404) && sideways <= 0 && canonical === `${PUBLIC}/@naaate/1/m/11-b1-4` && !/remix frame/i.test(t);
+    await record(19, 'moment page', url, "200; version 2 (chosen) and version 1 side by side, each its own frame, AI label and editor link with #recipe; version 2 says its pictures were redrawn from version 1; the shot's lines and whose words; Play this moment loads nothing until pressed, then plays version 2's cut and stops at the shot's end (25.2 s); previous, next and the whole scene; every link 44px; a bad shot, a path trick and an unknown name are 404; no sideways scroll on a phone; canonical /@naaate/1/m/11-b1-4; no readers' Remix frames gathered (waits for consent v5)", page, { status: res?.status() ?? null, cols, preload, played, nav, tiny, bad, sideways, canonical }, pass);
     await page.context().close();
   }
   if (outside.length) failures.push(`the editor asked for things outside the site: ${[...new Set(outside)].slice(0, 5).join(', ')}`);
