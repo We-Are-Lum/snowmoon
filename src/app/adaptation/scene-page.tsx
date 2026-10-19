@@ -156,7 +156,9 @@ export async function ScenePage({ adaptation, version, handle, fixed }: { adapta
             {/* The AI label stays in sight, short; its full wording and the recipe open from it (owner, 2026-10-18: "too much text"). */}
             <details className="scene-ai">
               <summary>
-                AI-made{r.closed_model ? ' · closed model' : ''} · recipe <span className="scene-ai-icon" aria-hidden="true">i</span>
+                {/* Owner's wording, 2026-10-19: the model, its maker, that it is closed and "not by the author", in sight. */}
+                AI pictures: {r.closed_model ? `${r.closed_model.name.replace(/\s+\d.*$/, '')} (${r.closed_model.maker}, closed model), ` : ''}not by the author{' '}
+                <span className="scene-ai-icon" aria-hidden="true">i</span>
               </summary>
               <div className="scene-ai-body">
                 {r.ai_label && <p>{r.ai_label}</p>}

@@ -221,7 +221,7 @@ try {
       /AI-generated with GPT Image \(OpenAI, a closed model\), not by the author/i.test(t) &&
       /Inputs open, model closed: the pictures by GPT Image 2\.5 Sunburst \(OpenAI, a closed model\), 2026-10-18/i.test(t) &&
       /Read the recipe/i.test(t) && !/version 1.s shots/i.test(t) && /^Every shot/i.test(strip) &&
-      /^AI-made · closed model · recipe i$/i.test(summary) && shut &&
+      /^AI pictures: GPT Image \(OpenAI, closed model\), not by the author i$/i.test(summary) && shut &&
       thumbs.length > 70 && thumbs.every((u) => u.startsWith('/editor/1/v2/thumbs/')) &&
       !/remixed from/i.test(t);
     const canonical = await page.locator('link[rel="canonical"]').getAttribute('href').catch(() => null);
@@ -229,7 +229,7 @@ try {
     const embed = embedRaw ? (JSON.parse(embedRaw) as { button?: { title?: string; action?: { url?: string } } }) : null;
     const headOk = canonical === `${PUBLIC}/@naaate/1` && embed?.button?.action?.url === `${PUBLIC}/@naaate/1` && embed?.button?.title === 'Watch it';
     const pass = headOk && sourcesOk && h.status === 200 && res?.status() === 200 && /Fifteen Days/i.test(t) && /@naaate.s chosen version/i.test(t) && player?.src === 'https://media.snowmoon.party/scenes/fifteen-days/v2/fifteen-days-58da1b6d582e.mp4' && player?.poster === 'https://media.snowmoon.party/scenes/fifteen-days/v2/fifteen-days-poster-shown-4fc80109065b.jpg' && /Version 2 /i.test(t) && closedOk;
-    await record(1, 'owner page', url, `200; title Fifteen Days; @naaate's chosen version; version 2 (the GPT cut, no parent); its AI label shown short ("AI-made · closed model · recipe i"), closed until tapped, then naming GPT Image (OpenAI, a closed model); "Inputs open, model closed" with the model, maker and date; the shot strip shows version 2's own GPT pictures and the recipe link reads "Read the recipe" (no "version 1's shots" note); the player plays v2's cut from media.snowmoon.party (its 720p copy on phones, its re-wrapped copy wider, the cut last) with the no-text GPT triptych as its poster; canonical and fc:miniapp embed point at ${PUBLIC}/@naaate/1`, page, { status: h.status, player, strip, thumbs: thumbs.slice(0, 2), canonical, embedUrl: embed?.button?.action?.url ?? null, summary, shut }, pass);
+    await record(1, 'owner page', url, `200; title Fifteen Days; @naaate's chosen version; version 2 (the GPT cut, no parent); its AI label shown short ("AI pictures: GPT Image (OpenAI, closed model), not by the author i"), closed until tapped, then naming GPT Image (OpenAI, a closed model); "Inputs open, model closed" with the model, maker and date; the shot strip shows version 2's own GPT pictures and the recipe link reads "Read the recipe" (no "version 1's shots" note); the player plays v2's cut from media.snowmoon.party (its 720p copy on phones, its re-wrapped copy wider, the cut last) with the no-text GPT triptych as its poster; canonical and fc:miniapp embed point at ${PUBLIC}/@naaate/1`, page, { status: h.status, player, strip, thumbs: thumbs.slice(0, 2), canonical, embedUrl: embed?.button?.action?.url ?? null, summary, shut }, pass);
     await page.context().close();
   }
 
