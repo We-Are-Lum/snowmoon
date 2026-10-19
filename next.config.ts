@@ -53,6 +53,8 @@ const nextConfig: NextConfig = {
     // Remix's Generate reads the shot (its prompt, plate and cast cards) from the editor's data,
     // made at build time from committed files (scripts/editor-data.mjs): only those, not the voices.
     '/api/remix/**': ['./public/editor/*/v*/data.json', './public/editor/*/v*/plates/**', './public/editor/*/v*/cards/**'],
+    // Recording takes reads each line's speaker, words and published voice from the same data.
+    '/api/takes/**': ['./public/editor/*/v*/data.json'],
   },
   // The end card's "make your own" link (owner, 2026-10-14): the repository for now; temporary (307),
   // since /make may become a page of its own.

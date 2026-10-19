@@ -93,3 +93,10 @@ export async function restorePublic(sha256: string): Promise<void> {
   const key = keyFor(sha256);
   await client.send(new CopyObjectCommand({ Bucket: pub, Key: key, CopySource: `${priv}/${key}`, CacheControl: `public, max-age=${IMAGES.cacheSeconds}`, MetadataDirective: 'REPLACE', ContentType: 'image/jpeg' }));
 }
+
+/** A public file under its own key (a converted take: takes/<sha256>.wav), cached like readers' images. */
+export async function putPublicKey(key: string, bytes: Buffer, contentType: string): Promise<string> {
+  const { client, pub, url } = r2();
+  await client.send(new PutObjectCommand({ Bucket: pub, Key: key, Body: bytes, ContentType: contentType, CacheControl: `public, max-age=${IMAGES.cacheSeconds}` }));
+  return `${url}/${key}`;
+}

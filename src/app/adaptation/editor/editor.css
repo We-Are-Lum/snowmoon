@@ -95,3 +95,7 @@
   .ed-quote { font-size: 18px; }
   .ed-recipe dl { grid-template-columns: minmax(0, 1fr); }
 }
+/* Record your own take (switched off: TAKES.enabled). */
+.ed-take { display: grid; gap: 8px; margin-top: 10px; border-top: 1px solid var(--rule, currentColor); padding-top: 10px; }
+.ed-takes { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.ed-takes li { display: grid; gap: 4px; }

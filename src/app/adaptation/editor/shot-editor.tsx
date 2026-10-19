@@ -6,6 +6,8 @@ import type { SetStage, ShotCamera, PersonSpec } from './set3d';
 import { LocalTextField } from '~/components/local-text-field';
 import { RemixPanel } from './remix-panel';
 import { AddToStoryboard } from './add-to-storyboard';
+import { RecordTake } from './record-take';
+import { TAKES } from '~/lib/config';
 
 /**
  * The live shot editor (owner, 2026-10-17: "Ship a live editor on the site by Sunday"; boards 1-3 of
@@ -489,6 +491,7 @@ function Editor({
                           The converted line, as heard in version {data.version}: @{data.author.handle}&rsquo;s performance, converted to the character&rsquo;s designed voice
                           {l.voice!.model ? ` with ${l.voice!.model.name ?? l.voice!.model.id} (${l.voice!.model.licence})` : ''}. The raw take stays private.
                         </p>
+                        {TAKES.enabled && l.speaker && <RecordTake adaptation={data.adaptation} version={data.version} cue={l.cue} speaker={l.speaker} />}
                       </div>
                     ))
                 ) : (

@@ -126,6 +126,40 @@ export const ADAPTATION_PAGES = { live: true };
  * migration 0013). REMIX_FREE=off in the environment stops free generations at once (prepaid
  * still works); REMIX_GENERATE=off stops every Generate.
  */
+/**
+ * "Record your own takes", v1 (owner, 2026-10-19): a person records a line in the browser; our server
+ * sends the recording to the voice-conversion model and keeps only the converted take, in the
+ * character's voice. SWITCHED OFF until the Privacy and consent v5 lines are reread and migration 0016
+ * is applied. Daily limits as Remix: a count per person and a dollar cap across everyone.
+ */
+export const TAKES = {
+  enabled: false,
+  /** Per person per UTC day (the owner's higher count applies, as in Remix). */
+  perDay: 10,
+  /** Across everyone, per UTC day, for free conversions. */
+  dailyFreeCapUsd: 2,
+  /** A take: at most this long, as recorded in the browser and as converted. */
+  maxSeconds: 15,
+  /** The recording as uploaded from the browser (Opus or AAC at speech rates is far smaller). */
+  maxBytes: 600_000,
+  contentTypes: ['audio/webm', 'audio/ogg', 'audio/mp4', 'audio/mpeg', 'audio/wav'] as const,
+  model: {
+    id: 'chatterbox-vc',
+    name: 'Chatterbox (Resemble AI), voice conversion',
+    licence: 'MIT (open weights)',
+    weights: 'https://huggingface.co/ResembleAI/chatterbox',
+    endpoint: 'fal-ai/chatterbox/speech-to-speech',
+    host: 'fal.ai',
+    /** fal's listed price, seen 2026-10-19: $0.015 per minute of audio. */
+    usdPerMinute: 0.015,
+  },
+  /** The worst case reserved before a conversion: a full-length take, rounded up to a whole minute. */
+  reserveUsd: 0.015,
+  /** How long fal keeps the converted file on its CDN before deleting it (we copy it at once). */
+  falOutputSeconds: 600,
+  label: 'AI-converted voice: a person\'s own performance, converted into the character\'s voice, not by the author',
+};
+
 export const REMIX = {
   /** Across everyone, per UTC day, for free generations (owner: "$10/day to start"). */
   dailyFreeCapUsd: 10,

@@ -31,6 +31,7 @@
     "probe:pooler-echo": "tsx --env-file-if-exists=.env.local scripts/probe-pooler-echo.ts",
     "test:pglite-gate": "tsx scripts/test-pglite-gate.ts",
     "test:try-again": "tsx --conditions=react-server scripts/test-try-again.ts",
+    "test:takes": "tsx --conditions=react-server scripts/test-takes.ts",
     "test:wallet": "tsx --conditions=react-server scripts/test-wallet.ts",
     "seed:designs": "tsx --conditions=react-server --env-file-if-exists=.env.local scripts/seed-designs.ts",
     "check:miniapp": "tsx scripts/check-miniapp.ts",
