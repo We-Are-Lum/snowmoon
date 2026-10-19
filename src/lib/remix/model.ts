@@ -51,7 +51,7 @@ export const REMIX_GPT = {
   url: 'https://ai-gateway.vercel.sh/v1/images/edits',
   /** The cut's size, so a remix frame matches the version's frames. */
   size: { width: 1536, height: 864 },
-  /** Asked for a JPEG, as the readers' bucket stores remix frames; a PNG reply is kept as PNG. */
+  /** Asked for a JPEG; the gateway sends a PNG anyway, which is converted to JPEG on our server (src/lib/images/stored-jpeg.ts). */
   outputFormat: 'jpeg',
   /** USD per million tokens, as the gateway charged for the cut (2026-10-18). */
   usdPerMTok: { textIn: 5, imageIn: 8, out: 30 },

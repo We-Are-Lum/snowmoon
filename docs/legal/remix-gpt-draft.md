@@ -78,8 +78,8 @@ coordinator's machine only and is not published.
 - **The four pictures:** taken. The usage is 732 text tokens, 1,856 image tokens and 280 out, identical to the
   cut's own call for this recipe (also $0.026908).
 - **output_format "jpeg": ignored.** OpenAI's metadata says `outputFormat: png`, and a 1536×864 PNG came back,
-  1,535,122 bytes. `makeGptEdit` already keeps a PNG reply as PNG. If remix frames should stay JPEG like the
-  bucket's others, the site would have to convert it before storing (not built).
+  1,535,122 bytes. The owner chose JPEG (2026-10-19): the site converts it on our server before storing
+  (`src/lib/images/stored-jpeg.ts`, sharp, quality 90; this PNG became a 160,935-byte JPEG). The PNG is not kept.
 - **Still unseen:** what a moderation refusal looks like.
 
 ## Terms: section 6a (prepaid) is unchanged; section 8 gets one clause
@@ -216,7 +216,9 @@ The caps are in src/lib/config.ts, and they are not changed here:
 - **C2:** open (not acted on here).
 - **TO VERIFY / UNVERIFIED before the Privacy line ships:** "up to 30 days", "does not train", and "Vercel AI
   Gateway does not keep them" (above).
-- **JPEG or PNG:** the gateway ignores `output_format: jpeg` for this model (test 2, 2026-10-19), so GPT remix
-  frames would be stored as PNG, about 1.5 MB each, unless the site converts them. Owner's call.
+- **JPEG or PNG: decided** (owner, 2026-10-19: "JPEG for GPT Remix frames: yes, converted on our server, with the
+  recipe recording both the original PNG's sha256 and the stored JPEG's"). Built: the recipe's `output_sha256` is the
+  stored JPEG's (the frame's `image_sha256`, as for every frame) and `model_output` records the PNG the gateway sent
+  (type, size, sha256, how it was converted, `kept: false`). Tested by `npm run test:gpt-jpeg` (no network, no key).
 - **A moderation refusal:** its shape is still unseen. It is handled as a dropped frame by matching "moderation" or
   "safety" in the error.

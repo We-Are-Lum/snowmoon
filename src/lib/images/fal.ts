@@ -1,5 +1,6 @@
 import 'server-only';
 import { IMAGES } from '../config';
+import type { ModelOutput } from './stored-jpeg';
 
 /**
  * The image model on fal.ai (decision 3): one image, fixed size and settings, the host's safety
@@ -15,6 +16,8 @@ export interface Made {
   nsfw: boolean;
   costUsd: number;
   settings: Record<string, unknown>;
+  /** What the model sent, when the stored bytes were converted from it (GPT Image: src/lib/images/stored-jpeg.ts). */
+  modelOutput?: ModelOutput;
 }
 
 export class ImageUnavailable extends Error {}
