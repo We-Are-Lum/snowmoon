@@ -11,8 +11,8 @@ import type { PGlite } from '@electric-sql/pglite';
  * (2026-10-19, docs/db-interleave.md.) On the real database every connection is its own session, so the site
  * itself never does this; it is a test-harness fault, and this gate removes it:
  *
- * - The site's messages pass through; a Parse/Bind/Describe/Execute/Flush marks its session "mid-pipeline" until
- *   its Sync. A message that would START a new pipeline waits while a direct test query is running.
+ * - The site's messages pass through; a Parse/Bind/Describe/Execute/Flush marks its session "busy" until a Sync
+ *   whose ReadyForQuery says idle ('I'), so a test query never runs inside the site's pipeline or its transaction. A message that would START a new pipeline waits while a direct test query is running.
  * - The test's pg.query / pg.exec wait until the site is between pipelines, and hold the gate while they run.
  * - Every reply to the site is checked: any 08P01 (protocol violation) is recorded, and the test fails on it
  *   (protocolErrors()), so this can't come back unnoticed.
@@ -32,15 +32,22 @@ export function gatePglite(pg: PGlite) {
     if (letter && !mid) while (gate) (waitedSite++, await gate);
     // Extended-protocol messages open a pipeline that only Sync closes; a simple Query ('Q') is self-contained.
     if (letter && type !== 0x53 && type !== 0x51 && type !== 0x58) mid = true;
+    let status = '';
     const r = await raw(msg, {
       ...opts,
       onRawData: (d: Uint8Array) => {
-        const s = Buffer.from(d).toString('latin1');
+        const b = Buffer.from(d);
+        const s = b.toString('latin1');
         if (s.includes('C08P01')) errors.push(s.match(/M([^\x00]*)/)?.[1] ?? '08P01');
+        // ReadyForQuery: 'Z', length 5, then the session's state: I idle, T in a transaction, E a failed one.
+        const z = b.lastIndexOf(Buffer.from([0x5a, 0, 0, 0, 5]));
+        if (z >= 0 && z + 5 < b.length) status = String.fromCharCode(b[z + 5]);
         opts.onRawData(d);
       },
     });
-    if (type === 0x53 || type === 0x51) {
+    // The site's session is free for a test query only between pipelines AND outside a transaction.
+    if ((type === 0x53 || type === 0x51) && status && status !== 'I') mid = true;
+    if ((type === 0x53 || type === 0x51) && status === 'I') {
       mid = false;
       const w = idle;
       idle = [];
