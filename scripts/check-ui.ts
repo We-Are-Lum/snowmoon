@@ -1438,6 +1438,13 @@ try {
         if (!current?.includes('Chapter 1')) fail(`@${width}: the rail does not mark the current chapter`);
         // Signed out: the assistant panel is there, with what it does and a sign-in button.
         await page.waitForSelector('.panel .as-signed-out button');
+        // The panel's sign-in is the menu's button (owner, 2026-10-19): full width, at least 48px, the main font, filled.
+        const pb = await page.locator('.panel .as-signed-out button.as-signin').evaluate((e) => {
+          const r = e.getBoundingClientRect();
+          const st = getComputedStyle(e);
+          return { h: r.height, w: r.width, pw: (e.parentElement as HTMLElement).clientWidth, font: st.fontFamily, upper: st.textTransform };
+        });
+        if (pb.h < 47.5 || pb.w < pb.pw - 1 || /mono/i.test(pb.font) || pb.upper === 'uppercase') fail(`@${width}: the assistant panel's sign-in is not the menu's button (${JSON.stringify(pb)})`);
         await shot(page, `desktop-${width}-chapter`, scheme);
         await checkAccountSignedOut(page, '.rail', `@${width} rail`);
         await shot(page, `desktop-${width}-account-signed-out`, scheme);
