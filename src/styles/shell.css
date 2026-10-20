@@ -114,13 +114,6 @@
 .nav-coming { color: var(--muted); }
 .nav-meta { font-family: var(--label); font-size: var(--text-label); letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); }
 
-.account { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-family: var(--label); font-size: var(--text-label); }
-.account-name { color: var(--ink); }
-.account-action { padding: 0; background: none; border: 0; color: var(--link); cursor: pointer; font-family: var(--label); font-size: var(--text-label); }
-/* Signed out: Farcaster, then a wallet with its note (src/components/wallet.tsx), stacked. */
-.account.account-out { flex-direction: column; align-items: flex-start; gap: 10px; }
-.account .wallet-sign-in .account-action { align-self: flex-start; }
-.account .wallet-sign-in .ic-note { margin: 0; color: var(--muted); font-family: var(--label); font-size: var(--text-label); line-height: 1.5; }
 .quiet-action { align-self: flex-start; padding: 0; background: none; border: 0; color: var(--link); cursor: pointer; font-family: var(--label); font-size: var(--text-label); }
 
 /* ---------- The chapter frame: context strip, selector, Read / Listen ---------- */
@@ -269,9 +262,10 @@
   }
   .rail-mark { font-family: var(--label); font-size: var(--text-label); text-transform: uppercase; color: var(--muted); }
   .rail-extra { display: flex; flex-direction: column; gap: 10px; padding: 12px 20px 16px; border-top: 1px solid var(--rule); }
-  .rail .account { flex: none; padding: 12px 20px; border-top: 1px solid var(--rule); }
+  .rail .rail-account { flex: none; padding: 12px 20px; border-top: 1px solid var(--rule); border-bottom: 0; }
+  .rail .menu-account-row { font-size: 18px; }
   /* Collapsed: only the expand control. */
-  .rail:not(.is-open) .rail-wordmark, .rail:not(.is-open) .rail-body, .rail:not(.is-open) .account { display: none; }
+  .rail:not(.is-open) .rail-wordmark, .rail:not(.is-open) .rail-body, .rail:not(.is-open) .rail-account { display: none; }
   .rail:not(.is-open) .rail-head { justify-content: center; padding: 0; border-bottom: 0; }
   .rail.is-open { position: fixed; z-index: 100; top: 0; left: 0; width: min(320px, 85vw); box-shadow: 0 0 40px rgba(0, 0, 0, 0.15); }
   .rail.is-open .rail-collapse-open { display: inline; }
@@ -289,7 +283,7 @@
   .shell.rail-collapsed { grid-template-columns: var(--rail-mini) minmax(0, 1fr); }
   .shell.rail-collapsed.with-panel { grid-template-columns: var(--rail-mini) minmax(0, 1fr) var(--panel-w); }
   .shell:not(.rail-collapsed) .rail .rail-wordmark,
-  .shell:not(.rail-collapsed) .rail .account { display: flex; }
+  .shell:not(.rail-collapsed) .rail .rail-account { display: flex; }
   .shell:not(.rail-collapsed) .rail .rail-body { display: block; }
   .shell:not(.rail-collapsed) .rail .rail-head { justify-content: space-between; padding: 0 8px 0 20px; border-bottom: 1px solid var(--rule); }
   .shell:not(.rail-collapsed) .rail-collapse-open { display: inline; }
@@ -341,7 +335,7 @@
 
 /* Labels sit on the prototype's line height (DM Mono "normal", about 16px at 12px), not the book's 1.6. */
 .rail-label, .menu-eyebrow, .chapter-sheet-title, .cs-state, .nav-meta, .rail-mark, .context-strip, .as-label, .as-draft, .as-testing,
-.as-start-title, .as-start-line, .as-empty-row, .as-meta, .listen-meta, .account, .recipe-eyebrow, .chapter .dateline, .block-caption { line-height: 16px; }
+.as-start-title, .as-start-line, .as-empty-row, .as-meta, .listen-meta, .recipe-eyebrow, .chapter .dateline, .block-caption { line-height: 16px; }
 .menu-sheet .nav-list a, .menu-sheet .nav-coming { line-height: 22px; }
 
 /* A short visible word with ⓘ, opening the details (owner ruling, 2026-10-09). */

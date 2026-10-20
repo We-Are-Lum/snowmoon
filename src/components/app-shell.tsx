@@ -174,7 +174,7 @@ export function AppShell({ chapters, adaptations, intro, children }: { chapters:
           </div>
           <LegalLine />
         </div>
-        <Account auth={auth} />
+        <MenuAccount auth={auth} where="rail" />
       </aside>
       {railOpen && <div className="rail-scrim" onClick={() => setRailOpen(false)} />}
 
@@ -259,51 +259,19 @@ function Nav({ items, path, current }: { items: ReturnType<typeof navItems>; pat
  * session (no Farcaster one) shows its shortened address and a Sign out that ends it. Farcaster-only
  * features keep their own sign-in prompts. Inside a Farcaster app there is no wallet option.
  */
-function Account({ auth }: { auth: AuthState }) {
-  const wallet = useWalletSession();
-  return (
-    <div className={auth.kind === 'signed-out' && !wallet ? 'account account-out' : 'account'}>
-      {auth.kind === 'signed-in' ? (
-        <>
-          <span className="account-name">{auth.username ? `@${auth.username}` : `FID ${auth.fid}`}</span>
-          {auth.via === 'website' && (
-            <button type="button" className="account-action" onClick={signOut}>
-              Sign out
-            </button>
-          )}
-        </>
-      ) : auth.kind === 'signed-out' && wallet ? (
-        <>
-          <span className="account-name">{wallet.short}</span>
-          <button type="button" className="account-action" onClick={signOutWallet}>
-            Sign out
-          </button>
-        </>
-      ) : auth.kind === 'signed-out' ? (
-        <>
-          <span className="account-name">Signed out</span>
-          <SignInButton className="account-action" />
-          {!auth.inApp && <WalletSignInButton className="account-action" />}
-        </>
-      ) : (
-        <span className="account-name">…</span>
-      )}
-    </div>
-  );
-}
-
 /**
- * The account, at the top of the phone menu (owner, 2026-10-19). Signed out: two full-width buttons and one
+ * The account, at the top of the phone menu and at the foot of the wide-screen rail (owner, 2026-10-19). Signed out: two full-width buttons and one
  * line. Signed in: a row with a monogram and the name (or the shortened address), then Sign out as a row.
  * The monogram is drawn here, not a profile picture: a picture would be fetched from a host Privacy doesn't name.
  */
-function MenuAccount({ auth }: { auth: AuthState }) {
+function MenuAccount({ auth, where = 'menu' }: { auth: AuthState; where?: 'menu' | 'rail' }) {
+  const at = where === 'rail' ? ' rail-account' : '';
   const wallet = useWalletSession();
   const name = auth.kind === 'signed-in' ? (auth.username ? `@${auth.username}` : `FID ${auth.fid}`) : wallet ? wallet.short : null;
-  if (auth.kind === 'loading') return <div className="menu-account" aria-busy="true" />;
+  if (auth.kind === 'loading') return <div className={`menu-account${at}`} aria-busy="true" />;
   if (name === null)
     return (
-      <div className="menu-account menu-account-out">
+      <div className={`menu-account menu-account-out${at}`}>
         <SignInButton className="menu-signin menu-signin-primary" label={IMAGE_WORDING.prepaid.menuSignIn} />
         {auth.kind === 'signed-out' && !auth.inApp && <WalletSignInButton className="menu-signin menu-signin-outline" note={false} />}
         <p className="menu-signin-note">{IMAGE_WORDING.prepaid.signInNote}</p>
@@ -312,7 +280,7 @@ function MenuAccount({ auth }: { auth: AuthState }) {
   const out = auth.kind === 'signed-in' ? (auth.via === 'website' ? signOut : null) : signOutWallet;
   const letter = auth.kind === 'signed-in' ? (auth.username?.[0] ?? '#') : (wallet?.address[2] ?? '0');
   return (
-    <div className="menu-account">
+    <div className={`menu-account${at}`}>
       <p className="menu-account-row">
         <span className="menu-avatar" aria-hidden="true">
           {letter.toUpperCase()}
