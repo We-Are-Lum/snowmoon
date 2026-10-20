@@ -9,8 +9,13 @@
 -- Not an adaptation yet: publishing one is a later step (studio.adaptations), with its own consent.
 --
 -- studio.coach_calls: the coach's own daily count (owner, 2026-10-19: "coach 50 a day"; src/lib/make/limits.ts). One
--- row per coach message: the person and the time, nothing else (no message, no reply, no cost). Rows older than two
--- days are deleted by the site as new ones come in.
+-- row per coach message: the person, the time and whether its reply was refused, nothing else (no message, no reply,
+-- no cost). A refused reply doesn't count as a message, up to 20 a day per person; from the 21st it does (owner,
+-- 2026-10-19). Rows older than two days are deleted by the site as new ones come in.
+--
+-- studio.coach_checks: daily totals of the coach's pronoun check (owner, 2026-10-19: "Log each one so we can see how
+-- often it happens"): how many replies it flagged, and how many retried replies were shown with a slip. No person,
+-- no message, no time of day.
 --
 -- studio.coach_costs: the coach's own cost rows, for its own spend cap (owner, 2026-10-19: "coach gets its own $1 a
 -- day"). Daily totals of model calls, with no person, no request id and no time of day, like studio.chat_costs (0007).
@@ -54,7 +59,8 @@ revoke execute on function studio.adaptation_draft_owner_fixed() from public;
 
 create table studio.coach_calls (
   person bigint not null check (person <> 0),
-  at timestamptz not null default now()
+  at timestamptz not null default now(),
+  refused boolean not null default false
 );
 create index coach_calls_person_at on studio.coach_calls (person, at);
 create index coach_calls_at on studio.coach_calls (at);
@@ -62,13 +68,16 @@ create index coach_calls_at on studio.coach_calls (at);
 alter table studio.coach_calls enable row level security;
 create policy writer_read on studio.coach_calls for select to studio_writer using (true);
 create policy writer_insert on studio.coach_calls for insert to studio_writer with check (true);
--- Only old rows can be deleted (the two-day clean-up), and a message's own row in the minutes it is answered, when its
--- reply is refused after the retry (owner, 2026-10-19: "a reply that's refused after the retry shouldn't count against
--- the 50 a day"). Earlier messages in a day can't be taken off the count.
-create policy writer_delete_old on studio.coach_calls for delete to studio_writer using (at < now() - interval '2 days' or at > now() - interval '10 minutes');
+-- Only old rows can be deleted (the two-day clean-up); a day's count can't be reset.
+create policy writer_delete_old on studio.coach_calls for delete to studio_writer using (at < now() - interval '2 days');
+-- A message's own row can be marked refused in the minutes it is answered, and only marked, never unmarked; nothing
+-- else in a row can change.
+create policy writer_mark_refused on studio.coach_calls for update to studio_writer using (at > now() - interval '10 minutes') with check (refused);
 revoke all on studio.coach_calls from anon, authenticated;
 grant select, insert, delete on studio.coach_calls to studio_writer;
+-- Update on the refused column only: the table-wide right (from the schema's default privileges) is taken away first.
 revoke update, truncate, references, trigger on studio.coach_calls from studio_writer;
+grant update (refused) on studio.coach_calls to studio_writer;
 
 create table studio.coach_costs (
   day date not null default ((now() at time zone 'utc')::date),
@@ -91,11 +100,27 @@ revoke all on studio.coach_costs from anon, authenticated;
 grant select, insert, update on studio.coach_costs to studio_writer;
 revoke delete, truncate, references, trigger on studio.coach_costs from studio_writer;
 
+create table studio.coach_checks (
+  day date not null default ((now() at time zone 'utc')::date),
+  -- pronoun_slip: a reply the pronoun check flagged; pronoun_shown: a retried reply shown although it still slipped.
+  event text not null check (event in ('pronoun_slip', 'pronoun_shown')),
+  n int not null default 0 check (n >= 0),
+  primary key (day, event)
+);
+-- Totals are added to (update), never removed.
+alter table studio.coach_checks enable row level security;
+create policy writer_read on studio.coach_checks for select to studio_writer using (true);
+create policy writer_insert on studio.coach_checks for insert to studio_writer with check (true);
+create policy writer_update on studio.coach_checks for update to studio_writer using (true) with check (true);
+revoke all on studio.coach_checks from anon, authenticated;
+grant select, insert, update on studio.coach_checks to studio_writer;
+revoke delete, truncate, references, trigger on studio.coach_checks from studio_writer;
+
 commit;
 
--- Check: three rows (adaptation_drafts, coach_calls, coach_costs), each rls = true, anon_reads = false, anon_writes = false.
+-- Check: four rows (adaptation_drafts, coach_calls, coach_costs, coach_checks), each rls = true, anon_reads = false, anon_writes = false.
 select c.relname as table, c.relrowsecurity as rls,
        has_table_privilege('anon', c.oid, 'select') as anon_reads,
        has_table_privilege('anon', c.oid, 'insert') as anon_writes
 from pg_class c join pg_namespace n on n.oid = c.relnamespace
-where n.nspname = 'studio' and c.relname in ('adaptation_drafts', 'coach_calls', 'coach_costs');
+where n.nspname = 'studio' and c.relname in ('adaptation_drafts', 'coach_calls', 'coach_costs', 'coach_checks');

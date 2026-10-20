@@ -8,7 +8,9 @@ import { MAKE } from './draft';
  *   MAKE.coachPerDayUnpaidWallet for a wallet that has never paid. Counted in studio.coach_calls (draft migration
  *   0017): one row per message, the person (a FID, or minus a wallet account's number) and the time, nothing else.
  *   Rows older than MAKE.coachCountDays are deleted as new ones come in. A message whose reply is refused after the
- *   retry is taken off the count (releaseCoach; owner, 2026-10-19), but its model calls still count toward the spend.
+ *   retry is marked refused and doesn't count, up to MAKE.coachRefusalsPerDay a day; from the next one it counts
+ *   (refuseCoach; owner, 2026-10-19). Its model calls count toward the spend either way.
+ * - daily totals of the pronoun check, with no person (studio.coach_checks; noteCheck).
  * - a daily spend cap across everyone, MAKE.coachSpendCapUsd, summed from its own cost rows (studio.coach_costs:
  *   daily totals of model calls with no person, no request id and no time of day, like the assistant's chat_costs).
  */
@@ -37,7 +39,7 @@ export async function reserveCoach(sql: Sql, person: number, worstUsd: number): 
     await tx`select pg_advisory_xact_lock(hashtext(${'snowmoon.make.coach.' + person}))`;
     await tx`delete from studio.coach_calls where at < now() - make_interval(days => ${MAKE.coachCountDays})`;
     const perDay = await coachPerDay(t, person);
-    const [{ n }] = await tx`select count(*)::int as n from studio.coach_calls where person = ${person} and at >= date_trunc('day', now() at time zone 'utc') at time zone 'utc'`;
+    const [{ n }] = await tx`select count(*)::int as n from studio.coach_calls where person = ${person} and not refused and at >= date_trunc('day', now() at time zone 'utc') at time zone 'utc'`;
     if (n >= perDay) return { ok: false as const, reason: 'limit' as const, perDay };
     if ((await coachSpentToday(t)) + worstUsd > MAKE.coachSpendCapUsd) return { ok: false as const, reason: 'spend' as const };
     const [{ at }] = await tx`insert into studio.coach_calls (person) values (${person}) returning at`;
@@ -46,11 +48,23 @@ export async function reserveCoach(sql: Sql, person: number, worstUsd: number): 
 }
 
 /**
- * Give back the message reserveCoach took: its reply was refused after the retry, so it doesn't count against the
- * person's day (owner, 2026-10-19). Only that one row; the spend it caused stays in studio.coach_costs.
+ * A message whose reply was refused after the retry (owner, 2026-10-19): marked refused, so it doesn't count against
+ * the person's day, while they have had fewer than MAKE.coachRefusalsPerDay today; after that it stays a counted
+ * message. Says which. The spend it caused stays in studio.coach_costs either way.
  */
-export async function releaseCoach(sql: Sql, person: number, at: Date): Promise<void> {
-  await sql`delete from studio.coach_calls where ctid = (select ctid from studio.coach_calls where person = ${person} and at = ${at} limit 1)`;
+export async function refuseCoach(sql: Sql, person: number, at: Date): Promise<{ counted: boolean }> {
+  return sql.begin(async (tx) => {
+    await tx`select pg_advisory_xact_lock(hashtext(${'snowmoon.make.coach.' + person}))`;
+    const [{ n }] = await tx`select count(*)::int as n from studio.coach_calls where person = ${person} and refused and at >= date_trunc('day', now() at time zone 'utc') at time zone 'utc'`;
+    if (n >= MAKE.coachRefusalsPerDay) return { counted: true };
+    await tx`update studio.coach_calls set refused = true where ctid = (select ctid from studio.coach_calls where person = ${person} and at = ${at} and not refused limit 1)`;
+    return { counted: false };
+  });
+}
+
+/** One event of the pronoun check, added to the day's person-free totals in studio.coach_checks. */
+export async function noteCheck(sql: Sql, event: 'pronoun_slip' | 'pronoun_shown'): Promise<void> {
+  await sql`insert into studio.coach_checks (event, n) values (${event}, 1) on conflict (day, event) do update set n = studio.coach_checks.n + 1`;
 }
 
 /** One coach model call's cost, added to the day's totals in studio.coach_costs. */

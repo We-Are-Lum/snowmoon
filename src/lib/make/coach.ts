@@ -4,7 +4,7 @@ import { renderMarkdown } from '../render';
 import { blocksById, labels, retrieve, type Passage } from '../chat/retrieve';
 import { sanitizeReply, type Part } from '../chat/sanitize';
 import { worstCaseUsd } from '../chat/limits';
-import { recordCoach, releaseCoach, reserveCoach } from './limits';
+import { noteCheck, recordCoach, refuseCoach, reserveCoach } from './limits';
 import type { Complete, Quote } from '../chat/ask';
 import { checkNoWriting } from './no-writing';
 import { cleanDraft, MAKE, ownWords, type Draft } from './draft';
@@ -17,15 +17,17 @@ import { dropBrokenCites, normaliseCites } from './cites';
  * and book search, and the same citation handling (quotes come from the database, never the model). Its limits are
  * its own (src/lib/make/limits.ts; owner, 2026-10-19): 50 messages a day (10 for a wallet that has never paid) and
  * $1 a day across everyone, with its own cost rows. A reply refused after the retry isn't counted against the day,
- * but its model calls count toward the $1.
+ * up to 20 refusals a day; its model calls count toward the $1 either way.
  * Signed in with Farcaster or a wallet (owner, 2026-10-19: "open to wallet accounts").
  *
  * Owner's rule: "can cite the book, but never writes prose, dialogue or narration", and (2026-10-19) "coach may suggest
  * visual details as questions or options, never written description". Every reply passes two checks
  * before anyone sees it: the pattern check (src/lib/make/no-writing.ts), then the guard model with
  * config/prompts/make-guard.md. A flagged reply is never shown or sent back; one retry with a reminder, then a
- * decline. A reply that gets a character's pronoun wrong (src/lib/make/cast.ts, from the book) is handled the same
- * way, with its own reminder, and only block ids found in the book's text are shown (src/lib/make/cites.ts). Nothing about the message or the reply is stored here; the device keeps the conversation.
+ * decline. A reply that gets a character's pronoun wrong (src/lib/make/cast.ts, from the book) is retried once with its
+ * own reminder; if the retry still slips, it is shown anyway and logged as a daily total (owner, 2026-10-19: "show the
+ * retried reply instead of refusing it … Keep the hard refusal for written lines, beats and shots"). Only block ids
+ * found in the book's text are shown (src/lib/make/cites.ts). Nothing about the message or the reply is stored here; the device keeps the conversation.
  */
 export type Stage = 'talk' | 'beats' | 'storyboard';
 
@@ -44,7 +46,7 @@ export interface CoachInput {
 
 export type CoachResult =
   | { state: 'note'; parts: Part[]; quotes: Quote[]; left: number; checks: { pattern: 'ok'; guard: 'ok' | 'none' }; regenerated: boolean }
-  | { state: 'declined'; why: 'writing' | 'pronouns'; left: number }
+  | { state: 'declined'; counted: boolean; left: number }
   | { state: 'limit'; perDay: number }
   | { state: 'spend' };
 
@@ -121,19 +123,21 @@ export async function coach(deps: CoachDeps, raw: unknown): Promise<CoachResult>
   const allowed = new Set(passages.map((p) => p.id));
 
   let reply = await replyOnce(deps, messages, allowed);
-  let verdict = await check(deps, input.message, reply.shown, own);
+  let verdict = await check(deps, input.message, reply.shown, own, false);
   let regenerated = false;
   if (verdict.verdict === 'flagged') {
     regenerated = true;
     const reminder = verdict.why === 'pronouns' ? deps.pronounReminder : deps.reminder;
     reply = await replyOnce(deps, [...messages, { role: 'user', content: reminder.replace('{{REASON}}', verdict.reason) }], allowed);
-    verdict = await check(deps, input.message, reply.shown, own);
+    verdict = await check(deps, input.message, reply.shown, own, true);
   }
-  // Refused after the retry: not counted against their day (owner, 2026-10-19); the model calls stay in the spend.
+  // Refused after the retry: not counted against their day, up to 20 a day (owner, 2026-10-19); the model calls stay
+  // in the spend.
   if (verdict.verdict === 'flagged') {
-    await releaseCoach(sql, person, slot.at);
-    return { state: 'declined', why: verdict.why, left: slot.left + 1 };
+    const { counted } = await refuseCoach(sql, person, slot.at);
+    return { state: 'declined', counted, left: counted ? slot.left : slot.left + 1 };
   }
+  if (verdict.slips) await noteCheck(sql, 'pronoun_shown');
 
   const blocks = await blocksById(sql, reply.cites, limit);
   const label = await labels(sql, blocks.map((b) => b.chapter));
@@ -168,13 +172,19 @@ async function replyOnce(deps: CoachDeps, messages: Message[], allowed: Set<stri
  * no verdict after two tries counts as flagged, unlike the reading assistant, because here a miss would put
  * writing in front of someone making their own work.
  */
-type Verdict = { verdict: 'ok'; why?: undefined; reason: '' } | { verdict: 'flagged'; why: 'writing' | 'pronouns'; reason: string };
+/** ok: shown (`slips`: a retry shown although its pronouns still slip). flagged: retried, or after the retry declined. */
+type Verdict = { verdict: 'ok'; slips: boolean; reason: '' } | { verdict: 'flagged'; why: 'writing' | 'pronouns'; reason: string };
 
-async function check(deps: CoachDeps, message: string, shown: string, own: string): Promise<Verdict> {
+/**
+ * `last`: this is the retry. A pronoun slip in the first reply asks for the retry without spending a guard call; in
+ * the retry it is logged and the reply still goes to the guard, and is shown if that passes.
+ */
+async function check(deps: CoachDeps, message: string, shown: string, own: string, last: boolean): Promise<Verdict> {
   const p = checkNoWriting(shown, own);
   if (!p.ok) return { verdict: 'flagged', why: 'writing', reason: `it wrote ${p.reasons.map((r) => r.reason).join(', ')} text` };
   const slips = pronounSlips(shown);
-  if (slips.length) return { verdict: 'flagged', why: 'pronouns', reason: slips.map((s) => `it called ${s.name} "${s.wrote}"; the book uses ${s.pronoun} for ${s.name}`).join('; ') };
+  if (slips.length) await noteCheck(deps.sql, 'pronoun_slip');
+  if (slips.length && !last) return { verdict: 'flagged', why: 'pronouns', reason: slips.map((s) => `it called ${s.name} "${s.wrote}"; the book uses ${s.pronoun} for ${s.name}`).join('; ') };
   for (let attempt = 0; attempt < 2; attempt++) {
     const g = await deps.complete(
       CHAT.guardModel,
@@ -187,7 +197,7 @@ async function check(deps: CoachDeps, message: string, shown: string, own: strin
     const first = g.text.trim().split(/\s+/)[0]?.toUpperCase() ?? '';
     const verdict = first.startsWith('VIOLATION') ? 'flagged' : first.startsWith('OK') ? 'ok' : 'none';
     await recordCoach(deps.sql, { kind: 'guard', model: g.model, provider: g.provider, promptTokens: g.promptTokens, completionTokens: g.completionTokens, costUsd: g.costUsd, guard: verdict });
-    if (verdict === 'ok') return { verdict: 'ok', reason: '' };
+    if (verdict === 'ok') return { verdict: 'ok', slips: slips.length > 0, reason: '' };
     if (verdict === 'flagged') return { verdict: 'flagged', why: 'writing', reason: g.text.trim().slice(first.length).replace(/^[\s:.-]+/, '').slice(0, 200) || 'it wrote for them' };
   }
   return { verdict: 'flagged', why: 'writing', reason: 'the check gave no verdict' };

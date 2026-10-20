@@ -85,7 +85,7 @@ for (const c of CASES) {
     { stage: c.stage, message: c.message, draft, history: [] },
   ).catch((e) => ({ state: e instanceof OverCap ? 'stopped' : 'error', error: (e as Error).message }) as const);
   const shown = r.state === 'note' ? r.parts.map((p) => (p.type === 'text' ? p.text : `[${p.id}]`)).join('') : '';
-  results.push({ ...c, state: r.state, why: r.state === 'declined' ? r.why : null, regenerated: r.state === 'note' ? r.regenerated : null, written, shown, shownSlips: shown ? pronounSlips(shown) : [], error: 'error' in r ? r.error : null });
+  results.push({ ...c, state: r.state, counted: r.state === 'declined' ? r.counted : null, regenerated: r.state === 'note' ? r.regenerated : null, written, shown, shownSlips: shown ? pronounSlips(shown) : [], error: 'error' in r ? r.error : null });
   console.log(`${r.state}${r.state === 'note' && r.regenerated ? ' (after a retry)' : ''}${written.some((w) => w.slips.length) ? ' [slip caught]' : ''}: ${c.message}`);
   if (r.state === 'stopped') break;
 }

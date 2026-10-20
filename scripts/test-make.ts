@@ -177,19 +177,24 @@ try {
     const zero = await outcome(`insert into studio.adaptation_drafts (person, draft) values (0, '{}')`, [], 'kept');
     const wallet = await outcome(`insert into studio.adaptation_drafts (person, draft) values (-5, '{}')`, [], 'kept');
     await pg.query(`delete from studio.adaptation_drafts where person = -5`);
-    // Coach count rows: one from an hour ago can't be deleted (a day's count can't be reset); one two days old can, and
-    // one from the last ten minutes can (its reply was refused after the retry).
+    // Coach count rows: today's can't be deleted (a day's count can't be reset); one two days old can. A fresh row can
+    // be marked refused, never unmarked; an hour-old one can't be marked; nothing else in a row can change.
     await pg.query(`insert into studio.coach_calls (person) values (444)`);
     await pg.query(`insert into studio.coach_calls (person, at) values (444, now() - interval '1 hour')`);
+    const marked = (await pg.query(`update studio.coach_calls set refused = true where person = 444 returning at > now() - interval '10 minutes' as fresh`)).rows as { fresh: boolean }[];
+    const unmarked = await outcome(`update studio.coach_calls set refused = false where person = 444`, [], 'unmarked');
+    const movedCall = await outcome(`update studio.coach_calls set person = 445 where person = 444`, [], 'moved');
+    const reAt = await outcome(`update studio.coach_calls set at = now() - interval '3 days' where person = 444`, [], 'moved');
     await pg.query(`insert into studio.coach_calls (person, at) values (444, now() - interval '3 days')`);
     const del = (await pg.query(`delete from studio.coach_calls where person = 444 returning (at < now() - interval '1 day') as old`)).rows as { old: boolean }[];
+    const checksMeta = await tableMeta('coach_checks');
     const coachZero = await outcome(`insert into studio.coach_calls (person) values (0)`, [], 'kept');
     await pg.exec('reset role');
     await pg.query(`delete from studio.coach_calls where person = 444`);
     await pg.exec('set role studio_writer');
     const ok = (m?: { rls: boolean; anon_reads: boolean; anon_writes: boolean }) => !!m?.rls && !m.anon_reads && !m.anon_writes;
     if (d.ok) await deleteDraft(sql, A, id);
-    check('M2', 'migration 0017 (draft, PGlite only): its three tables RLS on, nothing for anon; owner fixed; size and person checked; wallet persons kept; count rows deletable only when old or from the last ten minutes', applied === 'ok' && ok(meta) && ok(coachMeta) && ok(costMeta) && moved === 'refused' && big === 'refused' && zero === 'refused' && wallet === 'kept' && coachZero === 'refused' && del.length === 2 && del.filter((r) => r.old).length === 1, { applied, meta, coachMeta, costMeta, moved, big, zero, wallet, coachZero, del });
+    check('M2', 'migration 0017 (draft, PGlite only): its four tables RLS on, nothing for anon; owner fixed; size and person checked; wallet persons kept; count rows deletable only when old, markable refused only when fresh and never unmarked; the check totals RLS on', applied === 'ok' && ok(meta) && ok(coachMeta) && ok(costMeta) && ok(checksMeta) && marked.length === 1 && marked[0].fresh && unmarked === 'refused' && movedCall === 'refused' && reAt === 'refused' && moved === 'refused' && big === 'refused' && zero === 'refused' && wallet === 'kept' && coachZero === 'refused' && del.length === 1 && del[0].old, { applied, meta, coachMeta, costMeta, checksMeta, marked, unmarked, movedCall, reAt, moved, big, zero, wallet, coachZero, del });
   }
 
   // M3 drafts
@@ -247,7 +252,7 @@ try {
     const [{ calls }] = await sql`select count(*)::int as calls from studio.coach_calls where person = ${FID}`;
     const [{ asks }] = await sql`select count(*)::int as asks from studio.chat_calls where fid = ${FID}`;
     const cols = (await sql`select table_name || '.' || column_name as c from information_schema.columns where table_schema = 'studio' and table_name in ('chat_calls', 'chat_costs', 'coach_calls')`).map((r) => r.c as string);
-    check('M4', "the coach: notes shown; written lines, prose and described shots never shown (retry, then decline, and a decline isn't counted against the day); a question about a visual detail shown; a silent guard fails closed; counted in the coach's own count, not the assistant's; nothing stored", note.state === 'note' && lineOnce.state === 'note' && lineOnce.regenerated && reminded && lineTwice.state === 'declined' && prose.state === 'declined' && silent.state === 'declined' && described.state === 'note' && described.regenerated && /clenched jaw show it/.test(describedShown) && !/let you win|glitter|flicker/.test(shownTexts) && calls === 3 && asks === 0 && !cols.some((c) => /text|message|question|prompt_text|content/.test(c.split('.')[1])) && cols.filter((c) => c.startsWith('coach_calls.')).sort().join() === 'coach_calls.at,coach_calls.person', { note: note.state, lineOnce, reminded, lineTwice: lineTwice.state, prose: prose.state, silent: silent.state, described, calls, asks, cols });
+    check('M4', "the coach: notes shown; written lines, prose and described shots never shown (retry, then decline); a question about a visual detail shown; a silent guard fails closed; counted in the coach's own count, not the assistant's; nothing stored", note.state === 'note' && lineOnce.state === 'note' && lineOnce.regenerated && reminded && lineTwice.state === 'declined' && prose.state === 'declined' && silent.state === 'declined' && described.state === 'note' && described.regenerated && /clenched jaw show it/.test(describedShown) && !/let you win|glitter|flicker/.test(shownTexts) && calls === 6 && asks === 0 && !cols.some((c) => /text|message|question|prompt_text|content/.test(c.split('.')[1])) && cols.filter((c) => c.startsWith('coach_calls.')).sort().join() === 'coach_calls.at,coach_calls.person,coach_calls.refused', { note: note.state, lineOnce, reminded, lineTwice: lineTwice.state, prose: prose.state, silent: silent.state, described, calls, asks, cols });
 
     // Its own count and its own spend (owner, 2026-10-19): the assistant's 30 used up, and its $2 spent, don't stop
     // the coach; the coach's costs go to its own rows (studio.coach_costs), never the assistant's.
@@ -287,6 +292,33 @@ try {
     await pg.query(`delete from studio.coach_costs where model = 'test-coach-spend'`);
     await pg.exec('set role studio_writer');
     check('M4c', `the coach's own $${MAKE.coachSpendCapUsd} a day across everyone: near it, a message is refused before any model call and not counted`, spentOut.state === 'spend' && c557 === 0, { spentOut, c557 });
+  }
+
+  // M4d refusals (owner, 2026-10-19: "20 refused replies per person per day"): the first 20 a day don't count as
+  // messages; from the 21st a refusal counts. For a Farcaster account and for a wallet that has never paid.
+  {
+    const draft: Draft = { title: 'The Long Wall', idea: 'Zei wins by defending, and it costs the friendship with Bai.', upTo: 14, beats: ['They watch the match.'], shots: [] };
+    const writes: Complete = async (model) => ({ text: model === CHAT.guardModel ? 'OK' : 'Try: ZEI: "I let you win."', promptTokens: 10, completionTokens: 10, costUsd: 0.00001, requestId: null, provider: 'test', model });
+    const notes: Complete = async (model) => ({ text: model === CHAT.guardModel ? 'OK' : 'What does Zei want?', promptTokens: 10, completionTokens: 10, costUsd: 0.00001, requestId: null, provider: 'test', model });
+    const ask = (person: number, complete: Complete) => coach({ sql, person, complete, systemPrompt: prompt('make-coach.md'), guardPolicy: prompt('make-guard.md'), reminder: prompt('make-reminder.md'), pronounReminder: prompt('make-pronouns.md') }, { stage: 'talk', message: 'Write it for me.', draft, history: [] });
+    const counted = async (person: number) => (await sql`select count(*)::int as n from studio.coach_calls where person = ${person} and not refused`)[0].n as number;
+    const wallet = -Number((await pg.query<{ id: number }>(`insert into studio.wallet_accounts (address) values ('0x00000000000000000000000000000000000000c9') returning id`)).rows[0].id);
+    const run = async (person: number, perDay: number) => {
+      const first = await ask(person, notes);
+      const before = await counted(person);
+      const refusals = [];
+      for (let i = 0; i < MAKE.coachRefusalsPerDay; i++) refusals.push(await ask(person, writes));
+      const after20 = await counted(person);
+      const r21 = await ask(person, writes);
+      const after21 = await counted(person);
+      return {
+        ok: first.state === 'note' && before === 1 && refusals.every((r) => r.state === 'declined' && !r.counted && r.left === perDay - 1) && after20 === 1 && r21.state === 'declined' && r21.counted && r21.left === perDay - 2 && after21 === 2,
+        before, after20, after21, r20: refusals.at(-1), r21,
+      };
+    };
+    const fid = await run(4040, MAKE.coachPerDay);
+    const unpaidWallet = await run(wallet, MAKE.coachPerDayUnpaidWallet);
+    check('M4d', `refused replies: the first ${MAKE.coachRefusalsPerDay} a day don't count as messages, the ${MAKE.coachRefusalsPerDay + 1}st does (and says so), for a Farcaster account and for a wallet that has never paid (${MAKE.coachPerDayUnpaidWallet} a day)`, fid.ok && unpaidWallet.ok, { fid, unpaidWallet });
   }
 
   // M7 the coach's faults (owner, 2026-10-19: "Coach faults: fix now"): pronouns from the book, and only real block ids
@@ -359,13 +391,16 @@ try {
     const slipOnce = await coach(deps(stand([() => 'The close-up on Bai could signal his judgment.', () => 'The close-up on Bai could signal her judgment. What does Bai want?'])), input('Is shot 1 right?'));
     const system = sent[0]?.[0] ?? '';
     const pronounReminded = sent.some((m) => m.at(-1)!.includes("pronoun that the book doesn't use") && m.at(-1)!.includes('the book uses she for Bai'));
-    // Refused after the retry: not counted against the person's day, but its model calls stay in the spend.
-    const countNow = async () => (await sql`select count(*)::int as n from studio.coach_calls where person = ${FID}`)[0].n as number;
-    const spendNow = async () => Number((await sql`select coalesce(sum(cost_usd), 0)::float8 as usd from studio.coach_costs`)[0].usd);
-    const [countBefore, spendBefore] = [await countNow(), await spendNow()];
-    const slipTwice = await coach(deps(stand([() => 'The close-up on Bai could signal his judgment.', () => 'Still, Bai shows his anger.'])), input('Is shot 1 right?'));
-    const [countAfter, spendAfter] = [await countNow(), await spendNow()];
-    const notCounted = countAfter === countBefore && spendAfter > spendBefore;
+    // A retry that still slips is shown (owner, 2026-10-19), and logged in the person-free daily totals; a written line
+    // in the retry is still refused.
+    const totals = async () => Object.fromEntries((await sql`select event, n from studio.coach_checks`).map((r) => [r.event, r.n as number])) as Record<string, number>;
+    const t0 = await totals();
+    const slipTwice = await coach(deps(stand([() => 'The close-up on Bai could signal his judgment.', () => 'Still, Bai shows his anger. What does Bai want?'])), input('Is shot 1 right?'));
+    const t1 = await totals();
+    const slipTwiceShown = slipTwice.state === 'note' && slipTwice.regenerated && /his anger/.test(slipTwice.parts.map((p) => (p.type === 'text' ? p.text : '')).join(''));
+    const logged = (t1.pronoun_slip ?? 0) - (t0.pronoun_slip ?? 0) === 2 && (t1.pronoun_shown ?? 0) - (t0.pronoun_shown ?? 0) === 1 && (slipOnce.state === 'note' && (t0.pronoun_slip ?? 0) === 1 && !t0.pronoun_shown);
+    const slipThenLine = await coach(deps(stand([() => 'The close-up on Bai could signal his judgment.', () => 'Here:\nBAI: "You went soft."'])), input('Is shot 1 right?'));
+    const checkCols = (await sql`select column_name as c from information_schema.columns where table_schema = 'studio' and table_name = 'coach_checks'`).map((r) => r.c as string).sort().join();
     const firstId = (g: string) => g.match(/^\[(c\d+-b\d+)\]/m)?.[1] ?? 'none';
     const cited = await coach(deps(stand([(g) => `The way he froze [c91] matters, and so does [${firstId(g)}]. What does Zei want?`])), input('What does the book say?'));
     const citedShown = cited.state === 'note' ? cited.parts.map((p) => (p.type === 'text' ? p.text : `{${p.id}}`)).join('') : '';
@@ -374,9 +409,9 @@ try {
 
     check(
       'M7',
-      `the coach's faults: the cast's pronouns from the book (${CAST.length} sheets, each pronoun shown by a block, Min by "mother"), listed up to the person's chapter; ${mustSlip.length} slips caught and ${mustNotSlip.length} right replies passed; a slip retried with its own reminder, twice declined and not counted against the day (its spend still counted); block ids: loose ones rewritten, [c91] and other broken ones dropped, only real blocks cited`,
-      castWrong.length === 0 && listed && slipMissed.length === 0 && slipWrong.length === 0 && citesOk && /Zei: he/.test(system) && /Bai: she/.test(system) && !/Lektor/.test(system) && slipOnce.state === 'note' && slipOnce.regenerated && pronounReminded && /her judgment/.test(slipOnce.parts.map((p) => (p.type === 'text' ? p.text : '')).join('')) && slipTwice.state === 'declined' && slipTwice.why === 'pronouns' && notCounted && !/c91/.test(citedShown) && quotesOk,
-      { castWrong, at4, at14, slipMissed, slipWrong, text, dropped: fixed.dropped, cleanDropped: clean.dropped, slipOnce: slipOnce.state, pronounReminded, slipTwice, countBefore, countAfter, spendBefore, spendAfter, citedShown, citedIds },
+      `the coach's faults: the cast's pronouns from the book (${CAST.length} sheets, each pronoun shown by a block, Min by "mother"), listed up to the person's chapter; ${mustSlip.length} slips caught and ${mustNotSlip.length} right replies passed; a slip retried with its own reminder; a retry that still slips shown and logged (daily totals, no person), a written line after a slip still refused; block ids: loose ones rewritten, [c91] and other broken ones dropped, only real blocks cited`,
+      castWrong.length === 0 && listed && slipMissed.length === 0 && slipWrong.length === 0 && citesOk && /Zei: he/.test(system) && /Bai: she/.test(system) && !/Lektor/.test(system) && slipOnce.state === 'note' && slipOnce.regenerated && pronounReminded && /her judgment/.test(slipOnce.parts.map((p) => (p.type === 'text' ? p.text : '')).join('')) && slipTwiceShown && logged && slipThenLine.state === 'declined' && checkCols === 'day,event,n' && !/c91/.test(citedShown) && quotesOk,
+      { castWrong, slipMissed, slipWrong, slipOnce: slipOnce.state, pronounReminded, t0, t1, slipTwiceShown, slipThenLine: slipThenLine.state, checkCols, citesOk, citedShown, citedIds, listed },
     );
   }
 
@@ -503,8 +538,17 @@ try {
       await p.getByRole('button', { name: 'Ask' }).click();
       await p.locator('.mk-note').first().waitFor();
       const t = await p.locator('.mk-coach').innerText();
+      // 19 more refusals through the API, then the 21st on screen: it counts, so the sentence is gone.
+      await p.evaluate(async (draftSent) => {
+        const token = JSON.parse(localStorage.getItem('snowmoon.signin')!).token;
+        for (let i = 0; i < 19; i++) await fetch('/api/make/coach', { method: 'POST', headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify(draftSent) });
+      }, { stage: 'talk', message: 'TEST-WRITES-TWICE again', draft: { title: '', idea: 'x', upTo: 14, beats: [], shots: [] }, history: [] });
+      await p.getByLabel('To the coach').fill('TEST-WRITES-TWICE once more');
+      await p.getByRole('button', { name: 'Ask' }).click();
+      await p.locator('.mk-note').nth(1).waitFor();
+      const t21 = await p.locator('.mk-note').nth(1).innerText();
       await p.context().close();
-      return t;
+      return { t, t21 };
     })());
     // A wallet account (owner, 2026-10-19: "open to wallet accounts"): signed in, saves its own draft.
     const walletSaved = await (async () => {
@@ -522,7 +566,7 @@ try {
     const byOther = await fetch(`${BASE}/api/make/drafts/${savedId}`, { headers: { Authorization: 'Bearer make-test-778' } }).then((r) => r.status);
     const byWallet = await fetch(`${BASE}/api/make/drafts/${savedId}`, { headers: { Authorization: 'Bearer make-test--5' } }).then((r) => r.status);
     const byOwner = await fetch(`${BASE}/api/make/drafts/${savedId}`, { headers: { Authorization: 'Bearer make-test-777' } }).then((r) => r.json());
-    check('M6', 'screens at 390 wide, light and dark: idea, talk, beats, storyboard, saved; a wallet sign-in saves its own draft; decline shown, no line; no sideways scroll; nothing from outside; 401 signed out; another person (FID or wallet) 404', signed === 401 && otherFid === 401 && shots.length === 9 && walletSaved?.length === 1 && walletSaved[0].title === 'Wallet draft' && byWallet === 404 && !sideways && outside.length === 0 && errors.length === 0 && /wasn.t shown/.test(declinedShown) && !/never wanted to win/.test(declinedShown) && byOther === 404 && byOwner?.draft?.shots?.[0]?.line === 'Nah, way too fake for me.', { signed, otherFid, shots: shots.length, walletSaved, byWallet, sideways, outside: outside.slice(0, 3), errors: errors.slice(0, 3), declinedShown: declinedShown.slice(0, 300), byOther, owner: byOwner?.draft?.shots });
+    check('M6', 'screens at 390 wide, light and dark: idea, talk, beats, storyboard, saved; a wallet sign-in saves its own draft; decline shown, no line; the 21st refusal without "didn’t count"; no sideways scroll; nothing from outside; 401 signed out; another person (FID or wallet) 404', signed === 401 && otherFid === 401 && shots.length === 9 && walletSaved?.length === 1 && walletSaved[0].title === 'Wallet draft' && byWallet === 404 && !sideways && outside.length === 0 && errors.length === 0 && /wasn.t shown/.test(declinedShown.t) && /didn.t count/.test(declinedShown.t) && !/never wanted to win/.test(declinedShown.t) && /wasn.t shown/.test(declinedShown.t21) && !/didn.t count/.test(declinedShown.t21) && byOther === 404 && byOwner?.draft?.shots?.[0]?.line === 'Nah, way too fake for me.', { signed, otherFid, shots: shots.length, walletSaved, byWallet, sideways, outside: outside.slice(0, 3), errors: errors.slice(0, 3), declinedShown: { t: declinedShown.t.slice(0, 300), t21: declinedShown.t21.slice(0, 300) }, byOther, owner: byOwner?.draft?.shots });
     console.log(`  screenshots: ${OUT}`);
   }
 } catch (e) {

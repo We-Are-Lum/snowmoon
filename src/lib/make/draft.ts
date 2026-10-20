@@ -51,7 +51,12 @@ export const MAKE = {
    * day"), apart from the assistant's CHAT.dailySpendCapUsd; summed from its own cost rows, studio.coach_costs.
    */
   coachSpendCapUsd: 1,
-  /** Days a coach message's count row (person and time, nothing else) is kept before it is deleted. */
+  /**
+   * Refused coach replies per person per UTC day that don't count as messages (owner, 2026-10-19: "20 refused replies
+   * per person per day"); from the next one, a refusal counts like any message.
+   */
+  coachRefusalsPerDay: 20,
+  /** Days a coach message's count row (person, time, refused or not; nothing else) is kept before it is deleted. */
   coachCountDays: 2,
 };
 
