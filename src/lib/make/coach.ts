@@ -4,7 +4,7 @@ import { renderMarkdown } from '../render';
 import { blocksById, labels, retrieve, type Passage } from '../chat/retrieve';
 import { sanitizeReply, type Part } from '../chat/sanitize';
 import { worstCaseUsd } from '../chat/limits';
-import { recordCoach, reserveCoach } from './limits';
+import { recordCoach, releaseCoach, reserveCoach } from './limits';
 import type { Complete, Quote } from '../chat/ask';
 import { checkNoWriting } from './no-writing';
 import { cleanDraft, MAKE, ownWords, type Draft } from './draft';
@@ -16,7 +16,8 @@ import { dropBrokenCites, normaliseCites } from './cites';
  * guard model (CHAT.model, CHAT.guardModel), the same route to them (src/lib/chat/model.ts), the same spoiler limit
  * and book search, and the same citation handling (quotes come from the database, never the model). Its limits are
  * its own (src/lib/make/limits.ts; owner, 2026-10-19): 50 messages a day (10 for a wallet that has never paid) and
- * $1 a day across everyone, with its own cost rows.
+ * $1 a day across everyone, with its own cost rows. A reply refused after the retry isn't counted against the day,
+ * but its model calls count toward the $1.
  * Signed in with Farcaster or a wallet (owner, 2026-10-19: "open to wallet accounts").
  *
  * Owner's rule: "can cite the book, but never writes prose, dialogue or narration", and (2026-10-19) "coach may suggest
@@ -128,7 +129,11 @@ export async function coach(deps: CoachDeps, raw: unknown): Promise<CoachResult>
     reply = await replyOnce(deps, [...messages, { role: 'user', content: reminder.replace('{{REASON}}', verdict.reason) }], allowed);
     verdict = await check(deps, input.message, reply.shown, own);
   }
-  if (verdict.verdict === 'flagged') return { state: 'declined', why: verdict.why, left: slot.left };
+  // Refused after the retry: not counted against their day (owner, 2026-10-19); the model calls stay in the spend.
+  if (verdict.verdict === 'flagged') {
+    await releaseCoach(sql, person, slot.at);
+    return { state: 'declined', why: verdict.why, left: slot.left + 1 };
+  }
 
   const blocks = await blocksById(sql, reply.cites, limit);
   const label = await labels(sql, blocks.map((b) => b.chapter));

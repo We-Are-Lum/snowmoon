@@ -7,7 +7,8 @@ import { MAKE } from './draft';
  * - a daily count per person: MAKE.coachPerDay for a Farcaster account or a wallet with at least one payment,
  *   MAKE.coachPerDayUnpaidWallet for a wallet that has never paid. Counted in studio.coach_calls (draft migration
  *   0017): one row per message, the person (a FID, or minus a wallet account's number) and the time, nothing else.
- *   Rows older than MAKE.coachCountDays are deleted as new ones come in.
+ *   Rows older than MAKE.coachCountDays are deleted as new ones come in. A message whose reply is refused after the
+ *   retry is taken off the count (releaseCoach; owner, 2026-10-19), but its model calls still count toward the spend.
  * - a daily spend cap across everyone, MAKE.coachSpendCapUsd, summed from its own cost rows (studio.coach_costs:
  *   daily totals of model calls with no person, no request id and no time of day, like the assistant's chat_costs).
  */
@@ -29,7 +30,7 @@ export async function coachSpentToday(sql: Sql): Promise<number> {
  * Take one of today's coach messages for this person, or say why not. Locks per person and for the spend check, so
  * parallel requests cannot both slip under a limit; the spend check reserves the worst case of a message.
  */
-export async function reserveCoach(sql: Sql, person: number, worstUsd: number): Promise<{ ok: true; left: number } | { ok: false; reason: Refusal; perDay?: number }> {
+export async function reserveCoach(sql: Sql, person: number, worstUsd: number): Promise<{ ok: true; left: number; at: Date } | { ok: false; reason: Refusal; perDay?: number }> {
   return sql.begin(async (tx) => {
     const t = tx as unknown as Sql;
     await tx`select pg_advisory_xact_lock(hashtext('snowmoon.make.coach.spend'))`;
@@ -39,9 +40,17 @@ export async function reserveCoach(sql: Sql, person: number, worstUsd: number): 
     const [{ n }] = await tx`select count(*)::int as n from studio.coach_calls where person = ${person} and at >= date_trunc('day', now() at time zone 'utc') at time zone 'utc'`;
     if (n >= perDay) return { ok: false as const, reason: 'limit' as const, perDay };
     if ((await coachSpentToday(t)) + worstUsd > MAKE.coachSpendCapUsd) return { ok: false as const, reason: 'spend' as const };
-    await tx`insert into studio.coach_calls (person) values (${person})`;
-    return { ok: true as const, left: perDay - n - 1 };
+    const [{ at }] = await tx`insert into studio.coach_calls (person) values (${person}) returning at`;
+    return { ok: true as const, left: perDay - n - 1, at: at as Date };
   });
+}
+
+/**
+ * Give back the message reserveCoach took: its reply was refused after the retry, so it doesn't count against the
+ * person's day (owner, 2026-10-19). Only that one row; the spend it caused stays in studio.coach_costs.
+ */
+export async function releaseCoach(sql: Sql, person: number, at: Date): Promise<void> {
+  await sql`delete from studio.coach_calls where ctid = (select ctid from studio.coach_calls where person = ${person} and at = ${at} limit 1)`;
 }
 
 /** One coach model call's cost, added to the day's totals in studio.coach_costs. */

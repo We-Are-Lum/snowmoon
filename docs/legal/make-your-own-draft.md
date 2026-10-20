@@ -20,8 +20,9 @@ What the feature does (and so what the texts must say):
   coach's replies; the conversation stays on the device.
 - **Its own limits:** 50 coach messages a day for a Farcaster account or a wallet with at least one payment, **10 for
   a wallet that has never paid**, apart from the assistant's 30. To count them we record, per message, the account
-  (Farcaster ID or wallet account) and the time, nothing else, and delete those records after two days. Whether a
-  wallet has paid is read from the payments we already keep. **Its own spending limit, $1 a day across everyone**,
+  (Farcaster ID or wallet account) and the time, nothing else, and delete those records after two days. **A message
+  whose reply is refused after the retry isn't counted** (owner, 2026-10-19): its record is deleted in the same
+  request. Its model calls still count toward the $1 below, since they were paid for. Whether a wallet has paid is read from the payments we already keep. **Its own spending limit, $1 a day across everyone**,
   apart from the assistant's $2, with its own daily cost totals (no account, no time of day).
 - The coach may suggest visual details only as questions or short options ("would a clenched jaw show it?"), never as
   written description; every reply is checked before it is shown.
@@ -48,14 +49,16 @@ is shown only next to images today, so it is unchanged.
 
 > Drafts you save in "Make your own": your idea, your beats and your text storyboard. Only you can see them, and you
 > can delete them; a deleted draft is removed. To count the story coach's daily limit, we record when you send it a
-> message, under your Farcaster ID or wallet account, and delete those records after two days. For a wallet
+> message, under your Farcaster ID or wallet account, and delete those records after two days (straight away, if
+> the coach's reply couldn't be shown). For a wallet
 > account, the limit depends on whether it has made a payment, which we read from the payments we already keep.
 
 ## Privacy §5 (the assistant), one sentence added
 
 > The story coach in "Make your own" works the same way: your message and the draft you're working on are sent to
 > answer it, and nothing of the conversation is kept. It has its own limits: 50 messages a day (10 for a wallet
-> account that has never made a payment) and its own daily spending limit.
+> account that has never made a payment) and its own daily spending limit. A message whose reply couldn't be shown
+> doesn't count toward your 50 (or 10).
 
 ## Privacy §7 (outside services), the Groq item reworded
 

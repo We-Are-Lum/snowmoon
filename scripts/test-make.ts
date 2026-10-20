@@ -177,17 +177,19 @@ try {
     const zero = await outcome(`insert into studio.adaptation_drafts (person, draft) values (0, '{}')`, [], 'kept');
     const wallet = await outcome(`insert into studio.adaptation_drafts (person, draft) values (-5, '{}')`, [], 'kept');
     await pg.query(`delete from studio.adaptation_drafts where person = -5`);
-    // A coach count row: today's can't be deleted (a day's count can't be reset); one two days old can.
+    // Coach count rows: one from an hour ago can't be deleted (a day's count can't be reset); one two days old can, and
+    // one from the last ten minutes can (its reply was refused after the retry).
     await pg.query(`insert into studio.coach_calls (person) values (444)`);
+    await pg.query(`insert into studio.coach_calls (person, at) values (444, now() - interval '1 hour')`);
     await pg.query(`insert into studio.coach_calls (person, at) values (444, now() - interval '3 days')`);
-    const del = (await pg.query(`delete from studio.coach_calls where person = 444 returning at > now() - interval '1 day' as fresh`)).rows as { fresh: boolean }[];
+    const del = (await pg.query(`delete from studio.coach_calls where person = 444 returning (at < now() - interval '1 day') as old`)).rows as { old: boolean }[];
     const coachZero = await outcome(`insert into studio.coach_calls (person) values (0)`, [], 'kept');
     await pg.exec('reset role');
     await pg.query(`delete from studio.coach_calls where person = 444`);
     await pg.exec('set role studio_writer');
     const ok = (m?: { rls: boolean; anon_reads: boolean; anon_writes: boolean }) => !!m?.rls && !m.anon_reads && !m.anon_writes;
     if (d.ok) await deleteDraft(sql, A, id);
-    check('M2', 'migration 0017 (draft, PGlite only): its three tables RLS on, nothing for anon; owner fixed; size and person checked; wallet persons kept; only old count rows deletable', applied === 'ok' && ok(meta) && ok(coachMeta) && ok(costMeta) && moved === 'refused' && big === 'refused' && zero === 'refused' && wallet === 'kept' && coachZero === 'refused' && del.length === 1 && !del[0].fresh, { applied, meta, coachMeta, costMeta, moved, big, zero, wallet, coachZero, del });
+    check('M2', 'migration 0017 (draft, PGlite only): its three tables RLS on, nothing for anon; owner fixed; size and person checked; wallet persons kept; count rows deletable only when old or from the last ten minutes', applied === 'ok' && ok(meta) && ok(coachMeta) && ok(costMeta) && moved === 'refused' && big === 'refused' && zero === 'refused' && wallet === 'kept' && coachZero === 'refused' && del.length === 2 && del.filter((r) => r.old).length === 1, { applied, meta, coachMeta, costMeta, moved, big, zero, wallet, coachZero, del });
   }
 
   // M3 drafts
@@ -245,7 +247,7 @@ try {
     const [{ calls }] = await sql`select count(*)::int as calls from studio.coach_calls where person = ${FID}`;
     const [{ asks }] = await sql`select count(*)::int as asks from studio.chat_calls where fid = ${FID}`;
     const cols = (await sql`select table_name || '.' || column_name as c from information_schema.columns where table_schema = 'studio' and table_name in ('chat_calls', 'chat_costs', 'coach_calls')`).map((r) => r.c as string);
-    check('M4', "the coach: notes shown; written lines, prose and described shots never shown (retry, then decline); a question about a visual detail shown; a silent guard fails closed; counted in the coach's own count, not the assistant's; nothing stored", note.state === 'note' && lineOnce.state === 'note' && lineOnce.regenerated && reminded && lineTwice.state === 'declined' && prose.state === 'declined' && silent.state === 'declined' && described.state === 'note' && described.regenerated && /clenched jaw show it/.test(describedShown) && !/let you win|glitter|flicker/.test(shownTexts) && calls === 6 && asks === 0 && !cols.some((c) => /text|message|question|prompt_text|content/.test(c.split('.')[1])) && cols.filter((c) => c.startsWith('coach_calls.')).sort().join() === 'coach_calls.at,coach_calls.person', { note: note.state, lineOnce, reminded, lineTwice: lineTwice.state, prose: prose.state, silent: silent.state, described, calls, asks, cols });
+    check('M4', "the coach: notes shown; written lines, prose and described shots never shown (retry, then decline, and a decline isn't counted against the day); a question about a visual detail shown; a silent guard fails closed; counted in the coach's own count, not the assistant's; nothing stored", note.state === 'note' && lineOnce.state === 'note' && lineOnce.regenerated && reminded && lineTwice.state === 'declined' && prose.state === 'declined' && silent.state === 'declined' && described.state === 'note' && described.regenerated && /clenched jaw show it/.test(describedShown) && !/let you win|glitter|flicker/.test(shownTexts) && calls === 3 && asks === 0 && !cols.some((c) => /text|message|question|prompt_text|content/.test(c.split('.')[1])) && cols.filter((c) => c.startsWith('coach_calls.')).sort().join() === 'coach_calls.at,coach_calls.person', { note: note.state, lineOnce, reminded, lineTwice: lineTwice.state, prose: prose.state, silent: silent.state, described, calls, asks, cols });
 
     // Its own count and its own spend (owner, 2026-10-19): the assistant's 30 used up, and its $2 spent, don't stop
     // the coach; the coach's costs go to its own rows (studio.coach_costs), never the assistant's.
@@ -301,17 +303,21 @@ try {
       ...CAST.filter((c) => sheets.find((sh) => sh.slug === c.slug)?.first_appearance.chapter !== c.first).map((c) => `${c.slug}: first appearance`),
       ...CAST.filter((c) => (c.pronoun === null) !== (c.source === null)).map((c) => `${c.slug}: pronoun without a source`),
       ...CAST.filter((c) => c.source && !block(c.source.id).replace(/\s+/g, ' ').includes(c.source.words)).map((c) => `${c.slug}: words not in ${c.source!.id}`),
-      ...CAST.filter((c) => c.source && !new RegExp(`\\b(${c.pronoun === 'he' ? 'he|him|his|himself' : 'she|her|hers|herself'})\\b`, 'i').test(c.source.words)).map((c) => `${c.slug}: no ${c.pronoun} in the words`),
+      ...CAST.filter((c) => c.source && !new RegExp(`\\b(${c.pronoun === 'he' ? 'he|him|his|himself' : 'she|her|hers|herself'})\\b`, 'i').test(c.source.words) && !(c.slug === 'min' && /\bmother\b/.test(c.source.words))).map((c) => `${c.slug}: no ${c.pronoun} in the words`),
     ];
     const at4 = castText(4);
     const at14 = castText(14);
-    const listed = /Zei: he/.test(at4) && /Bai: she/.test(at4) && !/Deluin|Lektor|Tafindel|Min/.test(at4) && /Deluin: he/.test(at14) && /no pronoun for Min/.test(at14) && !/Lektor/.test(at14);
+    const listed = /Zei: he/.test(at4) && /Bai: she/.test(at4) && !/Deluin|Lektor|Tafindel|Min/.test(at4) && /Deluin: he/.test(at14) && /Min: she/.test(at14) && !/no pronoun/.test(at14) && !/Lektor/.test(at14);
 
     const mustSlip = [
       'The close-up on Bai could emphasize a physical cue (tight jaw, clenched fist) that signals his judgment.',
       'What does Zei want, and what does it cost her to say it?',
       'Bai turns away from the railing; he has heard enough.',
       'Would Seila tell him himself, or let him find out?',
+      'What is Min afraid of, and does he show it?',
+      // From the live runs (docs/make-your-own/redteam.json, before the cast list was in the prompt).
+      'How could Bai’s accusation be shown through body language or a sharp tone that hints at his fear of losing respect?',
+      'What does Zei fear losing if she defends instead of attacks?',
     ];
     const mustNotSlip = [
       'What does Bai want, and what does it cost her to say it?',
@@ -319,9 +325,13 @@ try {
       "Zei's mother hugs her son at the gate.",
       'Would a clenched jaw show it, or her hands on the railing?',
       "Would Min's face show it before she speaks?",
+      'Does Min hold the door for Bai, or does she go first?',
       'Does Pan see her coming before Zei does?',
       'Your close-up on Bai works. What does he see when she turns?',
       'How does Zei hide it from his rival? Does she notice?',
+      // From the live pronoun check (docs/make-your-own/pronouns-live.json): "she" and "her" are Mu, named earlier.
+      'What would she risk losing if Zei “only defends” (e.g., the credibility of the tournament or her own reputation as a facilitator)?',
+      'How could you show her judgment without dialogue—perhaps a lingering glance at Zei’s defensive moves or a subtle shift in her posture?',
     ];
     const slipMissed = mustSlip.filter((t) => pronounSlips(t).length === 0);
     const slipWrong = mustNotSlip.filter((t) => pronounSlips(t).length > 0);
@@ -349,7 +359,13 @@ try {
     const slipOnce = await coach(deps(stand([() => 'The close-up on Bai could signal his judgment.', () => 'The close-up on Bai could signal her judgment. What does Bai want?'])), input('Is shot 1 right?'));
     const system = sent[0]?.[0] ?? '';
     const pronounReminded = sent.some((m) => m.at(-1)!.includes("pronoun that the book doesn't use") && m.at(-1)!.includes('the book uses she for Bai'));
+    // Refused after the retry: not counted against the person's day, but its model calls stay in the spend.
+    const countNow = async () => (await sql`select count(*)::int as n from studio.coach_calls where person = ${FID}`)[0].n as number;
+    const spendNow = async () => Number((await sql`select coalesce(sum(cost_usd), 0)::float8 as usd from studio.coach_costs`)[0].usd);
+    const [countBefore, spendBefore] = [await countNow(), await spendNow()];
     const slipTwice = await coach(deps(stand([() => 'The close-up on Bai could signal his judgment.', () => 'Still, Bai shows his anger.'])), input('Is shot 1 right?'));
+    const [countAfter, spendAfter] = [await countNow(), await spendNow()];
+    const notCounted = countAfter === countBefore && spendAfter > spendBefore;
     const firstId = (g: string) => g.match(/^\[(c\d+-b\d+)\]/m)?.[1] ?? 'none';
     const cited = await coach(deps(stand([(g) => `The way he froze [c91] matters, and so does [${firstId(g)}]. What does Zei want?`])), input('What does the book say?'));
     const citedShown = cited.state === 'note' ? cited.parts.map((p) => (p.type === 'text' ? p.text : `{${p.id}}`)).join('') : '';
@@ -358,9 +374,9 @@ try {
 
     check(
       'M7',
-      `the coach's faults: the cast's pronouns from the book (${CAST.length} sheets, each pronoun shown by a block, Min with none), listed up to the person's chapter; ${mustSlip.length} slips caught and ${mustNotSlip.length} right replies passed; a slip retried with its own reminder, twice declined; block ids: loose ones rewritten, [c91] and other broken ones dropped, only real blocks cited`,
-      castWrong.length === 0 && listed && slipMissed.length === 0 && slipWrong.length === 0 && citesOk && /Zei: he/.test(system) && /Bai: she/.test(system) && !/Lektor/.test(system) && slipOnce.state === 'note' && slipOnce.regenerated && pronounReminded && /her judgment/.test(slipOnce.parts.map((p) => (p.type === 'text' ? p.text : '')).join('')) && slipTwice.state === 'declined' && slipTwice.why === 'pronouns' && !/c91/.test(citedShown) && quotesOk,
-      { castWrong, at4, at14, slipMissed, slipWrong, text, dropped: fixed.dropped, cleanDropped: clean.dropped, slipOnce: slipOnce.state, pronounReminded, slipTwice, citedShown, citedIds },
+      `the coach's faults: the cast's pronouns from the book (${CAST.length} sheets, each pronoun shown by a block, Min by "mother"), listed up to the person's chapter; ${mustSlip.length} slips caught and ${mustNotSlip.length} right replies passed; a slip retried with its own reminder, twice declined and not counted against the day (its spend still counted); block ids: loose ones rewritten, [c91] and other broken ones dropped, only real blocks cited`,
+      castWrong.length === 0 && listed && slipMissed.length === 0 && slipWrong.length === 0 && citesOk && /Zei: he/.test(system) && /Bai: she/.test(system) && !/Lektor/.test(system) && slipOnce.state === 'note' && slipOnce.regenerated && pronounReminded && /her judgment/.test(slipOnce.parts.map((p) => (p.type === 'text' ? p.text : '')).join('')) && slipTwice.state === 'declined' && slipTwice.why === 'pronouns' && notCounted && !/c91/.test(citedShown) && quotesOk,
+      { castWrong, at4, at14, slipMissed, slipWrong, text, dropped: fixed.dropped, cleanDropped: clean.dropped, slipOnce: slipOnce.state, pronounReminded, slipTwice, countBefore, countAfter, spendBefore, spendAfter, citedShown, citedIds },
     );
   }
 

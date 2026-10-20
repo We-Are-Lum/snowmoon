@@ -334,9 +334,9 @@ function CoachReply({ r }: { r: CoachResult }) {
   if (r.state === 'spend') return <p>The coach has reached today&rsquo;s spending limit for everyone. It comes back at 00:00 UTC.</p>;
   if (r.state === 'declined')
     return r.why === 'pronouns' ? (
-      <p>The coach&rsquo;s reply wasn&rsquo;t shown: it got a character&rsquo;s pronoun wrong twice. Ask again.</p>
+      <p>The coach&rsquo;s reply wasn&rsquo;t shown: it got a character&rsquo;s pronoun wrong twice. Ask again; this one didn&rsquo;t count toward today&rsquo;s messages.</p>
     ) : (
-      <p>The coach&rsquo;s reply wasn&rsquo;t shown: it tried to write for you, which it doesn&rsquo;t do. Ask it a question about your own draft instead.</p>
+      <p>The coach&rsquo;s reply wasn&rsquo;t shown: it tried to write for you, which it doesn&rsquo;t do. Ask it a question about your own draft instead; this one didn&rsquo;t count toward today&rsquo;s messages.</p>
     );
   return (
     <>

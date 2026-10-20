@@ -62,8 +62,10 @@ create index coach_calls_at on studio.coach_calls (at);
 alter table studio.coach_calls enable row level security;
 create policy writer_read on studio.coach_calls for select to studio_writer using (true);
 create policy writer_insert on studio.coach_calls for insert to studio_writer with check (true);
--- Only old rows can be deleted (the two-day clean-up); a day's count can't be reset.
-create policy writer_delete_old on studio.coach_calls for delete to studio_writer using (at < now() - interval '2 days');
+-- Only old rows can be deleted (the two-day clean-up), and a message's own row in the minutes it is answered, when its
+-- reply is refused after the retry (owner, 2026-10-19: "a reply that's refused after the retry shouldn't count against
+-- the 50 a day"). Earlier messages in a day can't be taken off the count.
+create policy writer_delete_old on studio.coach_calls for delete to studio_writer using (at < now() - interval '2 days' or at > now() - interval '10 minutes');
 revoke all on studio.coach_calls from anon, authenticated;
 grant select, insert, delete on studio.coach_calls to studio_writer;
 revoke update, truncate, references, trigger on studio.coach_calls from studio_writer;
