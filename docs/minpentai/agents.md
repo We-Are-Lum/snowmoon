@@ -58,12 +58,15 @@ npm run test:minpentai-play-server    # one-on-one: rules, clocks, refusals, vie
 npm run test:minpentai-learn          # Learn, run beside Design's v3 code and compared
 npm run test:minpentai-share          # sharing a ladder win
 npm run test:minpentai-players        # players.ts and minpentai:vs-rungs
+npm run test:minpentai-ladder         # the ladder: a seeded round robin of the five rungs (about a minute)
 npm run test:minpentai-agents         # this file: its paths, scripts, quotes and example
 npx tsx scripts/test-minpentai.ts       # the book's cell rule (engine.ts)
 npx tsx scripts/test-minpentai-match.ts # the older match code on the book's rule
 ```
 
-The five computer players against each other (a round robin; the table is printed, nothing is asserted about their order):
+The ladder's own test, `test:minpentai-ladder` (`scripts/test-minpentai-ladder.ts`), plays every rung against every other over seeded matches in both seats and checks that each rung beats every rung below it. One pair is left open: Builder (rung 3) and Opportunist (rung 4) are about even, so the test only checks that Opportunist isn't easier.
+
+To print the same kind of table for any players, without asserting anything:
 
 ```sh
 npm run minpentai:vs-rungs -- --round-robin
