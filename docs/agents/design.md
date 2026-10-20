@@ -11,7 +11,7 @@ work, with credit. Eventually, easy for people who know nothing about crypto or 
 
 Research behind it: `research-connectors.md` (Claude and ChatGPT), `research-scanning.md` (CSAM scanning
 and the law), `research-newcomers.md` (email, passkeys, cards). The proof: `demo/` (transcript and
-screenshots) and `npm run test:agents` (68 checks).
+screenshots) and `npm run test:agents` (69 checks).
 
 ## 1. Three ways to connect, one result
 
