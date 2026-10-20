@@ -110,6 +110,17 @@ export async function boardById(sql: Sql, id: string): Promise<Storyboard | null
   return r ? row(r) : null;
 }
 
+/**
+ * A person's storyboards, newest first: all of them (hidden ones too) for their own You page, or only
+ * shown ones for their public profile, /@<handle> (owner, 2026-10-18).
+ */
+export async function boardsBy(sql: Sql, person: number, o: { hidden: boolean; limit?: number }): Promise<Storyboard[]> {
+  const rs = o.hidden
+    ? await sql`select * from studio.storyboards where person = ${person} order by created_at desc limit ${o.limit ?? 100}`
+    : await sql`select * from studio.storyboards where person = ${person} and not hidden order by created_at desc limit ${o.limit ?? 100}`;
+  return rs.map(row);
+}
+
 /** The remix frames a board shows, by id: their image and whether they are still shown. */
 export async function boardFrames(sql: Sql, b: Storyboard): Promise<Record<string, { url: string; hidden: boolean }>> {
   const ids = [...new Set(b.items.map((i) => i.frame).filter((f): f is string => f !== null))];
