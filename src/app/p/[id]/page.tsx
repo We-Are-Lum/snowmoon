@@ -24,7 +24,7 @@ export default async function Piece({ params }: { params: Promise<{ id: string }
       {versions.map((v) => (
         <PieceVersion key={v.id} v={v} notes={notes.filter((n) => n.version === v.id)} imageSrc={v.image ? `/api/pieces/image/${v.id}` : null} />
       ))}
-      <PieceFeedback on={latest.id} ownerHandle={(await handleFor(latest.person)) ?? ''} />
+      <PieceFeedback on={latest.id} piece={latest.piece} ownerHandle={(await handleFor(latest.person)) ?? ''} />
     </div>
   );
 }

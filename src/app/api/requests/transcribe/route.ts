@@ -11,6 +11,7 @@ import { agentsOn, sha256, sql } from '~/lib/agents/core';
  * on Vercel). At most 10 a minute per person.
  */
 const noStore = { 'Cache-Control': 'no-store' };
+let standInTurn = 0;
 export async function POST(request: Request) {
   if (!agentsOn()) return new NextResponse('Not found', { status: 404 });
   const person = await getPerson(request);
@@ -22,8 +23,12 @@ export async function POST(request: Request) {
   if (!/^audio\/(webm|ogg|mp4|mpeg|wav|x-wav)/.test(type)) return NextResponse.json({ error: 'Send audio' }, { status: 400, headers: noStore });
   const audio = Buffer.from(await request.arrayBuffer());
   if (!audio.length || audio.length > AGENTS.transcription.maxBytes) return NextResponse.json({ error: 'That recording is too long; keep it under two minutes.' }, { status: 400, headers: noStore });
+  // The stand-in returns its fixed sentences in turn ("|" between them), so a test can speak more than once.
   const standIn = process.env.VERCEL ? null : process.env.AGENTS_TEST_TRANSCRIPT;
-  if (standIn) return NextResponse.json({ text: standIn, by: 'test stand-in (not a real transcription)' }, { headers: noStore });
+  if (standIn) {
+    const said = standIn.split('|');
+    return NextResponse.json({ text: said[standInTurn++ % said.length].trim(), by: 'test stand-in (not a real transcription)' }, { headers: noStore });
+  }
   const key = process.env.GROQ_API_KEY;
   if (!key) return NextResponse.json({ error: 'Speaking isn’t set up here yet. Type it instead.' }, { status: 503, headers: noStore });
   const form = new FormData();

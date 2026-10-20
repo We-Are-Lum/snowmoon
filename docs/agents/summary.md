@@ -1,63 +1,53 @@
 # Overnight: agents that make things for people (summary)
 
-Branch **`agents-connect`** (not pushed, nothing deployed, nothing published, no production database
-change). Switched off. Money spent: **$0** (the test agents ran on your Claude subscription; no fal or
-gateway calls). InfiniteTalk test: **skipped**, Modal isn't set up on this Mac.
+Branch **`agents-connect`**: local, switched off, not pushed. Nothing deployed or published, and no
+production database change. Money spent: **$0**: the test agents ran on your Claude subscription, and
+there were no fal or gateway calls. InfiniteTalk: **skipped**, because Modal isn't set up on this Mac.
 
-## What works (locally, end to end)
+**Judged against your goal: people do the creative acts; AI does the work.**
 
-- **Connect, three ways.** "Add to Claude / ChatGPT" (a connector at snowmoon.party/mcp with sign-in),
-  a plain-text guide at snowmoon.party/agents.md, and wallet agents for fleets. Each agent shows as
-  **"Claude, agent of @you"**. One tap on /you disconnects it, and its token stops at once.
-- **Agents draft, you publish.** They can start ideas, draft storyboards, frame prompts and character
-  versions, propose revisions, leave notes, read feedback, and bring in images with their recipe. All of
-  it waits in a new **"Your agents' drafts"** list on /you with Publish and Discard. No tool publishes,
-  spends money or speaks as you.
-- **The loop, proven with two real Claude agents.** A's agent drafted an idea and a storyboard. A
-  published them. B (a person) left a note, and B's agent drafted a note that B published. A's agent
-  read both and revised the storyboard: it ended on a held close-up, as B asked. A approved version 2,
-  which shows "Revised from Claude, agent of @A".
-- **Labels everywhere:** "agent of @x", "words by @x's agent", "Brought in · recipe as declared, not
-  checked", the credit chain, and a "Human-written words only" filter.
-- **Guardrails:** daily limits per agent, 3 agents per person, book lines checked word for word,
-  metadata stripped from images, and a scan gate that refuses to store a match and disconnects the
-  agent. Agents' tokens are refused everywhere a person signs in.
-- **Tests:** `test:agents` passes all 69 checks. The tests and the demo found three real bugs, now fixed: token withdrawal being undone, reconnecting using up an agent slot, and shot directions being labelled as story words.
+## What works (locally, end to end, with two real Claude agents)
 
-## What you'd see
+- **You say it; your agent makes it.** On /you, type or speak an idea. Your agent picks it up, makes
+  something from it, and you react with **Keep**, **Try again** or **Say more**. No settings anywhere.
+- **Speaking counts as writing.** A spoken idea or note is turned into text. You check the words and
+  send them, and they're kept as yours. The recording is never kept.
+- **The stamp.** Every piece shows what you did apart from what the AI did, for example **"Idea by @you ·
+  feedback from @friend · made by Claude, agent of @you"**. Your own words, the idea and your notes, are
+  shown as yours. An agent's note is credited to the agent, never to its person.
+- **Story words stay human.** An agent can use your own words or the book's, each checked word for
+  word, but never writes lines itself. A brought-in piece with AI-written words is labelled and never
+  counts as anyone's stamp.
+- **Feedback drives it.** A note on your draft, your piece or a moment of a scene goes to your agent as a
+  request. Other people's notes on your piece reach your agent too, and they're credited in the stamp.
+- **The machinery is one tap away.** Shot ids, timings, prompts and models sit behind "Recipe", still
+  public.
+- **Connecting.** "Add to Claude / ChatGPT" (with sign-in), snowmoon.party/agents.md, and wallet agents.
+  "Disconnect" on /you stops an agent at once.
+- **Tests:** `test:agents` passes 90 checks. The rest of the suite passes too, except one principle check
+  (decision 3 below).
 
-The screenshots are in `docs/agents/demo/`:
-1. The consent page.
-2. Your agents on /you.
-3. The review list.
-4. A piece with notes from a person and from an agent.
-5. The revised storyboard, version 2.
-6. Disconnected.
+## Taps (measured in the demo)
 
-The demo transcript is `docs/agents/demo/transcript.md`.
+- **Idea → first thing made: 5** when speaking (3 when typing): open You · Speak · Stop · Send ·
+  tell your AI "go". Keeping it is 1 more.
+- **Feedback → kept revision: 6** when speaking (4 when typing).
+- **Down to 2–4:** if the agent watches your requests by itself (no "go"), and speaking stops on silence.
 
 ## Decisions for you
 
-1. **Story words.** Can your agent write narration and dialogue? It's allowed by default, always
-   labelled, with a human-written-only filter. Your own work stays human-written either way. Keep it,
-   or refuse it?
-2. **Scanning before images open.** Arachnid Shield plus PhotoDNA (both free, both need an
-   application), plus registering with NCMEC and a written reporting procedure with a lawyer. Images
-   stay closed until then.
-3. **Principle checks.** P4a fails on the agent sign-in routes. I've proposed a change (design §8b) and
-   didn't make it. Principle 1 also needs to allow declared recipes.
-4. **ChatGPT.** Custom connectors with write tools may need a Business plan. It needs a test on a real
+1. **Scanning before images open:** Arachnid Shield plus PhotoDNA (both free, both need an application),
+   registering with NCMEC, and a written procedure with a lawyer. Until then, images stay closed.
+2. **Speaking:** the transcription is Whisper (open weights) on Groq. Groq hears the recording, so
+   Privacy has to name it. Not yet tried for real; the tests use a stand-in.
+3. **Principle checks:** P4a fails on the agent sign-in routes. I've proposed a change and didn't make
+   it. Principle 1 needs to allow declared recipes.
+4. **ChatGPT:** custom connectors with write tools may need a Business plan. It needs a test on a real
    account.
-5. **Newcomers** (researched, not built). Email codes plus $5 and $10 card packs through Stripe: about
-   $13 a month at 100 users. Or passkeys first?
-6. The Privacy and Terms lines in design §6 are for your reread.
+5. **The editor:** redesign it as "say what you want, react", with Line and Voice up front and the rest
+   behind Recipe. This is designed, not built (about 8–12 hours).
+6. **Newcomers** (researched, not built): email codes plus $5 and $10 card packs, about $13 a month at
+   100 users.
+7. **Privacy and Terms:** the lines are drafted for your reread.
 
-## Worth knowing
-
-- Claude registers a new client on every reconnect, so reconnecting now renews the same agent instead
-  of using up one of your three.
-- Anthropic's directory won't list a connector that moves money, so agents can't spend anything. That's
-  by design.
-- In version 2, the agent wrote "her face" about Zei. A person's review step catches slips like that.
-
-Full design: `docs/agents/design.md`. Research: `docs/agents/research-*.md`.
+Screenshots and the transcript are in `docs/agents/demo/`. The full design is `docs/agents/design.md`.

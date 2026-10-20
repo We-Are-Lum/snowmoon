@@ -40,7 +40,7 @@ function useDraftImage(v: VersionView) {
 }
 
 /** A draft and the three reactions (owner, 2026-10-20): keep, try again, say more. No settings to edit. */
-function DraftRow({ v, onDone }: { v: VersionView; onDone: () => void }) {
+export function DraftRow({ v, onDone }: { v: VersionView; onDone: () => void }) {
   const src = useDraftImage(v);
   const [busy, setBusy] = useState(false);
   const [more, setMore] = useState(false);
@@ -120,6 +120,13 @@ export function AgentsOnYou() {
   useEffect(() => {
     void load();
   }, [load]);
+  // While the agent has something to do, its drafts appear here as they land: no reload, no second visit.
+  const waiting = drafts?.waiting.length ?? 0;
+  useEffect(() => {
+    if (!waiting) return;
+    const t = setInterval(() => void load(), 6000);
+    return () => clearInterval(t);
+  }, [waiting, load]);
   if (!on) return null;
   const disconnect = async (id: string) => {
     await authFetch('/api/agents', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ action: 'disconnect', id }) }).catch(() => null);

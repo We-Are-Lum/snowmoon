@@ -35,7 +35,7 @@ export interface Stage {
   serverErr: () => string;
 }
 
-export async function startStage(opts: { scanner?: string; port?: number } = {}): Promise<Stage> {
+export async function startStage(opts: { scanner?: string; port?: number; transcript?: string } = {}): Promise<Stage> {
   const { signSession } = await import('../../src/lib/wallet/session');
   const pg = new PGlite();
   await pg.exec(`create role anon nologin; create role authenticated nologin; create role service_role nologin bypassrls;`);
@@ -88,7 +88,7 @@ export async function startStage(opts: { scanner?: string; port?: number } = {})
       ...env, NODE_ENV: 'production', NEXT_PUBLIC_URL: BASE,
       STUDIO_DATABASE_URL: `postgres://studio_writer@127.0.0.1:${dbPort}/postgres`,
       FARCASTER_API_URL: stubUrl, BASE_RPC_URL: stubUrl, IMAGES_TICKET_SECRET: SECRET,
-      AGENTS_TEST: '1', AGENT_API_TEST: '1', AGENTS_TEST_STORE: store, AGENTS_TEST_SCANNER: opts.scanner ?? 'none-planted', AGENTS_TEST_TRANSCRIPT: 'Bai tells Zei to slow down, and this time he listens.',
+      AGENTS_TEST: '1', AGENT_API_TEST: '1', AGENTS_TEST_STORE: store, AGENTS_TEST_SCANNER: opts.scanner ?? 'none-planted', AGENTS_TEST_TRANSCRIPT: opts.transcript ?? 'Bai tells Zei to slow down, and this time he listens.',
     },
     stdio: ['ignore', 'ignore', 'pipe'],
   });

@@ -11,7 +11,23 @@ work, with credit. Eventually, easy for people who know nothing about crypto or 
 
 Research behind it: `research-connectors.md` (Claude and ChatGPT), `research-scanning.md` (CSAM scanning
 and the law), `research-newcomers.md` (email, passkeys, cards). The proof: `demo/` (transcript and
-screenshots) and `npm run test:agents` (69 checks).
+screenshots) and `npm run test:agents` (90 checks).
+
+## 0. The main goal, and how this measures up
+
+**The goal (owner, 2026-10-20):** people do the creative acts (having ideas, writing, speaking, reading,
+giving feedback, having new ideas); AI does all the work to make them real (prompts, generation, layout,
+timing, assembly, revisions, settings). Two measures: **how easy the creative act is**, and **how easy it
+is to put a real human stamp on the work.**
+
+| What follows | Where it is now |
+|---|---|
+| The default view hides the machinery | A piece shows the work (the frames themselves, the person's words, the lines) and the stamp. Shot ids, timings, prompts, models and the agent's notes are behind **Recipe**, one tap away, still public. |
+| The stamp | Every version records what people did apart from what the agent did: **"Idea and words by @x · feedback from @y · made by Claude, agent of @x"**, and the person's own words that started and steered it are shown as theirs. An idea the agent had itself is the agent's, never a person's. |
+| Story words stay human (decision 6, settled) | An agent places lines; it never writes them. A line is the person's own (checked word for word against what they typed or said) or the book's (checked against its block). A brought-in piece with AI-written words is labelled and never counts as anyone's stamp. |
+| Feedback is the main input | A note, typed or spoken, on a draft, a piece or a moment becomes a request the agent acts on. The person **reacts: Keep, Try again, Say more.** No settings to edit. |
+| Speaking counts as writing | Speak instead of typing anywhere you tell your agent something. The recording is transcribed, comes back for you to check, and is kept as your words. The recording is never kept. |
+| Count taps | Measured in the demo: **idea → first thing made: 5 taps** spoken (3 typed); **feedback → kept revision: 6 taps** spoken (4 typed). Section 12. |
 
 ## 1. Three ways to connect, one result
 
@@ -55,9 +71,10 @@ pointer to its metadata, which is what makes Claude and ChatGPT start sign-in (b
 
 | Tool | What it does |
 |---|---|
-| `whoami` | its name here, scopes, limits, whether story words and images are open |
+| `whoami` | its name here, scopes, limits, and how to work (read_requests first) |
+| `read_requests` | **its to-do list:** what its person typed or said (ideas; notes on drafts, pieces and moments; try again; say more), in their words |
 | `list_my_work`, `get_piece` | its person's drafts and published work; any piece it can see, with credits and notes |
-| `start_idea` | an idea (text, adaptation, moments, optional lines) |
+| `start_idea` | the first piece made from a person's idea (`answering` its request) |
 | `draft_storyboard` | shots of a published version in the agent's order, with timings and notes |
 | `draft_frames` | image prompts per shot (no image is made by the site) |
 | `draft_character_version` | a new version of one of the book's characters, in words, building on a sheet |
@@ -67,11 +84,15 @@ pointer to its metadata, which is what makes Claude and ChatGPT start sign-in (b
 | `leave_note` | a draft note, labelled as from an agent, public once its person publishes it |
 | plus the seven read tools | the book, scenes, shots, recipes, moments |
 
-Not there, on purpose: publishing, spending, paying, posting as a person, linking agents.
+Every draft tool takes `answering` (the request it answers) and `notes` (other people's published notes it
+takes up); together they make the stamp. Not there, on purpose: publishing, spending, paying, posting as a
+person, writing story words, linking agents.
 
-**The review list on /you** shows every draft, rendered as it would be published, with Publish and
-Discard; agents' draft notes too. Only the person can publish (an agent's token is refused by every
-person route, tested).
+**/you starts with the creative act:** "Tell your agent an idea" (type or speak), then **Your agents'
+drafts**, each rendered as it would be published, with **Keep** (publish), **Try again** (it goes; the agent
+tries again) and **Say more** (type or speak; the agent revises; the revision replaces the draft), then
+what's waiting for the agent, then the agents themselves. Only the person reacts (an agent's token is
+refused by every person route, and an agent can't make a request in its person's name, tested).
 
 **Credit.** A revision records the chain behind it (`credit`): each step's version, piece, person and
 agent. The page reads "Revised from Claude, agent of @a (version 2), from @a (version 1)". A revision
@@ -84,21 +105,29 @@ existing designs system (a new sheet version with picks) is a follow-up; today i
 plates as inputs, matched by hash). `bring_in_image` already marks a declared input as ours when its
 hash is in the named version's editor data.
 
-## 3. Labels
+## 3. The stamp and labels
 
 | Where | Label |
 |---|---|
-| anything an agent drafted | "<name>, agent of @person" and an **agent** chip |
-| a version with an agent's story words | "**words by @person's agent**" |
+| every version, first line | the stamp: **"Idea and words by @x · feedback from @y"** (people, in bold) **· made by Claude, agent of @x** |
+| under it | the person's own words that started it and steered it, as quotes, "spoken" when said aloud |
+| an idea the agent had itself | "Idea by Claude, agent of @x", in the agent's part, never the person's |
+| a brought-in piece with AI-written words | "has AI-written words (not part of anyone's stamp)"; "human-written only" leaves it out |
 | a brought-in image | "Brought in by @person's agent · recipe as declared, not checked", the AI label "AI-made image, as declared by @person's agent, not by the author", and each recipe field marked ✓ checked or declared |
 | a revision | "Revised from …", every step linked |
 | a note from an agent | its agent label and chip |
 | lists | a "Human-written words only" filter |
 
-## 4. Feedback and notes
+## 4. Feedback is the main input
 
-People's notes on published work are public at once (after the own-words consent). An agent's notes
-are drafts until its person publishes them (v2's decision 1). Mentions: `@name` (a Farcaster name or an
+- **The person's own feedback** on their draft (Say more, Try again), on their published piece ("Tell your
+  agent what to change"), or on a moment of a scene ("Say what you want here") becomes a request, typed
+  or spoken. The agent answers it with a new version; the person reacts.
+- **Other people's notes** on a published piece are public at once (after the own-words consent); the
+  piece's agent reads them (`read_feedback`) and credits those it takes up (`notes`), so they appear in
+  the stamp as "feedback from @y".
+- An agent's own notes are drafts until its person keeps them (v2's decision 1); they're labelled as an
+  agent's and are never part of a stamp. Mentions: `@name` (a Farcaster name or an
 address) mentions a person; `@name's agent` addresses their agents, and shows as addressed in
 `read_feedback`. The full moment-notes design (the prompt check, per-person limits, the Mentions list,
 mini app notifications) still applies when notes go on moments; tonight's notes sit on pieces.
@@ -115,7 +144,7 @@ mini app notifications) still applies when notes go on moments; tonight's notes 
 | Agents never pose as people | yes: separate token type, refused by every person route; always labelled |
 | Rate limits on the open read API | 20 a minute per caller (already in agent-read-api); registration uses the same limit |
 | Scanning brought-in images | built as a gate that fails closed: off ('none') until a vendor is chosen; a labelled test stand-in proves the refusal path (a match is never stored, and the agent is disconnected) |
-| Story words | one switch plus a human-written-only list (section 7) |
+| Story words | stay human: only the person's own or the book's, each checked word for word (section 7) |
 | Book lines word for word | checked against the cited block; "…" for cuts |
 | Links | only to snowmoon.party |
 | Metadata | every brought-in image re-encoded, all metadata (GPS included) removed (tested) |
@@ -129,6 +158,14 @@ preservation procedure with counsel (18 U.S.C. §2258A; the REPORT Act). The cod
 match; the preservation store and the report are the procedure's job, not improvised.
 
 ## 6. Privacy and Terms lines each new thing needs (DRAFT, for the reread; they ship with the feature)
+
+**Privacy §4, kept when you sign in, add (requests):**
+> What you tell your agents, typed or spoken: your ideas and notes, in your words, until you delete them.
+> If you speak, the recording is used only to turn it into words and is not kept.
+
+**Privacy §7, outside services, add (speaking):**
+> If you speak to your agent here, the recording is sent to Groq to be turned into text with the open
+> Whisper model, and Groq returns the words; we keep the words, not the recording.
 
 **Privacy §4, kept when you sign in, add:**
 > If you connect an agent: its name, how it connected (through an app that signs in, or its own wallet
@@ -179,10 +216,14 @@ v1 suggested also recording the agreement with a hash of the wording, as the own
 **Principle 1** (every generated asset has a public recipe) needs the change v3 proposed: declared
 recipes allowed, labelled as declared. Not changed in principles.md: that's the owner's wording.
 
-## 7. Decision 6: can a person's own agent write story words?
+## 7. Decision 6: settled: story words stay human (owner, 2026-10-20)
 
-The site's own tools never write story words. Designed both ways, behind one switch
-(`AGENTS.storyWords`):
+`AGENTS.storyWords` is `'refused'`. An agent places the person's own words (source `person`, checked word
+for word against what they typed or said to their agents) and the book's (source `book`, checked against
+the block); it never writes lines, and lines hidden in free text (a speaker line, a script, quoted
+dialogue) are refused too. A brought-in image declares any words in it (`words: none | person | book | ai`);
+AI-written words are labelled and never count as the person's. The table below is kept as the record of
+the two designs; the 'allowed' path stays only so the tests can prove the switch:
 
 | | **Allowed** (default unless you say otherwise) | **Refused** |
 |---|---|---|
@@ -200,6 +241,28 @@ demo's first run labelled a storyboard of directions as "words by …'s agent", 
 lines meant as the book's go in `lines` with their block, where they're checked word for word.
 
 Tested both ways (S1–S5). **Your decision:** keep "allowed" (the default), or switch to "refused".
+
+## 7b. Speaking counts as writing
+
+- Every "tell your agent" box has **Speak**. The browser records; our server transcribes it with
+  **Whisper large-v3-turbo** (MIT, open weights; on the allowlist, hosted by Groq) and sends back only the
+  text, which the person checks and sends as their words. The recording is held in memory for the request
+  and never stored, logged or published (tested: nothing in the database can hold audio).
+- Spoken words are marked "spoken" in the stamp.
+- Not yet run against Groq for real (the tests use a labelled stand-in); Groq's endpoint and price are to
+  confirm before switching on.
+
+## 7c. Character versions and the editor, re-checked against the goal
+
+- **Character versions:** the person says what they want ("Zei a year older, a winter coat over the
+  tournament jacket"), on Zei's sheet or a moment; the agent drafts the version (its description and,
+  once images open, the sheet pictures, brought in with recipes); the person reacts. Stamp: "Idea by @x ·
+  made by @x's agent". The description is the agent's work, not story words.
+- **The editor** (today: a 3D camera and tabs Line, Voice, Picture, Prompt, Recipe) becomes **"say what
+  you want, react"**: the default is the frame playing, the shot's lines, a Speak/type box, and Keep / Try
+  again / Say more. **Line** (your words) and **Voice** (your performance) stay up front: they're creative
+  acts. Picture, Prompt, the camera and the models move behind **Recipe**. Not built tonight (design
+  only); about 8–12 hours.
 
 ## 8. People new to crypto and AI (investigation only; full research in `research-newcomers.md`)
 
@@ -244,7 +307,8 @@ for your yes:
 
 ## 9. Decisions for the owner
 
-1. **Story words (decision 6):** keep "allowed" (default) or "refused"? And record the principle 2 change.
+1. **Story words (decision 6):** settled as human-only (2026-10-20). Principle 2 needs no change for agent
+   words; it may want a line saying brought-in AI words are labelled and never anyone's.
 2. **Scanning vendor:** Arachnid Shield plus PhotoDNA (both free, applications), Cloudflare as a second
    layer; NCMEC registration and the written procedure (with counsel) before uploads open.
 3. **Principle 1:** allow declared recipes, labelled as declared.
@@ -277,3 +341,28 @@ for your yes:
 | Consent record, principles text and checks for declared recipes and agent words | 4–6 |
 | Email sign-in and card packs (if chosen) | 16–24 |
 | check:ui across the new pages, phone checks | 3–4 |
+
+## 12. Taps, measured in the demo
+
+Counted in `scripts/demo-agents.ts`, by phase. Typing or speaking is the creative act and isn't counted
+as a tap. "Tell their AI go" is the one message a person sends in Claude so the agent acts; it isn't a tap
+on this site, but it is a step, so it's counted.
+
+| Phase | Spoken | Typed | The taps (spoken) |
+|---|---|---|---|
+| **Idea → first thing made** | **5** | 3 | open You · Speak · Stop · Send · tell their AI "go" (the draft appears on the same page) |
+| Keep it | 1 | 1 | Keep |
+| **Feedback → kept revision** | **6** | 4 | open the piece · Speak · Stop · Send · tell their AI "go" · Keep (the new version appears on the piece itself) |
+
+The first run measured 6 and 7; two changes took one tap off each: /you shows drafts as they land while
+something is waiting, and a person's own piece shows its agent's new version in place, with Keep, Try
+again and Say more.
+
+**To get to a handful or fewer:**
+- **No "go":** an agent that watches its person's requests (a wallet agent polling, or an AI with
+  scheduled tasks) acts without being told. Then 4 and 5 spoken, 2 and 3 typed.
+- **One tap to speak:** stop on silence instead of a Stop tap. Then 3 and 4 (needs care: the person must
+  still see and check the words before they're sent, so Send stays).
+- **Notifications:** "your agent's new version is ready" (the mini app notification from the moments
+  design) replaces "open the piece".
+

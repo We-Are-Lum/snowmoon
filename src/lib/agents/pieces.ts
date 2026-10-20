@@ -39,6 +39,8 @@ export interface Stamp {
   idea?: { person: number; handle: string | null; words: string; spoken: boolean } | { agent: string };
   words?: { person?: { person: number; handle: string | null }; book?: boolean; ai?: boolean };
   feedback?: { person: number; handle: string | null; words: string; spoken: boolean; own: boolean }[];
+  /** Notes from other people's agents that this takes up: credited to the agent, never to a person's stamp. */
+  agent_notes?: { agent: string }[];
   made_by?: string;
 }
 
@@ -138,10 +140,12 @@ async function stampFor(agent: Agent, a: Answering, base: VersionView | null): P
   }
   if (!stamp.idea && !base) stamp.idea = { agent: who.label };
   for (const id of a.notes ?? []) {
-    const [n] = await sql()<{ person: string; body: string }[]>`select person, body from studio.notes where id = ${id} and status = 'published'`;
+    const [n] = await sql()<{ person: string; body: string; agent_name: string | null }[]>`select person, body, agent_name from studio.notes where id = ${id} and status = 'published'`;
     if (!n) throw new ToolInputError(`notes: ${id} isn't a published note`);
-    if (n.person && Number(n.person) !== agent.person)
-      (stamp.feedback ??= []).push({ person: Number(n.person), handle: (await handleFor(Number(n.person))) ?? null, words: n.body, spoken: false, own: false });
+    if (Number(n.person) === agent.person) continue;
+    // A note an agent drafted is the agent's, even once its person published it: credited to the agent, not the person.
+    if (n.agent_name) (stamp.agent_notes ??= []).push({ agent: (await agentLabel(Number(n.person), n.agent_name)).label });
+    else (stamp.feedback ??= []).push({ person: Number(n.person), handle: (await handleFor(Number(n.person))) ?? null, words: n.body, spoken: false, own: false });
   }
   if (a.lines && (a.lines.person || a.lines.book || a.lines.ai))
     stamp.words = { ...(a.lines.person ? { person: { person: agent.person, handle } } : {}), ...(a.lines.book ? { book: true } : {}), ...(a.lines.ai ? { ai: true } : {}) };

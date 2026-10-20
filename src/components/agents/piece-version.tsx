@@ -24,7 +24,7 @@ const blockHref = (b: string) => {
 const list = (xs: string[]) => (xs.length <= 1 ? xs.join('') : `${xs.slice(0, -1).join(', ')} and ${xs[xs.length - 1]}`);
 
 /** The human stamp, then what the agent did. */
-export function StampLine({ stamp, credit }: { stamp: Stamp; credit: Credit[] }) {
+export function StampLine({ stamp, credit, person }: { stamp: Stamp; credit: Credit[]; person?: number }) {
   const human: string[] = [];
   const idea = stamp.idea && 'person' in stamp.idea ? stamp.idea : null;
   const wordsBy = stamp.words?.person ? `@${short(stamp.words.person.handle)}` : null;
@@ -37,7 +37,8 @@ export function StampLine({ stamp, credit }: { stamp: Stamp; credit: Credit[] })
   if (stamp.words?.book) human.push(`lines from ${S.book}`);
   const fb = [...new Set((stamp.feedback ?? []).map((f) => `@${short(f.handle)}`))];
   if (fb.length) human.push(`${S.feedback} ${list(fb)}`);
-  const built = credit.length ? credit[credit.length - 1] : null;
+  // Built on someone else's work: the earliest version in the chain that isn't this person's own.
+  const built = credit.find((c) => c.person !== person) ?? null;
   return (
     <p className="piece-stamp">
       {human.length > 0 && <strong className="piece-stamp-human">{human.join(' · ')}</strong>}
@@ -45,8 +46,9 @@ export function StampLine({ stamp, credit }: { stamp: Stamp; credit: Credit[] })
       <span className="piece-stamp-made">
         {stamp.idea && 'agent' in stamp.idea ? `${S.agentIdea(stamp.idea.agent)} · ` : ''}
         {S.madeBy} {stamp.made_by ?? 'an agent'}
+        {stamp.agent_notes?.length ? ` · notes from ${list([...new Set(stamp.agent_notes.map((n) => n.agent))])}` : ''}
       </span>
-      {built && built.person !== undefined && (
+      {built && (
         <>
           {' · '}
           <span className="piece-stamp-made">built on <Link href={`/p/${built.piece}`}>@{short(built.handle)}’s</Link></span>
@@ -177,7 +179,7 @@ export function PieceVersion({ v, notes, imageSrc, showN = true }: { v: VersionV
   return (
     <article className="piece-version" id={`v${v.n}`}>
       {showN && <h3>Version {v.n}{v.status === 'draft' ? ' (draft)' : ''}</h3>}
-      <StampLine stamp={v.stamp} credit={v.credit} />
+      <StampLine stamp={v.stamp} credit={v.credit} person={v.person} />
       <TheirWords stamp={v.stamp} />
       <Work v={v} imageSrc={imageSrc} />
       <Recipe v={v} />
@@ -197,5 +199,5 @@ export function PieceVersion({ v, notes, imageSrc, showN = true }: { v: VersionV
 
 /** For lists: the stamp only. */
 export function MadeBy({ v }: { v: VersionView }) {
-  return <StampLine stamp={v.stamp} credit={v.credit} />;
+  return <StampLine stamp={v.stamp} credit={v.credit} person={v.person} />;
 }
