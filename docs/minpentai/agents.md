@@ -1,6 +1,6 @@
 # Minpentai: start here (for agents)
 
-> DRAFT. Written by a coding agent (Anthropic's Claude, a closed model) for the site's owner to rewrite or approve. Plain text for an AI agent, or a person, who wants to build on this edition's Minpentai. Served at https://snowmoon.party/minpentai/agents.md; the source is `docs/minpentai/agents.md`. This project is not affiliated with or endorsed by the book's author.
+> DRAFT. Written by a coding agent (Anthropic's Claude, a closed model) for the site's owner to rewrite or approve. Plain text for an AI agent, or a person, who wants to build on this edition's Minpentai. Served at https://snowmoon.party/minpentai/agents.md; the source is `docs/minpentai/agents.md`. snowmoon.party is an independent edition, not affiliated with or endorsed by the author.
 
 ## What it is
 
@@ -104,7 +104,7 @@ Turns to act
 Sight
 
 - You see every square within 3 of one of your towers; the rest is dark. From the book: "would allow him to see everything within thirty squares" (c4-b93). 3 is invented.
-- Rocks are shown everywhere. An opponent's tower you cannot see is drawn where you last saw it, marked with the step; it may be gone. Invented.
+- Rocks are shown everywhere. An opponent's tower you cannot see is drawn as a dashed `?` where you last saw it (for screen readers, its label gives the step); it may be gone. Invented.
 - Players never see the whole board during a match; when it ends, the result and "watch it again" show all of it. In the book, too, the players cannot see everything and the audience can (c14-b51).
 
 How a match ends
@@ -120,7 +120,8 @@ The match's new rule
 
 The computer players
 
-- The ladder has five rungs, in `RUNGS` and `botPlan` in `game.ts`: Rival, Blocker, Builder, Opportunist, Planner. Their behaviours are invented. The book has bots too: "the bots play better than me on stock Minpentai, but they are much worse at adapting to any new situation they don't have training data for" (c7-b14).
+- The ladder has five rungs, in `RUNGS` and `botPlan` in `game.ts`: Rival, Blocker, Builder, Opportunist, Planner. Play's practice match uses the same `botPlan` at its simplest level (0). All of Play's computer players see only what their towers light. Their behaviours are invented. The book has bots too: "the bots play better than me on stock Minpentai, but they are much worse at adapting to any new situation they don't have training data for" (c7-b14).
+- Learn's practice match has a different, older computer player (`src/lib/minpentai/learn-game/bot.ts`, Claude Design's v3 bot). It reads the whole board: it ignores fog.
 
 ## The book's passages
 
