@@ -16,6 +16,7 @@ import { LegalLine } from './legal-line';
 import { SignInButton } from './sign-in';
 import { ThemeSwitch } from './theme-switch';
 import { WalletSignInButton } from './wallet';
+import { IMAGE_WORDING } from '~/lib/images/wording';
 import '../app/assistant/assistant.css';
 
 /**
@@ -291,6 +292,42 @@ function Account({ auth }: { auth: AuthState }) {
   );
 }
 
+/**
+ * The account, at the top of the phone menu (owner, 2026-10-19). Signed out: two full-width buttons and one
+ * line. Signed in: a row with a monogram and the name (or the shortened address), then Sign out as a row.
+ * The monogram is drawn here, not a profile picture: a picture would be fetched from a host Privacy doesn't name.
+ */
+function MenuAccount({ auth }: { auth: AuthState }) {
+  const wallet = useWalletSession();
+  const name = auth.kind === 'signed-in' ? (auth.username ? `@${auth.username}` : `FID ${auth.fid}`) : wallet ? wallet.short : null;
+  if (auth.kind === 'loading') return <div className="menu-account" aria-busy="true" />;
+  if (name === null)
+    return (
+      <div className="menu-account menu-account-out">
+        <SignInButton className="menu-signin menu-signin-primary" label={IMAGE_WORDING.prepaid.menuSignIn} />
+        {auth.kind === 'signed-out' && !auth.inApp && <WalletSignInButton className="menu-signin menu-signin-outline" note={false} />}
+        <p className="menu-signin-note">{IMAGE_WORDING.prepaid.signInNote}</p>
+      </div>
+    );
+  const out = auth.kind === 'signed-in' ? (auth.via === 'website' ? signOut : null) : signOutWallet;
+  const letter = auth.kind === 'signed-in' ? (auth.username?.[0] ?? '#') : (wallet?.address[2] ?? '0');
+  return (
+    <div className="menu-account">
+      <p className="menu-account-row">
+        <span className="menu-avatar" aria-hidden="true">
+          {letter.toUpperCase()}
+        </span>
+        <span className="menu-account-name">{name}</span>
+      </p>
+      {out && (
+        <button type="button" className="menu-account-row menu-signout" onClick={out}>
+          Sign out
+        </button>
+      )}
+    </div>
+  );
+}
+
 function MenuSheet({ items, path, current, auth, intro, onClose }: { items: ReturnType<typeof navItems>; path: string; current: number; auth: AuthState; intro: Intro; onClose: () => void }) {
   const sheet = useRef<HTMLDivElement>(null);
   const close = useCallback(onClose, [onClose]);
@@ -319,11 +356,11 @@ function MenuSheet({ items, path, current, auth, intro, onClose }: { items: Retu
         <button type="button" className="sheet-x menu-close" aria-label="Close the menu" onClick={close}>
           ×
         </button>
+        <MenuAccount auth={auth} />
         <Nav items={items} path={path} current={current} />
         <div className="menu-extra">
           <ThemeSwitch name="theme-menu" />
           <ReplayIntro intro={intro} label="What is this?" className="quiet-action" />
-          <Account auth={auth} />
           <LegalLine />
         </div>
       </div>
