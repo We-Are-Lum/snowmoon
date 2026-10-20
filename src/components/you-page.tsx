@@ -9,6 +9,7 @@ import type { BoardItem, FrameItem, OwnWork, PictureItem, SceneItem, Who } from 
 import { AiLabel } from './recipe-sheet';
 import { SignInButton } from './sign-in';
 import { WalletPanel, WalletSignInButton } from './wallet';
+import { AgentsOnYou } from './agents/agents-you';
 
 /**
  * The You page (owner, 2026-10-18: "build the You page"), reached by tapping your name in the menu:
@@ -176,6 +177,8 @@ export function YouPage() {
         <WorkList title={W.boards} id="you-boards" items={tag('boards')} render={(b) => <BoardRow key={b.id} b={b} reload={load} />} />
         <WorkList title={W.pictures} id="you-pictures" items={tag('pictures')} render={(p) => <PictureRow key={p.versionId} p={p} reload={load} />} />
       </section>
+      {/* Agents and their drafts (owner, 2026-10-20): shown only while agents are switched on. */}
+      <AgentsOnYou />
     </Frame>
   );
 }

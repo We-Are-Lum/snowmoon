@@ -338,6 +338,13 @@ add({
         if (/<textarea\b/.test(text)) problems.push(`${file}: the search box must be a single-line search input`);
         continue;
       }
+      if (file.endsWith('components/agents/agent-address-field.tsx')) {
+        // A wallet agent's address on /you (owner, 2026-10-20): kept with the link, never published by us.
+        for (const [what, re] of [['kept with the link', /kept with the link/], ['never published', /Never published by us/], ['described to screen readers', /aria-describedby/]] as const)
+          if (!re.test(text)) problems.push(`${file}: the agent address box must say it is ${what}`);
+        if (/fetch\(|supabase|\/api\//.test(text)) problems.push(`${file}: the agent address box must not send its text anywhere itself`);
+        continue;
+      }
       if (file.endsWith('components/tx-hash-field.tsx')) {
         // The balance screen's payment hash (owner, 2026-10-15): sent to our server to look up on Base, never published by us.
         for (const [what, re] of [['sent to us to look up on Base', /Sent to us to look up on Base/], ['never published', /Never published by us/], ['described to screen readers', /aria-describedby/]] as const)

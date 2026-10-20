@@ -146,6 +146,47 @@ export const AGENT_API = {
   protocolVersions: ['2025-06-18', '2025-03-26'] as const,
 };
 
+/**
+ * Agents that act for a person (owner, 2026-10-20; design docs/agents/design.md; DRAFT migration 0019).
+ * Three ways in, one result: an "agent of @handle" whose drafts its person publishes. SWITCHED OFF.
+ */
+export const AGENTS = {
+  enabled: false,
+  /** What an agent may be given. The person sees every one before agreeing. */
+  scopes: ['read', 'drafts', 'images', 'notes'] as const,
+  /** At most this many live agents per person (also a database trigger). */
+  perPerson: 3,
+  /** An access token lasts an hour; a refresh token 30 days and is replaced each time it is used. */
+  accessMinutes: 60,
+  refreshDays: 30,
+  /** An agent's link ends after 90 days unless renewed; the person can end it at once from /you. */
+  linkDays: 90,
+  /** Per agent, per UTC day (and a short-term brake). */
+  limits: { drafts: 50, notes: 20, images: 50, imagesPerMinute: 5, readsPerMinute: 60 },
+  /** All of one person's agents together, per UTC day. */
+  perPersonImages: 150,
+  /** Everyone's agents together, per UTC day: a brake. */
+  siteImagesPerDay: 1000,
+  /**
+   * Story words (narration or dialogue) written by an agent (owner's decision 6, default 2026-10-20):
+   * 'allowed' = kept, always labelled "words by @x's agent", and filtered out by "human-written only";
+   * 'refused' = an agent may use only the book's lines (checked word for word) and its person's own.
+   */
+  storyWords: 'allowed' as 'allowed' | 'refused',
+  /** People whose agents never write story words, whatever storyWords says (the owner: "my versions stay human-written"). */
+  humanWrittenOnly: [6786] as readonly number[],
+  /** A brought-in image: PNG or JPEG, at most 3 MB, about 16:9, re-encoded to JPEG at most 1920 wide, all metadata removed. */
+  image: { maxBytes: 3 * 1024 * 1024, maxSide: 1920, aspect: 16 / 9, aspectTolerance: 0.03 },
+  /**
+   * The scan every brought-in image passes before it is stored (docs/agents/research-scanning.md).
+   * 'none' = bringing in images is closed. A vendor must be configured, the reporting procedure written,
+   * and the owner's go given before this changes. 'test' exists only off Vercel, for the local tests.
+   */
+  scanner: 'none' as 'none' | 'arachnid' | 'test',
+  /** Where the site lives, for OAuth (the issuer) and the connector's address. */
+  resourcePath: '/mcp',
+};
+
 export const REMIX = {
   /** Across everyone, per UTC day, for free generations (owner: "$10/day to start"). */
   dailyFreeCapUsd: 10,
