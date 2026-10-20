@@ -16,7 +16,7 @@
  *   'diag' rule, a player that throws: each is refused, named, and counted as a loss.
  * - A player cannot change the match by changing its view. The same seed gives the same match.
  * - The example (scripts/minpentai-players/first-player.ts) plays the five rungs with no refused turn,
- *   and the script runs it.
+ *   and the script runs it, a rung, and the round robin.
  */
 import { execFileSync } from 'node:child_process';
 import { PlayController, type Env } from '../src/lib/minpentai/play-game/controller';
@@ -138,11 +138,12 @@ check('the example player plays every rung, both seats, with no refused turn', (
   for (let l = 1; l <= 5; l++) { const t = tally(first, rung(l), 3); if (t.refused.length) return t.refused[0]; }
 });
 
-check('npm run minpentai:vs-rungs runs the example (--n 2) and a rung, and refuses a bad spec', () => {
+check('npm run minpentai:vs-rungs runs the example (--n 2), a rung and the round robin, and refuses a bad spec', () => {
   const run = (...a: string[]) => execFileSync('npx', ['tsx', 'scripts/minpentai-vs-rungs.ts', ...a], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] });
   const out = run('scripts/minpentai-players/first-player.ts', '--n', '2');
   for (const n of ['1 Rival', '2 Blocker', '3 Builder', '4 Opportunist', '5 Planner']) if (!out.includes(n)) return `no line for ${n}:\n${out}`;
   if (!run('rung:2', '--n', '1').includes('5 Planner')) return 'rung:2 printed no table';
+  if (!/^5 Planner .*—/m.test(run('--round-robin', '--n', '1'))) return '--round-robin printed no table';
   try { run('rung:9'); return 'rung:9 was accepted'; } catch { /* refused, as it should be */ }
 });
 

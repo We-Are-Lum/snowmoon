@@ -37,10 +37,10 @@ if (argv.includes('--round-robin')) {
   const levels = [1, 2, 3, 4, 5];
   console.log(`round robin: the row's score against the column (wins + half the draws), ${2 * N} matches a pair, both seats`);
   console.log(''.padEnd(16) + levels.map((l) => String(l).padStart(6)).join(''));
-  for (const a of levels) {
-    const row = levels.map((b) => (a === b ? '     —' : `${pct(tally(rung(a), rung(b), N))}%`.padStart(6)));
-    console.log(name(a).padEnd(16) + row.join(''));
-  }
+  // Each pair is played once (2N matches); the column's score is the rest of the row's.
+  const S: Record<string, number> = {};
+  for (const a of levels) for (const b of levels) if (a < b) { const x = pct(tally(rung(a), rung(b), N)); S[`${a},${b}`] = x; S[`${b},${a}`] = 100 - x; }
+  for (const a of levels) console.log(name(a).padEnd(16) + levels.map((b) => (a === b ? '     —' : `${S[`${a},${b}`]}%`.padStart(6))).join(''));
   process.exit(0);
 }
 

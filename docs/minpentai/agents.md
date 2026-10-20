@@ -82,7 +82,7 @@ The board
 The pieces
 
 - Tower: your score, your sight, and where you may place. From the book, where they are "symbols" (c4-b93); the tower shape is invented.
-- Glider: moves one square a step in a straight line, up, down, left or right (diagonally too only under the "diag" rule), and never stops. Gliders are from the book (c4-b84); their speed is invented.
+- Glider: moves one square a step in a straight line, up, down, left or right (diagonally too only under the "diag" rule), and never stops on its own. Gliders are from the book (c4-b84); their speed is invented.
 - Square: blocks a glider. The first hit cracks it and turns the glider straight back; the second breaks the square and the glider. Any glider cracks any square, its own side's too. From the book: walls that reflect gliders (c2-b12), and walls that can be destroyed (c4-b9). Two hits is invented.
 - Rock: fixed; turns every glider straight back, and never breaks. Rocks are from the book (c4-b108); bouncing only is invented (in the book, gliders hitting rocks can make more gliders, c4-b108).
 
@@ -152,7 +152,7 @@ interface Placement { t: 'g' | 's' | 't'; o: 'C' | 'A'; x: number; y: number; dx
 - A square is a number: `K(x, y) = y * 15 + x`, and `XY(k)` turns it back (both in `game.ts`). x runs 0–14, y runs 0–9.
 - What you see (`fogView`): every rock; your own towers and squares; and every piece, either side's, on a square within R of one of your towers. Nothing else: not what the opponent places this turn, not the seed. The five rungs plan from exactly this view (the test checks that they plan the same on it as on the whole board). It is slightly more than the page draws for a person, which shows your own squares in the dark as dark.
 - What you return: gliders with `dx, dy` in -1, 0, 1 (straight only, unless the rule is "diag"); squares and towers with `dx = dy = 0`. Each on an empty square within R of `mine`, one piece a square, at most 8 points in all. They are checked by the one-on-one server's own check (`checkPlacements` in `play-server/match.ts`). A refused turn, or a player that throws, counts as a loss.
-- A match is seeded: the same players and seed always give the same match. The rule is drawn from the seed as the page and the server draw it, and the test plays ladder matches through the page's own code (`controller.ts`) beside `playMatch` and compares them, turn by turn.
+- A match is seeded: the same players and seed always give the same match, if the players take their random numbers only from `rng` (the rungs do). The rule is drawn from the seed as the page and the server draw it, and the test plays ladder matches through the page's own code (`controller.ts`) beside `playMatch` and compares them, turn by turn.
 
 A minimal player, `scripts/minpentai-players/first-player.ts` (the test checks that this is the file, word for word, and that it plays every rung with no refused turn):
 
@@ -198,7 +198,7 @@ npm run minpentai:vs-rungs -- scripts/minpentai-players/first-player.ts --n 100 
 npm run minpentai:vs-rungs -- rung:5                                             # a rung as the player
 ```
 
-It prints wins, draws and losses against each rung (seeds 1–N with you as Amber, 10001 onward as Cyan) and lists any refused turn. The same file always gives the same table. A rung is also a player: `rung(n)` in `players.ts`, so your player can call one.
+It prints wins, draws and losses against each rung (seeds 1–N with you as Amber, 10001 onward as Cyan) and lists any refused turn. A player that takes its random numbers only from `rng` gets the same table every run. A rung is also a player: `rung(n)` in `players.ts`, so your player can call one.
 
 Playing your player on the site is not built: the ladder is the five rungs in `botPlan`, and `controller.ts` stops at rung 5.
 
@@ -211,7 +211,7 @@ These are ideas, not features. None of them is built.
 3. **Idea: a computer player that plays either colour.** `botPlan` always plays Amber; `players.ts` turns the board for Cyan.
 4. **Idea: a replay file.** A match as one JSON file (seed, rule, every turn's placements) that plays back on the page. `playMatch` already returns the placements.
 5. **Idea: Learn on Play's rules.** Bring the lessons from v3 to Play's rules, using section 11 of the rules page.
-6. **Idea: the book's own game.** The cell rule recovered from c4-b5 (`engine.ts`) or the hex rule the book describes (c12-b169, c12-b170; tested in `docs/minpentai-rules.md`, section 3.2) as a game you can play.
+6. **Idea: the book's own game.** The cell rule recovered from c4-b5 (`engine.ts`) or the hex rule the book describes (c12-b169, c12-b170; tested in `docs/minpentai-rules.md`, section 3.2) as a game you can play. Older match code on the cell rule (`src/lib/minpentai/match.ts`, `src/lib/minpentai/ai.ts`) is kept in the repository, out of the menus.
 7. **Idea: bigger matches.** Larger boards or four players; section 10 of the rules page has placeholders, none designed.
 
 ## How to contribute
