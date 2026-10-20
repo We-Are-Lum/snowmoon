@@ -140,7 +140,7 @@ export function Play({ start, onLearn }: { start: 'home' | 'free' | 'ladder' | '
               </button>
               <button className="mp-card" onClick={v.openLadder}>
                 <span className="mp-card-head"><span className="mp-card-title">The computer ladder</span><span className="mp-label">{v.ladTag}</span></span>
-                <span className="mp-card-text">Five computer players, each harder. Beat one to open the next.</span>
+                <span className="mp-card-text">Five computer players to beat. Beat one to open the next.</span>
               </button>
               <button className="mp-card" onClick={v.openPerson}>
                 <span className="mp-card-head"><span className="mp-card-title">Play a person</span><span className="mp-label">{v.signed ? '' : 'SIGN IN'}</span></span>
@@ -178,7 +178,7 @@ export function Play({ start, onLearn }: { start: 'home' | 'free' | 'ladder' | '
                     </li>
                   ))}
                 </ol>
-                <p className="mp-label mp-note">Every rung plays by the same rules and sees only what its towers light. Harder means better plans, never more information.</p>
+                <p className="mp-label mp-note">Every rung plays by the same rules and sees only what its towers light. They differ in how they plan, never in what they know.</p>
               </div>
               <div className="mp-foot"><button className="mp-btn primary" onClick={v.playRung}>{v.playRungLabel}</button></div>
             </>
