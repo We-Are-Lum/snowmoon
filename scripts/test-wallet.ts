@@ -238,6 +238,27 @@ await sql.end();
   check('the route takes only a bare hash (the box extracts it first)', bad.status === 400);
   const [rows] = await sql`select count(*)::int as n from studio.wallet_payments where tx_hash = ${lost}`;
   check('one payment row for the hash, whatever was tried', rows.n === 1);
+
+  // The owner's first ETH payment (2026-10-18, 0xe1f5f745…717d): from a smart wallet, through EntryPoint v0.6,
+  // with no value on the transaction. The reader then refused it as "not to us"; the device took that as final
+  // and forgot the hash, so the fixed reader never saw it again. Now: that refusal keeps the hash, and the same
+  // hash, tried again, is added.
+  const { forgetsPending } = await import('../src/lib/wallet/pending');
+  const firstEth = keccak256(toHex('first eth payment')) as `0x${string}`;
+  const EP6 = '0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789';
+  const beforeEth = await balanceUsd(S, mine);
+  useChainForTests(base({ to: EP6, from: BUNDLER, logs: [userOp(me.address, true, EP6)], rise: 0n }));
+  const then = await as(mine, me.address, { txHash: firstEth });
+  const tj = await then.json();
+  check('reproduced: a smart-wallet payment the reader can\'t see is refused as not to us', then.status === 422 && tj.reason === 'not-to-us' && (await balanceUsd(S, mine)) === beforeEth, JSON.stringify(tj));
+  check('…and the device keeps its hash (a "not to us" may be our own misreading)', forgetsPending(tj.reason) === false);
+  useChainForTests(base({ to: EP6, from: BUNDLER, logs: [userOp(me.address, true, EP6)], rise: 413487687184325n }));
+  const later = await as(mine, me.address, { txHash: firstEth });
+  const lj2 = await later.json();
+  check('…and the kept hash, tried again with the fixed reader, is added once', later.ok && lj2.added > 1 && lj2.added < 1.1 && (await balanceUsd(S, mine)) > beforeEth, JSON.stringify(lj2));
+  check('only "already", "failed" and "old" let the device forget a payment', ['already', 'failed', 'old'].every((r) => forgetsPending(r)) && ['not-to-us', 'not-from-you', 'too-small', 'shared-block', undefined].every((r) => !forgetsPending(r)));
+  const panel = readFileSync('src/components/wallet.tsx', 'utf8');
+  check('the wallet panel tries a remembered payment again when it opens', /tried\.current = true;\s*void claim\(pending, 3\)/.test(panel));
 }
 
 { const { db: d } = await import('../src/lib/db'); await d()?.end(); }

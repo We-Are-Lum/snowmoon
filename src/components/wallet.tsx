@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { authFetch, signOutWallet } from '~/lib/client-auth';
 import { IMAGE_WORDING } from '~/lib/images/wording';
 import { claim, hasWallet, pay, signInWithWallet, WalletError } from '~/lib/wallet/client';
@@ -87,6 +87,17 @@ export function WalletPanel({ onChange }: { onChange?: () => void }) {
   useEffect(() => {
     void load();
   }, [load]);
+  // A payment this device still remembers is tried again, once, when the panel opens (2026-10-19): a
+  // refusal that may have been ours is no longer the end of it.
+  const tried = useRef(false);
+  useEffect(() => {
+    if (!b?.open || !pending || tried.current) return;
+    tried.current = true;
+    void claim(pending, 3).then(done, (e: unknown) => {
+      if (e instanceof WalletError && e.final) keep(null);
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [b?.open, pending]);
   if (!b) return null;
 
   const done = (r: { added: number }) => {

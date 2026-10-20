@@ -22,6 +22,9 @@ export async function POST(request: Request) {
     return null;
   });
   if (!p) return NextResponse.json({ error: W.claim['not-found'], retry: true }, { status: 503 });
+  // A refusal is logged (the transaction is public; the account is our number, no address), so a payment our
+  // reading of Base got wrong can be found and added later (2026-10-19, the owner's first ETH payment).
+  if (!p.ok && p.why !== 'pending' && p.why !== 'not-found') console.warn(`wallet claim refused: ${p.why} tx ${txHash} account ${w.account}`);
   if (!p.ok) return NextResponse.json({ error: W.claim[p.why], reason: p.why, retry: p.why === 'pending' || p.why === 'not-found' }, { status: p.why === 'pending' || p.why === 'not-found' ? 409 : 422 });
   const added = await credit(sql, w.account, { txHash, token: p.token, amount: p.amount, usd: p.usd, blockNumber: p.blockNumber });
   if (!added) return NextResponse.json({ error: W.claim.already, reason: 'already' }, { status: 409 });
