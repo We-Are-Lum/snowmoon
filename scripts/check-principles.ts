@@ -1879,7 +1879,7 @@ add({
 add({
   id: 'P8g',
   principle: 8,
-  name: 'the Minpentai kit\'s rules table (/minpentai/build, rules.json) cites real blocks with their words verbatim, marks every other rule invented with where it is in the code, lists all 152 passages, and keeps the later ones in a closed Spoilers section',
+  name: 'the Minpentai kit\'s rules table (/minpentai/build, rules.json) cites real blocks with their words verbatim, marks every other rule invented with where it is in the code, lists all 152 passages, shows chapters 2–14 and keeps chapters 15 on in a closed Spoilers section',
   load: async () => {
     const { KIT_RULES } = await import('../src/lib/minpentai/kit-rules');
     const { findPassages } = await import('../src/lib/minpentai/kit');
@@ -1899,6 +1899,8 @@ add({
       problems.push('public/minpentai/rules.json is stale: run npx tsx scripts/build-minpentai-kit.ts');
     if (JSON.stringify(published.passages.map((p: { block: string; shownOnPage: boolean }) => [p.block, p.shownOnPage])) !== JSON.stringify(passages.map((p: { block: string; shown: boolean }) => [p.block, p.shown])))
       problems.push('public/minpentai/rules.json lists other passages than the book gives');
+    // Shown: exactly every passage of chapters 2–14; Spoilers: exactly chapters 15 on (owner, 2026-10-20).
+    for (const p of passages as { block: string; chapter: number; shown: boolean }[]) if (p.shown !== (p.chapter >= 2 && p.chapter <= 14)) problems.push(`${p.block}: ${p.shown ? 'shown' : 'under Spoilers'}, but chapters 2–14 are shown and 15 on are under Spoilers`);
     // The page: Book, Invented and Draft labels, the not-affiliated line, and the Spoilers section closed by default.
     if (!/<MinpentaiTags[\s\S]*?tags=\{\['book', 'rules', 'draft'\]\}/.test(page)) problems.push('/minpentai/build: not labelled Book, Invented and Draft');
     if (!/NOT AFFILIATED WITH THE AUTHOR/.test(page)) problems.push('/minpentai/build: no "not affiliated with the author" line');
@@ -1911,6 +1913,7 @@ add({
     const r = c.rules.find((x: { cites?: { quote?: string }[] }) => x.cites?.some((q) => q.quote));
     const q = r.cites.find((x: { quote?: string }) => x.quote);
     q.quote = q.quote.replace(/\b(\w+)\b/, '$1s');
+    c.passages.find((p: { chapter: number }) => p.chapter >= 15)!.shown = true;
     c.page = c.page.replace('<details className="mp-kit-spoilers">', '<details className="mp-kit-spoilers" open>');
   },
 });

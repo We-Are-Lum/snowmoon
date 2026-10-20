@@ -527,10 +527,10 @@ once the owner picks a version.)
   and every quote is word for word in its block; every invented rule names a
   place in the code that is in its file; the passages are 152; `rules.json`
   matches the table; the page is labelled Book, Invented and Draft, says it is
-  not affiliated with the author, and keeps the passages beyond the rule
-  passages of chapters 2–14 in a Spoilers section closed by default (owner's
-  go, 2026-10-20). `npm run test:minpentai-kit` checks the same and that the
-  generated files are current. The proof changes one quoted word and opens Spoilers.
+  not affiliated with the author, shows every passage of chapters 2–14, and
+  keeps chapters 15 on in a Spoilers section closed by default (owner,
+  2026-10-20). `npm run test:minpentai-kit` checks the same and that the
+  generated files are current. The proof changes one quoted word, shows a chapter 15 passage and opens Spoilers.
 - `npm run check:ingest`: the committed text, screens and figures re-parse
   byte-identical from the fetched source. `npm run test:render`: template cases.
 - Review: do generated images that depict boards, maps or screens (for example

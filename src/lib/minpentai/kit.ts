@@ -8,8 +8,8 @@
  * of the book's rules), or is cited by Learn's words (learn-text.ts); a cited range counts every block in
  * it. That gives 152 blocks (kit part 1, 2026-10-20).
  *
- * The page shows the rule passages of chapters 2–14 (the blocks the rules table cites; owner's go,
- * 2026-10-20) and puts every other passage inside a closed Spoilers section.
+ * The page shows every passage from chapters 2–14 and folds chapters 15 onward under a closed Spoilers
+ * section (owner's decision, 2026-10-20, replacing the go's "rule passages from chapters 2–14 shown").
  */
 import { KIT_RULES, type KitRule } from './kit-rules';
 
@@ -23,13 +23,13 @@ export interface Passage {
   reasons: Reason[];
   /** Cited by a row of the rules table. */
   rulePassage: boolean;
-  /** Shown on the page; otherwise inside Spoilers. */
+  /** Shown on the page (chapters 2–14); otherwise inside Spoilers. */
   shown: boolean;
 }
 
 /** The expected count (kit part 1). A different count fails the check, with the difference listed. */
 export const PASSAGE_COUNT = 152;
-/** Rule passages from these chapters are shown; everything else is behind Spoilers. */
+/** Passages from these chapters are shown; every later one is behind Spoilers (owner, 2026-10-20). */
 export const SHOWN_CHAPTERS: [number, number] = [2, 14];
 
 const ENTITIES: Record<string, string> = { amp: '&', lt: '<', gt: '>', quot: '"', '#39': "'", apos: "'", nbsp: ' ' };
@@ -90,7 +90,7 @@ export function findPassages(book: Record<number, BookBlock[]>, rulesDoc: string
       block: id, chapter, idx, kind: blk?.kind ?? 'missing',
       reasons: ORDER.filter((r) => reasons.get(id)!.has(r)),
       rulePassage,
-      shown: rulePassage && chapter >= SHOWN_CHAPTERS[0] && chapter <= SHOWN_CHAPTERS[1],
+      shown: chapter >= SHOWN_CHAPTERS[0] && chapter <= SHOWN_CHAPTERS[1],
     };
   });
 }

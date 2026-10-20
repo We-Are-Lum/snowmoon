@@ -18,7 +18,7 @@
       "no": 19
     },
     "passages": 152,
-    "passagesShown": 69
+    "passagesShown": 127
   },
   "config": {
     "board": {
@@ -1661,7 +1661,7 @@
         "names"
       ],
       "rulePassage": false,
-      "shownOnPage": false,
+      "shownOnPage": true,
       "href": "/chapter/2#c2-b11"
     },
     {
@@ -1732,7 +1732,7 @@
         "learn"
       ],
       "rulePassage": false,
-      "shownOnPage": false,
+      "shownOnPage": true,
       "href": "/chapter/4#c4-b15"
     },
     {
@@ -1743,7 +1743,7 @@
         "learn"
       ],
       "rulePassage": false,
-      "shownOnPage": false,
+      "shownOnPage": true,
       "href": "/chapter/4#c4-b58"
     },
     {
@@ -1765,7 +1765,7 @@
         "learn"
       ],
       "rulePassage": false,
-      "shownOnPage": false,
+      "shownOnPage": true,
       "href": "/chapter/4#c4-b73"
     },
     {
@@ -1776,7 +1776,7 @@
         "learn"
       ],
       "rulePassage": false,
-      "shownOnPage": false,
+      "shownOnPage": true,
       "href": "/chapter/4#c4-b77"
     },
     {
@@ -1787,7 +1787,7 @@
         "learn"
       ],
       "rulePassage": false,
-      "shownOnPage": false,
+      "shownOnPage": true,
       "href": "/chapter/4#c4-b78"
     },
     {
@@ -1798,7 +1798,7 @@
         "learn"
       ],
       "rulePassage": false,
-      "shownOnPage": false,
+      "shownOnPage": true,
       "href": "/chapter/4#c4-b82"
     },
     {
@@ -1832,7 +1832,7 @@
         "names"
       ],
       "rulePassage": false,
-      "shownOnPage": false,
+      "shownOnPage": true,
       "href": "/chapter/4#c4-b88"
     },
     {
@@ -1854,7 +1854,7 @@
         "rules-doc"
       ],
       "rulePassage": false,
-      "shownOnPage": false,
+      "shownOnPage": true,
       "href": "/chapter/4#c4-b90"
     },
     {
@@ -1992,7 +1992,7 @@
         "learn"
       ],
       "rulePassage": false,
-      "shownOnPage": false,
+      "shownOnPage": true,
       "href": "/chapter/4#c4-b114"
     },
     {
@@ -2003,7 +2003,7 @@
         "rules-doc"
       ],
       "rulePassage": false,
-      "shownOnPage": false,
+      "shownOnPage": true,
       "href": "/chapter/4#c4-b115"
     },
     {
@@ -2014,7 +2014,7 @@
         "rules-doc"
       ],
       "rulePassage": false,
-      "shownOnPage": false,
+      "shownOnPage": true,
       "href": "/chapter/4#c4-b125"
     },
     {
@@ -2082,7 +2082,7 @@
         "learn"
       ],
       "rulePassage": false,
-      "shownOnPage": false,
+      "shownOnPage": true,
       "href": "/chapter/4#c4-b137"
     },
     {
@@ -2152,7 +2152,7 @@
         "names"
       ],
       "rulePassage": false,
-      "shownOnPage": false,
+      "shownOnPage": true,
       "href": "/chapter/5#c5-b70"
     },
     {
@@ -2163,7 +2163,7 @@
         "names"
       ],
       "rulePassage": false,
-      "shownOnPage": false,
+      "shownOnPage": true,
       "href": "/chapter/5#c5-b81"
     },
     {
@@ -2174,7 +2174,7 @@
         "names"
       ],
       "rulePassage": false,
-      "shownOnPage": false,
+      "shownOnPage": true,
       "href": "/chapter/5#c5-b87"
     },
     {
@@ -2185,7 +2185,7 @@
         "names"
       ],
       "rulePassage": false,
-      "shownOnPage": false,
+      "shownOnPage": true,
       "href": "/chapter/7#c7-b2"
     },
     {
@@ -2196,7 +2196,7 @@
         "learn"
       ],
       "rulePassage": false,
-      "shownOnPage": false,
+      "shownOnPage": true,
       "href": "/chapter/7#c7-b13"
     },
     {
@@ -2219,7 +2219,7 @@
         "names"
       ],
       "rulePassage": false,
-      "shownOnPage": false,
+      "shownOnPage": true,
       "href": "/chapter/7#c7-b23"
     },
     {
@@ -2230,7 +2230,7 @@
         "names"
       ],
       "rulePassage": false,
-      "shownOnPage": false,
+      "shownOnPage": true,
       "href": "/chapter/7#c7-b50"
     },
     {
@@ -2241,7 +2241,7 @@
         "names"
       ],
       "rulePassage": false,
-      "shownOnPage": false,
+      "shownOnPage": true,
       "href": "/chapter/7#c7-b61"
     },
     {
@@ -2307,7 +2307,7 @@
         "learn"
       ],
       "rulePassage": false,
-      "shownOnPage": false,
+      "shownOnPage": true,
       "href": "/chapter/7#c7-b86"
     },
     {
@@ -2318,7 +2318,7 @@
         "rules-doc"
       ],
       "rulePassage": false,
-      "shownOnPage": false,
+      "shownOnPage": true,
       "href": "/chapter/7#c7-b87"
     },
     {
@@ -2329,7 +2329,7 @@
         "rules-doc"
       ],
       "rulePassage": false,
-      "shownOnPage": false,
+      "shownOnPage": true,
       "href": "/chapter/7#c7-b89"
     },
     {
@@ -2351,7 +2351,7 @@
         "rules-doc"
       ],
       "rulePassage": false,
-      "shownOnPage": false,
+      "shownOnPage": true,
       "href": "/chapter/7#c7-b95"
     },
     {
@@ -2362,7 +2362,7 @@
         "rules-doc"
       ],
       "rulePassage": false,
-      "shownOnPage": false,
+      "shownOnPage": true,
       "href": "/chapter/7#c7-b97"
     },
     {
@@ -2406,7 +2406,7 @@
         "rules-doc"
       ],
       "rulePassage": false,
-      "shownOnPage": false,
+      "shownOnPage": true,
       "href": "/chapter/7#c7-b112"
     },
     {
@@ -2417,7 +2417,7 @@
         "rules-doc"
       ],
       "rulePassage": false,
-      "shownOnPage": false,
+      "shownOnPage": true,
       "href": "/chapter/7#c7-b114"
     },
     {
@@ -2428,7 +2428,7 @@
         "rules-doc"
       ],
       "rulePassage": false,
-      "shownOnPage": false,
+      "shownOnPage": true,
       "href": "/chapter/7#c7-b118"
     },
     {
@@ -2439,7 +2439,7 @@
         "rules-doc"
       ],
       "rulePassage": false,
-      "shownOnPage": false,
+      "shownOnPage": true,
       "href": "/chapter/7#c7-b119"
     },
     {
@@ -2450,7 +2450,7 @@
         "rules-doc"
       ],
       "rulePassage": false,
-      "shownOnPage": false,
+      "shownOnPage": true,
       "href": "/chapter/7#c7-b120"
     },
     {
@@ -2461,7 +2461,7 @@
         "names"
       ],
       "rulePassage": false,
-      "shownOnPage": false,
+      "shownOnPage": true,
       "href": "/chapter/9#c9-b52"
     },
     {
@@ -2472,7 +2472,7 @@
         "names"
       ],
       "rulePassage": false,
-      "shownOnPage": false,
+      "shownOnPage": true,
       "href": "/chapter/9#c9-b60"
     },
     {
@@ -2483,7 +2483,7 @@
         "names"
       ],
       "rulePassage": false,
-      "shownOnPage": false,
+      "shownOnPage": true,
       "href": "/chapter/9#c9-b77"
     },
     {
@@ -2527,7 +2527,7 @@
         "names"
       ],
       "rulePassage": false,
-      "shownOnPage": false,
+      "shownOnPage": true,
       "href": "/chapter/10#c10-b178"
     },
     {
@@ -2538,7 +2538,7 @@
         "names"
       ],
       "rulePassage": false,
-      "shownOnPage": false,
+      "shownOnPage": true,
       "href": "/chapter/10#c10-b184"
     },
     {
@@ -2549,7 +2549,7 @@
         "names"
       ],
       "rulePassage": false,
-      "shownOnPage": false,
+      "shownOnPage": true,
       "href": "/chapter/10#c10-b187"
     },
     {
@@ -2560,7 +2560,7 @@
         "names"
       ],
       "rulePassage": false,
-      "shownOnPage": false,
+      "shownOnPage": true,
       "href": "/chapter/10#c10-b192"
     },
     {
@@ -2571,7 +2571,7 @@
         "names"
       ],
       "rulePassage": false,
-      "shownOnPage": false,
+      "shownOnPage": true,
       "href": "/chapter/10#c10-b202"
     },
     {
@@ -2582,7 +2582,7 @@
         "names"
       ],
       "rulePassage": false,
-      "shownOnPage": false,
+      "shownOnPage": true,
       "href": "/chapter/12#c12-b8"
     },
     {
@@ -2604,7 +2604,7 @@
         "names"
       ],
       "rulePassage": false,
-      "shownOnPage": false,
+      "shownOnPage": true,
       "href": "/chapter/12#c12-b13"
     },
     {
@@ -2615,7 +2615,7 @@
         "names"
       ],
       "rulePassage": false,
-      "shownOnPage": false,
+      "shownOnPage": true,
       "href": "/chapter/12#c12-b19"
     },
     {
@@ -2626,7 +2626,7 @@
         "names"
       ],
       "rulePassage": false,
-      "shownOnPage": false,
+      "shownOnPage": true,
       "href": "/chapter/12#c12-b65"
     },
     {
@@ -2637,7 +2637,7 @@
         "names"
       ],
       "rulePassage": false,
-      "shownOnPage": false,
+      "shownOnPage": true,
       "href": "/chapter/12#c12-b84"
     },
     {
@@ -2648,7 +2648,7 @@
         "names"
       ],
       "rulePassage": false,
-      "shownOnPage": false,
+      "shownOnPage": true,
       "href": "/chapter/12#c12-b89"
     },
     {
@@ -2694,7 +2694,7 @@
         "rules-doc"
       ],
       "rulePassage": false,
-      "shownOnPage": false,
+      "shownOnPage": true,
       "href": "/chapter/12#c12-b146"
     },
     {
@@ -2729,7 +2729,7 @@
         "rules-doc"
       ],
       "rulePassage": false,
-      "shownOnPage": false,
+      "shownOnPage": true,
       "href": "/chapter/12#c12-b151"
     },
     {
@@ -2752,7 +2752,7 @@
         "rules-doc"
       ],
       "rulePassage": false,
-      "shownOnPage": false,
+      "shownOnPage": true,
       "href": "/chapter/12#c12-b157"
     },
     {
@@ -2829,7 +2829,7 @@
         "rules-doc"
       ],
       "rulePassage": false,
-      "shownOnPage": false,
+      "shownOnPage": true,
       "href": "/chapter/12#c12-b177"
     },
     {
@@ -2862,7 +2862,7 @@
         "rules-doc"
       ],
       "rulePassage": false,
-      "shownOnPage": false,
+      "shownOnPage": true,
       "href": "/chapter/12#c12-b191"
     },
     {
@@ -2939,7 +2939,7 @@
         "rules-doc"
       ],
       "rulePassage": false,
-      "shownOnPage": false,
+      "shownOnPage": true,
       "href": "/chapter/14#c14-b40"
     },
     {
@@ -2983,7 +2983,7 @@
         "rules-doc"
       ],
       "rulePassage": false,
-      "shownOnPage": false,
+      "shownOnPage": true,
       "href": "/chapter/14#c14-b52"
     },
     {
@@ -2994,7 +2994,7 @@
         "rules-doc"
       ],
       "rulePassage": false,
-      "shownOnPage": false,
+      "shownOnPage": true,
       "href": "/chapter/14#c14-b60"
     },
     {
@@ -3005,7 +3005,7 @@
         "rules-doc"
       ],
       "rulePassage": false,
-      "shownOnPage": false,
+      "shownOnPage": true,
       "href": "/chapter/14#c14-b61"
     },
     {
@@ -3016,7 +3016,7 @@
         "rules-doc"
       ],
       "rulePassage": false,
-      "shownOnPage": false,
+      "shownOnPage": true,
       "href": "/chapter/14#c14-b63"
     },
     {
@@ -3027,7 +3027,7 @@
         "rules-doc"
       ],
       "rulePassage": false,
-      "shownOnPage": false,
+      "shownOnPage": true,
       "href": "/chapter/14#c14-b68"
     },
     {
@@ -3038,7 +3038,7 @@
         "rules-doc"
       ],
       "rulePassage": false,
-      "shownOnPage": false,
+      "shownOnPage": true,
       "href": "/chapter/14#c14-b77"
     },
     {
@@ -3060,7 +3060,7 @@
         "rules-doc"
       ],
       "rulePassage": false,
-      "shownOnPage": false,
+      "shownOnPage": true,
       "href": "/chapter/14#c14-b80"
     },
     {
