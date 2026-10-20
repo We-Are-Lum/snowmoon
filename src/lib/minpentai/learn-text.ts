@@ -77,6 +77,10 @@ export const LEARN_TEXT = {
     text: 'The rules of this game are invented for this edition. The book says that "every game there\'s always some kind of new rule" (c4-b84). The rule recovered from the book\'s figure (c4-b5, c4-b7) has its own page.',
     link: "THE RULE RECOVERED FROM THE BOOK'S FIGURE →",
     href: '/minpentai/rule',
+    /** The Play hub's Learn panel line, moved here when Play's LEARN tab began opening lesson 1 itself (2026-10-20). */
+    version: 'The lessons still play by the first version of the rules; the rules page notes what changes.',
+    versionLink: 'THE RULES PAGE →',
+    versionHref: '/minpentai/rules',
   },
 
   cams: {
