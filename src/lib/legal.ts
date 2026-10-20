@@ -45,7 +45,9 @@ export const LEGAL: {
     terms: { words: 'if3grj', on: '2026-10-18', by: 'FID 6786' },
     // Plus one sentence the drafted list missed (Privacy §4, images): "your name (Farcaster name or wallet
     // address)", the owner's own words for tonight's publish (2026-10-18), so the page stays true for wallet accounts.
-    privacy: { words: '1smezv1', on: '2026-10-18', by: 'FID 6786' },
+    // 2026-10-19, the owner's "Reread is done" for push 3, at these words: My picks in §4 (the owner's own sentence),
+    // sharing a Minpentai win in §6, and X added to §7's report-or-share item. The words before were 1smezv1.
+    privacy: { words: '87yjkk', on: '2026-10-19', by: 'FID 6786' },
   },
 };
 
@@ -87,6 +89,7 @@ export const PRIVACY: LegalDoc = {
           'Images you publish, with their prompt, your name (Farcaster name or wallet address) and the record of how they were made. These are public.',
           'Frames you make in Remix, each with your words, the full prompt sent, the camera and people you set, the pictures sent with it, what it cost and your name. Anyone with a frame\'s link can see it, with your words and name. You can hide your own frames at any time.',
           'Storyboards you save: the frames in order, how long each is shown and the voice takes you chose. Anyone with a storyboard\'s link can see it, with your name. You can hide it.',
+          'The styles and character sheets you choose to use in your pictures ("My picks"), kept until you clear them and seen only by you. An image you publish shows the ones it used, in its recipe.',
           'How many images and Remix frames you make each day, to count the daily limits, and the reports you make.',
           'The Farcaster usernames we have seen for your ID, so a link with an old name still finds your pages after you rename.',
           'If you play Minpentai: your progress against the computer and the people you block, kept until you ask us to delete them; your matches, deleted 30 days after they end; and invites, deleted when they expire after 24 hours. Challenges you send or receive, deleted an hour after they are answered or expire; and a count of today\'s Play requests and when you last opened a match or the lobby, deleted the next day. While you say you are ready to play, other signed-in players see your Farcaster username.',
@@ -96,7 +99,7 @@ export const PRIVACY: LegalDoc = {
       ],
     },
     { n: 5, head: 'The assistant.', body: ['Your question is sent to Groq to be answered, or through Vercel AI Gateway to Groq when Groq is busy. Both are set to keep nothing. We keep no copy of your questions or the answers. Under your Farcaster ID we record only how many questions you ask and when, to count the daily limit. The assistant\'s costs are kept only as daily totals, without your ID, to track our spending.'] },
-    { n: 6, head: 'What you publish.', body: ['Anything you publish, and every frame you make in Remix, is public, shown with your name (your Farcaster name, or, for a wallet account, its address shortened; your Farcaster ID on quote cards), the date, and the record of how it was made. See the Terms, sections 5 and 7.'] },
+    { n: 6, head: 'What you publish.', body: ['Anything you publish, and every frame you make in Remix, is public, shown with your name (your Farcaster name, or, for a wallet account, its address shortened; your Farcaster ID on quote cards), the date, and the record of how it was made. See the Terms, sections 5 and 7. If you share a Minpentai win, your own Farcaster or X app posts it; its link carries only the opponent you beat and the number of steps, its card is drawn from that link, and we keep nothing about it.'] },
     {
       n: 7,
       head: 'Outside services and what they receive.',
@@ -112,7 +115,7 @@ export const PRIVACY: LegalDoc = {
           'ntfy delivers a short alert to us when an image is reported. It carries no content and nothing about you.',
           'If you listen as a podcast, your podcast app fetches the audio from our media host; Spotify serves its own copy.',
           'If you prepay: Base\'s public network endpoint receives the transaction we look up to confirm your payment.',
-          'A "report" or "share" link may open GitHub or Farcaster, where what you post is public and under their terms.',
+          'A "report" or "share" link may open GitHub, Farcaster or X, where what you post is public and under their terms.',
         ],
         'Each of these companies has its own privacy policy.',
       ],

@@ -269,6 +269,8 @@ function Editor({
       <header className="ed-head">
         <nav className="ed-nav label" aria-label="Shots">
           <Link href={scenePath}>‹ {data.title}</Link>
+          {/* The moment page: this shot in every version, side by side (owner, 2026-10-19). */}
+          <Link href={`${scenePath.replace(/\/v\/\d+$/, '')}/m/${shot.id}`}>Every version</Link>
           <span className="ed-nav-step">
             {prev ? (
               <Link href={shotPath(prev)} aria-label={`Shot ${prev.n}`}>
