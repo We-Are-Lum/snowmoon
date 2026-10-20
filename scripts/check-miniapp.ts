@@ -143,7 +143,7 @@ try {
   }
   // Learn Minpentai fills the Farcaster frame (owner, 2026-10-09): no site top bar, the frame is the iframe's viewport, × back to the site.
   // ?mode=free opens Play's free play since Play shipped (2026-10-10); it is checked below.
-  for (const path of ['/minpentai?lesson=13', '/minpentai?mode=practice']) {
+  for (const path of ['/minpentai?lesson=5', '/minpentai?mode=practice']) {
     const page = await browser.newPage({ viewport: { width: 480, height: 760 } });
     await page.addInitScript('window.__name = (f) => f');
     const errors: string[] = [];
