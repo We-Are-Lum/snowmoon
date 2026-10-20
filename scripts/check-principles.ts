@@ -292,6 +292,14 @@ add({
         if (/fetch\(|supabase|\/api\//.test(text)) problems.push(`${file}: the note box must not send its text anywhere itself`);
         continue;
       }
+      // A private draft's box ("Make your own", owner's long run 2, 2026-10-19): saved in the person's own drafts, never
+      // published, sent to the model only with a message to the coach, and it says so.
+      if (file.endsWith('components/private-draft-field.tsx')) {
+        for (const [what, re] of [['private', /Private:/], ['only theirs', /only you can open/], ['never published', /Never published/], ['sent only with a message to the coach', /only with a message to the coach/], ['described to screen readers', /aria-describedby/]] as const)
+          if (!re.test(text)) problems.push(`${file}: the draft box must say it is ${what}`);
+        if (/fetch\(|supabase|\/api\//.test(text)) problems.push(`${file}: the draft box must not send its text anywhere itself`);
+        continue;
+      }
       if (file.endsWith('components/private-text-field.tsx')) {
         // Owner (2026-10-07): saved only on this device, sent to Vercel and Groq to be answered, never published; labelled draft.
         // 2026-10-08: Groq directly, the gateway only when Groq is busy, and both named while the fallback is on.
