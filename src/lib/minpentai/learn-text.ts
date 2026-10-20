@@ -77,11 +77,16 @@ export const LEARN_TEXT = {
     text: 'The rules of this game are invented for this edition. The book says that "every game there\'s always some kind of new rule" (c4-b84). The rule recovered from the book\'s figure (c4-b5, c4-b7) has its own page.',
     link: "THE RULE RECOVERED FROM THE BOOK'S FIGURE →",
     href: '/minpentai/rule',
-    /** The Play hub's Learn panel line, moved here when Play's LEARN tab began opening lesson 1 itself (2026-10-20). */
-    version: 'The lessons still play by the first version of the rules; the rules page notes what changes.',
-    versionLink: 'THE RULES PAGE →',
-    versionHref: '/minpentai/rules',
+    /** The link to the rules page's "Lessons vs Play" list (owner, 2026-10-20: in place of "first version of the rules"; link text draft). */
+    diffLink: 'LESSONS VS PLAY →',
+    diffHref: '/minpentai/rules#lessons-vs-play',
   },
+  /** Owner's words (2026-10-20), on every watch screen: the broadcast is not the game played here. */
+  broadcastNote: 'The full game as the book describes it: four players on a 48×32 board. What you\'ll play here is a simpler two-player version.',
+  /** Owner's words (2026-10-20), after what the practice match shows only to teach (Amber's towers in setup, hits in the dark). */
+  teachOnly: 'Shown here to teach. In a real match, you won\'t see this.',
+  /** Owner's words (2026-10-20): the book's pieces are cell patterns (c4-b5's figure; docs/minpentai-rules.md §1.1). */
+  cellsNote: 'In the book, pieces are made of cells. Here you play with whole squares.',
 
   cams: {
     crane: 'CAM 1 · CRANE',
@@ -303,7 +308,8 @@ export const LEARN_TEXT = {
     },
     hood: {
       title: 'Under the hood',
-      text: 'Every piece is a few cells, moved by one rule from the book. This is a glider, cell by cell. Press play.',
+      // Owner's sentence (cellsNote), then Design's.
+      text: 'In the book, pieces are made of cells. Here you play with whole squares. This is a glider, cell by cell. Press play.',
       caption: 'You never need this to play.',
       button: 'PLAY IT',
       tags: ['book', 'draft'],
@@ -370,9 +376,11 @@ export const LEARN_TEXT = {
   },
   practice: {
     titles: { win: 'You win', lose: 'Amber wins', draw: 'A draw' },
-    act0: 'Amber’s towers mirror yours on the far side. You see them only until this turn ends. Spend 8 points in the lit area, then end your turn.',
+    // The owner's teachOnly sentence after the towers (2026-10-20).
+    act0: 'Amber’s towers mirror yours on the far side. You see them only until this turn ends. Shown here to teach. In a real match, you won\'t see this. Spend 8 points in the lit area, then end your turn.',
     act: 'Your turn. Amber’s towers are where they started. Spend 8 points, then end your turn.',
-    run: 'The match runs by itself until your next turn. Pause any time.',
+    // "A ring marks every hit, even in the dark." is a draft (2026-10-20); then the owner's teachOnly sentence.
+    run: 'The match runs by itself until your next turn. Pause any time. A ring marks every hit, even in the dark. Shown here to teach. In a real match, you won\'t see this.',
     over: { win: 'Amber is out of towers, or had fewer when time ran out.', lose: 'Amber outlasted you. Squares in your towers’ rows are your best defence.', draw: 'Same number of towers when time ran out.' },
     rule: (t: string) => `New rule this match: ${t}`,
     rules: { diag: 'Gliders may also fly diagonally.', cost: 'Gliders cost 3 points.', fog: 'You see only 2 squares around your towers.', every: 'Turns to act come every 8 steps.' },

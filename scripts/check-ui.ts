@@ -84,6 +84,10 @@ const MINPENTAI_ADDRESSES = [...Array.from({ length: 8 }, (_, i) => `watch=${i +
 const MINPENTAI_HOOD = 'lesson=8';
 /** Lesson 1's title (src/lib/minpentai/learn-text.ts, lessons.goal). */
 const MINPENTAI_LESSON_1 = 'Keep your towers. Destroy theirs.';
+/** The owner's exact sentences (2026-10-20, before posting the tutorial link), and where each must appear. */
+const OWNER_BROADCAST = "The full game as the book describes it: four players on a 48×32 board. What you'll play here is a simpler two-player version.";
+const OWNER_TEACH = "Shown here to teach. In a real match, you won't see this.";
+const OWNER_CELLS = 'In the book, pieces are made of cells. Here you play with whole squares.';
 
 const failures: string[] = [];
 const fail = (msg: string) => failures.push(msg);
@@ -643,6 +647,14 @@ async function checkPlay(page: Page, scheme: string) {
   await noSideways(`/minpentai/rules (${scheme})`);
   const words = (await page.locator('.mp-rules').textContent()) ?? '';
   if (!words.includes('RULES, DRAFT 1') || !words.includes('c4-b84')) fail(`/minpentai/rules (${scheme}): not Design's rules page`);
+  // "Lessons vs Play" (owner, 2026-10-20): Learn's rules note links here; exactly the five differences.
+  const diff = page.locator('#lessons-vs-play');
+  const items = await diff.locator('li strong').allTextContents();
+  if (JSON.stringify(items) !== JSON.stringify(['The broadcast.', 'Amber’s towers in setup.', 'Hits in the dark.', 'Cells.', 'Pause.'])) fail(`/minpentai/rules (${scheme}): "Lessons vs Play" lists ${JSON.stringify(items)}`);
+  await open(page, '/minpentai/rules#lessons-vs-play');
+  await page.waitForTimeout(300);
+  const top = await diff.evaluate((e) => e.getBoundingClientRect().top).catch(() => -1);
+  if (top < 0 || top > 200) fail(`/minpentai/rules#lessons-vs-play (${scheme}): the list is not at the top of the view (${Math.round(top)}px)`);
 }
 /** ⤢ on a match: the frame covers the site (no top bar), the board upright, END TURN in view. */
 async function checkPlayFullScreen(page: Page, where: string, tall: number) {
@@ -1352,10 +1364,31 @@ try {
         // Full screen (owner, 2026-10-09): the frame fills the viewport, the site's top bar is hidden, and × goes back to the site.
         await checkLearnFullScreen(page, `/minpentai?${q} (${scheme})`);
         // The rules note links to the book's rule on its own page.
-        // …and says the lessons play by the first version of the rules, linking to the rules page (the Play hub's line, moved here 2026-10-20).
+        // …and links to the rules page's "Lessons vs Play" list (owner, 2026-10-20: in place of "first version of the rules").
         const note = page.locator('.ml-rulesnote a');
-        if ((await note.count()) && JSON.stringify(await note.evaluateAll((els) => els.map((e) => e.getAttribute('href')))) !== JSON.stringify(['/minpentai/rule', '/minpentai/rules'])) fail(`/minpentai?${q} (${scheme}): the rules note does not link to /minpentai/rule and /minpentai/rules`);
-        if (q === 'lesson=1' && !/first version of the rules/.test((await page.locator('.ml-rulesnote').textContent().catch(() => '')) ?? '')) fail(`/minpentai?${q} (${scheme}): lesson 1 does not say the lessons play by the first version of the rules`);
+        if ((await note.count()) && JSON.stringify(await note.evaluateAll((els) => els.map((e) => e.getAttribute('href')))) !== JSON.stringify(['/minpentai/rule', '/minpentai/rules#lessons-vs-play'])) fail(`/minpentai?${q} (${scheme}): the rules note does not link to /minpentai/rule and /minpentai/rules#lessons-vs-play`);
+        if (q === 'lesson=1') {
+          const noteText = (await page.locator('.ml-rulesnote').textContent().catch(() => '')) ?? '';
+          if (!noteText.includes('LESSONS VS PLAY') || /first version of the rules/.test(noteText)) fail(`/minpentai?${q} (${scheme}): lesson 1's note does not link to "Lessons vs Play" (or still says "first version of the rules")`);
+        }
+        // The owner's sentences (2026-10-20): the broadcast's caption on every watch screen, the cells line on Under
+        // the hood (CELLS stays on the lessons' boards), "Shown here to teach…" on the practice match's setup text.
+        const shown = async (sel: string) => (await page.locator(sel).isVisible().catch(() => false)) ? ((await page.locator(sel).textContent()) ?? '').trim() : '';
+        if (q.startsWith('watch=') && (await shown('.ml-broadcast-note')) !== OWNER_BROADCAST) fail(`/minpentai?${q} (${scheme}): the broadcast's caption is not the owner's sentence`);
+        if (!q.startsWith('watch=') && (await page.locator('.ml-broadcast-note').count())) fail(`/minpentai?${q} (${scheme}): the broadcast's caption shows off the broadcast`);
+        if (q === MINPENTAI_HOOD && !(await shown('.ml-text')).startsWith(OWNER_CELLS)) fail(`/minpentai?${q} (${scheme}): Under the hood does not open with the owner's cells sentence`);
+        if (q === 'lesson=2' && !(await page.locator('.ml-cells').isVisible())) fail(`/minpentai?${q} (${scheme}): the CELLS button is missing`);
+        if (q === 'mode=practice') {
+          if (!(await shown('.ml-text')).includes('Amber’s towers mirror yours') || !(await shown('.ml-text')).includes(OWNER_TEACH)) fail(`/minpentai?${q} (${scheme}): the setup text does not say "${OWNER_TEACH}" after Amber's towers`);
+          // While it runs: hits in the dark, the owner's sentence, and the pause the big button really gives.
+          await page.locator('.ml-main').click();
+          await page.waitForTimeout(300);
+          const run = await shown('.ml-text');
+          if (!run.includes('even in the dark') || !run.includes(OWNER_TEACH) || !run.includes('Pause any time.')) fail(`/minpentai?${q} (${scheme}): the running text is "${run}"`);
+          if (((await page.locator('.ml-main').textContent()) ?? '').trim() !== 'PAUSE') fail(`/minpentai?${q} (${scheme}): the running match's button is not PAUSE`);
+          await page.locator('.ml-main').click();
+          if (((await page.locator('.ml-main').textContent()) ?? '').trim() !== 'RESUME') fail(`/minpentai?${q} (${scheme}): PAUSE does not pause the practice match`);
+        }
       }
     }
     // ?lesson=1 opens lesson 1 itself, the old ?lesson=9 too, ?watch=1 the broadcast; Play's LEARN tab opens lesson 1 (owner, 2026-10-20).
@@ -1450,6 +1483,13 @@ try {
         if (!foot || !body || foot.x !== body.x || foot.y + foot.height > 900 + 1) fail(`${at}: the footer is not in view under the text`);
         if ((await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)) > 1) fail(`${at}: scrolls sideways`);
         await shot(page, `learn-desktop-${width}-${name}`, scheme);
+      }
+      // The broadcast's caption (owner, 2026-10-20) is in view in the desktop layout's text column.
+      {
+        await open(page, '/minpentai?watch=1');
+        const cap = await page.locator('.ml-broadcast-note').boundingBox();
+        const capText = ((await page.locator('.ml-broadcast-note').textContent().catch(() => '')) ?? '').trim();
+        if (!cap || cap.y + cap.height > 900 + 1 || capText !== OWNER_BROADCAST) fail(`/minpentai?watch=1 @${width} (${scheme}): the broadcast's caption is not in view`);
       }
       await open(page, '/chapter/1');
       const bodyShown = await page.locator('.rail-body').isVisible();
