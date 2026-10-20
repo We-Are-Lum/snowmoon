@@ -475,7 +475,7 @@ function SignedOut({ inApp: _inApp }: { inApp: boolean }) {
         {CHAT.gatewayFallback ? ` (through ${CHAT.host} when ${CHAT.providerName} is busy)` : ''} and are never published. The daily limit is
         counted per Farcaster account.
       </p>
-      <SignInButton className="as-primary as-signin" />
+      <SignInButton className="menu-signin menu-signin-primary as-signin" />
       {/* The two outside services are named in the sign-in step itself and on About. */}
       <Link className="as-quiet-link" href="/chapter/1">
         Keep reading without it

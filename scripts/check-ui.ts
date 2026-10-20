@@ -267,20 +267,53 @@ const plantWallet = (address: string) => {
   const body = btoa(JSON.stringify({ sub: 'w', exp: 4102444800 })).replace(/=+$/, '');
   localStorage.setItem('snowmoon.wallet', JSON.stringify({ token: `x.${body}.y`, address, short: `${address.slice(0, 6)}…${address.slice(-4)}`, exp: 4102444800 }));
 };
-/** The account inside `within` (src/components/app-shell.tsx Account): signed out, Farcaster then a wallet, both shown. */
+/** The account inside `within` (src/components/app-shell.tsx: Account in the rail, MenuAccount at the top of the
+ *  phone menu): signed out, Farcaster then a wallet, both shown. */
+const accountIn = (within: string) => `${within} .menu-account`;
 async function checkAccountSignedOut(page: Page, within: string, where: string) {
-  const acct = page.locator(`${within} .account`);
+  const acct = page.locator(accountIn(within));
   await acct.locator('button', { hasText: 'Sign in with a wallet' }).waitFor({ timeout: 10000 }).catch(() => {});
   const names = await acct.locator('button').evaluateAll((els) => els.filter((e) => (e as HTMLElement).offsetParent !== null).map((e) => e.textContent?.trim()));
   if (names.join(' | ') !== 'Sign in with Farcaster | Sign in with a wallet') fail(`${where}: signed out, the account offers "${names.join(' | ')}" (want Farcaster, then a wallet)`);
-  if (!(await acct.locator('.wallet-sign-in .ic-note').isVisible())) fail(`${where}: the wallet sign-in's note is not shown`);
+  // The phone menu and the wide-screen rail (owner, 2026-10-19): in the menu first in the sheet; in both, two full-width buttons at least 48px tall in the menu's
+  // main font, the first filled, and one line under them.
+  const first = await page.evaluate(() => {
+    const a = document.querySelector('.menu-sheet .menu-account');
+    const n = document.querySelector('.menu-sheet .nav-list');
+    return !!a && !!n && !!(a.compareDocumentPosition(n) & Node.DOCUMENT_POSITION_FOLLOWING);
+  });
+  if (within === '.menu-sheet' && !first) fail(`${where}: the account is not above the menu's items`);
+  const boxes = await acct.locator('button.menu-signin').evaluateAll((els) =>
+    els.map((e) => {
+      const r = e.getBoundingClientRect();
+      const st = getComputedStyle(e);
+      const box = e.closest('.menu-account') as HTMLElement;
+      const bs = getComputedStyle(box);
+      const inner = box.clientWidth - parseFloat(bs.paddingLeft) - parseFloat(bs.paddingRight);
+      return { h: r.height, full: r.width >= inner - 1, font: st.fontFamily, bg: st.backgroundColor };
+    }),
+  );
+  const label = await page.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue('--font-label').trim());
+  for (const [i, b] of boxes.entries()) {
+    if (b.h < 48) fail(`${where}: sign-in button ${i + 1} is ${b.h}px tall (want at least 48)`);
+    if (!b.full) fail(`${where}: sign-in button ${i + 1} is not full width`);
+    if (/mono/i.test(b.font) || (label && b.font.includes(label))) fail(`${where}: sign-in button ${i + 1} is in the label (mono) font`);
+  }
+  if (boxes.length === 2 && boxes[0].bg === boxes[1].bg) fail(`${where}: the Farcaster button is not filled apart from the wallet one`);
+  const note = (await acct.locator('.menu-signin-note').textContent())?.trim();
+  if (note !== 'Signing in is free. It’s a signature, not a payment.') fail(`${where}: the line under the buttons reads "${note}"`);
+  if (await acct.locator('.wallet-sign-in .ic-note:not([role=alert])').count()) fail(`${where}: the wallet's own note still shows in the menu`);
 }
 /** With a wallet session: the shortened address and a Sign out that ends it (back to both options). */
 async function checkAccountWallet(page: Page, within: string, where: string) {
-  const acct = page.locator(`${within} .account`);
+  const acct = page.locator(accountIn(within));
   const short = `${WALLET_ADDRESS.slice(0, 6)}…${WALLET_ADDRESS.slice(-4)}`;
-  await acct.locator('.account-name', { hasText: short }).waitFor({ timeout: 10000 }).catch(() => fail(`${where}: a wallet session does not show ${short}`));
+  await acct.locator('.menu-account-name', { hasText: short }).waitFor({ timeout: 10000 }).catch(() => fail(`${where}: a wallet session does not show ${short}`));
   if (await acct.locator('button', { hasText: /Sign in/ }).count()) fail(`${where}: a wallet session still offers sign-in`);
+  {
+    const rows = await acct.locator('.menu-account-row').evaluateAll((els) => els.map((e) => e.getBoundingClientRect().height));
+    if (rows.length !== 2 || rows.some((h) => h < 44)) fail(`${where}: the name and Sign out are not two menu-size rows (${rows.join(', ')}px)`);
+  }
   await acct.locator('button', { hasText: 'Sign out' }).click();
   const left = await page.evaluate(() => localStorage.getItem('snowmoon.wallet'));
   if (left) fail(`${where}: Sign out leaves the wallet session in storage`);
@@ -1405,6 +1438,13 @@ try {
         if (!current?.includes('Chapter 1')) fail(`@${width}: the rail does not mark the current chapter`);
         // Signed out: the assistant panel is there, with what it does and a sign-in button.
         await page.waitForSelector('.panel .as-signed-out button');
+        // The panel's sign-in is the menu's button (owner, 2026-10-19): full width, at least 48px, the main font, filled.
+        const pb = await page.locator('.panel .as-signed-out button.as-signin').evaluate((e) => {
+          const r = e.getBoundingClientRect();
+          const st = getComputedStyle(e);
+          return { h: r.height, w: r.width, pw: (e.parentElement as HTMLElement).clientWidth, font: st.fontFamily, upper: st.textTransform };
+        });
+        if (pb.h < 47.5 || pb.w < pb.pw - 1 || /mono/i.test(pb.font) || pb.upper === 'uppercase') fail(`@${width}: the assistant panel's sign-in is not the menu's button (${JSON.stringify(pb)})`);
         await shot(page, `desktop-${width}-chapter`, scheme);
         await checkAccountSignedOut(page, '.rail', `@${width} rail`);
         await shot(page, `desktop-${width}-account-signed-out`, scheme);
@@ -1433,7 +1473,7 @@ try {
         await open(page, '/chapter/1');
         await page.waitForSelector('.panel .as-start');
         await checkFloors(page, `/chapter/1 @${width} (signed in)`, scheme);
-        if ((await page.locator('.rail .account-name').textContent()) !== '@check' || (await page.locator('.rail .account button', { hasText: 'wallet' }).count())) fail(`@${width}: signed in with Farcaster, the rail does not show @check alone`);
+        if ((await page.locator('.rail .menu-account-name').textContent()) !== '@check' || (await page.locator('.rail .menu-account button', { hasText: 'wallet' }).count())) fail(`@${width}: signed in with Farcaster, the rail does not show @check alone`);
         await shot(page, `desktop-${width}-signed-in`, scheme);
         await page.unroute('**/api/chat/status');
       }
@@ -1452,7 +1492,7 @@ try {
     await checkFloors(page, '/chapter/1 @390 (menu)', scheme);
     await checkLegalLine(page, '.menu-sheet', '@390 menu', scheme);
     await checkAccountSignedOut(page, '.menu-sheet', '@390 menu');
-    await page.locator('.menu-sheet .account').scrollIntoViewIfNeeded();
+    await page.locator('.menu-sheet .menu-account').scrollIntoViewIfNeeded();
     await shot(page, 'phone-390-menu', scheme);
     await page.keyboard.press('Escape');
     // A wallet session in the menu, then Sign out (nothing signed: the session is planted in storage).
@@ -1460,7 +1500,7 @@ try {
     await open(page, '/chapter/1');
     await page.click('.topbar-icon[aria-label="Menu"]');
     await page.waitForSelector('.menu-sheet');
-    await page.locator('.menu-sheet .account').scrollIntoViewIfNeeded();
+    await page.locator('.menu-sheet .menu-account').scrollIntoViewIfNeeded();
     await checkFloors(page, '/chapter/1 @390 (menu, wallet)', scheme);
     await shot(page, 'phone-390-menu-wallet', scheme);
     await checkAccountWallet(page, '.menu-sheet', '@390 menu');

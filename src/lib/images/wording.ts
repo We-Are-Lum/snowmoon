@@ -274,8 +274,11 @@ export const IMAGE_WORDING = {
   /** Wallet sign-in and prepaid generations (owner, 2026-10-13). Drafted by the coding agent. */
   prepaid: {
     signIn: 'Sign in with a wallet',
-    signInNote:
-      'Your wallet signs a message to sign in: nothing is sent and there is no fee. A wallet account pays for each image in advance. Your address, shortened, is the byline on images you publish.',
+    /** Under the sign-in buttons (owner's words, 2026-10-19). The rest of the old note now shows where it matters:
+     *  inAdvance before a wallet account's first payment, and the address byline on the consent screen before
+     *  its first publish (ConsentScreen's wallet line). */
+    signInNote: 'Signing in is free. It’s a signature, not a payment.',
+    inAdvance: 'A wallet account pays for each image in advance. Your address, shortened, is the byline on images you publish.',
     noWallet: 'No wallet found in this browser. Open this page in your wallet’s browser, or install a wallet extension.',
     wrongSign: 'The wallet didn’t sign. Try again.',
     balance: (usd: string, n: number) => `Balance $${usd} · about ${n} image${n === 1 ? '' : 's'}`,
@@ -291,6 +294,7 @@ export const IMAGE_WORDING = {
     claimLater: 'The payment was sent but isn’t added yet. It’s safe: try again in a minute, or add it with its transaction hash below.',
     tryAgain: 'Try again',
     signOut: 'sign out',
+    menuSignIn: 'Sign in with Farcaster',
     payWith: 'Pay in USDC or ETH on Base. It’s added to your balance once the payment confirms.',
     terms:
       'You’re paying for image generation on this site. Each Generate is charged when you press it, whatever comes back, including a blocked prompt or an image the safety checker drops. No refunds.',
