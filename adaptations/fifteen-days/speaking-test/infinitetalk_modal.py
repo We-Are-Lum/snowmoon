@@ -7,6 +7,7 @@ per shot: the published frame and its trimmed finished line (recipe.json), nothi
   modal run infinitetalk_modal.py::download          # CPU: weights to the volume (once)
   modal run infinitetalk_modal.py::speak --shot 2-zei-b2-9
 """
+import hashlib
 import json
 import os
 import subprocess
@@ -103,14 +104,15 @@ def speak(shot: str, steps: int = 40, seed: int = 42):
     recipe = json.loads((HERE / "recipe.json").read_text())
     s = next(x for x in recipe["shots"] if x["id"] == shot)
     prompt = PROMPTS[shot]
-    res = generate.remote((HERE / f"{shot}.png").read_bytes(), (HERE / f"{shot}-trimmed.wav").read_bytes(), prompt, steps, seed)
+    audio = HERE / AUDIO.get(shot, f"{shot}-trimmed.wav")
+    res = generate.remote((HERE / f"{shot}.png").read_bytes(), audio.read_bytes(), prompt, steps, seed)
     out_dir = HERE / "infinitetalk"
     out_dir.mkdir(exist_ok=True)
     if res["ok"]:
         (out_dir / f"{shot}.mp4").write_bytes(res["video"])
     run = {
         "shot": shot, "ok": res["ok"], "model": INFINITETALK, "base": WAN, "audio_encoder": [WAV2VEC, WAV2VEC_SAFETENSORS], "code": CODE,
-        "frame_sha256": s["frame"]["sha256"], "audio_sha256": s["audio"]["sha256"], "prompt": prompt, "prompt_by": "coding agent (drafted)",
+        "frame_sha256": s["frame"]["sha256"], "audio": audio.name, "audio_sha256": hashlib.sha256(audio.read_bytes()).hexdigest(), "prompt": prompt, "prompt_by": "coding agent (drafted)",
         "settings": {"size": "infinitetalk-480", "steps": steps, "mode": "streaming", "motion_frame": 9, "seed": seed},
         "gpu": res["gpu"], "seconds": res["seconds"], "est_usd": res["est_usd"], "command": res["command"],
     }
@@ -119,6 +121,9 @@ def speak(shot: str, steps: int = 40, seed: int = 42):
     if not res["ok"]:
         print(res["log_tail"])
 
+
+# Deluin: his line's first sentence only, on both sides (owner, 2026-10-19); the full line only if the short results look good.
+AUDIO = {"3-deluin-b4-3": "3-deluin-b4-3-first-sentence-trimmed.wav"}
 
 # What each shot shows, for InfiniteTalk's text condition. Drafted by the coding agent from the frames; plain, no new action.
 PROMPTS = {
