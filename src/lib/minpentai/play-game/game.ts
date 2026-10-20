@@ -266,7 +266,11 @@ export function botPlan(m: PlanInput): Placement[] {
     if (!z.length) z = zone();
     if (z.length) add('g', z[Math.floor(r() * z.length)], -1, 0);
   }
-  if (L >= 3 && pts >= 4 && cnt(b, o) < (L >= 5 ? 3 : 5)) {
+  // Every builder rung stops at 5 towers. Design's mockup stopped the Planner at 3 (so it would
+  // fire twice sooner), which made the top rung lose 9 matches in 10 to rungs 3 and 4: towers are
+  // the score and the sight (scripts/test-minpentai-ladder.ts; fixed 2026-10-20, owner: "fix the
+  // real bugs"). It still fires twice once it has 5.
+  if (L >= 3 && pts >= 4 && cnt(b, o) < 5) {
     const z = zone();
     if (z.length) {
       const mx = Math.min(...z.map((k) => XY(k)[0]));

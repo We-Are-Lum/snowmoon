@@ -135,7 +135,7 @@
 .as-signed-out > * { margin: 0; }
 .as-signed-out h1 { font-size: 30px; line-height: 1.15; margin: 0; }
 .as-signed-out .as-body { font-size: 17px; line-height: 1.45; color: var(--body); text-wrap: pretty; }
-.as-signed-out .as-signin { width: 100%; margin-top: 6px; padding: 14px; }
+.as-signed-out .as-signin { margin-top: 6px; } /* the same button as the menu's sign-in (owner, 2026-10-19) */
 .panel .as:has(.as-signed-out) { justify-content: center; padding: 0 30px 24px; }
 .as-note { color: var(--muted); font-size: 16px; }
 /* The glossary entries a question names, above the reply. */

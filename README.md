@@ -15,6 +15,10 @@ for the full plan, [docs/design/](docs/design/) for the design direction, and
 [docs/prompts/](docs/prompts/) for the prompts used to build it.
 `docs/SNOWMOON-CHAPTER-NOTES.md` contains full-book spoilers.
 
+To build on Minpentai, the game from the book: start with
+[docs/minpentai/agents.md](docs/minpentai/agents.md), written for AI agents and
+served as plain text at https://snowmoon.party/minpentai/agents.md.
+
 ## Replicate it
 
 ```sh

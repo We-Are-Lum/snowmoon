@@ -127,9 +127,10 @@ export function Play({ start, onLearn }: { start: 'home' | 'free' | 'ladder' | '
 
       {v.sHome && (
         <div className="mp-col" style={{ maxWidth: L.colMax, borderLeft: L.colBd, borderRight: L.colBd }}>
+          {/* LEARN opens lesson 1 itself (owner, 2026-10-20), so the hub's Learn panel below is no longer shown. */}
           <div className="mp-tabs" role="tablist" aria-label="Minpentai">
             {v.tabs.map((t) => (
-              <button key={t.label} role="tab" aria-selected={t.on} className={t.on ? 'on' : ''} onClick={t.click}>{t.label}</button>
+              <button key={t.label} role="tab" aria-selected={t.on} className={t.on ? 'on' : ''} onClick={t.label === 'LEARN' ? onLearn : t.click}>{t.label}</button>
             ))}
           </div>
           {v.tPlay && (

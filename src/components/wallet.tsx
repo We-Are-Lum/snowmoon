@@ -15,7 +15,8 @@ const W = IMAGE_WORDING.prepaid;
 const PENDING = 'snowmoon.wallet.pending';
 const dollars = (usd: number) => (usd >= 1 ? usd.toFixed(2) : usd.toFixed(4).replace(/0+$/, '').replace(/\.$/, ''));
 
-export function WalletSignInButton({ className = 'ic-secondary' }: { className?: string }) {
+/** `note: false` leaves out the line under the button (the menu shows one line under both sign-in buttons). */
+export function WalletSignInButton({ className = 'ic-secondary', note = true }: { className?: string; note?: boolean }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const go = async () => {
@@ -35,7 +36,7 @@ export function WalletSignInButton({ className = 'ic-secondary' }: { className?:
       <button type="button" className={className} onClick={() => void go()} disabled={busy}>
         {busy ? '…' : W.signIn}
       </button>
-      <p className="ic-note">{W.signInNote}</p>
+      {note && <p className="ic-note">{W.signInNote}</p>}
       {error && <p className="ic-note" role="alert">{error}</p>}
     </div>
   );
@@ -169,6 +170,7 @@ export function WalletPanel({ onChange }: { onChange?: () => void }) {
         </button>
       ) : (
         <div className="wallet-add">
+          <p className="ic-note">{W.inAdvance}</p>
           <p className="ic-note">{W.payWith}</p>
           <div className="wallet-tokens" role="radiogroup" aria-label="Pay with">
             {(['USDC', 'ETH'] as const).map((t) => (
