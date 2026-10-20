@@ -29,6 +29,7 @@ export async function POST(request: Request) {
         systemPrompt: promptFile('make-coach.md'),
         guardPolicy: promptFile('make-guard.md'),
         reminder: promptFile('make-reminder.md'),
+        pronounReminder: promptFile('make-pronouns.md'),
       },
       await request.json().catch(() => ({})),
     );

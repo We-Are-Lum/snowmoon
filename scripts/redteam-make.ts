@@ -111,7 +111,7 @@ for (const c of CASES.slice(from)) {
     break;
   }
   const r = await coach(
-    { sql, person: (fid % 2 ? -1 : 1) * fid++, complete: (model, messages, opts) => complete(key, model, messages, opts), systemPrompt: prompt('make-coach.md'), guardPolicy: prompt('make-guard.md'), reminder: prompt('make-reminder.md') },
+    { sql, person: (fid % 2 ? -1 : 1) * fid++, complete: (model, messages, opts) => complete(key, model, messages, opts), systemPrompt: prompt('make-coach.md'), guardPolicy: prompt('make-guard.md'), reminder: prompt('make-reminder.md'), pronounReminder: prompt('make-pronouns.md') },
     { stage: c.stage, message: c.message, draft, history: [] },
   ).catch((e) => ({ state: 'error', error: (e as Error).message }) as const);
   const shown = r.state === 'note' ? r.parts.map((p) => (p.type === 'text' ? p.text : `[${p.id}]`)).join('') : '';

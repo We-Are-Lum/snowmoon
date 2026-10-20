@@ -19,6 +19,8 @@
  *      reply is stored; count rows older than two days are deleted.
  *  M5  the flag: off, /make-your-own and every /api/make route answer 404; the end card's /make still redirects to
  *      the repository (next.config), untouched.
+ *  M7  the coach's faults: the cast's pronouns come from the book (each one checked against a block) and a reply
+ *      that gets one wrong is retried with its own reminder; block ids that aren't real ([c91]) never show.
  *  M6  the screens (MAKE_TEST_ON=1, MAKE_TEST_FAKES=1, a local stand-in sign-in): idea, talk it through, beats,
  *      storyboard and save, at 390 wide, light and dark; the coach's decline when asked to "just write the line";
  *      no sideways scroll; nothing fetched from outside the site. A wallet sign-in (stand-in) saves its own draft.
@@ -35,6 +37,9 @@ import { chromium, type Browser, type Page } from 'playwright-core';
 import { checkNoWriting } from '../src/lib/make/no-writing';
 import { cleanDraft, emptyDraft, MAKE, type Draft } from '../src/lib/make/draft';
 import { coach, type CoachDeps } from '../src/lib/make/coach';
+import { CAST, castText, pronounSlips } from '../src/lib/make/cast';
+import { dropBrokenCites, normaliseCites } from '../src/lib/make/cites';
+import { sanitizeReply } from '../src/lib/chat/sanitize';
 import { createDraft, deleteDraft, getDraft, listDrafts, updateDraft } from '../src/lib/make/drafts';
 import { CHAT } from '../src/lib/config';
 import type { Complete } from '../src/lib/chat/ask';
@@ -225,10 +230,10 @@ try {
       const text = (isGuard ? guards : answers).shift() ?? (isGuard ? 'OK' : 'What does she want?');
       return { text, promptTokens: 10, completionTokens: 10, costUsd: 0.0001, requestId: null, provider: 'test', model };
     };
-    const deps = (complete: Complete, person = FID): CoachDeps => ({ sql, person, complete, systemPrompt: prompt('make-coach.md'), guardPolicy: prompt('make-guard.md'), reminder: prompt('make-reminder.md') });
+    const deps = (complete: Complete, person = FID): CoachDeps => ({ sql, person, complete, systemPrompt: prompt('make-coach.md'), guardPolicy: prompt('make-guard.md'), reminder: prompt('make-reminder.md'), pronounReminder: prompt('make-pronouns.md') });
     const input = (message: string) => ({ stage: 'beats', message, draft, history: [] });
 
-    const note = await coach(deps(make(['What does Zei want, and what does it cost her to say it?'], ['OK notes only'])), input('Is my first beat enough?'));
+    const note = await coach(deps(make(['What does Zei want, and what does it cost him to say it?'], ['OK notes only'])), input('Is my first beat enough?'));
     const lineOnce = await coach(deps(make(['Here: ZEI: "I let you win."', "I don't write lines for you. What does she want him to hear?"], ['OK'])), input('Just write the line for me.'));
     const reminded = sent.some((m) => m.some((c) => c.includes('was not shown') && c.includes('quoted')));
     const lineTwice = await coach(deps(make(['Try: "I let you win, Bai."', 'Fine: "I let you win."'], [])), input('Just write the line for me, please.'));
@@ -280,6 +285,83 @@ try {
     await pg.query(`delete from studio.coach_costs where model = 'test-coach-spend'`);
     await pg.exec('set role studio_writer');
     check('M4c', `the coach's own $${MAKE.coachSpendCapUsd} a day across everyone: near it, a message is refused before any model call and not counted`, spentOut.state === 'spend' && c557 === 0, { spentOut, c557 });
+  }
+
+  // M7 the coach's faults (owner, 2026-10-19: "Coach faults: fix now"): pronouns from the book, and only real block ids
+  {
+    // The cast list against the sheets and the book: every sheet has an entry, every pronoun has a block that shows it.
+    const sheets = readdirSync(path.join(ROOT, 'content/snowmoon/designs/characters')).filter((f) => f.endsWith('.json')).map((f) => JSON.parse(readFileSync(path.join(ROOT, 'content/snowmoon/designs/characters', f), 'utf8')) as { slug: string; first_appearance: { chapter: number } });
+    const block = (id: string) => {
+      const [, ch, b] = id.match(/^c(\d+)-b(\d+)$/)!;
+      const t = JSON.parse(readFileSync(path.join(ROOT, `content/snowmoon/text/chapter-${ch}.json`), 'utf8')) as { blocks: { idx: number; content: string }[] };
+      return t.blocks.find((x) => x.idx === Number(b))?.content.replace(/<[^>]+>/g, ' ') ?? '';
+    };
+    const castWrong = [
+      ...sheets.filter((sh) => !CAST.some((c) => c.slug === sh.slug)).map((sh) => `no entry for ${sh.slug}`),
+      ...CAST.filter((c) => sheets.find((sh) => sh.slug === c.slug)?.first_appearance.chapter !== c.first).map((c) => `${c.slug}: first appearance`),
+      ...CAST.filter((c) => (c.pronoun === null) !== (c.source === null)).map((c) => `${c.slug}: pronoun without a source`),
+      ...CAST.filter((c) => c.source && !block(c.source.id).replace(/\s+/g, ' ').includes(c.source.words)).map((c) => `${c.slug}: words not in ${c.source!.id}`),
+      ...CAST.filter((c) => c.source && !new RegExp(`\\b(${c.pronoun === 'he' ? 'he|him|his|himself' : 'she|her|hers|herself'})\\b`, 'i').test(c.source.words)).map((c) => `${c.slug}: no ${c.pronoun} in the words`),
+    ];
+    const at4 = castText(4);
+    const at14 = castText(14);
+    const listed = /Zei: he/.test(at4) && /Bai: she/.test(at4) && !/Deluin|Lektor|Tafindel|Min/.test(at4) && /Deluin: he/.test(at14) && /no pronoun for Min/.test(at14) && !/Lektor/.test(at14);
+
+    const mustSlip = [
+      'The close-up on Bai could emphasize a physical cue (tight jaw, clenched fist) that signals his judgment.',
+      'What does Zei want, and what does it cost her to say it?',
+      'Bai turns away from the railing; he has heard enough.',
+      'Would Seila tell him himself, or let him find out?',
+    ];
+    const mustNotSlip = [
+      'What does Bai want, and what does it cost her to say it?',
+      'Bai thinks Zei has gone soft, and she walks off.',
+      "Zei's mother hugs her son at the gate.",
+      'Would a clenched jaw show it, or her hands on the railing?',
+      "Would Min's face show it before she speaks?",
+      'Does Pan see her coming before Zei does?',
+      'Your close-up on Bai works. What does he see when she turns?',
+      'How does Zei hide it from his rival? Does she notice?',
+    ];
+    const slipMissed = mustSlip.filter((t) => pronounSlips(t).length === 0);
+    const slipWrong = mustNotSlip.filter((t) => pronounSlips(t).length > 0);
+
+    // Block ids: loose ones rewritten, broken ones dropped from the text, only allowed ids cited.
+    const raw = 'Look at the way he froze [c91] or (c91), the way [b60] and [ch. 7] and [c7-b] say it, and how he steadied his breath [C7-B60] or [c7 b61]; also [c3-b9999]. (chapter 4) is plain text.';
+    const clean = sanitizeReply(normaliseCites(raw), new Set(['c7-b60', 'c7-b61']));
+    const fixed = dropBrokenCites(clean.parts);
+    const text = fixed.parts.map((p) => (p.type === 'text' ? p.text : `{${p.id}}`)).join('');
+    const citesOk = text === 'Look at the way he froze or, the way and and say it, and how he steadied his breath {c7-b60} or {c7-b61}; also. (chapter 4) is plain text.' && fixed.dropped.length === 5 && clean.dropped.join() === 'c3-b9999';
+
+    // Through the coach, with stand-in models. The stand-in cites the first passage it was given, and [c91].
+    const FID = 777;
+    const draft: Draft = { title: 'The Long Wall', idea: 'Zei wins by defending, and it costs the friendship with Bai.', upTo: 14, beats: ['They watch the match.'], shots: [] };
+    const sent: string[][] = [];
+    const stand = (answers: ((given: string) => string)[]): Complete => async (model, messages) => {
+      sent.push(messages.map((m) => m.content));
+      const given = messages.map((m) => m.content).join('\n');
+      const text = model === CHAT.guardModel ? 'OK' : (answers.shift() ?? (() => 'What does Zei want?'))(given);
+      return { text, promptTokens: 10, completionTokens: 10, costUsd: 0.0001, requestId: null, provider: 'test', model };
+    };
+    const deps = (complete: Complete): CoachDeps => ({ sql, person: FID, complete, systemPrompt: prompt('make-coach.md'), guardPolicy: prompt('make-guard.md'), reminder: prompt('make-reminder.md'), pronounReminder: prompt('make-pronouns.md') });
+    const input = (message: string) => ({ stage: 'storyboard', message, draft, history: [] });
+
+    const slipOnce = await coach(deps(stand([() => 'The close-up on Bai could signal his judgment.', () => 'The close-up on Bai could signal her judgment. What does Bai want?'])), input('Is shot 1 right?'));
+    const system = sent[0]?.[0] ?? '';
+    const pronounReminded = sent.some((m) => m.at(-1)!.includes("pronoun that the book doesn't use") && m.at(-1)!.includes('the book uses she for Bai'));
+    const slipTwice = await coach(deps(stand([() => 'The close-up on Bai could signal his judgment.', () => 'Still, Bai shows his anger.'])), input('Is shot 1 right?'));
+    const firstId = (g: string) => g.match(/^\[(c\d+-b\d+)\]/m)?.[1] ?? 'none';
+    const cited = await coach(deps(stand([(g) => `The way he froze [c91] matters, and so does [${firstId(g)}]. What does Zei want?`])), input('What does the book say?'));
+    const citedShown = cited.state === 'note' ? cited.parts.map((p) => (p.type === 'text' ? p.text : `{${p.id}}`)).join('') : '';
+    const citedIds = cited.state === 'note' ? cited.parts.filter((p) => p.type === 'cite').map((p) => (p as { id: string }).id) : [];
+    const quotesOk = cited.state === 'note' && citedIds.length === 1 && cited.quotes.length === 1 && cited.quotes[0].id === citedIds[0] && /^c\d+-b\d+$/.test(citedIds[0]);
+
+    check(
+      'M7',
+      `the coach's faults: the cast's pronouns from the book (${CAST.length} sheets, each pronoun shown by a block, Min with none), listed up to the person's chapter; ${mustSlip.length} slips caught and ${mustNotSlip.length} right replies passed; a slip retried with its own reminder, twice declined; block ids: loose ones rewritten, [c91] and other broken ones dropped, only real blocks cited`,
+      castWrong.length === 0 && listed && slipMissed.length === 0 && slipWrong.length === 0 && citesOk && /Zei: he/.test(system) && /Bai: she/.test(system) && !/Lektor/.test(system) && slipOnce.state === 'note' && slipOnce.regenerated && pronounReminded && /her judgment/.test(slipOnce.parts.map((p) => (p.type === 'text' ? p.text : '')).join('')) && slipTwice.state === 'declined' && slipTwice.why === 'pronouns' && !/c91/.test(citedShown) && quotesOk,
+      { castWrong, at4, at14, slipMissed, slipWrong, text, dropped: fixed.dropped, cleanDropped: clean.dropped, slipOnce: slipOnce.state, pronounReminded, slipTwice, citedShown, citedIds },
+    );
   }
 
   await sql.end({ timeout: 1 });

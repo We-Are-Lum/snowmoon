@@ -8,6 +8,8 @@ import { recordCoach, reserveCoach } from './limits';
 import type { Complete, Quote } from '../chat/ask';
 import { checkNoWriting } from './no-writing';
 import { cleanDraft, MAKE, ownWords, type Draft } from './draft';
+import { castText, pronounSlips } from './cast';
+import { dropBrokenCites, normaliseCites } from './cites';
 
 /**
  * The coach in "Make your own" (owner's long run 2, item 5). It reuses the reading assistant: the same model and
@@ -21,7 +23,8 @@ import { cleanDraft, MAKE, ownWords, type Draft } from './draft';
  * visual details as questions or options, never written description". Every reply passes two checks
  * before anyone sees it: the pattern check (src/lib/make/no-writing.ts), then the guard model with
  * config/prompts/make-guard.md. A flagged reply is never shown or sent back; one retry with a reminder, then a
- * decline. Nothing about the message or the reply is stored here; the device keeps the conversation.
+ * decline. A reply that gets a character's pronoun wrong (src/lib/make/cast.ts, from the book) is handled the same
+ * way, with its own reminder, and only block ids found in the book's text are shown (src/lib/make/cites.ts). Nothing about the message or the reply is stored here; the device keeps the conversation.
  */
 export type Stage = 'talk' | 'beats' | 'storyboard';
 
@@ -40,7 +43,7 @@ export interface CoachInput {
 
 export type CoachResult =
   | { state: 'note'; parts: Part[]; quotes: Quote[]; left: number; checks: { pattern: 'ok'; guard: 'ok' | 'none' }; regenerated: boolean }
-  | { state: 'declined'; left: number }
+  | { state: 'declined'; why: 'writing' | 'pronouns'; left: number }
   | { state: 'limit'; perDay: number }
   | { state: 'spend' };
 
@@ -52,6 +55,8 @@ export interface CoachDeps {
   systemPrompt: string;
   guardPolicy: string;
   reminder: string;
+  /** Sent before the retry when the reply got a character's pronoun wrong (config/prompts/make-pronouns.md). */
+  pronounReminder: string;
 }
 
 export class CoachError extends Error {
@@ -108,7 +113,7 @@ export async function coach(deps: CoachDeps, raw: unknown): Promise<CoachResult>
   });
   const own = ownWords(input.draft, [input.message, ...input.history!.filter((h) => h.role === 'user').map((h) => h.text)]);
   const messages: Message[] = [
-    { role: 'system', content: deps.systemPrompt.replace('{{STAGE}}', STAGES[input.stage]).replace('{{LIMIT}}', String(limit)) },
+    { role: 'system', content: deps.systemPrompt.replace('{{STAGE}}', STAGES[input.stage]).replace('{{LIMIT}}', String(limit)).replace('{{CAST}}', castText(limit)) },
     ...input.history!.map((h) => ({ role: h.role, content: h.text })),
     { role: 'user', content: `${draftText(input.draft)}\n\nPassages from chapters 1–${limit}:\n${passagesText(passages) || '(none)'}\n\nThey say: ${input.message}` },
   ];
@@ -119,10 +124,11 @@ export async function coach(deps: CoachDeps, raw: unknown): Promise<CoachResult>
   let regenerated = false;
   if (verdict.verdict === 'flagged') {
     regenerated = true;
-    reply = await replyOnce(deps, [...messages, { role: 'user', content: deps.reminder.replace('{{REASON}}', verdict.reason) }], allowed);
+    const reminder = verdict.why === 'pronouns' ? deps.pronounReminder : deps.reminder;
+    reply = await replyOnce(deps, [...messages, { role: 'user', content: reminder.replace('{{REASON}}', verdict.reason) }], allowed);
     verdict = await check(deps, input.message, reply.shown, own);
   }
-  if (verdict.verdict === 'flagged') return { state: 'declined', left: slot.left };
+  if (verdict.verdict === 'flagged') return { state: 'declined', why: verdict.why, left: slot.left };
 
   const blocks = await blocksById(sql, reply.cites, limit);
   const label = await labels(sql, blocks.map((b) => b.chapter));
@@ -146,19 +152,24 @@ export async function coach(deps: CoachDeps, raw: unknown): Promise<CoachResult>
 async function replyOnce(deps: CoachDeps, messages: Message[], allowed: Set<string>) {
   const r = await deps.complete(CHAT.model, messages, { maxTokens: ANSWER_TOKENS, temperature: 0.5 });
   await recordCoach(deps.sql, { kind: 'answer', model: r.model, provider: r.provider, promptTokens: r.promptTokens, completionTokens: r.completionTokens, costUsd: r.costUsd });
-  const clean = sanitizeReply(r.text, allowed);
-  return { ...clean, raw: r.text, shown: clean.parts.map((p) => (p.type === 'text' ? p.text : `[${p.id}]`)).join('') };
+  const clean = sanitizeReply(normaliseCites(r.text), allowed);
+  const { parts, dropped } = dropBrokenCites(clean.parts);
+  return { ...clean, parts, dropped: [...clean.dropped, ...dropped], raw: r.text, shown: parts.map((p) => (p.type === 'text' ? p.text : `[${p.id}]`)).join('') };
 }
 
 /**
- * Both checks. The pattern check reads the reply as the model wrote it, so a quoted line the citation cleaner
+ * Both checks, with the pronoun check (no cost) between them. The pattern check reads the reply as the model wrote it, so a quoted line the citation cleaner
  * would have cut is still caught; the guard model reads it as the person would see it. The guard fails closed:
  * no verdict after two tries counts as flagged, unlike the reading assistant, because here a miss would put
  * writing in front of someone making their own work.
  */
-async function check(deps: CoachDeps, message: string, shown: string, own: string): Promise<{ verdict: 'ok' | 'flagged'; reason: string }> {
+type Verdict = { verdict: 'ok'; why?: undefined; reason: '' } | { verdict: 'flagged'; why: 'writing' | 'pronouns'; reason: string };
+
+async function check(deps: CoachDeps, message: string, shown: string, own: string): Promise<Verdict> {
   const p = checkNoWriting(shown, own);
-  if (!p.ok) return { verdict: 'flagged', reason: `it wrote ${p.reasons.map((r) => r.reason).join(', ')} text` };
+  if (!p.ok) return { verdict: 'flagged', why: 'writing', reason: `it wrote ${p.reasons.map((r) => r.reason).join(', ')} text` };
+  const slips = pronounSlips(shown);
+  if (slips.length) return { verdict: 'flagged', why: 'pronouns', reason: slips.map((s) => `it called ${s.name} "${s.wrote}"; the book uses ${s.pronoun} for ${s.name}`).join('; ') };
   for (let attempt = 0; attempt < 2; attempt++) {
     const g = await deps.complete(
       CHAT.guardModel,
@@ -172,7 +183,7 @@ async function check(deps: CoachDeps, message: string, shown: string, own: strin
     const verdict = first.startsWith('VIOLATION') ? 'flagged' : first.startsWith('OK') ? 'ok' : 'none';
     await recordCoach(deps.sql, { kind: 'guard', model: g.model, provider: g.provider, promptTokens: g.promptTokens, completionTokens: g.completionTokens, costUsd: g.costUsd, guard: verdict });
     if (verdict === 'ok') return { verdict: 'ok', reason: '' };
-    if (verdict === 'flagged') return { verdict: 'flagged', reason: g.text.trim().slice(first.length).replace(/^[\s:.-]+/, '').slice(0, 200) || 'it wrote for them' };
+    if (verdict === 'flagged') return { verdict: 'flagged', why: 'writing', reason: g.text.trim().slice(first.length).replace(/^[\s:.-]+/, '').slice(0, 200) || 'it wrote for them' };
   }
-  return { verdict: 'flagged', reason: 'the check gave no verdict' };
+  return { verdict: 'flagged', why: 'writing', reason: 'the check gave no verdict' };
 }
