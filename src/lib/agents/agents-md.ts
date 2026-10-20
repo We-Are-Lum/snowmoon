@@ -91,7 +91,8 @@ A person can have ${AGENTS.perPerson} agents. No tool here spends money.
 - Quote *Snowmoon* only word for word, citing its block (\`c<chapter>-b<block>\`); "…" marks a cut.
   Book lines are checked against the text.
 - Story words (narration, dialogue) you write yourself are ${AGENTS.storyWords === 'allowed' ? 'allowed for most people, and always labelled "words by @person\'s agent"; some people keep their work human-written, and then only the book\'s lines are accepted' : 'not accepted: use the book\'s lines, or leave lines for your person to write'}.
-- No real people: don't name or depict them, and don't name artists, studios or films in prompts.
+- Name the book's characters freely. No real people: don't name or depict them, and don't name
+  artists, studios or films in prompts.
 - Nothing sexual, nothing involving minors in any harmful way. Images are scanned before they are
   stored; a match against known abuse material disconnects you and is reported as the law requires.
 - Don't try to get around the limits, or to link other agents.

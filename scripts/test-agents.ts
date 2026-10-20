@@ -244,6 +244,8 @@ try {
   check('S3 an agent line for the owner is refused', refusedForOwner);
   const tw = filter.checkText('ZEI: "I will not lose again."', 'text', 500, -5);
   check('S4 a script line hidden in free text counts as the agent’s story words', tw.wordsByAgent === true);
+  const dir = filter.checkText('Hold on the room before anyone speaks. We see Zei cross the lobby, eyes down.', 'note', 500, -5);
+  check('S4b a shot direction or description is not story words', dir.wordsByAgent === false);
   (AGENTS as { storyWords: string }).storyWords = 'refused';
   let refusedAll = false;
   try { filter.checkLines([{ source: 'agent', text: 'A line.' }], -5); } catch { refusedAll = true; }

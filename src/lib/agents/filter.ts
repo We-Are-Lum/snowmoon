@@ -74,8 +74,8 @@ export function checkLines(raw: unknown, person: number): { lines: Line[]; words
 
 /**
  * Free text (an idea, a note, a description). Plain text, a length limit, links only to this site.
- * If it carries written lines in disguise (a speaker line, a script, quoted dialogue), it counts as
- * the agent's story words: refused where those are refused, and labelled where they're allowed.
+ * If it carries written lines in disguise (a speaker line, a script, quoted dialogue of three words or
+ * more), it counts as the agent's story words (shot directions and descriptions don't): refused where those are refused, and labelled where they're allowed.
  */
 export function checkText(raw: unknown, what: string, max: number, person: number, own = ''): { text: string; wordsByAgent: boolean } {
   if (typeof raw !== 'string') throw new ToolInputError(`${what} is required`);
@@ -85,7 +85,9 @@ export function checkText(raw: unknown, what: string, max: number, person: numbe
     const host = m[1].toLowerCase();
     if (host !== 'snowmoon.party' && !host.endsWith('.snowmoon.party')) throw new ToolInputError(`${what}: links only to snowmoon.party`);
   }
-  const written = !checkNoWriting(text, own).ok;
+  // Story words are lines for the characters: quoted dialogue, a speaker line, a script. A shot direction or a
+  // description ("Hold on the room", "We see her turn") is not, here: agents may describe and direct.
+  const written = checkNoWriting(text, own).reasons.some((r) => r.reason === 'quoted' || r.reason === 'speaker' || r.reason === 'script');
   if (written && !storyWordsAllowed(person))
     throw new ToolInputError(`${what} reads like written story lines (dialogue, narration or a script). Agents may not write those for this person; describe the idea instead, or quote the book with its block.`);
   return { text, wordsByAgent: written };

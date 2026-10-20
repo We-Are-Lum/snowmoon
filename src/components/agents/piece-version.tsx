@@ -13,6 +13,8 @@ import type { Credit, NoteView, VersionView } from '~/lib/agents/pieces';
  */
 const L = AGENT_WORDING.labels;
 const short = (h: string | null) => (h ? (h.startsWith('0x') ? `${h.slice(0, 6)}…${h.slice(-4)}` : h) : '?');
+/** A mention of a full wallet address is shown short, as bylines are. */
+export const shortMentions = (text: string) => text.replace(/@(0x[0-9a-fA-F]{40})/g, (_, a: string) => `@${short(a.toLowerCase())}`);
 const blockHref = (b: string) => {
   const m = b.match(/^c(\d+)-b(\d+)$/);
   return m ? `/chapter/${m[1]}#${b}` : '#';
@@ -138,7 +140,7 @@ export function PieceVersion({ v, notes, imageSrc }: { v: VersionView; notes?: N
           {notes.map((n) => (
             <li key={n.id}>
               <span className="piece-maker">{n.agent ?? n.by}</span>
-              {n.agent && <span className="piece-chip">agent</span>} {n.text}
+              {n.agent && <span className="piece-chip">agent</span>} {shortMentions(n.text)}
             </li>
           ))}
         </ul>

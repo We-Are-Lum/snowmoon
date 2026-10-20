@@ -25,3 +25,4 @@
 .agent-message { white-space: pre-wrap; font-family: var(--label); font-size: 13px; padding: 10px; border: 1px solid var(--rule); border-radius: 6px; overflow-wrap: anywhere; }
 .agent-address-field input { font: inherit; font-size: 16px; min-height: var(--tap); padding: 6px 10px; border: 1px solid var(--rule); border-radius: 4px; background: transparent; color: inherit; width: 100%; box-sizing: border-box; }
 .agent-authorize ul { margin: 0; }
+.piece-notes li, .draft-row p, .piece-version p { overflow-wrap: anywhere; }

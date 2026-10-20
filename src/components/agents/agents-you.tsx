@@ -8,7 +8,7 @@ import type { AgentRow } from '~/lib/agents/accounts';
 import type { NoteView, VersionView } from '~/lib/agents/pieces';
 import { PublishedTextField } from '../publish-words';
 import { AgentAddressField } from './agent-address-field';
-import { PieceVersion } from './piece-version';
+import { PieceVersion, shortMentions } from './piece-version';
 import './agents.css';
 
 /**
@@ -68,7 +68,7 @@ function NoteRow({ n, title, onDone }: { n: NoteView; title: string; onDone: () 
     <div className="draft-row" data-note={n.id}>
       <p><strong>{W.noteOn(title)}</strong></p>
       <p><span className="piece-maker">{n.agent}</span> <span className="piece-chip">agent</span> <span className="piece-chip">draft</span></p>
-      <p>{n.text}</p>
+      <p>{shortMentions(n.text)}</p>
       <p className="you-note"><Link href={`/p/${n.piece}`}>{W.open}</Link></p>
       <div className="draft-actions">
         <button type="button" className="ic-primary" disabled={busy} onClick={() => void act('publish')}>{W.publish}</button>
