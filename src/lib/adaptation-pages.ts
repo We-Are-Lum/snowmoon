@@ -200,6 +200,21 @@ export async function shownVersion(person: Person, adaptationId: number): Promis
   return STATIC.versions.filter((v) => v.adaptationId === adaptationId && v.author === person && !v.hidden).sort((a, b) => b.id - a.id)[0] ?? null;
 }
 
+/**
+ * Every public version a person made under one adaptation, the one their page shows first, then newest
+ * first (a moment page lays them side by side; owner, 2026-10-19).
+ */
+export async function authorVersions(person: Person, adaptationId: number): Promise<Version[]> {
+  const shown = await shownVersion(person, adaptationId);
+  const rows = await fromTables((sql) => sql<VersionRow[]>`
+    select id, adaptation_id, parent_version_id, author_person, recipe, created_at, hidden
+    from studio.adaptation_versions
+    where adaptation_id = ${adaptationId} and author_person = ${person} and not hidden
+    order by id desc`);
+  const all = rows ? rows.map(toVersion) : STATIC.versions.filter((v) => v.adaptationId === adaptationId && v.author === person && !v.hidden).sort((a, b) => b.id - a.id);
+  return shown ? [shown, ...all.filter((v) => v.id !== shown.id)] : all;
+}
+
 /** The FID we last saw holding this name (for links made before a rename). */
 async function seenName(fname: string): Promise<number | null> {
   const rows = await fromTables((sql) => sql<{ person: string }[]>`select person from studio.account_names where fname = ${fname}`);

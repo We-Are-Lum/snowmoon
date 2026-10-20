@@ -53,6 +53,8 @@ const nextConfig: NextConfig = {
     // Remix's Generate reads the shot (its prompt, plate and cast cards) from the editor's data,
     // made at build time from committed files (scripts/editor-data.mjs): only those, not the voices.
     '/api/remix/**': ['./public/editor/*/v*/data.json', './public/editor/*/v*/plates/**', './public/editor/*/v*/cards/**'],
+    // A moment page reads each version's shot (its frame, times and lines) from the same data.
+    '/adaptation/**': ['./public/editor/*/v*/data.json'],
   },
   // The end card's "make your own" link (owner, 2026-10-14): the repository for now; temporary (307),
   // since /make may become a page of its own.
@@ -69,6 +71,8 @@ const nextConfig: NextConfig = {
       { source: '/@:handle/:id/v/:n/shot/:shot', destination: '/adaptation/:id/by/:handle/v/:n/shot/:shot' },
       { source: '/@:handle/:id/v/:n/storyboard', destination: '/adaptation/:id/by/:handle/v/:n/storyboard' },
       { source: '/@:handle/:id/shot/:shot', destination: '/adaptation/:id/by/:handle/shot/:shot' },
+      // A moment: one shot, every version side by side (owner, 2026-10-19).
+      { source: '/@:handle/:id/m/:shot', destination: '/adaptation/:id/by/:handle/m/:shot' },
       { source: '/@:handle/:id/storyboard', destination: '/adaptation/:id/by/:handle/storyboard' },
       { source: '/@:handle/:id', destination: '/adaptation/:id/by/:handle' },
       { source: '/:id(\\d{1,9})', destination: '/adaptation/:id' },
