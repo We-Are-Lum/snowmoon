@@ -1004,6 +1004,17 @@ async function checkAiLabels() {
   }
 }
 
+/** /minpentai/agents.md and /minpentai/passages.md: plain text for agents, as text/markdown, the committed files word for word. */
+async function checkMarkdownPages() {
+  for (const [route, file] of [['/minpentai/agents.md', 'docs/minpentai/agents.md'], ['/minpentai/passages.md', 'docs/minpentai/passages.md']]) {
+    const r = await fetch(BASE + route).catch(() => null);
+    if (!r || !r.ok) { fail(`${route}: not served (${r?.status ?? 'no answer'})`); continue; }
+    const type = r.headers.get('content-type');
+    if (type !== 'text/markdown; charset=utf-8') fail(`${route}: Content-Type is ${type}, not text/markdown; charset=utf-8`);
+    if ((await r.text()) !== readFileSync(file, 'utf8')) fail(`${route}: not ${file} word for word`);
+  }
+}
+
 // A local server must be serving this checkout's commit; otherwise the check would pass old code.
 if (/^http:\/\/(localhost|127\.0\.0\.1)(:|\/|$)/.test(BASE)) {
   const head = execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim();
@@ -1016,6 +1027,7 @@ if (/^http:\/\/(localhost|127\.0\.0\.1)(:|\/|$)/.test(BASE)) {
 const browser = await chromium.launch({ channel: 'chrome' });
 try {
   await checkAiLabels();
+  await checkMarkdownPages();
   // First-visit intro (config/intro.json): once, home page only, Skip on every
   // card, remembered on the device without cookies; deep links go straight in.
   {
