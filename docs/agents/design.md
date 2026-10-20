@@ -176,7 +176,8 @@ match; the preservation store and the report are the procedure's job, not improv
 
 **Privacy §6, what you publish, add:**
 > When you publish something your agent drafted, it is shown with your name and your agent's, labelled
-> as made by an agent. If it holds story words your agent wrote, it says so. An image your agent brought
+> as made by an agent, with what you did (your idea, your words, the feedback it answers) shown as yours.
+> If it is a brought-in piece with words written by an AI, it says so. An image your agent brought
 > in is shown with its recipe as your agent declared it, marked as not checked by us. A note is public
 > with your name; the people and agents you mention are named.
 
@@ -206,8 +207,8 @@ match; the preservation store and the report are the procedure's job, not improv
 > store it, may remove anything, and report suspected child sexual abuse material to the authorities as
 > the law requires.
 
-**Terms §8 (AI-made material), add:** "including material drafted by agents, and story words written
-by agents, which are always labelled as such."
+**Terms §8 (AI-made material), add:** "including material drafted by agents. Story words (narration and
+dialogue) are people's; any AI-written words in brought-in work are labelled as such and are no one's."
 
 **The consent screen** is the authorize page itself (its wording is in `src/lib/agents/wording.ts`);
 v1 suggested also recording the agreement with a hash of the wording, as the own-words consent does.
@@ -225,7 +226,7 @@ dialogue) are refused too. A brought-in image declares any words in it (`words: 
 AI-written words are labelled and never count as the person's. The table below is kept as the record of
 the two designs; the 'allowed' path stays only so the tests can prove the switch:
 
-| | **Allowed** (default unless you say otherwise) | **Refused** |
+| | **Allowed** (the old default, now off) | **Refused** (now) |
 |---|---|---|
 | What an agent can put in lines | the book's lines (checked word for word) and its own lines | the book's lines only |
 | Free text with written lines hidden in it (a speaker line, a script, quoted dialogue) | kept, and the version counts as having agent words | refused, with a message saying why |
@@ -240,7 +241,7 @@ demo's first run labelled a storyboard of directions as "words by …'s agent", 
 (S4b). A book passage quoted inside a free-text note still counts, which errs on the side of the label;
 lines meant as the book's go in `lines` with their block, where they're checked word for word.
 
-Tested both ways (S1–S5). **Your decision:** keep "allowed" (the default), or switch to "refused".
+Tested both ways (S1–S5); person lines checked against what they said (S4c, R4–R5).
 
 ## 7b. Speaking counts as writing
 
@@ -284,8 +285,8 @@ Tested both ways (S1–S5). **Your decision:** keep "allowed" (the default), or 
 3. A copy button for `https://snowmoon.party/mcp` and three pictures: where to paste it in Claude or
    ChatGPT. (ChatGPT may need a workspace plan; say so up front.)
 4. The app opens our consent page; they read "it drafts, you publish" and tap Allow.
-5. A suggested first message to paste into their AI: "Read Fifteen Days on snowmoon.party and draft me
-   an idea for a new scene." When the draft lands, /you shows it with a big Publish button.
+5. Back on /you, they say or type their idea to their agent, then tell their AI "go" (or the agent is
+   already watching). When the draft lands, /you shows it with Keep, Try again and Say more.
 6. Nothing to pay unless a site-run tool is used; then "Add $5" by card.
 
 ## 8b. A principle check that needs your call (P4a, left failing on this branch)
