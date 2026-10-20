@@ -5,6 +5,8 @@ import { handleFor, resolveHandle } from '../adaptation-pages';
 import { ToolInputError } from '../agent/tools';
 import { sha256, sql, type Agent } from './core';
 import { agentLabel } from './accounts';
+import { markAnswered, requestOf } from './requests';
+import { editorData } from '../agent/data';
 
 /**
  * What agents draft for their person, and what people make of it (owner, 2026-10-20; design §3–4).
@@ -27,6 +29,19 @@ export interface Credit {
   agent: string | null;
 }
 
+/**
+ * The stamp (owner, 2026-10-20): what people did, kept apart from what the agent did. "Idea, words by @x ·
+ * feedback from @y · made by @x's agent". Ideas and feedback are people's own words (typed or spoken);
+ * words are story lines from a person or the book. An idea the agent had itself is shown as the agent's
+ * and is not part of the person's stamp.
+ */
+export interface Stamp {
+  idea?: { person: number; handle: string | null; words: string; spoken: boolean } | { agent: string };
+  words?: { person?: { person: number; handle: string | null }; book?: boolean; ai?: boolean };
+  feedback?: { person: number; handle: string | null; words: string; spoken: boolean; own: boolean }[];
+  made_by?: string;
+}
+
 export interface VersionView {
   id: string;
   piece: string;
@@ -40,6 +55,9 @@ export interface VersionView {
   wordsByAgent: boolean;
   body: Record<string, unknown>;
   credit: Credit[];
+  stamp: Stamp;
+  /** For storyboards and frame prompts: each shot's picture, as the scene shows it (the default view shows these, not ids). */
+  shots: { shot: string; thumb: string | null; frame: string | null }[];
   createdAt: string;
   publishedAt: string | null;
   image: { url: string; sha256: string; declared: unknown; checked: unknown } | null;
@@ -48,13 +66,25 @@ export interface VersionView {
 
 type Row = {
   id: string; piece_id: string; kind: Kind; title: string; n: number; status: VersionView['status']; person: string;
-  agent_name: string | null; words_by_agent: boolean; body: Record<string, unknown>; credit: Credit[]; created_at: Date;
+  agent_name: string | null; words_by_agent: boolean; body: Record<string, unknown>; credit: Credit[]; stamp: Stamp; created_at: Date;
   published_at: Date | null; image_key: string | null; image_sha256: string | null; declared: unknown; checked: unknown;
 };
 
 const SELECT = (s: Sql) => s`select v.id, v.piece_id, p.kind, p.title, v.n, v.status, p.person, v.agent_name, v.words_by_agent,
-  v.body, v.credit, v.created_at, v.published_at, v.image_key, v.image_sha256, v.declared, v.checked
+  v.body, v.credit, v.stamp, v.created_at, v.published_at, v.image_key, v.image_sha256, v.declared, v.checked
   from studio.piece_versions v join studio.pieces p on p.id = v.piece_id`;
+
+function shotsShown(body: Record<string, unknown>): VersionView['shots'] {
+  const a = Number(body.adaptation);
+  const v = Number(body.version);
+  const list = (Array.isArray(body.items) ? body.items : Array.isArray(body.frames) ? body.frames : []) as { shot?: string }[];
+  if (!list.length || !Number.isInteger(a) || !Number.isInteger(v)) return [];
+  const d = editorData(a, v);
+  return list.map((it) => {
+    const s = d?.shots.find((x) => x.id === it.shot);
+    return { shot: String(it.shot), thumb: typeof s?.thumb === 'string' ? (s.thumb as string) : null, frame: typeof s?.frame === 'string' ? (s.frame as string) : null };
+  });
+}
 
 export async function view(r: Row): Promise<VersionView> {
   const person = Number(r.person);
@@ -62,7 +92,7 @@ export async function view(r: Row): Promise<VersionView> {
   return {
     id: r.id, piece: r.piece_id, kind: r.kind, title: r.title, n: r.n, status: r.status, person,
     by: `@${who.short}`, agent: r.agent_name ? who.label : null, wordsByAgent: r.words_by_agent,
-    body: r.body, credit: r.credit, createdAt: new Date(r.created_at).toISOString(),
+    body: r.body, credit: r.credit, stamp: r.stamp ?? {}, shots: shotsShown(r.body), createdAt: new Date(r.created_at).toISOString(),
     publishedAt: r.published_at ? new Date(r.published_at).toISOString() : null,
     image: r.image_key && r.image_sha256 ? { url: `${appUrl()}/api/pieces/image/${r.id}`, sha256: r.image_sha256, declared: r.declared, checked: r.checked } : null,
     url: `${appUrl()}/p/${r.piece_id}`,
@@ -79,16 +109,58 @@ export async function versionById(id: string): Promise<VersionView | null> {
 /** Can this agent see this version? Published ones, or its own person's. */
 export const visibleTo = (v: VersionView, person: number) => v.status === 'published' || v.person === person;
 
+export interface Answering {
+  /** The person's request this version answers (an idea, a note, try again, say more). */
+  request?: string;
+  /** Published notes from other people that this revision takes up. */
+  notes?: string[];
+  /** Story lines in it: whose. */
+  lines?: { person: boolean; book: boolean; ai: boolean };
+}
+
+/** Builds the stamp for a new version from what it answers (and, for a revision, the version it revises). */
+async function stampFor(agent: Agent, a: Answering, base: VersionView | null): Promise<{ stamp: Stamp; requestId: string | null }> {
+  const handle = (await handleFor(agent.person)) ?? null;
+  const who = await agentLabel(agent.person, agent.name);
+  const stamp: Stamp = { made_by: who.label };
+  let requestId: string | null = null;
+  if (a.request) {
+    const r = await requestOf(agent.person, a.request);
+    if (!r || r.status !== 'open') throw new ToolInputError('answering: no open request with that id from your person (see read_requests)');
+    requestId = r.id;
+    if (r.kind === 'idea' && !base) stamp.idea = { person: agent.person, handle, words: r.words, spoken: r.spoken };
+    else stamp.feedback = [{ person: agent.person, handle, words: r.words, spoken: r.spoken, own: true }];
+  }
+  if (base) {
+    // A revision keeps whose idea it was, and adds the feedback it answers.
+    if (base.stamp.idea) stamp.idea = base.stamp.idea;
+    if (base.stamp.words) stamp.words = base.stamp.words;
+  }
+  if (!stamp.idea && !base) stamp.idea = { agent: who.label };
+  for (const id of a.notes ?? []) {
+    const [n] = await sql()<{ person: string; body: string }[]>`select person, body from studio.notes where id = ${id} and status = 'published'`;
+    if (!n) throw new ToolInputError(`notes: ${id} isn't a published note`);
+    if (n.person && Number(n.person) !== agent.person)
+      (stamp.feedback ??= []).push({ person: Number(n.person), handle: (await handleFor(Number(n.person))) ?? null, words: n.body, spoken: false, own: false });
+  }
+  if (a.lines && (a.lines.person || a.lines.book || a.lines.ai))
+    stamp.words = { ...(a.lines.person ? { person: { person: agent.person, handle } } : {}), ...(a.lines.book ? { book: true } : {}), ...(a.lines.ai ? { ai: true } : {}) };
+  return { stamp, requestId };
+}
+
 /** A new piece with its first version, drafted by an agent for its person. */
-export async function draftPiece(agent: Agent, kind: Kind, title: string, adaptationId: number | null, body: Record<string, unknown>, wordsByAgent: boolean, image?: { key: string; sha256: string; declared: unknown; checked: unknown }) {
+export async function draftPiece(agent: Agent, kind: Kind, title: string, adaptationId: number | null, body: Record<string, unknown>, wordsByAgent: boolean, image?: { key: string; sha256: string; declared: unknown; checked: unknown }, answering: Answering = {}) {
+  const { stamp, requestId } = await stampFor(agent, answering, null);
   const s = sql();
   return await s.begin(async (tx) => {
     const t = tx as unknown as Sql;
     const [p] = await t<{ id: string }[]>`insert into studio.pieces (kind, person, adaptation_id, title) values (${kind}, ${agent.person}, ${adaptationId}, ${title}) returning id`;
-    const [v] = await t<{ id: string }[]>`insert into studio.piece_versions (piece_id, n, body, agent_id, agent_name, words_by_agent, image_key, image_sha256, declared, checked)
+    const [v] = await t<{ id: string }[]>`insert into studio.piece_versions (piece_id, n, body, agent_id, agent_name, words_by_agent, image_key, image_sha256, declared, checked, request_id, stamp)
       values (${p.id}, 1, ${t.json(body as postgres.JSONValue)}, ${agent.id}, ${agent.name}, ${wordsByAgent}, ${image?.key ?? null}, ${image?.sha256 ?? null},
-              ${image ? t.json(image.declared as postgres.JSONValue) : null}, ${image ? t.json(image.checked as postgres.JSONValue) : null}) returning id`;
-    return { piece: p.id, version: v.id };
+              ${image ? t.json(image.declared as postgres.JSONValue) : null}, ${image ? t.json(image.checked as postgres.JSONValue) : null},
+              ${requestId}, ${t.json(stamp as unknown as postgres.JSONValue)}) returning id`;
+    if (requestId) await markAnswered(t, requestId, v.id);
+    return { piece: p.id, version: v.id, stamp };
   });
 }
 
@@ -96,10 +168,11 @@ export async function draftPiece(agent: Agent, kind: Kind, title: string, adapta
  * A revision: a new version of `of`. The person's own piece gets version n+1; someone else's published
  * version becomes a new piece of the agent's person, crediting the whole chain behind it.
  */
-export async function revise(agent: Agent, of: string, body: Record<string, unknown>, wordsByAgent: boolean, title?: string) {
+export async function revise(agent: Agent, of: string, body: Record<string, unknown>, wordsByAgent: boolean, title?: string, answering: Answering = {}) {
   const base = await versionById(of);
   if (!base || !visibleTo(base, agent.person)) throw new ToolInputError('no version with that id that you can see');
-  if (base.status === 'discarded') throw new ToolInputError('that version was discarded');
+  if (base.status === 'discarded' && base.person !== agent.person) throw new ToolInputError('that version was discarded');
+  const { stamp, requestId } = await stampFor(agent, answering, base.person === agent.person ? base : null);
   const credit: Credit[] = [{ version: base.id, piece: base.piece, n: base.n, person: base.person, handle: (await handleFor(base.person)) ?? null, agent: base.agent }, ...base.credit].slice(0, 20);
   const s = sql();
   return await s.begin(async (tx) => {
@@ -114,9 +187,13 @@ export async function revise(agent: Agent, of: string, body: Record<string, unkn
         select kind, ${agent.person}, adaptation_id, ${title ?? `${base.title} (revised)`} from studio.pieces where id = ${base.piece} returning id`;
       n = 1;
     }
-    const [v] = await t<{ id: string }[]>`insert into studio.piece_versions (piece_id, n, body, agent_id, agent_name, words_by_agent, remix_of, credit)
-      values (${pieceId}, ${n}, ${t.json(body as postgres.JSONValue)}, ${agent.id}, ${agent.name}, ${wordsByAgent}, ${base.id}, ${t.json(credit as unknown as postgres.JSONValue)}) returning id`;
-    return { piece: pieceId, version: v.id, n, credit };
+    const [v] = await t<{ id: string }[]>`insert into studio.piece_versions (piece_id, n, body, agent_id, agent_name, words_by_agent, remix_of, credit, request_id, stamp)
+      values (${pieceId}, ${n}, ${t.json(body as postgres.JSONValue)}, ${agent.id}, ${agent.name}, ${wordsByAgent}, ${base.id}, ${t.json(credit as unknown as postgres.JSONValue)},
+              ${requestId}, ${t.json(stamp as unknown as postgres.JSONValue)}) returning id`;
+    if (requestId) await markAnswered(t, requestId, v.id);
+    // A new version of the person's own draft replaces it in their review list.
+    if (base.person === agent.person && base.status === 'draft') await t`update studio.piece_versions set status = 'discarded' where id = ${base.id} and status = 'draft'`;
+    return { piece: pieceId, version: v.id, n, credit, stamp };
   });
 }
 

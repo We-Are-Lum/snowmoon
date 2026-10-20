@@ -1,16 +1,18 @@
 import Link from 'next/link';
 import { AGENT_WORDING } from '~/lib/agents/wording';
-import type { Credit, NoteView, VersionView } from '~/lib/agents/pieces';
+import type { Credit, NoteView, Stamp, VersionView } from '~/lib/agents/pieces';
 
 /**
- * One version of a piece, with every label it needs (owner, 2026-10-20; design §5). Used by the public
- * piece page and, as drafts, by the person's review list. Labels:
- * - who made it: "@person", or "<name>, agent of @person" when an agent drafted it;
- * - "words by @person's agent" on any version with an agent's story words;
- * - a brought-in image: "Brought in by @person's agent · recipe as declared, not checked", its AI label,
- *   and each recipe field marked checked by us or declared;
- * - the credit chain: "Revised from …", every step, linked.
+ * One version of a piece (owner, 2026-10-20, the main goal). The default view is the work and the stamp:
+ * what the person did (idea, words, feedback, in their own words) kept apart from what the agent did. The
+ * machinery (shot ids, timings, prompts, models, the agent's own notes, a brought-in image's recipe) sits
+ * behind "Recipe", one tap away and still public. Labels:
+ * - the stamp: "Idea and words by @x · feedback from @y · made by Claude, agent of @x";
+ * - an idea the agent had itself is shown as the agent's, never as part of a person's stamp;
+ * - a brought-in piece with AI-written words says so, and those words are no one's stamp;
+ * - a brought-in image: "Brought in by @x's agent · recipe as declared, not checked", in its recipe.
  */
+const S = AGENT_WORDING.stamp;
 const L = AGENT_WORDING.labels;
 const short = (h: string | null) => (h ? (h.startsWith('0x') ? `${h.slice(0, 6)}…${h.slice(-4)}` : h) : '?');
 /** A mention of a full wallet address is shown short, as bylines are. */
@@ -19,31 +21,62 @@ const blockHref = (b: string) => {
   const m = b.match(/^c(\d+)-b(\d+)$/);
   return m ? `/chapter/${m[1]}#${b}` : '#';
 };
+const list = (xs: string[]) => (xs.length <= 1 ? xs.join('') : `${xs.slice(0, -1).join(', ')} and ${xs[xs.length - 1]}`);
 
-export function CreditChain({ credit }: { credit: Credit[] }) {
-  if (!credit.length) return null;
+/** The human stamp, then what the agent did. */
+export function StampLine({ stamp, credit }: { stamp: Stamp; credit: Credit[] }) {
+  const human: string[] = [];
+  const idea = stamp.idea && 'person' in stamp.idea ? stamp.idea : null;
+  const wordsBy = stamp.words?.person ? `@${short(stamp.words.person.handle)}` : null;
+  const ideaBy = idea ? `@${short(idea.handle)}` : null;
+  if (ideaBy && wordsBy && ideaBy === wordsBy) human.push(`${S.idea} and ${S.words} by ${ideaBy}`);
+  else {
+    if (ideaBy) human.push(`${S.idea} by ${ideaBy}`);
+    if (wordsBy) human.push(`${S.words[0].toUpperCase()}${S.words.slice(1)} by ${wordsBy}`);
+  }
+  if (stamp.words?.book) human.push(`lines from ${S.book}`);
+  const fb = [...new Set((stamp.feedback ?? []).map((f) => `@${short(f.handle)}`))];
+  if (fb.length) human.push(`${S.feedback} ${list(fb)}`);
+  const built = credit.length ? credit[credit.length - 1] : null;
   return (
-    <p className="piece-credit">
-      {L.revisedFrom}{' '}
-      {credit.map((c, i) => (
-        <span key={c.version}>
-          {i > 0 && ', from '}
-          <Link href={`/p/${c.piece}`}>{c.agent ?? `@${short(c.handle)}`}</Link> (version {c.n})
-        </span>
-      ))}
+    <p className="piece-stamp">
+      {human.length > 0 && <strong className="piece-stamp-human">{human.join(' · ')}</strong>}
+      {human.length > 0 && ' · '}
+      <span className="piece-stamp-made">
+        {stamp.idea && 'agent' in stamp.idea ? `${S.agentIdea(stamp.idea.agent)} · ` : ''}
+        {S.madeBy} {stamp.made_by ?? 'an agent'}
+      </span>
+      {built && built.person !== undefined && (
+        <>
+          {' · '}
+          <span className="piece-stamp-made">built on <Link href={`/p/${built.piece}`}>@{short(built.handle)}’s</Link></span>
+        </>
+      )}
+      {stamp.words?.ai && <span className="piece-chip piece-chip-words">{S.aiWords}</span>}
     </p>
   );
 }
 
-export function MadeBy({ v }: { v: VersionView }) {
-  const handle = v.by.replace(/^@/, '');
+/** The person's own words that started it and steered it, shown as theirs. */
+function TheirWords({ stamp }: { stamp: Stamp }) {
+  const idea = stamp.idea && 'person' in stamp.idea ? stamp.idea : null;
+  const notes = (stamp.feedback ?? []).filter((f) => f.words && f.words !== 'Try again.');
+  if (!idea && !notes.length) return null;
   return (
-    <p className="piece-by">
-      <span className="piece-maker">{v.agent ?? v.by}</span>
-      {v.agent && <span className="piece-chip">agent</span>}
-      {v.wordsByAgent && <span className="piece-chip piece-chip-words">{L.words(handle)}</span>}
-      {v.status === 'draft' && <span className="piece-chip">draft</span>}
-    </p>
+    <div className="piece-their-words">
+      {idea && (
+        <blockquote>
+          <p>{shortMentions(idea.words)}</p>
+          <footer>@{short(idea.handle)}{idea.spoken ? `, ${S.spoken}` : ''}</footer>
+        </blockquote>
+      )}
+      {notes.map((f, i) => (
+        <blockquote key={i} className="piece-their-note">
+          <p>{shortMentions(f.words)}</p>
+          <footer>@{short(f.handle)}{f.spoken ? `, ${S.spoken}` : ''}</footer>
+        </blockquote>
+      ))}
+    </div>
   );
 }
 
@@ -54,87 +87,100 @@ function Lines({ lines }: { lines: { source: string; block?: string; speaker?: s
         <li key={i}>
           {l.speaker && <strong>{l.speaker}: </strong>}
           {l.text}{' '}
-          {l.source === 'book' && l.block ? <Link className="piece-cite" href={blockHref(l.block)}>book {l.block}</Link> : <span className="piece-chip piece-chip-words">agent’s words</span>}
+          {l.source === 'book' && l.block ? <Link className="piece-cite" href={blockHref(l.block)}>book {l.block}</Link> : l.source === 'agent' ? <span className="piece-chip piece-chip-words">AI-written</span> : null}
         </li>
       ))}
     </ul>
   );
 }
 
-function Body({ v, imageSrc }: { v: VersionView; imageSrc?: string | null }) {
+/** The work itself: pictures, the person's and the book's words, the agent's description of an idea. */
+function Work({ v, imageSrc }: { v: VersionView; imageSrc?: string | null }) {
   const b = v.body as Record<string, unknown>;
   const lines = Array.isArray(b.lines) ? (b.lines as { source: string; block?: string; speaker?: string; text: string }[]) : [];
-  if (v.kind === 'idea')
-    return (
-      <>
-        {String(b.text ?? '').split(/\n{2,}/).map((p, i) => <p key={i}>{p}</p>)}
-        {lines.length > 0 && <Lines lines={lines} />}
-      </>
-    );
-  if (v.kind === 'storyboard')
-    return (
-      <>
-        <ol className="piece-board">
-          {(b.items as { shot: string; seconds?: number; note?: string }[]).map((it, i) => (
-            <li key={i}>
-              shot {it.shot}
-              {it.seconds ? ` · ${it.seconds} s` : ''}
-              {it.note ? ` · ${it.note}` : ''}
-            </li>
+  return (
+    <>
+      {v.kind === 'idea' && String(b.text ?? '').split(/\n{2,}/).map((p, i) => <p key={i} className="piece-made-text">{p}</p>)}
+      {v.kind === 'character' && <p className="piece-made-text"><strong>{String(b.character)}</strong>: {String(b.description)}</p>}
+      {v.shots.length > 0 && (
+        <ol className="piece-strip" aria-label={v.kind === 'storyboard' ? 'The storyboard' : 'The shots'}>
+          {v.shots.map((s, i) => (
+            // eslint-disable-next-line @next/next/no-img-element
+            <li key={i}>{s.thumb ? <img src={s.thumb} alt={`AI-generated image: shot ${i + 1}`} loading="lazy" /> : <span className="piece-strip-missing">{i + 1}</span>}</li>
           ))}
         </ol>
-        {lines.length > 0 && <Lines lines={lines} />}
-      </>
-    );
-  if (v.kind === 'frames')
-    return (
-      <ol className="piece-board">
-        {(b.frames as { shot: string; prompt: string; note?: string }[]).map((f, i) => (
-          <li key={i}>
-            shot {f.shot}: <span className="piece-prompt">{f.prompt}</span>
-            {f.note ? ` (${f.note})` : ''}
-          </li>
-        ))}
-      </ol>
-    );
-  if (v.kind === 'character')
-    return (
-      <>
-        <p className="piece-sub">{String(b.character)}{b.based_on ? ` · building on ${String(b.based_on)}` : ''}</p>
-        <p>{String(b.description)}</p>
-      </>
-    );
-  if (v.kind === 'image' && v.image) {
-    const d = v.image.declared as { prompt: string; model: { name: string; maker: string; weights: string; version?: string; ran_on?: string }; inputs: { sha256: string; what?: string }[] };
-    const c = v.image.checked as { width: number; height: number; stored_sha256: string; scanned_by: string; inputs_ours: { sha256: string; ours: boolean }[] };
-    const handle = v.by.replace(/^@/, '');
-    return (
-      <>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        {imageSrc && <img className="piece-image" src={imageSrc} alt={`AI-made image, as declared by @${handle}’s agent, not by the author: ${v.title}`} width={c.width} height={c.height} />}
-        <p className="piece-label">{L.broughtIn(handle)}</p>
-        <table className="piece-recipe">
-          <tbody>
-            <tr><th>prompt</th><td>{d.prompt}</td><td>declared</td></tr>
-            <tr><th>model</th><td>{d.model.name} ({d.model.maker}, {d.model.weights === 'unknown' ? 'weights not stated' : `${d.model.weights} weights`}){d.model.ran_on ? `, ran on ${d.model.ran_on}` : ''}</td><td>declared</td></tr>
-            {c.inputs_ours.map((i) => <tr key={i.sha256}><th>input</th><td><code>{i.sha256.slice(0, 12)}</code></td><td>{i.ours ? '✓ ours, checked' : 'not ours'}</td></tr>)}
-            <tr><th>image</th><td>{c.width}×{c.height} JPEG, metadata removed, <code>{c.stored_sha256.slice(0, 12)}</code></td><td>✓ checked</td></tr>
-            <tr><th>scan</th><td>{c.scanned_by}</td><td>✓ before storing</td></tr>
-          </tbody>
-        </table>
-      </>
-    );
-  }
-  return null;
+      )}
+      {v.kind === 'image' && v.image && imageSrc && (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img className="piece-image" src={imageSrc} alt={`AI-made image, as declared by ${v.by}’s agent, not by the author: ${v.title}`} width={(v.image.checked as { width: number }).width} height={(v.image.checked as { height: number }).height} />
+      )}
+      {lines.length > 0 && <Lines lines={lines} />}
+    </>
+  );
 }
 
-export function PieceVersion({ v, notes, imageSrc }: { v: VersionView; notes?: NoteView[]; imageSrc?: string | null }) {
+/** Everything that made it, one tap away. */
+function Recipe({ v }: { v: VersionView }) {
+  const b = v.body as Record<string, unknown>;
+  const handle = v.by.replace(/^@/, '');
+  return (
+    <details className="piece-recipe-box">
+      <summary>{AGENT_WORDING.recipe}</summary>
+      <p className="you-note">Made by {v.agent ?? v.by}{v.agent ? ' (an AI agent; the model it runs is its own, not declared to us)' : ''}. A {v.kind}, version {v.n}.</p>
+      {v.credit.length > 0 && (
+        <p className="you-note">
+          {L.revisedFrom}{' '}
+          {v.credit.map((c, i) => (
+            <span key={c.version}>{i > 0 && ', from '}<Link href={`/p/${c.piece}`}>{c.agent ?? `@${short(c.handle)}`}</Link> (version {c.n})</span>
+          ))}
+        </p>
+      )}
+      {Array.isArray(b.items) && (
+        <ol className="piece-board">
+          {(b.items as { shot: string; seconds?: number; note?: string }[]).map((it, i) => (
+            <li key={i}>shot {it.shot}{it.seconds ? ` · ${it.seconds} s` : ''}{it.note ? ` · ${it.note}` : ''}</li>
+          ))}
+        </ol>
+      )}
+      {Array.isArray(b.frames) && (
+        <ol className="piece-board">
+          {(b.frames as { shot: string; prompt: string; note?: string }[]).map((f, i) => (
+            <li key={i}>shot {f.shot}: <span className="piece-prompt">{f.prompt}</span>{f.note ? ` (${f.note})` : ''}</li>
+          ))}
+        </ol>
+      )}
+      {b.adaptation ? <p className="you-note">From adaptation {String(b.adaptation)}{b.version ? `, version ${String(b.version)}` : ''}.</p> : null}
+      {v.kind === 'image' && v.image && (() => {
+        const d = v.image!.declared as { prompt: string; model: { name: string; maker: string; weights: string; ran_on?: string } };
+        const c = v.image!.checked as { width: number; height: number; stored_sha256: string; scanned_by: string; inputs_ours: { sha256: string; ours: boolean }[] };
+        return (
+          <>
+            <p className="piece-label">{L.broughtIn(handle)}</p>
+            <table className="piece-recipe">
+              <tbody>
+                <tr><th>prompt</th><td>{d.prompt}</td><td>declared</td></tr>
+                <tr><th>model</th><td>{d.model.name} ({d.model.maker}, {d.model.weights === 'unknown' ? 'weights not stated' : `${d.model.weights} weights`}){d.model.ran_on ? `, ran on ${d.model.ran_on}` : ''}</td><td>declared</td></tr>
+                {c.inputs_ours.map((i) => <tr key={i.sha256}><th>input</th><td><code>{i.sha256.slice(0, 12)}</code></td><td>{i.ours ? '✓ ours, checked' : 'not ours'}</td></tr>)}
+                <tr><th>image</th><td>{c.width}×{c.height} JPEG, metadata removed, <code>{c.stored_sha256.slice(0, 12)}</code></td><td>✓ checked</td></tr>
+                <tr><th>scan</th><td>{c.scanned_by}</td><td>✓ before storing</td></tr>
+              </tbody>
+            </table>
+          </>
+        );
+      })()}
+      <p className="you-note">GPL-3.0. The words people wrote or said are theirs; the pictures are AI-generated.</p>
+    </details>
+  );
+}
+
+export function PieceVersion({ v, notes, imageSrc, showN = true }: { v: VersionView; notes?: NoteView[]; imageSrc?: string | null; showN?: boolean }) {
   return (
     <article className="piece-version" id={`v${v.n}`}>
-      <h3>Version {v.n}</h3>
-      <MadeBy v={v} />
-      <CreditChain credit={v.credit} />
-      <Body v={v} imageSrc={imageSrc} />
+      {showN && <h3>Version {v.n}{v.status === 'draft' ? ' (draft)' : ''}</h3>}
+      <StampLine stamp={v.stamp} credit={v.credit} />
+      <TheirWords stamp={v.stamp} />
+      <Work v={v} imageSrc={imageSrc} />
+      <Recipe v={v} />
       {notes && notes.length > 0 && (
         <ul className="piece-notes" aria-label="Notes">
           {notes.map((n) => (
@@ -147,4 +193,9 @@ export function PieceVersion({ v, notes, imageSrc }: { v: VersionView; notes?: N
       )}
     </article>
   );
+}
+
+/** For lists: the stamp only. */
+export function MadeBy({ v }: { v: VersionView }) {
+  return <StampLine stamp={v.stamp} credit={v.credit} />;
 }

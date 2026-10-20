@@ -3,7 +3,8 @@ import Link from 'next/link';
 import { agentsOn } from '~/lib/agents/core';
 import { notesOn, pieceVersions } from '~/lib/agents/pieces';
 import { PieceVersion } from '~/components/agents/piece-version';
-import { NoteForm } from '~/components/agents/note-form';
+import { PieceFeedback } from '~/components/agents/piece-feedback';
+import { handleFor } from '~/lib/adaptation-pages';
 import '~/components/agents/agents.css';
 
 /** A piece's public page: its published versions, newest last, each with its labels, credits and notes. */
@@ -20,11 +21,10 @@ export default async function Piece({ params }: { params: Promise<{ id: string }
     <div className="page prose piece-page">
       <p className="crumb"><Link href="/p">← Made with agents</Link></p>
       <h1>{latest.title}</h1>
-      <p className="piece-sub">{latest.kind}{latest.agent ? ' · AI-assisted' : ''} · GPL-3.0</p>
       {versions.map((v) => (
         <PieceVersion key={v.id} v={v} notes={notes.filter((n) => n.version === v.id)} imageSrc={v.image ? `/api/pieces/image/${v.id}` : null} />
       ))}
-      <NoteForm on={latest.id} />
+      <PieceFeedback on={latest.id} ownerHandle={(await handleFor(latest.person)) ?? ''} />
     </div>
   );
 }

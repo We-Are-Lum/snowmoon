@@ -15,6 +15,12 @@
 -- 4. studio.notes: feedback on a published version, from a person or (once its person publishes it) an
 --    agent, with the @mentions in it.
 -- 5. studio.agent_counts: per agent, per UTC day, how many of each thing it did, for its limits.
+-- 6. studio.requests (owner, 2026-10-20, the main goal: people do the creative acts, AI does the work):
+--    what a person tells their agent, typed or spoken (transcribed; the recording is never kept): an idea,
+--    a note on a frame, a moment or a draft, "try again", "say more". These are the person's own words.
+--    They are private until a version that answers them is published; then they show as that person's.
+--    Each version records which request it answers and its stamp: what people did (idea, words, feedback)
+--    kept apart from what the agent did.
 -- Nothing here is readable by anon or authenticated; pages read it through the server.
 
 begin;
@@ -98,8 +104,12 @@ create table studio.piece_versions (
   -- Who made it: always the piece's person; an agent too when an agent drafted it.
   agent_id uuid references studio.agents(id),
   agent_name text,
-  -- Story words (narration or dialogue) written by the agent, not by a person or the book.
+  -- AI-written story words: only possible in a brought-in piece (agents may not write story words; owner,
+  -- 2026-10-20). Labelled wherever shown, and never part of the person's stamp.
   words_by_agent boolean not null default false,
+  -- The request this version answers, and the stamp: { idea, words, feedback: [{person, request}], made_by }.
+  request_id uuid,
+  stamp jsonb not null default '{}',
   remix_of uuid references studio.piece_versions(id),
   credit jsonb not null default '[]',
   status text not null default 'draft' check (status in ('draft', 'published', 'discarded')),
@@ -131,6 +141,22 @@ create table studio.notes (
 create index notes_version on studio.notes (version_id) where status = 'published';
 create index notes_mentions on studio.notes using gin (mentions);
 
+create table studio.requests (
+  id uuid primary key default gen_random_uuid(),
+  person bigint not null check (person <> 0),
+  kind text not null check (kind in ('idea', 'note', 'again', 'more')),
+  body text not null check (char_length(body) between 1 and 2000),
+  spoken boolean not null default false,
+  -- What it is about: a piece version (a draft or published), or a moment ("<adaptation>/<version>/<shot>"), or nothing (a new idea).
+  target_version uuid references studio.piece_versions(id),
+  target_moment text check (target_moment is null or target_moment ~ '^[0-9]{1,6}/[0-9]{1,6}/[A-Za-z0-9-]{1,40}$'),
+  status text not null default 'open' check (status in ('open', 'answered', 'withdrawn')),
+  answered_by uuid references studio.piece_versions(id),
+  created_at timestamptz not null default now()
+);
+create index requests_open on studio.requests (person) where status = 'open';
+alter table studio.piece_versions add constraint piece_versions_request foreign key (request_id) references studio.requests(id);
+
 -- A person never has more than 3 live agents (the server checks too; this is the floor).
 create function studio.agents_three() returns trigger language plpgsql as $$
 begin
@@ -144,7 +170,7 @@ create trigger agents_three before insert on studio.agents for each row execute 
 do $$
 declare t text;
 begin
-  foreach t in array array['agents', 'oauth_clients', 'oauth_codes', 'agent_tokens', 'agent_counts', 'pieces', 'piece_versions', 'notes'] loop
+  foreach t in array array['agents', 'oauth_clients', 'oauth_codes', 'agent_tokens', 'agent_counts', 'pieces', 'piece_versions', 'notes', 'requests'] loop
     execute format('alter table studio.%I enable row level security', t);
     execute format('create policy writer_all on studio.%I for all to studio_writer using (true) with check (true)', t);
     execute format('revoke all on studio.%I from anon, authenticated', t);

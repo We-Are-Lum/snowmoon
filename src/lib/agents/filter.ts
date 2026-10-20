@@ -8,19 +8,18 @@ import { ToolInputError } from '../agent/tools';
 /**
  * What an agent's words must pass before anything is kept (owner, 2026-10-20; design §5).
  *
- * Story words (narration and dialogue) are the owner's decision 6. One switch, AGENTS.storyWords:
- * - 'allowed' (the default unless the owner says otherwise): an agent may write lines; each version
- *   that has them is marked words_by_agent and labelled "words by @x's agent" wherever it appears,
- *   and "human-written only" filters it out;
- * - 'refused': an agent may use only the book's lines, word for word with their block.
- * People in AGENTS.humanWrittenOnly (the owner) never get agent-written lines, whatever the switch.
- * A line from the book is always checked word for word against the block it cites; "…" marks a cut.
+ * Story words (narration and dialogue) stay human (owner, 2026-10-20: the main goal; decision 6). An agent
+ * places lines; it never writes them. A line is either:
+ * - the book's, checked word for word against the block it cites ("…" marks a cut); or
+ * - its person's, checked word for word against what the person typed or said to their agents.
+ * AGENTS.storyWords = 'allowed' (off; only for testing the old path) would let an agent's own lines through,
+ * labelled; never for AGENTS.humanWrittenOnly.
  */
 export const storyWordsAllowed = (person: number) => AGENTS.storyWords === 'allowed' && !AGENTS.humanWrittenOnly.includes(person);
 
 export interface Line {
-  /** 'book' = a line from Snowmoon, cited by block; 'agent' = written by the agent. */
-  source: 'book' | 'agent';
+  /** 'book' = a line from Snowmoon, cited by block; 'person' = the person's own words; 'agent' = the agent's (refused). */
+  source: 'book' | 'person' | 'agent';
   block?: string;
   speaker?: string;
   text: string;
@@ -44,9 +43,24 @@ export function bookLineOk(block: string, text: string): boolean {
   return norm(text).length > 0;
 }
 
-/** Checks the lines an agent drafts; says whether any are the agent's own words. */
-export function checkLines(raw: unknown, person: number): { lines: Line[]; wordsByAgent: boolean } {
-  if (raw === undefined || raw === null) return { lines: [], wordsByAgent: false };
+/** A person's line is in something they typed or said to their agents, word for word ("…" for a cut). */
+export function personLineOk(text: string, words: string[]): boolean {
+  const parts = norm(text).split(/\s*(?:…|\.\.\.)\s*/).filter(Boolean);
+  return parts.length > 0 && words.some((w) => {
+    const src = norm(w);
+    let from = 0;
+    for (const part of parts) {
+      const at = src.indexOf(part, from);
+      if (at < 0) return false;
+      from = at + part.length;
+    }
+    return true;
+  });
+}
+
+/** Checks the lines an agent places; says whether any are the agent's own words (refused unless the old switch is on). */
+export function checkLines(raw: unknown, person: number, words: string[] = []): { lines: Line[]; wordsByAgent: boolean; personWords: boolean } {
+  if (raw === undefined || raw === null) return { lines: [], wordsByAgent: false, personWords: false };
   if (!Array.isArray(raw) || raw.length > 60) throw new ToolInputError('lines must be a list of at most 60');
   const lines: Line[] = raw.map((l, i) => {
     if (!l || typeof l !== 'object') throw new ToolInputError(`line ${i + 1} must be an object`);
@@ -59,17 +73,17 @@ export function checkLines(raw: unknown, person: number): { lines: Line[]; words
       if (!bookLineOk(block, text)) throw new ToolInputError(`line ${i + 1}: not in block ${block || '(none given)'} word for word. Book lines must be exact, with "…" for a cut, and cite their block (c<chapter>-b<block>).`);
       return { source: 'book', block, speaker, text };
     }
-    if (o.source !== 'agent') throw new ToolInputError(`line ${i + 1}: source must be "book" (with its block) or "agent"`);
+    if (o.source === 'person') {
+      if (!personLineOk(text, words)) throw new ToolInputError(`line ${i + 1}: not in anything your person typed or said, word for word. Story words are theirs or the book's; ask them for the line (it comes back to you as a request).`);
+      return { source: 'person', speaker, text };
+    }
+    if (o.source !== 'agent') throw new ToolInputError(`line ${i + 1}: source must be "person" (their words, exactly), or "book" (with its block)`);
     return { source: 'agent', speaker, text };
   });
   const wordsByAgent = lines.some((l) => l.source === 'agent');
   if (wordsByAgent && !storyWordsAllowed(person))
-    throw new ToolInputError(
-      AGENTS.humanWrittenOnly.includes(person)
-        ? 'Your person keeps their story words human-written: use the book’s lines (source "book", with the block), or leave lines out for them to write.'
-        : 'Agents may not write story words here: use the book’s lines (source "book", with the block), or leave lines out for your person to write.',
-    );
-  return { lines, wordsByAgent };
+    throw new ToolInputError('Story words stay human: use your person’s own words (source "person", exactly as they said them) or the book’s (source "book", with the block). If a line is missing, leave it out and ask your person for it.');
+  return { lines, wordsByAgent, personWords: lines.some((l) => l.source === 'person') };
 }
 
 /**
@@ -89,7 +103,7 @@ export function checkText(raw: unknown, what: string, max: number, person: numbe
   // description ("Hold on the room", "We see her turn") is not, here: agents may describe and direct.
   const written = checkNoWriting(text, own).reasons.some((r) => r.reason === 'quoted' || r.reason === 'speaker' || r.reason === 'script');
   if (written && !storyWordsAllowed(person))
-    throw new ToolInputError(`${what} reads like written story lines (dialogue, narration or a script). Agents may not write those for this person; describe the idea instead, or quote the book with its block.`);
+    throw new ToolInputError(`${what} reads like written story lines (dialogue, narration or a script). Story words stay human: describe what happens, quote your person's own words, or quote the book in lines with its block.`);
   return { text, wordsByAgent: written };
 }
 

@@ -26,3 +26,24 @@
 .agent-address-field input { font: inherit; font-size: 16px; min-height: var(--tap); padding: 6px 10px; border: 1px solid var(--rule); border-radius: 4px; background: transparent; color: inherit; width: 100%; box-sizing: border-box; }
 .agent-authorize ul { margin: 0; }
 .piece-notes li, .draft-row p, .piece-version p { overflow-wrap: anywhere; }
+/* The main goal (owner, 2026-10-20): the stamp and the person's words up front; the machinery behind Recipe. */
+.piece-stamp { margin: 0; font-size: 15px; line-height: 1.5; color: var(--body); }
+.piece-stamp-human { color: var(--ink); font-weight: 600; }
+.piece-their-words { display: flex; flex-direction: column; gap: 8px; }
+.piece-their-words blockquote { margin: 0; padding: 8px 12px; border-left: 3px solid var(--ink); }
+.piece-their-words blockquote p { margin: 0; font-size: 17px; line-height: 1.45; color: var(--ink); }
+.piece-their-words footer { font-family: var(--label); font-size: 12px; letter-spacing: 0.04em; color: var(--body); margin-top: 4px; }
+.piece-their-note { border-left-color: var(--rule) !important; }
+.piece-made-text { margin: 0; }
+.piece-strip { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); gap: 6px; }
+.piece-strip img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 4px; display: block; }
+.piece-strip-missing { display: grid; place-items: center; aspect-ratio: 16 / 9; border: 1px solid var(--rule); border-radius: 4px; font-size: 13px; }
+.piece-recipe-box summary { min-height: var(--tap); display: flex; align-items: center; cursor: pointer; font-family: var(--label); font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--body); }
+.piece-recipe-box[open] { display: flex; flex-direction: column; gap: 8px; padding-bottom: 8px; }
+.tell-agent { display: flex; flex-direction: column; gap: 8px; }
+.tell-buttons { display: flex; gap: 10px; flex-wrap: wrap; }
+.tell-buttons button { width: auto; padding: 8px 16px; min-height: var(--tap); }
+.tell-mic-on { border-color: var(--ink); color: var(--ink); }
+.request-row { padding: 8px 0; border-top: 1px solid var(--rule); }
+.request-row p { margin: 0; }
+.draft-say-more { margin-top: 6px; }

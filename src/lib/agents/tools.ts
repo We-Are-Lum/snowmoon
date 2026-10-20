@@ -8,13 +8,19 @@ import { countOk, sql, type Agent, type Counted, type Scope } from './core';
 import { revoke, agentLabel } from './accounts';
 import { checkLines, checkPlain, checkText, storyWordsAllowed } from './filter';
 import { bringIn, imagesOpen, ScanMatch, type Declared } from './images';
-import { addNote, draftPiece, feedbackFor, notesOn, pieceVersions, piecesOf, revise, versionById, visibleTo, type Kind } from './pieces';
+import { addNote, draftPiece, feedbackFor, notesOn, pieceVersions, piecesOf, revise, versionById, visibleTo, type Answering, type Kind } from './pieces';
+import { openRequests, personWords } from './requests';
 
 /**
  * The tools an agent of a person can use (owner, 2026-10-20; design §2). Served as MCP at /mcp (the
  * "Add to Claude / Add to ChatGPT" connector) and as REST at /api/agent/v1/<tool> for wallet agents.
- * - Read: the seven read tools of the open read API, plus the agent's own person's work and feedback.
- * - Draft: ideas, storyboards, frames and prompts, character versions, revisions, notes, brought-in images.
+ * The main goal (owner, 2026-10-20): people do the creative acts (ideas, words, voice, feedback); the agent
+ * does the work. So the agent's to-do list is its person's requests (read_requests): ideas and notes they
+ * typed or said. Every draft says which request it answers, and its stamp keeps what the person did apart
+ * from what the agent did. Story words are never the agent's: lines are the person's own (checked against
+ * what they said) or the book's (checked against the block).
+ * - Read: the seven read tools of the open read API, plus the person's requests, work and feedback.
+ * - Draft: pieces from ideas, storyboards, frames and prompts, character versions, revisions, notes, images.
  * NOTHING here publishes, spends, or speaks as a person: every draft waits for its person on /you.
  * No tool moves money (Anthropic's directory rule, and ours).
  */
@@ -55,29 +61,36 @@ function shotsOf(adaptation: number, version: number) {
 const LINES = {
   type: 'array',
   maxItems: 60,
-  description: 'Story lines, if any. A book line: {source:"book", block:"c14-b32", speaker?, text} (word for word; "…" marks a cut). Your own: {source:"agent", speaker?, text}, allowed only where the site and the person allow agent-written words; such work is labelled "words by @person\'s agent".',
-  items: { type: 'object', properties: { source: { enum: ['book', 'agent'] }, block: { type: 'string' }, speaker: { type: 'string' }, text: { type: 'string' } }, required: ['source', 'text'], additionalProperties: false },
+  description: 'Story lines, if any. Story words stay human: your person\'s own words, exactly as they typed or said them ({source:"person", speaker?, text}), or the book\'s, word for word ({source:"book", block:"c14-b32", speaker?, text}; "…" marks a cut). Never write lines yourself; if one is missing, leave it out.',
+  items: { type: 'object', properties: { source: { enum: ['person', 'book'] }, block: { type: 'string' }, speaker: { type: 'string' }, text: { type: 'string' } }, required: ['source', 'text'], additionalProperties: false },
 };
+const ANSWERING = { type: 'string', description: 'The id of your person\'s request this answers (from read_requests). It goes into the stamp as their idea or their note.' };
+const NOTES = { type: 'array', items: { type: 'string' }, description: 'Ids of published notes from other people that this takes up (from read_feedback); credited as their feedback.' };
+const answeringOf = (args: Record<string, unknown>, lines?: { personWords: boolean; lines: { source: string }[]; wordsByAgent: boolean }): Answering => ({
+  ...(typeof args.answering === 'string' ? { request: args.answering } : {}),
+  ...(Array.isArray(args.notes) ? { notes: args.notes.filter((n): n is string => typeof n === 'string').slice(0, 10) } : {}),
+  ...(lines ? { lines: { person: lines.personWords, book: lines.lines.some((l) => l.source === 'book'), ai: lines.wordsByAgent } } : {}),
+});
 const STORYBOARD_ITEMS = { type: 'array', minItems: 1, maxItems: 80, items: { type: 'object', properties: { shot: { type: 'string' }, seconds: { type: 'number' }, note: { type: 'string' } }, required: ['shot'], additionalProperties: false } };
 const FRAMES = { type: 'array', minItems: 1, maxItems: 40, items: { type: 'object', properties: { shot: { type: 'string' }, prompt: { type: 'string' }, note: { type: 'string' } }, required: ['shot', 'prompt'], additionalProperties: false } };
 
-function storyboardBody(args: Record<string, unknown>, person: number) {
+function storyboardBody(args: Record<string, unknown>, person: number, words: string[]) {
   const adaptation = posInt(args.adaptation, 'adaptation');
   const version = posInt(args.version, 'version');
   const shots = shotsOf(adaptation, version);
   if (!Array.isArray(args.items) || !args.items.length || args.items.length > 80) throw new ToolInputError('items: 1 to 80 shots');
-  let words = false;
+  let written = false;
   const items = args.items.map((it, i) => {
     const o = (it ?? {}) as Record<string, unknown>;
     if (typeof o.shot !== 'string' || !shots.has(o.shot)) throw new ToolInputError(`item ${i + 1}: no shot "${String(o.shot)}" in that version (see get_scene)`);
     const seconds = o.seconds === undefined ? undefined : Number(o.seconds);
     if (seconds !== undefined && !(seconds > 0 && seconds <= 30)) throw new ToolInputError(`item ${i + 1}: seconds from 0 to 30`);
-    const note = o.note === undefined ? undefined : checkText(o.note, `item ${i + 1} note`, 300, person);
-    if (note?.wordsByAgent) words = true;
+    const note = o.note === undefined ? undefined : checkText(o.note, `item ${i + 1} note`, 300, person, words.join('\n'));
+    if (note?.wordsByAgent) written = true;
     return { shot: o.shot, ...(seconds ? { seconds } : {}), ...(note ? { note: note.text } : {}) };
   });
-  const lines = checkLines(args.lines, person);
-  return { body: { adaptation, version, items, ...(lines.lines.length ? { lines: lines.lines } : {}) }, words: words || lines.wordsByAgent, adaptation };
+  const lines = checkLines(args.lines, person, words);
+  return { body: { adaptation, version, items, ...(lines.lines.length ? { lines: lines.lines } : {}) }, words: written || lines.wordsByAgent, adaptation, lines };
 }
 
 function framesBody(args: Record<string, unknown>) {
@@ -93,20 +106,20 @@ function framesBody(args: Record<string, unknown>) {
   return { body: { adaptation, version, frames }, adaptation };
 }
 
-function characterBody(args: Record<string, unknown>, person: number) {
+function characterBody(args: Record<string, unknown>, person: number, words: string[]) {
   const character = typeof args.character === 'string' ? args.character.toLowerCase() : '';
   if (!/^[a-z-]{2,30}$/.test(character) || !existsSync(path.join(process.cwd(), 'content/snowmoon/designs/characters', `${character}.json`)))
     throw new ToolInputError('character must be one of the book’s characters with a design sheet (e.g. zei, deluin, bai)');
-  const d = checkText(args.description, 'description', 1200, person);
+  const d = checkText(args.description, 'description', 1200, person, words.join('\n'));
   return { body: { character, description: d.text, ...(typeof args.based_on === 'string' ? { based_on: checkPlain(args.based_on, 'based_on', 120) } : {}) }, words: d.wordsByAgent };
 }
 
-function ideaBody(args: Record<string, unknown>, person: number) {
-  const t = checkText(args.text, 'text', 2000, person);
+function ideaBody(args: Record<string, unknown>, person: number, words: string[]) {
+  const t = checkText(args.text, 'text', 2000, person, words.join('\n'));
   const adaptation = args.adaptation === undefined ? null : posInt(args.adaptation, 'adaptation');
-  const lines = checkLines(args.lines, person);
+  const lines = checkLines(args.lines, person, words);
   const moments = Array.isArray(args.moments) ? args.moments.slice(0, 20).map((m) => checkPlain(m, 'moment', 80)) : undefined;
-  return { body: { text: t.text, ...(adaptation ? { adaptation } : {}), ...(moments ? { moments } : {}), ...(lines.lines.length ? { lines: lines.lines } : {}) }, words: t.wordsByAgent || lines.wordsByAgent, adaptation };
+  return { body: { text: t.text, ...(adaptation ? { adaptation } : {}), ...(moments ? { moments } : {}), ...(lines.lines.length ? { lines: lines.lines } : {}) }, words: t.wordsByAgent || lines.wordsByAgent, adaptation, lines };
 }
 
 const myWork = async (agent: Agent, status: 'draft' | 'published') =>
@@ -120,7 +133,7 @@ const WRITE: AgentTool[] = [
     run: async (agent, args) => {
       only(args, []);
       const who = await agentLabel(agent.person, agent.name);
-      return { you: who.label, person: `@${who.short}`, scopes: agent.scopes, limits_per_day: AGENTS.limits, story_words: storyWordsAllowed(agent.person) ? 'allowed, labelled "words by your person\'s agent"' : 'not allowed: book lines (word for word) only', bringing_in_images: imagesOpen() ? 'open' : 'not open yet', rule: 'You draft; your person publishes. Nothing you make is public until they do.' };
+      return { you: who.label, person: `@${who.short}`, scopes: agent.scopes, limits_per_day: AGENTS.limits, story_words: storyWordsAllowed(agent.person) ? 'allowed (test switch), labelled' : 'never yours: place your person\'s own words (exactly as they said them) or the book\'s; if a line is missing, leave it out and ask', how_to_work: 'Call read_requests: your person\'s ideas and notes are your to-do list. Answer each with a draft (answering: its id). They react with keep, try again, or say more; those come back as requests.', bringing_in_images: imagesOpen() ? 'open' : 'not open yet', rule: 'You draft; your person publishes. Nothing you make is public until they do.' };
     },
   },
   {
@@ -144,43 +157,52 @@ const WRITE: AgentTool[] = [
     },
   },
   {
-    name: 'start_idea', title: 'Start an idea', scope: 'drafts', writes: true, counts: 'drafts',
-    description: 'Draft an idea for your person: what it is, which adaptation and moments it touches. A private draft until they publish it.',
-    inputSchema: { type: 'object', properties: { title: { type: 'string' }, text: { type: 'string', description: 'The idea, up to 2,000 characters.' }, adaptation: { type: 'integer' }, moments: { type: 'array', items: { type: 'string' }, description: 'Shot ids or book blocks it touches.' }, lines: LINES }, required: ['title', 'text'], additionalProperties: false },
+    name: 'read_requests', title: 'Read my person\'s requests', scope: 'read', writes: false,
+    description: 'Your to-do list: what your person typed or said to you and you haven\'t answered yet, oldest first. Each is an idea, a note on a frame, moment or draft, "try again" (they discarded your draft), or "say more". Their words are theirs: use them as they are, never rewrite them as story lines. Answer each with a draft (answering: its id).',
+    inputSchema: { type: 'object', properties: {}, additionalProperties: false },
     run: async (agent, args) => {
-      only(args, ['title', 'text', 'adaptation', 'moments', 'lines']);
-      const b = ideaBody(args, agent.person);
-      return { ...(await draftPiece(agent, 'idea', title(args.title), b.adaptation, b.body, b.words)), status: 'draft', words_by_agent: b.words };
+      only(args, []);
+      return { requests: await openRequests(agent.person) };
+    },
+  },
+  {
+    name: 'start_idea', title: 'Make a first piece from an idea', scope: 'drafts', writes: true, counts: 'drafts',
+    description: 'Turn your person\'s idea (answering: the request id) into a first piece: what it is, which adaptation and moments it touches. Describe; don\'t write story lines. A private draft until they keep it.',
+    inputSchema: { type: 'object', properties: { title: { type: 'string' }, text: { type: 'string', description: 'What the piece is, up to 2,000 characters. Your working, not story words.' }, adaptation: { type: 'integer' }, moments: { type: 'array', items: { type: 'string' }, description: 'Shot ids or book blocks it touches.' }, lines: LINES, answering: ANSWERING }, required: ['title', 'text'], additionalProperties: false },
+    run: async (agent, args) => {
+      only(args, ['title', 'text', 'adaptation', 'moments', 'lines', 'answering']);
+      const b = ideaBody(args, agent.person, await personWords(agent.person));
+      return { ...(await draftPiece(agent, 'idea', title(args.title), b.adaptation, b.body, b.words, undefined, answeringOf(args, b.lines))), status: 'draft' };
     },
   },
   {
     name: 'draft_storyboard', title: 'Draft a storyboard', scope: 'drafts', writes: true, counts: 'drafts',
     description: 'Draft a storyboard from a published version\'s shots, in your order, with timings and notes. A private draft until your person publishes it.',
-    inputSchema: { type: 'object', properties: { title: { type: 'string' }, adaptation: { type: 'integer' }, version: { type: 'integer' }, items: STORYBOARD_ITEMS, lines: LINES }, required: ['title', 'adaptation', 'version', 'items'], additionalProperties: false },
+    inputSchema: { type: 'object', properties: { title: { type: 'string' }, adaptation: { type: 'integer' }, version: { type: 'integer' }, items: STORYBOARD_ITEMS, lines: LINES, answering: ANSWERING }, required: ['title', 'adaptation', 'version', 'items'], additionalProperties: false },
     run: async (agent, args) => {
-      only(args, ['title', 'adaptation', 'version', 'items', 'lines']);
-      const b = storyboardBody(args, agent.person);
-      return { ...(await draftPiece(agent, 'storyboard', title(args.title), b.adaptation, b.body, b.words)), status: 'draft', words_by_agent: b.words };
+      only(args, ['title', 'adaptation', 'version', 'items', 'lines', 'answering']);
+      const b = storyboardBody(args, agent.person, await personWords(agent.person));
+      return { ...(await draftPiece(agent, 'storyboard', title(args.title), b.adaptation, b.body, b.words, undefined, answeringOf(args, b.lines))), status: 'draft' };
     },
   },
   {
     name: 'draft_frames', title: 'Draft frames and prompts', scope: 'drafts', writes: true, counts: 'drafts',
     description: 'Draft image prompts for shots of a published version (no image is made here). Use them with your own image model, then bring_in_image the result.',
-    inputSchema: { type: 'object', properties: { title: { type: 'string' }, adaptation: { type: 'integer' }, version: { type: 'integer' }, frames: FRAMES }, required: ['title', 'adaptation', 'version', 'frames'], additionalProperties: false },
+    inputSchema: { type: 'object', properties: { title: { type: 'string' }, adaptation: { type: 'integer' }, version: { type: 'integer' }, frames: FRAMES, answering: ANSWERING }, required: ['title', 'adaptation', 'version', 'frames'], additionalProperties: false },
     run: async (agent, args) => {
-      only(args, ['title', 'adaptation', 'version', 'frames']);
+      only(args, ['title', 'adaptation', 'version', 'frames', 'answering']);
       const b = framesBody(args);
-      return { ...(await draftPiece(agent, 'frames', title(args.title), b.adaptation, b.body, false)), status: 'draft' };
+      return { ...(await draftPiece(agent, 'frames', title(args.title), b.adaptation, b.body, false, undefined, answeringOf(args))), status: 'draft' };
     },
   },
   {
     name: 'draft_character_version', title: 'Draft a character version', scope: 'drafts', writes: true, counts: 'drafts',
     description: 'Draft a new version of one of the book\'s characters: how they look, in words (their sheet can be drawn from it later). Optionally name the sheet version it builds on.',
-    inputSchema: { type: 'object', properties: { character: { type: 'string' }, title: { type: 'string' }, description: { type: 'string' }, based_on: { type: 'string' } }, required: ['character', 'description'], additionalProperties: false },
+    inputSchema: { type: 'object', properties: { character: { type: 'string' }, title: { type: 'string' }, description: { type: 'string' }, based_on: { type: 'string' }, answering: ANSWERING }, required: ['character', 'description'], additionalProperties: false },
     run: async (agent, args) => {
-      only(args, ['character', 'title', 'description', 'based_on']);
-      const b = characterBody(args, agent.person);
-      return { ...(await draftPiece(agent, 'character', title(args.title ?? `${String(args.character)}: a new version`), null, b.body, b.words)), status: 'draft' };
+      only(args, ['character', 'title', 'description', 'based_on', 'answering']);
+      const b = characterBody(args, agent.person, await personWords(agent.person));
+      return { ...(await draftPiece(agent, 'character', title(args.title ?? `${String(args.character)}: a new version`), null, b.body, b.words, undefined, answeringOf(args))), status: 'draft' };
     },
   },
   {
@@ -189,14 +211,18 @@ const WRITE: AgentTool[] = [
     inputSchema: {
       type: 'object',
       properties: {
-        title: { type: 'string' }, image_base64: { type: 'string' }, adaptation: { type: 'integer' }, version: { type: 'integer' }, shot: { type: 'string' }, revision_of: { type: 'string' },
+        title: { type: 'string' }, image_base64: { type: 'string' }, adaptation: { type: 'integer' }, version: { type: 'integer' }, shot: { type: 'string' }, revision_of: { type: 'string' }, answering: ANSWERING,
+        words: { enum: ['none', 'person', 'book', 'ai'], description: 'Story words shown in the image, if any: none, your person\'s, the book\'s, or written by an AI (labelled, and never your person\'s).' },
         recipe: { type: 'object', properties: { prompt: { type: 'string' }, model: { type: 'object', properties: { name: { type: 'string' }, maker: { type: 'string' }, weights: { enum: ['open', 'closed', 'unknown'] }, version: { type: 'string' }, ran_on: { type: 'string' } }, required: ['name', 'maker', 'weights'], additionalProperties: false }, inputs: { type: 'array', items: { type: 'object', properties: { sha256: { type: 'string' }, what: { type: 'string' } }, required: ['sha256'], additionalProperties: false } }, seed: { type: ['string', 'integer', 'null'] }, settings: { type: 'object' }, made_at: { type: 'string' } }, required: ['prompt', 'model', 'inputs'], additionalProperties: false },
       },
       required: ['title', 'image_base64', 'recipe'],
       additionalProperties: false,
     },
     run: async (agent, args) => {
-      only(args, ['title', 'image_base64', 'adaptation', 'version', 'shot', 'revision_of', 'recipe']);
+      only(args, ['title', 'image_base64', 'adaptation', 'version', 'shot', 'revision_of', 'recipe', 'answering', 'words']);
+      const wordsIn = args.words === 'person' || args.words === 'book' || args.words === 'ai' ? args.words : 'none';
+      const aiWords = wordsIn === 'ai';
+      const answering = { ...answeringOf(args), lines: { person: wordsIn === 'person', book: wordsIn === 'book', ai: aiWords } };
       const r = (args.recipe ?? {}) as Record<string, unknown>;
       const m = (r.model ?? {}) as Record<string, unknown>;
       const inputs = Array.isArray(r.inputs) ? r.inputs.slice(0, 30).map((i) => ({ sha256: String((i as Record<string, unknown>).sha256 ?? '').toLowerCase(), ...((i as Record<string, unknown>).what ? { what: checkPlain((i as Record<string, unknown>).what, 'input what', 120) } : {}) })) : [];
@@ -240,11 +266,11 @@ const WRITE: AgentTool[] = [
       if (args.revision_of !== undefined) {
         const base = await versionById(uuid(args.revision_of, 'revision_of'));
         if (!base || base.kind !== 'image' || !visibleTo(base, agent.person)) throw new ToolInputError('revision_of must be an image version you can see');
-        const out = await revise(agent, base.id, body, false, typeof args.title === 'string' ? title(args.title) : undefined);
+        const out = await revise(agent, base.id, body, aiWords, typeof args.title === 'string' ? title(args.title) : undefined, answering);
         await sql()`update studio.piece_versions set image_key = ${image.key}, image_sha256 = ${image.sha256}, declared = ${sql().json(declared as never)}, checked = ${sql().json(img.checked as never)} where id = ${out.version}`;
         return { ...out, status: 'draft', checked: img.checked, label: 'Brought in by your person\'s agent · recipe as declared, not checked' };
       }
-      const out = await draftPiece(agent, 'image', title(args.title), adaptation, body, false, image);
+      const out = await draftPiece(agent, 'image', title(args.title), adaptation, body, aiWords, image, answering);
       return { ...out, status: 'draft', checked: img.checked, label: 'Brought in by your person\'s agent · recipe as declared, not checked' };
     },
   },
@@ -260,23 +286,24 @@ const WRITE: AgentTool[] = [
   },
   {
     name: 'propose_revision', title: 'Propose a revision', scope: 'drafts', writes: true, counts: 'drafts',
-    description: 'Draft a new version of a version you can see, with the same fields as its kind (idea: text, lines; storyboard: adaptation, version, items, lines; frames: adaptation, version, frames; character: character, description). Your person\'s own piece gets its next version; anyone else\'s published version becomes a new piece of your person\'s, credited "revised from @them" (and their agent, if one made it).',
-    inputSchema: { type: 'object', properties: { of: { type: 'string' }, title: { type: 'string' }, changes: { type: 'object', description: 'The fields of the new version.' } }, required: ['of', 'changes'], additionalProperties: false },
+    description: 'Draft a new version answering feedback: your person\'s note, "try again" or "say more" (answering: the request id), and/or other people\'s published notes (notes: their ids). Same fields as its kind (idea: text, lines; storyboard: adaptation, version, items, lines; frames: adaptation, version, frames; character: character, description). Your person\'s own piece gets its next version; anyone else\'s published version becomes a new piece of your person\'s, credited "revised from @them".',
+    inputSchema: { type: 'object', properties: { of: { type: 'string' }, title: { type: 'string' }, changes: { type: 'object', description: 'The fields of the new version.' }, answering: ANSWERING, notes: NOTES }, required: ['of', 'changes'], additionalProperties: false },
     run: async (agent, args) => {
-      only(args, ['of', 'title', 'changes']);
+      only(args, ['of', 'title', 'changes', 'answering', 'notes']);
       const base = await versionById(uuid(args.of, 'of'));
       if (!base || !visibleTo(base, agent.person)) throw new ToolInputError('no version with that id that you can see');
       const c = (args.changes && typeof args.changes === 'object' ? args.changes : {}) as Record<string, unknown>;
       const kind: Kind = base.kind;
+      const words = await personWords(agent.person);
       const built =
-        kind === 'idea' ? ideaBody({ ...base.body, ...c }, agent.person)
-        : kind === 'storyboard' ? storyboardBody({ ...base.body, ...c }, agent.person)
-        : kind === 'frames' ? { ...framesBody({ ...base.body, ...c }), words: false }
-        : kind === 'character' ? characterBody({ ...base.body, ...c }, agent.person)
+        kind === 'idea' ? ideaBody({ ...base.body, ...c }, agent.person, words)
+        : kind === 'storyboard' ? storyboardBody({ ...base.body, ...c }, agent.person, words)
+        : kind === 'frames' ? { ...framesBody({ ...base.body, ...c }), words: false, lines: undefined }
+        : kind === 'character' ? { ...characterBody({ ...base.body, ...c }, agent.person, words), lines: undefined }
         : null;
       if (!built) throw new ToolInputError('to revise an image, bring_in_image with revision_of');
-      const out = await revise(agent, base.id, built.body, built.words, typeof args.title === 'string' ? title(args.title) : undefined);
-      return { ...out, status: 'draft', words_by_agent: built.words };
+      const out = await revise(agent, base.id, built.body, built.words, typeof args.title === 'string' ? title(args.title) : undefined, answeringOf(args, built.lines));
+      return { ...out, status: 'draft' };
     },
   },
   {

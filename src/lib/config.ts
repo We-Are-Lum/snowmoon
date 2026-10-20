@@ -168,11 +168,15 @@ export const AGENTS = {
   /** Everyone's agents together, per UTC day: a brake. */
   siteImagesPerDay: 1000,
   /**
-   * Story words (narration or dialogue) written by an agent (owner's decision 6, default 2026-10-20):
-   * 'allowed' = kept, always labelled "words by @x's agent", and filtered out by "human-written only";
-   * 'refused' = an agent may use only the book's lines (checked word for word) and its person's own.
+   * Story words (narration or dialogue) stay human (owner, 2026-10-20, the main goal; decision 6 settled).
+   * An agent may place only the book's lines (checked word for word) and its person's own words (checked
+   * against what the person typed or said). 'allowed' is kept only so the old path can be tested; never
+   * switch it on without the owner. A brought-in piece that declares AI-written words is labelled, and
+   * those words never count as the person's.
    */
-  storyWords: 'allowed' as 'allowed' | 'refused',
+  storyWords: 'refused' as 'allowed' | 'refused',
+  /** Speaking counts as writing: a spoken idea or note is transcribed, shown to the person to check, and kept as their words. */
+  transcription: { model: 'whisper-large-v3-turbo', host: 'Groq', maxSeconds: 120, maxBytes: 4 * 1024 * 1024 },
   /** People whose agents never write story words, whatever storyWords says (the owner: "my versions stay human-written"). */
   humanWrittenOnly: [6786] as readonly number[],
   /** A brought-in image: PNG or JPEG, at most 3 MB, about 16:9, re-encoded to JPEG at most 1920 wide, all metadata removed. */

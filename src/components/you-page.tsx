@@ -141,6 +141,8 @@ export function YouPage() {
   const stored = sides.every(({ side }) => side.work.stored);
   return (
     <Frame>
+      {/* First, the creative act (owner, 2026-10-20): tell your agent, react to its drafts. Only while agents are switched on. */}
+      <AgentsOnYou />
       <section className="you-section" aria-labelledby="you-account">
         <h2 id="you-account">{W.account}</h2>
         <AccountRows
@@ -177,8 +179,6 @@ export function YouPage() {
         <WorkList title={W.boards} id="you-boards" items={tag('boards')} render={(b) => <BoardRow key={b.id} b={b} reload={load} />} />
         <WorkList title={W.pictures} id="you-pictures" items={tag('pictures')} render={(p) => <PictureRow key={p.versionId} p={p} reload={load} />} />
       </section>
-      {/* Agents and their drafts (owner, 2026-10-20): shown only while agents are switched on. */}
-      <AgentsOnYou />
     </Frame>
   );
 }

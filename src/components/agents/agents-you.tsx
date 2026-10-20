@@ -6,6 +6,8 @@ import { authFetch } from '~/lib/client-auth';
 import { AGENT_WORDING } from '~/lib/agents/wording';
 import type { AgentRow } from '~/lib/agents/accounts';
 import type { NoteView, VersionView } from '~/lib/agents/pieces';
+import type { RequestView } from '~/lib/agents/requests';
+import { TellAgent, sendRequest } from './tell-agent';
 import { PublishedTextField } from '../publish-words';
 import { AgentAddressField } from './agent-address-field';
 import { PieceVersion, shortMentions } from './piece-version';
@@ -17,6 +19,8 @@ import './agents.css';
  * while agents are switched off (/api/agents answers 404).
  */
 const W = AGENT_WORDING.you;
+const R = AGENT_WORDING.react;
+const T = AGENT_WORDING.tell;
 const when = (iso: string | null) => (iso ? new Date(iso).toISOString().slice(0, 16).replace('T', ' ') + ' UTC' : null);
 
 /** A draft's image needs the person's token, so it is fetched and shown from memory. */
@@ -35,23 +39,32 @@ function useDraftImage(v: VersionView) {
   return src;
 }
 
+/** A draft and the three reactions (owner, 2026-10-20): keep, try again, say more. No settings to edit. */
 function DraftRow({ v, onDone }: { v: VersionView; onDone: () => void }) {
   const src = useDraftImage(v);
   const [busy, setBusy] = useState(false);
-  const act = async (action: 'publish' | 'discard') => {
+  const [more, setMore] = useState(false);
+  const act = async (action: 'keep' | 'again' | 'more', words?: string, spoken?: boolean) => {
     setBusy(true);
-    await authFetch('/api/drafts', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ what: 'version', id: v.id, action }) }).catch(() => null);
+    const r = await authFetch('/api/drafts', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ what: 'version', id: v.id, action, words, spoken }) }).catch(() => null);
     setBusy(false);
-    onDone();
+    if (r?.ok) onDone();
+    return r?.ok ? null : T.failed;
   };
   return (
     <div className="draft-row" data-draft={v.id}>
       <p><strong>{v.title}</strong> <span className="piece-sub">{v.kind}</span></p>
       <PieceVersion v={v} imageSrc={src} />
       <div className="draft-actions">
-        <button type="button" className="ic-primary" disabled={busy} onClick={() => void act('publish')}>{W.publish}</button>
-        <button type="button" className="ic-secondary" disabled={busy} onClick={() => void act('discard')}>{W.discard}</button>
+        <button type="button" className="ic-primary" disabled={busy} onClick={() => void act('keep')}>{R.keep}</button>
+        <button type="button" className="ic-secondary" disabled={busy} onClick={() => void act('again')}>{R.again}</button>
+        <button type="button" className="ic-secondary" disabled={busy} aria-expanded={more} onClick={() => setMore((m) => !m)}>{R.more}</button>
       </div>
+      {more && (
+        <div className="draft-say-more">
+          <TellAgent id={`more-${v.id}`} label={T.note} compact send={(words, spoken) => act('more', words, spoken)} />
+        </div>
+      )}
     </div>
   );
 }
@@ -71,9 +84,19 @@ function NoteRow({ n, title, onDone }: { n: NoteView; title: string; onDone: () 
       <p>{shortMentions(n.text)}</p>
       <p className="you-note"><Link href={`/p/${n.piece}`}>{W.open}</Link></p>
       <div className="draft-actions">
-        <button type="button" className="ic-primary" disabled={busy} onClick={() => void act('publish')}>{W.publish}</button>
+        <button type="button" className="ic-primary" disabled={busy} onClick={() => void act('publish')}>{R.keep}</button>
         <button type="button" className="ic-secondary" disabled={busy} onClick={() => void act('discard')}>{W.discard}</button>
       </div>
+    </div>
+  );
+}
+
+function Asked({ r }: { r: RequestView }) {
+  const about = r.about && 'version' in r.about ? `on “${r.about.title}”` : r.about && 'moment' in r.about ? `on a moment (${r.about.shot})` : 'a new idea';
+  return (
+    <div className="request-row" data-request={r.id}>
+      <p className="you-note">{r.kind === 'again' ? 'Try again' : r.kind === 'more' ? 'Say more' : r.kind === 'note' ? 'A note' : 'An idea'}, {about}{r.spoken ? ', spoken' : ''}</p>
+      <p>{r.words}</p>
     </div>
   );
 }
@@ -81,7 +104,7 @@ function NoteRow({ n, title, onDone }: { n: NoteView; title: string; onDone: () 
 export function AgentsOnYou() {
   const [on, setOn] = useState<boolean | null>(null);
   const [agents, setAgents] = useState<AgentRow[]>([]);
-  const [drafts, setDrafts] = useState<{ drafts: VersionView[]; notes: NoteView[]; published: VersionView[] } | null>(null);
+  const [drafts, setDrafts] = useState<{ drafts: VersionView[]; notes: NoteView[]; published: VersionView[]; waiting: RequestView[] } | null>(null);
   const [name, setName] = useState('');
   const [address, setAddress] = useState('');
   const [message, setMessage] = useState<string | null>(null);
@@ -116,6 +139,27 @@ export function AgentsOnYou() {
   const titleOf = (versionId: string) => [...(drafts?.published ?? []), ...(drafts?.drafts ?? [])].find((v) => v.id === versionId)?.title ?? 'a published version';
   return (
     <>
+      <section className="you-section" aria-labelledby="you-tell">
+        <h2 id="you-tell">{T.idea}</h2>
+        <TellAgent id="you-idea" label={T.idea} send={async (words, spoken) => {
+          const err = await sendRequest({ kind: 'idea', words, spoken });
+          if (!err) void load();
+          return err;
+        }} />
+      </section>
+      <section className="you-section" aria-labelledby="you-review">
+        <h2 id="you-review">{W.review}</h2>
+        <p className="you-note">{W.reviewNote}</p>
+        {drafts && drafts.drafts.length === 0 && drafts.notes.length === 0 && <p className="you-note">{W.noDrafts}</p>}
+        {drafts?.drafts.map((v) => <DraftRow key={v.id} v={v} onDone={() => void load()} />)}
+        {drafts?.notes.map((n) => <NoteRow key={n.id} n={n} title={titleOf(n.version)} onDone={() => void load()} />)}
+        {drafts && drafts.waiting.length > 0 && (
+          <>
+            <h3 className="you-sub">{W.asked}</h3>
+            {drafts.waiting.map((r) => <Asked key={r.id} r={r} />)}
+          </>
+        )}
+      </section>
       <section className="you-section" aria-labelledby="you-agents">
         <h2 id="you-agents">{W.agents}</h2>
         <p className="you-note">{W.agentsNote}</p>
@@ -142,13 +186,6 @@ export function AgentsOnYou() {
             </>
           )}
         </details>
-      </section>
-      <section className="you-section" aria-labelledby="you-review">
-        <h2 id="you-review">{W.review}</h2>
-        <p className="you-note">{W.reviewNote}</p>
-        {drafts && drafts.drafts.length === 0 && drafts.notes.length === 0 && <p className="you-note">{W.noDrafts}</p>}
-        {drafts?.drafts.map((v) => <DraftRow key={v.id} v={v} onDone={() => void load()} />)}
-        {drafts?.notes.map((n) => <NoteRow key={n.id} n={n} title={titleOf(n.version)} onDone={() => void load()} />)}
       </section>
     </>
   );
