@@ -51,6 +51,10 @@
 
 Planted divergences are caught: square hit points; the builder rung starting a level early; changed toast wording. A one-step change to the planner's look-ahead limit (40 to 39) is not caught, because no scripted match reaches it. That is the limit of a run-based comparison.
 
+**One deliberate difference from the mockup (2026-10-20).** The Planner (rung 5) stopped building at 3 towers where rungs 3 and 4 stop at 5, and lost about 9 matches in 10 to them. It now stops at 5 like them. The test applies the same change to Design's script before comparing (`FIXES` in the test), so everything else is still compared line for line.
+
+**`npm run test:minpentai-ladder`** plays a seeded round robin between practice and the five rungs with `botPlan` itself (both seats, the rule drawn as a match draws it) and asserts each rung beats the ones below it. One pair is open: Builder (3) and Opportunist (4) play the same moves except diagonal aiming under the diagonal rule, and score about 50% against each other.
+
 **`npm run test:minpentai-play-server`** (181 checks) covers:
 - no view ever shows a hidden piece (a planted leak is caught);
 - every way a placement can be refused;
