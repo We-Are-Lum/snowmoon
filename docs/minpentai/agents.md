@@ -38,12 +38,17 @@ The lessons still use the first rules (Claude Design's v3, `docs/design/minpenta
 
 ## Run it locally
 
+The repository is large (over 600 MB, mostly the films in `scenes-out/` and `adaptations/`), and Minpentai needs none of that. This fetches only what Minpentai, its tests and its pages need (about 45 MB, seconds):
+
 ```sh
-git clone https://github.com/We-Are-Lum/snowmoon.git
+git clone --depth 1 --filter=blob:none --sparse https://github.com/We-Are-Lum/snowmoon.git
 cd snowmoon
+git sparse-checkout set src scripts docs content public config supabase
 npm install                # Node 22.11 or later
-npm run build && npm start # then open http://localhost:3000/minpentai?mode=play
+npm run dev                # then open http://localhost:3000/minpentai?mode=play
 ```
+
+`npm run dev` builds each page when you open it. `npm run build` builds the whole site, which needs the full clone (`git clone --depth 1 https://github.com/We-Are-Lum/snowmoon.git`, about 1.2 GB on disk). To write a computer player you need only the tests and `minpentai:vs-rungs` below; running the site is optional.
 
 No keys are needed for Minpentai's practice match and free play (`/minpentai?mode=free`); they run in the browser. The ladder and one-on-one need Farcaster sign-in, and one-on-one also needs the database.
 
@@ -58,12 +63,15 @@ npm run test:minpentai-play-server    # one-on-one: rules, clocks, refusals, vie
 npm run test:minpentai-learn          # Learn, run beside Design's v3 code and compared
 npm run test:minpentai-share          # sharing a ladder win
 npm run test:minpentai-players        # players.ts and minpentai:vs-rungs
+npm run test:minpentai-ladder         # the ladder: a seeded round robin of the five rungs (about a minute)
 npm run test:minpentai-agents         # this file: its paths, scripts, quotes and example
 npx tsx scripts/test-minpentai.ts       # the book's cell rule (engine.ts)
 npx tsx scripts/test-minpentai-match.ts # the older match code on the book's rule
 ```
 
-The five computer players against each other (a round robin; the table is printed, nothing is asserted about their order):
+The ladder's own test, `test:minpentai-ladder` (`scripts/test-minpentai-ladder.ts`), plays every rung against every other over seeded matches in both seats and checks that each rung beats every rung below it. One pair is left open: Builder (rung 3) and Opportunist (rung 4) are about even, so the test only checks that Opportunist isn't easier.
+
+To print the same kind of table for any players, without asserting anything:
 
 ```sh
 npm run minpentai:vs-rungs -- --round-robin
@@ -221,7 +229,7 @@ These are ideas, not features. None of them is built.
 
 A good pull request:
 
-- **Tests pass**: `npm run typecheck` and every Minpentai test above. Add a test for what you add.
+- **Tests pass**: `npm run typecheck` and every Minpentai test above. Add a test for what you add: for a player, a check in `scripts/test-minpentai-players.ts` that it plays all five rungs, in both seats, with no refused turn.
 - **The rules are updated** if you change one: this file's rules section, and the rules page (`docs/design/minpentai-rules.dc.html`, then `npx tsx scripts/build-minpentai-rules.ts`). Mark each new rule from the book (with its block) or invented.
 - **Cites word for word**: anything said about the book gives its block id, and any quote is copied exactly from `docs/minpentai/passages.md` or `content/snowmoon/text/`. Never change the book's text.
 - **Says who made it**: that an agent wrote it, and which model.
