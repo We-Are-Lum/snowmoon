@@ -7,7 +7,9 @@
  * Learn tab opens the lessons again.
  *
  * Addresses:
- * - ?lesson=1…17 a Learn screen; ?mode=practice Learn's practice match (v3);
+ * - ?lesson=1…7 a lesson, ?lesson=8 Under the hood (owner, 2026-10-20: "?lesson=1 open lesson 1 directly");
+ *   ?watch=1…8 a screen of the broadcast; ?mode=practice Learn's practice match (v3). The old numbering,
+ *   ?lesson=9…17 for the lessons on, still opens the same screens (9 is lesson 1);
  * - ?mode=play the Play hub; ?mode=free free play (also #fp=… boards); ?mode=ladder the ladder;
  *   ?mode=person or ?invite=… one-on-one;
  * - ?s=… (an old sandbox board) opens /minpentai/rule, the book's rule on the figure's board.
@@ -18,7 +20,7 @@
  */
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Learn, LEARN_SCREENS, PRACTICE_SCREEN } from './learn';
+import { Learn, LEARN_SCREENS, PRACTICE_SCREEN, WATCH_SCREENS } from './learn';
 import { Play } from './play';
 
 /** Set once Learn is finished or skipped; later bare visits open Play. (The sandbox's key, kept.) */
@@ -35,6 +37,23 @@ function setQuery(params: Record<string, string>) {
   window.history.replaceState(null, '', url);
 }
 
+/** The Learn screen an address names, or null: ?watch=1…8, ?lesson=1…8 (lessons, then Under the hood), or the old ?lesson=9…17. */
+export function screenFor(q: URLSearchParams): number | null {
+  const watch = Number(q.get('watch'));
+  if (q.has('watch') && Number.isInteger(watch) && watch >= 1 && watch <= WATCH_SCREENS) return watch - 1;
+  const lesson = Number(q.get('lesson'));
+  if (!q.has('lesson') || !Number.isInteger(lesson)) return null;
+  if (lesson >= 1 && lesson < PRACTICE_SCREEN - WATCH_SCREENS + 1) return WATCH_SCREENS + lesson - 1;
+  if (lesson > WATCH_SCREENS && lesson <= LEARN_SCREENS) return lesson - 1;
+  return null;
+}
+
+/** The address of a Learn screen, the inverse of screenFor. */
+export function addressOf(i: number): Record<string, string> {
+  if (i === PRACTICE_SCREEN) return { mode: 'practice' };
+  return i < WATCH_SCREENS ? { watch: String(i + 1) } : { lesson: String(i - WATCH_SCREENS + 1) };
+}
+
 export function MinpentaiApp() {
   const router = useRouter();
   const [mode, setMode] = useState<Mode | null>(null);
@@ -45,9 +64,9 @@ export function MinpentaiApp() {
   useEffect(() => {
     const q = new URLSearchParams(window.location.search);
     if (q.get('s')) { router.replace('/minpentai/rule'); return; }
-    const lesson = Number(q.get('lesson'));
+    const screen = screenFor(q);
     const m = q.get('mode');
-    if (Number.isInteger(lesson) && lesson >= 1 && lesson <= LEARN_SCREENS) setMode({ kind: 'learn', screen: lesson - 1 });
+    if (screen !== null) setMode({ kind: 'learn', screen });
     else if (m === 'practice') setMode({ kind: 'learn', screen: PRACTICE_SCREEN });
     else if (q.get('invite') || m === 'person') setMode({ kind: 'play', start: 'person' });
     else if (m === 'free' || window.location.hash.startsWith('#fp=')) setMode({ kind: 'play', start: 'free' });
@@ -67,12 +86,13 @@ export function MinpentaiApp() {
     setVisit((v) => v + 1);
     setQuery({ mode: 'free' });
   };
+  // Play's Learn tab opens lesson 1 itself (owner, 2026-10-20: no "Open the lessons" step).
   const goLearn = () => {
-    setMode({ kind: 'learn', screen: 0 });
+    setMode({ kind: 'learn', screen: WATCH_SCREENS });
     setVisit((v) => v + 1);
     setQuery({ lesson: '1' });
   };
-  const onScreen = (i: number) => setQuery(i === PRACTICE_SCREEN ? { mode: 'practice' } : { lesson: String(i + 1) });
+  const onScreen = (i: number) => setQuery(addressOf(i));
 
   // Until the address has been read, an empty frame: neither must start on the wrong screen.
   if (!mode || !visit) return <section className="mp-play" aria-busy="true" />;
