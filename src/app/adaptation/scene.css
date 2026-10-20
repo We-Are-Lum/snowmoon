@@ -17,6 +17,20 @@
 .scene-video-empty { display: grid; place-items: center; color: var(--night-body); font-family: var(--label); font-size: var(--text-label); letter-spacing: var(--ls-label); text-transform: uppercase; padding: 0 var(--space-4); text-align: center; }
 
 .scene-under { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 16px; color: var(--muted); text-transform: uppercase; }
+.scene-under { align-items: center; }
+/* The AI label, short and always shown; its full wording and the recipe open from it. */
+.scene-ai > summary {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 44px; cursor: pointer; list-style: none; color: var(--muted);
+}
+.scene-ai > summary::-webkit-details-marker { display: none; }
+.scene-ai-icon {
+  display: inline-grid; place-items: center; width: 20px; height: 20px; border: 1px solid currentColor; border-radius: 50%;
+  font-family: var(--reading); font-style: italic; font-size: 14px; line-height: 1; text-transform: none;
+}
+.scene-ai[open] > summary { color: var(--ink); }
+.scene-ai-body { text-transform: none; color: var(--ink); max-width: 60ch; }
+.scene-ai-body p { margin: 0 0 8px; }
+.scene-ai-body a { display: inline-flex; align-items: center; min-height: 44px; }
 
 .scene .label { text-transform: uppercase; }
 .scene-head { display: flex; flex-direction: column; gap: 8px; border-top: 2px solid var(--ink); padding-top: 12px; }

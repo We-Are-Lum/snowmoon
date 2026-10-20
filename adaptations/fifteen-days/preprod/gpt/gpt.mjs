@@ -9,6 +9,9 @@ const HERE = new URL('.', import.meta.url).pathname;
 const SC = '/Users/nathan/snowmoon-scenes/';
 const MODEL = 'openai/gpt-image-2.5-sunburst';
 const SIZE = '1536x864';
+// On every call (owner, 2026-10-19): the gateway routes only to a provider that doesn't train on prompts, or refuses
+// the call (no_providers_available). No zeroDataRetention: this model has none, and the gateway refuses it.
+const GATEWAY_OPTIONS = { gateway: { disallowPromptTraining: true } };
 const CAP = 10;
 const [tag, only] = process.argv.slice(2);
 const key = process.env.AI_GATEWAY_API_KEY;
@@ -30,7 +33,7 @@ async function worker() {
     const t0 = Date.now();
     let r, text, body;
     for (let a = 0; a < 3; a++) {
-      r = await fetch('https://ai-gateway.vercel.sh/v1/images/edits', { method: 'POST', headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ model: MODEL, prompt: j.prompt, images, n: 1, size: SIZE }) });
+      r = await fetch('https://ai-gateway.vercel.sh/v1/images/edits', { method: 'POST', headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ model: MODEL, prompt: j.prompt, images, n: 1, size: SIZE, providerOptions: GATEWAY_OPTIONS }) });
       text = await r.text();
       try { body = JSON.parse(text); } catch { body = { raw: text.slice(0, 300) }; }
       if (r.ok && body.data?.[0]?.b64_json) break;
@@ -47,7 +50,7 @@ async function worker() {
       closed_model: true, label: 'closed model', model: MODEL, model_name: 'GPT Image 2.5 Sunburst (OpenAI)', route: 'Vercel AI Gateway /v1/images/edits (AI_GATEWAY_API_KEY)',
       date: new Date().toISOString(), purpose: process.env.PURPOSE || 'gpt-cut: a private full-cut comparison for the owner (2026-10-18); not in the cut or on the site',
       v6_picture: j.v6_image, edited_from: j.refs[0], from: { base: j.base, finish: j.finish, edits: j.edits }, prompt: j.prompt,
-      references: j.refs.map((f) => ({ file: f, sha256: sha(readFileSync(SC + f)) })), request: { size: SIZE, n: 1 },
+      references: j.refs.map((f) => ({ file: f, sha256: sha(readFileSync(SC + f)) })), request: { size: SIZE, n: 1, providerOptions: GATEWAY_OPTIONS },
       response_meta: meta, cost_usd: cost, output: { file: out, sha256: sha(buf), bytes: buf.length }, ms: Date.now() - t0,
     };
     writeFileSync(`${HERE}raw/${j.id}-${tag}.recipe.json`, JSON.stringify(rec, null, 1));

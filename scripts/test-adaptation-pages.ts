@@ -32,6 +32,7 @@ import { createServer as createHttp } from 'node:http';
 import { createServer as createNet } from 'node:net';
 import { PGlite } from '@electric-sql/pglite';
 import { PGLiteSocketServer } from '@electric-sql/pglite-socket';
+import { failOnProtocolErrors, gatePglite } from './lib/pglite-gate';
 import { build } from 'esbuild';
 import { chromium, type Browser, type Frame, type Page } from 'playwright-core';
 
@@ -77,6 +78,8 @@ await pg.exec(`insert into studio.account_names (fname, person) values ('oldie',
 await pg.exec('set role studio_writer');
 
 const dbPort = await freePort();
+// The site and this test share PGlite's one session: direct queries wait for the site's Sync (scripts/lib/pglite-gate.ts).
+failOnProtocolErrors(gatePglite(pg), 'test:adaptation-pages');
 const dbServer = new PGLiteSocketServer({ db: pg, port: dbPort, host: '127.0.0.1' });
 await dbServer.start();
 
@@ -196,6 +199,10 @@ try {
     const h = await head(url);
     const page = await newPage(browser);
     const res = await page.goto(BASE + url);
+    // The AI label shows short, its full wording and the recipe closed until tapped (owner, 2026-10-18: "too much text").
+    const summary = await page.locator('.scene-ai > summary').innerText().then((x) => x.replace(/\s+/g, ' ').trim()).catch(() => '');
+    const shut = !(await page.locator('.scene-ai-body').isVisible());
+    await page.locator('.scene-ai > summary').click();
     const t = await mainText(page);
     const player = await page
       .locator('video.scene-video')
@@ -216,7 +223,8 @@ try {
     const closedOk =
       /AI-generated with GPT Image \(OpenAI, a closed model\), not by the author/i.test(t) &&
       /Inputs open, model closed: the pictures by GPT Image 2\.5 Sunburst \(OpenAI, a closed model\), 2026-10-18/i.test(t) &&
-      /Read it/i.test(t) && !/version 1.s shots/i.test(t) && /^Every shot/i.test(strip) &&
+      /Read the recipe/i.test(t) && !/version 1.s shots/i.test(t) && /^Every shot/i.test(strip) &&
+      /^AI pictures: GPT Image \(OpenAI, closed model\), not by the author i$/i.test(summary) && shut &&
       thumbs.length > 70 && thumbs.every((u) => u.startsWith('/editor/1/v2/thumbs/')) &&
       !/remixed from/i.test(t);
     const canonical = await page.locator('link[rel="canonical"]').getAttribute('href').catch(() => null);
@@ -224,7 +232,7 @@ try {
     const embed = embedRaw ? (JSON.parse(embedRaw) as { button?: { title?: string; action?: { url?: string } } }) : null;
     const headOk = canonical === `${PUBLIC}/@naaate/1` && embed?.button?.action?.url === `${PUBLIC}/@naaate/1` && embed?.button?.title === 'Watch it';
     const pass = headOk && sourcesOk && h.status === 200 && res?.status() === 200 && /Fifteen Days/i.test(t) && /@naaate.s chosen version/i.test(t) && player?.src === 'https://media.snowmoon.party/scenes/fifteen-days/v2/fifteen-days-58da1b6d582e.mp4' && player?.poster === 'https://media.snowmoon.party/scenes/fifteen-days/v2/fifteen-days-poster-shown-4fc80109065b.jpg' && /Version 2 /i.test(t) && closedOk;
-    await record(1, 'owner page', url, `200; title Fifteen Days; @naaate's chosen version; version 2 (the GPT cut, no parent); its AI label naming GPT Image (OpenAI, a closed model); "Inputs open, model closed" with the model, maker and date; the shot strip shows version 2's own GPT pictures and the recipe link reads "Read it" (no "version 1's shots" note); the player plays v2's cut from media.snowmoon.party (its 720p copy on phones, its re-wrapped copy wider, the cut last) with the no-text GPT triptych as its poster; canonical and fc:miniapp embed point at ${PUBLIC}/@naaate/1`, page, { status: h.status, player, strip, thumbs: thumbs.slice(0, 2), canonical, embedUrl: embed?.button?.action?.url ?? null }, pass);
+    await record(1, 'owner page', url, `200; title Fifteen Days; @naaate's chosen version; version 2 (the GPT cut, no parent); its AI label shown short ("AI pictures: GPT Image (OpenAI, closed model), not by the author i"), closed until tapped, then naming GPT Image (OpenAI, a closed model); "Inputs open, model closed" with the model, maker and date; the shot strip shows version 2's own GPT pictures and the recipe link reads "Read the recipe" (no "version 1's shots" note); the player plays v2's cut from media.snowmoon.party (its 720p copy on phones, its re-wrapped copy wider, the cut last) with the no-text GPT triptych as its poster; canonical and fc:miniapp embed point at ${PUBLIC}/@naaate/1`, page, { status: h.status, player, strip, thumbs: thumbs.slice(0, 2), canonical, embedUrl: embed?.button?.action?.url ?? null, summary, shut }, pass);
     await page.context().close();
   }
 
@@ -234,6 +242,7 @@ try {
     const h = await head(url);
     const page = await newPage(browser);
     await page.goto(BASE + url);
+    await page.locator('.scene-ai > summary').click();
     const t = await mainText(page);
     const player = await page
       .locator('video.scene-video')
@@ -243,7 +252,7 @@ try {
     // Its own editor: every shot, the recipe and Remix open /@naaate/1/v/1/shot/<shot>, with version 1's own frames.
     const links = await page.locator('.scene-shot').evaluateAll((els) => els.map((e) => (e as HTMLAnchorElement).getAttribute('href') ?? ''));
     const thumbs = await page.locator('.scene-shot img').evaluateAll((els) => els.map((e) => (e as HTMLImageElement).getAttribute('src') ?? ''));
-    const recipeHref = await page.locator('.scene-facts a').getAttribute('href');
+    const recipeHref = await page.locator('.scene-ai a').getAttribute('href');
     const ownEditor = links.length === 85 && links.every((h) => /^\/@naaate\/1\/v\/1\/shot\/[\w-]+$/.test(h)) && thumbs.every((u) => u.startsWith('/editor/1/v1/thumbs/')) && recipeHref === '/@naaate/1/v/1/shot/first#recipe';
     const v1Ok =
       player?.src === 'https://media.snowmoon.party/scenes/fifteen-days/v1/fifteen-days-9391f90d6dca.mp4' &&
@@ -254,7 +263,7 @@ try {
           'any https://media.snowmoon.party/scenes/fifteen-days/v1/fifteen-days-wide-3e425205b1a4.mp4',
           'any https://media.snowmoon.party/scenes/fifteen-days/v1/fifteen-days-9391f90d6dca.mp4',
         ]) &&
-      /Version 1 /i.test(t) && /Pictures: AI-generated, not by the author/i.test(t) && !/closed model/i.test(t) && /^Every shot/i.test(strip) && /Read it/i.test(t);
+      /Version 1 /i.test(t) && /Pictures: AI-generated, not by the author/i.test(t) && !/closed model/i.test(t) && /^Every shot/i.test(strip) && /Read the recipe/i.test(t);
     const pass = h.status === 200 && /this version, fixed/i.test(t) && /See @naaate.s latest chosen version/i.test(t) && v1Ok && ownEditor;
     await record(2, 'fixed version', url, "200; 'this version, fixed'; a link to the latest chosen version; it plays version 1, the open-weight cut (its copies, its poster, its own AI label, no closed model named), with every shot of its own under it, each (and the recipe link) opening version 1's own editor at /@naaate/1/v/1/shot/<shot>", page, { status: h.status, player, strip, shotLinks: links.length, firstLink: links[0] ?? null, recipeHref }, pass);
     await page.context().close();
@@ -621,7 +630,7 @@ try {
     await page.locator('.scene-shot').first().waitFor();
     const links = await page.locator('.scene-shot').evaluateAll((els) => els.map((e) => (e as HTMLAnchorElement).getAttribute('href')));
     const remixHref = await page.getByRole('link', { name: /^Remix/ }).getAttribute('href');
-    const recipeHref = await page.locator('.scene-facts a').getAttribute('href');
+    const recipeHref = await page.locator('.scene-ai a').getAttribute('href');
     const github = await page.locator('main a[href*="github.com"]').count();
     const sceneText = await mainText(page);
     await page.getByRole('link', { name: /^Remix/ }).click();
