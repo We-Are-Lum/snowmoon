@@ -1,0 +1,93 @@
+{
+ "what": "Speaking-shot test (owner, 2026-10-19): three close-ups where one character speaks and is the main face, each animated to its finished line by Hedra (closed, run by the owner by hand on a paid plan) and by InfiniteTalk (open weights, MeiGen-AI, Apache-2.0, run by the coding agent on Modal), compared side by side with the current still. A test for the owner to judge; not part of the film.",
+ "rule": "Inputs are only frames and audio that are public: the frames below (published here, the same pictures as in the public version 2 cut without its burned-in subtitle) and the finished lines (already on GitHub). No raw recording goes to either model.",
+ "avoided": "Zei's line at 3:53.6 (b5-2), being re-recorded.",
+ "shots": [
+  {
+   "id": "1-bai-b1-6",
+   "speaker": "Bai",
+   "line": "b1-6",
+   "setup": "CU-B toast",
+   "in_cut_at_s": 31.208,
+   "frame": {
+    "file": "adaptations/fifteen-days/speaking-test/1-bai-b1-6.png",
+    "sha256": "9929f3186a10ec1f75967c2ea99e865a0228bfa37be82a5521b781134a0ba85d",
+    "from": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-overlook-CU-B-toast-K10.png (not committed; its picture is in the public cut scenes-out/fifteen-days/cuts/coverage-v6-gpt/coverage-v6-gpt.mp4)",
+    "recipe": "adaptations/fifteen-days/preprod/gpt/recipes/cov-overlook-CU-B-toast-K10-g1.recipe.json",
+    "made_by": "GPT Image 2.5 Sunburst (OpenAI), a closed model: the version 2 picture as is"
+   },
+   "audio": {
+    "file": "adaptations/fifteen-days/speaking-test/1-bai-b1-6-trimmed.wav",
+    "sha256": "c2f21437be253eab7e03c230d96dc4fbead06392712d2d778e3fbd65335aa6e8",
+    "seconds": 6.31,
+    "from": "scenes-out/fifteen-days/cuts/coverage-v6/stems/b1-6.wav",
+    "from_sha256": "bc7fd2cab896809e61c72a33777daa90761e21604ccad29c6ce3da93aa6a62dc",
+    "trim": "speech 0.06-5.77 s (first and last 10 ms window above -40 dBFS), plus 0.3 s either side, padded with silence where the stem is shorter; 16-bit PCM"
+   }
+  },
+  {
+   "id": "2-zei-b2-9",
+   "speaker": "Zei",
+   "line": "b2-9",
+   "setup": "CU-Z tease",
+   "in_cut_at_s": 86.708,
+   "frame": {
+    "file": "adaptations/fifteen-days/speaking-test/2-zei-b2-9.png",
+    "sha256": "95cdc616ca6fab95e01f4b2ec0715447b1666bf312784eeeccb316ffd8350e8f",
+    "from": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-walk-CU-Z-tease-K8.png (not committed; its picture is in the public cut scenes-out/fifteen-days/cuts/coverage-v6-gpt/coverage-v6-gpt.mp4)",
+    "recipe": "adaptations/fifteen-days/preprod/gpt/recipes/cov-walk-CU-Z-tease-K8-g1.recipe.json",
+    "made_by": "GPT Image 2.5 Sunburst (OpenAI), a closed model: the version 2 picture as is"
+   },
+   "audio": {
+    "file": "adaptations/fifteen-days/speaking-test/2-zei-b2-9-trimmed.wav",
+    "sha256": "0736df5b9813670a29e4d5730d8d1e73bbf83cb07c3c4c5f3b393172c7b92ace",
+    "seconds": 3.82,
+    "from": "scenes-out/fifteen-days/cuts/coverage-v6/stems/b2-9.wav",
+    "from_sha256": "c91ef0dff1fe757562771121def63a1bc31aa7f7d7a26b88f472aa43dad76c10",
+    "trim": "speech 0.06-3.28 s (first and last 10 ms window above -40 dBFS), plus 0.3 s either side, padded with silence where the stem is shorter; 16-bit PCM"
+   }
+  },
+  {
+   "id": "3-deluin-b4-3",
+   "speaker": "Deluin",
+   "line": "b4-3",
+   "setup": "CU-D warm",
+   "in_cut_at_s": 198.447,
+   "frame": {
+    "file": "adaptations/fifteen-days/speaking-test/3-deluin-b4-3.png",
+    "sha256": "803d4a0ad180f9a7e55e04a75e3af48643615cd8cb4e5b2fbd9143831a22421c",
+    "from": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-cafe-CU-D-warm-E16.png (not committed; its picture is in the public cut scenes-out/fifteen-days/cuts/coverage-v6-gpt/coverage-v6-gpt.mp4)",
+    "recipe": "adaptations/fifteen-days/preprod/gpt/recipes/cov-cafe-CU-D-warm-E16-g2.recipe.json",
+    "made_by": "GPT Image 2.5 Sunburst (OpenAI), a closed model: the version 2 picture as is"
+   },
+   "audio": {
+    "file": "adaptations/fifteen-days/speaking-test/3-deluin-b4-3-trimmed.wav",
+    "sha256": "dd1a458be50517cf9787806fe18ec30990f63b61def021528a1b9b4b673c859a",
+    "seconds": 14.7,
+    "from": "scenes-out/fifteen-days/cuts/coverage-v6/stems/b4-3.wav",
+    "from_sha256": "b7d2550b25aa295a1d01195744b4cb3cadbc980e3a8ddb320206a6413a78985d",
+    "trim": "speech 0.05-14.15 s (first and last 10 ms window above -40 dBFS), plus 0.3 s either side, padded with silence where the stem is shorter; 16-bit PCM"
+   },
+   "audio_first_sentence": {
+    "file": "adaptations/fifteen-days/speaking-test/3-deluin-b4-3-first-sentence-trimmed.wav",
+    "sha256": "d7b8083c648c6c1642ed3143fa85a4546b75658b59ca0021e2113da8a85a37eb",
+    "seconds": 2.58,
+    "trim": "speech 0.05-2.03 s (\"Sure. Yeah, we have our fair share.\"), plus 0.3 s either side"
+   }
+  }
+ ],
+ "models": {
+  "hedra": {
+   "closed_model": true,
+   "run_by": "the owner, by hand, on a paid plan",
+   "inputs": "the frame and the -trimmed.wav above"
+  },
+  "infinitetalk": {
+   "repo": "MeiGen-AI/InfiniteTalk",
+   "licence": "Apache-2.0 (config/models.json, checked 2026-10-13)",
+   "base": "Wan-AI/Wan2.1-I2V-14B-480P (Apache-2.0)",
+   "host": "Modal (owner's account); weights downloaded to a Modal volume by a CPU function, then one GPU run per shot",
+   "results": "added here per run, with the exact settings, seed, GPU, seconds and cost"
+  }
+ }
+}
