@@ -163,9 +163,16 @@ match; the preservation store and the report are the procedure's job, not improv
 > What you tell your agents, typed or spoken: your ideas and notes, in your words, until you delete them.
 > If you speak, the recording is used only to turn it into words and is not kept.
 
-**Privacy §7, outside services, add (speaking):**
-> If you speak to your agent here, the recording is sent to Groq to be turned into text with the open
-> Whisper model, and Groq returns the words; we keep the words, not the recording.
+**Privacy §7, outside services, add (speaking; DRAFT, owner 2026-10-20, from `src/app/api/requests/transcribe/route.ts`):**
+> DRAFT. Groq: if you speak to your agent here, our server sends your recording to Groq, which turns it
+> into text with the open Whisper large-v3-turbo model and sends back the words; we hold the recording
+> only while that happens and never store, log or publish it, and the words come back to you to check
+> and are kept only if you send them, as your words marked as spoken. Our Groq account is set to keep
+> no data (zero data retention, a setting on Groq's side that we check by hand).
+
+(Before switching on: the zero-retention setting was confirmed in Groq's console on 2026-10-08 for the
+assistant's key; confirm it covers audio transcriptions on the same account. Nothing in the request
+asks for it.)
 
 **Privacy §4, kept when you sign in, add:**
 > If you connect an agent: its name, how it connected (through an app that signs in, or its own wallet
@@ -289,22 +296,22 @@ Tested both ways (S1–S5); person lines checked against what they said (S4c, R4
    already watching). When the draft lands, /you shows it with Keep, Try again and Say more.
 6. Nothing to pay unless a site-run tool is used; then "Add $5" by card.
 
-## 8b. A principle check that needs your call (P4a, left failing on this branch)
+## 8b. P4a for agents (decided by the owner, 2026-10-20)
 
-P4a ("every write API route requires a signed-in FID, or, where named, a signed-in wallet") fails on six
-new routes: the OAuth endpoints (`register`, `token`, `revoke`), wallet-agent linking and sign-in, and
-the REST twin's POST. None publishes anything; they are the sign-in itself, or an agent's token writing
-drafts. Your rule is to raise a principle conflict and wait, so the check is unchanged. Proposed change,
-for your yes:
+The owner's words: "routes that only create drafts pass; any route that can publish or keep still
+fails." Implemented in `scripts/lib/p4a.ts` (used by check:principles, proven in test:agents group G):
 
-- **The OAuth and wallet-agent sign-in routes join the named sign-in exemptions** (as the website and
-  wallet sign-in routes already are): they are how a sign-in happens.
-- **A new allowed form: an agent's token.** A route passes if it calls `agentFromRequest` and answers 401
-  without one, and every tool it can reach is draft-only (no tool named publish, spend or pay; checked
-  from the tool list), so principle 4 still holds: nothing an agent makes is published without its
-  person.
-- **The check also scans `src/app/mcp`**, which is outside `src/app/api` today and so isn't checked at
-  all.
+- **An agent's route** (it calls `agentFromRequest`, or reaches the agent tools) passes only if it answers
+  401 without an agent's token, imports only inspected modules, has no publish or keep in it, and the
+  tools it serves are draft-only: no tool named publish, keep, spend or pay; the tool modules never call
+  `decide` (the person's publish, keep and discard) or write anything published; and the three piece
+  writers they use (`draftPiece`, `revise`, `addNote`) write drafts only (an agent's note is a draft;
+  versions take the table's 'draft' default and never set a status or published_by). Any route an agent
+  can reach that can publish or keep fails, even if it also checks a person.
+- **The agent sign-in routes** (OAuth register, token, revoke; the wallet agent's link and sign-in) are
+  named, as the website and wallet sign-ins are, and pass only while they import the sign-in modules
+  alone and those write only the sign-in tables (clients, codes, agents, tokens, counts).
+- **`src/app/mcp` is scanned** as well as `src/app/api`.
 
 ## 9. Decisions for the owner
 
@@ -319,7 +326,7 @@ for your yes:
 6. **Character versions:** publish into the existing designs system (a new sheet version), or keep them
    as pieces?
 7. **The consent record:** also store the agreement's wording hash when someone connects an agent?
-8. **P4a:** the change in 8b.
+8. **P4a:** decided (2026-10-20): drafts-only agent routes pass; see 8b.
 
 ## 10. Before switching on
 

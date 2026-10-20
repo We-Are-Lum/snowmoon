@@ -20,6 +20,7 @@
  *  L  Limits: 3 agents per person; daily notes; disconnect stops the agent at once.
  *  W  Wallet agents: the link message, the agent's signature, its own sign-in, REST.
  *  S  Story words: the switch and the human-written-only list (in-process).
+ *  G  P4a (in-process): an agent's draft-only route passes; one that can publish, or keep, fails.
  */
 import { readdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
@@ -309,6 +310,35 @@ try {
   let refusedAll = false;
   try { filter.checkLines([{ source: 'agent', text: 'A line.' }], -5); } catch { refusedAll = true; }
   check('S5 with the switch back at "refused", agent lines are refused for everyone', refusedAll);
+
+  console.log('G  P4a: an agent\'s route passes only if it creates drafts (owner, 2026-10-20), in-process');
+  const { p4aProblems, agentToolProblems } = await import('./lib/p4a');
+  const readReal = (rel: string) => readFileSync(path.join(ROOT, rel), 'utf8');
+  const readWith = (over: Record<string, string>) => (rel: string) => over[rel] ?? readReal(rel);
+  const real = (f: string) => ({ file: f, src: readReal(f) });
+  const head = "import { NextResponse } from 'next/server';\nimport { agentFromRequest } from '~/lib/agents/core';\n";
+  const guard = "  const agent = await agentFromRequest(request).catch(() => null);\n  if (!agent) return NextResponse.json({ error: 'token' }, { status: 401 });\n";
+  const draftOnly = { file: 'src/app/api/planted-draft/route.ts', src: `${head}import { runTool } from '~/lib/agents/tools';\nexport async function POST(request: Request) {\n${guard}  return NextResponse.json(await runTool(agent, 'start_idea', await request.json()));\n}\n` };
+  const publishes = { file: 'src/app/api/planted-publish/route.ts', src: `${head}import { decide } from '~/lib/agents/pieces';\nexport async function POST(request: Request) {\n${guard}  const b = await request.json();\n  return NextResponse.json({ ok: await decide(agent.person, 'version', b.id, 'publish') });\n}\n` };
+  const keeps = { file: 'src/app/api/planted-keep/route.ts', src: `${head}import { runTool } from '~/lib/agents/tools';\nexport async function POST(request: Request) {\n${guard}  const b = await request.json();\n  await fetch('/api/drafts', { method: 'POST', body: JSON.stringify({ what: 'version', id: b.id, action: 'keep' }) });\n  return NextResponse.json(await runTool(agent, 'start_idea', b));\n}\n` };
+  const noToken = { file: 'src/app/api/planted-open/route.ts', src: `import { NextResponse } from 'next/server';\nimport { runTool } from '~/lib/agents/tools';\nexport async function POST(request: Request) {\n  return NextResponse.json(await runTool({} as never, 'start_idea', await request.json()));\n}\n` };
+  const p = (r: { file: string; src: string }[], read = readReal) => p4aProblems(r, read);
+  const realAgentRoutes = ['src/app/mcp/route.ts', 'src/app/api/agent/v1/[tool]/route.ts', 'src/app/api/oauth/register/route.ts', 'src/app/api/oauth/token/route.ts', 'src/app/api/oauth/revoke/route.ts', 'src/app/api/agents/wallet/link/route.ts', 'src/app/api/agents/wallet/token/route.ts'].map(real);
+  check('G1 the real agent routes (/mcp, REST POST) and the agent sign-in routes pass', p(realAgentRoutes).length === 0, p(realAgentRoutes).join('; '));
+  check('G2 the real agent tools are draft-only (no publish, keep or spend tool; writers write drafts)', agentToolProblems(readReal).length === 0, agentToolProblems(readReal).join('; '));
+  check('G3 a planted draft-only agent route passes', p([draftOnly]).length === 0, p([draftOnly]).join('; '));
+  check('G4 an agent route that can publish fails', p([publishes]).some((x) => x.includes('can publish or keep')), p([publishes]).join('; '));
+  check('G5 an agent route that can keep fails', p([keeps]).some((x) => x.includes('can publish or keep') && x.includes('keep')), p([keeps]).join('; '));
+  check('G6 a route reaching the tools without an agent\'s token fails', p([noToken]).some((x) => x.includes('without an agent\'s token')));
+  const tools = readReal('src/lib/agents/tools.ts');
+  const keepTool = tools.replace("name: 'leave_note',", "name: 'keep_draft',");
+  check('G7 a tool that keeps, served to agents, fails the draft-only route too', p([draftOnly], readWith({ 'src/lib/agents/tools.ts': keepTool })).some((x) => x.includes('keep_draft')));
+  const decideTool = tools.replace('import { addNote, draftPiece,', 'import { addNote, decide, draftPiece,');
+  check('G8 a tool module that takes decide (publish, keep) from pieces fails', p([draftOnly], readWith({ 'src/lib/agents/tools.ts': decideTool })).some((x) => x.includes('decide')));
+  const publishingNote = readReal('src/lib/agents/pieces.ts').replace("${agent ? 'draft' : 'published'}", "'published'");
+  check('G9 a draft writer that would publish an agent\'s note fails', p([draftOnly], readWith({ 'src/lib/agents/pieces.ts': publishingNote })).some((x) => x.includes('addNote')));
+  const signInWrites = readReal('src/lib/agents/oauth.ts') + "\nexport async function x() { await sql()`update studio.piece_versions set status = 'draft'`; }\n";
+  check('G10 an agent sign-in route whose module writes pieces fails', p([real('src/app/api/oauth/token/route.ts')], readWith({ 'src/lib/agents/oauth.ts': signInWrites })).some((x) => x.includes('piece_versions')));
 } catch (e) {
   failures.push(`crashed: ${(e as Error).stack ?? e}`);
 } finally {

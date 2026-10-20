@@ -38,10 +38,12 @@ there were no fal or gateway calls. InfiniteTalk: **skipped**, because Modal isn
 
 1. **Scanning before images open:** Arachnid Shield plus PhotoDNA (both free, both need an application),
    registering with NCMEC, and a written procedure with a lawyer. Until then, images stay closed.
-2. **Speaking:** the transcription is Whisper (open weights) on Groq. Groq hears the recording, so
-   Privacy has to name it. Not yet tried for real; the tests use a stand-in.
-3. **Principle checks:** P4a fails on the agent sign-in routes. I've proposed a change and didn't make
-   it. Principle 1 needs to allow declared recipes.
+2. **Speaking:** the transcription is Whisper large-v3-turbo (open weights) on Groq. Groq hears the
+   recording; the Privacy line naming it is drafted (design §6). Not yet tried for real; the tests use a
+   stand-in.
+3. **Principle checks:** P4a now passes as you decided (2026-10-20): agent routes that only create
+   drafts pass, and any that can publish or keep fails (design §8b). Principle 1 needs to allow
+   declared recipes.
 4. **ChatGPT:** custom connectors with write tools may need a Business plan. It needs a test on a real
    account.
 5. **The editor:** redesign it as "say what you want, react", with Line and Voice up front and the rest

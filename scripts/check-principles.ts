@@ -30,6 +30,7 @@ import { LEGAL, PRIVACY, TERMS, legalKey } from '../src/lib/legal';
 import { LEARN_TEXT } from '../src/lib/minpentai/learn-text';
 import { BOOK_TAG, NARRATION_MAX_WORDS, PERSON_TAG, parseBeats } from '../src/lib/script-beats';
 import { GLOSSARY_FILE, loadBlocks, verifyGlossary, type Glossary } from './lib/glossary';
+import { p4aProblems } from './lib/p4a';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const arg = (name: string) => process.argv.slice(2).find((a) => a.startsWith(`--${name}=`))?.split('=').slice(1).join('=');
@@ -1002,34 +1003,15 @@ add({
 // ---------------------------------------------------------------------------
 // P4. No model output is published without a signed-in person's action.
 // ---------------------------------------------------------------------------
-/** Shared sign-in wrappers routes may call instead of checking getFid themselves (P4a reads each one). */
-const P4A_WRAPPERS = [{ module: '~/lib/minpentai/play-server/route', file: 'src/lib/minpentai/play-server/route.ts', call: 'play' }];
-const P4A_EXEMPT = new Set(['src/app/api/auth/web/start/route.ts', 'src/app/api/wallet/sign-in/route.ts']);
-// Named exemption (owner, 2026-10-19: "read API open without sign-in at a low rate"): MCP sends every message,
-// reads included, as a POST. The MCP route is exempt only while it stays read only: it must not touch the database
-// itself (its one write is the rate counter, inside src/lib/agent/rate.ts) and every tool it serves is read only.
-const P4A_READ_ONLY = new Set(['src/app/api/mcp/route.ts']);
+// The rules, the named exemptions and the agents' draft-only form (owner, 2026-10-20) live in scripts/lib/p4a.ts,
+// so scripts/test-agents.ts can prove them on planted routes (a draft-only route passes; one that can publish,
+// or keep, fails).
 add({
   id: 'P4a',
   principle: 4,
-  name: 'every write API route requires a signed-in FID (or, where named, a signed-in wallet)',
-  load: async () => walk('src/app/api', /route\.tsx?$/).map((f) => ({ file: f, src: read(f) })),
-  // Named exemption (owner instruction, 2026-10-08: website sign-in): the route that starts a sign-in
-  // cannot require one. It writes nothing of ours; it opens a channel on Farcaster's relay.
-  // Named exemption (owner, 2026-10-13: wallet sign-in): the wallet sign-in route is the sign-in; it
-  // writes only the account row, and only for a signature checked against the wallet.
-  // getPerson (a FID or a wallet; image routes and consent) and getWallet (wallet routes) count as
-  // sign-in checks too: both answer null without a valid session, and the route answers 401.
-  // A route may instead hand every request to a shared wrapper listed in P4A_WRAPPERS; it passes only
-  // if it imports and calls that wrapper, and the wrapper itself checks getFid and answers 401.
-  run: (routes) =>
-    routes
-      .filter((r: { file: string }) => !P4A_EXEMPT.has(r.file))
-      .filter((r: { file: string; src: string }) => !(P4A_READ_ONLY.has(r.file) && !/\bdb\(|sql`|from '~\/lib\/db'/.test(r.src) && !/readOnlyHint: false/.test(r.src)))
-      .filter((r: { src: string }) => /export async function (POST|PUT|PATCH|DELETE)\b/.test(r.src))
-      .filter((r: { src: string }) => !(/(getFid|getPerson|getWallet)\(/.test(r.src) && /status: 401/.test(r.src)))
-      .filter((r: { src: string }) => !P4A_WRAPPERS.some((w) => r.src.includes(`from '${w.module}'`) && new RegExp(`\\b${w.call}\\(request,`).test(r.src) && /getFid\(/.test(read(w.file)) && /\b401\)/.test(read(w.file))))
-      .map((r: { file: string }) => `${r.file}: writes without requiring sign-in`),
+  name: 'every write route requires a signed-in FID or wallet (or, where named, is a sign-in); an agent\'s route only creates drafts',
+  load: async () => [...walk('src/app/api', /route\.tsx?$/), ...walk('src/app/mcp', /route\.tsx?$/)].map((f) => ({ file: f, src: read(f) })),
+  run: (routes) => p4aProblems(routes, read),
   plant: (routes) => {
     routes.push({ file: 'src/app/api/planted/route.ts', src: 'export async function POST() { return new Response("ok"); }' });
   },
