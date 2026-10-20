@@ -56,6 +56,8 @@ const nextConfig: NextConfig = {
     // The agent read API reads the same editor data (src/lib/agent/data.ts).
     '/api/agent/**': ['./public/editor/*/v*/data.json'],
     '/api/mcp': ['./public/editor/*/v*/data.json'],
+    // A moment page reads each version's shot (its frame, times and lines) from the same data.
+    '/adaptation/**': ['./public/editor/*/v*/data.json'],
   },
   // The end card's "make your own" link (owner, 2026-10-14): the repository for now; temporary (307),
   // since /make may become a page of its own.
@@ -72,6 +74,8 @@ const nextConfig: NextConfig = {
       { source: '/@:handle/:id/v/:n/shot/:shot', destination: '/adaptation/:id/by/:handle/v/:n/shot/:shot' },
       { source: '/@:handle/:id/v/:n/storyboard', destination: '/adaptation/:id/by/:handle/v/:n/storyboard' },
       { source: '/@:handle/:id/shot/:shot', destination: '/adaptation/:id/by/:handle/shot/:shot' },
+      // A moment: one shot, every version side by side (owner, 2026-10-19).
+      { source: '/@:handle/:id/m/:shot', destination: '/adaptation/:id/by/:handle/m/:shot' },
       { source: '/@:handle/:id/storyboard', destination: '/adaptation/:id/by/:handle/storyboard' },
       { source: '/@:handle/:id', destination: '/adaptation/:id/by/:handle' },
       // A person's public profile (owner, 2026-10-18, the You page): one segment only, so /@<handle>/<id> above is never caught here.
