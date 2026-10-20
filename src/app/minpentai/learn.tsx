@@ -13,7 +13,8 @@
  * commentary, pause and CELLS sit outside the role="img" stage; keyboard placing on the board; the
  * pause on screen 2; bundled three.js. Full screen (owner, 2026-10-09): under 768 px and inside the
  * Farcaster mini app the frame fills the viewport (learn.css hides the site's top bar), with an exit
- * link back to the site; on tablet and desktop it is Design's phone, centred beside the rail.
+ * link back to the site; on a tablet it is Design's phone, centred beside the rail, and on a desktop (learn.css,
+ * 2026-10-20) the stage is large with the text and controls in a column beside it.
  */
 import { useEffect, useMemo, useReducer, useRef, useState } from 'react';
 import Link from 'next/link';

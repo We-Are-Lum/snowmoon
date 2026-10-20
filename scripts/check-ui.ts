@@ -33,8 +33,8 @@
  *   on an image's page (fixture images) and on the assistant's quote cards, each with the same range, shown only
  *   where "Add an image" shows.
  * - Learn Minpentai's screens are full screen at 390 and in the 424 × 695 Farcaster frame (the frame
- *   fills the viewport, no site top bar, a × back to the site), and Design's centred phone beside the rail at 1024
- *   and up. ?s= opens /minpentai/rule, the book's rule, tagged FROM THE BOOK, citing c4-b5 and c4-b7, with its
+ *   fills the viewport, no site top bar, a × back to the site), and beside the rail at 1024 and up the desktop layout
+ *   (2026-10-20): the stage large and 3:2, the text and footer in a column to its right (watch 2, lesson 5, practice). ?s= opens /minpentai/rule, the book's rule, tagged FROM THE BOOK, citing c4-b5 and c4-b7, with its
  *   GitHub write-up.
  * - Minpentai Play (Design's "Minpentai Play", owner 2026-10-09): ?mode=play opens the hub with Learn, Play and
  *   Free play; ?mode=free opens free play; a practice match starts, takes a glider and ends its turn; ⤢ makes it
@@ -1369,8 +1369,9 @@ try {
         await checkFloors(page, `${path} @${width}`, scheme);
         const wide = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth);
         if (wide > 1) fail(`${path} @${width} (${scheme}): scrolls sideways by ${wide}px`);
+        // Learn's desktop layout (2026-10-20) widens /minpentai's page; its reading column is the lesson text beside the stage.
         const measure = await page.evaluate(() => {
-          const el = document.querySelector('main .page.chapter, main .page') as HTMLElement | null;
+          const el = (document.querySelector('main .ml-learn .ml-body') ?? document.querySelector('main .page.chapter, main .page')) as HTMLElement | null;
           return el ? el.getBoundingClientRect().width : 0;
         });
         if (measure > 700) fail(`${path} @${width}: the reading column is ${Math.round(measure)}px wide`);
@@ -1383,6 +1384,23 @@ try {
         // Learn is Design's phone, centred beside the rail, on tablet and desktop (full screen is for phones and the Farcaster app).
         if (path === '/minpentai' && ((await page.locator('.ml-exit').isVisible()) || !(await page.locator('.rail').isVisible()))) fail(`/minpentai @${width}: Learn is full screen outside a phone`);
         if (path.startsWith('/glossary')) await shot(page, `desktop-${width}${path.replace(/\//g, '-')}`, scheme);
+      }
+      // Learn on desktop (owner, 2026-10-20: "the broadcast large, lesson text beside it"): a watch screen, a lesson with a
+      // board and the practice match. The stage is larger than Design's 390 phone and 3:2, the text column sits to its
+      // right, the footer is in view, and nothing scrolls sideways; light and dark.
+      for (const [q, name] of [['lesson=2', 'watch'], ['lesson=13', 'lesson'], ['mode=practice', 'practice']] as const) {
+        await open(page, `/minpentai?${q}`);
+        await page.waitForTimeout(400);
+        await checkFloors(page, `/minpentai?${q} @${width}`, scheme);
+        const at = `/minpentai?${q} @${width} (${scheme})`;
+        const stage = await page.locator('.ml-stage').boundingBox();
+        const body = await page.locator('.ml-body').boundingBox();
+        const foot = await page.locator('.ml-foot').boundingBox();
+        if (!stage || stage.width <= 400 || Math.abs(stage.width / stage.height - 1.5) > 0.02) fail(`${at}: the stage is not large and 3:2 (${stage ? `${Math.round(stage.width)}×${Math.round(stage.height)}` : 'none'})`);
+        if (!stage || !body || body.x < stage.x + stage.width - 1) fail(`${at}: the lesson text is not beside the stage`);
+        if (!foot || !body || foot.x !== body.x || foot.y + foot.height > 900 + 1) fail(`${at}: the footer is not in view under the text`);
+        if ((await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)) > 1) fail(`${at}: scrolls sideways`);
+        await shot(page, `learn-desktop-${width}-${name}`, scheme);
       }
       await open(page, '/chapter/1');
       const bodyShown = await page.locator('.rail-body').isVisible();
@@ -1499,6 +1517,14 @@ try {
     await page.waitForSelector('.listen-pane');
     await checkFloors(page, '/chapter/1?view=listen @390', scheme);
     await shot(page, 'phone-390-listen', scheme);
+    // Learn at phone width, beside the desktop layout's shots (it stays full screen: checkLearnFullScreen above).
+    if (SHOTS) {
+      for (const [q, name] of [['lesson=2', 'watch'], ['lesson=13', 'lesson'], ['mode=practice', 'practice']] as const) {
+        await open(page, `/minpentai?${q}`);
+        await page.waitForTimeout(400);
+        await shot(page, `learn-phone-390-${name}`, scheme);
+      }
+    }
     await page.close();
   }
   {
@@ -1523,4 +1549,4 @@ if (failures.length) {
   console.error(`\nUI CHECK FAILED (${failures.length}):\n- ` + failures.join('\n- '));
   process.exit(1);
 }
-console.log(`ui check passed: ${BASE}, ${38 + MINPENTAI_LESSONS + 4} pages, Make an image (browse, the 8-block cap, search, deep links, its links from the feed, an image's page and the assistant), the chapter sheet, the glossary's covers and back link, and 8 assistant states × light and dark; 10 pages at 1024, 1440 and 2000; AI labels on 9 screens at 390 and 1440`);
+console.log(`ui check passed: ${BASE}, ${38 + MINPENTAI_LESSONS + 4} pages, Make an image (browse, the 8-block cap, search, deep links, its links from the feed, an image's page and the assistant), the chapter sheet, the glossary's covers and back link, and 8 assistant states × light and dark; 10 pages and Learn's desktop layout (watch, lesson, practice) at 1024, 1440 and 2000; AI labels on 9 screens at 390 and 1440`);
