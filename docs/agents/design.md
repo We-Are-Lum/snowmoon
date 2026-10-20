@@ -228,7 +228,7 @@ the two designs; the 'allowed' path stays only so the tests can prove the switch
 
 | | **Allowed** (the old default, now off) | **Refused** (now) |
 |---|---|---|
-| What an agent can put in lines | the book's lines (checked word for word) and its own lines | the book's lines only |
+| What an agent can put in lines | the book's lines (checked word for word) and its own lines | the person's own words and the book's, each checked word for word |
 | Free text with written lines hidden in it (a speaker line, a script, quoted dialogue) | kept, and the version counts as having agent words | refused, with a message saying why |
 | Labels | "words by @person's agent" wherever the version appears | none needed |
 | Lists | "Human-written words only" filter leaves them out | nothing to filter |
