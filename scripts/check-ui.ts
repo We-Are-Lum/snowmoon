@@ -1279,7 +1279,7 @@ try {
       if (await page.locator('a[href="/images/picks"]').count()) fail(`/images/designs (${scheme}): "My picks" shows to a reader who is not invited`);
       await open(page, '/images/designs/new?kind=style');
       await page.waitForSelector('.dz-form .ic-gate');
-      if (!(await page.getByText('Making and picking styles and character sheets is open to invited readers only, for now.', { exact: false }).isVisible())) fail(`/images/designs/new (${scheme}): no invited-only refusal for a reader who is not invited`);
+      if (!(await page.getByText('Making styles and character sheets is open to invited readers only, for now.', { exact: false }).isVisible())) fail(`/images/designs/new (${scheme}): no invited-only refusal for a reader who is not invited`);
       if (await page.locator('#dz-text').count()) fail(`/images/designs/new (${scheme}): the form shows to a reader who is not invited`);
       await checkFloors(page, '/images/designs/new (not invited)', scheme);
       await ctx.unroute('**/api/designs/picks');
