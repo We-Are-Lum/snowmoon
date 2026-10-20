@@ -173,11 +173,15 @@ export async function approve(ask: AuthorizeAsk, person: number): Promise<string
   const code = newToken('sc1_');
   await s.begin(async (tx) => {
     const t = tx as unknown as Sql;
-    const [old] = await t<{ id: string }[]>`select id from studio.agents
-      where person = ${person} and route = 'oauth' and client_id = ${ask.clientId} and revoked_at is null and expires_at > now() limit 1`;
+    // The same client again (Claude registers a new client on every fresh connection, so also the same
+    // name with the same redirect address): its agent is renewed rather than a new one made.
+    const [old] = await t<{ id: string }[]>`select a.id from studio.agents a left join studio.oauth_clients c on c.client_id = a.client_id
+      where a.person = ${person} and a.route = 'oauth' and a.revoked_at is null and a.expires_at > now()
+        and (a.client_id = ${ask.clientId} or (c.name = ${ask.clientName} and ${ask.redirectUri} = any(c.redirect_uris)))
+      order by a.created_at limit 1`;
     let agentId = old?.id;
     if (agentId) {
-      await t`update studio.agents set scopes = ${ask.scopes}, expires_at = now() + make_interval(days => ${AGENTS.linkDays}), name = ${ask.clientName} where id = ${agentId}`;
+      await t`update studio.agents set scopes = ${ask.scopes}, expires_at = now() + make_interval(days => ${AGENTS.linkDays}), name = ${ask.clientName}, client_id = ${ask.clientId} where id = ${agentId}`;
     } else {
       const [live] = await t<{ n: number }[]>`select count(*)::int as n from studio.agents where person = ${person} and revoked_at is null and expires_at > now()`;
       if (live.n >= AGENTS.perPerson) throw new OAuthError('access_denied', `you already have ${AGENTS.perPerson} agents; disconnect one on your You page first`, 409);
@@ -215,16 +219,17 @@ export async function token(form: URLSearchParams) {
   if (grant === 'authorization_code') {
     const code = form.get('code') ?? '';
     const verifier = form.get('code_verifier') ?? '';
-    return await s.begin(async (tx) => {
+    let withdraw: string | null = null;
+    const out = await s.begin(async (tx) => {
       const t = tx as unknown as Sql;
       const [c] = await t<{ client_id: string; agent_id: string; redirect_uri: string; code_challenge: string; resource: string; used: boolean; live: boolean }[]>`
         select client_id, agent_id, redirect_uri, code_challenge, resource, used_at is not null as used, expires_at > now() as live
         from studio.oauth_codes where code_hash = ${sha256(code)} for update`;
       if (!c || !c.live || c.client_id !== clientId) throw new OAuthError('invalid_grant', 'the code is unknown, expired or for another client');
       if (c.used) {
-        // A code used twice: the agent's tokens are withdrawn (RFC 6749 §4.1.2).
-        await t`update studio.agent_tokens set revoked_at = now() where agent_id = ${c.agent_id} and revoked_at is null`;
-        throw new OAuthError('invalid_grant', 'the code was already used');
+        // A code used twice: the agent's tokens are withdrawn (RFC 6749 §4.1.2), outside this transaction.
+        withdraw = c.agent_id;
+        return null;
       }
       const redirect = form.get('redirect_uri');
       if (redirect !== null && redirect !== c.redirect_uri) throw new OAuthError('invalid_grant', 'redirect_uri doesn’t match');
@@ -235,10 +240,16 @@ export async function token(form: URLSearchParams) {
       if (!a) throw new OAuthError('invalid_grant', 'the agent was disconnected');
       return { ...(await issueTokens(t, c.agent_id, resource, true)), scope: a.scopes.join(' ') };
     });
+    if (withdraw) {
+      await s`update studio.agent_tokens set revoked_at = now() where agent_id = ${withdraw} and revoked_at is null`;
+      throw new OAuthError('invalid_grant', 'the code was already used');
+    }
+    return out!;
   }
   if (grant === 'refresh_token') {
     const refresh = form.get('refresh_token') ?? '';
-    return await s.begin(async (tx) => {
+    let withdraw: string | null = null;
+    const out = await s.begin(async (tx) => {
       const t = tx as unknown as Sql;
       const [r] = await t<{ agent_id: string; used: boolean; live: boolean; client_id: string; scopes: string[] }[]>`
         select t.agent_id, t.used_at is not null as used, (t.expires_at > now() and t.revoked_at is null and a.revoked_at is null and a.expires_at > now()) as live, a.client_id, a.scopes
@@ -246,13 +257,18 @@ export async function token(form: URLSearchParams) {
         where t.token_hash = ${sha256(refresh)} and t.kind = 'refresh' and t.resource = ${resource} for update of t`;
       if (!r || !r.live || r.client_id !== clientId) throw new OAuthError('invalid_grant', 'the refresh token is unknown, expired or withdrawn');
       if (r.used) {
-        // A refresh token used twice was probably stolen: everything of this agent's is withdrawn.
-        await t`update studio.agent_tokens set revoked_at = now() where agent_id = ${r.agent_id} and revoked_at is null`;
-        throw new OAuthError('invalid_grant', 'the refresh token was already used');
+        // A refresh token used twice was probably stolen: everything of this agent's is withdrawn (below).
+        withdraw = r.agent_id;
+        return null;
       }
       await t`update studio.agent_tokens set used_at = now() where token_hash = ${sha256(refresh)}`;
       return { ...(await issueTokens(t, r.agent_id, resource, true)), scope: r.scopes.join(' ') };
     });
+    if (withdraw) {
+      await s`update studio.agent_tokens set revoked_at = now() where agent_id = ${withdraw} and revoked_at is null`;
+      throw new OAuthError('invalid_grant', 'the refresh token was already used');
+    }
+    return out!;
   }
   throw new OAuthError('unsupported_grant_type', 'authorization_code or refresh_token');
 }
