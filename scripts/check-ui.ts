@@ -78,8 +78,12 @@ const INK = 'rgb(29, 29, 27)';
 const IN_WORLD = '.device-view, .dz-card, svg, [data-template]';
 /** Learn screens at /minpentai (src/app/minpentai/learn.tsx: 8 watch, 7 lessons, under the hood, practice). */
 const MINPENTAI_LESSONS = 17;
+/** Their addresses (owner, 2026-10-20: ?lesson=1 is lesson 1): ?watch=1…8, ?lesson=1…8 (8 is Under the hood), ?mode=practice. */
+const MINPENTAI_ADDRESSES = [...Array.from({ length: 8 }, (_, i) => `watch=${i + 1}`), ...Array.from({ length: 8 }, (_, i) => `lesson=${i + 1}`), 'mode=practice'];
 /** Under the hood runs the book's rule (c4-b5); every other Learn screen is the game invented for this edition. */
-const MINPENTAI_HOOD = 16;
+const MINPENTAI_HOOD = 'lesson=8';
+/** Lesson 1's title (src/lib/minpentai/learn-text.ts, lessons.goal). */
+const MINPENTAI_LESSON_1 = 'Keep your towers. Destroy theirs.';
 
 const failures: string[] = [];
 const fail = (msg: string) => failures.push(msg);
@@ -1290,7 +1294,7 @@ try {
     }
 
     // Minpentai: every Learn screen and Free play (and the sandbox's and "Play the computer"'s old links, which open Free play), at phone width.
-    for (const q of [...Array.from({ length: MINPENTAI_LESSONS }, (_, i) => `lesson=${i + 1}`), 'mode=practice']) {
+    for (const q of MINPENTAI_ADDRESSES) {
       await open(page, `/minpentai?${q}`);
       await page.waitForTimeout(150);
       await checkFloors(page, `/minpentai?${q}`, scheme);
@@ -1301,7 +1305,7 @@ try {
         // Short labels (owner ruling, 2026-10-10): the ⓘ named "Invented", "Draft" or "Book", each opening its explanation.
         const tags = await page.locator('.ml-tag.info-label').evaluateAll((els) => els.filter((e) => { const i = e.querySelector('svg.info-i') as SVGElement | null; return !!i && i.getBoundingClientRect().width > 0; }).map((e) => (e.querySelector('.info-word')?.textContent ?? '').trim()));
         const labelled = tags.includes('Invented');
-        if (q === `lesson=${MINPENTAI_HOOD}` ? labelled : !labelled) fail(`/minpentai?${q} (${scheme}): the "Invented" label is ${labelled ? 'on the book\'s rule' : 'missing'}`);
+        if (q === MINPENTAI_HOOD ? labelled : !labelled) fail(`/minpentai?${q} (${scheme}): the "Invented" label is ${labelled ? 'on the book\'s rule' : 'missing'}`);
         if (q === 'lesson=1') {
           await page.locator('.ml-tag[data-label="invented"]').click();
           if (!/invented for this edition/i.test((await page.locator('.info-sheet').textContent().catch(() => '')) ?? '')) fail(`/minpentai?${q} (${scheme}): "Invented" does not open its explanation`);
@@ -1315,10 +1319,22 @@ try {
         // Full screen (owner, 2026-10-09): the frame fills the viewport, the site's top bar is hidden, and × goes back to the site.
         await checkLearnFullScreen(page, `/minpentai?${q} (${scheme})`);
         // The rules note links to the book's rule on its own page.
+        // …and says the lessons play by the first version of the rules, linking to the rules page (the Play hub's line, moved here 2026-10-20).
         const note = page.locator('.ml-rulesnote a');
-        if ((await note.count()) && (await note.getAttribute('href')) !== '/minpentai/rule') fail(`/minpentai?${q} (${scheme}): the rules note does not link to /minpentai/rule`);
+        if ((await note.count()) && JSON.stringify(await note.evaluateAll((els) => els.map((e) => e.getAttribute('href')))) !== JSON.stringify(['/minpentai/rule', '/minpentai/rules'])) fail(`/minpentai?${q} (${scheme}): the rules note does not link to /minpentai/rule and /minpentai/rules`);
+        if (q === 'lesson=1' && !/first version of the rules/.test((await page.locator('.ml-rulesnote').textContent().catch(() => '')) ?? '')) fail(`/minpentai?${q} (${scheme}): lesson 1 does not say the lessons play by the first version of the rules`);
       }
     }
+    // ?lesson=1 opens lesson 1 itself, the old ?lesson=9 too, ?watch=1 the broadcast; Play's LEARN tab opens lesson 1 (owner, 2026-10-20).
+    for (const [q, lesson1] of [['lesson=1', true], ['lesson=9', true], ['watch=1', false]] as const) {
+      await open(page, `/minpentai?${q}`);
+      const title = ((await page.locator('.ml-title').textContent().catch(() => '')) ?? '').trim();
+      if ((title === MINPENTAI_LESSON_1) !== lesson1) fail(`/minpentai?${q} (${scheme}): opens "${title}"${lesson1 ? ', not lesson 1' : ''}`);
+    }
+    await open(page, '/minpentai?mode=play');
+    await page.getByRole('tab', { name: 'LEARN' }).click();
+    await page.waitForSelector('.ml-title');
+    if (((await page.locator('.ml-title').textContent()) ?? '').trim() !== MINPENTAI_LESSON_1 || !page.url().endsWith('/minpentai?lesson=1')) fail(`Play's LEARN tab (${scheme}): does not open lesson 1 (${page.url()})`);
     await checkPlay(page, scheme);
     // The rule recovered from the book's figure (c4-b5, c4-b7), on its own page; the sandbox's board links (?s=) land on it.
     await open(page, '/minpentai/rule');
@@ -1406,6 +1422,16 @@ try {
         // Signed out: the assistant panel is there, with what it does and a sign-in button.
         await page.waitForSelector('.panel .as-signed-out button');
         await shot(page, `desktop-${width}-chapter`, scheme);
+        // Minpentai's pages start with the assistant closed (owner, 2026-10-20); opening it there isn't remembered.
+        for (const mp of ['/minpentai', '/minpentai/rules']) {
+          await open(page, mp);
+          if (await page.locator('.panel').isVisible()) fail(`${mp} @${width} (${scheme}): the assistant panel opens by default`);
+          if (!(await page.locator('.panel-reopen').isVisible())) fail(`${mp} @${width} (${scheme}): no control to open the assistant`);
+        }
+        await page.locator('.panel-reopen').click();
+        if (!(await page.locator('.panel').isVisible())) fail(`/minpentai/rules @${width} (${scheme}): the assistant does not open`);
+        await open(page, '/chapter/1');
+        await page.waitForSelector('.panel .as-signed-out button');
         await checkAccountSignedOut(page, '.rail', `@${width} rail`);
         await shot(page, `desktop-${width}-account-signed-out`, scheme);
         await page.evaluate(plantWallet, WALLET_ADDRESS);
@@ -1506,7 +1532,7 @@ try {
     await open(frame, '/chapter/1');
     if (await frame.locator('.rail').isVisible()) fail('@424×695: the rail shows in the Farcaster frame');
     // Learn fills the Farcaster frame: a watch screen, a lesson, Under the hood and the practice match.
-    for (const q of ['lesson=1', 'lesson=13', `lesson=${MINPENTAI_HOOD}`, 'mode=practice']) {
+    for (const q of ['watch=1', 'lesson=5', MINPENTAI_HOOD, 'mode=practice']) {
       await open(frame, `/minpentai?${q}`);
       await checkLearnFullScreen(frame, `/minpentai?${q} @424×695`);
       const foot = await frame.locator('.ml-foot').boundingBox();

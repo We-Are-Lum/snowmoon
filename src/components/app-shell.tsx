@@ -24,7 +24,8 @@ import '../app/assistant/assistant.css';
  *   the Farcaster host has its own close control); ? is About, ☰ opens the menu sheet;
  * - 768–1199px: the rail collapsed to its expand control, opening over the page;
  * - 1200px and up: the rail open (wordmark, collapse, the destinations, the chapters with their
- *   state, theme, account) and the assistant beside the page, always there unless closed.
+ *   state, theme, account) and the assistant beside the page, always there unless closed; on Minpentai's
+ *   pages it starts closed, and opening or closing it there isn't remembered.
  * Tells the Farcaster host the app is ready (once).
  */
 export function AppShell({ chapters, adaptations, intro, children }: { chapters: number; adaptations: number; intro: Intro; children: React.ReactNode }) {
@@ -34,6 +35,8 @@ export function AppShell({ chapters, adaptations, intro, children }: { chapters:
   const [railOpen, setRailOpen] = useState(false); // tablet overlay
   const [collapsed, setCollapsed] = useState(false); // desktop, remembered
   const [panel, setPanel] = useState(true);
+  // Minpentai pages start with the assistant closed (owner, 2026-10-20); opening it there lasts for this visit only.
+  const [mpPanel, setMpPanel] = useState(false);
   const [last, setLast] = useState(1);
   const [opened, setOpened] = useState<Set<number>>(new Set());
 
@@ -85,7 +88,10 @@ export function AppShell({ chapters, adaptations, intro, children }: { chapters:
   };
   const current = Number(path.match(/^\/chapter\/(\d+)/)?.[1] ?? 0);
   const items = navItems(last, adaptations);
-  const showPanel = panel && !path.startsWith('/assistant');
+  const onMp = path === '/minpentai' || path.startsWith('/minpentai/');
+  const showPanel = (onMp ? mpPanel : panel) && !path.startsWith('/assistant');
+  const openPanel = () => (onMp ? setMpPanel(true) : (setPanel(true), remember('snowmoon.panel', null)));
+  const closePanel = () => (onMp ? setMpPanel(false) : (setPanel(false), remember('snowmoon.panel', 'closed')));
 
   return (
     <div className={`shell${collapsed ? ' rail-collapsed' : ''}${showPanel ? ' with-panel' : ''}`}>
@@ -182,7 +188,7 @@ export function AppShell({ chapters, adaptations, intro, children }: { chapters:
       {showPanel ? (
         <aside className="panel" aria-label="Assistant">
           <div className="panel-head">
-            <button type="button" className="panel-close" aria-label="Close the assistant" onClick={() => (setPanel(false), remember('snowmoon.panel', 'closed'))}>
+            <button type="button" className="panel-close" aria-label="Close the assistant" onClick={closePanel}>
               ×
             </button>
             <p className="panel-title">Assistant</p>
@@ -193,7 +199,7 @@ export function AppShell({ chapters, adaptations, intro, children }: { chapters:
         </aside>
       ) : (
         !path.startsWith('/assistant') && (
-          <button type="button" className="panel-reopen" onClick={() => (setPanel(true), remember('snowmoon.panel', null))}>
+          <button type="button" className="panel-reopen" onClick={openPanel}>
             Assistant ⟩
           </button>
         )

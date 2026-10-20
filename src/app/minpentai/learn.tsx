@@ -30,6 +30,7 @@ import { MinpentaiTags } from './mp-tags';
 import type { Scene } from './broadcast-scene';
 
 /** Screens by number: 0–7 watch, 8–14 the lessons, 15 Under the hood, 16 the practice match. */
+export const WATCH_SCREENS = T.watch.length;
 export const LEARN_SCREENS = T.watch.length + LS.length;
 export const PRACTICE_SCREEN = T.watch.length + indexOf('practice');
 
@@ -344,6 +345,8 @@ export function Learn({ start, onScreen, onFree, free = false }: { start: number
           <div className="ml-rulesnote">
             <p>{T.rulesNote.text}</p>
             <Link href={T.rulesNote.href} className="ml-textlink">{T.rulesNote.link}</Link>
+            <p>{T.rulesNote.version}</p>
+            <Link href={T.rulesNote.versionHref} className="ml-textlink">{T.rulesNote.versionLink}</Link>
           </div>
         )}
         <button type="button" className="ml-textlink" aria-expanded={S.src} onClick={() => ctl.toggleSrc()}>{v.srcLabel}</button>
