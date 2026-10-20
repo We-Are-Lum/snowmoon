@@ -40,6 +40,8 @@
  *   Free play; ?mode=free opens free play; a practice match starts, takes a glider and ends its turn; ⤢ makes it
  *   full screen (the site's top bar hidden, the board upright) at 390 and in the Farcaster frame; every Play screen is
  *   labelled RULES INVENTED FOR THIS EDITION; /minpentai/rules is Design's rules page. No sideways scroll.
+ * - The Minpentai kit (/minpentai/build, 2026-10-20): linked from the hub, labelled Book, Invented and Draft, not
+ *   affiliated; 152 passages, those outside Spoilers from chapters 2–14 only, Spoilers closed until opened.
  * - AI labels as rendered (owner, 2026-10-09): on the chapter (seeded images, the readers' strip,
  *   the narration credit), the listen view's player, the feed, an image's page, the composer's draft
  *   and preview, and the moderators' queue, every AI image and the narration control carry the label
@@ -606,6 +608,26 @@ async function checkPlay(page: Page, scheme: string) {
   await noSideways(`/minpentai/rules (${scheme})`);
   const words = (await page.locator('.mp-rules').textContent()) ?? '';
   if (!words.includes('RULES, DRAFT 1') || !words.includes('c4-b84')) fail(`/minpentai/rules (${scheme}): not Design's rules page`);
+  // The build-on kit (owner's go, 2026-10-20): linked from the hub; Book, Invented and Draft labels; the
+  // not-affiliated line; the rule passages of chapters 2–14 shown, the rest inside a closed Spoilers section.
+  await open(page, '/minpentai?mode=play');
+  if ((await page.locator('.mp-hub a', { hasText: 'BUILD ON IT' }).getAttribute('href').catch(() => null)) !== '/minpentai/build') fail(`${where('mode=play')}: no link to /minpentai/build`);
+  await open(page, '/minpentai/build');
+  await checkFloors(page, '/minpentai/build', scheme);
+  await noSideways(`/minpentai/build (${scheme})`);
+  const kit = (await page.locator('.mp-kit').textContent()) ?? '';
+  if (!kit.includes('NOT AFFILIATED WITH THE AUTHOR')) fail(`/minpentai/build (${scheme}): no "not affiliated with the author" line`);
+  const labels = await page.locator('.mp-kit .mp-rules-note .info-label').evaluateAll((els) => els.map((e) => e.getAttribute('data-label')));
+  if (labels.join(',') !== 'book,invented,draft') fail(`/minpentai/build (${scheme}): labels are ${labels.join(', ')}, not Book, Invented and Draft`);
+  const all = await page.locator('.mp-kit-passage').count(), hidden = await page.locator('.mp-kit-spoilers .mp-kit-passage').count();
+  if (all !== 152) fail(`/minpentai/build (${scheme}): ${all} passages, not 152`);
+  if (await page.locator('.mp-kit-spoilers[open]').count()) fail(`/minpentai/build (${scheme}): Spoilers is open on arrival`);
+  if (await page.locator('.mp-kit-spoilers .mp-kit-passage').first().isVisible()) fail(`/minpentai/build (${scheme}): a spoiler passage shows before Spoilers is opened`);
+  const shownCh = await page.locator('.mp-kit-passage:not(.mp-kit-spoilers .mp-kit-passage) .mp-kit-meta a').evaluateAll((els) => els.map((e) => Number(/^c(\d+)-/.exec(e.textContent ?? '')?.[1])));
+  if (!shownCh.length || shownCh.some((c) => c < 2 || c > 14) || shownCh.length + hidden !== 152) fail(`/minpentai/build (${scheme}): passages shown outside Spoilers are not chapters 2–14 only (${shownCh.length} shown, ${hidden} hidden)`);
+  await page.locator('.mp-kit-spoilers > summary').click();
+  if (!(await page.locator('.mp-kit-spoilers .mp-kit-passage').first().isVisible())) fail(`/minpentai/build (${scheme}): Spoilers does not open`);
+  await checkFloors(page, '/minpentai/build (Spoilers open)', scheme);
 }
 /** ⤢ on a match: the frame covers the site (no top bar), the board upright, END TURN in view. */
 async function checkPlayFullScreen(page: Page, where: string, tall: number) {

@@ -185,3 +185,33 @@ html:has(.mp-play.is-desk.is-fs) :is(.rail, .panel, .panel-reopen) { display: no
 /* Play's short labels (Book, Invented, Draft) are tap targets: the site's 44px floor. */
 .mp-play .ml-tag.info-label, .mp-rules-note .ml-tag.info-label { min-height: 44px; }
 .mp-share { display: flex; flex-direction: column; gap: 6px; margin-top: 12px; }
+
+/* The build-on kit (/minpentai/build, 2026-10-20): the rules table and the book's passages, in the rules page's column. */
+.mp-kit { font-family: var(--reading); color: var(--ink); overflow-wrap: anywhere; }
+.mp-kit-label, .mp-kit-meta, .mp-kit-code, .mp-kit-path { font-family: var(--label); font-size: 12px; letter-spacing: 0.04em; color: var(--muted); }
+.mp-kit-label { margin: 0 0 8px; }
+.mp-kit-title { margin: 0 0 12px; font-weight: 400; font-size: 40px; line-height: 1.05; }
+.mp-kit-lead { margin: 0 0 12px; font-size: 19px; line-height: 1.5; color: var(--body); text-wrap: pretty; }
+.mp-kit-links { margin: 0 0 8px; font-size: 17px; line-height: 1.6; }
+.mp-kit a { color: var(--link); }
+.mp-kit-section { border-top: 1px solid var(--ink); margin-top: 32px; padding-top: 4px; }
+.mp-kit-section > h2 { font-weight: 400; font-size: 28px; margin: 12px 0; }
+.mp-kit-section > p { font-size: 17px; line-height: 1.5; color: var(--body); margin: 0 0 12px; }
+.mp-kit-area h3, .mp-kit-chapter h3 { font-weight: 400; font-size: 21px; margin: 24px 0 8px; }
+.mp-kit-list { margin: 0; padding-left: 20px; font-size: 17px; line-height: 1.5; display: flex; flex-direction: column; gap: 8px; }
+.mp-kit-rules, .mp-kit-passages { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--rule); }
+.mp-kit-rule, .mp-kit-passage { border-bottom: 1px solid var(--rule); padding: 10px 0; display: flex; flex-direction: column; gap: 6px; }
+.mp-kit-rule p, .mp-kit-passage p { margin: 0; }
+.mp-kit-rule-text { font-size: 18px; line-height: 1.4; }
+.mp-kit-src, .mp-kit-site { display: inline-block; padding: 1px 6px; border-radius: 2px; margin: 2px 6px 2px 0; }
+.mp-kit-src.book { border: 1px solid var(--ink); color: var(--ink); }
+.mp-kit-src.invented { border: 1px dashed var(--muted); }
+.mp-kit-site.no { color: var(--dzego); }
+.mp-kit-cites { margin: 0; padding-left: 18px; font-size: 16px; line-height: 1.45; color: var(--body); }
+.mp-kit-note { font-size: 16px; line-height: 1.45; color: var(--body); }
+.mp-kit-quote { margin: 0; padding-left: 14px; border-left: 2px solid var(--rule); font-size: 18px; line-height: 1.5; display: flex; flex-direction: column; gap: 8px; }
+.mp-kit-figure { font-size: 16px; color: var(--body); font-style: italic; }
+.mp-kit-spoilers { margin-top: 24px; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+.mp-kit-spoilers > summary { min-height: 44px; display: flex; align-items: center; cursor: pointer; font-family: var(--label); font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--link); }
+.mp-kit-spoilers > summary:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.mp-kit .mp-rules-note .ml-tag.info-label { min-height: 44px; }
