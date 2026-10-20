@@ -200,6 +200,23 @@ export async function shownVersion(person: Person, adaptationId: number): Promis
   return STATIC.versions.filter((v) => v.adaptationId === adaptationId && v.author === person && !v.hidden).sort((a, b) => b.id - a.id)[0] ?? null;
 }
 
+/** Every adaptation and its public versions, newest first (the agent read API's list_scenes). */
+export async function publicCatalogue(): Promise<{ adaptation: Adaptation; versions: Version[] }[]> {
+  const rows = await fromTables((sql) => sql<(VersionRow & { title: string; owner_person: string })[]>`
+    select v.id, v.adaptation_id, v.parent_version_id, v.author_person, v.recipe, v.created_at, v.hidden, a.title, a.owner_person
+    from studio.adaptation_versions v join studio.adaptations a on a.id = v.adaptation_id
+    where not v.hidden order by v.adaptation_id, v.id desc`);
+  const list = rows
+    ? rows.map((r) => ({ adaptation: { id: Number(r.adaptation_id), owner: Number(r.owner_person), title: r.title }, version: toVersion(r) }))
+    : STATIC.versions.filter((v) => !v.hidden).map((v) => ({ adaptation: STATIC.adaptations.find((a) => a.id === v.adaptationId)!, version: v }));
+  const by = new Map<number, { adaptation: Adaptation; versions: Version[] }>();
+  for (const { adaptation, version } of list) {
+    if (!by.has(adaptation.id)) by.set(adaptation.id, { adaptation, versions: [] });
+    by.get(adaptation.id)!.versions.push(version);
+  }
+  return [...by.values()];
+}
+
 /** The FID we last saw holding this name (for links made before a rename). */
 async function seenName(fname: string): Promise<number | null> {
   const rows = await fromTables((sql) => sql<{ person: string }[]>`select person from studio.account_names where fname = ${fname}`);
