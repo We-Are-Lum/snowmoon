@@ -6,12 +6,16 @@
   "engine": {
     "repository": "https://github.com/We-Are-Lum/snowmoon",
     "commit": "eefb8d8f0777320db863a904227172e0ab12bf7a",
+    "entry": "src/lib/minpentai/onchain/replay.ts",
+    "replay": "replaySolo",
     "files": {
+      "src/lib/minpentai/onchain/replay.ts": "0xabd364795b4886a2d04d4d4a73b811073b15580914eb4e2ac6875bc23f612fde",
       "src/lib/minpentai/play-game/game.ts": "0x9cde86273c04c106cbd812030684f41a16e1f8a58483b9dab8c5e1489d5b3e83",
-      "src/lib/minpentai/play-server/match.ts": "0xc761b00cf856c824673563f408514097f1aab6f301a62dfea85b40bcd7ee04f5",
-      "src/lib/minpentai/onchain/replay.ts": "0xabd364795b4886a2d04d4d4a73b811073b15580914eb4e2ac6875bc23f612fde"
+      "src/lib/minpentai/play-game/live-types.ts": "0x98489b57e7cb44df289f179b116b940ee573d8fca212fc58fc28655637aed491",
+      "src/lib/minpentai/play-server/match.ts": "0xc761b00cf856c824673563f408514097f1aab6f301a62dfea85b40bcd7ee04f5"
     },
-    "replay": "replaySolo in src/lib/minpentai/onchain/replay.ts"
+    "packages": {},
+    "closureHash": "0xb80ccc69f6269f3eb7db028707e9a0fc05d8962d1d79427cf76f28ec2fbf59ff"
   },
   "board": {
     "width": 15,
@@ -84,7 +88,7 @@
   "rules": [
     {
       "id": "board-size",
-      "text": "The board is 15 × 10 squares.",
+      "text": "The board is 15 x 10 squares.",
       "source": {
         "invented": true
       }
@@ -243,7 +247,6 @@
       "source": {
         "book": [
           "c4-b136",
-          "c4-b137",
           "c4-b138"
         ]
       }
@@ -329,7 +332,7 @@
         "function": "botPlan",
         "level": 0
       },
-      "codeHash": "0x44a84167e5dec574014a2368284ac680fabb3f68adc3edfd3657c49dc0c32c38",
+      "codeHash": "0x33a5ae1bd24607fe28685c1de0c624f2551ce07b23236fdbf8ecda03d6080f46",
       "source": {
         "invented": true,
         "note": "Practice: the same code at its simplest level."
@@ -343,7 +346,7 @@
         "function": "botPlan",
         "level": 1
       },
-      "codeHash": "0x95bd5df01dfde6c578691547091385bf93c4347cf05e0767ee2267b725dc501b",
+      "codeHash": "0x86be99083de23f17888c995777d5938320d49076b37f4750ac6182ac49687b02",
       "source": {
         "invented": true,
         "note": "Behaviours are invented; the book has bots too (c7-b14)."
@@ -357,7 +360,7 @@
         "function": "botPlan",
         "level": 2
       },
-      "codeHash": "0xfd3dde40e2091d362d8892581dabdadf5d2e0a31ac9fade95312d67846c67f80",
+      "codeHash": "0x7b872de604278b52254bba52b7212cf1464bcf7625f651a696d1b5eb19a3f2b6",
       "source": {
         "invented": true,
         "note": "Behaviours are invented; the book has bots too (c7-b14)."
@@ -371,7 +374,7 @@
         "function": "botPlan",
         "level": 3
       },
-      "codeHash": "0xf9ea5742b2ef69c8779a7ec8ae1bd9f8f92591fc5cbb4af1cb6ce2e7e437f70d",
+      "codeHash": "0x598ee7c4837799d0101cfc7eb2d78717957c6d34ccec4cb6e96a971356857c66",
       "source": {
         "invented": true,
         "note": "Behaviours are invented; the book has bots too (c7-b14)."
@@ -385,7 +388,7 @@
         "function": "botPlan",
         "level": 4
       },
-      "codeHash": "0x7d0a016fe072f964bd6c94728754dcd7550f2f5c2f976051e41bba999f1d67e6",
+      "codeHash": "0xabe56b9efffb93beeb8fac2b2e24519174ef54297abb87fa77db680b86ca4d41",
       "source": {
         "invented": true,
         "note": "Behaviours are invented; the book has bots too (c7-b14)."
@@ -399,7 +402,7 @@
         "function": "botPlan",
         "level": 5
       },
-      "codeHash": "0xca192c22dd893cee8adbccfc876b1e7da532dd3ad7abe2bcf928181e7ae072f9",
+      "codeHash": "0x7a744c18dddcef69c69ff5ce95fcf03edf20065bf0f8dc9152ea593d20162cb2",
       "source": {
         "invented": true,
         "note": "Behaviours are invented; the book has bots too (c7-b14)."

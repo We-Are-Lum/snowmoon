@@ -25,12 +25,41 @@ export const hashText = (text: string) => keccak256(toBytes(text));
 export type Source = { book: string[]; note?: string } | { invented: true; note?: string };
 export interface Rule { id: string; text: string; source: Source }
 
-/** The files a replay runs: the engine, the placement check, the replay itself. */
-export const ENGINE_FILES = [
-  'src/lib/minpentai/play-game/game.ts',
-  'src/lib/minpentai/play-server/match.ts',
-  'src/lib/minpentai/onchain/replay.ts',
-] as const;
+/** Where a replay starts: everything it reaches from here is pinned (importClosure). */
+export const REPLAY_ENTRY = 'src/lib/minpentai/onchain/replay.ts';
+
+/**
+ * Every source file `entry` reaches through import, export-from, side-effect import, dynamic
+ * import() and require(), type-only imports included, and every npm package it reaches (by name;
+ * the builder pins each one's exact version from package-lock.json). `read` returns a file's text,
+ * or null if there is no such file. Paths are repository-relative; '~/' is src/.
+ */
+export function importClosure(entry: string, read: (path: string) => string | null): { files: Record<string, string>; packages: string[]; builtins: string[] } {
+  const files: Record<string, string> = {}, packages = new Set<string>(), builtins = new Set<string>();
+  const norm = (p: string) => { const out: string[] = []; for (const part of p.split('/')) { if (part === '..') out.pop(); else if (part && part !== '.') out.push(part); } return out.join('/'); };
+  const resolve = (from: string, spec: string): string => {
+    const base = spec.startsWith('~/') ? 'src/' + spec.slice(2) : norm(from.split('/').slice(0, -1).join('/') + '/' + spec);
+    for (const c of [base, base + '.ts', base + '.tsx', base + '.js', base + '/index.ts', base + '/index.tsx']) if (/\.(ts|tsx|js|mjs|json)$/.test(c) && read(c) !== null) return c;
+    throw new Error(`${from}: cannot resolve '${spec}'`);
+  };
+  const todo = [entry];
+  while (todo.length) {
+    const f = todo.pop()!;
+    if (f in files) continue;
+    const text = read(f);
+    if (text === null) throw new Error(`no file ${f}`);
+    files[f] = text;
+    const specs = [...text.matchAll(/(?:\bfrom\s*|\bimport\s*\(?\s*|\brequire\s*\(\s*)['"]([^'"]+)['"]/g)].map((x) => x[1]);
+    for (const spec of specs) {
+      if (spec.startsWith('.') || spec.startsWith('~/')) todo.push(resolve(f, spec));
+      else if (spec.startsWith('node:')) builtins.add(spec);
+      else packages.add(spec.startsWith('@') ? spec.split('/').slice(0, 2).join('/') : spec.split('/')[0]);
+    }
+  }
+  const sorted: Record<string, string> = {};
+  for (const k of Object.keys(files).sort()) sorted[k] = files[k];
+  return { files: sorted, packages: [...packages].sort(), builtins: [...builtins].sort() };
+}
 
 const book = (blocks: string[], note?: string): Source => ({ book: blocks, note });
 const invented = (note?: string): Source => ({ invented: true, note });
@@ -40,7 +69,7 @@ const invented = (note?: string): Source => ({ invented: true, note });
  * page (draft 1) and docs/minpentai/agents.md mark them. Block ids are chapter-block (c4-b84).
  */
 export const RULES_V1: Rule[] = [
-  { id: 'board-size', text: 'The board is 15 × 10 squares.', source: invented() },
+  { id: 'board-size', text: 'The board is 15 x 10 squares.', source: invented() },
   { id: 'board-edges', text: 'The board has edges and corners.', source: book(['c4-b113', 'c7-b81']) },
   { id: 'edge-bounce', text: 'A glider that would leave the board turns back on that side instead, and stays put for that step.', source: invented() },
   { id: 'starts', text: 'Each side starts with 2 towers (Cyan at (1, 2) and (1, 7), Amber at (13, 2) and (13, 7)) and there are six rocks, all mirrored.', source: invented('Starting in your own corner is from the book (c4-b94).') },
@@ -58,7 +87,7 @@ export const RULES_V1: Rule[] = [
   { id: 'simultaneous', text: 'Both sides place at the same time without seeing each other\'s choices; two pieces placed on one square cancel each other.', source: invented() },
   { id: 'sight', text: 'You see every square within 3 of one of your towers; the rest is dark.', source: book(['c4-b93'], '3 is invented.') },
   { id: 'last-seen', text: 'Rocks are shown everywhere; an opponent\'s tower you cannot see is shown where you last saw it.', source: invented() },
-  { id: 'end-towers', text: 'A side with no towers left loses; both at the same step is a draw.', source: book(['c4-b136', 'c4-b137', 'c4-b138']) },
+  { id: 'end-towers', text: 'A side with no towers left loses; both at the same step is a draw.', source: book(['c4-b136', 'c4-b138']) },
   { id: 'end-time', text: 'At step 96 the match stops: most towers wins, equal is a draw.', source: invented() },
   { id: 'resign', text: 'You may resign; it counts as a loss.', source: book(['c4-b141', 'c10-b164']) },
   { id: 'new-rule', text: 'One of four new rules is drawn from the seed at the start of every match, and both players see it.', source: book(['c4-b84'], 'The four rules are invented.') },
@@ -82,27 +111,23 @@ export const PLAYERS_V1 = [
   { level: 5, name: 'Planner' },
 ];
 
-/** The text of `export function name(…) {…}` in a source file (by brace matching). */
-export function functionSource(src: string, name: string): string {
-  const at = src.indexOf(`export function ${name}(`);
-  if (at < 0) throw new Error(`no function ${name}`);
-  let i = src.indexOf('{', src.indexOf(')', at)), depth = 0;
-  for (; i < src.length; i++) {
-    if (src[i] === '{') depth++;
-    else if (src[i] === '}' && --depth === 0) return src.slice(at, i + 1);
-  }
-  throw new Error(`unbalanced function ${name}`);
+export interface ManifestInput {
+  /** The full 40-character commit the closure is read from. */
+  commit: string;
+  /** replay.ts's import closure at that commit: path → file text. */
+  files: Record<string, string>;
+  /** Exact versions (package-lock.json at that commit) of every npm package in the closure. */
+  packages: Record<string, string>;
 }
 
-export interface ManifestInput {
-  commit: string;
-  files: Record<string, string>; // path → file text at that commit
-}
+/** The hash of the whole closure: every file's hash and every package's version. */
+export const closureHash = (files: Record<string, string>, packages: Record<string, string>) =>
+  keccak256(toBytes(canonical({ files: Object.fromEntries(Object.entries(files).map(([f, t]) => [f, hashText(t)])), packages })));
 
 /** The solo v1 manifest for the engine at `commit`. */
-export function soloManifestV1({ commit, files }: ManifestInput) {
-  const game = files['src/lib/minpentai/play-game/game.ts'];
-  const botPlanHash = hashText(functionSource(game, 'botPlan'));
+export function soloManifestV1({ commit, files, packages }: ManifestInput) {
+  if (!/^[0-9a-f]{40}$/.test(commit)) throw new Error(`pin a full 40-character commit, not ${commit}`);
+  const closure = closureHash(files, packages);
   return {
     format: 'snowmoon.minpentai.ruleset/1',
     name: 'Minpentai Play, solo against the computer, v1',
@@ -111,8 +136,13 @@ export function soloManifestV1({ commit, files }: ManifestInput) {
     engine: {
       repository: 'https://github.com/We-Are-Lum/snowmoon',
       commit,
-      files: Object.fromEntries(ENGINE_FILES.map((f) => [f, hashText(files[f])])),
-      replay: 'replaySolo in src/lib/minpentai/onchain/replay.ts',
+      entry: REPLAY_ENTRY,
+      replay: 'replaySolo',
+      // replay.ts's whole import closure at that commit (type-only imports included), and the exact
+      // version of every npm package in it; closureHash covers both.
+      files: Object.fromEntries(Object.entries(files).map(([f, t]) => [f, hashText(t)])),
+      packages,
+      closureHash: closure,
     },
     board: {
       width: 15, height: 10, maxSteps: 96,
@@ -125,8 +155,8 @@ export function soloManifestV1({ commit, files }: ManifestInput) {
     computerPlayers: PLAYERS_V1.map((p) => ({
       ...p,
       code: { file: 'src/lib/minpentai/play-game/game.ts', function: 'botPlan', level: p.level },
-      // One function plays every level; a player's hash is that function's source with its level.
-      codeHash: keccak256(toBytes(`${botPlanHash}:level:${p.level}`)),
+      // One function (botPlan) plays every level, inside the closure; a player is the closure and its level.
+      codeHash: keccak256(toBytes(`${closure}:level:${p.level}`)),
       source: invented(p.level ? 'Behaviours are invented; the book has bots too (c7-b14).' : 'Practice: the same code at its simplest level.'),
     })),
     sides: { person: 'C', computer: 'A' },
