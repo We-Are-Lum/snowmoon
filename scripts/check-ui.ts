@@ -85,8 +85,9 @@ const MINPENTAI_HOOD = 'lesson=8';
 /** Lesson 1's title (src/lib/minpentai/learn-text.ts, lessons.goal). */
 const MINPENTAI_LESSON_1 = 'Keep your towers. Destroy theirs.';
 /** The owner's exact sentences (2026-10-20, before posting the tutorial link), and where each must appear. */
-const OWNER_BROADCAST = "The full game as the book describes it: four players on a 48×32 board. What you'll play here is a simpler two-player version.";
-const OWNER_TEACH = "Shown here to teach. In a real match, you won't see this.";
+const OWNER_BROADCAST = "The full game, as the book describes it, has four players. What you'll play here is a simpler two-player version.";
+const OWNER_TEACH = "A ring marks each tower lost, square broken and crash, even in the dark. Shown here to teach. In a real match, you'll only see the hits your towers light.";
+const OWNER_AMBER = "Shown here to teach. In a real match, you'll only see outlines where they start.";
 const OWNER_CELLS = 'In the book, pieces are made of cells. Here you play with whole squares.';
 
 const failures: string[] = [];
@@ -1379,12 +1380,12 @@ try {
         if (q === MINPENTAI_HOOD && !(await shown('.ml-text')).startsWith(OWNER_CELLS)) fail(`/minpentai?${q} (${scheme}): Under the hood does not open with the owner's cells sentence`);
         if (q === 'lesson=2' && !(await page.locator('.ml-cells').isVisible())) fail(`/minpentai?${q} (${scheme}): the CELLS button is missing`);
         if (q === 'mode=practice') {
-          if (!(await shown('.ml-text')).includes('Amber’s towers mirror yours') || !(await shown('.ml-text')).includes(OWNER_TEACH)) fail(`/minpentai?${q} (${scheme}): the setup text does not say "${OWNER_TEACH}" after Amber's towers`);
+          if (!(await shown('.ml-text')).includes('Amber’s towers mirror yours') || !(await shown('.ml-text')).includes(OWNER_AMBER)) fail(`/minpentai?${q} (${scheme}): the setup text does not say "${OWNER_AMBER}" after Amber's towers`);
           // While it runs: hits in the dark, the owner's sentence, and the pause the big button really gives.
           await page.locator('.ml-main').click();
           await page.waitForTimeout(300);
           const run = await shown('.ml-text');
-          if (!run.includes('even in the dark') || !run.includes(OWNER_TEACH) || !run.includes('Pause any time.')) fail(`/minpentai?${q} (${scheme}): the running text is "${run}"`);
+          if (run.includes('every hit') || !run.includes(OWNER_TEACH) || !run.includes('Pause any time.')) fail(`/minpentai?${q} (${scheme}): the running text is "${run}"`);
           if (((await page.locator('.ml-main').textContent()) ?? '').trim() !== 'PAUSE') fail(`/minpentai?${q} (${scheme}): the running match's button is not PAUSE`);
           await page.locator('.ml-main').click();
           if (((await page.locator('.ml-main').textContent()) ?? '').trim() !== 'RESUME') fail(`/minpentai?${q} (${scheme}): PAUSE does not pause the practice match`);

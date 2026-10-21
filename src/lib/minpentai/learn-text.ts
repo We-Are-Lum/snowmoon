@@ -82,9 +82,12 @@ export const LEARN_TEXT = {
     diffHref: '/minpentai/rules#lessons-vs-play',
   },
   /** Owner's words (2026-10-20), on every watch screen: the broadcast is not the game played here. */
-  broadcastNote: 'The full game as the book describes it: four players on a 48×32 board. What you\'ll play here is a simpler two-player version.',
+  broadcastNote: 'The full game, as the book describes it, has four players. What you\'ll play here is a simpler two-player version.',
   /** Owner's words (2026-10-20), after what the practice match shows only to teach (Amber's towers in setup, hits in the dark). */
-  teachOnly: 'Shown here to teach. In a real match, you won\'t see this.',
+  /** The owner's sentence for hits shown in the dark (2026-10-20). */
+  teachHits: 'Shown here to teach. In a real match, you\'ll only see the hits your towers light.',
+  /** The owner's sentence for Amber's towers in setup (2026-10-20). */
+  teachAmber: 'Shown here to teach. In a real match, you\'ll only see outlines where they start.',
   /** Owner's words (2026-10-20): the book's pieces are cell patterns (c4-b5's figure; docs/minpentai-rules.md §1.1). */
   cellsNote: 'In the book, pieces are made of cells. Here you play with whole squares.',
 
@@ -376,11 +379,11 @@ export const LEARN_TEXT = {
   },
   practice: {
     titles: { win: 'You win', lose: 'Amber wins', draw: 'A draw' },
-    // The owner's teachOnly sentence after the towers (2026-10-20).
-    act0: 'Amber’s towers mirror yours on the far side. You see them only until this turn ends. Shown here to teach. In a real match, you won\'t see this. Spend 8 points in the lit area, then end your turn.',
+    // The owner's teachAmber sentence after the towers (2026-10-20).
+    act0: 'Amber’s towers mirror yours on the far side. You see them only until this turn ends. Shown here to teach. In a real match, you\'ll only see outlines where they start. Spend 8 points in the lit area, then end your turn.',
     act: 'Your turn. Amber’s towers are where they started. Spend 8 points, then end your turn.',
-    // "A ring marks every hit, even in the dark." is a draft (2026-10-20); then the owner's teachOnly sentence.
-    run: 'The match runs by itself until your next turn. Pause any time. A ring marks every hit, even in the dark. Shown here to teach. In a real match, you won\'t see this.',
+    // The owner's words (2026-10-20): what the ring marks (a glider that only cracks a square gets none), then teachHits.
+    run: 'The match runs by itself until your next turn. Pause any time. A ring marks each tower lost, square broken and crash, even in the dark. Shown here to teach. In a real match, you\'ll only see the hits your towers light.',
     over: { win: 'Amber is out of towers, or had fewer when time ran out.', lose: 'Amber outlasted you. Squares in your towers’ rows are your best defence.', draw: 'Same number of towers when time ran out.' },
     rule: (t: string) => `New rule this match: ${t}`,
     rules: { diag: 'Gliders may also fly diagonally.', cost: 'Gliders cost 3 points.', fog: 'You see only 2 squares around your towers.', every: 'Turns to act come every 8 steps.' },
