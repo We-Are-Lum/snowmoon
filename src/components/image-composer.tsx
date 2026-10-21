@@ -168,6 +168,8 @@ function Sheet({ initial, onClose }: { initial: AddImageDetail; onClose: () => v
   const signedIn = auth.kind === 'signed-in' || wallet !== null;
   const [range, setRange] = useState(initial);
   const [status, setStatus] = useState<Status | null>(null);
+  /** On the website, signed out, with wallet sign-in open: the wallet button comes first and is the solid one. */
+  const walletFirst = auth.kind === 'signed-out' && !auth.inApp && !!status?.walletSignIn;
   const [prompt, setPrompt] = useState('');
   // The project's starting style is chosen unless the person picks another or None (owner, 2026-10-10:
   // without it the model draws realistic pictures). undefined = not picked yet; a restored draft keeps its own.
@@ -386,9 +388,10 @@ function Sheet({ initial, onClose }: { initial: AddImageDetail; onClose: () => v
               ) : !signedIn ? (
                 <div className="ic-gate">
                   <p>Sign in to make an image.</p>
-                  {/* On the website the wallet comes first, Farcaster second (owner, 2026-10-16). */}
-                  {auth.kind === 'signed-out' && !auth.inApp && status?.walletSignIn && <WalletSignInButton />}
-                  <SignInButton />
+                  {/* On the website the wallet comes first and is the solid button, Farcaster second and outlined
+                      (owner, 2026-10-16 and 2026-10-21). In the Farcaster app there is no wallet button: Farcaster stays as it was. */}
+                  {walletFirst && <WalletSignInButton className="ic-primary" />}
+                  <SignInButton className={walletFirst ? 'ic-secondary' : undefined} />
                   {auth.kind === 'signed-out' && !auth.inApp && <p className="ic-note">{W.signIn.farcasterNote(IMAGES.generationsPerDay)}</p>}
                 </div>
               ) : !status ? (
