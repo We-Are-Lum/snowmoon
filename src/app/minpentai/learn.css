@@ -57,6 +57,9 @@ html.ml-in-app .ml-learn-bar .ml-exit { display: flex; }
       width: min(100%, calc((100cqh - 45px) * 1.5));
     }
     html:not(.ml-in-app) .ml-learn .ml-board { width: 100%; }
+    /* The lesson board with each square a whole number of screen pixels, drawn at that size (learn.tsx, learn-draw.ts;
+       2026-10-16), so no square is smoothed: a few pixels under the stage's width at most, centred on its black. */
+    html:not(.ml-in-app) .ml-learn .ml-stage[data-crisp] .ml-board { width: var(--ml-bw); height: var(--ml-bh); aspect-ratio: auto; max-height: none; }
     html:not(.ml-in-app) .ml-learn .ml-comment { font-size: 14px; }
     html:not(.ml-in-app) .ml-learn .ml-tools { grid-area: tools; padding-top: 14px; }
     html:not(.ml-in-app) .ml-learn .ml-palette { grid-area: palette; }
@@ -258,3 +261,9 @@ html.ml-in-app .ml-foot { padding-bottom: max(14px, env(safe-area-inset-bottom),
 .mr-tools button[aria-pressed='true'] { background: var(--btn); color: var(--btn-ink); }
 .mr-tools button:disabled { color: var(--muted); cursor: default; }
 .mr :is(button, a):focus-visible { outline: 2px solid #46D7E8; outline-offset: 2px; }
+
+/* Play takes the page's full width from 768px, not the reading measure (owner, 2026-10-16: "much bigger"); play.css's
+   frame fills it. Learn's desktop layout is the 2026-10-20 one above. */
+@media (min-width: 768px) {
+  .page.minpentai:has(.mp-play) { max-width: none; }
+}

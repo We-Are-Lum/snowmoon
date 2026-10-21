@@ -1466,11 +1466,11 @@ try {
         await checkFloors(page, `${path} @${width}`, scheme);
         const wide = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth);
         if (wide > 1) fail(`${path} @${width} (${scheme}): scrolls sideways by ${wide}px`);
-        // Learn's desktop layout (2026-10-20) widens /minpentai's page; its reading column is the lesson text beside the stage.
-        const measure = await page.evaluate(() => {
-          const el = (document.querySelector('main .ml-learn .ml-body') ?? document.querySelector('main .page.chapter, main .page')) as HTMLElement | null;
+        // Learn's desktop layout (2026-10-20) and Play's widen /minpentai's page; its reading column is the lesson text beside the stage, or Play's panel.
+        const measure = await page.evaluate((game) => {
+          const el = ((game ? document.querySelector('main .ml-learn .ml-body, main .mp-panel') : null) ?? document.querySelector('main .page.chapter, main .page')) as HTMLElement | null;
           return el ? el.getBoundingClientRect().width : 0;
-        });
+        }, path === '/minpentai');
         if (measure > 700) fail(`${path} @${width}: the reading column is ${Math.round(measure)}px wide`);
         // Home is Design's wide page (no .page column): its hero text keeps Design's 780px measure.
         if (path === '/') {
