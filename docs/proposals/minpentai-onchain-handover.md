@@ -25,6 +25,12 @@ The owner's rules for this work:
 3. **Rebuild `solo-v1.json`** (`build-minpentai-ruleset.ts`) at the merged commit. The engine commit, the file hashes, `closureHash`, the six `codeHash`es and `computerPlayers[].code.file` (now `src/lib/minpentai/versions/engine.ts`) all change, so **the ruleset ID changes** from 0x9107a46f…dd82. Nothing is registered or deployed (onchain-v1.md: local anvil only), so this is safe now and not after deploy.
 4. **Rebuild the fixtures:** `contracts/minpentai/fixtures/onchain.json` (`build-minpentai-onchain-fixtures.ts`). `test-minpentai-onchain-{ruleset,encoding,sandbox,verifier}.ts` and `minpentai-onchain-gas.ts` read the ID from `solo-v1.json` and follow it. `RulesetRegistry.t.sol`'s `SOLO_V1` constant is an arbitrary ID and can stay.
 
+## 1b. What players see (owner, 2026-10-21, after a phone test)
+
+An opponent's tower out of sight is now drawn **dimmed** where it was last seen: its starting square from the start, moving only when seen again. Before, it was a dashed "?" outline. Rocks are shown everywhere, as before. This is a drawing change only (`play-game/board.ts`); the engine and every replay are unaffected. When `solo-v1.json` is rebuilt, update these rule texts in `RULES_V1` (`onchain/ruleset.ts`):
+- `sight`, edition: "3 squares, not thirty (2 under \"sight2\"). Rocks are shown everywhere; an opponent's tower you cannot see is shown dimmed where you last saw it (its starting square until you first see it)."
+- `last-seen`, text: "Rocks are shown everywhere; an opponent's tower you cannot see is shown dimmed where you last saw it, at its starting square until you first see it."
+
 ## 2. Encoding format 4 (replaces format 3 before the first deploy)
 
 **Why.** Format 3 packs a square as `y*15+x` in one byte (at most 256 squares), refuses end steps above 96, keeps square hits only as "1 or 2+", and leaves rocks out because "rocks never change". Versions allow:

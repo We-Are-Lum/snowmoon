@@ -49,7 +49,7 @@ export const SETTINGS = {
   sight: {
     text: 'You see every square within this many of your towers', min: 1, max: 30, base: 3,
     book: { says: 'were a copy of it anywhere on the board, would allow him to see everything within thirty squares', blocks: ['c4-b93'] },
-    edition: '3, not thirty; counting diagonals.',
+    edition: '3, not thirty; counting diagonals. Rocks are shown everywhere; an opponent\'s tower you cannot see is shown dimmed where you last saw it (its starting square until you first see it).',
   },
   reach: {
     text: 'You may place within this many squares of a tower you had when the turn began', min: 1, max: 30, base: 3,

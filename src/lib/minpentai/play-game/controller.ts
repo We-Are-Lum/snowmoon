@@ -373,7 +373,7 @@ export class PlayController {
       v.hasBack = true; v.hPad = '0'; v.hBack = m.mode === 'ladder' ? go({ scr: 'ladder' }) : go({ scr: 'home', tab: 'play' });
       v.stDesc = m.mode === 'practice' ? 'A simple rival. It fires gliders at towers it has seen and never defends. Nothing is saved.' : RUNGS[m.rung!]!.d + ' It sees only what its towers light.';
       const rec = prog.rec[m.rung!] || { tries: 0 };
-      v.stNote = m.mode === 'practice' ? 'The outlines on the right are where Amber starts. Starts are mirrored, so you know them.' : ruleNote(m.rule, m.rung!, m.s.directions === 8) + (rec.tries ? `Tries so far: ${rec.tries}.` : 'Win once to open the next rung.');
+      v.stNote = m.mode === 'practice' ? 'The dimmed towers on the right are where Amber starts. Starts are mirrored, so you know them.' : ruleNote(m.rule, m.rung!, m.s.directions === 8) + (rec.tries ? `Tries so far: ${rec.tries}.` : 'Win once to open the next rung.');
     }
     if (scr === 'match' && m) {
       const e = m.e, w = m.w, act = m.phase === 'act', vis = e.lit(w, 'C', m.s.sight), pend = act ? m.pend.C : [], dots = new Set<number>();
@@ -389,7 +389,7 @@ export class PlayController {
       const order: [number, number][] = dirs === D8 ? [[-1, -1], [0, -1], [1, -1], [-1, 0], [1, 0], [-1, 1], [0, 1], [1, 1]] : [[-1, 0], [0, -1], [0, 1], [1, 0]];
       v.arrows = order.map((d) => ({ t: AR[d[0] + ',' + d[1]], d, on: s.dir[0] === d[0] && s.dir[1] === d[1], click: () => this.setDir(d) }));
       const first = w.step === 0, rulesLine = m.drawn ? `NEW RULE THIS MATCH: ${m.drawn.text.toUpperCase().replace(/\.$/, '')}` : 'NO NEW RULE THIS MATCH';
-      v.msg = first ? `Setup. Spend ${budget} points in the lit area near your towers. Nothing moves until you end your turn; then both sides' pieces appear at once.` : (seen ? 'Your turn. ' : "Your turn. You can't see Amber's towers now; the outlines are where you last saw them. ") + `Spend ${budget} points in the lit area, then end your turn. Tap a piece you placed to take it back.`;
+      v.msg = first ? `Setup. Spend ${budget} points in the lit area near your towers. Nothing moves until you end your turn; then both sides' pieces appear at once.` : (seen ? 'Your turn. ' : "Your turn. You can't see Amber's towers now; the dimmed ones are where you last saw them. ") + `Spend ${budget} points in the lit area, then end your turn. Tap a piece you placed to take it back.`;
       if (pend.length && !first) v.msg = `Placed: ${pend.map((p) => (p.t === 'g' ? 'glider' : p.t === 's' ? 'square' : 'tower')).join(', ')}. The dotted line is your glider's path until it leaves your sight. Tap a piece to take it back.`;
       v.ruleLine = rulesLine;
       v.ptsTxt = `${left} OF ${budget} PTS LEFT`; v.ptsShort = `${left} PTS`; v.endLabel = 'END TURN'; v.endTurn = () => this.endTurn();

@@ -10,7 +10,7 @@
  *
  * The server holds the whole match. A browser only sends placements on its own turn to act and
  * only ever receives what its towers light (rules page §5): its pieces, the rocks, anything within
- * sight, and "last seen" outlines. Both players act at once and in secret (rules page §4).
+ * sight, and "last seen" towers (dimmed). Both players act at once and in secret (rules page §4).
  */
 import type { Piece, RuleId, Side } from './game';
 
