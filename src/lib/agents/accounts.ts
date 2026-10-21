@@ -1,4 +1,5 @@
 import 'server-only';
+import { AGENT_WORDING } from './wording';
 import { isAddress, recoverMessageAddress, isAddressEqual } from 'viem';
 import { AGENTS } from '../config';
 import { handleFor } from '../adaptation-pages';
@@ -46,8 +47,8 @@ export async function agentsOf(person: number): Promise<AgentRow[]> {
  * only its sha256 is stored, and it is never logged.
  */
 export async function createKey(person: number, name: string, capUsd: number): Promise<{ id: string; key: string; expiresAt: string; spendCapUsd: number }> {
-  const clean = name.replace(/[\u0000-\u001f<>]/g, '').trim().slice(0, 60);
-  if (!clean) throw new Error('Give the key a name, such as the app it’s for.');
+  // The name is optional (owner, 2026-10-20: key creation under 5 taps); a key made without one is "Agent key".
+  const clean = name.replace(/[\u0000-\u001f<>]/g, '').trim().slice(0, 60) || AGENT_WORDING.you.keyDefaultName;
   if (!Number.isFinite(capUsd) || capUsd < 0 || capUsd > AGENTS.key.capUsd.max) throw new Error(`The spend cap is from $0 to $${AGENTS.key.capUsd.max}.`);
   const cap = Math.round(capUsd * 100) / 100;
   const s = sql();

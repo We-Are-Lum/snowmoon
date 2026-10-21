@@ -63,7 +63,8 @@ export const AGENT_WORDING = {
     // A personal agent key (DRAFT wording, owner's reread).
     keyTitle: 'Make an agent key',
     keyNote: 'For an AI app that connects with a key instead of a sign-in (Muse, for example). The key lets it read and draft for you; it can’t publish, and it spends only what you approve, up to the cap. It lasts 30 days. Disconnect ends it at once.',
-    keyName: 'Which app is it for?',
+    keyName: 'Which app is it for? (optional)',
+    keyDefaultName: 'Agent key',
     keyCap: 'Spend cap, in US dollars',
     keyMake: 'Make the key',
     keyShown: 'Your key, shown only this once. Put it in the app’s key or secret setting, never in a chat message. Point the app at snowmoon.party/agents.md.',

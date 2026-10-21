@@ -54,7 +54,7 @@ export function AgentKeyMaker({ onMade }: { onMade: () => void }) {
           <AgentKeyField id="agent-key-name" kind="name" label={W.keyName} value={name} onChange={setName} />
           <AgentKeyField id="agent-key-cap" kind="cap" label={W.keyCap} value={cap} onChange={setCap} />
           {error && <p role="alert" className="you-note">{error}</p>}
-          <button type="button" className="ic-secondary" disabled={busy || !name.trim() || cap === ''} onClick={() => void make()}>{W.keyMake}</button>
+          <button type="button" className="ic-secondary" disabled={busy || cap === ''} onClick={() => void make()}>{W.keyMake}</button>
         </>
       )}
     </details>
