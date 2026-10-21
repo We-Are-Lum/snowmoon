@@ -186,7 +186,7 @@ These are deliberately loose. They catch broken versions (no gliders affordable,
 | 1 | Gliders wrap around the edges, like Pac-Man | playable | edges wrap | |
 | 2 | Closer to the book: see thirty squares | playable | sight 30, **book** c4-b93 | Took 2 attempts. In a diagnostic re-run, the first quote wasn't word for word; refused, fixed on retry |
 | 3 | Brutal fog: see one square | playable | sight 1 | |
-| 4 | *Les carrés devraient résister à trois coups* | playable | squareHits 3 | French in, exact words kept as `é` |
+| 4 | *Les carrés devraient résister à trois coups* | playable | squareHits 3 | French in, exact words kept (é as `\u00e9`) |
 | 5 | Rocks make new gliders, like the book | playable | rocks split, **book** c4-b108 | Took 3 attempts (re-run: a misquote refused, then fixed). The computer barely notices (2%) |
 | 6 | Your own gliders can destroy your own towers | playable | ownTower destroy | Marked invented, though c4-b109 supports it |
 | 7 | Huge board 25 × 16, longer matches | playable | 25 × 16, maxSteps 240 | 55% draws (limit 60%); playtest 122 CPU-s |
