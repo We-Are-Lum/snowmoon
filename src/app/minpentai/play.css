@@ -192,6 +192,7 @@ html:has(.mp-play.is-desk.is-fs) :is(.rail, .panel, .panel-reopen) { display: no
 .mp-rules-diff ul { padding-left: 1.2em; display: flex; flex-direction: column; gap: 6px; }
 .mp-rules-diff strong { font-weight: 600; color: var(--ink); }
 .mp-rules-diff .ml-tag.info-label { min-height: 44px; }
+.mp-piece { display: block; pointer-events: none; }
 
 /* The build-on kit (/minpentai/build, 2026-10-20): the rules table and the book's passages, in the rules page's column. */
 .mp-kit { font-family: var(--reading); color: var(--ink); overflow-wrap: anywhere; }

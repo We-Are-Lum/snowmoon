@@ -223,7 +223,7 @@ function Nav({ items, path, current }: { items: ReturnType<typeof navItems>; pat
     router.push(`/glossary?from=${from}`);
   };
   const isActive = (it: NavItem) =>
-    it.key === 'read' ? current > 0 : it.key === 'listen' ? false : path.startsWith(it.href.split('#')[0]);
+    it.key === 'read' ? current > 0 : it.key === 'listen' || it.key === 'mp-learn' || it.key === 'mp-play' ? false : path.startsWith(it.href.split('#')[0]);
   const link = (it: NavItem) => (
     <Link href={it.href} aria-current={isActive(it) ? 'page' : undefined} onClick={it.key === 'glossary' ? toGlossary : undefined}>
       <span>{it.label}</span>

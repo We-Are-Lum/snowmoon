@@ -106,6 +106,10 @@ export function Learn({ start, onScreen, onFree, free = false }: { start: number
   }, []);
   const sceneRef = useRef<Scene | null>(null);
   const [noGL, setNoGL] = useState(false);
+  /** The lesson board canvas's width in pixels (its height is two thirds): 780, or 15 whole-pixel squares on desktop. */
+  const [boardPx, setBoardPx] = useState(780);
+  // A new canvas size clears it: draw it again.
+  useEffect(() => { if (ctl.L) ctl.L.dirty = true; }, [boardPx, ctl]);
   const [cursor, setCursor] = useState<[number, number]>([4, 5]);
   const [focused, setFocused] = useState(false);
   const draw = useRef({ cursor: null as [number, number] | null });
@@ -140,10 +144,22 @@ export function Learn({ start, onScreen, onFree, free = false }: { start: number
   }, [wantsGL, noGL]);
   useEffect(() => () => { sceneRef.current?.dispose(); sceneRef.current = null; }, []);
   useEffect(() => {
-    const el = stageRef.current;
-    if (!el || typeof ResizeObserver === 'undefined') return;
-    const ro = new ResizeObserver(() => sceneRef.current?.resize());
+    const host = stageRef.current, el = host?.closest<HTMLElement>('.ml-stage');
+    if (!host || !el || typeof ResizeObserver === 'undefined') return;
+    // Desktop (learn.css): the lesson board as large as the stage allows, each of its 15 × 10 squares a whole
+    // number of screen pixels, drawn at that size (learn-draw.ts), so no edge is smoothed. The phone keeps 780 × 520.
+    const crisp = () => {
+      const dpr = window.devicePixelRatio || 1, sq = Math.floor(Math.min((el.clientWidth * dpr) / PW, (el.clientHeight * dpr) / PH));
+      const desk = window.matchMedia('(min-width: 768px)').matches && !document.documentElement.classList.contains('ml-in-app');
+      if (!desk || sq < 26) { delete el.dataset.crisp; setBoardPx(780); return; }
+      el.dataset.crisp = '';
+      el.style.setProperty('--ml-bw', `${(PW * sq) / dpr}px`);
+      el.style.setProperty('--ml-bh', `${(PH * sq) / dpr}px`);
+      setBoardPx(PW * sq);
+    };
+    const ro = new ResizeObserver(() => { sceneRef.current?.resize(); crisp(); });
     ro.observe(el);
+    crisp();
     return () => ro.disconnect();
   }, []);
 
@@ -263,8 +279,8 @@ export function Learn({ start, onScreen, onFree, free = false }: { start: number
               <canvas
                 ref={boardRef}
                 className={v.boardPlaceable ? 'ml-board-canvas is-placing' : 'ml-board-canvas'}
-                width={780}
-                height={520}
+                width={boardPx}
+                height={(boardPx * 2) / 3}
                 role={v.boardPlaceable ? 'application' : 'img'}
                 aria-roledescription={v.boardPlaceable ? 'board' : undefined}
                 aria-label={v.stageLabel + (v.boardPlaceable ? ' ' + T.board.keys + ' ' + cursorWords() : '')}

@@ -186,6 +186,8 @@ export const AGENTS = {
   linkDays: 90,
   /** Per agent, per UTC day (and a short-term brake). */
   limits: { drafts: 50, notes: 20, images: 50, imagesPerMinute: 5, readsPerMinute: 60 },
+  /** Higher daily counts for these people's agents (owner, 2026-10-21: "Raise my own agent's daily limits"); everyone else keeps `limits`. The per-minute brakes stay. */
+  limitsFor: { 6786: { drafts: 500, notes: 200, images: 150 } } as Record<number, { drafts: number; notes: number; images: number }>,
   /** All of one person's agents together, per UTC day. */
   perPersonImages: 150,
   /** Everyone's agents together, per UTC day: a brake. */

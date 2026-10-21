@@ -30,7 +30,16 @@ export function navItems(last: number, adaptations: number): NavItem[] {
     },
     { key: 'assistant', label: 'Assistant', href: '/assistant' },
     { key: 'adaptations', label: 'Adaptations', href: '/adaptations', meta: adaptations ? 'Watch · remix' : undefined },
-    { key: 'minpentai', label: 'Minpentai', href: '/minpentai', meta: 'Learn · play' },
+    {
+      key: 'minpentai',
+      label: 'Minpentai',
+      href: '/minpentai?mode=learn',
+      // Learn opens the course where you left it, or its first step; Play opens free play (owner, 2026-10-16).
+      children: [
+        { key: 'mp-learn', label: 'Learn', href: '/minpentai?mode=learn' },
+        { key: 'mp-play', label: 'Play', href: '/minpentai?mode=free' },
+      ],
+    },
     { key: 'pictures', label: 'Pictures', href: '/images', meta: 'Trial' },
   ];
   // Adaptations are out of view for now (ADAPTATIONS.visible).

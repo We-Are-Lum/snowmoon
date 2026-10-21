@@ -109,6 +109,9 @@ export async function issueTokens(s: Sql, agentId: string, resource: string, wit
 
 export type Counted = 'drafts' | 'notes' | 'images' | 'reads';
 
+/** An agent's daily counts: its person's own (AGENTS.limitsFor) if they have them, else the defaults. */
+export const dailyLimits = (person: number) => ({ ...AGENTS.limits, ...(AGENTS.limitsFor[person] ?? {}) });
+
 /**
  * Counts one more of `what` for the agent today and says whether it is within its limits. Images also
  * have a per-minute brake, a per-person total across all their agents, and a site-wide brake.
@@ -121,7 +124,7 @@ export async function countOk(agent: Agent, what: Counted): Promise<{ ok: true }
       on conflict (agent_id, day, what) do update set n = studio.agent_counts.n + 1 returning n`;
     return r.n > AGENTS.limits.readsPerMinute ? { ok: false, why: `at most ${AGENTS.limits.readsPerMinute} reads a minute` } : { ok: true };
   }
-  const limit = AGENTS.limits[what];
+  const limit = dailyLimits(agent.person)[what];
   if (what === 'images') {
     const [m] = await s<{ n: number }[]>`
       insert into studio.agent_counts (agent_id, day, what, n) values (${agent.id}, (now() at time zone 'utc')::date, ${'images@' + new Date().toISOString().slice(0, 16)}, 1)

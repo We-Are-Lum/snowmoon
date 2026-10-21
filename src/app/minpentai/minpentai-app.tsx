@@ -9,7 +9,8 @@
  * Addresses:
  * - ?lesson=1…7 a lesson, ?lesson=8 Under the hood (owner, 2026-10-20: "?lesson=1 open lesson 1 directly");
  *   ?watch=1…8 a screen of the broadcast; ?mode=practice Learn's practice match (v3). The old numbering,
- *   ?lesson=9…17 for the lessons on, still opens the same screens (9 is lesson 1);
+ *   ?lesson=9…17 for the lessons on, still opens the same screens (9 is lesson 1); ?mode=learn Learn where this
+ *   device left it, or its first step (the nav's Learn and the home page; owner, 2026-10-16);
  * - ?mode=play the Play hub; ?mode=free free play (also #fp=… boards); ?mode=ladder the ladder;
  *   ?mode=person or ?invite=… one-on-one;
  * - ?s=… (an old sandbox board) opens /minpentai/rule, the book's rule on the figure's board.
@@ -25,6 +26,16 @@ import { Play } from './play';
 
 /** Set once Learn is finished or skipped; later bare visits open Play. (The sandbox's key, kept.) */
 const DONE_KEY = 'minpentai-tutorial-done';
+/** The Learn screen this device last showed (0-based), so Learn opens where it was left. */
+const STEP_KEY = 'minpentai-learn-step';
+function reachedStep(): number {
+  try {
+    const n = Number(window.localStorage.getItem(STEP_KEY));
+    return Number.isInteger(n) && n >= 0 && n < LEARN_SCREENS ? n : 0;
+  } catch {
+    return 0;
+  }
+}
 
 type PlayStart = 'home' | 'free' | 'ladder' | 'person';
 type Mode = { kind: 'learn'; screen: number } | { kind: 'play'; start: PlayStart };
@@ -68,6 +79,7 @@ export function MinpentaiApp() {
     const m = q.get('mode');
     if (screen !== null) setMode({ kind: 'learn', screen });
     else if (m === 'practice') setMode({ kind: 'learn', screen: PRACTICE_SCREEN });
+    else if (m === 'learn') setMode({ kind: 'learn', screen: reachedStep() });
     else if (q.get('invite') || m === 'person') setMode({ kind: 'play', start: 'person' });
     else if (m === 'free' || window.location.hash.startsWith('#fp=')) setMode({ kind: 'play', start: 'free' });
     else if (m === 'ladder') setMode({ kind: 'play', start: 'ladder' });
@@ -92,7 +104,10 @@ export function MinpentaiApp() {
     setVisit((v) => v + 1);
     setQuery({ lesson: '1' });
   };
-  const onScreen = (i: number) => setQuery(addressOf(i));
+  const onScreen = (i: number) => {
+    try { window.localStorage.setItem(STEP_KEY, String(i)); } catch { /* Learn starts at its first step next time */ }
+    setQuery(addressOf(i));
+  };
 
   // Until the address has been read, an empty frame: neither must start on the wrong screen.
   if (!mode || !visit) return <section className="mp-play" aria-busy="true" />;
