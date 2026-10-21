@@ -413,6 +413,14 @@ try {
   const cAgents = (await S.pg.query<{ id: string }>(`select id from studio.agents where person = $1 and revoked_at is null`, [people.D.person])).rows;
   check('A4 an agent whose person is off the allowlist stops at once (checked on every request)', cAgents.length > 0 && (await mcp(BASE, c2.access_token, 'ping')).status === 401);
 
+  console.log('DB database floors (0019, 0021)');
+  const refused = async (q: string, params: unknown[] = []) => S.pg.query(q, params).then(() => false, () => true);
+  check('DB1 a wallet agent\'s address must be lowercase (the server lowercases it before insert)', await refused(`insert into studio.agents (person, route, name, address, scopes, expires_at) values (-999, 'wallet', 'x', '0xABCDEF0000000000000000000000000000000001', '{read}', now() + interval '1 day')`));
+  check('DB2 a key\'s spend cap is at most $10 in the database too', await refused(`insert into studio.agents (person, route, name, scopes, expires_at, spend_cap_usd) values (-999, 'key', 'x', '{read}', now() + interval '1 day', 10.01)`) && !(await refused(`insert into studio.agents (person, route, name, scopes, expires_at, spend_cap_usd) values (-998, 'key', 'x', '{read}', now() + interval '1 day', 10)`)));
+  check('DB3 a piece\'s adaptation must exist', await refused(`insert into studio.pieces (kind, person, adaptation_id, title) values ('idea', -999, 987654, 'x')`));
+  const fnCfg = (await S.pg.query<{ cfg: string[] | null }>(`select proconfig as cfg from pg_proc where proname = 'agents_three'`)).rows[0]?.cfg ?? [];
+  check('DB4 agents_three() runs with an empty search_path', fnCfg.some((c) => /^search_path=(""|)$/.test(c)), JSON.stringify(fnCfg));
+
   console.log('S  story words, in-process');
   const filter = await import('../src/lib/agents/filter');
   const { AGENTS } = await import('../src/lib/config');

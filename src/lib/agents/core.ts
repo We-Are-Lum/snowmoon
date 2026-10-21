@@ -31,7 +31,8 @@ export async function allowed(person: number | null): Promise<boolean> {
   if (person > 0) return AGENTS.people.fids.includes(person) || test.includes(String(person));
   const [w] = await sql()<{ address: string }[]>`select address from studio.wallet_accounts where id = ${-person}`;
   const a = w?.address?.toLowerCase();
-  return !!a && (AGENTS.people.wallets.includes(a) || test.includes(a));
+  // Compared lowercase on both sides, so a checksummed address in AGENTS.people.wallets still matches.
+  return !!a && (AGENTS.people.wallets.some((w) => w.toLowerCase() === a) || test.includes(a));
 }
 
 export const sha256 = (s: string | Buffer) => createHash('sha256').update(s).digest('hex');

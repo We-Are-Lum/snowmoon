@@ -1,14 +1,15 @@
 -- 0019: agents that act for a person, their drafts, and feedback (owner, 2026-10-20; DRAFT).
 --
--- NOT APPLIED. Built on branch agents-connect and tested only in PGlite (npm run test:agents). The owner
--- applies migrations by hand, dry run first (replace the final commit; with rollback;).
+-- MUST RUN AS postgres, in the Supabase SQL Editor, after 0018. Dry run first: replace the final commit; with
+-- rollback;. Built on branch agents-connect, then agents-owner (PR #11); tested in PGlite (npm run test:agents).
 --
 -- Design: docs/agents/design.md. In short:
 -- 1. studio.agents: an agent is linked to exactly one person (a Farcaster FID, or minus a wallet account),
---    by one of two routes: OAuth (Add to Claude / Add to ChatGPT, any MCP client) or a wallet the person
---    named and the agent signed for. At most 3 live agents per person. Revoking stops it at once.
--- 2. OAuth's own records: registered clients, one-time codes (hashed) and tokens (hashed). No token is
---    ever stored in the clear.
+--    by one of three routes: OAuth (Add to Claude / Add to ChatGPT, any MCP client), a wallet the person
+--    named and the agent signed for, or a personal agent key the person made on /you (drafts only, a spend
+--    cap, 30 days). At most 3 live agents per person. Revoking stops it at once.
+-- 2. OAuth's own records: registered clients, one-time codes (hashed) and tokens (hashed); a key is kept
+--    the same way (agent_tokens, kind 'key'). No token or key is ever stored in the clear.
 -- 3. studio.pieces and studio.piece_versions: what agents draft (an idea, a storyboard, frames and
 --    prompts, a character version, a brought-in image). Every version is a private draft until its person
 --    publishes it. A revision is a new version with its credit chain (remixed from whom, and whose agent).
