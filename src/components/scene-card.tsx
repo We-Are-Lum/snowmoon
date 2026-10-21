@@ -4,43 +4,7 @@ import { ownMedia, shownVersion } from '~/lib/adaptation-pages';
 import { AI_LABEL } from '~/lib/ai-declared';
 import { AiLabel } from './recipe-sheet';
 import { posterFor } from '~/lib/scene-delivery';
-import type { RecipeView } from '~/lib/recipe-view';
-
-/** Each version's poster recipe, in short; each version's shots' full recipes are in its live editor's RECIPE tab (on the site, no GitHub). Draft wording. */
-const POSTER_V1: RecipeView = {
-  file: 'adaptations/fifteen-days/versions/1.json',
-  // Version 1's own editor (its fixed link's), since the chosen version is 2 (2026-10-18).
-  github: '/@naaate/1/v/1/shot/first#recipe',
-  whose: 'AI-generated picture, not by the author. Fifteen Days is by @naaate.',
-  full: { href: '/@naaate/1/v/1/shot/first#recipe', text: 'Every shot\u2019s recipe, in the live editor' },
-  what: 'The poster of Fifteen Days, version 1: the caf\u00e9 master frame.',
-  model: { name: 'Qwen-Image-Edit-2509, finished with FLUX.2 [klein] 4B', licence: 'Apache-2.0', where: 'fal.ai' },
-  prompt: null,
-  inputs: [],
-  published: { by: '@naaate', when: '2026-10-18' },
-};
-/** Version 2, the GPT cut (owner, 2026-10-18): its pictures by a closed model, named with its maker, the date and that it is closed. Draft wording. */
-const POSTER_V2: RecipeView = {
-  file: 'adaptations/fifteen-days/versions/2.json',
-  github: 'adaptations/fifteen-days/versions/2.json',
-  whose: 'AI-generated picture, not by the author. Fifteen Days is by @naaate.',
-  // Every shot's recipe, its GPT picture and every picture sent with it, in the live editor (2026-10-18).
-  full: { href: '/@naaate/1/v/2/shot/first#recipe', text: 'Every shot\u2019s recipe, in the live editor' },
-  what: 'The poster of Fifteen Days, version 2 (the GPT version): three GPT Image close-ups (Zei, Bai, Deluin) side by side, cropped in code, no text.',
-  model: { name: 'GPT Image 2.5 Sunburst (OpenAI), a closed model, on 2026-10-18; inputs open, model closed', licence: "proprietary: OpenAI's terms; weights not published", where: 'on the Vercel AI Gateway, a hosted service' },
-  prompt: null,
-  inputs: [
-    { label: 'Its pictures', value: 'adaptations/fifteen-days/preprod/gpt/recipes/: cov-gate-CU-Z-smile-K7-g1, cov-corridor-CU-B-sour-K9-g1 and cov-cafe-CU-D-warm-E16-g2, each with its prompt and every picture sent, by sha256' },
-    { label: 'How it was put together', value: 'adaptations/fifteen-days/versions/2.json, "poster_shown": the crops (the recipe\u2019s "poster" is the same three with a title bar, taken off for the home card)' },
-  ],
-  published: { by: '@naaate', when: '2026-10-18' },
-};
-const POSTERS: Record<number, RecipeView> = { 1: POSTER_V1, 2: POSTER_V2 };
-/** Each poster's alt text. Draft wording. */
-const POSTER_ALT: Record<number, string> = {
-  1: 'Fifteen Days: in the caf\u00e9, Deluin waves Zei over while Bai sits at the table',
-  2: 'Fifteen Days: Zei smiling, Bai frowning, arms crossed, and Deluin looking on warmly, side by side',
-};
+import { POSTER_ALT, POSTERS, POSTER_V1 } from '~/lib/scene-posters';
 
 /**
  * The published scene, as a card: Fifteen Days, the owner's chosen version (version 2 from 2026-10-18), on the home page and at the top of

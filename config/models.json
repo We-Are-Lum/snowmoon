@@ -448,6 +448,34 @@
       "weights": "https://huggingface.co/Wan-AI/Wan2.2-I2V-A14B"
     },
     {
+      "id": "seedvr2",
+      "kind": "video-upscale",
+      "repo": "ByteDance-Seed/SeedVR2-7B",
+      "revision": null,
+      "card_revision": "eb0c4281d41ba3767d4f14370f0e37e9e9180c16",
+      "license_line": "SeedVR and SeedVR2 are licensed under the Apache 2.0.",
+      "license_checked": {
+        "by": "coding agent",
+        "on": "2026-10-21",
+        "source": "https://huggingface.co/ByteDance-Seed/SeedVR2-7B (the 3B card, revision 37255ff8cccfb01071b87f635a5948ca8d53117c, has the same line)"
+      },
+      "notes": "Video upscaling (to 1080p in the 2026-10-20 speaking test). Card metadata: license: apache-2.0. fal doesn't say whether its endpoint runs the 3B or the 7B weights; both cards carry the same licence. Added on the owner's word, 2026-10-21: \"Allowlist: add SeedVR2.\"",
+      "runs_on": "hosted",
+      "hosted": {
+        "host": "fal.ai",
+        "endpoints": {
+          "fal-ai/seedvr/upscale/video": 0.001
+        },
+        "price_unit": "USD per megapixel of output (width x height x frames)",
+        "price_seen": "2026-10-20"
+      },
+      "model_record": "endpoint, date and request id (the host does not expose a weights revision)",
+      "cost_usd_per_unit": null,
+      "license": "Apache-2.0",
+      "open_weights": true,
+      "weights": "https://huggingface.co/ByteDance-Seed/SeedVR2-7B"
+    },
+    {
       "id": "longcat-video",
       "kind": "video",
       "repo": "meituan-longcat/LongCat-Video",
@@ -631,6 +659,34 @@
       "license": "proprietary (OpenAI)",
       "open_weights": false,
       "weights": null
+    },
+    {
+      "id": "whisper-large-v3-turbo",
+      "kind": "transcription",
+      "repo": "openai/whisper-large-v3-turbo",
+      "revision": null,
+      "card_revision": "41f01f3fe87f28c78e2fbf8b568835947dd65ed9",
+      "license_line": "license: mit",
+      "license_checked": {
+        "by": "coding agent",
+        "on": "2026-10-20",
+        "source": "https://huggingface.co/openai/whisper-large-v3-turbo"
+      },
+      "notes": "Speaking counts as writing (owner, 2026-10-20): a person's spoken idea or note is transcribed, shown to them to check, and kept as their words. The recording is never stored. DRAFT: not yet used in production; the Groq endpoint and price are to confirm before switching on (Privacy names Groq as the receiver of the recording).",
+      "runs_on": "hosted",
+      "hosted": {
+        "host": "Groq",
+        "endpoints": {
+          "https://api.groq.com/openai/v1/audio/transcriptions (model whisper-large-v3-turbo)": null
+        },
+        "price_unit": "USD per hour of audio",
+        "price_seen": null
+      },
+      "model_record": "model id, date and the host's request id (the host does not expose a weights revision)",
+      "cost_usd_per_unit": null,
+      "license": "MIT",
+      "open_weights": true,
+      "weights": "https://huggingface.co/openai/whisper-large-v3-turbo"
     }
   ],
   "candidates": [

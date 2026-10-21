@@ -126,6 +126,98 @@ export const ADAPTATION_PAGES = { live: true };
  * migration 0013). REMIX_FREE=off in the environment stops free generations at once (prepaid
  * still works); REMIX_GENERATE=off stops every Generate.
  */
+/**
+ * The agent interface, read-only part (owner, 2026-10-19: "build only the read-only MCP/API now … switched off").
+ * MCP at /api/mcp and the same tools at /api/agent/v1/<tool>. Open without sign-in at a low rate. Reads only what
+ * the site already shows anyone: the book (GPL-3.0), published scenes, shots and recipes. SWITCHED OFF until the
+ * owner's go, the Privacy line is reread and the draft migration 0018 (the rate counter) is applied.
+ */
+export const AGENT_API = {
+  enabled: false,
+  /** Requests a minute per address, without sign-in. */
+  perMinute: 20,
+  /** The most blocks one passage can return. */
+  maxBlocks: 40,
+  /** The most search hits one call can return. */
+  maxHits: 20,
+  /** How long a rate row is kept (minutes). */
+  keepMinutes: 60,
+  /** MCP protocol revisions answered, newest first. */
+  protocolVersions: ['2025-06-18', '2025-03-26'] as const,
+};
+
+/**
+ * Agents that act for a person (owner, 2026-10-20; design docs/agents/design.md; DRAFT migration 0019).
+ * Three ways in, one result: an "agent of @handle" whose drafts its person publishes. SWITCHED OFF.
+ */
+export const AGENTS = {
+  /**
+   * On, for the owner's account only (owner, 2026-10-20: "Ship agents-connect for my account only (FID 6786 and
+   * my wallet), behind an allowlist."; then "FID 6786 only for now"). Everyone else sees nothing new."). Anyone not in `people` gets 404s from
+   * every agent route and page, can't connect an agent, and sees no new section anywhere.
+   */
+  enabled: true,
+  people: {
+    fids: [6786] as readonly number[],
+    /**
+     * Wallets (lowercase addresses) whose sign-in gets in. Empty for now (owner, 2026-10-20: "FID 6786 only for
+     * now … I'll add my sign-in wallet later"). The payment address is not a sign-in wallet.
+     */
+    wallets: [] as readonly string[],
+  },
+  /** Public pages (agents.md, /p): off while agents are for the owner only. Kept work stays private on /you. */
+  public: false,
+  /** Approved spending: per person per UTC day, and a video test's estimate per second (LongCat 480p on fal). */
+  spend: { framesPerDay: 20, videosPerDay: 5, dailyCapUsd: 2, videoModel: 'fal-ai/longcat-video/distilled/image-to-video/480p', videoUsdPerSecond: 0.005, videoSeconds: 5 },
+  /** What an agent may be given. The person sees every one before agreeing. */
+  scopes: ['read', 'drafts', 'images', 'notes'] as const,
+  /** At most this many live agents per person (also a database trigger). */
+  perPerson: 3,
+  /**
+   * A personal agent key (owner, 2026-10-20), made on /you for a client that sends a key in a header (Muse):
+   * drafts only (no images), a spend cap the person sets, 30 days, shown once, revoked in one tap. Only its
+   * sha256 is stored.
+   */
+  key: { days: 30, scopes: ['read', 'drafts', 'notes'] as const, capUsd: { default: 1, max: 10 }, header: 'X-Snowmoon-Key' },
+  /** An access token lasts an hour; a refresh token 30 days and is replaced each time it is used. */
+  accessMinutes: 60,
+  refreshDays: 30,
+  /** An agent's link ends after 90 days unless renewed; the person can end it at once from /you. */
+  linkDays: 90,
+  /** Per agent, per UTC day (and a short-term brake). */
+  limits: { drafts: 50, notes: 20, images: 50, imagesPerMinute: 5, readsPerMinute: 60 },
+  /** All of one person's agents together, per UTC day. */
+  perPersonImages: 150,
+  /** Everyone's agents together, per UTC day: a brake. */
+  siteImagesPerDay: 1000,
+  /**
+   * Story words (narration or dialogue) stay human (owner, 2026-10-20, the main goal; decision 6 settled).
+   * An agent may place only the book's lines (checked word for word) and its person's own words (checked
+   * against what the person typed or said). 'allowed' is kept only so the old path can be tested; never
+   * switch it on without the owner. A brought-in piece that declares AI-written words is labelled, and
+   * those words never count as the person's.
+   */
+  storyWords: 'refused' as 'allowed' | 'refused',
+  /** Speaking counts as writing: a spoken idea or note is transcribed, shown to the person to check, and kept as their words. */
+  /**
+   * Speaking to your agent: OFF until the owner has confirmed Groq's audio retention in the Groq console (owner,
+   * 2026-10-20). The local tests turn it on (AGENTS_TEST, never on Vercel). Off, the Speak button isn't shown.
+   */
+  transcription: { on: false, model: 'whisper-large-v3-turbo', host: 'Groq', maxSeconds: 120, maxBytes: 4 * 1024 * 1024 },
+  /** People whose agents never write story words, whatever storyWords says (the owner: "my versions stay human-written"). */
+  humanWrittenOnly: [6786] as readonly number[],
+  /** A brought-in image: PNG or JPEG, at most 3 MB, about 16:9, re-encoded to JPEG at most 1920 wide, all metadata removed. */
+  image: { maxBytes: 3 * 1024 * 1024, maxSide: 1920, aspect: 16 / 9, aspectTolerance: 0.03 },
+  /**
+   * The scan every brought-in image passes before it is stored (docs/agents/research-scanning.md).
+   * 'none' = bringing in images is closed. A vendor must be configured, the reporting procedure written,
+   * and the owner's go given before this changes. 'test' exists only off Vercel, for the local tests.
+   */
+  scanner: 'none' as 'none' | 'arachnid' | 'test',
+  /** Where the site lives, for OAuth (the issuer) and the connector's address. */
+  resourcePath: '/mcp',
+};
+
 export const REMIX = {
   /** Across everyone, per UTC day, for free generations (owner: "$10/day to start"). */
   dailyFreeCapUsd: 10,

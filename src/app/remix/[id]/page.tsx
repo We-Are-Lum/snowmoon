@@ -1,3 +1,4 @@
+import { profileHandle } from '~/lib/you';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import Link from 'next/link';
@@ -27,7 +28,9 @@ async function load(id: string) {
   const adaptation = await getAdaptation(f.adaptationId);
   const [v] = await sql`select author_person from studio.adaptation_versions where id = ${f.versionId}`;
   const handle = v ? await handleFor(Number(v.author_person)) : null;
-  return { f, title: adaptation?.title ?? 'a scene', handle };
+  // The maker's public profile, which the byline links to (owner, 2026-10-18).
+  const maker = await profileHandle(f.person);
+  return { f, title: adaptation?.title ?? 'a scene', handle, maker };
 }
 
 const byline = (f: Frame) => (f.byName ? (f.person < 0 ? f.byName : `@${f.byName}`) : f.person > 0 ? `FID ${f.person}` : 'a wallet account');
@@ -51,7 +54,7 @@ export default async function RemixFramePage({ params }: Props) {
   const { id } = await params;
   const l = await load(id);
   if (!l) notFound();
-  const { f, title, handle } = l;
+  const { f, title, handle, maker } = l;
   const r = f.recipe as {
     model?: { name?: string; licence?: string; endpoint?: string; host?: string };
     seed?: number | null;
@@ -85,7 +88,7 @@ export default async function RemixFramePage({ params }: Props) {
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={f.imageUrl} alt={`A remix of shot ${r.shot?.n ?? f.shotId}, made by ${who}: ${f.ownWords}`} width={r.size?.width ?? 1024} height={r.size?.height ?? 576} />
         <figcaption className="label">
-          AI image · by {who} · <span>{AI_DECLARED.image}</span>
+          AI image · by {maker ? <Link href={`/@${maker}`}>{who}</Link> : who} · <span>{AI_DECLARED.image}</span>
         </figcaption>
       </figure>
       <section className="rx-words" aria-label="Their words">

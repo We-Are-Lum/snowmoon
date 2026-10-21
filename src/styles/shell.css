@@ -114,6 +114,11 @@
 .nav-coming { color: var(--muted); }
 .nav-meta { font-family: var(--label); font-size: var(--text-label); letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); }
 
+/* The top bar's avatar, opening the You page (owner, 2026-10-18). */
+.topbar-avatar { display: inline-flex; align-items: center; justify-content: center; }
+.topbar-avatar img, .topbar-avatar .avatar-letter, .topbar-avatar .avatar-wallet { width: 28px; height: 28px; border-radius: 50%; display: block; object-fit: cover; background: var(--card); box-shadow: 0 0 0 1px var(--rule); }
+.topbar-avatar .avatar-letter { display: grid; place-items: center; font-family: var(--label); font-size: 13px; color: var(--ink); }
+.topbar-avatar[aria-current='page'] img, .topbar-avatar[aria-current='page'] span { box-shadow: 0 0 0 2px var(--ink); }
 .quiet-action { align-self: flex-start; padding: 0; background: none; border: 0; color: var(--link); cursor: pointer; font-family: var(--label); font-size: var(--text-label); }
 
 /* ---------- The chapter frame: context strip, selector, Read / Listen ---------- */
