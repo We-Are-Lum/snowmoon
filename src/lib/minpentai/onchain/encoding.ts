@@ -3,16 +3,18 @@
  * and MatchRecorded carries. One canonical encoding: decode() re-encodes what it read and refuses
  * anything that is not byte for byte the same (so a match has exactly one byte form and one hash).
  *
- * Layout (big-endian):
- *    0  u8       format version (1)
+ * Layout (big-endian), format 2:
+ *    0  u8       format version (2)
  *    1  bytes32  ruleset ID (keccak256 of the manifest's canonical JSON)
- *   33  u32      seed (0-999,999)
- *   37  u8       opponent kind (0 = a computer player of the ruleset)
- *   38  u8       opponent (computer player level, 0-5)
- *   39  u8       claimed result for the recorder (0 loss, 1 win, 2 draw)
- *   40  u8       how it ended (0 played out, 1 resigned)
- *   41  u8       the step it ended at (0-96)
- *   42  u8       turns to act (T), then for each turn:
+ *   33  u32      n: this is the recorder's nth match (0 for their first)
+ *   37  bytes32  seed: keccak256(abi.encode(chainId, matchLog, recorder, n)) (seed.ts); MatchLog
+ *                checks it. The engine plays from its last 4 bytes, big-endian (engineSeed).
+ *   69  u8       opponent kind (0 = a computer player of the ruleset)
+ *   70  u8       opponent (computer player level, 0-5)
+ *   71  u8       claimed result for the recorder (0 loss, 1 win, 2 draw)
+ *   72  u8       how it ended (0 played out, 1 resigned)
+ *   73  u8       the step it ended at (0-96)
+ *   74  u8       turns to act (T), then for each turn:
  *         u8 placements (n, 0-8), then n x 2 bytes, in the order placed (order sets glider ids):
  *           u8 square (y * 15 + x, 0-149)
  *           u8 piece << 4 | direction (piece 0 glider, 1 square, 2 tower; direction 0-7 into D8
@@ -29,11 +31,16 @@
 import { D8, H, MAXS, W, type Placement, type Side, type World } from '../play-game/game';
 import { keccak256, type Hex } from 'viem';
 
-export const FORMAT_VERSION = 1;
+export const FORMAT_VERSION = 2;
+/** Header (74 bytes) + the turn count + the piece count: the shortest a match can be. */
+export const MIN_LENGTH = 76;
 export type Claim = 'loss' | 'win' | 'draw';
 export interface EncodedMatch {
   rulesetId: Hex;
-  seed: number;
+  /** The recorder's match number (their record count before this one). */
+  n: number;
+  /** The wallet-bound seed (bytes32). */
+  seed: Hex;
   opponent: { kind: 'computer'; level: number };
   claim: Claim;
   end: { kind: 'end' | 'resign'; step: number };
@@ -65,8 +72,10 @@ export function encode(m: EncodedMatch): Uint8Array {
   u8(FORMAT_VERSION, 'version');
   if (!/^0x[0-9a-f]{64}$/.test(m.rulesetId)) fail(`ruleset ID ${m.rulesetId} is not a lowercase bytes32`);
   for (let i = 0; i < 32; i++) out.push(parseInt(m.rulesetId.slice(2 + 2 * i, 4 + 2 * i), 16));
-  if (!Number.isInteger(m.seed) || m.seed < 0 || m.seed > 999_999) fail(`seed ${m.seed}`);
-  out.push((m.seed >>> 24) & 255, (m.seed >>> 16) & 255, (m.seed >>> 8) & 255, m.seed & 255);
+  if (!Number.isInteger(m.n) || m.n < 0 || m.n > 0xffff_ffff) fail(`n ${m.n} does not fit in 4 bytes`);
+  out.push((m.n >>> 24) & 255, (m.n >>> 16) & 255, (m.n >>> 8) & 255, m.n & 255);
+  if (!/^0x[0-9a-f]{64}$/.test(m.seed)) fail(`seed ${m.seed} is not a lowercase bytes32`);
+  for (let i = 0; i < 32; i++) out.push(parseInt(m.seed.slice(2 + 2 * i, 4 + 2 * i), 16));
   if (m.opponent.kind !== 'computer') fail('only computer opponents in format 1');
   u8(0, 'opponent kind');
   if (m.opponent.level > 5) fail(`level ${m.opponent.level}`);
@@ -118,7 +127,8 @@ export function decode(bytes: Uint8Array): EncodedMatch {
   if (u8() !== FORMAT_VERSION) fail(`format version ${bytes[0]}`);
   const rulesetId = hex(take(32)) as Hex;
   const s = take(4);
-  const seed = ((s[0] << 24) | (s[1] << 16) | (s[2] << 8) | s[3]) >>> 0;
+  const n = ((s[0] << 24) | (s[1] << 16) | (s[2] << 8) | s[3]) >>> 0;
+  const seed = hex(take(32)) as Hex;
   if (u8() !== 0) fail('opponent kind');
   const level = u8();
   const claim = CLAIMS[u8()] ?? fail('claim');
@@ -150,7 +160,7 @@ export function decode(bytes: Uint8Array): EncodedMatch {
     position.push([v >> 5, v & 31]);
   }
   if (i !== bytes.length) fail(`${bytes.length - i} trailing byte(s)`);
-  const m: EncodedMatch = { rulesetId, seed, opponent: { kind: 'computer', level }, claim, end, turns, position };
+  const m: EncodedMatch = { rulesetId, n, seed, opponent: { kind: 'computer', level }, claim, end, turns, position };
   // One form only: what was read must re-encode to the same bytes (sorted position, zero padding, every field in range).
   let again: Uint8Array;
   try { again = encode(m); } catch (e) { return fail(`not canonical: ${(e as Error).message}`); }
@@ -162,9 +172,9 @@ export const matchHash = (bytes: Uint8Array) => keccak256(bytes);
 export { hex as toHex };
 
 /** A replayed solo match as an EncodedMatch: the claim and the final position as the replay found them. */
-export function fromReplay(rulesetId: Hex, solo: { seed: number; level: number; turns: Placement[][]; end: { kind: 'end' } | { kind: 'resign'; step: number } }, r: { win: Side | 'D'; step: number; board: World }): EncodedMatch {
+export function fromReplay(rulesetId: Hex, n: number, seed: Hex, solo: { level: number; turns: Placement[][]; end: { kind: 'end' } | { kind: 'resign'; step: number } }, r: { win: Side | 'D'; step: number; board: World }): EncodedMatch {
   return {
-    rulesetId, seed: solo.seed, opponent: { kind: 'computer', level: solo.level },
+    rulesetId, n, seed, opponent: { kind: 'computer', level: solo.level },
     claim: r.win === 'C' ? 'win' : r.win === 'A' ? 'loss' : 'draw',
     end: { kind: solo.end.kind, step: r.step },
     turns: solo.turns.map((t) => t.map((p) => ({ t: p.t, o: 'C' as Side, x: p.x, y: p.y, dx: p.t === 'g' ? p.dx || 0 : 0, dy: p.t === 'g' ? p.dy || 0 : 0 }))),

@@ -71,3 +71,20 @@ export function fixedSet(): SoloMatch[] {
   }
   return out;
 }
+
+/** Engine seeds at the edges of the 32-bit range (owner, 2026-10-21), then random ones across all of it. */
+export const EDGE_SEEDS = [0, 1, 999_999, 1_000_000, 2 ** 31 - 1, 2 ** 31, 2 ** 32 - 1];
+export function fullRangeSeeds(randomCount = 40): number[] {
+  const r = rng(0xfeedbeef);
+  const out = [...EDGE_SEEDS];
+  for (let i = 0; i < randomCount; i++) out.push(Math.floor(r() * 2 ** 32));
+  return out;
+}
+/** Every full-range seed at every level (played out), plus some resigned. */
+export function fullRangeSet(): SoloMatch[] {
+  const out: SoloMatch[] = [];
+  fullRangeSeeds().forEach((seed, i) => {
+    for (let level = 0; level <= 5; level++) out.push(sampleMatch(seed, level, (i + level) % 11 === 5 ? 1 + (i % 3) : undefined));
+  });
+  return out;
+}

@@ -10,7 +10,10 @@ import { build } from 'esbuild';
 import { PlayController, type Env } from '../src/lib/minpentai/play-game/controller';
 import { MAXS } from '../src/lib/minpentai/play-game/game';
 import { ReplayError, replaySolo } from '../src/lib/minpentai/onchain/replay';
-import { digest, fixedSet, sampleMatch } from '../src/lib/minpentai/onchain/sample';
+import { EDGE_SEEDS, digest, fixedSet, fullRangeSeeds, fullRangeSet, sampleMatch } from '../src/lib/minpentai/onchain/sample';
+import { H, W, rng, type Placement } from '../src/lib/minpentai/play-game/game';
+import { playMatch, rung, type Player } from '../src/lib/minpentai/play-game/players';
+import { engineSeed } from '../src/lib/minpentai/onchain/replay';
 
 let failed = 0, passed = 0;
 const check = (name: string, f: () => string | void | Promise<string | void>) =>
@@ -73,11 +76,43 @@ const main = async () => {
     ) || undefined;
   });
 
+  // 2b. The whole 32-bit seed range (owner, 2026-10-21): edges and random seeds, every level.
+  const full = fullRangeSet();
+  const dFull = digest(full);
+  await check(`full-range seeds (${EDGE_SEEDS.join(', ')} and 40 random, x 6 levels = ${full.length} matches) replay to the same digest twice`, () => {
+    if (digest(full) !== dFull || digest(JSON.parse(JSON.stringify(full))) !== dFull) return 'digests differ';
+    if (!EDGE_SEEDS.every((s) => full.some((m) => m.seed === s))) return 'an edge seed is missing';
+    if (!full.some((m) => m.seed >= 2 ** 31)) return 'no seed at or above 2^31';
+  });
+  await check('full-range seeds: the replay agrees with players.ts playMatch (an independent driver of the same engine) on every played-out match', () => {
+    for (const m of full) {
+      if (m.end.kind !== 'end') continue;
+      let t = 0;
+      // The recorded turns as a player in Cyan's seat: playMatch shows Cyan the board turned 180 degrees, so turn them to match.
+      const scripted: Player = () => (m.turns[t++] ?? []).map((p): Placement => ({ ...p, o: 'A', x: W - 1 - p.x, y: H - 1 - p.y, dx: -p.dx || 0, dy: -p.dy || 0 }));
+      const a = playMatch(scripted, rung(m.level), m.seed);
+      const b = replaySolo(m);
+      if (a.win !== b.win || a.step !== b.step || a.rule !== b.rule) return `seed ${m.seed}, level ${m.level}: playMatch ${a.win}@${a.step} ${a.rule}, replay ${b.win}@${b.step} ${b.rule}`;
+    }
+  });
+  await check('rng output stays in [0, 1) and never goes negative for the edge seeds; engine seeds outside 0 to 2^32 - 1 are refused', () => {
+    for (const s of EDGE_SEEDS) { const r = rng(s); for (let i = 0; i < 10_000; i++) { const v = r(); if (!(v >= 0 && v < 1)) return `seed ${s}: ${v}`; } }
+    for (const bad of [-1, 2 ** 32, 1.5, Number.NaN]) {
+      try { replaySolo({ seed: bad, level: 1, turns: [], end: { kind: 'end' } }); return `seed ${bad} accepted`; } catch (e) { if (!(e instanceof ReplayError)) throw e; }
+    }
+  });
+  await check('engineSeed takes the last 4 bytes of the bytes32, big-endian, and is never negative', () => {
+    const z = '0x' + '00'.repeat(28);
+    const cases: [string, number][] = [[z + '00000000', 0], [z + '00000001', 1], [z + '7fffffff', 2 ** 31 - 1], [z + '80000000', 2 ** 31], [z + 'ffffffff', 2 ** 32 - 1], ['0x' + 'ff'.repeat(28) + '01020304', 0x01020304]];
+    for (const [h, v] of cases) if (engineSeed(h) !== v) return `${h} -> ${engineSeed(h)}, want ${v}`;
+    for (const s of fullRangeSeeds()) if (engineSeed('0x' + 'ab'.repeat(28) + s.toString(16).padStart(8, '0')) !== s) return `round trip ${s}`;
+  });
+
   // 3. A replay refuses what the page could not have produced.
   await check('a replay refuses a bad seed, level, placement, too few or too many turns, a resign after the end', () => {
     const s = sampleMatch(4242, 3);
     const bad: [string, () => unknown][] = [
-      ['seed', () => replaySolo({ ...s, seed: 1_000_000 })],
+      ['seed', () => replaySolo({ ...s, seed: 2 ** 32 })],
       ['level', () => replaySolo({ ...s, level: 6 })],
       ['too few turns', () => replaySolo({ ...s, turns: s.turns.slice(0, -1) })],
       ['too many turns', () => replaySolo({ ...s, turns: [...s.turns, []] })],
@@ -91,9 +126,9 @@ const main = async () => {
 
   // 4. The same digest in Chromium.
   if (process.argv.includes('--browser')) {
-    await check('Chromium replays the fixed set to the same digest as Node', async () => {
+    await check('Chromium replays the fixed set and the full-range set to the same digests as Node', async () => {
       const out = await build({
-        stdin: { contents: "import { digest, fixedSet } from './src/lib/minpentai/onchain/sample'; (window as any).__d = digest(fixedSet());", resolveDir: process.cwd(), loader: 'ts' },
+        stdin: { contents: "import { digest, fixedSet, fullRangeSet } from './src/lib/minpentai/onchain/sample'; (window as any).__d = digest(fixedSet()); (window as any).__f = digest(fullRangeSet());", resolveDir: process.cwd(), loader: 'ts' },
         bundle: true, write: false, format: 'iife', platform: 'browser', alias: { '~': './src' },
       });
       const { chromium } = await import('playwright-core');
@@ -101,8 +136,9 @@ const main = async () => {
       try {
         const p = await b.newPage();
         await p.setContent(`<script>${out.outputFiles[0].text}</script>`);
-        const d = await p.evaluate(() => (window as unknown as { __d: string }).__d);
-        if (d !== d1) return `Chromium ${d}, Node ${d1}`;
+        const [d, f] = await p.evaluate(() => [(window as unknown as { __d: string }).__d, (window as unknown as { __f: string }).__f]);
+        if (d !== d1) return `fixed set: Chromium ${d}, Node ${d1}`;
+        if (f !== dFull) return `full range: Chromium ${f}, Node ${dFull}`;
       } finally {
         await b.close();
       }

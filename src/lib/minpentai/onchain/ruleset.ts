@@ -106,7 +106,7 @@ export const RULES_V1: Rule[] = [
   { id: 'new-rule', text: 'One of four new rules is drawn from the seed at the start of every match, and both players see it.',
     book: book('Every game has some kind of new rule.', ['c4-b84']), edition: 'One of four rules, drawn from the seed; the four rules are invented.' },
   { id: 'computer-sight', text: 'The computer players see only what their towers light (Play\'s; Learn\'s practice bot is not part of this ruleset).', edition: 'The whole rule.' },
-  { id: 'seed', text: 'A match\'s seed is a whole number from 0 to 999,999. Its first random number draws the new rule; the computer player takes the rest, in order.', edition: 'The whole rule.' },
+  { id: 'seed', text: 'A recorded match\'s seed is bound to the player\'s wallet: keccak256 of the chain, the MatchLog, the player and how many matches they have recorded. The engine plays from its last 4 bytes, read big-endian (0 to 2^32 - 1). Its first random number draws the new rule; the computer player takes the rest, in order.', edition: 'The whole rule.' },
 ];
 
 export const DRAWN_RULES_V1: Rule[] = [
@@ -163,7 +163,14 @@ export function soloManifestV1({ commit, files, packages }: ManifestInput) {
       rocks: [[6, 0], [9, 3], [7, 4], [7, 5], [5, 6], [8, 9]],
       towers: { C: [[1, 2], [1, 7]], A: [[13, 2], [13, 7]] },
     },
-    settings: { points: 8, cost: { glider: 4, square: 1, tower: 4 }, sight: 3, every: 12, squareHits: 2, seeds: [0, 999_999] },
+    settings: {
+      points: 8, cost: { glider: 4, square: 1, tower: 4 }, sight: 3, every: 12, squareHits: 2,
+      seed: {
+        recorded: 'bytes32 = keccak256(abi.encode(uint256 chainId, address matchLog, address player, uint256 n)), n = the player\'s record count before this match',
+        engineSeed: 'uint32(uint256(seed)): the last 4 bytes of the bytes32, read big-endian',
+        engineRange: [0, 4294967295],
+      },
+    },
     rules: RULES_V1,
     drawnRules: DRAWN_RULES_V1,
     computerPlayers: PLAYERS_V1.map((p) => ({

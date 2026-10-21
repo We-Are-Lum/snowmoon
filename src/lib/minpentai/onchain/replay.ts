@@ -14,8 +14,20 @@
 import { K, MAXS, RULE_IDS, apply, botPlan, rng, step, towers, updLS, world, type Placement, type RuleId, type Side, type World } from '../play-game/game';
 import { checkPlacements, type LiveMatch } from '../play-server/match';
 
-/** The seeds the page draws: (Date.now() % 1e6) | 0. */
-export const MAX_SEED = 999_999;
+export class ReplayError extends Error {}
+
+/** Engine seeds are 32-bit: 0 to 2^32 - 1 (rng takes any of them; the page's own draw, (Date.now() % 1e6) | 0, is a subset). */
+export const MAX_SEED = 0xffff_ffff;
+
+/**
+ * A recorded match's seed is a bytes32 (MatchLog derives it from the chain, the log, the player and
+ * their record count). The engine uses its low 32 bits: the last 4 bytes, read big-endian, which
+ * is Solidity's uint32(uint256(seed)). Never negative.
+ */
+export function engineSeed(seed32: string): number {
+  if (!/^0x[0-9a-f]{64}$/.test(seed32)) throw new ReplayError(`seed ${seed32} is not a lowercase bytes32`);
+  return parseInt(seed32.slice(58), 16);
+}
 
 export interface SoloMatch {
   seed: number;
@@ -39,7 +51,6 @@ export interface Replayed {
   amber: Placement[][];
 }
 
-export class ReplayError extends Error {}
 
 /** The rule the page draws for a seed: the first number of the match's rng (controller.ts mk). */
 export function ruleFor(seed: number): RuleId {
@@ -48,7 +59,7 @@ export function ruleFor(seed: number): RuleId {
 
 export function replaySolo(input: SoloMatch): Replayed {
   const { seed, level, turns, end } = input;
-  if (!Number.isInteger(seed) || seed < 0 || seed > MAX_SEED) throw new ReplayError(`seed ${seed} is not one the page draws (0–${MAX_SEED})`);
+  if (!Number.isInteger(seed) || seed < 0 || seed > MAX_SEED) throw new ReplayError(`engine seed ${seed} is not 0 to 2^32 - 1`);
   if (!Number.isInteger(level) || level < 0 || level > 5) throw new ReplayError(`level ${level} is not 0–5`);
   if (end.kind === 'resign' && (!Number.isInteger(end.step) || end.step < 0 || end.step > MAXS)) throw new ReplayError(`resign step ${end.step} is not 0–${MAXS}`);
   // mk: one rng for the match; its first number draws the rule, the rest are the computer player's.
