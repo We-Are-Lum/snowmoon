@@ -1,0 +1,413 @@
+{
+  "format": "snowmoon.minpentai.ruleset/1",
+  "name": "Minpentai Play, solo against the computer, v1",
+  "edition": "snowmoon.party: an independent edition of Vitalik Buterin's Snowmoon, not affiliated with or endorsed by the author. Rules marked invented were made up for this edition.",
+  "license": "GPL-3.0-only",
+  "engine": {
+    "repository": "https://github.com/We-Are-Lum/snowmoon",
+    "commit": "eefb8d8f0777320db863a904227172e0ab12bf7a",
+    "files": {
+      "src/lib/minpentai/play-game/game.ts": "0x9cde86273c04c106cbd812030684f41a16e1f8a58483b9dab8c5e1489d5b3e83",
+      "src/lib/minpentai/play-server/match.ts": "0xc761b00cf856c824673563f408514097f1aab6f301a62dfea85b40bcd7ee04f5",
+      "src/lib/minpentai/onchain/replay.ts": "0xabd364795b4886a2d04d4d4a73b811073b15580914eb4e2ac6875bc23f612fde"
+    },
+    "replay": "replaySolo in src/lib/minpentai/onchain/replay.ts"
+  },
+  "board": {
+    "width": 15,
+    "height": 10,
+    "maxSteps": 96,
+    "rocks": [
+      [
+        6,
+        0
+      ],
+      [
+        9,
+        3
+      ],
+      [
+        7,
+        4
+      ],
+      [
+        7,
+        5
+      ],
+      [
+        5,
+        6
+      ],
+      [
+        8,
+        9
+      ]
+    ],
+    "towers": {
+      "C": [
+        [
+          1,
+          2
+        ],
+        [
+          1,
+          7
+        ]
+      ],
+      "A": [
+        [
+          13,
+          2
+        ],
+        [
+          13,
+          7
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "points": 8,
+    "cost": {
+      "glider": 4,
+      "square": 1,
+      "tower": 4
+    },
+    "sight": 3,
+    "every": 12,
+    "squareHits": 2,
+    "seeds": [
+      0,
+      999999
+    ]
+  },
+  "rules": [
+    {
+      "id": "board-size",
+      "text": "The board is 15 × 10 squares.",
+      "source": {
+        "invented": true
+      }
+    },
+    {
+      "id": "board-edges",
+      "text": "The board has edges and corners.",
+      "source": {
+        "book": [
+          "c4-b113",
+          "c7-b81"
+        ]
+      }
+    },
+    {
+      "id": "edge-bounce",
+      "text": "A glider that would leave the board turns back on that side instead, and stays put for that step.",
+      "source": {
+        "invented": true
+      }
+    },
+    {
+      "id": "starts",
+      "text": "Each side starts with 2 towers (Cyan at (1, 2) and (1, 7), Amber at (13, 2) and (13, 7)) and there are six rocks, all mirrored.",
+      "source": {
+        "invented": true,
+        "note": "Starting in your own corner is from the book (c4-b94)."
+      }
+    },
+    {
+      "id": "tower",
+      "text": "A tower is your score, your sight, and where you may place.",
+      "source": {
+        "book": [
+          "c4-b93"
+        ],
+        "note": "In the book they are \"symbols\"; the tower shape is invented."
+      }
+    },
+    {
+      "id": "glider",
+      "text": "A glider moves one square a step in a straight line, up, down, left or right (diagonally too only under the \"diag\" rule), and never stops on its own.",
+      "source": {
+        "book": [
+          "c4-b84"
+        ],
+        "note": "Their speed is invented."
+      }
+    },
+    {
+      "id": "square",
+      "text": "A square blocks a glider: the first hit cracks it and turns the glider straight back; the second breaks the square and the glider. Any glider cracks any square, its own side's too.",
+      "source": {
+        "book": [
+          "c2-b12",
+          "c4-b9"
+        ],
+        "note": "Two hits is invented."
+      }
+    },
+    {
+      "id": "rock",
+      "text": "A rock is fixed, turns every glider straight back, and never breaks.",
+      "source": {
+        "book": [
+          "c4-b108"
+        ],
+        "note": "Bouncing only is invented; in the book gliders hitting rocks can make more gliders."
+      }
+    },
+    {
+      "id": "step-together",
+      "text": "Every glider moves at the same moment.",
+      "source": {
+        "invented": true
+      }
+    },
+    {
+      "id": "glider-collide",
+      "text": "Two gliders of different sides break each other if they head for the same square, swap squares, or cross. A side's own gliders pass through each other.",
+      "source": {
+        "invented": true
+      }
+    },
+    {
+      "id": "tower-hit",
+      "text": "A glider reaching an opponent's tower destroys it and breaks. Your own tower turns it straight back.",
+      "source": {
+        "invented": true,
+        "note": "In the book a stray glider can wreck its own side (c4-b109); left out here."
+      }
+    },
+    {
+      "id": "no-debris",
+      "text": "Broken pieces leave nothing behind.",
+      "source": {
+        "invented": true,
+        "note": "The book's boards fill with debris (c4-b140)."
+      }
+    },
+    {
+      "id": "turns",
+      "text": "A setup turn at step 0, then a turn to act every 12 steps; between turns the match runs on its own.",
+      "source": {
+        "book": [
+          "c4-b110",
+          "c14-b45"
+        ],
+        "note": "12 is invented."
+      }
+    },
+    {
+      "id": "points",
+      "text": "8 points a turn: glider 4, square 1, tower 4. Unspent points are lost.",
+      "source": {
+        "invented": true
+      }
+    },
+    {
+      "id": "placing",
+      "text": "Place on any empty square within 3 squares, counting diagonals, of a tower you had when the turn began.",
+      "source": {
+        "book": [
+          "c4-b110"
+        ],
+        "note": "The distance is invented."
+      }
+    },
+    {
+      "id": "simultaneous",
+      "text": "Both sides place at the same time without seeing each other's choices; two pieces placed on one square cancel each other.",
+      "source": {
+        "invented": true
+      }
+    },
+    {
+      "id": "sight",
+      "text": "You see every square within 3 of one of your towers; the rest is dark.",
+      "source": {
+        "book": [
+          "c4-b93"
+        ],
+        "note": "3 is invented."
+      }
+    },
+    {
+      "id": "last-seen",
+      "text": "Rocks are shown everywhere; an opponent's tower you cannot see is shown where you last saw it.",
+      "source": {
+        "invented": true
+      }
+    },
+    {
+      "id": "end-towers",
+      "text": "A side with no towers left loses; both at the same step is a draw.",
+      "source": {
+        "book": [
+          "c4-b136",
+          "c4-b137",
+          "c4-b138"
+        ]
+      }
+    },
+    {
+      "id": "end-time",
+      "text": "At step 96 the match stops: most towers wins, equal is a draw.",
+      "source": {
+        "invented": true
+      }
+    },
+    {
+      "id": "resign",
+      "text": "You may resign; it counts as a loss.",
+      "source": {
+        "book": [
+          "c4-b141",
+          "c10-b164"
+        ]
+      }
+    },
+    {
+      "id": "new-rule",
+      "text": "One of four new rules is drawn from the seed at the start of every match, and both players see it.",
+      "source": {
+        "book": [
+          "c4-b84"
+        ],
+        "note": "The four rules are invented."
+      }
+    },
+    {
+      "id": "computer-sight",
+      "text": "The computer players see only what their towers light (Play's; Learn's practice bot is not part of this ruleset).",
+      "source": {
+        "invented": true
+      }
+    },
+    {
+      "id": "seed",
+      "text": "A match's seed is a whole number from 0 to 999,999. Its first random number draws the new rule; the computer player takes the rest, in order.",
+      "source": {
+        "invented": true
+      }
+    }
+  ],
+  "drawnRules": [
+    {
+      "id": "diag",
+      "text": "Gliders may also fly diagonally.",
+      "source": {
+        "invented": true
+      }
+    },
+    {
+      "id": "cost3",
+      "text": "Gliders cost 3 points.",
+      "source": {
+        "invented": true
+      }
+    },
+    {
+      "id": "sight2",
+      "text": "You see only 2 squares around your towers.",
+      "source": {
+        "invented": true
+      }
+    },
+    {
+      "id": "every8",
+      "text": "Turns to act come every 8 steps.",
+      "source": {
+        "invented": true
+      }
+    }
+  ],
+  "computerPlayers": [
+    {
+      "level": 0,
+      "name": "Practice",
+      "code": {
+        "file": "src/lib/minpentai/play-game/game.ts",
+        "function": "botPlan",
+        "level": 0
+      },
+      "codeHash": "0x44a84167e5dec574014a2368284ac680fabb3f68adc3edfd3657c49dc0c32c38",
+      "source": {
+        "invented": true,
+        "note": "Practice: the same code at its simplest level."
+      }
+    },
+    {
+      "level": 1,
+      "name": "Rival",
+      "code": {
+        "file": "src/lib/minpentai/play-game/game.ts",
+        "function": "botPlan",
+        "level": 1
+      },
+      "codeHash": "0x95bd5df01dfde6c578691547091385bf93c4347cf05e0767ee2267b725dc501b",
+      "source": {
+        "invented": true,
+        "note": "Behaviours are invented; the book has bots too (c7-b14)."
+      }
+    },
+    {
+      "level": 2,
+      "name": "Blocker",
+      "code": {
+        "file": "src/lib/minpentai/play-game/game.ts",
+        "function": "botPlan",
+        "level": 2
+      },
+      "codeHash": "0xfd3dde40e2091d362d8892581dabdadf5d2e0a31ac9fade95312d67846c67f80",
+      "source": {
+        "invented": true,
+        "note": "Behaviours are invented; the book has bots too (c7-b14)."
+      }
+    },
+    {
+      "level": 3,
+      "name": "Builder",
+      "code": {
+        "file": "src/lib/minpentai/play-game/game.ts",
+        "function": "botPlan",
+        "level": 3
+      },
+      "codeHash": "0xf9ea5742b2ef69c8779a7ec8ae1bd9f8f92591fc5cbb4af1cb6ce2e7e437f70d",
+      "source": {
+        "invented": true,
+        "note": "Behaviours are invented; the book has bots too (c7-b14)."
+      }
+    },
+    {
+      "level": 4,
+      "name": "Opportunist",
+      "code": {
+        "file": "src/lib/minpentai/play-game/game.ts",
+        "function": "botPlan",
+        "level": 4
+      },
+      "codeHash": "0x7d0a016fe072f964bd6c94728754dcd7550f2f5c2f976051e41bba999f1d67e6",
+      "source": {
+        "invented": true,
+        "note": "Behaviours are invented; the book has bots too (c7-b14)."
+      }
+    },
+    {
+      "level": 5,
+      "name": "Planner",
+      "code": {
+        "file": "src/lib/minpentai/play-game/game.ts",
+        "function": "botPlan",
+        "level": 5
+      },
+      "codeHash": "0xca192c22dd893cee8adbccfc876b1e7da532dd3ad7abe2bcf928181e7ae072f9",
+      "source": {
+        "invented": true,
+        "note": "Behaviours are invented; the book has bots too (c7-b14)."
+      }
+    }
+  ],
+  "sides": {
+    "person": "C",
+    "computer": "A"
+  }
+}
