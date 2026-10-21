@@ -204,7 +204,14 @@ const QUOTE_FIX: Record<string, string> = {
   'A new rule every game': BOOK_NEW_RULE[0],
   'A new rule every game; the priests decide the rule sets': '"Every game there\'s always some kind of new rule"; the priests "decide on the rule sets"',
 };
+/* Owner's copy fixes (2026-10-20, PR #6): Design's words, and ours. */
+const TEXT_FIX: Record<string, string> = {
+  'Every piece is a few cells, moved by one rule from the book. This is a glider, cell by cell. Press play.': T.lessons.hood.text,
+  'Amber’s towers mirror yours on the far side. You see them only until this turn ends. Spend 8 points in the lit area, then end your turn.': T.practice.act0,
+  'The match runs by itself until your next turn. Pause any time.': T.practice.run,
+};
 const DELIBERATE = {
+  text: (t: string) => TEXT_FIX[t] ?? t,
   tags(where: string, tags: string[]): string[] {
     if (where === 'hood') return tags; // the book's rule: no "invented" tag
     if (where === 'practice') return ['RULES INVENTED FOR THIS EDITION', 'DRAFT WORDING']; // Design: none (study §13.4)
@@ -254,7 +261,7 @@ function compareView(dc: Any, mc: LearnController, what: string) {
   const where = mc.state.mode === 'watch' ? `watch ${mc.state.i + 1}` : LS[mc.state.li].id;
   const b = myView(mc.view(), where);
   const sources = DELIBERATE.sources(where, a.sources);
-  const want = { ...a, tags: DELIBERATE.tags(where, a.tags), sources, srcLabel: a.srcLabel.replace(/\(\d+\)/, `(${sources.length})`), where };
+  const want = { ...a, text: DELIBERATE.text(a.text), tags: DELIBERATE.tags(where, a.tags), sources, srcLabel: a.srcLabel.replace(/\(\d+\)/, `(${sources.length})`), where };
   eq(want, b, `${what}: the screen (${where})`);
 }
 function compare(dc: Any, mc: LearnController, what: string, ruleWords?: string) {
