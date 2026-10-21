@@ -54,17 +54,19 @@ Kept as documented behaviour (tests in `MatchLogLimits.t.sol`): record from your
 ## Deploy plan
 
 1. Merge the branch with a merge commit, not a squash or rebase: the manifest pins commit `5db11b1…` by hash. If the history is rewritten, rebuild the manifest; the ruleset ID changes, which is fine before any deploy.
-2. Publish the manifest and the engine's closure text somewhere permanent (the manifest URI should point at it; see open decisions), not only git.
-3. Rehearse on Base Sepolia: deploy RulesetRegistry with a Safe as owner, deploy MatchLog, register solo-v1, record a few matches from test wallets, run the verifier against them, and verify both contracts' source on the explorer.
-4. Mainnet: the same steps, with the registry owner a Safe (not a single key), so its signers can change later even though the owner address can't.
-5. Tell players to record from their own wallet (smart wallets are fine); the page reads `nextSeed(player)` before a match.
+2. Tag every engine commit a manifest pins (for example `minpentai-engine-solo-v1`) and push the tags before deploying, so the commits can't be garbage-collected or lost to a rewritten branch (owner, 2026-10-21).
+3. Put each manifest and its closure files (the exact text of every pinned file) on Arweave, and point the registry's manifest URI there (owner, 2026-10-21). Git stays a second copy.
+4. Rehearse on Base Sepolia: deploy RulesetRegistry with a Safe as owner, deploy MatchLog, register solo-v1, record a few matches from test wallets, run the verifier against them, and verify both contracts' source on the explorer.
+5. Mainnet: the same steps. The registry owner is a Safe, not a single key, so its signers can change later even though the owner address can't. The Safe starts with the owner as its only signer (owner, 2026-10-21).
+6. Tell players to record from their own wallet (smart wallets are fine), never through a shared forwarder.
+7. If commit-before-play is built (`minpentai-commit-before-play.md`), it replaces this MatchLog before any deploy: the page calls `start()` before a match and reads the seed from the seed block, instead of `nextSeed(player)`.
 
 ## Open decisions
 
-- **Selective recording and fairness.** Every seed is known in advance and the computer player is deterministic, so a player can retry the same seed offline until they win, or grind wallets, and record only wins. The reviewer won at level 5 after 439 random tries. Today a history proves legal games, not skill. The fix is commit-before-play: a small transaction before the match fixes the seed and the level, and every committed match must be recorded or counts as a loss. That is a second transaction per match and a different MatchLog, so decide before mainnet.
+- **Selective recording and fairness.** Decided: build commit-before-play (`minpentai-commit-before-play.md`, waiting for the owner's OK on the design). Every seed is known in advance and the computer player is deterministic, so a player can retry the same seed offline until they win, or grind wallets, and record only wins. The reviewer won at level 5 after 439 random tries. Today a history proves legal games, not skill. The fix is commit-before-play: a small transaction before the match fixes the seed and the level, and every committed match must be recorded or counts as a loss. That is a second transaction per match and a different MatchLog, so decide before mainnet.
 - **The seed doesn't fix the level or ruleset.** Related: a player chooses the level and ruleset after seeing the seed. Commit-before-play would fix both.
 - **Solo first, or PvP.** Solo works today. PvP needs both players' signed moves (see `minpentai-fog.md`).
 - **An onchain profile.** History is already readable by wallet (`count`, `matchHash`, events). A profile (name, avatar, stats) could stay offchain on the You page, or be its own contract later.
 - **A ranked mode.** Only meaningful after commit-before-play. Even then, solo fog can't be enforced: the player can compute the whole board from the seed.
-- **Where manifests live.** The manifest URI needs a permanent home (IPFS or Arweave, pinned; or the repository at a fixed commit). Old matches can only be checked while the pinned engine text exists somewhere.
+- **Where manifests live.** Decided: Arweave, with git tags as a second copy (deploy plan, steps 2 and 3).
 - **The verifier's addresses.** Pin the official MatchLog and registry addresses in the verifier, so it can't be pointed at a look-alike.
