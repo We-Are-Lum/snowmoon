@@ -1,0 +1,70 @@
+{
+  "level": 2,
+  "rows": [
+    {
+      "opponent": 0,
+      "win": 99,
+      "draw": 93,
+      "loss": 8,
+      "refused": 0,
+      "winRate": 0.495,
+      "seconds": 160
+    },
+    {
+      "opponent": 1,
+      "win": 99,
+      "draw": 93,
+      "loss": 8,
+      "refused": 0,
+      "winRate": 0.495,
+      "seconds": 116
+    },
+    {
+      "opponent": 2,
+      "win": 58,
+      "draw": 135,
+      "loss": 7,
+      "refused": 0,
+      "winRate": 0.29,
+      "seconds": 106
+    },
+    {
+      "opponent": 3,
+      "win": 0,
+      "draw": 0,
+      "loss": 200,
+      "refused": 0,
+      "winRate": 0,
+      "seconds": 68
+    },
+    {
+      "opponent": 4,
+      "win": 0,
+      "draw": 0,
+      "loss": 200,
+      "refused": 0,
+      "winRate": 0,
+      "seconds": 60
+    },
+    {
+      "opponent": 5,
+      "win": 0,
+      "draw": 0,
+      "loss": 200,
+      "refused": 0,
+      "winRate": 0,
+      "seconds": 51
+    }
+  ],
+  "turns": 8906,
+  "ms": {
+    "median": 19.162332999985665,
+    "p95": 242.3045839999686,
+    "p99": 402.68854099998134,
+    "max": 1492.4440830000094
+  },
+  "sims": {
+    "median": 238,
+    "max": 547
+  }
+}
