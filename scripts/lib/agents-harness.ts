@@ -74,6 +74,13 @@ export async function startStage(opts: { scanner?: string; port?: number; transc
 
   // Farcaster's name API: nobody here has a Farcaster name (both people are wallets), so every lookup is "not found".
   const stub = createHttp((req, res) => {
+    // Client metadata documents and key sets, at https://cimd.test/… (oauth.ts reads them here off Vercel).
+    if (req.method === 'GET' && (req.url ?? '').startsWith('/cimd/')) {
+      const doc = cimdDocs.get((req.url ?? '').slice('/cimd'.length));
+      res.writeHead(doc ? 200 : 404, { 'content-type': 'application/json' });
+      res.end(JSON.stringify(doc ?? {}));
+      return;
+    }
     // fal's video endpoint, stood in: a video test answers with a link to a tiny file served here.
     if (req.method === 'POST' && (req.url ?? '').startsWith('/fal-ai/')) {
       req.resume();
@@ -117,7 +124,7 @@ export async function startStage(opts: { scanner?: string; port?: number; transc
       STUDIO_DATABASE_URL: `postgres://studio_writer@127.0.0.1:${dbPort}/postgres`,
       FARCASTER_API_URL: stubUrl, BASE_RPC_URL: stubUrl, IMAGES_TICKET_SECRET: SECRET,
       AGENTS_TEST: '1', AGENT_API_TEST: '1', AGENTS_TEST_ALLOW: [A, B, C].join(','), AGENTS_TEST_PUBLIC: opts.public === false ? '' : '1',
-      AGENTS_TEST_FAL_URL: stubUrl, REMIX_TEST_FAKES: '1', AGENTS_TEST_STORE: store, AGENTS_TEST_SCANNER: opts.scanner ?? 'none-planted', AGENTS_TEST_TRANSCRIPT: opts.transcript ?? 'Bai tells Zei to slow down, and this time he listens.',
+      AGENTS_TEST_FAL_URL: stubUrl, AGENTS_TEST_CIMD_URL: `${stubUrl}/cimd`, REMIX_TEST_FAKES: '1', AGENTS_TEST_STORE: store, AGENTS_TEST_SCANNER: opts.scanner ?? 'none-planted', AGENTS_TEST_TRANSCRIPT: opts.transcript ?? 'Bai tells Zei to slow down, and this time he listens.',
     },
     stdio: ['ignore', 'pipe', 'pipe'],
   });
@@ -148,6 +155,9 @@ export async function startStage(opts: { scanner?: string; port?: number; transc
     },
   };
 }
+
+/** What the stand-in serves at https://cimd.test/<path> (key: "/<path>"): metadata documents and key sets, set by a test. */
+export const cimdDocs = new Map<string, unknown>();
 
 /** The OAuth dance a connector does, scripted: register, the person's Allow, the code for tokens. */
 export async function connect(BASE: string, personToken: string, clientName: string, scope = 'read drafts images notes') {

@@ -28,7 +28,7 @@ import sharp from 'sharp';
 import { createHash } from 'node:crypto';
 import { privateKeyToAccount } from 'viem/accounts';
 import { createSiweMessage } from 'viem/siwe';
-import { startStage, connect, mcp, tool, ROOT } from './lib/agents-harness';
+import { startStage, connect, mcp, tool, ROOT, cimdDocs } from './lib/agents-harness';
 import { AGENTS as AGENT_CONFIG } from '../src/lib/config';
 
 const failures: string[] = [];
@@ -54,7 +54,7 @@ try {
   const prm = await (await fetch(`${BASE}/.well-known/oauth-protected-resource/mcp`)).json();
   check('O2 protected resource metadata names /mcp exactly and this site as its server', prm.resource === `${BASE}/mcp` && prm.authorization_servers?.[0] === BASE, JSON.stringify(prm));
   const asm = await (await fetch(`${BASE}/.well-known/oauth-authorization-server`)).json();
-  check('O3 server metadata: S256 only, public clients, CIMD and DCR, iss in responses', JSON.stringify(asm.code_challenge_methods_supported) === '["S256"]' && JSON.stringify(asm.token_endpoint_auth_methods_supported) === '["none"]' && asm.client_id_metadata_document_supported === true && asm.authorization_response_iss_parameter_supported === true && asm.registration_endpoint === `${BASE}/api/oauth/register`);
+  check('O3 server metadata: S256 only, public clients, CIMD and DCR, iss in responses', JSON.stringify(asm.code_challenge_methods_supported) === '["S256"]' && JSON.stringify(asm.token_endpoint_auth_methods_supported) === '["none","private_key_jwt"]' && asm.client_id_metadata_document_supported === true && asm.authorization_response_iss_parameter_supported === true && asm.registration_endpoint === `${BASE}/api/oauth/register`);
   const badReg = await fetch(`${BASE}/api/oauth/register`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ client_name: 'x', redirect_uris: ['http://evil.example/cb'] }) });
   check('O4 a plain-http redirect to another machine is refused at registration', badReg.status === 400);
   const page = await (await fetch(`${BASE}/oauth/authorize?client_id=nobody&redirect_uri=https%3A%2F%2Fevil.example%2Fcb&response_type=code&code_challenge=${'a'.repeat(43)}&code_challenge_method=S256`, { redirect: 'manual' })).text();
@@ -84,6 +84,58 @@ try {
   check('O14 a token for another resource is refused', wrongResource.status === 400 && (await wrongResource.json()).error === 'invalid_target');
   const deny = await (await asPerson(people.C.token, '/api/oauth/approve', { method: 'POST', body: JSON.stringify({ query: a1.query.toString(), allow: false }) })).json();
   check('O15 “Don’t allow” sends back access_denied', new URL(deny.to).searchParams.get('error') === 'access_denied');
+
+  console.log('J  a metadata-document client that signs its token requests (private_key_jwt), as ChatGPT does');
+  {
+    const { generateKeyPairSync, sign: rsaSign, randomBytes: rb, createHash: ch } = await import('node:crypto');
+    const kp = generateKeyPairSync('rsa', { modulusLength: 2048 });
+    const stranger = generateKeyPairSync('rsa', { modulusLength: 2048 });
+    const cid = 'https://cimd.test/chatgpt-like';
+    const cb = 'https://chatgpt.example/connector/oauth/callback';
+    cimdDocs.set('/chatgpt-like', { client_id: cid, client_name: 'ChatGPT', redirect_uris: [cb], token_endpoint_auth_method: 'private_key_jwt', jwks_uri: 'https://cimd.test/chatgpt-like/jwks' });
+    cimdDocs.set('/chatgpt-like/jwks', { keys: [{ ...kp.publicKey.export({ format: 'jwk' }), kid: 'k1', use: 'sig', alg: 'RS256' }] });
+    const b64 = (o: unknown) => Buffer.from(JSON.stringify(o)).toString('base64url');
+    const now = () => Math.floor(Date.now() / 1000);
+    const assertion = (over: Record<string, unknown> = {}, key = kp.privateKey) => {
+      const head = `${b64({ alg: 'RS256', typ: 'JWT', kid: 'k1' })}.${b64({ iss: cid, sub: cid, aud: `${BASE}/api/oauth/token`, iat: now(), exp: now() + 120, jti: rb(12).toString('hex'), ...over })}`;
+      return `${head}.${rsaSign('sha256', Buffer.from(head), key).toString('base64url')}`;
+    };
+    const AT = 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer';
+    const verifier = rb(32).toString('base64url');
+    const q = new URLSearchParams({ response_type: 'code', client_id: cid, redirect_uri: cb, code_challenge: ch('sha256').update(verifier).digest('base64url'), code_challenge_method: 'S256', state: 'st-gpt', resource: `${BASE}/mcp` });
+    const ok = await asPerson(people.A.token, '/api/oauth/approve', { method: 'POST', body: JSON.stringify({ query: q.toString(), allow: true }) });
+    const code = new URL(((await ok.json()) as { to?: string }).to ?? 'http://x/').searchParams.get('code') ?? '';
+    const tokenWith = (extra: Record<string, string>, base: Record<string, string> = { grant_type: 'authorization_code', code, code_verifier: verifier, redirect_uri: cb }) =>
+      fetch(`${BASE}/api/oauth/token`, { method: 'POST', headers: { 'content-type': 'application/x-www-form-urlencoded' }, body: new URLSearchParams({ ...base, client_id: cid, resource: `${BASE}/mcp`, ...extra }) });
+    check('J1 server metadata offers none and private_key_jwt, with the signing algorithms', JSON.stringify(asm.token_endpoint_auth_methods_supported) === '["none","private_key_jwt"]' && asm.token_endpoint_auth_signing_alg_values_supported?.includes('RS256'));
+    check('J2 a private_key_jwt metadata document is accepted at sign-in, and the person’s Allow sends back a code', ok.ok && !!code);
+    const noAssert = await tokenWith({});
+    check('J3 without its signed assertion, the token request is refused (invalid_client, 401)', noAssert.status === 401 && (await noAssert.json()).error === 'invalid_client');
+    const wrongKey = await tokenWith({ client_assertion_type: AT, client_assertion: assertion({}, stranger.privateKey) });
+    const wrongAud = await tokenWith({ client_assertion_type: AT, client_assertion: assertion({ aud: 'https://elsewhere.example/token' }) });
+    const expired = await tokenWith({ client_assertion_type: AT, client_assertion: assertion({ exp: now() - 120 }) });
+    const otherIss = await tokenWith({ client_assertion_type: AT, client_assertion: assertion({ iss: 'https://cimd.test/someone-else', sub: 'https://cimd.test/someone-else' }) });
+    check('J4 an assertion signed by another key, for another audience, expired, or from another client is refused', [wrongKey, wrongAud, expired, otherIss].every((r) => r.status === 401), [wrongKey, wrongAud, expired, otherIss].map((r) => r.status).join(','));
+    const good = await tokenWith({ client_assertion_type: AT, client_assertion: assertion() });
+    const goodJ = (await good.json()) as { access_token?: string; refresh_token?: string };
+    check('J5 with a valid assertion and the PKCE verifier, the code becomes tokens that work at /mcp', good.ok && !!goodJ.access_token && (await mcp(BASE, goodJ.access_token!, 'ping')).status === 200, JSON.stringify(goodJ).slice(0, 200));
+    const refreshBase = { grant_type: 'refresh_token', refresh_token: goodJ.refresh_token ?? '' };
+    const refreshBare = await tokenWith({}, refreshBase);
+    const refreshed = await tokenWith({ client_assertion_type: AT, client_assertion: assertion() }, refreshBase);
+    check('J6 a refresh needs a fresh assertion too', refreshBare.status === 401 && refreshed.ok);
+    const badVerifier = await (async () => {
+      const r = await asPerson(people.A.token, '/api/oauth/approve', { method: 'POST', body: JSON.stringify({ query: q.toString(), allow: true }) });
+      const c2 = new URL(((await r.json()) as { to: string }).to).searchParams.get('code') ?? '';
+      return tokenWith({ client_assertion_type: AT, client_assertion: assertion() }, { grant_type: 'authorization_code', code: c2, code_verifier: rb(32).toString('base64url'), redirect_uri: cb });
+    })();
+    check('J7 PKCE is still required for a signing client: a wrong verifier is refused even with a valid assertion', badVerifier.status === 400 && (await badVerifier.json()).error === 'invalid_grant');
+    cimdDocs.set('/secret-client', { client_id: 'https://cimd.test/secret-client', client_name: 'S', redirect_uris: [cb], token_endpoint_auth_method: 'client_secret_basic' });
+    const secretPage = await (await fetch(`${BASE}/oauth/authorize?client_id=${encodeURIComponent('https://cimd.test/secret-client')}&redirect_uri=${encodeURIComponent(cb)}&response_type=code&code_challenge=${'a'.repeat(43)}&code_challenge_method=S256`)).text();
+    const publicWithAssertion = await fetch(`${BASE}/api/oauth/token`, { method: 'POST', headers: { 'content-type': 'application/x-www-form-urlencoded' }, body: new URLSearchParams({ grant_type: 'refresh_token', refresh_token: 'x', client_id: a2.client, client_assertion_type: AT, client_assertion: assertion() }) });
+    check('J8 a metadata document asking for a client secret is still refused; a public client may not send an assertion', secretPage.includes('can’t be used') && publicWithAssertion.status === 401);
+    // This test's agent is ended, so the counts below are as before.
+    await S.pg.query(`update studio.agents set revoked_at = now() where person = $1 and client_id = $2`, [people.A.person, cid]);
+  }
 
   // The agents used from here on: A's Claude, B's ChatGPT.
   const agentA = (await connect(BASE, people.A.token, 'Claude')).access_token;
