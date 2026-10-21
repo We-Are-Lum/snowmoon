@@ -32,6 +32,8 @@
     "probe:pooler-echo": "tsx --env-file-if-exists=.env.local scripts/probe-pooler-echo.ts",
     "test:pglite-gate": "tsx scripts/test-pglite-gate.ts",
     "test:try-again": "tsx --conditions=react-server scripts/test-try-again.ts",
+    "test:agent-api-live": "node scripts/editor-data.mjs && NEXT_PUBLIC_URL=https://snowmoon.party next build && tsx scripts/test-agent-api-live.ts",
+    "test:agent-api": "tsx --conditions=react-server scripts/test-agent-api.ts",
     "test:wallet": "tsx --conditions=react-server scripts/test-wallet.ts",
     "seed:designs": "tsx --conditions=react-server --env-file-if-exists=.env.local scripts/seed-designs.ts",
     "check:miniapp": "tsx scripts/check-miniapp.ts",
@@ -52,8 +54,11 @@
     "check:minpentai-live": "tsx --conditions=react-server scripts/check-minpentai-live.ts",
     "designs:scenes": "tsx scripts/designs-scenes.ts",
     "check:chapter-summaries": "tsx scripts/chapter-summaries.ts check",
+    "test:make": "node scripts/editor-data.mjs && NEXT_PUBLIC_URL=https://snowmoon.party next build && tsx --conditions=react-server scripts/test-make.ts",
     "test:remix": "node scripts/editor-data.mjs && NEXT_PUBLIC_URL=https://snowmoon.party next build && tsx --conditions=react-server scripts/test-remix.ts",
-    "test:adaptation-pages": "node scripts/editor-data.mjs && NEXT_PUBLIC_URL=https://snowmoon.party next build && tsx scripts/test-adaptation-pages.ts"
+    "test:you-page": "node scripts/editor-data.mjs && next build && tsx --conditions=react-server scripts/test-you-page.ts",
+    "test:adaptation-pages": "node scripts/editor-data.mjs && NEXT_PUBLIC_URL=https://snowmoon.party next build && tsx scripts/test-adaptation-pages.ts",
+    "test:agents": "tsx --conditions=react-server scripts/test-agents.ts"
   },
   "license": "GPL-3.0-only",
   "description": "",

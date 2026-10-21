@@ -53,7 +53,9 @@
  * - The account at the foot of the rail and the menu sheet (owner, 2026-10-18): signed out it offers "Sign in with
  *   Farcaster", then "Sign in with a wallet" (the editor's button, with its note); a wallet session (planted in
  *   storage, nothing signed) shows its shortened address and a Sign out that ends it; a Farcaster session shows
- *   the Farcaster name and no wallet option.
+ *   the Farcaster name and no wallet option. The name is a link to the You page (/you), and the top bar shows an
+ *   avatar linking there, between ? and the menu, only when signed in; /you signed out meets the floors and shows
+ *   only the sign-in offer (owner, 2026-10-18).
  * - The footer line (owner's legal starter, 2026-10-09) reads exactly as written, with Terms, Privacy
  *   and Source linked, at the foot of About, in the menu sheet and at the bottom of the rail; not on a
  *   phone's reading screen. /terms and /privacy meet the floors.
@@ -1589,6 +1591,7 @@ try {
     await checkFloors(page, '/chapter/1 @390 (menu)', scheme);
     await checkLegalLine(page, '.menu-sheet', '@390 menu', scheme);
     await checkAccountSignedOut(page, '.menu-sheet', '@390 menu');
+    if (await page.locator('.topbar-avatar').count()) fail('@390: signed out, the top bar shows an avatar');
     await page.locator('.menu-sheet .menu-account').scrollIntoViewIfNeeded();
     await shot(page, 'phone-390-menu', scheme);
     await page.keyboard.press('Escape');
@@ -1600,6 +1603,10 @@ try {
     await page.locator('.menu-sheet .menu-account').scrollIntoViewIfNeeded();
     await checkFloors(page, '/chapter/1 @390 (menu, wallet)', scheme);
     await shot(page, 'phone-390-menu-wallet', scheme);
+    // The You page's entry points (owner, 2026-10-18): the name in the menu, and the avatar between ? and the menu.
+    if ((await page.locator('.menu-sheet a.menu-account-name').getAttribute('href').catch(() => null)) !== '/you') fail('@390 menu: a wallet session\'s name is not a link to /you');
+    if ((await page.locator('.topbar-end .topbar-avatar').getAttribute('href').catch(() => null)) !== '/you') fail('@390: a wallet session shows no avatar linking to /you in the top bar');
+    else if (!/^You: /.test((await page.locator('.topbar-avatar').getAttribute('aria-label')) ?? '')) fail('@390: the top bar\'s avatar has no accessible name');
     await checkAccountWallet(page, '.menu-sheet', '@390 menu');
     await page.keyboard.press('Escape');
     if (await page.locator('.menu-sheet').count()) fail('@390: Escape does not close the menu');
@@ -1632,6 +1639,12 @@ try {
       if (await page.locator('.recipe-sheet').count()) fail('@390: Escape does not close the recipe sheet');
       if (!(await label.evaluate((el) => el === document.activeElement))) fail('@390: closing the recipe sheet does not return focus to the AI label');
     }
+    // The You page signed out (owner, 2026-10-18): the floors, the sign-in offer, and no account, wallet or work.
+    await open(page, '/you');
+    await page.locator('.you-sign-in button').first().waitFor({ timeout: 10000 }).catch(() => fail(`/you @390 (${scheme}): signed out, no sign-in offered`));
+    await checkFloors(page, '/you @390 (signed out)', scheme);
+    if (/Your account|Your work|Balance \$/.test(await page.locator('main.you').innerText().catch(() => ''))) fail(`/you @390 (${scheme}): signed out, the page shows an account, wallet or work`);
+    await shot(page, 'phone-390-you-signed-out', scheme);
     await open(page, '/chapter/1?view=listen');
     await page.waitForSelector('.listen-pane');
     await checkFloors(page, '/chapter/1?view=listen @390', scheme);

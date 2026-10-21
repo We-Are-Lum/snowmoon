@@ -120,6 +120,12 @@ export async function allMyFrames(sql: Sql, person: number): Promise<Frame[]> {
   return rs.map(row);
 }
 
+/** A person's frames that are shown (not hidden), newest first: for their public profile, /@<handle> (owner, 2026-10-18). */
+export async function shownFramesBy(sql: Sql, person: number, limit = 60): Promise<Frame[]> {
+  const rs = await sql`select * from studio.remix_frames where person = ${person} and not hidden order by created_at desc limit ${limit}`;
+  return rs.map(row);
+}
+
 /**
  * Hide or unhide. The maker hides their own; the maintainer hides anything. A maker's hide is undone
  * by the maker; a maintainer's only by the maintainer.

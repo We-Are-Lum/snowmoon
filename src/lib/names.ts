@@ -112,3 +112,29 @@ export async function lookupFid(name: string): Promise<{ fid: number | null; use
   byName.set(key, out);
   return out;
 }
+
+const pfpCache = new Map<number, { url: string | null; at: number }>();
+
+/**
+ * A FID's profile picture address, from Farcaster's public API (GET /v2/user?fid=… → result.user.pfp.url),
+ * for the top bar's avatar (owner, 2026-10-18). Sends only the FID. Cached a day. Only an https address on a
+ * named host (not an IP or localhost) is returned, since the server then fetches it (src/app/api/pfp).
+ */
+export async function lookupPfp(fid: number): Promise<string | null> {
+  const hit = pfpCache.get(fid);
+  if (hit && Date.now() - hit.at < DAY) return hit.url;
+  const res = await fetch(`${farcasterApi()}/v2/user?fid=${fid}`, { signal: AbortSignal.timeout(5000) }).catch(() => null);
+  if (!res?.ok) return hit?.url ?? null;
+  const j = (await res.json().catch(() => ({}))) as { result?: { user?: { pfp?: { url?: unknown } } } };
+  const raw = j.result?.user?.pfp?.url;
+  let url: string | null = null;
+  try {
+    const u = typeof raw === 'string' ? new URL(raw) : null;
+    const ipOrLocal = u && (/^[\d.]+$/.test(u.hostname) || u.hostname.includes(':') || u.hostname.startsWith('[') || u.hostname === 'localhost' || !u.hostname.includes('.'));
+    url = u && u.protocol === 'https:' && !ipOrLocal ? u.toString() : null;
+  } catch {
+    url = null;
+  }
+  pfpCache.set(fid, { url, at: Date.now() });
+  return url;
+}

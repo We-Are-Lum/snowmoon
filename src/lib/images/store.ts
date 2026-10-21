@@ -1,5 +1,5 @@
 import 'server-only';
-import { CopyObjectCommand, DeleteObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import { CopyObjectCommand, DeleteObjectCommand, GetObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { IMAGES } from '../config';
 
 /**
@@ -92,4 +92,21 @@ export async function restorePublic(sha256: string): Promise<void> {
   const { client, pub, priv } = r2();
   const key = keyFor(sha256);
   await client.send(new CopyObjectCommand({ Bucket: pub, Key: key, CopySource: `${priv}/${key}`, CacheControl: `public, max-age=${IMAGES.cacheSeconds}`, MetadataDirective: 'REPLACE', ContentType: 'image/jpeg' }));
+}
+
+/**
+ * Brought-in images (agents, owner 2026-10-20; DRAFT): kept only in the private bucket, under
+ * brought-in/, and served through the site's own route (/api/pieces/image/<version>) to their
+ * person while a draft and to anyone once published. Never written before the scan has passed.
+ */
+export async function putPrivate(key: string, bytes: Buffer, contentType: string): Promise<void> {
+  const { client, priv } = r2();
+  await client.send(new PutObjectCommand({ Bucket: priv, Key: key, Body: bytes, ContentType: contentType }));
+}
+
+export async function getPrivate(key: string): Promise<Buffer | null> {
+  const { client, priv } = r2();
+  const out = await client.send(new GetObjectCommand({ Bucket: priv, Key: key })).catch(() => null);
+  if (!out?.Body) return null;
+  return Buffer.from(await out.Body.transformToByteArray());
 }

@@ -8,6 +8,8 @@ import { deliveryFor } from '~/lib/scene-delivery';
 import { isShotId, momentShot, type MomentLine, type MomentShot } from '~/lib/moments';
 import { NothingHere, loadScene, type SceneParams } from './scene-page';
 import { MomentPlay } from './moment-play';
+import { agentsOn } from '~/lib/agents/core';
+import { MomentTell } from '~/components/agents/moment-tell';
 import './scene.css';
 import './moment.css';
 
@@ -140,6 +142,9 @@ export async function MomentPage({ p }: { p: MomentParams }) {
           );
         })}
       </section>
+
+      {/* Say what you want here; your agent makes it (owner, 2026-10-20). Only while agents are switched on. */}
+      {agentsOn() && <MomentTell moment={`${adaptation.id}/${columns[0].edId}/${first.id}`} />}
 
       <nav className="moment-nav label" aria-label="Other moments">
         {first.prev ? <Link href={path(handle, adaptation.id, first.prev)}>← Moment {first.n - 1}</Link> : <span />}

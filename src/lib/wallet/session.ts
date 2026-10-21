@@ -8,7 +8,7 @@ import { IMAGES } from '../config';
  * - the nonce in the message the wallet signs: random, good for ten minutes;
  * - the session token sent back as a bearer header: the account number and address, good for
  *   IMAGES.prepaid.sessionHours. It starts with "w1." so it is never mistaken for a Farcaster token.
- * A wallet session is accepted only by the image routes and consent (src/lib/auth.ts getPerson).
+ * A wallet session is accepted only by the image routes, consent and "Make your own" (src/lib/auth.ts getPerson).
  */
 const NONCE_MINUTES = 10;
 

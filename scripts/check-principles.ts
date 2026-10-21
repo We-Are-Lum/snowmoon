@@ -30,6 +30,7 @@ import { LEGAL, PRIVACY, TERMS, legalKey } from '../src/lib/legal';
 import { LEARN_TEXT } from '../src/lib/minpentai/learn-text';
 import { BOOK_TAG, NARRATION_MAX_WORDS, PERSON_TAG, parseBeats } from '../src/lib/script-beats';
 import { GLOSSARY_FILE, loadBlocks, verifyGlossary, type Glossary } from './lib/glossary';
+import { p4aProblems } from './lib/p4a';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const arg = (name: string) => process.argv.slice(2).find((a) => a.startsWith(`--${name}=`))?.split('=').slice(1).join('=');
@@ -292,6 +293,14 @@ add({
         if (/fetch\(|supabase|\/api\//.test(text)) problems.push(`${file}: the note box must not send its text anywhere itself`);
         continue;
       }
+      // A private draft's box ("Make your own", owner's long run 2, 2026-10-19): saved in the person's own drafts, never
+      // published, sent to the model only with a message to the coach, and it says so.
+      if (file.endsWith('components/private-draft-field.tsx')) {
+        for (const [what, re] of [['private', /Private:/], ['only theirs', /only you can open/], ['never published', /Never published/], ['sent only with a message to the coach', /only with a message to the coach/], ['described to screen readers', /aria-describedby/]] as const)
+          if (!re.test(text)) problems.push(`${file}: the draft box must say it is ${what}`);
+        if (/fetch\(|supabase|\/api\//.test(text)) problems.push(`${file}: the draft box must not send its text anywhere itself`);
+        continue;
+      }
       if (file.endsWith('components/private-text-field.tsx')) {
         // Owner (2026-10-07): saved only on this device, sent to Vercel and Groq to be answered, never published; labelled draft.
         // 2026-10-08: Groq directly, the gateway only when Groq is busy, and both named while the fallback is on.
@@ -328,6 +337,20 @@ add({
         if (fetches.some((f) => f !== "'/api/book/text'")) problems.push(`src/components/image-create.tsx: fetches ${fetches.join(', ')}; the search must fetch only '/api/book/text' and never send the query`);
         if (!/searchCorpus\(/.test(create)) problems.push('src/components/image-create.tsx: does not search on the device (searchCorpus)');
         if (/<textarea\b/.test(text)) problems.push(`${file}: the search box must be a single-line search input`);
+        continue;
+      }
+      if (file.endsWith('components/agents/agent-key-field.tsx')) {
+        // A personal agent key's name and spend cap on /you (owner, 2026-10-20): kept with the key, never published by us.
+        for (const [what, re] of [['kept with the key', /Kept with the key/], ['never published', /Never published by us/], ['described to screen readers', /aria-describedby/]] as const)
+          if (!re.test(text)) problems.push(`${file}: the agent key boxes must say they are ${what}`);
+        if (/fetch\(|supabase|\/api\//.test(text)) problems.push(`${file}: the agent key boxes must not send their text anywhere themselves`);
+        continue;
+      }
+      if (file.endsWith('components/agents/agent-address-field.tsx')) {
+        // A wallet agent's address on /you (owner, 2026-10-20): kept with the link, never published by us.
+        for (const [what, re] of [['kept with the link', /kept with the link/], ['never published', /Never published by us/], ['described to screen readers', /aria-describedby/]] as const)
+          if (!re.test(text)) problems.push(`${file}: the agent address box must say it is ${what}`);
+        if (/fetch\(|supabase|\/api\//.test(text)) problems.push(`${file}: the agent address box must not send its text anywhere itself`);
         continue;
       }
       if (file.endsWith('components/tx-hash-field.tsx')) {
@@ -987,29 +1010,15 @@ add({
 // ---------------------------------------------------------------------------
 // P4. No model output is published without a signed-in person's action.
 // ---------------------------------------------------------------------------
-/** Shared sign-in wrappers routes may call instead of checking getFid themselves (P4a reads each one). */
-const P4A_WRAPPERS = [{ module: '~/lib/minpentai/play-server/route', file: 'src/lib/minpentai/play-server/route.ts', call: 'play' }];
-const P4A_EXEMPT = new Set(['src/app/api/auth/web/start/route.ts', 'src/app/api/wallet/sign-in/route.ts']);
+// The rules, the named exemptions and the agents' draft-only form (owner, 2026-10-20) live in scripts/lib/p4a.ts,
+// so scripts/test-agents.ts can prove them on planted routes (a draft-only route passes; one that can publish,
+// or keep, fails).
 add({
   id: 'P4a',
   principle: 4,
-  name: 'every write API route requires a signed-in FID (or, where named, a signed-in wallet)',
-  load: async () => walk('src/app/api', /route\.tsx?$/).map((f) => ({ file: f, src: read(f) })),
-  // Named exemption (owner instruction, 2026-10-08: website sign-in): the route that starts a sign-in
-  // cannot require one. It writes nothing of ours; it opens a channel on Farcaster's relay.
-  // Named exemption (owner, 2026-10-13: wallet sign-in): the wallet sign-in route is the sign-in; it
-  // writes only the account row, and only for a signature checked against the wallet.
-  // getPerson (a FID or a wallet; image routes and consent) and getWallet (wallet routes) count as
-  // sign-in checks too: both answer null without a valid session, and the route answers 401.
-  // A route may instead hand every request to a shared wrapper listed in P4A_WRAPPERS; it passes only
-  // if it imports and calls that wrapper, and the wrapper itself checks getFid and answers 401.
-  run: (routes) =>
-    routes
-      .filter((r: { file: string }) => !P4A_EXEMPT.has(r.file))
-      .filter((r: { src: string }) => /export async function (POST|PUT|PATCH|DELETE)\b/.test(r.src))
-      .filter((r: { src: string }) => !(/(getFid|getPerson|getWallet)\(/.test(r.src) && /status: 401/.test(r.src)))
-      .filter((r: { src: string }) => !P4A_WRAPPERS.some((w) => r.src.includes(`from '${w.module}'`) && new RegExp(`\\b${w.call}\\(request,`).test(r.src) && /getFid\(/.test(read(w.file)) && /\b401\)/.test(read(w.file))))
-      .map((r: { file: string }) => `${r.file}: writes without requiring sign-in`),
+  name: 'every write route requires a signed-in FID or wallet (or, where named, is a sign-in); an agent\'s route only creates drafts',
+  load: async () => [...walk('src/app/api', /route\.tsx?$/), ...walk('src/app/mcp', /route\.tsx?$/)].map((f) => ({ file: f, src: read(f) })),
+  run: (routes) => p4aProblems(routes, read),
   plant: (routes) => {
     routes.push({ file: 'src/app/api/planted/route.ts', src: 'export async function POST() { return new Response("ok"); }' });
   },
@@ -1128,7 +1137,9 @@ add({
 // ---------------------------------------------------------------------------
 const PAGES = ['/', '/chapter/1', '/chapter/30', '/about', '/cards', '/adaptations', '/adaptations/dog-dawn', '/share/1/4?img=c1-b005-toy-drone', '/images', '/moderate', '/glossary', '/glossary/zei', '/terms', '/privacy', '/images?show=moments',
   // Step 4: styles and character sheets.
-  '/images/designs', '/images/designs?tab=characters', '/images/designs/character/gladias', '/images/picks'];
+  '/images/designs', '/images/designs?tab=characters', '/images/designs/character/gladias', '/images/picks',
+  // The You page and a public profile (owner, 2026-10-18).
+  '/you', '/@naaate'];
 add({
   id: 'P6a',
   principle: 6,

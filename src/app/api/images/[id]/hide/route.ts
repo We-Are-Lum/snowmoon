@@ -1,6 +1,6 @@
 import { after, NextResponse } from 'next/server';
 import { revalidatePath } from 'next/cache';
-import { getFid } from '~/lib/auth';
+import { getPerson } from '~/lib/auth';
 import { db } from '~/lib/db';
 import { tryAgain } from '~/lib/try-again';
 import { alertReports } from '~/lib/images/alert';
@@ -15,11 +15,13 @@ type Ctx = { params: Promise<{ id: string }> };
  * private bucket, and the step is logged. "Unhide" undoes only a hide the author made themselves
  * (decision 22); a hide by a moderator or a rule is undone only by the maintainer.
  * Step 4: a style or a character sheet is hidden the same way, with all its pictures.
+ * A wallet account hides its own the same way (owner, 2026-10-18, the You page: "pictures, each with
+ * Hide"): its person number is minus its account id, which is what its pictures record as their maker.
  */
 export async function POST(request: Request, { params }: Ctx) {
   try {
-    const fid = await getFid(request);
-    if (fid === null) return NextResponse.json({ error: 'Sign in with Farcaster' }, { status: 401 });
+    const fid = await getPerson(request);
+    if (fid === null) return NextResponse.json({ error: 'Sign in first' }, { status: 401 });
     const sql = db();
     if (!sql) return NextResponse.json({ error: 'Not available here' }, { status: 503 });
     const { id } = await params;

@@ -18,7 +18,14 @@ const EVENT = 'snowmoon:signin';
  * of Farcaster. A Farcaster sign-in, when there is one, wins.
  */
 const WALLET_KEY = 'snowmoon.wallet';
-const WALLET_ROUTES = ['/api/images/status', '/api/images/generate', '/api/images/publish', '/api/consent', '/api/wallet/', '/api/remix/', '/api/designs/picks'];
+const WALLET_ROUTES = ['/api/images/status', '/api/images/generate', '/api/images/publish', '/api/consent', '/api/wallet/', '/api/remix/', '/api/you', '/api/scenes/', '/api/make/', '/api/oauth/approve', '/api/agents', '/api/drafts', '/api/notes', '/api/requests', '/api/designs/picks'];
+/**
+ * Routes matched exactly rather than by prefix: hiding one's own picture (the You page, owner 2026-10-18).
+ * Not every /api/images/<id>/… route: like and report take a Farcaster sign-in only, and a wallet
+ * token sent there would be answered 401, which signs the wallet out.
+ */
+const WALLET_EXACT = [/^\/api\/images\/[0-9a-f-]{36}\/hide$/];
+const takesWallet = (url: string) => WALLET_ROUTES.some((r) => url.startsWith(r)) || WALLET_EXACT.some((r) => r.test(url));
 
 interface WebSession {
   token: string;
@@ -133,12 +140,50 @@ export function useWalletSession(): WalletSessionState | null {
   return state;
 }
 
+/**
+ * The wallet session, even when a Farcaster sign-in wins everywhere else (the You page and the top bar's
+ * avatar show both; owner, 2026-10-18). Null when there is none.
+ */
+export function useWalletAlongside(): WalletSessionState | null {
+  const [state, setState] = useState<WalletSessionState | null>(null);
+  useEffect(() => {
+    const check = () => setState(readWallet());
+    check();
+    window.addEventListener(EVENT, check);
+    window.addEventListener('storage', check);
+    return () => {
+      window.removeEventListener(EVENT, check);
+      window.removeEventListener('storage', check);
+    };
+  }, []);
+  return state;
+}
+
 /** fetch with the person's token when there is one; a plain fetch otherwise. */
+/**
+ * fetch with the wallet session's token, whatever else is signed in: for a wallet's own things when the
+ * person is signed in with Farcaster too (the You page and top bar, owner 2026-10-18: show both). A
+ * plain fetch when there is no wallet session; a 401 ends the wallet session only.
+ */
+export async function walletFetch(url: string, init?: RequestInit): Promise<Response> {
+  const w = readWallet();
+  if (!w) return fetch(url, init);
+  const headers = new Headers(init?.headers);
+  headers.set('Authorization', `Bearer ${w.token}`);
+  const res = await fetch(url, { ...init, headers });
+  if (res.status === 401) signOutWallet();
+  return res;
+}
+
+/** Routes that take only a wallet sign-in (balance, claim): the wallet's token goes there even when Farcaster is signed in too. */
+const WALLET_ONLY = ['/api/wallet/'];
+
 export async function authFetch(url: string, init?: RequestInit): Promise<Response> {
+  if (WALLET_ONLY.some((r) => url.startsWith(r)) && readWallet()) return walletFetch(url, init);
   if (await inMiniApp()) return sdk.quickAuth.fetch(url, init);
   const s = readSession();
   if (!s) {
-    const w = WALLET_ROUTES.some((r) => url.startsWith(r)) ? readWallet() : null;
+    const w = takesWallet(url) ? readWallet() : null;
     if (!w) return fetch(url, init);
     const headers = new Headers(init?.headers);
     headers.set('Authorization', `Bearer ${w.token}`);
