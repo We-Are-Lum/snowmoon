@@ -67,6 +67,7 @@ Kept as documented behaviour (tests in `MatchLogLimits.t.sol`): record from your
 - **The seed doesn't fix the level or ruleset.** Related: a player chooses the level and ruleset after seeing the seed. Commit-before-play would fix both.
 - **Solo first, or PvP.** Solo works today. PvP needs both players' signed moves (see `minpentai-fog.md`).
 - **An onchain profile.** History is already readable by wallet (`count`, `matchHash`, events). A profile (name, avatar, stats) could stay offchain on the You page, or be its own contract later.
+- **Rankings count per Farcaster ID, gated by Neynar score, not per wallet** (owner, 2026-10-21). Commit-before-play stops retrying a seed within one wallet, but not starting in many wallets and keeping the best seed; a ranking keyed to a Farcaster ID (with a minimum Neynar score, as Make an image already uses) makes extra wallets worthless. To decide: how a wallet is linked to a Farcaster ID for rankings, and the score threshold.
 - **A ranked mode.** Only meaningful after commit-before-play. Even then, solo fog can't be enforced: the player can compute the whole board from the seed.
 - **Where manifests live.** Decided: Arweave, with git tags as a second copy (deploy plan, steps 2 and 3).
 - **The verifier's addresses.** Pin the official MatchLog and registry addresses in the verifier, so it can't be pointed at a look-alike.

@@ -149,7 +149,8 @@ export const RULES_V1: Rule[] = [
   { id: 'new-rule', text: 'One of four new rules is drawn from the seed at the start of every match, and both players see it.',
     book: book('Every game has some kind of new rule.', ['c4-b84']), edition: 'One of four rules, drawn from the seed; the four rules are invented.' },
   { id: 'computer-sight', text: 'The computer players see only what their towers light (Play\'s; Learn\'s practice bot is not part of this ruleset).', edition: 'The whole rule.' },
-  { id: 'seed', text: 'A recorded match\'s seed is bound to the player\'s wallet: keccak256 of the chain, the MatchLog, the player and how many matches they have recorded. The engine plays from its last 4 bytes, read big-endian (0 to 2^32 - 1). Its first random number draws the new rule; the computer player takes the rest, in order.', edition: 'The whole rule.' },
+  { id: 'seed', text: 'A match is opened before play, fixing its ruleset and level, and its seed comes from the hash of a block that did not exist yet when it was opened, bound to the player\'s wallet and match number. The engine plays from the seed\'s last 4 bytes, read big-endian (0 to 2^32 - 1). Its first random number draws the new rule; the computer player takes the rest, in order.', edition: 'The whole rule.' },
+  { id: 'forfeit', text: 'A match opened and not recorded within 8,000 blocks of its seed block, or abandoned by opening another, is a forfeit.', edition: 'The whole rule.' },
 ];
 
 export const DRAWN_RULES_V1: Rule[] = [
@@ -209,7 +210,7 @@ export function soloManifestV1({ commit, files, packages }: ManifestInput) {
     settings: {
       points: 8, cost: { glider: 4, square: 1, tower: 4 }, sight: 3, every: 12, squareHits: 2,
       seed: {
-        recorded: 'bytes32 = keccak256(abi.encode(uint256 chainId, address matchLog, address player, uint256 n)), n = the player\'s record count before this match',
+        recorded: 'bytes32 = keccak256(abi.encode(uint256 chainId, address matchLog, address player, uint256 n, bytes32 rulesetId, uint8 level, bytes32 blockhash(seedBlock))); MatchLog.start(rulesetId, level) fixes n, the ruleset, the level and seedBlock = its block + 2',
         engineSeed: 'uint32(uint256(seed)): the last 4 bytes of the bytes32, read big-endian',
         engineRange: [0, 4294967295],
       },

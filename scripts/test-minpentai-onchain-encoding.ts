@@ -7,26 +7,30 @@ import { replaySolo } from '../src/lib/minpentai/onchain/replay';
 import { EDGE_SEEDS, sampleMatch } from '../src/lib/minpentai/onchain/sample';
 import { deriveSeed } from '../src/lib/minpentai/onchain/seed';
 import { engineSeed } from '../src/lib/minpentai/onchain/replay';
-import type { Address, Hex } from 'viem';
+import { keccak256, toBytes, type Address, type Hex } from 'viem';
 import { decode, encode, EncodingError, fromReplay, positionOf, toHex, type EncodedMatch } from '../src/lib/minpentai/onchain/encoding';
 import { rulesetId } from '../src/lib/minpentai/onchain/ruleset';
 
 let failed = 0, passed = 0;
 const check = (name: string, f: () => string | void) => { let bad: string | void; try { bad = f(); } catch (e) { bad = (e as Error).stack; } if (bad) { failed++; console.log(`FAIL ${name}: ${bad}`); } else passed++; };
+const js = (v: unknown) => JSON.stringify(v, (_, x) => (typeof x === 'bigint' ? `${x}n` : x));
 const refuses = (f: () => unknown) => { try { f(); return false; } catch (e) { return e instanceof EncodingError; } };
 const ID = rulesetId(JSON.parse(readFileSync('docs/minpentai/rulesets/solo-v1.json', 'utf8')));
 // 300 matches across the whole seed range: the edge engine seeds at every level (in a bytes32 whose
-// first 28 bytes are arbitrary), then wallet-bound seeds derived for 40 players' first 6 matches.
+// first 28 bytes are arbitrary), then commit-before-play seeds for 40 players' first 6 matches
+// (synthetic seed-block hashes; seed blocks from 2 to 2^64 - 1).
 const LOG: Address = '0x00000000000000000000000000000000000b10c5';
-const seeds: { n: number; seed: Hex; level: number; resign?: number }[] = [];
-EDGE_SEEDS.forEach((e, i) => { for (let level = 0; level <= 5; level++) seeds.push({ n: i, seed: `0x${'5a'.repeat(28)}${e.toString(16).padStart(8, '0')}`, level }); });
+const seeds: { n: number; seed: Hex; seedBlock: bigint; level: number; resign?: number }[] = [];
+EDGE_SEEDS.forEach((e, i) => { for (let level = 0; level <= 5; level++) seeds.push({ n: i, seed: `0x${'5a'.repeat(28)}${e.toString(16).padStart(8, '0')}`, seedBlock: BigInt(i * 6 + level + 2), level }); });
 for (let p = 0; seeds.length < 300; p++) for (let n = 0; n < 6 && seeds.length < 300; n++) {
   const player = `0x${(p + 1).toString(16).padStart(40, '0')}` as Address;
-  seeds.push({ n, seed: deriveSeed(31337n, LOG, player, BigInt(n)), level: (p + n) % 6, resign: (p + n) % 9 === 4 ? 1 + (n % 3) : undefined });
+  const level = (p + n) % 6, seedBlock = p === 0 && n === 0 ? 2n ** 64n - 1n : BigInt(52_000_000 + p * 1000 + n * 37);
+  const seed = deriveSeed({ chainId: 31337n, matchLog: LOG, player, n: BigInt(n), rulesetId: ID, level, seedBlockHash: keccak256(toBytes(`block ${seedBlock}`)) });
+  seeds.push({ n, seed, seedBlock, level, resign: (p + n) % 9 === 4 ? 1 + (n % 3) : undefined });
 }
 const ms: EncodedMatch[] = seeds.map((x) => {
   const solo = sampleMatch(engineSeed(x.seed), x.level, x.resign);
-  return fromReplay(ID, x.n, x.seed, solo, replaySolo(solo));
+  return fromReplay(ID, x.n, x.seed, x.seedBlock, solo, replaySolo(solo));
 });
 const bytesOf = ms.map(encode);
 
@@ -34,11 +38,12 @@ check('the edge seeds are all there, and n of 2^32 - 1 round-trips', () => {
   for (const e of EDGE_SEEDS) if (!ms.some((m) => engineSeed(m.seed) === e)) return `no engine seed ${e}`;
   const top = decode(encode({ ...ms[0], n: 2 ** 32 - 1 }));
   if (top.n !== 2 ** 32 - 1) return `n came back ${top.n}`;
+  if (!ms.some((m) => m.seedBlock === 2n ** 64n - 1n) || decode(encode(ms.find((m) => m.seedBlock === 2n ** 64n - 1n)!)).seedBlock !== 2n ** 64n - 1n) return 'seed block 2^64 - 1 did not round-trip';
 });
 check(`${ms.length} matches round-trip: decode(encode(m)) is m, and encode(decode(b)) is b`, () => {
   for (let i = 0; i < ms.length; i++) {
     const d = decode(bytesOf[i]);
-    if (JSON.stringify(d) !== JSON.stringify(ms[i])) return `match ${i}: ${JSON.stringify(d).slice(0, 200)}`;
+    if (js(d) !== js(ms[i])) return `match ${i}: ${js(d).slice(0, 200)}`;
     if (toHex(encode(d)) !== toHex(bytesOf[i])) return `match ${i}: bytes differ`;
   }
 });
@@ -91,12 +96,15 @@ check('every field is range-checked on the way in and out', () => {
   const b = bytesOf[0], m = ms[0];
   const set = (at: number, v: number) => { const c = b.slice(); c[at] = v; return c; };
   const bad: [string, () => unknown][] = [
-    ['version 1', () => decode(set(0, 1))],
-    ['opponent kind 1', () => decode(set(69, 1))],
-    ['level 6', () => decode(set(70, 6))],
-    ['claim 3', () => decode(set(71, 3))],
-    ['end kind 2', () => decode(set(72, 2))],
-    ['end step 97', () => decode(set(73, 97))],
+    ['version 2', () => decode(set(0, 2))],
+    ['opponent kind 1', () => decode(set(77, 1))],
+    ['level 6', () => decode(set(78, 6))],
+    ['claim 3', () => decode(set(79, 3))],
+    ['end kind 2', () => decode(set(80, 2))],
+    ['end step 97', () => decode(set(81, 97))],
+    ['seed block 2^64', () => encode({ ...m, seedBlock: 2n ** 64n })],
+    ['seed block negative', () => encode({ ...m, seedBlock: -1n })],
+    ['seed block as a number', () => encode({ ...m, seedBlock: 5 as unknown as bigint })],
     ['n of 2^32', () => encode({ ...m, n: 2 ** 32 })],
     ['n negative', () => encode({ ...m, n: -1 })],
     ['uppercase seed', () => encode({ ...m, seed: m.seed.toUpperCase().replace('0X', '0x') as Hex })],

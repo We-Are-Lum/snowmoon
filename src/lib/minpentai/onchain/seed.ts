@@ -1,23 +1,32 @@
 /**
- * Wallet-bound seeds (onchain v1 spike, owner 2026-10-21). A player's nth match (n = how many they
- * have recorded so far) must use this seed; MatchLog.record() computes the same and refuses
- * anything else, so nobody can put another wallet's match, or one from another chain or log, into
- * their own history:
+ * Commit-before-play seeds (onchain v1 spike, owner 2026-10-21). MatchLog.start(rulesetId, level)
+ * opens a player's match number n and names its seed block (start's block + 2). Once that block
+ * exists, its hash gives the seed; MatchLog.record() recomputes it through EIP-2935 and refuses
+ * anything else:
  *
- *   seed = keccak256(abi.encode(uint256 chainId, address matchLog, address player, uint256 n))
+ *   seed = keccak256(abi.encode(uint256 chainId, address matchLog, address player, uint256 n,
+ *                               bytes32 rulesetId, uint8 level, bytes32 blockhash(seedBlock)))
  *
- * The engine plays from the seed's low 32 bits (engineSeed in replay.ts: the last 4 bytes,
- * big-endian, Solidity's uint32(uint256(seed))).
+ * The engine plays from the seed's last 4 bytes, big-endian (engineSeed in replay.ts).
  */
 import { encodeAbiParameters, getAddress, keccak256, type Address, type Hex } from 'viem';
 import { engineSeed } from './replay';
 
-export function deriveSeed(chainId: bigint, matchLog: Address, player: Address, n: bigint): Hex {
-  return keccak256(encodeAbiParameters([{ type: 'uint256' }, { type: 'address' }, { type: 'address' }, { type: 'uint256' }], [chainId, getAddress(matchLog), getAddress(player), n]));
+export const SEED_DELAY = 2n;
+export const DEADLINE_BLOCKS = 8000n;
+export const HISTORY: Address = '0x0000F90827F1C53a10cb7A02335B175320002935';
+
+export interface SeedInput { chainId: bigint; matchLog: Address; player: Address; n: bigint; rulesetId: Hex; level: number; seedBlockHash: Hex }
+
+export function deriveSeed(s: SeedInput): Hex {
+  return keccak256(encodeAbiParameters(
+    [{ type: 'uint256' }, { type: 'address' }, { type: 'address' }, { type: 'uint256' }, { type: 'bytes32' }, { type: 'uint8' }, { type: 'bytes32' }],
+    [s.chainId, getAddress(s.matchLog), getAddress(s.player), s.n, s.rulesetId, s.level, s.seedBlockHash],
+  ));
 }
 
-/** What the page would show before a match: the player's next n, its seed, and the engine seed. */
-export function nextSeed(chainId: bigint, matchLog: Address, player: Address, count: bigint) {
-  const seed = deriveSeed(chainId, matchLog, player, count);
-  return { n: count, seed, engineSeed: engineSeed(seed) };
+/** What the page shows once the seed block exists: the seed and the engine seed. */
+export function seedForPlay(s: SeedInput) {
+  const seed = deriveSeed(s);
+  return { seed, engineSeed: engineSeed(seed) };
 }

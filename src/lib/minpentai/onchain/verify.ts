@@ -23,7 +23,12 @@ import { deriveSeed } from './seed';
 export type Verdict =
   | { status: 'verified'; claim: EncodedMatch['claim']; endStep: number }
   | { status: 'invalid'; code: InvalidCode; reason: string }
-  | { status: 'unknown-ruleset'; code: 'unregistered' | 'no-engine'; reason: string };
+  | { status: 'unknown-ruleset'; code: 'unregistered' | 'no-engine'; reason: string }
+  /** Commit before play: a started match that ended without a record ('closed': MatchForfeited on chain;
+   *  'expired': still open on chain past its deadline, so it counts as a forfeit though nobody closed it). */
+  | { status: 'forfeit'; code: 'closed' | 'expired'; reason: string }
+  /** Started and still inside its deadline. */
+  | { status: 'open'; reason: string };
 export type InvalidCode = 'malformed' | 'hash-mismatch' | 'header-mismatch' | 'wrong-seed' | 'illegal' | 'claim-mismatch' | 'end-kind-mismatch' | 'end-step-mismatch' | 'position-mismatch';
 
 export interface RecordedMatch {
@@ -36,6 +41,10 @@ export interface RecordedMatch {
   data: Hex;
   /** MatchLog.matchHash(player, n), when the caller read it: the data must hash to it. */
   storedHash?: Hex;
+  /** The hash of a block, from the chain's headers (for the seed block named in the bytes); undefined if unknown. */
+  blockHash: (blockNumber: bigint) => Hex | undefined;
+  /** What start() fixed (from MatchStarted), when known: the bytes must carry the same. */
+  started?: { rulesetId: Hex; level: number; seedBlock: bigint };
 }
 
 /** What a replay engine module exports (replay.ts at some commit). */
@@ -95,7 +104,15 @@ export function verifyMatch(rec: RecordedMatch, registered: (id: Hex) => boolean
   let m: EncodedMatch;
   try { m = decode(hexToBytes(rec.data)); } catch (e) { return bad('malformed', (e as Error).message); }
   if (m.rulesetId !== rec.rulesetId || BigInt(m.n) !== rec.n) return bad('header-mismatch', `the bytes say ruleset ${m.rulesetId} n ${m.n}; the event says ${rec.rulesetId} n ${rec.n}`);
-  if (m.seed !== deriveSeed(rec.chainId, rec.matchLog, rec.player, rec.n)) return bad('wrong-seed', `the seed is not ${rec.player}'s match ${rec.n} on this chain and log`);
+  if (rec.started && (m.rulesetId !== rec.started.rulesetId || m.opponent.level !== rec.started.level || m.seedBlock !== rec.started.seedBlock)) {
+    return bad('header-mismatch', `the bytes' ruleset, level or seed block are not the ones start() fixed`);
+  }
+  // The seed, recomputed from the seed block's real hash (from the headers, so it is checkable forever).
+  const sbh = rec.blockHash(m.seedBlock);
+  if (!sbh) return bad('wrong-seed', `the hash of seed block ${m.seedBlock} is not available`);
+  if (m.seed !== deriveSeed({ chainId: rec.chainId, matchLog: rec.matchLog, player: rec.player, n: rec.n, rulesetId: m.rulesetId, level: m.opponent.level, seedBlockHash: sbh })) {
+    return bad('wrong-seed', `the seed is not ${rec.player}'s match ${rec.n} for this ruleset, level and seed block ${m.seedBlock}`);
+  }
   const { replaySolo, engineSeed, ReplayError } = rs.engine;
   let r: ReturnType<typeof replaySolo>;
   try {
@@ -137,4 +154,34 @@ export async function loadRulesets(dir: string, opts: { repo?: string; fromGit?:
     }
   }
   return { rulesets, errors };
+}
+
+/** A match as MatchLog's events tell it: started, then recorded, forfeited, or neither yet. */
+export interface MatchEvents {
+  player: Address;
+  n: bigint;
+  rulesetId: Hex;
+  level: number;
+  seedBlock: bigint;
+  deadline: bigint;
+  recorded?: RecordedMatch;
+  forfeited?: boolean;
+}
+
+/**
+ * The verdict for one started match: a record is verified as above; a forfeit on chain is a
+ * forfeit; a match still open past its deadline (at `head`) is a forfeit too, though nobody has
+ * closed it yet; otherwise it is open. A record's ruleset, level and seed block must also be the
+ * ones start() fixed.
+ */
+export function verdictOf(e: MatchEvents, head: bigint, registered: (id: Hex) => boolean, rulesets: Map<Hex, LoadedRuleset>): Verdict {
+  if (e.forfeited) return { status: 'forfeit', code: 'closed', reason: `forfeited on chain (match ${e.n})` };
+  if (!e.recorded) {
+    return head > e.deadline
+      ? { status: 'forfeit', code: 'expired', reason: `not recorded by block ${e.deadline}; counts as a forfeit (nobody has closed it on chain yet)` }
+      : { status: 'open', reason: `can be recorded until block ${e.deadline}` };
+  }
+  // A record with no MatchStarted (level -1) can't match what start() fixed.
+  if (e.level < 0) return bad('header-mismatch', 'recorded without a MatchStarted event');
+  return verifyMatch({ ...e.recorded, started: { rulesetId: e.rulesetId, level: e.level, seedBlock: e.seedBlock } }, registered, rulesets);
 }

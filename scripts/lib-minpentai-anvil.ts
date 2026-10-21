@@ -10,9 +10,10 @@ import { foundry } from 'viem/chains';
 
 const freePort = () => new Promise<number>((res, rej) => { const s = createServer(); s.listen(0, '127.0.0.1', () => { const p = (s.address() as { port: number }).port; s.close(() => res(p)); }); s.on('error', rej); });
 
+/** Prague, so the EIP-2935 block-hash history contract is there (Base has it live). */
 export async function withAnvil<T>(chainId: bigint, f: (url: string) => Promise<T>): Promise<T> {
   const port = await freePort();
-  const anvil = spawn('anvil', ['--port', String(port), '--chain-id', chainId.toString(), '--silent'], { stdio: 'ignore' });
+  const anvil = spawn('anvil', ['--port', String(port), '--chain-id', chainId.toString(), '--hardfork', 'prague', '--silent'], { stdio: 'ignore' });
   try {
     const url = `http://127.0.0.1:${port}`;
     let id: string | null = null;
@@ -29,7 +30,7 @@ export const artifact = (name: string) => JSON.parse(readFileSync(`contracts/min
 /** Clients for an impersonated account (funded), on our anvil. */
 export async function as(url: string, account: Address) {
   const chain = { ...foundry, id: Number(BigInt(((await (await fetch(url, { method: 'POST', headers: { 'content-type': 'application/json' }, body: '{"jsonrpc":"2.0","id":1,"method":"eth_chainId","params":[]}' })).json()) as { result: string }).result)) };
-  const test = createTestClient({ chain, mode: 'anvil', transport: http(url) }).extend(publicActions);
+  const test = createTestClient({ chain, mode: 'anvil', transport: http(url, { timeout: 300_000 }) }).extend(publicActions);
   await test.impersonateAccount({ address: account });
   await test.setBalance({ address: account, value: 10n ** 20n });
   return { test, wallet: createWalletClient({ chain, transport: http(url), account }) };

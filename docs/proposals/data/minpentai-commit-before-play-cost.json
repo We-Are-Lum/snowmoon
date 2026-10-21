@@ -1,0 +1,585 @@
+{
+  "measured": "2026-10-21T18:48:45.899Z",
+  "sources": {
+    "rpc": "https://mainnet.base.org",
+    "gasPriceOracle": "0x420000000000000000000000000000000000000F",
+    "ethUsdFeed": "0x71041dddad3595F9CEd3DcCFBe3D1F4b0a16Bb70 (Chainlink ETH / USD on Base, read at each sampled block)",
+    "l2": "block baseFeePerGas at each sample; priority fee: eth_feeHistory over the last 1024 blocks, 10th/50th/90th percentile",
+    "l1": "GasPriceOracle.getL1Fee(serialized EIP-1559 record() transaction) at each sampled block",
+    "gasUsed": "record() receipts on a fresh local anvil (the same EVM gas as Base)"
+  },
+  "head": "52909554",
+  "tipsWei": [
+    "1",
+    "1000000",
+    "5000000"
+  ],
+  "samples": [
+    {
+      "block": "52909554",
+      "time": "2026-10-21T18:47:35.000Z",
+      "baseFee": "5000000",
+      "l1BaseFee": "122666025",
+      "blobBaseFee": "6864779",
+      "ethUsd": 2513.16,
+      "l1Fee": {
+        "short first": "2893616605",
+        "short later": "2893616605",
+        "median first": "3216612447",
+        "median later": "3216612447",
+        "long first": "3872391886",
+        "long later": "3549396043"
+      },
+      "operatorFee": {
+        "short first": "0",
+        "short later": "0",
+        "median first": "0",
+        "median later": "0",
+        "long first": "0",
+        "long later": "0"
+      }
+    },
+    {
+      "block": "52887954",
+      "time": "2026-10-21T06:47:35.000Z",
+      "baseFee": "5000000",
+      "l1BaseFee": "28041882",
+      "blobBaseFee": "1727599",
+      "ethUsd": 2440.65231669,
+      "l1Fee": {
+        "short first": "702817871",
+        "short later": "702817871",
+        "median first": "781268918",
+        "median later": "781268918",
+        "long first": "940548316",
+        "long later": "862097269"
+      },
+      "operatorFee": {
+        "short first": "0",
+        "short later": "0",
+        "median first": "0",
+        "median later": "0",
+        "long first": "0",
+        "long later": "0"
+      }
+    },
+    {
+      "block": "52866354",
+      "time": "2026-10-20T18:47:35.000Z",
+      "baseFee": "5000000",
+      "l1BaseFee": "240676483",
+      "blobBaseFee": "13159828",
+      "ethUsd": 2435.44,
+      "l1Fee": {
+        "short first": "5596684931",
+        "short later": "5596684931",
+        "median first": "6221406935",
+        "median later": "6221406935",
+        "long first": "7489781914",
+        "long later": "6865059910"
+      },
+      "operatorFee": {
+        "short first": "0",
+        "short later": "0",
+        "median first": "0",
+        "median later": "0",
+        "long first": "0",
+        "long later": "0"
+      }
+    },
+    {
+      "block": "52844754",
+      "time": "2026-10-20T06:47:35.000Z",
+      "baseFee": "5000000",
+      "l1BaseFee": "42499571",
+      "blobBaseFee": "2347855",
+      "ethUsd": 2397.81753381,
+      "l1Fee": {
+        "short first": "994561188",
+        "short later": "994561188",
+        "median first": "1105577668",
+        "median later": "1105577668",
+        "long first": "1330974764",
+        "long later": "1219958284"
+      },
+      "operatorFee": {
+        "short first": "0",
+        "short later": "0",
+        "median first": "0",
+        "median later": "0",
+        "long first": "0",
+        "long later": "0"
+      }
+    },
+    {
+      "block": "52823154",
+      "time": "2026-10-19T18:47:35.000Z",
+      "baseFee": "5000000",
+      "l1BaseFee": "133802111",
+      "blobBaseFee": "8434856",
+      "ethUsd": 2398.33883,
+      "l1Fee": {
+        "short first": "3403527261",
+        "short later": "3403527261",
+        "median first": "3783441156",
+        "median later": "3783441156",
+        "long first": "4554781489",
+        "long later": "4174867594"
+      },
+      "operatorFee": {
+        "short first": "0",
+        "short later": "0",
+        "median first": "0",
+        "median later": "0",
+        "long first": "0",
+        "long later": "0"
+      }
+    },
+    {
+      "block": "52801554",
+      "time": "2026-10-19T06:47:35.000Z",
+      "baseFee": "5000000",
+      "l1BaseFee": "41204613",
+      "blobBaseFee": "2130700",
+      "ethUsd": 2427.86122882,
+      "l1Fee": {
+        "short first": "926238124",
+        "short later": "926238124",
+        "median first": "1029628138",
+        "median later": "1029628138",
+        "long first": "1239541199",
+        "long later": "1136151184"
+      },
+      "operatorFee": {
+        "short first": "0",
+        "short later": "0",
+        "median first": "0",
+        "median later": "0",
+        "long first": "0",
+        "long later": "0"
+      }
+    },
+    {
+      "block": "52779954",
+      "time": "2026-10-18T18:47:35.000Z",
+      "baseFee": "5000000",
+      "l1BaseFee": "66110132",
+      "blobBaseFee": "4023625",
+      "ethUsd": 2360.16295089,
+      "l1Fee": {
+        "short first": "1644062744",
+        "short later": "1644062744",
+        "median first": "1827578912",
+        "median later": "1827578912",
+        "long first": "2200172345",
+        "long later": "2016656177"
+      },
+      "operatorFee": {
+        "short first": "0",
+        "short later": "0",
+        "median first": "0",
+        "median later": "0",
+        "long first": "0",
+        "long later": "0"
+      }
+    },
+    {
+      "block": "52758354",
+      "time": "2026-10-18T06:47:35.000Z",
+      "baseFee": "5000000",
+      "l1BaseFee": "39195514",
+      "blobBaseFee": "2331125",
+      "ethUsd": 2412.7095,
+      "l1Fee": {
+        "short first": "960529413",
+        "short later": "960529413",
+        "median first": "1067747144",
+        "median later": "1067747144",
+        "long first": "1285431628",
+        "long later": "1178213897"
+      },
+      "operatorFee": {
+        "short first": "0",
+        "short later": "0",
+        "median first": "0",
+        "median later": "0",
+        "long first": "0",
+        "long later": "0"
+      }
+    },
+    {
+      "block": "52736754",
+      "time": "2026-10-17T18:47:35.000Z",
+      "baseFee": "5000000",
+      "l1BaseFee": "50407757",
+      "blobBaseFee": "2697315",
+      "ethUsd": 2415.45,
+      "l1Fee": {
+        "short first": "1156801143",
+        "short later": "1156801143",
+        "median first": "1285927428",
+        "median later": "1285927428",
+        "long first": "1548092914",
+        "long later": "1418966630"
+      },
+      "operatorFee": {
+        "short first": "0",
+        "short later": "0",
+        "median first": "0",
+        "median later": "0",
+        "long first": "0",
+        "long later": "0"
+      }
+    },
+    {
+      "block": "52715154",
+      "time": "2026-10-17T06:47:35.000Z",
+      "baseFee": "5000000",
+      "l1BaseFee": "65793289",
+      "blobBaseFee": "3833659",
+      "ethUsd": 2430.2975,
+      "l1Fee": {
+        "short first": "1591619944",
+        "short later": "1591619944",
+        "median first": "1769282259",
+        "median later": "1769282259",
+        "long first": "2129990596",
+        "long later": "1952328280"
+      },
+      "operatorFee": {
+        "short first": "0",
+        "short later": "0",
+        "median first": "0",
+        "median later": "0",
+        "long first": "0",
+        "long later": "0"
+      }
+    },
+    {
+      "block": "52693554",
+      "time": "2026-10-16T18:47:35.000Z",
+      "baseFee": "5003128",
+      "l1BaseFee": "112962128",
+      "blobBaseFee": "6471350",
+      "ethUsd": 2403.44990902,
+      "l1Fee": {
+        "short first": "2703774941",
+        "short later": "2703774941",
+        "median first": "3005579978",
+        "median later": "3005579978",
+        "long first": "3618335659",
+        "long later": "3316530622"
+      },
+      "operatorFee": {
+        "short first": "0",
+        "short later": "0",
+        "median first": "0",
+        "median later": "0",
+        "long first": "0",
+        "long later": "0"
+      }
+    },
+    {
+      "block": "52671954",
+      "time": "2026-10-16T06:47:35.000Z",
+      "baseFee": "5000000",
+      "l1BaseFee": "54263363",
+      "blobBaseFee": "3834304",
+      "ethUsd": 2445.96,
+      "l1Fee": {
+        "short first": "1488272953",
+        "short later": "1488272953",
+        "median first": "1654399307",
+        "median later": "1654399307",
+        "long first": "1991686148",
+        "long later": "1825559793"
+      },
+      "operatorFee": {
+        "short first": "0",
+        "short later": "0",
+        "median first": "0",
+        "median later": "0",
+        "long first": "0",
+        "long later": "0"
+      }
+    },
+    {
+      "block": "52650354",
+      "time": "2026-10-15T18:47:35.000Z",
+      "baseFee": "5000000",
+      "l1BaseFee": "136472643",
+      "blobBaseFee": "8315104",
+      "ethUsd": 2446.5733,
+      "l1Fee": {
+        "short first": "3396237202",
+        "short later": "3396237202",
+        "median first": "3775337355",
+        "median later": "3775337355",
+        "long first": "4545025544",
+        "long later": "4165925391"
+      },
+      "operatorFee": {
+        "short first": "0",
+        "short later": "0",
+        "median first": "0",
+        "median later": "0",
+        "long first": "0",
+        "long later": "0"
+      }
+    },
+    {
+      "block": "52628754",
+      "time": "2026-10-15T06:47:35.000Z",
+      "baseFee": "5000000",
+      "l1BaseFee": "61414277",
+      "blobBaseFee": "3749849",
+      "ethUsd": 2357.74,
+      "l1Fee": {
+        "short first": "1530423342",
+        "short later": "1530423342",
+        "median first": "1701254673",
+        "median later": "1701254673",
+        "long first": "2048094043",
+        "long later": "1877262712"
+      },
+      "operatorFee": {
+        "short first": "0",
+        "short later": "0",
+        "median first": "0",
+        "median later": "0",
+        "long first": "0",
+        "long later": "0"
+      }
+    },
+    {
+      "block": "52607154",
+      "time": "2026-10-14T18:47:35.000Z",
+      "baseFee": "5000000",
+      "l1BaseFee": "218211835",
+      "blobBaseFee": "13074568",
+      "ethUsd": 2420.97,
+      "l1Fee": {
+        "short first": "5372737351",
+        "short later": "5372737351",
+        "median first": "5972461524",
+        "median later": "5972461524",
+        "long first": "7190083332",
+        "long later": "6590359158"
+      },
+      "operatorFee": {
+        "short first": "0",
+        "short later": "0",
+        "median first": "0",
+        "median later": "0",
+        "long first": "0",
+        "long later": "0"
+      }
+    }
+  ],
+  "rows": [
+    {
+      "label": "short first",
+      "bytes": 91,
+      "startGas": "71728",
+      "recordGas": "85801",
+      "gasUsed": "157529",
+      "now": {
+        "l2Wei": "945174000000",
+        "l1Wei": "2893616605",
+        "totalWei": "948067616605",
+        "usd": 0.0023826456113470217
+      },
+      "low": {
+        "l2Wei": "787645157529",
+        "l1Wei": "702817871",
+        "totalWei": "788347975400",
+        "usd": 0.0019240833125178812,
+        "at": "2026-10-21T06:47:35.000Z"
+      },
+      "typical": {
+        "l2Wei": "945174000000",
+        "l1Wei": "1591619944",
+        "totalWei": "946765619944",
+        "usd": 0.0023009221192358533,
+        "at": "2026-10-17T06:47:35.000Z"
+      },
+      "high": {
+        "l2Wei": "1575290000000",
+        "l1Wei": "5596684931",
+        "totalWei": "1580886684931",
+        "usd": 0.0038501546679483543,
+        "at": "2026-10-20T18:47:35.000Z"
+      }
+    },
+    {
+      "label": "short later",
+      "bytes": 91,
+      "startGas": "34728",
+      "recordGas": "68713",
+      "gasUsed": "103441",
+      "now": {
+        "l2Wei": "620646000000",
+        "l1Wei": "2893616605",
+        "totalWei": "623539616605",
+        "usd": 0.0015670548228670217
+      },
+      "low": {
+        "l2Wei": "517205103441",
+        "l1Wei": "702817871",
+        "totalWei": "517907921312",
+        "usd": 0.0012640331679822352,
+        "at": "2026-10-21T06:47:35.000Z"
+      },
+      "typical": {
+        "l2Wei": "620646000000",
+        "l1Wei": "1591619944",
+        "totalWei": "622237619944",
+        "usd": 0.0015122225321558536,
+        "at": "2026-10-17T06:47:35.000Z"
+      },
+      "high": {
+        "l2Wei": "1034410000000",
+        "l1Wei": "5596684931",
+        "totalWei": "1040006684931",
+        "usd": 0.002532873880748355,
+        "at": "2026-10-20T18:47:35.000Z"
+      }
+    },
+    {
+      "label": "median first",
+      "bytes": 124,
+      "startGas": "71728",
+      "recordGas": "86608",
+      "gasUsed": "158336",
+      "now": {
+        "l2Wei": "950016000000",
+        "l1Wei": "3216612447",
+        "totalWei": "953232612447",
+        "usd": 0.0023956260722973024
+      },
+      "low": {
+        "l2Wei": "791680158336",
+        "l1Wei": "781268918",
+        "totalWei": "792461427254",
+        "usd": 0.001934122818314939,
+        "at": "2026-10-21T06:47:35.000Z"
+      },
+      "typical": {
+        "l2Wei": "950016000000",
+        "l1Wei": "1769282259",
+        "totalWei": "951785282259",
+        "usd": 0.002313121392010842,
+        "at": "2026-10-17T06:47:35.000Z"
+      },
+      "high": {
+        "l2Wei": "1583360000000",
+        "l1Wei": "6221406935",
+        "totalWei": "1589581406935",
+        "usd": 0.0038713301417057765,
+        "at": "2026-10-20T18:47:35.000Z"
+      }
+    },
+    {
+      "label": "median later",
+      "bytes": 127,
+      "startGas": "34728",
+      "recordGas": "69568",
+      "gasUsed": "104296",
+      "now": {
+        "l2Wei": "625776000000",
+        "l1Wei": "3216612447",
+        "totalWei": "628992612447",
+        "usd": 0.0015807590738973023
+      },
+      "low": {
+        "l2Wei": "521480104296",
+        "l1Wei": "781268918",
+        "totalWei": "522261373214",
+        "usd": 0.00127465843045245,
+        "at": "2026-10-21T06:47:35.000Z"
+      },
+      "typical": {
+        "l2Wei": "625776000000",
+        "l1Wei": "1769282259",
+        "totalWei": "627545282259",
+        "usd": 0.0015251217306108422,
+        "at": "2026-10-17T06:47:35.000Z"
+      },
+      "high": {
+        "l2Wei": "1042960000000",
+        "l1Wei": "6221406935",
+        "totalWei": "1049181406935",
+        "usd": 0.0025552183657057766,
+        "at": "2026-10-20T18:47:35.000Z"
+      }
+    },
+    {
+      "label": "long first",
+      "bytes": 175,
+      "startGas": "71728",
+      "recordGas": "88018",
+      "gasUsed": "159746",
+      "now": {
+        "l2Wei": "958476000000",
+        "l1Wei": "3872391886",
+        "totalWei": "962348391886",
+        "usd": 0.00241853548455222
+      },
+      "low": {
+        "l2Wei": "798730159746",
+        "l1Wei": "940548316",
+        "totalWei": "799670708062",
+        "usd": 0.0019517181662206532,
+        "at": "2026-10-21T06:47:35.000Z"
+      },
+      "typical": {
+        "l2Wei": "958476000000",
+        "l1Wei": "2129990596",
+        "totalWei": "960605990596",
+        "usd": 0.0023345583374304825,
+        "at": "2026-10-17T06:47:35.000Z"
+      },
+      "high": {
+        "l2Wei": "1597460000000",
+        "l1Wei": "7489781914",
+        "totalWei": "1604949781914",
+        "usd": 0.003908758896864632,
+        "at": "2026-10-20T18:47:35.000Z"
+      }
+    },
+    {
+      "label": "long later",
+      "bytes": 160,
+      "startGas": "34728",
+      "recordGas": "70351",
+      "gasUsed": "105079",
+      "now": {
+        "l2Wei": "630474000000",
+        "l1Wei": "3549396043",
+        "totalWei": "634023396043",
+        "usd": 0.0015934022379994258
+      },
+      "low": {
+        "l2Wei": "525395105079",
+        "l1Wei": "862097269",
+        "totalWei": "526257202348",
+        "usd": 0.0012844108600854444,
+        "at": "2026-10-21T06:47:35.000Z"
+      },
+      "typical": {
+        "l2Wei": "630474000000",
+        "l1Wei": "1952328280",
+        "totalWei": "632426328280",
+        "usd": 0.0015369841245530633,
+        "at": "2026-10-17T06:47:35.000Z"
+      },
+      "high": {
+        "l2Wei": "1050790000000",
+        "l1Wei": "6865059910",
+        "totalWei": "1057655059910",
+        "usd": 0.002575855439107211,
+        "at": "2026-10-20T18:47:35.000Z"
+      }
+    }
+  ]
+}

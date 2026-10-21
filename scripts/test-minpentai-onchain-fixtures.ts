@@ -1,7 +1,7 @@
 /**
  * Onchain v1 spike: the shared fixtures are what the TypeScript computes today; every fixture match
- * decodes, carries its player's own seed, and replays to its claim and position; and MatchLog has
- * no way to change or remove a record (its ABI's only state-changing function is record(), it has
+ * decodes, carries its own seed, and replays to its claim and position; and MatchLog has no way to
+ * change or remove a record (its only state-changing functions are start(), record() and close(); it has
  * no fallback or receive, and its runtime code has no SELFDESTRUCT, DELEGATECALL or CALLCODE).
  * Needs `forge build` in contracts/minpentai first.
  */
@@ -19,11 +19,12 @@ const file = JSON.parse(readFileSync('contracts/minpentai/fixtures/onchain.json'
 check('fixtures/onchain.json is what the TypeScript computes (rebuild with npx tsx scripts/build-minpentai-onchain-fixtures.ts)', () => {
   if (JSON.stringify(buildFixtures()) !== JSON.stringify(file)) return 'stale';
 });
-check('every fixture match decodes, has its player\'s own nth seed, and replays to its claim and final position', () => {
+check('every fixture match decodes, has its own seed (player, n, ruleset, level, seed block), and replays to its claim and final position', () => {
   for (const m of file.matches) {
     const d = decode(Uint8Array.from(Buffer.from(m.data.slice(2), 'hex')));
     if (d.n !== m.n || d.rulesetId !== file.rulesetId) return `${m.label}: header`;
-    if (d.seed !== deriveSeed(BigInt(file.chainId), file.matchLog as Address, m.player as Address, BigInt(m.n))) return `${m.label}: not the player's seed`;
+    if (d.seedBlock !== BigInt(m.seedBlock) || m.seedBlock !== m.startBlock + 2 || d.opponent.level !== m.level) return `${m.label}: seed block or level`;
+    if (d.seed !== deriveSeed({ chainId: BigInt(file.chainId), matchLog: file.matchLog as Address, player: m.player as Address, n: BigInt(m.n), rulesetId: d.rulesetId, level: d.opponent.level, seedBlockHash: m.seedBlockHash })) return `${m.label}: not this match's seed`;
     const r = replaySolo({ seed: engineSeed(d.seed), level: d.opponent.level, turns: d.turns, end: d.end.kind === 'end' ? { kind: 'end' } : { kind: 'resign', step: d.end.step } });
     if ((r.win === 'C' ? 'win' : r.win === 'A' ? 'loss' : 'draw') !== d.claim || r.step !== d.end.step) return `${m.label}: claim`;
     if (JSON.stringify(positionOf(r.board)) !== JSON.stringify(d.position)) return `${m.label}: position`;
@@ -33,10 +34,10 @@ check('every fixture match decodes, has its player\'s own nth seed, and replays 
 const art = (name: string) => JSON.parse(readFileSync(`contracts/minpentai/out/${name}.sol/${name}.json`, 'utf8')) as { abi: { type: string; name?: string; stateMutability?: string }[]; deployedBytecode: { object: string } };
 /** Opcodes actually executed-able in runtime code (skipping PUSH data). */
 const opcodes = (hex: string) => { const b = Buffer.from(hex.replace(/^0x/, ''), 'hex'), ops = new Set<number>(); for (let i = 0; i < b.length; i++) { const op = b[i]; ops.add(op); if (op >= 0x60 && op <= 0x7f) i += op - 0x5f; } return ops; };
-check('MatchLog: the only state-changing function is record(); no fallback, no receive, nothing payable', () => {
+check('MatchLog: the only state-changing functions are start(), record() and close(); no fallback, no receive, nothing payable', () => {
   const a = art('MatchLog').abi;
   const writers = a.filter((x) => x.type === 'function' && x.stateMutability !== 'view' && x.stateMutability !== 'pure').map((x) => x.name);
-  if (writers.join() !== 'record') return `state-changing: ${writers.join(', ')}`;
+  if (writers.sort().join() !== 'close,record,start') return `state-changing: ${writers.join(', ')}`;
   if (a.some((x) => x.type === 'fallback' || x.type === 'receive' || x.stateMutability === 'payable')) return 'fallback, receive or payable';
 });
 check('RulesetRegistry: the only state-changing function is add(); no fallback, no receive, nothing payable', () => {
