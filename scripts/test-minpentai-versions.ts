@@ -14,7 +14,11 @@
  */
 import path from 'node:path';
 import { isDeepStrictEqual } from 'node:util';
-import * as G from '../src/lib/minpentai/play-game/game';
+// The reference: game.ts as it was before the one engine (2026-10-21), frozen. Play must stay identical to it.
+import * as G from './fixtures/minpentai/game-2026-10-21';
+// game.ts today: the same names, run on the one engine.
+import * as Adapter from '../src/lib/minpentai/play-game/game';
+const Frozen = G;
 import { engine, layout, playVersion, type World } from '../src/lib/minpentai/versions/engine';
 import { BASE, BASE_DRAWN, PIECES, PIECE_IDS, SETTINGS, SETTING_IDS, asciiEscape, check, jsonSchema, type Version } from '../src/lib/minpentai/versions/schema';
 import { quoteFound } from '../src/lib/minpentai/versions/book';
@@ -40,7 +44,9 @@ function turned(w: G.World): G.World {
   return m;
 }
 const turnedKeys = (o: Record<number, number>) => Object.fromEntries(Object.entries(o).map(([k, v]) => [rk(+k), v]));
-function playGame(lvlC: number, lvlA: number, seed: number) {
+function playGame(lvlC: number, lvlA: number, seed: number, mod: typeof Frozen | typeof Adapter = Frozen) {
+  // The two modules have the same names; a world's rock is typed 1 in the frozen one and a count in the engine.
+  const G = mod as unknown as typeof Frozen;
   const r = G.rng(seed), rule: G.RuleId = G.RULE_IDS[Math.floor(r() * G.RULE_IDS.length)];
   const R = rule === 'sight2' ? 2 : 3, every = rule === 'every8' ? 8 : 12, cost = rule === 'cost3' ? 3 : 4;
   const m = { w: G.world(), R, lsC: { [K(13, 2)]: 0, [K(13, 7)]: 0 } as Record<number, number>, lsA: { [K(1, 2)]: 0, [K(1, 7)]: 0 } as Record<number, number>, pend: { C: [] as G.Placement[], A: [] as G.Placement[] } };
@@ -72,6 +78,16 @@ for (let c = 0; c <= 5; c++) for (let a = 0; a <= 5; a++) for (let i = 0; i < SE
   matches++;
 }
 console.log(`whole matches: ${matches} compared`);
+
+// --- game.ts (now on the engine) plays as the frozen game.ts: the same loop, run through each ---
+let adapted = 0;
+for (let c = 0; c <= 5; c++) for (let a = 0; a <= 5; a++) for (let i = 0; i < SEEDS; i++) {
+  const seed = 53 * i + 11 * c + a + 3;
+  const f = playGame(c, a, seed, Frozen), g = playGame(c, a, seed, Adapter);
+  ok(isDeepStrictEqual(f, g), `game.ts on the engine: C${c} v A${a} seed ${seed}: frozen ${f.rule} ${f.win}@${f.step}, now ${g.rule} ${g.win}@${g.step}`);
+  adapted++;
+}
+console.log(`game.ts on the engine: ${adapted} whole matches identical to the frozen game.ts, every placement`);
 
 // --- step() on random boards ---
 const toG = (w: World): G.World => ({ step: w.step, rock: Object.fromEntries(Object.keys(w.rock).map((k) => [k, 1])) as Record<number, 1>, sq: structuredClone(w.sq), tw: { ...w.tw }, gl: w.gl.map((g) => ({ id: g.id, o: g.o, x: g.x, y: g.y, dx: g.dx, dy: g.dy })), nid: w.nid, flash: [] });

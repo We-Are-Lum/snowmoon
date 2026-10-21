@@ -6,7 +6,7 @@
  *
  * Pure: no DOM, no clock. Settings are data; nothing here runs code from a version.
  */
-import { rng } from '../play-game/game';
+import { rng } from '../play-game/rng';
 import { BASE, BASE_DRAWN, type DrawnRule, type Settings, type Version } from './schema';
 
 export { rng };
@@ -31,9 +31,10 @@ export interface World {
   gl: Glider[];
   nid: number;
   flash: number[];
-  /** Towers each side has destroyed (for "first-blood"). */
-  kills: Record<Side, number>;
 }
+/** Towers each side has destroyed this match (for "first-blood"). Kept beside the world, not in it,
+ * so a world has exactly the shape Play has always saved. */
+export type Kills = Record<Side, number>;
 export interface Placement { t: Piece; o: Side; x: number; y: number; dx: number; dy: number }
 
 /** The board a version starts from: size, rocks, towers. Fixed for the match. */
@@ -81,7 +82,7 @@ export function engine(L: Layout) {
   const inb = (x: number, y: number) => x >= 0 && y >= 0 && x < W && y < H;
 
   function world(s: Settings, blank?: boolean): World {
-    const w: World = { step: 0, rock: {}, sq: {}, tw: {}, gl: [], nid: 1, flash: [], kills: { C: 0, A: 0 } };
+    const w: World = { step: 0, rock: {}, sq: {}, tw: {}, gl: [], nid: 1, flash: [] };
     if (!blank) {
       L.rocks.forEach((k) => (w.rock[k] = s.rocks === 'breakable' ? s.rockHits : 1));
       L.towers.C.forEach((k) => (w.tw[k] = 'C'));
@@ -92,7 +93,7 @@ export function engine(L: Layout) {
   function clone(w: World): World {
     const sq: Record<number, Square> = {};
     for (const k in w.sq) sq[k] = { ...w.sq[k] };
-    return { step: w.step, rock: { ...w.rock }, sq, tw: { ...w.tw }, gl: w.gl.map((g) => ({ ...g })), nid: w.nid, flash: w.flash.slice(), kills: { ...w.kills } };
+    return { step: w.step, rock: { ...w.rock }, sq, tw: { ...w.tw }, gl: w.gl.map((g) => ({ ...g })), nid: w.nid, flash: (w.flash || []).slice() };
   }
   const towers = (w: World, o: Side) => Object.keys(w.tw).filter((k) => w.tw[+k] === o).map(Number);
   function lit(w: World, o: Side, R: number, tws?: number[]): Set<number> {
@@ -106,7 +107,7 @@ export function engine(L: Layout) {
   const empty = (w: World, k: number) => !w.rock[k] && !w.sq[k] && !w.tw[k] && !w.gl.some((g) => K(g.x, g.y) === k);
 
   /** One step (game.ts step), with the version's edges, rocks, square hits, own towers, same-side meetings and debris. */
-  function step(w: World, s: Settings): World {
+  function step(w: World, s: Settings, kills?: Kills): World {
     const gl = w.gl;
     w.flash = [];
     const wrap = s.edges === 'wrap', vanish = s.edges === 'vanish', gone = new Set<Glider>();
@@ -160,7 +161,7 @@ export function engine(L: Layout) {
       }
       const t = w.tw[k];
       if (t) {
-        if (t !== g.o || s.ownTower === 'destroy') { delete w.tw[k]; g.dead = true; w.kills[g.o]++; broke(k); } else bounce(g);
+        if (t !== g.o || s.ownTower === 'destroy') { delete w.tw[k]; g.dead = true; if (kills) kills[g.o]++; broke(k); } else bounce(g);
         continue;
       }
       g.x = g.tx!;
@@ -337,7 +338,6 @@ export function engine(L: Layout) {
     for (const k in w.sq) m.sq[rk(+k)] = { ...w.sq[k], o: other(w.sq[k].o) };
     for (const k in w.rock) m.rock[rk(+k)] = w.rock[k];
     m.gl = w.gl.map((g) => ({ ...g, o: other(g.o), x: W - 1 - g.x, y: H - 1 - g.y, dx: -g.dx, dy: -g.dy }));
-    m.kills = { C: w.kills.A, A: w.kills.C };
     return m;
   }
   const turnedKeys = (o: Record<number, number>) => Object.fromEntries(Object.entries(o).map(([k, v]) => [rk(+k), v]));
@@ -349,10 +349,10 @@ export function engine(L: Layout) {
 export type Engine = ReturnType<typeof engine>;
 
 /** The result of a side's tower count, the version's way. */
-export function verdict(e: Engine, w: World, s: Settings): Side | 'D' | null {
+export function verdict(e: Engine, w: World, s: Settings, kills: Kills = { C: 0, A: 0 }): Side | 'D' | null {
   const nc = e.towers(w, 'C').length, na = e.towers(w, 'A').length;
-  if (s.win === 'first-blood' && (w.kills.C || w.kills.A || !nc || !na)) {
-    const c = w.kills.C + (na ? 0 : 1), a = w.kills.A + (nc ? 0 : 1);
+  if (s.win === 'first-blood' && (kills.C || kills.A || !nc || !na)) {
+    const c = kills.C + (na ? 0 : 1), a = kills.A + (nc ? 0 : 1);
     return c > a ? 'C' : a > c ? 'A' : 'D';
   }
   if (!nc && !na) return 'D';
@@ -395,7 +395,7 @@ export function playVersion(v: Pick<Version, 'set' | 'drawn' | 'rocksAt'>, lvlC:
   const m = { w: w0 };
   const rA = rng(seed * 7 + 1), rC = rng(seed * 13 + 5);
   const log: MatchLog = { how: 'towers', win: 'D', step: 0, first: first?.id ?? null, second: second?.id ?? null, turns: [], towersAt: [], maxGliders: 0, illegal: 0 };
-  const saved: Record<Side, number> = { C: 0, A: 0 };
+  const saved: Record<Side, number> = { C: 0, A: 0 }, kills: Kills = { C: 0, A: 0 };
   for (;;) {
     if (s2 && s === s1 && m.w.step >= s1.switchAt) s = s2;
     const w = m.w, snap = { C: e.towers(w, 'C'), A: e.towers(w, 'A') };
@@ -415,14 +415,14 @@ export function playVersion(v: Pick<Version, 'set' | 'drawn' | 'rocksAt'>, lvlC:
     log.towersAt.push({ step: w.step, C: e.towers(m.w, 'C').length, A: e.towers(m.w, 'A').length });
     const from = m.w.step;
     do {
-      e.step(m.w, s);
+      e.step(m.w, s, kills);
       e.updLS(m.w, s.sight, ls);
       log.maxGliders = Math.max(log.maxGliders, m.w.gl.length);
-      const v2 = verdict(e, m.w, s);
+      const v2 = verdict(e, m.w, s, kills);
       if (v2) {
         log.win = v2; log.step = m.w.step;
         const alive = e.towers(m.w, 'C').length && e.towers(m.w, 'A').length;
-        log.how = s.win === 'first-blood' && (m.w.kills.C || m.w.kills.A) ? 'first-blood' : alive ? 'time' : 'towers';
+        log.how = s.win === 'first-blood' && (kills.C || kills.A) ? 'first-blood' : alive ? 'time' : 'towers';
         return log;
       }
     } while (m.w.step - from < s.every);

@@ -6,7 +6,7 @@
  *
  * Pure. A version's ruleset manifest (manifest.ts) pins this file as its replay entry.
  */
-import { drawRules, engine, layout, rng, verdict, type Placement, type Side, type World } from './engine';
+import { drawRules, engine, layout, rng, verdict, type Kills, type Placement, type Side, type World } from './engine';
 import type { Version } from './schema';
 
 export class ReplayError extends Error {}
@@ -35,7 +35,7 @@ export function replayVersion(v: Pick<Version, 'set' | 'drawn' | 'rocksAt'>, inp
   L.towers.A.forEach((k) => (ls.C[k] = 0));
   L.towers.C.forEach((k) => (ls.A[k] = 0));
   const amber: Placement[][] = [];
-  const saved: Record<Side, number> = { C: 0, A: 0 };
+  const saved: Record<Side, number> = { C: 0, A: 0 }, kills: Kills = { C: 0, A: 0 };
   const done = (win: Side | 'D'): Replayed => ({ first: first?.id ?? null, second: second?.id ?? null, win, step: w.step, towers: { C: e.towers(w, 'C').length, A: e.towers(w, 'A').length }, board: w, amber });
   const resignedAt = (st: number) => end.kind === 'resign' && end.step === st;
   let t = 0;
@@ -63,9 +63,9 @@ export function replayVersion(v: Pick<Version, 'set' | 'drawn' | 'rocksAt'>, inp
     e.updLS(w, s.sight, ls);
     const from = w.step;
     do {
-      e.step(w, s);
+      e.step(w, s, kills);
       e.updLS(w, s.sight, ls);
-      const over = verdict(e, w, s);
+      const over = verdict(e, w, s, kills);
       if (over) {
         if (end.kind === 'resign') throw new ReplayError(`the match ended at step ${w.step}, before the resign at step ${end.step}`);
         if (t !== turns.length) throw new ReplayError(`the match ended at step ${w.step} with ${turns.length - t} turn(s) left over`);
