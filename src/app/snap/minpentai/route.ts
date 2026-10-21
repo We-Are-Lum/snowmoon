@@ -2,14 +2,13 @@ import { sender, viewer } from '~/lib/minpentai/snap/auth';
 import { Unplayable } from '~/lib/minpentai/snap/match';
 import { act, intro, SNAP_PATH, type Here } from '~/lib/minpentai/snap/pages';
 import { drop, load, save } from '~/lib/minpentai/snap/resume';
-import { parse, verified, type BoardMode } from '~/lib/minpentai/snap/state';
+import { parse, verified } from '~/lib/minpentai/snap/state';
 
 /**
  * Minpentai as a Farcaster snap (spike, 2026-10-21; docs/proposals/minpentai-snap.md). GET is the
  * tutorial (or a version's "What's different"); every button POSTs here with the signed match in
  * its target. Practice only: nothing is recorded; each FID's latest match (seed and finished turns)
- * is kept so the first page can offer "Resume" (resume.ts). `?b=n` starts matches on the near-sight
- * board (off by default).
+ * is kept so the first page can offer "Resume" (resume.ts).
  */
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -30,8 +29,6 @@ const snap = (body: unknown, extra: Record<string, string> = {}) =>
     headers: { 'Content-Type': MEDIA, Vary: 'Accept', 'Access-Control-Allow-Origin': '*', 'Cache-Control': 'no-store', ...extra },
   });
 
-const boardOf = (q: URLSearchParams): BoardMode => (q.get('b') === 'n' ? 'near' : 'full');
-
 export async function GET(request: Request) {
   const h = here(request);
   const q = new URL(request.url).searchParams;
@@ -50,9 +47,9 @@ export async function GET(request: Request) {
   const who = await viewer(request, h.base);
   if (who && 'error' in who) return Response.json({ error: who.error }, { status: who.status, headers: { 'Access-Control-Allow-Origin': '*' } });
   const vary = { Vary: 'Accept, X-Snap-Payload' };
-  if (!who) return snap(intro(h, ver, boardOf(q), 'maybe'), { 'Cache-Control': 'public, max-age=300', ...vary });
+  if (!who) return snap(intro(h, ver, 'maybe'), { 'Cache-Control': 'public, max-age=300', ...vary });
   const kept = await load(who.fid);
-  return snap(intro(h, ver, boardOf(q), kept ? 'yes' : 'no'), { 'Cache-Control': 'private, no-store', ...vary });
+  return snap(intro(h, ver, kept ? 'yes' : 'no'), { 'Cache-Control': 'private, no-store', ...vary });
 }
 
 export async function POST(request: Request) {
@@ -67,7 +64,7 @@ export async function POST(request: Request) {
   try {
     const a = q.get('a') ?? 'start';
     const saved = a === 'resume' ? await load(who.fid) : undefined;
-    const { page, keep } = act(h, a, st, who.fid, who.inputs, { ver: q.get('v') ?? '', board: boardOf(q), saved });
+    const { page, keep } = act(h, a, st, who.fid, who.inputs, { ver: q.get('v') ?? '', saved });
     if (keep === 'drop') await drop(who.fid);
     else if (keep) await save(who.fid, keep.save);
     const t2 = performance.now();

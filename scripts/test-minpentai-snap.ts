@@ -112,7 +112,7 @@ function tapState(page: SnapPage): SnapState {
   return parse(s)!;
 }
 /** One POST through the snap's own action; the page only. */
-const A = (a: string, st: SnapState | null, fid: number, inputs: Record<string, unknown>, ver: string) => act(H, a, st, fid, inputs, { ver, board: st?.board ?? 'full' }).page;
+const A = (a: string, st: SnapState | null, fid: number, inputs: Record<string, unknown>, ver: string) => act(H, a, st, fid, inputs, { ver }).page;
 const post = (a: string, st: SnapState, inputs: Record<string, unknown> = {}) => A(a, structuredClone(st), st.fid, inputs, st.ver);
 const tapAt = (st: SnapState, x: number, y: number, tool = '→ 4') => post('tap', st, { cell: `${y},${x}`, piece: tool });
 const seedWith = (rule: string) => { for (let s = 0; ; s++) { const st = newMatch(5, ''); st.seed = s; if (play(st).rule === rule) return st; } };
@@ -244,50 +244,30 @@ async function main() {
     const a = JSON.stringify(play(st).w), b = JSON.stringify(play(parse(serialize(st))!).w);
     assert.equal(a, b);
   });
-  // 6. Resume, the near-sight board, the reveal's guard, Play carrying on a match
+  // 6. Resume, the reveal's guard, Play carrying on a match
   check('a kept match resumes at its next turn to act, and is dropped when the match ends', () => {
-    let r = act(H, 'start', null, 7, {}, { ver: '', board: 'full' });
+    let r = act(H, 'start', null, 7, {}, { ver: '' });
     assert.ok(r.keep && r.keep !== 'drop', 'a new match is kept');
     let st = tapState(r.page);
     st = tapState(A('tap', st, 7, { cell: '2,3', piece: '→ 4' }, ''));
-    r = act(H, 'end', st, 7, {}, { ver: '', board: 'full' });
+    r = act(H, 'end', st, 7, {}, { ver: '' });
     assert.ok(r.keep && r.keep !== 'drop' && r.keep.save.turns.length === 1, 'the finished turn is kept');
     const saved = (r.keep as { save: Parameters<typeof act>[5]['saved'] & object }).save;
     // Only seed, level, version and finished turns: no taps, no pending pieces.
     assert.deepEqual(Object.keys(saved).sort(), ['lvl', 'seed', 'turns', 'ver']);
-    const res = act(H, 'resume', null, 7, {}, { ver: '', board: 'full', saved });
+    const res = act(H, 'resume', null, 7, {}, { ver: '', saved });
     valid(res.page, 'resumed');
     const back = tapState(res.page);
     assert.equal(back.seed, saved.seed);
     assert.equal(JSON.stringify(play(back).w), JSON.stringify(play({ ...back, turns: saved.turns }).w));
     assert.match(String(res.page.ui.elements.status.props!.content), /Resumed at turn 2/);
-    const none = act(H, 'resume', null, 7, {}, { ver: '', board: 'full', saved: null });
+    const none = act(H, 'resume', null, 7, {}, { ver: '', saved: null });
     assert.match(String(none.page.ui.elements.status.props!.content), /No match to resume/);
-    const quit = act(H, 'resign-yes', back, 7, {}, { ver: '', board: 'full' });
+    const quit = act(H, 'resign-yes', back, 7, {}, { ver: '' });
     assert.equal(quit.keep, 'drop');
-    for (const k of ['yes', 'no', 'maybe'] as const) valid(intro(H, '', 'full', k), `intro resume ${k}`);
-    assert.ok(intro(H, '', 'full', 'yes').ui.elements.resume, 'Resume shown when kept');
-    assert.ok(!intro(H, '', 'full', 'no').ui.elements.resume, 'no Resume when nothing kept');
-  });
-
-  check('the near-sight board shows only the lit area, larger, and every move still works', () => {
-    for (const rule of ['every8', 'diag']) {
-      const st0 = { ...seedWith(rule), board: 'near' as const };
-      const page = A('next', st0, st0.fid, {}, '');
-      valid(page, `near board ${rule}`);
-      const g = page.ui.elements.board.props as { cols: number; rows: number; rowHeight: number; cells: { value?: string }[] };
-      assert.ok(g.cols < 15 && g.cells.length === g.cols * g.rows && g.cells.every((c) => c.value), `${g.cols} x ${g.rows}`);
-      console.log(`     near board (${rule}): ${g.cols} x ${g.rows}, rows ${g.rowHeight} px`);
-      // A glider by tapping its true square, turned through every direction; a square; the fog refused.
-      const dirs = rule === 'diag' ? 8 : 4;
-      let st = tapState(tapAt(st0, 3, 2));
-      const turned = new Set<string>();
-      for (let i = 0; i < dirs; i++) { turned.add(`${st.pend[0].dx},${st.pend[0].dy}`); st = tapState(tapAt(st, 3, 2)); }
-      assert.equal(turned.size, dirs);
-      st = tapState(tapAt(st, 1, 4, '■ 1'));
-      assert.deepEqual(st.pend.map((q) => q.t), ['g', 's']);
-      assert.equal(st.board, 'near');
-    }
+    for (const k of ['yes', 'no', 'maybe'] as const) valid(intro(H, '', k), `intro resume ${k}`);
+    assert.ok(intro(H, '', 'yes').ui.elements.resume, 'Resume shown when kept');
+    assert.ok(!intro(H, '', 'no').ui.elements.resume, 'no Resume when nothing kept');
   });
 
   check('the reveal is drawn only for a match that is over', async () => {

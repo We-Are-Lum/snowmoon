@@ -12,7 +12,7 @@ import { play, refusal, type Played } from './match';
 import { LABELS } from '../../labels';
 import { encMatch } from './moves';
 import type { Saved } from './resume';
-import { runToken, serialize, sign, type BoardMode, type P, type SnapState, type Tool } from './state';
+import { runToken, serialize, sign, type P, type SnapState, type Tool } from './state';
 import { differences, versionOf } from './versions';
 
 type El = { type: string; props?: Record<string, unknown>; children?: string[]; on?: Record<string, unknown> };
@@ -81,7 +81,7 @@ const BADGES: [string, string][] = [['b-inv', LABELS.minpentai.invented.word], [
  * 'no' when known without one, 'maybe' when the GET is anonymous (the button then asks the server,
  * whose POST is always signed).
  */
-export function intro(h: Here, ver: string, board: BoardMode = 'full', resume: 'yes' | 'no' | 'maybe' = 'maybe'): SnapPage {
+export function intro(h: Here, ver: string, resume: 'yes' | 'no' | 'maybe' = 'maybe'): SnapPage {
   const v = versionOf(ver);
   const els: Record<string, El> = {};
   const pages: string[] = [];
@@ -108,7 +108,7 @@ export function intro(h: Here, ver: string, board: BoardMode = 'full', resume: '
     pages.push(id);
   });
   els.pager = { type: 'paginator', props: { controlsPosition: 'top' }, children: pages };
-  const q = { ...(ver ? { v: ver } : {}), ...(board === 'near' ? { b: 'n' } : {}) };
+  const q: Record<string, string> = ver ? { v: ver } : {};
   if (resume === 'yes') {
     els.resume = button('Resume', submit(h, 'resume', null, q), true);
     els.start = button('New match', submit(h, 'start', null, q));
@@ -133,33 +133,7 @@ const arrow = (dx: number, dy: number) => ARROWS[`${dx},${dy}`];
 const CW4: [number, number][] = [[1, 0], [0, 1], [-1, 0], [0, -1]];
 const CW8: [number, number][] = [[1, 0], [1, 1], [0, 1], [-1, 1], [-1, 0], [-1, -1], [0, -1], [1, -1]];
 
-interface Cell { row: number; col: number; color: string; content?: string; textColor?: string; value?: string }
-
-/** The squares shown: all 150, or (board mode 'near') the smallest rectangle holding every lit square. */
-function window(p: Played, st: SnapState) {
-  if (st.board !== 'near') return { x0: 0, y0: 0, cols: W, rows: 10 };
-  const xs: number[] = [], ys: number[] = [];
-  for (const k of lit(p.w, 'C', p.R)) { const [x, y] = XY(k); xs.push(x); ys.push(y); }
-  if (!xs.length) return { x0: 0, y0: 0, cols: W, rows: 10 };
-  let x0 = Math.min(...xs), y0 = Math.min(...ys), x1 = Math.max(...xs), y1 = Math.max(...ys);
-  // The grid needs at least 2 × 2.
-  if (x1 === x0) { if (x1 < W - 1) x1++; else x0--; }
-  if (y1 === y0) { if (y1 < 9) y1++; else y0--; }
-  return { x0, y0, cols: x1 - x0 + 1, rows: y1 - y0 + 1 };
-}
-
-/** The board's cell_grid props. 'near' keeps the board page under 500 px (280 px for the grid):
- * rows grow to at most 64 px, columns share the card's width, and each cell's value is its true
- * square, so taps read the same in both modes. */
-function boardProps(p: Played, st: SnapState) {
-  const all = boardCells(p, st);
-  if (st.board !== 'near') return { cols: W, rows: 10, cells: all, cellAspectRatio: 'square', gap: 'sm' };
-  const v = window(p, st);
-  const cells = all
-    .filter((c) => c.col >= v.x0 && c.col < v.x0 + v.cols && c.row >= v.y0 && c.row < v.y0 + v.rows)
-    .map((c) => ({ ...c, row: c.row - v.y0, col: c.col - v.x0, value: `${c.row},${c.col}` }));
-  return { cols: v.cols, rows: v.rows, cells, rowHeight: Math.min(64, Math.floor(280 / v.rows)), gap: 'sm' };
-}
+interface Cell { row: number; col: number; color: string; content?: string; textColor?: string }
 
 function boardCells(p: Played, st: SnapState): Cell[] {
   const see = lit(p.w, 'C', p.R);
@@ -216,7 +190,7 @@ export function actPage(h: Here, st: SnapState, p: Played, msg: string | null): 
     piece: { type: 'toggle_group', props: { name: 'piece', options: labels, defaultValue: labels['gst'.indexOf(st.tool)] } },
     board: {
       type: 'cell_grid',
-      props: { name: 'cell', ...boardProps(p, st) },
+      props: { name: 'cell', cols: W, rows: 10, cells: boardCells(p, st), cellAspectRatio: 'square', gap: 'sm' },
       on: { press: submit(h, 'tap', st) },
     },
     acts: { type: 'stack', props: { direction: 'horizontal' }, children: ['end', 'undo'] },
@@ -290,12 +264,12 @@ export function resultPage(h: Here, st: SnapState, p: Played): SnapPage {
 // ---------------------------------------------------------------------------------------------
 // Actions
 
-export function newMatch(fid: number, ver: string, board: BoardMode = 'full'): SnapState {
-  return { fid, seed: randomInt(0, 2 ** 32), lvl: 0, ver: versionOf(ver) ? ver : '', turns: [], pend: [], aim: -1, tool: 'g', taps: 0, resigned: false, board };
+export function newMatch(fid: number, ver: string): SnapState {
+  return { fid, seed: randomInt(0, 2 ** 32), lvl: 0, ver: versionOf(ver) ? ver : '', turns: [], pend: [], aim: -1, tool: 'g', taps: 0, resigned: false };
 }
 /** A kept match (resume.ts) as a state at its next turn to act. */
-export function resumed(fid: number, saved: Saved, board: BoardMode): SnapState {
-  return { fid, seed: saved.seed, lvl: saved.lvl, ver: versionOf(saved.ver) ? saved.ver : '', turns: saved.turns, pend: [], aim: -1, tool: 'g', taps: 0, resigned: false, board };
+export function resumed(fid: number, saved: Saved): SnapState {
+  return { fid, seed: saved.seed, lvl: saved.lvl, ver: versionOf(saved.ver) ? saved.ver : '', turns: saved.turns, pend: [], aim: -1, tool: 'g', taps: 0, resigned: false };
 }
 
 const toolOf = (label: unknown): Tool | null => (typeof label === 'string' ? ({ '→': 'g', '■': 's', '◎': 't' } as Record<string, Tool>)[label[0]] ?? null : null);
@@ -331,28 +305,28 @@ const kept = (st: SnapState): Keep => ({ save: { seed: st.seed, lvl: st.lvl, ver
 
 /**
  * One POST. `st` is the verified match from the link (or null), `inputs` the snap's field values,
- * `q` what the first page's link said (version, board mode) and, for "Resume", the FID's kept match.
+ * `q` what the first page's link said (the version) and, for "Resume", the FID's kept match.
  * Returns the page to show (its targets carry the state) and what to keep.
  */
 export function act(
   h: Here, a: string, st: SnapState | null, fid: number, inputs: Record<string, unknown>,
-  q: { ver: string; board: BoardMode; saved?: Saved | null },
+  q: { ver: string; saved?: Saved | null },
 ): { page: SnapPage; keep: Keep } {
   if (a === 'resume') {
     if (q.saved) {
-      const r = resumed(fid, q.saved, q.board);
+      const r = resumed(fid, q.saved);
       r.taps = 1;
       try {
         const p = play(r);
         if (!p.over) return { page: actPage(h, r, p, `Resumed at turn ${r.turns.length + 1}, step ${p.w.step}.`), keep: null };
       } catch { /* a kept match that no longer replays: start afresh */ }
     }
-    const n = newMatch(fid, q.ver, q.board);
+    const n = newMatch(fid, q.ver);
     n.taps = 1;
     return { page: actPage(h, n, play(n), 'No match to resume, so here is a new one.'), keep: kept(n) };
   }
   if (!st || st.fid !== fid || a === 'start' || a === 'again') {
-    const n = newMatch(fid, a === 'again' && st ? st.ver : q.ver, st && st.fid === fid ? st.board : q.board);
+    const n = newMatch(fid, a === 'again' && st ? st.ver : q.ver);
     n.taps = 1;
     return { page: actPage(h, n, play(n), null), keep: kept(n) };
   }

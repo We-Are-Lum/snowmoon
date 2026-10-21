@@ -14,8 +14,6 @@ import { decList, encList, type P } from './moves';
 
 export type { P } from './moves';
 export type Tool = Piece;
-/** 'full': the whole 15 x 10 board. 'near': only what your towers light, at larger cells (off by default). */
-export type BoardMode = 'full' | 'near';
 
 export interface SnapState {
   fid: number;
@@ -36,21 +34,19 @@ export interface SnapState {
   taps: number;
   /** Resigned at the current turn to act. */
   resigned: boolean;
-  board: BoardMode;
 }
 
 export function serialize(s: SnapState): string {
   return [
     s.fid, s.seed.toString(36), s.lvl, s.ver, s.tool, s.aim + 1, s.taps, s.resigned ? 1 : 0, s.turns.length,
-    s.turns.map(encList).join('~'), encList(s.pend), s.board === 'near' ? 'n' : 'f',
+    s.turns.map(encList).join('~'), encList(s.pend),
   ].join('.');
 }
 
 export function parse(text: string): SnapState | null {
   const f = text.split('.');
-  if (f.length !== 12) return null;
-  const [fid, seed, lvl, ver, tool, aim, taps, res, nT, turnsText, pendText, board] = f;
-  if (board !== 'n' && board !== 'f') return null;
+  if (f.length !== 11) return null;
+  const [fid, seed, lvl, ver, tool, aim, taps, res, nT, turnsText, pendText] = f;
   const num = (v: string) => (/^\d{1,10}$/.test(v) ? Number(v) : NaN);
   const st = {
     fid: num(fid), seed: /^[0-9a-z]{1,7}$/.test(seed) ? parseInt(seed, 36) : NaN, lvl: num(lvl), ver,
@@ -66,7 +62,7 @@ export function parse(text: string): SnapState | null {
   const turns = lists.map(decList);
   const pend = decList(pendText);
   if (turns.some((t) => !t) || !pend) return null;
-  return { ...st, turns: turns as P[][], pend, board: board === 'n' ? 'near' : 'full' };
+  return { ...st, turns: turns as P[][], pend };
 }
 
 let cachedKey: Buffer | null = null;
@@ -100,6 +96,6 @@ export function parseRunToken(text: string): { seed: number; lvl: number; ver: s
   const f = text.split('.');
   if (f.length !== 6) return null;
   const [seed, lvl, ver, nT, turnsText, res] = f;
-  const s = parse(['0', seed, lvl, ver, 'g', '0', '0', res, nT, turnsText, '', 'f'].join('.'));
+  const s = parse(['0', seed, lvl, ver, 'g', '0', '0', res, nT, turnsText, ''].join('.'));
   return s && { seed: s.seed, lvl: s.lvl, ver: s.ver, turns: s.turns, resigned: s.resigned };
 }

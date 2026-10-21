@@ -1961,12 +1961,12 @@ add({
     type Page = { ui: { root: string; elements: Record<string, { type: string; props?: Record<string, unknown>; children?: string[] }> } };
     const h = { base: 'https://snowmoon.party', keep: [] as [string, string][] };
     const firsts: { id: string; page: Page }[] = [];
-    for (const ver of ['', ...Object.keys(VERSIONS)]) for (const board of ['full', 'near'] as const) for (const resume of ['yes', 'no', 'maybe'] as const) {
-      firsts.push({ id: `first page${ver ? ` (${ver})` : ''}, ${board} board, resume ${resume}`, page: intro(h, ver, board, resume) as Page });
+    for (const ver of ['', ...Object.keys(VERSIONS)]) for (const resume of ['yes', 'no', 'maybe'] as const) {
+      firsts.push({ id: `first page${ver ? ` (${ver})` : ''}, resume ${resume}`, page: intro(h, ver, resume) as Page });
     }
     // The other pages of a short match: the board, a run, resign, the result.
     const others: { id: string; page: Page }[] = [];
-    let r = act(h, 'start', null, 1, {}, { ver: '', board: 'full' });
+    let r = act(h, 'start', null, 1, {}, { ver: '' });
     others.push({ id: 'board', page: r.page as Page });
     const stOf = (pg: Page) => {
       for (const el of Object.values(pg.ui.elements)) {
@@ -1976,11 +1976,11 @@ add({
       return null;
     };
     const { parse } = await import('../src/lib/minpentai/snap/state');
-    r = act(h, 'end', parse(stOf(r.page as Page)!.s), 1, {}, { ver: '', board: 'full' });
+    r = act(h, 'end', parse(stOf(r.page as Page)!.s), 1, {}, { ver: '' });
     others.push({ id: 'run', page: r.page as Page });
-    r = act(h, 'resign', parse(stOf(r.page as Page)!.s), 1, {}, { ver: '', board: 'full' });
+    r = act(h, 'resign', parse(stOf(r.page as Page)!.s), 1, {}, { ver: '' });
     others.push({ id: 'resign', page: r.page as Page });
-    r = act(h, 'resign-yes', parse(stOf(r.page as Page)!.s), 1, {}, { ver: '', board: 'full' });
+    r = act(h, 'resign-yes', parse(stOf(r.page as Page)!.s), 1, {}, { ver: '' });
     others.push({ id: 'result', page: r.page as Page });
     return { words: { invented: LABELS.minpentai.invented.word, draft: LABELS.minpentai.draft.word }, firsts, others };
   },
