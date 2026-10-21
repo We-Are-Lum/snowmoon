@@ -330,6 +330,13 @@ export const IMAGES = {
     maxAgeDays: 7,
     /** A wallet sign-in lasts this long. */
     sessionHours: 24,
+    /**
+     * Credit back a Generate that failed (the prompt check or the image model didn't answer), to the balance only
+     * (owner, 2026-10-21: "credit the balance for anything charged but not made"). OFF until migration 0022 is
+     * applied and Terms 6a is reread and changed in the same deploy (docs/legal/credits-draft.md): while off, the
+     * code never reads studio.wallet_credits and a failed Generate stays charged, as the Terms say today.
+     */
+    creditBack: false as boolean,
   },
   /** A draft's signed record is good for this long; after that, generate again. */
   ticketHours: 24,

@@ -51,7 +51,7 @@ const DEFAULT_SPEND: Spend = { model: IMAGES.model, reserveUsd: IMAGES.reserveUs
  * Counts this Generate and reserves its worst case, or says which cap it would pass. A style's
  * sample and a sheet's view are Generates too (step 4): the same count, the same caps.
  */
-export async function reserve(sql: Sql, fid: number, spend: Spend = DEFAULT_SPEND): Promise<{ ok: true; left: number } | { ok: false; refusal: Refusal }> {
+export async function reserve(sql: Sql, fid: number, spend: Spend = DEFAULT_SPEND): Promise<{ ok: true; left: number; debitId?: number } | { ok: false; refusal: Refusal }> {
   return sql.begin(async (tx) => {
     await tx`select pg_advisory_xact_lock(hashtext('snowmoon.images.spend'))`;
     await tx`select pg_advisory_xact_lock(hashtext('snowmoon.images.fid'), ${fid}::int)`;
@@ -62,9 +62,9 @@ export async function reserve(sql: Sql, fid: number, spend: Spend = DEFAULT_SPEN
       if (balance < price) return { ok: false as const, refusal: 'balance' as const };
       const [paid] = await tx`select coalesce(sum(cost_usd), 0)::float8 as usd from studio.image_costs where day = ${tx.unsafe(TODAY)} and funded = 'prepaid'`;
       if (paid.usd + spend.reserveUsd > IMAGES.prepaid.dailyCapUsd) return { ok: false as const, refusal: 'prepaid-spend' as const };
-      await debit(t, -fid, price);
+      const debitId = await debit(t, -fid, price);
       await addCost(t, 'prepaid', 'reserved', spend.model.id, '', '', 1, spend.reserveUsd);
-      return { ok: true as const, left: Math.floor((balance - price) / priceUsd(IMAGES.reserveUsd)) };
+      return { ok: true as const, left: Math.floor((balance - price) / priceUsd(IMAGES.reserveUsd)), debitId };
     }
     const left = await generationsLeft(tx as unknown as Sql, fid);
     if (left <= 0) return { ok: false as const, refusal: 'limit' as const };
