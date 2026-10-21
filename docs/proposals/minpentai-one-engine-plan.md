@@ -1,6 +1,6 @@
 # Minpentai: one engine, version links, any board size: plan
 
-Plan for the owner's OK. Written 2026-10-21 by the coding agent. Branch `minpentai-one-engine` (worktree `~/snowmoon-one-engine`, from origin/main b770a17). Only this document has been written; no code changes yet. Preview only after your OK, nothing merged.
+Plan, approved with changes by the owner on 2026-10-21. Written by the coding agent. Branch `minpentai-one-engine` (worktree `~/snowmoon-one-engine`, from origin/main b770a17). **Status (2026-10-21):** A steps 1–5 and C built and committed (c70f7d7, 31f3c4f), the onchain handover written (f874dfa), the visibility change committed on its own (1e2e2ff). Stopped at the checkpoint, before B. Nothing pushed, deployed or merged.
 
 It builds on the spike (`minpentai-versions-spike`, doc `docs/proposals/minpentai-versions.md`) and your five decisions of 2026-10-21.
 
