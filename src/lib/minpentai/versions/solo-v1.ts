@@ -28,3 +28,12 @@ export function engineFor(v: VersionRules, s: Settings): Engine {
   if (s.width === BASE.width && s.height === BASE.height && s.startTowers === BASE.startTowers && !v.rocksAt) return SOLO_V1_ENGINE;
   return engine(layout(v, s));
 }
+
+const bySize = new Map<string, Engine>();
+/** An engine for drawing a board of this size (the page's view of a match; where the starts are doesn't matter). */
+export function engineForSize(W: number, H: number): Engine {
+  if (W === SOLO_V1_LAYOUT.W && H === SOLO_V1_LAYOUT.H) return SOLO_V1_ENGINE;
+  const key = `${W}x${H}`;
+  if (!bySize.has(key)) bySize.set(key, engine(layout({}, { ...BASE, width: W, height: H })));
+  return bySize.get(key)!;
+}

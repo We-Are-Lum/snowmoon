@@ -5,19 +5,20 @@
  * opponent's placements before they appear, glider ids, any other square. Once the match is over,
  * the whole board at every step (rules §5: players see the true count at the end).
  */
-import { MAXS, W, lit, world, type Side } from '../play-game/game';
-import type { BoardView, LivePhase, MatchView, Person } from '../play-game/live-types';
-import { GONE_MS, other, type LiveMatch, type Over } from './match';
+import { MAXS, type Side } from '../play-game/game';
+import type { BoardView, LivePhase, LiveRules, MatchView, Person } from '../play-game/live-types';
+import type { Engine } from '../versions/engine';
+import { BASE, type Settings } from '../versions/schema';
+import { SOLO_V1_ENGINE, drawnOf, type VersionRules } from '../versions/solo-v1';
+import { GONE_MS, other, rulesOf, type LiveMatch, type Over } from './match';
 
-const BLANK = world(true);
-
-/** The squares `side` sees in board b: within R of their towers in b. */
-export function sightOf(b: BoardView, side: Side, R: number): Set<number> {
-  return lit(BLANK, side, R, b.tw.filter(([, o]) => o === side).map(([k]) => k));
+/** The squares `side` sees in board b: within R of their towers in b (on Play's board unless an engine is given). */
+export function sightOf(b: BoardView, side: Side, R: number, e: Engine = SOLO_V1_ENGINE): Set<number> {
+  return e.lit(e.world(BASE, true), side, R, b.tw.filter(([, o]) => o === side).map(([k]) => k));
 }
 
-export function fog(b: BoardView, side: Side, R: number): BoardView {
-  const see = sightOf(b, side, R);
+export function fog(b: BoardView, side: Side, R: number, e: Engine = SOLO_V1_ENGINE): BoardView {
+  const see = sightOf(b, side, R, e), W = e.W;
   return {
     step: b.step,
     rock: b.rock.slice(),
@@ -32,7 +33,7 @@ export function fog(b: BoardView, side: Side, R: number): BoardView {
 const s = (n: number) => (n === 1 ? '' : 's');
 
 /** The prototype's checkEnd and finish wording, for the player reading it. */
-export function why(o: Over, you: Side, opp: string): string {
+export function why(o: Over, you: Side, opp: string, maxSteps = MAXS): string {
   const n = o.step, them = `@${opp}`;
   const mine = o.counts[you], theirs = o.counts[other(you)];
   switch (o.kind) {
@@ -40,7 +41,7 @@ export function why(o: Over, you: Side, opp: string): string {
       if (!mine && !theirs) return `Both sides lost their last tower at step ${n}.`;
       if (!mine) return `Your last tower fell at step ${n}.`;
       if (!theirs) return `${them}'s last tower fell at step ${n}.`;
-      return `Time ran out at step ${MAXS}. ${them} had ${theirs} tower${s(theirs)}, you had ${mine}.`;
+      return `Time ran out at step ${maxSteps}. ${them} had ${theirs} tower${s(theirs)}, you had ${mine}.`;
     case 'resign':
       return o.by === you ? `You resigned at step ${n}. It counts as a loss.` : `${them} resigned at step ${n}.`;
     case 'left':
@@ -62,9 +63,9 @@ export function phaseOf(m: LiveMatch, now: number): LivePhase {
 
 /** MatchView for `you`. Call after touch()/advance() at the same `now`. */
 export function viewFor(m: LiveMatch, you: Side, now: number, meta: { id: string; version: number; opponent: Person }): MatchView {
-  const opp = other(you), R = m.R, phase = phaseOf(m, now);
+  const opp = other(you), R = m.R, phase = phaseOf(m, now), { e, s: st } = rulesOf(m);
   const last = m.hist[m.hist.length - 1];
-  const frames = m.runFrom === null ? [] : m.hist.slice(m.runFrom).map((b) => fog(b, you, R));
+  const frames = m.runFrom === null ? [] : m.hist.slice(m.runFrom).map((b) => fog(b, you, R, e));
   const live = phase === 'act' || phase === 'run' || phase === 'paused';
   const o = m.over;
   return {
@@ -76,8 +77,9 @@ export function viewFor(m: LiveMatch, you: Side, now: number, meta: { id: string
     R,
     every: m.every,
     cost: m.cost,
+    rules: liveRules(m.version, m.rule, st, e),
     phase,
-    board: fog(last, you, R),
+    board: fog(last, you, R, e),
     snap: m.snap[you].slice(),
     lastSeen: { ...(you === 'C' ? m.lsC : m.lsA) },
     frames,
@@ -89,7 +91,7 @@ export function viewFor(m: LiveMatch, you: Side, now: number, meta: { id: string
     result: o
       ? {
           win: o.win,
-          why: why(o, you, meta.opponent.username),
+          why: why(o, you, meta.opponent.username, st.maxSteps),
           kind: o.kind,
           step: o.step,
           replay: m.hist.map((b) => ({ ...b, rock: b.rock.slice(), tw: b.tw.slice(), sq: b.sq.slice(), gl: b.gl.slice(), flash: b.flash.slice() })),
@@ -99,5 +101,15 @@ export function viewFor(m: LiveMatch, you: Side, now: number, meta: { id: string
         }
       : null,
     serverNow: now,
+  };
+}
+
+/** A match's rules for the page (LiveRules). */
+export function liveRules(v: VersionRules | undefined, rule: string, s: Settings, e: Engine): LiveRules {
+  const d = v ? drawnOf(v).find((x) => x.id === rule) : drawnOf({ set: {} }).find((x) => x.id === rule);
+  return {
+    W: e.W, H: e.H, ruleText: d?.text ?? 'No new rule this match.',
+    setupPoints: s.setupPoints, points: s.points, cost: { g: s.costGlider, s: s.costSquare, t: s.costTower },
+    maxSteps: s.maxSteps, directions: s.directions === 8 ? 8 : 4, sight: s.sight, reach: s.reach, startTowers: e.L.towers.C.length,
   };
 }

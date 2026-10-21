@@ -343,7 +343,7 @@ export function engine(L: Layout) {
   const turnedKeys = (o: Record<number, number>) => Object.fromEntries(Object.entries(o).map(([k, v]) => [rk(+k), v]));
   const unturn = (p: Placement): Placement => ({ ...p, o: 'C', x: W - 1 - p.x, y: H - 1 - p.y, dx: -p.dx, dy: -p.dy });
 
-  return { W, H, K, XY, inb, world, clone, towers, lit, empty, step, apply, updLS, refuse, botPlan, turned, turnedKeys, unturn, cost };
+  return { L, W, H, K, XY, inb, world, clone, towers, lit, empty, step, apply, updLS, refuse, botPlan, turned, turnedKeys, unturn, cost };
 }
 
 export type Engine = ReturnType<typeof engine>;

@@ -8,10 +8,13 @@
  * (advance): the act clock, a player not heard from for 15 s (pause), then 60 s more (gone).
  */
 import {
-  D4, D8, COST, K, MAXS, RULE_IDS, apply, clone, empty, inb, lit, rng, step, towers, updLS, world,
+  D4, D8, RULE_IDS, rng,
   type Piece, type Placement, type RuleId, type Side, type World,
 } from '../play-game/game';
 import type { BoardView } from '../play-game/live-types';
+import { verdict, type Engine } from '../versions/engine';
+import { BASE, type Settings } from '../versions/schema';
+import { SOLO_V1, engineFor, settingsFor, type VersionRules } from '../versions/solo-v1';
 
 export const RULES_VERSION = 'play-rules-draft-1-2026-10-09';
 /** Setup's turn to act, later turns, one step of playback (rules §4; the prototype's runT). */
@@ -42,10 +45,15 @@ export interface Over {
 }
 
 export interface LiveMatch {
-  rule: RuleId;
+  /** The drawn rule's id (one of Play's four in one-on-one). */
+  rule: string;
   R: number;
   every: number;
   cost: number;
+  /** A player-made version's rules; absent means Play today (every one-on-one match so far). */
+  version?: VersionRules;
+  /** Points each side kept from earlier turns (a version's carryOver); absent means none. */
+  saved?: Record<Side, number>;
   w: World;
   lsC: Record<number, number>;
   lsA: Record<number, number>;
@@ -70,6 +78,22 @@ export interface LiveMatch {
   rm: { C: number | null; A: number | null; until: number; matchId: string | null } | null;
 }
 
+/**
+ * The rules a match runs under: its version's engine and the settings in force (its drawn rule,
+ * with the sight, turn spacing and glider cost the match carries). For a match saved before the one
+ * engine these are exactly Play's, so it resumes as it was.
+ */
+export function rulesOf(m: Pick<LiveMatch, 'rule' | 'R' | 'every' | 'cost' | 'version'>): { e: Engine; s: Settings } {
+  const v = m.version ?? SOLO_V1, base = settingsFor(v, m.rule);
+  const s = { ...base, sight: m.R, reach: m.version ? base.reach : m.R, every: m.every, costGlider: m.cost };
+  return { e: engineFor(v, s), s };
+}
+/** A side's points this turn: the setup's or a later turn's, plus any kept. */
+export const budgetOf = (m: Pick<LiveMatch, 'rule' | 'R' | 'every' | 'cost' | 'version' | 'saved' | 'w'>, side: Side) => {
+  const { s } = rulesOf(m);
+  return (m.w.step === 0 ? s.setupPoints : s.points) + (m.saved?.[side] ?? 0);
+};
+
 /** The whole board as a BoardView (no fog). */
 export function fullBoard(w: World): BoardView {
   return {
@@ -88,44 +112,44 @@ export function drawRule(seed: number): RuleId {
   return RULE_IDS[Math.floor(r() * RULE_IDS.length)];
 }
 
-/** A new match (the prototype's mk, then beginAct for setup). */
-export function createMatch(seed: number, now: number): LiveMatch {
-  const rule = drawRule(seed);
-  const w = world();
+/** A new match (the prototype's mk, then beginAct for setup): Play today unless a version is given. */
+export function createMatch(seed: number, now: number, version: VersionRules = SOLO_V1): LiveMatch {
+  const solo = version === SOLO_V1, pool = version.drawn ?? (RULE_IDS.map((id) => ({ id })) as { id: string }[]);
+  const rule = solo ? drawRule(seed) : pool.length ? pool[Math.floor(rng(seed)() * pool.length)].id : '';
+  const s = settingsFor(version, rule), e = engineFor(version, s);
+  const w = e.world(s);
   const m: LiveMatch = {
-    rule, R: rule === 'sight2' ? 2 : 3, every: rule === 'every8' ? 8 : 12, cost: rule === 'cost3' ? 3 : 4,
+    rule, R: s.sight, every: s.every, cost: s.costGlider, ...(solo ? {} : { version, saved: { C: 0, A: 0 } }),
     w, lsC: {}, lsA: {}, hist: [], runFrom: null,
     snap: { C: [], A: [] }, pend: { C: [], A: [] }, ended: { C: false, A: false },
     actStart: now, deadline: now + SETUP_MS, paused: null, resumedAt: now, seen: { C: now, A: now },
     moves: [], over: null, rm: null,
   };
   // Starts are mirrored, so each side knows where the other's towers began (rules §5).
-  m.lsC[K(13, 2)] = 0; m.lsC[K(13, 7)] = 0; m.lsA[K(1, 2)] = 0; m.lsA[K(1, 7)] = 0;
+  e.L.towers.A.forEach((k) => (m.lsC[k] = 0)); e.L.towers.C.forEach((k) => (m.lsA[k] = 0));
   m.hist.push(fullBoard(m.w));
   beginAct(m, now, SETUP_MS);
   return m;
 }
 
 function beginAct(m: LiveMatch, start: number, dur: number) {
-  m.snap = { C: towers(m.w, 'C'), A: towers(m.w, 'A') };
+  const { e } = rulesOf(m);
+  m.snap = { C: e.towers(m.w, 'C'), A: e.towers(m.w, 'A') };
   m.pend = { C: [], A: [] };
   m.ended = { C: false, A: false };
   m.actStart = start;
   m.deadline = start + dur;
 }
 
-/** The prototype's checkEnd, without the wording (see view.ts). */
-export function checkEnd(w: World): Side | 'D' | null {
-  const c = towers(w, 'C').length, a = towers(w, 'A').length;
-  if (!c && !a) return 'D';
-  if (!c) return 'A';
-  if (!a) return 'C';
-  if (w.step >= MAXS) return c > a ? 'C' : a > c ? 'A' : 'D';
-  return null;
+/** The prototype's checkEnd, without the wording (see view.ts): under Play's rules unless others are given. */
+export function checkEnd(w: World, rules?: { e: Engine; s: Settings }): Side | 'D' | null {
+  const r = rules ?? rulesOf({ rule: '', R: BASE.sight, every: BASE.every, cost: BASE.costGlider });
+  return verdict(r.e, w, r.s);
 }
 
 function finish(m: LiveMatch, win: Side | 'D', kind: EndKind, by: Side | null, at: number) {
-  m.over = { win, kind, by, step: m.w.step, counts: { C: towers(m.w, 'C').length, A: towers(m.w, 'A').length }, at };
+  const { e } = rulesOf(m);
+  m.over = { win, kind, by, step: m.w.step, counts: { C: e.towers(m.w, 'C').length, A: e.towers(m.w, 'A').length }, at };
   m.paused = null;
   // No rematch after leaving, not coming back, or a cancelled setup (the prototype's finish).
   m.rm = kind === 'end' || kind === 'resign' ? { C: null, A: null, until: at + REMATCH_MS, matchId: null } : null;
@@ -139,23 +163,25 @@ const atSetup = (m: LiveMatch) => m.w.step === 0 && m.runFrom === null;
  * (the prototype's startRun and runTick). What a player placed stands even if they did not end.
  */
 export function resolveTurn(m: LiveMatch, t: number) {
+  const r = rulesOf(m), { e, s } = r, ls = { C: m.lsC, A: m.lsA };
   m.moves.push({ step: m.w.step, C: m.pend.C, A: m.pend.A });
-  apply(m);
-  updLS(m);
+  if (m.saved) for (const o of ['C', 'A'] as const) m.saved[o] = Math.min(s.carryOver, budgetOf(m, o) - m.pend[o].reduce((n, p) => n + e.cost(s, p.t), 0));
+  e.apply(m.w, s, m.pend);
+  e.updLS(m.w, s.sight, ls);
   m.hist[m.hist.length - 1] = fullBoard(m.w);
   m.runFrom = m.w.step;
   for (;;) {
-    step(m.w);
-    updLS(m);
+    e.step(m.w, s);
+    e.updLS(m.w, s.sight, ls);
     m.hist.push(fullBoard(m.w));
-    const win = checkEnd(m.w);
+    const win = checkEnd(m.w, r);
     if (win) {
       m.pend = { C: [], A: [] };
       m.ended = { C: false, A: false };
       finish(m, win, 'end', null, t);
       return;
     }
-    if (m.w.step % m.every === 0) {
+    if (m.w.step - m.runFrom >= m.every) {
       beginAct(m, t + (m.w.step - m.runFrom) * STEP_MS, TURN_MS);
       return;
     }
@@ -230,29 +256,31 @@ export interface PlacementIn { t: Piece; x: number; y: number; dx: number; dy: n
  */
 export function checkPlacements(m: LiveMatch, side: Side, list: unknown): Placement[] {
   if (!Array.isArray(list)) throw new Refused(400, 'Bad placements');
-  if (list.length > POINTS) throw new Refused(400, 'Not enough points left this turn.');
-  const zone = lit(m.w, side, m.R, m.snap[side]);
-  const dirs = m.rule === 'diag' ? D8 : D4;
+  const { e, s } = rulesOf(m), budget = budgetOf(m, side);
+  if (list.length > budget) throw new Refused(400, 'Not enough points left this turn.');
+  const zone = e.lit(m.w, side, s.reach, m.snap[side]);
+  const diag = s.directions === 8, dirs = diag ? D8 : D4;
   const used = new Set<number>();
   const out: Placement[] = [];
-  let pts = POINTS;
+  let pts = budget, towersNow = e.towers(m.w, side).length;
   for (const raw of list) {
     const p = (raw ?? {}) as Partial<PlacementIn>;
     if (p.t !== 'g' && p.t !== 's' && p.t !== 't') throw new Refused(400, 'Pieces are gliders, squares and towers.');
     const { x, y } = p;
-    if (!Number.isInteger(x) || !Number.isInteger(y) || !inb(x!, y!)) throw new Refused(400, 'That square is not on the board.');
-    const k = K(x!, y!);
+    if (!Number.isInteger(x) || !Number.isInteger(y) || !e.inb(x!, y!)) throw new Refused(400, 'That square is not on the board.');
+    const k = e.K(x!, y!);
     if (used.has(k)) throw new Refused(400, 'That square is taken.');
-    if (!zone.has(k)) throw new Refused(400, `Place in the lit area: within ${m.R} squares of a tower you had when this turn began.`);
-    if (!empty(m.w, k)) throw new Refused(400, 'That square is taken.');
+    if (!zone.has(k)) throw new Refused(400, `Place in the lit area: within ${s.reach} squares of a tower you had when this turn began.`);
+    if (!e.empty(m.w, k)) throw new Refused(400, 'That square is taken.');
+    if (p.t === 't' && s.maxTowers && ++towersNow > s.maxTowers) throw new Refused(400, `This version allows at most ${s.maxTowers} towers.`);
     let dx = 0, dy = 0;
     if (p.t === 'g') {
       dx = p.dx as number; dy = p.dy as number;
       if (!dirs.some(([a, b]) => a === dx && b === dy)) {
-        throw new Refused(400, m.rule === 'diag' ? 'Gliders fly in one of eight directions.' : 'Gliders fly up, down, left or right in this match.');
+        throw new Refused(400, diag ? 'Gliders fly in one of eight directions.' : 'Gliders fly up, down, left or right in this match.');
       }
     }
-    pts -= p.t === 'g' ? m.cost : COST[p.t];
+    pts -= e.cost(s, p.t);
     if (pts < 0) throw new Refused(400, 'Not enough points left this turn.');
     used.add(k);
     out.push({ t: p.t, o: side, x: x!, y: y!, dx, dy });
@@ -297,6 +325,6 @@ export function askRematch(m: LiveMatch, side: Side, now: number): boolean {
 /** For tests: a deep copy. */
 export function copyMatch(m: LiveMatch): LiveMatch {
   const c = JSON.parse(JSON.stringify({ ...m, w: undefined })) as LiveMatch;
-  c.w = clone(m.w);
+  c.w = rulesOf(m).e.clone(m.w);
   return c;
 }

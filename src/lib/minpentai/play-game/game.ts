@@ -72,7 +72,8 @@ export interface PlanInput {
   rng: () => number;
   cost: number;
   every: number;
-  rule: RuleId;
+  /** The drawn rule's id (one of RULE_IDS in Play; any other id draws nothing). */
+  rule: string;
   /** Each side's towers when the turn to act began (where it may place). */
   snap: Record<Side, number[]>;
   /** Where Amber last saw each of Cyan's towers (square → step). */

@@ -20,7 +20,10 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { authFetch, useAuth, webNameProof } from '~/lib/client-auth';
 import { SignInButton } from '~/components/sign-in';
-import { AR, COST, D4, D8, H, K, MAXS, RULES, W, empty, fmt, inb, lit, world, type Piece, type Side, type World } from '~/lib/minpentai/play-game/game';
+import { AR, D4, D8, fmt, type Piece, type Side, type World } from '~/lib/minpentai/play-game/game';
+import type { Engine } from '~/lib/minpentai/versions/engine';
+import { BASE } from '~/lib/minpentai/versions/schema';
+import { SOLO_V1_ENGINE, engineForSize } from '~/lib/minpentai/versions/solo-v1';
 import { board } from '~/lib/minpentai/play-game/board';
 import type { BoardView, LobbyView, MatchView, Person } from '~/lib/minpentai/play-game/live-types';
 import { PlayBoard } from './play-board';
@@ -33,12 +36,13 @@ async function json<T>(r: Response): Promise<T> {
 }
 
 /* ---------------- you are always Cyan ---------------- */
-const flipK = (k: number) => K(W - 1 - (k % W), H - 1 - ((k / W) | 0));
+/** A square turned 180° on the match's board (Play's unless an engine is given). */
+const flipK = (k: number, e: Engine = SOLO_V1_ENGINE) => e.W * e.H - 1 - k;
 const swap = (o: Side): Side => (o === 'C' ? 'A' : 'C');
 /** A board view as a World, drawn with you as Cyan on the left. */
-export function toWorld(b: BoardView, flip: boolean): World {
-  const w = world(true);
-  const k = (n: number) => (flip ? flipK(n) : n), o = (s: Side) => (flip ? swap(s) : s);
+export function toWorld(b: BoardView, flip: boolean, e: Engine = SOLO_V1_ENGINE): World {
+  const w = e.world(BASE, true), W = e.W, H = e.H;
+  const k = (n: number) => (flip ? flipK(n, e) : n), o = (s: Side) => (flip ? swap(s) : s);
   w.step = b.step;
   b.rock.forEach((n) => (w.rock[k(n)] = 1));
   b.tw.forEach(([n, s]) => (w.tw[k(n)] = o(s)));
@@ -48,7 +52,7 @@ export function toWorld(b: BoardView, flip: boolean): World {
   return w;
 }
 type Mine = { t: Piece; x: number; y: number; dx: number; dy: number };
-const flipP = (p: Mine): Mine => ({ ...p, x: W - 1 - p.x, y: H - 1 - p.y, dx: -p.dx, dy: -p.dy });
+const flipP = (p: Mine, e: Engine = SOLO_V1_ENGINE): Mine => ({ ...p, x: e.W - 1 - p.x, y: e.H - 1 - p.y, dx: -p.dx, dy: -p.dy });
 
 /* ---------------- the lobby ---------------- */
 export function PlayPerson({ onBack, invite: inviteToken }: { onBack: () => void; invite?: string | null }) {
@@ -286,7 +290,7 @@ function LiveMatch({ id, onDone, onMatch }: { id: string; onDone: () => void; on
   useEffect(() => { const r = m?.result?.rematch.matchId; if (r && r !== id) onMatch(r); }, [m, id, onMatch]);
 
   const flip = m?.you === 'A';
-  const mineDrawn = useMemo(() => (m ? m.mine.map((p) => (flip ? flipP(p) : p)) : []), [m, flip]);
+  const mineDrawn = useMemo(() => (m ? m.mine.map((p) => (flip ? flipP(p, engineForSize(m.rules.W, m.rules.H)) : p)) : []), [m, flip]);
   const send = async (url: string, b?: unknown) => {
     try {
       const r = await post(url, b);
@@ -302,35 +306,38 @@ function LiveMatch({ id, onDone, onMatch }: { id: string; onDone: () => void; on
   const playing = frameAt !== null && m.frames.length > 1;
   const over = m.phase === 'over' && !playing;
   const phase: 'act' | 'run' | 'over' = over ? 'over' : playing || m.phase === 'run' || m.phase === 'paused' ? 'run' : 'act';
-  const R = m.R, cost = m.cost, dirs = m.rule === 'diag' ? D8 : D4;
+  // The match's own rules, as the server sent them: never Play's assumed.
+  const rules = m.rules, e = engineForSize(rules.W, rules.H), { K, inb, empty, lit } = e;
+  const R = rules.sight, reach = rules.reach, cost = rules.cost, dirs = rules.directions === 8 ? D8 : D4, last = rules.maxSteps;
   const r = m.result;
   const shownView = playing ? m.frames[frameAt!] : replay && r ? r.replay[replay.i] : over && r && r.replay.length ? r.replay[r.replay.length - 1] : m.board;
-  const now = toWorld(shownView, flip);
-  const snap = m.snap.map((k) => (flip ? flipK(k) : k));
+  const now = toWorld(shownView, flip, e);
+  const snap = m.snap.map((k) => (flip ? flipK(k, e) : k));
   const ls: Record<number, number> = {};
-  Object.entries(m.lastSeen).forEach(([k, s]) => (ls[flip ? flipK(+k) : +k] = s));
+  Object.entries(m.lastSeen).forEach(([k, s]) => (ls[flip ? flipK(+k, e) : +k] = s));
   const act = phase === 'act' && !m.paused;
   const setup = m.board.step === 0 && phase === 'act';
   const showMatched = setup && !begun;
-  const pts = 8 - mineDrawn.reduce((s, p) => s + (p.t === 'g' ? cost : COST[p.t]), 0);
+  const budget = m.board.step === 0 ? rules.setupPoints : rules.points;
+  const pts = budget - mineDrawn.reduce((s, p) => s + cost[p.t], 0);
   const nextAt = (Math.floor(m.board.step / m.every) + 1) * m.every;
   const vis = lit(now, 'C', R);
   const pend = act ? mineDrawn.map((p) => ({ ...p, o: 'C' as Side })) : [];
   const dots = new Set<number>();
   pend.forEach((p) => { if (p.t !== 'g') return; let x = p.x + p.dx, y = p.y + p.dy, n = 0; while (inb(x, y) && n < 14 && vis.has(K(x, y)) && empty(now, K(x, y)) && !pend.some((q) => q.x === x && q.y === y)) { dots.add(K(x, y)); x += p.dx; y += p.dy; n++; } });
   const port = fs && typeof window !== 'undefined' && window.innerWidth < 768;
-  const placeTurn = (list: Mine[], ended: boolean) => send(`/api/minpentai/match/${id}/turn`, { placements: list.map((p) => (flip ? flipP(p) : p)), ended });
+  const placeTurn = (list: Mine[], ended: boolean) => send(`/api/minpentai/match/${id}/turn`, { placements: list.map((p) => (flip ? flipP(p, e) : p)), ended });
   const onCell = (x: number, y: number) => {
     if (over || showMatched || m.paused) return;
-    if (phase === 'run') { say(nextAt >= MAXS ? 'Your last turn to act is over. The match ends at step 96.' : `Your turn to act is over. The next one is at step ${nextAt}.`); return; }
+    if (phase === 'run') { say(nextAt >= last ? `Your last turn to act is over. The match ends at step ${last}.` : `Your turn to act is over. The next one is at step ${nextAt}.`); return; }
     if (!act) return;
     const k = K(x, y);
     const i = mineDrawn.findIndex((p) => K(p.x, p.y) === k);
     if (i >= 0) { void placeTurn(mineDrawn.filter((_, j) => j !== i), false); return; }
     if (m.ended) { say('Tap CHANGE MY TURN to place more.'); return; }
-    if (!lit(now, 'C', R, snap).has(k)) { say(`Place in the lit area: within ${R} squares of a tower you had when this turn began.`); return; }
+    if (!lit(now, 'C', reach, snap).has(k)) { say(`Place in the lit area: within ${reach} squares of a tower you had when this turn began.`); return; }
     if (!empty(now, k)) { say('That square is taken.'); return; }
-    const c = piece === 'g' ? cost : COST[piece];
+    const c = cost[piece];
     if (pts < c) { say('Not enough points left this turn.'); return; }
     const p: Mine = piece === 'g' ? { t: 'g', x, y, dx: dir[0], dy: dir[1] } : { t: piece, x, y, dx: 0, dy: 0 };
     void placeTurn([...mineDrawn, p], false);
@@ -340,15 +347,15 @@ function LiveMatch({ id, onDone, onMatch }: { id: string; onDone: () => void; on
     const last = [...mineDrawn].reverse().find((p) => p.t === 'g');
     if (act && last && !m.ended) void placeTurn(mineDrawn.map((p) => (p === last ? { ...p, dx: d[0], dy: d[1] } : p)), false);
   };
-  const lightAll = new Set([...lit(now, 'C', R)].filter((k) => empty(now, k)));
-  const zone = showMatched ? lightAll : act && !m.ended ? new Set([...lit(now, 'C', R, snap)].filter((k) => empty(now, k))) : null;
+  const lightAll = new Set([...lit(now, 'C', reach)].filter((k) => empty(now, k)));
+  const zone = showMatched ? lightAll : act && !m.ended ? new Set([...lit(now, 'C', reach, snap)].filter((k) => empty(now, k))) : null;
   const whole = over || !!replay;
-  const bd = board({ w: now, cs: port ? 36 : 26, portrait: port, fog: whole ? null : 'C', R, zone, pend, dots, ls: whole ? undefined : ls, flash: playing || !!replay, dirs, onCell });
+  const bd = board({ w: now, e, cs: port ? 36 : 26, portrait: port, fog: whole ? null : 'C', R, zone, pend, dots, ls: whole ? undefined : ls, flash: playing || !!replay, dirs, onCell });
   const seen = Object.entries(now.tw).filter(([k, o]) => o === 'A' && vis.has(+k)).length;
   const minesN = Object.values(now.tw).filter((o) => o === 'C').length;
-  const strip = m.paused ? `STEP ${now.step} · PAUSED` : whole ? `STEP ${now.step} · WHOLE BOARD SHOWN` : showMatched ? 'SETUP · CYAN 2 · AMBER 0 SEEN' : `STEP ${now.step} · CYAN ${minesN} · AMBER ${seen} SEEN`;
-  const ruleLine = `NEW RULE THIS MATCH: ${RULES[m.rule].toUpperCase().replace(/\.$/, '')}${act && msLeft !== null ? ` · ${fmt(msLeft)} LEFT` : ''}`;
-  const pieces: [Piece, string, string, number][] = [['g', 'GLIDER', 'GLIDER', cost], ['s', 'SQUARE', 'SQ', 1], ['t', 'TOWER', 'TWR', 4]];
+  const strip = m.paused ? `STEP ${now.step} · PAUSED` : whole ? `STEP ${now.step} · WHOLE BOARD SHOWN` : showMatched ? `SETUP · CYAN ${rules.startTowers} · AMBER 0 SEEN` : `STEP ${now.step} · CYAN ${minesN} · AMBER ${seen} SEEN`;
+  const ruleLine = `NEW RULE THIS MATCH: ${rules.ruleText.toUpperCase().replace(/\.$/, '')}${act && msLeft !== null ? ` · ${fmt(msLeft)} LEFT` : ''}`;
+  const pieces: [Piece, string, string, number][] = [['g', 'GLIDER', 'GLIDER', cost.g], ['s', 'SQUARE', 'SQ', cost.s], ['t', 'TOWER', 'TWR', cost.t]];
   const winMe = r && r.win !== 'D' && (flip ? swap(r.win) : r.win) === 'C';
   const arrowOrder: [number, number][] = dirs === D8 ? [[-1, -1], [0, -1], [1, -1], [-1, 0], [1, 0], [-1, 1], [0, 1], [1, 1]] : [[-1, 0], [0, -1], [0, 1], [1, 0]];
   const rematchLeft = r ? Math.max(0, r.rematch.msLeft - (Date.now() - got)) : 0;
@@ -362,7 +369,7 @@ function LiveMatch({ id, onDone, onMatch }: { id: string; onDone: () => void; on
               <div className="mp-who"><span className="mp-label ink"><span className="mp-swatch" style={{ background: '#46D7E8' }} /> CYAN · YOU</span></div>
               <div className="mp-who"><span className="mp-label ink"><span className="mp-swatch" style={{ background: '#FFB43A' }} /> AMBER</span><span className="mp-who-name">@{opp}</span></div>
             </div>
-            <div className="mp-rule"><span className="mp-label">NEW RULE THIS MATCH, DRAWN AT RANDOM</span><span className="mp-rule-text">{RULES[m.rule]}</span></div>
+            <div className="mp-rule"><span className="mp-label">NEW RULE THIS MATCH, DRAWN AT RANDOM</span><span className="mp-rule-text">{rules.ruleText}</span></div>
             <p className="mp-text">Setup: 90 seconds to place in the lit area. Then the battle runs.</p>
             <div className="mp-grow" />
             {/* Owner ruling, 2026-10-09: short labels. Model-drafted wording. */}
@@ -381,7 +388,7 @@ function LiveMatch({ id, onDone, onMatch }: { id: string; onDone: () => void; on
             <div className={`mp-arrows${arrowOrder.length > 4 ? ' eight' : ''}`} role="group" aria-label="Glider direction">{arrowOrder.map((d) => { const on = dir[0] === d[0] && dir[1] === d[1]; return <button key={d.join()} className={`mp-arrow${on ? ' on' : ''}`} aria-pressed={on} onClick={() => chooseDir(d)}>{AR[d.join(',')]}</button>; })}</div>
           </div>
           <div className="mp-body tight">
-            <p className="mp-text big" aria-live="polite">{m.board.step === 0 ? 'Setup. Spend 8 points in the lit area near your towers. Nothing moves until you end your turn or the clock runs out; then both sides’ pieces appear at once.' : mineDrawn.length ? `Placed: ${mineDrawn.map((p) => (p.t === 'g' ? 'glider' : p.t === 's' ? 'square' : 'tower')).join(', ')}. The dotted line is your glider's path until it leaves your sight. Tap a piece to take it back.` : `${seen ? 'Your turn. ' : `Your turn. You can't see @${opp}'s towers now; the outlines are where you last saw them. `}Spend 8 points in the lit area, then end your turn. Tap a piece you placed to take it back.`}</p>
+            <p className="mp-text big" aria-live="polite">{m.board.step === 0 ? `Setup. Spend ${budget} points in the lit area near your towers. Nothing moves until you end your turn or the clock runs out; then both sides’ pieces appear at once.` : mineDrawn.length ? `Placed: ${mineDrawn.map((p) => (p.t === 'g' ? 'glider' : p.t === 's' ? 'square' : 'tower')).join(', ')}. The dotted line is your glider's path until it leaves your sight. Tap a piece to take it back.` : `${seen ? 'Your turn. ' : `Your turn. You can't see @${opp}'s towers now; the outlines are where you last saw them. `}Spend ${budget} points in the lit area, then end your turn. Tap a piece you placed to take it back.`}</p>
             <p className="mp-label">{ruleLine}</p>
             <MinpentaiTags tags={['rules', 'draft']} />
           </div>
@@ -401,7 +408,7 @@ function LiveMatch({ id, onDone, onMatch }: { id: string; onDone: () => void; on
       {phase === 'run' && (
         <>
           <div className="mp-body">
-            <p className="mp-label ink">THE RUN · {nextAt >= MAXS ? 'NO MORE TURNS · ENDS AT STEP 96' : `NEXT TURN AT STEP ${nextAt}`}</p>
+            <p className="mp-label ink">THE RUN · {nextAt >= last ? `NO MORE TURNS · ENDS AT STEP ${last}` : `NEXT TURN AT STEP ${nextAt}`}</p>
             <p className="mp-text big">{m.paused ? "The match is paused for both of you. If they're not back in 60 seconds, it counts as resigning and you win." : 'Steps move on their own. You see only what your towers light; a white flash is a hit.'}</p>
             <p className="mp-label">{ruleLine}</p>
           </div>
@@ -452,13 +459,13 @@ function LiveMatch({ id, onDone, onMatch }: { id: string; onDone: () => void; on
           <div className="mp-port-ctl">
             {act && !m.ended && <>{pieces.map(([p2, , sh]) => <button key={p2} className={`mp-fsbtn${piece === p2 ? ' on' : ''}`} aria-pressed={piece === p2} onClick={() => setPiece(p2)}>{sh}</button>)}<span className="mp-port-pts">{pts} PTS</span><button className="mp-fsbtn end" onClick={() => placeTurn(mineDrawn, true)}>END TURN</button></>}
             {act && m.ended && <><span className="mp-port-pts">WAITING FOR @{opp.toUpperCase()} · {fmt(msLeft ?? 0)}</span><button className="mp-fsbtn" onClick={() => placeTurn(mineDrawn, false)}>CHANGE</button></>}
-            {phase === 'run' && <span className="mp-port-pts">{nextAt >= MAXS ? 'NO MORE TURNS · ENDS AT STEP 96' : `NEXT TURN AT STEP ${nextAt}`}</span>}
+            {phase === 'run' && <span className="mp-port-pts">{nextAt >= last ? `NO MORE TURNS · ENDS AT STEP ${last}` : `NEXT TURN AT STEP ${nextAt}`}</span>}
           </div>
         </div>
       ) : (
         <div className="mp-split" style={{ flexDirection: 'column' }}>
           <div className="mp-boardarea" style={{ flex: 'none', padding: 0 }}>
-            <PlayBoard bd={bd} label={label} foot={showMatched || m.paused ? undefined : act && !m.ended ? <span className="mp-pts">{pts} OF 8 PTS LEFT</span> : act ? `WAITING FOR @${opp.toUpperCase()} · ${fmt(msLeft ?? 0)}` : phase === 'run' ? (nextAt >= MAXS ? 'NO MORE TURNS · ENDS AT STEP 96' : `NEXT TURN AT STEP ${nextAt}`) : undefined}>
+            <PlayBoard bd={bd} label={label} foot={showMatched || m.paused ? undefined : act && !m.ended ? <span className="mp-pts">{pts} OF {budget} PTS LEFT</span> : act ? `WAITING FOR @${opp.toUpperCase()} · ${fmt(msLeft ?? 0)}` : phase === 'run' ? (nextAt >= last ? `NO MORE TURNS · ENDS AT STEP ${last}` : `NEXT TURN AT STEP ${nextAt}`) : undefined}>
               <div className="mp-strip" aria-hidden="true">{strip}</div>
               {phase !== 'over' && !replay && <button className="mp-fsgo" title="Full screen" aria-label="Full screen" onClick={() => setFs(true)}>⤢</button>}
               {showMatched && <div className="mp-banner" aria-hidden="true"><span className="mp-banner-dz">MU GU GEI TAU FA</span><span className="mp-banner-en">The battle begins in fifty ticks.</span></div>}

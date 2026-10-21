@@ -1,9 +1,12 @@
 /**
  * Design's board(): what each square of the Play board shows (docs/design/
  * minpentai-play-prototype.dc.html, script lines 91–117), as data the page draws. Colours are
- * Design's board colours; the page draws each cell as a square of `cs` pixels.
+ * Design's board colours; the page draws each cell as a square of `cs` pixels. Any board size: the
+ * match's engine (Play's 15 x 10 when none is given) says how wide and tall.
  */
-import { AR, COL, D4, H, K, ROT, W, inb, lit, type Placement, type Side, type World } from './game';
+import { AR, COL, D4, ROT, type Placement, type Side, type World } from './game';
+import type { Engine } from '../versions/engine';
+import { SOLO_V1_ENGINE } from '../versions/solo-v1';
 
 export interface Cell {
   /** Background, border, inset ring, text colour, text, font size (px), as Design draws them. */
@@ -23,6 +26,8 @@ export interface Cell {
 }
 export interface BoardOpts {
   w: World;
+  /** The match's engine, for its board's size; Play's when absent. */
+  e?: Engine;
   cs: number;
   portrait?: boolean;
   /** Draw only what this side sees; null or undefined shows everything. */
@@ -44,7 +49,7 @@ const DIRW: Record<string, string> = { '1,0': 'right', '-1,0': 'left', '0,-1': '
 export interface BoardView { cells: Cell[]; cols: number; cs: number; tap: (c: Cell) => void }
 
 export function board(o: BoardOpts): BoardView {
-  const { w, cs } = o, vis = o.fog ? lit(w, o.fog, o.R ?? 3) : null;
+  const { w, cs } = o, e = o.e ?? SOLO_V1_ENGINE, { W, H, K, inb } = e, vis = o.fog ? e.lit(w, o.fog, o.R ?? 3) : null;
   const glAt: Record<number, World['gl'][number]> = {}, pAt: Record<number, Placement> = {}, am: Record<number, [number, number]> = {};
   w.gl.forEach((g) => { const k = K(g.x, g.y); if (!glAt[k]) glAt[k] = g; });
   (o.pend || []).forEach((p) => (pAt[K(p.x, p.y)] = p));
