@@ -153,17 +153,17 @@ export const AGENT_API = {
 export const AGENTS = {
   /**
    * On, for the owner's account only (owner, 2026-10-20: "Ship agents-connect for my account only (FID 6786 and
-   * my wallet), behind an allowlist. Everyone else sees nothing new."). Anyone not in `people` gets 404s from
+   * my wallet), behind an allowlist."; then "FID 6786 only for now"). Everyone else sees nothing new."). Anyone not in `people` gets 404s from
    * every agent route and page, can't connect an agent, and sees no new section anywhere.
    */
   enabled: true,
   people: {
     fids: [6786] as readonly number[],
     /**
-     * The owner's wallet. ASSUMPTION (2026-10-20, to confirm): the project's payment address (IMAGES.prepaid.payTo),
-     * taken to be the owner's own wallet. Only a person who signs in with this wallet gets in.
+     * Wallets (lowercase addresses) whose sign-in gets in. Empty for now (owner, 2026-10-20: "FID 6786 only for
+     * now … I'll add my sign-in wallet later"). The payment address is not a sign-in wallet.
      */
-    wallets: ['0x4fea94b8947926ddd3c02f4e133357b547f74ffa'] as readonly string[],
+    wallets: [] as readonly string[],
   },
   /** Public pages (agents.md, /p): off while agents are for the owner only. Kept work stays private on /you. */
   public: false,

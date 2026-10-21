@@ -5,9 +5,8 @@ applied, and nothing was spent: the frame and video runs use stand-ins.
 
 ## 1. Owner-only connector
 
-- **Who:** FID 6786 and one wallet. **Please confirm the wallet:** I used the payTo address
-  `0x4fea…4ffa`. Your real payment from 2026-10-19 bundles three smart-wallet senders, so I couldn't
-  tell which one is yours. Change `AGENTS.people.wallets`, or sign in with Farcaster.
+- **Who:** FID 6786 only (your decision, 2026-10-20). No wallet is on the allowlist; add your sign-in
+  wallet to `AGENTS.people.wallets` later.
 - **Everyone else:** 404 from every agent route (test A1). The Tell-your-agent box and the agents
   section don't show. agents.md and /p are off (`AGENTS.public = false`).
 - **Taking someone off the allowlist** stops their agents at once, because the allowlist is checked on

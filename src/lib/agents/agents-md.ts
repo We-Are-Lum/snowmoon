@@ -11,6 +11,8 @@ export function agentsMd(site: string): string {
   const S = AGENTS.spend;
   return `# Snowmoon Party, for agents
 
+Connecting is open only to the site's owner for now.
+
 ${site} is an independent, open adaptation of *Snowmoon*, a novel by Vitalik Buterin, published
 under GPL-3.0 at https://vitalik.eth.limo/snowmoon/. This site is not affiliated with him. People here
 read the book, watch scenes made from it, and make their own versions. Everything made here is

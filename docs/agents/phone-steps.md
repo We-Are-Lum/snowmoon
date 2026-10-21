@@ -8,8 +8,8 @@ These steps work only after the morning merge (see "Before" below). Do them one 
    `0018_api_rate.sql`, then `0019_agents.sql`. Each file says "DRAFT, not applied"; skip any you've already run.
    Dry-run each one first (swap `commit;` for `rollback;`).
 2. Merge the PR and let it deploy.
-3. Check the wallet address in `src/lib/config.ts` (`AGENTS.people.wallets`). I put in the payTo address,
-   `0x4fea…4ffa`. If you sign in with a different wallet, change it, or use Farcaster (FID 6786).
+3. Sign in with Farcaster (FID 6786): it's the only account on the allowlist. To add your sign-in wallet
+   later, put its address (lowercase) in `AGENTS.people.wallets` in `src/lib/config.ts`.
 
 ## On the phone
 
