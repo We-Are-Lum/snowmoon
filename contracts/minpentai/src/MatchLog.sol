@@ -71,7 +71,9 @@ contract MatchLog {
     }
 
     /// @notice Open a match. A match already open is forfeited first, whether or not its deadline has passed.
+    /// Reverts on a chain without the EIP-2935 history contract, where no match could ever be recorded.
     function start(bytes32 rulesetId, uint8 level) external returns (uint256 n, uint64 seedBlock) {
+        if (HISTORY.code.length == 0) revert NoHistory();
         Open storage o = openMatch[msg.sender];
         if (o.open) _forfeit(msg.sender, o);
         n = count[msg.sender];

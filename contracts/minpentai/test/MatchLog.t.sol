@@ -346,6 +346,15 @@ contract MatchLogTest is Test {
         ml.record(f.data);
     }
 
+    function test_startRevertsWithoutHistoryCode() public {
+        vm.etch(HISTORY, "");
+        vm.prank(address(0xA11CE));
+        vm.expectRevert(MatchLog.NoHistory.selector);
+        ml.start(RULESET, 1);
+        (,,, bool open) = _open(address(0xA11CE));
+        assertFalse(open);
+    }
+
     function test_recordRevertsWhenHistoryHasNoHash() public {
         Fx memory f = _fx(0);
         vm.roll(f.startBlock);

@@ -53,6 +53,7 @@
     "test:minpentai-onchain-encoding": "tsx scripts/test-minpentai-onchain-encoding.ts",
     "test:minpentai-onchain-fixtures": "tsx scripts/test-minpentai-onchain-fixtures.ts",
     "test:minpentai-onchain-verifier": "tsx scripts/test-minpentai-onchain-verifier.ts",
+    "test:minpentai-onchain-sandbox": "tsx scripts/test-minpentai-onchain-sandbox.ts",
     "minpentai:verify": "tsx scripts/minpentai-verify.ts",
     "minpentai:onchain-base-cost": "tsx scripts/minpentai-onchain-base-cost.ts",
     "minpentai:contract-mutants": "tsx scripts/minpentai-contract-mutants.ts",

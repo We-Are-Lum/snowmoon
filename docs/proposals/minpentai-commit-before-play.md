@@ -39,8 +39,10 @@ Measured on the built contract, on a local anvil running Prague (the same EIP-29
 
 | | start() | record() | Per match | Today | Low to high |
 |---|---|---|---|---|---|
-| A player's first match | 71,728 | 85,801 to 88,114 | about 158,000 | $0.0024 | $0.0019 to $0.0039 |
-| Every later match | 34,728 | 68,713 to 69,991 | about 104,000 | $0.0016 | $0.0013 to $0.0026 |
+| A player's first match | 74,350 | 85,801 to 88,849 | about 161,000 | $0.0024 | $0.0019 to $0.0059 |
+| Every later match | 37,350 | 68,713 to 71,581 | about 107,000 | $0.0016 | $0.0013 to $0.0040 |
+
+(start() includes the check that the history contract exists, added after the second review. The high end uses the 90th-percentile tip, which rose during the day.)
 
 The one-transaction design was about 56,000 gas ($0.0008) a match.
 
@@ -52,9 +54,26 @@ The one-transaction design was about 56,000 gas ($0.0008) a match.
 - **Left: a reorg after the seed is shown.** If Base reorganised the seed block, the record would fail and the match would become a forfeit. This is very rare on Base.
 - **Longer deadlines.** Past about 4 h 33 min, a win can't be checked onchain. If you want a longer deadline, a permissionless `seal(player)` could copy the block hash into storage (about 25,000 gas, a third transaction). I don't recommend it for v1.
 
+## The second independent review (2026-10-21)
+
+A fresh reviewer, given only the code, found no break in the contracts' own rules: no way to learn the seed before committing, record as someone else or twice, record outside the window, leak a field from one match into the next, dodge or steal a forfeit, or make TypeScript and Solidity disagree. Fixed, with tests:
+
+- **Junk instead of a forfeit.** After seeing the seed, a player could record junk bytes that pass the header check; the verifier called it "invalid", a bucket nothing counted. Now the verifier gives every match an outcome: only a verified record counts as its claim; invalid, unknown-ruleset and forfeited matches all count as losses; open ones are pending.
+- **A ruleset's engine ran with full access inside the verifier.** A planted engine reached `process` through `globalThis` and wrote a file. Engines now run bundled in their own vm context (no process, require, eval or new Function; Math.random and Date throw; a 10-second limit per call), and the pinned commit must exist in the repository. Eight hostile engines are tested and fail without touching the host.
+- **A chain without EIP-2935.** start() succeeded but every record would revert, so every match would forfeit. start() now reverts there.
+- **The verifier against real RPCs.** It read all logs in one call and judged at the unsafe head. It now reads logs in pages from the deploy block and judges at the safe head.
+
+Not fixed, for the owner:
+
+- **Takebacks (the big one).** Once the seed block exists, the player knows everything the computer will do: its moves are a function of the seed, the level and the player's moves. Within the 4.4-hour window a player can replay offline with unlimited takebacks, see through the fog, and record only a winning line. The reviewer's random search beat the top rung 19 times in 20. So a verified win means "a winning line exists for this seed and this player found it", not "played live". Options: call solo results puzzles (the honest label, no code); commit each turn onchain with the computer's randomness from a later block per turn (many transactions, and the board is still fully visible); or an opponent the player can't simulate (a server or a trusted enclave). This decides whether solo ranks are worth building.
+- **Many wallets.** Starting in many wallets and playing the best seed still works; the Farcaster-ID rankings decision covers it.
+- **The sequencer** (or a block builder) could steer a seed block's hash. Users can't.
+- **Block time.** The deadline is in blocks; if Base made blocks faster, the 4.4-hour window would shrink, and the contract can't change.
+- **The verifier's decoder isn't pinned** by the ruleset ID (only the engine is). Freeze encoding format 3, or pin the decoder in later manifests.
+
 ## As built
 
-- The seed is the hash of block start+2, read through EIP-2935. The history address is a constant, and record() reverts if it has no code or gives no hash.
+- The seed is the hash of block start+2, read through EIP-2935. The history address is a constant; start() and record() revert if it has no code, and record() if it gives no hash.
 - The deadline is 8,000 blocks (about 4.5 hours) after the seed block, inclusive. After it, record() always reverts.
 - Forfeits are marked by the contract: by close() after the deadline, or by the wallet's next start() at any time. The verifier also counts a match still open past its deadline as a forfeit.
 - Encoding format 3 adds the seed block number (8 bytes) and fixes the level's position in the bytes, so record() can check every field start() fixed.

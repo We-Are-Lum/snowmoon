@@ -100,6 +100,13 @@ const main = async () => withAnvil(CHAIN, async (url) => {
     await play(wallet(100 + i), rid ?? ID, level ?? 3, resign, f);
     want(wallet(100 + i), 0, `fake: ${label}`, e);
   }
+  // The second review's escape: after seeing the seed, record junk (level 200, opponent kind 9) instead of taking a forfeit.
+  {
+    const p = wallet(150), s0 = await start(p, ID, 200);
+    const junk = ('0x03' + ID.slice(2) + s0.n.toString(16).padStart(8, '0') + s0.seed.slice(2) + s0.seedBlock.toString(16).padStart(16, '0') + '09' + 'c8' + 'ffffffffffff') as Hex;
+    await send(p, log, encodeFunctionData({ abi: ml.abi, functionName: 'record', args: [junk] }));
+    want(p, 0, 'junk recorded instead of a forfeit (level 200, kind 9)', { status: 'invalid', code: 'malformed' });
+  }
   // Forfeits and an open match.
   await start(wallet(200), ID, 1); want(wallet(200), 0, 'started, closed after the deadline', { status: 'forfeit', code: 'closed' });
   await start(wallet(201), ID, 4); want(wallet(201), 0, 'started and abandoned', { status: 'forfeit', code: 'expired' });
@@ -108,12 +115,13 @@ const main = async () => withAnvil(CHAIN, async (url) => {
   await send(wallet(7), log, encodeFunctionData({ abi: ml.abi, functionName: 'close', args: [wallet(200)] }));
   await play(wallet(202), ID, 5); want(wallet(202), 1, 'the second start, played and recorded', { status: 'verified' });
   await start(wallet(203), ID, 0); want(wallet(203), 0, 'started, still open', { status: 'open' });
+  await test.mine({ blocks: 70 }); // the verifier judges at the safe head (anvil's is 32 blocks behind the tip)
 
   const client = createPublicClient({ transport: http(url) });
   const local = await loadRuleset(MANIFEST);
   const rs = new Map([[local.id, local]]);
   const judge = async (v: typeof verdictOf) => {
-    const rows = await verifyLog(client, log, registry, rs, v);
+    const rows = await verifyLog(client, log, registry, rs, v, { chunk: 997n }); // small pages, to exercise paging
     const out: string[] = [];
     if (rows.length !== expect.size) out.push(`${rows.length} matches, want ${expect.size}`);
     for (const r of rows) {
@@ -126,7 +134,8 @@ const main = async () => withAnvil(CHAIN, async (url) => {
   };
   const { verdictOf: real } = await import('../src/lib/minpentai/onchain/verify');
   const first = await judge(real);
-  check(`the verifier gets all ${expect.size} matches right (21 real verified; 10 fakes caught; 3 forfeits; 1 open)`, first.out.join('; ') || undefined);
+  check(`the verifier gets all ${expect.size} matches right (21 real verified; 11 fakes caught; 3 forfeits; 1 open)`, first.out.join('; ') || undefined);
+  check('only a verified record counts as its claim; every other ended match (junk, invalid, unknown ruleset, forfeit) counts as a loss; an open one is pending', first.rows.every((r) => r.outcome === (r.verdict.status === 'verified' ? r.verdict.claim : r.verdict.status === 'open' ? 'pending' : 'loss')) && first.rows.some((r) => r.verdict.status === 'invalid' && r.outcome === 'loss') ? undefined : 'wrong outcome');
   for (const r of first.rows) {
     const x = expect.get(`${r.player.toLowerCase()}#${r.n}`)!;
     if (x.e.status !== 'verified') console.log(`  ${x.label.padEnd(48)} -> ${r.verdict.status}${'code' in r.verdict ? ` ${r.verdict.code}` : ''}: ${'reason' in r.verdict ? r.verdict.reason : ''}`);

@@ -30,7 +30,8 @@ export const MUTANTS: [string, string, string][] = [
   ['seed ignores the level', 'player, n, rulesetId, level, seedBlockHash));', 'player, n, rulesetId, uint8(0), seedBlockHash));'],
   ['seed ignores the chain', 'abi.encode(block.chainid, address(this),', 'abi.encode(uint256(0), address(this),'],
   ['zero hash accepted from history', 'if (h == bytes32(0)) revert NoHistory();', ''],
-  ['no history code check (also covered by the return-length check: equivalent)', 'if (HISTORY.code.length == 0) revert NoHistory();', ''],
+  ['record: no history code check (also covered by the return-length check: equivalent)', 'if (HISTORY.code.length == 0) revert NoHistory();\n        (bool ok', '(bool ok'],
+  ['start: no history code check', 'if (HISTORY.code.length == 0) revert NoHistory();\n        Open storage o = openMatch[msg.sender];\n        if (o.open) _forfeit', 'Open storage o = openMatch[msg.sender];\n        if (o.open) _forfeit'],
   ['wrong version accepted', 'if (uint8(data[0]) != FORMAT_VERSION) revert BadVersion(uint8(data[0]));', ''],
   ['short data accepted', 'if (data.length < MIN_LENGTH) revert TooShort(data.length);', ''],
 ];

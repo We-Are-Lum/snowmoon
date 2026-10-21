@@ -94,6 +94,26 @@ contract MatchLogLimitsTest is Test {
         } catch {}
     }
 
+    /// From the second review (2026-10-21): a record that gets only the header right (opponent kind 9,
+    /// level 200, a junk body) is accepted on chain. The verifier calls it invalid, and every match that
+    /// isn't verified counts as a loss (verify.ts outcomeOf), so junk is never a way out of a forfeit.
+    function test_junkRecordIsAcceptedOnChain() public {
+        address p = address(0xA11CE);
+        (uint64 sb, bytes32 seed) = _open(p, keccak256("any id, registered or not"), 200);
+        bytes memory data = abi.encodePacked(uint8(3), keccak256("any id, registered or not"), uint32(0), seed, sb, uint8(9), uint8(200), hex"ffffffffffff");
+        vm.prank(p);
+        ml.record(data);
+        assertEq(ml.matchHash(p, 0), keccak256(data));
+    }
+
+    /// seedBlock near 2^64: start() reverts (checked add in deadlineOf). Unreachable in practice.
+    function test_startRevertsNear2pow64() public {
+        vm.roll(type(uint64).max - 8001);
+        vm.prank(address(0xA11CE));
+        vm.expectRevert();
+        ml.start(bytes32(uint256(1)), 1);
+    }
+
     /// Gas for a big payload: the recorder pays, but readers and indexers get the full bytes in the event.
     function test_bigPayloadGas() public {
         address p = address(0xA11CE);
