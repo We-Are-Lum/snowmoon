@@ -1,5 +1,5 @@
 {
- "what": "Speaking-shot test (owner, 2026-10-19): three close-ups where one character speaks and is the main face, each animated to its finished line by Hedra (closed, run by the owner by hand on a paid plan) and by InfiniteTalk (open weights, MeiGen-AI, Apache-2.0, run by the coding agent on Modal), compared side by side with the current still. A test for the owner to judge; not part of the film.",
+ "what": "Speaking-shot test (owner, 2026-10-19): three close-ups where one character speaks and is the main face, each animated to its finished line by Hedra (closed, run by the owner by hand on a paid plan) and by InfiniteTalk (open weights, MeiGen-AI, Apache-2.0, run by the coding agent, hosted on fal.ai), compared side by side with the current still. A test for the owner to judge; not part of the film.",
  "rule": "Inputs are only frames and audio that are public: the frames below (published here, the same pictures as in the public version 2 cut without its burned-in subtitle) and the finished lines (already on GitHub). No raw recording goes to either model.",
  "avoided": "Zei's line at 3:53.6 (b5-2), being re-recorded.",
  "shots": [
@@ -86,8 +86,8 @@
    "repo": "MeiGen-AI/InfiniteTalk",
    "licence": "Apache-2.0 (config/models.json, checked 2026-10-13)",
    "base": "Wan-AI/Wan2.1-I2V-14B-480P (Apache-2.0)",
-   "host": "Modal (owner's account); weights downloaded to a Modal volume by a CPU function, then one GPU run per shot",
-   "results": "added here per run, with the exact settings, seed, GPU, seconds and cost"
+   "host": "fal.ai (fal-ai/infinitetalk), run 2026-10-20. The Modal script first planned was never run and is dropped (owner, 2026-10-21).",
+   "results": "the endpoint, request ids, settings and cost of each run are in the owner's speaking-test recipe (iCloud speaking-test/)"
   }
  }
 }
