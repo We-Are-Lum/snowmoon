@@ -173,6 +173,12 @@ export const AGENTS = {
   scopes: ['read', 'drafts', 'images', 'notes'] as const,
   /** At most this many live agents per person (also a database trigger). */
   perPerson: 3,
+  /**
+   * A personal agent key (owner, 2026-10-20), made on /you for a client that sends a key in a header (Muse):
+   * drafts only (no images), a spend cap the person sets, 30 days, shown once, revoked in one tap. Only its
+   * sha256 is stored.
+   */
+  key: { days: 30, scopes: ['read', 'drafts', 'notes'] as const, capUsd: { default: 1, max: 10 }, header: 'X-Snowmoon-Key' },
   /** An access token lasts an hour; a refresh token 30 days and is replaced each time it is used. */
   accessMinutes: 60,
   refreshDays: 30,

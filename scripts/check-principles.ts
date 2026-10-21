@@ -339,6 +339,13 @@ add({
         if (/<textarea\b/.test(text)) problems.push(`${file}: the search box must be a single-line search input`);
         continue;
       }
+      if (file.endsWith('components/agents/agent-key-field.tsx')) {
+        // A personal agent key's name and spend cap on /you (owner, 2026-10-20): kept with the key, never published by us.
+        for (const [what, re] of [['kept with the key', /Kept with the key/], ['never published', /Never published by us/], ['described to screen readers', /aria-describedby/]] as const)
+          if (!re.test(text)) problems.push(`${file}: the agent key boxes must say they are ${what}`);
+        if (/fetch\(|supabase|\/api\//.test(text)) problems.push(`${file}: the agent key boxes must not send their text anywhere themselves`);
+        continue;
+      }
       if (file.endsWith('components/agents/agent-address-field.tsx')) {
         // A wallet agent's address on /you (owner, 2026-10-20): kept with the link, never published by us.
         for (const [what, re] of [['kept with the link', /kept with the link/], ['never published', /Never published by us/], ['described to screen readers', /aria-describedby/]] as const)

@@ -90,6 +90,12 @@ export async function runApproved(person: number, versionId: string, request: Re
     return { ok: false as const, status, error };
   };
   if (over) return fail(429, `That's the most for today: ${over}. More tomorrow (00:00 UTC).`);
+  // A personal key's spend cap: what all its approved drafts have spent, plus this one, stays within it.
+  const [key] = await s<{ cap: string | null; spent: number }[]>`
+    select a.spend_cap_usd as cap, (select coalesce(sum(o.spent_usd), 0)::float8 from studio.piece_versions o where o.agent_id = a.id and o.id <> ${versionId}) as spent
+    from studio.piece_versions pv join studio.agents a on a.id = pv.agent_id where pv.id = ${versionId}`;
+  if (key?.cap !== null && key !== undefined && Number(key.spent) + body.change.estimate_usd > Number(key.cap) + 1e-9)
+    return fail(429, `That's over this agent key's spend cap ($${Number(key.cap).toFixed(2)}; $${Number(key.spent).toFixed(2)} spent). Make a new key with a higher cap, or approve less.`);
   const r = body.change.type === 'frame' ? await runFrame(person, request, body as never) : await runVideo(body as never);
   if (!r.ok) return fail(r.status, r.error);
   await s`update studio.piece_versions set spent_usd = ${r.spent}, made = ${s.json(r.made as postgres.JSONValue)}, image_key = ${r.key}, image_sha256 = ${r.sha} where id = ${versionId}`;

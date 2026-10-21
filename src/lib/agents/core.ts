@@ -46,11 +46,24 @@ export type Scope = (typeof AGENTS.scopes)[number];
 export interface Agent {
   id: string;
   person: number;
-  route: 'oauth' | 'wallet';
+  route: 'oauth' | 'wallet' | 'key';
   name: string;
   scopes: Scope[];
   clientId: string | null;
   address: string | null;
+  /** A personal key's spend cap in US dollars (null for the other routes). */
+  spendCapUsd: number | null;
+}
+
+/**
+ * The credential on a request: an access token ("sa1_…", from OAuth or a wallet sign-in) as a bearer token, or
+ * a personal agent key ("sk1_…") as a bearer token or in the X-Snowmoon-Key header. Never logged anywhere.
+ */
+function credentialOf(request: Request): { token: string; kind: 'access' | 'key' } | null {
+  const bearer = (request.headers.get('authorization') ?? '').match(/^Bearer\s+((sa1|sk1)_[A-Za-z0-9_-]{20,80})$/);
+  if (bearer) return { token: bearer[1], kind: bearer[2] === 'sk1' ? 'key' : 'access' };
+  const key = (request.headers.get(AGENTS.key.header) ?? '').trim().match(/^sk1_[A-Za-z0-9_-]{20,80}$/);
+  return key ? { token: key[0], kind: 'key' } : null;
 }
 
 export function sql(): Sql {
@@ -61,21 +74,22 @@ export function sql(): Sql {
 
 /** The live agent behind a bearer token for this resource, or null (expired, revoked, unknown, or a person's token). */
 export async function agentFromRequest(request: Request): Promise<Agent | null> {
-  const token = (request.headers.get('authorization') ?? '').match(/^Bearer\s+(sa1_[A-Za-z0-9_-]{20,80})$/)?.[1];
-  if (!token) return null;
+  const cred = credentialOf(request);
+  if (!cred) return null;
   const s = sql();
-  const [row] = await s<{ id: string; person: string; route: 'oauth' | 'wallet'; name: string; scopes: string[]; client_id: string | null; address: string | null }[]>`
-    select a.id, a.person, a.route, a.name, a.scopes, a.client_id, a.address
+  const [row] = await s<{ id: string; person: string; route: 'oauth' | 'wallet' | 'key'; name: string; scopes: string[]; client_id: string | null; address: string | null; spend_cap_usd: string | null }[]>`
+    select a.id, a.person, a.route, a.name, a.scopes, a.client_id, a.address, a.spend_cap_usd
     from studio.agent_tokens t join studio.agents a on a.id = t.agent_id
-    where t.token_hash = ${sha256(token)} and t.kind = 'access' and t.revoked_at is null and t.expires_at > now()
+    where t.token_hash = ${sha256(cred.token)} and t.kind = ${cred.kind} and t.revoked_at is null and t.expires_at > now()
       and t.resource = ${resourceUrl()}
       and a.revoked_at is null and a.expires_at > now()
-      and (a.route <> 'wallet' or a.link_signature is not null)`;
+      and (a.route <> 'wallet' or a.link_signature is not null)
+      and (t.kind <> 'key' or a.route = 'key')`;
   if (!row) return null;
   // The allowlist is checked on every request too, so taking someone off it stops their agents at once.
   if (!(await allowed(Number(row.person)))) return null;
   await s`update studio.agents set last_used_at = now() where id = ${row.id}`;
-  return { id: row.id, person: Number(row.person), route: row.route, name: row.name, scopes: row.scopes as Scope[], clientId: row.client_id, address: row.address };
+  return { id: row.id, person: Number(row.person), route: row.route, name: row.name, scopes: row.scopes as Scope[], clientId: row.client_id, address: row.address, spendCapUsd: row.spend_cap_usd === null ? null : Number(row.spend_cap_usd) };
 }
 
 /** An access token (and, for OAuth, a refresh token) for an agent. */

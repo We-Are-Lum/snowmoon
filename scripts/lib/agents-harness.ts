@@ -36,6 +36,8 @@ export interface Stage {
   store: string;
   stop: () => Promise<void>;
   serverErr: () => string;
+  /** Everything the server printed (stdout and stderr), to prove a key never appears in it. */
+  serverLog: () => string;
 }
 
 export async function startStage(opts: { scanner?: string; port?: number; transcript?: string; public?: boolean } = {}): Promise<Stage> {
@@ -117,10 +119,12 @@ export async function startStage(opts: { scanner?: string; port?: number; transc
       AGENTS_TEST: '1', AGENT_API_TEST: '1', AGENTS_TEST_ALLOW: [A, B, C].join(','), AGENTS_TEST_PUBLIC: opts.public === false ? '' : '1',
       AGENTS_TEST_FAL_URL: stubUrl, REMIX_TEST_FAKES: '1', AGENTS_TEST_STORE: store, AGENTS_TEST_SCANNER: opts.scanner ?? 'none-planted', AGENTS_TEST_TRANSCRIPT: opts.transcript ?? 'Bai tells Zei to slow down, and this time he listens.',
     },
-    stdio: ['ignore', 'ignore', 'pipe'],
+    stdio: ['ignore', 'pipe', 'pipe'],
   });
   let serverErr = '';
-  next.stderr?.on('data', (d) => { serverErr += d; if (process.env.AGENTS_DEBUG) process.stderr.write(d); });
+  let serverLog = '';
+  next.stdout?.on('data', (d) => (serverLog += d));
+  next.stderr?.on('data', (d) => { serverErr += d; serverLog += d; if (process.env.AGENTS_DEBUG) process.stderr.write(d); });
   for (let i = 0; i < 80; i++) {
     if (await fetch(BASE + '/about').then((r) => r.ok, () => false)) break;
     await new Promise((r) => setTimeout(r, 500));
@@ -134,6 +138,7 @@ export async function startStage(opts: { scanner?: string; port?: number; transc
   return {
     BASE, pg, people, store,
     serverErr: () => serverErr,
+    serverLog: () => serverLog,
     stop: async () => {
       next.kill('SIGTERM');
       await new Promise((r) => setTimeout(r, 500));

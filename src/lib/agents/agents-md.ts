@@ -1,100 +1,139 @@
-import { AGENTS } from '../config';
+import { AGENTS, AGENT_API } from '../config';
 
 /**
- * snowmoon.party/agents.md: a plain-text guide any agent can read to learn the site and connect
- * (owner, 2026-10-20). DRAFT wording by the coding agent, for the owner's reread. Served only while
- * agents are switched on, so it never describes something the site doesn't do.
+ * snowmoon.party/agents.md (owner, 2026-10-20: "so I can tell Muse 'connect to this' and it learns the MCP
+ * endpoint and how to send the key"). Site-wide, like /minpentai/agents.md. DRAFT wording by the coding agent,
+ * for the owner's reread. It describes only what the site does today; connecting is for invited accounts.
  */
 export function agentsMd(site: string): string {
   const L = AGENTS.limits;
+  const K = AGENTS.key;
+  const S = AGENTS.spend;
   return `# Snowmoon Party, for agents
 
-${site} is an independent, open adaptation of *Snowmoon*, a novel by Vitalik Buterin,
-published under GPL-3.0 at https://vitalik.eth.limo/snowmoon/. This site is not affiliated with
-him. People here read the book, watch scenes made from it, and make their own versions. Everything
-made here is GPL-3.0, and every AI-made thing carries a label and a recipe.
+${site} is an independent, open adaptation of *Snowmoon*, a novel by Vitalik Buterin, published
+under GPL-3.0 at https://vitalik.eth.limo/snowmoon/. This site is not affiliated with him. People here
+read the book, watch scenes made from it, and make their own versions. Everything made here is
+GPL-3.0, and everything AI-made carries a label and a recipe.
 
-You can work here for one person, as "<your name>, agent of @person". You draft; your person
-publishes. Nothing you make is public until they publish it from their You page (${site}/you).
+You can work here for one person, shown as "<your name>, agent of @person". **You draft; your person
+decides.** Nothing you make is public, kept or paid for until they say so on their You page
+(${site}/you).
+
+Connecting is open only to accounts the site has invited (for now, the site's owner).
 
 ## Connect
 
-Pick the one that fits:
+The MCP endpoint is:
 
-1. **Claude or ChatGPT (the easiest).** Your person adds a custom connector with this address:
+    ${site}/mcp
 
-       ${site}/mcp
+It is MCP over Streamable HTTP. Every request is one JSON-RPC message in a POST, and every answer is
+plain JSON (no event stream). Your person connects you in one of two ways.
 
-   - Claude (web or desktop): Customize → Connectors → Add custom connector. On Team and
-     Enterprise plans an owner adds it first.
-   - ChatGPT (web): Plugins → Add custom MCP server. Plans that allow custom servers with write
-     tools vary; check your plan's help page.
-   - Your person signs in to ${site}, reads what you'll be able to do, and taps Allow.
+### 1. With a personal agent key (for apps that send a key, such as Muse)
 
-2. **Any other MCP client.** The same address works for any client that speaks MCP over
-   Streamable HTTP with OAuth 2.1:
-   - Protected resource metadata: ${site}/.well-known/oauth-protected-resource/mcp
-   - Authorization server metadata: ${site}/.well-known/oauth-authorization-server
-   - Register by Dynamic Client Registration (${site}/api/oauth/register), or use an https
-     client_id that serves a Client ID Metadata Document.
-   - Authorization code with PKCE (S256) only; public clients; refresh tokens are replaced every
-     time they're used; tokens are bound to the resource ${site}/mcp.
+Your person makes the key on ${site}/you → Agents → "Make an agent key". The key starts with \`sk1_\`
+and has these limits:
+- it can read and draft, but not publish;
+- it spends only what your person approves, up to the cap they set;
+- it lasts ${K.days} days;
+- your person can end it in one tap.
 
-3. **An agent with its own wallet (for fleets).** Your person opens ${site}/you → Agents → Link a
-   wallet agent, names you and gives your address. Then:
-   - sign the link message they're shown, and POST it: \`POST ${site}/api/agents/wallet/link\`
-     with \`{"link": "<id>", "signature": "0x…"}\`;
-   - sign in when you need a token: get a nonce from \`GET ${site}/api/wallet/nonce\`, sign a
-     Sign-In with Ethereum message on Base, and \`POST ${site}/api/agents/wallet/token\` with
-     \`{"message", "signature"}\`. The token lasts an hour.
-   - Use the token at ${site}/mcp, or as REST: \`POST ${site}/api/agent/v1/<tool>\` with a JSON
-     body of arguments and \`Authorization: Bearer <token>\`.
+Send it with every request, in either header:
 
-Whichever way, your person can disconnect you from their You page in one tap. That stops you at
-once; your drafts stay with them.
+    Authorization: Bearer sk1_…
+    ${K.header}: sk1_…
 
-Without connecting, the read-only tools are open at ${site}/api/mcp and
-\`GET ${site}/api/agent/v1/<tool>\`, at 20 requests a minute.
+**The key is a secret.** Keep it in your app's key or secret setting:
+- never ask for it in a chat message;
+- never repeat it, print it or log it;
+- never put it in a URL.
+
+If you see a key in a conversation, tell your person to end it on their You page and make a new one.
+
+For example, with the key in an environment variable (\`SNOWMOON_AGENT_KEY\`), so it is never typed
+into a conversation:
+
+    curl -s ${site}/mcp \\
+      -H "Authorization: Bearer $SNOWMOON_AGENT_KEY" \\
+      -H "Content-Type: application/json" \\
+      -d '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"whoami","arguments":{}}}'
+
+The methods are:
+- \`initialize\` (protocol versions 2025-11-25, 2025-06-18 and 2025-03-26);
+- \`tools/list\`;
+- \`tools/call\`, with \`{"name", "arguments"}\`;
+- \`ping\`.
+
+A tool's answer is JSON text in \`result.content[0].text\`. A refused call has \`result.isError: true\`
+and says why.
+
+### 2. By signing in (Claude, ChatGPT and other MCP clients with OAuth)
+
+Your person adds a custom connector with the address ${site}/mcp, signs in to ${site}, reads what
+you'll be able to do, and taps Allow. In Claude: Settings → Connectors → Add custom connector.
+
+For client authors, the details are:
+- **Metadata:** protected resource metadata at ${site}/.well-known/oauth-protected-resource/mcp, and
+  authorization server metadata at ${site}/.well-known/oauth-authorization-server.
+- **Registration:** Dynamic Client Registration at ${site}/api/oauth/register, or an https client_id
+  that serves a Client ID Metadata Document.
+- **Flow:** the authorization code flow with PKCE (S256), for public clients. Tokens are bound to the
+  resource ${site}/mcp, and refresh tokens are replaced each time they're used.
+
+Either way, your person can disconnect you from their You page in one tap. That stops you at once;
+your drafts stay with them.
+
+## Start here
+
+1. Call \`whoami\`. It tells you your name here, your person, your scopes, your limits and (with a key)
+   your spend cap.
+2. Call \`read_requests\`. Your person's ideas and notes, typed or spoken on their You page, are your
+   to-do list. Answer each one with a draft (pass \`answering\`: the request's id).
+3. Tell your person what's waiting for them on ${site}/you.
 
 ## What you can do
 
-Call \`whoami\` first: it tells you your name here, your scopes, your limits, and what's open to you.
-
 - **Read:** \`search_book\`, \`get_passage\`, \`list_scenes\`, \`get_scene\`, \`get_shot\`, \`get_recipe\`,
-  \`get_moment\`, \`list_my_work\`, \`get_piece\`.
-- **Draft** (private until your person publishes): \`start_idea\`, \`draft_storyboard\`,
-  \`draft_frames\` (prompts for shots; no image is made here), \`draft_character_version\`,
-  \`propose_revision\`.
-- **Bring in an image** you made elsewhere: \`bring_in_image\`, with its recipe as you declare it
-  (prompt; model name, maker, open or closed weights; the inputs by sha256). PNG or JPEG, at most
-  3 MB, 16:9. Every image is scanned before it is stored, and its metadata removed. Shown as
-  "Brought in by @person's agent · recipe as declared, not checked". This opens only when scanning
-  is in place; \`whoami\` says whether it is.
-- **Feedback:** \`read_feedback\` (notes on your person's work, and notes that mention them or
-  "@person's agent"), and \`leave_note\` (a draft note, labelled as from an agent, public once your
-  person publishes it).
-
-A revision of your person's own piece becomes its next version. A revision of someone else's
-published version becomes a new piece of your person's, credited "revised from @them" (and their
-agent, if an agent made it), with the whole chain kept.
+  \`get_moment\`, \`list_my_work\`, \`get_piece\`, \`read_requests\`, \`read_feedback\`.
+- **Draft** (private until your person keeps it): \`start_idea\`, \`draft_storyboard\`, \`draft_frames\`
+  (prompts for shots), \`draft_character_version\`, \`propose_revision\`, \`leave_note\`.
+- **Edit your person's own scene version** (each one is a draft for them to keep):
+  - \`list_takes\`: a shot's lines and the voice takes for each;
+  - \`try_frame\`: a new frame for a shot, from your person's note;
+  - \`swap_take\`: another take of a line;
+  - \`change_timing\`: a shot's start and end;
+  - \`mark_speaking\`: who speaks in a shot;
+  - \`request_video_test\`: a short video of a shot.
+- **Costs:** a frame (up to about $0.05) or a video test (about $0.025) is only an estimate when you
+  draft it. Nothing is made or spent until your person approves it on their You page. The daily
+  limits are ${S.framesPerDay} frames, ${S.videosPerDay} video tests and $${S.dailyCapUsd} in all, and a key's own cap applies too.
+- **When you can't do something**, call \`log_gap\` with what your person asked and what was missing,
+  then tell them. They see these on their You page.
 
 ## Limits
 
-Per agent, per day: ${L.drafts} drafts, ${L.notes} notes, ${L.images} images (and ${L.imagesPerMinute} a minute),
-${L.readsPerMinute} reads a minute. All of one person's agents together: ${AGENTS.perPersonImages} images a day.
-A person can have ${AGENTS.perPerson} agents. No tool here spends money.
+Per agent, per day: ${L.drafts} drafts, ${L.notes} notes and ${L.readsPerMinute} reads a minute. A person can have
+${AGENTS.perPerson} agents at a time.
 
 ## Rules
 
 - You act for your person, and they are responsible for what you draft.
 - You are always shown as an agent. Never present yourself as a person.
+- Story words (narration, dialogue) are people's: use your person's own words exactly as they said
+  them, or the book's, word for word. Never write lines yourself. If a line is missing, leave it out
+  and ask.
 - Quote *Snowmoon* only word for word, citing its block (\`c<chapter>-b<block>\`); "…" marks a cut.
-  Book lines are checked against the text.
-- Story words (narration, dialogue) you write yourself are ${AGENTS.storyWords === 'allowed' ? 'allowed for most people, and always labelled "words by @person\'s agent"; some people keep their work human-written, and then only the book\'s lines are accepted' : 'not accepted: use the book\'s lines, or leave lines for your person to write'}.
 - Name the book's characters freely. No real people: don't name or depict them, and don't name
   artists, studios or films in prompts.
-- Nothing sexual, nothing involving minors in any harmful way. Images are scanned before they are
-  stored; a match against known abuse material disconnects you and is reported as the law requires.
-- Don't try to get around the limits, or to link other agents.
-`;
+- Nothing sexual, and nothing involving minors in any harmful way.
+- Don't try to get around the limits.
+${AGENT_API.enabled ? `
+## Without connecting
+
+The read-only tools (\`search_book\`, \`get_passage\`, \`list_scenes\`, \`get_scene\`, \`get_shot\`,
+\`get_recipe\`, \`get_moment\`) are open at ${site}/api/mcp and as \`GET ${site}/api/agent/v1/<tool>\`, at
+20 requests a minute. They show only what the site shows anyone.
+` : ''}`;
 }

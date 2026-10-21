@@ -112,6 +112,53 @@ The first one should go; it was there before tonight. I left it for the editor r
 - Every other test and check script passes, except `test:images-gate` (above). `check:ui`,
   `check:miniapp` and `check:podcast` were run against this build.
 
+## 9. Second part (same night): a personal agent key and agents.md
+
+- **The key:** on /you → Agents → "Make an agent key", give a name and a spend cap (default $1, at most
+  $10).
+  - It's shown once, with Copy and "Done, hide it".
+  - It starts with `sk1_` and only its sha256 is stored.
+  - It can read and draft (no images) and lasts 30 days.
+  - Each spend still needs your approval on /you, and the key's total stays within its cap.
+  - /you shows "spent $x of $cap · ends <date>", and Disconnect ends it in one tap.
+- **Sending it:** `Authorization: Bearer sk1_…`, or the header `X-Snowmoon-Key`. A key in a URL is
+  refused.
+- **Keys never appear in logs.** Test K9 searches everything the server printed. Only the key's hash
+  is stored (K2).
+- **agents.md:** snowmoon.party/agents.md is now site-wide whenever agents are on, like
+  /minpentai/agents.md. It explains the MCP endpoint, how to send the key (with a curl example that
+  reads the key from an environment variable), keeping the key secret, the tools and the rules.
+  Connecting is still invited-only.
+- **Tests:** `test:agents` now passes 130 checks (K1 to K9 are new).
+- **A fresh agent using only agents.md and a key** (`scripts/demo-key.ts`, screenshots in
+  `docs/agents/demo-key/` with the key blurred).
+  - **Setup:** a new Claude session with no connector, only curl allowed. It was told the agents.md
+    address. The key sat in an environment variable, as an app's secret store would hold it, and was
+    never in its prompt.
+  - **What it did:** it read the page, sent the key as `$SNOWMOON_AGENT_KEY` in its headers, and drafted
+    both asks (a new frame, and who's speaking).
+  - **The key was searched for afterwards:** it appears neither in the agent's transcript nor in the
+    server's output. After one tap on Disconnect, the key was refused (401).
+  - **Taps:** making a key took 5 (open /you, Make an agent key, Make the key, Copy, Done). Sending the
+    ask took 1, reviewing took 1, and ending the key took 1.
+- **check:principles P1f:** the key's two boxes are a small component of their own,
+  `agent-key-field.tsx`, which says "Kept with the key… Never published by us". P1f now checks for
+  that, as it already does for the agent address box.
+
+### Connectors, one line each (researched tonight, not tested)
+
+- **ChatGPT Plus with developer mode:** probably read-only. OpenAI's help page lists write actions for
+  Business, Enterprise and Edu, and read and fetch for Pro, and doesn't name Plus. Test it with the
+  steps in phone-steps.md. ([help article](https://help.openai.com/en/articles/12584461-developer-mode-and-mcp-apps-in-chatgpt))
+- **Gemini, free:** maybe. Google's help page has "Add a custom app" with an MCP URL, for US adults
+  with personal accounts in English, and names no paid plan. Some vendor guides say it's for paid
+  plans only. ([Google](https://support.google.com/gemini/answer/17209137))
+- **Mistral Le Chat, free:** yes, per Mistral's docs. It supports OAuth with DCR, or a Bearer key.
+  ([Mistral](https://docs.mistral.ai/le-chat/knowledge-integrations/connectors/mcp-connectors))
+- **Muse:** unconfirmed by Meta. Meta's page mentions a "Secure Credentials Store", and third-party
+  guides show both OAuth and keys (Bearer, or a vendor's own header). Our key works either way.
+  ([Meta](https://www.meta.com/help/artificial-intelligence/1687253048996149/))
+
 ## Principles
 
 - **P1, public recipe:** pass. A made frame or video records its model, prompt and inputs ("Recipe").

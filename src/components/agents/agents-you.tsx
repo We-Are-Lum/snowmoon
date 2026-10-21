@@ -10,6 +10,7 @@ import type { RequestView } from '~/lib/agents/requests';
 import { TellAgent, sendRequest } from './tell-agent';
 import { PublishedTextField } from '../publish-words';
 import { AgentAddressField } from './agent-address-field';
+import { AgentKeyMaker } from './agent-key';
 import { PieceVersion, shortMentions } from './piece-version';
 import './agents.css';
 
@@ -203,10 +204,12 @@ export function AgentsOnYou() {
           <div className="agent-row" key={a.id} data-agent={a.id}>
             <p><strong>{a.name}</strong> <span className="piece-chip">agent</span></p>
             <p className="you-note">{W.via(a.route)} · {a.scopes.join(', ')} · {W.lastUsed(when(a.lastUsedAt))}</p>
+            {a.route === 'key' && a.spendCapUsd !== null && <p className="you-note">{W.keyLine(a.spentUsd, a.spendCapUsd, a.expiresAt.slice(0, 10))}</p>}
             {a.waitingForSignature && <p className="you-note">{W.waiting}</p>}
             <button type="button" className="ic-secondary" onClick={() => void disconnect(a.id)}>{W.disconnect}</button>
           </div>
         ))}
+        <AgentKeyMaker onMade={() => void load()} />
         <details className="agent-wallet">
           <summary>{W.walletTitle}</summary>
           <p className="you-note">{W.walletNote}</p>

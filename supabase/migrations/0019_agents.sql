@@ -28,7 +28,9 @@ begin;
 create table studio.agents (
   id uuid primary key default gen_random_uuid(),
   person bigint not null check (person <> 0),
-  route text not null check (route in ('oauth', 'wallet')),
+  -- oauth: an app that signs in (Claude, ChatGPT); wallet: an agent with its own wallet; key: a personal agent
+  -- key the person made on /you (owner, 2026-10-20: for clients like Muse that send a key in a header).
+  route text not null check (route in ('oauth', 'wallet', 'key')),
   name text not null check (char_length(name) between 1 and 60),
   client_id text,
   address text check (address is null or address ~ '^0x[0-9a-f]{40}$'),
@@ -40,7 +42,10 @@ create table studio.agents (
   link_signature text,
   revoked_at timestamptz,
   last_used_at timestamptz,
+  -- A key's spend cap: the most its drafts may spend in all, once its person approves each one.
+  spend_cap_usd numeric(8, 2) check (spend_cap_usd is null or spend_cap_usd >= 0),
   check (route <> 'wallet' or address is not null),
+  check (route <> 'key' or spend_cap_usd is not null),
   check (route <> 'oauth' or client_id is not null)
 );
 create index agents_person on studio.agents (person) where revoked_at is null;
@@ -69,7 +74,7 @@ create table studio.oauth_codes (
 create table studio.agent_tokens (
   token_hash text primary key,
   agent_id uuid not null references studio.agents(id),
-  kind text not null check (kind in ('access', 'refresh')),
+  kind text not null check (kind in ('access', 'refresh', 'key')),
   resource text not null,
   created_at timestamptz not null default now(),
   expires_at timestamptz not null,

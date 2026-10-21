@@ -30,3 +30,32 @@ These steps work only after the morning merge (see "Before" below). Do them one 
 
 **To disconnect:** tap Disconnect on /you, or remove the connector in the app. Either one stops the agent
 at once.
+
+## Next: ChatGPT Plus (on the web)
+
+Test whether it can draft or only read. OpenAI's help page lists write actions for Business,
+Enterprise and Edu, and read and fetch for Pro. It doesn't name Plus.
+
+1. On chatgpt.com, go to Settings → Apps (it may say "Apps & Connectors") → Advanced settings, and turn on **Developer mode**. The exact menu names may differ.
+2. **Create app**, with the URL https://snowmoon.party/mcp and OAuth for authentication.
+3. Sign in on Snowmoon's page and tap **Allow**.
+4. In a chat, ask: "Using Snowmoon, call whoami." That's a read.
+5. Then ask: "On shot 3 of my Fifteen Days version, mark Bai as speaking." That's a draft.
+   - If ChatGPT asks you to confirm and the draft shows up on /you, Plus can draft.
+   - If the tool is missing or blocked, Plus can only read.
+
+## Muse (Meta), with a key
+
+Muse may connect with a key rather than a sign-in, so it gets a personal agent key.
+
+1. On snowmoon.party/you → Agents → **Make an agent key**. Name it "Muse" and set a cap (for example
+   $1). Tap **Make the key**, then **Copy**. The key is shown only this once.
+2. In Muse, ask it to add a custom connector. When it asks for the key, paste it into the **secure
+   credential prompt**, never into the chat.
+3. Tell Muse: "Connect to snowmoon.party/agents.md and follow it." The page tells it the endpoint
+   (https://snowmoon.party/mcp) and how to send the key (`Authorization: Bearer …`, or the header
+   `X-Snowmoon-Key`).
+4. Ask for an edit, then review it on /you. Your Agents list shows what the key has spent of its cap.
+
+If the key ever ends up in a chat message, tap **Disconnect** on the key in /you and make a new one.
+The key ends by itself after 30 days.
