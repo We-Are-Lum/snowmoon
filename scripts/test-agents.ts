@@ -380,6 +380,18 @@ try {
     const frRun = await asPerson(people.A.token, '/api/drafts', { method: 'POST', body: JSON.stringify({ what: 'version', id: fr.out.version, action: 'run' }) });
     const frMade = ((await (await asPerson(people.A.token, '/api/drafts')).json()).drafts.find((d: { id: string }) => d.id === fr.out.version) as { made: { prompt?: string; direction?: { character: string; text: string; by: string }[] } | null }).made;
     check('N11 acting notes feed that shot’s frame prompt, in their words, and show in the recipe as theirs', frRun.ok && !!frMade?.prompt?.includes(`Bai: ${said}`) && frMade.direction?.[0]?.text === said && frMade.direction[0].by === 'person', `${frRun.status} ${JSON.stringify(frMade)?.slice(0, 300)}`);
+    const agentRw = await tool(BASE, edA, 'rewrite_line', { adaptation: 1, version: 2, cue: 'b1-3', text: 'Nah. Too fake.' });
+    const ownRw = await asPerson(people.A.token, '/api/direction', { method: 'POST', body: JSON.stringify({ action: 'rewrite', adaptation: 1, version: 2, cue: 'b1-4', text: 'Such patience.' }) });
+    const lineAt = async (cue: string) => ((await (await asPerson(people.A.token, '/api/direction?adaptation=1&version=2')).json()) as { shots: { lines: { cue: string; rewrite: { id: string; filedBy: string | null } | null }[] }[] }).shots.flatMap((x) => x.lines).find((l) => l.cue === cue);
+    const before = await lineAt('b1-3');
+    const mine = await lineAt('b1-4');
+    const conf = await asPerson(people.A.token, '/api/direction', { method: 'POST', body: JSON.stringify({ action: 'confirm', id: before?.rewrite?.id }) });
+    const bConf = await asPerson(people.B.token, '/api/direction', { method: 'POST', body: JSON.stringify({ action: 'confirm', id: before?.rewrite?.id }) });
+    const confirmed = await lineAt('b1-3');
+    check('N13 an agent-filed rewrite is labelled as filed by the agent until the person taps "These were my words"; their own is theirs at once; someone else can’t confirm it; an unconfirmed acting note is labelled in the recipe', agentRw.ok && ownRw.ok && String(before?.rewrite?.filedBy).startsWith('Claude') && mine?.rewrite?.filedBy === null && bConf.status !== 200 && conf.ok && confirmed?.rewrite?.filedBy === null && String((frMade?.direction?.[0] as { filedBy?: string } | undefined)?.filedBy).startsWith('Claude'), `${JSON.stringify(before?.rewrite)} ${JSON.stringify(confirmed?.rewrite)} ${bConf.status}`);
+    const noVersion = await S.pg.query(`insert into studio.direction_notes (person, adaptation_id, version, kind, shot, body, confirmed_at) values ($1, 1, 999, 'intent', '14-b1-6', 'x', now())`, [people.A.person]).then(() => 'kept', (e: Error) => e.message);
+    const unconfirmedOwn = await S.pg.query(`insert into studio.direction_notes (person, adaptation_id, version, kind, shot, body) values ($1, 1, 2, 'intent', '14-b1-6', 'x')`, [people.A.person]).then(() => 'kept', (e: Error) => e.message);
+    check('N14 the tables refuse a note on a version that doesn’t exist, and a row the person filed without confirmed_at', /foreign key/i.test(noVersion) && /check constraint/i.test(unconfirmedOwn), `${noVersion} | ${unconfirmedOwn}`);
     const dList = ((await mcp(BASE, edA, 'tools/list')).body?.result?.tools ?? []).map((t) => t.name);
     check('N12 the four direction tools are there, and still nothing that publishes or spends', ['find_line', 'get_direction', 'add_direction', 'rewrite_line'].every((n) => dList.includes(n)) && !dList.some((n) => /publish|spend|pay|approve|run/i.test(n)));
   }

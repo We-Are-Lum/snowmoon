@@ -16,6 +16,8 @@ import { sql, type Agent } from './core';
  * Filed on the script page by the person, or by their agent from what they said: the agent passes their words
  * as given and names the shot; when it isn't sure which shot, it asks them (find_line helps). Nothing here
  * guesses a shot: a note without one is refused.
+ * What the person files is theirs at once. What their agent files is labelled "filed by <agent>" until the
+ * person taps "These were my words" (owner, 2026-10-21); confirmed_at records that tap.
  */
 export type DirectionKind = 'intent' | 'acting' | 'delivery';
 export const DIRECTION_KINDS: DirectionKind[] = ['intent', 'acting', 'delivery'];
@@ -109,9 +111,9 @@ export async function addDirection(person: number, by: By, args: Record<string, 
       character = c;
     }
   }
-  const [r] = await sql()<{ id: string }[]>`insert into studio.direction_notes (person, adaptation_id, version, kind, shot, character, cue, body, agent_id, agent_name, request_id)
-    values (${person}, ${adaptation}, ${version}, ${kind}, ${shot.id}, ${character}, ${cue}, ${body}, ${by.agent?.id ?? null}, ${by.agent?.name ?? null}, ${request}) returning id`;
-  return { note: r.id, kind, shot: shot.id, n: shot.n, ...(character ? { character } : {}), ...(cue ? { cue } : {}), text: body, filed: 'on your person’s script page, as their words' };
+  const [r] = await sql()<{ id: string }[]>`insert into studio.direction_notes (person, adaptation_id, version, kind, shot, character, cue, body, agent_id, agent_name, request_id, confirmed_at)
+    values (${person}, ${adaptation}, ${version}, ${kind}, ${shot.id}, ${character}, ${cue}, ${body}, ${by.agent?.id ?? null}, ${by.agent?.name ?? null}, ${request}, ${by.agent ? null : new Date()}) returning id`;
+  return { note: r.id, kind, shot: shot.id, n: shot.n, ...(character ? { character } : {}), ...(cue ? { cue } : {}), text: body, filed: by.agent ? 'on your person’s script page, labelled as filed by you until they confirm the words are theirs' : 'on the script page' };
 }
 
 export async function rewriteLine(person: number, by: By, args: Record<string, unknown>) {
@@ -124,17 +126,23 @@ export async function rewriteLine(person: number, by: By, args: Record<string, u
   const id = await s.begin(async (tx) => {
     // The newest rewrite of a line is the draft; an earlier one is withdrawn (it stays in the history).
     await tx`update studio.line_rewrites set withdrawn_at = now() where person = ${person} and adaptation_id = ${adaptation} and version = ${version} and cue = ${line.cue} and withdrawn_at is null`;
-    const [r] = await tx<{ id: string }[]>`insert into studio.line_rewrites (person, adaptation_id, version, shot, cue, original, body, agent_id, agent_name, request_id)
-      values (${person}, ${adaptation}, ${version}, ${shot.id}, ${line.cue}, ${original}, ${body}, ${by.agent?.id ?? null}, ${by.agent?.name ?? null}, ${request}) returning id`;
+    const [r] = await tx<{ id: string }[]>`insert into studio.line_rewrites (person, adaptation_id, version, shot, cue, original, body, agent_id, agent_name, request_id, confirmed_at)
+      values (${person}, ${adaptation}, ${version}, ${shot.id}, ${line.cue}, ${original}, ${body}, ${by.agent?.id ?? null}, ${by.agent?.name ?? null}, ${request}, ${by.agent ? null : new Date()}) returning id`;
     return r.id;
   });
   return { rewrite: id, cue: line.cue, shot: shot.id, n: shot.n, speaker: line.speaker ?? null, original, text: body, status: 'draft', rerecord: 'on the re-record sheet until it’s recorded' };
 }
 
-/** Withdraw a note or a rewrite, or mark a rewrite recorded (the person, on the script page). */
-export async function settle(person: number, id: string, action: 'withdraw' | 'recorded'): Promise<boolean> {
+/** Withdraw a note or a rewrite, mark a rewrite recorded, or confirm an agent-filed one as the person's words (the person, on the script page). */
+export async function settle(person: number, id: string, action: 'withdraw' | 'recorded' | 'confirm'): Promise<boolean> {
   if (!/^[0-9a-f-]{36}$/.test(id)) return false;
   const s = sql();
+  if (action === 'confirm') {
+    const a = await s`update studio.direction_notes set confirmed_at = now() where id = ${id} and person = ${person} and withdrawn_at is null and confirmed_at is null returning id`;
+    if (a.length) return true;
+    const b = await s`update studio.line_rewrites set confirmed_at = now() where id = ${id} and person = ${person} and withdrawn_at is null and confirmed_at is null returning id`;
+    return b.length > 0;
+  }
   if (action === 'recorded') {
     const r = await s`update studio.line_rewrites set recorded_at = now() where id = ${id} and person = ${person} and withdrawn_at is null and recorded_at is null returning id`;
     return r.length > 0;
@@ -145,18 +153,20 @@ export async function settle(person: number, id: string, action: 'withdraw' | 'r
   return b.length > 0;
 }
 
-type NoteRow = { id: string; kind: DirectionKind; shot: string; character: string | null; cue: string | null; body: string; agent_name: string | null; created_at: Date };
-type RewriteRow = { id: string; shot: string; cue: string; original: string; body: string; agent_name: string | null; created_at: Date; recorded_at: Date | null };
-const noteView = (r: NoteRow) => ({ id: r.id, kind: r.kind, shot: r.shot, character: r.character, cue: r.cue, text: r.body, filedBy: r.agent_name, at: new Date(r.created_at).toISOString() });
-const rewriteView = (r: RewriteRow) => ({ id: r.id, shot: r.shot, cue: r.cue, original: r.original, text: r.body, filedBy: r.agent_name, at: new Date(r.created_at).toISOString(), recorded: r.recorded_at ? new Date(r.recorded_at).toISOString() : null });
+type NoteRow = { id: string; kind: DirectionKind; shot: string; character: string | null; cue: string | null; body: string; agent_name: string | null; created_at: Date; confirmed_at: Date | null };
+type RewriteRow = { id: string; shot: string; cue: string; original: string; body: string; agent_name: string | null; created_at: Date; confirmed_at: Date | null; recorded_at: Date | null };
+// filedBy: the agent's name while the person hasn't confirmed the words as theirs; null once they have (or filed it themselves).
+const filedBy = (r: { agent_name: string | null; confirmed_at: Date | null }) => (r.confirmed_at ? null : (r.agent_name ?? 'your agent'));
+const noteView = (r: NoteRow) => ({ id: r.id, kind: r.kind, shot: r.shot, character: r.character, cue: r.cue, text: r.body, filedBy: filedBy(r), at: new Date(r.created_at).toISOString() });
+const rewriteView = (r: RewriteRow) => ({ id: r.id, shot: r.shot, cue: r.cue, original: r.original, text: r.body, filedBy: filedBy(r), at: new Date(r.created_at).toISOString(), recorded: r.recorded_at ? new Date(r.recorded_at).toISOString() : null });
 export type NoteView = ReturnType<typeof noteView>;
 export type RewriteView = ReturnType<typeof rewriteView>;
 
 async function live(person: number, adaptation: number, version: number) {
   const s = sql();
-  const notes = await s<NoteRow[]>`select id, kind, shot, character, cue, body, agent_name, created_at from studio.direction_notes
+  const notes = await s<NoteRow[]>`select id, kind, shot, character, cue, body, agent_name, created_at, confirmed_at from studio.direction_notes
     where person = ${person} and adaptation_id = ${adaptation} and version = ${version} and withdrawn_at is null order by created_at`;
-  const rewrites = await s<RewriteRow[]>`select id, shot, cue, original, body, agent_name, created_at, recorded_at from studio.line_rewrites
+  const rewrites = await s<RewriteRow[]>`select id, shot, cue, original, body, agent_name, created_at, confirmed_at, recorded_at from studio.line_rewrites
     where person = ${person} and adaptation_id = ${adaptation} and version = ${version} and withdrawn_at is null order by created_at`;
   return { notes: notes.map(noteView), rewrites: rewrites.map(rewriteView) };
 }
@@ -204,9 +214,10 @@ function rerecordFrom(shots: ScriptShot[]) {
 
 /** Acting notes for a shot, for its frame and video prompts and their recipes (approve.ts). */
 export async function actingFor(person: number, adaptation: number, version: number, shot: string) {
-  const rows = await sql()<{ character: string; body: string; agent_name: string | null }[]>`select character, body, agent_name from studio.direction_notes
+  const rows = await sql()<{ character: string; body: string; agent_name: string | null; confirmed_at: Date | null }[]>`select character, body, agent_name, confirmed_at from studio.direction_notes
     where person = ${person} and adaptation_id = ${adaptation} and version = ${version} and shot = ${shot} and kind = 'acting' and withdrawn_at is null order by created_at`;
-  return rows.map((r) => ({ character: r.character, text: r.body, by: 'person' as const, filedBy: r.agent_name }));
+  // Unconfirmed agent-filed notes still go into the prompt, but the recipe says who filed them.
+  return rows.map((r) => ({ character: r.character, text: r.body, by: 'person' as const, filedBy: filedBy(r) }));
 }
 
 /** Acting notes as a prompt sentence: the person's words, quoted, per character. */

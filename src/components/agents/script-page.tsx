@@ -17,14 +17,19 @@ const D = AGENT_WORDING.direction;
 type Script = { adaptation: number; version: number; title: string; cast: string[]; shots: ScriptShot[]; rerecord: { speaker: string; lines: { shot: string; n: number; cue: string; time: string; line: string; original: string | null; rewrite: string | null; delivery: string[] }[] }[] };
 type Open = { kind: 'line'; cue: string; mode: 'rewrite' | 'delivery' } | { kind: 'shot'; shot: string; mode: 'intent' | 'acting'; who: string } | null;
 
-function Notes({ notes, onWithdraw }: { notes: NoteView[]; onWithdraw: (id: string) => void }) {
+function Notes({ notes, onWithdraw, onConfirm }: { notes: NoteView[]; onWithdraw: (id: string) => void; onConfirm: (id: string) => void }) {
   if (!notes.length) return null;
   return (
     <ul className="script-notes">
       {notes.map((n) => (
         <li key={n.id} data-kind={n.kind}>
           <span className="script-kind">{D.kinds[n.kind]}{n.character ? ` · ${n.character}` : ''}</span> {n.text}
-          {n.filedBy && <span className="you-note"> · {D.filedBy(n.filedBy)}</span>}{' '}
+          {n.filedBy && (
+            <span className="you-note">
+              {' '}· {D.filedBy(n.filedBy)} ·{' '}
+              <button type="button" className="script-link" onClick={() => onConfirm(n.id)}>{D.confirm}</button>
+            </span>
+          )}{' '}
           <button type="button" className="script-link" onClick={() => onWithdraw(n.id)}>{D.withdraw}</button>
         </li>
       ))}
@@ -73,6 +78,7 @@ export function ScriptPage({ adaptation, version }: { adaptation: number; versio
     if (ok) setOpen(null);
   };
   const withdraw = (id: string) => void post({ action: 'withdraw', id });
+  const confirm = (id: string) => void post({ action: 'confirm', id });
 
   if (!script) return <main className="script-page"><p className="you-note">{error ?? '…'}</p></main>;
 
@@ -102,12 +108,16 @@ export function ScriptPage({ adaptation, version }: { adaptation: number; versio
         </button>
         {l.rewrite && (
           <p className="you-note">
-            {l.rewrite.filedBy && `${D.filedBy(l.rewrite.filedBy)} · `}
+            {l.rewrite.filedBy && (
+              <>
+                {D.filedBy(l.rewrite.filedBy)} · <button type="button" className="script-link" onClick={() => confirm(l.rewrite!.id)}>{D.confirm}</button>{' · '}
+              </>
+            )}
             <button type="button" className="script-link" onClick={() => void post({ action: 'recorded', id: l.rewrite!.id })}>{D.recorded}</button>{' · '}
             <button type="button" className="script-link" onClick={() => withdraw(l.rewrite!.id)}>{D.withdraw}</button>
           </p>
         )}
-        <Notes notes={l.delivery} onWithdraw={withdraw} />
+        <Notes notes={l.delivery} onWithdraw={withdraw} onConfirm={confirm} />
         {here && open.kind === 'line' && (
           <>
             <div className="script-modes" role="group">
@@ -164,7 +174,7 @@ export function ScriptPage({ adaptation, version }: { adaptation: number; versio
                   {D.note}
                 </button>
               </div>
-              <Notes notes={[...s.intent, ...s.acting]} onWithdraw={withdraw} />
+              <Notes notes={[...s.intent, ...s.acting]} onWithdraw={withdraw} onConfirm={confirm} />
               {here && open.kind === 'shot' && (
                 <>
                   <div className="script-modes" role="group">

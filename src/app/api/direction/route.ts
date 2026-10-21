@@ -43,7 +43,7 @@ export async function POST(request: Request) {
   try {
     if (action === 'note') return NextResponse.json(await addDirection(w.person, { agent: null }, args), { headers: noStore });
     if (action === 'rewrite') return NextResponse.json(await rewriteLine(w.person, { agent: null }, args), { headers: noStore });
-    if ((action === 'withdraw' || action === 'recorded') && typeof args.id === 'string') {
+    if ((action === 'withdraw' || action === 'recorded' || action === 'confirm') && typeof args.id === 'string') {
       const ok = await settle(w.person, args.id, action);
       return NextResponse.json({ ok }, { status: ok ? 200 : 404, headers: noStore });
     }

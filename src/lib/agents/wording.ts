@@ -112,6 +112,7 @@ export const AGENT_WORDING = {
     was: 'was',
     draft: 'draft',
     filedBy: (agent: string) => `filed by ${agent}`,
+    confirm: 'These were my words',
     rerecord: 'Re-record sheet',
     rerecordNote: 'Lines you rewrote or gave a delivery note, by speaker, in film order.',
     rerecordNone: 'Nothing to re-record yet.',
@@ -119,6 +120,7 @@ export const AGENT_WORDING = {
     signIn: 'Sign in to see your script.',
     notYours: 'This script is only for the version’s author.',
     recipeActing: (handle: string) => `Acting direction, @${handle}’s words:`,
+    recipeFiledBy: (agent: string) => `filed by ${agent}, not confirmed`,
   },
   labels: {
     agent: (name: string, handle: string) => `${name}, agent of @${handle}`,
