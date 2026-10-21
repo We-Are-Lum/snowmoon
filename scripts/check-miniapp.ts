@@ -113,9 +113,9 @@ try {
     // The first-visit intro covers the home page once; skip it, as a visitor would.
     const skip = frame.getByRole('button', { name: 'Skip', exact: true });
     if (await skip.isVisible().catch(() => false)) await skip.click();
-    // Signed in silently: the menu shows the account from the Farcaster context.
+    // Signed in silently: the menu shows the account from the Farcaster context (its name is .menu-account-name since the menu sign-in, #1).
     await frame.click('.topbar-icon[aria-label="Menu"]');
-    await frame.waitForSelector('.menu-sheet .account-name:has-text("@check")', { timeout: 15000 }).catch(() => fail(`${path}: not signed in silently`));
+    await frame.waitForSelector('.menu-sheet .menu-account-name:has-text("@check")', { timeout: 15000 }).catch(() => fail(`${path}: not signed in silently`));
     await frame.click('.menu-close');
     if (path === '/assistant') {
       await frame.waitForSelector('.as-start', { timeout: 15000 });
