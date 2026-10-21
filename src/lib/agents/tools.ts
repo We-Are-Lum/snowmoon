@@ -10,6 +10,7 @@ import { checkLines, checkPlain, checkText, storyWordsAllowed } from './filter';
 import { bringIn, imagesOpen, ScanMatch, type Declared } from './images';
 import { addNote, draftPiece, feedbackFor, notesOn, pieceVersions, piecesOf, revise, versionById, visibleTo, type Answering, type Kind } from './pieces';
 import { openRequests, personWords } from './requests';
+import { addDirection, directionOf, findLine, rewriteLine } from './direction';
 import { changeTiming, listTakes, logGap, markSpeaking, requestVideo, swapTake, tryFrame, frameEstimate, videoEstimate } from './edits';
 
 /**
@@ -363,6 +364,30 @@ const EDITS: AgentTool[] = [
     description: `Draft a short video test of a shot of your person's own version (LongCat-Video, 480p, 5 seconds, from the shot's frame and their note). Its cost (about $${videoEstimate()}) is shown on their You page; nothing is spent until they approve.`,
     inputSchema: { type: 'object', properties: { ...SHOT_ARGS, note: { type: 'string', description: EDIT_NOTE }, answering: ANSWERING }, required: ['adaptation', 'version', 'shot'], additionalProperties: false },
     run: async (agent, args) => requestVideo(agent, args),
+  },
+  {
+    name: 'find_line', title: 'Find a line in your person\'s version', scope: 'read', writes: false,
+    description: 'Before filing a note or a rewrite: find the line your person means by some of its words and/or its speaker. Gives each match\'s shot, cue, time and who is on screen. If more than one fits, or none, ask your person which they mean; never guess.',
+    inputSchema: { type: 'object', properties: { adaptation: { type: 'integer' }, version: { type: 'integer' }, words: { type: 'string' }, speaker: { type: 'string' } }, required: ['adaptation', 'version'], additionalProperties: false },
+    run: async (agent, args) => findLine(agent.person, args),
+  },
+  {
+    name: 'get_direction', title: 'Read your person\'s direction notes', scope: 'read', writes: false,
+    description: 'Your person\'s direction notes (intent, acting, delivery) and line rewrites on one of their versions, as filed.',
+    inputSchema: { type: 'object', properties: { adaptation: { type: 'integer' }, version: { type: 'integer' } }, required: ['adaptation', 'version'], additionalProperties: false },
+    run: async (agent, args) => directionOf(agent.person, args),
+  },
+  {
+    name: 'add_direction', title: 'File a direction note', scope: 'drafts', writes: true, counts: 'notes',
+    description: 'File one of your person\'s direction notes on their own version, in their words exactly as they gave them (never reworded, summarised or added to). kind: "intent" for a moment (shot): where to take the viewer, the feeling, the thoughts; "acting" for a character in a shot: thinking, movement, where they look (needs character; it feeds that shot\'s frame and video prompts); "delivery" for a line: how it\'s said (needs cue; it goes on the re-record sheet). Name the shot (or the cue for delivery). If you aren\'t sure which shot or line, or which kind, ask your person first; never guess. Split a sentence covering several shots or kinds into one note each only if their words split cleanly; otherwise ask.',
+    inputSchema: { type: 'object', properties: { adaptation: { type: 'integer' }, version: { type: 'integer' }, kind: { enum: ['intent', 'acting', 'delivery'] }, shot: { type: 'string' }, character: { type: 'string' }, cue: { type: 'string' }, text: { type: 'string', description: 'Your person\'s words, exactly as they gave them.' }, answering: ANSWERING }, required: ['adaptation', 'version', 'kind', 'text'], additionalProperties: false },
+    run: async (agent, args) => addDirection(agent.person, { agent, request: typeof args.answering === 'string' ? args.answering : null }, args),
+  },
+  {
+    name: 'rewrite_line', title: 'File a line rewrite', scope: 'drafts', writes: true, counts: 'drafts',
+    description: 'File your person\'s new line, exactly as they wrote or said it, as a draft against the line it replaces (by cue; find_line shows them). Story words are theirs: never write, fix or finish a line yourself; if they haven\'t given you the exact words, ask. The rewrite goes on their re-record sheet. If you aren\'t sure which line, ask; never guess.',
+    inputSchema: { type: 'object', properties: { adaptation: { type: 'integer' }, version: { type: 'integer' }, cue: { type: 'string' }, text: { type: 'string', description: 'Your person\'s new line, exactly as they gave it.' }, answering: ANSWERING }, required: ['adaptation', 'version', 'cue', 'text'], additionalProperties: false },
+    run: async (agent, args) => rewriteLine(agent.person, { agent, request: typeof args.answering === 'string' ? args.answering : null }, args),
   },
   {
     name: 'log_gap', title: 'Log something you couldn\'t do', scope: 'read', writes: true,

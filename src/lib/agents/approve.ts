@@ -8,6 +8,7 @@ import { generate, remixPictures, remixPrompt } from '../remix/make';
 import { pictureSize, remixShot, type RemixPicture } from '../remix/shot';
 import { sha256, sql } from './core';
 import type { Change } from './edits';
+import { actingFor, actingPrompt } from './direction';
 import { storeMade } from './images';
 import { versionById } from './pieces';
 
@@ -33,18 +34,22 @@ async function runFrame(person: number, request: Request, body: { adaptation: nu
   if (!shot?.prompt || !bytes || !size) return { ok: false as const, status: 400, error: 'This shot has no committed layout to redraw from.' };
   const layout: RemixPicture = { role: 'layout', name: 'the shot’s own camera (depth)', src: setFrame!.src!, file: null, fileSha256: setFrame!.sha256 ?? null, bytes, sha256: sha256(bytes), ...size } as RemixPicture;
   const pictures = remixPictures(layout, shot);
-  const prompt = remixPrompt(shot, pictures, body.change.note);
+  // The person's acting notes for this shot go into the prompt, in their words, and into the recipe as theirs.
+  const acting = await actingFor(person, body.adaptation, body.version, body.shot);
+  const prompt = remixPrompt(shot, pictures, [body.change.note, actingPrompt(acting)].filter(Boolean).join(' '));
   const g = await generate(sql(), person, request, prompt, pictures);
   if (!g.ok) return { ok: false as const, status: g.status, error: g.error };
   const key = await storeMade(g.made.bytes, 'jpg');
-  return { ok: true as const, key, sha: sha256(g.made.bytes), spent: g.made.costUsd + (g.guard.costUsd ?? 0), made: { kind: 'frame', label: 'Made here', model: g.made.settings, request_id: g.made.requestId, seed: g.made.seed, prompt, inputs: pictures.map((p) => ({ role: p.role, name: p.name, sha256: p.sha256 })) } };
+  return { ok: true as const, key, sha: sha256(g.made.bytes), spent: g.made.costUsd + (g.guard.costUsd ?? 0), made: { kind: 'frame', label: 'Made here', model: g.made.settings, request_id: g.made.requestId, seed: g.made.seed, prompt, inputs: pictures.map((p) => ({ role: p.role, name: p.name, sha256: p.sha256 })), ...(acting.length ? { direction: acting } : {}) } };
 }
 
 /** The person approved a video test: LongCat-Video 480p on fal, from the shot's frame and their note, kept private. */
-async function runVideo(body: { adaptation: number; version: number; shot: string; change: Extract<Change, { type: 'video' }> }) {
+async function runVideo(person: number, body: { adaptation: number; version: number; shot: string; change: Extract<Change, { type: 'video' }> }) {
   const data = editorData(body.adaptation, body.version)?.shots.find((s) => s.id === body.shot);
   const frame = typeof data?.frame === 'string' ? publicFile(data.frame as string) : null;
   if (!frame) return { ok: false as const, status: 400, error: 'This shot has no frame to move.' };
+  const acting = await actingFor(person, body.adaptation, body.version, body.shot);
+  const prompt = [body.change.note, actingPrompt(acting)].filter(Boolean).join(' ');
   const testUrl = process.env.VERCEL ? null : process.env.AGENTS_TEST_FAL_URL;
   const key = process.env.FAL_KEY;
   if (!testUrl && !key) return { ok: false as const, status: 503, error: 'Video tests aren’t set up here.' };
@@ -52,7 +57,7 @@ async function runVideo(body: { adaptation: number; version: number; shot: strin
     method: 'POST',
     // X-Fal-Store-IO: 0 as for every image (src/lib/images/fal.ts): fal keeps no copy of the request or reply.
     headers: { 'content-type': 'application/json', 'X-Fal-Store-IO': '0', ...(key && !testUrl ? { authorization: `Key ${key}` } : {}) },
-    body: JSON.stringify({ image_url: `data:image/jpeg;base64,${frame.toString('base64')}`, prompt: body.change.note, enable_safety_checker: true }),
+    body: JSON.stringify({ image_url: `data:image/jpeg;base64,${frame.toString('base64')}`, prompt, enable_safety_checker: true }),
     signal: AbortSignal.timeout(280_000),
   }).catch(() => null);
   const out = (await res?.json().catch(() => null)) as { video?: { url?: string }; request_id?: string } | null;
@@ -62,7 +67,7 @@ async function runVideo(body: { adaptation: number; version: number; shot: strin
   if (!vid) return { ok: false as const, status: 502, error: 'The video couldn’t be fetched. Try again later.' };
   const bytes = Buffer.from(vid);
   const stored = await storeMade(bytes, 'mp4');
-  return { ok: true as const, key: stored, sha: sha256(bytes), spent: body.change.estimate_usd, made: { kind: 'video', label: 'Made here', model: body.change.model, host: 'fal.ai', request_id: out?.request_id ?? null, prompt: body.change.note, inputs: [{ role: 'frame', sha256: sha256(frame) }], cost_note: 'the estimate (fal returns no price per call)' } };
+  return { ok: true as const, key: stored, sha: sha256(bytes), spent: body.change.estimate_usd, made: { kind: 'video', label: 'Made here', model: body.change.model, host: 'fal.ai', request_id: out?.request_id ?? null, prompt, inputs: [{ role: 'frame', sha256: sha256(frame) }], ...(acting.length ? { direction: acting } : {}), cost_note: 'the estimate (fal returns no price per call)' } };
 }
 
 /** "Make it": the person approves the spend on their own draft; within the daily caps; at most once. */
@@ -96,7 +101,7 @@ export async function runApproved(person: number, versionId: string, request: Re
     from studio.piece_versions pv join studio.agents a on a.id = pv.agent_id where pv.id = ${versionId}`;
   if (key?.cap !== null && key !== undefined && Number(key.spent) + body.change.estimate_usd > Number(key.cap) + 1e-9)
     return fail(429, `That's over this agent key's spend cap ($${Number(key.cap).toFixed(2)}; $${Number(key.spent).toFixed(2)} spent). Make a new key with a higher cap, or approve less.`);
-  const r = body.change.type === 'frame' ? await runFrame(person, request, body as never) : await runVideo(body as never);
+  const r = body.change.type === 'frame' ? await runFrame(person, request, body as never) : await runVideo(person, body as never);
   if (!r.ok) return fail(r.status, r.error);
   await s`update studio.piece_versions set spent_usd = ${r.spent}, made = ${s.json(r.made as postgres.JSONValue)}, image_key = ${r.key}, image_sha256 = ${r.sha} where id = ${versionId}`;
   return { ok: true };

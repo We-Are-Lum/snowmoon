@@ -346,6 +346,13 @@ add({
         if (/fetch\(|supabase|\/api\//.test(text)) problems.push(`${file}: the agent key boxes must not send their text anywhere themselves`);
         continue;
       }
+      if (file.endsWith('components/agents/direction-field.tsx')) {
+        // The script page's note or rewritten line (owner, 2026-10-20): kept with the person's version, private, never published by us.
+        for (const [what, re] of [['kept with the version', /Kept with your version/], ['seen only by them and their agents', /seen only by you and your agents/], ['never published', /Never published by us/], ['described to screen readers', /aria-describedby/]] as const)
+          if (!re.test(text)) problems.push(`${file}: the direction box must say it is ${what}`);
+        if (/fetch\(|supabase|\/api\//.test(text)) problems.push(`${file}: the direction box must not send its text anywhere itself`);
+        continue;
+      }
       if (file.endsWith('components/agents/agent-address-field.tsx')) {
         // A wallet agent's address on /you (owner, 2026-10-20): kept with the link, never published by us.
         for (const [what, re] of [['kept with the link', /kept with the link/], ['never published', /Never published by us/], ['described to screen readers', /aria-describedby/]] as const)

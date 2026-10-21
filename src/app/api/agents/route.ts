@@ -3,6 +3,8 @@ import { getPerson } from '~/lib/auth';
 import { AGENTS } from '~/lib/config';
 import { agentsOn, type Scope, allowed } from '~/lib/agents/core';
 import { agentsOf, createKey, revoke, startWalletLink } from '~/lib/agents/accounts';
+import { versionsBy } from '~/lib/adaptation-pages';
+import { editorData } from '~/lib/agent/data';
 
 /**
  * A person's agents, for /you: list them, disconnect one (one tap, at once), or name a wallet agent.
@@ -15,7 +17,9 @@ export async function GET(request: Request) {
   // Only the allowlisted people (the owner) see anything here; everyone else gets the same 404 as before.
   if (!(await allowed(person))) return new NextResponse('Not found', { status: 404 });
   if (person === null) return NextResponse.json({ error: 'Sign in first' }, { status: 401, headers: noStore });
-  return NextResponse.json({ agents: await agentsOf(person), max: AGENTS.perPerson }, { headers: noStore });
+  // The person's own scene versions that have a script page (owner, 2026-10-20: direction notes and rewrites).
+  const scripts = (await versionsBy(person)).filter((v) => !v.hidden && editorData(v.adaptationId, v.id)).map((v) => ({ adaptation: v.adaptationId, version: v.id, title: v.title }));
+  return NextResponse.json({ agents: await agentsOf(person), max: AGENTS.perPerson, scripts }, { headers: noStore });
 }
 
 export async function POST(request: Request) {

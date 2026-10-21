@@ -336,6 +336,54 @@ try {
   const editList = ((await mcp(BASE, edA, 'tools/list')).body?.result?.tools ?? []).map((t) => t.name);
   check('E13 still nothing that publishes, spends on its own, or pays', ['try_frame', 'swap_take', 'change_timing', 'mark_speaking', 'request_video_test', 'log_gap'].every((n) => editList.includes(n)) && !editList.some((n) => /publish|spend|pay|approve|run/i.test(n)));
 
+  console.log('N  direction notes and line rewrites (the person’s words exactly; never a guessed shot)');
+  {
+    const said = 'Eyes on the pieces, not on Zei —  he doesn’t look up until “toast”.';
+    const one = await tool(BASE, edA, 'find_line', { adaptation: 1, version: 2, words: 'toast' });
+    const m1 = (one.out?.matches ?? []) as { shot: string; cue: string; time: string; speaker: string }[];
+    check('N1 find_line finds the line by its words: shot, cue, time, speaker', one.ok && m1.length === 1 && m1[0].cue === 'b1-6' && m1[0].shot === '14-b1-6' && m1[0].speaker === 'Bai' && /^0:3\d\.\d$/.test(m1[0].time) && one.out.ask === null, JSON.stringify(one.out ?? one.error));
+    const many = await tool(BASE, edA, 'find_line', { adaptation: 1, version: 2, speaker: 'Bai' });
+    check('N2 when more than one line fits, it says to ask the person', many.ok && (many.out.matches as unknown[]).length > 1 && /ask your person/.test(String(many.out.ask)));
+    const noShot = await tool(BASE, edA, 'add_direction', { adaptation: 1, version: 2, kind: 'intent', text: 'Make them lean in here.' });
+    const notThere = await tool(BASE, edA, 'add_direction', { adaptation: 1, version: 2, kind: 'acting', shot: '14-b1-6', character: 'Deluin', text: 'Deluin smirks.' });
+    check('N3 no shot, no note: it asks instead of guessing; a character not in the shot is refused', !noShot.ok && /never guess/.test(noShot.error ?? '') && !notThere.ok && /isn’t in shot/.test(notThere.error ?? ''), `${noShot.error} | ${notThere.error}`);
+    const notMineD = await tool(BASE, edA, 'add_direction', { adaptation: 1, version: 1, kind: 'intent', shot: '14-b1-6', text: 'x' });
+    check('N4 only on the person’s own version', !notMineD.ok && /own versions/.test(notMineD.error ?? ''));
+    const act = await tool(BASE, edA, 'add_direction', { adaptation: 1, version: 2, kind: 'acting', shot: '14-b1-6', character: 'bai', text: `  ${said}\n` });
+    const intent = await tool(BASE, edA, 'add_direction', { adaptation: 1, version: 2, kind: 'intent', shot: '14-b1-6', text: 'The viewer should feel Bai has already won.' });
+    const deliv = await tool(BASE, edA, 'add_direction', { adaptation: 1, version: 2, kind: 'delivery', cue: 'b1-6', text: 'Quieter, almost to himself. No pause before “but”.' });
+    const back = await tool(BASE, edA, 'get_direction', { adaptation: 1, version: 2 });
+    const notes = (back.out?.notes ?? []) as { kind: string; text: string; character: string | null; shot: string; filedBy: string | null }[];
+    check('N5 acting, intent and delivery are filed to the right shot and kind, in the person’s words exactly (only the ends trimmed), as filed by the agent', act.ok && intent.ok && deliv.ok && notes.some((n) => n.kind === 'acting' && n.text === said && n.character === 'Bai' && n.shot === '14-b1-6' && String(n.filedBy).startsWith('Claude')) && notes.some((n) => n.kind === 'delivery' && n.shot === '14-b1-6'), JSON.stringify(notes));
+    const rw1 = await tool(BASE, edA, 'rewrite_line', { adaptation: 1, version: 2, cue: 'b1-6', text: 'That one’s toast. He just hasn’t heard.' });
+    const rw2 = await tool(BASE, edA, 'rewrite_line', { adaptation: 1, version: 2, cue: 'b1-6', text: 'That one’s toast, and he doesn’t even know it.' });
+    const rwBad = await tool(BASE, edA, 'rewrite_line', { adaptation: 1, version: 2, text: 'A line.' });
+    check('N6 a rewrite is a draft against the original; the newest is the draft; no cue, no rewrite', rw1.ok && rw2.ok && (/^That other loser/.test(String(rw2.out.original)) && rw2.out.status === 'draft' && !rwBad.ok && /never guess/.test(rwBad.error ?? '')), JSON.stringify(rw2.out ?? rw2.error));
+    const scriptRes = await asPerson(people.A.token, '/api/direction?adaptation=1&version=2');
+    const script = (await scriptRes.json()) as { shots: { id: string; time: string; intent: unknown[]; acting: unknown[]; lines: { cue: string; speaker: string | null; time: string; rewrite: { text: string; id: string } | null; delivery: unknown[] }[] }[]; rerecord: { speaker: string; lines: { cue: string; line: string; original: string | null; delivery: string[] }[] }[] };
+    const sh = script.shots?.find((x) => x.id === '14-b1-6');
+    const ln = sh?.lines.find((l) => l.cue === 'b1-6');
+    const bai = script.rerecord?.find((g) => g.speaker === 'Bai')?.lines.find((l) => l.cue === 'b1-6');
+    check('N7 the script page: every shot and line with speaker and time, the notes inline, the rewrite as a draft', scriptRes.ok && script.shots.length === 85 && !!ln && ln.speaker === 'Bai' && ln.rewrite?.text === 'That one’s toast, and he doesn’t even know it.' && sh!.intent.length === 1 && sh!.acting.length === 1 && ln.delivery.length === 1, JSON.stringify(sh ?? script).slice(0, 400));
+    check('N8 the rewritten line joins the re-record sheet, with its delivery note, by speaker', !!bai && bai.line === 'That one’s toast, and he doesn’t even know it.' && /^That other loser/.test(bai.original ?? '') && bai.delivery.length === 1, JSON.stringify(script.rerecord));
+    const bScript = await asPerson(people.B.token, '/api/direction?adaptation=1&version=2');
+    const anonScript = await fetch(`${BASE}/api/direction?adaptation=1&version=2`);
+    check('N9 the script and its notes are the author’s only (someone else: refused; signed out: not found)', bScript.status === 400 && anonScript.status === 404, `${bScript.status} ${anonScript.status}`);
+    const own = await asPerson(people.A.token, '/api/direction', { method: 'POST', body: JSON.stringify({ action: 'note', adaptation: 1, version: 2, kind: 'delivery', cue: 'b1-6', text: 'Lighter.' }) });
+    const ownId = ((await own.json()) as { note: string }).note;
+    const wd = await asPerson(people.A.token, '/api/direction', { method: 'POST', body: JSON.stringify({ action: 'withdraw', id: ownId }) });
+    const rec = await asPerson(people.A.token, '/api/direction', { method: 'POST', body: JSON.stringify({ action: 'recorded', id: ln?.rewrite?.id }) });
+    const after = (await (await asPerson(people.A.token, '/api/direction?adaptation=1&version=2')).json()) as typeof script;
+    const afterLn = after.shots.find((x) => x.id === '14-b1-6')?.lines.find((l) => l.cue === 'b1-6');
+    check('N10 from the page: a note of their own, withdrawn; a rewrite marked recorded leaves the sheet', own.ok && wd.ok && rec.ok && afterLn?.delivery.length === 1 && afterLn.rewrite === null, JSON.stringify(afterLn));
+    const fr = await tool(BASE, edA, 'try_frame', { adaptation: 1, version: 2, shot: '14-b1-6', note: 'Same frame, warmer.' });
+    const frRun = await asPerson(people.A.token, '/api/drafts', { method: 'POST', body: JSON.stringify({ what: 'version', id: fr.out.version, action: 'run' }) });
+    const frMade = ((await (await asPerson(people.A.token, '/api/drafts')).json()).drafts.find((d: { id: string }) => d.id === fr.out.version) as { made: { prompt?: string; direction?: { character: string; text: string; by: string }[] } | null }).made;
+    check('N11 acting notes feed that shot’s frame prompt, in their words, and show in the recipe as theirs', frRun.ok && !!frMade?.prompt?.includes(`Bai: ${said}`) && frMade.direction?.[0]?.text === said && frMade.direction[0].by === 'person', `${frRun.status} ${JSON.stringify(frMade)?.slice(0, 300)}`);
+    const dList = ((await mcp(BASE, edA, 'tools/list')).body?.result?.tools ?? []).map((t) => t.name);
+    check('N12 the four direction tools are there, and still nothing that publishes or spends', ['find_line', 'get_direction', 'add_direction', 'rewrite_line'].every((n) => dList.includes(n)) && !dList.some((n) => /publish|spend|pay|approve|run/i.test(n)));
+  }
+
   console.log('G  gaps');
   const gap = await tool(BASE, edA, 'log_gap', { asked: 'Make Zei’s coat blue in every shot of the hotel.', missing: 'No tool changes a character across many shots at once.' });
   const gapsA = (await (await asPerson(people.A.token, '/api/drafts')).json()).gaps as { asked: string; agent: string }[];
