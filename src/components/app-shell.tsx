@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { readingPlace } from '~/lib/glossary-view';
 import { sdk } from '@farcaster/miniapp-sdk';
-import { inMiniApp, signOut, signOutWallet, useAuth, useWalletSession, type AuthState } from '~/lib/client-auth';
+import { inMiniApp, signOut, signOutWallet, useAuth, useWalletAlongside, useWalletSession, type AuthState } from '~/lib/client-auth';
 import { lastChapter, openedChapters } from '~/lib/chat/device';
 import { COMING, navItems, type NavItem } from '~/lib/nav';
 import type { Intro } from '~/lib/intro';
@@ -113,6 +113,7 @@ export function AppShell({ chapters, adaptations, intro, children }: { chapters:
           <Link href="/about" className="topbar-icon topbar-about" aria-label="About" title="About" aria-current={path.startsWith('/about') ? 'page' : undefined}>
             ?
           </Link>
+          <TopbarAvatar auth={auth} current={path.startsWith('/you')} />
           <button type="button" className="topbar-icon" aria-label="Menu" title="Menu" aria-haspopup="dialog" aria-expanded={menu} onClick={() => setMenu(true)}>
             <svg className="menu-glyph" width="18" height="14" viewBox="0 0 18 14" aria-hidden="true">
               <path d="M0 1h18M0 7h18M0 13h18" stroke="currentColor" strokeWidth="1.6" />
@@ -260,7 +261,43 @@ function Nav({ items, path, current }: { items: ReturnType<typeof navItems>; pat
 }
 
 /**
- * Who is signed in, at the foot of the rail and the menu sheet. Signed out, it offers Farcaster first,
+ * The avatar in the top bar, between ? and the menu, opening the You page (owner, 2026-10-18: "as my pfp
+ * between the ? and the menu hamburger"). Farcaster: the profile picture, served from this site
+ * (/api/pfp/<fid>, so no third party is asked from the browser), or the name's first letter if there is
+ * none. A wallet session only: a pattern drawn from the address. Signed out: nothing (sign-in stays in the menu).
+ */
+function TopbarAvatar({ auth, current }: { auth: AuthState; current: boolean }) {
+  const wallet = useWalletAlongside();
+  const [broken, setBroken] = useState(false);
+  const farcaster = auth.kind === 'signed-in' ? auth : null;
+  if (!farcaster && !wallet) return null;
+  const name = farcaster ? (farcaster.username ? `@${farcaster.username}` : `FID ${farcaster.fid}`) : wallet!.short;
+  const hue = (h: string, i: number) => (parseInt(h.slice(2 + i * 6, 8 + i * 6), 16) % 360);
+  return (
+    <Link href="/you" className="topbar-icon topbar-avatar" aria-label={`You: ${name}`} title={YOU_TITLE} aria-current={current ? 'page' : undefined}>
+      {farcaster && !broken ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src={`/api/pfp/${farcaster.fid}`} alt="" width={28} height={28} onError={() => setBroken(true)} />
+      ) : farcaster ? (
+        <span className="avatar-letter" aria-hidden="true">
+          {(farcaster.username ?? String(farcaster.fid)).charAt(0).toUpperCase()}
+        </span>
+      ) : (
+        <span
+          className="avatar-wallet"
+          aria-hidden="true"
+          style={{ background: `conic-gradient(hsl(${hue(wallet!.address, 0)} 55% 55%), hsl(${hue(wallet!.address, 1)} 55% 45%), hsl(${hue(wallet!.address, 2)} 55% 55%), hsl(${hue(wallet!.address, 0)} 55% 55%))` }}
+        />
+      )}
+    </Link>
+  );
+}
+
+/** The name in the account area opens the You page (owner, 2026-10-18: "reached by tapping your name in the menu"). DRAFT wording for the owner. */
+const YOU_TITLE = 'You: your account, wallet and work';
+
+/**
+ * Who is signed in, at the foot of the rail and the menu sheet. The name links to /you. Signed out, it offers Farcaster first,
  * then a wallet (owner, 2026-10-18: the simple step; the editor's own wallet sign-in, reused). A wallet
  * session (no Farcaster one) shows its shortened address and a Sign out that ends it. Farcaster-only
  * features keep their own sign-in prompts. Inside a Farcaster app there is no wallet option.
@@ -291,7 +328,7 @@ function MenuAccount({ auth, where = 'menu' }: { auth: AuthState; where?: 'menu'
         <span className="menu-avatar" aria-hidden="true">
           {letter.toUpperCase()}
         </span>
-        <span className="menu-account-name">{name}</span>
+        <Link href="/you" className="menu-account-name" title={YOU_TITLE}>{name}</Link>
       </p>
       {out && (
         <button type="button" className="menu-account-row menu-signout" onClick={out}>

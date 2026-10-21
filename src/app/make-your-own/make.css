@@ -1,0 +1,38 @@
+/* "Make your own" (owner's long run 2, item 5). Site tokens only (src/styles/tokens.css), so light and dark follow them. */
+.mk { max-width: 44rem; margin: 0 auto; display: grid; gap: var(--space-5); padding-block: var(--space-5) var(--space-7); color: var(--ink); }
+.mk-head h1 { font-family: var(--reading); font-weight: 400; font-size: 34px; line-height: 1.1; margin: 4px 0 8px; text-wrap: balance; }
+.mk-eyebrow, .mk-draftline { font-family: var(--label); font-size: var(--text-label); letter-spacing: var(--ls-label); text-transform: uppercase; color: var(--muted); margin: 0; }
+.mk-muted { color: var(--muted); font-size: var(--text-small); margin: 0; }
+.mk-warn { color: var(--warn); margin: 0; }
+.mk-drafts, .mk-steps { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.mk-chip, .mk-steps button {
+  min-height: var(--tap); padding: 8px 12px; border: 1px solid var(--rule); border-radius: var(--radius); background: var(--card); color: var(--ink);
+  font-family: var(--label); font-size: var(--text-label); text-transform: uppercase; letter-spacing: var(--ls-label); cursor: pointer;
+}
+.mk-chip[aria-pressed='true'], .mk-steps button[aria-current='step'] { background: var(--btn); color: var(--btn-ink); border-color: var(--btn); }
+.mk-steps button span { display: inline-block; min-width: 1.2em; }
+.mk-step { display: grid; gap: var(--space-4); }
+.mk-field { display: grid; gap: 6px; min-width: 0; }
+.mk-field > span, .mk-field > label { font-family: var(--label); font-size: var(--text-label); letter-spacing: var(--ls-label); text-transform: uppercase; color: var(--muted); }
+.mk-field input, .mk-field textarea, .mk-field select {
+  width: 100%; min-height: var(--tap); padding: 10px 12px; border: 1px solid var(--rule); border-radius: var(--radius);
+  background: var(--card); color: var(--ink); font: 18px/1.45 var(--reading);
+}
+.mk-narrow { max-width: 16rem; }
+.mk-beats { margin: 0; padding: 0; list-style: none; display: grid; gap: var(--space-3); }
+.mk-beats li { display: grid; gap: 4px; justify-items: start; }
+.mk-beats li .mk-field { width: 100%; }
+.mk-beat { display: grid; gap: var(--space-3); border-top: 1px solid var(--rule); padding-top: var(--space-4); }
+.mk-beat h2 { font-family: var(--reading); font-weight: 400; font-size: var(--text-h2); margin: 0; }
+.mk-shot { display: grid; gap: var(--space-3); padding: var(--space-3); background: var(--card); border: 1px solid var(--rule); border-radius: var(--radius); justify-items: start; }
+.mk-shot .mk-field { width: 100%; }
+.mk-coach { display: grid; gap: var(--space-3); padding: var(--space-4); background: var(--chrome); border-radius: var(--radius); border-left: 3px solid var(--ink); }
+.mk-turns { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-3); }
+.mk-turns p { margin: 0; font-size: var(--text-small); line-height: 1.5; }
+.mk-you p { color: var(--body); }
+.mk-you p::before { content: 'You · '; font-family: var(--label); font-size: var(--text-label); text-transform: uppercase; color: var(--muted); }
+.mk-note > p::before { content: 'Coach (AI) · '; font-family: var(--label); font-size: var(--text-label); text-transform: uppercase; color: var(--muted); }
+.mk-cite { color: var(--link); font-family: var(--label); font-size: var(--text-label); }
+.mk-save { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); }
+.mk button[disabled] { opacity: 0.6; cursor: default; }
+.mk-line, .mk-field .private-line { margin: 0; font-size: 14px; line-height: 1.4; color: var(--muted); }

@@ -185,4 +185,11 @@ html:has(.mp-play.is-desk.is-fs) :is(.rail, .panel, .panel-reopen) { display: no
 /* Play's short labels (Book, Invented, Draft) are tap targets: the site's 44px floor. */
 .mp-play .ml-tag.info-label, .mp-rules-note .ml-tag.info-label { min-height: 44px; }
 .mp-share { display: flex; flex-direction: column; gap: 6px; margin-top: 12px; }
+/* The rules page's "Lessons vs Play" list (owner, 2026-10-20), between the draft note and Design's article. */
+.mp-rules-diff { margin: 0 0 36px; display: flex; flex-direction: column; gap: 10px; font-family: var(--reading); font-size: 17px; line-height: 1.45; color: var(--body); scroll-margin-top: 72px; }
+.mp-rules-diff h2 { margin: 0; font-weight: 400; font-size: 28px; color: var(--ink); }
+.mp-rules-diff p, .mp-rules-diff ul { margin: 0; }
+.mp-rules-diff ul { padding-left: 1.2em; display: flex; flex-direction: column; gap: 6px; }
+.mp-rules-diff strong { font-weight: 600; color: var(--ink); }
+.mp-rules-diff .ml-tag.info-label { min-height: 44px; }
 .mp-piece { display: block; pointer-events: none; }

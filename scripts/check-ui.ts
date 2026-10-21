@@ -53,7 +53,9 @@
  * - The account at the foot of the rail and the menu sheet (owner, 2026-10-18): signed out it offers "Sign in with
  *   Farcaster", then "Sign in with a wallet" (the editor's button, with its note); a wallet session (planted in
  *   storage, nothing signed) shows its shortened address and a Sign out that ends it; a Farcaster session shows
- *   the Farcaster name and no wallet option.
+ *   the Farcaster name and no wallet option. The name is a link to the You page (/you), and the top bar shows an
+ *   avatar linking there, between ? and the menu, only when signed in; /you signed out meets the floors and shows
+ *   only the sign-in offer (owner, 2026-10-18).
  * - The footer line (owner's legal starter, 2026-10-09) reads exactly as written, with Terms, Privacy
  *   and Source linked, at the foot of About, in the menu sheet and at the bottom of the rail; not on a
  *   phone's reading screen. /terms and /privacy meet the floors.
@@ -84,6 +86,11 @@ const MINPENTAI_ADDRESSES = [...Array.from({ length: 8 }, (_, i) => `watch=${i +
 const MINPENTAI_HOOD = 'lesson=8';
 /** Lesson 1's title (src/lib/minpentai/learn-text.ts, lessons.goal). */
 const MINPENTAI_LESSON_1 = 'Keep your towers. Destroy theirs.';
+/** The owner's exact sentences (2026-10-20, before posting the tutorial link), and where each must appear. */
+const OWNER_BROADCAST = "The full game, as the book describes it, has four players. What you'll play here is a simpler two-player version.";
+const OWNER_TEACH = "A ring marks each tower lost, square broken and crash, even in the dark. Shown here to teach. In a real match, you'll only see the hits your towers light.";
+const OWNER_AMBER = "Shown here to teach. In a real match, you'll only see outlines where they start.";
+const OWNER_CELLS = 'In the book, pieces are made of cells. Here you play with whole squares.';
 
 const failures: string[] = [];
 const fail = (msg: string) => failures.push(msg);
@@ -643,6 +650,14 @@ async function checkPlay(page: Page, scheme: string) {
   await noSideways(`/minpentai/rules (${scheme})`);
   const words = (await page.locator('.mp-rules').textContent()) ?? '';
   if (!words.includes('RULES, DRAFT 1') || !words.includes('c4-b84')) fail(`/minpentai/rules (${scheme}): not Design's rules page`);
+  // "Lessons vs Play" (owner, 2026-10-20): Learn's rules note links here; exactly the five differences.
+  const diff = page.locator('#lessons-vs-play');
+  const items = await diff.locator('li strong').allTextContents();
+  if (JSON.stringify(items) !== JSON.stringify(['The broadcast.', 'Amber’s towers in setup.', 'Hits in the dark.', 'Cells.', 'Pause.'])) fail(`/minpentai/rules (${scheme}): "Lessons vs Play" lists ${JSON.stringify(items)}`);
+  await open(page, '/minpentai/rules#lessons-vs-play');
+  await page.waitForTimeout(300);
+  const top = await diff.evaluate((e) => e.getBoundingClientRect().top).catch(() => -1);
+  if (top < 0 || top > 200) fail(`/minpentai/rules#lessons-vs-play (${scheme}): the list is not at the top of the view (${Math.round(top)}px)`);
 }
 /** ⤢ on a match: the frame covers the site (no top bar), the board upright, END TURN in view. */
 async function checkPlayFullScreen(page: Page, where: string, tall: number) {
@@ -1364,10 +1379,31 @@ try {
         // Full screen (owner, 2026-10-09): the frame fills the viewport, the site's top bar is hidden, and × goes back to the site.
         await checkLearnFullScreen(page, `/minpentai?${q} (${scheme})`);
         // The rules note links to the book's rule on its own page.
-        // …and says the lessons play by the first version of the rules, linking to the rules page (the Play hub's line, moved here 2026-10-20).
+        // …and links to the rules page's "Lessons vs Play" list (owner, 2026-10-20: in place of "first version of the rules").
         const note = page.locator('.ml-rulesnote a');
-        if ((await note.count()) && JSON.stringify(await note.evaluateAll((els) => els.map((e) => e.getAttribute('href')))) !== JSON.stringify(['/minpentai/rule', '/minpentai/rules'])) fail(`/minpentai?${q} (${scheme}): the rules note does not link to /minpentai/rule and /minpentai/rules`);
-        if (q === 'lesson=1' && !/first version of the rules/.test((await page.locator('.ml-rulesnote').textContent().catch(() => '')) ?? '')) fail(`/minpentai?${q} (${scheme}): lesson 1 does not say the lessons play by the first version of the rules`);
+        if ((await note.count()) && JSON.stringify(await note.evaluateAll((els) => els.map((e) => e.getAttribute('href')))) !== JSON.stringify(['/minpentai/rule', '/minpentai/rules#lessons-vs-play'])) fail(`/minpentai?${q} (${scheme}): the rules note does not link to /minpentai/rule and /minpentai/rules#lessons-vs-play`);
+        if (q === 'lesson=1') {
+          const noteText = (await page.locator('.ml-rulesnote').textContent().catch(() => '')) ?? '';
+          if (!noteText.includes('LESSONS VS PLAY') || /first version of the rules/.test(noteText)) fail(`/minpentai?${q} (${scheme}): lesson 1's note does not link to "Lessons vs Play" (or still says "first version of the rules")`);
+        }
+        // The owner's sentences (2026-10-20): the broadcast's caption on every watch screen, the cells line on Under
+        // the hood (CELLS stays on the lessons' boards), "Shown here to teach…" on the practice match's setup text.
+        const shown = async (sel: string) => (await page.locator(sel).isVisible().catch(() => false)) ? ((await page.locator(sel).textContent()) ?? '').trim() : '';
+        if (q.startsWith('watch=') && (await shown('.ml-broadcast-note')) !== OWNER_BROADCAST) fail(`/minpentai?${q} (${scheme}): the broadcast's caption is not the owner's sentence`);
+        if (!q.startsWith('watch=') && (await page.locator('.ml-broadcast-note').count())) fail(`/minpentai?${q} (${scheme}): the broadcast's caption shows off the broadcast`);
+        if (q === MINPENTAI_HOOD && !(await shown('.ml-text')).startsWith(OWNER_CELLS)) fail(`/minpentai?${q} (${scheme}): Under the hood does not open with the owner's cells sentence`);
+        if (q === 'lesson=2' && !(await page.locator('.ml-cells').isVisible())) fail(`/minpentai?${q} (${scheme}): the CELLS button is missing`);
+        if (q === 'mode=practice') {
+          if (!(await shown('.ml-text')).includes('Amber’s towers mirror yours') || !(await shown('.ml-text')).includes(OWNER_AMBER)) fail(`/minpentai?${q} (${scheme}): the setup text does not say "${OWNER_AMBER}" after Amber's towers`);
+          // While it runs: hits in the dark, the owner's sentence, and the pause the big button really gives.
+          await page.locator('.ml-main').click();
+          await page.waitForTimeout(300);
+          const run = await shown('.ml-text');
+          if (run.includes('every hit') || !run.includes(OWNER_TEACH) || !run.includes('Pause any time.')) fail(`/minpentai?${q} (${scheme}): the running text is "${run}"`);
+          if (((await page.locator('.ml-main').textContent()) ?? '').trim() !== 'PAUSE') fail(`/minpentai?${q} (${scheme}): the running match's button is not PAUSE`);
+          await page.locator('.ml-main').click();
+          if (((await page.locator('.ml-main').textContent()) ?? '').trim() !== 'RESUME') fail(`/minpentai?${q} (${scheme}): PAUSE does not pause the practice match`);
+        }
       }
     }
     // ?lesson=1 opens lesson 1 itself, the old ?lesson=9 too, ?watch=1 the broadcast; Play's LEARN tab opens lesson 1 (owner, 2026-10-20).
@@ -1463,6 +1499,13 @@ try {
         if ((await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)) > 1) fail(`${at}: scrolls sideways`);
         await shot(page, `learn-desktop-${width}-${name}`, scheme);
       }
+      // The broadcast's caption (owner, 2026-10-20) is in view in the desktop layout's text column.
+      {
+        await open(page, '/minpentai?watch=1');
+        const cap = await page.locator('.ml-broadcast-note').boundingBox();
+        const capText = ((await page.locator('.ml-broadcast-note').textContent().catch(() => '')) ?? '').trim();
+        if (!cap || cap.y + cap.height > 900 + 1 || capText !== OWNER_BROADCAST) fail(`/minpentai?watch=1 @${width} (${scheme}): the broadcast's caption is not in view`);
+      }
       await open(page, '/chapter/1');
       const bodyShown = await page.locator('.rail-body').isVisible();
       if (width === 1024) {
@@ -1548,6 +1591,7 @@ try {
     await checkFloors(page, '/chapter/1 @390 (menu)', scheme);
     await checkLegalLine(page, '.menu-sheet', '@390 menu', scheme);
     await checkAccountSignedOut(page, '.menu-sheet', '@390 menu');
+    if (await page.locator('.topbar-avatar').count()) fail('@390: signed out, the top bar shows an avatar');
     await page.locator('.menu-sheet .menu-account').scrollIntoViewIfNeeded();
     await shot(page, 'phone-390-menu', scheme);
     await page.keyboard.press('Escape');
@@ -1559,6 +1603,10 @@ try {
     await page.locator('.menu-sheet .menu-account').scrollIntoViewIfNeeded();
     await checkFloors(page, '/chapter/1 @390 (menu, wallet)', scheme);
     await shot(page, 'phone-390-menu-wallet', scheme);
+    // The You page's entry points (owner, 2026-10-18): the name in the menu, and the avatar between ? and the menu.
+    if ((await page.locator('.menu-sheet a.menu-account-name').getAttribute('href').catch(() => null)) !== '/you') fail('@390 menu: a wallet session\'s name is not a link to /you');
+    if ((await page.locator('.topbar-end .topbar-avatar').getAttribute('href').catch(() => null)) !== '/you') fail('@390: a wallet session shows no avatar linking to /you in the top bar');
+    else if (!/^You: /.test((await page.locator('.topbar-avatar').getAttribute('aria-label')) ?? '')) fail('@390: the top bar\'s avatar has no accessible name');
     await checkAccountWallet(page, '.menu-sheet', '@390 menu');
     await page.keyboard.press('Escape');
     if (await page.locator('.menu-sheet').count()) fail('@390: Escape does not close the menu');
@@ -1591,6 +1639,12 @@ try {
       if (await page.locator('.recipe-sheet').count()) fail('@390: Escape does not close the recipe sheet');
       if (!(await label.evaluate((el) => el === document.activeElement))) fail('@390: closing the recipe sheet does not return focus to the AI label');
     }
+    // The You page signed out (owner, 2026-10-18): the floors, the sign-in offer, and no account, wallet or work.
+    await open(page, '/you');
+    await page.locator('.you-sign-in button').first().waitFor({ timeout: 10000 }).catch(() => fail(`/you @390 (${scheme}): signed out, no sign-in offered`));
+    await checkFloors(page, '/you @390 (signed out)', scheme);
+    if (/Your account|Your work|Balance \$/.test(await page.locator('main.you').innerText().catch(() => ''))) fail(`/you @390 (${scheme}): signed out, the page shows an account, wallet or work`);
+    await shot(page, 'phone-390-you-signed-out', scheme);
     await open(page, '/chapter/1?view=listen');
     await page.waitForSelector('.listen-pane');
     await checkFloors(page, '/chapter/1?view=listen @390', scheme);

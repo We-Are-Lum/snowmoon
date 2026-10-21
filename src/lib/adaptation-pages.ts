@@ -200,6 +200,75 @@ export async function shownVersion(person: Person, adaptationId: number): Promis
   return STATIC.versions.filter((v) => v.adaptationId === adaptationId && v.author === person && !v.hidden).sort((a, b) => b.id - a.id)[0] ?? null;
 }
 
+/** Every adaptation and its public versions, newest first (the agent read API's list_scenes). */
+export async function publicCatalogue(): Promise<{ adaptation: Adaptation; versions: Version[] }[]> {
+  const rows = await fromTables((sql) => sql<(VersionRow & { title: string; owner_person: string })[]>`
+    select v.id, v.adaptation_id, v.parent_version_id, v.author_person, v.recipe, v.created_at, v.hidden, a.title, a.owner_person
+    from studio.adaptation_versions v join studio.adaptations a on a.id = v.adaptation_id
+    where not v.hidden order by v.adaptation_id, v.id desc`);
+  const list = rows
+    ? rows.map((r) => ({ adaptation: { id: Number(r.adaptation_id), owner: Number(r.owner_person), title: r.title }, version: toVersion(r) }))
+    : STATIC.versions.filter((v) => !v.hidden).map((v) => ({ adaptation: STATIC.adaptations.find((a) => a.id === v.adaptationId)!, version: v }));
+  const by = new Map<number, { adaptation: Adaptation; versions: Version[] }>();
+  for (const { adaptation, version } of list) {
+    if (!by.has(adaptation.id)) by.set(adaptation.id, { adaptation, versions: [] });
+    by.get(adaptation.id)!.versions.push(version);
+  }
+  return [...by.values()];
+}
+
+/**
+ * The adaptations a person has something public under: a version they made that isn't hidden, or their
+ * page pointing at one (the You page and the public profile, /@<handle>; owner, 2026-10-18).
+ * Each is then shown with shownVersion, so a profile shows exactly what /@<handle>/<id> shows.
+ */
+export async function adaptationsOf(person: Person): Promise<Adaptation[]> {
+  const rows = await fromTables((sql) => sql<{ id: string; owner_person: string; title: string }[]>`
+    select a.id, a.owner_person, a.title from studio.adaptations a
+    where exists (select 1 from studio.adaptation_versions v where v.adaptation_id = a.id and v.author_person = ${person} and not v.hidden)
+       or exists (select 1 from studio.adaptation_pages p join studio.adaptation_versions v on v.id = p.version_id
+                  where p.person = ${person} and p.adaptation_id = a.id and not v.hidden)
+    order by a.id`);
+  if (rows) return rows.map((r) => ({ id: Number(r.id), owner: Number(r.owner_person), title: r.title }));
+  const ids = new Set([
+    ...STATIC.versions.filter((v) => v.author === person && !v.hidden).map((v) => v.adaptationId),
+    ...STATIC.pages.filter((p) => p.person === person).map((p) => p.adaptationId),
+  ]);
+  return STATIC.adaptations.filter((a) => ids.has(a.id));
+}
+
+/** Who hid a version, when migration 0015 (DRAFT) has added the columns; null before it, or when not hidden. */
+export type HiddenBy = 'maker' | 'maintainer' | null;
+
+/**
+ * Every version a person made, hidden ones too, newest first: for their own You page only (never a
+ * public page). `hiddenRole` is read when the DRAFT migration 0015 is applied; until then it is
+ * undefined (who hid it isn't recorded, so bringing it back isn't offered).
+ */
+export async function versionsBy(person: Person): Promise<(Version & { title: string; hiddenRole?: HiddenBy })[]> {
+  const withRole = await fromTables(async (sql) => {
+    // 0015 (DRAFT) adds hidden_role; asked of the catalogue first, so no failing statement is sent without it.
+    const [c] = await sql`select exists (select 1 from information_schema.columns
+      where table_schema = 'studio' and table_name = 'adaptation_versions' and column_name = 'hidden_role') as has`;
+    if (c?.has)
+      return await sql<(VersionRow & { title: string; hidden_role: HiddenBy })[]>`
+        select v.id, v.adaptation_id, v.parent_version_id, v.author_person, v.recipe, v.created_at, v.hidden, a.title, v.hidden_role
+        from studio.adaptation_versions v join studio.adaptations a on a.id = v.adaptation_id
+        where v.author_person = ${person} order by v.created_at desc, v.id desc limit 100`;
+    return (
+      await sql<(VersionRow & { title: string })[]>`
+        select v.id, v.adaptation_id, v.parent_version_id, v.author_person, v.recipe, v.created_at, v.hidden, a.title
+        from studio.adaptation_versions v join studio.adaptations a on a.id = v.adaptation_id
+        where v.author_person = ${person} order by v.created_at desc, v.id desc limit 100`
+    ).map((r) => ({ ...r, hidden_role: undefined as unknown as HiddenBy }));
+  });
+  if (withRole) return withRole.map((r) => ({ ...toVersion(r), title: r.title, ...(r.hidden_role === undefined ? {} : { hiddenRole: r.hidden_role }) }));
+  return STATIC.versions
+    .filter((v) => v.author === person)
+    .sort((a, b) => b.id - a.id)
+    .map((v) => ({ ...v, title: STATIC.adaptations.find((a) => a.id === v.adaptationId)?.title ?? '' }));
+}
+
 /**
  * Every public version a person made under one adaptation, the one their page shows first, then newest
  * first (a moment page lays them side by side; owner, 2026-10-19).

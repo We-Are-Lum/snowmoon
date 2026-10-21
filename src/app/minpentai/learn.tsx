@@ -331,6 +331,8 @@ export function Learn({ start, onScreen, onFree, free = false }: { start: number
         <h2 className="ml-title">{v.title}</h2>
         <p className="ml-text">{v.text}</p>
         {v.caption && <p className="ml-caption">{v.caption}</p>}
+        {/* Owner's caption for the broadcast (2026-10-20), on every watch screen. */}
+        {!learn && <p className="ml-caption ml-broadcast-note">{T.broadcastNote}</p>}
         <p className="ml-status" aria-live="polite">{v.status}</p>
         {v.hasReasons && (
           <ol className="ml-reasons">
@@ -362,8 +364,7 @@ export function Learn({ start, onScreen, onFree, free = false }: { start: number
           <div className="ml-rulesnote">
             <p>{T.rulesNote.text}</p>
             <Link href={T.rulesNote.href} className="ml-textlink">{T.rulesNote.link}</Link>
-            <p>{T.rulesNote.version}</p>
-            <Link href={T.rulesNote.versionHref} className="ml-textlink">{T.rulesNote.versionLink}</Link>
+            <Link href={T.rulesNote.diffHref} className="ml-textlink">{T.rulesNote.diffLink}</Link>
           </div>
         )}
         <button type="button" className="ml-textlink" aria-expanded={S.src} onClick={() => ctl.toggleSrc()}>{v.srcLabel}</button>

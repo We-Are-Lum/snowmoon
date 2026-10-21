@@ -9,7 +9,9 @@
       "site-local-fonts": false,
       "site-make-p1c": false,
       "scenes-sound": false,
-      "dog-dawn-comic": false
+      "dog-dawn-comic": false,
+      "agents-owner": false,
+      "agents-db-followup": false
     }
   }
 }

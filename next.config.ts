@@ -53,6 +53,9 @@ const nextConfig: NextConfig = {
     // Remix's Generate reads the shot (its prompt, plate and cast cards) from the editor's data,
     // made at build time from committed files (scripts/editor-data.mjs): only those, not the voices.
     '/api/remix/**': ['./public/editor/*/v*/data.json', './public/editor/*/v*/plates/**', './public/editor/*/v*/cards/**'],
+    // The agent read API reads the same editor data (src/lib/agent/data.ts).
+    '/api/agent/**': ['./public/editor/*/v*/data.json'],
+    '/api/mcp': ['./public/editor/*/v*/data.json'],
     // A moment page reads each version's shot (its frame, times and lines) from the same data.
     '/adaptation/**': ['./public/editor/*/v*/data.json'],
   },
@@ -75,6 +78,8 @@ const nextConfig: NextConfig = {
       { source: '/@:handle/:id/m/:shot', destination: '/adaptation/:id/by/:handle/m/:shot' },
       { source: '/@:handle/:id/storyboard', destination: '/adaptation/:id/by/:handle/storyboard' },
       { source: '/@:handle/:id', destination: '/adaptation/:id/by/:handle' },
+      // A person's public profile (owner, 2026-10-18, the You page): one segment only, so /@<handle>/<id> above is never caught here.
+      { source: '/@:handle', destination: '/profile/:handle' },
       { source: '/:id(\\d{1,9})', destination: '/adaptation/:id' },
     ];
   },
