@@ -54,6 +54,7 @@
     "test:minpentai-onchain-fixtures": "tsx scripts/test-minpentai-onchain-fixtures.ts",
     "test:minpentai-onchain-verifier": "tsx scripts/test-minpentai-onchain-verifier.ts",
     "minpentai:verify": "tsx scripts/minpentai-verify.ts",
+    "minpentai:onchain-base-cost": "tsx scripts/minpentai-onchain-base-cost.ts",
     "minpentai:onchain-gas": "tsx scripts/minpentai-onchain-gas.ts",
     "minpentai:vs-rungs": "tsx scripts/minpentai-vs-rungs.ts",
     "check:minpentai-live": "tsx --conditions=react-server scripts/check-minpentai-live.ts",
