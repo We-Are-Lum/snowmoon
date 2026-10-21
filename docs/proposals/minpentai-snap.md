@@ -1,6 +1,6 @@
 # Minpentai in a cast: snap feasibility spike
 
-Written 2026-10-21 by the coding agent for the owner. Branch `minpentai-snap` (not merged). Code: `src/lib/minpentai/snap/`, `src/app/snap/minpentai/`, `scripts/test-minpentai-snap.ts` (`npm run test:minpentai-snap`). Screenshots: `docs/proposals/minpentai-snap/`.
+Written 2026-10-21 by the coding agent for the owner; updated the same day with the owner's four additions (below, "Round 2"). Branch `minpentai-snap` (not merged). Code: `src/lib/minpentai/snap/`, `src/app/snap/minpentai/`, `scripts/test-minpentai-snap.ts` (`npm run test:minpentai-snap`). Screenshots: `docs/proposals/minpentai-snap/`.
 
 ## Answer first
 
@@ -24,6 +24,19 @@ Not yet tested: the Farcaster emulator and a phone (see "What wasn't tested").
 ### Versions
 
 There are no player-made versions anywhere yet, and nothing on main to make them. The snap reads versions only from a list in code (`snap/versions.ts`), never from the link, so a link can't put words in a player's name. The list has one sample by this edition, "Fast fog" (turns every 8, sight 2), labelled "(a sample)". A version can change only the numbers the engine already takes as parameters: the extra rule (fixed instead of drawn; the first random number is still drawn, so the computer player's numbers don't shift), sight, the turn interval and the glider cost. Points per turn (8) and the square and tower costs are hard-coded in `botPlan` and `checkPlacements`. Anything more needs the rule modules in `docs/proposals/minpentai-rule-modules.md`.
+
+## Round 2 (owner, 2026-10-21)
+
+| Ask | Done | How |
+|---|---|---|
+| End: the whole board | Yes | The result page's picture is the last run **unfogged** (`run?r=1`), with the true tower counts in the text. The server draws it only for a match that is over (the test checks a live match gets 404). A match resigned at setup gets the board as one frame. |
+| Resume | Yes | Each FID's latest match (seed, level, version, finished turns: no taps, no unfinished turn) is kept after every start and End turn and dropped when the match ends. Production: `studio.mp_snap_resume` (**DRAFT migration 0022, not applied**). Without a database (the test project) it is kept in the server instance's memory, so there it lasts only while the instance is warm. The first page shows Resume: as the main button only when a signed viewer (`X-Snap-Payload`, now verified like a POST) has a match kept; for an anonymous GET it is always shown beside Start, and the signed POST finds out (no match: a new one, with a note). |
+| Near-sight board (off) | Yes | `?b=n` on the snap link. Only the smallest rectangle holding every lit square, each cell carrying its true square. With two towers that's 5 × 10: cells about 89 × 28 px instead of 29 × 29. **Wider, not taller**: ten rows must fit the board page under 500 px (491 px), and `cell_grid`'s `maxWidth` only narrows. The rectangle shrinks as towers fall (one starting tower left: 5 × 6, at 46 px rows). Moves off the rectangle's edge still work by turning the glider. |
+| Play continues the match | Yes | From the second run screen (base game only; Play has no versions), "Keep playing in the app" opens `/minpentai?match=<seed>.<turns>.<moves>` on the same host. `PlayController.continueMatch` replays the turns through `checkPlacements` on the match's own rng and lands on the next turn to act. The test matches Play's board to the snap's at the hand-off and one turn later; a placement in the fog is refused. Screenshot: `play-continued.png` (step 36, same rule). |
+| Privacy draft | Yes | `docs/legal/minpentai-snap-draft.md`: one item for section 4 (the kept match) and one for section 7 (the hub check). Not in `legal.ts`; ships with the snap. |
+| P8 checks | Yes | New `P8g` in `check:principles` (and `docs/principles.md`): the first card, for every version, both board modes and every Resume state, carries "Invented" and "Draft" (the words from `labels.ts`) as badges and says the rules are invented for this edition; no page of a match paraphrases c4-b84. The proof swaps the Draft badge and plants "a new rule each match". 47 of 48 pass (P6d). |
+
+Heights of the new pages (same renderer): first page with Resume 266 px, run with "Keep playing in the app" 451, resumed board 475, result with the revealed board 470, near-sight board 491.
 
 ## Measurements
 
@@ -76,8 +89,7 @@ Each turn costs at least 2 taps that aren't moves: End turn, then Your turn afte
 - **Taps are small.** Cells are about 29 px on a 480 px card (less on narrow phones). Fine with a mouse; unproven with a thumb.
 - **Aim arrows sit on the neighbouring squares.** To put a piece right next to a new glider, you first tap its → arrow (or place the neighbour before the glider). The test covers it, but people will trip on it.
 - **No hold-to-preview, no animation on the board itself.** The run is a GIF in a separate page; the board page is static.
-- **No true count at the end.** The site shows the whole board when a match ends; the snap's result GIF is still fogged. It could be added as a second GIF.
-- **A match is lost if the client drops the page.** With signed URLs, scrolling away or a client reload returns to the tutorial. Server-side state by FID would let a GET resume, but `action.user` on GET isn't guaranteed, so even that is best effort. I'd keep signed URLs: no new table and no data kept about anyone.
+- **A match was lost if the client dropped the page.** Round 2 adds Resume (above).
 - **Badges aren't the site's labels.** Play's tags are the ⓘ "Invented" and "Draft" opening an explanation (P8f); a snap can't open a dialog, so they are plain badges, with "rules invented for this edition" in the text beside them.
 - **Only the Practice computer (level 0).** The ladder rungs would work the same way, but they're recorded in the mini app, so the snap leaves them out.
 - **"Make your own version" goes to the Minpentai page.** Nothing to make versions exists yet.
@@ -92,10 +104,10 @@ A full match in the feed works, but it is 30–55 taps, and every tap waits for 
 
 Forcing the hand-off after turn 1 or 2 would be simpler to build, but it gives up the in-feed match that makes the snap worth sharing.
 
-## What wasn't tested, and what I need from you
+## Testing
 
+- **Test project:** `snowmoon-snap-test` (Vercel team nates-projects-d1780cff), separate from `snowmoon`, with no environment variables, no deployment protection and no Git connection. Its only secret is a random signing key passed to the deployment itself (`vercel deploy --env`). **Delete the project after testing.**
 - **The Farcaster emulator** (farcaster.xyz/~/developers/snaps): in this session, Chrome automation timed out on every page (the emulator and localhost alike), so I used the same renderer locally (`@farcaster/snap/react` `SnapCard`, dark theme, overflow line at 500 px) with signature checks skipped in development.
-- **A phone**: needs a public URL. See the preview note in the session report.
 
 ## Principles
 
@@ -103,4 +115,6 @@ Forcing the hand-off after turn 1 or 2 would be simpler to build, but it gives u
 - **P7 (not affiliated line on the first screen; no token):** the first card (and the version card) carries "Independent adaptation · Not affiliated with the author · No token". Pass.
 - **P8 (Minpentai matches the source):** the snap plays Play's invented rules, labelled "Invented" and "Draft", with "rules invented for this edition" on card 1. It doesn't paraphrase c4-b84 as "a new rule each match" ("one of four invented extras"). Concern: P8f's ⓘ labels can't be drawn in a snap; the badges stand in. P8's checks don't cover the snap yet.
 - **P1, P2, P4 (generated assets, AI declared, publishing):** the GIFs are drawn in code from the engine, with no model and no text in the picture. Not touched.
-- **Legal texts:** the snap stores nothing and records nothing. It sends each tapping FID's signing key lookup to a Farcaster hub. If it ships, Privacy needs a line saying that the snap checks a tapper's Farcaster signature with a Farcaster hub and keeps nothing (to ship with it, per "legal texts describe today").
+- **P8g (new):** passes; proven to fail on its plant.
+- **P6 (privacy):** Round 2 keeps each FID's latest practice match (seed and placements only) for Resume, not publicly readable (0022 has no public policy), deleted when the match ends or after 30 days. Pass, with the Privacy lines drafted.
+- **Legal texts:** `docs/legal/minpentai-snap-draft.md` (the kept match; the hub check). They ship with the snap, not before.
