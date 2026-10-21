@@ -89,238 +89,223 @@
     {
       "id": "board-size",
       "text": "The board is 15 x 10 squares.",
-      "source": {
-        "invented": true
-      }
+      "edition": "The whole rule."
     },
     {
       "id": "board-edges",
-      "text": "The board has edges and corners.",
-      "source": {
-        "book": [
+      "text": "The board has edges and corners. A glider that would leave the board turns back on that side instead, and stays put for that step.",
+      "book": {
+        "says": "The field has corners (and so edges).",
+        "blocks": [
           "c4-b113",
           "c7-b81"
-        ]
-      }
-    },
-    {
-      "id": "edge-bounce",
-      "text": "A glider that would leave the board turns back on that side instead, and stays put for that step.",
-      "source": {
-        "invented": true
-      }
+        ],
+        "basis": "implied"
+      },
+      "edition": "What a glider does at the edge."
     },
     {
       "id": "starts",
       "text": "Each side starts with 2 towers (Cyan at (1, 2) and (1, 7), Amber at (13, 2) and (13, 7)) and there are six rocks, all mirrored.",
-      "source": {
-        "invented": true,
-        "note": "Starting in your own corner is from the book (c4-b94)."
-      }
+      "edition": "The whole rule. (Each player starting in a corner is in the book, c4-b94; these starts are not in corners.)"
     },
     {
       "id": "tower",
       "text": "A tower is your score, your sight, and where you may place.",
-      "source": {
-        "book": [
+      "book": {
+        "says": "Each player has a symbol; a copy of it anywhere on the board lets them see around it.",
+        "blocks": [
           "c4-b93"
         ],
-        "note": "In the book they are \"symbols\"; the tower shape is invented."
-      }
+        "basis": "stated"
+      },
+      "edition": "Symbols are drawn as towers, one square each; they are also the score."
     },
     {
       "id": "glider",
       "text": "A glider moves one square a step in a straight line, up, down, left or right (diagonally too only under the \"diag\" rule), and never stops on its own.",
-      "source": {
-        "book": [
-          "c4-b84"
+      "book": {
+        "says": "Gliders exist and fly across the field.",
+        "blocks": [
+          "c4-b84",
+          "c4-b108"
         ],
-        "note": "Their speed is invented."
-      }
+        "basis": "stated"
+      },
+      "edition": "One square a step, in a straight line, four directions (eight under \"diag\"), never stopping on its own."
     },
     {
       "id": "square",
       "text": "A square blocks a glider: the first hit cracks it and turns the glider straight back; the second breaks the square and the glider. Any glider cracks any square, its own side's too.",
-      "source": {
-        "book": [
+      "book": {
+        "says": "Walls can reflect gliders, and a wall can be destroyed.",
+        "blocks": [
           "c2-b12",
           "c4-b9"
         ],
-        "note": "Two hits is invented."
-      }
+        "basis": "stated"
+      },
+      "edition": "Walls are single squares; two hits to break; the first hit reflects; any side's glider cracks any square."
     },
     {
       "id": "rock",
       "text": "A rock is fixed, turns every glider straight back, and never breaks.",
-      "source": {
-        "book": [
-          "c4-b108"
+      "book": {
+        "says": "There are rocks on the field.",
+        "blocks": [
+          "c4-b84"
         ],
-        "note": "Bouncing only is invented; in the book gliders hitting rocks can make more gliders."
-      }
+        "basis": "stated"
+      },
+      "edition": "Rocks are fixed, bounce every glider straight back, never break, and never make gliders (in the book, gliders hitting rocks make more gliders, c4-b108; not here)."
     },
     {
       "id": "step-together",
       "text": "Every glider moves at the same moment.",
-      "source": {
-        "invented": true
-      }
+      "edition": "The whole rule."
     },
     {
       "id": "glider-collide",
       "text": "Two gliders of different sides break each other if they head for the same square, swap squares, or cross. A side's own gliders pass through each other.",
-      "source": {
-        "invented": true
-      }
+      "edition": "The whole rule."
     },
     {
       "id": "tower-hit",
       "text": "A glider reaching an opponent's tower destroys it and breaks. Your own tower turns it straight back.",
-      "source": {
-        "invented": true,
-        "note": "In the book a stray glider can wreck its own side (c4-b109); left out here."
-      }
+      "edition": "The whole rule. (In the book a stray glider can wreck its own side, c4-b109; left out here.)"
     },
     {
       "id": "no-debris",
       "text": "Broken pieces leave nothing behind.",
-      "source": {
-        "invented": true,
-        "note": "The book's boards fill with debris (c4-b140)."
-      }
+      "edition": "The whole rule. (The book's boards fill with debris, c4-b140.)"
     },
     {
       "id": "turns",
       "text": "A setup turn at step 0, then a turn to act every 12 steps; between turns the match runs on its own.",
-      "source": {
-        "book": [
+      "book": {
+        "says": "Play begins with an initiation phase in which players put down squares, then runs on its own, with intervention turns from time to time.",
+        "blocks": [
+          "c4-b94",
           "c4-b110",
           "c14-b45"
         ],
-        "note": "12 is invented."
-      }
+        "basis": "stated"
+      },
+      "edition": "A setup turn at step 0 and one every 12 steps (in the book the first comes after about a thousand turns)."
     },
     {
       "id": "points",
       "text": "8 points a turn: glider 4, square 1, tower 4. Unspent points are lost.",
-      "source": {
-        "invented": true
-      }
+      "edition": "The whole rule."
     },
     {
       "id": "placing",
       "text": "Place on any empty square within 3 squares, counting diagonals, of a tower you had when the turn began.",
-      "source": {
-        "book": [
+      "book": {
+        "says": "In an intervention turn, players put down more squares near any copy of their symbols.",
+        "blocks": [
           "c4-b110"
         ],
-        "note": "The distance is invented."
-      }
+        "basis": "stated"
+      },
+      "edition": "Within 3 squares counting diagonals, of towers held when the turn began; gliders, squares or towers."
     },
     {
       "id": "simultaneous",
       "text": "Both sides place at the same time without seeing each other's choices; two pieces placed on one square cancel each other.",
-      "source": {
-        "invented": true
-      }
+      "edition": "The whole rule."
     },
     {
       "id": "sight",
       "text": "You see every square within 3 of one of your towers; the rest is dark.",
-      "source": {
-        "book": [
+      "book": {
+        "says": "A copy of your symbol lets you see everything within thirty squares; the field starts dark.",
+        "blocks": [
           "c4-b93"
         ],
-        "note": "3 is invented."
-      }
+        "basis": "stated"
+      },
+      "edition": "3 squares, not thirty (2 under \"sight2\")."
     },
     {
       "id": "last-seen",
       "text": "Rocks are shown everywhere; an opponent's tower you cannot see is shown where you last saw it.",
-      "source": {
-        "invented": true
-      }
+      "edition": "The whole rule."
     },
     {
       "id": "end-towers",
       "text": "A side with no towers left loses; both at the same step is a draw.",
-      "source": {
-        "book": [
+      "book": {
+        "says": "A player whose symbols have all been eliminated is out.",
+        "blocks": [
           "c4-b136",
           "c4-b138"
-        ]
-      }
+        ],
+        "basis": "stated"
+      },
+      "edition": "With two players, out means lost; both at once is a draw."
     },
     {
       "id": "end-time",
       "text": "At step 96 the match stops: most towers wins, equal is a draw.",
-      "source": {
-        "invented": true
-      }
+      "edition": "The whole rule."
     },
     {
       "id": "resign",
       "text": "You may resign; it counts as a loss.",
-      "source": {
-        "book": [
+      "book": {
+        "says": "A player may resign.",
+        "blocks": [
           "c4-b141",
           "c10-b164"
-        ]
-      }
+        ],
+        "basis": "stated"
+      },
+      "edition": "Resigning counts as a loss."
     },
     {
       "id": "new-rule",
       "text": "One of four new rules is drawn from the seed at the start of every match, and both players see it.",
-      "source": {
-        "book": [
+      "book": {
+        "says": "Every game has some kind of new rule.",
+        "blocks": [
           "c4-b84"
         ],
-        "note": "The four rules are invented."
-      }
+        "basis": "stated"
+      },
+      "edition": "One of four rules, drawn from the seed; the four rules are invented."
     },
     {
       "id": "computer-sight",
       "text": "The computer players see only what their towers light (Play's; Learn's practice bot is not part of this ruleset).",
-      "source": {
-        "invented": true
-      }
+      "edition": "The whole rule."
     },
     {
       "id": "seed",
       "text": "A match's seed is a whole number from 0 to 999,999. Its first random number draws the new rule; the computer player takes the rest, in order.",
-      "source": {
-        "invented": true
-      }
+      "edition": "The whole rule."
     }
   ],
   "drawnRules": [
     {
       "id": "diag",
       "text": "Gliders may also fly diagonally.",
-      "source": {
-        "invented": true
-      }
+      "edition": "The whole rule."
     },
     {
       "id": "cost3",
       "text": "Gliders cost 3 points.",
-      "source": {
-        "invented": true
-      }
+      "edition": "The whole rule."
     },
     {
       "id": "sight2",
       "text": "You see only 2 squares around your towers.",
-      "source": {
-        "invented": true
-      }
+      "edition": "The whole rule."
     },
     {
       "id": "every8",
       "text": "Turns to act come every 8 steps.",
-      "source": {
-        "invented": true
-      }
+      "edition": "The whole rule."
     }
   ],
   "computerPlayers": [
@@ -333,10 +318,7 @@
         "level": 0
       },
       "codeHash": "0x33a5ae1bd24607fe28685c1de0c624f2551ce07b23236fdbf8ecda03d6080f46",
-      "source": {
-        "invented": true,
-        "note": "Practice: the same code at its simplest level."
-      }
+      "edition": "Practice: the same code at its simplest level."
     },
     {
       "level": 1,
@@ -347,10 +329,7 @@
         "level": 1
       },
       "codeHash": "0x86be99083de23f17888c995777d5938320d49076b37f4750ac6182ac49687b02",
-      "source": {
-        "invented": true,
-        "note": "Behaviours are invented; the book has bots too (c7-b14)."
-      }
+      "edition": "Behaviours are invented. (The book has bots too, c7-b14.)"
     },
     {
       "level": 2,
@@ -361,10 +340,7 @@
         "level": 2
       },
       "codeHash": "0x7b872de604278b52254bba52b7212cf1464bcf7625f651a696d1b5eb19a3f2b6",
-      "source": {
-        "invented": true,
-        "note": "Behaviours are invented; the book has bots too (c7-b14)."
-      }
+      "edition": "Behaviours are invented. (The book has bots too, c7-b14.)"
     },
     {
       "level": 3,
@@ -375,10 +351,7 @@
         "level": 3
       },
       "codeHash": "0x598ee7c4837799d0101cfc7eb2d78717957c6d34ccec4cb6e96a971356857c66",
-      "source": {
-        "invented": true,
-        "note": "Behaviours are invented; the book has bots too (c7-b14)."
-      }
+      "edition": "Behaviours are invented. (The book has bots too, c7-b14.)"
     },
     {
       "level": 4,
@@ -389,10 +362,7 @@
         "level": 4
       },
       "codeHash": "0xabe56b9efffb93beeb8fac2b2e24519174ef54297abb87fa77db680b86ca4d41",
-      "source": {
-        "invented": true,
-        "note": "Behaviours are invented; the book has bots too (c7-b14)."
-      }
+      "edition": "Behaviours are invented. (The book has bots too, c7-b14.)"
     },
     {
       "level": 5,
@@ -403,10 +373,7 @@
         "level": 5
       },
       "codeHash": "0x7a744c18dddcef69c69ff5ce95fcf03edf20065bf0f8dc9152ea593d20162cb2",
-      "source": {
-        "invented": true,
-        "note": "Behaviours are invented; the book has bots too (c7-b14)."
-      }
+      "edition": "Behaviours are invented. (The book has bots too, c7-b14.)"
     }
   ],
   "sides": {

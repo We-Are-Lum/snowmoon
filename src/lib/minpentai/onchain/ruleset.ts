@@ -22,8 +22,13 @@ export const rulesetId = (manifest: unknown) => keccak256(toBytes(canonical(mani
 export const hashText = (text: string) => keccak256(toBytes(text));
 
 /** Where a rule comes from: the book (with the blocks it rests on) or this edition. */
-export type Source = { book: string[]; note?: string } | { invented: true; note?: string };
-export interface Rule { id: string; text: string; source: Source }
+/**
+ * Where a rule comes from. `book`: what the book says, the blocks it rests on, and whether the book
+ * states it in so many words ('stated') or only implies it ('implied'). `edition`: the details this
+ * edition made up. A rule has one or both; a rule with no `book` part is invented outright.
+ */
+export interface BookPart { says: string; blocks: string[]; basis: 'stated' | 'implied' }
+export interface Rule { id: string; text: string; book?: BookPart; edition?: string }
 
 /** Where a replay starts: everything it reaches from here is pinned (importClosure). */
 export const REPLAY_ENTRY = 'src/lib/minpentai/onchain/replay.ts';
@@ -61,45 +66,54 @@ export function importClosure(entry: string, read: (path: string) => string | nu
   return { files: sorted, packages: [...packages].sort(), builtins: [...builtins].sort() };
 }
 
-const book = (blocks: string[], note?: string): Source => ({ book: blocks, note });
-const invented = (note?: string): Source => ({ invented: true, note });
+const book = (says: string, blocks: string[], basis: 'stated' | 'implied' = 'stated'): BookPart => ({ says, blocks, basis });
 
 /**
  * Play's rules, as game.ts, controller.ts and play-server/match.ts run them, marked as the rules
  * page (draft 1) and docs/minpentai/agents.md mark them. Block ids are chapter-block (c4-b84).
  */
 export const RULES_V1: Rule[] = [
-  { id: 'board-size', text: 'The board is 15 x 10 squares.', source: invented() },
-  { id: 'board-edges', text: 'The board has edges and corners.', source: book(['c4-b113', 'c7-b81']) },
-  { id: 'edge-bounce', text: 'A glider that would leave the board turns back on that side instead, and stays put for that step.', source: invented() },
-  { id: 'starts', text: 'Each side starts with 2 towers (Cyan at (1, 2) and (1, 7), Amber at (13, 2) and (13, 7)) and there are six rocks, all mirrored.', source: invented('Starting in your own corner is from the book (c4-b94).') },
-  { id: 'tower', text: 'A tower is your score, your sight, and where you may place.', source: book(['c4-b93'], 'In the book they are "symbols"; the tower shape is invented.') },
-  { id: 'glider', text: 'A glider moves one square a step in a straight line, up, down, left or right (diagonally too only under the "diag" rule), and never stops on its own.', source: book(['c4-b84'], 'Their speed is invented.') },
-  { id: 'square', text: 'A square blocks a glider: the first hit cracks it and turns the glider straight back; the second breaks the square and the glider. Any glider cracks any square, its own side\'s too.', source: book(['c2-b12', 'c4-b9'], 'Two hits is invented.') },
-  { id: 'rock', text: 'A rock is fixed, turns every glider straight back, and never breaks.', source: book(['c4-b108'], 'Bouncing only is invented; in the book gliders hitting rocks can make more gliders.') },
-  { id: 'step-together', text: 'Every glider moves at the same moment.', source: invented() },
-  { id: 'glider-collide', text: 'Two gliders of different sides break each other if they head for the same square, swap squares, or cross. A side\'s own gliders pass through each other.', source: invented() },
-  { id: 'tower-hit', text: 'A glider reaching an opponent\'s tower destroys it and breaks. Your own tower turns it straight back.', source: invented('In the book a stray glider can wreck its own side (c4-b109); left out here.') },
-  { id: 'no-debris', text: 'Broken pieces leave nothing behind.', source: invented('The book\'s boards fill with debris (c4-b140).') },
-  { id: 'turns', text: 'A setup turn at step 0, then a turn to act every 12 steps; between turns the match runs on its own.', source: book(['c4-b110', 'c14-b45'], '12 is invented.') },
-  { id: 'points', text: '8 points a turn: glider 4, square 1, tower 4. Unspent points are lost.', source: invented() },
-  { id: 'placing', text: 'Place on any empty square within 3 squares, counting diagonals, of a tower you had when the turn began.', source: book(['c4-b110'], 'The distance is invented.') },
-  { id: 'simultaneous', text: 'Both sides place at the same time without seeing each other\'s choices; two pieces placed on one square cancel each other.', source: invented() },
-  { id: 'sight', text: 'You see every square within 3 of one of your towers; the rest is dark.', source: book(['c4-b93'], '3 is invented.') },
-  { id: 'last-seen', text: 'Rocks are shown everywhere; an opponent\'s tower you cannot see is shown where you last saw it.', source: invented() },
-  { id: 'end-towers', text: 'A side with no towers left loses; both at the same step is a draw.', source: book(['c4-b136', 'c4-b138']) },
-  { id: 'end-time', text: 'At step 96 the match stops: most towers wins, equal is a draw.', source: invented() },
-  { id: 'resign', text: 'You may resign; it counts as a loss.', source: book(['c4-b141', 'c10-b164']) },
-  { id: 'new-rule', text: 'One of four new rules is drawn from the seed at the start of every match, and both players see it.', source: book(['c4-b84'], 'The four rules are invented.') },
-  { id: 'computer-sight', text: 'The computer players see only what their towers light (Play\'s; Learn\'s practice bot is not part of this ruleset).', source: invented() },
-  { id: 'seed', text: 'A match\'s seed is a whole number from 0 to 999,999. Its first random number draws the new rule; the computer player takes the rest, in order.', source: invented() },
+  { id: 'board-size', text: 'The board is 15 x 10 squares.', edition: 'The whole rule.' },
+  { id: 'board-edges', text: 'The board has edges and corners. A glider that would leave the board turns back on that side instead, and stays put for that step.',
+    book: book('The field has corners (and so edges).', ['c4-b113', 'c7-b81'], 'implied'), edition: 'What a glider does at the edge.' },
+  { id: 'starts', text: 'Each side starts with 2 towers (Cyan at (1, 2) and (1, 7), Amber at (13, 2) and (13, 7)) and there are six rocks, all mirrored.', edition: 'The whole rule. (Each player starting in a corner is in the book, c4-b94; these starts are not in corners.)' },
+  { id: 'tower', text: 'A tower is your score, your sight, and where you may place.',
+    book: book('Each player has a symbol; a copy of it anywhere on the board lets them see around it.', ['c4-b93']), edition: 'Symbols are drawn as towers, one square each; they are also the score.' },
+  { id: 'glider', text: 'A glider moves one square a step in a straight line, up, down, left or right (diagonally too only under the "diag" rule), and never stops on its own.',
+    book: book('Gliders exist and fly across the field.', ['c4-b84', 'c4-b108']), edition: 'One square a step, in a straight line, four directions (eight under "diag"), never stopping on its own.' },
+  { id: 'square', text: 'A square blocks a glider: the first hit cracks it and turns the glider straight back; the second breaks the square and the glider. Any glider cracks any square, its own side\'s too.',
+    book: book('Walls can reflect gliders, and a wall can be destroyed.', ['c2-b12', 'c4-b9']), edition: 'Walls are single squares; two hits to break; the first hit reflects; any side\'s glider cracks any square.' },
+  { id: 'rock', text: 'A rock is fixed, turns every glider straight back, and never breaks.',
+    book: book('There are rocks on the field.', ['c4-b84']), edition: 'Rocks are fixed, bounce every glider straight back, never break, and never make gliders (in the book, gliders hitting rocks make more gliders, c4-b108; not here).' },
+  { id: 'step-together', text: 'Every glider moves at the same moment.', edition: 'The whole rule.' },
+  { id: 'glider-collide', text: 'Two gliders of different sides break each other if they head for the same square, swap squares, or cross. A side\'s own gliders pass through each other.', edition: 'The whole rule.' },
+  { id: 'tower-hit', text: 'A glider reaching an opponent\'s tower destroys it and breaks. Your own tower turns it straight back.', edition: 'The whole rule. (In the book a stray glider can wreck its own side, c4-b109; left out here.)' },
+  { id: 'no-debris', text: 'Broken pieces leave nothing behind.', edition: 'The whole rule. (The book\'s boards fill with debris, c4-b140.)' },
+  { id: 'turns', text: 'A setup turn at step 0, then a turn to act every 12 steps; between turns the match runs on its own.',
+    book: book('Play begins with an initiation phase in which players put down squares, then runs on its own, with intervention turns from time to time.', ['c4-b94', 'c4-b110', 'c14-b45']), edition: 'A setup turn at step 0 and one every 12 steps (in the book the first comes after about a thousand turns).' },
+  { id: 'points', text: '8 points a turn: glider 4, square 1, tower 4. Unspent points are lost.', edition: 'The whole rule.' },
+  { id: 'placing', text: 'Place on any empty square within 3 squares, counting diagonals, of a tower you had when the turn began.',
+    book: book('In an intervention turn, players put down more squares near any copy of their symbols.', ['c4-b110']), edition: 'Within 3 squares counting diagonals, of towers held when the turn began; gliders, squares or towers.' },
+  { id: 'simultaneous', text: 'Both sides place at the same time without seeing each other\'s choices; two pieces placed on one square cancel each other.', edition: 'The whole rule.' },
+  { id: 'sight', text: 'You see every square within 3 of one of your towers; the rest is dark.',
+    book: book('A copy of your symbol lets you see everything within thirty squares; the field starts dark.', ['c4-b93']), edition: '3 squares, not thirty (2 under "sight2").' },
+  { id: 'last-seen', text: 'Rocks are shown everywhere; an opponent\'s tower you cannot see is shown where you last saw it.', edition: 'The whole rule.' },
+  { id: 'end-towers', text: 'A side with no towers left loses; both at the same step is a draw.',
+    book: book('A player whose symbols have all been eliminated is out.', ['c4-b136', 'c4-b138']), edition: 'With two players, out means lost; both at once is a draw.' },
+  { id: 'end-time', text: 'At step 96 the match stops: most towers wins, equal is a draw.', edition: 'The whole rule.' },
+  { id: 'resign', text: 'You may resign; it counts as a loss.',
+    book: book('A player may resign.', ['c4-b141', 'c10-b164']), edition: 'Resigning counts as a loss.' },
+  { id: 'new-rule', text: 'One of four new rules is drawn from the seed at the start of every match, and both players see it.',
+    book: book('Every game has some kind of new rule.', ['c4-b84']), edition: 'One of four rules, drawn from the seed; the four rules are invented.' },
+  { id: 'computer-sight', text: 'The computer players see only what their towers light (Play\'s; Learn\'s practice bot is not part of this ruleset).', edition: 'The whole rule.' },
+  { id: 'seed', text: 'A match\'s seed is a whole number from 0 to 999,999. Its first random number draws the new rule; the computer player takes the rest, in order.', edition: 'The whole rule.' },
 ];
 
-export const DRAWN_RULES_V1 = [
-  { id: 'diag', text: 'Gliders may also fly diagonally.', source: invented() },
-  { id: 'cost3', text: 'Gliders cost 3 points.', source: invented() },
-  { id: 'sight2', text: 'You see only 2 squares around your towers.', source: invented() },
-  { id: 'every8', text: 'Turns to act come every 8 steps.', source: invented() },
+export const DRAWN_RULES_V1: Rule[] = [
+  { id: 'diag', text: 'Gliders may also fly diagonally.', edition: 'The whole rule.' },
+  { id: 'cost3', text: 'Gliders cost 3 points.', edition: 'The whole rule.' },
+  { id: 'sight2', text: 'You see only 2 squares around your towers.', edition: 'The whole rule.' },
+  { id: 'every8', text: 'Turns to act come every 8 steps.', edition: 'The whole rule.' },
 ];
 
 export const PLAYERS_V1 = [
@@ -157,7 +171,7 @@ export function soloManifestV1({ commit, files, packages }: ManifestInput) {
       code: { file: 'src/lib/minpentai/play-game/game.ts', function: 'botPlan', level: p.level },
       // One function (botPlan) plays every level, inside the closure; a player is the closure and its level.
       codeHash: keccak256(toBytes(`${closure}:level:${p.level}`)),
-      source: invented(p.level ? 'Behaviours are invented; the book has bots too (c7-b14).' : 'Practice: the same code at its simplest level.'),
+      edition: p.level ? 'Behaviours are invented. (The book has bots too, c7-b14.)' : 'Practice: the same code at its simplest level.',
     })),
     sides: { person: 'C', computer: 'A' },
   };

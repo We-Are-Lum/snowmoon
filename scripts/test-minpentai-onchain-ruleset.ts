@@ -22,6 +22,15 @@ check('the engine commit is a full 40-character commit that exists', () => {
   if (!/^[0-9a-f]{40}$/.test(m.engine.commit)) return m.engine.commit;
   git('cat-file', '-e', `${m.engine.commit}^{commit}`);
 });
+check('each closure file, as it is at the pinned commit (git show <commit>:<path>), hashes to the manifest\'s hash', () => {
+  const c = importClosure(REPLAY_ENTRY, at);
+  const listed = Object.keys(m.engine.files).sort().join(), found = Object.keys(c.files).sort().join();
+  if (listed !== found) return `closure at the commit: ${found}; manifest: ${listed}`;
+  for (const f of Object.keys(m.engine.files)) {
+    const text = git('show', `${m.engine.commit}:${f}`);
+    if (hashText(text) !== (m.engine.files as Record<string, string>)[f]) return f;
+  }
+});
 check('the manifest is what the builder makes from its pinned commit (the closure read there, versions from its lockfile)', () => {
   const c = importClosure(REPLAY_ENTRY, at);
   if (canonical(soloManifestV1({ commit: m.engine.commit, files: c.files, packages: m.engine.packages })) !== canonical(m)) return 'rebuild with npx tsx scripts/build-minpentai-ruleset.ts';
@@ -42,6 +51,17 @@ check("replay.ts's import closure today is the one pinned (same files, same hash
 check('the closure reaches no Node builtins', () => {
   const c = importClosure(REPLAY_ENTRY, (p) => (existsSync(p) ? readFileSync(p, 'utf8') : null));
   if (c.builtins.length) return c.builtins.join(', ');
+});
+check('every integer in the manifest is at most 2^53 - 1 (and none is negative or fractional)', () => {
+  const bad: string[] = [];
+  const walk = (v: unknown, path: string) => {
+    if (typeof v === 'number') { if (!Number.isInteger(v) || v < 0 || v > Number.MAX_SAFE_INTEGER) bad.push(`${path}=${v}`); }
+    else if (Array.isArray(v)) v.forEach((x, i) => walk(x, `${path}[${i}]`));
+    else if (v && typeof v === 'object') for (const [k, x] of Object.entries(v)) walk(x, `${path}.${k}`);
+  };
+  walk(m, '$');
+  if (Number.MAX_SAFE_INTEGER !== 2 ** 53 - 1) return 'MAX_SAFE_INTEGER';
+  return bad.join(', ') || undefined;
 });
 check('only integers and ASCII strings (so the canonical JSON is RFC 8785 / JCS)', () => {
   const bad: string[] = [];
@@ -64,14 +84,15 @@ check('an independent implementation (Python: its own JCS and its own Keccak-256
   const py = execFileSync('python3', ['-I', 'scripts/minpentai_ruleset_id.py', FILE], { encoding: 'utf8' }).trim();
   if (py !== rulesetId(m)) return `Python ${py}, TS ${rulesetId(m)}`;
 });
-check('every rule and drawn rule is from the book (blocks that exist) or invented', () => {
+check('every rule has a book part, this edition\'s details, or both; each book part is stated or implied, with blocks that exist', () => {
   const passages = readFileSync('docs/minpentai/passages.md', 'utf8');
   const bad: string[] = [];
   for (const r of [...m.rules, ...m.drawnRules]) {
-    const s = r.source as { book?: string[]; invented?: boolean };
-    if (s.invented === true && !s.book) continue;
-    if (!s.book?.length) { bad.push(`${r.id}: no source`); continue; }
-    for (const b of s.book) if (!passages.includes(`**${b}**`)) bad.push(`${r.id}: ${b} not in passages.md`);
+    if (!r.book && !r.edition) bad.push(`${r.id}: no source`);
+    if (!r.book) continue;
+    if (r.book.basis !== 'stated' && r.book.basis !== 'implied') bad.push(`${r.id}: basis`);
+    if (!r.book.says || !r.book.blocks.length) bad.push(`${r.id}: empty book part`);
+    for (const b of r.book.blocks) if (!passages.includes(`**${b}**`)) bad.push(`${r.id}: ${b} not in passages.md`);
   }
   return bad.join('; ') || undefined;
 });

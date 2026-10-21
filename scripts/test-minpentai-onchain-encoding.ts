@@ -1,0 +1,98 @@
+/**
+ * The match encoding (onchain v1 spike): round trips, one canonical form (shuffled or padded input
+ * refused), no wrapping past 255, every field range-checked.
+ */
+import { readFileSync } from 'node:fs';
+import { replaySolo } from '../src/lib/minpentai/onchain/replay';
+import { fixedSet, sampleMatch } from '../src/lib/minpentai/onchain/sample';
+import { decode, encode, EncodingError, fromReplay, positionOf, toHex, type EncodedMatch } from '../src/lib/minpentai/onchain/encoding';
+import { rulesetId } from '../src/lib/minpentai/onchain/ruleset';
+
+let failed = 0, passed = 0;
+const check = (name: string, f: () => string | void) => { let bad: string | void; try { bad = f(); } catch (e) { bad = (e as Error).stack; } if (bad) { failed++; console.log(`FAIL ${name}: ${bad}`); } else passed++; };
+const refuses = (f: () => unknown) => { try { f(); return false; } catch (e) { return e instanceof EncodingError; } };
+const ID = rulesetId(JSON.parse(readFileSync('docs/minpentai/rulesets/solo-v1.json', 'utf8')));
+const solos = [...fixedSet()];
+for (let i = 0; i < 180; i++) solos.push(sampleMatch((i * 104729 + 17) % 1_000_000, i % 6, i % 9 === 4 ? 1 + (i % 3) : undefined));
+const ms: EncodedMatch[] = solos.map((s) => fromReplay(ID, s, replaySolo(s)));
+const bytesOf = ms.map(encode);
+
+check(`${ms.length} matches round-trip: decode(encode(m)) is m, and encode(decode(b)) is b`, () => {
+  for (let i = 0; i < ms.length; i++) {
+    const d = decode(bytesOf[i]);
+    if (JSON.stringify(d) !== JSON.stringify(ms[i])) return `match ${i}: ${JSON.stringify(d).slice(0, 200)}`;
+    if (toHex(encode(d)) !== toHex(bytesOf[i])) return `match ${i}: bytes differ`;
+  }
+});
+check('a decoded match replays to its claimed result and position', () => {
+  for (let i = 0; i < ms.length; i++) {
+    const d = decode(bytesOf[i]);
+    const r = replaySolo({ seed: d.seed, level: d.opponent.level, turns: d.turns, end: d.end.kind === 'end' ? { kind: 'end' } : { kind: 'resign', step: d.end.step } });
+    if (JSON.stringify(positionOf(r.board)) !== JSON.stringify(d.position)) return `match ${i}: position`;
+    if ((r.win === 'C' ? 'win' : r.win === 'A' ? 'loss' : 'draw') !== d.claim || r.step !== d.end.step) return `match ${i}: result`;
+  }
+});
+
+// One canonical form.
+const withPos = (b: Uint8Array) => { const m = decode(b); return m; };
+const rich = ms.reduce((a, m, i) => (m.position.length > ms[a].position.length ? i : a), 0);
+check('a position out of order is refused, by encode and (as bytes) by decode', () => {
+  const m = withPos(bytesOf[rich]);
+  const shuffled = { ...m, position: [...m.position].reverse() };
+  if (!refuses(() => encode(shuffled))) return 'encode took a shuffled position';
+  // Build the shuffled bytes by hand: the same pieces packed in the wrong order.
+  const good = bytesOf[rich], head = good.length - Math.ceil((13 * m.position.length) / 8);
+  let acc = 0n, bits = 0n; const packed: number[] = [];
+  for (const [sq, k] of shuffled.position) { acc = (acc << 13n) | BigInt((sq << 5) | k); bits += 13n; while (bits >= 8n) { packed.push(Number((acc >> (bits - 8n)) & 255n)); bits -= 8n; acc &= (1n << bits) - 1n; } }
+  if (bits) packed.push(Number((acc << (8n - bits)) & 255n));
+  const bad = Uint8Array.from([...good.subarray(0, head), ...packed]);
+  if (bad.length !== good.length || toHex(bad) === toHex(good)) return 'test setup';
+  if (!refuses(() => decode(bad))) return 'decode took shuffled bytes';
+});
+check('non-zero padding bits, a trailing byte, and a truncated match are refused', () => {
+  const i = ms.findIndex((m) => (13 * m.position.length) % 8 !== 0);
+  const b = bytesOf[i];
+  const pad = 8 - ((13 * ms[i].position.length) % 8);
+  for (let bit = 0; bit < pad; bit++) {
+    const c = b.slice(); c[c.length - 1] |= 1 << bit;
+    if (!refuses(() => decode(c))) return `padding bit ${bit} accepted`;
+  }
+  if (!refuses(() => decode(Uint8Array.from([...b, 0])))) return 'a trailing zero byte accepted';
+  if (!refuses(() => decode(b.subarray(0, b.length - 1)))) return 'truncated accepted';
+});
+check('more than 255 pieces, turns or placements throws instead of wrapping; 255 pieces is fine', () => {
+  const base = ms[0];
+  const pieces = (n: number) => Array.from({ length: n }, (_, j) => [Math.min(149, j >> 1), j & 1] as [number, number]).sort((a, b) => a[0] - b[0] || a[1] - b[1]);
+  const ok = decode(encode({ ...base, position: pieces(255) }));
+  if (ok.position.length !== 255) return '255 pieces did not round-trip';
+  if (!refuses(() => encode({ ...base, position: pieces(256) }))) return '256 pieces accepted';
+  if (!refuses(() => encode({ ...base, turns: Array.from({ length: 256 }, () => []) }))) return '256 turns accepted';
+  if (!refuses(() => encode({ ...base, turns: [Array.from({ length: 256 }, () => ({ t: 's' as const, o: 'C' as const, x: 1, y: 1, dx: 0, dy: 0 }))] }))) return '256 placements accepted';
+});
+check('every field is range-checked on the way in and out', () => {
+  const b = bytesOf[0], m = ms[0];
+  const set = (at: number, v: number) => { const c = b.slice(); c[at] = v; return c; };
+  const bad: [string, () => unknown][] = [
+    ['version 2', () => decode(set(0, 2))],
+    ['opponent kind 1', () => decode(set(37, 1))],
+    ['level 6', () => decode(set(38, 6))],
+    ['claim 3', () => decode(set(39, 3))],
+    ['end kind 2', () => decode(set(40, 2))],
+    ['end step 97', () => decode(set(41, 97))],
+    ['seed 1,000,000', () => encode({ ...m, seed: 1_000_000 })],
+    ['seed bytes over 999,999', () => decode(set(33, 0xff))],
+    ['uppercase ruleset ID', () => encode({ ...m, rulesetId: m.rulesetId.toUpperCase().replace('0X', '0x') as typeof m.rulesetId })],
+    ['position square 150', () => encode({ ...m, position: [[150, 0]] })],
+    ['position kind 22', () => encode({ ...m, position: [[3, 22]] })],
+    ['a square with a direction', () => encode({ ...m, turns: [[{ t: 's', o: 'C', x: 2, y: 2, dx: 1, dy: 0 }]] })],
+    ['a glider with no direction', () => encode({ ...m, turns: [[{ t: 'g', o: 'C', x: 2, y: 2, dx: 0, dy: 0 }]] })],
+    ['placement off the board', () => encode({ ...m, turns: [[{ t: 's', o: 'C', x: 15, y: 0, dx: 0, dy: 0 }]] })],
+  ];
+  const missed = bad.filter(([, f]) => !refuses(f)).map(([n]) => n);
+  return missed.length ? `not refused: ${missed.join(', ')}` : undefined;
+});
+
+const lens = bytesOf.map((b) => b.length).sort((a, b) => a - b), pl = ms.map((m) => Math.ceil((13 * m.position.length) / 8) + 1).sort((a, b) => a - b);
+const q = (a: number[]) => `min ${a[0]}, median ${a[a.length >> 1]}, max ${a[a.length - 1]}`;
+console.log(failed ? `encoding: ${failed} failed, ${passed} passed` : `encoding: ${passed} checks passed; match ${q(lens)} bytes; final position ${q(pl)} bytes (${ms.length} matches)`);
+process.exit(failed ? 1 : 0);

@@ -50,6 +50,7 @@
     "test:minpentai-agents": "tsx scripts/test-minpentai-agents-md.ts",
     "test:minpentai-onchain": "tsx scripts/test-minpentai-onchain.ts",
     "test:minpentai-onchain-ruleset": "tsx scripts/test-minpentai-onchain-ruleset.ts",
+    "test:minpentai-onchain-encoding": "tsx scripts/test-minpentai-onchain-encoding.ts",
     "minpentai:vs-rungs": "tsx scripts/minpentai-vs-rungs.ts",
     "check:minpentai-live": "tsx --conditions=react-server scripts/check-minpentai-live.ts",
     "designs:scenes": "tsx scripts/designs-scenes.ts",
