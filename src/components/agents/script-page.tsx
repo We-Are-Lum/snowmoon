@@ -14,7 +14,7 @@ import './agents.css';
  * needs the person's token, so it is read in the browser from /api/direction. DRAFT wording.
  */
 const D = AGENT_WORDING.direction;
-type Script = { adaptation: number; version: number; title: string; cast: string[]; shots: ScriptShot[]; rerecord: { speaker: string; lines: { shot: string; n: number; cue: string; time: string; line: string; original: string | null; rewrite: string | null; delivery: string[] }[] }[] };
+type Script = { adaptation: number; version: number; title: string; cast: string[]; shots: ScriptShot[]; rerecord: { speaker: string; lines: { shot: string; n: number; cue: string; time: string; line: string; original: string | null; rewrite: string | null; rewriteFiledBy: string | null; delivery: string[]; notes: NoteView[] }[] }[] };
 type Open = { kind: 'line'; cue: string; mode: 'rewrite' | 'delivery' } | { kind: 'shot'; shot: string; mode: 'intent' | 'acting'; who: string } | null;
 
 function Notes({ notes, onWithdraw, onConfirm }: { notes: NoteView[]; onWithdraw: (id: string) => void; onConfirm: (id: string) => void }) {
@@ -80,6 +80,7 @@ export function ScriptPage({ adaptation, version }: { adaptation: number; versio
   const withdraw = (id: string) => void post({ action: 'withdraw', id });
   const confirm = (id: string) => void post({ action: 'confirm', id });
 
+  const rerecordCount = script?.rerecord.reduce((n, g) => n + g.lines.length, 0) ?? 0;
   if (!script) return <main className="script-page"><p className="you-note">{error ?? '…'}</p></main>;
 
   const editor = (label: string, id: string) => (
@@ -140,8 +141,9 @@ export function ScriptPage({ adaptation, version }: { adaptation: number; versio
       <h1>{D.title(script.title)}</h1>
       <p className="you-note">{D.lede}</p>
       {error && <p role="alert" className="you-note">{error}</p>}
-      <details className="script-rerecord">
-        <summary>{D.rerecord} ({script.rerecord.reduce((n, g) => n + g.lines.length, 0)})</summary>
+      {/* Open on arrival when it has lines (owner, 2026-10-21: "It wasn't clear that re-record sheet is expandable"). */}
+      <details className="script-rerecord" open={rerecordCount > 0}>
+        <summary>{D.rerecord} ({rerecordCount})</summary>
         <p className="you-note">{D.rerecordNote}</p>
         {script.rerecord.length === 0 && <p className="you-note">{D.rerecordNone}</p>}
         {script.rerecord.map((g) => (
@@ -152,7 +154,22 @@ export function ScriptPage({ adaptation, version }: { adaptation: number; versio
                 <li key={r.cue}>
                   <a href={`#cue-${r.cue}`}><span className="script-time">{r.time}</span></a> {r.line}
                   {r.original && <span className="you-note"> ({D.was} “{r.original}”)</span>}
-                  {r.delivery.map((d, i) => <span key={i} className="script-delivery"> · {d}</span>)}
+                  {r.rewrite && r.rewriteFiledBy && (
+                    <span className="you-note">
+                      {' '}· {D.filedBy(r.rewriteFiledBy)} · <button type="button" className="script-link" onClick={() => confirm(r.rewrite!)}>{D.confirm}</button>
+                    </span>
+                  )}
+                  {/* The delivery notes, with who filed them and the confirm tap, here as well as on the line below (owner, 2026-10-21). */}
+                  {r.notes.map((d) => (
+                    <span key={d.id} className="script-delivery">
+                      {' '}· {d.text}
+                      {d.filedBy && (
+                        <span className="you-note">
+                          {' '}({D.filedBy(d.filedBy)} · <button type="button" className="script-link" onClick={() => confirm(d.id)}>{D.confirm}</button>)
+                        </span>
+                      )}
+                    </span>
+                  ))}
                 </li>
               ))}
             </ol>

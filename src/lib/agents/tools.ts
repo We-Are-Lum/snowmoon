@@ -4,7 +4,7 @@ import path from 'node:path';
 import { TOOLS as READ_TOOLS, ToolInputError } from '../agent/tools';
 import { editorData } from '../agent/data';
 import { AGENTS } from '../config';
-import { countOk, sql, type Agent, type Counted, type Scope } from './core';
+import { countOk, dailyLimits, sql, type Agent, type Counted, type Scope } from './core';
 import { revoke, agentLabel } from './accounts';
 import { checkLines, checkPlain, checkText, storyWordsAllowed } from './filter';
 import { bringIn, imagesOpen, ScanMatch, type Declared } from './images';
@@ -135,7 +135,7 @@ const WRITE: AgentTool[] = [
     run: async (agent, args) => {
       only(args, []);
       const who = await agentLabel(agent.person, agent.name);
-      return { you: who.label, person: `@${who.short}`, scopes: agent.scopes, ...(agent.spendCapUsd !== null ? { spend_cap_usd: agent.spendCapUsd, spend_note: 'Your key\'s cap for all the spending your person approves on your drafts.' } : {}), limits_per_day: AGENTS.limits, story_words: storyWordsAllowed(agent.person) ? 'allowed (test switch), labelled' : 'never yours: place your person\'s own words (exactly as they said them) or the book\'s; if a line is missing, leave it out and ask', how_to_work: 'Call read_requests: your person\'s ideas and notes are your to-do list. Answer each with a draft (answering: its id). They react with keep, try again, or say more; those come back as requests. To edit their own scene, use list_takes, try_frame, swap_take, change_timing, mark_speaking or request_video_test; anything with a cost waits for their approval. If no tool can do what they asked, call log_gap.', bringing_in_images: imagesOpen() ? 'open' : 'not open yet', rule: 'You draft; your person publishes. Nothing you make is public until they do.' };
+      return { you: who.label, person: `@${who.short}`, scopes: agent.scopes, ...(agent.spendCapUsd !== null ? { spend_cap_usd: agent.spendCapUsd, spend_note: 'Your key\'s cap for all the spending your person approves on your drafts.' } : {}), limits_per_day: dailyLimits(agent.person), story_words: storyWordsAllowed(agent.person) ? 'allowed (test switch), labelled' : 'never yours: place your person\'s own words (exactly as they said them) or the book\'s; if a line is missing, leave it out and ask', how_to_work: 'Call read_requests: your person\'s ideas and notes are your to-do list. Answer each with a draft (answering: its id). They react with keep, try again, or say more; those come back as requests. To edit their own scene, use list_takes, try_frame, swap_take, change_timing, mark_speaking or request_video_test; anything with a cost waits for their approval. If no tool can do what they asked, call log_gap.', bringing_in_images: imagesOpen() ? 'open' : 'not open yet', rule: 'You draft; your person publishes. Nothing you make is public until they do.' };
     },
   },
   {

@@ -29,6 +29,7 @@ import { createHash } from 'node:crypto';
 import { privateKeyToAccount } from 'viem/accounts';
 import { createSiweMessage } from 'viem/siwe';
 import { startStage, connect, mcp, tool, ROOT } from './lib/agents-harness';
+import { AGENTS as AGENT_CONFIG } from '../src/lib/config';
 
 const failures: string[] = [];
 let passed = 0;
@@ -366,6 +367,8 @@ try {
     const bai = script.rerecord?.find((g) => g.speaker === 'Bai')?.lines.find((l) => l.cue === 'b1-6');
     check('N7 the script page: every shot and line with speaker and time, the notes inline, the rewrite as a draft', scriptRes.ok && script.shots.length === 85 && !!ln && ln.speaker === 'Bai' && ln.rewrite?.text === 'That one’s toast, and he doesn’t even know it.' && sh!.intent.length === 1 && sh!.acting.length === 1 && ln.delivery.length === 1, JSON.stringify(sh ?? script).slice(0, 400));
     check('N8 the rewritten line joins the re-record sheet, with its delivery note, by speaker', !!bai && bai.line === 'That one’s toast, and he doesn’t even know it.' && /^That other loser/.test(bai.original ?? '') && bai.delivery.length === 1, JSON.stringify(script.rerecord));
+    const sheetNote = (bai as { notes?: { id: string; filedBy: string | null }[] } | undefined)?.notes?.[0];
+    check('N8b the re-record sheet says who filed the delivery note and has its id for the "These were my words" tap', !!sheetNote?.id && String(sheetNote.filedBy).startsWith('Claude') && String((bai as { rewriteFiledBy?: string } | undefined)?.rewriteFiledBy).startsWith('Claude'), JSON.stringify(bai));
     const bScript = await asPerson(people.B.token, '/api/direction?adaptation=1&version=2');
     const anonScript = await fetch(`${BASE}/api/direction?adaptation=1&version=2`);
     check('N9 the script and its notes are the author’s only (someone else: refused; signed out: not found)', bScript.status === 400 && anonScript.status === 404, `${bScript.status} ${anonScript.status}`);
@@ -392,6 +395,7 @@ try {
     const noVersion = await S.pg.query(`insert into studio.direction_notes (person, adaptation_id, version, kind, shot, body, confirmed_at) values ($1, 1, 999, 'intent', '14-b1-6', 'x', now())`, [people.A.person]).then(() => 'kept', (e: Error) => e.message);
     const unconfirmedOwn = await S.pg.query(`insert into studio.direction_notes (person, adaptation_id, version, kind, shot, body) values ($1, 1, 2, 'intent', '14-b1-6', 'x')`, [people.A.person]).then(() => 'kept', (e: Error) => e.message);
     check('N14 the tables refuse a note on a version that doesn’t exist, and a row the person filed without confirmed_at', /foreign key/i.test(noVersion) && /check constraint/i.test(unconfirmedOwn), `${noVersion} | ${unconfirmedOwn}`);
+    check('N15 the owner’s agents have higher daily counts (500 drafts, 200 notes, 150 images); everyone else keeps 50, 20 and 50; the per-minute brakes are the same', AGENT_CONFIG.limitsFor[6786]?.drafts === 500 && AGENT_CONFIG.limitsFor[6786]?.notes === 200 && AGENT_CONFIG.limitsFor[6786]?.images === 150 && AGENT_CONFIG.limits.drafts === 50 && AGENT_CONFIG.limits.notes === 20 && AGENT_CONFIG.limits.images === 50 && !('imagesPerMinute' in (AGENT_CONFIG.limitsFor[6786] ?? {})));
     const dList = ((await mcp(BASE, edA, 'tools/list')).body?.result?.tools ?? []).map((t) => t.name);
     check('N12 the four direction tools are there, and still nothing that publishes or spends', ['find_line', 'get_direction', 'add_direction', 'rewrite_line'].every((n) => dList.includes(n)) && !dList.some((n) => /publish|spend|pay|approve|run/i.test(n)));
   }
