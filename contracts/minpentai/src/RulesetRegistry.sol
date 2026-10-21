@@ -21,12 +21,14 @@ contract RulesetRegistry {
     event RulesetAdded(bytes32 indexed id, bytes32 indexed remixedFrom, address indexed author, string manifestURI);
 
     error NotOwner();
+    error ZeroOwner();
     error ZeroId();
     error EmptyURI();
     error AlreadyAdded(bytes32 id);
     error UnknownRuleset(bytes32 id);
 
     constructor(address owner_) {
+        if (owner_ == address(0)) revert ZeroOwner();
         owner = owner_;
     }
 
@@ -35,20 +37,25 @@ contract RulesetRegistry {
         if (msg.sender != owner) revert NotOwner();
         if (id == bytes32(0)) revert ZeroId();
         if (bytes(manifestURI).length == 0) revert EmptyURI();
-        if (_rulesets[id].addedAt != 0) revert AlreadyAdded(id);
-        if (remixedFrom != bytes32(0) && _rulesets[remixedFrom].addedAt == 0) revert UnknownRuleset(remixedFrom);
+        if (_exists(id)) revert AlreadyAdded(id);
+        if (remixedFrom != bytes32(0) && !_exists(remixedFrom)) revert UnknownRuleset(remixedFrom);
         _rulesets[id] = Ruleset(manifestURI, author, remixedFrom, uint64(block.timestamp));
         _ids.push(id);
         emit RulesetAdded(id, remixedFrom, author, manifestURI);
     }
 
     function get(bytes32 id) external view returns (Ruleset memory r) {
+        if (!_exists(id)) revert UnknownRuleset(id);
         r = _rulesets[id];
-        if (r.addedAt == 0) revert UnknownRuleset(id);
     }
 
     function isAdded(bytes32 id) external view returns (bool) {
-        return _rulesets[id].addedAt != 0;
+        return _exists(id);
+    }
+
+    /// @dev A ruleset exists once added: add() refuses an empty manifest URI, so a non-empty one marks it.
+    function _exists(bytes32 id) private view returns (bool) {
+        return bytes(_rulesets[id].manifestURI).length != 0;
     }
 
     function count() external view returns (uint256) {

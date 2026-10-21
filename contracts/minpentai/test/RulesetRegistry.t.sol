@@ -72,6 +72,11 @@ contract RulesetRegistryTest is Test {
         vm.stopPrank();
     }
 
+    function test_refusesZeroOwner() public {
+        vm.expectRevert(RulesetRegistry.ZeroOwner.selector);
+        new RulesetRegistry(address(0));
+    }
+
     function test_unknownRulesetReverts() public {
         vm.expectRevert(abi.encodeWithSelector(RulesetRegistry.UnknownRuleset.selector, SOLO_V1));
         reg.get(SOLO_V1);

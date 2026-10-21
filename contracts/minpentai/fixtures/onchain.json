@@ -1,0 +1,389 @@
+{
+  "about": "Shared TS/Solidity fixtures for Minpentai onchain v1 (spike). Built by scripts/build-minpentai-onchain-fixtures.ts; do not edit.",
+  "seedRule": "seed = keccak256(abi.encode(uint256 chainId, address matchLog, address player, uint256 n)); engineSeed = uint32(uint256(seed)) = the last 4 bytes (bytes 28..31) read big-endian",
+  "rulesetId": "0x99afca1f74da319bc2ead8c1b501833b7d15efa5022cd5b4566314068c371a6f",
+  "chainId": "31337",
+  "matchLog": "0x00000000000000000000000000000000000b10c5",
+  "seeds": [
+    {
+      "chainId": "31337",
+      "matchLog": "0x00000000000000000000000000000000000b10c5",
+      "player": "0x0000000000000000000000000000000000001001",
+      "n": "0",
+      "seed": "0xadf743fe8bb2ab1fbe75bf950b9cc50f42ac7aa71772522ff93e057e49babce0",
+      "engineSeed": 1236974816
+    },
+    {
+      "chainId": "31337",
+      "matchLog": "0x00000000000000000000000000000000000b10c5",
+      "player": "0x0000000000000000000000000000000000001001",
+      "n": "1",
+      "seed": "0xaa1ccfbe747611a778abc75e01a5d90ecad81e2ed7e3010f1cd86e2c722a8d9a",
+      "engineSeed": 1915391386
+    },
+    {
+      "chainId": "31337",
+      "matchLog": "0x00000000000000000000000000000000000b10c5",
+      "player": "0x0000000000000000000000000000000000001002",
+      "n": "0",
+      "seed": "0x1a1abf066969791f81475796f9b7ecbdba1fb06d4756b0ddd0a584e0fac059e0",
+      "engineSeed": 4206909920
+    },
+    {
+      "chainId": "31337",
+      "matchLog": "0x00000000000000000000000000000000000b10c5",
+      "player": "0x0000000000000000000000000000000000001003",
+      "n": "7",
+      "seed": "0xf1367dd72c205013416adc21717a50ab5c281e1fb7eaf45cc497ee180bfcb58a",
+      "engineSeed": 201110922
+    },
+    {
+      "chainId": "31337",
+      "matchLog": "0x00000000000000000000000000000000000b10c5",
+      "player": "0x0000000000000000000000000000000000001004",
+      "n": "4294967295",
+      "seed": "0x454c34db24b111d1da743fcb94e5fc1da2b973b1af7d3346452e51dfb8989529",
+      "engineSeed": 3097007401
+    },
+    {
+      "chainId": "31337",
+      "matchLog": "0x00000000000000000000000000000000000b10c5",
+      "player": "0x0000000000000000000000000000000000001005",
+      "n": "57896044618658097711785492504343953926634992332820282019728792003956564819968",
+      "seed": "0x93340e9f20e1c05e2d3042ee9d2bcfa5566a5af27b0de563677cff2e8a8649bb",
+      "engineSeed": 2324056507
+    },
+    {
+      "chainId": "31337",
+      "matchLog": "0x5615dEB798BB3E4dFa0139dFa1b3D433Cc23b72f",
+      "player": "0x0000000000000000000000000000000000001001",
+      "n": "0",
+      "seed": "0xb6c81b4235006e3afde972086db54864b033eeefd66218dd406d49b1db19d0fa",
+      "engineSeed": 3675902202
+    },
+    {
+      "chainId": "31337",
+      "matchLog": "0x5615dEB798BB3E4dFa0139dFa1b3D433Cc23b72f",
+      "player": "0x0000000000000000000000000000000000001001",
+      "n": "1",
+      "seed": "0x6093f7d7e75b3091a282d73774d49268d7f9eb1e44890265d11e84c8d220f3ab",
+      "engineSeed": 3525374891
+    },
+    {
+      "chainId": "31337",
+      "matchLog": "0x5615dEB798BB3E4dFa0139dFa1b3D433Cc23b72f",
+      "player": "0x0000000000000000000000000000000000001002",
+      "n": "0",
+      "seed": "0xe861bb24a716007747b050e1e2b1fda5ccdce54e1ce5ddaa088a06f2a829a439",
+      "engineSeed": 2821301305
+    },
+    {
+      "chainId": "31337",
+      "matchLog": "0x5615dEB798BB3E4dFa0139dFa1b3D433Cc23b72f",
+      "player": "0x0000000000000000000000000000000000001003",
+      "n": "7",
+      "seed": "0x56482e6e3f57413a0e3df6b736dcad96be8e4477269fd3c71de634899560dafa",
+      "engineSeed": 2506152698
+    },
+    {
+      "chainId": "31337",
+      "matchLog": "0x5615dEB798BB3E4dFa0139dFa1b3D433Cc23b72f",
+      "player": "0x0000000000000000000000000000000000001004",
+      "n": "4294967295",
+      "seed": "0x2106e79ebcf71cac84c74acf64847745305f902ffae851bee842cb72ba15c8ca",
+      "engineSeed": 3121989834
+    },
+    {
+      "chainId": "31337",
+      "matchLog": "0x5615dEB798BB3E4dFa0139dFa1b3D433Cc23b72f",
+      "player": "0x0000000000000000000000000000000000001005",
+      "n": "57896044618658097711785492504343953926634992332820282019728792003956564819968",
+      "seed": "0x46fc7b8390758bfa392e422db7be6e6f47d140b9856931ff53fdac2d7d3429b2",
+      "engineSeed": 2100570546
+    },
+    {
+      "chainId": "8453",
+      "matchLog": "0x00000000000000000000000000000000000b10c5",
+      "player": "0x0000000000000000000000000000000000001001",
+      "n": "0",
+      "seed": "0xe3bfc1e5e3310457e024e70eb039d4071dcb911af5b2b941d8c08b9a033e52d1",
+      "engineSeed": 54416081
+    },
+    {
+      "chainId": "8453",
+      "matchLog": "0x00000000000000000000000000000000000b10c5",
+      "player": "0x0000000000000000000000000000000000001001",
+      "n": "1",
+      "seed": "0x5df1b16d1d019aac2d16bb39638462f0cff122c292cc992c6a84acb57ca52faa",
+      "engineSeed": 2091200426
+    },
+    {
+      "chainId": "8453",
+      "matchLog": "0x00000000000000000000000000000000000b10c5",
+      "player": "0x0000000000000000000000000000000000001002",
+      "n": "0",
+      "seed": "0xa3aa5d14232237b7da826fcfc86ee8f011fb164e825e65b107c33621781a3351",
+      "engineSeed": 2014982993
+    },
+    {
+      "chainId": "8453",
+      "matchLog": "0x00000000000000000000000000000000000b10c5",
+      "player": "0x0000000000000000000000000000000000001003",
+      "n": "7",
+      "seed": "0x3fd28dd7929eea33b94a16bf3230d3ecd389751d4772c30175851b122fc4b359",
+      "engineSeed": 801420121
+    },
+    {
+      "chainId": "8453",
+      "matchLog": "0x00000000000000000000000000000000000b10c5",
+      "player": "0x0000000000000000000000000000000000001004",
+      "n": "4294967295",
+      "seed": "0xe9f7d6b0f97422f7e7454013903de4f918f8532de27a35e5ed416b4573be7440",
+      "engineSeed": 1941861440
+    },
+    {
+      "chainId": "8453",
+      "matchLog": "0x00000000000000000000000000000000000b10c5",
+      "player": "0x0000000000000000000000000000000000001005",
+      "n": "57896044618658097711785492504343953926634992332820282019728792003956564819968",
+      "seed": "0xe487f08d047d2e678f1fcaba302e961ef426cb6b46365e9928dd99127542264c",
+      "engineSeed": 1967269452
+    },
+    {
+      "chainId": "8453",
+      "matchLog": "0x5615dEB798BB3E4dFa0139dFa1b3D433Cc23b72f",
+      "player": "0x0000000000000000000000000000000000001001",
+      "n": "0",
+      "seed": "0x9a71087dadd1a927eff0112e6f3828ef4cf8048d8749e81612ad285703a0f672",
+      "engineSeed": 60880498
+    },
+    {
+      "chainId": "8453",
+      "matchLog": "0x5615dEB798BB3E4dFa0139dFa1b3D433Cc23b72f",
+      "player": "0x0000000000000000000000000000000000001001",
+      "n": "1",
+      "seed": "0xafe2062a8257d13f8a112f49be0d8c34bc5808f297956bee7fd1f94f6b14f557",
+      "engineSeed": 1796535639
+    },
+    {
+      "chainId": "8453",
+      "matchLog": "0x5615dEB798BB3E4dFa0139dFa1b3D433Cc23b72f",
+      "player": "0x0000000000000000000000000000000000001002",
+      "n": "0",
+      "seed": "0x8cdef90c81ca77aa6c4be368fff57bb31525a6114954f063e143ab915d7cc120",
+      "engineSeed": 1568456992
+    },
+    {
+      "chainId": "8453",
+      "matchLog": "0x5615dEB798BB3E4dFa0139dFa1b3D433Cc23b72f",
+      "player": "0x0000000000000000000000000000000000001003",
+      "n": "7",
+      "seed": "0x3f310ea24103080e5b6a25abd294855e17208c3555ba823220a7acb0be5288cf",
+      "engineSeed": 3193080015
+    },
+    {
+      "chainId": "8453",
+      "matchLog": "0x5615dEB798BB3E4dFa0139dFa1b3D433Cc23b72f",
+      "player": "0x0000000000000000000000000000000000001004",
+      "n": "4294967295",
+      "seed": "0x147320747a0714efec0ecda0e7d953efa9014cf5af1fcd92390742eba65cb084",
+      "engineSeed": 2791092356
+    },
+    {
+      "chainId": "8453",
+      "matchLog": "0x5615dEB798BB3E4dFa0139dFa1b3D433Cc23b72f",
+      "player": "0x0000000000000000000000000000000000001005",
+      "n": "57896044618658097711785492504343953926634992332820282019728792003956564819968",
+      "seed": "0x8b2da6142f310d0947b797ea1453308cc974dce90509d6f0f720268ef95a3ffa",
+      "engineSeed": 4183441402
+    },
+    {
+      "chainId": "84532",
+      "matchLog": "0x00000000000000000000000000000000000b10c5",
+      "player": "0x0000000000000000000000000000000000001001",
+      "n": "0",
+      "seed": "0xa97772f3818d65dcf514b9e2fdda7ec00af6a59a116c0bd05ca0aa70a2c1506f",
+      "engineSeed": 2730578031
+    },
+    {
+      "chainId": "84532",
+      "matchLog": "0x00000000000000000000000000000000000b10c5",
+      "player": "0x0000000000000000000000000000000000001001",
+      "n": "1",
+      "seed": "0xfe7bff9482fdb1fe84fb648d7fa62902eb24321b95eea6d532e72a93fde61a98",
+      "engineSeed": 4259715736
+    },
+    {
+      "chainId": "84532",
+      "matchLog": "0x00000000000000000000000000000000000b10c5",
+      "player": "0x0000000000000000000000000000000000001002",
+      "n": "0",
+      "seed": "0x3354879ae6fb2796ba207beab4ccb0eaae8e0cd1de48bccaa0421ec8ce1b1f1b",
+      "engineSeed": 3457883931
+    },
+    {
+      "chainId": "84532",
+      "matchLog": "0x00000000000000000000000000000000000b10c5",
+      "player": "0x0000000000000000000000000000000000001003",
+      "n": "7",
+      "seed": "0x495537765abca17f1a9b2f44ea0b260d377ff78b1e4b84a387560267c2d914eb",
+      "engineSeed": 3269006571
+    },
+    {
+      "chainId": "84532",
+      "matchLog": "0x00000000000000000000000000000000000b10c5",
+      "player": "0x0000000000000000000000000000000000001004",
+      "n": "4294967295",
+      "seed": "0xaa3ebc9540bc9280523a0e31a692e32636bfce2636430d516104073820834ddb",
+      "engineSeed": 545476059
+    },
+    {
+      "chainId": "84532",
+      "matchLog": "0x00000000000000000000000000000000000b10c5",
+      "player": "0x0000000000000000000000000000000000001005",
+      "n": "57896044618658097711785492504343953926634992332820282019728792003956564819968",
+      "seed": "0x4b6671f7de30baea8d03bffaf3dc5420498ae0cef3448f6d2d615e588bcdb7c8",
+      "engineSeed": 2345514952
+    },
+    {
+      "chainId": "84532",
+      "matchLog": "0x5615dEB798BB3E4dFa0139dFa1b3D433Cc23b72f",
+      "player": "0x0000000000000000000000000000000000001001",
+      "n": "0",
+      "seed": "0x905dba10493da3bbd41fc876ec8ac1f655f97d37a2681d5f3d4136c0f4682952",
+      "engineSeed": 4100467026
+    },
+    {
+      "chainId": "84532",
+      "matchLog": "0x5615dEB798BB3E4dFa0139dFa1b3D433Cc23b72f",
+      "player": "0x0000000000000000000000000000000000001001",
+      "n": "1",
+      "seed": "0xe4951c39068d06cdbabb58a5cd93f3708d6ebfaee458d6546f830b35624473fe",
+      "engineSeed": 1648653310
+    },
+    {
+      "chainId": "84532",
+      "matchLog": "0x5615dEB798BB3E4dFa0139dFa1b3D433Cc23b72f",
+      "player": "0x0000000000000000000000000000000000001002",
+      "n": "0",
+      "seed": "0x27fc909a43eed8cc114cc41a87207d5038ac7d929557d0807f94423177674946",
+      "engineSeed": 2003257670
+    },
+    {
+      "chainId": "84532",
+      "matchLog": "0x5615dEB798BB3E4dFa0139dFa1b3D433Cc23b72f",
+      "player": "0x0000000000000000000000000000000000001003",
+      "n": "7",
+      "seed": "0x6f9fdae3bad149b7778fa561fc3bb1e35e2833515cabb7eb269a27c8c2b5dc55",
+      "engineSeed": 3266698325
+    },
+    {
+      "chainId": "84532",
+      "matchLog": "0x5615dEB798BB3E4dFa0139dFa1b3D433Cc23b72f",
+      "player": "0x0000000000000000000000000000000000001004",
+      "n": "4294967295",
+      "seed": "0x621281e790a570960ab3c1cdd353df79bf13a40537829e439bbf237c1d907fee",
+      "engineSeed": 496009198
+    },
+    {
+      "chainId": "84532",
+      "matchLog": "0x5615dEB798BB3E4dFa0139dFa1b3D433Cc23b72f",
+      "player": "0x0000000000000000000000000000000000001005",
+      "n": "57896044618658097711785492504343953926634992332820282019728792003956564819968",
+      "seed": "0xb0dec62a311f5b01eb235fcacc3972978f64e2a7beca8b3b4d1d2ecdb903d56f",
+      "engineSeed": 3104036207
+    }
+  ],
+  "engine": [
+    {
+      "seed": "0x1111111111111111111111111111111111111111111111111111111100000000",
+      "engineSeed": 0
+    },
+    {
+      "seed": "0x3636363636363636363636363636363636363636363636363636363600000001",
+      "engineSeed": 1
+    },
+    {
+      "seed": "0x5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b000f423f",
+      "engineSeed": 999999
+    },
+    {
+      "seed": "0x80808080808080808080808080808080808080808080808080808080000f4240",
+      "engineSeed": 1000000
+    },
+    {
+      "seed": "0xa5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a57fffffff",
+      "engineSeed": 2147483647
+    },
+    {
+      "seed": "0xcacacacacacacacacacacacacacacacacacacacacacacacacacacaca80000000",
+      "engineSeed": 2147483648
+    },
+    {
+      "seed": "0xefefefefefefefefefefefefefefefefefefefefefefefefefefefefffffffff",
+      "engineSeed": 4294967295
+    }
+  ],
+  "matches": [
+    {
+      "label": "short n=0",
+      "player": "0x0000000000000000000000000000000000001064",
+      "n": 0,
+      "data": "0x0299afca1f74da319bc2ead8c1b501833b7d15efa5022cd5b4566314068c371a6f0000000026e61f7d0e6830b7e4ae4ebc973d55a5a667442d4342b7ec30379433e77e05e7000000010000041f01585a80ec10",
+      "hash": "0x4896b17827f08f3cb3572acad29f9f9434208dbcdc82aebeccb30d4095f99dfb",
+      "length": 83,
+      "level": 0,
+      "claim": "loss"
+    },
+    {
+      "label": "short n=1",
+      "player": "0x0000000000000000000000000000000000001064",
+      "n": 1,
+      "data": "0x0299afca1f74da319bc2ead8c1b501833b7d15efa5022cd5b4566314068c371a6f000000013b9aaaa620662676a1e78bf4852fa6346610d62ba541bdf74a5302eb5c66d4ba000000010000041f01585a80ec10",
+      "hash": "0x0d882d1afd67c7438d45bcd7143cb9ed7c1bcb95f7cccb4338c9aa0f02472124",
+      "length": 83,
+      "level": 0,
+      "claim": "loss"
+    },
+    {
+      "label": "median n=0",
+      "player": "0x0000000000000000000000000000000000001065",
+      "n": 0,
+      "data": "0x0299afca1f74da319bc2ead8c1b501833b7d15efa5022cd5b4566314068c371a6f0000000057051c2f94a4fba304ac8081ef0cf473bffe910c4e0c620dcb051a96c76503e30000000124030288201e10035c203c1031100403108b1078043d100e0318f0c7c05613119e0cf46b806993ac9d8308a880458c",
+      "hash": "0x5cf3fc3b0043e6b3fcf21cbae5acbd3c5eb87cfc47e52e993046a2fc737967e2",
+      "length": 120,
+      "level": 0,
+      "claim": "loss"
+    },
+    {
+      "label": "median n=1",
+      "player": "0x0000000000000000000000000000000000001065",
+      "n": 1,
+      "data": "0x0299afca1f74da319bc2ead8c1b501833b7d15efa5022cd5b4566314068c371a6f0000000192c0916fdc32361fcfa8c7209917ec1ed95132c562cc7c2b6af0527cd42c7082000300001402035c032f108a10034c1078104d010a2b097891429835c4b285d82f03893c50c0",
+      "hash": "0x121373f0239324748c305d2d003757c46057fa6f8797e67b5b3f10bfece7038d",
+      "length": 107,
+      "level": 3,
+      "claim": "loss"
+    },
+    {
+      "label": "long n=0",
+      "player": "0x0000000000000000000000000000000000001066",
+      "n": 0,
+      "data": "0x0299afca1f74da319bc2ead8c1b501833b7d15efa5022cd5b4566314068c371a6f0000000049f86c8de3f775abbf3e4c711edbecff2539e73739cbfc71e85e7b282b385e3b00030000600c023d035c20036d1002204f100200017a10033d0179104010024b203004032e103f203e10025d044203021f046a200332108c015a1002880314060422104c1060048b10027d037c102400381941022451528b046ca4432429514ac260a3929f0cfc0849452a3052c09e3542ad0d700baa6453311b46dc7752bb05e5ef437c141a61091140",
+      "hash": "0xac1ed7588847e8e0da2dfd0db57cca1a1e5ea81a7e87055e874e291abdb738e5",
+      "length": 207,
+      "level": 3,
+      "claim": "loss"
+    },
+    {
+      "label": "long n=1",
+      "player": "0x0000000000000000000000000000000000001066",
+      "n": 1,
+      "data": "0x0299afca1f74da319bc2ead8c1b501833b7d15efa5022cd5b4566314068c371a6f0000000193f003586bab48347cb82ef7cde499b124f5060c9bc60a0f18abd10b9801df770003000060080269208a04025d208b20026c035a20042f1070026f107a10058d1061034e105d103010028a207020044d046b103e107e10045e2079108e1089101e1b29214a8a5612d2978cc066653409c94f0a7a13e19f9508a9654e2a785746bc06b1b789d4aec1791bd0a2811608d1c70c",
+      "hash": "0xa56f0a72e20e575f09f6aa0b6e89ba2b7329be900732b5d52484ee0141c0382d",
+      "length": 183,
+      "level": 3,
+      "claim": "loss"
+    }
+  ]
+}
