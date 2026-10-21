@@ -5,6 +5,7 @@
  *   drawView   -> Component.drawView (657–669): what one player sees, under each player cam
  *   drawFlat   -> drawView without the sight clip: the whole field from above, used only when
  *                 WebGL is missing (Design's note asks for "the flat match view" there)
+ *   drawPiece  -> one tower, glider or square, as drawBoard draws it; Play draws its pieces with it too (2026-10-21)
  * Added by this build: the keyboard cursor (a dashed outline on the square the arrow keys reach).
  */
 import { COL, SYM, TOWERS, W, WORLD, towerUp, type Sim } from '~/lib/minpentai/learn-game/broadcast';
@@ -47,7 +48,6 @@ export function drawBoard(c: HTMLCanvasElement | null, L: LState, cellsOn: boole
     g.setLineDash([]);
   }
   const sub = cp / 4.6, cell = (cx: number, cy: number, col: string) => { g.fillStyle = col; g.fillRect(cx - sub * .45, cy - sub * .45, sub * .9, sub * .9); };
-  const x0 = (v: number) => v * cp + 8;
   for (const q of s.pieces) {
     if (q.k !== 'rock' && q.p !== 0 && !seen(q.x, q.y) && !(d.practice && q.k === 'tower' && s.turn === 0)) continue;
     if (q.k === 'rock') { g.fillStyle = '#4B4C55'; g.fillRect(q.x * cp + 4, q.y * cp + 4, cp - 8, cp - 8); continue; }
@@ -57,32 +57,13 @@ export function drawBoard(c: HTMLCanvasElement | null, L: LState, cellsOn: boole
       g.globalAlpha = 1;
       const nn = Math.hypot(q.dx, q.dy) || 1, fx = q.dx / nn, fy = q.dy / nn, sx = -fy, sy = fx;
       if (cellsOn) { [[1, 0], [2, 0], [0, 1], [3, 1]].forEach(([a, r]) => { const A = (a - 1.5) * sub, B = (.5 - r) * sub; cell(cx + sx * A + fx * B, cy + sy * A + fy * B, col); }); }
-      else {
-        g.fillStyle = col; g.beginPath();
-        g.moveTo(cx + fx * cp * .36, cy + fy * cp * .36);
-        g.lineTo(cx - fx * cp * .26 + sx * cp * .28, cy - fy * cp * .26 + sy * cp * .28);
-        g.lineTo(cx - fx * cp * .12, cy - fy * cp * .12);
-        g.lineTo(cx - fx * cp * .26 - sx * cp * .28, cy - fy * cp * .26 - sy * cp * .28);
-        g.closePath(); g.fill();
-      }
+      else drawPiece(g, 'glider', cx, cy, cp, col, { dx: q.dx, dy: q.dy });
     } else if (q.k === 'tower') {
       if (cellsOn) { [[0, 0], [1, 1], [2, 1], [1, 2]].forEach(([a, b]) => cell(cx + (a - 1) * sub, cy + (b - 1) * sub, col)); }
-      else {
-        g.fillStyle = col; g.beginPath(); g.arc(cx, cy, cp * .36, 0, 6.283); g.fill();
-        g.fillStyle = '#0E0F13'; g.beginPath(); g.arc(cx, cy, cp * .17, 0, 6.283); g.fill();
-        g.fillStyle = col; g.fillRect(cx - cp * .06, cy - cp * .06, cp * .12, cp * .12);
-      }
+      else drawPiece(g, 'tower', cx, cy, cp, col);
     } else if (q.k === 'square') {
       if (cellsOn) { [[-.5, -.5], [.5, -.5], [-.5, .5], [.5, .5]].forEach(([a, b]) => cell(cx + a * sub, cy + b * sub, col)); }
-      else {
-        g.globalAlpha = .45; g.fillStyle = col; g.fillRect(x0(q.x), x0(q.y), cp - 16, cp - 16); g.globalAlpha = 1;
-        g.strokeStyle = col; g.lineWidth = 2.5; g.strokeRect(x0(q.x), x0(q.y), cp - 16, cp - 16);
-        if (q.hp === 1) {
-          g.strokeStyle = '#E7E4DD'; g.lineWidth = 2; g.beginPath();
-          g.moveTo(x0(q.x) + 6, x0(q.y) + 4); g.lineTo(x0(q.x) + 16, x0(q.y) + 16); g.lineTo(x0(q.x) + 11, x0(q.y) + 22); g.lineTo(x0(q.x) + cp - 22, x0(q.y) + cp - 18);
-          g.stroke();
-        }
-      }
+      else drawPiece(g, 'square', cx, cy, cp, col, { hp: q.hp });
     }
   }
   if (fr) {
@@ -103,6 +84,45 @@ export function drawBoard(c: HTMLCanvasElement | null, L: LState, cellsOn: boole
     g.setLineDash([]);
   }
   return true;
+}
+
+/** Learn's square, one board square across in Design's lesson board (780 / 15). */
+const UNIT = 52;
+export type PieceKind = 'tower' | 'glider' | 'square';
+/**
+ * One piece as Learn draws it (Design's drawBoard, script lines 825–846), centred at (cx, cy) on a square cp
+ * pixels across: a tower is a ring with a dot, a glider an arrowhead pointing where it flies (dx, dy), a square a
+ * tinted square with a crack once hit (hp 1). Learn's lesson board and Play's board (play-board.tsx, owner,
+ * 2026-10-21: "Play uses Learn's shapes") both draw with it. Drawn in Learn's 52-unit square, scaled to cp.
+ */
+export function drawPiece(g: CanvasRenderingContext2D, k: PieceKind, cx: number, cy: number, cp: number, col: string, o: { dx?: number; dy?: number; hp?: number } = {}) {
+  g.save();
+  g.translate(cx, cy);
+  if (cp !== UNIT) g.scale(cp / UNIT, cp / UNIT);
+  const u = UNIT;
+  if (k === 'glider') {
+    const dx = o.dx ?? 1, dy = o.dy ?? 0, nn = Math.hypot(dx, dy) || 1, fx = dx / nn, fy = dy / nn, sx = -fy, sy = fx;
+    g.fillStyle = col; g.beginPath();
+    g.moveTo(fx * u * .36, fy * u * .36);
+    g.lineTo(-fx * u * .26 + sx * u * .28, -fy * u * .26 + sy * u * .28);
+    g.lineTo(-fx * u * .12, -fy * u * .12);
+    g.lineTo(-fx * u * .26 - sx * u * .28, -fy * u * .26 - sy * u * .28);
+    g.closePath(); g.fill();
+  } else if (k === 'tower') {
+    g.fillStyle = col; g.beginPath(); g.arc(0, 0, u * .36, 0, 6.283); g.fill();
+    g.fillStyle = '#0E0F13'; g.beginPath(); g.arc(0, 0, u * .17, 0, 6.283); g.fill();
+    g.fillStyle = col; g.fillRect(-u * .06, -u * .06, u * .12, u * .12);
+  } else {
+    const x0 = -u / 2 + 8;
+    g.globalAlpha = .45; g.fillStyle = col; g.fillRect(x0, x0, u - 16, u - 16); g.globalAlpha = 1;
+    g.strokeStyle = col; g.lineWidth = 2.5; g.strokeRect(x0, x0, u - 16, u - 16);
+    if (o.hp === 1) {
+      g.strokeStyle = '#E7E4DD'; g.lineWidth = 2; g.beginPath();
+      g.moveTo(x0 + 6, x0 + 4); g.lineTo(x0 + 16, x0 + 16); g.lineTo(x0 + 11, x0 + 22); g.lineTo(x0 + u - 22, x0 + u - 18);
+      g.stroke();
+    }
+  }
+  g.restore();
 }
 
 /** What player p sees: the field clipped to circles of 7 cells round their standing towers. */
