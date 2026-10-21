@@ -46,6 +46,7 @@
     "test:glossary": "tsx scripts/test-glossary.ts",
     "test:minpentai-share": "tsx scripts/test-minpentai-share.ts",
     "test:minpentai-play": "tsx scripts/test-minpentai-play.ts",
+    "test:minpentai-kit": "tsx scripts/build-minpentai-kit.ts --check",
     "test:minpentai-ladder": "tsx scripts/test-minpentai-ladder.ts",
     "test:minpentai-play-server": "tsx --conditions=react-server scripts/test-minpentai-play-server.ts",
     "test:minpentai-players": "tsx scripts/test-minpentai-players.ts",

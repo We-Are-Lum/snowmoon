@@ -149,7 +149,7 @@ export function Play({ start, onLearn }: { start: 'home' | 'free' | 'ladder' | '
                 <span className="mp-card-text">One-on-one with another signed-in player.</span>
               </button>
               <div className="mp-grow" />
-              <p className="mp-label mp-note">RULES INVENTED FOR THIS EDITION · <Link href="/minpentai/rules">THE RULES PAGE →</Link></p>
+              <p className="mp-label mp-note">RULES INVENTED FOR THIS EDITION · <Link href="/minpentai/rules">THE RULES PAGE →</Link> · <Link href="/minpentai/build">BUILD ON IT →</Link></p>
             </div>
           )}
           {v.tLearn && (

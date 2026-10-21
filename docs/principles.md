@@ -521,6 +521,16 @@ once the owner picks a version.)
   `test:render` also checks that Reset returns to the source's value from
   anywhere and that the island neither stores nor sends; `check:ui` moves each
   slider and resets it in a browser with no request made.
+- `P8g`: the Minpentai build-on kit's rules table (`src/lib/minpentai/kit-rules.ts`,
+  served as `/minpentai/build` and `public/minpentai/rules.json`, DRAFT 2026-10-20):
+  every rule from the book cites blocks that exist and are Minpentai passages,
+  and every quote is word for word in its block; every invented rule names a
+  place in the code that is in its file; the passages are 152; `rules.json`
+  matches the table; the page is labelled Book, Invented and Draft, says it is
+  not affiliated with the author, shows every passage of chapters 2–14, and
+  keeps chapters 15 on in a Spoilers section closed by default (owner,
+  2026-10-20). `npm run test:minpentai-kit` checks the same and that the
+  generated files are current. The proof changes one quoted word, shows a chapter 15 passage and opens Spoilers.
 - `npm run check:ingest`: the committed text, screens and figures re-parse
   byte-identical from the fetched source. `npm run test:render`: template cases.
 - Review: do generated images that depict boards, maps or screens (for example

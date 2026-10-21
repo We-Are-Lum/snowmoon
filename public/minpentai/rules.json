@@ -1,0 +1,3353 @@
+{
+  "about": "Minpentai in this edition: every rule, marked from the book (with the block and its words) or invented for this edition (with where it is in the code), and whether the site follows it. The 152 passages are listed by block id; their words are in the book (content/snowmoon/text, or /chapter/N#cN-bM).",
+  "status": "DRAFT. Written by the coding agent (Anthropic's Claude, a closed model) from the book and the code, for the owner to rewrite or approve. The quotes are the book's words, unchanged. Rules invented for this edition · not affiliated with the author.",
+  "generatedBy": "scripts/build-minpentai-kit.ts from src/lib/minpentai/kit-rules.ts",
+  "page": "/minpentai/build",
+  "docs": "docs/minpentai/",
+  "site": {
+    "play": "Practice, the computer ladder, free play and one-on-one: src/lib/minpentai/play-game/game.ts",
+    "learn": "The lessons: src/lib/minpentai/learn-game/ (Design's v3; the rules page says Play's rules replace it)",
+    "rulePage": "/minpentai/rule, the rule recovered from the book's figure: src/lib/minpentai/engine.ts"
+  },
+  "counts": {
+    "book": 53,
+    "invented": 24,
+    "site": {
+      "yes": 39,
+      "partly": 19,
+      "no": 19
+    },
+    "passages": 152,
+    "passagesShown": 127
+  },
+  "config": {
+    "board": {
+      "width": 15,
+      "height": 10
+    },
+    "steps": 96,
+    "turnEvery": 12,
+    "pointsPerTurn": 8,
+    "costs": {
+      "glider": 4,
+      "square": 1,
+      "tower": 4
+    },
+    "sight": 3,
+    "squareHits": 2,
+    "towersAtStart": 2,
+    "rocks": [
+      [
+        6,
+        0
+      ],
+      [
+        9,
+        3
+      ],
+      [
+        7,
+        4
+      ],
+      [
+        7,
+        5
+      ],
+      [
+        5,
+        6
+      ],
+      [
+        8,
+        9
+      ]
+    ],
+    "oneOnOneSeconds": {
+      "setup": 90,
+      "turn": 45
+    },
+    "drawnRules": {
+      "diag": "Gliders may also fly diagonally.",
+      "cost3": "Gliders cost 3 points.",
+      "sight2": "You see only 2 squares around your towers.",
+      "every8": "Turns to act come every 8 steps."
+    }
+  },
+  "rules": [
+    {
+      "id": "square-grid",
+      "area": "board",
+      "rule": "The game is played on a grid of squares; a hex grid is announced as a rule change.",
+      "source": "book",
+      "how": "implied",
+      "cites": [
+        {
+          "block": "c12-b147",
+          "quote": "Today, Minpentai will be played on a hex grid."
+        },
+        {
+          "block": "c4-b94",
+          "quote": "put down squares"
+        },
+        {
+          "block": "c14-b36",
+          "quote": "intervene in only a few cells"
+        }
+      ],
+      "code": [
+        {
+          "file": "src/lib/minpentai/play-game/game.ts",
+          "find": "export const W = 15;"
+        },
+        {
+          "file": "src/lib/minpentai/engine.ts",
+          "find": "export const WIDTH = 48;"
+        }
+      ],
+      "site": "yes",
+      "siteNote": "Every board on the site is a grid of squares."
+    },
+    {
+      "id": "cell-rule",
+      "area": "board",
+      "rule": "The board is cells that change by a rule; one variant is \"rotate one eighty if three\", animated in the figure c4-b5.",
+      "source": "book",
+      "how": "stated",
+      "cites": [
+        {
+          "block": "c4-b7",
+          "quote": "We were playing with the 'rotate one eighty if three' rule."
+        },
+        {
+          "block": "c4-b5"
+        }
+      ],
+      "code": [
+        {
+          "file": "src/lib/minpentai/engine.ts",
+          "find": "export function blockRule"
+        }
+      ],
+      "site": "partly",
+      "siteNote": "The book's rule page runs the rule recovered from c4-b5. Play and Learn use pieces instead of cells (invented); Learn's Under the hood shows the cell rule."
+    },
+    {
+      "id": "reversible",
+      "area": "board",
+      "rule": "The rules are time-reversible: anything that can be created can be destroyed.",
+      "source": "book",
+      "how": "stated",
+      "cites": [
+        {
+          "block": "c4-b9",
+          "quote": "Well, remember, the rules are time-reversible."
+        },
+        {
+          "block": "c4-b13",
+          "quote": "Anything that can be created can be destroyed."
+        }
+      ],
+      "code": [
+        {
+          "file": "src/lib/minpentai/engine.ts",
+          "find": "export function stepBack"
+        }
+      ],
+      "site": "partly",
+      "siteNote": "The book's rule page steps back exactly. Play is not reversible: broken pieces are gone, and rocks never break."
+    },
+    {
+      "id": "no-wrapper",
+      "area": "board",
+      "rule": "The rule loses no information (unlike a hash, it has no truncate-and-xor step).",
+      "source": "book",
+      "how": "stated",
+      "cites": [
+        {
+          "block": "c12-b163",
+          "quote": "But unlike the hash function, here there was no truncate-and-xor wrapper at the end."
+        }
+      ],
+      "code": [
+        {
+          "file": "src/lib/minpentai/engine.ts",
+          "find": "export function blockRule"
+        }
+      ],
+      "site": "partly",
+      "siteNote": "The book's rule page: each step is one-to-one. Play: no."
+    },
+    {
+      "id": "mass-conserved",
+      "area": "board",
+      "rule": "Live cells are conserved; only the shrines of one match break this.",
+      "source": "book",
+      "how": "stated",
+      "cites": [
+        {
+          "block": "c14-b35",
+          "quote": "The shrines are the only objects that violate mass conservation"
+        }
+      ],
+      "code": [
+        {
+          "file": "src/lib/minpentai/engine.ts",
+          "find": "export function liveCount"
+        }
+      ],
+      "site": "partly",
+      "siteNote": "The book's rule page conserves live cells. Play adds pieces on turns to act and removes broken ones."
+    },
+    {
+      "id": "edges",
+      "area": "board",
+      "rule": "The board has edges and corners.",
+      "source": "book",
+      "how": "stated",
+      "cites": [
+        {
+          "block": "c4-b113",
+          "quote": "along the edge"
+        },
+        {
+          "block": "c7-b81",
+          "quote": "the southeast corner"
+        }
+      ],
+      "code": [
+        {
+          "file": "src/lib/minpentai/play-game/game.ts",
+          "find": "export const inb"
+        }
+      ],
+      "site": "yes",
+      "siteNote": "Play's board has edges and corners. (The book's rule page wraps; see the invented rows.)"
+    },
+    {
+      "id": "turn-is-update",
+      "area": "board",
+      "rule": "One turn is one update of the whole board.",
+      "source": "book",
+      "how": "implied",
+      "cites": [
+        {
+          "block": "c4-b126",
+          "quote": "Sixty turns until the next intervention turn."
+        },
+        {
+          "block": "c14-b94",
+          "quote": "Ten thousand two hundred turns into the game"
+        }
+      ],
+      "code": [
+        {
+          "file": "src/lib/minpentai/play-game/game.ts",
+          "find": "export function step(w: World)"
+        }
+      ],
+      "site": "yes",
+      "siteNote": "Play counts steps; each step moves every glider once."
+    },
+    {
+      "id": "hex-rule",
+      "area": "board",
+      "rule": "Hex grid: each step the board splits into triangles; a triangle with one filled hex rotates clockwise, with two counterclockwise; the tiling shifts after each step.",
+      "source": "book",
+      "how": "stated",
+      "cites": [
+        {
+          "block": "c12-b169",
+          "quote": "During each step, the game board split up into triangles, and the hexagons rotated inside each triangle - clockwise if it had one hex filled, counterclockwise if it had two hexes filled."
+        },
+        {
+          "block": "c12-b170",
+          "quote": "after each time step, the split into triangles shifted"
+        }
+      ],
+      "code": [],
+      "site": "no",
+      "siteNote": "No hex board on the site."
+    },
+    {
+      "id": "hex-gliders",
+      "area": "board",
+      "rule": "On the hex grid the fastest gliders move east, and no vertical glider was found.",
+      "source": "book",
+      "how": "stated",
+      "cites": [
+        {
+          "block": "c12-b152",
+          "quote": "the gliders that moved the fastest moved ... directly east"
+        },
+        {
+          "block": "c12-b192",
+          "quote": "Neither player had managed to figure out any gliders that move vertically"
+        }
+      ],
+      "code": [],
+      "site": "no",
+      "siteNote": "No hex board on the site."
+    },
+    {
+      "id": "debris",
+      "area": "board",
+      "rule": "Collisions leave debris, and the board grows more disordered.",
+      "source": "book",
+      "how": "stated",
+      "cites": [
+        {
+          "block": "c4-b140",
+          "quote": "most of the game field had become a high-entropy wasteland"
+        },
+        {
+          "block": "c14-b79",
+          "quote": "More and more debris."
+        }
+      ],
+      "code": [],
+      "site": "no",
+      "siteNote": "Play: broken pieces leave nothing. Learn's broadcast draws debris that gliders fly through."
+    },
+    {
+      "id": "play-board-size",
+      "area": "board",
+      "rule": "The board is 15 × 10 squares.",
+      "source": "invented",
+      "cites": [],
+      "code": [
+        {
+          "file": "src/lib/minpentai/play-game/game.ts",
+          "find": "export const W = 15;"
+        },
+        {
+          "file": "src/lib/minpentai/play-game/game.ts",
+          "find": "export const H = 10;"
+        }
+      ],
+      "site": "yes",
+      "siteNote": "Play and Learn."
+    },
+    {
+      "id": "play-start",
+      "area": "board",
+      "rule": "Each player starts with 2 towers near their own side; the six rocks and the towers are mirrored, so both start even.",
+      "source": "invented",
+      "cites": [
+        {
+          "block": "c4-b94",
+          "quote": "He drew a few copies of his symbol in the bottom right corner of the board, where he was allowed to put down squares during the initiation phase."
+        }
+      ],
+      "code": [
+        {
+          "file": "src/lib/minpentai/play-game/game.ts",
+          "find": "export const ROCKS"
+        },
+        {
+          "file": "src/lib/minpentai/play-game/game.ts",
+          "find": "export function world"
+        }
+      ],
+      "site": "yes",
+      "siteNote": "Play. In the book, players draw their own symbols in a home corner at setup."
+    },
+    {
+      "id": "play-edges-bounce",
+      "area": "board",
+      "rule": "A glider that would leave the board turns back on that side and waits a step.",
+      "source": "invented",
+      "cites": [],
+      "code": [
+        {
+          "file": "src/lib/minpentai/play-game/game.ts",
+          "find": "if (bx) g.dx = -g.dx;"
+        }
+      ],
+      "site": "yes",
+      "siteNote": "Play and Learn."
+    },
+    {
+      "id": "play-no-debris",
+      "area": "board",
+      "rule": "Broken pieces leave nothing behind.",
+      "source": "invented",
+      "cites": [
+        {
+          "block": "c4-b140",
+          "quote": "a high-entropy wasteland"
+        }
+      ],
+      "code": [
+        {
+          "file": "src/lib/minpentai/play-game/game.ts",
+          "find": "w.gl = gl.filter((g) => !g.dead);"
+        }
+      ],
+      "site": "yes",
+      "siteNote": "Play and Learn."
+    },
+    {
+      "id": "rule-page-board",
+      "area": "board",
+      "rule": "The book's rule page runs on a 48 × 32 board that wraps on all edges; a block holding a rock is left unchanged; the board beyond the figure's right edge is a reconstruction that replays all 120 frames.",
+      "source": "invented",
+      "cites": [],
+      "code": [
+        {
+          "file": "src/lib/minpentai/engine.ts",
+          "find": "Board size 48 × 32, wrapping on all edges."
+        },
+        {
+          "file": "src/lib/minpentai/presets.ts",
+          "find": "export const C4B5_HIDDEN_SIDE"
+        }
+      ],
+      "site": "yes",
+      "siteNote": "The book's rule page."
+    },
+    {
+      "id": "moving-structures",
+      "area": "pieces",
+      "rule": "Moving structures: gliders, and spaceships (large, slow gliders); a \"moving wall\" is a large glider at half speed.",
+      "source": "book",
+      "how": "stated",
+      "cites": [
+        {
+          "block": "c4-b108",
+          "quote": "Spaceships flew out, acting as large slow-moving gliders"
+        },
+        {
+          "block": "c4-b111",
+          "quote": "a sort of large glider that flew half as fast"
+        }
+      ],
+      "code": [
+        {
+          "file": "src/lib/minpentai/play-game/game.ts",
+          "find": "export interface Glider"
+        }
+      ],
+      "site": "partly",
+      "siteNote": "Play has gliders only; no spaceships or moving walls."
+    },
+    {
+      "id": "static-structures",
+      "area": "pieces",
+      "rule": "Static structures: walls, rocks and glider factories.",
+      "source": "book",
+      "how": "stated",
+      "cites": [
+        {
+          "block": "c4-b84",
+          "quote": "Walls, gliders, rocks, techniques for extracting usable negentropy from rocks, sideways attacks."
+        },
+        {
+          "block": "c14-b38",
+          "quote": "an eternal glider factory"
+        }
+      ],
+      "code": [
+        {
+          "file": "src/lib/minpentai/play-game/game.ts",
+          "find": "export interface Square"
+        }
+      ],
+      "site": "partly",
+      "siteNote": "Play has squares (walls) and rocks; no factories."
+    },
+    {
+      "id": "rocks-resource",
+      "area": "pieces",
+      "rule": "Rock formations are a resource: gliders hitting them make more gliders and build structures.",
+      "source": "book",
+      "how": "stated",
+      "cites": [
+        {
+          "block": "c4-b108",
+          "quote": "Gliders flew out, interacted with rock formations, and created more gliders."
+        },
+        {
+          "block": "c7-b107",
+          "quote": "constructed in real time out of nearby rock formations by gliders"
+        }
+      ],
+      "code": [],
+      "site": "no",
+      "siteNote": "Play: rocks only send gliders back. The rules page marks this OPEN."
+    },
+    {
+      "id": "no-owner",
+      "area": "pieces",
+      "rule": "Cells have no owner: a stray glider can wreck its own side's structures.",
+      "source": "book",
+      "how": "implied",
+      "cites": [
+        {
+          "block": "c4-b109",
+          "quote": "A few stray gliders from Bai accidentally flew into Zei's territory, and wrecked one of his factories."
+        },
+        {
+          "block": "c4-b109",
+          "quote": "began to fly back toward his own base"
+        }
+      ],
+      "code": [
+        {
+          "file": "src/lib/minpentai/play-game/game.ts",
+          "find": "if (s.hp > 1)"
+        }
+      ],
+      "site": "partly",
+      "siteNote": "Play: any glider cracks any square, its own side's included; but a glider bounces off its own side's tower, and a side's gliders pass through each other."
+    },
+    {
+      "id": "play-tower",
+      "area": "pieces",
+      "rule": "A symbol is drawn as a tower: one square that is a player's score, sight and place to build. Its shape is invented.",
+      "source": "invented",
+      "cites": [
+        {
+          "block": "c4-b93",
+          "quote": "a pattern of dots"
+        }
+      ],
+      "code": [
+        {
+          "file": "src/lib/minpentai/play-game/game.ts",
+          "find": "tw: Record<number, Side>;"
+        }
+      ],
+      "site": "yes",
+      "siteNote": "Play and Learn."
+    },
+    {
+      "id": "play-glider",
+      "area": "pieces",
+      "rule": "A glider moves one square per step in a straight line, up, down, left or right (diagonals only under one drawn rule), and never stops.",
+      "source": "invented",
+      "cites": [],
+      "code": [
+        {
+          "file": "src/lib/minpentai/play-game/game.ts",
+          "find": "export const D4"
+        }
+      ],
+      "site": "yes",
+      "siteNote": "Play and Learn."
+    },
+    {
+      "id": "play-square",
+      "area": "pieces",
+      "rule": "A square sends a glider back; the first hit cracks it, the second breaks it and the glider.",
+      "source": "invented",
+      "cites": [
+        {
+          "block": "c4-b9",
+          "quote": "any wall that can be created in some way can be destroyed in some way"
+        }
+      ],
+      "code": [
+        {
+          "file": "src/lib/minpentai/play-game/game.ts",
+          "find": "else if (p.t === 's') w.sq[k] = { o: p.o, hp: 2 };"
+        }
+      ],
+      "site": "yes",
+      "siteNote": "Play and Learn."
+    },
+    {
+      "id": "play-rock",
+      "area": "pieces",
+      "rule": "A rock is fixed, sends every glider straight back, and never breaks.",
+      "source": "invented",
+      "cites": [],
+      "code": [
+        {
+          "file": "src/lib/minpentai/play-game/game.ts",
+          "find": "if (w.rock[k]) { g.dx = -g.dx; g.dy = -g.dy; continue; }"
+        }
+      ],
+      "site": "yes",
+      "siteNote": "Play and Learn. In the book, rocks are a resource (see above)."
+    },
+    {
+      "id": "play-collisions",
+      "area": "pieces",
+      "rule": "All gliders move at once. Two gliders of different players break each other if they head for the same square, swap squares or cross; a player's own gliders pass through each other. A glider that hits an opponent's tower destroys it and breaks; one that hits its own side's tower turns back.",
+      "source": "invented",
+      "cites": [],
+      "code": [
+        {
+          "file": "src/lib/minpentai/play-game/game.ts",
+          "find": "if (a.o === b.o) continue;"
+        },
+        {
+          "file": "src/lib/minpentai/play-game/game.ts",
+          "find": "if (t !== g.o) { delete w.tw[k];"
+        }
+      ],
+      "site": "partly",
+      "siteNote": "Play. Learn (v3) still moves gliders one at a time in list order, and lets diagonal gliders crossing in an X pass (rules page §11)."
+    },
+    {
+      "id": "setup-phase",
+      "area": "turns",
+      "rule": "Before the battle there is a setup phase, with placing allowed only in a home area.",
+      "source": "book",
+      "how": "stated",
+      "cites": [
+        {
+          "block": "c4-b94",
+          "quote": "where he was allowed to put down squares during the initiation phase"
+        }
+      ],
+      "code": [
+        {
+          "file": "src/lib/minpentai/play-game/controller.ts",
+          "find": "v.strip = 'SETUP · CYAN 2 · AMBER 0 SEEN';"
+        }
+      ],
+      "site": "yes",
+      "siteNote": "Play: a setup turn at step 0, placing near your own towers."
+    },
+    {
+      "id": "setup-time",
+      "area": "turns",
+      "rule": "Setup time is set per match (twenty minutes in one).",
+      "source": "book",
+      "how": "stated",
+      "cites": [
+        {
+          "block": "c12-b149",
+          "quote": "You will have twenty minutes to figure out your structures"
+        }
+      ],
+      "code": [
+        {
+          "file": "src/lib/minpentai/play-server/match.ts",
+          "find": "export const SETUP_MS = 90_000;"
+        }
+      ],
+      "site": "partly",
+      "siteNote": "One-on-one gives 90 seconds for setup; against the computer there is no limit (invented numbers)."
+    },
+    {
+      "id": "act-on-interventions",
+      "area": "turns",
+      "rule": "During the battle, players act only on intervention turns; in between, the board runs on its own.",
+      "source": "book",
+      "how": "implied",
+      "cites": [
+        {
+          "block": "c7-b92",
+          "quote": "He knew that he would not get to see the results of his attack for a long time."
+        }
+      ],
+      "code": [
+        {
+          "file": "src/lib/minpentai/play-game/controller.ts",
+          "find": "if (m.w.step % m.every === 0)"
+        }
+      ],
+      "site": "yes",
+      "siteNote": "Play."
+    },
+    {
+      "id": "place-near-symbols",
+      "area": "turns",
+      "rule": "On an intervention turn, a player may put down squares near any copy of their symbol.",
+      "source": "book",
+      "how": "stated",
+      "cites": [
+        {
+          "block": "c4-b110",
+          "quote": "all players were able to put down more squares near any copy of their symbols"
+        }
+      ],
+      "code": [
+        {
+          "file": "src/lib/minpentai/play-game/controller.ts",
+          "find": "Place in the lit area: within"
+        }
+      ],
+      "site": "yes",
+      "siteNote": "Play: within 3 squares of a tower you had when the turn began (the distance is invented)."
+    },
+    {
+      "id": "symbol-at-the-moment",
+      "area": "turns",
+      "rule": "A symbol only has to exist at the moment of the intervention turn to anchor placing.",
+      "source": "book",
+      "how": "implied",
+      "cites": [
+        {
+          "block": "c4-b113",
+          "quote": "came together into Zei's symbol for exactly one turn - Zei's next intervention turn"
+        }
+      ],
+      "code": [
+        {
+          "file": "src/lib/minpentai/play-game/game.ts",
+          "find": "snap: Record<Side, number[]>;"
+        }
+      ],
+      "site": "partly",
+      "siteNote": "Play anchors placing to the towers standing when the turn began; towers never form by collision there."
+    },
+    {
+      "id": "remove-cells",
+      "area": "turns",
+      "rule": "Interventions may remove cells as well as place them.",
+      "source": "book",
+      "how": "stated",
+      "cites": [
+        {
+          "block": "c4-b113",
+          "quote": "Zei quickly removed junk"
+        },
+        {
+          "block": "c4-b135",
+          "quote": "Zei used his intervention turn to remove his own wall."
+        }
+      ],
+      "code": [],
+      "site": "no",
+      "siteNote": "Play: you can only take back a piece placed this turn. Free play has an eraser, outside any match."
+    },
+    {
+      "id": "budget",
+      "area": "turns",
+      "rule": "Each intervention turn has a budget of resources per player.",
+      "source": "book",
+      "how": "stated",
+      "cites": [
+        {
+          "block": "c7-b102",
+          "quote": "Allocate eighty percent of resources this intervention turn to this."
+        }
+      ],
+      "code": [
+        {
+          "file": "src/lib/minpentai/play-server/match.ts",
+          "find": "export const POINTS = 8;"
+        }
+      ],
+      "site": "yes",
+      "siteNote": "Play: 8 points a turn (the number and the costs are invented)."
+    },
+    {
+      "id": "team-capacity",
+      "area": "turns",
+      "rule": "Two teammates can do twice as much in their intervention turns as one player.",
+      "source": "book",
+      "how": "stated",
+      "cites": [
+        {
+          "block": "c4-b138",
+          "quote": "Zei and Bai could do twice as much together in their intervention turns as Pan could do alone in his."
+        }
+      ],
+      "code": [],
+      "site": "no",
+      "siteNote": "No teams on the site."
+    },
+    {
+      "id": "multi-turn-builds",
+      "area": "turns",
+      "rule": "A large structure can take several intervention turns to build.",
+      "source": "book",
+      "how": "stated",
+      "cites": [
+        {
+          "block": "c14-b46",
+          "quote": "it would take him four intervention turns to make a symbol-carrying spaceship or glider factory"
+        }
+      ],
+      "code": [],
+      "site": "no",
+      "siteNote": "Play: points not spent are lost, and every piece is placed whole."
+    },
+    {
+      "id": "interval",
+      "area": "turns",
+      "rule": "Intervention turns come about a thousand turns apart.",
+      "source": "book",
+      "how": "implied",
+      "cites": [
+        {
+          "block": "c14-b45",
+          "quote": "A thousand turns later, the first intervention turn came."
+        },
+        {
+          "block": "c4-b110",
+          "quote": "A thousand turns later, the two sides' gliders and ships met. At the same time, the first intervention turn came."
+        }
+      ],
+      "code": [
+        {
+          "file": "src/lib/minpentai/play-game/controller.ts",
+          "find": "every: rule === 'every8' ? 8 : 12"
+        }
+      ],
+      "site": "partly",
+      "siteNote": "Play: every 12 steps (8 under one drawn rule), on a far smaller board. The rules page marks the interval OPEN."
+    },
+    {
+      "id": "copy-paste",
+      "area": "turns",
+      "rule": "Copy and paste is allowed when placing.",
+      "source": "book",
+      "how": "stated",
+      "cites": [
+        {
+          "block": "c12-b182",
+          "quote": "deployment is just copy and paste"
+        },
+        {
+          "block": "c7-b70",
+          "quote": "copying and pasting pieces of what the AI had already made"
+        }
+      ],
+      "code": [],
+      "site": "no",
+      "siteNote": "Play places one piece at a time."
+    },
+    {
+      "id": "countdown",
+      "area": "turns",
+      "rule": "Countdowns are announced in Dzegoban before the start and before the battle.",
+      "source": "book",
+      "how": "stated",
+      "cites": [
+        {
+          "block": "c4-b83",
+          "quote": "MU GU GEI FA"
+        },
+        {
+          "block": "c4-b97",
+          "quote": "MU GU GEI TAU FA"
+        },
+        {
+          "block": "c4-b98",
+          "quote": "The battle begins in fifty ticks."
+        }
+      ],
+      "code": [
+        {
+          "file": "src/app/minpentai/play-live.tsx",
+          "find": "MU GU GEI TAU FA"
+        }
+      ],
+      "site": "yes",
+      "siteNote": "One-on-one and Learn's broadcast show c4-b97 and c4-b98."
+    },
+    {
+      "id": "play-points",
+      "area": "turns",
+      "rule": "8 points each turn: glider 4, square 1, tower 4. Points not spent are lost.",
+      "source": "invented",
+      "cites": [],
+      "code": [
+        {
+          "file": "src/lib/minpentai/play-game/game.ts",
+          "find": "export const COST = { s: 1, t: 4 } as const;"
+        },
+        {
+          "file": "src/lib/minpentai/play-server/match.ts",
+          "find": "export const POINTS = 8;"
+        }
+      ],
+      "site": "yes",
+      "siteNote": "Play and Learn."
+    },
+    {
+      "id": "play-every-12",
+      "area": "turns",
+      "rule": "A setup turn at step 0, then a turn to act every 12 steps.",
+      "source": "invented",
+      "cites": [],
+      "code": [
+        {
+          "file": "src/lib/minpentai/play-game/controller.ts",
+          "find": "every: rule === 'every8' ? 8 : 12"
+        },
+        {
+          "file": "src/lib/minpentai/play-server/match.ts",
+          "find": "every: rule === 'every8' ? 8 : 12"
+        }
+      ],
+      "site": "yes",
+      "siteNote": "Play."
+    },
+    {
+      "id": "play-simultaneous",
+      "area": "turns",
+      "rule": "Both players act at the same time without seeing each other's choices; everything placed appears at once, and two pieces put on one square cancel each other.",
+      "source": "invented",
+      "cites": [],
+      "code": [
+        {
+          "file": "src/lib/minpentai/play-game/game.ts",
+          "find": "export function apply"
+        }
+      ],
+      "site": "yes",
+      "siteNote": "Play."
+    },
+    {
+      "id": "play-take-back",
+      "area": "turns",
+      "rule": "A piece placed this turn can be tapped to take it back, with its points.",
+      "source": "invented",
+      "cites": [],
+      "code": [
+        {
+          "file": "src/lib/minpentai/play-game/controller.ts",
+          "find": "const p = m.pend.C.splice(i, 1)[0];"
+        }
+      ],
+      "site": "yes",
+      "siteNote": "Play."
+    },
+    {
+      "id": "play-clock",
+      "area": "turns",
+      "rule": "One-on-one gives 45 seconds a turn and 90 for setup; what is placed when time runs out stands. Against the computer, time is unlimited.",
+      "source": "invented",
+      "cites": [],
+      "code": [
+        {
+          "file": "src/lib/minpentai/play-server/match.ts",
+          "find": "export const TURN_MS = 45_000;"
+        }
+      ],
+      "site": "yes",
+      "siteNote": "Play."
+    },
+    {
+      "id": "symbol",
+      "area": "sight",
+      "rule": "Each player has a symbol, a pattern of dots; a copy of it anywhere lets its player see within thirty squares.",
+      "source": "book",
+      "how": "stated",
+      "cites": [
+        {
+          "block": "c4-b93",
+          "quote": "would allow him to see everything within thirty squares"
+        }
+      ],
+      "code": [
+        {
+          "file": "src/lib/minpentai/play-game/game.ts",
+          "find": "export function lit"
+        }
+      ],
+      "site": "partly",
+      "siteNote": "Play: towers light 3 squares around them (counting diagonals), not 30; the tower is one square, not a pattern."
+    },
+    {
+      "id": "dark-start",
+      "area": "sight",
+      "rule": "The board starts dark.",
+      "source": "book",
+      "how": "stated",
+      "cites": [
+        {
+          "block": "c4-b93",
+          "quote": "the game field, which at the beginning appeared completely black"
+        }
+      ],
+      "code": [
+        {
+          "file": "src/lib/minpentai/play-game/board.ts",
+          "find": "c.label = 'dark';"
+        }
+      ],
+      "site": "yes",
+      "siteNote": "Play: everything outside your lit area is dark (rocks excepted, see below)."
+    },
+    {
+      "id": "symbols-made",
+      "area": "sight",
+      "rule": "Symbols are made by placing them, or by gliders and ships crashing into rock.",
+      "source": "book",
+      "how": "stated",
+      "cites": [
+        {
+          "block": "c4-b108",
+          "quote": "leaving behind copies of each player's symbols"
+        },
+        {
+          "block": "c12-b187",
+          "quote": "One of his gliders had successfully created a symbol"
+        }
+      ],
+      "code": [
+        {
+          "file": "src/lib/minpentai/play-game/game.ts",
+          "find": "else w.tw[k] = p.o;"
+        }
+      ],
+      "site": "partly",
+      "siteNote": "Play: towers are only placed, never formed by a collision."
+    },
+    {
+      "id": "anyone-forms-any-symbol",
+      "area": "sight",
+      "rule": "A crash can form any player's symbol, a teammate's included.",
+      "source": "book",
+      "how": "stated",
+      "cites": [
+        {
+          "block": "c4-b132",
+          "quote": "for one single turn, the chaos came together into a symbol"
+        },
+        {
+          "block": "c4-b133",
+          "quote": "Bai's symbol."
+        }
+      ],
+      "code": [],
+      "site": "no",
+      "siteNote": "Not on the site."
+    },
+    {
+      "id": "symbols-destroyed",
+      "area": "sight",
+      "rule": "Gliders destroy symbols.",
+      "source": "book",
+      "how": "stated",
+      "cites": [
+        {
+          "block": "c10-b163",
+          "quote": "shredded through both of his remaining symbols"
+        }
+      ],
+      "code": [
+        {
+          "file": "src/lib/minpentai/play-game/game.ts",
+          "find": "if (t !== g.o) { delete w.tw[k];"
+        }
+      ],
+      "site": "yes",
+      "siteNote": "Play: an opponent's glider destroys a tower."
+    },
+    {
+      "id": "shared-vision",
+      "area": "sight",
+      "rule": "Teammates share what they see.",
+      "source": "book",
+      "how": "implied",
+      "cites": [
+        {
+          "block": "c4-b94",
+          "quote": "he also became able to see a few parts of the field at the bottom left. Bai had put down her symbols too."
+        }
+      ],
+      "code": [],
+      "site": "no",
+      "siteNote": "No teams on the site."
+    },
+    {
+      "id": "hidden-watcher",
+      "area": "sight",
+      "rule": "A symbol the opponent cannot see can watch their moves.",
+      "source": "book",
+      "how": "stated",
+      "cites": [
+        {
+          "block": "c10-b162",
+          "quote": "I had a symbol along the path, right in the position where you could not see it."
+        }
+      ],
+      "code": [
+        {
+          "file": "src/lib/minpentai/play-game/game.ts",
+          "find": "export function updLS"
+        }
+      ],
+      "site": "yes",
+      "siteNote": "Play: each side sees only what its own towers light, so a tower in the opponent's dark can watch."
+    },
+    {
+      "id": "audience-sees-more",
+      "area": "sight",
+      "rule": "The players see less than the audience.",
+      "source": "book",
+      "how": "stated",
+      "cites": [
+        {
+          "block": "c14-b51",
+          "quote": "Zei and Gun could not see the full view of what was going on, but the audience could."
+        }
+      ],
+      "code": [],
+      "site": "yes",
+      "siteNote": "Learn's broadcast and Play's replays show the whole board; players in a match never see it."
+    },
+    {
+      "id": "voice-chat",
+      "area": "sight",
+      "rule": "Teammates normally talk by voice during the game.",
+      "source": "book",
+      "how": "stated",
+      "cites": [
+        {
+          "block": "c4-b99",
+          "quote": "Normally, at this stage, the players would be speaking intensely by voice chat"
+        }
+      ],
+      "code": [],
+      "site": "no",
+      "siteNote": "No teams or chat in a match."
+    },
+    {
+      "id": "play-sight-3",
+      "area": "sight",
+      "rule": "You see every square within 3 of one of your towers (counting diagonals), right now.",
+      "source": "invented",
+      "cites": [],
+      "code": [
+        {
+          "file": "src/lib/minpentai/play-game/controller.ts",
+          "find": "R: rule === 'sight2' ? 2 : 3"
+        }
+      ],
+      "site": "yes",
+      "siteNote": "Play and Learn."
+    },
+    {
+      "id": "play-rocks-known",
+      "area": "sight",
+      "rule": "Rocks are shown everywhere, all match.",
+      "source": "invented",
+      "cites": [
+        {
+          "block": "c12-b187",
+          "quote": "revealed a part of the board that showed what the rock formations look like"
+        }
+      ],
+      "code": [
+        {
+          "file": "src/lib/minpentai/play-game/board.ts",
+          "find": "if (w.rock[k]) { c.bg = '#3A3B42'; c.label = 'rock'; return c; }"
+        }
+      ],
+      "site": "yes",
+      "siteNote": "Play. In the book, rocks are hidden until seen."
+    },
+    {
+      "id": "play-last-seen",
+      "area": "sight",
+      "rule": "An opponent's tower out of sight is drawn as an outline where it was last seen; the count shows only the opponent's towers you can see now.",
+      "source": "invented",
+      "cites": [],
+      "code": [
+        {
+          "file": "src/lib/minpentai/play-game/game.ts",
+          "find": "export function updLS"
+        },
+        {
+          "file": "src/lib/minpentai/play-game/controller.ts",
+          "find": "AMBER ${seen} SEEN"
+        }
+      ],
+      "site": "yes",
+      "siteNote": "Play."
+    },
+    {
+      "id": "out",
+      "area": "ending",
+      "rule": "A player with no symbols left is out.",
+      "source": "book",
+      "how": "stated",
+      "cites": [
+        {
+          "block": "c4-b136",
+          "quote": "all of Dza's remaining symbols had been eliminated"
+        },
+        {
+          "block": "c4-b138",
+          "quote": "now, Dza was out"
+        }
+      ],
+      "code": [
+        {
+          "file": "src/lib/minpentai/play-server/match.ts",
+          "find": "export function checkEnd"
+        }
+      ],
+      "site": "yes",
+      "siteNote": "Play: a player with no towers left loses."
+    },
+    {
+      "id": "win-by-elimination",
+      "area": "ending",
+      "rule": "One-on-one is won by destroying all the opponent's symbols.",
+      "source": "book",
+      "how": "stated",
+      "cites": [
+        {
+          "block": "c12-b196",
+          "quote": "all of Bo's symbols were destroyed, and Zei was announced the winner"
+        }
+      ],
+      "code": [
+        {
+          "file": "src/lib/minpentai/play-server/match.ts",
+          "find": "export function checkEnd"
+        }
+      ],
+      "site": "yes",
+      "siteNote": "Play."
+    },
+    {
+      "id": "resign",
+      "area": "ending",
+      "rule": "Players may resign.",
+      "source": "book",
+      "how": "stated",
+      "cites": [
+        {
+          "block": "c4-b141",
+          "quote": "At that moment, Pan resigned."
+        },
+        {
+          "block": "c10-b164",
+          "quote": "Zei clicked a button to resign."
+        }
+      ],
+      "code": [
+        {
+          "file": "src/lib/minpentai/play-server/match.ts",
+          "find": "export function resign"
+        }
+      ],
+      "site": "yes",
+      "siteNote": "Play: from the ··· menu, after one confirmation; it counts as a loss."
+    },
+    {
+      "id": "symbol-count",
+      "area": "ending",
+      "rule": "Standing is measured by symbol count, which does not decide the game by itself.",
+      "source": "book",
+      "how": "implied",
+      "cites": [
+        {
+          "block": "c4-b138",
+          "quote": "By total symbol count, it was fifteen to fifteen - exactly even."
+        },
+        {
+          "block": "c7-b98",
+          "quote": "Seventeen symbols to twenty-two"
+        }
+      ],
+      "code": [
+        {
+          "file": "src/lib/minpentai/play-game/controller.ts",
+          "find": "Time ran out at step ${MAXS}"
+        }
+      ],
+      "site": "partly",
+      "siteNote": "Play: the count decides only at the step limit (invented)."
+    },
+    {
+      "id": "formats",
+      "area": "ending",
+      "rule": "Games are played two against two, one-on-one, or by several players with placings.",
+      "source": "book",
+      "how": "stated",
+      "cites": [
+        {
+          "block": "c4-b89",
+          "quote": "fated by chance to be on team Ja"
+        },
+        {
+          "block": "c7-b62",
+          "quote": "Today, we have our two finalists"
+        },
+        {
+          "block": "c2-b12",
+          "quote": "I got third place!"
+        }
+      ],
+      "code": [],
+      "site": "partly",
+      "siteNote": "Play is one-on-one only."
+    },
+    {
+      "id": "random-teams",
+      "area": "ending",
+      "rule": "Teams are normally assigned by cryptographic randomness.",
+      "source": "book",
+      "how": "stated",
+      "cites": [
+        {
+          "block": "c4-b68",
+          "quote": "the teams are randomly assigned!"
+        },
+        {
+          "block": "c4-b148",
+          "quote": "the team selection was not done through cryptographic randomness"
+        }
+      ],
+      "code": [],
+      "site": "no",
+      "siteNote": "No teams on the site."
+    },
+    {
+      "id": "no-turn-limit",
+      "area": "ending",
+      "rule": "Games have no fixed turn limit.",
+      "source": "book",
+      "how": "implied",
+      "cites": [
+        {
+          "block": "c14-b94",
+          "quote": "Ten thousand two hundred turns into the game, Deluin was announced the winner."
+        }
+      ],
+      "code": [],
+      "site": "no",
+      "siteNote": "Play stops at step 96 (invented)."
+    },
+    {
+      "id": "qualifying-tiebreak",
+      "area": "ending",
+      "rule": "Qualifying rounds rank by wins, with a tiebreak on turns survived or needed, counted up to eight thousand turns.",
+      "source": "book",
+      "how": "stated",
+      "cites": [
+        {
+          "block": "c12-b91",
+          "quote": "counted up to a maximum of eight thousand turns"
+        }
+      ],
+      "code": [],
+      "site": "no",
+      "siteNote": "No tournaments on the site."
+    },
+    {
+      "id": "play-step-limit",
+      "area": "ending",
+      "rule": "At step 96 the match stops; most towers wins, and equal is a draw.",
+      "source": "invented",
+      "cites": [],
+      "code": [
+        {
+          "file": "src/lib/minpentai/play-game/game.ts",
+          "find": "export const MAXS = 96;"
+        },
+        {
+          "file": "src/lib/minpentai/play-server/match.ts",
+          "find": "if (w.step >= MAXS) return c > a ? 'C' : a > c ? 'A' : 'D';"
+        }
+      ],
+      "site": "yes",
+      "siteNote": "Play."
+    },
+    {
+      "id": "play-leaving",
+      "area": "ending",
+      "rule": "In one-on-one, a player not heard from for 15 seconds pauses the match; after 60 seconds more it counts as resigning (during setup, the match is cancelled).",
+      "source": "invented",
+      "cites": [],
+      "code": [
+        {
+          "file": "src/lib/minpentai/play-server/match.ts",
+          "find": "export const PAUSE_MS = 15_000;"
+        },
+        {
+          "file": "src/lib/minpentai/play-server/match.ts",
+          "find": "export const GONE_MS = 60_000;"
+        }
+      ],
+      "site": "yes",
+      "siteNote": "Play."
+    },
+    {
+      "id": "sandbox",
+      "area": "sandbox",
+      "rule": "Players have a private sandbox for trying structures before placing them; moves found there are repeated live by hand.",
+      "source": "book",
+      "how": "stated",
+      "cites": [
+        {
+          "block": "c4-b96",
+          "quote": "He experimented with a few glider and wall formations in his sandbox, and after confirming that they work, deployed them to the field."
+        },
+        {
+          "block": "c4-b135",
+          "quote": "she repeated her moves live"
+        }
+      ],
+      "code": [
+        {
+          "file": "src/lib/minpentai/play-game/controller.ts",
+          "find": "fpReset"
+        }
+      ],
+      "site": "partly",
+      "siteNote": "Free play is a board to try things on, outside any match; a match has no sandbox (the dotted line shows a glider's path)."
+    },
+    {
+      "id": "sandbox-controls",
+      "area": "sandbox",
+      "rule": "The sandbox has a button to play one step forward, and two to shift time forward or back; running backward is done by hand.",
+      "source": "book",
+      "how": "stated",
+      "cites": [
+        {
+          "block": "c12-b171",
+          "quote": "there was a button to play one step forward, and two buttons to shift time - either forward or backward"
+        },
+        {
+          "block": "c12-b173",
+          "quote": "It was an arduous process, and his fingers quickly tired."
+        }
+      ],
+      "code": [
+        {
+          "file": "src/app/minpentai/rule/rule-view.tsx",
+          "find": "stepBack(b)"
+        }
+      ],
+      "site": "partly",
+      "siteNote": "The book's rule page has step forward and step back (one button, not by hand)."
+    },
+    {
+      "id": "sampled-past",
+      "area": "sandbox",
+      "rule": "Running backward from an end state shows one possible past.",
+      "source": "book",
+      "how": "stated",
+      "cites": [
+        {
+          "block": "c12-b176",
+          "quote": "So in that particular history that Zei had just sampled, before the crash, the symbol had been there all along."
+        }
+      ],
+      "code": [],
+      "site": "no",
+      "siteNote": "Not on the site."
+    },
+    {
+      "id": "sandbox-symbol",
+      "area": "sandbox",
+      "rule": "The older sandbox's symbol is a skew tetromino, counted only in one orientation with an empty margin. The book never gives a symbol's shape.",
+      "source": "invented",
+      "cites": [],
+      "code": [
+        {
+          "file": "src/lib/minpentai/symbol.ts",
+          "find": "export const SYMBOL_ROWS = ['#..', '.##', '.#.'] as const;"
+        }
+      ],
+      "site": "no",
+      "siteNote": "Kept in the repo (sandbox.tsx); out of the menus since 2026-10-09."
+    },
+    {
+      "id": "new-rule",
+      "area": "match-rules",
+      "rule": "In the book, \"every game there's always some kind of new rule\"; the priests decide the rule sets in secret.",
+      "source": "book",
+      "how": "stated",
+      "cites": [
+        {
+          "block": "c4-b84",
+          "quote": "every game there's always some kind of new rule"
+        },
+        {
+          "block": "c4-b148",
+          "quote": "the priests went into the dungeon to decide on the rule sets"
+        }
+      ],
+      "code": [
+        {
+          "file": "src/lib/minpentai/play-server/match.ts",
+          "find": "export function drawRule"
+        }
+      ],
+      "site": "yes",
+      "siteNote": "Play draws one of four invented rules at the start of each practice, ladder and one-on-one match. Learn's lessons have none."
+    },
+    {
+      "id": "rule-kept-secret",
+      "area": "match-rules",
+      "rule": "Players are kept offline beforehand, so they cannot learn the new rule early.",
+      "source": "book",
+      "how": "stated",
+      "cites": [
+        {
+          "block": "c12-b133",
+          "quote": "so we don't learn the new rule ahead of time?"
+        },
+        {
+          "block": "c12-b134",
+          "quote": "Exactly."
+        }
+      ],
+      "code": [
+        {
+          "file": "src/lib/minpentai/play-game/controller.ts",
+          "find": "NEW RULE THIS MATCH"
+        }
+      ],
+      "site": "yes",
+      "siteNote": "Play shows the rule to both players only when the match starts."
+    },
+    {
+      "id": "rule-mid-game",
+      "area": "match-rules",
+      "rule": "A rule can change partway through a game.",
+      "source": "book",
+      "how": "stated",
+      "cites": [
+        {
+          "block": "c5-b30",
+          "quote": "the sudden rule change four thousand turns in"
+        }
+      ],
+      "code": [],
+      "site": "no",
+      "siteNote": "Not on the site."
+    },
+    {
+      "id": "ai-assistants",
+      "area": "match-rules",
+      "rule": "One match's rule: each player has an AI, and each side can read the other AI's thoughts.",
+      "source": "book",
+      "how": "stated",
+      "cites": [
+        {
+          "block": "c7-b63",
+          "quote": "Both players will have access to a powerful personal AI"
+        },
+        {
+          "block": "c7-b65",
+          "quote": "the players and their AIs will have full read access to the thought transcripts of each other's AI"
+        }
+      ],
+      "code": [],
+      "site": "no",
+      "siteNote": "Not on the site."
+    },
+    {
+      "id": "shrines",
+      "area": "match-rules",
+      "rule": "One match's rule: the budget is cut by eighty percent, and five shrines apply their changes as an XOR every thousand turns, then reset.",
+      "source": "book",
+      "how": "stated",
+      "cites": [
+        {
+          "block": "c14-b33",
+          "quote": "The resources you can allocate in each intervention turn are reduced by eighty percent."
+        },
+        {
+          "block": "c14-b33",
+          "quote": "any changes that had taken place to the contents of the shrine will be applied as an XOR to the regions near the four corners of the shrine"
+        },
+        {
+          "block": "c14-b35",
+          "quote": "XOR is not weight-preserving, but it is reversible."
+        }
+      ],
+      "code": [],
+      "site": "no",
+      "siteNote": "Not on the site."
+    },
+    {
+      "id": "custom-games",
+      "area": "match-rules",
+      "rule": "Practice games against bots can be set up with custom starts and teams.",
+      "source": "book",
+      "how": "stated",
+      "cites": [
+        {
+          "block": "c12-b10",
+          "quote": "he had adjusted the game to only give him one corner and three other AIs the other three corners"
+        }
+      ],
+      "code": [
+        {
+          "file": "src/lib/minpentai/play-game/controller.ts",
+          "find": "v.fpRules = "
+        }
+      ],
+      "site": "partly",
+      "siteNote": "Free play lets you set up any board and switch two rules; there are no teams or four corners."
+    },
+    {
+      "id": "play-four-rules",
+      "area": "match-rules",
+      "rule": "The four rules one is drawn from: gliders may also fly diagonally; gliders cost 3 points; you see only 2 squares around your towers; turns to act come every 8 steps.",
+      "source": "invented",
+      "cites": [],
+      "code": [
+        {
+          "file": "src/lib/minpentai/play-game/game.ts",
+          "find": "export const RULES: Record<RuleId, string>"
+        },
+        {
+          "file": "src/lib/minpentai/learn-game/pieces.ts",
+          "find": "export const RULES: NewRule[]"
+        }
+      ],
+      "site": "yes",
+      "siteNote": "Play, and Learn's practice match (the same four)."
+    },
+    {
+      "id": "bots-and-new-rules",
+      "area": "computer",
+      "rule": "Bots play the usual rules better than people, but adapt badly to a new rule.",
+      "source": "book",
+      "how": "stated",
+      "cites": [
+        {
+          "block": "c7-b14",
+          "quote": "the bots play better than me on stock Minpentai, but they are much worse at adapting to any new situation they don't have training data for"
+        }
+      ],
+      "code": [
+        {
+          "file": "src/lib/minpentai/play-game/game.ts",
+          "find": "const dirs = m.rule === 'diag' && L >= 4 ? D8 : D4;"
+        }
+      ],
+      "site": "partly",
+      "siteNote": "On the ladder, only rungs 4 and 5 fly diagonally under that rule; every rung pays the same costs and sees as far."
+    },
+    {
+      "id": "play-ladder",
+      "area": "computer",
+      "rule": "Five computer players (Rival, Blocker, Builder, Opportunist, Planner) see only what their towers light, get the same 8 points, and give the same result for the same seed.",
+      "source": "invented",
+      "cites": [],
+      "code": [
+        {
+          "file": "src/lib/minpentai/play-game/game.ts",
+          "find": "export const RUNGS"
+        },
+        {
+          "file": "src/lib/minpentai/play-game/game.ts",
+          "find": "export function botPlan"
+        }
+      ],
+      "site": "yes",
+      "siteNote": "Play: the computer ladder and practice (practice plays the simplest)."
+    },
+    {
+      "id": "learn-bot",
+      "area": "computer",
+      "rule": "Learn's practice bot reads the whole board (it ignores the dark), blocks threats with squares, and fires along its targets' rows.",
+      "source": "invented",
+      "cites": [],
+      "code": [
+        {
+          "file": "src/lib/minpentai/learn-game/bot.ts",
+          "find": "export function botTurn"
+        }
+      ],
+      "site": "yes",
+      "siteNote": "Learn's practice match (v3); the rules page lists it as changing."
+    }
+  ],
+  "passages": [
+    {
+      "block": "c2-b11",
+      "chapter": 2,
+      "kind": "paragraph",
+      "reasons": [
+        "names"
+      ],
+      "rulePassage": false,
+      "shownOnPage": true,
+      "href": "/chapter/2#c2-b11"
+    },
+    {
+      "block": "c2-b12",
+      "chapter": 2,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc"
+      ],
+      "rulePassage": true,
+      "shownOnPage": true,
+      "href": "/chapter/2#c2-b12"
+    },
+    {
+      "block": "c4-b5",
+      "chapter": 4,
+      "kind": "figure",
+      "reasons": [
+        "rules-doc",
+        "learn"
+      ],
+      "rulePassage": true,
+      "shownOnPage": true,
+      "href": "/chapter/4#c4-b5"
+    },
+    {
+      "block": "c4-b7",
+      "chapter": 4,
+      "kind": "paragraph",
+      "reasons": [
+        "names",
+        "rules-doc",
+        "learn"
+      ],
+      "rulePassage": true,
+      "shownOnPage": true,
+      "href": "/chapter/4#c4-b7"
+    },
+    {
+      "block": "c4-b9",
+      "chapter": 4,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc",
+        "learn"
+      ],
+      "rulePassage": true,
+      "shownOnPage": true,
+      "href": "/chapter/4#c4-b9"
+    },
+    {
+      "block": "c4-b13",
+      "chapter": 4,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc",
+        "learn"
+      ],
+      "rulePassage": true,
+      "shownOnPage": true,
+      "href": "/chapter/4#c4-b13"
+    },
+    {
+      "block": "c4-b15",
+      "chapter": 4,
+      "kind": "paragraph",
+      "reasons": [
+        "learn"
+      ],
+      "rulePassage": false,
+      "shownOnPage": true,
+      "href": "/chapter/4#c4-b15"
+    },
+    {
+      "block": "c4-b58",
+      "chapter": 4,
+      "kind": "paragraph",
+      "reasons": [
+        "learn"
+      ],
+      "rulePassage": false,
+      "shownOnPage": true,
+      "href": "/chapter/4#c4-b58"
+    },
+    {
+      "block": "c4-b68",
+      "chapter": 4,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc"
+      ],
+      "rulePassage": true,
+      "shownOnPage": true,
+      "href": "/chapter/4#c4-b68"
+    },
+    {
+      "block": "c4-b73",
+      "chapter": 4,
+      "kind": "paragraph",
+      "reasons": [
+        "learn"
+      ],
+      "rulePassage": false,
+      "shownOnPage": true,
+      "href": "/chapter/4#c4-b73"
+    },
+    {
+      "block": "c4-b77",
+      "chapter": 4,
+      "kind": "paragraph",
+      "reasons": [
+        "learn"
+      ],
+      "rulePassage": false,
+      "shownOnPage": true,
+      "href": "/chapter/4#c4-b77"
+    },
+    {
+      "block": "c4-b78",
+      "chapter": 4,
+      "kind": "paragraph",
+      "reasons": [
+        "learn"
+      ],
+      "rulePassage": false,
+      "shownOnPage": true,
+      "href": "/chapter/4#c4-b78"
+    },
+    {
+      "block": "c4-b82",
+      "chapter": 4,
+      "kind": "paragraph",
+      "reasons": [
+        "learn"
+      ],
+      "rulePassage": false,
+      "shownOnPage": true,
+      "href": "/chapter/4#c4-b82"
+    },
+    {
+      "block": "c4-b83",
+      "chapter": 4,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc"
+      ],
+      "rulePassage": true,
+      "shownOnPage": true,
+      "href": "/chapter/4#c4-b83"
+    },
+    {
+      "block": "c4-b84",
+      "chapter": 4,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc",
+        "learn"
+      ],
+      "rulePassage": true,
+      "shownOnPage": true,
+      "href": "/chapter/4#c4-b84"
+    },
+    {
+      "block": "c4-b88",
+      "chapter": 4,
+      "kind": "paragraph",
+      "reasons": [
+        "names"
+      ],
+      "rulePassage": false,
+      "shownOnPage": true,
+      "href": "/chapter/4#c4-b88"
+    },
+    {
+      "block": "c4-b89",
+      "chapter": 4,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc"
+      ],
+      "rulePassage": true,
+      "shownOnPage": true,
+      "href": "/chapter/4#c4-b89"
+    },
+    {
+      "block": "c4-b90",
+      "chapter": 4,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc"
+      ],
+      "rulePassage": false,
+      "shownOnPage": true,
+      "href": "/chapter/4#c4-b90"
+    },
+    {
+      "block": "c4-b93",
+      "chapter": 4,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc",
+        "learn"
+      ],
+      "rulePassage": true,
+      "shownOnPage": true,
+      "href": "/chapter/4#c4-b93"
+    },
+    {
+      "block": "c4-b94",
+      "chapter": 4,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc"
+      ],
+      "rulePassage": true,
+      "shownOnPage": true,
+      "href": "/chapter/4#c4-b94"
+    },
+    {
+      "block": "c4-b96",
+      "chapter": 4,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc"
+      ],
+      "rulePassage": true,
+      "shownOnPage": true,
+      "href": "/chapter/4#c4-b96"
+    },
+    {
+      "block": "c4-b97",
+      "chapter": 4,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc",
+        "learn"
+      ],
+      "rulePassage": true,
+      "shownOnPage": true,
+      "href": "/chapter/4#c4-b97"
+    },
+    {
+      "block": "c4-b98",
+      "chapter": 4,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc",
+        "learn"
+      ],
+      "rulePassage": true,
+      "shownOnPage": true,
+      "href": "/chapter/4#c4-b98"
+    },
+    {
+      "block": "c4-b99",
+      "chapter": 4,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc",
+        "learn"
+      ],
+      "rulePassage": true,
+      "shownOnPage": true,
+      "href": "/chapter/4#c4-b99"
+    },
+    {
+      "block": "c4-b108",
+      "chapter": 4,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc",
+        "learn"
+      ],
+      "rulePassage": true,
+      "shownOnPage": true,
+      "href": "/chapter/4#c4-b108"
+    },
+    {
+      "block": "c4-b109",
+      "chapter": 4,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc"
+      ],
+      "rulePassage": true,
+      "shownOnPage": true,
+      "href": "/chapter/4#c4-b109"
+    },
+    {
+      "block": "c4-b110",
+      "chapter": 4,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc",
+        "learn"
+      ],
+      "rulePassage": true,
+      "shownOnPage": true,
+      "href": "/chapter/4#c4-b110"
+    },
+    {
+      "block": "c4-b111",
+      "chapter": 4,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc"
+      ],
+      "rulePassage": true,
+      "shownOnPage": true,
+      "href": "/chapter/4#c4-b111"
+    },
+    {
+      "block": "c4-b113",
+      "chapter": 4,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc"
+      ],
+      "rulePassage": true,
+      "shownOnPage": true,
+      "href": "/chapter/4#c4-b113"
+    },
+    {
+      "block": "c4-b114",
+      "chapter": 4,
+      "kind": "paragraph",
+      "reasons": [
+        "learn"
+      ],
+      "rulePassage": false,
+      "shownOnPage": true,
+      "href": "/chapter/4#c4-b114"
+    },
+    {
+      "block": "c4-b115",
+      "chapter": 4,
+      "kind": "figure",
+      "reasons": [
+        "rules-doc"
+      ],
+      "rulePassage": false,
+      "shownOnPage": true,
+      "href": "/chapter/4#c4-b115"
+    },
+    {
+      "block": "c4-b125",
+      "chapter": 4,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc"
+      ],
+      "rulePassage": false,
+      "shownOnPage": true,
+      "href": "/chapter/4#c4-b125"
+    },
+    {
+      "block": "c4-b126",
+      "chapter": 4,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc"
+      ],
+      "rulePassage": true,
+      "shownOnPage": true,
+      "href": "/chapter/4#c4-b126"
+    },
+    {
+      "block": "c4-b132",
+      "chapter": 4,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc"
+      ],
+      "rulePassage": true,
+      "shownOnPage": true,
+      "href": "/chapter/4#c4-b132"
+    },
+    {
+      "block": "c4-b133",
+      "chapter": 4,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc"
+      ],
+      "rulePassage": true,
+      "shownOnPage": true,
+      "href": "/chapter/4#c4-b133"
+    },
+    {
+      "block": "c4-b135",
+      "chapter": 4,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc"
+      ],
+      "rulePassage": true,
+      "shownOnPage": true,
+      "href": "/chapter/4#c4-b135"
+    },
+    {
+      "block": "c4-b136",
+      "chapter": 4,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc",
+        "learn"
+      ],
+      "rulePassage": true,
+      "shownOnPage": true,
+      "href": "/chapter/4#c4-b136"
+    },
+    {
+      "block": "c4-b137",
+      "chapter": 4,
+      "kind": "figure",
+      "reasons": [
+        "rules-doc",
+        "learn"
+      ],
+      "rulePassage": false,
+      "shownOnPage": true,
+      "href": "/chapter/4#c4-b137"
+    },
+    {
+      "block": "c4-b138",
+      "chapter": 4,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc",
+        "learn"
+      ],
+      "rulePassage": true,
+      "shownOnPage": true,
+      "href": "/chapter/4#c4-b138"
+    },
+    {
+      "block": "c4-b140",
+      "chapter": 4,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc",
+        "learn"
+      ],
+      "rulePassage": true,
+      "shownOnPage": true,
+      "href": "/chapter/4#c4-b140"
+    },
+    {
+      "block": "c4-b141",
+      "chapter": 4,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc",
+        "learn"
+      ],
+      "rulePassage": true,
+      "shownOnPage": true,
+      "href": "/chapter/4#c4-b141"
+    },
+    {
+      "block": "c4-b148",
+      "chapter": 4,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc",
+        "learn"
+      ],
+      "rulePassage": true,
+      "shownOnPage": true,
+      "href": "/chapter/4#c4-b148"
+    },
+    {
+      "block": "c5-b30",
+      "chapter": 5,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc"
+      ],
+      "rulePassage": true,
+      "shownOnPage": true,
+      "href": "/chapter/5#c5-b30"
+    },
+    {
+      "block": "c5-b70",
+      "chapter": 5,
+      "kind": "paragraph",
+      "reasons": [
+        "names"
+      ],
+      "rulePassage": false,
+      "shownOnPage": true,
+      "href": "/chapter/5#c5-b70"
+    },
+    {
+      "block": "c5-b81",
+      "chapter": 5,
+      "kind": "paragraph",
+      "reasons": [
+        "names"
+      ],
+      "rulePassage": false,
+      "shownOnPage": true,
+      "href": "/chapter/5#c5-b81"
+    },
+    {
+      "block": "c5-b87",
+      "chapter": 5,
+      "kind": "paragraph",
+      "reasons": [
+        "names"
+      ],
+      "rulePassage": false,
+      "shownOnPage": true,
+      "href": "/chapter/5#c5-b87"
+    },
+    {
+      "block": "c7-b2",
+      "chapter": 7,
+      "kind": "paragraph",
+      "reasons": [
+        "names"
+      ],
+      "rulePassage": false,
+      "shownOnPage": true,
+      "href": "/chapter/7#c7-b2"
+    },
+    {
+      "block": "c7-b13",
+      "chapter": 7,
+      "kind": "paragraph",
+      "reasons": [
+        "learn"
+      ],
+      "rulePassage": false,
+      "shownOnPage": true,
+      "href": "/chapter/7#c7-b13"
+    },
+    {
+      "block": "c7-b14",
+      "chapter": 7,
+      "kind": "paragraph",
+      "reasons": [
+        "names",
+        "learn"
+      ],
+      "rulePassage": true,
+      "shownOnPage": true,
+      "href": "/chapter/7#c7-b14"
+    },
+    {
+      "block": "c7-b23",
+      "chapter": 7,
+      "kind": "paragraph",
+      "reasons": [
+        "names"
+      ],
+      "rulePassage": false,
+      "shownOnPage": true,
+      "href": "/chapter/7#c7-b23"
+    },
+    {
+      "block": "c7-b50",
+      "chapter": 7,
+      "kind": "paragraph",
+      "reasons": [
+        "names"
+      ],
+      "rulePassage": false,
+      "shownOnPage": true,
+      "href": "/chapter/7#c7-b50"
+    },
+    {
+      "block": "c7-b61",
+      "chapter": 7,
+      "kind": "paragraph",
+      "reasons": [
+        "names"
+      ],
+      "rulePassage": false,
+      "shownOnPage": true,
+      "href": "/chapter/7#c7-b61"
+    },
+    {
+      "block": "c7-b62",
+      "chapter": 7,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc"
+      ],
+      "rulePassage": true,
+      "shownOnPage": true,
+      "href": "/chapter/7#c7-b62"
+    },
+    {
+      "block": "c7-b63",
+      "chapter": 7,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc"
+      ],
+      "rulePassage": true,
+      "shownOnPage": true,
+      "href": "/chapter/7#c7-b63"
+    },
+    {
+      "block": "c7-b65",
+      "chapter": 7,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc"
+      ],
+      "rulePassage": true,
+      "shownOnPage": true,
+      "href": "/chapter/7#c7-b65"
+    },
+    {
+      "block": "c7-b70",
+      "chapter": 7,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc"
+      ],
+      "rulePassage": true,
+      "shownOnPage": true,
+      "href": "/chapter/7#c7-b70"
+    },
+    {
+      "block": "c7-b81",
+      "chapter": 7,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc"
+      ],
+      "rulePassage": true,
+      "shownOnPage": true,
+      "href": "/chapter/7#c7-b81"
+    },
+    {
+      "block": "c7-b86",
+      "chapter": 7,
+      "kind": "paragraph",
+      "reasons": [
+        "learn"
+      ],
+      "rulePassage": false,
+      "shownOnPage": true,
+      "href": "/chapter/7#c7-b86"
+    },
+    {
+      "block": "c7-b87",
+      "chapter": 7,
+      "kind": "figure",
+      "reasons": [
+        "rules-doc"
+      ],
+      "rulePassage": false,
+      "shownOnPage": true,
+      "href": "/chapter/7#c7-b87"
+    },
+    {
+      "block": "c7-b89",
+      "chapter": 7,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc"
+      ],
+      "rulePassage": false,
+      "shownOnPage": true,
+      "href": "/chapter/7#c7-b89"
+    },
+    {
+      "block": "c7-b92",
+      "chapter": 7,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc"
+      ],
+      "rulePassage": true,
+      "shownOnPage": true,
+      "href": "/chapter/7#c7-b92"
+    },
+    {
+      "block": "c7-b95",
+      "chapter": 7,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc"
+      ],
+      "rulePassage": false,
+      "shownOnPage": true,
+      "href": "/chapter/7#c7-b95"
+    },
+    {
+      "block": "c7-b97",
+      "chapter": 7,
+      "kind": "figure",
+      "reasons": [
+        "rules-doc"
+      ],
+      "rulePassage": false,
+      "shownOnPage": true,
+      "href": "/chapter/7#c7-b97"
+    },
+    {
+      "block": "c7-b98",
+      "chapter": 7,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc"
+      ],
+      "rulePassage": true,
+      "shownOnPage": true,
+      "href": "/chapter/7#c7-b98"
+    },
+    {
+      "block": "c7-b102",
+      "chapter": 7,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc"
+      ],
+      "rulePassage": true,
+      "shownOnPage": true,
+      "href": "/chapter/7#c7-b102"
+    },
+    {
+      "block": "c7-b107",
+      "chapter": 7,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc"
+      ],
+      "rulePassage": true,
+      "shownOnPage": true,
+      "href": "/chapter/7#c7-b107"
+    },
+    {
+      "block": "c7-b112",
+      "chapter": 7,
+      "kind": "figure",
+      "reasons": [
+        "rules-doc"
+      ],
+      "rulePassage": false,
+      "shownOnPage": true,
+      "href": "/chapter/7#c7-b112"
+    },
+    {
+      "block": "c7-b114",
+      "chapter": 7,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc"
+      ],
+      "rulePassage": false,
+      "shownOnPage": true,
+      "href": "/chapter/7#c7-b114"
+    },
+    {
+      "block": "c7-b118",
+      "chapter": 7,
+      "kind": "figure",
+      "reasons": [
+        "rules-doc"
+      ],
+      "rulePassage": false,
+      "shownOnPage": true,
+      "href": "/chapter/7#c7-b118"
+    },
+    {
+      "block": "c7-b119",
+      "chapter": 7,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc"
+      ],
+      "rulePassage": false,
+      "shownOnPage": true,
+      "href": "/chapter/7#c7-b119"
+    },
+    {
+      "block": "c7-b120",
+      "chapter": 7,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc"
+      ],
+      "rulePassage": false,
+      "shownOnPage": true,
+      "href": "/chapter/7#c7-b120"
+    },
+    {
+      "block": "c9-b52",
+      "chapter": 9,
+      "kind": "paragraph",
+      "reasons": [
+        "names"
+      ],
+      "rulePassage": false,
+      "shownOnPage": true,
+      "href": "/chapter/9#c9-b52"
+    },
+    {
+      "block": "c9-b60",
+      "chapter": 9,
+      "kind": "paragraph",
+      "reasons": [
+        "names"
+      ],
+      "rulePassage": false,
+      "shownOnPage": true,
+      "href": "/chapter/9#c9-b60"
+    },
+    {
+      "block": "c9-b77",
+      "chapter": 9,
+      "kind": "paragraph",
+      "reasons": [
+        "names"
+      ],
+      "rulePassage": false,
+      "shownOnPage": true,
+      "href": "/chapter/9#c9-b77"
+    },
+    {
+      "block": "c10-b162",
+      "chapter": 10,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc"
+      ],
+      "rulePassage": true,
+      "shownOnPage": true,
+      "href": "/chapter/10#c10-b162"
+    },
+    {
+      "block": "c10-b163",
+      "chapter": 10,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc"
+      ],
+      "rulePassage": true,
+      "shownOnPage": true,
+      "href": "/chapter/10#c10-b163"
+    },
+    {
+      "block": "c10-b164",
+      "chapter": 10,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc"
+      ],
+      "rulePassage": true,
+      "shownOnPage": true,
+      "href": "/chapter/10#c10-b164"
+    },
+    {
+      "block": "c10-b178",
+      "chapter": 10,
+      "kind": "paragraph",
+      "reasons": [
+        "names"
+      ],
+      "rulePassage": false,
+      "shownOnPage": true,
+      "href": "/chapter/10#c10-b178"
+    },
+    {
+      "block": "c10-b184",
+      "chapter": 10,
+      "kind": "paragraph",
+      "reasons": [
+        "names"
+      ],
+      "rulePassage": false,
+      "shownOnPage": true,
+      "href": "/chapter/10#c10-b184"
+    },
+    {
+      "block": "c10-b187",
+      "chapter": 10,
+      "kind": "paragraph",
+      "reasons": [
+        "names"
+      ],
+      "rulePassage": false,
+      "shownOnPage": true,
+      "href": "/chapter/10#c10-b187"
+    },
+    {
+      "block": "c10-b192",
+      "chapter": 10,
+      "kind": "paragraph",
+      "reasons": [
+        "names"
+      ],
+      "rulePassage": false,
+      "shownOnPage": true,
+      "href": "/chapter/10#c10-b192"
+    },
+    {
+      "block": "c10-b202",
+      "chapter": 10,
+      "kind": "paragraph",
+      "reasons": [
+        "names"
+      ],
+      "rulePassage": false,
+      "shownOnPage": true,
+      "href": "/chapter/10#c10-b202"
+    },
+    {
+      "block": "c12-b8",
+      "chapter": 12,
+      "kind": "paragraph",
+      "reasons": [
+        "names"
+      ],
+      "rulePassage": false,
+      "shownOnPage": true,
+      "href": "/chapter/12#c12-b8"
+    },
+    {
+      "block": "c12-b10",
+      "chapter": 12,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc"
+      ],
+      "rulePassage": true,
+      "shownOnPage": true,
+      "href": "/chapter/12#c12-b10"
+    },
+    {
+      "block": "c12-b13",
+      "chapter": 12,
+      "kind": "paragraph",
+      "reasons": [
+        "names"
+      ],
+      "rulePassage": false,
+      "shownOnPage": true,
+      "href": "/chapter/12#c12-b13"
+    },
+    {
+      "block": "c12-b19",
+      "chapter": 12,
+      "kind": "paragraph",
+      "reasons": [
+        "names"
+      ],
+      "rulePassage": false,
+      "shownOnPage": true,
+      "href": "/chapter/12#c12-b19"
+    },
+    {
+      "block": "c12-b65",
+      "chapter": 12,
+      "kind": "paragraph",
+      "reasons": [
+        "names"
+      ],
+      "rulePassage": false,
+      "shownOnPage": true,
+      "href": "/chapter/12#c12-b65"
+    },
+    {
+      "block": "c12-b84",
+      "chapter": 12,
+      "kind": "paragraph",
+      "reasons": [
+        "names"
+      ],
+      "rulePassage": false,
+      "shownOnPage": true,
+      "href": "/chapter/12#c12-b84"
+    },
+    {
+      "block": "c12-b89",
+      "chapter": 12,
+      "kind": "paragraph",
+      "reasons": [
+        "names"
+      ],
+      "rulePassage": false,
+      "shownOnPage": true,
+      "href": "/chapter/12#c12-b89"
+    },
+    {
+      "block": "c12-b91",
+      "chapter": 12,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc"
+      ],
+      "rulePassage": true,
+      "shownOnPage": true,
+      "href": "/chapter/12#c12-b91"
+    },
+    {
+      "block": "c12-b133",
+      "chapter": 12,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc",
+        "learn"
+      ],
+      "rulePassage": true,
+      "shownOnPage": true,
+      "href": "/chapter/12#c12-b133"
+    },
+    {
+      "block": "c12-b134",
+      "chapter": 12,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc",
+        "learn"
+      ],
+      "rulePassage": true,
+      "shownOnPage": true,
+      "href": "/chapter/12#c12-b134"
+    },
+    {
+      "block": "c12-b146",
+      "chapter": 12,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc"
+      ],
+      "rulePassage": false,
+      "shownOnPage": true,
+      "href": "/chapter/12#c12-b146"
+    },
+    {
+      "block": "c12-b147",
+      "chapter": 12,
+      "kind": "paragraph",
+      "reasons": [
+        "names",
+        "rules-doc"
+      ],
+      "rulePassage": true,
+      "shownOnPage": true,
+      "href": "/chapter/12#c12-b147"
+    },
+    {
+      "block": "c12-b149",
+      "chapter": 12,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc",
+        "learn"
+      ],
+      "rulePassage": true,
+      "shownOnPage": true,
+      "href": "/chapter/12#c12-b149"
+    },
+    {
+      "block": "c12-b151",
+      "chapter": 12,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc"
+      ],
+      "rulePassage": false,
+      "shownOnPage": true,
+      "href": "/chapter/12#c12-b151"
+    },
+    {
+      "block": "c12-b152",
+      "chapter": 12,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc"
+      ],
+      "rulePassage": true,
+      "shownOnPage": true,
+      "href": "/chapter/12#c12-b152"
+    },
+    {
+      "block": "c12-b157",
+      "chapter": 12,
+      "kind": "paragraph",
+      "reasons": [
+        "names",
+        "rules-doc"
+      ],
+      "rulePassage": false,
+      "shownOnPage": true,
+      "href": "/chapter/12#c12-b157"
+    },
+    {
+      "block": "c12-b163",
+      "chapter": 12,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc"
+      ],
+      "rulePassage": true,
+      "shownOnPage": true,
+      "href": "/chapter/12#c12-b163"
+    },
+    {
+      "block": "c12-b169",
+      "chapter": 12,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc"
+      ],
+      "rulePassage": true,
+      "shownOnPage": true,
+      "href": "/chapter/12#c12-b169"
+    },
+    {
+      "block": "c12-b170",
+      "chapter": 12,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc"
+      ],
+      "rulePassage": true,
+      "shownOnPage": true,
+      "href": "/chapter/12#c12-b170"
+    },
+    {
+      "block": "c12-b171",
+      "chapter": 12,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc"
+      ],
+      "rulePassage": true,
+      "shownOnPage": true,
+      "href": "/chapter/12#c12-b171"
+    },
+    {
+      "block": "c12-b173",
+      "chapter": 12,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc"
+      ],
+      "rulePassage": true,
+      "shownOnPage": true,
+      "href": "/chapter/12#c12-b173"
+    },
+    {
+      "block": "c12-b176",
+      "chapter": 12,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc"
+      ],
+      "rulePassage": true,
+      "shownOnPage": true,
+      "href": "/chapter/12#c12-b176"
+    },
+    {
+      "block": "c12-b177",
+      "chapter": 12,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc"
+      ],
+      "rulePassage": false,
+      "shownOnPage": true,
+      "href": "/chapter/12#c12-b177"
+    },
+    {
+      "block": "c12-b182",
+      "chapter": 12,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc"
+      ],
+      "rulePassage": true,
+      "shownOnPage": true,
+      "href": "/chapter/12#c12-b182"
+    },
+    {
+      "block": "c12-b187",
+      "chapter": 12,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc"
+      ],
+      "rulePassage": true,
+      "shownOnPage": true,
+      "href": "/chapter/12#c12-b187"
+    },
+    {
+      "block": "c12-b191",
+      "chapter": 12,
+      "kind": "figure",
+      "reasons": [
+        "rules-doc"
+      ],
+      "rulePassage": false,
+      "shownOnPage": true,
+      "href": "/chapter/12#c12-b191"
+    },
+    {
+      "block": "c12-b192",
+      "chapter": 12,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc"
+      ],
+      "rulePassage": true,
+      "shownOnPage": true,
+      "href": "/chapter/12#c12-b192"
+    },
+    {
+      "block": "c12-b196",
+      "chapter": 12,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc"
+      ],
+      "rulePassage": true,
+      "shownOnPage": true,
+      "href": "/chapter/12#c12-b196"
+    },
+    {
+      "block": "c14-b33",
+      "chapter": 14,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc"
+      ],
+      "rulePassage": true,
+      "shownOnPage": true,
+      "href": "/chapter/14#c14-b33"
+    },
+    {
+      "block": "c14-b35",
+      "chapter": 14,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc"
+      ],
+      "rulePassage": true,
+      "shownOnPage": true,
+      "href": "/chapter/14#c14-b35"
+    },
+    {
+      "block": "c14-b36",
+      "chapter": 14,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc"
+      ],
+      "rulePassage": true,
+      "shownOnPage": true,
+      "href": "/chapter/14#c14-b36"
+    },
+    {
+      "block": "c14-b38",
+      "chapter": 14,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc"
+      ],
+      "rulePassage": true,
+      "shownOnPage": true,
+      "href": "/chapter/14#c14-b38"
+    },
+    {
+      "block": "c14-b40",
+      "chapter": 14,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc"
+      ],
+      "rulePassage": false,
+      "shownOnPage": true,
+      "href": "/chapter/14#c14-b40"
+    },
+    {
+      "block": "c14-b45",
+      "chapter": 14,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc"
+      ],
+      "rulePassage": true,
+      "shownOnPage": true,
+      "href": "/chapter/14#c14-b45"
+    },
+    {
+      "block": "c14-b46",
+      "chapter": 14,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc"
+      ],
+      "rulePassage": true,
+      "shownOnPage": true,
+      "href": "/chapter/14#c14-b46"
+    },
+    {
+      "block": "c14-b51",
+      "chapter": 14,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc"
+      ],
+      "rulePassage": true,
+      "shownOnPage": true,
+      "href": "/chapter/14#c14-b51"
+    },
+    {
+      "block": "c14-b52",
+      "chapter": 14,
+      "kind": "figure",
+      "reasons": [
+        "rules-doc"
+      ],
+      "rulePassage": false,
+      "shownOnPage": true,
+      "href": "/chapter/14#c14-b52"
+    },
+    {
+      "block": "c14-b60",
+      "chapter": 14,
+      "kind": "figure",
+      "reasons": [
+        "rules-doc"
+      ],
+      "rulePassage": false,
+      "shownOnPage": true,
+      "href": "/chapter/14#c14-b60"
+    },
+    {
+      "block": "c14-b61",
+      "chapter": 14,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc"
+      ],
+      "rulePassage": false,
+      "shownOnPage": true,
+      "href": "/chapter/14#c14-b61"
+    },
+    {
+      "block": "c14-b63",
+      "chapter": 14,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc"
+      ],
+      "rulePassage": false,
+      "shownOnPage": true,
+      "href": "/chapter/14#c14-b63"
+    },
+    {
+      "block": "c14-b68",
+      "chapter": 14,
+      "kind": "figure",
+      "reasons": [
+        "rules-doc"
+      ],
+      "rulePassage": false,
+      "shownOnPage": true,
+      "href": "/chapter/14#c14-b68"
+    },
+    {
+      "block": "c14-b77",
+      "chapter": 14,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc"
+      ],
+      "rulePassage": false,
+      "shownOnPage": true,
+      "href": "/chapter/14#c14-b77"
+    },
+    {
+      "block": "c14-b79",
+      "chapter": 14,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc"
+      ],
+      "rulePassage": true,
+      "shownOnPage": true,
+      "href": "/chapter/14#c14-b79"
+    },
+    {
+      "block": "c14-b80",
+      "chapter": 14,
+      "kind": "figure",
+      "reasons": [
+        "rules-doc"
+      ],
+      "rulePassage": false,
+      "shownOnPage": true,
+      "href": "/chapter/14#c14-b80"
+    },
+    {
+      "block": "c14-b94",
+      "chapter": 14,
+      "kind": "paragraph",
+      "reasons": [
+        "rules-doc"
+      ],
+      "rulePassage": true,
+      "shownOnPage": true,
+      "href": "/chapter/14#c14-b94"
+    },
+    {
+      "block": "c15-b99",
+      "chapter": 15,
+      "kind": "paragraph",
+      "reasons": [
+        "names"
+      ],
+      "rulePassage": false,
+      "shownOnPage": false,
+      "href": "/chapter/15#c15-b99"
+    },
+    {
+      "block": "c15-b100",
+      "chapter": 15,
+      "kind": "paragraph",
+      "reasons": [
+        "names"
+      ],
+      "rulePassage": false,
+      "shownOnPage": false,
+      "href": "/chapter/15#c15-b100"
+    },
+    {
+      "block": "c16-b43",
+      "chapter": 16,
+      "kind": "paragraph",
+      "reasons": [
+        "names"
+      ],
+      "rulePassage": false,
+      "shownOnPage": false,
+      "href": "/chapter/16#c16-b43"
+    },
+    {
+      "block": "c17-b28",
+      "chapter": 17,
+      "kind": "paragraph",
+      "reasons": [
+        "names"
+      ],
+      "rulePassage": false,
+      "shownOnPage": false,
+      "href": "/chapter/17#c17-b28"
+    },
+    {
+      "block": "c17-b29",
+      "chapter": 17,
+      "kind": "paragraph",
+      "reasons": [
+        "names"
+      ],
+      "rulePassage": false,
+      "shownOnPage": false,
+      "href": "/chapter/17#c17-b29"
+    },
+    {
+      "block": "c19-b5",
+      "chapter": 19,
+      "kind": "paragraph",
+      "reasons": [
+        "names"
+      ],
+      "rulePassage": false,
+      "shownOnPage": false,
+      "href": "/chapter/19#c19-b5"
+    },
+    {
+      "block": "c19-b124",
+      "chapter": 19,
+      "kind": "paragraph",
+      "reasons": [
+        "names"
+      ],
+      "rulePassage": false,
+      "shownOnPage": false,
+      "href": "/chapter/19#c19-b124"
+    },
+    {
+      "block": "c19-b153",
+      "chapter": 19,
+      "kind": "screen",
+      "reasons": [
+        "names"
+      ],
+      "rulePassage": false,
+      "shownOnPage": false,
+      "href": "/chapter/19#c19-b153"
+    },
+    {
+      "block": "c21-b95",
+      "chapter": 21,
+      "kind": "paragraph",
+      "reasons": [
+        "names"
+      ],
+      "rulePassage": false,
+      "shownOnPage": false,
+      "href": "/chapter/21#c21-b95"
+    },
+    {
+      "block": "c24-b48",
+      "chapter": 24,
+      "kind": "paragraph",
+      "reasons": [
+        "names"
+      ],
+      "rulePassage": false,
+      "shownOnPage": false,
+      "href": "/chapter/24#c24-b48"
+    },
+    {
+      "block": "c25-b22",
+      "chapter": 25,
+      "kind": "paragraph",
+      "reasons": [
+        "names"
+      ],
+      "rulePassage": false,
+      "shownOnPage": false,
+      "href": "/chapter/25#c25-b22"
+    },
+    {
+      "block": "c26-b79",
+      "chapter": 26,
+      "kind": "paragraph",
+      "reasons": [
+        "names"
+      ],
+      "rulePassage": false,
+      "shownOnPage": false,
+      "href": "/chapter/26#c26-b79"
+    },
+    {
+      "block": "c26-b101",
+      "chapter": 26,
+      "kind": "paragraph",
+      "reasons": [
+        "names"
+      ],
+      "rulePassage": false,
+      "shownOnPage": false,
+      "href": "/chapter/26#c26-b101"
+    },
+    {
+      "block": "c26-b154",
+      "chapter": 26,
+      "kind": "paragraph",
+      "reasons": [
+        "names"
+      ],
+      "rulePassage": false,
+      "shownOnPage": false,
+      "href": "/chapter/26#c26-b154"
+    },
+    {
+      "block": "c27-b107",
+      "chapter": 27,
+      "kind": "paragraph",
+      "reasons": [
+        "names"
+      ],
+      "rulePassage": false,
+      "shownOnPage": false,
+      "href": "/chapter/27#c27-b107"
+    },
+    {
+      "block": "c28-b37",
+      "chapter": 28,
+      "kind": "paragraph",
+      "reasons": [
+        "names"
+      ],
+      "rulePassage": false,
+      "shownOnPage": false,
+      "href": "/chapter/28#c28-b37"
+    },
+    {
+      "block": "c29-b42",
+      "chapter": 29,
+      "kind": "paragraph",
+      "reasons": [
+        "names"
+      ],
+      "rulePassage": false,
+      "shownOnPage": false,
+      "href": "/chapter/29#c29-b42"
+    },
+    {
+      "block": "c29-b71",
+      "chapter": 29,
+      "kind": "paragraph",
+      "reasons": [
+        "names"
+      ],
+      "rulePassage": false,
+      "shownOnPage": false,
+      "href": "/chapter/29#c29-b71"
+    },
+    {
+      "block": "c29-b114",
+      "chapter": 29,
+      "kind": "screen",
+      "reasons": [
+        "names"
+      ],
+      "rulePassage": false,
+      "shownOnPage": false,
+      "href": "/chapter/29#c29-b114"
+    },
+    {
+      "block": "c31-b24",
+      "chapter": 31,
+      "kind": "paragraph",
+      "reasons": [
+        "names"
+      ],
+      "rulePassage": false,
+      "shownOnPage": false,
+      "href": "/chapter/31#c31-b24"
+    },
+    {
+      "block": "c31-b25",
+      "chapter": 31,
+      "kind": "paragraph",
+      "reasons": [
+        "names"
+      ],
+      "rulePassage": false,
+      "shownOnPage": false,
+      "href": "/chapter/31#c31-b25"
+    },
+    {
+      "block": "c31-b30",
+      "chapter": 31,
+      "kind": "paragraph",
+      "reasons": [
+        "names"
+      ],
+      "rulePassage": false,
+      "shownOnPage": false,
+      "href": "/chapter/31#c31-b30"
+    },
+    {
+      "block": "c31-b31",
+      "chapter": 31,
+      "kind": "paragraph",
+      "reasons": [
+        "names"
+      ],
+      "rulePassage": false,
+      "shownOnPage": false,
+      "href": "/chapter/31#c31-b31"
+    },
+    {
+      "block": "c31-b32",
+      "chapter": 31,
+      "kind": "paragraph",
+      "reasons": [
+        "names"
+      ],
+      "rulePassage": false,
+      "shownOnPage": false,
+      "href": "/chapter/31#c31-b32"
+    },
+    {
+      "block": "c31-b34",
+      "chapter": 31,
+      "kind": "paragraph",
+      "reasons": [
+        "names"
+      ],
+      "rulePassage": false,
+      "shownOnPage": false,
+      "href": "/chapter/31#c31-b34"
+    }
+  ]
+}
