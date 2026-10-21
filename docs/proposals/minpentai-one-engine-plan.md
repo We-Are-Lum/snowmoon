@@ -4,6 +4,15 @@ Plan for the owner's OK. Written 2026-10-21 by the coding agent. Branch `minpent
 
 It builds on the spike (`minpentai-versions-spike`, doc `docs/proposals/minpentai-versions.md`) and your five decisions of 2026-10-21.
 
+**Owner's changes to this plan (2026-10-21), applied below where they bear on it:**
+1. Checkpoint after A steps 1–5 and C; stop before B.
+2. Step 6 (onchain) is a handover spec, `docs/proposals/minpentai-onchain-handover.md`, including format 4. Nothing on `minpentai-onchain` is edited (another session is building there).
+3. Manifests are rules only: exactly what `replayVersion` needs. Title, line, idea, prompt, author and parent live in `mp_versions` columns (published on Recipe, removable under docs/removal.md). Only the rules-only manifest goes to Arweave. Identical rules give the same ID and link; Share then says "This version already exists by @x" and links to it. The Share screen and Privacy wording follow this.
+4. Arweave: ArDrive Turbo (free under 105 KiB per ar.io's docs, checked 2026-10-21), with a dedicated uploader key in server env only, never the owner's wallet or the Safe. Until it's set up: database, "not yet on Arweave".
+5. 10-character IDs and 10 trials per version per day: approved.
+6. Play accepting a seed and moves in the URL: dropped. The snap branch built `/minpentai?match=` and re-applies it after this merges, so that URL's handling is not touched here.
+7. The versions migration takes the next free number at merge time (the snap branch has 0022). It is not 0022.
+
 ## A correction first
 
 In the spike I wrote that a version "becomes a ruleset manifest with no contract change". That is true for Play-sized versions, but not for larger ones:
@@ -66,11 +75,11 @@ On the onchain branch, also: its ruleset, sandbox, verifier, encoding and fixtur
    - replays your trial moves with `replayVersion` and confirms a win on the issued seed;
    - stores the version and its manifest, and gives the link.
 
-**Migration** `supabase/migrations/0022_minpentai_versions.sql`: written, not applied, tested in PGlite like 0021. All tables are server-only, like 0009 (no anon or authenticated access; `studio_writer` only).
+**Migration** `supabase/migrations/<next free number>_minpentai_versions.sql` (numbered at merge time): written, not applied, tested in PGlite like 0021. All tables are server-only, like 0009 (no anon or authenticated access; `studio_writer` only).
 - **`studio.mp_versions`** (one row per shared version):
   - `short_id` (pk) and `ruleset_id` (unique);
-  - `manifest` as the exact sorted JSON text, so its hash can always be re-checked;
-  - `version` (jsonb), `author_fid`, `parent_ruleset_id`;
+  - `manifest` as the exact sorted JSON text of the rules-only manifest, so its hash can always be re-checked;
+  - `title`, `line` (the creator's words), `idea` (their words, public), `prompt` (the model's input and model name), `author_fid`, `parent_ruleset_id`: never in the manifest, published on Recipe, removable;
   - `playtest` (the server's report), `trial_id`;
   - `arweave_tx` and `arweave_at` (null until uploaded);
   - `hidden_at` and `hidden_by` (moderators can hide, nothing else: P5);
