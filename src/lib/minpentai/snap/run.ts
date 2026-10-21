@@ -4,6 +4,9 @@
  * as SVG, one frame a step, joined by sharp. No text in the picture (no fonts on the server); the
  * steps show as ticks down the left edge.
  *
+ * When the match is over the last run can be drawn unfogged instead (`reveal`): the whole board, as
+ * Play shows it at the end. A match that ends before any run (resigned at setup) gets one still frame.
+ *
  * Shapes follow Play's (learn-draw.ts): a ring for a tower, an arrowhead for a glider, a square
  * with a crack once hit. 640 × 360 for the snap's 16:9 image.
  */
@@ -16,8 +19,9 @@ import type { Run } from './match';
 const GW = 640, GH = 360, CP = 34, OX = (GW - W * CP) / 2, OY = (GH - 10 * CP) / 2;
 const COL = { C: '#46D7E8', A: '#FFB43A' } as const;
 
-function frameSvg(b: BoardView, ls: Record<number, number>, R: number, i: number, n: number): string {
-  const see = sightOf(b, 'C', R);
+/** One frame. `reveal`: the whole board unfogged (the match is over), no last-seen marks. */
+function frameSvg(b: BoardView, ls: Record<number, number>, R: number, i: number, n: number, reveal = false): string {
+  const see = reveal ? new Set(Array.from({ length: 150 }, (_, k) => k)) : sightOf(b, 'C', R);
   const o: string[] = [`<svg xmlns="http://www.w3.org/2000/svg" width="${GW}" height="${GH}"><rect width="${GW}" height="${GH}" fill="#060608"/>`];
   for (let k = 0; k < 150; k++) {
     const x = k % W, y = (k / W) | 0;
@@ -55,8 +59,13 @@ export function delays(n: number): number[] {
   return Array.from({ length: n }, (_, i) => (i === 0 ? 600 : i === n - 1 ? 1600 : 260));
 }
 
-export async function runGif(run: Run, R: number): Promise<Buffer> {
-  const n = run.frames.length;
-  const frames = await Promise.all(run.frames.map((b, i) => sharp(Buffer.from(frameSvg(b, run.ls[i], R, i, n))).png().toBuffer()));
+export async function runGif(run: Run, R: number, reveal = false): Promise<Buffer> {
+  const boards = reveal ? run.full : run.frames, n = boards.length;
+  const frames = await Promise.all(boards.map((b, i) => sharp(Buffer.from(frameSvg(b, run.ls[i], R, i, n, reveal))).png().toBuffer()));
   return sharp(frames, { join: { animated: true } }).gif({ delay: delays(n), loop: 0, colours: 16, effort: 3, dither: 0 }).toBuffer();
+}
+
+/** The whole board unfogged as a one-frame GIF: a match resigned before its first run. */
+export async function boardGif(b: BoardView, R: number): Promise<Buffer> {
+  return sharp(Buffer.from(frameSvg(b, {}, R, 0, 0, true))).gif({ colours: 16, effort: 3, dither: 0 }).toBuffer();
 }

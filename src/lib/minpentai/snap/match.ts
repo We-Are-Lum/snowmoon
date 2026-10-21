@@ -21,6 +21,8 @@ export interface Run {
   frames: BoardView[];
   /** Where Cyan last saw Amber's towers, at each frame. */
   ls: Record<number, number>[];
+  /** The same frames unfogged: shown only once the match is over. */
+  full: BoardView[];
 }
 
 export interface Played {
@@ -73,13 +75,16 @@ export function play(input: { seed: number; lvl: number; ver: string; turns: P[]
     // startRun, then runTick until the next turn to act or the end.
     apply(m);
     updLS(m);
-    const run: Run = { frames: [fog(fullBoard(m.w), 'C', m.R)], ls: [{ ...m.lsC }] };
+    const b0 = fullBoard(m.w);
+    const run: Run = { frames: [fog(b0, 'C', m.R)], ls: [{ ...m.lsC }], full: [b0] };
     runs.push(run);
     for (;;) {
       step(m.w);
       updLS(m);
-      run.frames.push(fog(fullBoard(m.w), 'C', m.R));
+      const b = fullBoard(m.w);
+      run.frames.push(fog(b, 'C', m.R));
       run.ls.push({ ...m.lsC });
+      run.full.push(b);
       const { C: c, A: a } = counts();
       if (!c || !a || m.w.step >= MAXS) {
         if (t + 1 !== input.turns.length) throw new Unplayable(`the match ended at step ${m.w.step} with turns left over`);

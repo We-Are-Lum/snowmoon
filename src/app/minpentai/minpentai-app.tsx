@@ -37,7 +37,7 @@ function reachedStep(): number {
   }
 }
 
-type PlayStart = 'home' | 'free' | 'ladder' | 'person';
+type PlayStart = 'home' | 'free' | 'ladder' | 'person' | 'match';
 type Mode = { kind: 'learn'; screen: number } | { kind: 'play'; start: PlayStart };
 
 function setQuery(params: Record<string, string>) {
@@ -84,6 +84,7 @@ export function MinpentaiApp() {
     else if (m === 'free' || window.location.hash.startsWith('#fp=')) setMode({ kind: 'play', start: 'free' });
     else if (m === 'ladder') setMode({ kind: 'play', start: 'ladder' });
     else if (m === 'play') setMode({ kind: 'play', start: 'home' });
+    else if (q.get('match')) setMode({ kind: 'play', start: 'match' });
     else {
       let done = false;
       try { done = !!window.localStorage.getItem(DONE_KEY); } catch { /* storage blocked: Learn */ }

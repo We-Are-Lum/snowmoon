@@ -21,6 +21,7 @@ import { useEffect, useMemo, useReducer, useRef, useState } from 'react';
 import Link from 'next/link';
 import { authFetch, inMiniApp, useAuth } from '~/lib/client-auth';
 import { PlayController, browserEnv, type Dev } from '~/lib/minpentai/play-game/controller';
+import { decMatch } from '~/lib/minpentai/snap/moves';
 import type { LadderProgress } from '~/lib/minpentai/play-game/live-types';
 import { PlayBoard } from './play-board';
 import { PlayPerson } from './play-live';
@@ -36,7 +37,7 @@ function isProgress(p: unknown): p is LadderProgress {
   return !!q && typeof q === 'object' && Number.isInteger(q.opened) && q.opened >= 1 && q.opened <= 5 && !!q.rec && typeof q.rec === 'object';
 }
 
-export function Play({ start, onLearn }: { start: 'home' | 'free' | 'ladder' | 'person'; onLearn: () => void }) {
+export function Play({ start, onLearn }: { start: 'home' | 'free' | 'ladder' | 'person' | 'match'; onLearn: () => void }) {
   const auth = useAuth();
   const signed = auth.kind === 'signed-in';
   const [, force] = useReducer((x: number) => x + 1, 0);
@@ -67,6 +68,11 @@ export function Play({ start, onLearn }: { start: 'home' | 'free' | 'ladder' | '
     if (start === 'free') ctl.openFree();
     else if (start === 'ladder') ctl.setState({ scr: 'ladder' });
     else if (start === 'person') ctl.setState({ scr: 'person' });
+    else if (start === 'match') {
+      // A practice match carried on from the snap (?match=<seed>.<turns>.<moves>, moves.ts).
+      const g = decMatch(new URLSearchParams(window.location.search).get('match') ?? '');
+      if (!g || !ctl.continueMatch(g.seed, g.turns)) ctl.say('That match link could not be read, so here is Play.');
+    }
     ctl.mount(window.location.hash);
     const onK = (e: KeyboardEvent) => { if (e.key === 'Escape') ctl.escape(); };
     window.addEventListener('keydown', onK);

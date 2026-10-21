@@ -1,12 +1,15 @@
-import { sender } from '~/lib/minpentai/snap/auth';
+import { sender, viewer } from '~/lib/minpentai/snap/auth';
 import { Unplayable } from '~/lib/minpentai/snap/match';
-import { act, intro, MINI_APP, SNAP_PATH, type Here } from '~/lib/minpentai/snap/pages';
-import { parse, verified } from '~/lib/minpentai/snap/state';
+import { act, intro, SNAP_PATH, type Here } from '~/lib/minpentai/snap/pages';
+import { drop, load, save } from '~/lib/minpentai/snap/resume';
+import { parse, verified, type BoardMode } from '~/lib/minpentai/snap/state';
 
 /**
  * Minpentai as a Farcaster snap (spike, 2026-10-21; docs/proposals/minpentai-snap.md). GET is the
  * tutorial (or a version's "What's different"); every button POSTs here with the signed match in
- * its target. Practice only: nothing is stored or recorded.
+ * its target. Practice only: nothing is recorded; each FID's latest match (seed and finished turns)
+ * is kept so the first page can offer "Resume" (resume.ts). `?b=n` starts matches on the near-sight
+ * board (off by default).
  */
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -27,19 +30,29 @@ const snap = (body: unknown, extra: Record<string, string> = {}) =>
     headers: { 'Content-Type': MEDIA, Vary: 'Accept', 'Access-Control-Allow-Origin': '*', 'Cache-Control': 'no-store', ...extra },
   });
 
+const boardOf = (q: URLSearchParams): BoardMode => (q.get('b') === 'n' ? 'near' : 'full');
+
 export async function GET(request: Request) {
   const h = here(request);
-  const ver = new URL(request.url).searchParams.get('v') ?? '';
+  const q = new URL(request.url).searchParams;
+  const ver = q.get('v') ?? '';
   const accept = request.headers.get('accept') ?? '';
   if (!accept.includes(MEDIA)) {
     // A browser: point at the game, and say there is a snap here.
     const link = `<${h.base}${SNAP_PATH}${ver ? `?v=${encodeURIComponent(ver)}` : ''}>; rel="alternate"; type="${MEDIA}"`;
     return new Response(
-      `<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Minpentai</title><p>Minpentai plays inside a Farcaster cast. <a href="${MINI_APP}">Play it on snowmoon.party</a>.</p>`,
+      `<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Minpentai</title><p>Minpentai plays inside a Farcaster cast. <a href="${h.base}/minpentai">Play it here</a>.</p>`,
       { headers: { 'Content-Type': 'text/html; charset=utf-8', Link: link, Vary: 'Accept' } },
     );
   }
-  return snap(intro(h, ver), { 'Cache-Control': 'public, max-age=300' });
+  // A signed viewer (optional): offer Resume only if they have a match kept. Anonymous: always
+  // offer it, and the POST (always signed) finds out.
+  const who = await viewer(request, h.base);
+  if (who && 'error' in who) return Response.json({ error: who.error }, { status: who.status, headers: { 'Access-Control-Allow-Origin': '*' } });
+  const vary = { Vary: 'Accept, X-Snap-Payload' };
+  if (!who) return snap(intro(h, ver, boardOf(q), 'maybe'), { 'Cache-Control': 'public, max-age=300', ...vary });
+  const kept = await load(who.fid);
+  return snap(intro(h, ver, boardOf(q), kept ? 'yes' : 'no'), { 'Cache-Control': 'private, no-store', ...vary });
 }
 
 export async function POST(request: Request) {
@@ -52,7 +65,11 @@ export async function POST(request: Request) {
   const s = q.get('s');
   const st = s && verified(s, q.get('h')) ? parse(s) : null;
   try {
-    const page = act(h, q.get('a') ?? 'start', st, who.fid, who.inputs, q.get('v') ?? '');
+    const a = q.get('a') ?? 'start';
+    const saved = a === 'resume' ? await load(who.fid) : undefined;
+    const { page, keep } = act(h, a, st, who.fid, who.inputs, { ver: q.get('v') ?? '', board: boardOf(q), saved });
+    if (keep === 'drop') await drop(who.fid);
+    else if (keep) await save(who.fid, keep.save);
     const t2 = performance.now();
     const timing = `auth;dur=${(t1 - t0).toFixed(1)}, hub;dur=${who.ms.hub.toFixed(1)}, game;dur=${(t2 - t1).toFixed(1)}`;
     console.log(JSON.stringify({ snap: 'minpentai', a: q.get('a'), fid: who.fid, ms: { auth: +(t1 - t0).toFixed(1), hub: +who.ms.hub.toFixed(1), game: +(t2 - t1).toFixed(1) }, bytes: JSON.stringify(page).length }));

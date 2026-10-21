@@ -5,6 +5,8 @@
  * slow part (a request to the hub), so each FID's active keys are kept for five minutes; an
  * unknown key refreshes them once.
  *
+ * The same check reads the optional signed viewer on a GET (viewer), for the first page's Resume.
+ *
  * SNAP_SKIP_JFS=1 skips the signature in development only (`next dev`), for curl and the tests.
  */
 import { verify } from '@farcaster/jfs';
@@ -33,24 +35,43 @@ export async function sender(request: Request, origin: string): Promise<Sender> 
   if (parsed.action.type !== 'post') return { ok: false, status: 400, error: 'not a snap post' };
   const { user, inputs } = parsed.action;
   const t1 = performance.now();
-  let t2 = t1, t3 = t1;
-  if (!(process.env.SNAP_SKIP_JFS === '1' && process.env.NODE_ENV !== 'production')) {
-    const jfs = parseJfs(body);
-    if (!jfs.ok) return { ok: false, status: 400, error: 'invalid_json' };
-    try {
-      await verify({ data: jfs.jfs, strict: true, keyTypes: ['app_key'] });
-    } catch {
-      return { ok: false, status: 401, error: 'signature' };
-    }
-    t2 = performance.now();
-    const header = JSON.parse(Buffer.from(jfs.jfs.header, 'base64url').toString()) as { fid: number; key: string };
-    if (header.fid !== user.fid) return { ok: false, status: 401, error: 'fid_mismatch' };
-    const key = header.key.replace(/^0x/, '').toLowerCase();
-    let active = await activeKeys(header.fid, false);
-    if (active && !active.has(key)) active = await activeKeys(header.fid, true);
-    if (!active) return { ok: false, status: 503, error: 'hub unavailable' };
-    if (!active.has(key)) return { ok: false, status: 401, error: 'signer not active' };
-    t3 = performance.now();
+  const sig = await signature(body, user.fid);
+  if (!sig.ok) return sig;
+  const t3 = performance.now();
+  return { ok: true, fid: user.fid, inputs: inputs as Record<string, unknown>, ms: { parse: t1 - t0, sig: sig.sigMs, hub: t3 - t1 - sig.sigMs } };
+}
+
+/** Check a JFS (JSON or compact) is signed by an active key of `fid`. Skipped only in development. */
+async function signature(jfsText: string, fid: number): Promise<{ ok: true; sigMs: number } | { ok: false; status: number; error: string }> {
+  if (process.env.SNAP_SKIP_JFS === '1' && process.env.NODE_ENV !== 'production') return { ok: true, sigMs: 0 };
+  const t0 = performance.now();
+  const jfs = parseJfs(jfsText);
+  if (!jfs.ok) return { ok: false, status: 400, error: 'invalid_json' };
+  try {
+    await verify({ data: jfs.jfs, strict: true, keyTypes: ['app_key'] });
+  } catch {
+    return { ok: false, status: 401, error: 'signature' };
   }
-  return { ok: true, fid: user.fid, inputs: inputs as Record<string, unknown>, ms: { parse: t1 - t0, sig: t2 - t1, hub: t3 - t2 } };
+  const sigMs = performance.now() - t0;
+  const header = JSON.parse(Buffer.from(jfs.jfs.header, 'base64url').toString()) as { fid: number; key: string };
+  if (header.fid !== fid) return { ok: false, status: 401, error: 'fid_mismatch' };
+  const key = header.key.replace(/^0x/, '').toLowerCase();
+  let active = await activeKeys(header.fid, false);
+  if (active && !active.has(key)) active = await activeKeys(header.fid, true);
+  if (!active) return { ok: false, status: 503, error: 'hub unavailable' };
+  if (!active.has(key)) return { ok: false, status: 401, error: 'signer not active' };
+  return { ok: true, sigMs };
+}
+
+/**
+ * Who is viewing a GET, if the client said (X-Snap-Payload, optional and never guaranteed): null
+ * when anonymous, an error when the header is there but bad (the spec asks for a 4xx then).
+ */
+export async function viewer(request: Request, origin: string): Promise<{ fid: number } | null | { error: string; status: number }> {
+  const header = request.headers.get('x-snap-payload')?.trim();
+  if (!header) return null;
+  const parsed = await parseRequest(request, { skipJFSVerification: true, requestOrigin: origin });
+  if (!parsed.success || parsed.action.type !== 'get' || !parsed.action.user) return { error: parsed.success ? 'no user' : parsed.error.type, status: 400 };
+  const sig = await signature(header, parsed.action.user.fid);
+  return sig.ok ? { fid: parsed.action.user.fid } : { error: sig.error, status: sig.status };
 }

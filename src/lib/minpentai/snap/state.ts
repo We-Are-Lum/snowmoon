@@ -1,17 +1,21 @@
 /**
  * A snap match lives in its URLs (spike, 2026-10-21): every button's target carries the whole
- * match, signed, so the server keeps nothing. The match is its seed, the computer player's level,
+ * match, signed. The match is its seed, the computer player's level,
  * the version, and the person's placements; everything else is replayed from them with the site's
  * engine (match.ts). A match is bound to the Farcaster ID that started it: a POST signed by anyone
- * else starts that person a new match.
+ * else starts that person a new match. Besides the links, the server keeps only each FID's latest
+ * match (seed and finished turns, resume.ts), so a dropped page can be resumed.
  *
  * Practice only: nothing here is recorded anywhere. Recording happens in the mini app.
  */
 import { createHash, createHmac, timingSafeEqual } from 'node:crypto';
-import { D8, W, XY, type Piece } from '../play-game/game';
+import type { Piece } from '../play-game/game';
+import { decList, encList, type P } from './moves';
 
-export interface P { t: Piece; x: number; y: number; dx: number; dy: number }
+export type { P } from './moves';
 export type Tool = Piece;
+/** 'full': the whole 15 x 10 board. 'near': only what your towers light, at larger cells (off by default). */
+export type BoardMode = 'full' | 'near';
 
 export interface SnapState {
   fid: number;
@@ -32,52 +36,21 @@ export interface SnapState {
   taps: number;
   /** Resigned at the current turn to act. */
   resigned: boolean;
-}
-
-const B64 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';
-
-/** A placement as a number below 1500: square * 10 + kind (0–7 a glider's direction in D8, 8 square, 9 tower). */
-function code(p: P): number {
-  const kind = p.t === 's' ? 8 : p.t === 't' ? 9 : D8.findIndex(([a, b]) => a === p.dx && b === p.dy);
-  if (kind < 0) throw new Error('bad glider direction');
-  return (p.y * W + p.x) * 10 + kind;
-}
-function uncode(n: number): P | null {
-  const k = Math.floor(n / 10), kind = n % 10;
-  if (k >= 150) return null;
-  const [x, y] = XY(k);
-  if (kind === 8) return { t: 's', x, y, dx: 0, dy: 0 };
-  if (kind === 9) return { t: 't', x, y, dx: 0, dy: 0 };
-  const [dx, dy] = D8[kind];
-  return { t: 'g', x, y, dx, dy };
-}
-export function encList(l: P[]): string {
-  return l.map((p) => { const n = code(p); return B64[n >> 6] + B64[n & 63]; }).join('');
-}
-export function decList(s: string): P[] | null {
-  if (s.length % 2) return null;
-  const out: P[] = [];
-  for (let i = 0; i < s.length; i += 2) {
-    const a = B64.indexOf(s[i]), b = B64.indexOf(s[i + 1]);
-    if (a < 0 || b < 0) return null;
-    const p = uncode(a * 64 + b);
-    if (!p) return null;
-    out.push(p);
-  }
-  return out;
+  board: BoardMode;
 }
 
 export function serialize(s: SnapState): string {
   return [
     s.fid, s.seed.toString(36), s.lvl, s.ver, s.tool, s.aim + 1, s.taps, s.resigned ? 1 : 0, s.turns.length,
-    s.turns.map(encList).join('~'), encList(s.pend),
+    s.turns.map(encList).join('~'), encList(s.pend), s.board === 'near' ? 'n' : 'f',
   ].join('.');
 }
 
 export function parse(text: string): SnapState | null {
   const f = text.split('.');
-  if (f.length !== 11) return null;
-  const [fid, seed, lvl, ver, tool, aim, taps, res, nT, turnsText, pendText] = f;
+  if (f.length !== 12) return null;
+  const [fid, seed, lvl, ver, tool, aim, taps, res, nT, turnsText, pendText, board] = f;
+  if (board !== 'n' && board !== 'f') return null;
   const num = (v: string) => (/^\d{1,10}$/.test(v) ? Number(v) : NaN);
   const st = {
     fid: num(fid), seed: /^[0-9a-z]{1,7}$/.test(seed) ? parseInt(seed, 36) : NaN, lvl: num(lvl), ver,
@@ -93,7 +66,7 @@ export function parse(text: string): SnapState | null {
   const turns = lists.map(decList);
   const pend = decList(pendText);
   if (turns.some((t) => !t) || !pend) return null;
-  return { ...st, turns: turns as P[][], pend };
+  return { ...st, turns: turns as P[][], pend, board: board === 'n' ? 'near' : 'full' };
 }
 
 let cachedKey: Buffer | null = null;
@@ -127,6 +100,6 @@ export function parseRunToken(text: string): { seed: number; lvl: number; ver: s
   const f = text.split('.');
   if (f.length !== 6) return null;
   const [seed, lvl, ver, nT, turnsText, res] = f;
-  const s = parse(['0', seed, lvl, ver, 'g', '0', '0', res, nT, turnsText, ''].join('.'));
+  const s = parse(['0', seed, lvl, ver, 'g', '0', '0', res, nT, turnsText, '', 'f'].join('.'));
   return s && { seed: s.seed, lvl: s.lvl, ver: s.ver, turns: s.turns, resigned: s.resigned };
 }

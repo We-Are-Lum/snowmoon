@@ -18,11 +18,19 @@ import { play } from '../src/lib/minpentai/snap/match';
 import { act, intro, newMatch, type Here, type SnapPage } from '../src/lib/minpentai/snap/pages';
 import { parse, serialize, sign, verified, type P, type SnapState } from '../src/lib/minpentai/snap/state';
 import { runGif } from '../src/lib/minpentai/snap/run';
+import { decMatch, encMatch } from '../src/lib/minpentai/snap/moves';
+import { GET as runRoute } from '../src/app/snap/minpentai/run/route';
 
 const H: Here = { base: 'https://snowmoon.party', keep: [] };
 let failures = 0;
-const check = (name: string, f: () => void) => {
-  try { f(); console.log(`ok   ${name}`); } catch (e) { failures++; console.log(`FAIL ${name}: ${(e as Error).message}`); }
+const pending: Promise<void>[] = [];
+const check = (name: string, f: () => void | Promise<void>) => {
+  const fail = (e: unknown) => { failures++; console.log(`FAIL ${name}: ${(e as Error).message}`); };
+  try {
+    const r = f();
+    if (r instanceof Promise) pending.push(r.then(() => console.log(`ok   ${name}`), fail));
+    else console.log(`ok   ${name}`);
+  } catch (e) { fail(e); }
 };
 const valid = (p: SnapPage, where: string) => {
   const r = validateSnapResponse(p);
@@ -103,7 +111,9 @@ function tapState(page: SnapPage): SnapState {
   assert.ok(verified(s, target.searchParams.get('h')));
   return parse(s)!;
 }
-const post = (a: string, st: SnapState, inputs: Record<string, unknown> = {}) => act(H, a, structuredClone(st), st.fid, inputs, st.ver);
+/** One POST through the snap's own action; the page only. */
+const A = (a: string, st: SnapState | null, fid: number, inputs: Record<string, unknown>, ver: string) => act(H, a, st, fid, inputs, { ver, board: st?.board ?? 'full' }).page;
+const post = (a: string, st: SnapState, inputs: Record<string, unknown> = {}) => A(a, structuredClone(st), st.fid, inputs, st.ver);
 const tapAt = (st: SnapState, x: number, y: number, tool = '→ 4') => post('tap', st, { cell: `${y},${x}`, piece: tool });
 const seedWith = (rule: string) => { for (let s = 0; ; s++) { const st = newMatch(5, ''); st.seed = s; if (play(st).rule === rule) return st; } };
 
@@ -163,17 +173,17 @@ async function fullMatch(seed: number, style: 'gliders' | 'mixed', ver = ''): Pr
     return p;
   };
   valid(intro(H, ver), 'intro');
-  let page = timed(() => act(H, 'start', null, 9, {}, ver), 'start');
+  let page = timed(() => A('start', null, 9, {}, ver), 'start');
   let st = tapState(page);
   st.seed = seed;
   for (;;) {
     const p = play(st);
     const label = (t: string) => `${t === 'g' ? '→' : t === 's' ? '■' : '◎'} ${t === 'g' ? p.cost : t === 's' ? 1 : 4}`;
     for (const q of plan(p, style)) {
-      page = timed(() => act(H, 'tap', structuredClone(st), 9, { cell: `${q.y},${q.x}`, piece: label(q.t) }, ver), 'tap');
+      page = timed(() => A('tap', structuredClone(st), 9, { cell: `${q.y},${q.x}`, piece: label(q.t) }, ver), 'tap');
       st = tapState(page);
     }
-    page = timed(() => act(H, 'end', structuredClone(st), 9, { piece: label(st.tool) }, ver), 'end');
+    page = timed(() => A('end', structuredClone(st), 9, { piece: label(st.tool) }, ver), 'end');
     T.turns++;
     const next = page.ui.elements.next ?? page.ui.elements.again;
     const s = new URL((next.on!.press as { params: { target: string } }).params.target).searchParams.get('s')!;
@@ -184,8 +194,16 @@ async function fullMatch(seed: number, style: 'gliders' | 'mixed', ver = ''): Pr
     const gif = await runGif(run, after.R);
     T.gifMs.push(performance.now() - t0);
     T.gifBytes.push(gif.length);
-    if (after.over) { T.win = after.over.win; T.step = after.over.step; T.taps = st.taps; break; }
-    page = timed(() => act(H, 'next', structuredClone(st), 9, {}, ver), 'next');
+    if (after.over) {
+      T.win = after.over.win; T.step = after.over.step; T.taps = st.taps;
+      // The result page shows the whole board: the reveal link, and a GIF that isn't the fogged one.
+      const img = String(page.ui.elements.gif.props!.url);
+      assert.equal(new URL(img).searchParams.get('r'), '1', 'the result image is the reveal');
+      const shown = await runGif(run, after.R, true);
+      assert.notDeepEqual(shown, gif, 'the reveal differs from the fogged run');
+      break;
+    }
+    page = timed(() => A('next', structuredClone(st), 9, {}, ver), 'next');
     st = tapState(page);
   }
   return T;
@@ -215,7 +233,7 @@ async function main() {
     const s = serialize(st);
     assert.ok(verified(s, sign(s)));
     assert.ok(!verified(s.replace(/^3\./, '4.'), sign(s)));
-    const page = act(H, 'tap', st, 4, { cell: '2,3' }, '');
+    const page = A('tap', st, 4, { cell: '2,3' }, '');
     const got = tapState(page);
     assert.equal(got.fid, 4);
     assert.equal(got.pend.length, 0);
@@ -226,6 +244,93 @@ async function main() {
     const a = JSON.stringify(play(st).w), b = JSON.stringify(play(parse(serialize(st))!).w);
     assert.equal(a, b);
   });
+  // 6. Resume, the near-sight board, the reveal's guard, Play carrying on a match
+  check('a kept match resumes at its next turn to act, and is dropped when the match ends', () => {
+    let r = act(H, 'start', null, 7, {}, { ver: '', board: 'full' });
+    assert.ok(r.keep && r.keep !== 'drop', 'a new match is kept');
+    let st = tapState(r.page);
+    st = tapState(A('tap', st, 7, { cell: '2,3', piece: '→ 4' }, ''));
+    r = act(H, 'end', st, 7, {}, { ver: '', board: 'full' });
+    assert.ok(r.keep && r.keep !== 'drop' && r.keep.save.turns.length === 1, 'the finished turn is kept');
+    const saved = (r.keep as { save: Parameters<typeof act>[5]['saved'] & object }).save;
+    // Only seed, level, version and finished turns: no taps, no pending pieces.
+    assert.deepEqual(Object.keys(saved).sort(), ['lvl', 'seed', 'turns', 'ver']);
+    const res = act(H, 'resume', null, 7, {}, { ver: '', board: 'full', saved });
+    valid(res.page, 'resumed');
+    const back = tapState(res.page);
+    assert.equal(back.seed, saved.seed);
+    assert.equal(JSON.stringify(play(back).w), JSON.stringify(play({ ...back, turns: saved.turns }).w));
+    assert.match(String(res.page.ui.elements.status.props!.content), /Resumed at turn 2/);
+    const none = act(H, 'resume', null, 7, {}, { ver: '', board: 'full', saved: null });
+    assert.match(String(none.page.ui.elements.status.props!.content), /No match to resume/);
+    const quit = act(H, 'resign-yes', back, 7, {}, { ver: '', board: 'full' });
+    assert.equal(quit.keep, 'drop');
+    for (const k of ['yes', 'no', 'maybe'] as const) valid(intro(H, '', 'full', k), `intro resume ${k}`);
+    assert.ok(intro(H, '', 'full', 'yes').ui.elements.resume, 'Resume shown when kept');
+    assert.ok(!intro(H, '', 'full', 'no').ui.elements.resume, 'no Resume when nothing kept');
+  });
+
+  check('the near-sight board shows only the lit area, larger, and every move still works', () => {
+    for (const rule of ['every8', 'diag']) {
+      const st0 = { ...seedWith(rule), board: 'near' as const };
+      const page = A('next', st0, st0.fid, {}, '');
+      valid(page, `near board ${rule}`);
+      const g = page.ui.elements.board.props as { cols: number; rows: number; rowHeight: number; cells: { value?: string }[] };
+      assert.ok(g.cols < 15 && g.cells.length === g.cols * g.rows && g.cells.every((c) => c.value), `${g.cols} x ${g.rows}`);
+      console.log(`     near board (${rule}): ${g.cols} x ${g.rows}, rows ${g.rowHeight} px`);
+      // A glider by tapping its true square, turned through every direction; a square; the fog refused.
+      const dirs = rule === 'diag' ? 8 : 4;
+      let st = tapState(tapAt(st0, 3, 2));
+      const turned = new Set<string>();
+      for (let i = 0; i < dirs; i++) { turned.add(`${st.pend[0].dx},${st.pend[0].dy}`); st = tapState(tapAt(st, 3, 2)); }
+      assert.equal(turned.size, dirs);
+      st = tapState(tapAt(st, 1, 4, '■ 1'));
+      assert.deepEqual(st.pend.map((q) => q.t), ['g', 's']);
+      assert.equal(st.board, 'near');
+    }
+  });
+
+  check('the reveal is drawn only for a match that is over', async () => {
+    const st = newMatch(3, '');
+    st.turns = [[{ t: 'g', x: 3, y: 2, dx: 1, dy: 0 }]];
+    const g = (await import('../src/lib/minpentai/snap/state')).runToken(st, 1);
+    const get = (r: string) => runRoute(new Request(`https://snowmoon.party/snap/minpentai/run?g=${g}&h=${sign(g)}${r}`));
+    assert.equal((await get('')).status, 200);
+    assert.equal((await get('&r=1')).status, 404);
+    // Resigned at setup: the whole board as one frame.
+    const z = { ...newMatch(3, ''), resigned: true };
+    const g0 = (await import('../src/lib/minpentai/snap/state')).runToken(z, 0);
+    const res = await runRoute(new Request(`https://snowmoon.party/snap/minpentai/run?g=${g0}&h=${sign(g0)}&r=1`));
+    assert.equal(res.status, 200);
+    assert.equal(res.headers.get('content-type'), 'image/gif');
+  });
+
+  check('Play carries on a snap match from its link: the same board at the same turn', () => {
+    for (const seed of [11, 3333, 77_777_777]) {
+      const st = newMatch(1, '');
+      st.seed = seed;
+      for (let i = 0; i < 3; i++) { const p = play(st); if (p.over) break; st.turns.push(plan(p, 'mixed')); }
+      const link = decMatch(encMatch(st.seed, st.turns))!;
+      const env: Env = { now: () => 0, setInterval: () => 0, clearInterval: () => {}, setTimeout: () => 0, clearTimeout: () => {}, copy: () => {}, href: () => '' };
+      const c = new PlayController(env);
+      assert.ok(c.continueMatch(link.seed, link.turns));
+      assert.equal(JSON.stringify(c.m!.w), JSON.stringify(play(st).w), `seed ${seed}`);
+      assert.equal(c.state.scr, play(st).over ? 'result' : 'match');
+      // Play goes on from there exactly as the snap would.
+      if (c.m!.phase === 'act') {
+        const next = plan(play(st), 'gliders');
+        c.m!.pend.C = next.map((q) => ({ ...q, o: 'C' as const }));
+        c.endTurn();
+        while ((c.m!.phase as string) === 'run') c.runTick();
+        st.turns.push(next);
+        assert.equal(JSON.stringify(c.m!.w), JSON.stringify(play(st).w), `seed ${seed}, a turn later`);
+      }
+    }
+    const bad = new PlayController({ now: () => 0, setInterval: () => 0, clearInterval: () => {}, setTimeout: () => 0, clearTimeout: () => {}, copy: () => {}, href: () => '' });
+    assert.equal(bad.continueMatch(1, [[{ t: 'g', x: 12, y: 5, dx: 1, dy: 0 }]]), false, 'a placement in the fog is refused');
+  });
+
+  await Promise.all(pending);
   if (failures) { console.log(`\n${failures} failure(s)`); process.exit(1); }
   console.log('\nall passed');
 }

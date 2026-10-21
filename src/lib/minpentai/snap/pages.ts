@@ -9,7 +9,10 @@
 import { randomInt } from 'node:crypto';
 import { D4, D8, K, RULES, W, XY, inb, lit, type RuleId } from '../play-game/game';
 import { play, refusal, type Played } from './match';
-import { runToken, serialize, sign, type P, type SnapState, type Tool } from './state';
+import { LABELS } from '../../labels';
+import { encMatch } from './moves';
+import type { Saved } from './resume';
+import { runToken, serialize, sign, type BoardMode, type P, type SnapState, type Tool } from './state';
 import { differences, versionOf } from './versions';
 
 type El = { type: string; props?: Record<string, unknown>; children?: string[]; on?: Record<string, unknown> };
@@ -21,7 +24,6 @@ export interface SnapPage {
 }
 
 export const SNAP_PATH = '/snap/minpentai';
-export const MINI_APP = 'https://snowmoon.party/minpentai';
 const DISCLAIMER = 'Independent adaptation · Not affiliated with the author · No token';
 const RULE_SHORT: Record<RuleId, string> = { diag: 'diagonal gliders', cost3: 'gliders cost 3', sight2: 'sight 2', every8: 'turns every 8 steps' };
 
@@ -71,36 +73,52 @@ const TUTORIAL: [string, string[]][] = [
   ]],
 ];
 
-export function intro(h: Here, ver: string): SnapPage {
+/** The labels Play uses (src/lib/labels.ts); a snap can't open the ⓘ dialog, so they are badges. */
+const BADGES: [string, string][] = [['b-inv', LABELS.minpentai.invented.word], ['b-draft', LABELS.minpentai.draft.word], ['b-prac', 'Practice']];
+
+/**
+ * The first page. `resume`: 'yes' when the viewer is known (a signed GET) and has a match kept,
+ * 'no' when known without one, 'maybe' when the GET is anonymous (the button then asks the server,
+ * whose POST is always signed).
+ */
+export function intro(h: Here, ver: string, board: BoardMode = 'full', resume: 'yes' | 'no' | 'maybe' = 'maybe'): SnapPage {
   const v = versionOf(ver);
   const els: Record<string, El> = {};
   const pages: string[] = [];
+  const badges = (id: string) => {
+    els[id] = { type: 'stack', props: { direction: 'horizontal', gap: 'sm' }, children: BADGES.map(([b]) => b) };
+    for (const [b, label] of BADGES) els[b] = { type: 'badge', props: { label, variant: 'outline' } };
+    return id;
+  };
   if (v) {
-    els.vd = { type: 'stack', props: {}, children: ['vd-t', 'vd-by', 'vd-l', 'vd-x'] };
+    els.vd = { type: 'stack', props: {}, children: ['vd-t', badges('vd-b'), 'vd-by', 'vd-l', 'vd-x'] };
     els['vd-t'] = text(`${v.name}: what's different`, { weight: 'bold' });
-    els['vd-by'] = text(`A version of Minpentai Play by ${v.by}. Swipe on for how to play.`, { size: 'sm' });
-    els['vd-l'] = text(differences(v).join(' ') || 'Nothing: the base game.');
+    els['vd-by'] = text(`A version of Minpentai Play by ${v.by}, rules invented for this edition. Swipe on for how to play.`, { size: 'sm' });
+    els['vd-l'] = text(differences(v).join(' ') || 'Nothing: the base game.', { size: 'sm' });
     els['vd-x'] = text(DISCLAIMER, { size: 'sm' });
     pages.push('vd');
   }
   TUTORIAL.forEach(([title, lines], i) => {
     const id = `t${i}`, kids = [`${id}-h`];
     els[`${id}-h`] = text(title, { weight: 'bold' });
-    if (i === 0) {
-      kids.push(`${id}-b`);
-      els[`${id}-b`] = { type: 'stack', props: { direction: 'horizontal', gap: 'sm' }, children: ['b-inv', 'b-draft', 'b-prac'] };
-      els['b-inv'] = { type: 'badge', props: { label: 'Invented', variant: 'outline' } };
-      els['b-draft'] = { type: 'badge', props: { label: 'Draft', variant: 'outline' } };
-      els['b-prac'] = { type: 'badge', props: { label: 'Practice', variant: 'outline' } };
-    }
+    if (i === 0) kids.push(badges(`${id}-b`));
     lines.forEach((l, j) => { kids.push(`${id}-${j}`); els[`${id}-${j}`] = text(l, j > 0 || i === 1 ? { size: 'sm' } : {}); });
     if (i === 0 && !v) { kids.push(`${id}-x`); els[`${id}-x`] = text(DISCLAIMER, { size: 'sm' }); }
     els[id] = { type: 'stack', props: {}, children: kids };
     pages.push(id);
   });
   els.pager = { type: 'paginator', props: { controlsPosition: 'top' }, children: pages };
-  els.start = button('Start a match', submit(h, 'start', null, ver ? { v: ver } : {}), true);
-  els.page = { type: 'stack', props: {}, children: ['pager', 'start'] };
+  const q = { ...(ver ? { v: ver } : {}), ...(board === 'near' ? { b: 'n' } : {}) };
+  if (resume === 'yes') {
+    els.resume = button('Resume', submit(h, 'resume', null, q), true);
+    els.start = button('New match', submit(h, 'start', null, q));
+  } else {
+    els.start = button('Start a match', submit(h, 'start', null, q), true);
+    if (resume === 'maybe') els.resume = button('Resume', submit(h, 'resume', null, q));
+  }
+  const acts = resume === 'yes' ? ['resume', 'start'] : resume === 'maybe' ? ['start', 'resume'] : ['start'];
+  if (acts.length > 1) els.acts = { type: 'stack', props: { direction: 'horizontal' }, children: acts };
+  els.page = { type: 'stack', props: {}, children: ['pager', acts.length > 1 ? 'acts' : 'start'] };
   return page(els);
 }
 
@@ -115,7 +133,33 @@ const arrow = (dx: number, dy: number) => ARROWS[`${dx},${dy}`];
 const CW4: [number, number][] = [[1, 0], [0, 1], [-1, 0], [0, -1]];
 const CW8: [number, number][] = [[1, 0], [1, 1], [0, 1], [-1, 1], [-1, 0], [-1, -1], [0, -1], [1, -1]];
 
-interface Cell { row: number; col: number; color: string; content?: string; textColor?: string }
+interface Cell { row: number; col: number; color: string; content?: string; textColor?: string; value?: string }
+
+/** The squares shown: all 150, or (board mode 'near') the smallest rectangle holding every lit square. */
+function window(p: Played, st: SnapState) {
+  if (st.board !== 'near') return { x0: 0, y0: 0, cols: W, rows: 10 };
+  const xs: number[] = [], ys: number[] = [];
+  for (const k of lit(p.w, 'C', p.R)) { const [x, y] = XY(k); xs.push(x); ys.push(y); }
+  if (!xs.length) return { x0: 0, y0: 0, cols: W, rows: 10 };
+  let x0 = Math.min(...xs), y0 = Math.min(...ys), x1 = Math.max(...xs), y1 = Math.max(...ys);
+  // The grid needs at least 2 × 2.
+  if (x1 === x0) { if (x1 < W - 1) x1++; else x0--; }
+  if (y1 === y0) { if (y1 < 9) y1++; else y0--; }
+  return { x0, y0, cols: x1 - x0 + 1, rows: y1 - y0 + 1 };
+}
+
+/** The board's cell_grid props. 'near' keeps the board page under 500 px (280 px for the grid):
+ * rows grow to at most 64 px, columns share the card's width, and each cell's value is its true
+ * square, so taps read the same in both modes. */
+function boardProps(p: Played, st: SnapState) {
+  const all = boardCells(p, st);
+  if (st.board !== 'near') return { cols: W, rows: 10, cells: all, cellAspectRatio: 'square', gap: 'sm' };
+  const v = window(p, st);
+  const cells = all
+    .filter((c) => c.col >= v.x0 && c.col < v.x0 + v.cols && c.row >= v.y0 && c.row < v.y0 + v.rows)
+    .map((c) => ({ ...c, row: c.row - v.y0, col: c.col - v.x0, value: `${c.row},${c.col}` }));
+  return { cols: v.cols, rows: v.rows, cells, rowHeight: Math.min(64, Math.floor(280 / v.rows)), gap: 'sm' };
+}
 
 function boardCells(p: Played, st: SnapState): Cell[] {
   const see = lit(p.w, 'C', p.R);
@@ -172,7 +216,7 @@ export function actPage(h: Here, st: SnapState, p: Played, msg: string | null): 
     piece: { type: 'toggle_group', props: { name: 'piece', options: labels, defaultValue: labels['gst'.indexOf(st.tool)] } },
     board: {
       type: 'cell_grid',
-      props: { name: 'cell', cols: W, rows: 10, cells: boardCells(p, st), cellAspectRatio: 'square', gap: 'sm' },
+      props: { name: 'cell', ...boardProps(p, st) },
       on: { press: submit(h, 'tap', st) },
     },
     acts: { type: 'stack', props: { direction: 'horizontal' }, children: ['end', 'undo'] },
@@ -183,22 +227,28 @@ export function actPage(h: Here, st: SnapState, p: Played, msg: string | null): 
 
 const s = (n: number) => (n === 1 ? '' : 's');
 
-function runImage(h: Here, st: SnapState, i: number): string {
+/** The run after turn i, as a GIF; `reveal` (the match is over): the last run, unfogged. */
+function runImage(h: Here, st: SnapState, i: number, reveal = false): string {
   const g = runToken(st, i + 1);
-  return url(h, `${SNAP_PATH}/run`, { g, h: sign(g) });
+  return url(h, `${SNAP_PATH}/run`, { g, h: sign(g), ...(reveal ? { r: '1' } : {}) });
 }
+/** Play, carrying on this match: seed and finished turns (moves.ts encMatch). */
+const inApp = (h: Here, st: SnapState) => url(h, '/minpentai', { match: encMatch(st.seed, st.turns) });
 
 export function runPage(h: Here, st: SnapState, p: Played): SnapPage {
   const i = st.turns.length - 1, run = p.runs[i], last = run.frames[run.frames.length - 1];
   const mine = last.tw.filter(([, o]) => o === 'C').length, seen = Object.keys(p.lsC).length;
+  // From the second turn, the match can go on in the app (the base game only: Play has no versions).
+  const handOff = st.turns.length >= 2 && !st.ver;
   return page({
-    page: { type: 'stack', props: {}, children: ['title', 'gif', 'sum', 'acts'] },
+    page: { type: 'stack', props: {}, children: ['title', 'gif', 'sum', 'acts', ...(handOff ? ['app'] : [])] },
     title: text(`Steps ${run.frames[0].step}–${last.step}`, { weight: 'bold' }),
     gif: { type: 'image', props: { url: runImage(h, st, i), aspect: '16:9', alt: `The board as Cyan saw it, steps ${run.frames[0].step} to ${last.step}.` } },
     sum: text(`You have ${mine} tower${s(mine)}. Amber: ${seen} last seen. Your turn to act.`, { size: 'sm' }),
     acts: { type: 'stack', props: { direction: 'horizontal' }, children: ['next', 'resign'] },
     next: button('Your turn', submit(h, 'next', st), true),
     resign: button('Resign', submit(h, 'resign', st)),
+    ...(handOff ? { app: button('Keep playing in the app', { action: 'open_mini_app', params: { target: inApp(h, st) } }) } : {}),
   });
 }
 
@@ -223,24 +273,29 @@ export function resultPage(h: Here, st: SnapState, p: Played): SnapPage {
     : `Time ran out at step ${o.step}: you ${o.counts.C}, Amber ${o.counts.A}.`;
   const v = versionOf(st.ver);
   const share = won ? `I beat the computer at Minpentai${v ? ` (${v.name})` : ''} in ${o.step} steps, right in the feed.` : `Minpentai${v ? ` (${v.name})` : ''}: a game from Snowmoon you can play in a cast.`;
-  const kids = ['title', ...(p.runs.length ? ['gif'] : []), 'why', 'acts', 'make'];
+  // The match is over: the last run (or, resigned at setup, the board) unfogged, as Play shows it.
+  const reveal = p.runs.length ? runImage(h, st, p.runs.length - 1, true) : url(h, `${SNAP_PATH}/run`, (() => { const g = runToken(st, 0); return { g, h: sign(g), r: '1' }; })());
   return page({
-    page: { type: 'stack', props: {}, children: kids },
+    page: { type: 'stack', props: {}, children: ['title', 'gif', 'why', 'acts', 'make'] },
     title: text(title, { weight: 'bold' }),
-    ...(p.runs.length ? { gif: { type: 'image', props: { url: runImage(h, st, p.runs.length - 1), aspect: '16:9', alt: `The last steps of the match, as Cyan saw them.` } } } : {}),
-    why: text(`${why} ${st.taps} taps. Practice: nothing recorded.`, { size: 'sm' }),
+    gif: { type: 'image', props: { url: reveal, aspect: '16:9', alt: 'The whole board, unfogged, over the last steps of the match.' } },
+    why: text(`${why} Whole board: you ${o.counts.C} tower${s(o.counts.C)}, Amber ${o.counts.A}. ${st.taps} taps; practice, nothing recorded.`, { size: 'sm' }),
     acts: { type: 'stack', props: { direction: 'horizontal' }, children: ['share', 'again'] },
     share: { type: 'button', props: { label: 'Share', icon: 'share' }, on: { press: { action: 'compose_cast', params: { text: share, embeds: [versionLink(h, st.ver)] } } } },
     again: button('Play again', submit(h, 'again', st), true),
-    make: button('Make your own version', { action: 'open_mini_app', params: { target: MINI_APP } }),
+    make: button('Make your own version', { action: 'open_mini_app', params: { target: url(h, '/minpentai', {}) } }),
   }, 'page', won ? ['confetti'] : undefined);
 }
 
 // ---------------------------------------------------------------------------------------------
 // Actions
 
-export function newMatch(fid: number, ver: string): SnapState {
-  return { fid, seed: randomInt(0, 2 ** 32), lvl: 0, ver: versionOf(ver) ? ver : '', turns: [], pend: [], aim: -1, tool: 'g', taps: 0, resigned: false };
+export function newMatch(fid: number, ver: string, board: BoardMode = 'full'): SnapState {
+  return { fid, seed: randomInt(0, 2 ** 32), lvl: 0, ver: versionOf(ver) ? ver : '', turns: [], pend: [], aim: -1, tool: 'g', taps: 0, resigned: false, board };
+}
+/** A kept match (resume.ts) as a state at its next turn to act. */
+export function resumed(fid: number, saved: Saved, board: BoardMode): SnapState {
+  return { fid, seed: saved.seed, lvl: saved.lvl, ver: versionOf(saved.ver) ? saved.ver : '', turns: saved.turns, pend: [], aim: -1, tool: 'g', taps: 0, resigned: false, board };
 }
 
 const toolOf = (label: unknown): Tool | null => (typeof label === 'string' ? ({ '→': 'g', '■': 's', '◎': 't' } as Record<string, Tool>)[label[0]] ?? null : null);
@@ -270,46 +325,67 @@ function tap(st: SnapState, p: Played, x: number, y: number): string | null {
   return null;
 }
 
+/** What the route should do with the kept match (resume.ts) after this POST. */
+export type Keep = { save: Saved } | 'drop' | null;
+const kept = (st: SnapState): Keep => ({ save: { seed: st.seed, lvl: st.lvl, ver: st.ver, turns: st.turns } });
+
 /**
- * One POST. `st` is the verified match (or null for a new one), `inputs` the snap's field values.
- * Returns the page to show; the state it carries is in its targets.
+ * One POST. `st` is the verified match from the link (or null), `inputs` the snap's field values,
+ * `q` what the first page's link said (version, board mode) and, for "Resume", the FID's kept match.
+ * Returns the page to show (its targets carry the state) and what to keep.
  */
-export function act(h: Here, a: string, st: SnapState | null, fid: number, inputs: Record<string, unknown>, ver: string): SnapPage {
-  if (!st || st.fid !== fid || a === 'start' || a === 'again') {
-    const n = newMatch(fid, a === 'again' && st ? st.ver : ver);
+export function act(
+  h: Here, a: string, st: SnapState | null, fid: number, inputs: Record<string, unknown>,
+  q: { ver: string; board: BoardMode; saved?: Saved | null },
+): { page: SnapPage; keep: Keep } {
+  if (a === 'resume') {
+    if (q.saved) {
+      const r = resumed(fid, q.saved, q.board);
+      r.taps = 1;
+      try {
+        const p = play(r);
+        if (!p.over) return { page: actPage(h, r, p, `Resumed at turn ${r.turns.length + 1}, step ${p.w.step}.`), keep: null };
+      } catch { /* a kept match that no longer replays: start afresh */ }
+    }
+    const n = newMatch(fid, q.ver, q.board);
     n.taps = 1;
-    return actPage(h, n, play(n), null);
+    return { page: actPage(h, n, play(n), 'No match to resume, so here is a new one.'), keep: kept(n) };
+  }
+  if (!st || st.fid !== fid || a === 'start' || a === 'again') {
+    const n = newMatch(fid, a === 'again' && st ? st.ver : q.ver, st && st.fid === fid ? st.board : q.board);
+    n.taps = 1;
+    return { page: actPage(h, n, play(n), null), keep: kept(n) };
   }
   st.taps++;
   const tool = toolOf(inputs.piece);
   if (tool && tool !== st.tool) { st.tool = tool; st.taps++; }
   let p = play(st);
-  if (p.over) return resultPage(h, st, p);
+  if (p.over) return { page: resultPage(h, st, p), keep: 'drop' };
   switch (a) {
     case 'tap': {
       const m = /^(\d+),(\d+)$/.exec(String(inputs.cell ?? ''));
       const msg = m ? tap(st, p, +m[2], +m[1]) : 'Tap a square on the board.';
-      return actPage(h, st, p, msg);
+      return { page: actPage(h, st, p, msg), keep: null };
     }
     case 'undo':
       st.pend.pop();
       st.aim = -1;
-      return actPage(h, st, p, null);
+      return { page: actPage(h, st, p, null), keep: null };
     case 'end': {
       st.turns.push(st.pend);
       st.pend = [];
       st.aim = -1;
       p = play(st);
-      return p.over ? resultPage(h, st, p) : runPage(h, st, p);
+      return p.over ? { page: resultPage(h, st, p), keep: 'drop' } : { page: runPage(h, st, p), keep: kept(st) };
     }
     case 'resign':
-      return resignPage(h, st);
+      return { page: resignPage(h, st), keep: null };
     case 'resign-yes':
       st.resigned = true;
       st.pend = [];
-      return resultPage(h, st, play(st));
+      return { page: resultPage(h, st, play(st)), keep: 'drop' };
     case 'next':
     default:
-      return actPage(h, st, p, null);
+      return { page: actPage(h, st, p, null), keep: null };
   }
 }
