@@ -18,7 +18,9 @@
  *   npm run test:minpentai-onchain-verifier      (needs `forge build` in contracts/minpentai)
  */
 import { execFileSync } from 'node:child_process';
-import { readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { cpSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import path from 'node:path';
 import { encodeFunctionData, keccak256, toBytes, type Address, type Hex } from 'viem';
 import { as, artifact, deploy, withAnvil } from './lib-minpentai-anvil';
 import { MATCH_RECORDED } from './minpentai-verify';
@@ -27,7 +29,8 @@ import { engineSeed, replaySolo } from '../src/lib/minpentai/onchain/replay';
 import { rulesetId, type SoloManifestV1 } from '../src/lib/minpentai/onchain/ruleset';
 import { sampleMatch } from '../src/lib/minpentai/onchain/sample';
 import { deriveSeed } from '../src/lib/minpentai/onchain/seed';
-import { loadRuleset, type LoadedRuleset, type RecordedMatch, type Verdict } from '../src/lib/minpentai/onchain/verify';
+import { loadRuleset, loadRulesets, type LoadedRuleset, type RecordedMatch, type Verdict } from '../src/lib/minpentai/onchain/verify';
+import { REPLAY_ENTRY, hashText } from '../src/lib/minpentai/onchain/ruleset';
 
 const CHAIN = 31337n;
 const MANIFEST = JSON.parse(readFileSync('docs/minpentai/rulesets/solo-v1.json', 'utf8')) as SoloManifestV1;
@@ -158,6 +161,42 @@ const main = async () => withAnvil(CHAIN, async (url) => {
       if (caught.length) console.log(`  planted bug "${name}": ${caught.length} failure(s), e.g. ${caught[0]}`);
     } finally { rmSync(file, { force: true }); }
   }
+  // Review fixes (2026-10-21), offline.
+  const good = recs[0].rec;
+  const vOf = (rec: RecordedMatch) => verifyMatch(rec, registered, rs);
+  check('data that is not whole bytes of hex is refused, not silently trimmed (review finding 3)', ['7', 'zzzz', '0g00', '0'].map((tail) => vOf({ ...good, data: (good.data + tail) as Hex })).every((v) => v.status === 'invalid' && v.code === 'malformed') ? undefined : 'accepted');
+  check("data that does not hash to MatchLog's stored hash is refused", (() => { const v = vOf({ ...good, storedHash: keccak256(toBytes('another match')) }); return v.status === 'invalid' && v.code === 'hash-mismatch' ? undefined : JSON.stringify(v); })());
+  check('with the right stored hash it still verifies', vOf({ ...good, storedHash: keccak256(good.data) }).status === 'verified' ? undefined : 'not verified');
+  check('each load runs a fresh private copy of exactly the pinned files (review findings 2 and 4)', (() => {
+    const a = local.dir, b = fromGit.dir;
+    if (a === b) return 'the same folder twice';
+    for (const d of [a, b]) for (const [f, h] of Object.entries(MANIFEST.engine.files)) if (hashText(readFileSync(path.join(d, f), 'utf8')) !== h) return `${d}: ${f}`;
+  })());
+  // A working tree whose engine differs (the reviewer's MAXS = 24), with no git history to fall back on: refused.
+  const fake = mkdtempSync(path.join(tmpdir(), 'minpentai-fake-repo-'));
+  try {
+    for (const f of Object.keys(MANIFEST.engine.files)) { mkdirSync(path.dirname(path.join(fake, f)), { recursive: true }); cpSync(f, path.join(fake, f)); }
+    cpSync('package-lock.json', path.join(fake, 'package-lock.json'));
+    const g = path.join(fake, 'src/lib/minpentai/play-game/game.ts');
+    writeFileSync(g, readFileSync(g, 'utf8').replace('export const MAXS = 96;', 'export const MAXS = 24;'));
+    let took: string | null = null;
+    try { const r = await loadRuleset(MANIFEST, { repo: fake }); took = r.from; } catch { /* refused */ }
+    check('a working tree with a changed engine (and no git to fall back on) is refused, not run', took === null ? undefined : `loaded from ${took}`);
+  } finally { rmSync(fake, { recursive: true, force: true }); }
+  for (const [what, m] of [["a commit that is not 40 hex ('HEAD')", { ...MANIFEST, engine: { ...MANIFEST.engine, commit: 'HEAD' } }], ['a different entry file', { ...MANIFEST, engine: { ...MANIFEST.engine, entry: 'src/other.ts' } }], ['a wrong per-file hash', { ...MANIFEST, engine: { ...MANIFEST.engine, files: { ...MANIFEST.engine.files, [REPLAY_ENTRY]: keccak256(toBytes('x')) } } }]] as [string, SoloManifestV1][]) {
+    let ok = false;
+    try { await loadRuleset(m); } catch { ok = true; }
+    check(`a manifest with ${what} is refused`, ok ? undefined : 'loaded');
+  }
+  const folder = mkdtempSync(path.join(tmpdir(), 'minpentai-rulesets-'));
+  try {
+    cpSync('docs/minpentai/rulesets/solo-v1.json', path.join(folder, 'solo-v1.json'));
+    writeFileSync(path.join(folder, 'broken.json'), '{ not json');
+    writeFileSync(path.join(folder, 'head.json'), JSON.stringify({ ...MANIFEST, engine: { ...MANIFEST.engine, commit: 'HEAD' } }));
+    const { rulesets: got, errors } = await loadRulesets(folder);
+    check('one bad manifest never stops the others (review finding D3)', got.size === 1 && errors.length === 2 && readdirSync(folder).length === 3 ? undefined : `${got.size} loaded, ${errors.length} errors`);
+  } finally { rmSync(folder, { recursive: true, force: true }); }
+
   console.log(failed ? `verifier: ${failed} failed, ${passed} passed` : `verifier: ${passed} checks passed`);
   process.exitCode = failed ? 1 : 0;
 });

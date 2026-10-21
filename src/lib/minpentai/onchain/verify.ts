@@ -5,24 +5,26 @@
  * claimed result, end kind, end step and final position equal the replay's.
  *
  * The engine for a ruleset is the one its manifest pins: replay.ts's import closure at the pinned
- * commit. If the working tree's closure hashes match the manifest, it is used directly; otherwise
- * the closure is read from git at that commit into a scratch folder and loaded from there, so a
- * match recorded under an old ruleset is always replayed by the old engine.
+ * commit. Its text is taken from the working tree if it hashes to the manifest, else from git at the
+ * pinned commit; either way exactly that text is written to a fresh private folder, hashed again
+ * there, and loaded from there (review findings 2 and 4, 2026-10-21: never hash one copy and run
+ * another). So a match recorded under an old ruleset is always replayed by the old engine.
  */
 import { execFileSync } from 'node:child_process';
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
-import type { Address, Hex } from 'viem';
+import { pathToFileURL } from 'node:url';
+import { hexToBytes, keccak256, type Address, type Hex } from 'viem';
 import { decode, positionOf, type EncodedMatch } from './encoding';
-import { REPLAY_ENTRY, closureHash, importClosure, rulesetId, type SoloManifestV1 } from './ruleset';
+import { REPLAY_ENTRY, closureHash, hashText, importClosure, rulesetId, type SoloManifestV1 } from './ruleset';
 import { deriveSeed } from './seed';
 
 export type Verdict =
   | { status: 'verified'; claim: EncodedMatch['claim']; endStep: number }
   | { status: 'invalid'; code: InvalidCode; reason: string }
   | { status: 'unknown-ruleset'; code: 'unregistered' | 'no-engine'; reason: string };
-export type InvalidCode = 'malformed' | 'header-mismatch' | 'wrong-seed' | 'illegal' | 'claim-mismatch' | 'end-kind-mismatch' | 'end-step-mismatch' | 'position-mismatch';
+export type InvalidCode = 'malformed' | 'hash-mismatch' | 'header-mismatch' | 'wrong-seed' | 'illegal' | 'claim-mismatch' | 'end-kind-mismatch' | 'end-step-mismatch' | 'position-mismatch';
 
 export interface RecordedMatch {
   chainId: bigint;
@@ -32,6 +34,8 @@ export interface RecordedMatch {
   rulesetId: Hex;
   n: bigint;
   data: Hex;
+  /** MatchLog.matchHash(player, n), when the caller read it: the data must hash to it. */
+  storedHash?: Hex;
 }
 
 /** What a replay engine module exports (replay.ts at some commit). */
@@ -40,32 +44,41 @@ interface Engine {
   engineSeed: typeof import('./replay').engineSeed;
   ReplayError: typeof import('./replay').ReplayError;
 }
-export interface LoadedRuleset { id: Hex; manifest: SoloManifestV1; engine: Engine; from: 'working tree' | `git ${string}` }
+export interface LoadedRuleset { id: Hex; manifest: SoloManifestV1; engine: Engine; from: 'working tree' | `git ${string}`; /** Where the engine was loaded from: a fresh copy of exactly the pinned text. */ dir: string }
 
-/**
- * Load a manifest's engine: the working tree's replay.ts if its closure matches the manifest
- * exactly; else the closure read from git at the pinned commit (`fromGit` forces this).
- */
+/** Load a manifest's engine (see the header). `fromGit` skips the working tree. Throws if anything doesn't match. */
 export async function loadRuleset(manifest: SoloManifestV1, opts: { repo?: string; fromGit?: boolean } = {}): Promise<LoadedRuleset> {
   const repo = opts.repo ?? process.cwd();
   const id = rulesetId(manifest) as Hex;
-  const lock = JSON.parse(readFileSync(path.join(repo, 'package-lock.json'), 'utf8')) as { packages: Record<string, { version?: string }> };
-  const here = importClosure(REPLAY_ENTRY, (p) => (existsSync(path.join(repo, p)) ? readFileSync(path.join(repo, p), 'utf8') : null));
-  const herePk = Object.fromEntries(here.packages.map((n) => [n, lock.packages[`node_modules/${n}`]?.version ?? '?']));
-  if (!opts.fromGit && closureHash(here.files, herePk) === manifest.engine.closureHash) {
-    return { id, manifest, engine: (await import('./replay')) as Engine, from: 'working tree' };
+  const e = manifest.engine;
+  if (!/^[0-9a-f]{40}$/.test(e.commit)) throw new Error(`the manifest's engine commit ${JSON.stringify(e.commit)} is not 40 hex characters`);
+  if (e.entry !== REPLAY_ENTRY || e.replay !== 'replaySolo') throw new Error(`this verifier replays ${REPLAY_ENTRY} replaySolo; the manifest names ${e.entry} ${e.replay}`);
+  if (Object.keys(e.packages).length) throw new Error('engines that reach npm packages are not supported by this verifier yet');
+  const pinned = (files: Record<string, string>) =>
+    closureHash(files, e.packages) === e.closureHash &&
+    Object.keys(files).sort().join() === Object.keys(e.files).sort().join() &&
+    Object.entries(files).every(([f, t]) => (e.files as Record<string, string>)[f] === hashText(t));
+  let files: Record<string, string> | null = null, from: LoadedRuleset['from'] = 'working tree';
+  if (!opts.fromGit) {
+    try {
+      const here = importClosure(REPLAY_ENTRY, (p) => (existsSync(path.join(repo, p)) ? readFileSync(path.join(repo, p), 'utf8') : null));
+      if (!here.packages.length && !here.builtins.length && pinned(here.files)) files = here.files;
+    } catch { /* the working tree's closure doesn't resolve: use git */ }
   }
-  const commit = manifest.engine.commit;
-  const at = (p: string) => { try { return execFileSync('git', ['-C', repo, 'show', `${commit}:${p}`], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }); } catch { return null; } };
-  const c = importClosure(REPLAY_ENTRY, at);
-  if (closureHash(c.files, manifest.engine.packages) !== manifest.engine.closureHash) throw new Error(`the closure at ${commit} does not hash to the manifest's closureHash`);
-  if (c.packages.some((n) => manifest.engine.packages[n] !== herePk[n] && lock.packages[`node_modules/${n}`]?.version !== manifest.engine.packages[n])) {
-    throw new Error(`the engine at ${commit} needs package versions not installed here`);
+  if (!files) {
+    const at = (p: string) => { try { return execFileSync('git', ['-C', repo, 'show', `${e.commit}:${p}`], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }); } catch { return null; } };
+    const c = importClosure(REPLAY_ENTRY, at);
+    if (c.packages.length || c.builtins.length || !pinned(c.files)) throw new Error(`the closure at ${e.commit} does not match the manifest`);
+    files = c.files;
+    from = `git ${e.commit}`;
   }
-  const dir = path.join(tmpdir(), 'minpentai-engines', commit);
-  for (const [f, text] of Object.entries(c.files)) { mkdirSync(path.dirname(path.join(dir, f)), { recursive: true }); writeFileSync(path.join(dir, f), text); }
-  const engine = (await import(path.join(dir, REPLAY_ENTRY))) as Engine;
-  return { id, manifest, engine, from: `git ${commit}` };
+  // Exactly the pinned text, in a fresh private folder, hashed again after writing, then loaded from there.
+  const dir = mkdtempSync(path.join(tmpdir(), 'minpentai-engine-'));
+  for (const [f, text] of Object.entries(files)) { mkdirSync(path.dirname(path.join(dir, f)), { recursive: true, mode: 0o700 }); writeFileSync(path.join(dir, f), text, { mode: 0o600 }); }
+  const written = Object.fromEntries(Object.keys(files).map((f) => [f, readFileSync(path.join(dir, f), 'utf8')]));
+  if (!pinned(written)) throw new Error('the engine changed while it was being written');
+  const engine = (await import(pathToFileURL(path.join(dir, REPLAY_ENTRY)).href)) as Engine;
+  return { id, manifest, engine, from, dir };
 }
 
 const claimOf = (w: 'C' | 'A' | 'D') => (w === 'C' ? 'win' : w === 'A' ? 'loss' : 'draw');
@@ -76,8 +89,11 @@ export function verifyMatch(rec: RecordedMatch, registered: (id: Hex) => boolean
   if (!registered(rec.rulesetId)) return { status: 'unknown-ruleset', code: 'unregistered', reason: `ruleset ${rec.rulesetId} is not in the registry` };
   const rs = rulesets.get(rec.rulesetId);
   if (!rs) return { status: 'unknown-ruleset', code: 'no-engine', reason: `ruleset ${rec.rulesetId} is registered, but no manifest or engine for it is available here` };
+  // Strict hex (review finding 3): an odd nibble or a non-hex character is never silently dropped.
+  if (typeof rec.data !== 'string' || !/^0x([0-9a-fA-F]{2})*$/.test(rec.data)) return bad('malformed', 'the data is not whole bytes of hex');
+  if (rec.storedHash !== undefined && keccak256(rec.data) !== rec.storedHash) return bad('hash-mismatch', `the data does not hash to MatchLog's stored hash for ${rec.player} #${rec.n}`);
   let m: EncodedMatch;
-  try { m = decode(Uint8Array.from(Buffer.from(rec.data.slice(2), 'hex'))); } catch (e) { return bad('malformed', (e as Error).message); }
+  try { m = decode(hexToBytes(rec.data)); } catch (e) { return bad('malformed', (e as Error).message); }
   if (m.rulesetId !== rec.rulesetId || BigInt(m.n) !== rec.n) return bad('header-mismatch', `the bytes say ruleset ${m.rulesetId} n ${m.n}; the event says ${rec.rulesetId} n ${rec.n}`);
   if (m.seed !== deriveSeed(rec.chainId, rec.matchLog, rec.player, rec.n)) return bad('wrong-seed', `the seed is not ${rec.player}'s match ${rec.n} on this chain and log`);
   const { replaySolo, engineSeed, ReplayError } = rs.engine;
@@ -103,13 +119,22 @@ export function verifyMatch(rec: RecordedMatch, registered: (id: Hex) => boolean
   return { status: 'verified', claim: m.claim, endStep: m.end.step };
 }
 
-/** Every manifest in a folder (docs/minpentai/rulesets), loaded by ID. */
-export async function loadRulesets(dir: string, opts: { repo?: string; fromGit?: boolean } = {}): Promise<Map<Hex, LoadedRuleset>> {
-  const out = new Map<Hex, LoadedRuleset>();
-  const { readdirSync } = await import('node:fs');
-  for (const f of readdirSync(dir).filter((x) => x.endsWith('.json') && !x.endsWith('.canonical.json'))) {
-    const rs = await loadRuleset(JSON.parse(readFileSync(path.join(dir, f), 'utf8')), opts);
-    out.set(rs.id, rs);
+/**
+ * Every manifest in a folder (docs/minpentai/rulesets), loaded by ID. One that fails to load is
+ * reported in `errors` and skipped (review finding D3): it never stops the others.
+ */
+export async function loadRulesets(dir: string, opts: { repo?: string; fromGit?: boolean } = {}): Promise<{ rulesets: Map<Hex, LoadedRuleset>; errors: { file: string; id?: Hex; error: string }[] }> {
+  const rulesets = new Map<Hex, LoadedRuleset>(), errors: { file: string; id?: Hex; error: string }[] = [];
+  for (const f of readdirSync(dir).filter((x) => x.endsWith('.json') && !x.endsWith('.canonical.json')).sort()) {
+    let id: Hex | undefined;
+    try {
+      const manifest = JSON.parse(readFileSync(path.join(dir, f), 'utf8')) as SoloManifestV1;
+      id = rulesetId(manifest) as Hex;
+      const rs = await loadRuleset(manifest, opts);
+      rulesets.set(rs.id, rs);
+    } catch (e) {
+      errors.push({ file: f, id, error: (e as Error).message });
+    }
   }
-  return out;
+  return { rulesets, errors };
 }

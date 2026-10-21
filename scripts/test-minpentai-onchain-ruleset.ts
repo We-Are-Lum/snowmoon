@@ -101,5 +101,33 @@ check('six computer players (levels 0-5): each hash is the closure hash with its
   for (const p of m.computerPlayers) if (p.codeHash !== keccak256(toBytes(`${m.engine.closureHash}:level:${p.level}`))) return `level ${p.level}`;
   if (new Set(m.computerPlayers.map((p) => p.codeHash)).size !== 6) return 'not all different';
 });
+// The closure walker (review finding 1, 2026-10-21): imports written oddly are found, text in
+// strings and comments is not an import, and anything the walker can't know is refused.
+const vfs = (files: Record<string, string>) => (f: string) => files[f] ?? null;
+check('the closure walker finds imports hidden by comments, parentheses, templates, require and multi-line export-from', () => {
+  const files: Record<string, string> = {
+    'src/a.ts': ["const x = await import(/* c */ './h1');", "import y from /* c */ './h2';", "const z = await import(('./h3'));", 'const w = await import(`./h4`);', "const q = require /* c */ ('./h5');", "export * from\n// c\n'./h6';", "import type { T } from './h7';", "type U = import('./h8').U;", "import r = require('./h9');"].join('\n'),
+  };
+  for (let i = 1; i <= 9; i++) files[`src/h${i}.ts`] = '';
+  const got = Object.keys(importClosure('src/a.ts', vfs(files)).files);
+  const missing = [1, 2, 3, 4, 5, 6, 7, 8, 9].filter((i) => !got.includes(`src/h${i}.ts`));
+  return missing.length ? `missed h${missing.join(', h')}` : undefined;
+});
+check('text in strings and comments is not an import', () => {
+  const c = importClosure('src/b.ts', vfs({ 'src/b.ts': "const msg = \"import 'left-pad'\"; // from 'lodash'\n/* require('x') */ const t = `from './nope'`;" }));
+  if (c.packages.length || Object.keys(c.files).length !== 1) return `${c.packages.join(', ')} ${Object.keys(c.files).join(', ')}`;
+});
+check('a specifier the walker cannot know, eval, new Function and an aliased require are refused', () => {
+  const bad = ["const n = './x'; await import(n);", "await import('./a' + 'b');", 'await import(`./${n}`);', "eval('1');", "new Function('return 1');", 'const r = require; r(\'./x\');', "require(name);"];
+  const took = bad.filter((t) => { try { importClosure('src/c.ts', vfs({ 'src/c.ts': t, 'src/x.ts': '', 'src/ab.ts': '' })); return true; } catch { return false; } });
+  return took.length ? `accepted: ${took.join(' | ')}` : undefined;
+});
+check('the manifest file is byte for byte what the builder writes (so a number like 96.0 cannot hide in it)', () => {
+  if (readFileSync(FILE, 'utf8') !== JSON.stringify(m, null, 2) + '\n') return 'the file is not the canonical pretty form';
+});
+check('canonical() refuses non-integers, unsafe integers and non-ASCII strings (TS and Python agree on what is allowed)', () => {
+  const took = [{ a: 96.5 }, { a: 2 ** 53 + 2 }, { a: -1 }, { a: 'caf\u00e9' }, { 'k\u00e9': 1 }, { a: Number.NaN }].filter((v) => { try { canonical(v); return true; } catch { return false; } });
+  return took.length ? `accepted: ${JSON.stringify(took)}` : undefined;
+});
 console.log(failed ? `ruleset: ${failed} failed, ${passed} passed` : `ruleset: ${passed} checks passed (solo-v1 ${rulesetId(m)})`);
 process.exit(failed ? 1 : 0);

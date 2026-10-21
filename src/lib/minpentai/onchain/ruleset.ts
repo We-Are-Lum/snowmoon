@@ -9,14 +9,23 @@
  * Built by scripts/build-minpentai-ruleset.ts into docs/minpentai/rulesets/; checked by
  * scripts/test-minpentai-onchain-ruleset.ts.
  */
+import { builtinModules } from 'node:module';
+import ts from 'typescript';
 import { keccak256, toBytes } from 'viem';
 
 /** Canonical JSON: object keys sorted, no whitespace. */
 export function canonical(v: unknown): string {
+  // Only what RFC 8785 and the Python check (scripts/minpentai_ruleset_id.py) serialise identically:
+  // non-negative safe integers and printable ASCII (review finding D10, 2026-10-21).
+  if (typeof v === 'number' && !(Number.isSafeInteger(v) && v >= 0)) throw new Error(`canonical JSON: ${v} is not a non-negative safe integer`);
+  if (typeof v === 'string' && !/^[\x20-\x7e]*$/.test(v)) throw new Error(`canonical JSON: a non-ASCII string ${JSON.stringify(v)}`);
+  if (v === undefined || typeof v === 'function' || typeof v === 'bigint' || typeof v === 'symbol') throw new Error(`canonical JSON: a ${typeof v}`);
   if (v === null || typeof v !== 'object') return JSON.stringify(v);
   if (Array.isArray(v)) return `[${v.map(canonical).join(',')}]`;
   const o = v as Record<string, unknown>;
-  return `{${Object.keys(o).sort().filter((k) => o[k] !== undefined).map((k) => `${JSON.stringify(k)}:${canonical(o[k])}`).join(',')}}`;
+  const keys = Object.keys(o).filter((k) => o[k] !== undefined).sort();
+  for (const k of keys) if (!/^[\x20-\x7e]+$/.test(k)) throw new Error(`canonical JSON: a non-ASCII key ${JSON.stringify(k)}`);
+  return `{${keys.map((k) => `${JSON.stringify(k)}:${canonical(o[k])}`).join(',')}}`;
 }
 export const rulesetId = (manifest: unknown) => keccak256(toBytes(canonical(manifest)));
 export const hashText = (text: string) => keccak256(toBytes(text));
@@ -34,10 +43,43 @@ export interface Rule { id: string; text: string; book?: BookPart; edition?: str
 export const REPLAY_ENTRY = 'src/lib/minpentai/onchain/replay.ts';
 
 /**
- * Every source file `entry` reaches through import, export-from, side-effect import, dynamic
- * import() and require(), type-only imports included, and every npm package it reaches (by name;
- * the builder pins each one's exact version from package-lock.json). `read` returns a file's text,
- * or null if there is no such file. Paths are repository-relative; '~/' is src/.
+ * Every module specifier in a source file, read from the TypeScript syntax tree (not a regex, so
+ * comments, strings and odd spacing neither hide an import nor invent one): import and export-from
+ * declarations, `import x = require()`, `import()` and `require()` calls, and `import('...')` types.
+ * A specifier that is not a plain string literal (a variable, an expression, a template with
+ * substitutions) is refused, and so are `eval` and `new Function`: the closure must be knowable.
+ */
+export function moduleSpecifiers(file: string, text: string): string[] {
+  const sf = ts.createSourceFile(file, text, ts.ScriptTarget.Latest, true, file.endsWith('.tsx') ? ts.ScriptKind.TSX : ts.ScriptKind.TS);
+  const out: string[] = [];
+  const refuse = (n: ts.Node, why: string): never => { throw new Error(`${file}:${sf.getLineAndCharacterOfPosition(n.getStart()).line + 1}: ${why}`); };
+  const literal = (e: ts.Expression | undefined, at: ts.Node): string => {
+    let x = e;
+    while (x && (ts.isParenthesizedExpression(x) || ts.isAsExpression(x) || ts.isSatisfiesExpression(x))) x = x.expression;
+    if (x && (ts.isStringLiteral(x) || ts.isNoSubstitutionTemplateLiteral(x))) return x.text;
+    return refuse(at, 'a module specifier that is not a plain string literal');
+  };
+  const visit = (n: ts.Node) => {
+    if (ts.isImportDeclaration(n) || (ts.isExportDeclaration(n) && n.moduleSpecifier)) out.push(literal(n.moduleSpecifier as ts.Expression, n));
+    else if (ts.isImportEqualsDeclaration(n) && ts.isExternalModuleReference(n.moduleReference)) out.push(literal(n.moduleReference.expression, n));
+    else if (ts.isImportTypeNode(n) && ts.isLiteralTypeNode(n.argument)) out.push(literal(n.argument.literal as ts.Expression, n));
+    else if (ts.isCallExpression(n)) {
+      if (n.expression.kind === ts.SyntaxKind.ImportKeyword) out.push(literal(n.arguments[0], n));
+      else if (ts.isIdentifier(n.expression) && n.expression.text === 'require') out.push(literal(n.arguments[0], n));
+      else if (ts.isIdentifier(n.expression) && n.expression.text === 'eval') refuse(n, 'eval');
+    } else if (ts.isNewExpression(n) && ts.isIdentifier(n.expression) && n.expression.text === 'Function') refuse(n, 'new Function');
+    else if (ts.isIdentifier(n) && n.text === 'require' && !(n.parent && ts.isCallExpression(n.parent) && n.parent.expression === n)) refuse(n, 'require used other than as a direct call');
+    ts.forEachChild(n, visit);
+  };
+  visit(sf);
+  return out;
+}
+
+/**
+ * Every source file `entry` reaches (moduleSpecifiers, type-only imports included), and every npm
+ * package and Node builtin it reaches (by name; the builder pins each package's exact version from
+ * package-lock.json). `read` returns a file's text, or null if there is no such file. Paths are
+ * repository-relative; '~/' is src/.
  */
 export function importClosure(entry: string, read: (path: string) => string | null): { files: Record<string, string>; packages: string[]; builtins: string[] } {
   const files: Record<string, string> = {}, packages = new Set<string>(), builtins = new Set<string>();
@@ -54,10 +96,10 @@ export function importClosure(entry: string, read: (path: string) => string | nu
     const text = read(f);
     if (text === null) throw new Error(`no file ${f}`);
     files[f] = text;
-    const specs = [...text.matchAll(/(?:\bfrom\s*|\bimport\s*\(?\s*|\brequire\s*\(\s*)['"]([^'"]+)['"]/g)].map((x) => x[1]);
+    const specs = f.endsWith('.json') ? [] : moduleSpecifiers(f, text);
     for (const spec of specs) {
       if (spec.startsWith('.') || spec.startsWith('~/')) todo.push(resolve(f, spec));
-      else if (spec.startsWith('node:')) builtins.add(spec);
+      else if (spec.startsWith('node:') || BUILTINS.has(spec.split('/')[0])) builtins.add(spec);
       else packages.add(spec.startsWith('@') ? spec.split('/').slice(0, 2).join('/') : spec.split('/')[0]);
     }
   }
@@ -65,6 +107,7 @@ export function importClosure(entry: string, read: (path: string) => string | nu
   for (const k of Object.keys(files).sort()) sorted[k] = files[k];
   return { files: sorted, packages: [...packages].sort(), builtins: [...builtins].sort() };
 }
+const BUILTINS = new Set(builtinModules);
 
 const book = (says: string, blocks: string[], basis: 'stated' | 'implied' = 'stated'): BookPart => ({ says, blocks, basis });
 
