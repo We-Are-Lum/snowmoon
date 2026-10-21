@@ -1,0 +1,105 @@
+{
+ "closed_model": true,
+ "label": "closed model",
+ "model": "openai/gpt-image-2.5-sunburst",
+ "model_name": "GPT Image 2.5 Sunburst (OpenAI)",
+ "route": "Vercel AI Gateway /v1/images/edits (AI_GATEWAY_API_KEY)",
+ "date": "2026-10-18T09:10:34.498Z",
+ "purpose": "gpt-cut: a private full-cut comparison for the owner (2026-10-18); not in the cut or on the site",
+ "v6_picture": "images-out/preprod/pass3/cov-cafe-CU-B-standing-K7.png",
+ "from": {
+  "base": "cov-cafe-CU-B-standing-A7",
+  "finish": "cov-cafe-CU-B-standing-K7",
+  "edits": []
+ },
+ "prompt": "A hand-drawn science fiction comic book panel, ink linework and flat cel-shaded colour, not a 3D render, not a photograph. Close-up (CU). the thin, wiry young woman with warm brown skin, shaved sides, a tall magenta ponytail, dangly geometric earrings, a lime-green vest and tattooed arms, standing now, big headphones in her hand, looking down toward the left of the frame at Zei: serious, a straight face, not smiling. Faces stay soft and natural: smiles and laughs are closed-mouthed, never open-mouthed grins, no teeth showing. Picture 1 is a depth map of this exact frame rendered from a 3D model (near is light, far is dark): follow its camera, angle, lens and perspective exactly; every person, chair, table, wall and railing goes exactly where and as big as its shape stands there, people sitting on the chairs and standing on the floor; the simple mannequin shapes are only where the people go. Draw nothing grey from it. Picture 2 is the thin, wiry young woman with warm brown skin, shaved sides, a tall magenta ponytail, dangly geometric earrings, a lime-green vest and tattooed arms: copy only that person's face, hair, skin and clothes, never the sheet's layout, poses or grey background. In this frame: the thin, wiry young woman is in the middle of the frame, toward the camera. Exactly one main person, appearing once. Nobody else in the picture at all: no other diners, no passers-by, no figures in the windows. Everyone stands on the ground or sits on a chair at their real size: nobody floats, nobody sits or stands on a table. Behind them, as the layout shows: the megastructures and mountain pyramids above the rooftops. Faces stay soft and natural: smiles and laughs are closed-mouthed, never open-mouthed grins, no teeth showing. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands. Shop windows and panels glow plainly, at most with one simple pictogram (a cup, a leaf, a bowl); no lettered signs at all. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character. Draw it as a finished comic panel: inked outlines, painted flat colour, glowing lights. Picture 3 shows how the place looks: take its colours, materials and night light; it has nobody in it. The picture is 16:9, landscape.",
+ "references": [
+  {
+   "file": "adaptations/fifteen-days/preprod/set-frames/cov-cafe-CU-B-standing.depth.png",
+   "sha256": "166a59f40fe62ee1a7f5b12caafef0386527bb3ca104f16a9d09a1a8e69da826"
+  },
+  {
+   "file": "images-out/preprod/cards-small/bai.png",
+   "sha256": "4c175214502b73eb6bc8d0905daa9d0475383bf7996d3355ff43b381376d9acd"
+  },
+  {
+   "file": "images-out/preprod/plates-small/courtyard.png",
+   "sha256": "c4e6d9b1b60e358dd71d0321462453467f47598a5912b03910a5e34fa0ab1ff5"
+  }
+ ],
+ "request": {
+  "size": "1536x864",
+  "n": 1
+ },
+ "response_meta": {
+  "created": 1792314597,
+  "usage": {
+   "total_tokens": 3718,
+   "input_tokens": 2640,
+   "output_tokens": 1078,
+   "input_tokens_details": {
+    "text_tokens": 688,
+    "image_tokens": 1952
+   }
+  },
+  "providerMetadata": {
+   "openai": {
+    "images": [
+     {
+      "imageTokens": 1952,
+      "textTokens": 688,
+      "created": 1792314597,
+      "size": "1536x864",
+      "quality": "high",
+      "background": "opaque",
+      "outputFormat": "png"
+     }
+    ]
+   },
+   "gateway": {
+    "routing": {
+     "originalModelId": "openai/gpt-image-2.5-sunburst",
+     "resolvedProvider": "openai",
+     "fallbacksAvailable": [],
+     "planningReasoning": "System credentials planned for: openai. Total execution order: openai(system)",
+     "canonicalSlug": "openai/gpt-image-2.5-sunburst",
+     "finalProvider": "openai",
+     "modelAttemptCount": 1,
+     "modelAttempts": [
+      {
+       "canonicalSlug": "openai/gpt-image-2.5-sunburst",
+       "success": true,
+       "providerAttemptCount": 1,
+       "providerAttempts": [
+        {
+         "provider": "openai",
+         "credentialType": "system",
+         "success": true,
+         "startTime": 1792314568409,
+         "endTime": 1792314597956,
+         "statusCode": 200
+        }
+       ]
+      }
+     ],
+     "totalProviderAttemptCount": 1
+    },
+    "cost": "0.051396",
+    "marketCost": "0.051396",
+    "surchargeCost": "0",
+    "gatewayCost": "0.051396",
+    "inferenceCost": "0.051396",
+    "inputInferenceCost": "0",
+    "outputInferenceCost": "0.051396",
+    "generationId": "gen_01M574BVNWMW09NNVNGWNB42HJ"
+   }
+  }
+ },
+ "cost_usd": 0.051396,
+ "output": {
+  "file": "/private/tmp/claude-501/-Users-nathan-snowmoon/9334ff32-2377-4150-8bc0-c96cfb5e0d3f/scratchpad/gptcut/raw/cov-cafe-CU-B-standing-K7-g1.png",
+  "sha256": "928ba09612b50c8cecaa2d6e1229175811b529a9abdf07fdf38c42b11342ea08",
+  "bytes": 1704307
+ },
+ "ms": 67933
+}

@@ -1,0 +1,210 @@
+<title>__TITLE__</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=JetBrains+Mono:wght@400&display=swap">
+<style>
+/* Review page for Fifteen Days: plates to approve (one pick each) or frames to judge (OK / Change), grouped by place or scene; one column on a phone. */
+/* Layout: the test first, then the plates to approve, Bai and the voices, then the storyboard: one card per shot (3D frame, overhead map, line, prompt), grouped by scene; one column on a phone. */
+:root{--bg:#f3f2f7;--fg:#1b1a2b;--muted:#5d5a78;--line:#d6d3e6;--panel:#e9e7f2;--paper:#ffffff;--ink:#46464c;--accent:#5b3fd1;--ok:#1d7a4b;--bad:#b42340;--warn:#a86a00;
+--display:"Chakra Petch",system-ui,sans-serif;--body:"Source Serif 4",Georgia,serif;--mono:"JetBrains Mono",ui-monospace,monospace}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d0e1c;--fg:#e9e7f5;--muted:#a19dc0;--line:#2b2a46;--panel:#16172b;--paper:#1c1d33;--ink:#c9c7dc;--accent:#a996ff;--ok:#5fd39a;--bad:#ff6b85;--warn:#f0b54a;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0d0e1c;--fg:#e9e7f5;--muted:#a19dc0;--line:#2b2a46;--panel:#16172b;--paper:#1c1d33;--ink:#c9c7dc;--accent:#a996ff;--ok:#5fd39a;--bad:#ff6b85;--warn:#f0b54a;color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font:16px/1.55 var(--body);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 64px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+main{max-width:1200px;margin:0 auto;display:grid;gap:44px}
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:3;background:var(--bg);border-bottom:1px solid var(--line);padding-block:10px;display:flex;flex-wrap:wrap;gap:6px 16px;align-items:baseline}
+header.top nav{display:flex;flex-wrap:wrap;gap:4px 12px;font:13px var(--mono)}
+header.top nav a{color:var(--muted);text-decoration:none}header.top nav a:hover,header.top nav a:focus-visible{color:var(--accent)}
+h1{font:600 clamp(22px,4vw,30px)/1.15 var(--display);margin:0;text-wrap:balance}
+h2{font:600 24px/1.2 var(--display);margin:0;text-wrap:balance}h3{font:500 18px/1.25 var(--display);margin:0}
+.status,.tally{font:13px var(--mono);color:var(--muted);font-variant-numeric:tabular-nums}
+p{margin:0;max-width:70ch}.muted{color:var(--muted)}
+section{display:grid;gap:14px}
+.eyebrow{font:12px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:14px}
+figure{margin:0;display:grid;gap:6px;min-width:0}figure img{width:100%;height:auto;border-radius:4px;display:block}
+figcaption{font:12px var(--mono);color:var(--muted)}
+button.pick{all:unset;cursor:pointer;display:grid;gap:6px;padding:5px;border-radius:6px;outline:2px solid transparent;min-width:0}
+button.pick img{width:100%;height:auto;border-radius:4px;display:block}
+button.pick[aria-pressed="true"]{outline-color:var(--accent);background:var(--panel)}button.pick:focus-visible{outline-color:var(--fg)}
+button.pick span{font:12px var(--mono);color:var(--muted)}button.pick[aria-pressed="true"] span{color:var(--accent)}
+.verdict{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-start}
+.verdict button{font:13px var(--mono);padding:8px 14px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--fg);cursor:pointer;min-height:36px}
+.verdict button[aria-pressed="true"].ok{background:var(--ok);border-color:var(--ok);color:var(--bg)}
+.verdict button[aria-pressed="true"].bad{background:var(--bad);border-color:var(--bad);color:var(--bg)}
+.verdict button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+textarea{flex:1 1 240px;min-width:0;width:100%;min-height:40px;font:15px/1.4 var(--body);color:var(--fg);background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:8px 10px;resize:vertical}
+@media (max-width:640px){.pair{grid-template-columns:1fr}}
+.scene{display:grid;gap:14px}
+.scene>header{display:grid;gap:4px;border-top:2px solid var(--fg);padding-top:10px}
+.geo{font-size:14px;color:var(--muted);max-width:90ch}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr));gap:16px}
+.card{display:grid;gap:8px;align-content:start;min-width:0;border:1px solid var(--line);border-radius:8px;padding:10px;background:var(--bg)}
+.card.ok{border-color:var(--ok)}.card.change{border-color:var(--bad)}
+.card .head{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline}
+.card .id{font:600 15px var(--mono);color:var(--accent)}.card .sz{font:12px var(--mono);color:var(--muted)}
+.card .line{font:italic 14px/1.4 var(--body)}
+.card .act{font-size:14px;line-height:1.4;color:var(--muted)}
+details summary{font:12px var(--mono);color:var(--muted);cursor:pointer;padding-block:4px}
+pre.prompt{white-space:pre-wrap;word-break:break-word;font:12px/1.45 var(--mono);background:var(--panel);border-radius:6px;padding:8px;margin:4px 0 0;max-height:260px;overflow:auto}
+.tag{font:11px var(--mono);padding:1px 7px;border-radius:999px;border:1px solid var(--line);color:var(--muted)}
+.tag.comp{border-color:var(--warn);color:var(--warn)}
+@media (max-width:640px){header.top{position:static}}
+.flag{font:600 12px var(--mono);text-transform:uppercase;letter-spacing:.05em}.flag.pass{color:var(--ok)}.flag.fail{color:var(--bad)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:8px}
+.platecard{display:grid;gap:10px;border-top:1px solid var(--line);padding-top:14px}
+.platecard.picked{border-top-color:var(--ok)}.platecard.redo{border-top-color:var(--bad)}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,3fr);gap:10px;align-items:start}
+@media (max-width:640px){.layout{grid-template-columns:1fr}}
+.verdict button[aria-pressed="true"].redo{background:var(--bad);border-color:var(--bad);color:var(--bg)}
+.card .frame{width:100%;height:auto;border-radius:4px;display:block;cursor:zoom-in}
+.card .frame.big{cursor:zoom-out}
+.thumbs{display:flex;gap:6px;align-items:center}.thumbs img{width:96px;height:auto;border:1px solid var(--line);border-radius:3px}
+.thumbs span{font:11px var(--mono);color:var(--muted)}
+.cards.wide{grid-template-columns:repeat(auto-fill,minmax(min(100%,420px),1fr))}
+.pick2{display:grid;gap:10px;border-top:1px solid var(--line);padding-top:14px}
+.pick2.picked{border-top:2px solid var(--ok)}.pick2.neither{border-top:2px solid var(--bad)}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:10px}
+.cand{display:grid;gap:6px;align-content:start;min-width:0}
+.cand .rev{font-size:13px;line-height:1.4;color:var(--muted)}
+.cand .rev b{font:600 11px var(--mono);letter-spacing:.05em;text-transform:uppercase}
+.cand .rev b.pass{color:var(--ok)}.cand .rev b.fail{color:var(--bad)}
+.summary{display:grid;gap:18px;background:var(--panel);border-radius:10px;padding:18px max(16px,2vw)}
+.summary h2{font-size:20px}.summary ul{margin:0;padding-left:20px;display:grid;gap:4px;max-width:80ch}
+.summary video{width:100%;max-width:720px;border-radius:6px;background:#000}
+.summary .vids{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:12px}
+</style>
+<main>
+<header class="top"><h1 id="h1"></h1><nav id="nav"></nav><span class="tally" id="tally"></span><span class="status" id="status">loading…</span></header>
+<section id="intro"></section>
+<div id="rows" style="display:grid;gap:40px"></div>
+</main>
+<script>
+const DATA = __DATA__;
+const state = {}; let db = null;
+const $ = (t, a = {}, ...kids) => { const e = document.createElement(t); for (const [k, v] of Object.entries(a)) { if (k === 'class') e.className = v; else if (k === 'text') e.textContent = v; else e.setAttribute(k, v); } e.append(...kids); return e; };
+function setStatus(t) { document.getElementById('status').textContent = t; }
+const refreshers = []; function refresh() { for (const f of refreshers) f(); tally(); }
+async function save(item, patch) {
+  state[item] = { ...(state[item] || {}), ...patch }; refresh();
+  if (!db) return;
+  try { await db.doc(DATA.coll + '/' + item).set({ ...state[item], at: new Date().toISOString() }); setStatus('saved'); }
+  catch (e) { setStatus('not saved (' + ((e && e.code) || 'error') + '); tell Claude in chat'); }
+}
+function noteBox(item) {
+  const note = $('textarea', { placeholder: 'Comment', rows: '1', 'aria-label': 'Comment on ' + item });
+  note.addEventListener('change', () => save(item, { note: note.value }));
+  refreshers.push(() => { if (document.activeElement !== note) note.value = state[item]?.note || ''; });
+  return note;
+}
+document.getElementById('h1').textContent = DATA.title;
+document.getElementById('intro').append(...DATA.intro.map(t => $('p', { class: 'muted', text: t })));
+if (DATA.summary) {
+  const box = $('div', { class: 'summary' });
+  for (const sec of DATA.summary) {
+    const s = $('section', {}, $('h2', { text: sec.title }));
+    for (const para of sec.paras || []) s.append($('p', { text: para }));
+    if (sec.list) s.append($('ul', {}, ...sec.list.map(x => $('li', { text: x }))));
+    if (sec.images) s.append($('div', { class: 'vids' }, ...sec.images.map(v => $('figure', {}, $('img', { src: v.src, alt: v.label, loading: 'lazy' }), $('figcaption', { text: v.label })))));
+    if (sec.videos) s.append($('div', { class: 'vids' }, ...sec.videos.map(v => $('figure', {}, $('video', { src: v.src, controls: '', preload: 'none', playsinline: '' }), $('figcaption', { text: v.label })))));
+    box.append(s);
+  }
+  document.getElementById('intro').append(box);
+}
+const ids = [];
+if (DATA.mode === 'plates') {
+  const nav = document.getElementById('nav');
+  for (const grp of DATA.groups) {
+    const anchor = 'g-' + grp.key; nav.append($('a', { href: '#' + anchor, text: grp.title }));
+    const sec = $('section', { id: anchor, class: 'scene' }, $('header', {}, $('h2', { text: grp.title }), $('p', { class: 'geo', text: grp.note || '' })));
+    for (const p of grp.items) {
+      ids.push(p.id);
+      const card = $('div', { class: 'platecard' });
+      const opts = $('div', { class: 'opts' });
+      for (const o of p.options) {
+        const b = $('button', { class: 'pick', type: 'button', 'aria-pressed': 'false' }, $('img', { src: o.img, alt: p.id + ' option ' + o.key, loading: 'lazy' }), $('span', { text: o.label }));
+        b.onclick = () => save(p.id, { pick: state[p.id]?.pick === o.key ? null : o.key });
+        refreshers.push(() => b.setAttribute('aria-pressed', String(state[p.id]?.pick === o.key)));
+        opts.append(b);
+      }
+      const redo = $('button', { class: 'redo', type: 'button', text: 'Redo this plate' });
+      redo.onclick = () => save(p.id, { pick: state[p.id]?.pick === 'redo' ? null : 'redo' });
+      refreshers.push(() => { const k = state[p.id]?.pick; redo.setAttribute('aria-pressed', String(k === 'redo')); card.classList.toggle('picked', !!k && k !== 'redo'); card.classList.toggle('redo', k === 'redo'); });
+      card.append($('div', { class: 'head' }, $('span', { class: 'id', text: p.id.replace('plate-', '') }), $('span', { class: 'sz', text: p.what })),
+        $('div', { class: 'layout' }, $('figure', {}, $('img', { src: p.set, alt: '3D layout for ' + p.id, loading: 'lazy' }), $('figcaption', { text: '3D set, this camera' + (p.uses ? ' · used by ' + p.uses : '') })), opts),
+        $('div', { class: 'verdict' }, redo, noteBox(p.id)));
+      sec.append(card);
+    }
+    document.getElementById('rows').append(sec);
+  }
+} else if (DATA.mode === 'pick2') {
+  const nav = document.getElementById('nav');
+  for (const sc of DATA.scenes) {
+    const anchor = 's-' + sc.key; nav.append($('a', { href: '#' + anchor, text: sc.short }));
+    const sec = $('section', { class: 'scene', id: anchor }, $('header', {}, $('h2', { text: sc.title + ' · ' + sc.shots.length + ' shots' })));
+    for (const s of sc.shots) {
+      ids.push(s.id);
+      const card = $('article', { class: 'pick2', id: 'shot-' + s.id });
+      const head = $('div', { class: 'head' }, $('span', { class: 'id', text: s.id }), $('span', { class: 'sz', text: s.size }));
+      if (s.tag) head.append($('span', { class: 'tag comp', text: s.tag }));
+      card.append(head);
+      if (s.line) card.append($('div', { class: 'line', text: '“' + s.line + '”' }));
+      card.append($('div', { class: 'act', text: s.action }));
+      const two = $('div', { class: 'two' });
+      for (const c of s.cands) {
+        const b = $('button', { class: 'pick', type: 'button', 'aria-pressed': 'false' }, $('img', { src: c.img, alt: s.id + ' ' + c.key, loading: 'lazy' }), $('span', { text: c.label }));
+        b.onclick = () => save(s.id, { pick: state[s.id]?.pick === c.key ? null : c.key });
+        refreshers.push(() => b.setAttribute('aria-pressed', String(state[s.id]?.pick === c.key)));
+        const rev = $('div', { class: 'rev' });
+        if (c.verdict) rev.append($('b', { class: c.verdict, text: c.verdict === 'pass' ? 'reviewer: passes' : 'reviewer: fails' }), ' ');
+        rev.append(c.note || '');
+        two.append($('div', { class: 'cand' }, b, rev));
+      }
+      card.append(two);
+      if (s.frame) card.append($('div', { class: 'thumbs' }, $('img', { src: s.frame, alt: '3D layout for ' + s.id, loading: 'lazy' }), $('span', { text: '3D layout' })));
+      const nei = $('button', { class: 'bad', type: 'button', text: 'Neither' });
+      nei.onclick = () => save(s.id, { pick: state[s.id]?.pick === 'neither' ? null : 'neither' });
+      refreshers.push(() => { const k = state[s.id]?.pick; nei.setAttribute('aria-pressed', String(k === 'neither')); card.classList.toggle('picked', !!k && k !== 'neither'); card.classList.toggle('neither', k === 'neither'); });
+      card.append($('div', { class: 'verdict' }, nei, noteBox(s.id)));
+      sec.append(card);
+    }
+    document.getElementById('rows').append(sec);
+  }
+} else {
+  const nav = document.getElementById('nav');
+  for (const sc of DATA.scenes) {
+    const anchor = 's-' + sc.key; nav.append($('a', { href: '#' + anchor, text: sc.short }));
+    const grid = $('div', { class: 'cards wide' });
+    for (const s of sc.shots) {
+      ids.push(s.id);
+      const card = $('article', { class: 'card', id: 'shot-' + s.id });
+      const img = $('img', { class: 'frame', src: s.img, alt: 'Frame ' + s.id + ': ' + s.action, loading: 'lazy' });
+      const head = $('div', { class: 'head' }, $('span', { class: 'id', text: s.id }), $('span', { class: 'sz', text: s.size }));
+      if (s.tag) head.append($('span', { class: 'tag comp', text: s.tag }));
+      card.append(head, img);
+      if (s.line) card.append($('div', { class: 'line', text: '“' + s.line + '”' }));
+      card.append($('div', { class: 'act', text: s.action }));
+      if (s.frame) card.append($('div', { class: 'thumbs' }, $('img', { src: s.frame, alt: '3D layout for ' + s.id, loading: 'lazy' }), $('span', { text: '3D layout' })));
+      const ok = $('button', { class: 'ok', type: 'button', text: 'OK' }), bad = $('button', { class: 'bad', type: 'button', text: 'Change' });
+      ok.onclick = () => save(s.id, { status: state[s.id]?.status === 'ok' ? null : 'ok' });
+      bad.onclick = () => save(s.id, { status: state[s.id]?.status === 'change' ? null : 'change' });
+      refreshers.push(() => { const st = state[s.id]?.status; ok.setAttribute('aria-pressed', String(st === 'ok')); bad.setAttribute('aria-pressed', String(st === 'change')); card.classList.toggle('ok', st === 'ok'); card.classList.toggle('change', st === 'change'); });
+      card.append($('div', { class: 'verdict' }, ok, bad, noteBox(s.id)));
+      grid.append(card);
+    }
+    document.getElementById('rows').append($('section', { class: 'scene', id: anchor }, $('header', {}, $('h2', { text: sc.title + ' · ' + sc.shots.length + ' frames' }), $('p', { class: 'geo', text: sc.note || '' })), grid));
+  }
+}
+function tally() {
+  let a = 0, b = 0;
+  for (const id of ids) { const s = state[id] || {}; if (DATA.mode === 'plates' || DATA.mode === 'pick2') { if (s.pick && s.pick !== 'redo' && s.pick !== 'neither') a++; else if (s.pick === 'redo' || s.pick === 'neither') b++; } else { if (s.status === 'ok') a++; else if (s.status === 'change') b++; } }
+  document.getElementById('tally').textContent = DATA.mode === 'plates' ? `${a} picked · ${b} to redo · ${ids.length - a - b} unmarked` : DATA.mode === 'pick2' ? `${a} picked · ${b} neither · ${ids.length - a - b} unmarked` : `${a} OK · ${b} to change · ${ids.length - a - b} unmarked`;
+}
+refresh();
+(async () => {
+  try { db = window.claude ? await window.claude.use('db') : null; } catch (e) { db = null; }
+  if (!db) { setStatus('marks can’t be saved in this view; tell Claude in chat'); return; }
+  setStatus('marks save as you go');
+  db.collection(DATA.coll).onSnapshot(snap => { for (const d of snap.docs) { const v = d.data(); if (v) state[d.id] = v; } refresh(); }, e => setStatus('not connected: ' + e.code));
+})();
+</script>

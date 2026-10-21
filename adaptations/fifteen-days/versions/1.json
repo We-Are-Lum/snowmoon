@@ -1,0 +1,39 @@
+{
+ "about": "Version 1 of Fifteen Days: the files it was made from, all committed. The live editor (scripts/editor-data.mjs, /@<name>/1/shot/<shot>) reads only these, so it works the same on any fork.",
+ "adaptation": 1,
+ "version": 1,
+ "seed": "fifteen-days",
+ "title": "Fifteen Days",
+ "cut": "scenes-out/fifteen-days/cuts/coverage-v6",
+ "timeline": "scenes-out/fifteen-days/cuts/coverage-v6/timeline.json",
+ "frames_recipe": "adaptations/fifteen-days/preprod/overnight/frames-recipe.json",
+ "picks": [
+  "adaptations/fifteen-days/preprod/overnight/coverage-pictures.json",
+  "adaptations/fifteen-days/preprod/overnight/coverage-pictures-v5.json",
+  "adaptations/fifteen-days/preprod/overnight/coverage-pictures-v6.json"
+ ],
+ "board": "adaptations/fifteen-days/preprod/coverage-board-v6.json",
+ "lines": "adaptations/fifteen-days/recording-lines.json",
+ "sets": "adaptations/fifteen-days/preprod/sets",
+ "sent": "adaptations/fifteen-days/preprod/sent",
+ "set_frames": "adaptations/fifteen-days/preprod/set-frames",
+ "author": {
+  "fid": 6786,
+  "handle": "naaate"
+ },
+ "delivery": {
+  "about": "The same cut, packaged to start sooner (owner, 2026-10-18; src/lib/scene-delivery.ts). The cut above stays the version's file; these are copies made from it with ffmpeg 9.0.1 and uploaded by npm run publish:scene-video.",
+  "wide": {
+   "file": "scenes-out/fifteen-days/cuts/coverage-v6/delivery/wide.mp4",
+   "sha256": "3e425205b1a4619a5992121e12bba8a2b09a081617e8362c15e3881a243560be",
+   "made": "ffmpeg -i coverage-v6.mp4 -map 0 -c copy -movflags +frag_keyframe+empty_moov+default_base_moof+global_sidx -frag_duration 1000000 wide.mp4",
+   "same_as_cut": "video and audio streams bit-identical (ffmpeg -f streamhash: video 0ecb2be4…, audio 829cca4c…)"
+  },
+  "phone": {
+   "file": "scenes-out/fifteen-days/cuts/coverage-v6/delivery/phone.mp4",
+   "sha256": "6a5de81bbece2431033e0f902e0e888158f1f636a7eab8f47cb7e0cdf9fd7028",
+   "made": "ffmpeg -i coverage-v6.mp4 -map 0 -vf scale=1280:720:flags=lanczos -c:v libx264 -profile:v high -preset slow -crf 24 -maxrate 900k -bufsize 1800k -g 60 -keyint_min 30 -pix_fmt yuv420p -c:a copy, then re-wrapped as wide.mp4",
+   "for": "screens up to 800px wide"
+  }
+ }
+}

@@ -1,0 +1,3897 @@
+{
+ "about": "Fifteen Days, the coverage cut (owner's rules, 2026-10-17; docs/coverage.md; scripts/cut-coverage.py from coverage-board.json). Setups, variants, cut points and sound places DRAFTED by the coding agent.",
+ "seed": "fifteen-days",
+ "placeholder": true,
+ "placeholder_reason": "frames drawn and self-reviewed, for the owner's final watch",
+ "video": {
+  "width": 1920,
+  "height": 1080,
+  "fps": 30
+ },
+ "loudness": {
+  "integrated_lufs": -16,
+  "true_peak_db": -1,
+  "lra": 11
+ },
+ "tail_s": 1.0,
+ "tracks": {
+  "voice": {
+   "level_db": 0
+  },
+  "bed": {
+   "level_db": -24
+  },
+  "foley": {
+   "level_db": -10
+  },
+  "music": {
+   "level_db": -16
+  }
+ },
+ "rooms": {
+  "hall": "highpass=f=90,aecho=0.8:0.6:60|110:0.18|0.12",
+  "corridor": "highpass=f=80,aecho=0.85:0.7:37|71|113:0.26|0.17|0.10",
+  "courtyard": "highpass=f=70,aecho=0.9:0.6:14:0.06",
+  "gate": "highpass=f=70,aecho=0.9:0.6:55:0.08",
+  "lobby": "highpass=f=80,aecho=0.85:0.55:18|31:0.14|0.09"
+ },
+ "cues": [
+  {
+   "id": "fx-0-0",
+   "track": "foley",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/fx-0-0.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 0.4
+   },
+   "level_db": -14,
+   "fade_in": 0.03,
+   "fade_out": 0.2,
+   "note": "game: flyby (drafted place)",
+   "source": {
+    "effect": "game: flyby",
+    "licence": "GPL-3.0, with the code that makes it"
+   }
+  },
+  {
+   "id": "fx-1-0",
+   "track": "foley",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/fx-1-0.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 2.4
+   },
+   "level_db": -12,
+   "fade_in": 0.03,
+   "fade_out": 0.2,
+   "note": "game: blast (drafted place)",
+   "source": {
+    "effect": "game: blast",
+    "licence": "GPL-3.0, with the code that makes it"
+   }
+  },
+  {
+   "id": "fx-1-1",
+   "track": "foley",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/fx-1-1.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 3.0
+   },
+   "level_db": -16,
+   "fade_in": 0.03,
+   "fade_out": 0.2,
+   "note": "game: flyby (drafted place)",
+   "source": {
+    "effect": "game: flyby",
+    "licence": "GPL-3.0, with the code that makes it"
+   }
+  },
+  {
+   "id": "fx-2-0",
+   "track": "foley",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/fx-2-0.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 4.1
+   },
+   "level_db": -15,
+   "fade_in": 0.03,
+   "fade_out": 0.2,
+   "note": "game: blast (drafted place)",
+   "source": {
+    "effect": "game: blast",
+    "licence": "GPL-3.0, with the code that makes it"
+   }
+  },
+  {
+   "id": "fx-3-0",
+   "track": "foley",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/fx-3-0.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 5.2
+   },
+   "level_db": -13,
+   "fade_in": 0.03,
+   "fade_out": 0.2,
+   "note": "game: crash (drafted place)",
+   "source": {
+    "effect": "game: crash",
+    "licence": "GPL-3.0, with the code that makes it"
+   }
+  },
+  {
+   "id": "fx-4-0",
+   "track": "foley",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/fx-4-0.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 6.2
+   },
+   "level_db": -10,
+   "fade_in": 0.03,
+   "fade_out": 0.2,
+   "note": "hall: crowd swell (drafted place)",
+   "source": {
+    "effect": "hall: crowd swell",
+    "licence": "Creative Commons 0 (CC0 1.0), as shown on the sound's page"
+   }
+  },
+  {
+   "id": "b1-1",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b1-1.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 7.7
+   },
+   "room": "hall",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v3/L01-b1-1.zei-v4b.wav",
+    "voice": "zei-v4b"
+   }
+  },
+  {
+   "id": "b1-2",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b1-2.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 12.318
+   },
+   "room": "hall",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v3/L02-b1-2.bai-v3b.wav",
+    "voice": "bai-v3b"
+   }
+  },
+  {
+   "id": "b1-3",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b1-3.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 15.699
+   },
+   "room": "hall",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v3/L03-b1-3.bai-v3b.wav",
+    "voice": "bai-v3b"
+   }
+  },
+  {
+   "id": "fx-8-0",
+   "track": "foley",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/fx-8-0.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 19.0
+   },
+   "level_db": -18,
+   "fade_in": 0.03,
+   "fade_out": 0.2,
+   "note": "game: crash (drafted place)",
+   "source": {
+    "effect": "game: crash",
+    "licence": "GPL-3.0, with the code that makes it"
+   }
+  },
+  {
+   "id": "fx-9-0",
+   "track": "foley",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/fx-9-0.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 20.4
+   },
+   "level_db": -20,
+   "fade_in": 0.03,
+   "fade_out": 0.2,
+   "note": "game: blast (drafted place)",
+   "source": {
+    "effect": "game: blast",
+    "licence": "GPL-3.0, with the code that makes it"
+   }
+  },
+  {
+   "id": "b1-4",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b1-4.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 21.4
+   },
+   "room": "hall",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v3/L04-b1-4.zei-v4b.wav",
+    "voice": "zei-v4b"
+   }
+  },
+  {
+   "id": "b1-5",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b1-5.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 23.447
+   },
+   "room": "hall",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v3/L05-b1-5.bai-v3b.wav",
+    "voice": "bai-v3b"
+   }
+  },
+  {
+   "id": "fx-12-0",
+   "track": "foley",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/fx-12-0.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 28.578
+   },
+   "level_db": -22,
+   "fade_in": 0.03,
+   "fade_out": 0.2,
+   "note": "game: blast (drafted place)",
+   "source": {
+    "effect": "game: blast",
+    "licence": "GPL-3.0, with the code that makes it"
+   }
+  },
+  {
+   "id": "b1-6",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b1-6.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 29.578
+   },
+   "room": "hall",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v3/L06-b1-6.bai-v3b.wav",
+    "voice": "bai-v3b"
+   }
+  },
+  {
+   "id": "fx-13-0",
+   "track": "foley",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/fx-13-0.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 30.478
+   },
+   "level_db": -18,
+   "fade_in": 0.03,
+   "fade_out": 0.2,
+   "note": "game: wall (drafted place)",
+   "source": {
+    "effect": "game: wall",
+    "licence": "GPL-3.0, with the code that makes it"
+   }
+  },
+  {
+   "id": "fx-14-0",
+   "track": "foley",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/fx-14-0.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 35.765
+   },
+   "level_db": -6,
+   "fade_in": 0.03,
+   "fade_out": 0.2,
+   "note": "hall: crowd swell (drafted place)",
+   "source": {
+    "effect": "hall: crowd swell",
+    "licence": "Creative Commons 0 (CC0 1.0), as shown on the sound's page"
+   }
+  },
+  {
+   "id": "fx-14-1",
+   "track": "foley",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/fx-14-1.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 36.165
+   },
+   "level_db": -12,
+   "fade_in": 0.03,
+   "fade_out": 0.2,
+   "note": "game: crash (drafted place)",
+   "source": {
+    "effect": "game: crash",
+    "licence": "GPL-3.0, with the code that makes it"
+   }
+  },
+  {
+   "id": "fx-16-0",
+   "track": "foley",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/fx-16-0.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 38.665
+   },
+   "level_db": -8,
+   "fade_in": 0.03,
+   "fade_out": 0.2,
+   "note": "device: elevator-arrive (drafted place)",
+   "source": {
+    "effect": "device: elevator-arrive",
+    "licence": "GPL-3.0, with the code that makes it"
+   }
+  },
+  {
+   "id": "b2-1",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b2-1.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 40.165
+   },
+   "room": "corridor",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v3/L07-b2-1.zei-v4b.wav",
+    "voice": "zei-v4b"
+   }
+  },
+  {
+   "id": "b2-2",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b2-2.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 41.447
+   },
+   "room": "corridor",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v2/L08-b2-2.deluin-v2.wav",
+    "voice": "deluin-v2"
+   }
+  },
+  {
+   "id": "b2-3",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b2-3.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 49.629
+   },
+   "room": "corridor",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v3/L09-b2-3.zei-v4b.wav",
+    "voice": "zei-v4b"
+   }
+  },
+  {
+   "id": "b2-4",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b2-4.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 58.819
+   },
+   "room": "corridor",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v2/L10-b2-4.deluin-v2.wav",
+    "voice": "deluin-v2"
+   }
+  },
+  {
+   "id": "b2-5",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b2-5.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 67.991
+   },
+   "room": "corridor",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v3/L11-b2-5.zei-v4b.wav",
+    "voice": "zei-v4b"
+   }
+  },
+  {
+   "id": "b2-6",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b2-6.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 70.126
+   },
+   "room": "corridor",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v2/L12-b2-6.deluin-v2.wav",
+    "voice": "deluin-v2"
+   }
+  },
+  {
+   "id": "b2-7",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b2-7.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 76.527
+   },
+   "room": "corridor",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v3/L13-b2-7.zei-v4b.wav",
+    "voice": "zei-v4b"
+   }
+  },
+  {
+   "id": "b2-8",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b2-8.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 82.312
+   },
+   "room": "corridor",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v3/L14-b2-8.bai-v3b.wav",
+    "voice": "bai-v3b"
+   }
+  },
+  {
+   "id": "b2-9",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b2-9.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 85.993
+   },
+   "room": "corridor",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v3/L15-b2-9.zei-v4b.wav",
+    "voice": "zei-v4b"
+   }
+  },
+  {
+   "id": "b2-10",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b2-10.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 89.551
+   },
+   "room": "corridor",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v3/L16-b2-10.bai-v3b.wav",
+    "voice": "bai-v3b"
+   }
+  },
+  {
+   "id": "b2-11",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b2-11.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 94.789
+   },
+   "room": "corridor",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v3/L17-b2-11.bai-v3b.wav",
+    "voice": "bai-v3b"
+   }
+  },
+  {
+   "id": "b2-12",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b2-12.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 97.373
+   },
+   "room": "corridor",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v3/L18-b2-12.zei-v4b.wav",
+    "voice": "zei-v4b"
+   }
+  },
+  {
+   "id": "b3-1",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b3-1.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 101.537
+   },
+   "room": "courtyard",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v2/L19-b3-1.deluin-v2.wav",
+    "voice": "deluin-v2"
+   }
+  },
+  {
+   "id": "laugh",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/laugh.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 101.137
+   },
+   "level_db": -5,
+   "note": "Deluin laughing at the table as Zei arrives"
+  },
+  {
+   "id": "b3-2",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b3-2.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 106.631
+   },
+   "room": "courtyard",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v2/L20-b3-2.robot.wav",
+    "voice": "robot"
+   }
+  },
+  {
+   "id": "b3-3",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b3-3.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 109.576
+   },
+   "room": "courtyard",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v3/L21-b3-3.zei-v4b.wav",
+    "voice": "zei-v4b"
+   }
+  },
+  {
+   "id": "fx-32-0",
+   "track": "foley",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/fx-32-0.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 109.396
+   },
+   "level_db": -10,
+   "fade_in": 0.03,
+   "fade_out": 0.2,
+   "note": "device: menu-appears (drafted place)",
+   "source": {
+    "effect": "device: menu-appears",
+    "licence": "GPL-3.0, with the code that makes it"
+   }
+  },
+  {
+   "id": "b3-4",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b3-4.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 111.4
+   },
+   "room": "courtyard",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v2/L22-b3-4.deluin-v2.wav",
+    "voice": "deluin-v2"
+   }
+  },
+  {
+   "id": "b3-5",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b3-5.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 114.44
+   },
+   "room": "courtyard",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v3/L23-b3-5.zei-v4b.wav",
+    "voice": "zei-v4b"
+   }
+  },
+  {
+   "id": "fx-35-0",
+   "track": "foley",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/fx-35-0.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 115.54
+   },
+   "level_db": -14,
+   "fade_in": 0.03,
+   "fade_out": 0.2,
+   "note": "device: menu-tap-1 (drafted place)",
+   "source": {
+    "effect": "device: menu-tap-1",
+    "licence": "GPL-3.0, with the code that makes it"
+   }
+  },
+  {
+   "id": "b3-6",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b3-6.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 121.783
+   },
+   "room": "courtyard",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v3/L24-b3-6.zei-v4b.wav",
+    "voice": "zei-v4b"
+   }
+  },
+  {
+   "id": "b3-7",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b3-7.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 123.67
+   },
+   "room": "courtyard",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v2/L25-b3-7.deluin-v2.wav",
+    "voice": "deluin-v2"
+   }
+  },
+  {
+   "id": "b3-8",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b3-8.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 128.116
+   },
+   "room": "courtyard",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v3/L26-b3-8.zei-v4b.wav",
+    "voice": "zei-v4b"
+   }
+  },
+  {
+   "id": "fx-39-0",
+   "track": "foley",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/fx-39-0.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 130.036
+   },
+   "level_db": -14,
+   "fade_in": 0.03,
+   "fade_out": 0.2,
+   "note": "device: menu-tap-2 (drafted place)",
+   "source": {
+    "effect": "device: menu-tap-2",
+    "licence": "GPL-3.0, with the code that makes it"
+   }
+  },
+  {
+   "id": "b3-9",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b3-9.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 136.233
+   },
+   "room": "courtyard",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v2/L27-b3-9.deluin-v2.wav",
+    "voice": "deluin-v2"
+   }
+  },
+  {
+   "id": "fx-40-0",
+   "track": "foley",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/fx-40-0.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 137.353
+   },
+   "level_db": -14,
+   "fade_in": 0.03,
+   "fade_out": 0.2,
+   "note": "device: menu-tap-3 (drafted place)",
+   "source": {
+    "effect": "device: menu-tap-3",
+    "licence": "GPL-3.0, with the code that makes it"
+   }
+  },
+  {
+   "id": "b3-10",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b3-10.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 150.302
+   },
+   "room": "courtyard",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v3/L28-b3-10.zei-v4b.wav",
+    "voice": "zei-v4b"
+   }
+  },
+  {
+   "id": "b3-11",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b3-11.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 151.986
+   },
+   "room": "courtyard",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v2/L29-b3-11.deluin-v2.wav",
+    "voice": "deluin-v2"
+   }
+  },
+  {
+   "id": "b3-12",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b3-12.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 156.924
+   },
+   "room": "courtyard",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v3/L30-b3-12.zei-v4b.wav",
+    "voice": "zei-v4b"
+   }
+  },
+  {
+   "id": "b3-13",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b3-13.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 160.436
+   },
+   "room": "courtyard",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v3/L31-b3-13.bai-v3b.wav",
+    "voice": "bai-v3b"
+   }
+  },
+  {
+   "id": "fx-45-0",
+   "track": "foley",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/fx-45-0.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 169.972
+   },
+   "level_db": -12,
+   "fade_in": 0.03,
+   "fade_out": 0.2,
+   "note": "device: robot-glide (drafted place)",
+   "source": {
+    "effect": "device: robot-glide",
+    "licence": "GPL-3.0, with the code that makes it"
+   }
+  },
+  {
+   "id": "b4-1",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b4-1.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 171.372
+   },
+   "room": "courtyard",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v2/L32-b4-1.deluin-v2.wav",
+    "voice": "deluin-v2"
+   }
+  },
+  {
+   "id": "b4-2",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b4-2.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 183.838
+   },
+   "room": "courtyard",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v3/L33-b4-2.zei-v4b.wav",
+    "voice": "zei-v4b"
+   }
+  },
+  {
+   "id": "b4-3",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b4-3.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 195.111
+   },
+   "room": "courtyard",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v2/L34-b4-3.deluin-v2.wav",
+    "voice": "deluin-v2"
+   }
+  },
+  {
+   "id": "b4-4",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b4-4.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 211.986
+   },
+   "room": "courtyard",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v3/L35-b4-4.zei-v4b.wav",
+    "voice": "zei-v4b"
+   }
+  },
+  {
+   "id": "b4-5",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b4-5.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 214.84
+   },
+   "room": "courtyard",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v2/L36-b4-5.deluin-v2.wav",
+    "voice": "deluin-v2"
+   }
+  },
+  {
+   "id": "b5-1",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b5-1.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 225.283
+   },
+   "room": "courtyard",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v2/L37-b5-1.deluin-v2.wav",
+    "voice": "deluin-v2"
+   }
+  },
+  {
+   "id": "b5-2",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b5-2.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 234.037
+   },
+   "room": "courtyard",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v3/L38-b5-2.zei-v4b.wav",
+    "voice": "zei-v4b"
+   }
+  },
+  {
+   "id": "b5-3",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b5-3.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 242.408
+   },
+   "room": "courtyard",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v2/L39-b5-3.deluin-v2.wav",
+    "voice": "deluin-v2"
+   }
+  },
+  {
+   "id": "b5-4",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b5-4.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 248.79
+   },
+   "room": "courtyard",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v2/L40-b5-4.deluin-v2.wav",
+    "voice": "deluin-v2"
+   }
+  },
+  {
+   "id": "b5-5",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b5-5.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 251.093
+   },
+   "room": "courtyard",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v3/L41-b5-5.bai-v3b.wav",
+    "voice": "bai-v3b"
+   }
+  },
+  {
+   "id": "dreadnaught",
+   "track": "music",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/dreadnaught-loud.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 252.193
+   },
+   "level_db": 0,
+   "fade_in": 0.08,
+   "fade_out": 0.25,
+   "note": "Dreadnaught v3 from her lifted headphone"
+  },
+  {
+   "id": "b6-1",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b6-1.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 256.52
+   },
+   "room": "gate",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v2/L42-b6-1.deluin-v2.wav",
+    "voice": "deluin-v2"
+   }
+  },
+  {
+   "id": "fx-67-0",
+   "track": "foley",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/fx-67-0.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 271.665
+   },
+   "level_db": -9,
+   "fade_in": 0.03,
+   "fade_out": 0.2,
+   "note": "device: message-sent (drafted place)",
+   "source": {
+    "effect": "device: message-sent",
+    "licence": "GPL-3.0, with the code that makes it"
+   }
+  },
+  {
+   "id": "fx-69-0",
+   "track": "foley",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/fx-69-0.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 273.965
+   },
+   "level_db": -8,
+   "fade_in": 0.03,
+   "fade_out": 0.2,
+   "note": "device: message-received-a (drafted place)",
+   "source": {
+    "effect": "device: message-received-a",
+    "licence": "GPL-3.0, with the code that makes it"
+   }
+  },
+  {
+   "id": "fx-72-0",
+   "track": "foley",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/fx-72-0.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 280.865
+   },
+   "level_db": -8,
+   "fade_in": 0.03,
+   "fade_out": 0.2,
+   "note": "device: message-received-b (drafted place)",
+   "source": {
+    "effect": "device: message-received-b",
+    "licence": "GPL-3.0, with the code that makes it"
+   }
+  },
+  {
+   "id": "bed-0",
+   "track": "bed",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/bed-0.wav",
+   "loop": true,
+   "loop_xfade_s": 1.5,
+   "at": {
+    "cue": "@start",
+    "offset": 0
+   },
+   "until": {
+    "cue": "@start",
+    "offset": 39.165
+   },
+   "level_db": 2,
+   "fade_in": 1.0,
+   "fade_out": 1.0,
+   "source": {
+    "effect": "bed: match hall",
+    "url": "https://freesound.org/people/klankbeeld/sounds/171462/",
+    "author": "klankbeeld",
+    "licence": "Creative Commons 0 (CC0 1.0), as shown on the sound's page"
+   }
+  },
+  {
+   "id": "bed-1",
+   "track": "bed",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/bed-1.wav",
+   "loop": true,
+   "loop_xfade_s": 1.5,
+   "at": {
+    "cue": "@start",
+    "offset": 38.165
+   },
+   "until": {
+    "cue": "@start",
+    "offset": 101.937
+   },
+   "level_db": -2,
+   "fade_in": 1.0,
+   "fade_out": 1.0,
+   "source": {
+    "effect": "bed: corridor",
+    "url": "https://freesound.org/people/sturmankin/sounds/272317/",
+    "author": "sturmankin",
+    "licence": "Creative Commons 0 (CC0 1.0), as shown on the sound's page"
+   }
+  },
+  {
+   "id": "bed-2",
+   "track": "bed",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/bed-2.wav",
+   "loop": true,
+   "loop_xfade_s": 1.5,
+   "at": {
+    "cue": "@start",
+    "offset": 100.937
+   },
+   "until": {
+    "cue": "@start",
+    "offset": 256.32
+   },
+   "level_db": 5,
+   "fade_in": 1.0,
+   "fade_out": 1.0,
+   "source": {
+    "effect": "bed: courtyard café",
+    "url": "https://freesound.org/people/Anya_Media/sounds/437462/",
+    "author": "Anya_Media",
+    "licence": "Creative Commons 0 (CC0 1.0), as shown on the sound's page"
+   }
+  },
+  {
+   "id": "bed-3",
+   "track": "bed",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/bed-3.wav",
+   "loop": true,
+   "loop_xfade_s": 1.5,
+   "at": {
+    "cue": "@start",
+    "offset": 255.32
+   },
+   "until": {
+    "cue": "@start",
+    "offset": 261.315
+   },
+   "level_db": -2,
+   "fade_in": 1.0,
+   "fade_out": 1.0,
+   "source": {
+    "effect": "bed: gate at dusk",
+    "url": "https://freesound.org/people/softwalls/sounds/385104/",
+    "author": "softwalls",
+    "licence": "Creative Commons 0 (CC0 1.0), as shown on the sound's page"
+   }
+  },
+  {
+   "id": "bed-4",
+   "track": "bed",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/bed-4.wav",
+   "loop": true,
+   "loop_xfade_s": 1.5,
+   "at": {
+    "cue": "@start",
+    "offset": 260.315
+   },
+   "until": {
+    "cue": "@start",
+    "offset": 265.315
+   },
+   "level_db": 5,
+   "fade_in": 1.0,
+   "fade_out": 1.0,
+   "source": {
+    "effect": "bed: courtyard café",
+    "url": "https://freesound.org/people/Anya_Media/sounds/437462/",
+    "author": "Anya_Media",
+    "licence": "Creative Commons 0 (CC0 1.0), as shown on the sound's page"
+   }
+  },
+  {
+   "id": "bed-5",
+   "track": "bed",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/bed-5.wav",
+   "loop": true,
+   "loop_xfade_s": 1.5,
+   "at": {
+    "cue": "@start",
+    "offset": 265.565
+   },
+   "until": {
+    "cue": "@start",
+    "offset": 288.065
+   },
+   "level_db": 4,
+   "fade_in": 1.0,
+   "fade_out": 1.0,
+   "source": {
+    "effect": "bed: lobby restaurant",
+    "url": "https://freesound.org/people/Berwitz/sounds/263584/",
+    "author": "Berwitz",
+    "licence": "Creative Commons 0 (CC0 1.0), as shown on the sound's page"
+   }
+  }
+ ],
+ "shots": [
+  {
+   "id": "0-EST",
+   "frame": "cov-game-EST",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v5/lettered-cov-game-EST.png",
+   "picture": "reused (approved earlier)",
+   "at": {
+    "cue": "@start",
+    "offset": 0.0
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "66c115e2365224ae1ab6cb08e625e6c720eec0fa848ac2568504e0ecc4559ec2"
+  },
+  {
+   "id": "1-FLOOR",
+   "frame": "cov-game-FLOOR-live",
+   "image": "images-out/preprod/pass3/H02-B2.png",
+   "picture": "reused (approved earlier)",
+   "at": {
+    "cue": "@start",
+    "offset": 2.2
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "ecc280db1f1db9e370b02688d9c6d18d670df407fe9c97e68ac38c7ce8e78f8f"
+  },
+  {
+   "id": "2-PIT-D",
+   "frame": "cov-game-PIT-D-playing",
+   "image": "images-out/preprod/pass3/cov-game-PIT-D-playing-K7.png",
+   "picture": "picked",
+   "at": {
+    "cue": "@start",
+    "offset": 3.6
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "fc4cc0b26ab8062e16d73d734def5ccca515f2138c3fd71b752db78a464b9e29"
+  },
+  {
+   "id": "3-PIT-K",
+   "frame": "cov-game-PIT-K",
+   "image": "images-out/preprod/pass3/H05-K6.png",
+   "picture": "reused (approved earlier)",
+   "at": {
+    "cue": "@start",
+    "offset": 4.9
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "18c16dc35d7290f99f0b0679f798a291ffe638ee955ef19892312055851bbfdd"
+  },
+  {
+   "id": "4-SCREEN",
+   "frame": "cov-game-SCREEN-face",
+   "image": "images-out/preprod/pass3/cov-game-SCREEN-face-E18.png",
+   "picture": "picked",
+   "at": {
+    "cue": "@start",
+    "offset": 6.2
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "5b6770471fd047d25ee6d35d75afbd5f445d04af72324c9f235dd4c7726c4e92"
+  },
+  {
+   "id": "5-b1-1",
+   "frame": "cov-overlook-MASTER-watch",
+   "image": "images-out/preprod/pass3/cov-overlook-MASTER-watch-K9.png",
+   "picture": "picked",
+   "at": {
+    "cue": "@start",
+    "offset": 7.6
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "6f35ce0506d92c14cfae7e797586d7c69884f001057bc5b19c34a19550981997"
+  },
+  {
+   "id": "6-b1-2",
+   "frame": "cov-overlook-OTS-Z-dry",
+   "image": "images-out/preprod/pass3/cov-overlook-OTS-Z-dry-K7.png",
+   "picture": "picked",
+   "at": {
+    "cue": "@start",
+    "offset": 12.438
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "cff7d9ddc74ebc183e45fd2908e8e2e8d3ec9db5721be33820f1cdebc9d46322"
+  },
+  {
+   "id": "7-b1-3",
+   "frame": "cov-overlook-OTS-Z-shrug",
+   "image": "images-out/preprod/pass3/cov-overlook-OTS-Z-shrug-E16.png",
+   "picture": "picked",
+   "at": {
+    "cue": "@start",
+    "offset": 15.699
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "ca49f7ec1874ef1bca072b17419c0417aeb03b488731d8feedf717966a4ac7f5"
+  },
+  {
+   "id": "8-POV",
+   "frame": "cov-overlook-POV",
+   "image": "images-out/preprod/pass3/G08-K2.png",
+   "picture": "reused (approved earlier)",
+   "at": {
+    "cue": "@start",
+    "offset": 18.6
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "dc4856b6d2eaff7f713e354f76b4675cc6f4a1ca7d20a8150233cf657a0c1218"
+  },
+  {
+   "id": "9-game/PIT-D",
+   "frame": "cov-game-PIT-D-playing",
+   "image": "images-out/preprod/pass3/cov-game-PIT-D-playing-K7.png",
+   "picture": "picked",
+   "at": {
+    "cue": "@start",
+    "offset": 20.1
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "fc4cc0b26ab8062e16d73d734def5ccca515f2138c3fd71b752db78a464b9e29"
+  },
+  {
+   "id": "10-b1-4",
+   "frame": "cov-overlook-MASTER-watch",
+   "image": "images-out/preprod/pass3/cov-overlook-MASTER-watch-K9.png",
+   "picture": "picked",
+   "at": {
+    "cue": "@start",
+    "offset": 21.3
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "6f35ce0506d92c14cfae7e797586d7c69884f001057bc5b19c34a19550981997"
+  },
+  {
+   "id": "11-b1-5",
+   "frame": "cov-overlook-OTS-Z-wry",
+   "image": "images-out/preprod/pass3/cov-overlook-OTS-Z-wry-E16.png",
+   "picture": "picked",
+   "at": {
+    "cue": "@start",
+    "offset": 23.567
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "571d19aa4592d71bc83829cf6601a536fb5c638f7e311591b3d7229be8f44918"
+  },
+  {
+   "id": "12-MASTER",
+   "frame": "cov-overlook-MASTER-lean",
+   "image": "images-out/preprod/pass3/cov-overlook-MASTER-lean-K8.png",
+   "picture": "picked",
+   "at": {
+    "cue": "@start",
+    "offset": 28.278
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "1612b1239f84c74dfba395404d6fac1281e21b8e011d8e52eb65e68b36c1d101"
+  },
+  {
+   "id": "13-b1-6",
+   "frame": "cov-overlook-CU-B-toast",
+   "image": "images-out/preprod/pass3/cov-overlook-CU-B-toast-K10.png",
+   "picture": "picked",
+   "at": {
+    "cue": "@start",
+    "offset": 29.478
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "be77d18c06e3a707abd5ec5b79e7595ffcea8ca20569e9fd758e6ff82ae7f2c7"
+  },
+  {
+   "id": "14-game/SCREEN",
+   "frame": "cov-game-SCREEN-face",
+   "image": "images-out/preprod/pass3/cov-game-SCREEN-face-E18.png",
+   "picture": "picked",
+   "at": {
+    "cue": "@start",
+    "offset": 35.765
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "5b6770471fd047d25ee6d35d75afbd5f445d04af72324c9f235dd4c7726c4e92"
+  },
+  {
+   "id": "15-game/PIT-D",
+   "frame": "cov-game-PIT-D-glasses",
+   "image": "images-out/preprod/pass3/cov-game-PIT-D-glasses-K7.png",
+   "picture": "picked",
+   "at": {
+    "cue": "@start",
+    "offset": 37.265
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "0148c76f4181af3f249b3f1160feb4538313098e0ce7846a9817f8afcbc40d62"
+  },
+  {
+   "id": "16-MASTER",
+   "frame": "cov-corridor-MASTER-arrive",
+   "image": "images-out/preprod/pass3/cov-corridor-MASTER-arrive-K8.png",
+   "picture": "picked",
+   "at": {
+    "cue": "@start",
+    "offset": 38.665
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "e7a1fbeebad8749a41f29a6fb91fda91645e8652a116aafa00744f4a2c264dc1"
+  },
+  {
+   "id": "17-b2-1",
+   "frame": "cov-corridor-OTS-D-eager",
+   "image": "images-out/preprod/pass3/cov-corridor-OTS-D-eager-K7.png",
+   "picture": "picked",
+   "at": {
+    "cue": "@start",
+    "offset": 40.065
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "b80ab9479b204e6034b0fe65ba6198575eb4c40abc33fd3a1d80ee981aa2b638"
+  },
+  {
+   "id": "18-b2-2",
+   "frame": "cov-corridor-OTS-Z-easy",
+   "image": "images-out/preprod/pass3/cov-corridor-OTS-Z-easy-K8.png",
+   "picture": "picked",
+   "at": {
+    "cue": "@start",
+    "offset": 41.567
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "e862d46f66823fba234a4f65436f6f6a5e052bfcc32d14deddc9a957c20ea5d4"
+  },
+  {
+   "id": "19-b2-3",
+   "frame": "cov-corridor-OTS-D-eager",
+   "image": "images-out/preprod/pass3/cov-corridor-OTS-D-eager-K7.png",
+   "picture": "picked",
+   "at": {
+    "cue": "@start",
+    "offset": 49.749
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "b80ab9479b204e6034b0fe65ba6198575eb4c40abc33fd3a1d80ee981aa2b638"
+  },
+  {
+   "id": "20-CU-B",
+   "frame": "cov-corridor-CU-B-sour",
+   "image": "images-out/preprod/pass3/cov-corridor-CU-B-sour-K9.png",
+   "picture": "picked",
+   "at": {
+    "cue": "@start",
+    "offset": 57.719
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "6dc5d45027767dd26cdadf84406df9fcf4f88bf562a1f72a474b8cb4cd54b75e"
+  },
+  {
+   "id": "21-b2-4",
+   "frame": "cov-corridor-OTS-Z-warm",
+   "image": "images-out/preprod/pass3/cov-corridor-OTS-Z-warm-K9.png",
+   "picture": "picked",
+   "at": {
+    "cue": "@start",
+    "offset": 58.719
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "8b0e3274af9e78012e8882c378ccf892a104f22f895514c28ba64c2e1c9f26d1"
+  },
+  {
+   "id": "22-b2-5",
+   "frame": "cov-corridor-OTS-D-eager",
+   "image": "images-out/preprod/pass3/cov-corridor-OTS-D-eager-K7.png",
+   "picture": "picked",
+   "at": {
+    "cue": "@start",
+    "offset": 68.111
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "b80ab9479b204e6034b0fe65ba6198575eb4c40abc33fd3a1d80ee981aa2b638"
+  },
+  {
+   "id": "23-b2-6",
+   "frame": "cov-corridor-OTS-Z-warm",
+   "image": "images-out/preprod/pass3/cov-corridor-OTS-Z-warm-K9.png",
+   "picture": "picked",
+   "at": {
+    "cue": "@start",
+    "offset": 70.246
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "8b0e3274af9e78012e8882c378ccf892a104f22f895514c28ba64c2e1c9f26d1"
+  },
+  {
+   "id": "23-b2-6-cut",
+   "frame": "cov-corridor-CU-B-sour",
+   "image": "images-out/preprod/pass3/cov-corridor-CU-B-sour-K9.png",
+   "picture": "picked",
+   "at": {
+    "cue": "@start",
+    "offset": 72.326
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "6dc5d45027767dd26cdadf84406df9fcf4f88bf562a1f72a474b8cb4cd54b75e"
+  },
+  {
+   "id": "24-b2-7",
+   "frame": "cov-corridor-OTS-D-eager",
+   "image": "images-out/preprod/pass3/cov-corridor-OTS-D-eager-K7.png",
+   "picture": "picked",
+   "at": {
+    "cue": "@start",
+    "offset": 76.647
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "b80ab9479b204e6034b0fe65ba6198575eb4c40abc33fd3a1d80ee981aa2b638"
+  },
+  {
+   "id": "25-pre",
+   "frame": "cov-walk-MASTER",
+   "image": "images-out/preprod/pass3/C17-K4.png",
+   "picture": "reused (approved earlier)",
+   "at": {
+    "cue": "@start",
+    "offset": 81.012
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "2af7254381904b6ec9ca97b707f4d7d350be163ea5e47a737f2098569d461b95"
+  },
+  {
+   "id": "25-b2-8",
+   "frame": "cov-walk-CU-B-serious",
+   "image": "images-out/preprod/pass3/cov-walk-CU-B-serious-K9.png",
+   "picture": "picked",
+   "at": {
+    "cue": "@start",
+    "offset": 82.212
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "66c3bd87b635dcaa37eb6088b3c16101cd75f0098787e9a6850251ee879765e5"
+  },
+  {
+   "id": "26-b2-9",
+   "frame": "cov-walk-CU-Z-tease",
+   "image": "images-out/preprod/pass3/cov-walk-CU-Z-tease-K8.png",
+   "picture": "picked",
+   "at": {
+    "cue": "@start",
+    "offset": 86.113
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "e8ffae9ae640225c81518a3820637c9a48190ea16aae0639136eb3f1c2594367"
+  },
+  {
+   "id": "27-b2-10",
+   "frame": "cov-walk-CU-B-sly",
+   "image": "images-out/preprod/pass3/cov-walk-CU-B-sly-K7.png",
+   "picture": "picked",
+   "at": {
+    "cue": "@start",
+    "offset": 89.671
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "ad152006f95202a59ae25a2c4dd7b724a5fde7c27c4260cacf595d92223a95de"
+  },
+  {
+   "id": "28-b2-11",
+   "frame": "cov-walk-CU-B-serious",
+   "image": "images-out/preprod/pass3/cov-walk-CU-B-serious-K9.png",
+   "picture": "picked",
+   "at": {
+    "cue": "@start",
+    "offset": 94.789
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "66c3bd87b635dcaa37eb6088b3c16101cd75f0098787e9a6850251ee879765e5"
+  },
+  {
+   "id": "29-b2-12",
+   "frame": "cov-walk-MASTER",
+   "image": "images-out/preprod/pass3/C17-K4.png",
+   "picture": "reused (approved earlier)",
+   "at": {
+    "cue": "@start",
+    "offset": 97.493
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "2af7254381904b6ec9ca97b707f4d7d350be163ea5e47a737f2098569d461b95"
+  },
+  {
+   "id": "30-b3-1",
+   "frame": "cov-cafe-MASTER-wave",
+   "image": "images-out/preprod/pass3/cov-cafe-MASTER-wave-K7.png",
+   "picture": "picked",
+   "at": {
+    "cue": "@start",
+    "offset": 101.437
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "5519aeecab1238e57f3881ea0fbc19807e7957cbe054531598421b055f5d9428"
+  },
+  {
+   "id": "31-b3-2",
+   "frame": "cov-cafe-CU-Z0-listen",
+   "image": "images-out/preprod/pass3/cov-cafe-CU-Z0-listen-K15.png",
+   "picture": "picked",
+   "at": {
+    "cue": "@start",
+    "offset": 106.751
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "abcd34e335ed956e1f405d16010fad9ce28b6fd5b7dd58b94356512fa47960f0"
+  },
+  {
+   "id": "32-b3-3",
+   "frame": "cov-cafe-CU-Z0-whoa",
+   "image": "images-out/preprod/pass3/cov-cafe-CU-Z0-whoa-E17.png",
+   "picture": "picked",
+   "at": {
+    "cue": "@start",
+    "offset": 109.696
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "7021defae434d28bb6d7054459c6e865c378aa2c36bb9a1e59daf9df04afbb4b"
+  },
+  {
+   "id": "33-b3-4",
+   "frame": "cov-cafe-OTS-Z-menu",
+   "image": "images-out/preprod/pass3/cov-cafe-OTS-Z-menu-K7.png",
+   "picture": "picked",
+   "at": {
+    "cue": "@start",
+    "offset": 111.52
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "685c0abfac81d60cd9c41f235a77b1219800a4661e8af791716fc228fd47aa77"
+  },
+  {
+   "id": "34-MENU",
+   "frame": "cov-cafe-MENU",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v5/framed-cov-cafe-MENU.png",
+   "picture": "the book's own picture",
+   "at": {
+    "cue": "@start",
+    "offset": 112.34
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "6329cae0c57fdd09562286be192e5e5876407b2f181eec136baf2d886dbd32d6"
+  },
+  {
+   "id": "35-b3-5",
+   "frame": "cov-cafe-CU-Z0-explain",
+   "image": "images-out/preprod/pass3/cov-cafe-CU-Z0-explain-K13.png",
+   "picture": "picked",
+   "at": {
+    "cue": "@start",
+    "offset": 114.34
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "e4e2a3c58f9a8780bfa8b8a4329750c26e6411be31f235faf90e2c76ecb099ee"
+  },
+  {
+   "id": "36-CU-B",
+   "frame": "cov-cafe-CU-B-menu",
+   "image": "images-out/preprod/pass3/cov-cafe-CU-B-menu-K9.png",
+   "picture": "picked",
+   "at": {
+    "cue": "@start",
+    "offset": 120.683
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "5cd135926675458de0b6747a2788ff217b931245154e93acf298009d148dc06f"
+  },
+  {
+   "id": "37-b3-6",
+   "frame": "cov-cafe-CU-Z0-explain",
+   "image": "images-out/preprod/pass3/cov-cafe-CU-Z0-explain-K13.png",
+   "picture": "picked",
+   "at": {
+    "cue": "@start",
+    "offset": 121.683
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "e4e2a3c58f9a8780bfa8b8a4329750c26e6411be31f235faf90e2c76ecb099ee"
+  },
+  {
+   "id": "38-b3-7",
+   "frame": "cov-cafe-OTS-Z-menu",
+   "image": "images-out/preprod/pass3/cov-cafe-OTS-Z-menu-K7.png",
+   "picture": "picked",
+   "at": {
+    "cue": "@start",
+    "offset": 123.79
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "685c0abfac81d60cd9c41f235a77b1219800a4661e8af791716fc228fd47aa77"
+  },
+  {
+   "id": "39-b3-8",
+   "frame": "cov-cafe-CU-Z0-explain",
+   "image": "images-out/preprod/pass3/cov-cafe-CU-Z0-explain-K13.png",
+   "picture": "picked",
+   "at": {
+    "cue": "@start",
+    "offset": 128.236
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "e4e2a3c58f9a8780bfa8b8a4329750c26e6411be31f235faf90e2c76ecb099ee"
+  },
+  {
+   "id": "40-b3-9",
+   "frame": "cov-cafe-OTS-Z-menu",
+   "image": "images-out/preprod/pass3/cov-cafe-OTS-Z-menu-K7.png",
+   "picture": "picked",
+   "at": {
+    "cue": "@start",
+    "offset": 136.353
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "685c0abfac81d60cd9c41f235a77b1219800a4661e8af791716fc228fd47aa77"
+  },
+  {
+   "id": "41-b3-10",
+   "frame": "cov-cafe-CU-Z0-astonished",
+   "image": "images-out/preprod/pass3/cov-cafe-CU-Z0-astonished-K13.png",
+   "picture": "picked",
+   "at": {
+    "cue": "@start",
+    "offset": 150.422
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "34c19df02bcbd9d4783f226863bea87c27f40844d9056635070919c71e42ee23"
+  },
+  {
+   "id": "42-b3-11",
+   "frame": "cov-cafe-OTS-Z-stern",
+   "image": "images-out/preprod/pass3/cov-cafe-OTS-Z-stern-K9.png",
+   "picture": "picked",
+   "at": {
+    "cue": "@start",
+    "offset": 152.106
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "d4bbc5af975859b722da488b9c07fd5ed8487a51c82e9f616c3eaf128b96d291"
+  },
+  {
+   "id": "43-b3-12",
+   "frame": "cov-cafe-CU-Z0-astonished",
+   "image": "images-out/preprod/pass3/cov-cafe-CU-Z0-astonished-K13.png",
+   "picture": "picked",
+   "at": {
+    "cue": "@start",
+    "offset": 157.044
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "34c19df02bcbd9d4783f226863bea87c27f40844d9056635070919c71e42ee23"
+  },
+  {
+   "id": "44-b3-13",
+   "frame": "cov-cafe-CU-B-menu",
+   "image": "images-out/preprod/pass3/cov-cafe-CU-B-menu-K9.png",
+   "picture": "picked",
+   "at": {
+    "cue": "@start",
+    "offset": 160.556
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "5cd135926675458de0b6747a2788ff217b931245154e93acf298009d148dc06f"
+  },
+  {
+   "id": "44-b3-13-cut",
+   "frame": "cov-cafe-CU-B-standing",
+   "image": "images-out/preprod/pass3/cov-cafe-CU-B-standing-K7.png",
+   "picture": "picked",
+   "at": {
+    "cue": "@start",
+    "offset": 163.036
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "967dd46a66d948735242521481991dfd88ea412350c7a2649abbaffca23dd22d"
+  },
+  {
+   "id": "45-BAI",
+   "frame": "cov-cafe-BAI-sideeye",
+   "image": "images-out/preprod/pass3/cov-cafe-BAI-sideeye-R20.png",
+   "picture": "picked",
+   "at": {
+    "cue": "@start",
+    "offset": 169.972
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "ea4d003905272bac90d6adb7916955678d3fbbee156f486c4a47cb89f75360a1"
+  },
+  {
+   "id": "46-b4-1",
+   "frame": "cov-cafe-OTS-Z-talk",
+   "image": "images-out/preprod/pass3/cov-cafe-OTS-Z-talk-K7.png",
+   "picture": "picked",
+   "at": {
+    "cue": "@start",
+    "offset": 171.272
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "46a381d0a0111486f8b5b2cfd6e4c169f6f61b66219ce8827f2c92425e2bc51f"
+  },
+  {
+   "id": "46-b4-1-cut",
+   "frame": "cov-cafe-SUGAR-stack",
+   "image": "images-out/preprod/pass3/cov-cafe-SUGAR-stack-E16.png",
+   "picture": "picked",
+   "at": {
+    "cue": "@start",
+    "offset": 175.372
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "f9af9901020458a07c7c6b2d45666fbd42555d7f9bafb2794bd1c55a98152b43"
+  },
+  {
+   "id": "46-b4-1-back",
+   "frame": "cov-cafe-OTS-Z-talk",
+   "image": "images-out/preprod/pass3/cov-cafe-OTS-Z-talk-K7.png",
+   "picture": "picked",
+   "at": {
+    "cue": "@start",
+    "offset": 176.572
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "46a381d0a0111486f8b5b2cfd6e4c169f6f61b66219ce8827f2c92425e2bc51f"
+  },
+  {
+   "id": "47-b4-2",
+   "frame": "cov-cafe-CU-Z-amused",
+   "image": "images-out/preprod/pass3/cov-cafe-CU-Z-amused-K7.png",
+   "picture": "picked",
+   "at": {
+    "cue": "@start",
+    "offset": 183.958
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "78cc86ffab061b3dcfd33d2ead47a10fe2c9e872bad96fe67a9cd7cac2946c98"
+  },
+  {
+   "id": "48-b4-3",
+   "frame": "cov-cafe-CU-D-warm",
+   "image": "images-out/preprod/pass3/cov-cafe-CU-D-warm-E16.png",
+   "picture": "picked",
+   "at": {
+    "cue": "@start",
+    "offset": 195.231
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "9e560cd933b40d2c83102f642a5ac4ea3bbdc96645d45b845d2ab06e7919dc1b"
+  },
+  {
+   "id": "48-b4-3-cut",
+   "frame": "cov-cafe-SUGAR-wall",
+   "image": "images-out/preprod/pass3/cov-cafe-SUGAR-wall-K9.png",
+   "picture": "picked",
+   "at": {
+    "cue": "@start",
+    "offset": 201.111
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "25a4ebddd2044bb9e84f247d2600ca5bccadbceb6f322a68b3156a53acbb7064"
+  },
+  {
+   "id": "48-b4-3-back",
+   "frame": "cov-cafe-CU-D-warm",
+   "image": "images-out/preprod/pass3/cov-cafe-CU-D-warm-E16.png",
+   "picture": "picked",
+   "at": {
+    "cue": "@start",
+    "offset": 202.311
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "9e560cd933b40d2c83102f642a5ac4ea3bbdc96645d45b845d2ab06e7919dc1b"
+  },
+  {
+   "id": "49-b4-4",
+   "frame": "cov-cafe-CU-Z-amused",
+   "image": "images-out/preprod/pass3/cov-cafe-CU-Z-amused-K7.png",
+   "picture": "picked",
+   "at": {
+    "cue": "@start",
+    "offset": 212.106
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "78cc86ffab061b3dcfd33d2ead47a10fe2c9e872bad96fe67a9cd7cac2946c98"
+  },
+  {
+   "id": "50-b4-5",
+   "frame": "cov-cafe-CU-D-warm",
+   "image": "images-out/preprod/pass3/cov-cafe-CU-D-warm-E16.png",
+   "picture": "picked",
+   "at": {
+    "cue": "@start",
+    "offset": 214.96
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "9e560cd933b40d2c83102f642a5ac4ea3bbdc96645d45b845d2ab06e7919dc1b"
+  },
+  {
+   "id": "51-SUGAR",
+   "frame": "cov-cafe-SUGAR-flick",
+   "image": "images-out/preprod/pass3/cov-cafe-SUGAR-flick-E16.png",
+   "picture": "picked",
+   "at": {
+    "cue": "@start",
+    "offset": 220.583
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "0f5f4d4f807a3c4895b7dfb37f5013814218ad4db845dff9380fd05b6aa1a6bc"
+  },
+  {
+   "id": "52-SUGAR",
+   "frame": "cov-cafe-SUGAR-door",
+   "image": "images-out/preprod/pass3/cov-cafe-SUGAR-door-K7.png",
+   "picture": "picked",
+   "at": {
+    "cue": "@start",
+    "offset": 221.783
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "e16b2f2bf49bc1d6e344d733c61b98e9eab22e376052c29bec0f93cbfeee1039"
+  },
+  {
+   "id": "53-CU-Z",
+   "frame": "cov-cafe-CU-Z-amused",
+   "image": "images-out/preprod/pass3/cov-cafe-CU-Z-amused-K7.png",
+   "picture": "picked",
+   "at": {
+    "cue": "@start",
+    "offset": 222.983
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "78cc86ffab061b3dcfd33d2ead47a10fe2c9e872bad96fe67a9cd7cac2946c98"
+  },
+  {
+   "id": "54-BAI",
+   "frame": "cov-cafe-BAI-sideeye",
+   "image": "images-out/preprod/pass3/cov-cafe-BAI-sideeye-R20.png",
+   "picture": "picked",
+   "at": {
+    "cue": "@start",
+    "offset": 224.083
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "ea4d003905272bac90d6adb7916955678d3fbbee156f486c4a47cb89f75360a1"
+  },
+  {
+   "id": "55-b5-1",
+   "frame": "cov-cafe-OTS-Z-eager",
+   "image": "images-out/preprod/pass3/cov-cafe-OTS-Z-eager-K7.png",
+   "picture": "picked",
+   "at": {
+    "cue": "@start",
+    "offset": 225.183
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "c80f0eb216e7cc312566d46e16029247b4f1c1cbc1b36f6a91922128c247a94e"
+  },
+  {
+   "id": "56-b5-2",
+   "frame": "cov-cafe-CU-Z-smile",
+   "image": "images-out/preprod/pass3/cov-cafe-CU-Z-smile-K14.png",
+   "picture": "picked",
+   "at": {
+    "cue": "@start",
+    "offset": 234.157
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "551ea7f37111792ad16d4ea8a0a3046834f4e290ee419488c0cea3ffcde0f9d2"
+  },
+  {
+   "id": "57-b5-3",
+   "frame": "cov-cafe-OTS-Z-eager",
+   "image": "images-out/preprod/pass3/cov-cafe-OTS-Z-eager-K7.png",
+   "picture": "picked",
+   "at": {
+    "cue": "@start",
+    "offset": 242.528
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "c80f0eb216e7cc312566d46e16029247b4f1c1cbc1b36f6a91922128c247a94e"
+  },
+  {
+   "id": "58-BAI",
+   "frame": "cov-cafe-BAI-sideeye",
+   "image": "images-out/preprod/pass3/cov-cafe-BAI-sideeye-R20.png",
+   "picture": "picked",
+   "at": {
+    "cue": "@start",
+    "offset": 247.69
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "ea4d003905272bac90d6adb7916955678d3fbbee156f486c4a47cb89f75360a1"
+  },
+  {
+   "id": "59-b5-4",
+   "frame": "cov-cafe-OTS-Z-talk",
+   "image": "images-out/preprod/pass3/cov-cafe-OTS-Z-talk-K7.png",
+   "picture": "picked",
+   "at": {
+    "cue": "@start",
+    "offset": 248.69
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "46a381d0a0111486f8b5b2cfd6e4c169f6f61b66219ce8827f2c92425e2bc51f"
+  },
+  {
+   "id": "60-b5-5",
+   "frame": "cov-cafe-BAI-what",
+   "image": "images-out/preprod/pass3/cov-cafe-BAI-what-R27.png",
+   "picture": "picked",
+   "at": {
+    "cue": "@start",
+    "offset": 251.213
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "5feaa81d9ea976a00e25807f3f78b9fa70074e1e096ee32a3d0dcefefcd90498"
+  },
+  {
+   "id": "61-pre",
+   "frame": "cov-gate-MASTER-fingers",
+   "image": "images-out/preprod/pass3/cov-gate-MASTER-fingers-K11.png",
+   "picture": "picked",
+   "at": {
+    "cue": "@start",
+    "offset": 255.82
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "b869a4b054a55072af3d16ad67efcb4879a33347b049d56c4240e041049ad970"
+  },
+  {
+   "id": "61-b6-1",
+   "frame": "cov-gate-MASTER-fingers",
+   "image": "images-out/preprod/pass3/cov-gate-MASTER-fingers-K11.png",
+   "picture": "picked",
+   "at": {
+    "cue": "@start",
+    "offset": 256.42
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "b869a4b054a55072af3d16ad67efcb4879a33347b049d56c4240e041049ad970"
+  },
+  {
+   "id": "62-CU-Z",
+   "frame": "cov-gate-CU-Z-smile",
+   "image": "images-out/preprod/pass3/cov-gate-CU-Z-smile-K7.png",
+   "picture": "picked",
+   "at": {
+    "cue": "@start",
+    "offset": 258.215
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "dd4276a3907b8e8b58e84cb04047878b119027c72e98898550fc01c5303c4506"
+  },
+  {
+   "id": "63-MASTER",
+   "frame": "cov-gate-MASTER-wave",
+   "image": "images-out/preprod/pass3/cov-gate-MASTER-wave-K7.png",
+   "picture": "picked",
+   "at": {
+    "cue": "@start",
+    "offset": 259.415
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "c4f82ba9831d3970688b8b464dd636855f1c7115e433af271c1e1984a10257a5"
+  },
+  {
+   "id": "64-MASTER",
+   "frame": "cov-dusk-MASTER-talk",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v5/lettered-cov-dusk-MASTER-talk.png",
+   "picture": "picked",
+   "at": {
+    "cue": "@start",
+    "offset": 260.815
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "bd95f2546a7423d66556fef13b79869f1a80f48764a85d995f0e2edb1893df27"
+  },
+  {
+   "id": "BLACK",
+   "frame": "black",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v5/black.png",
+   "picture": "black",
+   "at": {
+    "cue": "@start",
+    "offset": 265.065
+   },
+   "transition": {
+    "type": "dissolve",
+    "seconds": 0.6
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "0f52608dd021e7069ef19f9d8f46f6d651aaf5cbac5154465092de3574cf8514"
+  },
+  {
+   "id": "65-EST",
+   "frame": "cov-lobby-EST",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v5/lettered-cov-lobby-EST.png",
+   "picture": "reused (approved earlier)",
+   "at": {
+    "cue": "@start",
+    "offset": 266.065
+   },
+   "transition": {
+    "type": "dissolve",
+    "seconds": 0.6
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "03208dc714e458d1af6c29409ad54663f4a39566de824575868ff864a8591250"
+  },
+  {
+   "id": "66-CU-Z",
+   "frame": "cov-lobby-CU-Z-down",
+   "image": "images-out/preprod/pass3/cov-lobby-CU-Z-down-K8.png",
+   "picture": "picked",
+   "at": {
+    "cue": "@start",
+    "offset": 269.065
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "54ad4ed36b47feed82bc3b5c7e0f08d064249f028d16891ec63c63dc4daab488"
+  },
+  {
+   "id": "67-SCREEN",
+   "frame": "cov-lobby-SCREEN",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v5/screen-L03.png",
+   "picture": "the book's words on a device, drawn in code",
+   "at": {
+    "cue": "@start",
+    "offset": 270.465
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "f18456ef81952237a71a8a322e9ed3abe2b9de24b10eb3eafa3ff226fd656fe3"
+  },
+  {
+   "id": "68-MASTER",
+   "frame": "cov-lobby-MASTER-sits",
+   "image": "images-out/preprod/pass3/cov-lobby-MASTER-sits-E18.png",
+   "picture": "picked",
+   "at": {
+    "cue": "@start",
+    "offset": 272.965
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "7a89d50737983b4b18e206bd42a50be2ce8376202ad7573d61d7b488ad49b1ab"
+  },
+  {
+   "id": "69-CU-Z",
+   "frame": "cov-lobby-CU-Z-down",
+   "image": "images-out/preprod/pass3/cov-lobby-CU-Z-down-K8.png",
+   "picture": "picked",
+   "at": {
+    "cue": "@start",
+    "offset": 274.465
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "54ad4ed36b47feed82bc3b5c7e0f08d064249f028d16891ec63c63dc4daab488"
+  },
+  {
+   "id": "70-SCREEN",
+   "frame": "cov-lobby-SCREEN",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v5/screen-L07.png",
+   "picture": "the book's words on a device, drawn in code",
+   "at": {
+    "cue": "@start",
+    "offset": 275.665
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "d921411802b9982860669a7d3ba793459cc6dfec05aa4d3de709a11ba769c0de"
+  },
+  {
+   "id": "71-CU-Z",
+   "frame": "cov-lobby-CU-Z-relief",
+   "image": "images-out/preprod/pass3/cov-lobby-CU-Z-relief-K10.png",
+   "picture": "picked",
+   "at": {
+    "cue": "@start",
+    "offset": 279.165
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "beb0aa031ce8c985b93b7a162728c45395d7682c9db4be7a32830be0aba32caa"
+  },
+  {
+   "id": "72-SCREEN",
+   "frame": "cov-lobby-SCREEN",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v5/screen-L09.png",
+   "picture": "the book's words on a device, drawn in code",
+   "at": {
+    "cue": "@start",
+    "offset": 280.665
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "3f75fe4d229537a53524add7a506b5def7a0d9404a988031912bd3cddff93f1e"
+  },
+  {
+   "id": "73-OTS-Z",
+   "frame": "cov-lobby-OTS-Z-turns",
+   "image": "images-out/preprod/pass3/cov-lobby-OTS-Z-turns-K9.png",
+   "picture": "picked",
+   "at": {
+    "cue": "@start",
+    "offset": 283.165
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "20cc511b20c30b8a437e0dc29bea7fddc66b631ad41b90b058097259f5b9e976"
+  },
+  {
+   "id": "BLACK",
+   "frame": "black",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v5/black.png",
+   "picture": "black",
+   "at": {
+    "cue": "@start",
+    "offset": 285.965
+   },
+   "transition": {
+    "type": "dissolve",
+    "seconds": 0.8
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "0f52608dd021e7069ef19f9d8f46f6d651aaf5cbac5154465092de3574cf8514"
+  }
+ ],
+ "lettering": [],
+ "subtitles": [
+  {
+   "cue": "b1-1",
+   "text": "You'd think after making it this far, they'd stop underestimating the foreigner.",
+   "from": 0.0,
+   "to": 1.0
+  },
+  {
+   "cue": "b1-2",
+   "text": "It wouldn't be so annoying if he wasn't so damn pretty.",
+   "from": 0.0,
+   "to": 1.0
+  },
+  {
+   "cue": "b1-3",
+   "text": "Nah, way too fake for me.",
+   "from": 0.0,
+   "to": 1.0
+  },
+  {
+   "cue": "b1-4",
+   "text": "Such patience...",
+   "from": 0.0,
+   "to": 1.0
+  },
+  {
+   "cue": "b1-5",
+   "text": "Total wimp, just like you. But it gets you guys the W.",
+   "from": 0.0,
+   "to": 1.0
+  },
+  {
+   "cue": "b1-6",
+   "text": "That other loser's toast.",
+   "from": 0.0,
+   "to": 0.2551
+  },
+  {
+   "cue": "b1-6",
+   "text": "He should have already thrown in the towel, but doesn't even know it yet.",
+   "from": 0.2551,
+   "to": 1.0
+  },
+  {
+   "cue": "b2-1",
+   "text": "Good job out there.",
+   "from": 0.0,
+   "to": 1.0
+  },
+  {
+   "cue": "b2-2",
+   "text": "Thanks. Yeah, the walls held out.",
+   "from": 0.0,
+   "to": 0.3511
+  },
+  {
+   "cue": "b2-2",
+   "text": "Haven't yet watched your replay, but will be sure to tonight.",
+   "from": 0.3511,
+   "to": 1.0
+  },
+  {
+   "cue": "b2-3",
+   "text": "Yeah, please ignore the ugly style.",
+   "from": 0.0,
+   "to": 0.2756
+  },
+  {
+   "cue": "b2-3",
+   "text": "I also won by defense though,",
+   "from": 0.2756,
+   "to": 0.5039
+  },
+  {
+   "cue": "b2-3",
+   "text": "but for most of the game it just looks like I'm running scared.",
+   "from": 0.5039,
+   "to": 1.0
+  },
+  {
+   "cue": "b2-4",
+   "text": "Patience often does, until you win. Hey, do you want to get tea later?",
+   "from": 0.0,
+   "to": 0.6087
+  },
+  {
+   "cue": "b2-4",
+   "text": "I'll be at the courtyard in about a longhour.",
+   "from": 0.6087,
+   "to": 1.0
+  },
+  {
+   "cue": "b2-5",
+   "text": "Sure, yeah, that works well for me!",
+   "from": 0.0,
+   "to": 1.0
+  },
+  {
+   "cue": "b2-6",
+   "text": "Great, I'll see you then. Bai, you're welcome to come too.",
+   "from": 0.0,
+   "to": 0.725
+  },
+  {
+   "cue": "b2-6",
+   "text": "Hope to see you there!",
+   "from": 0.725,
+   "to": 1.0
+  },
+  {
+   "cue": "b2-7",
+   "text": "See you. So are you gonna come? Should be fun!",
+   "from": 0.0,
+   "to": 1.0
+  },
+  {
+   "cue": "b2-8",
+   "text": "He's your competition, remember?",
+   "from": 0.0,
+   "to": 1.0
+  },
+  {
+   "cue": "b2-9",
+   "text": "Take it easy, you're my competition too.",
+   "from": 0.0,
+   "to": 1.0
+  },
+  {
+   "cue": "b2-10",
+   "text": "'Was.' And you know I hate you. And I know all your tricks already anyway.",
+   "from": 0.0,
+   "to": 1.0
+  },
+  {
+   "cue": "b2-11",
+   "text": "We don't know anything about this guy.",
+   "from": 0.0,
+   "to": 1.0
+  },
+  {
+   "cue": "b2-12",
+   "text": "So let's get to know him, it'll be fun! Maybe he won't be so fake after all.",
+   "from": 0.0,
+   "to": 1.0
+  },
+  {
+   "cue": "b3-1",
+   "text": "Hey, over here! We were just talking about you!",
+   "from": 0.0,
+   "to": 1.0
+  },
+  {
+   "cue": "b3-2",
+   "text": "jie mo kai tu jie hei ja ma?",
+   "from": 0.0,
+   "to": 1.0
+  },
+  {
+   "cue": "b3-3",
+   "text": "Whoa",
+   "from": 0.0,
+   "to": 1.0
+  },
+  {
+   "cue": "b3-4",
+   "text": "What is it?",
+   "from": 0.0,
+   "to": 1.0
+  },
+  {
+   "cue": "b3-5",
+   "text": "I think these are some of the new symbols that they're A/B testing for the",
+   "from": 0.0,
+   "to": 0.7708
+  },
+  {
+   "cue": "b3-5",
+   "text": "Dzegoban version nine.",
+   "from": 0.7708,
+   "to": 1.0
+  },
+  {
+   "cue": "b3-6",
+   "text": "Have you heard about version nine?",
+   "from": 0.0,
+   "to": 1.0
+  },
+  {
+   "cue": "b3-7",
+   "text": "I had a couple people mention it to me. Making the language visual.",
+   "from": 0.0,
+   "to": 1.0
+  },
+  {
+   "cue": "b3-8",
+   "text": "Hmmm.",
+   "from": 0.0,
+   "to": 0.0413
+  },
+  {
+   "cue": "b3-8",
+   "text": "More straight horizontal lines than usual,",
+   "from": 0.0413,
+   "to": 0.3884
+  },
+  {
+   "cue": "b3-8",
+   "text": "and the three diagonal lines on the right. probably pronunciation markers?",
+   "from": 0.3884,
+   "to": 1.0
+  },
+  {
+   "cue": "b3-9",
+   "text": "Top right is 'kai', right?",
+   "from": 0.0,
+   "to": 0.1333
+  },
+  {
+   "cue": "b3-9",
+   "text": "The extra vertical vein on the left is unusual,",
+   "from": 0.1333,
+   "to": 0.3744
+  },
+  {
+   "cue": "b3-9",
+   "text": "although I'm not sure I would make the images so detailed when they have such",
+   "from": 0.3744,
+   "to": 0.7692
+  },
+  {
+   "cue": "b3-9",
+   "text": "different meanings, depending on the context.",
+   "from": 0.7692,
+   "to": 1.0
+  },
+  {
+   "cue": "b3-10",
+   "text": "Wait, you know Dzegoban?",
+   "from": 0.0,
+   "to": 1.0
+  },
+  {
+   "cue": "b3-11",
+   "text": "Zei, the whole point of Dzegoban is that you can learn it in less than a month.",
+   "from": 0.0,
+   "to": 1.0
+  },
+  {
+   "cue": "b3-12",
+   "text": "I'm impressed, you're almost a local already.",
+   "from": 0.0,
+   "to": 1.0
+  },
+  {
+   "cue": "b3-13",
+   "text": "Actually, I don't think I want anything. Plus, I've got a lot to catch up on.",
+   "from": 0.0,
+   "to": 0.5066
+  },
+  {
+   "cue": "b3-13",
+   "text": "Zei, when you're done, come get me. I want to go over some things with you.",
+   "from": 0.5066,
+   "to": 1.0
+  },
+  {
+   "cue": "b4-1",
+   "text": "So while visiting, I've been wondering about the differences between home and",
+   "from": 0.0,
+   "to": 0.5274
+  },
+  {
+   "cue": "b4-1",
+   "text": "here. And I've been wondering, why does Dzego like Minpentai so much?",
+   "from": 0.5274,
+   "to": 1.0
+  },
+  {
+   "cue": "b4-2",
+   "text": "Kids get into it pretty young here, I guess.",
+   "from": 0.0,
+   "to": 0.2803
+  },
+  {
+   "cue": "b4-2",
+   "text": "Whole family involved, it's a big thing.",
+   "from": 0.2803,
+   "to": 0.535
+  },
+  {
+   "cue": "b4-2",
+   "text": "One of our quirks, just like the language. Does Redshire have any quirks?",
+   "from": 0.535,
+   "to": 1.0
+  },
+  {
+   "cue": "b4-3",
+   "text": "Sure. Yeah, we have our fair share.",
+   "from": 0.0,
+   "to": 0.2047
+  },
+  {
+   "cue": "b4-3",
+   "text": "We care a lot about natural beauty,",
+   "from": 0.2047,
+   "to": 0.4094
+  },
+  {
+   "cue": "b4-3",
+   "text": "and maybe have an unnatural obsession with old styles.",
+   "from": 0.4094,
+   "to": 0.7251
+  },
+  {
+   "cue": "b4-3",
+   "text": "Less cameras, more castles, that kind of thing.",
+   "from": 0.7251,
+   "to": 1.0
+  },
+  {
+   "cue": "b4-4",
+   "text": "I see where you get your love of walls then.",
+   "from": 0.0,
+   "to": 1.0
+  },
+  {
+   "cue": "b4-5",
+   "text": "Yes. Simple, straightforward, useful.",
+   "from": 0.0,
+   "to": 1.0
+  },
+  {
+   "cue": "b5-1",
+   "text": "Why don't you come visit?",
+   "from": 0.0,
+   "to": 0.1838
+  },
+  {
+   "cue": "b5-1",
+   "text": "My parents just told me I need to come back for an early birthday celebration",
+   "from": 0.1838,
+   "to": 0.75
+  },
+  {
+   "cue": "b5-1",
+   "text": "for them, so you can come with me!",
+   "from": 0.75,
+   "to": 1.0
+  },
+  {
+   "cue": "b5-2",
+   "text": "Well, budget will be pretty tight for... about fifteen days.",
+   "from": 0.0,
+   "to": 1.0
+  },
+  {
+   "cue": "b5-3",
+   "text": "Oh yeah, then I can use some of my winnings to pay for your trip, right?",
+   "from": 0.0,
+   "to": 1.0
+  },
+  {
+   "cue": "b5-4",
+   "text": "You're welcome to come too, Bai!",
+   "from": 0.0,
+   "to": 1.0
+  },
+  {
+   "cue": "b5-5",
+   "text": "What?!! Dreadnaught!! It's good! You should check it out.",
+   "from": 0.0,
+   "to": 1.0
+  },
+  {
+   "cue": "b6-1",
+   "text": "Dze go ba fau gie",
+   "from": 0.0,
+   "to": 1.0
+  }
+ ],
+ "end_card": {
+  "file": "adaptations/fifteen-days/end-card.json",
+  "seconds": 8,
+  "fade_s": 0.8
+ },
+ "notes": []
+}

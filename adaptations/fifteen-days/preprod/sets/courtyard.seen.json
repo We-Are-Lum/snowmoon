@@ -1,0 +1,6736 @@
+{
+  "F07": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the long rectangular wooden table",
+        "side": "centre"
+      },
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "centre"
+      },
+      {
+        "id": "gate",
+        "name": "the street gate, dark metal bars",
+        "side": "left"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "centre"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "left"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      }
+    ],
+    "people": {
+      "D": {
+        "side": "left",
+        "x": 0.303,
+        "y": 0.331,
+        "facing": "facing screen-right, in profile",
+        "dist": 4.48,
+        "visible": true
+      },
+      "B": {
+        "side": "right",
+        "x": 0.689,
+        "y": 0.36,
+        "facing": "facing screen-left, in profile",
+        "dist": 4.22,
+        "visible": true
+      },
+      "Z": {
+        "side": "centre",
+        "x": 0.523,
+        "y": 0.34,
+        "facing": "toward the camera",
+        "dist": 5.74,
+        "visible": true
+      }
+    }
+  },
+  "F08": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the long rectangular wooden table",
+        "side": "centre"
+      },
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "right"
+      },
+      {
+        "id": "gate",
+        "name": "the street gate, dark metal bars",
+        "side": "centre"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "right"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "left"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "wallN",
+        "name": "the shop fronts with windows glowing pink and cyan",
+        "side": "left"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "lamp",
+        "name": "a street lamp by the gate",
+        "side": "centre"
+      }
+    ],
+    "people": {
+      "R": {
+        "side": "left",
+        "x": 0.253,
+        "y": 0.309,
+        "facing": "facing screen-right, in profile",
+        "dist": 5.28,
+        "visible": true
+      },
+      "D": {
+        "side": "centre",
+        "x": 0.425,
+        "y": 0.36,
+        "facing": "toward the camera",
+        "dist": 5.08,
+        "visible": true
+      },
+      "B": {
+        "side": "centre",
+        "x": 0.64,
+        "y": 0.432,
+        "facing": "away from the camera, seen from behind",
+        "dist": 3.6,
+        "visible": true
+      },
+      "Z": {
+        "side": "right",
+        "x": 0.692,
+        "y": 0.378,
+        "facing": "toward the camera",
+        "dist": 5.35,
+        "visible": true
+      }
+    }
+  },
+  "S04": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the long rectangular wooden table",
+        "side": "right"
+      },
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.164,
+        "facing": "facing screen-right, in profile",
+        "dist": 1.2,
+        "visible": true
+      }
+    }
+  },
+  "F17": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the long rectangular wooden table",
+        "side": "centre"
+      },
+      {
+        "id": "wallW",
+        "name": "the low buildings on the west side, windows glowing",
+        "side": "right"
+      },
+      {
+        "id": "counter",
+        "name": "the robot's serving counter by the west wall",
+        "side": "right"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "right"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "left",
+        "x": 0.236,
+        "y": 0.359,
+        "facing": "facing screen-right, in profile",
+        "dist": 3.06,
+        "visible": true
+      },
+      "D": {
+        "side": "right",
+        "x": 0.765,
+        "y": 0.318,
+        "facing": "toward the camera",
+        "dist": 3.05,
+        "visible": true
+      }
+    }
+  },
+  "F26": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the long rectangular wooden table",
+        "side": "centre"
+      },
+      {
+        "id": "wallW",
+        "name": "the low buildings on the west side, windows glowing",
+        "side": "right"
+      },
+      {
+        "id": "counter",
+        "name": "the robot's serving counter by the west wall",
+        "side": "right"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "right"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "left",
+        "x": 0.236,
+        "y": 0.359,
+        "facing": "facing screen-right, in profile",
+        "dist": 3.06,
+        "visible": true
+      },
+      "D": {
+        "side": "right",
+        "x": 0.765,
+        "y": 0.318,
+        "facing": "toward the camera",
+        "dist": 3.05,
+        "visible": true
+      },
+      "B": {
+        "side": "left",
+        "x": 0.181,
+        "y": 0.288,
+        "facing": "toward the camera",
+        "dist": 7.11,
+        "visible": true
+      }
+    }
+  },
+  "D01": {
+    "landmarks": [
+      {
+        "id": "gate",
+        "name": "the street gate, dark metal bars",
+        "side": "right"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "right"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "right"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "centre"
+      },
+      {
+        "id": "wallN",
+        "name": "the shop fronts with windows glowing pink and cyan",
+        "side": "left"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "left"
+      },
+      {
+        "id": "lamp",
+        "name": "a street lamp by the gate",
+        "side": "left"
+      }
+    ],
+    "people": {
+      "D": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.409,
+        "facing": "toward the camera",
+        "dist": 6.44,
+        "visible": true
+      },
+      "Z": {
+        "side": "right",
+        "x": 0.679,
+        "y": 0.439,
+        "facing": "facing screen-left, in profile",
+        "dist": 5.3,
+        "visible": true
+      }
+    }
+  },
+  "S02": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the long rectangular wooden table",
+        "side": "centre"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "centre"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      }
+    ],
+    "people": {
+      "D": {
+        "side": "right",
+        "x": 3.516,
+        "y": 1.303,
+        "facing": "toward the camera",
+        "dist": 0.79,
+        "visible": false
+      }
+    }
+  },
+  "R06": {
+    "landmarks": [
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "centre"
+      }
+    ],
+    "people": {
+      "B": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.164,
+        "facing": "toward the camera",
+        "dist": 1.2,
+        "visible": true
+      },
+      "Z": {
+        "side": "right",
+        "x": 1.269,
+        "y": 0.24,
+        "facing": "facing screen-right, in profile",
+        "dist": 3.08,
+        "visible": false
+      },
+      "D": {
+        "side": "right",
+        "x": 0.723,
+        "y": 0.264,
+        "facing": "facing screen-left, in profile",
+        "dist": 3.84,
+        "visible": true
+      }
+    }
+  },
+  "F01": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the long rectangular wooden table",
+        "side": "centre"
+      },
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "right"
+      },
+      {
+        "id": "tree",
+        "name": "the shade tree hung with little lights",
+        "side": "left"
+      },
+      {
+        "id": "gate",
+        "name": "the street gate, dark metal bars",
+        "side": "centre"
+      },
+      {
+        "id": "wallW",
+        "name": "the low buildings on the west side, windows glowing",
+        "side": "left"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "right"
+      },
+      {
+        "id": "counter",
+        "name": "the robot's serving counter by the west wall",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "centre"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "wallN",
+        "name": "the shop fronts with windows glowing pink and cyan",
+        "side": "left"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "lamp",
+        "name": "a street lamp by the gate",
+        "side": "centre"
+      }
+    ],
+    "people": {
+      "D": {
+        "side": "centre",
+        "x": 0.489,
+        "y": 0.441,
+        "facing": "toward the camera",
+        "dist": 11.45,
+        "visible": true
+      },
+      "B": {
+        "side": "centre",
+        "x": 0.588,
+        "y": 0.489,
+        "facing": "facing screen-left, in profile",
+        "dist": 10.42,
+        "visible": true
+      }
+    }
+  },
+  "F02": {
+    "landmarks": [
+      {
+        "id": "gate",
+        "name": "the street gate, dark metal bars",
+        "side": "centre"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "right"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "centre"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "right"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.23,
+        "facing": "toward the camera",
+        "dist": 2,
+        "visible": true
+      }
+    }
+  },
+  "F03": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the long rectangular wooden table",
+        "side": "centre"
+      },
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "left"
+      },
+      {
+        "id": "tree",
+        "name": "the shade tree hung with little lights",
+        "side": "right"
+      },
+      {
+        "id": "gate",
+        "name": "the street gate, dark metal bars",
+        "side": "left"
+      },
+      {
+        "id": "wallW",
+        "name": "the low buildings on the west side, windows glowing",
+        "side": "right"
+      },
+      {
+        "id": "counter",
+        "name": "the robot's serving counter by the west wall",
+        "side": "right"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "right"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      }
+    ],
+    "people": {
+      "D": {
+        "side": "centre",
+        "x": 0.624,
+        "y": 0.37,
+        "facing": "away from the camera, seen from behind",
+        "dist": 8.08,
+        "visible": true
+      },
+      "B": {
+        "side": "centre",
+        "x": 0.394,
+        "y": 0.377,
+        "facing": "toward the camera",
+        "dist": 9.39,
+        "visible": true
+      }
+    }
+  },
+  "F04": {
+    "landmarks": [
+      {
+        "id": "gate",
+        "name": "the street gate, dark metal bars",
+        "side": "left"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "right"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "right"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "right"
+      },
+      {
+        "id": "wallN",
+        "name": "the shop fronts with windows glowing pink and cyan",
+        "side": "right"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "left"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.23,
+        "facing": "toward the camera",
+        "dist": 2,
+        "visible": true
+      }
+    }
+  },
+  "F05": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the long rectangular wooden table",
+        "side": "centre"
+      },
+      {
+        "id": "tree",
+        "name": "the shade tree hung with little lights",
+        "side": "right"
+      },
+      {
+        "id": "wallW",
+        "name": "the low buildings on the west side, windows glowing",
+        "side": "centre"
+      },
+      {
+        "id": "counter",
+        "name": "the robot's serving counter by the west wall",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "right"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      }
+    ],
+    "people": {
+      "D": {
+        "side": "right",
+        "x": 0.708,
+        "y": 0.304,
+        "facing": "facing screen-left, in profile",
+        "dist": 3.68,
+        "visible": true
+      },
+      "B": {
+        "side": "left",
+        "x": 0.298,
+        "y": 0.331,
+        "facing": "facing screen-right, in profile",
+        "dist": 3.78,
+        "visible": true
+      }
+    }
+  },
+  "F06": {
+    "landmarks": [
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "right"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "centre"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "right"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.178,
+        "facing": "toward the camera",
+        "dist": 1.2,
+        "visible": true
+      }
+    }
+  },
+  "F09": {
+    "landmarks": [
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "right"
+      },
+      {
+        "id": "wallN",
+        "name": "the shop fronts with windows glowing pink and cyan",
+        "side": "left"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "centre"
+      },
+      {
+        "id": "lamp",
+        "name": "a street lamp by the gate",
+        "side": "right"
+      }
+    ],
+    "people": {
+      "R": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.042,
+        "facing": "facing screen-right, in profile",
+        "dist": 1.21,
+        "visible": true
+      }
+    }
+  },
+  "F11": {
+    "landmarks": [
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "right"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "right"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "right"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "left"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.394,
+        "facing": "toward the camera",
+        "dist": 0.64,
+        "visible": true
+      }
+    }
+  },
+  "F13": {
+    "landmarks": [
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "centre"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "centre"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "right"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "right"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.244,
+        "facing": "toward the camera",
+        "dist": 0.97,
+        "visible": true
+      }
+    }
+  },
+  "F14": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the long rectangular wooden table",
+        "side": "centre"
+      },
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "left"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "left"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "left",
+        "x": 0.294,
+        "y": 0.342,
+        "facing": "toward the camera",
+        "dist": 3.67,
+        "visible": true
+      },
+      "D": {
+        "side": "centre",
+        "x": 0.462,
+        "y": 0.359,
+        "facing": "facing screen-left, in profile",
+        "dist": 1.96,
+        "visible": true
+      },
+      "B": {
+        "side": "right",
+        "x": 0.727,
+        "y": 0.338,
+        "facing": "toward the camera",
+        "dist": 3.69,
+        "visible": true
+      }
+    }
+  },
+  "F15": {
+    "landmarks": [
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "centre"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "centre"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "right"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.231,
+        "facing": "toward the camera",
+        "dist": 0.92,
+        "visible": true
+      }
+    }
+  },
+  "F16": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the long rectangular wooden table",
+        "side": "left"
+      },
+      {
+        "id": "tree",
+        "name": "the shade tree hung with little lights",
+        "side": "left"
+      },
+      {
+        "id": "wallW",
+        "name": "the low buildings on the west side, windows glowing",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "left"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "right"
+      },
+      {
+        "id": "wallN",
+        "name": "the shop fronts with windows glowing pink and cyan",
+        "side": "right"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "right"
+      }
+    ],
+    "people": {
+      "D": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.234,
+        "facing": "toward the camera",
+        "dist": 0.92,
+        "visible": true
+      }
+    }
+  },
+  "F18": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the long rectangular wooden table",
+        "side": "centre"
+      },
+      {
+        "id": "wallW",
+        "name": "the low buildings on the west side, windows glowing",
+        "side": "right"
+      },
+      {
+        "id": "counter",
+        "name": "the robot's serving counter by the west wall",
+        "side": "right"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "right"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "left",
+        "x": 0.236,
+        "y": 0.359,
+        "facing": "facing screen-right, in profile",
+        "dist": 3.06,
+        "visible": true
+      },
+      "D": {
+        "side": "right",
+        "x": 0.765,
+        "y": 0.318,
+        "facing": "toward the camera",
+        "dist": 3.05,
+        "visible": true
+      }
+    }
+  },
+  "F19": {
+    "landmarks": [
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "centre"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "centre"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "right"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.31,
+        "facing": "toward the camera",
+        "dist": 0.49,
+        "visible": true
+      }
+    }
+  },
+  "F20": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the long rectangular wooden table",
+        "side": "centre"
+      },
+      {
+        "id": "wallW",
+        "name": "the low buildings on the west side, windows glowing",
+        "side": "right"
+      },
+      {
+        "id": "counter",
+        "name": "the robot's serving counter by the west wall",
+        "side": "right"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "right"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "left",
+        "x": 0.236,
+        "y": 0.359,
+        "facing": "facing screen-right, in profile",
+        "dist": 3.06,
+        "visible": true
+      },
+      "D": {
+        "side": "right",
+        "x": 0.765,
+        "y": 0.318,
+        "facing": "toward the camera",
+        "dist": 3.05,
+        "visible": true
+      }
+    }
+  },
+  "F21": {
+    "landmarks": [
+      {
+        "id": "tree",
+        "name": "the shade tree hung with little lights",
+        "side": "left"
+      },
+      {
+        "id": "wallW",
+        "name": "the low buildings on the west side, windows glowing",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "left"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "centre"
+      },
+      {
+        "id": "wallN",
+        "name": "the shop fronts with windows glowing pink and cyan",
+        "side": "right"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "right"
+      }
+    ],
+    "people": {
+      "D": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.253,
+        "facing": "toward the camera",
+        "dist": 0.98,
+        "visible": true
+      }
+    }
+  },
+  "F22": {
+    "landmarks": [
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "centre"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "centre"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "right"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.231,
+        "facing": "toward the camera",
+        "dist": 0.92,
+        "visible": true
+      }
+    }
+  },
+  "F23": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the long rectangular wooden table",
+        "side": "centre"
+      },
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "left"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "left"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "left",
+        "x": 0.294,
+        "y": 0.342,
+        "facing": "toward the camera",
+        "dist": 3.67,
+        "visible": true
+      },
+      "D": {
+        "side": "centre",
+        "x": 0.462,
+        "y": 0.359,
+        "facing": "facing screen-left, in profile",
+        "dist": 1.96,
+        "visible": true
+      },
+      "B": {
+        "side": "right",
+        "x": 0.727,
+        "y": 0.338,
+        "facing": "toward the camera",
+        "dist": 3.69,
+        "visible": true
+      }
+    }
+  },
+  "F24": {
+    "landmarks": [
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "left"
+      }
+    ],
+    "people": {
+      "B": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.178,
+        "facing": "facing screen-left, in profile",
+        "dist": 1.2,
+        "visible": true
+      }
+    }
+  },
+  "F25": {
+    "landmarks": [
+      {
+        "id": "gate",
+        "name": "the street gate, dark metal bars",
+        "side": "centre"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "right"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "right"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "left"
+      },
+      {
+        "id": "wallN",
+        "name": "the shop fronts with windows glowing pink and cyan",
+        "side": "left"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "left"
+      },
+      {
+        "id": "lamp",
+        "name": "a street lamp by the gate",
+        "side": "left"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.31,
+        "facing": "toward the camera",
+        "dist": 0.49,
+        "visible": true
+      }
+    }
+  },
+  "S01": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the long rectangular wooden table",
+        "side": "centre"
+      },
+      {
+        "id": "wallW",
+        "name": "the low buildings on the west side, windows glowing",
+        "side": "right"
+      },
+      {
+        "id": "counter",
+        "name": "the robot's serving counter by the west wall",
+        "side": "right"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "right"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      }
+    ],
+    "people": {
+      "R": {
+        "side": "centre",
+        "x": 0.578,
+        "y": 0.215,
+        "facing": "away from the camera, seen from behind",
+        "dist": 2.57,
+        "visible": true
+      },
+      "Z": {
+        "side": "left",
+        "x": 0.236,
+        "y": 0.359,
+        "facing": "facing screen-right, in profile",
+        "dist": 3.06,
+        "visible": true
+      },
+      "D": {
+        "side": "right",
+        "x": 0.765,
+        "y": 0.318,
+        "facing": "toward the camera",
+        "dist": 3.05,
+        "visible": true
+      }
+    }
+  },
+  "S03": {
+    "landmarks": [
+      {
+        "id": "tree",
+        "name": "the shade tree hung with little lights",
+        "side": "left"
+      },
+      {
+        "id": "wallW",
+        "name": "the low buildings on the west side, windows glowing",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "right"
+      },
+      {
+        "id": "wallN",
+        "name": "the shop fronts with windows glowing pink and cyan",
+        "side": "right"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "right"
+      }
+    ],
+    "people": {
+      "D": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.118,
+        "facing": "toward the camera",
+        "dist": 0.65,
+        "visible": true
+      }
+    }
+  },
+  "S05": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the long rectangular wooden table",
+        "side": "left"
+      },
+      {
+        "id": "wallW",
+        "name": "the low buildings on the west side, windows glowing",
+        "side": "right"
+      },
+      {
+        "id": "counter",
+        "name": "the robot's serving counter by the west wall",
+        "side": "right"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      }
+    ],
+    "people": {
+      "D": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.167,
+        "facing": "toward the camera",
+        "dist": 1.2,
+        "visible": true
+      }
+    }
+  },
+  "S06": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the long rectangular wooden table",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "centre"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      }
+    ],
+    "people": {
+      "D": {
+        "side": "right",
+        "x": 2.578,
+        "y": 0.805,
+        "facing": "toward the camera",
+        "dist": 0.96,
+        "visible": false
+      }
+    }
+  },
+  "S07": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the long rectangular wooden table",
+        "side": "left"
+      },
+      {
+        "id": "tree",
+        "name": "the shade tree hung with little lights",
+        "side": "left"
+      },
+      {
+        "id": "wallW",
+        "name": "the low buildings on the west side, windows glowing",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "left"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "right"
+      },
+      {
+        "id": "wallN",
+        "name": "the shop fronts with windows glowing pink and cyan",
+        "side": "right"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "right"
+      }
+    ],
+    "people": {
+      "D": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.234,
+        "facing": "toward the camera",
+        "dist": 0.92,
+        "visible": true
+      }
+    }
+  },
+  "S08": {
+    "landmarks": [
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "centre"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "centre"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "right"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.31,
+        "facing": "toward the camera",
+        "dist": 0.49,
+        "visible": true
+      }
+    }
+  },
+  "S09": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the long rectangular wooden table",
+        "side": "right"
+      },
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "right"
+      },
+      {
+        "id": "gate",
+        "name": "the street gate, dark metal bars",
+        "side": "left"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "right"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "right"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "wallN",
+        "name": "the shop fronts with windows glowing pink and cyan",
+        "side": "left"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "lamp",
+        "name": "a street lamp by the gate",
+        "side": "left"
+      }
+    ],
+    "people": {}
+  },
+  "S10": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the long rectangular wooden table",
+        "side": "centre"
+      },
+      {
+        "id": "wallW",
+        "name": "the low buildings on the west side, windows glowing",
+        "side": "right"
+      },
+      {
+        "id": "counter",
+        "name": "the robot's serving counter by the west wall",
+        "side": "right"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "right"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "left",
+        "x": 0.236,
+        "y": 0.359,
+        "facing": "facing screen-right, in profile",
+        "dist": 3.06,
+        "visible": true
+      },
+      "D": {
+        "side": "right",
+        "x": 0.765,
+        "y": 0.318,
+        "facing": "toward the camera",
+        "dist": 3.05,
+        "visible": true
+      },
+      "B": {
+        "side": "left",
+        "x": 0.181,
+        "y": 0.288,
+        "facing": "toward the camera",
+        "dist": 7.11,
+        "visible": true
+      }
+    }
+  },
+  "S11": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the long rectangular wooden table",
+        "side": "left"
+      },
+      {
+        "id": "wallW",
+        "name": "the low buildings on the west side, windows glowing",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "right"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "right"
+      },
+      {
+        "id": "wallN",
+        "name": "the shop fronts with windows glowing pink and cyan",
+        "side": "right"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "right"
+      }
+    ],
+    "people": {
+      "D": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.293,
+        "facing": "toward the camera",
+        "dist": 1.01,
+        "visible": true
+      }
+    }
+  },
+  "S12": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the long rectangular wooden table",
+        "side": "left"
+      },
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "right"
+      },
+      {
+        "id": "gate",
+        "name": "the street gate, dark metal bars",
+        "side": "left"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "right"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "right"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "wallN",
+        "name": "the shop fronts with windows glowing pink and cyan",
+        "side": "left"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "lamp",
+        "name": "a street lamp by the gate",
+        "side": "left"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "right",
+        "x": 0.86,
+        "y": -0.114,
+        "facing": "toward the camera",
+        "dist": 1.54,
+        "visible": true
+      },
+      "D": {
+        "side": "left",
+        "x": -1.395,
+        "y": -1.429,
+        "facing": "toward the camera",
+        "dist": 1.11,
+        "visible": false
+      }
+    }
+  },
+  "S12b": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the long rectangular wooden table",
+        "side": "right"
+      },
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "right"
+      },
+      {
+        "id": "gate",
+        "name": "the street gate, dark metal bars",
+        "side": "left"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "right"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "right"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "wallN",
+        "name": "the shop fronts with windows glowing pink and cyan",
+        "side": "left"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "lamp",
+        "name": "a street lamp by the gate",
+        "side": "left"
+      }
+    ],
+    "people": {}
+  },
+  "S13": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the long rectangular wooden table",
+        "side": "centre"
+      },
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "right"
+      },
+      {
+        "id": "gate",
+        "name": "the street gate, dark metal bars",
+        "side": "centre"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "right"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "left"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "wallN",
+        "name": "the shop fronts with windows glowing pink and cyan",
+        "side": "left"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "lamp",
+        "name": "a street lamp by the gate",
+        "side": "centre"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "centre",
+        "x": 0.631,
+        "y": 0.429,
+        "facing": "toward the camera",
+        "dist": 5.92,
+        "visible": true
+      },
+      "D": {
+        "side": "centre",
+        "x": 0.368,
+        "y": 0.409,
+        "facing": "toward the camera",
+        "dist": 5.92,
+        "visible": true
+      }
+    }
+  },
+  "S14": {
+    "landmarks": [
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "left"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "right"
+      }
+    ],
+    "people": {
+      "B": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.231,
+        "facing": "facing screen-left, in profile",
+        "dist": 0.92,
+        "visible": true
+      }
+    }
+  },
+  "R01": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the long rectangular wooden table",
+        "side": "left"
+      },
+      {
+        "id": "wallW",
+        "name": "the low buildings on the west side, windows glowing",
+        "side": "right"
+      },
+      {
+        "id": "counter",
+        "name": "the robot's serving counter by the west wall",
+        "side": "right"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      }
+    ],
+    "people": {
+      "D": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.167,
+        "facing": "toward the camera",
+        "dist": 1.2,
+        "visible": true
+      }
+    }
+  },
+  "R02": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the long rectangular wooden table",
+        "side": "right"
+      },
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.164,
+        "facing": "facing screen-right, in profile",
+        "dist": 1.2,
+        "visible": true
+      }
+    }
+  },
+  "R03": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the long rectangular wooden table",
+        "side": "right"
+      },
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.164,
+        "facing": "facing screen-right, in profile",
+        "dist": 1.2,
+        "visible": true
+      }
+    }
+  },
+  "R04": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the long rectangular wooden table",
+        "side": "right"
+      },
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.164,
+        "facing": "facing screen-right, in profile",
+        "dist": 1.2,
+        "visible": true
+      }
+    }
+  },
+  "R05": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the long rectangular wooden table",
+        "side": "left"
+      },
+      {
+        "id": "wallW",
+        "name": "the low buildings on the west side, windows glowing",
+        "side": "right"
+      },
+      {
+        "id": "counter",
+        "name": "the robot's serving counter by the west wall",
+        "side": "right"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      }
+    ],
+    "people": {
+      "D": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.167,
+        "facing": "toward the camera",
+        "dist": 1.2,
+        "visible": true
+      }
+    }
+  },
+  "R07": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the long rectangular wooden table",
+        "side": "centre"
+      },
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "left"
+      },
+      {
+        "id": "tree",
+        "name": "the shade tree hung with little lights",
+        "side": "right"
+      },
+      {
+        "id": "wallW",
+        "name": "the low buildings on the west side, windows glowing",
+        "side": "right"
+      },
+      {
+        "id": "counter",
+        "name": "the robot's serving counter by the west wall",
+        "side": "right"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "right"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "centre",
+        "x": 0.369,
+        "y": 0.429,
+        "facing": "facing screen-right, in profile",
+        "dist": 5.92,
+        "visible": true
+      },
+      "D": {
+        "side": "centre",
+        "x": 0.632,
+        "y": 0.409,
+        "facing": "toward the camera",
+        "dist": 5.92,
+        "visible": true
+      },
+      "B": {
+        "side": "left",
+        "x": 0.28,
+        "y": 0.404,
+        "facing": "toward the camera",
+        "dist": 9.91,
+        "visible": true
+      }
+    }
+  },
+  "R08": {
+    "landmarks": [
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "centre"
+      }
+    ],
+    "people": {
+      "B": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.222,
+        "facing": "toward the camera",
+        "dist": 2,
+        "visible": true
+      }
+    }
+  },
+  "R09": {
+    "landmarks": [
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "left"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "right"
+      }
+    ],
+    "people": {
+      "B": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.231,
+        "facing": "facing screen-left, in profile",
+        "dist": 0.92,
+        "visible": true
+      }
+    }
+  },
+  "R10": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the long rectangular wooden table",
+        "side": "centre"
+      },
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "right"
+      },
+      {
+        "id": "gate",
+        "name": "the street gate, dark metal bars",
+        "side": "centre"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "right"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "left"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "wallN",
+        "name": "the shop fronts with windows glowing pink and cyan",
+        "side": "left"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "lamp",
+        "name": "a street lamp by the gate",
+        "side": "centre"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "centre",
+        "x": 0.631,
+        "y": 0.429,
+        "facing": "toward the camera",
+        "dist": 5.92,
+        "visible": true
+      },
+      "D": {
+        "side": "centre",
+        "x": 0.368,
+        "y": 0.409,
+        "facing": "toward the camera",
+        "dist": 5.92,
+        "visible": true
+      }
+    }
+  },
+  "D02": {
+    "landmarks": [
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "right"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "left"
+      }
+    ],
+    "people": {
+      "D": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.249,
+        "facing": "toward the camera",
+        "dist": 0.92,
+        "visible": true
+      }
+    }
+  },
+  "D03": {
+    "landmarks": [
+      {
+        "id": "gate",
+        "name": "the street gate, dark metal bars",
+        "side": "right"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "right"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "left"
+      }
+    ],
+    "people": {
+      "D": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.23,
+        "facing": "toward the camera",
+        "dist": 2,
+        "visible": true
+      }
+    }
+  },
+  "D04": {
+    "landmarks": [
+      {
+        "id": "tree",
+        "name": "the shade tree hung with little lights",
+        "side": "left"
+      },
+      {
+        "id": "gate",
+        "name": "the street gate, dark metal bars",
+        "side": "left"
+      },
+      {
+        "id": "wallW",
+        "name": "the low buildings on the west side, windows glowing",
+        "side": "left"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "left"
+      },
+      {
+        "id": "counter",
+        "name": "the robot's serving counter by the west wall",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "left"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "left"
+      },
+      {
+        "id": "wallN",
+        "name": "the shop fronts with windows glowing pink and cyan",
+        "side": "centre"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "right"
+      },
+      {
+        "id": "lamp",
+        "name": "a street lamp by the gate",
+        "side": "right"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "left",
+        "x": 0.235,
+        "y": 0.389,
+        "facing": "facing screen-right, in profile",
+        "dist": 3.09,
+        "visible": true
+      },
+      "D": {
+        "side": "right",
+        "x": 0.767,
+        "y": 0.3,
+        "facing": "facing screen-left, in profile",
+        "dist": 3.08,
+        "visible": true
+      }
+    }
+  },
+  "D05": {
+    "landmarks": [
+      {
+        "id": "tree",
+        "name": "the shade tree hung with little lights",
+        "side": "left"
+      },
+      {
+        "id": "gate",
+        "name": "the street gate, dark metal bars",
+        "side": "left"
+      },
+      {
+        "id": "wallW",
+        "name": "the low buildings on the west side, windows glowing",
+        "side": "left"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "left"
+      },
+      {
+        "id": "counter",
+        "name": "the robot's serving counter by the west wall",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "left"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "left"
+      },
+      {
+        "id": "wallN",
+        "name": "the shop fronts with windows glowing pink and cyan",
+        "side": "centre"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "right"
+      },
+      {
+        "id": "lamp",
+        "name": "a street lamp by the gate",
+        "side": "right"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "left",
+        "x": 0.235,
+        "y": 0.389,
+        "facing": "facing screen-right, in profile",
+        "dist": 3.09,
+        "visible": true
+      },
+      "D": {
+        "side": "right",
+        "x": 0.767,
+        "y": 0.3,
+        "facing": "facing screen-left, in profile",
+        "dist": 3.08,
+        "visible": true
+      }
+    }
+  },
+  "D06": {
+    "landmarks": [
+      {
+        "id": "tree",
+        "name": "the shade tree hung with little lights",
+        "side": "left"
+      },
+      {
+        "id": "wallW",
+        "name": "the low buildings on the west side, windows glowing",
+        "side": "left"
+      },
+      {
+        "id": "counter",
+        "name": "the robot's serving counter by the west wall",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "left"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "left"
+      },
+      {
+        "id": "wallN",
+        "name": "the shop fronts with windows glowing pink and cyan",
+        "side": "centre"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "right"
+      },
+      {
+        "id": "lamp",
+        "name": "a street lamp by the gate",
+        "side": "left"
+      }
+    ],
+    "people": {
+      "D": {
+        "side": "centre",
+        "x": 0.515,
+        "y": 0.401,
+        "facing": "away from the camera, seen from behind",
+        "dist": 5.66,
+        "visible": true
+      }
+    }
+  },
+  "D07": {
+    "landmarks": [
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "left"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "right"
+      }
+    ],
+    "people": {
+      "D": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.349,
+        "facing": "toward the camera",
+        "dist": 0.5,
+        "visible": true
+      }
+    }
+  },
+  "D08": {
+    "landmarks": [
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "left"
+      },
+      {
+        "id": "wallN",
+        "name": "the shop fronts with windows glowing pink and cyan",
+        "side": "right"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "right"
+      }
+    ],
+    "people": {
+      "D": {
+        "side": "left",
+        "x": -0.211,
+        "y": 3.231,
+        "facing": "toward the camera",
+        "dist": 0.47,
+        "visible": false
+      }
+    }
+  },
+  "D09": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the long rectangular wooden table",
+        "side": "left"
+      },
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "right"
+      },
+      {
+        "id": "gate",
+        "name": "the street gate, dark metal bars",
+        "side": "left"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "right"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "right"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "wallN",
+        "name": "the shop fronts with windows glowing pink and cyan",
+        "side": "left"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "lamp",
+        "name": "a street lamp by the gate",
+        "side": "left"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "left",
+        "x": 0.173,
+        "y": 0.306,
+        "facing": "facing screen-right, in profile",
+        "dist": 4.21,
+        "visible": true
+      },
+      "B": {
+        "side": "right",
+        "x": 0.823,
+        "y": 0.456,
+        "facing": "facing screen-left, in profile",
+        "dist": 4.23,
+        "visible": true
+      }
+    }
+  },
+  "D10": {
+    "landmarks": [
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "left"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "left"
+      }
+    ],
+    "people": {
+      "B": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.222,
+        "facing": "facing screen-left, in profile",
+        "dist": 2,
+        "visible": true
+      }
+    }
+  },
+  "plate-A": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the wide table",
+        "side": "centre"
+      },
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "centre"
+      },
+      {
+        "id": "tree",
+        "name": "the shade tree hung with little lights",
+        "side": "left"
+      },
+      {
+        "id": "gate",
+        "name": "the street gate, dark metal bars",
+        "side": "left"
+      },
+      {
+        "id": "wallW",
+        "name": "the low buildings on the west side, windows glowing",
+        "side": "right"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "centre"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "left"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "left"
+      },
+      {
+        "id": "wallN",
+        "name": "the shop fronts with windows glowing pink and cyan",
+        "side": "left"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "lamp",
+        "name": "a street lamp by the gate",
+        "side": "left"
+      }
+    ],
+    "people": {}
+  },
+  "plate-B": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the wide table",
+        "side": "right"
+      },
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "centre"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "left"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      }
+    ],
+    "people": {}
+  },
+  "plate-C": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the wide table",
+        "side": "centre"
+      },
+      {
+        "id": "tree",
+        "name": "the shade tree hung with little lights",
+        "side": "centre"
+      },
+      {
+        "id": "wallW",
+        "name": "the low buildings on the west side, windows glowing",
+        "side": "left"
+      },
+      {
+        "id": "counter",
+        "name": "the robot's serving counter by the west wall",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "centre"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "right"
+      },
+      {
+        "id": "wallN",
+        "name": "the shop fronts with windows glowing pink and cyan",
+        "side": "right"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      }
+    ],
+    "people": {}
+  },
+  "plate-D": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the wide table",
+        "side": "centre"
+      },
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "left"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "right"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      }
+    ],
+    "people": {}
+  },
+  "plate-E": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the wide table",
+        "side": "centre"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "centre"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "right"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      }
+    ],
+    "people": {}
+  },
+  "plate-G": {
+    "landmarks": [
+      {
+        "id": "gate",
+        "name": "the street gate, dark metal bars",
+        "side": "right"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "right"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "right"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "centre"
+      },
+      {
+        "id": "wallN",
+        "name": "the shop fronts with windows glowing pink and cyan",
+        "side": "left"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "left"
+      },
+      {
+        "id": "lamp",
+        "name": "a street lamp by the gate",
+        "side": "left"
+      }
+    ],
+    "people": {}
+  },
+  "plate-S": {
+    "landmarks": [
+      {
+        "id": "tree",
+        "name": "the shade tree hung with little lights",
+        "side": "left"
+      },
+      {
+        "id": "wallW",
+        "name": "the low buildings on the west side, windows glowing",
+        "side": "left"
+      },
+      {
+        "id": "counter",
+        "name": "the robot's serving counter by the west wall",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "left"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "left"
+      },
+      {
+        "id": "wallN",
+        "name": "the shop fronts with windows glowing pink and cyan",
+        "side": "centre"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "right"
+      },
+      {
+        "id": "lamp",
+        "name": "a street lamp by the gate",
+        "side": "left"
+      }
+    ],
+    "people": {}
+  },
+  "plate-courtyard-A": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the long rectangular wooden table",
+        "side": "centre"
+      },
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "centre"
+      },
+      {
+        "id": "tree",
+        "name": "the shade tree hung with little lights",
+        "side": "left"
+      },
+      {
+        "id": "gate",
+        "name": "the street gate, dark metal bars",
+        "side": "left"
+      },
+      {
+        "id": "wallW",
+        "name": "the low buildings on the west side, windows glowing",
+        "side": "right"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "centre"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "left"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "wallN",
+        "name": "the shop fronts with windows glowing pink and cyan",
+        "side": "left"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "lamp",
+        "name": "a street lamp by the gate",
+        "side": "left"
+      }
+    ],
+    "people": {}
+  },
+  "plate-courtyard-B": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the long rectangular wooden table",
+        "side": "right"
+      },
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "centre"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "left"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      }
+    ],
+    "people": {}
+  },
+  "plate-courtyard-C": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the long rectangular wooden table",
+        "side": "centre"
+      },
+      {
+        "id": "tree",
+        "name": "the shade tree hung with little lights",
+        "side": "centre"
+      },
+      {
+        "id": "wallW",
+        "name": "the low buildings on the west side, windows glowing",
+        "side": "left"
+      },
+      {
+        "id": "counter",
+        "name": "the robot's serving counter by the west wall",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "centre"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "wallN",
+        "name": "the shop fronts with windows glowing pink and cyan",
+        "side": "right"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      }
+    ],
+    "people": {}
+  },
+  "plate-courtyard-D": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the long rectangular wooden table",
+        "side": "centre"
+      },
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "left"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "right"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      }
+    ],
+    "people": {}
+  },
+  "plate-courtyard-E": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the long rectangular wooden table",
+        "side": "centre"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "centre"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      }
+    ],
+    "people": {}
+  },
+  "plate-courtyard-G": {
+    "landmarks": [
+      {
+        "id": "gate",
+        "name": "the street gate, dark metal bars",
+        "side": "right"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "right"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "right"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "centre"
+      },
+      {
+        "id": "wallN",
+        "name": "the shop fronts with windows glowing pink and cyan",
+        "side": "left"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "left"
+      },
+      {
+        "id": "lamp",
+        "name": "a street lamp by the gate",
+        "side": "left"
+      }
+    ],
+    "people": {}
+  },
+  "plate-courtyard-S": {
+    "landmarks": [
+      {
+        "id": "tree",
+        "name": "the shade tree hung with little lights",
+        "side": "left"
+      },
+      {
+        "id": "wallW",
+        "name": "the low buildings on the west side, windows glowing",
+        "side": "left"
+      },
+      {
+        "id": "counter",
+        "name": "the robot's serving counter by the west wall",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "left"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "left"
+      },
+      {
+        "id": "wallN",
+        "name": "the shop fronts with windows glowing pink and cyan",
+        "side": "centre"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "right"
+      },
+      {
+        "id": "lamp",
+        "name": "a street lamp by the gate",
+        "side": "left"
+      }
+    ],
+    "people": {}
+  },
+  "plate-courtyard-B-bai": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the long rectangular wooden table",
+        "side": "right"
+      },
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "centre"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "left"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      }
+    ],
+    "people": {
+      "B": {
+        "side": "centre",
+        "x": 0.575,
+        "y": 0.394,
+        "facing": "facing screen-left, in profile",
+        "dist": 5.55,
+        "visible": true
+      }
+    }
+  },
+  "cov-cafe-MASTER-wave": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the long rectangular wooden table",
+        "side": "centre"
+      },
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "left"
+      },
+      {
+        "id": "wallW",
+        "name": "the low buildings on the west side, windows glowing",
+        "side": "right"
+      },
+      {
+        "id": "counter",
+        "name": "the robot's serving counter by the west wall",
+        "side": "right"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "right"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      }
+    ],
+    "people": {
+      "D": {
+        "side": "right",
+        "x": 0.653,
+        "y": 0.425,
+        "facing": "facing screen-left, in profile",
+        "dist": 3.8,
+        "visible": true
+      },
+      "B": {
+        "side": "centre",
+        "x": 0.49,
+        "y": 0.404,
+        "facing": "toward the camera",
+        "dist": 5.29,
+        "visible": true
+      }
+    }
+  },
+  "cov-cafe-MASTER-robot": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the long rectangular wooden table",
+        "side": "centre"
+      },
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "left"
+      },
+      {
+        "id": "wallW",
+        "name": "the low buildings on the west side, windows glowing",
+        "side": "right"
+      },
+      {
+        "id": "counter",
+        "name": "the robot's serving counter by the west wall",
+        "side": "right"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "right"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "centre",
+        "x": 0.362,
+        "y": 0.447,
+        "facing": "facing screen-right, in profile",
+        "dist": 3.79,
+        "visible": true
+      },
+      "D": {
+        "side": "right",
+        "x": 0.653,
+        "y": 0.425,
+        "facing": "facing screen-left, in profile",
+        "dist": 3.8,
+        "visible": true
+      },
+      "B": {
+        "side": "centre",
+        "x": 0.49,
+        "y": 0.404,
+        "facing": "toward the camera",
+        "dist": 5.29,
+        "visible": true
+      },
+      "R": {
+        "side": "centre",
+        "x": 0.418,
+        "y": 0.356,
+        "facing": "toward the camera",
+        "dist": 4.79,
+        "visible": true
+      }
+    }
+  },
+  "cov-cafe-MASTER": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the long rectangular wooden table",
+        "side": "centre"
+      },
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "left"
+      },
+      {
+        "id": "wallW",
+        "name": "the low buildings on the west side, windows glowing",
+        "side": "right"
+      },
+      {
+        "id": "counter",
+        "name": "the robot's serving counter by the west wall",
+        "side": "right"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "right"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "centre",
+        "x": 0.362,
+        "y": 0.447,
+        "facing": "facing screen-right, in profile",
+        "dist": 3.79,
+        "visible": true
+      },
+      "D": {
+        "side": "right",
+        "x": 0.653,
+        "y": 0.425,
+        "facing": "facing screen-left, in profile",
+        "dist": 3.8,
+        "visible": true
+      },
+      "B": {
+        "side": "centre",
+        "x": 0.49,
+        "y": 0.404,
+        "facing": "toward the camera",
+        "dist": 5.29,
+        "visible": true
+      }
+    }
+  },
+  "cov-cafe-MASTER-apart": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the long rectangular wooden table",
+        "side": "right"
+      },
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "left"
+      },
+      {
+        "id": "wallW",
+        "name": "the low buildings on the west side, windows glowing",
+        "side": "right"
+      },
+      {
+        "id": "counter",
+        "name": "the robot's serving counter by the west wall",
+        "side": "right"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "right"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "centre",
+        "x": 0.523,
+        "y": 0.431,
+        "facing": "facing screen-right, in profile",
+        "dist": 4.17,
+        "visible": true
+      },
+      "D": {
+        "side": "right",
+        "x": 0.781,
+        "y": 0.412,
+        "facing": "facing screen-left, in profile",
+        "dist": 4.59,
+        "visible": true
+      },
+      "B": {
+        "side": "left",
+        "x": 0.209,
+        "y": 0.424,
+        "facing": "toward the camera",
+        "dist": 4.82,
+        "visible": true
+      },
+      "R": {
+        "side": "centre",
+        "x": 0.542,
+        "y": 0.352,
+        "facing": "toward the camera",
+        "dist": 5.23,
+        "visible": true
+      }
+    }
+  },
+  "cov-cafe-MASTER-laugh": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the long rectangular wooden table",
+        "side": "right"
+      },
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "left"
+      },
+      {
+        "id": "wallW",
+        "name": "the low buildings on the west side, windows glowing",
+        "side": "right"
+      },
+      {
+        "id": "counter",
+        "name": "the robot's serving counter by the west wall",
+        "side": "right"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "right"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "centre",
+        "x": 0.523,
+        "y": 0.431,
+        "facing": "facing screen-right, in profile",
+        "dist": 4.17,
+        "visible": true
+      },
+      "D": {
+        "side": "right",
+        "x": 0.781,
+        "y": 0.412,
+        "facing": "facing screen-left, in profile",
+        "dist": 4.59,
+        "visible": true
+      },
+      "B": {
+        "side": "left",
+        "x": 0.209,
+        "y": 0.424,
+        "facing": "toward the camera",
+        "dist": 4.82,
+        "visible": true
+      }
+    }
+  },
+  "cov-cafe-OTS-Z": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the long rectangular wooden table",
+        "side": "left"
+      },
+      {
+        "id": "tree",
+        "name": "the shade tree hung with little lights",
+        "side": "centre"
+      },
+      {
+        "id": "wallW",
+        "name": "the low buildings on the west side, windows glowing",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "centre"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "wallN",
+        "name": "the shop fronts with windows glowing pink and cyan",
+        "side": "right"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "left",
+        "x": 0.126,
+        "y": 0.499,
+        "facing": "away from the camera, seen from behind",
+        "dist": 0.87,
+        "visible": true
+      },
+      "D": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.406,
+        "facing": "toward the camera",
+        "dist": 2.57,
+        "visible": true
+      },
+      "B": {
+        "side": "left",
+        "x": -0.435,
+        "y": 0.458,
+        "facing": "facing screen-right, in profile",
+        "dist": 2.55,
+        "visible": false
+      }
+    }
+  },
+  "cov-cafe-OTS-D": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the long rectangular wooden table",
+        "side": "right"
+      },
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "left"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "left"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.404,
+        "facing": "toward the camera",
+        "dist": 2.57,
+        "visible": true
+      },
+      "D": {
+        "side": "right",
+        "x": 0.876,
+        "y": 0.283,
+        "facing": "away from the camera, seen from behind",
+        "dist": 0.88,
+        "visible": true
+      },
+      "B": {
+        "side": "right",
+        "x": 1.302,
+        "y": 0.403,
+        "facing": "toward the camera",
+        "dist": 2.71,
+        "visible": false
+      }
+    }
+  },
+  "cov-cafe-OTS-D-talk": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the long rectangular wooden table",
+        "side": "right"
+      },
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "left"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "left"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.404,
+        "facing": "toward the camera",
+        "dist": 2.57,
+        "visible": true
+      },
+      "D": {
+        "side": "right",
+        "x": 0.876,
+        "y": 0.283,
+        "facing": "away from the camera, seen from behind",
+        "dist": 0.88,
+        "visible": true
+      },
+      "B": {
+        "side": "centre",
+        "x": 0.455,
+        "y": 0.393,
+        "facing": "toward the camera",
+        "dist": 4.81,
+        "visible": true
+      }
+    }
+  },
+  "cov-cafe-CU-Z": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the long rectangular wooden table",
+        "side": "right"
+      },
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "left"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "left"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "right"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.305,
+        "facing": "toward the camera",
+        "dist": 1.24,
+        "visible": true
+      },
+      "D": {
+        "side": "left",
+        "x": -2.82,
+        "y": 1.145,
+        "facing": "toward the camera",
+        "dist": 0.94,
+        "visible": false
+      },
+      "B": {
+        "side": "left",
+        "x": 0.166,
+        "y": 0.341,
+        "facing": "toward the camera",
+        "dist": 3.41,
+        "visible": true
+      }
+    }
+  },
+  "cov-cafe-CU-D": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the long rectangular wooden table",
+        "side": "left"
+      },
+      {
+        "id": "tree",
+        "name": "the shade tree hung with little lights",
+        "side": "right"
+      },
+      {
+        "id": "wallW",
+        "name": "the low buildings on the west side, windows glowing",
+        "side": "left"
+      },
+      {
+        "id": "counter",
+        "name": "the robot's serving counter by the west wall",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "centre"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "right"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "right"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "right",
+        "x": 3.934,
+        "y": 0.11,
+        "facing": "toward the camera",
+        "dist": 0.94,
+        "visible": false
+      },
+      "D": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.308,
+        "facing": "toward the camera",
+        "dist": 1.24,
+        "visible": true
+      },
+      "B": {
+        "side": "right",
+        "x": 1.639,
+        "y": 0.342,
+        "facing": "toward the camera",
+        "dist": 3.05,
+        "visible": false
+      }
+    }
+  },
+  "cov-cafe-CU-B": {
+    "landmarks": [
+      {
+        "id": "wallW",
+        "name": "the low buildings on the west side, windows glowing",
+        "side": "right"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "left"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "left"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "right",
+        "x": 3.88,
+        "y": 0.597,
+        "facing": "toward the camera",
+        "dist": 0.94,
+        "visible": false
+      },
+      "D": {
+        "side": "left",
+        "x": -1.731,
+        "y": 0.864,
+        "facing": "toward the camera",
+        "dist": 0.99,
+        "visible": false
+      },
+      "B": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.305,
+        "facing": "toward the camera",
+        "dist": 1.24,
+        "visible": true
+      }
+    }
+  },
+  "cov-cafe-CU-B-standing": {
+    "landmarks": [
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "left"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "right",
+        "x": 6.253,
+        "y": -4.33,
+        "facing": "toward the camera",
+        "dist": 0.93,
+        "visible": false
+      },
+      "D": {
+        "side": "left",
+        "x": -0.369,
+        "y": -0.251,
+        "facing": "toward the camera",
+        "dist": 1.29,
+        "visible": false
+      },
+      "B": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.322,
+        "facing": "toward the camera",
+        "dist": 1.24,
+        "visible": true
+      }
+    }
+  },
+  "cov-cafe-BAI": {
+    "landmarks": [
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "left"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "left"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "left"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "right"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "left",
+        "x": -0.167,
+        "y": 0.457,
+        "facing": "away from the camera, seen from behind",
+        "dist": 1.15,
+        "visible": false
+      },
+      "D": {
+        "side": "left",
+        "x": 0.03,
+        "y": 0.467,
+        "facing": "toward the camera",
+        "dist": 2.9,
+        "visible": true
+      },
+      "B": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.349,
+        "facing": "toward the camera",
+        "dist": 1.23,
+        "visible": true
+      }
+    }
+  },
+  "cov-cafe-SUGAR-stack": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the long rectangular wooden table",
+        "side": "right"
+      },
+      {
+        "id": "wallW",
+        "name": "the low buildings on the west side, windows glowing",
+        "side": "right"
+      },
+      {
+        "id": "counter",
+        "name": "the robot's serving counter by the west wall",
+        "side": "right"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "right",
+        "x": 5.953,
+        "y": 4.329,
+        "facing": "toward the camera",
+        "dist": 1.03,
+        "visible": false
+      },
+      "D": {
+        "side": "left",
+        "x": -3.675,
+        "y": 4.529,
+        "facing": "toward the camera",
+        "dist": 0.95,
+        "visible": false
+      },
+      "B": {
+        "side": "centre",
+        "x": 0.395,
+        "y": -0.291,
+        "facing": "toward the camera",
+        "dist": 1.64,
+        "visible": false
+      }
+    }
+  },
+  "cov-cafe-SUGAR": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the long rectangular wooden table",
+        "side": "right"
+      },
+      {
+        "id": "wallW",
+        "name": "the low buildings on the west side, windows glowing",
+        "side": "right"
+      },
+      {
+        "id": "counter",
+        "name": "the robot's serving counter by the west wall",
+        "side": "right"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      }
+    ],
+    "people": {}
+  },
+  "cov-cafe-SUGAR-flick": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the long rectangular wooden table",
+        "side": "right"
+      },
+      {
+        "id": "wallW",
+        "name": "the low buildings on the west side, windows glowing",
+        "side": "right"
+      },
+      {
+        "id": "counter",
+        "name": "the robot's serving counter by the west wall",
+        "side": "right"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "right",
+        "x": 5.953,
+        "y": 4.329,
+        "facing": "toward the camera",
+        "dist": 1.03,
+        "visible": false
+      },
+      "D": {
+        "side": "left",
+        "x": -3.675,
+        "y": 4.529,
+        "facing": "toward the camera",
+        "dist": 0.95,
+        "visible": false
+      },
+      "B": {
+        "side": "centre",
+        "x": 0.395,
+        "y": -0.291,
+        "facing": "toward the camera",
+        "dist": 1.64,
+        "visible": false
+      }
+    }
+  },
+  "cov-cafe-SUGAR-door": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the long rectangular wooden table",
+        "side": "right"
+      },
+      {
+        "id": "wallW",
+        "name": "the low buildings on the west side, windows glowing",
+        "side": "right"
+      },
+      {
+        "id": "counter",
+        "name": "the robot's serving counter by the west wall",
+        "side": "right"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      }
+    ],
+    "people": {}
+  },
+  "cov-cafe-WATCH": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the long rectangular wooden table",
+        "side": "right"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "left"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "left",
+        "x": 0.196,
+        "y": 1.07,
+        "facing": "toward the camera",
+        "dist": 0.39,
+        "visible": true
+      },
+      "D": {
+        "side": "right",
+        "x": 6.073,
+        "y": 1.161,
+        "facing": "toward the camera",
+        "dist": 1.69,
+        "visible": false
+      },
+      "B": {
+        "side": "right",
+        "x": 1.547,
+        "y": -3.749,
+        "facing": "facing screen-right, in profile",
+        "dist": 1.7,
+        "visible": false
+      }
+    }
+  },
+  "cov-gate-MASTER": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the long rectangular wooden table",
+        "side": "right"
+      },
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "right"
+      },
+      {
+        "id": "gate",
+        "name": "the street gate, dark metal bars",
+        "side": "centre"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "centre"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "right"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "wallN",
+        "name": "the shop fronts with windows glowing pink and cyan",
+        "side": "right"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "lamp",
+        "name": "a street lamp by the gate",
+        "side": "right"
+      }
+    ],
+    "people": {
+      "D": {
+        "side": "right",
+        "x": 0.683,
+        "y": 0.345,
+        "facing": "facing screen-left, in profile",
+        "dist": 3.49,
+        "visible": true
+      },
+      "Z": {
+        "side": "left",
+        "x": 0.318,
+        "y": 0.413,
+        "facing": "facing screen-right, in profile",
+        "dist": 3.49,
+        "visible": true
+      }
+    }
+  },
+  "cov-gate-CU-D": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the long rectangular wooden table",
+        "side": "left"
+      },
+      {
+        "id": "tree",
+        "name": "the shade tree hung with little lights",
+        "side": "centre"
+      },
+      {
+        "id": "wallW",
+        "name": "the low buildings on the west side, windows glowing",
+        "side": "centre"
+      },
+      {
+        "id": "counter",
+        "name": "the robot's serving counter by the west wall",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "left"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "left"
+      },
+      {
+        "id": "wallN",
+        "name": "the shop fronts with windows glowing pink and cyan",
+        "side": "right"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "right"
+      },
+      {
+        "id": "lamp",
+        "name": "a street lamp by the gate",
+        "side": "centre"
+      }
+    ],
+    "people": {
+      "D": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.322,
+        "facing": "toward the camera",
+        "dist": 1.24,
+        "visible": true
+      },
+      "Z": {
+        "side": "right",
+        "x": 7.307,
+        "y": -1.727,
+        "facing": "toward the camera",
+        "dist": 0.82,
+        "visible": false
+      }
+    }
+  },
+  "cov-gate-CU-Z": {
+    "landmarks": [
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "right"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "left"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "centre"
+      }
+    ],
+    "people": {
+      "D": {
+        "side": "left",
+        "x": -5.351,
+        "y": 2.944,
+        "facing": "toward the camera",
+        "dist": 0.84,
+        "visible": false
+      },
+      "Z": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.322,
+        "facing": "toward the camera",
+        "dist": 1.24,
+        "visible": true
+      }
+    }
+  },
+  "cov-dusk-MASTER": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the long rectangular wooden table",
+        "side": "left"
+      },
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "right"
+      },
+      {
+        "id": "tree",
+        "name": "the shade tree hung with little lights",
+        "side": "left"
+      },
+      {
+        "id": "wallW",
+        "name": "the low buildings on the west side, windows glowing",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "left"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "wallN",
+        "name": "the shop fronts with windows glowing pink and cyan",
+        "side": "centre"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      },
+      {
+        "id": "lamp",
+        "name": "a street lamp by the gate",
+        "side": "right"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "centre",
+        "x": 0.389,
+        "y": 0.271,
+        "facing": "facing screen-right, in profile",
+        "dist": 3.04,
+        "visible": true
+      },
+      "B": {
+        "side": "centre",
+        "x": 0.609,
+        "y": 0.449,
+        "facing": "facing screen-left, in profile",
+        "dist": 3.04,
+        "visible": true
+      }
+    }
+  },
+  "cov-cafe-MASTER-call": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the long rectangular wooden table",
+        "side": "right"
+      },
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "left"
+      },
+      {
+        "id": "wallW",
+        "name": "the low buildings on the west side, windows glowing",
+        "side": "right"
+      },
+      {
+        "id": "counter",
+        "name": "the robot's serving counter by the west wall",
+        "side": "right"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "right"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "centre",
+        "x": 0.523,
+        "y": 0.431,
+        "facing": "facing screen-right, in profile",
+        "dist": 4.17,
+        "visible": true
+      },
+      "D": {
+        "side": "right",
+        "x": 0.781,
+        "y": 0.412,
+        "facing": "facing screen-left, in profile",
+        "dist": 4.59,
+        "visible": true
+      },
+      "B": {
+        "side": "left",
+        "x": 0.209,
+        "y": 0.424,
+        "facing": "toward the camera",
+        "dist": 4.82,
+        "visible": true
+      }
+    }
+  },
+  "cov-cafe-MASTER-up": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the long rectangular wooden table",
+        "side": "centre"
+      },
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "left"
+      },
+      {
+        "id": "wallW",
+        "name": "the low buildings on the west side, windows glowing",
+        "side": "right"
+      },
+      {
+        "id": "counter",
+        "name": "a plain serving counter by the west wall, nobody at it",
+        "side": "right"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "right"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "centre",
+        "x": 0.362,
+        "y": 0.447,
+        "facing": "facing screen-right, in profile",
+        "dist": 3.79,
+        "visible": true
+      },
+      "D": {
+        "side": "right",
+        "x": 0.653,
+        "y": 0.425,
+        "facing": "facing screen-left, in profile",
+        "dist": 3.8,
+        "visible": true
+      },
+      "B": {
+        "side": "centre",
+        "x": 0.445,
+        "y": 0.32,
+        "facing": "toward the camera",
+        "dist": 5.45,
+        "visible": true
+      }
+    }
+  },
+  "cov-cafe-CU-Z0": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the long rectangular wooden table",
+        "side": "right"
+      },
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "left"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "left"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "right"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.305,
+        "facing": "toward the camera",
+        "dist": 1.24,
+        "visible": true
+      },
+      "D": {
+        "side": "left",
+        "x": -2.82,
+        "y": 1.145,
+        "facing": "toward the camera",
+        "dist": 0.94,
+        "visible": false
+      },
+      "B": {
+        "side": "right",
+        "x": 1.944,
+        "y": 0.301,
+        "facing": "toward the camera",
+        "dist": 2.25,
+        "visible": false
+      }
+    }
+  }
+}

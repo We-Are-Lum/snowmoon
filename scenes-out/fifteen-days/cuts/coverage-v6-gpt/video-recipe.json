@@ -1,0 +1,522 @@
+{
+  "about": "The video of fifteen-days: the mix recipe's resolved timeline, rendered frame by frame (moves, cuts, dissolves, lettering on cue).",
+  "placeholder": true,
+  "mix_recipe": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/recipe.json",
+  "mix_recipe_sha256": "fc77bb5fd4b2a71087bb7ca9f6e12e9076bba09a2d2c31848bc89ca0c4e6803c",
+  "mix": {
+    "file": "scenes-out/fifteen-days/cuts/coverage-v6/coverage-v6-mix.wav",
+    "sha256": "ed56ff4de490229ee5f61d56525e8aa1571c1169650133266eee427de51038b4"
+  },
+  "images": [
+    {
+      "shot": "0-EST",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/lettered-cov-game-EST.png",
+      "sha256": "c5288c422e5f558a46e3821ecefe3a02325cdec03a30ad13647da24fecbc245d"
+    },
+    {
+      "shot": "1-FLOOR",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-game-FLOOR-live-E40.png",
+      "sha256": "3bf43898294299ef9c0f279e2ff138866c0888211b0186e70dae90e2241bee38"
+    },
+    {
+      "shot": "2-PIT-D",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-game-PIT-D-playing-K7.png",
+      "sha256": "431b6c3e5d2110c1bb3c67b51438d8747efff42792f10a809832f043ed0e862c"
+    },
+    {
+      "shot": "3-PIT-K",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-H05-K6.png",
+      "sha256": "25c18ac60f869fbf9e4a75eb9bee24c4c64c46102dfeeacf98d93b7179d06b55"
+    },
+    {
+      "shot": "4-SCREEN",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-game-SCREEN-face-E18.png",
+      "sha256": "4aa552f2ed3418cb494c4f7819475d9ad67e401fbda0b5edc5949fed98d6e146"
+    },
+    {
+      "shot": "5-b1-1",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-overlook-MASTER-watch-K9.png",
+      "sha256": "0f18cc23e7ae05a4fd162c12dde640cecb17a259fe0f60f4023f122d9cb9aa44"
+    },
+    {
+      "shot": "6-b1-2",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-overlook-OTS-Z-dry-K7.png",
+      "sha256": "d6a5085d07dd9c7b3353b4ab9564044cc86c312babdb4c1fe0c24529d4ea5350"
+    },
+    {
+      "shot": "7-CU-Z",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-overlook-CU-Z-look-E40.png",
+      "sha256": "182bb51068e9dbc27321384454325e7e6b48b9afddaac1073892aa542a14ca27"
+    },
+    {
+      "shot": "8-b1-3",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-overlook-OTS-Z-shrug-E16.png",
+      "sha256": "76b2378eaeb804ef10630bcd89b10537f70d41f2e6f1b5739cb1c801c2b5d22b"
+    },
+    {
+      "shot": "9-POV",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-G08-K2.png",
+      "sha256": "e360f3fb2175e3a0c064682a8a4873f5d354b936d08c369733b9aac87fdee87a"
+    },
+    {
+      "shot": "10-game/PIT-D",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-game-PIT-D-playing-K7.png",
+      "sha256": "431b6c3e5d2110c1bb3c67b51438d8747efff42792f10a809832f043ed0e862c"
+    },
+    {
+      "shot": "11-b1-4",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-overlook-MASTER-watch-K9.png",
+      "sha256": "0f18cc23e7ae05a4fd162c12dde640cecb17a259fe0f60f4023f122d9cb9aa44"
+    },
+    {
+      "shot": "12-b1-5",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-overlook-OTS-Z-wry-E16.png",
+      "sha256": "5a8751e25097e46d9f65c58978c821cd79ab07ca96ec3a640d6f72c32c5a7b19"
+    },
+    {
+      "shot": "13-MASTER",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-overlook-MASTER-lean-K8.png",
+      "sha256": "6dd5349e27c284d33cc7896a642ca3b0c3224f7145821089ae9013b516afcb31"
+    },
+    {
+      "shot": "14-b1-6",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-overlook-CU-B-toast-K10.png",
+      "sha256": "9929f3186a10ec1f75967c2ea99e865a0228bfa37be82a5521b781134a0ba85d"
+    },
+    {
+      "shot": "15-game/SCREEN",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-game-SCREEN-face-E18.png",
+      "sha256": "4aa552f2ed3418cb494c4f7819475d9ad67e401fbda0b5edc5949fed98d6e146"
+    },
+    {
+      "shot": "16-game/PIT-D",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-game-PIT-D-glasses-K7.png",
+      "sha256": "11b27beac40ade1960fa31775a9c2bcc0a68a7864500a13e54941c5bad8bbd15"
+    },
+    {
+      "shot": "17-MASTER",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-corridor-MASTER-arrive-K8.png",
+      "sha256": "0ce18c6218654f7e701f26140a4e38694dec48f05764a11e2f46f5361e14c101"
+    },
+    {
+      "shot": "18-b2-1",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-corridor-OTS-D-eager-K7.png",
+      "sha256": "b7e80087bc7b69ee416f2b27e249187f7272fbaca2406b51e0b8b7c9e265eb80"
+    },
+    {
+      "shot": "19-b2-2",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-corridor-OTS-Z-easy-K8.png",
+      "sha256": "4a585931881bdc7d6f2fd3663dce2d648863a3a49c92421259edd70ee8e1764c"
+    },
+    {
+      "shot": "20-b2-3",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-corridor-OTS-D-eager-K7.png",
+      "sha256": "b7e80087bc7b69ee416f2b27e249187f7272fbaca2406b51e0b8b7c9e265eb80"
+    },
+    {
+      "shot": "21-CU-B",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-corridor-CU-B-sour-K9.png",
+      "sha256": "650601dddb779eb959e51f5ddb8c46896d4641460890c6b41e7d715696bbff6e"
+    },
+    {
+      "shot": "22-b2-4",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-corridor-OTS-Z-warm-E40.png",
+      "sha256": "b1e5afcf8f1b7ae655ecab13a2f5dd6b01880f0879a9c238341f8470f13e4b16"
+    },
+    {
+      "shot": "23-b2-5",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-corridor-OTS-D-eager-K7.png",
+      "sha256": "b7e80087bc7b69ee416f2b27e249187f7272fbaca2406b51e0b8b7c9e265eb80"
+    },
+    {
+      "shot": "24-b2-6",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-corridor-OTS-Z-warm-E40.png",
+      "sha256": "b1e5afcf8f1b7ae655ecab13a2f5dd6b01880f0879a9c238341f8470f13e4b16"
+    },
+    {
+      "shot": "24-b2-6-cut",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-corridor-CU-B-sour-K9.png",
+      "sha256": "650601dddb779eb959e51f5ddb8c46896d4641460890c6b41e7d715696bbff6e"
+    },
+    {
+      "shot": "25-b2-7",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-corridor-OTS-D-eager-K7.png",
+      "sha256": "b7e80087bc7b69ee416f2b27e249187f7272fbaca2406b51e0b8b7c9e265eb80"
+    },
+    {
+      "shot": "26-pre",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-C17-K4.png",
+      "sha256": "a96b517ca5f146b40823b48cf5df656f4b4548343e0bb969a63339a7ed539d0e"
+    },
+    {
+      "shot": "26-b2-7",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-C17-K4.png",
+      "sha256": "a96b517ca5f146b40823b48cf5df656f4b4548343e0bb969a63339a7ed539d0e"
+    },
+    {
+      "shot": "27-b2-8",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-walk-CU-B-serious-K9.png",
+      "sha256": "32eb9c82c91aa3a801516a549fdf7499788a59290683c40c22b777c147e9a6a4"
+    },
+    {
+      "shot": "28-b2-9",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-walk-CU-Z-tease-K8.png",
+      "sha256": "95cdc616ca6fab95e01f4b2ec0715447b1666bf312784eeeccb316ffd8350e8f"
+    },
+    {
+      "shot": "29-b2-10",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-walk-CU-B-serious-K9.png",
+      "sha256": "32eb9c82c91aa3a801516a549fdf7499788a59290683c40c22b777c147e9a6a4"
+    },
+    {
+      "shot": "30-b2-11",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-walk-CU-B-serious-K9.png",
+      "sha256": "32eb9c82c91aa3a801516a549fdf7499788a59290683c40c22b777c147e9a6a4"
+    },
+    {
+      "shot": "31-b2-12",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-C17-K4.png",
+      "sha256": "a96b517ca5f146b40823b48cf5df656f4b4548343e0bb969a63339a7ed539d0e"
+    },
+    {
+      "shot": "32-pre",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-cafe-MASTER-laugh-E40.png",
+      "sha256": "4b380cec20f2bbb077d385b3fbb3fbe015425870cf9cf9fb9bfa7aecbe6e200f"
+    },
+    {
+      "shot": "32-b3-1",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-cafe-MASTER-wave-K7.png",
+      "sha256": "c7247abf1b1bd58ed087951b961c569362a5f44924eff5b671cdc70d3f9ece67"
+    },
+    {
+      "shot": "33-b3-2",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-cafe-OTS-Z-robot-E50.png",
+      "sha256": "e221685afa83cc80c0a7448f431008e4bbaef02d121d98a67e624d3621d3d0a4"
+    },
+    {
+      "shot": "34-b3-3",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-cafe-CU-Z0-whoa-E17.png",
+      "sha256": "d097335709c290f7811cf3fa2faa20162187b424f81a8448ea77c0ec4bae222d"
+    },
+    {
+      "shot": "35-b3-4",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-cafe-OTS-Z-menu-E40.png",
+      "sha256": "4a31e5e9259983f36e8a9c57475638ea5457862bb86935e5a1d1df50195de9c2"
+    },
+    {
+      "shot": "36-MENU",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6/framed-cov-cafe-MENU.png",
+      "sha256": "6329cae0c57fdd09562286be192e5e5876407b2f181eec136baf2d886dbd32d6"
+    },
+    {
+      "shot": "37-b3-5",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-cafe-CU-Z0-explain-K13.png",
+      "sha256": "cee6d5fa585beca123db6149664306c84cf65fdc06c11cf51dc1135e8fb32b12"
+    },
+    {
+      "shot": "38-OTS-Z",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-cafe-OTS-Z-menu-E40.png",
+      "sha256": "4a31e5e9259983f36e8a9c57475638ea5457862bb86935e5a1d1df50195de9c2"
+    },
+    {
+      "shot": "39-b3-6",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-cafe-CU-Z0-explain-K13.png",
+      "sha256": "cee6d5fa585beca123db6149664306c84cf65fdc06c11cf51dc1135e8fb32b12"
+    },
+    {
+      "shot": "40-b3-7",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-cafe-OTS-Z-menu-E40.png",
+      "sha256": "4a31e5e9259983f36e8a9c57475638ea5457862bb86935e5a1d1df50195de9c2"
+    },
+    {
+      "shot": "41-b3-8",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-cafe-CU-Z0-explain-K13.png",
+      "sha256": "cee6d5fa585beca123db6149664306c84cf65fdc06c11cf51dc1135e8fb32b12"
+    },
+    {
+      "shot": "42-b3-9",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-cafe-OTS-Z-menu-E40.png",
+      "sha256": "4a31e5e9259983f36e8a9c57475638ea5457862bb86935e5a1d1df50195de9c2"
+    },
+    {
+      "shot": "43-b3-10",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-cafe-CU-Z0-astonished-K13.png",
+      "sha256": "98b3afc3111b576e8b691c2e91a9ff2f8664279be18277b5740e260feeb893f8"
+    },
+    {
+      "shot": "44-b3-11",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-cafe-OTS-Z-stern-E42.png",
+      "sha256": "f2ad1a07ee80efcc64f8703f6007d1d11a387e2c36840d60150808c6d4575d3c"
+    },
+    {
+      "shot": "45-b3-12",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-cafe-CU-Z0-astonished-K13.png",
+      "sha256": "98b3afc3111b576e8b691c2e91a9ff2f8664279be18277b5740e260feeb893f8"
+    },
+    {
+      "shot": "46-b3-13",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-cafe-CU-B-menu-K9.png",
+      "sha256": "c5e0d8515ac574257a3bd2de1aac2f41c4086bb7dfb45c92315d89740a5df614"
+    },
+    {
+      "shot": "46-b3-13-cut",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-cafe-CU-B-standing-K7.png",
+      "sha256": "928ba09612b50c8cecaa2d6e1229175811b529a9abdf07fdf38c42b11342ea08"
+    },
+    {
+      "shot": "47-BAI",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-cafe-BAI-sideeye-R20.png",
+      "sha256": "75ccb5117899ca2236fa24494eff56a36080accff2ab2c19f6b6661ad56ed279"
+    },
+    {
+      "shot": "48-b4-1",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-cafe-OTS-Z-talk-K7.png",
+      "sha256": "d8ad958b2e1377f8bac125b1cb93627a3ac01ab532b358591eb3bf9118d406e9"
+    },
+    {
+      "shot": "48-b4-1-cut",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-cafe-SUGAR-stack-E16.png",
+      "sha256": "bd431a99cb0835e96c148caf6d8f4ef367061909287e59269d1bf8d447a8ffcd"
+    },
+    {
+      "shot": "48-b4-1-back",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-cafe-OTS-Z-talk-K7.png",
+      "sha256": "d8ad958b2e1377f8bac125b1cb93627a3ac01ab532b358591eb3bf9118d406e9"
+    },
+    {
+      "shot": "49-b4-2",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-cafe-CU-Z-amused-K7.png",
+      "sha256": "2ed81d665f29bda28b5e78edc22b9fa71b6f72e0a61aeb32e59de02ac9a8ac50"
+    },
+    {
+      "shot": "50-b4-3",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-cafe-CU-D-warm-E16.png",
+      "sha256": "803d4a0ad180f9a7e55e04a75e3af48643615cd8cb4e5b2fbd9143831a22421c"
+    },
+    {
+      "shot": "51-b4-4",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-cafe-CU-Z-amused-K7.png",
+      "sha256": "2ed81d665f29bda28b5e78edc22b9fa71b6f72e0a61aeb32e59de02ac9a8ac50"
+    },
+    {
+      "shot": "52-b4-5",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-cafe-SUGAR-wall-K9.png",
+      "sha256": "6532e8755782c8210f4b9265f64d266347f5a34311962f59ab3fe9253d721c87"
+    },
+    {
+      "shot": "52-b4-5-cut",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-cafe-CU-D-warm-E16.png",
+      "sha256": "803d4a0ad180f9a7e55e04a75e3af48643615cd8cb4e5b2fbd9143831a22421c"
+    },
+    {
+      "shot": "53-SUGAR",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-cafe-SUGAR-door-K7.png",
+      "sha256": "77d477fe1d44b367b925d70ef88ef5af7029ceca320bf9fce430cba789a8a553"
+    },
+    {
+      "shot": "54-CU-Z",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-cafe-CU-Z-amused-K7.png",
+      "sha256": "2ed81d665f29bda28b5e78edc22b9fa71b6f72e0a61aeb32e59de02ac9a8ac50"
+    },
+    {
+      "shot": "55-BAI",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-cafe-BAI-sideeye-R20.png",
+      "sha256": "75ccb5117899ca2236fa24494eff56a36080accff2ab2c19f6b6661ad56ed279"
+    },
+    {
+      "shot": "56-b5-1",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-cafe-OTS-Z-eager-K7.png",
+      "sha256": "8d49a4552105347b7831ccf9a801671e6a5bb7696a657d05a4ea3b55058b19ff"
+    },
+    {
+      "shot": "57-b5-2",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-cafe-CU-Z-smile-K14.png",
+      "sha256": "9e4cc22dc30e770ffb626a2cdcc95dc248dad68a4b680e9e9f02d30f7752943f"
+    },
+    {
+      "shot": "58-b5-3",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-cafe-OTS-Z-eager-K7.png",
+      "sha256": "8d49a4552105347b7831ccf9a801671e6a5bb7696a657d05a4ea3b55058b19ff"
+    },
+    {
+      "shot": "59-BAI",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-cafe-BAI-sideeye-R20.png",
+      "sha256": "75ccb5117899ca2236fa24494eff56a36080accff2ab2c19f6b6661ad56ed279"
+    },
+    {
+      "shot": "60-b5-4",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-cafe-OTS-Z-talk-K7.png",
+      "sha256": "d8ad958b2e1377f8bac125b1cb93627a3ac01ab532b358591eb3bf9118d406e9"
+    },
+    {
+      "shot": "61-b5-5",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-cafe-BAI-what-E47.png",
+      "sha256": "908e357a121cfa8b78b4b795292e7983b87db037d15a3b19d7f72c6863697568"
+    },
+    {
+      "shot": "62-pre",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-gate-MASTER-fingers-K11.png",
+      "sha256": "e1d8ec3386631ead1e197656e77d3a9a8e22ded22ed29c797eeb2cb139128022"
+    },
+    {
+      "shot": "62-b6-1",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-gate-MASTER-fingers-K11.png",
+      "sha256": "e1d8ec3386631ead1e197656e77d3a9a8e22ded22ed29c797eeb2cb139128022"
+    },
+    {
+      "shot": "63-CU-Z",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-gate-CU-Z-smile-K7.png",
+      "sha256": "a02815c1d7a0df858d5e2cd5045e41a465641a81336a1991c60b7cb49bd61c62"
+    },
+    {
+      "shot": "64-MASTER",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-gate-MASTER-wave-K7.png",
+      "sha256": "0376cd2ff2f2deb38cbc7227018592d23490cae61309fba0c2669460a79898b3"
+    },
+    {
+      "shot": "65-MASTER",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/lettered-cov-dusk-MASTER-talk.png",
+      "sha256": "38848aeb7ff68811a357bc6248bd8fb5f1f099135c3ce4a4eda1c9a1777b3c9d"
+    },
+    {
+      "shot": "BLACK",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6/black.png",
+      "sha256": "0f52608dd021e7069ef19f9d8f46f6d651aaf5cbac5154465092de3574cf8514"
+    },
+    {
+      "shot": "66-EST",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/lettered-cov-lobby-EST.png",
+      "sha256": "8909530b9b64c139766ebaa4c392a9619cc1ff1e7ee02fcfbe740c4f909289f4"
+    },
+    {
+      "shot": "67-CU-Z",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-lobby-CU-Z-down-K8.png",
+      "sha256": "4bd26144111f1035fac2c127504ff53802247faad5f5d137077f8f76705fab93"
+    },
+    {
+      "shot": "68-SCREEN",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6/screen-L03.png",
+      "sha256": "f18456ef81952237a71a8a322e9ed3abe2b9de24b10eb3eafa3ff226fd656fe3"
+    },
+    {
+      "shot": "69-MASTER",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-lobby-MASTER-sits-E18.png",
+      "sha256": "56a2f6cf3c226a0490977b3dd33dcbe1ffbf989410aca99c7b3967b4ef867eff"
+    },
+    {
+      "shot": "70-CU-Z",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-lobby-CU-Z-down-K8.png",
+      "sha256": "4bd26144111f1035fac2c127504ff53802247faad5f5d137077f8f76705fab93"
+    },
+    {
+      "shot": "71-SCREEN",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6/screen-L07.png",
+      "sha256": "d921411802b9982860669a7d3ba793459cc6dfec05aa4d3de709a11ba769c0de"
+    },
+    {
+      "shot": "72-CU-Z",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-lobby-CU-Z-relief-K10.png",
+      "sha256": "2cff93d606151b28da262204188399f58a2975a98c057282c40f03e841bba7b7"
+    },
+    {
+      "shot": "73-SCREEN",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6/screen-L09.png",
+      "sha256": "3f75fe4d229537a53524add7a506b5def7a0d9404a988031912bd3cddff93f1e"
+    },
+    {
+      "shot": "74-OTS-Z",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-lobby-OTS-Z-turns-K9.png",
+      "sha256": "9db6932d95317e375bbad06efcc63ef831fa0517e9ec504ca34b42844bf78c95"
+    },
+    {
+      "shot": "BLACK",
+      "file": "scenes-out/fifteen-days/cuts/coverage-v6/black.png",
+      "sha256": "0f52608dd021e7069ef19f9d8f46f6d651aaf5cbac5154465092de3574cf8514"
+    }
+  ],
+  "settings": {
+    "width": 1920,
+    "height": 1080,
+    "fps": 30,
+    "resample": "Lanczos, one pass per frame from the source",
+    "lettering_scale": 2,
+    "codec": "H.264 crf 18 preset slow yuv420p + AAC 256k"
+  },
+  "script": "scripts/render-scene.py",
+  "commit": "7ee45801fb945743551e8325ca50b0010604c9a5",
+  "ffmpeg": "ffmpeg version 9.0.1 Copyright (c) 2000-2026 the FFmpeg developers",
+  "command": [
+    "ffmpeg",
+    "-y",
+    "-hide_banner",
+    "-loglevel",
+    "error",
+    "-f",
+    "rawvideo",
+    "-pix_fmt",
+    "rgb24",
+    "-s",
+    "1920x1080",
+    "-r",
+    "30",
+    "-i",
+    "-",
+    "-ss",
+    "0.000",
+    "-t",
+    "287.851",
+    "-i",
+    "scenes-out/fifteen-days/cuts/coverage-v6/coverage-v6-mix.wav",
+    "-map",
+    "0:v",
+    "-map",
+    "1:a",
+    "-c:v",
+    "libx264",
+    "-preset",
+    "slow",
+    "-crf",
+    "18",
+    "-pix_fmt",
+    "yuv420p",
+    "-c:a",
+    "aac",
+    "-b:a",
+    "256k",
+    "-shortest",
+    "-movflags",
+    "+faststart",
+    "scenes-out/fifteen-days/cuts/coverage-v6-gpt/coverage-v6-gpt.mp4"
+  ],
+  "measured": {
+    "duration_s": 287.851,
+    "streams": [
+      {
+        "codec_name": "h264",
+        "width": 1920,
+        "height": 1080,
+        "r_frame_rate": "30/1"
+      },
+      {
+        "codec_name": "aac",
+        "r_frame_rate": "0/0"
+      }
+    ],
+    "loudness": {
+      "integrated_lufs": -16.2,
+      "true_peak_dbfs": -3.9
+    }
+  },
+  "output": {
+    "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/coverage-v6-gpt.mp4",
+    "sha256": "58da1b6d582ec1061a823b9f3f8e8da753bb355674a180eb3418f7c4ef8f9079"
+  },
+  "render_seconds": 321.7,
+  "generated_at": "2026-10-18T09:24:23+00:00",
+  "cost_usd": 0,
+  "subtitles": {
+    "burned_in": 64,
+    "font": "Arial Bold (macOS system font)",
+    "from": "the mix recipe's resolved subtitles"
+  }
+}

@@ -1,0 +1,1402 @@
+{
+ "about": "Fifteen Days, the coverage plan (owner's rules, 2026-10-17; docs/coverage.md). DRAFTED by the coding agent: positions, setups, variants and which line cuts to which setup. scripts/coverage-plan.py computes the cameras and checks the rules. | v6 (owner's comments on coverage-v5, 2026-10-18 overnight): applied by the coding agent; see each item's 'why'.",
+ "left": [
+  "Z"
+ ],
+ "scenes": [
+  {
+   "id": "game",
+   "set": "hall",
+   "bed": "hall",
+   "room": "hall",
+   "people": {
+    "D": {
+     "at": [
+      -8.4,
+      0
+     ],
+     "face": "W",
+     "pose": "seated",
+     "y": -1.1
+    },
+    "K": {
+     "at": [
+      8.4,
+      0
+     ],
+     "face": "E",
+     "pose": "seated",
+     "y": -1.1
+    }
+   },
+   "setups": {
+    "EST": {
+     "kind": "reuse",
+     "frame": "images-out/preprod/pass3/H01-Q3.png",
+     "what": "the hall from high on the east side (the owner's pick)"
+    },
+    "FLOOR": {
+     "kind": "layout",
+     "shot": "H07",
+     "what": "low on the floor among the hologram towers",
+     "variants": {
+      "live": {
+       "reuse": "images-out/preprod/pass3/H02-B2.png"
+      }
+     }
+    },
+    "SCREEN": {
+     "kind": "layout",
+     "shot": "H03b",
+     "what": "the arena with Deluin's face on the big screen",
+     "variants": {
+      "face": {
+       "action": "The arena: the glowing hologram play floor with its walls and gliders, the crowded tiers rising around it, and above the floor one huge screen showing {D}'s calm face in close-up."
+      }
+     }
+    },
+    "PIT-D": {
+     "kind": "layout",
+     "shot": "G08c",
+     "what": "Deluin in his pit, side-on",
+     "variants": {
+      "playing": {
+       "action": "{D} in his sunken pit at the glowing console, playing: eyes on the board, hands still, patient, unhurried."
+      },
+      "glasses": {
+       "action": "{D} in his sunken pit lifts the cabled glasses off his face with one hand, the other hand empty on the console; a small private closed-mouth smile."
+      }
+     }
+    },
+    "PIT-K": {
+     "kind": "reuse",
+     "frame": "images-out/preprod/pass3/H05-K6.png",
+     "what": "Kau in his pit (the owner: keep Kau)"
+    }
+   },
+   "sequence": [
+    {
+     "setup": "EST",
+     "s": 2.2,
+     "letter": "Sadzu Du, Dzego · 3724 Firemoon 10",
+     "fx": [
+      [
+       "game: flyby",
+       0.4,
+       -14,
+       2.6
+      ]
+     ],
+     "why": "the place-and-date card needs reading time"
+    },
+    {
+     "setup": "FLOOR",
+     "v": "live",
+     "s": 1.4,
+     "fx": [
+      [
+       "game: blast",
+       0.2,
+       -12,
+       1.6
+      ],
+      [
+       "game: flyby",
+       0.8,
+       -16,
+       2.6
+      ]
+     ]
+    },
+    {
+     "setup": "PIT-D",
+     "v": "playing",
+     "s": 1.3,
+     "fx": [
+      [
+       "game: blast",
+       0.5,
+       -15,
+       1.6
+      ]
+     ]
+    },
+    {
+     "setup": "PIT-K",
+     "s": 1.3,
+     "fx": [
+      [
+       "game: crash",
+       0.3,
+       -13,
+       2.4
+      ]
+     ]
+    },
+    {
+     "setup": "SCREEN",
+     "v": "face",
+     "s": 1.4,
+     "fx": [
+      [
+       "hall: crowd swell",
+       0.0,
+       -10,
+       3.0
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "id": "overlook",
+   "set": "hall",
+   "bed": "gallery",
+   "room": "hall",
+   "pair": [
+    "Z",
+    "B"
+   ],
+   "people": {
+    "Z": {
+     "at": [
+      -1.1,
+      -0.6
+     ],
+     "face": "W",
+     "pose": "standing",
+     "y": 7.6
+    },
+    "B": {
+     "at": [
+      -1.1,
+      0.6
+     ],
+     "face": "W",
+     "pose": "standing",
+     "y": 7.6
+    }
+   },
+   "ots": {
+    "back": 0.7,
+    "side": 0.45,
+    "fov": 30
+   },
+   "cu": {
+    "angle": 30,
+    "fov": 28
+   },
+   "setups": {
+    "MASTER": {
+     "kind": "layout",
+     "shot": "G05",
+     "what": "the two-shot from out over the hall: Zei left, Bai right at the railing",
+     "variants": {
+      "watch": {
+       "action": "At the overlook railing, seen from out over the hall: {Z} on the left leans on the railing watching the game far below, admiring; {B} on the right is bent over the small gadget she is working on, not looking up."
+      },
+      "lean": {
+       "action": "At the overlook railing: {B} on the right has set her gadget on the rail and leans out over the railing studying the board below; {Z} on the left watches the game."
+      }
+     }
+    },
+    "OTS-Z": {
+     "kind": "ots",
+     "over": "Z",
+     "onto": "B",
+     "turned": true,
+     "what": "over Zei's shoulder onto Bai",
+     "variants": {
+      "dry": {
+       "action": "Over {Z}'s shoulder: {B}, the gadget in her hands, glances at him, dry, unimpressed."
+      },
+      "shrug": {
+       "action": "Over {Z}'s shoulder: {B} snaps the gadget's casing shut and shrugs, looking up at him."
+      },
+      "wry": {
+       "action": "Over {Z}'s shoulder: {B} glances sideways at him, wry, a small closed-mouth smile."
+      }
+     }
+    },
+    "CU-B": {
+     "kind": "cu",
+     "who": "B",
+     "toward": "Z",
+     "what": "Bai, clean close-up",
+     "variants": {
+      "toast": {
+       "action": "{B} close, leaning over the railing, face lit from below by the holograms, eyes narrowed, studying the pieces, serious. Any big screens in the background show only glowing abstract game graphics, never a face."
+      }
+     }
+    },
+    "POV": {
+     "kind": "reuse",
+     "frame": "images-out/preprod/pass3/G08-K2.png",
+     "what": "straight down to the game (passed review)"
+    },
+    "CU-Z": {
+     "kind": "reuse",
+     "frame": "images-out/preprod/pass3/cov-overlook-CU-Z-look-E40.png"
+    }
+   },
+   "sequence": [
+    {
+     "line": "b1-1",
+     "setup": "MASTER",
+     "v": "watch"
+    },
+    {
+     "line": "b1-2",
+     "setup": "OTS-Z",
+     "v": "dry"
+    },
+    {
+     "setup": "CU-Z",
+     "s": 1.4,
+     "why": "the owner (v5 comment): a longer pause before 'Nah...', him looking at her, and her looking back"
+    },
+    {
+     "line": "b1-3",
+     "setup": "OTS-Z",
+     "v": "shrug"
+    },
+    {
+     "setup": "POV",
+     "s": 1.5,
+     "why": "the owner: a pause and the game below before 'such patience'",
+     "fx": [
+      [
+       "game: crash",
+       0.4,
+       -18,
+       2.4
+      ]
+     ]
+    },
+    {
+     "setup": "game/PIT-D",
+     "v": "playing",
+     "s": 1.2,
+     "fx": [
+      [
+       "game: blast",
+       0.3,
+       -20,
+       1.6
+      ]
+     ]
+    },
+    {
+     "line": "b1-4",
+     "setup": "MASTER",
+     "v": "watch"
+    },
+    {
+     "line": "b1-5",
+     "setup": "OTS-Z",
+     "v": "wry"
+    },
+    {
+     "setup": "MASTER",
+     "v": "lean",
+     "s": 1.2,
+     "why": "the owner: her leaning over the railing before 'toast'",
+     "fx": [
+      [
+       "game: blast",
+       0.3,
+       -22,
+       1.6
+      ]
+     ]
+    },
+    {
+     "line": "b1-6",
+     "setup": "CU-B",
+     "v": "toast",
+     "fx": [
+      [
+       "game: wall",
+       1.0,
+       -18,
+       3.2
+      ]
+     ]
+    },
+    {
+     "setup": "game/SCREEN",
+     "v": "face",
+     "s": 1.5,
+     "fx": [
+      [
+       "hall: crowd swell",
+       0.0,
+       -6,
+       4.0
+      ],
+      [
+       "game: crash",
+       0.4,
+       -12,
+       2.4
+      ]
+     ]
+    },
+    {
+     "setup": "game/PIT-D",
+     "v": "glasses",
+     "s": 1.4
+    }
+   ],
+   "turn_cu": true
+  },
+  {
+   "id": "corridor",
+   "set": "corridor",
+   "bed": "corridor",
+   "room": "corridor",
+   "pair": [
+    "Z",
+    "D"
+   ],
+   "people": {
+    "D": {
+     "at": [
+      -0.6,
+      -6.0
+     ],
+     "face": "toward:Z",
+     "pose": "standing"
+    },
+    "Z": {
+     "at": [
+      0.4,
+      -6.0
+     ],
+     "face": "toward:D",
+     "pose": "standing"
+    },
+    "B": {
+     "at": [
+      0.7,
+      -4.9
+     ],
+     "face": "toward:D",
+     "pose": "standing"
+    }
+   },
+   "ots": {
+    "back": 0.35,
+    "side": 0.4,
+    "fov": 32
+   },
+   "cu": {
+    "angle": 30,
+    "fov": 28
+   },
+   "setups": {
+    "MASTER": {
+     "kind": "master",
+     "what": "the two-shot in profile at the elevator: Zei left, Deluin right, Bai behind Zei",
+     "variants": {
+      "arrive": {
+       "action": "The elevator doors stand open; {D} on the right steps out of the elevator, easy and friendly; {Z} on the left, standing, eager, half a step toward him; {B} behind {Z}, arms crossed, bored."
+      }
+     }
+    },
+    "OTS-Z": {
+     "kind": "ots",
+     "over": "Z",
+     "onto": "D",
+     "what": "over Zei's shoulder onto Deluin",
+     "variants": {
+      "easy": {
+       "action": "Over {Z}'s shoulder: {D} in the elevator doorway, easy and friendly, talking."
+      },
+      "warm": {
+       "action": "Over {Z}'s shoulder: {D} in the elevator doorway, open and warm, asking."
+      }
+     }
+    },
+    "OTS-D": {
+     "kind": "ots",
+     "over": "D",
+     "onto": "Z",
+     "what": "over Deluin's shoulder onto Zei (Bai behind him)",
+     "variants": {
+      "eager": {
+       "action": "Over {D}'s shoulder: {Z}, standing, eager; behind him {B} stands with her arms crossed, bored."
+      }
+     }
+    },
+    "CU-B": {
+     "kind": "cu",
+     "who": "B",
+     "toward": "D",
+     "what": "Bai, clean close-up",
+     "variants": {
+      "sour": {
+       "action": "{B} close, a shrug and a sour twist of her mouth, arms crossed."
+      }
+     }
+    }
+   },
+   "sequence": [
+    {
+     "setup": "MASTER",
+     "v": "arrive",
+     "s": 1.4,
+     "fx": [
+      [
+       "device: elevator-arrive",
+       0.0,
+       -8,
+       2.2
+      ]
+     ],
+     "why": "establish: the doors open, Deluin steps out"
+    },
+    {
+     "line": "b2-1",
+     "setup": "OTS-D",
+     "v": "eager"
+    },
+    {
+     "line": "b2-2",
+     "setup": "OTS-Z",
+     "v": "easy"
+    },
+    {
+     "line": "b2-3",
+     "setup": "OTS-D",
+     "v": "eager"
+    },
+    {
+     "setup": "CU-B",
+     "v": "sour",
+     "s": 1.0,
+     "over": 1.0,
+     "why": "the owner: this shot while he's still talking, so Deluin answers sooner"
+    },
+    {
+     "line": "b2-4",
+     "setup": "OTS-Z",
+     "v": "warm"
+    },
+    {
+     "line": "b2-5",
+     "setup": "OTS-D",
+     "v": "eager"
+    },
+    {
+     "line": "b2-6",
+     "setup": "OTS-Z",
+     "v": "warm",
+     "cut_at": {
+      "setup": "CU-B",
+      "v": "sour",
+      "after": 2.2,
+      "why": "no shot with Bai until 'Bai, you're welcome'"
+     }
+    },
+    {
+     "line": "b2-7",
+     "setup": "OTS-D",
+     "v": "eager",
+     "part": {
+      "from": null,
+      "to": 1.1,
+      "text": "See you."
+     },
+     "why": "the owner (v5 comment): 'See you.' by itself, then cut to just Zei and Bai"
+    }
+   ]
+  },
+  {
+   "id": "walk",
+   "set": "corridor",
+   "bed": "corridor",
+   "room": "corridor",
+   "pair": [
+    "Z",
+    "B"
+   ],
+   "people": {
+    "Z": {
+     "at": [
+      -0.4,
+      0.5
+     ],
+     "face": "S",
+     "pose": "standing"
+    },
+    "B": {
+     "at": [
+      0.4,
+      0.5
+     ],
+     "face": "S",
+     "pose": "standing"
+    }
+   },
+   "cu": {
+    "angle": 40,
+    "fov": 30,
+    "ahead": true
+   },
+   "setups": {
+    "MASTER": {
+     "kind": "reuse",
+     "frame": "images-out/preprod/pass3/C17-K4.png",
+     "what": "walking toward us, Zei left, Bai right (passed review)"
+    },
+    "CU-Z": {
+     "kind": "cu",
+     "who": "Z",
+     "toward": "B",
+     "what": "Zei walking, close",
+     "variants": {
+      "tease": {
+       "action": "{Z} walking, close, turned three-quarters toward her on the right of the frame, teasing, a closed-mouth smile."
+      },
+      "hopeful": {
+       "action": "{Z} walking, close, turned toward her, hopeful, a closed-mouth smile."
+      }
+     }
+    },
+    "CU-B": {
+     "kind": "cu",
+     "who": "B",
+     "toward": "Z",
+     "what": "Bai walking, close",
+     "variants": {
+      "serious": {
+       "action": "{B} walking, close, eyes ahead, serious and worried about him, not smiling."
+      },
+      "sly": {
+       "action": "{B} walking, close, a sly closed-mouth smile, glancing toward him on the left of the frame."
+      }
+     }
+    }
+   },
+   "sequence": [
+    {
+     "line": "b2-7",
+     "setup": "MASTER",
+     "part": {
+      "from": 1.1,
+      "to": null,
+      "text": "So are you gonna come? Should be fun!"
+     },
+     "why": "the owner: then he says 'So are you gonna come?...' with just Zei and Bai",
+     "pre": {
+      "setup": "MASTER",
+      "s": 0.7,
+      "why": "a beat on just Zei and Bai before his question"
+     }
+    },
+    {
+     "line": "b2-8",
+     "setup": "CU-B",
+     "v": "serious"
+    },
+    {
+     "line": "b2-9",
+     "setup": "CU-Z",
+     "v": "tease"
+    },
+    {
+     "line": "b2-10",
+     "setup": "CU-B",
+     "v": "serious",
+     "why": "the owner: her look changed and the torso copied the 3D shape in 'sly'; her serious close-up instead"
+    },
+    {
+     "line": "b2-11",
+     "setup": "CU-B",
+     "v": "serious"
+    },
+    {
+     "line": "b2-12",
+     "setup": "MASTER"
+    }
+   ],
+   "turn_cu": true
+  },
+  {
+   "id": "cafe",
+   "set": "courtyard",
+   "bed": "courtyard",
+   "room": "courtyard",
+   "pair": [
+    "Z",
+    "D"
+   ],
+   "people": {
+    "Z": {
+     "at": [
+      1.5,
+      0
+     ],
+     "face": "toward:D",
+     "pose": "seated"
+    },
+    "D": {
+     "at": [
+      0,
+      -0.95
+     ],
+     "face": "toward:Z",
+     "pose": "seated"
+    },
+    "B": {
+     "at": [
+      0,
+      0.95
+     ],
+     "face": "N",
+     "pose": "seated"
+    }
+   },
+   "later": {
+    "B": {
+     "at": [
+      3.3,
+      1.35
+     ],
+     "face": "N",
+     "pose": "seated"
+    }
+   },
+   "ots": {
+    "back": 0.75,
+    "side": 0.45,
+    "fov": 32
+   },
+   "cu": {
+    "angle": 30,
+    "fov": 28
+   },
+   "setups": {
+    "MASTER": {
+     "kind": "master",
+     "fov": 50,
+     "dist": 4.2,
+     "high": 0.5,
+     "with": [
+      "B"
+     ],
+     "what": "the triangle at the long table, from the north-east",
+     "variants": {
+      "wave": {
+       "action": "At the long rectangular table: {D} on the right turns and raises one hand to wave someone over, a soft closed-mouth laugh; {B} across from him looks over too; the chair at the left end is empty.",
+       "people": {
+        "Z": null
+       }
+      },
+      "laugh": {
+       "reuse": "images-out/preprod/pass3/cov-cafe-MASTER-laugh-E40.png"
+      }
+     }
+    },
+    "OTS-Z": {
+     "kind": "ots",
+     "over": "Z",
+     "onto": "D",
+     "what": "over Zei's shoulder onto Deluin",
+     "variants": {
+      "talk": {
+       "action": "Over {Z}'s shoulder: {D} at the long table, talking, easy and warm."
+      },
+      "menu": {
+       "action": "Over {Z}'s shoulder: {D} at the long table, a thin glowing menu in hand, modest."
+      },
+      "stern": {
+       "action": "Over {Z}'s shoulder: {D}, a mock-stern face with a playful closed-mouth smile: a joking lecture."
+      },
+      "eager": {
+       "action": "Over {Z}'s shoulder: {D} leans in, eager and inviting, smiling with his mouth closed."
+      },
+      "robot": {
+       "reuse": "images-out/preprod/pass3/cov-cafe-OTS-Z-robot-E50.png"
+      }
+     }
+    },
+    "CU-Z": {
+     "kind": "cu",
+     "who": "Z",
+     "toward": "D",
+     "later": true,
+     "what": "Zei, clean close-up",
+     "variants": {
+      "amused": {
+       "action": "{Z} close, amused, a closed-mouth smile, looking toward the right of the frame at Deluin."
+      },
+      "smile": {
+       "action": "{Z} close, a little embarrassed, smiling with his mouth closed, looking toward the right of the frame at Deluin."
+      }
+     }
+    },
+    "CU-D": {
+     "kind": "cu",
+     "who": "D",
+     "toward": "Z",
+     "later": true,
+     "what": "Deluin, clean close-up",
+     "variants": {
+      "warm": {
+       "action": "{D} close, warm, thinking about home, looking toward the left of the frame at Zei."
+      }
+     }
+    },
+    "CU-B": {
+     "kind": "cu",
+     "who": "B",
+     "toward": "Z",
+     "what": "Bai at the long table, clean close-up",
+     "variants": {
+      "menu": {
+       "action": "{B} close, glancing down at her thin glowing menu, unimpressed."
+      },
+      "standing": {
+       "action": "{B}, standing now, big headphones in her hand, looking down toward the left of the frame at Zei: serious, a straight face, not smiling.",
+       "people": {
+        "B": {
+         "at": [
+          0.55,
+          1.35
+         ],
+         "face": "toward:Z",
+         "pose": "standing"
+        }
+       }
+      }
+     },
+     "turned": true
+    },
+    "BAI": {
+     "kind": "single",
+     "who": "B",
+     "later": true,
+     "facing": "toward:Z",
+     "size": "MCU",
+     "angle": 35,
+     "what": "Bai at her back table",
+     "variants": {
+      "sideeye": {
+       "action": "{B} sits at her small round table with her back to us, big headphones on, a handheld in her hands, and turns her head back over her left shoulder toward the left of the frame, glancing sideways out of the corner of her eye; her face in profile over her shoulder."
+      },
+      "what": {
+       "action": "{B} twists round in her chair, her back to us, head and shoulders turned toward the left of the frame, lifting one side of her big headphones off one ear as she calls out; her face in profile over her shoulder."
+      }
+     },
+     "why_turn": "drawn as a turn, not facing us from her table (owner, 2026-10-17 night)"
+    },
+    "MENU": {
+     "kind": "reuse",
+     "frame": "scenes-out/fifteen-days/inserts/c14-b108.png",
+     "framed": true,
+     "what": "the menu: the book's own picture"
+    },
+    "SUGAR": {
+     "kind": "insert",
+     "at": [
+      0.49,
+      0.79,
+      -0.18
+     ],
+     "dist": 0.36,
+     "height": 0.1,
+     "from": "n",
+     "what": "the sugar cubes between the cups, modelled in the set",
+     "props": "sugar",
+     "variants": {
+      "stack": {
+       "action": "Very close at table height: {D}'s fingers, his cream cable-knit sleeve showing, absent-mindedly setting one small white sugar cube on another between two tea cups.",
+       "props": "sugar-few",
+       "people": {
+        "D": "scene"
+       }
+      },
+      "wall": {
+       "action": "Very close at table height: a neat little wall of small white sugar cubes, two rows high, between two tea cups on the wooden table."
+      },
+      "flick": {
+       "action": "Very close at table height: a finger flicks one small white sugar cube out of the bottom row of the little wall between two tea cups; the cube flies.",
+       "people": {
+        "Z": "scene"
+       }
+      },
+      "door": {
+       "action": "Very close at table height: the little wall of small white sugar cubes between two tea cups, now with one cube missing from the middle of the bottom row: a doorway.",
+       "props": "sugar-door"
+      }
+     }
+    },
+    "CU-Z0": {
+     "kind": "cu",
+     "who": "Z",
+     "toward": "D",
+     "what": "Zei, clean close-up, before Bai moves",
+     "variants": {
+      "whoa": {
+       "action": "{Z} close at the end of the table, eyes on the thin glowing menu in his hands, surprised."
+      },
+      "listen": {
+       "action": "{Z} close at the end of the table, looking up toward the right of the frame, a little surprised, a thin glowing menu in his hands."
+      },
+      "explain": {
+       "action": "{Z} close, the thin glowing menu in his hands, explaining, keen, looking toward the right of the frame at Deluin."
+      },
+      "astonished": {
+       "action": "{Z} close, astonished, looking toward the right of the frame at Deluin."
+      }
+     }
+    }
+   },
+   "sequence": [
+    {
+     "line": "b3-1",
+     "setup": "MASTER",
+     "v": "wave",
+     "laugh": 0.2,
+     "why": "establish: the master, before Zei arrives",
+     "pre": {
+      "setup": "MASTER",
+      "v": "laugh",
+      "s": 2.6,
+      "why": "the owner: a pause with the café's sound, him laughing, sitting with Bai, then 'Zei, over here!'"
+     },
+     "laugh_from": "pre",
+     "laugh_trim": [
+      1.0,
+      3.25
+     ]
+    },
+    {
+     "line": "b3-2",
+     "setup": "OTS-Z",
+     "v": "robot",
+     "why": "the owner: we don't see the robot; it brings the menus as it speaks (Zei already seated: him pulling up a seat is not drawn)"
+    },
+    {
+     "line": "b3-3",
+     "setup": "CU-Z0",
+     "v": "whoa",
+     "fx": [
+      [
+       "device: menu-appears",
+       -0.3,
+       -10,
+       1.5
+      ]
+     ]
+    },
+    {
+     "line": "b3-4",
+     "setup": "OTS-Z",
+     "v": "menu"
+    },
+    {
+     "setup": "MENU",
+     "s": 2.0,
+     "why": "the menu matters: hold to read it"
+    },
+    {
+     "line": "b3-5",
+     "setup": "CU-Z0",
+     "v": "explain",
+     "fx": [
+      [
+       "device: menu-tap-1",
+       1.2,
+       -14,
+       0.5
+      ]
+     ]
+    },
+    {
+     "setup": "OTS-Z",
+     "v": "menu",
+     "s": 1.4,
+     "why": "the owner: instead of cutting to her, all three at the table looking at the menus (the menu shot, now with Bai at the table)"
+    },
+    {
+     "line": "b3-6",
+     "setup": "CU-Z0",
+     "v": "explain"
+    },
+    {
+     "line": "b3-7",
+     "setup": "OTS-Z",
+     "v": "menu"
+    },
+    {
+     "line": "b3-8",
+     "setup": "CU-Z0",
+     "v": "explain",
+     "fx": [
+      [
+       "device: menu-tap-2",
+       1.8,
+       -14,
+       0.5
+      ]
+     ]
+    },
+    {
+     "line": "b3-9",
+     "setup": "OTS-Z",
+     "v": "menu",
+     "fx": [
+      [
+       "device: menu-tap-3",
+       1.0,
+       -14,
+       0.5
+      ]
+     ]
+    },
+    {
+     "line": "b3-10",
+     "setup": "CU-Z0",
+     "v": "astonished"
+    },
+    {
+     "line": "b3-11",
+     "setup": "OTS-Z",
+     "v": "stern"
+    },
+    {
+     "line": "b3-12",
+     "setup": "CU-Z0",
+     "v": "astonished"
+    },
+    {
+     "line": "b3-13",
+     "setup": "CU-B",
+     "v": "menu",
+     "cut_at": {
+      "setup": "CU-B",
+      "v": "standing",
+      "after": 2.6,
+      "why": "she stands for 'come get me'"
+     }
+    },
+    {
+     "setup": "BAI",
+     "v": "sideeye",
+     "s": 1.3,
+     "why": "re-establish: Bai at her own table now",
+     "fx": [
+      [
+       "device: robot-glide",
+       0.0,
+       -12,
+       2.0
+      ]
+     ]
+    },
+    {
+     "line": "b4-1",
+     "setup": "OTS-Z",
+     "v": "talk",
+     "cut_at": {
+      "setup": "SUGAR",
+      "v": "stack",
+      "after": 4.0,
+      "back": 1.2
+     }
+    },
+    {
+     "line": "b4-2",
+     "setup": "CU-Z",
+     "v": "amused"
+    },
+    {
+     "line": "b4-3",
+     "setup": "CU-D",
+     "v": "warm",
+     "why": "the owner: 'Sure' cut; he answers quickly with 'Yeah, we have...'"
+    },
+    {
+     "line": "b4-4",
+     "setup": "CU-Z",
+     "v": "amused"
+    },
+    {
+     "line": "b4-5",
+     "setup": "SUGAR",
+     "v": "wall",
+     "cut_at": {
+      "setup": "CU-D",
+      "v": "warm",
+      "after": 1.2
+     },
+     "why": "the owner: the cut to the sugar-cube wall moves to before 'Yes. Simple'"
+    },
+    {
+     "setup": "SUGAR",
+     "v": "door",
+     "s": 1.2
+    },
+    {
+     "setup": "CU-Z",
+     "v": "amused",
+     "s": 1.1
+    },
+    {
+     "setup": "BAI",
+     "v": "sideeye",
+     "s": 1.1
+    },
+    {
+     "line": "b5-1",
+     "setup": "OTS-Z",
+     "v": "eager"
+    },
+    {
+     "line": "b5-2",
+     "setup": "CU-Z",
+     "v": "smile"
+    },
+    {
+     "line": "b5-3",
+     "setup": "OTS-Z",
+     "v": "eager"
+    },
+    {
+     "setup": "BAI",
+     "v": "sideeye",
+     "s": 1.0
+    },
+    {
+     "line": "b5-4",
+     "setup": "OTS-Z",
+     "v": "talk"
+    },
+    {
+     "line": "b5-5",
+     "setup": "BAI",
+     "v": "what",
+     "music": true
+    }
+   ]
+  },
+  {
+   "id": "gate",
+   "set": "courtyard",
+   "bed": "gate",
+   "room": "gate",
+   "pair": [
+    "Z",
+    "D"
+   ],
+   "people": {
+    "D": {
+     "at": [
+      5.6,
+      -8.6
+     ],
+     "face": "toward:Z",
+     "pose": "standing"
+    },
+    "Z": {
+     "at": [
+      7.2,
+      -8.6
+     ],
+     "face": "toward:D",
+     "pose": "standing"
+    }
+   },
+   "cu": {
+    "angle": 30,
+    "fov": 28
+   },
+   "setups": {
+    "MASTER": {
+     "kind": "master",
+     "dist": 3.4,
+     "fov": 40,
+     "what": "the two-shot at the street gate at dusk, Zei left, Deluin right",
+     "variants": {
+      "fingers": {
+       "action": "At the courtyard's street gate at dusk, the lamps coming on: {D} on the right holds up one open hand, five fingers spread wide; {Z} on the left holds up his open hand the same way, a closed-mouth smile. Both hands clearly drawn."
+      },
+      "wave": {
+       "action": "At the street gate at dusk: {D} on the right, turning to go into the street, gives a quick wave goodbye; {Z} on the left waves back."
+      }
+     }
+    },
+    "CU-Z": {
+     "kind": "cu",
+     "who": "Z",
+     "toward": "D",
+     "what": "Zei close",
+     "variants": {
+      "smile": {
+       "action": "{Z} close at the gate at dusk, a closed-mouth smile, looking toward the right of the frame at Deluin."
+      }
+     }
+    }
+   },
+   "sequence": [
+    {
+     "line": "b6-1",
+     "setup": "MASTER",
+     "v": "fingers",
+     "pre": {
+      "setup": "MASTER",
+      "v": "fingers",
+      "s": 0.6
+     }
+    },
+    {
+     "setup": "CU-Z",
+     "v": "smile",
+     "s": 1.2,
+     "why": "he mirrors it"
+    },
+    {
+     "setup": "MASTER",
+     "v": "wave",
+     "s": 1.4
+    }
+   ]
+  },
+  {
+   "id": "dusk",
+   "set": "courtyard",
+   "bed": "courtyard",
+   "room": "courtyard",
+   "pair": [
+    "Z",
+    "B"
+   ],
+   "people": {
+    "Z": {
+     "at": [
+      2.55,
+      1.75
+     ],
+     "face": "toward:B",
+     "pose": "standing"
+    },
+    "B": {
+     "at": [
+      3.3,
+      1.35
+     ],
+     "face": "toward:Z",
+     "pose": "seated"
+    }
+   },
+   "setups": {
+    "MASTER": {
+     "kind": "master",
+     "dist": 3.0,
+     "fov": 40,
+     "what": "Zei at Bai's table at dusk",
+     "variants": {
+      "talk": {
+       "action": "At dusk in the emptying courtyard: {Z} on the left stands at {B}'s small round table and talks to her; {B} on the right, seated, headphones around her neck, looks up at him."
+      }
+     }
+    }
+   },
+   "sequence": [
+    {
+     "setup": "MASTER",
+     "v": "talk",
+     "s": 6.0,
+     "letter": "That day was his last Minpentai game- the last day when his life was somewhat normal.",
+     "why": "the on-screen line needs reading time; larger and held 6 s (owner on v6: 'small, and easy to get lost. Goes too quick')",
+     "letter_style": "caption"
+    }
+   ]
+  },
+  {
+   "id": "lobby",
+   "set": "lobby",
+   "bed": "lobby",
+   "room": "lobby",
+   "pair": [
+    "Z",
+    "B"
+   ],
+   "fade_in": true,
+   "people": {
+    "Z": {
+     "at": [
+      -3.35,
+      0
+     ],
+     "face": "toward:B",
+     "pose": "seated"
+    },
+    "B": {
+     "at": [
+      -4.65,
+      0
+     ],
+     "face": "toward:Z",
+     "pose": "seated"
+    }
+   },
+   "ots": {
+    "back": 0.7,
+    "side": 0.45,
+    "fov": 32
+   },
+   "cu": {
+    "angle": 30,
+    "fov": 28
+   },
+   "setups": {
+    "EST": {
+     "kind": "reuse",
+     "frame": "images-out/preprod/pass3/L01b-K6.png",
+     "what": "from the street through the window (passed review)"
+    },
+    "CU-Z": {
+     "kind": "cu",
+     "who": "Z",
+     "toward": "B",
+     "what": "Zei close at his table",
+     "variants": {
+      "down": {
+       "action": "{Z}'s face close, eyes looking down at the device in his hands as it lights up; worried, not smiling.",
+       "people": {
+        "B": null
+       }
+      },
+      "relief": {
+       "action": "{Z} close, eyes closing, breathing out in relief, his device in his hands."
+      }
+     }
+    },
+    "MASTER": {
+     "kind": "master",
+     "fov": 44,
+     "dist": 3.4,
+     "what": "the two-shot at his table, Zei left, Bai right",
+     "variants": {
+      "sits": {
+       "action": "The hotel lobby restaurant late at night: {Z} on the left at his table, worried, not smiling; {B} on the right sits down across from him carefully, concerned and caring, without a word."
+      }
+     }
+    },
+    "OTS-Z": {
+     "kind": "ots",
+     "over": "Z",
+     "onto": "B",
+     "what": "over Zei's shoulder onto Bai",
+     "variants": {
+      "turns": {
+       "action": "Over {Z}'s shoulder: he turns his glowing device to show {B}; {B} across the table leans in to read it, her face unreadable."
+      }
+     }
+    },
+    "SCREEN": {
+     "kind": "code",
+     "what": "the messages: the book's words on a clean device, drawn in code"
+    }
+   },
+   "sequence": [
+    {
+     "setup": "EST",
+     "s": 3.5,
+     "letter": "Pafogai Du, Dzego · 3724 Firemoon 17\nFifteen days later",
+     "why": "the place card needs reading time; 'Fifteen days later' added as a line under the book's place and date (owner, 2026-10-18)"
+    },
+    {
+     "setup": "CU-Z",
+     "v": "down",
+     "s": 1.4
+    },
+    {
+     "setup": "SCREEN",
+     "v": "L03",
+     "s": 2.5,
+     "why": "his fifth message, to read",
+     "fx": [
+      [
+       "device: message-sent",
+       1.2,
+       -9,
+       1.2
+      ]
+     ]
+    },
+    {
+     "setup": "MASTER",
+     "v": "sits",
+     "s": 1.5
+    },
+    {
+     "setup": "CU-Z",
+     "v": "down",
+     "s": 1.2,
+     "fx": [
+      [
+       "device: message-received-a",
+       -0.5,
+       -8,
+       1.5
+      ]
+     ],
+     "why": "the chime, then his eyes"
+    },
+    {
+     "setup": "SCREEN",
+     "v": "L07",
+     "s": 3.5,
+     "why": "the reply, to read"
+    },
+    {
+     "setup": "CU-Z",
+     "v": "relief",
+     "s": 1.5
+    },
+    {
+     "setup": "SCREEN",
+     "v": "L09",
+     "s": 4.5,
+     "fx": [
+      [
+       "device: message-received-b",
+       0.2,
+       -8,
+       1.5
+      ]
+     ],
+     "why": "the owner: hold on this last message longer, to read it"
+    },
+    {
+     "setup": "OTS-Z",
+     "v": "turns",
+     "s": 2.5,
+     "why": "cut on her face, reading"
+    }
+   ]
+  }
+ ],
+ "trim": {
+  "b4-3": [
+   3.5,
+   null
+  ]
+ },
+ "rooms": {
+  "hall": "highpass=f=90,aecho=0.8:0.6:60|110:0.07|0.04",
+  "corridor": "highpass=f=80,aecho=0.85:0.7:37|71:0.09|0.05",
+  "courtyard": "highpass=f=70",
+  "gate": "highpass=f=70,aecho=0.9:0.6:55:0.03",
+  "lobby": "highpass=f=80,aecho=0.85:0.55:18:0.05"
+ },
+ "end_card": {
+  "file": "adaptations/fifteen-days/end-card-v6.json",
+  "seconds": 5
+ }
+}

@@ -1,0 +1,224 @@
+<title>Fifteen Days Storyboard</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=JetBrains+Mono:wght@400&display=swap">
+<style>
+/* Layout: decisions first (faces, hall, the second test, voices, cost), then the storyboard: one card per shot, grouped by scene, a single column on a phone. */
+:root{--bg:#f3f2f7;--fg:#1b1a2b;--muted:#5d5a78;--line:#d6d3e6;--panel:#e9e7f2;--paper:#ffffff;--ink:#46464c;--accent:#5b3fd1;--ok:#1d7a4b;--bad:#b42340;--warn:#a86a00;
+--display:"Chakra Petch",system-ui,sans-serif;--body:"Source Serif 4",Georgia,serif;--mono:"JetBrains Mono",ui-monospace,monospace}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d0e1c;--fg:#e9e7f5;--muted:#a19dc0;--line:#2b2a46;--panel:#16172b;--paper:#1c1d33;--ink:#c9c7dc;--accent:#a996ff;--ok:#5fd39a;--bad:#ff6b85;--warn:#f0b54a;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0d0e1c;--fg:#e9e7f5;--muted:#a19dc0;--line:#2b2a46;--panel:#16172b;--paper:#1c1d33;--ink:#c9c7dc;--accent:#a996ff;--ok:#5fd39a;--bad:#ff6b85;--warn:#f0b54a;color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font:16px/1.55 var(--body);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 64px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+main{max-width:1200px;margin:0 auto;display:grid;gap:44px}
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:3;background:var(--bg);border-bottom:1px solid var(--line);padding-block:10px;display:flex;flex-wrap:wrap;gap:6px 16px;align-items:baseline}
+header.top nav{display:flex;flex-wrap:wrap;gap:4px 12px;font:13px var(--mono)}
+header.top nav a{color:var(--muted);text-decoration:none}header.top nav a:hover,header.top nav a:focus-visible{color:var(--accent)}
+h1{font:600 clamp(22px,4vw,30px)/1.15 var(--display);margin:0;text-wrap:balance}
+h2{font:600 24px/1.2 var(--display);margin:0;text-wrap:balance}h3{font:500 18px/1.25 var(--display);margin:0}
+.status,.tally{font:13px var(--mono);color:var(--muted);font-variant-numeric:tabular-nums}
+p{margin:0;max-width:70ch}.muted{color:var(--muted)}
+section{display:grid;gap:14px}
+.eyebrow{font:12px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:14px}
+figure{margin:0;display:grid;gap:6px;min-width:0}figure img{width:100%;height:auto;border-radius:4px;display:block}
+figcaption{font:12px var(--mono);color:var(--muted)}
+button.pick{all:unset;cursor:pointer;display:grid;gap:6px;padding:5px;border-radius:6px;outline:2px solid transparent;min-width:0}
+button.pick img{width:100%;height:auto;border-radius:4px;display:block}
+button.pick[aria-pressed="true"]{outline-color:var(--accent);background:var(--panel)}button.pick:focus-visible{outline-color:var(--fg)}
+button.pick span{font:12px var(--mono);color:var(--muted)}button.pick[aria-pressed="true"] span{color:var(--accent)}
+.verdict{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-start}
+.verdict button{font:13px var(--mono);padding:8px 14px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--fg);cursor:pointer;min-height:36px}
+.verdict button[aria-pressed="true"].ok{background:var(--ok);border-color:var(--ok);color:var(--bg)}
+.verdict button[aria-pressed="true"].bad{background:var(--bad);border-color:var(--bad);color:var(--bg)}
+.verdict button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+textarea{flex:1 1 240px;min-width:0;width:100%;min-height:40px;font:15px/1.4 var(--body);color:var(--fg);background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:8px 10px;resize:vertical}
+.cost{border:1px solid var(--line);border-radius:8px;padding:12px 14px;display:grid;gap:6px;font-variant-numeric:tabular-nums}
+.cost table{border-collapse:collapse;font-size:15px}.cost td{padding:3px 14px 3px 0}.cost td.n{font-family:var(--mono);text-align:right}
+.pair{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:10px;align-items:start;border-bottom:1px solid var(--line);padding-bottom:12px}
+@media (max-width:640px){.pair{grid-template-columns:1fr}}
+.audio-row{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;border-bottom:1px solid var(--line);padding-block:8px}
+.audio-row span{flex:1 1 220px}
+.audio-row button{font:13px var(--mono);padding:8px 12px;border-radius:6px;border:1px solid var(--line);background:var(--panel);color:var(--fg);cursor:pointer;min-height:36px}
+.audio-row button[aria-pressed="true"]{border-color:var(--accent);color:var(--accent)}
+.scene{display:grid;gap:14px}
+.scene>header{display:grid;gap:4px;border-top:2px solid var(--fg);padding-top:10px}
+.geo{font-size:14px;color:var(--muted);max-width:90ch}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr));gap:16px}
+.card{display:grid;gap:8px;align-content:start;min-width:0;border:1px solid var(--line);border-radius:8px;padding:10px;background:var(--bg)}
+.card.ok{border-color:var(--ok)}.card.change{border-color:var(--bad)}
+.card .head{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline}
+.card .id{font:600 15px var(--mono);color:var(--accent)}.card .sz{font:12px var(--mono);color:var(--muted)}
+.card .line{font:italic 14px/1.4 var(--body)}
+.card .act{font-size:14px;line-height:1.4;color:var(--muted)}
+.sk{width:100%;height:auto;display:block;border-radius:4px;border:1px solid var(--line)}
+.sk .bg{fill:var(--paper)}.sk .st{stroke:var(--ink);fill:none}.sk .fl{fill:var(--panel)}.sk .nf{fill:none}
+.sk .lb{font:700 64px var(--mono);paint-order:stroke;stroke:var(--paper);stroke-width:10px}
+.refs{display:flex;gap:6px;flex-wrap:wrap}.refs figure{width:88px}.refs img{height:50px;width:88px;object-fit:cover;border:1px solid var(--line)}
+.refs figcaption{font-size:10px;line-height:1.2}
+details summary{font:12px var(--mono);color:var(--muted);cursor:pointer;padding-block:4px}
+pre.prompt{white-space:pre-wrap;word-break:break-word;font:12px/1.45 var(--mono);background:var(--panel);border-radius:6px;padding:8px;margin:4px 0 0;max-height:260px;overflow:auto}
+.tag{font:11px var(--mono);padding:1px 7px;border-radius:999px;border:1px solid var(--line);color:var(--muted)}
+.tag.comp{border-color:var(--warn);color:var(--warn)}
+@media (max-width:640px){header.top{position:static}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+<main>
+<header class="top"><h1>Fifteen Days storyboard</h1><nav><a href="#faces">Faces</a><a href="#hall">Hall</a><a href="#test">Test</a><a href="#voices">Voices</a><a href="#cost">Cost</a><a href="#board">Storyboard</a></nav><span class="tally" id="tally"></span><span class="status" id="status">connecting…</span></header>
+
+<section>
+<p>The storyboard is below: one card per shot, each with its sketch, the line over it, the exact prompt the model will get and the pictures that go in with it. Mark each OK or change, and comment on anything. The full pass waits for your comments. Above it: the faces to choose (two each), the hall, the second test and the re-recorded voices.</p>
+<p class="muted" id="spend"></p>
+</section>
+
+<section id="faces">
+<div class="eyebrow">Your notes: Bai reads as a young woman from the front, dangly earrings; Deluin older; natural smiles</div>
+<h2>Faces, two options each</h2>
+<p class="muted">Bai's front views kept dropping the ponytail, so her option B is assembled: her side views on top, and below, her front views drawn one at a time (neutral, smile, frown, surprise). Smiles are closed-mouth. The new cast cards (used in the test below) take Zei A, Deluin A and Bai B; pick your final ones here. Kau's sheet is new, for his close-ups and the big screens.</p>
+<div id="faceRows" style="display:grid;gap:22px"></div>
+</section>
+
+<section id="hall">
+<div class="eyebrow">Your notes: a wide standing ring, an empty floor of posts and holograms, the players' real faces on the screens, no café icons, the railing's perspective</div>
+<h2>The hall and the overlook</h2>
+<p class="muted">Both were drawn from a code-drawn layout (the method the full pass will use), so the standing ring, the identical posts and the two pits sit where the sketch put them. The screens came out blank on purpose, and Deluin's and Kau's faces are composited in from their sheets: never drawn. The overlook was harder: from the ring itself the model either copied the whole hall or lost the crowd. Option A has the railing right but the hall too small. I'd use the hall frame for the overlook shots as well, since they all look down from the ring.</p>
+<div class="grid2" id="hallPicks"></div>
+<div class="verdict" data-item="hall-plates"></div>
+</section>
+
+<section id="test">
+<div class="eyebrow">Second test · T1, T3, T5, T8 with the new cards and the code-drawn sketches</div>
+<h2>Did consistency hold?</h2>
+<p class="muted">Each new shot is shown beside its first try. The prompts and references are exactly the ones on that shot's storyboard card below. My read: the doubles are gone in all four; T3 is now a real close-up behind the menu with dark eyes and a blank menu; T5 keeps Deluin once, from behind; T1 and T8 follow the sketch's people, though T1 put them at a small round table and T8 drew Deluin's hair darker. Mark each.</p>
+<div id="testRows" style="display:grid;gap:14px"></div>
+</section>
+
+<section id="voices">
+<div class="eyebrow">Your re-record, converted</div>
+<h2>Voices, before and now</h2>
+<p class="muted">All 42 lines are converted again with your picks: Zei on his new sheet with no speed-up, Deluin's new sheet 6% slower, Bai on her sheet with less low end, never sped up; your ten re-recorded lines replace the old takes. Whisper now hears every word: line 33 was "…a pretty young here… Right sure have any quirks", and now reads exactly. One wording change: line 16 is now as you said it, "And I know all your tricks already anyway"; the script follows.</p>
+<div id="voiceRows"></div>
+<div class="verdict" data-item="voices-v2"></div>
+</section>
+
+<section id="cost">
+<div class="eyebrow">The full pass</div>
+<h2>What drawing all 108 would cost</h2>
+<div class="cost">
+<table><tbody>
+<tr><td>Shots drawn (5 more are the book's or the tutorial's pictures, composited)</td><td class="n">103</td></tr>
+<tr><td>One attempt each, at 1536 × 864 with 2–4 references</td><td class="n">$2.94</td></tr>
+<tr><td>With retries on about half the shots (my estimate after the tests)</td><td class="n">$4.42</td></tr>
+<tr><td>Two options for every shot</td><td class="n">$5.89</td></tr>
+<tr><td>Two options, plus retries on 40%</td><td class="n">$7.07</td></tr>
+</tbody></table>
+<p class="muted">Prices are fal's, per megapixel of output and references. I'd draw one option each with retries (about $4.42), under your $5, and ask before going over.</p>
+</div>
+</section>
+
+<section id="board">
+<div class="eyebrow">Storyboard · shot list v3 · sketches drawn in code</div>
+<h2>Every shot</h2>
+<p class="muted">Each sketch is drawn from shapes in code, so placement is exact: Z Zei, B Bai, D Deluin, K Kau, R the robot; the arrow shows which way each person faces. The model gets the same sketch with every label and arrow stripped (grey lines on white), so it can't copy lettering. Seated shots in the café are framed from the waist up.</p>
+<div id="sceneRows" style="display:grid;gap:40px"></div>
+</section>
+</main>
+<script>
+const DATA = __DATA__;
+const state = {}; let db = null;
+const $ = (t, a = {}, ...kids) => { const e = document.createElement(t); for (const [k, v] of Object.entries(a)) { if (k === 'class') e.className = v; else if (k === 'text') e.textContent = v; else e.setAttribute(k, v); } e.append(...kids); return e; };
+function setStatus(t) { document.getElementById('status').textContent = t; }
+const refreshers = []; function refresh() { for (const f of refreshers) f(); tally(); }
+async function save(item, patch) {
+  state[item] = { ...(state[item] || {}), ...patch }; refresh();
+  if (!db) return;
+  try { await db.doc('review/' + item).set({ ...state[item], at: new Date().toISOString() }); setStatus('saved'); }
+  catch (e) { setStatus('not saved (' + ((e && e.code) || 'error') + '); tell Claude in chat'); }
+}
+function verdict(el, item, onState) {
+  const ok = $('button', { class: 'ok', type: 'button', text: 'OK' }), bad = $('button', { class: 'bad', type: 'button', text: 'Change' });
+  const note = $('textarea', { id: 'note-' + item, placeholder: 'Comment', rows: '1' });
+  ok.onclick = () => save(item, { status: state[item]?.status === 'ok' ? null : 'ok' });
+  bad.onclick = () => save(item, { status: state[item]?.status === 'change' ? null : 'change' });
+  note.addEventListener('change', () => save(item, { note: note.value }));
+  el.append(ok, bad, note);
+  refreshers.push(() => { const s = state[item]?.status; ok.setAttribute('aria-pressed', String(s === 'ok')); bad.setAttribute('aria-pressed', String(s === 'change')); if (document.activeElement !== note) note.value = state[item]?.note || ''; if (onState) onState(s); });
+}
+function picks(container, item, options) {
+  for (const o of options) {
+    const b = $('button', { class: 'pick', type: 'button' }, $('img', { src: o.img, alt: o.label, loading: 'lazy' }), $('span', { text: o.label }));
+    b.onclick = () => save(item, { pick: state[item]?.pick === o.key ? null : o.key });
+    container.append(b); refreshers.push(() => b.setAttribute('aria-pressed', String(state[item]?.pick === o.key)));
+  }
+}
+// Faces
+const F = DATA.faces;
+for (const [id, name, opts] of [['bai', 'Bai', [['face2-bai-b', 'A: drawn as one sheet'], ['face3-bai', 'B: assembled, front views drawn one at a time (in the cards)']]],
+                                 ['deluin', 'Deluin, a few years older', [['face2-deluin-a', 'A (in the cards)'], ['face2-deluin-b', 'B']]],
+                                 ['zei', 'Zei, smile fixed', [['face2-zei-a', 'A (in the cards)'], ['face2-zei-b', 'B']]],
+                                 ['kau', 'Kau (new)', [['face2-kau', 'one sheet']]]]) {
+  const row = $('div', { class: 'grid2' }); picks(row, 'face3-' + id, opts.map(([k, l]) => ({ key: k, img: F[k], label: l })));
+  const v = $('div', { class: 'verdict' }); verdict(v, 'face3-' + id + '-ok');
+  document.getElementById('faceRows').append($('div', { style: 'display:grid;gap:8px' }, $('h3', { text: name }), row, v));
+}
+// Hall
+picks(document.getElementById('hallPicks'), 'hall-plate', [['hall', 'hall A, faces composited (in the storyboard)'], ['hall-b', 'hall B, screens still blank'], ['ovl-a', 'overlook A, from the ring'], ['ovl-b', 'overlook B']].map(([k, l]) => ({ key: k, img: DATA.places[k], label: l })));
+verdict(document.querySelector('[data-item="hall-plates"]'), 'hall-plates');
+// Test
+for (const t of DATA.test) {
+  const v = $('div', { class: 'verdict' }); verdict(v, 'test2-' + t.id);
+  document.getElementById('testRows').append($('div', { class: 'pair' },
+    $('figure', {}, $('img', { src: t.old, alt: t.id + ' first try', loading: 'lazy' }), $('figcaption', { text: t.id.slice(0, 2) + ', first try' })),
+    $('div', { style: 'display:grid;gap:8px;min-width:0' }, $('figure', {}, $('img', { src: t.img, alt: t.id, loading: 'lazy' }), $('figcaption', { text: t.id + ' = storyboard ' + t.shot + ', new cards and sketch' })), v)));
+}
+// Voices
+let playing = null;
+function play(btn, src) {
+  if (playing) { playing.a.pause(); playing.b.setAttribute('aria-pressed', 'false'); if (playing.b === btn) { playing = null; return; } }
+  const a = new Audio(src); a.play().catch(() => setStatus('tap again to play')); btn.setAttribute('aria-pressed', 'true'); a.onended = () => { btn.setAttribute('aria-pressed', 'false'); playing = null; }; playing = { a, b: btn };
+}
+for (const x of DATA.voices) {
+  const b1 = $('button', { type: 'button', 'aria-pressed': 'false', text: '▶ before' }), b2 = $('button', { type: 'button', 'aria-pressed': 'false', text: '▶ now' });
+  b1.onclick = () => play(b1, x.before); b2.onclick = () => play(b2, x.now);
+  document.getElementById('voiceRows').append($('div', { class: 'audio-row' }, $('span', { text: x.label }), b1, b2));
+}
+verdict(document.querySelector('[data-item="voices-v2"]'), 'voices-v2');
+// Storyboard
+const SCENES = [['hall', 'Beat 1 · the hall'], ['gallery', 'Beat 1 · the overlook'], ['corridor', 'Beat 2 · the corridor'], ['courtyard', 'Beats 3–6 · the café'], ['gate', 'Beat 6 · the gate'], ['lobby', 'Beat 7 · the vigil']];
+const WHO = { Z: 'Zei', B: 'Bai', D: 'Deluin', K: 'Kau', R: 'robot' };
+const cardIds = [];
+for (const [key, title] of SCENES) {
+  const list = DATA.shots.filter(s => s.scene === key);
+  if (!list.length) continue;
+  const grid = $('div', { class: 'cards' });
+  for (const s of list) {
+    cardIds.push(s.id);
+    const card = $('article', { class: 'card', id: 'shot-' + s.id });
+    const sk = $('div'); sk.innerHTML = s.svg;
+    const head = $('div', { class: 'head' }, $('span', { class: 'id', text: s.id }), $('span', { class: 'sz', text: s.size + ' · ' + s.dur_s + ' s' }));
+    if (s.composite) head.append($('span', { class: 'tag comp', text: 'composited, not drawn' }));
+    card.append(sk, head);
+    card.append($('div', { class: 'line', text: s.line ? s.line : '(no line)' }));
+    card.append($('div', { class: 'act', text: s.action.replace(/\{([ZBDKR])\}/g, (_, k) => WHO[k]) }));
+    if (s.composite) card.append($('p', { class: 'muted', style: 'font-size:14px', text: 'Composited from ' + s.composite + '; the model draws nothing here.' }));
+    else {
+      card.append($('div', { class: 'refs' }, ...s.refimgs.map((r, i) => $('figure', {}, $('img', { src: r.src, alt: r.what, loading: 'lazy' }), $('figcaption', { text: (i + 1) + '. ' + r.what })))));
+      card.append($('details', {}, $('summary', { text: 'the exact prompt' }), $('pre', { class: 'prompt', text: s.prompt })));
+    }
+    const v = $('div', { class: 'verdict' }); verdict(v, 'shot-' + s.id, st => { card.classList.toggle('ok', st === 'ok'); card.classList.toggle('change', st === 'change'); });
+    card.append(v); grid.append(card);
+  }
+  document.getElementById('sceneRows').append($('div', { class: 'scene' }, $('header', {}, $('h3', { text: title + ' · ' + list.length + ' shots' }), $('p', { class: 'geo', text: DATA.geography[key] || '' })), grid));
+}
+function tally() {
+  let ok = 0, ch = 0; for (const id of cardIds) { const s = state['shot-' + id]?.status; if (s === 'ok') ok++; else if (s === 'change') ch++; }
+  document.getElementById('tally').textContent = `${ok} OK · ${ch} to change · ${cardIds.length - ok - ch} unmarked`;
+}
+document.getElementById('spend').textContent = `Spent on this round: $${DATA.spent.toFixed(2)} of your $${DATA.cap.toFixed(2)}.`;
+refresh();
+(async () => {
+  try { db = window.claude ? await window.claude.use('db') : null; } catch (e) { db = null; }
+  if (!db) { setStatus('marks can’t be saved in this view; tell Claude in chat'); return; }
+  setStatus('marks save as you go');
+  db.collection('review').onSnapshot(snap => { for (const d of snap.docs) { const v = d.data(); if (v) state[d.id] = v; } refresh(); }, e => setStatus('not connected: ' + e.code));
+})();
+</script>

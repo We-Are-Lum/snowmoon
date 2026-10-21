@@ -1,0 +1,285 @@
+{
+  "about": "Fifteen Days coverage frames, klein finish from A7 with round-three prompts, attempt 12. Prompts DRAFTED by the coding agent.",
+  "out": "images-out/preprod/pass3",
+  "ledger": "images-out/preprod/ledger-s7.json",
+  "cap_usd": 25.0,
+  "style": "",
+  "jobs": [
+    {
+      "id": "cov-corridor-OTS-D-sheepish-K12",
+      "shot": "cov-corridor-OTS-D-sheepish",
+      "approach": "A",
+      "attempt": 12,
+      "prompt": "Over-the-shoulder shot (OTS). Over the tall young man with wavy shoulder-length light-brown hair and a long cream cable-knit tunic's shoulder: the slim young man with spiky black hair with one blue streak, dark brown eyes and an orange cropped zip jacket over a black top, a small self-deprecating closed-mouth smile, rubbing the back of his neck; behind him the thin, wiry young woman with warm brown skin, shaved sides, a tall magenta ponytail, dangly geometric earrings, a lime-green vest and tattooed arms with her arms crossed. Keep reference image 1's exact framing and crop: the same over-the-shoulder shot, nothing added outside its edges, never widen the view. Every mouth is closed, lips together: smiles and laughs are small closed-lip smiles, no teeth visible at all, never a grin. Faces stay soft and natural. Redraw reference image 1 as a finished, detailed hand-drawn science fiction comic book panel at night: keep its camera, perspective, every person's position, pose, gesture, expression and size, and every table, chair and wall exactly as they are; nobody is added or removed. Reference image 2 shows how the place looks: take its colours, materials and night light; it has nobody in it. Reference image 3 shows the three main people, one per row: the slim young man with spiky black hair with one blue streak, dark brown eyes and an orange cropped zip jacket over a black top; the thin, wiry young woman with warm brown skin, shaved sides, a tall magenta ponytail, dangly geometric earrings, a lime-green vest and tattooed arms; the tall young man with wavy shoulder-length light-brown hair and a long cream cable-knit tunic. Copy only their faces, hair, skin and clothes, never the sheet's layout, poses or grey background. Each main person's face, hair, skin and clothes match their reference exactly. In this frame: the slim young man is turned three-quarters, looking toward the right of the frame, never straight at the camera; the thin, wiry young woman is on the right of the frame, toward the camera; the tall young man is seen only from behind in the near foreground, the back of the head and one shoulder at the on the right edge of the frame, soft; he or she appears only once. No robot and no other people anywhere in the picture. Exactly three main people, each appearing once. Nobody else in the corridor at all. Everyone stands on the ground or sits on a chair at their real size: nobody floats, nobody sits or stands on a table. Behind them, as the layout shows: the round-topped corridor of polished pale stone, no windows; a row of sleek elevator doors in the left-hand wall. Faces stay soft and natural: smiles and laughs are closed-mouthed, never open-mouthed grins, no teeth showing. The spiky-haired young man's eyes are dark brown. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. No signs, no panels with pictograms, no icons, no symbols anywhere: walls are bare. Screens show only what the shot describes, or are blank and softly glowing. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character.",
+      "refs": [
+        "images-out/preprod/pass3/cov-corridor-OTS-D-A7.png",
+        "images-out/preprod/plates-small/plate-corridor-N-a.png",
+        "images-out/preprod/cards-small/cast.png"
+      ],
+      "width": 1024,
+      "height": 576,
+      "seed": 35217,
+      "layers": {
+        "set": {
+          "file": "adaptations/fifteen-days/preprod/sets/corridor.json",
+          "sha256": "1a4b812cb9676465305d91190cc8d1b6cc83266894470e9524e512c52b6b5c02"
+        },
+        "camera": {
+          "file": "adaptations/fifteen-days/preprod/sets/corridor.shots.json",
+          "key": "cov-corridor-OTS-D",
+          "people": {
+            "D": {
+              "at": [
+                -0.6,
+                -6.0
+              ],
+              "face": 90.0,
+              "pose": "standing"
+            },
+            "Z": {
+              "at": [
+                0.4,
+                -6.0
+              ],
+              "face": -90.0,
+              "pose": "standing"
+            },
+            "B": {
+              "at": [
+                0.7,
+                -4.9
+              ],
+              "face": -130.2,
+              "pose": "standing"
+            }
+          },
+          "cam": [
+            -0.95,
+            1.764,
+            -6.4
+          ],
+          "look": [
+            0.4,
+            1.5495999999999999,
+            -6.0
+          ],
+          "fov": 32
+        },
+        "set_frame": {
+          "file": "adaptations/fifteen-days/preprod/set-frames/cov-corridor-OTS-D.depth.png",
+          "sha256": "0b875f2ea12779d08e487dc962856c82fbfc7aed40d3f8d73fbf3007e22c7d4d",
+          "mode": "depth",
+          "rendered_from": "images-out/preprod/set/cov-corridor-OTS-D.depth.png"
+        },
+        "stage1": {
+          "file": "images-out/preprod/pass3/cov-corridor-OTS-D-A7.png",
+          "sha256": "1336840b8dc2f97a5ab5554db1892c1c23815911073824726739e46fe091c3ac",
+          "engine": "qwen-image-edit-2509"
+        },
+        "plate": {
+          "file": "images-out/preprod/plates-small/plate-corridor-N-a.png",
+          "sha256": "b6290cd1c6c309b7b986516bab6888afb7351ebdfeecc8a50c23e8e38ee6d4f3",
+          "plate": "plate-corridor-N",
+          "source": {
+            "file": "images-out/preprod/plates2/plate-corridor-N-a.png",
+            "sha256": "74b39bf5e74f158b7011282775c84fcb8cb3b7bc826a877a7b305c15526495b5"
+          }
+        },
+        "cards": [
+          {
+            "file": "images-out/preprod/cards-small/cast.png",
+            "sha256": "bc385007db7717a3913fac5fa1a77ce46ba7fb3d4430cfaa7a34b30530958206",
+            "source": {
+              "file": "images-out/preprod/cards2/cast.png",
+              "sha256": "f49026e31855abcec55412812286bfd7837b4eefc9d84242f36ca2e01609eb0d"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "cov-corridor-OTS-D-delighted-K12",
+      "shot": "cov-corridor-OTS-D-delighted",
+      "approach": "A",
+      "attempt": 12,
+      "prompt": "Over-the-shoulder shot (OTS). Over the tall young man with wavy shoulder-length light-brown hair and a long cream cable-knit tunic's shoulder: the slim young man with spiky black hair with one blue streak, dark brown eyes and an orange cropped zip jacket over a black top, delighted, a warm closed-mouth smile; behind him the thin, wiry young woman with warm brown skin, shaved sides, a tall magenta ponytail, dangly geometric earrings, a lime-green vest and tattooed arms with her arms crossed. Keep reference image 1's exact framing and crop: the same over-the-shoulder shot, nothing added outside its edges, never widen the view. Every mouth is closed, lips together: smiles and laughs are small closed-lip smiles, no teeth visible at all, never a grin. Faces stay soft and natural. Redraw reference image 1 as a finished, detailed hand-drawn science fiction comic book panel at night: keep its camera, perspective, every person's position, pose, gesture, expression and size, and every table, chair and wall exactly as they are; nobody is added or removed. Reference image 2 shows how the place looks: take its colours, materials and night light; it has nobody in it. Reference image 3 shows the three main people, one per row: the slim young man with spiky black hair with one blue streak, dark brown eyes and an orange cropped zip jacket over a black top; the thin, wiry young woman with warm brown skin, shaved sides, a tall magenta ponytail, dangly geometric earrings, a lime-green vest and tattooed arms; the tall young man with wavy shoulder-length light-brown hair and a long cream cable-knit tunic. Copy only their faces, hair, skin and clothes, never the sheet's layout, poses or grey background. Each main person's face, hair, skin and clothes match their reference exactly. In this frame: the slim young man is turned three-quarters, looking toward the right of the frame, never straight at the camera; the thin, wiry young woman is on the right of the frame, toward the camera; the tall young man is seen only from behind in the near foreground, the back of the head and one shoulder at the on the right edge of the frame, soft; he or she appears only once. No robot and no other people anywhere in the picture. Exactly three main people, each appearing once. Nobody else in the corridor at all. Everyone stands on the ground or sits on a chair at their real size: nobody floats, nobody sits or stands on a table. Behind them, as the layout shows: the round-topped corridor of polished pale stone, no windows; a row of sleek elevator doors in the left-hand wall. Faces stay soft and natural: smiles and laughs are closed-mouthed, never open-mouthed grins, no teeth showing. The spiky-haired young man's eyes are dark brown. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. No signs, no panels with pictograms, no icons, no symbols anywhere: walls are bare. Screens show only what the shot describes, or are blank and softly glowing. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character.",
+      "refs": [
+        "images-out/preprod/pass3/cov-corridor-OTS-D-A7.png",
+        "images-out/preprod/plates-small/plate-corridor-N-a.png",
+        "images-out/preprod/cards-small/cast.png"
+      ],
+      "width": 1024,
+      "height": 576,
+      "seed": 35218,
+      "layers": {
+        "set": {
+          "file": "adaptations/fifteen-days/preprod/sets/corridor.json",
+          "sha256": "1a4b812cb9676465305d91190cc8d1b6cc83266894470e9524e512c52b6b5c02"
+        },
+        "camera": {
+          "file": "adaptations/fifteen-days/preprod/sets/corridor.shots.json",
+          "key": "cov-corridor-OTS-D",
+          "people": {
+            "D": {
+              "at": [
+                -0.6,
+                -6.0
+              ],
+              "face": 90.0,
+              "pose": "standing"
+            },
+            "Z": {
+              "at": [
+                0.4,
+                -6.0
+              ],
+              "face": -90.0,
+              "pose": "standing"
+            },
+            "B": {
+              "at": [
+                0.7,
+                -4.9
+              ],
+              "face": -130.2,
+              "pose": "standing"
+            }
+          },
+          "cam": [
+            -0.95,
+            1.764,
+            -6.4
+          ],
+          "look": [
+            0.4,
+            1.5495999999999999,
+            -6.0
+          ],
+          "fov": 32
+        },
+        "set_frame": {
+          "file": "adaptations/fifteen-days/preprod/set-frames/cov-corridor-OTS-D.depth.png",
+          "sha256": "0b875f2ea12779d08e487dc962856c82fbfc7aed40d3f8d73fbf3007e22c7d4d",
+          "mode": "depth",
+          "rendered_from": "images-out/preprod/set/cov-corridor-OTS-D.depth.png"
+        },
+        "stage1": {
+          "file": "images-out/preprod/pass3/cov-corridor-OTS-D-A7.png",
+          "sha256": "1336840b8dc2f97a5ab5554db1892c1c23815911073824726739e46fe091c3ac",
+          "engine": "qwen-image-edit-2509"
+        },
+        "plate": {
+          "file": "images-out/preprod/plates-small/plate-corridor-N-a.png",
+          "sha256": "b6290cd1c6c309b7b986516bab6888afb7351ebdfeecc8a50c23e8e38ee6d4f3",
+          "plate": "plate-corridor-N",
+          "source": {
+            "file": "images-out/preprod/plates2/plate-corridor-N-a.png",
+            "sha256": "74b39bf5e74f158b7011282775c84fcb8cb3b7bc826a877a7b305c15526495b5"
+          }
+        },
+        "cards": [
+          {
+            "file": "images-out/preprod/cards-small/cast.png",
+            "sha256": "bc385007db7717a3913fac5fa1a77ce46ba7fb3d4430cfaa7a34b30530958206",
+            "source": {
+              "file": "images-out/preprod/cards2/cast.png",
+              "sha256": "f49026e31855abcec55412812286bfd7837b4eefc9d84242f36ca2e01609eb0d"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "cov-cafe-CU-D-cubes-K12",
+      "shot": "cov-cafe-CU-D-cubes",
+      "approach": "A",
+      "attempt": 12,
+      "prompt": "Close-up (CU). the tall young man with wavy shoulder-length light-brown hair and a long cream cable-knit tunic close, looking down at the table as if seeing something for the first time, a small closed-mouth smile. Keep reference image 1's exact framing and crop: the same close-up, nothing added outside its edges, never widen the view. Every mouth is closed, lips together: smiles and laughs are small closed-lip smiles, no teeth visible at all, never a grin. Faces stay soft and natural. Redraw reference image 1 as a finished, detailed hand-drawn science fiction comic book panel at night: keep its camera, perspective, every person's position, pose, gesture, expression and size, and every table, chair and wall exactly as they are; nobody is added or removed. Reference image 2 shows how the place looks (samples): take its colours, materials and night light; it has nobody in it. Reference image 3 is the tall young man with wavy shoulder-length light-brown hair and a long cream cable-knit tunic: copy only that person's face, hair, skin and clothes, never the sheet's layout, poses or grey background. Each main person's face, hair, skin and clothes match their reference exactly. In this frame: the tall young man is turned three-quarters, looking toward the left of the frame, never straight at the camera. No robot and no other people anywhere in the picture. Exactly one main person, appearing once. Nobody else in the picture at all: no other diners, no passers-by, no figures in the windows. Everyone stands on the ground or sits on a chair at their real size: nobody floats, nobody sits or stands on a table. Behind them, as the layout shows: the long rectangular wooden table; the shade tree hung with little lights; the low buildings on the west side, windows glowing; the robot's serving counter by the west wall; the megastructures and mountain pyramids above the rooftops; strings of little warm lights overhead; the quiet street beyond the gate, plain building fronts with no signs. The table they share is a long rectangular wooden table, never round. Faces stay soft and natural: smiles and laughs are closed-mouthed, never open-mouthed grins, no teeth showing. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands. Shop windows and panels glow plainly, at most with one simple pictogram (a cup, a leaf, a bowl); no lettered signs at all. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character.",
+      "refs": [
+        "images-out/preprod/pass3/cov-cafe-CU-D-A7.png",
+        "images-out/preprod/plates-small/courtyard.png",
+        "images-out/preprod/cards-small/deluin.png"
+      ],
+      "width": 1024,
+      "height": 576,
+      "seed": 35244,
+      "layers": {
+        "set": {
+          "file": "adaptations/fifteen-days/preprod/sets/courtyard.json",
+          "sha256": "5b18405b8531087e7c62dd1ff75dc62814d51b7948107fe48d40a9f3bd52ebd5"
+        },
+        "camera": {
+          "file": "adaptations/fifteen-days/preprod/sets/courtyard.shots.json",
+          "key": "cov-cafe-CU-D",
+          "people": {
+            "Z": {
+              "at": [
+                1.5,
+                0
+              ],
+              "face": -122.3,
+              "pose": "seated"
+            },
+            "D": {
+              "at": [
+                0,
+                -0.95
+              ],
+              "face": 57.7,
+              "pose": "seated"
+            },
+            "B": {
+              "at": [
+                3.3,
+                1.35
+              ],
+              "face": "N",
+              "pose": "seated"
+            }
+          },
+          "cam": [
+            1.242,
+            1.325,
+            -0.899
+          ],
+          "look": [
+            0,
+            1.2446000000000002,
+            -0.95
+          ],
+          "fov": 28
+        },
+        "set_frame": {
+          "file": "adaptations/fifteen-days/preprod/set-frames/cov-cafe-CU-D.depth.png",
+          "sha256": "293911f0cb01f9155b0ae4ffee2e9626dfa1461016e4c734b4b3e4f741120e3a",
+          "mode": "depth",
+          "rendered_from": "images-out/preprod/set/cov-cafe-CU-D.depth.png"
+        },
+        "stage1": {
+          "file": "images-out/preprod/pass3/cov-cafe-CU-D-A7.png",
+          "sha256": "d0e5993f21a6b1182e5488823f4df3fdcae3663c0b7e025e2a7027d7dce9c601",
+          "engine": "qwen-image-edit-2509"
+        },
+        "plate": {
+          "file": "images-out/preprod/plates-small/courtyard.png",
+          "sha256": "c4e6d9b1b60e358dd71d0321462453467f47598a5912b03910a5e34fa0ab1ff5",
+          "plate": "plate-courtyard-C",
+          "source": {
+            "file": "images-out/preprod/swatch/courtyard.png",
+            "sha256": "c4e6d9b1b60e358dd71d0321462453467f47598a5912b03910a5e34fa0ab1ff5"
+          }
+        },
+        "cards": [
+          {
+            "file": "images-out/preprod/cards-small/deluin.png",
+            "sha256": "6b8326e2b0188b37084c83ea965ea6e1e6a3cbf10f174ec4c8d08d7ee68f6892",
+            "source": {
+              "file": "images-out/preprod/cards2/deluin.png",
+              "sha256": "86b8e2fb1b659722e92ca7c1b272ef9e10a73cf1847dea06c0ed44033880737d"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -25,6 +25,7 @@ import type { LadderProgress } from '~/lib/minpentai/play-game/live-types';
 import { PlayBoard } from './play-board';
 import { PlayPerson } from './play-live';
 import { SignInButton } from '~/components/sign-in';
+import { ShareResult } from './share-result';
 
 /** The Book label's explanation where a match's new rule is drawn (model-drafted). */
 const PLAY_BOOK_RULE = 'In the book, "every game there\'s always some kind of new rule" (c4-b84). Here, one of four rules invented for this edition is drawn at random for each match.';
@@ -126,9 +127,10 @@ export function Play({ start, onLearn }: { start: 'home' | 'free' | 'ladder' | '
 
       {v.sHome && (
         <div className="mp-col" style={{ maxWidth: L.colMax, borderLeft: L.colBd, borderRight: L.colBd }}>
+          {/* LEARN opens lesson 1 itself (owner, 2026-10-20), so the hub's Learn panel below is no longer shown. */}
           <div className="mp-tabs" role="tablist" aria-label="Minpentai">
             {v.tabs.map((t) => (
-              <button key={t.label} role="tab" aria-selected={t.on} className={t.on ? 'on' : ''} onClick={t.click}>{t.label}</button>
+              <button key={t.label} role="tab" aria-selected={t.on} className={t.on ? 'on' : ''} onClick={t.label === 'LEARN' ? onLearn : t.click}>{t.label}</button>
             ))}
           </div>
           {v.tPlay && (
@@ -139,7 +141,7 @@ export function Play({ start, onLearn }: { start: 'home' | 'free' | 'ladder' | '
               </button>
               <button className="mp-card" onClick={v.openLadder}>
                 <span className="mp-card-head"><span className="mp-card-title">The computer ladder</span><span className="mp-label">{v.ladTag}</span></span>
-                <span className="mp-card-text">Five computer players, each harder. Beat one to open the next.</span>
+                <span className="mp-card-text">Five computer players to beat. Beat one to open the next.</span>
               </button>
               <button className="mp-card" onClick={v.openPerson}>
                 <span className="mp-card-head"><span className="mp-card-title">Play a person</span><span className="mp-label">{v.signed ? '' : 'SIGN IN'}</span></span>
@@ -177,7 +179,7 @@ export function Play({ start, onLearn }: { start: 'home' | 'free' | 'ladder' | '
                     </li>
                   ))}
                 </ol>
-                <p className="mp-label mp-note">Every rung plays by the same rules and sees only what its towers light. Harder means better plans, never more information.</p>
+                <p className="mp-label mp-note">Every rung plays by the same rules and sees only what its towers light. They differ in how they plan, never in what they know.</p>
               </div>
               <div className="mp-foot"><button className="mp-btn primary" onClick={v.playRung}>{v.playRungLabel}</button></div>
             </>
@@ -302,6 +304,7 @@ export function Play({ start, onLearn }: { start: 'home' | 'free' | 'ladder' | '
                         <div className="mp-opened"><span className="mp-rung-icon on">{v.resCardN}</span><span className="mp-rung-main"><span className="mp-rung-name">{v.resCardT}</span><span className="mp-rung-desc">{v.resCardD}</span></span></div>
                       )}
                       {v.resNote && <p className="mp-text">{v.resNote}</p>}
+                      {v.share && <ShareResult rung={v.share.rung} steps={v.share.steps} />}
                       <div className="mp-grow" />
                       <div className="mp-btns">{v.resBtns!.map((b) => <button key={b.label} className={`mp-btn${b.primary ? ' primary' : ''}`} onClick={b.click}>{b.label}</button>)}</div>
                     </div>

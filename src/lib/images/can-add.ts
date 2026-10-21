@@ -1,6 +1,6 @@
 'use client';
 
-import { useAuth } from '../client-auth';
+import { useAuth, useWalletSession } from '../client-auth';
 import { IMAGES } from '../config';
 
 /**
@@ -22,4 +22,14 @@ export function useCanAddImage(): boolean {
 export function useCanMakeDesigns(): boolean {
   const auth = useAuth();
   return IMAGES.enabled && auth.kind === 'signed-in' && IMAGES.invited.includes(auth.fid);
+}
+
+/**
+ * Picking a published style or character sheet and using it at Generate ("My picks"): everyone signed
+ * in, with Farcaster or a wallet (owner, 2026-10-19). The server checks again (/api/designs/picks).
+ */
+export function useCanPick(): boolean {
+  const auth = useAuth();
+  const wallet = useWalletSession();
+  return IMAGES.enabled && (auth.kind === 'signed-in' || wallet !== null);
 }

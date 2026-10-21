@@ -1,0 +1,107 @@
+{
+ "closed_model": true,
+ "label": "closed model",
+ "model": "openai/gpt-image-2.5-sunburst",
+ "model_name": "GPT Image 2.5 Sunburst (OpenAI)",
+ "route": "Vercel AI Gateway /v1/images/edits (AI_GATEWAY_API_KEY)",
+ "date": "2026-10-18T09:05:06.218Z",
+ "purpose": "gpt-cut: a private full-cut comparison for the owner (2026-10-18); not in the cut or on the site",
+ "v6_picture": "images-out/preprod/pass3/H01-Q3.png",
+ "from": {
+  "base": "H01-A1",
+  "finish": null,
+  "edits": [
+   "H01-Q3"
+  ]
+ },
+ "prompt": "A hand-drawn science fiction comic book panel, ink linework and flat cel-shaded colour, not a 3D render, not a photograph. Extreme wide shot (EWS, from the standing overlook, below the ceiling). The hall from the top: tiers of a varied crowd falling away to the floor; over the floor, the tutorial's holograms in two colours (cyan and amber), glowing towers, streams of gliders and ships, walls building; big screens hanging above show the two players' faces in close-up; far apart at opposite edges, two small sunken pits with one player in each. Faces stay soft and natural: smiles and laughs are closed-mouthed, never open-mouthed grins, no teeth showing. Picture 1 is a depth map of this exact frame rendered from a 3D model (near is light, far is dark): follow its camera, angle, lens and perspective exactly; every person, chair, table, wall and railing goes exactly where and as big as its shape stands there, people sitting on the chairs and standing on the floor; the simple mannequin shapes are only where the people go. Draw nothing grey from it. Picture 2 is the tall young man with wavy shoulder-length light-brown hair and a long cream cable-knit tunic: copy only that person's face, hair, skin and clothes, never the sheet's layout, poses or grey background. Picture 3 is the stocky young man with a shaved head and dark brown skin in a plain charcoal tunic: copy only that person's face, hair, skin and clothes, never the sheet's layout, poses or grey background. In this frame: the tall young man is in the middle of the frame, away from the camera, seen from behind; the stocky young man is in the middle of the frame, toward the camera. Exactly two main people, each appearing once. Every other person is an ordinary background figure in plain, muted everyday clothes with ordinary hair: no orange jackets, no magenta hair, no cream knitwear, nobody who looks like the main people. Everyone stands on the ground or sits on a chair at their real size: nobody floats, nobody sits or stands on a table. Behind them, as the layout shows: tiers of seats rising all around the hall, full of a varied crowd; the standing ring around the top of the hall, crowded behind a railing; the broad walkway spanning the hall high above the floor, with a railing on each side; a few slim, light hologram towers on small gliding bases, drifting across the floor, glowing cube clusters on top; the whole play space alive with glowing holograms: gliders streaking past with light trails, little ships and walls of light cubes in cyan and amber; Deluin's sunken pit at the edge of the floor; Kau's sunken pit at the edge of the floor; two big screens hung over the hall, showing the two players' faces. Faces stay soft and natural: smiles and laughs are closed-mouthed, never open-mouthed grins, no teeth showing. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. No signs, no panels with pictograms, no icons, no symbols anywhere: walls are bare. Screens show only what the shot describes, or are blank and softly glowing. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character. Draw it as a finished comic panel: inked outlines, painted flat colour, glowing lights. Changes made to this shot after it was first drawn, which this picture must already show: A hand-drawn science fiction comic book panel, ink linework and flat cel-shaded colour, not a 3D render, not a photograph. Extreme wide shot (EWS, from the standing overlook, below the ceiling). The hall from the top: tiers of a varied crowd falling away to the floor; over the floor, the tutorial's holograms in two colours (cyan and amber), glowing towers, streams of gliders and ships, walls building; big screens hanging above show the two players' faces in close-up; far apart at opposite edges, two small sunken pits with one player in each. Picture 1 is this exact frame: keep its framing and crop (the same extreme wide shot), camera, perspective, and every person's position, pose, gesture and size exactly; nothing added outside its edges, nobody added or removed. Redraw it as a finished, detailed hand-drawn comic book panel at night: deep blue and violet darkness, pools of warm and cool glowing light, inked outlines, cel-shaded colour. Every mouth is closed, lips together: smiles and laughs are small closed-lip smiles, no teeth visible at all, never a grin. Faces stay soft and natural. Picture 2 is the tall young man with wavy shoulder-length light-brown hair and a long cream cable-knit tunic: copy only that person's face, hair, skin and clothes, never the sheet's layout, poses or grey background. Picture 3 is the stocky young man with a shaved head and dark brown skin in a plain charcoal tunic: copy only that person's face, hair, skin and clothes, never the sheet's layout, poses or grey background. The stocky young man sits low inside a small round sunken pit at the edge of the play floor, only his upper body above its rim, at a glowing console. The tall young man sits low inside a small round sunken pit at the edge of the play floor, only his upper body above its rim, at a glowing console. In this frame: the tall young man is in the middle of the frame, away from the camera, seen from behind; the stocky young man is in the middle of the frame, toward the camera. Exactly two main people, each appearing once. Every other person is an ordinary background figure in plain, muted everyday clothes with ordinary hair: no orange jackets, no magenta hair, no cream knitwear, nobody who looks like the main people. Everyone stands on the ground or sits on a chair at their real size: nobody floats, nobody sits or stands on a table. Behind them, as the layout shows: tiers of seats rising all around the hall, full of a varied crowd; the standing ring around the top of the hall, crowded behind a railing; the broad walkway spanning the hall high above the floor, with a railing on each side; a few slim, light hologram towers on small gliding bases, drifting across the floor, glowing cube clusters on top; the whole play space alive with glowing holograms: gliders streaking past with light trails, little ships and walls of light cubes in cyan and amber; Deluin's sunken pit at the edge of the floor; Kau's sunken pit at the edge of the floor; two big screens hung over the hall, showing the two players' faces. Faces stay soft and natural: smiles and laughs are closed-mouthed, never open-mouthed grins, no teeth showing. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. No signs, no panels with pictograms, no icons, no symbols anywhere: walls are bare. Screens show only what the shot describes, or are blank and softly glowing. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character. The picture is 16:9, landscape.",
+ "references": [
+  {
+   "file": "adaptations/fifteen-days/preprod/set-frames/H01.depth.png",
+   "sha256": "bff3d59c3a284c43819b8596f5d4f01d9079f41d9f512c0d46a4925cb24820d0"
+  },
+  {
+   "file": "images-out/preprod/cards-small/deluin.png",
+   "sha256": "6b8326e2b0188b37084c83ea965ea6e1e6a3cbf10f174ec4c8d08d7ee68f6892"
+  },
+  {
+   "file": "images-out/preprod/cards-small/kau.png",
+   "sha256": "76becc875eaab4801cb08fb2d27dd5496d2bebe17519f55e22531361a0f6f723"
+  }
+ ],
+ "request": {
+  "size": "1536x864",
+  "n": 1
+ },
+ "response_meta": {
+  "created": 1792314290,
+  "usage": {
+   "total_tokens": 4388,
+   "input_tokens": 3310,
+   "output_tokens": 1078,
+   "input_tokens_details": {
+    "text_tokens": 1678,
+    "image_tokens": 1632
+   }
+  },
+  "providerMetadata": {
+   "openai": {
+    "images": [
+     {
+      "imageTokens": 1632,
+      "textTokens": 1678,
+      "created": 1792314290,
+      "size": "1536x864",
+      "quality": "high",
+      "background": "opaque",
+      "outputFormat": "png"
+     }
+    ]
+   },
+   "gateway": {
+    "routing": {
+     "originalModelId": "openai/gpt-image-2.5-sunburst",
+     "resolvedProvider": "openai",
+     "fallbacksAvailable": [],
+     "planningReasoning": "System credentials planned for: openai. Total execution order: openai(system)",
+     "canonicalSlug": "openai/gpt-image-2.5-sunburst",
+     "finalProvider": "openai",
+     "modelAttemptCount": 1,
+     "modelAttempts": [
+      {
+       "canonicalSlug": "openai/gpt-image-2.5-sunburst",
+       "success": true,
+       "providerAttemptCount": 1,
+       "providerAttempts": [
+        {
+         "provider": "openai",
+         "credentialType": "system",
+         "success": true,
+         "startTime": 1792314258912,
+         "endTime": 1792314290295,
+         "statusCode": 200
+        }
+       ]
+      }
+     ],
+     "totalProviderAttemptCount": 1
+    },
+    "cost": "0.053786",
+    "marketCost": "0.053786",
+    "surchargeCost": "0",
+    "gatewayCost": "0.053786",
+    "inferenceCost": "0.053786",
+    "inputInferenceCost": "0",
+    "outputInferenceCost": "0.053786",
+    "generationId": "gen_01M5742DDQZDNFP4Z9R2CPNVDG"
+   }
+  }
+ },
+ "cost_usd": 0.053786,
+ "output": {
+  "file": "/private/tmp/claude-501/-Users-nathan-snowmoon/9334ff32-2377-4150-8bc0-c96cfb5e0d3f/scratchpad/gptcut/raw/H01-Q3-g1.png",
+  "sha256": "991f9dfbab6f4438d1393dda34ea51bb8c74d82adb5ae14d3ed1a35bb4769b39",
+  "bytes": 2412279
+ },
+ "ms": 56152
+}

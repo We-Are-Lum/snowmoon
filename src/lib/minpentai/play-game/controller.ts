@@ -369,6 +369,8 @@ export class PlayController {
       v.resB = r.win === 'C' ? 'You win' : r.win === 'D' ? 'Draw' : 'Amber wins'; v.resWhy = r.why;
       v.resNote = m.mode === 'ladder' && r.win !== 'C' ? (r.win === 'D' ? "Draws don't open the next rung." : '') : '';
       v.resCard = m.mode === 'ladder' && r.win === 'C' && (!!m.newOpen || m.rung === 5);
+      // A ladder win can be shared, if the player chooses (owner, 2026-10-19); nothing is sent until they do.
+      v.share = m.mode === 'ladder' && r.win === 'C' ? { rung: m.rung!, steps: r.step } : undefined;
       if (v.resCard) { if (m.rung! < 5) { v.resCardN = String(m.rung! + 1); v.resCardT = `Rung ${m.rung! + 1} · ${RUNGS[m.rung! + 1]!.n} is open`; v.resCardD = RUNGS[m.rung! + 1]!.d; } else { v.resCardN = '✓'; v.resCardT = "You've beaten every rung"; v.resCardD = 'Replay any of them from the ladder.'; } }
       const P1 = (label: string, click: () => void): Btn => ({ label, click, primary: true }), S1 = (label: string, click: () => void): Btn => ({ label, click });
       const watch = S1('WATCH IT AGAIN', () => this.openReplay()), done = S1('DONE', go({ scr: 'home', tab: 'play' }));
@@ -430,7 +432,7 @@ export interface PlayView {
   msg?: string; ruleLine?: string; ptsTxt?: string; ptsShort?: string; endLabel?: string; endTurn?: () => void;
   runHead?: string; runMsg?: string; ffLabel?: string; ffShort?: string; ffDim?: boolean; ffClick?: () => void;
   leaveLabel?: string; askResign?: () => void; askLeave?: () => void; resignText?: string; resign?: () => void; leave?: () => void; leaveTitle?: string; leaveText?: string;
-  resA?: string; resB?: string; resWhy?: string; resNote?: string; resCard?: boolean; resCardN?: string; resCardT?: string; resCardD?: string; resBtns?: Btn[];
+  resA?: string; resB?: string; resWhy?: string; resNote?: string; resCard?: boolean; resCardN?: string; resCardT?: string; resCardD?: string; resBtns?: Btn[]; share?: { rung: number; steps: number };
   rmShow?: boolean; rmText?: string; rmTime?: string;
   rpEnd?: number; rpBtns?: Btn[]; rpDone?: () => void;
   fpBtns?: Btn[]; fpBtnsFS?: Btn[]; fpSides?: { label: string; sw: string; on: boolean; click: () => void }[]; fpPieces?: { label: string; on: boolean; click: () => void }[];

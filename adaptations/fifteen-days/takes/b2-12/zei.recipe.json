@@ -1,0 +1,49 @@
+{
+  "line": "L18-b2-12",
+  "voice": "zei",
+  "stand_in": false,
+  "script_line": {
+    "n": 18,
+    "ref": "b2-12",
+    "take": 1,
+    "of": 5
+  },
+  "model": "chatterbox-vc",
+  "weights": "https://huggingface.co/ResembleAI/chatterbox",
+  "revision": "5bb1f6ee58e50c3b8d408bc82a6d3740c2db6e18",
+  "license": "MIT",
+  "weights_sha256": {
+    "s3gen.safetensors": "2b78103c654207393955e4900aac14a12de8ef25f4b09424f1ef91941f161d4e",
+    "conds.pt": "6552d70568833628ba019c6b03459e77fe71ca197d5c560cef9411bee9d87f4e"
+  },
+  "runs_on": "the performer's machine (cpu)",
+  "take": {
+    "sha256": "b6d05e5e2160921e6615dc41ec549804b86c4802414fe345717a0b826ee75c98",
+    "duration_s": 4.19,
+    "kept": "private, outside the repository; never copied or uploaded"
+  },
+  "reference": {
+    "file": "scenes-out/fifteen-days/voices/zei.ref.wav",
+    "sha256": "6d0250abaeac56bc9a5ea430c5363f16098f8a7ae311ad3e098bc6488a10b9f4",
+    "recipe": "adaptations/fifteen-days/voices/zei.recipe.json"
+  },
+  "watermark": {
+    "applied": "Perth implicit watermark, applied in Chatterbox's own code (ChatterboxVC.generate calls PerthImplicitWatermarker.apply_watermark on every output)",
+    "verified": false,
+    "detector": "not evidence: on 2026-10-14 Perth's detector scored clean audio as watermarked (a 220 Hz sine 0.98; the owner's raw take 0.67, which rounds to 1), though clean white noise scored 0.00 and freshly watermarked speech 1.00, also after -5.3 dB of gain. A score of 1.00 here is consistent with the watermark but does not prove it."
+  },
+  "seconds_taken": 11.4,
+  "sample_rate": 24000,
+  "format": "32-bit float WAV",
+  "level": {
+    "vocoder_clamp": "lifted",
+    "peak_before": 0.7707,
+    "gain_db": 0.0,
+    "peak_after": 0.7707
+  },
+  "file": "scenes-out/fifteen-days/lines/L18-b2-12.zei.wav",
+  "sha256": "5d212032d5ca3d1c0d95d425bbb78663c55f5d68bb65df518e598b15e6b390a8",
+  "duration_s": 4.2,
+  "made_at": "2026-10-16T00:13:11+00:00",
+  "cost_usd": 0
+}

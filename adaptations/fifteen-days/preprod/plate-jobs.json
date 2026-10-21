@@ -1,0 +1,185 @@
+{
+  "about": "Fifteen Days background plates: one per camera setup, from the grey-box sets (owner, 2026-10-16). Layout from the set render, look from the place's approved picture. Prompts DRAFTED by the coding agent.",
+  "out": "images-out/preprod/plates",
+  "ledger": "images-out/preprod/ledger-s5.json",
+  "cap_usd": 0.64,
+  "style": "",
+  "jobs": [
+    {
+      "id": "plate-courtyard-A",
+      "prompt": "An empty establishing background plate of the small open-air courtyard cafe at night, for wide, from the west. Reference image 1 is a plain grey 3D layout render: copy its camera position, height, angle, lens and perspective exactly, and where every wall, table, chair, railing, door and window stands, but draw nothing of its grey blocks, white background or simple figures as they are: turn them into the real, finished place. Reference image 2 shows how this place looks: its materials, colours, light and mood. None of the main characters are in the picture; any people are ordinary background figures in plain, muted everyday clothes, small and natural. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands. Shop fronts and walls carry no lettered signs at all: at most a plain glowing panel with one single large simple pictogram (a cup, a leaf, a bowl) and nothing else. Screens show only abstract shapes. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character.",
+      "refs": [
+        "images-out/preprod/set/plate-courtyard-A.png",
+        "images-out/preprod/places-final/courtyard.png"
+      ],
+      "width": 1536,
+      "height": 864,
+      "seed": 15000
+    },
+    {
+      "id": "plate-courtyard-B",
+      "prompt": "An empty establishing background plate of the small open-air courtyard cafe at night, for toward Zei and Bai's later table (from behind Deluin's side). Reference image 1 is a plain grey 3D layout render: copy its camera position, height, angle, lens and perspective exactly, and where every wall, table, chair, railing, door and window stands, but draw nothing of its grey blocks, white background or simple figures as they are: turn them into the real, finished place. Reference image 2 shows how this place looks: its materials, colours, light and mood. None of the main characters are in the picture; any people are ordinary background figures in plain, muted everyday clothes, small and natural. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands. Shop fronts and walls carry no lettered signs at all: at most a plain glowing panel with one single large simple pictogram (a cup, a leaf, a bowl) and nothing else. Screens show only abstract shapes. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character.",
+      "refs": [
+        "images-out/preprod/set/plate-courtyard-B.png",
+        "images-out/preprod/places-final/courtyard.png"
+      ],
+      "width": 1536,
+      "height": 864,
+      "seed": 15001
+    },
+    {
+      "id": "plate-courtyard-C",
+      "prompt": "An empty establishing background plate of the small open-air courtyard cafe at night, for toward Deluin, the tree and the west side (from Zei's side). Reference image 1 is a plain grey 3D layout render: copy its camera position, height, angle, lens and perspective exactly, and where every wall, table, chair, railing, door and window stands, but draw nothing of its grey blocks, white background or simple figures as they are: turn them into the real, finished place. Reference image 2 shows how this place looks: its materials, colours, light and mood. None of the main characters are in the picture; any people are ordinary background figures in plain, muted everyday clothes, small and natural. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands. Shop fronts and walls carry no lettered signs at all: at most a plain glowing panel with one single large simple pictogram (a cup, a leaf, a bowl) and nothing else. Screens show only abstract shapes. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character.",
+      "refs": [
+        "images-out/preprod/set/plate-courtyard-C.png",
+        "images-out/preprod/places-final/courtyard.png"
+      ],
+      "width": 1536,
+      "height": 864,
+      "seed": 15002
+    },
+    {
+      "id": "plate-courtyard-D",
+      "prompt": "An empty establishing background plate of the small open-air courtyard cafe at night, for toward Bai across the table (from Deluin's side). Reference image 1 is a plain grey 3D layout render: copy its camera position, height, angle, lens and perspective exactly, and where every wall, table, chair, railing, door and window stands, but draw nothing of its grey blocks, white background or simple figures as they are: turn them into the real, finished place. Reference image 2 shows how this place looks: its materials, colours, light and mood. None of the main characters are in the picture; any people are ordinary background figures in plain, muted everyday clothes, small and natural. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands. Shop fronts and walls carry no lettered signs at all: at most a plain glowing panel with one single large simple pictogram (a cup, a leaf, a bowl) and nothing else. Screens show only abstract shapes. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character.",
+      "refs": [
+        "images-out/preprod/set/plate-courtyard-D.png",
+        "images-out/preprod/places-final/courtyard.png"
+      ],
+      "width": 1536,
+      "height": 864,
+      "seed": 15003
+    },
+    {
+      "id": "plate-courtyard-E",
+      "prompt": "An empty establishing background plate of the small open-air courtyard cafe at night, for the tabletop from above. Reference image 1 is a plain grey 3D layout render: copy its camera position, height, angle, lens and perspective exactly, and where every wall, table, chair, railing, door and window stands, but draw nothing of its grey blocks, white background or simple figures as they are: turn them into the real, finished place. Reference image 2 shows how this place looks: its materials, colours, light and mood. Seen from above: the wooden tabletop with two tea cups, a little sugar bowl and a small neat wall of white sugar cubes. None of the main characters are in the picture; any people are ordinary background figures in plain, muted everyday clothes, small and natural. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands. Shop fronts and walls carry no lettered signs at all: at most a plain glowing panel with one single large simple pictogram (a cup, a leaf, a bowl) and nothing else. Screens show only abstract shapes. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character.",
+      "refs": [
+        "images-out/preprod/set/plate-courtyard-E.png",
+        "images-out/preprod/places-final/courtyard.png"
+      ],
+      "width": 1536,
+      "height": 864,
+      "seed": 15004
+    },
+    {
+      "id": "plate-courtyard-G",
+      "prompt": "An empty establishing background plate of the small open-air courtyard cafe at night, for the gate and the street, from inside the courtyard. Reference image 1 is a plain grey 3D layout render: copy its camera position, height, angle, lens and perspective exactly, and where every wall, table, chair, railing, door and window stands, but draw nothing of its grey blocks, white background or simple figures as they are: turn them into the real, finished place. Reference image 2 shows how this place looks: its materials, colours, light and mood. None of the main characters are in the picture; any people are ordinary background figures in plain, muted everyday clothes, small and natural. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands. Shop fronts and walls carry no lettered signs at all: at most a plain glowing panel with one single large simple pictogram (a cup, a leaf, a bowl) and nothing else. Screens show only abstract shapes. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character.",
+      "refs": [
+        "images-out/preprod/set/plate-courtyard-G.png",
+        "images-out/preprod/places-final/gate.png"
+      ],
+      "width": 1536,
+      "height": 864,
+      "seed": 15005
+    },
+    {
+      "id": "plate-courtyard-S",
+      "prompt": "An empty establishing background plate of the small open-air courtyard cafe at night, for the street outside the gate. Reference image 1 is a plain grey 3D layout render: copy its camera position, height, angle, lens and perspective exactly, and where every wall, table, chair, railing, door and window stands, but draw nothing of its grey blocks, white background or simple figures as they are: turn them into the real, finished place. Reference image 2 shows how this place looks: its materials, colours, light and mood. None of the main characters are in the picture; any people are ordinary background figures in plain, muted everyday clothes, small and natural. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands. Shop fronts and walls carry no lettered signs at all: at most a plain glowing panel with one single large simple pictogram (a cup, a leaf, a bowl) and nothing else. Screens show only abstract shapes. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character.",
+      "refs": [
+        "images-out/preprod/set/plate-courtyard-S.png",
+        "images-out/preprod/places-final/gate.png"
+      ],
+      "width": 1536,
+      "height": 864,
+      "seed": 15006
+    },
+    {
+      "id": "plate-hall-A",
+      "prompt": "An empty establishing background plate of the vast game hall inside the mountain, for the whole hall from the standing ring on the south-west, the walkway crossing the frame. Reference image 1 is a plain grey 3D layout render: copy its camera position, height, angle, lens and perspective exactly, and where every wall, table, chair, railing, door and window stands, but draw nothing of its grey blocks, white background or simple figures as they are: turn them into the real, finished place. Reference image 2 shows how this place looks: its materials, colours, light and mood. The two big screens hang blank, plain soft light, nothing on them. Nobody stands on the floor; the posts are all the same height. None of the main characters are in the picture; any people are ordinary background figures in plain, muted everyday clothes, small and natural. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Shop fronts and walls carry no lettered signs at all: at most a plain glowing panel with one single large simple pictogram (a cup, a leaf, a bowl) and nothing else. Screens show only abstract shapes. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character.",
+      "refs": [
+        "images-out/preprod/set/plate-hall-A.png",
+        "images-out/preprod/refs-small/hall6-a.png"
+      ],
+      "width": 1536,
+      "height": 864,
+      "seed": 15007
+    },
+    {
+      "id": "plate-hall-B",
+      "prompt": "An empty establishing background plate of the vast game hall inside the mountain, for low on the floor among the posts. Reference image 1 is a plain grey 3D layout render: copy its camera position, height, angle, lens and perspective exactly, and where every wall, table, chair, railing, door and window stands, but draw nothing of its grey blocks, white background or simple figures as they are: turn them into the real, finished place. Reference image 2 shows how this place looks: its materials, colours, light and mood. The two big screens hang blank, plain soft light, nothing on them. Nobody stands on the floor; the posts are all the same height. None of the main characters are in the picture; any people are ordinary background figures in plain, muted everyday clothes, small and natural. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Shop fronts and walls carry no lettered signs at all: at most a plain glowing panel with one single large simple pictogram (a cup, a leaf, a bowl) and nothing else. Screens show only abstract shapes. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character.",
+      "refs": [
+        "images-out/preprod/set/plate-hall-B.png",
+        "images-out/preprod/refs-small/hall6-a.png"
+      ],
+      "width": 1536,
+      "height": 864,
+      "seed": 15008
+    },
+    {
+      "id": "plate-hall-P",
+      "prompt": "An empty establishing background plate of the vast game hall inside the mountain, for down into Deluin's pit, the tiers rising behind. Reference image 1 is a plain grey 3D layout render: copy its camera position, height, angle, lens and perspective exactly, and where every wall, table, chair, railing, door and window stands, but draw nothing of its grey blocks, white background or simple figures as they are: turn them into the real, finished place. Reference image 2 shows how this place looks: its materials, colours, light and mood. The two big screens hang blank, plain soft light, nothing on them. Nobody stands on the floor; the posts are all the same height. None of the main characters are in the picture; any people are ordinary background figures in plain, muted everyday clothes, small and natural. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Shop fronts and walls carry no lettered signs at all: at most a plain glowing panel with one single large simple pictogram (a cup, a leaf, a bowl) and nothing else. Screens show only abstract shapes. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character.",
+      "refs": [
+        "images-out/preprod/set/plate-hall-P.png",
+        "images-out/preprod/refs-small/hall6-a.png"
+      ],
+      "width": 1536,
+      "height": 864,
+      "seed": 15009
+    },
+    {
+      "id": "plate-hall-W",
+      "prompt": "An empty establishing background plate of the vast game hall inside the mountain, for the walkway from the air beside it, the floor below. Reference image 1 is a plain grey 3D layout render: copy its camera position, height, angle, lens and perspective exactly, and where every wall, table, chair, railing, door and window stands, but draw nothing of its grey blocks, white background or simple figures as they are: turn them into the real, finished place. Reference image 2 shows how this place looks: its materials, colours, light and mood. The two big screens hang blank, plain soft light, nothing on them. Nobody stands on the floor; the posts are all the same height. None of the main characters are in the picture; any people are ordinary background figures in plain, muted everyday clothes, small and natural. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Shop fronts and walls carry no lettered signs at all: at most a plain glowing panel with one single large simple pictogram (a cup, a leaf, a bowl) and nothing else. Screens show only abstract shapes. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character.",
+      "refs": [
+        "images-out/preprod/set/plate-hall-W.png",
+        "images-out/preprod/refs-small/hall6-a.png"
+      ],
+      "width": 1536,
+      "height": 864,
+      "seed": 15010
+    },
+    {
+      "id": "plate-hall-V",
+      "prompt": "An empty establishing background plate of the vast game hall inside the mountain, for straight down from the walkway's railing to the floor. Reference image 1 is a plain grey 3D layout render: copy its camera position, height, angle, lens and perspective exactly, and where every wall, table, chair, railing, door and window stands, but draw nothing of its grey blocks, white background or simple figures as they are: turn them into the real, finished place. Reference image 2 shows how this place looks: its materials, colours, light and mood. The two big screens hang blank, plain soft light, nothing on them. Nobody stands on the floor; the posts are all the same height. None of the main characters are in the picture; any people are ordinary background figures in plain, muted everyday clothes, small and natural. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Shop fronts and walls carry no lettered signs at all: at most a plain glowing panel with one single large simple pictogram (a cup, a leaf, a bowl) and nothing else. Screens show only abstract shapes. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character.",
+      "refs": [
+        "images-out/preprod/set/plate-hall-V.png",
+        "images-out/preprod/refs-small/hall6-a.png"
+      ],
+      "width": 1536,
+      "height": 864,
+      "seed": 15011
+    },
+    {
+      "id": "plate-corridor-N",
+      "prompt": "An empty establishing background plate of the round-topped stone corridor inside the mountain, for down the corridor toward the elevators (north). Reference image 1 is a plain grey 3D layout render: copy its camera position, height, angle, lens and perspective exactly, and where every wall, table, chair, railing, door and window stands, but draw nothing of its grey blocks, white background or simple figures as they are: turn them into the real, finished place. Reference image 2 shows how this place looks: its materials, colours, light and mood. No windows anywhere; a semicircular vaulted ceiling. None of the main characters are in the picture; any people are ordinary background figures in plain, muted everyday clothes, small and natural. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Shop fronts and walls carry no lettered signs at all: at most a plain glowing panel with one single large simple pictogram (a cup, a leaf, a bowl) and nothing else. Screens show only abstract shapes. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character.",
+      "refs": [
+        "images-out/preprod/set/plate-corridor-N.png",
+        "images-out/preprod/places-final/corridor.png"
+      ],
+      "width": 1536,
+      "height": 864,
+      "seed": 15012
+    },
+    {
+      "id": "plate-corridor-S",
+      "prompt": "An empty establishing background plate of the round-topped stone corridor inside the mountain, for the corridor looking south, the way they walk. Reference image 1 is a plain grey 3D layout render: copy its camera position, height, angle, lens and perspective exactly, and where every wall, table, chair, railing, door and window stands, but draw nothing of its grey blocks, white background or simple figures as they are: turn them into the real, finished place. Reference image 2 shows how this place looks: its materials, colours, light and mood. No windows anywhere; a semicircular vaulted ceiling. None of the main characters are in the picture; any people are ordinary background figures in plain, muted everyday clothes, small and natural. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Shop fronts and walls carry no lettered signs at all: at most a plain glowing panel with one single large simple pictogram (a cup, a leaf, a bowl) and nothing else. Screens show only abstract shapes. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character.",
+      "refs": [
+        "images-out/preprod/set/plate-corridor-S.png",
+        "images-out/preprod/places-final/corridor.png"
+      ],
+      "width": 1536,
+      "height": 864,
+      "seed": 15013
+    },
+    {
+      "id": "plate-lobby-I",
+      "prompt": "An empty establishing background plate of the cozy hotel lobby restaurant late at night, for inside, toward the windows. Reference image 1 is a plain grey 3D layout render: copy its camera position, height, angle, lens and perspective exactly, and where every wall, table, chair, railing, door and window stands, but draw nothing of its grey blocks, white background or simple figures as they are: turn them into the real, finished place. Reference image 2 shows how this place looks: its materials, colours, light and mood. None of the main characters are in the picture; any people are ordinary background figures in plain, muted everyday clothes, small and natural. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands. Shop fronts and walls carry no lettered signs at all: at most a plain glowing panel with one single large simple pictogram (a cup, a leaf, a bowl) and nothing else. Screens show only abstract shapes. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character.",
+      "refs": [
+        "images-out/preprod/set/plate-lobby-I.png",
+        "images-out/preprod/places-final/lobby.png"
+      ],
+      "width": 1536,
+      "height": 864,
+      "seed": 15014
+    },
+    {
+      "id": "plate-lobby-O",
+      "prompt": "An empty establishing background plate of the cozy hotel lobby restaurant late at night, for from the street outside, through the window. Reference image 1 is a plain grey 3D layout render: copy its camera position, height, angle, lens and perspective exactly, and where every wall, table, chair, railing, door and window stands, but draw nothing of its grey blocks, white background or simple figures as they are: turn them into the real, finished place. Reference image 2 shows how this place looks: its materials, colours, light and mood. None of the main characters are in the picture; any people are ordinary background figures in plain, muted everyday clothes, small and natural. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands. Shop fronts and walls carry no lettered signs at all: at most a plain glowing panel with one single large simple pictogram (a cup, a leaf, a bowl) and nothing else. Screens show only abstract shapes. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character.",
+      "refs": [
+        "images-out/preprod/set/plate-lobby-O.png",
+        "images-out/preprod/places-final/lobby.png"
+      ],
+      "width": 1536,
+      "height": 864,
+      "seed": 15015
+    }
+  ]
+}

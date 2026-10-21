@@ -1,0 +1,105 @@
+{
+ "closed_model": true,
+ "label": "closed model",
+ "model": "openai/gpt-image-2.5-sunburst",
+ "model_name": "GPT Image 2.5 Sunburst (OpenAI)",
+ "route": "Vercel AI Gateway /v1/images/edits (AI_GATEWAY_API_KEY)",
+ "date": "2026-10-18T09:14:53.598Z",
+ "purpose": "gpt-cut: a private full-cut comparison for the owner (2026-10-18); not in the cut or on the site",
+ "v6_picture": "images-out/preprod/pass3/cov-lobby-CU-Z-relief-K10.png",
+ "from": {
+  "base": "cov-lobby-CU-Z-A8",
+  "finish": "cov-lobby-CU-Z-relief-K10",
+  "edits": []
+ },
+ "prompt": "A hand-drawn science fiction comic book panel, ink linework and flat cel-shaded colour, not a 3D render, not a photograph. Close-up (CU). the slim young man with spiky black hair with one blue streak, dark brown eyes and an orange cropped zip jacket over a black top close, eyes closing, breathing out in relief, his device in his hands. Faces stay soft and natural: smiles and laughs are closed-mouthed, never open-mouthed grins, no teeth showing. Picture 1 is a depth map of this exact frame rendered from a 3D model (near is light, far is dark): follow its camera, angle, lens and perspective exactly; every person, chair, table, wall and railing goes exactly where and as big as its shape stands there, people sitting on the chairs and standing on the floor; the simple mannequin shapes are only where the people go. Draw nothing grey from it. Picture 2 is the slim young man with spiky black hair with one blue streak, dark brown eyes and an orange cropped zip jacket over a black top: copy only that person's face, hair, skin and clothes, never the sheet's layout, poses or grey background. In this frame: the slim young man is turned three-quarters, looking toward the right of the frame, never straight at the camera. No robot and no other people anywhere in the picture. Exactly one main person, appearing once. Nobody else in the lobby at all, apart from what the shot describes. Everyone stands on the ground or sits on a chair at their real size: nobody floats, nobody sits or stands on a table. Behind them, as the layout shows: the warm, plain walls of the hotel lobby restaurant; tall windows along the west wall, the night city outside; the robot's counter on the east wall; the dark street outside. Faces stay soft and natural: smiles and laughs are closed-mouthed, never open-mouthed grins, no teeth showing. The spiky-haired young man's eyes are dark brown. Every menu is a thin glass tablet glowing with soft blank light, never paper; every screen and device shows only soft blank light: no writing, no letters, no symbols at all. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands. Shop windows and panels glow plainly, at most with one simple pictogram (a cup, a leaf, a bowl); no lettered signs at all. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character. Draw it as a finished comic panel: inked outlines, painted flat colour, glowing lights. Picture 3 shows how the place looks: take its colours, materials and night light; it has nobody in it. The picture is 16:9, landscape.",
+ "references": [
+  {
+   "file": "adaptations/fifteen-days/preprod/set-frames/cov-lobby-CU-Z.depth.png",
+   "sha256": "f589356ecdc0f1dbe0b201f9599d2aebf50f1d4630b3fbdfa42f98555fbab2e3"
+  },
+  {
+   "file": "images-out/preprod/cards-small/zei.png",
+   "sha256": "2faf3c23d7e35f8d526477898d8862412f7e84c31f9d87b99d2aaf548178256f"
+  },
+  {
+   "file": "images-out/preprod/plates-small/lobby.png",
+   "sha256": "c19f9eb67b27691f9ccd3b5e5512cf7dc02c67fc6ac4a4ec88cd346bb031e3a1"
+  }
+ ],
+ "request": {
+  "size": "1536x864",
+  "n": 1
+ },
+ "response_meta": {
+  "created": 1792314864,
+  "usage": {
+   "total_tokens": 2968,
+   "input_tokens": 2688,
+   "output_tokens": 280,
+   "input_tokens_details": {
+    "text_tokens": 736,
+    "image_tokens": 1952
+   }
+  },
+  "providerMetadata": {
+   "openai": {
+    "images": [
+     {
+      "imageTokens": 1952,
+      "textTokens": 736,
+      "created": 1792314863,
+      "size": "1536x864",
+      "quality": "medium",
+      "background": "opaque",
+      "outputFormat": "png"
+     }
+    ]
+   },
+   "gateway": {
+    "routing": {
+     "originalModelId": "openai/gpt-image-2.5-sunburst",
+     "resolvedProvider": "openai",
+     "fallbacksAvailable": [],
+     "planningReasoning": "System credentials planned for: openai. Total execution order: openai(system)",
+     "canonicalSlug": "openai/gpt-image-2.5-sunburst",
+     "finalProvider": "openai",
+     "modelAttemptCount": 1,
+     "modelAttempts": [
+      {
+       "canonicalSlug": "openai/gpt-image-2.5-sunburst",
+       "success": true,
+       "providerAttemptCount": 1,
+       "providerAttempts": [
+        {
+         "provider": "openai",
+         "credentialType": "system",
+         "success": true,
+         "startTime": 1792314847400,
+         "endTime": 1792314863994,
+         "statusCode": 200
+        }
+       ]
+      }
+     ],
+     "totalProviderAttemptCount": 1
+    },
+    "cost": "0.027696",
+    "marketCost": "0.027696",
+    "surchargeCost": "0",
+    "gatewayCost": "0.027696",
+    "inferenceCost": "0.027696",
+    "inputInferenceCost": "0",
+    "outputInferenceCost": "0.027696",
+    "generationId": "gen_01M574MC4H0Y7Y0C7VN8M8G10V"
+   }
+  }
+ },
+ "cost_usd": 0.027696,
+ "output": {
+  "file": "/private/tmp/claude-501/-Users-nathan-snowmoon/9334ff32-2377-4150-8bc0-c96cfb5e0d3f/scratchpad/gptcut/raw/cov-lobby-CU-Z-relief-K10-g1.png",
+  "sha256": "2cff93d606151b28da262204188399f58a2975a98c057282c40f03e841bba7b7",
+  "bytes": 1448315
+ },
+ "ms": 49059
+}

@@ -1,0 +1,33 @@
+{
+  "about": "Hall plate fixes (owner, 2026-10-16 night): klein edits of the reviewer's closest options. Prompts DRAFTED by the coding agent.",
+  "out": "images-out/preprod/plates3",
+  "ledger": "images-out/preprod/ledger-s6.json",
+  "cap_usd": 40.0,
+  "style": "",
+  "jobs": [
+    {
+      "id": "plate-hall-P-fx3",
+      "plate": "plate-hall-P",
+      "option": "fx3",
+      "prompt": "Edit this picture: remove the stack of solid stone blocks on the play floor at the upper right; turn every tower top and every solid cube into glowing translucent light; no dark poles anywhere. Keep the camera, the pit, the gliders, the light trails and everything else exactly as they are. The play floor is all glowing holograms: gliders streaking with long light trails, little ships and walls of light cubes, all made of glowing cyan and amber light, translucent, never solid objects; any towers are slim towers made only of light; a solid rock ceiling, no sky, no stars. No signs, no pictograms, no letters, words, digits or numbers anywhere. Nobody at all: no people anywhere. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character.",
+      "refs": [
+        "images-out/preprod/plates3/plate-hall-P-fx1.png"
+      ],
+      "width": 1536,
+      "height": 864,
+      "seed": 25300
+    },
+    {
+      "id": "plate-hall-P-fx4",
+      "plate": "plate-hall-P",
+      "option": "fx4",
+      "prompt": "Edit this picture: remove the stack of solid stone blocks on the play floor at the upper right; turn every tower top and every solid cube into glowing translucent light; no dark poles anywhere. Keep the camera, the pit, the gliders, the light trails and everything else exactly as they are. The play floor is all glowing holograms: gliders streaking with long light trails, little ships and walls of light cubes, all made of glowing cyan and amber light, translucent, never solid objects; any towers are slim towers made only of light; a solid rock ceiling, no sky, no stars. No signs, no pictograms, no letters, words, digits or numbers anywhere. Nobody at all: no people anywhere. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character.",
+      "refs": [
+        "images-out/preprod/plates3/plate-hall-P-fx1.png"
+      ],
+      "width": 1536,
+      "height": 864,
+      "seed": 25400
+    }
+  ]
+}

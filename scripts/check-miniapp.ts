@@ -12,6 +12,8 @@
  * - Learn Minpentai and Free play fill the 424×695 frame: no site top bar, a × back to the site.
  * - The page can be framed (no X-Frame-Options or frame-ancestors).
  * - /assistant has its own embed, so a cast link opens the assistant.
+ * - /minpentai has its share card: "Start the tutorial" opens /minpentai?lesson=1, 1200×800 embed, 1200×630 og:image
+ *   and twitter:card summary_large_image; a shared win (/minpentai/result) keeps its own card.
  * The Quick Auth server and the chat API are mocked: what is checked is the client's
  * wiring. The server's token check (src/lib/auth.ts) needs a real Farcaster sign-in.
  */
@@ -42,6 +44,50 @@ for (const h of ['/', '/assistant']) {
   }
 }
 
+// The share card for /minpentai (owner, 2026-10-20): Farcaster's 3:2 embed with "Start the tutorial" opening
+// /minpentai?lesson=1 (also when the pasted link already has it), and X's 1200×630 large card. The images are
+// fetched from this server by path, since the tags name the app's own address.
+const metaTags = (html: string) => {
+  const tags: Record<string, string> = {};
+  for (const [, , k, v] of html.matchAll(/<meta (name|property)="([^"]+)" content="([^"]*)"/g)) tags[k] = v.replace(/&quot;/g, '"').replace(/&amp;/g, '&').replace(/&#x27;/g, "'");
+  return tags;
+};
+/** "WxH" for a PNG, the content type otherwise, '' when it does not answer. */
+const imageKind = async (url: string, where: string) => {
+  const u = new URL(url, BASE);
+  const res = await fetch(BASE + u.pathname + u.search);
+  const b = Buffer.from(await res.arrayBuffer());
+  if (!res.ok) return fail(`${where}: ${url} answers ${res.status}`), '';
+  if (b.subarray(1, 4).toString() === 'PNG') return `${b.readUInt32BE(16)}x${b.readUInt32BE(20)}`;
+  return res.headers.get('content-type') ?? '';
+};
+for (const h of ['/minpentai', '/minpentai?lesson=1']) {
+  const t = metaTags(await (await fetch(BASE + h)).text());
+  for (const name of ['fc:miniapp', 'fc:frame']) {
+    const e = t[name] ? JSON.parse(t[name]) : null;
+    if (e?.button?.title !== 'Start the tutorial') fail(`${h}: ${name} button is "${e?.button?.title}", not "Start the tutorial"`);
+    if (!String(e?.button?.action?.url).endsWith('/minpentai?lesson=1')) fail(`${h}: ${name} button opens ${e?.button?.action?.url}, not /minpentai?lesson=1`);
+    if (!String(e?.imageUrl).endsWith('/share/minpentai-embed-3x2.png')) fail(`${h}: ${name} image is ${e?.imageUrl}`);
+    else if ((await imageKind(e.imageUrl, h)) !== '1200x800') fail(`${h}: ${name} image is not a 1200×800 PNG`);
+  }
+  if (t['twitter:card'] !== 'summary_large_image') fail(`${h}: twitter:card is ${t['twitter:card']}, not summary_large_image`);
+  for (const k of ['og:image', 'twitter:image']) {
+    if (!t[k]?.endsWith('/share/minpentai-og-1200x630.png')) fail(`${h}: ${k} is ${t[k]}`);
+    else if ((await imageKind(t[k], h)) !== '1200x630') fail(`${h}: ${k} is not a 1200×630 PNG`);
+  }
+  if (t['og:image:width'] !== '1200' || t['og:image:height'] !== '630') fail(`${h}: og:image is not declared 1200×630`);
+}
+// A shared ladder win keeps its own card, unchanged (src/app/minpentai/result/page.tsx).
+{
+  const h = '/minpentai/result?r=3&s=42';
+  const t = metaTags(await (await fetch(BASE + h)).text());
+  const e = t['fc:miniapp'] ? JSON.parse(t['fc:miniapp']) : null;
+  if (e?.button?.title !== 'Play Minpentai' || !String(e?.button?.action?.url).endsWith('/minpentai')) fail(`${h}: the win card's button changed (${e?.button?.title} → ${e?.button?.action?.url})`);
+  if (!String(e?.imageUrl).endsWith('/api/minpentai-card?r=3&s=42&shape=embed')) fail(`${h}: the win card's embed image changed (${e?.imageUrl})`);
+  if (!t['og:image']?.endsWith('/api/minpentai-card?r=3&s=42') || t['twitter:card'] !== 'summary_large_image') fail(`${h}: the win card's link preview changed (${t['og:image']}, ${t['twitter:card']})`);
+  if (!/^image\/jpeg/.test(await imageKind(e?.imageUrl ?? '', h))) fail(`${h}: the win card's embed image is not drawn as a JPEG`);
+}
+
 // Chrome blocks a page framing localhost unless the framing page is local too; this one is routed, so allow it.
 const browser = await chromium.launch({ channel: 'chrome', args: ['--disable-features=LocalNetworkAccessChecks,BlockInsecurePrivateNetworkRequests,PrivateNetworkAccessForNavigations'] });
 try {
@@ -67,9 +113,9 @@ try {
     // The first-visit intro covers the home page once; skip it, as a visitor would.
     const skip = frame.getByRole('button', { name: 'Skip', exact: true });
     if (await skip.isVisible().catch(() => false)) await skip.click();
-    // Signed in silently: the menu shows the account from the Farcaster context.
+    // Signed in silently: the menu shows the account from the Farcaster context (its name is .menu-account-name since the menu sign-in, #1).
     await frame.click('.topbar-icon[aria-label="Menu"]');
-    await frame.waitForSelector('.menu-sheet .account-name:has-text("@check")', { timeout: 15000 }).catch(() => fail(`${path}: not signed in silently`));
+    await frame.waitForSelector('.menu-sheet .menu-account-name:has-text("@check")', { timeout: 15000 }).catch(() => fail(`${path}: not signed in silently`));
     await frame.click('.menu-close');
     if (path === '/assistant') {
       await frame.waitForSelector('.as-start', { timeout: 15000 });
@@ -97,7 +143,7 @@ try {
   }
   // Learn Minpentai fills the Farcaster frame (owner, 2026-10-09): no site top bar, the frame is the iframe's viewport, × back to the site.
   // ?mode=free opens Play's free play since Play shipped (2026-10-10); it is checked below.
-  for (const path of ['/minpentai?lesson=13', '/minpentai?mode=practice']) {
+  for (const path of ['/minpentai?lesson=5', '/minpentai?mode=practice']) {
     const page = await browser.newPage({ viewport: { width: 480, height: 760 } });
     await page.addInitScript('window.__name = (f) => f');
     const errors: string[] = [];
@@ -167,4 +213,4 @@ if (failures.length) {
   console.error(`MINIAPP CHECK FAILED (${failures.length}):\n- ` + failures.join('\n- '));
   process.exit(1);
 }
-console.log(`miniapp check passed: ${BASE}, home, a chapter, the assistant and Learn Minpentai (full screen) and Minpentai Play in a stand-in Farcaster client`);
+console.log(`miniapp check passed: ${BASE}, home, a chapter, the assistant and Learn Minpentai (full screen) and Minpentai Play in a stand-in Farcaster client; the /minpentai share card and the win card's embed`);

@@ -1,0 +1,105 @@
+{
+ "closed_model": true,
+ "label": "closed model",
+ "model": "openai/gpt-image-2.5-sunburst",
+ "model_name": "GPT Image 2.5 Sunburst (OpenAI)",
+ "route": "Vercel AI Gateway /v1/images/edits (AI_GATEWAY_API_KEY)",
+ "date": "2026-10-18T09:07:26.483Z",
+ "purpose": "gpt-cut: a private full-cut comparison for the owner (2026-10-18); not in the cut or on the site",
+ "v6_picture": "images-out/preprod/pass3/cov-overlook-CU-B-toast-K10.png",
+ "from": {
+  "base": "cov-overlook-CU-B-A8",
+  "finish": "cov-overlook-CU-B-toast-K10",
+  "edits": []
+ },
+ "prompt": "A hand-drawn science fiction comic book panel, ink linework and flat cel-shaded colour, not a 3D render, not a photograph. Close-up (CU). the thin, wiry young woman with warm brown skin, shaved sides, a tall magenta ponytail, dangly geometric earrings, a lime-green vest and tattooed arms close, leaning over the railing, face lit from below by the holograms, eyes narrowed, studying the pieces, serious. Any big screens in the background show only glowing abstract game graphics, never a face. Faces stay soft and natural: smiles and laughs are closed-mouthed, never open-mouthed grins, no teeth showing. Picture 1 is a depth map of this exact frame rendered from a 3D model (near is light, far is dark): follow its camera, angle, lens and perspective exactly; every person, chair, table, wall and railing goes exactly where and as big as its shape stands there, people sitting on the chairs and standing on the floor; the simple mannequin shapes are only where the people go. Draw nothing grey from it. Picture 2 is the thin, wiry young woman with warm brown skin, shaved sides, a tall magenta ponytail, dangly geometric earrings, a lime-green vest and tattooed arms: copy only that person's face, hair, skin and clothes, never the sheet's layout, poses or grey background. In this frame: the thin, wiry young woman is turned three-quarters, looking toward the left of the frame, never straight at the camera. No robot and no other people anywhere in the picture, apart from the crowd in the tiers. Exactly one main person, appearing once. Every other person is an ordinary background figure in plain, muted everyday clothes with ordinary hair: no orange jackets, no magenta hair, no cream knitwear, nobody who looks like the main people. Everyone stands on the ground or sits on a chair at their real size: nobody floats, nobody sits or stands on a table. Behind them, as the layout shows: tiers of seats rising all around the hall, full of a varied crowd; the standing ring around the top of the hall, crowded behind a railing; the broad walkway spanning the hall high above the floor, with a railing on each side. Faces stay soft and natural: smiles and laughs are closed-mouthed, never open-mouthed grins, no teeth showing. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. No signs, no panels with pictograms, no icons, no symbols anywhere: walls are bare. Screens show only what the shot describes, or are blank and softly glowing. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character. Draw it as a finished comic panel: inked outlines, painted flat colour, glowing lights. Picture 3 shows how the place looks: take its colours, materials and night light; it has nobody in it. The picture is 16:9, landscape.",
+ "references": [
+  {
+   "file": "adaptations/fifteen-days/preprod/set-frames/cov-overlook-CU-B.depth.png",
+   "sha256": "90200def2634d6b7ffa1e4740759884a491a7a5f8d05a16de3ac9fc397cc9d83"
+  },
+  {
+   "file": "images-out/preprod/cards-small/bai.png",
+   "sha256": "4c175214502b73eb6bc8d0905daa9d0475383bf7996d3355ff43b381376d9acd"
+  },
+  {
+   "file": "images-out/preprod/plates-small/hall.png",
+   "sha256": "1171b86e92e69126ebdd817a59f3fc6b982c823a4480165e1241afcaeb65fdf7"
+  }
+ ],
+ "request": {
+  "size": "1536x864",
+  "n": 1
+ },
+ "response_meta": {
+  "created": 1792314403,
+  "usage": {
+   "total_tokens": 3744,
+   "input_tokens": 2666,
+   "output_tokens": 1078,
+   "input_tokens_details": {
+    "text_tokens": 714,
+    "image_tokens": 1952
+   }
+  },
+  "providerMetadata": {
+   "openai": {
+    "images": [
+     {
+      "imageTokens": 1952,
+      "textTokens": 714,
+      "created": 1792314403,
+      "size": "1536x864",
+      "quality": "high",
+      "background": "opaque",
+      "outputFormat": "png"
+     }
+    ]
+   },
+   "gateway": {
+    "routing": {
+     "originalModelId": "openai/gpt-image-2.5-sunburst",
+     "resolvedProvider": "openai",
+     "fallbacksAvailable": [],
+     "planningReasoning": "System credentials planned for: openai. Total execution order: openai(system)",
+     "canonicalSlug": "openai/gpt-image-2.5-sunburst",
+     "finalProvider": "openai",
+     "modelAttemptCount": 1,
+     "modelAttempts": [
+      {
+       "canonicalSlug": "openai/gpt-image-2.5-sunburst",
+       "success": true,
+       "providerAttemptCount": 1,
+       "providerAttempts": [
+        {
+         "provider": "openai",
+         "credentialType": "system",
+         "success": true,
+         "startTime": 1792314374562,
+         "endTime": 1792314403339,
+         "statusCode": 200
+        }
+       ]
+      }
+     ],
+     "totalProviderAttemptCount": 1
+    },
+    "cost": "0.051526",
+    "marketCost": "0.051526",
+    "surchargeCost": "0",
+    "gatewayCost": "0.051526",
+    "inferenceCost": "0.051526",
+    "inputInferenceCost": "0",
+    "outputInferenceCost": "0.051526",
+    "generationId": "gen_01M5745YB2NGTN5HG4RWVSQHF1"
+   }
+  }
+ },
+ "cost_usd": 0.051526,
+ "output": {
+  "file": "/private/tmp/claude-501/-Users-nathan-snowmoon/9334ff32-2377-4150-8bc0-c96cfb5e0d3f/scratchpad/gptcut/raw/cov-overlook-CU-B-toast-K10-g1.png",
+  "sha256": "9929f3186a10ec1f75967c2ea99e865a0228bfa37be82a5521b781134a0ba85d",
+  "bytes": 1588851
+ },
+ "ms": 74087
+}

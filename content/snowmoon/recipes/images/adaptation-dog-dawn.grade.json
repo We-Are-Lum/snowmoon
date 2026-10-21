@@ -1,0 +1,133 @@
+{
+  "about": "Grades applied in code to clean renders (time of day, fills). Each entry names the clean input and the graded output by sha256.",
+  "script": "scripts/grade-images.py",
+  "script_commit": "d707eb8095db816fedc9ab5a8576151d1748a67a",
+  "script_uncommitted_changes": false,
+  "numpy_version": "2.5.3",
+  "pillow_version": "12.3.0",
+  "generated_at": "2026-10-05T22:04:46+00:00",
+  "images": [
+    {
+      "id": "dd-02-a1",
+      "beat": 2,
+      "job_file": "content/snowmoon/illustrations/adaptation-dog-dawn.json",
+      "grade": [
+        {
+          "op": "night",
+          "warm_below": 0.52
+        }
+      ],
+      "input": {
+        "file": "images-out/adaptation-dog-dawn/dd-02-a1.png",
+        "sha256": "a6d7adba7ea40a8584684cc74a381cd9811a9c0db87c2a0d5084085fe2dd7eb7",
+        "role": "clean render, the starting point for a remix"
+      },
+      "output": {
+        "file": "images-out/adaptation-dog-dawn/dd-02-a1.graded.png",
+        "sha256": "eb31bd05ad40203d1b25b431516897f5d0364884a1ccb834d35f590ef606de0d"
+      }
+    },
+    {
+      "id": "dd-03-a2",
+      "beat": 3,
+      "job_file": "content/snowmoon/illustrations/adaptation-dog-dawn.json",
+      "grade": [
+        {
+          "op": "night",
+          "dark": 0.8,
+          "sky": 0.0
+        }
+      ],
+      "input": {
+        "file": "images-out/adaptation-dog-dawn/dd-03-a2.png",
+        "sha256": "b874adf428251264131c9822048c05cba503a9beb9c8ebb29362f1d1b2718825",
+        "role": "clean render, the starting point for a remix"
+      },
+      "output": {
+        "file": "images-out/adaptation-dog-dawn/dd-03-a2.graded.png",
+        "sha256": "9fe1105022ae49bf345115bec1871196484846b07b2a7003c224a7fe77d96e4f"
+      }
+    },
+    {
+      "id": "dd-04-a1",
+      "beat": 4,
+      "job_file": "content/snowmoon/illustrations/adaptation-dog-dawn.json",
+      "grade": [
+        {
+          "op": "fill_above",
+          "y": 0.345,
+          "feather": 0.012,
+          "top": [
+            3,
+            6,
+            16
+          ],
+          "bottom": [
+            6,
+            14,
+            26
+          ]
+        }
+      ],
+      "input": {
+        "file": "images-out/adaptation-dog-dawn/dd-04-a1.png",
+        "sha256": "cc6324265344bb26d7d1c9173ef8317941a38b3bfbebb56c2e59290e573eda20",
+        "role": "clean render, the starting point for a remix"
+      },
+      "output": {
+        "file": "images-out/adaptation-dog-dawn/dd-04-a1.graded.png",
+        "sha256": "df898783337657bdb33b67d85a7c7a7aaa0b9484c269e279d53912840f8344c6"
+      }
+    },
+    {
+      "id": "dd-05-a2",
+      "beat": 5,
+      "job_file": "content/snowmoon/illustrations/adaptation-dog-dawn.json",
+      "grade": [
+        {
+          "op": "night",
+          "warm_below": 1.0
+        }
+      ],
+      "input": {
+        "file": "images-out/adaptation-dog-dawn/dd-05-a2.png",
+        "sha256": "2af39159182e5440d792531aee55b0dada453b145c669d70631f0808d9a40465",
+        "role": "clean render, the starting point for a remix"
+      },
+      "output": {
+        "file": "images-out/adaptation-dog-dawn/dd-05-a2.graded.png",
+        "sha256": "62c097843403a239c58e10f4f4ecec4098bf97eaa82ecfa1c33ec59f9729e467"
+      }
+    },
+    {
+      "id": "dd-06-a1",
+      "beat": 6,
+      "job_file": "content/snowmoon/illustrations/adaptation-dog-dawn.json",
+      "grade": [
+        {
+          "op": "predawn"
+        }
+      ],
+      "input": {
+        "file": "images-out/adaptation-dog-dawn/dd-06-a1.png",
+        "sha256": "ed1852d227cd8205a82f079c517f000040d8cfdc6629716129daae7945cf381f",
+        "role": "clean render, the starting point for a remix"
+      },
+      "output": {
+        "file": "images-out/adaptation-dog-dawn/dd-06-a1.graded.png",
+        "sha256": "e83c77eba588b5fd83dd9e8149c479a57480cd32bc4d2745e5255f78ef9555a7"
+      }
+    }
+  ],
+  "assist": {
+    "model": "claude-coding-agent",
+    "by": "the coding agent",
+    "drafted": [
+      "grade steps and their settings"
+    ],
+    "instructions": [
+      "scripts/grade-images.py"
+    ],
+    "see": "config/models.json drafting; principle 3"
+  }
+}

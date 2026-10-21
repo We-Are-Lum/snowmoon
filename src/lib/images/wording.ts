@@ -173,7 +173,7 @@ export const IMAGE_WORDING = {
       signIn: 'Sign in to make a style or a sheet. For now, making them is open to invited readers only.',
       // Owner, 2026-10-10: "Invited only, for now". Shown by the form and sent by /api/designs and /api/designs/sample.
       // 2026-10-10: picks too, until the Privacy Policy covers them (the owner's words are pending). Model-drafted.
-      notInvited: 'Making and picking styles and character sheets is open to invited readers only, for now. You can still browse them.',
+      notInvited: 'Making styles and character sheets is open to invited readers only, for now. Anyone signed in can browse them and use them in their pictures.',
       notReady: 'Making styles and sheets isn’t set up on this deployment yet.',
       consentFirst: 'Before your first style or sheet: how your words are published.',
       readAndAgree: 'Read and agree',
@@ -281,16 +281,27 @@ export const IMAGE_WORDING = {
   /** Wallet sign-in and prepaid generations (owner, 2026-10-13). Drafted by the coding agent. */
   prepaid: {
     signIn: 'Sign in with a wallet',
-    signInNote:
-      'Your wallet signs a message to sign in: nothing is sent and there is no fee. A wallet account pays for each image in advance. Your address, shortened, is the byline on images you publish.',
+    /** Under the sign-in buttons (owner's words, 2026-10-19). The rest of the old note now shows where it matters:
+     *  inAdvance before a wallet account's first payment, and the address byline on the consent screen before
+     *  its first publish (ConsentScreen's wallet line). */
+    signInNote: 'Signing in is free. It’s a signature, not a payment.',
+    inAdvance: 'A wallet account pays for each image in advance. Your address, shortened, is the byline on images you publish.',
     noWallet: 'No wallet found in this browser. Open this page in your wallet’s browser, or install a wallet extension.',
     wrongSign: 'The wallet didn’t sign. Try again.',
     balance: (usd: string, n: number) => `Balance $${usd} · about ${n} image${n === 1 ? '' : 's'}`,
     price: (usd: string, markup: number) => `$${usd} an image: the estimated cost plus ${Math.round(markup * 100)}%`,
     addFunds: 'Add funds',
-    notAddedYet: 'A payment from this wallet hasn’t been added yet.',
+    notAddedYet: 'A payment from this wallet hasn’t been added to your balance yet. It’s safe: it’s on Base, and you can add it with its transaction hash below, within 7 days of paying.',
+    // The "add a payment by its hash" box (owner, 2026-10-15). DRAFT wording for the owner.
+    recover: 'Add a payment by its transaction hash',
+    recoverNote: 'Paste the transaction hash (0x…) or its link on a block explorer. Only a payment from this wallet to this project is added, and only once.',
+    recoverLabel: 'Transaction hash or link',
+    recoverButton: 'Add payment',
+    recoverBad: 'That isn’t a transaction hash: it starts with 0x and has 64 more letters and numbers.',
+    claimLater: 'The payment was sent but isn’t added yet. It’s safe: try again in a minute, or add it with its transaction hash below.',
     tryAgain: 'Try again',
     signOut: 'sign out',
+    menuSignIn: 'Sign in with Farcaster',
     payWith: 'Pay in USDC or ETH on Base. It’s added to your balance once the payment confirms.',
     terms:
       'You’re paying for image generation on this site. Each Generate is charged when you press it, whatever comes back, including a blocked prompt or an image the safety checker drops. No refunds.',
@@ -304,10 +315,12 @@ export const IMAGE_WORDING = {
       'not-found': 'That payment isn’t on Base yet. Try again in a moment.',
       pending: 'That payment is still confirming. Try again in a moment.',
       failed: 'That transaction failed onchain, so nothing was paid.',
-      old: 'That payment is too old to add here. Ask the maintainer.',
+      old: 'That payment is more than 7 days old, so it can’t be added here. Ask the maintainer.',
       'not-to-us': 'That transaction didn’t pay this project’s address.',
       'not-from-you': 'That payment came from a different wallet than the one signed in.',
       'too-small': 'That payment is below the smallest amount added.',
+      // Drafted by the coding agent (2026-10-18), for the owner.
+      'shared-block': 'Someone else paid this address in the same block, so this payment can’t be told apart. Ask the maintainer.',
       already: 'That payment was already added.',
     },
   },

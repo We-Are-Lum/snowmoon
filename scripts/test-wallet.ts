@@ -82,11 +82,12 @@ const usdcLog = (from: string, to: string, value: bigint) => ({
   address: IMAGES.prepaid.usdc, data: encodeAbiParameters([{ type: 'uint256' }], [value]),
   topics: [transferTopic, pad(from as `0x${string}`), pad(to as `0x${string}`)],
 });
-function base(o: { status?: string; logs?: unknown[]; head?: bigint; ageDays?: number; to?: string; from?: string; value?: bigint } = {}) {
+function base(o: { status?: string; logs?: unknown[]; head?: bigint; ageDays?: number; to?: string; from?: string; value?: bigint; rise?: bigint; blockTxs?: { hash: string; to: string | null }[] } = {}) {
   return {
     getTransactionReceipt: async () => ({ status: o.status ?? 'success', blockNumber: 100n, logs: o.logs ?? [] }),
     getBlockNumber: async () => o.head ?? 110n,
-    getBlock: async () => ({ timestamp: BigInt(Math.floor(Date.now() / 1000 - (o.ageDays ?? 0) * 86400)) }),
+    getBlock: async () => ({ timestamp: BigInt(Math.floor(Date.now() / 1000 - (o.ageDays ?? 0) * 86400)), transactions: o.blockTxs ?? [{ hash, to: o.to ?? US }] }),
+    getBalance: async ({ blockNumber }: { blockNumber: bigint }) => (blockNumber === 100n ? 10n ** 18n + (o.rise ?? 0n) : 10n ** 18n),
     getTransaction: async () => ({ to: o.to ?? US, from: o.from ?? me.address, value: o.value ?? 0n }),
     readContract: async () => [1n, 250000000000n, 0n, 0n, 1n], // $2,500.00000000
   } as unknown as PublicClient;
@@ -109,6 +110,36 @@ check('a failed transaction pays nothing', (await why(base({ status: 'reverted' 
 check('a payment still confirming waits', (await why(base({ head: 101n, logs: [usdcLog(me.address, US, 5_000_000n)] }))) === 'pending');
 check('an old payment is not added here', (await why(base({ ageDays: 8, logs: [usdcLog(me.address, US, 5_000_000n)] }))) === 'old');
 check('a payment under the minimum is too small', (await why(base({ logs: [usdcLog(me.address, US, 100_000n)] }))) === 'too-small');
+
+// Smart wallets: ETH arrives as an internal transfer (2026-10-18, the owner's first ETH payment).
+const EP7 = '0x0000000071727De22E5E9d8BAf0edAc6f37da032';
+const opTopic = keccak256(toHex('UserOperationEvent(bytes32,address,address,uint256,bool,uint256,uint256)'));
+const userOp = (sender: string, success: boolean, ep = EP7) => ({
+  address: ep,
+  data: encodeAbiParameters([{ type: 'uint256' }, { type: 'bool' }, { type: 'uint256' }, { type: 'uint256' }], [1n, success, 1000n, 1000n]),
+  topics: [opTopic, keccak256(toHex('op')), pad(sender as `0x${string}`), pad('0x0000000000000000000000000000000000000000')],
+});
+const BUNDLER = '0x00000000000000000000000000000000000b0b1e';
+const sw = await readPayment(hash, me.address, base({ to: '0x0000000071727De22E5E9d8BAf0edAc6f37da032', from: BUNDLER, logs: [userOp(me.address, true)], rise: 2n * 10n ** 15n }));
+check('smart wallet (4337): ETH credited from payTo\'s rise, $5', sw.ok && sw.token === 'ETH' && sw.usd === 5 && sw.amount === 2n * 10n ** 15n, JSON.stringify(sw, (_, v) => (typeof v === 'bigint' ? String(v) : v)));
+check('smart wallet (4337, EntryPoint v0.6) too', (await why(base({ to: '0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789', from: BUNDLER, logs: [userOp(me.address, true, '0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789')], rise: 2n * 10n ** 15n }))) === 'ok');
+check('smart wallet (7702, the wallet sends a batch to itself): credited', (await why(base({ to: me.address, from: me.address, rise: 2n * 10n ** 15n }))) === 'ok');
+check('a failed user operation pays nothing', (await why(base({ to: EP7, from: BUNDLER, logs: [userOp(me.address, false)], rise: 2n * 10n ** 15n }))) === 'not-to-us');
+check('another wallet\'s user operation is not mine', (await why(base({ to: EP7, from: BUNDLER, logs: [userOp(other.address, true)], rise: 2n * 10n ** 15n }))) === 'not-to-us');
+check('someone else also paid payTo in that block: refused', (await why(base({ to: EP7, from: BUNDLER, logs: [userOp(me.address, true)], rise: 4n * 10n ** 15n, blockTxs: [{ hash, to: EP7 }, { hash: keccak256(toHex('other')), to: US }] }))) === 'shared-block');
+check('no rise in payTo\'s balance: nothing paid', (await why(base({ to: EP7, from: BUNDLER, logs: [userOp(me.address, true)], rise: 0n }))) === 'not-to-us');
+check('an ordinary wallet\'s plain ETH payment still works without a balance read', (await why(base({ value: 2n * 10n ** 15n }))) === 'ok');
+
+// --- A payment's hash, as pasted (owner, 2026-10-15) ------------------------------------
+{
+  const { txHashFrom } = await import('../src/lib/wallet/hash');
+  const h = '0x' + 'aB'.repeat(32);
+  check('a pasted hash is read, lower case, spaces trimmed', txHashFrom(`  ${h}\n`) === h.toLowerCase());
+  check('a block explorer link gives its hash', txHashFrom(`https://basescan.org/tx/${h}?x=1`) === h.toLowerCase());
+  check('too short, too long or not hex is refused', txHashFrom(h.slice(0, -1)) === null && txHashFrom(h + 'a') === null && txHashFrom('0x' + 'g'.repeat(64)) === null);
+  check('two different hashes are refused; the same one twice is fine', txHashFrom(`${h} 0x${'cd'.repeat(32)}`) === null && txHashFrom(`${h} ${h.toLowerCase()}`) === h.toLowerCase());
+  check('an address is not a hash', txHashFrom(me.address) === null);
+}
 
 // --- The balance -----------------------------------------------------------------------
 const db = new PGlite();
@@ -165,6 +196,72 @@ const writable = await sql`select c.relname as t from pg_class c join pg_namespa
 check('accounts, payments and debits are append-only for the app', writable.length === 0, writable.map((r) => r.t).join(', '));
 
 await sql.end();
+// --- Adding a payment by its hash: the claim route, end to end (owner, 2026-10-15) ---------
+{
+  // One connection at a time: the test's own is closed, and the route's (src/lib/db.ts) is used.
+  process.env.STUDIO_DATABASE_URL = `postgres://studio_writer@127.0.0.1:${PORT}/postgres`;
+  const { db: routeDb } = await import('../src/lib/db');
+  const D = routeDb()!;
+  await D`set role studio_writer`;
+  const S = D as unknown as Sql;
+  const sql = D;
+  const { useChainForTests } = await import('../src/lib/wallet/chain');
+  const { POST } = await import('../src/app/api/wallet/claim/route');
+  const mine = await accountFor(S, me.address);
+  const theirs = await accountFor(S, other.address);
+  const as = (account: number, address: string, body: unknown) =>
+    POST(new Request('https://snowmoon.party/api/wallet/claim', { method: 'POST', headers: { 'content-type': 'application/json', authorization: `Bearer ${signSession(account, address)}` }, body: JSON.stringify(body) }));
+  const lost = keccak256(toHex('lost payment')) as `0x${string}`;
+  const before = await balanceUsd(S, mine);
+
+  useChainForTests(base({ logs: [usdcLog(other.address, US, 2_000_000n)] }));
+  const fromOther = await as(mine, me.address, { txHash: lost });
+  check('a payment sent from another wallet is refused and adds nothing', fromOther.status === 422 && (await fromOther.json()).reason === 'not-from-you' && (await balanceUsd(S, mine)) === before);
+
+  useChainForTests({ ...base(), getBlockNumber: async () => { throw new Error('429 Too Many Requests'); } } as unknown as PublicClient);
+  const limited = await as(mine, me.address, { txHash: lost });
+  const lj = await limited.json();
+  check('a Base read that fails (a rate limit) says retry and adds nothing', limited.status === 503 && lj.retry === true && (await balanceUsd(S, mine)) === before, JSON.stringify(lj));
+
+  useChainForTests(base({ logs: [usdcLog(me.address, US, 2_000_000n)] }));
+  const good = await as(mine, me.address, { txHash: lost.toUpperCase().replace('0X', '0x') });
+  const gj = await good.json();
+  check('my own payment, pasted later, is added once for its amount', good.ok && gj.added === 2 && Math.abs((await balanceUsd(S, mine)) - (before + 2)) < 1e-6, JSON.stringify(gj));
+  const again = await as(mine, me.address, { txHash: lost });
+  check('the same hash again is refused as already added', again.status === 409 && (await again.json()).reason === 'already' && Math.abs((await balanceUsd(S, mine)) - (before + 2)) < 1e-6);
+  const theirTry = await as(theirs, other.address, { txHash: lost });
+  check('another wallet pasting my hash gets nothing', !theirTry.ok && (await balanceUsd(S, theirs)) === 0);
+
+  const anon = await POST(new Request('https://snowmoon.party/api/wallet/claim', { method: 'POST', body: JSON.stringify({ txHash: lost }) }));
+  check('adding a payment needs a wallet sign-in', anon.status === 401);
+  const bad = await as(mine, me.address, { txHash: 'basescan.org/tx/' + lost });
+  check('the route takes only a bare hash (the box extracts it first)', bad.status === 400);
+  const [rows] = await sql`select count(*)::int as n from studio.wallet_payments where tx_hash = ${lost}`;
+  check('one payment row for the hash, whatever was tried', rows.n === 1);
+
+  // The owner's first ETH payment (2026-10-18, 0xe1f5f745…717d): from a smart wallet, through EntryPoint v0.6,
+  // with no value on the transaction. The reader then refused it as "not to us"; the device took that as final
+  // and forgot the hash, so the fixed reader never saw it again. Now: that refusal keeps the hash, and the same
+  // hash, tried again, is added.
+  const { forgetsPending } = await import('../src/lib/wallet/pending');
+  const firstEth = keccak256(toHex('first eth payment')) as `0x${string}`;
+  const EP6 = '0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789';
+  const beforeEth = await balanceUsd(S, mine);
+  useChainForTests(base({ to: EP6, from: BUNDLER, logs: [userOp(me.address, true, EP6)], rise: 0n }));
+  const then = await as(mine, me.address, { txHash: firstEth });
+  const tj = await then.json();
+  check('reproduced: a smart-wallet payment the reader can\'t see is refused as not to us', then.status === 422 && tj.reason === 'not-to-us' && (await balanceUsd(S, mine)) === beforeEth, JSON.stringify(tj));
+  check('…and the device keeps its hash (a "not to us" may be our own misreading)', forgetsPending(tj.reason) === false);
+  useChainForTests(base({ to: EP6, from: BUNDLER, logs: [userOp(me.address, true, EP6)], rise: 413487687184325n }));
+  const later = await as(mine, me.address, { txHash: firstEth });
+  const lj2 = await later.json();
+  check('…and the kept hash, tried again with the fixed reader, is added once', later.ok && lj2.added > 1 && lj2.added < 1.1 && (await balanceUsd(S, mine)) > beforeEth, JSON.stringify(lj2));
+  check('only "already", "failed" and "old" let the device forget a payment', ['already', 'failed', 'old'].every((r) => forgetsPending(r)) && ['not-to-us', 'not-from-you', 'too-small', 'shared-block', undefined].every((r) => !forgetsPending(r)));
+  const panel = readFileSync('src/components/wallet.tsx', 'utf8');
+  check('the wallet panel tries a remembered payment again when it opens', /tried\.current = true;\s*void claim\(pending, 3\)/.test(panel));
+}
+
+{ const { db: d } = await import('../src/lib/db'); await d()?.end(); }
 await server.stop();
 await db.close();
 if (failures.length) {
