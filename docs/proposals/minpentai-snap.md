@@ -38,7 +38,18 @@ There are no player-made versions anywhere yet, and nothing on main to make them
 
 Heights of the new pages (same renderer): first page with Resume 266 px, run with "Keep playing in the app" 451, resumed board 475, result with the revealed board 470.
 
-## Measurements
+## Phone test, part 2 (owner, 2026-10-21)
+
+**Angled shots: both the rules and the display.**
+- *Rules.* A glider flies diagonally only in a match that draws the diagonal rule (one match in four). Otherwise only four arrows appear, and nothing said why. Now tutorial card 2 says it ("up, down, left or right … Diagonally too only in a match that draws the diagonal rule"). The turn screen says it on setup ("No diagonal gliders."), on later turns ("· no diagonals") and while aiming ("Up, down, left or right only: this match has no diagonal rule." / "This match lets gliders fly diagonally too.").
+- *Display.* The arrow squares were dark teal: 2.3:1 against fog, 1.6:1 against lit squares, 1.0:1 on a rock. Now they are magenta (a hue no piece uses) with black arrows: 7.9:1 on fog, 5.3:1 on lit squares, arrows 7.7:1 on the magenta. On a rock or a bright piece the magenta is close in brightness (1.4–1.6:1) but plainly different in hue.
+- *Edges.* No square exists past the edge to hold an arrow. Tapping the glider turns it through every direction, which the aiming line and tutorial card 4 now say.
+- Before and after: `minpentai-snap/aim/aim-before-*.png`, `aim-after-*.png` (beside the fog with and without the diagonal rule, and in a corner).
+
+**Visibility.** The snap already drew rocks through fog and Amber's towers dimmed at their starts from step 0, changed only where Cyan sees. A new test checks this over whole matches, frame by frame. Contrast was weak: rocks were 2.3:1 on fog, now 4.8:1; the last-seen ring was 2.9:1, now 6.9:1 (the run GIFs too). After one-engine merges, the snap will use Play's shared view.
+
+**Computer level.** It was always 0, Practice. The first page now has a slider, 0 Practice to 5 Planner (316 px tall). The turn screen and result name the opponent, Play again and Resume keep it, and "Keep playing in the app" carries it (`&level=`). Play continues at that level, still as a practice match, nothing recorded. Tested board for board at level 3.
+
 
 ### Height (visible card under 500 px)
 

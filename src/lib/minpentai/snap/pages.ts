@@ -7,7 +7,7 @@
  * the turn to act (the board), the run (the 12 steps as a GIF, run.ts), resign, and the result.
  */
 import { randomInt } from 'node:crypto';
-import { D4, D8, K, RULES, W, XY, inb, lit, type RuleId } from '../play-game/game';
+import { D4, D8, K, RULES, RUNGS, W, XY, inb, lit, type RuleId } from '../play-game/game';
 import { play, refusal, type Played } from './match';
 import { LABELS } from '../../labels';
 import { encMatch } from './moves';
@@ -25,6 +25,8 @@ export interface SnapPage {
 
 export const SNAP_PATH = '/snap/minpentai';
 const DISCLAIMER = 'Independent adaptation · Not affiliated with the author · No token';
+/** The computer players by level (game.ts botPlan): 0 Practice, then the ladder's five rungs. */
+export const LEVELS = ['Practice', ...RUNGS.slice(1).map((r) => r!.n)];
 const RULE_SHORT: Record<RuleId, string> = { diag: 'diagonal gliders', cost3: 'gliders cost 3', sight2: 'sight 2', every8: 'turns every 8 steps' };
 
 /** Where the snap is served, and query parameters every link must keep (a preview's bypass). */
@@ -59,7 +61,7 @@ const TUTORIAL: [string, string[]][] = [
     "A game from Vitalik Buterin's novel Snowmoon, with rules invented for this edition. You are Cyan; the computer is Amber.",
   ]],
   ['Three pieces', [
-    'Glider, 4 points: flies one square a step in a straight line and never stops. It breaks an enemy tower it reaches.',
+    'Glider, 4 points: flies one square a step, up, down, left or right, and never stops. Diagonally too only in a match that draws the diagonal rule. It breaks an enemy tower it reaches.',
     'Square, 1: the first hit cracks it and turns the glider back; the second breaks both.',
     'Tower, 4: your score and your sight.',
   ]],
@@ -68,7 +70,7 @@ const TUTORIAL: [string, string[]][] = [
     'Lose every tower and you lose; at step 96, most towers wins. Each match also draws one of four invented extras, such as diagonal gliders.',
   ]],
   ['Playing here', [
-    'Pick a piece (→ glider, ■ square, ◎ tower), then tap a lit square. Arrows appear around a new glider: tap one to aim it, or tap the glider to turn it. Tap a square or tower again to take it back.',
+    'Pick a piece (→ glider, ■ square, ◎ tower), then tap a lit square. Pink arrows appear around a new glider: tap one to aim it, or tap the glider to turn it (that also aims off the edge). Tap a square or tower again to take it back.',
     'Practice only: nothing is recorded.',
   ]],
 ];
@@ -109,6 +111,8 @@ export function intro(h: Here, ver: string, resume: 'yes' | 'no' | 'maybe' = 'ma
   });
   els.pager = { type: 'paginator', props: { controlsPosition: 'top' }, children: pages };
   const q: Record<string, string> = ver ? { v: ver } : {};
+  // The computer player, picked here and sent with Start (Resume keeps the kept match's own).
+  els.level = { type: 'slider', props: { name: 'lvl', min: 0, max: 5, step: 1, defaultValue: 0, showValue: true, label: 'Computer level: 0 Practice … 5 Planner' } };
   if (resume === 'yes') {
     els.resume = button('Resume', submit(h, 'resume', null, q), true);
     els.start = button('New match', submit(h, 'start', null, q));
@@ -118,7 +122,7 @@ export function intro(h: Here, ver: string, resume: 'yes' | 'no' | 'maybe' = 'ma
   }
   const acts = resume === 'yes' ? ['resume', 'start'] : resume === 'maybe' ? ['start', 'resume'] : ['start'];
   if (acts.length > 1) els.acts = { type: 'stack', props: { direction: 'horizontal' }, children: acts };
-  els.page = { type: 'stack', props: {}, children: ['pager', acts.length > 1 ? 'acts' : 'start'] };
+  els.page = { type: 'stack', props: {}, children: ['pager', 'level', acts.length > 1 ? 'acts' : 'start'] };
   return page(els);
 }
 
@@ -126,7 +130,11 @@ export function intro(h: Here, ver: string, resume: 'yes' | 'no' | 'maybe' = 'ma
 // The board
 
 const CY = '#46D7E8', CY_DIM = '#2A7F8A', AM = '#FFB43A', AM_DIM = '#8A6220';
-const FOG = '#08090C', LIT = '#17323A', ROCK = '#4B4C55', PEND = '#B8F2F8', ARROW = '#24525B';
+const FOG = '#08090C', LIT = '#17323A', PEND = '#B8F2F8';
+/** Contrast (phone test, 2026-10-21): rocks 4.8:1 on fog and 3.3:1 on lit squares; a last-seen tower's
+ * ring 6.9:1 on its dimmed square; aim arrows magenta (a hue no piece uses), 7.9:1 on fog, 5.3:1 on lit
+ * squares, black arrows on them 7.7:1. The test checks these ratios. */
+export const ROCK = '#7A7C86', SEEN_BG = '#2E2210', SEEN = '#E0A040', AIM = '#FF6AD5', AIM_TEXT = '#0B0B0E';
 const ARROWS: Record<string, string> = { '1,0': '→', '-1,0': '←', '0,-1': '↑', '0,1': '↓', '1,-1': '↗', '1,1': '↘', '-1,1': '↙', '-1,-1': '↖' };
 const arrow = (dx: number, dy: number) => ARROWS[`${dx},${dy}`];
 /** Clockwise from →, for turning a glider by tapping it. */
@@ -152,7 +160,7 @@ function boardCells(p: Played, st: SnapState): Cell[] {
     if (textColor) c.textColor = textColor;
   };
   for (const k in p.w.rock) set(+k, ROCK);
-  for (const k in p.lsC) if (!see.has(+k)) set(+k, '#2A2112', '◎', AM_DIM);
+  for (const k in p.lsC) if (!see.has(+k)) set(+k, SEEN_BG, '◎', SEEN);
   for (const k in p.w.tw) if (p.w.tw[k] === 'C' || see.has(+k)) set(+k, p.w.tw[k] === 'C' ? CY : AM, '◎', '#0B0B0E');
   for (const k in p.w.sq) {
     const s = p.w.sq[k];
@@ -167,7 +175,7 @@ function boardCells(p: Played, st: SnapState): Cell[] {
     const g = st.pend[st.aim];
     for (const [dx, dy] of p.rule === 'diag' ? D8 : D4) {
       if (dx === g.dx && dy === g.dy) continue;
-      if (inb(g.x + dx, g.y + dy)) set(K(g.x + dx, g.y + dy), ARROW, arrow(dx, dy), '#E6FBFF');
+      if (inb(g.x + dx, g.y + dy)) set(K(g.x + dx, g.y + dy), AIM, arrow(dx, dy), AIM_TEXT);
     }
   }
   return cells;
@@ -180,9 +188,12 @@ const pieceLabels = (p: Played) => [`→ ${p.cost}`, '■ 1', '◎ 4'];
 
 export function actPage(h: Here, st: SnapState, p: Played, msg: string | null): SnapPage {
   const left = 8 - spent(p, st.pend);
-  const status = msg ?? (st.turns.length === 0
-    ? `Extra rule: ${RULES[p.rule]} Pieces: → glider ${p.cost}, ■ square 1, ◎ tower 4.`
-    : `Turn ${turnNo(st)} · step ${p.w.step} · ${left} of 8 points left · ${RULE_SHORT[p.rule]}`);
+  const diag = p.rule === 'diag';
+  const status = msg ?? (st.aim >= 0
+    ? `Aim: tap a pink arrow, or tap the glider to turn it. ${diag ? 'This match lets gliders fly diagonally too.' : 'Up, down, left or right only: this match has no diagonal rule.'}`
+    : st.turns.length === 0
+      ? `Against ${LEVELS[st.lvl]}. Extra rule: ${RULES[p.rule]}${diag ? '' : ' No diagonal gliders.'}`
+      : `Turn ${turnNo(st)} · step ${p.w.step} · ${left} of 8 points left · ${RULE_SHORT[p.rule]}${diag ? '' : ' · no diagonals'}`);
   const labels = pieceLabels(p);
   return page({
     page: { type: 'stack', props: {}, children: ['status', 'piece', 'board', 'acts'] },
@@ -207,7 +218,7 @@ function runImage(h: Here, st: SnapState, i: number, reveal = false): string {
   return url(h, `${SNAP_PATH}/run`, { g, h: sign(g), ...(reveal ? { r: '1' } : {}) });
 }
 /** Play, carrying on this match: seed and finished turns (moves.ts encMatch). */
-const inApp = (h: Here, st: SnapState) => url(h, '/minpentai', { match: encMatch(st.seed, st.turns) });
+const inApp = (h: Here, st: SnapState) => url(h, '/minpentai', { match: encMatch(st.seed, st.turns), ...(st.lvl ? { level: String(st.lvl) } : {}) });
 
 export function runPage(h: Here, st: SnapState, p: Played): SnapPage {
   const i = st.turns.length - 1, run = p.runs[i], last = run.frames[run.frames.length - 1];
@@ -239,14 +250,14 @@ export function resignPage(h: Here, st: SnapState): SnapPage {
 
 export function resultPage(h: Here, st: SnapState, p: Played): SnapPage {
   const o = p.over!, won = o.win === 'C';
-  const title = o.win === 'D' ? 'Draw' : won ? 'You won' : 'Amber won';
+  const title = o.win === 'D' ? 'Draw' : won ? `You beat ${LEVELS[st.lvl]}` : `${LEVELS[st.lvl]} (Amber) won`;
   const why = o.kind === 'resign' ? `You resigned at step ${o.step}.`
     : !o.counts.C && !o.counts.A ? `Both sides lost their last tower at step ${o.step}.`
     : !o.counts.C ? `Your last tower fell at step ${o.step}.`
     : !o.counts.A ? `Amber's last tower fell at step ${o.step}.`
     : `Time ran out at step ${o.step}: you ${o.counts.C}, Amber ${o.counts.A}.`;
   const v = versionOf(st.ver);
-  const share = won ? `I beat the computer at Minpentai${v ? ` (${v.name})` : ''} in ${o.step} steps, right in the feed.` : `Minpentai${v ? ` (${v.name})` : ''}: a game from Snowmoon you can play in a cast.`;
+  const share = won ? `I beat ${LEVELS[st.lvl]} at Minpentai${v ? ` (${v.name})` : ''} in ${o.step} steps, right in the feed.` : `Minpentai${v ? ` (${v.name})` : ''}: a game from Snowmoon you can play in a cast.`;
   // The match is over: the last run (or, resigned at setup, the board) unfogged, as Play shows it.
   const reveal = p.runs.length ? runImage(h, st, p.runs.length - 1, true) : url(h, `${SNAP_PATH}/run`, (() => { const g = runToken(st, 0); return { g, h: sign(g), r: '1' }; })());
   return page({
@@ -264,14 +275,16 @@ export function resultPage(h: Here, st: SnapState, p: Played): SnapPage {
 // ---------------------------------------------------------------------------------------------
 // Actions
 
-export function newMatch(fid: number, ver: string): SnapState {
-  return { fid, seed: randomInt(0, 2 ** 32), lvl: 0, ver: versionOf(ver) ? ver : '', turns: [], pend: [], aim: -1, tool: 'g', taps: 0, resigned: false };
+export function newMatch(fid: number, ver: string, lvl = 0): SnapState {
+  return { fid, seed: randomInt(0, 2 ** 32), lvl, ver: versionOf(ver) ? ver : '', turns: [], pend: [], aim: -1, tool: 'g', taps: 0, resigned: false };
 }
 /** A kept match (resume.ts) as a state at its next turn to act. */
 export function resumed(fid: number, saved: Saved): SnapState {
   return { fid, seed: saved.seed, lvl: saved.lvl, ver: versionOf(saved.ver) ? saved.ver : '', turns: saved.turns, pend: [], aim: -1, tool: 'g', taps: 0, resigned: false };
 }
 
+/** The slider's value: a whole number 0–5, else Practice. */
+const levelOf = (v: unknown) => (typeof v === 'number' && Number.isInteger(v) && v >= 0 && v <= 5 ? v : 0);
 const toolOf = (label: unknown): Tool | null => (typeof label === 'string' ? ({ '→': 'g', '■': 's', '◎': 't' } as Record<string, Tool>)[label[0]] ?? null : null);
 
 /** A tap on the board at (x, y). Returns the message to show, or null. */
@@ -321,12 +334,13 @@ export function act(
         if (!p.over) return { page: actPage(h, r, p, `Resumed at turn ${r.turns.length + 1}, step ${p.w.step}.`), keep: null };
       } catch { /* a kept match that no longer replays: start afresh */ }
     }
-    const n = newMatch(fid, q.ver);
+    const n = newMatch(fid, q.ver, levelOf(inputs.lvl));
     n.taps = 1;
     return { page: actPage(h, n, play(n), 'No match to resume, so here is a new one.'), keep: kept(n) };
   }
   if (!st || st.fid !== fid || a === 'start' || a === 'again') {
-    const n = newMatch(fid, a === 'again' && st ? st.ver : q.ver);
+    const again = a === 'again' && st && st.fid === fid;
+    const n = newMatch(fid, again ? st.ver : q.ver, again ? st.lvl : levelOf(inputs.lvl));
     n.taps = 1;
     return { page: actPage(h, n, play(n), null), keep: kept(n) };
   }

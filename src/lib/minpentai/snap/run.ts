@@ -15,6 +15,7 @@ import { W } from '../play-game/game';
 import type { BoardView } from '../play-game/live-types';
 import { sightOf } from '../play-server/view';
 import type { Run } from './match';
+import { ROCK, SEEN } from './pages';
 
 const GW = 640, GH = 360, CP = 34, OX = (GW - W * CP) / 2, OY = (GH - 10 * CP) / 2;
 const COL = { C: '#46D7E8', A: '#FFB43A' } as const;
@@ -28,10 +29,10 @@ function frameSvg(b: BoardView, ls: Record<number, number>, R: number, i: number
     o.push(`<rect x="${OX + x * CP + 1}" y="${OY + y * CP + 1}" width="${CP - 2}" height="${CP - 2}" fill="${see.has(k) ? '#17262C' : '#0B0C0F'}"/>`);
   }
   const cx = (k: number) => OX + (k % W) * CP + CP / 2, cy = (k: number) => OY + ((k / W) | 0) * CP + CP / 2;
-  for (const k of b.rock) o.push(`<rect x="${cx(k) - CP / 2 + 4}" y="${cy(k) - CP / 2 + 4}" width="${CP - 8}" height="${CP - 8}" fill="#4B4C55"/>`);
+  for (const k of b.rock) o.push(`<rect x="${cx(k) - CP / 2 + 4}" y="${cy(k) - CP / 2 + 4}" width="${CP - 8}" height="${CP - 8}" fill="${ROCK}"/>`);
   const shown = new Set(b.tw.map(([k]) => k));
   for (const k in ls) if (!shown.has(+k) && !see.has(+k)) {
-    o.push(`<circle cx="${cx(+k)}" cy="${cy(+k)}" r="${CP * 0.3}" fill="none" stroke="${COL.A}" stroke-opacity=".55" stroke-width="2" stroke-dasharray="4 3"/>`);
+    o.push(`<circle cx="${cx(+k)}" cy="${cy(+k)}" r="${CP * 0.3}" fill="none" stroke="${SEEN}" stroke-width="2.5" stroke-dasharray="4 3"/>`);
   }
   for (const [k, s] of b.tw) {
     o.push(`<circle cx="${cx(k)}" cy="${cy(k)}" r="${CP * 0.36}" fill="${COL[s]}"/><circle cx="${cx(k)}" cy="${cy(k)}" r="${CP * 0.17}" fill="#0E0F13"/>`);

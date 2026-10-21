@@ -167,11 +167,14 @@ export class PlayController {
    * Carry on a practice match from elsewhere (the Farcaster snap's "Keep playing in the app",
    * owner 2026-10-21): its seed and Cyan's placements for every finished turn, replayed on this
    * match's own rng exactly as if they had been played here, each turn checked by the server's
-   * checkPlacements. Lands on the next turn to act (or the result). False if a turn is refused.
+   * checkPlacements, against the same computer level (0 Practice, 1–5 the rungs' players; still a
+   * practice match, nothing recorded). Lands on the next turn to act (or the result). False if a
+   * turn is refused.
    */
-  continueMatch(seed: number, turns: { t: Piece; x: number; y: number; dx: number; dy: number }[][]): boolean {
+  continueMatch(seed: number, turns: { t: Piece; x: number; y: number; dx: number; dy: number }[][], lvl = 0): boolean {
     this.env.clearInterval(this.rt);
     const m = this.mk('practice', undefined, seed);
+    m.lvl = lvl;
     this.m = m;
     this.beginAct();
     for (const turn of turns) {

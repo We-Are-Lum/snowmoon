@@ -69,9 +69,10 @@ export function Play({ start, onLearn }: { start: 'home' | 'free' | 'ladder' | '
     else if (start === 'ladder') ctl.setState({ scr: 'ladder' });
     else if (start === 'person') ctl.setState({ scr: 'person' });
     else if (start === 'match') {
-      // A practice match carried on from the snap (?match=<seed>.<turns>.<moves>, moves.ts).
-      const g = decMatch(new URLSearchParams(window.location.search).get('match') ?? '');
-      if (!g || !ctl.continueMatch(g.seed, g.turns)) ctl.say('That match link could not be read, so here is Play.');
+      // A practice match carried on from the snap (?match=<seed>.<turns>.<moves>, moves.ts; &level=0–5).
+      const q = new URLSearchParams(window.location.search);
+      const g = decMatch(q.get('match') ?? ''), lvl = Number(q.get('level') ?? 0);
+      if (!g || !Number.isInteger(lvl) || lvl < 0 || lvl > 5 || !ctl.continueMatch(g.seed, g.turns, lvl)) ctl.say('That match link could not be read, so here is Play.');
     }
     ctl.mount(window.location.hash);
     const onK = (e: KeyboardEvent) => { if (e.key === 'Escape') ctl.escape(); };

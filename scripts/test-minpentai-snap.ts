@@ -15,7 +15,8 @@ import { validateSnapResponse } from '@farcaster/snap';
 import { K, XY, lit, towers, type Placement } from '../src/lib/minpentai/play-game/game';
 import { PlayController, type Env } from '../src/lib/minpentai/play-game/controller';
 import { play } from '../src/lib/minpentai/snap/match';
-import { act, intro, newMatch, type Here, type SnapPage } from '../src/lib/minpentai/snap/pages';
+import { act, intro, newMatch, AIM, AIM_TEXT, LEVELS, ROCK, SEEN, SEEN_BG, type Here, type SnapPage } from '../src/lib/minpentai/snap/pages';
+import { sightOf } from '../src/lib/minpentai/play-server/view';
 import { parse, serialize, sign, verified, type P, type SnapState } from '../src/lib/minpentai/snap/state';
 import { runGif } from '../src/lib/minpentai/snap/run';
 import { decMatch, encMatch } from '../src/lib/minpentai/snap/moves';
@@ -25,7 +26,7 @@ const H: Here = { base: 'https://snowmoon.party', keep: [] };
 let failures = 0;
 const pending: Promise<void>[] = [];
 const check = (name: string, f: () => void | Promise<void>) => {
-  const fail = (e: unknown) => { failures++; console.log(`FAIL ${name}: ${(e as Error).message}`); };
+  const fail = (e: unknown) => { failures++; console.log(`FAIL ${name}: ${(e as Error).message}`, process.env.STACK ? (e as Error).stack : ''); };
   try {
     const r = f();
     if (r instanceof Promise) pending.push(r.then(() => console.log(`ok   ${name}`), fail));
@@ -308,6 +309,83 @@ async function main() {
     }
     const bad = new PlayController({ now: () => 0, setInterval: () => 0, clearInterval: () => {}, setTimeout: () => 0, clearTimeout: () => {}, copy: () => {}, href: () => '' });
     assert.equal(bad.continueMatch(1, [[{ t: 'g', x: 12, y: 5, dx: 1, dy: 0 }]]), false, 'a placement in the fog is refused');
+  });
+
+  // 7. Phone test part 2: aiming, what the fog shows, the computer level
+  const lum = (h: string) => { const c = [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16) / 255).map((x) => (x <= 0.03928 ? x / 12.92 : ((x + 0.055) / 1.055) ** 2.4)); return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2]; };
+  const ratio = (a: string, b: string) => { const [x, y] = [lum(a), lum(b)].sort((m, n) => n - m); return (x + 0.05) / (y + 0.05); };
+  check('aim arrows: magenta with black arrows on every square, diagonals exactly when the rule is drawn, and the turn screen says which', () => {
+    assert.ok(ratio(AIM, '#08090C') >= 7 && ratio(AIM, '#17323A') >= 4.5 && ratio(AIM_TEXT, AIM) >= 7, 'aim contrast');
+    assert.ok(ratio(ROCK, '#08090C') >= 4.5 && ratio(ROCK, '#17323A') >= 3, 'rock contrast');
+    assert.ok(ratio(SEEN, SEEN_BG) >= 4.5, 'last-seen contrast');
+    for (const rule of ['cost3', 'diag']) {
+      const st0 = seedWith(rule);
+      // Beside the fog (x 4 is the lit edge), and in the corner.
+      for (const [x, y] of [[4, 2], [4, 7], [0, 0], [0, 9]]) {
+        const page = tapAt(st0, x, y);
+        const st = tapState(page);
+        if (!st.pend.length) continue;
+        const cells = (page.ui.elements.board.props as { cells: { row: number; col: number; color: string; content?: string; textColor?: string }[] }).cells;
+        const aims = cells.filter((c) => c.color === AIM);
+        assert.ok(aims.every((c) => c.textColor === AIM_TEXT && /[←→↑↓↖↗↘↙]/.test(c.content ?? '')), 'every arrow drawn black on magenta');
+        const n = [-1, 0, 1].flatMap((dx) => [-1, 0, 1].map((dy) => [dx, dy])).filter(([dx, dy]) => (dx || dy) && !(dx === 1 && dy === 0) && (rule === 'diag' || !dx || !dy) && x + dx >= 0 && x + dx < 15 && y + dy >= 0 && y + dy < 10).length;
+        assert.equal(aims.length, n, `${rule} at ${x},${y}: ${aims.length} arrows, expected ${n}`);
+        const status = String(page.ui.elements.status.props!.content);
+        assert.match(status, rule === 'diag' ? /diagonally/ : /no diagonal rule/, status);
+      }
+    }
+    const t = intro(H, '');
+    assert.match(JSON.stringify(t), /Diagonally too only in a match that draws the diagonal rule/);
+  });
+
+  check('the fog: rocks always shown; Amber\'s towers dimmed at their starts from step 0, changed only where Cyan can see', () => {
+    for (const seed of [11, 3333, 77_777_777]) {
+      const st = newMatch(1, '');
+      st.seed = seed;
+      const page = A('next', st, 1, {}, '');
+      const cells = (page.ui.elements.board.props as { cells: { row: number; col: number; color: string; content?: string }[] }).cells;
+      const at = (x: number, y: number) => cells.find((c) => c.col === x && c.row === y)!;
+      for (const [x, y] of [[6, 0], [9, 3], [7, 4], [7, 5], [5, 6], [8, 9]]) assert.equal(at(x, y).color, ROCK, `rock ${x},${y}`);
+      for (const [x, y] of [[13, 2], [13, 7]]) assert.ok(at(x, y).color === SEEN_BG && at(x, y).content === '◎', `Amber's start ${x},${y}`);
+      // A whole match: a last-seen mark appears or goes only on a square Cyan sees in that frame.
+      for (;;) {
+        const p = play(st);
+        if (p.over) break;
+        st.turns.push(plan(p, 'gliders'));
+      }
+      const p = play(st);
+      for (const run of p.runs) for (let i = 1; i < run.frames.length; i++) {
+        const see = sightOf(run.full[i], 'C', p.R);
+        for (let k = 0; k < 150; k++) if (!see.has(k)) assert.equal(k in run.ls[i], k in run.ls[i - 1], `seed ${seed}: mark at ${k} changed unseen`);
+      }
+    }
+  });
+
+  check('the computer level: picked on the first page, played, named, kept by Play again and Resume, and carried to Play', () => {
+    const first = intro(H, '');
+    valid(first, 'first page with the level');
+    assert.equal(first.ui.elements.level.type, 'slider');
+    let r = act(H, 'start', null, 8, { lvl: 3 }, { ver: '' });
+    let st = tapState(r.page);
+    assert.equal(st.lvl, 3);
+    assert.match(String(r.page.ui.elements.status.props!.content), /Against Builder/);
+    st.seed = 4242; // fixed, so the turns below are the same every run
+    assert.ok(r.keep && r.keep !== 'drop' && r.keep.save.lvl === 3, 'kept with its level');
+    assert.equal(act(H, 'start', null, 8, { lvl: 9 }, { ver: '' }).page && tapState(act(H, 'start', null, 8, { lvl: 9 }, { ver: '' }).page).lvl, 0, 'out of range: Practice');
+    // Levels play differently on one seed.
+    const a: SnapState = { ...st, seed: 4242, turns: [[]] }, b: SnapState = { ...a, lvl: 0, turns: [[]] };
+    assert.notEqual(JSON.stringify(play(a).w), JSON.stringify(play(b).w), 'Builder and Practice differ');
+    // Play again keeps it; the hand-off carries it, and Play matches board for board at that level.
+    for (let i = 0; i < 2; i++) { r = act(H, 'end', st, 8, {}, { ver: '' }); st = parse(new URL((r.page.ui.elements.next.on!.press as { params: { target: string } }).params.target).searchParams.get('s')!)!; }
+    const link = new URL((r.page.ui.elements.app.on!.press as { params: { target: string } }).params.target);
+    assert.equal(link.searchParams.get('level'), '3');
+    const g = decMatch(link.searchParams.get('match')!)!;
+    const c = new PlayController({ now: () => 0, setInterval: () => 0, clearInterval: () => {}, setTimeout: () => 0, clearTimeout: () => {}, copy: () => {}, href: () => '' });
+    assert.ok(c.continueMatch(g.seed, g.turns, 3));
+    assert.equal(JSON.stringify(c.m!.w), JSON.stringify(play(st).w), 'Play at level 3 matches the snap');
+    const again = tapState(act(H, 'again', { ...st, resigned: true }, 8, {}, { ver: '' }).page);
+    assert.equal(again.lvl, 3);
+    assert.match(LEVELS.join(' '), /^Practice Rival Blocker Builder Opportunist Planner$/);
   });
 
   await Promise.all(pending);
