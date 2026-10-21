@@ -231,7 +231,7 @@ export function botPlan(m: PlanInput): Placement[] {
     }
   }
   const shots = () => {
-    const cs: { k: number; dx: number; dy: number; s: number }[] = [], base = cnt(b, e);
+    const cs: { k: number; dx: number; dy: number; s: number; i: number }[] = [], base = cnt(b, e);
     for (const k of zone()) {
       const [x, y] = XY(k);
       for (const [dx, dy] of dirs) {
@@ -240,7 +240,7 @@ export function botPlan(m: PlanInput): Placement[] {
           while (inb(cx, cy)) {
             const kk = K(cx, cy);
             if (b.rock[kk] || b.sq[kk]) break;
-            if (b.tw[kk]) { if (b.tw[kk] === e) cs.push({ k, dx, dy, s: 100 - n }); break; }
+            if (b.tw[kk]) { if (b.tw[kk] === e) cs.push({ k, dx, dy, s: 100 - n, i: cs.length }); break; }
             cx += dx; cy += dy; n++;
           }
         } else {
@@ -249,12 +249,14 @@ export function botPlan(m: PlanInput): Placement[] {
           const lim = Math.min(40, MAXS - b.step);
           for (let n = 1; n <= lim; n++) {
             step(sw);
-            if (!sw.gl.some((g) => g.id === 1e6)) { if (cnt(sw, e) < base) cs.push({ k, dx, dy, s: 100 - n }); break; }
+            if (!sw.gl.some((g) => g.id === 1e6)) { if (cnt(sw, e) < base) cs.push({ k, dx, dy, s: 100 - n, i: cs.length }); break; }
           }
         }
       }
     }
-    return cs.sort((a, c) => c.s - a.s);
+    // Ties keep the order found (i): what a stable sort gives, written out so the result never
+    // depends on the engine's sort (onchain replay needs identical moves everywhere).
+    return cs.sort((a, c) => c.s - a.s || a.i - c.i);
   };
   const c = pts >= cost ? shots() : [];
   if (c.length) {

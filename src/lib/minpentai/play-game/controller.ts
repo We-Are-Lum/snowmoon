@@ -69,6 +69,8 @@ export interface PState {
 
 export interface Match {
   mode: Mode;
+  /** The match's seed (its rule and the computer player's moves follow from it): kept so a finished match can be replayed and recorded (onchain/replay.ts). */
+  seed: number;
   rung?: number;
   lvl: number;
   rule: RuleId;
@@ -155,7 +157,7 @@ export class PlayController {
 
   mk(mode: Mode, rung?: number): Match {
     const seed = (this.env.now() % 1e6) | 0, r = rng(seed), ids = Object.keys(RULES) as RuleId[], rule = ids[Math.floor(r() * ids.length)];
-    const m: Match = { mode, rung, lvl: mode === 'practice' ? 0 : mode === 'ladder' ? rung! : 3, rule, R: rule === 'sight2' ? 2 : 3, every: rule === 'every8' ? 8 : 12, cost: rule === 'cost3' ? 3 : 4, rng: r, w: world(), hist: [], phase: 'pre', pend: { C: [], A: [] }, snap: { C: [], A: [] }, lsC: {}, lsA: {}, ended: false, oppEnded: false, clock: null, res: null };
+    const m: Match = { mode, seed, rung, lvl: mode === 'practice' ? 0 : mode === 'ladder' ? rung! : 3, rule, R: rule === 'sight2' ? 2 : 3, every: rule === 'every8' ? 8 : 12, cost: rule === 'cost3' ? 3 : 4, rng: r, w: world(), hist: [], phase: 'pre', pend: { C: [], A: [] }, snap: { C: [], A: [] }, lsC: {}, lsA: {}, ended: false, oppEnded: false, clock: null, res: null };
     m.lsC[K(13, 2)] = 0; m.lsC[K(13, 7)] = 0; m.lsA[K(1, 2)] = 0; m.lsA[K(1, 7)] = 0;
     m.hist.push(clone(m.w));
     return m;
