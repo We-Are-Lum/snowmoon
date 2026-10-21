@@ -33,8 +33,8 @@
  *   on an image's page (fixture images) and on the assistant's quote cards, each with the same range, shown only
  *   where "Add an image" shows.
  * - Learn Minpentai's screens are full screen at 390 and in the 424 × 695 Farcaster frame (the frame
- *   fills the viewport, no site top bar, a × back to the site), and Design's centred phone beside the rail at 1024
- *   and up. ?s= opens /minpentai/rule, the book's rule, tagged FROM THE BOOK, citing c4-b5 and c4-b7, with its
+ *   fills the viewport, no site top bar, a × back to the site), and beside the rail at 1024 and up the desktop layout
+ *   (2026-10-20): the stage large and 3:2, the text and footer in a column to its right (watch 2, lesson 5, practice). ?s= opens /minpentai/rule, the book's rule, tagged FROM THE BOOK, citing c4-b5 and c4-b7, with its
  *   GitHub write-up.
  * - Minpentai Play (Design's "Minpentai Play", owner 2026-10-09): ?mode=play opens the hub with Learn, Play and
  *   Free play; ?mode=free opens free play; a practice match starts, takes a glider and ends its turn; ⤢ makes it
@@ -80,8 +80,12 @@ const INK = 'rgb(29, 29, 27)';
 const IN_WORLD = '.device-view, .dz-card, svg, [data-template]';
 /** Learn screens at /minpentai (src/app/minpentai/learn.tsx: 8 watch, 7 lessons, under the hood, practice). */
 const MINPENTAI_LESSONS = 17;
+/** Their addresses (owner, 2026-10-20: ?lesson=1 is lesson 1): ?watch=1…8, ?lesson=1…8 (8 is Under the hood), ?mode=practice. */
+const MINPENTAI_ADDRESSES = [...Array.from({ length: 8 }, (_, i) => `watch=${i + 1}`), ...Array.from({ length: 8 }, (_, i) => `lesson=${i + 1}`), 'mode=practice'];
 /** Under the hood runs the book's rule (c4-b5); every other Learn screen is the game invented for this edition. */
-const MINPENTAI_HOOD = 16;
+const MINPENTAI_HOOD = 'lesson=8';
+/** Lesson 1's title (src/lib/minpentai/learn-text.ts, lessons.goal). */
+const MINPENTAI_LESSON_1 = 'Keep your towers. Destroy theirs.';
 
 const failures: string[] = [];
 const fail = (msg: string) => failures.push(msg);
@@ -269,20 +273,53 @@ const plantWallet = (address: string) => {
   const body = btoa(JSON.stringify({ sub: 'w', exp: 4102444800 })).replace(/=+$/, '');
   localStorage.setItem('snowmoon.wallet', JSON.stringify({ token: `x.${body}.y`, address, short: `${address.slice(0, 6)}…${address.slice(-4)}`, exp: 4102444800 }));
 };
-/** The account inside `within` (src/components/app-shell.tsx Account): signed out, Farcaster then a wallet, both shown. */
+/** The account inside `within` (src/components/app-shell.tsx: Account in the rail, MenuAccount at the top of the
+ *  phone menu): signed out, Farcaster then a wallet, both shown. */
+const accountIn = (within: string) => `${within} .menu-account`;
 async function checkAccountSignedOut(page: Page, within: string, where: string) {
-  const acct = page.locator(`${within} .account`);
+  const acct = page.locator(accountIn(within));
   await acct.locator('button', { hasText: 'Sign in with a wallet' }).waitFor({ timeout: 10000 }).catch(() => {});
   const names = await acct.locator('button').evaluateAll((els) => els.filter((e) => (e as HTMLElement).offsetParent !== null).map((e) => e.textContent?.trim()));
   if (names.join(' | ') !== 'Sign in with Farcaster | Sign in with a wallet') fail(`${where}: signed out, the account offers "${names.join(' | ')}" (want Farcaster, then a wallet)`);
-  if (!(await acct.locator('.wallet-sign-in .ic-note').isVisible())) fail(`${where}: the wallet sign-in's note is not shown`);
+  // The phone menu and the wide-screen rail (owner, 2026-10-19): in the menu first in the sheet; in both, two full-width buttons at least 48px tall in the menu's
+  // main font, the first filled, and one line under them.
+  const first = await page.evaluate(() => {
+    const a = document.querySelector('.menu-sheet .menu-account');
+    const n = document.querySelector('.menu-sheet .nav-list');
+    return !!a && !!n && !!(a.compareDocumentPosition(n) & Node.DOCUMENT_POSITION_FOLLOWING);
+  });
+  if (within === '.menu-sheet' && !first) fail(`${where}: the account is not above the menu's items`);
+  const boxes = await acct.locator('button.menu-signin').evaluateAll((els) =>
+    els.map((e) => {
+      const r = e.getBoundingClientRect();
+      const st = getComputedStyle(e);
+      const box = e.closest('.menu-account') as HTMLElement;
+      const bs = getComputedStyle(box);
+      const inner = box.clientWidth - parseFloat(bs.paddingLeft) - parseFloat(bs.paddingRight);
+      return { h: r.height, full: r.width >= inner - 1, font: st.fontFamily, bg: st.backgroundColor };
+    }),
+  );
+  const label = await page.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue('--font-label').trim());
+  for (const [i, b] of boxes.entries()) {
+    if (b.h < 48) fail(`${where}: sign-in button ${i + 1} is ${b.h}px tall (want at least 48)`);
+    if (!b.full) fail(`${where}: sign-in button ${i + 1} is not full width`);
+    if (/mono/i.test(b.font) || (label && b.font.includes(label))) fail(`${where}: sign-in button ${i + 1} is in the label (mono) font`);
+  }
+  if (boxes.length === 2 && boxes[0].bg === boxes[1].bg) fail(`${where}: the Farcaster button is not filled apart from the wallet one`);
+  const note = (await acct.locator('.menu-signin-note').textContent())?.trim();
+  if (note !== 'Signing in is free. It’s a signature, not a payment.') fail(`${where}: the line under the buttons reads "${note}"`);
+  if (await acct.locator('.wallet-sign-in .ic-note:not([role=alert])').count()) fail(`${where}: the wallet's own note still shows in the menu`);
 }
 /** With a wallet session: the shortened address and a Sign out that ends it (back to both options). */
 async function checkAccountWallet(page: Page, within: string, where: string) {
-  const acct = page.locator(`${within} .account`);
+  const acct = page.locator(accountIn(within));
   const short = `${WALLET_ADDRESS.slice(0, 6)}…${WALLET_ADDRESS.slice(-4)}`;
-  await acct.locator('.account-name', { hasText: short }).waitFor({ timeout: 10000 }).catch(() => fail(`${where}: a wallet session does not show ${short}`));
+  await acct.locator('.menu-account-name', { hasText: short }).waitFor({ timeout: 10000 }).catch(() => fail(`${where}: a wallet session does not show ${short}`));
   if (await acct.locator('button', { hasText: /Sign in/ }).count()) fail(`${where}: a wallet session still offers sign-in`);
+  {
+    const rows = await acct.locator('.menu-account-row').evaluateAll((els) => els.map((e) => e.getBoundingClientRect().height));
+    if (rows.length !== 2 || rows.some((h) => h < 44)) fail(`${where}: the name and Sign out are not two menu-size rows (${rows.join(', ')}px)`);
+  }
   await acct.locator('button', { hasText: 'Sign out' }).click();
   const left = await page.evaluate(() => localStorage.getItem('snowmoon.wallet'));
   if (left) fail(`${where}: Sign out leaves the wallet session in storage`);
@@ -969,6 +1006,17 @@ async function checkAiLabels() {
   }
 }
 
+/** /minpentai/agents.md and /minpentai/passages.md: plain text for agents, as text/markdown, the committed files word for word. */
+async function checkMarkdownPages() {
+  for (const [route, file] of [['/minpentai/agents.md', 'docs/minpentai/agents.md'], ['/minpentai/passages.md', 'docs/minpentai/passages.md']]) {
+    const r = await fetch(BASE + route).catch(() => null);
+    if (!r || !r.ok) { fail(`${route}: not served (${r?.status ?? 'no answer'})`); continue; }
+    const type = r.headers.get('content-type');
+    if (type !== 'text/markdown; charset=utf-8') fail(`${route}: Content-Type is ${type}, not text/markdown; charset=utf-8`);
+    if ((await r.text()) !== readFileSync(file, 'utf8')) fail(`${route}: not ${file} word for word`);
+  }
+}
+
 // A local server must be serving this checkout's commit; otherwise the check would pass old code.
 if (/^http:\/\/(localhost|127\.0\.0\.1)(:|\/|$)/.test(BASE)) {
   const head = execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim();
@@ -981,6 +1029,7 @@ if (/^http:\/\/(localhost|127\.0\.0\.1)(:|\/|$)/.test(BASE)) {
 const browser = await chromium.launch({ channel: 'chrome' });
 try {
   await checkAiLabels();
+  await checkMarkdownPages();
   // First-visit intro (config/intro.json): once, home page only, Skip on every
   // card, remembered on the device without cookies; deep links go straight in.
   {
@@ -1281,7 +1330,7 @@ try {
       if (await page.locator('a[href="/images/picks"]').count()) fail(`/images/designs (${scheme}): "My picks" shows to a reader who is not invited`);
       await open(page, '/images/designs/new?kind=style');
       await page.waitForSelector('.dz-form .ic-gate');
-      if (!(await page.getByText('Making and picking styles and character sheets is open to invited readers only, for now.', { exact: false }).isVisible())) fail(`/images/designs/new (${scheme}): no invited-only refusal for a reader who is not invited`);
+      if (!(await page.getByText('Making styles and character sheets is open to invited readers only, for now.', { exact: false }).isVisible())) fail(`/images/designs/new (${scheme}): no invited-only refusal for a reader who is not invited`);
       if (await page.locator('#dz-text').count()) fail(`/images/designs/new (${scheme}): the form shows to a reader who is not invited`);
       await checkFloors(page, '/images/designs/new (not invited)', scheme);
       await ctx.unroute('**/api/designs/picks');
@@ -1292,7 +1341,7 @@ try {
     }
 
     // Minpentai: every Learn screen and Free play (and the sandbox's and "Play the computer"'s old links, which open Free play), at phone width.
-    for (const q of [...Array.from({ length: MINPENTAI_LESSONS }, (_, i) => `lesson=${i + 1}`), 'mode=practice']) {
+    for (const q of MINPENTAI_ADDRESSES) {
       await open(page, `/minpentai?${q}`);
       await page.waitForTimeout(150);
       await checkFloors(page, `/minpentai?${q}`, scheme);
@@ -1303,7 +1352,7 @@ try {
         // Short labels (owner ruling, 2026-10-10): the ⓘ named "Invented", "Draft" or "Book", each opening its explanation.
         const tags = await page.locator('.ml-tag.info-label').evaluateAll((els) => els.filter((e) => { const i = e.querySelector('svg.info-i') as SVGElement | null; return !!i && i.getBoundingClientRect().width > 0; }).map((e) => (e.querySelector('.info-word')?.textContent ?? '').trim()));
         const labelled = tags.includes('Invented');
-        if (q === `lesson=${MINPENTAI_HOOD}` ? labelled : !labelled) fail(`/minpentai?${q} (${scheme}): the "Invented" label is ${labelled ? 'on the book\'s rule' : 'missing'}`);
+        if (q === MINPENTAI_HOOD ? labelled : !labelled) fail(`/minpentai?${q} (${scheme}): the "Invented" label is ${labelled ? 'on the book\'s rule' : 'missing'}`);
         if (q === 'lesson=1') {
           await page.locator('.ml-tag[data-label="invented"]').click();
           if (!/invented for this edition/i.test((await page.locator('.info-sheet').textContent().catch(() => '')) ?? '')) fail(`/minpentai?${q} (${scheme}): "Invented" does not open its explanation`);
@@ -1317,10 +1366,22 @@ try {
         // Full screen (owner, 2026-10-09): the frame fills the viewport, the site's top bar is hidden, and × goes back to the site.
         await checkLearnFullScreen(page, `/minpentai?${q} (${scheme})`);
         // The rules note links to the book's rule on its own page.
+        // …and says the lessons play by the first version of the rules, linking to the rules page (the Play hub's line, moved here 2026-10-20).
         const note = page.locator('.ml-rulesnote a');
-        if ((await note.count()) && (await note.getAttribute('href')) !== '/minpentai/rule') fail(`/minpentai?${q} (${scheme}): the rules note does not link to /minpentai/rule`);
+        if ((await note.count()) && JSON.stringify(await note.evaluateAll((els) => els.map((e) => e.getAttribute('href')))) !== JSON.stringify(['/minpentai/rule', '/minpentai/rules'])) fail(`/minpentai?${q} (${scheme}): the rules note does not link to /minpentai/rule and /minpentai/rules`);
+        if (q === 'lesson=1' && !/first version of the rules/.test((await page.locator('.ml-rulesnote').textContent().catch(() => '')) ?? '')) fail(`/minpentai?${q} (${scheme}): lesson 1 does not say the lessons play by the first version of the rules`);
       }
     }
+    // ?lesson=1 opens lesson 1 itself, the old ?lesson=9 too, ?watch=1 the broadcast; Play's LEARN tab opens lesson 1 (owner, 2026-10-20).
+    for (const [q, lesson1] of [['lesson=1', true], ['lesson=9', true], ['watch=1', false]] as const) {
+      await open(page, `/minpentai?${q}`);
+      const title = ((await page.locator('.ml-title').textContent().catch(() => '')) ?? '').trim();
+      if ((title === MINPENTAI_LESSON_1) !== lesson1) fail(`/minpentai?${q} (${scheme}): opens "${title}"${lesson1 ? ', not lesson 1' : ''}`);
+    }
+    await open(page, '/minpentai?mode=play');
+    await page.getByRole('tab', { name: 'LEARN' }).click();
+    await page.waitForSelector('.ml-title');
+    if (((await page.locator('.ml-title').textContent()) ?? '').trim() !== MINPENTAI_LESSON_1 || !page.url().endsWith('/minpentai?lesson=1')) fail(`Play's LEARN tab (${scheme}): does not open lesson 1 (${page.url()})`);
     await checkPlay(page, scheme);
     // The rule recovered from the book's figure (c4-b5, c4-b7), on its own page; the sandbox's board links (?s=) land on it.
     await open(page, '/minpentai/rule');
@@ -1371,8 +1432,9 @@ try {
         await checkFloors(page, `${path} @${width}`, scheme);
         const wide = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth);
         if (wide > 1) fail(`${path} @${width} (${scheme}): scrolls sideways by ${wide}px`);
+        // Learn's desktop layout (2026-10-20) widens /minpentai's page; its reading column is the lesson text beside the stage.
         const measure = await page.evaluate(() => {
-          const el = document.querySelector('main .page.chapter, main .page') as HTMLElement | null;
+          const el = (document.querySelector('main .ml-learn .ml-body') ?? document.querySelector('main .page.chapter, main .page')) as HTMLElement | null;
           return el ? el.getBoundingClientRect().width : 0;
         });
         if (measure > 700) fail(`${path} @${width}: the reading column is ${Math.round(measure)}px wide`);
@@ -1385,6 +1447,23 @@ try {
         // Learn is Design's phone, centred beside the rail, on tablet and desktop (full screen is for phones and the Farcaster app).
         if (path === '/minpentai' && ((await page.locator('.ml-exit').isVisible()) || !(await page.locator('.rail').isVisible()))) fail(`/minpentai @${width}: Learn is full screen outside a phone`);
         if (path.startsWith('/glossary')) await shot(page, `desktop-${width}${path.replace(/\//g, '-')}`, scheme);
+      }
+      // Learn on desktop (owner, 2026-10-20: "the broadcast large, lesson text beside it"): a watch screen, a lesson with a
+      // board and the practice match. The stage is larger than Design's 390 phone and 3:2, the text column sits to its
+      // right, the footer is in view, and nothing scrolls sideways; light and dark.
+      for (const [q, name] of [['lesson=2', 'watch'], ['lesson=13', 'lesson'], ['mode=practice', 'practice']] as const) {
+        await open(page, `/minpentai?${q}`);
+        await page.waitForTimeout(400);
+        await checkFloors(page, `/minpentai?${q} @${width}`, scheme);
+        const at = `/minpentai?${q} @${width} (${scheme})`;
+        const stage = await page.locator('.ml-stage').boundingBox();
+        const body = await page.locator('.ml-body').boundingBox();
+        const foot = await page.locator('.ml-foot').boundingBox();
+        if (!stage || stage.width <= 400 || Math.abs(stage.width / stage.height - 1.5) > 0.02) fail(`${at}: the stage is not large and 3:2 (${stage ? `${Math.round(stage.width)}×${Math.round(stage.height)}` : 'none'})`);
+        if (!stage || !body || body.x < stage.x + stage.width - 1) fail(`${at}: the lesson text is not beside the stage`);
+        if (!foot || !body || foot.x !== body.x || foot.y + foot.height > 900 + 1) fail(`${at}: the footer is not in view under the text`);
+        if ((await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)) > 1) fail(`${at}: scrolls sideways`);
+        await shot(page, `learn-desktop-${width}-${name}`, scheme);
       }
       await open(page, '/chapter/1');
       const bodyShown = await page.locator('.rail-body').isVisible();
@@ -1407,7 +1486,24 @@ try {
         if (!current?.includes('Chapter 1')) fail(`@${width}: the rail does not mark the current chapter`);
         // Signed out: the assistant panel is there, with what it does and a sign-in button.
         await page.waitForSelector('.panel .as-signed-out button');
+        // The panel's sign-in is the menu's button (owner, 2026-10-19): full width, at least 48px, the main font, filled.
+        const pb = await page.locator('.panel .as-signed-out button.as-signin').evaluate((e) => {
+          const r = e.getBoundingClientRect();
+          const st = getComputedStyle(e);
+          return { h: r.height, w: r.width, pw: (e.parentElement as HTMLElement).clientWidth, font: st.fontFamily, upper: st.textTransform };
+        });
+        if (pb.h < 47.5 || pb.w < pb.pw - 1 || /mono/i.test(pb.font) || pb.upper === 'uppercase') fail(`@${width}: the assistant panel's sign-in is not the menu's button (${JSON.stringify(pb)})`);
         await shot(page, `desktop-${width}-chapter`, scheme);
+        // Minpentai's pages start with the assistant closed (owner, 2026-10-20); opening it there isn't remembered.
+        for (const mp of ['/minpentai', '/minpentai/rules']) {
+          await open(page, mp);
+          if (await page.locator('.panel').isVisible()) fail(`${mp} @${width} (${scheme}): the assistant panel opens by default`);
+          if (!(await page.locator('.panel-reopen').isVisible())) fail(`${mp} @${width} (${scheme}): no control to open the assistant`);
+        }
+        await page.locator('.panel-reopen').click();
+        if (!(await page.locator('.panel').isVisible())) fail(`/minpentai/rules @${width} (${scheme}): the assistant does not open`);
+        await open(page, '/chapter/1');
+        await page.waitForSelector('.panel .as-signed-out button');
         await checkAccountSignedOut(page, '.rail', `@${width} rail`);
         await shot(page, `desktop-${width}-account-signed-out`, scheme);
         await page.evaluate(plantWallet, WALLET_ADDRESS);
@@ -1435,7 +1531,7 @@ try {
         await open(page, '/chapter/1');
         await page.waitForSelector('.panel .as-start');
         await checkFloors(page, `/chapter/1 @${width} (signed in)`, scheme);
-        if ((await page.locator('.rail .account-name').textContent()) !== '@check' || (await page.locator('.rail .account button', { hasText: 'wallet' }).count())) fail(`@${width}: signed in with Farcaster, the rail does not show @check alone`);
+        if ((await page.locator('.rail .menu-account-name').textContent()) !== '@check' || (await page.locator('.rail .menu-account button', { hasText: 'wallet' }).count())) fail(`@${width}: signed in with Farcaster, the rail does not show @check alone`);
         await shot(page, `desktop-${width}-signed-in`, scheme);
         await page.unroute('**/api/chat/status');
       }
@@ -1455,7 +1551,7 @@ try {
     await checkLegalLine(page, '.menu-sheet', '@390 menu', scheme);
     await checkAccountSignedOut(page, '.menu-sheet', '@390 menu');
     if (await page.locator('.topbar-avatar').count()) fail('@390: signed out, the top bar shows an avatar');
-    await page.locator('.menu-sheet .account').scrollIntoViewIfNeeded();
+    await page.locator('.menu-sheet .menu-account').scrollIntoViewIfNeeded();
     await shot(page, 'phone-390-menu', scheme);
     await page.keyboard.press('Escape');
     // A wallet session in the menu, then Sign out (nothing signed: the session is planted in storage).
@@ -1463,11 +1559,11 @@ try {
     await open(page, '/chapter/1');
     await page.click('.topbar-icon[aria-label="Menu"]');
     await page.waitForSelector('.menu-sheet');
-    await page.locator('.menu-sheet .account').scrollIntoViewIfNeeded();
+    await page.locator('.menu-sheet .menu-account').scrollIntoViewIfNeeded();
     await checkFloors(page, '/chapter/1 @390 (menu, wallet)', scheme);
     await shot(page, 'phone-390-menu-wallet', scheme);
     // The You page's entry points (owner, 2026-10-18): the name in the menu, and the avatar between ? and the menu.
-    if ((await page.locator('.menu-sheet a.account-name').getAttribute('href').catch(() => null)) !== '/you') fail('@390 menu: a wallet session\'s name is not a link to /you');
+    if ((await page.locator('.menu-sheet a.menu-account-name').getAttribute('href').catch(() => null)) !== '/you') fail('@390 menu: a wallet session\'s name is not a link to /you');
     if ((await page.locator('.topbar-end .topbar-avatar').getAttribute('href').catch(() => null)) !== '/you') fail('@390: a wallet session shows no avatar linking to /you in the top bar');
     else if (!/^You: /.test((await page.locator('.topbar-avatar').getAttribute('aria-label')) ?? '')) fail('@390: the top bar\'s avatar has no accessible name');
     await checkAccountWallet(page, '.menu-sheet', '@390 menu');
@@ -1512,6 +1608,14 @@ try {
     await page.waitForSelector('.listen-pane');
     await checkFloors(page, '/chapter/1?view=listen @390', scheme);
     await shot(page, 'phone-390-listen', scheme);
+    // Learn at phone width, beside the desktop layout's shots (it stays full screen: checkLearnFullScreen above).
+    if (SHOTS) {
+      for (const [q, name] of [['lesson=2', 'watch'], ['lesson=13', 'lesson'], ['mode=practice', 'practice']] as const) {
+        await open(page, `/minpentai?${q}`);
+        await page.waitForTimeout(400);
+        await shot(page, `learn-phone-390-${name}`, scheme);
+      }
+    }
     await page.close();
   }
   {
@@ -1519,7 +1623,7 @@ try {
     await open(frame, '/chapter/1');
     if (await frame.locator('.rail').isVisible()) fail('@424×695: the rail shows in the Farcaster frame');
     // Learn fills the Farcaster frame: a watch screen, a lesson, Under the hood and the practice match.
-    for (const q of ['lesson=1', 'lesson=13', `lesson=${MINPENTAI_HOOD}`, 'mode=practice']) {
+    for (const q of ['watch=1', 'lesson=5', MINPENTAI_HOOD, 'mode=practice']) {
       await open(frame, `/minpentai?${q}`);
       await checkLearnFullScreen(frame, `/minpentai?${q} @424×695`);
       const foot = await frame.locator('.ml-foot').boundingBox();
@@ -1536,4 +1640,4 @@ if (failures.length) {
   console.error(`\nUI CHECK FAILED (${failures.length}):\n- ` + failures.join('\n- '));
   process.exit(1);
 }
-console.log(`ui check passed: ${BASE}, ${38 + MINPENTAI_LESSONS + 4} pages, Make an image (browse, the 8-block cap, search, deep links, its links from the feed, an image's page and the assistant), the chapter sheet, the glossary's covers and back link, and 8 assistant states × light and dark; 10 pages at 1024, 1440 and 2000; AI labels on 9 screens at 390 and 1440`);
+console.log(`ui check passed: ${BASE}, ${38 + MINPENTAI_LESSONS + 4} pages, Make an image (browse, the 8-block cap, search, deep links, its links from the feed, an image's page and the assistant), the chapter sheet, the glossary's covers and back link, and 8 assistant states × light and dark; 10 pages and Learn's desktop layout (watch, lesson, practice) at 1024, 1440 and 2000; AI labels on 9 screens at 390 and 1440`);

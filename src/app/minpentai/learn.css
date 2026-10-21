@@ -33,6 +33,38 @@ html.ml-in-app .ml-learn {
 }
 html.ml-in-app .ml-learn-bar { padding-left: 0; }
 html.ml-in-app .ml-learn-bar .ml-exit { display: flex; }
+/* Desktop (owner, 2026-10-20: "the broadcast large, lesson text beside it"): from 1024 px, outside the mini app, and
+   when the page beside the rail and assistant is at least 760 px wide, the frame is wide: Design's app bar across the
+   top, the stage (broadcast or board, 3:2 as in Design) as large as fits on the left over broadcast black, and the
+   board controls, palette, text and footer in a column on the right. Narrower, it stays Design's phone. Markup and
+   order are unchanged (stage, controls, text, footer), so the reading and focus order are the phone's. The frame
+   ends 24 px above the bottom of the window (--ml-top, set in learn.tsx, is where it starts), so the footer is in view. */
+@media (min-width: 1024px) {
+  html:not(.ml-in-app) .minpentai:has(.ml-learn) { max-width: none; container: ml-page / inline-size; }
+  @container ml-page (min-width: 760px) {
+    html:not(.ml-in-app) .ml-learn {
+      --ml-side: clamp(340px, 32%, 420px);
+      display: grid; container-type: size;
+      grid-template-columns: minmax(0, 1fr) var(--ml-side);
+      grid-template-rows: auto auto auto minmax(0, 1fr) auto;
+      grid-template-areas: 'bar bar' 'stage tools' 'stage palette' 'stage body' 'stage foot';
+      width: calc(100% - 48px); max-width: 1440px; height: min(900px, calc(100dvh - var(--ml-top, 24px) - 24px)); margin: 24px auto;
+      background: linear-gradient(to right, #050507 calc(100% - var(--ml-side)), var(--paper) 0);
+    }
+    html:not(.ml-in-app) .ml-learn-bar { grid-area: bar; background: var(--paper); }
+    html:not(.ml-in-app) .ml-learn .ml-stage {
+      grid-area: stage; align-self: center; justify-self: center; height: auto; aspect-ratio: 3 / 2;
+      width: min(100%, calc((100cqh - 45px) * 1.5));
+    }
+    html:not(.ml-in-app) .ml-learn .ml-board { width: 100%; }
+    html:not(.ml-in-app) .ml-learn .ml-comment { font-size: 14px; }
+    html:not(.ml-in-app) .ml-learn .ml-tools { grid-area: tools; padding-top: 14px; }
+    html:not(.ml-in-app) .ml-learn .ml-palette { grid-area: palette; }
+    html:not(.ml-in-app) .ml-learn .ml-body { grid-area: body; padding-top: 14px; }
+    html:not(.ml-in-app) .ml-learn .ml-foot { grid-area: foot; }
+    html:not(.ml-in-app) .ml-learn .ml-toast { left: auto; width: calc(var(--ml-side) - 36px); box-sizing: border-box; }
+  }
+}
 .ml-learn .ml-exit {
   flex: none; align-items: center; justify-content: center; width: 44px; height: 44px; color: var(--muted); text-decoration: none;
   font-family: var(--font-label), monospace; font-size: 18px; line-height: 1;
