@@ -77,6 +77,26 @@ contract RulesetRegistryTest is Test {
         new RulesetRegistry(address(0));
     }
 
+    /// "Exists" means "has a manifest URI", so an empty URI must never be stored: it would leave the ID re-addable.
+    function testFuzz_emptyURIAlwaysReverts(bytes32 id, address author, bytes32 remix) public {
+        vm.prank(owner);
+        if (id == bytes32(0)) vm.expectRevert(RulesetRegistry.ZeroId.selector);
+        else vm.expectRevert(RulesetRegistry.EmptyURI.selector);
+        reg.add(id, "", author, remix);
+        assertFalse(reg.isAdded(id));
+        assertEq(reg.count(), 0);
+    }
+
+    /// The same ID twice in one transaction, from the owner, with different arguments: the second reverts.
+    function test_sameIdTwiceInOneTransactionReverts() public {
+        vm.startPrank(owner);
+        reg.add(SOLO_V1, "a", owner, bytes32(0));
+        vm.expectRevert(abi.encodeWithSelector(RulesetRegistry.AlreadyAdded.selector, SOLO_V1));
+        reg.add(SOLO_V1, "b", address(1), SOLO_V1);
+        vm.stopPrank();
+        assertEq(reg.get(SOLO_V1).manifestURI, "a");
+    }
+
     function test_unknownRulesetReverts() public {
         vm.expectRevert(abi.encodeWithSelector(RulesetRegistry.UnknownRuleset.selector, SOLO_V1));
         reg.get(SOLO_V1);

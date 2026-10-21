@@ -10,3 +10,7 @@ fs_permissions = [{ access = "read", path = "./fixtures" }]
 
 [fuzz]
 runs = 2000
+
+[invariant]
+runs = 256
+depth = 200
