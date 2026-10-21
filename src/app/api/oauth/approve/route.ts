@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getPerson } from '~/lib/auth';
-import { agentsOn } from '~/lib/agents/core';
+import { agentsOn, allowed } from '~/lib/agents/core';
 import { approve, checkAuthorize, deniedRedirect, OAuthError } from '~/lib/agents/oauth';
 
 /**
@@ -12,6 +12,7 @@ export async function POST(request: Request) {
   if (!agentsOn()) return new NextResponse('Not found', { status: 404 });
   const person = await getPerson(request);
   if (person === null) return NextResponse.json({ error: 'Sign in first' }, { status: 401 });
+  if (!(await allowed(person))) return NextResponse.json({ error: 'Connecting an agent isn’t open for this account.' }, { status: 403 });
   const body = (await request.json().catch(() => ({}))) as { query?: string; allow?: boolean };
   try {
     const ask = await checkAuthorize(new URLSearchParams(body.query ?? ''));

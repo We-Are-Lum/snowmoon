@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { authFetch } from '~/lib/client-auth';
 import { AGENT_WORDING } from '~/lib/agents/wording';
 import { PublishedTextField } from '../publish-words';
@@ -20,6 +20,15 @@ export function TellAgent({ id, label, send, compact = false }: { id: string; la
   const [busy, setBusy] = useState(false);
   const [note, setNote] = useState<string | null>(null);
   const rec = useRef<MediaRecorder | null>(null);
+  // Speaking shows only while it's switched on (AGENTS.transcription.on); until then this is typing only.
+  const [canSpeak, setCanSpeak] = useState(false);
+  useEffect(() => {
+    let live = true;
+    void authFetch('/api/requests/transcribe').then((r) => live && setCanSpeak(r.ok), () => {});
+    return () => {
+      live = false;
+    };
+  }, []);
   const start = async () => {
     setNote(null);
     try {
@@ -68,7 +77,7 @@ export function TellAgent({ id, label, send, compact = false }: { id: string; la
       <PublishedTextField id={id} label={label} value={words} onChange={(v) => setWords(v)} rows={compact ? 2 : 3} maxLength={2000} />
       <p className="you-note">{W.when}</p>
       <div className="tell-buttons">
-        {recording ? (
+        {!canSpeak ? null : recording ? (
           <button type="button" className="ic-secondary tell-mic tell-mic-on" onClick={stop}>{W.stop}</button>
         ) : (
           <button type="button" className="ic-secondary tell-mic" disabled={busy} onClick={() => void start()}>{W.speak}</button>

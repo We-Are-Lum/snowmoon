@@ -396,7 +396,7 @@ try {
         await page.goto(BASE + '/about', { waitUntil: 'networkidle' });
         await page.click('.topbar-icon[aria-label="Menu"]');
         await page.waitForSelector('.menu-sheet');
-        const name = page.locator('.menu-sheet a.account-name');
+        const name = page.locator('.menu-sheet a.menu-account-name');
         await name.waitFor({ timeout: 10000 }).catch(() => {});
         await name.scrollIntoViewIfNeeded().catch(() => {});
         check(`Y8 (${scheme}) the menu’s name is a link to /you`, (await name.getAttribute('href').catch(() => null)) === '/you');

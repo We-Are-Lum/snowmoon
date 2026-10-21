@@ -18,7 +18,7 @@ import { editorData } from '../agent/data';
  * until their person publishes it). Mentions resolve to people, or to a person's agents.
  */
 type Sql = postgres.Sql;
-export type Kind = 'idea' | 'storyboard' | 'frames' | 'character' | 'image';
+export type Kind = 'idea' | 'storyboard' | 'frames' | 'character' | 'image' | 'edit';
 
 export interface Credit {
   version: string;
@@ -60,6 +60,10 @@ export interface VersionView {
   stamp: Stamp;
   /** For storyboards and frame prompts: each shot's picture, as the scene shows it (the default view shows these, not ids). */
   shots: { shot: string; thumb: string | null; frame: string | null }[];
+  /** An approved edit's result (a frame or a video), what it cost, and when it was approved. */
+  made: { kind: string } | null;
+  spentUsd: number | null;
+  approved: boolean;
   createdAt: string;
   publishedAt: string | null;
   image: { url: string; sha256: string; declared: unknown; checked: unknown } | null;
@@ -70,16 +74,17 @@ type Row = {
   id: string; piece_id: string; kind: Kind; title: string; n: number; status: VersionView['status']; person: string;
   agent_name: string | null; words_by_agent: boolean; body: Record<string, unknown>; credit: Credit[]; stamp: Stamp; created_at: Date;
   published_at: Date | null; image_key: string | null; image_sha256: string | null; declared: unknown; checked: unknown;
+  made: { kind: string } | null; spent_usd: string | null; approved_at: Date | null;
 };
 
 const SELECT = (s: Sql) => s`select v.id, v.piece_id, p.kind, p.title, v.n, v.status, p.person, v.agent_name, v.words_by_agent,
-  v.body, v.credit, v.stamp, v.created_at, v.published_at, v.image_key, v.image_sha256, v.declared, v.checked
+  v.body, v.credit, v.stamp, v.created_at, v.published_at, v.image_key, v.image_sha256, v.declared, v.checked, v.made, v.spent_usd, v.approved_at
   from studio.piece_versions v join studio.pieces p on p.id = v.piece_id`;
 
 function shotsShown(body: Record<string, unknown>): VersionView['shots'] {
   const a = Number(body.adaptation);
   const v = Number(body.version);
-  const list = (Array.isArray(body.items) ? body.items : Array.isArray(body.frames) ? body.frames : []) as { shot?: string }[];
+  const list = (Array.isArray(body.items) ? body.items : Array.isArray(body.frames) ? body.frames : typeof body.shot === 'string' ? [{ shot: body.shot }] : []) as { shot?: string }[];
   if (!list.length || !Number.isInteger(a) || !Number.isInteger(v)) return [];
   const d = editorData(a, v);
   return list.map((it) => {
@@ -94,7 +99,7 @@ export async function view(r: Row): Promise<VersionView> {
   return {
     id: r.id, piece: r.piece_id, kind: r.kind, title: r.title, n: r.n, status: r.status, person,
     by: `@${who.short}`, agent: r.agent_name ? who.label : null, wordsByAgent: r.words_by_agent,
-    body: r.body, credit: r.credit, stamp: r.stamp ?? {}, shots: shotsShown(r.body), createdAt: new Date(r.created_at).toISOString(),
+    body: r.body, credit: r.credit, stamp: r.stamp ?? {}, shots: shotsShown(r.body), made: r.made ?? null, spentUsd: r.spent_usd === null ? null : Number(r.spent_usd), approved: !!r.approved_at, createdAt: new Date(r.created_at).toISOString(),
     publishedAt: r.published_at ? new Date(r.published_at).toISOString() : null,
     image: r.image_key && r.image_sha256 ? { url: `${appUrl()}/api/pieces/image/${r.id}`, sha256: r.image_sha256, declared: r.declared, checked: r.checked } : null,
     url: `${appUrl()}/p/${r.piece_id}`,

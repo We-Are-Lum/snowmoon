@@ -96,6 +96,37 @@ function Lines({ lines }: { lines: { source: string; block?: string; speaker?: s
   );
 }
 
+/** An edit to the person's own scene, said plainly: the shot, what changes, and what it made (if approved). */
+function EditChange({ v, mediaSrc }: { v: VersionView; mediaSrc?: string | null }) {
+  const b = v.body as { shot: string; change: { type: string; note?: string; cue?: string; line?: string; from?: string | null; to?: string; from_s?: number; to_s?: number; was?: { from_s?: number; to_s?: number } | string[]; who?: string[]; estimate_usd?: number; seconds?: number } };
+  const c = b.change;
+  const shot = v.shots[0];
+  const made = (v as VersionView & { made?: { kind: string } | null }).made;
+  const sec = (x?: number) => (typeof x === 'number' ? `${x.toFixed(1)} s` : '?');
+  const say =
+    c.type === 'frame' ? `A new frame: “${c.note}”`
+    : c.type === 'take' ? `Line ${c.cue}${c.line ? ` (“${c.line}”)` : ''}: take ${c.to}${c.from ? ` instead of ${c.from}` : ''}`
+    : c.type === 'timing' ? `Runs ${sec(c.from_s)}–${sec(c.to_s)}${c.was && !Array.isArray(c.was) ? ` (was ${sec(c.was.from_s)}–${sec(c.was.to_s)})` : ''}`
+    : c.type === 'speaking' ? `Speaking: ${(c.who ?? []).join(', ')}${Array.isArray(c.was) && c.was.length ? ` (in the shot: ${c.was.join(', ')})` : ''}`
+    : c.type === 'video' ? `A ${c.seconds ?? 5}-second video test: “${c.note}”`
+    : '';
+  return (
+    <div className="piece-edit">
+      {shot?.thumb && !mediaSrc && (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img className="piece-edit-shot" src={shot.thumb} alt={`AI-generated image: shot ${b.shot} as it is now`} />
+      )}
+      {mediaSrc && (made?.kind === 'video' ? (
+        <video className="piece-image" src={mediaSrc} controls muted playsInline />
+      ) : (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img className="piece-image" src={mediaSrc} alt={`AI-generated image: a new frame for shot ${b.shot}`} />
+      ))}
+      <p className="piece-made-text">{say}</p>
+    </div>
+  );
+}
+
 /** The work itself: pictures, the person's and the book's words, the agent's description of an idea. */
 function Work({ v, imageSrc }: { v: VersionView; imageSrc?: string | null }) {
   const b = v.body as Record<string, unknown>;
@@ -104,7 +135,8 @@ function Work({ v, imageSrc }: { v: VersionView; imageSrc?: string | null }) {
     <>
       {v.kind === 'idea' && String(b.text ?? '').split(/\n{2,}/).map((p, i) => <p key={i} className="piece-made-text">{p}</p>)}
       {v.kind === 'character' && <p className="piece-made-text"><strong>{String(b.character)}</strong>: {String(b.description)}</p>}
-      {v.shots.length > 0 && (
+      {v.kind === 'edit' && <EditChange v={v} mediaSrc={imageSrc} />}
+      {v.shots.length > 0 && v.kind !== 'edit' && (
         <ol className="piece-strip" aria-label={v.kind === 'storyboard' ? 'The storyboard' : 'The shots'}>
           {v.shots.map((s, i) => (
             // eslint-disable-next-line @next/next/no-img-element

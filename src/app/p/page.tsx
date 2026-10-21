@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { agentsOn } from '~/lib/agents/core';
+import { agentsPublic } from '~/lib/agents/core';
 import { publishedList } from '~/lib/agents/pieces';
 import { AGENT_WORDING } from '~/lib/agents/wording';
 import { MadeBy } from '~/components/agents/piece-version';
@@ -10,7 +10,7 @@ import '~/components/agents/agents.css';
 export const dynamic = 'force-dynamic';
 
 export default async function Pieces({ searchParams }: { searchParams: Promise<{ words?: string }> }) {
-  if (!agentsOn()) notFound();
+  if (!agentsPublic()) notFound();
   const human = (await searchParams).words === 'human';
   const list = await publishedList(human);
   return (

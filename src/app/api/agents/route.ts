@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getPerson } from '~/lib/auth';
 import { AGENTS } from '~/lib/config';
-import { agentsOn, type Scope } from '~/lib/agents/core';
+import { agentsOn, type Scope, allowed } from '~/lib/agents/core';
 import { agentsOf, revoke, startWalletLink } from '~/lib/agents/accounts';
 
 /**
@@ -12,6 +12,8 @@ const noStore = { 'Cache-Control': 'no-store' };
 export async function GET(request: Request) {
   if (!agentsOn()) return new NextResponse('Not found', { status: 404 });
   const person = await getPerson(request);
+  // Only the allowlisted people (the owner) see anything here; everyone else gets the same 404 as before.
+  if (!(await allowed(person))) return new NextResponse('Not found', { status: 404 });
   if (person === null) return NextResponse.json({ error: 'Sign in first' }, { status: 401, headers: noStore });
   return NextResponse.json({ agents: await agentsOf(person), max: AGENTS.perPerson }, { headers: noStore });
 }
@@ -19,6 +21,8 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   if (!agentsOn()) return new NextResponse('Not found', { status: 404 });
   const person = await getPerson(request);
+  // Only the allowlisted people (the owner) see anything here; everyone else gets the same 404 as before.
+  if (!(await allowed(person))) return new NextResponse('Not found', { status: 404 });
   if (person === null) return NextResponse.json({ error: 'Sign in first' }, { status: 401, headers: noStore });
   const body = (await request.json().catch(() => ({}))) as { action?: string; id?: string; address?: string; name?: string };
   if (body.action === 'disconnect' && typeof body.id === 'string') {

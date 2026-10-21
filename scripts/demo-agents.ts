@@ -11,6 +11,7 @@
 import { spawn } from 'node:child_process';
 import { createHash, randomBytes } from 'node:crypto';
 import { mkdirSync, rmSync, writeFileSync } from 'node:fs';
+import { homedir } from 'node:os';
 import path from 'node:path';
 import { chromium, type Page, type BrowserContext } from 'playwright-core';
 import { startStage, ROOT } from './lib/agents-harness';
@@ -130,7 +131,8 @@ async function agentSession(label: string, token: string, prompt: string) {
       md.push(`*Session ended: ${m.num_turns} turns, ${Math.round((Date.now() - started) / 1000)} s; the CLI's own cost estimate $${cost.toFixed(4)} (billed to the Claude subscription, not per call).*`, '');
     }
   }
-  writeFileSync(path.join(OUT, `transcript-${label}.jsonl`), lines.join('\n') + '\n');
+  // The home folder is replaced with ~ (paths in the CLI's own init event).
+  writeFileSync(path.join(OUT, `transcript-${label}.jsonl`), lines.join('\n').replaceAll(homedir(), '~') + '\n');
   say(`  ${label}: ${lines.length} events`);
   return { md: md.join('\n'), cost };
 }

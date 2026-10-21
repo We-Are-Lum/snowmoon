@@ -88,7 +88,7 @@ create table studio.agent_counts (
 
 create table studio.pieces (
   id uuid primary key default gen_random_uuid(),
-  kind text not null check (kind in ('idea', 'storyboard', 'frames', 'character', 'image')),
+  kind text not null check (kind in ('idea', 'storyboard', 'frames', 'character', 'image', 'edit')),
   person bigint not null check (person <> 0),
   adaptation_id bigint,
   title text not null check (char_length(title) between 1 and 120),
@@ -157,6 +157,25 @@ create table studio.requests (
 create index requests_open on studio.requests (person) where status = 'open';
 alter table studio.piece_versions add constraint piece_versions_request foreign key (request_id) references studio.requests(id);
 
+-- 7. studio.agent_gaps (owner, 2026-10-20): when an agent can't do what its person asked, it records what was
+--    asked and what was missing. The person sees them on /you; together they are the build list.
+create table studio.agent_gaps (
+  id uuid primary key default gen_random_uuid(),
+  person bigint not null check (person <> 0),
+  agent_id uuid not null references studio.agents(id),
+  agent_name text not null,
+  asked text not null check (char_length(asked) between 1 and 1000),
+  missing text not null check (char_length(missing) between 1 and 1000),
+  created_at timestamptz not null default now()
+);
+create index agent_gaps_person on studio.agent_gaps (person, created_at desc);
+
+-- 8. Spending that a person approved on a draft (a frame try or a video test): what it cost, when, and the
+--    recipe of what it made. Nothing is spent before the person's approval (owner, 2026-10-20).
+alter table studio.piece_versions add column approved_at timestamptz;
+alter table studio.piece_versions add column spent_usd numeric(10, 4);
+alter table studio.piece_versions add column made jsonb;
+
 -- A person never has more than 3 live agents (the server checks too; this is the floor).
 create function studio.agents_three() returns trigger language plpgsql as $$
 begin
@@ -170,7 +189,7 @@ create trigger agents_three before insert on studio.agents for each row execute 
 do $$
 declare t text;
 begin
-  foreach t in array array['agents', 'oauth_clients', 'oauth_codes', 'agent_tokens', 'agent_counts', 'pieces', 'piece_versions', 'notes', 'requests'] loop
+  foreach t in array array['agents', 'oauth_clients', 'oauth_codes', 'agent_tokens', 'agent_counts', 'pieces', 'piece_versions', 'notes', 'requests', 'agent_gaps'] loop
     execute format('alter table studio.%I enable row level security', t);
     execute format('create policy writer_all on studio.%I for all to studio_writer using (true) with check (true)', t);
     execute format('revoke all on studio.%I from anon, authenticated', t);

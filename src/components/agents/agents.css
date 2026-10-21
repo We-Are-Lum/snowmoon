@@ -47,3 +47,5 @@
 .request-row { padding: 8px 0; border-top: 1px solid var(--rule); }
 .request-row p { margin: 0; }
 .draft-say-more { margin-top: 6px; }
+.piece-edit { display: flex; flex-direction: column; gap: 8px; }
+.piece-edit-shot { width: 100%; max-width: 360px; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 4px; }

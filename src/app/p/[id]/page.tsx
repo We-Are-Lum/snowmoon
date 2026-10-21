@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { agentsOn } from '~/lib/agents/core';
+import { agentsPublic } from '~/lib/agents/core';
 import { notesOn, pieceVersions } from '~/lib/agents/pieces';
 import { PieceVersion } from '~/components/agents/piece-version';
 import { PieceFeedback } from '~/components/agents/piece-feedback';
@@ -11,7 +11,7 @@ import '~/components/agents/agents.css';
 export const dynamic = 'force-dynamic';
 
 export default async function Piece({ params }: { params: Promise<{ id: string }> }) {
-  if (!agentsOn()) notFound();
+  if (!agentsPublic()) notFound();
   const { id } = await params;
   const versions = (await pieceVersions(id, null)).filter((v) => v.status === 'published');
   if (!versions.length) notFound();

@@ -23,19 +23,22 @@ process.env.IMAGES_TICKET_SECRET = SECRET;
 export const A = '0xa11ce0000000000000000000000000000000a11c';
 export const B = '0xb0b0000000000000000000000000000000000b0b';
 export const C = '0xc0de00000000000000000000000000000000c0de';
+/** Not on the allowlist: everyone else, who must see nothing new. */
+export const D = '0xd00d00000000000000000000000000000000d00d';
 
+const stubUrlRef = { url: '' };
 const freePort = () => new Promise<number>((res) => { const s = createNet(); s.listen(0, '127.0.0.1', () => { const p = (s.address() as { port: number }).port; s.close(() => res(p)); }); });
 
 export interface Stage {
   BASE: string;
   pg: PGlite;
-  people: { A: { person: number; token: string; address: string }; B: { person: number; token: string; address: string }; C: { person: number; token: string; address: string } };
+  people: { A: { person: number; token: string; address: string }; B: { person: number; token: string; address: string }; C: { person: number; token: string; address: string }; D: { person: number; token: string; address: string } };
   store: string;
   stop: () => Promise<void>;
   serverErr: () => string;
 }
 
-export async function startStage(opts: { scanner?: string; port?: number; transcript?: string } = {}): Promise<Stage> {
+export async function startStage(opts: { scanner?: string; port?: number; transcript?: string; public?: boolean } = {}): Promise<Stage> {
   const { signSession } = await import('../../src/lib/wallet/session');
   const pg = new PGlite();
   await pg.exec(`create role anon nologin; create role authenticated nologin; create role service_role nologin bypassrls;`);
@@ -46,6 +49,14 @@ export async function startStage(opts: { scanner?: string; port?: number; transc
   const pA = await account(A);
   const pB = await account(B);
   const pC = await account(C);
+  const pD = await account(D);
+  // A has a $5 prepaid balance (a wallet account pays for its frames, as on the site).
+  await pg.query(`insert into studio.wallet_payments (tx_hash, account_id, chain_id, token, amount, usd, block_number) values ($1, $2, 8453, 'USDC', 5000000, 5, 1)`, ['0x' + 'a'.repeat(64), -pA]);
+  // A made version 2 of Fifteen Days here, so A's agent can edit it (the owner's own versions, in production).
+  // Versions are fixed by a trigger (0012); here, in the test database only, it is lifted for this one setup row.
+  await pg.exec('alter table studio.adaptation_versions disable trigger user');
+  await pg.query(`update studio.adaptation_versions set author_person = $1 where id = 2`, [pA]);
+  await pg.exec('alter table studio.adaptation_versions enable trigger user');
   // A and B have agreed to how their own words are published (the current own-words consent), so they can post notes.
   const { consentWording } = await import('../../src/lib/consent');
   const { sha256 } = consentWording();
@@ -61,6 +72,20 @@ export async function startStage(opts: { scanner?: string; port?: number; transc
 
   // Farcaster's name API: nobody here has a Farcaster name (both people are wallets), so every lookup is "not found".
   const stub = createHttp((req, res) => {
+    // fal's video endpoint, stood in: a video test answers with a link to a tiny file served here.
+    if (req.method === 'POST' && (req.url ?? '').startsWith('/fal-ai/')) {
+      req.resume();
+      req.on('end', () => {
+        res.writeHead(200, { 'content-type': 'application/json' });
+        res.end(JSON.stringify({ video: { url: `${stubUrlRef.url}/video.mp4` }, request_id: 'test-video-1' }));
+      });
+      return;
+    }
+    if (req.method === 'GET' && req.url === '/video.mp4') {
+      res.writeHead(200, { 'content-type': 'video/mp4' });
+      res.end(Buffer.from('fake mp4 bytes for the video test stand-in'));
+      return;
+    }
     if (req.method === 'POST') {
       let body = '';
       req.on('data', (d) => (body += d));
@@ -77,6 +102,7 @@ export async function startStage(opts: { scanner?: string; port?: number; transc
   });
   await new Promise<void>((r) => stub.listen(0, '127.0.0.1', r));
   const stubUrl = `http://127.0.0.1:${(stub.address() as { port: number }).port}`;
+  stubUrlRef.url = stubUrl;
 
   const port = opts.port ?? (await freePort());
   const BASE = `http://localhost:${port}`;
@@ -88,12 +114,13 @@ export async function startStage(opts: { scanner?: string; port?: number; transc
       ...env, NODE_ENV: 'production', NEXT_PUBLIC_URL: BASE,
       STUDIO_DATABASE_URL: `postgres://studio_writer@127.0.0.1:${dbPort}/postgres`,
       FARCASTER_API_URL: stubUrl, BASE_RPC_URL: stubUrl, IMAGES_TICKET_SECRET: SECRET,
-      AGENTS_TEST: '1', AGENT_API_TEST: '1', AGENTS_TEST_STORE: store, AGENTS_TEST_SCANNER: opts.scanner ?? 'none-planted', AGENTS_TEST_TRANSCRIPT: opts.transcript ?? 'Bai tells Zei to slow down, and this time he listens.',
+      AGENTS_TEST: '1', AGENT_API_TEST: '1', AGENTS_TEST_ALLOW: [A, B, C].join(','), AGENTS_TEST_PUBLIC: opts.public === false ? '' : '1',
+      AGENTS_TEST_FAL_URL: stubUrl, REMIX_TEST_FAKES: '1', AGENTS_TEST_STORE: store, AGENTS_TEST_SCANNER: opts.scanner ?? 'none-planted', AGENTS_TEST_TRANSCRIPT: opts.transcript ?? 'Bai tells Zei to slow down, and this time he listens.',
     },
     stdio: ['ignore', 'ignore', 'pipe'],
   });
   let serverErr = '';
-  next.stderr?.on('data', (d) => (serverErr += d));
+  next.stderr?.on('data', (d) => { serverErr += d; if (process.env.AGENTS_DEBUG) process.stderr.write(d); });
   for (let i = 0; i < 80; i++) {
     if (await fetch(BASE + '/about').then((r) => r.ok, () => false)) break;
     await new Promise((r) => setTimeout(r, 500));
@@ -102,6 +129,7 @@ export async function startStage(opts: { scanner?: string; port?: number; transc
     A: { person: pA, token: signSession(-pA, A)!, address: A },
     B: { person: pB, token: signSession(-pB, B)!, address: B },
     C: { person: pC, token: signSession(-pC, C)!, address: C },
+    D: { person: pD, token: signSession(-pD, D)!, address: D },
   };
   return {
     BASE, pg, people, store,

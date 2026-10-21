@@ -44,19 +44,34 @@ export function DraftRow({ v, onDone }: { v: VersionView; onDone: () => void }) 
   const src = useDraftImage(v);
   const [busy, setBusy] = useState(false);
   const [more, setMore] = useState(false);
-  const act = async (action: 'keep' | 'again' | 'more', words?: string, spoken?: boolean) => {
+  const [err, setErr] = useState<string | null>(null);
+  const act = async (action: 'keep' | 'again' | 'more' | 'run', words?: string, spoken?: boolean) => {
     setBusy(true);
+    setErr(null);
     const r = await authFetch('/api/drafts', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ what: 'version', id: v.id, action, words, spoken }) }).catch(() => null);
     setBusy(false);
     if (r?.ok) onDone();
+    else if (action === 'run') setErr(((await r?.json().catch(() => ({}))) as { error?: string }).error ?? T.failed);
     return r?.ok ? null : T.failed;
   };
+  // A frame try or a video test costs money: it is made only when the person approves the shown estimate.
+  const change = (v.body as { change?: { type?: string; estimate_usd?: number } }).change;
+  const needsApproval = v.kind === 'edit' && (change?.type === 'frame' || change?.type === 'video') && !v.approved;
   return (
     <div className="draft-row" data-draft={v.id}>
       <p><strong>{v.title}</strong> <span className="piece-sub">{v.kind}</span></p>
       <PieceVersion v={v} imageSrc={src} />
+      {needsApproval && (
+        <div className="draft-actions">
+          <button type="button" className="ic-primary" disabled={busy} onClick={() => void act('run')}>
+            {busy ? R.making : change?.type === 'video' ? R.makeVideo(change.estimate_usd ?? 0) : R.makeFrame(change?.estimate_usd ?? 0)}
+          </button>
+        </div>
+      )}
+      {v.spentUsd !== null && <p className="you-note">{R.spent(v.spentUsd)}</p>}
+      {err && <p className="you-note" role="alert">{err}</p>}
       <div className="draft-actions">
-        <button type="button" className="ic-primary" disabled={busy} onClick={() => void act('keep')}>{R.keep}</button>
+        <button type="button" className={needsApproval ? 'ic-secondary' : 'ic-primary'} disabled={busy} onClick={() => void act('keep')}>{R.keep}</button>
         <button type="button" className="ic-secondary" disabled={busy} onClick={() => void act('again')}>{R.again}</button>
         <button type="button" className="ic-secondary" disabled={busy} aria-expanded={more} onClick={() => setMore((m) => !m)}>{R.more}</button>
       </div>
@@ -104,7 +119,7 @@ function Asked({ r }: { r: RequestView }) {
 export function AgentsOnYou() {
   const [on, setOn] = useState<boolean | null>(null);
   const [agents, setAgents] = useState<AgentRow[]>([]);
-  const [drafts, setDrafts] = useState<{ drafts: VersionView[]; notes: NoteView[]; published: VersionView[]; waiting: RequestView[] } | null>(null);
+  const [drafts, setDrafts] = useState<{ drafts: VersionView[]; notes: NoteView[]; published: VersionView[]; waiting: RequestView[]; gaps: { id: string; agent: string; asked: string; missing: string; createdAt: string }[] } | null>(null);
   const [name, setName] = useState('');
   const [address, setAddress] = useState('');
   const [message, setMessage] = useState<string | null>(null);
@@ -167,6 +182,19 @@ export function AgentsOnYou() {
           </>
         )}
       </section>
+      {drafts && drafts.gaps.length > 0 && (
+        <section className="you-section" aria-labelledby="you-gaps">
+          <h2 id="you-gaps">{W.gaps}</h2>
+          <p className="you-note">{W.gapsNote}</p>
+          {drafts.gaps.map((g) => (
+            <div className="request-row" key={g.id} data-gap={g.id}>
+              <p className="you-note">{W.gapAsked} ({g.agent}, {when(g.createdAt)}):</p>
+              <p>{g.asked}</p>
+              <p className="you-note">{W.gapMissing}: {g.missing}</p>
+            </div>
+          ))}
+        </section>
+      )}
       <section className="you-section" aria-labelledby="you-agents">
         <h2 id="you-agents">{W.agents}</h2>
         <p className="you-note">{W.agentsNote}</p>

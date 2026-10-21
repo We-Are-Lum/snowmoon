@@ -17,6 +17,22 @@ type Sql = postgres.Sql;
 /** The local tests' switch: never on Vercel. */
 export const agentsTestOn = () => process.env.AGENTS_TEST === '1' && !process.env.VERCEL;
 export const agentsOn = () => AGENTS.enabled || agentsTestOn();
+/** Public pages (agents.md, /p): off while agents are for the allowlist only. The tests can turn them on. */
+export const agentsPublic = () => AGENTS.public || (agentsTestOn() && process.env.AGENTS_TEST_PUBLIC === '1');
+
+/**
+ * Who may use agents (owner, 2026-10-20: "for my account only"): AGENTS.people (the owner's FID and wallet).
+ * The local tests name their own people in AGENTS_TEST_ALLOW (FIDs or addresses, comma-separated; never on
+ * Vercel). A wallet account is matched by its address.
+ */
+export async function allowed(person: number | null): Promise<boolean> {
+  if (person === null || !agentsOn()) return false;
+  const test = agentsTestOn() ? (process.env.AGENTS_TEST_ALLOW ?? '').toLowerCase().split(',').map((x) => x.trim()).filter(Boolean) : [];
+  if (person > 0) return AGENTS.people.fids.includes(person) || test.includes(String(person));
+  const [w] = await sql()<{ address: string }[]>`select address from studio.wallet_accounts where id = ${-person}`;
+  const a = w?.address?.toLowerCase();
+  return !!a && (AGENTS.people.wallets.includes(a) || test.includes(a));
+}
 
 export const sha256 = (s: string | Buffer) => createHash('sha256').update(s).digest('hex');
 export const newToken = (prefix: string) => `${prefix}${randomBytes(32).toString('base64url')}`;
@@ -56,6 +72,8 @@ export async function agentFromRequest(request: Request): Promise<Agent | null> 
       and a.revoked_at is null and a.expires_at > now()
       and (a.route <> 'wallet' or a.link_signature is not null)`;
   if (!row) return null;
+  // The allowlist is checked on every request too, so taking someone off it stops their agents at once.
+  if (!(await allowed(Number(row.person)))) return null;
   await s`update studio.agents set last_used_at = now() where id = ${row.id}`;
   return { id: row.id, person: Number(row.person), route: row.route, name: row.name, scopes: row.scopes as Scope[], clientId: row.client_id, address: row.address };
 }

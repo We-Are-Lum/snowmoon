@@ -1,8 +1,10 @@
 import { NextResponse } from 'next/server';
 import { getPerson } from '~/lib/auth';
-import { agentsOn } from '~/lib/agents/core';
+import { agentsOn, allowed } from '~/lib/agents/core';
 import { decide, draftNotesOf, piecesOf } from '~/lib/agents/pieces';
 import { addRequest, openRequests } from '~/lib/agents/requests';
+import { gapsOf } from '~/lib/agents/edits';
+import { runApproved } from '~/lib/agents/approve';
 import { hasConsented } from '~/lib/consent';
 
 /**
@@ -13,18 +15,27 @@ const noStore = { 'Cache-Control': 'no-store' };
 export async function GET(request: Request) {
   if (!agentsOn()) return new NextResponse('Not found', { status: 404 });
   const person = await getPerson(request);
+  // Only the allowlisted people (the owner) see anything here; everyone else gets the same 404 as before.
+  if (!(await allowed(person))) return new NextResponse('Not found', { status: 404 });
   if (person === null) return NextResponse.json({ error: 'Sign in first' }, { status: 401, headers: noStore });
-  return NextResponse.json({ drafts: await piecesOf(person, 'draft'), notes: await draftNotesOf(person), published: await piecesOf(person, 'published'), waiting: await openRequests(person) }, { headers: noStore });
+  return NextResponse.json({ drafts: await piecesOf(person, 'draft'), notes: await draftNotesOf(person), published: await piecesOf(person, 'published'), waiting: await openRequests(person), gaps: await gapsOf(person) }, { headers: noStore });
 }
 
 export async function POST(request: Request) {
   if (!agentsOn()) return new NextResponse('Not found', { status: 404 });
   const person = await getPerson(request);
+  // Only the allowlisted people (the owner) see anything here; everyone else gets the same 404 as before.
+  if (!(await allowed(person))) return new NextResponse('Not found', { status: 404 });
   if (person === null) return NextResponse.json({ error: 'Sign in first' }, { status: 401, headers: noStore });
   // The person reacts (owner, 2026-10-20): keep (publish it), try again (discard it; the agent tries again),
   // or say more (their words, typed or spoken, become the agent's next request on it). Publish and discard
   // stay as the plain words for the same two acts.
   const b = (await request.json().catch(() => ({}))) as { what?: string; id?: string; action?: string; words?: string; spoken?: boolean };
+  // "Make it": the person approves the shown estimate for a frame try or a video test (owner, 2026-10-20).
+  if (b.action === 'run' && b.what === 'version' && typeof b.id === 'string') {
+    const r = await runApproved(person, b.id, request);
+    return NextResponse.json(r.ok ? { ok: true } : { error: r.error }, { status: r.ok ? 200 : r.status, headers: noStore });
+  }
   const action = b.action === 'keep' ? 'publish' : b.action;
   if ((b.what !== 'version' && b.what !== 'note') || typeof b.id !== 'string' || !['publish', 'discard', 'again', 'more'].includes(action ?? ''))
     return NextResponse.json({ error: 'Bad request' }, { status: 400, headers: noStore });

@@ -10,6 +10,7 @@ import { checkLines, checkPlain, checkText, storyWordsAllowed } from './filter';
 import { bringIn, imagesOpen, ScanMatch, type Declared } from './images';
 import { addNote, draftPiece, feedbackFor, notesOn, pieceVersions, piecesOf, revise, versionById, visibleTo, type Answering, type Kind } from './pieces';
 import { openRequests, personWords } from './requests';
+import { changeTiming, listTakes, logGap, markSpeaking, requestVideo, swapTake, tryFrame, frameEstimate, videoEstimate } from './edits';
 
 /**
  * The tools an agent of a person can use (owner, 2026-10-20; design §2). Served as MCP at /mcp (the
@@ -133,7 +134,7 @@ const WRITE: AgentTool[] = [
     run: async (agent, args) => {
       only(args, []);
       const who = await agentLabel(agent.person, agent.name);
-      return { you: who.label, person: `@${who.short}`, scopes: agent.scopes, limits_per_day: AGENTS.limits, story_words: storyWordsAllowed(agent.person) ? 'allowed (test switch), labelled' : 'never yours: place your person\'s own words (exactly as they said them) or the book\'s; if a line is missing, leave it out and ask', how_to_work: 'Call read_requests: your person\'s ideas and notes are your to-do list. Answer each with a draft (answering: its id). They react with keep, try again, or say more; those come back as requests.', bringing_in_images: imagesOpen() ? 'open' : 'not open yet', rule: 'You draft; your person publishes. Nothing you make is public until they do.' };
+      return { you: who.label, person: `@${who.short}`, scopes: agent.scopes, limits_per_day: AGENTS.limits, story_words: storyWordsAllowed(agent.person) ? 'allowed (test switch), labelled' : 'never yours: place your person\'s own words (exactly as they said them) or the book\'s; if a line is missing, leave it out and ask', how_to_work: 'Call read_requests: your person\'s ideas and notes are your to-do list. Answer each with a draft (answering: its id). They react with keep, try again, or say more; those come back as requests. To edit their own scene, use list_takes, try_frame, swap_take, change_timing, mark_speaking or request_video_test; anything with a cost waits for their approval. If no tool can do what they asked, call log_gap.', bringing_in_images: imagesOpen() ? 'open' : 'not open yet', rule: 'You draft; your person publishes. Nothing you make is public until they do.' };
     },
   },
   {
@@ -319,10 +320,62 @@ const WRITE: AgentTool[] = [
   },
 ];
 
+const SHOT_ARGS = { adaptation: { type: 'integer' }, version: { type: 'integer' }, shot: { type: 'string' } };
+const EDIT_NOTE = 'Your person\'s own words for what they want.';
+
+/**
+ * Editing the person's own adaptation (owner, 2026-10-20). Drafts only; a frame or a video costs money and
+ * runs only after the person approves the shown estimate on /you.
+ */
+const EDITS: AgentTool[] = [
+  {
+    name: 'list_takes', title: 'List a shot\'s voice takes', scope: 'read', writes: false,
+    description: 'For a shot of a version your person made: each line, the take in use, and the other takes there are for it (for swap_take).',
+    inputSchema: { type: 'object', properties: SHOT_ARGS, required: ['adaptation', 'version', 'shot'], additionalProperties: false },
+    run: async (agent, args) => listTakes(agent, args),
+  },
+  {
+    name: 'try_frame', title: 'Try a new frame for a shot', scope: 'drafts', writes: true, counts: 'drafts',
+    description: `Draft a new frame for a shot of your person's own version, from their note. Nothing is made yet: their You page shows the estimate (up to about $${frameEstimate()}) and makes it only when they approve; the frame comes from the site's own pipeline (the shot's camera, cast and place, plus the note) and stays private in the draft.`,
+    inputSchema: { type: 'object', properties: { ...SHOT_ARGS, note: { type: 'string', description: EDIT_NOTE }, answering: ANSWERING }, required: ['adaptation', 'version', 'shot', 'note'], additionalProperties: false },
+    run: async (agent, args) => tryFrame(agent, args),
+  },
+  {
+    name: 'swap_take', title: 'Swap a voice take', scope: 'drafts', writes: true, counts: 'drafts',
+    description: 'Draft using another take of a line in a shot of your person\'s own version (the takes are theirs; see list_takes).',
+    inputSchema: { type: 'object', properties: { ...SHOT_ARGS, cue: { type: 'string' }, take: { type: 'string' }, answering: ANSWERING }, required: ['adaptation', 'version', 'shot', 'cue', 'take'], additionalProperties: false },
+    run: async (agent, args) => swapTake(agent, args),
+  },
+  {
+    name: 'change_timing', title: 'Change a shot\'s timing', scope: 'drafts', writes: true, counts: 'drafts',
+    description: 'Draft a new start and end for a shot of your person\'s own version: from_s and to_s (seconds in the cut), or a new length in seconds.',
+    inputSchema: { type: 'object', properties: { ...SHOT_ARGS, from_s: { type: 'number' }, to_s: { type: 'number' }, seconds: { type: 'number' }, answering: ANSWERING }, required: ['adaptation', 'version', 'shot'], additionalProperties: false },
+    run: async (agent, args) => changeTiming(agent, args),
+  },
+  {
+    name: 'mark_speaking', title: 'Mark who\'s speaking', scope: 'drafts', writes: true, counts: 'drafts',
+    description: 'Draft who is speaking in a shot of your person\'s own version (names, or the shot\'s letters such as Z and B).',
+    inputSchema: { type: 'object', properties: { ...SHOT_ARGS, who: { type: 'array', items: { type: 'string' } }, answering: ANSWERING }, required: ['adaptation', 'version', 'shot', 'who'], additionalProperties: false },
+    run: async (agent, args) => markSpeaking(agent, args),
+  },
+  {
+    name: 'request_video_test', title: 'Request a video test for a shot', scope: 'drafts', writes: true, counts: 'drafts',
+    description: `Draft a short video test of a shot of your person's own version (LongCat-Video, 480p, 5 seconds, from the shot's frame and their note). Its cost (about $${videoEstimate()}) is shown on their You page; nothing is spent until they approve.`,
+    inputSchema: { type: 'object', properties: { ...SHOT_ARGS, note: { type: 'string', description: EDIT_NOTE }, answering: ANSWERING }, required: ['adaptation', 'version', 'shot'], additionalProperties: false },
+    run: async (agent, args) => requestVideo(agent, args),
+  },
+  {
+    name: 'log_gap', title: 'Log something you couldn\'t do', scope: 'read', writes: true,
+    description: 'When your person asks for something none of your tools can do, record it: what they asked (their words) and what was missing. It shows on their You page and becomes the build list. Use it instead of guessing or working around a missing tool.',
+    inputSchema: { type: 'object', properties: { asked: { type: 'string' }, missing: { type: 'string' } }, required: ['asked', 'missing'], additionalProperties: false },
+    run: async (agent, args) => logGap(agent, args),
+  },
+];
+
 /** The open read tools, as tools of a signed-in agent (scope read). */
 const READ: AgentTool[] = READ_TOOLS.map((t) => ({ ...t, scope: 'read' as Scope, writes: false, run: (_agent: Agent, args: Record<string, unknown>) => t.run(args) }));
 
-export const AGENT_TOOLS: AgentTool[] = [...READ, ...WRITE];
+export const AGENT_TOOLS: AgentTool[] = [...READ, ...WRITE, ...EDITS];
 export const agentToolByName = (name: string) => AGENT_TOOLS.find((t) => t.name === name) ?? null;
 
 /** Runs one tool for an agent: its scope, then its count, then the tool. */

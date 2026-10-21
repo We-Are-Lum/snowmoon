@@ -94,7 +94,7 @@ try {
   const publishAsAgent = await fetch(`${BASE}/api/drafts`, { method: 'POST', headers: { 'content-type': 'application/json', authorization: `Bearer ${agentA}` }, body: JSON.stringify({ what: 'version', id: '00000000-0000-4000-8000-000000000000', action: 'publish' }) });
   const noteAsAgent = await fetch(`${BASE}/api/notes`, { method: 'POST', headers: { 'content-type': 'application/json', authorization: `Bearer ${agentA}` }, body: JSON.stringify({ on: 'x', text: 'hi' }) });
   const agentsAsAgent = await fetch(`${BASE}/api/agents`, { headers: { authorization: `Bearer ${agentA}` } });
-  check('P1 an agent’s token is refused as a person (You page, Allow, publish, notes, agents list)', [you, approveAsAgent, publishAsAgent, noteAsAgent, agentsAsAgent].every((r) => r.status === 401), [you, approveAsAgent, publishAsAgent, noteAsAgent, agentsAsAgent].map((r) => r.status).join(','));
+  check('P1 an agent’s token is refused as a person (You page, Allow, publish, notes, agents list)', [you, approveAsAgent, publishAsAgent, noteAsAgent, agentsAsAgent].every((r) => r.status === 401 || r.status === 404), [you, approveAsAgent, publishAsAgent, noteAsAgent, agentsAsAgent].map((r) => r.status).join(','));
   const asPersonToken = await mcp(BASE, people.A.token, 'ping');
   check('P2 a person’s token is not an agent’s at /mcp', asPersonToken.status === 401);
 
@@ -193,11 +193,11 @@ try {
   check('R14 speaking: the recording comes back as words to check (labelled stand-in here)', tr.ok && trj.text === 'Bai tells Zei to slow down, and this time he listens.' && /stand-in/.test(trj.by));
   const trAnon = await fetch(`${BASE}/api/requests/transcribe`, { method: 'POST', headers: { 'content-type': 'audio/wav' }, body: audio });
   const trText = await fetch(`${BASE}/api/requests/transcribe`, { method: 'POST', headers: { 'content-type': 'text/plain', authorization: `Bearer ${people.A.token}` }, body: 'x' });
-  check('R15 speaking needs a person’s sign-in and audio', trAnon.status === 401 && trText.status === 400);
+  check('R15 speaking needs a person’s sign-in and audio', (trAnon.status === 401 || trAnon.status === 404) && trText.status === 400);
   const audioCols = await S.pg.query<{ n: number }>(`select count(*)::int as n from information_schema.columns where table_schema = 'studio' and (data_type = 'bytea' or column_name ~ 'audio|recording')`);
   check('R16 no recording is kept: no table has a place for audio', audioCols.rows[0].n === 0, String(audioCols.rows[0].n));
   const agentRequest = await fetch(`${BASE}/api/requests`, { method: 'POST', headers: { 'content-type': 'application/json', authorization: `Bearer ${agentA}` }, body: JSON.stringify({ kind: 'idea', words: 'an agent pretending to be its person' }) });
-  check('R17 an agent can’t put words in its person’s mouth (a request needs the person’s sign-in)', agentRequest.status === 401);
+  check('R17 an agent can’t put words in its person’s mouth (a request needs the person’s sign-in)', agentRequest.status === 401 || agentRequest.status === 404);
 
   console.log('F  feedback, revisions and credit');
   const personNote = await asPerson(people.B.token, '/api/notes', { method: 'POST', body: JSON.stringify({ on: ideaVersion, text: `Lovely. @${people.A.address}'s agent, could the rice go cold in two beats, not one?` }) });
@@ -291,6 +291,68 @@ try {
   const restAnon = await fetch(`${BASE}/api/agent/v1/whoami`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: '{}' });
   check('W6 REST without a token: 401', restAnon.status === 401);
 
+  console.log('E  editing your own adaptation (drafts; spending only after approval)');
+  const edA = (await connect(BASE, people.A.token, 'Claude')).access_token;
+  const v2data = JSON.parse(readFileSync(path.join(ROOT, 'public/editor/1/v2/data.json'), 'utf8')) as { shots: { id: string; lines?: { cue: string; takes?: { id: string }[] }[] }[] };
+  const withLine = v2data.shots.find((x) => (x.lines ?? []).some((l) => (l.takes ?? []).length > 1))!;
+  const line = withLine.lines!.find((l) => (l.takes ?? []).length > 1)!;
+  const takes = await tool(BASE, edA, 'list_takes', { adaptation: 1, version: 2, shot: withLine.id });
+  check('E1 list_takes: the lines of a shot of their own version and the takes for each', takes.ok && (takes.out.lines as { cue: string; takes: string[] }[]).some((l) => l.cue === line.cue && l.takes.length > 1), takes.error ?? '');
+  const notMine = await tool(BASE, edA, 'try_frame', { adaptation: 1, version: 1, shot: withLine.id, note: 'Warmer light.' });
+  check('E2 a version someone else made can’t be edited', !notMine.ok && /own versions/.test(notMine.error ?? ''));
+  const tf = await tool(BASE, edA, 'try_frame', { adaptation: 1, version: 2, shot: withLine.id, note: 'Warmer light, and Bai a little closer to him.' });
+  const tfDraft = (await (await asPerson(people.A.token, '/api/drafts')).json()).drafts.find((d: { id: string }) => d.id === tf.out.version) as { approved: boolean; spentUsd: number | null; image: unknown };
+  check('E3 try_frame is a draft with an estimate, waiting for approval; nothing is made or spent yet', tf.ok && Number((tf.out.change as { estimate_usd: number }).estimate_usd) > 0 && tfDraft && !tfDraft.approved && tfDraft.spentUsd === null && !tfDraft.image, tf.error ?? JSON.stringify(tfDraft));
+  const bRuns = await asPerson(people.B.token, '/api/drafts', { method: 'POST', body: JSON.stringify({ what: 'version', id: tf.out.version, action: 'run' }) });
+  check('E4 nobody else can approve the spend', bRuns.status === 404);
+  const run = await asPerson(people.A.token, '/api/drafts', { method: 'POST', body: JSON.stringify({ what: 'version', id: tf.out.version, action: 'run' }) });
+  const ranDraft = (await (await asPerson(people.A.token, '/api/drafts')).json()).drafts.find((d: { id: string }) => d.id === tf.out.version) as { approved: boolean; spentUsd: number | null; made: { label: string; kind: string } | null };
+  const frameImg = await asPerson(people.A.token, `/api/pieces/image/${tf.out.version}`);
+  check('E5 the person approves: the frame is made (Remix’s pipeline, stand-in model here), kept private, its cost recorded', run.ok && ranDraft.approved && ranDraft.spentUsd !== null && ranDraft.made?.label === 'Made here' && frameImg.ok && frameImg.headers.get('content-type') === 'image/jpeg', `${run.status} ${JSON.stringify(ranDraft)}`);
+  const anonImg = await fetch(`${BASE}/api/pieces/image/${tf.out.version}`);
+  check('E6 the made frame is private to its person', anonImg.status === 404);
+  const twice = await asPerson(people.A.token, '/api/drafts', { method: 'POST', body: JSON.stringify({ what: 'version', id: tf.out.version, action: 'run' }) });
+  check('E7 approved once only (no double spending)', twice.status === 409);
+  const otherTake = line.takes!.map((t) => t.id).find((id) => id !== (takes.out.lines as { cue: string; in_use: string | null }[]).find((l) => l.cue === line.cue)?.in_use) ?? line.takes![0].id;
+  const sw = await tool(BASE, edA, 'swap_take', { adaptation: 1, version: 2, shot: withLine.id, cue: line.cue, take: otherTake });
+  const swBad = await tool(BASE, edA, 'swap_take', { adaptation: 1, version: 2, shot: withLine.id, cue: line.cue, take: 'no-such-take' });
+  check('E8 swap_take drafts another of the line’s own takes; a take that isn’t there is refused', sw.ok && !swBad.ok, sw.error ?? '');
+  const tm = await tool(BASE, edA, 'change_timing', { adaptation: 1, version: 2, shot: withLine.id, seconds: 4 });
+  const tmBad = await tool(BASE, edA, 'change_timing', { adaptation: 1, version: 2, shot: withLine.id, seconds: 0.1 });
+  check('E9 change_timing drafts a new length; under 0.3 s is refused', tm.ok && !tmBad.ok && (tm.out.change as { was: { from_s: number } }).was.from_s >= 0);
+  const sp = await tool(BASE, edA, 'mark_speaking', { adaptation: 1, version: 2, shot: withLine.id, who: ['Bai'] });
+  check('E10 mark_speaking drafts who speaks', sp.ok && JSON.stringify((sp.out.change as { who: string[] }).who) === '["Bai"]');
+  const vt = await tool(BASE, edA, 'request_video_test', { adaptation: 1, version: 2, shot: withLine.id, note: 'Steam rising from the cup; the camera holds.' });
+  const vrun = await asPerson(people.A.token, '/api/drafts', { method: 'POST', body: JSON.stringify({ what: 'version', id: vt.out.version, action: 'run' }) });
+  const vid = await asPerson(people.A.token, `/api/pieces/image/${vt.out.version}`);
+  check('E11 a video test runs only on approval (fal stood in), kept private, its estimate recorded', vt.ok && vrun.ok && vid.ok && vid.headers.get('content-type') === 'video/mp4', `${vt.error ?? ''} ${vrun.status}`);
+  let capAt = 0;
+  for (let i = 2; i <= 6; i++) {
+    const more = await tool(BASE, edA, 'request_video_test', { adaptation: 1, version: 2, shot: withLine.id, note: `Test ${i}.` });
+    const r = await asPerson(people.A.token, '/api/drafts', { method: 'POST', body: JSON.stringify({ what: 'version', id: more.out.version, action: 'run' }) });
+    if (!r.ok) { capAt = i; check('E12 the daily cap stops the sixth video test, saying why', r.status === 429 && /most for today/.test((await r.json()).error ?? '')); break; }
+  }
+  check('E12b …at exactly the sixth', capAt === 6, String(capAt));
+  const editList = ((await mcp(BASE, edA, 'tools/list')).body?.result?.tools ?? []).map((t) => t.name);
+  check('E13 still nothing that publishes, spends on its own, or pays', ['try_frame', 'swap_take', 'change_timing', 'mark_speaking', 'request_video_test', 'log_gap'].every((n) => editList.includes(n)) && !editList.some((n) => /publish|spend|pay|approve|run/i.test(n)));
+
+  console.log('G  gaps');
+  const gap = await tool(BASE, edA, 'log_gap', { asked: 'Make Zei’s coat blue in every shot of the hotel.', missing: 'No tool changes a character across many shots at once.' });
+  const gapsA = (await (await asPerson(people.A.token, '/api/drafts')).json()).gaps as { asked: string; agent: string }[];
+  const gapsB = (await (await asPerson(people.B.token, '/api/drafts')).json()).gaps as unknown[];
+  check('G1 log_gap records what was asked and what was missing, on the person’s You page only', gap.ok && gapsA.some((g) => g.asked.includes('coat blue') && g.agent === 'Claude') && gapsB.length === 0);
+
+  console.log('A  the allowlist: everyone else sees nothing new');
+  const dRoutes = await Promise.all(['/api/agents', '/api/drafts', '/api/requests'].map((u) => asPerson(people.D.token, u)));
+  check('A1 someone not on the allowlist gets 404 from every agent route', dRoutes.every((r) => r.status === 404), dRoutes.map((r) => r.status).join(','));
+  const dApprove = await asPerson(people.D.token, '/api/oauth/approve', { method: 'POST', body: JSON.stringify({ query: a1.query.toString(), allow: true }) });
+  check('A2 …and can’t connect an agent', dApprove.status === 403);
+  const dSpeak = await fetch(`${BASE}/api/requests/transcribe`, { method: 'POST', headers: { 'content-type': 'audio/wav', authorization: `Bearer ${people.D.token}` }, body: Buffer.from('x') });
+  check('A3 …or use speaking', dSpeak.status === 404);
+  await S.pg.query(`update studio.agents set person = $1 where person = $2 and revoked_at is null`, [people.D.person, people.C.person]);
+  const cAgents = (await S.pg.query<{ id: string }>(`select id from studio.agents where person = $1 and revoked_at is null`, [people.D.person])).rows;
+  check('A4 an agent whose person is off the allowlist stops at once (checked on every request)', cAgents.length > 0 && (await mcp(BASE, c2.access_token, 'ping')).status === 401);
+
   console.log('S  story words, in-process');
   const filter = await import('../src/lib/agents/filter');
   const { AGENTS } = await import('../src/lib/config');
@@ -343,6 +405,26 @@ try {
   failures.push(`crashed: ${(e as Error).stack ?? e}`);
 } finally {
   await S.stop();
+}
+// Owner-only mode, as it ships (owner, 2026-10-20): the connector works; public pages stay off.
+console.log('M  owner-only mode (public pages off)');
+{
+  const M = await startStage({ public: false });
+  try {
+    const md = await fetch(`${M.BASE}/agents.md`);
+    const list = await fetch(`${M.BASE}/p`);
+    const meta = await fetch(`${M.BASE}/.well-known/oauth-protected-resource/mcp`);
+    const mcpAnon = await fetch(`${M.BASE}/mcp`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: '{"jsonrpc":"2.0","id":1,"method":"ping"}' });
+    check('M1 agents.md and /p are not there; the connector and its metadata are (for the Claude app)', md.status === 404 && list.status === 404 && meta.ok && mcpAnon.status === 401, `${md.status} ${list.status} ${meta.status} ${mcpAnon.status}`);
+    const owner = await connect(M.BASE, M.people.A.token, 'Claude');
+    const idea = await tool(M.BASE, owner.access_token, 'start_idea', { title: 'x', text: 'an idea' });
+    await fetch(`${M.BASE}/api/drafts`, { method: 'POST', headers: { 'content-type': 'application/json', authorization: `Bearer ${M.people.A.token}` }, body: JSON.stringify({ what: 'version', id: idea.out.version, action: 'keep' }) });
+    check('M2 a kept piece stays private: no public page for it', (await fetch(`${M.BASE}/p/${idea.out.piece}`)).status === 404);
+  } catch (e) {
+    failures.push(`owner-only stage crashed: ${(e as Error).stack ?? e}`);
+  } finally {
+    await M.stop();
+  }
 }
 if (S.serverErr().includes('Error')) console.log('server stderr (tail):\n' + S.serverErr().split('\n').slice(-15).join('\n'));
 if (failures.length) {

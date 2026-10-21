@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getPerson } from '~/lib/auth';
 import { AGENTS } from '~/lib/config';
-import { agentsOn, sha256, sql } from '~/lib/agents/core';
+import { agentsOn, agentsTestOn, sha256, sql, allowed } from '~/lib/agents/core';
 
 /**
  * Speaking counts as writing (owner, 2026-10-20). The person's recording comes in, is transcribed, and only
@@ -12,9 +12,19 @@ import { agentsOn, sha256, sql } from '~/lib/agents/core';
  */
 const noStore = { 'Cache-Control': 'no-store' };
 let standInTurn = 0;
+const speakingOn = () => agentsOn() && (AGENTS.transcription.on || agentsTestOn());
+
+/** Whether the Speak button shows: for an allowlisted person, while speaking is on. */
+export async function GET(request: Request) {
+  if (!speakingOn() || !(await allowed(await getPerson(request)))) return new NextResponse('Not found', { status: 404, headers: noStore });
+  return NextResponse.json({ on: true }, { headers: noStore });
+}
+
 export async function POST(request: Request) {
-  if (!agentsOn()) return new NextResponse('Not found', { status: 404 });
+  if (!speakingOn()) return new NextResponse('Not found', { status: 404 });
   const person = await getPerson(request);
+  // Only the allowlisted people (the owner) see anything here; everyone else gets the same 404 as before.
+  if (!(await allowed(person))) return new NextResponse('Not found', { status: 404 });
   if (person === null) return NextResponse.json({ error: 'Sign in first' }, { status: 401, headers: noStore });
   const [r] = await sql()<{ n: number }[]>`insert into studio.api_rate (caller, minute, n) values (${sha256(`speak:${person}:${process.env.AGENT_RATE_KEY ?? process.env.IMAGES_TICKET_SECRET ?? ''}`).slice(0, 32)}, date_trunc('minute', now()), 1)
     on conflict (caller, minute) do update set n = studio.api_rate.n + 1 returning n`;

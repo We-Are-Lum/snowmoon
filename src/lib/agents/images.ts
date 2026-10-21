@@ -99,8 +99,23 @@ export async function bringIn(base64: string, declared: Declared, ourInputs: Set
   };
 }
 
+/** What an approved edit made (a frame or a video): kept privately, like a brought-in image, until kept and published. */
+export async function storeMade(bytes: Buffer, ext: 'jpg' | 'mp4'): Promise<string> {
+  const key = `made/${sha256(bytes).slice(0, 32)}.${ext}`;
+  const dir = testStore();
+  if (dir) {
+    mkdirSync(path.join(dir, 'made'), { recursive: true });
+    writeFileSync(path.join(dir, key), bytes);
+  } else {
+    await putPrivate(key, bytes, ext === 'jpg' ? 'image/jpeg' : 'video/mp4');
+  }
+  return key;
+}
+
+export const contentTypeOf = (key: string) => (key.endsWith('.mp4') ? 'video/mp4' : 'image/jpeg');
+
 export async function readImage(key: string): Promise<Buffer | null> {
-  if (!/^brought-in\/[0-9a-f]{32}\.jpg$/.test(key)) return null;
+  if (!/^(brought-in|made)\/[0-9a-f]{32}\.(jpg|mp4)$/.test(key)) return null;
   const dir = testStore();
   if (dir) return existsSync(path.join(dir, key)) ? readFileSync(path.join(dir, key)) : null;
   return await getPrivate(key);

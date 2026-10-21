@@ -50,7 +50,9 @@ const TOOLS = 'src/lib/agents/tools.ts';
 const PIECES = 'src/lib/agents/pieces.ts';
 const READ_TOOLS = 'src/lib/agent/tools.ts';
 /** Modules the agent tools import from ./ (each scanned for publish and keep). */
-const TOOL_MODULES = new Set(['core', 'accounts', 'filter', 'images', 'pieces', 'requests']);
+const TOOL_MODULES = new Set(['core', 'accounts', 'filter', 'images', 'pieces', 'requests', 'edits']);
+// The edit tools (owner, 2026-10-20) draft only; spending on an approved edit lives in ./approve, which no tool may
+// import (it isn't in this list, so importing it from tools.ts fails the check).
 /** What tools.ts may take from pieces.ts: the three draft writers (each read below) and readers. Never decide. */
 const PIECE_WRITERS = ['draftPiece', 'revise', 'addNote'];
 const PIECE_READERS = new Set(['feedbackFor', 'notesOn', 'pieceVersions', 'piecesOf', 'versionById', 'visibleTo', 'type Answering', 'type Kind', 'Answering', 'Kind']);

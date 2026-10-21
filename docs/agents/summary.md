@@ -1,3 +1,37 @@
+# Tonight (2026-10-20): agents for your account only, with edit tools (branch `agents-owner`)
+
+**What's switched on after the merge:** agents, for an allowlist only: FID 6786 and one wallet (to confirm, see
+below). Everyone else gets 404 from every agent route and sees nothing new; agents.md and /p stay off.
+
+- **The connector:** https://snowmoon.party/mcp, a remote MCP server with OAuth, which you add as a custom
+  connector in the Claude app (steps in `phone-steps.md`). Anyone may reach the consent page, but only
+  the allowlist can tap Allow. Taking someone off the allowlist stops their agents on their next request.
+- **Edit tools (drafts on your own versions only):**
+  - `list_takes`;
+  - `try_frame`, with your note;
+  - `swap_take`;
+  - `change_timing`;
+  - `mark_speaking`;
+  - `request_video_test`.
+  Each one is a draft on /you, and you react with Keep, Try again or Say more. Keeping an edit does not
+  change the published scene yet: putting kept edits into a new version is the editor rework, which
+  waits.
+- **Spending:** `try_frame` and `request_video_test` only draft. The cost shows on the button ("Make it
+  (up to $0.05)", "Run the test (about $0.025)"), and nothing is spent until you tap it. Each approval
+  runs once. The daily caps are 20 frames, 5 video tests and $2. A frame goes through Remix's own
+  pipeline and your balance, and is kept privately. A video test uses LongCat-Video 480p on fal, is paid
+  from the site's fal key and is kept privately. **The real fal video call has not been tried.** The
+  tests use a stand-in.
+- **`log_gap`:** when the agent can't do something, it records what you asked and what was missing.
+  These show on /you under "What your agent couldn't do", which is your build list.
+- **Speaking is off** (`AGENTS.transcription.on = false`) until you've confirmed Groq's audio retention.
+  The Speak button doesn't show.
+- **Tests:** `test:agents` passes 121 checks. The principle checks: 46 pass, none fail, and P6d isn't run
+  (no Vercel CLI here).
+- **Privacy and Terms:** drafts are in `docs/legal/agents-owner-draft.md`, for your reread.
+
+---
+
 # Overnight: agents that make things for people (summary)
 
 Branch **`agents-connect`**: local, switched off, not pushed. Nothing deployed or published, and no

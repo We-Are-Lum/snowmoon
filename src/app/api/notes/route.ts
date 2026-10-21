@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { getPerson } from '~/lib/auth';
 import { hasConsented } from '~/lib/consent';
 import { ToolInputError } from '~/lib/agent/tools';
-import { agentsOn } from '~/lib/agents/core';
+import { agentsOn, allowed } from '~/lib/agents/core';
 import { checkPlain } from '~/lib/agents/filter';
 import { addNote } from '~/lib/agents/pieces';
 
@@ -13,6 +13,8 @@ import { addNote } from '~/lib/agents/pieces';
 export async function POST(request: Request) {
   if (!agentsOn()) return new NextResponse('Not found', { status: 404 });
   const person = await getPerson(request);
+  // Only the allowlisted people (the owner) see anything here; everyone else gets the same 404 as before.
+  if (!(await allowed(person))) return new NextResponse('Not found', { status: 404 });
   if (person === null) return NextResponse.json({ error: 'Sign in first' }, { status: 401 });
   if (!(await hasConsented(person))) return NextResponse.json({ error: 'consent', consent: true }, { status: 403 });
   const b = (await request.json().catch(() => ({}))) as { on?: string; text?: string };

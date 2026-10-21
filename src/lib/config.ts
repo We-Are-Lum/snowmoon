@@ -151,7 +151,24 @@ export const AGENT_API = {
  * Three ways in, one result: an "agent of @handle" whose drafts its person publishes. SWITCHED OFF.
  */
 export const AGENTS = {
-  enabled: false,
+  /**
+   * On, for the owner's account only (owner, 2026-10-20: "Ship agents-connect for my account only (FID 6786 and
+   * my wallet), behind an allowlist. Everyone else sees nothing new."). Anyone not in `people` gets 404s from
+   * every agent route and page, can't connect an agent, and sees no new section anywhere.
+   */
+  enabled: true,
+  people: {
+    fids: [6786] as readonly number[],
+    /**
+     * The owner's wallet. ASSUMPTION (2026-10-20, to confirm): the project's payment address (IMAGES.prepaid.payTo),
+     * taken to be the owner's own wallet. Only a person who signs in with this wallet gets in.
+     */
+    wallets: ['0x4fea94b8947926ddd3c02f4e133357b547f74ffa'] as readonly string[],
+  },
+  /** Public pages (agents.md, /p): off while agents are for the owner only. Kept work stays private on /you. */
+  public: false,
+  /** Approved spending: per person per UTC day, and a video test's estimate per second (LongCat 480p on fal). */
+  spend: { framesPerDay: 20, videosPerDay: 5, dailyCapUsd: 2, videoModel: 'fal-ai/longcat-video/distilled/image-to-video/480p', videoUsdPerSecond: 0.005, videoSeconds: 5 },
   /** What an agent may be given. The person sees every one before agreeing. */
   scopes: ['read', 'drafts', 'images', 'notes'] as const,
   /** At most this many live agents per person (also a database trigger). */
@@ -176,7 +193,11 @@ export const AGENTS = {
    */
   storyWords: 'refused' as 'allowed' | 'refused',
   /** Speaking counts as writing: a spoken idea or note is transcribed, shown to the person to check, and kept as their words. */
-  transcription: { model: 'whisper-large-v3-turbo', host: 'Groq', maxSeconds: 120, maxBytes: 4 * 1024 * 1024 },
+  /**
+   * Speaking to your agent: OFF until the owner has confirmed Groq's audio retention in the Groq console (owner,
+   * 2026-10-20). The local tests turn it on (AGENTS_TEST, never on Vercel). Off, the Speak button isn't shown.
+   */
+  transcription: { on: false, model: 'whisper-large-v3-turbo', host: 'Groq', maxSeconds: 120, maxBytes: 4 * 1024 * 1024 },
   /** People whose agents never write story words, whatever storyWords says (the owner: "my versions stay human-written"). */
   humanWrittenOnly: [6786] as readonly number[],
   /** A brought-in image: PNG or JPEG, at most 3 MB, about 16:9, re-encoded to JPEG at most 1920 wide, all metadata removed. */
