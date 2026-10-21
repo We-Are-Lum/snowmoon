@@ -120,6 +120,7 @@ function Asked({ r }: { r: RequestView }) {
 export function AgentsOnYou() {
   const [on, setOn] = useState<boolean | null>(null);
   const [agents, setAgents] = useState<AgentRow[]>([]);
+  const [scripts, setScripts] = useState<{ adaptation: number; version: number; title: string }[]>([]);
   const [drafts, setDrafts] = useState<{ drafts: VersionView[]; notes: NoteView[]; published: VersionView[]; waiting: RequestView[]; gaps: { id: string; agent: string; asked: string; missing: string; createdAt: string }[] } | null>(null);
   const [name, setName] = useState('');
   const [address, setAddress] = useState('');
@@ -129,7 +130,11 @@ export function AgentsOnYou() {
     const a = await authFetch('/api/agents').catch(() => null);
     if (!a || a.status === 404) return setOn(false);
     setOn(true);
-    if (a.ok) setAgents(((await a.json()) as { agents: AgentRow[] }).agents);
+    if (a.ok) {
+      const out = (await a.json()) as { agents: AgentRow[]; scripts?: { adaptation: number; version: number; title: string }[] };
+      setAgents(out.agents);
+      setScripts(out.scripts ?? []);
+    }
     const d = await authFetch('/api/drafts').catch(() => null);
     if (d?.ok) setDrafts(await d.json());
   }, []);
@@ -170,6 +175,16 @@ export function AgentsOnYou() {
           return err;
         }} />
       </section>
+      {scripts.length > 0 && (
+        <section className="you-section" aria-labelledby="you-scripts">
+          <h2 id="you-scripts">{AGENT_WORDING.direction.scripts}</h2>
+          <ul className="you-list">
+            {scripts.map((x) => (
+              <li key={x.version}><Link href={`/you/script/${x.adaptation}/${x.version}`} data-script-link>{AGENT_WORDING.direction.title(x.title)} (version {x.version})</Link></li>
+            ))}
+          </ul>
+        </section>
+      )}
       <section className="you-section" aria-labelledby="you-review">
         <h2 id="you-review">{W.review}</h2>
         <p className="you-note">{W.reviewNote}</p>

@@ -183,6 +183,16 @@ function Recipe({ v }: { v: VersionView }) {
           ))}
         </ol>
       )}
+      {(() => {
+        // The person's acting notes that went into this frame or video (owner, 2026-10-20: "both show in the recipe as mine").
+        const direction = (v.made as { direction?: { character: string; text: string; filedBy?: string | null }[] } | null)?.direction ?? [];
+        return direction.length ? (
+          <p className="you-note">
+            {AGENT_WORDING.direction.recipeActing(handle)}{' '}
+            {direction.map((d, i) => <span key={i}>{i > 0 && ' · '}{d.character}: “{d.text}”{d.filedBy ? ` (${AGENT_WORDING.direction.recipeFiledBy(d.filedBy)})` : ''}</span>)}
+          </p>
+        ) : null;
+      })()}
       {b.adaptation ? <p className="you-note">From adaptation {String(b.adaptation)}{b.version ? `, version ${String(b.version)}` : ''}.</p> : null}
       {v.kind === 'image' && v.image && (() => {
         const d = v.image!.declared as { prompt: string; model: { name: string; maker: string; weights: string; ran_on?: string } };
