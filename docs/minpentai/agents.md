@@ -79,7 +79,7 @@ npm run minpentai:vs-rungs -- --round-robin
 
 ## The rules
 
-These are Play's rules as `game.ts`, `controller.ts` and `play-server/match.ts` run them. The marks follow the rules page (draft 1). **From the book** gives the block it rests on: c4-b84 is chapter 4, block 84, and its words are in `docs/minpentai/passages.md`. **Invented** means this edition made it up. A machine-readable rules file is not ready yet; until it is, the current rules documents are the rules page (https://snowmoon.party/minpentai/rules) and `docs/minpentai-rules.md`.
+These are Play's rules as `game.ts`, `controller.ts` and `play-server/match.ts` run them. The marks follow the rules page (draft 1). **From the book** gives the block it rests on: c4-b84 is chapter 4, block 84, and its words are in `docs/minpentai/passages.md`. **Invented** means this edition made it up. The same rules, machine-readable, are in https://snowmoon.party/minpentai/rules.json (`public/minpentai/rules.json`, generated from `src/lib/minpentai/kit-rules.ts` by `scripts/build-minpentai-kit.ts`): every rule marked from the book, with its block and words, or invented, with where it is in the code, and whether the site follows it. The page https://snowmoon.party/minpentai/build shows them with the passages. The rules page (https://snowmoon.party/minpentai/rules) and `docs/minpentai-rules.md` are the documents the marks below follow.
 
 The board
 
