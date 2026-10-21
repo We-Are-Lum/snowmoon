@@ -1,0 +1,319 @@
+{
+  "job_file": "adaptations/fifteen-days/options-night2.json",
+  "generated_at": "2026-10-16T11:32:44+00:00",
+  "model": {
+    "repo": "black-forest-labs/FLUX.2-klein-4B",
+    "revision": "e7b7dc27f91deacad38e78976d1f2b499d76a294",
+    "license": "apache-2.0",
+    "runtime": "mflux",
+    "mflux_version": "0.20.0",
+    "quantize_bits": 4
+  },
+  "settings": {
+    "steps": 4,
+    "guidance": 1.0
+  },
+  "cost_usd": 0,
+  "host": {
+    "platform": "macOS-26.5.1-arm64-arm-64bit",
+    "machine": "arm64"
+  },
+  "model_load_seconds": 0.6,
+  "images": [
+    {
+      "id": "s01-o5",
+      "chapter": null,
+      "idx": null,
+      "file": "s01-o5.png",
+      "sha256": "3bf9da3e7e1a24d30570784396a30308e2f3d0d6f55d02d7637307df7757b107",
+      "prompt": "Wide shot of the vast game hall, its dark tiers packed with a crowd of small, plainly dressed spectators. On the floor two large glowing game consoles face each other: at one sits the tall pale young man, calm and cool, seen from behind and to one side, wearing glasses attached to a long cable that runs behind him; at the other, facing him, sits his opponent, a stocky young man with a shaved head, dark skin and a plain charcoal tunic, sweating, also wearing cabled glasses. Overhead hangs an enormous screen showing the game as a low-lit 3D view of a dark field: a base on a circle of coloured light in each corner, thin black pillar towers topped by glowing cube clusters, rings of light on the floor, small lit drones; beside it, smaller screens show the two players' faces. Exactly two main people: reference image 1 is the tall pale young man (wavy light-brown hair and a cream cable-knit sweater); his opponent has no reference image and looks nothing like him. Each appears exactly once; only one person has wavy light-brown hair and a cream cable-knit sweater. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. The tiers are full of spectators: many small people in plain dark clothes, none of them looking like the main people. The place: a vast dark game hall hollowed inside a mountain pyramid, steep tiers of seats rising into shadow, thin beams of light crossing the air. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands.",
+      "seed": 7015,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "deluin.png",
+          "sha256": "c484ca77c27d663829c614ff2f5d8964a585133e7d938f9bdd99646f14c1d207"
+        }
+      ],
+      "generation_seconds": 150.4
+    },
+    {
+      "id": "s01-o6",
+      "chapter": null,
+      "idx": null,
+      "file": "s01-o6.png",
+      "sha256": "0d31109733d6b3e07a2488128fed67263c16151a2391e1c2419adc2b17ddcb4b",
+      "prompt": "Wide shot of the vast game hall, its dark tiers packed with a crowd of small, plainly dressed spectators. On the floor two large glowing game consoles face each other: at one sits the tall pale young man, calm and cool, seen from behind and to one side, wearing glasses attached to a long cable that runs behind him; at the other, facing him, sits his opponent, a stocky young man with a shaved head, dark skin and a plain charcoal tunic, sweating, also wearing cabled glasses. Overhead hangs an enormous screen showing the game as a low-lit 3D view of a dark field: a base on a circle of coloured light in each corner, thin black pillar towers topped by glowing cube clusters, rings of light on the floor, small lit drones; beside it, smaller screens show the two players' faces. Exactly two main people: reference image 1 is the tall pale young man (wavy light-brown hair and a cream cable-knit sweater); his opponent has no reference image and looks nothing like him. Each appears exactly once; only one person has wavy light-brown hair and a cream cable-knit sweater. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. The tiers are full of spectators: many small people in plain dark clothes, none of them looking like the main people. The place: a vast dark game hall hollowed inside a mountain pyramid, steep tiers of seats rising into shadow, thin beams of light crossing the air. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands.",
+      "seed": 7016,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "deluin.png",
+          "sha256": "c484ca77c27d663829c614ff2f5d8964a585133e7d938f9bdd99646f14c1d207"
+        }
+      ],
+      "generation_seconds": 177.3
+    },
+    {
+      "id": "s01-o7",
+      "chapter": null,
+      "idx": null,
+      "file": "s01-o7.png",
+      "sha256": "6eb61e41518eb8c77a8a60ae42ce930cb7b7e5bd5f53b3b48c926d890680dc4d",
+      "prompt": "Wide shot of the vast game hall, its dark tiers packed with a crowd of small, plainly dressed spectators. On the floor two large glowing game consoles face each other: at one sits the tall pale young man, calm and cool, seen from behind and to one side, wearing glasses attached to a long cable that runs behind him; at the other, facing him, sits his opponent, a stocky young man with a shaved head, dark skin and a plain charcoal tunic, sweating, also wearing cabled glasses. Overhead hangs an enormous screen showing the game as a low-lit 3D view of a dark field: a base on a circle of coloured light in each corner, thin black pillar towers topped by glowing cube clusters, rings of light on the floor, small lit drones; beside it, smaller screens show the two players' faces. Exactly two main people: reference image 1 is the tall pale young man (wavy light-brown hair and a cream cable-knit sweater); his opponent has no reference image and looks nothing like him. Each appears exactly once; only one person has wavy light-brown hair and a cream cable-knit sweater. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. The tiers are full of spectators: many small people in plain dark clothes, none of them looking like the main people. The place: a vast dark game hall hollowed inside a mountain pyramid, steep tiers of seats rising into shadow, thin beams of light crossing the air. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands.",
+      "seed": 7017,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "deluin.png",
+          "sha256": "c484ca77c27d663829c614ff2f5d8964a585133e7d938f9bdd99646f14c1d207"
+        }
+      ],
+      "generation_seconds": 150.0
+    },
+    {
+      "id": "s02-o5",
+      "chapter": null,
+      "idx": null,
+      "file": "s02-o5.png",
+      "sha256": "5ee31ebbb6fb426fdb9c629a435edab2284b3aa563f23861a7b33828f5e47bcd",
+      "prompt": "Medium close-up of the tall pale young man seated at a large glowing game console, calm and cool, wearing glasses attached to a long cable that runs behind him, the console's glow on his face; behind him, out of focus at the other console, sits his opponent, a stocky young man with a shaved head, dark skin and a plain charcoal tunic, wiping sweat from his brow; beyond, the crowd in the dark tiers and part of an enormous screen showing the game as a low-lit 3D view of a dark field: a base on a circle of coloured light in each corner, thin black pillar towers topped by glowing cube clusters, rings of light on the floor, small lit drones; beside it, smaller screens show the two players' faces. Exactly two main people: reference image 1 is the tall pale young man (wavy light-brown hair and a cream cable-knit sweater); his opponent has no reference image and looks nothing like him. Each appears exactly once; only one person has wavy light-brown hair and a cream cable-knit sweater. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. The tiers are full of spectators: many small people in plain dark clothes, none of them looking like the main people. The place: a vast dark game hall hollowed inside a mountain pyramid, steep tiers of seats rising into shadow, thin beams of light crossing the air. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands.",
+      "seed": 7025,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "deluin.png",
+          "sha256": "c484ca77c27d663829c614ff2f5d8964a585133e7d938f9bdd99646f14c1d207"
+        }
+      ],
+      "generation_seconds": 167.5
+    },
+    {
+      "id": "s02-o6",
+      "chapter": null,
+      "idx": null,
+      "file": "s02-o6.png",
+      "sha256": "99afd9684a70e7760dd63c7301e5b3b829d536a1d2adeca2bd45b5bb18a09a05",
+      "prompt": "Medium close-up of the tall pale young man seated at a large glowing game console, calm and cool, wearing glasses attached to a long cable that runs behind him, the console's glow on his face; behind him, out of focus at the other console, sits his opponent, a stocky young man with a shaved head, dark skin and a plain charcoal tunic, wiping sweat from his brow; beyond, the crowd in the dark tiers and part of an enormous screen showing the game as a low-lit 3D view of a dark field: a base on a circle of coloured light in each corner, thin black pillar towers topped by glowing cube clusters, rings of light on the floor, small lit drones; beside it, smaller screens show the two players' faces. Exactly two main people: reference image 1 is the tall pale young man (wavy light-brown hair and a cream cable-knit sweater); his opponent has no reference image and looks nothing like him. Each appears exactly once; only one person has wavy light-brown hair and a cream cable-knit sweater. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. The tiers are full of spectators: many small people in plain dark clothes, none of them looking like the main people. The place: a vast dark game hall hollowed inside a mountain pyramid, steep tiers of seats rising into shadow, thin beams of light crossing the air. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands.",
+      "seed": 7026,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "deluin.png",
+          "sha256": "c484ca77c27d663829c614ff2f5d8964a585133e7d938f9bdd99646f14c1d207"
+        }
+      ],
+      "generation_seconds": 164.9
+    },
+    {
+      "id": "s02-o7",
+      "chapter": null,
+      "idx": null,
+      "file": "s02-o7.png",
+      "sha256": "d0e9f76c4fc07cb341cdba53cf15078fbad29314576c3193282f2b687bd15072",
+      "prompt": "Medium close-up of the tall pale young man seated at a large glowing game console, calm and cool, wearing glasses attached to a long cable that runs behind him, the console's glow on his face; behind him, out of focus at the other console, sits his opponent, a stocky young man with a shaved head, dark skin and a plain charcoal tunic, wiping sweat from his brow; beyond, the crowd in the dark tiers and part of an enormous screen showing the game as a low-lit 3D view of a dark field: a base on a circle of coloured light in each corner, thin black pillar towers topped by glowing cube clusters, rings of light on the floor, small lit drones; beside it, smaller screens show the two players' faces. Exactly two main people: reference image 1 is the tall pale young man (wavy light-brown hair and a cream cable-knit sweater); his opponent has no reference image and looks nothing like him. Each appears exactly once; only one person has wavy light-brown hair and a cream cable-knit sweater. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. The tiers are full of spectators: many small people in plain dark clothes, none of them looking like the main people. The place: a vast dark game hall hollowed inside a mountain pyramid, steep tiers of seats rising into shadow, thin beams of light crossing the air. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands.",
+      "seed": 7027,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "deluin.png",
+          "sha256": "c484ca77c27d663829c614ff2f5d8964a585133e7d938f9bdd99646f14c1d207"
+        }
+      ],
+      "generation_seconds": 171.2
+    },
+    {
+      "id": "s02-o8",
+      "chapter": null,
+      "idx": null,
+      "file": "s02-o8.png",
+      "sha256": "8a59f45198a74301b03914fc47fe07defebe81d03990bde92645a7579ac8ad24",
+      "prompt": "Medium close-up of the tall pale young man seated at a large glowing game console, calm and cool, wearing glasses attached to a long cable that runs behind him, the console's glow on his face; behind him, out of focus at the other console, sits his opponent, a stocky young man with a shaved head, dark skin and a plain charcoal tunic, wiping sweat from his brow; beyond, the crowd in the dark tiers and part of an enormous screen showing the game as a low-lit 3D view of a dark field: a base on a circle of coloured light in each corner, thin black pillar towers topped by glowing cube clusters, rings of light on the floor, small lit drones; beside it, smaller screens show the two players' faces. Exactly two main people: reference image 1 is the tall pale young man (wavy light-brown hair and a cream cable-knit sweater); his opponent has no reference image and looks nothing like him. Each appears exactly once; only one person has wavy light-brown hair and a cream cable-knit sweater. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. The tiers are full of spectators: many small people in plain dark clothes, none of them looking like the main people. The place: a vast dark game hall hollowed inside a mountain pyramid, steep tiers of seats rising into shadow, thin beams of light crossing the air. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands.",
+      "seed": 7028,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "deluin.png",
+          "sha256": "c484ca77c27d663829c614ff2f5d8964a585133e7d938f9bdd99646f14c1d207"
+        }
+      ],
+      "generation_seconds": 164.9
+    },
+    {
+      "id": "s03-o3",
+      "chapter": null,
+      "idx": null,
+      "file": "s03-o3.png",
+      "sha256": "8aa5464fc5f5e4d5ed39109ee55437bf2480d6757e98b8dd199f114bb392bff2",
+      "prompt": "The slim spiky-haired young man and the young woman sit side by side on a low stone bench, watching the big wall screen, which shows the game as a flat board: a near-black square grid with ring-shaped towers (a glowing circle with a dark centre) in cyan and amber, chevron-shaped gliders flying in straight lines with a trail of small dots, small squares in each player's colour, and grey rocks; a small bin stands beside her. Medium two-shot. The room has no windows. Exactly two main people: reference image 1 is the spiky-haired young man (spiky black hair with a blue streak and an orange jacket); reference image 2 is the young woman (a magenta ponytail and a lime-green vest). Each appears exactly once; only one person has spiky black hair with a blue streak and an orange jacket. only one person has a magenta ponytail and a lime-green vest. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. No other people anywhere in the picture. The place: a windowless players' waiting room carved deep inside a mountain pyramid, polished pale stone walls and a vaulted round-topped ceiling, a doorway of stone bricks curving into an arch whose top bears a carved emblem of two horizontal arms meeting in the middle with clashing fists, sleek elevator doors in one wall, low stone benches, a big wall screen showing the game, warm indirect light. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands.",
+      "seed": 7033,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "zei.png",
+          "sha256": "ec4afe4e6f5ea930de23700219665316ceb0defd705c6c53aa45f7360db94e20"
+        },
+        {
+          "file": "bai.png",
+          "sha256": "255dbc865840cffbee3fb36707082b14676f7425d1419bb1f44d3af483db3eac"
+        }
+      ],
+      "generation_seconds": 186.6
+    },
+    {
+      "id": "s03-o4",
+      "chapter": null,
+      "idx": null,
+      "file": "s03-o4.png",
+      "sha256": "52249578d9f348023fc354f7b46ec0629cc4033917abd347f1ba81159aed235b",
+      "prompt": "The slim spiky-haired young man and the young woman sit side by side on a low stone bench, watching the big wall screen, which shows the game as a flat board: a near-black square grid with ring-shaped towers (a glowing circle with a dark centre) in cyan and amber, chevron-shaped gliders flying in straight lines with a trail of small dots, small squares in each player's colour, and grey rocks; a small bin stands beside her. Medium two-shot. The room has no windows. Exactly two main people: reference image 1 is the spiky-haired young man (spiky black hair with a blue streak and an orange jacket); reference image 2 is the young woman (a magenta ponytail and a lime-green vest). Each appears exactly once; only one person has spiky black hair with a blue streak and an orange jacket. only one person has a magenta ponytail and a lime-green vest. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. No other people anywhere in the picture. The place: a windowless players' waiting room carved deep inside a mountain pyramid, polished pale stone walls and a vaulted round-topped ceiling, a doorway of stone bricks curving into an arch whose top bears a carved emblem of two horizontal arms meeting in the middle with clashing fists, sleek elevator doors in one wall, low stone benches, a big wall screen showing the game, warm indirect light. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands.",
+      "seed": 7034,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "zei.png",
+          "sha256": "ec4afe4e6f5ea930de23700219665316ceb0defd705c6c53aa45f7360db94e20"
+        },
+        {
+          "file": "bai.png",
+          "sha256": "255dbc865840cffbee3fb36707082b14676f7425d1419bb1f44d3af483db3eac"
+        }
+      ],
+      "generation_seconds": 196.4
+    },
+    {
+      "id": "s04-o3",
+      "chapter": null,
+      "idx": null,
+      "file": "s04-o3.png",
+      "sha256": "9cbea70e2780d3df86c00666b231221d454fc8d5e0aa87b9ad4861e7af7ec087",
+      "prompt": "Both sitting on the low stone bench: the slim spiky-haired young man turns to the young woman beside him with one eyebrow raised; she keeps her eyes on the wall screen, which shows the game as a flat board: a near-black square grid with ring-shaped towers (a glowing circle with a dark centre) in cyan and amber, chevron-shaped gliders flying in straight lines with a trail of small dots, small squares in each player's colour, and grey rocks, unimpressed. Medium close two-shot. The room has no windows. Exactly two main people: reference image 1 is the spiky-haired young man (spiky black hair with a blue streak and an orange jacket); reference image 2 is the young woman (a magenta ponytail and a lime-green vest). Each appears exactly once; only one person has spiky black hair with a blue streak and an orange jacket. only one person has a magenta ponytail and a lime-green vest. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. No other people anywhere in the picture. The place: a windowless players' waiting room carved deep inside a mountain pyramid, polished pale stone walls and a vaulted round-topped ceiling, a doorway of stone bricks curving into an arch whose top bears a carved emblem of two horizontal arms meeting in the middle with clashing fists, sleek elevator doors in one wall, low stone benches, a big wall screen showing the game, warm indirect light. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands.",
+      "seed": 7043,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "zei.png",
+          "sha256": "ec4afe4e6f5ea930de23700219665316ceb0defd705c6c53aa45f7360db94e20"
+        },
+        {
+          "file": "bai.png",
+          "sha256": "255dbc865840cffbee3fb36707082b14676f7425d1419bb1f44d3af483db3eac"
+        }
+      ],
+      "generation_seconds": 189.3
+    },
+    {
+      "id": "s04-o4",
+      "chapter": null,
+      "idx": null,
+      "file": "s04-o4.png",
+      "sha256": "34c2a2e43985a2ee18f3cffd36281fad82ec875e9768386c062b4f059d4b3a6e",
+      "prompt": "Both sitting on the low stone bench: the slim spiky-haired young man turns to the young woman beside him with one eyebrow raised; she keeps her eyes on the wall screen, which shows the game as a flat board: a near-black square grid with ring-shaped towers (a glowing circle with a dark centre) in cyan and amber, chevron-shaped gliders flying in straight lines with a trail of small dots, small squares in each player's colour, and grey rocks, unimpressed. Medium close two-shot. The room has no windows. Exactly two main people: reference image 1 is the spiky-haired young man (spiky black hair with a blue streak and an orange jacket); reference image 2 is the young woman (a magenta ponytail and a lime-green vest). Each appears exactly once; only one person has spiky black hair with a blue streak and an orange jacket. only one person has a magenta ponytail and a lime-green vest. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. No other people anywhere in the picture. The place: a windowless players' waiting room carved deep inside a mountain pyramid, polished pale stone walls and a vaulted round-topped ceiling, a doorway of stone bricks curving into an arch whose top bears a carved emblem of two horizontal arms meeting in the middle with clashing fists, sleek elevator doors in one wall, low stone benches, a big wall screen showing the game, warm indirect light. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands.",
+      "seed": 7044,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "zei.png",
+          "sha256": "ec4afe4e6f5ea930de23700219665316ceb0defd705c6c53aa45f7360db94e20"
+        },
+        {
+          "file": "bai.png",
+          "sha256": "255dbc865840cffbee3fb36707082b14676f7425d1419bb1f44d3af483db3eac"
+        }
+      ],
+      "generation_seconds": 191.5
+    },
+    {
+      "id": "s06-o3",
+      "chapter": null,
+      "idx": null,
+      "file": "s06-o3.png",
+      "sha256": "68c4aa2b08544b7713eddcfc4a9681c79089c6eca42a96e952f86a69b1be72f7",
+      "prompt": "The young woman finally gives the wall screen a serious look, studying it, chin on her hand, its glow on her face; the screen shows the game as a flat board: a near-black square grid with ring-shaped towers (a glowing circle with a dark centre) in cyan and amber, chevron-shaped gliders flying in straight lines with a trail of small dots, small squares in each player's colour, and grey rocks. Close-up. The room has no windows. Exactly one main person: reference image 1 is the young woman (a magenta ponytail and a lime-green vest). Each appears exactly once; only one person has a magenta ponytail and a lime-green vest. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. No other people anywhere in the picture. The place: a windowless players' waiting room carved deep inside a mountain pyramid, polished pale stone walls and a vaulted round-topped ceiling, a doorway of stone bricks curving into an arch whose top bears a carved emblem of two horizontal arms meeting in the middle with clashing fists, sleek elevator doors in one wall, low stone benches, a big wall screen showing the game, warm indirect light. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands.",
+      "seed": 7063,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "bai.png",
+          "sha256": "255dbc865840cffbee3fb36707082b14676f7425d1419bb1f44d3af483db3eac"
+        }
+      ],
+      "generation_seconds": 152.1
+    },
+    {
+      "id": "s06-o4",
+      "chapter": null,
+      "idx": null,
+      "file": "s06-o4.png",
+      "sha256": "996533552f73358a141d473b0d55fc58fda3b119657fcb09b8721e58bee27819",
+      "prompt": "The young woman finally gives the wall screen a serious look, studying it, chin on her hand, its glow on her face; the screen shows the game as a flat board: a near-black square grid with ring-shaped towers (a glowing circle with a dark centre) in cyan and amber, chevron-shaped gliders flying in straight lines with a trail of small dots, small squares in each player's colour, and grey rocks. Close-up. The room has no windows. Exactly one main person: reference image 1 is the young woman (a magenta ponytail and a lime-green vest). Each appears exactly once; only one person has a magenta ponytail and a lime-green vest. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. No other people anywhere in the picture. The place: a windowless players' waiting room carved deep inside a mountain pyramid, polished pale stone walls and a vaulted round-topped ceiling, a doorway of stone bricks curving into an arch whose top bears a carved emblem of two horizontal arms meeting in the middle with clashing fists, sleek elevator doors in one wall, low stone benches, a big wall screen showing the game, warm indirect light. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands.",
+      "seed": 7064,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "bai.png",
+          "sha256": "255dbc865840cffbee3fb36707082b14676f7425d1419bb1f44d3af483db3eac"
+        }
+      ],
+      "generation_seconds": 166.7
+    },
+    {
+      "id": "s05-o5",
+      "chapter": null,
+      "idx": null,
+      "file": "s05-o5.png",
+      "sha256": "a3fb167234dda67081ccf9932422b7a50b219dcf5979b33ee5ab8efc69877013",
+      "prompt": "Seated on the low stone bench, the young woman leans sideways mid-motion and spits into a small bin beside her, nonchalant, her eyes still on the wall screen, which shows the game as a flat board: a near-black square grid with ring-shaped towers (a glowing circle with a dark centre) in cyan and amber, chevron-shaped gliders flying in straight lines with a trail of small dots, small squares in each player's colour, and grey rocks. Medium shot from a low angle. The room has no windows; nothing in her mouth. Exactly one main person: reference image 1 is the young woman (a magenta ponytail and a lime-green vest). Each appears exactly once; only one person has a magenta ponytail and a lime-green vest. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. No other people anywhere in the picture. The place: a windowless players' waiting room carved deep inside a mountain pyramid, polished pale stone walls and a vaulted round-topped ceiling, a doorway of stone bricks curving into an arch whose top bears a carved emblem of two horizontal arms meeting in the middle with clashing fists, sleek elevator doors in one wall, low stone benches, a big wall screen showing the game, warm indirect light. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands.",
+      "seed": 7055,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "bai.png",
+          "sha256": "255dbc865840cffbee3fb36707082b14676f7425d1419bb1f44d3af483db3eac"
+        }
+      ],
+      "generation_seconds": 173.2
+    },
+    {
+      "id": "s05-o6",
+      "chapter": null,
+      "idx": null,
+      "file": "s05-o6.png",
+      "sha256": "1790f5d39c3ce7af4decf851b6f3359ed12f9a6df48614b6c6a8e71bbefb5ebe",
+      "prompt": "Seated on the low stone bench, the young woman leans sideways mid-motion and spits into a small bin beside her, nonchalant, her eyes still on the wall screen, which shows the game as a flat board: a near-black square grid with ring-shaped towers (a glowing circle with a dark centre) in cyan and amber, chevron-shaped gliders flying in straight lines with a trail of small dots, small squares in each player's colour, and grey rocks. Medium shot from a low angle. The room has no windows; nothing in her mouth. Exactly one main person: reference image 1 is the young woman (a magenta ponytail and a lime-green vest). Each appears exactly once; only one person has a magenta ponytail and a lime-green vest. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. No other people anywhere in the picture. The place: a windowless players' waiting room carved deep inside a mountain pyramid, polished pale stone walls and a vaulted round-topped ceiling, a doorway of stone bricks curving into an arch whose top bears a carved emblem of two horizontal arms meeting in the middle with clashing fists, sleek elevator doors in one wall, low stone benches, a big wall screen showing the game, warm indirect light. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands.",
+      "seed": 7056,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "bai.png",
+          "sha256": "255dbc865840cffbee3fb36707082b14676f7425d1419bb1f44d3af483db3eac"
+        }
+      ],
+      "generation_seconds": 157.2
+    }
+  ],
+  "assist": {
+    "model": "claude-coding-agent",
+    "drafted": [
+      "subjects",
+      "framing",
+      "people counts",
+      "place text"
+    ]
+  }
+}

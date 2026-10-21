@@ -1,0 +1,160 @@
+{
+  "about": "Low-strength image-model passes over code-drawn lettering, taken back only inside the lettered areas, each checked by OCR against the lettering record; failures are rejected.",
+  "script": "scripts/harmonise.py",
+  "script_commit": "306651b67ec40d128a367b69f406f96d96792d55",
+  "script_uncommitted_changes": false,
+  "model": {
+    "repo": "black-forest-labs/FLUX.2-klein-4B",
+    "revision": "e7b7dc27f91deacad38e78976d1f2b499d76a294",
+    "license": "apache-2.0",
+    "runtime": "mflux",
+    "mflux_version": "0.20.0",
+    "quantize_bits": 4
+  },
+  "settings": {
+    "guidance": 1.0,
+    "image_strength_meaning": "share of the input kept (mflux); higher is a lighter repaint"
+  },
+  "cost_usd": 0,
+  "generated_at": "2026-10-05T22:04:17+00:00",
+  "images": [
+    {
+      "id": "dd-07-a2",
+      "beat": 7,
+      "input": {
+        "file": "images-out/adaptation-dog-dawn/dd-07-a2.sheets.png",
+        "sha256": "37bfb55fb87c1852e81df43025227fb9afad5eede4d7edad5018c586f5160089",
+        "role": "code-drawn version (scripts/texture-sheets.py)"
+      },
+      "prompt": "Dynamic low wide shot in a snowy pine forest at sunrise; only trees, hills and snow, no buildings and no city. A line of heavy snowmobile-like drones on skis, covered in sheets of bright, colorful abstract squiggly patterns, each sheet with a wide blank white band across its middle, ploughs forward through deep snow between the trees, skis on the ground, throwing up great sprays and wakes of snow. Darker sleek enemy drones sit motionless in the snow or turn aside in confusion. Low sunlight cuts through drifting smoke. No people visible.",
+      "seed": 70701,
+      "mask": {
+        "from": "sheet quads",
+        "grow": 6,
+        "feather": 3
+      },
+      "tries": [
+        {
+          "steps": 4,
+          "image_strength": 0.75,
+          "raw": {
+            "file": "images-out/adaptation-dog-dawn/dd-07-a2.harmonise-raw-4x0.75.png",
+            "sha256": "9dcacd066a7174c85ab0e6d6b14cbd7348ce1aa3476203baf86eb99cd913caf7"
+          },
+          "output": {
+            "file": "images-out/adaptation-dog-dawn/dd-07-a2.harmonised-4x0.75.png",
+            "sha256": "33cf80d43fbbe3189cd923f9b03a2df6acca7b555fad20270309d24cc2f20e79"
+          },
+          "ocr_checks": [
+            {
+              "text": "DOG",
+              "ocr": [],
+              "exact": false
+            },
+            {
+              "text": "DOG",
+              "ocr": [],
+              "exact": false
+            }
+          ],
+          "accepted": false
+        },
+        {
+          "steps": 4,
+          "image_strength": 0.85,
+          "raw": {
+            "file": "images-out/adaptation-dog-dawn/dd-07-a2.harmonise-raw-4x0.85.png",
+            "sha256": "5f6dcd2eaf96edd5a61a3a7ce18c91624d87020fe8683d41af2bbfe395ad691f"
+          },
+          "output": {
+            "file": "images-out/adaptation-dog-dawn/dd-07-a2.harmonised-4x0.85.png",
+            "sha256": "33cf80d43fbbe3189cd923f9b03a2df6acca7b555fad20270309d24cc2f20e79"
+          },
+          "ocr_checks": [
+            {
+              "text": "DOG",
+              "ocr": [],
+              "exact": false
+            },
+            {
+              "text": "DOG",
+              "ocr": [],
+              "exact": false
+            }
+          ],
+          "accepted": false
+        },
+        {
+          "steps": 12,
+          "image_strength": 0.92,
+          "raw": {
+            "file": "images-out/adaptation-dog-dawn/dd-07-a2.harmonise-raw-12x0.92.png",
+            "sha256": "ee253468c765f5a5c296fd43e6c75024fc0658f8c6522d9484dc817746a806e0"
+          },
+          "output": {
+            "file": "images-out/adaptation-dog-dawn/dd-07-a2.harmonised-12x0.92.png",
+            "sha256": "59cfe614521b0b06b9a5382241da0d423059710012efd9be4765b7cfcfeb6417"
+          },
+          "ocr_checks": [
+            {
+              "text": "DOG",
+              "ocr": [
+                "0OG"
+              ],
+              "exact": false
+            },
+            {
+              "text": "DOG",
+              "ocr": [
+                ",DUG"
+              ],
+              "exact": false
+            }
+          ],
+          "accepted": false
+        },
+        {
+          "steps": 12,
+          "image_strength": 0.96,
+          "raw": {
+            "file": "images-out/adaptation-dog-dawn/dd-07-a2.harmonise-raw-12x0.96.png",
+            "sha256": "6e442762595abbe84e901bf70a5de12c34a4f72fd86df340baf32344a3b1ee74"
+          },
+          "output": {
+            "file": "images-out/adaptation-dog-dawn/dd-07-a2.harmonised-12x0.96.png",
+            "sha256": "59cfe614521b0b06b9a5382241da0d423059710012efd9be4765b7cfcfeb6417"
+          },
+          "ocr_checks": [
+            {
+              "text": "DOG",
+              "ocr": [
+                "0OG"
+              ],
+              "exact": false
+            },
+            {
+              "text": "DOG",
+              "ocr": [
+                ",DUG"
+              ],
+              "exact": false
+            }
+          ],
+          "accepted": false
+        }
+      ],
+      "kept": null
+    }
+  ],
+  "assist": {
+    "model": "claude-coding-agent",
+    "by": "the coding agent",
+    "drafted": [
+      "strengths, mask settings (the prompt is the job's; the word is the book's)"
+    ],
+    "instructions": [
+      "scripts/harmonise.py"
+    ],
+    "see": "config/models.json drafting; principle 3"
+  }
+}

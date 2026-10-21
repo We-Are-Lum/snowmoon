@@ -1,0 +1,103 @@
+{
+ "closed_model": true,
+ "label": "closed model",
+ "model": "openai/gpt-image-2.5-sunburst",
+ "model_name": "GPT Image 2.5 Sunburst (OpenAI)",
+ "route": "Vercel AI Gateway /v1/images/edits (AI_GATEWAY_API_KEY)",
+ "date": "2026-10-18T09:05:06.626Z",
+ "purpose": "gpt-cut: a private full-cut comparison for the owner (2026-10-18); not in the cut or on the site",
+ "v6_picture": "images-out/preprod/pass3/cov-game-FLOOR-live-E40.png",
+ "from": {
+  "base": "H02-B2",
+  "finish": null,
+  "edits": [
+   "cov-game-FLOOR-live-E40"
+  ]
+ },
+ "prompt": "Wide shot (WS, low among the towers). Down among the game: physical tower pillars on small robotic bases rolling to new places, holographic gliders and ships shooting around them in cyan and amber, a holographic wall building itself; the tiers rising beyond. Reference image 1 is a simple 3D model of this exact frame, textured and lit: copy its framing, height, angle and perspective, where each person sits or stands and how big each is, which way each faces, and where the table, chairs, railing, doors and walls stand; people sit on the chairs and stand on the floor exactly as there. Its figures are only mannequins coloured by who they are; draw real people, never mannequins. Reference image 2 shows how the place looks: its materials, colours and light. The finished picture is fully coloured and lit like that place picture, never grey; the place picture has nobody in it, and the people come only from the other references. Behind them, as the layout shows: tiers of seats rising all around the hall, full of a varied crowd; the standing ring around the top of the hall, crowded behind a railing; the broad walkway spanning the hall high above the floor, with a railing on each side; a few slim, light hologram towers on small gliding bases, drifting across the floor, glowing cube clusters on top; the whole play space alive with glowing holograms: gliders streaking past with light trails, little ships and walls of light cubes in cyan and amber; Kau's sunken pit at the edge of the floor; two big screens hung over the hall, showing the two players' faces. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. No signs, no panels with pictograms, no icons, no symbols anywhere: walls are bare. Screens show only what the shot describes, or are blank and softly glowing. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character. Changes made to this shot after it was first drawn, which this picture must already show: Remove every face and portrait from the floating glowing blocks and the hanging screens: they become plain softly glowing cubes and blank glowing screens with no faces, no people, no pictures on them. The audience, the glass arena, the beams of light and everything else stay exactly the same. No letters or numbers anywhere. The picture is 16:9, landscape.",
+ "references": [
+  {
+   "file": "adaptations/fifteen-days/preprod/set-frames/H02.look.png",
+   "sha256": "c67f1144e33fb859cd89ace10803b71458eb9a47d3dd0be9b0faee69b8453f67"
+  },
+  {
+   "file": "images-out/preprod/plates-small/plate-hall-B-fx1.png",
+   "sha256": "21171ca2f4aec0d420182cee9d2440493de5c6e0d8a8a0b8fc1b755f87015ba1"
+  }
+ ],
+ "request": {
+  "size": "1536x864",
+  "n": 1
+ },
+ "response_meta": {
+  "created": 1792314294,
+  "usage": {
+   "total_tokens": 2813,
+   "input_tokens": 1735,
+   "output_tokens": 1078,
+   "input_tokens_details": {
+    "text_tokens": 583,
+    "image_tokens": 1152
+   }
+  },
+  "providerMetadata": {
+   "openai": {
+    "images": [
+     {
+      "imageTokens": 1152,
+      "textTokens": 583,
+      "created": 1792314294,
+      "size": "1536x864",
+      "quality": "high",
+      "background": "opaque",
+      "outputFormat": "png"
+     }
+    ]
+   },
+   "gateway": {
+    "routing": {
+     "originalModelId": "openai/gpt-image-2.5-sunburst",
+     "resolvedProvider": "openai",
+     "fallbacksAvailable": [],
+     "planningReasoning": "System credentials planned for: openai. Total execution order: openai(system)",
+     "canonicalSlug": "openai/gpt-image-2.5-sunburst",
+     "finalProvider": "openai",
+     "modelAttemptCount": 1,
+     "modelAttempts": [
+      {
+       "canonicalSlug": "openai/gpt-image-2.5-sunburst",
+       "success": true,
+       "providerAttemptCount": 1,
+       "providerAttempts": [
+        {
+         "provider": "openai",
+         "credentialType": "system",
+         "success": true,
+         "startTime": 1792314266137,
+         "endTime": 1792314294557,
+         "statusCode": 200
+        }
+       ]
+      }
+     ],
+     "totalProviderAttemptCount": 1
+    },
+    "cost": "0.044471",
+    "marketCost": "0.044471",
+    "surchargeCost": "0",
+    "gatewayCost": "0.044471",
+    "inferenceCost": "0.044471",
+    "inputInferenceCost": "0",
+    "outputInferenceCost": "0.044471",
+    "generationId": "gen_01M5742MFEM5QSQVXM4QK9RD36"
+   }
+  }
+ },
+ "cost_usd": 0.044471,
+ "output": {
+  "file": "/private/tmp/claude-501/-Users-nathan-snowmoon/9334ff32-2377-4150-8bc0-c96cfb5e0d3f/scratchpad/gptcut/raw/cov-game-FLOOR-live-E40-g1.png",
+  "sha256": "3bf43898294299ef9c0f279e2ff138866c0888211b0186e70dae90e2241bee38",
+  "bytes": 2132347
+ },
+ "ms": 56545
+}

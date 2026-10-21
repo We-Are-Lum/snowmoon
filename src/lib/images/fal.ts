@@ -65,8 +65,14 @@ export async function makeImage(prompt: string, size: Size = IMAGES.size): Promi
  * as a data: URI so fal fetches nothing. Settings fixed; the safety checker on. The cost counts the
  * output and every input picture (fal's page doesn't say whether inputs count; see config).
  */
-export async function makeEdit(prompt: string, references: { bytes: Buffer; contentType: string; width: number; height: number }[], size: Size = IMAGES.size): Promise<Made> {
-  if (!references.length || references.length > IMAGES.maxReferences) throw new ImageUnavailable('wrong number of reference pictures');
+export async function makeEdit(
+  prompt: string,
+  references: { bytes: Buffer; contentType: string; width: number; height: number }[],
+  size: Size = IMAGES.size,
+  /** Remix sends up to 4 (the model's own limit); Pictures keeps IMAGES.maxReferences. */
+  max: number = IMAGES.maxReferences,
+): Promise<Made> {
+  if (!references.length || references.length > max) throw new ImageUnavailable('wrong number of reference pictures');
   const settings = {
     image_size: { width: size.width, height: size.height },
     num_images: 1,

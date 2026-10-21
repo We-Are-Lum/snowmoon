@@ -62,12 +62,13 @@ export function momentProblems(moments: HomeMoment[], blocks: Map<string, { kind
  * to rewrite.
  */
 export const HOME_TEXT = {
-  kicker: 'An open novel, being adapted by its readers · Draft',
+  // The eyebrow, the title and the three lines are the owner's words (FID 6786, 2026-10-16); the eyebrow is shown in capitals.
+  kicker: 'An open novel, adapted by readers',
   title: 'Build a world together.',
   lines: [
-    'Make something with others, and keep your name on it.',
-    'Get to know Veridia in depth, one passage at a time.',
-    'Learn to make things with AI, in the open.',
+    'Make open adaptations and get credit.',
+    'Understand the Snowmoon world and expand it.',
+    'Transparent, open-recipe AI use.',
   ],
   start: 'Start chapter 1',
   how: 'How this works',
@@ -80,7 +81,7 @@ export const HOME_TEXT = {
     // Where the book has the game: Zei's last match, in chapter 4 (c4-b4–b7). Design's "the game the boy is
     // playing in chapter 1" is not in the book: the boy in chapter 1 (c1-b6) is flying a toy drone.
     caption: 'Zei studies a board from his last Minpentai game in chapter 4 (c4-b5, c4-b7). This board plays the Learn game against itself: both sides are its computer player.',
-    play: 'Play Minpentai →',
+    play: 'Learn how to play →',
     pause: 'Pause',
     resume: 'Play',
   },

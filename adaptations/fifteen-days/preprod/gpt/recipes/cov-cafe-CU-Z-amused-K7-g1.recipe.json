@@ -1,0 +1,105 @@
+{
+ "closed_model": true,
+ "label": "closed model",
+ "model": "openai/gpt-image-2.5-sunburst",
+ "model_name": "GPT Image 2.5 Sunburst (OpenAI)",
+ "route": "Vercel AI Gateway /v1/images/edits (AI_GATEWAY_API_KEY)",
+ "date": "2026-10-18T09:11:17.595Z",
+ "purpose": "gpt-cut: a private full-cut comparison for the owner (2026-10-18); not in the cut or on the site",
+ "v6_picture": "images-out/preprod/pass3/cov-cafe-CU-Z-amused-K7.png",
+ "from": {
+  "base": "cov-cafe-CU-Z-A7",
+  "finish": "cov-cafe-CU-Z-amused-K7",
+  "edits": []
+ },
+ "prompt": "A hand-drawn science fiction comic book panel, ink linework and flat cel-shaded colour, not a 3D render, not a photograph. Close-up (CU). the slim young man with spiky black hair with one blue streak, dark brown eyes and an orange cropped zip jacket over a black top close, amused, a closed-mouth smile, looking toward the right of the frame at Deluin. Faces stay soft and natural: smiles and laughs are closed-mouthed, never open-mouthed grins, no teeth showing. Picture 1 is a depth map of this exact frame rendered from a 3D model (near is light, far is dark): follow its camera, angle, lens and perspective exactly; every person, chair, table, wall and railing goes exactly where and as big as its shape stands there, people sitting on the chairs and standing on the floor; the simple mannequin shapes are only where the people go. Draw nothing grey from it. Picture 2 is the slim young man with spiky black hair with one blue streak, dark brown eyes and an orange cropped zip jacket over a black top: copy only that person's face, hair, skin and clothes, never the sheet's layout, poses or grey background. In this frame: the slim young man is in the middle of the frame, toward the camera. Exactly one main person, appearing once. Nobody else in the picture at all: no other diners, no passers-by, no figures in the windows. Everyone stands on the ground or sits on a chair at their real size: nobody floats, nobody sits or stands on a table. Behind them, as the layout shows: the long rectangular wooden table; a small round table for one; the low buildings on the east side, windows glowing; the megastructures and mountain pyramids above the rooftops; the quiet street beyond the gate, plain building fronts with no signs. The table they share is a long rectangular wooden table, never round. Faces stay soft and natural: smiles and laughs are closed-mouthed, never open-mouthed grins, no teeth showing. The spiky-haired young man's eyes are dark brown. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands. Shop windows and panels glow plainly, at most with one simple pictogram (a cup, a leaf, a bowl); no lettered signs at all. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character. Draw it as a finished comic panel: inked outlines, painted flat colour, glowing lights. Picture 3 shows how the place looks: take its colours, materials and night light; it has nobody in it. The picture is 16:9, landscape.",
+ "references": [
+  {
+   "file": "adaptations/fifteen-days/preprod/set-frames/cov-cafe-CU-Z.depth.png",
+   "sha256": "6d89ca79bb6dc11dc3decdd96a8168b570e2952342d902c32a22c945a33799ed"
+  },
+  {
+   "file": "images-out/preprod/cards-small/zei.png",
+   "sha256": "2faf3c23d7e35f8d526477898d8862412f7e84c31f9d87b99d2aaf548178256f"
+  },
+  {
+   "file": "images-out/preprod/plates-small/courtyard.png",
+   "sha256": "c4e6d9b1b60e358dd71d0321462453467f47598a5912b03910a5e34fa0ab1ff5"
+  }
+ ],
+ "request": {
+  "size": "1536x864",
+  "n": 1
+ },
+ "response_meta": {
+  "created": 1792314653,
+  "usage": {
+   "total_tokens": 3751,
+   "input_tokens": 2673,
+   "output_tokens": 1078,
+   "input_tokens_details": {
+    "text_tokens": 721,
+    "image_tokens": 1952
+   }
+  },
+  "providerMetadata": {
+   "openai": {
+    "images": [
+     {
+      "imageTokens": 1952,
+      "textTokens": 721,
+      "created": 1792314652,
+      "size": "1536x864",
+      "quality": "high",
+      "background": "opaque",
+      "outputFormat": "png"
+     }
+    ]
+   },
+   "gateway": {
+    "routing": {
+     "originalModelId": "openai/gpt-image-2.5-sunburst",
+     "resolvedProvider": "openai",
+     "fallbacksAvailable": [],
+     "planningReasoning": "System credentials planned for: openai. Total execution order: openai(system)",
+     "canonicalSlug": "openai/gpt-image-2.5-sunburst",
+     "finalProvider": "openai",
+     "modelAttemptCount": 1,
+     "modelAttempts": [
+      {
+       "canonicalSlug": "openai/gpt-image-2.5-sunburst",
+       "success": true,
+       "providerAttemptCount": 1,
+       "providerAttempts": [
+        {
+         "provider": "openai",
+         "credentialType": "system",
+         "success": true,
+         "startTime": 1792314624269,
+         "endTime": 1792314653103,
+         "statusCode": 200
+        }
+       ]
+      }
+     ],
+     "totalProviderAttemptCount": 1
+    },
+    "cost": "0.051561",
+    "marketCost": "0.051561",
+    "surchargeCost": "0",
+    "gatewayCost": "0.051561",
+    "inferenceCost": "0.051561",
+    "inputInferenceCost": "0",
+    "outputInferenceCost": "0.051561",
+    "generationId": "gen_01M574DJ7681H7926N9ESQXZD9"
+   }
+  }
+ },
+ "cost_usd": 0.051561,
+ "output": {
+  "file": "/private/tmp/claude-501/-Users-nathan-snowmoon/9334ff32-2377-4150-8bc0-c96cfb5e0d3f/scratchpad/gptcut/raw/cov-cafe-CU-Z-amused-K7-g1.png",
+  "sha256": "2ed81d665f29bda28b5e78edc22b9fa71b6f72e0a61aeb32e59de02ac9a8ac50",
+  "bytes": 1640740
+ },
+ "ms": 55823
+}

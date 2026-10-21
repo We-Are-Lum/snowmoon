@@ -1,0 +1,758 @@
+{
+  "about": "Fifteen Days shot list v2 thumbnails: quick storyboard sketches, no references (owner, 2026-10-16). Prompts DRAFTED by the coding agent from shotlist-v2.json; people described, never named.",
+  "out": "images-out/preprod/thumbs",
+  "ledger": "images-out/preprod/ledger.json",
+  "cap_usd": 5.0,
+  "style": "",
+  "jobs": [
+    {
+      "id": "thumb-H01",
+      "prompt": "extreme wide shot (EWS, high from the back of the stands). The vast hall inside the mountain: tiers packed with a varied crowd; the game's holograms glowing in the middle of the floor; far apart on opposite edges, two tiny pods, one player in each, facing the walls.  Setting: inside a vast dark game hall carved in a mountain, tiers of spectators, glowing game holograms above the floor. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12000
+    },
+    {
+      "id": "thumb-H02",
+      "prompt": "wide shot (WS, low angle from the floor). Among the holograms: thin black pillar towers with glowing cube tops; a ring of luminous walls holding as streams of small glowing gliders crash into it; the crowd's tiers rising beyond.  Setting: inside a vast dark game hall carved in a mountain, tiers of spectators, glowing game holograms above the floor. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12001
+    },
+    {
+      "id": "thumb-H03",
+      "prompt": "medium shot (MS, front three-quarter). a tall young man with wavy shoulder-length hair and a long knit tunic seated in his dark pod at a large glowing console, game glasses on a long cable running behind him, calm and cool; a dark partition behind him hides the holograms. Exactly one main person. Setting: inside a vast dark game hall carved in a mountain, tiers of spectators, glowing game holograms above the floor. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12002
+    },
+    {
+      "id": "thumb-H04",
+      "prompt": "Insert close-up filling the whole frame: a glowing game console screen showing a flat square game board grid, most of it blacked out in solid black patches, only a small lit area around one base with a tight ring of walls. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12780
+    },
+    {
+      "id": "thumb-H05",
+      "prompt": "Medium shot of one stocky bald young man alone in a small dark booth at a large glowing game console, wearing glasses attached to a long cable, sweating, hunched, focused down; only one person in the picture, seen from the front; a dark game hall behind. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12781
+    },
+    {
+      "id": "thumb-H06",
+      "prompt": "medium shot (MS, audience cutaway). Spectators in the tiers, varied in age, build and skin tone and in clothes of many colours: an old man leaning forward on his cane, a mother pointing for her child, two teens whispering; hologram light on their faces.  Setting: inside a vast dark game hall carved in a mountain, tiers of spectators, glowing game holograms above the floor. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12005
+    },
+    {
+      "id": "thumb-G01",
+      "prompt": "wide shot (WS, from across the hall, looking up). High up at the gallery railing, a slim young man with spiky black hair and a cropped jacket and a young woman with a high ponytail and a sleeveless vest, small, leaning on it; the crowd seated just below them; hologram light from below. Exactly two main people, each appearing once. Setting: high gallery railing in a vast dark game hall inside a mountain, the crowd seated just below, holograms far below. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12006
+    },
+    {
+      "id": "thumb-G02",
+      "prompt": "medium shot (MS two-shot from behind). From behind, a slim young man with spiky black hair and a cropped jacket leans on the railing on the left, absorbed in the game below; a young woman with a high ponytail and a sleeveless vest on the right, half turned away, hunched over something in her hands; the full hall below. Exactly two main people, each appearing once. Setting: high gallery railing in a vast dark game hall inside a mountain, the crowd seated just below, holograms far below. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12007
+    },
+    {
+      "id": "thumb-G03",
+      "prompt": "medium close-up from the waist up (MCU, from the hall side, slightly below). a slim young man with spiky black hair and a cropped jacket leaning on his forearms on the railing, eyes on the game below, admiring. Exactly one main person. Setting: high gallery railing in a vast dark game hall inside a mountain, the crowd seated just below, holograms far below. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12008
+    },
+    {
+      "id": "thumb-G04",
+      "prompt": "insert close-up detail (INSERT). a young woman with a high ponytail and a sleeveless vest's hands prying open a small electronic gadget with a tiny tool on the flat top of the railing: a little circuit board and wires. Exactly one main person. Setting: high gallery railing in a vast dark game hall inside a mountain, the crowd seated just below, holograms far below. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12009
+    },
+    {
+      "id": "thumb-G05",
+      "prompt": "medium close-up from the waist up (MCU). a young woman with a high ponytail and a sleeveless vest at the railing, eyes on her gadget, not looking up, dry. Exactly one main person. Setting: high gallery railing in a vast dark game hall inside a mountain, the crowd seated just below, holograms far below. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12010
+    },
+    {
+      "id": "thumb-G06",
+      "prompt": "close-up on the face (CU). a slim young man with spiky black hair and a cropped jacket turns to her, one eyebrow raised. Exactly one main person. Setting: high gallery railing in a vast dark game hall inside a mountain, the crowd seated just below, holograms far below. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12011
+    },
+    {
+      "id": "thumb-G07",
+      "prompt": "medium close-up from the waist up (MCU). a young woman with a high ponytail and a sleeveless vest snaps the gadget's casing shut and shrugs, without looking at him. Exactly one main person. Setting: high gallery railing in a vast dark game hall inside a mountain, the crowd seated just below, holograms far below. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12012
+    },
+    {
+      "id": "thumb-G08",
+      "prompt": "point-of-view shot (POV, high angle down over the railing). Looking down past the backs of the crowd's heads to the holograms far below: the ring of walls holding against the gliders.  Setting: high gallery railing in a vast dark game hall inside a mountain, the crowd seated just below, holograms far below. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12013
+    },
+    {
+      "id": "thumb-G09",
+      "prompt": "medium close-up from the waist up (MCU). a young woman with a high ponytail and a sleeveless vest glances sideways at him, wry. Exactly one main person. Setting: high gallery railing in a vast dark game hall inside a mountain, the crowd seated just below, holograms far below. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12014
+    },
+    {
+      "id": "thumb-G10",
+      "prompt": "medium shot (MS side two-shot). a young woman with a high ponytail and a sleeveless vest sets the gadget on the rail and leans over the railing to study the board below; a slim young man with spiky black hair and a cropped jacket turns to watch her. Exactly two main people, each appearing once. Setting: high gallery railing in a vast dark game hall inside a mountain, the crowd seated just below, holograms far below. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12015
+    },
+    {
+      "id": "thumb-G11",
+      "prompt": "close-up on the face (CU). a young woman with a high ponytail and a sleeveless vest's face lit from below by the holograms, eyes narrowed, studying the pieces; a slim young man with spiky black hair and a cropped jacket soft in the background over her shoulder, watching her. Exactly two main people, each appearing once. Setting: high gallery railing in a vast dark game hall inside a mountain, the crowd seated just below, holograms far below. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12016
+    },
+    {
+      "id": "thumb-H07",
+      "prompt": "wide shot (WS). The holograms' walls stand as the last gliders break; the crowd rises in a swell of noise.  Setting: inside a vast dark game hall carved in a mountain, tiers of spectators, glowing game holograms above the floor. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12017
+    },
+    {
+      "id": "thumb-H08",
+      "prompt": "medium close-up from the waist up (MCU). a tall young man with wavy shoulder-length hair and a long knit tunic lifts the glasses off; the cable falls behind his arm; a small private smile. Exactly one main person. Setting: inside a vast dark game hall carved in a mountain, tiers of spectators, glowing game holograms above the floor. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12018
+    },
+    {
+      "id": "thumb-C01",
+      "prompt": "wide shot (WS establishing). The round-topped, polished stone corridor with a row of elevator doors; a few people passing far off; a slim young man with spiky black hair and a cropped jacket waits near one elevator door; a young woman with a high ponytail and a sleeveless vest leans on the opposite wall behind him, arms crossed. Exactly two main people, each appearing once. Setting: a round-topped polished stone corridor inside a mountain, elevator doors, no windows. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12019
+    },
+    {
+      "id": "thumb-C02",
+      "prompt": "Medium shot from behind two people standing in the foreground, a slim young man with spiky black hair and a young woman with a high ponytail, both standing; in front of them the elevator doors slide open and a tall young man with wavy shoulder-length hair and a long knit tunic steps out, smiling. Exactly three people, each once. Setting: a round-topped polished stone corridor inside a mountain, no windows. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12797
+    },
+    {
+      "id": "thumb-C03",
+      "prompt": "medium close-up from the waist up (MCU). a slim young man with spiky black hair and a cropped jacket, eager. Exactly one main person. Setting: a round-topped polished stone corridor inside a mountain, elevator doors, no windows. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12021
+    },
+    {
+      "id": "thumb-C04",
+      "prompt": "medium close-up from the waist up (MCU). a tall young man with wavy shoulder-length hair and a long knit tunic, easy and friendly. Exactly one main person. Setting: a round-topped polished stone corridor inside a mountain, elevator doors, no windows. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12022
+    },
+    {
+      "id": "thumb-C05",
+      "prompt": "medium close-up from the waist up (MCU). a slim young man with spiky black hair and a cropped jacket, a self-deprecating grin. Exactly one main person. Setting: a round-topped polished stone corridor inside a mountain, elevator doors, no windows. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12023
+    },
+    {
+      "id": "thumb-C06",
+      "prompt": "medium shot (MS, past Zei's shoulder). a young woman with a high ponytail and a sleeveless vest in the background against the wall, arms crossed, looking off down the corridor, bored; a slim young man with spiky black hair and a cropped jacket's shoulder soft in the foreground. Exactly two main people, each appearing once. Setting: a round-topped polished stone corridor inside a mountain, elevator doors, no windows. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12024
+    },
+    {
+      "id": "thumb-C07",
+      "prompt": "medium close-up from the waist up (MCU). a tall young man with wavy shoulder-length hair and a long knit tunic asks. Exactly one main person. Setting: a round-topped polished stone corridor inside a mountain, elevator doors, no windows. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12025
+    },
+    {
+      "id": "thumb-C08",
+      "prompt": "close-up on the face (CU). a slim young man with spiky black hair and a cropped jacket, delighted. Exactly one main person. Setting: a round-topped polished stone corridor inside a mountain, elevator doors, no windows. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12026
+    },
+    {
+      "id": "thumb-C09",
+      "prompt": "over-the-shoulder shot (OTS from behind Bai). Over a young woman with a high ponytail and a sleeveless vest's shoulder, a tall young man with wavy shoulder-length hair and a long knit tunic turns to her, open and warm. Exactly two main people, each appearing once. Setting: a round-topped polished stone corridor inside a mountain, elevator doors, no windows. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12027
+    },
+    {
+      "id": "thumb-C10",
+      "prompt": "close-up on the face (CU). a young woman with a high ponytail and a sleeveless vest shrugs, disgruntled. Exactly one main person. Setting: a round-topped polished stone corridor inside a mountain, elevator doors, no windows. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12028
+    },
+    {
+      "id": "thumb-C11",
+      "prompt": "wide shot (WS). a tall young man with wavy shoulder-length hair and a long knit tunic walks away down the corridor, back to us; a slim young man with spiky black hair and a cropped jacket in the foreground lifts a hand. Exactly two main people, each appearing once. Setting: a round-topped polished stone corridor inside a mountain, elevator doors, no windows. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12029
+    },
+    {
+      "id": "thumb-C12",
+      "prompt": "medium shot (MS walk-and-talk, tracking ahead of them). a slim young man with spiky black hair and a cropped jacket and a young woman with a high ponytail and a sleeveless vest walk the other way toward camera, other people passing; he turns to her, hopeful. Exactly two main people, each appearing once. Setting: a round-topped polished stone corridor inside a mountain, elevator doors, no windows. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12030
+    },
+    {
+      "id": "thumb-C13",
+      "prompt": "medium close-up from the waist up (MCU walking). a young woman with a high ponytail and a sleeveless vest walking, not looking at him. Exactly one main person. Setting: a round-topped polished stone corridor inside a mountain, elevator doors, no windows. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12031
+    },
+    {
+      "id": "thumb-C14",
+      "prompt": "medium close-up from the waist up (MCU walking). a slim young man with spiky black hair and a cropped jacket walking, teasing. Exactly one main person. Setting: a round-topped polished stone corridor inside a mountain, elevator doors, no windows. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12032
+    },
+    {
+      "id": "thumb-C15",
+      "prompt": "close-up on the face (CU walking). a young woman with a high ponytail and a sleeveless vest walking, a sly smile. Exactly one main person. Setting: a round-topped polished stone corridor inside a mountain, elevator doors, no windows. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12033
+    },
+    {
+      "id": "thumb-C16",
+      "prompt": "close-up on the face (CU walking). a young woman with a high ponytail and a sleeveless vest walking; the smile drops, serious. Exactly one main person. Setting: a round-topped polished stone corridor inside a mountain, elevator doors, no windows. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12034
+    },
+    {
+      "id": "thumb-C17",
+      "prompt": "medium shot (MS two-shot walking). a slim young man with spiky black hair and a cropped jacket grins and nudges her shoulder with his; a young woman with a high ponytail and a sleeveless vest rolls her eyes, half smiling. Exactly two main people, each appearing once. Setting: a round-topped polished stone corridor inside a mountain, elevator doors, no windows. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12035
+    },
+    {
+      "id": "thumb-F01",
+      "prompt": "extreme wide shot (EWS establishing, high from the west). The courtyard café at night: close-set tables full of people eating and talking, the shade tree hung with little lights, megastructures above the rooftops; at the table for four in the middle, a tall young man with wavy shoulder-length hair and a long knit tunic and a young woman with a high ponytail and a sleeveless vest, small, laughing. Exactly two main people, each appearing once. Setting: a small open-air courtyard cafe at night, close-set tables, string lights in a tree, tall buildings beyond the rooftops. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12036
+    },
+    {
+      "id": "thumb-F02",
+      "prompt": "medium shot (MS). a slim young man with spiky black hair and a cropped jacket steps in through the courtyard's street gate, scanning the tables. Exactly one main person. Setting: a small open-air courtyard cafe at night, close-set tables, string lights in a tree, tall buildings beyond the rooftops. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12037
+    },
+    {
+      "id": "thumb-F03",
+      "prompt": "point-of-view shot (POV, long lens between diners). Across the courtyard, between other diners: a tall young man with wavy shoulder-length hair and a long knit tunic and a young woman with a high ponytail and a sleeveless vest at their table, laughing together. Exactly two main people, each appearing once. Setting: a small open-air courtyard cafe at night, close-set tables, string lights in a tree, tall buildings beyond the rooftops. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12038
+    },
+    {
+      "id": "thumb-F04",
+      "prompt": "medium shot (MS). a slim young man with spiky black hair and a cropped jacket weaving quickly between the crowded tables, half running, slowing as he nears. Exactly one main person. Setting: a small open-air courtyard cafe at night, close-set tables, string lights in a tree, tall buildings beyond the rooftops. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12039
+    },
+    {
+      "id": "thumb-F05",
+      "prompt": "medium shot (MS two-shot, side). a tall young man with wavy shoulder-length hair and a long knit tunic and a young woman with a high ponytail and a sleeveless vest laughing across the table; a tall young man with wavy shoulder-length hair and a long knit tunic spots someone and waves. Exactly two main people, each appearing once. Setting: a small open-air courtyard cafe at night, close-set tables, string lights in a tree, tall buildings beyond the rooftops. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12040
+    },
+    {
+      "id": "thumb-F06",
+      "prompt": "medium shot (MS). a slim young man with spiky black hair and a cropped jacket pulls a chair to the end of the table and sits. Exactly one main person. Setting: a small open-air courtyard cafe at night, close-set tables, string lights in a tree, tall buildings beyond the rooftops. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12041
+    },
+    {
+      "id": "thumb-F07",
+      "prompt": "wide shot (WS three-shot from the west, waist-up). All three at the table: a tall young man with wavy shoulder-length hair and a long knit tunic on the left (north side), a young woman with a high ponytail and a sleeveless vest on the right (south side), a slim young man with spiky black hair and a cropped jacket at the far end between them, at right angles. Exactly three main people, each appearing once. Setting: a small open-air courtyard cafe at night, close-set tables, string lights in a tree, tall buildings beyond the rooftops. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12042
+    },
+    {
+      "id": "thumb-F08",
+      "prompt": "medium shot (MS). a humanoid service robot with a round screen face and a tray, gliding on a smooth column base glides up beside the table. Exactly one main person. Setting: a small open-air courtyard cafe at night, close-set tables, string lights in a tree, tall buildings beyond the rooftops. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12043
+    },
+    {
+      "id": "thumb-F09",
+      "prompt": "medium close-up from the waist up (MCU). a humanoid service robot with a round screen face and a tray, gliding on a smooth column base at the table, its face screen kind, tray level. Exactly one main person. Setting: a small open-air courtyard cafe at night, close-set tables, string lights in a tree, tall buildings beyond the rooftops. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12044
+    },
+    {
+      "id": "thumb-F10",
+      "prompt": "insert close-up detail (INSERT). The robot's hands offering paper-thin tablet menus; hands take them.  Setting: a small open-air courtyard cafe at night, close-set tables, string lights in a tree, tall buildings beyond the rooftops. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12045
+    },
+    {
+      "id": "thumb-F11",
+      "prompt": "close-up on the face (CU). a slim young man with spiky black hair and a cropped jacket looking down at the paper-thin menu in his hands. Exactly one main person. Setting: a small open-air courtyard cafe at night, close-set tables, string lights in a tree, tall buildings beyond the rooftops. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12046
+    },
+    {
+      "id": "thumb-F12",
+      "prompt": "insert close-up detail (INSERT). The menu: the book's own glyph picture on the paper-thin tablet.  Setting: a small open-air courtyard cafe at night, close-set tables, string lights in a tree, tall buildings beyond the rooftops. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12047
+    },
+    {
+      "id": "thumb-F13",
+      "prompt": "medium close-up from the waist up (MCU). a slim young man with spiky black hair and a cropped jacket, the menu in his hands, explaining. Exactly one main person. Setting: a small open-air courtyard cafe at night, close-set tables, string lights in a tree, tall buildings beyond the rooftops. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12048
+    },
+    {
+      "id": "thumb-F14",
+      "prompt": "Medium close-up of one young woman with a high ponytail and a sleeveless vest, alone in the frame, seated at a cafe table, holding a thin tablet menu, glancing up from it to the left, unhappy. Only one person in the picture. Setting: a courtyard cafe at night, string lights, blurred diners far behind. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12826
+    },
+    {
+      "id": "thumb-F15",
+      "prompt": "Medium close-up of one slim young man with spiky black hair and a cropped jacket, alone in the frame, seated at a cafe table, turning his head to look left at someone off-screen, a thin tablet menu in his hands. Only one person in the picture. Setting: a courtyard cafe at night, string lights. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12827
+    },
+    {
+      "id": "thumb-F16",
+      "prompt": "medium close-up from the waist up (MCU). a tall young man with wavy shoulder-length hair and a long knit tunic, menu in hand, modest. Exactly one main person. Setting: a small open-air courtyard cafe at night, close-set tables, string lights in a tree, tall buildings beyond the rooftops. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12051
+    },
+    {
+      "id": "thumb-F17",
+      "prompt": "over-the-shoulder shot (OTS from behind Deluin). Over a tall young man with wavy shoulder-length hair and a long knit tunic's shoulder: a slim young man with spiky black hair and a cropped jacket, menu in hand, eyes going between the menu and him. Exactly two main people, each appearing once. Setting: a small open-air courtyard cafe at night, close-set tables, string lights in a tree, tall buildings beyond the rooftops. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12052
+    },
+    {
+      "id": "thumb-F18",
+      "prompt": "medium close-up from the waist up (MCU). a tall young man with wavy shoulder-length hair and a long knit tunic leaning over his menu, reading it closely. Exactly one main person. Setting: a small open-air courtyard cafe at night, close-set tables, string lights in a tree, tall buildings beyond the rooftops. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12053
+    },
+    {
+      "id": "thumb-F19",
+      "prompt": "close-up on the face (CU). a slim young man with spiky black hair and a cropped jacket listening, eyebrows rising. Exactly one main person. Setting: a small open-air courtyard cafe at night, close-set tables, string lights in a tree, tall buildings beyond the rooftops. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12054
+    },
+    {
+      "id": "thumb-F20",
+      "prompt": "close-up on the face (CU). a slim young man with spiky black hair and a cropped jacket, astonished. Exactly one main person. Setting: a small open-air courtyard cafe at night, close-set tables, string lights in a tree, tall buildings beyond the rooftops. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12055
+    },
+    {
+      "id": "thumb-F21",
+      "prompt": "close-up on the face (CU). a tall young man with wavy shoulder-length hair and a long knit tunic, a mock-stern face with a playful smile, no gestures: a joking lecture. Exactly one main person. Setting: a small open-air courtyard cafe at night, close-set tables, string lights in a tree, tall buildings beyond the rooftops. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12056
+    },
+    {
+      "id": "thumb-F22",
+      "prompt": "close-up on the face (CU). a slim young man with spiky black hair and a cropped jacket, impressed and a bit put out. Exactly one main person. Setting: a small open-air courtyard cafe at night, close-set tables, string lights in a tree, tall buildings beyond the rooftops. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12057
+    },
+    {
+      "id": "thumb-F23",
+      "prompt": "medium close-up from the waist up (MCU). a young woman with a high ponytail and a sleeveless vest puts her menu down on the table. Exactly one main person. Setting: a small open-air courtyard cafe at night, close-set tables, string lights in a tree, tall buildings beyond the rooftops. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12058
+    },
+    {
+      "id": "thumb-F24",
+      "prompt": "close-up on the face (CU). a young woman with a high ponytail and a sleeveless vest, standing now, headphones in hand, to Zei. Exactly one main person. Setting: a small open-air courtyard cafe at night, close-set tables, string lights in a tree, tall buildings beyond the rooftops. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12059
+    },
+    {
+      "id": "thumb-F25",
+      "prompt": "close-up on the face (CU). a slim young man with spiky black hair and a cropped jacket nods, a bit confused. Exactly one main person. Setting: a small open-air courtyard cafe at night, close-set tables, string lights in a tree, tall buildings beyond the rooftops. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12060
+    },
+    {
+      "id": "thumb-F26",
+      "prompt": "medium shot (MS past Zei, soft foreground). Behind a slim young man with spiky black hair and a cropped jacket, a young woman with a high ponytail and a sleeveless vest sits at the small round table, puts on big headphones and takes out her handheld. Exactly two main people, each appearing once. Setting: a small open-air courtyard cafe at night, close-set tables, string lights in a tree, tall buildings beyond the rooftops. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12061
+    },
+    {
+      "id": "thumb-S01",
+      "prompt": "Medium side two-shot at a cafe table: a humanoid service robot with a round screen face, gliding on a column base, pours tea from a pot into two cups; seated at the table, a slim young man with spiky black hair and a tall young man with wavy shoulder-length hair and a long knit tunic, framed from the waist up. Exactly two people and one robot, each once. Setting: a courtyard cafe at night, string lights. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12839
+    },
+    {
+      "id": "thumb-S02",
+      "prompt": "insert close-up detail (INSERT). a tall young man with wavy shoulder-length hair and a long knit tunic's hand, absent-mindedly taking sugar cubes from a little bowl and setting one on another. Exactly one main person. Setting: a small open-air courtyard cafe at night, close-set tables, string lights in a tree, tall buildings beyond the rooftops. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12063
+    },
+    {
+      "id": "thumb-S03",
+      "prompt": "medium close-up from the waist up (MCU). a tall young man with wavy shoulder-length hair and a long knit tunic, eyes on Zei, not on his hands. Exactly one main person. Setting: a small open-air courtyard cafe at night, close-set tables, string lights in a tree, tall buildings beyond the rooftops. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12064
+    },
+    {
+      "id": "thumb-S04",
+      "prompt": "medium close-up from the waist up (MCU). a slim young man with spiky black hair and a cropped jacket; behind him, small, a young woman with a high ponytail and a sleeveless vest at her table with headphones on. Exactly two main people, each appearing once. Setting: a small open-air courtyard cafe at night, close-set tables, string lights in a tree, tall buildings beyond the rooftops. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12065
+    },
+    {
+      "id": "thumb-S05",
+      "prompt": "medium close-up from the waist up (MCU). a tall young man with wavy shoulder-length hair and a long knit tunic, warm, thinking about home. Exactly one main person. Setting: a small open-air courtyard cafe at night, close-set tables, string lights in a tree, tall buildings beyond the rooftops. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12066
+    },
+    {
+      "id": "thumb-S06",
+      "prompt": "insert close-up detail (INSERT). a tall young man with wavy shoulder-length hair and a long knit tunic's hands still stacking while he talks: the cubes are becoming a little wall. Exactly one main person. Setting: a small open-air courtyard cafe at night, close-set tables, string lights in a tree, tall buildings beyond the rooftops. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12067
+    },
+    {
+      "id": "thumb-S07",
+      "prompt": "medium close-up from the waist up (MCU). a tall young man with wavy shoulder-length hair and a long knit tunic: 'Less cameras, more castles.' Exactly one main person. Setting: a small open-air courtyard cafe at night, close-set tables, string lights in a tree, tall buildings beyond the rooftops. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12068
+    },
+    {
+      "id": "thumb-S08",
+      "prompt": "close-up on the face (CU). a slim young man with spiky black hair and a cropped jacket glances down at the table, notices, and smiles. Exactly one main person. Setting: a small open-air courtyard cafe at night, close-set tables, string lights in a tree, tall buildings beyond the rooftops. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12069
+    },
+    {
+      "id": "thumb-S09",
+      "prompt": "insert close-up detail (INSERT). A neat little wall of white sugar cubes between two tea cups.  Setting: a small open-air courtyard cafe at night, close-set tables, string lights in a tree, tall buildings beyond the rooftops. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12070
+    },
+    {
+      "id": "thumb-S10",
+      "prompt": "close-up on the face (CU). a slim young man with spiky black hair and a cropped jacket, amused. Exactly one main person. Setting: a small open-air courtyard cafe at night, close-set tables, string lights in a tree, tall buildings beyond the rooftops. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12071
+    },
+    {
+      "id": "thumb-S11",
+      "prompt": "close-up on the face (CU). a tall young man with wavy shoulder-length hair and a long knit tunic looks down at the cubes as if for the first time, and smiles. Exactly one main person. Setting: a small open-air courtyard cafe at night, close-set tables, string lights in a tree, tall buildings beyond the rooftops. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12072
+    },
+    {
+      "id": "thumb-S12",
+      "prompt": "insert close-up detail (INSERT). a slim young man with spiky black hair and a cropped jacket's finger flicks one cube out of the bottom row: the wall now has a door. Exactly one main person. Setting: a small open-air courtyard cafe at night, close-set tables, string lights in a tree, tall buildings beyond the rooftops. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12073
+    },
+    {
+      "id": "thumb-S13",
+      "prompt": "medium shot (MS side two-shot). a slim young man with spiky black hair and a cropped jacket and a tall young man with wavy shoulder-length hair and a long knit tunic both laughing. Exactly two main people, each appearing once. Setting: a small open-air courtyard cafe at night, close-set tables, string lights in a tree, tall buildings beyond the rooftops. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12074
+    },
+    {
+      "id": "thumb-S14",
+      "prompt": "medium shot (MS cutaway). a young woman with a high ponytail and a sleeveless vest at her table, headphones on, handheld in her hands, looking straight ahead; her eyes slide toward them. Exactly one main person. Setting: a small open-air courtyard cafe at night, close-set tables, string lights in a tree, tall buildings beyond the rooftops. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12075
+    },
+    {
+      "id": "thumb-R01",
+      "prompt": "medium close-up from the waist up (MCU). a tall young man with wavy shoulder-length hair and a long knit tunic, leaning in, eager and inviting. Exactly one main person. Setting: a small open-air courtyard cafe at night, close-set tables, string lights in a tree, tall buildings beyond the rooftops. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12076
+    },
+    {
+      "id": "thumb-R02",
+      "prompt": "medium close-up from the waist up (MCU). a slim young man with spiky black hair and a cropped jacket, a little embarrassed; a young woman with a high ponytail and a sleeveless vest small behind him. Exactly two main people, each appearing once. Setting: a small open-air courtyard cafe at night, close-set tables, string lights in a tree, tall buildings beyond the rooftops. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12077
+    },
+    {
+      "id": "thumb-R03",
+      "prompt": "insert close-up detail (INSERT). a slim young man with spiky black hair and a cropped jacket's wrist: he turns it to glance at his watch. Exactly one main person. Setting: a small open-air courtyard cafe at night, close-set tables, string lights in a tree, tall buildings beyond the rooftops. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12078
+    },
+    {
+      "id": "thumb-R04",
+      "prompt": "close-up on the face (CU). a slim young man with spiky black hair and a cropped jacket, smiling. Exactly one main person. Setting: a small open-air courtyard cafe at night, close-set tables, string lights in a tree, tall buildings beyond the rooftops. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12079
+    },
+    {
+      "id": "thumb-R05",
+      "prompt": "medium close-up from the waist up (MCU). a tall young man with wavy shoulder-length hair and a long knit tunic, playful. Exactly one main person. Setting: a small open-air courtyard cafe at night, close-set tables, string lights in a tree, tall buildings beyond the rooftops. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12080
+    },
+    {
+      "id": "thumb-R06",
+      "prompt": "medium shot (MS). a young woman with a high ponytail and a sleeveless vest at her table glances back over her shoulder, absent-mindedly. Exactly one main person. Setting: a small open-air courtyard cafe at night, close-set tables, string lights in a tree, tall buildings beyond the rooftops. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12081
+    },
+    {
+      "id": "thumb-R07",
+      "prompt": "medium close-up from the waist up (MCU). a tall young man with wavy shoulder-length hair and a long knit tunic leans out and calls across, loudly. Exactly one main person. Setting: a small open-air courtyard cafe at night, close-set tables, string lights in a tree, tall buildings beyond the rooftops. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12082
+    },
+    {
+      "id": "thumb-R08",
+      "prompt": "medium shot (MS). a young woman with a high ponytail and a sleeveless vest makes a big show of pulling one side of her headphones off; loud music blares. Exactly one main person. Setting: a small open-air courtyard cafe at night, close-set tables, string lights in a tree, tall buildings beyond the rooftops. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12083
+    },
+    {
+      "id": "thumb-R09",
+      "prompt": "close-up on the face (CU). a young woman with a high ponytail and a sleeveless vest points at the headphones, then pops them back on, playing it off as if she can't hear them. Exactly one main person. Setting: a small open-air courtyard cafe at night, close-set tables, string lights in a tree, tall buildings beyond the rooftops. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12084
+    },
+    {
+      "id": "thumb-R10",
+      "prompt": "medium shot (MS side two-shot). a slim young man with spiky black hair and a cropped jacket and a tall young man with wavy shoulder-length hair and a long knit tunic exchange an amused look. Exactly two main people, each appearing once. Setting: a small open-air courtyard cafe at night, close-set tables, string lights in a tree, tall buildings beyond the rooftops. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12085
+    },
+    {
+      "id": "thumb-D01",
+      "prompt": "wide shot (WS establishing). The courtyard's street gate at dusk, lamps coming on; a tall young man with wavy shoulder-length hair and a long knit tunic and a slim young man with spiky black hair and a cropped jacket walk to it. Exactly two main people, each appearing once. Setting: the street gate of a courtyard cafe at dusk, a lamp post, a quiet street. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12086
+    },
+    {
+      "id": "thumb-D02",
+      "prompt": "medium shot (MS). a tall young man with wavy shoulder-length hair and a long knit tunic at the gate, on the street side, turns back to Zei. Exactly one main person. Setting: the street gate of a courtyard cafe at dusk, a lamp post, a quiet street. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12087
+    },
+    {
+      "id": "thumb-D03",
+      "prompt": "medium shot (MS). a tall young man with wavy shoulder-length hair and a long knit tunic holds up both open hands, ten fingers, then lowers one hand: five. One clear gesture: fifteen. Exactly one main person. Setting: the street gate of a courtyard cafe at dusk, a lamp post, a quiet street. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12088
+    },
+    {
+      "id": "thumb-D04",
+      "prompt": "medium shot (MS). a slim young man with spiky black hair and a cropped jacket mirrors it, grinning: ten fingers, then five. Exactly one main person. Setting: the street gate of a courtyard cafe at dusk, a lamp post, a quiet street. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12089
+    },
+    {
+      "id": "thumb-D05",
+      "prompt": "wide shot (WS). a tall young man with wavy shoulder-length hair and a long knit tunic walks out under the lamps into the street, back to us; a slim young man with spiky black hair and a cropped jacket small at the gate. Exactly two main people, each appearing once. Setting: the street gate of a courtyard cafe at dusk, a lamp post, a quiet street. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12090
+    },
+    {
+      "id": "thumb-D06",
+      "prompt": "medium shot (MS). a tall young man with wavy shoulder-length hair and a long knit tunic alone in the street stops under a lamp and takes out his small device. Exactly one main person. Setting: the street gate of a courtyard cafe at dusk, a lamp post, a quiet street. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12091
+    },
+    {
+      "id": "thumb-D07",
+      "prompt": "close-up on the face (CU). a tall young man with wavy shoulder-length hair and a long knit tunic's face lit by the screen, hesitating. Exactly one main person. Setting: the street gate of a courtyard cafe at dusk, a lamp post, a quiet street. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12092
+    },
+    {
+      "id": "thumb-D08",
+      "prompt": "insert close-up detail (INSERT). His thumbs hover over the device, its screen turned away from us, then press: sent. Exactly one main person. Setting: the street gate of a courtyard cafe at dusk, a lamp post, a quiet street. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12093
+    },
+    {
+      "id": "thumb-D09",
+      "prompt": "wide shot (WS). At dusk, a slim young man with spiky black hair and a cropped jacket walks back across the emptying courtyard toward a young woman with a high ponytail and a sleeveless vest's small table; she sits alone, headphones on. Exactly two main people, each appearing once. Setting: a small open-air courtyard cafe at night, close-set tables, string lights in a tree, tall buildings beyond the rooftops. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12094
+    },
+    {
+      "id": "thumb-D10",
+      "prompt": "Medium shot of one young woman with a high ponytail, alone at a small round cafe table at dusk, headphones round her neck, looking up to the left as someone arrives off-screen. Only one person in the picture. Setting: an emptying courtyard cafe at dusk, string lights. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12872
+    },
+    {
+      "id": "thumb-L01",
+      "prompt": "wide shot (WS establishing). The hotel lobby restaurant late at night, nearly empty; a slim young man with spiky black hair and a cropped jacket alone at a table by the tall windows; a humanoid service robot with a round screen face and a tray, gliding on a smooth column base by the counter. Exactly two main people, each appearing once. Setting: a cozy hotel lobby restaurant late at night, wooden tables, tall windows, nearly empty: no other diners at all. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12096
+    },
+    {
+      "id": "thumb-L02",
+      "prompt": "medium close-up from the waist up (MCU). a slim young man with spiky black hair and a cropped jacket, distraught, tapping his device again; an untouched bowl of rice and vegetables and a tea cup in front of him. Exactly one main person. Setting: a cozy hotel lobby restaurant late at night, wooden tables, tall windows, nearly empty: no other diners at all. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12097
+    },
+    {
+      "id": "thumb-L03",
+      "prompt": "insert close-up detail (INSERT). His device's screen: his fifth message.  Setting: a cozy hotel lobby restaurant late at night, wooden tables, tall windows, nearly empty: no other diners at all. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12098
+    },
+    {
+      "id": "thumb-L04",
+      "prompt": "medium shot (MS). a humanoid service robot with a round screen face and a tray, gliding on a smooth column base refills his tea; he doesn't look up. Exactly two main people, each appearing once. Setting: a cozy hotel lobby restaurant late at night, wooden tables, tall windows, nearly empty: no other diners at all. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12099
+    },
+    {
+      "id": "thumb-L05",
+      "prompt": "Medium shot: a young woman with a high ponytail sits down across a small table from a slim young man with spiky black hair, who is slumped over a handheld device; a bowl and a tea cup on the table. Exactly two people, each appearing once. Setting: a cozy hotel lobby restaurant late at night, wooden tables, tall windows, nearly empty: no other diners at all. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12877
+    },
+    {
+      "id": "thumb-L06",
+      "prompt": "close-up on the face (CU). a slim young man with spiky black hair and a cropped jacket looks up at her. Exactly one main person. Setting: a cozy hotel lobby restaurant late at night, wooden tables, tall windows, nearly empty: no other diners at all. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12101
+    },
+    {
+      "id": "thumb-L07",
+      "prompt": "Insert close-up filling the frame: a small handheld device lying in a hand on a wooden table, its screen lighting up with a message, glowing. No people's faces. Setting: a cozy hotel lobby restaurant late at night, wooden tables, tall windows, nearly empty: no other diners at all. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12879
+    },
+    {
+      "id": "thumb-L08",
+      "prompt": "close-up on the face (CU). a slim young man with spiky black hair and a cropped jacket breathes out, eyes closing. Exactly one main person. Setting: a cozy hotel lobby restaurant late at night, wooden tables, tall windows, nearly empty: no other diners at all. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12103
+    },
+    {
+      "id": "thumb-L09",
+      "prompt": "Insert close-up filling the frame: a small handheld device held in two hands above a wooden table, its screen glowing with a new message. No people's faces. Setting: a cozy hotel lobby restaurant late at night, wooden tables, tall windows, nearly empty: no other diners at all. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12881
+    },
+    {
+      "id": "thumb-L10",
+      "prompt": "over-the-shoulder shot (OTS from behind Zei). Over a slim young man with spiky black hair and a cropped jacket's shoulder: he turns the screen to a young woman with a high ponytail and a sleeveless vest. Exactly two main people, each appearing once. Setting: a cozy hotel lobby restaurant late at night, wooden tables, tall windows, nearly empty: no other diners at all. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12105
+    },
+    {
+      "id": "thumb-L11",
+      "prompt": "Close-up of a young woman with a high ponytail, alone in the frame, reading a small glowing handheld device held out to her, its light on her face, her expression unreadable. Only one person. Setting: a cozy hotel lobby restaurant late at night, wooden tables, tall windows, nearly empty: no other diners at all. Rough storyboard frame for an animated film: a quick, loose pencil sketch in grey tones with light grey marker shading on white paper, simple clear shapes and silhouettes, strong cinematic composition, 16:9. One single frame, no panel borders. Seated people are framed from the waist up, never showing their feet. No text, no lettering, no numbers, no arrows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12883
+    }
+  ]
+}

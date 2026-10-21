@@ -101,7 +101,8 @@ def main():
     # ("assist": null when a person wrote them all). Copied into the recipe.
     if "assist" not in spec:
         sys.exit(f"{job_file.name}: add an \"assist\" field (null if no model drafted the prompts)")
-    style = json.loads((CONTENT / spec["style"]).read_text())
+    # A style is a design file, or written inline ({"prompt": ...}) for a style test's forks.
+    style = spec["style"] if isinstance(spec["style"], dict) else json.loads((CONTENT / spec["style"]).read_text())
     out = ROOT / "images-out" / job_file.stem
     out.mkdir(parents=True, exist_ok=True)
     manifest_path = out / "manifest.json"
@@ -149,7 +150,8 @@ def main():
             continue
         if not args.force and job["id"] in done and (out / done[job["id"]]["file"]).exists():
             continue
-        prompt = compose_prompt(job, load(job["style"]) if job.get("style") else style)
+        jstyle = job.get("style")
+        prompt = compose_prompt(job, jstyle if isinstance(jstyle, dict) else load(jstyle) if jstyle else style)
         refs = reference_paths(job, out) or None
         missing = [r for r in refs or [] if not Path(r).exists()]
         if missing:
@@ -180,8 +182,8 @@ def main():
         secs = time.time() - t
         done[job["id"]] = {
             "id": job["id"],
-            "chapter": job["chapter"],
-            "idx": job["idx"],
+            "chapter": job.get("chapter"),
+            "idx": job.get("idx"),
             "file": path.name,
             "sha256": sha256_file(path),
             "prompt": prompt,

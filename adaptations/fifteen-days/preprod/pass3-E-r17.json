@@ -1,0 +1,177 @@
+{
+ "about": "Fifteen Days v5: approved frames with extra figures or a wrong detail, edited (owner's pass, 2026-10-17 night; the extra-figure review). Reference sent at 1344x752 so the edit keeps the framing. DRAFTED prompts.",
+ "out": "images-out/preprod/pass3",
+ "ledger": "images-out/preprod/ledger-s7.json",
+ "cap_usd": 25.0,
+ "style": "",
+ "jobs": [
+  {
+   "id": "cov-lobby-MASTER-sits-E18",
+   "shot": "cov-lobby-MASTER-sits",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-lobby-MASTER-sits-K11.png"
+   ],
+   "prompt": "Remove every background figure: the people standing outside behind the big windows and the people by the far tables near the windows. The far tables and chairs are empty and the windows show only the night city and the empty street. Only the two people seated at the front table remain, both whole and fully in the frame as they are now. Keep everything else exactly as it is: the same drawing, colours, line work and lighting, and exactly the same camera, framing and crop; do not zoom, crop, shift or widen the view; every main person keeps their face, hair, clothes, pose, expression and place in the frame. No letters, words or numbers.",
+   "width": 1344,
+   "height": 752,
+   "seed": 18
+  },
+  {
+   "id": "cov-lobby-MASTER-sits-E19",
+   "shot": "cov-lobby-MASTER-sits",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-lobby-MASTER-sits-K11.png"
+   ],
+   "prompt": "Remove every background figure: the people standing outside behind the big windows and the people by the far tables near the windows. The far tables and chairs are empty and the windows show only the night city and the empty street. Only the two people seated at the front table remain, both whole and fully in the frame as they are now. Keep everything else exactly as it is: the same drawing, colours, line work and lighting, and exactly the same camera, framing and crop; do not zoom, crop, shift or widen the view; every main person keeps their face, hair, clothes, pose, expression and place in the frame. No letters, words or numbers.",
+   "width": 1344,
+   "height": 752,
+   "seed": 19
+  },
+  {
+   "id": "cov-overlook-OTS-Z-wry-E16",
+   "shot": "cov-overlook-OTS-Z-wry",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-overlook-OTS-Z-wry-K7.png"
+   ],
+   "prompt": "Remove every person standing or walking on the purple walkway, the ramp and the gallery behind the young woman, including the large man at the far right; the walkway is empty. The glowing hologram game in the hall below stays. Keep everything else exactly as it is: the same drawing, colours, line work and lighting, and exactly the same camera, framing and crop; do not zoom, crop, shift or widen the view; every main person keeps their face, hair, clothes, pose, expression and place in the frame. No letters, words or numbers.",
+   "width": 1344,
+   "height": 752,
+   "seed": 16
+  },
+  {
+   "id": "cov-overlook-OTS-Z-wry-E17",
+   "shot": "cov-overlook-OTS-Z-wry",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-overlook-OTS-Z-wry-K7.png"
+   ],
+   "prompt": "Remove every person standing or walking on the purple walkway, the ramp and the gallery behind the young woman, including the large man at the far right; the walkway is empty. The glowing hologram game in the hall below stays. Keep everything else exactly as it is: the same drawing, colours, line work and lighting, and exactly the same camera, framing and crop; do not zoom, crop, shift or widen the view; every main person keeps their face, hair, clothes, pose, expression and place in the frame. No letters, words or numbers.",
+   "width": 1344,
+   "height": 752,
+   "seed": 17
+  },
+  {
+   "id": "cov-overlook-OTS-Z-shrug-E16",
+   "shot": "cov-overlook-OTS-Z-shrug",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-overlook-OTS-Z-shrug-K7.png"
+   ],
+   "prompt": "Remove every person standing on the walkway and the gallery railing behind the two people, at the left and behind the young woman; the walkway and gallery are empty. The glowing hologram game in the hall below stays. Keep everything else exactly as it is: the same drawing, colours, line work and lighting, and exactly the same camera, framing and crop; do not zoom, crop, shift or widen the view; every main person keeps their face, hair, clothes, pose, expression and place in the frame. No letters, words or numbers.",
+   "width": 1344,
+   "height": 752,
+   "seed": 16
+  },
+  {
+   "id": "cov-overlook-OTS-Z-shrug-E17",
+   "shot": "cov-overlook-OTS-Z-shrug",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-overlook-OTS-Z-shrug-K7.png"
+   ],
+   "prompt": "Remove every person standing on the walkway and the gallery railing behind the two people, at the left and behind the young woman; the walkway and gallery are empty. The glowing hologram game in the hall below stays. Keep everything else exactly as it is: the same drawing, colours, line work and lighting, and exactly the same camera, framing and crop; do not zoom, crop, shift or widen the view; every main person keeps their face, hair, clothes, pose, expression and place in the frame. No letters, words or numbers.",
+   "width": 1344,
+   "height": 752,
+   "seed": 17
+  },
+  {
+   "id": "cov-cafe-SUGAR-flick-E16",
+   "shot": "cov-cafe-SUGAR-flick",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-cafe-SUGAR-flick-K7.png"
+   ],
+   "prompt": "The arm reaching in to flick the sugar cube wears the sleeve of an orange cropped zip jacket down to the wrist; remove the bare upper arm and the black sleeveless top behind it, showing the caf\u00e9 courtyard and buildings there instead. The finger, the sugar cubes and the two cups stay exactly as they are. Keep everything else exactly as it is: the same drawing, colours, line work and lighting, and exactly the same camera, framing and crop; do not zoom, crop, shift or widen the view; every main person keeps their face, hair, clothes, pose, expression and place in the frame. No letters, words or numbers.",
+   "width": 1344,
+   "height": 752,
+   "seed": 16
+  },
+  {
+   "id": "cov-cafe-SUGAR-flick-E17",
+   "shot": "cov-cafe-SUGAR-flick",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-cafe-SUGAR-flick-K7.png"
+   ],
+   "prompt": "The arm reaching in to flick the sugar cube wears the sleeve of an orange cropped zip jacket down to the wrist; remove the bare upper arm and the black sleeveless top behind it, showing the caf\u00e9 courtyard and buildings there instead. The finger, the sugar cubes and the two cups stay exactly as they are. Keep everything else exactly as it is: the same drawing, colours, line work and lighting, and exactly the same camera, framing and crop; do not zoom, crop, shift or widen the view; every main person keeps their face, hair, clothes, pose, expression and place in the frame. No letters, words or numbers.",
+   "width": 1344,
+   "height": 752,
+   "seed": 17
+  },
+  {
+   "id": "cov-cafe-SUGAR-stack-E16",
+   "shot": "cov-cafe-SUGAR-stack",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-cafe-SUGAR-stack-K8.png"
+   ],
+   "prompt": "Remove the large dark machine with the round glowing joint at the top left; in its place the low caf\u00e9 buildings with warm windows and the night sky with the distant towers. The hand, the cream knit sleeve, the sugar cubes and the cup stay exactly as they are. Keep everything else exactly as it is: the same drawing, colours, line work and lighting, and exactly the same camera, framing and crop; do not zoom, crop, shift or widen the view; every main person keeps their face, hair, clothes, pose, expression and place in the frame. No letters, words or numbers.",
+   "width": 1344,
+   "height": 752,
+   "seed": 16
+  },
+  {
+   "id": "cov-cafe-SUGAR-stack-E17",
+   "shot": "cov-cafe-SUGAR-stack",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-cafe-SUGAR-stack-K8.png"
+   ],
+   "prompt": "Remove the large dark machine with the round glowing joint at the top left; in its place the low caf\u00e9 buildings with warm windows and the night sky with the distant towers. The hand, the cream knit sleeve, the sugar cubes and the cup stay exactly as they are. Keep everything else exactly as it is: the same drawing, colours, line work and lighting, and exactly the same camera, framing and crop; do not zoom, crop, shift or widen the view; every main person keeps their face, hair, clothes, pose, expression and place in the frame. No letters, words or numbers.",
+   "width": 1344,
+   "height": 752,
+   "seed": 17
+  },
+  {
+   "id": "cov-game-SCREEN-face-E16",
+   "shot": "cov-game-SCREEN-face",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-game-SCREEN-face-K7.png"
+   ],
+   "prompt": "Remove the second, smaller screen at the top right corner and the face on it; that area is plain dark hall wall. Remove the row of grey standing figures along the top gallery railing. Keep the one huge screen with the calm face, the seated crowd in the tiers, the player in the pit and the glowing play floor. Keep everything else exactly as it is: the same drawing, colours, line work and lighting, and exactly the same camera, framing and crop; do not zoom, crop, shift or widen the view; every main person keeps their face, hair, clothes, pose, expression and place in the frame. No letters, words or numbers.",
+   "width": 1344,
+   "height": 752,
+   "seed": 16
+  },
+  {
+   "id": "cov-game-SCREEN-face-E17",
+   "shot": "cov-game-SCREEN-face",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-game-SCREEN-face-K7.png"
+   ],
+   "prompt": "Remove the second, smaller screen at the top right corner and the face on it; that area is plain dark hall wall. Remove the row of grey standing figures along the top gallery railing. Keep the one huge screen with the calm face, the seated crowd in the tiers, the player in the pit and the glowing play floor. Keep everything else exactly as it is: the same drawing, colours, line work and lighting, and exactly the same camera, framing and crop; do not zoom, crop, shift or widen the view; every main person keeps their face, hair, clothes, pose, expression and place in the frame. No letters, words or numbers.",
+   "width": 1344,
+   "height": 752,
+   "seed": 17
+  },
+  {
+   "id": "cov-cafe-CU-Z0-whoa-E16",
+   "shot": "cov-cafe-CU-Z0-whoa",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-cafe-CU-Z0-whoa-K15.png"
+   ],
+   "prompt": "The young man's spiky black hair has only ONE blue streak, at the front on one side; the other blue streak becomes black hair. Keep everything else exactly as it is: the same drawing, colours, line work and lighting, and exactly the same camera, framing and crop; do not zoom, crop, shift or widen the view; every main person keeps their face, hair, clothes, pose, expression and place in the frame. No letters, words or numbers.",
+   "width": 1344,
+   "height": 752,
+   "seed": 16
+  },
+  {
+   "id": "cov-cafe-CU-Z0-whoa-E17",
+   "shot": "cov-cafe-CU-Z0-whoa",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-cafe-CU-Z0-whoa-K15.png"
+   ],
+   "prompt": "The young man's spiky black hair has only ONE blue streak, at the front on one side; the other blue streak becomes black hair. Keep everything else exactly as it is: the same drawing, colours, line work and lighting, and exactly the same camera, framing and crop; do not zoom, crop, shift or widen the view; every main person keeps their face, hair, clothes, pose, expression and place in the frame. No letters, words or numbers.",
+   "width": 1344,
+   "height": 752,
+   "seed": 17
+  }
+ ]
+}

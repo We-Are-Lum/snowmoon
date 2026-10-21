@@ -1,0 +1,312 @@
+{
+  "job_file": "content/snowmoon/illustrations/adaptation-dog-dawn.json",
+  "generated_at": "2026-10-05T23:03:48+00:00",
+  "model": {
+    "repo": "black-forest-labs/FLUX.2-klein-4B",
+    "revision": "e7b7dc27f91deacad38e78976d1f2b499d76a294",
+    "license": "apache-2.0",
+    "runtime": "mflux",
+    "mflux_version": "0.20.0",
+    "quantize_bits": 4
+  },
+  "settings": {
+    "steps": 4,
+    "guidance": 1.0
+  },
+  "cost_usd": 0,
+  "host": {
+    "platform": "macOS-26.5.1-arm64-arm-64bit",
+    "machine": "arm64"
+  },
+  "model_load_seconds": 0.9,
+  "images": [
+    {
+      "id": "dd-01-a1",
+      "chapter": 29,
+      "idx": 114,
+      "file": "dd-01-a1.png",
+      "sha256": "eeaa218dd9f0f0acf963c4083278f2578c9601e434c6c96ada8c68e8df8e2631",
+      "prompt": "Medium shot at night in a narrow room of pale faceted crystalline panels. The young man from reference image 1 sits alone at a sleek console, his face lit cold blue by its glow, calm and serious. Behind frosted glass at the back of the room, two guards stand as dark faceless silhouettes. Cold blues and icy whites, quiet tense mood. Reference image 1 shows a young man of about eighteen, tall and long-limbed, pale skin, wavy shoulder-length light-brown hair, grey-green eyes and a calm, slightly serious face, wearing a thick cream cable-knit sweater cut as a long asymmetric tunic with a high folded collar and a light grey hood, dark green slim segmented trousers, a narrow dark sash and sturdy brown seamless boots; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Severe faceted crystalline megastructures, icy whites, pale blues and steel.",
+      "seed": 50011,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "deluin-sheet.png",
+          "sha256": "3edf7878c7001438c4c7133005517cba0d1679bed4988fadc58947d428934384"
+        }
+      ],
+      "generation_seconds": 204.3
+    },
+    {
+      "id": "dd-02-a1",
+      "chapter": 29,
+      "idx": 108,
+      "file": "dd-02-a1.png",
+      "sha256": "a6d7adba7ea40a8584684cc74a381cd9811a9c0db87c2a0d5084085fe2dd7eb7",
+      "prompt": "View from inside a dark room of pale faceted panels, looking out through a large frosted window at night. Far across snowy forested hills, a long line of small moving lights threads through the pines, and on the horizon a large orange fire glows among the dark trees, smoke rising into the sky. Cold blue interior, warm orange glow in the distance. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Severe faceted crystalline megastructures, icy whites, pale blues and steel.",
+      "seed": 50021,
+      "width": 1024,
+      "height": 576,
+      "references": [],
+      "generation_seconds": 184.0
+    },
+    {
+      "id": "dd-03-a1",
+      "chapter": 29,
+      "idx": 114,
+      "file": "dd-03-a1.png",
+      "sha256": "c544644e6e644232efd7c155c311e289cbd5a9ebbd8c5f84b9bddd1c1a46b1f8",
+      "prompt": "Close-up of a young man's hand resting on a sleek pale console in a dark room, lit cold blue. Across the console's display flows a soft stream of pale green abstract waveforms, like heartbeat lines, with no letters or numbers; one thin bright thread of light slips out of the stream and away into the dark. Cold blues, one thread of warm light. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Severe faceted crystalline megastructures, icy whites, pale blues and steel.",
+      "seed": 50031,
+      "width": 1024,
+      "height": 576,
+      "references": [],
+      "generation_seconds": 170.1
+    },
+    {
+      "id": "dd-04-a1",
+      "chapter": 30,
+      "idx": 4,
+      "file": "dd-04-a1.png",
+      "sha256": "cc6324265344bb26d7d1c9173ef8317941a38b3bfbebb56c2e59290e573eda20",
+      "prompt": "Inside a vast dark digital space: rows of translucent glowing wireframe copies of sleek angular snowmobile-like drones stand on an endless grid of light lines. One small bright probe of a different, warm color drifts among them, leaving a faint trail. Deep blacks, cyan lines, one point of warm orange. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers.",
+      "seed": 50041,
+      "width": 1024,
+      "height": 576,
+      "references": [],
+      "generation_seconds": 187.0
+    },
+    {
+      "id": "dd-05-a1",
+      "chapter": 30,
+      "idx": 29,
+      "file": "dd-05-a1.png",
+      "sha256": "2f6b8999512a1610753b7417df195cae919b694847f6f9f3558cd30b34bd6ff9",
+      "prompt": "Medium shot at night in a narrow room of pale faceted crystalline panels. The young man from reference image 1 sits at a console and glances back over his shoulder, wary. Behind frosted glass at the back of the room stands the dark faceless silhouette of a guard. On his screen, faint flickering threads of light with no letters. Cold blue light, tense mood. Reference image 1 shows a young man of about eighteen, tall and long-limbed, pale skin, wavy shoulder-length light-brown hair, grey-green eyes and a calm, slightly serious face, wearing a thick cream cable-knit sweater cut as a long asymmetric tunic with a high folded collar and a light grey hood, dark green slim segmented trousers, a narrow dark sash and sturdy brown seamless boots; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Severe faceted crystalline megastructures, icy whites, pale blues and steel.",
+      "seed": 50051,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "deluin-sheet.png",
+          "sha256": "3edf7878c7001438c4c7133005517cba0d1679bed4988fadc58947d428934384"
+        }
+      ],
+      "generation_seconds": 207.1
+    },
+    {
+      "id": "dd-06-a1",
+      "chapter": 30,
+      "idx": 41,
+      "file": "dd-06-a1.png",
+      "sha256": "ed1852d227cd8205a82f079c517f000040d8cfdc6629716129daae7945cf381f",
+      "prompt": "Pre-dawn in a snowy pine forest, the sky deep blue and brightening in the east. Soldiers in pale hooded thermal cloaks press large freshly printed sheets onto the flank of a snowmobile-like drone. Each sheet is covered in bright, colorful abstract squiggly patterns around a wide blank white band across its middle. Behind them, an endless row of drones covered in the same sheets; small printers on folding tables. Busy, urgent mood, deep blues with pops of color. Reference image 1 shows the location, a vast forest of snow-laden green pines rolling over low hills to the horizon, a bare windswept snowy hilltop lookout with a low half-buried bunker door at its foot, wide white clearings along the forest edge, deep untouched drifts, faint silver threads of cable trailing over the snow, and pale slender towers far off on the northern horizon, in white, pine green, steel blue and pale gold; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
+      "seed": 50061,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "elenar-forest-front-plate.png",
+          "sha256": "f3ae91ba81743125c14fa43662849073f69296c80f783c8168488449956bd7cb"
+        }
+      ],
+      "generation_seconds": 202.2
+    },
+    {
+      "id": "dd-07-a1",
+      "chapter": 30,
+      "idx": 48,
+      "file": "dd-07-a1.png",
+      "sha256": "eb4c88c1d23d04da9c39239ff42be8c5c5da1429cf8a7ede2e9839c6e8f304c7",
+      "prompt": "Dynamic wide shot of a snowy pine forest at sunrise. A line of snowmobile-like drones covered in sheets of bright, colorful abstract squiggly patterns, each sheet with a wide blank white band across its middle, surges forward through the trees, kicking up sprays of snow, past darker sleek enemy drones that sit motionless or turn aside in confusion. Low sunlight cuts through drifting smoke. No people visible. Reference image 1 shows the location, a vast forest of snow-laden green pines rolling over low hills to the horizon, a bare windswept snowy hilltop lookout with a low half-buried bunker door at its foot, wide white clearings along the forest edge, deep untouched drifts, faint silver threads of cable trailing over the snow, and pale slender towers far off on the northern horizon, in white, pine green, steel blue and pale gold; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
+      "seed": 50071,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "elenar-forest-front-plate.png",
+          "sha256": "f3ae91ba81743125c14fa43662849073f69296c80f783c8168488449956bd7cb"
+        }
+      ],
+      "generation_seconds": 212.9
+    },
+    {
+      "id": "dd-08-a1",
+      "chapter": 30,
+      "idx": 61,
+      "file": "dd-08-a1.png",
+      "sha256": "ed75695093fd0cbbd675ea2e103a7220710465ad64b1ec96121fe91ce2cc325b",
+      "prompt": "The young man from reference image 1 sits alone at a console in a narrow room of pale faceted panels, seen from the side; the first pale gold light of dawn comes through a frosted window. In front of him a large blank glowing screen. His hand hovers just above a single glowing key. Still, heavy mood, cold blues warming to gold. Reference image 1 shows a young man of about eighteen, tall and long-limbed, pale skin, wavy shoulder-length light-brown hair, grey-green eyes and a calm, slightly serious face, wearing a thick cream cable-knit sweater cut as a long asymmetric tunic with a high folded collar and a light grey hood, dark green slim segmented trousers, a narrow dark sash and sturdy brown seamless boots; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Severe faceted crystalline megastructures, icy whites, pale blues and steel.",
+      "seed": 50081,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "deluin-sheet.png",
+          "sha256": "3edf7878c7001438c4c7133005517cba0d1679bed4988fadc58947d428934384"
+        }
+      ],
+      "generation_seconds": 201.7
+    },
+    {
+      "id": "dd-01-a2",
+      "chapter": 29,
+      "idx": 114,
+      "file": "dd-01-a2.png",
+      "sha256": "df5f88d92e1c39718191a443a107ac38b1c8838235e9496ae368445307c59ec6",
+      "prompt": "Medium shot at night in a narrow room of pale faceted crystalline panels. The young man from reference image 1 sits alone at a sleek console, his face lit cold blue by its glow, calm and serious. Behind frosted glass at the back of the room, exactly two guards stand as dark faceless silhouettes. Cold blues and icy whites, quiet tense mood. It is the middle of the night: a pitch-black sky full of stars outside, no sunset, no pastel colors; the only light inside is the cold blue glow of the screens. Reference image 1 shows a young man of about eighteen, tall and long-limbed, pale skin, wavy shoulder-length light-brown hair, grey-green eyes and a calm, slightly serious face, wearing a thick cream cable-knit sweater cut as a long asymmetric tunic with a high folded collar and a light grey hood, dark green slim segmented trousers, a narrow dark sash and sturdy brown seamless boots; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Severe faceted crystalline megastructures, icy whites, pale blues and steel.",
+      "seed": 50012,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "deluin-sheet.png",
+          "sha256": "3edf7878c7001438c4c7133005517cba0d1679bed4988fadc58947d428934384"
+        }
+      ],
+      "generation_seconds": 217.1
+    },
+    {
+      "id": "dd-02-a2",
+      "chapter": 29,
+      "idx": 108,
+      "file": "dd-02-a2.png",
+      "sha256": "87b03f22486ad92bc87414ed1b89074540a6d9ba5016cb1b05aa09caa662d7bd",
+      "prompt": "View from inside a dark room of pale faceted panels, looking out through a large frosted window at night. Far across snowy forested hills, a long line of small moving lights threads through the pines, and on the horizon a huge orange fire blazes among the dark trees, smoke rising into the sky. Cold blue interior, warm orange glow in the distance. It is the middle of the night: a pitch-black starry sky, no sunset, no pastel colors; the fire is the brightest thing in the picture. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Severe faceted crystalline megastructures, icy whites, pale blues and steel.",
+      "seed": 50022,
+      "width": 1024,
+      "height": 576,
+      "references": [],
+      "generation_seconds": 175.9
+    },
+    {
+      "id": "dd-09-a1",
+      "chapter": 31,
+      "idx": 9,
+      "file": "dd-09-a1.png",
+      "sha256": "bc77355df9da057f32fe203759f86c3a663e7350ca64885c0701729e8dcc944e",
+      "prompt": "On a snowy mountain summit at the top of a long staircase with handrails, the young man from reference image 1, in a sweater and a light hood, throws himself into the arms of the young man from reference image 2, who staggers back, nearly knocked off balance, both overjoyed. Two women in winter jackets watch nearby, seen from behind. Far below, a small city among snowy hills and pine forest. Bright cold sunlight, icy whites and pale blues. Reference image 1 shows a young man of about eighteen, tall and long-limbed, pale skin, wavy shoulder-length light-brown hair, grey-green eyes and a calm, slightly serious face, wearing a thick cream cable-knit sweater cut as a long asymmetric tunic with a high folded collar and a light grey hood, dark green slim segmented trousers, a narrow dark sash and sturdy brown seamless boots; keep the same face, hair, build and clothing. Reference image 2 shows a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
+      "seed": 50091,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "deluin-sheet.png",
+          "sha256": "3edf7878c7001438c4c7133005517cba0d1679bed4988fadc58947d428934384"
+        },
+        {
+          "file": "zei-sheet.png",
+          "sha256": "cd6e71769d0d468bbfc5dbb4269aa62b14a92efaa45aef33bfc1b9fd0ba8d867"
+        }
+      ],
+      "generation_seconds": 260.5
+    },
+    {
+      "id": "dd-01-a3",
+      "chapter": 29,
+      "idx": 114,
+      "file": "dd-01-a3.png",
+      "sha256": "cb29c85020db4df107cae701395f27e76e4e57d517079f6f39e83ffa6c24f3fa",
+      "prompt": "Medium shot at night in a narrow room of pale faceted crystalline panels. The young man from reference image 1 is the only person in the room; he sits alone at a single sleek console, his face lit cold blue by its glow, calm and serious. Through frosted glass at the back of the room, outside the room, two guards stand as dark faceless silhouettes. Outside the windows the sky is black and starry. Cold blues and icy whites, quiet tense mood. Reference image 1 shows a young man of about eighteen, tall and long-limbed, pale skin, wavy shoulder-length light-brown hair, grey-green eyes and a calm, slightly serious face, wearing a thick cream cable-knit sweater cut as a long asymmetric tunic with a high folded collar and a light grey hood, dark green slim segmented trousers, a narrow dark sash and sturdy brown seamless boots; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Severe faceted crystalline megastructures, icy whites, pale blues and steel.",
+      "seed": 50013,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "deluin-sheet.png",
+          "sha256": "3edf7878c7001438c4c7133005517cba0d1679bed4988fadc58947d428934384"
+        }
+      ],
+      "generation_seconds": 209.7
+    },
+    {
+      "id": "dd-03-a2",
+      "chapter": 29,
+      "idx": 114,
+      "file": "dd-03-a2.png",
+      "sha256": "b874adf428251264131c9822048c05cba503a9beb9c8ebb29362f1d1b2718825",
+      "prompt": "Close-up of a young man's hand resting on a sleek pale console in a dark room, lit cold blue; his wrist and forearm are in the thick cream cable-knit sweater sleeve of the young man from reference image 1, and only his hand and sleeve are in the picture. Across the console's display flows a soft stream of pale green abstract waveforms, like heartbeat lines, with no letters or numbers; one thin bright thread of light slips out of the stream and away into the dark. Cold blues, one thread of warm light. Reference image 1 shows a young man of about eighteen, tall and long-limbed, pale skin, wavy shoulder-length light-brown hair, grey-green eyes and a calm, slightly serious face, wearing a thick cream cable-knit sweater cut as a long asymmetric tunic with a high folded collar and a light grey hood, dark green slim segmented trousers, a narrow dark sash and sturdy brown seamless boots; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Severe faceted crystalline megastructures, icy whites, pale blues and steel.",
+      "seed": 50032,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "deluin-sheet.png",
+          "sha256": "3edf7878c7001438c4c7133005517cba0d1679bed4988fadc58947d428934384"
+        }
+      ],
+      "generation_seconds": 196.8
+    },
+    {
+      "id": "dd-05-a2",
+      "chapter": 30,
+      "idx": 29,
+      "file": "dd-05-a2.png",
+      "sha256": "2af39159182e5440d792531aee55b0dada453b145c669d70631f0808d9a40465",
+      "prompt": "Medium shot inside the command room. The young man from reference image 1 sits at the console and glances back over his shoulder, wary. He is the only person in the room. Behind the frosted glass wall at the back of the room, outside the room in the corridor, stands the dark faceless silhouette of a guard, blurred by the glass. On his screen, faint flickering threads of light with no letters. Cold blue light, tense mood. Reference image 1 shows a young man of about eighteen, tall and long-limbed, pale skin, wavy shoulder-length light-brown hair, grey-green eyes and a calm, slightly serious face, wearing a thick cream cable-knit sweater cut as a long asymmetric tunic with a high folded collar and a light grey hood, dark green slim segmented trousers, a narrow dark sash and sturdy brown seamless boots; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Reference image 2 shows the location, a narrow Arctic command room walled in pale faceted crystalline panels, a single sleek console with a glowing screen and one chair, and across the back of the room a wall of frosted glass with a dim corridor beyond it; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Severe faceted crystalline megastructures, icy whites, pale blues and steel.",
+      "seed": 50052,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "deluin-sheet.png",
+          "sha256": "3edf7878c7001438c4c7133005517cba0d1679bed4988fadc58947d428934384"
+        },
+        {
+          "file": "arctic-command-post-plate.png",
+          "sha256": "3fe26335e781f7eeb61da4d93b3dd9e5d38c29c27beab0a1f8492a79313f8454"
+        }
+      ],
+      "generation_seconds": 282.1
+    },
+    {
+      "id": "dd-07-a2",
+      "chapter": 30,
+      "idx": 48,
+      "file": "dd-07-a2.png",
+      "sha256": "ae06c2ac8e0db1b2c3fc6874e072454fbcba148c959ec452f869b845a4a21a41",
+      "prompt": "Dynamic low wide shot in a snowy pine forest at sunrise; only trees, hills and snow, no buildings and no city. A line of heavy snowmobile-like drones on skis, covered in sheets of bright, colorful abstract squiggly patterns, each sheet with a wide blank white band across its middle, ploughs forward through deep snow between the trees, skis on the ground, throwing up great sprays and wakes of snow. Darker sleek enemy drones sit motionless in the snow or turn aside in confusion. Low sunlight cuts through drifting smoke. No people visible. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers.",
+      "seed": 50072,
+      "width": 1024,
+      "height": 576,
+      "references": [],
+      "generation_seconds": 200.7
+    },
+    {
+      "id": "dd-05-a3",
+      "chapter": 30,
+      "idx": 29,
+      "file": "dd-05-a3.png",
+      "sha256": "003124396bdac251644eb5c9ca11e6e4193956bad1240cf996a42e179c5c1241",
+      "prompt": "Medium shot inside the command room at night, seen from in front of the console. The young man from reference image 1 sits facing the viewer behind the console, his body and face turned toward us, lit cold blue from below by the screen; his eyes are cut sideways, wary, toward the frosted glass wall behind him. He is the only person in the room. Behind him, outside the room, beyond the frosted glass, stands the dark faceless silhouette of a guard, blurred by the glass. The room is dark, lit only by the screen. Cold blue light, tense mood. Reference image 1 shows a young man of about eighteen, tall and long-limbed, pale skin, wavy shoulder-length light-brown hair, grey-green eyes and a calm, slightly serious face, wearing a thick cream cable-knit sweater cut as a long asymmetric tunic with a high folded collar and a light grey hood, dark green slim segmented trousers, a narrow dark sash and sturdy brown seamless boots; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Reference image 2 shows the location, a narrow Arctic command room walled in pale faceted crystalline panels, a single sleek console with a glowing screen and one chair, and across the back of the room a wall of frosted glass with a dim corridor beyond it; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Severe faceted crystalline megastructures, icy whites, pale blues and steel.",
+      "seed": 50053,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "deluin-sheet.png",
+          "sha256": "3edf7878c7001438c4c7133005517cba0d1679bed4988fadc58947d428934384"
+        },
+        {
+          "file": "arctic-command-post-plate.png",
+          "sha256": "3fe26335e781f7eeb61da4d93b3dd9e5d38c29c27beab0a1f8492a79313f8454"
+        }
+      ],
+      "generation_seconds": 282.2
+    }
+  ],
+  "assist": {
+    "model": "claude-coding-agent",
+    "by": "the coding agent",
+    "drafted": [
+      "image prompts (from the approved script's image descriptions)",
+      "reference choices"
+    ],
+    "instructions": [
+      "adaptations/dog-dawn/script.md",
+      "adaptations/dog-dawn/prompts/001-request.md"
+    ],
+    "see": "config/models.json drafting; principle 3"
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "line": "L26-b3-8",
+  "voice": "zei-v4b",
+  "stand_in": false,
+  "script_line": {
+    "n": 26,
+    "ref": "b3-8",
+    "take": 1,
+    "of": 2,
+    "rerecorded": false,
+    "tempo": 1.0
+  },
+  "model": "chatterbox-vc",
+  "weights": "https://huggingface.co/ResembleAI/chatterbox",
+  "revision": "5bb1f6ee58e50c3b8d408bc82a6d3740c2db6e18",
+  "license": "MIT",
+  "weights_sha256": {
+    "s3gen.safetensors": "2b78103c654207393955e4900aac14a12de8ef25f4b09424f1ef91941f161d4e",
+    "conds.pt": "6552d70568833628ba019c6b03459e77fe71ca197d5c560cef9411bee9d87f4e"
+  },
+  "runs_on": "the performer's machine (cpu)",
+  "take": {
+    "sha256": "4103b6faf5ac20085ffb3d83c970533723042914bf2d590aedb5f5368ccfc2d5",
+    "duration_s": 8.69,
+    "kept": "private, outside the repository; never copied or uploaded"
+  },
+  "reference": {
+    "file": "scenes-out/fifteen-days/voices/zei-v4b.ref.wav",
+    "sha256": "684656ab6bdddf42ae9e5155a80d6da486391bb7ce7c825686c2d0ff02734e22",
+    "recipe": "adaptations/fifteen-days/voices/zei-v4b.recipe.json"
+  },
+  "watermark": {
+    "applied": "Perth implicit watermark, applied in Chatterbox's own code (ChatterboxVC.generate calls PerthImplicitWatermarker.apply_watermark on every output)",
+    "verified": false,
+    "detector": "not evidence: on 2026-10-14 Perth's detector scored clean audio as watermarked (a 220 Hz sine 0.98; the owner's raw take 0.67, which rounds to 1), though clean white noise scored 0.00 and freshly watermarked speech 1.00, also after -5.3 dB of gain. A score of 1.00 here is consistent with the watermark but does not prove it."
+  },
+  "seconds_taken": 17.0,
+  "sample_rate": 24000,
+  "format": "32-bit float WAV",
+  "level": {
+    "vocoder_clamp": "lifted",
+    "peak_before": 2.0735,
+    "gain_db": -7.33,
+    "peak_after": 0.8913
+  },
+  "file": "scenes-out/fifteen-days/lines-v3/L26-b3-8.zei-v4b.wav",
+  "sha256": "2a0426a848d8881158359d85d3901669a1f4274bc221932d511ccc9db88a07a6",
+  "duration_s": 8.72,
+  "made_at": "2026-10-17T06:27:35+00:00",
+  "cost_usd": 0
+}

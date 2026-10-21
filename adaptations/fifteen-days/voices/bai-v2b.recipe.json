@@ -1,0 +1,32 @@
+{
+  "voice": "bai-v2b",
+  "character": "Bai",
+  "placeholder": true,
+  "model": "qwen3-tts-1.7b-voicedesign",
+  "weights": "https://huggingface.co/Qwen/Qwen3-TTS-12Hz-1.7B-VoiceDesign",
+  "license": "Apache-2.0",
+  "host": "fal.ai",
+  "endpoint": "fal-ai/qwen-3-tts/voice-design/1.7b",
+  "weights_revision": "not exposed by the host; the endpoint as served on the date below",
+  "request_id": "01a145d9-0713-7c81-86ba-355a24ff0638",
+  "served_at": "2026-10-16T17:54:00+00:00",
+  "description": "A young woman of eighteen with a clear, youthful, feminine speaking voice, higher and lighter than most, crisp consonants and a bright, slightly breathy tone; dry, quick and playful.",
+  "description_by": "DRAFT candidate (model-drafted 2026-10-16 from the owner's note: Bai more feminine, less depth; Zei and Deluin more distinct from each other and from the performer)",
+  "text": "This is a test of a designed voice, reading a neutral passage so it can be heard on its own. The morning was cold, the corridor was quiet, and somewhere a door closed.",
+  "language": "English",
+  "settings": {
+    "temperature": 0.9,
+    "top_p": 1,
+    "top_k": 50,
+    "repetition_penalty": 1.05,
+    "max_new_tokens": 240
+  },
+  "safety_checker": "host default (on)",
+  "price_usd_per_1000_chars": 0.09,
+  "price_seen": "2026-10-13",
+  "cost_usd": 0.09,
+  "cost_basis": "description + text characters, at least 1000, times the listed price",
+  "file": "scenes-out/fifteen-days/voices/bai-v2b.ref.wav",
+  "sha256": "d64ac089492cec1dd88c70de1ffd3b53efb2d85dcbe77378c6eb9c9af65d93f3",
+  "duration_s": 10.62
+}

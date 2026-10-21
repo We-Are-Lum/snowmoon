@@ -1,0 +1,121 @@
+{
+  "about": "Printed sheets drawn in code (pattern and lettering together) and laid onto surfaces in perspective, with the scene's light and line work kept. Each entry names input and output by sha256 and records an OCR check per sheet.",
+  "script": "scripts/texture-sheets.py",
+  "script_commit": "d707eb8095db816fedc9ab5a8576151d1748a67a",
+  "script_uncommitted_changes": false,
+  "font": {
+    "file": "node_modules/@fontsource/dm-mono/files/dm-mono-latin-500-normal.woff",
+    "sha256": "f9fbeef336ab52ff50c455d34ba361b686d4dc5f32b17e4ac5181606ff132e6b"
+  },
+  "numpy_version": "2.5.3",
+  "pillow_version": "12.3.0",
+  "generated_at": "2026-10-05T22:04:51+00:00",
+  "images": [
+    {
+      "id": "dd-07-a2",
+      "beat": 7,
+      "sheets": [
+        {
+          "quad": [
+            [
+              281,
+              362
+            ],
+            [
+              342,
+              360
+            ],
+            [
+              342,
+              406
+            ],
+            [
+              281,
+              410
+            ]
+          ],
+          "text": "DOG",
+          "lang": "en",
+          "seed": 7,
+          "band": [
+            0.3,
+            0.7
+          ],
+          "shade": 0.8,
+          "light_blur": 12,
+          "lines": 0.8,
+          "feather": 1.0,
+          "clip_to_paint": false
+        },
+        {
+          "quad": [
+            [
+              492,
+              336
+            ],
+            [
+              612,
+              330
+            ],
+            [
+              616,
+              396
+            ],
+            [
+              484,
+              402
+            ]
+          ],
+          "text": "DOG",
+          "lang": "en",
+          "seed": 8,
+          "band": [
+            0.34,
+            0.66
+          ],
+          "shade": 0.8,
+          "light_blur": 18,
+          "lines": 0.8,
+          "feather": 1.0,
+          "clip_to_paint": true
+        }
+      ],
+      "ocr_checks": [
+        {
+          "text": "DOG",
+          "ocr": [
+            "DOG"
+          ],
+          "exact": true
+        },
+        {
+          "text": "DOG",
+          "ocr": [
+            "DOG"
+          ],
+          "exact": true
+        }
+      ],
+      "input": {
+        "file": "images-out/adaptation-dog-dawn/dd-07-a2.png",
+        "sha256": "ae06c2ac8e0db1b2c3fc6874e072454fbcba148c959ec452f869b845a4a21a41",
+        "role": "clean render, the starting point for a remix"
+      },
+      "output": {
+        "file": "images-out/adaptation-dog-dawn/dd-07-a2.sheets.png",
+        "sha256": "37bfb55fb87c1852e81df43025227fb9afad5eede4d7edad5018c586f5160089"
+      }
+    }
+  ],
+  "assist": {
+    "model": "claude-coding-agent",
+    "by": "the coding agent",
+    "drafted": [
+      "sheet placement, pattern and blend settings (the word is the book's)"
+    ],
+    "instructions": [
+      "scripts/texture-sheets.py"
+    ],
+    "see": "config/models.json drafting; principle 3"
+  }
+}

@@ -1,0 +1,2117 @@
+{
+  "about": "Fifteen Days rough cut (2026-10-15): the owner's performances converted into the character voices, each location's acoustics, Dreadnaught v3, stand-in cards for the drafted shots. Line gaps, shot anchors, holds and acoustics are drafted by the coding agent. A bed that isn't downloaded yet is left out (the gate uses the café, darker, until its own arrive).",
+  "seed": "fifteen-days",
+  "placeholder": true,
+  "placeholder_reason": "the stills are in a DRAFT style awaiting the owner's approval; s28 has no accepted frame yet",
+  "video": {
+    "width": 1920,
+    "height": 1080,
+    "fps": 30
+  },
+  "loudness": {
+    "integrated_lufs": -16,
+    "true_peak_db": -1,
+    "lra": 11
+  },
+  "tail_s": 2.0,
+  "tracks": {
+    "voice": {
+      "level_db": 0
+    },
+    "hold": {
+      "level_db": -60
+    },
+    "bed": {
+      "level_db": -24
+    },
+    "foley": {
+      "level_db": -10
+    },
+    "music": {
+      "level_db": -16
+    }
+  },
+  "rooms": {
+    "waiting room": "highpass=f=90,aecho=0.85:0.55:18|31:0.16|0.10,lowpass=f=9000",
+    "rock corridor": "highpass=f=80,aecho=0.85:0.7:37|71|113:0.26|0.17|0.10",
+    "courtyard café, open air": "highpass=f=70,aecho=0.9:0.6:14:0.06",
+    "street gate at dusk": "highpass=f=70,aecho=0.9:0.6:55:0.08"
+  },
+  "cues": [
+    {
+      "id": "b1-1",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b1-1.wav",
+      "at": {
+        "cue": "@start",
+        "offset": 9.0
+      },
+      "room": "waiting room",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L01-b1-1.zei.wav"
+      }
+    },
+    {
+      "id": "b1-2",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b1-2.wav",
+      "at": {
+        "cue": "b1-1",
+        "edge": "end",
+        "offset": 0.35
+      },
+      "room": "waiting room",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L02-b1-2.bai.wav"
+      }
+    },
+    {
+      "id": "b1-3",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b1-3.wav",
+      "at": {
+        "cue": "b1-2",
+        "edge": "end",
+        "offset": 0.35
+      },
+      "room": "waiting room",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L03-b1-3.bai.wav"
+      }
+    },
+    {
+      "id": "b1-4",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b1-4.wav",
+      "at": {
+        "cue": "b1-3",
+        "edge": "end",
+        "offset": 0.35
+      },
+      "room": "waiting room",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L04-b1-4.zei.wav"
+      }
+    },
+    {
+      "id": "b1-5",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b1-5.wav",
+      "at": {
+        "cue": "b1-4",
+        "edge": "end",
+        "offset": 0.35
+      },
+      "room": "waiting room",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L05-b1-5.bai.wav"
+      }
+    },
+    {
+      "id": "b1-6",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b1-6.wav",
+      "at": {
+        "cue": "b1-5",
+        "edge": "end",
+        "offset": 0.35
+      },
+      "room": "waiting room",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L06-b1-6.bai.wav"
+      }
+    },
+    {
+      "id": "b2-1",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b2-1.wav",
+      "at": {
+        "cue": "b1-6",
+        "edge": "end",
+        "offset": 1.6
+      },
+      "room": "rock corridor",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L07-b2-1.zei.wav"
+      }
+    },
+    {
+      "id": "b2-2",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b2-2.wav",
+      "at": {
+        "cue": "b2-1",
+        "edge": "end",
+        "offset": 0.35
+      },
+      "room": "rock corridor",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L08-b2-2.deluin.wav"
+      }
+    },
+    {
+      "id": "b2-3",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b2-3.wav",
+      "at": {
+        "cue": "b2-2",
+        "edge": "end",
+        "offset": 0.35
+      },
+      "room": "rock corridor",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L09-b2-3.zei.wav"
+      }
+    },
+    {
+      "id": "b2-4",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b2-4.wav",
+      "at": {
+        "cue": "b2-3",
+        "edge": "end",
+        "offset": 0.35
+      },
+      "room": "rock corridor",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L10-b2-4.deluin.wav"
+      }
+    },
+    {
+      "id": "b2-5",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b2-5.wav",
+      "at": {
+        "cue": "b2-4",
+        "edge": "end",
+        "offset": 0.35
+      },
+      "room": "rock corridor",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L11-b2-5.zei.wav"
+      }
+    },
+    {
+      "id": "b2-6",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b2-6.wav",
+      "at": {
+        "cue": "b2-5",
+        "edge": "end",
+        "offset": 0.35
+      },
+      "room": "rock corridor",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L12-b2-6.deluin.wav"
+      }
+    },
+    {
+      "id": "b2-7",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b2-7.wav",
+      "at": {
+        "cue": "b2-6",
+        "edge": "end",
+        "offset": 0.35
+      },
+      "room": "rock corridor",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L13-b2-7.zei.wav"
+      }
+    },
+    {
+      "id": "b2-8",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b2-8.wav",
+      "at": {
+        "cue": "b2-7",
+        "edge": "end",
+        "offset": 0.35
+      },
+      "room": "rock corridor",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L14-b2-8.bai.wav"
+      }
+    },
+    {
+      "id": "b2-9",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b2-9.wav",
+      "at": {
+        "cue": "b2-8",
+        "edge": "end",
+        "offset": 0.35
+      },
+      "room": "rock corridor",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L15-b2-9.zei.wav"
+      }
+    },
+    {
+      "id": "b2-10",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b2-10.wav",
+      "at": {
+        "cue": "b2-9",
+        "edge": "end",
+        "offset": 0.35
+      },
+      "room": "rock corridor",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L16-b2-10.bai.wav"
+      }
+    },
+    {
+      "id": "b2-11",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b2-11.wav",
+      "at": {
+        "cue": "b2-10",
+        "edge": "end",
+        "offset": 0.35
+      },
+      "room": "rock corridor",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L17-b2-11.bai.wav"
+      }
+    },
+    {
+      "id": "b2-12",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b2-12.wav",
+      "at": {
+        "cue": "b2-11",
+        "edge": "end",
+        "offset": 0.35
+      },
+      "room": "rock corridor",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L18-b2-12.zei.wav"
+      }
+    },
+    {
+      "id": "b3-1",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b3-1.wav",
+      "at": {
+        "cue": "b2-12",
+        "edge": "end",
+        "offset": 1.6
+      },
+      "room": "courtyard café, open air",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L19-b3-1.deluin.wav"
+      }
+    },
+    {
+      "id": "b3-2",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b3-2.wav",
+      "at": {
+        "cue": "b3-1",
+        "edge": "end",
+        "offset": 0.35
+      },
+      "room": "courtyard café, open air",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L20-b3-2.robot.wav"
+      }
+    },
+    {
+      "id": "b3-3",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b3-3.wav",
+      "at": {
+        "cue": "b3-2",
+        "edge": "end",
+        "offset": 0.35
+      },
+      "room": "courtyard café, open air",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L21-b3-3.zei.wav"
+      }
+    },
+    {
+      "id": "b3-4",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b3-4.wav",
+      "at": {
+        "cue": "b3-3",
+        "edge": "end",
+        "offset": 0.35
+      },
+      "room": "courtyard café, open air",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L22-b3-4.deluin.wav"
+      }
+    },
+    {
+      "id": "b3-5",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b3-5.wav",
+      "at": {
+        "cue": "b3-4",
+        "edge": "end",
+        "offset": 0.35
+      },
+      "room": "courtyard café, open air",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L23-b3-5.zei.wav"
+      }
+    },
+    {
+      "id": "b3-6",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b3-6.wav",
+      "at": {
+        "cue": "b3-5",
+        "edge": "end",
+        "offset": 0.35
+      },
+      "room": "courtyard café, open air",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L24-b3-6.zei.wav"
+      }
+    },
+    {
+      "id": "b3-7",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b3-7.wav",
+      "at": {
+        "cue": "b3-6",
+        "edge": "end",
+        "offset": 0.35
+      },
+      "room": "courtyard café, open air",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L25-b3-7.deluin.wav"
+      }
+    },
+    {
+      "id": "b3-8",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b3-8.wav",
+      "at": {
+        "cue": "b3-7",
+        "edge": "end",
+        "offset": 0.35
+      },
+      "room": "courtyard café, open air",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L26-b3-8.zei.wav"
+      }
+    },
+    {
+      "id": "b3-9",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b3-9.wav",
+      "at": {
+        "cue": "b3-8",
+        "edge": "end",
+        "offset": 0.35
+      },
+      "room": "courtyard café, open air",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L27-b3-9.deluin.wav"
+      }
+    },
+    {
+      "id": "b3-10",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b3-10.wav",
+      "at": {
+        "cue": "b3-9",
+        "edge": "end",
+        "offset": 0.35
+      },
+      "room": "courtyard café, open air",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L28-b3-10.zei.wav"
+      }
+    },
+    {
+      "id": "b3-11",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b3-11.wav",
+      "at": {
+        "cue": "b3-10",
+        "edge": "end",
+        "offset": 0.35
+      },
+      "room": "courtyard café, open air",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L29-b3-11.deluin.wav"
+      }
+    },
+    {
+      "id": "b3-12",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b3-12.wav",
+      "at": {
+        "cue": "b3-11",
+        "edge": "end",
+        "offset": 0.35
+      },
+      "room": "courtyard café, open air",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L30-b3-12.zei.wav"
+      }
+    },
+    {
+      "id": "b3-13",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b3-13.wav",
+      "at": {
+        "cue": "b3-12",
+        "edge": "end",
+        "offset": 0.35
+      },
+      "room": "courtyard café, open air",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L31-b3-13.bai.wav"
+      }
+    },
+    {
+      "id": "b4-1",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b4-1.wav",
+      "at": {
+        "cue": "b3-13",
+        "edge": "end",
+        "offset": 1.6
+      },
+      "room": "courtyard café, open air",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L32-b4-1.deluin.wav"
+      }
+    },
+    {
+      "id": "b4-2",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b4-2.wav",
+      "at": {
+        "cue": "b4-1",
+        "edge": "end",
+        "offset": 0.35
+      },
+      "room": "courtyard café, open air",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L33-b4-2.zei.wav"
+      }
+    },
+    {
+      "id": "b4-3",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b4-3.wav",
+      "at": {
+        "cue": "b4-2",
+        "edge": "end",
+        "offset": 0.35
+      },
+      "room": "courtyard café, open air",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L34-b4-3.deluin.wav"
+      }
+    },
+    {
+      "id": "b4-4",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b4-4.wav",
+      "at": {
+        "cue": "b4-3",
+        "edge": "end",
+        "offset": 0.35
+      },
+      "room": "courtyard café, open air",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L35-b4-4.zei.wav"
+      }
+    },
+    {
+      "id": "b4-5",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b4-5.wav",
+      "at": {
+        "cue": "b4-4",
+        "edge": "end",
+        "offset": 0.35
+      },
+      "room": "courtyard café, open air",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L36-b4-5.deluin.wav"
+      }
+    },
+    {
+      "id": "b5-1",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b5-1.wav",
+      "at": {
+        "cue": "b4-5",
+        "edge": "end",
+        "offset": 1.6
+      },
+      "room": "courtyard café, open air",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L37-b5-1.deluin.wav"
+      }
+    },
+    {
+      "id": "b5-2",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b5-2.wav",
+      "at": {
+        "cue": "b5-1",
+        "edge": "end",
+        "offset": 0.35
+      },
+      "room": "courtyard café, open air",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L38-b5-2.zei.wav"
+      }
+    },
+    {
+      "id": "b5-3",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b5-3.wav",
+      "at": {
+        "cue": "b5-2",
+        "edge": "end",
+        "offset": 0.35
+      },
+      "room": "courtyard café, open air",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L39-b5-3.deluin.wav"
+      }
+    },
+    {
+      "id": "b5-4",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b5-4.wav",
+      "at": {
+        "cue": "b5-3",
+        "edge": "end",
+        "offset": 0.35
+      },
+      "room": "courtyard café, open air",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L40-b5-4.deluin.wav"
+      }
+    },
+    {
+      "id": "b5-5",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b5-5.wav",
+      "at": {
+        "cue": "b5-4",
+        "edge": "end",
+        "offset": 0.35
+      },
+      "room": "courtyard café, open air",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L41-b5-5.bai.wav"
+      }
+    },
+    {
+      "id": "b6-1",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b6-1.wav",
+      "at": {
+        "cue": "b5-5",
+        "edge": "end",
+        "offset": 1.6
+      },
+      "room": "street gate at dusk",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L42-b6-1.deluin.wav"
+      }
+    },
+    {
+      "id": "hold-s31",
+      "track": "hold",
+      "stem": "scenes-out/fifteen-days/stems/hold-s31.wav",
+      "at": {
+        "cue": "b6-1",
+        "edge": "end",
+        "offset": 1.0
+      }
+    },
+    {
+      "id": "hold-s32",
+      "track": "hold",
+      "stem": "scenes-out/fifteen-days/stems/hold-s32.wav",
+      "at": {
+        "cue": "hold-s31",
+        "edge": "end",
+        "offset": 0
+      }
+    },
+    {
+      "id": "hold-s33",
+      "track": "hold",
+      "stem": "scenes-out/fifteen-days/stems/hold-s33.wav",
+      "at": {
+        "cue": "hold-s32",
+        "edge": "end",
+        "offset": 0
+      }
+    },
+    {
+      "id": "hold-s34",
+      "track": "hold",
+      "stem": "scenes-out/fifteen-days/stems/hold-s34.wav",
+      "at": {
+        "cue": "hold-s33",
+        "edge": "end",
+        "offset": 0
+      }
+    },
+    {
+      "id": "hold-s35",
+      "track": "hold",
+      "stem": "scenes-out/fifteen-days/stems/hold-s35.wav",
+      "at": {
+        "cue": "hold-s34",
+        "edge": "end",
+        "offset": 0
+      }
+    },
+    {
+      "id": "hold-s36",
+      "track": "hold",
+      "stem": "scenes-out/fifteen-days/stems/hold-s36.wav",
+      "at": {
+        "cue": "hold-s35",
+        "edge": "end",
+        "offset": 0
+      }
+    },
+    {
+      "id": "hold-s37",
+      "track": "hold",
+      "stem": "scenes-out/fifteen-days/stems/hold-s37.wav",
+      "at": {
+        "cue": "hold-s36",
+        "edge": "end",
+        "offset": 0
+      }
+    },
+    {
+      "id": "hold-s38",
+      "track": "hold",
+      "stem": "scenes-out/fifteen-days/stems/hold-s38.wav",
+      "at": {
+        "cue": "hold-s37",
+        "edge": "end",
+        "offset": 0
+      }
+    },
+    {
+      "id": "hold-s39",
+      "track": "hold",
+      "stem": "scenes-out/fifteen-days/stems/hold-s39.wav",
+      "at": {
+        "cue": "hold-s38",
+        "edge": "end",
+        "offset": 0
+      }
+    },
+    {
+      "id": "hold-s40",
+      "track": "hold",
+      "stem": "scenes-out/fifteen-days/stems/hold-s40.wav",
+      "at": {
+        "cue": "hold-s39",
+        "edge": "end",
+        "offset": 0
+      }
+    },
+    {
+      "id": "hold-s41",
+      "track": "hold",
+      "stem": "scenes-out/fifteen-days/stems/hold-s41.wav",
+      "at": {
+        "cue": "hold-s40",
+        "edge": "end",
+        "offset": 0
+      }
+    },
+    {
+      "id": "dreadnaught",
+      "track": "music",
+      "stem": "scenes-out/fifteen-days/music/dreadnaught-v3-fal.wav",
+      "at": {
+        "cue": "b5-5",
+        "edge": "start",
+        "offset": -1.2
+      },
+      "level_db": 4,
+      "fade_in": 0.15,
+      "fade_out": 2.0,
+      "note": "Dreadnaught v3 (owner's pick), blaring as Bai pulls off one side of her headphones; sits under her line"
+    },
+    {
+      "id": "laugh",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/laugh.wav",
+      "at": {
+        "cue": "b3-1",
+        "edge": "start",
+        "offset": -2.6
+      },
+      "level_db": -4,
+      "note": "Deluin laughing at the table as Zei arrives (the owner's take, the agent's pick of four)"
+    },
+    {
+      "id": "bed-hall",
+      "track": "bed",
+      "stem": "scenes-out/fifteen-days/stems/bed-hall.wav",
+      "loop": true,
+      "loop_xfade_s": 1.5,
+      "at": {
+        "cue": "@start",
+        "offset": 0
+      },
+      "until": {
+        "cue": "b1-1",
+        "edge": "start",
+        "offset": 0.15000000000000002
+      },
+      "level_db": 4,
+      "fade_in": 1.5,
+      "fade_out": 1.5,
+      "source": {
+        "effect": "bed: match hall",
+        "url": "https://freesound.org/people/klankbeeld/sounds/171462/",
+        "author": "klankbeeld",
+        "licence": "Creative Commons 0 (CC0 1.0), as shown on the sound's page"
+      }
+    },
+    {
+      "id": "hall-swell",
+      "track": "foley",
+      "stem": "scenes-out/fifteen-days/stems/hall-swell.wav",
+      "at": {
+        "cue": "@start",
+        "offset": 1.0
+      },
+      "level_db": -8,
+      "fade_in": 0.05,
+      "fade_out": 0.3,
+      "note": "the audience murmurs as the gliders crash into Deluin's walls",
+      "source": {
+        "effect": "hall: crowd swell",
+        "url": "https://freesound.org/people/craigsmith/sounds/438370/",
+        "author": "craigsmith",
+        "licence": "Creative Commons 0 (CC0 1.0), as shown on the sound's page"
+      }
+    },
+    {
+      "id": "hall-gasp",
+      "track": "foley",
+      "stem": "scenes-out/fifteen-days/stems/hall-gasp.wav",
+      "at": {
+        "cue": "@start",
+        "offset": 5.0
+      },
+      "level_db": -10,
+      "fade_in": 0.05,
+      "fade_out": 0.3,
+      "note": "a gasp as Kau's attack breaks on the walls (c4-b134)",
+      "source": {
+        "effect": "hall: gasp",
+        "url": "https://freesound.org/people/HowardV/sounds/264376/",
+        "author": "HowardV",
+        "licence": "Creative Commons 0 (CC0 1.0), as shown on the sound's page"
+      }
+    },
+    {
+      "id": "hall-drone",
+      "track": "foley",
+      "stem": "scenes-out/fifteen-days/stems/hall-drone.wav",
+      "at": {
+        "cue": "@start",
+        "offset": 0.3
+      },
+      "level_db": -16,
+      "fade_in": 0.05,
+      "fade_out": 0.3,
+      "note": "an anti-cheat drone passes (c4-b81), heard faintly",
+      "source": {
+        "effect": "hall: drone",
+        "url": "https://freesound.org/people/Sadiquecat/sounds/677833/",
+        "author": "Sadiquecat",
+        "licence": "Creative Commons 0 (CC0 1.0), as shown on the sound's page"
+      }
+    },
+    {
+      "id": "hall-alarm",
+      "track": "foley",
+      "stem": "scenes-out/fifteen-days/stems/hall-alarm.wav",
+      "at": {
+        "cue": "b1-6",
+        "edge": "start",
+        "offset": 1.5
+      },
+      "level_db": -14,
+      "fade_in": 0.05,
+      "fade_out": 0.3,
+      "note": "the alarm buzz near the game's end (c14-b86), through the wall",
+      "source": {
+        "effect": "hall: alarm",
+        "url": "https://freesound.org/people/magnuswaker/sounds/641416/",
+        "author": "magnuswaker",
+        "licence": "Creative Commons 0 (CC0 1.0), as shown on the sound's page"
+      }
+    },
+    {
+      "id": "bed-hall-wall",
+      "track": "bed",
+      "stem": "scenes-out/fifteen-days/stems/bed-hall-wall.wav",
+      "loop": true,
+      "loop_xfade_s": 1.5,
+      "at": {
+        "cue": "b1-1",
+        "edge": "start",
+        "offset": -1.35
+      },
+      "until": {
+        "cue": "b2-1",
+        "edge": "start",
+        "offset": -0.6499999999999999
+      },
+      "level_db": -4,
+      "fade_in": 1.5,
+      "fade_out": 1.5,
+      "source": {
+        "effect": "bed: match hall",
+        "url": "https://freesound.org/people/klankbeeld/sounds/171462/",
+        "author": "klankbeeld",
+        "licence": "Creative Commons 0 (CC0 1.0), as shown on the sound's page"
+      },
+      "note": "the game through the waiting-room wall (drafted: the owner hasn't decided yet)"
+    },
+    {
+      "id": "bed-waiting",
+      "track": "bed",
+      "stem": "scenes-out/fifteen-days/stems/bed-waiting.wav",
+      "loop": true,
+      "loop_xfade_s": 1.5,
+      "at": {
+        "cue": "b1-1",
+        "edge": "start",
+        "offset": -1.35
+      },
+      "until": {
+        "cue": "b2-1",
+        "edge": "start",
+        "offset": -0.6499999999999999
+      },
+      "level_db": -2,
+      "fade_in": 1.5,
+      "fade_out": 1.5,
+      "source": {
+        "effect": "bed: waiting room",
+        "url": "https://freesound.org/people/gchase/sounds/144046/",
+        "author": "gchase",
+        "licence": "Creative Commons 0 (CC0 1.0), as shown on the sound's page"
+      }
+    },
+    {
+      "id": "bed-corridor",
+      "track": "bed",
+      "stem": "scenes-out/fifteen-days/stems/bed-corridor.wav",
+      "loop": true,
+      "loop_xfade_s": 1.5,
+      "at": {
+        "cue": "b2-1",
+        "edge": "start",
+        "offset": -2.15
+      },
+      "until": {
+        "cue": "b3-1",
+        "edge": "start",
+        "offset": -2.25
+      },
+      "level_db": -2,
+      "fade_in": 1.5,
+      "fade_out": 1.5,
+      "source": {
+        "effect": "bed: corridor",
+        "url": "https://freesound.org/people/sturmankin/sounds/272317/",
+        "author": "sturmankin",
+        "licence": "Creative Commons 0 (CC0 1.0), as shown on the sound's page"
+      }
+    },
+    {
+      "id": "bed-cafe",
+      "track": "bed",
+      "stem": "scenes-out/fifteen-days/stems/bed-cafe.wav",
+      "loop": true,
+      "loop_xfade_s": 1.5,
+      "at": {
+        "cue": "b3-1",
+        "edge": "start",
+        "offset": -3.75
+      },
+      "until": {
+        "cue": "b6-1",
+        "edge": "start",
+        "offset": -0.75
+      },
+      "level_db": 0,
+      "fade_in": 1.5,
+      "fade_out": 1.5,
+      "source": {
+        "effect": "bed: courtyard café",
+        "url": "https://freesound.org/people/Anya_Media/sounds/437462/",
+        "author": "Anya_Media",
+        "licence": "Creative Commons 0 (CC0 1.0), as shown on the sound's page"
+      }
+    },
+    {
+      "id": "bed-gate",
+      "track": "bed",
+      "stem": "scenes-out/fifteen-days/stems/bed-gate.wav",
+      "loop": true,
+      "loop_xfade_s": 1.5,
+      "at": {
+        "cue": "b6-1",
+        "edge": "start",
+        "offset": -2.25
+      },
+      "until": {
+        "cue": "hold-s34",
+        "edge": "start",
+        "offset": 0.75
+      },
+      "level_db": -2,
+      "fade_in": 1.5,
+      "fade_out": 1.5,
+      "source": {
+        "effect": "bed: gate at dusk",
+        "url": "https://freesound.org/people/softwalls/sounds/385104/",
+        "author": "softwalls",
+        "licence": "Creative Commons 0 (CC0 1.0), as shown on the sound's page"
+      }
+    },
+    {
+      "id": "bed-lobby",
+      "track": "bed",
+      "stem": "scenes-out/fifteen-days/stems/bed-lobby.wav",
+      "loop": true,
+      "loop_xfade_s": 1.5,
+      "at": {
+        "cue": "hold-s34",
+        "edge": "start",
+        "offset": -0.75
+      },
+      "until": {
+        "cue": "@end",
+        "offset": 0
+      },
+      "level_db": -2,
+      "fade_in": 1.5,
+      "fade_out": 1.5,
+      "source": {
+        "effect": "bed: lobby restaurant",
+        "url": "https://freesound.org/people/Berwitz/sounds/263584/",
+        "author": "Berwitz",
+        "licence": "Creative Commons 0 (CC0 1.0), as shown on the sound's page"
+      }
+    }
+  ],
+  "shots": [
+    {
+      "id": "s01",
+      "image": "images-out/shots-night-megastructures/s01-1.a4.png",
+      "image_sha256": "2cfcbde85db139c720b3a8543df907d6947379ab8b398528f7b19bc31e4b6728",
+      "at": {
+        "cue": "@start",
+        "edge": "start",
+        "offset": 0.0
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "push",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.0
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.48,
+          "zoom": 1.15
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s02",
+      "image": "images-out/shots-night-megastructures/s02-1.a1.png",
+      "image_sha256": "adfdb3cb4829e05e90dbcee548cb0e008dad902e26518d92c3578af72e63d430",
+      "at": {
+        "cue": "@start",
+        "edge": "start",
+        "offset": 5.0
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "hold",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.04
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.08
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s03",
+      "image": "images-out/shots-night-megastructures/s03-1.a1.png",
+      "image_sha256": "5237d1c737a37e8514459e4bef50043d5a810b5cc520f07a637d1f010d78846d",
+      "at": {
+        "cue": "b1-1",
+        "edge": "start",
+        "offset": -0.6
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "pan",
+        "from": {
+          "x": 0.42,
+          "y": 0.5,
+          "zoom": 1.12
+        },
+        "to": {
+          "x": 0.58,
+          "y": 0.5,
+          "zoom": 1.12
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s04",
+      "image": "images-out/shots-night-megastructures/s04-1.a2.png",
+      "image_sha256": "f0c86f62d76e4d676ced1fb0415470d8448bf71bfd077bd40bc9e7e87a04d7cf",
+      "at": {
+        "cue": "b1-3",
+        "edge": "start",
+        "offset": -0.4
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "hold",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.04
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.08
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s05",
+      "image": "images-out/shots-night-megastructures/s05-1.a1.png",
+      "image_sha256": "f3d7819f668ee1e5f463259a1030e8191dad8b3905ed0cd20bad77db48c26ea4",
+      "at": {
+        "cue": "b1-3",
+        "edge": "end",
+        "offset": 0.2
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "hold",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.04
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.08
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s06",
+      "image": "images-out/shots-night-megastructures/s06-1.a1.png",
+      "image_sha256": "fd393e2e8f3aa3a77960c978420d09d7e7bf1e5861c71d1cae9b251abee158c6",
+      "at": {
+        "cue": "b1-6",
+        "edge": "start",
+        "offset": -0.4
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "push",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.0
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.48,
+          "zoom": 1.1
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s07",
+      "image": "images-out/shots-night-megastructures/s07-2.a4.png",
+      "image_sha256": "514a950cafddd85e57e11f9feb270eb3852f19b25a5f9249612baba66e0b8f1a",
+      "at": {
+        "cue": "b2-1",
+        "edge": "start",
+        "offset": -1.4
+      },
+      "transition": {
+        "type": "dissolve",
+        "seconds": 0.8
+      },
+      "move": {
+        "kind": "push",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.0
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.48,
+          "zoom": 1.08
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s08",
+      "image": "images-out/shots-night-megastructures/s08-2.a1.png",
+      "image_sha256": "118fc1bd3a0c51dd0593c775bdff8d9b14dab0eab5275e67f14d0f0972610742",
+      "at": {
+        "cue": "b2-2",
+        "edge": "start",
+        "offset": -0.3
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "pan",
+        "from": {
+          "x": 0.42,
+          "y": 0.5,
+          "zoom": 1.12
+        },
+        "to": {
+          "x": 0.58,
+          "y": 0.5,
+          "zoom": 1.12
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s09",
+      "image": "images-out/shots-night-megastructures/s09-2.a2.png",
+      "image_sha256": "960a42ab077edefc357c4259417e8f2e63944c1698357d48936d3178b4d03e39",
+      "at": {
+        "cue": "b2-6",
+        "edge": "start",
+        "offset": -0.3
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "hold",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.04
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.08
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s10",
+      "image": "images-out/shots-night-megastructures/s10-2.a7.png",
+      "image_sha256": "6996cfdacfbd612e8801261d4e0a7e74baf6f455c91bbbd40b56ccb34636caff",
+      "at": {
+        "cue": "b2-8",
+        "edge": "start",
+        "offset": -0.6
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "push",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.0
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.48,
+          "zoom": 1.1
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s11",
+      "image": "images-out/shots-night-megastructures/s11-2.a1.png",
+      "image_sha256": "b228067d2de6cfd2b0ef4cf741132939008992003b5bc6fe3b40f3b56eac035a",
+      "at": {
+        "cue": "b2-10",
+        "edge": "start",
+        "offset": -0.3
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "hold",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.04
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.08
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s12",
+      "image": "images-out/shots-night-megastructures/s12-2.a1.png",
+      "image_sha256": "1699e3430cbea6a84de1ed5be533afbda6b63c7a5a483829110690aa8ae15d0f",
+      "at": {
+        "cue": "b2-12",
+        "edge": "start",
+        "offset": -0.3
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "pan",
+        "from": {
+          "x": 0.58,
+          "y": 0.5,
+          "zoom": 1.12
+        },
+        "to": {
+          "x": 0.42,
+          "y": 0.5,
+          "zoom": 1.12
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s13",
+      "image": "images-out/shots-night-megastructures/s13-3.a4.png",
+      "image_sha256": "2145763f5e7eb0ec2f30ff0e088e7f643a09abb6a734274b00cf6116ba62571b",
+      "at": {
+        "cue": "b3-1",
+        "edge": "start",
+        "offset": -3.0
+      },
+      "transition": {
+        "type": "dissolve",
+        "seconds": 0.8
+      },
+      "move": {
+        "kind": "push",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.0
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.48,
+          "zoom": 1.12
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s14",
+      "image": "images-out/shots-night-megastructures/s14-3.a1.png",
+      "image_sha256": "d27586306be7842cd93a9ad0f8c34681c1cf2021ddcce2c0f3f71f75b822307b",
+      "at": {
+        "cue": "b3-1",
+        "edge": "start",
+        "offset": -0.2
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "hold",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.04
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.08
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s15",
+      "image": "images-out/shots-night-megastructures/s15-3.a3.png",
+      "image_sha256": "c015c94782c7f35008e87b52b023936446ea01abd259e731543c6b518a27a12e",
+      "at": {
+        "cue": "b3-2",
+        "edge": "start",
+        "offset": -0.8
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "pan",
+        "from": {
+          "x": 0.42,
+          "y": 0.5,
+          "zoom": 1.12
+        },
+        "to": {
+          "x": 0.58,
+          "y": 0.5,
+          "zoom": 1.12
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s16",
+      "image": "scenes-out/fifteen-days/cards/s16.png",
+      "image_sha256": "6329cae0c57fdd09562286be192e5e5876407b2f181eec136baf2d886dbd32d6",
+      "at": {
+        "cue": "b3-3",
+        "edge": "start",
+        "offset": -0.4
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "hold",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.04
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.08
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s17",
+      "image": "images-out/shots-night-megastructures/s17-3.a4.png",
+      "image_sha256": "ccdc7e0e3fd76f0f057b8a12c3b67406dd1d86dcc0e179093f353287360fedf3",
+      "at": {
+        "cue": "b3-5",
+        "edge": "start",
+        "offset": -0.3
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "push",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.0
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.48,
+          "zoom": 1.08
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s18",
+      "image": "images-out/shots-night-megastructures/s18-3.a2.png",
+      "image_sha256": "57710845048c119dddf48a20b118302b1541bc58bf7da256417bd31f9773a2a0",
+      "at": {
+        "cue": "b3-9",
+        "edge": "start",
+        "offset": -0.3
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "pan",
+        "from": {
+          "x": 0.58,
+          "y": 0.5,
+          "zoom": 1.12
+        },
+        "to": {
+          "x": 0.42,
+          "y": 0.5,
+          "zoom": 1.12
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s19",
+      "image": "images-out/shots-night-megastructures/s19-3.a2.png",
+      "image_sha256": "0ed0924f6c77345f227401d48667071f81617b718c91c948584708b6ab755d3c",
+      "at": {
+        "cue": "b3-13",
+        "edge": "start",
+        "offset": -0.3
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "hold",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.04
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.08
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s20",
+      "image": "images-out/shots-night-megastructures/s20-3.a2.png",
+      "image_sha256": "abc08771a9e4b28a324109670b7047b129e2955ef73aecd6ee7707c5d724681d",
+      "at": {
+        "cue": "b3-13",
+        "edge": "end",
+        "offset": 0.3
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "push",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.0
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.48,
+          "zoom": 1.1
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s21",
+      "image": "images-out/shots-night-megastructures/s21-4.a1.png",
+      "image_sha256": "1c0ee0cefa65772377b69d5d0c8189c760064224704ff6c4981136076088f942",
+      "at": {
+        "cue": "b4-1",
+        "edge": "start",
+        "offset": -1.2
+      },
+      "transition": {
+        "type": "dissolve",
+        "seconds": 0.8
+      },
+      "move": {
+        "kind": "push",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.0
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.48,
+          "zoom": 1.1
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s22",
+      "image": "images-out/shots-night-megastructures/s22-4.a1.png",
+      "image_sha256": "8e478673e4b24f75f3bd543f69fecbadd740003791a915f46436f813b6e4b7b3",
+      "at": {
+        "cue": "b4-2",
+        "edge": "start",
+        "offset": -0.3
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "pan",
+        "from": {
+          "x": 0.42,
+          "y": 0.5,
+          "zoom": 1.12
+        },
+        "to": {
+          "x": 0.58,
+          "y": 0.5,
+          "zoom": 1.12
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s23",
+      "image": "images-out/shots-night-megastructures/s23-4.a3.png",
+      "image_sha256": "2c4506aced408e55d0306d36a7be7097f16fc47276b8ea3dbb81fce5c7428431",
+      "at": {
+        "cue": "b4-3",
+        "edge": "end",
+        "offset": 0.2
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "push",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.0
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.48,
+          "zoom": 1.15
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s24",
+      "image": "images-out/shots-night-megastructures/s24-4.a3.png",
+      "image_sha256": "c6d99827b9d81315f9ec9ac228ff262b970da6978e4c70bb23445440f5f187ba",
+      "at": {
+        "cue": "b4-5",
+        "edge": "start",
+        "offset": -0.5
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "hold",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.04
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.08
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s25",
+      "image": "images-out/shots-night-megastructures/s25-4.a2.png",
+      "image_sha256": "4b2d9fee575a9ec1c545c5aa636cf644fbedf7deed4a50a2050a992c8d151b50",
+      "at": {
+        "cue": "b4-5",
+        "edge": "end",
+        "offset": 0.3
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "hold",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.04
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.08
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s26",
+      "image": "images-out/shots-night-megastructures/s26-5.a2.png",
+      "image_sha256": "93a542a8e3a5af4246aefe45569f05bc93e1b99496c1898441427f4987d595f0",
+      "at": {
+        "cue": "b5-1",
+        "edge": "start",
+        "offset": -0.4
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "pan",
+        "from": {
+          "x": 0.42,
+          "y": 0.5,
+          "zoom": 1.12
+        },
+        "to": {
+          "x": 0.58,
+          "y": 0.5,
+          "zoom": 1.12
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s27",
+      "image": "images-out/shots-night-megastructures/s27-5.a1.png",
+      "image_sha256": "440ebc54cd421ec91afc2f6ea0562bf9a3a39a9fd77dd2930d2cfa2a0e1cd7bc",
+      "at": {
+        "cue": "b5-2",
+        "edge": "start",
+        "offset": -0.3
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "hold",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.04
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.08
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s29",
+      "image": "images-out/shots-night-megastructures/s29-5.a2.png",
+      "image_sha256": "e3d956b212b96e67363338d65b2ea168d28b288a78b0b892a5fac3fc6c30f2ce",
+      "at": {
+        "cue": "b5-5",
+        "edge": "start",
+        "offset": -0.6
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "hold",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.04
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.08
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s30",
+      "image": "images-out/shots-night-megastructures/s30-6.a2.png",
+      "image_sha256": "577ed5571846ee5a1d768ae1a409803c17071d01e3e04993ac947249f8e481a3",
+      "at": {
+        "cue": "b6-1",
+        "edge": "start",
+        "offset": -1.5
+      },
+      "transition": {
+        "type": "dissolve",
+        "seconds": 1.0
+      },
+      "move": {
+        "kind": "push",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.0
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.48,
+          "zoom": 1.06
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s31",
+      "image": "images-out/shots-night-megastructures/s31-6.a2.png",
+      "image_sha256": "f467d991129c1192c52af2a551b57ed40b249bb0593b4d7addbf3b9422ef94f4",
+      "at": {
+        "cue": "hold-s31",
+        "edge": "start",
+        "offset": 0
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "hold",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.04
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.08
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s32",
+      "image": "images-out/shots-night-megastructures/s32-6.a2.png",
+      "image_sha256": "fd3a601d284d765e9b881d53cf51b611a38bd788941db33d050bb739a43af54e",
+      "at": {
+        "cue": "hold-s32",
+        "edge": "start",
+        "offset": 0
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "push",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.0
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.48,
+          "zoom": 1.15
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s33",
+      "image": "images-out/shots-night-megastructures/s33-6.a3.png",
+      "image_sha256": "688ea5ef9c8cd741fbacd54b39e9668217558552a6099b7af137442401f51ab6",
+      "at": {
+        "cue": "hold-s33",
+        "edge": "start",
+        "offset": 0
+      },
+      "transition": {
+        "type": "dissolve",
+        "seconds": 0.8
+      },
+      "move": {
+        "kind": "pan",
+        "from": {
+          "x": 0.42,
+          "y": 0.5,
+          "zoom": 1.12
+        },
+        "to": {
+          "x": 0.58,
+          "y": 0.5,
+          "zoom": 1.12
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s34",
+      "image": "images-out/shots-night-megastructures/s34-7.a1.png",
+      "image_sha256": "55f157f88b5d60f5ef9b638ca914340edaf852e97d3e78b59c8c09007d3c83cd",
+      "at": {
+        "cue": "hold-s34",
+        "edge": "start",
+        "offset": 0
+      },
+      "transition": {
+        "type": "dissolve",
+        "seconds": 1.2
+      },
+      "move": {
+        "kind": "push",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.0
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.48,
+          "zoom": 1.1
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s35",
+      "image": "scenes-out/fifteen-days/cards/s35.png",
+      "image_sha256": "c8cc84779fbc5609d1fbfdfe5bcd4232cbcec4b804bd88bbc82b74a825a9499d",
+      "at": {
+        "cue": "hold-s35",
+        "edge": "start",
+        "offset": 0
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "hold",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.04
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.08
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s36",
+      "image": "images-out/shots-night-megastructures/s36-7.a1.png",
+      "image_sha256": "40d098df2bf321fda6cc083b9bfc935fec042363f8cfe6db059e5d1153ab10a7",
+      "at": {
+        "cue": "hold-s36",
+        "edge": "start",
+        "offset": 0
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "hold",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.04
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.08
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s37",
+      "image": "scenes-out/fifteen-days/cards/s37.png",
+      "image_sha256": "01021e033fbe2cbc482175c0b6a288a233253e331a19b7f2dec0d58e186725fb",
+      "at": {
+        "cue": "hold-s37",
+        "edge": "start",
+        "offset": 0
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "hold",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.04
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.08
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s38",
+      "image": "images-out/shots-night-megastructures/s38-7.a2.png",
+      "image_sha256": "2a2f3a3d36bc7799bf79f553a1b75ed152ecc54123269f204c031efb88bd6228",
+      "at": {
+        "cue": "hold-s38",
+        "edge": "start",
+        "offset": 0
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "push",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.0
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.48,
+          "zoom": 1.08
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s39",
+      "image": "scenes-out/fifteen-days/cards/s39.png",
+      "image_sha256": "433d7798d3ec31b74c4db518e0e3f4d15deebcd887552e937470566774ab273e",
+      "at": {
+        "cue": "hold-s39",
+        "edge": "start",
+        "offset": 0
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "hold",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.04
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.08
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s40",
+      "image": "images-out/shots-night-megastructures/s40-7.a1.png",
+      "image_sha256": "6aca2499a19f41772eb8c2301d52951247b4c7d180c5eaba9bca3a9f64742488",
+      "at": {
+        "cue": "hold-s40",
+        "edge": "start",
+        "offset": 0
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "hold",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.04
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.08
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s41",
+      "image": "images-out/shots-night-megastructures/s41-7.a4.png",
+      "image_sha256": "b17092e7af7031ccff08e51e5010c2a5916b36a6b635197806606aa312665a54",
+      "at": {
+        "cue": "hold-s41",
+        "edge": "start",
+        "offset": 0
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "push",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.0
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.48,
+          "zoom": 1.12
+        },
+        "ease": "inout"
+      }
+    }
+  ],
+  "lettering": [],
+  "end_card": {
+    "file": "adaptations/fifteen-days/end-card.json",
+    "seconds": 8,
+    "fade_s": 0.8
+  }
+}

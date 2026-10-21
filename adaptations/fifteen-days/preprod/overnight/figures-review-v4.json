@@ -1,0 +1,849 @@
+{
+ "about": "Extra and background figures on the 46 frames in the v4 cut (reviewer agents, brief reviewer-brief-figures.md; sheets from scripts/review-sheets.py figures), 2026-10-17 night.",
+ "verdicts": {
+  "cov-cafe-BAI-sideeye-K7": {
+   "pass": true,
+   "figures": [
+    {
+     "what": "Bai at the round table, headphones on, handheld",
+     "where": "centre, spans all four quarters",
+     "expected": true,
+     "certainty": "clear"
+    }
+   ],
+   "note": "Only Bai; the street, doorways and lit windows behind her are empty."
+  },
+  "cov-cafe-CU-B-standing-K7": {
+   "pass": true,
+   "figures": [
+    {
+     "what": "Bai standing, headphones in hand",
+     "where": "centre, spans all four quarters",
+     "expected": true,
+     "certainty": "clear"
+    }
+   ],
+   "note": "Only Bai; the tables, windows and city outside hold nobody."
+  },
+  "cov-cafe-CU-Z-smile-K14": {
+   "pass": true,
+   "figures": [
+    {
+     "what": "Zei, close, closed-mouth smile",
+     "where": "right half, top right and bottom right",
+     "expected": true,
+     "certainty": "clear"
+    }
+   ],
+   "note": "Only Zei; the dark spiky shape at the right edge of the top-left quarter is his own hair."
+  },
+  "cov-cafe-CU-Z0-listen-K15": {
+   "pass": true,
+   "figures": [
+    {
+     "what": "Zei with the glowing menu",
+     "where": "right half, top right and bottom right",
+     "expected": true,
+     "certainty": "clear"
+    }
+   ],
+   "note": "Only Zei; the gate, street and lit windows are empty (not a figure problem, but his hair shows two blue streaks plus a small blue zigzag rather than one streak)."
+  },
+  "cov-cafe-OTS-Z-eager-K7": {
+   "pass": true,
+   "figures": [
+    {
+     "what": "Zei from behind (over-the-shoulder)",
+     "where": "left, top left and bottom left",
+     "expected": true,
+     "certainty": "clear"
+    },
+    {
+     "what": "Deluin leaning on the table, smiling",
+     "where": "centre right, top right and bottom right",
+     "expected": true,
+     "certainty": "clear"
+    }
+   ],
+   "note": "Zei and Deluin only; the pink and blue windows and the counter at left hold nobody."
+  },
+  "cov-cafe-OTS-Z-talk-K7": {
+   "pass": true,
+   "figures": [
+    {
+     "what": "Zei from behind (over-the-shoulder)",
+     "where": "left, top left and bottom left",
+     "expected": true,
+     "certainty": "clear"
+    },
+    {
+     "what": "Deluin seated at the long table",
+     "where": "centre right, top right and bottom right",
+     "expected": true,
+     "certainty": "clear"
+    }
+   ],
+   "note": "Zei and Deluin only; windows, gate and tree are clear of figures."
+  },
+  "cov-cafe-SUGAR-stack-K8": {
+   "pass": false,
+   "figures": [
+    {
+     "what": "Deluin's hand, sleeve and a strand of hair",
+     "where": "right side, top right and bottom right",
+     "expected": true,
+     "certainty": "clear"
+    },
+    {
+     "what": "a huge dark mechanical body with an armoured shoulder, a round joint with a glowing emblem and a long leg-like strut, reading as a giant robot or mech standing behind the table",
+     "where": "top left quarter, upper-left corner, with a second strut in the centre top of the top-left/top-right overlap",
+     "expected": false,
+     "certainty": "possible"
+    }
+   ],
+   "note": "A giant robot-like machine (armoured shoulder, glowing joint, leg strut) fills the top-left behind the table; it could be meant as city scenery, but a viewer will likely read it as a big robot in a place that should hold nobody."
+  },
+  "cov-corridor-MASTER-arrive-K8": {
+   "pass": true,
+   "figures": [
+    {
+     "what": "Zei standing, left",
+     "where": "top left and bottom left",
+     "expected": true,
+     "certainty": "clear"
+    },
+    {
+     "what": "Bai behind Zei, arms crossed",
+     "where": "top left and bottom left, centre",
+     "expected": true,
+     "certainty": "clear"
+    },
+    {
+     "what": "Deluin stepping out of the elevator",
+     "where": "top right and bottom right",
+     "expected": true,
+     "certainty": "clear"
+    },
+    {
+     "what": "a small low dark blob on the floor at the far end of the tunnel",
+     "where": "top left quarter, centre-right, at the bottom of the lit far arch",
+     "expected": false,
+     "certainty": "possible"
+    }
+   ],
+   "note": "The three expected people only; a tiny low dark blob at the far end of the tunnel is too small and squat to read as a person."
+  },
+  "cov-corridor-OTS-Z-warm-K9": {
+   "pass": true,
+   "figures": [
+    {
+     "what": "Zei from behind (over-the-shoulder)",
+     "where": "left, top left and bottom left",
+     "expected": true,
+     "certainty": "clear"
+    },
+    {
+     "what": "Deluin in the doorway",
+     "where": "top right and bottom right",
+     "expected": true,
+     "certainty": "clear"
+    }
+   ],
+   "note": "Zei and Deluin only; the elevator, open door and long tunnel behind are empty."
+  },
+  "cov-game-PIT-D-playing-K7": {
+   "pass": true,
+   "figures": [
+    {
+     "what": "Deluin in the pit at the console",
+     "where": "centre, all four quarters",
+     "expected": true,
+     "certainty": "clear"
+    },
+    {
+     "what": "crowd seated and standing in the upper and lower tiers behind railings, including people standing at the railing on the far left and a standing row on the right",
+     "where": "top left and top right, backgrounds; edges of bottom quarters",
+     "expected": true,
+     "certainty": "clear"
+    }
+   ],
+   "note": "Deluin plus the allowed crowd behind the tier railings; nobody on the walkway and no look-alike of a main person in the crowd."
+  },
+  "cov-gate-MASTER-fingers-K11": {
+   "pass": true,
+   "figures": [
+    {
+     "what": "Zei, hand raised",
+     "where": "left, top left and bottom left",
+     "expected": true,
+     "certainty": "clear"
+    },
+    {
+     "what": "Deluin, hand raised",
+     "where": "right, top right and bottom right",
+     "expected": true,
+     "certainty": "clear"
+    }
+   ],
+   "note": "Zei and Deluin only; the tables, street, towers and the lit cup sign hold no figures."
+  },
+  "cov-lobby-CU-Z-relief-K10": {
+   "pass": true,
+   "figures": [
+    {
+     "what": "Zei with his device, eyes closed",
+     "where": "centre, all four quarters",
+     "expected": true,
+     "certainty": "clear"
+    },
+    {
+     "what": "a small blurred dark leafy shape outside the window behind the balcony railing, most likely a potted plant",
+     "where": "bottom right quarter, upper left area, just behind the outside railing",
+     "expected": false,
+     "certainty": "possible"
+    }
+   ],
+   "note": "Only Zei; the one dark shape outside the window has leafy edges and reads as a plant, not a person."
+  },
+  "cov-overlook-CU-B-toast-K10": {
+   "pass": true,
+   "figures": [
+    {
+     "what": "Bai leaning over the railing",
+     "where": "centre and right, all four quarters",
+     "expected": true,
+     "certainty": "clear"
+    },
+    {
+     "what": "crowd in the upper and lower tiers and a standing group at the right edge behind a railing",
+     "where": "all four quarters' backgrounds; standing group in top right and bottom right, right edge",
+     "expected": true,
+     "certainty": "clear"
+    }
+   ],
+   "note": "Bai plus the allowed crowd; the big screens show only abstract graphics; the standing group at the right edge is fairly close and could be checked to be sure they are in a tier and not on the walkway."
+  },
+  "cov-overlook-OTS-Z-dry-K7": {
+   "pass": true,
+   "figures": [
+    {
+     "what": "Zei from behind (over-the-shoulder)",
+     "where": "left, top left and bottom left",
+     "expected": true,
+     "certainty": "clear"
+    },
+    {
+     "what": "Bai holding the gadget",
+     "where": "right, top right and bottom right",
+     "expected": true,
+     "certainty": "clear"
+    }
+   ],
+   "note": "Zei and Bai only; the small dark shape in the centre is a game piece among the light beams, not a figure."
+  },
+  "cov-walk-CU-B-serious-K9": {
+   "pass": true,
+   "figures": [
+    {
+     "what": "Bai walking, close",
+     "where": "centre, all four quarters",
+     "expected": true,
+     "certainty": "clear"
+    }
+   ],
+   "note": "Only Bai; the tunnel is empty and the lit wall panel shows only an abstract mark."
+  },
+  "cov-walk-CU-Z-tease-K8": {
+   "pass": true,
+   "figures": [
+    {
+     "what": "Zei walking, close",
+     "where": "centre, all four quarters",
+     "expected": true,
+     "certainty": "clear"
+    }
+   ],
+   "note": "Only Zei; the elevator door and the tunnel behind him are empty."
+  },
+  "cov-cafe-BAI-what-K8": {
+   "pass": true,
+   "figures": [
+    {
+     "what": "Bai, seated at the round table, lifting her headphones",
+     "where": "top right and bottom right, centre-right foreground",
+     "expected": true,
+     "certainty": "clear"
+    }
+   ],
+   "note": "Only Bai; the street on the left and the courtyard on the right are empty."
+  },
+  "cov-cafe-CU-D-warm-K9": {
+   "pass": false,
+   "figures": [
+    {
+     "what": "Deluin, close, in the cream cable-knit sweater",
+     "where": "top right and bottom right, right half",
+     "expected": true,
+     "certainty": "clear"
+    },
+    {
+     "what": "white robot with a round head and arms, on a wheeled base, standing behind a counter or cart",
+     "where": "top left / bottom left, left side mid-background by the wooden counter under the lit windows",
+     "expected": false,
+     "certainty": "clear"
+    }
+   ],
+   "note": "A white robot stands at a counter in the left background; the serving robot isn't expected in this close-up of Deluin."
+  },
+  "cov-cafe-CU-Z0-astonished-K13": {
+   "pass": true,
+   "figures": [
+    {
+     "what": "Zei, close, orange jacket, one blue streak",
+     "where": "top right and bottom right",
+     "expected": true,
+     "certainty": "clear"
+    }
+   ],
+   "note": "Only Zei; the café tables and the street behind him are empty."
+  },
+  "cov-cafe-CU-Z0-whoa-K15": {
+   "pass": true,
+   "figures": [
+    {
+     "what": "Zei holding the glowing menu",
+     "where": "top right and bottom right, centre-right",
+     "expected": true,
+     "certainty": "clear"
+    }
+   ],
+   "note": "Only Zei and the street outside is empty; one thing outside my brief: his hair has two blue streaks, not one."
+  },
+  "cov-cafe-OTS-Z-menu-K7": {
+   "pass": true,
+   "figures": [
+    {
+     "what": "Zei seen from behind, orange jacket",
+     "where": "top left and bottom left, left foreground",
+     "expected": true,
+     "certainty": "clear"
+    },
+    {
+     "what": "Deluin at the long table with the glowing menu",
+     "where": "top right and bottom right, centre",
+     "expected": true,
+     "certainty": "clear"
+    }
+   ],
+   "note": "Zei and Deluin only; nobody is in the pink and blue lit windows or by the gate."
+  },
+  "cov-cafe-SUGAR-door-K7": {
+   "pass": true,
+   "figures": [],
+   "note": "No figures at all: two cups, the sugar-cube wall with its doorway and an empty city behind."
+  },
+  "cov-cafe-SUGAR-wall-K9": {
+   "pass": true,
+   "figures": [],
+   "note": "No figures at all: two cups, the sugar-cube wall and an empty terrace and skyline."
+  },
+  "cov-corridor-OTS-D-eager-K7": {
+   "pass": true,
+   "figures": [
+    {
+     "what": "Deluin seen from behind",
+     "where": "top left and bottom left, left foreground",
+     "expected": true,
+     "certainty": "clear"
+    },
+    {
+     "what": "Zei standing, orange jacket",
+     "where": "centre, across all four quarters",
+     "expected": true,
+     "certainty": "clear"
+    },
+    {
+     "what": "Bai with her arms crossed",
+     "where": "top right and bottom right",
+     "expected": true,
+     "certainty": "clear"
+    }
+   ],
+   "note": "Exactly Deluin, Zei and Bai; the tunnel behind them is empty."
+  },
+  "cov-dusk-MASTER-talk-K7": {
+   "pass": true,
+   "figures": [
+    {
+     "what": "Zei standing",
+     "where": "top left and bottom left, centre-left",
+     "expected": true,
+     "certainty": "clear"
+    },
+    {
+     "what": "Bai seated, headphones around her neck",
+     "where": "top right and bottom right, centre-right",
+     "expected": true,
+     "certainty": "clear"
+    }
+   ],
+   "note": "Zei and Bai only; the courtyard tables and walls are empty."
+  },
+  "cov-game-SCREEN-face-K7": {
+   "pass": false,
+   "figures": [
+    {
+     "what": "Deluin seen from behind, seated at the console in the pit",
+     "where": "bottom left and bottom right, centre",
+     "expected": true,
+     "certainty": "clear"
+    },
+    {
+     "what": "Deluin's face in close-up on the big screen",
+     "where": "top right, upper right",
+     "expected": true,
+     "certainty": "clear"
+    },
+    {
+     "what": "a second screen showing another Deluin (face and cream sweater), cut off by the frame edge",
+     "where": "top right, far top-right corner",
+     "expected": false,
+     "certainty": "clear"
+    },
+    {
+     "what": "seated spectators filling the tiers",
+     "where": "all four quarters, middle band",
+     "expected": true,
+     "certainty": "clear"
+    },
+    {
+     "what": "about 15 grey, featureless mannequin-like standing figures along the upper gallery rail, one standing in front of the big screen",
+     "where": "top left and top right, upper gallery",
+     "expected": false,
+     "certainty": "clear"
+    }
+   ],
+   "note": "Deluin appears a third time on a second screen in the top-right corner, and the upper gallery has a row of grey mannequin-like standing figures (one in front of the big screen) that read as odd statues rather than the crowd."
+  },
+  "cov-gate-MASTER-wave-K7": {
+   "pass": true,
+   "figures": [
+    {
+     "what": "Zei waving",
+     "where": "top left and bottom left, centre-left",
+     "expected": true,
+     "certainty": "clear"
+    },
+    {
+     "what": "Deluin waving",
+     "where": "top right and bottom right, right",
+     "expected": true,
+     "certainty": "clear"
+    }
+   ],
+   "note": "Zei and Deluin only; the gate, windows and street are empty."
+  },
+  "cov-lobby-MASTER-sits-K11": {
+   "pass": false,
+   "figures": [
+    {
+     "what": "Zei at his table",
+     "where": "top left and bottom left",
+     "expected": true,
+     "certainty": "clear"
+    },
+    {
+     "what": "Bai seated across from him",
+     "where": "top right and bottom right",
+     "expected": true,
+     "certainty": "clear"
+    },
+    {
+     "what": "a man seated at a table, dark jacket",
+     "where": "top left / bottom left, centre background in front of the window",
+     "expected": false,
+     "certainty": "clear"
+    },
+    {
+     "what": "a person in a yellow-green top seated at a table",
+     "where": "top left / top right, centre background by the window",
+     "expected": false,
+     "certainty": "clear"
+    },
+    {
+     "what": "a woman in a brown coat standing outside the window",
+     "where": "top right / bottom right, centre, beyond the glass",
+     "expected": false,
+     "certainty": "clear"
+    },
+    {
+     "what": "a dark-haired woman standing outside the window",
+     "where": "top right / bottom right, beyond the glass just left of Bai's face",
+     "expected": false,
+     "certainty": "clear"
+    },
+    {
+     "what": "a woman in purple standing outside the window",
+     "where": "top right / bottom right, beyond the glass in front of Bai",
+     "expected": false,
+     "certainty": "clear"
+    },
+    {
+     "what": "a dark shape that may be a person behind Bai's ponytail",
+     "where": "bottom right, by the right-hand window",
+     "expected": false,
+     "certainty": "possible"
+    }
+   ],
+   "note": "Two other diners sit in the lobby and three people stand outside the windows; the scene should hold only Zei and Bai."
+  },
+  "cov-overlook-MASTER-lean-K8": {
+   "pass": true,
+   "figures": [
+    {
+     "what": "Zei at the railing",
+     "where": "top left and bottom left",
+     "expected": true,
+     "certainty": "clear"
+    },
+    {
+     "what": "Bai leaning on the railing with her gadget",
+     "where": "top right and bottom right",
+     "expected": true,
+     "certainty": "clear"
+    },
+    {
+     "what": "spectators seated in the tiers and a row standing along the far upper rail",
+     "where": "all quarters, background",
+     "expected": true,
+     "certainty": "clear"
+    },
+    {
+     "what": "a man in green seated close at the left edge, and a standing man and a seated person in yellow close at the right edge",
+     "where": "top left, far left; top right, far right behind Bai",
+     "expected": true,
+     "certainty": "possible"
+    }
+   ],
+   "note": "Zei and Bai with the crowd behind them; the nearest spectators at the left and right edges look like they're beyond the railing in the tiers, not on the walkway, but the owner may want a second look."
+  },
+  "cov-overlook-OTS-Z-shrug-K7": {
+   "pass": false,
+   "figures": [
+    {
+     "what": "Zei seen from behind",
+     "where": "top left and bottom left",
+     "expected": true,
+     "certainty": "clear"
+    },
+    {
+     "what": "Bai holding the gadget",
+     "where": "top right and bottom right",
+     "expected": true,
+     "certainty": "clear"
+    },
+    {
+     "what": "a full-height man in a dark jacket standing on the walkway",
+     "where": "bottom left, far left edge",
+     "expected": false,
+     "certainty": "clear"
+    },
+    {
+     "what": "several people standing on the walkway floor behind Bai",
+     "where": "bottom right, right side",
+     "expected": false,
+     "certainty": "clear"
+    },
+    {
+     "what": "people standing at the far railing and seated in the tiers",
+     "where": "top left and top right, background",
+     "expected": true,
+     "certainty": "clear"
+    }
+   ],
+   "note": "Besides the crowd at the far railing, people stand on the walkway itself: a man at the far left and several figures behind Bai on the right."
+  },
+  "cov-walk-CU-B-sly-K7": {
+   "pass": true,
+   "figures": [
+    {
+     "what": "Bai, close, walking",
+     "where": "all four quarters, centre",
+     "expected": true,
+     "certainty": "clear"
+    },
+    {
+     "what": "a dark shape deep in the tunnel behind her ponytail",
+     "where": "bottom right, centre-left, in the tunnel's shadow",
+     "expected": false,
+     "certainty": "possible"
+    }
+   ],
+   "note": "Only Bai; the dark shape behind her ponytail reads as tunnel shadow, not a person."
+  },
+  "cov-cafe-CU-B-menu-K9": {
+   "pass": true,
+   "figures": [
+    {
+     "what": "Bai, magenta ponytail, lime-green vest, holding the glowing menu",
+     "where": "centre to right, all four quarters",
+     "expected": true,
+     "certainty": "clear"
+    }
+   ],
+   "note": "Only Bai; the street, windows and gate behind her are empty."
+  },
+  "cov-cafe-CU-Z-amused-K7": {
+   "pass": true,
+   "figures": [
+    {
+     "what": "Zei, orange jacket, blue streak",
+     "where": "centre, all four quarters",
+     "expected": true,
+     "certainty": "clear"
+    }
+   ],
+   "note": "Only Zei; the tables, street, lit windows and doorway behind him are empty."
+  },
+  "cov-cafe-CU-Z0-explain-K13": {
+   "pass": true,
+   "figures": [
+    {
+     "what": "Zei holding the glowing menu",
+     "where": "left of centre, all four quarters",
+     "expected": true,
+     "certainty": "clear"
+    }
+   ],
+   "note": "Only Zei; windows, balcony and the doorway on the right are empty."
+  },
+  "cov-cafe-MASTER-wave-K7": {
+   "pass": true,
+   "figures": [
+    {
+     "what": "Bai seated at the long table",
+     "where": "top left and bottom left, centre",
+     "expected": true,
+     "certainty": "clear"
+    },
+    {
+     "what": "Deluin in the cream cable-knit tunic, raising a hand to wave",
+     "where": "top right and bottom right",
+     "expected": true,
+     "certainty": "clear"
+    }
+   ],
+   "note": "Just Bai and Deluin, with nobody at the other tables or in the towers' windows; Deluin is standing rather than seated, which is outside this figure check."
+  },
+  "cov-cafe-OTS-Z-stern-K9": {
+   "pass": true,
+   "figures": [
+    {
+     "what": "Zei from behind, orange jacket, near shoulder",
+     "where": "top left and bottom left",
+     "expected": true,
+     "certainty": "clear"
+    },
+    {
+     "what": "Deluin standing in the cream knit tunic",
+     "where": "top right and bottom right",
+     "expected": true,
+     "certainty": "clear"
+    }
+   ],
+   "note": "Only Zei (from behind) and Deluin; the pink-lit windows, gate and neon sign show no one."
+  },
+  "cov-cafe-SUGAR-flick-K7": {
+   "pass": false,
+   "figures": [
+    {
+     "what": "a person's arm, hand and torso in a black sleeveless top, flicking the sugar cube",
+     "where": "top left and top right, centre top edge, down to the finger in the bottom quarters",
+     "expected": false,
+     "certainty": "clear"
+    }
+   ],
+   "note": "The frame should hold no one, but besides the flicking finger it shows a whole forearm and a torso in a black sleeveless top that matches nobody's costume, so the flicker reads as an unknown person; frame it tighter on the hand, or dress the arm as the right character."
+  },
+  "cov-corridor-CU-B-sour-K9": {
+   "pass": true,
+   "figures": [
+    {
+     "what": "Bai, arms crossed",
+     "where": "centre, all four quarters",
+     "expected": true,
+     "certainty": "clear"
+    }
+   ],
+   "note": "Only Bai; the corridor and elevator door behind her are empty."
+  },
+  "cov-corridor-OTS-Z-easy-K8": {
+   "pass": true,
+   "figures": [
+    {
+     "what": "Zei from behind, orange jacket",
+     "where": "top left and bottom left",
+     "expected": true,
+     "certainty": "clear"
+    },
+    {
+     "what": "Deluin in the cream knit tunic",
+     "where": "top right and bottom right",
+     "expected": true,
+     "certainty": "clear"
+    }
+   ],
+   "note": "Only Zei (from behind) and Deluin; the elevator doors and the long corridor are empty."
+  },
+  "cov-game-PIT-D-glasses-K7": {
+   "pass": true,
+   "figures": [
+    {
+     "what": "Deluin at the console touching his glasses",
+     "where": "centre, all four quarters",
+     "expected": true,
+     "certainty": "clear"
+    },
+    {
+     "what": "seated crowd in the tiers, some standing in the upper tier",
+     "where": "top left and top right, background",
+     "expected": true,
+     "certainty": "clear"
+    },
+    {
+     "what": "crowd seen through the translucent holographic panel",
+     "where": "top left, far left",
+     "expected": true,
+     "certainty": "clear"
+    },
+    {
+     "what": "one man in a mustard shirt standing at the front rail of the lower tier",
+     "where": "top left, behind the second light pillar",
+     "expected": true,
+     "certainty": "possible"
+    }
+   ],
+   "note": "Only Deluin plus the allowed crowd; one man stands at the lower tier's front rail, which reads as part of the crowd rather than the walkway."
+  },
+  "cov-gate-CU-Z-smile-K7": {
+   "pass": true,
+   "figures": [
+    {
+     "what": "Zei, orange jacket, blue streak",
+     "where": "centre, all four quarters",
+     "expected": true,
+     "certainty": "clear"
+    }
+   ],
+   "note": "Only Zei; the gate, the street and the lit windows are empty."
+  },
+  "cov-lobby-CU-Z-down-K8": {
+   "pass": true,
+   "figures": [
+    {
+     "what": "Zei looking down at the glowing device",
+     "where": "centre, all four quarters",
+     "expected": true,
+     "certainty": "clear"
+    }
+   ],
+   "note": "Only Zei; the tables, windows, city outside and the glass door on the right are empty."
+  },
+  "cov-lobby-OTS-Z-turns-K9": {
+   "pass": true,
+   "figures": [
+    {
+     "what": "Zei from behind, orange shirt",
+     "where": "top left and bottom left",
+     "expected": true,
+     "certainty": "clear"
+    },
+    {
+     "what": "Bai across the table, looking down at the tablet",
+     "where": "top right and bottom right",
+     "expected": true,
+     "certainty": "clear"
+    },
+    {
+     "what": "bright white shape on the wall screen by the window, abstract and not a figure",
+     "where": "top right, left side",
+     "expected": true,
+     "certainty": "possible"
+    }
+   ],
+   "note": "Only Zei and Bai; the wall screen shows a white abstract shape that does not read as a person."
+  },
+  "cov-overlook-MASTER-watch-K9": {
+   "pass": true,
+   "figures": [
+    {
+     "what": "Zei at the railing",
+     "where": "top left and bottom left",
+     "expected": true,
+     "certainty": "clear"
+    },
+    {
+     "what": "Bai working the gadget",
+     "where": "top right and bottom right",
+     "expected": true,
+     "certainty": "clear"
+    },
+    {
+     "what": "many small dark crowd silhouettes seated and standing in the tiers and at the pit consoles",
+     "where": "all quarters, background",
+     "expected": true,
+     "certainty": "clear"
+    }
+   ],
+   "note": "Zei and Bai alone on the walkway; the only other people are the allowed crowd and players across the hall."
+  },
+  "cov-overlook-OTS-Z-wry-K7": {
+   "pass": false,
+   "figures": [
+    {
+     "what": "Zei from behind, orange shirt",
+     "where": "top left and bottom left",
+     "expected": true,
+     "certainty": "clear"
+    },
+    {
+     "what": "Bai",
+     "where": "top right and bottom right, centre",
+     "expected": true,
+     "certainty": "clear"
+    },
+    {
+     "what": "man in a dark sweater and trousers, standing on the purple walkway",
+     "where": "top right and bottom right, far right edge",
+     "expected": false,
+     "certainty": "clear"
+    },
+    {
+     "what": "standing figure on a raised block beside the walkway",
+     "where": "top right, right side above the man",
+     "expected": false,
+     "certainty": "clear"
+    },
+    {
+     "what": "four or five small dark figures standing or walking on the lit purple ramp down the walkway",
+     "where": "bottom right, right of Bai",
+     "expected": false,
+     "certainty": "clear"
+    }
+   ],
+   "note": "Several people stand and walk on the purple walkway and ramp just right of Bai, including a fairly large man in a dark sweater; they are on the walkway, not in the tiers, so the frame fails."
+  },
+  "cov-walk-CU-Z-hopeful-K8": {
+   "pass": true,
+   "figures": [
+    {
+     "what": "Zei, orange jacket, smiling",
+     "where": "centre, all four quarters",
+     "expected": true,
+     "certainty": "clear"
+    }
+   ],
+   "note": "Only Zei and an empty corridor; there is an odd blue droplet shape on his forehead, which is not a figure."
+  }
+ }
+}

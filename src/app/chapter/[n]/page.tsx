@@ -24,8 +24,8 @@ import { LiveScreen } from '~/components/live-screen';
 import { adaptationsCiting as citing } from '~/lib/adaptations';
 import { ADAPTATIONS } from '~/lib/config';
 
-// No "cited in" marks while adaptations are out of view (ADAPTATIONS.visible).
-const adaptationsCiting: typeof citing = (...a) => (ADAPTATIONS.visible ? citing(...a) : []);
+// No "cited in" marks in the reader while ADAPTATIONS.inReader is off.
+const adaptationsCiting: typeof citing = (...a) => (ADAPTATIONS.inReader ? citing(...a) : []);
 import type { Block } from '~/lib/book';
 
 type Props = { params: Promise<{ n: string }> };

@@ -1,0 +1,33 @@
+{
+ "about": "Fifteen Days v5: Bai's 'What?!' lift, third try, from the trimmed side-glance frame (C20). DRAFTED prompts.",
+ "out": "images-out/preprod/pass3",
+ "ledger": "images-out/preprod/ledger-s7.json",
+ "cap_usd": 25.0,
+ "style": "",
+ "jobs": [
+  {
+   "id": "cov-cafe-BAI-what-E27",
+   "shot": "cov-cafe-BAI-what",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-cafe-BAI-sideeye-C20.png"
+   ],
+   "prompt": "Her left hand stays on the table holding the phone. Her other hand is raised to the side of her head and holds that headphone ear cup a little away from her ear. Exactly two arms and two hands, one set of headphones. Keep the drawing, colours, camera, framing and crop exactly as they are; she keeps her face, hair, vest, tattoos and her head turned over her shoulder in profile toward the left. Nobody else anywhere. No letters or numbers.",
+   "width": 1344,
+   "height": 752,
+   "seed": 27
+  },
+  {
+   "id": "cov-cafe-BAI-what-E28",
+   "shot": "cov-cafe-BAI-what",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-cafe-BAI-sideeye-C20.png"
+   ],
+   "prompt": "Her left hand stays on the table holding the phone. Her other hand is raised to the side of her head and holds that headphone ear cup a little away from her ear. Exactly two arms and two hands, one set of headphones. Keep the drawing, colours, camera, framing and crop exactly as they are; she keeps her face, hair, vest, tattoos and her head turned over her shoulder in profile toward the left. Nobody else anywhere. No letters or numbers.",
+   "width": 1344,
+   "height": 752,
+   "seed": 28
+  }
+ ]
+}

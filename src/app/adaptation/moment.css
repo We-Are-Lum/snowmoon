@@ -1,0 +1,15 @@
+/* Moment pages (/@<fname>/<id>/m/<shot>): one shot, every version side by side. Phone: the versions stack. */
+.moment-head { display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
+.moment-head a { color: inherit; }
+.moment-title { margin: 0; font-weight: 400; font-size: var(--text-display); line-height: 1; }
+.moment-lines { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; font-size: 18px; }
+.moment-speaker { font-family: var(--label); font-size: var(--text-label); letter-spacing: var(--ls-label); text-transform: uppercase; }
+.moment-versions { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 24px; }
+.moment-version { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.moment-version .label { margin: 0; overflow-wrap: anywhere; }
+.moment-play { display: flex; flex-direction: column; gap: 8px; }
+.moment-video { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: contain; background: var(--night); }
+.moment-play-btn { align-self: flex-start; min-height: 44px; }
+.moment-nav { display: flex; justify-content: space-between; gap: 12px; margin-top: 28px; text-transform: uppercase; }
+/* Every link a 44px target (the site's floor), inline ones included. */
+.moment a { display: inline-flex; align-items: center; min-height: 44px; }

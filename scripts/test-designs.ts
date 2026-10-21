@@ -180,6 +180,15 @@ check('picked characters are offered', D.composerPicks(await D.myPicks(S, 42)).c
 await D.clearPick(S, 42, (await D.myPicks(S, 42)).find((p) => p.versionId === other.versionId)!.entityId);
 check('clearing a pick', !(await D.myPicks(S, 42)).some((p) => p.versionId === other.versionId));
 check('a pick must be a published design', (await D.setPick(S, 42, '00000000-0000-0000-0000-000000000000')) === null);
+// Picks are open to everyone signed in, Farcaster or wallet (owner, 2026-10-19); making designs stays invited-only.
+await D.setPick(S, -99, s1.versionId);
+check('a wallet account keeps its own picks, apart from the FID with the same number', (await D.myPicks(S, -99)).map((p) => p.versionId).join() === s1.versionId && (await D.myPicks(S, 99)).length === 0);
+{
+  const route = readFileSync('src/app/api/designs/picks/route.ts', 'utf8');
+  check('the picks route has no invite gate and takes a wallet sign-in', !/invited/.test(route.replace(/\/\*[\s\S]*?\*\//g, '')) && /getPerson\(request\)/.test(route));
+  check('making styles and sheets is still invited-only', /IMAGES\.invited\.includes/.test(readFileSync('src/app/api/designs/route.ts', 'utf8')) && /IMAGES\.invited\.includes/.test(readFileSync('src/app/api/designs/sample/route.ts', 'utf8')));
+  check('the browser sends a wallet sign-in to the picks route', /'\/api\/designs\/picks'/.test(readFileSync('src/lib/client-auth.ts', 'utf8')));
+}
 for (const role of ['anon', 'authenticated']) {
   await db.exec(`set role ${role}`);
   try {

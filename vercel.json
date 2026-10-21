@@ -7,7 +7,9 @@
       "site-images-designs": false,
       "site-images-designs-2": false,
       "site-local-fonts": false,
-      "site-make-p1c": false
+      "site-make-p1c": false,
+      "scenes-sound": false,
+      "dog-dawn-comic": false
     }
   }
 }

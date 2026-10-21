@@ -308,6 +308,14 @@ add({
         if (/fetch\(|supabase|\/api\//.test(text)) problems.push(`${file}: the private box must not send its text anywhere itself`);
         continue;
       }
+      if (file.endsWith('components/local-text-field.tsx')) {
+        // The live shot editor (2026-10-17): the prompt and a line, kept in this browser only (the fork file
+        // was removed, owner 2026-10-18); never saved, sent or published by the site.
+        for (const [what, re] of [['kept in this browser only', /Kept in this browser only/], ['never saved, sent or published', /Never saved, sent or published by this site/], ['described to screen readers', /aria-describedby/]] as const)
+          if (!re.test(text)) problems.push(`${file}: the editor's box must say it is ${what}`);
+        if (/fetch\(|supabase|\/api\//.test(text)) problems.push(`${file}: the editor's box must not send its text anywhere itself`);
+        continue;
+      }
       if (file.endsWith('components/search-field.tsx')) {
         // "Make an image" (2026-10-10): a search of the book's own text, run on the reader's device over the text
         // served whole by GET /api/book/text; the query is never sent anywhere, kept or published.
@@ -320,6 +328,14 @@ add({
         if (fetches.some((f) => f !== "'/api/book/text'")) problems.push(`src/components/image-create.tsx: fetches ${fetches.join(', ')}; the search must fetch only '/api/book/text' and never send the query`);
         if (!/searchCorpus\(/.test(create)) problems.push('src/components/image-create.tsx: does not search on the device (searchCorpus)');
         if (/<textarea\b/.test(text)) problems.push(`${file}: the search box must be a single-line search input`);
+        continue;
+      }
+      if (file.endsWith('components/tx-hash-field.tsx')) {
+        // The balance screen's payment hash (owner, 2026-10-15): sent to our server to look up on Base, never published by us.
+        for (const [what, re] of [['sent to us to look up on Base', /Sent to us to look up on Base/], ['never published', /Never published by us/], ['described to screen readers', /aria-describedby/]] as const)
+          if (!re.test(text)) problems.push(`${file}: the payment hash box must say it is ${what}`);
+        if (/fetch\(|supabase|\/api\//.test(text)) problems.push(`${file}: the payment hash box must not send its text anywhere itself`);
+        if (/<textarea\b/.test(text)) problems.push(`${file}: the payment hash box must be a single-line input`);
         continue;
       }
       for (const m of text.matchAll(/<textarea\b|<input\b(?![^>]*type=["'](?:hidden|checkbox|radio|range|submit|button|file)["'])[^>]*>/g)) {
@@ -885,6 +901,17 @@ add({
     for (const f of walk('adaptations', /(^|\/)recipe\.json$/)) {
       for (const im of (json(f).images ?? []) as { endpoint?: string }[]) if (im.endpoint) endpoints.set(im.endpoint, f);
     }
+    // Closed models (owner, 2026-10-18: allowed when every recipe and label names them): a version's recipe
+    // file (adaptations/<seed>/versions/<n>.json, closed_model.endpoint) and each per-picture recipe marked
+    // closed_model: true (adaptations/**/<id>.recipe.json, model).
+    for (const f of walk('adaptations', /\/versions\/\d+\.json$/)) {
+      const e = (json(f).closed_model as { endpoint?: string } | undefined)?.endpoint;
+      if (e) endpoints.set(e, f);
+    }
+    for (const f of walk('adaptations', /\.recipe\.json$/)) {
+      const r = json(f) as { closed_model?: unknown; model?: unknown };
+      if (r.closed_model === true && typeof r.model === 'string') endpoints.set(r.model, f);
+    }
     // Readers' images (slice 1): the image model's endpoint and the prompt check, as configured.
     endpoints.set(IMAGES.model.endpoint, 'src/lib/config.ts IMAGES.model');
     endpoints.set(IMAGES.guardModel, 'src/lib/config.ts IMAGES.guardModel');
@@ -895,8 +922,9 @@ add({
   run: ({ models, used, endpoints }) => {
     const problems: string[] = [];
     for (const [endpoint, file] of endpoints) {
-      const m = models.find((x: { hosted?: { endpoints?: Record<string, number> } }) => x.hosted?.endpoints && endpoint in x.hosted.endpoints);
+      const m = models.find((x: { hosted?: { endpoints?: Record<string, number | null> } }) => x.hosted?.endpoints && endpoint in x.hosted.endpoints);
       if (!m) problems.push(`hosted endpoint ${endpoint} (used in ${file}) is not on the allowlist`);
+      else if (m.open_weights === false) console.log(`  note: closed model in use: ${m.name ?? m.id} (${m.maker ?? 'maker not recorded'}), ${endpoint}, in ${file}`);
     }
     for (const [repo, file] of used) {
       const m = models.find((x: { repo: string }) => x.repo === repo);

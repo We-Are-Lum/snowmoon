@@ -42,16 +42,41 @@ const nextConfig: NextConfig = {
       // A glossary word's share card (src/app/api/glossary-card) reads the glossary on request.
       './content/snowmoon/glossary.json',
       './config/**',
-      './adaptations/**',
+      // Only the scene docs read at request time (src/lib/adaptations.ts), not the frames and sound
+      // committed beside them (publish step (a)): those would add ~150 MB to every function.
+      './adaptations/*/*.md',
+      './adaptations/*/*.json',
       './node_modules/@fontsource/crimson-pro/files/crimson-pro-latin-*-normal.woff',
       './node_modules/@fontsource/crimson-pro/files/crimson-pro-latin-*-italic.woff',
       './node_modules/@fontsource/dm-mono/files/dm-mono-latin-*-normal.woff',
     ],
+    // Remix's Generate reads the shot (its prompt, plate and cast cards) from the editor's data,
+    // made at build time from committed files (scripts/editor-data.mjs): only those, not the voices.
+    '/api/remix/**': ['./public/editor/*/v*/data.json', './public/editor/*/v*/plates/**', './public/editor/*/v*/cards/**'],
+    // A moment page reads each version's shot (its frame, times and lines) from the same data.
+    '/adaptation/**': ['./public/editor/*/v*/data.json'],
   },
   // The end card's "make your own" link (owner, 2026-10-14): the repository for now; temporary (307),
   // since /make may become a page of its own.
   async redirects() {
     return [{ source: '/make', destination: 'https://github.com/We-Are-Lum/snowmoon', permanent: false }];
+  },
+  // Adaptation pages (docs/proposals/adaptation-urls.md). A folder named `@…` is a parallel-route slot
+  // in the App Router, so the public /@<fname>/… URLs are rewritten to /adaptation/<id>/by/<fname>/….
+  // These run after the app's own pages and files, so no existing route is shadowed; /<id> is digits only.
+  async rewrites() {
+    return [
+      { source: '/@:handle/:id/v/:n', destination: '/adaptation/:id/by/:handle/v/:n' },
+      // A fixed version's own editor and storyboard (its frames and labels, whatever the chosen version is).
+      { source: '/@:handle/:id/v/:n/shot/:shot', destination: '/adaptation/:id/by/:handle/v/:n/shot/:shot' },
+      { source: '/@:handle/:id/v/:n/storyboard', destination: '/adaptation/:id/by/:handle/v/:n/storyboard' },
+      { source: '/@:handle/:id/shot/:shot', destination: '/adaptation/:id/by/:handle/shot/:shot' },
+      // A moment: one shot, every version side by side (owner, 2026-10-19).
+      { source: '/@:handle/:id/m/:shot', destination: '/adaptation/:id/by/:handle/m/:shot' },
+      { source: '/@:handle/:id/storyboard', destination: '/adaptation/:id/by/:handle/storyboard' },
+      { source: '/@:handle/:id', destination: '/adaptation/:id/by/:handle' },
+      { source: '/:id(\\d{1,9})', destination: '/adaptation/:id' },
+    ];
   },
 };
 

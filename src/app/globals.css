@@ -476,7 +476,11 @@ a.provenance { color: var(--muted); }
 .published-field textarea { width: 100%; font: inherit; }
 .consent-overlay { position: fixed; inset: 0; background: var(--scrim); display: flex; align-items: center; justify-content: center; z-index: 100; padding: 16px; }
 .consent-screen { background: var(--paper, #fff); color: var(--ink); max-width: 30em; max-height: 90vh; overflow-y: auto; padding: 20px; border-radius: var(--radius); }
-.consent-actions { display: flex; gap: 8px; margin: 12px 0; }
+/* "I agree" is the big, clear main button, full width, above "Not now" (owner, 2026-10-18). */
+.consent-actions { display: grid; grid-template-columns: 1fr; gap: 8px; margin: 12px 0; }
+.consent-actions button { width: 100%; min-height: 48px; border-radius: var(--radius); cursor: pointer; font-family: var(--label); font-size: var(--text-label); letter-spacing: 0.06em; text-transform: uppercase; }
+.consent-agree { order: -1; border: 0; background: var(--btn); color: var(--btn-ink); }
+.consent-cancel { border: 1px solid var(--rule); background: transparent; color: var(--ink); }
 .consent-error { color: var(--warn); font-size: 13px; }
 .publish-preview { border: 1px solid var(--muted); padding: 12px; margin: 8px 0; }
 

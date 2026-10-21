@@ -64,6 +64,20 @@ attempts, stays fully public in the repository. A proposal for the render
 queue is public: submitting one is publishing it, so it goes through the
 consent screen and the preview. (Owner decisions, Oct 5, 2026.)
 
+**Recorded exception: raw voice takes (owner, 2026-10-13).** When a person
+performs lines that are converted into a character's voice, their raw takes
+are never published. The reason is privacy: a raw recording of a person's
+voice is enough to clone it. The converted line is the published source of
+that line, and its recipe gives the model and revision, the settings, the
+character's reference clip and the sha256 of the raw take, but not the take.
+Conversion runs on the performer's own machine, so the take never leaves it,
+and takes are kept in a private folder outside the repository and outside R2.
+The performer agrees to `own-voice-v1` (`config/consent.json`) first. Every
+performer gets the same terms. Anyone can still re-run the conversion with
+their own voice or another reference clip; they cannot reproduce the exact
+converted line from the recipe alone, which is why the converted line itself
+is published.
+
 **People know their words will be public.** Before a person's first
 contribution that stores their own words (a prompt or a line), a blocking
 screen says: "Public, permanent, GPL-3.0, shown with your Farcaster name."
@@ -120,6 +134,16 @@ person writes them, and each line records its author: `book c<ch>-b<idx>` or
 people's lines, images) and puts the structure under a collapsed "How this was
 built", labelled model-drafted. Image alt text is model-drafted accessibility
 text and begins "AI-generated image:".
+
+**Prompts in scenes (owner, 2026-10-13).** Voice descriptions, the sound line
+for each place, and style texts are the owner's words; until the owner sends
+them they are marked placeholders, and nothing is published with one.
+Per-shot and per-cue prompts (image, motion, sound effect) may be drafted by a
+model, and each recipe labels them model-drafted in `assist`, as image
+prompts are. **DRAFT, for the owner (replaces "Published scene assets use
+open-weight models only"):** Published scene assets may use closed models when
+every recipe and label names the model, its maker, the date and that it is
+closed (owner, 2026-10-18).
 
 **Recorded exception.** The house narration keeps 148 model-drafted spoken
 descriptions of screens, figures and lyric cards. Each is preceded by a tone
@@ -225,7 +249,17 @@ they drafted published text and inputs: the spoken descriptions of screens and
 figures, the pronunciation word lists, the character and location profiles,
 and the image prompts (their instructions are in
 `docs/prompts/008a-agent-prompts.md`). No closed model generated any image or
-audio.
+audio, except the one below.
+
+**DRAFT, for the owner:** GPT Image 2.5 Sunburst (OpenAI), a closed model
+(`config/models.json` `gpt-image-2.5-sunburst`, `open_weights: false`), drew
+every model-drawn picture of Fifteen Days version 2, the GPT cut, on
+2026-10-18, through the Vercel AI Gateway (owner, 2026-10-18: "Chat gpt
+version is so much better. Let's go with that one and change the site to allow
+closed models"). Inputs open, model closed: its prompts, the pictures sent and
+every call's recipe are committed (`adaptations/fifteen-days/versions/2.json`);
+its weights are not published. The version's AI label names it. Version 1, the
+open-weight cut, stays at its own fixed link. `P3b` prints it as a note.
 
 ## 4. No model output is published without a signed-in person's action.
 
@@ -440,6 +474,12 @@ the rules of Minpentai and Dzegoban" among the checks the author made
 **In this app.** Screens and figures show exactly what the source shows,
 either as drawn or through a template that keeps every word. Dzegoban is
 quoted as written. Minpentai boards and maps come from the source's own SVGs.
+
+**Lettering.** Text in an image must match its lettering record exactly. It may be drawn in code, or repainted by the image model from the code-drawn version, and it is checked either way. An in-world screen shown on a device in a
+panel is the book's own screen block, as the reader's template draws it; a cut
+is marked `…` and recorded. (Owner's wording, Oct 5, 2026. Applied first to
+dog-dawn panel 7's versions; the check is extended to every lettered image
+once the owner picks a version.)
 
 **Checked by.**
 - `P8a`: every screen drawn by a default template shows every word of the

@@ -1,0 +1,33 @@
+{
+ "about": "Fifteen Days v7 follow-up: Deluin's grin softened to a closed-mouth smirk, from E70 (Zei seated). DRAFTED prompt.",
+ "out": "images-out/preprod/pass3",
+ "ledger": "images-out/preprod/ledger-s7.json",
+ "cap_usd": 25.0,
+ "style": "",
+ "jobs": [
+  {
+   "id": "cov-cafe-OTS-Z-stern-E73",
+   "shot": "cov-cafe-OTS-Z-stern",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-cafe-OTS-Z-stern-E70.png"
+   ],
+   "prompt": "Change only the face of the tall young man in the long cream knitted tunic at the right end of the table: a dry, sly closed-mouth smirk, one corner of his mouth raised, lips together, no teeth showing, one eyebrow slightly raised, his eyes on the young man in the orange jacket, as if he has just made a deadpan joke. Keep everything else exactly as it is: the young man in the orange jacket seated on his chair at the near side of the table, seen from behind; the woman with pink hair, her face and the glowing menu; the drawing, line work, colours, lighting, camera, framing and crop. Nobody else anywhere. No letters or numbers.",
+   "width": 1344,
+   "height": 752,
+   "seed": 73
+  },
+  {
+   "id": "cov-cafe-OTS-Z-stern-E74",
+   "shot": "cov-cafe-OTS-Z-stern",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-cafe-OTS-Z-stern-E70.png"
+   ],
+   "prompt": "Change only the face of the tall young man in the long cream knitted tunic at the right end of the table: a dry, sly closed-mouth smirk, one corner of his mouth raised, lips together, no teeth showing, one eyebrow slightly raised, his eyes on the young man in the orange jacket, as if he has just made a deadpan joke. Keep everything else exactly as it is: the young man in the orange jacket seated on his chair at the near side of the table, seen from behind; the woman with pink hair, her face and the glowing menu; the drawing, line work, colours, lighting, camera, framing and crop. Nobody else anywhere. No letters or numbers.",
+   "width": 1344,
+   "height": 752,
+   "seed": 74
+  }
+ ]
+}

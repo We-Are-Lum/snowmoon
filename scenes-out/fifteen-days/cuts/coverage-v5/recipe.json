@@ -1,0 +1,3644 @@
+{
+  "about": "The mix of fifteen-days: the timeline resolved against its measured stems, mixed, and normalised in two passes.",
+  "placeholder": true,
+  "timeline": "scenes-out/fifteen-days/cuts/coverage-v5/timeline.json",
+  "timeline_sha256": "e1eee2ca41069c090bc568ad683adee1218a9562d6199c5842045757c2388488",
+  "script": "scripts/mix-scene.py",
+  "commit": "d0f2710c1867e0a6bb6a66fe971d9878932d4ace",
+  "resolved": {
+    "duration_s": 291.365,
+    "video": {
+      "width": 1920,
+      "height": 1080,
+      "fps": 30
+    },
+    "cues": [
+      {
+        "id": "fx-0-0",
+        "track": "foley",
+        "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/fx-0-0.wav",
+        "stem_sha256": "21227a35a7723a1a249b7626644beaeaca8984e4e5178100f4fc64d646fdf60a",
+        "stem_s": 2.6,
+        "start": 0.4,
+        "end": 3.0,
+        "level_db": -24,
+        "fade_in": 0.03,
+        "fade_out": 0.2,
+        "loop": false
+      },
+      {
+        "id": "fx-1-0",
+        "track": "foley",
+        "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/fx-1-0.wav",
+        "stem_sha256": "e3de9f552620a4a38f2e999cf10ee927e6d57be65ba7ba445a66e05fc8fe6858",
+        "stem_s": 1.6,
+        "start": 2.4,
+        "end": 4.0,
+        "level_db": -22,
+        "fade_in": 0.03,
+        "fade_out": 0.2,
+        "loop": false
+      },
+      {
+        "id": "fx-1-1",
+        "track": "foley",
+        "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/fx-1-1.wav",
+        "stem_sha256": "21227a35a7723a1a249b7626644beaeaca8984e4e5178100f4fc64d646fdf60a",
+        "stem_s": 2.6,
+        "start": 3.0,
+        "end": 5.6,
+        "level_db": -26,
+        "fade_in": 0.03,
+        "fade_out": 0.2,
+        "loop": false
+      },
+      {
+        "id": "fx-2-0",
+        "track": "foley",
+        "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/fx-2-0.wav",
+        "stem_sha256": "e3de9f552620a4a38f2e999cf10ee927e6d57be65ba7ba445a66e05fc8fe6858",
+        "stem_s": 1.6,
+        "start": 4.1,
+        "end": 5.7,
+        "level_db": -25,
+        "fade_in": 0.03,
+        "fade_out": 0.2,
+        "loop": false
+      },
+      {
+        "id": "fx-3-0",
+        "track": "foley",
+        "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/fx-3-0.wav",
+        "stem_sha256": "1d5204d342f3163f7b05fd7c1f6fc823c3ec7bff3b3aca05cdd996530faf4b65",
+        "stem_s": 2.4,
+        "start": 5.2,
+        "end": 7.6,
+        "level_db": -23,
+        "fade_in": 0.03,
+        "fade_out": 0.2,
+        "loop": false
+      },
+      {
+        "id": "fx-4-0",
+        "track": "foley",
+        "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/fx-4-0.wav",
+        "stem_sha256": "09ff98617448c608121a6063ab053a05d179297a499eaf927e723fe8edbd5a53",
+        "stem_s": 3.0,
+        "start": 6.2,
+        "end": 9.2,
+        "level_db": -20,
+        "fade_in": 0.03,
+        "fade_out": 0.2,
+        "loop": false
+      },
+      {
+        "id": "b1-1",
+        "track": "voice",
+        "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b1-1.wav",
+        "stem_sha256": "6412559024abf238bbb38fcc638985ea03e2f80e0f07be79d05dd1ddcbb7b7a8",
+        "stem_s": 4.498,
+        "start": 7.7,
+        "end": 12.198,
+        "level_db": 0,
+        "fade_in": 0,
+        "fade_out": 0,
+        "loop": false
+      },
+      {
+        "id": "b1-2",
+        "track": "voice",
+        "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b1-2.wav",
+        "stem_sha256": "eea2113bdefe287bf711c393fed615e2b095a9fb162a3ba584d16c5e85bb49b2",
+        "stem_s": 3.261,
+        "start": 12.318,
+        "end": 15.579,
+        "level_db": 0,
+        "fade_in": 0,
+        "fade_out": 0,
+        "loop": false
+      },
+      {
+        "id": "b1-3",
+        "track": "voice",
+        "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b1-3.wav",
+        "stem_sha256": "cca931d242d7cc50294ef5a2ca7a6fc9900125266f2556d3d1dcb3eccdff796d",
+        "stem_s": 2.651,
+        "start": 15.699,
+        "end": 18.35,
+        "level_db": 0,
+        "fade_in": 0,
+        "fade_out": 0,
+        "loop": false
+      },
+      {
+        "id": "fx-8-0",
+        "track": "foley",
+        "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/fx-8-0.wav",
+        "stem_sha256": "1d5204d342f3163f7b05fd7c1f6fc823c3ec7bff3b3aca05cdd996530faf4b65",
+        "stem_s": 2.4,
+        "start": 19.0,
+        "end": 21.4,
+        "level_db": -28,
+        "fade_in": 0.03,
+        "fade_out": 0.2,
+        "loop": false
+      },
+      {
+        "id": "fx-9-0",
+        "track": "foley",
+        "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/fx-9-0.wav",
+        "stem_sha256": "e3de9f552620a4a38f2e999cf10ee927e6d57be65ba7ba445a66e05fc8fe6858",
+        "stem_s": 1.6,
+        "start": 20.4,
+        "end": 22.0,
+        "level_db": -30,
+        "fade_in": 0.03,
+        "fade_out": 0.2,
+        "loop": false
+      },
+      {
+        "id": "b1-4",
+        "track": "voice",
+        "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b1-4.wav",
+        "stem_sha256": "c29471bdedb0d7c3dfaad5f647ccdab2cca0e205cd57b2c543bd706ae5083fcf",
+        "stem_s": 1.927,
+        "start": 21.4,
+        "end": 23.327,
+        "level_db": 0,
+        "fade_in": 0,
+        "fade_out": 0,
+        "loop": false
+      },
+      {
+        "id": "b1-5",
+        "track": "voice",
+        "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b1-5.wav",
+        "stem_sha256": "37b94f092a655e8e6a7ed1fb942893002f972364ff6274936e13db8c16d3b481",
+        "stem_s": 4.581,
+        "start": 23.447,
+        "end": 28.028,
+        "level_db": 0,
+        "fade_in": 0,
+        "fade_out": 0,
+        "loop": false
+      },
+      {
+        "id": "fx-12-0",
+        "track": "foley",
+        "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/fx-12-0.wav",
+        "stem_sha256": "e3de9f552620a4a38f2e999cf10ee927e6d57be65ba7ba445a66e05fc8fe6858",
+        "stem_s": 1.6,
+        "start": 28.578,
+        "end": 30.178,
+        "level_db": -32,
+        "fade_in": 0.03,
+        "fade_out": 0.2,
+        "loop": false
+      },
+      {
+        "id": "b1-6",
+        "track": "voice",
+        "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b1-6.wav",
+        "stem_sha256": "54fb81265aca46166069bea14ffb16ff45ef10f154eba0c519f83276f009e4f2",
+        "stem_s": 5.937,
+        "start": 29.578,
+        "end": 35.515,
+        "level_db": 0,
+        "fade_in": 0,
+        "fade_out": 0,
+        "loop": false
+      },
+      {
+        "id": "fx-13-0",
+        "track": "foley",
+        "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/fx-13-0.wav",
+        "stem_sha256": "fe21b1eade5c8ceda0e10c1985781e0651207430accf0971e293297633b30235",
+        "stem_s": 3.2,
+        "start": 30.478,
+        "end": 33.678,
+        "level_db": -28,
+        "fade_in": 0.03,
+        "fade_out": 0.2,
+        "loop": false
+      },
+      {
+        "id": "fx-14-0",
+        "track": "foley",
+        "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/fx-14-0.wav",
+        "stem_sha256": "35753eca1e4fc1bc282b75dfc011da1ae7e04709035d373c5d6f9e4ec49d3563",
+        "stem_s": 4.0,
+        "start": 35.765,
+        "end": 39.765,
+        "level_db": -16,
+        "fade_in": 0.03,
+        "fade_out": 0.2,
+        "loop": false
+      },
+      {
+        "id": "fx-14-1",
+        "track": "foley",
+        "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/fx-14-1.wav",
+        "stem_sha256": "1d5204d342f3163f7b05fd7c1f6fc823c3ec7bff3b3aca05cdd996530faf4b65",
+        "stem_s": 2.4,
+        "start": 36.165,
+        "end": 38.565,
+        "level_db": -22,
+        "fade_in": 0.03,
+        "fade_out": 0.2,
+        "loop": false
+      },
+      {
+        "id": "fx-16-0",
+        "track": "foley",
+        "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/fx-16-0.wav",
+        "stem_sha256": "4a292c9e789a183cf5ab9bfd12bc3c8037fba78672cbc82a23018c607667f707",
+        "stem_s": 2.2,
+        "start": 38.665,
+        "end": 40.865,
+        "level_db": -18,
+        "fade_in": 0.03,
+        "fade_out": 0.2,
+        "loop": false
+      },
+      {
+        "id": "b2-1",
+        "track": "voice",
+        "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b2-1.wav",
+        "stem_sha256": "45b608acec95a9051a04de1ec777fb9d3a8f67e77745ec9a195e8fded9743175",
+        "stem_s": 1.162,
+        "start": 40.165,
+        "end": 41.327,
+        "level_db": 0,
+        "fade_in": 0,
+        "fade_out": 0,
+        "loop": false
+      },
+      {
+        "id": "b2-2",
+        "track": "voice",
+        "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b2-2.wav",
+        "stem_sha256": "f273637571bd96c399adcec4584b5f02ec3e813cd4bf4e584293d7ba9333e9da",
+        "stem_s": 8.062,
+        "start": 41.447,
+        "end": 49.509,
+        "level_db": 0,
+        "fade_in": 0,
+        "fade_out": 0,
+        "loop": false
+      },
+      {
+        "id": "b2-3",
+        "track": "voice",
+        "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b2-3.wav",
+        "stem_sha256": "91e4e6dcc160859f9d62821f19180e8256a064499ab7437607108004104ea6c1",
+        "stem_s": 8.84,
+        "start": 49.629,
+        "end": 58.469,
+        "level_db": 0,
+        "fade_in": 0,
+        "fade_out": 0,
+        "loop": false
+      },
+      {
+        "id": "b2-4",
+        "track": "voice",
+        "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b2-4.wav",
+        "stem_sha256": "ae5b3421e415bad366c807b88bcde6e73d0c847b127e03312ccf675affb313fc",
+        "stem_s": 9.052,
+        "start": 58.819,
+        "end": 67.871,
+        "level_db": 0,
+        "fade_in": 0,
+        "fade_out": 0,
+        "loop": false
+      },
+      {
+        "id": "b2-5",
+        "track": "voice",
+        "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b2-5.wav",
+        "stem_sha256": "6ac9d01f79509c480fe54f29ae5a262abfed16b0e4bd65ef0455b19f6b999c29",
+        "stem_s": 2.016,
+        "start": 67.991,
+        "end": 70.007,
+        "level_db": 0,
+        "fade_in": 0,
+        "fade_out": 0,
+        "loop": false
+      },
+      {
+        "id": "b2-6",
+        "track": "voice",
+        "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b2-6.wav",
+        "stem_sha256": "6c1be4c38dabfb2e95e24c8e990015eaccc05d30e9dd2dbf751bf2ba2bfbbeca",
+        "stem_s": 6.281,
+        "start": 70.126,
+        "end": 76.407,
+        "level_db": 0,
+        "fade_in": 0,
+        "fade_out": 0,
+        "loop": false
+      },
+      {
+        "id": "b2-7",
+        "track": "voice",
+        "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b2-7.wav",
+        "stem_sha256": "433169e879e15f40af24218ed4793160e31fa86c3fd22168e152b12cc394ff77",
+        "stem_s": 4.485,
+        "start": 76.527,
+        "end": 81.012,
+        "level_db": 0,
+        "fade_in": 0,
+        "fade_out": 0,
+        "loop": false
+      },
+      {
+        "id": "b2-8",
+        "track": "voice",
+        "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b2-8.wav",
+        "stem_sha256": "b1ffa4087f54046de9e103da00a0c58b4fde76be2169a62c29156a936b289355",
+        "stem_s": 3.561,
+        "start": 82.312,
+        "end": 85.873,
+        "level_db": 0,
+        "fade_in": 0,
+        "fade_out": 0,
+        "loop": false
+      },
+      {
+        "id": "b2-9",
+        "track": "voice",
+        "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b2-9.wav",
+        "stem_sha256": "eee830dc67b09dc2153911aba3993d7a8eefd2d6df2a68d88fe5c16eac9faf68",
+        "stem_s": 3.438,
+        "start": 85.993,
+        "end": 89.431,
+        "level_db": 0,
+        "fade_in": 0,
+        "fade_out": 0,
+        "loop": false
+      },
+      {
+        "id": "b2-10",
+        "track": "voice",
+        "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b2-10.wav",
+        "stem_sha256": "cac6383d7b626566a7c7085689f41cbaf1f6d0281afd63f7492e1a4db937e438",
+        "stem_s": 5.118,
+        "start": 89.551,
+        "end": 94.669,
+        "level_db": 0,
+        "fade_in": 0,
+        "fade_out": 0,
+        "loop": false
+      },
+      {
+        "id": "b2-11",
+        "track": "voice",
+        "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b2-11.wav",
+        "stem_sha256": "1492698acfb5f69b6c10e9cc1b6da1a4222da65ff23ed33e526317b55abc1dc8",
+        "stem_s": 2.464,
+        "start": 94.789,
+        "end": 97.253,
+        "level_db": 0,
+        "fade_in": 0,
+        "fade_out": 0,
+        "loop": false
+      },
+      {
+        "id": "b2-12",
+        "track": "voice",
+        "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b2-12.wav",
+        "stem_sha256": "2327f166c4808ca35e6bc10261ace852a8a7ea689d7a4d38037b72f61750a309",
+        "stem_s": 4.064,
+        "start": 97.373,
+        "end": 101.437,
+        "level_db": 0,
+        "fade_in": 0,
+        "fade_out": 0,
+        "loop": false
+      },
+      {
+        "id": "b3-1",
+        "track": "voice",
+        "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b3-1.wav",
+        "stem_sha256": "b5498e0f068da467aed70ed928ac33df3757ea24e51c799cb1a81175834c8241",
+        "stem_s": 4.975,
+        "start": 101.537,
+        "end": 106.512,
+        "level_db": 0,
+        "fade_in": 0,
+        "fade_out": 0,
+        "loop": false
+      },
+      {
+        "id": "laugh",
+        "track": "voice",
+        "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/laugh.wav",
+        "stem_sha256": "2b6a97856503bd9c04a42d2fe1c0d8dbb6702707dbcdb8e084dcb735cc0e2b92",
+        "stem_s": 3.774,
+        "start": 101.137,
+        "end": 104.911,
+        "level_db": -5,
+        "fade_in": 0,
+        "fade_out": 0,
+        "loop": false
+      },
+      {
+        "id": "b3-2",
+        "track": "voice",
+        "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b3-2.wav",
+        "stem_sha256": "230d9c7455beb3236e2ac99c058a169d91a506616d6ebbd92cf8f68769cb9cc3",
+        "stem_s": 2.825,
+        "start": 106.631,
+        "end": 109.456,
+        "level_db": 0,
+        "fade_in": 0,
+        "fade_out": 0,
+        "loop": false
+      },
+      {
+        "id": "b3-3",
+        "track": "voice",
+        "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b3-3.wav",
+        "stem_sha256": "3539cda3acc5a50558b1ae402adc5cce77e7375117c20a8ad5460d8631610268",
+        "stem_s": 1.703,
+        "start": 109.576,
+        "end": 111.279,
+        "level_db": 0,
+        "fade_in": 0,
+        "fade_out": 0,
+        "loop": false
+      },
+      {
+        "id": "fx-32-0",
+        "track": "foley",
+        "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/fx-32-0.wav",
+        "stem_sha256": "66fdeb1c04bc07a14531bdac4dc2969bb914f10da886b50344eb8ddee73d821f",
+        "stem_s": 1.5,
+        "start": 109.396,
+        "end": 110.896,
+        "level_db": -20,
+        "fade_in": 0.03,
+        "fade_out": 0.2,
+        "loop": false
+      },
+      {
+        "id": "b3-4",
+        "track": "voice",
+        "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b3-4.wav",
+        "stem_sha256": "2217e929ae637a695af62e89d4a73b8664b77d99d0d5899059f92927803f3f45",
+        "stem_s": 0.69,
+        "start": 111.4,
+        "end": 112.09,
+        "level_db": 0,
+        "fade_in": 0,
+        "fade_out": 0,
+        "loop": false
+      },
+      {
+        "id": "b3-5",
+        "track": "voice",
+        "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b3-5.wav",
+        "stem_sha256": "cb84329d2b87af5dd0675a5c5480ec6b3aa25b4587f37e666f9880a3633618ef",
+        "stem_s": 5.993,
+        "start": 114.44,
+        "end": 120.433,
+        "level_db": 0,
+        "fade_in": 0,
+        "fade_out": 0,
+        "loop": false
+      },
+      {
+        "id": "fx-35-0",
+        "track": "foley",
+        "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/fx-35-0.wav",
+        "stem_sha256": "20ae765031110a0dc1b05f17ad1deaa4a74e71d832add7851e731346a08e79f2",
+        "stem_s": 0.5,
+        "start": 115.54,
+        "end": 116.04,
+        "level_db": -24,
+        "fade_in": 0.03,
+        "fade_out": 0.2,
+        "loop": false
+      },
+      {
+        "id": "b3-6",
+        "track": "voice",
+        "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b3-6.wav",
+        "stem_sha256": "1cd0c463e1d370ca742cb6a6e62308c28e0221392ad8e4e8879e3101574a9d91",
+        "stem_s": 1.767,
+        "start": 121.783,
+        "end": 123.55,
+        "level_db": 0,
+        "fade_in": 0,
+        "fade_out": 0,
+        "loop": false
+      },
+      {
+        "id": "b3-7",
+        "track": "voice",
+        "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b3-7.wav",
+        "stem_sha256": "0a07d53cb5a1cf4535a414f6f00c89d3429ee4081496093e1e02edac32c93515",
+        "stem_s": 4.326,
+        "start": 123.67,
+        "end": 127.996,
+        "level_db": 0,
+        "fade_in": 0,
+        "fade_out": 0,
+        "loop": false
+      },
+      {
+        "id": "b3-8",
+        "track": "voice",
+        "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b3-8.wav",
+        "stem_sha256": "6a04d7e330b3da5fc0c11af591490477166668e8b9f8c1114bf44cf446fd7c7d",
+        "stem_s": 7.997,
+        "start": 128.116,
+        "end": 136.113,
+        "level_db": 0,
+        "fade_in": 0,
+        "fade_out": 0,
+        "loop": false
+      },
+      {
+        "id": "fx-39-0",
+        "track": "foley",
+        "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/fx-39-0.wav",
+        "stem_sha256": "c0adbc788b95afc8c43565ee3a3b9349dbb0e40ff495166159151c8a008a805f",
+        "stem_s": 0.5,
+        "start": 130.036,
+        "end": 130.536,
+        "level_db": -24,
+        "fade_in": 0.03,
+        "fade_out": 0.2,
+        "loop": false
+      },
+      {
+        "id": "b3-9",
+        "track": "voice",
+        "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b3-9.wav",
+        "stem_sha256": "8f9e1d7f09a515181a88fac2973c419ea042d55c108b6358f21201827946ba04",
+        "stem_s": 13.949,
+        "start": 136.233,
+        "end": 150.182,
+        "level_db": 0,
+        "fade_in": 0,
+        "fade_out": 0,
+        "loop": false
+      },
+      {
+        "id": "fx-40-0",
+        "track": "foley",
+        "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/fx-40-0.wav",
+        "stem_sha256": "8ff5c3d5b9361a9a8091839206a3b6290476f57e5641d6b9c07326ab3d9afd75",
+        "stem_s": 0.5,
+        "start": 137.353,
+        "end": 137.853,
+        "level_db": -24,
+        "fade_in": 0.03,
+        "fade_out": 0.2,
+        "loop": false
+      },
+      {
+        "id": "b3-10",
+        "track": "voice",
+        "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b3-10.wav",
+        "stem_sha256": "f2b6a26a3db70f350ba7d2949ed5e473ffa82bb20428772c08a59d0e4781e9aa",
+        "stem_s": 1.565,
+        "start": 150.302,
+        "end": 151.867,
+        "level_db": 0,
+        "fade_in": 0,
+        "fade_out": 0,
+        "loop": false
+      },
+      {
+        "id": "b3-11",
+        "track": "voice",
+        "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b3-11.wav",
+        "stem_sha256": "3d450b875e00521c315e5b1c4f0a4dcb2b450d37862172913b3fd4348fd05396",
+        "stem_s": 4.818,
+        "start": 151.986,
+        "end": 156.804,
+        "level_db": 0,
+        "fade_in": 0,
+        "fade_out": 0,
+        "loop": false
+      },
+      {
+        "id": "b3-12",
+        "track": "voice",
+        "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b3-12.wav",
+        "stem_sha256": "42818a5ed0f17c156391dcb0ab4837b21ad708e41efb017cb48e1b6d22fd57ec",
+        "stem_s": 3.392,
+        "start": 156.924,
+        "end": 160.316,
+        "level_db": 0,
+        "fade_in": 0,
+        "fade_out": 0,
+        "loop": false
+      },
+      {
+        "id": "b3-13",
+        "track": "voice",
+        "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b3-13.wav",
+        "stem_sha256": "c0881b018c6d9a404673b6d026c674fc3ffa54afe4170c95c9ba9e858c4c3e7a",
+        "stem_s": 9.286,
+        "start": 160.436,
+        "end": 169.722,
+        "level_db": 0,
+        "fade_in": 0,
+        "fade_out": 0,
+        "loop": false
+      },
+      {
+        "id": "fx-45-0",
+        "track": "foley",
+        "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/fx-45-0.wav",
+        "stem_sha256": "0e0bafaf6f65d033d04d5de45279b5488b162adc286d38f82fd89e65c144e098",
+        "stem_s": 2.0,
+        "start": 169.972,
+        "end": 171.972,
+        "level_db": -22,
+        "fade_in": 0.03,
+        "fade_out": 0.2,
+        "loop": false
+      },
+      {
+        "id": "b4-1",
+        "track": "voice",
+        "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b4-1.wav",
+        "stem_sha256": "f051148ad3a9a98598ba5648d4da523135360664881b9cdd1b752528eb65d61a",
+        "stem_s": 12.346,
+        "start": 171.372,
+        "end": 183.718,
+        "level_db": 0,
+        "fade_in": 0,
+        "fade_out": 0,
+        "loop": false
+      },
+      {
+        "id": "b4-2",
+        "track": "voice",
+        "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b4-2.wav",
+        "stem_sha256": "a4b7b29aefa06d301fd6d68cdbc0d2f8d26d2e0309b556d46d46c54e8e8d37b8",
+        "stem_s": 11.153,
+        "start": 183.838,
+        "end": 194.991,
+        "level_db": 0,
+        "fade_in": 0,
+        "fade_out": 0,
+        "loop": false
+      },
+      {
+        "id": "b4-3",
+        "track": "voice",
+        "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b4-3.wav",
+        "stem_sha256": "b67d8351982664c16e70ee4d300f4bd39914b7f74e5cea3548a154934177a19e",
+        "stem_s": 16.755,
+        "start": 195.111,
+        "end": 211.866,
+        "level_db": 0,
+        "fade_in": 0,
+        "fade_out": 0,
+        "loop": false
+      },
+      {
+        "id": "b4-4",
+        "track": "voice",
+        "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b4-4.wav",
+        "stem_sha256": "24a729e9f38ab25e815e9cfd0c6daa4db2565f8d486f0d3972b443c79c487086",
+        "stem_s": 2.733,
+        "start": 211.986,
+        "end": 214.719,
+        "level_db": 0,
+        "fade_in": 0,
+        "fade_out": 0,
+        "loop": false
+      },
+      {
+        "id": "b4-5",
+        "track": "voice",
+        "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b4-5.wav",
+        "stem_sha256": "7dc881c9a9bd2718fa2a6e417679922d9efe16253122944276afb156e96c6017",
+        "stem_s": 5.493,
+        "start": 214.84,
+        "end": 220.333,
+        "level_db": 0,
+        "fade_in": 0,
+        "fade_out": 0,
+        "loop": false
+      },
+      {
+        "id": "b5-1",
+        "track": "voice",
+        "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b5-1.wav",
+        "stem_sha256": "500e609d6714b1154e8456bd0fa3b880ad3e90fdc75be48a918aaf2d91b73de9",
+        "stem_s": 8.634,
+        "start": 225.283,
+        "end": 233.917,
+        "level_db": 0,
+        "fade_in": 0,
+        "fade_out": 0,
+        "loop": false
+      },
+      {
+        "id": "b5-2",
+        "track": "voice",
+        "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b5-2.wav",
+        "stem_sha256": "abf2bd11b4ccfd232feb74a13086ce7723e10c3fb1458272bf174f10cd3217d2",
+        "stem_s": 8.251,
+        "start": 234.037,
+        "end": 242.288,
+        "level_db": 0,
+        "fade_in": 0,
+        "fade_out": 0,
+        "loop": false
+      },
+      {
+        "id": "b5-3",
+        "track": "voice",
+        "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b5-3.wav",
+        "stem_sha256": "1c3be5dd9e8b7ddccf6dbcabf6272d0b498df8fe00778f537656bc553cbc5cd1",
+        "stem_s": 5.031,
+        "start": 242.408,
+        "end": 247.439,
+        "level_db": 0,
+        "fade_in": 0,
+        "fade_out": 0,
+        "loop": false
+      },
+      {
+        "id": "b5-4",
+        "track": "voice",
+        "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b5-4.wav",
+        "stem_sha256": "0ca0fb5e97e74e5c5cecae05dfd3ac30a64e5c25fa54e6532761935be92c25e0",
+        "stem_s": 2.183,
+        "start": 248.79,
+        "end": 250.973,
+        "level_db": 0,
+        "fade_in": 0,
+        "fade_out": 0,
+        "loop": false
+      },
+      {
+        "id": "b5-5",
+        "track": "voice",
+        "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b5-5.wav",
+        "stem_sha256": "ecafbb27adfa1f57b68ba5db43083bf4656d36f69a43779497af6cc1449ee33e",
+        "stem_s": 4.727,
+        "start": 251.093,
+        "end": 255.82,
+        "level_db": 0,
+        "fade_in": 0,
+        "fade_out": 0,
+        "loop": false
+      },
+      {
+        "id": "dreadnaught",
+        "track": "music",
+        "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/dreadnaught-loud.wav",
+        "stem_sha256": "50cb60513577177e4bab80b65da723bbf747b2a6ee44c12316cb67b19f420062",
+        "stem_s": 3.927,
+        "start": 252.193,
+        "end": 256.12,
+        "level_db": -16,
+        "fade_in": 0.08,
+        "fade_out": 0.25,
+        "loop": false
+      },
+      {
+        "id": "b6-1",
+        "track": "voice",
+        "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/b6-1.wav",
+        "stem_sha256": "a6e6c3eccc1e58b0acd7a226e89db8b15985ac97f88ad5d06d79760e84fd33cf",
+        "stem_s": 1.446,
+        "start": 256.52,
+        "end": 257.966,
+        "level_db": 0,
+        "fade_in": 0,
+        "fade_out": 0,
+        "loop": false
+      },
+      {
+        "id": "fx-67-0",
+        "track": "foley",
+        "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/fx-67-0.wav",
+        "stem_sha256": "7be090a886b2c967595fd2728b17b78df36b4e4dd0d4dbeca050dd62fd9306db",
+        "stem_s": 1.2,
+        "start": 271.665,
+        "end": 272.865,
+        "level_db": -19,
+        "fade_in": 0.03,
+        "fade_out": 0.2,
+        "loop": false
+      },
+      {
+        "id": "fx-69-0",
+        "track": "foley",
+        "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/fx-69-0.wav",
+        "stem_sha256": "4fc31d90e2627b513785ad99ee2e53c132fddfef18497169c653e5fd9578fe7c",
+        "stem_s": 1.5,
+        "start": 273.965,
+        "end": 275.465,
+        "level_db": -18,
+        "fade_in": 0.03,
+        "fade_out": 0.2,
+        "loop": false
+      },
+      {
+        "id": "fx-72-0",
+        "track": "foley",
+        "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/fx-72-0.wav",
+        "stem_sha256": "9f43516e9ffd8dd15a5e776ae8bb17c66bffd8b9eb5ac3217b256e0a088cdcf2",
+        "stem_s": 1.5,
+        "start": 280.865,
+        "end": 282.365,
+        "level_db": -18,
+        "fade_in": 0.03,
+        "fade_out": 0.2,
+        "loop": false
+      },
+      {
+        "id": "bed-0",
+        "track": "bed",
+        "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/bed-0.wav",
+        "stem_sha256": "dd0632bf424d0e46f9a805ee6eaae7719d5117299843ae42357172119f960988",
+        "stem_s": 174.933,
+        "start": 0.0,
+        "end": 39.165,
+        "level_db": -22,
+        "fade_in": 1.0,
+        "fade_out": 1.0,
+        "loop": true
+      },
+      {
+        "id": "bed-1",
+        "track": "bed",
+        "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/bed-1.wav",
+        "stem_sha256": "0bbca8b6de730de0218ddb1da3985cc65b5e7f7715f895e027412179d2582fc8",
+        "stem_s": 109.444,
+        "start": 38.165,
+        "end": 101.937,
+        "level_db": -26,
+        "fade_in": 1.0,
+        "fade_out": 1.0,
+        "loop": true
+      },
+      {
+        "id": "bed-2",
+        "track": "bed",
+        "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/bed-2.wav",
+        "stem_sha256": "8fac0b9d343bf6603468c32720a2083220b85507dd87c7125c412a7e90f322fd",
+        "stem_s": 147.048,
+        "start": 100.937,
+        "end": 256.32,
+        "level_db": -19,
+        "fade_in": 1.0,
+        "fade_out": 1.0,
+        "loop": true
+      },
+      {
+        "id": "bed-3",
+        "track": "bed",
+        "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/bed-3.wav",
+        "stem_sha256": "ad9d137ce16299c50d26f6206ad50f64fd7de16616b17c6344819bbfd4b334ab",
+        "stem_s": 215.637,
+        "start": 255.32,
+        "end": 261.315,
+        "level_db": -26,
+        "fade_in": 1.0,
+        "fade_out": 1.0,
+        "loop": true
+      },
+      {
+        "id": "bed-4",
+        "track": "bed",
+        "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/bed-4.wav",
+        "stem_sha256": "8fac0b9d343bf6603468c32720a2083220b85507dd87c7125c412a7e90f322fd",
+        "stem_s": 147.048,
+        "start": 260.315,
+        "end": 265.315,
+        "level_db": -19,
+        "fade_in": 1.0,
+        "fade_out": 1.0,
+        "loop": true
+      },
+      {
+        "id": "bed-5",
+        "track": "bed",
+        "stem": "scenes-out/fifteen-days/cuts/coverage-v5/stems/bed-5.wav",
+        "stem_sha256": "c7dc94cce5973ec4671730318939d022d156e8f3640f0270ac222f8a047b854a",
+        "stem_s": 137.664,
+        "start": 265.565,
+        "end": 288.065,
+        "level_db": -20,
+        "fade_in": 1.0,
+        "fade_out": 1.0,
+        "loop": true
+      }
+    ],
+    "shots": [
+      {
+        "id": "0-EST",
+        "frame": "cov-game-EST",
+        "image": "scenes-out/fifteen-days/cuts/coverage-v5/lettered-cov-game-EST.png",
+        "picture": "reused (approved earlier)",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "66c115e2365224ae1ab6cb08e625e6c720eec0fa848ac2568504e0ecc4559ec2",
+        "start": 0.0,
+        "end": 2.2,
+        "image_sha256_now": "66c115e2365224ae1ab6cb08e625e6c720eec0fa848ac2568504e0ecc4559ec2"
+      },
+      {
+        "id": "1-FLOOR",
+        "frame": "cov-game-FLOOR-live",
+        "image": "images-out/preprod/pass3/H02-B2.png",
+        "picture": "reused (approved earlier)",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "ecc280db1f1db9e370b02688d9c6d18d670df407fe9c97e68ac38c7ce8e78f8f",
+        "start": 2.2,
+        "end": 3.6,
+        "image_sha256_now": "ecc280db1f1db9e370b02688d9c6d18d670df407fe9c97e68ac38c7ce8e78f8f"
+      },
+      {
+        "id": "2-PIT-D",
+        "frame": "cov-game-PIT-D-playing",
+        "image": "images-out/preprod/pass3/cov-game-PIT-D-playing-K7.png",
+        "picture": "picked",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "fc4cc0b26ab8062e16d73d734def5ccca515f2138c3fd71b752db78a464b9e29",
+        "start": 3.6,
+        "end": 4.9,
+        "image_sha256_now": "fc4cc0b26ab8062e16d73d734def5ccca515f2138c3fd71b752db78a464b9e29"
+      },
+      {
+        "id": "3-PIT-K",
+        "frame": "cov-game-PIT-K",
+        "image": "images-out/preprod/pass3/H05-K6.png",
+        "picture": "reused (approved earlier)",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "18c16dc35d7290f99f0b0679f798a291ffe638ee955ef19892312055851bbfdd",
+        "start": 4.9,
+        "end": 6.2,
+        "image_sha256_now": "18c16dc35d7290f99f0b0679f798a291ffe638ee955ef19892312055851bbfdd"
+      },
+      {
+        "id": "4-SCREEN",
+        "frame": "cov-game-SCREEN-face",
+        "image": "images-out/preprod/pass3/cov-game-SCREEN-face-E18.png",
+        "picture": "picked",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "5b6770471fd047d25ee6d35d75afbd5f445d04af72324c9f235dd4c7726c4e92",
+        "start": 6.2,
+        "end": 7.6,
+        "image_sha256_now": "5b6770471fd047d25ee6d35d75afbd5f445d04af72324c9f235dd4c7726c4e92"
+      },
+      {
+        "id": "5-b1-1",
+        "frame": "cov-overlook-MASTER-watch",
+        "image": "images-out/preprod/pass3/cov-overlook-MASTER-watch-K9.png",
+        "picture": "picked",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "6f35ce0506d92c14cfae7e797586d7c69884f001057bc5b19c34a19550981997",
+        "start": 7.6,
+        "end": 12.438,
+        "image_sha256_now": "6f35ce0506d92c14cfae7e797586d7c69884f001057bc5b19c34a19550981997"
+      },
+      {
+        "id": "6-b1-2",
+        "frame": "cov-overlook-OTS-Z-dry",
+        "image": "images-out/preprod/pass3/cov-overlook-OTS-Z-dry-K7.png",
+        "picture": "picked",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "cff7d9ddc74ebc183e45fd2908e8e2e8d3ec9db5721be33820f1cdebc9d46322",
+        "start": 12.438,
+        "end": 15.699,
+        "image_sha256_now": "cff7d9ddc74ebc183e45fd2908e8e2e8d3ec9db5721be33820f1cdebc9d46322"
+      },
+      {
+        "id": "7-b1-3",
+        "frame": "cov-overlook-OTS-Z-shrug",
+        "image": "images-out/preprod/pass3/cov-overlook-OTS-Z-shrug-E16.png",
+        "picture": "picked",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "ca49f7ec1874ef1bca072b17419c0417aeb03b488731d8feedf717966a4ac7f5",
+        "start": 15.699,
+        "end": 18.6,
+        "image_sha256_now": "ca49f7ec1874ef1bca072b17419c0417aeb03b488731d8feedf717966a4ac7f5"
+      },
+      {
+        "id": "8-POV",
+        "frame": "cov-overlook-POV",
+        "image": "images-out/preprod/pass3/G08-K2.png",
+        "picture": "reused (approved earlier)",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "dc4856b6d2eaff7f713e354f76b4675cc6f4a1ca7d20a8150233cf657a0c1218",
+        "start": 18.6,
+        "end": 20.1,
+        "image_sha256_now": "dc4856b6d2eaff7f713e354f76b4675cc6f4a1ca7d20a8150233cf657a0c1218"
+      },
+      {
+        "id": "9-game/PIT-D",
+        "frame": "cov-game-PIT-D-playing",
+        "image": "images-out/preprod/pass3/cov-game-PIT-D-playing-K7.png",
+        "picture": "picked",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "fc4cc0b26ab8062e16d73d734def5ccca515f2138c3fd71b752db78a464b9e29",
+        "start": 20.1,
+        "end": 21.3,
+        "image_sha256_now": "fc4cc0b26ab8062e16d73d734def5ccca515f2138c3fd71b752db78a464b9e29"
+      },
+      {
+        "id": "10-b1-4",
+        "frame": "cov-overlook-MASTER-watch",
+        "image": "images-out/preprod/pass3/cov-overlook-MASTER-watch-K9.png",
+        "picture": "picked",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "6f35ce0506d92c14cfae7e797586d7c69884f001057bc5b19c34a19550981997",
+        "start": 21.3,
+        "end": 23.567,
+        "image_sha256_now": "6f35ce0506d92c14cfae7e797586d7c69884f001057bc5b19c34a19550981997"
+      },
+      {
+        "id": "11-b1-5",
+        "frame": "cov-overlook-OTS-Z-wry",
+        "image": "images-out/preprod/pass3/cov-overlook-OTS-Z-wry-E16.png",
+        "picture": "picked",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "571d19aa4592d71bc83829cf6601a536fb5c638f7e311591b3d7229be8f44918",
+        "start": 23.567,
+        "end": 28.278,
+        "image_sha256_now": "571d19aa4592d71bc83829cf6601a536fb5c638f7e311591b3d7229be8f44918"
+      },
+      {
+        "id": "12-MASTER",
+        "frame": "cov-overlook-MASTER-lean",
+        "image": "images-out/preprod/pass3/cov-overlook-MASTER-lean-K8.png",
+        "picture": "picked",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "1612b1239f84c74dfba395404d6fac1281e21b8e011d8e52eb65e68b36c1d101",
+        "start": 28.278,
+        "end": 29.478,
+        "image_sha256_now": "1612b1239f84c74dfba395404d6fac1281e21b8e011d8e52eb65e68b36c1d101"
+      },
+      {
+        "id": "13-b1-6",
+        "frame": "cov-overlook-CU-B-toast",
+        "image": "images-out/preprod/pass3/cov-overlook-CU-B-toast-K10.png",
+        "picture": "picked",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "be77d18c06e3a707abd5ec5b79e7595ffcea8ca20569e9fd758e6ff82ae7f2c7",
+        "start": 29.478,
+        "end": 35.765,
+        "image_sha256_now": "be77d18c06e3a707abd5ec5b79e7595ffcea8ca20569e9fd758e6ff82ae7f2c7"
+      },
+      {
+        "id": "14-game/SCREEN",
+        "frame": "cov-game-SCREEN-face",
+        "image": "images-out/preprod/pass3/cov-game-SCREEN-face-E18.png",
+        "picture": "picked",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "5b6770471fd047d25ee6d35d75afbd5f445d04af72324c9f235dd4c7726c4e92",
+        "start": 35.765,
+        "end": 37.265,
+        "image_sha256_now": "5b6770471fd047d25ee6d35d75afbd5f445d04af72324c9f235dd4c7726c4e92"
+      },
+      {
+        "id": "15-game/PIT-D",
+        "frame": "cov-game-PIT-D-glasses",
+        "image": "images-out/preprod/pass3/cov-game-PIT-D-glasses-K7.png",
+        "picture": "picked",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "0148c76f4181af3f249b3f1160feb4538313098e0ce7846a9817f8afcbc40d62",
+        "start": 37.265,
+        "end": 38.665,
+        "image_sha256_now": "0148c76f4181af3f249b3f1160feb4538313098e0ce7846a9817f8afcbc40d62"
+      },
+      {
+        "id": "16-MASTER",
+        "frame": "cov-corridor-MASTER-arrive",
+        "image": "images-out/preprod/pass3/cov-corridor-MASTER-arrive-K8.png",
+        "picture": "picked",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "e7a1fbeebad8749a41f29a6fb91fda91645e8652a116aafa00744f4a2c264dc1",
+        "start": 38.665,
+        "end": 40.065,
+        "image_sha256_now": "e7a1fbeebad8749a41f29a6fb91fda91645e8652a116aafa00744f4a2c264dc1"
+      },
+      {
+        "id": "17-b2-1",
+        "frame": "cov-corridor-OTS-D-eager",
+        "image": "images-out/preprod/pass3/cov-corridor-OTS-D-eager-K7.png",
+        "picture": "picked",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "b80ab9479b204e6034b0fe65ba6198575eb4c40abc33fd3a1d80ee981aa2b638",
+        "start": 40.065,
+        "end": 41.567,
+        "image_sha256_now": "b80ab9479b204e6034b0fe65ba6198575eb4c40abc33fd3a1d80ee981aa2b638"
+      },
+      {
+        "id": "18-b2-2",
+        "frame": "cov-corridor-OTS-Z-easy",
+        "image": "images-out/preprod/pass3/cov-corridor-OTS-Z-easy-K8.png",
+        "picture": "picked",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "e862d46f66823fba234a4f65436f6f6a5e052bfcc32d14deddc9a957c20ea5d4",
+        "start": 41.567,
+        "end": 49.749,
+        "image_sha256_now": "e862d46f66823fba234a4f65436f6f6a5e052bfcc32d14deddc9a957c20ea5d4"
+      },
+      {
+        "id": "19-b2-3",
+        "frame": "cov-corridor-OTS-D-eager",
+        "image": "images-out/preprod/pass3/cov-corridor-OTS-D-eager-K7.png",
+        "picture": "picked",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "b80ab9479b204e6034b0fe65ba6198575eb4c40abc33fd3a1d80ee981aa2b638",
+        "start": 49.749,
+        "end": 57.719,
+        "image_sha256_now": "b80ab9479b204e6034b0fe65ba6198575eb4c40abc33fd3a1d80ee981aa2b638"
+      },
+      {
+        "id": "20-CU-B",
+        "frame": "cov-corridor-CU-B-sour",
+        "image": "images-out/preprod/pass3/cov-corridor-CU-B-sour-K9.png",
+        "picture": "picked",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "6dc5d45027767dd26cdadf84406df9fcf4f88bf562a1f72a474b8cb4cd54b75e",
+        "start": 57.719,
+        "end": 58.719,
+        "image_sha256_now": "6dc5d45027767dd26cdadf84406df9fcf4f88bf562a1f72a474b8cb4cd54b75e"
+      },
+      {
+        "id": "21-b2-4",
+        "frame": "cov-corridor-OTS-Z-warm",
+        "image": "images-out/preprod/pass3/cov-corridor-OTS-Z-warm-K9.png",
+        "picture": "picked",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "8b0e3274af9e78012e8882c378ccf892a104f22f895514c28ba64c2e1c9f26d1",
+        "start": 58.719,
+        "end": 68.111,
+        "image_sha256_now": "8b0e3274af9e78012e8882c378ccf892a104f22f895514c28ba64c2e1c9f26d1"
+      },
+      {
+        "id": "22-b2-5",
+        "frame": "cov-corridor-OTS-D-eager",
+        "image": "images-out/preprod/pass3/cov-corridor-OTS-D-eager-K7.png",
+        "picture": "picked",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "b80ab9479b204e6034b0fe65ba6198575eb4c40abc33fd3a1d80ee981aa2b638",
+        "start": 68.111,
+        "end": 70.246,
+        "image_sha256_now": "b80ab9479b204e6034b0fe65ba6198575eb4c40abc33fd3a1d80ee981aa2b638"
+      },
+      {
+        "id": "23-b2-6",
+        "frame": "cov-corridor-OTS-Z-warm",
+        "image": "images-out/preprod/pass3/cov-corridor-OTS-Z-warm-K9.png",
+        "picture": "picked",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "8b0e3274af9e78012e8882c378ccf892a104f22f895514c28ba64c2e1c9f26d1",
+        "start": 70.246,
+        "end": 72.326,
+        "image_sha256_now": "8b0e3274af9e78012e8882c378ccf892a104f22f895514c28ba64c2e1c9f26d1"
+      },
+      {
+        "id": "23-b2-6-cut",
+        "frame": "cov-corridor-CU-B-sour",
+        "image": "images-out/preprod/pass3/cov-corridor-CU-B-sour-K9.png",
+        "picture": "picked",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "6dc5d45027767dd26cdadf84406df9fcf4f88bf562a1f72a474b8cb4cd54b75e",
+        "start": 72.326,
+        "end": 76.647,
+        "image_sha256_now": "6dc5d45027767dd26cdadf84406df9fcf4f88bf562a1f72a474b8cb4cd54b75e"
+      },
+      {
+        "id": "24-b2-7",
+        "frame": "cov-corridor-OTS-D-eager",
+        "image": "images-out/preprod/pass3/cov-corridor-OTS-D-eager-K7.png",
+        "picture": "picked",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "b80ab9479b204e6034b0fe65ba6198575eb4c40abc33fd3a1d80ee981aa2b638",
+        "start": 76.647,
+        "end": 81.012,
+        "image_sha256_now": "b80ab9479b204e6034b0fe65ba6198575eb4c40abc33fd3a1d80ee981aa2b638"
+      },
+      {
+        "id": "25-pre",
+        "frame": "cov-walk-MASTER",
+        "image": "images-out/preprod/pass3/C17-K4.png",
+        "picture": "reused (approved earlier)",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "2af7254381904b6ec9ca97b707f4d7d350be163ea5e47a737f2098569d461b95",
+        "start": 81.012,
+        "end": 82.212,
+        "image_sha256_now": "2af7254381904b6ec9ca97b707f4d7d350be163ea5e47a737f2098569d461b95"
+      },
+      {
+        "id": "25-b2-8",
+        "frame": "cov-walk-CU-B-serious",
+        "image": "images-out/preprod/pass3/cov-walk-CU-B-serious-K9.png",
+        "picture": "picked",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "66c3bd87b635dcaa37eb6088b3c16101cd75f0098787e9a6850251ee879765e5",
+        "start": 82.212,
+        "end": 86.113,
+        "image_sha256_now": "66c3bd87b635dcaa37eb6088b3c16101cd75f0098787e9a6850251ee879765e5"
+      },
+      {
+        "id": "26-b2-9",
+        "frame": "cov-walk-CU-Z-tease",
+        "image": "images-out/preprod/pass3/cov-walk-CU-Z-tease-K8.png",
+        "picture": "picked",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "e8ffae9ae640225c81518a3820637c9a48190ea16aae0639136eb3f1c2594367",
+        "start": 86.113,
+        "end": 89.671,
+        "image_sha256_now": "e8ffae9ae640225c81518a3820637c9a48190ea16aae0639136eb3f1c2594367"
+      },
+      {
+        "id": "27-b2-10",
+        "frame": "cov-walk-CU-B-sly",
+        "image": "images-out/preprod/pass3/cov-walk-CU-B-sly-K7.png",
+        "picture": "picked",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "ad152006f95202a59ae25a2c4dd7b724a5fde7c27c4260cacf595d92223a95de",
+        "start": 89.671,
+        "end": 94.789,
+        "image_sha256_now": "ad152006f95202a59ae25a2c4dd7b724a5fde7c27c4260cacf595d92223a95de"
+      },
+      {
+        "id": "28-b2-11",
+        "frame": "cov-walk-CU-B-serious",
+        "image": "images-out/preprod/pass3/cov-walk-CU-B-serious-K9.png",
+        "picture": "picked",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "66c3bd87b635dcaa37eb6088b3c16101cd75f0098787e9a6850251ee879765e5",
+        "start": 94.789,
+        "end": 97.493,
+        "image_sha256_now": "66c3bd87b635dcaa37eb6088b3c16101cd75f0098787e9a6850251ee879765e5"
+      },
+      {
+        "id": "29-b2-12",
+        "frame": "cov-walk-MASTER",
+        "image": "images-out/preprod/pass3/C17-K4.png",
+        "picture": "reused (approved earlier)",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "2af7254381904b6ec9ca97b707f4d7d350be163ea5e47a737f2098569d461b95",
+        "start": 97.493,
+        "end": 101.437,
+        "image_sha256_now": "2af7254381904b6ec9ca97b707f4d7d350be163ea5e47a737f2098569d461b95"
+      },
+      {
+        "id": "30-b3-1",
+        "frame": "cov-cafe-MASTER-wave",
+        "image": "images-out/preprod/pass3/cov-cafe-MASTER-wave-K7.png",
+        "picture": "picked",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "5519aeecab1238e57f3881ea0fbc19807e7957cbe054531598421b055f5d9428",
+        "start": 101.437,
+        "end": 106.751,
+        "image_sha256_now": "5519aeecab1238e57f3881ea0fbc19807e7957cbe054531598421b055f5d9428"
+      },
+      {
+        "id": "31-b3-2",
+        "frame": "cov-cafe-CU-Z0-listen",
+        "image": "images-out/preprod/pass3/cov-cafe-CU-Z0-listen-K15.png",
+        "picture": "picked",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "abcd34e335ed956e1f405d16010fad9ce28b6fd5b7dd58b94356512fa47960f0",
+        "start": 106.751,
+        "end": 109.696,
+        "image_sha256_now": "abcd34e335ed956e1f405d16010fad9ce28b6fd5b7dd58b94356512fa47960f0"
+      },
+      {
+        "id": "32-b3-3",
+        "frame": "cov-cafe-CU-Z0-whoa",
+        "image": "images-out/preprod/pass3/cov-cafe-CU-Z0-whoa-E17.png",
+        "picture": "picked",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "7021defae434d28bb6d7054459c6e865c378aa2c36bb9a1e59daf9df04afbb4b",
+        "start": 109.696,
+        "end": 111.52,
+        "image_sha256_now": "7021defae434d28bb6d7054459c6e865c378aa2c36bb9a1e59daf9df04afbb4b"
+      },
+      {
+        "id": "33-b3-4",
+        "frame": "cov-cafe-OTS-Z-menu",
+        "image": "images-out/preprod/pass3/cov-cafe-OTS-Z-menu-K7.png",
+        "picture": "picked",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "685c0abfac81d60cd9c41f235a77b1219800a4661e8af791716fc228fd47aa77",
+        "start": 111.52,
+        "end": 112.34,
+        "image_sha256_now": "685c0abfac81d60cd9c41f235a77b1219800a4661e8af791716fc228fd47aa77"
+      },
+      {
+        "id": "34-MENU",
+        "frame": "cov-cafe-MENU",
+        "image": "scenes-out/fifteen-days/cuts/coverage-v5/framed-cov-cafe-MENU.png",
+        "picture": "the book's own picture",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "6329cae0c57fdd09562286be192e5e5876407b2f181eec136baf2d886dbd32d6",
+        "start": 112.34,
+        "end": 114.34,
+        "image_sha256_now": "6329cae0c57fdd09562286be192e5e5876407b2f181eec136baf2d886dbd32d6"
+      },
+      {
+        "id": "35-b3-5",
+        "frame": "cov-cafe-CU-Z0-explain",
+        "image": "images-out/preprod/pass3/cov-cafe-CU-Z0-explain-K13.png",
+        "picture": "picked",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "e4e2a3c58f9a8780bfa8b8a4329750c26e6411be31f235faf90e2c76ecb099ee",
+        "start": 114.34,
+        "end": 120.683,
+        "image_sha256_now": "e4e2a3c58f9a8780bfa8b8a4329750c26e6411be31f235faf90e2c76ecb099ee"
+      },
+      {
+        "id": "36-CU-B",
+        "frame": "cov-cafe-CU-B-menu",
+        "image": "images-out/preprod/pass3/cov-cafe-CU-B-menu-K9.png",
+        "picture": "picked",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "5cd135926675458de0b6747a2788ff217b931245154e93acf298009d148dc06f",
+        "start": 120.683,
+        "end": 121.683,
+        "image_sha256_now": "5cd135926675458de0b6747a2788ff217b931245154e93acf298009d148dc06f"
+      },
+      {
+        "id": "37-b3-6",
+        "frame": "cov-cafe-CU-Z0-explain",
+        "image": "images-out/preprod/pass3/cov-cafe-CU-Z0-explain-K13.png",
+        "picture": "picked",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "e4e2a3c58f9a8780bfa8b8a4329750c26e6411be31f235faf90e2c76ecb099ee",
+        "start": 121.683,
+        "end": 123.79,
+        "image_sha256_now": "e4e2a3c58f9a8780bfa8b8a4329750c26e6411be31f235faf90e2c76ecb099ee"
+      },
+      {
+        "id": "38-b3-7",
+        "frame": "cov-cafe-OTS-Z-menu",
+        "image": "images-out/preprod/pass3/cov-cafe-OTS-Z-menu-K7.png",
+        "picture": "picked",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "685c0abfac81d60cd9c41f235a77b1219800a4661e8af791716fc228fd47aa77",
+        "start": 123.79,
+        "end": 128.236,
+        "image_sha256_now": "685c0abfac81d60cd9c41f235a77b1219800a4661e8af791716fc228fd47aa77"
+      },
+      {
+        "id": "39-b3-8",
+        "frame": "cov-cafe-CU-Z0-explain",
+        "image": "images-out/preprod/pass3/cov-cafe-CU-Z0-explain-K13.png",
+        "picture": "picked",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "e4e2a3c58f9a8780bfa8b8a4329750c26e6411be31f235faf90e2c76ecb099ee",
+        "start": 128.236,
+        "end": 136.353,
+        "image_sha256_now": "e4e2a3c58f9a8780bfa8b8a4329750c26e6411be31f235faf90e2c76ecb099ee"
+      },
+      {
+        "id": "40-b3-9",
+        "frame": "cov-cafe-OTS-Z-menu",
+        "image": "images-out/preprod/pass3/cov-cafe-OTS-Z-menu-K7.png",
+        "picture": "picked",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "685c0abfac81d60cd9c41f235a77b1219800a4661e8af791716fc228fd47aa77",
+        "start": 136.353,
+        "end": 150.422,
+        "image_sha256_now": "685c0abfac81d60cd9c41f235a77b1219800a4661e8af791716fc228fd47aa77"
+      },
+      {
+        "id": "41-b3-10",
+        "frame": "cov-cafe-CU-Z0-astonished",
+        "image": "images-out/preprod/pass3/cov-cafe-CU-Z0-astonished-K13.png",
+        "picture": "picked",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "34c19df02bcbd9d4783f226863bea87c27f40844d9056635070919c71e42ee23",
+        "start": 150.422,
+        "end": 152.106,
+        "image_sha256_now": "34c19df02bcbd9d4783f226863bea87c27f40844d9056635070919c71e42ee23"
+      },
+      {
+        "id": "42-b3-11",
+        "frame": "cov-cafe-OTS-Z-stern",
+        "image": "images-out/preprod/pass3/cov-cafe-OTS-Z-stern-K9.png",
+        "picture": "picked",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "d4bbc5af975859b722da488b9c07fd5ed8487a51c82e9f616c3eaf128b96d291",
+        "start": 152.106,
+        "end": 157.044,
+        "image_sha256_now": "d4bbc5af975859b722da488b9c07fd5ed8487a51c82e9f616c3eaf128b96d291"
+      },
+      {
+        "id": "43-b3-12",
+        "frame": "cov-cafe-CU-Z0-astonished",
+        "image": "images-out/preprod/pass3/cov-cafe-CU-Z0-astonished-K13.png",
+        "picture": "picked",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "34c19df02bcbd9d4783f226863bea87c27f40844d9056635070919c71e42ee23",
+        "start": 157.044,
+        "end": 160.556,
+        "image_sha256_now": "34c19df02bcbd9d4783f226863bea87c27f40844d9056635070919c71e42ee23"
+      },
+      {
+        "id": "44-b3-13",
+        "frame": "cov-cafe-CU-B-menu",
+        "image": "images-out/preprod/pass3/cov-cafe-CU-B-menu-K9.png",
+        "picture": "picked",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "5cd135926675458de0b6747a2788ff217b931245154e93acf298009d148dc06f",
+        "start": 160.556,
+        "end": 163.036,
+        "image_sha256_now": "5cd135926675458de0b6747a2788ff217b931245154e93acf298009d148dc06f"
+      },
+      {
+        "id": "44-b3-13-cut",
+        "frame": "cov-cafe-CU-B-standing",
+        "image": "images-out/preprod/pass3/cov-cafe-CU-B-standing-K7.png",
+        "picture": "picked",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "967dd46a66d948735242521481991dfd88ea412350c7a2649abbaffca23dd22d",
+        "start": 163.036,
+        "end": 169.972,
+        "image_sha256_now": "967dd46a66d948735242521481991dfd88ea412350c7a2649abbaffca23dd22d"
+      },
+      {
+        "id": "45-BAI",
+        "frame": "cov-cafe-BAI-sideeye",
+        "image": "images-out/preprod/pass3/cov-cafe-BAI-sideeye-R20.png",
+        "picture": "picked",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "ea4d003905272bac90d6adb7916955678d3fbbee156f486c4a47cb89f75360a1",
+        "start": 169.972,
+        "end": 171.272,
+        "image_sha256_now": "ea4d003905272bac90d6adb7916955678d3fbbee156f486c4a47cb89f75360a1"
+      },
+      {
+        "id": "46-b4-1",
+        "frame": "cov-cafe-OTS-Z-talk",
+        "image": "images-out/preprod/pass3/cov-cafe-OTS-Z-talk-K7.png",
+        "picture": "picked",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "46a381d0a0111486f8b5b2cfd6e4c169f6f61b66219ce8827f2c92425e2bc51f",
+        "start": 171.272,
+        "end": 175.372,
+        "image_sha256_now": "46a381d0a0111486f8b5b2cfd6e4c169f6f61b66219ce8827f2c92425e2bc51f"
+      },
+      {
+        "id": "46-b4-1-cut",
+        "frame": "cov-cafe-SUGAR-stack",
+        "image": "images-out/preprod/pass3/cov-cafe-SUGAR-stack-E16.png",
+        "picture": "picked",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "f9af9901020458a07c7c6b2d45666fbd42555d7f9bafb2794bd1c55a98152b43",
+        "start": 175.372,
+        "end": 176.572,
+        "image_sha256_now": "f9af9901020458a07c7c6b2d45666fbd42555d7f9bafb2794bd1c55a98152b43"
+      },
+      {
+        "id": "46-b4-1-back",
+        "frame": "cov-cafe-OTS-Z-talk",
+        "image": "images-out/preprod/pass3/cov-cafe-OTS-Z-talk-K7.png",
+        "picture": "picked",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "46a381d0a0111486f8b5b2cfd6e4c169f6f61b66219ce8827f2c92425e2bc51f",
+        "start": 176.572,
+        "end": 183.958,
+        "image_sha256_now": "46a381d0a0111486f8b5b2cfd6e4c169f6f61b66219ce8827f2c92425e2bc51f"
+      },
+      {
+        "id": "47-b4-2",
+        "frame": "cov-cafe-CU-Z-amused",
+        "image": "images-out/preprod/pass3/cov-cafe-CU-Z-amused-K7.png",
+        "picture": "picked",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "78cc86ffab061b3dcfd33d2ead47a10fe2c9e872bad96fe67a9cd7cac2946c98",
+        "start": 183.958,
+        "end": 195.231,
+        "image_sha256_now": "78cc86ffab061b3dcfd33d2ead47a10fe2c9e872bad96fe67a9cd7cac2946c98"
+      },
+      {
+        "id": "48-b4-3",
+        "frame": "cov-cafe-CU-D-warm",
+        "image": "images-out/preprod/pass3/cov-cafe-CU-D-warm-E16.png",
+        "picture": "picked",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "9e560cd933b40d2c83102f642a5ac4ea3bbdc96645d45b845d2ab06e7919dc1b",
+        "start": 195.231,
+        "end": 201.111,
+        "image_sha256_now": "9e560cd933b40d2c83102f642a5ac4ea3bbdc96645d45b845d2ab06e7919dc1b"
+      },
+      {
+        "id": "48-b4-3-cut",
+        "frame": "cov-cafe-SUGAR-wall",
+        "image": "images-out/preprod/pass3/cov-cafe-SUGAR-wall-K9.png",
+        "picture": "picked",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "25a4ebddd2044bb9e84f247d2600ca5bccadbceb6f322a68b3156a53acbb7064",
+        "start": 201.111,
+        "end": 202.311,
+        "image_sha256_now": "25a4ebddd2044bb9e84f247d2600ca5bccadbceb6f322a68b3156a53acbb7064"
+      },
+      {
+        "id": "48-b4-3-back",
+        "frame": "cov-cafe-CU-D-warm",
+        "image": "images-out/preprod/pass3/cov-cafe-CU-D-warm-E16.png",
+        "picture": "picked",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "9e560cd933b40d2c83102f642a5ac4ea3bbdc96645d45b845d2ab06e7919dc1b",
+        "start": 202.311,
+        "end": 212.106,
+        "image_sha256_now": "9e560cd933b40d2c83102f642a5ac4ea3bbdc96645d45b845d2ab06e7919dc1b"
+      },
+      {
+        "id": "49-b4-4",
+        "frame": "cov-cafe-CU-Z-amused",
+        "image": "images-out/preprod/pass3/cov-cafe-CU-Z-amused-K7.png",
+        "picture": "picked",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "78cc86ffab061b3dcfd33d2ead47a10fe2c9e872bad96fe67a9cd7cac2946c98",
+        "start": 212.106,
+        "end": 214.96,
+        "image_sha256_now": "78cc86ffab061b3dcfd33d2ead47a10fe2c9e872bad96fe67a9cd7cac2946c98"
+      },
+      {
+        "id": "50-b4-5",
+        "frame": "cov-cafe-CU-D-warm",
+        "image": "images-out/preprod/pass3/cov-cafe-CU-D-warm-E16.png",
+        "picture": "picked",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "9e560cd933b40d2c83102f642a5ac4ea3bbdc96645d45b845d2ab06e7919dc1b",
+        "start": 214.96,
+        "end": 220.583,
+        "image_sha256_now": "9e560cd933b40d2c83102f642a5ac4ea3bbdc96645d45b845d2ab06e7919dc1b"
+      },
+      {
+        "id": "51-SUGAR",
+        "frame": "cov-cafe-SUGAR-flick",
+        "image": "images-out/preprod/pass3/cov-cafe-SUGAR-flick-E16.png",
+        "picture": "picked",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "0f5f4d4f807a3c4895b7dfb37f5013814218ad4db845dff9380fd05b6aa1a6bc",
+        "start": 220.583,
+        "end": 221.783,
+        "image_sha256_now": "0f5f4d4f807a3c4895b7dfb37f5013814218ad4db845dff9380fd05b6aa1a6bc"
+      },
+      {
+        "id": "52-SUGAR",
+        "frame": "cov-cafe-SUGAR-door",
+        "image": "images-out/preprod/pass3/cov-cafe-SUGAR-door-K7.png",
+        "picture": "picked",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "e16b2f2bf49bc1d6e344d733c61b98e9eab22e376052c29bec0f93cbfeee1039",
+        "start": 221.783,
+        "end": 222.983,
+        "image_sha256_now": "e16b2f2bf49bc1d6e344d733c61b98e9eab22e376052c29bec0f93cbfeee1039"
+      },
+      {
+        "id": "53-CU-Z",
+        "frame": "cov-cafe-CU-Z-amused",
+        "image": "images-out/preprod/pass3/cov-cafe-CU-Z-amused-K7.png",
+        "picture": "picked",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "78cc86ffab061b3dcfd33d2ead47a10fe2c9e872bad96fe67a9cd7cac2946c98",
+        "start": 222.983,
+        "end": 224.083,
+        "image_sha256_now": "78cc86ffab061b3dcfd33d2ead47a10fe2c9e872bad96fe67a9cd7cac2946c98"
+      },
+      {
+        "id": "54-BAI",
+        "frame": "cov-cafe-BAI-sideeye",
+        "image": "images-out/preprod/pass3/cov-cafe-BAI-sideeye-R20.png",
+        "picture": "picked",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "ea4d003905272bac90d6adb7916955678d3fbbee156f486c4a47cb89f75360a1",
+        "start": 224.083,
+        "end": 225.183,
+        "image_sha256_now": "ea4d003905272bac90d6adb7916955678d3fbbee156f486c4a47cb89f75360a1"
+      },
+      {
+        "id": "55-b5-1",
+        "frame": "cov-cafe-OTS-Z-eager",
+        "image": "images-out/preprod/pass3/cov-cafe-OTS-Z-eager-K7.png",
+        "picture": "picked",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "c80f0eb216e7cc312566d46e16029247b4f1c1cbc1b36f6a91922128c247a94e",
+        "start": 225.183,
+        "end": 234.157,
+        "image_sha256_now": "c80f0eb216e7cc312566d46e16029247b4f1c1cbc1b36f6a91922128c247a94e"
+      },
+      {
+        "id": "56-b5-2",
+        "frame": "cov-cafe-CU-Z-smile",
+        "image": "images-out/preprod/pass3/cov-cafe-CU-Z-smile-K14.png",
+        "picture": "picked",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "551ea7f37111792ad16d4ea8a0a3046834f4e290ee419488c0cea3ffcde0f9d2",
+        "start": 234.157,
+        "end": 242.528,
+        "image_sha256_now": "551ea7f37111792ad16d4ea8a0a3046834f4e290ee419488c0cea3ffcde0f9d2"
+      },
+      {
+        "id": "57-b5-3",
+        "frame": "cov-cafe-OTS-Z-eager",
+        "image": "images-out/preprod/pass3/cov-cafe-OTS-Z-eager-K7.png",
+        "picture": "picked",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "c80f0eb216e7cc312566d46e16029247b4f1c1cbc1b36f6a91922128c247a94e",
+        "start": 242.528,
+        "end": 247.69,
+        "image_sha256_now": "c80f0eb216e7cc312566d46e16029247b4f1c1cbc1b36f6a91922128c247a94e"
+      },
+      {
+        "id": "58-BAI",
+        "frame": "cov-cafe-BAI-sideeye",
+        "image": "images-out/preprod/pass3/cov-cafe-BAI-sideeye-R20.png",
+        "picture": "picked",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "ea4d003905272bac90d6adb7916955678d3fbbee156f486c4a47cb89f75360a1",
+        "start": 247.69,
+        "end": 248.69,
+        "image_sha256_now": "ea4d003905272bac90d6adb7916955678d3fbbee156f486c4a47cb89f75360a1"
+      },
+      {
+        "id": "59-b5-4",
+        "frame": "cov-cafe-OTS-Z-talk",
+        "image": "images-out/preprod/pass3/cov-cafe-OTS-Z-talk-K7.png",
+        "picture": "picked",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "46a381d0a0111486f8b5b2cfd6e4c169f6f61b66219ce8827f2c92425e2bc51f",
+        "start": 248.69,
+        "end": 251.213,
+        "image_sha256_now": "46a381d0a0111486f8b5b2cfd6e4c169f6f61b66219ce8827f2c92425e2bc51f"
+      },
+      {
+        "id": "60-b5-5",
+        "frame": "cov-cafe-BAI-what",
+        "image": "images-out/preprod/pass3/cov-cafe-BAI-what-R27.png",
+        "picture": "picked",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "5feaa81d9ea976a00e25807f3f78b9fa70074e1e096ee32a3d0dcefefcd90498",
+        "start": 251.213,
+        "end": 255.82,
+        "image_sha256_now": "5feaa81d9ea976a00e25807f3f78b9fa70074e1e096ee32a3d0dcefefcd90498"
+      },
+      {
+        "id": "61-pre",
+        "frame": "cov-gate-MASTER-fingers",
+        "image": "images-out/preprod/pass3/cov-gate-MASTER-fingers-K11.png",
+        "picture": "picked",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "b869a4b054a55072af3d16ad67efcb4879a33347b049d56c4240e041049ad970",
+        "start": 255.82,
+        "end": 256.42,
+        "image_sha256_now": "b869a4b054a55072af3d16ad67efcb4879a33347b049d56c4240e041049ad970"
+      },
+      {
+        "id": "61-b6-1",
+        "frame": "cov-gate-MASTER-fingers",
+        "image": "images-out/preprod/pass3/cov-gate-MASTER-fingers-K11.png",
+        "picture": "picked",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "b869a4b054a55072af3d16ad67efcb4879a33347b049d56c4240e041049ad970",
+        "start": 256.42,
+        "end": 258.215,
+        "image_sha256_now": "b869a4b054a55072af3d16ad67efcb4879a33347b049d56c4240e041049ad970"
+      },
+      {
+        "id": "62-CU-Z",
+        "frame": "cov-gate-CU-Z-smile",
+        "image": "images-out/preprod/pass3/cov-gate-CU-Z-smile-K7.png",
+        "picture": "picked",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "dd4276a3907b8e8b58e84cb04047878b119027c72e98898550fc01c5303c4506",
+        "start": 258.215,
+        "end": 259.415,
+        "image_sha256_now": "dd4276a3907b8e8b58e84cb04047878b119027c72e98898550fc01c5303c4506"
+      },
+      {
+        "id": "63-MASTER",
+        "frame": "cov-gate-MASTER-wave",
+        "image": "images-out/preprod/pass3/cov-gate-MASTER-wave-K7.png",
+        "picture": "picked",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "c4f82ba9831d3970688b8b464dd636855f1c7115e433af271c1e1984a10257a5",
+        "start": 259.415,
+        "end": 260.815,
+        "image_sha256_now": "c4f82ba9831d3970688b8b464dd636855f1c7115e433af271c1e1984a10257a5"
+      },
+      {
+        "id": "64-MASTER",
+        "frame": "cov-dusk-MASTER-talk",
+        "image": "scenes-out/fifteen-days/cuts/coverage-v5/lettered-cov-dusk-MASTER-talk.png",
+        "picture": "picked",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "bd95f2546a7423d66556fef13b79869f1a80f48764a85d995f0e2edb1893df27",
+        "start": 260.815,
+        "end": 265.065,
+        "image_sha256_now": "bd95f2546a7423d66556fef13b79869f1a80f48764a85d995f0e2edb1893df27"
+      },
+      {
+        "id": "BLACK",
+        "frame": "black",
+        "image": "scenes-out/fifteen-days/cuts/coverage-v5/black.png",
+        "picture": "black",
+        "transition": {
+          "type": "dissolve",
+          "seconds": 0.6
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "0f52608dd021e7069ef19f9d8f46f6d651aaf5cbac5154465092de3574cf8514",
+        "start": 265.065,
+        "end": 266.065,
+        "image_sha256_now": "0f52608dd021e7069ef19f9d8f46f6d651aaf5cbac5154465092de3574cf8514"
+      },
+      {
+        "id": "65-EST",
+        "frame": "cov-lobby-EST",
+        "image": "scenes-out/fifteen-days/cuts/coverage-v5/lettered-cov-lobby-EST.png",
+        "picture": "reused (approved earlier)",
+        "transition": {
+          "type": "dissolve",
+          "seconds": 0.6
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "03208dc714e458d1af6c29409ad54663f4a39566de824575868ff864a8591250",
+        "start": 266.065,
+        "end": 269.065,
+        "image_sha256_now": "03208dc714e458d1af6c29409ad54663f4a39566de824575868ff864a8591250"
+      },
+      {
+        "id": "66-CU-Z",
+        "frame": "cov-lobby-CU-Z-down",
+        "image": "images-out/preprod/pass3/cov-lobby-CU-Z-down-K8.png",
+        "picture": "picked",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "54ad4ed36b47feed82bc3b5c7e0f08d064249f028d16891ec63c63dc4daab488",
+        "start": 269.065,
+        "end": 270.465,
+        "image_sha256_now": "54ad4ed36b47feed82bc3b5c7e0f08d064249f028d16891ec63c63dc4daab488"
+      },
+      {
+        "id": "67-SCREEN",
+        "frame": "cov-lobby-SCREEN",
+        "image": "scenes-out/fifteen-days/cuts/coverage-v5/screen-L03.png",
+        "picture": "the book's words on a device, drawn in code",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "f18456ef81952237a71a8a322e9ed3abe2b9de24b10eb3eafa3ff226fd656fe3",
+        "start": 270.465,
+        "end": 272.965,
+        "image_sha256_now": "f18456ef81952237a71a8a322e9ed3abe2b9de24b10eb3eafa3ff226fd656fe3"
+      },
+      {
+        "id": "68-MASTER",
+        "frame": "cov-lobby-MASTER-sits",
+        "image": "images-out/preprod/pass3/cov-lobby-MASTER-sits-E18.png",
+        "picture": "picked",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "7a89d50737983b4b18e206bd42a50be2ce8376202ad7573d61d7b488ad49b1ab",
+        "start": 272.965,
+        "end": 274.465,
+        "image_sha256_now": "7a89d50737983b4b18e206bd42a50be2ce8376202ad7573d61d7b488ad49b1ab"
+      },
+      {
+        "id": "69-CU-Z",
+        "frame": "cov-lobby-CU-Z-down",
+        "image": "images-out/preprod/pass3/cov-lobby-CU-Z-down-K8.png",
+        "picture": "picked",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "54ad4ed36b47feed82bc3b5c7e0f08d064249f028d16891ec63c63dc4daab488",
+        "start": 274.465,
+        "end": 275.665,
+        "image_sha256_now": "54ad4ed36b47feed82bc3b5c7e0f08d064249f028d16891ec63c63dc4daab488"
+      },
+      {
+        "id": "70-SCREEN",
+        "frame": "cov-lobby-SCREEN",
+        "image": "scenes-out/fifteen-days/cuts/coverage-v5/screen-L07.png",
+        "picture": "the book's words on a device, drawn in code",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "d921411802b9982860669a7d3ba793459cc6dfec05aa4d3de709a11ba769c0de",
+        "start": 275.665,
+        "end": 279.165,
+        "image_sha256_now": "d921411802b9982860669a7d3ba793459cc6dfec05aa4d3de709a11ba769c0de"
+      },
+      {
+        "id": "71-CU-Z",
+        "frame": "cov-lobby-CU-Z-relief",
+        "image": "images-out/preprod/pass3/cov-lobby-CU-Z-relief-K10.png",
+        "picture": "picked",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "beb0aa031ce8c985b93b7a162728c45395d7682c9db4be7a32830be0aba32caa",
+        "start": 279.165,
+        "end": 280.665,
+        "image_sha256_now": "beb0aa031ce8c985b93b7a162728c45395d7682c9db4be7a32830be0aba32caa"
+      },
+      {
+        "id": "72-SCREEN",
+        "frame": "cov-lobby-SCREEN",
+        "image": "scenes-out/fifteen-days/cuts/coverage-v5/screen-L09.png",
+        "picture": "the book's words on a device, drawn in code",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "3f75fe4d229537a53524add7a506b5def7a0d9404a988031912bd3cddff93f1e",
+        "start": 280.665,
+        "end": 283.165,
+        "image_sha256_now": "3f75fe4d229537a53524add7a506b5def7a0d9404a988031912bd3cddff93f1e"
+      },
+      {
+        "id": "73-OTS-Z",
+        "frame": "cov-lobby-OTS-Z-turns",
+        "image": "images-out/preprod/pass3/cov-lobby-OTS-Z-turns-K9.png",
+        "picture": "picked",
+        "transition": {
+          "type": "cut"
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "20cc511b20c30b8a437e0dc29bea7fddc66b631ad41b90b058097259f5b9e976",
+        "start": 283.165,
+        "end": 285.965,
+        "image_sha256_now": "20cc511b20c30b8a437e0dc29bea7fddc66b631ad41b90b058097259f5b9e976"
+      },
+      {
+        "id": "BLACK",
+        "frame": "black",
+        "image": "scenes-out/fifteen-days/cuts/coverage-v5/black.png",
+        "picture": "black",
+        "transition": {
+          "type": "dissolve",
+          "seconds": 0.8
+        },
+        "move": {
+          "kind": "push",
+          "from": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "to": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "ease": "linear"
+        },
+        "image_sha256": "0f52608dd021e7069ef19f9d8f46f6d651aaf5cbac5154465092de3574cf8514",
+        "start": 285.965,
+        "end": 283.365,
+        "image_sha256_now": "0f52608dd021e7069ef19f9d8f46f6d651aaf5cbac5154465092de3574cf8514"
+      }
+    ],
+    "lettering": [],
+    "end_card": {
+      "file": "adaptations/fifteen-days/end-card.json",
+      "file_sha256": "8750c5c83b60d2fcf554be5d2b5d25c9afa03eb09532dbc83671598fab8156eb",
+      "start": 283.365,
+      "end": 291.365,
+      "fade_s": 0.8
+    },
+    "subtitles": [
+      {
+        "cue": "b1-1",
+        "text": "You'd think after making it this far, they'd stop underestimating the foreigner.",
+        "start": 7.7,
+        "end": 12.198
+      },
+      {
+        "cue": "b1-2",
+        "text": "It wouldn't be so annoying if he wasn't so damn pretty.",
+        "start": 12.318,
+        "end": 15.579
+      },
+      {
+        "cue": "b1-3",
+        "text": "Nah, way too fake for me.",
+        "start": 15.699,
+        "end": 18.35
+      },
+      {
+        "cue": "b1-4",
+        "text": "Such patience...",
+        "start": 21.4,
+        "end": 23.327
+      },
+      {
+        "cue": "b1-5",
+        "text": "Total wimp, just like you. But it gets you guys the W.",
+        "start": 23.447,
+        "end": 28.028
+      },
+      {
+        "cue": "b1-6",
+        "text": "That other loser's toast.",
+        "start": 29.578,
+        "end": 31.092
+      },
+      {
+        "cue": "b1-6",
+        "text": "He should have already thrown in the towel, but doesn't even know it yet.",
+        "start": 31.092,
+        "end": 35.515
+      },
+      {
+        "cue": "b2-1",
+        "text": "Good job out there.",
+        "start": 40.165,
+        "end": 41.327
+      },
+      {
+        "cue": "b2-2",
+        "text": "Thanks. Yeah, the walls held out.",
+        "start": 41.447,
+        "end": 44.278
+      },
+      {
+        "cue": "b2-2",
+        "text": "Haven't yet watched your replay, but will be sure to tonight.",
+        "start": 44.278,
+        "end": 49.509
+      },
+      {
+        "cue": "b2-3",
+        "text": "Yeah, please ignore the ugly style.",
+        "start": 49.629,
+        "end": 52.065
+      },
+      {
+        "cue": "b2-3",
+        "text": "I also won by defense though,",
+        "start": 52.065,
+        "end": 54.083
+      },
+      {
+        "cue": "b2-3",
+        "text": "but for most of the game it just looks like I'm running scared.",
+        "start": 54.083,
+        "end": 58.469
+      },
+      {
+        "cue": "b2-4",
+        "text": "Patience often does, until you win. Hey, do you want to get tea later?",
+        "start": 58.819,
+        "end": 64.329
+      },
+      {
+        "cue": "b2-4",
+        "text": "I'll be at the courtyard in about a longhour.",
+        "start": 64.329,
+        "end": 67.871
+      },
+      {
+        "cue": "b2-5",
+        "text": "Sure, yeah, that works well for me!",
+        "start": 67.991,
+        "end": 70.007
+      },
+      {
+        "cue": "b2-6",
+        "text": "Great, I'll see you then. Bai, you're welcome to come too.",
+        "start": 70.126,
+        "end": 74.68
+      },
+      {
+        "cue": "b2-6",
+        "text": "Hope to see you there!",
+        "start": 74.68,
+        "end": 76.407
+      },
+      {
+        "cue": "b2-7",
+        "text": "See you. So are you gonna come? Should be fun!",
+        "start": 76.527,
+        "end": 81.012
+      },
+      {
+        "cue": "b2-8",
+        "text": "He's your competition, remember?",
+        "start": 82.312,
+        "end": 85.873
+      },
+      {
+        "cue": "b2-9",
+        "text": "Take it easy, you're my competition too.",
+        "start": 85.993,
+        "end": 89.431
+      },
+      {
+        "cue": "b2-10",
+        "text": "'Was.' And you know I hate you. And I know all your tricks already anyway.",
+        "start": 89.551,
+        "end": 94.669
+      },
+      {
+        "cue": "b2-11",
+        "text": "We don't know anything about this guy.",
+        "start": 94.789,
+        "end": 97.253
+      },
+      {
+        "cue": "b2-12",
+        "text": "So let's get to know him, it'll be fun! Maybe he won't be so fake after all.",
+        "start": 97.373,
+        "end": 101.437
+      },
+      {
+        "cue": "b3-1",
+        "text": "Hey, over here! We were just talking about you!",
+        "start": 101.537,
+        "end": 106.512
+      },
+      {
+        "cue": "b3-2",
+        "text": "jie mo kai tu jie hei ja ma?",
+        "start": 106.631,
+        "end": 109.456
+      },
+      {
+        "cue": "b3-3",
+        "text": "Whoa",
+        "start": 109.576,
+        "end": 111.279
+      },
+      {
+        "cue": "b3-4",
+        "text": "What is it?",
+        "start": 111.4,
+        "end": 112.09
+      },
+      {
+        "cue": "b3-5",
+        "text": "I think these are some of the new symbols that they're A/B testing for the",
+        "start": 114.44,
+        "end": 119.06
+      },
+      {
+        "cue": "b3-5",
+        "text": "Dzegoban version nine.",
+        "start": 119.06,
+        "end": 120.433
+      },
+      {
+        "cue": "b3-6",
+        "text": "Have you heard about version nine?",
+        "start": 121.783,
+        "end": 123.55
+      },
+      {
+        "cue": "b3-7",
+        "text": "I had a couple people mention it to me. Making the language visual.",
+        "start": 123.67,
+        "end": 127.996
+      },
+      {
+        "cue": "b3-8",
+        "text": "Hmmm.",
+        "start": 128.116,
+        "end": 128.446
+      },
+      {
+        "cue": "b3-8",
+        "text": "More straight horizontal lines than usual,",
+        "start": 128.446,
+        "end": 131.222
+      },
+      {
+        "cue": "b3-8",
+        "text": "and the three diagonal lines on the right. probably pronunciation markers?",
+        "start": 131.222,
+        "end": 136.113
+      },
+      {
+        "cue": "b3-9",
+        "text": "Top right is 'kai', right?",
+        "start": 136.233,
+        "end": 138.092
+      },
+      {
+        "cue": "b3-9",
+        "text": "The extra vertical vein on the left is unusual,",
+        "start": 138.092,
+        "end": 141.455
+      },
+      {
+        "cue": "b3-9",
+        "text": "although I'm not sure I would make the images so detailed when they have such",
+        "start": 141.455,
+        "end": 146.962
+      },
+      {
+        "cue": "b3-9",
+        "text": "different meanings, depending on the context.",
+        "start": 146.962,
+        "end": 150.182
+      },
+      {
+        "cue": "b3-10",
+        "text": "Wait, you know Dzegoban?",
+        "start": 150.302,
+        "end": 151.867
+      },
+      {
+        "cue": "b3-11",
+        "text": "Zei, the whole point of Dzegoban is that you can learn it in less than a month.",
+        "start": 151.986,
+        "end": 156.804
+      },
+      {
+        "cue": "b3-12",
+        "text": "I'm impressed, you're almost a local already.",
+        "start": 156.924,
+        "end": 160.316
+      },
+      {
+        "cue": "b3-13",
+        "text": "Actually, I don't think I want anything. Plus, I've got a lot to catch up on.",
+        "start": 160.436,
+        "end": 165.14
+      },
+      {
+        "cue": "b3-13",
+        "text": "Zei, when you're done, come get me. I want to go over some things with you.",
+        "start": 165.14,
+        "end": 169.722
+      },
+      {
+        "cue": "b4-1",
+        "text": "So while visiting, I've been wondering about the differences between home and",
+        "start": 171.372,
+        "end": 177.883
+      },
+      {
+        "cue": "b4-1",
+        "text": "here. And I've been wondering, why does Dzego like Minpentai so much?",
+        "start": 177.883,
+        "end": 183.718
+      },
+      {
+        "cue": "b4-2",
+        "text": "Kids get into it pretty young here, I guess.",
+        "start": 183.838,
+        "end": 186.964
+      },
+      {
+        "cue": "b4-2",
+        "text": "Whole family involved, it's a big thing.",
+        "start": 186.964,
+        "end": 189.805
+      },
+      {
+        "cue": "b4-2",
+        "text": "One of our quirks, just like the language. Does Redshire have any quirks?",
+        "start": 189.805,
+        "end": 194.991
+      },
+      {
+        "cue": "b4-3",
+        "text": "Sure. Yeah, we have our fair share.",
+        "start": 195.111,
+        "end": 198.541
+      },
+      {
+        "cue": "b4-3",
+        "text": "We care a lot about natural beauty,",
+        "start": 198.541,
+        "end": 201.971
+      },
+      {
+        "cue": "b4-3",
+        "text": "and maybe have an unnatural obsession with old styles.",
+        "start": 201.971,
+        "end": 207.26
+      },
+      {
+        "cue": "b4-3",
+        "text": "Less cameras, more castles, that kind of thing.",
+        "start": 207.26,
+        "end": 211.866
+      },
+      {
+        "cue": "b4-4",
+        "text": "I see where you get your love of walls then.",
+        "start": 211.986,
+        "end": 214.719
+      },
+      {
+        "cue": "b4-5",
+        "text": "Yes. Simple, straightforward, useful.",
+        "start": 214.84,
+        "end": 220.333
+      },
+      {
+        "cue": "b5-1",
+        "text": "Why don't you come visit?",
+        "start": 225.283,
+        "end": 226.87
+      },
+      {
+        "cue": "b5-1",
+        "text": "My parents just told me I need to come back for an early birthday celebration",
+        "start": 226.87,
+        "end": 231.758
+      },
+      {
+        "cue": "b5-1",
+        "text": "for them, so you can come with me!",
+        "start": 231.758,
+        "end": 233.917
+      },
+      {
+        "cue": "b5-2",
+        "text": "Well, budget will be pretty tight for... about fifteen days.",
+        "start": 234.037,
+        "end": 242.288
+      },
+      {
+        "cue": "b5-3",
+        "text": "Oh yeah, then I can use some of my winnings to pay for your trip, right?",
+        "start": 242.408,
+        "end": 247.439
+      },
+      {
+        "cue": "b5-4",
+        "text": "You're welcome to come too, Bai!",
+        "start": 248.79,
+        "end": 250.973
+      },
+      {
+        "cue": "b5-5",
+        "text": "What?!! Dreadnaught!! It's good! You should check it out.",
+        "start": 251.093,
+        "end": 255.82
+      },
+      {
+        "cue": "b6-1",
+        "text": "Dze go ba fau gie",
+        "start": 256.52,
+        "end": 257.966
+      }
+    ]
+  },
+  "loudness": {
+    "target": {
+      "integrated_lufs": -16,
+      "true_peak_db": -1,
+      "lra": 11
+    },
+    "before": {
+      "input_i": "-25.97",
+      "input_tp": "-4.35",
+      "input_lra": "12.60"
+    },
+    "after": {
+      "output_i": "-16.60",
+      "output_tp": "-1.00",
+      "output_lra": "12.70"
+    }
+  },
+  "ffmpeg": "ffmpeg version 9.0.1 Copyright (c) 2000-2026 the FFmpeg developers",
+  "command": [
+    "ffmpeg",
+    "-y",
+    "-hide_banner",
+    "-i",
+    "scenes-out/fifteen-days/cuts/coverage-v5/coverage-v5-premix.wav",
+    "-af",
+    "loudnorm=I=-16:TP=-1:LRA=11:measured_I=-25.97:measured_TP=-4.35:measured_LRA=12.60:measured_thresh=-37.54:offset=1.03:linear=true:print_format=json",
+    "-ar",
+    "48000",
+    "-ac",
+    "2",
+    "-c:a",
+    "pcm_s24le",
+    "scenes-out/fifteen-days/cuts/coverage-v5/coverage-v5-mix.wav"
+  ],
+  "output": {
+    "file": "scenes-out/fifteen-days/cuts/coverage-v5/coverage-v5-mix.wav",
+    "sha256": "8e3e39ac4291d5db9bd138c58f2f5b3ce1b50961d23fe7e085a84305543d8639",
+    "sample_rate": 48000,
+    "channels": 2
+  },
+  "generated_at": "2026-10-17T21:34:49+00:00",
+  "cost_usd": 0
+}

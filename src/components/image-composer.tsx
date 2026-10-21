@@ -408,7 +408,8 @@ function Sheet({ initial, onClose }: { initial: AddImageDetail; onClose: () => v
                 <>
                   <WalletPanel onChange={() => void refresh()} />
                   <div className="ic-gate">
-                    <p>Before your first image: how your prompt is published.</p>
+                    {/* Drafted by the coding agent (2026-10-18): once paid, this is the next step. */}
+                    <p className={status.prepaid.balanceUsd > 0 ? 'ic-next' : undefined}>{status.prepaid.balanceUsd > 0 ? 'Next: agree to how your words are published.' : 'Before your first image: how your prompt is published.'}</p>
                     <button type="button" className="ic-primary" onClick={startConsent}>
                       Read and agree
                     </button>
@@ -594,7 +595,7 @@ function Sheet({ initial, onClose }: { initial: AddImageDetail; onClose: () => v
             />
           </div>
         )}
-        {consent && <ConsentScreen wording={consent} name={null} onAgree={agree} onCancel={() => setConsent(null)} error={null} />}
+        {consent && <ConsentScreen wording={consent} name={null} wallet={auth.kind !== 'signed-in' ? (wallet?.short ?? null) : null} onAgree={agree} onCancel={() => setConsent(null)} error={null} />}
       </div>
     </div>
   );
