@@ -5,17 +5,17 @@
   "license": "GPL-3.0-only",
   "engine": {
     "repository": "https://github.com/We-Are-Lum/snowmoon",
-    "commit": "eefb8d8f0777320db863a904227172e0ab12bf7a",
+    "commit": "5db11b14d50dbeba182ecfc7ba53a06af08e1b0c",
     "entry": "src/lib/minpentai/onchain/replay.ts",
     "replay": "replaySolo",
     "files": {
-      "src/lib/minpentai/onchain/replay.ts": "0xabd364795b4886a2d04d4d4a73b811073b15580914eb4e2ac6875bc23f612fde",
+      "src/lib/minpentai/onchain/replay.ts": "0x8886458e381e166166c41a88dec6fe63bff192e9528ef5c98188ba3c052a6cad",
       "src/lib/minpentai/play-game/game.ts": "0x9cde86273c04c106cbd812030684f41a16e1f8a58483b9dab8c5e1489d5b3e83",
       "src/lib/minpentai/play-game/live-types.ts": "0x98489b57e7cb44df289f179b116b940ee573d8fca212fc58fc28655637aed491",
       "src/lib/minpentai/play-server/match.ts": "0xc761b00cf856c824673563f408514097f1aab6f301a62dfea85b40bcd7ee04f5"
     },
     "packages": {},
-    "closureHash": "0xb80ccc69f6269f3eb7db028707e9a0fc05d8962d1d79427cf76f28ec2fbf59ff"
+    "closureHash": "0xc6979758a32967b3fd431785f5251a2f5f3c117a297f07111b95562425769e2a"
   },
   "board": {
     "width": 15,
@@ -80,10 +80,14 @@
     "sight": 3,
     "every": 12,
     "squareHits": 2,
-    "seeds": [
-      0,
-      999999
-    ]
+    "seed": {
+      "recorded": "bytes32 = keccak256(abi.encode(uint256 chainId, address matchLog, address player, uint256 n)), n = the player's record count before this match",
+      "engineSeed": "uint32(uint256(seed)): the last 4 bytes of the bytes32, read big-endian",
+      "engineRange": [
+        0,
+        4294967295
+      ]
+    }
   },
   "rules": [
     {
@@ -282,7 +286,7 @@
     },
     {
       "id": "seed",
-      "text": "A match's seed is a whole number from 0 to 999,999. Its first random number draws the new rule; the computer player takes the rest, in order.",
+      "text": "A recorded match's seed is bound to the player's wallet: keccak256 of the chain, the MatchLog, the player and how many matches they have recorded. The engine plays from its last 4 bytes, read big-endian (0 to 2^32 - 1). Its first random number draws the new rule; the computer player takes the rest, in order.",
       "edition": "The whole rule."
     }
   ],
@@ -317,7 +321,7 @@
         "function": "botPlan",
         "level": 0
       },
-      "codeHash": "0x33a5ae1bd24607fe28685c1de0c624f2551ce07b23236fdbf8ecda03d6080f46",
+      "codeHash": "0x506cf04c670a63da09fa0d8d1c64a63dcabec13018e30c37521592ce478a73e6",
       "edition": "Practice: the same code at its simplest level."
     },
     {
@@ -328,7 +332,7 @@
         "function": "botPlan",
         "level": 1
       },
-      "codeHash": "0x86be99083de23f17888c995777d5938320d49076b37f4750ac6182ac49687b02",
+      "codeHash": "0xe4d3d7130686607d95f2b4f57f0b83030ee3da87c7bca1e7efe3b7cdc6b341b8",
       "edition": "Behaviours are invented. (The book has bots too, c7-b14.)"
     },
     {
@@ -339,7 +343,7 @@
         "function": "botPlan",
         "level": 2
       },
-      "codeHash": "0x7b872de604278b52254bba52b7212cf1464bcf7625f651a696d1b5eb19a3f2b6",
+      "codeHash": "0xf56d8789cd40fc19c44a613e8fae403c6d72981dec7317f0cd4e7b8202d706e1",
       "edition": "Behaviours are invented. (The book has bots too, c7-b14.)"
     },
     {
@@ -350,7 +354,7 @@
         "function": "botPlan",
         "level": 3
       },
-      "codeHash": "0x598ee7c4837799d0101cfc7eb2d78717957c6d34ccec4cb6e96a971356857c66",
+      "codeHash": "0x18b38c0a5a9d7f35110561042ac48de053fb96b0a73b53ba6df8a1a14e566b9d",
       "edition": "Behaviours are invented. (The book has bots too, c7-b14.)"
     },
     {
@@ -361,7 +365,7 @@
         "function": "botPlan",
         "level": 4
       },
-      "codeHash": "0xabe56b9efffb93beeb8fac2b2e24519174ef54297abb87fa77db680b86ca4d41",
+      "codeHash": "0x21e1295410a8005929c07ab5629e4c725313f5c37fd594cb0a0107c57ee46139",
       "edition": "Behaviours are invented. (The book has bots too, c7-b14.)"
     },
     {
@@ -372,7 +376,7 @@
         "function": "botPlan",
         "level": 5
       },
-      "codeHash": "0x7a744c18dddcef69c69ff5ce95fcf03edf20065bf0f8dc9152ea593d20162cb2",
+      "codeHash": "0xd1b4c8daa4d111395ae678a7c6ac63036c91f2480dc07edaa3004850232d047d",
       "edition": "Behaviours are invented. (The book has bots too, c7-b14.)"
     }
   ],
