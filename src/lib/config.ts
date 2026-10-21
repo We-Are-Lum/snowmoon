@@ -102,11 +102,62 @@ export const CHAT = {
 
 /** Moderation only: these FIDs may hide content. They never promote or rank anything. */
 /**
- * Adaptations are out of view (owner, 2026-10-08: image generation first). Off: no Adaptations in
- * the rail, menu, intro or About; no "cited in" marks in the reader; /adaptations and its pages say
- * nothing is published yet. Every file stays in the repo; set to true to bring them back.
+ * Adaptations were out of view from 2026-10-08 (owner: image generation first). Back in view on
+ * 2026-10-18 (owner: "adaptations isn't in the main menu or on the homepage yet"): `visible` puts
+ * Adaptations in the rail and menu, opens /adaptations (Fifteen Days first, then the seed briefs)
+ * and the home card. `inReader` stays off: no "cited in" marks or planning line in the reader, which
+ * the owner hasn't asked back.
  */
-export const ADAPTATIONS = { visible: false };
+export const ADAPTATIONS = { visible: true, inReader: false };
+
+/**
+ * Adaptation pages (/@<fname>/<id>, /@<fname>/<id>/v/<n>, /<id>; docs/proposals/adaptation-urls.md).
+ * Off on production until the owner says "publish": there they say "Nothing here yet". Local builds
+ * and preview deployments (behind Vercel Authentication) show them, so they can be checked.
+ */
+export const ADAPTATION_PAGES = { live: true };
+
+/**
+ * Remix in the shot editor (owner, 2026-10-18): Generate from any camera, through the Pictures
+ * pipeline (Farcaster sign-in and its gate, 10 free a day, wallet accounts prepaid; the same
+ * reference-picture model and price, IMAGES.editModel; the same prompt check, blocked names and
+ * consent wording). Its own daily count and its own daily cap on free generations, apart from
+ * Pictures'. Every generated frame is saved to the person's remix of the shot (studio.remix_frames,
+ * migration 0013). REMIX_FREE=off in the environment stops free generations at once (prepaid
+ * still works); REMIX_GENERATE=off stops every Generate.
+ */
+export const REMIX = {
+  /** Across everyone, per UTC day, for free generations (owner: "$10/day to start"). */
+  dailyFreeCapUsd: 10,
+  generationsPerDay: 10,
+  /** Their words: the same length as a Pictures prompt. */
+  ownWordsMaxChars: 600,
+  /** The live layout as sent: a PNG of the shot camera's view, at most this size. */
+  layout: { width: 1024, height: 576, maxBytes: 3_000_000 },
+  /**
+   * The pictures sent, in the order the version's own frames were sent theirs: the live layout as a
+   * depth map, the shot's cast cards, then its plate. The edit model takes up to 4.
+   */
+  maxPictures: 4,
+  /** The exact prompt sent: the shot's own prompt from the version's recipe, the plate's line and their words. */
+  promptMaxChars: 6000,
+  /**
+   * Tokens for the prompt check on a Remix prompt (the shot's own prompt and the person's words, up to
+   * 4,400 characters). At Pictures' 400 the check sometimes spent them all reasoning and gave no
+   * answer, which counts as a refusal: 6 of 78 plain prompts in the real check of 2026-10-18. Only the
+   * tokens used are billed (about 200 to 400).
+   */
+  guardMaxTokens: 1200,
+  /** The worst case reserved before a Generate: every picture and the output rounded up to 1 MP, plus the prompt check. */
+  reserveUsd: (pictures: number) => (1 + pictures) * 0.01 + 0.0015,
+  /** Storyboards: frames per board and each frame's length (seconds). */
+  storyboard: { maxItems: 200, minSeconds: 0.5, maxSeconds: 20, titleMaxChars: 80 },
+} as const;
+export const remixFreeOn = () => process.env.REMIX_FREE !== 'off';
+export const remixGenerateOn = () => IMAGES.enabled && process.env.REMIX_GENERATE !== 'off';
+export function adaptationPagesShown(): boolean {
+  return ADAPTATION_PAGES.live || process.env.VERCEL_ENV !== 'production';
+}
 
 /** Moderation only: these FIDs may hide content or dismiss a report. They never promote or rank anything. Owner, 2026-10-08 (decision 20). */
 export const MODERATOR_FIDS: readonly number[] = [6786];

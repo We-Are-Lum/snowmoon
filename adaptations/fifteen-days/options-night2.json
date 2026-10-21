@@ -1,0 +1,251 @@
+{
+  "about": "Fifteen Days, new shot options, round two: the game on the hall's broadcast and the waiting room's screen, the book's cabled glasses (c4-b82). The 3D broadcast is this edition's invention ('broadcast imagined'); the flat board is closest to the book's 'large detailed map' (c4-b114). Prompts DRAFTED by the coding agent; people described, never named.",
+  "style": {
+    "prompt": "Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands."
+  },
+  "style_draft": true,
+  "jobs": [
+    {
+      "id": "s01-o5",
+      "shot": "s01",
+      "prompt": "Wide shot of the vast game hall, its dark tiers packed with a crowd of small, plainly dressed spectators. On the floor two large glowing game consoles face each other: at one sits the tall pale young man, calm and cool, seen from behind and to one side, wearing glasses attached to a long cable that runs behind him; at the other, facing him, sits his opponent, a stocky young man with a shaved head, dark skin and a plain charcoal tunic, sweating, also wearing cabled glasses. Overhead hangs an enormous screen showing the game as a low-lit 3D view of a dark field: a base on a circle of coloured light in each corner, thin black pillar towers topped by glowing cube clusters, rings of light on the floor, small lit drones; beside it, smaller screens show the two players' faces. Exactly two main people: reference image 1 is the tall pale young man (wavy light-brown hair and a cream cable-knit sweater); his opponent has no reference image and looks nothing like him. Each appears exactly once; only one person has wavy light-brown hair and a cream cable-knit sweater. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. The tiers are full of spectators: many small people in plain dark clothes, none of them looking like the main people. The place: a vast dark game hall hollowed inside a mountain pyramid, steep tiers of seats rising into shadow, thin beams of light crossing the air. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/deluin"
+      ],
+      "cast": [
+        "deluin"
+      ],
+      "seed": 7015,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s01-o6",
+      "shot": "s01",
+      "prompt": "Wide shot of the vast game hall, its dark tiers packed with a crowd of small, plainly dressed spectators. On the floor two large glowing game consoles face each other: at one sits the tall pale young man, calm and cool, seen from behind and to one side, wearing glasses attached to a long cable that runs behind him; at the other, facing him, sits his opponent, a stocky young man with a shaved head, dark skin and a plain charcoal tunic, sweating, also wearing cabled glasses. Overhead hangs an enormous screen showing the game as a low-lit 3D view of a dark field: a base on a circle of coloured light in each corner, thin black pillar towers topped by glowing cube clusters, rings of light on the floor, small lit drones; beside it, smaller screens show the two players' faces. Exactly two main people: reference image 1 is the tall pale young man (wavy light-brown hair and a cream cable-knit sweater); his opponent has no reference image and looks nothing like him. Each appears exactly once; only one person has wavy light-brown hair and a cream cable-knit sweater. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. The tiers are full of spectators: many small people in plain dark clothes, none of them looking like the main people. The place: a vast dark game hall hollowed inside a mountain pyramid, steep tiers of seats rising into shadow, thin beams of light crossing the air. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/deluin"
+      ],
+      "cast": [
+        "deluin"
+      ],
+      "seed": 7016,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s01-o7",
+      "shot": "s01",
+      "prompt": "Wide shot of the vast game hall, its dark tiers packed with a crowd of small, plainly dressed spectators. On the floor two large glowing game consoles face each other: at one sits the tall pale young man, calm and cool, seen from behind and to one side, wearing glasses attached to a long cable that runs behind him; at the other, facing him, sits his opponent, a stocky young man with a shaved head, dark skin and a plain charcoal tunic, sweating, also wearing cabled glasses. Overhead hangs an enormous screen showing the game as a low-lit 3D view of a dark field: a base on a circle of coloured light in each corner, thin black pillar towers topped by glowing cube clusters, rings of light on the floor, small lit drones; beside it, smaller screens show the two players' faces. Exactly two main people: reference image 1 is the tall pale young man (wavy light-brown hair and a cream cable-knit sweater); his opponent has no reference image and looks nothing like him. Each appears exactly once; only one person has wavy light-brown hair and a cream cable-knit sweater. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. The tiers are full of spectators: many small people in plain dark clothes, none of them looking like the main people. The place: a vast dark game hall hollowed inside a mountain pyramid, steep tiers of seats rising into shadow, thin beams of light crossing the air. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/deluin"
+      ],
+      "cast": [
+        "deluin"
+      ],
+      "seed": 7017,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s02-o5",
+      "shot": "s02",
+      "prompt": "Medium close-up of the tall pale young man seated at a large glowing game console, calm and cool, wearing glasses attached to a long cable that runs behind him, the console's glow on his face; behind him, out of focus at the other console, sits his opponent, a stocky young man with a shaved head, dark skin and a plain charcoal tunic, wiping sweat from his brow; beyond, the crowd in the dark tiers and part of an enormous screen showing the game as a low-lit 3D view of a dark field: a base on a circle of coloured light in each corner, thin black pillar towers topped by glowing cube clusters, rings of light on the floor, small lit drones; beside it, smaller screens show the two players' faces. Exactly two main people: reference image 1 is the tall pale young man (wavy light-brown hair and a cream cable-knit sweater); his opponent has no reference image and looks nothing like him. Each appears exactly once; only one person has wavy light-brown hair and a cream cable-knit sweater. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. The tiers are full of spectators: many small people in plain dark clothes, none of them looking like the main people. The place: a vast dark game hall hollowed inside a mountain pyramid, steep tiers of seats rising into shadow, thin beams of light crossing the air. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/deluin"
+      ],
+      "cast": [
+        "deluin"
+      ],
+      "seed": 7025,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s02-o6",
+      "shot": "s02",
+      "prompt": "Medium close-up of the tall pale young man seated at a large glowing game console, calm and cool, wearing glasses attached to a long cable that runs behind him, the console's glow on his face; behind him, out of focus at the other console, sits his opponent, a stocky young man with a shaved head, dark skin and a plain charcoal tunic, wiping sweat from his brow; beyond, the crowd in the dark tiers and part of an enormous screen showing the game as a low-lit 3D view of a dark field: a base on a circle of coloured light in each corner, thin black pillar towers topped by glowing cube clusters, rings of light on the floor, small lit drones; beside it, smaller screens show the two players' faces. Exactly two main people: reference image 1 is the tall pale young man (wavy light-brown hair and a cream cable-knit sweater); his opponent has no reference image and looks nothing like him. Each appears exactly once; only one person has wavy light-brown hair and a cream cable-knit sweater. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. The tiers are full of spectators: many small people in plain dark clothes, none of them looking like the main people. The place: a vast dark game hall hollowed inside a mountain pyramid, steep tiers of seats rising into shadow, thin beams of light crossing the air. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/deluin"
+      ],
+      "cast": [
+        "deluin"
+      ],
+      "seed": 7026,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s02-o7",
+      "shot": "s02",
+      "prompt": "Medium close-up of the tall pale young man seated at a large glowing game console, calm and cool, wearing glasses attached to a long cable that runs behind him, the console's glow on his face; behind him, out of focus at the other console, sits his opponent, a stocky young man with a shaved head, dark skin and a plain charcoal tunic, wiping sweat from his brow; beyond, the crowd in the dark tiers and part of an enormous screen showing the game as a low-lit 3D view of a dark field: a base on a circle of coloured light in each corner, thin black pillar towers topped by glowing cube clusters, rings of light on the floor, small lit drones; beside it, smaller screens show the two players' faces. Exactly two main people: reference image 1 is the tall pale young man (wavy light-brown hair and a cream cable-knit sweater); his opponent has no reference image and looks nothing like him. Each appears exactly once; only one person has wavy light-brown hair and a cream cable-knit sweater. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. The tiers are full of spectators: many small people in plain dark clothes, none of them looking like the main people. The place: a vast dark game hall hollowed inside a mountain pyramid, steep tiers of seats rising into shadow, thin beams of light crossing the air. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/deluin"
+      ],
+      "cast": [
+        "deluin"
+      ],
+      "seed": 7027,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s02-o8",
+      "shot": "s02",
+      "prompt": "Medium close-up of the tall pale young man seated at a large glowing game console, calm and cool, wearing glasses attached to a long cable that runs behind him, the console's glow on his face; behind him, out of focus at the other console, sits his opponent, a stocky young man with a shaved head, dark skin and a plain charcoal tunic, wiping sweat from his brow; beyond, the crowd in the dark tiers and part of an enormous screen showing the game as a low-lit 3D view of a dark field: a base on a circle of coloured light in each corner, thin black pillar towers topped by glowing cube clusters, rings of light on the floor, small lit drones; beside it, smaller screens show the two players' faces. Exactly two main people: reference image 1 is the tall pale young man (wavy light-brown hair and a cream cable-knit sweater); his opponent has no reference image and looks nothing like him. Each appears exactly once; only one person has wavy light-brown hair and a cream cable-knit sweater. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. The tiers are full of spectators: many small people in plain dark clothes, none of them looking like the main people. The place: a vast dark game hall hollowed inside a mountain pyramid, steep tiers of seats rising into shadow, thin beams of light crossing the air. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/deluin"
+      ],
+      "cast": [
+        "deluin"
+      ],
+      "seed": 7028,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s03-o3",
+      "shot": "s03",
+      "prompt": "The slim spiky-haired young man and the young woman sit side by side on a low stone bench, watching the big wall screen, which shows the game as a flat board: a near-black square grid with ring-shaped towers (a glowing circle with a dark centre) in cyan and amber, chevron-shaped gliders flying in straight lines with a trail of small dots, small squares in each player's colour, and grey rocks; a small bin stands beside her. Medium two-shot. The room has no windows. Exactly two main people: reference image 1 is the spiky-haired young man (spiky black hair with a blue streak and an orange jacket); reference image 2 is the young woman (a magenta ponytail and a lime-green vest). Each appears exactly once; only one person has spiky black hair with a blue streak and an orange jacket. only one person has a magenta ponytail and a lime-green vest. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. No other people anywhere in the picture. The place: a windowless players' waiting room carved deep inside a mountain pyramid, polished pale stone walls and a vaulted round-topped ceiling, a doorway of stone bricks curving into an arch whose top bears a carved emblem of two horizontal arms meeting in the middle with clashing fists, sleek elevator doors in one wall, low stone benches, a big wall screen showing the game, warm indirect light. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/zei",
+        "cast/front/bai"
+      ],
+      "cast": [
+        "zei",
+        "bai"
+      ],
+      "seed": 7033,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s03-o4",
+      "shot": "s03",
+      "prompt": "The slim spiky-haired young man and the young woman sit side by side on a low stone bench, watching the big wall screen, which shows the game as a flat board: a near-black square grid with ring-shaped towers (a glowing circle with a dark centre) in cyan and amber, chevron-shaped gliders flying in straight lines with a trail of small dots, small squares in each player's colour, and grey rocks; a small bin stands beside her. Medium two-shot. The room has no windows. Exactly two main people: reference image 1 is the spiky-haired young man (spiky black hair with a blue streak and an orange jacket); reference image 2 is the young woman (a magenta ponytail and a lime-green vest). Each appears exactly once; only one person has spiky black hair with a blue streak and an orange jacket. only one person has a magenta ponytail and a lime-green vest. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. No other people anywhere in the picture. The place: a windowless players' waiting room carved deep inside a mountain pyramid, polished pale stone walls and a vaulted round-topped ceiling, a doorway of stone bricks curving into an arch whose top bears a carved emblem of two horizontal arms meeting in the middle with clashing fists, sleek elevator doors in one wall, low stone benches, a big wall screen showing the game, warm indirect light. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/zei",
+        "cast/front/bai"
+      ],
+      "cast": [
+        "zei",
+        "bai"
+      ],
+      "seed": 7034,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s04-o3",
+      "shot": "s04",
+      "prompt": "Both sitting on the low stone bench: the slim spiky-haired young man turns to the young woman beside him with one eyebrow raised; she keeps her eyes on the wall screen, which shows the game as a flat board: a near-black square grid with ring-shaped towers (a glowing circle with a dark centre) in cyan and amber, chevron-shaped gliders flying in straight lines with a trail of small dots, small squares in each player's colour, and grey rocks, unimpressed. Medium close two-shot. The room has no windows. Exactly two main people: reference image 1 is the spiky-haired young man (spiky black hair with a blue streak and an orange jacket); reference image 2 is the young woman (a magenta ponytail and a lime-green vest). Each appears exactly once; only one person has spiky black hair with a blue streak and an orange jacket. only one person has a magenta ponytail and a lime-green vest. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. No other people anywhere in the picture. The place: a windowless players' waiting room carved deep inside a mountain pyramid, polished pale stone walls and a vaulted round-topped ceiling, a doorway of stone bricks curving into an arch whose top bears a carved emblem of two horizontal arms meeting in the middle with clashing fists, sleek elevator doors in one wall, low stone benches, a big wall screen showing the game, warm indirect light. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/zei",
+        "cast/front/bai"
+      ],
+      "cast": [
+        "zei",
+        "bai"
+      ],
+      "seed": 7043,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s04-o4",
+      "shot": "s04",
+      "prompt": "Both sitting on the low stone bench: the slim spiky-haired young man turns to the young woman beside him with one eyebrow raised; she keeps her eyes on the wall screen, which shows the game as a flat board: a near-black square grid with ring-shaped towers (a glowing circle with a dark centre) in cyan and amber, chevron-shaped gliders flying in straight lines with a trail of small dots, small squares in each player's colour, and grey rocks, unimpressed. Medium close two-shot. The room has no windows. Exactly two main people: reference image 1 is the spiky-haired young man (spiky black hair with a blue streak and an orange jacket); reference image 2 is the young woman (a magenta ponytail and a lime-green vest). Each appears exactly once; only one person has spiky black hair with a blue streak and an orange jacket. only one person has a magenta ponytail and a lime-green vest. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. No other people anywhere in the picture. The place: a windowless players' waiting room carved deep inside a mountain pyramid, polished pale stone walls and a vaulted round-topped ceiling, a doorway of stone bricks curving into an arch whose top bears a carved emblem of two horizontal arms meeting in the middle with clashing fists, sleek elevator doors in one wall, low stone benches, a big wall screen showing the game, warm indirect light. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/zei",
+        "cast/front/bai"
+      ],
+      "cast": [
+        "zei",
+        "bai"
+      ],
+      "seed": 7044,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s06-o3",
+      "shot": "s06",
+      "prompt": "The young woman finally gives the wall screen a serious look, studying it, chin on her hand, its glow on her face; the screen shows the game as a flat board: a near-black square grid with ring-shaped towers (a glowing circle with a dark centre) in cyan and amber, chevron-shaped gliders flying in straight lines with a trail of small dots, small squares in each player's colour, and grey rocks. Close-up. The room has no windows. Exactly one main person: reference image 1 is the young woman (a magenta ponytail and a lime-green vest). Each appears exactly once; only one person has a magenta ponytail and a lime-green vest. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. No other people anywhere in the picture. The place: a windowless players' waiting room carved deep inside a mountain pyramid, polished pale stone walls and a vaulted round-topped ceiling, a doorway of stone bricks curving into an arch whose top bears a carved emblem of two horizontal arms meeting in the middle with clashing fists, sleek elevator doors in one wall, low stone benches, a big wall screen showing the game, warm indirect light. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/bai"
+      ],
+      "cast": [
+        "bai"
+      ],
+      "seed": 7063,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s06-o4",
+      "shot": "s06",
+      "prompt": "The young woman finally gives the wall screen a serious look, studying it, chin on her hand, its glow on her face; the screen shows the game as a flat board: a near-black square grid with ring-shaped towers (a glowing circle with a dark centre) in cyan and amber, chevron-shaped gliders flying in straight lines with a trail of small dots, small squares in each player's colour, and grey rocks. Close-up. The room has no windows. Exactly one main person: reference image 1 is the young woman (a magenta ponytail and a lime-green vest). Each appears exactly once; only one person has a magenta ponytail and a lime-green vest. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. No other people anywhere in the picture. The place: a windowless players' waiting room carved deep inside a mountain pyramid, polished pale stone walls and a vaulted round-topped ceiling, a doorway of stone bricks curving into an arch whose top bears a carved emblem of two horizontal arms meeting in the middle with clashing fists, sleek elevator doors in one wall, low stone benches, a big wall screen showing the game, warm indirect light. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/bai"
+      ],
+      "cast": [
+        "bai"
+      ],
+      "seed": 7064,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s05-o5",
+      "shot": "s05",
+      "prompt": "Seated on the low stone bench, the young woman leans sideways mid-motion and spits into a small bin beside her, nonchalant, her eyes still on the wall screen, which shows the game as a flat board: a near-black square grid with ring-shaped towers (a glowing circle with a dark centre) in cyan and amber, chevron-shaped gliders flying in straight lines with a trail of small dots, small squares in each player's colour, and grey rocks. Medium shot from a low angle. The room has no windows; nothing in her mouth. Exactly one main person: reference image 1 is the young woman (a magenta ponytail and a lime-green vest). Each appears exactly once; only one person has a magenta ponytail and a lime-green vest. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. No other people anywhere in the picture. The place: a windowless players' waiting room carved deep inside a mountain pyramid, polished pale stone walls and a vaulted round-topped ceiling, a doorway of stone bricks curving into an arch whose top bears a carved emblem of two horizontal arms meeting in the middle with clashing fists, sleek elevator doors in one wall, low stone benches, a big wall screen showing the game, warm indirect light. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/bai"
+      ],
+      "cast": [
+        "bai"
+      ],
+      "seed": 7055,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "s05-o6",
+      "shot": "s05",
+      "prompt": "Seated on the low stone bench, the young woman leans sideways mid-motion and spits into a small bin beside her, nonchalant, her eyes still on the wall screen, which shows the game as a flat board: a near-black square grid with ring-shaped towers (a glowing circle with a dark centre) in cyan and amber, chevron-shaped gliders flying in straight lines with a trail of small dots, small squares in each player's colour, and grey rocks. Medium shot from a low angle. The room has no windows; nothing in her mouth. Exactly one main person: reference image 1 is the young woman (a magenta ponytail and a lime-green vest). Each appears exactly once; only one person has a magenta ponytail and a lime-green vest. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. No other people anywhere in the picture. The place: a windowless players' waiting room carved deep inside a mountain pyramid, polished pale stone walls and a vaulted round-topped ceiling, a doorway of stone bricks curving into an arch whose top bears a carved emblem of two horizontal arms meeting in the middle with clashing fists, sleek elevator doors in one wall, low stone benches, a big wall screen showing the game, warm indirect light. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character.",
+      "characters": [],
+      "references": [
+        "cast/front/bai"
+      ],
+      "cast": [
+        "bai"
+      ],
+      "seed": 7056,
+      "width": 1024,
+      "height": 576
+    }
+  ],
+  "assist": {
+    "model": "claude-coding-agent",
+    "drafted": [
+      "subjects",
+      "framing",
+      "people counts",
+      "place text"
+    ]
+  }
+}

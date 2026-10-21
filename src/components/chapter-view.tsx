@@ -180,8 +180,8 @@ function ChapterSheet({
             <Link className="cs-ask" href={`/assistant?chapter=${chapter}`} onClick={onClose}>
               ○ Ask about this chapter
             </Link>
-            {/* Planning isn't built: shown in its place, not as a control. Hidden with adaptations (ADAPTATIONS.visible). */}
-            {ADAPTATIONS.visible && (
+            {/* Planning isn't built: shown in its place, not as a control. Hidden while ADAPTATIONS.inReader is off. */}
+            {ADAPTATIONS.inReader && (
               <p className="cs-coming">
                 <span>● Plan an adaptation of it</span>
                 <span>Coming</span>

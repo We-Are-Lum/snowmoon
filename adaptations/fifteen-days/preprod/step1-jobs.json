@@ -1,0 +1,218 @@
+{
+  "about": "Fifteen Days pre-production, step 1 (owner's review, 2026-10-16): Bai and Deluin redrawn, the hall rebuilt after the tutorial, the courtyard with robot C and a wider table, the gate with the cafe's skyline, the lobby in B's mood. Text DRAFTED by the coding agent.",
+  "out": "images-out/preprod/step1",
+  "ledger": "images-out/preprod/ledger-s12.json",
+  "cap_usd": 1.0,
+  "style": "",
+  "jobs": [
+    {
+      "id": "face-bai-c",
+      "prompt": "Face reference sheet on a plain flat mid-grey background with no scenery: six heads of the same person in two rows of three, all the same size, framed from the top of the head to the collarbone, even soft lighting. Top row, neutral expression: facing the viewer, a three-quarter view turned to the left, and a side profile facing left. Bottom row, all facing the viewer: a smile, an annoyed frown, surprise. Every head is clearly the same person with the same hair. Only a plain dark crew-neck collar shows at the neck, no costume. The person: a young woman of about eighteen, thin and wiry, of mixed Black and East Asian heritage: deep warm brown skin, narrow dark eyes with monolids, high cheekbones, a sharp jaw, a sly self-assured look; an extreme edgy haircut: both sides of her head shaved close, the top gathered into a tall high ponytail dyed hot magenta; a fine black geometric line tattoo running up the side of her neck (abstract shapes only, no letters). Detailed science fiction comic art: precise fine uniform linework, cel-shaded flat color, clear readable faces. No text, no lettering, no numbers, no logos anywhere.",
+      "width": 1536,
+      "height": 1024,
+      "seed": 10101
+    },
+    {
+      "id": "face-bai-d",
+      "prompt": "Face reference sheet on a plain flat mid-grey background with no scenery: six heads of the same person in two rows of three, all the same size, framed from the top of the head to the collarbone, even soft lighting. Top row, neutral expression: facing the viewer, a three-quarter view turned to the left, and a side profile facing left. Bottom row, all facing the viewer: a smile, an annoyed frown, surprise. Every head is clearly the same person with the same hair. Only a plain dark crew-neck collar shows at the neck, no costume. The person: a young woman of about eighteen, thin and wiry, of mixed Black and East Asian heritage: deep warm brown skin, dark almond eyes, high cheekbones, a narrow face, a guarded, sly look; an extreme edgy haircut: one side of her head shaved close, a long sharp asymmetric fringe on the other, the back pulled into a high magenta ponytail; small black geometric tattoos on the side of her neck (abstract shapes only, no letters). Detailed science fiction comic art: precise fine uniform linework, cel-shaded flat color, clear readable faces. No text, no lettering, no numbers, no logos anywhere.",
+      "width": 1536,
+      "height": 1024,
+      "seed": 10102
+    },
+    {
+      "id": "figure-bai",
+      "prompt": "Figure and costume reference sheet on a plain flat off-white background with no scenery: the same young woman shown twice side by side, front view and back view, framed from the chin down so her face is not shown, standing naturally. She is thin and wiry with deep warm brown skin, and black geometric line tattoos (abstract shapes only, no letters) wind around both forearms and upper arms. She wears a lime-green modular shell vest with a bulky angular collar, sleeveless, over a white seamless bodysuit with glowing magenta seams, black wide gathered trousers with segmented knees, chunky black boots with glowing soles, a small waist pouch. Detailed science fiction comic art: precise fine uniform linework, cel-shaded flat color, clear readable faces. No text, no lettering, no numbers, no logos anywhere.",
+      "width": 1536,
+      "height": 1024,
+      "seed": 10103
+    },
+    {
+      "id": "face-deluin-c",
+      "prompt": "Face reference sheet on a plain flat mid-grey background with no scenery: six heads of the same person in two rows of three, all the same size, framed from the top of the head to the collarbone, even soft lighting. Top row, neutral expression: facing the viewer, a three-quarter view turned to the left, and a side profile facing left. Bottom row, all facing the viewer: a smile, an annoyed frown, surprise. Every head is clearly the same person with the same hair. Only a plain dark crew-neck collar shows at the neck, no costume. The person: a young man of eighteen, tall and long-limbed, fair skin in warm natural tones, grey-green eyes, light-brown wavy shoulder-length hair; warm, kind and approachable but a little removed: his smile is polite and gentle and does not reach his eyes, which stay calm and watchful. Detailed science fiction comic art: precise fine uniform linework, cel-shaded flat color, clear readable faces. No text, no lettering, no numbers, no logos anywhere.",
+      "width": 1536,
+      "height": 1024,
+      "seed": 10104
+    },
+    {
+      "id": "face-deluin-d",
+      "prompt": "Face reference sheet on a plain flat mid-grey background with no scenery: six heads of the same person in two rows of three, all the same size, framed from the top of the head to the collarbone, even soft lighting. Top row, neutral expression: facing the viewer, a three-quarter view turned to the left, and a side profile facing left. Bottom row, all facing the viewer: a smile, an annoyed frown, surprise. Every head is clearly the same person with the same hair. Only a plain dark crew-neck collar shows at the neck, no costume. The person: a young man of eighteen, tall and long-limbed, fair skin in warm natural tones, grey-green eyes, light-brown wavy shoulder-length hair; warm, kind and approachable but a little removed: his smile is polite and gentle and does not reach his eyes, which stay calm and watchful. Keep the face shape and hair of the person in the reference image. Detailed science fiction comic art: precise fine uniform linework, cel-shaded flat color, clear readable faces. No text, no lettering, no numbers, no logos anywhere.",
+      "refs": [
+        "images-out/cast/front/deluin.png"
+      ],
+      "width": 1536,
+      "height": 1024,
+      "seed": 10105
+    },
+    {
+      "id": "hall3-a",
+      "prompt": "Extreme wide establishing shot from the standing overlook at the very top of a vast round game hall inside a mountain, framed below the ceiling so no rock ceiling shows. Below the overlook's railing: a second tier of seats, then tiers of good seats close to the floor, all packed with a varied crowd of many ages, builds and skin tones in clothes of many colours. Over the open floor, large glowing three-dimensional holograms of the game in exactly the style of reference images 2 and 3, in only two colours, cyan and amber: black pillar towers topped with glowing cube clusters, some of them physical towers riding small robotic bases, rings of light on the floor, streams of small glowing gliders and little ships, walls of glowing cubes building. Hanging above the floor, two big screens, each showing one player's face in close-up. Far apart at opposite edges of the floor, two small sunken pits, each with one player at a glowing console, facing outward toward the wall, unable to see the holograms or each other. Use reference image 1 only for the hall's dark mood and shape. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Shop fronts and walls carry no lettered signs at all: at most a plain glowing panel with one single large simple pictogram (a cup, a leaf, a bowl) and nothing else. Screens show only abstract shapes. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character.",
+      "refs": [
+        "images-out/preprod/refs-small/est2-hall-a.png",
+        "images-out/preprod/refs-small/holo-towers-cyan.png",
+        "images-out/preprod/refs-small/holo-towers-pink-amber.png"
+      ],
+      "width": 1536,
+      "height": 864,
+      "seed": 10201,
+      "note": "holograms after the tutorial (broadcast imagined)"
+    },
+    {
+      "id": "hall3-b",
+      "prompt": "Extreme wide establishing shot from the standing overlook at the very top of a vast round game hall inside a mountain, framed below the ceiling so no rock ceiling shows. Below the overlook's railing: a second tier of seats, then tiers of good seats close to the floor, all packed with a varied crowd of many ages, builds and skin tones in clothes of many colours. Over the open floor, large glowing three-dimensional holograms of the game in exactly the style of reference images 2 and 3, in only two colours, cyan and amber: black pillar towers topped with glowing cube clusters, some of them physical towers riding small robotic bases, rings of light on the floor, streams of small glowing gliders and little ships, walls of glowing cubes building. Hanging above the floor, two big screens, each showing one player's face in close-up. Far apart at opposite edges of the floor, two small sunken pits, each with one player at a glowing console, facing outward toward the wall, unable to see the holograms or each other. Use reference image 1 only for the hall's dark mood and shape. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Shop fronts and walls carry no lettered signs at all: at most a plain glowing panel with one single large simple pictogram (a cup, a leaf, a bowl) and nothing else. Screens show only abstract shapes. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character.",
+      "refs": [
+        "images-out/preprod/refs-small/est2-hall-a.png",
+        "images-out/preprod/refs-small/holo-towers-cyan.png",
+        "images-out/preprod/refs-small/holo-towers-pink-amber.png"
+      ],
+      "width": 1536,
+      "height": 864,
+      "seed": 10202,
+      "note": "holograms after the tutorial (broadcast imagined)"
+    },
+    {
+      "id": "hall3-c",
+      "prompt": "Extreme wide establishing shot from the standing overlook at the very top of a vast round game hall inside a mountain, framed below the ceiling so no rock ceiling shows. Below the overlook's railing: a second tier of seats, then tiers of good seats close to the floor, all packed with a varied crowd of many ages, builds and skin tones in clothes of many colours. Over the open floor, large glowing three-dimensional holograms of the game in exactly the style of reference images 2 and 3, in only two colours, cyan and amber: black pillar towers topped with glowing cube clusters, some of them physical towers riding small robotic bases, rings of light on the floor, streams of small glowing gliders and little ships, walls of glowing cubes building. Hanging above the floor, two big screens, each showing one player's face in close-up. Far apart at opposite edges of the floor, two small sunken pits, each with one player at a glowing console, facing outward toward the wall, unable to see the holograms or each other. Use reference image 1 only for the hall's dark mood and shape. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Shop fronts and walls carry no lettered signs at all: at most a plain glowing panel with one single large simple pictogram (a cup, a leaf, a bowl) and nothing else. Screens show only abstract shapes. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character.",
+      "refs": [
+        "images-out/preprod/refs-small/est2-hall-a.png",
+        "images-out/preprod/refs-small/holo-towers-cyan.png",
+        "images-out/preprod/refs-small/holo-towers-pink-amber.png"
+      ],
+      "width": 1536,
+      "height": 864,
+      "seed": 10203,
+      "note": "holograms after the tutorial (broadcast imagined)"
+    },
+    {
+      "id": "courtyard3-a",
+      "prompt": "The same small open-air courtyard cafe at night as reference image 1, the same buildings, tree, string lights and skyline, but with one wide rectangular table for four in the middle ground with generous room between its chairs, and a small round table for one just beyond its east end; other tables close around, taken by people eating and talking. The serving robot standing by the table is exactly the robot of reference image 2 (humanoid upper body with a tray, gliding on a smooth column, no legs). No other robots. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands. Shop fronts and walls carry no lettered signs at all: at most a plain glowing panel with one single large simple pictogram (a cup, a leaf, a bowl) and nothing else. Screens show only abstract shapes. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character.",
+      "refs": [
+        "images-out/preprod/refs-small/est-courtyard-a.png",
+        "images-out/preprod/refs-small/robot2-c.png"
+      ],
+      "width": 1536,
+      "height": 864,
+      "seed": 10301
+    },
+    {
+      "id": "courtyard3-b",
+      "prompt": "The same small open-air courtyard cafe at night as reference image 1, the same buildings, tree, string lights and skyline, but with one wide rectangular table for four in the middle ground with generous room between its chairs, and a small round table for one just beyond its east end; other tables close around, taken by people eating and talking. The serving robot standing by the table is exactly the robot of reference image 2 (humanoid upper body with a tray, gliding on a smooth column, no legs). No other robots. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands. Shop fronts and walls carry no lettered signs at all: at most a plain glowing panel with one single large simple pictogram (a cup, a leaf, a bowl) and nothing else. Screens show only abstract shapes. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character.",
+      "refs": [
+        "images-out/preprod/refs-small/est-courtyard-a.png",
+        "images-out/preprod/refs-small/robot2-c.png"
+      ],
+      "width": 1536,
+      "height": 864,
+      "seed": 10302
+    },
+    {
+      "id": "gate3-a",
+      "prompt": "Establishing shot at dusk of the open street gate of the courtyard cafe in reference image 1: the same gate, lamp post and street. On the horizon, the same skyline as the cafe in reference image 2: the same megastructures and towering stone mountain pyramids, with the first lit windows against a deep blue and violet dusk sky. One single continuous picture, not split into panels. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands. Shop fronts and walls carry no lettered signs at all: at most a plain glowing panel with one single large simple pictogram (a cup, a leaf, a bowl) and nothing else. Screens show only abstract shapes. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character.",
+      "refs": [
+        "images-out/preprod/refs-small/est2-gate-a.png",
+        "images-out/preprod/refs-small/est-courtyard-a.png"
+      ],
+      "width": 1536,
+      "height": 864,
+      "seed": 10401
+    },
+    {
+      "id": "gate3-b",
+      "prompt": "Establishing shot at dusk of the open street gate of the courtyard cafe in reference image 1: the same gate, lamp post and street. On the horizon, the same skyline as the cafe in reference image 2: the same megastructures and towering stone mountain pyramids, with the first lit windows against a deep blue and violet dusk sky. One single continuous picture, not split into panels. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands. Shop fronts and walls carry no lettered signs at all: at most a plain glowing panel with one single large simple pictogram (a cup, a leaf, a bowl) and nothing else. Screens show only abstract shapes. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character.",
+      "refs": [
+        "images-out/preprod/refs-small/est2-gate-a.png",
+        "images-out/preprod/refs-small/est-courtyard-a.png"
+      ],
+      "width": 1536,
+      "height": 864,
+      "seed": 10402
+    },
+    {
+      "id": "lobby3-a",
+      "prompt": "Wide establishing shot. The same cozy hotel lobby restaurant late at night as the reference image, the same warm lamps, wooden tables, tall windows and glowing strip of light, nearly empty: no other diners. One single continuous picture, not split into panels. A slim young man with spiky black hair in an orange jacket sits alone at a table by the tall window, head down over a small glowing device; a bowl and a tea cup in front of him. Exactly one person. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands. Shop fronts and walls carry no lettered signs at all: at most a plain glowing panel with one single large simple pictogram (a cup, a leaf, a bowl) and nothing else. Screens show only abstract shapes. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character.",
+      "refs": [
+        "images-out/preprod/refs-small/est-lobby-b.png"
+      ],
+      "width": 1536,
+      "height": 864,
+      "seed": 10501
+    },
+    {
+      "id": "lobby3-out",
+      "prompt": "From the dark, quiet street outside at night, looking in through the hotel restaurant's tall window: inside, in the warm light of the same cozy hotel lobby restaurant late at night as the reference image, the same warm lamps, wooden tables, tall windows and glowing strip of light, nearly empty: no other diners. one single continuous picture, not split into panels. a slim young man with spiky black hair in an orange jacket sits alone at a table by the window, small, head down over a glowing device. Reflections of the street lights on the glass. Exactly one person inside, nobody on the street. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands. Shop fronts and walls carry no lettered signs at all: at most a plain glowing panel with one single large simple pictogram (a cup, a leaf, a bowl) and nothing else. Screens show only abstract shapes. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character.",
+      "refs": [
+        "images-out/preprod/refs-small/est-lobby-b.png"
+      ],
+      "width": 1536,
+      "height": 864,
+      "seed": 10502
+    },
+    {
+      "id": "hall4-a",
+      "prompt": "The same game hall as reference image 1, seen from the standing overlook at the top, the camera tilted down toward the floor so the ceiling is out of the picture entirely. Tiers of a varied crowd fall away below. Over the open floor, much larger and busier glowing three-dimensional holograms in the style of reference image 2, in only cyan and amber: many black pillar towers with glowing cube tops, several of them physical towers riding small robotic bases, rings of light, swarms of small glowing gliders and little ships streaking between them, walls of glowing cubes building. Two big screens hang above the floor, each showing one young man's face in close-up. At opposite edges of the floor, two small sunken pits like holes in the floor, each with one player at a glowing console inside, lower than the crowd, facing outward. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Shop fronts and walls carry no lettered signs at all: at most a plain glowing panel with one single large simple pictogram (a cup, a leaf, a bowl) and nothing else. Screens show only abstract shapes. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character.",
+      "refs": [
+        "images-out/preprod/refs-small/hall3-b.png",
+        "images-out/preprod/refs-small/holo-towers-cyan.png"
+      ],
+      "width": 1536,
+      "height": 864,
+      "seed": 10601,
+      "note": "holograms after the tutorial (broadcast imagined)"
+    },
+    {
+      "id": "hall4-b",
+      "prompt": "The same game hall as reference image 1, seen from the standing overlook at the top, the camera tilted down toward the floor so the ceiling is out of the picture entirely. Tiers of a varied crowd fall away below. Over the open floor, much larger and busier glowing three-dimensional holograms in the style of reference image 2, in only cyan and amber: many black pillar towers with glowing cube tops, several of them physical towers riding small robotic bases, rings of light, swarms of small glowing gliders and little ships streaking between them, walls of glowing cubes building. Two big screens hang above the floor, each showing one young man's face in close-up. At opposite edges of the floor, two small sunken pits like holes in the floor, each with one player at a glowing console inside, lower than the crowd, facing outward. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Shop fronts and walls carry no lettered signs at all: at most a plain glowing panel with one single large simple pictogram (a cup, a leaf, a bowl) and nothing else. Screens show only abstract shapes. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character.",
+      "refs": [
+        "images-out/preprod/refs-small/hall3-b.png",
+        "images-out/preprod/refs-small/holo-towers-cyan.png"
+      ],
+      "width": 1536,
+      "height": 864,
+      "seed": 10602,
+      "note": "holograms after the tutorial (broadcast imagined)"
+    },
+    {
+      "id": "lobby4-out-a",
+      "prompt": "Exterior night shot from across a dark, quiet city street: the camera stands outside on the pavement, looking at the front of a hotel. A tall glass window fills the middle of the picture, its frame and the building's dark facade around it, the empty pavement and a street lamp in the foreground. Through the glass, the warm-lit restaurant of the reference image: a slim young man with spiky black hair in an orange jacket sits alone at a table by the window, small, head down over a glowing device. Reflections of street lights on the glass. Nobody on the street. One single continuous picture. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands. Shop fronts and walls carry no lettered signs at all: at most a plain glowing panel with one single large simple pictogram (a cup, a leaf, a bowl) and nothing else. Screens show only abstract shapes. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character.",
+      "refs": [
+        "images-out/preprod/refs-small/lobby3-a.png"
+      ],
+      "width": 1536,
+      "height": 864,
+      "seed": 10701
+    },
+    {
+      "id": "lobby4-out-b",
+      "prompt": "Exterior night shot from across a dark, quiet city street: the camera stands outside on the pavement, looking at the front of a hotel. A tall glass window fills the middle of the picture, its frame and the building's dark facade around it, the empty pavement and a street lamp in the foreground. Through the glass, the warm-lit restaurant of the reference image: a slim young man with spiky black hair in an orange jacket sits alone at a table by the window, small, head down over a glowing device. Reflections of street lights on the glass. Nobody on the street. One single continuous picture. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands. Shop fronts and walls carry no lettered signs at all: at most a plain glowing panel with one single large simple pictogram (a cup, a leaf, a bowl) and nothing else. Screens show only abstract shapes. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character.",
+      "refs": [
+        "images-out/preprod/refs-small/lobby3-a.png"
+      ],
+      "width": 1536,
+      "height": 864,
+      "seed": 10702
+    },
+    {
+      "id": "gallery4-a",
+      "prompt": "The standing overlook at the very top of the same game hall as reference image 1: a long waist-high metal railing in the foreground curving away, a few ordinary people standing at it here and there, standing room behind them against the wall. Just below the railing, the second tier of seated spectators, the backs of their heads close; further down, the good seats near the floor; all a varied crowd of many ages, builds and skin tones. Far below and across the hall, the same glowing holograms in cyan and amber, in the style of reference image 2, and the two big screens showing the players' faces. The camera looks along the railing and down into the hall, so no ceiling shows. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Shop fronts and walls carry no lettered signs at all: at most a plain glowing panel with one single large simple pictogram (a cup, a leaf, a bowl) and nothing else. Screens show only abstract shapes. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character.",
+      "refs": [
+        "images-out/preprod/refs-small/hall4-a-crop.png",
+        "images-out/preprod/refs-small/holo-towers-cyan.png"
+      ],
+      "width": 1536,
+      "height": 864,
+      "seed": 10801,
+      "note": "holograms after the tutorial (broadcast imagined)"
+    },
+    {
+      "id": "gallery4-b",
+      "prompt": "The standing overlook at the very top of the same game hall as reference image 1: a long waist-high metal railing in the foreground curving away, a few ordinary people standing at it here and there, standing room behind them against the wall. Just below the railing, the second tier of seated spectators, the backs of their heads close; further down, the good seats near the floor; all a varied crowd of many ages, builds and skin tones. Far below and across the hall, the same glowing holograms in cyan and amber, in the style of reference image 2, and the two big screens showing the players' faces. The camera looks along the railing and down into the hall, so no ceiling shows. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Shop fronts and walls carry no lettered signs at all: at most a plain glowing panel with one single large simple pictogram (a cup, a leaf, a bowl) and nothing else. Screens show only abstract shapes. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character.",
+      "refs": [
+        "images-out/preprod/refs-small/hall4-a-crop.png",
+        "images-out/preprod/refs-small/holo-towers-cyan.png"
+      ],
+      "width": 1536,
+      "height": 864,
+      "seed": 10802,
+      "note": "holograms after the tutorial (broadcast imagined)"
+    }
+  ]
+}

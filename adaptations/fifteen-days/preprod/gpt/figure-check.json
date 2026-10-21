@@ -1,0 +1,308 @@
+{
+ "H01-Q3": {
+  "tag": "g1",
+  "pass": true,
+  "note": "Both players in their pits, the arena and crowd; the two big screens show the players' faces.",
+  "tries": 1
+ },
+ "cov-game-FLOOR-live-E40": {
+  "tag": "g1",
+  "pass": true,
+  "note": "No faces on the blocks; towers, gliders, crowd.",
+  "tries": 1
+ },
+ "cov-game-PIT-D-playing-K7": {
+  "tag": "g1",
+  "pass": true,
+  "note": "Deluin once; long belted cable-knit tunic with its hood, as on his card.",
+  "tries": 1
+ },
+ "H05-K6": {
+  "tag": "g1",
+  "pass": true,
+  "note": "Kau once, glasses with cables, sweat.",
+  "tries": 1
+ },
+ "cov-game-SCREEN-face-E18": {
+  "tag": "g1",
+  "pass": true,
+  "note": "Deluin on the big screen, hooded tunic as on his card; one main person.",
+  "tries": 1
+ },
+ "cov-overlook-MASTER-watch-K9": {
+  "tag": "g1",
+  "pass": true,
+  "note": "Zei and Bai, each once, at the railing.",
+  "tries": 1
+ },
+ "cov-overlook-OTS-Z-dry-K7": {
+  "tag": "g1",
+  "pass": true,
+  "note": "Zei and Bai each once; a few spectators walk the walkway behind her.",
+  "tries": 1
+ },
+ "cov-overlook-CU-Z-look-E40": {
+  "tag": "g1",
+  "pass": true,
+  "note": "Zei once, looking right, small smile.",
+  "tries": 1
+ },
+ "cov-overlook-OTS-Z-shrug-E16": {
+  "tag": "g1",
+  "pass": true,
+  "note": "Zei and Bai each once.",
+  "tries": 1
+ },
+ "G08-K2": {
+  "tag": "g1",
+  "pass": true,
+  "note": "POV down to the floor; crowd only.",
+  "tries": 1
+ },
+ "cov-overlook-OTS-Z-wry-E16": {
+  "tag": "g1",
+  "pass": true,
+  "note": "Zei and Bai each once.",
+  "tries": 1
+ },
+ "cov-overlook-MASTER-lean-K8": {
+  "tag": "g1",
+  "pass": true,
+  "note": "Zei and Bai each once, leaning on the railing.",
+  "tries": 1
+ },
+ "cov-overlook-CU-B-toast-K10": {
+  "tag": "g1",
+  "pass": true,
+  "note": "Bai once.",
+  "tries": 1
+ },
+ "cov-game-PIT-D-glasses-K7": {
+  "tag": "g1",
+  "pass": true,
+  "note": "Deluin once, putting on the glasses; hooded belted tunic, on card.",
+  "tries": 1
+ },
+ "cov-corridor-MASTER-arrive-K8": {
+  "tag": "g1",
+  "pass": true,
+  "note": "Zei, Bai, Deluin each once; Deluin's long belted hooded tunic.",
+  "tries": 1
+ },
+ "cov-corridor-OTS-D-eager-K7": {
+  "tag": "g1",
+  "pass": true,
+  "note": "Three, each once; Deluin from behind.",
+  "tries": 1
+ },
+ "cov-corridor-OTS-Z-easy-K8": {
+  "tag": "g1",
+  "pass": true,
+  "note": "Two, each once. Tunic drift (mild): Deluin's tunic reads as a hooded, belted sweater, tan rather than cream.",
+  "tries": 1
+ },
+ "cov-corridor-CU-B-sour-K9": {
+  "tag": "g1",
+  "pass": true,
+  "note": "Bai once, arms crossed.",
+  "tries": 1
+ },
+ "cov-corridor-OTS-Z-warm-E40": {
+  "tag": "g1",
+  "pass": true,
+  "note": "Two, each once; no open door. Tunic drift (mild): hooded, belted sweater.",
+  "tries": 1
+ },
+ "C17-K4": {
+  "tag": "g1",
+  "pass": true,
+  "note": "Zei and Bai walking, each once.",
+  "tries": 1
+ },
+ "cov-walk-CU-B-serious-K9": {
+  "tag": "g1",
+  "pass": true,
+  "note": "Bai once, serious; no odd torso.",
+  "tries": 1
+ },
+ "cov-walk-CU-Z-tease-K8": {
+  "tag": "g1",
+  "pass": true,
+  "note": "Zei once.",
+  "tries": 1
+ },
+ "cov-cafe-MASTER-laugh-E40": {
+  "tag": "g1",
+  "pass": true,
+  "note": "Bai and Deluin at the table, each once, smiling (closed mouths). Tunic drift (mild): hooded, reads as a sweater.",
+  "tries": 1
+ },
+ "cov-cafe-MASTER-wave-K7": {
+  "tag": "g1",
+  "pass": true,
+  "note": "Bai and Deluin each once; he waves; long belted tunic.",
+  "tries": 1
+ },
+ "cov-cafe-OTS-Z-robot-E50": {
+  "tag": "g1",
+  "pass": true,
+  "note": "Three people and the robot with the menu tray (column base, no legs).",
+  "tries": 1
+ },
+ "cov-cafe-CU-Z0-whoa-E17": {
+  "tag": "g1",
+  "pass": true,
+  "note": "Zei once with the menu.",
+  "tries": 1
+ },
+ "cov-cafe-OTS-Z-menu-E40": {
+  "tag": "g1",
+  "pass": true,
+  "note": "Three, each once; Bai at the table with a menu.",
+  "tries": 1
+ },
+ "cov-cafe-CU-Z0-explain-K13": {
+  "tag": "g1",
+  "pass": true,
+  "note": "Zei once.",
+  "tries": 1
+ },
+ "cov-cafe-CU-Z0-astonished-K13": {
+  "tag": "g1",
+  "pass": true,
+  "note": "Zei once.",
+  "tries": 1
+ },
+ "cov-cafe-OTS-Z-stern-E42": {
+  "tag": "g1",
+  "pass": true,
+  "note": "Three, each once. Bai's vest drifts to olive over a black top; Deluin smiles rather than stern.",
+  "tries": 1
+ },
+ "cov-cafe-CU-B-menu-K9": {
+  "tag": "g1",
+  "pass": true,
+  "note": "Bai once with the menu.",
+  "tries": 1
+ },
+ "cov-cafe-CU-B-standing-K7": {
+  "tag": "g1",
+  "pass": true,
+  "note": "Bai once, holding her headphones.",
+  "tries": 1
+ },
+ "cov-cafe-BAI-sideeye-R20": {
+  "tag": "g1",
+  "pass": true,
+  "note": "Bai once; nobody in the background.",
+  "tries": 1
+ },
+ "cov-cafe-OTS-Z-talk-K7": {
+  "tag": "g1",
+  "pass": true,
+  "note": "Two, each once. Tunic drift (mild): hooded, belted sweater.",
+  "tries": 1
+ },
+ "cov-cafe-SUGAR-stack-E16": {
+  "tag": "g1",
+  "pass": true,
+  "note": "Deluin's hand stacking cubes; one hand, right size.",
+  "tries": 1
+ },
+ "cov-cafe-CU-Z-amused-K7": {
+  "tag": "g1",
+  "pass": true,
+  "note": "Zei once.",
+  "tries": 1
+ },
+ "cov-cafe-CU-D-warm-E16": {
+  "tag": "g2",
+  "pass": true,
+  "note": "Retry g2: Deluin once, belted cable-knit tunic, no hood. (g1 failed: a drawstring hoodie.) A faint silhouette shows inside the left window.",
+  "tries": 2
+ },
+ "cov-cafe-SUGAR-wall-K9": {
+  "tag": "g1",
+  "pass": true,
+  "note": "Cubes and cups only.",
+  "tries": 1
+ },
+ "cov-cafe-SUGAR-door-K7": {
+  "tag": "g1",
+  "pass": true,
+  "note": "The cube wall with its door gap; nobody.",
+  "tries": 1
+ },
+ "cov-cafe-OTS-Z-eager-K7": {
+  "tag": "g1",
+  "pass": true,
+  "note": "Two, each once; belted tunic.",
+  "tries": 1
+ },
+ "cov-cafe-CU-Z-smile-K14": {
+  "tag": "g1",
+  "pass": true,
+  "note": "Zei once.",
+  "tries": 1
+ },
+ "cov-cafe-BAI-what-E47": {
+  "tag": "g1",
+  "pass": true,
+  "note": "Bai once, lifting the headphone off her ear with her hand; arm reads right.",
+  "tries": 1
+ },
+ "cov-gate-MASTER-fingers-K11": {
+  "tag": "g1",
+  "pass": true,
+  "note": "Zei and Deluin each once, hands up.",
+  "tries": 1
+ },
+ "cov-gate-CU-Z-smile-K7": {
+  "tag": "g1",
+  "pass": true,
+  "note": "Zei once.",
+  "tries": 1
+ },
+ "cov-gate-MASTER-wave-K7": {
+  "tag": "g1",
+  "pass": true,
+  "note": "Zei and Deluin each once, waving; long belted tunic.",
+  "tries": 1
+ },
+ "cov-dusk-MASTER-talk-K7": {
+  "tag": "g1",
+  "pass": true,
+  "note": "Zei standing, Bai seated, each once.",
+  "tries": 1
+ },
+ "L01b-K6": {
+  "tag": "g1",
+  "pass": true,
+  "note": "Zei alone inside; the robot at its counter.",
+  "tries": 1
+ },
+ "cov-lobby-CU-Z-down-K8": {
+  "tag": "g1",
+  "pass": true,
+  "note": "Zei once. His phone is drawn as a large glowing slab (the layout's lamp shape).",
+  "tries": 1
+ },
+ "cov-lobby-MASTER-sits-E18": {
+  "tag": "g1",
+  "pass": true,
+  "note": "Zei and Bai each once at the table.",
+  "tries": 1
+ },
+ "cov-lobby-CU-Z-relief-K10": {
+  "tag": "g1",
+  "pass": true,
+  "note": "Zei once; a big glowing lamp shape in front of him.",
+  "tries": 1
+ },
+ "cov-lobby-OTS-Z-turns-K9": {
+  "tag": "g1",
+  "pass": true,
+  "note": "Zei and Bai each once.",
+  "tries": 1
+ }
+}

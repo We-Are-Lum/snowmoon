@@ -1,0 +1,107 @@
+{
+ "closed_model": true,
+ "label": "closed model",
+ "model": "openai/gpt-image-2.5-sunburst",
+ "model_name": "GPT Image 2.5 Sunburst (OpenAI)",
+ "route": "Vercel AI Gateway /v1/images/edits (AI_GATEWAY_API_KEY)",
+ "date": "2026-10-18T09:11:12.766Z",
+ "purpose": "gpt-cut: a private full-cut comparison for the owner (2026-10-18); not in the cut or on the site",
+ "v6_picture": "images-out/preprod/pass3/cov-cafe-SUGAR-stack-E16.png",
+ "from": {
+  "base": "cov-cafe-SUGAR-stack-A7",
+  "finish": "cov-cafe-SUGAR-stack-K8",
+  "edits": [
+   "cov-cafe-SUGAR-stack-E16"
+  ]
+ },
+ "prompt": "A hand-drawn science fiction comic book panel, ink linework and flat cel-shaded colour, not a 3D render, not a photograph. Insert close-up (ECU INSERT). Very close at table height: the tall young man with wavy shoulder-length light-brown hair and a long cream cable-knit tunic's fingers, his cream cable-knit sleeve showing, absent-mindedly setting one small white sugar cube on another between two tea cups. Picture 1 is a depth map of this exact frame rendered from a 3D model (near is light, far is dark): follow its camera, angle, lens and perspective exactly; every person, chair, table, wall and railing goes exactly where and as big as its shape stands there, people sitting on the chairs and standing on the floor; the simple mannequin shapes are only where the people go. Draw nothing grey from it. Picture 2 is the tall young man with wavy shoulder-length light-brown hair and a long cream cable-knit tunic: copy only that person's face, hair, skin and clothes, never the sheet's layout, poses or grey background. Exactly one main person, appearing once. Nobody else in the picture at all: no other diners, no passers-by, no figures in the windows. The table they share is a long rectangular wooden table, never round. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands. Shop windows and panels glow plainly, at most with one simple pictogram (a cup, a leaf, a bowl); no lettered signs at all. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character. Draw it as a finished comic panel: inked outlines, painted flat colour, glowing lights. Picture 3 shows how the place looks: take its colours, materials and night light; it has nobody in it. Changes made to this shot after it was first drawn, which this picture must already show: Remove the large dark machine with the round glowing joint at the top left; in its place the low café buildings with warm windows and the night sky with the distant towers. The hand, the cream knit sleeve, the sugar cubes and the cup stay exactly as they are. No letters, words or numbers. The picture is 16:9, landscape.",
+ "references": [
+  {
+   "file": "adaptations/fifteen-days/preprod/set-frames/cov-cafe-SUGAR-stack.depth.png",
+   "sha256": "e3bdf28118616dcd82def533acca12f0299c5beaff8f2c2e822d967c5880fa47"
+  },
+  {
+   "file": "images-out/preprod/cards-small/deluin.png",
+   "sha256": "6b8326e2b0188b37084c83ea965ea6e1e6a3cbf10f174ec4c8d08d7ee68f6892"
+  },
+  {
+   "file": "images-out/preprod/plates-small/courtyard.png",
+   "sha256": "c4e6d9b1b60e358dd71d0321462453467f47598a5912b03910a5e34fa0ab1ff5"
+  }
+ ],
+ "request": {
+  "size": "1536x864",
+  "n": 1
+ },
+ "response_meta": {
+  "created": 1792314612,
+  "usage": {
+   "total_tokens": 2704,
+   "input_tokens": 2584,
+   "output_tokens": 120,
+   "input_tokens_details": {
+    "text_tokens": 632,
+    "image_tokens": 1952
+   }
+  },
+  "providerMetadata": {
+   "openai": {
+    "images": [
+     {
+      "imageTokens": 1952,
+      "textTokens": 632,
+      "created": 1792314612,
+      "size": "1536x864",
+      "quality": "low",
+      "background": "opaque",
+      "outputFormat": "png"
+     }
+    ]
+   },
+   "gateway": {
+    "routing": {
+     "originalModelId": "openai/gpt-image-2.5-sunburst",
+     "resolvedProvider": "openai",
+     "fallbacksAvailable": [],
+     "planningReasoning": "System credentials planned for: openai. Total execution order: openai(system)",
+     "canonicalSlug": "openai/gpt-image-2.5-sunburst",
+     "finalProvider": "openai",
+     "modelAttemptCount": 1,
+     "modelAttempts": [
+      {
+       "canonicalSlug": "openai/gpt-image-2.5-sunburst",
+       "success": true,
+       "providerAttemptCount": 1,
+       "providerAttempts": [
+        {
+         "provider": "openai",
+         "credentialType": "system",
+         "success": true,
+         "startTime": 1792314597551,
+         "endTime": 1792314612753,
+         "statusCode": 200
+        }
+       ]
+      }
+     ],
+     "totalProviderAttemptCount": 1
+    },
+    "cost": "0.022376",
+    "marketCost": "0.022376",
+    "surchargeCost": "0",
+    "gatewayCost": "0.022376",
+    "inferenceCost": "0.022376",
+    "inputInferenceCost": "0",
+    "outputInferenceCost": "0.022376",
+    "generationId": "gen_01M574CR46SMD6V9MVAAP5S4XY"
+   }
+  }
+ },
+ "cost_usd": 0.022376,
+ "output": {
+  "file": "/private/tmp/claude-501/-Users-nathan-snowmoon/9334ff32-2377-4150-8bc0-c96cfb5e0d3f/scratchpad/gptcut/raw/cov-cafe-SUGAR-stack-E16-g1.png",
+  "sha256": "bd431a99cb0835e96c148caf6d8f4ef367061909287e59269d1bf8d447a8ffcd",
+  "bytes": 1879717
+ },
+ "ms": 79907
+}

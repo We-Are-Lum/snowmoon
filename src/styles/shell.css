@@ -78,8 +78,32 @@
 .nav-sub { list-style: none; margin: 0; padding: 0 0 6px 16px; }
 .menu-sheet .nav-group-label { padding: 13px 0 2px; font-size: 20px; line-height: 22px; }
 .menu-sheet .nav-sub a { min-height: 44px; padding: 0; border-bottom: 0; align-items: center; font-size: 18px; }
+.menu-account { display: flex; flex-direction: column; padding: 4px 0 12px; border-bottom: 1px solid var(--rule); }
+.menu-account-out { gap: 10px; padding: 8px 0 18px; }
+.menu-account-out .wallet-sign-in { display: flex; flex-direction: column; gap: 6px; }
+.menu-account-out .wallet-sign-in .ic-note { margin: 0; color: var(--muted); font-family: var(--label); font-size: var(--text-label); }
+.menu-signin {
+  width: 100%; min-height: 52px; padding: 12px 16px; border-radius: 8px; cursor: pointer;
+  font-family: var(--reading); font-size: 18px; line-height: 1.2; font-weight: 400;
+}
+.menu-signin-primary { background: var(--btn); color: var(--btn-ink); border: 1px solid var(--btn); }
+.menu-signin-outline { background: transparent; color: var(--ink); border: 1px solid var(--ink); }
+.menu-signin:disabled { opacity: 0.6; cursor: default; }
+.menu-signin:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.menu-signin-note { margin: 0; color: var(--muted); font-family: var(--label); font-size: var(--text-label); line-height: 1.5; }
+.menu-account-row {
+  display: flex; align-items: center; gap: 12px; width: 100%; min-height: 48px; margin: 0; padding: 8px 0;
+  background: none; border: 0; text-align: left; color: var(--ink); font-family: var(--reading); font-size: 20px; line-height: 1.2;
+}
+.menu-account-row + .menu-account-row { border-top: 1px solid var(--rule); }
+.menu-signout { cursor: pointer; }
+.menu-signout:focus-visible { outline: 2px solid var(--ink); outline-offset: -2px; }
+.menu-avatar {
+  display: inline-flex; flex: none; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 50%;
+  background: var(--soft); color: var(--ink); font-family: var(--label); font-size: 15px;
+}
+.menu-account-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .menu-extra { display: flex; flex-direction: column; gap: 12px; padding-top: 16px; }
-.menu-extra .account { padding: 12px 0 0; }
 
 /* The destinations, in the menu and the rail. */
 .nav-list { list-style: none; margin: 0; padding: 0; }
@@ -90,9 +114,6 @@
 .nav-coming { color: var(--muted); }
 .nav-meta { font-family: var(--label); font-size: var(--text-label); letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); }
 
-.account { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-family: var(--label); font-size: var(--text-label); }
-.account-name { color: var(--ink); }
-.account-action { padding: 0; background: none; border: 0; color: var(--link); cursor: pointer; font-family: var(--label); font-size: var(--text-label); }
 .quiet-action { align-self: flex-start; padding: 0; background: none; border: 0; color: var(--link); cursor: pointer; font-family: var(--label); font-size: var(--text-label); }
 
 /* ---------- The chapter frame: context strip, selector, Read / Listen ---------- */
@@ -241,9 +262,10 @@
   }
   .rail-mark { font-family: var(--label); font-size: var(--text-label); text-transform: uppercase; color: var(--muted); }
   .rail-extra { display: flex; flex-direction: column; gap: 10px; padding: 12px 20px 16px; border-top: 1px solid var(--rule); }
-  .rail .account { flex: none; padding: 12px 20px; border-top: 1px solid var(--rule); }
+  .rail .rail-account { flex: none; padding: 12px 20px; border-top: 1px solid var(--rule); border-bottom: 0; }
+  .rail .menu-account-row { font-size: 18px; }
   /* Collapsed: only the expand control. */
-  .rail:not(.is-open) .rail-wordmark, .rail:not(.is-open) .rail-body, .rail:not(.is-open) .account { display: none; }
+  .rail:not(.is-open) .rail-wordmark, .rail:not(.is-open) .rail-body, .rail:not(.is-open) .rail-account { display: none; }
   .rail:not(.is-open) .rail-head { justify-content: center; padding: 0; border-bottom: 0; }
   .rail.is-open { position: fixed; z-index: 100; top: 0; left: 0; width: min(320px, 85vw); box-shadow: 0 0 40px rgba(0, 0, 0, 0.15); }
   .rail.is-open .rail-collapse-open { display: inline; }
@@ -261,7 +283,7 @@
   .shell.rail-collapsed { grid-template-columns: var(--rail-mini) minmax(0, 1fr); }
   .shell.rail-collapsed.with-panel { grid-template-columns: var(--rail-mini) minmax(0, 1fr) var(--panel-w); }
   .shell:not(.rail-collapsed) .rail .rail-wordmark,
-  .shell:not(.rail-collapsed) .rail .account { display: flex; }
+  .shell:not(.rail-collapsed) .rail .rail-account { display: flex; }
   .shell:not(.rail-collapsed) .rail .rail-body { display: block; }
   .shell:not(.rail-collapsed) .rail .rail-head { justify-content: space-between; padding: 0 8px 0 20px; border-bottom: 1px solid var(--rule); }
   .shell:not(.rail-collapsed) .rail-collapse-open { display: inline; }
@@ -313,7 +335,7 @@
 
 /* Labels sit on the prototype's line height (DM Mono "normal", about 16px at 12px), not the book's 1.6. */
 .rail-label, .menu-eyebrow, .chapter-sheet-title, .cs-state, .nav-meta, .rail-mark, .context-strip, .as-label, .as-draft, .as-testing,
-.as-start-title, .as-start-line, .as-empty-row, .as-meta, .listen-meta, .account, .recipe-eyebrow, .chapter .dateline, .block-caption { line-height: 16px; }
+.as-start-title, .as-start-line, .as-empty-row, .as-meta, .listen-meta, .recipe-eyebrow, .chapter .dateline, .block-caption { line-height: 16px; }
 .menu-sheet .nav-list a, .menu-sheet .nav-coming { line-height: 22px; }
 
 /* A short visible word with ⓘ, opening the details (owner ruling, 2026-10-09). */

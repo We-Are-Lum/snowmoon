@@ -29,8 +29,19 @@ import { PlayController, ruleNote, type Env, type PlayView } from '../src/lib/mi
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const html = readFileSync(path.join(ROOT, 'docs/design/minpentai-play-prototype.dc.html'), 'utf8');
-const script = html.split('<script type="text/x-dc" data-dc-script>')[1]?.split('</script>')[0];
-if (!script) throw new Error("Design's script block was not found");
+const designScript = html.split('<script type="text/x-dc" data-dc-script>')[1]?.split('</script>')[0];
+if (!designScript) throw new Error("Design's script block was not found");
+/** Where the port deliberately differs from Design's mockup: a bug fixed in the port, applied to
+ * Design's script here so everything else is still compared line for line. Each must match once. */
+const FIXES: [string, string, string][] = [
+  // The Planner stopped building at 3 towers, rungs 3 and 4 at 5 (game.ts, botPlan; 2026-10-20).
+  ['the Planner builds up to 5 towers', 'cnt(b, o) < (L >= 5 ? 3 : 5)', 'cnt(b, o) < 5'],
+];
+let script = designScript;
+for (const [what, from, to] of FIXES) {
+  if (script.split(from).length !== 2) throw new Error(`Design's script: the text for "${what}" was not found exactly once`);
+  script = script.replace(from, to);
+}
 
 let checks = 0;
 const failures: string[] = [];

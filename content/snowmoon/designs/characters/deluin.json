@@ -51,5 +51,14 @@
     "chapter": 12,
     "idx": 71,
     "as": "Deluin"
-  }
+  },
+  "fixed_description": "a young man of eighteen with fair skin in warm, natural tones, grey-green eyes and light brown shoulder-length hair, wearing a long cream cable-knit wool tunic reaching mid-thigh, belted at the waist with a plain leather belt, its soft hood worn down, dark green wool trousers and brown leather boots, with no zips, drawstrings, pockets or logos",
+  "fixed_description_about": "Owner decision, Oct 5, 2026 (dog-dawn final pass): one Deluin. These exact words go into every panel he is in when a model renders from words alone (hosted models take no reference image). Revised the same day to match beat 10's outfit: a long cream cable-knit wool tunic to mid-thigh, belted with a plain leather belt, soft hood worn down; dark green wool trousers; brown leather boots; no zips, drawstrings, pockets or logos; warm, natural skin tones. A hand-only close-up uses the sweater words alone.",
+  "fixed_description_history": [
+    {
+      "until": "2026-10-05",
+      "text": "a young man of eighteen, pale skin, grey-green eyes, light brown shoulder-length hair, wearing a hooded cream cable-knit sweater with an open neckline and no turtleneck, green trousers and brown boots",
+      "replaced_because": "read as a modern hoodie and cargo trousers, and gave a blue-grey skin cast (owner's notes)"
+    }
+  ]
 }

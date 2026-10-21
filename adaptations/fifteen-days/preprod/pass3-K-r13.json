@@ -1,0 +1,377 @@
+{
+  "about": "Fifteen Days coverage, the cafe close-ups that replace the over-the-shoulder shots over Deluin (they drew him twice in nine tries). DRAFTED prompts.",
+  "out": "images-out/preprod/pass3",
+  "ledger": "images-out/preprod/ledger-s7.json",
+  "cap_usd": 25.0,
+  "style": "",
+  "jobs": [
+    {
+      "id": "cov-cafe-CU-Z0-whoa-K13",
+      "shot": "cov-cafe-CU-Z0-whoa",
+      "approach": "A",
+      "attempt": 13,
+      "prompt": "Close-up (CU). the slim young man with spiky black hair with one blue streak, dark brown eyes and an orange cropped zip jacket over a black top close at the end of the table, eyes on the thin glowing menu in his hands, surprised. Keep reference image 1's exact framing and crop: the same close-up, nothing added outside its edges, never widen the view. Every mouth is closed, lips together: smiles and laughs are small closed-lip smiles, no teeth visible at all, never a grin. Faces stay soft and natural. Redraw reference image 1 as a finished, detailed hand-drawn science fiction comic book panel at night: keep its camera, perspective, every person's position, pose, gesture, expression and size, and every table, chair and wall exactly as they are; nobody is added or removed. Reference image 2 shows how the place looks (samples): take its colours, materials and night light; it has nobody in it. Reference image 3 is the slim young man with spiky black hair with one blue streak, dark brown eyes and an orange cropped zip jacket over a black top: copy only that person's face, hair, skin and clothes, never the sheet's layout, poses or grey background. Each main person's face, hair, skin and clothes match their reference exactly. In this frame: the slim young man is turned three-quarters, looking toward the right of the frame, never straight at the camera. No robot and no other people anywhere in the picture. Exactly one main person, appearing once. Nobody else in the picture at all: no other diners, no passers-by, no figures in the windows. Everyone stands on the ground or sits on a chair at their real size: nobody floats, nobody sits or stands on a table. Behind them, as the layout shows: the long rectangular wooden table; a small round table for one; the low buildings on the east side, windows glowing; the megastructures and mountain pyramids above the rooftops; the quiet street beyond the gate, plain building fronts with no signs. The table they share is a long rectangular wooden table, never round. Faces stay soft and natural: smiles and laughs are closed-mouthed, never open-mouthed grins, no teeth showing. The spiky-haired young man's eyes are dark brown. Every menu is a thin glass tablet glowing with soft blank light, never paper; every screen and device shows only soft blank light: no writing, no letters, no symbols at all. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands. Shop windows and panels glow plainly, at most with one simple pictogram (a cup, a leaf, a bowl); no lettered signs at all. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character.",
+      "refs": [
+        "images-out/preprod/pass3/cov-cafe-CU-Z0-A13.png",
+        "images-out/preprod/plates-small/courtyard.png",
+        "images-out/preprod/cards-small/zei.png"
+      ],
+      "width": 1024,
+      "height": 576,
+      "seed": 35336,
+      "layers": {
+        "set": {
+          "file": "adaptations/fifteen-days/preprod/sets/courtyard.json",
+          "sha256": "5b18405b8531087e7c62dd1ff75dc62814d51b7948107fe48d40a9f3bd52ebd5"
+        },
+        "camera": {
+          "file": "adaptations/fifteen-days/preprod/sets/courtyard.shots.json",
+          "key": "cov-cafe-CU-Z0",
+          "people": {
+            "Z": {
+              "at": [
+                1.5,
+                0
+              ],
+              "face": -122.3,
+              "pose": "seated"
+            },
+            "D": {
+              "at": [
+                0,
+                -0.95
+              ],
+              "face": 57.7,
+              "pose": "seated"
+            },
+            "B": {
+              "at": [
+                0,
+                0.95
+              ],
+              "face": "N",
+              "pose": "seated"
+            }
+          },
+          "cam": [
+            0.923,
+            1.247,
+            -1.101
+          ],
+          "look": [
+            1.5,
+            1.1665999999999999,
+            0
+          ],
+          "fov": 28
+        },
+        "set_frame": {
+          "file": "adaptations/fifteen-days/preprod/set-frames/cov-cafe-CU-Z0.depth.png",
+          "sha256": "2fc116b54d42f0142b5010942de60ba48973aa080a6fb9b5b980cdc20489e332",
+          "mode": "depth",
+          "rendered_from": "images-out/preprod/set/cov-cafe-CU-Z0.depth.png"
+        },
+        "stage1": {
+          "file": "images-out/preprod/pass3/cov-cafe-CU-Z0-A13.png",
+          "sha256": "6a7ea290a583002354698484c2c1c125f162d23f4fed6c05b8f39f7e4435df29",
+          "engine": "qwen-image-edit-2509"
+        },
+        "plate": {
+          "file": "images-out/preprod/plates-small/courtyard.png",
+          "sha256": "c4e6d9b1b60e358dd71d0321462453467f47598a5912b03910a5e34fa0ab1ff5",
+          "plate": "plate-courtyard-D",
+          "source": {
+            "file": "images-out/preprod/swatch/courtyard.png",
+            "sha256": "c4e6d9b1b60e358dd71d0321462453467f47598a5912b03910a5e34fa0ab1ff5"
+          }
+        },
+        "cards": [
+          {
+            "file": "images-out/preprod/cards-small/zei.png",
+            "sha256": "2faf3c23d7e35f8d526477898d8862412f7e84c31f9d87b99d2aaf548178256f",
+            "source": {
+              "file": "images-out/preprod/cards2/zei.png",
+              "sha256": "0081e5f5c2ca95ad5cd5a9cbbc92ef6480779b092ac31792d4bc291f8c5abd12"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "cov-cafe-CU-Z0-listen-K13",
+      "shot": "cov-cafe-CU-Z0-listen",
+      "approach": "A",
+      "attempt": 13,
+      "prompt": "Close-up (CU). the slim young man with spiky black hair with one blue streak, dark brown eyes and an orange cropped zip jacket over a black top close at the end of the table, looking up toward the right of the frame, a little surprised, a thin glowing menu in his hands. Keep reference image 1's exact framing and crop: the same close-up, nothing added outside its edges, never widen the view. Every mouth is closed, lips together: smiles and laughs are small closed-lip smiles, no teeth visible at all, never a grin. Faces stay soft and natural. Redraw reference image 1 as a finished, detailed hand-drawn science fiction comic book panel at night: keep its camera, perspective, every person's position, pose, gesture, expression and size, and every table, chair and wall exactly as they are; nobody is added or removed. Reference image 2 shows how the place looks (samples): take its colours, materials and night light; it has nobody in it. Reference image 3 is the slim young man with spiky black hair with one blue streak, dark brown eyes and an orange cropped zip jacket over a black top: copy only that person's face, hair, skin and clothes, never the sheet's layout, poses or grey background. Each main person's face, hair, skin and clothes match their reference exactly. In this frame: the slim young man is turned three-quarters, looking toward the right of the frame, never straight at the camera. No robot and no other people anywhere in the picture. Exactly one main person, appearing once. Nobody else in the picture at all: no other diners, no passers-by, no figures in the windows. Everyone stands on the ground or sits on a chair at their real size: nobody floats, nobody sits or stands on a table. Behind them, as the layout shows: the long rectangular wooden table; a small round table for one; the low buildings on the east side, windows glowing; the megastructures and mountain pyramids above the rooftops; the quiet street beyond the gate, plain building fronts with no signs. The table they share is a long rectangular wooden table, never round. Faces stay soft and natural: smiles and laughs are closed-mouthed, never open-mouthed grins, no teeth showing. The spiky-haired young man's eyes are dark brown. Every menu is a thin glass tablet glowing with soft blank light, never paper; every screen and device shows only soft blank light: no writing, no letters, no symbols at all. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands. Shop windows and panels glow plainly, at most with one simple pictogram (a cup, a leaf, a bowl); no lettered signs at all. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character.",
+      "refs": [
+        "images-out/preprod/pass3/cov-cafe-CU-Z0-A13.png",
+        "images-out/preprod/plates-small/courtyard.png",
+        "images-out/preprod/cards-small/zei.png"
+      ],
+      "width": 1024,
+      "height": 576,
+      "seed": 35337,
+      "layers": {
+        "set": {
+          "file": "adaptations/fifteen-days/preprod/sets/courtyard.json",
+          "sha256": "5b18405b8531087e7c62dd1ff75dc62814d51b7948107fe48d40a9f3bd52ebd5"
+        },
+        "camera": {
+          "file": "adaptations/fifteen-days/preprod/sets/courtyard.shots.json",
+          "key": "cov-cafe-CU-Z0",
+          "people": {
+            "Z": {
+              "at": [
+                1.5,
+                0
+              ],
+              "face": -122.3,
+              "pose": "seated"
+            },
+            "D": {
+              "at": [
+                0,
+                -0.95
+              ],
+              "face": 57.7,
+              "pose": "seated"
+            },
+            "B": {
+              "at": [
+                0,
+                0.95
+              ],
+              "face": "N",
+              "pose": "seated"
+            }
+          },
+          "cam": [
+            0.923,
+            1.247,
+            -1.101
+          ],
+          "look": [
+            1.5,
+            1.1665999999999999,
+            0
+          ],
+          "fov": 28
+        },
+        "set_frame": {
+          "file": "adaptations/fifteen-days/preprod/set-frames/cov-cafe-CU-Z0.depth.png",
+          "sha256": "2fc116b54d42f0142b5010942de60ba48973aa080a6fb9b5b980cdc20489e332",
+          "mode": "depth",
+          "rendered_from": "images-out/preprod/set/cov-cafe-CU-Z0.depth.png"
+        },
+        "stage1": {
+          "file": "images-out/preprod/pass3/cov-cafe-CU-Z0-A13.png",
+          "sha256": "6a7ea290a583002354698484c2c1c125f162d23f4fed6c05b8f39f7e4435df29",
+          "engine": "qwen-image-edit-2509"
+        },
+        "plate": {
+          "file": "images-out/preprod/plates-small/courtyard.png",
+          "sha256": "c4e6d9b1b60e358dd71d0321462453467f47598a5912b03910a5e34fa0ab1ff5",
+          "plate": "plate-courtyard-D",
+          "source": {
+            "file": "images-out/preprod/swatch/courtyard.png",
+            "sha256": "c4e6d9b1b60e358dd71d0321462453467f47598a5912b03910a5e34fa0ab1ff5"
+          }
+        },
+        "cards": [
+          {
+            "file": "images-out/preprod/cards-small/zei.png",
+            "sha256": "2faf3c23d7e35f8d526477898d8862412f7e84c31f9d87b99d2aaf548178256f",
+            "source": {
+              "file": "images-out/preprod/cards2/zei.png",
+              "sha256": "0081e5f5c2ca95ad5cd5a9cbbc92ef6480779b092ac31792d4bc291f8c5abd12"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "cov-cafe-CU-Z0-explain-K13",
+      "shot": "cov-cafe-CU-Z0-explain",
+      "approach": "A",
+      "attempt": 13,
+      "prompt": "Close-up (CU). the slim young man with spiky black hair with one blue streak, dark brown eyes and an orange cropped zip jacket over a black top close, the thin glowing menu in his hands, explaining, keen, looking toward the right of the frame at Deluin. Keep reference image 1's exact framing and crop: the same close-up, nothing added outside its edges, never widen the view. Every mouth is closed, lips together: smiles and laughs are small closed-lip smiles, no teeth visible at all, never a grin. Faces stay soft and natural. Redraw reference image 1 as a finished, detailed hand-drawn science fiction comic book panel at night: keep its camera, perspective, every person's position, pose, gesture, expression and size, and every table, chair and wall exactly as they are; nobody is added or removed. Reference image 2 shows how the place looks (samples): take its colours, materials and night light; it has nobody in it. Reference image 3 is the slim young man with spiky black hair with one blue streak, dark brown eyes and an orange cropped zip jacket over a black top: copy only that person's face, hair, skin and clothes, never the sheet's layout, poses or grey background. Each main person's face, hair, skin and clothes match their reference exactly. In this frame: the slim young man is turned three-quarters, looking toward the right of the frame, never straight at the camera. No robot and no other people anywhere in the picture. Exactly one main person, appearing once. Nobody else in the picture at all: no other diners, no passers-by, no figures in the windows. Everyone stands on the ground or sits on a chair at their real size: nobody floats, nobody sits or stands on a table. Behind them, as the layout shows: the long rectangular wooden table; a small round table for one; the low buildings on the east side, windows glowing; the megastructures and mountain pyramids above the rooftops; the quiet street beyond the gate, plain building fronts with no signs. The table they share is a long rectangular wooden table, never round. Faces stay soft and natural: smiles and laughs are closed-mouthed, never open-mouthed grins, no teeth showing. The spiky-haired young man's eyes are dark brown. Every menu is a thin glass tablet glowing with soft blank light, never paper; every screen and device shows only soft blank light: no writing, no letters, no symbols at all. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands. Shop windows and panels glow plainly, at most with one simple pictogram (a cup, a leaf, a bowl); no lettered signs at all. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character.",
+      "refs": [
+        "images-out/preprod/pass3/cov-cafe-CU-Z0-A13.png",
+        "images-out/preprod/plates-small/courtyard.png",
+        "images-out/preprod/cards-small/zei.png"
+      ],
+      "width": 1024,
+      "height": 576,
+      "seed": 35338,
+      "layers": {
+        "set": {
+          "file": "adaptations/fifteen-days/preprod/sets/courtyard.json",
+          "sha256": "5b18405b8531087e7c62dd1ff75dc62814d51b7948107fe48d40a9f3bd52ebd5"
+        },
+        "camera": {
+          "file": "adaptations/fifteen-days/preprod/sets/courtyard.shots.json",
+          "key": "cov-cafe-CU-Z0",
+          "people": {
+            "Z": {
+              "at": [
+                1.5,
+                0
+              ],
+              "face": -122.3,
+              "pose": "seated"
+            },
+            "D": {
+              "at": [
+                0,
+                -0.95
+              ],
+              "face": 57.7,
+              "pose": "seated"
+            },
+            "B": {
+              "at": [
+                0,
+                0.95
+              ],
+              "face": "N",
+              "pose": "seated"
+            }
+          },
+          "cam": [
+            0.923,
+            1.247,
+            -1.101
+          ],
+          "look": [
+            1.5,
+            1.1665999999999999,
+            0
+          ],
+          "fov": 28
+        },
+        "set_frame": {
+          "file": "adaptations/fifteen-days/preprod/set-frames/cov-cafe-CU-Z0.depth.png",
+          "sha256": "2fc116b54d42f0142b5010942de60ba48973aa080a6fb9b5b980cdc20489e332",
+          "mode": "depth",
+          "rendered_from": "images-out/preprod/set/cov-cafe-CU-Z0.depth.png"
+        },
+        "stage1": {
+          "file": "images-out/preprod/pass3/cov-cafe-CU-Z0-A13.png",
+          "sha256": "6a7ea290a583002354698484c2c1c125f162d23f4fed6c05b8f39f7e4435df29",
+          "engine": "qwen-image-edit-2509"
+        },
+        "plate": {
+          "file": "images-out/preprod/plates-small/courtyard.png",
+          "sha256": "c4e6d9b1b60e358dd71d0321462453467f47598a5912b03910a5e34fa0ab1ff5",
+          "plate": "plate-courtyard-D",
+          "source": {
+            "file": "images-out/preprod/swatch/courtyard.png",
+            "sha256": "c4e6d9b1b60e358dd71d0321462453467f47598a5912b03910a5e34fa0ab1ff5"
+          }
+        },
+        "cards": [
+          {
+            "file": "images-out/preprod/cards-small/zei.png",
+            "sha256": "2faf3c23d7e35f8d526477898d8862412f7e84c31f9d87b99d2aaf548178256f",
+            "source": {
+              "file": "images-out/preprod/cards2/zei.png",
+              "sha256": "0081e5f5c2ca95ad5cd5a9cbbc92ef6480779b092ac31792d4bc291f8c5abd12"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "cov-cafe-CU-Z0-astonished-K13",
+      "shot": "cov-cafe-CU-Z0-astonished",
+      "approach": "A",
+      "attempt": 13,
+      "prompt": "Close-up (CU). the slim young man with spiky black hair with one blue streak, dark brown eyes and an orange cropped zip jacket over a black top close, astonished, looking toward the right of the frame at Deluin. Keep reference image 1's exact framing and crop: the same close-up, nothing added outside its edges, never widen the view. Every mouth is closed, lips together: smiles and laughs are small closed-lip smiles, no teeth visible at all, never a grin. Faces stay soft and natural. Redraw reference image 1 as a finished, detailed hand-drawn science fiction comic book panel at night: keep its camera, perspective, every person's position, pose, gesture, expression and size, and every table, chair and wall exactly as they are; nobody is added or removed. Reference image 2 shows how the place looks (samples): take its colours, materials and night light; it has nobody in it. Reference image 3 is the slim young man with spiky black hair with one blue streak, dark brown eyes and an orange cropped zip jacket over a black top: copy only that person's face, hair, skin and clothes, never the sheet's layout, poses or grey background. Each main person's face, hair, skin and clothes match their reference exactly. In this frame: the slim young man is turned three-quarters, looking toward the right of the frame, never straight at the camera. No robot and no other people anywhere in the picture. Exactly one main person, appearing once. Nobody else in the picture at all: no other diners, no passers-by, no figures in the windows. Everyone stands on the ground or sits on a chair at their real size: nobody floats, nobody sits or stands on a table. Behind them, as the layout shows: the long rectangular wooden table; a small round table for one; the low buildings on the east side, windows glowing; the megastructures and mountain pyramids above the rooftops; the quiet street beyond the gate, plain building fronts with no signs. The table they share is a long rectangular wooden table, never round. Faces stay soft and natural: smiles and laughs are closed-mouthed, never open-mouthed grins, no teeth showing. The spiky-haired young man's eyes are dark brown. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands. Shop windows and panels glow plainly, at most with one simple pictogram (a cup, a leaf, a bowl); no lettered signs at all. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character.",
+      "refs": [
+        "images-out/preprod/pass3/cov-cafe-CU-Z0-A13.png",
+        "images-out/preprod/plates-small/courtyard.png",
+        "images-out/preprod/cards-small/zei.png"
+      ],
+      "width": 1024,
+      "height": 576,
+      "seed": 35339,
+      "layers": {
+        "set": {
+          "file": "adaptations/fifteen-days/preprod/sets/courtyard.json",
+          "sha256": "5b18405b8531087e7c62dd1ff75dc62814d51b7948107fe48d40a9f3bd52ebd5"
+        },
+        "camera": {
+          "file": "adaptations/fifteen-days/preprod/sets/courtyard.shots.json",
+          "key": "cov-cafe-CU-Z0",
+          "people": {
+            "Z": {
+              "at": [
+                1.5,
+                0
+              ],
+              "face": -122.3,
+              "pose": "seated"
+            },
+            "D": {
+              "at": [
+                0,
+                -0.95
+              ],
+              "face": 57.7,
+              "pose": "seated"
+            },
+            "B": {
+              "at": [
+                0,
+                0.95
+              ],
+              "face": "N",
+              "pose": "seated"
+            }
+          },
+          "cam": [
+            0.923,
+            1.247,
+            -1.101
+          ],
+          "look": [
+            1.5,
+            1.1665999999999999,
+            0
+          ],
+          "fov": 28
+        },
+        "set_frame": {
+          "file": "adaptations/fifteen-days/preprod/set-frames/cov-cafe-CU-Z0.depth.png",
+          "sha256": "2fc116b54d42f0142b5010942de60ba48973aa080a6fb9b5b980cdc20489e332",
+          "mode": "depth",
+          "rendered_from": "images-out/preprod/set/cov-cafe-CU-Z0.depth.png"
+        },
+        "stage1": {
+          "file": "images-out/preprod/pass3/cov-cafe-CU-Z0-A13.png",
+          "sha256": "6a7ea290a583002354698484c2c1c125f162d23f4fed6c05b8f39f7e4435df29",
+          "engine": "qwen-image-edit-2509"
+        },
+        "plate": {
+          "file": "images-out/preprod/plates-small/courtyard.png",
+          "sha256": "c4e6d9b1b60e358dd71d0321462453467f47598a5912b03910a5e34fa0ab1ff5",
+          "plate": "plate-courtyard-D",
+          "source": {
+            "file": "images-out/preprod/swatch/courtyard.png",
+            "sha256": "c4e6d9b1b60e358dd71d0321462453467f47598a5912b03910a5e34fa0ab1ff5"
+          }
+        },
+        "cards": [
+          {
+            "file": "images-out/preprod/cards-small/zei.png",
+            "sha256": "2faf3c23d7e35f8d526477898d8862412f7e84c31f9d87b99d2aaf548178256f",
+            "source": {
+              "file": "images-out/preprod/cards2/zei.png",
+              "sha256": "0081e5f5c2ca95ad5cd5a9cbbc92ef6480779b092ac31792d4bc291f8c5abd12"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

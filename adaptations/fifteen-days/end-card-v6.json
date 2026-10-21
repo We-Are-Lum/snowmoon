@@ -1,0 +1,20 @@
+{
+  "about": "The v6 end card, shorter, in the owner's words (2026-10-18 overnight comment on coverage-v5: \"Fifteen days by naaate. based on Snowmoon by Vitalik Buterin. create your own remix or adapation: snowmoon.party\"), spelling and capitals fixed by the coding agent.",
+  "draft": false,
+  "title": "Fifteen Days",
+  "subtitle": "by @naaate · Based on Snowmoon by Vitalik Buterin",
+  "sections": [
+    {
+      "text": "Create your own remix or adaptation: snowmoon.party",
+      "strong": true
+    }
+  ],
+  "links": [
+    {
+      "label": "Source",
+      "shown": "github.com/We-Are-Lum/snowmoon",
+      "url": "https://github.com/We-Are-Lum/snowmoon",
+      "card": false
+    }
+  ]
+}

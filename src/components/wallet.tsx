@@ -1,9 +1,11 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { authFetch, signOutWallet } from '~/lib/client-auth';
 import { IMAGE_WORDING } from '~/lib/images/wording';
 import { claim, hasWallet, pay, signInWithWallet, WalletError } from '~/lib/wallet/client';
+import { txHashFrom } from '~/lib/wallet/hash';
+import { TxHashField } from './tx-hash-field';
 
 /**
  * Wallet sign-in and the prepaid balance (owner, 2026-10-13). Wording drafted by the coding agent
@@ -13,7 +15,8 @@ const W = IMAGE_WORDING.prepaid;
 const PENDING = 'snowmoon.wallet.pending';
 const dollars = (usd: number) => (usd >= 1 ? usd.toFixed(2) : usd.toFixed(4).replace(/0+$/, '').replace(/\.$/, ''));
 
-export function WalletSignInButton({ className = 'ic-secondary' }: { className?: string }) {
+/** `note: false` leaves out the line under the button (the menu shows one line under both sign-in buttons). */
+export function WalletSignInButton({ className = 'ic-secondary', note = true }: { className?: string; note?: boolean }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const go = async () => {
@@ -33,7 +36,7 @@ export function WalletSignInButton({ className = 'ic-secondary' }: { className?:
       <button type="button" className={className} onClick={() => void go()} disabled={busy}>
         {busy ? '…' : W.signIn}
       </button>
-      <p className="ic-note">{W.signInNote}</p>
+      {note && <p className="ic-note">{W.signInNote}</p>}
       {error && <p className="ic-note" role="alert">{error}</p>}
     </div>
   );
@@ -58,6 +61,7 @@ export function WalletPanel({ onChange }: { onChange?: () => void }) {
   const [token, setToken] = useState<'USDC' | 'ETH'>('USDC');
   const [note, setNote] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [pasted, setPasted] = useState('');
   // A payment sent but not yet added (kept on this device, so a closed tab doesn't lose it).
   const [pending, setPending] = useState<`0x${string}` | null>(null);
   useEffect(() => {
@@ -84,6 +88,17 @@ export function WalletPanel({ onChange }: { onChange?: () => void }) {
   useEffect(() => {
     void load();
   }, [load]);
+  // A payment this device still remembers is tried again, once, when the panel opens (2026-10-19): a
+  // refusal that may have been ours is no longer the end of it.
+  const tried = useRef(false);
+  useEffect(() => {
+    if (!b?.open || !pending || tried.current) return;
+    tried.current = true;
+    void claim(pending, 3).then(done, (e: unknown) => {
+      if (e instanceof WalletError && e.final) keep(null);
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [b?.open, pending]);
   if (!b) return null;
 
   const done = (r: { added: number }) => {
@@ -122,6 +137,22 @@ export function WalletPanel({ onChange }: { onChange?: () => void }) {
     }
   };
 
+  // A payment that reached us but wasn't added (owner, 2026-10-15): the same server check, by its hash.
+  const recover = async () => {
+    const h = txHashFrom(pasted);
+    if (!h) return setNote(W.recoverBad);
+    setBusy(true);
+    setNote(W.waiting);
+    try {
+      done(await claim(h, 3));
+      setPasted('');
+    } catch (e) {
+      setNote((e as Error).message);
+    } finally {
+      setBusy(false);
+    }
+  };
+
   return (
     <div className="wallet-panel">
       <p className="wallet-balance">
@@ -139,6 +170,7 @@ export function WalletPanel({ onChange }: { onChange?: () => void }) {
         </button>
       ) : (
         <div className="wallet-add">
+          <p className="ic-note">{W.inAdvance}</p>
           <p className="ic-note">{W.payWith}</p>
           <div className="wallet-tokens" role="radiogroup" aria-label="Pay with">
             {(['USDC', 'ETH'] as const).map((t) => (
@@ -164,6 +196,23 @@ export function WalletPanel({ onChange }: { onChange?: () => void }) {
             {W.tryAgain}
           </button>
         </p>
+      )}
+      {b.open && (
+        <details className="wallet-recover" open={pending !== null}>
+          <summary>{W.recover}</summary>
+          <p className="ic-note">{W.recoverNote}</p>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              void recover();
+            }}
+          >
+            <TxHashField id="wallet-recover-hash" label={W.recoverLabel} value={pasted} onChange={setPasted} />
+            <button type="submit" className="ic-secondary" disabled={busy || !pasted.trim()}>
+              {W.recoverButton}
+            </button>
+          </form>
+        </details>
       )}
       {note && (
         <p className="ic-note" role="status">

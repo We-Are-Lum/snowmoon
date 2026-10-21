@@ -1,0 +1,1176 @@
+{
+  "about": "Fifteen Days storyboard frames, approach A, attempt 1 (owner, 2026-10-16 night): scripts/storyboard4.py. Prompts DRAFTED by the coding agent.",
+  "out": "images-out/preprod/pass3",
+  "ledger": "images-out/preprod/ledger-s6.json",
+  "cap_usd": 40.0,
+  "style": "",
+  "jobs": [
+    {
+      "id": "H01-A1",
+      "shot": "H01",
+      "approach": "A",
+      "attempt": 1,
+      "engine": "qwen",
+      "prompt": "A hand-drawn science fiction comic book panel, ink linework and flat cel-shaded colour, not a 3D render, not a photograph. Extreme wide shot (EWS, from the standing overlook, below the ceiling). The hall from the top: tiers of a varied crowd falling away to the floor; over the floor, the tutorial's holograms in two colours (cyan and amber), glowing towers, streams of gliders and ships, walls building; big screens hanging above show the two players' faces in close-up; far apart at opposite edges, two small sunken pits with one player in each. Faces stay soft and natural: smiles and laughs are closed-mouthed, never open-mouthed grins, no teeth showing. Picture 1 is a depth map of this exact frame rendered from a 3D model (near is light, far is dark): follow its camera, angle, lens and perspective exactly; every person, chair, table, wall and railing goes exactly where and as big as its shape stands there, people sitting on the chairs and standing on the floor; the simple mannequin shapes are only where the people go. Draw nothing grey from it. Picture 2 is the tall young man with wavy shoulder-length light-brown hair and a long cream cable-knit tunic: copy only that person's face, hair, skin and clothes, never the sheet's layout, poses or grey background. Picture 3 is the stocky young man with a shaved head and dark brown skin in a plain charcoal tunic: copy only that person's face, hair, skin and clothes, never the sheet's layout, poses or grey background. In this frame: the tall young man is in the middle of the frame, away from the camera, seen from behind; the stocky young man is in the middle of the frame, toward the camera. Exactly two main people, each appearing once. Every other person is an ordinary background figure in plain, muted everyday clothes with ordinary hair: no orange jackets, no magenta hair, no cream knitwear, nobody who looks like the main people. Everyone stands on the ground or sits on a chair at their real size: nobody floats, nobody sits or stands on a table. Behind them, as the layout shows: tiers of seats rising all around the hall, full of a varied crowd; the standing ring around the top of the hall, crowded behind a railing; the broad walkway spanning the hall high above the floor, with a railing on each side; a few slim, light hologram towers on small gliding bases, drifting across the floor, glowing cube clusters on top; the whole play space alive with glowing holograms: gliders streaking past with light trails, little ships and walls of light cubes in cyan and amber; Deluin's sunken pit at the edge of the floor; Kau's sunken pit at the edge of the floor; two big screens hung over the hall, showing the two players' faces. Faces stay soft and natural: smiles and laughs are closed-mouthed, never open-mouthed grins, no teeth showing. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. No signs, no panels with pictograms, no icons, no symbols anywhere: walls are bare. Screens show only what the shot describes, or are blank and softly glowing. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character. Draw it as a finished comic panel: inked outlines, painted flat colour, glowing lights.",
+      "refs": [
+        "adaptations/fifteen-days/preprod/set-frames/H01.depth.png",
+        "images-out/preprod/cards-small/deluin.png",
+        "images-out/preprod/cards-small/kau.png"
+      ],
+      "width": 1024,
+      "height": 576,
+      "seed": 31100,
+      "layers": {
+        "set": {
+          "file": "adaptations/fifteen-days/preprod/sets/hall.json",
+          "sha256": "a61caec40b182fa6d3413396ab28e40d4da4577eaf7eda0c31e18a797b527c1a"
+        },
+        "camera": {
+          "file": "adaptations/fifteen-days/preprod/sets/hall.shots.json",
+          "key": "H01",
+          "people": {
+            "D": {
+              "at": [
+                -8.4,
+                0
+              ],
+              "face": "W",
+              "pose": "seated",
+              "y": -1.1
+            },
+            "K": {
+              "at": [
+                8.4,
+                0
+              ],
+              "face": "E",
+              "pose": "seated",
+              "y": -1.1
+            }
+          },
+          "fov": 64,
+          "cam": [
+            10.0,
+            5.5,
+            3.0
+          ],
+          "look": [
+            -6.0,
+            4.199999999999999,
+            -1.0
+          ],
+          "plate": "plate-hall-A"
+        },
+        "set_frame": {
+          "file": "adaptations/fifteen-days/preprod/set-frames/H01.depth.png",
+          "sha256": "bff3d59c3a284c43819b8596f5d4f01d9079f41d9f512c0d46a4925cb24820d0",
+          "mode": "depth",
+          "rendered_from": "images-out/preprod/set/H01.depth.png"
+        },
+        "plate": null,
+        "cards": [
+          {
+            "file": "images-out/preprod/cards-small/deluin.png",
+            "sha256": "6b8326e2b0188b37084c83ea965ea6e1e6a3cbf10f174ec4c8d08d7ee68f6892",
+            "source": {
+              "file": "images-out/preprod/cards2/deluin.png",
+              "sha256": "86b8e2fb1b659722e92ca7c1b272ef9e10a73cf1847dea06c0ed44033880737d"
+            }
+          },
+          {
+            "file": "images-out/preprod/cards-small/kau.png",
+            "sha256": "76becc875eaab4801cb08fb2d27dd5496d2bebe17519f55e22531361a0f6f723",
+            "source": {
+              "file": "images-out/preprod/cards2/kau.png",
+              "sha256": "6d9a84f7c49bf1cb7e54ee8c1a4fb9f9d66560c2b2ca95198e95f711c686be37"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "H02-A1",
+      "shot": "H02",
+      "approach": "A",
+      "attempt": 1,
+      "engine": "qwen",
+      "prompt": "A hand-drawn science fiction comic book panel, ink linework and flat cel-shaded colour, not a 3D render, not a photograph. Wide shot (WS, low among the towers). Down among the game: physical tower pillars on small robotic bases rolling to new places, holographic gliders and ships shooting around them in cyan and amber, a holographic wall building itself; the tiers rising beyond. Picture 1 is a depth map of this exact frame rendered from a 3D model (near is light, far is dark): follow its camera, angle, lens and perspective exactly; every person, chair, table, wall and railing goes exactly where and as big as its shape stands there, people sitting on the chairs and standing on the floor; the simple mannequin shapes are only where the people go. Draw nothing grey from it. Behind them, as the layout shows: tiers of seats rising all around the hall, full of a varied crowd; the standing ring around the top of the hall, crowded behind a railing; the broad walkway spanning the hall high above the floor, with a railing on each side; a few slim, light hologram towers on small gliding bases, drifting across the floor, glowing cube clusters on top; the whole play space alive with glowing holograms: gliders streaking past with light trails, little ships and walls of light cubes in cyan and amber; Kau's sunken pit at the edge of the floor; two big screens hung over the hall, showing the two players' faces. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. No signs, no panels with pictograms, no icons, no symbols anywhere: walls are bare. Screens show only what the shot describes, or are blank and softly glowing. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character. Draw it as a finished comic panel: inked outlines, painted flat colour, glowing lights.",
+      "refs": [
+        "adaptations/fifteen-days/preprod/set-frames/H02.depth.png"
+      ],
+      "width": 1024,
+      "height": 576,
+      "seed": 31101,
+      "layers": {
+        "set": {
+          "file": "adaptations/fifteen-days/preprod/sets/hall.json",
+          "sha256": "a61caec40b182fa6d3413396ab28e40d4da4577eaf7eda0c31e18a797b527c1a"
+        },
+        "camera": {
+          "file": "adaptations/fifteen-days/preprod/sets/hall.shots.json",
+          "key": "H02",
+          "people": {},
+          "fov": 50,
+          "cam": [
+            -4.0,
+            0.9,
+            6.8
+          ],
+          "look": [
+            1.5,
+            1.8,
+            -1.5
+          ],
+          "plate": "plate-hall-B"
+        },
+        "set_frame": {
+          "file": "adaptations/fifteen-days/preprod/set-frames/H02.depth.png",
+          "sha256": "3fa795da8a57ade3d6e62239ca44fa221f2b2ff0b3a257e700657252fbb820e1",
+          "mode": "depth",
+          "rendered_from": "images-out/preprod/set/H02.depth.png"
+        },
+        "plate": null,
+        "cards": []
+      }
+    },
+    {
+      "id": "H03-A1",
+      "shot": "H03",
+      "approach": "A",
+      "attempt": 1,
+      "engine": "qwen",
+      "prompt": "A hand-drawn science fiction comic book panel, ink linework and flat cel-shaded colour, not a 3D render, not a photograph. Medium shot (MS, high angle looking down into his pit). the tall young man with wavy shoulder-length light-brown hair and a long cream cable-knit tunic in his sunken pit at a large glowing console, glasses on a long cable running behind him, calm and cool; the crowd's tiers rise high above him; on a big screen above, his own face in close-up. Faces stay soft and natural: smiles and laughs are closed-mouthed, never open-mouthed grins, no teeth showing. Picture 1 is a depth map of this exact frame rendered from a 3D model (near is light, far is dark): follow its camera, angle, lens and perspective exactly; every person, chair, table, wall and railing goes exactly where and as big as its shape stands there, people sitting on the chairs and standing on the floor; the simple mannequin shapes are only where the people go. Draw nothing grey from it. Picture 2 is the tall young man with wavy shoulder-length light-brown hair and a long cream cable-knit tunic: copy only that person's face, hair, skin and clothes, never the sheet's layout, poses or grey background. In this frame: the tall young man is in the middle of the frame, toward the camera. Exactly one main person, appearing once. Every other person is an ordinary background figure in plain, muted everyday clothes with ordinary hair: no orange jackets, no magenta hair, no cream knitwear, nobody who looks like the main people. Everyone stands on the ground or sits on a chair at their real size: nobody floats, nobody sits or stands on a table. Behind them, as the layout shows: tiers of seats rising all around the hall, full of a varied crowd; the standing ring around the top of the hall, crowded behind a railing; a few slim, light hologram towers on small gliding bases, drifting across the floor, glowing cube clusters on top; the whole play space alive with glowing holograms: gliders streaking past with light trails, little ships and walls of light cubes in cyan and amber; Deluin's sunken pit at the edge of the floor; Kau's sunken pit at the edge of the floor. Faces stay soft and natural: smiles and laughs are closed-mouthed, never open-mouthed grins, no teeth showing. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. No signs, no panels with pictograms, no icons, no symbols anywhere: walls are bare. Screens show only what the shot describes, or are blank and softly glowing. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character. Draw it as a finished comic panel: inked outlines, painted flat colour, glowing lights.",
+      "refs": [
+        "adaptations/fifteen-days/preprod/set-frames/H03.depth.png",
+        "images-out/preprod/cards-small/deluin.png"
+      ],
+      "width": 1024,
+      "height": 576,
+      "seed": 31102,
+      "layers": {
+        "set": {
+          "file": "adaptations/fifteen-days/preprod/sets/hall.json",
+          "sha256": "a61caec40b182fa6d3413396ab28e40d4da4577eaf7eda0c31e18a797b527c1a"
+        },
+        "camera": {
+          "file": "adaptations/fifteen-days/preprod/sets/hall.shots.json",
+          "key": "H03",
+          "people": {
+            "D": {
+              "at": [
+                -8.4,
+                0
+              ],
+              "face": "W",
+              "pose": "seated",
+              "y": -1.1
+            }
+          },
+          "fov": 52,
+          "cam": [
+            -11.2,
+            4.4,
+            2.0
+          ],
+          "look": [
+            -6.2,
+            -0.6,
+            -0.3
+          ],
+          "plate": "plate-hall-P"
+        },
+        "set_frame": {
+          "file": "adaptations/fifteen-days/preprod/set-frames/H03.depth.png",
+          "sha256": "0f3a7dd1f6b4ad62d3f863ff305ad8422b7c8326a0d0b2772d1ec6d769c1f9b1",
+          "mode": "depth",
+          "rendered_from": "images-out/preprod/set/H03.depth.png"
+        },
+        "plate": null,
+        "cards": [
+          {
+            "file": "images-out/preprod/cards-small/deluin.png",
+            "sha256": "6b8326e2b0188b37084c83ea965ea6e1e6a3cbf10f174ec4c8d08d7ee68f6892",
+            "source": {
+              "file": "images-out/preprod/cards2/deluin.png",
+              "sha256": "86b8e2fb1b659722e92ca7c1b272ef9e10a73cf1847dea06c0ed44033880737d"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "H05-A1",
+      "shot": "H05",
+      "approach": "A",
+      "attempt": 1,
+      "engine": "qwen",
+      "prompt": "A hand-drawn science fiction comic book panel, ink linework and flat cel-shaded colour, not a 3D render, not a photograph. Extreme close-up (ECU). the stocky young man with a shaved head and dark brown skin in a plain charcoal tunic's face in his pit, sweat beading under the cabled glasses, jaw tight, console glow from below. Faces stay soft and natural: smiles and laughs are closed-mouthed, never open-mouthed grins, no teeth showing. Picture 1 is a depth map of this exact frame rendered from a 3D model (near is light, far is dark): follow its camera, angle, lens and perspective exactly; every person, chair, table, wall and railing goes exactly where and as big as its shape stands there, people sitting on the chairs and standing on the floor; the simple mannequin shapes are only where the people go. Draw nothing grey from it. Picture 2 is the stocky young man with a shaved head and dark brown skin in a plain charcoal tunic: copy only that person's face, hair, skin and clothes, never the sheet's layout, poses or grey background. In this frame: the stocky young man is in the middle of the frame, toward the camera. Exactly one main person, appearing once. Every other person is an ordinary background figure in plain, muted everyday clothes with ordinary hair: no orange jackets, no magenta hair, no cream knitwear, nobody who looks like the main people. Everyone stands on the ground or sits on a chair at their real size: nobody floats, nobody sits or stands on a table. Faces stay soft and natural: smiles and laughs are closed-mouthed, never open-mouthed grins, no teeth showing. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. No signs, no panels with pictograms, no icons, no symbols anywhere: walls are bare. Screens show only what the shot describes, or are blank and softly glowing. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character. Draw it as a finished comic panel: inked outlines, painted flat colour, glowing lights.",
+      "refs": [
+        "adaptations/fifteen-days/preprod/set-frames/H05.depth.png",
+        "images-out/preprod/cards-small/kau.png"
+      ],
+      "width": 1024,
+      "height": 576,
+      "seed": 31104,
+      "layers": {
+        "set": {
+          "file": "adaptations/fifteen-days/preprod/sets/hall.json",
+          "sha256": "a61caec40b182fa6d3413396ab28e40d4da4577eaf7eda0c31e18a797b527c1a"
+        },
+        "camera": {
+          "file": "adaptations/fifteen-days/preprod/sets/hall.shots.json",
+          "key": "H05",
+          "people": {
+            "K": {
+              "at": [
+                8.4,
+                0
+              ],
+              "face": "E",
+              "pose": "seated",
+              "y": -1.1
+            }
+          },
+          "fov": 36,
+          "cam": [
+            8.868328157299976,
+            0.1699999999999999,
+            0.15216904260722458
+          ],
+          "look": [
+            8.4,
+            0.1499999999999999,
+            0
+          ]
+        },
+        "set_frame": {
+          "file": "adaptations/fifteen-days/preprod/set-frames/H05.depth.png",
+          "sha256": "9bb0f7b3bea4e4f8b24b1dfaa39854d5512b348784c1d414e8c46785be53c077",
+          "mode": "depth",
+          "rendered_from": "images-out/preprod/set/H05.depth.png"
+        },
+        "plate": null,
+        "cards": [
+          {
+            "file": "images-out/preprod/cards-small/kau.png",
+            "sha256": "76becc875eaab4801cb08fb2d27dd5496d2bebe17519f55e22531361a0f6f723",
+            "source": {
+              "file": "images-out/preprod/cards2/kau.png",
+              "sha256": "6d9a84f7c49bf1cb7e54ee8c1a4fb9f9d66560c2b2ca95198e95f711c686be37"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "H06-A1",
+      "shot": "H06",
+      "approach": "A",
+      "attempt": 1,
+      "engine": "qwen",
+      "prompt": "A hand-drawn science fiction comic book panel, ink linework and flat cel-shaded colour, not a 3D render, not a photograph. Wide shot (WS, audience cutaway). The good seats near the floor: a varied crowd of many ages, builds and skin tones in clothes of many colours, an old man leaning forward on his cane, a mother pointing for her child, two teens whispering; hologram light on their faces. Picture 1 is a depth map of this exact frame rendered from a 3D model (near is light, far is dark): follow its camera, angle, lens and perspective exactly; every person, chair, table, wall and railing goes exactly where and as big as its shape stands there, people sitting on the chairs and standing on the floor; the simple mannequin shapes are only where the people go. Draw nothing grey from it. Behind them, as the layout shows: tiers of seats rising all around the hall, full of a varied crowd; the standing ring around the top of the hall, crowded behind a railing; a few slim, light hologram towers on small gliding bases, drifting across the floor, glowing cube clusters on top; the whole play space alive with glowing holograms: gliders streaking past with light trails, little ships and walls of light cubes in cyan and amber. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. No signs, no panels with pictograms, no icons, no symbols anywhere: walls are bare. Screens show only what the shot describes, or are blank and softly glowing. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character. Draw it as a finished comic panel: inked outlines, painted flat colour, glowing lights.",
+      "refs": [
+        "adaptations/fifteen-days/preprod/set-frames/H06.depth.png"
+      ],
+      "width": 1024,
+      "height": 576,
+      "seed": 31105,
+      "layers": {
+        "set": {
+          "file": "adaptations/fifteen-days/preprod/sets/hall.json",
+          "sha256": "a61caec40b182fa6d3413396ab28e40d4da4577eaf7eda0c31e18a797b527c1a"
+        },
+        "camera": {
+          "file": "adaptations/fifteen-days/preprod/sets/hall.shots.json",
+          "key": "H06",
+          "people": {},
+          "fov": 40,
+          "cam": [
+            3.0,
+            1.4,
+            4.0
+          ],
+          "look": [
+            9.5,
+            3.5,
+            9.0
+          ]
+        },
+        "set_frame": {
+          "file": "adaptations/fifteen-days/preprod/set-frames/H06.depth.png",
+          "sha256": "fab97a02afd1d3e46959204055d7d26761d6e1539e0cee67e47a97da73fe67c8",
+          "mode": "depth",
+          "rendered_from": "images-out/preprod/set/H06.depth.png"
+        },
+        "plate": null,
+        "cards": []
+      }
+    },
+    {
+      "id": "G01-A1",
+      "shot": "G01",
+      "approach": "A",
+      "attempt": 1,
+      "engine": "qwen",
+      "prompt": "A hand-drawn science fiction comic book panel, ink linework and flat cel-shaded colour, not a 3D render, not a photograph. Extreme wide shot (EWS, from the floor looking up). Far above the crowded tiers, at the top of the hall, the standing overlook and its railing: the slim young man with spiky black hair with one blue streak, dark brown eyes and an orange cropped jacket and the thin, wiry young woman with warm brown skin, shaved sides, a tall magenta ponytail, dangly geometric earrings, a lime-green vest and tattooed arms, tiny, leaning on it among a few other standing people. Faces stay soft and natural: smiles and laughs are closed-mouthed, never open-mouthed grins, no teeth showing. Picture 1 is a depth map of this exact frame rendered from a 3D model (near is light, far is dark): follow its camera, angle, lens and perspective exactly; every person, chair, table, wall and railing goes exactly where and as big as its shape stands there, people sitting on the chairs and standing on the floor; the simple mannequin shapes are only where the people go. Draw nothing grey from it. Picture 2 is the slim young man with spiky black hair with one blue streak, dark brown eyes and an orange cropped jacket: copy only that person's face, hair, skin and clothes, never the sheet's layout, poses or grey background. Picture 3 is the thin, wiry young woman with warm brown skin, shaved sides, a tall magenta ponytail, dangly geometric earrings, a lime-green vest and tattooed arms: copy only that person's face, hair, skin and clothes, never the sheet's layout, poses or grey background. In this frame: the slim young man is in the middle of the frame, facing screen-left, in profile; the thin, wiry young woman is in the middle of the frame, facing screen-left, in profile. Exactly two main people, each appearing once. Every other person is an ordinary background figure in plain, muted everyday clothes with ordinary hair: no orange jackets, no magenta hair, no cream knitwear, nobody who looks like the main people. Everyone stands on the ground or sits on a chair at their real size: nobody floats, nobody sits or stands on a table. Behind them, as the layout shows: tiers of seats rising all around the hall, full of a varied crowd; the standing ring around the top of the hall, crowded behind a railing; the broad walkway spanning the hall high above the floor, with a railing on each side; a few slim, light hologram towers on small gliding bases, drifting across the floor, glowing cube clusters on top; the whole play space alive with glowing holograms: gliders streaking past with light trails, little ships and walls of light cubes in cyan and amber; two big screens hung over the hall, showing the two players' faces. Faces stay soft and natural: smiles and laughs are closed-mouthed, never open-mouthed grins, no teeth showing. The spiky-haired young man's eyes are dark brown. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. No signs, no panels with pictograms, no icons, no symbols anywhere: walls are bare. Screens show only what the shot describes, or are blank and softly glowing. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character. Draw it as a finished comic panel: inked outlines, painted flat colour, glowing lights.",
+      "refs": [
+        "adaptations/fifteen-days/preprod/set-frames/G01.depth.png",
+        "images-out/preprod/cards-small/zei.png",
+        "images-out/preprod/cards-small/bai.png"
+      ],
+      "width": 1024,
+      "height": 576,
+      "seed": 31106,
+      "layers": {
+        "set": {
+          "file": "adaptations/fifteen-days/preprod/sets/hall.json",
+          "sha256": "a61caec40b182fa6d3413396ab28e40d4da4577eaf7eda0c31e18a797b527c1a"
+        },
+        "camera": {
+          "file": "adaptations/fifteen-days/preprod/sets/hall.shots.json",
+          "key": "G01",
+          "people": {
+            "Z": {
+              "at": [
+                -1.1,
+                -0.6
+              ],
+              "face": "W",
+              "pose": "standing",
+              "y": 7.6
+            },
+            "B": {
+              "at": [
+                -1.1,
+                0.6
+              ],
+              "face": "W",
+              "pose": "standing",
+              "y": 7.6
+            }
+          },
+          "fov": 42,
+          "cam": [
+            -7.0,
+            1.6,
+            8.5
+          ],
+          "look": [
+            -1.2,
+            8.6,
+            0
+          ]
+        },
+        "set_frame": {
+          "file": "adaptations/fifteen-days/preprod/set-frames/G01.depth.png",
+          "sha256": "5200fe0107dbacccb05735f658c6ef12756a3942f7dabdea72c66a710614ea5a",
+          "mode": "depth",
+          "rendered_from": "images-out/preprod/set/G01.depth.png"
+        },
+        "plate": null,
+        "cards": [
+          {
+            "file": "images-out/preprod/cards-small/zei.png",
+            "sha256": "2faf3c23d7e35f8d526477898d8862412f7e84c31f9d87b99d2aaf548178256f",
+            "source": {
+              "file": "images-out/preprod/cards2/zei.png",
+              "sha256": "0081e5f5c2ca95ad5cd5a9cbbc92ef6480779b092ac31792d4bc291f8c5abd12"
+            }
+          },
+          {
+            "file": "images-out/preprod/cards-small/bai.png",
+            "sha256": "4c175214502b73eb6bc8d0905daa9d0475383bf7996d3355ff43b381376d9acd",
+            "source": {
+              "file": "images-out/preprod/cards2/bai.png",
+              "sha256": "99f8fbe3c4edf2caa4f3e99201d3961f5ddbd20fbeccc223a5684b8cde2a431e"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "G02-A1",
+      "shot": "G02",
+      "approach": "A",
+      "attempt": 1,
+      "engine": "qwen",
+      "prompt": "A hand-drawn science fiction comic book panel, ink linework and flat cel-shaded colour, not a 3D render, not a photograph. Wide shot (WS two-shot from behind). From behind, at the overlook railing: the slim young man with spiky black hair with one blue streak, dark brown eyes and an orange cropped jacket on the left leans forward, absorbed in the holograms far below; the thin, wiry young woman with warm brown skin, shaved sides, a tall magenta ponytail, dangly geometric earrings, a lime-green vest and tattooed arms on the right, half turned away, head down over something in her hands; the whole hall below them. Faces stay soft and natural: smiles and laughs are closed-mouthed, never open-mouthed grins, no teeth showing. Picture 1 is a depth map of this exact frame rendered from a 3D model (near is light, far is dark): follow its camera, angle, lens and perspective exactly; every person, chair, table, wall and railing goes exactly where and as big as its shape stands there, people sitting on the chairs and standing on the floor; the simple mannequin shapes are only where the people go. Draw nothing grey from it. Picture 2 is the slim young man with spiky black hair with one blue streak, dark brown eyes and an orange cropped jacket: copy only that person's face, hair, skin and clothes, never the sheet's layout, poses or grey background. Picture 3 is the thin, wiry young woman with warm brown skin, shaved sides, a tall magenta ponytail, dangly geometric earrings, a lime-green vest and tattooed arms: copy only that person's face, hair, skin and clothes, never the sheet's layout, poses or grey background. In this frame: the slim young man is on the right of the frame, away from the camera, seen from behind; the thin, wiry young woman is on the left of the frame, away from the camera, seen from behind. Exactly two main people, each appearing once. Every other person is an ordinary background figure in plain, muted everyday clothes with ordinary hair: no orange jackets, no magenta hair, no cream knitwear, nobody who looks like the main people. Everyone stands on the ground or sits on a chair at their real size: nobody floats, nobody sits or stands on a table. Behind them, as the layout shows: tiers of seats rising all around the hall, full of a varied crowd; the standing ring around the top of the hall, crowded behind a railing; the broad walkway spanning the hall high above the floor, with a railing on each side; a few slim, light hologram towers on small gliding bases, drifting across the floor, glowing cube clusters on top; the whole play space alive with glowing holograms: gliders streaking past with light trails, little ships and walls of light cubes in cyan and amber; Deluin's sunken pit at the edge of the floor. Faces stay soft and natural: smiles and laughs are closed-mouthed, never open-mouthed grins, no teeth showing. The spiky-haired young man's eyes are dark brown. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. No signs, no panels with pictograms, no icons, no symbols anywhere: walls are bare. Screens show only what the shot describes, or are blank and softly glowing. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character. Draw it as a finished comic panel: inked outlines, painted flat colour, glowing lights.",
+      "refs": [
+        "adaptations/fifteen-days/preprod/set-frames/G02.depth.png",
+        "images-out/preprod/cards-small/zei.png",
+        "images-out/preprod/cards-small/bai.png"
+      ],
+      "width": 1024,
+      "height": 576,
+      "seed": 31107,
+      "layers": {
+        "set": {
+          "file": "adaptations/fifteen-days/preprod/sets/hall.json",
+          "sha256": "a61caec40b182fa6d3413396ab28e40d4da4577eaf7eda0c31e18a797b527c1a"
+        },
+        "camera": {
+          "file": "adaptations/fifteen-days/preprod/sets/hall.shots.json",
+          "key": "G02",
+          "people": {
+            "Z": {
+              "at": [
+                -1.1,
+                -0.6
+              ],
+              "face": "W",
+              "pose": "standing",
+              "y": 7.6
+            },
+            "B": {
+              "at": [
+                -1.1,
+                0.6
+              ],
+              "face": "W",
+              "pose": "standing",
+              "y": 7.6
+            }
+          },
+          "fov": 48,
+          "cam": [
+            1.2,
+            9.3,
+            0.1
+          ],
+          "look": [
+            -6.0,
+            6.0,
+            0
+          ]
+        },
+        "set_frame": {
+          "file": "adaptations/fifteen-days/preprod/set-frames/G02.depth.png",
+          "sha256": "f8c80b3d44c8e28a32da0cf24d590ae090c184c49939e75049f6c1059e990cf6",
+          "mode": "depth",
+          "rendered_from": "images-out/preprod/set/G02.depth.png"
+        },
+        "plate": null,
+        "cards": [
+          {
+            "file": "images-out/preprod/cards-small/zei.png",
+            "sha256": "2faf3c23d7e35f8d526477898d8862412f7e84c31f9d87b99d2aaf548178256f",
+            "source": {
+              "file": "images-out/preprod/cards2/zei.png",
+              "sha256": "0081e5f5c2ca95ad5cd5a9cbbc92ef6480779b092ac31792d4bc291f8c5abd12"
+            }
+          },
+          {
+            "file": "images-out/preprod/cards-small/bai.png",
+            "sha256": "4c175214502b73eb6bc8d0905daa9d0475383bf7996d3355ff43b381376d9acd",
+            "source": {
+              "file": "images-out/preprod/cards2/bai.png",
+              "sha256": "99f8fbe3c4edf2caa4f3e99201d3961f5ddbd20fbeccc223a5684b8cde2a431e"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "G03-A1",
+      "shot": "G03",
+      "approach": "A",
+      "attempt": 1,
+      "engine": "qwen",
+      "prompt": "A hand-drawn science fiction comic book panel, ink linework and flat cel-shaded colour, not a 3D render, not a photograph. Close-up (CU, low angle from the hall side). the slim young man with spiky black hair with one blue streak, dark brown eyes and an orange cropped jacket leaning on his forearms on the railing, eyes on the game below, admiring; hologram light on his face. Faces stay soft and natural: smiles and laughs are closed-mouthed, never open-mouthed grins, no teeth showing. Picture 1 is a depth map of this exact frame rendered from a 3D model (near is light, far is dark): follow its camera, angle, lens and perspective exactly; every person, chair, table, wall and railing goes exactly where and as big as its shape stands there, people sitting on the chairs and standing on the floor; the simple mannequin shapes are only where the people go. Draw nothing grey from it. Picture 2 is the slim young man with spiky black hair with one blue streak, dark brown eyes and an orange cropped jacket: copy only that person's face, hair, skin and clothes, never the sheet's layout, poses or grey background. In this frame: the slim young man is in the middle of the frame, toward the camera. Exactly one main person, appearing once. Every other person is an ordinary background figure in plain, muted everyday clothes with ordinary hair: no orange jackets, no magenta hair, no cream knitwear, nobody who looks like the main people. Everyone stands on the ground or sits on a chair at their real size: nobody floats, nobody sits or stands on a table. Behind them, as the layout shows: the standing ring around the top of the hall, crowded behind a railing; the broad walkway spanning the hall high above the floor, with a railing on each side. Faces stay soft and natural: smiles and laughs are closed-mouthed, never open-mouthed grins, no teeth showing. The spiky-haired young man's eyes are dark brown. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. No signs, no panels with pictograms, no icons, no symbols anywhere: walls are bare. Screens show only what the shot describes, or are blank and softly glowing. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character. Draw it as a finished comic panel: inked outlines, painted flat colour, glowing lights.",
+      "refs": [
+        "adaptations/fifteen-days/preprod/set-frames/G03.depth.png",
+        "images-out/preprod/cards-small/zei.png"
+      ],
+      "width": 1024,
+      "height": 576,
+      "seed": 31108,
+      "layers": {
+        "set": {
+          "file": "adaptations/fifteen-days/preprod/sets/hall.json",
+          "sha256": "a61caec40b182fa6d3413396ab28e40d4da4577eaf7eda0c31e18a797b527c1a"
+        },
+        "camera": {
+          "file": "adaptations/fifteen-days/preprod/sets/hall.shots.json",
+          "key": "G03",
+          "people": {
+            "Z": {
+              "at": [
+                -1.1,
+                -0.6
+              ],
+              "face": "W",
+              "pose": "standing",
+              "y": 7.6
+            }
+          },
+          "fov": 36,
+          "cam": [
+            -1.978115294937453,
+            8.8996,
+            -0.3146830451114539
+          ],
+          "look": [
+            -1.1,
+            9.1296,
+            -0.6
+          ]
+        },
+        "set_frame": {
+          "file": "adaptations/fifteen-days/preprod/set-frames/G03.depth.png",
+          "sha256": "ccab54add91d3ccb635f433c3226b4ee36f9cfd6fc139447a761d7131efd3aad",
+          "mode": "depth",
+          "rendered_from": "images-out/preprod/set/G03.depth.png"
+        },
+        "plate": null,
+        "cards": [
+          {
+            "file": "images-out/preprod/cards-small/zei.png",
+            "sha256": "2faf3c23d7e35f8d526477898d8862412f7e84c31f9d87b99d2aaf548178256f",
+            "source": {
+              "file": "images-out/preprod/cards2/zei.png",
+              "sha256": "0081e5f5c2ca95ad5cd5a9cbbc92ef6480779b092ac31792d4bc291f8c5abd12"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "G04-A1",
+      "shot": "G04",
+      "approach": "A",
+      "attempt": 1,
+      "engine": "qwen",
+      "prompt": "A hand-drawn science fiction comic book panel, ink linework and flat cel-shaded colour, not a 3D render, not a photograph. Insert close-up (ECU INSERT). the thin, wiry young woman with warm brown skin, shaved sides, a tall magenta ponytail, dangly geometric earrings, a lime-green vest and tattooed arms's fingers prying open a small electronic gadget with a tiny tool on the flat top of the railing: a little circuit board and wires. Picture 1 is a depth map of this exact frame rendered from a 3D model (near is light, far is dark): follow its camera, angle, lens and perspective exactly; every person, chair, table, wall and railing goes exactly where and as big as its shape stands there, people sitting on the chairs and standing on the floor; the simple mannequin shapes are only where the people go. Draw nothing grey from it. Picture 2 is the thin, wiry young woman with warm brown skin, shaved sides, a tall magenta ponytail, dangly geometric earrings, a lime-green vest and tattooed arms: copy only that person's face, hair, skin and clothes, never the sheet's layout, poses or grey background. Exactly one main person, appearing once. Every other person is an ordinary background figure in plain, muted everyday clothes with ordinary hair: no orange jackets, no magenta hair, no cream knitwear, nobody who looks like the main people. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. No signs, no panels with pictograms, no icons, no symbols anywhere: walls are bare. Screens show only what the shot describes, or are blank and softly glowing. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character. Draw it as a finished comic panel: inked outlines, painted flat colour, glowing lights.",
+      "refs": [
+        "adaptations/fifteen-days/preprod/set-frames/G04.depth.png",
+        "images-out/preprod/cards-small/bai.png"
+      ],
+      "width": 1024,
+      "height": 576,
+      "seed": 31109,
+      "layers": {
+        "set": {
+          "file": "adaptations/fifteen-days/preprod/sets/hall.json",
+          "sha256": "a61caec40b182fa6d3413396ab28e40d4da4577eaf7eda0c31e18a797b527c1a"
+        },
+        "camera": {
+          "file": "adaptations/fifteen-days/preprod/sets/hall.shots.json",
+          "key": "G04",
+          "people": {
+            "B": {
+              "at": [
+                -1.1,
+                0.6
+              ],
+              "face": "W",
+              "pose": "standing",
+              "y": 7.6
+            }
+          },
+          "fov": 44,
+          "cam": [
+            -1.7011586416038027,
+            9.11,
+            0.6442415536401374
+          ],
+          "look": [
+            -1.55,
+            8.66,
+            0.6
+          ]
+        },
+        "set_frame": {
+          "file": "adaptations/fifteen-days/preprod/set-frames/G04.depth.png",
+          "sha256": "dd66614ec25bfc1fbf38c04d1c590f180f52e06de7570331e74f37671ab7bf9d",
+          "mode": "depth",
+          "rendered_from": "images-out/preprod/set/G04.depth.png"
+        },
+        "plate": null,
+        "cards": [
+          {
+            "file": "images-out/preprod/cards-small/bai.png",
+            "sha256": "4c175214502b73eb6bc8d0905daa9d0475383bf7996d3355ff43b381376d9acd",
+            "source": {
+              "file": "images-out/preprod/cards2/bai.png",
+              "sha256": "99f8fbe3c4edf2caa4f3e99201d3961f5ddbd20fbeccc223a5684b8cde2a431e"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "G05-A1",
+      "shot": "G05",
+      "approach": "A",
+      "attempt": 1,
+      "engine": "qwen",
+      "prompt": "A hand-drawn science fiction comic book panel, ink linework and flat cel-shaded colour, not a 3D render, not a photograph. Close-up (CU, three-quarter from her right). the thin, wiry young woman with warm brown skin, shaved sides, a tall magenta ponytail, dangly geometric earrings, a lime-green vest and tattooed arms at the railing, eyes on her gadget, not looking up, dry. Faces stay soft and natural: smiles and laughs are closed-mouthed, never open-mouthed grins, no teeth showing. Picture 1 is a depth map of this exact frame rendered from a 3D model (near is light, far is dark): follow its camera, angle, lens and perspective exactly; every person, chair, table, wall and railing goes exactly where and as big as its shape stands there, people sitting on the chairs and standing on the floor; the simple mannequin shapes are only where the people go. Draw nothing grey from it. Picture 2 is the thin, wiry young woman with warm brown skin, shaved sides, a tall magenta ponytail, dangly geometric earrings, a lime-green vest and tattooed arms: copy only that person's face, hair, skin and clothes, never the sheet's layout, poses or grey background. In this frame: the thin, wiry young woman is in the middle of the frame, toward the camera. Exactly one main person, appearing once. Every other person is an ordinary background figure in plain, muted everyday clothes with ordinary hair: no orange jackets, no magenta hair, no cream knitwear, nobody who looks like the main people. Everyone stands on the ground or sits on a chair at their real size: nobody floats, nobody sits or stands on a table. Behind them, as the layout shows: tiers of seats rising all around the hall, full of a varied crowd; the standing ring around the top of the hall, crowded behind a railing; the broad walkway spanning the hall high above the floor, with a railing on each side; the whole play space alive with glowing holograms: gliders streaking past with light trails, little ships and walls of light cubes in cyan and amber. Faces stay soft and natural: smiles and laughs are closed-mouthed, never open-mouthed grins, no teeth showing. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. No signs, no panels with pictograms, no icons, no symbols anywhere: walls are bare. Screens show only what the shot describes, or are blank and softly glowing. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character. Draw it as a finished comic panel: inked outlines, painted flat colour, glowing lights.",
+      "refs": [
+        "adaptations/fifteen-days/preprod/set-frames/G05.depth.png",
+        "images-out/preprod/cards-small/bai.png"
+      ],
+      "width": 1024,
+      "height": 576,
+      "seed": 31110,
+      "layers": {
+        "set": {
+          "file": "adaptations/fifteen-days/preprod/sets/hall.json",
+          "sha256": "a61caec40b182fa6d3413396ab28e40d4da4577eaf7eda0c31e18a797b527c1a"
+        },
+        "camera": {
+          "file": "adaptations/fifteen-days/preprod/sets/hall.shots.json",
+          "key": "G05",
+          "people": {
+            "B": {
+              "at": [
+                -1.1,
+                0.6
+              ],
+              "face": "W",
+              "pose": "standing",
+              "y": 7.6
+            }
+          },
+          "fov": 36,
+          "cam": [
+            -1.8996056384008757,
+            9.266399999999999,
+            0.13834746942371196
+          ],
+          "look": [
+            -1.1,
+            9.1464,
+            0.6
+          ]
+        },
+        "set_frame": {
+          "file": "adaptations/fifteen-days/preprod/set-frames/G05.depth.png",
+          "sha256": "befdd92767201ba13d0af435640921b4843081654d0cf19bc523186ad2fa2fed",
+          "mode": "depth",
+          "rendered_from": "images-out/preprod/set/G05.depth.png"
+        },
+        "plate": null,
+        "cards": [
+          {
+            "file": "images-out/preprod/cards-small/bai.png",
+            "sha256": "4c175214502b73eb6bc8d0905daa9d0475383bf7996d3355ff43b381376d9acd",
+            "source": {
+              "file": "images-out/preprod/cards2/bai.png",
+              "sha256": "99f8fbe3c4edf2caa4f3e99201d3961f5ddbd20fbeccc223a5684b8cde2a431e"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "G06-A1",
+      "shot": "G06",
+      "approach": "A",
+      "attempt": 1,
+      "engine": "qwen",
+      "prompt": "A hand-drawn science fiction comic book panel, ink linework and flat cel-shaded colour, not a 3D render, not a photograph. Extreme close-up (ECU). the slim young man with spiky black hair with one blue streak, dark brown eyes and an orange cropped jacket's eyes turn to her, one eyebrow raised. Faces stay soft and natural: smiles and laughs are closed-mouthed, never open-mouthed grins, no teeth showing. Picture 1 is a depth map of this exact frame rendered from a 3D model (near is light, far is dark): follow its camera, angle, lens and perspective exactly; every person, chair, table, wall and railing goes exactly where and as big as its shape stands there, people sitting on the chairs and standing on the floor; the simple mannequin shapes are only where the people go. Draw nothing grey from it. Picture 2 is the slim young man with spiky black hair with one blue streak, dark brown eyes and an orange cropped jacket: copy only that person's face, hair, skin and clothes, never the sheet's layout, poses or grey background. In this frame: the slim young man is in the middle of the frame, toward the camera. Exactly one main person, appearing once. Every other person is an ordinary background figure in plain, muted everyday clothes with ordinary hair: no orange jackets, no magenta hair, no cream knitwear, nobody who looks like the main people. Everyone stands on the ground or sits on a chair at their real size: nobody floats, nobody sits or stands on a table. Faces stay soft and natural: smiles and laughs are closed-mouthed, never open-mouthed grins, no teeth showing. The spiky-haired young man's eyes are dark brown. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. No signs, no panels with pictograms, no icons, no symbols anywhere: walls are bare. Screens show only what the shot describes, or are blank and softly glowing. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character. Draw it as a finished comic panel: inked outlines, painted flat colour, glowing lights.",
+      "refs": [
+        "adaptations/fifteen-days/preprod/set-frames/G06.depth.png",
+        "images-out/preprod/cards-small/zei.png"
+      ],
+      "width": 1024,
+      "height": 576,
+      "seed": 31111,
+      "layers": {
+        "set": {
+          "file": "adaptations/fifteen-days/preprod/sets/hall.json",
+          "sha256": "a61caec40b182fa6d3413396ab28e40d4da4577eaf7eda0c31e18a797b527c1a"
+        },
+        "camera": {
+          "file": "adaptations/fifteen-days/preprod/sets/hall.shots.json",
+          "key": "G06",
+          "people": {
+            "Z": {
+              "at": [
+                -1.1,
+                -0.6
+              ],
+              "face": "S",
+              "pose": "standing",
+              "y": 7.6
+            }
+          },
+          "fov": 36,
+          "cam": [
+            -1.2521690426072247,
+            9.2496,
+            -0.1316718427000252
+          ],
+          "look": [
+            -1.1,
+            9.2296,
+            -0.6
+          ]
+        },
+        "set_frame": {
+          "file": "adaptations/fifteen-days/preprod/set-frames/G06.depth.png",
+          "sha256": "c78bcfe73a11a0e1d5b70b0e7623e04d983271eef3186d8acf8e1fd2c50bd57c",
+          "mode": "depth",
+          "rendered_from": "images-out/preprod/set/G06.depth.png"
+        },
+        "plate": null,
+        "cards": [
+          {
+            "file": "images-out/preprod/cards-small/zei.png",
+            "sha256": "2faf3c23d7e35f8d526477898d8862412f7e84c31f9d87b99d2aaf548178256f",
+            "source": {
+              "file": "images-out/preprod/cards2/zei.png",
+              "sha256": "0081e5f5c2ca95ad5cd5a9cbbc92ef6480779b092ac31792d4bc291f8c5abd12"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "G07-A1",
+      "shot": "G07",
+      "approach": "A",
+      "attempt": 1,
+      "engine": "qwen",
+      "prompt": "A hand-drawn science fiction comic book panel, ink linework and flat cel-shaded colour, not a 3D render, not a photograph. Medium close-up (MCU). the thin, wiry young woman with warm brown skin, shaved sides, a tall magenta ponytail, dangly geometric earrings, a lime-green vest and tattooed arms snaps the gadget's casing shut and shrugs, without looking at him. Faces stay soft and natural: smiles and laughs are closed-mouthed, never open-mouthed grins, no teeth showing. Picture 1 is a depth map of this exact frame rendered from a 3D model (near is light, far is dark): follow its camera, angle, lens and perspective exactly; every person, chair, table, wall and railing goes exactly where and as big as its shape stands there, people sitting on the chairs and standing on the floor; the simple mannequin shapes are only where the people go. Draw nothing grey from it. Picture 2 is the thin, wiry young woman with warm brown skin, shaved sides, a tall magenta ponytail, dangly geometric earrings, a lime-green vest and tattooed arms: copy only that person's face, hair, skin and clothes, never the sheet's layout, poses or grey background. In this frame: the thin, wiry young woman is in the middle of the frame, toward the camera. Exactly one main person, appearing once. Every other person is an ordinary background figure in plain, muted everyday clothes with ordinary hair: no orange jackets, no magenta hair, no cream knitwear, nobody who looks like the main people. Everyone stands on the ground or sits on a chair at their real size: nobody floats, nobody sits or stands on a table. Behind them, as the layout shows: tiers of seats rising all around the hall, full of a varied crowd; the standing ring around the top of the hall, crowded behind a railing; the broad walkway spanning the hall high above the floor, with a railing on each side; the whole play space alive with glowing holograms: gliders streaking past with light trails, little ships and walls of light cubes in cyan and amber. Faces stay soft and natural: smiles and laughs are closed-mouthed, never open-mouthed grins, no teeth showing. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. No signs, no panels with pictograms, no icons, no symbols anywhere: walls are bare. Screens show only what the shot describes, or are blank and softly glowing. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character. Draw it as a finished comic panel: inked outlines, painted flat colour, glowing lights.",
+      "refs": [
+        "adaptations/fifteen-days/preprod/set-frames/G07.depth.png",
+        "images-out/preprod/cards-small/bai.png"
+      ],
+      "width": 1024,
+      "height": 576,
+      "seed": 31112,
+      "layers": {
+        "set": {
+          "file": "adaptations/fifteen-days/preprod/sets/hall.json",
+          "sha256": "a61caec40b182fa6d3413396ab28e40d4da4577eaf7eda0c31e18a797b527c1a"
+        },
+        "camera": {
+          "file": "adaptations/fifteen-days/preprod/sets/hall.shots.json",
+          "key": "G07",
+          "people": {
+            "B": {
+              "at": [
+                -1.1,
+                0.6
+              ],
+              "face": "W",
+              "pose": "standing",
+              "y": 7.6
+            }
+          },
+          "fov": 36,
+          "cam": [
+            -2.2279098385091656,
+            9.266399999999999,
+            1.0105256081533351
+          ],
+          "look": [
+            -1.1,
+            9.0464,
+            0.6
+          ]
+        },
+        "set_frame": {
+          "file": "adaptations/fifteen-days/preprod/set-frames/G07.depth.png",
+          "sha256": "60dc5b3f86846b8393a7bd80e209aaf05c8aebbe010ec90b3e619de33bc77865",
+          "mode": "depth",
+          "rendered_from": "images-out/preprod/set/G07.depth.png"
+        },
+        "plate": null,
+        "cards": [
+          {
+            "file": "images-out/preprod/cards-small/bai.png",
+            "sha256": "4c175214502b73eb6bc8d0905daa9d0475383bf7996d3355ff43b381376d9acd",
+            "source": {
+              "file": "images-out/preprod/cards2/bai.png",
+              "sha256": "99f8fbe3c4edf2caa4f3e99201d3961f5ddbd20fbeccc223a5684b8cde2a431e"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "G08-A1",
+      "shot": "G08",
+      "approach": "A",
+      "attempt": 1,
+      "engine": "qwen",
+      "prompt": "A hand-drawn science fiction comic book panel, ink linework and flat cel-shaded colour, not a 3D render, not a photograph. Extreme wide shot (EWS POV, straight down over the railing). Straight down past the crowd's heads to the floor far below: the holographic ring of walls holding against streams of gliders. Picture 1 is a depth map of this exact frame rendered from a 3D model (near is light, far is dark): follow its camera, angle, lens and perspective exactly; every person, chair, table, wall and railing goes exactly where and as big as its shape stands there, people sitting on the chairs and standing on the floor; the simple mannequin shapes are only where the people go. Draw nothing grey from it. Behind them, as the layout shows: tiers of seats rising all around the hall, full of a varied crowd; the standing ring around the top of the hall, crowded behind a railing; the broad walkway spanning the hall high above the floor, with a railing on each side; a few slim, light hologram towers on small gliding bases, drifting across the floor, glowing cube clusters on top; the whole play space alive with glowing holograms: gliders streaking past with light trails, little ships and walls of light cubes in cyan and amber; Deluin's sunken pit at the edge of the floor. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. No signs, no panels with pictograms, no icons, no symbols anywhere: walls are bare. Screens show only what the shot describes, or are blank and softly glowing. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character. Draw it as a finished comic panel: inked outlines, painted flat colour, glowing lights.",
+      "refs": [
+        "adaptations/fifteen-days/preprod/set-frames/G08.depth.png"
+      ],
+      "width": 1024,
+      "height": 576,
+      "seed": 31113,
+      "layers": {
+        "set": {
+          "file": "adaptations/fifteen-days/preprod/sets/hall.json",
+          "sha256": "a61caec40b182fa6d3413396ab28e40d4da4577eaf7eda0c31e18a797b527c1a"
+        },
+        "camera": {
+          "file": "adaptations/fifteen-days/preprod/sets/hall.shots.json",
+          "key": "G08",
+          "people": {},
+          "fov": 55,
+          "cam": [
+            -1.4,
+            9.2,
+            0
+          ],
+          "look": [
+            -4.0,
+            0,
+            0.3
+          ],
+          "plate": "plate-hall-V"
+        },
+        "set_frame": {
+          "file": "adaptations/fifteen-days/preprod/set-frames/G08.depth.png",
+          "sha256": "55f067ca4f41aef49ddaa3573f7ed1eb677e9960ee99553c0555a3f20b2ceac7",
+          "mode": "depth",
+          "rendered_from": "images-out/preprod/set/G08.depth.png"
+        },
+        "plate": null,
+        "cards": []
+      }
+    },
+    {
+      "id": "G09-A1",
+      "shot": "G09",
+      "approach": "A",
+      "attempt": 1,
+      "engine": "qwen",
+      "prompt": "A hand-drawn science fiction comic book panel, ink linework and flat cel-shaded colour, not a 3D render, not a photograph. Close-up (CU, side-on profile). the thin, wiry young woman with warm brown skin, shaved sides, a tall magenta ponytail, dangly geometric earrings, a lime-green vest and tattooed arms glances sideways at him, wry. Faces stay soft and natural: smiles and laughs are closed-mouthed, never open-mouthed grins, no teeth showing. Picture 1 is a depth map of this exact frame rendered from a 3D model (near is light, far is dark): follow its camera, angle, lens and perspective exactly; every person, chair, table, wall and railing goes exactly where and as big as its shape stands there, people sitting on the chairs and standing on the floor; the simple mannequin shapes are only where the people go. Draw nothing grey from it. Picture 2 is the thin, wiry young woman with warm brown skin, shaved sides, a tall magenta ponytail, dangly geometric earrings, a lime-green vest and tattooed arms: copy only that person's face, hair, skin and clothes, never the sheet's layout, poses or grey background. In this frame: the thin, wiry young woman is in the middle of the frame, facing screen-right, in profile. Exactly one main person, appearing once. Every other person is an ordinary background figure in plain, muted everyday clothes with ordinary hair: no orange jackets, no magenta hair, no cream knitwear, nobody who looks like the main people. Everyone stands on the ground or sits on a chair at their real size: nobody floats, nobody sits or stands on a table. Behind them, as the layout shows: tiers of seats rising all around the hall, full of a varied crowd; the standing ring around the top of the hall, crowded behind a railing; the broad walkway spanning the hall high above the floor, with a railing on each side; the whole play space alive with glowing holograms: gliders streaking past with light trails, little ships and walls of light cubes in cyan and amber. Faces stay soft and natural: smiles and laughs are closed-mouthed, never open-mouthed grins, no teeth showing. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. No signs, no panels with pictograms, no icons, no symbols anywhere: walls are bare. Screens show only what the shot describes, or are blank and softly glowing. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character. Draw it as a finished comic panel: inked outlines, painted flat colour, glowing lights.",
+      "refs": [
+        "adaptations/fifteen-days/preprod/set-frames/G09.depth.png",
+        "images-out/preprod/cards-small/bai.png"
+      ],
+      "width": 1024,
+      "height": 576,
+      "seed": 31114,
+      "layers": {
+        "set": {
+          "file": "adaptations/fifteen-days/preprod/sets/hall.json",
+          "sha256": "a61caec40b182fa6d3413396ab28e40d4da4577eaf7eda0c31e18a797b527c1a"
+        },
+        "camera": {
+          "file": "adaptations/fifteen-days/preprod/sets/hall.shots.json",
+          "key": "G09",
+          "people": {
+            "B": {
+              "at": [
+                -1.1,
+                0.6
+              ],
+              "face": "W",
+              "pose": "standing",
+              "y": 7.6
+            }
+          },
+          "fov": 36,
+          "cam": [
+            -1.2603302412997988,
+            9.266399999999999,
+            -0.30927798261846784
+          ],
+          "look": [
+            -1.1,
+            9.1464,
+            0.6
+          ]
+        },
+        "set_frame": {
+          "file": "adaptations/fifteen-days/preprod/set-frames/G09.depth.png",
+          "sha256": "11da7566b3661fb5b37727af36053a56810e68f4fe20a298c78d607ed4b614a8",
+          "mode": "depth",
+          "rendered_from": "images-out/preprod/set/G09.depth.png"
+        },
+        "plate": null,
+        "cards": [
+          {
+            "file": "images-out/preprod/cards-small/bai.png",
+            "sha256": "4c175214502b73eb6bc8d0905daa9d0475383bf7996d3355ff43b381376d9acd",
+            "source": {
+              "file": "images-out/preprod/cards2/bai.png",
+              "sha256": "99f8fbe3c4edf2caa4f3e99201d3961f5ddbd20fbeccc223a5684b8cde2a431e"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "G10-A1",
+      "shot": "G10",
+      "approach": "A",
+      "attempt": 1,
+      "engine": "qwen",
+      "prompt": "A hand-drawn science fiction comic book panel, ink linework and flat cel-shaded colour, not a 3D render, not a photograph. Wide shot (WS side two-shot). the thin, wiry young woman with warm brown skin, shaved sides, a tall magenta ponytail, dangly geometric earrings, a lime-green vest and tattooed arms sets the gadget on the rail and leans out over the railing to study the board below; the slim young man with spiky black hair with one blue streak, dark brown eyes and an orange cropped jacket straightens and turns to watch her. Faces stay soft and natural: smiles and laughs are closed-mouthed, never open-mouthed grins, no teeth showing. Picture 1 is a depth map of this exact frame rendered from a 3D model (near is light, far is dark): follow its camera, angle, lens and perspective exactly; every person, chair, table, wall and railing goes exactly where and as big as its shape stands there, people sitting on the chairs and standing on the floor; the simple mannequin shapes are only where the people go. Draw nothing grey from it. Picture 2 is the slim young man with spiky black hair with one blue streak, dark brown eyes and an orange cropped jacket: copy only that person's face, hair, skin and clothes, never the sheet's layout, poses or grey background. Picture 3 is the thin, wiry young woman with warm brown skin, shaved sides, a tall magenta ponytail, dangly geometric earrings, a lime-green vest and tattooed arms: copy only that person's face, hair, skin and clothes, never the sheet's layout, poses or grey background. In this frame: the slim young man is in the middle of the frame, facing screen-right, in profile; the thin, wiry young woman is in the middle of the frame, toward the camera. Exactly two main people, each appearing once. Every other person is an ordinary background figure in plain, muted everyday clothes with ordinary hair: no orange jackets, no magenta hair, no cream knitwear, nobody who looks like the main people. Everyone stands on the ground or sits on a chair at their real size: nobody floats, nobody sits or stands on a table. Behind them, as the layout shows: tiers of seats rising all around the hall, full of a varied crowd; the standing ring around the top of the hall, crowded behind a railing; the broad walkway spanning the hall high above the floor, with a railing on each side; the whole play space alive with glowing holograms: gliders streaking past with light trails, little ships and walls of light cubes in cyan and amber. Faces stay soft and natural: smiles and laughs are closed-mouthed, never open-mouthed grins, no teeth showing. The spiky-haired young man's eyes are dark brown. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. No signs, no panels with pictograms, no icons, no symbols anywhere: walls are bare. Screens show only what the shot describes, or are blank and softly glowing. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character. Draw it as a finished comic panel: inked outlines, painted flat colour, glowing lights.",
+      "refs": [
+        "adaptations/fifteen-days/preprod/set-frames/G10.depth.png",
+        "images-out/preprod/cards-small/zei.png",
+        "images-out/preprod/cards-small/bai.png"
+      ],
+      "width": 1024,
+      "height": 576,
+      "seed": 31115,
+      "layers": {
+        "set": {
+          "file": "adaptations/fifteen-days/preprod/sets/hall.json",
+          "sha256": "a61caec40b182fa6d3413396ab28e40d4da4577eaf7eda0c31e18a797b527c1a"
+        },
+        "camera": {
+          "file": "adaptations/fifteen-days/preprod/sets/hall.shots.json",
+          "key": "G10",
+          "people": {
+            "Z": {
+              "at": [
+                -1.1,
+                -0.6
+              ],
+              "face": "S",
+              "pose": "standing",
+              "y": 7.6
+            },
+            "B": {
+              "at": [
+                -1.15,
+                0.6
+              ],
+              "face": "W",
+              "pose": "standing",
+              "y": 7.6
+            }
+          },
+          "fov": 36,
+          "cam": [
+            -6.967529279956937,
+            9.488,
+            -0.24343871999820488
+          ],
+          "look": [
+            -1.125,
+            8.988,
+            0.0
+          ]
+        },
+        "set_frame": {
+          "file": "adaptations/fifteen-days/preprod/set-frames/G10.depth.png",
+          "sha256": "79ee0086b0ae2544be2d5d1e50ca08ff6f9a48c8486510c7f3b94f3bf7b53893",
+          "mode": "depth",
+          "rendered_from": "images-out/preprod/set/G10.depth.png"
+        },
+        "plate": null,
+        "cards": [
+          {
+            "file": "images-out/preprod/cards-small/zei.png",
+            "sha256": "2faf3c23d7e35f8d526477898d8862412f7e84c31f9d87b99d2aaf548178256f",
+            "source": {
+              "file": "images-out/preprod/cards2/zei.png",
+              "sha256": "0081e5f5c2ca95ad5cd5a9cbbc92ef6480779b092ac31792d4bc291f8c5abd12"
+            }
+          },
+          {
+            "file": "images-out/preprod/cards-small/bai.png",
+            "sha256": "4c175214502b73eb6bc8d0905daa9d0475383bf7996d3355ff43b381376d9acd",
+            "source": {
+              "file": "images-out/preprod/cards2/bai.png",
+              "sha256": "99f8fbe3c4edf2caa4f3e99201d3961f5ddbd20fbeccc223a5684b8cde2a431e"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "G11-A1",
+      "shot": "G11",
+      "approach": "A",
+      "attempt": 1,
+      "engine": "qwen",
+      "prompt": "A hand-drawn science fiction comic book panel, ink linework and flat cel-shaded colour, not a 3D render, not a photograph. Close-up (CU). the thin, wiry young woman with warm brown skin, shaved sides, a tall magenta ponytail, dangly geometric earrings, a lime-green vest and tattooed arms's face lit from below by the holograms, eyes narrowed, studying the pieces; the slim young man with spiky black hair with one blue streak, dark brown eyes and an orange cropped jacket soft in the background over her shoulder, watching her. Faces stay soft and natural: smiles and laughs are closed-mouthed, never open-mouthed grins, no teeth showing. Picture 1 is a depth map of this exact frame rendered from a 3D model (near is light, far is dark): follow its camera, angle, lens and perspective exactly; every person, chair, table, wall and railing goes exactly where and as big as its shape stands there, people sitting on the chairs and standing on the floor; the simple mannequin shapes are only where the people go. Draw nothing grey from it. Picture 2 is the thin, wiry young woman with warm brown skin, shaved sides, a tall magenta ponytail, dangly geometric earrings, a lime-green vest and tattooed arms: copy only that person's face, hair, skin and clothes, never the sheet's layout, poses or grey background. Picture 3 is the slim young man with spiky black hair with one blue streak, dark brown eyes and an orange cropped jacket: copy only that person's face, hair, skin and clothes, never the sheet's layout, poses or grey background. In this frame: the thin, wiry young woman is in the middle of the frame, toward the camera; the slim young man is on the right of the frame, toward the camera. Exactly two main people, each appearing once. Every other person is an ordinary background figure in plain, muted everyday clothes with ordinary hair: no orange jackets, no magenta hair, no cream knitwear, nobody who looks like the main people. Everyone stands on the ground or sits on a chair at their real size: nobody floats, nobody sits or stands on a table. Behind them, as the layout shows: tiers of seats rising all around the hall, full of a varied crowd; the standing ring around the top of the hall, crowded behind a railing; the broad walkway spanning the hall high above the floor, with a railing on each side; the whole play space alive with glowing holograms: gliders streaking past with light trails, little ships and walls of light cubes in cyan and amber. Faces stay soft and natural: smiles and laughs are closed-mouthed, never open-mouthed grins, no teeth showing. The spiky-haired young man's eyes are dark brown. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. No signs, no panels with pictograms, no icons, no symbols anywhere: walls are bare. Screens show only what the shot describes, or are blank and softly glowing. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character. Draw it as a finished comic panel: inked outlines, painted flat colour, glowing lights.",
+      "refs": [
+        "adaptations/fifteen-days/preprod/set-frames/G11.depth.png",
+        "images-out/preprod/cards-small/bai.png",
+        "images-out/preprod/cards-small/zei.png"
+      ],
+      "width": 1024,
+      "height": 576,
+      "seed": 31116,
+      "layers": {
+        "set": {
+          "file": "adaptations/fifteen-days/preprod/sets/hall.json",
+          "sha256": "a61caec40b182fa6d3413396ab28e40d4da4577eaf7eda0c31e18a797b527c1a"
+        },
+        "camera": {
+          "file": "adaptations/fifteen-days/preprod/sets/hall.shots.json",
+          "key": "G11",
+          "people": {
+            "B": {
+              "at": [
+                -1.1,
+                0.6
+              ],
+              "face": "W",
+              "pose": "standing",
+              "y": 7.6
+            },
+            "Z": {
+              "at": [
+                -0.35,
+                1.05
+              ],
+              "face": "W",
+              "pose": "standing",
+              "y": 7.6
+            }
+          },
+          "fov": 36,
+          "cam": [
+            -2.0031286303117724,
+            9.266399999999999,
+            0.4080340835951732
+          ],
+          "look": [
+            -1.1,
+            9.1464,
+            0.6
+          ]
+        },
+        "set_frame": {
+          "file": "adaptations/fifteen-days/preprod/set-frames/G11.depth.png",
+          "sha256": "83f4e78c6a6448a8c06b00d03443221c2148bccd4b72e527c23e9ae3b38bae09",
+          "mode": "depth",
+          "rendered_from": "images-out/preprod/set/G11.depth.png"
+        },
+        "plate": null,
+        "cards": [
+          {
+            "file": "images-out/preprod/cards-small/bai.png",
+            "sha256": "4c175214502b73eb6bc8d0905daa9d0475383bf7996d3355ff43b381376d9acd",
+            "source": {
+              "file": "images-out/preprod/cards2/bai.png",
+              "sha256": "99f8fbe3c4edf2caa4f3e99201d3961f5ddbd20fbeccc223a5684b8cde2a431e"
+            }
+          },
+          {
+            "file": "images-out/preprod/cards-small/zei.png",
+            "sha256": "2faf3c23d7e35f8d526477898d8862412f7e84c31f9d87b99d2aaf548178256f",
+            "source": {
+              "file": "images-out/preprod/cards2/zei.png",
+              "sha256": "0081e5f5c2ca95ad5cd5a9cbbc92ef6480779b092ac31792d4bc291f8c5abd12"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "H07-A1",
+      "shot": "H07",
+      "approach": "A",
+      "attempt": 1,
+      "engine": "qwen",
+      "prompt": "A hand-drawn science fiction comic book panel, ink linework and flat cel-shaded colour, not a 3D render, not a photograph. Wide shot (WS). The holographic walls stand as the last gliders break; the crowd rises in a swell of noise; the big screen cuts to Deluin's face. Picture 1 is a depth map of this exact frame rendered from a 3D model (near is light, far is dark): follow its camera, angle, lens and perspective exactly; every person, chair, table, wall and railing goes exactly where and as big as its shape stands there, people sitting on the chairs and standing on the floor; the simple mannequin shapes are only where the people go. Draw nothing grey from it. Behind them, as the layout shows: tiers of seats rising all around the hall, full of a varied crowd; the standing ring around the top of the hall, crowded behind a railing; the broad walkway spanning the hall high above the floor, with a railing on each side; a few slim, light hologram towers on small gliding bases, drifting across the floor, glowing cube clusters on top; the whole play space alive with glowing holograms: gliders streaking past with light trails, little ships and walls of light cubes in cyan and amber; Kau's sunken pit at the edge of the floor; two big screens hung over the hall, showing the two players' faces. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. No signs, no panels with pictograms, no icons, no symbols anywhere: walls are bare. Screens show only what the shot describes, or are blank and softly glowing. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character. Draw it as a finished comic panel: inked outlines, painted flat colour, glowing lights.",
+      "refs": [
+        "adaptations/fifteen-days/preprod/set-frames/H07.depth.png"
+      ],
+      "width": 1024,
+      "height": 576,
+      "seed": 31117,
+      "layers": {
+        "set": {
+          "file": "adaptations/fifteen-days/preprod/sets/hall.json",
+          "sha256": "a61caec40b182fa6d3413396ab28e40d4da4577eaf7eda0c31e18a797b527c1a"
+        },
+        "camera": {
+          "file": "adaptations/fifteen-days/preprod/sets/hall.shots.json",
+          "key": "H07",
+          "people": {},
+          "fov": 50,
+          "cam": [
+            -4.0,
+            0.9,
+            6.8
+          ],
+          "look": [
+            1.5,
+            1.8,
+            -1.5
+          ],
+          "plate": "plate-hall-B"
+        },
+        "set_frame": {
+          "file": "adaptations/fifteen-days/preprod/set-frames/H07.depth.png",
+          "sha256": "3fa795da8a57ade3d6e62239ca44fa221f2b2ff0b3a257e700657252fbb820e1",
+          "mode": "depth",
+          "rendered_from": "images-out/preprod/set/H07.depth.png"
+        },
+        "plate": null,
+        "cards": []
+      }
+    },
+    {
+      "id": "H08-A1",
+      "shot": "H08",
+      "approach": "A",
+      "attempt": 1,
+      "engine": "qwen",
+      "prompt": "A hand-drawn science fiction comic book panel, ink linework and flat cel-shaded colour, not a 3D render, not a photograph. Close-up (CU, high angle into the pit). the tall young man with wavy shoulder-length light-brown hair and a long cream cable-knit tunic lifts the glasses off; the cable falls behind his arm; a small private smile. Faces stay soft and natural: smiles and laughs are closed-mouthed, never open-mouthed grins, no teeth showing. Picture 1 is a depth map of this exact frame rendered from a 3D model (near is light, far is dark): follow its camera, angle, lens and perspective exactly; every person, chair, table, wall and railing goes exactly where and as big as its shape stands there, people sitting on the chairs and standing on the floor; the simple mannequin shapes are only where the people go. Draw nothing grey from it. Picture 2 is the tall young man with wavy shoulder-length light-brown hair and a long cream cable-knit tunic: copy only that person's face, hair, skin and clothes, never the sheet's layout, poses or grey background. In this frame: the tall young man is in the middle of the frame, toward the camera. Exactly one main person, appearing once. Every other person is an ordinary background figure in plain, muted everyday clothes with ordinary hair: no orange jackets, no magenta hair, no cream knitwear, nobody who looks like the main people. Everyone stands on the ground or sits on a chair at their real size: nobody floats, nobody sits or stands on a table. Behind them, as the layout shows: tiers of seats rising all around the hall, full of a varied crowd; a few slim, light hologram towers on small gliding bases, drifting across the floor, glowing cube clusters on top; the whole play space alive with glowing holograms: gliders streaking past with light trails, little ships and walls of light cubes in cyan and amber; Deluin's sunken pit at the edge of the floor. Faces stay soft and natural: smiles and laughs are closed-mouthed, never open-mouthed grins, no teeth showing. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. No signs, no panels with pictograms, no icons, no symbols anywhere: walls are bare. Screens show only what the shot describes, or are blank and softly glowing. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character. Draw it as a finished comic panel: inked outlines, painted flat colour, glowing lights.",
+      "refs": [
+        "adaptations/fifteen-days/preprod/set-frames/H08.depth.png",
+        "images-out/preprod/cards-small/deluin.png"
+      ],
+      "width": 1024,
+      "height": 576,
+      "seed": 31118,
+      "layers": {
+        "set": {
+          "file": "adaptations/fifteen-days/preprod/sets/hall.json",
+          "sha256": "a61caec40b182fa6d3413396ab28e40d4da4577eaf7eda0c31e18a797b527c1a"
+        },
+        "camera": {
+          "file": "adaptations/fifteen-days/preprod/sets/hall.shots.json",
+          "key": "H08",
+          "people": {
+            "D": {
+              "at": [
+                -8.4,
+                0
+              ],
+              "face": "W",
+              "pose": "seated",
+              "y": -1.1
+            }
+          },
+          "fov": 36,
+          "cam": [
+            -9.278115294937454,
+            0.9246,
+            0.2853169548885461
+          ],
+          "look": [
+            -8.4,
+            0.1046,
+            0
+          ]
+        },
+        "set_frame": {
+          "file": "adaptations/fifteen-days/preprod/set-frames/H08.depth.png",
+          "sha256": "b4779c2e0760c7025df81d58bf5858e16311808a3b51b626188cff99cb4bef8b",
+          "mode": "depth",
+          "rendered_from": "images-out/preprod/set/H08.depth.png"
+        },
+        "plate": null,
+        "cards": [
+          {
+            "file": "images-out/preprod/cards-small/deluin.png",
+            "sha256": "6b8326e2b0188b37084c83ea965ea6e1e6a3cbf10f174ec4c8d08d7ee68f6892",
+            "source": {
+              "file": "images-out/preprod/cards2/deluin.png",
+              "sha256": "86b8e2fb1b659722e92ca7c1b272ef9e10a73cf1847dea06c0ed44033880737d"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

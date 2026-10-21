@@ -8,11 +8,16 @@ prompt, script, and piece of data used to make it is in this repository.
 Working title. Licensed GPL-3.0, the same as the book. See
 [ATTRIBUTION.md](ATTRIBUTION.md).
 
-**Status: Milestone 1 plus brief v4.** Scaffold, ingest, and reader; not
-yet deployed. See [docs/SNOWMOON-BUILD-BRIEF.md](docs/SNOWMOON-BUILD-BRIEF.md)
+Live at [snowmoon.party](https://snowmoon.party). To make your own scene from the book with
+this pipeline, start with [docs/make-a-scene.md](docs/make-a-scene.md). See
+[docs/SNOWMOON-BUILD-BRIEF.md](docs/SNOWMOON-BUILD-BRIEF.md)
 for the full plan, [docs/design/](docs/design/) for the design direction, and
 [docs/prompts/](docs/prompts/) for the prompts used to build it.
 `docs/SNOWMOON-CHAPTER-NOTES.md` contains full-book spoilers.
+
+To build on Minpentai, the game from the book: start with
+[docs/minpentai/agents.md](docs/minpentai/agents.md), written for AI agents and
+served as plain text at https://snowmoon.party/minpentai/agents.md.
 
 ## Replicate it
 
@@ -21,7 +26,13 @@ npm install
 npm run ingest -- --offline   # re-parse the committed source HTML into content/snowmoon/text/
 npm run check:ingest          # 32 chapters, exact text coverage, byte-identical re-run
 npm run build && npm start    # reader at http://localhost:3000
+npm run typecheck             # TypeScript
+npm run check:principles      # the principles' checks; 7 need the live database or Vercel and are skipped without keys
 ```
+
+Each `test:*` and `check:*` script in `package.json` runs on its own; none needs a key except
+where its header says so. `check:ui`, `check:miniapp` and `check:podcast` need the app running
+(`npm start`) and take `-- --url=http://localhost:3000`.
 
 `npm run ingest` (without `--offline`) re-fetches the 32 chapters from the
 source site and updates `content/snowmoon/source/` if the author has changed
@@ -127,6 +138,7 @@ runs the migration and permission tests in an in-memory Postgres.
 | `npm run check:ingest` | Ingest checks (fails on any problem) |
 | `npm run seed:text` | Upsert `studio.works` and `studio.text_blocks` |
 | `npm run test:db` | Migration and permission tests (PGlite) |
+| `npm run test:adaptation-pages` | Adaptation pages end to end against an in-memory database with every migration and a stand-in for Farcaster's name API; screenshots and `results.json` (`-- --out=DIR`) |
 | `npm run test:render` | Rendering rules: ¶ labels, settings, default templates, figure sizing |
 | `npm run check:ui -- --url=…` | Reader floors in Chrome at 390px: 12px text, 44px targets, fonts, colours, first screen, first-visit intro and its replay |
 | `npm run check:intro -- [--url=…]` | First-visit intro (`config/intro.json`): five cards, live cards point at real pages, card 1 keeps the independence and no-token line |
@@ -171,3 +183,60 @@ which sends the token as `Authorization: Bearer …`. The server verifies it on
 every request (`src/lib/auth.ts`). There are no cookies, because on Farcaster
 web the app runs in a cross-site iframe where third-party cookies may be
 blocked. Reading never requires signing in.
+
+## How to fork
+
+*Draft.* Everything here is GPL-3.0, like the book, so you may fork it and make your own version
+of a scene. *Snowmoon* is by Vitalik Buterin; this edition is independent and not affiliated with
+him. Anything you make from it is GPL-3.0 too.
+
+You need Node 22 or later. For the scene steps (4 and 5) you also need Python 3.10 or later,
+[uv](https://docs.astral.sh/uv/) and ffmpeg. Steps 1 to 4 need no keys and cost nothing; they take
+about 30 minutes (the clone is about 100 MB).
+
+1. Fork [We-Are-Lum/snowmoon](https://github.com/We-Are-Lum/snowmoon) on GitHub and clone your fork.
+2. `npm install`, then `npm run build && npm start` runs the reader at http://localhost:3000.
+   No keys are needed to read or build. The tests and checks run without keys too, with two
+   exceptions: `npm run check:principles` skips 7 checks that need the live database or Vercel,
+   and its P6a check fails on `--url=http://localhost:3000`, because a local reader loads media
+   from media.snowmoon.party.
+3. A scene lives in `adaptations/<seed>/`. The format is
+   [docs/adaptation-format.md](docs/adaptation-format.md): a `brief.md`, then a `script.md` that people
+   write, and a log of what was made. Add your seed to `config/adaptations.json` (copy an entry:
+   `slug`, `title`, `line`, `spoilers_through`, and `video_url` as `null`) and run
+   `npm run check:adaptations`. To see your seed at http://localhost:3000/adaptations, set
+   `ADAPTATIONS = { visible: true }` in `src/lib/config.ts`; it is off on this site for now.
+4. [docs/make-a-scene.md](docs/make-a-scene.md) is the guide to making a whole scene: timeline,
+   mix and video. Its example (`dog-dawn`) runs with no keys and makes an 87-second video with grey
+   stand-in pictures in about two minutes.
+5. Pictures and voices made by models cost money. Stills and designed voices run on fal.ai and
+   need your own `FAL_KEY` in `.env.local`: about $0.09 to design a voice and a few cents a still.
+   Fifteen Days cost about $42 in all (about $1 of voices, the rest stills and tests). Stills can
+   also run free on an Apple Silicon Mac (`scripts/illustrate.py`).
+
+What a fork cannot do yet:
+
+- **Re-cut Fifteen Days.** `scripts/cut-coverage.py` needs the scene's pictures, converted voices
+  and sounds. They live in `images-out/` and `scenes-out/`, which are not in the repository
+  until the maintainer publishes them. `scripts/coverage-plan.py fifteen-days` does run; it only
+  plans.
+- **Convert a performance into a character's voice** without the Chatterbox weights on your
+  machine. Scripts look for shared tools in the checkout (or set `SNOWMOON_VOICE_PY`,
+  `SNOWMOON_IMAGE_PY`, `SNOWMOON_VOICE_MODELS`, `SNOWMOON_NODE_MODULES`; see
+  `scripts/snowmoon_paths.py`). `scripts/set-render.mjs` also needs a browser:
+  `npx playwright-core install chromium`.
+
+The licence asks that what you share stays GPL-3.0, with its source. This edition also keeps its
+own rules, and anything shown on snowmoon.party will follow them:
+
+- The book's text is never altered. A book line is quoted exactly, at its block.
+- People write every published word (narration, dialogue). A model may draft structure, labelled
+  as model-drafted.
+- AI use is declared where it appears, and every model-made file has a public recipe with its
+  exact prompt.
+- Link the book and this repository.
+
+[docs/principles.md](docs/principles.md) explains these rules and the checks behind them.
+
+Publishing a fork on snowmoon.party, and an editor that forks a scene in the app, are not built
+yet. For now, a fork lives in your own repository.

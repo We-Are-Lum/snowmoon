@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { authFetch } from '~/lib/client-auth';
-import { useCanAddImage } from '~/lib/images/can-add';
+import { useCanPick } from '~/lib/images/can-add';
 import { IMAGE_WORDING } from '~/lib/images/wording';
 
 /**
@@ -43,7 +43,7 @@ export async function changePick(method: 'POST' | 'DELETE', body: { versionId?: 
 
 /** Your picks, or null while loading or when you can't have any (signed out). */
 export function useMyPicks(): PickView[] | null {
-  const canAdd = useCanAddImage();
+  const canAdd = useCanPick();
   const [picks, setPicks] = useState<PickView[] | null>(null);
   const load = useCallback(async () => {
     const res = await authFetch('/api/designs/picks').catch(() => null);
@@ -66,7 +66,7 @@ export function useMyPicks(): PickView[] | null {
  * If you already keep an older or newer version of it, offers to switch (never switches for you).
  */
 export function PickButton({ versionId, versionNo, elementId, entityId, kind, name }: { versionId: string; versionNo: number; elementId: string; entityId: string; kind: 'style' | 'character'; name: string }) {
-  const canAdd = useCanAddImage();
+  const canAdd = useCanPick();
   const picks = useMyPicks();
   const [note, setNote] = useState<string | null>(null);
   if (!canAdd || picks === null) return null;

@@ -1,0 +1,3953 @@
+{
+ "about": "PRIVATE comparison, not for the site (owner, 2026-10-18): cut v6 with every model-drawn picture redrawn by GPT Image 2.5 Sunburst, a closed model, through the Vercel AI Gateway; words, voices, sound, timing and the non-model pictures are v6's. Fifteen Days, the coverage cut (owner's rules, 2026-10-17; docs/coverage.md; scripts/cut-coverage.py from coverage-board.json). Setups, variants, cut points and sound places DRAFTED by the coding agent.",
+ "seed": "fifteen-days",
+ "placeholder": true,
+ "placeholder_reason": "frames drawn and self-reviewed, for the owner's final watch",
+ "video": {
+  "width": 1920,
+  "height": 1080,
+  "fps": 30
+ },
+ "loudness": {
+  "integrated_lufs": -16,
+  "true_peak_db": -1,
+  "lra": 11
+ },
+ "tail_s": 1.0,
+ "tracks": {
+  "voice": {
+   "level_db": 0
+  },
+  "bed": {
+   "level_db": -24
+  },
+  "foley": {
+   "level_db": -10
+  },
+  "music": {
+   "level_db": -16
+  }
+ },
+ "rooms": {
+  "hall": "highpass=f=90,aecho=0.8:0.6:60|110:0.07|0.04",
+  "corridor": "highpass=f=80,aecho=0.85:0.7:37|71:0.09|0.05",
+  "courtyard": "highpass=f=70",
+  "gate": "highpass=f=70,aecho=0.9:0.6:55:0.03",
+  "lobby": "highpass=f=80,aecho=0.85:0.55:18:0.05"
+ },
+ "cues": [
+  {
+   "id": "fx-0-0",
+   "track": "foley",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v6/stems/fx-0-0.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 0.4
+   },
+   "level_db": -14,
+   "fade_in": 0.03,
+   "fade_out": 0.2,
+   "note": "game: flyby (drafted place)",
+   "source": {
+    "effect": "game: flyby",
+    "licence": "GPL-3.0, with the code that makes it"
+   }
+  },
+  {
+   "id": "fx-1-0",
+   "track": "foley",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v6/stems/fx-1-0.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 2.4
+   },
+   "level_db": -12,
+   "fade_in": 0.03,
+   "fade_out": 0.2,
+   "note": "game: blast (drafted place)",
+   "source": {
+    "effect": "game: blast",
+    "licence": "GPL-3.0, with the code that makes it"
+   }
+  },
+  {
+   "id": "fx-1-1",
+   "track": "foley",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v6/stems/fx-1-1.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 3.0
+   },
+   "level_db": -16,
+   "fade_in": 0.03,
+   "fade_out": 0.2,
+   "note": "game: flyby (drafted place)",
+   "source": {
+    "effect": "game: flyby",
+    "licence": "GPL-3.0, with the code that makes it"
+   }
+  },
+  {
+   "id": "fx-2-0",
+   "track": "foley",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v6/stems/fx-2-0.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 4.1
+   },
+   "level_db": -15,
+   "fade_in": 0.03,
+   "fade_out": 0.2,
+   "note": "game: blast (drafted place)",
+   "source": {
+    "effect": "game: blast",
+    "licence": "GPL-3.0, with the code that makes it"
+   }
+  },
+  {
+   "id": "fx-3-0",
+   "track": "foley",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v6/stems/fx-3-0.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 5.2
+   },
+   "level_db": -13,
+   "fade_in": 0.03,
+   "fade_out": 0.2,
+   "note": "game: crash (drafted place)",
+   "source": {
+    "effect": "game: crash",
+    "licence": "GPL-3.0, with the code that makes it"
+   }
+  },
+  {
+   "id": "fx-4-0",
+   "track": "foley",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v6/stems/fx-4-0.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 6.2
+   },
+   "level_db": -10,
+   "fade_in": 0.03,
+   "fade_out": 0.2,
+   "note": "hall: crowd swell (drafted place)",
+   "source": {
+    "effect": "hall: crowd swell",
+    "licence": "Creative Commons 0 (CC0 1.0), as shown on the sound's page"
+   }
+  },
+  {
+   "id": "b1-1",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v6/stems/b1-1.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 7.7
+   },
+   "room": "hall",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v3/L01-b1-1.zei-v4b.wav",
+    "voice": "zei-v4b"
+   }
+  },
+  {
+   "id": "b1-2",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v6/stems/b1-2.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 12.318
+   },
+   "room": "hall",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v3/L02-b1-2.bai-v3b.wav",
+    "voice": "bai-v3b"
+   }
+  },
+  {
+   "id": "b1-3",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v6/stems/b1-3.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 17.329
+   },
+   "room": "hall",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v3/L03-b1-3.bai-v3b.wav",
+    "voice": "bai-v3b"
+   }
+  },
+  {
+   "id": "fx-9-0",
+   "track": "foley",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v6/stems/fx-9-0.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 20.63
+   },
+   "level_db": -18,
+   "fade_in": 0.03,
+   "fade_out": 0.2,
+   "note": "game: crash (drafted place)",
+   "source": {
+    "effect": "game: crash",
+    "licence": "GPL-3.0, with the code that makes it"
+   }
+  },
+  {
+   "id": "fx-10-0",
+   "track": "foley",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v6/stems/fx-10-0.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 22.03
+   },
+   "level_db": -20,
+   "fade_in": 0.03,
+   "fade_out": 0.2,
+   "note": "game: blast (drafted place)",
+   "source": {
+    "effect": "game: blast",
+    "licence": "GPL-3.0, with the code that makes it"
+   }
+  },
+  {
+   "id": "b1-4",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v6/stems/b1-4.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 23.03
+   },
+   "room": "hall",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v3/L04-b1-4.zei-v4b.wav",
+    "voice": "zei-v4b"
+   }
+  },
+  {
+   "id": "b1-5",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v6/stems/b1-5.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 25.077
+   },
+   "room": "hall",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v3/L05-b1-5.bai-v3b.wav",
+    "voice": "bai-v3b"
+   }
+  },
+  {
+   "id": "fx-13-0",
+   "track": "foley",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v6/stems/fx-13-0.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 30.208
+   },
+   "level_db": -22,
+   "fade_in": 0.03,
+   "fade_out": 0.2,
+   "note": "game: blast (drafted place)",
+   "source": {
+    "effect": "game: blast",
+    "licence": "GPL-3.0, with the code that makes it"
+   }
+  },
+  {
+   "id": "b1-6",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v6/stems/b1-6.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 31.208
+   },
+   "room": "hall",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v3/L06-b1-6.bai-v3b.wav",
+    "voice": "bai-v3b"
+   }
+  },
+  {
+   "id": "fx-14-0",
+   "track": "foley",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v6/stems/fx-14-0.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 32.108
+   },
+   "level_db": -18,
+   "fade_in": 0.03,
+   "fade_out": 0.2,
+   "note": "game: wall (drafted place)",
+   "source": {
+    "effect": "game: wall",
+    "licence": "GPL-3.0, with the code that makes it"
+   }
+  },
+  {
+   "id": "fx-15-0",
+   "track": "foley",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v6/stems/fx-15-0.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 37.395
+   },
+   "level_db": -6,
+   "fade_in": 0.03,
+   "fade_out": 0.2,
+   "note": "hall: crowd swell (drafted place)",
+   "source": {
+    "effect": "hall: crowd swell",
+    "licence": "Creative Commons 0 (CC0 1.0), as shown on the sound's page"
+   }
+  },
+  {
+   "id": "fx-15-1",
+   "track": "foley",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v6/stems/fx-15-1.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 37.795
+   },
+   "level_db": -12,
+   "fade_in": 0.03,
+   "fade_out": 0.2,
+   "note": "game: crash (drafted place)",
+   "source": {
+    "effect": "game: crash",
+    "licence": "GPL-3.0, with the code that makes it"
+   }
+  },
+  {
+   "id": "fx-17-0",
+   "track": "foley",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v6/stems/fx-17-0.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 40.295
+   },
+   "level_db": -8,
+   "fade_in": 0.03,
+   "fade_out": 0.2,
+   "note": "device: elevator-arrive (drafted place)",
+   "source": {
+    "effect": "device: elevator-arrive",
+    "licence": "GPL-3.0, with the code that makes it"
+   }
+  },
+  {
+   "id": "b2-1",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v6/stems/b2-1.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 41.795
+   },
+   "room": "corridor",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v3/L07-b2-1.zei-v4b.wav",
+    "voice": "zei-v4b"
+   }
+  },
+  {
+   "id": "b2-2",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v6/stems/b2-2.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 43.035
+   },
+   "room": "corridor",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v2/L08-b2-2.deluin-v2.wav",
+    "voice": "deluin-v2"
+   }
+  },
+  {
+   "id": "b2-3",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v6/stems/b2-3.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 51.175
+   },
+   "room": "corridor",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v3/L09-b2-3.zei-v4b.wav",
+    "voice": "zei-v4b"
+   }
+  },
+  {
+   "id": "b2-4",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v6/stems/b2-4.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 60.323
+   },
+   "room": "corridor",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v2/L10-b2-4.deluin-v2.wav",
+    "voice": "deluin-v2"
+   }
+  },
+  {
+   "id": "b2-5",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v6/stems/b2-5.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 69.453
+   },
+   "room": "corridor",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v3/L11-b2-5.zei-v4b.wav",
+    "voice": "zei-v4b"
+   }
+  },
+  {
+   "id": "b2-6",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v6/stems/b2-6.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 71.546
+   },
+   "room": "corridor",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v2/L12-b2-6.deluin-v2.wav",
+    "voice": "deluin-v2"
+   }
+  },
+  {
+   "id": "b2-7-p25",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v6/stems/b2-7-p25.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 77.905
+   },
+   "room": "corridor",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v3/L13-b2-7.zei-v4b.wav",
+    "voice": "zei-v4b",
+    "part": [
+     null,
+     1.1
+    ]
+   }
+  },
+  {
+   "id": "b2-7-p26",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v6/stems/b2-7-p26.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 79.644
+   },
+   "room": "corridor",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v3/L13-b2-7.zei-v4b.wav",
+    "voice": "zei-v4b",
+    "part": [
+     1.1,
+     null
+    ]
+   }
+  },
+  {
+   "id": "b2-8",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v6/stems/b2-8.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 83.069
+   },
+   "room": "corridor",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v3/L14-b2-8.bai-v3b.wav",
+    "voice": "bai-v3b"
+   }
+  },
+  {
+   "id": "b2-9",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v6/stems/b2-9.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 86.708
+   },
+   "room": "corridor",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v3/L15-b2-9.zei-v4b.wav",
+    "voice": "zei-v4b"
+   }
+  },
+  {
+   "id": "b2-10",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v6/stems/b2-10.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 90.223
+   },
+   "room": "corridor",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v3/L16-b2-10.bai-v3b.wav",
+    "voice": "bai-v3b"
+   }
+  },
+  {
+   "id": "b2-11",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v6/stems/b2-11.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 95.42
+   },
+   "room": "corridor",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v3/L17-b2-11.bai-v3b.wav",
+    "voice": "bai-v3b"
+   }
+  },
+  {
+   "id": "b2-12",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v6/stems/b2-12.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 97.961
+   },
+   "room": "corridor",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v3/L18-b2-12.zei-v4b.wav",
+    "voice": "zei-v4b"
+   }
+  },
+  {
+   "id": "b3-1",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v6/stems/b3-1.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 104.683
+   },
+   "room": "courtyard",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v2/L19-b3-1.deluin-v2.wav",
+    "voice": "deluin-v2"
+   }
+  },
+  {
+   "id": "laugh",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v6/stems/laugh.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 102.183
+   },
+   "level_db": -5,
+   "note": "Deluin laughing at the table as Zei arrives"
+  },
+  {
+   "id": "b3-2",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v6/stems/b3-2.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 109.764
+   },
+   "room": "courtyard",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v2/L20-b3-2.robot.wav",
+    "voice": "robot"
+   }
+  },
+  {
+   "id": "b3-3",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v6/stems/b3-3.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 112.695
+   },
+   "room": "courtyard",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v3/L21-b3-3.zei-v4b.wav",
+    "voice": "zei-v4b"
+   }
+  },
+  {
+   "id": "fx-34-0",
+   "track": "foley",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v6/stems/fx-34-0.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 112.515
+   },
+   "level_db": -10,
+   "fade_in": 0.03,
+   "fade_out": 0.2,
+   "note": "device: menu-appears (drafted place)",
+   "source": {
+    "effect": "device: menu-appears",
+    "licence": "GPL-3.0, with the code that makes it"
+   }
+  },
+  {
+   "id": "b3-4",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v6/stems/b3-4.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 114.504
+   },
+   "room": "courtyard",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v2/L22-b3-4.deluin-v2.wav",
+    "voice": "deluin-v2"
+   }
+  },
+  {
+   "id": "b3-5",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v6/stems/b3-5.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 117.53
+   },
+   "room": "courtyard",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v3/L23-b3-5.zei-v4b.wav",
+    "voice": "zei-v4b"
+   }
+  },
+  {
+   "id": "fx-37-0",
+   "track": "foley",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v6/stems/fx-37-0.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 118.63
+   },
+   "level_db": -14,
+   "fade_in": 0.03,
+   "fade_out": 0.2,
+   "note": "device: menu-tap-1 (drafted place)",
+   "source": {
+    "effect": "device: menu-tap-1",
+    "licence": "GPL-3.0, with the code that makes it"
+   }
+  },
+  {
+   "id": "b3-6",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v6/stems/b3-6.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 125.259
+   },
+   "room": "courtyard",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v3/L24-b3-6.zei-v4b.wav",
+    "voice": "zei-v4b"
+   }
+  },
+  {
+   "id": "b3-7",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v6/stems/b3-7.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 127.133
+   },
+   "room": "courtyard",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v2/L25-b3-7.deluin-v2.wav",
+    "voice": "deluin-v2"
+   }
+  },
+  {
+   "id": "b3-8",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v6/stems/b3-8.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 131.565
+   },
+   "room": "courtyard",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v3/L26-b3-8.zei-v4b.wav",
+    "voice": "zei-v4b"
+   }
+  },
+  {
+   "id": "fx-41-0",
+   "track": "foley",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v6/stems/fx-41-0.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 133.485
+   },
+   "level_db": -14,
+   "fade_in": 0.03,
+   "fade_out": 0.2,
+   "note": "device: menu-tap-2 (drafted place)",
+   "source": {
+    "effect": "device: menu-tap-2",
+    "licence": "GPL-3.0, with the code that makes it"
+   }
+  },
+  {
+   "id": "b3-9",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v6/stems/b3-9.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 139.667
+   },
+   "room": "courtyard",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v2/L27-b3-9.deluin-v2.wav",
+    "voice": "deluin-v2"
+   }
+  },
+  {
+   "id": "fx-42-0",
+   "track": "foley",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v6/stems/fx-42-0.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 140.787
+   },
+   "level_db": -14,
+   "fade_in": 0.03,
+   "fade_out": 0.2,
+   "note": "device: menu-tap-3 (drafted place)",
+   "source": {
+    "effect": "device: menu-tap-3",
+    "licence": "GPL-3.0, with the code that makes it"
+   }
+  },
+  {
+   "id": "b3-10",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v6/stems/b3-10.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 153.722
+   },
+   "room": "courtyard",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v3/L28-b3-10.zei-v4b.wav",
+    "voice": "zei-v4b"
+   }
+  },
+  {
+   "id": "b3-11",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v6/stems/b3-11.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 155.393
+   },
+   "room": "courtyard",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v2/L29-b3-11.deluin-v2.wav",
+    "voice": "deluin-v2"
+   }
+  },
+  {
+   "id": "b3-12",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v6/stems/b3-12.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 160.317
+   },
+   "room": "courtyard",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v3/L30-b3-12.zei-v4b.wav",
+    "voice": "zei-v4b"
+   }
+  },
+  {
+   "id": "b3-13",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v6/stems/b3-13.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 163.815
+   },
+   "room": "courtyard",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v3/L31-b3-13.bai-v3b.wav",
+    "voice": "bai-v3b"
+   }
+  },
+  {
+   "id": "fx-47-0",
+   "track": "foley",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v6/stems/fx-47-0.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 173.337
+   },
+   "level_db": -12,
+   "fade_in": 0.03,
+   "fade_out": 0.2,
+   "note": "device: robot-glide (drafted place)",
+   "source": {
+    "effect": "device: robot-glide",
+    "licence": "GPL-3.0, with the code that makes it"
+   }
+  },
+  {
+   "id": "b4-1",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v6/stems/b4-1.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 174.737
+   },
+   "room": "courtyard",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v2/L32-b4-1.deluin-v2.wav",
+    "voice": "deluin-v2"
+   }
+  },
+  {
+   "id": "b4-2",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v6/stems/b4-2.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 187.189
+   },
+   "room": "courtyard",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v3/L33-b4-2.zei-v4b.wav",
+    "voice": "zei-v4b"
+   }
+  },
+  {
+   "id": "b4-3",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v6/stems/b4-3.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 198.447
+   },
+   "room": "courtyard",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v2/L34-b4-3.deluin-v2.wav",
+    "voice": "deluin-v2"
+   }
+  },
+  {
+   "id": "b4-4",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v6/stems/b4-4.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 212.77
+   },
+   "room": "courtyard",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v3/L35-b4-4.zei-v4b.wav",
+    "voice": "zei-v4b"
+   }
+  },
+  {
+   "id": "b4-5",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v6/stems/b4-5.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 215.609
+   },
+   "room": "courtyard",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v2/L36-b4-5.deluin-v2.wav",
+    "voice": "deluin-v2"
+   }
+  },
+  {
+   "id": "b5-1",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v6/stems/b5-1.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 224.839
+   },
+   "room": "courtyard",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v2/L37-b5-1.deluin-v2.wav",
+    "voice": "deluin-v2"
+   }
+  },
+  {
+   "id": "b5-2",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v6/stems/b5-2.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 233.579
+   },
+   "room": "courtyard",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v3/L38-b5-2.zei-v4b.wav",
+    "voice": "zei-v4b"
+   }
+  },
+  {
+   "id": "b5-3",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v6/stems/b5-3.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 241.936
+   },
+   "room": "courtyard",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v2/L39-b5-3.deluin-v2.wav",
+    "voice": "deluin-v2"
+   }
+  },
+  {
+   "id": "b5-4",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v6/stems/b5-4.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 248.303
+   },
+   "room": "courtyard",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v2/L40-b5-4.deluin-v2.wav",
+    "voice": "deluin-v2"
+   }
+  },
+  {
+   "id": "b5-5",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v6/stems/b5-5.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 250.593
+   },
+   "room": "courtyard",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v3/L41-b5-5.bai-v3b.wav",
+    "voice": "bai-v3b"
+   }
+  },
+  {
+   "id": "dreadnaught",
+   "track": "music",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v6/stems/dreadnaught-loud.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 251.693
+   },
+   "level_db": 0,
+   "fade_in": 0.08,
+   "fade_out": 0.25,
+   "note": "Dreadnaught v3 from her lifted headphone"
+  },
+  {
+   "id": "b6-1",
+   "track": "voice",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v6/stems/b6-1.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 256.005
+   },
+   "room": "gate",
+   "source": {
+    "converted": "scenes-out/fifteen-days/lines-v2/L42-b6-1.deluin-v2.wav",
+    "voice": "deluin-v2"
+   }
+  },
+  {
+   "id": "fx-68-0",
+   "track": "foley",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v6/stems/fx-68-0.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 271.151
+   },
+   "level_db": -9,
+   "fade_in": 0.03,
+   "fade_out": 0.2,
+   "note": "device: message-sent (drafted place)",
+   "source": {
+    "effect": "device: message-sent",
+    "licence": "GPL-3.0, with the code that makes it"
+   }
+  },
+  {
+   "id": "fx-70-0",
+   "track": "foley",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v6/stems/fx-70-0.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 273.451
+   },
+   "level_db": -8,
+   "fade_in": 0.03,
+   "fade_out": 0.2,
+   "note": "device: message-received-a (drafted place)",
+   "source": {
+    "effect": "device: message-received-a",
+    "licence": "GPL-3.0, with the code that makes it"
+   }
+  },
+  {
+   "id": "fx-73-0",
+   "track": "foley",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v6/stems/fx-73-0.wav",
+   "at": {
+    "cue": "@start",
+    "offset": 280.351
+   },
+   "level_db": -8,
+   "fade_in": 0.03,
+   "fade_out": 0.2,
+   "note": "device: message-received-b (drafted place)",
+   "source": {
+    "effect": "device: message-received-b",
+    "licence": "GPL-3.0, with the code that makes it"
+   }
+  },
+  {
+   "id": "bed-0",
+   "track": "bed",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v6/stems/bed-0.wav",
+   "loop": true,
+   "loop_xfade_s": 1.5,
+   "at": {
+    "cue": "@start",
+    "offset": 0
+   },
+   "until": {
+    "cue": "@start",
+    "offset": 40.795
+   },
+   "level_db": 2,
+   "fade_in": 1.0,
+   "fade_out": 1.0,
+   "source": {
+    "effect": "bed: match hall",
+    "url": "https://freesound.org/people/klankbeeld/sounds/171462/",
+    "author": "klankbeeld",
+    "licence": "Creative Commons 0 (CC0 1.0), as shown on the sound's page"
+   }
+  },
+  {
+   "id": "bed-1",
+   "track": "bed",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v6/stems/bed-1.wav",
+   "loop": true,
+   "loop_xfade_s": 1.5,
+   "at": {
+    "cue": "@start",
+    "offset": 39.795
+   },
+   "until": {
+    "cue": "@start",
+    "offset": 102.483
+   },
+   "level_db": -2,
+   "fade_in": 1.0,
+   "fade_out": 1.0,
+   "source": {
+    "effect": "bed: corridor",
+    "url": "https://freesound.org/people/sturmankin/sounds/272317/",
+    "author": "sturmankin",
+    "licence": "Creative Commons 0 (CC0 1.0), as shown on the sound's page"
+   }
+  },
+  {
+   "id": "bed-2",
+   "track": "bed",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v6/stems/bed-2.wav",
+   "loop": true,
+   "loop_xfade_s": 1.5,
+   "at": {
+    "cue": "@start",
+    "offset": 101.483
+   },
+   "until": {
+    "cue": "@start",
+    "offset": 255.805
+   },
+   "level_db": 5,
+   "fade_in": 1.0,
+   "fade_out": 1.0,
+   "source": {
+    "effect": "bed: courtyard café",
+    "url": "https://freesound.org/people/Anya_Media/sounds/437462/",
+    "author": "Anya_Media",
+    "licence": "Creative Commons 0 (CC0 1.0), as shown on the sound's page"
+   }
+  },
+  {
+   "id": "bed-3",
+   "track": "bed",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v6/stems/bed-3.wav",
+   "loop": true,
+   "loop_xfade_s": 1.5,
+   "at": {
+    "cue": "@start",
+    "offset": 254.805
+   },
+   "until": {
+    "cue": "@start",
+    "offset": 260.801
+   },
+   "level_db": -2,
+   "fade_in": 1.0,
+   "fade_out": 1.0,
+   "source": {
+    "effect": "bed: gate at dusk",
+    "url": "https://freesound.org/people/softwalls/sounds/385104/",
+    "author": "softwalls",
+    "licence": "Creative Commons 0 (CC0 1.0), as shown on the sound's page"
+   }
+  },
+  {
+   "id": "bed-4",
+   "track": "bed",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v6/stems/bed-4.wav",
+   "loop": true,
+   "loop_xfade_s": 1.5,
+   "at": {
+    "cue": "@start",
+    "offset": 259.801
+   },
+   "until": {
+    "cue": "@start",
+    "offset": 264.801
+   },
+   "level_db": 5,
+   "fade_in": 1.0,
+   "fade_out": 1.0,
+   "source": {
+    "effect": "bed: courtyard café",
+    "url": "https://freesound.org/people/Anya_Media/sounds/437462/",
+    "author": "Anya_Media",
+    "licence": "Creative Commons 0 (CC0 1.0), as shown on the sound's page"
+   }
+  },
+  {
+   "id": "bed-5",
+   "track": "bed",
+   "stem": "scenes-out/fifteen-days/cuts/coverage-v6/stems/bed-5.wav",
+   "loop": true,
+   "loop_xfade_s": 1.5,
+   "at": {
+    "cue": "@start",
+    "offset": 265.051
+   },
+   "until": {
+    "cue": "@start",
+    "offset": 289.551
+   },
+   "level_db": 4,
+   "fade_in": 1.0,
+   "fade_out": 1.0,
+   "source": {
+    "effect": "bed: lobby restaurant",
+    "url": "https://freesound.org/people/Berwitz/sounds/263584/",
+    "author": "Berwitz",
+    "licence": "Creative Commons 0 (CC0 1.0), as shown on the sound's page"
+   }
+  }
+ ],
+ "shots": [
+  {
+   "id": "0-EST",
+   "frame": "cov-game-EST",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/lettered-cov-game-EST.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), lettered in code as in v6",
+   "at": {
+    "cue": "@start",
+    "offset": 0.0
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "c5288c422e5f558a46e3821ecefe3a02325cdec03a30ad13647da24fecbc245d"
+  },
+  {
+   "id": "1-FLOOR",
+   "frame": "cov-game-FLOOR-live",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-game-FLOOR-live-E40.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), private comparison",
+   "at": {
+    "cue": "@start",
+    "offset": 2.2
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "3bf43898294299ef9c0f279e2ff138866c0888211b0186e70dae90e2241bee38"
+  },
+  {
+   "id": "2-PIT-D",
+   "frame": "cov-game-PIT-D-playing",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-game-PIT-D-playing-K7.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), private comparison",
+   "at": {
+    "cue": "@start",
+    "offset": 3.6
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "431b6c3e5d2110c1bb3c67b51438d8747efff42792f10a809832f043ed0e862c"
+  },
+  {
+   "id": "3-PIT-K",
+   "frame": "cov-game-PIT-K",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-H05-K6.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), private comparison",
+   "at": {
+    "cue": "@start",
+    "offset": 4.9
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "25c18ac60f869fbf9e4a75eb9bee24c4c64c46102dfeeacf98d93b7179d06b55"
+  },
+  {
+   "id": "4-SCREEN",
+   "frame": "cov-game-SCREEN-face",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-game-SCREEN-face-E18.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), private comparison",
+   "at": {
+    "cue": "@start",
+    "offset": 6.2
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "4aa552f2ed3418cb494c4f7819475d9ad67e401fbda0b5edc5949fed98d6e146"
+  },
+  {
+   "id": "5-b1-1",
+   "frame": "cov-overlook-MASTER-watch",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-overlook-MASTER-watch-K9.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), private comparison",
+   "at": {
+    "cue": "@start",
+    "offset": 7.6
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "0f18cc23e7ae05a4fd162c12dde640cecb17a259fe0f60f4023f122d9cb9aa44"
+  },
+  {
+   "id": "6-b1-2",
+   "frame": "cov-overlook-OTS-Z-dry",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-overlook-OTS-Z-dry-K7.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), private comparison",
+   "at": {
+    "cue": "@start",
+    "offset": 12.438
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "d6a5085d07dd9c7b3353b4ab9564044cc86c312babdb4c1fe0c24529d4ea5350"
+  },
+  {
+   "id": "7-CU-Z",
+   "frame": "cov-overlook-CU-Z",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-overlook-CU-Z-look-E40.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), private comparison",
+   "at": {
+    "cue": "@start",
+    "offset": 15.829
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "182bb51068e9dbc27321384454325e7e6b48b9afddaac1073892aa542a14ca27"
+  },
+  {
+   "id": "8-b1-3",
+   "frame": "cov-overlook-OTS-Z-shrug",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-overlook-OTS-Z-shrug-E16.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), private comparison",
+   "at": {
+    "cue": "@start",
+    "offset": 17.229
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "76b2378eaeb804ef10630bcd89b10537f70d41f2e6f1b5739cb1c801c2b5d22b"
+  },
+  {
+   "id": "9-POV",
+   "frame": "cov-overlook-POV",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-G08-K2.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), private comparison",
+   "at": {
+    "cue": "@start",
+    "offset": 20.23
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "e360f3fb2175e3a0c064682a8a4873f5d354b936d08c369733b9aac87fdee87a"
+  },
+  {
+   "id": "10-game/PIT-D",
+   "frame": "cov-game-PIT-D-playing",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-game-PIT-D-playing-K7.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), private comparison",
+   "at": {
+    "cue": "@start",
+    "offset": 21.73
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "431b6c3e5d2110c1bb3c67b51438d8747efff42792f10a809832f043ed0e862c"
+  },
+  {
+   "id": "11-b1-4",
+   "frame": "cov-overlook-MASTER-watch",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-overlook-MASTER-watch-K9.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), private comparison",
+   "at": {
+    "cue": "@start",
+    "offset": 22.93
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "0f18cc23e7ae05a4fd162c12dde640cecb17a259fe0f60f4023f122d9cb9aa44"
+  },
+  {
+   "id": "12-b1-5",
+   "frame": "cov-overlook-OTS-Z-wry",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-overlook-OTS-Z-wry-E16.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), private comparison",
+   "at": {
+    "cue": "@start",
+    "offset": 25.197
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "5a8751e25097e46d9f65c58978c821cd79ab07ca96ec3a640d6f72c32c5a7b19"
+  },
+  {
+   "id": "13-MASTER",
+   "frame": "cov-overlook-MASTER-lean",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-overlook-MASTER-lean-K8.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), private comparison",
+   "at": {
+    "cue": "@start",
+    "offset": 29.908
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "6dd5349e27c284d33cc7896a642ca3b0c3224f7145821089ae9013b516afcb31"
+  },
+  {
+   "id": "14-b1-6",
+   "frame": "cov-overlook-CU-B-toast",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-overlook-CU-B-toast-K10.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), private comparison",
+   "at": {
+    "cue": "@start",
+    "offset": 31.108
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "9929f3186a10ec1f75967c2ea99e865a0228bfa37be82a5521b781134a0ba85d"
+  },
+  {
+   "id": "15-game/SCREEN",
+   "frame": "cov-game-SCREEN-face",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-game-SCREEN-face-E18.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), private comparison",
+   "at": {
+    "cue": "@start",
+    "offset": 37.395
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "4aa552f2ed3418cb494c4f7819475d9ad67e401fbda0b5edc5949fed98d6e146"
+  },
+  {
+   "id": "16-game/PIT-D",
+   "frame": "cov-game-PIT-D-glasses",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-game-PIT-D-glasses-K7.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), private comparison",
+   "at": {
+    "cue": "@start",
+    "offset": 38.895
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "11b27beac40ade1960fa31775a9c2bcc0a68a7864500a13e54941c5bad8bbd15"
+  },
+  {
+   "id": "17-MASTER",
+   "frame": "cov-corridor-MASTER-arrive",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-corridor-MASTER-arrive-K8.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), private comparison",
+   "at": {
+    "cue": "@start",
+    "offset": 40.295
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "0ce18c6218654f7e701f26140a4e38694dec48f05764a11e2f46f5361e14c101"
+  },
+  {
+   "id": "18-b2-1",
+   "frame": "cov-corridor-OTS-D-eager",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-corridor-OTS-D-eager-K7.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), private comparison",
+   "at": {
+    "cue": "@start",
+    "offset": 41.695
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "b7e80087bc7b69ee416f2b27e249187f7272fbaca2406b51e0b8b7c9e265eb80"
+  },
+  {
+   "id": "19-b2-2",
+   "frame": "cov-corridor-OTS-Z-easy",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-corridor-OTS-Z-easy-K8.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), private comparison",
+   "at": {
+    "cue": "@start",
+    "offset": 43.155
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "4a585931881bdc7d6f2fd3663dce2d648863a3a49c92421259edd70ee8e1764c"
+  },
+  {
+   "id": "20-b2-3",
+   "frame": "cov-corridor-OTS-D-eager",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-corridor-OTS-D-eager-K7.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), private comparison",
+   "at": {
+    "cue": "@start",
+    "offset": 51.295
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "b7e80087bc7b69ee416f2b27e249187f7272fbaca2406b51e0b8b7c9e265eb80"
+  },
+  {
+   "id": "21-CU-B",
+   "frame": "cov-corridor-CU-B-sour",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-corridor-CU-B-sour-K9.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), private comparison",
+   "at": {
+    "cue": "@start",
+    "offset": 59.223
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "650601dddb779eb959e51f5ddb8c46896d4641460890c6b41e7d715696bbff6e"
+  },
+  {
+   "id": "22-b2-4",
+   "frame": "cov-corridor-OTS-Z-warm",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-corridor-OTS-Z-warm-E40.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), private comparison",
+   "at": {
+    "cue": "@start",
+    "offset": 60.223
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "b1e5afcf8f1b7ae655ecab13a2f5dd6b01880f0879a9c238341f8470f13e4b16"
+  },
+  {
+   "id": "23-b2-5",
+   "frame": "cov-corridor-OTS-D-eager",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-corridor-OTS-D-eager-K7.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), private comparison",
+   "at": {
+    "cue": "@start",
+    "offset": 69.573
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "b7e80087bc7b69ee416f2b27e249187f7272fbaca2406b51e0b8b7c9e265eb80"
+  },
+  {
+   "id": "24-b2-6",
+   "frame": "cov-corridor-OTS-Z-warm",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-corridor-OTS-Z-warm-E40.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), private comparison",
+   "at": {
+    "cue": "@start",
+    "offset": 71.666
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "b1e5afcf8f1b7ae655ecab13a2f5dd6b01880f0879a9c238341f8470f13e4b16"
+  },
+  {
+   "id": "24-b2-6-cut",
+   "frame": "cov-corridor-CU-B-sour",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-corridor-CU-B-sour-K9.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), private comparison",
+   "at": {
+    "cue": "@start",
+    "offset": 73.746
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "650601dddb779eb959e51f5ddb8c46896d4641460890c6b41e7d715696bbff6e"
+  },
+  {
+   "id": "25-b2-7",
+   "frame": "cov-corridor-OTS-D-eager",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-corridor-OTS-D-eager-K7.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), private comparison",
+   "at": {
+    "cue": "@start",
+    "offset": 78.025
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "b7e80087bc7b69ee416f2b27e249187f7272fbaca2406b51e0b8b7c9e265eb80"
+  },
+  {
+   "id": "26-pre",
+   "frame": "cov-walk-MASTER",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-C17-K4.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), private comparison",
+   "at": {
+    "cue": "@start",
+    "offset": 78.844
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "a96b517ca5f146b40823b48cf5df656f4b4548343e0bb969a63339a7ed539d0e"
+  },
+  {
+   "id": "26-b2-7",
+   "frame": "cov-walk-MASTER",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-C17-K4.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), private comparison",
+   "at": {
+    "cue": "@start",
+    "offset": 79.544
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "a96b517ca5f146b40823b48cf5df656f4b4548343e0bb969a63339a7ed539d0e"
+  },
+  {
+   "id": "27-b2-8",
+   "frame": "cov-walk-CU-B-serious",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-walk-CU-B-serious-K9.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), private comparison",
+   "at": {
+    "cue": "@start",
+    "offset": 83.189
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "32eb9c82c91aa3a801516a549fdf7499788a59290683c40c22b777c147e9a6a4"
+  },
+  {
+   "id": "28-b2-9",
+   "frame": "cov-walk-CU-Z-tease",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-walk-CU-Z-tease-K8.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), private comparison",
+   "at": {
+    "cue": "@start",
+    "offset": 86.828
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "95cdc616ca6fab95e01f4b2ec0715447b1666bf312784eeeccb316ffd8350e8f"
+  },
+  {
+   "id": "29-b2-10",
+   "frame": "cov-walk-CU-B-serious",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-walk-CU-B-serious-K9.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), private comparison",
+   "at": {
+    "cue": "@start",
+    "offset": 90.343
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "32eb9c82c91aa3a801516a549fdf7499788a59290683c40c22b777c147e9a6a4"
+  },
+  {
+   "id": "30-b2-11",
+   "frame": "cov-walk-CU-B-serious",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-walk-CU-B-serious-K9.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), private comparison",
+   "at": {
+    "cue": "@start",
+    "offset": 95.42
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "32eb9c82c91aa3a801516a549fdf7499788a59290683c40c22b777c147e9a6a4"
+  },
+  {
+   "id": "31-b2-12",
+   "frame": "cov-walk-MASTER",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-C17-K4.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), private comparison",
+   "at": {
+    "cue": "@start",
+    "offset": 98.081
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "a96b517ca5f146b40823b48cf5df656f4b4548343e0bb969a63339a7ed539d0e"
+  },
+  {
+   "id": "32-pre",
+   "frame": "cov-cafe-MASTER-laugh",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-cafe-MASTER-laugh-E40.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), private comparison",
+   "at": {
+    "cue": "@start",
+    "offset": 101.983
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "4b380cec20f2bbb077d385b3fbb3fbe015425870cf9cf9fb9bfa7aecbe6e200f"
+  },
+  {
+   "id": "32-b3-1",
+   "frame": "cov-cafe-MASTER-wave",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-cafe-MASTER-wave-K7.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), private comparison",
+   "at": {
+    "cue": "@start",
+    "offset": 104.583
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "c7247abf1b1bd58ed087951b961c569362a5f44924eff5b671cdc70d3f9ece67"
+  },
+  {
+   "id": "33-b3-2",
+   "frame": "cov-cafe-OTS-Z-robot",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-cafe-OTS-Z-robot-E50.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), private comparison",
+   "at": {
+    "cue": "@start",
+    "offset": 109.884
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "e221685afa83cc80c0a7448f431008e4bbaef02d121d98a67e624d3621d3d0a4"
+  },
+  {
+   "id": "34-b3-3",
+   "frame": "cov-cafe-CU-Z0-whoa",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-cafe-CU-Z0-whoa-E17.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), private comparison",
+   "at": {
+    "cue": "@start",
+    "offset": 112.815
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "d097335709c290f7811cf3fa2faa20162187b424f81a8448ea77c0ec4bae222d"
+  },
+  {
+   "id": "35-b3-4",
+   "frame": "cov-cafe-OTS-Z-menu",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-cafe-OTS-Z-menu-E40.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), private comparison",
+   "at": {
+    "cue": "@start",
+    "offset": 114.624
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "4a31e5e9259983f36e8a9c57475638ea5457862bb86935e5a1d1df50195de9c2"
+  },
+  {
+   "id": "36-MENU",
+   "frame": "cov-cafe-MENU",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6/framed-cov-cafe-MENU.png",
+   "picture": "the book's own picture",
+   "at": {
+    "cue": "@start",
+    "offset": 115.43
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "6329cae0c57fdd09562286be192e5e5876407b2f181eec136baf2d886dbd32d6"
+  },
+  {
+   "id": "37-b3-5",
+   "frame": "cov-cafe-CU-Z0-explain",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-cafe-CU-Z0-explain-K13.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), private comparison",
+   "at": {
+    "cue": "@start",
+    "offset": 117.43
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "cee6d5fa585beca123db6149664306c84cf65fdc06c11cf51dc1135e8fb32b12"
+  },
+  {
+   "id": "38-OTS-Z",
+   "frame": "cov-cafe-OTS-Z-menu",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-cafe-OTS-Z-menu-E40.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), private comparison",
+   "at": {
+    "cue": "@start",
+    "offset": 123.759
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "4a31e5e9259983f36e8a9c57475638ea5457862bb86935e5a1d1df50195de9c2"
+  },
+  {
+   "id": "39-b3-6",
+   "frame": "cov-cafe-CU-Z0-explain",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-cafe-CU-Z0-explain-K13.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), private comparison",
+   "at": {
+    "cue": "@start",
+    "offset": 125.159
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "cee6d5fa585beca123db6149664306c84cf65fdc06c11cf51dc1135e8fb32b12"
+  },
+  {
+   "id": "40-b3-7",
+   "frame": "cov-cafe-OTS-Z-menu",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-cafe-OTS-Z-menu-E40.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), private comparison",
+   "at": {
+    "cue": "@start",
+    "offset": 127.253
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "4a31e5e9259983f36e8a9c57475638ea5457862bb86935e5a1d1df50195de9c2"
+  },
+  {
+   "id": "41-b3-8",
+   "frame": "cov-cafe-CU-Z0-explain",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-cafe-CU-Z0-explain-K13.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), private comparison",
+   "at": {
+    "cue": "@start",
+    "offset": 131.685
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "cee6d5fa585beca123db6149664306c84cf65fdc06c11cf51dc1135e8fb32b12"
+  },
+  {
+   "id": "42-b3-9",
+   "frame": "cov-cafe-OTS-Z-menu",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-cafe-OTS-Z-menu-E40.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), private comparison",
+   "at": {
+    "cue": "@start",
+    "offset": 139.787
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "4a31e5e9259983f36e8a9c57475638ea5457862bb86935e5a1d1df50195de9c2"
+  },
+  {
+   "id": "43-b3-10",
+   "frame": "cov-cafe-CU-Z0-astonished",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-cafe-CU-Z0-astonished-K13.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), private comparison",
+   "at": {
+    "cue": "@start",
+    "offset": 153.842
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "98b3afc3111b576e8b691c2e91a9ff2f8664279be18277b5740e260feeb893f8"
+  },
+  {
+   "id": "44-b3-11",
+   "frame": "cov-cafe-OTS-Z-stern",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-cafe-OTS-Z-stern-E42.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), private comparison",
+   "at": {
+    "cue": "@start",
+    "offset": 155.513
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "f2ad1a07ee80efcc64f8703f6007d1d11a387e2c36840d60150808c6d4575d3c"
+  },
+  {
+   "id": "45-b3-12",
+   "frame": "cov-cafe-CU-Z0-astonished",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-cafe-CU-Z0-astonished-K13.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), private comparison",
+   "at": {
+    "cue": "@start",
+    "offset": 160.437
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "98b3afc3111b576e8b691c2e91a9ff2f8664279be18277b5740e260feeb893f8"
+  },
+  {
+   "id": "46-b3-13",
+   "frame": "cov-cafe-CU-B-menu",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-cafe-CU-B-menu-K9.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), private comparison",
+   "at": {
+    "cue": "@start",
+    "offset": 163.935
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "c5e0d8515ac574257a3bd2de1aac2f41c4086bb7dfb45c92315d89740a5df614"
+  },
+  {
+   "id": "46-b3-13-cut",
+   "frame": "cov-cafe-CU-B-standing",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-cafe-CU-B-standing-K7.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), private comparison",
+   "at": {
+    "cue": "@start",
+    "offset": 166.415
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "928ba09612b50c8cecaa2d6e1229175811b529a9abdf07fdf38c42b11342ea08"
+  },
+  {
+   "id": "47-BAI",
+   "frame": "cov-cafe-BAI-sideeye",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-cafe-BAI-sideeye-R20.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), private comparison",
+   "at": {
+    "cue": "@start",
+    "offset": 173.337
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "75ccb5117899ca2236fa24494eff56a36080accff2ab2c19f6b6661ad56ed279"
+  },
+  {
+   "id": "48-b4-1",
+   "frame": "cov-cafe-OTS-Z-talk",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-cafe-OTS-Z-talk-K7.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), private comparison",
+   "at": {
+    "cue": "@start",
+    "offset": 174.637
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "d8ad958b2e1377f8bac125b1cb93627a3ac01ab532b358591eb3bf9118d406e9"
+  },
+  {
+   "id": "48-b4-1-cut",
+   "frame": "cov-cafe-SUGAR-stack",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-cafe-SUGAR-stack-E16.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), private comparison",
+   "at": {
+    "cue": "@start",
+    "offset": 178.737
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "bd431a99cb0835e96c148caf6d8f4ef367061909287e59269d1bf8d447a8ffcd"
+  },
+  {
+   "id": "48-b4-1-back",
+   "frame": "cov-cafe-OTS-Z-talk",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-cafe-OTS-Z-talk-K7.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), private comparison",
+   "at": {
+    "cue": "@start",
+    "offset": 179.937
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "d8ad958b2e1377f8bac125b1cb93627a3ac01ab532b358591eb3bf9118d406e9"
+  },
+  {
+   "id": "49-b4-2",
+   "frame": "cov-cafe-CU-Z-amused",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-cafe-CU-Z-amused-K7.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), private comparison",
+   "at": {
+    "cue": "@start",
+    "offset": 187.309
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "2ed81d665f29bda28b5e78edc22b9fa71b6f72e0a61aeb32e59de02ac9a8ac50"
+  },
+  {
+   "id": "50-b4-3",
+   "frame": "cov-cafe-CU-D-warm",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-cafe-CU-D-warm-E16.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), private comparison",
+   "at": {
+    "cue": "@start",
+    "offset": 198.567
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "803d4a0ad180f9a7e55e04a75e3af48643615cd8cb4e5b2fbd9143831a22421c"
+  },
+  {
+   "id": "51-b4-4",
+   "frame": "cov-cafe-CU-Z-amused",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-cafe-CU-Z-amused-K7.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), private comparison",
+   "at": {
+    "cue": "@start",
+    "offset": 212.89
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "2ed81d665f29bda28b5e78edc22b9fa71b6f72e0a61aeb32e59de02ac9a8ac50"
+  },
+  {
+   "id": "52-b4-5",
+   "frame": "cov-cafe-SUGAR-wall",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-cafe-SUGAR-wall-K9.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), private comparison",
+   "at": {
+    "cue": "@start",
+    "offset": 215.729
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "6532e8755782c8210f4b9265f64d266347f5a34311962f59ab3fe9253d721c87"
+  },
+  {
+   "id": "52-b4-5-cut",
+   "frame": "cov-cafe-CU-D-warm",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-cafe-CU-D-warm-E16.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), private comparison",
+   "at": {
+    "cue": "@start",
+    "offset": 216.809
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "803d4a0ad180f9a7e55e04a75e3af48643615cd8cb4e5b2fbd9143831a22421c"
+  },
+  {
+   "id": "53-SUGAR",
+   "frame": "cov-cafe-SUGAR-door",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-cafe-SUGAR-door-K7.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), private comparison",
+   "at": {
+    "cue": "@start",
+    "offset": 221.339
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "77d477fe1d44b367b925d70ef88ef5af7029ceca320bf9fce430cba789a8a553"
+  },
+  {
+   "id": "54-CU-Z",
+   "frame": "cov-cafe-CU-Z-amused",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-cafe-CU-Z-amused-K7.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), private comparison",
+   "at": {
+    "cue": "@start",
+    "offset": 222.539
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "2ed81d665f29bda28b5e78edc22b9fa71b6f72e0a61aeb32e59de02ac9a8ac50"
+  },
+  {
+   "id": "55-BAI",
+   "frame": "cov-cafe-BAI-sideeye",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-cafe-BAI-sideeye-R20.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), private comparison",
+   "at": {
+    "cue": "@start",
+    "offset": 223.639
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "75ccb5117899ca2236fa24494eff56a36080accff2ab2c19f6b6661ad56ed279"
+  },
+  {
+   "id": "56-b5-1",
+   "frame": "cov-cafe-OTS-Z-eager",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-cafe-OTS-Z-eager-K7.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), private comparison",
+   "at": {
+    "cue": "@start",
+    "offset": 224.739
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "8d49a4552105347b7831ccf9a801671e6a5bb7696a657d05a4ea3b55058b19ff"
+  },
+  {
+   "id": "57-b5-2",
+   "frame": "cov-cafe-CU-Z-smile",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-cafe-CU-Z-smile-K14.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), private comparison",
+   "at": {
+    "cue": "@start",
+    "offset": 233.699
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "9e4cc22dc30e770ffb626a2cdcc95dc248dad68a4b680e9e9f02d30f7752943f"
+  },
+  {
+   "id": "58-b5-3",
+   "frame": "cov-cafe-OTS-Z-eager",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-cafe-OTS-Z-eager-K7.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), private comparison",
+   "at": {
+    "cue": "@start",
+    "offset": 242.056
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "8d49a4552105347b7831ccf9a801671e6a5bb7696a657d05a4ea3b55058b19ff"
+  },
+  {
+   "id": "59-BAI",
+   "frame": "cov-cafe-BAI-sideeye",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-cafe-BAI-sideeye-R20.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), private comparison",
+   "at": {
+    "cue": "@start",
+    "offset": 247.203
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "75ccb5117899ca2236fa24494eff56a36080accff2ab2c19f6b6661ad56ed279"
+  },
+  {
+   "id": "60-b5-4",
+   "frame": "cov-cafe-OTS-Z-talk",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-cafe-OTS-Z-talk-K7.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), private comparison",
+   "at": {
+    "cue": "@start",
+    "offset": 248.203
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "d8ad958b2e1377f8bac125b1cb93627a3ac01ab532b358591eb3bf9118d406e9"
+  },
+  {
+   "id": "61-b5-5",
+   "frame": "cov-cafe-BAI-what",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-cafe-BAI-what-E47.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), private comparison",
+   "at": {
+    "cue": "@start",
+    "offset": 250.713
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "908e357a121cfa8b78b4b795292e7983b87db037d15a3b19d7f72c6863697568"
+  },
+  {
+   "id": "62-pre",
+   "frame": "cov-gate-MASTER-fingers",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-gate-MASTER-fingers-K11.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), private comparison",
+   "at": {
+    "cue": "@start",
+    "offset": 255.305
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "e1d8ec3386631ead1e197656e77d3a9a8e22ded22ed29c797eeb2cb139128022"
+  },
+  {
+   "id": "62-b6-1",
+   "frame": "cov-gate-MASTER-fingers",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-gate-MASTER-fingers-K11.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), private comparison",
+   "at": {
+    "cue": "@start",
+    "offset": 255.905
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "e1d8ec3386631ead1e197656e77d3a9a8e22ded22ed29c797eeb2cb139128022"
+  },
+  {
+   "id": "63-CU-Z",
+   "frame": "cov-gate-CU-Z-smile",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-gate-CU-Z-smile-K7.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), private comparison",
+   "at": {
+    "cue": "@start",
+    "offset": 257.701
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "a02815c1d7a0df858d5e2cd5045e41a465641a81336a1991c60b7cb49bd61c62"
+  },
+  {
+   "id": "64-MASTER",
+   "frame": "cov-gate-MASTER-wave",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-gate-MASTER-wave-K7.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), private comparison",
+   "at": {
+    "cue": "@start",
+    "offset": 258.901
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "0376cd2ff2f2deb38cbc7227018592d23490cae61309fba0c2669460a79898b3"
+  },
+  {
+   "id": "65-MASTER",
+   "frame": "cov-dusk-MASTER-talk",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/lettered-cov-dusk-MASTER-talk.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), lettered in code as in v6",
+   "at": {
+    "cue": "@start",
+    "offset": 260.301
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "38848aeb7ff68811a357bc6248bd8fb5f1f099135c3ce4a4eda1c9a1777b3c9d"
+  },
+  {
+   "id": "BLACK",
+   "frame": "black",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6/black.png",
+   "picture": "black",
+   "at": {
+    "cue": "@start",
+    "offset": 264.551
+   },
+   "transition": {
+    "type": "dissolve",
+    "seconds": 0.6
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "0f52608dd021e7069ef19f9d8f46f6d651aaf5cbac5154465092de3574cf8514"
+  },
+  {
+   "id": "66-EST",
+   "frame": "cov-lobby-EST",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/lettered-cov-lobby-EST.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), lettered in code as in v6",
+   "at": {
+    "cue": "@start",
+    "offset": 265.551
+   },
+   "transition": {
+    "type": "dissolve",
+    "seconds": 0.6
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "8909530b9b64c139766ebaa4c392a9619cc1ff1e7ee02fcfbe740c4f909289f4"
+  },
+  {
+   "id": "67-CU-Z",
+   "frame": "cov-lobby-CU-Z-down",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-lobby-CU-Z-down-K8.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), private comparison",
+   "at": {
+    "cue": "@start",
+    "offset": 268.551
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "4bd26144111f1035fac2c127504ff53802247faad5f5d137077f8f76705fab93"
+  },
+  {
+   "id": "68-SCREEN",
+   "frame": "cov-lobby-SCREEN",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6/screen-L03.png",
+   "picture": "the book's words on a device, drawn in code",
+   "at": {
+    "cue": "@start",
+    "offset": 269.951
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "f18456ef81952237a71a8a322e9ed3abe2b9de24b10eb3eafa3ff226fd656fe3"
+  },
+  {
+   "id": "69-MASTER",
+   "frame": "cov-lobby-MASTER-sits",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-lobby-MASTER-sits-E18.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), private comparison",
+   "at": {
+    "cue": "@start",
+    "offset": 272.451
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "56a2f6cf3c226a0490977b3dd33dcbe1ffbf989410aca99c7b3967b4ef867eff"
+  },
+  {
+   "id": "70-CU-Z",
+   "frame": "cov-lobby-CU-Z-down",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-lobby-CU-Z-down-K8.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), private comparison",
+   "at": {
+    "cue": "@start",
+    "offset": 273.951
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "4bd26144111f1035fac2c127504ff53802247faad5f5d137077f8f76705fab93"
+  },
+  {
+   "id": "71-SCREEN",
+   "frame": "cov-lobby-SCREEN",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6/screen-L07.png",
+   "picture": "the book's words on a device, drawn in code",
+   "at": {
+    "cue": "@start",
+    "offset": 275.151
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "d921411802b9982860669a7d3ba793459cc6dfec05aa4d3de709a11ba769c0de"
+  },
+  {
+   "id": "72-CU-Z",
+   "frame": "cov-lobby-CU-Z-relief",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-lobby-CU-Z-relief-K10.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), private comparison",
+   "at": {
+    "cue": "@start",
+    "offset": 278.651
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "2cff93d606151b28da262204188399f58a2975a98c057282c40f03e841bba7b7"
+  },
+  {
+   "id": "73-SCREEN",
+   "frame": "cov-lobby-SCREEN",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6/screen-L09.png",
+   "picture": "the book's words on a device, drawn in code",
+   "at": {
+    "cue": "@start",
+    "offset": 280.151
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "3f75fe4d229537a53524add7a506b5def7a0d9404a988031912bd3cddff93f1e"
+  },
+  {
+   "id": "74-OTS-Z",
+   "frame": "cov-lobby-OTS-Z-turns",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/gpt-cov-lobby-OTS-Z-turns-K9.png",
+   "picture": "GPT Image 2.5 Sunburst (closed model), private comparison",
+   "at": {
+    "cue": "@start",
+    "offset": 284.651
+   },
+   "transition": {
+    "type": "cut"
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "9db6932d95317e375bbad06efcc63ef831fa0517e9ec504ca34b42844bf78c95"
+  },
+  {
+   "id": "BLACK",
+   "frame": "black",
+   "image": "scenes-out/fifteen-days/cuts/coverage-v6/black.png",
+   "picture": "black",
+   "at": {
+    "cue": "@start",
+    "offset": 287.451
+   },
+   "transition": {
+    "type": "dissolve",
+    "seconds": 0.8
+   },
+   "move": {
+    "kind": "push",
+    "from": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "to": {
+     "x": 0.5,
+     "y": 0.5,
+     "zoom": 1.0
+    },
+    "ease": "linear"
+   },
+   "image_sha256": "0f52608dd021e7069ef19f9d8f46f6d651aaf5cbac5154465092de3574cf8514"
+  }
+ ],
+ "lettering": [],
+ "subtitles": [
+  {
+   "cue": "b1-1",
+   "text": "You'd think after making it this far, they'd stop underestimating the foreigner.",
+   "from": 0.0,
+   "to": 1.0
+  },
+  {
+   "cue": "b1-2",
+   "text": "It wouldn't be so annoying if he wasn't so damn pretty.",
+   "from": 0.0,
+   "to": 1.0
+  },
+  {
+   "cue": "b1-3",
+   "text": "Nah, way too fake for me.",
+   "from": 0.0,
+   "to": 1.0
+  },
+  {
+   "cue": "b1-4",
+   "text": "Such patience...",
+   "from": 0.0,
+   "to": 1.0
+  },
+  {
+   "cue": "b1-5",
+   "text": "Total wimp, just like you. But it gets you guys the W.",
+   "from": 0.0,
+   "to": 1.0
+  },
+  {
+   "cue": "b1-6",
+   "text": "That other loser's toast.",
+   "from": 0.0,
+   "to": 0.2551
+  },
+  {
+   "cue": "b1-6",
+   "text": "He should have already thrown in the towel, but doesn't even know it yet.",
+   "from": 0.2551,
+   "to": 1.0
+  },
+  {
+   "cue": "b2-1",
+   "text": "Good job out there.",
+   "from": 0.0,
+   "to": 1.0
+  },
+  {
+   "cue": "b2-2",
+   "text": "Thanks. Yeah, the walls held out.",
+   "from": 0.0,
+   "to": 0.3511
+  },
+  {
+   "cue": "b2-2",
+   "text": "Haven't yet watched your replay, but will be sure to tonight.",
+   "from": 0.3511,
+   "to": 1.0
+  },
+  {
+   "cue": "b2-3",
+   "text": "Yeah, please ignore the ugly style.",
+   "from": 0.0,
+   "to": 0.2756
+  },
+  {
+   "cue": "b2-3",
+   "text": "I also won by defense though,",
+   "from": 0.2756,
+   "to": 0.5039
+  },
+  {
+   "cue": "b2-3",
+   "text": "but for most of the game it just looks like I'm running scared.",
+   "from": 0.5039,
+   "to": 1.0
+  },
+  {
+   "cue": "b2-4",
+   "text": "Patience often does, until you win. Hey, do you want to get tea later?",
+   "from": 0.0,
+   "to": 0.6087
+  },
+  {
+   "cue": "b2-4",
+   "text": "I'll be at the courtyard in about a longhour.",
+   "from": 0.6087,
+   "to": 1.0
+  },
+  {
+   "cue": "b2-5",
+   "text": "Sure, yeah, that works well for me!",
+   "from": 0.0,
+   "to": 1.0
+  },
+  {
+   "cue": "b2-6",
+   "text": "Great, I'll see you then. Bai, you're welcome to come too.",
+   "from": 0.0,
+   "to": 0.725
+  },
+  {
+   "cue": "b2-6",
+   "text": "Hope to see you there!",
+   "from": 0.725,
+   "to": 1.0
+  },
+  {
+   "cue": "b2-7-p25",
+   "text": "See you.",
+   "from": 0.0,
+   "to": 1.0
+  },
+  {
+   "cue": "b2-7-p26",
+   "text": "So are you gonna come? Should be fun!",
+   "from": 0.0,
+   "to": 1.0
+  },
+  {
+   "cue": "b2-8",
+   "text": "He's your competition, remember?",
+   "from": 0.0,
+   "to": 1.0
+  },
+  {
+   "cue": "b2-9",
+   "text": "Take it easy, you're my competition too.",
+   "from": 0.0,
+   "to": 1.0
+  },
+  {
+   "cue": "b2-10",
+   "text": "'Was.' And you know I hate you. And I know all your tricks already anyway.",
+   "from": 0.0,
+   "to": 1.0
+  },
+  {
+   "cue": "b2-11",
+   "text": "We don't know anything about this guy.",
+   "from": 0.0,
+   "to": 1.0
+  },
+  {
+   "cue": "b2-12",
+   "text": "So let's get to know him, it'll be fun! Maybe he won't be so fake after all.",
+   "from": 0.0,
+   "to": 1.0
+  },
+  {
+   "cue": "b3-1",
+   "text": "Hey, over here! We were just talking about you!",
+   "from": 0.0,
+   "to": 1.0
+  },
+  {
+   "cue": "b3-2",
+   "text": "jie mo kai tu jie hei ja ma?",
+   "from": 0.0,
+   "to": 1.0
+  },
+  {
+   "cue": "b3-3",
+   "text": "Whoa",
+   "from": 0.0,
+   "to": 1.0
+  },
+  {
+   "cue": "b3-4",
+   "text": "What is it?",
+   "from": 0.0,
+   "to": 1.0
+  },
+  {
+   "cue": "b3-5",
+   "text": "I think these are some of the new symbols that they're A/B testing for the",
+   "from": 0.0,
+   "to": 0.7708
+  },
+  {
+   "cue": "b3-5",
+   "text": "Dzegoban version nine.",
+   "from": 0.7708,
+   "to": 1.0
+  },
+  {
+   "cue": "b3-6",
+   "text": "Have you heard about version nine?",
+   "from": 0.0,
+   "to": 1.0
+  },
+  {
+   "cue": "b3-7",
+   "text": "I had a couple people mention it to me. Making the language visual.",
+   "from": 0.0,
+   "to": 1.0
+  },
+  {
+   "cue": "b3-8",
+   "text": "Hmmm.",
+   "from": 0.0,
+   "to": 0.0413
+  },
+  {
+   "cue": "b3-8",
+   "text": "More straight horizontal lines than usual,",
+   "from": 0.0413,
+   "to": 0.3884
+  },
+  {
+   "cue": "b3-8",
+   "text": "and the three diagonal lines on the right. probably pronunciation markers?",
+   "from": 0.3884,
+   "to": 1.0
+  },
+  {
+   "cue": "b3-9",
+   "text": "Top right is 'kai', right?",
+   "from": 0.0,
+   "to": 0.1333
+  },
+  {
+   "cue": "b3-9",
+   "text": "The extra vertical vein on the left is unusual,",
+   "from": 0.1333,
+   "to": 0.3744
+  },
+  {
+   "cue": "b3-9",
+   "text": "although I'm not sure I would make the images so detailed when they have such",
+   "from": 0.3744,
+   "to": 0.7692
+  },
+  {
+   "cue": "b3-9",
+   "text": "different meanings, depending on the context.",
+   "from": 0.7692,
+   "to": 1.0
+  },
+  {
+   "cue": "b3-10",
+   "text": "Wait, you know Dzegoban?",
+   "from": 0.0,
+   "to": 1.0
+  },
+  {
+   "cue": "b3-11",
+   "text": "Zei, the whole point of Dzegoban is that you can learn it in less than a month.",
+   "from": 0.0,
+   "to": 1.0
+  },
+  {
+   "cue": "b3-12",
+   "text": "I'm impressed, you're almost a local already.",
+   "from": 0.0,
+   "to": 1.0
+  },
+  {
+   "cue": "b3-13",
+   "text": "Actually, I don't think I want anything. Plus, I've got a lot to catch up on.",
+   "from": 0.0,
+   "to": 0.5066
+  },
+  {
+   "cue": "b3-13",
+   "text": "Zei, when you're done, come get me. I want to go over some things with you.",
+   "from": 0.5066,
+   "to": 1.0
+  },
+  {
+   "cue": "b4-1",
+   "text": "So while visiting, I've been wondering about the differences between home and",
+   "from": 0.0,
+   "to": 0.5274
+  },
+  {
+   "cue": "b4-1",
+   "text": "here. And I've been wondering, why does Dzego like Minpentai so much?",
+   "from": 0.5274,
+   "to": 1.0
+  },
+  {
+   "cue": "b4-2",
+   "text": "Kids get into it pretty young here, I guess.",
+   "from": 0.0,
+   "to": 0.2803
+  },
+  {
+   "cue": "b4-2",
+   "text": "Whole family involved, it's a big thing.",
+   "from": 0.2803,
+   "to": 0.535
+  },
+  {
+   "cue": "b4-2",
+   "text": "One of our quirks, just like the language. Does Redshire have any quirks?",
+   "from": 0.535,
+   "to": 1.0
+  },
+  {
+   "cue": "b4-3",
+   "text": "Sure. Yeah, we have our fair share.",
+   "from": 0.0,
+   "to": 0.2047
+  },
+  {
+   "cue": "b4-3",
+   "text": "We care a lot about natural beauty,",
+   "from": 0.2047,
+   "to": 0.4094
+  },
+  {
+   "cue": "b4-3",
+   "text": "and maybe have an unnatural obsession with old styles.",
+   "from": 0.4094,
+   "to": 0.7251
+  },
+  {
+   "cue": "b4-3",
+   "text": "Less cameras, more castles, that kind of thing.",
+   "from": 0.7251,
+   "to": 1.0
+  },
+  {
+   "cue": "b4-4",
+   "text": "I see where you get your love of walls then.",
+   "from": 0.0,
+   "to": 1.0
+  },
+  {
+   "cue": "b4-5",
+   "text": "Yes. Simple, straightforward, useful.",
+   "from": 0.0,
+   "to": 1.0
+  },
+  {
+   "cue": "b5-1",
+   "text": "Why don't you come visit?",
+   "from": 0.0,
+   "to": 0.1838
+  },
+  {
+   "cue": "b5-1",
+   "text": "My parents just told me I need to come back for an early birthday celebration",
+   "from": 0.1838,
+   "to": 0.75
+  },
+  {
+   "cue": "b5-1",
+   "text": "for them, so you can come with me!",
+   "from": 0.75,
+   "to": 1.0
+  },
+  {
+   "cue": "b5-2",
+   "text": "Well, budget will be pretty tight for... about fifteen days.",
+   "from": 0.0,
+   "to": 1.0
+  },
+  {
+   "cue": "b5-3",
+   "text": "Oh yeah, then I can use some of my winnings to pay for your trip, right?",
+   "from": 0.0,
+   "to": 1.0
+  },
+  {
+   "cue": "b5-4",
+   "text": "You're welcome to come too, Bai!",
+   "from": 0.0,
+   "to": 1.0
+  },
+  {
+   "cue": "b5-5",
+   "text": "What?!! Dreadnaught!! It's good! You should check it out.",
+   "from": 0.0,
+   "to": 1.0
+  },
+  {
+   "cue": "b6-1",
+   "text": "Dze go ba fau gie",
+   "from": 0.0,
+   "to": 1.0
+  }
+ ],
+ "end_card": {
+  "file": "adaptations/fifteen-days/end-card-v6.json",
+  "seconds": 5,
+  "fade_s": 0.8
+ },
+ "notes": []
+}

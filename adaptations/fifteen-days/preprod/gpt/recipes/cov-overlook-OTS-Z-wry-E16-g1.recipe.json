@@ -1,0 +1,111 @@
+{
+ "closed_model": true,
+ "label": "closed model",
+ "model": "openai/gpt-image-2.5-sunburst",
+ "model_name": "GPT Image 2.5 Sunburst (OpenAI)",
+ "route": "Vercel AI Gateway /v1/images/edits (AI_GATEWAY_API_KEY)",
+ "date": "2026-10-18T09:06:24.755Z",
+ "purpose": "gpt-cut: a private full-cut comparison for the owner (2026-10-18); not in the cut or on the site",
+ "v6_picture": "images-out/preprod/pass3/cov-overlook-OTS-Z-wry-E16.png",
+ "from": {
+  "base": "cov-overlook-OTS-Z-A7",
+  "finish": "cov-overlook-OTS-Z-wry-K7",
+  "edits": [
+   "cov-overlook-OTS-Z-wry-E16"
+  ]
+ },
+ "prompt": "A hand-drawn science fiction comic book panel, ink linework and flat cel-shaded colour, not a 3D render, not a photograph. Over-the-shoulder shot (OTS). Over the slim young man with spiky black hair with one blue streak, dark brown eyes and an orange cropped zip jacket over a black top's shoulder: the thin, wiry young woman with warm brown skin, shaved sides, a tall magenta ponytail, dangly geometric earrings, a lime-green vest and tattooed arms glances sideways at him, wry, a small closed-mouth smile. Faces stay soft and natural: smiles and laughs are closed-mouthed, never open-mouthed grins, no teeth showing. Picture 1 is a depth map of this exact frame rendered from a 3D model (near is light, far is dark): follow its camera, angle, lens and perspective exactly; every person, chair, table, wall and railing goes exactly where and as big as its shape stands there, people sitting on the chairs and standing on the floor; the simple mannequin shapes are only where the people go. Draw nothing grey from it. Picture 2 is the slim young man with spiky black hair with one blue streak, dark brown eyes and an orange cropped zip jacket over a black top: copy only that person's face, hair, skin and clothes, never the sheet's layout, poses or grey background. Picture 3 is the thin, wiry young woman with warm brown skin, shaved sides, a tall magenta ponytail, dangly geometric earrings, a lime-green vest and tattooed arms: copy only that person's face, hair, skin and clothes, never the sheet's layout, poses or grey background. In this frame: the slim young man is on the left of the frame, away from the camera, seen from behind; the thin, wiry young woman is in the middle of the frame, toward the camera. Exactly two main people, each appearing once. Every other person is an ordinary background figure in plain, muted everyday clothes with ordinary hair: no orange jackets, no magenta hair, no cream knitwear, nobody who looks like the main people. Everyone stands on the ground or sits on a chair at their real size: nobody floats, nobody sits or stands on a table. Behind them, as the layout shows: tiers of seats rising all around the hall, full of a varied crowd; the standing ring around the top of the hall, crowded behind a railing; the broad walkway spanning the hall high above the floor, with a railing on each side. Faces stay soft and natural: smiles and laughs are closed-mouthed, never open-mouthed grins, no teeth showing. The spiky-haired young man's eyes are dark brown. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. No signs, no panels with pictograms, no icons, no symbols anywhere: walls are bare. Screens show only what the shot describes, or are blank and softly glowing. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character. Draw it as a finished comic panel: inked outlines, painted flat colour, glowing lights. Picture 4 shows how the place looks: take its colours, materials and night light; it has nobody in it. Changes made to this shot after it was first drawn, which this picture must already show: Remove every person standing or walking on the purple walkway, the ramp and the gallery behind the young woman, including the large man at the far right; the walkway is empty. The glowing hologram game in the hall below stays. No letters, words or numbers. The picture is 16:9, landscape.",
+ "references": [
+  {
+   "file": "adaptations/fifteen-days/preprod/set-frames/cov-overlook-OTS-Z.depth.png",
+   "sha256": "7ea7ae6c8fed6dbce384d147c27c7f597adc215c1ffa7105f4e3883a94a16950"
+  },
+  {
+   "file": "images-out/preprod/cards-small/zei.png",
+   "sha256": "2faf3c23d7e35f8d526477898d8862412f7e84c31f9d87b99d2aaf548178256f"
+  },
+  {
+   "file": "images-out/preprod/cards-small/bai.png",
+   "sha256": "4c175214502b73eb6bc8d0905daa9d0475383bf7996d3355ff43b381376d9acd"
+  },
+  {
+   "file": "images-out/preprod/plates-small/plate-hall-V-ak.png",
+   "sha256": "2f36f430bb34a2b24cb08a41beae4811efef4b21fb911ff4e2648c953173771c"
+  }
+ ],
+ "request": {
+  "size": "1536x864",
+  "n": 1
+ },
+ "response_meta": {
+  "created": 1792314376,
+  "usage": {
+   "total_tokens": 3797,
+   "input_tokens": 2719,
+   "output_tokens": 1078,
+   "input_tokens_details": {
+    "text_tokens": 863,
+    "image_tokens": 1856
+   }
+  },
+  "providerMetadata": {
+   "openai": {
+    "images": [
+     {
+      "imageTokens": 1856,
+      "textTokens": 863,
+      "created": 1792314376,
+      "size": "1536x864",
+      "quality": "high",
+      "background": "opaque",
+      "outputFormat": "png"
+     }
+    ]
+   },
+   "gateway": {
+    "routing": {
+     "originalModelId": "openai/gpt-image-2.5-sunburst",
+     "resolvedProvider": "openai",
+     "fallbacksAvailable": [],
+     "planningReasoning": "System credentials planned for: openai. Total execution order: openai(system)",
+     "canonicalSlug": "openai/gpt-image-2.5-sunburst",
+     "finalProvider": "openai",
+     "modelAttemptCount": 1,
+     "modelAttempts": [
+      {
+       "canonicalSlug": "openai/gpt-image-2.5-sunburst",
+       "success": true,
+       "providerAttemptCount": 1,
+       "providerAttempts": [
+        {
+         "provider": "openai",
+         "credentialType": "system",
+         "success": true,
+         "startTime": 1792314349222,
+         "endTime": 1792314376581,
+         "statusCode": 200
+        }
+       ]
+      }
+     ],
+     "totalProviderAttemptCount": 1
+    },
+    "cost": "0.051503",
+    "marketCost": "0.051503",
+    "surchargeCost": "0",
+    "gatewayCost": "0.051503",
+    "inferenceCost": "0.051503",
+    "inputInferenceCost": "0",
+    "outputInferenceCost": "0.051503",
+    "generationId": "gen_01M57455M2MJW2X4YVBNWB1H9E"
+   }
+  }
+ },
+ "cost_usd": 0.051503,
+ "output": {
+  "file": "/private/tmp/claude-501/-Users-nathan-snowmoon/9334ff32-2377-4150-8bc0-c96cfb5e0d3f/scratchpad/gptcut/raw/cov-overlook-OTS-Z-wry-E16-g1.png",
+  "sha256": "5a8751e25097e46d9f65c58978c821cd79ab07ca96ec3a640d6f72c32c5a7b19",
+  "bytes": 1654181
+ },
+ "ms": 41895
+}

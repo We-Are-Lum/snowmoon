@@ -453,6 +453,46 @@ for (const role of ['anon', 'authenticated']) {
   await denied(`${role} cannot write alert_state`, role, `update studio.alert_state set sent_at = now()`, PERM);
 }
 
+// --- 0012: adaptations, versions, each person's page (docs/proposals/adaptation-urls.md) -----------
+await equal('0012 seeds adaptation 1 for FID 6786', 'anon', `select owner_person::int as v from studio.adaptations where id = 1`, 6786);
+// 0014 (version 2, the GPT cut): the owner's page moves to version 2; version 1 is untouched.
+await equal("0014 points the owner's page at version 2", 'anon', `select version_id::int as v from studio.adaptation_pages where person = 6786 and adaptation_id = 1`, 2);
+await equal('0014: version 1 is still the open-weight cut', 'anon', `select (recipe->>'video_url' = 'https://media.snowmoon.party/scenes/fifteen-days/v1/fifteen-days-9391f90d6dca.mp4' and recipe ? 'closed_model' = false)::int as v from studio.adaptation_versions where id = 1`, 1);
+await equal('0014: version 2 is the GPT cut, by 6786, no parent, naming its closed model', 'anon',
+  `select (author_person = 6786 and parent_version_id is null and recipe->>'video_url' like '%/v2/fifteen-days-58da1b6d582e.mp4' and recipe->'closed_model'->>'maker' = 'OpenAI')::int as v from studio.adaptation_versions where id = 2`, 1);
+{
+  // Safe to re-run: the same rows, no error.
+  const again = await readFile(path.join(ROOT, 'supabase/migrations/0014_version_2.sql'), 'utf8');
+  try {
+    await db.exec(again);
+    passed++;
+  } catch (e) {
+    failures.push(`0014 failed on a second run: ${(e as Error).message}`);
+  }
+}
+await equal('0014 run twice: still one version 2', 'anon', `select count(*)::int as v from studio.adaptation_versions where adaptation_id = 1 and author_person = 6786`, 2);
+await ok('writer adds a fork', W, `insert into studio.adaptation_versions (adaptation_id, parent_version_id, author_person, recipe) values (1, 1, 7, '{"video_url":null}')`);
+await ok('writer adds a fork of a fork', W, `insert into studio.adaptation_versions (adaptation_id, parent_version_id, author_person, recipe) select 1, max(id), 8, '{"video_url":null}' from studio.adaptation_versions where author_person = 7`);
+await equal('the next version id continues after version 2', W, `select min(id)::int as v from studio.adaptation_versions where author_person = 7`, 3);
+await ok('writer adds a second adaptation', W, `insert into studio.adaptations (owner_person, title) values (9, 'Another')`);
+await equal('the next adaptation id continues after the seed', W, `select max(id)::int as v from studio.adaptations`, 2);
+await denied('a fork stays under its root', W,
+  `insert into studio.adaptation_versions (adaptation_id, parent_version_id, author_person, recipe) values (2, 1, 9, '{}')`, /foreign key/);
+await denied("a page can't point at another root's version", W,
+  `insert into studio.adaptation_pages (person, adaptation_id, version_id) values (9, 2, 1)`, /foreign key/);
+await ok('writer hides a version', W, `update studio.adaptation_versions set hidden = true where author_person = 7`);
+await denied("a version's recipe is fixed", W, `update studio.adaptation_versions set recipe = '{"video_url":"x"}' where id = 1`, /only hidden can change/);
+await denied('a version is never deleted', W, `delete from studio.adaptation_versions where id = 1`, /append-only|permission denied/);
+await equal('the public never sees a hidden version', 'anon', `select count(*)::int as v from studio.adaptation_versions where author_person = 7`, 0);
+await ok("writer points a person's page at a version", W, `insert into studio.adaptation_pages (person, adaptation_id, version_id) select 7, 1, id from studio.adaptation_versions where author_person = 7`);
+await equal('the public never sees a page pointing at a hidden version', 'anon', `select count(*)::int as v from studio.adaptation_pages where person = 7`, 0);
+await denied('a wallet person number is never 0', W, `insert into studio.adaptations (owner_person, title) values (0, 'x')`, /check/);
+for (const role of ['anon', 'authenticated']) {
+  await denied(`${role} cannot add a version`, role, `insert into studio.adaptation_versions (adaptation_id, author_person, recipe) values (1, 5, '{}')`, PERM);
+  await denied(`${role} cannot change a page`, role, `update studio.adaptation_pages set version_id = 1`, PERM);
+  await denied(`${role} cannot write a name`, role, `insert into studio.account_names (fname, person) values ('x', 5)`, PERM);
+}
+
 // --- The real seed script, as studio_writer, over the wire --------------------
 await db.exec(`delete from studio.text_blocks`);
 await db.exec(`set role studio_writer`);

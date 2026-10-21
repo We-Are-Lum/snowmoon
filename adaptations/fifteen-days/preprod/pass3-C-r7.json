@@ -1,0 +1,234 @@
+{
+  "about": "Crop-and-refine finishing for frames that failed only on shot size (overnight 2026-10-17). Prompts DRAFTED by the coding agent.",
+  "out": "images-out/preprod/pass3",
+  "ledger": "images-out/preprod/ledger-s6.json",
+  "cap_usd": 100.0,
+  "style": "",
+  "jobs": [
+    {
+      "id": "D07-C7",
+      "shot": "D07",
+      "approach": "A",
+      "attempt": 7,
+      "prompt": "Redraw reference image 1 at full detail exactly as it is: the same framing and crop, the same faces, hair, clothes, expressions, hands and objects, the same colours and night light; only make the linework crisp and the detail sharp, as a finished hand-drawn science fiction comic book panel. Nobody is added. Every mouth is closed, lips together: no teeth visible at all. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character.",
+      "refs": [
+        "images-out/preprod/crops/D07-crop.png"
+      ],
+      "width": 1024,
+      "height": 576,
+      "seed": 37000,
+      "layers": {
+        "crop_of": {
+          "file": "images-out/preprod/pass3/D07-K3.png",
+          "box": [
+            0.24,
+            0.06,
+            0.7,
+            0.52
+          ]
+        },
+        "note": "crop-and-refine finishing of the reviewer's best frame (fails only on shot size)"
+      }
+    },
+    {
+      "id": "F25-C7",
+      "shot": "F25",
+      "approach": "A",
+      "attempt": 7,
+      "prompt": "Redraw reference image 1 at full detail exactly as it is: the same framing and crop, the same faces, hair, clothes, expressions, hands and objects, the same colours and night light; only make the linework crisp and the detail sharp, as a finished hand-drawn science fiction comic book panel. Nobody is added. Every mouth is closed, lips together: no teeth visible at all. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character.",
+      "refs": [
+        "images-out/preprod/crops/F25-crop.png"
+      ],
+      "width": 1024,
+      "height": 576,
+      "seed": 37001,
+      "layers": {
+        "crop_of": {
+          "file": "images-out/preprod/pass3/F25-K6.png",
+          "box": [
+            0.25,
+            0.07,
+            0.71,
+            0.53
+          ]
+        },
+        "note": "crop-and-refine finishing of the reviewer's best frame (fails only on shot size)"
+      }
+    },
+    {
+      "id": "G06-C7",
+      "shot": "G06",
+      "approach": "A",
+      "attempt": 7,
+      "prompt": "Redraw reference image 1 at full detail exactly as it is: the same framing and crop, the same faces, hair, clothes, expressions, hands and objects, the same colours and night light; only make the linework crisp and the detail sharp, as a finished hand-drawn science fiction comic book panel. Nobody is added. Every mouth is closed, lips together: no teeth visible at all. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character.",
+      "refs": [
+        "images-out/preprod/crops/G06-crop.png"
+      ],
+      "width": 1024,
+      "height": 576,
+      "seed": 37002,
+      "layers": {
+        "crop_of": {
+          "file": "images-out/preprod/pass3/G06-K6.png",
+          "box": [
+            0.29,
+            0.12,
+            0.71,
+            0.54
+          ]
+        },
+        "note": "crop-and-refine finishing of the reviewer's best frame (fails only on shot size)"
+      }
+    },
+    {
+      "id": "H05-C7",
+      "shot": "H05",
+      "approach": "A",
+      "attempt": 7,
+      "prompt": "Redraw reference image 1 at full detail exactly as it is: the same framing and crop, the same faces, hair, clothes, expressions, hands and objects, the same colours and night light; only make the linework crisp and the detail sharp, as a finished hand-drawn science fiction comic book panel. Nobody is added. Every mouth is closed, lips together: no teeth visible at all. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character.",
+      "refs": [
+        "images-out/preprod/crops/H05-crop.png"
+      ],
+      "width": 1024,
+      "height": 576,
+      "seed": 37003,
+      "layers": {
+        "crop_of": {
+          "file": "images-out/preprod/pass3/H05-K6.png",
+          "box": [
+            0.25,
+            0.2,
+            0.75,
+            0.7
+          ]
+        },
+        "note": "crop-and-refine finishing of the reviewer's best frame (fails only on shot size)"
+      }
+    },
+    {
+      "id": "L06-C7",
+      "shot": "L06",
+      "approach": "A",
+      "attempt": 7,
+      "prompt": "Redraw reference image 1 at full detail exactly as it is: the same framing and crop, the same faces, hair, clothes, expressions, hands and objects, the same colours and night light; only make the linework crisp and the detail sharp, as a finished hand-drawn science fiction comic book panel. Nobody is added. Every mouth is closed, lips together: no teeth visible at all. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character.",
+      "refs": [
+        "images-out/preprod/crops/L06-crop.png"
+      ],
+      "width": 1024,
+      "height": 576,
+      "seed": 37004,
+      "layers": {
+        "crop_of": {
+          "file": "images-out/preprod/pass3/L06-K3.png",
+          "box": [
+            0.29,
+            0.15,
+            0.71,
+            0.57
+          ]
+        },
+        "note": "crop-and-refine finishing of the reviewer's best frame (fails only on shot size)"
+      }
+    },
+    {
+      "id": "L11-C7",
+      "shot": "L11",
+      "approach": "A",
+      "attempt": 7,
+      "prompt": "Redraw reference image 1 at full detail exactly as it is: the same framing and crop, the same faces, hair, clothes, expressions, hands and objects, the same colours and night light; only make the linework crisp and the detail sharp, as a finished hand-drawn science fiction comic book panel. Nobody is added. Every mouth is closed, lips together: no teeth visible at all. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character.",
+      "refs": [
+        "images-out/preprod/crops/L11-crop.png"
+      ],
+      "width": 1024,
+      "height": 576,
+      "seed": 37005,
+      "layers": {
+        "crop_of": {
+          "file": "images-out/preprod/pass3/L11-K3.png",
+          "box": [
+            0.29,
+            0.17,
+            0.71,
+            0.59
+          ]
+        },
+        "note": "crop-and-refine finishing of the reviewer's best frame (fails only on shot size)"
+      }
+    },
+    {
+      "id": "S06-C7",
+      "shot": "S06",
+      "approach": "A",
+      "attempt": 7,
+      "prompt": "Redraw reference image 1 at full detail exactly as it is: the same framing and crop, the same faces, hair, clothes, expressions, hands and objects, the same colours and night light; only make the linework crisp and the detail sharp, as a finished hand-drawn science fiction comic book panel. Nobody is added. Every mouth is closed, lips together: no teeth visible at all. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character.",
+      "refs": [
+        "images-out/preprod/crops/S06-crop.png"
+      ],
+      "width": 1024,
+      "height": 576,
+      "seed": 37006,
+      "layers": {
+        "crop_of": {
+          "file": "images-out/preprod/pass3/S06-K3.png",
+          "box": [
+            0.28,
+            0.33,
+            0.68,
+            0.73
+          ]
+        },
+        "note": "crop-and-refine finishing of the reviewer's best frame (fails only on shot size)"
+      }
+    },
+    {
+      "id": "S07-C7",
+      "shot": "S07",
+      "approach": "A",
+      "attempt": 7,
+      "prompt": "Redraw reference image 1 at full detail exactly as it is: the same framing and crop, the same faces, hair, clothes, expressions, hands and objects, the same colours and night light; only make the linework crisp and the detail sharp, as a finished hand-drawn science fiction comic book panel. Nobody is added. Every mouth is closed, lips together: no teeth visible at all. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character.",
+      "refs": [
+        "images-out/preprod/crops/S07-crop.png"
+      ],
+      "width": 1024,
+      "height": 576,
+      "seed": 37007,
+      "layers": {
+        "crop_of": {
+          "file": "images-out/preprod/pass3/S07-K6.png",
+          "box": [
+            0.2,
+            0.05,
+            0.8,
+            0.65
+          ]
+        },
+        "note": "crop-and-refine finishing of the reviewer's best frame (fails only on shot size)"
+      }
+    },
+    {
+      "id": "S11-C7",
+      "shot": "S11",
+      "approach": "A",
+      "attempt": 7,
+      "prompt": "Redraw reference image 1 at full detail exactly as it is: the same framing and crop, the same faces, hair, clothes, expressions, hands and objects, the same colours and night light; only make the linework crisp and the detail sharp, as a finished hand-drawn science fiction comic book panel. Nobody is added. Every mouth is closed, lips together: no teeth visible at all. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character.",
+      "refs": [
+        "images-out/preprod/crops/S11-crop.png"
+      ],
+      "width": 1024,
+      "height": 576,
+      "seed": 37008,
+      "layers": {
+        "crop_of": {
+          "file": "images-out/preprod/pass3/S11-K5.png",
+          "box": [
+            0.2,
+            0.12,
+            0.8,
+            0.72
+          ]
+        },
+        "note": "crop-and-refine finishing of the reviewer's best frame (fails only on shot size)"
+      }
+    }
+  ]
+}

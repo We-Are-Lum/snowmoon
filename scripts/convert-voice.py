@@ -1,0 +1,130 @@
+"""Convert a performed line into a character's designed voice, locally, with Chatterbox.
+
+Stage 2, performed lines (docs/adaptation-format.md; consent own-voice-v1): a person's take is
+converted on their own machine, so the take never leaves it. Chatterbox speech-to-speech (MIT,
+open weights, on the allowlist as chatterbox-vc) runs from the pinned local weights in
+.voice-models/chatterbox/<revision>, checked against config/models.json's sha256 before loading.
+Chatterbox applies its Perth watermark to every output; Perth's detector can't confirm it (it scores
+clean speech as watermarked), so recipes record it as applied, not verified.
+
+The take is read where it lies and never copied. A take inside this repository is refused, so a
+raw recording can't be committed by accident; --stand-in allows a synthetic source made for
+testing (never a person's voice). The recipe records the take's sha256, never the take.
+
+  python scripts/convert-voice.py fifteen-days \
+      --take ~/Recordings/line-1.m4a --voices zei deluin bai [--name line-1]
+  python scripts/convert-voice.py fifteen-days --batch jobs.json
+
+A batch (from scripts/split-takes.py) loads the model once and writes scenes-out/<seed>/<out>/.
+
+Writes scenes-out/<seed>/voice-test/<name>.<voice>.wav (gitignored) and, beside it,
+<name>.<voice>.recipe.json: the model, revision, weight hashes, the reference clip and its
+recipe, the take's sha256 and duration, the device, the time taken, and the output's sha256.
+"""
+
+import argparse
+import hashlib
+import json
+import subprocess
+import time
+from datetime import datetime, timezone
+from pathlib import Path
+from snowmoon_paths import MAIN, VOICE_MODELS  # the shared tools, for a fork or a worktree
+
+ROOT = Path(__file__).resolve().parent.parent
+MODEL_ID = "chatterbox-vc"
+WATERMARK = {"applied": "Perth implicit watermark, applied in Chatterbox's own code (ChatterboxVC.generate calls PerthImplicitWatermarker.apply_watermark on every output)", "verified": False, "detector": "not evidence: on 2026-10-14 Perth's detector scored clean audio as watermarked (a 220 Hz sine 0.98; the owner's raw take 0.67, which rounds to 1), though clean white noise scored 0.00 and freshly watermarked speech 1.00, also after -5.3 dB of gain. A score of 1.00 here is consistent with the watermark but does not prove it."}
+PEAK = 10 ** (-1 / 20)  # scale after the watermark so the peak sits at -1 dBFS; never raise the level
+
+
+def sha256(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def duration(path: Path) -> float:
+    return float(subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", str(path)],
+                                capture_output=True, text=True, check=True).stdout)
+
+
+def main() -> None:
+    ap = argparse.ArgumentParser()
+    ap.add_argument("seed")
+    ap.add_argument("--take", type=Path)
+    ap.add_argument("--voices", nargs="+")
+    ap.add_argument("--name", default=None)
+    ap.add_argument("--batch", type=Path, help="a JSON file {out, jobs: [{take, voice, name, line?}]}, e.g. from split-takes.py")
+    ap.add_argument("--stand-in", action="store_true", help="the source is synthetic test audio, not a person's take")
+    ap.add_argument("--device", default="cpu", help="cpu (faster than mps on the 8 GB M3: 14 October test)")
+    args = ap.parse_args()
+
+    if args.batch:
+        batch = json.loads(args.batch.expanduser().read_text())
+        out_name, jobs = batch.get("out", "lines"), batch["jobs"]
+    elif args.take and args.voices:
+        out_name = "voice-test"
+        jobs = [{"take": str(args.take), "voice": v, "name": args.name or args.take.stem} for v in args.voices]
+    else:
+        raise SystemExit("give --take and --voices, or --batch")
+    for j in jobs:
+        take = Path(j["take"]).expanduser().resolve()
+        if not take.exists():
+            raise SystemExit(f"no such take: {take}")
+        inside = ROOT.resolve() in take.parents or (MAIN in take.parents)
+        if inside and not args.stand_in:
+            raise SystemExit("refused: the take is inside a repository folder; keep raw takes in a private folder outside it")
+        j["take"] = take
+    model = next(m for m in json.loads((ROOT / "config" / "models.json").read_text())["models"] if m["id"] == MODEL_ID)
+    rev = model["revision"]
+    wdir = VOICE_MODELS / "chatterbox" / rev
+    for fname, want in model["local"]["weights"].items():
+        if sha256(wdir / fname) != want:
+            raise SystemExit(f"{fname} does not match the pinned sha256 in config/models.json")
+
+    from chatterbox.vc import ChatterboxVC
+    import numpy as np
+    import soundfile as sf
+
+    vc = ChatterboxVC.from_local(str(wdir), args.device)
+    # The vocoder hard-clamps at ±0.99 and the watermark is added after it, so outputs clipped
+    # (14 Oct test: 221 samples flattened in 10 s). Lift the clamp, then scale after the watermark.
+    vc.s3gen.mel2wav.audio_limit = float("inf")
+    out = ROOT / "scenes-out" / args.seed / out_name
+    out.mkdir(parents=True, exist_ok=True)
+    jobs.sort(key=lambda j: j["voice"])  # set each voice's reference once, not once per line
+    current = None
+    for i, j in enumerate(jobs, 1):
+        take, vid, name = j["take"], j["voice"], j["name"]
+        ref = ROOT / "scenes-out" / args.seed / "voices" / f"{vid}.ref.wav"
+        ref_rec = ROOT / "adaptations" / args.seed / "voices" / f"{vid}.recipe.json"
+        if sha256(ref) != json.loads(ref_rec.read_text())["sha256"]:
+            raise SystemExit(f"{vid}: the reference clip does not match its recipe")
+        if vid != current:
+            vc.set_target_voice(str(ref))
+            current = vid
+        began = time.time()
+        wav = vc.generate(str(take)).squeeze(0).numpy()
+        took = time.time() - began
+        peak = float(np.abs(wav).max())
+        gain = min(1.0, PEAK / peak) if peak > 0 else 1.0
+        wav = (wav * gain).astype(np.float32)
+        dst = out / f"{name}.{vid}.wav"
+        sf.write(dst, wav, vc.sr, subtype="FLOAT")
+        rec = {
+            "line": name, "voice": vid, "stand_in": args.stand_in,
+            **({"script_line": j["line"]} if j.get("line") else {}),
+            "model": MODEL_ID, "weights": model["weights"], "revision": rev, "license": model["license"],
+            "weights_sha256": model["local"]["weights"], "runs_on": f"the performer's machine ({args.device})",
+            "take": {"sha256": sha256(take), "duration_s": round(duration(take), 2), "kept": "private, outside the repository; never copied or uploaded"},
+            "reference": {"file": str(ref.relative_to(ROOT)), "sha256": sha256(ref), "recipe": str(ref_rec.relative_to(ROOT))},
+            "watermark": WATERMARK,
+            "seconds_taken": round(took, 1), "sample_rate": vc.sr, "format": "32-bit float WAV",
+            "level": {"vocoder_clamp": "lifted", "peak_before": round(peak, 4), "gain_db": round(20 * np.log10(gain), 2), "peak_after": round(float(np.abs(wav).max()), 4)},
+            "file": str(dst.relative_to(ROOT)), "sha256": sha256(dst), "duration_s": round(len(wav) / vc.sr, 2),
+            "made_at": datetime.now(timezone.utc).isoformat(timespec="seconds"), "cost_usd": 0,
+        }
+        (out / f"{name}.{vid}.recipe.json").write_text(json.dumps(rec, indent=2, ensure_ascii=False) + "\n")
+        print(f"[{i}/{len(jobs)}] {name} → {vid}: {dst.relative_to(ROOT)} ({rec['duration_s']} s, {took:.0f} s on {args.device})", flush=True)
+
+
+if __name__ == "__main__":
+    main()

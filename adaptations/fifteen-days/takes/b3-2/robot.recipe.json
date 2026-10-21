@@ -1,0 +1,49 @@
+{
+  "line": "L20-b3-2",
+  "voice": "robot",
+  "stand_in": false,
+  "script_line": {
+    "n": 20,
+    "ref": "b3-2",
+    "take": 1,
+    "of": 5
+  },
+  "model": "chatterbox-vc",
+  "weights": "https://huggingface.co/ResembleAI/chatterbox",
+  "revision": "5bb1f6ee58e50c3b8d408bc82a6d3740c2db6e18",
+  "license": "MIT",
+  "weights_sha256": {
+    "s3gen.safetensors": "2b78103c654207393955e4900aac14a12de8ef25f4b09424f1ef91941f161d4e",
+    "conds.pt": "6552d70568833628ba019c6b03459e77fe71ca197d5c560cef9411bee9d87f4e"
+  },
+  "runs_on": "the performer's machine (cpu)",
+  "take": {
+    "sha256": "84328a8890b5d4eb480bbfc83b7b68a0ee2078f719c7a589d49a32d590853a50",
+    "duration_s": 5.65,
+    "kept": "private, outside the repository; never copied or uploaded"
+  },
+  "reference": {
+    "file": "scenes-out/fifteen-days/voices/robot.ref.wav",
+    "sha256": "3eb5a3f547e23db31e17b58488942318e674f6bfc9dc0cf8a52ebcbf7e7d4c1e",
+    "recipe": "adaptations/fifteen-days/voices/robot.recipe.json"
+  },
+  "watermark": {
+    "applied": "Perth implicit watermark, applied in Chatterbox's own code (ChatterboxVC.generate calls PerthImplicitWatermarker.apply_watermark on every output)",
+    "verified": false,
+    "detector": "not evidence: on 2026-10-14 Perth's detector scored clean audio as watermarked (a 220 Hz sine 0.98; the owner's raw take 0.67, which rounds to 1), though clean white noise scored 0.00 and freshly watermarked speech 1.00, also after -5.3 dB of gain. A score of 1.00 here is consistent with the watermark but does not prove it."
+  },
+  "seconds_taken": 9.4,
+  "sample_rate": 24000,
+  "format": "32-bit float WAV",
+  "level": {
+    "vocoder_clamp": "lifted",
+    "peak_before": 0.6619,
+    "gain_db": 0.0,
+    "peak_after": 0.6619
+  },
+  "file": "scenes-out/fifteen-days/lines/L20-b3-2.robot.wav",
+  "sha256": "68a1df0040e21bc6dbb318f105f39965f093d2c781c1a477b88f7c70c72ed748",
+  "duration_s": 5.68,
+  "made_at": "2026-10-16T04:58:46+00:00",
+  "cost_usd": 0
+}

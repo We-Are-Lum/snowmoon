@@ -15,11 +15,12 @@ export interface GuardResult {
   provider: string | null;
 }
 
-export async function checkPrompt(prompt: string, request: Request): Promise<GuardResult> {
+/** maxTokens covers the model's reasoning and its one-line answer: run out, and the answer is empty (a refusal). */
+export async function checkPrompt(prompt: string, request: Request, maxTokens = 400): Promise<GuardResult> {
   const reply = await complete(gatewayToken(request), IMAGES.guardModel, [
     { role: 'system', content: promptFile('image-guard.md') },
     { role: 'user', content: prompt },
-  ], { maxTokens: 400, temperature: 0 });
+  ], { maxTokens, temperature: 0 });
   const line = reply.text.trim().split('\n').reverse().find((l) => l.trim().startsWith('{')) ?? '';
   let verdict: { allow?: unknown; category?: unknown } = {};
   try {

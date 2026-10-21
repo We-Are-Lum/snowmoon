@@ -1,0 +1,33 @@
+{
+ "about": "Fifteen Days v5: Bai's 'What?!' as a turn, from the cleaned side-glance frame (the K18 'what' picture was flagged by fal's content checker). DRAFTED prompts.",
+ "out": "images-out/preprod/pass3",
+ "ledger": "images-out/preprod/ledger-s7.json",
+ "cap_usd": 25.0,
+ "style": "",
+ "jobs": [
+  {
+   "id": "cov-cafe-BAI-what-E23",
+   "shot": "cov-cafe-BAI-what",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-cafe-BAI-sideeye-E19.png"
+   ],
+   "prompt": "She twists a little further round in her chair toward the left and raises her nearer hand to lift that headphone cup away from her ear. Keep the drawing, colours, camera, framing and crop exactly as they are; she keeps her face, hair, vest, tattoos and her head turned over her shoulder in profile. Nobody else anywhere. No letters or numbers.",
+   "width": 1344,
+   "height": 752,
+   "seed": 23
+  },
+  {
+   "id": "cov-cafe-BAI-what-E24",
+   "shot": "cov-cafe-BAI-what",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-cafe-BAI-sideeye-E19.png"
+   ],
+   "prompt": "She twists a little further round in her chair toward the left and raises her nearer hand to lift that headphone cup away from her ear. Keep the drawing, colours, camera, framing and crop exactly as they are; she keeps her face, hair, vest, tattoos and her head turned over her shoulder in profile. Nobody else anywhere. No letters or numbers.",
+   "width": 1344,
+   "height": 752,
+   "seed": 24
+  }
+ ]
+}

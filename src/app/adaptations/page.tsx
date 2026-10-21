@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { adaptationsConfig, bountyOpen, longDate } from '~/lib/adaptations';
+import { SceneCard } from '~/components/scene-card';
 
 export const metadata = { title: 'Adaptations' };
 
@@ -12,6 +13,10 @@ export default function Adaptations() {
   return (
     <div className="page prose adaptations">
       <h1>Adaptations</h1>
+      <div className="adaptations-published">
+        <SceneCard as="list" />
+      </div>
+      <h2>Seed briefs</h2>
       <p>
         Seed briefs for adapting scenes of the book. Each one lists what the text gives, what an adapter has to invent,
         and the passages to read, linked into the reader. They are starting points, not canon.
@@ -26,7 +31,6 @@ export default function Adaptations() {
         </a>
       </section>
 
-      <h2>Seeds</h2>
       <ul className="seed-list">
         {seeds.map((s) => (
           <li key={s.slug}>

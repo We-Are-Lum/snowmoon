@@ -13,7 +13,8 @@
  * commentary, pause and CELLS sit outside the role="img" stage; keyboard placing on the board; the
  * pause on screen 2; bundled three.js. Full screen (owner, 2026-10-09): under 768 px and inside the
  * Farcaster mini app the frame fills the viewport (learn.css hides the site's top bar), with an exit
- * link back to the site; on tablet and desktop it is Design's phone, centred beside the rail.
+ * link back to the site; on a tablet it is Design's phone, centred beside the rail, and on a desktop (learn.css,
+ * 2026-10-20) the stage is large with the text and controls in a column beside it.
  */
 import { useEffect, useMemo, useReducer, useRef, useState } from 'react';
 import Link from 'next/link';
@@ -30,6 +31,7 @@ import { MinpentaiTags } from './mp-tags';
 import type { Scene } from './broadcast-scene';
 
 /** Screens by number: 0–7 watch, 8–14 the lessons, 15 Under the hood, 16 the practice match. */
+export const WATCH_SCREENS = T.watch.length;
 export const LEARN_SCREENS = T.watch.length + LS.length;
 export const PRACTICE_SCREEN = T.watch.length + indexOf('practice');
 
@@ -360,6 +362,8 @@ export function Learn({ start, onScreen, onFree, free = false }: { start: number
           <div className="ml-rulesnote">
             <p>{T.rulesNote.text}</p>
             <Link href={T.rulesNote.href} className="ml-textlink">{T.rulesNote.link}</Link>
+            <p>{T.rulesNote.version}</p>
+            <Link href={T.rulesNote.versionHref} className="ml-textlink">{T.rulesNote.versionLink}</Link>
           </div>
         )}
         <button type="button" className="ml-textlink" aria-expanded={S.src} onClick={() => ctl.toggleSrc()}>{v.srcLabel}</button>

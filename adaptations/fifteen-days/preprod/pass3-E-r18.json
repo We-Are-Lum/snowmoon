@@ -1,0 +1,33 @@
+{
+ "about": "Fifteen Days v5: the game screen shot, second try (the first edit removed the main screen too). DRAFTED prompts.",
+ "out": "images-out/preprod/pass3",
+ "ledger": "images-out/preprod/ledger-s7.json",
+ "cap_usd": 25.0,
+ "style": "",
+ "jobs": [
+  {
+   "id": "cov-game-SCREEN-face-E18",
+   "shot": "cov-game-SCREEN-face",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-game-SCREEN-face-K7.png"
+   ],
+   "prompt": "Keep the big screen at the top right showing the calm long-haired face exactly as it is. Remove only the second, partly cut-off screen at the very right edge of the picture beside it (make that corner plain dark hall wall), and remove the row of small grey standing figures along the top gallery railing at the top left. Keep the seated crowd in the tiers, the player in the pit and the glowing play floor. Keep everything else exactly as it is: the same drawing, colours, line work and lighting, and exactly the same camera, framing and crop; do not zoom, crop, shift or widen the view. No letters, words or numbers.",
+   "width": 1344,
+   "height": 752,
+   "seed": 18
+  },
+  {
+   "id": "cov-game-SCREEN-face-E19",
+   "shot": "cov-game-SCREEN-face",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-game-SCREEN-face-K7.png"
+   ],
+   "prompt": "Keep the big screen at the top right showing the calm long-haired face exactly as it is. Remove only the second, partly cut-off screen at the very right edge of the picture beside it (make that corner plain dark hall wall), and remove the row of small grey standing figures along the top gallery railing at the top left. Keep the seated crowd in the tiers, the player in the pit and the glowing play floor. Keep everything else exactly as it is: the same drawing, colours, line work and lighting, and exactly the same camera, framing and crop; do not zoom, crop, shift or widen the view. No letters, words or numbers.",
+   "width": 1344,
+   "height": 752,
+   "seed": 19
+  }
+ ]
+}

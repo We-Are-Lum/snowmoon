@@ -107,7 +107,9 @@
 /* The arrow goes on ::before, moved to the end: ::after is the touch hit area (shell.css). */
 .image-composer .publish-start { display: inline-flex; align-items: center; justify-content: center; gap: 0.6em; }
 .image-composer .publish-start::before { content: '→'; order: 2; }
-.ic-gate .ic-primary { align-self: flex-start; width: auto; padding: 6px 18px; }
+/* The next step after paying is the one thing to tap (owner, 2026-10-18): full width, as the main button. */
+.ic-gate .ic-primary { align-self: stretch; width: 100%; }
+.ic-next { font-weight: 600; }
 .ic-secondary, .image-composer .publish-edit {
   width: 100%; min-height: 48px; padding: 6px 10px; border: 1px solid var(--rule); border-radius: var(--radius); background: transparent; color: var(--ink); cursor: pointer;
   font-family: var(--label); font-size: var(--text-label); line-height: 16px; text-transform: uppercase;
@@ -146,7 +148,7 @@
 .image-composer .consent-screen > p { margin: 0; padding-top: 8px; border-top: 1px solid var(--rule); font-size: 16px; line-height: 1.4; }
 .image-composer .consent-screen > .publication-line { padding-top: 0; border-top: 0; font-size: var(--text-label); line-height: 1.5; color: var(--ink); }
 .image-composer .consent-screen > .label { padding-top: 0; border-top: 0; font-size: var(--text-label); color: var(--muted); }
-.image-composer .consent-actions { display: grid; grid-template-columns: 1fr 2fr; gap: 8px; margin: 4px 0 0; }
+.image-composer .consent-actions { display: grid; grid-template-columns: 1fr; gap: 8px; margin: 4px 0 0; }
 .image-composer .consent-actions button { min-height: 48px; border-radius: var(--radius); cursor: pointer; font-family: var(--label); font-size: var(--text-label); text-transform: uppercase; }
 .image-composer .consent-cancel { border: 1px solid var(--rule); background: transparent; color: var(--ink); }
 .image-composer .consent-agree { border: 0; background: var(--btn); color: var(--btn-ink); }
@@ -434,3 +436,9 @@ a.ia-button:hover { text-decoration: none; }
 .wallet-add { display: flex; flex-direction: column; gap: 8px; }
 .wallet-tokens, .wallet-packs { display: flex; flex-wrap: wrap; gap: 8px; }
 .wallet-tokens button, .wallet-packs button, .wallet-panel > .ic-secondary { width: auto; padding: 6px 14px; }
+/* A payment by its transaction hash (owner, 2026-10-15). */
+.wallet-recover summary { min-height: var(--tap); display: flex; align-items: center; cursor: pointer; font-size: var(--text-label); }
+.wallet-recover form { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
+.wallet-recover input { font: inherit; font-size: 16px; min-height: var(--tap); padding: 6px 10px; border: 1px solid var(--rule, currentColor); border-radius: 4px; background: transparent; color: inherit; }
+.wallet-recover input:focus-visible { outline: 2px solid var(--ink); outline-offset: 1px; }
+.wallet-recover .ic-secondary { align-self: flex-start; width: auto; padding: 6px 14px; }
