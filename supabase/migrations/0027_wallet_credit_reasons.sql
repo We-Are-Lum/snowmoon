@@ -1,6 +1,6 @@
--- NEXT_wallet_credit_reasons.sql — credit back every Generate that gives no picture (owner, 2026-10-22: "Credit-back:
--- B."). DRAFT, NOT APPLIED. Named by topic; it gets the next free number at merge, checked against main and
--- production. Written by the coding agent on branch credit-back-b.
+-- 0027_wallet_credit_reasons.sql — credit back every Generate that gives no picture (owner, 2026-10-22: "Credit-back:
+-- B."). APPLIED by the owner on 2026-10-22 (read-back: 4 rows true; checked read-only). Numbered 0027 (main ends at
+-- 0026; 0025 is reserved by minpentai-snap). Written by the coding agent on branch credit-back-b.
 --
 -- MUST RUN AS postgres, in the Supabase SQL Editor, after 0022. Dry run first: replace the final `commit;` with
 -- `rollback;`. Tested only in PGlite (npm run test:wallet).

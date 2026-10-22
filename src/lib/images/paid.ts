@@ -22,7 +22,7 @@ import { creditBack } from '../wallet/credits';
  * final (owner, 2026-10-13): never paid back as money. A Generate that fails (the prompt check or the image
  * model didn't answer), and, since the owner chose reading B (2026-10-22), a refused prompt or a picture the safety
  * checker drops: every Generate that gives no picture is credited back to the balance once
- * IMAGES.prepaid.creditBack is on (migrations 0022 and NEXT_wallet_credit_reasons).
+ * IMAGES.prepaid.creditBack is on (migrations 0022 and 0027_wallet_credit_reasons).
  */
 type Sql = postgres.Sql;
 
