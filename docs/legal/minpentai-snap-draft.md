@@ -34,5 +34,5 @@ could add "and its game in Farcaster casts".
 
 - P6g lists the outside services the Privacy page, About, the assistant's notice and the consent
   screen must agree on. If the hub becomes a named service, it is added there in the same change.
-- Migration 0025 (`studio.mp_snap_resume`) is a DRAFT and must be applied before the snap ships to
+- Migration NEXT_minpentai_snap_resume (`studio.mp_snap_resume`, numbered at merge) is a DRAFT and must be applied before the snap ships to
   production; without it the snap still plays, and Resume lasts only while a server instance is warm.
