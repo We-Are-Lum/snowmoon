@@ -527,9 +527,12 @@ try {
 
   console.log('S  story words, in-process');
   const filter = await import('../src/lib/agents/filter');
-  const { AGENTS, IMAGES } = await import('../src/lib/config');
+  const { AGENTS, IMAGES, LINKED_WALLETS } = await import('../src/lib/config');
   check('S1 story words stay human: agents’ own lines are refused by default', filter.storyWordsAllowed(-5) === false && AGENTS.storyWords === 'refused');
-  check('S0 as shipped, the allowlist is the owner and the two accounts they invited (FIDs 6786, 6852, 193912) and one invited wallet (m.luisotravez.eth; owner, 2026-10-22), and the payment address is not one', JSON.stringify(AGENTS.people.fids) === '[6786,6852,193912]' && JSON.stringify(AGENTS.people.wallets) === '["0x003276c5c24cdaff1d804170ab5cbb914f51f78a"]' && !AGENTS.people.wallets.includes(String(IMAGES.prepaid.payTo ?? '').toLowerCase()));
+  check('S0 as shipped, the allowlist is the owner and the two accounts they invited (FIDs 6786, 6852, 193912; owner, 2026-10-22): no wallet', JSON.stringify(AGENTS.people.fids) === '[6786,6852,193912]' && AGENTS.people.wallets.length === 0);
+  // Linked wallets (owner, 2026-10-22): m.luisotravez.eth signs in as @luisotravez, any case; the payment address is never one.
+  const { linkedFid } = await import('../src/lib/auth');
+  check('S3 a linked wallet signs in as its FID, whatever the case; others stay wallet accounts; the payment address is never linked', linkedFid('0x003276C5C24cDaFf1d804170Ab5cBB914F51f78a') === 6852 && linkedFid('0x003276c5c24cdaff1d804170ab5cbb914f51f78a') === 6852 && linkedFid('0x0000000000000000000000000000000000000001') === null && linkedFid(String(IMAGES.prepaid.payTo ?? '')) === null && Object.values(LINKED_WALLETS).every((f) => AGENTS.people.fids.includes(f)));
   check('S2 never for the owner (human-written only)', filter.storyWordsAllowed(6786) === false);
   let refusedForOwner = false;
   (AGENTS as { storyWords: string }).storyWords = 'allowed';

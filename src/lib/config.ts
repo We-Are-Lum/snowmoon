@@ -150,6 +150,18 @@ export const AGENT_API = {
  * Agents that act for a person (owner, 2026-10-20; design docs/agents/design.md; DRAFT migration 0019).
  * Three ways in, one result: an "agent of @handle" whose drafts its person publishes. SWITCHED OFF.
  */
+/**
+ * Wallets that sign in as a Farcaster account (owner, 2026-10-22: "associate that wallet also with his Farcaster
+ * account too. Let him login both ways"): a sign-in with one of these addresses is that FID everywhere getPerson
+ * is used (images, consent, agents, You), not a wallet account of its own. Each one is the owner's to add, and
+ * only an address that the FID itself verified on Farcaster (checked when added). Lowercase addresses.
+ * A linked wallet's prepaid balance, if any, stays on its wallet account and isn't spent while it signs in as the FID.
+ */
+export const LINKED_WALLETS: Readonly<Record<string, number>> = {
+  // m.luisotravez.eth, verified by @luisotravez (FID 6852) on Farcaster since 2023-08-31; resolved three ways, all agreeing.
+  '0x003276c5c24cdaff1d804170ab5cbb914f51f78a': 6852,
+};
+
 export const AGENTS = {
   /**
    * On, for the owner's account only (owner, 2026-10-20: "Ship agents-connect for my account only (FID 6786 and
@@ -164,8 +176,7 @@ export const AGENTS = {
      * Wallets (lowercase addresses) whose sign-in gets in. Empty for now (owner, 2026-10-20: "FID 6786 only for
      * now … I'll add my sign-in wallet later"). The payment address is not a sign-in wallet.
      */
-    // m.luisotravez.eth, @luisotravez's sign-in wallet (owner, 2026-10-22; resolved by three sources, all agreeing).
-    wallets: ['0x003276c5c24cdaff1d804170ab5cbb914f51f78a'] as readonly string[],
+    wallets: [] as readonly string[],
   },
   /** Public pages (agents.md, /p): off while agents are for the owner only. Kept work stays private on /you. */
   public: false,
