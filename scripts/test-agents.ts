@@ -527,9 +527,9 @@ try {
 
   console.log('S  story words, in-process');
   const filter = await import('../src/lib/agents/filter');
-  const { AGENTS } = await import('../src/lib/config');
+  const { AGENTS, IMAGES } = await import('../src/lib/config');
   check('S1 story words stay human: agents’ own lines are refused by default', filter.storyWordsAllowed(-5) === false && AGENTS.storyWords === 'refused');
-  check('S0 as shipped, the allowlist is the owner and the two accounts they invited (FIDs 6786, 6852, 193912; owner, 2026-10-22): no wallet, and the payment address is not one', JSON.stringify(AGENTS.people.fids) === '[6786,6852,193912]' && AGENTS.people.wallets.length === 0);
+  check('S0 as shipped, the allowlist is the owner and the two accounts they invited (FIDs 6786, 6852, 193912) and one invited wallet (m.luisotravez.eth; owner, 2026-10-22), and the payment address is not one', JSON.stringify(AGENTS.people.fids) === '[6786,6852,193912]' && JSON.stringify(AGENTS.people.wallets) === '["0x003276c5c24cdaff1d804170ab5cbb914f51f78a"]' && !AGENTS.people.wallets.includes(String(IMAGES.prepaid.payTo ?? '').toLowerCase()));
   check('S2 never for the owner (human-written only)', filter.storyWordsAllowed(6786) === false);
   let refusedForOwner = false;
   (AGENTS as { storyWords: string }).storyWords = 'allowed';

@@ -164,7 +164,8 @@ export const AGENTS = {
      * Wallets (lowercase addresses) whose sign-in gets in. Empty for now (owner, 2026-10-20: "FID 6786 only for
      * now … I'll add my sign-in wallet later"). The payment address is not a sign-in wallet.
      */
-    wallets: [] as readonly string[],
+    // m.luisotravez.eth, @luisotravez's sign-in wallet (owner, 2026-10-22; resolved by three sources, all agreeing).
+    wallets: ['0x003276c5c24cdaff1d804170ab5cbb914f51f78a'] as readonly string[],
   },
   /** Public pages (agents.md, /p): off while agents are for the owner only. Kept work stays private on /you. */
   public: false,
