@@ -167,10 +167,10 @@ export const LINKED_WALLETS: Readonly<Record<string, number>> = {
 /**
  * Wallet ↔ Farcaster links as a regular feature (owner, 2026-10-22: "After you are signed in with a wallet you can
  * have an offer to sign in with Farcaster to associate the account with this wallet. If we can't just use neynar to
- * find out if the wallet is already associated."). Kept in studio.wallet_links (DRAFT migration
- * NEXT_wallet_links.sql, numbered at merge, which seeds the two LINKED_WALLETS entries). Until that table exists,
- * LINKED_WALLETS above is what getPerson reads, so nothing changes before the migration is applied; after, it is
- * read only for a wallet the table has never linked or unlinked. src/lib/wallet/links.ts.
+ * find out if the wallet is already associated."). Kept in studio.wallet_links (migration 0026_wallet_links.sql,
+ * which seeds the two LINKED_WALLETS entries). Until that table exists, LINKED_WALLETS above is what getPerson reads;
+ * after, it is read only for a wallet the table has never had a link for. src/lib/wallet/links.ts. The Privacy and
+ * Terms lines that describe all of this were reread by the owner on 2026-10-22 (src/lib/legal.ts).
  */
 export const WALLET_LINKS = {
   /**
@@ -180,13 +180,15 @@ export const WALLET_LINKS = {
    */
   offer: true as boolean,
   /**
-   * The automatic link ('verified'), on a wallet's first signed-in request: its address is sent to Neynar (user by verified
-   * address), and a wallet that exactly one Farcaster account has verified is linked to it. SWITCHED OFF: sending
-   * an address to Neynar is new data going to an outside service, so it waits for the owner's reread of the
-   * Privacy line (docs/legal/wallet-links-draft.md) and the migration.
+   * The automatic link ('verified'), on a wallet's signed-in request: its address is sent to Neynar (user by verified
+   * address), and a wallet that exactly one Farcaster account has verified is linked to it. A linked wallet is looked
+   * up again at most once a day, and a verified link ends if that FID no longer verifies the address; a tapped link
+   * isn't affected; a wallet the person unlinked isn't looked up again (owner, 2026-10-22). ON, in the same deploy
+   * as the Privacy line that says so (section 7, reread by the owner on 2026-10-22) and migration 0026, which the
+   * owner applies before the merge. Without the table it does nothing.
    */
-  lookUp: false as boolean,
-  /** How long a lookup's answer (the FIDs found, possibly none) is kept before Neynar is asked again. */
+  lookUp: true as boolean,
+  /** How long a lookup's answer (the FIDs found, possibly none) is kept before Neynar is asked again: "at most once a day". */
   lookupCacheHours: 24,
   /**
    * A linked wallet's earlier work shows under its Farcaster name (owner, 2026-10-22, replacing "don't reassign"):

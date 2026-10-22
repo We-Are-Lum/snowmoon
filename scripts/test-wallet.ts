@@ -18,6 +18,9 @@
  *   so the free daily cap doesn't stop a paying account and prepaid spend has its own cap.
  * - Wallet ↔ Farcaster links (owner, 2026-10-22): verified (Neynar stood in: exactly one FID, two FIDs, none, a
  *   custody address, Neynar down, the lookup off), signed (both proofs through the route, each alone refused),
+ *   the daily re-check (at most once a day; a verified link ends when its FID drops the verification, recorded as
+ *   'unverified', and can come back later; a tapped link is never re-checked; an unlinked wallet is never looked up;
+ *   Neynar down keeps the link),
  *   unlink (never undone by the app, never relinked automatically, LINKED_WALLETS doesn't override it), the payment
  *   address never linked, the two LINKED_WALLETS seeds, and earlier work shown under the FID (not rewritten).
  * - Nothing new is publicly readable; payments and debits can't be changed or deleted.
@@ -244,12 +247,12 @@ await sql`insert into studio.image_costs (funded, kind, model, provider, verdict
 const capped = await reserve(S, -acct);
 check('prepaid spend has its own daily cap', !capped.ok && capped.refusal === 'prepaid-spend', JSON.stringify(capped));
 
-// --- Wallet ↔ Farcaster links (owner, 2026-10-22; DRAFT migration NEXT_wallet_links.sql) ------------------------
+// --- Wallet ↔ Farcaster links (owner, 2026-10-22; migration 0026_wallet_links.sql) -------------------------------
 {
   const L = await import('../src/lib/wallet/links');
   const { WALLET_LINKS } = await import('../src/lib/config');
   const WL = WALLET_LINKS as { lookUp: boolean; offer: boolean };
-  check('the automatic Neynar lookup is switched off until the owner rereads the Privacy line', WL.lookUp === false);
+  check('the automatic Neynar lookup ships on, with the Privacy line the owner reread (2026-10-22)', WL.lookUp === true);
   check('the signed offer is on (no new outside service)', WL.offer === true);
   const addr = (n: number) => `0x${n.toString(16).padStart(40, '0')}`;
   const ONE = addr(0xa1), TWO = addr(0xa2), DOWN = addr(0xa3), NONE = addr(0xa4), LAZY = addr(0xa5), CUSTODY = addr(0xa6), BARE = addr(0xa7);
@@ -257,13 +260,17 @@ check('prepaid spend has its own daily cap', !capped.ok && capped.refusal === 'p
   const realFetch = globalThis.fetch;
   let calls = 0;
   const user = (fid: number, verified: string[]) => ({ object: 'user', fid, username: `u${fid}`, custody_address: addr(fid), verified_addresses: { eth_addresses: verified, sol_addresses: [] } });
+  // What Neynar says now, for the re-check tests (address → FIDs that verify it), and addresses for which it is down.
+  const now: Record<string, number[]> = {};
+  const neynarDown = new Set<string>();
   globalThis.fetch = (async (input: string | URL | Request) => {
     const u = new URL(String(input));
     if (u.hostname !== 'api.neynar.com') throw new Error(`unexpected fetch ${u.hostname}`);
     calls++;
     const a = u.searchParams.get('addresses')!;
     if (u.searchParams.get('address_types') !== 'verified_address') return new Response('{}', { status: 400 });
-    if (a === DOWN) throw new TypeError('fetch failed');
+    if (a === DOWN || neynarDown.has(a)) throw new TypeError('fetch failed');
+    if (a in now) return new Response(JSON.stringify({ [a]: now[a].map((f) => user(f, [a])) }), { status: 200, headers: { 'content-type': 'application/json' } });
     if (a === NONE) return new Response(JSON.stringify({ code: 'NotFound' }), { status: 404 });
     const by: Record<string, unknown[]> = {
       [ONE]: [user(5001, [ONE])],
@@ -271,6 +278,9 @@ check('prepaid spend has its own daily cap', !capped.ok && capped.refusal === 'p
       [LAZY]: [user(5004, [LAZY])],
       // A custody address is not a verification: Neynar may group it under the address, but it doesn't count.
       [CUSTODY]: [user(5005, [])],
+      // The two seeded wallets, still verified by their FIDs.
+      '0x003276c5c24cdaff1d804170ab5cbb914f51f78a': [user(6852, ['0x003276c5c24cdaff1d804170ab5cbb914f51f78a'])],
+      '0x317a1ea96dc4b10c1ea60e3af59c472316d31303': [user(193912, ['0x317a1ea96dc4b10c1ea60e3af59c472316d31303'])],
       [String(IMAGES.prepaid.payTo).toLowerCase()]: [user(5006, [String(IMAGES.prepaid.payTo).toLowerCase()])],
     };
     return new Response(JSON.stringify({ [a]: by[a] ?? [] }), { status: 200, headers: { 'content-type': 'application/json' } });
@@ -278,6 +288,7 @@ check('prepaid spend has its own daily cap', !capped.ok && capped.refusal === 'p
   process.env.NEYNAR_API_KEY = 'test-key';
 
   // While off: nothing goes to Neynar, nothing is linked.
+  WL.lookUp = false;
   const accOne = await acc(ONE);
   const off = await L.autoLink(S, accOne, ONE);
   check('while the lookup is off, no address goes to Neynar and nothing is linked', off.linked === null && off.why === 'off' && calls === 0 && (await L.linkedFidFor(S, accOne, ONE)) === null && calls === 0);
@@ -361,7 +372,9 @@ check('prepaid spend has its own daily cap', !capped.ok && capped.refusal === 'p
     ['change the FID', `update studio.wallet_links set fid = 1 where account_id = ${accLuis}`],
     ['delete a link', `delete from studio.wallet_links where account_id = ${accLuis}`],
     ['add a second active link', `insert into studio.wallet_links (account_id, fid, how) values (${accLuis}, 7, 'signed')`],
-    ['add a link already unlinked', `insert into studio.wallet_links (account_id, fid, how, unlinked_at) values (${accBare}, 7, 'signed', now())`],
+    ['add a link already unlinked', `insert into studio.wallet_links (account_id, fid, how, unlinked_at, ended_by) values (${accBare}, 7, 'signed', now(), 'person')`],
+    ['end a link without saying how', `update studio.wallet_links set unlinked_at = now() where account_id = ${accLuis} and unlinked_at is null`],
+    ['end a tapped link as no longer verified', `update studio.wallet_links set unlinked_at = now(), ended_by = 'unverified' where account_id = ${accLuis} and unlinked_at is null`],
   ];
   check('the direct checks run as studio_writer', (await db.query<{ r: string }>('select current_user as r')).rows[0].r === 'studio_writer');
   for (const [what, q] of tries) {
@@ -372,7 +385,64 @@ check('prepaid spend has its own daily cap', !capped.ok && capped.refusal === 'p
   await sql`update studio.wallet_links set unlinked_at = null where account_id = ${accOne}`;
   check('the app can\'t undo an unlink', (await L.readLink(S, accOne)).active === null);
 
+  // --- Looked up again at most once a day; a verified link ends when the FID drops the verification (owner, 2026-10-22).
+  const age = (account: number) => sql`update studio.wallet_fid_lookups set fetched_at = now() - interval '25 hours' where account_id = ${account}`;
+  const rows = async (account: number) => (await sql`select fid::int as fid, how, unlinked_at, ended_by from studio.wallet_links where account_id = ${account} order by id`) as unknown as { fid: number; how: string; unlinked_at: Date | null; ended_by: string | null }[];
+  const RE = addr(0xc1), SG = addr(0xc2), DN = addr(0xc3), BOTH = addr(0xc4);
+  const accRe = await acc(RE), accSg = await acc(SG), accDn = await acc(DN), accBoth = await acc(BOTH);
+  now[RE] = [5010];
+  check('re-check: a verified wallet is linked', (await L.linkedFidFor(S, accRe, RE)) === 5010);
+  now[RE] = [];
+  const c0 = calls;
+  const sameDay = [await L.linkedFidFor(S, accRe, RE), await L.linkedFidFor(S, accRe, RE), await L.linkedFidFor(S, accRe, RE)];
+  check('a linked wallet is looked up again at most once a day: within the day, Neynar isn\'t asked and the link stays', sameDay.every((f) => f === 5010) && calls === c0);
+  await age(accRe);
+  const after = await L.linkedFidFor(S, accRe, RE);
+  const reRows = await rows(accRe);
+  check('a day later, it is looked up once, and the verified link ends when that FID no longer verifies the address', after === null && calls === c0 + 1 && reRows.length === 1 && reRows[0].unlinked_at !== null && reRows[0].ended_by === 'unverified', JSON.stringify(reRows));
+  check('…recorded as ended because the verification was dropped, not by the person', reRows[0].ended_by === 'unverified' && !(await L.readLink(S, accRe)).personUnlinked);
+  check('…and the wallet signs in as itself (LINKED_WALLETS doesn\'t bring it back), its work the wallet\'s again', (await L.linkedFidFor(S, accRe, RE)) === null && !(await C.linkedTo(S, [-accRe])).has(-accRe));
+  // Chosen: a link that ended automatically can come back, because the person didn't unlink it.
+  now[RE] = [5011];
+  await age(accRe);
+  const back = await L.linkedFidFor(S, accRe, RE);
+  const reRows2 = await rows(accRe);
+  check('a wallet whose verified link ended automatically is linked again later if a FID verifies it (a new row)', back === 5011 && reRows2.length === 2 && reRows2[1].how === 'verified' && reRows2[1].unlinked_at === null, JSON.stringify(reRows2));
+  // Still verified, alongside another FID: kept (the link's FID still verifies it).
+  now[BOTH] = [5040];
+  await L.linkedFidFor(S, accBoth, BOTH);
+  now[BOTH] = [5040, 5041];
+  await age(accBoth);
+  check('a verified link whose FID still verifies the address is kept, even if another FID verifies it too', (await L.linkedFidFor(S, accBoth, BOTH)) === 5040 && (await rows(accBoth)).length === 1);
+  // A tapped link is never re-checked or ended.
+  check('re-check: a tapped link', (await L.link(S, accSg, SG, 5020, 'signed')).ok);
+  now[SG] = [];
+  await age(accSg);
+  const c1 = calls;
+  const sg = [await L.linkedFidFor(S, accSg, SG), (await L.autoLink(S, accSg, SG)).linked];
+  check('a tapped (signed) link is never looked up again or ended', sg.every((f) => f === 5020) && calls === c1 && (await rows(accSg)).every((r) => r.unlinked_at === null));
+  // A wallet the person unlinked is never looked up again (ONE, unlinked above), even a day later.
+  now[ONE] = [5001];
+  await age(accOne);
+  const c2 = calls;
+  const one = [await L.linkedFidFor(S, accOne, ONE), (await L.autoLink(S, accOne, ONE)).linked];
+  check('a wallet the person unlinked is never looked up again, even when a FID verifies it', one[0] === null && one[1] === null && calls === c2 && (await rows(accOne)).every((r) => r.unlinked_at !== null && r.ended_by === 'person'), JSON.stringify({ one, calls, c2 }));
+  // Neynar down during a re-check: the link is kept.
+  now[DN] = [5030];
+  check('re-check: linked before Neynar went down', (await L.linkedFidFor(S, accDn, DN)) === 5030);
+  neynarDown.add(DN);
+  await age(accDn);
+  const c3 = calls;
+  const dn = await L.linkedFidFor(S, accDn, DN);
+  check('Neynar down during a re-check keeps the link (and nothing is kept from the failed lookup)', dn === 5030 && calls === c3 + 1 && (await rows(accDn)).every((r) => r.unlinked_at === null) && (await sql`select count(*)::int as n from studio.wallet_fid_lookups where account_id = ${accDn}`)[0].n === 0);
+  // While the lookup is off, nothing is re-checked.
   WL.lookUp = false;
+  neynarDown.delete(DN);
+  now[DN] = [];
+  const c4 = calls;
+  check('while the lookup is off, a verified link is kept and nothing is sent', (await L.linkedFidFor(S, accDn, DN)) === 5030 && calls === c4);
+
+  WL.lookUp = true;
   globalThis.fetch = realFetch;
   delete process.env.NEYNAR_API_KEY;
 }

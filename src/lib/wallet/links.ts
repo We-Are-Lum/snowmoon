@@ -7,10 +7,15 @@ import { IMAGES, LINKED_WALLETS, WALLET_LINKS } from '../config';
  * in with Farcaster to associate the account with this wallet. If we can't just use neynar to find out if the wallet
  * is already associated."). A linked wallet's sign-in is that FID everywhere getPerson is used.
  *
- * Kept in studio.wallet_links (DRAFT migration NEXT_wallet_links.sql): a row per link, 'verified' (the FID verified
- * the address on Farcaster) or 'signed' (both sign-ins, same session, confirmed); unlinking sets unlinked_at. At most
- * one active link per wallet. Until the table exists, LINKED_WALLETS (config) is read instead; after, it is read only
- * for a wallet the table has never had a row for, so an unlink always wins.
+ * Kept in studio.wallet_links (migration 0026_wallet_links.sql): a row per link, 'verified' (the FID verified the
+ * address on Farcaster) or 'signed' (both sign-ins, same session, confirmed). Ending a link sets unlinked_at and
+ * ended_by: 'person' (unlinked on the You page) or 'unverified' (owner, 2026-10-22: "a linked wallet is looked up
+ * again at most once a day, and an automatic ('verified') link ends if that FID no longer verifies the address. A
+ * link I made by tapping isn't affected."). At most one active link per wallet.
+ * - A wallet the person unlinked is never looked up again.
+ * - A wallet whose verified link ended automatically can be looked up and linked again (the person didn't unlink it).
+ * Until the table exists, LINKED_WALLETS (config) is read instead; after, it is read only for a wallet the table has
+ * never had a row for, so an ended link always wins.
  *
  * Never linked, whatever anyone claims: the project's payment address (IMAGES.prepaid.payTo).
  *
@@ -21,6 +26,8 @@ type Sql = postgres.Sql;
 
 export type How = 'verified' | 'signed';
 export interface Link {
+  /** The row (null for a LINKED_WALLETS link). */
+  id?: number;
   fid: number;
   how: How | 'config';
   linkedAt: string | null;
@@ -31,7 +38,10 @@ export interface LinkRead {
   table: boolean;
   active: Link | null;
   ever: boolean;
+  /** The person unlinked this wallet at some point: never looked up again. */
+  personUnlinked: boolean;
 }
+const NO_TABLE: LinkRead = { table: false, active: null, ever: false, personUnlinked: false };
 
 /** The project's payment address: never a sign-in wallet's link. */
 export const isPayTo = (address: string) => !!IMAGES.prepaid.payTo && address.toLowerCase() === IMAGES.prepaid.payTo.toLowerCase();
@@ -44,12 +54,17 @@ const missing = (e: unknown) => (e as { code?: string }).code === '42P01';
 /** The table's view of a wallet account. A missing table reads as { table: false }. Other errors throw. */
 export async function readLink(sql: Sql, account: number): Promise<LinkRead> {
   try {
-    const rows = await sql`select fid::int as fid, how, linked_at, unlinked_at from studio.wallet_links
+    const rows = await sql`select id::int as id, fid::int as fid, how, linked_at, unlinked_at, ended_by from studio.wallet_links
       where account_id = ${account} order by linked_at desc, id desc`;
     const a = rows.find((r) => r.unlinked_at === null);
-    return { table: true, ever: rows.length > 0, active: a ? { fid: a.fid, how: a.how, linkedAt: new Date(a.linked_at).toISOString() } : null };
+    return {
+      table: true,
+      ever: rows.length > 0,
+      personUnlinked: rows.some((r) => r.ended_by === 'person'),
+      active: a ? { id: a.id, fid: a.fid, how: a.how, linkedAt: new Date(a.linked_at).toISOString() } : null,
+    };
   } catch (e) {
-    if (missing(e)) return { table: false, active: null, ever: false };
+    if (missing(e)) return NO_TABLE;
     throw e;
   }
 }
@@ -64,14 +79,16 @@ export async function linkedFidFor(sql: Sql | null, account: number, address: st
   if (!sql) return configLink(address);
   try {
     const r = await readLink(sql, account);
-    if (r.active) return r.active.fid;
-    if (r.ever) return null;
-    // Lazily, on the first signed-in request of a wallet the table has never linked (only while the lookup is on).
+    // A tapped link is never re-checked; nor is anything while the lookup is off.
+    if (r.active && (r.active.how !== 'verified' || !WALLET_LINKS.lookUp)) return r.active.fid;
+    if (r.personUnlinked) return null;
+    // Lazily, on a signed-in request: a verified link checked again (at most once a day: the lookup is kept a day),
+    // or a wallet with no link looked up.
     if (r.table && WALLET_LINKS.lookUp) {
       const auto = await autoLinkOnce(sql, account, address);
-      if (auto.linked) return auto.linked;
+      if (auto.linked || r.ever || r.active) return auto.linked;
     }
-    return configLink(address);
+    return r.ever ? null : configLink(address);
   } catch (e) {
     console.error('wallet links: read failed', (e as { code?: string }).code ?? (e as Error).name);
     return configLink(address);
@@ -81,7 +98,7 @@ export async function linkedFidFor(sql: Sql | null, account: number, address: st
 /** The link shown on the You page: the table's, or LINKED_WALLETS' when the table has none. */
 export async function linkOf(sql: Sql | null, account: number, address: string): Promise<{ link: Link | null; table: boolean }> {
   if (isPayTo(address)) return { link: null, table: false };
-  const r = sql ? await readLink(sql, account).catch(() => ({ table: false, active: null, ever: false }) as LinkRead) : { table: false, active: null, ever: false };
+  const r = sql ? await readLink(sql, account).catch(() => NO_TABLE) : NO_TABLE;
   if (r.active) return { link: r.active, table: r.table };
   const c = r.ever ? null : configLink(address);
   return { link: c ? { fid: c, how: 'config', linkedAt: null } : null, table: r.table };
@@ -115,10 +132,10 @@ export async function link(sql: Sql, account: number, address: string, fid: numb
   }
 }
 
-/** Unlink: the active link gets its unlinked_at. 'not-yet' while the table isn't there (LINKED_WALLETS can't be unlinked here). */
+/** Unlink, by the person: the active link ends ('person'), and the wallet is never looked up again. 'not-yet' while the table isn't there (LINKED_WALLETS can't be unlinked here). */
 export async function unlink(sql: Sql, account: number): Promise<'done' | 'none' | 'not-yet'> {
   try {
-    const rows = await sql`update studio.wallet_links set unlinked_at = now() where account_id = ${account} and unlinked_at is null returning id`;
+    const rows = await sql`update studio.wallet_links set unlinked_at = now(), ended_by = 'person' where account_id = ${account} and unlinked_at is null returning id`;
     return rows.length > 0 ? 'done' : 'none';
   } catch (e) {
     if (missing(e)) return 'not-yet';
@@ -126,7 +143,7 @@ export async function unlink(sql: Sql, account: number): Promise<'done' | 'none'
   }
 }
 
-// --- The automatic link: Neynar's user by verified address (switched off: WALLET_LINKS.lookUp) ------------------
+// --- The automatic link: Neynar's user by verified address (WALLET_LINKS.lookUp) --------------------------------
 
 /**
  * Where the lookup goes (docs.neynar.com, "Fetch bulk users by Eth or Sol address": GET
@@ -188,27 +205,39 @@ export async function verifiedFids(sql: Sql, account: number, address: string): 
 export type AutoLink = { linked: number | null; why: string };
 
 /**
- * On a wallet's first signed-in request (getPerson, lazily; not in the sign-in route, whose P4a exemption says it
- * writes only the account row): if exactly one Farcaster account has verified this address, link it ('verified'). Only for a
- * wallet the table has never linked: an unlink, or a 'signed' link, is never overridden. Never throws, so Neynar
- * (or the database) being down only means the person signs in as the plain wallet.
+ * On a wallet's signed-in request (getPerson, lazily; not in the sign-in route, whose P4a exemption says it writes
+ * only the account row). The lookup's answer is kept a day, so Neynar is asked at most once a day per wallet.
+ * - No active link, and the person never unlinked it: if exactly one Farcaster account has verified the address,
+ *   link it ('verified'). Two or more: no link.
+ * - An active 'verified' link: if its FID no longer verifies the address, the link ends ('unverified'); then, as
+ *   above, a single other FID that verifies it is linked instead.
+ * - An active 'signed' link, or a wallet the person unlinked: nothing is looked up.
+ * Never throws. Neynar (or the database) down: an active link is kept, and a wallet without one signs in as itself.
  */
 export async function autoLink(sql: Sql, account: number, address: string): Promise<AutoLink> {
+  const r0 = await readLink(sql, account).catch(() => NO_TABLE);
+  const keep: AutoLink = { linked: r0.active?.fid ?? null, why: 'kept' };
   try {
-    if (!WALLET_LINKS.lookUp) return { linked: null, why: 'off' };
+    if (!WALLET_LINKS.lookUp) return { ...keep, why: 'off' };
     if (isPayTo(address)) return { linked: null, why: 'payment address' };
-    const r = await readLink(sql, account);
+    const r = r0;
     if (!r.table) return { linked: null, why: 'not-yet' };
-    if (r.active) return { linked: r.active.fid, why: 'already' };
-    if (r.ever) return { linked: null, why: 'unlinked before' };
+    if (r.active && r.active.how !== 'verified') return { linked: r.active.fid, why: 'signed' };
+    if (!r.active && r.personUnlinked) return { linked: null, why: 'unlinked before' };
     const found = await verifiedFids(sql, account, address);
-    if (!found.ok) return { linked: null, why: found.why };
-    if (found.fids.length !== 1) return { linked: null, why: found.fids.length ? 'more than one account' : 'no account' };
+    if (!found.ok) return { ...keep, why: found.why };
+    if (r.active) {
+      if (found.fids.includes(r.active.fid)) return { linked: r.active.fid, why: 'still verified' };
+      await sql`update studio.wallet_links set unlinked_at = now(), ended_by = 'unverified'
+        where id = ${r.active.id!} and unlinked_at is null and how = 'verified'`;
+      keep.linked = null;
+    }
+    if (found.fids.length !== 1) return { linked: null, why: r.active ? 'no longer verified' : found.fids.length ? 'more than one account' : 'no account' };
     const l = await link(sql, account, address, found.fids[0], 'verified');
     return l.ok ? { linked: l.fid, why: 'verified' } : { linked: null, why: l.why };
   } catch (e) {
     console.error('wallet links: automatic link failed', (e as { code?: string }).code ?? (e as Error).name);
-    return { linked: null, why: 'error' };
+    return { ...keep, why: 'error' };
   }
 }
 
