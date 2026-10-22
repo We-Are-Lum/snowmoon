@@ -1,7 +1,7 @@
--- 0024_minpentai_snap_resume.sql — Minpentai in a Farcaster cast (the snap): each player's
+-- 0025_minpentai_snap_resume.sql — Minpentai in a Farcaster cast (the snap): each player's
 -- latest practice match, so the snap's first page can offer "Resume" after a dropped page
 -- (owner, 2026-10-21; docs/proposals/minpentai-snap.md, branch minpentai-snap).
--- DRAFT, NOT APPLIED. Renumbered from 0022 (taken by 0022_wallet_credits; 0023 by 0023_oauth_client_secrets). The number may need to change again if another branch takes 0024 first.
+-- DRAFT, NOT APPLIED. Renumbered from 0022 (taken by 0022_wallet_credits; 0023 by 0023_oauth_client_secrets; 0024 by 0024_suggestions_and_film_notes). The number may need to change again if another branch takes 0025 first.
 --
 -- MUST RUN AS postgres (the role that owns the `studio` schema), in the Supabase SQL Editor.
 -- Requires 0001. Dry run first: paste everything, but replace the final `commit;` with `rollback;`.
