@@ -491,7 +491,8 @@ const DESIGN_IMAGE_FILES = [
   'src/components/design-index.tsx',
   'src/components/pictures-latest.tsx',
   'src/app/images/designs/[id]/page.tsx',
-  'src/app/images/designs/character/[slug]/page.tsx',
+  // A character's or a place's sheet rows (2026-10-14: moved out of the character page).
+  'src/components/sheet-list.tsx',
   'src/components/design-form.tsx',
   'src/components/my-picks.tsx',
   'src/components/moderate-queue.tsx',
@@ -542,6 +543,10 @@ add({
     const figures = [...ch1.matchAll(/<figure class="seed-image"[\s\S]*?<\/figure>/g)].map((m) => m[0]);
     if (!figures.length) problems.push('chapter 1: no seeded images found to check');
     figures.forEach((f, i) => problems.push(...aiLabelProblems(`chapter 1 image ${i + 1}`, f, 'image')));
+    // Beside the book's text, "not by the author" is shown, not only hidden, once per page (owner, 2026-10-15).
+    const shown = [...ch1.matchAll(/<span class="ai-not-author">([\s\S]*?)<\/span>/g)].map((m) => htmlText(m[1]));
+    if (shown.length !== 1 || !NOT_AUTHOR.test(shown[0] ?? '')) problems.push(`chapter 1: "not by the author" is shown ${shown.length} times beside the pictures, want once`);
+    if (shown.length && !figures[0]?.includes('class="ai-not-author"')) problems.push('chapter 1: "not by the author" is not beside the first picture');
     const credit = ch1.match(/<p class="[^"]*\bnarration-credit\b[^"]*">[\s\S]*?<\/p>/)?.[0] ?? '';
     problems.push(...aiLabelProblems('chapter 1 narration credit', credit, 'voice'));
     if (!/Synthetic narration/.test(aiLabels(credit).map((l) => l.hidden).join(' '))) problems.push('chapter 1: the narration credit does not say "Synthetic narration"');
@@ -575,7 +580,11 @@ add({
     for (const r of readers as { file: string; text: string }[]) {
       if (!/<AiLabel\b[\s\S]*?\bkind="image"[\s\S]*?\btext=\{AI_LABEL\.(image|imageBy)\b/.test(r.text)) problems.push(`${r.file}: a reader's image is shown without the AI label`);
     }
+    // A design screen says it in words, or uses AiTag ("AI ⓘ", owner 2026-10-15), whose own words are checked here.
+    const tag = code('src/components/ai-tag.tsx');
+    if (!AI_GENERATED.test(tag) || !NOT_AUTHOR.test(tag)) problems.push('src/components/ai-tag.tsx: the AI tag does not say "AI-generated" and "not by the author"');
     for (const r of designs as { file: string; text: string }[]) {
+      if (/<AiTag\b/.test(r.text)) continue;
       if (!AI_GENERATED.test(r.text)) problems.push(`${r.file}: a style's sample or a sheet's view is shown without "AI-generated"`);
       if (!NOT_AUTHOR.test(r.text)) problems.push(`${r.file}: a style's sample or a sheet's view is shown without "not by the author"`);
     }
@@ -592,6 +601,7 @@ add({
     c.sheets.push({ what: 'planted', whose: 'The project made it.' });
     c.readers[0].text = c.readers[0].text.replace(/<AiLabel\b/g, '<Caption');
     c.card = c.card.replace(/AI[- ]generated/gi, 'picture');
+    c.ch1 = c.ch1.replace(/<span class="ai-not-author">[\s\S]*?<\/span>/g, '');
     c.home = c.home.replace(/class="home-feed-empty"/g, 'class="home-feed-x"').replace(/class="ai-label"/g, 'class="by-line"');
   },
 });

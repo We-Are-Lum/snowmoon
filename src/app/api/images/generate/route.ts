@@ -11,9 +11,9 @@ import { mayGenerate } from '~/lib/images/gate';
 import { paidPicture } from '~/lib/images/paid';
 import { finalPrompt, STYLES, styleText, type StyleId } from '~/lib/images/rules';
 import { signTicket, type TicketDesign } from '~/lib/images/ticket';
-import { myPicks, startingStyleRetired, type MyPick } from '~/lib/images/designs';
+import { designByVersion, myPicks, startingStyleRetired, type MyPick } from '~/lib/images/designs';
 import { designByline } from '~/lib/images/byline';
-import { askedSheets, inPassage, sheetsForImage } from '~/lib/images/sheets';
+import { askedSheets, inPassage, placeTitle, sheetPlaces, sheetsForImage } from '~/lib/images/sheets';
 
 /**
  * Generate one draft image for a passage (docs/proposals/add-an-image.md, section 5). Any
@@ -23,8 +23,9 @@ import { askedSheets, inPassage, sheetsForImage } from '~/lib/images/sheets';
  * image and a signed record of how it was made go back to the person's device. The daily count
  * (studio.image_asks) and the day's cost totals (studio.image_costs, no FID) are all that is kept.
  *
- * Step 4: the person may add their own picks (a picked style instead of the starting one, and
- * picked character sheets), each one's text added to the prompt and checked with it. When asked,
+ * Step 4: every image is made in a style (owner, 2026-10-14): the starting style while it is
+ * offered, or any published style. The person may add their own picks (character sheets, and a
+ * setting sheet, 2026-10-14), each one's text added to the prompt and checked with it. When asked,
  * a picked sheet's views go to FLUX.2 [klein] 4B edit as reference pictures, through the same caps.
  *
  * Sheets as text (owner, 2026-10-10): the characters this passage names and its scene's place
@@ -57,7 +58,7 @@ export async function POST(request: Request) {
   const sql = db();
   if (!sql || !process.env.FAL_KEY || !process.env.IMAGES_TICKET_SECRET) return no('Making images is not set up on this deployment', 503);
 
-  let body: { chapter?: unknown; start?: unknown; end?: unknown; prompt?: unknown; style?: unknown; characters?: unknown; reference?: unknown; sheets?: { characters?: unknown; place?: unknown } };
+  let body: { chapter?: unknown; start?: unknown; end?: unknown; prompt?: unknown; style?: unknown; characters?: unknown; place?: unknown; reference?: unknown; sheets?: { characters?: unknown; place?: unknown } };
   try {
     body = await request.json();
   } catch {
@@ -73,10 +74,12 @@ export async function POST(request: Request) {
   if (idx.filter((i) => i >= start && i <= end).length > IMAGES.maxBlocks) return no(`A passage can be up to ${IMAGES.maxBlocks} blocks`, 400);
   if (!userPrompt || userPrompt.length > IMAGES.promptMaxChars) return no(`Describe the image in up to ${IMAGES.promptMaxChars} characters`, 400);
   const designStyle = isId(style) ? style : null;
-  if (style !== null && !designStyle && !(style in STYLES)) return no('No such style', 400);
+  if (style === null) return no('Choose a style first', 400, { reason: 'style' });
+  if (!designStyle && !(style in STYLES)) return no('No such style', 400);
   // Decision 13: once the starting style is a published design, only the design is offered.
   if (style !== null && !designStyle && (await startingStyleRetired(sql))) return no('No such style', 400);
   const wanted = Array.isArray(body.characters) ? body.characters.filter(isId) : [];
+  const wantedPlace = isId(body.place) ? body.place : null;
   if (wanted.length > IMAGES.designs.maxCharacters) return no(`Up to ${IMAGES.designs.maxCharacters} characters in one image`, 400);
   // "In this passage": only the characters it names and its scene's place, never an arbitrary id.
   const asked = askedSheets(inPassage(chapter, start, end), body.sheets, IMAGES.designs.maxCharacters);
@@ -87,34 +90,43 @@ export async function POST(request: Request) {
   const gate = await mayGenerate(sql, fid);
   if (!gate.ok) return no(gate.error, gate.status, { reason: gate.reason });
 
-  // Picked styles and sheets: only the person's own picks, still published.
-  const picks = designStyle || wanted.length ? (await myPicks(sql, fid)).filter((p) => p.available) : [];
-  const stylePick = designStyle ? picks.find((p) => p.kind === 'style' && p.versionId === designStyle) : null;
-  if (designStyle && !stylePick) return no('That style is not one of your picks', 400);
+  // The style: any published style (2026-10-14), at the version chosen. Sheets: only the person's own picks, still published.
+  const styleDesign = designStyle ? await designByVersion(sql, designStyle) : null;
+  if (designStyle && styleDesign?.kind !== 'style') return no('No such style', 400);
+  const stylePick: TicketDesign | null = styleDesign
+    ? { versionId: styleDesign.shown.versionId, kind: 'style', entity: styleDesign.entity, title: styleDesign.shown.body.title, by: designByline(styleDesign.byName, styleDesign.byFid, styleDesign.byRole), versionNo: styleDesign.shown.versionNo, text: styleDesign.shown.body.text, assist: styleDesign.shown.body.assist }
+    : null;
+  const picks = wanted.length || wantedPlace ? (await myPicks(sql, fid)).filter((p) => p.available) : [];
   const sheets = wanted.map((id) => picks.find((p) => p.kind === 'character' && p.versionId === id));
   if (sheets.some((p) => !p)) return no('That sheet is not one of your picks', 400);
-  const designs = [...(stylePick ? [stylePick] : []), ...(sheets as MyPick[])];
-  // The project's shorthand for each chosen character without a picked sheet, and for the place.
-  const imageSheets = sheetsForImage(asked, (sheets as MyPick[]).map((p) => p.entity));
+  const placePick = wantedPlace ? picks.find((p) => p.kind === 'location' && p.versionId === wantedPlace) : null;
+  if (wantedPlace && !placePick) return no('That setting sheet is not one of your picks', 400);
+  const sheetPicks = [...(sheets as MyPick[]), ...(placePick ? [placePick] : [])];
+  const designs = [...(stylePick ? [stylePick] : []), ...sheetPicks.map(asDesign)];
+  // The project's shorthand for each chosen character without a picked sheet, and for the place unless a setting sheet is picked.
+  const askedSheetsText = sheetsForImage(asked, (sheets as MyPick[]).map((p) => p.entity));
+  // A picked setting sheet names the place the image is of (its own place, which may not be the passage's).
+  const pickedPlace = placePick ? (sheetPlaces().find((x) => placeTitle(x.name) === placePick.entity)?.slug ?? null) : null;
+  const imageSheets = pickedPlace ? { characters: askedSheetsText?.characters ?? [], place: pickedPlace, added: askedSheetsText?.added ?? [] } : askedSheetsText;
   if (imageSheets && imageSheets.characters.length > IMAGES.designs.maxCharacters) return no(`Up to ${IMAGES.designs.maxCharacters} characters in one image`, 400);
-  const added = imageSheets?.added ?? [];
+  const added = (imageSheets?.added ?? []).filter((a) => !(placePick && a.kind === 'place'));
 
   const facts = blockFacts(ch.blocks);
   const setting = facts[ch.blocks.findIndex((b) => b.idx === start)]?.setting ?? null;
   const styleObj = style && !designStyle ? { id: style, text: styleText(style as StyleId, setting) } : null;
-  const prompt = finalPrompt(userPrompt, styleObj?.text ?? stylePick?.text ?? null, [...(sheets as MyPick[]).map((p) => p.text), ...added.map((a) => a.text)]);
+  const prompt = finalPrompt(userPrompt, styleObj?.text ?? stylePick?.text ?? null, [...sheetPicks.map((p) => p.text), ...added.map((a) => a.text)]);
 
   // Reference pictures: the chosen sheets' views, front first, up to the model's limit.
-  const refs: { url: string; sha256: string }[] = [];
+  const refs: { url: string; sha256: string; width: number; height: number }[] = [];
   if (body.reference === true) {
-    for (const p of sheets as MyPick[]) for (const k of ['front', 'side', 'back'] as const) if (p.views[k] && refs.length < IMAGES.maxReferences) refs.push({ url: p.views[k]!.url, sha256: p.views[k]!.sha256 });
+    for (const p of sheetPicks) for (const k of ['front', 'side', 'back'] as const) if (p.views[k] && refs.length < IMAGES.maxReferences) refs.push({ url: p.views[k]!.url, sha256: p.views[k]!.sha256, width: p.views[k]!.recipe.width, height: p.views[k]!.recipe.height });
     if (!refs.length) return no('None of these sheets has pictures to use as a reference', 400);
   }
   const pictures: { bytes: Buffer; contentType: string; width: number; height: number }[] = [];
   for (const ref of refs) {
     const bytes = await referencePicture(ref.url, ref.sha256);
     if (!bytes) return no('A reference picture could not be read. Try again without it.', 503);
-    pictures.push({ bytes, contentType: 'image/jpeg', ...IMAGES.viewSize });
+    pictures.push({ bytes, contentType: 'image/jpeg', width: ref.width, height: ref.height });
   }
   const model = pictures.length ? IMAGES.editModel : IMAGES.model;
 
@@ -134,8 +146,8 @@ export async function POST(request: Request) {
     model: model.id, endpoint: model.endpoint, host: model.host, settings: made.settings,
     seed: made.seed, requestId: made.requestId, sha256, width: IMAGES.size.width, height: IMAGES.size.height,
     costUsd: made.costUsd, guard: { model: IMAGES.guardModel, verdict: 'ok' }, at: new Date().toISOString(),
-    ...(designs.length ? { designs: designs.map(asDesign) } : {}),
-    ...(refs.length ? { references: refs } : {}),
+    ...(designs.length ? { designs } : {}),
+    ...(refs.length ? { references: refs.map(({ url, sha256 }) => ({ url, sha256 })) } : {}),
     ...(imageSheets ? { sheets: imageSheets } : {}),
   });
   return NextResponse.json(

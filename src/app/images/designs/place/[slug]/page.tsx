@@ -1,6 +1,9 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { IMAGES } from '~/lib/config';
+import { db } from '~/lib/db';
+import { listDesigns, placeEntity, type DesignOrder } from '~/lib/images/designs';
+import { SheetList } from '~/components/sheet-list';
 import { IMAGE_WORDING } from '~/lib/images/wording';
 import { labelRange } from '~/lib/reading';
 import { partsOf, placeFirstChapter, placeTitle, sheetPlace } from '~/lib/images/sheets';
@@ -12,10 +15,11 @@ import { Appears, SheetImages, Shorthand } from '~/components/design-sheets';
  * One of the book's places (sheets as text, owner 2026-10-10), mirroring a character's page: the
  * summary, what the book says (its own words, each linked to its block), this edition's shorthand
  * (invented, drafted by the coding agent), the scenes it is in (content/snowmoon/designs/scenes.json)
- * and the images of it. Covered past where the reader has got to, from the first chapter it is in.
+ * and the images of it. Readers' place sheets (2026-10-14), as a character's: views made in one of
+ * the published styles, offered when they make an image.
  */
 export const revalidate = 60;
-type Props = { params: Promise<{ slug: string }> };
+type Props = { params: Promise<{ slug: string }>; searchParams: Promise<{ sort?: string }> };
 const W = IMAGE_WORDING.designs;
 const SH = W.sheets;
 
@@ -24,9 +28,13 @@ export async function generateMetadata({ params }: Props) {
   return { title: p ? `${placeTitle(p.name)} · place` : 'Not found', robots: { index: false } };
 }
 
-export default async function PlacePage({ params }: Props) {
+export default async function PlacePage({ params, searchParams }: Props) {
   const p = sheetPlace((await params).slug);
   if (!p) notFound();
+  const sort: DesignOrder = (await searchParams).sort === 'built' ? 'built' : 'new';
+  const sql = db();
+  const entityId = sql ? await placeEntity(sql, placeTitle(p.name)).catch(() => null) : null;
+  const sheets = sql && entityId ? await listDesigns(sql, 'location', sort, entityId).catch(() => []) : [];
   const parts = partsOf(p.slug);
   const images = await sheetImages('place', p.slug, p.name);
   const first = placeFirstChapter(p);
@@ -53,6 +61,7 @@ export default async function PlacePage({ params }: Props) {
             text: SH.appearsRow(s.chapter, s.scene, s.from !== null && s.to !== null ? labelRange(s.from, s.to) : ''),
           }))}
         />
+        <SheetList href={`/images/designs/place/${p.slug}`} sort={sort} sheets={sheets} kind="location" slug={p.slug} name={placeTitle(p.name)} />
         <SheetImages images={images} />
         <p className="dz-footer">{W.index.footer}</p>
         <p className="as-draft ic-draftline">{IMAGE_WORDING.draftLine}</p>

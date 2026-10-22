@@ -21,6 +21,11 @@ export interface DesignBody {
   assist: { model: string; drafted: string[]; source?: string } | null;
   /** 'maintainer' when the maintainer published it for the project (the starting style, decision 13); absent otherwise. */
   role?: 'maintainer' | null;
+  /**
+   * A sheet's views: the published style they were made in (owner, 2026-10-14: a sheet must use one
+   * of the style guides). Absent on styles, and on sheets published before 2026-10-15.
+   */
+  style?: { version_id: string; title: string } | null;
 }
 
 export interface DesignPicture {
@@ -40,6 +45,8 @@ export interface DesignPicture {
     width: number;
     height: number;
     references?: { sha256: string }[];
+    /** A sheet's view: the style version whose text is in the prompt, as it was then. */
+    style?: { version_id: string; title: string; text: string };
     checks: { prompt: { model: string; verdict: 'ok' }; host_safety_checker: 'passed' };
     assist: { model: string; drafted: string[]; source?: string } | null;
   };

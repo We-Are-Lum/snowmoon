@@ -7,6 +7,7 @@ import { wordDiff } from '~/lib/images/design-rules';
 import { IMAGE_WORDING } from '~/lib/images/wording';
 import { changePick, useMyPicks, type PickView } from './design-picks';
 import { SignInButton } from './sign-in';
+import { AiTag } from './ai-tag';
 
 /**
  * My picks (Design 6): private, dashed, "only you". Your style picks (the newest one is what the
@@ -34,6 +35,7 @@ export function MyPicks() {
 
   const styles = (picks ?? []).filter((p) => p.kind === 'style');
   const chars = (picks ?? []).filter((p) => p.kind === 'character');
+  const places = (picks ?? []).filter((p) => p.kind === 'location');
   const clear = async (p: PickView) => {
     await changePick('DELETE', { entityId: p.entityId });
     setNote(W.page.cleared);
@@ -52,10 +54,10 @@ export function MyPicks() {
             {nameOf(p)} v{p.versionNo}
           </Link>
           <span className="dz-row-meta">
-            {!p.available ? W.picks.hidden : p.kind === 'style' ? (i === 0 ? W.picks.used : W.picks.alsoOffered) : W.picks.charUsed(p.entity.split(' ')[0])}
+            {!p.available ? W.picks.hidden : p.kind === 'style' ? (i === 0 ? W.picks.used : W.picks.alsoOffered) : p.kind === 'location' ? W.picks.placeUsed : W.picks.charUsed(p.entity.split(' ')[0])}
           </span>
           <span className="dz-pick-actions">
-            <Link href={p.kind === 'style' ? '/images/designs' : '/images/designs?tab=characters'}>{W.picks.change}</Link>
+            <Link href={p.kind === 'style' ? '/images/designs' : p.kind === 'location' ? '/images/designs?tab=places' : '/images/designs?tab=characters'}>{W.picks.change}</Link>
             <button type="button" onClick={() => clear(p)}>
               {W.picks.clear}
             </button>
@@ -84,6 +86,8 @@ export function MyPicks() {
             {styles.length ? <ul className="dz-pick-list">{styles.map(row)}</ul> : <p className="dz-empty-row">{W.picks.noStyle}</p>}
             <p className="dz-label">{W.picks.characters}</p>
             {chars.length ? <ul className="dz-pick-list">{chars.map(row)}</ul> : <p className="dz-empty-row">{W.picks.noCharacters}</p>}
+            <p className="dz-label">{W.picks.places}</p>
+            {places.length ? <ul className="dz-pick-list">{places.map(row)}</ul> : <p className="dz-empty-row">{W.picks.noPlaces}</p>}
             <p className="dz-note">{W.picks.nobody}</p>
           </div>
           {comparing?.newer && <Compare pick={comparing} onDone={(msg) => { setComparing(null); setNote(msg); }} />}
@@ -135,7 +139,9 @@ function Compare({ pick, onDone }: { pick: PickView; onDone: (msg: string | null
           <figcaption className="dz-caption">{W.picks.newLabel(pick.newer!.versionNo, (newer?.createdAt ?? pick.newer!.createdAt).slice(0, 10))}</figcaption>
         </figure>
       </div>
-      <p className="dz-caption">{W.page.samplesCaption}</p>
+      <p className="dz-caption">
+        {W.page.samplesCaption} <AiTag />
+      </p>
       {newer && (
         <p className="dz-text">
           {wordDiff(pick.text, newer.text).map((d, i) => (d.changed ? <mark key={i}>{d.text}</mark> : <span key={i}>{d.text}</span>))}

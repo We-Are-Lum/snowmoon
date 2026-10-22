@@ -15,7 +15,7 @@ const EVENT = 'snowmoon:picks';
 
 export type PickView = {
   entityId: string;
-  kind: 'style' | 'character';
+  kind: 'style' | 'character' | 'location';
   entity: string;
   versionId: string;
   versionNo: number;
@@ -65,7 +65,7 @@ export function useMyPicks(): PickView[] | null {
  * "Use as my style" / "Use as my {name}" on a design's page. Keeps this version for you, privately.
  * If you already keep an older or newer version of it, offers to switch (never switches for you).
  */
-export function PickButton({ versionId, versionNo, elementId, entityId, kind, name }: { versionId: string; versionNo: number; elementId: string; entityId: string; kind: 'style' | 'character'; name: string }) {
+export function PickButton({ versionId, versionNo, elementId, entityId, kind, name }: { versionId: string; versionNo: number; elementId: string; entityId: string; kind: 'style' | 'character' | 'location'; name: string }) {
   const canAdd = useCanPick();
   const picks = useMyPicks();
   const [note, setNote] = useState<string | null>(null);

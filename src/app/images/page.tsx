@@ -52,10 +52,10 @@ export default async function Pictures({ searchParams }: { searchParams: Promise
   const empty = <p className="pictures-empty">Nothing is published here yet.</p>;
   let latest: LatestItem[] = [];
   if (!moments && sql) {
-    const [characters, styles] = await Promise.all([listDesigns(sql, 'character').catch(() => []), listDesigns(sql, 'style').catch(() => [])]);
+    const [characters, places, styles] = await Promise.all([listDesigns(sql, 'character').catch(() => []), listDesigns(sql, 'location').catch(() => []), listDesigns(sql, 'style').catch(() => [])]);
     latest = [
       ...images.map((im): LatestItem => ({ type: 'moment', at: im.createdAt, moment: moment(im) })),
-      ...[...characters, ...styles].map((d): LatestItem => ({
+      ...[...characters, ...places, ...styles].map((d): LatestItem => ({
         type: 'design',
         at: d.updatedAt,
         design: { versionId: d.versionId, kind: d.kind, title: d.title || d.entity, entity: d.entity, meta: W.designs.index.rowMeta(designByline(d.byName, d.byFid, d.byRole), d.versionNo), date: d.updatedAt.slice(0, 10), thumb: d.thumb },

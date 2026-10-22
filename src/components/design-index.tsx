@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useCanMakeDesigns } from '~/lib/images/can-add';
 import { IMAGE_WORDING } from '~/lib/images/wording';
 import { useMyPicks } from './design-picks';
+import { AiTag } from './ai-tag';
 
 /**
  * Styles, characters or settings (step 4; Pictures' menu above it chooses which): the order named, rows. Your own picks are marked
@@ -13,7 +14,7 @@ import { useMyPicks } from './design-picks';
 const W = IMAGE_WORDING.designs;
 type StyleRow = { versionId: string; elementId: string; entityId: string; title: string; meta: string; drafted: boolean; thumb: string | null };
 type CharacterRow = { slug: string; name: string; firstChapter: number; sheets: number };
-type PlaceRow = { slug: string; name: string; firstChapter: number; scenes: number };
+type PlaceRow = { slug: string; name: string; firstChapter: number; scenes: number; sheets: number };
 
 export function DesignIndex({ tab, sort, styles, characters, places }: { tab: 'styles' | 'characters' | 'places'; sort: 'new' | 'built'; styles: StyleRow[]; characters: CharacterRow[]; places: PlaceRow[] }) {
   const canMake = useCanMakeDesigns();
@@ -53,7 +54,7 @@ export function DesignIndex({ tab, sort, styles, characters, places }: { tab: 's
                     <span className="dz-row-text">
                       <span className="dz-row-title">{s.title}</span>
                       <span className="dz-row-meta">{s.meta}</span>
-                      {s.thumb && <span className="dz-row-ai">Sample: AI-generated · not by the author</span>}
+                      {s.thumb && <span className="dz-row-ai"><AiTag what="Sample" /></span>}
                       {s.drafted && <span className="dz-row-ai">{W.index.drafted}</span>}
                       {pickedElements.has(s.elementId) && <span className="dz-row-pick">{W.index.yourPick}</span>}
                     </span>
@@ -76,7 +77,7 @@ export function DesignIndex({ tab, sort, styles, characters, places }: { tab: 's
                 <Link href={`/images/designs/place/${p.slug}`} className="dz-row">
                   <span className="dz-row-text">
                     <span className="dz-row-title">{p.name}</span>
-                    <span className="dz-row-meta">{W.sheets.scenes(p.scenes)}</span>
+                    <span className="dz-row-meta">{W.sheets.scenes(p.scenes)} · {W.index.sheets(p.sheets)}</span>
                   </span>
                 </Link>
               </li>

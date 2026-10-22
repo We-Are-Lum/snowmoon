@@ -565,7 +565,8 @@ async function checkHome(page: Page, scheme: 'light' | 'dark') {
   if (rows) {
     for (const li of await page.locator('.home-feed-list li').all()) {
       const label = li.locator('button.ai-label');
-      if (!(await label.count()) || !/\bAI\b.* · by \S/i.test((await label.innerText()) ?? '')) fail(`/ (${scheme}): a "Just made" image has no AI label naming who made it`);
+      // "AI ⓘ" (owner, 2026-10-15): who made it is in the label's hover and accessible name, not beside it.
+      if (!(await label.count()) || !/\bAI\b.* · by \S/i.test((await label.textContent()) ?? '')) fail(`/ (${scheme}): a "Just made" image has no AI label naming who made it`);
     }
   } else if (!(await page.locator('.home-feed-empty').isVisible())) fail(`/ (${scheme}): "Just made" shows neither images nor its empty state`);
 
@@ -1288,10 +1289,10 @@ try {
       await page.evaluate(() => getSelection()!.removeAllRanges());
       await page.locator('.scene-label .add-image').first().click();
       await page.waitForSelector('.image-composer textarea');
-      // The project's starting style is chosen by default (owner, 2026-10-10); None is still there.
+      // The project's starting style is chosen by default (owner, 2026-10-10); there is no None: every image is made in a style (owner, 2026-10-14).
       const styleChecked = await page.locator('.ic-style input[type="radio"]').evaluateAll((els) => els.map((e) => ({ on: (e as HTMLInputElement).checked, label: (e.parentElement?.textContent ?? '').trim() })));
       if (!styleChecked.find((x) => x.on)?.label.startsWith('Techno vistas')) fail(`/chapter/1 (${scheme}): the composer does not start with the project's style chosen (${JSON.stringify(styleChecked)})`);
-      if (!styleChecked.some((x) => x.label.startsWith('None'))) fail(`/chapter/1 (${scheme}): the composer has no "None" style`);
+      if (styleChecked.some((x) => x.label.startsWith('None'))) fail(`/chapter/1 (${scheme}): the composer offers "None" for the style`);
       if (!(await page.locator('.ic-style-text').count())) fail(`/chapter/1 (${scheme}): the chosen style's text is not shown`);
       // "In this passage" (2026-10-10): the character and the place, chosen to start, their text in full; one removed.
       {

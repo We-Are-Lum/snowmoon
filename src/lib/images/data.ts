@@ -118,7 +118,9 @@ export async function imageByVersion(sql: Sql, versionId: string): Promise<Reade
 export async function imagesWithSheet(sql: Sql, kind: 'character' | 'place', slug: string, name: string, limit = 48): Promise<ReaderImage[]> {
   const rows = await sql`select * from (${SELECT(sql)}) x where ${
     kind === 'place'
-      ? sql`x.params->'sheets'->>'place' = ${slug}`
+      ? sql`(x.params->'sheets'->>'place' = ${slug}
+             or exists (select 1 from jsonb_array_elements(case when jsonb_typeof(x.params->'designs') = 'array' then x.params->'designs' else '[]'::jsonb end) d
+                        where d->>'kind' = 'location' and lower(d->>'entity') = lower(${name})))`
       : sql`(jsonb_exists(coalesce(x.params->'sheets'->'characters', '[]'::jsonb), ${slug})
              or exists (select 1 from jsonb_array_elements(case when jsonb_typeof(x.params->'designs') = 'array' then x.params->'designs' else '[]'::jsonb end) d
                         where d->>'kind' = 'character' and d->>'entity' = ${name}))`

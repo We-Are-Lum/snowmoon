@@ -14,7 +14,7 @@ type DesignItem = {
   status: string;
   created_by_fid: number;
   created_at: string;
-  kind: 'style' | 'character';
+  kind: 'style' | 'character' | 'location';
   entity: string;
   title: string;
   text: string;
