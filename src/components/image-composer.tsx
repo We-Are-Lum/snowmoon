@@ -12,6 +12,7 @@ import { SignInButton } from './sign-in';
 import { WalletPanel, WalletSignInButton } from './wallet';
 import { AiLabel } from './recipe-sheet';
 import { AI_LABEL, readerImageView } from '~/lib/ai-declared';
+import { exactDollars } from '~/lib/wallet/price-text';
 
 /**
  * "Add an image" (docs/proposals/add-an-image.md, section 2): a sheet over the reader. The
@@ -342,7 +343,8 @@ function Sheet({ initial, onClose }: { initial: AddImageDetail; onClose: () => v
   const showDraft = view === 'draft' && draft !== null && !published;
   const previewing = step === 'preview' || step === 'publishing';
   const by = auth.kind === 'signed-in' ? (auth.username ? `@${auth.username}` : `FID ${auth.fid}`) : wallet ? wallet.short : 'you';
-  const count = (n: number) => (status?.prepaid ? W.prepaid.balance(status.prepaid.balanceUsd.toFixed(2), n) : `${n} of ${status?.perDay ?? 0} left today`);
+  // A wallet account sees the price it is charged on the button itself (Terms 6a: "at the price shown when you start it").
+  const count = (n: number) => (status?.prepaid ? `${W.prepaid.priceOnButton(exactDollars(status.prepaid.priceUsd))} · ${W.prepaid.balance(status.prepaid.balanceUsd.toFixed(2), n)}` : `${n} of ${status?.perDay ?? 0} left today`);
   return (
     <div className="sheet-overlay ic-overlay" onClick={(e) => e.target === e.currentTarget && onClose()}>
       <div ref={sheet} className="recipe-sheet image-composer" role="dialog" aria-modal="true" aria-labelledby="composer-title">

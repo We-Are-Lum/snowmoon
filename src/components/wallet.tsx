@@ -9,6 +9,7 @@ import { claim, hasWallet, pay, signInWithWallet, WalletError } from '~/lib/wall
 import { txHashFrom } from '~/lib/wallet/hash';
 import { LINK_NOTE, linkNoteShown } from '~/lib/wallet/announce';
 import { TxHashField } from './tx-hash-field';
+import { exactDollars } from '~/lib/wallet/price-text';
 
 /**
  * Wallet sign-in and the prepaid balance (owner, 2026-10-13). Wording drafted by the coding agent
@@ -183,7 +184,7 @@ export function WalletPanel({ onChange, linkHint = true }: { onChange?: () => vo
           {b.address.slice(0, 6)}…{b.address.slice(-4)} · {W.signOut}
         </button>
       </p>
-      <p className="ic-note">{W.price(dollars(b.priceUsd), b.markup)}</p>
+      <p className="ic-note">{W.price(exactDollars(b.priceUsd), b.markup)}</p>
       {/* The 30-day note about automatic links (owner, 2026-10-22); on the You page it shows once, above. */}
       {linkHint && <LinkNote />}
       {/* After a wallet sign-in, the offer to link it (owner, 2026-10-22); made on the You page. */}

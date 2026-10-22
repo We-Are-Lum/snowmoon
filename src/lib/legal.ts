@@ -45,7 +45,9 @@ export const LEGAL: {
     // The baseline's words were terms 5wwopt, privacy 1wfmhnv.
     // 2026-10-22, the owner's reread of the wallet ↔ Farcaster link sentences in sections 4 and 5 (PR #34: "reread for
     // Privacy sections 1–4 and both Terms sentences"). The words before were if3grj.
-    terms: { words: 'tvt9ga', on: '2026-10-22', by: 'FID 6786' },
+    // 2026-10-22, the owner's reread of §6a for credit-back (PR #35: "#35: reread, with the tidier §6a sentence"): reading B,
+    // the price shown, and the payment sentences matching the code. The words before were tvt9ga.
+    terms: { words: '1pz1d61', on: '2026-10-22', by: 'FID 6786' },
     // Plus one sentence the drafted list missed (Privacy §4, images): "your name (Farcaster name or wallet
     // address)", the owner's own words for tonight's publish (2026-10-18), so the page stays true for wallet accounts.
     // 2026-10-19, the owner's "Reread is done" for push 3, at these words: My picks in §4 (the owner's own sentence),
@@ -55,7 +57,9 @@ export const LEGAL: {
     // sentence is the owner's own: "A linked wallet is looked up again at most once a day, …"); then §4's "and why a
     // link ended", the owner's approved words (2026-10-22, "Yes, add 'and why a link ended' to section 4"). The words
     // before were 87yjkk (and h0zppm before §4's addition).
-    privacy: { words: 'hqt7ov', on: '2026-10-22', by: 'FID 6786' },
+    // 2026-10-22, the owner's reread for credit-back (PR #35): §4's wallet paragraph adds "any charge added back to your
+    // balance because a generation gave you no picture". The words before were hqt7ov.
+    privacy: { words: 'l8xev2', on: '2026-10-22', by: 'FID 6786' },
   },
 };
 
@@ -68,7 +72,7 @@ export const TERMS: LegalDoc = {
     { n: 4, head: 'Who can use it.', body: ['Anyone can read and listen without an account. To sign in you must be at least 18 years old. Your account here is a Farcaster account or a wallet address. You can link a wallet to your Farcaster account; while it is linked, signing in with the wallet is signing in as that account. Other ways to sign in may come later; these Terms will list each one when it does.'] },
     { n: 5, head: 'What you add.', body: ['If you publish something through the Service, or make a frame in Remix (which is saved, and can be seen by anyone with its link, as soon as it is made), it remains yours, and you license it to everyone under GPL version 3. You confirm it is your own work, or that you have the right to license it this way. Your name is shown with it: your Farcaster name, or, for a wallet account, its address shortened. Work made with a wallet that is linked to your Farcaster account is shown with your Farcaster name. Where the Service says so before you publish, the prompts and any planning thread that led to the piece are published with it. Published work is public and others may copy it under the licence. We can hide it on request (see section 7), but we cannot recall copies others have made.'] },
     { n: 6, head: 'What you must not do.', body: ['Don\'t post anything unlawful, harassing or sexual involving minors; don\'t post other people\'s private information; don\'t impersonate anyone or present your work as the author\'s or as official; don\'t try to get around sign-in, daily limits or spending caps; don\'t interfere with the Service.'] },
-    { n: '6a', head: 'Prepaid generations.', body: ['You can pay in USDC or ETH on Base to the address the Service shows. Each generation is charged to your balance at its estimated cost plus 30%. Payments are final and are not refunded, whatever the outcome of a generation. A payment is credited once it has 3 confirmations; one more than 7 days old is not credited automatically — write to us.'] },
+    { n: '6a', head: 'Prepaid generations.', body: ['You can pay in USDC or ETH on Base to the address the Service shows. Each generation is charged to your balance at the price shown when you start it. If a generation doesn\'t give you a picture (a check or the image model didn\'t answer, the rules refused the prompt, or the safety checker dropped the picture), that charge is added back to your balance. Payments are final: what you pay is never refunded or paid out as money, and your balance can only be spent on generations here. A payment made through the Service is added to your balance once it has 3 confirmations, while the page is open or the next time you open your wallet on that device. You can also add a payment from your wallet by its transaction, on the wallet panel. Either way, this works within 7 days of the payment; after that, write to us and we\'ll add it.'] },
     { n: 7, head: 'Hiding and removal.', body: ['Nothing on the Service is official or canonical. We may hide content that breaks these Terms. You may hide your own work yourself where the Service offers "Hide", or ask us to hide it, at any time. How this works is set out in our removal policy, linked from About.'] },
     { n: 8, head: 'AI-made material.', body: ['The narration, many pictures (every frame made in Remix among them) and the assistant\'s answers are produced by AI models and are labelled as such. They can be wrong. The assistant\'s commentary is not the book and is not advice of any kind.'] },
     { n: 9, head: 'Outside services.', body: ['The Service relies on other companies\' services, listed in the Privacy Policy. Their terms apply to their part.'] },
@@ -103,7 +107,7 @@ export const PRIVACY: LegalDoc = {
           'The Farcaster usernames we have seen for your ID, so a link with an old name still finds your pages after you rename.',
           'If you play Minpentai: your progress against the computer and the people you block, kept until you ask us to delete them; your matches, deleted 30 days after they end; and invites, deleted when they expire after 24 hours. Challenges you send or receive, deleted an hour after they are answered or expire; and a count of today\'s Play requests and when you last opened a match or the lobby, deleted the next day. While you say you are ready to play, other signed-in players see your Farcaster username.',
         ],
-        'For a wallet account we also keep its address and its prepaid balance and spending: the payments you made to us (transaction, token, amount and its value in US dollars) and what each generation cost. This links money to your account, to keep your balance. Payments on Base are public on-chain, as every Base transaction is. A wallet\'s balance stays with the wallet when it is linked to a Farcaster account.',
+        'For a wallet account we also keep its address and its prepaid balance and spending: the payments you made to us (transaction, token, amount and its value in US dollars), what each generation cost, and any charge added back to your balance because a generation gave you no picture. This links money to your account, to keep your balance. Payments on Base are public on-chain, as every Base transaction is. A wallet\'s balance stays with the wallet when it is linked to a Farcaster account.',
         'Deletions happen at the next routine clean-up, so they can come a little later than stated.',
       ],
     },

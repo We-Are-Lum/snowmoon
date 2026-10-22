@@ -10,6 +10,7 @@ import { AiLabel } from './recipe-sheet';
 import { SignInButton } from './sign-in';
 import { LinkNote, WalletPanel, WalletSignInButton } from './wallet';
 import { AgentsOnYou } from './agents/agents-you';
+import { exactDollars } from '~/lib/wallet/price-text';
 
 /**
  * The You page (owner, 2026-10-18: "build the You page"), reached by tapping your name in the menu:
@@ -203,7 +204,7 @@ export function YouPage() {
             {/* Always shown with a wallet session (owner, 2026-10-18): the balance, its price, Add funds and
                 "Add a payment by its transaction hash", the existing panel, reused. */}
             <WalletPanel onChange={() => void load()} linkHint={false} />
-            {walletSide?.prices && <p className="you-note">{W.framePrice(dollars(walletSide.prices.frameUsd))}</p>}
+            {walletSide?.prices && <p className="you-note">{W.framePrice(exactDollars(walletSide.prices.frameUsd))}</p>}
           </>
         ) : (
           <>

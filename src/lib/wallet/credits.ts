@@ -6,11 +6,12 @@ import { IMAGES } from '../config';
  * Prepaid balances for wallet accounts (owner, 2026-10-13; migration 0011). Balance = payments
  * credited - debits + debits credited back for a failed Generate (migration 0022, once
  * IMAGES.prepaid.creditBack is on). A Generate's price is its estimated cost (the worst case reserved for it,
- * src/lib/images/limits.ts) plus IMAGES.prepaid.markup, rounded up to a millionth of a dollar.
+ * src/lib/images/limits.ts) plus IMAGES.prepaid.markup, rounded up to the nearest $0.001 (owner, 2026-10-22: "round each
+ * price up to the nearest $0.001 and show three decimals"), so the price shown (three decimals) is the price charged.
  */
 type Sql = postgres.Sql;
 
-export const priceUsd = (reserveUsd: number) => Math.ceil(reserveUsd * (1 + IMAGES.prepaid.markup) * 1e6) / 1e6;
+export const priceUsd = (reserveUsd: number) => Math.ceil(Math.ceil(reserveUsd * (1 + IMAGES.prepaid.markup) * 1e6 - 1e-6) / 1000) / 1000;
 
 /** Payment can be taken only once there is an address to pay. */
 export const prepaidOpen = () => Boolean(IMAGES.prepaid.enabled && IMAGES.prepaid.payTo);
@@ -55,11 +56,19 @@ export async function debit(sql: Sql, account: number, usd: number): Promise<num
 }
 
 /**
+ * Why a Generate gave no picture (owner, 2026-10-22, reading B: every Generate that gives no picture is credited back):
+ * 'failed' (the prompt check or the image model didn't answer), 'refused' (the blocked-names list or the rules check
+ * refused the prompt), 'dropped' (the safety checker dropped the picture). 'refused' and 'dropped' came with migration
+ * 0027_wallet_credit_reasons.sql (applied 2026-10-22).
+ */
+export type CreditReason = 'failed' | 'refused' | 'dropped';
+
+/**
  * Credits a failed Generate's debit back to the same account's balance, once, for exactly what was taken (the row
  * is copied from the debit itself). False when credit-back is off (IMAGES.prepaid.creditBack, waiting for migration
  * 0022 and the Terms) or the debit was already credited. Never throws: a Generate's answer doesn't wait on it.
  */
-export async function creditBack(sql: Sql, debitId: number | undefined, reason: 'failed'): Promise<boolean> {
+export async function creditBack(sql: Sql, debitId: number | undefined, reason: CreditReason): Promise<boolean> {
   if (!IMAGES.prepaid.creditBack || !debitId) return false;
   try {
     const rows = await sql`insert into studio.wallet_credits (debit_id, account_id, usd, reason)
