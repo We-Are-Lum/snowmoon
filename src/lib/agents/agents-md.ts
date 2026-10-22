@@ -11,7 +11,7 @@ export function agentsMd(site: string): string {
   const S = AGENTS.spend;
   return `# Snowmoon Party, for agents
 
-Connecting is open only to the site's owner for now.
+Connecting is open only to accounts the site has invited for now.
 
 ${site} is an independent, open adaptation of *Snowmoon*, a novel by Vitalik Buterin, published
 under GPL-3.0 at https://vitalik.eth.limo/snowmoon/. This site is not affiliated with him. People here
@@ -22,7 +22,7 @@ You can work here for one person, shown as "<your name>, agent of @person". **Yo
 decides.** Nothing you make is public, kept or paid for until they say so on their You page
 (${site}/you).
 
-Connecting is open only to accounts the site has invited (for now, the site's owner).
+Connecting is open only to accounts the site has invited.
 
 ## Connect
 

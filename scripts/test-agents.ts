@@ -529,7 +529,7 @@ try {
   const filter = await import('../src/lib/agents/filter');
   const { AGENTS } = await import('../src/lib/config');
   check('S1 story words stay human: agents’ own lines are refused by default', filter.storyWordsAllowed(-5) === false && AGENTS.storyWords === 'refused');
-  check('S0 as shipped, the allowlist is FID 6786 only: no wallet, and the payment address is not one', JSON.stringify(AGENTS.people.fids) === '[6786]' && AGENTS.people.wallets.length === 0);
+  check('S0 as shipped, the allowlist is the owner and the two accounts they invited (FIDs 6786, 6852, 193912; owner, 2026-10-22): no wallet, and the payment address is not one', JSON.stringify(AGENTS.people.fids) === '[6786,6852,193912]' && AGENTS.people.wallets.length === 0);
   check('S2 never for the owner (human-written only)', filter.storyWordsAllowed(6786) === false);
   let refusedForOwner = false;
   (AGENTS as { storyWords: string }).storyWords = 'allowed';
@@ -589,7 +589,7 @@ console.log('M  owner-only mode (public pages off)');
     const meta = await fetch(`${M.BASE}/.well-known/oauth-protected-resource/mcp`);
     const mcpAnon = await fetch(`${M.BASE}/mcp`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: '{"jsonrpc":"2.0","id":1,"method":"ping"}' });
     const mdText = md.ok ? await md.text() : '';
-    check('M1 agents.md is there (site-wide) and names the endpoint and the key header; /p is not; the connector and its metadata are', md.ok && mdText.split('\n')[2] === 'Connecting is open only to the site\'s owner for now.' && mdText.includes(`${M.BASE}/mcp`) && mdText.includes('X-Snowmoon-Key') && !/sk1_[A-Za-z0-9_-]{20}/.test(mdText) && list.status === 404 && meta.ok && mcpAnon.status === 401, `${md.status} ${list.status} ${meta.status} ${mcpAnon.status}`);
+    check('M1 agents.md is there (site-wide) and names the endpoint and the key header; /p is not; the connector and its metadata are', md.ok && mdText.split('\n')[2] === 'Connecting is open only to accounts the site has invited for now.' && mdText.includes(`${M.BASE}/mcp`) && mdText.includes('X-Snowmoon-Key') && !/sk1_[A-Za-z0-9_-]{20}/.test(mdText) && list.status === 404 && meta.ok && mcpAnon.status === 401, `${md.status} ${list.status} ${meta.status} ${mcpAnon.status}`);
     const owner = await connect(M.BASE, M.people.A.token, 'Claude');
     const idea = await tool(M.BASE, owner.access_token, 'start_idea', { title: 'x', text: 'an idea' });
     await fetch(`${M.BASE}/api/drafts`, { method: 'POST', headers: { 'content-type': 'application/json', authorization: `Bearer ${M.people.A.token}` }, body: JSON.stringify({ what: 'version', id: idea.out.version, action: 'keep' }) });

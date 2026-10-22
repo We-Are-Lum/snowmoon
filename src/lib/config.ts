@@ -158,7 +158,8 @@ export const AGENTS = {
    */
   enabled: true,
   people: {
-    fids: [6786] as readonly number[],
+    // 6852 is @luisotravez and 193912 is @garance (owner, 2026-10-22: Claude connector access; checked with Farcaster's API).
+    fids: [6786, 6852, 193912] as readonly number[],
     /**
      * Wallets (lowercase addresses) whose sign-in gets in. Empty for now (owner, 2026-10-20: "FID 6786 only for
      * now … I'll add my sign-in wallet later"). The payment address is not a sign-in wallet.
