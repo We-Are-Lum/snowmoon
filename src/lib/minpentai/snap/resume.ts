@@ -5,7 +5,7 @@
  * nothing here is a record of play, and nothing goes onchain. A match is dropped when it ends, and
  * any row is deleted 30 days after its last turn.
  *
- * Kept in studio.mp_snap_resume (DRAFT migration 0022, not applied) when the site's database is
+ * Kept in studio.mp_snap_resume (DRAFT migration 0024, not applied) when the site's database is
  * configured; otherwise in this server instance's memory, which a cold start empties (the
  * separate test project has no environment variables, so Resume there only lasts while its
  * instance is warm). Best effort: a database error is logged and the game goes on without it.
