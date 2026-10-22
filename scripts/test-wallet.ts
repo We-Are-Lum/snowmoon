@@ -12,7 +12,9 @@
  * - Payments read from Base: USDC to us from this wallet; ETH priced at the block; from someone else,
  *   to someone else, failed, still confirming, too old, too small; nothing when payTo isn't set.
  * - The balance: a payment is credited once; a Generate is paid at the estimate plus the markup; an
- *   empty balance is refused; there are no refunds, even when nothing comes back; prepaid costs are counted apart from free ones,
+ *   empty balance is refused; while credit-back is off (today), nothing comes back even when nothing is made; once on, a
+ *   Generate that fails (check or model didn't answer) is credited back once, for exactly its debit, a refused prompt
+ *   stays charged; prepaid costs are counted apart from free ones,
  *   so the free daily cap doesn't stop a paying account and prepaid spend has its own cap.
  * - Nothing new is publicly readable; payments and debits can't be changed or deleted.
  */
@@ -170,6 +172,60 @@ const r1 = await reserve(S, -acct);
 check('a Generate is paid from the balance', r1.ok && Math.abs((await balanceUsd(S, acct)) - (1 - price)) < 1e-6);
 await settle(S, { guard: { costUsd: 0.0001, provider: 'groq', verdict: 'ok' } }, undefined, 'prepaid');
 check('a Generate stays paid for when nothing comes back (no refunds)', Math.abs((await balanceUsd(S, acct)) - (1 - price)) < 1e-6);
+// --- Credit back a failed Generate (owner, 2026-10-21; migration 0022, IMAGES.prepaid.creditBack) ---------------
+{
+  const { creditBack } = await import('../src/lib/wallet/credits');
+  const { paidPicture } = await import('../src/lib/images/paid');
+  const { generate } = await import('../src/lib/remix/make');
+  const { IMAGE_WORDING } = await import('../src/lib/images/wording');
+  const P = IMAGES.prepaid as { creditBack: boolean };
+  const credits = async () => (await sql`select count(*)::int as n from studio.wallet_credits`)[0].n as number;
+  const req = new Request('https://snowmoon.party/api/images/generate', { method: 'POST' });
+  const realFetch = globalThis.fetch;
+  globalThis.fetch = (async () => {
+    throw new Error('offline');
+  }) as typeof fetch;
+  delete process.env.VERCEL;
+  const unused = async (): Promise<never> => {
+    throw new Error('unused');
+  };
+
+  // Off (today, until 0022 and the Terms): a failure stays charged, and the credits table is never read.
+  check('credit-back is off until the owner turns it on', P.creditBack === false);
+  const offBefore = await balanceUsd(S, acct);
+  const off = await paidPicture(S, -acct, req, { checkText: 'a quiet lake', make: unused });
+  check('while off, a failed Generate stays charged (as the Terms say today)', !off.ok && off.status === 503 && Math.abs((await balanceUsd(S, acct)) - (offBefore - price)) < 1e-6 && (await credits()) === 0, JSON.stringify(off));
+
+  P.creditBack = true;
+  // Pictures: the prompt check didn't answer, so nothing was made.
+  const b0 = await balanceUsd(S, acct);
+  const failedCheck = await paidPicture(S, -acct, req, { checkText: 'a quiet lake', make: unused });
+  check('a Pictures Generate whose prompt check fails is credited back in full', !failedCheck.ok && Math.abs((await balanceUsd(S, acct)) - b0) < 1e-6 && (await credits()) === 1, JSON.stringify({ failedCheck, b0 }));
+  check('the person is told it was added back', !failedCheck.ok && failedCheck.error.endsWith(IMAGE_WORDING.prepaid.creditedBack) && failedCheck.extra.creditedBack === true);
+
+  // Remix: the prompt check passes (the local stand-in), the model fails (no pictures to send), nothing was made.
+  process.env.REMIX_TEST_FAKES = 'guard';
+  const b1 = await balanceUsd(S, acct);
+  const failedModel = await generate(S, -acct, req, 'a quiet lake', []);
+  check('a Remix frame whose model fails is credited back in full', !failedModel.ok && failedModel.status === 503 && Math.abs((await balanceUsd(S, acct)) - b1) < 1e-6 && (await credits()) === 2, JSON.stringify(failedModel));
+  // A refused prompt is not a failure: it stays charged until the owner decides otherwise.
+  const pic = { role: 'layout', name: 'layout', src: null, file: null, fileSha256: null, bytes: Buffer.from('x'), contentType: 'image/jpeg', width: 8, height: 8 } as never;
+  const refused = await generate(S, -acct, req, 'TEST-BLOCK', [pic]);
+  const remixPrice = priceUsd(IMAGES.editReserveUsd(1));
+  check('a refused prompt stays charged', !refused.ok && refused.status === 422 && Math.abs((await balanceUsd(S, acct)) - (b1 - remixPrice)) < 1e-6 && (await credits()) === 2, JSON.stringify(refused));
+  delete process.env.REMIX_TEST_FAKES;
+
+  // Once per debit, for exactly what it took, to the same account.
+  const [last] = await sql`select id::int as id, usd::float8 as usd from studio.wallet_debits order by id desc limit 1`;
+  const b2 = await balanceUsd(S, acct);
+  check('a debit is credited back once only', (await creditBack(S, last.id, 'failed')) && !(await creditBack(S, last.id, 'failed')) && Math.abs((await balanceUsd(S, acct)) - (b2 + last.usd)) < 1e-6);
+  const [same] = await sql`select count(*)::int as n from studio.wallet_credits c join studio.wallet_debits d on d.id = c.debit_id where c.usd <> d.usd or c.account_id <> d.account_id`;
+  check('every credit is its own debit’s amount, to its own account', same.n === 0);
+  check('a free Generate has nothing to credit back', !(await creditBack(S, undefined, 'failed')));
+  P.creditBack = false;
+  globalThis.fetch = realFetch;
+}
+
 const debitSigns = await sql`select count(*)::int as n from studio.wallet_debits where usd <= 0`;
 check('no debit is ever negative', debitSigns[0].n === 0);
 const asks = await sql`select count(*)::int as n from studio.image_asks where fid = ${-acct}`;
@@ -187,13 +243,13 @@ check('prepaid spend has its own daily cap', !capped.ok && capped.refusal === 'p
 // --- Private, and append-only --------------------------------------------------------------
 await sql`reset role`;
 const readable = await sql`select c.relname as t from pg_class c join pg_namespace n on n.oid = c.relnamespace
-  where n.nspname = 'studio' and c.relname in ('wallet_accounts', 'wallet_payments', 'wallet_debits')
+  where n.nspname = 'studio' and c.relname in ('wallet_accounts', 'wallet_payments', 'wallet_debits', 'wallet_credits')
   and (has_table_privilege('anon', c.oid, 'select') or has_table_privilege('authenticated', c.oid, 'select'))`;
 check('no wallet table is publicly readable', readable.length === 0, readable.map((r) => r.t).join(', '));
 const writable = await sql`select c.relname as t from pg_class c join pg_namespace n on n.oid = c.relnamespace
-  where n.nspname = 'studio' and c.relname in ('wallet_accounts', 'wallet_payments', 'wallet_debits')
+  where n.nspname = 'studio' and c.relname in ('wallet_accounts', 'wallet_payments', 'wallet_debits', 'wallet_credits')
   and (has_table_privilege('studio_writer', c.oid, 'update') or has_table_privilege('studio_writer', c.oid, 'delete'))`;
-check('accounts, payments and debits are append-only for the app', writable.length === 0, writable.map((r) => r.t).join(', '));
+check('accounts, payments, debits and credits are append-only for the app', writable.length === 0, writable.map((r) => r.t).join(', '));
 
 await sql.end();
 // --- Adding a payment by its hash: the claim route, end to end (owner, 2026-10-15) ---------

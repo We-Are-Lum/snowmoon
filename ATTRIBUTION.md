@@ -10,7 +10,8 @@ endorsed by the author.
 
 Source: https://github.com/We-Are-Lum/snowmoon
 
-Everything used to make this edition is here and licensed GPL-3.0:
+Everything used to make this edition is here: the code under AGPL-3.0, and the book and everything
+made from it under GPL-3.0 (see `LICENSING.md`):
 
 | Path | What |
 |------|------|

@@ -1,6 +1,7 @@
 import 'server-only';
 import { createClient } from '@farcaster/quick-auth';
 import { readSession, type WalletSession } from './wallet/session';
+import { LINKED_WALLETS } from './config';
 
 /**
  * Sign In with Farcaster via Quick Auth, as a bearer token.
@@ -39,11 +40,15 @@ export function getWallet(request: Request): WalletSession | null {
 /**
  * Who is signed in, for the routes that also take a wallet sign-in (making and publishing images,
  * and agreeing to how one's words are published; owner, 2026-10-13; "Make your own", owner, 2026-10-19): a Farcaster FID, or minus a
- * wallet account's number (never a FID, which is positive). Every other route uses getFid.
+ * wallet account's number (never a FID, which is positive). Every other route uses getFid. A wallet the owner
+ * linked to a Farcaster account (LINKED_WALLETS) signs in as that FID.
  */
 export async function getPerson(request: Request): Promise<number | null> {
   const fid = await getFid(request);
   if (fid !== null) return fid;
   const w = getWallet(request);
-  return w ? -w.account : null;
+  return w ? linkedFid(w.address) ?? -w.account : null;
 }
+
+/** The FID a wallet is linked to (LINKED_WALLETS), or null. */
+export const linkedFid = (address: string): number | null => LINKED_WALLETS[address.toLowerCase()] ?? null;

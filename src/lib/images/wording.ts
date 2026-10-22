@@ -35,13 +35,20 @@ export const IMAGE_WORDING = {
       { key: 'settings', label: 'Settings', hint: 'Where it happens' },
       { key: 'styles', label: 'Styles', hint: 'Looks to build on' },
     ],
-    latest: 'Newest first · moments, character sheets and styles',
-    kind: { moment: 'Moment', character: 'Character sheet', style: 'Style' },
+    latest: 'Newest first · moments, character and setting sheets, styles',
+    kind: { moment: 'Moment', character: 'Character sheet', place: 'Setting sheet', style: 'Style' },
     setting: 'Setting:',
     momentsLead: 'Images readers made for passages of the book, each shown with the passage it is of.',
   },
   reader: {
     order: 'Most liked first, then newest',
+  },
+  /**
+   * Under "Sign in with Farcaster" in the composer's sign-in step, on the website (owner, 2026-10-16:
+   * the wallet first, Farcaster second). The Neynar threshold is not named here. Model-drafted wording.
+   */
+  signIn: {
+    farcasterNote: (perDay: number) => `Established Farcaster accounts can make up to ${perDay} images a day for free.`,
   },
   /** "Make an image" (/images/new, 2026-10-10): choose a passage, then the composer. Model-drafted wording. */
   create: {
@@ -90,8 +97,6 @@ export const IMAGE_WORDING = {
       rowMeta: (by: string, v: number) => `${by} · v${v}`,
       sheets: (n: number) => (n === 0 ? 'No sheet yet' : n === 1 ? '1 sheet' : `${n} sheets`),
       yourPick: '○ Your pick',
-      sampleAi: 'Sample: AI-generated · not by the author',
-      viewAi: 'Views: AI-generated · not by the author',
       noSheets: 'No sheets yet.',
       drafted: 'Text drafted by the coding agent, a closed model',
       bookOrder: 'In the order the book first tells of them',
@@ -102,8 +107,11 @@ export const IMAGE_WORDING = {
       remixedFrom: 'Remixed from',
       remixedHidden: 'a design that was hidden',
       drafted: 'The project’s starting style. Its text was drafted by the coding agent, a closed model.',
-      samplesCaption: 'Sample images · AI-generated · not by the author',
-      viewsCaption: 'Front, side, back · AI-generated · not by the author',
+      samplesCaption: 'Sample images',
+      viewsCaption: 'Front, side, back',
+      placeViewsCaption: 'Wide, other side, closer',
+      /** Model-drafted wording (2026-10-14). */
+      madeInStyle: (title: string) => `Views made in the style ${title}`,
       noPictures: 'No sample pictures yet.',
       styleText: 'Style text · added to prompts',
       sheetText: (name: string) => `Sheet text · added when ${name} is in a prompt`,
@@ -141,6 +149,12 @@ export const IMAGE_WORDING = {
       sheetName: 'Name (optional)',
       styleText: 'Style text · added to every prompt that uses it',
       sheetText: (name: string) => `Sheet text · added when ${name} is in a prompt`,
+      /** A sheet's style (owner, 2026-10-14: views must use one of the style guides). Model-drafted wording. */
+      viewStyle: 'Style for the views',
+      viewStyleNote: 'Each view is made in the style you choose: its text goes into the prompt before your sheet text. Your sheet shows which style its views used.',
+      viewStyleNone: 'No styles are published yet. Publish a style first.',
+      viewStyleFirst: 'Choose a style first.',
+      viewStyleChanged: 'The style changed since these views were made. Make them again.',
       yours: (v: number) => `Shaded words are yours; the rest is unchanged from v${v}.`,
       sentTo: 'Your text is sent to Groq to be checked (through Vercel AI Gateway when Groq is busy) and to fal.ai to make the pictures. It becomes public only if you publish.',
       samples: (min: number, max: number) => `Sample images · ${min} to ${max} · made with this text`,
@@ -174,16 +188,19 @@ export const IMAGE_WORDING = {
     picks: {
       title: 'My picks',
       strip: '○ Private · only you see your picks',
-      lead: 'Your picks fill in the style and characters when you make an image. Nobody else’s images change.',
+      lead: 'Your picks fill in the style, characters and settings when you make an image. Nobody else’s images change.',
       style: 'Style',
       characters: 'Characters',
+      places: 'Settings',
       used: 'Offered first when you make an image',
       alsoOffered: 'Also offered when you make an image',
       charUsed: (name: string) => `Offered when a passage names ${name}`,
+      placeUsed: 'Offered when you make an image',
       change: 'Change',
       clear: 'Clear',
-      noStyle: 'No style picked · nothing is added',
+      noStyle: 'No style picked · you choose one when you make an image',
       noCharacters: 'No characters picked · nothing is added',
+      noPlaces: 'No settings picked · nothing is added',
       hidden: 'Hidden since you picked it · not added',
       newer: (v: number) => `Newer version: v${v}`,
       compare: 'Compare →',
@@ -199,7 +216,9 @@ export const IMAGE_WORDING = {
     },
     composer: {
       label: 'From your picks · change for this image only',
-      none: 'None',
+      /** A picked setting sheet (2026-10-14). Model-drafted wording. */
+      placeLabel: 'Setting · from your picks, for this image only',
+      placeNone: 'None · this edition’s shorthand for the place, if the passage has one',
       starting: 'Techno vistas (the project’s starting style)',
       yourPick: 'your pick',
       added: 'Added to your prompt, and published with it:',
@@ -298,6 +317,12 @@ export const IMAGE_WORDING = {
     payWith: 'Pay in USDC or ETH on Base. It’s added to your balance once the payment confirms.',
     terms:
       'You’re paying for image generation on this site. Each Generate is charged when you press it, whatever comes back, including a blocked prompt or an image the safety checker drops. No refunds.',
+    /** DRAFT (coding agent, 2026-10-21), for the owner's reread with Terms 6a (docs/legal/credits-draft.md). Shown in
+     *  place of `terms` once IMAGES.prepaid.creditBack is on. */
+    termsCreditBack:
+      'You’re paying for image generation on this site. Each Generate is charged when you press it. If nothing comes back because the prompt check or the image model didn’t answer, it’s added back to your balance. A blocked prompt or an image the safety checker drops stays charged. Payments aren’t refunded as money.',
+    /** DRAFT (coding agent, 2026-10-21): after a failed Generate was credited back. */
+    creditedBack: 'Nothing was made, so it was added back to your balance.',
     pay: (usd: number, token: 'USDC' | 'ETH') => `Pay $${usd} in ${token}`,
     waiting: 'Waiting for the payment to confirm…',
     added: (usd: string) => `Added $${usd} to your balance.`,
@@ -332,6 +357,7 @@ export const IMAGE_WORDING_ROWS: { screen: string; where: string; text: string }
   { screen: 'Add an image · draft', where: 'src/components/image-composer.tsx', text: IMAGE_WORDING.draft.kept(24).replace('24', '{hours}') },
   { screen: 'Add an image · draft', where: 'src/components/image-composer.tsx', text: IMAGE_WORDING.draft.editPrompt },
   { screen: 'Add an image · draft', where: 'src/components/image-composer.tsx (action bar)', text: 'Generate again · {n} left' },
+  { screen: 'Add an image · sign in', where: 'src/components/image-composer.tsx (under Sign in with Farcaster, website only)', text: IMAGE_WORDING.signIn.farcasterNote(10).replace('10', '{per day}') },
   ...Object.entries(IMAGE_WORDING.prepaid as Record<string, unknown>).flatMap(([k, v]): { screen: string; where: string; text: string }[] =>
     typeof v === 'string' ? [{ screen: 'Wallet and prepaid images', where: `src/lib/images/wording.ts (prepaid.${k})`, text: v }] : typeof v === 'object' ? Object.entries(v as Record<string, string>).map(([c, t]) => ({ screen: 'Wallet and prepaid images', where: `src/lib/images/wording.ts (prepaid.${k}.${c})`, text: t })) : [],
   ),

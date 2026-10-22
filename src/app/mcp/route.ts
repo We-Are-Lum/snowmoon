@@ -10,6 +10,21 @@ import { AGENT_TOOLS, runTool } from '~/lib/agents/tools';
  * one the answer is 401 with the metadata's address, which is how a client knows to sign the person in.
  * The open, anonymous read API stays at /api/mcp. SWITCHED OFF (AGENTS.enabled).
  */
+/**
+ * A stuck call must fail fast, not hold the agent for Vercel's five minutes (owner, 2026-10-22, after eleven
+ * calls hung at 23:43–23:48 on 2026-10-21): the route stops at 60 s, and a tool that hasn't answered in
+ * TOOL_TIMEOUT_MS answers "took too long" instead. Each call is logged by tool name and time taken, never by
+ * what was asked or answered, so the next hang names its tool.
+ */
+export const maxDuration = 60;
+const TOOL_TIMEOUT_MS = 25_000;
+class ToolTimeout extends Error {}
+const withTimeout = <T,>(work: Promise<T>, ms: number) =>
+  new Promise<T>((resolve, reject) => {
+    const timer = setTimeout(() => reject(new ToolTimeout()), ms);
+    work.then((v) => { clearTimeout(timer); resolve(v); }, (e) => { clearTimeout(timer); reject(e); });
+  });
+
 type Msg = { jsonrpc?: string; id?: string | number | null; method?: string; params?: Record<string, unknown> };
 const PROTOCOLS = ['2025-11-25', '2025-06-18', '2025-03-26'];
 const headers = { 'Cache-Control': 'no-store' };
@@ -78,10 +93,23 @@ export async function POST(request: Request) {
       const name = typeof msg.params?.name === 'string' ? msg.params.name : '';
       const args = msg.params?.arguments ?? {};
       if (typeof args !== 'object' || Array.isArray(args) || args === null) return fail(msg.id, -32602, 'arguments must be an object');
+      const started = Date.now();
+      const writes = AGENT_TOOLS.find((t) => t.name === name)?.writes ?? false;
+      console.log('agent tool start', name);
+      const done = (outcome: string) => console.log('agent tool', name, outcome, `${Date.now() - started}ms`);
       try {
-        const out = (await runTool(agent, name, args as Record<string, unknown>)) as Record<string, unknown>;
+        const out = (await withTimeout(runTool(agent, name, args as Record<string, unknown>), TOOL_TIMEOUT_MS)) as Record<string, unknown>;
+        done('ok');
         return reply(msg.id, { content: [{ type: 'text', text: JSON.stringify(out) }], structuredContent: out, isError: false });
       } catch (e) {
+        if (e instanceof ToolTimeout) {
+          done('timeout');
+          const text = writes
+            ? 'That took too long on our side. It may still have been saved: check with list_my_work before trying again.'
+            : 'That took too long on our side. Try again in a moment.';
+          return reply(msg.id, { content: [{ type: 'text', text }], isError: true });
+        }
+        done(e instanceof ToolInputError ? 'input-error' : 'error');
         if (e instanceof ToolInputError) return reply(msg.id, { content: [{ type: 'text', text: e.message }], isError: true });
         console.error('agent tool failed', name, (e as { code?: string }).code ?? (e as Error)?.message ?? 'unknown');
         return reply(msg.id, { content: [{ type: 'text', text: 'Something went wrong on our side. Try again in a moment.' }], isError: true });

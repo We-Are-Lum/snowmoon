@@ -206,7 +206,7 @@ export async function scriptOf(person: number, a: unknown, v: unknown) {
 /** The re-record sheet: every line with a rewrite not yet recorded or a delivery note, by speaker, in film order. */
 function rerecordFrom(shots: ScriptShot[]) {
   const rows = shots.flatMap((s) =>
-    s.lines.filter((l) => l.rewrite || l.delivery.length).map((l) => ({ shot: s.id, n: s.n, cue: l.cue, time: l.time, speaker: l.speaker ?? '(no speaker)', line: l.rewrite?.text ?? l.text, original: l.rewrite ? l.text : null, rewrite: l.rewrite?.id ?? null, delivery: l.delivery.map((d) => d.text) })),
+    s.lines.filter((l) => l.rewrite || l.delivery.length).map((l) => ({ shot: s.id, n: s.n, cue: l.cue, time: l.time, speaker: l.speaker ?? '(no speaker)', line: l.rewrite?.text ?? l.text, original: l.rewrite ? l.text : null, rewrite: l.rewrite?.id ?? null, rewriteFiledBy: l.rewrite?.filedBy ?? null, delivery: l.delivery.map((d) => d.text), notes: l.delivery })),
   );
   const order = [...new Set(rows.map((r) => r.speaker))];
   return order.map((speaker) => ({ speaker, lines: rows.filter((r) => r.speaker === speaker) }));

@@ -150,6 +150,20 @@ export const AGENT_API = {
  * Agents that act for a person (owner, 2026-10-20; design docs/agents/design.md; DRAFT migration 0019).
  * Three ways in, one result: an "agent of @handle" whose drafts its person publishes. SWITCHED OFF.
  */
+/**
+ * Wallets that sign in as a Farcaster account (owner, 2026-10-22: "associate that wallet also with his Farcaster
+ * account too. Let him login both ways"): a sign-in with one of these addresses is that FID everywhere getPerson
+ * is used (images, consent, agents, You), not a wallet account of its own. Each one is the owner's to add, and
+ * only an address that the FID itself verified on Farcaster (checked when added). Lowercase addresses.
+ * A linked wallet's prepaid balance, if any, stays on its wallet account and isn't spent while it signs in as the FID.
+ */
+export const LINKED_WALLETS: Readonly<Record<string, number>> = {
+  // m.luisotravez.eth, verified by @luisotravez (FID 6852) on Farcaster since 2023-08-31; resolved three ways, all agreeing.
+  '0x003276c5c24cdaff1d804170ab5cbb914f51f78a': 6852,
+  // garance.eth, verified by @garance (FID 193912) on Farcaster; resolved three ways, all agreeing (owner, 2026-10-22).
+  '0x317a1ea96dc4b10c1ea60e3af59c472316d31303': 193912,
+};
+
 export const AGENTS = {
   /**
    * On, for the owner's account only (owner, 2026-10-20: "Ship agents-connect for my account only (FID 6786 and
@@ -158,7 +172,8 @@ export const AGENTS = {
    */
   enabled: true,
   people: {
-    fids: [6786] as readonly number[],
+    // 6852 is @luisotravez and 193912 is @garance (owner, 2026-10-22: Claude connector access; checked with Farcaster's API).
+    fids: [6786, 6852, 193912] as readonly number[],
     /**
      * Wallets (lowercase addresses) whose sign-in gets in. Empty for now (owner, 2026-10-20: "FID 6786 only for
      * now … I'll add my sign-in wallet later"). The payment address is not a sign-in wallet.
@@ -186,6 +201,8 @@ export const AGENTS = {
   linkDays: 90,
   /** Per agent, per UTC day (and a short-term brake). */
   limits: { drafts: 50, notes: 20, images: 50, imagesPerMinute: 5, readsPerMinute: 60 },
+  /** Higher daily counts for these people's agents (owner, 2026-10-21: "Raise my own agent's daily limits"); everyone else keeps `limits`. The per-minute brakes stay. */
+  limitsFor: { 6786: { drafts: 500, notes: 200, images: 150 } } as Record<number, { drafts: number; notes: number; images: number }>,
   /** All of one person's agents together, per UTC day. */
   perPersonImages: 150,
   /** Everyone's agents together, per UTC day: a brake. */
@@ -272,7 +289,8 @@ export const IMAGES = {
    * and kept a day per FID (studio.image_scores, migration 0010). If Neynar can't be reached, no one
    * outside the invited list may generate. Invited FIDs skip the lookup.
    */
-  invited: [6786] as readonly number[],
+  // 6852 is @luisotravez (owner, 2026-10-15).
+  invited: [6786, 6852] as readonly number[],
   /** The one place the threshold lives. */
   neynarMinScore: 0.7,
   /** How long a looked-up Neynar user value is kept before it is asked again. */
@@ -328,6 +346,13 @@ export const IMAGES = {
     maxAgeDays: 7,
     /** A wallet sign-in lasts this long. */
     sessionHours: 24,
+    /**
+     * Credit back a Generate that failed (the prompt check or the image model didn't answer), to the balance only
+     * (owner, 2026-10-21: "credit the balance for anything charged but not made"). OFF until migration 0022 is
+     * applied and Terms 6a is reread and changed in the same deploy (docs/legal/credits-draft.md): while off, the
+     * code never reads studio.wallet_credits and a failed Generate stays charged, as the Terms say today.
+     */
+    creditBack: false as boolean,
   },
   /** A draft's signed record is good for this long; after that, generate again. */
   ticketHours: 24,

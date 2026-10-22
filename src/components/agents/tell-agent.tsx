@@ -13,7 +13,7 @@ import { PublishedTextField } from '../publish-words';
  */
 const W = AGENT_WORDING.tell;
 
-export function TellAgent({ id, label, send, compact = false }: { id: string; label: string; send: (words: string, spoken: boolean) => Promise<string | null>; compact?: boolean }) {
+export function TellAgent({ id, label, send, compact = false, sendLabel = W.send, whenNote = W.when, sentNote = W.sent }: { id: string; label: string; send: (words: string, spoken: boolean) => Promise<string | null>; compact?: boolean; sendLabel?: string; whenNote?: string; sentNote?: string }) {
   const [words, setWords] = useState('');
   const [spoken, setSpoken] = useState(false);
   const [recording, setRecording] = useState(false);
@@ -68,21 +68,21 @@ export function TellAgent({ id, label, send, compact = false }: { id: string; la
     else {
       setWords('');
       setSpoken(false);
-      setNote(W.sent);
+      setNote(sentNote);
     }
     setBusy(false);
   };
   return (
     <div className={`tell-agent${compact ? ' tell-agent-compact' : ''}`}>
       <PublishedTextField id={id} label={label} value={words} onChange={(v) => setWords(v)} rows={compact ? 2 : 3} maxLength={2000} />
-      <p className="you-note">{W.when}</p>
+      <p className="you-note">{whenNote}</p>
       <div className="tell-buttons">
         {!canSpeak ? null : recording ? (
           <button type="button" className="ic-secondary tell-mic tell-mic-on" onClick={stop}>{W.stop}</button>
         ) : (
           <button type="button" className="ic-secondary tell-mic" disabled={busy} onClick={() => void start()}>{W.speak}</button>
         )}
-        <button type="button" className="ic-primary" disabled={busy || recording || !words.trim()} onClick={() => void go()}>{W.send}</button>
+        <button type="button" className="ic-primary" disabled={busy || recording || !words.trim()} onClick={() => void go()}>{sendLabel}</button>
       </div>
       {note && <p className="you-note" role="status">{note}</p>}
     </div>

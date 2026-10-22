@@ -48,6 +48,7 @@ export function AuthorizeConsent({ query, client, scopes, backHost }: { query: s
           <p>{W.can}</p>
           <ul>{scopes.map((s) => <li key={s}>{s}</li>)}</ul>
           <p>{W.cannot}</p>
+          <p>{W.pays}</p>
           <p className="you-note">{W.limits}</p>
           <p className="you-note">{W.responsible}</p>
           <p className="you-note">{W.back(backHost)}</p>

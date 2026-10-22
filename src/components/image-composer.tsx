@@ -43,22 +43,23 @@ type Status = {
   maxBlocks: number;
   rules: string;
   model: { name: string; licence: string; host: string };
-  styles: { id: string; name: string; text: string }[];
+  /** Every style an image can be made in (owner, 2026-10-14: always one): the starting style while offered, then the published ones. */
+  styles: { id: string; name: string; text: string; by: string | null; drafted: boolean }[];
   editModel?: { name: string; licence: string; host: string };
   /** Step 4: the person's own picks (private), offered for this image only. */
-  picks?: { styles: Chip[]; characters: Chip[] };
+  picks?: { styles: Chip[]; characters: Chip[]; places: Chip[] };
   /** Sheets as text: the characters this passage names and its scene's place, with the text Generate would add. */
   inPassage?: { passage: { chapter: number; start: number; end: number }; characters: SheetChip[]; place: SheetChip | null; maxCharacters: number };
 };
 type SheetChip = { slug: string; name: string; text: string };
 const SH = W.designs.sheets;
-type Chip = { versionId: string; kind: 'style' | 'character'; entity: string; title: string; by: string; versionNo: number; text: string; views: number; drafted: boolean };
+type Chip = { versionId: string; kind: 'style' | 'character' | 'location'; entity: string; title: string; by: string; versionNo: number; text: string; views: number; drafted: boolean };
 const D = W.designs.composer;
 /** The designs in a draft's signed record (signed, not secret: it is the person's own draft). */
 function ticketDesigns(ticket: string): Chip[] {
   try {
     const t = JSON.parse(new TextDecoder().decode(Uint8Array.from(atob(ticket.split('.')[0].replace(/-/g, '+').replace(/_/g, '/')), (ch) => ch.charCodeAt(0)))) as {
-      designs?: { versionId: string; kind: 'style' | 'character'; entity: string; title: string; by: string; versionNo: number; text: string; assist: unknown }[];
+      designs?: { versionId: string; kind: 'style' | 'character' | 'location'; entity: string; title: string; by: string; versionNo: number; text: string; assist: unknown }[];
     };
     return (t.designs ?? []).map((d) => ({ ...d, views: 0, drafted: Boolean(d.assist) }));
   } catch {
@@ -168,12 +169,16 @@ function Sheet({ initial, onClose }: { initial: AddImageDetail; onClose: () => v
   const signedIn = auth.kind === 'signed-in' || wallet !== null;
   const [range, setRange] = useState(initial);
   const [status, setStatus] = useState<Status | null>(null);
+  /** On the website, signed out, with wallet sign-in open: the wallet button comes first and is the solid one. */
+  const walletFirst = auth.kind === 'signed-out' && !auth.inApp && !!status?.walletSignIn;
   const [prompt, setPrompt] = useState('');
-  // The project's starting style is chosen unless the person picks another or None (owner, 2026-10-10:
-  // without it the model draws realistic pictures). undefined = not picked yet; a restored draft keeps its own.
+  // Always a style (owner, 2026-10-14; 2026-10-10: without one the model draws realistic pictures): the newest
+  // style pick, else the first offered. undefined = not chosen yet; a restored draft keeps its own.
   const [picked, setStyle] = useState<string | null | undefined>(undefined);
-  const style = picked === undefined ? (status?.styles[0]?.id ?? null) : picked;
+  const style = picked === undefined || picked === null ? (status?.styles[0]?.id ?? null) : picked;
   const [characters, setCharacters] = useState<string[]>([]);
+  // A picked setting sheet for this image (2026-10-14): replaces this edition's shorthand for the place.
+  const [placeSheet, setPlaceSheet] = useState<string | null>(null);
   const [reference, setReference] = useState(false);
   const [chipsFor, setChipsFor] = useState<string | null>(null);
   // "In this passage": the characters and place chosen for this image (all found, up to the limit, to start).
@@ -221,6 +226,7 @@ function Sheet({ initial, onClose }: { initial: AddImageDetail; onClose: () => v
       setPrompt(d.prompt);
       setStyle(d.style);
       setCharacters(d.characters ?? []);
+      setPlaceSheet(d.place ?? null);
       setReference(d.reference ?? false);
       setMadeWith({ style: d.style, characters: d.characters ?? [], reference: d.reference ?? false });
       setChipsFor(draftKey(range));
@@ -237,7 +243,11 @@ function Sheet({ initial, onClose }: { initial: AddImageDetail; onClose: () => v
     setChipsFor(key);
     // Every picked style is offered; the newest pick starts chosen, for this image only (decision 3).
     // With no picked style, the project's starting style stays chosen (main's default, 2026-10-10).
-    if (status.picks.styles[0]) setStyle(status.picks.styles[0].versionId);
+    const pickedStyle = status.picks.styles.find((c) => status.styles.some((s) => s.id === c.versionId));
+    if (pickedStyle) setStyle(pickedStyle.versionId);
+    // A picked setting sheet for the passage's place starts chosen.
+    const place = status.inPassage && sameRange(status.inPassage.passage, range) ? status.inPassage.place : null;
+    setPlaceSheet(place ? (status.picks.places.find((c) => c.entity.toLowerCase() === place.name.toLowerCase())?.versionId ?? null) : null);
     // A picked sheet is offered for a character the passage names (the same rule as "In this passage").
     const named = status.inPassage && sameRange(status.inPassage.passage, range) ? status.inPassage.characters.map((c) => c.name) : null;
     setCharacters(status.picks.characters.filter((c) => (named ? named.includes(c.entity) : mentions(passageText, c.entity))).map((c) => c.versionId));
@@ -285,14 +295,14 @@ function Sheet({ initial, onClose }: { initial: AddImageDetail; onClose: () => v
       const res = await authFetch('/api/images/generate', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ chapter: range.chapter, start: range.start, end: range.end, prompt, style, characters, reference: reference && withViews, sheets: chosenSheets }),
+        body: JSON.stringify({ chapter: range.chapter, start: range.start, end: range.end, prompt, style, characters, place: placeSheet, reference: reference && withViews, sheets: chosenSheets }),
       });
       const out = (await res.json().catch(() => ({}))) as { ticket?: string; image?: string; error?: string; left?: number };
       if (res.ok && out.ticket && out.image) {
         setDraft({ ticket: out.ticket, image: out.image });
         setMadeWith({ style, characters, reference: reference && withViews });
         setView('draft');
-        await saveDraft({ key: draftKey(range), ...range, prompt, style, characters, reference: reference && withViews, sheets: chosenSheets, ticket: out.ticket, image: out.image, savedAt: new Date().toISOString() });
+        await saveDraft({ key: draftKey(range), ...range, prompt, style, characters, place: placeSheet, reference: reference && withViews, sheets: chosenSheets, ticket: out.ticket, image: out.image, savedAt: new Date().toISOString() });
       } else setNote(out.error ?? 'Could not make the image');
     } catch {
       setNote('No connection. Try again.');
@@ -313,10 +323,11 @@ function Sheet({ initial, onClose }: { initial: AddImageDetail; onClose: () => v
   };
 
   const chosen = status?.styles.find((s) => s.id === style) ?? null;
-  const picks = status?.picks ?? { styles: [], characters: [] };
-  const styleChip = picks.styles.find((c) => c.versionId === style) ?? null;
+  const picks = status?.picks ?? { styles: [], characters: [], places: [] };
   const charChips = picks.characters.filter((c) => characters.includes(c.versionId));
-  const withViews = charChips.some((c) => c.views > 0);
+  const placeChip = picks.places.find((c) => c.versionId === placeSheet) ?? null;
+  const sheetChips = [...charChips, ...(placeChip ? [placeChip] : [])];
+  const withViews = sheetChips.some((c) => c.views > 0);
   const useEdit = reference && withViews && Boolean(status?.editModel);
   const shownModel = useEdit && status?.editModel ? status.editModel : status?.model;
   const made = madeWith ?? { style, characters, reference: useEdit };
@@ -386,8 +397,11 @@ function Sheet({ initial, onClose }: { initial: AddImageDetail; onClose: () => v
               ) : !signedIn ? (
                 <div className="ic-gate">
                   <p>Sign in to make an image.</p>
-                  <SignInButton />
-                  {auth.kind === 'signed-out' && !auth.inApp && status?.walletSignIn && <WalletSignInButton />}
+                  {/* On the website the wallet comes first and is the solid button, Farcaster second and outlined
+                      (owner, 2026-10-16 and 2026-10-21). In the Farcaster app there is no wallet button: Farcaster stays as it was. */}
+                  {walletFirst && <WalletSignInButton className="ic-primary" />}
+                  <SignInButton className={walletFirst ? 'ic-secondary' : undefined} />
+                  {auth.kind === 'signed-out' && !auth.inApp && <p className="ic-note">{W.signIn.farcasterNote(IMAGES.generationsPerDay)}</p>}
                 </div>
               ) : !status ? (
                 <p className="ic-note">…</p>
@@ -425,24 +439,17 @@ function Sheet({ initial, onClose }: { initial: AddImageDetail; onClose: () => v
                   <p className="ic-note">Your prompt is sent to Groq to be checked (through Vercel AI Gateway when Groq is busy) and to fal.ai to make the image. It becomes public only if you publish.</p>
                   {!status.invited && <p className="ic-note">At Generate, your Farcaster ID (and nothing else) is sent to Neynar to check your account&apos;s score, once a day.</p>}
 
+                  {/* Always a style (owner, 2026-10-14): no "None". */}
                   <fieldset className="ic-style">
                     <legend>Style</legend>
-                    <label>
-                      <input type="radio" name="ic-style" checked={style === null} onChange={() => setStyle(null)} /> {D.none}
-                    </label>
                     {status.styles.map((s) => (
                       <label key={s.id}>
-                        <input type="radio" name="ic-style" checked={style === s.id} onChange={() => setStyle(s.id)} /> {s.name} (the project&apos;s starting style)
+                        <input type="radio" name="ic-style" checked={style === s.id} onChange={() => setStyle(s.id)} /> {s.name}{' '}
+                        {s.by ? `· ${s.by}` : "(the project's starting style)"}
+                        {picks.styles.some((c) => c.versionId === s.id) && <span className="ic-chip-key"> · {D.yourPick}</span>}
                       </label>
                     ))}
-                    {picks.styles.map((c) => (
-                      <label key={c.versionId}>
-                        <input type="radio" name="ic-style" checked={style === c.versionId} onChange={() => setStyle(c.versionId)} /> {chipName(c)}{' '}
-                        <span className="ic-chip-key">· {D.yourPick}</span>
-                      </label>
-                    ))}
-                    {chosen && <p className="ic-style-text">Added to your prompt, and published with it (model-drafted): {chosen.text}</p>}
-                    {styleChip && <p className="ic-style-text">{styleChip.drafted ? D.addedDrafted : D.added} {styleChip.text}</p>}
+                    {chosen && <p className="ic-style-text">{chosen.drafted ? D.addedDrafted : D.added} {chosen.text}</p>}
                   </fieldset>
 
                   {picks.characters.length > 0 && (
@@ -463,17 +470,36 @@ function Sheet({ initial, onClose }: { initial: AddImageDetail; onClose: () => v
                           {D.added} {c.text}
                         </p>
                       ))}
-                      {withViews && status.editModel && (
-                        <label className="ic-reference">
-                          <input type="checkbox" checked={reference} onChange={(e) => setReference(e.target.checked)} />{' '}
-                          {D.reference(charChips.filter((c) => c.views > 0).map((c) => c.entity).join(', '))}
+                    </fieldset>
+                  )}
+                  {picks.places.length > 0 && (
+                    <fieldset className="ic-style ic-chars">
+                      <legend>{D.placeLabel}</legend>
+                      <label>
+                        <input type="radio" name="ic-place" checked={placeSheet === null} onChange={() => setPlaceSheet(null)} /> {D.placeNone}
+                      </label>
+                      {picks.places.map((c) => (
+                        <label key={c.versionId}>
+                          <input type="radio" name="ic-place" checked={placeSheet === c.versionId} onChange={() => setPlaceSheet(c.versionId)} />{' '}
+                          <span className="ic-chip-key">Setting</span> {chipName(c)}
                         </label>
+                      ))}
+                      {placeChip && (
+                        <p className="ic-style-text">
+                          {D.added} {placeChip.text}
+                        </p>
                       )}
                     </fieldset>
                   )}
+                  {withViews && status.editModel && (
+                    <label className="ic-reference">
+                      <input type="checkbox" checked={reference} onChange={(e) => setReference(e.target.checked)} />{' '}
+                      {D.reference(sheetChips.filter((c) => c.views > 0).map((c) => c.entity).join(', '))}
+                    </label>
+                  )}
                   {status.invited && (
                     <p className="ic-note">
-                      <Link href="/images/picks">{picks.styles.length || picks.characters.length ? D.changePicks : D.noPicks}</Link>
+                      <Link href="/images/picks">{picks.styles.length || picks.characters.length || picks.places.length ? D.changePicks : D.noPicks}</Link>
                     </p>
                   )}
 
@@ -517,7 +543,7 @@ function Sheet({ initial, onClose }: { initial: AddImageDetail; onClose: () => v
                 {W.draft.back}
               </button>
             )}
-            <button type="button" className="ic-primary ic-generate" onClick={generate} disabled={busy || !prompt.trim() || left <= 0}>
+            <button type="button" className="ic-primary ic-generate" onClick={generate} disabled={busy || !prompt.trim() || left <= 0 || !style}>
               {busy ? 'Making it…' : draft ? 'Generate again' : 'Generate'} · {count(left)}
             </button>
             <p className="ic-model">
@@ -528,7 +554,7 @@ function Sheet({ initial, onClose }: { initial: AddImageDetail; onClose: () => v
         {showDraft && draft && status?.consented && (
           <div className={`ic-bar ic-bar-two${previewing ? ' is-preview' : ''}`}>
             {!previewing && (
-              <button type="button" className="ic-secondary" onClick={generate} disabled={busy || !prompt.trim() || left <= 0}>
+              <button type="button" className="ic-secondary" onClick={generate} disabled={busy || !prompt.trim() || left <= 0 || !style}>
                 {busy ? 'Making it…' : 'Generate again'} · {status?.prepaid ? count(left) : W.draft.left(left)}
               </button>
             )}

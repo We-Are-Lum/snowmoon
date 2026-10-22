@@ -7,6 +7,7 @@ import { AGENT_WORDING } from '~/lib/agents/wording';
 import type { AgentRow } from '~/lib/agents/accounts';
 import type { NoteView, VersionView } from '~/lib/agents/pieces';
 import type { RequestView } from '~/lib/agents/requests';
+import type { SuggestionView } from '~/lib/agents/suggestions';
 import { TellAgent, sendRequest } from './tell-agent';
 import { PublishedTextField } from '../publish-words';
 import { AgentAddressField } from './agent-address-field';
@@ -108,12 +109,70 @@ function NoteRow({ n, title, onDone }: { n: NoteView; title: string; onDone: () 
 }
 
 function Asked({ r }: { r: RequestView }) {
-  const about = r.about && 'version' in r.about ? `on “${r.about.title}”` : r.about && 'moment' in r.about ? `on a moment (${r.about.shot})` : 'a new idea';
+  const about = r.about && 'version' in r.about ? `on “${r.about.title}”` : r.about && 'moment' in r.about ? (r.about.at ? `at ${r.about.at} in the film (${r.about.shot})` : `on a moment (${r.about.shot})`) : 'a new idea';
   return (
     <div className="request-row" data-request={r.id}>
       <p className="you-note">{r.kind === 'again' ? 'Try again' : r.kind === 'more' ? 'Say more' : r.kind === 'note' ? 'A note' : 'An idea'}, {about}{r.spoken ? ', spoken' : ''}</p>
       <p>{r.words}</p>
     </div>
+  );
+}
+
+const S = AGENT_WORDING.you;
+const whereOf = (x: SuggestionView) => [x.page, x.moment ? `moment ${x.moment}${x.at ? ` at ${x.at}` : ''}` : null].filter(Boolean).join(' · ');
+
+/**
+ * "Suggest an improvement" (owner, 2026-10-22), for the invited people: typed or spoken, to the owner only.
+ * The owner also sees everyone's here, with who said it and where they were.
+ */
+function Suggestions() {
+  const [data, setData] = useState<{ mine: SuggestionView[]; all?: (SuggestionView & { who: string })[] } | null>(null);
+  const load = useCallback(async () => {
+    const r = await authFetch('/api/suggestions').catch(() => null);
+    if (r?.ok) setData(await r.json());
+  }, []);
+  useEffect(() => {
+    void load();
+  }, [load]);
+  if (!data) return null;
+  return (
+    <>
+      <section className="you-section" aria-labelledby="you-suggest">
+        <h2 id="you-suggest">{S.suggest}</h2>
+        <TellAgent id="you-suggest-box" label={S.suggestLabel} sendLabel={S.suggestSend} whenNote={S.suggestNote} sentNote={S.suggestSent} send={async (words, spoken) => {
+          const r = await authFetch('/api/suggestions', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ words, spoken, page: '/you' }) }).catch(() => null);
+          if (r?.ok) {
+            void load();
+            return null;
+          }
+          return ((await r?.json().catch(() => ({}))) as { error?: string }).error ?? T.failed;
+        }} />
+        {data.mine.length > 0 && (
+          <details className="you-suggested">
+            <summary>{S.yourSuggestions} ({data.mine.length})</summary>
+            {data.mine.map((x) => (
+              <div className="request-row" key={x.id} data-suggestion={x.id}>
+                <p className="you-note">{when(x.createdAt)}{x.spoken ? ', spoken' : ''}{x.filedBy ? `, ${S.passedOnBy(x.filedBy)}` : ''}</p>
+                <p>{x.words}</p>
+              </div>
+            ))}
+          </details>
+        )}
+      </section>
+      {data.all && (
+        <section className="you-section" aria-labelledby="you-suggestions-all">
+          <h2 id="you-suggestions-all">{S.allSuggestions}</h2>
+          <p className="you-note">{S.allSuggestionsNote}</p>
+          {data.all.length === 0 && <p className="you-note">None yet.</p>}
+          {data.all.map((x) => (
+            <div className="request-row" key={x.id} data-suggestion-all={x.id}>
+              <p className="you-note"><strong>{x.who}</strong>, {when(x.createdAt)}{x.spoken ? ', spoken' : ''}{x.filedBy ? `, ${S.passedOnBy(x.filedBy)}` : ''}{whereOf(x) ? ` · ${whereOf(x)}` : ''}</p>
+              <p>{x.words}</p>
+            </div>
+          ))}
+        </section>
+      )}
+    </>
   );
 }
 
@@ -211,6 +270,7 @@ export function AgentsOnYou() {
           ))}
         </section>
       )}
+      <Suggestions />
       <section className="you-section" aria-labelledby="you-agents">
         <h2 id="you-agents">{W.agents}</h2>
         <p className="you-note">{W.agentsNote}</p>

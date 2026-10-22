@@ -4,12 +4,13 @@ import path from 'node:path';
 import { TOOLS as READ_TOOLS, ToolInputError } from '../agent/tools';
 import { editorData } from '../agent/data';
 import { AGENTS } from '../config';
-import { countOk, sql, type Agent, type Counted, type Scope } from './core';
+import { countOk, dailyLimits, sql, type Agent, type Counted, type Scope } from './core';
 import { revoke, agentLabel } from './accounts';
 import { checkLines, checkPlain, checkText, storyWordsAllowed } from './filter';
 import { bringIn, imagesOpen, ScanMatch, type Declared } from './images';
 import { addNote, draftPiece, feedbackFor, notesOn, pieceVersions, piecesOf, revise, versionById, visibleTo, type Answering, type Kind } from './pieces';
 import { openRequests, personWords } from './requests';
+import { addSuggestion, suggestionsOf } from './suggestions';
 import { addDirection, directionOf, findLine, rewriteLine } from './direction';
 import { changeTiming, listTakes, logGap, markSpeaking, requestVideo, swapTake, tryFrame, frameEstimate, videoEstimate } from './edits';
 
@@ -135,7 +136,7 @@ const WRITE: AgentTool[] = [
     run: async (agent, args) => {
       only(args, []);
       const who = await agentLabel(agent.person, agent.name);
-      return { you: who.label, person: `@${who.short}`, scopes: agent.scopes, ...(agent.spendCapUsd !== null ? { spend_cap_usd: agent.spendCapUsd, spend_note: 'Your key\'s cap for all the spending your person approves on your drafts.' } : {}), limits_per_day: AGENTS.limits, story_words: storyWordsAllowed(agent.person) ? 'allowed (test switch), labelled' : 'never yours: place your person\'s own words (exactly as they said them) or the book\'s; if a line is missing, leave it out and ask', how_to_work: 'Call read_requests: your person\'s ideas and notes are your to-do list. Answer each with a draft (answering: its id). They react with keep, try again, or say more; those come back as requests. To edit their own scene, use list_takes, try_frame, swap_take, change_timing, mark_speaking or request_video_test; anything with a cost waits for their approval. If no tool can do what they asked, call log_gap.', bringing_in_images: imagesOpen() ? 'open' : 'not open yet', rule: 'You draft; your person publishes. Nothing you make is public until they do.' };
+      return { you: who.label, person: `@${who.short}`, scopes: agent.scopes, ...(agent.spendCapUsd !== null ? { spend_cap_usd: agent.spendCapUsd, spend_note: 'Your key\'s cap for all the spending your person approves on your drafts.' } : {}), limits_per_day: dailyLimits(agent.person), story_words: storyWordsAllowed(agent.person) ? 'allowed (test switch), labelled' : 'never yours: place your person\'s own words (exactly as they said them) or the book\'s; if a line is missing, leave it out and ask', how_to_work: 'Call read_requests: your person\'s ideas and notes are your to-do list. Answer each with a draft (answering: its id). They react with keep, try again, or say more; those come back as requests. To edit their own scene, use list_takes, try_frame, swap_take, change_timing, mark_speaking or request_video_test; anything with a cost waits for their approval. If no tool can do what they asked, call log_gap.', bringing_in_images: imagesOpen() ? 'open' : 'not open yet', rule: 'You draft; your person publishes. Nothing you make is public until they do.' };
     },
   },
   {
@@ -160,7 +161,7 @@ const WRITE: AgentTool[] = [
   },
   {
     name: 'read_requests', title: 'Read my person\'s requests', scope: 'read', writes: false,
-    description: 'Your to-do list: what your person typed or said to you and you haven\'t answered yet, oldest first. Each is an idea, a note on a frame, moment or draft, "try again" (they discarded your draft), or "say more". Their words are theirs: use them as they are, never rewrite them as story lines. Answer each with a draft (answering: its id).',
+    description: 'Your to-do list: what your person typed or said to you and you haven\'t answered yet, oldest first. Each is an idea, a note on a frame, moment or draft, a note made by pausing the film (with the time, the shot and the line spoken there), "try again" (they discarded your draft), or "say more". Their words are theirs: use them as they are, never rewrite them as story lines. Answer each with a draft (answering: its id).',
     inputSchema: { type: 'object', properties: {}, additionalProperties: false },
     run: async (agent, args) => {
       only(args, []);
@@ -394,6 +395,25 @@ const EDITS: AgentTool[] = [
     description: 'When your person asks for something none of your tools can do, record it: what they asked (their words) and what was missing. It shows on their You page and becomes the build list. Use it instead of guessing or working around a missing tool.',
     inputSchema: { type: 'object', properties: { asked: { type: 'string' }, missing: { type: 'string' } }, required: ['asked', 'missing'], additionalProperties: false },
     run: async (agent, args) => logGap(agent, args),
+  },
+  {
+    name: 'suggest_improvement', title: 'Pass on a suggestion for the site', scope: 'read', writes: true, counts: 'notes',
+    description: 'When your person says how this site could be better (something confusing, missing or broken, or an idea for how it works), pass it to the site\'s owner in their words, exactly as they gave them (never reworded, summarised or added to). Say where they were if you know: the page (a path like /you) and, for the film, the moment and the time. Only the owner reads these, with your person\'s name; it is never published. For something your tools can\'t do, use log_gap instead.',
+    inputSchema: { type: 'object', properties: { text: { type: 'string', description: 'Your person\'s words, exactly as they gave them.' }, page: { type: 'string', description: 'The path of the page they were on, e.g. /you.' }, moment: { type: 'string', description: 'A moment "<adaptation>/<version>/<shot>", if it is about one.' }, seconds: { type: 'number', description: 'The time in that version\'s video, in seconds.' } }, required: ['text'], additionalProperties: false },
+    run: async (agent, args) => {
+      only(args, ['text', 'page', 'moment', 'seconds']);
+      const id = await addSuggestion(agent.person, args.text, false, { page: args.page, moment: args.moment, seconds: args.seconds }, agent);
+      return { suggestion: id, shown: 'to the site\'s owner only, with your person\'s name and that you passed it on; never published' };
+    },
+  },
+  {
+    name: 'read_my_suggestions', title: 'Read my person\'s suggestions for the site', scope: 'read', writes: false,
+    description: 'What your person has suggested to the site\'s owner (by themselves or through you), newest first. Only your own person\'s.',
+    inputSchema: { type: 'object', properties: {}, additionalProperties: false },
+    run: async (agent, args) => {
+      only(args, []);
+      return { suggestions: await suggestionsOf(agent.person) };
+    },
   },
 ];
 

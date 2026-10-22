@@ -57,7 +57,7 @@ export interface TicketSheets {
 
 export interface TicketDesign {
   versionId: string;
-  kind: 'style' | 'character';
+  kind: 'style' | 'character' | 'location';
   /** The style's or the character's name (the entity). */
   entity: string;
   title: string;
@@ -96,6 +96,8 @@ export interface SampleTicket {
   costUsd: number;
   /** For side and back: the front view it was made from. */
   references?: { sha256: string }[];
+  /** For a sheet's views: the published style version whose text is in the prompt. */
+  style?: { versionId: string; title: string; text: string };
   guard: { model: string; verdict: 'ok' };
   at: string;
 }

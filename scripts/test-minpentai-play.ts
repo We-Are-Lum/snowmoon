@@ -14,7 +14,11 @@
  *     result, the ladder progress, and the screen's words and squares;
  *   - free play: placing and erasing for each side, rocks, stepping, playing, the board options,
  *     the link (written and read back), "my last match";
- *   - full screen on a phone and in the Farcaster frame: the upright board and aiming arrows.
+ *   - full screen on a phone and in the Farcaster frame: the upright board and aiming arrows;
+ *   - the pieces are drawn with Learn's shapes, not Design's squares (owner, 2026-10-21: "Play uses Learn's
+ *     shapes"): every square Design paints as a tower, square or glider carries that piece (side, the way a
+ *     glider points on screen, a cracked square, a new placement) for play-board.tsx, which paints the square
+ *     empty and draws the piece with Learn's drawPiece (learn-draw.ts): a ring, an arrowhead, a tinted square.
  *
  * The match's seed is Design's (the clock, mod 1e6), so both sides draw the same new rule.
  *
@@ -26,6 +30,9 @@ import vm from 'node:vm';
 import { isDeepStrictEqual } from 'node:util';
 import * as G from '../src/lib/minpentai/play-game/game';
 import { PlayController, ruleNote, type Env, type PlayView } from '../src/lib/minpentai/play-game/controller';
+import type { Cell } from '../src/lib/minpentai/play-game/board';
+import { look } from '../src/app/minpentai/play-board';
+import { drawPiece } from '../src/app/minpentai/learn-draw';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const html = readFileSync(path.join(ROOT, 'docs/design/minpentai-play-prototype.dc.html'), 'utf8');
@@ -200,6 +207,41 @@ function compareView(dv: Any, pv: PlayView, what: string) {
     toast: v.toast,
   });
   eq(pick(dv), pick(pv), what);
+  comparePieces(dv.bd.cells, pv.bd.cells, what);
+}
+/** The piece Design's square shows, read from how Design paints it (its colours, ring, border and arrow). */
+const SIDE: Record<string, G.Side> = { [G.COL.C]: 'C', [G.COL.A]: 'A' };
+const DIR: Record<string, [number, number]> = Object.fromEntries(Object.entries(G.AR).map(([k, t]) => [t, k.split(',').map(Number) as [number, number]]));
+const NEW = '0 0 0 1px #E7E4DD';
+function designPiece(c: Any) {
+  const mine = String(c.sh).endsWith(NEW) || undefined;
+  if (SIDE[c.bg] && String(c.sh).startsWith('inset')) return { k: 'tower', side: SIDE[c.bg], mine };
+  const sq = /^2px (solid|dashed) (#\w+)$/.exec(c.bd);
+  if (sq && c.bg === '#16181E') return { k: 'square', side: SIDE[sq[2]], hp: sq[1] === 'solid' ? 2 : 1, mine };
+  if (DIR[c.t] && SIDE[c.fg] && c.bd !== '1px dashed #E7E4DD') return { k: 'glider', side: SIDE[c.fg], dir: DIR[c.t], mine };
+  return undefined;
+}
+function comparePieces(dc: Any[], pc: Cell[], what: string) {
+  eq(dc.map(designPiece), pc.map((c) => c.pc), `${what}: the pieces, for Learn's shapes`);
+  // Painted: a piece's square is empty (no Design fill, ring, border or arrow text) for its shape.
+  const wrong = pc.filter((c) => c.pc).map((c) => look(c)).filter((st) => SIDE[String(st.background)] || st.border || st.color || (st.boxShadow !== 'none' && st.boxShadow !== NEW));
+  eq(wrong.length, 0, `${what}: pieces painted as Design's squares`);
+}
+
+/* ---------- Learn's shapes: what drawPiece draws, at Learn's 52 px square and at Play's sizes ---------- */
+{
+  for (const cp of [52, 24, 13]) {
+    const rec = (k: Parameters<typeof drawPiece>[1], o: Parameters<typeof drawPiece>[6] = {}) => {
+      const calls: string[] = [];
+      const g = new Proxy({}, { get: (_t, n) => (typeof n === 'string' && !['fillStyle', 'strokeStyle', 'lineWidth', 'globalAlpha'].includes(n) ? (...a: unknown[]) => { calls.push(n); void a; } : undefined), set: () => true });
+      drawPiece(g as CanvasRenderingContext2D, k, cp / 2, cp / 2, cp, G.COL.C, o);
+      return calls.filter((n) => !['save', 'restore', 'translate', 'scale'].includes(n)).join(' ');
+    };
+    eq(rec('tower'), 'beginPath arc fill beginPath arc fill fillRect', `drawPiece at ${cp}px: a tower is a ring with a dot`);
+    eq(rec('glider', { dx: 1, dy: -1 }), 'beginPath moveTo lineTo lineTo lineTo closePath fill', `drawPiece at ${cp}px: a glider is an arrowhead`);
+    eq(rec('square', { hp: 2 }), 'fillRect strokeRect', `drawPiece at ${cp}px: a square is a tinted square`);
+    eq(rec('square', { hp: 1 }), 'fillRect strokeRect beginPath moveTo lineTo lineTo lineTo stroke', `drawPiece at ${cp}px: a hit square is cracked`);
+  }
 }
 function compareMatch(dc: Any, pc: PlayController, what: string) {
   const dm = dc.m, pm = pc.m!;
@@ -339,4 +381,4 @@ for (const dev of ['phone', 'frame'] as const) {
 }
 
 if (failures.length) report();
-console.log(`play: ${checks} checks, all identical to Design's mockup (${matchesPlayed} matches, practice and every rung, every new rule)`);
+console.log(`play: ${checks} checks, all identical to Design's mockup (${matchesPlayed} matches, practice and every rung, every new rule); pieces drawn with Learn's shapes`);

@@ -491,7 +491,8 @@ const DESIGN_IMAGE_FILES = [
   'src/components/design-index.tsx',
   'src/components/pictures-latest.tsx',
   'src/app/images/designs/[id]/page.tsx',
-  'src/app/images/designs/character/[slug]/page.tsx',
+  // A character's or a place's sheet rows (2026-10-14: moved out of the character page).
+  'src/components/sheet-list.tsx',
   'src/components/design-form.tsx',
   'src/components/my-picks.tsx',
   'src/components/moderate-queue.tsx',
@@ -542,6 +543,10 @@ add({
     const figures = [...ch1.matchAll(/<figure class="seed-image"[\s\S]*?<\/figure>/g)].map((m) => m[0]);
     if (!figures.length) problems.push('chapter 1: no seeded images found to check');
     figures.forEach((f, i) => problems.push(...aiLabelProblems(`chapter 1 image ${i + 1}`, f, 'image')));
+    // Beside the book's text, "not by the author" is shown, not only hidden, once per page (owner, 2026-10-15).
+    const shown = [...ch1.matchAll(/<span class="ai-not-author">([\s\S]*?)<\/span>/g)].map((m) => htmlText(m[1]));
+    if (shown.length !== 1 || !NOT_AUTHOR.test(shown[0] ?? '')) problems.push(`chapter 1: "not by the author" is shown ${shown.length} times beside the pictures, want once`);
+    if (shown.length && !figures[0]?.includes('class="ai-not-author"')) problems.push('chapter 1: "not by the author" is not beside the first picture');
     const credit = ch1.match(/<p class="[^"]*\bnarration-credit\b[^"]*">[\s\S]*?<\/p>/)?.[0] ?? '';
     problems.push(...aiLabelProblems('chapter 1 narration credit', credit, 'voice'));
     if (!/Synthetic narration/.test(aiLabels(credit).map((l) => l.hidden).join(' '))) problems.push('chapter 1: the narration credit does not say "Synthetic narration"');
@@ -575,7 +580,11 @@ add({
     for (const r of readers as { file: string; text: string }[]) {
       if (!/<AiLabel\b[\s\S]*?\bkind="image"[\s\S]*?\btext=\{AI_LABEL\.(image|imageBy)\b/.test(r.text)) problems.push(`${r.file}: a reader's image is shown without the AI label`);
     }
+    // A design screen says it in words, or uses AiTag ("AI ⓘ", owner 2026-10-15), whose own words are checked here.
+    const tag = code('src/components/ai-tag.tsx');
+    if (!AI_GENERATED.test(tag) || !NOT_AUTHOR.test(tag)) problems.push('src/components/ai-tag.tsx: the AI tag does not say "AI-generated" and "not by the author"');
     for (const r of designs as { file: string; text: string }[]) {
+      if (/<AiTag\b/.test(r.text)) continue;
       if (!AI_GENERATED.test(r.text)) problems.push(`${r.file}: a style's sample or a sheet's view is shown without "AI-generated"`);
       if (!NOT_AUTHOR.test(r.text)) problems.push(`${r.file}: a style's sample or a sheet's view is shown without "not by the author"`);
     }
@@ -592,6 +601,7 @@ add({
     c.sheets.push({ what: 'planted', whose: 'The project made it.' });
     c.readers[0].text = c.readers[0].text.replace(/<AiLabel\b/g, '<Caption');
     c.card = c.card.replace(/AI[- ]generated/gi, 'picture');
+    c.ch1 = c.ch1.replace(/<span class="ai-not-author">[\s\S]*?<\/span>/g, '');
     c.home = c.home.replace(/class="home-feed-empty"/g, 'class="home-feed-x"').replace(/class="ai-label"/g, 'class="by-line"');
   },
 });
@@ -1891,6 +1901,48 @@ add({
       const s = c.screens.find((x: { html: string }) => x.html.includes(WORD_SPAN(c.words[k])));
       if (s) s.html = blankWord(s.html, c.words[k]);
     }
+  },
+});
+
+add({
+  id: 'P8g',
+  principle: 8,
+  name: 'the Minpentai kit\'s rules table (/minpentai/build, rules.json) cites real blocks with their words verbatim, marks every other rule invented with where it is in the code, lists all 152 passages, shows chapters 2–14 and keeps chapters 15 on in a closed Spoilers section',
+  load: async () => {
+    const { KIT_RULES } = await import('../src/lib/minpentai/kit-rules');
+    const { findPassages } = await import('../src/lib/minpentai/kit');
+    const book: Record<number, { idx: number; kind: string; content: string }[]> = {};
+    for (let n = 1; n <= 32; n++) book[n] = json(`content/snowmoon/text/chapter-${n}.json`).blocks;
+    const passages = findPassages(book, read('docs/minpentai-rules.md'), JSON.stringify(LEARN_TEXT));
+    const files: Record<string, string | undefined> = {};
+    for (const r of KIT_RULES) for (const c of r.code ?? []) files[c.file] = existsSync(path.join(ROOT, c.file)) ? read(c.file) : undefined;
+    const published = json('public/minpentai/rules.json');
+    return { rules: JSON.parse(JSON.stringify(KIT_RULES)), book, passages, files, published, page: code('src/app/minpentai/build/page.tsx') };
+  },
+  run: async ({ rules, book, passages, files, published, page }) => {
+    const { tableProblems, passageProblems } = await import('../src/lib/minpentai/kit');
+    const problems = [...passageProblems(passages), ...tableProblems(rules, book, passages, files)];
+    // The published file says the same as the table and the passage list.
+    if (JSON.stringify(published.rules.map((r: { id: string; source: string; cites: unknown }) => [r.id, r.source, r.cites])) !== JSON.stringify(rules.map((r: { id: string; source: string; cites?: unknown }) => [r.id, r.source, r.cites ?? []])))
+      problems.push('public/minpentai/rules.json is stale: run npx tsx scripts/build-minpentai-kit.ts');
+    if (JSON.stringify(published.passages.map((p: { block: string; shownOnPage: boolean }) => [p.block, p.shownOnPage])) !== JSON.stringify(passages.map((p: { block: string; shown: boolean }) => [p.block, p.shown])))
+      problems.push('public/minpentai/rules.json lists other passages than the book gives');
+    // Shown: exactly every passage of chapters 2–14; Spoilers: exactly chapters 15 on (owner, 2026-10-20).
+    for (const p of passages as { block: string; chapter: number; shown: boolean }[]) if (p.shown !== (p.chapter >= 2 && p.chapter <= 14)) problems.push(`${p.block}: ${p.shown ? 'shown' : 'under Spoilers'}, but chapters 2–14 are shown and 15 on are under Spoilers`);
+    // The page: Book, Invented and Draft labels, the not-affiliated line, and the Spoilers section closed by default.
+    if (!/<MinpentaiTags[\s\S]*?tags=\{\['book', 'rules', 'draft'\]\}/.test(page)) problems.push('/minpentai/build: not labelled Book, Invented and Draft');
+    if (!/NOT AFFILIATED WITH THE AUTHOR/.test(page)) problems.push('/minpentai/build: no "not affiliated with the author" line');
+    const spoilers = page.match(/<details className="mp-kit-spoilers"[^>]*>/)?.[0];
+    if (!spoilers) problems.push('/minpentai/build: no Spoilers section');
+    else if (/\bopen\b/.test(spoilers)) problems.push('/minpentai/build: the Spoilers section is open by default');
+    return problems;
+  },
+  plant: (c) => {
+    const r = c.rules.find((x: { cites?: { quote?: string }[] }) => x.cites?.some((q) => q.quote));
+    const q = r.cites.find((x: { quote?: string }) => x.quote);
+    q.quote = q.quote.replace(/\b(\w+)\b/, '$1s');
+    c.passages.find((p: { chapter: number }) => p.chapter >= 15)!.shown = true;
+    c.page = c.page.replace('<details className="mp-kit-spoilers">', '<details className="mp-kit-spoilers" open>');
   },
 });
 

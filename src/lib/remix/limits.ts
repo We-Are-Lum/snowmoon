@@ -39,7 +39,7 @@ export async function freeSpendToday(sql: Sql): Promise<number> {
   return t.usd;
 }
 
-export async function reserve(sql: Sql, person: number, spend: Spend): Promise<{ ok: true; left: number } | { ok: false; refusal: Refusal }> {
+export async function reserve(sql: Sql, person: number, spend: Spend): Promise<{ ok: true; left: number; debitId?: number } | { ok: false; refusal: Refusal }> {
   return sql.begin(async (tx) => {
     await tx`select pg_advisory_xact_lock(hashtext('snowmoon.remix.spend'))`;
     await tx`select pg_advisory_xact_lock(hashtext('snowmoon.remix.person'), ${person}::int)`;
@@ -50,9 +50,9 @@ export async function reserve(sql: Sql, person: number, spend: Spend): Promise<{
       if (balance < price) return { ok: false as const, refusal: 'balance' as const };
       const [paid] = await tx`select coalesce(sum(cost_usd), 0)::float8 as usd from studio.remix_costs where day = ${tx.unsafe(TODAY)} and funded = 'prepaid'`;
       if (paid.usd + spend.reserveUsd > IMAGES.prepaid.dailyCapUsd) return { ok: false as const, refusal: 'prepaid-spend' as const };
-      await debit(t, -person, price);
+      const debitId = await debit(t, -person, price);
       await addCost(t, 'prepaid', 'reserved', spend.model.id, '', '', 1, spend.reserveUsd);
-      return { ok: true as const, left: Math.floor((balance - price) / price) };
+      return { ok: true as const, left: Math.floor((balance - price) / price), debitId };
     }
     if (!remixFreeOn()) return { ok: false as const, refusal: 'free-off' as const };
     const left = await generationsLeft(t, person, spend.reserveUsd);

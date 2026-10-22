@@ -3,7 +3,7 @@ import { agentsOn } from '~/lib/agents/core';
 import { OAuthError, registerClient } from '~/lib/agents/oauth';
 import { rateOk } from '~/lib/agent/rate';
 
-/** Dynamic Client Registration (RFC 7591): public clients only, at the open read API's rate per caller. */
+/** Dynamic Client Registration (RFC 7591): public or confidential clients (a secret shown once), at the open read API's rate per caller. */
 export async function POST(request: Request) {
   if (!agentsOn()) return new NextResponse('Not found', { status: 404 });
   const rate = await rateOk(request).catch(() => ({ ok: false as const, status: 503 as const }));

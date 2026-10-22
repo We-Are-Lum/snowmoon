@@ -2,7 +2,8 @@
  * Design's board(): what each square of the Play board shows (docs/design/
  * minpentai-play-prototype.dc.html, script lines 91–117), as data the page draws. Colours are
  * Design's board colours; the page draws each cell as a square of `cs` pixels. Any board size: the
- * match's engine (Play's 15 x 10 when none is given) says how wide and tall.
+ * match's engine (Play's 15 x 10 when none is given) says how wide and tall. `pc` says which piece stands
+ * there, so the page draws it with Learn's shapes (owner, 2026-10-21: "Play uses Learn's shapes"): play-board.tsx.
  */
 import { AR, COL, D4, ROT, type Placement, type Side, type World } from './game';
 import type { Engine } from '../versions/engine';
@@ -23,7 +24,11 @@ export interface Cell {
   aim?: [number, number];
   /** For people who can't see the board: what is here. */
   label: string;
+  /** The piece here, drawn with Learn's shapes: kind, side, the way a glider points on screen (turned with an
+   *  upright board), a square's hits left (1 is cracked), and whether it is the visitor's new placement. */
+  pc?: CellPiece;
 }
+export interface CellPiece { k: 'tower' | 'glider' | 'square'; side: Side; dir?: [number, number]; hp?: number; mine?: boolean; /** Out of sight: drawn dimmed where it was last seen. */ dim?: boolean }
 export interface BoardOpts {
   w: World;
   /** The match's engine, for its board's size; Play's when absent. */
@@ -57,7 +62,7 @@ export function board(o: BoardOpts): BoardView {
   (o.pend || []).forEach((p) => (pAt[K(p.x, p.y)] = p));
   const fl = new Set(o.flash ? w.flash : []);
   if (o.aim) (o.dirs || D4).forEach(([dx, dy]) => { const x = o.aim!.x + dx, y = o.aim!.y + dy; if (inb(x, y)) am[K(x, y)] = [dx, dy]; });
-  const rot = (t: string) => (o.portrait ? ROT[t] || t : t), fz = (f: number) => Math.round(cs * f) + 'px', ring = `inset 0 0 0 ${Math.round(cs * 0.2)}px #0E0F13`, pr = '0 0 0 1px #E7E4DD';
+  const rot = (t: string) => (o.portrait ? ROT[t] || t : t), turn = (dx: number, dy: number): [number, number] => (o.portrait ? [dy, -dx] : [dx, dy]), fz = (f: number) => Math.round(cs * f) + 'px', ring = `inset 0 0 0 ${Math.round(cs * 0.2)}px #0E0F13`, pr = '0 0 0 1px #E7E4DD';
   const one = (x: number, y: number): Cell => {
     const k = K(x, y);
     const c: Cell = { bg: '#0E0F13', bd: '0', sh: 'none', fg: '#E7E4DD', t: '', fs: fz(0.58), x, y, label: 'empty' };
@@ -65,17 +70,17 @@ export function board(o: BoardOpts): BoardView {
     if (w.rock[k]) { c.bg = '#3A3B42'; c.label = 'rock'; return c; }
     // An opponent's tower out of sight is drawn dimmed where it was last seen (from the start: its
     // starting square), and moves only when seen again (owner, 2026-10-21, after a phone test).
-    if (vis && !vis.has(k)) { c.bg = '#050507'; c.label = 'dark'; if (o.ls && o.ls[k] !== undefined) { c.bg = LAST_SEEN; c.sh = ring; c.label = `Amber tower last seen at step ${o.ls[k]}`; } return c; }
+    if (vis && !vis.has(k)) { c.bg = '#050507'; c.label = 'dark'; if (o.ls && o.ls[k] !== undefined) { c.bg = LAST_SEEN; c.sh = ring; c.label = `Amber tower last seen at step ${o.ls[k]}`; c.pc = { k: 'tower', side: 'A', dim: true }; } return c; }
     if (fl.has(k)) { c.bg = '#F4F2ED'; c.label = 'hit'; return c; }
     const t = w.tw[k], q = w.sq[k], g = glAt[k], p = pAt[k];
-    if (t) { c.bg = COL[t]; c.sh = ring; c.label = `${NAME[t]} tower`; }
-    else if (q) { c.bd = `2px ${q.hp > 1 ? 'solid' : 'dashed'} ${COL[q.o]}`; c.bg = '#16181E'; c.label = `${NAME[q.o]} square${q.hp > 1 ? '' : ', cracked'}`; }
-    else if (g) { c.fg = COL[g.o]; c.t = rot(AR[g.dx + ',' + g.dy]); c.label = `${NAME[g.o]} glider flying ${DIRW[g.dx + ',' + g.dy]}`; }
+    if (t) { c.bg = COL[t]; c.sh = ring; c.label = `${NAME[t]} tower`; c.pc = { k: 'tower', side: t }; }
+    else if (q) { c.bd = `2px ${q.hp > 1 ? 'solid' : 'dashed'} ${COL[q.o]}`; c.bg = '#16181E'; c.label = `${NAME[q.o]} square${q.hp > 1 ? '' : ', cracked'}`; c.pc = { k: 'square', side: q.o, hp: q.hp > 1 ? 2 : 1 }; }
+    else if (g) { c.fg = COL[g.o]; c.t = rot(AR[g.dx + ',' + g.dy]); c.label = `${NAME[g.o]} glider flying ${DIRW[g.dx + ',' + g.dy]}`; c.pc = { k: 'glider', side: g.o, dir: turn(g.dx, g.dy) }; }
     else if (p) {
-      const col = COL[p.o || 'C'];
-      if (p.t === 't') { c.bg = col; c.sh = ring + ',' + pr; c.label = 'your new tower'; }
-      else if (p.t === 's') { c.bd = '2px solid ' + col; c.bg = '#16181E'; c.sh = pr; c.label = 'your new square'; }
-      else { c.fg = col; c.t = rot(AR[p.dx + ',' + p.dy]); c.sh = pr; c.bg = '#14272C'; c.label = `your new glider, flying ${DIRW[p.dx + ',' + p.dy]}`; }
+      const side = p.o || 'C', col = COL[side];
+      if (p.t === 't') { c.bg = col; c.sh = ring + ',' + pr; c.label = 'your new tower'; c.pc = { k: 'tower', side, mine: true }; }
+      else if (p.t === 's') { c.bd = '2px solid ' + col; c.bg = '#16181E'; c.sh = pr; c.label = 'your new square'; c.pc = { k: 'square', side, hp: 2, mine: true }; }
+      else { c.fg = col; c.t = rot(AR[p.dx + ',' + p.dy]); c.sh = pr; c.bg = '#14272C'; c.label = `your new glider, flying ${DIRW[p.dx + ',' + p.dy]}`; c.pc = { k: 'glider', side, dir: turn(p.dx, p.dy), mine: true }; }
     }
     else if (o.dots && o.dots.has(k)) { c.t = '·'; c.fg = COL.C; c.fs = fz(0.7); c.label = 'your glider’s path'; if (o.zone && o.zone.has(k)) c.bg = '#14272C'; }
     else if (o.zone && o.zone.has(k)) { c.bg = '#14272C'; c.label = 'lit, you can place here'; }

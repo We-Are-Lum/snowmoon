@@ -23,6 +23,12 @@ export const AI_LABEL = {
   imageBy: (who: string) => `AI image · by ${who}`,
 } as const;
 
+/**
+ * Shown, not hidden, once per chapter page beside the first picture (owner, 2026-10-15: "where
+ * pictures sit beside the book's text, keep 'not by the author' visible once per page").
+ */
+export const NOT_AUTHOR_VISIBLE = 'not by the author';
+
 /** Served with the label, visually hidden: the whole declaration. */
 export const AI_DECLARED = {
   image: 'AI-generated image, not by the author',

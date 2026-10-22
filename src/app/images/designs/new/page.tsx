@@ -3,8 +3,9 @@ import { notFound } from 'next/navigation';
 import { IMAGES } from '~/lib/config';
 import { db } from '~/lib/db';
 import { designByline } from '~/lib/images/byline';
-import { SAMPLE_SUBJECTS, VIEW_LINES } from '~/lib/images/design-rules';
-import { bookCharacter, bookCharacters, designByVersion } from '~/lib/images/designs';
+import { SAMPLE_SUBJECTS, viewLinesFor } from '~/lib/images/design-rules';
+import { placeTitle, sheetPlace, sheetPlaces } from '~/lib/images/sheets';
+import { bookCharacter, bookCharacters, designByVersion, listDesigns } from '~/lib/images/designs';
 import { RULES } from '~/lib/images/rules';
 import { IMAGE_WORDING } from '~/lib/images/wording';
 import { DesignForm } from '~/components/design-form';
@@ -15,8 +16,9 @@ import { DesignForm } from '~/components/design-form';
  * (?version=). The form itself is in the browser; the server checks everything again on publish.
  */
 export const metadata = { title: 'Styles & characters', robots: { index: false } };
-type Props = { searchParams: Promise<{ kind?: string; character?: string; from?: string; version?: string }> };
+type Props = { searchParams: Promise<{ kind?: string; character?: string; place?: string; from?: string; version?: string }> };
 const W = IMAGE_WORDING.designs;
+const sheetPlaceByName = (name: string) => sheetPlaces().find((p) => placeTitle(p.name) === name);
 
 export default async function NewDesign({ searchParams }: Props) {
   const q = await searchParams;
@@ -24,17 +26,22 @@ export default async function NewDesign({ searchParams }: Props) {
   const srcId = q.from ?? q.version;
   const src = srcId && sql ? await designByVersion(sql, srcId).catch(() => null) : null;
   if (srcId && !src) notFound();
-  const kind = src ? src.kind : q.kind === 'character' ? 'character' : 'style';
+  const kind = src ? src.kind : q.kind === 'character' ? 'character' : q.kind === 'location' ? 'location' : 'style';
   const character = kind === 'character' ? (src ? (bookCharacters().find((c) => c.name === src.entity) ?? null) : bookCharacter(q.character ?? '')) : null;
   if (kind === 'character' && !character) notFound();
+  // A place sheet (2026-10-14): one of the book's places, found by its slug or, for a fork or version, its name.
+  const place = kind === 'location' ? (src ? (sheetPlaceByName(src.entity) ?? null) : sheetPlace(q.place ?? '')) : null;
+  if (kind === 'location' && !place) notFound();
   const mode = q.version && src ? 'version' : src ? 'fork' : 'create';
+  // A sheet's views are made in one of the published styles (owner, 2026-10-14).
+  const styles = kind !== 'style' && sql ? await listDesigns(sql, 'style').catch(() => []) : [];
   const callName = character ? (character.name.split(' ').find((w) => !/^(Lord|General|Senator)$/.test(w)) ?? character.name) : '';
-  const title = mode === 'fork' ? W.form.fork : mode === 'version' ? W.form.newVersion : kind === 'style' ? W.form.newStyle : W.form.newSheet(callName);
+  const title = mode === 'fork' ? W.form.fork : mode === 'version' ? W.form.newVersion : kind === 'style' ? W.form.newStyle : W.form.newSheet(place ? placeTitle(place.name) : callName);
   return (
     <div className="page prose dz-page dz-form-page">
       <p className="label ip-crumb">
-        <Link href={src ? `/images/designs/${src.shown.versionId}` : kind === 'style' ? '/images/designs' : `/images/designs/character/${character!.slug}`}>
-          ← {src ? (src.shown.body.title || src.entity) : kind === 'style' ? W.index.tabStyles : character!.name}
+        <Link href={src ? `/images/designs/${src.shown.versionId}` : kind === 'style' ? '/images/designs' : place ? `/images/designs/place/${place.slug}` : `/images/designs/character/${character!.slug}`}>
+          ← {src ? (src.shown.body.title || src.entity) : kind === 'style' ? W.index.tabStyles : place ? placeTitle(place.name) : character!.name}
         </Link>{' '}
         · {IMAGES.label}
       </p>
@@ -43,6 +50,7 @@ export default async function NewDesign({ searchParams }: Props) {
         mode={mode}
         kind={kind}
         character={character ? { slug: character.slug, name: character.name, callName, quotes: character.quotes, firstChapter: character.firstChapter } : null}
+        place={place ? { slug: place.slug, name: placeTitle(place.name), quotes: place.facts } : null}
         source={
           src
             ? {
@@ -57,7 +65,8 @@ export default async function NewDesign({ searchParams }: Props) {
             : null
         }
         subjects={[...SAMPLE_SUBJECTS]}
-        viewLines={VIEW_LINES}
+        styles={styles.map((s) => ({ versionId: s.versionId, title: s.title || s.entity, by: designByline(s.byName, s.byFid, s.byRole), text: s.text, thumb: s.thumb }))}
+        viewLines={viewLinesFor(kind === 'location' ? 'location' : 'character')}
         rules={RULES}
         limits={{ ...IMAGES.designs }}
         models={{ text: IMAGES.model, edit: IMAGES.editModel }}

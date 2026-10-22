@@ -10,8 +10,8 @@ In the book the board is a grid of cells that changes by a rule, and the game is
 
 ## License
 
-- `LICENSE` is the GNU General Public License, version 3. `package.json` says `"license": "GPL-3.0-only"`. The book is released under the GPL v3 too (`ATTRIBUTION.md`).
-- What that means for a contribution: once merged, it is part of this repository and is published under GPL-3.0 with everything else. Anyone may use, change and share it under the same license. If you distribute a changed version, it must be under GPL-3.0 too, with its source.
+- `LICENSE` is the GNU Affero General Public License, version 3, for the code. `package.json` says `"license": "AGPL-3.0-only"`. The book, and everything made from it, is under the GPL v3 (`LICENSE-GPL-3.0`, `LICENSING.md`, `ATTRIBUTION.md`).
+- What that means for a contribution: a computer player is code, so once merged it is published under AGPL-3.0 with the rest of the code. Anyone may use, change and share it under the same license. If you distribute a changed version, or run one as a website, it must be under AGPL-3.0 too, with its source.
 - `ATTRIBUTION.md`, under Contributions: "Before a first contribution, contributors agree that their prompts and generated media are published under GPL-3.0 and recorded permanently in the public ledger."
 - Contribute only work you have the right to license that way.
 
@@ -79,7 +79,7 @@ npm run minpentai:vs-rungs -- --round-robin
 
 ## The rules
 
-These are Play's rules as `game.ts`, `controller.ts` and `play-server/match.ts` run them. The marks follow the rules page (draft 1). **From the book** gives the block it rests on: c4-b84 is chapter 4, block 84, and its words are in `docs/minpentai/passages.md`. **Invented** means this edition made it up. A machine-readable rules file is not ready yet; until it is, the current rules documents are the rules page (https://snowmoon.party/minpentai/rules) and `docs/minpentai-rules.md`.
+These are Play's rules as `game.ts`, `controller.ts` and `play-server/match.ts` run them. The marks follow the rules page (draft 1). **From the book** gives the block it rests on: c4-b84 is chapter 4, block 84, and its words are in `docs/minpentai/passages.md`. **Invented** means this edition made it up. The same rules, machine-readable, are in https://snowmoon.party/minpentai/rules.json (`public/minpentai/rules.json`, generated from `src/lib/minpentai/kit-rules.ts` by `scripts/build-minpentai-kit.ts`): every rule marked from the book, with its block and words, or invented, with where it is in the code, and whether the site follows it. The page https://snowmoon.party/minpentai/build shows them with the passages. The rules page (https://snowmoon.party/minpentai/rules) and `docs/minpentai-rules.md` are the documents the marks below follow.
 
 The board
 

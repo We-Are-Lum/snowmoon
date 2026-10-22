@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { authFetch, signOutWallet } from '~/lib/client-auth';
+import { IMAGES } from '~/lib/config';
 import { IMAGE_WORDING } from '~/lib/images/wording';
 import { claim, hasWallet, pay, signInWithWallet, WalletError } from '~/lib/wallet/client';
 import { txHashFrom } from '~/lib/wallet/hash';
@@ -186,7 +187,7 @@ export function WalletPanel({ onChange }: { onChange?: () => void }) {
               </button>
             ))}
           </div>
-          <p className="ic-note">{W.terms}</p>
+          <p className="ic-note">{IMAGES.prepaid.creditBack ? W.termsCreditBack : W.terms}</p>
         </div>
       )}
       {pending && b.open && (

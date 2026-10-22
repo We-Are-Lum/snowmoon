@@ -15,7 +15,7 @@ import { PickButton } from './design-picks';
  */
 const W = IMAGE_WORDING.designs;
 
-export function DesignBar(p: { versionId: string; versionNo: number; elementId: string; entityId: string; kind: 'style' | 'character'; name: string; byFid: number }) {
+export function DesignBar(p: { versionId: string; versionNo: number; elementId: string; entityId: string; kind: 'style' | 'character' | 'location'; name: string; byFid: number }) {
   const auth = useAuth();
   const canAdd = useCanAddImage();
   const canMake = useCanMakeDesigns();

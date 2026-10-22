@@ -28,8 +28,10 @@ export default function About() {
       </p>
       <h2>License</h2>
       <p>
-        This app and everything used to make it are GPL-3.0: the code, the ingest and analysis scripts, the prompts,
-        and the data. The source is at <a href={REPO_URL}>{REPO_URL}</a>.
+        Everything used to make this app is open. The book and everything made from it (scenes, pictures, voices,
+        prompts, recipes and data) are GPL-3.0, the book&apos;s licence. The site&apos;s code and scripts are AGPL-3.0:
+        the GPL, plus the source of any modified copy run as a website. The source is at{' '}
+        <a href={REPO_URL}>{REPO_URL}</a>.
       </p>
       <p>
         The author has said that he reads the GPL to mean that anyone may adapt the book, but must open-source the

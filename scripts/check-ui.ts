@@ -40,6 +40,8 @@
  *   Free play; ?mode=free opens free play; a practice match starts, takes a glider and ends its turn; ⤢ makes it
  *   full screen (the site's top bar hidden, the board upright) at 390 and in the Farcaster frame; every Play screen is
  *   labelled RULES INVENTED FOR THIS EDITION; /minpentai/rules is Design's rules page. No sideways scroll.
+ * - The Minpentai kit (/minpentai/build, 2026-10-20): linked from the hub, labelled Book, Invented and Draft, not
+ *   affiliated; 152 passages, chapters 2–14 shown, chapters 15 on under Spoilers, closed until opened.
  * - AI labels as rendered (owner, 2026-10-09): on the chapter (seeded images, the readers' strip,
  *   the narration credit), the listen view's player, the feed, an image's page, the composer's draft
  *   and preview, and the moderators' queue, every AI image and the narration control carry the label
@@ -563,7 +565,8 @@ async function checkHome(page: Page, scheme: 'light' | 'dark') {
   if (rows) {
     for (const li of await page.locator('.home-feed-list li').all()) {
       const label = li.locator('button.ai-label');
-      if (!(await label.count()) || !/\bAI\b.* · by \S/i.test((await label.innerText()) ?? '')) fail(`/ (${scheme}): a "Just made" image has no AI label naming who made it`);
+      // "AI ⓘ" (owner, 2026-10-15): who made it is in the label's hover and accessible name, not beside it.
+      if (!(await label.count()) || !/\bAI\b.* · by \S/i.test((await label.textContent()) ?? '')) fail(`/ (${scheme}): a "Just made" image has no AI label naming who made it`);
     }
   } else if (!(await page.locator('.home-feed-empty').isVisible())) fail(`/ (${scheme}): "Just made" shows neither images nor its empty state`);
 
@@ -658,6 +661,27 @@ async function checkPlay(page: Page, scheme: string) {
   await page.waitForTimeout(300);
   const top = await diff.evaluate((e) => e.getBoundingClientRect().top).catch(() => -1);
   if (top < 0 || top > 200) fail(`/minpentai/rules#lessons-vs-play (${scheme}): the list is not at the top of the view (${Math.round(top)}px)`);
+  // The build-on kit (owner's go, 2026-10-20): linked from the hub; Book, Invented and Draft labels; the
+  // not-affiliated line; every passage of chapters 2–14 shown, chapters 15 on inside a closed Spoilers section (owner, 2026-10-20).
+  await open(page, '/minpentai?mode=play');
+  if ((await page.locator('.mp-hub a', { hasText: 'BUILD ON IT' }).getAttribute('href').catch(() => null)) !== '/minpentai/build') fail(`${where('mode=play')}: no link to /minpentai/build`);
+  await open(page, '/minpentai/build');
+  await checkFloors(page, '/minpentai/build', scheme);
+  await noSideways(`/minpentai/build (${scheme})`);
+  const kit = (await page.locator('.mp-kit').textContent()) ?? '';
+  if (!kit.includes('NOT AFFILIATED WITH THE AUTHOR')) fail(`/minpentai/build (${scheme}): no "not affiliated with the author" line`);
+  const labels = await page.locator('.mp-kit .mp-rules-note .info-label').evaluateAll((els) => els.map((e) => e.getAttribute('data-label')));
+  if (labels.join(',') !== 'book,invented,draft') fail(`/minpentai/build (${scheme}): labels are ${labels.join(', ')}, not Book, Invented and Draft`);
+  const all = await page.locator('.mp-kit-passage').count(), hidden = await page.locator('.mp-kit-spoilers .mp-kit-passage').count();
+  if (all !== 152) fail(`/minpentai/build (${scheme}): ${all} passages, not 152`);
+  if (await page.locator('.mp-kit-spoilers[open]').count()) fail(`/minpentai/build (${scheme}): Spoilers is open on arrival`);
+  if (await page.locator('.mp-kit-spoilers .mp-kit-passage').first().isVisible()) fail(`/minpentai/build (${scheme}): a spoiler passage shows before Spoilers is opened`);
+  const shownCh = await page.locator('.mp-kit-passage:not(.mp-kit-spoilers .mp-kit-passage) .mp-kit-meta a').evaluateAll((els) => els.map((e) => Number(/^c(\d+)-/.exec(e.textContent ?? '')?.[1])));
+  const hiddenCh = await page.locator('.mp-kit-spoilers .mp-kit-passage .mp-kit-meta a').evaluateAll((els) => els.map((e) => Number(/^c(\\d+)-/.exec(e.textContent ?? '')?.[1])));
+  if (shownCh.length !== 127 || shownCh.some((c) => c < 2 || c > 14) || hiddenCh.length !== 25 || hiddenCh.some((c) => c < 15)) fail(`/minpentai/build (${scheme}): shown must be exactly the 127 passages of chapters 2–14 and Spoilers the 25 of chapters 15 on (${shownCh.length} shown, ${hiddenCh.length} hidden)`);
+  await page.locator('.mp-kit-spoilers > summary').click();
+  if (!(await page.locator('.mp-kit-spoilers .mp-kit-passage').first().isVisible())) fail(`/minpentai/build (${scheme}): Spoilers does not open`);
+  await checkFloors(page, '/minpentai/build (Spoilers open)', scheme);
 }
 /** ⤢ on a match: the frame covers the site (no top bar), the board upright, END TURN in view. */
 async function checkPlayFullScreen(page: Page, where: string, tall: number) {
@@ -1265,10 +1289,10 @@ try {
       await page.evaluate(() => getSelection()!.removeAllRanges());
       await page.locator('.scene-label .add-image').first().click();
       await page.waitForSelector('.image-composer textarea');
-      // The project's starting style is chosen by default (owner, 2026-10-10); None is still there.
+      // The project's starting style is chosen by default (owner, 2026-10-10); there is no None: every image is made in a style (owner, 2026-10-14).
       const styleChecked = await page.locator('.ic-style input[type="radio"]').evaluateAll((els) => els.map((e) => ({ on: (e as HTMLInputElement).checked, label: (e.parentElement?.textContent ?? '').trim() })));
       if (!styleChecked.find((x) => x.on)?.label.startsWith('Techno vistas')) fail(`/chapter/1 (${scheme}): the composer does not start with the project's style chosen (${JSON.stringify(styleChecked)})`);
-      if (!styleChecked.some((x) => x.label.startsWith('None'))) fail(`/chapter/1 (${scheme}): the composer has no "None" style`);
+      if (styleChecked.some((x) => x.label.startsWith('None'))) fail(`/chapter/1 (${scheme}): the composer offers "None" for the style`);
       if (!(await page.locator('.ic-style-text').count())) fail(`/chapter/1 (${scheme}): the chosen style's text is not shown`);
       // "In this passage" (2026-10-10): the character and the place, chosen to start, their text in full; one removed.
       {
@@ -1466,11 +1490,11 @@ try {
         await checkFloors(page, `${path} @${width}`, scheme);
         const wide = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth);
         if (wide > 1) fail(`${path} @${width} (${scheme}): scrolls sideways by ${wide}px`);
-        // Learn's desktop layout (2026-10-20) widens /minpentai's page; its reading column is the lesson text beside the stage.
-        const measure = await page.evaluate(() => {
-          const el = (document.querySelector('main .ml-learn .ml-body') ?? document.querySelector('main .page.chapter, main .page')) as HTMLElement | null;
+        // Learn's desktop layout (2026-10-20) and Play's widen /minpentai's page; its reading column is the lesson text beside the stage, or Play's panel.
+        const measure = await page.evaluate((game) => {
+          const el = ((game ? document.querySelector('main .ml-learn .ml-body, main .mp-panel') : null) ?? document.querySelector('main .page.chapter, main .page')) as HTMLElement | null;
           return el ? el.getBoundingClientRect().width : 0;
-        });
+        }, path === '/minpentai');
         if (measure > 700) fail(`${path} @${width}: the reading column is ${Math.round(measure)}px wide`);
         // Home is Design's wide page (no .page column): its hero text keeps Design's 780px measure.
         if (path === '/') {

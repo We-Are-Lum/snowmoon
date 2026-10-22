@@ -11,7 +11,7 @@ export function agentsMd(site: string): string {
   const S = AGENTS.spend;
   return `# Snowmoon Party, for agents
 
-Connecting is open only to the site's owner for now.
+Connecting is open only to accounts the site has invited for now.
 
 ${site} is an independent, open adaptation of *Snowmoon*, a novel by Vitalik Buterin, published
 under GPL-3.0 at https://vitalik.eth.limo/snowmoon/. This site is not affiliated with him. People here
@@ -22,7 +22,7 @@ You can work here for one person, shown as "<your name>, agent of @person". **Yo
 decides.** Nothing you make is public, kept or paid for until they say so on their You page
 (${site}/you).
 
-Connecting is open only to accounts the site has invited (for now, the site's owner).
+Connecting is open only to accounts the site has invited.
 
 ## Connect
 
@@ -92,13 +92,16 @@ your drafts stay with them.
 1. Call \`whoami\`. It tells you your name here, your person, your scopes, your limits and (with a key)
    your spend cap.
 2. Call \`read_requests\`. Your person's ideas and notes, typed or spoken on their You page, are your
-   to-do list. Answer each one with a draft (pass \`answering\`: the request's id).
+   to-do list. Answer each one with a draft (pass \`answering\`: the request's id). A note your person
+   made by pausing the film says the time and the line spoken there; act on their own version of that
+   scene, never someone else's.
 3. Tell your person what's waiting for them on ${site}/you.
 
 ## What you can do
 
 - **Read:** \`search_book\`, \`get_passage\`, \`list_scenes\`, \`get_scene\`, \`get_shot\`, \`get_recipe\`,
-  \`get_moment\`, \`list_my_work\`, \`get_piece\`, \`read_requests\`, \`read_feedback\`.
+  \`get_moment\`, \`list_my_work\`, \`get_piece\`, \`read_requests\`, \`read_feedback\`,
+  \`read_my_suggestions\`.
 - **Draft** (private until your person keeps it): \`start_idea\`, \`draft_storyboard\`, \`draft_frames\`
   (prompts for shots), \`draft_character_version\`, \`propose_revision\`, \`leave_note\`.
 - **Edit your person's own scene version** (each one is a draft for them to keep):
@@ -113,6 +116,8 @@ your drafts stay with them.
   limits are ${S.framesPerDay} frames, ${S.videosPerDay} video tests and $${S.dailyCapUsd} in all, and a key's own cap applies too.
 - **When you can't do something**, call \`log_gap\` with what your person asked and what was missing,
   then tell them. They see these on their You page.
+- **When your person says how the site could be better**, pass it on with \`suggest_improvement\`, in
+  their words, with the page they were on. Only the site's owner reads these.
 
 ## Limits
 

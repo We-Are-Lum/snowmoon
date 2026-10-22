@@ -20,6 +20,8 @@
  *  L  Limits: 3 agents per person; daily notes; disconnect stops the agent at once.
  *  W  Wallet agents: the link message, the agent's signature, its own sign-in, REST.
  *  S  Story words: the switch and the human-written-only list (in-process).
+ *  FN Pause and note on the film: a note at a time lands on the shot, private to its person.
+ *  SU Suggest an improvement: typed, spoken or through an agent; the owner reads all, an agent only its person's.
  *  G  P4a (in-process): an agent's draft-only route passes; one that can publish, or keep, fails.
  */
 import { readdirSync, readFileSync } from 'node:fs';
@@ -28,7 +30,8 @@ import sharp from 'sharp';
 import { createHash } from 'node:crypto';
 import { privateKeyToAccount } from 'viem/accounts';
 import { createSiweMessage } from 'viem/siwe';
-import { startStage, connect, mcp, tool, ROOT } from './lib/agents-harness';
+import { startStage, connect, mcp, tool, ROOT, cimdDocs } from './lib/agents-harness';
+import { AGENTS as AGENT_CONFIG } from '../src/lib/config';
 
 const failures: string[] = [];
 let passed = 0;
@@ -53,7 +56,7 @@ try {
   const prm = await (await fetch(`${BASE}/.well-known/oauth-protected-resource/mcp`)).json();
   check('O2 protected resource metadata names /mcp exactly and this site as its server', prm.resource === `${BASE}/mcp` && prm.authorization_servers?.[0] === BASE, JSON.stringify(prm));
   const asm = await (await fetch(`${BASE}/.well-known/oauth-authorization-server`)).json();
-  check('O3 server metadata: S256 only, public clients, CIMD and DCR, iss in responses', JSON.stringify(asm.code_challenge_methods_supported) === '["S256"]' && JSON.stringify(asm.token_endpoint_auth_methods_supported) === '["none"]' && asm.client_id_metadata_document_supported === true && asm.authorization_response_iss_parameter_supported === true && asm.registration_endpoint === `${BASE}/api/oauth/register`);
+  check('O3 server metadata: S256 only, public clients, CIMD and DCR, iss in responses', JSON.stringify(asm.code_challenge_methods_supported) === '["S256"]' && JSON.stringify(asm.token_endpoint_auth_methods_supported) === '["none","client_secret_basic","client_secret_post","private_key_jwt"]' && asm.client_id_metadata_document_supported === true && asm.authorization_response_iss_parameter_supported === true && asm.registration_endpoint === `${BASE}/api/oauth/register`);
   const badReg = await fetch(`${BASE}/api/oauth/register`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ client_name: 'x', redirect_uris: ['http://evil.example/cb'] }) });
   check('O4 a plain-http redirect to another machine is refused at registration', badReg.status === 400);
   const page = await (await fetch(`${BASE}/oauth/authorize?client_id=nobody&redirect_uri=https%3A%2F%2Fevil.example%2Fcb&response_type=code&code_challenge=${'a'.repeat(43)}&code_challenge_method=S256`, { redirect: 'manual' })).text();
@@ -83,6 +86,106 @@ try {
   check('O14 a token for another resource is refused', wrongResource.status === 400 && (await wrongResource.json()).error === 'invalid_target');
   const deny = await (await asPerson(people.C.token, '/api/oauth/approve', { method: 'POST', body: JSON.stringify({ query: a1.query.toString(), allow: false }) })).json();
   check('O15 “Don’t allow” sends back access_denied', new URL(deny.to).searchParams.get('error') === 'access_denied');
+
+  console.log('Q  a confidential client at registration (client_secret_basic or client_secret_post)');
+  {
+    const { randomBytes: rb, createHash: ch } = await import('node:crypto');
+    const cb = 'https://chatgpt.example/connector/oauth/callback';
+    const register = async (method: string) => (await fetch(`${BASE}/api/oauth/register`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ client_name: 'ChatGPT', redirect_uris: [cb], token_endpoint_auth_method: method }) })).json() as Promise<{ client_id: string; client_secret?: string; token_endpoint_auth_method: string }>;
+    const basicC = await register('client_secret_basic');
+    const postC = await register('client_secret_post');
+    const stored = (await S.pg.query<{ secret_hash: string; auth_method: string }>(`select secret_hash, auth_method from studio.oauth_clients where client_id = $1`, [basicC.client_id])).rows[0];
+    const dump = JSON.stringify((await S.pg.query(`select * from studio.oauth_clients`)).rows);
+    check('Q1 a confidential client gets a secret once; only its sha256 is stored', !!basicC.client_secret?.startsWith('scs_') && basicC.token_endpoint_auth_method === 'client_secret_basic' && stored?.secret_hash === ch('sha256').update(basicC.client_secret!).digest('hex') && !dump.includes(basicC.client_secret!) && !dump.includes(postC.client_secret!));
+    const codeFor = async (clientId: string) => {
+      const verifier = rb(32).toString('base64url');
+      const q = new URLSearchParams({ response_type: 'code', client_id: clientId, redirect_uri: cb, code_challenge: ch('sha256').update(verifier).digest('base64url'), code_challenge_method: 'S256', resource: `${BASE}/mcp` });
+      const to = new URL(((await (await asPerson(people.A.token, '/api/oauth/approve', { method: 'POST', body: JSON.stringify({ query: q.toString(), allow: true }) })).json()) as { to: string }).to);
+      return { code: to.searchParams.get('code') ?? '', verifier };
+    };
+    const form = (c: { code: string; verifier: string }, extra: Record<string, string> = {}) => new URLSearchParams({ grant_type: 'authorization_code', code: c.code, code_verifier: c.verifier, redirect_uri: cb, resource: `${BASE}/mcp`, ...extra });
+    const basicHeader = (id: string, secret: string) => 'Basic ' + Buffer.from(`${encodeURIComponent(id)}:${encodeURIComponent(secret)}`).toString('base64');
+    const post = (body: URLSearchParams, auth?: string) => fetch(`${BASE}/api/oauth/token`, { method: 'POST', headers: { 'content-type': 'application/x-www-form-urlencoded', ...(auth ? { authorization: auth } : {}) }, body });
+
+    const c1 = await codeFor(basicC.client_id);
+    const noSecret = await post(form(c1, { client_id: basicC.client_id }));
+    const wrongBasic = await post(form(c1), basicHeader(basicC.client_id, basicC.client_secret! + 'x'));
+    const wrongPost = await post(form(c1, { client_id: basicC.client_id, client_secret: 'scs_' + rb(32).toString('base64url') }));
+    const otherSecret = await post(form(c1), basicHeader(basicC.client_id, postC.client_secret!));
+    check('Q2 a wrong, missing or another client’s secret is refused (invalid_client, 401), and the code still works after', [noSecret, wrongBasic, wrongPost, otherSecret].every((r) => r.status === 401) && wrongBasic.headers.get('www-authenticate')?.startsWith('Basic') === true, [noSecret, wrongBasic, wrongPost, otherSecret].map((r) => r.status).join(','));
+    const okBasic = await post(form(c1), basicHeader(basicC.client_id, basicC.client_secret!));
+    const okBasicJ = (await okBasic.json()) as { access_token?: string; refresh_token?: string };
+    check('Q3 client_secret_basic: the right secret in the Authorization header gets tokens that work', okBasic.ok && !!okBasicJ.access_token && (await mcp(BASE, okBasicJ.access_token!, 'ping')).status === 200);
+    const refreshNo = await post(new URLSearchParams({ grant_type: 'refresh_token', refresh_token: okBasicJ.refresh_token ?? '', client_id: basicC.client_id, resource: `${BASE}/mcp` }));
+    const refreshOk = await post(new URLSearchParams({ grant_type: 'refresh_token', refresh_token: okBasicJ.refresh_token ?? '', resource: `${BASE}/mcp` }), basicHeader(basicC.client_id, basicC.client_secret!));
+    check('Q5 a refresh needs the secret too', refreshNo.status === 401 && refreshOk.ok);
+    const c2 = await codeFor(postC.client_id);
+    const okPost = await post(form(c2, { client_id: postC.client_id, client_secret: postC.client_secret! }));
+    check('Q4 client_secret_post: the right secret in the form gets tokens', okPost.ok);
+    const c3 = await codeFor(basicC.client_id);
+    const badPkce = await post(form({ code: c3.code, verifier: rb(32).toString('base64url') }), basicHeader(basicC.client_id, basicC.client_secret!));
+    check('Q6 PKCE is still required for a confidential client: a wrong verifier is refused with the right secret', badPkce.status === 400 && (await badPkce.json()).error === 'invalid_grant');
+    const publicC = await register('none');
+    const c4 = await codeFor(publicC.client_id);
+    const publicWithSecret = await post(form(c4, { client_id: publicC.client_id, client_secret: 'scs_anything' }));
+    const publicOk = await post(form(c4, { client_id: publicC.client_id }));
+    const unknownMethod = await fetch(`${BASE}/api/oauth/register`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ client_name: 'X', redirect_uris: [cb], token_endpoint_auth_method: 'tls_client_auth' }) });
+    check('Q7 a public client still needs no secret (and may not send one); an unknown method is refused at registration', !publicC.client_secret && publicWithSecret.status === 401 && publicOk.ok && unknownMethod.status === 400);
+    // These test agents are ended, so the counts below are as before.
+    await S.pg.query(`update studio.agents set revoked_at = now() where person = $1 and client_id = any($2)`, [people.A.person, [basicC.client_id, postC.client_id, publicC.client_id]]);
+  }
+
+  console.log('J  a metadata-document client that signs its token requests (private_key_jwt), as ChatGPT does');
+  {
+    const { generateKeyPairSync, sign: rsaSign, randomBytes: rb, createHash: ch } = await import('node:crypto');
+    const kp = generateKeyPairSync('rsa', { modulusLength: 2048 });
+    const stranger = generateKeyPairSync('rsa', { modulusLength: 2048 });
+    const cid = 'https://cimd.test/chatgpt-like';
+    const cb = 'https://chatgpt.example/connector/oauth/callback';
+    cimdDocs.set('/chatgpt-like', { client_id: cid, client_name: 'ChatGPT', redirect_uris: [cb], token_endpoint_auth_method: 'private_key_jwt', jwks_uri: 'https://cimd.test/chatgpt-like/jwks' });
+    cimdDocs.set('/chatgpt-like/jwks', { keys: [{ ...kp.publicKey.export({ format: 'jwk' }), kid: 'k1', use: 'sig', alg: 'RS256' }] });
+    const b64 = (o: unknown) => Buffer.from(JSON.stringify(o)).toString('base64url');
+    const now = () => Math.floor(Date.now() / 1000);
+    const assertion = (over: Record<string, unknown> = {}, key = kp.privateKey) => {
+      const head = `${b64({ alg: 'RS256', typ: 'JWT', kid: 'k1' })}.${b64({ iss: cid, sub: cid, aud: `${BASE}/api/oauth/token`, iat: now(), exp: now() + 120, jti: rb(12).toString('hex'), ...over })}`;
+      return `${head}.${rsaSign('sha256', Buffer.from(head), key).toString('base64url')}`;
+    };
+    const AT = 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer';
+    const verifier = rb(32).toString('base64url');
+    const q = new URLSearchParams({ response_type: 'code', client_id: cid, redirect_uri: cb, code_challenge: ch('sha256').update(verifier).digest('base64url'), code_challenge_method: 'S256', state: 'st-gpt', resource: `${BASE}/mcp` });
+    const ok = await asPerson(people.A.token, '/api/oauth/approve', { method: 'POST', body: JSON.stringify({ query: q.toString(), allow: true }) });
+    const code = new URL(((await ok.json()) as { to?: string }).to ?? 'http://x/').searchParams.get('code') ?? '';
+    const tokenWith = (extra: Record<string, string>, base: Record<string, string> = { grant_type: 'authorization_code', code, code_verifier: verifier, redirect_uri: cb }) =>
+      fetch(`${BASE}/api/oauth/token`, { method: 'POST', headers: { 'content-type': 'application/x-www-form-urlencoded' }, body: new URLSearchParams({ ...base, client_id: cid, resource: `${BASE}/mcp`, ...extra }) });
+    check('J1 server metadata offers none and private_key_jwt, with the signing algorithms', JSON.stringify(asm.token_endpoint_auth_methods_supported) === '["none","client_secret_basic","client_secret_post","private_key_jwt"]' && asm.token_endpoint_auth_signing_alg_values_supported?.includes('RS256'));
+    check('J2 a private_key_jwt metadata document is accepted at sign-in, and the person’s Allow sends back a code', ok.ok && !!code);
+    const noAssert = await tokenWith({});
+    check('J3 without its signed assertion, the token request is refused (invalid_client, 401)', noAssert.status === 401 && (await noAssert.json()).error === 'invalid_client');
+    const wrongKey = await tokenWith({ client_assertion_type: AT, client_assertion: assertion({}, stranger.privateKey) });
+    const wrongAud = await tokenWith({ client_assertion_type: AT, client_assertion: assertion({ aud: 'https://elsewhere.example/token' }) });
+    const expired = await tokenWith({ client_assertion_type: AT, client_assertion: assertion({ exp: now() - 120 }) });
+    const otherIss = await tokenWith({ client_assertion_type: AT, client_assertion: assertion({ iss: 'https://cimd.test/someone-else', sub: 'https://cimd.test/someone-else' }) });
+    check('J4 an assertion signed by another key, for another audience, expired, or from another client is refused', [wrongKey, wrongAud, expired, otherIss].every((r) => r.status === 401), [wrongKey, wrongAud, expired, otherIss].map((r) => r.status).join(','));
+    const good = await tokenWith({ client_assertion_type: AT, client_assertion: assertion() });
+    const goodJ = (await good.json()) as { access_token?: string; refresh_token?: string };
+    check('J5 with a valid assertion and the PKCE verifier, the code becomes tokens that work at /mcp', good.ok && !!goodJ.access_token && (await mcp(BASE, goodJ.access_token!, 'ping')).status === 200, JSON.stringify(goodJ).slice(0, 200));
+    const refreshBase = { grant_type: 'refresh_token', refresh_token: goodJ.refresh_token ?? '' };
+    const refreshBare = await tokenWith({}, refreshBase);
+    const refreshed = await tokenWith({ client_assertion_type: AT, client_assertion: assertion() }, refreshBase);
+    check('J6 a refresh needs a fresh assertion too', refreshBare.status === 401 && refreshed.ok);
+    const badVerifier = await (async () => {
+      const r = await asPerson(people.A.token, '/api/oauth/approve', { method: 'POST', body: JSON.stringify({ query: q.toString(), allow: true }) });
+      const c2 = new URL(((await r.json()) as { to: string }).to).searchParams.get('code') ?? '';
+      return tokenWith({ client_assertion_type: AT, client_assertion: assertion() }, { grant_type: 'authorization_code', code: c2, code_verifier: rb(32).toString('base64url'), redirect_uri: cb });
+    })();
+    check('J7 PKCE is still required for a signing client: a wrong verifier is refused even with a valid assertion', badVerifier.status === 400 && (await badVerifier.json()).error === 'invalid_grant');
+    cimdDocs.set('/secret-client', { client_id: 'https://cimd.test/secret-client', client_name: 'S', redirect_uris: [cb], token_endpoint_auth_method: 'client_secret_basic' });
+    const secretPage = await (await fetch(`${BASE}/oauth/authorize?client_id=${encodeURIComponent('https://cimd.test/secret-client')}&redirect_uri=${encodeURIComponent(cb)}&response_type=code&code_challenge=${'a'.repeat(43)}&code_challenge_method=S256`)).text();
+    const publicWithAssertion = await fetch(`${BASE}/api/oauth/token`, { method: 'POST', headers: { 'content-type': 'application/x-www-form-urlencoded' }, body: new URLSearchParams({ grant_type: 'refresh_token', refresh_token: 'x', client_id: a2.client, client_assertion_type: AT, client_assertion: assertion() }) });
+    check('J8 a metadata document asking for a client secret is still refused; a public client may not send an assertion', secretPage.includes('can’t be used') && publicWithAssertion.status === 401);
+    // This test's agent is ended, so the counts below are as before.
+    await S.pg.query(`update studio.agents set revoked_at = now() where person = $1 and client_id = $2`, [people.A.person, cid]);
+  }
 
   // The agents used from here on: A's Claude, B's ChatGPT.
   const agentA = (await connect(BASE, people.A.token, 'Claude')).access_token;
@@ -366,6 +469,8 @@ try {
     const bai = script.rerecord?.find((g) => g.speaker === 'Bai')?.lines.find((l) => l.cue === 'b1-6');
     check('N7 the script page: every shot and line with speaker and time, the notes inline, the rewrite as a draft', scriptRes.ok && script.shots.length === 85 && !!ln && ln.speaker === 'Bai' && ln.rewrite?.text === 'That one’s toast, and he doesn’t even know it.' && sh!.intent.length === 1 && sh!.acting.length === 1 && ln.delivery.length === 1, JSON.stringify(sh ?? script).slice(0, 400));
     check('N8 the rewritten line joins the re-record sheet, with its delivery note, by speaker', !!bai && bai.line === 'That one’s toast, and he doesn’t even know it.' && /^That other loser/.test(bai.original ?? '') && bai.delivery.length === 1, JSON.stringify(script.rerecord));
+    const sheetNote = (bai as { notes?: { id: string; filedBy: string | null }[] } | undefined)?.notes?.[0];
+    check('N8b the re-record sheet says who filed the delivery note and has its id for the "These were my words" tap', !!sheetNote?.id && String(sheetNote.filedBy).startsWith('Claude') && String((bai as { rewriteFiledBy?: string } | undefined)?.rewriteFiledBy).startsWith('Claude'), JSON.stringify(bai));
     const bScript = await asPerson(people.B.token, '/api/direction?adaptation=1&version=2');
     const anonScript = await fetch(`${BASE}/api/direction?adaptation=1&version=2`);
     check('N9 the script and its notes are the author’s only (someone else: refused; signed out: not found)', bScript.status === 400 && anonScript.status === 404, `${bScript.status} ${anonScript.status}`);
@@ -392,6 +497,7 @@ try {
     const noVersion = await S.pg.query(`insert into studio.direction_notes (person, adaptation_id, version, kind, shot, body, confirmed_at) values ($1, 1, 999, 'intent', '14-b1-6', 'x', now())`, [people.A.person]).then(() => 'kept', (e: Error) => e.message);
     const unconfirmedOwn = await S.pg.query(`insert into studio.direction_notes (person, adaptation_id, version, kind, shot, body) values ($1, 1, 2, 'intent', '14-b1-6', 'x')`, [people.A.person]).then(() => 'kept', (e: Error) => e.message);
     check('N14 the tables refuse a note on a version that doesn’t exist, and a row the person filed without confirmed_at', /foreign key/i.test(noVersion) && /check constraint/i.test(unconfirmedOwn), `${noVersion} | ${unconfirmedOwn}`);
+    check('N15 the owner’s agents have higher daily counts (500 drafts, 200 notes, 150 images); everyone else keeps 50, 20 and 50; the per-minute brakes are the same', AGENT_CONFIG.limitsFor[6786]?.drafts === 500 && AGENT_CONFIG.limitsFor[6786]?.notes === 200 && AGENT_CONFIG.limitsFor[6786]?.images === 150 && AGENT_CONFIG.limits.drafts === 50 && AGENT_CONFIG.limits.notes === 20 && AGENT_CONFIG.limits.images === 50 && !('imagesPerMinute' in (AGENT_CONFIG.limitsFor[6786] ?? {})));
     const dList = ((await mcp(BASE, edA, 'tools/list')).body?.result?.tools ?? []).map((t) => t.name);
     check('N12 the four direction tools are there, and still nothing that publishes or spends', ['find_line', 'get_direction', 'add_direction', 'rewrite_line'].every((n) => dList.includes(n)) && !dList.some((n) => /publish|spend|pay|approve|run/i.test(n)));
   }
@@ -401,6 +507,46 @@ try {
   const gapsA = (await (await asPerson(people.A.token, '/api/drafts')).json()).gaps as { asked: string; agent: string }[];
   const gapsB = (await (await asPerson(people.B.token, '/api/drafts')).json()).gaps as unknown[];
   check('G1 log_gap records what was asked and what was missing, on the person’s You page only', gap.ok && gapsA.some((g) => g.asked.includes('coat blue') && g.agent === 'Claude') && gapsB.length === 0);
+
+  console.log('FN pause and note on the film (2026-10-22)');
+  const film = await asPerson(people.A.token, '/api/requests', { method: 'POST', body: JSON.stringify({ kind: 'note', words: 'Hold on her face a beat longer here.', spoken: true, film: { adaptation: 1, version: 2, seconds: 5.25 } }) });
+  const filmBad = await asPerson(people.A.token, '/api/requests', { method: 'POST', body: JSON.stringify({ kind: 'note', words: 'x', film: { adaptation: 1, version: 2, seconds: 99999 } }) });
+  const filmNoVersion = await asPerson(people.A.token, '/api/requests', { method: 'POST', body: JSON.stringify({ kind: 'note', words: 'x', film: { adaptation: 1, version: 999, seconds: 3 } }) });
+  check('FN1 a note at a time in the film is filed; a time or version that isn’t there is refused', film.ok && filmBad.status === 400 && filmNoVersion.status === 400, `${film.status} ${filmBad.status} ${filmNoVersion.status}`);
+  const filmId = film.ok ? ((await film.json()) as { id: string }).id : '';
+  const todo = await tool(BASE, edA, 'read_requests');
+  const fr = ((todo.out.requests ?? []) as { id: string; kind: string; spoken: boolean; about: { moment?: string; shot?: string; at?: string; seconds?: number; next?: string } | null }[]).find((r) => r.id === filmId);
+  check('FN2 the agent reads it with the time, the shot and the moment, and is told to act on its person’s own version', !!fr && fr.kind === 'note' && fr.spoken && fr.about?.at === '0:05' && fr.about?.seconds === 5.25 && fr.about?.moment === `1/2/${fr.about?.shot}` && /own version/.test(fr.about?.next ?? ''), JSON.stringify(fr));
+  const bFilm = await asPerson(people.B.token, '/api/requests', { method: 'POST', body: JSON.stringify({ kind: 'note', words: 'B’s own note on A’s film.', film: { adaptation: 1, version: 2, seconds: 2 } }) });
+  const todoAfter = await tool(BASE, edA, 'read_requests');
+  check('FN3 a note is private to its person: another person’s note on the same film isn’t in this agent’s list', bFilm.ok && !((todoAfter.out.requests ?? []) as { words: string }[]).some((r) => r.words.includes('B’s own note')));
+  const filmRow = (await S.pg.query<{ target_seconds: string; target_moment: string }>(`select target_seconds::text, target_moment from studio.requests where id = $1`, [filmId])).rows[0];
+  check('FN4 it is kept as words with the moment and the time (no recording)', filmRow?.target_seconds === '5.25' && /^1\/2\//.test(filmRow?.target_moment ?? ''), JSON.stringify(filmRow));
+  const noMomentTime = await S.pg.query(`insert into studio.requests (person, kind, body, target_seconds) values ($1, 'note', 'x', 3)`, [people.A.person]).then(() => true, () => false);
+  check('FN5 the database refuses a time without a moment', !noMomentTime);
+
+  console.log('SU suggest an improvement (2026-10-22)');
+  const sugA = await asPerson(people.A.token, '/api/suggestions', { method: 'POST', body: JSON.stringify({ words: 'The re-record sheet should say it opens.', spoken: true, page: '/you' }) });
+  const sugB = await asPerson(people.B.token, '/api/suggestions', { method: 'POST', body: JSON.stringify({ words: 'I couldn’t find where my notes went.', page: '/@x/1', moment: '1/2/0-EST', seconds: 4.5 }) });
+  const sugEmpty = await asPerson(people.B.token, '/api/suggestions', { method: 'POST', body: JSON.stringify({ words: '   ' }) });
+  check('SU1 an invited person can send a suggestion, typed or spoken; an empty one is refused', sugA.ok && sugB.ok && sugEmpty.status === 400, `${sugA.status} ${sugB.status} ${sugEmpty.status}`);
+  const viaAgent = await tool(BASE, edA, 'suggest_improvement', { text: 'Let me pause the film from my phone’s lock screen.', page: '/@x/1' });
+  check('SU2 …or through their agent (suggest_improvement)', viaAgent.ok, viaAgent.error ?? '');
+  const ownerView = (await (await asPerson(people.A.token, '/api/suggestions')).json()) as { mine: { words: string }[]; all?: { words: string; who: string; page: string | null; moment: string | null; at: string | null; filedBy: string | null }[] };
+  const bView = (await (await asPerson(people.B.token, '/api/suggestions')).json()) as { mine: { words: string }[]; all?: unknown };
+  const fromB = ownerView.all?.find((x) => x.words.startsWith('I couldn’t find'));
+  check('SU3 the owner sees everyone’s, with who said it and where they were (page, moment and time)', !!fromB && fromB.page === '/@x/1' && fromB.moment === '1/2/0-EST' && fromB.at === '0:04' && fromB.who.length > 0 && ownerView.all!.some((x) => x.filedBy === 'Claude'), JSON.stringify(ownerView.all));
+  check('SU4 anyone else sees only their own, and no one else’s list', bView.all === undefined && bView.mine.length === 1 && bView.mine[0].words.startsWith('I couldn’t find'), JSON.stringify(bView));
+  const agentReads = await tool(BASE, edA, 'read_my_suggestions');
+  const agentList = (agentReads.out.suggestions ?? []) as { words: string }[];
+  check('SU5 a person’s agent reads that person’s suggestions only', agentReads.ok && agentList.length === 2 && !agentList.some((x) => x.words.startsWith('I couldn’t find')), JSON.stringify(agentList));
+  const dSug = await asPerson(people.D.token, '/api/suggestions', { method: 'POST', body: JSON.stringify({ words: 'not invited' }) });
+  check('SU6 someone not invited gets 404', dSug.status === 404 && (await asPerson(people.D.token, '/api/suggestions')).status === 404);
+  const anonRead = await S.pg.query(`set role anon; select 1 from studio.suggestions limit 1`).then(() => true, () => false);
+  await S.pg.query('reset role');
+  const writerDeletes = await S.pg.query(`set role studio_writer; delete from studio.suggestions`).then(() => true, () => false);
+  await S.pg.query('reset role');
+  check('SU7 anon can’t read suggestions, and the site can’t change or delete them', !anonRead && !writerDeletes);
 
   console.log('A  the allowlist: everyone else sees nothing new');
   const dRoutes = await Promise.all(['/api/agents', '/api/drafts', '/api/requests'].map((u) => asPerson(people.D.token, u)));
@@ -421,11 +567,18 @@ try {
   const fnCfg = (await S.pg.query<{ cfg: string[] | null }>(`select proconfig as cfg from pg_proc where proname = 'agents_three'`)).rows[0]?.cfg ?? [];
   check('DB4 agents_three() runs with an empty search_path', fnCfg.some((c) => /^search_path=(""|)$/.test(c)), JSON.stringify(fnCfg));
 
+  console.log('H  a stuck call fails fast');
+  const mcpRoute = await import('../src/app/mcp/route');
+  check('H1 /mcp stops at 60 s, not Vercel\'s 300 (owner, 2026-10-22)', mcpRoute.maxDuration === 60, String(mcpRoute.maxDuration));
+
   console.log('S  story words, in-process');
   const filter = await import('../src/lib/agents/filter');
-  const { AGENTS } = await import('../src/lib/config');
+  const { AGENTS, IMAGES, LINKED_WALLETS } = await import('../src/lib/config');
   check('S1 story words stay human: agents’ own lines are refused by default', filter.storyWordsAllowed(-5) === false && AGENTS.storyWords === 'refused');
-  check('S0 as shipped, the allowlist is FID 6786 only: no wallet, and the payment address is not one', JSON.stringify(AGENTS.people.fids) === '[6786]' && AGENTS.people.wallets.length === 0);
+  check('S0 as shipped, the allowlist is the owner and the two accounts they invited (FIDs 6786, 6852, 193912; owner, 2026-10-22): no wallet', JSON.stringify(AGENTS.people.fids) === '[6786,6852,193912]' && AGENTS.people.wallets.length === 0);
+  // Linked wallets (owner, 2026-10-22): m.luisotravez.eth signs in as @luisotravez, any case; the payment address is never one.
+  const { linkedFid } = await import('../src/lib/auth');
+  check('S3 a linked wallet signs in as its FID, whatever the case; others stay wallet accounts; the payment address is never linked', linkedFid('0x003276C5C24cDaFf1d804170Ab5cBB914F51f78a') === 6852 && linkedFid('0x003276c5c24cdaff1d804170ab5cbb914f51f78a') === 6852 && linkedFid('0x317A1EA96DC4B10C1ea60E3aF59C472316D31303') === 193912 && linkedFid('0x0000000000000000000000000000000000000001') === null && linkedFid(String(IMAGES.prepaid.payTo ?? '')) === null && Object.values(LINKED_WALLETS).every((f) => AGENTS.people.fids.includes(f)));
   check('S2 never for the owner (human-written only)', filter.storyWordsAllowed(6786) === false);
   let refusedForOwner = false;
   (AGENTS as { storyWords: string }).storyWords = 'allowed';
@@ -485,7 +638,7 @@ console.log('M  owner-only mode (public pages off)');
     const meta = await fetch(`${M.BASE}/.well-known/oauth-protected-resource/mcp`);
     const mcpAnon = await fetch(`${M.BASE}/mcp`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: '{"jsonrpc":"2.0","id":1,"method":"ping"}' });
     const mdText = md.ok ? await md.text() : '';
-    check('M1 agents.md is there (site-wide) and names the endpoint and the key header; /p is not; the connector and its metadata are', md.ok && mdText.split('\n')[2] === 'Connecting is open only to the site\'s owner for now.' && mdText.includes(`${M.BASE}/mcp`) && mdText.includes('X-Snowmoon-Key') && !/sk1_[A-Za-z0-9_-]{20}/.test(mdText) && list.status === 404 && meta.ok && mcpAnon.status === 401, `${md.status} ${list.status} ${meta.status} ${mcpAnon.status}`);
+    check('M1 agents.md is there (site-wide) and names the endpoint and the key header; /p is not; the connector and its metadata are', md.ok && mdText.split('\n')[2] === 'Connecting is open only to accounts the site has invited for now.' && mdText.includes(`${M.BASE}/mcp`) && mdText.includes('X-Snowmoon-Key') && !/sk1_[A-Za-z0-9_-]{20}/.test(mdText) && list.status === 404 && meta.ok && mcpAnon.status === 401, `${md.status} ${list.status} ${meta.status} ${mcpAnon.status}`);
     const owner = await connect(M.BASE, M.people.A.token, 'Claude');
     const idea = await tool(M.BASE, owner.access_token, 'start_idea', { title: 'x', text: 'an idea' });
     await fetch(`${M.BASE}/api/drafts`, { method: 'POST', headers: { 'content-type': 'application/json', authorization: `Bearer ${M.people.A.token}` }, body: JSON.stringify({ what: 'version', id: idea.out.version, action: 'keep' }) });
