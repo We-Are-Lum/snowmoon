@@ -58,6 +58,8 @@
  *   the Farcaster name and no wallet option. The name is a link to the You page (/you), and the top bar shows an
  *   avatar linking there, between ? and the menu, only when signed in; /you signed out meets the floors and shows
  *   only the sign-in offer (owner, 2026-10-18).
+ * - The owner's phone test (/voice-test, owner 2026-10-22): signed out, the site's "not found"; as FID 6786 (mocked), the
+ *   idle test meets the floors.
  * - The footer line (owner's legal starter, 2026-10-09) reads exactly as written, with Terms, Privacy
  *   and Source linked, at the foot of About, in the menu sheet and at the bottom of the rail; not on a
  *   phone's reading screen. /terms and /privacy meet the floors.
@@ -1669,6 +1671,27 @@ try {
     await checkFloors(page, '/you @390 (signed out)', scheme);
     if (/Your account|Your work|Balance \$/.test(await page.locator('main.you').innerText().catch(() => ''))) fail(`/you @390 (${scheme}): signed out, the page shows an account, wallet or work`);
     await shot(page, 'phone-390-you-signed-out', scheme);
+    // The owner's phone test (/voice-test; owner, 2026-10-22): signed out it is the site's "not found"; as FID 6786
+    // (session mocked, its route answered with the real manifest) it shows the test, idle, at the floors. Nothing runs.
+    await open(page, '/voice-test');
+    await page.waitForFunction(() => /could not be found/i.test(document.querySelector('main')?.textContent ?? ''), null, { timeout: 10000 }).catch(() => fail(`/voice-test @390 (${scheme}): signed out, not "not found"`));
+    if (await page.locator('.vt-button').count()) fail(`/voice-test @390 (${scheme}): signed out, the test shows`);
+    {
+      const { VOICE_TEST, VOICE_TEST_MEDIA } = await import('../src/lib/voice-test');
+      await page.route('**/api/voice-test', (r) => r.fulfill({ json: { media: VOICE_TEST_MEDIA, ...VOICE_TEST } }));
+      await page.route('**/api/chat/status', (r) => r.fulfill({ json: { available: false, model: 'm', host: null, provider: null, route: '', perDay: 30, left: 30 } }));
+      await page.evaluate(() => {
+        const b64 = (o: object) => btoa(JSON.stringify(o)).replace(/=+$/, '');
+        localStorage.setItem('snowmoon.signin', JSON.stringify({ token: `x.${b64({ sub: 6786, exp: 4102444800 })}.y`, fid: 6786, username: 'check', exp: 4102444800 }));
+      });
+      await open(page, '/voice-test');
+      await page.locator('.vt-button').first().waitFor({ timeout: 10000 }).catch(() => fail(`/voice-test @390 (${scheme}): FID 6786 (mocked), no test shown`));
+      await checkFloors(page, '/voice-test @390 (owner, idle)', scheme);
+      await shot(page, 'phone-390-voice-test', scheme);
+      await page.evaluate(() => localStorage.removeItem('snowmoon.signin'));
+      await page.unroute('**/api/voice-test');
+      await page.unroute('**/api/chat/status');
+    }
     await open(page, '/chapter/1?view=listen');
     await page.waitForSelector('.listen-pane');
     await checkFloors(page, '/chapter/1?view=listen @390', scheme);
