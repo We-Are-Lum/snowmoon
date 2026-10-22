@@ -75,18 +75,19 @@ const W = {
   linkConfirm: (wallet: string, to: string) => `Link ${wallet} to ${to}?`,
   linkWhat: 'From now on, signing in with this wallet signs you in as this Farcaster account.',
   /** Next to the button (owner, 2026-10-22: "Show a line next to the button saying the wallet's past work will appear under their Farcaster name"). */
-  linkPast: (to: string) => `What you made with this wallet before will appear under ${to}, here and on its public pages. Its balance stays with the wallet. You can unlink it here at any time.`,
+  linkPast: (to: string) => `What you made with this wallet before will appear under ${to}, here and on its public pages, so anyone can see this wallet is yours. Its balance stays with the wallet. You can unlink it here at any time.`,
   linkYes: 'Link them',
   linkNo: 'Not now',
   linked: (wallet: string, to: string) => `${wallet} is linked to ${to}: signing in with it signs you in as ${to}.`,
-  linkedHow: { verified: 'Linked because that account verified this address on Farcaster.', signed: 'Linked by you, signed in with both.', config: 'Linked by the maintainer.' },
+  linkedHow: { verified: 'Linked because that account verified this address on Farcaster.', signed: 'Linked by you, signed in with both.', maintainer: 'Linked by the maintainer, checked on Farcaster.' },
+  /** Signed in with Farcaster: a wallet linked to this account (owner, 2026-10-22: "Either side can unlink"). */
+  linkedWallet: (wallet: string) => `${wallet} is linked to this account: signing in with it signs you in here.`,
   linkedEarlier: (to: string) => `What you made with this wallet shows under ${to}, and is listed with your work below.`,
   linkedBalance: 'The wallet’s balance stays with the wallet. While linked, Pictures and Remix use the Farcaster account’s free daily count.',
   unlink: 'Unlink this wallet',
   unlinkConfirm: 'Unlink? Signing in with this wallet will be the wallet’s own account again.',
   unlinkYes: 'Unlink',
   unlinkNo: 'Keep it',
-  unlinkAsk: 'To unlink it, write to us.',
   viaWallet: 'Signed in with your linked wallet.',
 } as const;
 
@@ -101,10 +102,14 @@ interface YouData extends Side {
   wallet: Side | null;
   /** The wallet on this page: its link, and whether the offer to link it applies (src/app/api/you/route.ts). */
   link: LinkView | null;
+  /** Signed in with Farcaster: the wallets linked to it, other than the one in `link`. */
+  linkedWallets: { address: string; short: string; how: LinkHow }[];
 }
+/** How a link reads: 'maintainer' is LINKED_WALLETS or seeded from it (src/app/api/you/route.ts). */
+type LinkHow = 'verified' | 'signed' | 'maintainer';
 interface LinkView {
   wallet: { address: string; short: string };
-  linked: { fid: number; how: 'verified' | 'signed' | 'config'; at: string | null; name: string } | null;
+  linked: { fid: number; how: LinkHow; at: string | null; name: string } | null;
   canUnlink: boolean;
   offer: boolean;
   /** The FID signed in with Farcaster on this device, if any: who the offer links to. */
@@ -187,6 +192,7 @@ export function YouPage() {
         />
         {data.wallet && <AccountRows who={data.wallet.who} signOut={signOutWallet} />}
         {data.link && <LinkPanel view={data.link} to={who.kind === 'farcaster' ? who : null} reload={load} />}
+        {(data.linkedWallets ?? []).map((lw) => <LinkedWallet key={lw.address} w={lw} reload={load} />)}
       </section>
 
       <section className="you-section" aria-labelledby="you-wallet">
@@ -338,9 +344,7 @@ function LinkPanel({ view, to, reload }: { view: LinkView; to: Who | null; reloa
               </button>
             )}
           </div>
-        ) : (
-          <p className="you-note">{W.unlinkAsk}</p>
-        )}
+        ) : null}
         {status}
       </div>
     );
@@ -370,6 +374,52 @@ function LinkPanel({ view, to, reload }: { view: LinkView; to: Who | null; reloa
         </>
       )}
       {status}
+    </div>
+  );
+}
+
+/** A wallet linked to the Farcaster account signed in, with Unlink from this side (owner, 2026-10-22: "Either side can unlink"). */
+function LinkedWallet({ w, reload }: { w: YouData['linkedWallets'][number]; reload: () => void }) {
+  const [busy, setBusy] = useState(false);
+  const [asking, setAsking] = useState(false);
+  const [note, setNote] = useState<string | null>(null);
+  const unlinkNow = async () => {
+    setBusy(true);
+    // The Farcaster sign-in as the bearer; the server ends only this FID's own link to that wallet.
+    const r = await authFetch('/api/wallet-link', { method: 'DELETE', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ wallet: w.address }) }).catch(() => null);
+    const out = (await r?.json().catch(() => ({}))) as { error?: string } | undefined;
+    setBusy(false);
+    setAsking(false);
+    if (!r?.ok) return setNote(out?.error ?? W.couldNot);
+    setNote(null);
+    reload();
+  };
+  return (
+    <div className="you-link" aria-label={W.linkTitle}>
+      <p className="you-note">{W.linkedWallet(w.short)}</p>
+      <p className="you-note">{W.linkedHow[w.how]}</p>
+      <div className="you-actions">
+        {asking ? (
+          <>
+            <span className="you-note">{W.unlinkConfirm}</span>
+            <button type="button" className="ic-secondary" disabled={busy} onClick={() => void unlinkNow()}>
+              {W.unlinkYes}
+            </button>
+            <button type="button" className="ic-secondary" disabled={busy} onClick={() => setAsking(false)}>
+              {W.unlinkNo}
+            </button>
+          </>
+        ) : (
+          <button type="button" className="ic-secondary" onClick={() => setAsking(true)}>
+            {W.unlink}
+          </button>
+        )}
+      </div>
+      {note && (
+        <p className="you-note" role="status">
+          {note}
+        </p>
+      )}
     </div>
   );
 }

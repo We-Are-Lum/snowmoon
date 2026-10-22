@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { getFid, getWallet } from '~/lib/auth';
 import { WALLET_LINKS } from '~/lib/config';
 import { db } from '~/lib/db';
-import { link, unlink } from '~/lib/wallet/links';
+import { link, unlink, unlinkFromFid } from '~/lib/wallet/links';
 import { readSession } from '~/lib/wallet/session';
 
 /**
@@ -15,7 +15,9 @@ import { readSession } from '~/lib/wallet/session';
  * The body names the FID the page showed ("Link to @name?"); if the Farcaster sign-in is now another FID, nothing
  * is linked. The payment address is never linked.
  *
- * DELETE, unlink: the wallet's own sign-in (bearer or `X-Wallet-Session`). Sets the link's unlinked_at.
+ * DELETE, unlink, from either side (owner, 2026-10-22): the wallet's own sign-in (bearer or `X-Wallet-Session`), or
+ * the linked Farcaster account's sign-in (bearer) naming the wallet in the body (`{ wallet: address }`); a FID can end
+ * only its own link. Sets the link's unlinked_at, ended by the person.
  *
  * Not under /api/wallet/: the client sends a wallet's token as the bearer to every route there, and this one needs
  * the Farcaster token as the bearer.
@@ -43,12 +45,23 @@ export async function POST(request: Request) {
 }
 
 export async function DELETE(request: Request) {
+  // From the Farcaster side: the linked FID names the wallet.
+  const fid = await getFid(request);
+  const body = (await request.json().catch(() => ({}))) as { wallet?: unknown };
+  if (fid !== null && typeof body.wallet === 'string') {
+    const sql = db();
+    if (!sql) return no('Not available here', 503);
+    const done = await unlinkFromFid(sql, fid, body.wallet);
+    if (done === 'not-yet') return no('Unlinking isn’t available yet.', 503, done);
+    if (done === 'none') return no('This wallet isn’t linked to this account.', 409, done);
+    return NextResponse.json({ unlinked: true }, { headers: noStore });
+  }
   const w = getWallet(request) ?? readSession(request.headers.get('x-wallet-session'));
-  if (!w) return NextResponse.json({ error: 'Sign in with the wallet first' }, { status: 401, headers: noStore });
+  if (!w) return NextResponse.json({ error: 'Sign in with the wallet or the linked Farcaster account first' }, { status: 401, headers: noStore });
   const sql = db();
   if (!sql) return no('Not available here', 503);
   const done = await unlink(sql, w.account);
-  if (done === 'not-yet') return no('Unlinking isn’t available yet. Write to us and we’ll do it.', 503, done);
+  if (done === 'not-yet') return no('Unlinking isn’t available yet.', 503, done);
   if (done === 'none') return no('This wallet isn’t linked.', 409, done);
   return NextResponse.json({ unlinked: true }, { headers: noStore });
 }

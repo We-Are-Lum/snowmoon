@@ -108,10 +108,13 @@ DRAFT marks for a separate reread:
   Link this wallet to it, and signing in with this wallet signs you in as that account."; linkSignIn "Sign in with
   Farcaster to link this wallet"; linkConfirm "Link 0x… to @name (FID n)?"; linkWhat "From now on, signing in with this
   wallet signs you in as this Farcaster account."; linkPast "What you made with this wallet before will appear under
-  @name, here and on its public pages. Its balance stays with the wallet. You can unlink it here at any time."; linkYes
+  @name, here and on its public pages, so anyone can see this wallet is yours. Its balance stays with the wallet. You
+  can unlink it here at any time." (owner's words, 2026-10-22); linkYes
   "Link them"; linkNo "Not now"; linked "0x… is linked to @name: signing in with it signs you in as @name."; linkedHow
-  (verified / signed / config); linkedEarlier; linkedBalance; unlink, unlinkConfirm, unlinkYes, unlinkNo, unlinkAsk;
-  viaWallet.
+  (verified / signed / maintainer: "Linked by the maintainer, checked on Farcaster." in the owner's words, 2026-10-22,
+  for LINKED_WALLETS and the two links 0026 seeds from it); linkedWallet (signed in with Farcaster: each wallet linked
+  to it, with Unlink; owner, 2026-10-22: "Either side can unlink"); linkedEarlier; linkedBalance; unlink,
+  unlinkConfirm, unlinkYes, unlinkNo; viaWallet. ("To unlink it, write to us." removed, owner, 2026-10-22.)
 - `src/lib/images/wording.ts`, `prepaid.linkHint`: "Have a Farcaster account? Link this wallet to it on your You page."
 - Not yet said anywhere on the You page: that a verified link ends by itself if the account stops verifying the
   address. Privacy section 7 says it; a line on the You page could too.

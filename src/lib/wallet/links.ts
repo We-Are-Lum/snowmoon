@@ -143,6 +143,36 @@ export async function unlink(sql: Sql, account: number): Promise<'done' | 'none'
   }
 }
 
+/**
+ * Unlink, from the Farcaster side (owner, 2026-10-22: "Either side can unlink"): the FID signed in ends its own active
+ * link to this wallet address, as 'person', exactly as an unlink from the wallet. A link to another FID is 'none'.
+ */
+export async function unlinkFromFid(sql: Sql, fid: number, address: string): Promise<'done' | 'none' | 'not-yet'> {
+  if (!Number.isInteger(fid) || fid <= 0 || !/^0x[0-9a-fA-F]{40}$/.test(address)) return 'none';
+  try {
+    const rows = await sql`update studio.wallet_links l set unlinked_at = now(), ended_by = 'person'
+      from studio.wallet_accounts a
+      where a.id = l.account_id and lower(a.address) = ${address.toLowerCase()} and l.fid = ${fid} and l.unlinked_at is null returning l.id`;
+    return rows.length > 0 ? 'done' : 'none';
+  } catch (e) {
+    if (missing(e)) return 'not-yet';
+    throw e;
+  }
+}
+
+/** The wallets actively linked to a FID in the table, for its You page (the payment address never). */
+export async function walletLinksOf(sql: Sql | null, fid: number): Promise<{ account: number; address: string; how: How }[]> {
+  if (!sql || fid <= 0) return [];
+  try {
+    const rows = await sql`select a.id::int as account, a.address, l.how from studio.wallet_links l join studio.wallet_accounts a on a.id = l.account_id
+      where l.fid = ${fid} and l.unlinked_at is null order by l.linked_at`;
+    return (rows as unknown as { account: number; address: string; how: How }[]).filter((r) => !isPayTo(r.address));
+  } catch (e) {
+    if (missing(e)) return [];
+    throw e;
+  }
+}
+
 // --- The automatic link: Neynar's user by verified address (WALLET_LINKS.lookUp) --------------------------------
 
 /**

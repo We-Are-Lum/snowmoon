@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { getFid, getPerson, getWallet } from '~/lib/auth';
 import { IMAGES, REMIX, WALLET_LINKS } from '~/lib/config';
 import { db } from '~/lib/db';
-import { isPayTo, linkOf } from '~/lib/wallet/links';
+import { configLink, isPayTo, linkOf, walletLinksOf } from '~/lib/wallet/links';
 import { linkedTo } from '~/lib/wallet/credit';
 import { shortAddress } from '~/lib/wallet/session';
 import { priceUsd } from '~/lib/wallet/credits';
@@ -58,6 +58,8 @@ export async function GET(request: Request) {
       prices: person < 0 ? prices() : null,
       wallet: alongside,
       link: w ? await linkView(w.account, w.address, fid) : null,
+      // Signed in with Farcaster: the wallets linked to it (other than the one already on this page), each with Unlink.
+      linkedWallets: fid !== null ? await linkedWalletsView(fid, w?.account ?? null) : [],
     },
     { headers: noStore },
   );
@@ -69,11 +71,19 @@ async function linkView(account: number, address: string, fid: number | null) {
   const name = link ? (await whoIs(link.fid)).name : null;
   return {
     wallet: { address, short: shortAddress(address) },
-    linked: link ? { fid: link.fid, how: link.how, at: link.linkedAt, name } : null,
+    linked: link ? { fid: link.fid, how: shownHow(link.how, address, link.fid), at: link.linkedAt, name } : null,
     // Unlink works on the table's links only; a LINKED_WALLETS one is the owner's to remove.
     canUnlink: !!link && link.how !== 'config' && table,
     offer: WALLET_LINKS.offer && table && !link && !isPayTo(address),
     // The Farcaster sign-in on this device, if any: who the offer would link to.
     to: fid,
   };
+}
+
+/** How a link reads on the page: the maintainer's (LINKED_WALLETS, or seeded from it by 0026 as 'verified') or the person's or Farcaster's. */
+const shownHow = (how: 'verified' | 'signed' | 'config', address: string, fid: number) => (how === 'config' || (how === 'verified' && configLink(address) === fid) ? 'maintainer' : how);
+
+async function linkedWalletsView(fid: number, except: number | null) {
+  const rows = await walletLinksOf(db(), fid).catch(() => []);
+  return rows.filter((r) => r.account !== except).map((r) => ({ address: r.address, short: shortAddress(r.address), how: shownHow(r.how, r.address, fid) }));
 }
