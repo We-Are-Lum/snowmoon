@@ -72,10 +72,12 @@ that line, and its recipe gives the model and revision, the settings, the
 character's reference clip and the sha256 of the raw take, but not the take.
 **DRAFT rule, the owner's words (2026-10-22), not yet read back; the principle check is unchanged until
 they have:** "Raw recordings are never published and never sent to any service that processes them; they
-stay on my devices and my own encrypted storage." Exception, the owner's decision (2026-10-22): "Let's allow
-a hosted service with performers opt in until we get an app for it live." Until the recording app is live, a
-recording may be converted by a hosted service only if its performer opts in for that recording (as
-`own-voice-v1` point 3 says); it is still never published or kept by the service. In practice: conversion runs on the performer's own device
+stay on my devices and my own encrypted storage." **Temporary exception** (owner, 2026-10-22: "Let's allow a hosted
+service with performers opt in until we get an app for it live", and "hosted means our Modal setup only").
+It ends when the recording app is live. Until then, a recording may be converted on the project's own Modal
+deployment of the allowlisted conversion model, and nowhere else, only if its performer opts in for that
+recording (`own-voice-v1`); it is never published or kept there. No other hosted service, such as fal, is used
+for a recording (`config/models.json`, `chatterbox-vc`). In practice: conversion runs on the performer's own device
 (their computer, or their browser), and takes are kept in a private folder outside the repository and
 outside R2, or in the performer's own end-to-end encrypted storage (iCloud with Advanced Data Protection).
 The performer agrees to `own-voice-v1` (`config/consent.json`) first. Every
