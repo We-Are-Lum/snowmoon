@@ -239,8 +239,14 @@ export function VoiceTest() {
       setCopied(true);
     } catch {
       setCopied(false);
-      const ta = document.getElementById('vt-report') as HTMLTextAreaElement | null;
-      ta?.select();
+      // No clipboard: select the text below so it can be copied by hand.
+      const pre = document.getElementById('vt-report');
+      if (pre) {
+        const r = document.createRange();
+        r.selectNodeContents(pre);
+        getSelection()?.removeAllRanges();
+        getSelection()?.addRange(r);
+      }
     }
   };
   const ms = (v: unknown) => (typeof v === 'number' ? `${(v / 1000).toFixed(1)} s` : '—');
@@ -340,7 +346,7 @@ export function VoiceTest() {
           </button>
         </div>
       ) : null}
-      {results || previous ? <textarea id="vt-report" className="vt-report" readOnly value={report()} aria-label="Results as text" rows={8} /> : null}
+      {results || previous ? <pre id="vt-report" className="vt-report" aria-label="Results as text">{report()}</pre> : null}
 
       <p className="vt-fine">
         Model: {manifest.model.name}, from {manifest.model.source}. Runtime: {manifest.runtime.name}. Reference: {manifest.reference.label}. Build {COMMIT}.

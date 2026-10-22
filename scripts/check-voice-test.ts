@@ -85,7 +85,7 @@ try {
     await button.click();
     await page.locator('.vt-results, .vt-alert:has-text("It failed")').first().waitFor({ timeout: 20 * 60_000 });
     console.log(`run took ${Math.round((Date.now() - t0) / 1000)} s of wall time`);
-    const report = JSON.parse(await page.locator('#vt-report').inputValue()) as { results: Record<string, unknown> };
+    const report = JSON.parse(await page.locator('#vt-report').innerText()) as { results: Record<string, unknown> };
     console.log(JSON.stringify(report.results));
     if (report.results.error) fail(`the run failed: ${String(report.results.error)}`);
     if (!(await page.locator('.vt-play audio').count())) fail('no player for the converted line');
