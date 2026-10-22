@@ -70,8 +70,11 @@ are never published. The reason is privacy: a raw recording of a person's
 voice is enough to clone it. The converted line is the published source of
 that line, and its recipe gives the model and revision, the settings, the
 character's reference clip and the sha256 of the raw take, but not the take.
-Conversion runs on the performer's own machine, so the take never leaves it,
-and takes are kept in a private folder outside the repository and outside R2.
+**DRAFT rule, the owner's words (2026-10-22), not yet read back; the principle check is unchanged until
+they have:** "Raw recordings are never published and never sent to any service that processes them; they
+stay on my devices and my own encrypted storage." In practice: conversion runs on the performer's own device
+(their computer, or their browser), and takes are kept in a private folder outside the repository and
+outside R2, or in the performer's own end-to-end encrypted storage (iCloud with Advanced Data Protection).
 The performer agrees to `own-voice-v1` (`config/consent.json`) first. Every
 performer gets the same terms. Anyone can still re-run the conversion with
 their own voice or another reference clip; they cannot reproduce the exact
