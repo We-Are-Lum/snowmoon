@@ -10,6 +10,7 @@ import { posterFor } from './scene-delivery';
 import { basenameOf } from './wallet/basename';
 import { PROFILE_LISTS_REMIXES, SHOW_BASENAMES } from './you-flags';
 import { shortAddress } from './wallet/session';
+import { linkedTo, walletsOf } from './wallet/credit';
 
 /**
  * The You page (/you, private to the signed-in person) and the public profile (/@<handle>), owner
@@ -198,8 +199,24 @@ export interface OwnWork {
   pictures: PictureItem[];
 }
 
-/** Everything the signed-in person made, hidden things too. Never call this for anyone but the signed-in person. */
+/**
+ * Everything the signed-in person made, hidden things too. Never call this for anyone but the signed-in person.
+ * For a FID, with what its linked wallets made (owner, 2026-10-22: a linked wallet's earlier work shows under the
+ * Farcaster name; src/lib/wallet/credit.ts). Each piece keeps its own link (a wallet's scenes stay at its address).
+ */
 export async function ownWork(person: Person, handle: string | null): Promise<OwnWork> {
+  const own = await ownWorkOf(person, handle);
+  for (const w of person > 0 ? await walletsOf(db(), person) : []) {
+    const more = await ownWorkOf(w, await handleFor(w).catch(() => null));
+    own.scenes.push(...more.scenes);
+    own.frames.push(...more.frames);
+    own.boards.push(...more.boards);
+    own.pictures.push(...more.pictures);
+  }
+  return own;
+}
+
+async function ownWorkOf(person: Person, handle: string | null): Promise<OwnWork> {
   const sql = db();
   const scenes = (await versionsBy(person)).map((v) => sceneItem(v, handle));
   if (!sql) return { stored: false, scenes, frames: [], boards: [], pictures: [] };
@@ -225,8 +242,21 @@ export interface PublicWork {
   boards: BoardItem[];
 }
 
-/** What a public profile shows: only what is already public at its own link. Nothing hidden, no pictures, no money. */
+/** What a public profile shows: only what is already public at its own link. Nothing hidden, no pictures, no money. A FID's includes its linked wallets' (as ownWork). */
 export async function publicWork(person: Person, handle: string): Promise<PublicWork> {
+  const pub = await publicWorkOf(person, handle);
+  for (const w of person > 0 ? await walletsOf(db(), person) : []) {
+    const wh = await handleFor(w).catch(() => null);
+    if (!wh) continue;
+    const more = await publicWorkOf(w, wh);
+    pub.scenes.push(...more.scenes);
+    pub.frames.push(...more.frames);
+    pub.boards.push(...more.boards);
+  }
+  return pub;
+}
+
+async function publicWorkOf(person: Person, handle: string): Promise<PublicWork> {
   const scenes: PublicWork['scenes'] = [];
   for (const a of await adaptationsOf(person)) {
     const v = await shownVersion(person, a.id);
@@ -246,6 +276,9 @@ export async function publicWork(person: Person, handle: string): Promise<Public
 
 /** The handle of a person's public profile, if it has anything on it (so a byline never links to a page that isn't there). */
 export async function profileHandle(person: Person): Promise<string | null> {
+  // A linked wallet's work is shown under its FID, so its byline links to the FID's profile.
+  const fid = person < 0 ? (await linkedTo(db(), [person]).catch(() => new Map<number, number>())).get(person) : undefined;
+  if (fid) return profileHandle(fid);
   const handle = await handleFor(person).catch(() => null);
   if (!handle) return null;
   const w = await publicWork(person, handle).catch(() => null);

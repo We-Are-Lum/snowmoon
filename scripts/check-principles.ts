@@ -1187,7 +1187,7 @@ add({
     seen.push({ page: '/chapter/1', host: 'fonts.googleapis.com' });
   },
 });
-const PRIVATE_FID_TABLES = ['ratings', 'likes', 'take_likes', 'picks', 'contributor_consents', 'image_asks', 'removal_log', 'image_scores'];
+const PRIVATE_FID_TABLES = ['ratings', 'likes', 'take_likes', 'picks', 'contributor_consents', 'image_asks', 'removal_log', 'image_scores', 'wallet_links'];
 add({
   id: 'P6b',
   principle: 6,
@@ -1209,7 +1209,9 @@ add({
       insert into studio.contributor_consents (fid, kind, consent_text_sha256) values (42,'handmade_upload','${'a'.repeat(64)}');
       insert into studio.image_asks (fid) values (42);
       insert into studio.image_scores (fid, score) values (42, 0.8);
-      insert into studio.removal_log (element_id, step, by_fid, role, reason) values ('00000000-0000-0000-0000-0000000000b1','reported',42,'reader','spam');`);
+      insert into studio.removal_log (element_id, step, by_fid, role, reason) values ('00000000-0000-0000-0000-0000000000b1','reported',42,'reader','spam');
+      insert into studio.wallet_accounts (address) values ('0x${'4'.repeat(40)}');
+      insert into studio.wallet_links (account_id, fid, how) select id, 42, 'signed' from studio.wallet_accounts where address = '0x${'4'.repeat(40)}';`);
     const problems: string[] = [];
     for (const role of ['anon', 'authenticated']) {
       for (const t of PRIVATE_FID_TABLES) {

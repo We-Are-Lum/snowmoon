@@ -7,6 +7,7 @@ import { APP_NAME, appUrl } from '~/lib/config';
 import { AI_DECLARED } from '~/lib/ai-declared';
 import { getAdaptation, handleFor } from '~/lib/adaptation-pages';
 import { frameById, type Frame } from '~/lib/remix/frames';
+import { credit } from '~/lib/wallet/credit';
 import { HideButton, ShareRow } from '../remix-actions';
 import '../remix.css';
 
@@ -23,8 +24,10 @@ const PAPER = '#f6f3ea';
 async function load(id: string) {
   const sql = db();
   if (!sql) return null;
-  const f = await frameById(sql, id).catch(() => null);
-  if (!f) return null;
+  const made = await frameById(sql, id).catch(() => null);
+  if (!made) return null;
+  // A linked wallet's frame shows under its Farcaster name (owner, 2026-10-22; src/lib/wallet/credit.ts).
+  const [f] = await credit(sql, [made], (x) => x.person, (x, fid, name) => ({ ...x, person: fid, byName: name }));
   const adaptation = await getAdaptation(f.adaptationId);
   const [v] = await sql`select author_person from studio.adaptation_versions where id = ${f.versionId}`;
   const handle = v ? await handleFor(Number(v.author_person)) : null;
