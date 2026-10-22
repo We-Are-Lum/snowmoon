@@ -9,7 +9,8 @@
  * Practice only: nothing here is recorded anywhere. Recording happens in the mini app.
  */
 import { createHash, createHmac, timingSafeEqual } from 'node:crypto';
-import type { Piece } from '../play-game/game';
+import { RULE_IDS, type Piece, type RuleId } from '../play-game/game';
+import { RESULT_RE } from './challenge';
 import { decList, encList, type P } from './moves';
 
 export type { P } from './moves';
@@ -23,6 +24,10 @@ export interface SnapState {
   lvl: number;
   /** A version id from versions.ts, or '' for the base game. */
   ver: string;
+  /** The extra rule the player picked (the first page, or a challenge link), or '' for the drawn one. */
+  rule: RuleId | '';
+  /** A challenge's result (challenge.ts encResult) when this match was started from one, else ''. */
+  ch: string;
   /** The person's placements, one list per finished turn to act. */
   turns: P[][];
   /** This turn's placements so far. */
@@ -38,21 +43,22 @@ export interface SnapState {
 
 export function serialize(s: SnapState): string {
   return [
-    s.fid, s.seed.toString(36), s.lvl, s.ver, s.tool, s.aim + 1, s.taps, s.resigned ? 1 : 0, s.turns.length,
+    s.fid, s.seed.toString(36), s.lvl, s.ver, s.rule, s.ch, s.tool, s.aim + 1, s.taps, s.resigned ? 1 : 0, s.turns.length,
     s.turns.map(encList).join('~'), encList(s.pend),
   ].join('.');
 }
 
 export function parse(text: string): SnapState | null {
   const f = text.split('.');
-  if (f.length !== 11) return null;
-  const [fid, seed, lvl, ver, tool, aim, taps, res, nT, turnsText, pendText] = f;
+  if (f.length !== 13) return null;
+  const [fid, seed, lvl, ver, rule, ch, tool, aim, taps, res, nT, turnsText, pendText] = f;
   const num = (v: string) => (/^\d{1,10}$/.test(v) ? Number(v) : NaN);
   const st = {
-    fid: num(fid), seed: /^[0-9a-z]{1,7}$/.test(seed) ? parseInt(seed, 36) : NaN, lvl: num(lvl), ver,
+    fid: num(fid), seed: /^[0-9a-z]{1,7}$/.test(seed) ? parseInt(seed, 36) : NaN, lvl: num(lvl), ver, rule: rule as RuleId | '', ch,
     tool: tool as Tool, aim: num(aim) - 1, taps: num(taps), resigned: res === '1',
   };
-  if (![st.fid, st.seed, st.lvl, st.aim, st.taps].every(Number.isFinite) || st.seed > 0xffff_ffff) return null;
+  if (![st.fid, st.seed, st.lvl, st.aim, st.taps].every(Number.isFinite) || st.seed > 0xffff_ffff || st.lvl > 5) return null;
+  if ((rule && !RULE_IDS.includes(rule as RuleId)) || (ch && !RESULT_RE.test(ch))) return null;
   if (!/^[a-z0-9-]{0,40}$/.test(ver) || !['g', 's', 't'].includes(tool) || !/^[01]$/.test(res)) return null;
   const n = num(nT);
   const parts = turnsText === '' ? [] : turnsText.split('~');
@@ -90,12 +96,12 @@ export function verified(text: string | null, sig: string | null): boolean {
 /** The finished part of a match, for its run pictures: no FID, no pending pieces, so the same run
  * has one address whoever asks. `upTo` turns, the last of which led to the run shown. */
 export function runToken(s: SnapState, upTo: number): string {
-  return [s.seed.toString(36), s.lvl, s.ver, upTo, s.turns.slice(0, upTo).map(encList).join('~'), s.resigned ? 1 : 0].join('.');
+  return [s.seed.toString(36), s.lvl, s.ver, s.rule, upTo, s.turns.slice(0, upTo).map(encList).join('~'), s.resigned ? 1 : 0].join('.');
 }
-export function parseRunToken(text: string): { seed: number; lvl: number; ver: string; turns: P[][]; resigned: boolean } | null {
+export function parseRunToken(text: string): { seed: number; lvl: number; ver: string; rule: RuleId | ''; turns: P[][]; resigned: boolean } | null {
   const f = text.split('.');
-  if (f.length !== 6) return null;
-  const [seed, lvl, ver, nT, turnsText, res] = f;
-  const s = parse(['0', seed, lvl, ver, 'g', '0', '0', res, nT, turnsText, ''].join('.'));
-  return s && { seed: s.seed, lvl: s.lvl, ver: s.ver, turns: s.turns, resigned: s.resigned };
+  if (f.length !== 7) return null;
+  const [seed, lvl, ver, rule, nT, turnsText, res] = f;
+  const s = parse(['0', seed, lvl, ver, rule, '', 'g', '0', '0', res, nT, turnsText, ''].join('.'));
+  return s && { seed: s.seed, lvl: s.lvl, ver: s.ver, rule: s.rule, turns: s.turns, resigned: s.resigned };
 }

@@ -36,9 +36,11 @@ export function versionOf(id: string | null | undefined): Version | null {
   return (id && Object.prototype.hasOwnProperty.call(VERSIONS, id) && VERSIONS[id]) || null;
 }
 
-/** The match's numbers: the drawn rule unless the version fixes one, then the version's overrides. */
-export function settings(drawn: RuleId, v: Version | null) {
-  const rule = v?.rule ?? drawn;
+/** The match's numbers: the version's fixed rule, else the one the player picked (the first page,
+ * or a challenge link), else the drawn one; then the version's overrides. Picking a rule changes no
+ * engine numbers: the first random number is still drawn (and unused), as for a version. */
+export function settings(drawn: RuleId, v: Version | null, picked: RuleId | '' = '') {
+  const rule = v?.rule ?? (picked || drawn);
   return {
     rule,
     R: v?.R ?? (rule === 'sight2' ? 2 : 3),

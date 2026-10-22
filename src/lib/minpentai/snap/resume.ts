@@ -1,7 +1,7 @@
 /**
  * Each Farcaster ID's latest snap match, so the snap's first page can offer "Resume" after a dropped
- * page (owner, 2026-10-21). Only the seed, the computer player's level, the version and the
- * finished turns' placements: no taps, no pieces of an unfinished turn, no result. Practice only:
+ * page (owner, 2026-10-21). Only the seed, the computer player's level, the version, the picked
+ * extra rule and the finished turns' placements: no taps, no pieces of an unfinished turn, no result. Practice only:
  * nothing here is a record of play, and nothing goes onchain. A match is dropped when it ends, and
  * any row is deleted 30 days after its last turn.
  *
@@ -11,9 +11,10 @@
  * instance is warm). Best effort: a database error is logged and the game goes on without it.
  */
 import { db } from '~/lib/db';
+import { RULE_IDS, type RuleId } from '../play-game/game';
 import { decMatch, encMatch, type P } from './moves';
 
-export interface Saved { seed: number; lvl: number; ver: string; turns: P[][] }
+export interface Saved { seed: number; lvl: number; ver: string; rule: RuleId | ''; turns: P[][] }
 
 const KEEP_DAYS = 30;
 const memory = new Map<number, { saved: Saved; at: number }>();
@@ -33,11 +34,11 @@ async function loadNow(fid: number): Promise<Saved | null> {
     const m = memory.get(fid);
     return m && Date.now() - m.at < KEEP_DAYS * 86_400_000 ? m.saved : null;
   }
-  const rows = await sql<{ lvl: number; ver: string; moves: string }[]>`
-    select lvl, ver, moves from studio.mp_snap_resume where fid = ${fid} and updated_at > now() - make_interval(days => ${KEEP_DAYS})`;
+  const rows = await sql<{ lvl: number; ver: string; rule: string; moves: string }[]>`
+    select lvl, ver, rule, moves from studio.mp_snap_resume where fid = ${fid} and updated_at > now() - make_interval(days => ${KEEP_DAYS})`;
   const r = rows[0];
   const m = r && decMatch(r.moves);
-  return m ? { ...m, lvl: r.lvl, ver: r.ver } : null;
+  return m ? { ...m, lvl: r.lvl, ver: r.ver, rule: RULE_IDS.includes(r.rule as RuleId) ? (r.rule as RuleId) : '' } : null;
 }
 
 async function saveNow(fid: number, s: Saved): Promise<void> {
@@ -45,8 +46,8 @@ async function saveNow(fid: number, s: Saved): Promise<void> {
   if (!sql) { memory.set(fid, { saved: structuredClone(s), at: Date.now() }); return; }
   const moves = encMatch(s.seed, s.turns);
   await sql`
-    insert into studio.mp_snap_resume (fid, lvl, ver, moves) values (${fid}, ${s.lvl}, ${s.ver}, ${moves})
-    on conflict (fid) do update set lvl = excluded.lvl, ver = excluded.ver, moves = excluded.moves, updated_at = now()`;
+    insert into studio.mp_snap_resume (fid, lvl, ver, rule, moves) values (${fid}, ${s.lvl}, ${s.ver}, ${s.rule}, ${moves})
+    on conflict (fid) do update set lvl = excluded.lvl, ver = excluded.ver, rule = excluded.rule, moves = excluded.moves, updated_at = now()`;
   // Retention without a cron: at most once per 10 minutes per instance.
   if (Date.now() - lastSweep > 600_000) {
     lastSweep = Date.now();

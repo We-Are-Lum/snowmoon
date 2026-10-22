@@ -70,3 +70,8 @@ export async function runGif(run: Run, R: number, reveal = false): Promise<Buffe
 export async function boardGif(b: BoardView, R: number): Promise<Buffer> {
   return sharp(Buffer.from(frameSvg(b, {}, R, 0, 0, true))).gif({ colours: 16, effort: 3, dither: 0 }).toBuffer();
 }
+
+/** The whole board unfogged as a PNG, `width` wide: a challenge's start, for its preview card. */
+export async function boardPng(b: BoardView, R: number, width: number): Promise<Buffer> {
+  return sharp(Buffer.from(frameSvg(b, {}, R, 0, 0, true))).resize({ width }).png().toBuffer();
+}

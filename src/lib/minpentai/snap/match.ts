@@ -44,10 +44,10 @@ export interface Played {
 
 export class Unplayable extends Error {}
 
-export function play(input: { seed: number; lvl: number; ver: string; turns: P[][]; resigned: boolean }): Played {
+export function play(input: { seed: number; lvl: number; ver: string; rule: RuleId | ''; turns: P[][]; resigned: boolean }): Played {
   const r = rng(input.seed);
   const drawn = RULE_IDS[Math.floor(r() * RULE_IDS.length)];
-  const set = settings(drawn, versionOf(input.ver));
+  const set = settings(drawn, versionOf(input.ver), input.rule);
   const m = {
     lvl: input.lvl, ...set, rng: r, w: world(),
     pend: { C: [] as Placement[], A: [] as Placement[] },

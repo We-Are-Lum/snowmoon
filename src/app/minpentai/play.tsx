@@ -21,7 +21,10 @@ import { useEffect, useMemo, useReducer, useRef, useState } from 'react';
 import Link from 'next/link';
 import { authFetch, inMiniApp, useAuth } from '~/lib/client-auth';
 import { PlayController, browserEnv, type Dev } from '~/lib/minpentai/play-game/controller';
+import { RULE_IDS, type RuleId } from '~/lib/minpentai/play-game/game';
+import { CHALLENGE_PATH, decChallenge, outcome, splitChallenge } from '~/lib/minpentai/snap/challenge';
 import { decMatch } from '~/lib/minpentai/snap/moves';
+import { settings, versionOf } from '~/lib/minpentai/snap/versions';
 import type { LadderProgress } from '~/lib/minpentai/play-game/live-types';
 import { PlayBoard } from './play-board';
 import { PlayPerson } from './play-live';
@@ -68,11 +71,20 @@ export function Play({ start, onLearn }: { start: 'home' | 'free' | 'ladder' | '
     if (start === 'free') ctl.openFree();
     else if (start === 'ladder') ctl.setState({ scr: 'ladder' });
     else if (start === 'person') ctl.setState({ scr: 'person' });
-    else if (start === 'match') {
-      // A practice match carried on from the snap (?match=<seed>.<turns>.<moves>, moves.ts; &level=0–5).
+    else if (start === 'match' && window.location.pathname.startsWith(CHALLENGE_PATH)) {
+      // A challenge link (/minpentai/c/<…>, snap/challenge.ts): the same start, as a practice match.
+      // The page checked its signature on the server; this reads only the start from it.
+      const x = splitChallenge(window.location.pathname.slice(CHALLENGE_PATH.length));
+      const c = x && decChallenge(x.body);
+      if (c && ctl.continueMatch(c.seed, [], c.lvl, (drawn) => settings(drawn, versionOf(c.ver), c.rule))) ctl.say(`A challenge: ${outcome(c.res)}, in ${c.res.taps} taps. Same start: your move.`);
+      else ctl.say('That challenge link could not be read, so here is Play.');
+    } else if (start === 'match') {
+      // A practice match carried on from the snap (?match=<seed>.<turns>.<moves>, moves.ts; &level=0–5;
+      // &rule= when the player picked the extra rule).
       const q = new URLSearchParams(window.location.search);
-      const g = decMatch(q.get('match') ?? ''), lvl = Number(q.get('level') ?? 0);
-      if (!g || !Number.isInteger(lvl) || lvl < 0 || lvl > 5 || !ctl.continueMatch(g.seed, g.turns, lvl)) ctl.say('That match link could not be read, so here is Play.');
+      const g = decMatch(q.get('match') ?? ''), lvl = Number(q.get('level') ?? 0), rule = q.get('rule') ?? '';
+      const picked = (RULE_IDS as string[]).includes(rule) ? (rule as RuleId) : null;
+      if (!g || !Number.isInteger(lvl) || lvl < 0 || lvl > 5 || (rule && !picked) || !ctl.continueMatch(g.seed, g.turns, lvl, picked ? (drawn) => settings(drawn, null, picked) : undefined)) ctl.say('That match link could not be read, so here is Play.');
     }
     ctl.mount(window.location.hash);
     const onK = (e: KeyboardEvent) => { if (e.key === 'Escape') ctl.escape(); };

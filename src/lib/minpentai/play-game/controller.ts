@@ -169,12 +169,15 @@ export class PlayController {
    * match's own rng exactly as if they had been played here, each turn checked by the server's
    * checkPlacements, against the same computer level (0 Practice, 1–5 the rungs' players; still a
    * practice match, nothing recorded). Lands on the next turn to act (or the result). False if a
-   * turn is refused.
+   * turn is refused. `numbers`: the match's extra rule and the numbers it sets, from the drawn rule,
+   * when the snap's player picked a rule or played a version (snap/versions.ts settings; a challenge
+   * link starts here with no turns). The rng is the same either way: mk has drawn its first number.
    */
-  continueMatch(seed: number, turns: { t: Piece; x: number; y: number; dx: number; dy: number }[][], lvl = 0): boolean {
+  continueMatch(seed: number, turns: { t: Piece; x: number; y: number; dx: number; dy: number }[][], lvl = 0, numbers?: (drawn: RuleId) => { rule: RuleId; R: number; every: number; cost: number }): boolean {
     this.env.clearInterval(this.rt);
     const m = this.mk('practice', undefined, seed);
     m.lvl = lvl;
+    if (numbers) Object.assign(m, numbers(m.rule));
     this.m = m;
     this.beginAct();
     for (const turn of turns) {

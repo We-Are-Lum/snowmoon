@@ -9,6 +9,8 @@
  * 4. Whole matches played through the snap's own actions: taps per match, time per action, GIF
  *    time and size.
  * 5. State: a tampered link is refused; a link replays the same match; another FID gets a new match.
+ * 6. Resume, the reveal, Play carrying on a match, aim arrows, fog, the computer level.
+ * 7. The extra rule picked on the first page, and the challenge a result shares (owner, 2026-10-22).
  */
 import assert from 'node:assert/strict';
 import { validateSnapResponse } from '@farcaster/snap';
@@ -21,6 +23,10 @@ import { parse, serialize, sign, verified, type P, type SnapState } from '../src
 import { runGif } from '../src/lib/minpentai/snap/run';
 import { decMatch, encMatch } from '../src/lib/minpentai/snap/moves';
 import { GET as runRoute } from '../src/app/snap/minpentai/run/route';
+import { GET as snapRoute } from '../src/app/snap/minpentai/route';
+import { GET as cardRoute } from '../src/app/api/minpentai-challenge-card/route';
+import { CHALLENGE_PATH, decChallenge, splitChallenge } from '../src/lib/minpentai/snap/challenge';
+import { settings, versionOf } from '../src/lib/minpentai/snap/versions';
 
 const H: Here = { base: 'https://snowmoon.party', keep: [] };
 let failures = 0;
@@ -255,7 +261,7 @@ async function main() {
     assert.ok(r.keep && r.keep !== 'drop' && r.keep.save.turns.length === 1, 'the finished turn is kept');
     const saved = (r.keep as { save: Parameters<typeof act>[5]['saved'] & object }).save;
     // Only seed, level, version and finished turns: no taps, no pending pieces.
-    assert.deepEqual(Object.keys(saved).sort(), ['lvl', 'seed', 'turns', 'ver']);
+    assert.deepEqual(Object.keys(saved).sort(), ['lvl', 'rule', 'seed', 'turns', 'ver']);
     const res = act(H, 'resume', null, 7, {}, { ver: '', saved });
     valid(res.page, 'resumed');
     const back = tapState(res.page);
@@ -386,6 +392,124 @@ async function main() {
     const again = tapState(act(H, 'again', { ...st, resigned: true }, 8, {}, { ver: '' }).page);
     assert.equal(again.lvl, 3);
     assert.match(LEVELS.join(' '), /^Practice Rival Blocker Builder Opportunist Planner$/);
+  });
+
+  // 7. The extra rule, and challenges
+  const targetOf = (el: { on?: Record<string, unknown> }) => new URL((el.on!.press as { params: { target: string } }).params.target);
+  /** Play a match through the snap's own actions to its result page. */
+  const toEnd = (st0: SnapState, style: 'gliders' | 'mixed' = 'gliders', h: Here = H) => {
+    let st = structuredClone(st0);
+    for (let guard = 0; guard < 20; guard++) {
+      const p = play(st);
+      st.pend = plan(p, style);
+      const r = act(h, 'end', st, st.fid, {}, { ver: st.ver });
+      if (r.page.ui.elements.share) return r.page;
+      st = parse(targetOf(r.page.ui.elements.next).searchParams.get('s')!)!;
+    }
+    throw new Error('no end');
+  };
+  const play0 = () => new PlayController({ now: () => 0, setInterval: () => 0, clearInterval: () => {}, setTimeout: () => 0, clearTimeout: () => {}, copy: () => {}, href: () => '' });
+
+  check('the extra rule: picked on the first page (or drawn), played, kept, carried to Play board for board; no picker when a version fixes one', () => {
+    const first = intro(H, '');
+    valid(first, 'first page with the rule picker');
+    const pick = first.ui.elements.rule;
+    assert.equal(pick.type, 'toggle_group');
+    assert.deepEqual(pick.props!.options, ['?', '↗', '→3', '◎2', '↻8']);
+    assert.ok((pick.props!.options as string[]).join('').length <= 8, 'five options stay in one row (8 characters at most)');
+    assert.ok(String(pick.props!.label).length <= 60);
+    assert.ok(!intro(H, 'fast-fog').ui.elements.rule, 'a version with a fixed rule has no picker');
+    const want: Record<string, string> = { '↗': 'diag', '→3': 'cost3', '◎2': 'sight2', '↻8': 'every8' };
+    for (const [g, rule] of Object.entries(want)) {
+      const st = tapState(act(H, 'start', null, 9, { rule: g, lvl: 2 }, { ver: '' }).page);
+      assert.equal(st.rule, rule);
+      assert.equal(play(st).rule, rule);
+      assert.equal(play(st).R, rule === 'sight2' ? 2 : 3);
+    }
+    assert.equal(tapState(act(H, 'start', null, 9, { rule: '?' }, { ver: '' }).page).rule, '', '? is drawn');
+    assert.equal(tapState(act(H, 'start', null, 9, { rule: 'nonsense' }, { ver: '' }).page).rule, '');
+    // Picking the rule a seed would draw anyway changes nothing: the rng is used the same way.
+    const d = seedWith('diag');
+    const fixed = { ...d, rule: 'diag' as const, turns: [plan(play(d), 'gliders')] };
+    assert.equal(JSON.stringify(play(fixed).w), JSON.stringify(play({ ...fixed, rule: '' }).w));
+    // A rule the seed would not draw: the snap and Play still agree board for board, turn after turn.
+    let st: SnapState = { ...seedWith('every8'), fid: 9, rule: 'sight2', lvl: 4 };
+    for (let i = 0; i < 2; i++) { st.pend = plan(play(st), 'mixed'); const r = act(H, 'end', st, 9, {}, { ver: '' }); assert.ok(r.keep && r.keep !== 'drop' && r.keep.save.rule === 'sight2', 'kept with its rule'); st = parse(targetOf(r.page.ui.elements.next).searchParams.get('s')!)!; }
+    const r = act(H, 'end', { ...st, pend: [] }, 9, {}, { ver: '' });
+    const s2 = parse(targetOf(r.page.ui.elements.next).searchParams.get('s')!)!;
+    const link = targetOf(r.page.ui.elements.app);
+    assert.equal(link.searchParams.get('rule'), 'sight2');
+    assert.equal(link.searchParams.get('level'), '4');
+    const g = decMatch(link.searchParams.get('match')!)!;
+    const c = play0();
+    assert.ok(c.continueMatch(g.seed, g.turns, 4, (drawn) => settings(drawn, null, 'sight2')));
+    assert.equal(c.m!.rule, 'sight2');
+    assert.equal(c.m!.R, 2);
+    assert.equal(JSON.stringify(c.m!.w), JSON.stringify(play(s2).w), 'Play with the picked rule matches the snap');
+    assert.equal(tapState(act(H, 'again', { ...s2, resigned: true }, 9, {}, { ver: '' }).page).rule, 'sight2', 'Play again keeps it');
+  });
+
+  check('a challenge: Share casts the result with a signed link to the same start; the link plays it in the feed and in Play', async () => {
+    const leak: Here = { base: 'https://snowmoon.party', keep: [['x-vercel-protection-bypass', 'SECRET']] };
+    const st: SnapState = { ...newMatch(21, '', 2, 'cost3'), seed: 777 };
+    const end = toEnd(st);
+    valid(end, 'result with a challenge share');
+    assert.ok(!end.ui.elements.make, 'no "Make your own version" until versions exist');
+    const press = end.ui.elements.share.on!.press as { action: string; params: { text: string; embeds: string[] } };
+    assert.equal(press.action, 'compose_cast');
+    assert.match(press.params.text, /^Minpentai against Blocker: I (won|lost|drew|resigned) at step \d+.*, in \d+ taps\. Same start, same extra rule \(gliders cost 3\): can you beat it\?$/);
+    const url = press.params.embeds[0];
+    assert.ok(url.startsWith(`https://snowmoon.party${CHALLENGE_PATH}`), url);
+    assert.ok(Buffer.byteLength(url) <= 256, `an embed URL is at most 256 bytes (${Buffer.byteLength(url)})`);
+    // A preview's bypass never goes into a shared link.
+    const leaked = toEnd(st, 'gliders', leak);
+    assert.ok(JSON.stringify(leaked.ui.elements.again).includes('SECRET'), 'the snap\'s own links keep it');
+    assert.ok(!JSON.stringify(leaked.ui.elements.share).includes('SECRET'), 'the shared link does not');
+    const seg = url.slice(`https://snowmoon.party${CHALLENGE_PATH}`.length);
+    const c = decChallenge(splitChallenge(seg)!.body)!;
+    assert.deepEqual([c.seed, c.lvl, c.rule, c.ver], [777, 2, 'cost3', '']);
+    // The first page a cast shows: the result, the same start, no level or rule to pick.
+    const get = (s: string) => snapRoute(new Request(`https://snowmoon.party/snap/minpentai?c=${encodeURIComponent(s)}`, { headers: { accept: 'application/vnd.farcaster.snap+json' } }));
+    const res = await get(seg);
+    assert.equal(res.status, 200);
+    const first = (await res.json()) as SnapPage;
+    valid(first, 'challenge first page');
+    assert.match(String(first.ui.elements.ch.props!.content), /^A challenge: .* Against Blocker, extra rule: Gliders cost 3 points\.$/);
+    assert.ok(!first.ui.elements.level && !first.ui.elements.rule && !first.ui.elements.resume);
+    // The same page when the rewrite (next.config.ts) hands over the link's own path.
+    const viaPath = await snapRoute(new Request(`https://snowmoon.party${CHALLENGE_PATH}${seg}`, { headers: { accept: 'application/vnd.farcaster.snap+json' } }));
+    assert.deepEqual(await viaPath.json(), first);
+    const start = targetOf(first.ui.elements.start);
+    assert.equal(start.searchParams.get('c'), seg);
+    // A forged result (or start) is refused.
+    const bad = seg.replace(/\.([CAD]r?)-(\d+)/, (_m, w, n) => `.${w}-${Math.max(1, +n - 1)}`);
+    assert.notEqual(bad, seg);
+    assert.equal((await get(bad)).status, 404);
+    assert.equal((await snapRoute(new Request(`https://snowmoon.party${CHALLENGE_PATH}${bad}`, { headers: { accept: 'application/vnd.farcaster.snap+json' } }))).status, 404);
+    // Accepting it: the same match (seed, level, rule), with the challenge's result kept for the end.
+    const mine = tapState(act(H, 'start', null, 33, { lvl: 0, rule: '↗' }, { ver: '', challenge: c }).page);
+    assert.deepEqual([mine.seed, mine.lvl, mine.rule, mine.fid], [777, 2, 'cost3', 33]);
+    assert.ok(mine.ch);
+    assert.equal(JSON.stringify(play(mine).w), JSON.stringify(play({ ...st, turns: [] }).w), 'the identical start');
+    const theirEnd = toEnd(mine, 'mixed');
+    assert.match(String(theirEnd.ui.elements.vs.props!.content), /^The challenge: .*\. You: .*\.$/);
+    // In a browser the link opens Play at the same start, board for board.
+    const p = play0();
+    assert.ok(p.continueMatch(c.seed, [], c.lvl, (drawn) => settings(drawn, versionOf(c.ver), c.rule)));
+    assert.equal(JSON.stringify(p.m!.w), JSON.stringify(play(mine).w));
+    assert.deepEqual([p.m!.rule, p.m!.cost, p.m!.lvl], ['cost3', 3, 2]);
+    // Its preview card for X (1200×630) and Farcaster (3:2), only for a signed link.
+    // (tsx compiles the route's JSX for the classic runtime; Next uses the automatic one.)
+    (globalThis as { React?: unknown }).React = (await import('react')).default;
+    const card = await cardRoute(new Request(`https://snowmoon.party/api/minpentai-challenge-card?c=${encodeURIComponent(seg)}`));
+    assert.equal(card.status, 200);
+    assert.equal(card.headers.get('content-type'), 'image/jpeg');
+    const sharp = (await import('sharp')).default;
+    const meta = await sharp(Buffer.from(await card.arrayBuffer())).metadata();
+    assert.deepEqual([meta.width, meta.height], [1200, 630]);
+    const embed = await sharp(Buffer.from(await (await cardRoute(new Request(`https://snowmoon.party/api/minpentai-challenge-card?c=${encodeURIComponent(seg)}&shape=embed`))).arrayBuffer())).metadata();
+    assert.deepEqual([embed.width, embed.height], [1200, 800]);
+    assert.equal((await cardRoute(new Request(`https://snowmoon.party/api/minpentai-challenge-card?c=${encodeURIComponent(bad)}`))).status, 404);
   });
 
   await Promise.all(pending);

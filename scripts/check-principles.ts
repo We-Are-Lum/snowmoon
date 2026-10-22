@@ -1953,7 +1953,7 @@ add({
 add({
   id: 'P8h',
   principle: 8,
-  name: 'the Minpentai snap\'s first card carries Play\'s labels "Invented" and "Draft" (as badges: a snap can\'t open the ⓘ) and says the rules are invented for this edition; none of its pages paraphrases c4-b84 as "a new rule each match"',
+  name: 'the Minpentai snap\'s first card (a challenge\'s too) carries Play\'s labels "Invented" and "Draft" (as badges: a snap can\'t open the ⓘ) and says the rules are invented for this edition; none of its pages, nor the cast its Share starts, paraphrases c4-b84 as "a new rule each match"',
   load: async () => {
     const { intro, act } = await import('../src/lib/minpentai/snap/pages');
     const { VERSIONS } = await import('../src/lib/minpentai/snap/versions');
@@ -1964,6 +1964,9 @@ add({
     for (const ver of ['', ...Object.keys(VERSIONS)]) for (const resume of ['yes', 'no', 'maybe'] as const) {
       firsts.push({ id: `first page${ver ? ` (${ver})` : ''}, resume ${resume}`, page: intro(h, ver, resume) as Page });
     }
+    // A challenge link's first page (owner, 2026-10-22).
+    const challenge = { seed: 777, lvl: 3, rule: 'diag' as const, ver: '', res: { win: 'C' as const, resigned: false, step: 41, c: 3, a: 0, taps: 38 } };
+    firsts.push({ id: 'first page of a challenge', page: intro(h, '', 'no', { c: challenge, seg: 'x' }) as Page });
     // The other pages of a short match: the board, a run, resign, the result.
     const others: { id: string; page: Page }[] = [];
     let r = act(h, 'start', null, 1, {}, { ver: '' });
@@ -1982,6 +1985,9 @@ add({
     others.push({ id: 'resign', page: r.page as Page });
     r = act(h, 'resign-yes', parse(stOf(r.page as Page)!.s), 1, {}, { ver: '' });
     others.push({ id: 'result', page: r.page as Page });
+    // The words its Share starts the cast with.
+    const cast = (r.page as { ui: { elements: Record<string, { on?: { press?: { params?: { text?: string } } } }> } }).ui.elements.share?.on?.press?.params?.text ?? '';
+    others.push({ id: 'the share\'s cast text', page: { ui: { root: 'cast', elements: { cast: { type: 'text', props: { content: cast } } } } } });
     return { words: { invented: LABELS.minpentai.invented.word, draft: LABELS.minpentai.draft.word }, firsts, others };
   },
   run: ({ words, firsts, others }) => {

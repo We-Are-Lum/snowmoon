@@ -34,7 +34,7 @@ There are no player-made versions anywhere yet, and nothing on main to make them
 | Near-sight board | Built, then **removed** | `?b=n` showed only the lit rectangle (5 × 10 with two towers: cells about 89 × 28 px). Your phone test, 2026-10-21: the full board wins; near-sight hides too much of the field. The mode, its code and its tests were removed. |
 | Play continues the match | Yes | From the second run screen (base game only; Play has no versions), "Keep playing in the app" opens `/minpentai?match=<seed>.<turns>.<moves>` on the same host. `PlayController.continueMatch` replays the turns through `checkPlacements` on the match's own rng and lands on the next turn to act. The test matches Play's board to the snap's at the hand-off and one turn later; a placement in the fog is refused. Screenshot: `play-continued.png` (step 36, same rule). |
 | Privacy draft | Yes | `docs/legal/minpentai-snap-draft.md`: one item for section 4 (the kept match) and one for section 7 (the hub check). Not in `legal.ts`; ships with the snap. |
-| P8 checks | Yes | New `P8g` in `check:principles` (and `docs/principles.md`): the first card, for every version and every Resume state, carries "Invented" and "Draft" (the words from `labels.ts`) as badges and says the rules are invented for this edition; no page of a match paraphrases c4-b84. The proof swaps the Draft badge and plants "a new rule each match". 47 of 48 pass (P6d). |
+| P8 checks | Yes | New `P8h` (was P8g) in `check:principles` (and `docs/principles.md`): the first card, for every version and every Resume state, carries "Invented" and "Draft" (the words from `labels.ts`) as badges and says the rules are invented for this edition; no page of a match paraphrases c4-b84. The proof swaps the Draft badge and plants "a new rule each match". 47 of 48 pass (P6d). |
 
 Heights of the new pages (same renderer): first page with Resume 266 px, run with "Keep playing in the app" 451, resumed board 475, result with the revealed board 470.
 
@@ -115,6 +115,17 @@ A full match in the feed works, but it is 30–55 taps, and every tap waits for 
 
 Forcing the hand-off after turn 1 or 2 would be simpler to build, but it gives up the in-feed match that makes the snap worth sharing.
 
+## Ship (owner, 2026-10-22)
+
+Decisions: the snap merges first, on today's main (minpentai-one-engine rebases after it and re-applies `?match=` on its controller). The whole match plays in the feed; "Keep playing in the app" stays optional from turn 2. "Make your own version" is hidden until versions exist.
+
+- **One link.** `snowmoon.party/minpentai` serves the snap to a request whose `Accept` asks for `application/vnd.farcaster.snap+json`, and the page to everything else, with `Link: </minpentai>; rel="alternate"; type="application/vnd.farcaster.snap+json"` (next.config.ts: a `beforeFiles` rewrite on the Accept header and `headers` with `missing`). The page stays static, with the same metadata and the same app. `/snap/minpentai` still answers directly; buttons post there.
+- **Challenge.** Share is `compose_cast` with the result in words the player can edit ("Minpentai against Builder: I won at step 41 with 3 towers left, in 38 taps. Same start, same extra rule (diagonal gliders): can you beat it?"). It embeds `snowmoon.party/minpentai/c/<seed>.<level>.<rule>.<version>.<result>.<signature>`: about 90 bytes, within Farcaster's 256-byte embed limit. In a cast it is the snap: a first page with the result and Accept the challenge, then the identical start, and at the end both results side by side ("The challenge: … You: …"), no ranking. In a browser it is Play at the same start (the board for board test covers it), with a preview card for X (1200×630) and Farcaster's 3:2 embed, drawn from the link (`/api/minpentai-challenge-card`). The result is signed, so a link can't show a result the snap didn't reach; a forged one is a 404. Nothing is stored.
+- **Rule choice.** No engine change: the snap's versions already fix a rule while still drawing (and ignoring) the rng's first number, and Play's `continueMatch` now takes the match's numbers. The first page has a five-way picker: `?` (drawn), `↗` diagonal, `→3` glider cost 3, `◎2` sight 2, `↻8` turns every 8 steps. Glyphs, because the renderer keeps five options in a row only up to 8 characters in all; its label spells them out and the turn screen names the rule in full. It is kept by Play again and Resume, carried to Play (`&rule=`) and in the challenge link. A version with a fixed rule has no picker.
+- **Heights:** first page 396 px, challenge first page 320, result with both results 475, board 475. Screenshots: `minpentai-snap/challenge/`.
+- **Production:** `MINPENTAI_SNAP_SECRET` (sensitive, production only) signs match and challenge links. The resume migration is `NEXT_minpentai_snap_resume.sql`, numbered at merge; the snap plays without it.
+- **Legal:** Privacy §4 (the kept match), §6 (a shared challenge), §7 (the hub check, in the Farcaster item) and Terms §1 ("its game in Farcaster casts") are in `src/lib/legal.ts`, awaiting the owner's reread (`docs/legal/minpentai-snap-draft.md`).
+
 ## Testing
 
 - **Test project:** `snowmoon-snap-test` (Vercel team nates-projects-d1780cff), separate from `snowmoon`, with no environment variables, no deployment protection and no Git connection. Its only secret is a random signing key passed to the deployment itself (`vercel deploy --env`). **Delete the project after testing.**
@@ -124,8 +135,8 @@ Forcing the hand-off after turn 1 or 2 would be simpler to build, but it gives u
 
 - **P6 (no third-party requests on pages; ratings private):** the snap is JSON drawn by Farcaster's client. Our server makes one outside request, to a Farcaster hub, to check who signed a tap (required by the snap spec). Nothing about players is stored. The browser fallback page links only to snowmoon.party. Pass.
 - **P7 (not affiliated line on the first screen; no token):** the first card (and the version card) carries "Independent adaptation · Not affiliated with the author · No token". Pass.
-- **P8 (Minpentai matches the source):** the snap plays Play's invented rules, labelled "Invented" and "Draft", with "rules invented for this edition" on card 1. It doesn't paraphrase c4-b84 as "a new rule each match" ("one of four invented extras"). Concern: P8f's ⓘ labels can't be drawn in a snap; the badges stand in. P8's checks don't cover the snap yet.
+- **P8 (Minpentai matches the source):** the snap plays Play's invented rules, labelled "Invented" and "Draft", with "rules invented for this edition" on card 1. It doesn't paraphrase c4-b84 as "a new rule each match" ("one of four invented extras"). Concern: P8f's ⓘ labels can't be drawn in a snap; the badges stand in, and P8h checks them.
 - **P1, P2, P4 (generated assets, AI declared, publishing):** the GIFs are drawn in code from the engine, with no model and no text in the picture. Not touched.
-- **P8g (new):** passes; proven to fail on its plant.
+- **P8h (new; P8g on main is the kit's rules table):** passes, including a challenge's first card and the cast text Share starts; proven to fail on its plant.
 - **P6 (privacy):** Round 2 keeps each FID's latest practice match (seed and placements only) for Resume, not publicly readable (the migration has no public policy), deleted when the match ends or after 30 days. Pass, with the Privacy lines drafted.
-- **Legal texts:** `docs/legal/minpentai-snap-draft.md` (the kept match; the hub check). They ship with the snap, not before.
+- **Legal texts:** in `src/lib/legal.ts` with the snap (the kept match, a shared challenge, the hub check, Terms §1), awaiting the owner's reread: P6k and P6l fail until then, by design.

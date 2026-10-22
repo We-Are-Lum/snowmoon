@@ -1,38 +1,49 @@
-# DRAFT: Privacy lines for Minpentai in a Farcaster cast (the snap)
+# Privacy and Terms lines for Minpentai in a Farcaster cast (the snap)
 
-Branch `minpentai-snap`, 2026-10-21. Drafted by the coding agent for the owner's reread. Not in
-`src/lib/legal.ts`; it goes in with the merge that ships the snap (per "legal texts describe today").
+Branch `minpentai-snap`, 2026-10-22. Drafted by the coding agent; in `src/lib/legal.ts` in the same
+PR as the snap (per "legal texts describe today"), awaiting the owner's reread. Until then
+check:principles P6k and P6l fail, and the merge waits.
 
-What the branch does: `/snap/minpentai` serves a practice match of Minpentai that plays inside a
-Farcaster cast. Each tap reaches our server as a request signed by the player's Farcaster app. To
-check the signature, the server asks a Farcaster hub (by default `rho.farcaster.xyz`, run by
-Farcaster) which signing keys the player's Farcaster ID has, and keeps that answer in memory for
-five minutes. The match itself travels in the snap's own links, signed by us. We keep each
-Farcaster ID's latest match (seed, computer level, version, and the placements of the finished
-turns) so the first page can offer "Resume"; it is deleted when the match ends, and any left over
-after 30 days. Nothing is recorded as a result, ranked, or sent onchain. "Keep playing in the app"
-opens the mini app with the match's seed and moves in the link.
+What ships: `snowmoon.party/minpentai` plays inside a Farcaster cast (the snap) when a Farcaster
+client asks for a snap; browsers get the page as before. Each tap reaches our server signed by the
+player's Farcaster app. To check the signature, the server asks a Farcaster hub (by default
+`rho.farcaster.xyz`, run by Farcaster) which signing keys the player's Farcaster ID has, and keeps
+that answer in memory for five minutes. The match itself travels in the snap's own links, signed by
+us. We keep each Farcaster ID's latest match (seed, computer level, version, picked extra rule, and
+the placements of the finished turns) so the first page can offer "Resume"; it is deleted when the
+match ends, and any left over after 30 days. Share posts a challenge: the player's own Farcaster app
+composes the cast, and its link (`/minpentai/c/…`) carries the match's start and the player's result,
+signed; its preview card is drawn from the link. Nothing is recorded as a result, ranked, or sent
+onchain. "Keep playing in the app" opens Play with the match's seed and moves in the link.
 
 ## Privacy, section 4 ("Kept by us when you sign in."), one item added to the list
 
-Strictly a snap tap isn't a sign-in, but it is the same Farcaster ID; the list is where Minpentai's
-other records are, so the line sits next to them:
+> If you play Minpentai in a Farcaster cast: your latest practice match there (its random seed, the computer level, the extra rule and where you placed your pieces, turn by turn), so you can resume it; deleted when the match ends, or 30 days after your last turn. Nothing else about these matches is kept or recorded.
 
-> If you play Minpentai in a Farcaster cast: your latest practice match there (where pieces were placed, turn by turn, and the match's random seed), so you can resume it; deleted when the match ends, or 30 days after your last turn. Nothing else about these matches is kept or recorded.
+## Privacy, section 6 ("What you publish."), one sentence added at the end
 
-## Privacy, section 7 ("Outside services and what they receive."), one item added
+> If you share a Minpentai challenge from a Farcaster cast, your Farcaster app posts it; its link carries the match's start (its random seed, the computer level and the extra rule) and your result (how and at which step it ended, the towers left and your taps), its card is drawn from that link, and we keep nothing about it.
 
-> When you tap in Minpentai inside a Farcaster cast, your Farcaster app signs the tap, and we ask a Farcaster hub (run by Farcaster) which signing keys your Farcaster ID has, to check the signature. The hub receives your Farcaster ID; we keep its answer in memory for five minutes and not after.
+## Privacy, section 7 ("Outside services and what they receive."), one sentence added to the Farcaster item
 
-## Terms
+Added to the existing Farcaster item rather than as a new service, since the hub is Farcaster's
+(P6g's list of outside services is unchanged):
 
-No change: section 2 already describes "a game reconstruction", and nothing in the snap is paid,
-published or ranked. If the owner prefers, section 1's "(snowmoon.party and its Farcaster mini app)"
-could add "and its game in Farcaster casts".
+> When you play Minpentai inside a Farcaster cast, your Farcaster app signs each tap, and we ask a Farcaster hub (run by Farcaster) which signing keys your Farcaster ID has, to check the signature: the hub receives your Farcaster ID, and we keep its answer in memory for five minutes.
 
-## Checks to update with the merge
+## Terms, section 1 ("Who runs this.")
 
-- P6g lists the outside services the Privacy page, About, the assistant's notice and the consent
-  screen must agree on. If the hub becomes a named service, it is added there in the same change.
-- Migration NEXT_minpentai_snap_resume (`studio.mp_snap_resume`, numbered at merge) is a DRAFT and must be applied before the snap ships to
-  production; without it the snap still plays, and Resume lasts only while a server instance is warm.
+> Snowmoon Party (snowmoon.party, its Farcaster mini app and its game in Farcaster casts, together "the Service") is operated by Lum LLC, a Wyoming limited liability company ("we"). By using the Service you agree to these Terms.
+
+(Was: "snowmoon.party and its Farcaster mini app".) Section 2 already describes "a game
+reconstruction"; nothing in the snap is paid, published by us or ranked.
+
+## After the reread
+
+Set `LEGAL.ownerReread` to the keys check:principles prints (P6k, P6l), with the date.
+
+## The migration
+
+`supabase/migrations/NEXT_minpentai_snap_resume.sql` (`studio.mp_snap_resume`) takes the next free
+number at merge. Without it the snap still plays, and Resume lasts only while a server instance is
+warm; the Privacy line is true either way (the match is kept, in memory or in the table).

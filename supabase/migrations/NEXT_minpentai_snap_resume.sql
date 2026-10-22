@@ -7,7 +7,7 @@
 -- Requires 0001. Dry run first: paste everything, but replace the final `commit;` with `rollback;`.
 --
 -- What it adds: studio.mp_snap_resume, one row per FID: the computer player's level, the
--- version id, and the match as text (seed, then the finished turns' placements; the format is
+-- version id, the extra rule the player picked ('' when it was drawn), and the match as text (seed, then the finished turns' placements; the format is
 -- src/lib/minpentai/snap/moves.ts encMatch). Nothing else: no username, no taps, no result.
 -- Practice only; nothing here is a record of play. Not publicly readable: no public read
 -- policy, and anon and authenticated lose every privilege 0001's default privileges gave them.
@@ -25,6 +25,7 @@ create table studio.mp_snap_resume (
   fid bigint primary key,
   lvl smallint not null default 0 check (lvl between 0 and 5),
   ver text not null default '' check (ver ~ '^[a-z0-9-]{0,40}$'),
+  rule text not null default '' check (rule in ('', 'diag', 'cost3', 'sight2', 'every8')),
   -- seed (base 36) . number of turns . placements, two base64url characters each, turns joined by ~
   moves text not null check (moves ~ '^[0-9a-z]{1,7}\.[0-9]{1,3}\.[A-Za-z0-9_~-]{0,2000}$'),
   updated_at timestamptz not null default now()

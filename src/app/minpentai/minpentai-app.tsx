@@ -23,6 +23,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Learn, LEARN_SCREENS, PRACTICE_SCREEN, WATCH_SCREENS } from './learn';
 import { Play } from './play';
+import { CHALLENGE_PATH } from '~/lib/minpentai/snap/challenge';
 
 /** Set once Learn is finished or skipped; later bare visits open Play. (The sandbox's key, kept.) */
 const DONE_KEY = 'minpentai-tutorial-done';
@@ -75,6 +76,8 @@ export function MinpentaiApp() {
   useEffect(() => {
     const q = new URLSearchParams(window.location.search);
     if (q.get('s')) { router.replace('/minpentai/rule'); return; }
+    // A challenge link (/minpentai/c/<…>) starts its match in Play.
+    if (window.location.pathname.startsWith(CHALLENGE_PATH)) { setMode({ kind: 'play', start: 'match' }); setVisit((v) => v + 1); return; }
     const screen = screenFor(q);
     const m = q.get('mode');
     if (screen !== null) setMode({ kind: 'learn', screen });
