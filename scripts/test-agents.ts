@@ -525,6 +525,10 @@ try {
   const fnCfg = (await S.pg.query<{ cfg: string[] | null }>(`select proconfig as cfg from pg_proc where proname = 'agents_three'`)).rows[0]?.cfg ?? [];
   check('DB4 agents_three() runs with an empty search_path', fnCfg.some((c) => /^search_path=(""|)$/.test(c)), JSON.stringify(fnCfg));
 
+  console.log('H  a stuck call fails fast');
+  const mcpRoute = await import('../src/app/mcp/route');
+  check('H1 /mcp stops at 60 s, not Vercel\'s 300 (owner, 2026-10-22)', mcpRoute.maxDuration === 60, String(mcpRoute.maxDuration));
+
   console.log('S  story words, in-process');
   const filter = await import('../src/lib/agents/filter');
   const { AGENTS, IMAGES, LINKED_WALLETS } = await import('../src/lib/config');
