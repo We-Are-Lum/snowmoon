@@ -6,11 +6,12 @@ import { IMAGES } from '../config';
  * Prepaid balances for wallet accounts (owner, 2026-10-13; migration 0011). Balance = payments
  * credited - debits + debits credited back for a failed Generate (migration 0022, once
  * IMAGES.prepaid.creditBack is on). A Generate's price is its estimated cost (the worst case reserved for it,
- * src/lib/images/limits.ts) plus IMAGES.prepaid.markup, rounded up to a millionth of a dollar.
+ * src/lib/images/limits.ts) plus IMAGES.prepaid.markup, rounded up to the nearest $0.001 (owner, 2026-10-22: "round each
+ * price up to the nearest $0.001 and show three decimals"), so the price shown (three decimals) is the price charged.
  */
 type Sql = postgres.Sql;
 
-export const priceUsd = (reserveUsd: number) => Math.ceil(reserveUsd * (1 + IMAGES.prepaid.markup) * 1e6) / 1e6;
+export const priceUsd = (reserveUsd: number) => Math.ceil(Math.ceil(reserveUsd * (1 + IMAGES.prepaid.markup) * 1e6 - 1e-6) / 1000) / 1000;
 
 /** Payment can be taken only once there is an address to pay. */
 export const prepaidOpen = () => Boolean(IMAGES.prepaid.enabled && IMAGES.prepaid.payTo);

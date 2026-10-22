@@ -8,15 +8,16 @@ you say "reread", in the same deploy that turns credit-back on, so the Terms alw
 that day.
 
 
-## Final for the owner's reread: reading B (owner, 2026-10-22)
+## Reread and live: reading B (owner, 2026-10-22, "#35: reread, with the tidier §6a sentence")
 
 The owner chose **B** and changed §6a: "at its estimated cost plus 30%" becomes "at the price shown when you start
 it", and the last sentence is the coding agent's wording, which matches what the code does (a payment is added by
-the page, not by a server watching the address; that is on the backlog). DRAFT until the owner says "reread".
+the page, not by a server watching the address; that is on the backlog). Reread by the owner on 2026-10-22 with the tidier second sentence, below; in `src/lib/legal.ts`. Prices are
+rounded up to the nearest $0.001 and shown in three decimals (owner, 2026-10-22).
 
 **Terms §6a (replaces the whole paragraph):**
 > You can pay in USDC or ETH on Base to the address the Service shows. Each generation is charged to your balance
-> when you start it, at the price shown when you start it. If a generation doesn't give you a picture (a check or
+> at the price shown when you start it. If a generation doesn't give you a picture (a check or
 > the image model didn't answer, the rules refused the prompt, or the safety checker dropped the picture), that
 > charge is added back to your balance. Payments are final: what you pay is never refunded or paid out as money,
 > and your balance can only be spent on generations here. A payment made through the Service is added to your
@@ -38,7 +39,7 @@ the page, not by a server watching the address; that is on the backlog). DRAFT u
 
 After a credit, appended to the error: "No picture came back, so the charge was added back to your balance."
 
-"The price shown": every control that charges a wallet now shows the exact charge, to the millionth of a dollar
+"The price shown": every control that charges a wallet now shows the exact charge, in three decimals
 (Pictures' Generate buttons, Remix's Generate button, an agent frame's Make it); reference pictures, whose price
 differs and isn't shown, are refused for wallet accounts.
 

@@ -305,7 +305,7 @@ export const IMAGE_WORDING = {
     /** DRAFT (coding agent, 2026-10-22): the price on the Generate button, as charged (Terms 6a: "the price shown"). */
     priceOnButton: (usd: string) => `$${usd}`,
     balance: (usd: string, n: number) => `Balance $${usd} · about ${n} image${n === 1 ? '' : 's'}`,
-    price: (usd: string, markup: number) => `$${usd} an image: the estimated cost plus ${Math.round(markup * 100)}%`,
+    price: (usd: string, markup: number) => `$${usd} an image: the estimated cost plus ${Math.round(markup * 100)}%, rounded up to $0.001`,
     addFunds: 'Add funds',
     notAddedYet: 'A payment from this wallet hasn’t been added to your balance yet. It’s safe: it’s on Base, and you can add it with its transaction hash below, within 7 days of paying.',
     // The "add a payment by its hash" box (owner, 2026-10-15). DRAFT wording for the owner.
