@@ -317,6 +317,12 @@ export const IMAGE_WORDING = {
     payWith: 'Pay in USDC or ETH on Base. It’s added to your balance once the payment confirms.',
     terms:
       'You’re paying for image generation on this site. Each Generate is charged when you press it, whatever comes back, including a blocked prompt or an image the safety checker drops. No refunds.',
+    /** DRAFT (coding agent, 2026-10-21), for the owner's reread with Terms 6a (docs/legal/credits-draft.md). Shown in
+     *  place of `terms` once IMAGES.prepaid.creditBack is on. */
+    termsCreditBack:
+      'You’re paying for image generation on this site. Each Generate is charged when you press it. If nothing comes back because the prompt check or the image model didn’t answer, it’s added back to your balance. A blocked prompt or an image the safety checker drops stays charged. Payments aren’t refunded as money.',
+    /** DRAFT (coding agent, 2026-10-21): after a failed Generate was credited back. */
+    creditedBack: 'Nothing was made, so it was added back to your balance.',
     pay: (usd: number, token: 'USDC' | 'ETH') => `Pay $${usd} in ${token}`,
     waiting: 'Waiting for the payment to confirm…',
     added: (usd: string) => `Added $${usd} to your balance.`,

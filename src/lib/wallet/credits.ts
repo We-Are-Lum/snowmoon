@@ -4,7 +4,8 @@ import { IMAGES } from '../config';
 
 /**
  * Prepaid balances for wallet accounts (owner, 2026-10-13; migration 0011). Balance = payments
- * credited - debits. A Generate's price is its estimated cost (the worst case reserved for it,
+ * credited - debits + debits credited back for a failed Generate (migration 0022, once
+ * IMAGES.prepaid.creditBack is on). A Generate's price is its estimated cost (the worst case reserved for it,
  * src/lib/images/limits.ts) plus IMAGES.prepaid.markup, rounded up to a millionth of a dollar.
  */
 type Sql = postgres.Sql;
@@ -26,7 +27,14 @@ export async function balanceUsd(sql: Sql, account: number): Promise<number> {
   const [r] = await sql`select
     coalesce((select sum(usd) from studio.wallet_payments where account_id = ${account}), 0)::float8
     - coalesce((select sum(usd) from studio.wallet_debits where account_id = ${account}), 0)::float8 as usd`;
-  return Math.round((r?.usd ?? 0) * 1e6) / 1e6;
+  const back = IMAGES.prepaid.creditBack ? await creditedUsd(sql, account) : 0;
+  return Math.round(((r?.usd ?? 0) + back) * 1e6) / 1e6;
+}
+
+/** What failed Generates gave back to this account (migration 0022; read only while IMAGES.prepaid.creditBack is on). */
+async function creditedUsd(sql: Sql, account: number): Promise<number> {
+  const [r] = await sql`select coalesce(sum(usd), 0)::float8 as usd from studio.wallet_credits where account_id = ${account}`;
+  return r?.usd ?? 0;
 }
 
 /** Credits a payment once (its hash is the key). False when it was already credited. */
@@ -37,7 +45,29 @@ export async function credit(sql: Sql, account: number, p: { txHash: string; tok
   return rows.length > 0;
 }
 
-/** What a Generate cost the account. Final: there are no refunds (owner, 2026-10-13). */
-export async function debit(sql: Sql, account: number, usd: number) {
-  await sql`insert into studio.wallet_debits (account_id, usd) values (${account}, ${usd})`;
+/**
+ * What a Generate cost the account, taken when it is pressed. Its id, so a Generate that fails can be credited
+ * back (creditBack). Never paid out as money (owner, 2026-10-13 and 2026-10-21).
+ */
+export async function debit(sql: Sql, account: number, usd: number): Promise<number> {
+  const [r] = await sql`insert into studio.wallet_debits (account_id, usd) values (${account}, ${usd}) returning id::int as id`;
+  return r.id;
+}
+
+/**
+ * Credits a failed Generate's debit back to the same account's balance, once, for exactly what was taken (the row
+ * is copied from the debit itself). False when credit-back is off (IMAGES.prepaid.creditBack, waiting for migration
+ * 0022 and the Terms) or the debit was already credited. Never throws: a Generate's answer doesn't wait on it.
+ */
+export async function creditBack(sql: Sql, debitId: number | undefined, reason: 'failed'): Promise<boolean> {
+  if (!IMAGES.prepaid.creditBack || !debitId) return false;
+  try {
+    const rows = await sql`insert into studio.wallet_credits (debit_id, account_id, usd, reason)
+      select id, account_id, usd, ${reason} from studio.wallet_debits where id = ${debitId}
+      on conflict (debit_id) do nothing returning 1`;
+    return rows.length > 0;
+  } catch (e) {
+    console.error('credit back failed', (e as Error).name);
+    return false;
+  }
 }

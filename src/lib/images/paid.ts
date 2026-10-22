@@ -6,6 +6,7 @@ import { ImageUnavailable, type Made } from './fal';
 import { fundedBy, perDay, recordGuard, reserve, settle, wordsCheckFits, type Spend } from './limits';
 import { blockedName } from './rules';
 import { IMAGE_WORDING } from './wording';
+import { creditBack } from '../wallet/credits';
 
 /**
  * Every paid picture goes through here, in this order (docs/proposals/add-an-image.md, section 5;
@@ -17,8 +18,10 @@ import { IMAGE_WORDING } from './wording';
  * 4. the reservation replaced by the real costs; a picture the checker flags is dropped.
  * The caller has already checked sign-in, the off switch, setup, its input, consent and the gate
  * (gate.ts: invited FIDs, or a Neynar score of at least IMAGES.neynarMinScore), in that order.
- * A wallet account (fid below zero) pays for the Generate from its prepaid balance in step 1. Payment
- * is final (owner, 2026-10-13): no refunds, whatever the outcome.
+ * A wallet account (fid below zero) pays for the Generate from its prepaid balance in step 1. Payments are
+ * final (owner, 2026-10-13): never paid back as money. A Generate that fails (the prompt check or the image
+ * model didn't answer, so nothing was made) is credited back to the balance once IMAGES.prepaid.creditBack is
+ * on (owner, 2026-10-21; migration 0022); a refused prompt or a dropped picture stays charged.
  */
 type Sql = postgres.Sql;
 
@@ -33,6 +36,8 @@ export const LIMIT_SAY = {
   'prepaid-spend': IMAGE_WORDING.prepaid.dailyCap,
 } as const;
 const say = (refusal: keyof typeof LIMIT_SAY, fid: number) => (refusal === 'limit' ? LIMIT_SAY.limit(perDay(fid)) : LIMIT_SAY[refusal]);
+/** A failure's words, and, when a wallet account's Generate was credited back, that it was. */
+export const failed = (error: string, back: boolean) => (back ? `${error} ${IMAGE_WORDING.prepaid.creditedBack}` : error);
 
 export async function paidPicture(
   sql: Sql,
@@ -55,7 +60,8 @@ export async function paidPicture(
   } catch (e) {
     await settle(sql, {}, spend, funded);
     console.error('image prompt check failed', (e as Error).name);
-    return { ok: false, status: 503, error: 'The prompt check did not answer. Try again in a moment.', extra: { left: r.left } };
+    const back = await creditBack(sql, r.debitId, 'failed');
+    return { ok: false, status: 503, error: failed('The prompt check did not answer. Try again in a moment.', back), extra: { left: r.left, ...(back ? { creditedBack: true } : {}) } };
   }
   if (!guard.allow) {
     await settle(sql, { guard: { costUsd: guard.costUsd, provider: guard.provider, verdict: 'blocked' } }, spend, funded);
@@ -67,7 +73,8 @@ export async function paidPicture(
   } catch (e) {
     await settle(sql, { guard: { costUsd: guard.costUsd, provider: guard.provider, verdict: 'ok' } }, spend, funded);
     console.error('image generation failed', e instanceof ImageUnavailable ? e.message : (e as Error).name);
-    return { ok: false, status: 503, error: 'The image model did not answer. Try again in a moment.', extra: { left: r.left } };
+    const back = await creditBack(sql, r.debitId, 'failed');
+    return { ok: false, status: 503, error: failed('The image model did not answer. Try again in a moment.', back), extra: { left: r.left, ...(back ? { creditedBack: true } : {}) } };
   }
   await settle(sql, { guard: { costUsd: guard.costUsd, provider: guard.provider, verdict: 'ok' }, image: { costUsd: made.costUsd, verdict: made.nsfw ? 'nsfw' : 'ok' } }, spend, funded);
   // Flagged by the host's safety checker: dropped here, never shown or stored.
