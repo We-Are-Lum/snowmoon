@@ -115,7 +115,7 @@ export interface MatchResult {
  * one-on-one server draws it, and Amber's random numbers continue from that draw, as a practice or
  * ladder match on the page does with the same seed (controller.ts, mk). Cyan's are their own
  * (rng(seed ^ 0x5eed)). Ends as the page's checkEnd does: a side with no towers loses (both at
- * once: a draw); at the version's last step (96 in Play) most towers wins, equal is a draw.
+ * once: a draw); at the version's last step (120 in Play) most towers wins, equal is a draw.
  */
 export function playMatch(cyan: Player, amber: Player, seed: number, version: VersionRules = SOLO_V1): MatchResult {
   const rA = rng(seed);

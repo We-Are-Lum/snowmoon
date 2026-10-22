@@ -461,7 +461,7 @@ export const KIT_RULES: KitRule[] = [
     id: 'no-turn-limit', area: 'ending', source: 'book', how: 'implied',
     rule: 'Games have no fixed turn limit.',
     cites: [{ block: 'c14-b94', quote: 'Ten thousand two hundred turns into the game, Deluin was announced the winner.' }],
-    site: 'no', siteNote: 'Play stops at step 96 (invented).',
+    site: 'no', siteNote: 'Play stops at step 120 (invented; 96 until 2026-10-22).',
   },
   {
     id: 'qualifying-tiebreak', area: 'ending', source: 'book', how: 'stated',
@@ -471,8 +471,8 @@ export const KIT_RULES: KitRule[] = [
   },
   {
     id: 'play-step-limit', area: 'ending', source: 'invented',
-    rule: 'At step 96 the match stops; most towers wins, and equal is a draw.',
-    code: [{ file: SCHEMA, find: "maxSteps: { text: 'The match stops at this step; most towers wins', min: 24, max: 240, base: 96," }, { file: VENG, find: "if (w.step >= s.maxSteps) return nc > na ? 'C' : na > nc ? 'A' : 'D';" }],
+    rule: 'At step 120 the match stops; most towers wins, and equal is a draw.',
+    code: [{ file: SCHEMA, find: "maxSteps: { text: 'The match stops at this step; most towers wins', min: 24, max: 240, base: 120," }, { file: VENG, find: "if (w.step >= s.maxSteps) return nc > na ? 'C' : na > nc ? 'A' : 'D';" }],
     site: 'yes', siteNote: 'Play.',
   },
   {

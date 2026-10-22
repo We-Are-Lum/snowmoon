@@ -344,7 +344,7 @@ function both(m: LiveMatch, from: number, to: number) { for (let t = from; t <= 
   refused('a rung not open yet', () => recordResult(p, { rung: 2, win: 'C', step: 40 }), 409);
   refused('a bad rung', () => recordResult(p, { rung: 0, win: 'C', step: 40 }), 400);
   refused('a bad result', () => recordResult(p, { rung: 1, win: 'X', step: 40 }), 400);
-  refused('a bad step', () => recordResult(p, { rung: 1, win: 'C', step: 97 }), 400);
+  refused('a bad step', () => recordResult(p, { rung: 1, win: 'C', step: 121 }), 400);
   p = recordResult(p, { rung: 1, win: 'A', step: 30 });
   check('a loss: tries + 1, nothing opens', p.opened === 1 && same(p.rec[1], { tries: 1 }));
   p = recordResult(p, { rung: 1, win: 'D', step: 96 });

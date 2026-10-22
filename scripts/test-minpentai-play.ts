@@ -42,7 +42,11 @@ if (!designScript) throw new Error("Design's script block was not found");
  * Design's script here so everything else is still compared line for line. Each must match once. */
 const FIXES: [string, string, string][] = [
   // The Planner stopped building at 3 towers, rungs 3 and 4 at 5 (game.ts, botPlan; 2026-10-20).
-  ['the Planner builds up to 5 towers', 'cnt(b, o) < (L >= 5 ? 3 : 5)', 'cnt(b, o) < 5'],
+  // ... and every builder rung up to 10 since 2026-10-22, with the step limit 120 (owner, after Luis's play tests).
+  ['the builders build up to 10 towers', 'cnt(b, o) < (L >= 5 ? 3 : 5)', 'cnt(b, o) < 10'],
+  ['the step limit is 120', 'const W = 15, H = 10, MAXS = 96,', 'const W = 15, H = 10, MAXS = 120,'],
+  ['the last turn says step 120', 'The match ends at step 96.', 'The match ends at step 120.'],
+  ['the run head says step 120', 'NO MORE TURNS · ENDS AT STEP 96', 'NO MORE TURNS · ENDS AT STEP 120'],
   // An opponent's tower out of sight is drawn as a dimmed tower where last seen (its starting square
   // until first seen), not a dashed "?" outline (owner, 2026-10-21, after a phone test; board.ts).
   ['a last-seen tower is drawn dimmed', "c.bd = '1px dashed #FFB43A'; c.t = '?'; c.fg = '#FFB43A'; c.fs = fz(.4);", "c.bg = '#503A16'; c.sh = ring;"],

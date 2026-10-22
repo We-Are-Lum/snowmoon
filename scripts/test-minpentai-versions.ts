@@ -12,10 +12,13 @@
  *
  *   npx tsx scripts/test-minpentai-versions.ts
  */
+import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { isDeepStrictEqual } from 'node:util';
-// The reference: game.ts as it was before the one engine (2026-10-21), frozen. Play must stay identical to it.
-import * as G from './fixtures/minpentai/game-2026-10-21';
+// The reference: game.ts as it was before the one engine (2026-10-21), frozen, with exactly the two rule
+// changes of 2026-10-22 (step limit 96 -> 120, the computer's tower cap 5 -> 10; owner, after Luis's play
+// tests), checked below line by line. Play must stay identical to it.
+import * as G from './fixtures/minpentai/game-2026-10-22';
 // game.ts today: the same names, run on the one engine.
 import * as Adapter from '../src/lib/minpentai/play-game/game';
 const Frozen = G;
@@ -29,6 +32,14 @@ import { readVersionLink, versionLink } from '../src/lib/minpentai/versions/link
 const ROOT = path.resolve(import.meta.dirname, '..');
 let failed = 0;
 const ok = (cond: boolean, what: string) => { if (!cond) { failed++; console.error('FAIL ' + what); } };
+{
+  // The 2026-10-22 reference differs from the 2026-10-21 one in exactly these two lines, nothing else.
+  const was = readFileSync(path.join(ROOT, 'scripts/fixtures/minpentai/game-2026-10-21.ts'), 'utf8').split('\n');
+  const now = readFileSync(path.join(ROOT, 'scripts/fixtures/minpentai/game-2026-10-22.ts'), 'utf8').split('\n');
+  const diff = was.map((l, i) => (l === now[i] ? null : `${l.trim()} -> ${now[i].trim()}`)).filter(Boolean);
+  ok(was.length === now.length && diff.join(' | ') === 'export const MAXS = 96; -> export const MAXS = 120; | if (L >= 3 && pts >= 4 && cnt(b, o) < 5) { -> if (L >= 3 && pts >= 4 && cnt(b, o) < 10) {', `the 2026-10-22 reference changes only the step limit and the tower cap: ${diff.join(' | ')}`);
+  console.log('reference: game-2026-10-22 is game-2026-10-21 with only the step limit (120) and the computer\'s tower cap (10) changed');
+}
 
 // --- whole matches: the ladder test's loop on game.ts, recording every turn ---
 const { W, H, K, XY } = G;
