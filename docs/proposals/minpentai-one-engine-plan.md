@@ -11,7 +11,7 @@ It builds on the spike (`minpentai-versions-spike`, doc `docs/proposals/minpenta
 4. Arweave: ArDrive Turbo (free under 105 KiB per ar.io's docs, checked 2026-10-21), with a dedicated uploader key in server env only, never the owner's wallet or the Safe. Until it's set up: database, "not yet on Arweave".
 5. 10-character IDs and 10 trials per version per day: approved.
 6. Play accepting a seed and moves in the URL: dropped. The snap branch built `/minpentai?match=` and re-applies it after this merges, so that URL's handling is not touched here.
-7. The versions migration takes the next free number at merge time (the snap branch has 0022). It is not 0022.
+7. The versions migration is named by topic with no number (`supabase/migrations/NEXT_minpentai_versions.sql`) while the branch is unmerged. At merge it takes the next free number, checked against main and production (0018–0024 applied, 0025 reserved by the snap branch as of 2026-10-22), and its paste files and mentions are updated then (owner's standing rule, 2026-10-22).
 
 ## A correction first
 
@@ -75,7 +75,7 @@ On the onchain branch, also: its ruleset, sandbox, verifier, encoding and fixtur
    - replays your trial moves with `replayVersion` and confirms a win on the issued seed;
    - stores the version and its manifest, and gives the link.
 
-**Migration** `supabase/migrations/<next free number>_minpentai_versions.sql` (numbered at merge time): written, not applied, tested in PGlite like 0021. All tables are server-only, like 0009 (no anon or authenticated access; `studio_writer` only).
+**Migration** `supabase/migrations/NEXT_minpentai_versions.sql` (no number until merge; see change 7): written, not applied, tested in PGlite like 0021. All tables are server-only, like 0009 (no anon or authenticated access; `studio_writer` only).
 - **`studio.mp_versions`** (one row per shared version):
   - `short_id` (pk) and `ruleset_id` (unique);
   - `manifest` as the exact sorted JSON text of the rules-only manifest, so its hash can always be re-checked;
