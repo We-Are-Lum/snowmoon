@@ -94,8 +94,10 @@ for (const [, q, id] of quotes) {
 }
 // License and ATTRIBUTION.
 const licence = read('LICENSE');
-ok(/GNU GENERAL PUBLIC LICENSE\s+Version 3, 29 June 2007/.test(licence), 'LICENSE is not the GPL v3');
-ok(pkg.license === 'GPL-3.0-only' && md.includes('"license": "GPL-3.0-only"'), `package.json's license is ${pkg.license}`);
+// The code is AGPL-3.0 and the book and what's made from it GPL-3.0 (owner, 2026-10-22; LICENSING.md).
+ok(/GNU AFFERO GENERAL PUBLIC LICENSE\s+Version 3, 19 November 2007/.test(licence), 'LICENSE is not the AGPL v3');
+ok(/GNU GENERAL PUBLIC LICENSE\s+Version 3, 29 June 2007/.test(read('LICENSE-GPL-3.0')), 'LICENSE-GPL-3.0 is not the GPL v3');
+ok(pkg.license === 'AGPL-3.0-only' && md.includes('"license": "AGPL-3.0-only"'), `package.json's license is ${pkg.license}`);
 const attr = /`ATTRIBUTION\.md`, under Contributions: "([^"]+)"/.exec(md)?.[1];
 ok(!!attr && norm(read('ATTRIBUTION.md')).includes(norm(attr)), 'agents.md: the ATTRIBUTION.md quote is not word for word');
 ok(/## Contributions/.test(read('ATTRIBUTION.md')), 'ATTRIBUTION.md has no Contributions section');

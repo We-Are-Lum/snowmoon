@@ -5,8 +5,8 @@ A Farcaster miniapp for reading Vitalik Buterin's novel
 building an open illustrated and narrated edition of it together. Every
 prompt, script, and piece of data used to make it is in this repository.
 
-Working title. Licensed GPL-3.0, the same as the book. See
-[ATTRIBUTION.md](ATTRIBUTION.md).
+Working title. The site's code is AGPL-3.0; the book and everything made from it are GPL-3.0, the
+book's licence. See [LICENSING.md](LICENSING.md) and [ATTRIBUTION.md](ATTRIBUTION.md).
 
 Live at [snowmoon.party](https://snowmoon.party). To make your own scene from the book with
 this pipeline, start with [docs/make-a-scene.md](docs/make-a-scene.md). See
@@ -186,9 +186,10 @@ blocked. Reading never requires signing in.
 
 ## How to fork
 
-*Draft.* Everything here is GPL-3.0, like the book, so you may fork it and make your own version
-of a scene. *Snowmoon* is by Vitalik Buterin; this edition is independent and not affiliated with
-him. Anything you make from it is GPL-3.0 too.
+*Draft.* The code is AGPL-3.0 and the book and what's made from it are GPL-3.0 (see
+[LICENSING.md](LICENSING.md)), so you may fork it and make your own version of a scene. *Snowmoon*
+is by Vitalik Buterin; this edition is independent and not affiliated with him. Anything you make
+from the book is GPL-3.0 too.
 
 You need Node 22 or later. For the scene steps (4 and 5) you also need Python 3.10 or later,
 [uv](https://docs.astral.sh/uv/) and ffmpeg. Steps 1 to 4 need no keys and cost nothing; they take
@@ -226,7 +227,8 @@ What a fork cannot do yet:
   `scripts/snowmoon_paths.py`). `scripts/set-render.mjs` also needs a browser:
   `npx playwright-core install chromium`.
 
-The licence asks that what you share stays GPL-3.0, with its source. This edition also keeps its
+The licences ask that what you share stays under them, with its source: GPL-3.0 for what you make
+from the book, AGPL-3.0 for the code, which also covers a modified copy you run as a website. This edition also keeps its
 own rules, and anything shown on snowmoon.party will follow them:
 
 - The book's text is never altered. A book line is quoted exactly, at its block.

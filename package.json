@@ -61,7 +61,7 @@
     "test:adaptation-pages": "node scripts/editor-data.mjs && NEXT_PUBLIC_URL=https://snowmoon.party next build && tsx scripts/test-adaptation-pages.ts",
     "test:agents": "tsx --conditions=react-server scripts/test-agents.ts"
   },
-  "license": "GPL-3.0-only",
+  "license": "AGPL-3.0-only",
   "description": "",
   "dependencies": {
     "@farcaster/miniapp-sdk": "^0.3.0",

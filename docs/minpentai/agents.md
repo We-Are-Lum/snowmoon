@@ -10,8 +10,8 @@ In the book the board is a grid of cells that changes by a rule, and the game is
 
 ## License
 
-- `LICENSE` is the GNU General Public License, version 3. `package.json` says `"license": "GPL-3.0-only"`. The book is released under the GPL v3 too (`ATTRIBUTION.md`).
-- What that means for a contribution: once merged, it is part of this repository and is published under GPL-3.0 with everything else. Anyone may use, change and share it under the same license. If you distribute a changed version, it must be under GPL-3.0 too, with its source.
+- `LICENSE` is the GNU Affero General Public License, version 3, for the code. `package.json` says `"license": "AGPL-3.0-only"`. The book, and everything made from it, is under the GPL v3 (`LICENSE-GPL-3.0`, `LICENSING.md`, `ATTRIBUTION.md`).
+- What that means for a contribution: a computer player is code, so once merged it is published under AGPL-3.0 with the rest of the code. Anyone may use, change and share it under the same license. If you distribute a changed version, or run one as a website, it must be under AGPL-3.0 too, with its source.
 - `ATTRIBUTION.md`, under Contributions: "Before a first contribution, contributors agree that their prompts and generated media are published under GPL-3.0 and recorded permanently in the public ledger."
 - Contribute only work you have the right to license that way.
 
