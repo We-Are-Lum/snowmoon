@@ -54,7 +54,7 @@ try {
   const prm = await (await fetch(`${BASE}/.well-known/oauth-protected-resource/mcp`)).json();
   check('O2 protected resource metadata names /mcp exactly and this site as its server', prm.resource === `${BASE}/mcp` && prm.authorization_servers?.[0] === BASE, JSON.stringify(prm));
   const asm = await (await fetch(`${BASE}/.well-known/oauth-authorization-server`)).json();
-  check('O3 server metadata: S256 only, public clients, CIMD and DCR, iss in responses', JSON.stringify(asm.code_challenge_methods_supported) === '["S256"]' && JSON.stringify(asm.token_endpoint_auth_methods_supported) === '["none","private_key_jwt"]' && asm.client_id_metadata_document_supported === true && asm.authorization_response_iss_parameter_supported === true && asm.registration_endpoint === `${BASE}/api/oauth/register`);
+  check('O3 server metadata: S256 only, public clients, CIMD and DCR, iss in responses', JSON.stringify(asm.code_challenge_methods_supported) === '["S256"]' && JSON.stringify(asm.token_endpoint_auth_methods_supported) === '["none","client_secret_basic","client_secret_post","private_key_jwt"]' && asm.client_id_metadata_document_supported === true && asm.authorization_response_iss_parameter_supported === true && asm.registration_endpoint === `${BASE}/api/oauth/register`);
   const badReg = await fetch(`${BASE}/api/oauth/register`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ client_name: 'x', redirect_uris: ['http://evil.example/cb'] }) });
   check('O4 a plain-http redirect to another machine is refused at registration', badReg.status === 400);
   const page = await (await fetch(`${BASE}/oauth/authorize?client_id=nobody&redirect_uri=https%3A%2F%2Fevil.example%2Fcb&response_type=code&code_challenge=${'a'.repeat(43)}&code_challenge_method=S256`, { redirect: 'manual' })).text();
@@ -85,6 +85,54 @@ try {
   const deny = await (await asPerson(people.C.token, '/api/oauth/approve', { method: 'POST', body: JSON.stringify({ query: a1.query.toString(), allow: false }) })).json();
   check('O15 “Don’t allow” sends back access_denied', new URL(deny.to).searchParams.get('error') === 'access_denied');
 
+  console.log('Q  a confidential client at registration (client_secret_basic or client_secret_post)');
+  {
+    const { randomBytes: rb, createHash: ch } = await import('node:crypto');
+    const cb = 'https://chatgpt.example/connector/oauth/callback';
+    const register = async (method: string) => (await fetch(`${BASE}/api/oauth/register`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ client_name: 'ChatGPT', redirect_uris: [cb], token_endpoint_auth_method: method }) })).json() as Promise<{ client_id: string; client_secret?: string; token_endpoint_auth_method: string }>;
+    const basicC = await register('client_secret_basic');
+    const postC = await register('client_secret_post');
+    const stored = (await S.pg.query<{ secret_hash: string; auth_method: string }>(`select secret_hash, auth_method from studio.oauth_clients where client_id = $1`, [basicC.client_id])).rows[0];
+    const dump = JSON.stringify((await S.pg.query(`select * from studio.oauth_clients`)).rows);
+    check('Q1 a confidential client gets a secret once; only its sha256 is stored', !!basicC.client_secret?.startsWith('scs_') && basicC.token_endpoint_auth_method === 'client_secret_basic' && stored?.secret_hash === ch('sha256').update(basicC.client_secret!).digest('hex') && !dump.includes(basicC.client_secret!) && !dump.includes(postC.client_secret!));
+    const codeFor = async (clientId: string) => {
+      const verifier = rb(32).toString('base64url');
+      const q = new URLSearchParams({ response_type: 'code', client_id: clientId, redirect_uri: cb, code_challenge: ch('sha256').update(verifier).digest('base64url'), code_challenge_method: 'S256', resource: `${BASE}/mcp` });
+      const to = new URL(((await (await asPerson(people.A.token, '/api/oauth/approve', { method: 'POST', body: JSON.stringify({ query: q.toString(), allow: true }) })).json()) as { to: string }).to);
+      return { code: to.searchParams.get('code') ?? '', verifier };
+    };
+    const form = (c: { code: string; verifier: string }, extra: Record<string, string> = {}) => new URLSearchParams({ grant_type: 'authorization_code', code: c.code, code_verifier: c.verifier, redirect_uri: cb, resource: `${BASE}/mcp`, ...extra });
+    const basicHeader = (id: string, secret: string) => 'Basic ' + Buffer.from(`${encodeURIComponent(id)}:${encodeURIComponent(secret)}`).toString('base64');
+    const post = (body: URLSearchParams, auth?: string) => fetch(`${BASE}/api/oauth/token`, { method: 'POST', headers: { 'content-type': 'application/x-www-form-urlencoded', ...(auth ? { authorization: auth } : {}) }, body });
+
+    const c1 = await codeFor(basicC.client_id);
+    const noSecret = await post(form(c1, { client_id: basicC.client_id }));
+    const wrongBasic = await post(form(c1), basicHeader(basicC.client_id, basicC.client_secret! + 'x'));
+    const wrongPost = await post(form(c1, { client_id: basicC.client_id, client_secret: 'scs_' + rb(32).toString('base64url') }));
+    const otherSecret = await post(form(c1), basicHeader(basicC.client_id, postC.client_secret!));
+    check('Q2 a wrong, missing or another client’s secret is refused (invalid_client, 401), and the code still works after', [noSecret, wrongBasic, wrongPost, otherSecret].every((r) => r.status === 401) && wrongBasic.headers.get('www-authenticate')?.startsWith('Basic') === true, [noSecret, wrongBasic, wrongPost, otherSecret].map((r) => r.status).join(','));
+    const okBasic = await post(form(c1), basicHeader(basicC.client_id, basicC.client_secret!));
+    const okBasicJ = (await okBasic.json()) as { access_token?: string; refresh_token?: string };
+    check('Q3 client_secret_basic: the right secret in the Authorization header gets tokens that work', okBasic.ok && !!okBasicJ.access_token && (await mcp(BASE, okBasicJ.access_token!, 'ping')).status === 200);
+    const refreshNo = await post(new URLSearchParams({ grant_type: 'refresh_token', refresh_token: okBasicJ.refresh_token ?? '', client_id: basicC.client_id, resource: `${BASE}/mcp` }));
+    const refreshOk = await post(new URLSearchParams({ grant_type: 'refresh_token', refresh_token: okBasicJ.refresh_token ?? '', resource: `${BASE}/mcp` }), basicHeader(basicC.client_id, basicC.client_secret!));
+    check('Q5 a refresh needs the secret too', refreshNo.status === 401 && refreshOk.ok);
+    const c2 = await codeFor(postC.client_id);
+    const okPost = await post(form(c2, { client_id: postC.client_id, client_secret: postC.client_secret! }));
+    check('Q4 client_secret_post: the right secret in the form gets tokens', okPost.ok);
+    const c3 = await codeFor(basicC.client_id);
+    const badPkce = await post(form({ code: c3.code, verifier: rb(32).toString('base64url') }), basicHeader(basicC.client_id, basicC.client_secret!));
+    check('Q6 PKCE is still required for a confidential client: a wrong verifier is refused with the right secret', badPkce.status === 400 && (await badPkce.json()).error === 'invalid_grant');
+    const publicC = await register('none');
+    const c4 = await codeFor(publicC.client_id);
+    const publicWithSecret = await post(form(c4, { client_id: publicC.client_id, client_secret: 'scs_anything' }));
+    const publicOk = await post(form(c4, { client_id: publicC.client_id }));
+    const unknownMethod = await fetch(`${BASE}/api/oauth/register`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ client_name: 'X', redirect_uris: [cb], token_endpoint_auth_method: 'tls_client_auth' }) });
+    check('Q7 a public client still needs no secret (and may not send one); an unknown method is refused at registration', !publicC.client_secret && publicWithSecret.status === 401 && publicOk.ok && unknownMethod.status === 400);
+    // These test agents are ended, so the counts below are as before.
+    await S.pg.query(`update studio.agents set revoked_at = now() where person = $1 and client_id = any($2)`, [people.A.person, [basicC.client_id, postC.client_id, publicC.client_id]]);
+  }
+
   console.log('J  a metadata-document client that signs its token requests (private_key_jwt), as ChatGPT does');
   {
     const { generateKeyPairSync, sign: rsaSign, randomBytes: rb, createHash: ch } = await import('node:crypto');
@@ -107,7 +155,7 @@ try {
     const code = new URL(((await ok.json()) as { to?: string }).to ?? 'http://x/').searchParams.get('code') ?? '';
     const tokenWith = (extra: Record<string, string>, base: Record<string, string> = { grant_type: 'authorization_code', code, code_verifier: verifier, redirect_uri: cb }) =>
       fetch(`${BASE}/api/oauth/token`, { method: 'POST', headers: { 'content-type': 'application/x-www-form-urlencoded' }, body: new URLSearchParams({ ...base, client_id: cid, resource: `${BASE}/mcp`, ...extra }) });
-    check('J1 server metadata offers none and private_key_jwt, with the signing algorithms', JSON.stringify(asm.token_endpoint_auth_methods_supported) === '["none","private_key_jwt"]' && asm.token_endpoint_auth_signing_alg_values_supported?.includes('RS256'));
+    check('J1 server metadata offers none and private_key_jwt, with the signing algorithms', JSON.stringify(asm.token_endpoint_auth_methods_supported) === '["none","client_secret_basic","client_secret_post","private_key_jwt"]' && asm.token_endpoint_auth_signing_alg_values_supported?.includes('RS256'));
     check('J2 a private_key_jwt metadata document is accepted at sign-in, and the person’s Allow sends back a code', ok.ok && !!code);
     const noAssert = await tokenWith({});
     check('J3 without its signed assertion, the token request is refused (invalid_client, 401)', noAssert.status === 401 && (await noAssert.json()).error === 'invalid_client');
