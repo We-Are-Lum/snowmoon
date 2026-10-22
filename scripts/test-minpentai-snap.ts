@@ -419,6 +419,10 @@ async function main() {
     assert.ok((pick.props!.options as string[]).join('').length <= 8, 'five options stay in one row (8 characters at most)');
     assert.ok(String(pick.props!.label).length <= 60);
     assert.ok(!intro(H, 'fast-fog').ui.elements.rule, 'a version with a fixed rule has no picker');
+    // Every option is explained on the page itself.
+    const key = String(first.ui.elements['rule-key'].props!.content);
+    for (const g of ['↗', '→3', '◎2', '↻8']) assert.ok(key.includes(g + ' '), `the key explains ${g}`);
+    assert.match(String(pick.props!.label), /\? = drawn at random/);
     const want: Record<string, string> = { '↗': 'diag', '→3': 'cost3', '◎2': 'sight2', '↻8': 'every8' };
     for (const [g, rule] of Object.entries(want)) {
       const st = tapState(act(H, 'start', null, 9, { rule: g, lvl: 2 }, { ver: '' }).page);

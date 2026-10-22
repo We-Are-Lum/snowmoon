@@ -31,6 +31,7 @@ export { LEVELS };
  * 8 characters in all. `?` is the drawn rule. Its label spells them out; the turn screen then names
  * the rule in full. */
 export const RULE_PICKS: [string, RuleId | ''][] = [['?', ''], ['↗', 'diag'], ['→3', 'cost3'], ['◎2', 'sight2'], ['↻8', 'every8']];
+const RULE_KEY = '↗ gliders also fly diagonally · →3 gliders cost 3, not 4 · ◎2 you see 2 squares around your towers, not 3 · ↻8 a turn every 8 steps, not 12';
 
 /** Where the snap is served, and query parameters every link must keep (a preview's bypass). */
 export interface Here { base: string; keep: [string, string][] }
@@ -131,7 +132,12 @@ export function intro(h: Here, ver: string, resume: 'yes' | 'no' | 'maybe' = 'ma
   els.level = { type: 'slider', props: { name: 'lvl', min: 0, max: 5, step: 1, defaultValue: 0, showValue: true, label: 'Computer level: 0 Practice … 5 Planner' } };
   // The extra rule (owner, 2026-10-22): drawn, or one of Play's four. A version that fixes one has no picker.
   const picker = !v?.rule;
-  if (picker) els.rule = { type: 'toggle_group', props: { name: 'rule', label: 'Extra rule: ? drawn, ↗ diagonal, →3 cost, ◎2 sight, ↻8 steps', options: RULE_PICKS.map(([g]) => g), defaultValue: '?' } };
+  // A snap can't explain an option when it is tapped, so a key under the picker says what each does
+  // (owner's phone test, 2026-10-22: "it wasn't clear what that bottom area was").
+  if (picker) {
+    els.rule = { type: 'toggle_group', props: { name: 'rule', label: 'Extra rule for your match (? = drawn at random)', options: RULE_PICKS.map(([g]) => g), defaultValue: '?' } };
+    els['rule-key'] = text(RULE_KEY, { size: 'sm' });
+  }
   if (resume === 'yes') {
     els.resume = button('Resume', submit(h, 'resume', null, q), true);
     els.start = button('New match', submit(h, 'start', null, q));
@@ -141,7 +147,7 @@ export function intro(h: Here, ver: string, resume: 'yes' | 'no' | 'maybe' = 'ma
   }
   const acts = resume === 'yes' ? ['resume', 'start'] : resume === 'maybe' ? ['start', 'resume'] : ['start'];
   if (acts.length > 1) els.acts = { type: 'stack', props: { direction: 'horizontal' }, children: acts };
-  els.page = { type: 'stack', props: {}, children: ['pager', 'level', ...(picker ? ['rule'] : []), acts.length > 1 ? 'acts' : 'start'] };
+  els.page = { type: 'stack', props: {}, children: ['pager', 'level', ...(picker ? ['rule', 'rule-key'] : []), acts.length > 1 ? 'acts' : 'start'] };
   return page(els);
 }
 
