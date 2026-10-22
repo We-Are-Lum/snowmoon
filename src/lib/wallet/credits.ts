@@ -55,11 +55,19 @@ export async function debit(sql: Sql, account: number, usd: number): Promise<num
 }
 
 /**
+ * Why a Generate gave no picture (owner, 2026-10-22, reading B: every Generate that gives no picture is credited back):
+ * 'failed' (the prompt check or the image model didn't answer), 'refused' (the blocked-names list or the rules check
+ * refused the prompt), 'dropped' (the safety checker dropped the picture). 'refused' and 'dropped' need migration
+ * NEXT_wallet_credit_reasons.sql; until it is applied, those credits are refused by the table and stay charged.
+ */
+export type CreditReason = 'failed' | 'refused' | 'dropped';
+
+/**
  * Credits a failed Generate's debit back to the same account's balance, once, for exactly what was taken (the row
  * is copied from the debit itself). False when credit-back is off (IMAGES.prepaid.creditBack, waiting for migration
  * 0022 and the Terms) or the debit was already credited. Never throws: a Generate's answer doesn't wait on it.
  */
-export async function creditBack(sql: Sql, debitId: number | undefined, reason: 'failed'): Promise<boolean> {
+export async function creditBack(sql: Sql, debitId: number | undefined, reason: CreditReason): Promise<boolean> {
   if (!IMAGES.prepaid.creditBack || !debitId) return false;
   try {
     const rows = await sql`insert into studio.wallet_credits (debit_id, account_id, usd, reason)

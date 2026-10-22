@@ -13,8 +13,8 @@
  *   to someone else, failed, still confirming, too old, too small; nothing when payTo isn't set.
  * - The balance: a payment is credited once; a Generate is paid at the estimate plus the markup; an
  *   empty balance is refused; while credit-back is off (today), nothing comes back even when nothing is made; once on, a
- *   Generate that fails (check or model didn't answer) is credited back once, for exactly its debit, a refused prompt
- *   stays charged; prepaid costs are counted apart from free ones,
+ *   Generate that gives no picture (check or model didn't answer, prompt refused, picture dropped) is credited back
+ *   once, for exactly its debit; a picture made stays charged; prepaid costs are counted apart from free ones,
  *   so the free daily cap doesn't stop a paying account and prepaid spend has its own cap.
  * - Wallet ↔ Farcaster links (owner, 2026-10-22): verified (Neynar stood in: exactly one FID, two FIDs, none, a
  *   custody address, Neynar down, the lookup off), signed (both proofs through the route, each alone refused),
@@ -33,7 +33,7 @@ import postgres from 'postgres';
 import { privateKeyToAccount } from 'viem/accounts';
 import { createSiweMessage } from 'viem/siwe';
 import { encodeAbiParameters, keccak256, pad, toHex, type PublicClient } from 'viem';
-import { IMAGES } from '../src/lib/config';
+import { IMAGES, REMIX } from '../src/lib/config';
 
 process.env.IMAGES_TICKET_SECRET = 'x'.repeat(48);
 const ROOT = path.resolve(import.meta.dirname, '..');
@@ -215,12 +215,33 @@ check('a Generate stays paid for when nothing comes back (no refunds)', Math.abs
   const b1 = await balanceUsd(S, acct);
   const failedModel = await generate(S, -acct, req, 'a quiet lake', []);
   check('a Remix frame whose model fails is credited back in full', !failedModel.ok && failedModel.status === 503 && Math.abs((await balanceUsd(S, acct)) - b1) < 1e-6 && (await credits()) === 2, JSON.stringify(failedModel));
-  // A refused prompt is not a failure: it stays charged until the owner decides otherwise.
+  // Reading B (owner, 2026-10-22): a refused prompt gives no picture, so it is credited back too.
   const pic = { role: 'layout', name: 'layout', src: null, file: null, fileSha256: null, bytes: Buffer.from('x'), contentType: 'image/jpeg', width: 8, height: 8 } as never;
   const refused = await generate(S, -acct, req, 'TEST-BLOCK', [pic]);
-  const remixPrice = priceUsd(IMAGES.editReserveUsd(1));
-  check('a refused prompt stays charged', !refused.ok && refused.status === 422 && Math.abs((await balanceUsd(S, acct)) - (b1 - remixPrice)) < 1e-6 && (await credits()) === 2, JSON.stringify(refused));
+  check('a refused prompt (the rules check) is credited back in full, and the person is told', !refused.ok && refused.status === 422 && Math.abs((await balanceUsd(S, acct)) - b1) < 1e-6 && (await credits()) === 3 && refused.error.endsWith(IMAGE_WORDING.prepaid.creditedBack), JSON.stringify(refused));
   delete process.env.REMIX_TEST_FAKES;
+  const reasonOf = async () => (await sql`select reason from studio.wallet_credits order by id desc limit 1`)[0].reason as string;
+  check('…recorded as refused', (await reasonOf()) === 'refused');
+  // A blocked name (no check is asked); the name is read from the list at run time, never written here.
+  const named = (JSON.parse(readFileSync(path.join(ROOT, 'config', 'image-blocked-names.json'), 'utf8')) as { names: string[] }).names[0];
+  const b3 = await balanceUsd(S, acct);
+  const blocked = await paidPicture(S, -acct, req, { checkText: `a portrait of ${named}`, make: unused });
+  check('a prompt naming someone on the blocked list is credited back in full', !blocked.ok && blocked.status === 422 && Math.abs((await balanceUsd(S, acct)) - b3) < 1e-6 && (await reasonOf()) === 'refused', blocked.ok ? 'made' : blocked.error);
+  // The safety checker drops the frame: made, then dropped, so no picture; credited back.
+  process.env.REMIX_TEST_FAKES = '1';
+  const b4 = await balanceUsd(S, acct);
+  const dropped = await generate(S, -acct, req, 'a quiet lake TEST-NSFW', [pic]);
+  check('a frame the safety checker drops is credited back in full, recorded as dropped', !dropped.ok && dropped.status === 422 && Math.abs((await balanceUsd(S, acct)) - b4) < 1e-6 && (await reasonOf()) === 'dropped' && dropped.error.endsWith(IMAGE_WORDING.prepaid.creditedBack), JSON.stringify(dropped.ok ? 'made' : dropped));
+  // A frame that is made stays charged.
+  const b5 = await balanceUsd(S, acct);
+  const nBefore = await credits();
+  const madeOk = await generate(S, -acct, req, 'a quiet lake', [pic]);
+  check('a frame that is made stays charged', madeOk.ok && Math.abs((await balanceUsd(S, acct)) - (b5 - priceUsd(IMAGES.editReserveUsd(1)))) < 1e-6 && (await credits()) === nBefore, madeOk.ok ? '' : madeOk.error);
+  delete process.env.REMIX_TEST_FAKES;
+
+  // "The price shown" (Terms 6a): prices are shown as charged, never rounded for show.
+  const { exactDollars } = await import('../src/lib/wallet/price-text');
+  check('a price is shown exactly as charged', exactDollars(priceUsd(IMAGES.reserveUsd)) === String(priceUsd(IMAGES.reserveUsd)) && exactDollars(priceUsd(REMIX.reserveUsd(3))) === String(priceUsd(REMIX.reserveUsd(3))) && exactDollars(1.5) === '1.50', `${exactDollars(priceUsd(IMAGES.reserveUsd))} ${priceUsd(IMAGES.reserveUsd)}`);
 
   // Once per debit, for exactly what it took, to the same account.
   const [last] = await sql`select id::int as id, usd::float8 as usd from studio.wallet_debits order by id desc limit 1`;
