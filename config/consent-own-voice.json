@@ -8,7 +8,7 @@
       "text": [
         "You record lines from a script. Each recording is converted into a character's voice, and only the converted line is published.",
         "The converted line is public and permanent, licensed GPL-3.0 like everything in this edition. Anyone may copy, edit and adapt it, including converting it again into another voice.",
-        "Your own recordings are never published or released. They stay on the device that recorded and converted them, in a private folder, and are not uploaded to the project's repository or storage. A hosted service is used for a recording only if you agree to that for that recording.",
+        "Your own recordings are never published or released. They stay on the device that recorded and converted them, in a private folder, and are not uploaded to the project's repository or storage. Our own server, run on Modal, which deletes your recording right after conversion, is used for a recording only if you agree to that for that recording.",
         "Each converted line's public recipe names the model, its settings, the character's reference clip, and a fingerprint (sha256) of your recording. The fingerprint shows which recording was used; your voice can't be recovered from it.",
         "A converted line can keep your timing, phrasing and delivery, though not your voice. You're credited as its performer by your Farcaster name (or the name you give), unless you ask not to be named.",
         "You can ask for a line to be hidden from view, like any other contribution. Copies others have already made may remain.",

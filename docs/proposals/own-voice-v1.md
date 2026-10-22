@@ -2,7 +2,8 @@
 
 Drafted by the coding agent on 2026-10-13 from the owner's terms of the same
 day. Approved by the owner on 2026-10-22 with points 8 and 9 added ("Record only
-your own voice, never someone else's recording" and the same 18+ rule as sign-in).
+your own voice, never someone else's recording" and the same 18+ rule as sign-in),
+and point 3 naming Modal (owner, same day).
 The approved wording is `config/consent-own-voice.json` (kind `own_voice`); its
 sha256 is recorded with each agreement, as for `own-words`.
 
@@ -27,8 +28,9 @@ Your performance, in a character's voice
    converting it again into another voice.
 3. Your own recordings are never published or released. They stay on the
    device that recorded and converted them, in a private folder, and are not
-   uploaded to the project's repository or storage. A hosted service is used
-   for a recording only if you agree to that for that recording.
+   uploaded to the project's repository or storage. Our own server, run on
+   Modal, which deletes your recording right after conversion, is used for a
+   recording only if you agree to that for that recording.
 4. Each converted line's public recipe names the model, its settings, the
    character's reference clip, and a fingerprint (sha256) of your recording.
    The fingerprint shows which recording was used; your voice can't be
