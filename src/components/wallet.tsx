@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
+import Link from 'next/link';
 import { authFetch, signOutWallet } from '~/lib/client-auth';
 import { IMAGES } from '~/lib/config';
 import { IMAGE_WORDING } from '~/lib/images/wording';
@@ -53,10 +54,12 @@ interface Balance {
   payTo: `0x${string}` | null;
   usdc: `0x${string}`;
   packsUsd: number[];
+  /** Not linked to a Farcaster account, and the offer to link applies. */
+  linkOffer?: boolean;
 }
 
 /** Balance, price, and Add funds; `onChange` after a payment is added. */
-export function WalletPanel({ onChange }: { onChange?: () => void }) {
+export function WalletPanel({ onChange, linkHint = true }: { onChange?: () => void; linkHint?: boolean }) {
   const [b, setB] = useState<Balance | null>(null);
   const [adding, setAdding] = useState(false);
   const [token, setToken] = useState<'USDC' | 'ETH'>('USDC');
@@ -163,6 +166,12 @@ export function WalletPanel({ onChange }: { onChange?: () => void }) {
         </button>
       </p>
       <p className="ic-note">{W.price(dollars(b.priceUsd), b.markup)}</p>
+      {/* After a wallet sign-in, the offer to link it (owner, 2026-10-22); made on the You page. */}
+      {linkHint && b.linkOffer && (
+        <p className="ic-note">
+          <Link href="/you">{W.linkHint}</Link>
+        </p>
+      )}
       {!b.open ? (
         <p className="ic-note">{W.notOpen}</p>
       ) : !adding ? (

@@ -347,7 +347,8 @@ only, through `studio.rating_totals`, `studio.like_totals` and
   outside the site's own domain.
 - `P6b`: in the committed migrations, no public read policy remains on
   `ratings`, `likes`, `take_likes`, `picks`, `contributor_consents`, `image_asks`,
-  `removal_log` or `image_scores` (Neynar scores by FID, migration 0010)
+  `removal_log`, `image_scores` (Neynar scores by FID, migration 0010) or `wallet_links` (which wallet is linked
+  to which FID, DRAFT migration NEXT_wallet_links.sql)
   (`npm run test:db` proves it on an in-memory database, totals views
   included).
 - `P6c`: on the live database, through the public API with the public key,
@@ -428,6 +429,13 @@ ratings and likes and serves the totals.
   anyway. They are private (no public read; append-only for the app;
   `npm run test:wallet`). `studio.image_costs` still has no person in it: it now
   says only whether a day's costs were free or prepaid.
+- Wallet ↔ Farcaster links (owner, 2026-10-22; DRAFT migration NEXT_wallet_links.sql): which wallet account is
+  linked to which FID, and how ('verified' on Farcaster, or 'signed' with both sign-ins), are kept privately
+  (`studio.wallet_links`, append-only for the app except a link's one-time unlinked_at). A linked wallet's work is
+  then shown under the Farcaster name, which makes the link public for a 'signed' link (the person is told so
+  before confirming; for a 'verified' one it is public on Farcaster already). The automatic link sends the wallet's
+  address to Neynar; it is switched off (`WALLET_LINKS.lookUp`) until the owner rereads the Privacy line that says
+  so (docs/legal/wallet-links-draft.md).
 
 ## 7. Payments never enter scoring or ordering. No token. The "not affiliated" line stays on the first screen.
 

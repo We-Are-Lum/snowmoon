@@ -1,4 +1,5 @@
 import 'server-only';
+import { actsFor } from '../wallet/credit';
 import type postgres from 'postgres';
 import { REMIX } from '../config';
 import { isMaintainer } from './frames';
@@ -132,7 +133,7 @@ export async function boardFrames(sql: Sql, b: Storyboard): Promise<Record<strin
 export async function setBoardHidden(sql: Sql, person: number, id: string, hide: boolean): Promise<{ ok: true; board: Storyboard } | { ok: false; status: number; error: string }> {
   const b = await boardById(sql, id);
   if (!b) return { ok: false, status: 404, error: 'No such storyboard' };
-  const maker = b.person === person;
+  const maker = await actsFor(sql, person, b.person);
   const maint = isMaintainer(person);
   if (!maker && !maint) return { ok: false, status: 403, error: 'Only the person who made this storyboard can hide it.' };
   if (hide) {

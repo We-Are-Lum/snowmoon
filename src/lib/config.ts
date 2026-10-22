@@ -164,6 +164,38 @@ export const LINKED_WALLETS: Readonly<Record<string, number>> = {
   '0x317a1ea96dc4b10c1ea60e3af59c472316d31303': 193912,
 };
 
+/**
+ * Wallet ↔ Farcaster links as a regular feature (owner, 2026-10-22: "After you are signed in with a wallet you can
+ * have an offer to sign in with Farcaster to associate the account with this wallet. If we can't just use neynar to
+ * find out if the wallet is already associated."). Kept in studio.wallet_links (DRAFT migration
+ * NEXT_wallet_links.sql, numbered at merge, which seeds the two LINKED_WALLETS entries). Until that table exists,
+ * LINKED_WALLETS above is what getPerson reads, so nothing changes before the migration is applied; after, it is
+ * read only for a wallet the table has never linked or unlinked. src/lib/wallet/links.ts.
+ */
+export const WALLET_LINKS = {
+  /**
+   * The offer: a wallet person signs in with Farcaster in the same session, sees who it will link to, and confirms
+   * ('signed'). Both proofs are checked on our server; no new outside service. On. Without the table it answers
+   * "not available yet" and links nothing.
+   */
+  offer: true as boolean,
+  /**
+   * The automatic link ('verified'), on a wallet's first signed-in request: its address is sent to Neynar (user by verified
+   * address), and a wallet that exactly one Farcaster account has verified is linked to it. SWITCHED OFF: sending
+   * an address to Neynar is new data going to an outside service, so it waits for the owner's reread of the
+   * Privacy line (docs/legal/wallet-links-draft.md) and the migration.
+   */
+  lookUp: false as boolean,
+  /** How long a lookup's answer (the FIDs found, possibly none) is kept before Neynar is asked again. */
+  lookupCacheHours: 24,
+  /**
+   * A linked wallet's earlier work shows under its Farcaster name (owner, 2026-10-22, replacing "don't reassign"):
+   * bylines, the profile, the You page and Hide read it as the FID's. Shown, not rewritten: the records keep the
+   * wallet account as the maker, and an unlink shows it as the wallet's again (src/lib/wallet/credit.ts). On.
+   */
+  creditEarlierWork: true as boolean,
+};
+
 export const AGENTS = {
   /**
    * On, for the owner's account only (owner, 2026-10-20: "Ship agents-connect for my account only (FID 6786 and
