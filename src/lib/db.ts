@@ -15,7 +15,8 @@ const scoped = new AsyncLocalStorage<postgres.Sql | null>();
 export function db(): postgres.Sql | null {
   // Inside asAgentReader (the agent read API), every query uses the read-only agent role's connection instead.
   if (scoped.getStore() !== undefined) return scoped.getStore()!;
-  if (client === undefined) {
+  if (!client) {
+    // Not kept while unset, so a script that sets it after an early call (scripts/test-wallet.ts) still connects.
     const url = process.env.STUDIO_DATABASE_URL;
     // prepare: false because the transaction pooler does not keep prepared statements.
     client = url ? postgres(url, { prepare: false, max: 1, idle_timeout: 20, connect_timeout: 10 }) : null;
