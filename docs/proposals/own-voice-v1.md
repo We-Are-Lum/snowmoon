@@ -1,9 +1,10 @@
-# own-voice-v1 (draft, not approved)
+# own-voice-v1 (approved by the owner, 2026-10-22)
 
 Drafted by the coding agent on 2026-10-13 from the owner's terms of the same
-day. Nothing records agreement to it until the owner approves the wording; it
-then moves into `config/consent.json` as a version of kind `own_voice`, and
-its sha256 is recorded with each agreement, as for `own-words`.
+day. Approved by the owner on 2026-10-22 with points 8 and 9 added ("Record only
+your own voice, never someone else's recording" and the same 18+ rule as sign-in).
+The approved wording is `config/consent-own-voice.json` (kind `own_voice`); its
+sha256 is recorded with each agreement, as for `own-words`.
 
 Agreed once per performer, before their first take is converted. A performer
 who isn't signed in (a friend recording offline) agrees in writing, and the
@@ -38,6 +39,8 @@ Your performance, in a character's voice
 6. You can ask for a line to be hidden from view, like any other contribution.
    Copies others have already made may remain.
 7. You must not perform a voice that imitates a real person.
+8. Record only your own voice, never someone else's recording.
+9. You must be at least 18 years old.
 
 ## Notes for the owner
 
