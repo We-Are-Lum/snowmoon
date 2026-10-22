@@ -69,6 +69,9 @@ const nextConfig: NextConfig = {
   // These run after the app's own pages and files, so no existing route is shadowed; /<id> is digits only.
   async rewrites() {
     return [
+      // The owner's phone test (/voice-test; owner, 2026-10-22) reads its model from the site's media. Previews
+      // aren't in media.snowmoon.party's CORS list, so there the page reads the same files through this path.
+      { source: '/voice-media/:path*', destination: 'https://media.snowmoon.party/voice/:path*' },
       { source: '/@:handle/:id/v/:n', destination: '/adaptation/:id/by/:handle/v/:n' },
       // A fixed version's own editor and storyboard (its frames and labels, whatever the chosen version is).
       { source: '/@:handle/:id/v/:n/shot/:shot', destination: '/adaptation/:id/by/:handle/v/:n/shot/:shot' },

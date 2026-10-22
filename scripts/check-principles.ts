@@ -1156,7 +1156,9 @@ const PAGES = ['/', '/chapter/1', '/chapter/30', '/about', '/cards', '/adaptatio
   // Step 4: styles and character sheets.
   '/images/designs', '/images/designs?tab=characters', '/images/designs/character/gladias', '/images/picks',
   // The You page and a public profile (owner, 2026-10-18).
-  '/you', '/@naaate'];
+  '/you', '/@naaate',
+  // The owner's phone test (owner, 2026-10-22), as served (signed out: "not found"). Signed in, check:voice-test drives the run and fails on any host outside the site.
+  '/voice-test'];
 add({
   id: 'P6a',
   principle: 6,
