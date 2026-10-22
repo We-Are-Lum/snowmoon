@@ -1,4 +1,5 @@
 import 'server-only';
+import { actsFor } from '../wallet/credit';
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import type postgres from 'postgres';
@@ -133,7 +134,8 @@ export async function shownFramesBy(sql: Sql, person: number, limit = 60): Promi
 export async function setHidden(sql: Sql, person: number, id: string, hide: boolean): Promise<{ ok: true; frame: Frame } | { ok: false; status: number; error: string }> {
   const f = await frameById(sql, id);
   if (!f) return { ok: false, status: 404, error: 'No such frame' };
-  const maker = f.person === person;
+  // A linked wallet's earlier frames are its FID's (owner, 2026-10-22; src/lib/wallet/credit.ts).
+  const maker = await actsFor(sql, person, f.person);
   const maint = isMaintainer(person);
   if (!maker && !maint) return { ok: false, status: 403, error: 'Only the person who made this frame can hide it.' };
   if (hide) {

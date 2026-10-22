@@ -1,7 +1,8 @@
 import 'server-only';
 import { createClient } from '@farcaster/quick-auth';
 import { readSession, type WalletSession } from './wallet/session';
-import { LINKED_WALLETS } from './config';
+import { db } from './db';
+import { configLink, linkedFidFor } from './wallet/links';
 
 /**
  * Sign In with Farcaster via Quick Auth, as a bearer token.
@@ -40,15 +41,16 @@ export function getWallet(request: Request): WalletSession | null {
 /**
  * Who is signed in, for the routes that also take a wallet sign-in (making and publishing images,
  * and agreeing to how one's words are published; owner, 2026-10-13; "Make your own", owner, 2026-10-19): a Farcaster FID, or minus a
- * wallet account's number (never a FID, which is positive). Every other route uses getFid. A wallet the owner
- * linked to a Farcaster account (LINKED_WALLETS) signs in as that FID.
+ * wallet account's number (never a FID, which is positive). Every other route uses getFid. A wallet linked to a
+ * Farcaster account signs in as that FID (owner, 2026-10-22): the newest active link in studio.wallet_links, or
+ * LINKED_WALLETS while that table isn't there (src/lib/wallet/links.ts). The payment address is never linked.
  */
 export async function getPerson(request: Request): Promise<number | null> {
   const fid = await getFid(request);
   if (fid !== null) return fid;
   const w = getWallet(request);
-  return w ? linkedFid(w.address) ?? -w.account : null;
+  return w ? (await linkedFidFor(db(), w.account, w.address)) ?? -w.account : null;
 }
 
-/** The FID a wallet is linked to (LINKED_WALLETS), or null. */
-export const linkedFid = (address: string): number | null => LINKED_WALLETS[address.toLowerCase()] ?? null;
+/** The FID LINKED_WALLETS (config) links an address to, or null; the table may say otherwise (linkedFidFor). */
+export const linkedFid = (address: string): number | null => configLink(address);

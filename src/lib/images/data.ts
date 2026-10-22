@@ -1,4 +1,5 @@
 import 'server-only';
+import { credit } from '../wallet/credit';
 import type postgres from 'postgres';
 import { WORK_ID } from '../config';
 
@@ -56,6 +57,9 @@ const SELECT = (sql: Sql) => sql`
   left join studio.like_totals lt on lt.version_id = v.id
   where e.element_type = 'image' and e.status = 'published' and e.work_id = ${WORK_ID} and r.source = 'in_app'`;
 
+/** A linked wallet's images show under its Farcaster name (owner, 2026-10-22; src/lib/wallet/credit.ts). */
+const shown = (sql: Sql, images: ReaderImage[]) => credit(sql, images, (i) => i.byFid, (i, fid, name) => ({ ...i, byFid: fid, byName: name }));
+
 function shape(r: Record<string, unknown>): ReaderImage {
   const p = (r.params ?? {}) as Record<string, unknown>;
   return {
@@ -96,18 +100,18 @@ export async function feed(sql: Sql, sort: 'new' | 'liked', limit = 60): Promise
     select * from (${SELECT(sql)}) x
     order by ${sort === 'liked' ? sql`x.likes desc, x.created_at desc` : sql`x.created_at desc`}
     limit ${limit}`;
-  return rows.map(shape);
+  return shown(sql, rows.map(shape));
 }
 
 export async function chapterImages(sql: Sql, chapter: number): Promise<ReaderImage[]> {
   const rows = await sql`select * from (${SELECT(sql)}) x where x.chapter = ${chapter} order by x.likes desc, x.created_at desc`;
-  return rows.map(shape);
+  return shown(sql, rows.map(shape));
 }
 
 export async function imageByVersion(sql: Sql, versionId: string): Promise<ReaderImage | null> {
   if (!/^[0-9a-f-]{36}$/.test(versionId)) return null;
   const [row] = await sql`select * from (${SELECT(sql)}) x where x.version_id = ${versionId}`;
-  return row ? shape(row) : null;
+  return row ? (await shown(sql, [shape(row)]))[0] : null;
 }
 
 /**
@@ -125,7 +129,7 @@ export async function imagesWithSheet(sql: Sql, kind: 'character' | 'place', slu
              or exists (select 1 from jsonb_array_elements(case when jsonb_typeof(x.params->'designs') = 'array' then x.params->'designs' else '[]'::jsonb end) d
                         where d->>'kind' = 'character' and d->>'entity' = ${name}))`
   } order by x.created_at desc limit ${limit}`;
-  return rows.map(shape);
+  return shown(sql, rows.map(shape));
 }
 
 /** The element behind a version, whatever its status (for the author's hide and unhide, and moderation). */

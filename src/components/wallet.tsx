@@ -1,11 +1,13 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
+import Link from 'next/link';
 import { authFetch, signOutWallet } from '~/lib/client-auth';
 import { IMAGES } from '~/lib/config';
 import { IMAGE_WORDING } from '~/lib/images/wording';
 import { claim, hasWallet, pay, signInWithWallet, WalletError } from '~/lib/wallet/client';
 import { txHashFrom } from '~/lib/wallet/hash';
+import { LINK_NOTE, linkNoteShown } from '~/lib/wallet/announce';
 import { TxHashField } from './tx-hash-field';
 
 /**
@@ -53,10 +55,29 @@ interface Balance {
   payTo: `0x${string}` | null;
   usdc: `0x${string}`;
   packsUsd: number[];
+  /** Not linked to a Farcaster account, and the offer to link applies. */
+  linkOffer?: boolean;
+}
+
+/**
+ * The 30-day note (owner, 2026-10-22), in the owner's words, to everyone until WALLET_LINKS.announceUntil; "Privacy §7"
+ * links to the Privacy page. Read on the client, so it leaves on its own when the date passes.
+ */
+export function LinkNote({ className = 'ic-note' }: { className?: string }) {
+  const [shown, setShown] = useState(false);
+  useEffect(() => setShown(linkNoteShown()), []);
+  if (!shown) return null;
+  const [lead] = LINK_NOTE.split('Privacy §7.');
+  return (
+    <p className={className} data-note="wallet-links">
+      {lead}
+      <Link href="/privacy">Privacy §7</Link>.
+    </p>
+  );
 }
 
 /** Balance, price, and Add funds; `onChange` after a payment is added. */
-export function WalletPanel({ onChange }: { onChange?: () => void }) {
+export function WalletPanel({ onChange, linkHint = true }: { onChange?: () => void; linkHint?: boolean }) {
   const [b, setB] = useState<Balance | null>(null);
   const [adding, setAdding] = useState(false);
   const [token, setToken] = useState<'USDC' | 'ETH'>('USDC');
@@ -163,6 +184,14 @@ export function WalletPanel({ onChange }: { onChange?: () => void }) {
         </button>
       </p>
       <p className="ic-note">{W.price(dollars(b.priceUsd), b.markup)}</p>
+      {/* The 30-day note about automatic links (owner, 2026-10-22); on the You page it shows once, above. */}
+      {linkHint && <LinkNote />}
+      {/* After a wallet sign-in, the offer to link it (owner, 2026-10-22); made on the You page. */}
+      {linkHint && b.linkOffer && (
+        <p className="ic-note">
+          <Link href="/you">{W.linkHint}</Link>
+        </p>
+      )}
       {!b.open ? (
         <p className="ic-note">{W.notOpen}</p>
       ) : !adding ? (

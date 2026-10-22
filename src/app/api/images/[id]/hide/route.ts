@@ -1,4 +1,5 @@
 import { after, NextResponse } from 'next/server';
+import { actsFor } from '~/lib/wallet/credit';
 import { revalidatePath } from 'next/cache';
 import { getPerson } from '~/lib/auth';
 import { db } from '~/lib/db';
@@ -27,7 +28,8 @@ export async function POST(request: Request, { params }: Ctx) {
     const { id } = await params;
     const el = await workOf(sql, id);
     if (!el) return NextResponse.json({ error: 'No such image' }, { status: 404 });
-    if (el.byFid !== fid) return NextResponse.json({ error: `Only the person who made this ${el.type === 'image' ? 'image' : 'design'} can hide it here. Others can report it.` }, { status: 403 });
+    // A linked wallet's earlier images are its FID's to hide (owner, 2026-10-22; src/lib/wallet/credit.ts).
+    if (!(await actsFor(sql, fid, el.byFid))) return NextResponse.json({ error: `Only the person who made this ${el.type === 'image' ? 'image' : 'design'} can hide it here. Others can report it.` }, { status: 403 });
     const { hide } = (await request.json().catch(() => ({}))) as { hide?: unknown };
     if (hide !== false) {
       if (el.status === 'hidden') return NextResponse.json({ hidden: true });
