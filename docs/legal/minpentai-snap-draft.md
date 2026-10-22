@@ -18,11 +18,11 @@ onchain. "Keep playing in the app" opens Play with the match's seed and moves in
 
 ## Privacy, section 4 ("Kept by us when you sign in."), one item added to the list
 
-> If you play Minpentai in a Farcaster cast: your latest practice match there (its random seed, the computer level, the extra rule and where you placed your pieces, turn by turn), so you can resume it; deleted when the match ends, or 30 days after your last turn. Nothing else about these matches is kept or recorded.
+> If you play Minpentai in a Farcaster cast: your latest practice match there, kept with your Farcaster ID (its random seed, the computer level, the extra rule and where you placed your pieces, turn by turn), so you can resume it; deleted when the match ends, or 30 days after your last turn. Nothing else about these matches is kept or recorded.
 
 ## Privacy, section 6 ("What you publish."), one sentence added at the end
 
-> If you share a Minpentai challenge from a Farcaster cast, your Farcaster app posts it; its link carries the match's start (its random seed, the computer level and the extra rule) and your result (how and at which step it ended, the towers left and your taps), its card is drawn from that link, and we keep nothing about it.
+> If you share a Minpentai challenge from a Farcaster cast, your Farcaster app posts it; its link carries the match's start (its random seed, the computer level and the extra rule) and your result (how and at which step it ended, how many towers were left and how many taps you used). It does not carry your moves or your Farcaster ID, though anyone who opens the link can read what it does carry. Its card is drawn from that link, and we keep nothing about it.
 
 ## Privacy, section 7 ("Outside services and what they receive."), one sentence added to the Farcaster item
 
