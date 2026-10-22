@@ -9,14 +9,16 @@ Each line below describes what the code does today. The source is named under ea
 ## Privacy
 
 **§4 Kept when you sign in, add:**
-> If you use an agent here (for now, only the site's owner can): the edits it drafts for your own
+> If you use an agent here (for now, only people the site has invited): the edits it drafts for your own
 > scene versions (a new frame, another voice take, a shot's timing, who speaks in a shot, a video
 > test), each with the note it was drafted from. A frame or video test you approve is kept with what it
 > cost, the model and the pictures sent, privately and only for you. When your agent can't do something
-> you asked, it may record what you asked and what was missing. That record is shown only to you, on
-> your You page.
+> you asked, it may record what you asked and what was missing. That record is shown to you on your You
+> page, and to the site's owner, who reads them, with your name, to decide what to build next. It is
+> never published.
 
-Source: `src/lib/agents/edits.ts`, `approve.ts` and the `agent_gaps` table in migration 0019.
+Source: `src/lib/agents/edits.ts` (`allGaps`, for the owner only, 2026-10-22), `approve.ts` and the `agent_gaps`
+table in migration 0019. Test SU7.
 
 **§4 Kept when you sign in, also add (agent keys, 2026-10-20 night):**
 > If you make an agent key: its name, the spend cap you set, when it was made, when it ends (30 days

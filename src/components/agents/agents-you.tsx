@@ -126,7 +126,7 @@ const whereOf = (x: SuggestionView) => [x.page, x.moment ? `moment ${x.moment}${
  * The owner also sees everyone's here, with who said it and where they were.
  */
 function Suggestions() {
-  const [data, setData] = useState<{ mine: SuggestionView[]; all?: (SuggestionView & { who: string })[] } | null>(null);
+  const [data, setData] = useState<{ mine: SuggestionView[]; all?: (SuggestionView & { who: string })[]; gaps?: { id: string; who: string; agent: string; asked: string; missing: string; createdAt: string }[] } | null>(null);
   const load = useCallback(async () => {
     const r = await authFetch('/api/suggestions').catch(() => null);
     if (r?.ok) setData(await r.json());
@@ -168,6 +168,20 @@ function Suggestions() {
             <div className="request-row" key={x.id} data-suggestion-all={x.id}>
               <p className="you-note"><strong>{x.who}</strong>, {when(x.createdAt)}{x.spoken ? ', spoken' : ''}{x.filedBy ? `, ${S.passedOnBy(x.filedBy)}` : ''}{whereOf(x) ? ` · ${whereOf(x)}` : ''}</p>
               <p>{x.words}</p>
+            </div>
+          ))}
+        </section>
+      )}
+      {data.gaps && (
+        <section className="you-section" aria-labelledby="you-gaps-all">
+          <h2 id="you-gaps-all">{S.allGaps}</h2>
+          <p className="you-note">{S.allGapsNote}</p>
+          {data.gaps.length === 0 && <p className="you-note">None yet.</p>}
+          {data.gaps.map((g) => (
+            <div className="request-row" key={g.id} data-gap-all={g.id}>
+              <p className="you-note"><strong>{g.who}</strong>, {when(g.createdAt)}, {S.passedOnBy(g.agent)}</p>
+              <p>{g.asked}</p>
+              <p className="you-note">{S.gapMissing}: {g.missing}</p>
             </div>
           ))}
         </section>

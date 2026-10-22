@@ -6,6 +6,8 @@ import { AGENTS, REMIX } from '../config';
 import { remixShot } from '../remix/shot';
 import { sql, type Agent } from './core';
 import { draftPiece } from './pieces';
+import { suggestionsReader } from './suggestions';
+import { agentLabel } from './accounts';
 
 /**
  * Editing your own adaptation through your agent (owner, 2026-10-20: "edit Fifteen Days myself through agents
@@ -101,7 +103,20 @@ export async function logGap(agent: Agent, args: Record<string, unknown>) {
   const asked = note(args.asked, 'asked');
   const missing = note(args.missing, 'missing');
   const [g] = await sql()<{ id: string }[]>`insert into studio.agent_gaps (person, agent_id, agent_name, asked, missing) values (${agent.person}, ${agent.id}, ${agent.name}, ${asked}, ${missing}) returning id`;
-  return { gap: g.id, shown: 'on your person\'s You page, under "What your agent couldn\'t do"' };
+  return { gap: g.id, shown: 'to your person on their You page, under "What your agent couldn\'t do", and to the site\'s owner, who reads them as the build list; never published' };
+}
+
+/**
+ * Everyone's gaps, for the owner only (owner, 2026-10-22: "I want to see everything someone tries to do that they
+ * can't"), with who asked: the build list.
+ */
+export async function allGaps(reader: number) {
+  if (reader !== suggestionsReader()) return [];
+  const rows = await sql()<{ id: string; person: string; agent_name: string; asked: string; missing: string; created_at: Date }[]>`
+    select id, person, agent_name, asked, missing, created_at from studio.agent_gaps order by created_at desc limit 200`;
+  const who = new Map<number, string>();
+  for (const p of new Set(rows.map((r) => Number(r.person)))) who.set(p, (await agentLabel(p, null)).label);
+  return rows.map((r) => ({ id: r.id, person: Number(r.person), who: who.get(Number(r.person))!, agent: r.agent_name, asked: r.asked, missing: r.missing, createdAt: new Date(r.created_at).toISOString() }));
 }
 
 export async function gapsOf(person: number) {

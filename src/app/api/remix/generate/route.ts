@@ -9,7 +9,7 @@ import { bylineName } from '~/lib/names';
 import { shortAddress } from '~/lib/wallet/session';
 import { generate, remixPictures, remixPrompt, testFakes } from '~/lib/remix/make';
 import { frameStorageReady, putFrame, saveFrame } from '~/lib/remix/frames';
-import { layoutPicture, remixShot } from '~/lib/remix/shot';
+import { layoutPicture, remixShot, savedLayoutPicture } from '~/lib/remix/shot';
 
 /**
  * Generate from any camera (owner, 2026-10-18): the live layout from the person's browser (the shot
@@ -49,10 +49,11 @@ export async function POST(request: Request) {
   if (!Number.isInteger(adaptation) || !Number.isInteger(version) || !shotId) return no('Bad request', 400);
   const shot = remixShot(adaptation, version, shotId);
   if (!shot) return no('No such shot', 404);
-  if (!shot.hasCamera || !shot.prompt) return no('This shot has no camera and prompt to remix', 400);
+  if (!shot.prompt || (!shot.hasCamera && !shot.savedLayout)) return no('This shot has no camera and prompt to remix', 400);
   if (!words || words.length > REMIX.ownWordsMaxChars) return no(`Say what to change in up to ${REMIX.ownWordsMaxChars} characters`, 400);
-  const layout = layoutPicture(body.layout, REMIX.layout);
-  if (!layout) return no('The live layout did not come through. Try again.', 400);
+  // A shot with a camera: the live layout from the person's browser. One made in code: its saved layout (owner, 2026-10-22).
+  const layout = shot.hasCamera ? layoutPicture(body.layout, REMIX.layout) : await savedLayoutPicture(shot, REMIX.layout);
+  if (!layout) return no(shot.hasCamera ? 'The live layout did not come through. Try again.' : 'This shot\u2019s saved layout could not be read. Try again.', 400);
   const [v] = await sql`select 1 from studio.adaptation_versions where id = ${version} and adaptation_id = ${adaptation} and not hidden`;
   if (!v) return no('No such version', 404);
   if (!(await hasConsented(person))) return no('Agree to how your words are published first', 403, { reason: 'consent' });
@@ -92,7 +93,8 @@ export async function POST(request: Request) {
       // version_frame_of: the version whose frame and prompt were sent (version 1's, for a shot of version 2, the GPT cut, while Remix draws with the open-weight model).
       shot: { id: shot.id, n: shot.n, version_frame: shot.recipeId, version_frame_sha256: shot.recipeSha256, version_frame_of: shot.from },
       pictures: pictures.map((p, i) => ({ n: i + 1, role: p.role, name: p.name, sent_sha256: p.sha256, width: p.width, height: p.height, served: p.src, made_from: p.file, made_from_sha256: p.fileSha256 })),
-      camera: cameraOf(body.camera),
+      camera: shot.hasCamera ? cameraOf(body.camera) : null,
+      layout: shot.hasCamera ? 'live: the camera the person set' : 'saved: the shot has no camera, so its committed layout was sent',
       // The shot's own prompt and the plate's sentence were drafted by the coding agent; the person's words are theirs.
       assist: { shot_prompt: 'the version\'s own prompt for this shot, drafted by the coding agent', plate_line: 'drafted by the coding agent', own_words: 'the remixer\'s, unchanged' },
       by_name: by.name,

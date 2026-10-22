@@ -104,9 +104,12 @@ export const AGENT_WORDING = {
     yourSuggestions: 'What you suggested',
     allSuggestions: 'Suggestions from invited people',
     allSuggestionsNote: 'Only you see these. Who said it, where they were, and when.',
+    // DRAFT (2026-10-22): everyone's gaps, for the owner.
+    allGaps: 'What people asked their agents for that they couldn’t do',
+    allGapsNote: 'Only you and each person see these. What they asked, in their agent’s record, and what was missing: the build list.',
     passedOnBy: (agent: string) => `passed on by ${agent}`,
     gaps: 'What your agent couldn’t do',
-    gapsNote: 'Things you asked for that your agent had no way to do yet. This is the build list.',
+    gapsNote: 'Things you asked for that your agent had no way to do yet. The site’s owner sees these too: this is the build list.',
     gapAsked: 'You asked',
     gapMissing: 'Missing',
     noDrafts: 'Nothing waiting.',

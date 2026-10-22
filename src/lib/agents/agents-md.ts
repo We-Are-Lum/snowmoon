@@ -115,8 +115,8 @@ your drafts stay with them.
   draft it. Nothing is made or spent until your person approves it on their You page. The daily
   limits are ${S.framesPerDay} frames, ${S.videosPerDay} video tests and $${S.dailyCapUsd} in all, and a key's own cap applies too.
 - **When you can't do something**, call \`log_gap\` with what your person asked and what was missing,
-  then tell them. They see these on their You page.
-- **When your person says how the site could be better**, pass it on with \`suggest_improvement\`, in
+  then tell them. They see these on their You page, and so does the site's owner.
+- **When your person wishes for a feature or says how the site could be better**, pass it on with \`suggest_improvement\`, in
   their words, with the page they were on. Only the site's owner reads these.
 
 ## Limits
