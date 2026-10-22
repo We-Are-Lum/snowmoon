@@ -7,7 +7,7 @@ tapping isn't affected. Section 7's last sentence becomes: 'A linked wallet is l
 its link ends if that account no longer verifies it; a wallet you unlinked isn't looked up again.'"
 
 The reread words are now in `src/lib/legal.ts` on the branch (Privacy sections 4, 6 and 7; Terms sections 4 and 5),
-with `LEGAL.ownerReread` set for both pages (terms `tvt9ga`, privacy `h0zppm`, 2026-10-22) and `LEGAL.effective`
+with `LEGAL.ownerReread` set for both pages (terms `tvt9ga`, privacy `hqt7ov`, 2026-10-22) and `LEGAL.effective`
 2026-10-22. They go live in the one merge deploy, with migration 0026 applied first and `WALLET_LINKS.lookUp` on.
 If the merge is on a later day, `LEGAL.effective` should become that day. The sections below are kept as the record
 of what was reread; section 1 shows the owner's sentence.
@@ -55,7 +55,7 @@ Where: `src/lib/legal.ts`, Privacy, `n: 7`, the Neynar item. In, with `WALLET_LI
 **Proposed (new item, after "That you agreed to the terms for publishing…"):**
 > If your wallet is linked to your Farcaster account (because that account verified the wallet's address on
 > Farcaster, or because you linked them while signed in with both): which wallet is linked to which account, how,
-> and when it was linked or unlinked. While linked, signing in with the wallet is signing in as that account. You
+> when it was linked or unlinked, and why a link ended. While linked, signing in with the wallet is signing in as that account. You
 > can unlink it on your You page.
 
 And, at the end of the same section's wallet paragraph (line 97 on origin/main), one sentence:
@@ -121,9 +121,12 @@ DRAFT marks for a separate reread:
 - Privacy section 10 says "A change to what is collected or where it is sent will also be announced on the Service."
   Sending the wallet address to Neynar is such a change. The branch has no announcement; say where you want one, or
   that the dated pages are enough.
-- Section 4's list item names "which wallet is linked to which account, how, and when it was linked or unlinked".
-  The table also keeps why a link ended ('person' or 'unverified'). That is close to "how … unlinked", but not word
-  for word; say if you want it named.
+- Done (owner, 2026-10-22, "Yes, add 'and why a link ended' to section 4"): section 4 now ends "…how, when it was
+  linked or unlinked, and why a link ended." (the table's ended_by: 'person' or 'unverified').
+- Done (owner, 2026-10-22, "Yes to the 30-day note"): the announcement for section 10 is a note in the wallet panel
+  and on the You page, in the owner's words: "New: if your wallet is verified on Farcaster, it now links to that
+  account automatically. Privacy §7." Shown to everyone until `WALLET_LINKS.announceUntil` (2026-11-21, or the merge
+  day + 30 if later; set at merge), then gone with no further deploy (src/lib/wallet/announce.ts).
 
 ## Before it goes live
 

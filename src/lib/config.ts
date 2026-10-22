@@ -196,6 +196,11 @@ export const WALLET_LINKS = {
    * wallet account as the maker, and an unlink shows it as the wallet's again (src/lib/wallet/credit.ts). On.
    */
   creditEarlierWork: true as boolean,
+  /**
+   * The 30-day note in the wallet panel and on the You page (owner, 2026-10-22), shown through this UTC day and then
+   * gone with no further deploy: 30 days from the deploy. Set at merge: 2026-11-21, or the merge day + 30 if later.
+   */
+  announceUntil: '2026-11-21',
 };
 
 export const AGENTS = {

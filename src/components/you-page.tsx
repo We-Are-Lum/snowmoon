@@ -8,7 +8,7 @@ import { frameView, labelFor, pictureView, posterAlt, posterView } from '~/lib/s
 import type { BoardItem, FrameItem, OwnWork, PictureItem, SceneItem, Who } from '~/lib/you';
 import { AiLabel } from './recipe-sheet';
 import { SignInButton } from './sign-in';
-import { WalletPanel, WalletSignInButton } from './wallet';
+import { LinkNote, WalletPanel, WalletSignInButton } from './wallet';
 import { AgentsOnYou } from './agents/agents-you';
 
 /**
@@ -145,6 +145,7 @@ export function YouPage() {
     return (
       <Frame>
         <p className="you-lede">{W.signedOut}</p>
+        <LinkNote className="you-note" />
         <div className="you-sign-in">
           <SignInButton className="ic-secondary" />
           {auth.kind === 'signed-out' && !auth.inApp && <WalletSignInButton />}
@@ -175,6 +176,8 @@ export function YouPage() {
     <Frame>
       {/* First, the creative act (owner, 2026-10-20): tell your agent, react to its drafts. Only while agents are switched on. */}
       <AgentsOnYou />
+      {/* The 30-day note about automatic links (owner, 2026-10-22), for everyone signed in. */}
+      <LinkNote className="you-note" />
       <section className="you-section" aria-labelledby="you-account">
         <h2 id="you-account">{W.account}</h2>
         <AccountRows

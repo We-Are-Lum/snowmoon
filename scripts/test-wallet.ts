@@ -521,6 +521,18 @@ await sql.end();
   check('…and the kept hash, tried again with the fixed reader, is added once', later.ok && lj2.added > 1 && lj2.added < 1.1 && (await balanceUsd(S, mine)) > beforeEth, JSON.stringify(lj2));
   check('only "already", "failed" and "old" let the device forget a payment', ['already', 'failed', 'old'].every((r) => forgetsPending(r)) && ['not-to-us', 'not-from-you', 'too-small', 'shared-block', undefined].every((r) => !forgetsPending(r)));
   const panel = readFileSync('src/components/wallet.tsx', 'utf8');
+  {
+    // The 30-day note (owner, 2026-10-22), in the owner's words, gone on its own after WALLET_LINKS.announceUntil.
+    const { LINK_NOTE, linkNoteShown } = await import('../src/lib/wallet/announce');
+    const { WALLET_LINKS: WLN } = await import('../src/lib/config');
+    const until = WLN.announceUntil;
+    check('the note is in the owner\'s words', LINK_NOTE === 'New: if your wallet is verified on Farcaster, it now links to that account automatically. Privacy §7.');
+    check('the note ends 30 days after the earliest merge day (2026-11-21 or later)', until >= '2026-11-21');
+    check('the note shows before its end date, through the whole last day', linkNoteShown(new Date('2026-10-22T12:00:00Z')) && linkNoteShown(new Date(`${until}T23:59:59Z`)));
+    check('…and is gone after it, with no deploy', !linkNoteShown(new Date(Date.parse(`${until}T00:00:00Z`) + 24 * 3600 * 1000)) && !linkNoteShown(new Date('2027-01-01T00:00:00Z')));
+    const you = readFileSync('src/components/you-page.tsx', 'utf8');
+    check('the note is in the wallet panel and on the You page, by the dated helper', /linkNoteShown\(\)/.test(panel) && /\{linkHint && <LinkNote \/>\}/.test(panel) && (you.match(/<LinkNote className="you-note" \/>/g) ?? []).length === 2);
+  }
   check('the wallet panel tries a remembered payment again when it opens', /tried\.current = true;\s*void claim\(pending, 3\)/.test(panel));
 
   // --- Linking, end to end: both proofs (owner, 2026-10-22) -------------------------------------------------

@@ -52,8 +52,10 @@ export const LEGAL: {
     // sharing a Minpentai win in §6, and X added to §7's report-or-share item. The words before were 1smezv1.
     // 2026-10-22, the owner's reread for wallet ↔ Farcaster links (PR #34): §4 (the link kept; the balance stays with
     // the wallet), §6 (linked work under the Farcaster name) and §7 (Neynar receives the wallet's address; the last
-    // sentence is the owner's own: "A linked wallet is looked up again at most once a day, …"). The words before were 87yjkk.
-    privacy: { words: 'h0zppm', on: '2026-10-22', by: 'FID 6786' },
+    // sentence is the owner's own: "A linked wallet is looked up again at most once a day, …"); then §4's "and why a
+    // link ended", the owner's approved words (2026-10-22, "Yes, add 'and why a link ended' to section 4"). The words
+    // before were 87yjkk (and h0zppm before §4's addition).
+    privacy: { words: 'hqt7ov', on: '2026-10-22', by: 'FID 6786' },
   },
 };
 
@@ -92,7 +94,7 @@ export const PRIVACY: LegalDoc = {
         [
           'Quote cards you save, and your likes. A saved card\'s page is public. Your individual likes are private; only totals are shown.',
           'That you agreed to the terms for publishing, and any of your own work you have hidden.',
-          'If your wallet is linked to your Farcaster account (because that account verified the wallet\'s address on Farcaster, or because you linked them while signed in with both): which wallet is linked to which account, how, and when it was linked or unlinked. While linked, signing in with the wallet is signing in as that account. You can unlink it on your You page.',
+          'If your wallet is linked to your Farcaster account (because that account verified the wallet\'s address on Farcaster, or because you linked them while signed in with both): which wallet is linked to which account, how, when it was linked or unlinked, and why a link ended. While linked, signing in with the wallet is signing in as that account. You can unlink it on your You page.',
           'Images you publish, with their prompt, your name (Farcaster name or wallet address) and the record of how they were made. These are public.',
           'Frames you make in Remix, each with your words, the full prompt sent, the camera and people you set, the pictures sent with it, what it cost and your name. Anyone with a frame\'s link can see it, with your words and name. You can hide your own frames at any time.',
           'Storyboards you save: the frames in order, how long each is shown and the voice takes you chose. Anyone with a storyboard\'s link can see it, with your name. You can hide it.',
