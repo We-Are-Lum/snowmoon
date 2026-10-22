@@ -20,6 +20,8 @@
  *  L  Limits: 3 agents per person; daily notes; disconnect stops the agent at once.
  *  W  Wallet agents: the link message, the agent's signature, its own sign-in, REST.
  *  S  Story words: the switch and the human-written-only list (in-process).
+ *  FN Pause and note on the film: a note at a time lands on the shot, private to its person.
+ *  SU Suggest an improvement: typed, spoken or through an agent; the owner reads all, an agent only its person's.
  *  G  P4a (in-process): an agent's draft-only route passes; one that can publish, or keep, fails.
  */
 import { readdirSync, readFileSync } from 'node:fs';
@@ -505,6 +507,46 @@ try {
   const gapsA = (await (await asPerson(people.A.token, '/api/drafts')).json()).gaps as { asked: string; agent: string }[];
   const gapsB = (await (await asPerson(people.B.token, '/api/drafts')).json()).gaps as unknown[];
   check('G1 log_gap records what was asked and what was missing, on the person’s You page only', gap.ok && gapsA.some((g) => g.asked.includes('coat blue') && g.agent === 'Claude') && gapsB.length === 0);
+
+  console.log('FN pause and note on the film (2026-10-22)');
+  const film = await asPerson(people.A.token, '/api/requests', { method: 'POST', body: JSON.stringify({ kind: 'note', words: 'Hold on her face a beat longer here.', spoken: true, film: { adaptation: 1, version: 2, seconds: 5.25 } }) });
+  const filmBad = await asPerson(people.A.token, '/api/requests', { method: 'POST', body: JSON.stringify({ kind: 'note', words: 'x', film: { adaptation: 1, version: 2, seconds: 99999 } }) });
+  const filmNoVersion = await asPerson(people.A.token, '/api/requests', { method: 'POST', body: JSON.stringify({ kind: 'note', words: 'x', film: { adaptation: 1, version: 999, seconds: 3 } }) });
+  check('FN1 a note at a time in the film is filed; a time or version that isn’t there is refused', film.ok && filmBad.status === 400 && filmNoVersion.status === 400, `${film.status} ${filmBad.status} ${filmNoVersion.status}`);
+  const filmId = film.ok ? ((await film.json()) as { id: string }).id : '';
+  const todo = await tool(BASE, edA, 'read_requests');
+  const fr = ((todo.out.requests ?? []) as { id: string; kind: string; spoken: boolean; about: { moment?: string; shot?: string; at?: string; seconds?: number; next?: string } | null }[]).find((r) => r.id === filmId);
+  check('FN2 the agent reads it with the time, the shot and the moment, and is told to act on its person’s own version', !!fr && fr.kind === 'note' && fr.spoken && fr.about?.at === '0:05' && fr.about?.seconds === 5.25 && fr.about?.moment === `1/2/${fr.about?.shot}` && /own version/.test(fr.about?.next ?? ''), JSON.stringify(fr));
+  const bFilm = await asPerson(people.B.token, '/api/requests', { method: 'POST', body: JSON.stringify({ kind: 'note', words: 'B’s own note on A’s film.', film: { adaptation: 1, version: 2, seconds: 2 } }) });
+  const todoAfter = await tool(BASE, edA, 'read_requests');
+  check('FN3 a note is private to its person: another person’s note on the same film isn’t in this agent’s list', bFilm.ok && !((todoAfter.out.requests ?? []) as { words: string }[]).some((r) => r.words.includes('B’s own note')));
+  const filmRow = (await S.pg.query<{ target_seconds: string; target_moment: string }>(`select target_seconds::text, target_moment from studio.requests where id = $1`, [filmId])).rows[0];
+  check('FN4 it is kept as words with the moment and the time (no recording)', filmRow?.target_seconds === '5.25' && /^1\/2\//.test(filmRow?.target_moment ?? ''), JSON.stringify(filmRow));
+  const noMomentTime = await S.pg.query(`insert into studio.requests (person, kind, body, target_seconds) values ($1, 'note', 'x', 3)`, [people.A.person]).then(() => true, () => false);
+  check('FN5 the database refuses a time without a moment', !noMomentTime);
+
+  console.log('SU suggest an improvement (2026-10-22)');
+  const sugA = await asPerson(people.A.token, '/api/suggestions', { method: 'POST', body: JSON.stringify({ words: 'The re-record sheet should say it opens.', spoken: true, page: '/you' }) });
+  const sugB = await asPerson(people.B.token, '/api/suggestions', { method: 'POST', body: JSON.stringify({ words: 'I couldn’t find where my notes went.', page: '/@x/1', moment: '1/2/0-EST', seconds: 4.5 }) });
+  const sugEmpty = await asPerson(people.B.token, '/api/suggestions', { method: 'POST', body: JSON.stringify({ words: '   ' }) });
+  check('SU1 an invited person can send a suggestion, typed or spoken; an empty one is refused', sugA.ok && sugB.ok && sugEmpty.status === 400, `${sugA.status} ${sugB.status} ${sugEmpty.status}`);
+  const viaAgent = await tool(BASE, edA, 'suggest_improvement', { text: 'Let me pause the film from my phone’s lock screen.', page: '/@x/1' });
+  check('SU2 …or through their agent (suggest_improvement)', viaAgent.ok, viaAgent.error ?? '');
+  const ownerView = (await (await asPerson(people.A.token, '/api/suggestions')).json()) as { mine: { words: string }[]; all?: { words: string; who: string; page: string | null; moment: string | null; at: string | null; filedBy: string | null }[] };
+  const bView = (await (await asPerson(people.B.token, '/api/suggestions')).json()) as { mine: { words: string }[]; all?: unknown };
+  const fromB = ownerView.all?.find((x) => x.words.startsWith('I couldn’t find'));
+  check('SU3 the owner sees everyone’s, with who said it and where they were (page, moment and time)', !!fromB && fromB.page === '/@x/1' && fromB.moment === '1/2/0-EST' && fromB.at === '0:04' && fromB.who.length > 0 && ownerView.all!.some((x) => x.filedBy === 'Claude'), JSON.stringify(ownerView.all));
+  check('SU4 anyone else sees only their own, and no one else’s list', bView.all === undefined && bView.mine.length === 1 && bView.mine[0].words.startsWith('I couldn’t find'), JSON.stringify(bView));
+  const agentReads = await tool(BASE, edA, 'read_my_suggestions');
+  const agentList = (agentReads.out.suggestions ?? []) as { words: string }[];
+  check('SU5 a person’s agent reads that person’s suggestions only', agentReads.ok && agentList.length === 2 && !agentList.some((x) => x.words.startsWith('I couldn’t find')), JSON.stringify(agentList));
+  const dSug = await asPerson(people.D.token, '/api/suggestions', { method: 'POST', body: JSON.stringify({ words: 'not invited' }) });
+  check('SU6 someone not invited gets 404', dSug.status === 404 && (await asPerson(people.D.token, '/api/suggestions')).status === 404);
+  const anonRead = await S.pg.query(`set role anon; select 1 from studio.suggestions limit 1`).then(() => true, () => false);
+  await S.pg.query('reset role');
+  const writerDeletes = await S.pg.query(`set role studio_writer; delete from studio.suggestions`).then(() => true, () => false);
+  await S.pg.query('reset role');
+  check('SU7 anon can’t read suggestions, and the site can’t change or delete them', !anonRead && !writerDeletes);
 
   console.log('A  the allowlist: everyone else sees nothing new');
   const dRoutes = await Promise.all(['/api/agents', '/api/drafts', '/api/requests'].map((u) => asPerson(people.D.token, u)));

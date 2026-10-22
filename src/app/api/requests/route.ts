@@ -3,7 +3,7 @@ import { getPerson } from '~/lib/auth';
 import { hasConsented } from '~/lib/consent';
 import { ToolInputError } from '~/lib/agent/tools';
 import { agentsOn, allowed } from '~/lib/agents/core';
-import { addRequest, openRequests } from '~/lib/agents/requests';
+import { addRequest, momentAt, openRequests } from '~/lib/agents/requests';
 
 /**
  * What a person tells their agent: an idea, or a note on a frame, a moment or one of their drafts; typed,
@@ -27,10 +27,13 @@ export async function POST(request: Request) {
   if (!(await allowed(person))) return new NextResponse('Not found', { status: 404 });
   if (person === null) return NextResponse.json({ error: 'Sign in first' }, { status: 401, headers: noStore });
   if (!(await hasConsented(person))) return NextResponse.json({ error: 'consent', consent: true }, { status: 403, headers: noStore });
-  const b = (await request.json().catch(() => ({}))) as { kind?: string; words?: string; spoken?: boolean; version?: string; moment?: string };
+  const b = (await request.json().catch(() => ({}))) as { kind?: string; words?: string; spoken?: boolean; version?: string; moment?: string; film?: { adaptation?: unknown; version?: unknown; seconds?: unknown } };
   const kind = b.kind === 'note' ? 'note' : 'idea';
+  // A note at a time in the film (owner, 2026-10-22): the server finds the shot on screen then.
+  const film = b.film && typeof b.film === 'object' ? momentAt(Number(b.film.adaptation), Number(b.film.version), Number(b.film.seconds)) : null;
+  if (b.film && !film) return NextResponse.json({ error: 'That time isn’t in a published scene.' }, { status: 400, headers: noStore });
   try {
-    const id = await addRequest(person, kind, typeof b.words === 'string' ? b.words : '', b.spoken === true, {
+    const id = await addRequest(person, kind, typeof b.words === 'string' ? b.words : '', b.spoken === true, film ? { moment: film.moment, seconds: film.seconds } : {
       ...(typeof b.version === 'string' && /^[0-9a-f-]{36}$/.test(b.version) ? { version: b.version } : {}),
       ...(typeof b.moment === 'string' ? { moment: b.moment } : {}),
     });

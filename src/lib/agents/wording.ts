@@ -20,6 +20,15 @@ export const AGENT_WORDING = {
     bad: 'This connection request can’t be used:',
     working: 'One moment…',
   },
+  // DRAFT wording (2026-10-22): pause the film and note something for your agent.
+  film: {
+    noteAt: (at: string) => `Note at ${at}`,
+    label: (at: string) => `Your note at ${at}, for your agent`,
+    lineThere: 'Being said here:',
+    shotThere: (shot: string) => `Shot ${shot}`,
+    private: 'Only you and your agent see this, until you keep something made from it. Your agent works on your own version of this scene, never this one. Recordings are never kept.',
+    close: 'Close',
+  },
   tell: {
     idea: 'Tell your agent an idea',
     note: 'Tell your agent what to change',
@@ -86,6 +95,16 @@ export const AGENT_WORDING = {
     review: 'Your agents’ drafts',
     reviewNote: 'Nothing here is public until you keep it. Try again, or say more, and your agent works on it again.',
     asked: 'Waiting for your agent',
+    // DRAFT wording (2026-10-22), for the owner to reread.
+    suggest: 'Suggest an improvement',
+    suggestNote: 'What would make this site better for you? Something confusing, missing or broken, or an idea. Only the site’s owner reads these, with your name. Recordings are never kept.',
+    suggestLabel: 'Your suggestion',
+    suggestSend: 'Send to the owner',
+    suggestSent: 'Sent. Thank you.',
+    yourSuggestions: 'What you suggested',
+    allSuggestions: 'Suggestions from invited people',
+    allSuggestionsNote: 'Only you see these. Who said it, where they were, and when.',
+    passedOnBy: (agent: string) => `passed on by ${agent}`,
     gaps: 'What your agent couldn’t do',
     gapsNote: 'Things you asked for that your agent had no way to do yet. This is the build list.',
     gapAsked: 'You asked',
