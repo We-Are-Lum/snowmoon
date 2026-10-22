@@ -160,6 +160,8 @@ export const AGENT_API = {
 export const LINKED_WALLETS: Readonly<Record<string, number>> = {
   // m.luisotravez.eth, verified by @luisotravez (FID 6852) on Farcaster since 2023-08-31; resolved three ways, all agreeing.
   '0x003276c5c24cdaff1d804170ab5cbb914f51f78a': 6852,
+  // garance.eth, verified by @garance (FID 193912) on Farcaster; resolved three ways, all agreeing (owner, 2026-10-22).
+  '0x317a1ea96dc4b10c1ea60e3af59c472316d31303': 193912,
 };
 
 export const AGENTS = {
