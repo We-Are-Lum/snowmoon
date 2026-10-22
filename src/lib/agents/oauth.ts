@@ -1,5 +1,5 @@
 import 'server-only';
-import { createHash, createPublicKey, constants as cryptoConstants, verify as cryptoVerify, type JsonWebKey } from 'node:crypto';
+import { createHash, createPublicKey, timingSafeEqual, constants as cryptoConstants, verify as cryptoVerify, type JsonWebKey } from 'node:crypto';
 import type postgres from 'postgres';
 import { AGENTS } from '../config';
 import { issueTokens, issuer, newToken, resourceUrl, sha256, sql, type Scope } from './core';
@@ -39,7 +39,8 @@ export function authServerMetadata() {
     code_challenge_methods_supported: ['S256'],
     // none: public clients (Claude). private_key_jwt: a metadata-document client that signs its token requests
     // with a key it publishes (ChatGPT prefers this; owner, 2026-10-21). PKCE is required either way.
-    token_endpoint_auth_methods_supported: ['none', 'private_key_jwt'],
+    // client_secret_basic and client_secret_post: a client that registers as confidential gets a secret (owner, 2026-10-21).
+    token_endpoint_auth_methods_supported: ['none', 'client_secret_basic', 'client_secret_post', 'private_key_jwt'],
     token_endpoint_auth_signing_alg_values_supported: [...ASSERTION_ALGS],
     client_id_metadata_document_supported: true,
     authorization_response_iss_parameter_supported: true,
@@ -88,16 +89,26 @@ function redirectMatches(asked: string, registered: string[]): boolean {
 
 const cleanName = (v: unknown) => (typeof v === 'string' ? v.replace(/[\u0000-\u001f\u007f<>]/g, '').trim().slice(0, 80) : '');
 
-/** Dynamic Client Registration (RFC 7591): a public client, its name and redirect URIs. */
+const SECRET_METHODS = ['client_secret_basic', 'client_secret_post'] as const;
+type SecretMethod = (typeof SECRET_METHODS)[number];
+
+/**
+ * Dynamic Client Registration (RFC 7591): a public client (no secret), or a confidential one
+ * (client_secret_basic or client_secret_post), which gets a secret shown to it this once; only its sha256 is kept.
+ */
 export async function registerClient(body: Record<string, unknown>) {
   const uris = Array.isArray(body.redirect_uris) ? body.redirect_uris.filter((u): u is string => typeof u === 'string') : [];
   if (!uris.length || uris.length > 10 || !uris.every(redirectOk)) throw new OAuthError('invalid_redirect_uri', 'redirect_uris must be https, or http to localhost');
   const auth = body.token_endpoint_auth_method ?? 'none';
-  if (auth !== 'none') throw new OAuthError('invalid_client_metadata', 'only public clients (token_endpoint_auth_method "none")');
+  if (auth !== 'none' && !SECRET_METHODS.includes(auth as SecretMethod)) throw new OAuthError('invalid_client_metadata', 'token_endpoint_auth_method must be none, client_secret_basic or client_secret_post');
   const name = cleanName(body.client_name) || new URL(uris[0]).hostname;
   const clientId = newToken('dcr_');
-  await sql()`insert into studio.oauth_clients (client_id, how, name, redirect_uris) values (${clientId}, 'dcr', ${name}, ${uris})`;
-  return { client_id: clientId, client_name: name, redirect_uris: uris, token_endpoint_auth_method: 'none', grant_types: ['authorization_code', 'refresh_token'], response_types: ['code'] };
+  const secret = auth === 'none' ? null : newToken('scs_');
+  await sql()`insert into studio.oauth_clients (client_id, how, name, redirect_uris, auth_method, secret_hash) values (${clientId}, 'dcr', ${name}, ${uris}, ${auth as string}, ${secret ? sha256(secret) : null})`;
+  return {
+    client_id: clientId, client_name: name, redirect_uris: uris, token_endpoint_auth_method: auth, grant_types: ['authorization_code', 'refresh_token'], response_types: ['code'],
+    ...(secret ? { client_secret: secret, client_secret_expires_at: 0 } : {}),
+  };
 }
 
 /** An https client_id that isn't a private or local address, for fetching its metadata document. */
@@ -292,15 +303,50 @@ function assertionOk(jwt: string, clientId: string, keys: JsonWebKey[]): boolean
  * whose document says private_key_jwt must prove it with a fresh assertion signed by a key it publishes;
  * its document and keys are read again for every token request, so a key it withdraws stops working at once.
  */
-async function tokenClient(form: URLSearchParams): Promise<string> {
+/** HTTP Basic client credentials (RFC 6749 §2.3.1): form-urlencoded id and secret. */
+function basicCredentials(header: string | null): { id: string; secret: string } | null {
+  const m = /^Basic\s+([A-Za-z0-9+/=]+)$/i.exec(header ?? '');
+  if (!m) return null;
+  const raw = Buffer.from(m[1], 'base64').toString('utf8');
+  const at = raw.indexOf(':');
+  if (at < 0) return null;
+  try {
+    return { id: decodeURIComponent(raw.slice(0, at).replace(/\+/g, ' ')), secret: decodeURIComponent(raw.slice(at + 1).replace(/\+/g, ' ')) };
+  } catch {
+    return null;
+  }
+}
+
+/** Constant-time comparison of a presented secret with the stored sha256. */
+const secretMatches = (secret: string, storedHash: string) => timingSafeEqual(Buffer.from(sha256(secret), 'hex'), Buffer.from(storedHash, 'hex'));
+
+async function tokenClient(form: URLSearchParams, authorization: string | null = null): Promise<string> {
   const assertion = form.get('client_assertion');
   const assertionType = form.get('client_assertion_type');
-  let clientId = form.get('client_id') ?? '';
+  const basic = basicCredentials(authorization);
+  const postSecret = form.get('client_secret');
+  let clientId = form.get('client_id') ?? basic?.id ?? '';
+  if (basic && form.get('client_id') && form.get('client_id') !== basic.id) throw new OAuthError('invalid_client', 'client_id and the Basic credentials name different clients', 401);
+  if (basic && postSecret !== null) throw new OAuthError('invalid_request', 'send the client secret one way, not both');
   if (!clientId && assertion) clientId = String(b64json(assertion.split('.')[1] ?? '')?.sub ?? '');
-  if (clientId.startsWith('dcr_') || !cimdUrlOk(clientId)) {
-    if (assertion || assertionType) throw new OAuthError('invalid_client', 'this client is public: no client assertion', 401);
+  if (clientId.startsWith('dcr_')) {
+    if (assertion || assertionType) throw new OAuthError('invalid_client', 'a registered client authenticates with its secret, or not at all', 401);
+    const [c] = await sql()<{ auth_method: string; secret_hash: string | null }[]>`select auth_method, secret_hash from studio.oauth_clients where client_id = ${clientId}`;
+    if (!c) throw new OAuthError('invalid_client', 'unknown client', 401);
+    const secret = basic?.secret ?? postSecret;
+    if (c.auth_method === 'none') {
+      if (secret) throw new OAuthError('invalid_client', 'this client is public: no client secret', 401);
+      return clientId;
+    }
+    // A confidential client: its secret, by Basic or in the form (either is accepted), compared in constant time.
+    if (!secret || !c.secret_hash || !secretMatches(secret, c.secret_hash)) throw new OAuthError('invalid_client', 'the client secret is missing or wrong', 401);
     return clientId;
   }
+  if (!cimdUrlOk(clientId)) {
+    if (assertion || assertionType || basic || postSecret) throw new OAuthError('invalid_client', 'unknown client', 401);
+    return clientId;
+  }
+  if (basic || postSecret) throw new OAuthError('invalid_client', 'a metadata-document client has no client secret', 401);
   const { auth } = await metadataDocument(clientId);
   if (auth.method === 'none') {
     if (assertion || assertionType) throw new OAuthError('invalid_client', 'this client is public: no client assertion', 401);
@@ -313,10 +359,10 @@ async function tokenClient(form: URLSearchParams): Promise<string> {
 }
 
 /** The token endpoint: a code (with its PKCE verifier) or a refresh token, for a new access token. */
-export async function token(form: URLSearchParams) {
+export async function token(form: URLSearchParams, authorization: string | null = null) {
   const s = sql();
   const grant = form.get('grant_type');
-  const clientId = await tokenClient(form);
+  const clientId = await tokenClient(form, authorization);
   const resource = form.get('resource') ?? resourceUrl();
   if (resource !== resourceUrl()) throw new OAuthError('invalid_target', `the resource must be ${resourceUrl()}`);
   if (grant === 'authorization_code') {
