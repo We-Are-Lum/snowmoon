@@ -29,6 +29,9 @@ function legalPages(): string {
  * for a snap (Accept: application/vnd.farcaster.snap+json) gets the snap's JSON from /snap/minpentai;
  * any other gets the page, unchanged, with a Link header naming the snap, as the snap spec requires
  * (https://docs.farcaster.xyz/snap/http-headers). The same for a challenge link, /minpentai/c/<…>.
+ * The `Vary: Accept` here doesn't reach the page: Next and Vercel set a page's Vary themselves (a
+ * middleware can't add to it either; tried 2026-10-22). Caches still key correctly, since the choice
+ * is made here in routing, before Vercel's cache, and the snap's own responses carry Vary: Accept.
  */
 const SNAP_MEDIA = 'application/vnd.farcaster.snap+json';
 const ASKS_FOR_SNAP = [{ type: 'header' as const, key: 'accept', value: '.*application/vnd\\.farcaster\\.snap\\+json.*' }];
