@@ -215,6 +215,8 @@ const DIR: Record<string, [number, number]> = Object.fromEntries(Object.entries(
 const NEW = '0 0 0 1px #E7E4DD';
 function designPiece(c: Any) {
   const mine = String(c.sh).endsWith(NEW) || undefined;
+  // A tower out of sight (Design's square, with the dimmed fix above): Learn's tower shape, dimmed.
+  if (c.bg === '#503A16' && String(c.sh).startsWith('inset')) return { k: 'tower', side: 'A', dim: true };
   if (SIDE[c.bg] && String(c.sh).startsWith('inset')) return { k: 'tower', side: SIDE[c.bg], mine };
   const sq = /^2px (solid|dashed) (#\w+)$/.exec(c.bd);
   if (sq && c.bg === '#16181E') return { k: 'square', side: SIDE[sq[2]], hp: sq[1] === 'solid' ? 2 : 1, mine };

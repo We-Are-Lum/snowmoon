@@ -5,7 +5,7 @@
   "page": "/minpentai/build",
   "docs": "docs/minpentai/",
   "site": {
-    "play": "Practice, the computer ladder, free play and one-on-one: src/lib/minpentai/play-game/game.ts",
+    "play": "Practice, the computer ladder, free play and one-on-one: src/lib/minpentai/versions/engine.ts (Play is its base settings, versions/schema.ts)",
     "learn": "The lessons: src/lib/minpentai/learn-game/ (Design's v3; the rules page says Play's rules replace it)",
     "rulePage": "/minpentai/rule, the rule recovered from the book's figure: src/lib/minpentai/engine.ts"
   },
@@ -96,8 +96,8 @@
       ],
       "code": [
         {
-          "file": "src/lib/minpentai/play-game/game.ts",
-          "find": "export const W = 15;"
+          "file": "src/lib/minpentai/versions/schema.ts",
+          "find": "width: { text: 'Board width in squares', min: 9, max: 25, base: 15,"
         },
         {
           "file": "src/lib/minpentai/engine.ts",
@@ -241,8 +241,8 @@
       ],
       "code": [
         {
-          "file": "src/lib/minpentai/play-game/game.ts",
-          "find": "export function step(w: World)"
+          "file": "src/lib/minpentai/versions/engine.ts",
+          "find": "function step(w: World, s: Settings, kills?: Kills): World {"
         }
       ],
       "site": "yes",
@@ -316,12 +316,12 @@
       "cites": [],
       "code": [
         {
-          "file": "src/lib/minpentai/play-game/game.ts",
-          "find": "export const W = 15;"
+          "file": "src/lib/minpentai/versions/schema.ts",
+          "find": "width: { text: 'Board width in squares', min: 9, max: 25, base: 15,"
         },
         {
-          "file": "src/lib/minpentai/play-game/game.ts",
-          "find": "export const H = 10;"
+          "file": "src/lib/minpentai/versions/schema.ts",
+          "find": "height: { text: 'Board height in squares', min: 6, max: 16, base: 10,"
         }
       ],
       "site": "yes",
@@ -340,12 +340,12 @@
       ],
       "code": [
         {
-          "file": "src/lib/minpentai/play-game/game.ts",
-          "find": "export const ROCKS"
+          "file": "src/lib/minpentai/versions/engine.ts",
+          "find": "const PLAY_ROCKS: [number, number][] = [[6, 0], [9, 3], [7, 4], [7, 5], [5, 6], [8, 9]];"
         },
         {
-          "file": "src/lib/minpentai/play-game/game.ts",
-          "find": "export function world"
+          "file": "src/lib/minpentai/versions/engine.ts",
+          "find": "function world(s: Settings, blank?: boolean): World {"
         }
       ],
       "site": "yes",
@@ -359,7 +359,7 @@
       "cites": [],
       "code": [
         {
-          "file": "src/lib/minpentai/play-game/game.ts",
+          "file": "src/lib/minpentai/versions/engine.ts",
           "find": "if (bx) g.dx = -g.dx;"
         }
       ],
@@ -379,7 +379,7 @@
       ],
       "code": [
         {
-          "file": "src/lib/minpentai/play-game/game.ts",
+          "file": "src/lib/minpentai/versions/engine.ts",
           "find": "w.gl = gl.filter((g) => !g.dead);"
         }
       ],
@@ -423,7 +423,7 @@
       ],
       "code": [
         {
-          "file": "src/lib/minpentai/play-game/game.ts",
+          "file": "src/lib/minpentai/versions/engine.ts",
           "find": "export interface Glider"
         }
       ],
@@ -448,7 +448,7 @@
       ],
       "code": [
         {
-          "file": "src/lib/minpentai/play-game/game.ts",
+          "file": "src/lib/minpentai/versions/engine.ts",
           "find": "export interface Square"
         }
       ],
@@ -493,8 +493,8 @@
       ],
       "code": [
         {
-          "file": "src/lib/minpentai/play-game/game.ts",
-          "find": "if (s.hp > 1)"
+          "file": "src/lib/minpentai/versions/engine.ts",
+          "find": "if (q.hp > 1) { q.hp--; bounce(g); }"
         }
       ],
       "site": "partly",
@@ -513,7 +513,7 @@
       ],
       "code": [
         {
-          "file": "src/lib/minpentai/play-game/game.ts",
+          "file": "src/lib/minpentai/versions/engine.ts",
           "find": "tw: Record<number, Side>;"
         }
       ],
@@ -548,8 +548,8 @@
       ],
       "code": [
         {
-          "file": "src/lib/minpentai/play-game/game.ts",
-          "find": "else if (p.t === 's') w.sq[k] = { o: p.o, hp: 2 };"
+          "file": "src/lib/minpentai/versions/engine.ts",
+          "find": "else if (p.t === 's') w.sq[k] = { o: p.o, hp: s.squareHits };"
         }
       ],
       "site": "yes",
@@ -563,8 +563,8 @@
       "cites": [],
       "code": [
         {
-          "file": "src/lib/minpentai/play-game/game.ts",
-          "find": "if (w.rock[k]) { g.dx = -g.dx; g.dy = -g.dy; continue; }"
+          "file": "src/lib/minpentai/versions/engine.ts",
+          "find": "const bounce = (g: Glider) => { g.dx = -g.dx; g.dy = -g.dy; };"
         }
       ],
       "site": "yes",
@@ -578,12 +578,12 @@
       "cites": [],
       "code": [
         {
-          "file": "src/lib/minpentai/play-game/game.ts",
-          "find": "if (a.o === b.o) continue;"
+          "file": "src/lib/minpentai/versions/engine.ts",
+          "find": "if (a.o === b.o && s.sameSide === 'pass') continue;"
         },
         {
-          "file": "src/lib/minpentai/play-game/game.ts",
-          "find": "if (t !== g.o) { delete w.tw[k];"
+          "file": "src/lib/minpentai/versions/engine.ts",
+          "find": "if (t !== g.o || s.ownTower === 'destroy') { delete w.tw[k];"
         }
       ],
       "site": "partly",
@@ -604,7 +604,7 @@
       "code": [
         {
           "file": "src/lib/minpentai/play-game/controller.ts",
-          "find": "v.strip = 'SETUP · CYAN 2 · AMBER 0 SEEN';"
+          "find": "v.strip = `SETUP · CYAN ${m.e.towers(w, 'C').length} · AMBER 0 SEEN`;"
         }
       ],
       "site": "yes",
@@ -646,7 +646,7 @@
       "code": [
         {
           "file": "src/lib/minpentai/play-game/controller.ts",
-          "find": "if (m.w.step % m.every === 0)"
+          "find": "if (m.w.step - m.turnAt >= m.s.every) { this.env.clearInterval(this.rt); this.beginAct(); }"
         }
       ],
       "site": "yes",
@@ -785,8 +785,8 @@
       ],
       "code": [
         {
-          "file": "src/lib/minpentai/play-game/controller.ts",
-          "find": "every: rule === 'every8' ? 8 : 12"
+          "file": "src/lib/minpentai/versions/schema.ts",
+          "find": "text: 'A turn to act comes every this many steps', min: 4, max: 32, base: 12,"
         }
       ],
       "site": "partly",
@@ -849,8 +849,12 @@
       "cites": [],
       "code": [
         {
-          "file": "src/lib/minpentai/play-game/game.ts",
-          "find": "export const COST = { s: 1, t: 4 } as const;"
+          "file": "src/lib/minpentai/versions/schema.ts",
+          "find": "costSquare: { text: 'A square costs', min: 1, max: 6, base: 1,"
+        },
+        {
+          "file": "src/lib/minpentai/versions/schema.ts",
+          "find": "costTower: { text: 'A tower costs', min: 1, max: 16, base: 4,"
         },
         {
           "file": "src/lib/minpentai/play-server/match.ts",
@@ -868,12 +872,12 @@
       "cites": [],
       "code": [
         {
-          "file": "src/lib/minpentai/play-game/controller.ts",
-          "find": "every: rule === 'every8' ? 8 : 12"
+          "file": "src/lib/minpentai/versions/schema.ts",
+          "find": "text: 'A turn to act comes every this many steps', min: 4, max: 32, base: 12,"
         },
         {
-          "file": "src/lib/minpentai/play-server/match.ts",
-          "find": "every: rule === 'every8' ? 8 : 12"
+          "file": "src/lib/minpentai/versions/schema.ts",
+          "find": "{ id: 'every8', text: 'Turns to act come every 8 steps.', set: { every: 8 } },"
         }
       ],
       "site": "yes",
@@ -887,8 +891,8 @@
       "cites": [],
       "code": [
         {
-          "file": "src/lib/minpentai/play-game/game.ts",
-          "find": "export function apply"
+          "file": "src/lib/minpentai/versions/engine.ts",
+          "find": "function apply(w: World, s: Settings, pend: Record<Side, Placement[]>) {"
         }
       ],
       "site": "yes",
@@ -938,8 +942,8 @@
       ],
       "code": [
         {
-          "file": "src/lib/minpentai/play-game/game.ts",
-          "find": "export function lit"
+          "file": "src/lib/minpentai/versions/engine.ts",
+          "find": "function lit(w: World, o: Side, R: number, tws?: number[]): Set<number> {"
         }
       ],
       "site": "partly",
@@ -984,7 +988,7 @@
       ],
       "code": [
         {
-          "file": "src/lib/minpentai/play-game/game.ts",
+          "file": "src/lib/minpentai/versions/engine.ts",
           "find": "else w.tw[k] = p.o;"
         }
       ],
@@ -1025,8 +1029,8 @@
       ],
       "code": [
         {
-          "file": "src/lib/minpentai/play-game/game.ts",
-          "find": "if (t !== g.o) { delete w.tw[k];"
+          "file": "src/lib/minpentai/versions/engine.ts",
+          "find": "if (t !== g.o || s.ownTower === 'destroy') { delete w.tw[k];"
         }
       ],
       "site": "yes",
@@ -1062,8 +1066,8 @@
       ],
       "code": [
         {
-          "file": "src/lib/minpentai/play-game/game.ts",
-          "find": "export function updLS"
+          "file": "src/lib/minpentai/versions/engine.ts",
+          "find": "function updLS(w: World, R: number, ls: Record<Side, Record<number, number>>) {"
         }
       ],
       "site": "yes",
@@ -1109,8 +1113,12 @@
       "cites": [],
       "code": [
         {
-          "file": "src/lib/minpentai/play-game/controller.ts",
-          "find": "R: rule === 'sight2' ? 2 : 3"
+          "file": "src/lib/minpentai/versions/schema.ts",
+          "find": "text: 'You see every square within this many of your towers', min: 1, max: 30, base: 3,"
+        },
+        {
+          "file": "src/lib/minpentai/versions/schema.ts",
+          "find": "{ id: 'sight2', text: 'You see only 2 squares around your towers.', set: { sight: 2, reach: 2 } },"
         }
       ],
       "site": "yes",
@@ -1144,8 +1152,8 @@
       "cites": [],
       "code": [
         {
-          "file": "src/lib/minpentai/play-game/game.ts",
-          "find": "export function updLS"
+          "file": "src/lib/minpentai/versions/engine.ts",
+          "find": "function updLS(w: World, R: number, ls: Record<Side, Record<number, number>>) {"
         },
         {
           "file": "src/lib/minpentai/play-game/controller.ts",
@@ -1245,7 +1253,7 @@
       "code": [
         {
           "file": "src/lib/minpentai/play-game/controller.ts",
-          "find": "Time ran out at step ${MAXS}"
+          "find": "Time ran out at step ${last}."
         }
       ],
       "site": "partly",
@@ -1335,12 +1343,12 @@
       "cites": [],
       "code": [
         {
-          "file": "src/lib/minpentai/play-game/game.ts",
-          "find": "export const MAXS = 96;"
+          "file": "src/lib/minpentai/versions/schema.ts",
+          "find": "maxSteps: { text: 'The match stops at this step; most towers wins', min: 24, max: 240, base: 96,"
         },
         {
-          "file": "src/lib/minpentai/play-server/match.ts",
-          "find": "if (w.step >= MAXS) return c > a ? 'C' : a > c ? 'A' : 'D';"
+          "file": "src/lib/minpentai/versions/engine.ts",
+          "find": "if (w.step >= s.maxSteps) return nc > na ? 'C' : na > nc ? 'A' : 'D';"
         }
       ],
       "site": "yes",
@@ -1585,8 +1593,8 @@
       "cites": [],
       "code": [
         {
-          "file": "src/lib/minpentai/play-game/game.ts",
-          "find": "export const RULES: Record<RuleId, string>"
+          "file": "src/lib/minpentai/versions/schema.ts",
+          "find": "export const BASE_DRAWN: DrawnRule[] = ["
         },
         {
           "file": "src/lib/minpentai/learn-game/pieces.ts",
@@ -1610,8 +1618,8 @@
       ],
       "code": [
         {
-          "file": "src/lib/minpentai/play-game/game.ts",
-          "find": "const dirs = m.rule === 'diag' && L >= 4 ? D8 : D4;"
+          "file": "src/lib/minpentai/versions/engine.ts",
+          "find": "const dirs = m.diag && Lv >= 4 ? D8 : D4;"
         }
       ],
       "site": "partly",
