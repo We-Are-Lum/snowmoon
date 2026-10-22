@@ -7,6 +7,7 @@ import { type Adaptation, type Version, editorVersion, getAdaptation, getVersion
 import { deliveryFor, posterFor } from '~/lib/scene-delivery';
 import { ShotStrip } from './editor/shot-strip';
 import { SceneActions } from '~/components/scene-actions';
+import { FilmNote } from '~/components/agents/film-note';
 import './scene.css';
 
 /**
@@ -135,19 +136,21 @@ export async function ScenePage({ adaptation, version, handle, fixed }: { adapta
           {video ? (
             delivery ? (
               // The same cut, packaged to start sooner (src/lib/scene-delivery.ts); the cut itself is the last source.
-              <video className="scene-video" poster={poster} controls preload="metadata" playsInline aria-label={`${adaptation.title}, version ${version.id}`} data-cut={video}>
+              <video id="scene-video" className="scene-video" poster={poster} controls preload="metadata" playsInline aria-label={`${adaptation.title}, version ${version.id}`} data-cut={video}>
                 <source src={delivery.phone} type="video/mp4" media="(max-width: 800px)" />
                 <source src={delivery.wide} type="video/mp4" />
                 <source src={video} type="video/mp4" />
               </video>
             ) : (
-              <video className="scene-video" src={video} poster={poster} controls preload="metadata" playsInline aria-label={`${adaptation.title}, version ${version.id}`} />
+              <video id="scene-video" className="scene-video" src={video} poster={poster} controls preload="metadata" playsInline aria-label={`${adaptation.title}, version ${version.id}`} />
             )
           ) : (
             <div className="scene-video scene-video-empty" role="img" aria-label="The video is not published yet">
               <span>The video is not published yet.</span>
             </div>
           )}
+          {/* Pause and note, for the invited people (owner, 2026-10-22); only where the shots' times are this cut's own. */}
+          {video && !otherShots && <FilmNote videoId="scene-video" adaptation={adaptation.id} version={version.id} dataUrl={`/editor/${adaptation.id}/v${version.id}/data.json`} />}
           <div className="scene-under label">
             <span>
               Version {version.id} · {version.createdAt}

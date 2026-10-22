@@ -123,7 +123,7 @@ export async function startStage(opts: { scanner?: string; port?: number; transc
       ...env, NODE_ENV: 'production', NEXT_PUBLIC_URL: BASE,
       STUDIO_DATABASE_URL: `postgres://studio_writer@127.0.0.1:${dbPort}/postgres`,
       FARCASTER_API_URL: stubUrl, BASE_RPC_URL: stubUrl, IMAGES_TICKET_SECRET: SECRET,
-      AGENTS_TEST: '1', AGENT_API_TEST: '1', AGENTS_TEST_ALLOW: [A, B, C].join(','), AGENTS_TEST_PUBLIC: opts.public === false ? '' : '1',
+      AGENTS_TEST: '1', AGENT_API_TEST: '1', AGENTS_TEST_ALLOW: [A, B, C].join(','), AGENTS_TEST_OWNER: String(pA), AGENTS_TEST_PUBLIC: opts.public === false ? '' : '1',
       AGENTS_TEST_FAL_URL: stubUrl, AGENTS_TEST_CIMD_URL: `${stubUrl}/cimd`, REMIX_TEST_FAKES: '1', AGENTS_TEST_STORE: store, AGENTS_TEST_SCANNER: opts.scanner ?? 'none-planted', AGENTS_TEST_TRANSCRIPT: opts.transcript ?? 'Bai tells Zei to slow down, and this time he listens.',
     },
     stdio: ['ignore', 'pipe', 'pipe'],

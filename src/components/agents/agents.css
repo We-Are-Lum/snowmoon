@@ -79,3 +79,12 @@
 .script-rerecord summary::before { content: '▸'; }
 .script-rerecord[open] summary::before { content: '▾'; }
 .script-delivery { font-style: italic; }
+
+/* Pause and note under the film (2026-10-22): phone first, one tap to pause and open the box. */
+.film-note { margin-top: 0.5rem; }
+.film-note-btn { min-height: 44px; padding-inline: 1rem; font-variant-numeric: tabular-nums; }
+.film-note-box { display: flex; flex-direction: column; gap: 0.5rem; padding: 0.75rem; border: 1px solid currentColor; border-radius: 6px; }
+.film-note-box > * { margin: 0; }
+.film-note-line { font-style: italic; }
+.film-note-close { align-self: flex-start; min-height: 44px; }
+.you-suggested summary { cursor: pointer; margin-block: 0.5rem; }
