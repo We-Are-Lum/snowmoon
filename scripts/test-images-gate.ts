@@ -222,13 +222,43 @@ process.env.APP_LEGAL_PAGES = 'terms+privacy';
     // Making styles and sheets stays invited-only (the two checks above). Same rule as test:designs.
     const code = picks.replace(/\/\*[\s\S]*?\*\//g, '');
     check('picks are open to everyone signed in: no invite gate, a sign-in is required for GET, POST and DELETE', !/invited/.test(code) && /getPerson\(request\)/.test(code) && /status: 401/.test(code) && (code.match(/const w = await who\(request\);\s*if \('error' in w\) return w\.error;/g) ?? []).length === 3);
-    check('the composer is offered picks only for invited FIDs', /composerPicks\(invited \? picks : \[\]\)/.test(readFileSync(path.join(ROOT, 'src/app/api/images/status/route.ts'), 'utf8')));
+    // At Generate too, Farcaster accounts invited or not and wallet accounts (owner, 2026-10-23: "open picks to everyone
+    // at Generate, wallets too"). The daily limits and the gate are unchanged: picks add text, or pictures through the same paid path.
+    const statusCode = readFileSync(path.join(ROOT, 'src/app/api/images/status/route.ts'), 'utf8').replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/.*$/gm, '');
+    check('the composer is offered every signed-in person\'s own picks, invited or not, wallet accounts too', /composerPicks\(picks\)/.test(statusCode) && !/invited \?\s*picks/.test(statusCode) && (statusCode.match(/picks: offer\(picks\)/g) ?? []).length === 2 && !/picks: \{ styles: \[\]/.test(statusCode));
+    const genCode = readFileSync(path.join(ROOT, 'src/app/api/images/generate/route.ts'), 'utf8');
+    check('Generate takes only the person\'s own picks, and opening picks adds no way around the gate or the caps', /\(await myPicks\(sql, fid\)\)\.filter\(\(p\) => p\.available\)/.test(genCode) && genCode.indexOf('await mayGenerate(') < genCode.indexOf('await myPicks(') && genCode.indexOf('await myPicks(') < genCode.indexOf('await paidPicture(') && !/invited/.test(genCode.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/.*$/gm, '')));
+    check('the composer links to My picks for everyone signed in', !/status\.invited && \(\s*<p className="ic-note">\s*<Link href="\/images\/picks">/.test(readFileSync(path.join(ROOT, 'src/components/image-composer.tsx'), 'utf8')));
   }
   check('publishing a design passes the gate before the name\'s paid check', dat('await mayGenerate(') > 0 && dat('await mayGenerate(') < dat('await checkWords('));
   check('the gate\'s refusal is returned at once', /if \(!gate\.ok\) return no\(gate\.error, gate\.status/.test(src));
   check('no invited-only refusal is left', !/invited readers only/.test(src));
   const nx = readFileSync(path.join(ROOT, 'next.config.ts'), 'utf8');
   check('next.config.ts derives APP_LEGAL_PAGES from both page files', /APP_LEGAL_PAGES: legalPages\(\)/.test(nx) && /has\('terms'\) && has\('privacy'\)/.test(nx));
+}
+
+// --- A pick used as text doesn't change a Generate's cost (owner, 2026-10-23: "If a pick raises the price, ...") ------
+// A picked style or sheet adds only text: the same model, the same picture size (fal bills by megapixel), so the
+// image's worst case is unchanged. The text does lengthen the prompt check; even with every pick at its longest,
+// counted as one token per byte, that stays inside the reserve's margin over the image. Pictures sent as references
+// do change it (the edit model): test:wallet checks that price is shown and charged.
+{
+  const { CHAT } = await import('../src/lib/config');
+  const { finalPrompt } = await import('../src/lib/images/rules');
+  const fal = readFileSync(path.join(ROOT, 'src/lib/images/fal.ts'), 'utf8');
+  check('a text-to-image Generate is billed by its picture size only, not its prompt', /return call\(IMAGES\.model\.endpoint, \{ prompt \}, settings, \(\(size\.width \* size\.height\) \/ 1e6\) \* IMAGES\.pricePerMp\)/.test(fal));
+  const long = (n: number) => 'x'.repeat(n);
+  const T = IMAGES.designs.textMaxChars;
+  // The person's words, a style, every sheet (characters and a place) at their longest, and room for the edition's shorthand.
+  const worstPrompt = finalPrompt(long(IMAGES.promptMaxChars), long(T), [...Array.from({ length: IMAGES.designs.maxCharacters + 1 }, () => long(T)), long(1000)]);
+  const plain = finalPrompt(long(IMAGES.promptMaxChars), long(T), []);
+  const guardPrice = CHAT.prices[IMAGES.guardModel];
+  const system = Buffer.byteLength(readFileSync(path.join(ROOT, 'config/prompts/image-guard.md'), 'utf8'));
+  const guardWorst = (prompt: string) => (system + Buffer.byteLength(prompt)) * guardPrice.input + 400 * guardPrice.output;
+  const imageWorst = 1 * IMAGES.pricePerMp; // fal may round up to 1 MP
+  const guardSrc = readFileSync(path.join(ROOT, 'src/lib/images/guard.ts'), 'utf8');
+  check('the Pictures prompt check answers in at most 400 tokens', /maxTokens = 400\)/.test(guardSrc) && /checkPrompt\(job\.checkText, request\)/.test(readFileSync(path.join(ROOT, 'src/lib/images/paid.ts'), 'utf8')));
+  check('with every pick at its longest, the prompt check still fits the reserve, so picks as text leave the price as it is', imageWorst + guardWorst(worstPrompt) <= IMAGES.reserveUsd, `${imageWorst} + ${guardWorst(worstPrompt).toFixed(6)} vs ${IMAGES.reserveUsd} (no picks: ${guardWorst(plain).toFixed(6)})`);
 }
 
 // --- The caps -------------------------------------------------------------------------

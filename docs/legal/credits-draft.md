@@ -41,7 +41,8 @@ After a credit, appended to the error: "No picture came back, so the charge was 
 
 "The price shown": every control that charges a wallet now shows the exact charge, in three decimals
 (Pictures' Generate buttons, Remix's Generate button, an agent frame's Make it); reference pictures, whose price
-differs and isn't shown, are refused for wallet accounts.
+differs and isn't shown, are refused for wallet accounts. (Since 2026-10-23, PR #38: wallet accounts may use picks and
+their reference pictures; the button shows that Generate's own price, `src/lib/images/price.ts`, and that is what is charged.)
 
 ## What the site does today (origin/main, 2026-10-21)
 
