@@ -27,6 +27,7 @@ import { GET as snapRoute } from '../src/app/snap/minpentai/route';
 import { GET as cardRoute } from '../src/app/api/minpentai-challenge-card/route';
 import { sender } from '../src/lib/minpentai/snap/auth';
 import nextConfig from '../next.config';
+import { prefersHtml, wantsSnap } from '../src/lib/minpentai/snap/negotiate';
 import { CHALLENGE_PATH, decChallenge, splitChallenge } from '../src/lib/minpentai/snap/challenge';
 import { settings, versionOf } from '../src/lib/minpentai/snap/versions';
 
@@ -543,6 +544,22 @@ async function main() {
       const link = hs.find((x) => x.source === source)?.headers.find((x) => x.key === 'Link')?.value ?? '';
       assert.ok(link.includes(`<${source}>`) && link.includes('rel="alternate"'), `${source}: Link`);
     }
+  });
+
+  check('/minpentai/play negotiation: HTML only to a clear text/html preference or a link-preview bot; the snap otherwise', () => {
+    const chrome = 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8';
+    assert.ok(prefersHtml(chrome) && !wantsSnap(chrome, 'Mozilla/5.0 (iPhone) Safari/604.1'));
+    assert.ok(!wantsSnap('*/*', 'Twitterbot/1.0'), "X's card");
+    assert.ok(!wantsSnap(null, 'facebookexternalhit/1.1'));
+    for (const a of ['*/*', 'application/json', 'application/json, text/plain, */*', '', 'text/html;q=0']) assert.ok(wantsSnap(a, 'Mozilla/5.0'), `snap for "${a}"`);
+    assert.ok(wantsSnap('application/vnd.farcaster.snap+json', 'Twitterbot/1.0'), 'an explicit ask wins');
+  });
+
+  check('the snap route serves the snap to a request the middleware forwards (x-snap-serve), and the bare page to a browser without it', async () => {
+    const forced = await snapRoute(new Request('https://snowmoon.party/snap/minpentai', { headers: { accept: '*/*', 'x-snap-serve': '1' } }));
+    assert.ok(forced.headers.get('content-type')?.startsWith('application/vnd.farcaster.snap+json'));
+    const plain = await snapRoute(new Request('https://snowmoon.party/snap/minpentai', { headers: { accept: '*/*' } }));
+    assert.ok(plain.headers.get('content-type')?.startsWith('text/html'), '/snap/minpentai itself unchanged');
   });
 
   await Promise.all(pending);
