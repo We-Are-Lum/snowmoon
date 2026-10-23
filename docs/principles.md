@@ -70,8 +70,15 @@ are never published. The reason is privacy: a raw recording of a person's
 voice is enough to clone it. The converted line is the published source of
 that line, and its recipe gives the model and revision, the settings, the
 character's reference clip and the sha256 of the raw take, but not the take.
-Conversion runs on the performer's own machine, so the take never leaves it,
-and takes are kept in a private folder outside the repository and outside R2.
+**The rule, in the owner's words (2026-10-22; reread by the owner 2026-10-23):** "Raw recordings are never published and never sent to any service that processes them; they
+stay on my devices and my own encrypted storage." **Temporary exception** (owner, 2026-10-22: "Let's allow a hosted
+service with performers opt in until we get an app for it live", and "hosted means our Modal setup only").
+It ends when the recording app is live. Until then, a recording may be converted on the project's own Modal
+deployment of the allowlisted conversion model, and nowhere else, only if its performer opts in for that
+recording (`own-voice-v1`); it is never published or kept there. No other hosted service, such as fal, is used
+for a recording (`config/models.json`, `chatterbox-vc`). In practice: conversion runs on the performer's own device
+(their computer, or their browser), and takes are kept in a private folder outside the repository and
+outside R2, or in the performer's own end-to-end encrypted storage (iCloud with Advanced Data Protection).
 The performer agrees to `own-voice-v1` (`config/consent.json`) first. Every
 performer gets the same terms. Anyone can still re-run the conversion with
 their own voice or another reference clip; they cannot reproduce the exact
@@ -519,6 +526,13 @@ once the owner picks a version.)
   same labels, with no old-style tag carrying a label's words, and nothing there paraphrases c4-b84 as
   "a new rule each match" (the ruling of 2026-10-09, which P8d checks in Learn; 2026-10-10). The proof
   blanks each of the three words and plants the old c4-b84 tag.
+- `P8h`: the Minpentai snap (`src/lib/minpentai/snap/pages.ts`, a practice match inside a
+  Farcaster cast): its first card, for the base game and every version, with or without Resume, and
+  a challenge link's, carries Play's words "Invented" and "Draft" (from `labels.ts`) as badges,
+  since a snap can't open the ⓘ's explanation, and says the rules are invented for this edition;
+  no page of a match (first page, board, run, resign, result), nor the cast text its Share starts,
+  paraphrases c4-b84 as "a new rule each match". The proof swaps the Draft badge out and plants that phrase on the run page (2026-10-21,
+  branch `minpentai-snap`).
 - `P8e`: every live voting screen (c1-b18, c1-b31, c7-b6) starts in the state
   the book shows: the slider's range, step and starting value are the source's
   `<input type="range">` with its HTML defaults, its marks and title are the

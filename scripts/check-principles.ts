@@ -1848,6 +1848,9 @@ add({
   },
 });
 
+/** A paraphrase of c4-b84 as a rule for each match (P8d's ruling of 2026-10-09). */
+const CHANGES = /\b(?:the\s+)?rules?\s+(?:change|changes|changed|changing)\s+(?:(?:with|for|in)\s+)?(?:every|each)\s+(?:match|game)\b|\b(?:a\s+)?(?:new|different)\s+rules?\s+(?:every|each)\s+(?:match|game)\b/i;
+
 const PLAY_TAG_FILES = ['src/app/minpentai/play.tsx', 'src/app/minpentai/play-live.tsx', 'src/app/minpentai/rules/page.tsx'];
 add({
   id: 'P8f',
@@ -1883,7 +1886,6 @@ add({
       if (JSON.stringify(labels.map((l) => l.kind)) !== JSON.stringify(want)) problems.push(`${s.id}: labels ${labels.map((l) => l.kind).join(', ') || 'none'}, expected ${want.join(', ')}`);
       for (const l of labels) if (words[l.kind]) problems.push(...infoLabelProblems(s.id, l, words[l.kind]));
     }
-    const CHANGES = /\b(?:the\s+)?rules?\s+(?:change|changes|changed|changing)\s+(?:(?:with|for|in)\s+)?(?:every|each)\s+(?:match|game)\b|\b(?:a\s+)?(?:new|different)\s+rules?\s+(?:every|each)\s+(?:match|game)\b/i;
     for (const { file, text } of play as { file: string; text: string }[]) {
       // An old-style tag: a span or link styled mp-tag that carries a label's words instead of the label.
       for (const m of text.matchAll(/className="mp-tag[^"]*"[^>]*>([^<]*)</g)) {
@@ -1945,6 +1947,77 @@ add({
     q.quote = q.quote.replace(/\b(\w+)\b/, '$1s');
     c.passages.find((p: { chapter: number }) => p.chapter >= 15)!.shown = true;
     c.page = c.page.replace('<details className="mp-kit-spoilers">', '<details className="mp-kit-spoilers" open>');
+  },
+});
+
+add({
+  id: 'P8h',
+  principle: 8,
+  name: 'the Minpentai snap\'s first card (a challenge\'s too) carries Play\'s labels "Invented" and "Draft" (as badges: a snap can\'t open the ⓘ) and says the rules are invented for this edition; none of its pages, nor the cast its Share starts, paraphrases c4-b84 as "a new rule each match"',
+  load: async () => {
+    const { intro, act } = await import('../src/lib/minpentai/snap/pages');
+    const { VERSIONS } = await import('../src/lib/minpentai/snap/versions');
+    const { LABELS } = await import('../src/lib/labels');
+    type Page = { ui: { root: string; elements: Record<string, { type: string; props?: Record<string, unknown>; children?: string[] }> } };
+    const h = { base: 'https://snowmoon.party', keep: [] as [string, string][] };
+    const firsts: { id: string; page: Page }[] = [];
+    for (const ver of ['', ...Object.keys(VERSIONS)]) for (const resume of ['yes', 'no', 'maybe'] as const) {
+      firsts.push({ id: `first page${ver ? ` (${ver})` : ''}, resume ${resume}`, page: intro(h, ver, resume) as Page });
+    }
+    // A challenge link's first page (owner, 2026-10-22).
+    const challenge = { seed: 777, lvl: 3, rule: 'diag' as const, ver: '', res: { win: 'C' as const, resigned: false, step: 41, c: 3, a: 0, taps: 38 } };
+    firsts.push({ id: 'first page of a challenge', page: intro(h, '', 'no', { c: challenge, seg: 'x' }) as Page });
+    // The other pages of a short match: the board, a run, resign, the result.
+    const others: { id: string; page: Page }[] = [];
+    let r = act(h, 'start', null, 1, {}, { ver: '' });
+    others.push({ id: 'board', page: r.page as Page });
+    const stOf = (pg: Page) => {
+      for (const el of Object.values(pg.ui.elements)) {
+        const t = (el as { on?: { press?: { params?: { target?: string } } } }).on?.press?.params?.target;
+        if (t && t.includes('s=')) { const u = new URL(t); return { s: u.searchParams.get('s')! }; }
+      }
+      return null;
+    };
+    const { parse } = await import('../src/lib/minpentai/snap/state');
+    r = act(h, 'end', parse(stOf(r.page as Page)!.s), 1, {}, { ver: '' });
+    others.push({ id: 'run', page: r.page as Page });
+    r = act(h, 'resign', parse(stOf(r.page as Page)!.s), 1, {}, { ver: '' });
+    others.push({ id: 'resign', page: r.page as Page });
+    r = act(h, 'resign-yes', parse(stOf(r.page as Page)!.s), 1, {}, { ver: '' });
+    others.push({ id: 'result', page: r.page as Page });
+    // The words its Share starts the cast with.
+    const cast = (r.page as { ui: { elements: Record<string, { on?: { press?: { params?: { text?: string } } } }> } }).ui.elements.share?.on?.press?.params?.text ?? '';
+    others.push({ id: 'the share\'s cast text', page: { ui: { root: 'cast', elements: { cast: { type: 'text', props: { content: cast } } } } } });
+    return { words: { invented: LABELS.minpentai.invented.word, draft: LABELS.minpentai.draft.word }, firsts, others };
+  },
+  run: ({ words, firsts, others }) => {
+    const problems: string[] = [];
+    type Page = { ui: { root: string; elements: Record<string, { type: string; props?: Record<string, unknown>; children?: string[] }> } };
+    /** The elements under one element, in order. */
+    const under = (pg: Page, id: string): string[] => [id, ...(pg.ui.elements[id]?.children ?? []).flatMap((c) => under(pg, c))];
+    const texts = (pg: Page, ids: string[]) => ids.map((i) => pg.ui.elements[i]).filter((e) => e?.type === 'text').map((e) => String(e.props?.content ?? ''));
+    for (const { id, page } of firsts as { id: string; page: Page }[]) {
+      const pager = Object.values(page.ui.elements).find((e) => e.type === 'paginator');
+      const first = pager?.children?.[0];
+      if (!first) { problems.push(`${id}: no first card`); continue; }
+      const ids = under(page, first);
+      const badges = ids.map((i) => page.ui.elements[i]).filter((e) => e?.type === 'badge').map((e) => String(e.props?.label ?? ''));
+      for (const w of [words.invented, words.draft]) if (!badges.includes(w)) problems.push(`${id}: the first card has no "${w}" badge (badges: ${badges.join(', ') || 'none'})`);
+      if (!texts(page, ids).some((t) => /invented for this edition/i.test(t))) problems.push(`${id}: the first card doesn't say the rules are invented for this edition`);
+    }
+    for (const { id, page } of [...firsts, ...others] as { id: string; page: Page }[]) {
+      for (const t of texts(page, Object.keys(page.ui.elements))) {
+        const hit = t.replace(/"[^"\n]*"/g, ' ').replace(/“[^”]*”/g, ' ').match(CHANGES);
+        if (hit) problems.push(`${id}: "${hit[0]}" paraphrases c4-b84 as a rule for each match; quote the book instead`);
+      }
+    }
+    return problems;
+  },
+  plant: (c) => {
+    const pg = c.firsts[0].page;
+    for (const e of Object.values(pg.ui.elements) as { type: string; props?: Record<string, unknown> }[]) if (e.type === 'badge' && e.props?.label === c.words.draft) e.props.label = 'Practice';
+    const run = c.others.find((o: { id: string }) => o.id === 'run')!.page;
+    run.ui.elements.planted = { type: 'text', props: { content: 'A new rule each match keeps it fresh.' } };
   },
 });
 
