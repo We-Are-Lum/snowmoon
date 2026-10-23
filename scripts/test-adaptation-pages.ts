@@ -24,6 +24,8 @@
  * shows version 2's own GPT frames and labels), and 18: version 1's own editor at /@naaate/1/v/1/shot/<shot>. Version 1's video
  * and poster are named on media.snowmoon.party (uploaded in publish step (b)); the browser here is
  * refused anything outside the local site, so the check reads the player's src and poster rather than playing it.
+ * 20: a wallet linked to a Farcaster account (owner, 2026-10-22): its scene under the name, its address URLs 308 there
+ * while linked, nothing rewritten, and back to the address after an unlink.
  */
 import path from 'node:path';
 import { mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
@@ -701,6 +703,71 @@ try {
     await page.context().close();
   }
   if (outside.length) failures.push(`the editor asked for things outside the site: ${[...new Set(outside)].slice(0, 5).join(', ')}`);
+
+  // 20. A wallet linked to a Farcaster account (owner, 2026-10-22; src/lib/wallet/credit.ts): its scene shows under the
+  // Farcaster name, its address URLs redirect there permanently while linked (308, sent with no-store so no browser keeps
+  // it), nothing in the database is rewritten, and after an unlink the address URLs answer again and the name's URLs
+  // send them back.
+  {
+    NAMES.linkedone = 9100;
+    const account = -walletPerson;
+    await pg.query(`insert into studio.wallet_links (account_id, fid, how) values ($1, 9100, 'signed')`, [account]);
+    const raw = async (p: string) => {
+      const r = await fetch(BASE + p, { redirect: 'manual' });
+      const loc = r.headers.get('location');
+      const html = r.status === 200 ? await r.text() : '';
+      return { status: r.status, location: loc ? new URL(loc, BASE).pathname : null, cache: r.headers.get('cache-control') ?? '', text: html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' '), hrefs: [...html.matchAll(/href="([^"]+)"/g)].map((m) => m[1]) };
+    };
+    const linked = {
+      page: await raw(`/@${WALLET}/1`),
+      fixed: await raw(`/@${WALLET}/1/v/${v2}`),
+      shot: await raw(`/@${WALLET}/1/v/${v2}/shot/11-b1-4`),
+      board: await raw(`/@${WALLET}/1/storyboard`),
+      moment: await raw(`/@${WALLET}/1/m/11-b1-4`),
+      checksum: await raw(`/@${WALLET_CHECKSUM}/1`),
+      named: await raw('/@linkedone/1'),
+      namedFixed: await raw(`/@linkedone/1/v/${v2}`),
+      other: await raw(`/@naaate/1/v/${v2}`),
+      profile: await raw('/@linkedone'),
+      // Nothing of the wallet's in the second adaptation: its address URL there doesn't move (it would reveal the link).
+      empty: await raw(`/@${WALLET}/${a2}`),
+    };
+    const rows = await pg.query<{ author: string; page: string }>(
+      `select (select author_person::text from studio.adaptation_versions where id = $1) as author, (select version_id::text from studio.adaptation_pages where person = $2 and adaptation_id = 1) as page`,
+      [v2, walletPerson],
+    );
+    await pg.query(`update studio.wallet_links set unlinked_at = now(), ended_by = 'person' where account_id = $1 and unlinked_at is null`, [account]);
+    const unlinked = { page: await raw(`/@${WALLET}/1`), fixed: await raw(`/@${WALLET}/1/v/${v2}`), named: await raw('/@linkedone/1'), namedFixed: await raw(`/@linkedone/1/v/${v2}`) };
+    const moved = (r: { status: number; location: string | null; cache: string }, to: string) => r.status === 308 && r.location === to && /no-store/.test(r.cache);
+    const passLinked =
+      moved(linked.page, '/@linkedone/1') && moved(linked.fixed, `/@linkedone/1/v/${v2}`) && moved(linked.shot, `/@linkedone/1/v/${v2}/shot/11-b1-4`) &&
+      moved(linked.board, '/@linkedone/1/storyboard') && moved(linked.moment, '/@linkedone/1/m/11-b1-4') &&
+      linked.checksum.status === 307 && linked.checksum.location === `/@${WALLET}/1` &&
+      linked.named.status === 200 && new RegExp(`Version ${v2} .*remixed from version 1`).test(linked.named.text) && linked.named.text.includes('@linkedone') && !linked.named.text.includes(WALLET) &&
+      linked.namedFixed.status === 200 && linked.namedFixed.text.includes('@linkedone') && !linked.namedFixed.text.includes(WALLET) &&
+      linked.other.status === 307 && linked.other.location === `/@linkedone/1/v/${v2}` &&
+      // The profile lists the scene once, at the Farcaster name's URL, never at the address.
+      linked.empty.status === 200 && /Nothing here yet/.test(linked.empty.text) && !linked.empty.text.includes('linkedone') &&
+      linked.profile.status === 200 && linked.profile.hrefs.filter((h) => h === '/@linkedone/1').length === 1 && !linked.profile.hrefs.some((h) => h.includes(WALLET));
+    const passStored = rows.rows[0].author === String(walletPerson) && rows.rows[0].page === String(v2);
+    const passUnlinked =
+      unlinked.page.status === 200 && unlinked.page.text.includes(`@${WALLET}`) && !unlinked.page.text.includes('@linkedone') && unlinked.fixed.status === 200 &&
+      unlinked.named.status === 200 && /Nothing here yet/.test(unlinked.named.text) &&
+      unlinked.namedFixed.status === 307 && unlinked.namedFixed.location === `/@${WALLET}/1/v/${v2}`;
+    const strip = (o: Record<string, { text: string; hrefs: string[] }>) => Object.fromEntries(Object.entries(o).map(([k, v]) => [k, { ...v, text: v.text.slice(0, 80), hrefs: v.hrefs.filter((h) => h.startsWith('/@')) }]));
+    const pass = passLinked && passStored && passUnlinked;
+    results.push({
+      n: 20,
+      name: "a linked wallet's scene under the Farcaster name",
+      url: `/@${WALLET}/1`,
+      expected: "while linked: the address URLs (page, fixed, shot, storyboard, moment) 308 to /@linkedone/… with no-store, but not where the wallet has nothing to show; /@linkedone/1 and its fixed link show the wallet's version under @linkedone, no address; another name's fixed link goes to @linkedone; nothing rewritten; after unlink: the address page shows again, /@linkedone/1 has nothing, and its fixed link goes back to the address",
+      got: { status: linked.page.status, finalUrl: linked.page.location ?? '', text: '', linked: strip(linked), stored: rows.rows[0], unlinked: strip(unlinked), passLinked, passStored, passUnlinked },
+      pass,
+      screenshot: '',
+    });
+    if (!pass) failures.push(`20 linked wallet scenes: ${JSON.stringify({ passLinked, passStored, passUnlinked, linked: strip(linked), unlinked: strip(unlinked), stored: rows.rows[0] })}`);
+    console.log(`  ${pass ? 'PASS' : 'FAIL'} 20 a linked wallet's scene under the Farcaster name`);
+  }
 
   // The site read as studio_writer, and viewing pages stored no names: only the four seeded
   // (owner, 2026-10-17: names are remembered at sign-in or publish, never on a page view).
