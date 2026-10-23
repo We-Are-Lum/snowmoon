@@ -49,6 +49,7 @@
     "test:minpentai-kit": "tsx scripts/build-minpentai-kit.ts --check",
     "test:minpentai-ladder": "tsx scripts/test-minpentai-ladder.ts",
     "test:minpentai-play-server": "tsx --conditions=react-server scripts/test-minpentai-play-server.ts",
+    "test:minpentai-snap": "tsx --conditions=react-server scripts/test-minpentai-snap.ts",
     "test:minpentai-players": "tsx scripts/test-minpentai-players.ts",
     "test:minpentai-agents": "tsx scripts/test-minpentai-agents-md.ts",
     "minpentai:vs-rungs": "tsx scripts/minpentai-vs-rungs.ts",
@@ -59,13 +60,16 @@
     "test:remix": "node scripts/editor-data.mjs && NEXT_PUBLIC_URL=https://snowmoon.party next build && tsx --conditions=react-server scripts/test-remix.ts",
     "test:you-page": "node scripts/editor-data.mjs && next build && tsx --conditions=react-server scripts/test-you-page.ts",
     "test:adaptation-pages": "node scripts/editor-data.mjs && NEXT_PUBLIC_URL=https://snowmoon.party next build && tsx scripts/test-adaptation-pages.ts",
-    "test:agents": "tsx --conditions=react-server scripts/test-agents.ts"
+    "test:agents": "tsx --conditions=react-server scripts/test-agents.ts",
+    "check:snap-live": "tsx scripts/check-snap-live.ts"
   },
   "license": "AGPL-3.0-only",
   "description": "",
   "dependencies": {
+    "@farcaster/jfs": "^0.3.0",
     "@farcaster/miniapp-sdk": "^0.3.0",
     "@farcaster/quick-auth": "^0.0.8",
+    "@farcaster/snap": "^2.11.0",
     "@fontsource/crimson-pro": "^5.3.0",
     "@fontsource/dm-mono": "^5.3.0",
     "@supabase/supabase-js": "^2.117.2",

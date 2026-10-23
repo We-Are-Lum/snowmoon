@@ -519,6 +519,13 @@ once the owner picks a version.)
   same labels, with no old-style tag carrying a label's words, and nothing there paraphrases c4-b84 as
   "a new rule each match" (the ruling of 2026-10-09, which P8d checks in Learn; 2026-10-10). The proof
   blanks each of the three words and plants the old c4-b84 tag.
+- `P8h`: the Minpentai snap (`src/lib/minpentai/snap/pages.ts`, a practice match inside a
+  Farcaster cast): its first card, for the base game and every version, with or without Resume, and
+  a challenge link's, carries Play's words "Invented" and "Draft" (from `labels.ts`) as badges,
+  since a snap can't open the ⓘ's explanation, and says the rules are invented for this edition;
+  no page of a match (first page, board, run, resign, result), nor the cast text its Share starts,
+  paraphrases c4-b84 as "a new rule each match". The proof swaps the Draft badge out and plants that phrase on the run page (2026-10-21,
+  branch `minpentai-snap`).
 - `P8e`: every live voting screen (c1-b18, c1-b31, c7-b6) starts in the state
   the book shows: the slider's range, step and starting value are the source's
   `<input type="range">` with its HTML defaults, its marks and title are the

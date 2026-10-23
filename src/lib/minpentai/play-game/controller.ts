@@ -22,6 +22,7 @@ import {
 } from './game';
 import { board, type BoardOpts, type BoardView } from './board';
 import type { LadderProgress } from './live-types';
+import { checkPlacements, type LiveMatch } from '../play-server/match';
 
 export interface Env {
   now(): number;
@@ -153,8 +154,8 @@ export class PlayController {
   /** Escape: close a sheet, else leave full screen. */
   escape() { if (this.state.sheet) this.setState({ sheet: null }); else if (this.state.fs) this.setState({ fs: false, aim: false }); }
 
-  mk(mode: Mode, rung?: number): Match {
-    const seed = (this.env.now() % 1e6) | 0, r = rng(seed), ids = Object.keys(RULES) as RuleId[], rule = ids[Math.floor(r() * ids.length)];
+  mk(mode: Mode, rung?: number, given?: number): Match {
+    const seed = given ?? (this.env.now() % 1e6) | 0, r = rng(seed), ids = Object.keys(RULES) as RuleId[], rule = ids[Math.floor(r() * ids.length)];
     const m: Match = { mode, rung, lvl: mode === 'practice' ? 0 : mode === 'ladder' ? rung! : 3, rule, R: rule === 'sight2' ? 2 : 3, every: rule === 'every8' ? 8 : 12, cost: rule === 'cost3' ? 3 : 4, rng: r, w: world(), hist: [], phase: 'pre', pend: { C: [], A: [] }, snap: { C: [], A: [] }, lsC: {}, lsA: {}, ended: false, oppEnded: false, clock: null, res: null };
     m.lsC[K(13, 2)] = 0; m.lsC[K(13, 7)] = 0; m.lsA[K(1, 2)] = 0; m.lsA[K(1, 7)] = 0;
     m.hist.push(clone(m.w));
@@ -162,6 +163,37 @@ export class PlayController {
   }
   openStart(mode: Mode, rung?: number) { this.env.clearInterval(this.rt); this.m = this.mk(mode, rung); this.setState({ scr: 'start', fs: false, sheet: null }); }
   begin() { this.beginAct(); this.setState({ scr: 'match', piece: 'g', dir: [1, 0], aim: false }); }
+  /**
+   * Carry on a practice match from elsewhere (the Farcaster snap's "Keep playing in the app",
+   * owner 2026-10-21): its seed and Cyan's placements for every finished turn, replayed on this
+   * match's own rng exactly as if they had been played here, each turn checked by the server's
+   * checkPlacements, against the same computer level (0 Practice, 1–5 the rungs' players; still a
+   * practice match, nothing recorded). Lands on the next turn to act (or the result). False if a
+   * turn is refused. `numbers`: the match's extra rule and the numbers it sets, from the drawn rule,
+   * when the snap's player picked a rule or played a version (snap/versions.ts settings; a challenge
+   * link starts here with no turns). The rng is the same either way: mk has drawn its first number.
+   */
+  continueMatch(seed: number, turns: { t: Piece; x: number; y: number; dx: number; dy: number }[][], lvl = 0, numbers?: (drawn: RuleId) => { rule: RuleId; R: number; every: number; cost: number }): boolean {
+    this.env.clearInterval(this.rt);
+    const m = this.mk('practice', undefined, seed);
+    m.lvl = lvl;
+    if (numbers) Object.assign(m, numbers(m.rule));
+    this.m = m;
+    this.beginAct();
+    for (const turn of turns) {
+      try {
+        m.pend.C = checkPlacements(m as unknown as LiveMatch, 'C', turn);
+      } catch {
+        this.m = null;
+        return false;
+      }
+      apply(m); updLS(m); m.hist[m.hist.length - 1] = clone(m.w); m.phase = 'run';
+      while (m.phase === 'run') this.runTick();
+      if (m.phase === 'over') return true;
+    }
+    this.setState({ scr: 'match', piece: 'g', dir: [1, 0], aim: false });
+    return true;
+  }
   beginAct() {
     const m = this.m!, w = m.w;
     m.phase = 'act'; m.snap = { C: towers(w, 'C'), A: towers(w, 'A') }; m.pend = { C: [], A: [] }; m.ended = m.oppEnded = false; m.lastG = null; m.ff = false;
