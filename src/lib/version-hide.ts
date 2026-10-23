@@ -1,4 +1,5 @@
 import 'server-only';
+import { actsFor } from './wallet/credit';
 import type postgres from 'postgres';
 import { isMaintainer } from './remix/frames';
 
@@ -40,7 +41,8 @@ async function read(sql: Sql, id: number): Promise<{ author: number; hidden: boo
 export async function setVersionHidden(sql: Sql, person: number, id: number, hide: boolean): Promise<VersionHideResult> {
   const v = await read(sql, id);
   if (!v) return { ok: false, status: 404, error: 'No such scene' };
-  const maker = v.author === person;
+  // A linked wallet's earlier scenes are its FID's (owner, 2026-10-22; src/lib/wallet/credit.ts).
+  const maker = await actsFor(sql, person, v.author);
   const maint = isMaintainer(person);
   // DRAFT wording for the owner.
   if (!maker && !maint) return { ok: false, status: 403, error: 'Only the person who made this scene can hide it.' };

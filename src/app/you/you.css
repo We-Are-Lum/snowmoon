@@ -20,6 +20,8 @@
 .you-facts dd { margin: 0; overflow-wrap: anywhere; color: var(--body); }
 .you-addr { font-family: var(--label); font-size: 13px; }
 .you-sign-out { align-self: flex-start; }
+.you-link { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--rule); }
+.you-link > button { align-self: flex-start; }
 .you-work { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
 .you-work h3 { margin: 8px 0 0; font-family: var(--label); font-size: var(--text-label); letter-spacing: var(--ls-label); font-weight: 400; color: var(--muted); }
 .you-list { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 14px; }

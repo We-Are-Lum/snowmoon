@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { actsFor } from '~/lib/wallet/credit';
 import { revalidatePath } from 'next/cache';
 import { getPerson } from '~/lib/auth';
 import { db } from '~/lib/db';
@@ -35,7 +36,7 @@ export async function GET(request: Request, { params }: Ctx) {
   if (person === null || !sql) return NextResponse.json({ canHide: false }, { headers: { 'Cache-Control': 'no-store' } });
   const { id } = await params;
   const f = await frameById(sql, id);
-  const maker = !!f && f.person === person;
+  const maker = !!f && (await actsFor(sql, person, f.person));
   const maint = isMaintainer(person);
   const canUnhide = !!f && f.hidden && (f.hiddenRole === 'maintainer' ? maint : maker);
   return NextResponse.json({ canHide: !!f && (maker || maint), hidden: f?.hidden ?? false, canUnhide, as: maker ? 'maker' : maint ? 'maintainer' : null }, { headers: { 'Cache-Control': 'no-store' } });

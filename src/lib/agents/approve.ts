@@ -3,7 +3,7 @@ import { readFileSync, existsSync } from 'node:fs';
 import path from 'node:path';
 import type postgres from 'postgres';
 import { editorData } from '../agent/data';
-import { AGENTS } from '../config';
+import { AGENTS, REMIX } from '../config';
 import { generate, remixPictures, remixPrompt } from '../remix/make';
 import { pictureSize, remixShot, type RemixPicture } from '../remix/shot';
 import { sha256, sql } from './core';
@@ -11,6 +11,7 @@ import type { Change } from './edits';
 import { actingFor, actingPrompt } from './direction';
 import { storeMade } from './images';
 import { versionById } from './pieces';
+import { priceUsd } from '../wallet/credits';
 
 /**
  * Spending on an edit draft, only when its person approves the shown estimate on /you (owner, 2026-10-20: "cost
@@ -34,6 +35,8 @@ async function runFrame(person: number, request: Request, body: { adaptation: nu
   if (!shot?.prompt || !bytes || !size) return { ok: false as const, status: 400, error: 'This shot has no committed layout to redraw from.' };
   const layout: RemixPicture = { role: 'layout', name: 'the shot’s own camera (depth)', src: setFrame!.src!, file: null, fileSha256: setFrame!.sha256 ?? null, bytes, sha256: sha256(bytes), ...size } as RemixPicture;
   const pictures = remixPictures(layout, shot);
+  // A wallet account is charged the price its Make it button showed, or nothing (Terms 6a: "the price shown").
+  if (person < 0 && body.change.price_usd !== priceUsd(REMIX.reserveUsd(pictures.length))) return { ok: false as const, status: 409, error: 'The price of this frame has changed. Ask your agent to draft it again.' };
   // The person's acting notes for this shot go into the prompt, in their words, and into the recipe as theirs.
   const acting = await actingFor(person, body.adaptation, body.version, body.shot);
   const prompt = remixPrompt(shot, pictures, [body.change.note, actingPrompt(acting)].filter(Boolean).join(' '));

@@ -50,6 +50,18 @@ coding agent and its helpers are in `docs/prompts/`.
   the reader's device over the text served whole by `/api/book/text`; the
   query is never sent anywhere, kept or published, and the page may fetch
   only that text).
+- `P1h` (raw voice takes exception, owner 2026-10-23): our Modal conversion
+  code (`modal/chatterbox_vc.py`) keeps no recording. A static read finds no
+  volume write or `.commit()`, no Dict or Queue, no Web Function (Modal keeps
+  their inputs up to 7 days), no network client, no log of the audio, and
+  every temporary folder removed in a `finally`. A local run with a stub
+  model and a stub `modal` (`scripts/modal_vc_proof.py`, no Modal, no
+  spending) leaves no new file under the temp root, the weights path, the
+  working folder or HOME, including when the model raises, times out or is
+  cancelled; no log line or reply holds the input, its base64 or hex; and no
+  live object holds it afterwards. `npm run check:modal-vc` also proves ten
+  planted violations are each caught. Not covered: what Modal's platform
+  keeps outside our code (`docs/proposals/own-voice-v1.md`).
 - `npm run test:db`: after 0005, a recipe is public only if it made a
   published element version or a segment of a narration that is not hidden;
   drafts, hidden work and abandoned attempts stay private.
@@ -347,7 +359,8 @@ only, through `studio.rating_totals`, `studio.like_totals` and
   outside the site's own domain.
 - `P6b`: in the committed migrations, no public read policy remains on
   `ratings`, `likes`, `take_likes`, `picks`, `contributor_consents`, `image_asks`,
-  `removal_log` or `image_scores` (Neynar scores by FID, migration 0010)
+  `removal_log`, `image_scores` (Neynar scores by FID, migration 0010) or `wallet_links` (which wallet is linked
+  to which FID, migration 0026)
   (`npm run test:db` proves it on an in-memory database, totals views
   included).
 - `P6c`: on the live database, through the public API with the public key,
@@ -428,6 +441,13 @@ ratings and likes and serves the totals.
   anyway. They are private (no public read; append-only for the app;
   `npm run test:wallet`). `studio.image_costs` still has no person in it: it now
   says only whether a day's costs were free or prepaid.
+- Wallet ↔ Farcaster links (owner, 2026-10-22; migration 0026): which wallet account is linked to which FID, how
+  ('verified' on Farcaster, or 'signed' with both sign-ins) and how a link ended ('person' or 'unverified') are kept
+  privately (`studio.wallet_links`, append-only for the app except a link's one-time end). A linked wallet's work
+  is then shown under the Farcaster name, which makes the link public for a 'signed' link (the person is told so
+  before confirming; for a 'verified' one it is public on Farcaster already). The automatic link sends the wallet's
+  address to Neynar, at most once a day per wallet; the Privacy page says so (section 7, reread by the owner on
+  2026-10-22).
 
 ## 7. Payments never enter scoring or ordering. No token. The "not affiliated" line stays on the first screen.
 
@@ -511,6 +531,13 @@ once the owner picks a version.)
   same labels, with no old-style tag carrying a label's words, and nothing there paraphrases c4-b84 as
   "a new rule each match" (the ruling of 2026-10-09, which P8d checks in Learn; 2026-10-10). The proof
   blanks each of the three words and plants the old c4-b84 tag.
+- `P8h`: the Minpentai snap (`src/lib/minpentai/snap/pages.ts`, a practice match inside a
+  Farcaster cast): its first card, for the base game and every version, with or without Resume, and
+  a challenge link's, carries Play's words "Invented" and "Draft" (from `labels.ts`) as badges,
+  since a snap can't open the ⓘ's explanation, and says the rules are invented for this edition;
+  no page of a match (first page, board, run, resign, result), nor the cast text its Share starts,
+  paraphrases c4-b84 as "a new rule each match". The proof swaps the Draft badge out and plants that phrase on the run page (2026-10-21,
+  branch `minpentai-snap`).
 - `P8e`: every live voting screen (c1-b18, c1-b31, c7-b6) starts in the state
   the book shows: the slider's range, step and starting value are the source's
   `<input type="range">` with its HTML defaults, its marks and title are the

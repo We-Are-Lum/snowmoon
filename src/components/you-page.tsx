@@ -8,8 +8,9 @@ import { frameView, labelFor, pictureView, posterAlt, posterView } from '~/lib/s
 import type { BoardItem, FrameItem, OwnWork, PictureItem, SceneItem, Who } from '~/lib/you';
 import { AiLabel } from './recipe-sheet';
 import { SignInButton } from './sign-in';
-import { WalletPanel, WalletSignInButton } from './wallet';
+import { LinkNote, WalletPanel, WalletSignInButton } from './wallet';
 import { AgentsOnYou } from './agents/agents-you';
+import { exactDollars } from '~/lib/wallet/price-text';
 
 /**
  * The You page (owner, 2026-10-18: "build the You page"), reached by tapping your name in the menu:
@@ -68,6 +69,27 @@ const W = {
   untitled: 'Untitled storyboard',
   chapter: (n: number) => `Chapter ${n}`,
   couldNot: 'Could not change it',
+  // Wallet ↔ Farcaster links (owner, 2026-10-22). DRAFT wording (coding agent, 2026-10-22), for the owner.
+  linkTitle: 'Link this wallet to Farcaster',
+  linkOffer: 'Have a Farcaster account? Link this wallet to it, and signing in with this wallet signs you in as that account.',
+  linkSignIn: 'Sign in with Farcaster to link this wallet',
+  linkConfirm: (wallet: string, to: string) => `Link ${wallet} to ${to}?`,
+  linkWhat: 'From now on, signing in with this wallet signs you in as this Farcaster account.',
+  /** Next to the button (owner, 2026-10-22: "Show a line next to the button saying the wallet's past work will appear under their Farcaster name"). */
+  linkPast: (to: string) => `What you made with this wallet before will appear under ${to}, here and on its public pages, so anyone can see this wallet is yours. Its balance stays with the wallet. You can unlink it here at any time.`,
+  linkYes: 'Link them',
+  linkNo: 'Not now',
+  linked: (wallet: string, to: string) => `${wallet} is linked to ${to}: signing in with it signs you in as ${to}.`,
+  linkedHow: { verified: 'Linked because that account verified this address on Farcaster.', signed: 'Linked by you, signed in with both.', maintainer: 'Linked by the maintainer, checked on Farcaster.' },
+  /** Signed in with Farcaster: a wallet linked to this account (owner, 2026-10-22: "Either side can unlink"). */
+  linkedWallet: (wallet: string) => `${wallet} is linked to this account: signing in with it signs you in here.`,
+  linkedEarlier: (to: string) => `What you made with this wallet shows under ${to}, and is listed with your work below.`,
+  linkedBalance: 'The wallet’s balance stays with the wallet. While linked, Pictures and Remix use the Farcaster account’s free daily count.',
+  unlink: 'Unlink this wallet',
+  unlinkConfirm: 'Unlink? Signing in with this wallet will be the wallet’s own account again.',
+  unlinkYes: 'Unlink',
+  unlinkNo: 'Keep it',
+  viaWallet: 'Signed in with your linked wallet.',
 } as const;
 
 interface Side {
@@ -77,12 +99,26 @@ interface Side {
 }
 interface YouData extends Side {
   maintainer: boolean;
-  /** A wallet session alongside a Farcaster one (both signed in on this device). */
+  /** A wallet session alongside a Farcaster one (both signed in on this device), or a linked wallet's own earlier work. */
   wallet: Side | null;
+  /** The wallet on this page: its link, and whether the offer to link it applies (src/app/api/you/route.ts). */
+  link: LinkView | null;
+  /** Signed in with Farcaster: the wallets linked to it, other than the one in `link`. */
+  linkedWallets: { address: string; short: string; how: LinkHow }[];
+}
+/** How a link reads: 'maintainer' is LINKED_WALLETS or seeded from it (src/app/api/you/route.ts). */
+type LinkHow = 'verified' | 'signed' | 'maintainer';
+interface LinkView {
+  wallet: { address: string; short: string };
+  linked: { fid: number; how: LinkHow; at: string | null; name: string } | null;
+  canUnlink: boolean;
+  offer: boolean;
+  /** The FID signed in with Farcaster on this device, if any: who the offer links to. */
+  to: number | null;
 }
 type Fetcher = (url: string, init?: RequestInit) => Promise<Response>;
 /** Whose a listed item is, and which session acts for it (Hide goes with that account's own token). */
-type Mine<T> = T & { by: Who; fetcher: Fetcher };
+type Mine<T> = T & { by: Who; fetcher: Fetcher | null };
 
 const dollars = (usd: number) => (usd >= 1 ? usd.toFixed(2) : usd.toFixed(4).replace(/0+$/, '').replace(/\.$/, ''));
 const day = (iso: string) => iso.slice(0, 10);
@@ -115,6 +151,7 @@ export function YouPage() {
     return (
       <Frame>
         <p className="you-lede">{W.signedOut}</p>
+        <LinkNote className="you-note" />
         <div className="you-sign-in">
           <SignInButton className="ic-secondary" />
           {auth.kind === 'signed-out' && !auth.inApp && <WalletSignInButton />}
@@ -135,7 +172,9 @@ export function YouPage() {
   // The wallet account on this page: the primary one (wallet-only), or the one alongside Farcaster.
   const walletSide: Side | null = who.kind === 'wallet' ? data : data.wallet;
   const primaryFetch: Fetcher = authFetch;
-  const sides: { side: Side; fetcher: Fetcher }[] = [{ side: data, fetcher: primaryFetch }, ...(data.wallet ? [{ side: data.wallet, fetcher: walletFetch as Fetcher }] : [])];
+  const sides: { side: Side; fetcher: Fetcher | null }[] = [{ side: data, fetcher: primaryFetch }, ...(data.wallet ? [{ side: data.wallet, fetcher: walletFetch as Fetcher }] : [])];
+  // A wallet linked to the Farcaster account on this page: its work is in the account's own list (owner, 2026-10-22).
+  const linkedHere = !!data.link?.linked && who.kind === 'farcaster' && data.link.linked.fid === who.fid;
   const tag = <K extends keyof OwnWork>(k: K) =>
     sides.flatMap(({ side, fetcher }) => (side.work[k] as unknown[]).map((it) => ({ ...(it as object), by: side.who, fetcher }))) as Mine<OwnWork[K] extends (infer U)[] ? U : never>[];
   const stored = sides.every(({ side }) => side.work.stored);
@@ -143,23 +182,29 @@ export function YouPage() {
     <Frame>
       {/* First, the creative act (owner, 2026-10-20): tell your agent, react to its drafts. Only while agents are switched on. */}
       <AgentsOnYou />
+      {/* The 30-day note about automatic links (owner, 2026-10-22), for everyone signed in. */}
+      <LinkNote className="you-note" />
       <section className="you-section" aria-labelledby="you-account">
         <h2 id="you-account">{W.account}</h2>
         <AccountRows
           who={who}
           signOut={auth.kind === 'signed-in' && auth.via === 'farcaster-app' ? null : auth.kind === 'signed-in' ? signOut : signOutWallet}
+          viaWallet={auth.kind !== 'signed-in' && who.kind === 'farcaster'}
         />
         {data.wallet && <AccountRows who={data.wallet.who} signOut={signOutWallet} />}
+        {data.link && <LinkPanel view={data.link} to={who.kind === 'farcaster' ? who : null} reload={load} />}
+        {(data.linkedWallets ?? []).map((lw) => <LinkedWallet key={lw.address} w={lw} reload={load} />)}
       </section>
 
       <section className="you-section" aria-labelledby="you-wallet">
         <h2 id="you-wallet">{W.wallet}</h2>
-        {walletSide ? (
+        {/* A linked wallet signed in here still has its own balance (it stays with the wallet). */}
+        {walletSide || (linkedHere && wallet) ? (
           <>
             {/* Always shown with a wallet session (owner, 2026-10-18): the balance, its price, Add funds and
                 "Add a payment by its transaction hash", the existing panel, reused. */}
-            <WalletPanel onChange={() => void load()} />
-            {walletSide.prices && <p className="you-note">{W.framePrice(dollars(walletSide.prices.frameUsd))}</p>}
+            <WalletPanel onChange={() => void load()} linkHint={false} />
+            {walletSide?.prices && <p className="you-note">{W.framePrice(exactDollars(walletSide.prices.frameUsd))}</p>}
           </>
         ) : (
           <>
@@ -173,6 +218,7 @@ export function YouPage() {
         <h2 id="you-work">{W.work}</h2>
         <p className="you-note">{W.workNote}</p>
         {data.wallet && <p className="you-note">{W.bothWork}</p>}
+        {linkedHere && <p className="you-note">{W.linkedEarlier(who.name)}</p>}
         {!stored && <p className="you-note">{W.notStored}</p>}
         <WorkList title={W.scenes} id="you-scenes" items={tag('scenes')} render={(s) => <SceneRow key={s.versionId} s={s} reload={load} />} />
         <WorkList title={W.frames} id="you-frames" items={tag('frames')} render={(f) => <FrameRow key={f.id} f={f} reload={load} />} />
@@ -184,7 +230,7 @@ export function YouPage() {
 }
 
 /** One signed-in account's rows: its name (name order: Farcaster, Basename, address), its ids, its public page, and Sign out. */
-function AccountRows({ who, signOut: out }: { who: Who; signOut: (() => void) | null }) {
+function AccountRows({ who, signOut: out, viaWallet = false }: { who: Who; signOut: (() => void) | null; viaWallet?: boolean }) {
   return (
     <div className="you-account" data-kind={who.kind}>
       <p className="you-name">
@@ -225,12 +271,155 @@ function AccountRows({ who, signOut: out }: { who: Who; signOut: (() => void) | 
         </div>
       </dl>
       {who.handle && <p className="you-note">{W.profileNote}</p>}
-      {out ? (
+      {viaWallet ? (
+        <p className="you-note">{W.viaWallet}</p>
+      ) : out ? (
         <button type="button" className="ic-secondary you-sign-out" onClick={out}>
           {who.kind === 'wallet' ? W.signOutWallet : W.signOutFarcaster}
         </button>
       ) : (
         <p className="you-note">{W.inApp}</p>
+      )}
+    </div>
+  );
+}
+
+/**
+ * Wallet ↔ Farcaster link (owner, 2026-10-22): the offer (sign in with Farcaster, see who it links to, confirm), or the
+ * link as it is, with Unlink. The server checks both sign-ins itself (src/app/api/wallet-link/route.ts).
+ */
+function LinkPanel({ view, to, reload }: { view: LinkView; to: Who | null; reload: () => void }) {
+  const walletW = useWalletAlongside();
+  const [busy, setBusy] = useState(false);
+  const [asking, setAsking] = useState(false);
+  const [later, setLater] = useState(false);
+  const [note, setNote] = useState<string | null>(null);
+  const walletName = view.wallet.short;
+  const done = async (r: Response | null) => {
+    const out = (await r?.json().catch(() => ({}))) as { error?: string } | undefined;
+    setBusy(false);
+    setAsking(false);
+    if (!r?.ok) return setNote(out?.error ?? W.couldNot);
+    setNote(null);
+    reload();
+  };
+  const linkNow = async () => {
+    if (!walletW || view.to === null) return;
+    setBusy(true);
+    // The Farcaster sign-in as the bearer, the wallet's own token beside it; the FID shown is the FID linked.
+    const r = await authFetch('/api/wallet-link', { method: 'POST', headers: { 'content-type': 'application/json', 'x-wallet-session': walletW.token }, body: JSON.stringify({ fid: view.to }) }).catch(() => null);
+    await done(r);
+  };
+  const unlinkNow = async () => {
+    setBusy(true);
+    await done(await walletFetch('/api/wallet-link', { method: 'DELETE' }).catch(() => null));
+  };
+  const status = note && (
+    <p className="you-note" role="status">
+      {note}
+    </p>
+  );
+
+  if (view.linked) {
+    const l = view.linked;
+    return (
+      <div className="you-link" aria-label={W.linkTitle}>
+        <p className="you-note">{W.linked(walletName, l.name)}</p>
+        <p className="you-note">{W.linkedHow[l.how]}</p>
+        <p className="you-note">{W.linkedBalance}</p>
+        {view.canUnlink ? (
+          <div className="you-actions">
+            {asking ? (
+              <>
+                <span className="you-note">{W.unlinkConfirm}</span>
+                <button type="button" className="ic-secondary" disabled={busy} onClick={() => void unlinkNow()}>
+                  {W.unlinkYes}
+                </button>
+                <button type="button" className="ic-secondary" disabled={busy} onClick={() => setAsking(false)}>
+                  {W.unlinkNo}
+                </button>
+              </>
+            ) : (
+              <button type="button" className="ic-secondary" onClick={() => setAsking(true)}>
+                {W.unlink}
+              </button>
+            )}
+          </div>
+        ) : null}
+        {status}
+      </div>
+    );
+  }
+  if (!view.offer || later) return null;
+  return (
+    <div className="you-link" aria-label={W.linkTitle}>
+      <h3 className="label">{W.linkTitle}</h3>
+      {view.to === null || !to ? (
+        <>
+          <p className="you-note">{W.linkOffer}</p>
+          <SignInButton className="ic-secondary" label={W.linkSignIn} />
+        </>
+      ) : (
+        <>
+          <p className="you-name">{W.linkConfirm(walletName, `${to.name} (FID ${view.to})`)}</p>
+          <p className="you-note">{W.linkWhat}</p>
+          <div className="you-actions">
+            <span className="you-note">{W.linkPast(to.name)}</span>
+            <button type="button" className="ic-secondary" disabled={busy || !walletW} onClick={() => void linkNow()}>
+              {W.linkYes}
+            </button>
+            <button type="button" className="ic-secondary" disabled={busy} onClick={() => setLater(true)}>
+              {W.linkNo}
+            </button>
+          </div>
+        </>
+      )}
+      {status}
+    </div>
+  );
+}
+
+/** A wallet linked to the Farcaster account signed in, with Unlink from this side (owner, 2026-10-22: "Either side can unlink"). */
+function LinkedWallet({ w, reload }: { w: YouData['linkedWallets'][number]; reload: () => void }) {
+  const [busy, setBusy] = useState(false);
+  const [asking, setAsking] = useState(false);
+  const [note, setNote] = useState<string | null>(null);
+  const unlinkNow = async () => {
+    setBusy(true);
+    // The Farcaster sign-in as the bearer; the server ends only this FID's own link to that wallet.
+    const r = await authFetch('/api/wallet-link', { method: 'DELETE', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ wallet: w.address }) }).catch(() => null);
+    const out = (await r?.json().catch(() => ({}))) as { error?: string } | undefined;
+    setBusy(false);
+    setAsking(false);
+    if (!r?.ok) return setNote(out?.error ?? W.couldNot);
+    setNote(null);
+    reload();
+  };
+  return (
+    <div className="you-link" aria-label={W.linkTitle}>
+      <p className="you-note">{W.linkedWallet(w.short)}</p>
+      <p className="you-note">{W.linkedHow[w.how]}</p>
+      <div className="you-actions">
+        {asking ? (
+          <>
+            <span className="you-note">{W.unlinkConfirm}</span>
+            <button type="button" className="ic-secondary" disabled={busy} onClick={() => void unlinkNow()}>
+              {W.unlinkYes}
+            </button>
+            <button type="button" className="ic-secondary" disabled={busy} onClick={() => setAsking(false)}>
+              {W.unlinkNo}
+            </button>
+          </>
+        ) : (
+          <button type="button" className="ic-secondary" onClick={() => setAsking(true)}>
+            {W.unlink}
+          </button>
+        )}
+      </div>
+      {note && (
+        <p className="you-note" role="status">
+          {note}
+        </p>
       )}
     </div>
   );
@@ -257,10 +446,11 @@ function WorkList<T>({ title, id, items, render }: { title: string; id: string; 
 }
 
 /** Hide and "Show it again", through each kind's existing route; the server checks it is the person's own. */
-function HideControl({ route, hidden, canUnhide, maintainerOnly, confirm, fetcher, onDone }: { route: string; hidden: boolean; canUnhide: boolean; maintainerOnly?: boolean; confirm?: string; fetcher: Fetcher; onDone: () => void }) {
+function HideControl({ route, hidden, canUnhide, maintainerOnly, confirm, fetcher, onDone }: { route: string; hidden: boolean; canUnhide: boolean; maintainerOnly?: boolean; confirm?: string; fetcher: Fetcher | null; onDone: () => void }) {
   const [asking, setAsking] = useState(false);
   const [busy, setBusy] = useState(false);
   const [note, setNote] = useState<string | null>(null);
+  if (!fetcher) return null;
   const act = async (hide: boolean) => {
     setBusy(true);
     setNote(null);

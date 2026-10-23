@@ -6,6 +6,7 @@ import { db } from '~/lib/db';
 import { appUrl } from '~/lib/config';
 import { getAdaptation, getVersion, handleFor, ownMedia } from '~/lib/adaptation-pages';
 import { boardById, boardFrames } from '~/lib/remix/storyboards';
+import { credit } from '~/lib/wallet/credit';
 import { HideButton, ShareRow } from '../../remix/remix-actions';
 import { BoardView } from '../board-view';
 import '../../remix/remix.css';
@@ -21,8 +22,10 @@ type Props = { params: Promise<{ id: string }> };
 async function load(id: string) {
   const sql = db();
   if (!sql) return null;
-  const b = await boardById(sql, id).catch(() => null);
-  if (!b) return null;
+  const made = await boardById(sql, id).catch(() => null);
+  if (!made) return null;
+  // A linked wallet's storyboard shows under its Farcaster name (owner, 2026-10-22; src/lib/wallet/credit.ts).
+  const [b] = await credit(sql, [made], (x) => x.person, (x, fid, name) => ({ ...x, person: fid, byName: name }));
   const [adaptation, version, frames] = await Promise.all([getAdaptation(b.adaptationId), getVersion(b.versionId), boardFrames(sql, b)]);
   const handle = version ? await handleFor(version.author) : null;
   // The maker's public profile, which the byline links to (owner, 2026-10-18).
