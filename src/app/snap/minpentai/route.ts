@@ -46,7 +46,10 @@ export async function GET(request: Request) {
   const seg = q.get('c') ?? (u.pathname.startsWith(CHALLENGE_PATH) ? u.pathname.slice(CHALLENGE_PATH.length) : null);
   const ch = incoming(seg);
   const accept = request.headers.get('accept') ?? '';
-  if (!accept.includes(MEDIA)) {
+  // src/middleware.ts sends /minpentai/play's non-browser requests here with x-snap-serve: the snap,
+  // whatever they accept. Without it (this route's own URL) nothing changes.
+  const forced = request.headers.get('x-snap-serve') === '1';
+  if (!accept.includes(MEDIA) && !forced) {
     // A browser: point at the game, and say there is a snap here.
     const link = `<${h.base}${ch ? CHALLENGE_PATH + ch.seg : SNAP_PATH + (ver ? `?v=${encodeURIComponent(ver)}` : '')}>; rel="alternate"; type="${MEDIA}"`;
     return new Response(
