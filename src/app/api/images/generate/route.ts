@@ -118,6 +118,9 @@ export async function POST(request: Request) {
 
   // Reference pictures: the chosen sheets' views, front first, up to the model's limit.
   const refs: { url: string; sha256: string; width: number; height: number }[] = [];
+  // A wallet account is charged only a price it was shown (Terms 6a): the page never offers it reference pictures, whose
+  // price differs, so they aren't taken from one here either.
+  if (body.reference === true && fid < 0) return no('Reference pictures aren’t available for wallet accounts yet', 400);
   if (body.reference === true) {
     for (const p of sheetPicks) for (const k of ['front', 'side', 'back'] as const) if (p.views[k] && refs.length < IMAGES.maxReferences) refs.push({ url: p.views[k]!.url, sha256: p.views[k]!.sha256, width: p.views[k]!.recipe.width, height: p.views[k]!.recipe.height });
     if (!refs.length) return no('None of these sheets has pictures to use as a reference', 400);

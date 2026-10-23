@@ -17,8 +17,9 @@ import { failed } from '../images/paid';
  * then the picture, from the Pictures reference-picture model (IMAGES.editModel, FLUX.2 [klein] 4B
  * edit) with the host's safety checker on; then the real costs in place of the reservation. A frame
  * the checker flags is dropped.
- * A wallet account's frame that fails (the prompt check or the model didn't answer, so nothing was made) is
- * credited back to its balance as in Pictures, once IMAGES.prepaid.creditBack is on (owner, 2026-10-21).
+ * A wallet account's frame that gives no picture (the prompt check or the model didn't answer, the prompt was refused, or the
+ * safety checker dropped it) is credited back to its balance as in Pictures, once IMAGES.prepaid.creditBack is on
+ * (owner, 2026-10-21; reading B, 2026-10-22).
  *
  * The prompt sent: the shot's own prompt from the version's recipe (drafted by the coding agent for
  * the version's frames; it names the pictures by number), one sentence for the plate, then the
@@ -84,7 +85,8 @@ export async function generate(sql: Sql, person: number, request: Request, promp
   if (!r.ok) return { ok: false, status: r.refusal === 'free-off' ? 503 : 429, error: SAY[r.refusal](person), extra: { reason: r.refusal } };
   if (blockedName(prompt)) {
     await settle(sql, {}, spend, funded);
-    return { ok: false, status: 422, error: 'No real people: the prompt names someone on the blocked list.', extra: { reason: 'blocked', category: 'real_person', left: r.left } };
+    const back = await creditBack(sql, r.debitId, 'refused');
+    return { ok: false, status: 422, error: failed('No real people: the prompt names someone on the blocked list.', back), extra: { reason: 'blocked', category: 'real_person', left: r.left, ...(back ? { creditedBack: true } : {}) } };
   }
   let guard: GuardResult;
   try {
@@ -98,7 +100,8 @@ export async function generate(sql: Sql, person: number, request: Request, promp
   const checked = { costUsd: guard.costUsd, provider: guard.provider, verdict: guard.allow ? ('ok' as const) : ('blocked' as const) };
   if (!guard.allow) {
     await settle(sql, { guard: checked }, spend, funded);
-    return { ok: false, status: 422, error: 'This prompt asks for something the rules don’t allow.', extra: { reason: 'blocked', category: guard.category, left: r.left } };
+    const back = await creditBack(sql, r.debitId, 'refused');
+    return { ok: false, status: 422, error: failed('This prompt asks for something the rules don’t allow.', back), extra: { reason: 'blocked', category: guard.category, left: r.left, ...(back ? { creditedBack: true } : {}) } };
   }
   let made: Made;
   try {
@@ -111,6 +114,9 @@ export async function generate(sql: Sql, person: number, request: Request, promp
     return { ok: false, status: 503, error: failed('The image model did not answer. Try again in a moment.', back), extra: { left: r.left, ...(back ? { creditedBack: true } : {}) } };
   }
   await settle(sql, { guard: checked, image: { costUsd: made.costUsd, verdict: made.nsfw ? 'nsfw' : 'ok' } }, spend, funded);
-  if (made.nsfw) return { ok: false, status: 422, error: 'The frame was flagged by the safety checker and dropped.', extra: { reason: 'nsfw', left: r.left } };
+  if (made.nsfw) {
+    const back = await creditBack(sql, r.debitId, 'dropped');
+    return { ok: false, status: 422, error: failed('The frame was flagged by the safety checker and dropped.', back), extra: { reason: 'nsfw', left: r.left, ...(back ? { creditedBack: true } : {}) } };
+  }
   return { ok: true, made, guard, left: r.left };
 }

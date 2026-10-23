@@ -297,11 +297,15 @@ export const IMAGE_WORDING = {
      *  inAdvance before a wallet account's first payment, and the address byline on the consent screen before
      *  its first publish (ConsentScreen's wallet line). */
     signInNote: 'Signing in is free. It’s a signature, not a payment.',
+    /** Under the balance after a wallet sign-in, while the wallet isn't linked (owner, 2026-10-22). DRAFT (coding agent). */
+    linkHint: 'Have a Farcaster account? Link this wallet to it on your You page.',
     inAdvance: 'A wallet account pays for each image in advance. Your address, shortened, is the byline on images you publish.',
     noWallet: 'No wallet found in this browser. Open this page in your wallet’s browser, or install a wallet extension.',
     wrongSign: 'The wallet didn’t sign. Try again.',
+    /** DRAFT (coding agent, 2026-10-22): the price on the Generate button, as charged (Terms 6a: "the price shown"). */
+    priceOnButton: (usd: string) => `$${usd}`,
     balance: (usd: string, n: number) => `Balance $${usd} · about ${n} image${n === 1 ? '' : 's'}`,
-    price: (usd: string, markup: number) => `$${usd} an image: the estimated cost plus ${Math.round(markup * 100)}%`,
+    price: (usd: string, markup: number) => `$${usd} an image: the estimated cost plus ${Math.round(markup * 100)}%, rounded up to $0.001`,
     addFunds: 'Add funds',
     notAddedYet: 'A payment from this wallet hasn’t been added to your balance yet. It’s safe: it’s on Base, and you can add it with its transaction hash below, within 7 days of paying.',
     // The "add a payment by its hash" box (owner, 2026-10-15). DRAFT wording for the owner.
@@ -317,12 +321,12 @@ export const IMAGE_WORDING = {
     payWith: 'Pay in USDC or ETH on Base. It’s added to your balance once the payment confirms.',
     terms:
       'You’re paying for image generation on this site. Each Generate is charged when you press it, whatever comes back, including a blocked prompt or an image the safety checker drops. No refunds.',
-    /** DRAFT (coding agent, 2026-10-21), for the owner's reread with Terms 6a (docs/legal/credits-draft.md). Shown in
-     *  place of `terms` once IMAGES.prepaid.creditBack is on. */
+    /** DRAFT, reading B (coding agent, 2026-10-22), for the owner's reread with Terms 6a (docs/legal/credits-draft.md).
+     *  Shown in place of `terms` once IMAGES.prepaid.creditBack is on. */
     termsCreditBack:
-      'You’re paying for image generation on this site. Each Generate is charged when you press it. If nothing comes back because the prompt check or the image model didn’t answer, it’s added back to your balance. A blocked prompt or an image the safety checker drops stays charged. Payments aren’t refunded as money.',
-    /** DRAFT (coding agent, 2026-10-21): after a failed Generate was credited back. */
-    creditedBack: 'Nothing was made, so it was added back to your balance.',
+      'You’re paying for image generation on this site. Each Generate is charged the price shown when you press it. If it doesn’t give you a picture (a check or the image model didn’t answer, the prompt was blocked, or the safety checker dropped the image), the charge is added back to your balance. Payments aren’t refunded as money.',
+    /** DRAFT (coding agent, 2026-10-22, reading B): after a Generate that gave no picture was credited back. */
+    creditedBack: 'No picture came back, so the charge was added back to your balance.',
     pay: (usd: number, token: 'USDC' | 'ETH') => `Pay $${usd} in ${token}`,
     waiting: 'Waiting for the payment to confirm…',
     added: (usd: string) => `Added $${usd} to your balance.`,
