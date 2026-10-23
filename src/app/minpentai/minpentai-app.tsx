@@ -78,8 +78,6 @@ export function MinpentaiApp() {
     if (q.get('s')) { router.replace('/minpentai/rule'); return; }
     // A challenge link (/minpentai/c/<…>) starts its match in Play.
     if (window.location.pathname.startsWith(CHALLENGE_PATH)) { setMode({ kind: 'play', start: 'match' }); setVisit((v) => v + 1); return; }
-    // The snap's own link (/minpentai/play) opens Play's home in a browser.
-    if (window.location.pathname === '/minpentai/play') { setMode({ kind: 'play', start: 'home' }); setVisit((v) => v + 1); return; }
     const screen = screenFor(q);
     const m = q.get('mode');
     if (screen !== null) setMode({ kind: 'learn', screen });
