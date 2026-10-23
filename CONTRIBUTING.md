@@ -12,6 +12,10 @@ What you contribute is published under the licence of what it is (`LICENSING.md`
 - code (`src/`, `scripts/`, `supabase/`, `config/`, build files): **AGPL-3.0-only**;
 - the book and anything made from it (scenes, prompts, recipes, pictures, voices, video): **GPL-3.0-only**.
 
+That licence, given through your sign-off below, is the only grant you make. There is no contributor licence
+agreement (CLA) and no extra grant to the project's owner. Any private (unpublished) feature the owner builds uses
+only the owner's own code, and never includes an outside contribution unless that contribution's licence allows it.
+
 ## Sign off every commit (the DCO)
 
 Every commit in a pull request must end with a `Signed-off-by:` line, which `git commit -s` adds:
