@@ -45,6 +45,6 @@ Set `LEGAL.ownerReread` to the keys check:principles prints (P6k, P6l), with the
 
 ## The migration
 
-`supabase/migrations/NEXT_minpentai_snap_resume.sql` (`studio.mp_snap_resume`) takes the next free
-number at merge. Without it the snap still plays, and Resume lasts only while a server instance is
+`supabase/migrations/0025_minpentai_snap_resume.sql` (`studio.mp_snap_resume`), applied by the owner
+on 2026-10-23. Without it the snap still plays, and Resume lasts only while a server instance is
 warm; the Privacy line is true either way (the match is kept, in memory or in the table).
