@@ -12,9 +12,10 @@
  * - Payments read from Base: USDC to us from this wallet; ETH priced at the block; from someone else,
  *   to someone else, failed, still confirming, too old, too small; nothing when payTo isn't set.
  * - The balance: a payment is credited once; a Generate is paid at the estimate plus the markup; an
- *   empty balance is refused; while credit-back is off (today), nothing comes back even when nothing is made; once on, a
- *   Generate that gives no picture (check or model didn't answer, prompt refused, picture dropped) is credited back
- *   once, for exactly its debit; a picture made stays charged; prepaid costs are counted apart from free ones,
+ *   empty balance is refused; while credit-back is off, nothing comes back even when nothing is made; while on (since
+ *   2026-10-22), a Generate that gives no picture (check or model didn't answer, prompt refused, picture dropped) is
+ *   credited back once, for exactly its debit; turned off after credits were given, the balance still counts them
+ *   and only new credits stop, and turned back on it credits as before; a picture made stays charged; prepaid costs are counted apart from free ones,
  *   so the free daily cap doesn't stop a paying account and prepaid spend has its own cap.
  * - Wallet ↔ Farcaster links (owner, 2026-10-22): verified (Neynar stood in: exactly one FID, two FIDs, none, a
  *   custody address, Neynar down, the lookup off), signed (both proofs through the route, each alone refused),
@@ -252,6 +253,24 @@ check('settling the real costs never changes what was charged (only a credit-bac
   const [same] = await sql`select count(*)::int as n from studio.wallet_credits c join studio.wallet_debits d on d.id = c.debit_id where c.usd <> d.usd or c.account_id <> d.account_id`;
   check('every credit is its own debit’s amount, to its own account', same.n === 0);
   check('a free Generate has nothing to credit back', !(await creditBack(S, undefined, 'failed')));
+
+  // Turning it off stops new credits, never hides the ones already given (owner, 2026-10-23).
+  const given = await credits();
+  const bOn = await balanceUsd(S, acct);
+  P.creditBack = false;
+  check('turned off after credits were given: the balance still counts them', given > 0 && Math.abs((await balanceUsd(S, acct)) - bOn) < 1e-6, JSON.stringify({ given, bOn }));
+  const offAgain = await paidPicture(S, -acct, req, { checkText: 'a quiet lake', make: unused });
+  check(
+    'while off, a failed Generate stays charged, makes no credit and doesn’t say "added back"',
+    !offAgain.ok && Math.abs((await balanceUsd(S, acct)) - (bOn - price)) < 1e-6 && (await credits()) === given && !offAgain.error.includes(IMAGE_WORDING.prepaid.creditedBack) && offAgain.extra.creditedBack === undefined,
+    JSON.stringify(offAgain),
+  );
+  const [offDebit] = await sql`select id::int as id from studio.wallet_debits order by id desc limit 1`;
+  check('while off, nothing can be credited back', !(await creditBack(S, offDebit.id, 'failed')) && (await credits()) === given);
+  P.creditBack = true;
+  const bBack = await balanceUsd(S, acct);
+  const onAgain = await paidPicture(S, -acct, req, { checkText: 'a quiet lake', make: unused });
+  check('turned back on: a failed Generate is credited back as before, and the person is told', !onAgain.ok && Math.abs((await balanceUsd(S, acct)) - bBack) < 1e-6 && (await credits()) === given + 1 && onAgain.error.endsWith(IMAGE_WORDING.prepaid.creditedBack), JSON.stringify(onAgain));
   P.creditBack = true;
   globalThis.fetch = realFetch;
 }
