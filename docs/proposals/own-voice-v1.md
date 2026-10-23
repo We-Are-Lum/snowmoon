@@ -7,6 +7,13 @@ and point 3 naming Modal (owner, same day).
 The approved wording is `config/consent-own-voice.json` (kind `own_voice`); its
 sha256 is recorded with each agreement, as for `own-words`.
 
+Point 3's promise that our Modal server deletes each recording right after
+conversion is proven on `modal/chatterbox_vc.py` by `npm run check:modal-vc`
+and `P1h` in `check:principles`, without Modal and without spending; what
+that covers, what it doesn't, and what Modal itself keeps are in "The Modal
+conversion" below. Nothing shows this consent until `/record` exists, and
+then only while that proof passes (`P1i`).
+
 Agreed once per performer, before their first take is converted. A performer
 who isn't signed in (a friend recording offline) agrees in writing, and the
 signed copy's sha256 is recorded instead; the copy stays private.

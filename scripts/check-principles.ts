@@ -438,6 +438,28 @@ add({
   },
 });
 
+add({
+  id: 'P1i',
+  principle: 1,
+  name: 'the own-voice-v1 consent (config/consent-own-voice.json) shows nowhere until /record exists, and then only with P1h passing',
+  load: async () => ({
+    record: existsSync(path.join(ROOT, 'src/app/record')),
+    users: walk('src', /\.(ts|tsx)$/).filter((f) => /consent-own-voice/.test(read(f))),
+    proof: [] as string[],
+  }),
+  run: ({ record, users, proof }) => {
+    // Owner, 2026-10-23: "Ship own-voice-v1 only after that passes" (the proof in P1h).
+    if (!record) return (users as string[]).map((f) => `${f} uses the own-voice-v1 consent, but /record does not exist yet`);
+    const src = read(MODAL_VC_FILE);
+    const p = (proof as string[]).length ? proof : [...modalVcStatic(src), ...modalVcRun(src).problems];
+    return (p as string[]).map((x) => `/record shows own-voice-v1 while the Modal proof fails: ${x}`);
+  },
+  plant: (c) => {
+    c.users.push('src/app/planted/page.tsx');
+    c.proof.push('planted: the per-call folder is not removed');
+  },
+});
+
 // ---------------------------------------------------------------------------
 // P2. AI use declared on every element; the book's text never altered; nothing
 //     generated presented as the author's.
