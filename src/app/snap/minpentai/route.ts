@@ -58,13 +58,9 @@ export async function GET(request: Request) {
   // A challenge's first page is the same for everyone (no Resume on it).
   if (ch) return snap(intro(h, ch.c.ver, 'no', ch), { 'Cache-Control': 'public, max-age=3600', Vary: 'Accept' });
   // A signed viewer (optional): offer Resume only if they have a match kept. Anonymous: always
-  // offer it, and the POST (always signed) finds out. A viewer we can't verify (a bad header, the hub
-  // down) gets the anonymous page rather than an error, so the cast still shows the snap.
-  let who = await viewer(request, h.base);
-  if (who && 'error' in who) {
-    console.log(JSON.stringify({ snap: 'minpentai', viewer: who.error, status: who.status }));
-    who = null;
-  }
+  // offer it, and the POST (always signed) finds out.
+  const who = await viewer(request, h.base);
+  if (who && 'error' in who) return Response.json({ error: who.error }, { status: who.status, headers: { 'Access-Control-Allow-Origin': '*' } });
   const vary = { Vary: 'Accept, X-Snap-Payload' };
   if (!who) return snap(intro(h, ver, 'maybe'), { 'Cache-Control': 'public, max-age=300', ...vary });
   const kept = await load(who.fid);
