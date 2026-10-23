@@ -4,7 +4,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { db } from '~/lib/db';
 import { appUrl } from '~/lib/config';
-import { getAdaptation, getVersion, handleFor, ownMedia } from '~/lib/adaptation-pages';
+import { getAdaptation, getVersion, ownMedia, sceneHandleFor } from '~/lib/adaptation-pages';
 import { boardById, boardFrames } from '~/lib/remix/storyboards';
 import { credit } from '~/lib/wallet/credit';
 import { HideButton, ShareRow } from '../../remix/remix-actions';
@@ -27,7 +27,8 @@ async function load(id: string) {
   // A linked wallet's storyboard shows under its Farcaster name (owner, 2026-10-22; src/lib/wallet/credit.ts).
   const [b] = await credit(sql, [made], (x) => x.person, (x, fid, name) => ({ ...x, person: fid, byName: name }));
   const [adaptation, version, frames] = await Promise.all([getAdaptation(b.adaptationId), getVersion(b.versionId), boardFrames(sql, b)]);
-  const handle = version ? await handleFor(version.author) : null;
+  // The scene's link: a linked wallet's version lives under its FID's name (owner, 2026-10-22).
+  const handle = version ? await sceneHandleFor(version.author) : null;
   // The maker's public profile, which the byline links to (owner, 2026-10-18).
   const maker = await profileHandle(b.person);
   const by = b.byName ? (b.person < 0 ? b.byName : `@${b.byName}`) : b.person > 0 ? `FID ${b.person}` : 'a wallet account';

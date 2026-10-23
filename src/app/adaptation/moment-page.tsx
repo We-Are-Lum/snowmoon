@@ -1,12 +1,12 @@
 import Link from 'next/link';
-import { notFound, redirect } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { APP_NAME, appUrl } from '~/lib/config';
 import { PAPER } from '~/lib/tokens';
 import { authorVersions, editorVersion, ownMedia, type Version } from '~/lib/adaptation-pages';
 import { deliveryFor } from '~/lib/scene-delivery';
 import { isShotId, momentShot, type MomentLine, type MomentShot } from '~/lib/moments';
-import { NothingHere, loadScene, type SceneParams } from './scene-page';
+import { NothingHere, followScene, loadScene, type SceneParams } from './scene-page';
 import { MomentPlay } from './moment-play';
 import { agentsOn } from '~/lib/agents/core';
 import { MomentTell } from '~/components/agents/moment-tell';
@@ -28,9 +28,10 @@ async function loadMoment(p: MomentParams) {
   const shotId = decodeURIComponent(p.shot);
   if (!isShotId(shotId)) return { kind: 'not-found' as const };
   const s = await loadScene({ id: p.id, handle: p.handle });
-  if (s.kind === 'redirect') return { kind: 'redirect' as const, to: `${s.to.replace(/-[a-z0-9-]*$/, '')}/m/${shotId}` };
+  if (s.kind === 'redirect') return { kind: 'redirect' as const, to: `${s.to.replace(/-[a-z0-9-]*$/, '')}/m/${shotId}`, permanent: s.permanent };
   if (s.kind !== 'scene') return { kind: s.kind };
-  const versions = await authorVersions(s.version.author, s.adaptation.id);
+  // The person in the URL: a FID's moment also lays out its linked wallets' versions (owner, 2026-10-22).
+  const versions = await authorVersions(s.person, s.adaptation.id);
   const columns: Column[] = [];
   for (const v of versions) {
     const ed = await editorVersion(v);
@@ -83,7 +84,7 @@ function Whose({ by }: { by: MomentLine['by'] }) {
 
 export async function MomentPage({ p }: { p: MomentParams }) {
   const m = await loadMoment(p);
-  if (m.kind === 'redirect') redirect(m.to);
+  if (m.kind === 'redirect') followScene(m);
   if (m.kind === 'not-found') notFound();
   if (m.kind === 'hidden') return <NothingHere />;
   if (m.kind !== 'moment') return <NothingHere />;

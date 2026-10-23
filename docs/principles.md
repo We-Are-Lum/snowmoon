@@ -50,6 +50,22 @@ coding agent and its helpers are in `docs/prompts/`.
   the reader's device over the text served whole by `/api/book/text`; the
   query is never sent anywhere, kept or published, and the page may fetch
   only that text).
+- `P1h` (raw voice takes exception, owner 2026-10-23): our Modal conversion
+  code (`modal/chatterbox_vc.py`) keeps no recording. A static read finds no
+  volume write or `.commit()`, no Dict or Queue, no Web Function (Modal keeps
+  their inputs up to 7 days), no network client, no log of the audio, and
+  every temporary folder removed in a `finally`. A local run with a stub
+  model and a stub `modal` (`scripts/modal_vc_proof.py`, no Modal, no
+  spending) leaves no new file under the temp root, the weights path, the
+  working folder or HOME, including when the model raises, times out or is
+  cancelled; no log line or reply holds the input, its base64 or hex; and no
+  live object holds it afterwards. `npm run check:modal-vc` also proves ten
+  planted violations are each caught. Not covered: what Modal's platform
+  keeps outside our code (`docs/proposals/own-voice-v1.md`).
+- `P1i`: the own-voice-v1 consent (`config/consent-own-voice.json`) is used
+  by no page or code under `src/` until `src/app/record` exists, and once it
+  does, only while the `P1h` proof passes (owner, 2026-10-23: "Ship
+  own-voice-v1 only after that passes").
 - `npm run test:db`: after 0005, a recipe is public only if it made a
   published element version or a segment of a narration that is not hidden;
   drafts, hidden work and abandoned attempts stay private.
@@ -70,8 +86,15 @@ are never published. The reason is privacy: a raw recording of a person's
 voice is enough to clone it. The converted line is the published source of
 that line, and its recipe gives the model and revision, the settings, the
 character's reference clip and the sha256 of the raw take, but not the take.
-Conversion runs on the performer's own machine, so the take never leaves it,
-and takes are kept in a private folder outside the repository and outside R2.
+**The rule, in the owner's words (2026-10-22; reread by the owner 2026-10-23):** "Raw recordings are never published and never sent to any service that processes them; they
+stay on my devices and my own encrypted storage." **Temporary exception** (owner, 2026-10-22: "Let's allow a hosted
+service with performers opt in until we get an app for it live", and "hosted means our Modal setup only").
+It ends when the recording app is live. Until then, a recording may be converted on the project's own Modal
+deployment of the allowlisted conversion model, and nowhere else, only if its performer opts in for that
+recording (`own-voice-v1`); it is never published or kept there. No other hosted service, such as fal, is used
+for a recording (`config/models.json`, `chatterbox-vc`). In practice: conversion runs on the performer's own device
+(their computer, or their browser), and takes are kept in a private folder outside the repository and
+outside R2, or in the performer's own end-to-end encrypted storage (iCloud with Advanced Data Protection).
 The performer agrees to `own-voice-v1` (`config/consent.json`) first. Every
 performer gets the same terms. Anyone can still re-run the conversion with
 their own voice or another reference clip; they cannot reproduce the exact

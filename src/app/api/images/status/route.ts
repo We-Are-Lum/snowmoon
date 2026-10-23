@@ -12,6 +12,7 @@ import { keptValue } from '~/lib/images/neynar';
 import { GATE_WORDING, openToEveryone } from '~/lib/images/gate';
 import { IMAGE_WORDING } from '~/lib/images/wording';
 import { balanceUsd, prepaidOpen, priceUsd } from '~/lib/wallet/credits';
+import { generateReserveUsd } from '~/lib/images/price';
 import { composerPicks, listDesigns, myPicks, startingStyleRetired, type MyPick } from '~/lib/images/designs';
 import { designByline } from '~/lib/images/byline';
 import { inPassage, sheetCharacter, sheetPlace, shorthandLine } from '~/lib/images/sheets';
@@ -21,13 +22,21 @@ const chip = (p: MyPick) => ({
   versionId: p.versionId, kind: p.kind, entity: p.entity, title: p.title, by: designByline(p.byName, p.byFid, p.byRole), versionNo: p.versionNo, text: p.text,
   views: (['front', 'side', 'back'] as const).filter((k) => p.views[k]).length, drafted: Boolean(p.assist),
 });
+/** Every picked style, newest pick first (the composer starts with that one, for this image only; decision 3), and each picked sheet. */
+const offer = (picks: MyPick[]) => {
+  const o = composerPicks(picks);
+  return { styles: o.styles.map(chip), characters: o.characters.map(chip), places: o.places.map(chip) };
+};
 
 /**
  * What the composer needs before Generate: may this person generate, and how many are left today.
  * Never asks Neynar (it is asked only at Generate): `eligible` is true for an invited FID, true or
  * false from a value kept in the last day, and null when none is kept (Generate will look it up).
- * Step 4: the person's own picks (private; only ever their own), offered as "for this image only";
- * picking is open to everyone signed in (owner, 2026-10-10), creating designs to invited FIDs only.
+ * Step 4: the person's own picks (private; only ever their own), offered as "for this image only".
+ * Picks are open to everyone signed in, Farcaster accounts invited or not and wallet accounts (owner, 2026-10-19;
+ * at Generate, 2026-10-23: "open picks to everyone at Generate, wallets too"); creating designs stays invited-only.
+ * A wallet account gets the price of every Generate it can start: pricesUsd[n] with n reference pictures
+ * (src/lib/images/price.ts), the same number reserve() charges.
  */
 export async function GET(request: Request) {
   // A Farcaster FID, or minus a wallet account's number (prepaid; owner, 2026-10-13).
@@ -71,19 +80,16 @@ export async function GET(request: Request) {
     if (fid < 0) {
       // A wallet account: no daily count and no Neynar score; its balance pays (owner, 2026-10-13).
       const open = prepaidOpen() && openToEveryone().open;
-      const prepaid = { balanceUsd: await balanceUsd(sql, -fid), priceUsd: priceUsd(IMAGES.reserveUsd), markup: IMAGES.prepaid.markup };
+      const prices = Array.from({ length: IMAGES.maxReferences + 1 }, (_, n) => priceUsd(generateReserveUsd(n)));
+      const prepaid = { balanceUsd: await balanceUsd(sql, -fid), priceUsd: prices[0], pricesUsd: prices, markup: IMAGES.prepaid.markup };
       return NextResponse.json(
-        { ...base, signedIn: true, fid, invited: false, eligible: open, refusal: open ? undefined : prepaidOpen() ? GATE_WORDING.notOpen : IMAGE_WORDING.prepaid.notOpen, consented, left, publishesLeft: publishes, picks: { styles: [], characters: [], places: [] }, prepaid },
+        { ...base, signedIn: true, fid, invited: false, eligible: open, refusal: open ? undefined : prepaidOpen() ? GATE_WORDING.notOpen : IMAGE_WORDING.prepaid.notOpen, consented, left, publishesLeft: publishes, picks: offer(picks), prepaid },
         { headers: { 'Cache-Control': 'no-store' } },
       );
     }
     const eligible = invited ? true : kept === null ? null : kept >= IMAGES.neynarMinScore;
     const refusal = eligible === false && kept !== null ? GATE_WORDING.below(kept) : undefined;
-    // Picks are invited-only for now (2026-10-10): others are offered none, so no reference pictures either.
-    const offered = composerPicks(invited ? picks : []);
-    // Every picked style, newest pick first; the composer starts with that one, for this image only (decision 3).
-    const mine = { styles: offered.styles.map(chip), characters: offered.characters.map(chip), places: offered.places.map(chip) };
-    return NextResponse.json({ ...base, perDay: perDay(fid), signedIn: true, fid, invited, eligible, refusal, consented, left, publishesLeft: publishes, picks: mine }, { headers: { 'Cache-Control': 'no-store' } });
+    return NextResponse.json({ ...base, perDay: perDay(fid), signedIn: true, fid, invited, eligible, refusal, consented, left, publishesLeft: publishes, picks: offer(picks) }, { headers: { 'Cache-Control': 'no-store' } });
   } catch (e) {
     console.error('images status failed', (e as { code?: string }).code ?? (e as Error).name);
     return NextResponse.json({ ...base, ready: false, signedIn: true, fid, invited, eligible: invited ? true : null }, { headers: { 'Cache-Control': 'no-store' } });

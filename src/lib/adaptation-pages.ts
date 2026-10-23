@@ -1,6 +1,7 @@
 import 'server-only';
 import { db } from './db';
 import { forgetName, lookupFid, lookupName, NAME } from './names';
+import { linkedTo, walletsOf } from './wallet/credit';
 
 /**
  * Adaptation pages: /@<fname>/<id>, /@<fname>/<id>/v/<n>, /<id> (docs/proposals/adaptation-urls.md).
@@ -186,12 +187,15 @@ export async function editorVersion(v: Version): Promise<Version> {
  * latest public version under that root (forks of forks included); otherwise null ("nothing here yet").
  */
 export async function shownVersion(person: Person, adaptationId: number): Promise<Version | null> {
+  // A FID's page also shows what its linked wallets made (owner, 2026-10-22): its own choice first, then a linked
+  // wallet's choice, then the latest public version any of them made. Without a link this is the person alone.
+  const persons = await shownAs(person);
   const rows = await fromTables((sql) => sql<VersionRow[]>`
     select v.id, v.adaptation_id, v.parent_version_id, v.author_person, v.recipe, v.created_at, v.hidden
     from studio.adaptation_versions v
-    left join studio.adaptation_pages p on p.person = ${person} and p.adaptation_id = ${adaptationId} and p.version_id = v.id
-    where v.adaptation_id = ${adaptationId} and not v.hidden and (p.version_id is not null or v.author_person = ${person})
-    order by (p.version_id is not null) desc, v.created_at desc, v.id desc
+    left join studio.adaptation_pages p on p.person in ${sql(persons)} and p.adaptation_id = ${adaptationId} and p.version_id = v.id
+    where v.adaptation_id = ${adaptationId} and not v.hidden and (p.version_id is not null or v.author_person in ${sql(persons)})
+    order by coalesce(p.person = ${person}, false) desc, (p.version_id is not null) desc, v.created_at desc, v.id desc
     limit 1`);
   if (rows) return rows[0] ? toVersion(rows[0]) : null;
   const page = STATIC.pages.find((p) => p.person === person && p.adaptationId === adaptationId);
@@ -223,11 +227,12 @@ export async function publicCatalogue(): Promise<{ adaptation: Adaptation; versi
  * Each is then shown with shownVersion, so a profile shows exactly what /@<handle>/<id> shows.
  */
 export async function adaptationsOf(person: Person): Promise<Adaptation[]> {
+  const persons = await shownAs(person);
   const rows = await fromTables((sql) => sql<{ id: string; owner_person: string; title: string }[]>`
     select a.id, a.owner_person, a.title from studio.adaptations a
-    where exists (select 1 from studio.adaptation_versions v where v.adaptation_id = a.id and v.author_person = ${person} and not v.hidden)
+    where exists (select 1 from studio.adaptation_versions v where v.adaptation_id = a.id and v.author_person in ${sql(persons)} and not v.hidden)
        or exists (select 1 from studio.adaptation_pages p join studio.adaptation_versions v on v.id = p.version_id
-                  where p.person = ${person} and p.adaptation_id = a.id and not v.hidden)
+                  where p.person in ${sql(persons)} and p.adaptation_id = a.id and not v.hidden)
     order by a.id`);
   if (rows) return rows.map((r) => ({ id: Number(r.id), owner: Number(r.owner_person), title: r.title }));
   const ids = new Set([
@@ -275,10 +280,11 @@ export async function versionsBy(person: Person): Promise<(Version & { title: st
  */
 export async function authorVersions(person: Person, adaptationId: number): Promise<Version[]> {
   const shown = await shownVersion(person, adaptationId);
+  const persons = await shownAs(person);
   const rows = await fromTables((sql) => sql<VersionRow[]>`
     select id, adaptation_id, parent_version_id, author_person, recipe, created_at, hidden
     from studio.adaptation_versions
-    where adaptation_id = ${adaptationId} and author_person = ${person} and not hidden
+    where adaptation_id = ${adaptationId} and author_person in ${sql(persons)} and not hidden
     order by id desc`);
   const all = rows ? rows.map(toVersion) : STATIC.versions.filter((v) => v.adaptationId === adaptationId && v.author === person && !v.hidden).sort((a, b) => b.id - a.id);
   return shown ? [shown, ...all.filter((v) => v.id !== shown.id)] : all;
@@ -374,6 +380,40 @@ export async function handleFor(person: Person): Promise<string | null> {
     select fname from studio.account_names where person = ${person} order by seen_at desc limit 1`);
   if (seen?.[0]) return seen[0].fname;
   return Object.entries(STATIC.names).find(([, fid]) => fid === person)?.[0] ?? null;
+}
+
+/**
+ * Scenes made by a wallet that is linked to a Farcaster account show under the Farcaster name (owner, 2026-10-22;
+ * the same rule as images, frames and storyboards in src/lib/wallet/credit.ts). Shown, not rewritten: every version
+ * keeps its author_person (the wallet account), and the link is read on each request, so an unlink shows the
+ * scenes as the wallet's again at once. While WALLET_LINKS.creditEarlierWork is off, or with no database, nothing
+ * here changes anything.
+ */
+
+/** The person a person's scenes are shown under: a linked wallet's FID, otherwise the person. */
+export async function sceneOwner(person: Person): Promise<Person> {
+  if (person >= 0) return person;
+  const links = await linkedTo(db(), [person]).catch(() => new Map<number, number>());
+  return links.get(person) ?? person;
+}
+
+/** Whose scenes a person's URLs show: a FID and the wallets linked to it; anyone else, themselves. */
+export async function shownAs(person: Person): Promise<Person[]> {
+  if (person <= 0) return [person];
+  return [person, ...(await walletsOf(db(), person).catch(() => []))];
+}
+
+/**
+ * The handle a person's scene URLs use: for a linked wallet, its FID's name; otherwise handleFor. A linked wallet
+ * whose FID has no name keeps its address (there is no Farcaster name to show, and no /@ URL to move to).
+ */
+export async function sceneHandleFor(person: Person): Promise<string | null> {
+  const owner = await sceneOwner(person);
+  if (owner !== person) {
+    const name = await handleFor(owner);
+    if (name) return name;
+  }
+  return handleFor(person);
 }
 
 /** "Fifteen Days" → "fifteen-days": the words a page's link carries after its id. */

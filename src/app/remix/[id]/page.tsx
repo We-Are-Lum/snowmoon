@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { db } from '~/lib/db';
 import { APP_NAME, appUrl } from '~/lib/config';
 import { AI_DECLARED } from '~/lib/ai-declared';
-import { getAdaptation, handleFor } from '~/lib/adaptation-pages';
+import { getAdaptation, sceneHandleFor } from '~/lib/adaptation-pages';
 import { frameById, type Frame } from '~/lib/remix/frames';
 import { credit } from '~/lib/wallet/credit';
 import { HideButton, ShareRow } from '../remix-actions';
@@ -30,7 +30,8 @@ async function load(id: string) {
   const [f] = await credit(sql, [made], (x) => x.person, (x, fid, name) => ({ ...x, person: fid, byName: name }));
   const adaptation = await getAdaptation(f.adaptationId);
   const [v] = await sql`select author_person from studio.adaptation_versions where id = ${f.versionId}`;
-  const handle = v ? await handleFor(Number(v.author_person)) : null;
+  // The scene's link: a linked wallet's version lives under its FID's name (owner, 2026-10-22).
+  const handle = v ? await sceneHandleFor(Number(v.author_person)) : null;
   // The maker's public profile, which the byline links to (owner, 2026-10-18).
   const maker = await profileHandle(f.person);
   return { f, title: adaptation?.title ?? 'a scene', handle, maker };

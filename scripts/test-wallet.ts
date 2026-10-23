@@ -658,6 +658,113 @@ await sql.end();
   }
 }
 
+// --- Picks at Generate for a wallet account, and the price shown is the price charged (owner, 2026-10-23) ---------
+// "#38: (a) open picks to everyone at Generate, wallets too. If a pick raises the price, the Generate price must
+// include it." Through the real routes: /api/images/status (what the composer shows) and /api/images/generate (what
+// reserve() takes), for a wallet account, without a pick, with a pick (its text only) and with the pick's pictures
+// as references. Nothing paid is called: the prompt check is offline, so each Generate is credited back.
+{
+  const { createHash } = await import('node:crypto');
+  const { db: routeDb } = await import('../src/lib/db');
+  const D = routeDb()!;
+  const S = D as unknown as Sql;
+  const Des = await import('../src/lib/images/designs');
+  const { referenceCount, generateReserveUsd, paysFor } = await import('../src/lib/images/price');
+  const { recordConsent, consentWording } = await import('../src/lib/consent');
+  const { loadChapter } = await import('../src/lib/book');
+  const status = await import('../src/app/api/images/status/route');
+  const gen = await import('../src/app/api/images/generate/route');
+  const env = { FAL_KEY: process.env.FAL_KEY, R2: process.env.R2_IMAGES_PUBLIC_URL, LEGAL: process.env.APP_LEGAL_PAGES, ALERT: process.env.SNOWMOON_ALERT_URL };
+  process.env.FAL_KEY = 'test-not-a-key';
+  process.env.R2_IMAGES_PUBLIC_URL = 'https://pictures.test';
+  process.env.APP_LEGAL_PAGES = 'terms+privacy';
+  process.env.SNOWMOON_ALERT_URL = 'https://alerts.test/x';
+  // Three views, served from the public bucket stand-in with their own sha256; anything else is offline (the prompt check too).
+  const views = ['front', 'side', 'back'].map((k) => {
+    const bytes = Buffer.from(`view ${k}`);
+    return { k, bytes, sha256: createHash('sha256').update(bytes).digest('hex'), url: `https://pictures.test/${k}.jpg` };
+  });
+  const realFetch = globalThis.fetch;
+  globalThis.fetch = (async (input: string | URL | Request) => {
+    const url = String(input instanceof Request ? input.url : input);
+    const v = views.find((x) => x.url === url);
+    if (v) return new Response(v.bytes);
+    throw new Error('offline');
+  }) as typeof fetch;
+  const viewPic = (v: (typeof views)[number]) => ({ url: v.url, sha256: v.sha256, recipe: { prompt: 'p', model: 'flux2-klein-4b-edit', endpoint: 'fal-ai/flux-2/klein/4b/edit', host: 'fal.ai', settings: {}, seed: 1, request_id: 'r', cost_usd: 0.01, made_at: '2026-10-23T00:00:00Z', width: 576, height: 768, checks: { prompt: { model: 'g', verdict: 'ok' as const }, host_safety_checker: 'passed' as const }, assist: null } });
+  // An earlier check fills today's prepaid cap on purpose; this one starts from an empty day.
+  await db.exec(`reset role; delete from studio.image_costs where funded = 'prepaid'; set role studio_writer;`);
+  await db.exec(`insert into studio.works values ('snowmoon','Snowmoon','GPL-3.0','x') on conflict do nothing`);
+  const sheet = await Des.makeDesign(S, { fid: 6786, mode: 'create', kind: 'character', character: Des.bookCharacter('zei')!, body: { title: '', text: 'Eighteen, slight, short dark hair', samples: [], views: { front: viewPic(views[0]), side: viewPic(views[1]), back: viewPic(views[2]) }, by_name: 'nate', by_name_source: 'relay', assist: null } });
+
+  const payer = privateKeyToAccount('0x8b3a350cf5c34c9194ca85829a2df0ec3153be0318b5e2d3348e872092edffba');
+  const acctP = await accountFor(S, payer.address);
+  await credit(S, acctP, { txHash: keccak256(toHex('picks price payment')), token: 'USDC', amount: 1_000_000n, usd: 1, blockNumber: 100n });
+  await recordConsent(-acctP, consentWording().sha256);
+  const auth = { authorization: `Bearer ${signSession(acctP, payer.address)}` };
+  const ch = loadChapter(1)!;
+  const start = ch.blocks[0].idx;
+  const shown = async () => (await (await status.GET(new Request(`https://snowmoon.party/api/images/status?chapter=1&start=${start}&end=${start}`, { headers: auth }))).json()) as {
+    prepaid?: { balanceUsd: number; priceUsd: number; pricesUsd: number[] }; picks: { characters: { versionId: string; views: number }[] }; eligible: boolean;
+  };
+  const lastDebit = async () => (await D`select id::int as id, usd::float8 as usd from studio.wallet_debits where account_id = ${acctP} order by id desc limit 1`)[0] as { id: number; usd: number } | undefined;
+  const creditOf = async (id: number) => (await D`select usd::float8 as usd from studio.wallet_credits where debit_id = ${id}`)[0]?.usd as number | undefined;
+  const generate = (extra: Record<string, unknown>) =>
+    gen.POST(new Request('https://snowmoon.party/api/images/generate', { method: 'POST', headers: { ...auth, 'content-type': 'application/json' }, body: JSON.stringify({ chapter: 1, start, end: start, prompt: 'a quiet lake at dusk', style: 'techno-vistas', ...extra }) }));
+  // The composer's own price: pricesUsd[n], n counted from the chosen sheets' views as the server counts them.
+  const composerPrice = (st: Awaited<ReturnType<typeof shown>>, chosen: string[], reference: boolean) => {
+    const chips = st.picks.characters.filter((c) => chosen.includes(c.versionId));
+    const n = reference && chips.some((c) => c.views > 0) ? referenceCount(chips.map((c) => c.views)) : 0;
+    return st.prepaid!.pricesUsd[n];
+  };
+  const tryOne = async (label: string, st: Awaited<ReturnType<typeof shown>>, chosen: string[], reference: boolean) => {
+    const price = composerPrice(st, chosen, reference);
+    const before = await balanceUsd(S, acctP);
+    const prev = (await lastDebit())?.id ?? 0;
+    const res = await generate({ characters: chosen, reference });
+    const out = await res.json();
+    const d = await lastDebit();
+    const charged = d && d.id !== prev ? d.usd : null;
+    check(`${label}: the price shown is the amount charged`, charged !== null && Math.abs(charged - price) < 1e-9, JSON.stringify({ price, charged, status: res.status, out }));
+    check(`${label}: the Generate stopped at the offline prompt check, after the charge`, res.status === 503 && /prompt check did not answer/.test(out.error) && out.creditedBack === true, JSON.stringify(out));
+    check(`${label}: credited back exactly what was charged`, d !== undefined && (await creditOf(d.id)) === d.usd && Math.abs((await balanceUsd(S, acctP)) - before) < 1e-9);
+    return price;
+  };
+
+  const none = await shown();
+  check('a wallet account is told every Generate price it can start, as reserve() charges it', Array.isArray(none.prepaid?.pricesUsd) && none.prepaid!.pricesUsd.length === IMAGES.maxReferences + 1 && none.prepaid!.pricesUsd.every((p, n) => p === priceUsd(generateReserveUsd(n))) && none.prepaid!.priceUsd === priceUsd(IMAGES.reserveUsd), JSON.stringify(none.prepaid));
+  check('a wallet account may generate here (the test setup)', none.eligible === true);
+  check('no pick yet: none offered', none.picks.characters.length === 0);
+  const p0 = await tryOne('a wallet Generate without a pick', none, [], false);
+
+  await Des.setPick(S, -acctP, sheet.versionId);
+  const withPick = await shown();
+  check('a wallet account is offered its own picks at Generate', withPick.picks.characters.map((c) => c.versionId).join() === sheet.versionId && withPick.picks.characters[0].views === 3, JSON.stringify(withPick.picks));
+  const p1 = await tryOne('a wallet Generate with a pick (its text added)', withPick, [sheet.versionId], false);
+  check('a pick used as text does not change the price', p1 === p0);
+  const p2 = await tryOne('a wallet Generate with a pick and its pictures as references', withPick, [sheet.versionId], true);
+  check('a pick\'s pictures as references raise the price, and the price shown includes them', p2 === priceUsd(IMAGES.editReserveUsd(3)) && p2 > p0, `${p0} ${p2}`);
+  check('the balance counts Generates in whole tenths of a cent', paysFor(0.018, 0.009) === 2 && paysFor(0.0179, 0.009) === 1 && paysFor(1, 0) === 0);
+  // Someone else's pick is never used, wallet or not.
+  const other2 = await accountFor(S, other.address);
+  check('a wallet account can\'t use another account\'s pick', (await Des.myPicks(S, -other2)).length === 0);
+
+  globalThis.fetch = realFetch;
+  for (const [k, v] of [['FAL_KEY', env.FAL_KEY], ['R2_IMAGES_PUBLIC_URL', env.R2], ['APP_LEGAL_PAGES', env.LEGAL], ['SNOWMOON_ALERT_URL', env.ALERT]] as const) {
+    if (v === undefined) delete process.env[k];
+    else process.env[k] = v;
+  }
+}
+// The composer and Generate count reference pictures with the same helper, and price them with the same reserve.
+{
+  const composer = readFileSync(path.join(ROOT, 'src/components/image-composer.tsx'), 'utf8');
+  const genSrc = readFileSync(path.join(ROOT, 'src/app/api/images/generate/route.ts'), 'utf8');
+  const statusSrc = readFileSync(path.join(ROOT, 'src/app/api/images/status/route.ts'), 'utf8');
+  check('the composer shows pricesUsd[the reference pictures it will send]', /referenceCount\(sheetChips\.map\(\(c\) => c\.views\)\)/.test(composer) && /pricesUsd\?\.\[references\]/.test(composer) && /priceOnButton\(exactDollars\(shownPrice\)\)/.test(composer));
+  check('Generate reserves generateReserveUsd(the pictures it sends), and the status route prices the same', /reserveUsd: generateReserveUsd\(pictures\.length\)/.test(genSrc) && /priceUsd\(generateReserveUsd\(n\)\)/.test(statusSrc));
+  check('Generate no longer refuses a wallet account\'s reference pictures', !/aren’t available for wallet accounts/.test(genSrc));
+}
+
 { const { db: d } = await import('../src/lib/db'); await d()?.end(); }
 await server.stop();
 await db.close();
