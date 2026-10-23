@@ -26,6 +26,7 @@ import { GET as runRoute } from '../src/app/snap/minpentai/run/route';
 import { GET as snapRoute } from '../src/app/snap/minpentai/route';
 import { GET as cardRoute } from '../src/app/api/minpentai-challenge-card/route';
 import { sender } from '../src/lib/minpentai/snap/auth';
+import nextConfig from '../next.config';
 import { CHALLENGE_PATH, decChallenge, splitChallenge } from '../src/lib/minpentai/snap/challenge';
 import { settings, versionOf } from '../src/lib/minpentai/snap/versions';
 
@@ -521,6 +522,26 @@ async function main() {
     for (const body of [{ header: 'x', payload: 'x', signature: 'x' }, { header: 'x', payload: '', signature: 'x' }]) {
       const r = await sender(new Request('https://snowmoon.party/snap/minpentai?a=start', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) }), 'https://snowmoon.party');
       assert.ok(!r.ok && r.status === 400, JSON.stringify(r));
+    }
+  });
+
+  check('a first-page GET whose viewer header fails verification gets the anonymous snap, not an error', async () => {
+    const r = await snapRoute(new Request('https://snowmoon.party/snap/minpentai', { headers: { accept: 'application/vnd.farcaster.snap+json', 'x-snap-payload': 'not-a-jfs' } }));
+    assert.equal(r.status, 200);
+    assert.ok(r.headers.get('content-type')?.startsWith('application/vnd.farcaster.snap+json'));
+    assert.ok(JSON.stringify(await r.json()).includes('Start a match'));
+  });
+
+  check('next.config: the snap links (/minpentai, /minpentai/play, challenges) send preflights and snap requests to the snap route; browsers get the page with Link', async () => {
+    const rw = await (nextConfig.rewrites as () => Promise<{ beforeFiles: { source: string; has?: { key: string }[]; destination: string }[] }>)();
+    for (const source of ['/minpentai', '/minpentai/play', '/minpentai/c/:seg']) {
+      assert.ok(rw.beforeFiles.some((r) => r.source === source && r.has?.[0].key === 'access-control-request-method' && r.destination === '/snap/minpentai'), `${source}: preflight`);
+      assert.ok(rw.beforeFiles.some((r) => r.source === source && r.has?.[0].key === 'accept' && r.destination.startsWith('/snap/minpentai')), `${source}: snap Accept`);
+    }
+    const hs = await (nextConfig.headers as () => Promise<{ source: string; headers: { key: string; value: string }[] }[]>)();
+    for (const source of ['/minpentai', '/minpentai/play', '/minpentai/c/:seg']) {
+      const link = hs.find((x) => x.source === source)?.headers.find((x) => x.key === 'Link')?.value ?? '';
+      assert.ok(link.includes(`<${source}>`) && link.includes('rel="alternate"'), `${source}: Link`);
     }
   });
 
