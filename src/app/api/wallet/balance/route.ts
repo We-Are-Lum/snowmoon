@@ -4,6 +4,7 @@ import { db } from '~/lib/db';
 import { IMAGES, WALLET_LINKS } from '~/lib/config';
 import { isPayTo, linkOf } from '~/lib/wallet/links';
 import { balanceUsd, prepaidOpen, priceUsd } from '~/lib/wallet/credits';
+import { paysFor } from '~/lib/images/price';
 
 /** A wallet account's balance, what an image costs, and where to pay. */
 export async function GET(request: Request) {
@@ -18,7 +19,7 @@ export async function GET(request: Request) {
   const l = WALLET_LINKS.offer && !isPayTo(w.address) ? await linkOf(sql, w.account, w.address) : null;
   return NextResponse.json(
     {
-      address: w.address, balanceUsd: balance, priceUsd: price, generations: Math.floor(balance / price), markup: P.markup,
+      address: w.address, balanceUsd: balance, priceUsd: price, generations: paysFor(balance, price), markup: P.markup,
       open: prepaidOpen(), payTo: P.payTo, chainId: P.chainId, usdc: P.usdc, packsUsd: P.packsUsd, minUsd: P.minUsd,
       linkOffer: !!l && l.table && !l.link,
     },
