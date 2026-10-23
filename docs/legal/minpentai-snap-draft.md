@@ -6,8 +6,9 @@ check:principles P6k and P6l fail, and the merge waits.
 
 What ships: `snowmoon.party/minpentai` plays inside a Farcaster cast (the snap) when a Farcaster
 client asks for a snap; browsers get the page as before. Each tap reaches our server signed by the
-player's Farcaster app. To check the signature, the server asks a Farcaster hub (by default
-`rho.farcaster.xyz`, run by Farcaster) which signing keys the player's Farcaster ID has, and keeps
+player's Farcaster app. To check the signature, the server asks Neynar's Farcaster hub
+(`hub-api.neynar.com`, with the site's Neynar key; owner, 2026-10-22) which signing keys the
+player's Farcaster ID has, and keeps
 that answer in memory for five minutes. The match itself travels in the snap's own links, signed by
 us. We keep each Farcaster ID's latest match (seed, computer level, version, picked extra rule, and
 the placements of the finished turns) so the first page can offer "Resume"; it is deleted when the
@@ -24,12 +25,12 @@ onchain. "Keep playing in the app" opens Play with the match's seed and moves in
 
 > If you share a Minpentai challenge from a Farcaster cast, your Farcaster app posts it; its link carries the match's start (its random seed, the computer level and the extra rule) and your result (how and at which step it ended, how many towers were left and how many taps you used). It does not carry your moves or your Farcaster ID, though anyone who opens the link can read what it does carry. Its card is drawn from that link, and we keep nothing about it.
 
-## Privacy, section 7 ("Outside services and what they receive."), one sentence added to the Farcaster item
+## Privacy, section 7 ("Outside services and what they receive."), one sentence added to the Neynar item
 
-Added to the existing Farcaster item rather than as a new service, since the hub is Farcaster's
-(P6g's list of outside services is unchanged):
+Added to the existing Neynar item (P6g's list of outside services is unchanged; the Farcaster item
+is as on main):
 
-> When you play Minpentai inside a Farcaster cast, your Farcaster app signs each tap, and we ask a Farcaster hub (run by Farcaster) which signing keys your Farcaster ID has, to check the signature: the hub receives your Farcaster ID, and we keep its answer in memory for five minutes.
+> When you play Minpentai inside a Farcaster cast, your Farcaster app signs each tap, and we ask Neynar's Farcaster hub which signing keys your Farcaster ID has, to check the signature: Neynar receives your Farcaster ID, and we keep its answer in memory for five minutes.
 
 ## Terms, section 1 ("Who runs this.")
 

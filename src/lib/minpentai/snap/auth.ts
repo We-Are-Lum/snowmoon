@@ -1,7 +1,10 @@
 /**
  * Who sent a snap POST (https://docs.farcaster.xyz/snap/auth): the JFS envelope parsed and its
  * payload checked by @farcaster/snap's parseRequest (schema, timestamp skew, audience), the
- * signature checked by @farcaster/jfs, and the signing key looked up on a hub. The lookup is the
+ * signature checked by @farcaster/jfs, and the signing key looked up on Neynar's hub (owner,
+ * 2026-10-22: Privacy §7 names Neynar), with the site's NEYNAR_API_KEY. Without the key, a
+ * deployment other than production asks Farcaster's own hub instead (development, the test
+ * project); production without it answers 503 rather than ask a hub Privacy doesn't name. The lookup is the
  * slow part (a request to the hub), so each FID's active keys are kept for five minutes; an
  * unknown key refreshes them once.
  *
@@ -13,12 +16,22 @@ import { verify } from '@farcaster/jfs';
 import { DEFAULT_SNAP_HUB_HTTP_BASE_URL, getActiveEd25519SignerKeysFromHubHttp, parseJfs, parseRequest } from '@farcaster/snap/server';
 
 const KEEP_MS = 5 * 60_000;
+export const NEYNAR_HUB = 'https://hub-api.neynar.com';
+
+/** Which hub to ask, or null when production has no Neynar key. */
+function hub(): { base: string; fetchFn?: typeof fetch } | null {
+  const key = process.env.NEYNAR_API_KEY;
+  if (key) return { base: NEYNAR_HUB, fetchFn: (url, init) => fetch(url, { ...init, headers: { ...(init?.headers as Record<string, string>), 'x-api-key': key } }) };
+  return process.env.VERCEL_ENV === 'production' ? null : { base: DEFAULT_SNAP_HUB_HTTP_BASE_URL };
+}
 const keys = new Map<number, { at: number; hex: Set<string> }>();
 
 async function activeKeys(fid: number, fresh: boolean): Promise<Set<string> | null> {
   const k = keys.get(fid);
   if (k && !fresh && Date.now() - k.at < KEEP_MS) return k.hex;
-  const r = await getActiveEd25519SignerKeysFromHubHttp(DEFAULT_SNAP_HUB_HTTP_BASE_URL, fid);
+  const h = hub();
+  if (!h) return null;
+  const r = await getActiveEd25519SignerKeysFromHubHttp(h.base, fid, { fetchFn: h.fetchFn, signal: AbortSignal.timeout(3000) });
   if (!r.ok) return null;
   const hex = new Set(r.signers.map((s) => Buffer.from(s.publicKey).toString('hex')));
   keys.set(fid, { at: Date.now(), hex });

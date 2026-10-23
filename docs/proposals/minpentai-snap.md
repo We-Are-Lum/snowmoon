@@ -133,7 +133,7 @@ Decisions: the snap merges first, on today's main (minpentai-one-engine rebases 
 
 ## Principles
 
-- **P6 (no third-party requests on pages; ratings private):** the snap is JSON drawn by Farcaster's client. Our server makes one outside request, to a Farcaster hub, to check who signed a tap (required by the snap spec). Nothing about players is stored. The browser fallback page links only to snowmoon.party. Pass.
+- **P6 (no third-party requests on pages; ratings private):** the snap is JSON drawn by Farcaster's client. Our server makes one outside request, to Neynar's Farcaster hub (owner, 2026-10-22; Farcaster's own hub outside production when there is no Neynar key), to check who signed a tap (required by the snap spec). Only the resume record (Privacy §4) is stored. The browser fallback page links only to snowmoon.party. Pass.
 - **P7 (not affiliated line on the first screen; no token):** the first card (and the version card) carries "Independent adaptation · Not affiliated with the author · No token". Pass.
 - **P8 (Minpentai matches the source):** the snap plays Play's invented rules, labelled "Invented" and "Draft", with "rules invented for this edition" on card 1. It doesn't paraphrase c4-b84 as "a new rule each match" ("one of four invented extras"). Concern: P8f's ⓘ labels can't be drawn in a snap; the badges stand in, and P8h checks them.
 - **P1, P2, P4 (generated assets, AI declared, publishing):** the GIFs are drawn in code from the engine, with no model and no text in the picture. Not touched.
