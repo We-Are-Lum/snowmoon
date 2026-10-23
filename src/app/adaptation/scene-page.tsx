@@ -1,9 +1,10 @@
 import { cache } from 'react';
+import { permanentRedirect, redirect } from 'next/navigation';
 import Link from 'next/link';
 import type { Metadata } from 'next';
 import { APP_NAME, adaptationPagesShown, appUrl } from '~/lib/config';
 import { PAPER } from '~/lib/tokens';
-import { type Adaptation, type Version, editorVersion, getAdaptation, getVersion, handleFor, ownMedia, parseId, resolveHandle, shownVersion, titleSlug } from '~/lib/adaptation-pages';
+import { type Adaptation, type Person, type Version, editorVersion, getAdaptation, getVersion, handleFor, ownMedia, parseId, resolveHandle, sceneHandleFor, sceneOwner, shownVersion, titleSlug } from '~/lib/adaptation-pages';
 import { deliveryFor, posterFor } from '~/lib/scene-delivery';
 import { ShotStrip } from './editor/shot-strip';
 import { SceneActions } from '~/components/scene-actions';
@@ -20,9 +21,18 @@ export type SceneParams = { id: string; handle: string; n?: string };
 export type Scene =
   | { kind: 'not-found' }
   | { kind: 'hidden' }
-  | { kind: 'redirect'; to: string }
+  | { kind: 'redirect'; to: string; permanent?: boolean }
   | { kind: 'nothing'; adaptation: Adaptation; handle: string }
-  | { kind: 'scene'; adaptation: Adaptation; version: Version; handle: string; fixed: boolean };
+  | { kind: 'scene'; adaptation: Adaptation; version: Version; handle: string; fixed: boolean; person: Person };
+
+/**
+ * Follow a scene redirect: permanent (308) when the address URL of a linked wallet moves to its Farcaster name, temporary
+ * (307) otherwise. The page is dynamic, so the redirect is sent with no-store and is not kept by browsers: after an unlink
+ * the address URL answers again at once.
+ */
+export function followScene(s: { to: string; permanent?: boolean }, to = s.to): never {
+  return s.permanent ? permanentRedirect(to) : redirect(to);
+}
 
 /** Everything the page and its metadata need, looked up once per request. */
 export const loadScene = cache(async ({ id: idSeg, handle: raw, n }: SceneParams): Promise<Scene> => {
@@ -35,6 +45,15 @@ export const loadScene = cache(async ({ id: idSeg, handle: raw, n }: SceneParams
   if (who.kind === 'none') return { kind: 'not-found' };
   const tail = n === undefined ? idSeg : `${id}/v/${n}`;
   if (who.kind === 'redirect') return { kind: 'redirect', to: `/@${who.handle}/${tail}` };
+  // A wallet linked to a Farcaster account: its scenes live under the Farcaster name while the link lasts (owner,
+  // 2026-10-22). Read on each request, so after an unlink the address URL is the scene page again. Only where the
+  // wallet has something public to show: an address URL with nothing on it does not reveal the link (Privacy §6 says
+  // the work is shown under the name, so the link shows only through work).
+  if (who.person < 0) {
+    const owner = await sceneOwner(who.person);
+    const name = owner !== who.person && (await walletShowsHere(who.person, id, n)) ? await handleFor(owner) : null;
+    if (name) return { kind: 'redirect', to: `/@${name}/${tail}`, permanent: true };
+  }
   // Words after the id redirect to the current title's (owner, 2026-10-17); a bare id stays bare.
   const words = `${id}-${titleSlug(adaptation.title)}`;
   if (n === undefined && decodeURIComponent(idSeg) !== String(id) && decodeURIComponent(idSeg) !== words) {
@@ -43,19 +62,27 @@ export const loadScene = cache(async ({ id: idSeg, handle: raw, n }: SceneParams
 
   if (n === undefined) {
     const version = await shownVersion(who.person, id);
-    return version ? { kind: 'scene', adaptation, version, handle: who.handle, fixed: false } : { kind: 'nothing', adaptation, handle: who.handle };
+    return version ? { kind: 'scene', adaptation, version, handle: who.handle, fixed: false, person: who.person } : { kind: 'nothing', adaptation, handle: who.handle };
   }
   if (!/^\d{1,9}$/.test(n)) return { kind: 'not-found' };
   const version = await getVersion(Number(n));
   if (!version || version.adaptationId !== id) return { kind: 'not-found' };
-  if (version.author !== who.person) {
-    // A fixed link always lives under its author's current name (it survives a rename).
-    const author = await handleFor(version.author);
+  if (version.author !== who.person && (await sceneOwner(version.author)) !== who.person) {
+    // A fixed link always lives under its author's current name (it survives a rename); a version by a linked wallet, under the name of its FID.
+    const author = await sceneHandleFor(version.author);
     return author ? { kind: 'redirect', to: `/@${author}/${id}/v/${version.id}` } : { kind: 'not-found' };
   }
   if (version.hidden) return { kind: 'nothing', adaptation, handle: who.handle };
-  return { kind: 'scene', adaptation, version, handle: who.handle, fixed: true };
+  return { kind: 'scene', adaptation, version, handle: who.handle, fixed: true, person: who.person };
 });
+
+/** Does the URL of a wallet show something public here: its page for this adaptation, or its own fixed version. */
+async function walletShowsHere(person: Person, id: number, n: string | undefined): Promise<boolean> {
+  if (n === undefined) return (await shownVersion(person, id)) !== null;
+  if (!/^\d{1,9}$/.test(n)) return false;
+  const v = await getVersion(Number(n));
+  return !!v && v.adaptationId === id && v.author === person && !v.hidden;
+}
 
 /**
  * Share images made for one adaptation (owner, 2026-10-18): the Farcaster embed (3:2) and the link preview
