@@ -35,6 +35,7 @@ function legalPages(): string {
  */
 const SNAP_MEDIA = 'application/vnd.farcaster.snap+json';
 const ASKS_FOR_SNAP = [{ type: 'header' as const, key: 'accept', value: '.*application/vnd\\.farcaster\\.snap\\+json.*' }];
+const IS_PREFLIGHT = [{ type: 'header' as const, key: 'access-control-request-method' }];
 const snapAlternate = (path: string) => [
   { key: 'Link', value: `<${path}>; rel="alternate"; type="${SNAP_MEDIA}"` },
   { key: 'Vary', value: 'Accept' },
@@ -83,6 +84,7 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       { source: '/minpentai', missing: ASKS_FOR_SNAP, headers: snapAlternate('/minpentai') },
+      { source: '/minpentai/play', missing: ASKS_FOR_SNAP, headers: snapAlternate('/minpentai/play') },
       { source: '/minpentai/c/:seg', missing: ASKS_FOR_SNAP, headers: snapAlternate('/minpentai/c/:seg') },
     ];
   },
@@ -92,7 +94,13 @@ const nextConfig: NextConfig = {
   async rewrites() {
     // The snap first (before the app's pages: /minpentai is a page), then the adaptation pages.
     const beforeFiles = [
+      // A browser client (Farcaster's web app) sends X-Snap-Payload with the snap request, so it asks first
+      // (a CORS preflight: OPTIONS, without the snap Accept). The static page's own answer allows no
+      // headers and the browser never sends the request (2026-10-23: no snap in the web composer), so
+      // preflights go to the snap route, which allows them.
+      ...['/minpentai', '/minpentai/play', '/minpentai/c/:seg'].map((source) => ({ source, has: IS_PREFLIGHT, destination: '/snap/minpentai' })),
       { source: '/minpentai', has: ASKS_FOR_SNAP, destination: '/snap/minpentai' },
+      { source: '/minpentai/play', has: ASKS_FOR_SNAP, destination: '/snap/minpentai' },
       { source: '/minpentai/c/:seg', has: ASKS_FOR_SNAP, destination: '/snap/minpentai?c=:seg' },
     ];
     const afterFiles = [
