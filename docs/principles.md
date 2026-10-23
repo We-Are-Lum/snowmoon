@@ -62,6 +62,10 @@ coding agent and its helpers are in `docs/prompts/`.
   live object holds it afterwards. `npm run check:modal-vc` also proves ten
   planted violations are each caught. Not covered: what Modal's platform
   keeps outside our code (`docs/proposals/own-voice-v1.md`).
+- `P1i`: the own-voice-v1 consent (`config/consent-own-voice.json`) is used
+  by no page or code under `src/` until `src/app/record` exists, and once it
+  does, only while the `P1h` proof passes (owner, 2026-10-23: "Ship
+  own-voice-v1 only after that passes").
 - `npm run test:db`: after 0005, a recipe is public only if it made a
   published element version or a segment of a narration that is not hidden;
   drafts, hidden work and abandoned attempts stay private.
