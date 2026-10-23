@@ -25,6 +25,7 @@ import { decMatch, encMatch } from '../src/lib/minpentai/snap/moves';
 import { GET as runRoute } from '../src/app/snap/minpentai/run/route';
 import { GET as snapRoute } from '../src/app/snap/minpentai/route';
 import { GET as cardRoute } from '../src/app/api/minpentai-challenge-card/route';
+import { sender } from '../src/lib/minpentai/snap/auth';
 import { CHALLENGE_PATH, decChallenge, splitChallenge } from '../src/lib/minpentai/snap/challenge';
 import { settings, versionOf } from '../src/lib/minpentai/snap/versions';
 
@@ -514,6 +515,13 @@ async function main() {
     const embed = await sharp(Buffer.from(await (await cardRoute(new Request(`https://snowmoon.party/api/minpentai-challenge-card?c=${encodeURIComponent(seg)}&shape=embed`))).arrayBuffer())).metadata();
     assert.deepEqual([embed.width, embed.height], [1200, 800]);
     assert.equal((await cardRoute(new Request(`https://snowmoon.party/api/minpentai-challenge-card?c=${encodeURIComponent(bad)}`))).status, 404);
+  });
+
+  check('a tap whose payload is not base64url JSON is refused with 400, not a 500', async () => {
+    for (const body of [{ header: 'x', payload: 'x', signature: 'x' }, { header: 'x', payload: '', signature: 'x' }]) {
+      const r = await sender(new Request('https://snowmoon.party/snap/minpentai?a=start', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) }), 'https://snowmoon.party');
+      assert.ok(!r.ok && r.status === 400, JSON.stringify(r));
+    }
   });
 
   await Promise.all(pending);

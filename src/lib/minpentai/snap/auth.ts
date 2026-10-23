@@ -43,7 +43,9 @@ export type Sender = { ok: true; fid: number; inputs: Record<string, unknown>; m
 export async function sender(request: Request, origin: string): Promise<Sender> {
   const t0 = performance.now();
   const body = await request.text();
-  const parsed = await parseRequest(new Request(request.url, { method: 'POST', headers: request.headers, body }), { skipJFSVerification: true, requestOrigin: origin });
+  // parseRequest throws, rather than failing, on a payload that isn't base64url JSON.
+  const parsed = await parseRequest(new Request(request.url, { method: 'POST', headers: request.headers, body }), { skipJFSVerification: true, requestOrigin: origin }).catch(() => null);
+  if (!parsed) return { ok: false, status: 400, error: 'invalid_payload' };
   if (!parsed.success) return { ok: false, status: 400, error: parsed.error.type };
   if (parsed.action.type !== 'post') return { ok: false, status: 400, error: 'not a snap post' };
   const { user, inputs } = parsed.action;
