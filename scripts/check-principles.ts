@@ -31,6 +31,7 @@ import { LEARN_TEXT } from '../src/lib/minpentai/learn-text';
 import { BOOK_TAG, NARRATION_MAX_WORDS, PERSON_TAG, parseBeats } from '../src/lib/script-beats';
 import { GLOSSARY_FILE, loadBlocks, verifyGlossary, type Glossary } from './lib/glossary';
 import { p4aProblems } from './lib/p4a';
+import { MODAL_VC_FILE, MODAL_VC_PLANTS, modalVcRun, modalVcStatic } from './lib/modal-vc';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const arg = (name: string) => process.argv.slice(2).find((a) => a.startsWith(`--${name}=`))?.split('=').slice(1).join('=');
@@ -417,6 +418,23 @@ add({
   plant: (c) => {
     c.skipped = false;
     c.pages.push({ id: 'planted', prompt: 'a prompt nobody can read', html: '<p>no prompt here</p>' });
+  },
+});
+
+add({
+  id: 'P1h',
+  principle: 1,
+  name: 'our Modal conversion code keeps no recording: no file, volume, Dict, Queue or log line holds it after the call (raw voice takes exception)',
+  load: async () => ({ src: read(MODAL_VC_FILE) }),
+  run: ({ src }) => {
+    // scripts/check-modal-vc.ts (npm run check:modal-vc) also proves each violation in MODAL_VC_PLANTS is caught.
+    const run = modalVcRun(src);
+    const skipped = run.problems.length === 1 && run.problems[0].startsWith('skipped');
+    const problems = [...modalVcStatic(src), ...(skipped ? [] : run.problems)];
+    return problems.length || !skipped ? problems : run.problems;
+  },
+  plant: (c) => {
+    c.src = MODAL_VC_PLANTS.reduce((s, p) => (/base64|not removed/.test(p.name) ? p.plant(s) : s), c.src);
   },
 });
 
