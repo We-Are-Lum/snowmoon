@@ -23,6 +23,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Learn, LEARN_SCREENS, PRACTICE_SCREEN, WATCH_SCREENS } from './learn';
 import { Play } from './play';
+import { CHALLENGE_PATH } from '~/lib/minpentai/snap/challenge';
 
 /** Set once Learn is finished or skipped; later bare visits open Play. (The sandbox's key, kept.) */
 const DONE_KEY = 'minpentai-tutorial-done';
@@ -37,7 +38,7 @@ function reachedStep(): number {
   }
 }
 
-type PlayStart = 'home' | 'free' | 'ladder' | 'person';
+type PlayStart = 'home' | 'free' | 'ladder' | 'person' | 'match';
 type Mode = { kind: 'learn'; screen: number } | { kind: 'play'; start: PlayStart };
 
 function setQuery(params: Record<string, string>) {
@@ -75,6 +76,8 @@ export function MinpentaiApp() {
   useEffect(() => {
     const q = new URLSearchParams(window.location.search);
     if (q.get('s')) { router.replace('/minpentai/rule'); return; }
+    // A challenge link (/minpentai/c/<…>) starts its match in Play.
+    if (window.location.pathname.startsWith(CHALLENGE_PATH)) { setMode({ kind: 'play', start: 'match' }); setVisit((v) => v + 1); return; }
     const screen = screenFor(q);
     const m = q.get('mode');
     if (screen !== null) setMode({ kind: 'learn', screen });
@@ -84,6 +87,7 @@ export function MinpentaiApp() {
     else if (m === 'free' || window.location.hash.startsWith('#fp=')) setMode({ kind: 'play', start: 'free' });
     else if (m === 'ladder') setMode({ kind: 'play', start: 'ladder' });
     else if (m === 'play') setMode({ kind: 'play', start: 'home' });
+    else if (q.get('match')) setMode({ kind: 'play', start: 'match' });
     else {
       let done = false;
       try { done = !!window.localStorage.getItem(DONE_KEY); } catch { /* storage blocked: Learn */ }
