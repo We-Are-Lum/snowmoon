@@ -37,7 +37,7 @@ export const LEGAL: {
     privacy: { words: string; on: string; by: 'FID 6786' } | null;
   };
 } = {
-  effective: '2026-10-22',
+  effective: '2026-10-23',
   // The owner said "Reread" on 2026-10-10 (words 3iuvyo, 1r2aajz), and on 2026-10-18 of the drafted
   // changes ("I've read the drafted Terms and Privacy changes and approve them: this is my 'reread'"),
   // covering both pages at these words.
@@ -48,7 +48,9 @@ export const LEGAL: {
     // Privacy sections 1–4 and both Terms sentences"). The words before were if3grj.
     // 2026-10-22, the owner's reread of §6a for credit-back (PR #35: "#35: reread, with the tidier §6a sentence"): reading B,
     // the price shown, and the payment sentences matching the code. The words before were tvt9ga.
-    terms: { words: '1pz1d61', on: '2026-10-22', by: 'FID 6786' },
+    // 2026-10-23, the owner's "reread" for the Minpentai snap (PR #37): §1 adds "and its game in Farcaster casts". The
+    // words before were 1pz1d61.
+    terms: { words: '1gifacz', on: '2026-10-23', by: 'FID 6786' },
     // Plus one sentence the drafted list missed (Privacy §4, images): "your name (Farcaster name or wallet
     // address)", the owner's own words for tonight's publish (2026-10-18), so the page stays true for wallet accounts.
     // 2026-10-19, the owner's "Reread is done" for push 3, at these words: My picks in §4 (the owner's own sentence),
@@ -60,7 +62,11 @@ export const LEGAL: {
     // before were 87yjkk (and h0zppm before §4's addition).
     // 2026-10-22, the owner's reread for credit-back (PR #35): §4's wallet paragraph adds "any charge added back to your
     // balance because a generation gave you no picture". The words before were hqt7ov.
-    privacy: { words: 'l8xev2', on: '2026-10-22', by: 'FID 6786' },
+    // 2026-10-23, the owner's "reread" for the Minpentai snap (PR #37), after their questions on §4, §6 and §7 were
+    // answered: §4 (the latest cast match, kept with the Farcaster ID, placements turn by turn), §6 (a shared challenge's
+    // link: the start and the result, not the moves or the Farcaster ID) and §7 (Neynar's hub checks each tap's
+    // signer). The words before were l8xev2.
+    privacy: { words: '11qwrx4', on: '2026-10-23', by: 'FID 6786' },
   },
 };
 
