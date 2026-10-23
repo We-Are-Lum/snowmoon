@@ -218,7 +218,10 @@ process.env.APP_LEGAL_PAGES = 'terms+privacy';
   check('publishing a design is for invited FIDs only, with the drafted refusal', dat('if (!IMAGES.invited.includes(fid)) return no(IMAGE_WORDING.designs.form.notInvited') > 0);
   {
     const picks = readFileSync(path.join(ROOT, 'src/app/api/designs/picks/route.ts'), 'utf8');
-    check('picks are for invited FIDs only (POST and DELETE refuse others; GET gives them none)', (picks.match(/if \(!IMAGES\.invited\.includes\(w\.fid\)\) return no\(IMAGE_WORDING\.designs\.form\.notInvited, 403\)/g) ?? []).length === 2 && /if \(!IMAGES\.invited\.includes\(w\.fid\)\) return NextResponse\.json\(\{ picks: \[\] \}/.test(picks));
+    // Picks opened to everyone signed in, Farcaster or wallet (owner, 2026-10-19, e749871; Privacy names them).
+    // Making styles and sheets stays invited-only (the two checks above). Same rule as test:designs.
+    const code = picks.replace(/\/\*[\s\S]*?\*\//g, '');
+    check('picks are open to everyone signed in: no invite gate, a sign-in is required for GET, POST and DELETE', !/invited/.test(code) && /getPerson\(request\)/.test(code) && /status: 401/.test(code) && (code.match(/const w = await who\(request\);\s*if \('error' in w\) return w\.error;/g) ?? []).length === 3);
     check('the composer is offered picks only for invited FIDs', /composerPicks\(invited \? picks : \[\]\)/.test(readFileSync(path.join(ROOT, 'src/app/api/images/status/route.ts'), 'utf8')));
   }
   check('publishing a design passes the gate before the name\'s paid check', dat('await mayGenerate(') > 0 && dat('await mayGenerate(') < dat('await checkWords('));
