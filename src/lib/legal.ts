@@ -84,7 +84,11 @@ export const LEGAL: {
     // your agent filed for you)". His deletion line is NOT in: in the one real test (2026-10-24) fal applied neither the
     // "forbid" ACL nor the one-hour expiry (the file was still served anonymously after 63 minutes), so the line would
     // not be true today. Held for the owner's decision. The words before were ewxjzl.
-    privacy: { words: 'bjz6u1', on: '2026-10-24', by: 'FID 6786' },
+    // Later on 2026-10-24, the owner's "Option 2": §7's fal.ai item ends with his sentence "fal.ai keeps the video it
+    // made on its storage, at an unlisted link it gives only to us but that anyone holding it could open, for as long as
+    // fal.ai's settings keep it; we don't set a time yet." The deletion line waits for a real test showing the link
+    // gone. The words before were bjz6u1.
+    privacy: { words: 'ynzu1t', on: '2026-10-24', by: 'FID 6786' },
   },
 };
 
@@ -151,7 +155,7 @@ export const PRIVACY: LegalDoc = {
           'Cloudflare stores and serves the pictures and audio, and sees the same when your device fetches them.',
           'Supabase holds our database.',
           'Groq, and Vercel AI Gateway when Groq is busy, receive assistant questions, and the prompts for images you make, which are checked against the published rules.',
-          'fal.ai receives the prompt for an image you make, and any pictures sent with it (in Remix: a depth picture of the camera you set, and the shot\'s place and cast pictures), and makes the image. It is asked to keep no copy. For a video test you approve, fal.ai receives the shot\'s frame (already public on the site), your note and the acting notes for that shot (yours, and any your agent filed for you), and makes a short video with the open LongCat-Video model. It is asked to keep no copy of the request. It returns the video at a link on its own storage; we copy it at once and keep it privately, for you.',
+          'fal.ai receives the prompt for an image you make, and any pictures sent with it (in Remix: a depth picture of the camera you set, and the shot\'s place and cast pictures), and makes the image. It is asked to keep no copy. For a video test you approve, fal.ai receives the shot\'s frame (already public on the site), your note and the acting notes for that shot (yours, and any your agent filed for you), and makes a short video with the open LongCat-Video model. It is asked to keep no copy of the request. It returns the video at a link on its own storage; we copy it at once and keep it privately, for you. fal.ai keeps the video it made on its storage, at an unlisted link it gives only to us but that anyone holding it could open, for as long as fal.ai\'s settings keep it; we don\'t set a time yet.',
           'Farcaster\'s sign-in services confirm who you are when you sign in. They learn your Farcaster ID and that you signed in here, not what you read or ask. Farcaster\'s public API receives a Farcaster ID when we look up the username to show with published work, and in Minpentai\'s lobby and matches, and a username when a page is opened at /@name.',
           'Neynar receives your Farcaster ID when you first make an image on a given day, to look up its account score, which decides whether you can make images. We keep the score for a day. When you sign in with a wallet, Neynar also receives the wallet\'s address, to find the Farcaster account that has verified it; if exactly one has, your wallet is linked to that account (section 4). We keep the answer for a day. A linked wallet is looked up again at most once a day, and its link ends if that account no longer verifies it; a wallet you unlinked isn\'t looked up again. When you play Minpentai inside a Farcaster cast, your Farcaster app signs each tap, and we ask Neynar\'s Farcaster hub which signing keys your Farcaster ID has, to check the signature: Neynar receives your Farcaster ID, and we keep its answer in memory for five minutes.',
           'ntfy delivers a short alert to us when an image is reported. It carries no content and nothing about you.',

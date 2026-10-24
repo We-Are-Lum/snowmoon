@@ -221,8 +221,12 @@ export const AGENTS = {
   },
   /** Public pages (agents.md, /p): off while agents are for the owner only. Kept work stays private on /you. */
   public: false,
-  /** Approved spending: per person per UTC day, and a video test's estimate per second (LongCat 480p on fal). */
-  spend: { framesPerDay: 20, videosPerDay: 5, dailyCapUsd: 2, videoModel: 'fal-ai/longcat-video/distilled/image-to-video/480p', videoUsdPerSecond: 0.005, videoSeconds: 5 },
+  /**
+   * Approved spending: per person per UTC day, and a video test's estimate per second (LongCat 480p on fal). The length
+   * is what fal actually makes: we send no num_frames, so its default 162 frames, billed at 15 fps, is 10.8 s, about
+   * $0.054 (measured in the real test, owner 2026-10-24). A 5-second length waits for the queue test.
+   */
+  spend: { framesPerDay: 20, videosPerDay: 5, dailyCapUsd: 2, videoModel: 'fal-ai/longcat-video/distilled/image-to-video/480p', videoUsdPerSecond: 0.005, videoSeconds: 10.8 },
   /** What an agent may be given. The person sees every one before agreeing. */
   scopes: ['read', 'drafts', 'images', 'notes'] as const,
   /** At most this many live agents per person (also a database trigger). */

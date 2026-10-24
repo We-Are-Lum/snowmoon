@@ -39,6 +39,12 @@ against the code on main at 588c8e8 first):
     made, despite `expiration_duration_seconds: 3600`. Neither "deletes its copy … an hour after making it" nor "no one
     else can open it there" is true today. Held for the owner.
   - `runVideo` still asks for the one-hour expiry, and reads the file with a short-lived CDN token as the Bearer.
+  - **The owner's "Option 2" (2026-10-24):** §7's fal.ai item now ends "fal.ai keeps the video it made on its storage,
+    at an unlisted link it gives only to us but that anyone holding it could open, for as long as fal.ai's settings
+    keep it; we don't set a time yet." The deletion line goes in only once a real test shows the link gone.
+  - **Video estimate:** raised to the measured cost, $0.054 (fal's default 162 frames at 15 fps, 10.8 s at $0.005
+    a second). It is used by the "Make it" estimate, the $2 a day and a key's cap. The 5-second length waits for the
+    queue test.
 - **Terms 6b:** "Each draft is made at most once" replaces "Each draft can be approved once".
 - **check:principles P6o:** fails if `AGENTS.public` is on while Privacy §3 says "only you can see them".
 
