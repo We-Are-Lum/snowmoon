@@ -386,12 +386,15 @@ export const IMAGES = {
     /** A wallet sign-in lasts this long. */
     sessionHours: 24,
     /**
-     * Credit back a Generate that failed (the prompt check or the image model didn't answer), to the balance only
-     * (owner, 2026-10-21: "credit the balance for anything charged but not made"). OFF until migration 0022 is
-     * applied and Terms 6a is reread and changed in the same deploy (docs/legal/credits-draft.md): while off, the
-     * code never reads studio.wallet_credits and a failed Generate stays charged, as the Terms say today.
+     * Credit back every Generate that gives no picture (the check or the model didn't answer, the prompt was refused,
+     * or the safety checker dropped the picture), to the balance only (owner, 2026-10-21: "credit the balance for
+     * anything charged but not made"; reading B, 2026-10-22). ON since 2026-10-22, in the same deploy as Terms 6a and
+     * Privacy 4 (reread by the owner, PR #35), after migrations 0022 and 0027. Off means no new credits only: credits
+     * already given stay in the balance (owner, 2026-10-23), and the wallet panel's note goes back to `terms` and no
+     * "added back" line is shown. Turning it off ALSO needs a Terms change and the owner's reread in the same deploy:
+     * Terms 6a promises that a generation that gives no picture is added back, which would stop being true.
      */
-    creditBack: false as boolean,
+    creditBack: true as boolean,
   },
   /** A draft's signed record is good for this long; after that, generate again. */
   ticketHours: 24,

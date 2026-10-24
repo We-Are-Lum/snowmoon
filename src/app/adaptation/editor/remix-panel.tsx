@@ -8,6 +8,7 @@ import { SignInButton } from '~/components/sign-in';
 import { WalletPanel, WalletSignInButton } from '~/components/wallet';
 import { HideButton, ShareRow } from '../../remix/remix-actions';
 import { AddToStoryboard } from './add-to-storyboard';
+import { exactDollars } from '~/lib/wallet/price-text';
 
 /**
  * Remix in the shot editor (owner, 2026-10-18): Generate from the camera the person set. Sign in
@@ -125,7 +126,7 @@ export function RemixPanel({
   };
 
   const by = auth.kind === 'signed-in' ? (auth.username ? `@${auth.username}` : `FID ${auth.fid}`) : wallet ? wallet.short : 'you';
-  const left = status?.prepaid ? `Balance $${status.prepaid.balanceUsd.toFixed(2)} · $${status.prepaid.priceUsd.toFixed(4)} a frame` : status?.left !== undefined ? `${status.left} of ${status.perDay ?? 10} left today` : '';
+  const left = status?.prepaid ? `Balance $${status.prepaid.balanceUsd.toFixed(2)} · $${exactDollars(status.prepaid.priceUsd)} a frame` : status?.left !== undefined ? `${status.left} of ${status.perDay ?? 10} left today` : '';
   const frames = status?.frames ?? [];
   // The version's pictures were drawn by a closed model, Remix by the open-weight one (owner, 2026-10-18: "all the pictures in
   // the remix aren't the ChatGPT images so might be confusing"). DRAFT wording.
@@ -190,7 +191,7 @@ export function RemixPanel({
           <div className="ed-generate">
             <button type="button" className="ed-btn" onClick={generate} disabled={busy || !words.trim()}>
               {busy ? 'Making your frame…' : 'Generate'}
-              <span className="ed-btn-sub">{status.prepaid ? 'Paid from your balance' : status.free ? 'Free: 10 a day' : 'Free frames are paused'}</span>
+              <span className="ed-btn-sub">{status.prepaid ? `$${exactDollars(status.prepaid.priceUsd)} from your balance` : status.free ? 'Free: 10 a day' : 'Free frames are paused'}</span>
             </button>
           </div>
         </>

@@ -47,6 +47,11 @@ Tensions first. Each needs the owner's ruling where it says **Decide**.
    address can't be a Farcaster name (16 at most), so it never clashes. Built: the address in
    lowercase; a checksum-case address redirects to it. The address is already public as the
    account's byline (shortened). Still open: a FID with no fname has no `/@` URL yet.
+   **Linked wallets (owner, 2026-10-22, branch `wallet-links-scenes`):** while a wallet is linked to a Farcaster
+   account, its scenes show under the Farcaster name: `/@<address>/<id>…` redirects permanently (308, sent with
+   no-store) to `/@<fname>/<id>…` wherever the wallet has something public there, and `/@<fname>/<id>` shows the
+   wallet's versions with the FID's own. Nothing is rewritten (versions keep the wallet as `author_person`); after
+   an unlink the address URLs answer again. A linked FID with no name keeps the address URLs.
 7. **Slugs.** **Ruled (owner, 2026-10-17):** words after the id redirect to the current title's
    slug, so `/@naaate/1-the-real-ending` goes to `/@naaate/1-fifteen-days`, and a link made before
    a retitle follows the new title. A bare `/@naaate/1` stays bare. Fixed `/v/<n>` links take no words.

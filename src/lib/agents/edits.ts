@@ -3,7 +3,9 @@ import { ToolInputError } from '../agent/tools';
 import { editorData, type DataShot } from '../agent/data';
 import { getVersion } from '../adaptation-pages';
 import { AGENTS, REMIX } from '../config';
-import { remixShot } from '../remix/shot';
+import { remixPictures } from '../remix/make';
+import { remixShot, type RemixPicture } from '../remix/shot';
+import { priceUsd } from '../wallet/credits';
 import { sql, type Agent } from './core';
 import { draftPiece } from './pieces';
 import { suggestionsReader } from './suggestions';
@@ -23,7 +25,7 @@ import { agentLabel } from './accounts';
  * is the person's decision, and putting kept edits into a new version of the scene is the next step.
  */
 export type Change =
-  | { type: 'frame'; note: string; estimate_usd: number }
+  | { type: 'frame'; note: string; estimate_usd: number; /** A wallet account's exact charge (Terms 6a: "the price shown"), shown on Make it. */ price_usd?: number }
   | { type: 'take'; cue: string; line: string; from: string | null; to: string }
   | { type: 'timing'; from_s: number; to_s: number; was: { from_s: number; to_s: number } }
   | { type: 'speaking'; who: string[]; was: string[] }
@@ -53,6 +55,15 @@ const note = (v: unknown, what = 'note') => {
 };
 
 export const frameEstimate = () => Math.round(REMIX.reserveUsd(REMIX.maxPictures) * 100) / 100;
+/**
+ * What a wallet account is charged for this shot's frame: the Remix price for the pictures the shot sends (its camera,
+ * cast cards and plate), exactly as generate() debits it (src/lib/remix/make.ts). Null if the shot can't be redrawn.
+ */
+export function framePrice(adaptation: number, version: number, shotId: string): number | null {
+  const shot = remixShot(adaptation, version, shotId);
+  if (!shot?.prompt) return null;
+  return priceUsd(REMIX.reserveUsd(remixPictures({ role: 'layout' } as RemixPicture, shot).length));
+}
 export const videoEstimate = () => Math.round(AGENTS.spend.videoUsdPerSecond * AGENTS.spend.videoSeconds * 1000) / 1000;
 
 async function draftEdit(agent: Agent, adaptation: number, version: number, shot: DataShot, change: Change, title: string, answering?: unknown) {
@@ -65,7 +76,8 @@ export async function tryFrame(agent: Agent, args: Record<string, unknown>) {
   const { adaptation, version, shot } = await ownShot(agent, args);
   const n = note(args.note);
   if (!remixShot(adaptation, version, shot.id)?.prompt) throw new ToolInputError('this shot has no prompt and camera to redraw from');
-  return draftEdit(agent, adaptation, version, shot, { type: 'frame', note: n, estimate_usd: frameEstimate() }, `Shot ${shot.n}: a new frame`, args.answering);
+  const price = agent.person < 0 ? framePrice(adaptation, version, shot.id) : null;
+  return draftEdit(agent, adaptation, version, shot, { type: 'frame', note: n, estimate_usd: frameEstimate(), ...(price !== null ? { price_usd: price } : {}) }, `Shot ${shot.n}: a new frame`, args.answering);
 }
 
 export async function swapTake(agent: Agent, args: Record<string, unknown>) {

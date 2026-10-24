@@ -1,7 +1,8 @@
 /**
  * Terms of Use and Privacy Policy (/terms, /privacy), from the owner's legal starter of
  * 2026-10-08, updated 2026-10-09 (Privacy sections 3, 4 and 7), 2026-10-22 (wallet ↔ Farcaster links: Privacy
- * sections 4, 6 and 7, Terms sections 4 and 5; docs/legal/wallet-links-draft.md) and 2026-10-18 (accounts, wallets and
+ * sections 4, 6 and 7, Terms sections 4 and 5; docs/legal/wallet-links-draft.md), 2026-10-22 again (Minpentai in
+ * Farcaster casts: Privacy sections 4, 6 and 7, Terms section 1; docs/legal/minpentai-snap-draft.md) and 2026-10-18 (accounts, wallets and
  * prepaid generations, the adaptation pages, Remix: drafted by the coding agent, reread by the owner;
  * Terms section 2's last words are the owner's). Only the owner changes the words.
  *
@@ -36,7 +37,7 @@ export const LEGAL: {
     privacy: { words: string; on: string; by: 'FID 6786' } | null;
   };
 } = {
-  effective: '2026-10-22',
+  effective: '2026-10-23',
   // The owner said "Reread" on 2026-10-10 (words 3iuvyo, 1r2aajz), and on 2026-10-18 of the drafted
   // changes ("I've read the drafted Terms and Privacy changes and approve them: this is my 'reread'"),
   // covering both pages at these words.
@@ -45,7 +46,11 @@ export const LEGAL: {
     // The baseline's words were terms 5wwopt, privacy 1wfmhnv.
     // 2026-10-22, the owner's reread of the wallet ↔ Farcaster link sentences in sections 4 and 5 (PR #34: "reread for
     // Privacy sections 1–4 and both Terms sentences"). The words before were if3grj.
-    terms: { words: 'tvt9ga', on: '2026-10-22', by: 'FID 6786' },
+    // 2026-10-22, the owner's reread of §6a for credit-back (PR #35: "#35: reread, with the tidier §6a sentence"): reading B,
+    // the price shown, and the payment sentences matching the code. The words before were tvt9ga.
+    // 2026-10-23, the owner's "reread" for the Minpentai snap (PR #37): §1 adds "and its game in Farcaster casts". The
+    // words before were 1pz1d61.
+    terms: { words: '1gifacz', on: '2026-10-23', by: 'FID 6786' },
     // Plus one sentence the drafted list missed (Privacy §4, images): "your name (Farcaster name or wallet
     // address)", the owner's own words for tonight's publish (2026-10-18), so the page stays true for wallet accounts.
     // 2026-10-19, the owner's "Reread is done" for push 3, at these words: My picks in §4 (the owner's own sentence),
@@ -55,20 +60,26 @@ export const LEGAL: {
     // sentence is the owner's own: "A linked wallet is looked up again at most once a day, …"); then §4's "and why a
     // link ended", the owner's approved words (2026-10-22, "Yes, add 'and why a link ended' to section 4"). The words
     // before were 87yjkk (and h0zppm before §4's addition).
-    privacy: { words: 'hqt7ov', on: '2026-10-22', by: 'FID 6786' },
+    // 2026-10-22, the owner's reread for credit-back (PR #35): §4's wallet paragraph adds "any charge added back to your
+    // balance because a generation gave you no picture". The words before were hqt7ov.
+    // 2026-10-23, the owner's "reread" for the Minpentai snap (PR #37), after their questions on §4, §6 and §7 were
+    // answered: §4 (the latest cast match, kept with the Farcaster ID, placements turn by turn), §6 (a shared challenge's
+    // link: the start and the result, not the moves or the Farcaster ID) and §7 (Neynar's hub checks each tap's
+    // signer). The words before were l8xev2.
+    privacy: { words: '11qwrx4', on: '2026-10-23', by: 'FID 6786' },
   },
 };
 
 export const TERMS: LegalDoc = {
   title: 'Terms of Use',
   sections: [
-    { n: 1, head: 'Who runs this.', body: ['Snowmoon Party (snowmoon.party and its Farcaster mini app, together "the Service") is operated by Lum LLC, a Wyoming limited liability company ("we"). By using the Service you agree to these Terms.'] },
+    { n: 1, head: 'Who runs this.', body: ['Snowmoon Party (snowmoon.party, its Farcaster mini app and its game in Farcaster casts, together "the Service") is operated by Lum LLC, a Wyoming limited liability company ("we"). By using the Service you agree to these Terms.'] },
     { n: 2, head: 'What this is.', body: ['An independent, open edition of the novel Snowmoon by Vitalik Buterin, with read-aloud audio, pictures, a game reconstruction and a reading assistant. It is not affiliated with or endorsed by the author. There is no token. You can prepay for generations. Payments are final. Nothing else here is for sale.'] },
     { n: 3, head: 'The book and the licence.', body: ['Snowmoon is the author\'s work, released under the GNU General Public License version 3. The text, pictures, audio and code on the Service are offered under that same licence, and the source and the full record of how each piece was made are public in our repository. Nothing in these Terms limits the rights the licence gives you.'] },
     { n: 4, head: 'Who can use it.', body: ['Anyone can read and listen without an account. To sign in you must be at least 18 years old. Your account here is a Farcaster account or a wallet address. You can link a wallet to your Farcaster account; while it is linked, signing in with the wallet is signing in as that account. Other ways to sign in may come later; these Terms will list each one when it does.'] },
     { n: 5, head: 'What you add.', body: ['If you publish something through the Service, or make a frame in Remix (which is saved, and can be seen by anyone with its link, as soon as it is made), it remains yours, and you license it to everyone under GPL version 3. You confirm it is your own work, or that you have the right to license it this way. Your name is shown with it: your Farcaster name, or, for a wallet account, its address shortened. Work made with a wallet that is linked to your Farcaster account is shown with your Farcaster name. Where the Service says so before you publish, the prompts and any planning thread that led to the piece are published with it. Published work is public and others may copy it under the licence. We can hide it on request (see section 7), but we cannot recall copies others have made.'] },
     { n: 6, head: 'What you must not do.', body: ['Don\'t post anything unlawful, harassing or sexual involving minors; don\'t post other people\'s private information; don\'t impersonate anyone or present your work as the author\'s or as official; don\'t try to get around sign-in, daily limits or spending caps; don\'t interfere with the Service.'] },
-    { n: '6a', head: 'Prepaid generations.', body: ['You can pay in USDC or ETH on Base to the address the Service shows. Each generation is charged to your balance at its estimated cost plus 30%. Payments are final and are not refunded, whatever the outcome of a generation. A payment is credited once it has 3 confirmations; one more than 7 days old is not credited automatically — write to us.'] },
+    { n: '6a', head: 'Prepaid generations.', body: ['You can pay in USDC or ETH on Base to the address the Service shows. Each generation is charged to your balance at the price shown when you start it. If a generation doesn\'t give you a picture (a check or the image model didn\'t answer, the rules refused the prompt, or the safety checker dropped the picture), that charge is added back to your balance. Payments are final: what you pay is never refunded or paid out as money, and your balance can only be spent on generations here. A payment made through the Service is added to your balance once it has 3 confirmations, while the page is open or the next time you open your wallet on that device. You can also add a payment from your wallet by its transaction, on the wallet panel. Either way, this works within 7 days of the payment; after that, write to us and we\'ll add it.'] },
     { n: 7, head: 'Hiding and removal.', body: ['Nothing on the Service is official or canonical. We may hide content that breaks these Terms. You may hide your own work yourself where the Service offers "Hide", or ask us to hide it, at any time. How this works is set out in our removal policy, linked from About.'] },
     { n: 8, head: 'AI-made material.', body: ['The narration, many pictures (every frame made in Remix among them) and the assistant\'s answers are produced by AI models and are labelled as such. They can be wrong. The assistant\'s commentary is not the book and is not advice of any kind.'] },
     { n: 9, head: 'Outside services.', body: ['The Service relies on other companies\' services, listed in the Privacy Policy. Their terms apply to their part.'] },
@@ -102,13 +113,14 @@ export const PRIVACY: LegalDoc = {
           'How many images and Remix frames you make each day, to count the daily limits, and the reports you make.',
           'The Farcaster usernames we have seen for your ID, so a link with an old name still finds your pages after you rename.',
           'If you play Minpentai: your progress against the computer and the people you block, kept until you ask us to delete them; your matches, deleted 30 days after they end; and invites, deleted when they expire after 24 hours. Challenges you send or receive, deleted an hour after they are answered or expire; and a count of today\'s Play requests and when you last opened a match or the lobby, deleted the next day. While you say you are ready to play, other signed-in players see your Farcaster username.',
+          'If you play Minpentai in a Farcaster cast: your latest practice match there, kept with your Farcaster ID (its random seed, the computer level, the extra rule and where you placed your pieces, turn by turn), so you can resume it; deleted when the match ends, or 30 days after your last turn. Nothing else about these matches is kept or recorded.',
         ],
-        'For a wallet account we also keep its address and its prepaid balance and spending: the payments you made to us (transaction, token, amount and its value in US dollars) and what each generation cost. This links money to your account, to keep your balance. Payments on Base are public on-chain, as every Base transaction is. A wallet\'s balance stays with the wallet when it is linked to a Farcaster account.',
+        'For a wallet account we also keep its address and its prepaid balance and spending: the payments you made to us (transaction, token, amount and its value in US dollars), what each generation cost, and any charge added back to your balance because a generation gave you no picture. This links money to your account, to keep your balance. Payments on Base are public on-chain, as every Base transaction is. A wallet\'s balance stays with the wallet when it is linked to a Farcaster account.',
         'Deletions happen at the next routine clean-up, so they can come a little later than stated.',
       ],
     },
     { n: 5, head: 'The assistant.', body: ['Your question is sent to Groq to be answered, or through Vercel AI Gateway to Groq when Groq is busy. Both are set to keep nothing. We keep no copy of your questions or the answers. Under your Farcaster ID we record only how many questions you ask and when, to count the daily limit. The assistant\'s costs are kept only as daily totals, without your ID, to track our spending.'] },
-    { n: 6, head: 'What you publish.', body: ['Anything you publish, and every frame you make in Remix, is public, shown with your name (your Farcaster name, or, for a wallet account, its address shortened; your Farcaster ID on quote cards), the date, and the record of how it was made. If you link a wallet to your Farcaster account, what you made with the wallet, before and after linking, is shown under your Farcaster name, so anyone can see that the two are yours; if you unlink it, that work is shown with the wallet\'s address again. See the Terms, sections 5 and 7. If you share a Minpentai win, your own Farcaster or X app posts it; its link carries only the opponent you beat and the number of steps, its card is drawn from that link, and we keep nothing about it.'] },
+    { n: 6, head: 'What you publish.', body: ['Anything you publish, and every frame you make in Remix, is public, shown with your name (your Farcaster name, or, for a wallet account, its address shortened; your Farcaster ID on quote cards), the date, and the record of how it was made. If you link a wallet to your Farcaster account, what you made with the wallet, before and after linking, is shown under your Farcaster name, so anyone can see that the two are yours; if you unlink it, that work is shown with the wallet\'s address again. See the Terms, sections 5 and 7. If you share a Minpentai win, your own Farcaster or X app posts it; its link carries only the opponent you beat and the number of steps, its card is drawn from that link, and we keep nothing about it. If you share a Minpentai challenge from a Farcaster cast, your Farcaster app posts it; its link carries the match\'s start (its random seed, the computer level and the extra rule) and your result (how and at which step it ended, how many towers were left and how many taps you used). It does not carry your moves or your Farcaster ID, though anyone who opens the link can read what it does carry. Its card is drawn from that link, and we keep nothing about it.'] },
     {
       n: 7,
       head: 'Outside services and what they receive.',
@@ -120,7 +132,7 @@ export const PRIVACY: LegalDoc = {
           'Groq, and Vercel AI Gateway when Groq is busy, receive assistant questions, and the prompts for images you make, which are checked against the published rules.',
           'fal.ai receives the prompt for an image you make, and any pictures sent with it (in Remix: a depth picture of the camera you set, and the shot\'s place and cast pictures), and makes the image. It is asked to keep no copy.',
           'Farcaster\'s sign-in services confirm who you are when you sign in. They learn your Farcaster ID and that you signed in here, not what you read or ask. Farcaster\'s public API receives a Farcaster ID when we look up the username to show with published work, and in Minpentai\'s lobby and matches, and a username when a page is opened at /@name.',
-          'Neynar receives your Farcaster ID when you first make an image on a given day, to look up its account score, which decides whether you can make images. We keep the score for a day. When you sign in with a wallet, Neynar also receives the wallet\'s address, to find the Farcaster account that has verified it; if exactly one has, your wallet is linked to that account (section 4). We keep the answer for a day. A linked wallet is looked up again at most once a day, and its link ends if that account no longer verifies it; a wallet you unlinked isn\'t looked up again.',
+          'Neynar receives your Farcaster ID when you first make an image on a given day, to look up its account score, which decides whether you can make images. We keep the score for a day. When you sign in with a wallet, Neynar also receives the wallet\'s address, to find the Farcaster account that has verified it; if exactly one has, your wallet is linked to that account (section 4). We keep the answer for a day. A linked wallet is looked up again at most once a day, and its link ends if that account no longer verifies it; a wallet you unlinked isn\'t looked up again. When you play Minpentai inside a Farcaster cast, your Farcaster app signs each tap, and we ask Neynar\'s Farcaster hub which signing keys your Farcaster ID has, to check the signature: Neynar receives your Farcaster ID, and we keep its answer in memory for five minutes.',
           'ntfy delivers a short alert to us when an image is reported. It carries no content and nothing about you.',
           'If you listen as a podcast, your podcast app fetches the audio from our media host; Spotify serves its own copy.',
           'If you prepay: Base\'s public network endpoint receives the transaction we look up to confirm your payment.',

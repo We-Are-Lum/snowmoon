@@ -46,6 +46,8 @@ export const AGENT_WORDING = {
   },
   react: {
     makeFrame: (usd: number) => `Make it (up to $${usd.toFixed(2)})`,
+    /** DRAFT (coding agent, 2026-10-22): a wallet account's frame, at the exact price it is charged. */
+    makeFramePaid: (usd: string) => `Make it · $${usd} from your balance`,
     makeVideo: (usd: number) => `Run the test (about $${usd.toFixed(3)})`,
     making: 'Making it…',
     spent: (usd: number) => `Made, for $${usd.toFixed(3)}.`,

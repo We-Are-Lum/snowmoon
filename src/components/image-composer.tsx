@@ -12,6 +12,8 @@ import { SignInButton } from './sign-in';
 import { WalletPanel, WalletSignInButton } from './wallet';
 import { AiLabel } from './recipe-sheet';
 import { AI_LABEL, readerImageView } from '~/lib/ai-declared';
+import { exactDollars } from '~/lib/wallet/price-text';
+import { paysFor, referenceCount } from '~/lib/images/price';
 
 /**
  * "Add an image" (docs/proposals/add-an-image.md, section 2): a sheet over the reader. The
@@ -37,7 +39,8 @@ type Status = {
   publishesLeft?: number;
   perDay: number;
   /** A wallet account: its balance pays for each image (owner, 2026-10-13). */
-  prepaid?: { balanceUsd: number; priceUsd: number; markup: number };
+  /** pricesUsd[n]: a Generate's price with n reference pictures (0: none), as reserve() charges it. */
+  prepaid?: { balanceUsd: number; priceUsd: number; pricesUsd?: number[]; markup: number };
   /** Wallet sign-in is offered only once paying is open (IMAGES.prepaid.payTo set). */
   walletSignIn?: boolean;
   maxBlocks: number;
@@ -337,12 +340,17 @@ function Sheet({ initial, onClose }: { initial: AddImageDetail; onClose: () => v
   // A picked sheet for a character replaces this edition's shorthand for them.
   const pickedFor = new Set(charChips.map((c) => c.entity));
   const madeStyle = status?.styles.find((s) => s.id === made.style) ?? null;
-  const left = status?.left ?? 0;
+  // A wallet account's price for this Generate, as it will be charged (Terms 6a): a picked sheet's pictures sent as
+  // references raise it (owner, 2026-10-23), counted as the server counts them (src/lib/images/price.ts).
+  const references = useEdit ? referenceCount(sheetChips.map((c) => c.views)) : 0;
+  const shownPrice = status?.prepaid ? (status.prepaid.pricesUsd?.[references] ?? status.prepaid.priceUsd) : null;
+  const left = status?.prepaid && shownPrice !== null ? paysFor(status.prepaid.balanceUsd, shownPrice) : (status?.left ?? 0);
   const ready = signedIn && status?.eligible !== false && status?.ready && status.consented;
   const showDraft = view === 'draft' && draft !== null && !published;
   const previewing = step === 'preview' || step === 'publishing';
   const by = auth.kind === 'signed-in' ? (auth.username ? `@${auth.username}` : `FID ${auth.fid}`) : wallet ? wallet.short : 'you';
-  const count = (n: number) => (status?.prepaid ? W.prepaid.balance(status.prepaid.balanceUsd.toFixed(2), n) : `${n} of ${status?.perDay ?? 0} left today`);
+  // A wallet account sees the price it is charged on the button itself (Terms 6a: "at the price shown when you start it").
+  const count = (n: number) => (status?.prepaid && shownPrice !== null ? `${W.prepaid.priceOnButton(exactDollars(shownPrice))} · ${W.prepaid.balance(status.prepaid.balanceUsd.toFixed(2), n)}` : `${n} of ${status?.perDay ?? 0} left today`);
   return (
     <div className="sheet-overlay ic-overlay" onClick={(e) => e.target === e.currentTarget && onClose()}>
       <div ref={sheet} className="recipe-sheet image-composer" role="dialog" aria-modal="true" aria-labelledby="composer-title">
@@ -437,7 +445,7 @@ function Sheet({ initial, onClose }: { initial: AddImageDetail; onClose: () => v
                     </span>
                   </div>
                   <p className="ic-note">Your prompt is sent to Groq to be checked (through Vercel AI Gateway when Groq is busy) and to fal.ai to make the image. It becomes public only if you publish.</p>
-                  {!status.invited && <p className="ic-note">At Generate, your Farcaster ID (and nothing else) is sent to Neynar to check your account&apos;s score, once a day.</p>}
+                  {!status.invited && !status.prepaid && <p className="ic-note">At Generate, your Farcaster ID (and nothing else) is sent to Neynar to check your account&apos;s score, once a day.</p>}
 
                   {/* Always a style (owner, 2026-10-14): no "None". */}
                   <fieldset className="ic-style">
@@ -495,13 +503,13 @@ function Sheet({ initial, onClose }: { initial: AddImageDetail; onClose: () => v
                     <label className="ic-reference">
                       <input type="checkbox" checked={reference} onChange={(e) => setReference(e.target.checked)} />{' '}
                       {D.reference(sheetChips.filter((c) => c.views > 0).map((c) => c.entity).join(', '))}
+                      {status.prepaid?.pricesUsd && ` · ${D.referencePrice(exactDollars(status.prepaid.pricesUsd[referenceCount(sheetChips.map((c) => c.views))]))}`}
                     </label>
                   )}
-                  {status.invited && (
-                    <p className="ic-note">
-                      <Link href="/images/picks">{picks.styles.length || picks.characters.length || picks.places.length ? D.changePicks : D.noPicks}</Link>
-                    </p>
-                  )}
+                  {/* Picks are open to everyone signed in, wallet accounts too (owner, 2026-10-19 and 2026-10-23). */}
+                  <p className="ic-note">
+                    <Link href="/images/picks">{picks.styles.length || picks.characters.length || picks.places.length ? D.changePicks : D.noPicks}</Link>
+                  </p>
 
                   <div className="ic-rules">
                     <p className="ic-label">{W.composer.rulesLabel}</p>
