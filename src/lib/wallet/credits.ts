@@ -4,8 +4,9 @@ import { IMAGES } from '../config';
 
 /**
  * Prepaid balances for wallet accounts (owner, 2026-10-13; migration 0011). Balance = payments
- * credited - debits + debits credited back for a failed Generate (migration 0022, once
- * IMAGES.prepaid.creditBack is on). A Generate's price is its estimated cost (the worst case reserved for it,
+ * credited - debits + debits credited back for a Generate that gave no picture (migration 0022). Credits already
+ * given always count, whether IMAGES.prepaid.creditBack is on or off: the switch only stops new credits (owner,
+ * 2026-10-23: "turning credit-back off stop[s] new credits without hiding past ones"). A Generate's price is its estimated cost (the worst case reserved for it,
  * src/lib/images/limits.ts) plus IMAGES.prepaid.markup, rounded up to the nearest $0.001 (owner, 2026-10-22: "round each
  * price up to the nearest $0.001 and show three decimals"), so the price shown (three decimals) is the price charged.
  */
@@ -28,11 +29,11 @@ export async function balanceUsd(sql: Sql, account: number): Promise<number> {
   const [r] = await sql`select
     coalesce((select sum(usd) from studio.wallet_payments where account_id = ${account}), 0)::float8
     - coalesce((select sum(usd) from studio.wallet_debits where account_id = ${account}), 0)::float8 as usd`;
-  const back = IMAGES.prepaid.creditBack ? await creditedUsd(sql, account) : 0;
+  const back = await creditedUsd(sql, account);
   return Math.round(((r?.usd ?? 0) + back) * 1e6) / 1e6;
 }
 
-/** What failed Generates gave back to this account (migration 0022; read only while IMAGES.prepaid.creditBack is on). */
+/** What Generates that gave no picture gave back to this account (migration 0022). Read whether credit-back is on or off. */
 async function creditedUsd(sql: Sql, account: number): Promise<number> {
   const [r] = await sql`select coalesce(sum(usd), 0)::float8 as usd from studio.wallet_credits where account_id = ${account}`;
   return r?.usd ?? 0;
@@ -65,8 +66,8 @@ export type CreditReason = 'failed' | 'refused' | 'dropped';
 
 /**
  * Credits a failed Generate's debit back to the same account's balance, once, for exactly what was taken (the row
- * is copied from the debit itself). False when credit-back is off (IMAGES.prepaid.creditBack, waiting for migration
- * 0022 and the Terms) or the debit was already credited. Never throws: a Generate's answer doesn't wait on it.
+ * is copied from the debit itself). False when credit-back is off (IMAGES.prepaid.creditBack: no new credits, while
+ * the ones already given stay in the balance) or the debit was already credited. Never throws: a Generate's answer doesn't wait on it.
  */
 export async function creditBack(sql: Sql, debitId: number | undefined, reason: CreditReason): Promise<boolean> {
   if (!IMAGES.prepaid.creditBack || !debitId) return false;

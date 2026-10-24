@@ -496,7 +496,8 @@ export function Assistant({ embedded = false }: { embedded?: boolean } = {}) {
 
   const refresh = useCallback(async () => {
     const res = await authedFetch('/api/chat/status').catch(() => null);
-    if (!res || res.status === 401) {
+    // 403: a wallet not linked to a Farcaster account (its wallet session stays).
+    if (!res || res.status === 401 || res.status === 403) {
       const inApp = await inMiniApp();
       return setStatus({ kind: 'signed-out', inApp });
     }

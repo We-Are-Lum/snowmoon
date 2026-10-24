@@ -41,7 +41,8 @@ After a credit, appended to the error: "No picture came back, so the charge was 
 
 "The price shown": every control that charges a wallet now shows the exact charge, in three decimals
 (Pictures' Generate buttons, Remix's Generate button, an agent frame's Make it); reference pictures, whose price
-differs and isn't shown, are refused for wallet accounts.
+differs and isn't shown, are refused for wallet accounts. (Since 2026-10-23, PR #38: wallet accounts may use picks and
+their reference pictures; the button shows that Generate's own price, `src/lib/images/price.ts`, and that is what is charged.)
 
 ## What the site does today (origin/main, 2026-10-21)
 
@@ -141,6 +142,8 @@ Where: `src/lib/legal.ts`, Privacy, `n: 4`, the wallet paragraph (line 97 on ori
 ## Follow-ups not covered here
 
 - A generation made for less than its estimate is still charged the estimate (the worst case plus 30%). Settling
-  to the real cost and crediting back the difference (proposal §2.7) is a separate change, with its own wording.
-- If credit-back is ever turned off again, the balance would stop counting credits already given. Turning it off
-  should mean "no new credits", not hiding old ones; that needs a small change before it is ever turned off.
+  to the real cost and crediting back the difference (proposal §2.7): owner, 2026-10-23, "no real-cost-plus-difference".
+  Not planned.
+- Turning credit-back off now means "no new credits" (owner, 2026-10-23; PR credit-back-off-keeps-credits): the
+  balance always counts credits already given, whatever the switch says. Turning it off would still make Terms 6a
+  untrue ("that charge is added back to your balance"), so it needs a Terms change and your reread in the same deploy.

@@ -407,8 +407,10 @@ export const IMAGES = {
      * Credit back every Generate that gives no picture (the check or the model didn't answer, the prompt was refused,
      * or the safety checker dropped the picture), to the balance only (owner, 2026-10-21: "credit the balance for
      * anything charged but not made"; reading B, 2026-10-22). ON since 2026-10-22, in the same deploy as Terms 6a and
-     * Privacy 4 (reread by the owner, PR #35), after migrations 0022 and 0027. Off again would mean the code stops
-     * reading studio.wallet_credits; turning it off needs a change first (docs/legal/credits-draft.md).
+     * Privacy 4 (reread by the owner, PR #35), after migrations 0022 and 0027. Off means no new credits only: credits
+     * already given stay in the balance (owner, 2026-10-23), and the wallet panel's note goes back to `terms` and no
+     * "added back" line is shown. Turning it off ALSO needs a Terms change and the owner's reread in the same deploy:
+     * Terms 6a promises that a generation that gives no picture is added back, which would stop being true.
      */
     creditBack: true as boolean,
   },

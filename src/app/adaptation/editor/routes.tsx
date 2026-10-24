@@ -1,6 +1,6 @@
-import { notFound, redirect } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
-import { NothingHere, loadScene, type SceneParams } from '../scene-page';
+import { NothingHere, followScene, loadScene, type SceneParams } from '../scene-page';
 import { ShotEditor } from './shot-editor';
 import { StoryboardEditor } from './storyboard-editor';
 import { editorVersion, ownMedia } from '~/lib/adaptation-pages';
@@ -30,7 +30,7 @@ export async function ShotRoute({ p }: { p: ShotParams }) {
   const shot = decodeURIComponent(p.shot);
   if (!/^[\w-]{1,40}$/.test(shot)) notFound();
   const s = await loadScene(p);
-  if (s.kind === 'redirect') redirect(withTail(s.to, `shot/${shot}`));
+  if (s.kind === 'redirect') followScene(s, withTail(s.to, `shot/${shot}`));
   if (s.kind === 'not-found') notFound();
   if (s.kind === 'hidden') return <NothingHere />;
   if (s.kind === 'nothing') return <NothingHere title={s.adaptation.title} handle={s.handle} />;
@@ -55,7 +55,7 @@ export async function storyboardMetadata(p: SceneParams): Promise<Metadata> {
 
 export async function StoryboardRoute({ p }: { p: SceneParams }) {
   const s = await loadScene(p);
-  if (s.kind === 'redirect') redirect(withTail(s.to, 'storyboard'));
+  if (s.kind === 'redirect') followScene(s, withTail(s.to, 'storyboard'));
   if (s.kind === 'not-found') notFound();
   if (s.kind === 'hidden') return <NothingHere />;
   if (s.kind === 'nothing') return <NothingHere title={s.adaptation.title} handle={s.handle} />;

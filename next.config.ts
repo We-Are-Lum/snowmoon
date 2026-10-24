@@ -69,7 +69,11 @@ const nextConfig: NextConfig = {
     ],
     // Remix's Generate reads the shot (its prompt, plate and cast cards) from the editor's data,
     // made at build time from committed files (scripts/editor-data.mjs): only those, not the voices.
-    '/api/remix/**': ['./public/editor/*/v*/data.json', './public/editor/*/v*/plates/**', './public/editor/*/v*/cards/**'],
+    // …and, for a shot made in code, its saved layout (set/, owner 2026-10-22).
+    '/api/remix/**': ['./public/editor/*/v*/data.json', './public/editor/*/v*/plates/**', './public/editor/*/v*/cards/**', './public/editor/*/v*/set/**'],
+    // An agent's frame try or video test, made when its person approves it (src/lib/agents/approve.ts): the same, and
+    // the shot's frame for a video test.
+    '/api/drafts': ['./public/editor/*/v*/data.json', './public/editor/*/v*/plates/**', './public/editor/*/v*/cards/**', './public/editor/*/v*/set/**', './public/editor/*/v*/frames/**'],
     // The agent read API reads the same editor data (src/lib/agent/data.ts).
     '/api/agent/**': ['./public/editor/*/v*/data.json'],
     '/api/mcp': ['./public/editor/*/v*/data.json'],

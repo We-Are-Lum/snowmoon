@@ -2,7 +2,7 @@ import 'server-only';
 import { AGENT_API, appUrl } from '../config';
 import { blockId, chapterNumbers, loadChapter } from '../book';
 import { plainText, searchBook } from '../book-search';
-import { editorVersion, getAdaptation, getVersion, handleFor, ownMedia, publicCatalogue, shownVersion, type Version } from '../adaptation-pages';
+import { authorVersions, editorVersion, getAdaptation, getVersion, ownMedia, publicCatalogue, sceneHandleFor, sceneOwner, type Version } from '../adaptation-pages';
 import { editorData, type DataShot } from './data';
 
 /**
@@ -49,7 +49,7 @@ const abs = (u: string | null | undefined) => (u ? (u.startsWith('/') ? `${appUr
 
 /** The public facts of a version, as on its scene page. */
 async function versionFacts(v: Version) {
-  const handle = await handleFor(v.author);
+  const handle = await sceneHandleFor(v.author);
   const r = v.recipe;
   return {
     version: v.id,
@@ -169,7 +169,7 @@ export const TOOLS: Tool[] = [
       const v = await publicVersion(adaptation, version);
       const ed = await editorVersion(v);
       const { shot: s } = shotOf(adaptation, ed.id, shot);
-      const handle = await handleFor(v.author);
+      const handle = await sceneHandleFor(v.author);
       return {
         adaptation, version, shot: s.id, n: s.n, from: s.from, to: s.to,
         scene: s.scene ?? null, setup: s.setup ?? null, set: s.set ?? null, who: s.who ?? [],
@@ -210,10 +210,8 @@ export const TOOLS: Tool[] = [
       const shot = str(args, 'shot', /^[A-Za-z0-9-]{1,40}$/, 'a shot id');
       const a = await getAdaptation(adaptation);
       if (!a) throw new ToolInputError('no such adaptation');
-      // The maker's public versions, the one their page shows first (as on the moment page).
-      const all = (await publicCatalogue()).find((c) => c.adaptation.id === adaptation)?.versions.filter((v) => v.author === a.owner) ?? [];
-      const shown = await shownVersion(a.owner, adaptation);
-      const versions = shown ? [shown, ...all.filter((v) => v.id !== shown.id)] : all;
+      // The maker's public versions, the one their page shows first (as on the moment page; a linked wallet's under its FID).
+      const versions = await authorVersions(await sceneOwner(a.owner), adaptation);
       const cols = [];
       let lines: unknown[] = [];
       for (const v of versions) {
@@ -224,7 +222,7 @@ export const TOOLS: Tool[] = [
         cols.push({ version: v.id, from: s.from, to: s.to, frame: abs(s.frame as string | null), picture: s.picture ?? null, ai_label: v.recipe.ai_label ?? null, video: ownMedia(v.recipe.video_url) });
       }
       if (!cols.length) throw new ToolInputError('no such shot in this adaptation');
-      const handle = await handleFor(a.owner);
+      const handle = await sceneHandleFor(a.owner);
       return { adaptation, title: a.title, shot, page: handle ? `${appUrl()}/@${handle}/${adaptation}/m/${shot}` : null, lines, versions: cols, licence: 'GPL-3.0' };
     },
   },

@@ -50,6 +50,22 @@ coding agent and its helpers are in `docs/prompts/`.
   the reader's device over the text served whole by `/api/book/text`; the
   query is never sent anywhere, kept or published, and the page may fetch
   only that text).
+- `P1h` (raw voice takes exception, owner 2026-10-23): our Modal conversion
+  code (`modal/chatterbox_vc.py`) keeps no recording. A static read finds no
+  volume write or `.commit()`, no Dict or Queue, no Web Function (Modal keeps
+  their inputs up to 7 days), no network client, no log of the audio, and
+  every temporary folder removed in a `finally`. A local run with a stub
+  model and a stub `modal` (`scripts/modal_vc_proof.py`, no Modal, no
+  spending) leaves no new file under the temp root, the weights path, the
+  working folder or HOME, including when the model raises, times out or is
+  cancelled; no log line or reply holds the input, its base64 or hex; and no
+  live object holds it afterwards. `npm run check:modal-vc` also proves ten
+  planted violations are each caught. Not covered: what Modal's platform
+  keeps outside our code (`docs/proposals/own-voice-v1.md`).
+- `P1i`: the own-voice-v1 consent (`config/consent-own-voice.json`) is used
+  by no page or code under `src/` until `src/app/record` exists, and once it
+  does, only while the `P1h` proof passes (owner, 2026-10-23: "Ship
+  own-voice-v1 only after that passes").
 - `npm run test:db`: after 0005, a recipe is public only if it made a
   published element version or a segment of a narration that is not hidden;
   drafts, hidden work and abandoned attempts stay private.

@@ -3,7 +3,7 @@ import type postgres from 'postgres';
 import { db } from './db';
 import { WORK_ID } from './config';
 import { lookupName } from './names';
-import { adaptationsOf, getAdaptation, handleFor, ownMedia, shownVersion, versionsBy, type Person, type Version } from './adaptation-pages';
+import { adaptationsOf, getAdaptation, handleFor, ownMedia, sceneHandleFor, shownVersion, versionsBy, type Person, type Version } from './adaptation-pages';
 import { allMyFrames, shownFramesBy, type Frame } from './remix/frames';
 import { boardsBy, type Storyboard } from './remix/storyboards';
 import { posterFor } from './scene-delivery';
@@ -202,12 +202,13 @@ export interface OwnWork {
 /**
  * Everything the signed-in person made, hidden things too. Never call this for anyone but the signed-in person.
  * For a FID, with what its linked wallets made (owner, 2026-10-22: a linked wallet's earlier work shows under the
- * Farcaster name; src/lib/wallet/credit.ts). Each piece keeps its own link (a wallet's scenes stay at its address).
+ * Farcaster name; src/lib/wallet/credit.ts). A linked wallet's scenes link to the Farcaster name's URLs, where they
+ * now live (the address URLs redirect there while linked); its frames and boards keep their own links.
  */
 export async function ownWork(person: Person, handle: string | null): Promise<OwnWork> {
   const own = await ownWorkOf(person, handle);
   for (const w of person > 0 ? await walletsOf(db(), person) : []) {
-    const more = await ownWorkOf(w, await handleFor(w).catch(() => null));
+    const more = await ownWorkOf(w, await sceneHandleFor(w).catch(() => null));
     own.scenes.push(...more.scenes);
     own.frames.push(...more.frames);
     own.boards.push(...more.boards);
@@ -242,14 +243,17 @@ export interface PublicWork {
   boards: BoardItem[];
 }
 
-/** What a public profile shows: only what is already public at its own link. Nothing hidden, no pictures, no money. A FID's includes its linked wallets' (as ownWork). */
+/**
+ * What a public profile shows: only what is already public at its own link. Nothing hidden, no pictures, no money. A FID's
+ * includes its linked wallets' (as ownWork): their scenes through adaptationsOf and shownVersion, at the FID's own
+ * /@<name>/<id> (one per adaptation, as that URL shows), and their frames and boards here.
+ */
 export async function publicWork(person: Person, handle: string): Promise<PublicWork> {
   const pub = await publicWorkOf(person, handle);
   for (const w of person > 0 ? await walletsOf(db(), person) : []) {
     const wh = await handleFor(w).catch(() => null);
     if (!wh) continue;
     const more = await publicWorkOf(w, wh);
-    pub.scenes.push(...more.scenes);
     pub.frames.push(...more.frames);
     pub.boards.push(...more.boards);
   }

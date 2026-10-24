@@ -21,12 +21,15 @@ export const NOTICE_REVIEW: {
   ownerReread: { words: string; on: string } | null;
 } = {
   /** Fingerprint of the chat's code, prompts and settings when the notice was last reread. */
-  reviewedFor: '57f17a6164748a5c',
+  reviewedFor: '49f57678bb4d379f',
   /** Who did that reread: the coding agent, or the owner. */
   by: 'owner (FID 6786)',
-  on: '2026-10-14',
+  on: '2026-10-24',
   note:
-    'Reread by the owner (FID 6786) on 2026-10-14 ("Stamp it"), words unchanged, for the glossary pointers ' +
+    'Reread by the owner (FID 6786) on 2026-10-24 ("#36: stamp it"), words unchanged, for #36: the chat routes now take a ' +
+    'wallet linked to a FID as that FID (getPerson) and answer an unlinked wallet 403. The notice still holds: questions are ' +
+    'counted "under your Farcaster ID", which for a linked wallet is the FID it is linked to; nothing new is sent or kept. ' +
+    'Previous reread: Reread by the owner (FID 6786) on 2026-10-14 ("Stamp it"), words unchanged, for the glossary pointers ' +
     '(src/lib/chat/glossary.ts), citation ids written with other dashes (sanitize.ts) and two added lines in ' +
     'config/prompts/chat-ask.md: no new service receives questions and nothing new is kept. The coding agent ' +
     'reread /about and the private box too; they still hold. Previous reread (owner, 2026-10-08): ' +
