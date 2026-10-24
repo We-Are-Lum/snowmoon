@@ -37,6 +37,7 @@ import {
   verifyExplanations,
   type Entry,
 } from './lib/glossary-explain';
+import { applyFixes, flagged, parseFixes, readable, settle, tally } from './lib/glossary-fix';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const read = (f: string) => readFileSync(path.join(ROOT, f), 'utf8');
@@ -111,6 +112,47 @@ ok(shownThrough(good, 32).hidden === 0, 'a sentence hides at chapter 32');
 // ---- Parsing a model's answer: the gate is computed, never taken from the model ----
 const parsed = parseAnswer('```json\n{"sentences":[{"text":"x","cites":["[c9-b39]","c32-b23"],"quotes":[],"gate":1}]}\n```');
 ok(parsed.sentences[0].gate === 32 && parsed.sentences[0].cites[0] === 'c9-b39', 'parseAnswer took the gate from the model or kept brackets');
+
+// ---- The fix pass (scripts/lib/glossary-fix.ts), with stand-in answers ----
+{
+  const verdicts = [
+    { n: 1, supported: true, why: '' },
+    { n: 2, supported: false, why: 'the passage does not identify Fin as the speaker' },
+    { n: 3, supported: false, why: 'not stated' },
+  ];
+  ok(flagged(good, verdicts).map((f) => f.n).join() === '2,3', 'flagged: wrong sentences');
+  const answer = parseFixes('```json\n{"fixes":[{"slug":"lightfoot","n":2,"action":"recite","cites":["[c9-b38]","c9-b39"],"quotes":[{"block":"c9-b39","text":"at one billion lightfeet per tick"}],"why":"c9-b38 names the speaker","text":"A sentence the model rewrote."},{"slug":"lightfoot","n":3,"action":"CUT","cites":[],"quotes":[],"why":"no block says so"}]}\n```');
+  ok(answer[0].action === 'RECITE' && answer[0].cites[0] === 'c9-b38', 'parseFixes: action or brackets');
+  const applied = applyFixes(good, verdicts, answer, blocks);
+  ok(applied.sentences.map((x) => x.status).join() === 'pass,recheck,cut', `applyFixes statuses: ${applied.sentences.map((x) => x.status).join()}`);
+  ok(applied.sentences.every((x, i) => x.text === good.sentences[i].text), 'a fix changed the words of a sentence');
+  ok(applied.sentences[1].fix?.original.cites.join() === 'c9-b39' && applied.sentences[1].fix?.why === 'c9-b38 names the speaker', 'the fix log lacks the original citations or the reason');
+  ok(applied.sentences[2].fix?.action === 'CUT', 'the cut is not recorded');
+  let threw = false;
+  try {
+    readable(applied);
+  } catch {
+    threw = true;
+  }
+  ok(threw, 'readable() shows sentences still waiting for the re-check');
+  const passed = settle(applied, [{ n: 2, supported: true, why: '' }]);
+  ok(passed.sentences[1].status === 'pass' && passed.sentences[1].fix?.recheck?.supported === true, 'a supported re-check does not pass');
+  const shown = readable(passed);
+  ok(shown.sentences.length === 2 && !shown.sentences.some((x) => x.text === good.sentences[2].text), 'a cut sentence is shown');
+  ok(verifyExplanations([shown], blocks, glossary).length === 0, 'what readers see fails the program checks');
+  ok(readable(settle(applied, [{ n: 2, supported: false, why: 'still not' }])).sentences.length === 1, 'a sentence the re-check rejects is shown');
+  ok(readable(settle(applied, [])).sentences.length === 1, 'a sentence with no re-check verdict is shown');
+  // The gate follows the new citations: re-citing to chapter 32 moves the sentence to chapter 32.
+  const later = applyFixes(good, [{ n: 1, supported: false, why: 'not stated' }], [{ slug: 'lightfoot', n: 1, action: 'RECITE', cites: ['c32-b23'], quotes: [], why: 'x' }], blocks);
+  ok(later.sentences[0].gate === 32, 'the gate is not recomputed from the new citations');
+  // A fix to a block that doesn't exist, or a quote not word for word, fails the program and is never re-checked.
+  const bad = applyFixes(good, verdicts, [{ ...answer[0], cites: ['c9-b99999'] }, answer[1]], blocks);
+  ok(bad.sentences[1].status === 'fail' && (bad.sentences[1].fix?.program.length ?? 0) > 0, 'a fix citing a missing block is not failed');
+  const badQuote = applyFixes(good, verdicts, [{ ...answer[0], quotes: [{ block: 'c9-b39', text: 'at one million lightfeet per tick' }] }, answer[1]], blocks);
+  ok(badQuote.sentences[1].status === 'fail', 'a fix with a quote that is not word for word is not failed');
+  ok(applyFixes(good, verdicts, [], blocks).sentences[1].status === 'fail', 'a flagged sentence with no fix is not failed');
+  ok(tally([passed]).cut === 1 && tally([passed]).recited === 1, 'tally is wrong');
+}
 
 // ---- The committed files, when they exist ----
 if (existsSync(path.join(ROOT, EXPLANATIONS_FILE))) {

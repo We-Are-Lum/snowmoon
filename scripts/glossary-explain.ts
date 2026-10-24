@@ -15,8 +15,8 @@
  *   npx tsx --env-file-if-exists=.env.local scripts/glossary-explain.ts bakeoff-fill --run --cap <usd>
  *       Runs the bake-off's failed calls again (same model, same label) and updates both files.
  *   npx tsx --env-file-if-exists=.env.local scripts/glossary-explain.ts all --model <gateway id> --run --cap <usd>
- *       Every entry with one model. Writes the draft, private/glossary-explanations/glossary-explanations.json,
- *       with its `assist` record.
+ *       Every entry with one model. Writes the raw run, private/glossary-explanations/raw.json, with its `assist`
+ *       record; scripts/glossary-fix.ts then keeps only sentences that pass and writes the draft readers may see.
  *   npx tsx scripts/glossary-explain.ts publish --owner-read
  *       Only once the owner has read the draft: copies it to content/snowmoon/glossary-explanations.json (committed).
  *
@@ -37,6 +37,7 @@ import { randomInt, randomUUID } from 'node:crypto';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import type { Glossary } from './lib/glossary';
+import { call, type Reply, type Usage } from './lib/gateway-call';
 import {
   BAKEOFF_FILE,
   BAKEOFF_KEY_FILE,
@@ -44,6 +45,7 @@ import {
   BAKEOFF_SLUGS,
   CHECK_MODEL,
   EXPLANATIONS_DRAFT,
+  EXPLANATIONS_RAW,
   EXPLANATIONS_FILE,
   GATEWAY,
   PROMPT_FILE,
@@ -126,68 +128,7 @@ async function estimate() {
   }
 }
 
-// ---- Calls ----
-interface Usage {
-  prompt_tokens?: number;
-  completion_tokens?: number;
-  prompt_tokens_details?: { cached_tokens?: number; cache_write_tokens?: number };
-  completion_tokens_details?: { reasoning_tokens?: number };
-  cache_creation_input_tokens?: number;
-  cache_read_input_tokens?: number;
-  cost?: number;
-}
-interface Reply {
-  text: string;
-  usage: Usage;
-  usd: number;
-  requestId: string | null;
-  model: string;
-  provider: string;
-}
-
-function costOf(u: Usage, p: Price): number {
-  if (typeof u.cost === 'number') return u.cost;
-  const read = u.prompt_tokens_details?.cached_tokens ?? u.cache_read_input_tokens ?? 0;
-  const write = u.prompt_tokens_details?.cache_write_tokens ?? u.cache_creation_input_tokens ?? 0;
-  const plain = Math.max(0, (u.prompt_tokens ?? 0) - read - write);
-  return plain * p.input + read * p.cacheRead + write * p.cacheWrite + (u.completion_tokens ?? 0) * p.output;
-}
-
-async function call(key: string, m: ModelChoice, p: Price, session: string, system: string, user: string, request: string): Promise<Reply> {
-  const bookMessage: Record<string, unknown> = { role: 'user', content: user };
-  if (m.caching === 'explicit') bookMessage.cache_control = { type: 'ephemeral' };
-  const send = () => fetch(`${GATEWAY}/chat/completions`, {
-    method: 'POST',
-    headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json', 'x-session-affinity': session },
-    body: JSON.stringify({
-      model: m.id,
-      messages: [{ role: 'system', content: system }, bookMessage, { role: 'user', content: request }],
-      max_tokens: MAX_TOKENS,
-      reasoning: { effort: m.effort },
-      providerOptions: { gateway: { only: [m.provider] } },
-    }),
-  });
-  // A busy provider (429, "at capacity"): wait and try the same provider again, 30 s, 90 s, 180 s. A refused call costs nothing.
-  let res = await send();
-  for (const wait of [30_000, 90_000, 180_000]) {
-    if (res.status !== 429) break;
-    console.log(`${m.id}: busy (429), trying again in ${wait / 1000} s`);
-    await new Promise((r) => setTimeout(r, wait));
-    res = await send();
-  }
-  const j = (await res.json().catch(() => ({}))) as { id?: string; model?: string; provider?: string; choices?: { message?: { content?: string } }[]; usage?: Usage; error?: { message?: string } };
-  if (!res.ok) throw new Error(`${m.id}: gateway ${res.status} ${j.error?.message ?? ''}`.trim());
-  const usage = j.usage ?? {};
-  return {
-    text: j.choices?.[0]?.message?.content ?? '',
-    usage,
-    usd: costOf(usage, p),
-    requestId: j.id ?? res.headers.get('x-vercel-id'),
-    model: j.model ?? m.id,
-    provider: j.provider ?? res.headers.get('x-vercel-ai-provider') ?? m.provider,
-  };
-}
-
+// ---- Calls: scripts/lib/gateway-call.ts ----
 let spent = 0;
 function guard(p: Price) {
   const worst = BOOK_TOKENS * Math.max(p.cacheWrite, p.input) + ENTRY_IN * p.input + MAX_TOKENS * p.output;
@@ -206,7 +147,7 @@ async function runModel(key: string, m: ModelChoice, slugs: string[]) {
     guard(p);
     let r: Reply;
     try {
-      r = await call(key, m, p, session, prompt, book.text, entryRequest(t));
+      r = await call(key, m, p, session, prompt, book.text, entryRequest(t), MAX_TOKENS);
     } catch (e) {
       // A refused or failed call: recorded, and the run goes on (what was spent so far is kept and written).
       console.log(`${m.id} ${slug}: ${String(e).slice(0, 200)}`);
@@ -331,9 +272,10 @@ async function main() {
     const problems = verifyExplanations(r.entries, blocksOf(ROOT), glossary);
     const out: ExplanationsFile = { about: ABOUT, assist: r.assist, entries: r.entries };
     mkdirSync(path.join(ROOT, 'private/glossary-explanations'), { recursive: true });
-    writeFileSync(path.join(ROOT, EXPLANATIONS_DRAFT), JSON.stringify(out, null, 1) + '\n');
+    // The raw run: not for readers until the fix pass (scripts/glossary-fix.ts) has kept only sentences that pass.
+    writeFileSync(path.join(ROOT, EXPLANATIONS_RAW), JSON.stringify(out, null, 1) + '\n');
     writeFileSync(path.join(ROOT, `private/glossary-explanations/run-${r.assist.date}.json`), JSON.stringify({ spent_usd: spent, calls: r.calls }, null, 1) + '\n');
-    console.log(`wrote ${EXPLANATIONS_DRAFT}: ${r.entries.length} entries, ${problems.length} problems; spent ${usd(spent)}`);
+    console.log(`wrote ${EXPLANATIONS_RAW}: ${r.entries.length} entries, ${problems.length} problems; spent ${usd(spent)}`);
     if (problems.length) console.log(problems.slice(0, 30).join('\n'));
     return;
   }

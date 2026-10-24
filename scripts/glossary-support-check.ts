@@ -22,6 +22,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import type { Glossary } from './lib/glossary';
 import { BAKEOFF_FILE, BAKEOFF_SUPPORT_CONTEXT_FILE, BAKEOFF_SUPPORT_FILE, CHECK_CONTEXT_PROMPT_FILE, CHECK_MODEL, CHECK_PROMPT_FILE, blockBefore, GATEWAY, blocksOf, estimateTokens, priceOf, seenText, sha256, verifyExplanations, type Entry, type Price } from './lib/glossary-explain';
+import { callChecker, checkRequest } from './lib/glossary-check';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const read = (f: string) => readFileSync(path.join(ROOT, f), 'utf8');
@@ -46,51 +47,8 @@ function load(): Record<string, Entry[]> {
   return { [j.assist.model]: j.entries };
 }
 
-function request(e: Entry): string {
-  const cited = [...new Set(e.sentences.flatMap((s) => s.cites))].filter((c) => blocks.has(c));
-  return [
-    `ENTRY: ${e.term}`,
-    '',
-    'SENTENCES:',
-    ...e.sentences.map((s, i) => `${i + 1}. ${s.text}\n   cites: ${s.cites.join(', ')}`),
-    '',
-    'PASSAGES:',
-    ...cited.map((c) => {
-      const before = CONTEXT ? blockBefore(ROOT, c) : null;
-      return (before ? `CONTEXT (the passage before ${c}) [${before}] ${seenText(blocks.get(before)!)}\n` : '') + `[${c}] ${seenText(blocks.get(c)!)}`;
-    }),
-  ].join('\n');
-}
-
-async function check(key: string, p: Price, e: Entry) {
-  const send = () => fetch(`${GATEWAY}/chat/completions`, {
-    method: 'POST',
-    headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      model: CHECK_MODEL.id,
-      messages: [{ role: 'system', content: prompt }, { role: 'user', content: request(e) }],
-      max_tokens: MAX_TOKENS,
-      reasoning: { effort: CHECK_MODEL.effort },
-      providerOptions: { gateway: { only: [CHECK_MODEL.provider] } },
-    }),
-  });
-  // Busy or briefly down (429, 5xx): the same provider again after 20, 60 and 120 s. A refused call costs nothing.
-  let res = await send();
-  for (const wait of [20_000, 60_000, 120_000]) {
-    if (res.status !== 429 && res.status < 500) break;
-    console.log(`${CHECK_MODEL.id}: ${res.status}, trying again in ${wait / 1000} s`);
-    await new Promise((r) => setTimeout(r, wait));
-    res = await send();
-  }
-  const j = (await res.json().catch(() => ({}))) as { id?: string; model?: string; choices?: { message?: { content?: string } }[]; usage?: { prompt_tokens?: number; completion_tokens?: number; cost?: number } };
-  if (!res.ok) throw new Error(`${CHECK_MODEL.id}: gateway ${res.status}`);
-  const u = j.usage ?? {};
-  const cost = typeof u.cost === 'number' ? u.cost : (u.prompt_tokens ?? 0) * p.input + (u.completion_tokens ?? 0) * p.output;
-  const text = j.choices?.[0]?.message?.content ?? '';
-  const raw = text.slice(text.indexOf('{'), text.lastIndexOf('}') + 1);
-  const verdicts = (JSON.parse(raw).verdicts as { n: number; verdict: string; why?: string }[]).map((v) => ({ n: Number(v.n), supported: /^SUPPORTED$/i.test(v.verdict.trim()), why: v.why ?? '' }));
-  return { verdicts, cost, requestId: j.id ?? null, model: j.model ?? CHECK_MODEL.id };
-}
+const request = (e: Entry) => checkRequest(ROOT, e.term, e.sentences.map((x, i) => ({ ...x, n: i + 1 })), CONTEXT);
+const check = (key: string, p: Price, e: Entry) => callChecker(key, p, prompt, request(e), MAX_TOKENS);
 
 const labels = existsSync(path.join(ROOT, FILE)) ? load() : null;
 const p = await priceOf(CHECK_MODEL);

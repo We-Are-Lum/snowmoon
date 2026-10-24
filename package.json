@@ -47,6 +47,8 @@
     "test:glossary-explanations": "tsx scripts/test-glossary-explanations.ts",
     "glossary:explain": "tsx --env-file-if-exists=.env.local scripts/glossary-explain.ts",
     "glossary:support-check": "tsx --env-file-if-exists=.env.local scripts/glossary-support-check.ts",
+    "glossary:fix": "tsx --env-file-if-exists=.env.local scripts/glossary-fix.ts",
+    "glossary:opus-batch": "tsx --env-file-if-exists=.env.local --env-file-if-exists=/Users/nathan/snowmoon/.env.anthropic.local scripts/glossary-anthropic-batch.ts",
     "test:minpentai-share": "tsx scripts/test-minpentai-share.ts",
     "test:minpentai-play": "tsx scripts/test-minpentai-play.ts",
     "test:minpentai-kit": "tsx scripts/build-minpentai-kit.ts --check",

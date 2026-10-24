@@ -20,7 +20,7 @@ export interface WrittenSentence {
 }
 interface FileShape {
   assist: { model: string; maker: string; open_weights: boolean; date: string; prompt_file: string };
-  entries: { slug: string; term: string; sentences: (WrittenSentence & { quotes: unknown[] })[] }[];
+  entries: { slug: string; term: string; sentences: (WrittenSentence & { quotes: unknown[]; status?: string })[] }[];
 }
 export interface WrittenView {
   /** "Written by <model> from the book. Check the cited lines." */
@@ -76,7 +76,9 @@ export function writtenFor(slug: string, through: number): WrittenView | null {
   const e = f?.entries.find((x) => x.slug === slug);
   if (!f || !e || !e.sentences.length) return null;
   const upTo = Math.max(1, Math.min(WORK.chapters, Math.floor(through) || 1));
-  const shown = e.sentences.filter((s) => s.gate <= upTo).map((s) => ({ text: s.text, cites: s.cites, gate: s.gate }));
+  // Only sentences that passed (the fix pass writes passing ones only; a status other than pass is never shown).
+  const passing = e.sentences.filter((s) => s.status === undefined || s.status === 'pass');
+  const shown = passing.filter((s) => s.gate <= upTo).map((s) => ({ text: s.text, cites: s.cites, gate: s.gate }));
   return {
     label: writtenLabel(f.assist.model, f.assist.maker, f.assist.open_weights),
     model: f.assist.model,
@@ -85,7 +87,7 @@ export function writtenFor(slug: string, through: number): WrittenView | null {
     date: f.assist.date,
     promptFile: f.assist.prompt_file,
     sentences: shown,
-    hidden: e.sentences.length - shown.length,
+    hidden: passing.length - shown.length,
   };
 }
 

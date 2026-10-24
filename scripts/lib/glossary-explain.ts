@@ -32,7 +32,10 @@ import { loadBlocks, quoteSource, type Glossary } from './glossary';
  * repo until I've read them"): never committed, never in a deployment built from GitHub.
  */
 export const EXPLANATIONS_FILE = 'content/snowmoon/glossary-explanations.json';
+/** The draft readers may see (the owner only, until published): passing sentences only, written by the fix pass. */
 export const EXPLANATIONS_DRAFT = 'private/glossary-explanations/glossary-explanations.json';
+/** A full run before the fix pass. */
+export const EXPLANATIONS_RAW = 'private/glossary-explanations/raw.json';
 export const PROMPT_FILE = 'config/prompts/glossary-explain.md';
 export const CHECK_PROMPT_FILE = 'config/prompts/glossary-support-check.md';
 /** The second check: each cited block with the block before it, to show who is speaking (owner, 2026-10-23). */
