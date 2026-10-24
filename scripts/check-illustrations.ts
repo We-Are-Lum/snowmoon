@@ -18,7 +18,7 @@
  *   … --only=c1-b082-snatch,c2-b038-foil-classroom   … --model=anthropic/claude-opus-5.5
  *   … --sheets=DIR (repeatable): folders holding cast sheet renders (zei-sheet.png …); a sheet is sent as a
  *     picture only when its sha256 matches content/snowmoon/recipes/images/cast.json, otherwise as its text.
- *   … --upload: also store each answer in studio.illustration_checks (needs NEXT_illustration_review and
+ *   … --upload: also store each answer in studio.illustration_checks (needs 0028_illustration_review and
  *     STUDIO_DATABASE_URL), so the owner's review page can show it on the site.
  *
  * Output (with --spend): private/illustration-check/<run>.json (gitignored), with its recipe: the model, the
@@ -62,6 +62,7 @@ if (!price) throw new Error(`--model must be one of ${Object.keys(MODELS).join('
 const effort = arg('effort') ?? 'medium';
 const maxUsd = Number(arg('max-usd') ?? '3');
 const spend = flag('spend');
+const imageDir = arg('image-dir') ? path.resolve(arg('image-dir')!) : null;
 const sheetDirs = [path.join(ROOT, 'images-out', 'cast'), ...many('sheets')];
 
 const prompt = readFileSync(path.join(ROOT, PROMPT_FILE), 'utf8');
@@ -212,17 +213,23 @@ interface Result {
 
 async function call(key: string, b: Built): Promise<Result> {
   const job = b.job;
+  // --image-dir (the redo's re-check, owner 2026-10-24): the picture is <dir>/<job id>.png on this machine, not the
+  // published one; its own sha256 is recorded.
+  const local = imageDir ? path.join(imageDir, `${job.id}.png`) : null;
+  if (local && !existsSync(local)) return { job: job.id, chapter: job.chapter, idx: job.idx, image: null, inputs_sha256: b.inputs, sheets_sent_as: 'none', answer: null, error: `no ${local}` };
+  const localBytes = local ? readFileSync(local) : null;
   const base: Result = {
     job: job.id,
     chapter: job.chapter,
     idx: job.idx,
-    image: job.image ? { url: job.image.url, sha256: job.image.sha256 } : null,
-    inputs_sha256: b.inputs,
+    image: localBytes ? { url: path.relative(ROOT, local!), sha256: sha256(localBytes) } : job.image ? { url: job.image.url, sha256: job.image.sha256 } : null,
+    inputs_sha256: localBytes ? { ...b.inputs, image: sha256(localBytes) } : b.inputs,
     sheets_sent_as: !job.cast.length ? 'none' : b.sheets.length ? 'pictures and text' : 'text',
     answer: null,
   };
-  if (!job.image) return { ...base, error: `no published image (${job.excluded ?? 'not in published.json'})` };
-  const img = await imageBytes(job);
+  if (!job.image && !localBytes) return { ...base, error: `no published image (${job.excluded ?? 'not in published.json'})` };
+  const img = localBytes ?? (await imageBytes(job));
+  const imgType = localBytes ? 'image/png' : 'image/jpeg';
   const castParts = [
     { type: 'text', text: b.text.cast },
     ...b.sheets.flatMap((s) => [
@@ -239,7 +246,7 @@ async function call(key: string, b: Built): Promise<Result> {
     response_format: { type: 'json_schema', json_schema: { name: 'illustration_check', strict: true, schema: ANSWER_SCHEMA } },
     messages: [
       { role: 'system', content: system },
-      { role: 'user', content: [...castParts, { type: 'text', text: b.text.job }, { type: 'image_url', image_url: { url: dataUrl(img, 'image/jpeg'), detail: 'high' } }] },
+      { role: 'user', content: [...castParts, { type: 'text', text: b.text.job }, { type: 'image_url', image_url: { url: dataUrl(img, imgType), detail: 'high' } }] },
     ],
     providerOptions: { gateway: { zeroDataRetention: true } },
   };
@@ -288,6 +295,26 @@ async function call(key: string, b: Built): Promise<Result> {
 // ---------------------------------------------------------------------------------------------------------------
 // Main
 // ---------------------------------------------------------------------------------------------------------------
+
+// --upload-from=<run file>: store a run's answers (with their fix lines) in studio.illustration_checks, so the owner's
+// review page shows them on the site. Needs 0028_illustration_review applied and STUDIO_DATABASE_URL. Calls no model.
+const uploadFrom = arg('upload-from');
+if (uploadFrom) {
+  const rec = JSON.parse(readFileSync(uploadFrom, 'utf8')) as { run: string; recipe: { model: { gateway_id: string } }; results: Result[] };
+  const { default: postgres } = await import('postgres');
+  const url = process.env.STUDIO_DATABASE_URL;
+  if (!url) throw new Error('--upload-from needs STUDIO_DATABASE_URL');
+  const sql = postgres(url, { prepare: false, max: 1 });
+  let n = 0;
+  for (const r of rec.results.filter((x) => x.answer)) {
+    const res = await sql`insert into studio.illustration_checks ${sql({ run: rec.run, job_id: r.job, image_sha256: r.image?.sha256 ?? null, model: rec.recipe.model.gateway_id, answer: sql.json(r.answer as never), inputs_sha256: sql.json(r.inputs_sha256), cost_usd: r.cost_usd ?? null })} on conflict (run, job_id) do nothing`;
+    n += res.count;
+  }
+  const [{ count }] = await sql<{ count: string }[]>`select count(*) from studio.illustration_checks where run = ${rec.run}`;
+  await sql.end();
+  console.log(`uploaded ${n} new answers; run ${rec.run} now has ${count} rows`);
+  process.exit(0);
+}
 
 const all = checkJobs();
 const only = arg('only')?.split(',') ?? (flag('pilot') ? PILOT : null);

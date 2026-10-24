@@ -2,8 +2,8 @@ import 'server-only';
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import path from 'node:path';
 import type postgres from 'postgres';
-import { checkJobs, type CheckJob } from './jobs';
-import { hasDouble, worstFirst, type CheckAnswer } from './schema';
+import { checkJob, checkJobs, type CheckJob } from './jobs';
+import { draftedByOf, hasDouble, worstFirst, type CheckAnswer } from './schema';
 export { noteCredit } from './schema';
 
 /**
@@ -11,7 +11,7 @@ export { noteCredit } from './schema';
  * passage, its image, the vision check's latest answer and the owner's latest decision, worst first: wrong, then
  * partly, then matches, then not checked; within each, more problems first.
  *
- * Where things are kept (NEXT_illustration_review): the check's answers in studio.illustration_checks (uploaded by
+ * Where things are kept (0028_illustration_review): the check's answers in studio.illustration_checks (uploaded by
  * scripts/check-illustrations.ts --upload), the decisions in studio.illustration_reviews (append-only; the latest
  * per job counts). Neither is public. Without a database (a local build), the answers are read from the newest file
  * in private/illustration-check/ (gitignored), and decisions can't be saved.
@@ -124,10 +124,40 @@ export async function reviewItems(sql: Sql | null): Promise<{ items: ReviewItem[
   return { items: items.sort(worstFirst), canSave: decisions.stored };
 }
 
-/** The latest check of one job (its run, model and one-line finding), for the note the check drafts. */
-export async function latestCheckOf(sql: Sql | null, jobId: string): Promise<{ run: string; model: string; why: string } | null> {
+/**
+ * The note the check drafts for one job (owner, 2026-10-24: "Regenerate pre-fills the fix line, not the finding"): its
+ * stored fix line, with the run and who drafted it ("<check model> finding; <text model> fix line"); null without one.
+ */
+export async function draftedNoteOf(sql: Sql | null, jobId: string): Promise<{ run: string; text: string; draftedBy: string } | null> {
   const c = (await latestChecks(sql)).get(jobId);
-  return c ? { run: c.run, model: c.model, why: c.answer.why } : null;
+  const fix = c?.answer.fix_line;
+  if (!c || !fix?.text?.trim()) return null;
+  return { run: c.run, text: fix.text.trim(), draftedBy: draftedByOf(c.model, fix.model) };
+}
+
+/**
+ * The owner's decision as POST /api/you/illustrations takes it; the caller has checked the owner. The drafted text, its
+ * model and the edited flag come from the stored check only: anything the request says about them is ignored.
+ */
+export async function decide(sql: Sql, fid: number, raw: unknown): Promise<{ status: number; json: Record<string, unknown> }> {
+  const body = (raw ?? {}) as { jobId?: unknown; decision?: unknown; note?: unknown; checkRun?: unknown; fromCheck?: unknown };
+  const job = typeof body.jobId === 'string' ? checkJob(body.jobId) : null;
+  if (!job) return { status: 404, json: { error: 'No such job' } };
+  if (!DECISIONS.includes(body.decision as Decision)) return { status: 400, json: { error: 'Keep, regenerate or drop' } };
+  const decision = body.decision as Decision;
+  const note = typeof body.note === 'string' && body.note.trim() ? body.note.trim() : null;
+  if (note && note.length > NOTE_MAX) return { status: 400, json: { error: `A note is at most ${NOTE_MAX} characters` } };
+  if (decision === 'regenerate' && !note) return { status: 400, json: { error: 'Regenerate needs your note: it goes into the prompt' } };
+  const checkRun = typeof body.checkRun === 'string' && /^[A-Za-z0-9._-]{1,120}$/.test(body.checkRun) ? body.checkRun : null;
+  const check = decision === 'regenerate' && body.fromCheck === true ? await draftedNoteOf(sql, job.id) : null;
+  const drafted = check ? { draftedNote: check.text, draftedBy: check.draftedBy, noteEdited: note !== check.text } : { draftedNote: null, draftedBy: null, noteEdited: null };
+  try {
+    await saveDecision(sql, { jobId: job.id, decision, note, byFid: fid, imageSha256: job.image?.sha256 ?? null, checkRun: check?.run ?? checkRun, ...drafted });
+  } catch (e) {
+    if (/does not exist/.test(String((e as Error).message))) return { status: 503, json: { error: 'Decisions can’t be saved until 0028_illustration_review is applied' } };
+    throw e;
+  }
+  return { status: 200, json: { saved: decision } };
 }
 
 /** Adds the owner's decision (a new row; earlier ones stay). The caller has checked the owner. */

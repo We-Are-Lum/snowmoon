@@ -62,8 +62,8 @@
  *   the sign-in offer only; as the owner (API replayed from scripts/fixtures/illustration-review.json), worst first,
  *   in the owner's order (wrong, partly with a double, partly, matches, not checked), each item with its passage, its
  *   image's AI label, the check labelled AI with its model, Keep / Regenerate with my note / Drop, a saved decision
- *   shown, the note box with the publication line, pre-filled with the check's finding labelled "Drafted by the image
- *   check (Google Gemini 4 Argon)" and marked when edited; anyone else sees only the owner line.
+ *   shown, the finding with its fix line, the note box with the publication line, pre-filled with the fix line labelled
+ *   "Drafted by the image check (Argon finding, gpt-oss-120b fix line)" and marked when edited; anyone else sees only the owner line.
  * - The footer line (owner's legal starter, 2026-10-09) reads exactly as written, with Terms, Privacy
  *   and Source linked, at the foot of About, in the menu sheet and at the bottom of the rail; not on a
  *   phone's reading screen. /terms and /privacy meet the floors.
@@ -516,9 +516,10 @@ async function checkIllustrationReview(page: Page, scheme: string) {
   const first = page.locator('.illus-item').first();
   if (!(await first.locator('.illus-note .publication-line').count())) fail(`${where}: the note box does not show the publication line`);
   // The note is pre-filled with the check's finding, labelled as drafted by the check (owner, 2026-10-24); editing it says so.
-  const why = (fixture.items as { verdict: string | null; check: { answer: { why: string } } | null }[]).find((x) => x.verdict === 'wrong')!.check!.answer.why;
-  if ((await first.locator('.illus-note textarea').inputValue()) !== why) fail(`${where}: the note is not pre-filled with the check's finding`);
-  if (!/Drafted by the image check \(Google Gemini 4 Argon\)/.test(await first.locator('.illus-drafted').innerText().catch(() => ''))) fail(`${where}: the pre-filled note is not labelled as drafted by the image check`);
+  const why = (fixture.items as { verdict: string | null; check: { answer: { fix_line: { text: string } } } | null }[]).find((x) => x.verdict === 'wrong')!.check!.answer.fix_line.text;
+  if ((await first.locator('.illus-note textarea').inputValue()) !== why) fail(`${where}: the note is not pre-filled with the check's fix line`);
+  if (!(await first.locator('.illus-fix').count())) fail(`${where}: the fix line is not shown beside the finding`);
+  if (!/Drafted by the image check \(Argon finding, gpt-oss-120b fix line\)/.test(await first.locator('.illus-drafted').innerText().catch(() => ''))) fail(`${where}: the pre-filled note is not labelled as drafted by the image check (both steps)`);
   await first.locator('.illus-note textarea').fill(`${why} Draw him once.`);
   if (!/edited by you/i.test(await first.locator('.illus-drafted').innerText().catch(() => ''))) fail(`${where}: an edited note is not marked as edited`);
   await checkFloors(page, '/you/illustrations @390 (owner, note)', scheme);

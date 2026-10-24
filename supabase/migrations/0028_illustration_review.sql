@@ -1,6 +1,6 @@
--- NEXT_illustration_review.sql — the owner's review of the seeded key-moment images (owner, 2026-10-23: "Does each
--- image show its scene?"; branch illustration-check). DRAFT, NOT APPLIED. No number yet (owner's rule, 2026-10-22):
--- it takes the next free number at merge time, checked against main and production.
+-- 0028_illustration_review.sql — the owner's review of the seeded key-moment images (owner, 2026-10-23: "Does each
+-- image show its scene?"; branch illustration-check). APPLIED in production by the owner on 2026-10-24 as
+-- NEXT_illustration_review (dry run, real run and read-back 9 of 9 true); numbered 0028 for the merge (main ended at 0027).
 --
 -- MUST RUN AS postgres (the role that owns the `studio` schema), in the Supabase SQL Editor. Requires 0001 only.
 -- Dry run first: paste everything, but replace the final `commit;` with `rollback;`.

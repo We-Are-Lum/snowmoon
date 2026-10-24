@@ -6,7 +6,7 @@ import { authFetch, useAuth } from '~/lib/client-auth';
 import { AI_LABEL } from '~/lib/ai-declared';
 import { ILLUSTRATION_CHECK } from '~/lib/config';
 import type { ReviewItem, Decision } from '~/lib/illustration-check/review';
-import { GROUP_NAMES, noteCredit, reviewGroup, worstFirst } from '~/lib/illustration-check/schema';
+import { GROUP_NAMES, MODEL_NAMES, noteCredit, reviewGroup, worstFirst } from '~/lib/illustration-check/schema';
 import { AiLabel } from './recipe-sheet';
 import { PublishedTextField } from './publish-words';
 import { SignInButton } from './sign-in';
@@ -45,8 +45,11 @@ const W = {
   regenerate: 'Regenerate with my note',
   drop: 'Drop',
   noteLabel: 'Your note for the redo (it is added to this image’s prompt, credited to you)',
-  drafted: `Drafted by the image check (${ILLUSTRATION_CHECK.modelName}). Keep it as it is or edit it; saving it approves it.`,
-  draftedEdited: 'Drafted by the image check, edited by you.',
+  draftedBy: (check: string, fix: string | null) => `Drafted by the image check (${MODEL_NAMES[check] ?? check} finding${fix ? `, ${MODEL_NAMES[fix] ?? fix} fix line` : ''})`,
+  drafted: 'Keep it as it is or edit it; saving it approves it.',
+  draftedEdited: 'Edited by you.',
+  finding: 'Finding',
+  fix: 'Fix line',
   saveNote: 'Save the note',
   cancel: 'Cancel',
   noteNeeded: 'Write what should change first.',
@@ -131,6 +134,9 @@ function Item({ item, canSave, reload }: { item: ReviewItem; canSave: boolean; r
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const a = item.check?.answer ?? null;
+  // What pre-fills the note (owner, 2026-10-24: "Regenerate pre-fills the fix line, not the finding").
+  const draft = (a?.fix_line?.text ?? '').trim();
+  const draftLabel = a ? W.draftedBy(item.check!.model, a.fix_line?.model ?? null) : '';
 
   async function decide(decision: Decision) {
     if (decision === 'regenerate' && !note.trim()) return setError(W.noteNeeded);
@@ -226,6 +232,14 @@ function Item({ item, canSave, reload }: { item: ReviewItem; canSave: boolean; r
                 <dt>{W.verdict[a.verdict]}</dt>
                 <dd>{a.why}</dd>
               </div>
+              {a.fix_line && (
+                <div className="illus-fix">
+                  <dt>{W.fix}</dt>
+                  <dd>
+                    {a.fix_line.text} <span className="you-meta">{W.draftedBy(item.check.model, a.fix_line.model)}</span>
+                  </dd>
+                </div>
+              )}
             </dl>
           </section>
         ) : (
@@ -240,8 +254,8 @@ function Item({ item, canSave, reload }: { item: ReviewItem; canSave: boolean; r
             </button>
             <button type="button" className="ic-secondary" disabled={busy} aria-expanded={noting} aria-pressed={item.decision?.decision === 'regenerate'}
               onClick={() => {
-                if (!noting && !note.trim() && a) {
-                  setNote(a.why);
+                if (!noting && !note.trim() && draft) {
+                  setNote(draft);
                   setFromCheck(true);
                 }
                 setNoting((v) => !v);
@@ -257,8 +271,8 @@ function Item({ item, canSave, reload }: { item: ReviewItem; canSave: boolean; r
         {canSave && noting && (
           <div className="illus-note">
             {fromCheck && a && (
-              <p className="you-meta illus-drafted" data-edited={note.trim() !== a.why.trim() ? 'yes' : 'no'}>
-                {note.trim() !== a.why.trim() ? W.draftedEdited : W.drafted}
+              <p className="you-meta illus-drafted" data-edited={note.trim() !== draft ? 'yes' : 'no'}>
+                {draftLabel}. {note.trim() !== draft ? W.draftedEdited : W.drafted}
               </p>
             )}
             <PublishedTextField id={`note-${item.id}`} label={W.noteLabel} value={note} onChange={setNote} rows={3} maxLength={1000} />

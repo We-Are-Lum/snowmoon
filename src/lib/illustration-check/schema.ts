@@ -17,7 +17,18 @@ export interface CheckAnswer {
   problems: { type: ProblemType; detail: string }[];
   verdict: Verdict;
   why: string;
+  /**
+   * The fix line (owner, 2026-10-24): the finding turned into what to draw, by a text model (scripts/fix-lines.ts), with
+   * its recipe. Added after the check; it is what pre-fills a Regenerate note.
+   */
+  fix_line?: { text: string; model: string; prompt_file: string; prompt_sha256: string; date: string; cost_usd?: number };
 }
+
+/** Who drafted a pre-filled note, short enough for illustration_reviews.drafted_by (120 characters). */
+export const draftedByOf = (checkModel: string, fixModel: string | null) => (fixModel ? `${checkModel} finding; ${fixModel} fix line` : `${checkModel} finding`).slice(0, 120);
+
+/** Model ids as the page names them. */
+export const MODEL_NAMES: Record<string, string> = { 'google/gemini-4-argon': 'Argon', 'openai/gpt-oss-120b': 'gpt-oss-120b' };
 
 export const ANSWER_SCHEMA = {
   type: 'object',

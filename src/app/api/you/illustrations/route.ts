@@ -2,8 +2,7 @@ import { NextResponse } from 'next/server';
 import { getFid } from '~/lib/auth';
 import { db } from '~/lib/db';
 import { ILLUSTRATION_CHECK } from '~/lib/config';
-import { checkJob } from '~/lib/illustration-check/jobs';
-import { DECISIONS, NOTE_MAX, latestCheckOf, reviewItems, saveDecision, type Decision } from '~/lib/illustration-check/review';
+import { decide, reviewItems } from '~/lib/illustration-check/review';
 
 /**
  * The owner's review of the seeded images (owner, 2026-10-23), behind /you/illustrations. Owner only
@@ -34,24 +33,8 @@ export async function POST(request: Request) {
   if (!ILLUSTRATION_CHECK.owners.includes(fid)) return NextResponse.json({ error: 'Owner only' }, { status: 403 });
   const sql = db();
   if (!sql) return NextResponse.json({ error: 'Decisions can’t be saved on this copy of the site' }, { status: 503 });
-  const body = (await request.json().catch(() => ({}))) as { jobId?: unknown; decision?: unknown; note?: unknown; checkRun?: unknown; fromCheck?: unknown };
-  const job = typeof body.jobId === 'string' ? checkJob(body.jobId) : null;
-  if (!job) return NextResponse.json({ error: 'No such job' }, { status: 404 });
-  if (!DECISIONS.includes(body.decision as Decision)) return NextResponse.json({ error: 'Keep, regenerate or drop' }, { status: 400 });
-  const decision = body.decision as Decision;
-  const note = typeof body.note === 'string' && body.note.trim() ? body.note.trim() : null;
-  if (note && note.length > NOTE_MAX) return NextResponse.json({ error: `A note is at most ${NOTE_MAX} characters` }, { status: 400 });
-  if (decision === 'regenerate' && !note) return NextResponse.json({ error: 'Regenerate needs your note: it goes into the prompt' }, { status: 400 });
-  const checkRun = typeof body.checkRun === 'string' && /^[A-Za-z0-9._-]{1,120}$/.test(body.checkRun) ? body.checkRun : null;
-  // A note pre-filled by the image check (owner, 2026-10-24): the drafted text is taken from the stored check, never from
-  // the request, and the note counts as edited whenever it differs from it.
-  const check = decision === 'regenerate' && body.fromCheck === true ? await latestCheckOf(sql, job.id) : null;
-  const drafted = check ? { draftedNote: check.why, draftedBy: check.model, noteEdited: note !== check.why.trim() } : { draftedNote: null, draftedBy: null, noteEdited: null };
-  try {
-    await saveDecision(sql, { jobId: job.id, decision, note, byFid: fid, imageSha256: job.image?.sha256 ?? null, checkRun: check?.run ?? checkRun, ...drafted });
-  } catch (e) {
-    if (/does not exist/.test(String((e as Error).message))) return NextResponse.json({ error: 'Decisions can’t be saved until NEXT_illustration_review is applied' }, { status: 503 });
-    throw e;
-  }
-  return NextResponse.json({ saved: decision }, { headers: noStore });
+  const body = await request.json().catch(() => ({}));
+  const r = await decide(sql, fid, body);
+  return NextResponse.json(r.json, { status: r.status, headers: noStore });
 }
+

@@ -346,7 +346,14 @@
       }
      ],
      "verdict": "wrong",
-     "why": "Fixture: the same person appears twice."
+     "why": "Fixture: the same person appears twice.",
+     "fix_line": {
+      "text": "Fixture: Zei appears once, at the nearer console.",
+      "model": "openai/gpt-oss-120b",
+      "prompt_file": "config/prompts/illustration-fix-line.md",
+      "prompt_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "date": "2026-10-24T00:00:00Z"
+     }
     }
    },
    "verdict": "wrong",
