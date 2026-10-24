@@ -5,8 +5,10 @@
 
 Reads images-out/cast/<slug>-sheet.png and images-out/chapter-N/<id>.png (hash-checked by collect.py),
 and the jobs in content/snowmoon/illustrations/chapter-*.json (who is in each image, in reference order).
-Writes content/snowmoon/consistency/scores.json, and small sheet thumbnails to images-out/consistency/sheets/
-(local only: the cast sheets have never been published, so they stay out of the repository).
+Writes content/snowmoon/consistency/scores.json and small sheet thumbnails beside it.
+
+NOT USED FOR PICKING (owner, 2026-10-23: "The automatic scores were wrong 6 times in 10, so don't use them to pick
+redos: use the by-eye list"). Redos come from review.json's by-eye list; these scores are kept as a record only.
 
 Models (all open weights, run on this Mac, used only to measure, never to make anything published):
   google/owlv2-base-patch16-ensemble (Apache-2.0): finds people and faces by text query ("a person", "a face").
@@ -403,9 +405,8 @@ def main():
         sheets[slug] = {"views": views, "faces": [v["face_e"] for v in views[:2] if v["face_e"] is not None]}
         th = im.copy()
         th.thumbnail((640, 360))
-        # Thumbnails for the owner's page, kept out of the repository: the sheets have never been published.
-        (DEBUG / "sheets").mkdir(parents=True, exist_ok=True)
-        th.save(DEBUG / "sheets" / f"sheet-{slug}.jpg", quality=82)
+        # Thumbnails for the owner's page (committed: owner, 2026-10-23, "yes, commit the 19 sheet thumbnails").
+        th.save(OUT / f"sheet-{slug}.jpg", quality=82)
         print(f"sheet {slug}: {len(views)} views, {len(sheets[slug]['faces'])} faces found", flush=True)
 
     def compare(fig, slug):
@@ -455,6 +456,7 @@ def main():
     result = {
         "about": "How closely each character image matches that character's cast sheet. Measured locally by scripts/consistency/measure.py "
                  "(no paid service); see its docstring for what each score does and does not measure. Owner-only until the owner has read it.",
+        "not_for_picking": "A record only. Wrong 6 times in its worst 10; redos are picked from review.json's by-eye list (owner, 2026-10-23).",
         "models": [{"repo": r, "revision": revision(r), "license": l, "use": u} for r, l, u in (
             (OWL[0], "apache-2.0", "find people, heads and faces"), (DINO[0], "apache-2.0", "face and figure features"),
             (CLIP[0], "mit", "clothes features, build probe"))],

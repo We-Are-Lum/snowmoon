@@ -6,13 +6,11 @@ import { sheetCharacters } from './images/sheets';
 /**
  * Same character, same look (owner, 2026-10-23; branch illustration-consistency): how closely each seeded
  * character image matches that character's cast sheet, measured locally by scripts/consistency/measure.py.
- * Owner-only: read through /api/you/consistency, which answers only for the maintainer (FID 6786). The cast sheets
- * have never been published, so their thumbnails are not in the repository: on the owner's Mac (npm run dev, after
- * measure.py) they travel inside that answer; on a deploy the page says the sheet is local only.
+ * Owner-only: read through /api/you/consistency, which answers only for the maintainer (FID 6786). The sheet
+ * thumbnails are committed beside the scores (owner, 2026-10-23) and travel inside that answer.
+ * The automatic scores are a record only: redos are picked from the by-eye list (owner, 2026-10-23).
  */
 const DIR = path.join(process.cwd(), 'content', 'snowmoon', 'consistency');
-/** Sheet thumbnails: local only (images-out is not in the repository), because the cast sheets have never been published. */
-const SHEETS = path.join(process.cwd(), 'images-out', 'consistency', 'sheets');
 
 export interface PairScore {
   character: string;
@@ -61,17 +59,42 @@ export interface ConsistencyData {
   images: ImageScore[];
   characters: { slug: string; name: string; sheet: string | null }[];
   review: Review | null;
+  /** The trial, side by side, no scores: null where its pictures aren't on this machine (a deploy). */
+  trial: TrialRow[] | null;
+}
+
+/** The trial's pictures (images-out/trial, local only; scripts/consistency/trial.py). */
+const TRIAL = path.join(process.cwd(), 'images-out', 'trial');
+export const TRIAL_WAYS = ['a', 'b', 'c'] as const;
+export interface TrialRow {
+  id: string;
+  chapter: number;
+  /** The published original's public URL. */
+  original: string | null;
+  /** Way → the picture's file name in images-out/trial, or null if it wasn't made. */
+  ways: Record<(typeof TRIAL_WAYS)[number], string | null>;
+}
+function trialRecipe(): { images: { what: string; image?: string; way?: string; file: string }[] } | null {
+  const f = path.join(TRIAL, 'recipe.json');
+  return existsSync(f) ? JSON.parse(readFileSync(f, 'utf8')) : null;
+}
+/** A trial picture's path, only if the trial's recipe lists it (no other file can be named). */
+export function trialFile(name: string): string | null {
+  if (!/^[a-z0-9-]+\.(a|b|c)\.png$/.test(name)) return null;
+  const listed = trialRecipe()?.images.some((im) => im.what === 'trial' && path.basename(im.file) === name);
+  const f = path.join(TRIAL, name);
+  return listed && existsSync(f) ? f : null;
 }
 
 export function consistencyData(): ConsistencyData | null {
   const file = path.join(DIR, 'scores.json');
   if (!existsSync(file)) return null;
-  const scores = JSON.parse(readFileSync(file, 'utf8')) as Omit<ConsistencyData, 'characters' | 'review'>;
+  const scores = JSON.parse(readFileSync(file, 'utf8')) as Omit<ConsistencyData, 'characters' | 'review' | 'trial'>;
   const slugs = [...new Set(scores.images.flatMap((i) => i.characters))];
   const names = new Map(sheetCharacters().map((c) => [c.slug, c.name]));
   const characters = slugs
     .map((slug) => {
-      const thumb = path.join(SHEETS, `sheet-${slug}.jpg`);
+      const thumb = path.join(DIR, `sheet-${slug}.jpg`);
       const sheet = existsSync(thumb) ? `data:image/jpeg;base64,${readFileSync(thumb).toString('base64')}` : null;
       return { slug, name: names.get(slug) ?? slug, sheet };
     })
@@ -80,5 +103,18 @@ export function consistencyData(): ConsistencyData | null {
   const images = scores.images.map(({ figures: _figures, ...im }: ImageScore & { figures?: unknown }) => im);
   const reviewFile = path.join(DIR, 'review.json');
   const review = existsSync(reviewFile) ? (JSON.parse(readFileSync(reviewFile, 'utf8')) as Review) : null;
-  return { ...scores, images, characters, review };
+  const recipe = trialRecipe();
+  const trial = recipe
+    ? (review?.trial10 ?? []).map((id): TrialRow => {
+        const im = images.find((i) => i.id === id);
+        const made = (w: string) => recipe.images.find((r) => r.what === 'trial' && r.image === id && r.way === w);
+        return {
+          id,
+          chapter: im?.chapter ?? 0,
+          original: im?.url ?? null,
+          ways: { a: made('a') ? `${id}.a.png` : null, b: made('b') ? `${id}.b.png` : null, c: made('c') ? `${id}.c.png` : null },
+        };
+      })
+    : null;
+  return { ...scores, images, characters, review, trial };
 }

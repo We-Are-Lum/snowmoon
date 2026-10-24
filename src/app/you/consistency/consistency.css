@@ -9,3 +9,7 @@
 .consistency-box { position: absolute; border: 2px solid #f5c400; box-shadow: 0 0 0 1px #000; pointer-events: none; }
 .consistency-flag { color: #b3306e; font-size: 0.85rem; }
 .consistency-sheet { margin: 0 0 8px; max-width: 640px; }
+.consistency-trial { margin: 1.5rem 0; }
+.consistency-trial-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 8px; }
+.consistency-trial-row figure { margin: 0; }
+.consistency-trial-row img { width: 100%; height: auto; display: block; }

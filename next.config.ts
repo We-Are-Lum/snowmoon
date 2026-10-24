@@ -73,7 +73,7 @@ const nextConfig: NextConfig = {
     // The agent read API reads the same editor data (src/lib/agent/data.ts).
     '/api/agent/**': ['./public/editor/*/v*/data.json'],
     '/api/mcp': ['./public/editor/*/v*/data.json'],
-    // The owner-only consistency page's scores and the check by eye (src/lib/consistency.ts).
+    // The owner-only consistency page's scores, sheet thumbnails and the check by eye (src/lib/consistency.ts).
     '/api/you/consistency': ['./content/snowmoon/consistency/**'],
     // A moment page reads each version's shot (its frame, times and lines) from the same data.
     '/adaptation/**': ['./public/editor/*/v*/data.json'],

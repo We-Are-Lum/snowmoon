@@ -1,5 +1,6 @@
 {
  "about": "A check by eye of the measured scores (scores.json). The coding agent (Claude, a closed model) looked at every one of the 106 measured images beside its characters' sheets on 2026-10-23. DRAFT for the owner: the owner's own look decides.",
+ "picking": "Redos are picked from this by-eye list only, never from the automatic scores (owner, 2026-10-23: \"The automatic scores were wrong 6 times in 10, so don't use them to pick redos: use the by-eye list, and I'll judge the trial by eye.\").",
  "by": "coding agent (Claude, closed model), 2026-10-23",
  "finding": "The commonest fault is a double: a character's costume (or hair) copied onto a second person in the same picture. The automatic scores catch that only sometimes (the 'possible double' flag); they mostly measure the figure taken to be the character, and that step fails when a character is small, seated or seen from behind.",
  "problems": [
@@ -154,5 +155,9 @@
   "c13-b065-hijacked-screen",
   "c2-b038-foil-classroom"
  ],
- "trial10_why": "The ten worst real problems found by eye, most severe first. Only three of them are in the measured worst 10; the measured list is mostly measurement errors. Six are two-character images, so the who-is-who wording is tested."
+ "trial10_why": "The ten worst real problems found by eye, most severe first. Only three of them are in the measured worst 10; the measured list is mostly measurement errors. Six are two-character images, so the who-is-who wording is tested.",
+ "unmeasured": {
+  "c26-b132-drone-escape": "The Drive copy (sha256 c4a4239e88998d2c…, 2026-10-04 12:22 PDT) is the first render: two drones, seed 26632, recorded in commit 0500a18. The job was rewritten that night (one drone, one rider, seed 27632) and re-rendered; commit 4f381af replaced the recipe (sha256 b0bbfa6c912601b1…). The re-render was never copied to Drive and is no longer on disk. Excluded from publishing in both versions; never in published.json.",
+  "c27-b071-tea-robot": "The Drive copy (sha256 60399962853b9068…, 2026-10-04 12:27 PDT) is the first render: Gladias and Zei, seed 27571 (0500a18). Rewritten that night to Gladias alone, seed 28571, and re-rendered; 4f381af replaced the recipe (sha256 9a15e0a83fc7418e…). The re-render was never copied to Drive and is no longer on disk. Excluded from publishing in both versions; never in published.json."
+ }
 }

@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { authFetch, useAuth } from '~/lib/client-auth';
 import { AI_LABEL } from '~/lib/ai-declared';
 import { SYSTEM_FID } from '~/lib/config';
-import type { ConsistencyData, ImageScore, PairScore } from '~/lib/consistency';
+import type { ConsistencyData, ImageScore, PairScore, TrialRow } from '~/lib/consistency';
 import { AiLabel } from './recipe-sheet';
 import { SignInButton } from './sign-in';
 
@@ -30,7 +30,16 @@ const W = {
     ['clothes', 'garments and their colours, below the face. Hidden or seated bodies score lower for that alone.'],
     ['build', 'weak: a text probe (slim, heavy-set, tall…). Pose moves it. A hint only.'],
   ] as [string, string][],
+  sideBySide: 'The trial, side by side',
+  sideBySideNote:
+    'The ten from the check by eye, redrawn three ways with the same seed and size. No scores here: judge by eye. (c) is the main option. Nothing here is published.',
+  trialLocal:
+    'The trial’s pictures are only on the Mac (images-out/trial, never committed). Open images-out/trial/index.html there, or the “consistency trial” folder in your Drive.',
+  wayNames: { original: 'Original (published)', a: '(a) klein 4B + portraits', b: '(b) klein base 4B, 28 steps', c: '(c) Qwen-Image-Edit-2511' } as Record<string, string>,
+  notMade: 'Not made',
   eye: 'Checked by eye',
+  notForPicking:
+    'The automatic scores below were wrong 6 times in their worst 10, so they are not used to pick redos: redos come from the by-eye list (owner, 2026-10-23). They are kept as a record.',
   eyeNote: (by: string) => `Every measured image, looked at beside its characters’ sheets by the ${by}. Your own look decides.`,
   trialTen: 'The ten for the trial',
   worst: 'The 10 worst, as measured',
@@ -46,13 +55,12 @@ const W = {
   box: 'The outlined figure is the one taken to be this character.',
   robe: 'In a privacy robe in this scene (by design): face, hair and clothes are not compared.',
   robeOpen: 'Robe open in this scene: clothes are not compared.',
-  trial: 'The trial (Sunday; prepared, not run)',
-  trialNote:
-    'The ten below (checked by eye), redrawn three ways with the same seed and size, side by side (scripts/consistency/trial.py; its page is images-out/trial/index.html on the Mac). At most $1.45 with the portraits, counted high. Nothing is redrawn in full until you pick.',
+  trial: 'The three ways',
+  trialNote: 'Run on 2026-10-23 on fal (and this Mac for the portraits), under a $2 cap. Nothing is redrawn in full until you pick.',
   ways: [
-    ['a', 'Same model (FLUX.2 [klein] 4B, Apache-2.0, on the allowlist), with a head-and-shoulders portrait of each character as a second reference. There are no portraits yet: each is drawn from its sheet first (9 for the trial, 19 for everyone; about $0.016 each on fal, or free on this Mac), and you look at them before they are used. With two characters the location plate no longer fits (4 references at most) and the place stays in words.'],
-    ['b', 'More steps. The distilled 4B is made for 4 steps (fal allows 4–8). Its undistilled sibling, FLUX.2 [klein] base 4B (Apache-2.0, same family, not yet on the allowlist), runs 28 steps with guidance 5.'],
-    ['c', 'Qwen-Image-Edit-2511 (Qwen, Apache-2.0, 20B, not yet on the allowlist): built for multi-image edits and keeping people consistent. Too big for this Mac; on fal at $0.03 a megapixel.'],
+    ['a', 'Same model (FLUX.2 [klein] 4B, Apache-2.0), with a head-and-shoulders portrait of each character as a second reference. The 9 portraits were drawn from the sheets on this Mac, free. With two characters the location plate no longer fits (4 references at most), so the place is in words.'],
+    ['b', 'More steps. The distilled 4B is made for 4 steps (fal allows 4–8), so this is its undistilled sibling, FLUX.2 [klein] base 4B (Apache-2.0), at 28 steps, guidance 5. Now on the allowlist.'],
+    ['c', 'Qwen-Image-Edit-2511 (Qwen, Apache-2.0, 20B), the main option: built for multi-image edits and keeping people consistent. Now on the allowlist. Too big for this Mac; on fal at $0.03 a megapixel.'],
   ] as [string, string][],
 };
 
@@ -139,6 +147,11 @@ function Report({ data }: { data: ConsistencyData }) {
           ))}
         </ul>
       </section>
+      <section>
+        <h2>{W.sideBySide}</h2>
+        <p>{W.sideBySideNote}</p>
+        {data.trial ? data.trial.map((r) => <TrialRowView key={r.id} row={r} note={notes.get(r.id)} />) : <p>{W.trialLocal}</p>}
+      </section>
       {review ? (
         <section>
           <h2>{W.eye}</h2>
@@ -167,6 +180,7 @@ function Report({ data }: { data: ConsistencyData }) {
           </ul>
         </section>
       ) : null}
+      <p className="consistency-flag">{W.notForPicking}</p>
       <section>
         <h2>{W.worst}</h2>
         <p className="consistency-small">{W.worstNote}</p>
@@ -285,4 +299,53 @@ function Card({ im, focus, name, note }: { im: ImageScore; focus: string | null;
       </figcaption>
     </figure>
   );
+}
+
+function TrialRowView({ row, note }: { row: TrialRow; note?: string }) {
+  return (
+    <div className="consistency-trial">
+      <h3>
+        <Link href={`/chapter/${row.chapter}`}>{row.id}</Link>
+      </h3>
+      {note ? <p className="consistency-small">{note}</p> : null}
+      <div className="consistency-trial-row">
+        <figure>
+          {row.original ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={row.original} alt={`AI-generated image: ${row.id}, the published original`} width={1024} height={576} loading="lazy" />
+          ) : null}
+          <figcaption>
+            {W.wayNames.original} · <AiLabel kind="image" text={AI_LABEL.image} file={`content/snowmoon/recipes/images/chapter-${row.chapter}.json`} item={row.id} />
+          </figcaption>
+        </figure>
+        {(['a', 'b', 'c'] as const).map((w) => (
+          <figure key={w}>
+            {row.ways[w] ? <TrialImage file={row.ways[w]!} alt={`AI-generated image: ${row.id}, trial ${w}`} /> : <p>{W.notMade}</p>}
+            <figcaption>{W.wayNames[w]} · AI image, not published</figcaption>
+          </figure>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/** A trial picture, fetched with the owner's sign-in (an <img> can't send it) and shown from a blob. */
+function TrialImage({ file, alt }: { file: string; alt: string }) {
+  const [src, setSrc] = useState<string | null>(null);
+  useEffect(() => {
+    let url: string | null = null;
+    let alive = true;
+    void (async () => {
+      const res = await authFetch(`/api/you/consistency/trial?file=${encodeURIComponent(file)}`).catch(() => null);
+      if (!alive || !res?.ok) return;
+      url = URL.createObjectURL(await res.blob());
+      setSrc(url);
+    })();
+    return () => {
+      alive = false;
+      if (url) URL.revokeObjectURL(url);
+    };
+  }, [file]);
+  // eslint-disable-next-line @next/next/no-img-element
+  return src ? <img src={src} alt={alt} width={1024} height={576} /> : <p className="consistency-small">…</p>;
 }

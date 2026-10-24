@@ -18,11 +18,10 @@ seed and size, so only the method changes:
         klein takes at most 4 references: with two characters (2 sheets + 2 portraits) the location
         plate is left out and the place stays in words. That is a second change; it is recorded.
   b     more steps: FLUX.2 [klein] base 4B, the same family's undistilled weights (Apache-2.0), 28
-        steps, guidance 5 (fal's defaults). The distilled model is made for 4 steps; fal allows it 4-8
-        (--ways b8 tries the distilled model at 8). Base 4B is NOT on the allowlist yet: adding it is
-        a reviewed change (config/models.json) before anything it draws is published.
+        steps, guidance 5. The distilled model is made for 4 steps; fal allows it 4-8 (--ways b8 tries
+        the distilled model at 8). On the allowlist as flux2-klein-base-4b (owner, 2026-10-23).
   c     Qwen-Image-Edit-2511 (Qwen, Apache-2.0, 20B), multi-image edit, 28 steps, guidance 4.5 (fal's
-        defaults). NOT on the allowlist yet either.
+        defaults). On the allowlist as qwen-image-edit-2511 (owner, 2026-10-23); the owner's main option.
 
 All three ways use the same prompt wording for who is who (see who_is_who()): each reference is
 named by its number and by a letter, A or B, and the scene's "the boy from reference image 1"
@@ -63,13 +62,13 @@ _spec2.loader.exec_module(illustrate)
 # USD per megapixel, read from fal's model pages on 2026-10-23.
 WAYS = {
     "a": {"endpoint": "fal-ai/flux-2/klein/4b/edit", "price": 0.01, "body": {"num_inference_steps": 4},
-          "model": "FLUX.2 [klein] 4B (distilled), Apache-2.0, on the allowlist", "portraits": True},
+          "model": "FLUX.2 [klein] 4B (distilled), Apache-2.0, allowlist flux2-klein-4b, + portraits", "portraits": True},
     "b": {"endpoint": "fal-ai/flux-2/klein/4b/base/edit", "price": 0.009, "body": {"num_inference_steps": 28, "guidance_scale": 5},
-          "model": "FLUX.2 [klein] base 4B (undistilled), Apache-2.0, not yet on the allowlist", "portraits": False},
+          "model": "FLUX.2 [klein] base 4B (undistilled), Apache-2.0, allowlist flux2-klein-base-4b", "portraits": False},
     "b8": {"endpoint": "fal-ai/flux-2/klein/4b/edit", "price": 0.01, "body": {"num_inference_steps": 8},
            "model": "FLUX.2 [klein] 4B (distilled) at 8 steps, the most fal allows", "portraits": False},
     "c": {"endpoint": "fal-ai/qwen-image-edit-2511", "price": 0.03, "body": {"num_inference_steps": 28, "guidance_scale": 4.5},
-          "model": "Qwen-Image-Edit-2511, Apache-2.0, not yet on the allowlist", "portraits": False},
+          "model": "Qwen-Image-Edit-2511, Apache-2.0, allowlist qwen-image-edit-2511", "portraits": False},
 }
 PORTRAIT = {"endpoint": "fal-ai/flux-2/klein/4b/edit", "price": 0.01, "body": {"num_inference_steps": 4}}
 MAX_REFS = {"a": 4, "b": 4, "b8": 4, "c": 3}  # klein: 4 (fal); Qwen 2511 is trained and shown with 1-3 inputs
@@ -180,7 +179,7 @@ def main():
     ap.add_argument("--portraits", action="store_true", help="make the portraits way a needs (only those characters)")
     ap.add_argument("--only", nargs="*", help="image ids (default: review.json trial10)")
     ap.add_argument("--estimate-full", action="store_true", help="price a full redraw of every character image, each way; calls nothing")
-    ap.add_argument("--cap", type=float, default=5.0, help="USD; the trial's own ceiling (the owner's overall limit is $25 across three jobs)")
+    ap.add_argument("--cap", type=float, default=2.0, help="USD; the trial's own ceiling, $2 (owner, 2026-10-23; the overall limit is $25 across all weekend jobs)")
     args = ap.parse_args()
 
     scores = json.loads((CONTENT / "consistency" / "scores.json").read_text())
@@ -294,7 +293,32 @@ def main():
         rows.append(row)
     if args.run:
         page(rows, args.ways)
+        composites(rows, args.ways)
     print(f"trial: ${total:.4f} for {len(ids)} images x {len(args.ways)} ways{'' if args.run else ' (estimate, nothing called)'}")
+
+
+def composites(rows, ways):
+    """images-out/trial/side-by-side/<id>.jpg: original | a / b | c in one picture each, labelled, no scores,
+    for looking at on a phone (the owner's Drive)."""
+    from PIL import ImageDraw
+    out = OUT / "side-by-side"
+    out.mkdir(exist_ok=True)
+    names = {"orig": "original (published)", "a": "(a) klein 4B + portraits", "b": "(b) klein base 4B, 28 steps",
+             "b8": "(b8) klein 4B, 8 steps", "c": "(c) Qwen-Image-Edit-2511"}
+    for r in rows:
+        cells = [("orig", IMG / r["orig"].removeprefix("images-out/"))] + [(w, OUT / r["ways"][w]["file"]) for w in ways]
+        tiles = []
+        for key, f in cells:
+            im = Image.open(f).convert("RGB").resize((768, 432)) if f.exists() else Image.new("RGB", (768, 432), "#ddd")
+            d = ImageDraw.Draw(im)
+            d.rectangle([0, 0, 768, 30], fill=(0, 0, 0))
+            d.text((10, 8), names[key] + ("" if f.exists() else ": not made"), fill=(255, 230, 0))
+            tiles.append(im)
+        cols = 2
+        sheet = Image.new("RGB", (768 * cols + 8, 440 * ((len(tiles) + 1) // cols)), "white")
+        for k, t in enumerate(tiles):
+            sheet.paste(t, ((k % cols) * 776, (k // cols) * 440))
+        sheet.save(out / f"{r['id']}.jpg", quality=86)
 
 
 def page(rows, ways):

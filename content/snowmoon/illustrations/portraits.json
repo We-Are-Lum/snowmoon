@@ -1,5 +1,5 @@
 {
- "about": "DRAFT, not run (illustration-consistency trial, way a): one head-and-shoulders portrait per character, drawn from that character's cast sheet, to be used as a second reference image beside the sheet. Nothing here is published; the owner looks at the portraits before any trial uses them. Run locally with scripts/illustrate.py (free) or on fal through scripts/consistency/trial.py --portraits (priced there).",
+ "about": "DRAFT (illustration-consistency trial, way a): one head-and-shoulders portrait per character, drawn from that character's cast sheet, to be used as a second reference image beside the sheet. Nothing here is published; the owner looks at the portraits before any trial uses them. Run locally with scripts/illustrate.py (free) or on fal through scripts/consistency/trial.py --portraits (priced there).",
  "style": "designs/styles/techno-vistas.json",
  "assist": {
   "model": "claude-coding-agent",
@@ -26,10 +26,13 @@
    ],
    "setting": null,
    "props": [],
-   "prompt": "Head-and-shoulders portrait of the person from reference image 1, alone, facing the viewer, head turned very slightly to one side, face, hair and collar large and sharp in the frame, neutral calm expression, on a plain flat off-white background with no scenery, even lighting. Only this one person, drawn once.",
+   "prompt": "Close-up head-and-shoulders portrait of the person from reference image 1: only the head, neck and shoulders, cropped at the chest, the face large and filling the upper middle of the picture, facing the viewer with the head turned very slightly to one side, neutral calm expression, every detail of the face and hair sharp. Plain flat off-white background, no scenery, no legs, no full body. Only this one person, drawn once.",
    "width": 768,
    "height": 768,
-   "seed": 7001
+   "seed": 7001,
+   "style": {
+    "prompt": "Detailed science fiction comic art in the same style as the reference: precise fine uniform linework, cel-shaded flat color with soft hard-edged shadows, clean and bright. No text, no lettering, no writing, no logos, no numbers."
+   }
   },
   {
    "id": "deluin-portrait",
@@ -43,10 +46,13 @@
    ],
    "setting": null,
    "props": [],
-   "prompt": "Head-and-shoulders portrait of the person from reference image 1, alone, facing the viewer, head turned very slightly to one side, face, hair and collar large and sharp in the frame, neutral calm expression, on a plain flat off-white background with no scenery, even lighting. Only this one person, drawn once.",
+   "prompt": "Close-up head-and-shoulders portrait of the person from reference image 1: only the head, neck and shoulders, cropped at the chest, the face large and filling the upper middle of the picture, facing the viewer with the head turned very slightly to one side, neutral calm expression, every detail of the face and hair sharp. Plain flat off-white background, no scenery, no legs, no full body. Only this one person, drawn once.",
    "width": 768,
    "height": 768,
-   "seed": 7002
+   "seed": 7002,
+   "style": {
+    "prompt": "Detailed science fiction comic art in the same style as the reference: precise fine uniform linework, cel-shaded flat color with soft hard-edged shadows, clean and bright. No text, no lettering, no writing, no logos, no numbers."
+   }
   },
   {
    "id": "delwart-portrait",
@@ -60,10 +66,13 @@
    ],
    "setting": null,
    "props": [],
-   "prompt": "Head-and-shoulders portrait of the person from reference image 1, alone, facing the viewer, head turned very slightly to one side, face, hair and collar large and sharp in the frame, neutral calm expression, on a plain flat off-white background with no scenery, even lighting. Only this one person, drawn once.",
+   "prompt": "Close-up head-and-shoulders portrait of the person from reference image 1: only the head, neck and shoulders, cropped at the chest, the face large and filling the upper middle of the picture, facing the viewer with the head turned very slightly to one side, neutral calm expression, every detail of the face and hair sharp. Plain flat off-white background, no scenery, no legs, no full body. Only this one person, drawn once.",
    "width": 768,
    "height": 768,
-   "seed": 7003
+   "seed": 7003,
+   "style": {
+    "prompt": "Detailed science fiction comic art in the same style as the reference: precise fine uniform linework, cel-shaded flat color with soft hard-edged shadows, clean and bright. No text, no lettering, no writing, no logos, no numbers."
+   }
   },
   {
    "id": "den-portrait",
@@ -77,10 +86,13 @@
    ],
    "setting": null,
    "props": [],
-   "prompt": "Head-and-shoulders portrait of the person from reference image 1, alone, facing the viewer, head turned very slightly to one side, face, hair and collar large and sharp in the frame, neutral calm expression, on a plain flat off-white background with no scenery, even lighting. Only this one person, drawn once.",
+   "prompt": "Close-up head-and-shoulders portrait of the person from reference image 1: only the head, neck and shoulders, cropped at the chest, the face large and filling the upper middle of the picture, facing the viewer with the head turned very slightly to one side, neutral calm expression, every detail of the face and hair sharp. Plain flat off-white background, no scenery, no legs, no full body. Only this one person, drawn once.",
    "width": 768,
    "height": 768,
-   "seed": 7004
+   "seed": 7004,
+   "style": {
+    "prompt": "Detailed science fiction comic art in the same style as the reference: precise fine uniform linework, cel-shaded flat color with soft hard-edged shadows, clean and bright. No text, no lettering, no writing, no logos, no numbers."
+   }
   },
   {
    "id": "febric-portrait",
@@ -94,10 +106,13 @@
    ],
    "setting": null,
    "props": [],
-   "prompt": "Head-and-shoulders portrait of the person from reference image 1, alone, facing the viewer, head turned very slightly to one side, face, hair and collar large and sharp in the frame, neutral calm expression, on a plain flat off-white background with no scenery, even lighting. Only this one person, drawn once.",
+   "prompt": "Close-up head-and-shoulders portrait of the person from reference image 1: only the head, neck and shoulders, cropped at the chest, the face large and filling the upper middle of the picture, facing the viewer with the head turned very slightly to one side, neutral calm expression, every detail of the face and hair sharp. Plain flat off-white background, no scenery, no legs, no full body. Only this one person, drawn once.",
    "width": 768,
    "height": 768,
-   "seed": 7005
+   "seed": 7005,
+   "style": {
+    "prompt": "Detailed science fiction comic art in the same style as the reference: precise fine uniform linework, cel-shaded flat color with soft hard-edged shadows, clean and bright. No text, no lettering, no writing, no logos, no numbers."
+   }
   },
   {
    "id": "fin-portrait",
@@ -111,10 +126,13 @@
    ],
    "setting": null,
    "props": [],
-   "prompt": "Head-and-shoulders portrait of the person from reference image 1, alone, facing the viewer, head turned very slightly to one side, face, hair and collar large and sharp in the frame, neutral calm expression, on a plain flat off-white background with no scenery, even lighting. Only this one person, drawn once.",
+   "prompt": "Close-up head-and-shoulders portrait of the person from reference image 1: only the head, neck and shoulders, cropped at the chest, the face large and filling the upper middle of the picture, facing the viewer with the head turned very slightly to one side, neutral calm expression, every detail of the face and hair sharp. Plain flat off-white background, no scenery, no legs, no full body. Only this one person, drawn once.",
    "width": 768,
    "height": 768,
-   "seed": 7006
+   "seed": 7006,
+   "style": {
+    "prompt": "Detailed science fiction comic art in the same style as the reference: precise fine uniform linework, cel-shaded flat color with soft hard-edged shadows, clean and bright. No text, no lettering, no writing, no logos, no numbers."
+   }
   },
   {
    "id": "gladias-portrait",
@@ -128,10 +146,13 @@
    ],
    "setting": null,
    "props": [],
-   "prompt": "Head-and-shoulders portrait of the person from reference image 1, alone, facing the viewer, head turned very slightly to one side, face, hair and collar large and sharp in the frame, neutral calm expression, on a plain flat off-white background with no scenery, even lighting. Only this one person, drawn once.",
+   "prompt": "Close-up head-and-shoulders portrait of the person from reference image 1: only the head, neck and shoulders, cropped at the chest, the face large and filling the upper middle of the picture, facing the viewer with the head turned very slightly to one side, neutral calm expression, every detail of the face and hair sharp. Plain flat off-white background, no scenery, no legs, no full body. Only this one person, drawn once.",
    "width": 768,
    "height": 768,
-   "seed": 7007
+   "seed": 7007,
+   "style": {
+    "prompt": "Detailed science fiction comic art in the same style as the reference: precise fine uniform linework, cel-shaded flat color with soft hard-edged shadows, clean and bright. No text, no lettering, no writing, no logos, no numbers."
+   }
   },
   {
    "id": "hreda-portrait",
@@ -145,10 +166,13 @@
    ],
    "setting": null,
    "props": [],
-   "prompt": "Head-and-shoulders portrait of the person from reference image 1, alone, facing the viewer, head turned very slightly to one side, face, hair and collar large and sharp in the frame, neutral calm expression, on a plain flat off-white background with no scenery, even lighting. Only this one person, drawn once.",
+   "prompt": "Close-up head-and-shoulders portrait of the person from reference image 1: only the head, neck and shoulders, cropped at the chest, the face large and filling the upper middle of the picture, facing the viewer with the head turned very slightly to one side, neutral calm expression, every detail of the face and hair sharp. Plain flat off-white background, no scenery, no legs, no full body. Only this one person, drawn once.",
    "width": 768,
    "height": 768,
-   "seed": 7008
+   "seed": 7008,
+   "style": {
+    "prompt": "Detailed science fiction comic art in the same style as the reference: precise fine uniform linework, cel-shaded flat color with soft hard-edged shadows, clean and bright. No text, no lettering, no writing, no logos, no numbers."
+   }
   },
   {
    "id": "jahn-portrait",
@@ -162,10 +186,13 @@
    ],
    "setting": null,
    "props": [],
-   "prompt": "Head-and-shoulders portrait of the person from reference image 1, alone, facing the viewer, head turned very slightly to one side, face, hair and collar large and sharp in the frame, neutral calm expression, on a plain flat off-white background with no scenery, even lighting. Only this one person, drawn once.",
+   "prompt": "Close-up head-and-shoulders portrait of the person from reference image 1: only the head, neck and shoulders, cropped at the chest, the face large and filling the upper middle of the picture, facing the viewer with the head turned very slightly to one side, neutral calm expression, every detail of the face and hair sharp. Plain flat off-white background, no scenery, no legs, no full body. Only this one person, drawn once.",
    "width": 768,
    "height": 768,
-   "seed": 7009
+   "seed": 7009,
+   "style": {
+    "prompt": "Detailed science fiction comic art in the same style as the reference: precise fine uniform linework, cel-shaded flat color with soft hard-edged shadows, clean and bright. No text, no lettering, no writing, no logos, no numbers."
+   }
   },
   {
    "id": "lektor-portrait",
@@ -179,10 +206,13 @@
    ],
    "setting": null,
    "props": [],
-   "prompt": "Head-and-shoulders portrait of the person from reference image 1, alone, facing the viewer, head turned very slightly to one side, face, hair and collar large and sharp in the frame, neutral calm expression, on a plain flat off-white background with no scenery, even lighting. Only this one person, drawn once.",
+   "prompt": "Close-up head-and-shoulders portrait of the person from reference image 1: only the head, neck and shoulders, cropped at the chest, the face large and filling the upper middle of the picture, facing the viewer with the head turned very slightly to one side, neutral calm expression, every detail of the face and hair sharp. Plain flat off-white background, no scenery, no legs, no full body. Only this one person, drawn once.",
    "width": 768,
    "height": 768,
-   "seed": 7010
+   "seed": 7010,
+   "style": {
+    "prompt": "Detailed science fiction comic art in the same style as the reference: precise fine uniform linework, cel-shaded flat color with soft hard-edged shadows, clean and bright. No text, no lettering, no writing, no logos, no numbers."
+   }
   },
   {
    "id": "lily-portrait",
@@ -196,10 +226,13 @@
    ],
    "setting": null,
    "props": [],
-   "prompt": "Head-and-shoulders portrait of the person from reference image 1, alone, facing the viewer, head turned very slightly to one side, face, hair and collar large and sharp in the frame, neutral calm expression, on a plain flat off-white background with no scenery, even lighting. Only this one person, drawn once.",
+   "prompt": "Close-up head-and-shoulders portrait of the person from reference image 1: only the head, neck and shoulders, cropped at the chest, the face large and filling the upper middle of the picture, facing the viewer with the head turned very slightly to one side, neutral calm expression, every detail of the face and hair sharp. Plain flat off-white background, no scenery, no legs, no full body. Only this one person, drawn once.",
    "width": 768,
    "height": 768,
-   "seed": 7011
+   "seed": 7011,
+   "style": {
+    "prompt": "Detailed science fiction comic art in the same style as the reference: precise fine uniform linework, cel-shaded flat color with soft hard-edged shadows, clean and bright. No text, no lettering, no writing, no logos, no numbers."
+   }
   },
   {
    "id": "min-portrait",
@@ -213,10 +246,13 @@
    ],
    "setting": null,
    "props": [],
-   "prompt": "Head-and-shoulders portrait of the person from reference image 1, alone, facing the viewer, head turned very slightly to one side, face, hair and collar large and sharp in the frame, neutral calm expression, on a plain flat off-white background with no scenery, even lighting. Only this one person, drawn once.",
+   "prompt": "Close-up head-and-shoulders portrait of the person from reference image 1: only the head, neck and shoulders, cropped at the chest, the face large and filling the upper middle of the picture, facing the viewer with the head turned very slightly to one side, neutral calm expression, every detail of the face and hair sharp. Plain flat off-white background, no scenery, no legs, no full body. Only this one person, drawn once.",
    "width": 768,
    "height": 768,
-   "seed": 7012
+   "seed": 7012,
+   "style": {
+    "prompt": "Detailed science fiction comic art in the same style as the reference: precise fine uniform linework, cel-shaded flat color with soft hard-edged shadows, clean and bright. No text, no lettering, no writing, no logos, no numbers."
+   }
   },
   {
    "id": "mov-portrait",
@@ -230,10 +266,13 @@
    ],
    "setting": null,
    "props": [],
-   "prompt": "Head-and-shoulders portrait of the person from reference image 1, alone, facing the viewer, head turned very slightly to one side, face, hair and collar large and sharp in the frame, neutral calm expression, on a plain flat off-white background with no scenery, even lighting. Only this one person, drawn once.",
+   "prompt": "Close-up head-and-shoulders portrait of the person from reference image 1: only the head, neck and shoulders, cropped at the chest, the face large and filling the upper middle of the picture, facing the viewer with the head turned very slightly to one side, neutral calm expression, every detail of the face and hair sharp. Plain flat off-white background, no scenery, no legs, no full body. Only this one person, drawn once.",
    "width": 768,
    "height": 768,
-   "seed": 7013
+   "seed": 7013,
+   "style": {
+    "prompt": "Detailed science fiction comic art in the same style as the reference: precise fine uniform linework, cel-shaded flat color with soft hard-edged shadows, clean and bright. No text, no lettering, no writing, no logos, no numbers."
+   }
   },
   {
    "id": "mu-portrait",
@@ -247,10 +286,13 @@
    ],
    "setting": null,
    "props": [],
-   "prompt": "Head-and-shoulders portrait of the person from reference image 1, alone, facing the viewer, head turned very slightly to one side, face, hair and collar large and sharp in the frame, neutral calm expression, on a plain flat off-white background with no scenery, even lighting. Only this one person, drawn once.",
+   "prompt": "Close-up head-and-shoulders portrait of the person from reference image 1: only the head, neck and shoulders, cropped at the chest, the face large and filling the upper middle of the picture, facing the viewer with the head turned very slightly to one side, neutral calm expression, every detail of the face and hair sharp. Plain flat off-white background, no scenery, no legs, no full body. Only this one person, drawn once.",
    "width": 768,
    "height": 768,
-   "seed": 7014
+   "seed": 7014,
+   "style": {
+    "prompt": "Detailed science fiction comic art in the same style as the reference: precise fine uniform linework, cel-shaded flat color with soft hard-edged shadows, clean and bright. No text, no lettering, no writing, no logos, no numbers."
+   }
   },
   {
    "id": "seila-portrait",
@@ -264,10 +306,13 @@
    ],
    "setting": null,
    "props": [],
-   "prompt": "Head-and-shoulders portrait of the person from reference image 1, alone, facing the viewer, head turned very slightly to one side, face, hair and collar large and sharp in the frame, neutral calm expression, on a plain flat off-white background with no scenery, even lighting. Only this one person, drawn once.",
+   "prompt": "Close-up head-and-shoulders portrait of the person from reference image 1: only the head, neck and shoulders, cropped at the chest, the face large and filling the upper middle of the picture, facing the viewer with the head turned very slightly to one side, neutral calm expression, every detail of the face and hair sharp. Plain flat off-white background, no scenery, no legs, no full body. Only this one person, drawn once.",
    "width": 768,
    "height": 768,
-   "seed": 7015
+   "seed": 7015,
+   "style": {
+    "prompt": "Detailed science fiction comic art in the same style as the reference: precise fine uniform linework, cel-shaded flat color with soft hard-edged shadows, clean and bright. No text, no lettering, no writing, no logos, no numbers."
+   }
   },
   {
    "id": "tafindel-portrait",
@@ -281,10 +326,13 @@
    ],
    "setting": null,
    "props": [],
-   "prompt": "Head-and-shoulders portrait of the person from reference image 1, alone, facing the viewer, head turned very slightly to one side, face, hair and collar large and sharp in the frame, neutral calm expression, on a plain flat off-white background with no scenery, even lighting. Only this one person, drawn once.",
+   "prompt": "Close-up head-and-shoulders portrait of the person from reference image 1: only the head, neck and shoulders, cropped at the chest, the face large and filling the upper middle of the picture, facing the viewer with the head turned very slightly to one side, neutral calm expression, every detail of the face and hair sharp. Plain flat off-white background, no scenery, no legs, no full body. Only this one person, drawn once.",
    "width": 768,
    "height": 768,
-   "seed": 7016
+   "seed": 7016,
+   "style": {
+    "prompt": "Detailed science fiction comic art in the same style as the reference: precise fine uniform linework, cel-shaded flat color with soft hard-edged shadows, clean and bright. No text, no lettering, no writing, no logos, no numbers."
+   }
   },
   {
    "id": "verdow-portrait",
@@ -298,10 +346,13 @@
    ],
    "setting": null,
    "props": [],
-   "prompt": "Head-and-shoulders portrait of the person from reference image 1, alone, facing the viewer, head turned very slightly to one side, face, hair and collar large and sharp in the frame, neutral calm expression, on a plain flat off-white background with no scenery, even lighting. Only this one person, drawn once.",
+   "prompt": "Close-up head-and-shoulders portrait of the person from reference image 1: only the head, neck and shoulders, cropped at the chest, the face large and filling the upper middle of the picture, facing the viewer with the head turned very slightly to one side, neutral calm expression, every detail of the face and hair sharp. Plain flat off-white background, no scenery, no legs, no full body. Only this one person, drawn once.",
    "width": 768,
    "height": 768,
-   "seed": 7017
+   "seed": 7017,
+   "style": {
+    "prompt": "Detailed science fiction comic art in the same style as the reference: precise fine uniform linework, cel-shaded flat color with soft hard-edged shadows, clean and bright. No text, no lettering, no writing, no logos, no numbers."
+   }
   },
   {
    "id": "zei-portrait",
@@ -315,10 +366,13 @@
    ],
    "setting": null,
    "props": [],
-   "prompt": "Head-and-shoulders portrait of the person from reference image 1, alone, facing the viewer, head turned very slightly to one side, face, hair and collar large and sharp in the frame, neutral calm expression, on a plain flat off-white background with no scenery, even lighting. Only this one person, drawn once.",
+   "prompt": "Close-up head-and-shoulders portrait of the person from reference image 1: only the head, neck and shoulders, cropped at the chest, the face large and filling the upper middle of the picture, facing the viewer with the head turned very slightly to one side, neutral calm expression, every detail of the face and hair sharp. Plain flat off-white background, no scenery, no legs, no full body. Only this one person, drawn once.",
    "width": 768,
    "height": 768,
-   "seed": 7018
+   "seed": 7018,
+   "style": {
+    "prompt": "Detailed science fiction comic art in the same style as the reference: precise fine uniform linework, cel-shaded flat color with soft hard-edged shadows, clean and bright. No text, no lettering, no writing, no logos, no numbers."
+   }
   },
   {
    "id": "zven-portrait",
@@ -332,10 +386,13 @@
    ],
    "setting": null,
    "props": [],
-   "prompt": "Head-and-shoulders portrait of the person from reference image 1, alone, facing the viewer, head turned very slightly to one side, face, hair and collar large and sharp in the frame, neutral calm expression, on a plain flat off-white background with no scenery, even lighting. Only this one person, drawn once.",
+   "prompt": "Close-up head-and-shoulders portrait of the person from reference image 1: only the head, neck and shoulders, cropped at the chest, the face large and filling the upper middle of the picture, facing the viewer with the head turned very slightly to one side, neutral calm expression, every detail of the face and hair sharp. Plain flat off-white background, no scenery, no legs, no full body. Only this one person, drawn once.",
    "width": 768,
    "height": 768,
-   "seed": 7019
+   "seed": 7019,
+   "style": {
+    "prompt": "Detailed science fiction comic art in the same style as the reference: precise fine uniform linework, cel-shaded flat color with soft hard-edged shadows, clean and bright. No text, no lettering, no writing, no logos, no numbers."
+   }
   }
  ]
 }

@@ -1,5 +1,6 @@
 {
  "about": "How closely each character image matches that character's cast sheet. Measured locally by scripts/consistency/measure.py (no paid service); see its docstring for what each score does and does not measure. Owner-only until the owner has read it.",
+ "not_for_picking": "A record only. Wrong 6 times in its worst 10; redos are picked from review.json's by-eye list (owner, 2026-10-23).",
  "models": [
   {
    "repo": "google/owlv2-base-patch16-ensemble",
