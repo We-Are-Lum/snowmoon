@@ -76,31 +76,46 @@ export async function runApproved(person: number, versionId: string, request: Re
   if (!v || v.person !== person || v.status !== 'draft' || v.kind !== 'edit') return { ok: false, status: 404, error: 'Not found' };
   const body = v.body as { adaptation: number; version: number; shot: string; change: Change };
   if (body.change.type !== 'frame' && body.change.type !== 'video') return { ok: false, status: 400, error: 'Nothing to make for this edit.' };
+  const estimate = body.change.estimate_usd;
   const s = sql();
-  const [claimed] = await s`update studio.piece_versions set approved_at = now() where id = ${versionId} and approved_at is null returning id`;
-  if (!claimed) return { ok: false, status: 409, error: 'Already approved.' };
-  const [today] = await s<{ frames: number; videos: number; usd: number }[]>`
-    select count(*) filter (where pv.body->'change'->>'type' = 'frame')::int as frames,
-           count(*) filter (where pv.body->'change'->>'type' = 'video')::int as videos,
-           coalesce(sum(pv.spent_usd), 0)::float8 as usd
-    from studio.piece_versions pv join studio.pieces p on p.id = pv.piece_id
-    where p.person = ${person} and (pv.approved_at at time zone 'utc')::date = (now() at time zone 'utc')::date and pv.id <> ${versionId}`;
-  const over =
-    body.change.type === 'frame' && today.frames >= AGENTS.spend.framesPerDay ? `${AGENTS.spend.framesPerDay} frame tries a day`
-    : body.change.type === 'video' && today.videos >= AGENTS.spend.videosPerDay ? `${AGENTS.spend.videosPerDay} video tests a day`
-    : today.usd + body.change.estimate_usd > AGENTS.spend.dailyCapUsd ? `$${AGENTS.spend.dailyCapUsd} a day of approved spending`
-    : null;
+  // The checks and the claim are one transaction under a lock per person (as Remix's own reserve() does): a second
+  // "Make it" for the same person waits here until the first has claimed its draft, then sees it. An approval still
+  // in progress (approved_at set, spent_usd not yet written) counts at its estimate, so two taps at once can't both
+  // slip past the $2 a day or a key's spend cap. The lock is per person because the daily caps are per person and a
+  // key belongs to one person; the fal or image call itself runs after the lock is released.
+  type Gate = { ok: true } | { ok: false; status: number; error: string };
+  const gate: Gate = await s.begin(async (tx): Promise<Gate> => {
+    await tx`select pg_advisory_xact_lock(hashtext('snowmoon.agents.approve'), ${person}::int)`;
+    const [row] = await tx<{ approved: boolean }[]>`select approved_at is not null as approved from studio.piece_versions where id = ${versionId} for update`;
+    if (!row || row.approved) return { ok: false, status: 409, error: 'Already approved.' };
+    const [today] = await tx<{ frames: number; videos: number; usd: number }[]>`
+      select count(*) filter (where pv.body->'change'->>'type' = 'frame')::int as frames,
+             count(*) filter (where pv.body->'change'->>'type' = 'video')::int as videos,
+             coalesce(sum(coalesce(pv.spent_usd, (pv.body->'change'->>'estimate_usd')::numeric, 0)), 0)::float8 as usd
+      from studio.piece_versions pv join studio.pieces p on p.id = pv.piece_id
+      where p.person = ${person} and (pv.approved_at at time zone 'utc')::date = (now() at time zone 'utc')::date and pv.id <> ${versionId}`;
+    const over =
+      body.change.type === 'frame' && today.frames >= AGENTS.spend.framesPerDay ? `${AGENTS.spend.framesPerDay} frame tries a day`
+      : body.change.type === 'video' && today.videos >= AGENTS.spend.videosPerDay ? `${AGENTS.spend.videosPerDay} video tests a day`
+      : today.usd + estimate > AGENTS.spend.dailyCapUsd ? `$${AGENTS.spend.dailyCapUsd} a day of approved spending`
+      : null;
+    if (over) return { ok: false, status: 429, error: `That's the most for today: ${over}. More tomorrow (00:00 UTC).` };
+    // A personal key's spend cap: what all its approved drafts have spent (or, still in progress, their estimate), plus this one, stays within it.
+    const [key] = await tx<{ cap: string | null; spent: number }[]>`
+      select a.spend_cap_usd as cap,
+             (select coalesce(sum(coalesce(o.spent_usd, (o.body->'change'->>'estimate_usd')::numeric, 0)), 0)::float8 from studio.piece_versions o
+               where o.agent_id = a.id and o.id <> ${versionId} and (o.spent_usd is not null or o.approved_at is not null)) as spent
+      from studio.piece_versions pv join studio.agents a on a.id = pv.agent_id where pv.id = ${versionId}`;
+    if (key?.cap !== null && key !== undefined && Number(key.spent) + estimate > Number(key.cap) + 1e-9)
+      return { ok: false, status: 429, error: `That's over this agent key's spend cap ($${Number(key.cap).toFixed(2)}; $${Number(key.spent).toFixed(2)} spent). Make a new key with a higher cap, or approve less.` };
+    await tx`update studio.piece_versions set approved_at = now() where id = ${versionId}`;
+    return { ok: true };
+  });
+  if (!gate.ok) return gate;
   const fail = async (status: number, error: string) => {
     await s`update studio.piece_versions set approved_at = null where id = ${versionId}`;
     return { ok: false as const, status, error };
   };
-  if (over) return fail(429, `That's the most for today: ${over}. More tomorrow (00:00 UTC).`);
-  // A personal key's spend cap: what all its approved drafts have spent, plus this one, stays within it.
-  const [key] = await s<{ cap: string | null; spent: number }[]>`
-    select a.spend_cap_usd as cap, (select coalesce(sum(o.spent_usd), 0)::float8 from studio.piece_versions o where o.agent_id = a.id and o.id <> ${versionId}) as spent
-    from studio.piece_versions pv join studio.agents a on a.id = pv.agent_id where pv.id = ${versionId}`;
-  if (key?.cap !== null && key !== undefined && Number(key.spent) + body.change.estimate_usd > Number(key.cap) + 1e-9)
-    return fail(429, `That's over this agent key's spend cap ($${Number(key.cap).toFixed(2)}; $${Number(key.spent).toFixed(2)} spent). Make a new key with a higher cap, or approve less.`);
   const r = body.change.type === 'frame' ? await runFrame(person, request, body as never) : await runVideo(person, body as never);
   if (!r.ok) return fail(r.status, r.error);
   await s`update studio.piece_versions set spent_usd = ${r.spent}, made = ${s.json(r.made as postgres.JSONValue)}, image_key = ${r.key}, image_sha256 = ${r.sha} where id = ${versionId}`;

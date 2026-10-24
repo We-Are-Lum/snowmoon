@@ -2,7 +2,8 @@
  * Terms of Use and Privacy Policy (/terms, /privacy), from the owner's legal starter of
  * 2026-10-08, updated 2026-10-09 (Privacy sections 3, 4 and 7), 2026-10-22 (wallet ↔ Farcaster links: Privacy
  * sections 4, 6 and 7, Terms sections 4 and 5; docs/legal/wallet-links-draft.md), 2026-10-22 again (Minpentai in
- * Farcaster casts: Privacy sections 4, 6 and 7, Terms section 1; docs/legal/minpentai-snap-draft.md) and 2026-10-18 (accounts, wallets and
+ * Farcaster casts: Privacy sections 4, 6 and 7, Terms section 1; docs/legal/minpentai-snap-draft.md), 2026-10-24 (agents: Privacy
+ * sections 3, 4 and 7, Terms section 6b; docs/legal/agents-owner-draft.md) and 2026-10-18 (accounts, wallets and
  * prepaid generations, the adaptation pages, Remix: drafted by the coding agent, reread by the owner;
  * Terms section 2's last words are the owner's). Only the owner changes the words.
  *
@@ -37,7 +38,7 @@ export const LEGAL: {
     privacy: { words: string; on: string; by: 'FID 6786' } | null;
   };
 } = {
-  effective: '2026-10-23',
+  effective: '2026-10-24',
   // The owner said "Reread" on 2026-10-10 (words 3iuvyo, 1r2aajz), and on 2026-10-18 of the drafted
   // changes ("I've read the drafted Terms and Privacy changes and approve them: this is my 'reread'"),
   // covering both pages at these words.
@@ -50,7 +51,11 @@ export const LEGAL: {
     // the price shown, and the payment sentences matching the code. The words before were tvt9ga.
     // 2026-10-23, the owner's "reread" for the Minpentai snap (PR #37): §1 adds "and its game in Farcaster casts". The
     // words before were 1pz1d61.
-    terms: { words: '1gifacz', on: '2026-10-23', by: 'FID 6786' },
+    // 2026-10-24, the owner's "Reread" for agents, with his own changes (docs/legal/agents-owner-draft.md): a new
+    // section 6b "Agents": invited accounts only; can't spend money; the estimate and approval, once per draft, 20
+    // frames, 5 video tests and $2 a day; a frame counts like a Remix frame (free frames, or the balance at the price
+    // shown); video tests paid by us for now; and the agent key paragraph as drafted. The words before were 1gifacz.
+    terms: { words: 'ph5udk', on: '2026-10-24', by: 'FID 6786' },
     // Plus one sentence the drafted list missed (Privacy §4, images): "your name (Farcaster name or wallet
     // address)", the owner's own words for tonight's publish (2026-10-18), so the page stays true for wallet accounts.
     // 2026-10-19, the owner's "Reread is done" for push 3, at these words: My picks in §4 (the owner's own sentence),
@@ -69,7 +74,11 @@ export const LEGAL: {
     // 2026-10-23, the owner's "reread" for #36 ("the privacy line matches the code"): the agent line in §4 (drafts,
     // approved spends, gaps shown to the person and read by the owner), from docs/legal/agents-owner-draft.md. The words
     // before were 11qwrx4.
-    privacy: { words: '1wr7m6g', on: '2026-10-23', by: 'FID 6786' },
+    // 2026-10-24, the owner's "Reread" for agents, with his own changes (docs/legal/agents-owner-draft.md): §3 (frames
+    // and video tests your agent makes on approval are saved, privately: only you can see them), §4 (agent keys, as
+    // drafted) and §7 (fal.ai's video test: the frame, your note and your acting notes; LongCat-Video; we copy the video
+    // at once and keep it privately). The words before were 1wr7m6g.
+    privacy: { words: 'ewxjzl', on: '2026-10-24', by: 'FID 6786' },
   },
 };
 
@@ -83,6 +92,7 @@ export const TERMS: LegalDoc = {
     { n: 5, head: 'What you add.', body: ['If you publish something through the Service, or make a frame in Remix (which is saved, and can be seen by anyone with its link, as soon as it is made), it remains yours, and you license it to everyone under GPL version 3. You confirm it is your own work, or that you have the right to license it this way. Your name is shown with it: your Farcaster name, or, for a wallet account, its address shortened. Work made with a wallet that is linked to your Farcaster account is shown with your Farcaster name. Where the Service says so before you publish, the prompts and any planning thread that led to the piece are published with it. Published work is public and others may copy it under the licence. We can hide it on request (see section 7), but we cannot recall copies others have made.'] },
     { n: 6, head: 'What you must not do.', body: ['Don\'t post anything unlawful, harassing or sexual involving minors; don\'t post other people\'s private information; don\'t impersonate anyone or present your work as the author\'s or as official; don\'t try to get around sign-in, daily limits or spending caps; don\'t interfere with the Service.'] },
     { n: '6a', head: 'Prepaid generations.', body: ['You can pay in USDC or ETH on Base to the address the Service shows. Each generation is charged to your balance at the price shown when you start it. If a generation doesn\'t give you a picture (a check or the image model didn\'t answer, the rules refused the prompt, or the safety checker dropped the picture), that charge is added back to your balance. Payments are final: what you pay is never refunded or paid out as money, and your balance can only be spent on generations here. A payment made through the Service is added to your balance once it has 3 confirmations, while the page is open or the next time you open your wallet on that device. You can also add a payment from your wallet by its transaction, on the wallet panel. Either way, this works within 7 days of the payment; after that, write to us and we\'ll add it.'] },
+    { n: '6b', head: 'Agents.', body: ['Agents are open only to accounts we invite. They can\'t spend money. When an agent drafts something that costs money (a new frame or a video test), it shows the estimated cost, and nothing is made until you approve it. Each draft can be approved once, and each day is limited to 20 frames, 5 video tests and $2 in all. A frame counts like any other Remix frame: on a Farcaster account it uses your free frames for the day; on a wallet account it\'s charged to your balance at the price shown (section 6a). Video tests are paid by us for now.', 'You can make a personal agent key for an app that connects with a key. Keep it secret, as you would a password. Until it ends (after 30 days, or when you disconnect it), anyone holding it can read and draft for you, but not publish. Nothing it drafts is paid for unless you approve it, and never more than the cap you set. If it gets out, disconnect it on your You page.'] },
     { n: 7, head: 'Hiding and removal.', body: ['Nothing on the Service is official or canonical. We may hide content that breaks these Terms. You may hide your own work yourself where the Service offers "Hide", or ask us to hide it, at any time. How this works is set out in our removal policy, linked from About.'] },
     { n: 8, head: 'AI-made material.', body: ['The narration, many pictures (every frame made in Remix among them) and the assistant\'s answers are produced by AI models and are labelled as such. They can be wrong. The assistant\'s commentary is not the book and is not advice of any kind.'] },
     { n: 9, head: 'Outside services.', body: ['The Service relies on other companies\' services, listed in the Privacy Policy. Their terms apply to their part.'] },
@@ -99,7 +109,7 @@ export const PRIVACY: LegalDoc = {
   sections: [
     { n: 1, head: 'Who we are.', body: ['Lum LLC, a Wyoming limited liability company, operates Snowmoon Party.'] },
     { n: 2, head: 'The short version.', body: ['You can read and listen without an account, and we keep nothing about you when you do. We use no advertising or analytics trackers and set no cookies. We do not sell data.'] },
-    { n: 3, head: 'Kept on your device only.', body: ['Your browser stores a few things so the site works: whether you have seen the introduction, your light or dark setting, where you stopped listening, the furthest chapter you have opened, your questions to the assistant and its answers, drafts of images you make until you publish them, a few other settings of yours, and, on the website, a sign-in token that lasts about an hour (a day for a wallet sign-in), and a payment you have sent but not yet seen credited. These stay on your device. Clearing your browser\'s site data removes them. Frames you make in Remix are not drafts: they are saved by us as soon as they are made (section 4).'] },
+    { n: 3, head: 'Kept on your device only.', body: ['Your browser stores a few things so the site works: whether you have seen the introduction, your light or dark setting, where you stopped listening, the furthest chapter you have opened, your questions to the assistant and its answers, drafts of images you make until you publish them, a few other settings of yours, and, on the website, a sign-in token that lasts about an hour (a day for a wallet sign-in), and a payment you have sent but not yet seen credited. These stay on your device. Clearing your browser\'s site data removes them. Frames you make in Remix are not drafts: they are saved by us as soon as they are made (section 4). So are the frames and video tests your agent makes when you approve them, but privately: only you can see them (section 4).'] },
     {
       n: 4,
       head: 'Kept by us when you sign in.',
@@ -115,6 +125,7 @@ export const PRIVACY: LegalDoc = {
           'The styles and character sheets you choose to use in your pictures ("My picks"), kept until you clear them and seen only by you. An image you publish shows the ones it used, in its recipe.',
           'How many images and Remix frames you make each day, to count the daily limits, and the reports you make.',
           'If you use an agent here (for now, only people the site has invited): the edits it drafts for your own scene versions (a new frame, another voice take, a shot\'s timing, who speaks in a shot, a video test), each with the note it was drafted from. A frame or video test you approve is kept with what it cost, the model and the pictures sent, privately and only for you. When your agent can\'t do something you asked, it may record what you asked and what was missing. That record is shown to you on your You page, and to the site\'s owner, who reads them, with your name, to decide what to build next. It is never published.',
+          'If you make an agent key: its name, the spend cap you set, when it was made, when it ends (30 days later) and when it was last used. The key itself is shown to you once and kept only in coded form, so we can\'t show it again; it isn\'t written to our logs.',
           'The Farcaster usernames we have seen for your ID, so a link with an old name still finds your pages after you rename.',
           'If you play Minpentai: your progress against the computer and the people you block, kept until you ask us to delete them; your matches, deleted 30 days after they end; and invites, deleted when they expire after 24 hours. Challenges you send or receive, deleted an hour after they are answered or expire; and a count of today\'s Play requests and when you last opened a match or the lobby, deleted the next day. While you say you are ready to play, other signed-in players see your Farcaster username.',
           'If you play Minpentai in a Farcaster cast: your latest practice match there, kept with your Farcaster ID (its random seed, the computer level, the extra rule and where you placed your pieces, turn by turn), so you can resume it; deleted when the match ends, or 30 days after your last turn. Nothing else about these matches is kept or recorded.',
@@ -134,7 +145,7 @@ export const PRIVACY: LegalDoc = {
           'Cloudflare stores and serves the pictures and audio, and sees the same when your device fetches them.',
           'Supabase holds our database.',
           'Groq, and Vercel AI Gateway when Groq is busy, receive assistant questions, and the prompts for images you make, which are checked against the published rules.',
-          'fal.ai receives the prompt for an image you make, and any pictures sent with it (in Remix: a depth picture of the camera you set, and the shot\'s place and cast pictures), and makes the image. It is asked to keep no copy.',
+          'fal.ai receives the prompt for an image you make, and any pictures sent with it (in Remix: a depth picture of the camera you set, and the shot\'s place and cast pictures), and makes the image. It is asked to keep no copy. For a video test you approve, fal.ai receives the shot\'s frame (already public on the site), your note and your acting notes for that shot, and makes a short video with the open LongCat-Video model. It is asked to keep no copy of the request. It returns the video at a link on its own storage; we copy it at once and keep it privately, for you.',
           'Farcaster\'s sign-in services confirm who you are when you sign in. They learn your Farcaster ID and that you signed in here, not what you read or ask. Farcaster\'s public API receives a Farcaster ID when we look up the username to show with published work, and in Minpentai\'s lobby and matches, and a username when a page is opened at /@name.',
           'Neynar receives your Farcaster ID when you first make an image on a given day, to look up its account score, which decides whether you can make images. We keep the score for a day. When you sign in with a wallet, Neynar also receives the wallet\'s address, to find the Farcaster account that has verified it; if exactly one has, your wallet is linked to that account (section 4). We keep the answer for a day. A linked wallet is looked up again at most once a day, and its link ends if that account no longer verifies it; a wallet you unlinked isn\'t looked up again. When you play Minpentai inside a Farcaster cast, your Farcaster app signs each tap, and we ask Neynar\'s Farcaster hub which signing keys your Farcaster ID has, to check the signature: Neynar receives your Farcaster ID, and we keep its answer in memory for five minutes.',
           'ntfy delivers a short alert to us when an image is reported. It carries no content and nothing about you.',

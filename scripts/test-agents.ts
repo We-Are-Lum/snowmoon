@@ -686,6 +686,15 @@ console.log('M  owner-only mode (public pages off)');
     check('K5 the spend cap holds: a $0.05 frame is refused at a $0.03 cap, one $0.025 video runs, a second is refused', !!v2 && fr.ok && runFr.status === 429 && runV1.ok && runV2.status === 429 && /spend cap/.test(capErr), `${fr.error ?? ''} ${runFr.status} ${runV1.status} ${runV2.status}`);
     const spentRow = JSON.parse(await (await asA('/api/agents')).text()).agents.find((a: { id: string }) => a.id === mk.id) as { spentUsd: number; spendCapUsd: number };
     check('K6 /you shows what the key has spent of its cap', spentRow.spentUsd === 0.025 && spentRow.spendCapUsd === 0.03, JSON.stringify(spentRow));
+    // Two taps at once (owner, 2026-10-24): an approval still in progress counts at its estimate, under one lock per person.
+    const race = (await (await asA('/api/agents', { action: 'key', name: 'Race', capUsd: 0.03 })).json()) as { id: string; key: string };
+    const ra = await tool(M.BASE, race.key, 'request_video_test', { adaptation: 1, version: 2, shot: shotId, note: 'Snow falls.' });
+    const rb = await tool(M.BASE, race.key, 'request_video_test', { adaptation: 1, version: 2, shot: shotId, note: 'Wind.' });
+    const both = await Promise.all([ra, rb].map((d) => asA('/api/drafts', { what: 'version', id: d.out.version, action: 'run' })));
+    const statuses = both.map((r) => r.status).sort().join(',');
+    const ranRows = await M.pg.query<{ n: number }>(`select count(*)::int as n from studio.piece_versions where agent_id = $1 and spent_usd is not null`, [race.id]);
+    check('K5b two approvals at once that together pass the cap: exactly one runs', ra.ok && rb.ok && statuses === '200,429' && ranRows.rows[0].n === 1, `${statuses} ran ${ranRows.rows[0].n}`);
+    await asA('/api/agents', { action: 'disconnect', id: race.id });
     const dKey = await fetch(`${M.BASE}/api/agents`, { method: 'POST', headers: { 'content-type': 'application/json', authorization: `Bearer ${M.people.D.token}` }, body: JSON.stringify({ action: 'key', name: 'x' }) });
     check('K7 someone not on the allowlist can’t make a key', dKey.status === 404);
     const off = await asA('/api/agents', { action: 'disconnect', id: mk.id });
