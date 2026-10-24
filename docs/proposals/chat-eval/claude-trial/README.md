@@ -1,4 +1,4 @@
-# Claude as a second answer model: the trial (prepared, not run)
+# Claude as a second answer model: the trial (run 2026-10-24)
 
 The owner's brief (2026-10-23): run the 50-question check with Claude Opus 5.5 answering, and Claude
 Sonnet 5.5 as the middle option, with the same retrieval and the same gpt-oss-safeguard guard; compare
@@ -66,20 +66,20 @@ starts. The script refuses to run if the standard Anthropic key variable is set 
 cd /Users/nathan/snowmoon-chat-opus
 T=docs/proposals/chat-eval/claude-trial
 run() { env QUESTIONS=fresh-questions.json TRIAL_LEDGER=$T/spend.json TRIAL_CAP_USD=5 SEARCH_WORDS=$T/search-words.json EFFORT=medium "$@"; }
-E="--env-file=/Users/nathan/snowmoon/.env.local --env-file-if-exists=/Users/nathan/snowmoon/.env.anthropic.local"
+E=(--env-file=/Users/nathan/snowmoon/.env.local --env-file-if-exists=/Users/nathan/snowmoon/.env.anthropic.local)
 # smoke test, 2 questions each (~$0.09)
-run FIRST=2 ANSWER_MODEL=claude-opus-5-5   npx tsx $E scripts/eval-chat.ts --full /tmp/smoke-opus.json
-run FIRST=2 ANSWER_MODEL=claude-sonnet-5-5 npx tsx $E scripts/eval-chat.ts --full /tmp/smoke-sonnet.json
+run FIRST=2 ANSWER_MODEL=claude-opus-5-5   npx tsx "${E[@]}" scripts/eval-chat.ts --full /tmp/smoke-opus.json
+run FIRST=2 ANSWER_MODEL=claude-sonnet-5-5 npx tsx "${E[@]}" scripts/eval-chat.ts --full /tmp/smoke-sonnet.json
 # the runs: control first (it also saves the search words), then Opus, then Sonnet
-run npx tsx $E scripts/eval-chat.ts --full $T/run-gpt-oss-120b.json
-run ANSWER_MODEL=claude-opus-5-5   npx tsx $E scripts/eval-chat.ts --full $T/run-opus-5-5.json
-run ANSWER_MODEL=claude-sonnet-5-5 npx tsx $E scripts/eval-chat.ts --full $T/run-sonnet-5-5.json
+run npx tsx "${E[@]}" scripts/eval-chat.ts --full $T/run-gpt-oss-120b.json
+run ANSWER_MODEL=claude-opus-5-5   npx tsx "${E[@]}" scripts/eval-chat.ts --full $T/run-opus-5-5.json
+run ANSWER_MODEL=claude-sonnet-5-5 npx tsx "${E[@]}" scripts/eval-chat.ts --full $T/run-sonnet-5-5.json
 # measured columns, then the blind grading pack
 npx tsx scripts/eval-chat-compare.ts table docs/proposals/chat-eval/fresh-run-2-bge.json $T/run-*.json
 npx tsx scripts/eval-chat-compare.ts pack $T/grading docs/proposals/chat-eval/fresh-run-2-bge.json $T/run-*.json
 ```
 
-`$E` is left unquoted on purpose, so it splits into the two flags.
+`E` is an array, so the two flags pass separately in zsh and bash alike (an unquoted string does not split in zsh).
 
 ## Scoring
 
@@ -95,3 +95,66 @@ npx tsx scripts/eval-chat-compare.ts pack $T/grading docs/proposals/chat-eval/fr
 
 Note: the "answering block sent" column counts what was actually sent (question plus search words), so it
 differs from the README's retrieval table, which measured the question alone.
+
+## Results (2026-10-24)
+
+Run by the coding agent on the owner's "key added". The run order was: smoke tests, the gpt-oss-120b control, Opus, then Sonnet. Spend was **$1.52181 of the $5 cap**; no run stopped. Every answer
+ended normally (`end_turn`, no refusals), with no busy retries and no guard blocks.
+
+### Spend
+
+| Where | Model | Calls | Input (uncached) | Cache write | Cache read | Output (thinking included) | USD |
+|---|---|---|---|---|---|---|---|
+| Anthropic direct | claude-opus-5-5 | 52 | 149,632 | 544 | 27,744 | 20,681 | 1.02042 |
+| Anthropic direct | claude-sonnet-5-5 | 52 | 149,632 | 1,088 | 27,200 | 11,603 | 0.42073 |
+| Gateway (Groq) | gpt-oss-120b (search words, control answers) | 100 | 129,795 | | | 23,642 | 0.03317 |
+| Gateway (Groq) | gpt-oss-safeguard-20b (guard, support check) | 308 | 222,628 | | | 117,692 | 0.04748 |
+| | **Total** (`spend.json`) | | | | | | **1.52181** |
+
+Anthropic: $1.44115 (both smoke runs of 2 questions included). The system prompt cached (544 tokens; one
+write per run, a read on every other question), which saved little: the passages are most of the prompt.
+
+### Measured (from the run files)
+
+| Run | Answering block sent | Shown | Held back by the support check | Guard flagged / declined | Cost a question |
+|---|---|---|---|---|---|
+| gpt-oss-120b, 2026-10-07 with bge (`fresh-run-2-bge.json`) | 39 / 50 | 39 | 11 | 0 / 0 | $0.00095 |
+| gpt-oss-120b, control today | 33 / 50 | 43 | 7 | 0 / 0 | $0.00092 |
+| Claude Opus 5.5 | 33 / 50 | 47 | 3 | 0 / 0 | $0.01981 |
+| Claude Sonnet 5.5 | 33 / 50 | 42 | 8 | 0 / 0 | $0.00839 |
+
+### Graded (blind; two graders)
+
+| Run | Claims (A / B) | Supported | Not supported | Correct (A / B) | Can't (A / B) | Wrong (A / B) |
+|---|---|---|---|---|---|---|
+| gpt-oss-120b, 2026-10-07 with bge | 94 / 102 | 89% / 90% | 9% / 7% | 25 / 25 | 12 / 12 | 3 / 3 |
+| gpt-oss-120b, control today | 94 / 107 | 81% / 85% | 15% / 12% | 25 / 25 | 14 / 14 | **6 / 6** |
+| Claude Opus 5.5 | 258 / 265 | 93% / 94% | 3% / 5% | 26 / 26 | 18 / 18 | **2 / 1** |
+| Claude Sonnet 5.5 | 192 / 199 | 92% / 92% | 5% / 8% | 24 / 25 | 21 / 20 | **2 / 1** |
+
+The wrong answers:
+- **gpt-oss control:** f02, f06, f25, f26, f40 and f46; both graders agree on all six.
+- **Opus:** f33 (both graders: calls the Herald Alagael "she", where the book has "his", and says Mov was
+  explaining to Pelae) and f23 (A only: says Bai wasn't with Zei and Fin; B kept it correct).
+- **Sonnet:** f33 (both graders: the same pronoun) and f27 (A only: swaps who asked about forwarding and who
+  answered).
+
+The graders disagreed on 2 to 3 of 50 per run.
+
+### What it shows
+
+- Same passages, different answer model: Claude turns most of gpt-oss's wrong answers into "the passages
+  don't say", not into right answers. Correct answers stay at 24–26 of 50, and the misses are retrieval
+  (17 of 50 questions get no answering block). Both Claude models meet the owner's Testing bar on this set
+  (at most 2 wrong): Opus 1–2, Sonnet 1–2. Today's gpt-oss does not (6); its 2026-10-07 bge run had 3 here.
+- Claude writes longer answers (about 2.7× the claims for Opus, 2× for Sonnet), and more of them are supported.
+- Opus and Sonnet are close on quality; Sonnet costs 42% of Opus.
+
+### Caveats
+
+- Both graders are Claude, as is one of the systems under test. The pack was blind (letters shuffled, the key kept
+  apart until both had graded), but Claude's style (longer, hedged, bulleted) is recognisable.
+- One set of 50, one run each; one or two answers move these numbers.
+- Grader A ran the trial and had seen the smoke-test answers for f01 and f02.
+- The "answering block sent" column counts what was actually sent (question plus search words); the README's
+  retrieval table measured the question alone.

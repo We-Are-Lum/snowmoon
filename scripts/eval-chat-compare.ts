@@ -40,6 +40,26 @@ function shuffle<T>(xs: T[], seed: string): T[] {
   return a;
 }
 
+const chapters = new Map<number, Map<number, string>>();
+function blockText(id: string): string | null {
+  const m = /^c(\d+)-b(\d+)$/.exec(id);
+  if (!m) return null;
+  const n = Number(m[1]);
+  if (!chapters.has(n)) {
+    const doc = JSON.parse(readFileSync(path.join(import.meta.dirname, '..', `content/snowmoon/text/chapter-${n}.json`), 'utf8')) as { blocks: { idx: number; content: string }[] };
+    chapters.set(n, new Map(doc.blocks.map((b) => [b.idx, b.content.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim()])));
+  }
+  return chapters.get(n)!.get(Number(m[2])) ?? null;
+}
+function blockTexts(ids: string[]): Record<string, string> {
+  const out: Record<string, string> = {};
+  for (const id of [...new Set(ids)].sort()) {
+    const [c, b] = id.slice(1).split('-b').map(Number);
+    for (const k of [`c${c}-b${b - 1}`, id]) { const t = blockText(k); if (t !== null) out[k] = t; }
+  }
+  return out;
+}
+
 if (cmd === 'pack') {
   const [dir, ...files] = args;
   const runs = files.map(load);
@@ -50,7 +70,9 @@ if (cmd === 'pack') {
     const order = shuffle(runs.map((_, i) => i), r0.id);
     key[r0.id] = {};
     pack.push({
-      id: r0.id, question: r0.question, gold: r0.gold, answer_fact: r0.answer_fact,
+      id: r0.id, question: r0.question, gold: r0.gold, answer_fact: runs.map((r) => r.rows.find((x) => x.id === r0.id)?.answer_fact).find(Boolean),
+      // The stored text of the answering blocks and of every block an answer cites, each with the block before it.
+      blocks: blockTexts([...r0.gold, ...runs.flatMap((r) => r.rows.find((x) => x.id === r0.id)?.quoted ?? [])]),
       answers: order.map((ri, k) => {
         key[r0.id][letters[k]] = runs[ri].file;
         const row = runs[ri].rows.find((x) => x.id === r0.id);
