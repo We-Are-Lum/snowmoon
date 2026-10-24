@@ -23,6 +23,7 @@ import { createServer, type IncomingHttpHeaders } from 'node:http';
 import type { AddressInfo } from 'node:net';
 import { readdirSync, readFileSync } from 'node:fs';
 import { PGlite } from '@electric-sql/pglite';
+import { vector } from '@electric-sql/pglite-pgvector';
 import { PGLiteSocketServer } from '@electric-sql/pglite-socket';
 import postgres from 'postgres';
 import { IMAGES } from '../src/lib/config';
@@ -63,7 +64,7 @@ const toNtfy = () => heard.filter((h) => h.url.startsWith('/ntfy/'));
 const DEFAULT_HEADERS = ['host', 'connection', 'accept', 'accept-language', 'sec-fetch-mode', 'user-agent', 'accept-encoding'];
 
 // --- The database -------------------------------------------------------------------
-const pg = new PGlite();
+const pg = new PGlite({ extensions: { vector } });
 await pg.exec(`create role anon nologin; create role authenticated nologin; create role service_role nologin bypassrls;`);
 for (const f of readdirSync(path.join(ROOT, 'supabase/migrations')).filter((f) => f.endsWith('.sql')).sort()) {
   await pg.exec(readFileSync(path.join(ROOT, 'supabase/migrations', f), 'utf8'));

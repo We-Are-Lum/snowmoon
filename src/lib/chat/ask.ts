@@ -34,7 +34,7 @@ export interface Quote {
 type Glossary = { glossary?: GlossaryLink[] };
 
 export type AskResult =
-  | ({ state: 'answer'; parts: Part[]; quotes: Quote[]; heldBack: boolean; left: number; guard: 'ok' | 'none'; dropped: number; regenerated: boolean } & Glossary)
+  | ({ state: 'answer'; parts: Part[]; quotes: Quote[]; heldBack: boolean; left: number; guard: 'ok' | 'none'; dropped: number; regenerated: boolean; trimmed?: boolean } & Glossary)
   | ({ state: 'held'; heldBack: true; left: number } & Glossary)
   | { state: 'declined'; left: number }
   /** The answer's claims were not all supported by the passages it cited: shown as "the passages don't say". */
@@ -63,6 +63,10 @@ export interface AskDeps {
   supportPolicy?: string;
   /** Embedding search, for evaluation: block ids ranked for this question (see RetrieveOptions.dense). */
   dense?: (question: string, limit: number) => Promise<string[]>;
+  /** The question's embedding, made on our own server (./embed.ts). If it fails, the word search runs alone. */
+  embed?: (question: string) => Promise<number[]>;
+  /** The claim filter (chat-claim-filter.md): after the support check, unsupported sentences are dropped. */
+  filterPolicy?: string;
 }
 
 export class AskError extends Error {
@@ -74,6 +78,18 @@ export class AskError extends Error {
 const ANSWER_TOKENS = 1200;
 const GUARD_TOKENS = 1500;
 const SEARCH_TOKENS = 600;
+
+/**
+ * The most one question can cost, reserved against the day's cap before any call. Input tokens are summed over
+ * every call: with 16 hits and 2 + 4 neighbours a question sends up to ~112 blocks (about 6,000 tokens) to the
+ * answer (twice, with the retry) and to the claim filter (twice), plus up to six turns of history; the guard and
+ * support checks read the answer and the cited blocks. 24,000 was the estimate for 12 hits and ±2.
+ */
+export const WORST_CASE = {
+  before: { output: 2 * ANSWER_TOKENS + SEARCH_TOKENS, guardOutput: 6 * GUARD_TOKENS, input: 24000 },
+  now: { output: 2 * ANSWER_TOKENS + SEARCH_TOKENS, guardOutput: 10 * GUARD_TOKENS, input: 48000 },
+};
+export const WORST_CASE_USD = (w = CHAT.claimFilter || CHAT.passages > 12 ? WORST_CASE.now : WORST_CASE.before) => worstCaseUsd(w.output, w.guardOutput, w.input);
 
 function passagesText(passages: Passage[]): string {
   return passages.map((p) => `[${p.id}] ${p.content.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim()}`).join('\n');
@@ -100,8 +116,9 @@ export function validate(input: AskInput): AskInput {
 export async function ask(deps: AskDeps, raw: AskInput): Promise<AskResult> {
   const input = validate(raw);
   const { sql, fid } = deps;
-  // Worst case: search words, two answers (the retry), four guard calls and two support checks (each may be retried once).
-  const slot = await reserve(sql, fid, worstCaseUsd(2 * ANSWER_TOKENS + SEARCH_TOKENS, 6 * GUARD_TOKENS, 24000));
+  // Worst case: search words, two answers (the retry), four guard calls, and with the claim filter up to two filter
+  // calls and four support checks (the second for a trimmed answer; each may be retried once). See WORST_CASE.
+  const slot = await reserve(sql, fid, WORST_CASE_USD());
   if (!slot.ok) return { state: slot.reason };
 
   // Glossary words: their entries are pointed to first, and a misspelled one is searched as the book spells it.
@@ -114,7 +131,8 @@ export async function ask(deps: AskDeps, raw: AskInput): Promise<AskResult> {
   try {
     const terms = CHAT.searchTerms && deps.searchPrompt ? await searchTerms(deps, question) : '';
     const dense = deps.dense ? await deps.dense(question, input.limit) : undefined;
-    retrieved = await retrieve(sql, terms ? `${words.corrected} ${terms}` : words.corrected, input.limit, input.attached, dense ? { dense } : {});
+    const queryVector = !dense && CHAT.embedding && deps.embed ? await deps.embed(question).catch(() => undefined) : undefined;
+    retrieved = await retrieve(sql, terms ? `${words.corrected} ${terms}` : words.corrected, input.limit, input.attached, dense ? { dense } : queryVector ? { queryVector } : {});
   } catch (e) {
     throw new AskError((e as Error).message);
   }
@@ -151,22 +169,46 @@ export async function ask(deps: AskDeps, raw: AskInput): Promise<AskResult> {
   }));
   const found = new Set(quotes.map((q) => q.id));
 
-  // The second guard question: every claim supported by the passages it cites? If not, or no verdict, it isn't shown.
-  if (deps.supportPolicy) {
-    const supported = await supportCheck(deps, question, clean.shown, blocks, input.limit);
-    if (!supported) return { state: 'unsupported', heldBack, left: slot.left, glossary };
-  }
-  const parts = clean.parts.filter((p) => p.type === 'text' || found.has(p.id));
+  // The second guard question: every claim supported by the passages it cites? If not, or no verdict, it isn't shown
+  // (unless the claim filter can trim it to an answer that is).
+  let shownParts = clean.parts;
+  let shownQuotes = quotes;
+  let shownFound = found;
+  let trimmed = false;
+  const supported = deps.supportPolicy ? await supportCheck(deps, question, clean.shown, blocks, input.limit) : true;
+  // The claim filter, after the support check: the sentences the passages don't support are dropped, never shown.
+  if (CHAT.claimFilter && deps.filterPolicy) {
+    const kept = await claimFilter(deps, passages, clean.shown);
+    if (kept !== null) {
+      const re = sanitizeReply(kept, allowed);
+      const keptBlocks = await blocksById(sql, re.cites, input.limit);
+      // An answer the support check failed is shown trimmed only if the trimmed answer passes it.
+      const ok = re.cites.length > 0 && (supported || (deps.supportPolicy ? await supportCheck(deps, question, kept, keptBlocks, input.limit) : true));
+      if (!ok) return { state: 'unsupported', heldBack, left: slot.left, glossary };
+      const keptLabels = await labels(sql, keptBlocks.map((b) => b.chapter));
+      shownQuotes = keptBlocks.map((b) => ({
+        id: b.id,
+        chapter: b.chapter,
+        label: keptLabels.get(b.id) ?? null,
+        html: b.kind === 'paragraph' || b.kind === 'quote' ? renderMarkdown(b) : b.content.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim(),
+      }));
+      shownFound = new Set(shownQuotes.map((q) => q.id));
+      shownParts = re.parts;
+      trimmed = true;
+    } else if (!supported) return { state: 'unsupported', heldBack, left: slot.left, glossary };
+  } else if (!supported) return { state: 'unsupported', heldBack, left: slot.left, glossary };
+  const parts = shownParts.filter((p) => p.type === 'text' || shownFound.has(p.id));
   return {
     state: 'answer',
     parts,
-    quotes,
+    quotes: shownQuotes,
     heldBack,
     left: slot.left,
     guard: verdict.verdict === 'ok' ? 'ok' : 'none',
     regenerated,
     glossary,
     dropped: clean.dropped.length + clean.cites.filter((c) => !found.has(c)).length,
+    trimmed,
   };
 }
 
@@ -255,4 +297,39 @@ async function supportCheck(deps: AskDeps, question: string, shown: string, cite
     if (verdict !== 'none') return verdict === 'ok';
   }
   return false;
+}
+
+/** The claim filter's split of an answer into sentences (the citations after a sentence stay with it). */
+export function sentencesOf(text: string): string[] {
+  return text
+    .split(/\n+/)
+    .flatMap((line) => line.split(/(?<=[.!?](?:\s*\[[^\]]+\])*)\s+(?=[A-Z"“*(-])/))
+    .map((x) => x.trim())
+    .filter(Boolean);
+}
+
+/**
+ * The claim filter (chat-claim-filter.md): the guard model reads the passages sent and the answer's numbered
+ * sentences, and names the unsupported ones. Returns the answer without them, or null when nothing is dropped
+ * (or no verdict). Recorded as a guard call (no text).
+ */
+async function claimFilter(deps: AskDeps, passages: Passage[], shown: string): Promise<string | null> {
+  const sentences = sentencesOf(shown);
+  if (!sentences.length) return null;
+  const g = await deps.complete(
+    CHAT.guardModel,
+    [
+      { role: 'system', content: deps.filterPolicy! },
+      { role: 'user', content: `PASSAGES:\n${passagesText(passages)}\n\nANSWER SENTENCES:\n${sentences.map((x, i) => `${i + 1}. ${x}`).join('\n')}` },
+    ],
+    { maxTokens: GUARD_TOKENS, temperature: 0 },
+  );
+  const first = g.text.trim().split('\n')[0] ?? '';
+  const drop = /^DROP\b/i.test(first) ? new Set((first.match(/\d+/g) ?? []).map(Number)) : null;
+  await record(deps.sql, {
+    kind: 'guard', model: g.model, provider: g.provider,
+    promptTokens: g.promptTokens, completionTokens: g.completionTokens, costUsd: g.costUsd, guard: drop ? 'flagged' : /^KEEP\b/i.test(first) ? 'ok' : 'none',
+  });
+  if (!drop || !drop.size) return null;
+  return sentences.filter((_, i) => !drop.has(i + 1)).join(' ');
 }

@@ -22,12 +22,15 @@ import path from 'node:path';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { PGlite } from '@electric-sql/pglite';
+import { vector } from '@electric-sql/pglite-pgvector';
 import { PGLiteSocketServer } from '@electric-sql/pglite-socket';
 import postgres from 'postgres';
 import { ask, type Complete } from '../src/lib/chat/ask';
 import { retrieve } from '../src/lib/chat/retrieve';
 import { providerOptions, servedBy } from '../src/lib/chat/provider';
 import { CHAT } from '../src/lib/config';
+import { embedQuestion } from '../src/lib/chat/embed';
+import { loadVectors } from './embed-blocks';
 import { CapReached, CLAUDE_PRICES, callClaude, isClaude, Ledger, refuseAmbientAnthropicKey, worstCaseClaudeUsd } from './lib/claude-trial';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
@@ -48,17 +51,27 @@ const allQuestions = JSON.parse(await readFile(path.join(ROOT, 'docs/proposals/c
 // FIRST=n: only the first n questions (a smoke test before a paid run).
 const questions = process.env.FIRST ? allQuestions.slice(0, Number(process.env.FIRST)) : allQuestions;
 
-const pg = new PGlite();
+const pg = new PGlite({ extensions: { vector } });
 await pg.exec(`create role anon nologin; create role authenticated nologin; create role service_role nologin bypassrls;`);
-for (const f of ['0001_core.sql', '0002_v5.sql', '0003_likes.sql', '0004_private_ratings_and_likes.sql', '0005_public_prompts_and_consent.sql', '0006_chat.sql', '0007_chat_costs_without_person.sql'])
+for (const f of ['0001_core.sql', '0002_v5.sql', '0003_likes.sql', '0004_private_ratings_and_likes.sql', '0005_public_prompts_and_consent.sql', '0006_chat.sql', '0007_chat_costs_without_person.sql', 'NEXT_chat_block_vectors.sql'])
   await pg.exec(await readFile(path.join(ROOT, 'supabase/migrations', f), 'utf8'));
 await pg.exec(`insert into studio.works values ('snowmoon', 'Snowmoon', 'GPL-3.0', 'x'); set role studio_writer;`);
 const server = new PGLiteSocketServer({ db: pg, port: 54334, host: '127.0.0.1' });
 await server.start();
 const URL = 'postgres://studio_writer@127.0.0.1:54334/postgres';
 await promisify(execFile)('npx', ['tsx', 'scripts/seed-text.ts'], { cwd: ROOT, env: { ...process.env, STUDIO_DATABASE_URL: URL } });
+/**
+ * LIVE=1: the app's own pipeline (branch chat-search-live): the question embedded on this machine with the app's
+ * code and model (CHAT_EMBED_DIR), the book's vectors (private/chat-vectors/, scripts/embed-blocks.ts), CHAT's
+ * 16 hits and 2 + 4 neighbours, and the claim filter after the support check (config/prompts/chat-claim-filter.md).
+ */
+const LIVE = process.env.LIVE === '1';
+if (LIVE && (process.env.DENSE || process.env.HITS || process.env.NEIGHBOURS_AFTER || process.env.CLAIM_FILTER)) throw new Error('LIVE=1 runs the app\'s own settings: leave DENSE, HITS, NEIGHBOURS_AFTER and CLAIM_FILTER unset');
 const sql = postgres(URL, { prepare: false, max: 1 });
 await sql`set role studio_writer`;
+if (LIVE) console.log(`vectors loaded: ${await loadVectors(sql)}`);
+/** The query vector, as the app makes it (LIVE only). */
+const qv = async (question: string) => (LIVE ? { queryVector: await embedQuestion(question) } : {});
 
 try {
   // Retrieval: is any answering block among the passages sent to the model (hits and their neighbours)?
@@ -66,7 +79,7 @@ try {
   let first = 0;
   const misses: string[] = [];
   for (const q of questions) {
-    const r = await retrieve(sql, q.question, LIMIT, [], DENSE ? { dense: DENSE.ranks[q.id] } : {});
+    const r = await retrieve(sql, q.question, LIMIT, [], DENSE ? { dense: DENSE.ranks[q.id] } : await qv(q.question));
     const sent = new Set(r.passages.map((p) => p.id));
     const hit = q.gold.some((g) => sent.has(g));
     any += hit ? 1 : 0;
@@ -134,7 +147,8 @@ try {
     const log: Call[] = [];
     let current = '';
     let busy = 0;
-    const kindOf = (first: string) => (first === searchPrompt ? 'search' : first === guardPolicy ? 'guard' : first === supportPolicy ? 'support' : first === filterPolicy ? 'filter' : 'answer');
+    const liveFilter = LIVE ? await prompt('chat-claim-filter.md') : null;
+    const kindOf = (first: string) => (first === searchPrompt ? 'search' : first === guardPolicy ? 'guard' : first === supportPolicy ? 'support' : first === filterPolicy || first === liveFilter ? 'filter' : 'answer');
     const rawComplete: Complete = async (model, messages, opts) => {
       const kind = kindOf(messages[0]?.content ?? '');
       const chars = messages.reduce((n, m) => n + m.content.length, 0);
@@ -208,6 +222,7 @@ try {
 
     const deps = (fid: number) => ({
       sql, fid, complete, systemPrompt, guardPolicy, reminder, searchPrompt, supportPolicy,
+      ...(LIVE ? { embed: embedQuestion, filterPolicy: liveFilter! } : {}),
       ...(DENSE ? { dense: async () => DENSE.ranks[current] } : {}),
     });
     const results = [];
@@ -226,7 +241,7 @@ try {
       }
       // What was searched and sent: the search words are the first call's text.
       const words = log.find((l) => l.q === q.id && l.kind === 'search')?.text ?? '';
-      const passages = (await retrieve(sql, `${q.question} ${(words.match(/[\p{L}\p{N}][\p{L}\p{N}'-]*/gu) ?? []).slice(0, 20).join(' ')}`, LIMIT, [], DENSE ? { dense: DENSE.ranks[q.id] } : {})).passages.map((p) => p.id);
+      const passages = (await retrieve(sql, `${q.question} ${(words.match(/[\p{L}\p{N}][\p{L}\p{N}'-]*/gu) ?? []).slice(0, 20).join(' ')}`, LIMIT, [], DENSE ? { dense: DENSE.ranks[q.id] } : await qv(q.question))).passages.map((p) => p.id);
       const calls = log.filter((l) => l.q === q.id);
       results.push({
         ...q,

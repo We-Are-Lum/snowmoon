@@ -12,6 +12,7 @@ import path from 'node:path';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { spawn } from 'node:child_process';
 import { PGlite } from '@electric-sql/pglite';
+import { vector } from '@electric-sql/pglite-pgvector';
 import { PGLiteSocketServer } from '@electric-sql/pglite-socket';
 import { failOnProtocolErrors, gatePglite } from './lib/pglite-gate';
 
@@ -29,7 +30,7 @@ if (!existsSync(path.join(ROOT, '.next', 'BUILD_ID'))) {
   process.exit(2);
 }
 
-const db = new PGlite();
+const db = new PGlite({ extensions: { vector } });
 await db.exec(`create role anon nologin; create role authenticated nologin; create role service_role nologin bypassrls;`);
 for (const f of readdirSync(path.join(ROOT, 'supabase/migrations')).filter((f) => f.endsWith('.sql')).sort()) await db.exec(readFileSync(path.join(ROOT, 'supabase/migrations', f), 'utf8'));
 await db.exec(`insert into studio.account_names (fname, person) values ('naaate', 6786) on conflict do nothing`);

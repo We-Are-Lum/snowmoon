@@ -363,8 +363,9 @@ function both(m: LiveMatch, from: number, to: number) { for (let t = from; t <= 
 {
   const { PGlite } = await import('@electric-sql/pglite');
   const { PGLiteSocketServer } = await import('@electric-sql/pglite-socket');
+  const { vector } = await import('@electric-sql/pglite-pgvector');
   const postgres = (await import('postgres')).default;
-  const db = new PGlite();
+  const db = new PGlite({ extensions: { vector } });
   await db.exec(`create role anon nologin; create role authenticated nologin; create role service_role nologin bypassrls;`);
   for (const f of readdirSync(path.join(ROOT, 'supabase/migrations')).filter((f) => f.endsWith('.sql')).sort()) {
     await db.exec(readFileSync(path.join(ROOT, 'supabase/migrations', f), 'utf8'));

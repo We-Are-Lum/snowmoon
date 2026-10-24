@@ -14,6 +14,7 @@
 import { readFile, readdir } from 'node:fs/promises';
 import path from 'node:path';
 import { PGlite } from '@electric-sql/pglite';
+import { vector } from '@electric-sql/pglite-pgvector';
 import { PGLiteSocketServer } from '@electric-sql/pglite-socket';
 import postgres from 'postgres';
 import { execFile } from 'node:child_process';
@@ -25,7 +26,7 @@ const MIGRATION = migArg ? path.resolve(migArg.slice(12)) : path.join(ROOT, 'sup
 
 const failures: string[] = [];
 let passed = 0;
-const db = new PGlite();
+const db = new PGlite({ extensions: { vector } });
 
 async function as<T>(role: string, fn: () => Promise<T>): Promise<T> {
   await db.exec(`set role ${role}`);

@@ -684,6 +684,25 @@
       "license": "MIT",
       "open_weights": true,
       "weights": "https://huggingface.co/openai/whisper-large-v3-turbo"
+    },
+    {
+      "id": "bge-small-en-v1.5",
+      "kind": "embedding",
+      "repo": "BAAI/bge-small-en-v1.5",
+      "revision": "5c38ec7c405ec4b44b94cc5a9bb96e735b38267a",
+      "license_line": "license: mit",
+      "license_checked": {
+        "by": "coding agent, pending the owner's approval",
+        "on": "2026-10-24",
+        "source": "https://huggingface.co/BAAI/bge-small-en-v1.5"
+      },
+      "notes": "The reading assistant's embedding search (branch chat-search-live, owner 2026-10-24). The int8 ONNX export Xenova/bge-small-en-v1.5@ea104dacec62c0de699686887e3f920caeb4f3e3 (its card names BAAI/bge-small-en-v1.5 as the base; no separate license), served from media.snowmoon.party and fixed by sha256 (src/lib/chat/embed.ts). Runs in our own server function for questions and on the coding agent's machine for the book's blocks. Makes no published output: it only ranks passages.",
+      "runs_on": "server",
+      "cost_usd_per_unit": 0,
+      "license": "MIT",
+      "open_weights": true,
+      "weights": "https://huggingface.co/BAAI/bge-small-en-v1.5",
+      "role": "chat-search"
     }
   ],
   "candidates": [

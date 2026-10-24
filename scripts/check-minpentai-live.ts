@@ -26,6 +26,7 @@ import { readdirSync, readFileSync } from 'node:fs';
 import { spawn } from 'node:child_process';
 import { createServer } from 'node:net';
 import { PGlite } from '@electric-sql/pglite';
+import { vector } from '@electric-sql/pglite-pgvector';
 import { PGLiteSocketServer } from '@electric-sql/pglite-socket';
 import postgres from 'postgres';
 import { chromium, type BrowserContext, type Page, type Route } from 'playwright-core';
@@ -42,7 +43,7 @@ const ok = (cond: unknown, m: string) => { checks++; if (!cond) fail(m); };
 const freePort = () => new Promise<number>((res) => { const s = createServer(); s.listen(0, () => { const p = (s.address() as { port: number }).port; s.close(() => res(p)); }); });
 
 // --- the database ---------------------------------------------------------------------
-const pg = new PGlite();
+const pg = new PGlite({ extensions: { vector } });
 await pg.exec(`create role anon nologin; create role authenticated nologin; create role service_role nologin bypassrls;`);
 for (const f of readdirSync(path.join(ROOT, 'supabase/migrations')).filter((f) => f.endsWith('.sql')).sort()) await pg.exec(readFileSync(path.join(ROOT, 'supabase/migrations', f), 'utf8'));
 const dbPort = await freePort();

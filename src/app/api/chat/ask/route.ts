@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { getPerson } from '~/lib/auth';
 import { db } from '~/lib/db';
 import { AskError, ask, type AskInput } from '~/lib/chat/ask';
+import { embedQuestion } from '~/lib/chat/embed';
 import { complete, directKey, gatewayToken, promptFile, servingAllowed, ModelUnavailable } from '~/lib/chat/model';
 
 /**
@@ -31,6 +32,9 @@ export async function POST(request: Request) {
         reminder: promptFile('chat-reminder.md'),
         searchPrompt: promptFile('chat-search-terms.md'),
         supportPolicy: promptFile('chat-support.md'),
+        filterPolicy: promptFile('chat-claim-filter.md'),
+        // The question's embedding, on this server (no embedding service); see src/lib/chat/embed.ts.
+        embed: embedQuestion,
       },
       input,
     );

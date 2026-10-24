@@ -18,6 +18,7 @@ import { createServer as createNet } from 'node:net';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { PGlite } from '@electric-sql/pglite';
+import { vector } from '@electric-sql/pglite-pgvector';
 import { PGLiteSocketServer } from '@electric-sql/pglite-socket';
 import postgres from 'postgres';
 import { coach } from '../src/lib/make/coach';
@@ -35,7 +36,7 @@ const { complete } = await import('../src/lib/chat/model');
 const prompt = (f: string) => readFileSync(path.join(ROOT, 'config/prompts', f), 'utf8').replace(/^<!--[\s\S]*?-->\s*/, '');
 
 const freePort = () => new Promise<number>((res) => { const s = createNet(); s.listen(0, '127.0.0.1', () => { const p = (s.address() as { port: number }).port; s.close(() => res(p)); }); });
-const pg = new PGlite();
+const pg = new PGlite({ extensions: { vector } });
 await pg.exec(`create role anon nologin; create role authenticated nologin; create role service_role nologin bypassrls;`);
 for (const f of readdirSync(path.join(ROOT, 'supabase/migrations')).filter((f) => f.endsWith('.sql')).sort()) await pg.exec(readFileSync(path.join(ROOT, 'supabase/migrations', f), 'utf8'));
 // The draft 0017 (coach_calls, the coach's own count), on this local PGlite only.

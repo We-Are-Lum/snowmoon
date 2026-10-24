@@ -33,6 +33,7 @@ import { execFileSync, spawn } from 'node:child_process';
 import { createServer as createHttp } from 'node:http';
 import { createServer as createNet } from 'node:net';
 import { PGlite } from '@electric-sql/pglite';
+import { vector } from '@electric-sql/pglite-pgvector';
 import { PGLiteSocketServer } from '@electric-sql/pglite-socket';
 import { failOnProtocolErrors, gatePglite } from './lib/pglite-gate';
 import { build } from 'esbuild';
@@ -51,7 +52,7 @@ const WALLET_CHECKSUM = '0x5aAeb6053F3E94C9b9A09f33669435E7Ef1BeAed';
 const WALLET = WALLET_CHECKSUM.toLowerCase();
 
 // --- the database ----------------------------------------------------------------------
-const pg = new PGlite();
+const pg = new PGlite({ extensions: { vector } });
 await pg.exec(`create role anon nologin; create role authenticated nologin; create role service_role nologin bypassrls;`);
 for (const f of readdirSync(path.join(ROOT, 'supabase/migrations')).filter((f) => f.endsWith('.sql')).sort()) {
   await pg.exec(readFileSync(path.join(ROOT, 'supabase/migrations', f), 'utf8'));
