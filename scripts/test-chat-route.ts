@@ -72,6 +72,25 @@ let none = false;
 try { await complete(null, MODEL, msgs, opts); } catch (e) { none = e instanceof ModelUnavailable; }
 check('with no key and no token, nothing is sent', none && calls.length === 0);
 
+// Who may ask (owner, 2026-10-22: Luis, signed in with a wallet linked to his Farcaster account, was asked to sign in again):
+// a wallet linked to a FID asks as that FID; a wallet that isn't linked is minus its account (answered 403, so its session stays).
+{
+  process.env.IMAGES_TICKET_SECRET ??= 'test-secret-for-the-chat-route-test-only-000000';
+  delete process.env.STUDIO_DATABASE_URL;
+  const { getPerson } = await import('../src/lib/auth');
+  const { signSession } = await import('../src/lib/wallet/session');
+  const { LINKED_WALLETS } = await import('../src/lib/config');
+  const [linkedAddress, linkedFid] = Object.entries(LINKED_WALLETS)[0];
+  const as = (token: string | null) => new Request('https://snowmoon.party/api/chat/status', { headers: token ? { authorization: `Bearer ${token}` } : {} });
+  const linked = await getPerson(as(signSession(41, linkedAddress)));
+  const unlinked = await getPerson(as(signSession(42, '0x' + '1'.repeat(40))));
+  const nobody = await getPerson(as(null));
+  check('a wallet linked to a Farcaster account asks as that FID; an unlinked wallet is told to sign in with Farcaster (403); no sign-in is 401', linked === linkedFid && unlinked === -42 && nobody === null, JSON.stringify({ linked, unlinked, nobody }));
+  const { readFileSync } = await import('node:fs');
+  const route = (f: string) => readFileSync(f, 'utf8');
+  const both = ['src/app/api/chat/ask/route.ts', 'src/app/api/chat/status/route.ts'].map(route);
+  check('both chat routes use the reader check, answering 403 to an unlinked wallet', both.every((t) => t.includes('await getPerson(request)') && /fid < 0\) return [^\n]*status: 403/.test(t) && !t.includes('getFid(')));
+}
 if (failures.length) {
   console.error(`chat route tests FAILED (${failures.length}):\n- ` + failures.join('\n- '));
   process.exit(1);

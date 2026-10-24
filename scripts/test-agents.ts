@@ -542,6 +542,12 @@ try {
   check('SU5 a person’s agent reads that person’s suggestions only', agentReads.ok && agentList.length === 2 && !agentList.some((x) => x.words.startsWith('I couldn’t find')), JSON.stringify(agentList));
   const dSug = await asPerson(people.D.token, '/api/suggestions', { method: 'POST', body: JSON.stringify({ words: 'not invited' }) });
   check('SU6 someone not invited gets 404', dSug.status === 404 && (await asPerson(people.D.token, '/api/suggestions')).status === 404);
+  // Everything someone tries that their agent can't do reaches the owner too (owner, 2026-10-22).
+  const bGap = await tool(BASE, agentB, 'log_gap', { asked: 'Fork Nate’s Fifteen Days so I can change it.', missing: 'No tool makes a version of my own from someone else’s.' });
+  const ownerGaps = ((await (await asPerson(people.A.token, '/api/suggestions')).json()) as { gaps?: { asked: string; who: string; agent: string }[] }).gaps ?? [];
+  const bAfter = (await (await asPerson(people.B.token, '/api/suggestions')).json()) as { gaps?: unknown };
+  const bOwn = ((await (await asPerson(people.B.token, '/api/drafts')).json()) as { gaps: { asked: string }[] }).gaps;
+  check('SU6b the owner sees everyone’s gaps, with who and which agent; the person sees their own; no one else sees the list', bGap.ok && /owner/.test(String((bGap.out as { shown?: string }).shown)) && ownerGaps.some((g) => g.asked.startsWith('Fork Nate') && g.who.length > 0 && g.agent === 'ChatGPT') && bAfter.gaps === undefined && bOwn.some((g) => g.asked.startsWith('Fork Nate')), JSON.stringify({ err: bGap.error, ownerGaps: ownerGaps.length, bAfter: bAfter.gaps }));
   const anonRead = await S.pg.query(`set role anon; select 1 from studio.suggestions limit 1`).then(() => true, () => false);
   await S.pg.query('reset role');
   const writerDeletes = await S.pg.query(`set role studio_writer; delete from studio.suggestions`).then(() => true, () => false);

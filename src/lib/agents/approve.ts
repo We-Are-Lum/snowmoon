@@ -5,7 +5,7 @@ import type postgres from 'postgres';
 import { editorData } from '../agent/data';
 import { AGENTS, REMIX } from '../config';
 import { generate, remixPictures, remixPrompt } from '../remix/make';
-import { pictureSize, remixShot, type RemixPicture } from '../remix/shot';
+import { remixShot, savedLayoutPicture } from '../remix/shot';
 import { sha256, sql } from './core';
 import type { Change } from './edits';
 import { actingFor, actingPrompt } from './direction';
@@ -28,12 +28,9 @@ function publicFile(src: string): Buffer | null {
 /** The person approved a frame try: Remix's pipeline makes it as them (their caps and checks), kept private here. */
 async function runFrame(person: number, request: Request, body: { adaptation: number; version: number; shot: string; change: Extract<Change, { type: 'frame' }> }) {
   const shot = remixShot(body.adaptation, body.version, body.shot);
-  const data = editorData(body.adaptation, shot?.from ?? body.version)?.shots.find((s) => s.id === body.shot);
-  const setFrame = data?.setFrame as { src?: string; sha256?: string } | undefined;
-  const bytes = setFrame?.src ? publicFile(setFrame.src) : null;
-  const size = bytes ? pictureSize(bytes) : null;
-  if (!shot?.prompt || !bytes || !size) return { ok: false as const, status: 400, error: 'This shot has no committed layout to redraw from.' };
-  const layout: RemixPicture = { role: 'layout', name: 'the shot’s own camera (depth)', src: setFrame!.src!, file: null, fileSha256: setFrame!.sha256 ?? null, bytes, sha256: sha256(bytes), ...size } as RemixPicture;
+  // The shot's saved layout (its committed depth frame), as Remix sends it for a shot without a camera (owner, 2026-10-22).
+  const layout = shot?.prompt ? await savedLayoutPicture(shot, REMIX.layout) : null;
+  if (!shot || !layout) return { ok: false as const, status: 400, error: 'This shot has no committed layout to redraw from.' };
   const pictures = remixPictures(layout, shot);
   // A wallet account is charged the price its Make it button showed, or nothing (Terms 6a: "the price shown").
   if (person < 0 && body.change.price_usd !== priceUsd(REMIX.reserveUsd(pictures.length))) return { ok: false as const, status: 409, error: 'The price of this frame has changed. Ask your agent to draft it again.' };

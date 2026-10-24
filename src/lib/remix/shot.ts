@@ -2,6 +2,7 @@ import 'server-only';
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
+import sharp from 'sharp';
 
 /**
  * A shot as Generate needs it, read from the version's editor data (public/editor/<id>/v<n>/, made at
@@ -38,6 +39,12 @@ export interface RemixShot {
   n: number;
   who: string[];
   hasCamera: boolean;
+  /**
+   * The shot's saved layout, as a depth picture (the set frame committed for it), if it has one. A shot made in
+   * code has no camera to move, but when it has this, Generate draws from it instead (owner, 2026-10-22: Luis
+   * couldn't remix shot 8). A "look" render isn't a layout, so it doesn't count.
+   */
+  savedLayout: { src: string; file: string | null; fileSha256: string | null } | null;
   recipeId: string | null;
   recipeSha256: string | null;
   prompt: string | null;
@@ -47,7 +54,8 @@ export interface RemixShot {
 
 type Pic = { src: string; file: string; sha256: string; who?: string; name?: string };
 type DataLine = { cue: string; takes?: { id: string }[] };
-type DataShot = { id: string; n: number; from: number; to: number; who: string[]; camera: unknown; plate: Pic | null; cards: Pic[]; recipe: { id: string; sha256: string; prompt: string | null } | null; lines: DataLine[] };
+type SetFrame = { src?: string; mode?: string; file?: string; sha256?: string } | null;
+type DataShot = { id: string; n: number; from: number; to: number; who: string[]; camera: unknown; setFrame?: SetFrame; plate: Pic | null; cards: Pic[]; recipe: { id: string; sha256: string; prompt: string | null } | null; lines: DataLine[] };
 
 type Data = { shots: DataShot[]; openFrom?: number | null; closedModel?: { name: string; maker: string } | null };
 const cache = new Map<string, Data | null>();
@@ -113,12 +121,30 @@ export function remixShot(adaptation: number, version: number, shotId: string): 
     n: s.n,
     who: s.who,
     hasCamera: Boolean(s.camera),
+    // The version's own saved layout first (version 2 has them for shots version 1 drew in code), then the drawn-from version's.
+    savedLayout: depthLayout(own.shots.find((x) => x.id === shotId)?.setFrame) ?? depthLayout(s.setFrame),
     recipeId: s.recipe?.id ?? null,
     recipeSha256: s.recipe?.sha256 ?? null,
     prompt: s.recipe?.prompt ?? null,
     cards,
     plate: s.plate ? served(s.plate, 'plate', s.plate.name ?? 'plate') : null,
   };
+}
+
+function depthLayout(f: SetFrame | undefined): RemixShot['savedLayout'] {
+  if (!f?.src || f.mode !== 'depth' || !/^\/editor\/\d+\/v\d+\/set\/[\w.-]+\.(jpg|png)$/.test(f.src)) return null;
+  return { src: f.src, file: f.file ?? null, fileSha256: f.sha256 ?? null };
+}
+
+/** The shot's saved layout as Generate sends it: a PNG at the live layout's size, so both look the same to the model. */
+export async function savedLayoutPicture(shot: RemixShot, limits: { width: number; height: number }): Promise<RemixPicture | null> {
+  if (!shot.savedLayout) return null;
+  try {
+    const bytes = await sharp(readFileSync(path.join(root(), shot.savedLayout.src))).resize(limits.width, limits.height, { fit: 'fill' }).png().toBuffer();
+    return { role: 'layout', name: 'the shot\u2019s saved layout (depth)', src: shot.savedLayout.src, file: shot.savedLayout.file, fileSha256: shot.savedLayout.fileSha256, bytes, sha256: sha(bytes), contentType: 'image/png', width: limits.width, height: limits.height };
+  } catch {
+    return null;
+  }
 }
 
 /** The live layout as the browser sent it: a PNG data URL of the shot camera's depth view, checked. */

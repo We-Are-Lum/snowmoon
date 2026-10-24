@@ -31,7 +31,8 @@ interface Status {
   ready: boolean;
   free: boolean;
   model: { name: string; licence: string; host: string };
-  shot: { id: string; remixable: boolean; pictures: number } | null;
+  /** fixed: no camera to move; Generate draws from the shot's saved layout (owner, 2026-10-22). */
+  shot: { id: string; remixable: boolean; fixed?: boolean; pictures: number } | null;
   drawnFrom?: { version: number; versionModel: { name: string; maker: string } | null } | null;
   ownWordsMaxChars: number;
   layout: { width: number; height: number };
@@ -102,15 +103,16 @@ export function RemixPanel({
 
   const generate = async () => {
     if (!status) return;
-    const layout = depth(status.layout.width, status.layout.height);
-    if (!layout) return setNote('The 3D set isn’t ready yet.');
+    const fixed = Boolean(status.shot?.fixed);
+    const layout = fixed ? null : depth(status.layout.width, status.layout.height);
+    if (!fixed && !layout) return setNote('The 3D set isn’t ready yet.');
     setBusy(true);
     setNote(null);
     try {
       const r = await authFetch('/api/remix/generate', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ adaptation, version, shot: shotId, words, layout, camera, nameProof: webNameProof() }),
+        body: JSON.stringify({ adaptation, version, shot: shotId, words, layout, camera: fixed ? null : camera, nameProof: webNameProof() }),
       });
       const out = (await r.json().catch(() => ({}))) as { id?: string; url?: string; page?: string; words?: string; error?: string };
       if (r.ok && out.id && out.url && out.page) setMade({ id: out.id, url: out.url, page: out.page, words: out.words ?? words });
@@ -149,7 +151,7 @@ export function RemixPanel({
   return (
     <section className="ed-remix" aria-label="Remix this shot">
       <div className="ed-remix-head">
-        <span className="label">Remix shot {shotN} · from your camera</span>
+        <span className="label">Remix shot {shotN} · {status?.shot?.fixed ? 'from its saved layout' : 'from your camera'}</span>
         <span className="label ed-muted">{left}</span>
       </div>
       {differs && <p className="ed-help ed-remix-model">{differs}</p>}
@@ -157,7 +159,7 @@ export function RemixPanel({
         <p className="ed-help">…</p>
       ) : !signedIn ? (
         <div className="ed-row">
-          <p className="ed-help">Sign in to make a frame from the camera you set: 10 free a day.</p>
+          <p className="ed-help">{status.shot?.fixed ? 'Sign in to make a frame of this shot: 10 free a day.' : 'Sign in to make a frame from the camera you set: 10 free a day.'}</p>
           <SignInButton className="ed-small" />
           {auth.kind === 'signed-out' && !auth.inApp && status.walletSignIn && <WalletSignInButton className="ed-small" />}
         </div>
@@ -183,7 +185,8 @@ export function RemixPanel({
           {status.prepaid && status.prepaid.balanceUsd < status.prepaid.priceUsd && <WalletPanel onChange={() => void refresh()} />}
           <PublishedTextField id="ed-remix-words" label="What to change, in your words" value={words} onChange={setWords} rows={3} maxLength={status.ownWordsMaxChars} />
           <p className="ed-help">
-            Sent with the camera you set (as a depth picture), this shot&rsquo;s cast cards and plate, and {status.drawnFrom ? <>version {status.drawnFrom.version}&rsquo;s prompt for this shot</> : <>the shot&rsquo;s own prompt (the Prompt tab shows it; edits there stay in this browser)</>}. Made with {status.model.name} ({status.model.licence}) on {status.model.host}. Your frame is saved to your remix of this shot, public at its own link, with your words and {by}.
+            {/* DRAFT wording (2026-10-22) for a shot made in code. */}
+            Sent with {status.shot?.fixed ? <>this shot&rsquo;s saved layout (a depth picture: the shot has no camera to move)</> : <>the camera you set (as a depth picture)</>}, this shot&rsquo;s cast cards and plate, and {status.drawnFrom ? <>version {status.drawnFrom.version}&rsquo;s prompt for this shot</> : <>the shot&rsquo;s own prompt (the Prompt tab shows it; edits there stay in this browser)</>}. Made with {status.model.name} ({status.model.licence}) on {status.model.host}. Your frame is saved to your remix of this shot, public at its own link, with your words and {by}.
           </p>
           <div className="ed-generate">
             <button type="button" className="ed-btn" onClick={generate} disabled={busy || !words.trim()}>
