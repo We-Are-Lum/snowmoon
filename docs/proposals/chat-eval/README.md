@@ -189,3 +189,8 @@ own server function: no embedding service, no new party. The 4,105 text blocks e
 74 seconds once, at ingest, on the local machine; their vectors (384 floats each, about 6 MB
 in all) would be stored with pgvector in the existing database. The model is downloaded once,
 at build, from Hugging Face.
+
+## Claude as a second answer model (2026-10-23, prepared, not run)
+
+Claude Opus 5.5 and Claude Sonnet 5.5 answering the fresh set, with the same retrieval, prompts and guard,
+against gpt-oss-120b. Setup, cost estimate, the $5 cap and the exact commands: `claude-trial/README.md`.
