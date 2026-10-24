@@ -66,7 +66,10 @@ export const LEGAL: {
     // answered: §4 (the latest cast match, kept with the Farcaster ID, placements turn by turn), §6 (a shared challenge's
     // link: the start and the result, not the moves or the Farcaster ID) and §7 (Neynar's hub checks each tap's
     // signer). The words before were l8xev2.
-    privacy: { words: '11qwrx4', on: '2026-10-23', by: 'FID 6786' },
+    // 2026-10-23, the owner's "reread" for #36 ("the privacy line matches the code"): the agent line in §4 (drafts,
+    // approved spends, gaps shown to the person and read by the owner), from docs/legal/agents-owner-draft.md. The words
+    // before were 11qwrx4.
+    privacy: { words: '1wr7m6g', on: '2026-10-23', by: 'FID 6786' },
   },
 };
 
@@ -111,6 +114,7 @@ export const PRIVACY: LegalDoc = {
           'Storyboards you save: the frames in order, how long each is shown and the voice takes you chose. Anyone with a storyboard\'s link can see it, with your name. You can hide it.',
           'The styles and character sheets you choose to use in your pictures ("My picks"), kept until you clear them and seen only by you. An image you publish shows the ones it used, in its recipe.',
           'How many images and Remix frames you make each day, to count the daily limits, and the reports you make.',
+          'If you use an agent here (for now, only people the site has invited): the edits it drafts for your own scene versions (a new frame, another voice take, a shot\'s timing, who speaks in a shot, a video test), each with the note it was drafted from. A frame or video test you approve is kept with what it cost, the model and the pictures sent, privately and only for you. When your agent can\'t do something you asked, it may record what you asked and what was missing. That record is shown to you on your You page, and to the site\'s owner, who reads them, with your name, to decide what to build next. It is never published.',
           'The Farcaster usernames we have seen for your ID, so a link with an old name still finds your pages after you rename.',
           'If you play Minpentai: your progress against the computer and the people you block, kept until you ask us to delete them; your matches, deleted 30 days after they end; and invites, deleted when they expire after 24 hours. Challenges you send or receive, deleted an hour after they are answered or expire; and a count of today\'s Play requests and when you last opened a match or the lobby, deleted the next day. While you say you are ready to play, other signed-in players see your Farcaster username.',
           'If you play Minpentai in a Farcaster cast: your latest practice match there, kept with your Farcaster ID (its random seed, the computer level, the extra rule and where you placed your pieces, turn by turn), so you can resume it; deleted when the match ends, or 30 days after your last turn. Nothing else about these matches is kept or recorded.',
