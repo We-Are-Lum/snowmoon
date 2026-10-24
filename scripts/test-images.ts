@@ -19,6 +19,7 @@
 import path from 'node:path';
 import { readdirSync, readFileSync } from 'node:fs';
 import { PGlite } from '@electric-sql/pglite';
+import { vector } from '@electric-sql/pglite-pgvector';
 import { PGLiteSocketServer } from '@electric-sql/pglite-socket';
 import postgres from 'postgres';
 import { IMAGES } from '../src/lib/config';
@@ -76,7 +77,7 @@ const st = JSON.parse(readFileSync(path.join(ROOT, 'content/snowmoon/designs/sty
 check('the style text is the committed style and the setting', styleText('techno-vistas', 'veridia') === `${st.prompt} ${st.settings.veridia}`);
 
 // --- The database ---------------------------------------------------------------
-const db = new PGlite();
+const db = new PGlite({ extensions: { vector } });
 await db.exec(`create role anon nologin; create role authenticated nologin; create role service_role nologin bypassrls;`);
 for (const f of readdirSync(path.join(ROOT, 'supabase/migrations')).filter((f) => f.endsWith('.sql')).sort()) {
   await db.exec(readFileSync(path.join(ROOT, 'supabase/migrations', f), 'utf8'));

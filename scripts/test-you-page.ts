@@ -47,6 +47,7 @@ import { spawn } from 'node:child_process';
 import { createServer as createHttp } from 'node:http';
 import { createServer as createNet } from 'node:net';
 import { PGlite } from '@electric-sql/pglite';
+import { vector } from '@electric-sql/pglite-pgvector';
 import { PGLiteSocketServer } from '@electric-sql/pglite-socket';
 import { failOnProtocolErrors, gatePglite } from './lib/pglite-gate';
 import { decodeFunctionData, encodeFunctionResult, namehash, parseAbi } from 'viem';
@@ -77,7 +78,7 @@ const IMG2 = 'https://media.snowmoon.party/images/seed/c1/c1-b005-toy-drone-ea7f
 const sha = (c: string) => c.repeat(64);
 
 // --- the database ------------------------------------------------------------------------
-const pg = new PGlite();
+const pg = new PGlite({ extensions: { vector } });
 await pg.exec(`create role anon nologin; create role authenticated nologin; create role service_role nologin bypassrls;`);
 const migrations = readdirSync(path.join(ROOT, 'supabase/migrations')).filter((f) => f.endsWith('.sql')).sort();
 const DRAFT_0015 = migrations.find((f) => f.startsWith('0015_'));

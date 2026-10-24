@@ -25,10 +25,12 @@ import path from 'node:path';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { PGlite } from '@electric-sql/pglite';
+import { vector } from '@electric-sql/pglite-pgvector';
 import { PGLiteSocketServer } from '@electric-sql/pglite-socket';
 import postgres from 'postgres';
-import { ask, AskError, type Complete } from '../src/lib/chat/ask';
-import { retrieve } from '../src/lib/chat/retrieve';
+import { WORST_CASE, WORST_CASE_USD, ask, AskError, type Complete } from '../src/lib/chat/ask';
+import { nearestBlocks, retrieve } from '../src/lib/chat/retrieve';
+import { EMBED, windowText } from '../src/lib/chat/embed';
 import { sanitizeReply } from '../src/lib/chat/sanitize';
 import { glossaryWords } from '../src/lib/chat/glossary';
 import { CHAT } from '../src/lib/config';
@@ -40,9 +42,9 @@ let passed = 0;
 const check = (label: string, ok: boolean, detail = '') => (ok ? passed++ : failures.push(`${label}${detail ? `: ${detail}` : ''}`));
 
 // --- Database: the six migrations, then the real seed, as studio_writer ------
-const pg = new PGlite();
+const pg = new PGlite({ extensions: { vector } });
 await pg.exec(`create role anon nologin; create role authenticated nologin; create role service_role nologin bypassrls;`);
-for (const f of ['0001_core.sql', '0002_v5.sql', '0003_likes.sql', '0004_private_ratings_and_likes.sql', '0005_public_prompts_and_consent.sql', '0006_chat.sql', '0007_chat_costs_without_person.sql']) {
+for (const f of ['0001_core.sql', '0002_v5.sql', '0003_likes.sql', '0004_private_ratings_and_likes.sql', '0005_public_prompts_and_consent.sql', '0006_chat.sql', '0007_chat_costs_without_person.sql', 'NEXT_chat_block_vectors.sql']) {
   try {
     await pg.exec(await readFile(path.join(ROOT, 'supabase/migrations', f), 'utf8'));
   } catch (e) {
@@ -138,10 +140,14 @@ try {
   /** Verdicts for the support check, one per call (default SUPPORTED), and what it was shown. */
   let supportQueue: string[] = [];
   const supportSeen: string[] = [];
+  /** Verdicts for the claim filter (default KEEP), and what it was shown. */
+  let filterQueue: string[] = [];
+  const filterSeen: string[] = [];
   const complete: Complete = async (model, messages) => {
     calls.push({ model, user: messages[messages.length - 1].content });
+    if (messages[0].content === 'FILTER') filterSeen.push(messages[1].content);
     const text =
-      messages[0].content === 'SUPPORT' ? (supportQueue.shift() ?? 'SUPPORTED') : model === CHAT.guardModel ? (guardQueue.shift() ?? guardText) : messages[0].content === 'SEARCH' ? searchText : answerText;
+      messages[0].content === 'FILTER' ? (filterQueue.shift() ?? 'KEEP') : messages[0].content === 'SUPPORT' ? (supportQueue.shift() ?? 'SUPPORTED') : model === CHAT.guardModel ? (guardQueue.shift() ?? guardText) : messages[0].content === 'SEARCH' ? searchText : answerText;
     if (messages[0].content === 'SUPPORT') supportSeen.push(messages[1].content);
     return { text, promptTokens: 1000, completionTokens: 200, costUsd: 0.0002, requestId: 'test', provider: 'test', model };
   };
@@ -255,6 +261,76 @@ try {
     supportQueue = [];
     const res3 = await ask(deps(112), { question: 'Why is Gladias asked to rate a building?', limit: 1 });
     check('a supported answer is shown', res3.state === 'answer', res3.state);
+  }
+
+  {
+    // The claim filter (owner, 2026-10-24): after the support check, unsupported sentences are dropped and never shown.
+    const r1 = await retrieve(sql, 'Why is Gladias asked to rate a building?', 1);
+    const real = r1.passages[0].id;
+    const fdeps = (fid: number) => ({ ...deps(fid), filterPolicy: 'FILTER' });
+    answerText = `He is chosen at random [${real}]. He is also the emperor [${real}]. It is a civic duty [${real}].`;
+    filterQueue = ['DROP 2'];
+    supportQueue = [];
+    const a = await ask(fdeps(120), { question: 'Why is Gladias asked to rate a building?', limit: 1 });
+    const shown = a.state === 'answer' ? a.parts.map((p) => (p.type === 'text' ? p.text : `[${p.id}]`)).join('') : '';
+    check('a sentence the filter drops is not shown', a.state === 'answer' && !shown.includes('emperor') && shown.includes('at random') && shown.includes('civic duty') && a.trimmed === true, shown);
+    check('the filter sees the passages sent and the numbered sentences', /PASSAGES:[\s\S]*ANSWER SENTENCES:\n1\. He is chosen at random/.test(filterSeen.at(-1) ?? ''), (filterSeen.at(-1) ?? '').slice(-200));
+    filterQueue = ['KEEP'];
+    const b = await ask(fdeps(121), { question: 'Why is Gladias asked to rate a building?', limit: 1 });
+    check('KEEP shows the whole answer', b.state === 'answer' && !b.trimmed && b.parts.some((p) => p.type === 'text' && p.text.includes('emperor')));
+    // The support check fails: the trimmed answer is shown only if it passes a second check.
+    supportQueue = ['UNSUPPORTED the emperor', 'SUPPORTED'];
+    filterQueue = ['DROP 2'];
+    const c = await ask(fdeps(122), { question: 'Why is Gladias asked to rate a building?', limit: 1 });
+    check('a failed answer trimmed to a supported one is shown, trimmed', c.state === 'answer' && c.trimmed === true && !c.parts.some((p) => p.type === 'text' && p.text.includes('emperor')), c.state);
+    supportQueue = ['UNSUPPORTED the emperor', 'UNSUPPORTED still'];
+    filterQueue = ['DROP 2'];
+    const d = await ask(fdeps(123), { question: 'Why is Gladias asked to rate a building?', limit: 1 });
+    check('a trimmed answer that still fails is not shown', d.state === 'unsupported', d.state);
+    supportQueue = ['UNSUPPORTED the emperor'];
+    filterQueue = ['KEEP'];
+    const e = await ask(fdeps(124), { question: 'Why is Gladias asked to rate a building?', limit: 1 });
+    check('a failed answer the filter keeps whole is not shown', e.state === 'unsupported', e.state);
+    supportQueue = ['UNSUPPORTED'];
+    filterQueue = ['DROP 1, 2, 3'];
+    const f = await ask(fdeps(125), { question: 'Why is Gladias asked to rate a building?', limit: 1 });
+    check('nothing cited left means "the passages don\'t say"', f.state === 'unsupported', f.state);
+    supportQueue = [];
+    filterQueue = [];
+    const [{ n }] = await sql`select count(*)::int as n from studio.chat_costs where kind = 'guard' and guard = 'flagged'`;
+    check('filter calls are counted in the cost totals', n >= 1, String(n));
+    const w = WORST_CASE_USD();
+    const was = WORST_CASE_USD(WORST_CASE.before);
+    console.log(`  worst case a question: $${was.toFixed(5)} before (12 hits, ±2), $${w.toFixed(5)} now (16 hits, 2 before / 4 after, the claim filter)`);
+    check('the spend cap reserves more for the 16-passage prompt and the filter', w > was * 1.5, `${was} → ${w}`);
+  }
+
+  {
+    // The embedding search: the nearest blocks by vector are fused with the word search, within the limit.
+    const unit = (k: number) => Array.from({ length: 384 }, (_, i) => (i === k ? 1 : 0));
+    const vec = (v: number[]) => `[${v.join(',')}]`;
+    const near = (await sql`select content_hash from studio.text_blocks where chapter = 1 and idx = 86`)[0];
+    const far = (await sql`select content_hash from studio.text_blocks where chapter = 2 and idx = 40`)[0];
+    await sql`insert into studio.block_vectors (work_id, chapter, idx, model, content_hash, embedding) values
+      ('snowmoon', 1, 86, ${EMBED.id}, ${near.content_hash}, ${vec(unit(7))}::extensions.vector),
+      ('snowmoon', 2, 40, ${EMBED.id}, ${far.content_hash}, ${vec(unit(7))}::extensions.vector)`;
+    const ids = await nearestBlocks(sql, unit(7), 1, EMBED.id);
+    check('the nearest blocks stay within the limit', JSON.stringify(ids) === '["c1-b86"]', JSON.stringify(ids));
+    const r = await retrieve(sql, 'zzqx vvkw', 1, [], { queryVector: unit(7) });
+    check('a block found only by its vector is sent, with its neighbours', ['c1-b84', 'c1-b86', 'c1-b90'].every((id) => r.passages.some((p) => p.id === id)), JSON.stringify(r.passages.map((p) => p.id)));
+    check('no vectors for a model means the word search alone', (await nearestBlocks(sql, unit(7), 1, 'other-model')).length === 0);
+    check('a malformed vector is ignored', (await nearestBlocks(sql, [1, 2, 3], 1, EMBED.id)).length === 0);
+    const embedded: string[] = [];
+    calls.length = 0;
+    answerText = 'His shoes slowed him [c1-b86].';
+    const res = await ask({ ...deps(130), embed: async (q: string) => (embedded.push(q), unit(7)) }, { question: 'zzqx vvkw', limit: 1 });
+    check('ask embeds the question and searches by it', embedded.length === 1 && res.state === 'answer', res.state);
+    const res2 = await ask({ ...deps(131), embed: async () => { throw new Error('no model'); } }, { question: 'Why is Gladias asked to rate a building?', limit: 1 });
+    check('if the embedding fails, the word search answers alone', res2.state === 'answer', res2.state);
+    check('the window text is the block with the two readable blocks before it', windowText(['a', '', 'b', 'c', 'd'], 4) === 'b c d' && windowText(['a', 'b'], 0) === 'a');
+    const src = await readFile(path.join(ROOT, 'src/lib/chat/embed.ts'), 'utf8');
+    check('the model is fetched only from media.snowmoon.party, never Hugging Face', !/huggingface\.co|hf\.co/.test(src) && /mediaBase: 'https:\/\/media\.snowmoon\.party\/models'/.test(src) && /allowRemoteModels = false/.test(src));
+    check('every model file is fixed by its sha256', EMBED.files.every((f) => /^[0-9a-f]{64}$/.test(f.sha256) && f.bytes > 0));
   }
 
   // --- No answer, safety-check or search cost can be joined to a person ------

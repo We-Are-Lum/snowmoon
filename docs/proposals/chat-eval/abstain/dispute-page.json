@@ -1,0 +1,17 @@
+{
+ "title": "Chat: disputed gpt-oss answers (owner's marks)",
+ "id": "chat-disputes-2026-10-24",
+ "intro": "Every gpt-oss answer where graders A, B and GPT don't all agree, from two runs on the fresh set of 50 questions: the control (today's live setup) and the best setup (search fix + claim filter). f08 of the best run is included too, where all three say wrong. Mark each Right or Wrong; your marks decide. Marks stay in this browser until you press Export marks, which saves a JSON file to send back.",
+ "items": "disputed",
+ "include": ["f08"],
+ "runs": [
+  {"name": "control", "file": "../claude-trial/run-gpt-oss-120b.json", "graders": [
+   {"name": "A", "key": "grading-trial-strict/key.json", "grades": "grading-trial-strict/grades-A.json"},
+   {"name": "B", "key": "grading-trial-strict/key.json", "grades": "grading-trial-strict/grades-B.json"},
+   {"name": "GPT", "key": "grading-trial-gpt/key.json", "grades": "grading-trial-gpt/grades-GPT.json"}]},
+  {"name": "best (search fix + filter)", "file": "run-search-filter.json", "graders": [
+   {"name": "A", "key": "grading/key.json", "grades": "grading/grades-A.json"},
+   {"name": "B", "key": "grading/key.json", "grades": "grading/grades-B.json"},
+   {"name": "GPT", "key": "grading-gpt/key.json", "grades": "grading-gpt/grades-GPT.json"}]}
+ ]
+}

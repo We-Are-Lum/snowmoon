@@ -86,9 +86,25 @@ export const CHAT = {
   messagesPerDay: 30,
   /** Total spend per UTC day across everyone, in USD. Test cap: $2 (owner instruction, Oct 7, 2026). */
   dailySpendCapUsd: 2,
-  /** Search hits sent to the model, each with the blocks around it (see neighbours). */
-  passages: 12,
-  neighbours: { before: 2, after: 2 },
+  /**
+   * Search hits sent to the model, each with the blocks around it (see neighbours). 16 hits, 2 blocks before and
+   * 4 after, with the embedding search fused in: the answering block is sent for 44 of 50 fresh test questions
+   * (from 33) and 44 of 50 tuning questions (docs/proposals/chat-eval/search/, 2026-10-24).
+   */
+  passages: 16,
+  neighbours: { before: 2, after: 4 },
+  /**
+   * The embedding search: the question is embedded on our own server (src/lib/chat/embed.ts, bge-small-en-v1.5
+   * from media.snowmoon.party, no embedding service) and the nearest blocks (studio.block_vectors) are fused
+   * with the word search. Off, or before the vectors are loaded, the word search runs alone.
+   */
+  embedding: true,
+  /**
+   * After the support check, the guard model names the answer's sentences the passages don't support; they are
+   * dropped and never shown (config/prompts/chat-claim-filter.md). An answer the support check failed is shown
+   * trimmed only if the trimmed answer passes the support check. Owner, 2026-10-24 (branch chat-search-live).
+   */
+  claimFilter: true,
   /**
    * Before searching, the model lists words the answering passage is likely to use
    * (config/prompts/chat-search-terms.md); they are searched with the question. Never

@@ -13,6 +13,7 @@ import { createServer as createNet } from 'node:net';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { PGlite } from '@electric-sql/pglite';
+import { vector } from '@electric-sql/pglite-pgvector';
 import { PGLiteSocketServer } from '@electric-sql/pglite-socket';
 import { failOnProtocolErrors, gatePglite } from './pglite-gate';
 
@@ -42,7 +43,7 @@ export interface Stage {
 
 export async function startStage(opts: { scanner?: string; port?: number; transcript?: string; public?: boolean } = {}): Promise<Stage> {
   const { signSession } = await import('../../src/lib/wallet/session');
-  const pg = new PGlite();
+  const pg = new PGlite({ extensions: { vector } });
   await pg.exec(`create role anon nologin; create role authenticated nologin; create role service_role nologin bypassrls;`);
   const migrations = readdirSync(path.join(ROOT, 'supabase/migrations')).filter((f) => f.endsWith('.sql')).sort();
   for (const f of migrations) await pg.exec(readFileSync(path.join(ROOT, 'supabase/migrations', f), 'utf8'));

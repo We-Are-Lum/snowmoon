@@ -47,6 +47,19 @@ const nextConfig: NextConfig = {
     APP_BUILT_AT: new Date().toISOString(),
     APP_LEGAL_PAGES: legalPages(),
   },
+  // The reading assistant embeds the question on this server (src/lib/chat/embed.ts): Transformers.js and its
+  // native ONNX runtime are loaded by Node at run time, not bundled.
+  serverExternalPackages: ['@huggingface/transformers', 'onnxruntime-node'],
+  // Only the Linux x64 runtime ships with the assistant's function; the other platforms' binaries (~230 MB)
+  // and the browser runtime stay out. The model itself is not in the bundle: it comes from media.snowmoon.party.
+  outputFileTracingExcludes: {
+    '/api/chat/ask': [
+      './node_modules/onnxruntime-node/bin/napi-v6/darwin/**',
+      './node_modules/onnxruntime-node/bin/napi-v6/win32/**',
+      './node_modules/onnxruntime-node/bin/napi-v6/linux/arm64/**',
+      './node_modules/onnxruntime-web/**',
+    ],
+  },
   // Files read from disk at runtime (share pages and quote cards are rendered on demand).
   outputFileTracingIncludes: {
     '/**': [
@@ -79,6 +92,9 @@ const nextConfig: NextConfig = {
     '/api/mcp': ['./public/editor/*/v*/data.json'],
     // A moment page reads each version's shot (its frame, times and lines) from the same data.
     '/adaptation/**': ['./public/editor/*/v*/data.json'],
+    // The assistant's question embedding (src/lib/chat/embed.ts): Transformers.js loads its native ONNX runtime by
+    // a dynamic import the tracer doesn't follow. Only the Linux x64 binary ships (outputFileTracingExcludes).
+    '/api/chat/ask': ['./node_modules/onnxruntime-node/**', './node_modules/onnxruntime-common/**'],
     // The owner's image review reads each job's characters (their sheets and facts) on request.
     '/api/you/illustrations': ['./content/snowmoon/designs/characters/**'],
   },

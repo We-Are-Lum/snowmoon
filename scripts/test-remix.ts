@@ -33,6 +33,7 @@ import { tmpdir } from 'node:os';
 import { spawn } from 'node:child_process';
 import { createServer as createNet } from 'node:net';
 import { PGlite } from '@electric-sql/pglite';
+import { vector } from '@electric-sql/pglite-pgvector';
 import { PGLiteSocketServer } from '@electric-sql/pglite-socket';
 import { gatePglite } from './lib/pglite-gate';
 import postgres from 'postgres';
@@ -58,7 +59,7 @@ const check = (n: string, name: string, pass: boolean, got: unknown = null, shot
 };
 
 // --- the database ----------------------------------------------------------------------
-const pg = new PGlite();
+const pg = new PGlite({ extensions: { vector } });
 await pg.exec(`create role anon nologin; create role authenticated nologin; create role service_role nologin bypassrls;`);
 for (const f of readdirSync(path.join(ROOT, 'supabase/migrations')).filter((f) => f.endsWith('.sql')).sort()) await pg.exec(readFileSync(path.join(ROOT, 'supabase/migrations', f), 'utf8'));
 const WALLET = '0x5aaeb6053f3e94c9b9a09f33669435e7ef1beaed';

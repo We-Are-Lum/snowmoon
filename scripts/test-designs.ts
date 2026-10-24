@@ -21,6 +21,7 @@
 import path from 'node:path';
 import { readdirSync, readFileSync } from 'node:fs';
 import { PGlite } from '@electric-sql/pglite';
+import { vector } from '@electric-sql/pglite-pgvector';
 import { PGLiteSocketServer } from '@electric-sql/pglite-socket';
 import postgres from 'postgres';
 import { IMAGES } from '../src/lib/config';
@@ -58,7 +59,7 @@ const image = signTicket({ v: 1, fid: 6786, chapter: 1, start: 1, end: 1, userPr
 check('an image draft is not a sample record', readSampleTicket(image) === null && readTicket(image)?.fid === 6786);
 
 // --- The database --------------------------------------------------------------------
-const db = new PGlite();
+const db = new PGlite({ extensions: { vector } });
 await db.exec(`create role anon nologin; create role authenticated nologin; create role service_role nologin bypassrls;`);
 for (const f of readdirSync(path.join(ROOT, 'supabase/migrations')).filter((f) => f.endsWith('.sql')).sort()) await db.exec(read(`supabase/migrations/${f}`));
 await db.exec(`insert into studio.works values ('snowmoon','Snowmoon','GPL-3.0','x') on conflict do nothing`);

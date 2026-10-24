@@ -3,11 +3,14 @@ import aliases from '../../../config/aliases.json';
 import { blockFacts } from '../reading';
 import { CHAT, WORK_ID } from '../config';
 import { blockIdOk, chapterOf } from './sanitize';
+import { EMBED } from './embed';
 
 /**
  * Retrieval for the reading assistant: Postgres full-text search over
- * studio.text_blocks (migration 0006), never past the chapter limit. No
- * embedding model (docs/proposals/chat.md, section 2).
+ * studio.text_blocks (migration 0006), fused with an embedding search over
+ * studio.block_vectors (NEXT_chat_block_vectors) when the question's vector is
+ * given, never past the chapter limit. The question is embedded on our own
+ * server (./embed.ts); no embedding service.
  */
 export interface Passage {
   id: string;
@@ -90,9 +93,30 @@ export interface RetrieveOptions {
   /**
    * Block ids ranked by an embedding search, best first, already within the limit. When
    * given, they are fused with the word search by reciprocal rank (k = 60) before the top
-   * hits are taken. Evaluation only for now (docs/proposals/chat-eval/); the app passes none.
+   * hits are taken. Used by the evaluation (docs/proposals/chat-eval/).
    */
   dense?: string[];
+  /** The question's embedding (./embed.ts): the nearest blocks within the limit become the dense ranking. */
+  queryVector?: number[];
+}
+
+/**
+ * The 50 blocks nearest to the question's vector, within the limit, best first. Before the vectors are loaded
+ * (or if the table isn't there yet), none: the word search runs alone.
+ */
+export async function nearestBlocks(sql: postgres.Sql, vector: number[], limit: number, model: string): Promise<string[]> {
+  if (vector.length !== 384 || !vector.every((x) => Number.isFinite(x))) return [];
+  try {
+    const rows = (await sql.unsafe(
+      `select chapter, idx from studio.block_vectors where work_id = $1 and model = $2 and chapter <= $3
+        order by embedding operator(extensions.<=>) $4::extensions.vector limit 50`,
+      [WORK_ID, model, limit, `[${vector.join(',')}]`],
+    )) as unknown as { chapter: number; idx: number }[];
+    return rows.map((r) => `c${r.chapter}-b${r.idx}`);
+  } catch (e) {
+    if ((e as { code?: string }).code === '42P01') return [];
+    throw e;
+  }
 }
 
 export async function retrieve(
@@ -102,7 +126,12 @@ export async function retrieve(
   attached: string[] = [],
   opts: RetrieveOptions = {},
 ): Promise<Retrieved> {
-  const { hits: nHits = CHAT.passages, before = CHAT.neighbours.before, after = CHAT.neighbours.after, scoring = 'bm25', dense } = opts;
+  const { hits: nHits = CHAT.passages, before = CHAT.neighbours.before, after = CHAT.neighbours.after, scoring = 'bm25', queryVector } = opts;
+  let { dense } = opts;
+  if (!dense && queryVector) {
+    const near = await nearestBlocks(sql, queryVector, limit, EMBED.id);
+    if (near.length) dense = near;
+  }
   if (!Number.isInteger(limit) || limit < 1) throw new Error('bad chapter limit');
   const question = expandAliases(rawQuestion);
   const base = scoring === 'bm25' ? SCORED : RANKED;

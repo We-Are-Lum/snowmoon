@@ -31,6 +31,7 @@ import { createServer as createNet } from 'node:net';
 import { spawn, execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { PGlite } from '@electric-sql/pglite';
+import { vector } from '@electric-sql/pglite-pgvector';
 import { PGLiteSocketServer } from '@electric-sql/pglite-socket';
 import postgres from 'postgres';
 import { chromium, type Browser, type Page } from 'playwright-core';
@@ -130,7 +131,7 @@ const prompt = (f: string) => readFileSync(path.join(ROOT, 'config/prompts', f),
 }
 
 // --- the database: migrations, the seed, then the DRAFT 0017 ------------------------------------
-const pg = new PGlite();
+const pg = new PGlite({ extensions: { vector } });
 await pg.exec(`create role anon nologin; create role authenticated nologin; create role service_role nologin bypassrls;`);
 for (const f of readdirSync(path.join(ROOT, 'supabase/migrations')).filter((f) => f.endsWith('.sql')).sort()) await pg.exec(readFileSync(path.join(ROOT, 'supabase/migrations', f), 'utf8'));
 let applied = 'ok';

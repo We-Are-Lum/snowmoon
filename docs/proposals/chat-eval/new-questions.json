@@ -1,0 +1,516 @@
+[
+ {
+  "id": "n01",
+  "chapter": 1,
+  "question": "Why didn't Gladias just go with what his AI concluded about the band's songs at the concert?",
+  "gold": [
+   "c1-b61"
+  ],
+  "answer_fact": "Emerald's analysis was unreliable because there was too little source data on that kind of music, so Gladias went with his own instinct.",
+  "type": "why"
+ },
+ {
+  "id": "n02",
+  "chapter": 2,
+  "question": "Why does Dzego run the decisions that really matter through cryptography instead of through its official government and leaders?",
+  "gold": [
+   "c2-b128",
+   "c2-b127"
+  ],
+  "answer_fact": "Under 'grow roots, no head', the slow official government keeps going while cryptography lets the important decisions be coordinated anonymously, with no exposed individual leaders, countering the Arctic aim of keeping Dzego weak.",
+  "type": "why"
+ },
+ {
+  "id": "n03",
+  "chapter": 3,
+  "question": "According to the man on the bench, why does Greater Plum Harbor bother with things like the environment, schools, health and museums instead of just sticking to its science?",
+  "gold": [
+   "c3-b64"
+  ],
+  "answer_fact": "They do those populist projects to push their taxes down and get some money back from Quadratic Funding, even though they aren't good at them.",
+  "type": "why"
+ },
+ {
+  "id": "n04",
+  "chapter": 4,
+  "question": "In the quarter-final, why was Zei so set on knocking Dza out of the game completely?",
+  "gold": [
+   "c4-b116"
+  ],
+  "answer_fact": "Removing one of the two opponents takes out half the activity in the intervention turns, which are always the biggest source of surprise.",
+  "type": "why"
+ },
+ {
+  "id": "n05",
+  "chapter": 5,
+  "question": "Why are there fewer people in privacy robes in Freetown than in Veridia or Dzego?",
+  "gold": [
+   "c5-b68"
+  ],
+  "answer_fact": "People in Freetown mostly get around by car, and the interesting things tend to happen inside enclosed compounds.",
+  "type": "why"
+ },
+ {
+  "id": "n06",
+  "chapter": 2,
+  "question": "How do Zei and Fin find out where their DU class is going to be held that day?",
+  "gold": [
+   "c2-b22",
+   "c2-b29"
+  ],
+  "answer_fact": "The exact classroom location is decrypted and broadcast to their watches shortly before the lesson; that day it was Mun Gui 1842.",
+  "type": "what"
+ },
+ {
+  "id": "n07",
+  "chapter": 3,
+  "question": "What is the message on the poster Gladias finds taped up in the tunnel, and who is it from?",
+  "gold": [
+   "c3-b5",
+   "c3-b6"
+  ],
+  "answer_fact": "It is Arctic propaganda signed by Lord Ephelion, the Arctic consul, arguing that Veridia is comfortable but not strong and urging young Veridians to join the Arctics in building the future.",
+  "type": "what"
+ },
+ {
+  "id": "n08",
+  "chapter": 4,
+  "question": "What happened when Zei's spaceship smashed into the wall of Pan's home base?",
+  "gold": [
+   "c4-b133",
+   "c4-b132",
+   "c4-b131"
+  ],
+  "answer_fact": "The chaotic wreckage came together for a single turn into Bai's symbol, giving her a foothold at Pan's base.",
+  "type": "what"
+ },
+ {
+  "id": "n09",
+  "chapter": 5,
+  "question": "What had recently been going on with flights to Redshire when they arrived in Freetown?",
+  "gold": [
+   "c5-b9"
+  ],
+  "answer_fact": "Arctic drones had forced all flights to Redshire to be cancelled for the previous five days.",
+  "type": "what"
+ },
+ {
+  "id": "n10",
+  "chapter": 1,
+  "question": "Within the Order of Steering, what is the difference between what Keepers do and what Sentinels do?",
+  "gold": [
+   "c1-b57"
+  ],
+  "answer_fact": "Keepers vote on the tax rubrics, while Sentinels audit individual businesses and assign each one a position on a rubric; an Acolyte is a member in training.",
+  "type": "world"
+ },
+ {
+  "id": "n11",
+  "chapter": 2,
+  "question": "How do street names and house numbers work in Pafogai Du, the way Zei uses them to work out the walk?",
+  "gold": [
+   "c2-b31"
+  ],
+  "answer_fact": "Named streets are two hundred meters apart and house numbers are simply meters, so distances can be calculated directly from addresses.",
+  "type": "world"
+ },
+ {
+  "id": "n12",
+  "chapter": 4,
+  "question": "How is the Bansunpei trying out its new visual styles of written Dzegoban?",
+  "gold": [
+   "c4-b44"
+  ],
+  "answer_fact": "The priests made six styles of visualization and are A/B testing them across Dzego, giving reputation points to people who adapt their writing or signs or report on reading others'.",
+  "type": "world"
+ },
+ {
+  "id": "n13",
+  "chapter": 1,
+  "question": "Does Gladias actually like the kind of music Dreadknot plays?",
+  "gold": [
+   "c1-b53"
+  ],
+  "answer_fact": "It isn't his ideal entertainment since he prefers much softer music, but he doesn't dislike it and finds the concert anthropologically interesting.",
+  "type": "character"
+ },
+ {
+  "id": "n14",
+  "chapter": 2,
+  "question": "How did Zei try to lighten the mood in the classroom after the explosion?",
+  "gold": [
+   "c2-b116",
+   "c2-b117"
+  ],
+  "answer_fact": "He stood up and joked that they knew much less about the wall than two minutes earlier, and a few students smiled or laughed.",
+  "type": "character"
+ },
+ {
+  "id": "n15",
+  "chapter": 5,
+  "question": "What is Zei unsure about when it comes to his future studies?",
+  "gold": [
+   "c5-b70"
+  ],
+  "answer_fact": "He is trying to decide whether to go into physics or cryptography.",
+  "type": "character"
+ },
+ {
+  "id": "n16",
+  "chapter": 1,
+  "question": "What score did Lily get on the history exam that upset her?",
+  "gold": [
+   "c1-b119"
+  ],
+  "answer_fact": "She got sixty percent on her history exam.",
+  "type": "detail"
+ },
+ {
+  "id": "n17",
+  "chapter": 3,
+  "question": "How much sales tax does Greater Plum Harbor pay, according to Emerald?",
+  "gold": [
+   "c3-b62"
+  ],
+  "answer_fact": "It averages 5.2% sales tax, half the city average, with total land tax of 1.48%, slightly above average.",
+  "type": "detail"
+ },
+ {
+  "id": "n18",
+  "chapter": 7,
+  "question": "Why wasn't practising against bots with made-up rule changes very useful for Zei before the city final?",
+  "gold": [
+   "c7-b14"
+  ],
+  "answer_fact": "He beat them easily, because the bots are stronger at standard Minpentai but much worse at adapting to new situations they have no training data for.",
+  "type": "why"
+ },
+ {
+  "id": "n19",
+  "chapter": 8,
+  "question": "Why did Gladias say nothing back when Papli brought up mechanics' pay at the hearing?",
+  "gold": [
+   "c8-b74",
+   "c8-b73"
+  ],
+  "answer_fact": "He worked out his counter-argument in about three ticks, but saying it would take about twenty ticks and only four were left on the timer, so he gave up.",
+  "type": "why"
+ },
+ {
+  "id": "n20",
+  "chapter": 9,
+  "question": "Why does Den brush off Zei's explanation of encryption based on factoring numbers?",
+  "gold": [
+   "c9-b64"
+  ],
+  "answer_fact": "Den says factoring-based schemes haven't been used for decades and even elliptic curves are falling out of favour, because people fear the Arctics will soon produce a quantum computer.",
+  "type": "why"
+ },
+ {
+  "id": "n21",
+  "chapter": 10,
+  "question": "Why is Devanvil worried about the Arctic threat when cities like Ondak and Imber aren't?",
+  "gold": [
+   "c10-b21"
+  ],
+  "answer_fact": "Redshire chooses twelve percent of the seats in Devanvil's parliament.",
+  "type": "why"
+ },
+ {
+  "id": "n22",
+  "chapter": 6,
+  "question": "Why did the Order member at Gladias's track ceremony end up calling him by a string of digits instead of his name?",
+  "gold": [
+   "c6-b152",
+   "c6-b153",
+   "c6-b155"
+  ],
+  "answer_fact": "The Order members are not supposed to know who he is, since cryptography matches the procedure to his profile, so Gladias suggested they use the digits of the nullifier in his proof, and they called him three-seven-two-eff.",
+  "type": "why"
+ },
+ {
+  "id": "n23",
+  "chapter": 6,
+  "question": "What happened in the meeting room when the air sensors picked up a flu virus during the citizens' assembly?",
+  "gold": [
+   "c6-b100",
+   "c6-b99"
+  ],
+  "answer_fact": "The fans sped up and the violet lights got brighter; about half the people put on masks or respirators, and many switched to whispering through neck bands to reduce transmission.",
+  "type": "what"
+ },
+ {
+  "id": "n24",
+  "chapter": 8,
+  "question": "When Senator Ancus asked what Gladias wished he could have voted on, what did he name?",
+  "gold": [
+   "c8-b81",
+   "c8-b83"
+  ],
+  "answer_fact": "A Hydrafill billboard advertising that their drinks were free of over 2,000 poisons and anti-recommended substances, which he liked because the ad was fun.",
+  "type": "what"
+ },
+ {
+  "id": "n25",
+  "chapter": 10,
+  "question": "In the practice game after the city final, how did Bai catch Zei's spaceship by surprise?",
+  "gold": [
+   "c10-b162",
+   "c10-b160"
+  ],
+  "answer_fact": "She had placed a symbol along its path where Zei couldn't see it, so she saw the spaceship coming and hit it with gliders as it reflected.",
+  "type": "what"
+ },
+ {
+  "id": "n26",
+  "chapter": 7,
+  "question": "What did Zei build himself, without his AI, just before the city final started?",
+  "gold": [
+   "c7-b72"
+  ],
+  "answer_fact": "A symbol-carrying spaceship with a different style of moving wall, made by hand so Bai wouldn't see it, aimed to bounce off one of his AI's walls and travel up the middle of the field.",
+  "type": "what"
+ },
+ {
+  "id": "n27",
+  "chapter": 6,
+  "question": "How does someone in the Order end up becoming a Herald, and why are they only open about their work afterwards?",
+  "gold": [
+   "c6-b73",
+   "c6-b74"
+  ],
+  "answer_fact": "Keepers or Sentinels are randomly selected each year to retire and act as ambassadors to the public; they share how they worked only once they have no power left, so no one can influence them.",
+  "type": "world"
+ },
+ {
+  "id": "n28",
+  "chapter": 9,
+  "question": "How do ordinary people in Dzego check that the public security cameras aren't secretly leaking data?",
+  "gold": [
+   "c9-b97"
+  ],
+  "answer_fact": "Every Dzegojan has the right to occasionally pick a camera at random, unscrew it and analyse it themselves.",
+  "type": "world"
+ },
+ {
+  "id": "n29",
+  "chapter": 10,
+  "question": "Does the Keepers' rubric on cultural values in events also cover online content or billboards?",
+  "gold": [
+   "c10-b61"
+  ],
+  "answer_fact": "No: social media and other online things fall under a different rubric, and architecture and public billboards go into the aesthetics taxes.",
+  "type": "world"
+ },
+ {
+  "id": "n30",
+  "chapter": 8,
+  "question": "What did Gladias make of Lord Ephelion after hearing part of his debate with Sylka on the autobus?",
+  "gold": [
+   "c8-b37"
+  ],
+  "answer_fact": "He was faintly irritated at how neatly Ephelion's sentences formed a seemingly self-consistent argument and concluded he was a gifted demagogue.",
+  "type": "character"
+ },
+ {
+  "id": "n31",
+  "chapter": 9,
+  "question": "What old injury does Zei think of when Den says he wants to recruit him into defense?",
+  "gold": [
+   "c9-b75"
+  ],
+  "answer_fact": "His left arm, which had been broken and took a month to heal because of what happened at a thermodynamics lecture.",
+  "type": "character"
+ },
+ {
+  "id": "n32",
+  "chapter": 7,
+  "question": "What was Zei hoping to do with his winnings from the city final?",
+  "gold": [
+   "c7-b138"
+  ],
+  "answer_fact": "He had been hoping for months to buy his mom a new compute box.",
+  "type": "character"
+ },
+ {
+  "id": "n33",
+  "chapter": 9,
+  "question": "In Fin's simple example sentence about the avocado, which little words mark where the subject, verb and object split?",
+  "gold": [
+   "c9-b31"
+  ],
+  "answer_fact": "'li' separates the subject from the verb and 'fe' separates the verb from the object.",
+  "type": "detail"
+ },
+ {
+  "id": "n34",
+  "chapter": 6,
+  "question": "Before submitting his track choice, how many times had Gladias climbed the long staircase up to the Order's headquarters?",
+  "gold": [
+   "c6-b146"
+  ],
+  "answer_fact": "Only once before, when he was inducted as an Acolyte.",
+  "type": "detail"
+ },
+ {
+  "id": "n35",
+  "chapter": 11,
+  "question": "In the air quality Keeper meeting, why does one Keeper insist the rubric matters even though people in Veridia aren't getting sick much?",
+  "gold": [
+   "c11-b107",
+   "c11-b105"
+  ],
+  "answer_fact": "The Keeper says the others are missing the tail risk: super-pandemics deliberately released by the Arctics.",
+  "type": "why"
+ },
+ {
+  "id": "n36",
+  "chapter": 12,
+  "question": "Why is Bai in the capital during the national championship instead of back home?",
+  "gold": [
+   "c12-b110"
+  ],
+  "answer_fact": "Den's people contacted her and told her to come and take notes on all the contestants' strategies.",
+  "type": "why"
+ },
+ {
+  "id": "n37",
+  "chapter": 13,
+  "question": "Why does Eighteen object to making military and surveillance tech pay more under the openness tax?",
+  "gold": [
+   "c13-b86"
+  ],
+  "answer_fact": "Eighteen says the Arctics have the technological advantage, so the game isn't symmetric: if everyone must build their own tech in those areas, the Arctics win.",
+  "type": "why"
+ },
+ {
+  "id": "n38",
+  "chapter": 14,
+  "question": "In the semifinal against Gun, why does Zei park his last spaceship just out of sight instead of attacking openly?",
+  "gold": [
+   "c14-b56"
+  ],
+  "answer_fact": "It was the last mobile structure Gun knew nothing about, and keeping it hidden might be his best advantage, so he even bounced its gliders off the northern shrine to avoid giving away its location.",
+  "type": "why"
+ },
+ {
+  "id": "n39",
+  "chapter": 15,
+  "question": "Why hadn't Jahn checked the news before walking into the institute restaurant that morning?",
+  "gold": [
+   "c15-b3"
+  ],
+  "answer_fact": "He deliberately avoided the news to clear his mind and enjoy whatever lecture would be on the restaurant screen.",
+  "type": "why"
+ },
+ {
+  "id": "n40",
+  "chapter": 11,
+  "question": "What were the rules for Zven's Helisport game that day?",
+  "gold": [
+   "c11-b26"
+  ],
+  "answer_fact": "It was a limited game with only redballs: catch one and bring it back to the instructor for a point, and the first team to six points wins.",
+  "type": "what"
+ },
+ {
+  "id": "n41",
+  "chapter": 12,
+  "question": "On the drive to the opening ceremony, what had happened at the taped-off area the car detoured around?",
+  "gold": [
+   "c12-b61"
+  ],
+  "answer_fact": "The driver said there had been an explosion in an advanced biology research lab, probably the Arctics, and cleanup would take days.",
+  "type": "what"
+ },
+ {
+  "id": "n42",
+  "chapter": 13,
+  "question": "What exactly did Zero's drafted rubric change propose?",
+  "gold": [
+   "c13-b82"
+  ],
+  "answer_fact": "It would exempt all military, surveillance and counter-surveillance products from the more favorable openness tax tiers, making them minimum tier 3 unconditionally.",
+  "type": "what"
+ },
+ {
+  "id": "n43",
+  "chapter": 15,
+  "question": "How are messages from Deluin getting out of occupied Redshire?",
+  "gold": [
+   "c15-b107"
+  ],
+  "answer_fact": "An Arctic soldier charges people zipcoins to hide their messages in his health data.",
+  "type": "what"
+ },
+ {
+  "id": "n44",
+  "chapter": 11,
+  "question": "Who actually runs Veridia's public schools, if not the Order?",
+  "gold": [
+   "c11-b54"
+  ],
+  "answer_fact": "Public schools are run by the education committee, which is staffed by parliament; schools aren't Order business.",
+  "type": "world"
+ },
+ {
+  "id": "n45",
+  "chapter": 13,
+  "question": "How does Gladias say Veridia's rubric taxes compare with the way Inglewore regulates people?",
+  "gold": [
+   "c13-b8"
+  ],
+  "answer_fact": "Veridia doesn't make people fill forms for everything as Inglewore does; the taxes are just another variable to watch, like electricity costs.",
+  "type": "world"
+ },
+ {
+  "id": "n46",
+  "chapter": 14,
+  "question": "What is the new version nine of the Dzegojan language trying to change?",
+  "gold": [
+   "c14-b114"
+  ],
+  "answer_fact": "It makes the language visual, bringing back hieroglyphs for the roots with pronunciation readable from the glyph, plus a layer making the grammar look more like math.",
+  "type": "world"
+ },
+ {
+  "id": "n47",
+  "chapter": 12,
+  "question": "Just before his first championship match, what was Zei worried about, given that one loss wouldn't knock him out?",
+  "gold": [
+   "c12-b141"
+  ],
+  "answer_fact": "Because losing was allowed, he feared that excuse would sap the motivation he needed to keep his full attention on winning.",
+  "type": "character"
+ },
+ {
+  "id": "n48",
+  "chapter": 15,
+  "question": "When Su sends Zei to see Den after the invasion, where is Zei hoping he'll be posted, and why?",
+  "gold": [
+   "c15-b88"
+  ],
+  "answer_fact": "He hoped Den would put him in Pafogai so he could see Fin and his mom again.",
+  "type": "character"
+ },
+ {
+  "id": "n49",
+  "chapter": 11,
+  "question": "What carbon dioxide reading did Gladias's watch first show inside the air quality meeting booth?",
+  "gold": [
+   "c11-b92"
+  ],
+  "answer_fact": "It read 906, with only four people in the booth.",
+  "type": "detail"
+ },
+ {
+  "id": "n50",
+  "chapter": 14,
+  "question": "In the semifinal, how many intervention turns did Zei need to build a new symbol-carrying spaceship?",
+  "gold": [
+   "c14-b46"
+  ],
+  "answer_fact": "Four intervention turns, so his three symbol-carrying spaceships were his whole fleet.",
+  "type": "detail"
+ }
+]

@@ -11,6 +11,7 @@ import path from 'node:path';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { PGlite } from '@electric-sql/pglite';
+import { vector } from '@electric-sql/pglite-pgvector';
 import { PGLiteSocketServer } from '@electric-sql/pglite-socket';
 import postgres from 'postgres';
 import { ask, type Complete } from '../src/lib/chat/ask';
@@ -22,7 +23,7 @@ const token = process.env.AI_GATEWAY_API_KEY || process.env.VERCEL_OIDC_TOKEN;
 if (!token) throw new Error('no gateway token');
 const prompt = async (f: string) => (await readFile(path.join(ROOT, 'config/prompts', f), 'utf8')).replace(/^<!--[\s\S]*?-->\s*/, '');
 
-const pg = new PGlite();
+const pg = new PGlite({ extensions: { vector } });
 await pg.exec(`create role anon nologin; create role authenticated nologin; create role service_role nologin bypassrls;`);
 for (const f of ['0001_core.sql', '0002_v5.sql', '0003_likes.sql', '0004_private_ratings_and_likes.sql', '0005_public_prompts_and_consent.sql', '0006_chat.sql', '0007_chat_costs_without_person.sql'])
   await pg.exec(await readFile(path.join(ROOT, 'supabase/migrations', f), 'utf8'));

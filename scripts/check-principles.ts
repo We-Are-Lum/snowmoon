@@ -17,6 +17,7 @@ import { createHash } from 'node:crypto';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { PGlite } from '@electric-sql/pglite';
+import { vector } from '@electric-sql/pglite-pgvector';
 import postgres from 'postgres';
 import { chromium } from 'playwright-core';
 import * as cheerio from 'cheerio';
@@ -71,7 +72,7 @@ async function page(p: string): Promise<string> {
   return pageCache.get(p)!;
 }
 async function pglite(extraSql = ''): Promise<PGlite> {
-  const db = new PGlite();
+  const db = new PGlite({ extensions: { vector } });
   await db.exec(`create role anon nologin; create role authenticated nologin; create role service_role nologin bypassrls;`);
   for (const f of readdirSync(path.join(ROOT, 'supabase/migrations')).filter((f) => f.endsWith('.sql')).sort()) {
     await db.exec(read(`supabase/migrations/${f}`));
