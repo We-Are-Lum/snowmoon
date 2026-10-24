@@ -1,0 +1,1505 @@
+{
+ "grader": "GPT (openai/gpt-5.6-sol, reasoning effort low, via Vercel AI Gateway)",
+ "items": [
+  {
+   "id": "f01",
+   "label": "K",
+   "claims": 3,
+   "supported": 3,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f01",
+   "label": "M",
+   "claims": 9,
+   "supported": 7,
+   "unsupported_but_true": 2,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f01",
+   "label": "P",
+   "claims": 9,
+   "supported": 8,
+   "unsupported_but_true": 1,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f02",
+   "label": "K",
+   "claims": 3,
+   "supported": 0,
+   "unsupported_but_true": 0,
+   "unsupported": 3,
+   "correct": "wrong",
+   "note": "It attributes Gladias's plans in c1-b135 to Seila."
+  },
+  {
+   "id": "f02",
+   "label": "P",
+   "claims": 14,
+   "supported": 10,
+   "unsupported_but_true": 2,
+   "unsupported": 2,
+   "correct": "cant",
+   "note": "It presents both plans but incorrectly concludes that Seila's plan cannot be identified from the dialogue context."
+  },
+  {
+   "id": "f02",
+   "label": "R",
+   "claims": 13,
+   "supported": 12,
+   "unsupported_but_true": 0,
+   "unsupported": 1,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f03",
+   "label": "M",
+   "claims": 1,
+   "supported": 1,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f03",
+   "label": "P",
+   "claims": 7,
+   "supported": 7,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f03",
+   "label": "R",
+   "claims": 7,
+   "supported": 6,
+   "unsupported_but_true": 0,
+   "unsupported": 1,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f04",
+   "label": "M",
+   "claims": 6,
+   "supported": 6,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f04",
+   "label": "P",
+   "claims": 6,
+   "supported": 6,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f04",
+   "label": "R",
+   "claims": 2,
+   "supported": 2,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f05",
+   "label": "K",
+   "claims": 2,
+   "supported": 2,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f05",
+   "label": "M",
+   "claims": 10,
+   "supported": 9,
+   "unsupported_but_true": 0,
+   "unsupported": 1,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f05",
+   "label": "P",
+   "claims": 9,
+   "supported": 9,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f06",
+   "label": "P",
+   "claims": 0,
+   "supported": 0,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "not shown or \"the passages don't say\" only (no call)"
+  },
+  {
+   "id": "f06",
+   "label": "R",
+   "claims": 0,
+   "supported": 0,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "not shown or \"the passages don't say\" only (no call)"
+  },
+  {
+   "id": "f06",
+   "label": "M",
+   "claims": 1,
+   "supported": 1,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "wrong",
+   "note": "The cited passage describes a different event; in the Minpentai game the night before the bombing, Zei placed third."
+  },
+  {
+   "id": "f07",
+   "label": "P",
+   "claims": 0,
+   "supported": 0,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "not shown or \"the passages don't say\" only (no call)"
+  },
+  {
+   "id": "f07",
+   "label": "M",
+   "claims": 3,
+   "supported": 3,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f07",
+   "label": "R",
+   "claims": 9,
+   "supported": 9,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f08",
+   "label": "M",
+   "claims": 7,
+   "supported": 7,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f08",
+   "label": "P",
+   "claims": 7,
+   "supported": 7,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "partly",
+   "note": "It gives the correct motivation but stops short of confirming that the chapter 8 speaker is Gladias."
+  },
+  {
+   "id": "f08",
+   "label": "R",
+   "claims": 5,
+   "supported": 5,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f09",
+   "label": "K",
+   "claims": 10,
+   "supported": 8,
+   "unsupported_but_true": 0,
+   "unsupported": 2,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f09",
+   "label": "M",
+   "claims": 5,
+   "supported": 3,
+   "unsupported_but_true": 1,
+   "unsupported": 1,
+   "correct": "wrong",
+   "note": "It overstates the evidence by saying Bluewhale targets exposed information and implying the privacy breach caused the job loss, although Mov explicitly says the connection is unknown."
+  },
+  {
+   "id": "f09",
+   "label": "P",
+   "claims": 10,
+   "supported": 9,
+   "unsupported_but_true": 0,
+   "unsupported": 1,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f10",
+   "label": "K",
+   "claims": 0,
+   "supported": 0,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "not shown or \"the passages don't say\" only (no call)"
+  },
+  {
+   "id": "f10",
+   "label": "M",
+   "claims": 20,
+   "supported": 20,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f10",
+   "label": "P",
+   "claims": 13,
+   "supported": 13,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f11",
+   "label": "K",
+   "claims": 0,
+   "supported": 0,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "not shown or \"the passages don't say\" only (no call)"
+  },
+  {
+   "id": "f11",
+   "label": "P",
+   "claims": 0,
+   "supported": 0,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "not shown or \"the passages don't say\" only (no call)"
+  },
+  {
+   "id": "f11",
+   "label": "R",
+   "claims": 2,
+   "supported": 2,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f12",
+   "label": "K",
+   "claims": 3,
+   "supported": 3,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f12",
+   "label": "M",
+   "claims": 7,
+   "supported": 5,
+   "unsupported_but_true": 0,
+   "unsupported": 2,
+   "correct": "wrong",
+   "note": "Incorrectly says the passage does not explain why teamwork will be hard; Mu says real-time diplomacy will be especially important."
+  },
+  {
+   "id": "f12",
+   "label": "R",
+   "claims": 8,
+   "supported": 5,
+   "unsupported_but_true": 0,
+   "unsupported": 3,
+   "correct": "wrong",
+   "note": "The claim that this is the first hint of a theme Mu later returns to is not established, and the birthday remark is overinterpreted as proof that people generally are not Zei's strength."
+  },
+  {
+   "id": "f13",
+   "label": "M",
+   "claims": 1,
+   "supported": 1,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f13",
+   "label": "P",
+   "claims": 10,
+   "supported": 9,
+   "unsupported_but_true": 0,
+   "unsupported": 1,
+   "correct": "wrong",
+   "note": "The answer correctly identifies Zei's desire, but “gloated each time” is stronger and more specific than the cited statement that Bai was hardly magnanimous in victory."
+  },
+  {
+   "id": "f13",
+   "label": "R",
+   "claims": 8,
+   "supported": 8,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f14",
+   "label": "K",
+   "claims": 1,
+   "supported": 0,
+   "unsupported_but_true": 0,
+   "unsupported": 1,
+   "correct": "cant",
+   "note": "It says the answer cannot be determined, although c4-b156 and c4-b158 directly provide it."
+  },
+  {
+   "id": "f14",
+   "label": "M",
+   "claims": 7,
+   "supported": 4,
+   "unsupported_but_true": 0,
+   "unsupported": 3,
+   "correct": "cant",
+   "note": "It overlooks the answer in c4-b156 and c4-b158 and incorrectly directs the reader toward unrelated game passages."
+  },
+  {
+   "id": "f14",
+   "label": "P",
+   "claims": 9,
+   "supported": 7,
+   "unsupported_but_true": 0,
+   "unsupported": 2,
+   "correct": "cant",
+   "note": "Its description of the chapter 10 exchange is mostly supported, but it fails to answer despite c4-b156 and c4-b158 explicitly stating Zei's request."
+  },
+  {
+   "id": "f15",
+   "label": "K",
+   "claims": 9,
+   "supported": 9,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f15",
+   "label": "P",
+   "claims": 10,
+   "supported": 10,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f15",
+   "label": "R",
+   "claims": 7,
+   "supported": 6,
+   "unsupported_but_true": 0,
+   "unsupported": 1,
+   "correct": "wrong",
+   "note": "Correctly identifies Arctic infiltration and the safeguards, but adds that the network is hard to verify, which the cited text does not establish."
+  },
+  {
+   "id": "f16",
+   "label": "K",
+   "claims": 7,
+   "supported": 7,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f16",
+   "label": "M",
+   "claims": 5,
+   "supported": 5,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f16",
+   "label": "R",
+   "claims": 11,
+   "supported": 11,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f17",
+   "label": "K",
+   "claims": 6,
+   "supported": 5,
+   "unsupported_but_true": 0,
+   "unsupported": 1,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f17",
+   "label": "M",
+   "claims": 1,
+   "supported": 1,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f17",
+   "label": "R",
+   "claims": 5,
+   "supported": 5,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f18",
+   "label": "M",
+   "claims": 8,
+   "supported": 7,
+   "unsupported_but_true": 0,
+   "unsupported": 1,
+   "correct": "wrong",
+   "note": "Incorrectly says the priests’ reasoning is not given; Mu explicitly says they wanted realism in which success requires hiding one’s thoughts."
+  },
+  {
+   "id": "f18",
+   "label": "P",
+   "claims": 14,
+   "supported": 9,
+   "unsupported_but_true": 0,
+   "unsupported": 5,
+   "correct": "wrong",
+   "note": "Incorrectly denies that the priests chose and explained the rule; some added claims about a winning move, prior cooperation, and Den are not established by the cited blocks."
+  },
+  {
+   "id": "f18",
+   "label": "R",
+   "claims": 2,
+   "supported": 1,
+   "unsupported_but_true": 0,
+   "unsupported": 1,
+   "correct": "wrong",
+   "note": "Incorrectly says the motivation is unexplained; Mu states that the priests wanted the game to resemble real life, where thoughts must be concealed."
+  },
+  {
+   "id": "f19",
+   "label": "K",
+   "claims": 4,
+   "supported": 0,
+   "unsupported_but_true": 2,
+   "unsupported": 2,
+   "correct": "wrong",
+   "note": "It falsely says Nine’s belief and reasoning are absent; c10-b119 states both explicitly."
+  },
+  {
+   "id": "f19",
+   "label": "M",
+   "claims": 13,
+   "supported": 9,
+   "unsupported_but_true": 1,
+   "unsupported": 3,
+   "correct": "wrong",
+   "note": "Although its scene summary is mostly accurate, it falsely claims Nine’s reaction and reasoning are not shown; they appear in c10-b119."
+  },
+  {
+   "id": "f19",
+   "label": "P",
+   "claims": 8,
+   "supported": 5,
+   "unsupported_but_true": 0,
+   "unsupported": 3,
+   "correct": "wrong",
+   "note": "It falsely says the passages stop before Nine’s opinion and reasoning, both of which are stated in c10-b119."
+  },
+  {
+   "id": "f20",
+   "label": "K",
+   "claims": 0,
+   "supported": 0,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "not shown or \"the passages don't say\" only (no call)"
+  },
+  {
+   "id": "f20",
+   "label": "R",
+   "claims": 0,
+   "supported": 0,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "not shown or \"the passages don't say\" only (no call)"
+  },
+  {
+   "id": "f20",
+   "label": "P",
+   "claims": 10,
+   "supported": 5,
+   "unsupported_but_true": 0,
+   "unsupported": 5,
+   "correct": "wrong",
+   "note": "It incorrectly says the passages do not reveal the disguise or its reason; c10-b202 explicitly says open military recruitment would be targeted by the Arctics and the game is safe because it appears to be only a game. The cited excerpts also do not identify the speaker as Den."
+  },
+  {
+   "id": "f21",
+   "label": "M",
+   "claims": 5,
+   "supported": 4,
+   "unsupported_but_true": 0,
+   "unsupported": 1,
+   "correct": "wrong",
+   "note": "The claim that programming and law let him do well without that pressure is not established; only his decent programming-competition performance is stated."
+  },
+  {
+   "id": "f21",
+   "label": "P",
+   "claims": 11,
+   "supported": 11,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f21",
+   "label": "R",
+   "claims": 15,
+   "supported": 15,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f22",
+   "label": "K",
+   "claims": 10,
+   "supported": 10,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f22",
+   "label": "M",
+   "claims": 13,
+   "supported": 13,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f22",
+   "label": "R",
+   "claims": 5,
+   "supported": 5,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f23",
+   "label": "M",
+   "claims": 0,
+   "supported": 0,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "not shown or \"the passages don't say\" only (no call)"
+  },
+  {
+   "id": "f23",
+   "label": "K",
+   "claims": 11,
+   "supported": 8,
+   "unsupported_but_true": 0,
+   "unsupported": 3,
+   "correct": "wrong",
+   "note": "It incorrectly claims Bai was absent and disputes the stated journey context; the cited scene later explicitly refers to all three climbing together."
+  },
+  {
+   "id": "f23",
+   "label": "P",
+   "claims": 3,
+   "supported": 2,
+   "unsupported_but_true": 0,
+   "unsupported": 1,
+   "correct": "wrong",
+   "note": "The smoke came from the chip facility, but the text says the Arctics opposed technological progress, not that they had been trying to halt that specific plant."
+  },
+  {
+   "id": "f24",
+   "label": "M",
+   "claims": 1,
+   "supported": 1,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f24",
+   "label": "P",
+   "claims": 6,
+   "supported": 6,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f24",
+   "label": "R",
+   "claims": 3,
+   "supported": 3,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f25",
+   "label": "K",
+   "claims": 6,
+   "supported": 3,
+   "unsupported_but_true": 2,
+   "unsupported": 1,
+   "correct": "wrong",
+   "note": "It conflates the city final with a later defensive win; Zei’s actual comeback used the sixteen-strategy factory and secretly triggered gliders."
+  },
+  {
+   "id": "f25",
+   "label": "P",
+   "claims": 8,
+   "supported": 5,
+   "unsupported_but_true": 0,
+   "unsupported": 3,
+   "correct": "wrong",
+   "note": "The supplied chapter 7 blocks do describe the comeback, and the answer wrongly identifies the separate defensive game as the semifinal against Gun Caibai."
+  },
+  {
+   "id": "f25",
+   "label": "R",
+   "claims": 10,
+   "supported": 9,
+   "unsupported_but_true": 0,
+   "unsupported": 1,
+   "correct": "wrong",
+   "note": "It falsely says the turning point is not shown and consequently fails to give the described sixteen-strategy factory and surprise attack."
+  },
+  {
+   "id": "f26",
+   "label": "R",
+   "claims": 0,
+   "supported": 0,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "not shown or \"the passages don't say\" only (no call)"
+  },
+  {
+   "id": "f26",
+   "label": "K",
+   "claims": 12,
+   "supported": 12,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f26",
+   "label": "M",
+   "claims": 4,
+   "supported": 3,
+   "unsupported_but_true": 0,
+   "unsupported": 1,
+   "correct": "wrong",
+   "note": "Mogna gave in to the demand; it did not collapse."
+  },
+  {
+   "id": "f27",
+   "label": "K",
+   "claims": 5,
+   "supported": 4,
+   "unsupported_but_true": 0,
+   "unsupported": 1,
+   "correct": "wrong",
+   "note": "It says the device contacts the target “millions of times,” but the text specifies exactly one million times."
+  },
+  {
+   "id": "f27",
+   "label": "M",
+   "claims": 9,
+   "supported": 7,
+   "unsupported_but_true": 2,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f27",
+   "label": "P",
+   "claims": 12,
+   "supported": 6,
+   "unsupported_but_true": 3,
+   "unsupported": 3,
+   "correct": "wrong",
+   "note": "The final paragraph reverses the speakers: Zei asks about forwarding, while Den answers that the mountain helps but that generally he does not know."
+  },
+  {
+   "id": "f28",
+   "label": "K",
+   "claims": 16,
+   "supported": 16,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f28",
+   "label": "M",
+   "claims": 13,
+   "supported": 13,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f28",
+   "label": "P",
+   "claims": 12,
+   "supported": 12,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f29",
+   "label": "K",
+   "claims": 9,
+   "supported": 9,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f29",
+   "label": "M",
+   "claims": 8,
+   "supported": 8,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f29",
+   "label": "R",
+   "claims": 5,
+   "supported": 5,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f30",
+   "label": "K",
+   "claims": 4,
+   "supported": 3,
+   "unsupported_but_true": 0,
+   "unsupported": 1,
+   "correct": "no",
+   "note": "Identifies Pelae correctly but substitutes her curiosity about assembly outcomes for her stated plan to go into chemistry."
+  },
+  {
+   "id": "f30",
+   "label": "M",
+   "claims": 10,
+   "supported": 9,
+   "unsupported_but_true": 0,
+   "unsupported": 1,
+   "correct": "cant",
+   "note": "Correctly identifies Pelae but says her goal is not given, missing the supplied passages stating that she plans to go into chemistry."
+  },
+  {
+   "id": "f30",
+   "label": "P",
+   "claims": 7,
+   "supported": 6,
+   "unsupported_but_true": 0,
+   "unsupported": 1,
+   "correct": "cant",
+   "note": "Correctly identifies Pelae but says her plan is unstated, overlooking that she has decided to go into chemistry."
+  },
+  {
+   "id": "f31",
+   "label": "R",
+   "claims": 0,
+   "supported": 0,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "not shown or \"the passages don't say\" only (no call)"
+  },
+  {
+   "id": "f31",
+   "label": "M",
+   "claims": 11,
+   "supported": 9,
+   "unsupported_but_true": 0,
+   "unsupported": 2,
+   "correct": "wrong",
+   "note": "It incorrectly says the passages do not contain the requested reminder; c8-b117 gives both kind acts. It also adds that Gladias placed the meal “quietly,” which is not stated."
+  },
+  {
+   "id": "f31",
+   "label": "P",
+   "claims": 13,
+   "supported": 12,
+   "unsupported_but_true": 0,
+   "unsupported": 1,
+   "correct": "wrong",
+   "note": "It incorrectly says the requested scene is absent, although c8-b117 states that Lily baked Seila a birthday cake and brought Hreda food every day for a month."
+  },
+  {
+   "id": "f32",
+   "label": "K",
+   "claims": 4,
+   "supported": 2,
+   "unsupported_but_true": 0,
+   "unsupported": 2,
+   "correct": "wrong",
+   "note": "It incorrectly says Bai’s feelings are not given; c9-b21–22 explicitly show admiration for Zei’s superior tactics and her desire to understand his thinking."
+  },
+  {
+   "id": "f32",
+   "label": "P",
+   "claims": 9,
+   "supported": 6,
+   "unsupported_but_true": 1,
+   "unsupported": 2,
+   "correct": "wrong",
+   "note": "It overlooks the direct explanation in c9-b21–22 and therefore falsely concludes that Bai’s real feelings cannot be known."
+  },
+  {
+   "id": "f32",
+   "label": "R",
+   "claims": 10,
+   "supported": 6,
+   "unsupported_but_true": 1,
+   "unsupported": 3,
+   "correct": "wrong",
+   "note": "It misses Bai’s explicit admiration and curiosity in c9-b21–22; it also overstates c10-b156 by saying Bai and Zei were playing a game when it only says they stared at hand devices."
+  },
+  {
+   "id": "f33",
+   "label": "M",
+   "claims": 5,
+   "supported": 4,
+   "unsupported_but_true": 0,
+   "unsupported": 1,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f33",
+   "label": "P",
+   "claims": 16,
+   "supported": 14,
+   "unsupported_but_true": 0,
+   "unsupported": 2,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f33",
+   "label": "R",
+   "claims": 8,
+   "supported": 7,
+   "unsupported_but_true": 0,
+   "unsupported": 1,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f34",
+   "label": "P",
+   "claims": 0,
+   "supported": 0,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "not shown or \"the passages don't say\" only (no call)"
+  },
+  {
+   "id": "f34",
+   "label": "K",
+   "claims": 5,
+   "supported": 4,
+   "unsupported_but_true": 0,
+   "unsupported": 1,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f34",
+   "label": "M",
+   "claims": 5,
+   "supported": 4,
+   "unsupported_but_true": 0,
+   "unsupported": 1,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f35",
+   "label": "K",
+   "claims": 17,
+   "supported": 17,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f35",
+   "label": "M",
+   "claims": 16,
+   "supported": 16,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f35",
+   "label": "R",
+   "claims": 4,
+   "supported": 4,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f36",
+   "label": "K",
+   "claims": 0,
+   "supported": 0,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "It says the relevant exchange was not shown, although c14-b22–c14-b23 directly provide Bai's reason."
+  },
+  {
+   "id": "f36",
+   "label": "M",
+   "claims": 3,
+   "supported": 3,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "It declines to answer despite the answer appearing in c14-b22–c14-b23; its ancillary claims are supported."
+  },
+  {
+   "id": "f36",
+   "label": "R",
+   "claims": 8,
+   "supported": 8,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "It declines to answer despite the answer appearing in c14-b22–c14-b23; its ancillary summary is supported."
+  },
+  {
+   "id": "f37",
+   "label": "K",
+   "claims": 7,
+   "supported": 6,
+   "unsupported_but_true": 0,
+   "unsupported": 1,
+   "correct": "wrong",
+   "note": "It overlooks c13-b14, which explicitly gives Gladias's uncertainty and his wish to avoid Delwart's lecture; its claim that Delwart appears only in the voting discussion is false."
+  },
+  {
+   "id": "f37",
+   "label": "M",
+   "claims": 0,
+   "supported": 0,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "It says the answer is not shown, despite c13-b14 directly explaining Gladias's motive."
+  },
+  {
+   "id": "f37",
+   "label": "R",
+   "claims": 4,
+   "supported": 4,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "Its cited side details are accurate, but it misses the direct explanation in c13-b14 and therefore does not answer the question."
+  },
+  {
+   "id": "f38",
+   "label": "K",
+   "claims": 4,
+   "supported": 4,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f38",
+   "label": "M",
+   "claims": 11,
+   "supported": 11,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f38",
+   "label": "P",
+   "claims": 13,
+   "supported": 13,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f39",
+   "label": "R",
+   "claims": 0,
+   "supported": 0,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "not shown or \"the passages don't say\" only (no call)"
+  },
+  {
+   "id": "f39",
+   "label": "K",
+   "claims": 8,
+   "supported": 6,
+   "unsupported_but_true": 0,
+   "unsupported": 2,
+   "correct": "wrong",
+   "note": "It incorrectly says Den’s decision and reasoning are not shown; c15-b119 explicitly says he sends Zei back because the needed cryptographic infrastructure is run from Pafogai Du."
+  },
+  {
+   "id": "f39",
+   "label": "P",
+   "claims": 10,
+   "supported": 6,
+   "unsupported_but_true": 0,
+   "unsupported": 4,
+   "correct": "wrong",
+   "note": "It incorrectly denies that Den’s decision is available; c15-b119 gives both the instruction to return and the cryptographic-coordination reason."
+  },
+  {
+   "id": "f40",
+   "label": "K",
+   "claims": 0,
+   "supported": 0,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "not shown or \"the passages don't say\" only (no call)"
+  },
+  {
+   "id": "f40",
+   "label": "M",
+   "claims": 13,
+   "supported": 8,
+   "unsupported_but_true": 4,
+   "unsupported": 1,
+   "correct": "wrong",
+   "note": "It incorrectly says the relevant interruption is not shown and does not answer the question, despite the supplied chapter 13 blocks giving both the broadcast interruption and Seila's reaction."
+  },
+  {
+   "id": "f40",
+   "label": "P",
+   "claims": 4,
+   "supported": 2,
+   "unsupported_but_true": 0,
+   "unsupported": 2,
+   "correct": "wrong",
+   "note": "Lily's game did not interrupt the restaurant dinner, and Seila's hug and reassurance concerned Lily's exam result rather than the broadcast interruption."
+  },
+  {
+   "id": "f41",
+   "label": "K",
+   "claims": 10,
+   "supported": 8,
+   "unsupported_but_true": 0,
+   "unsupported": 2,
+   "correct": "cant",
+   "note": "It incorrectly says the advice is not shown and misses Zei’s LLM/XOR-bucket encoding method."
+  },
+  {
+   "id": "f41",
+   "label": "M",
+   "claims": 12,
+   "supported": 10,
+   "unsupported_but_true": 0,
+   "unsupported": 2,
+   "correct": "cant",
+   "note": "It incorrectly says the advice is not shown and instead summarizes contextual details about the soldier and Bai’s unrelated advice."
+  },
+  {
+   "id": "f41",
+   "label": "R",
+   "claims": 3,
+   "supported": 2,
+   "unsupported_but_true": 0,
+   "unsupported": 1,
+   "correct": "cant",
+   "note": "It says the requested advice is absent, overlooking Zei’s recommendation to use a trained model and XOR buckets to choose natural-looking bit flips."
+  },
+  {
+   "id": "f42",
+   "label": "K",
+   "claims": 11,
+   "supported": 11,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f42",
+   "label": "M",
+   "claims": 11,
+   "supported": 9,
+   "unsupported_but_true": 0,
+   "unsupported": 2,
+   "correct": "wrong",
+   "note": "The cited passages do not say Kau relied only on eternal glider factories or that Deluin reflected the gliders specifically with his walls."
+  },
+  {
+   "id": "f42",
+   "label": "R",
+   "claims": 11,
+   "supported": 11,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f43",
+   "label": "K",
+   "claims": 3,
+   "supported": 3,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "no",
+   "note": "It describes an earlier Keeper meeting, not the two later meetings about Silverchat and Dreadknot or the trail going cold."
+  },
+  {
+   "id": "f43",
+   "label": "P",
+   "claims": 16,
+   "supported": 16,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "It accurately summarizes earlier surveillance but says the relevant discovery is not shown and omits the two later meetings and loss of the trail."
+  },
+  {
+   "id": "f43",
+   "label": "R",
+   "claims": 10,
+   "supported": 10,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "It accurately discusses an earlier Keeper meeting but explicitly says the sought information is unavailable, omitting the later Silverchat and Dreadknot meetings and cold trail."
+  },
+  {
+   "id": "f44",
+   "label": "K",
+   "claims": 0,
+   "supported": 0,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "not shown or \"the passages don't say\" only (no call)"
+  },
+  {
+   "id": "f44",
+   "label": "M",
+   "claims": 6,
+   "supported": 4,
+   "unsupported_but_true": 0,
+   "unsupported": 2,
+   "correct": "wrong",
+   "note": "It misses the stated isolation procedure and falsely says the passages do not explain how players are prevented from hearing earlier announcements."
+  },
+  {
+   "id": "f44",
+   "label": "P",
+   "claims": 6,
+   "supported": 4,
+   "unsupported_but_true": 1,
+   "unsupported": 1,
+   "correct": "wrong",
+   "note": "It gives background secrecy and announcement details instead of the waiting-room/device-confiscation mechanism, and falsely implies the purpose is not stated."
+  },
+  {
+   "id": "f45",
+   "label": "R",
+   "claims": 0,
+   "supported": 0,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "not shown or \"the passages don't say\" only (no call)"
+  },
+  {
+   "id": "f45",
+   "label": "K",
+   "claims": 9,
+   "supported": 7,
+   "unsupported_but_true": 0,
+   "unsupported": 2,
+   "correct": "wrong",
+   "note": "It incorrectly says the passages do not specify the semifinal shrine rules; c14-b32–b33 explicitly identify the semifinal and explain the XOR-and-reset mechanism."
+  },
+  {
+   "id": "f45",
+   "label": "M",
+   "claims": 15,
+   "supported": 12,
+   "unsupported_but_true": 1,
+   "unsupported": 2,
+   "correct": "wrong",
+   "note": "It accurately describes a glider-factory use, but wrongly claims the semifinal and full shrine rules are not given; c14-b32–b33 provide both."
+  },
+  {
+   "id": "f46",
+   "label": "K",
+   "claims": 5,
+   "supported": 4,
+   "unsupported_but_true": 1,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "It correctly cites several surrounding anonymity practices but says the meeting mechanism is not shown and omits the face coverings and randomized AI voices."
+  },
+  {
+   "id": "f46",
+   "label": "M",
+   "claims": 5,
+   "supported": 2,
+   "unsupported_but_true": 0,
+   "unsupported": 3,
+   "correct": "wrong",
+   "note": "It correctly notes Keeper anonymity but invents random opaque identity assignments and conflates anonymous Court selection with the committees approving Keepers."
+  },
+  {
+   "id": "f46",
+   "label": "R",
+   "claims": 7,
+   "supported": 6,
+   "unsupported_but_true": 1,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "It gives accurate surrounding details but incorrectly concludes that the provided passages do not reveal the actual meeting mechanism."
+  },
+  {
+   "id": "f47",
+   "label": "R",
+   "claims": 0,
+   "supported": 0,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "not shown or \"the passages don't say\" only (no call)"
+  },
+  {
+   "id": "f47",
+   "label": "K",
+   "claims": 12,
+   "supported": 12,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f47",
+   "label": "P",
+   "claims": 3,
+   "supported": 3,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f48",
+   "label": "K",
+   "claims": 3,
+   "supported": 3,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f48",
+   "label": "M",
+   "claims": 11,
+   "supported": 11,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f48",
+   "label": "P",
+   "claims": 9,
+   "supported": 9,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f49",
+   "label": "P",
+   "claims": 0,
+   "supported": 0,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "not shown or \"the passages don't say\" only (no call)"
+  },
+  {
+   "id": "f49",
+   "label": "K",
+   "claims": 10,
+   "supported": 9,
+   "unsupported_but_true": 0,
+   "unsupported": 1,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f49",
+   "label": "R",
+   "claims": 1,
+   "supported": 1,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f50",
+   "label": "K",
+   "claims": 1,
+   "supported": 1,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f50",
+   "label": "M",
+   "claims": 14,
+   "supported": 14,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f50",
+   "label": "R",
+   "claims": 8,
+   "supported": 8,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  }
+ ]
+}

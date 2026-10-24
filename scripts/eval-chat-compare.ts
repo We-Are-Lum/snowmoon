@@ -2,6 +2,7 @@
  * Compare runs of the 50-question check (the Claude trial, 2026-10-23). Free: reads run files only.
  *
  *   npx tsx scripts/eval-chat-compare.ts table RUN.json…           the measured columns, and the graded ones once grades exist
+ *   npx tsx scripts/eval-chat-compare.ts agree KEY.json GRADES.json…     agreement between graders per run, and every disagreement
  *   npx tsx scripts/eval-chat-compare.ts pack DIR RUN.json…         a blind grading pack: each question's answers under
  *                                                                   shuffled labels (DIR/pack.json), the key apart (DIR/key.json)
  *
@@ -18,7 +19,7 @@ import path from 'node:path';
 
 interface Row { id: string; question: string; gold: string[]; answer_fact?: string; passages_sent?: string[]; passages?: string[]; state: string; regenerated?: boolean; answer_as_shown?: string; quoted?: string[]; cost_usd?: number }
 interface Run { file: string; name: string; spend: number; rows: Row[] }
-interface Grade { id: string; label: string; claims: number; supported: number; unsupported_but_true: number; unsupported: number; correct: string }
+interface Grade { id: string; label: string; claims: number; supported: number; unsupported_but_true: number; unsupported: number; correct: string; note?: string }
 
 const [cmd, ...args] = process.argv.slice(2);
 
@@ -112,7 +113,33 @@ if (cmd === 'pack') {
     }
     console.log(out.join('\n'));
   }
+} else if (cmd === 'agree') {
+  // agree KEY.json GRADES.json… : how often the graders give the same grade, per run, and every answer they don't agree on.
+  const [keyFile, ...gradeFiles] = args;
+  const key = JSON.parse(readFileSync(keyFile, 'utf8')) as Record<string, Record<string, string>>;
+  const graders = gradeFiles.map((f) => {
+    const j = JSON.parse(readFileSync(f, 'utf8')) as { grader: string; items: Grade[] };
+    return { name: j.grader.split(' ')[0], by: new Map(j.items.map((i) => [`${i.id} ${i.label}`, i])) };
+  });
+  const runOf = (id: string, label: string) => path.basename(key[id][label]).replace(/\.json$/, '');
+  const runs = [...new Set(Object.entries(key).flatMap(([id, m]) => Object.keys(m).map((l) => runOf(id, l))))];
+  const pairs = graders.flatMap((a, i) => graders.slice(i + 1).map((b) => [a, b] as const));
+  const lines = [`| Run | ${pairs.map(([a, b]) => `${a.name}–${b.name} same grade`).join(' | ')} | ${pairs.map(([a, b]) => `${a.name}–${b.name} same on wrong`).join(' | ')} | All agree |`, `|---|${pairs.map(() => '---|').join('')}${pairs.map(() => '---|').join('')}---|`];
+  const disagree: string[] = [];
+  for (const run of runs) {
+    const items = Object.entries(key).flatMap(([id, m]) => Object.entries(m).filter(([l]) => runOf(id, l) === run).map(([l]) => `${id} ${l}`)).filter((k) => graders.every((g) => g.by.has(k)));
+    const pct = (f: (k: string) => boolean) => `${Math.round((100 * items.filter(f).length) / Math.max(items.length, 1))}%`;
+    const all = items.filter((k) => new Set(graders.map((g) => g.by.get(k)!.correct)).size === 1).length;
+    lines.push(`| ${run} (${items.length}) | ${pairs.map(([a, b]) => pct((k) => a.by.get(k)!.correct === b.by.get(k)!.correct)).join(' | ')} | ${pairs.map(([a, b]) => pct((k) => (a.by.get(k)!.correct === 'wrong') === (b.by.get(k)!.correct === 'wrong'))).join(' | ')} | ${all} |`);
+    for (const k of items) {
+      const g = graders.map((x) => x.by.get(k)!);
+      if (new Set(g.map((x) => x.correct)).size > 1)
+        disagree.push(`| ${k.split(' ')[0]} | ${run} | ${g.map((x) => x.correct + (x.correct !== 'yes' && x.note ? `: ${x.note.replace(/\|/g, '/').slice(0, 110)}` : '')).join(' | ')} |`);
+    }
+  }
+  console.log(lines.join('\n'));
+  console.log(`\nWhere they differ (${disagree.length}):\n| Question | Run | ${graders.map((g) => g.name).join(' | ')} |\n|---|---|${graders.map(() => '---|').join('')}\n${disagree.sort().join('\n')}`);
 } else {
-  console.log('usage: eval-chat-compare.ts table RUN.json… | pack DIR RUN.json…');
+  console.log('usage: eval-chat-compare.ts table RUN.json… | pack DIR RUN.json… | agree KEY.json GRADES.json…');
   process.exit(1);
 }

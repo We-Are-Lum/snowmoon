@@ -77,7 +77,15 @@ try {
   console.log(`missed:\n  ${misses.join('\n  ')}`);
 
   const prompt = async (f: string) => (await readFile(path.join(ROOT, 'config/prompts', f), 'utf8')).replace(/^<!--[\s\S]*?-->\s*/, '');
-  const systemPrompt = await prompt('chat-ask.md');
+  /** ASK_PROMPT=path: another answer prompt, for evaluation (docs/proposals/chat-eval/abstain/prompts/). */
+  const promptAt = async (f: string) => (await readFile(path.resolve(ROOT, f), 'utf8')).replace(/^<!--[\s\S]*?-->\s*/, '');
+  const systemPrompt = process.env.ASK_PROMPT ? await promptAt(process.env.ASK_PROMPT) : await prompt('chat-ask.md');
+  /** CLAIM_FILTER=path: after each answer, drop the sentences the passages don't support (evaluation only). */
+  const filterPolicy = process.env.CLAIM_FILTER ? await promptAt(process.env.CLAIM_FILTER) : null;
+  // HITS, NEIGHBOURS_BEFORE, NEIGHBOURS_AFTER: retrieval settings for evaluation (the app's are CHAT.passages and CHAT.neighbours).
+  if (process.env.HITS) (CHAT as { passages: number }).passages = Number(process.env.HITS);
+  if (process.env.NEIGHBOURS_BEFORE) (CHAT.neighbours as { before: number }).before = Number(process.env.NEIGHBOURS_BEFORE);
+  if (process.env.NEIGHBOURS_AFTER) (CHAT.neighbours as { after: number }).after = Number(process.env.NEIGHBOURS_AFTER);
   const guardPolicy = await prompt('chat-guard.md');
   const reminder = await prompt('chat-reminder.md');
   const searchPrompt = await prompt('chat-search-terms.md');
@@ -126,8 +134,8 @@ try {
     const log: Call[] = [];
     let current = '';
     let busy = 0;
-    const kindOf = (first: string) => (first === searchPrompt ? 'search' : first === guardPolicy ? 'guard' : first === supportPolicy ? 'support' : 'answer');
-    const complete: Complete = async (model, messages, opts) => {
+    const kindOf = (first: string) => (first === searchPrompt ? 'search' : first === guardPolicy ? 'guard' : first === supportPolicy ? 'support' : first === filterPolicy ? 'filter' : 'answer');
+    const rawComplete: Complete = async (model, messages, opts) => {
       const kind = kindOf(messages[0]?.content ?? '');
       const chars = messages.reduce((n, m) => n + m.content.length, 0);
       if (kind === 'search' && savedWords[messages[1].content] !== undefined) {
@@ -174,6 +182,28 @@ try {
         await writeFile(wordsFile, JSON.stringify(savedWords, null, 1) + '\n');
       }
       return { text, promptTokens: pt, completionTokens: ct, costUsd: usd, requestId: j.id ?? null, provider, model: j.model ?? model };
+    };
+    /** The claim filter: the guard model marks unsupported sentences; they are dropped before the guard and support check see the answer. */
+    let filtered = 0;
+    const complete: Complete = async (model, messages, opts) => {
+      const r = await rawComplete(model, messages, opts);
+      if (!filterPolicy || kindOf(messages[0]?.content ?? '') !== 'answer') return r;
+      const passages = messages.find((m) => m.role === 'user' && m.content.startsWith('Passages from chapters'))?.content.split('\n\nQuestion:')[0] ?? '';
+      const sentences = r.text.split(/\n+/).flatMap((line) => line.split(/(?<=[.!?](?:\s*\[[^\]]+\])*)\s+(?=[A-Z"“*(-])/)).map((x) => x.trim()).filter(Boolean);
+      if (!sentences.length) return r;
+      const f = await rawComplete(CHAT.guardModel, [
+        { role: 'system', content: filterPolicy },
+        { role: 'user', content: `PASSAGES:\n${passages}\n\nANSWER SENTENCES:\n${sentences.map((x, i) => `${i + 1}. ${x}`).join('\n')}` },
+      ], { maxTokens: 1500, temperature: 0 });
+      const verdict = f.text.trim();
+      if (!/^DROP\b/i.test(verdict)) return r;
+      const drop = new Set((verdict.split('\n')[0].match(/\d+/g) ?? []).map(Number));
+      const kept = sentences.filter((_, i) => !drop.has(i + 1));
+      filtered++;
+      // Nothing cited left: the reader sees that the passages don't say.
+      const text = kept.some((x) => /\[c\d+-b\d+/.test(x)) ? kept.join(' ') : "The passages don't say.";
+      log[log.length - 1].text += `\n[dropped ${[...drop].join(', ')}]`;
+      return { ...r, text };
     };
 
     const deps = (fid: number) => ({
@@ -229,7 +259,11 @@ try {
         guard_model: CHAT.guardModel,
         date: new Date().toISOString(),
         git,
+        prompt_sha256_overrides: Object.fromEntries(await Promise.all([process.env.ASK_PROMPT, process.env.CLAIM_FILTER].filter(Boolean).map(async (f) => [f, createHash('sha256').update(await readFile(path.resolve(ROOT, f!))).digest('hex').slice(0, 12)]))),
         prompt_sha256: Object.fromEntries(await Promise.all(['chat-ask.md', 'chat-guard.md', 'chat-reminder.md', 'chat-search-terms.md', 'chat-support.md'].map(async (f) => [f, await sha(f)]))),
+        ask_prompt: process.env.ASK_PROMPT ?? 'config/prompts/chat-ask.md',
+        claim_filter: process.env.CLAIM_FILTER ?? null,
+        claim_filter_trimmed_answers: filterPolicy ? filtered : null,
         retrieval: { limit_chapter: LIMIT, hits: CHAT.passages, neighbours: CHAT.neighbours, search_words: CHAT.searchTerms, dense: DENSE?.model ?? null, search_words_file: wordsFile ?? null },
         questions: process.env.QUESTIONS ?? 'questions.json',
         spend_usd: usd,

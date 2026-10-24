@@ -39,3 +39,8 @@ The 50-question check had its own cap of $1 (owner, 2026-10-07) and spent $0.091
 
 Anthropic direct: claude-opus-5-5 $1.02042, claude-sonnet-5-5 $0.42073. Gateway (Groq): gpt-oss-120b $0.03317,
 gpt-oss-safeguard-20b $0.04748. Total $1.52181. Tokens and calls: `chat-eval/claude-trial/README.md`.
+
+### Search, abstaining and GPT grading (2026-10-24, cap $3)
+
+gpt-oss-120b $0.16597, gpt-oss-safeguard-20b $0.12101 (both on Groq through the gateway), and
+openai/gpt-5.6-sol $1.91637 (grading, through the gateway). Total $2.20335. Details: `chat-eval/abstain/README.md`.
