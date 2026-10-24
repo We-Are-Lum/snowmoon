@@ -69,9 +69,13 @@ WAYS = {
            "model": "FLUX.2 [klein] 4B (distilled) at 8 steps, the most fal allows", "portraits": False},
     "c": {"endpoint": "fal-ai/qwen-image-edit-2511", "price": 0.03, "body": {"num_inference_steps": 28, "guidance_scale": 4.5},
           "model": "Qwen-Image-Edit-2511, Apache-2.0, allowlist qwen-image-edit-2511", "portraits": False},
+    # The redo (owner, 2026-10-23): with the full sheet, Qwen drew its three views as three people, so it gets
+    # only the front view, cropped from the sheet (no portraits: two crops and the plate already make 3 inputs).
+    "c2": {"endpoint": "fal-ai/qwen-image-edit-2511", "price": 0.03, "body": {"num_inference_steps": 28, "guidance_scale": 4.5},
+           "model": "Qwen-Image-Edit-2511 with front-view crops of the sheets", "portraits": False, "front": True},
 }
 PORTRAIT = {"endpoint": "fal-ai/flux-2/klein/4b/edit", "price": 0.01, "body": {"num_inference_steps": 4}}
-MAX_REFS = {"a": 4, "b": 4, "b8": 4, "c": 3}  # klein: 4 (fal); Qwen 2511 is trained and shown with 1-3 inputs
+MAX_REFS = {"a": 4, "b": 4, "b8": 4, "c": 3, "c2": 3}  # klein: 4 (fal); Qwen 2511 is trained and shown with 1-3 inputs
 LETTERS = "AB"
 
 
@@ -93,7 +97,17 @@ def look_of(descriptor: str) -> str:
     return " and ".join(x for x in (hair, worn) if x)
 
 
-def who_is_who(chars, sheet_no, portrait_no, place_no, place_desc, picture="reference image"):
+def front_view(slug: str) -> Path:
+    """The sheet's front view: its left third (341 x 576), as scripts/fal-shots.py crops it."""
+    out = IMG / "cast" / "front" / f"{slug}.png"
+    if not out.exists():
+        out.parent.mkdir(parents=True, exist_ok=True)
+        sheet = Image.open(IMG / "cast" / f"{slug}-sheet.png")
+        sheet.crop((0, 0, sheet.size[0] // 3, sheet.size[1])).save(out)
+    return out
+
+
+def who_is_who(chars, sheet_no, portrait_no, place_no, place_desc, picture="reference image", front=False):
     """The sentences that say which reference is which. Used by all three ways.
 
     For two characters (the owner: "say in the prompt which reference is which"):
@@ -112,7 +126,8 @@ def who_is_who(chars, sheet_no, portrait_no, place_no, place_desc, picture="refe
     for k, slug in enumerate(chars):
         d = load(f"designs/characters/{slug}.json")["descriptor"]
         who = f"Person {LETTERS[k]}" if n > 1 else "This person"
-        bits = [f"{picture} {sheet_no[k]} (a sheet with three full-body views of one person: front, three-quarter and back)"]
+        bits = [f"{picture} {sheet_no[k]} (" + ("a full-body front view of one person" if front else
+                "a sheet with three full-body views of one person: front, three-quarter and back") + ")"]
         if portrait_no:
             bits.append(f"{picture} {portrait_no[k]} (a close head-and-shoulders portrait of the same person)")
         out.append(f"{who} is shown in {' and '.join(bits)}: {d}.")
@@ -124,7 +139,8 @@ def who_is_who(chars, sheet_no, portrait_no, place_no, place_desc, picture="refe
         out.append("Everyone else in the scene looks clearly different from both.")
     else:
         out.append("Keep the same face, hair, build and clothing; everyone else in the scene looks clearly different from them.")
-    out.append("A single continuous picture, not split into panels; the character sheet's three views are one person, not three.")
+    out.append("A single continuous picture, not split into panels." if front else
+               "A single continuous picture, not split into panels; the character sheet's three views are one person, not three.")
     if place_no:
         out.append(f"{picture[0].upper()}{picture[1:]} {place_no} shows the location, {place_desc}; keep its architecture, layout and colors.")
     elif place_desc:
@@ -136,7 +152,8 @@ def plan(job, way, style):
     """References and prompt for one image, one way."""
     chars = [Path(c).stem for c in job["characters"]]
     n = len(chars)
-    sheets = [IMG / "cast" / f"{c}-sheet.png" for c in chars]
+    front = WAYS[way].get("front", False)
+    sheets = [front_view(c) if front else IMG / "cast" / f"{c}-sheet.png" for c in chars]
     portraits = [IMG / "portraits" / f"{c}-portrait.png" for c in chars] if WAYS[way]["portraits"] else []
     place = load(job["location"]) if job.get("location") else None
     plate = IMG / f"{place['plate']}.png" if place else None
@@ -151,9 +168,10 @@ def plan(job, way, style):
     portrait_no = list(range(n + 1, 2 * n + 1)) if portraits else []
     place_no = len(refs) if plate is not None and refs[-1] == plate else None
     # Qwen-Image-Edit's template labels its inputs "Picture 1", "Picture 2"...; klein's prompts say "reference image".
-    picture = "Picture" if way == "c" else "reference image"
-    scene = job["prompt"] if way != "c" else re.sub(r"reference image (\d)", r"Picture \1", job["prompt"])
-    parts = [scene, who_is_who(chars, sheet_no, portrait_no, place_no, place["descriptor"] if place else None, picture)]
+    qwen = "qwen" in WAYS[way]["endpoint"]
+    picture = "Picture" if qwen else "reference image"
+    scene = re.sub(r"reference image (\d)", r"Picture \1", job["prompt"]) if qwen else job["prompt"]
+    parts = [scene, who_is_who(chars, sheet_no, portrait_no, place_no, place["descriptor"] if place else None, picture, front)]
     for prop in job.get("props", []):
         parts.append(load(prop)["prompt"])
     parts.append(style["prompt"])
@@ -304,7 +322,8 @@ def composites(rows, ways):
     out = OUT / "side-by-side"
     out.mkdir(exist_ok=True)
     names = {"orig": "original (published)", "a": "(a) klein 4B + portraits", "b": "(b) klein base 4B, 28 steps",
-             "b8": "(b8) klein 4B, 8 steps", "c": "(c) Qwen-Image-Edit-2511"}
+             "b8": "(b8) klein 4B, 8 steps", "c": "(c) Qwen-Image-Edit-2511, full sheet",
+             "c2": "(c, v2) Qwen-Image-Edit-2511, front-view crop"}
     for r in rows:
         cells = [("orig", IMG / r["orig"].removeprefix("images-out/"))] + [(w, OUT / r["ways"][w]["file"]) for w in ways]
         tiles = []
@@ -314,8 +333,8 @@ def composites(rows, ways):
             d.rectangle([0, 0, 768, 30], fill=(0, 0, 0))
             d.text((10, 8), names[key] + ("" if f.exists() else ": not made"), fill=(255, 230, 0))
             tiles.append(im)
-        cols = 2
-        sheet = Image.new("RGB", (768 * cols + 8, 440 * ((len(tiles) + 1) // cols)), "white")
+        cols = 2 if len(tiles) <= 4 else 3
+        sheet = Image.new("RGB", (776 * cols - 8, 440 * ((len(tiles) + cols - 1) // cols)), "white")
         for k, t in enumerate(tiles):
             sheet.paste(t, ((k % cols) * 776, (k // cols) * 440))
         sheet.save(out / f"{r['id']}.jpg", quality=86)
@@ -333,7 +352,7 @@ def page(rows, ways):
         "<!doctype html><meta charset='utf-8'><title>Consistency trial (owner-only)</title>"
         "<style>body{font:14px system-ui;margin:16px}.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:8px}"
         "img{width:100%;height:auto;background:#eee}figure{margin:0}details{font-size:12px;color:#555}</style>"
-        "<h1>Consistency trial: the 10 worst, three ways</h1><p>Owner-only. Nothing here is published. Same seed and size as the original.</p>" + body)
+        "<h1>Consistency trial: the ten found by eye, side by side</h1><p>Owner-only. Nothing here is published. Same seed and size as the original.</p>" + body)
 
 
 if __name__ == "__main__":

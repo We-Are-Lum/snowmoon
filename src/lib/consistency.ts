@@ -65,7 +65,7 @@ export interface ConsistencyData {
 
 /** The trial's pictures (images-out/trial, local only; scripts/consistency/trial.py). */
 const TRIAL = path.join(process.cwd(), 'images-out', 'trial');
-export const TRIAL_WAYS = ['a', 'b', 'c'] as const;
+export const TRIAL_WAYS = ['a', 'b', 'c', 'c2'] as const;
 export interface TrialRow {
   id: string;
   chapter: number;
@@ -80,7 +80,7 @@ function trialRecipe(): { images: { what: string; image?: string; way?: string; 
 }
 /** A trial picture's path, only if the trial's recipe lists it (no other file can be named). */
 export function trialFile(name: string): string | null {
-  if (!/^[a-z0-9-]+\.(a|b|c)\.png$/.test(name)) return null;
+  if (!/^[a-z0-9-]+\.(a|b|c|c2)\.png$/.test(name)) return null;
   const listed = trialRecipe()?.images.some((im) => im.what === 'trial' && path.basename(im.file) === name);
   const f = path.join(TRIAL, name);
   return listed && existsSync(f) ? f : null;
@@ -112,7 +112,7 @@ export function consistencyData(): ConsistencyData | null {
           id,
           chapter: im?.chapter ?? 0,
           original: im?.url ?? null,
-          ways: { a: made('a') ? `${id}.a.png` : null, b: made('b') ? `${id}.b.png` : null, c: made('c') ? `${id}.c.png` : null },
+          ways: Object.fromEntries(TRIAL_WAYS.map((w) => [w, made(w) ? `${id}.${w}.png` : null])) as TrialRow['ways'],
         };
       })
     : null;

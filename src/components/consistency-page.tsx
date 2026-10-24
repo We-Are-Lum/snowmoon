@@ -32,10 +32,10 @@ const W = {
   ] as [string, string][],
   sideBySide: 'The trial, side by side',
   sideBySideNote:
-    'The ten from the check by eye, redrawn three ways with the same seed and size. No scores here: judge by eye. (c) is the main option. Nothing here is published.',
+    'The ten from the check by eye, redrawn with the same seed and size. No scores here: judge by eye. (c) is the main option, run twice: with the full sheets, then (v2) with only each sheet’s front view, because with the full sheet it drew the three views as three people. Nothing here is published.',
   trialLocal:
     'The trial’s pictures are only on the Mac (images-out/trial, never committed). Open images-out/trial/index.html there, or the “consistency trial” folder in your Drive.',
-  wayNames: { original: 'Original (published)', a: '(a) klein 4B + portraits', b: '(b) klein base 4B, 28 steps', c: '(c) Qwen-Image-Edit-2511' } as Record<string, string>,
+  wayNames: { original: 'Original (published)', a: '(a) klein 4B + portraits', b: '(b) klein base 4B, 28 steps', c: '(c) Qwen-Image-Edit-2511, full sheet', c2: '(c, v2) Qwen-Image-Edit-2511, front-view crop' } as Record<string, string>,
   notMade: 'Not made',
   eye: 'Checked by eye',
   notForPicking:
@@ -318,7 +318,7 @@ function TrialRowView({ row, note }: { row: TrialRow; note?: string }) {
             {W.wayNames.original} · <AiLabel kind="image" text={AI_LABEL.image} file={`content/snowmoon/recipes/images/chapter-${row.chapter}.json`} item={row.id} />
           </figcaption>
         </figure>
-        {(['a', 'b', 'c'] as const).map((w) => (
+        {(['a', 'b', 'c', 'c2'] as const).map((w) => (
           <figure key={w}>
             {row.ways[w] ? <TrialImage file={row.ways[w]!} alt={`AI-generated image: ${row.id}, trial ${w}`} /> : <p>{W.notMade}</p>}
             <figcaption>{W.wayNames[w]} · AI image, not published</figcaption>
