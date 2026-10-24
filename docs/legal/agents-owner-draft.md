@@ -1,4 +1,55 @@
-# Agents for the owner's account only: Privacy and Terms lines (DRAFT, for the reread)
+# Agents for the owner's account only: Privacy and Terms lines (reread 2026-10-24)
+
+**Reread, 2026-10-24.** The owner said "Reread" for these lines, with his own changes, on branch
+`agents-legal-reread`. What went in (`src/lib/legal.ts`, word for word as he wrote them; each sentence checked
+against the code on main at 588c8e8 first):
+
+- **Privacy §3**, the last sentence is now: "Frames you make in Remix are not drafts: they are saved by us as soon
+  as they are made (section 4). So are the frames and video tests your agent makes when you approve them, but
+  privately: only you can see them (section 4)." (This replaces the drafted "A frame your agent tries for you is
+  different…" below.)
+- **Privacy §4**, agent keys: as drafted below.
+- **Privacy §7**, fal.ai, added at the end, without waiting for fal: "For a video test you approve, fal.ai receives
+  the shot's frame (already public on the site), your note and your acting notes for that shot, and makes a short
+  video with the open LongCat-Video model. It is asked to keep no copy of the request. It returns the video at a link
+  on its own storage; we copy it at once and keep it privately, for you." How long fal keeps that file is still
+  open: the owner asked for a line to add once known (see the PR).
+- **Terms**, a new section **6b "Agents."** (there was no Agents section yet; 6b keeps the numbers the other
+  sections cite): "Agents are open only to accounts we invite." (the bracketed "for now, only the site's owner" cut);
+  then the owner's own spending sentences: "They can't spend money. When an agent drafts something that costs money
+  (a new frame or a video test), it shows the estimated cost, and nothing is made until you approve it. Each draft
+  can be approved once, and each day is limited to 20 frames, 5 video tests and $2 in all. A frame counts like any
+  other Remix frame: on a Farcaster account it uses your free frames for the day; on a wallet account it's charged
+  to your balance at the price shown (section 6a). Video tests are paid by us for now."; then the agent key
+  paragraph as drafted below.
+- Not in: the rest of the design's "Agents" section (`docs/agents/design.md` §6: up to three agents, responsibility,
+  labels, suspension). It was not part of this reread.
+- With it, the code fix the owner asked for: `runApproved` counts approvals still in progress at their estimate, under
+  one lock per person, so two taps at once can't both pass the $2 a day or a key's cap (test K5b).
+- **Before agents open beyond invited people**, video tests are charged like frames and Terms 6b changes to say so
+  (the owner, 2026-10-24).
+
+**Later on 2026-10-24, the owner's "(b), done properly":**
+
+- **Privacy §7** now reads: "…your note and the acting notes for that shot (yours, and any your agent filed for you),
+  and makes a short video with the open LongCat-Video model. It is asked to keep no copy of the request. It returns
+  the video at a link on its own storage; we copy it at once and keep it privately, for you."
+  - **The owner's deletion line is not in.** In the one real test (2026-10-24, sync fal.run, LongCat 480p), fal served
+    the file to an anonymous fetch despite `initial_acl` default "forbid". It was still served 63 minutes after it was
+    made, despite `expiration_duration_seconds: 3600`. Neither "deletes its copy … an hour after making it" nor "no one
+    else can open it there" is true today. Held for the owner.
+  - `runVideo` still asks for the one-hour expiry, and reads the file with a short-lived CDN token as the Bearer.
+  - **The owner's "Option 2" (2026-10-24):** §7's fal.ai item now ends "fal.ai keeps the video it made on its storage,
+    at an unlisted link it gives only to us but that anyone holding it could open, for as long as fal.ai's settings
+    keep it; we don't set a time yet." The deletion line goes in only once a real test shows the link gone.
+  - **Video estimate:** raised to the measured cost, $0.054 (fal's default 162 frames at 15 fps, 10.8 s at $0.005
+    a second). It is used by the "Make it" estimate, the $2 a day and a key's cap. The 5-second length waits for the
+    queue test.
+- **Terms 6b:** "Each draft is made at most once" replaces "Each draft can be approved once".
+- **check:principles P6o:** fails if `AGENTS.public` is on while Privacy §3 says "only you can see them".
+
+The draft as it stood before the reread follows.
+
 
 These lines are written for branch `agents-owner`. Agents are switched on for an allowlist: the owner's
 FID 6786 and one wallet address. Nobody else sees anything new. These lines add to the agent lines in
