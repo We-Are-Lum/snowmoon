@@ -203,6 +203,7 @@ interface Result {
   provider?: string | null;
   served_model?: string | null;
   request_id?: string | null;
+  attempts?: number;
 }
 
 async function call(key: string, b: Built): Promise<Result> {
@@ -238,6 +239,8 @@ async function call(key: string, b: Built): Promise<Result> {
     ],
     providerOptions: { gateway: { zeroDataRetention: true } },
   };
+  // A malformed answer is retried once; the cost of every attempt is counted.
+  let paid = 0;
   for (let attempt = 1; attempt <= 2; attempt++) {
     const res = await fetch(ENDPOINT, { method: 'POST', headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
     const j = (await res.json().catch(() => ({}))) as {
@@ -248,7 +251,7 @@ async function call(key: string, b: Built): Promise<Result> {
       error?: { message?: string };
     };
     if (!res.ok) {
-      if (attempt === 2) return { ...base, error: `gateway ${res.status}: ${(j.error?.message ?? '').slice(0, 200)}` };
+      if (attempt === 2) return { ...base, cost_usd: paid, error: `gateway ${res.status}: ${(j.error?.message ?? '').slice(0, 200)}` };
       continue;
     }
     const msg = j.choices?.[0]?.message;
@@ -256,11 +259,13 @@ async function call(key: string, b: Built): Promise<Result> {
     const cached = u?.prompt_tokens_details?.cached_tokens ?? 0;
     const cost = u?.cost ?? Number(msg?.provider_metadata?.gateway?.cost ?? NaN);
     const est = u ? ((u.prompt_tokens - cached) * price.input + cached * price.cacheRead + u.completion_tokens * price.output) / 1e6 : 0;
+    paid += Number.isFinite(cost) ? cost : est;
     const parsed = parseAnswer(msg?.content ?? '');
     const out: Result = {
       ...base,
       usage: u ? { input_tokens: u.prompt_tokens, output_tokens: u.completion_tokens, cached_tokens: cached } : undefined,
-      cost_usd: Number.isFinite(cost) ? cost : est,
+      cost_usd: paid,
+      attempts: attempt,
       provider: msg?.provider_metadata?.gateway?.routing?.finalProvider ?? null,
       served_model: j.model ?? null,
       request_id: j.id ?? null,
@@ -314,47 +319,68 @@ if (planned > maxUsd) {
   process.exit(1);
 }
 const key = gatewayKey();
-const date = new Date().toISOString();
-const run = `${model.replace(/[^a-z0-9.]+/gi, '-')}-${date.slice(0, 19).replace(/[:T]/g, '-')}`;
-const results: Result[] = [];
-let spent = 0;
+// The record is written after every job, and a run given an existing --out resumes it: jobs with an answer are kept
+// and skipped, so a crash can't lose paid results.
+const outFile = arg('out');
+const resumed = outFile && existsSync(outFile) ? (JSON.parse(readFileSync(outFile, 'utf8')) as { run: string; recipe: { date: string }; results: Result[] }) : null;
+const date = resumed?.recipe.date ?? new Date().toISOString();
+const run = resumed?.run ?? `${model.replace(/[^a-z0-9.]+/gi, '-')}-${date.slice(0, 19).replace(/[:T]/g, '-')}`;
+const out = outFile ?? path.join(ROOT, 'private', 'illustration-check', `${run}.json`);
+mkdirSync(path.dirname(out), { recursive: true });
+const results: Result[] = resumed ? resumed.results.filter((r) => r.answer) : [];
+const done = new Set(results.map((r) => r.job));
+// Spend counts every paid attempt, including those of answers dropped on resume.
+let spent = resumed ? resumed.results.reduce((t, r) => t + (r.cost_usd ?? 0), 0) + ((resumed as { earlier_spend_usd?: number }).earlier_spend_usd ?? 0) : 0;
+const earlier = resumed ? spent - results.reduce((t, r) => t + (r.cost_usd ?? 0), 0) : 0;
+if (resumed) console.log(`resuming ${run}: ${done.size} answered, $${spent.toFixed(3)} spent so far`);
+const retention = arg('retention') ?? null;
+
+function save() {
+  const record = {
+    about: 'The illustration check (owner, 2026-10-23): a vision model says whether each seeded image shows its scene. Owner-only until the owner has read it.',
+    run,
+    recipe: {
+      model: { gateway_id: model, maker: price.maker, host: 'Vercel AI Gateway', open_weights: false },
+      version: [...new Set(results.map((r) => r.served_model).filter(Boolean))].join(', ') || null,
+      version_note: 'The gateway exposes no weights revision for a closed model; the served model id, the date and each call\'s request id are recorded.',
+      prompt_file: PROMPT_FILE,
+      prompt_sha256: sha256(prompt),
+      schema_sha256: sha256(JSON.stringify(ANSWER_SCHEMA)),
+      script: 'scripts/check-illustrations.ts',
+      date,
+      settings: { temperature: model.startsWith('anthropic/') ? 'default (reasoning on)' : 0, reasoning_effort: effort, zero_data_retention: true, structured_output: 'json_schema strict', image_detail: 'high', malformed_retry: 1 },
+      ...(retention ? { retention } : {}),
+      inputs_sha256: {
+        job_files: Object.fromEntries([...new Set(chosen.map((j) => j.jobFile))].map((f) => [f, sha256(readFileSync(path.join(ROOT, f)))])),
+        published: sha256(readFileSync(path.join(ROOT, 'content/snowmoon/illustrations/published.json'))),
+      },
+      assist: { model: 'claude-coding-agent', by: 'the coding agent', drafted: ['check instructions', 'answer fields as JSON schema', 'pilot choice'], instructions: ['owner brief, 2026-10-23'], see: 'config/models.json drafting; principle 3' },
+    },
+    cost_usd: Number(spent.toFixed(4)),
+    earlier_spend_usd: Number(earlier.toFixed(4)),
+    results,
+  };
+  writeFileSync(out, JSON.stringify(record, null, 1) + '\n');
+}
+
+let dearest = 0.06; // the most one job may cost; raised to the dearest seen
 for (const b of built) {
-  if (spent >= maxUsd) {
-    console.error(`stopped: $${spent.toFixed(3)} spent, the cap is $${maxUsd}`);
+  if (done.has(b.job.id)) continue;
+  if (spent + dearest > maxUsd) {
+    console.error(`stopped: $${spent.toFixed(3)} spent; one more job could pass the cap of $${maxUsd}`);
     break;
   }
   const r = await call(key, b);
   spent += r.cost_usd ?? 0;
+  dearest = Math.max(dearest, (r.cost_usd ?? 0) * 1.5);
+  const at = results.findIndex((x) => x.job === r.job);
+  if (at >= 0) results.splice(at, 1);
   results.push(r);
+  save();
   console.log(`  ${r.job}: ${r.answer ? `${r.answer.verdict}, ${r.answer.problems.length} problem(s)` : r.error} · $${(r.cost_usd ?? 0).toFixed(4)}`);
 }
-
-const record = {
-  about: 'The illustration check (owner, 2026-10-23): a vision model says whether each seeded image shows its scene. Owner-only until the owner has read it.',
-  run,
-  recipe: {
-    model: { gateway_id: model, maker: price.maker, host: 'Vercel AI Gateway', open_weights: false },
-    version: [...new Set(results.map((r) => r.served_model).filter(Boolean))].join(', ') || null,
-    version_note: 'The gateway exposes no weights revision for a closed model; the served model id, the date and each call\'s request id are recorded.',
-    prompt_file: PROMPT_FILE,
-    prompt_sha256: sha256(prompt),
-    schema_sha256: sha256(JSON.stringify(ANSWER_SCHEMA)),
-    script: 'scripts/check-illustrations.ts',
-    date,
-    settings: { temperature: model.startsWith('anthropic/') ? 'default (reasoning on)' : 0, reasoning_effort: effort, zero_data_retention: true, structured_output: 'json_schema strict', image_detail: 'high' },
-    inputs_sha256: {
-      job_files: Object.fromEntries([...new Set(chosen.map((j) => j.jobFile))].map((f) => [f, sha256(readFileSync(path.join(ROOT, f)))])),
-      published: sha256(readFileSync(path.join(ROOT, 'content/snowmoon/illustrations/published.json'))),
-    },
-    assist: { model: 'claude-coding-agent', by: 'the coding agent', drafted: ['check instructions', 'answer fields as JSON schema', 'pilot choice'], instructions: ['owner brief, 2026-10-23'], see: 'config/models.json drafting; principle 3' },
-  },
-  cost_usd: Number(spent.toFixed(4)),
-  results,
-};
-const outFile = arg('out') ?? path.join(ROOT, 'private', 'illustration-check', `${run}.json`);
-mkdirSync(path.dirname(outFile), { recursive: true });
-writeFileSync(outFile, JSON.stringify(record, null, 1) + '\n');
-console.log(`wrote ${path.relative(ROOT, outFile)} · spent $${spent.toFixed(3)}`);
+save();
+console.log(`wrote ${path.relative(ROOT, out)} · spent $${spent.toFixed(3)}`);
 
 if (flag('upload')) {
   const { default: postgres } = await import('postgres');

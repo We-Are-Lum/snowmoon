@@ -64,6 +64,9 @@ export function parseAnswer(text: string): CheckAnswer | string {
   for (const k of ['setting', 'action', 'time_of_day', 'why'] as const) if (typeof a[k] !== 'string') return `${k} is missing`;
   if (!Array.isArray(a.problems) || a.problems.some((p) => !PROBLEM_TYPES.includes(p?.type) || typeof p.detail !== 'string')) return 'problems is malformed';
   if (!VERDICTS.includes(a.verdict)) return 'verdict is not matches, partly or wrong';
+  // Placeholder answers (seen once in the pilot: every field "x") fit the schema but say nothing.
+  for (const k of ['setting', 'action', 'time_of_day', 'why'] as const) if (a[k].trim().length < 4) return `${k} is a placeholder`;
+  if (a.verdict !== 'matches' && a.problems.length === 0) return `verdict ${a.verdict} with no problem listed`;
   return a;
 }
 

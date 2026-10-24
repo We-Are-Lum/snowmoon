@@ -7,15 +7,6 @@
   "fine": "flagged when the verdict is not matches (problems listed on a matches verdict are reported too)",
   "verdict": "agreement: double -> wrong; problem -> partly or wrong; fine -> matches"
  },
- "seen_but_not_in_the_test": {
-  "c27-b114-countdown-chant": "a second person at the table wears Bai's back-view outfit (white top with magenta trim, black trousers with a pink seam): a double the consistency review did not list",
-  "c7-b100-audience": "a second red-haired boy beside Fin wears Fin's yellow sneakers: likely a double",
-  "c6-b100-assembly": "a second man wears Mov's olive vest (possible double)",
-  "c2-b003-electronics-street": "garbled letters on a shop sign (stray text)",
-  "c16-b060-helisport-broadcast": "a tiny brand mark on the TV bezel (stray text)",
-  "c28-b013-general-arrives": "Den in a brown-olive robe instead of his grey one, black hair",
-  "c12-b013-priests-on-platform": "seven robed figures where the passage has six"
- },
  "items": [
   {
    "job": "c2-b122-sweeping",
@@ -208,5 +199,67 @@
    "what": "Gladias once, in the scene's purple privacy hood over his tabard and sash (by design, per the consistency review), looking at the stepped pyramid; small robed figures far below. No writing.",
    "source": "checked by eye beside its sheets and facts by the coding agent, 2026-10-23"
   }
- ]
+ ],
+ "found_by_eye_2026_10_24": {
+  "about": "Seen by eye while picking the fine images for the pilot, not part of the 20-image pilot (owner, 2026-10-24: \"Add the 7 new finds to the by-eye list\"). The consistency agent adds them to review.json on PR #48.",
+  "by": "found by eye, coding agent, 2026-10-24",
+  "items": [
+   {
+    "job": "c27-b114-countdown-chant",
+    "expect": "double",
+    "types": [
+     "reference_copy_in_crowd"
+    ],
+    "what": "a second person at the table wears Bai's back-view outfit (white top with magenta trim, black trousers with a pink seam): a double the consistency review did not list"
+   },
+   {
+    "job": "c7-b100-audience",
+    "expect": "double",
+    "types": [
+     "reference_copy_in_crowd"
+    ],
+    "what": "a second red-haired boy beside Fin wears Fin's yellow sneakers: likely a double"
+   },
+   {
+    "job": "c6-b100-assembly",
+    "expect": "double",
+    "types": [
+     "reference_copy_in_crowd"
+    ],
+    "what": "a second man wears Mov's olive vest (possible double)"
+   },
+   {
+    "job": "c2-b003-electronics-street",
+    "expect": "problem",
+    "types": [
+     "stray_text"
+    ],
+    "what": "garbled letters on a shop sign (stray text)"
+   },
+   {
+    "job": "c16-b060-helisport-broadcast",
+    "expect": "problem",
+    "types": [
+     "stray_text"
+    ],
+    "what": "a tiny brand mark on the TV bezel (stray text)"
+   },
+   {
+    "job": "c28-b013-general-arrives",
+    "expect": "problem",
+    "types": [
+     "contradicts_facts"
+    ],
+    "what": "Den in a brown-olive robe instead of his grey one, black hair"
+   },
+   {
+    "job": "c12-b013-priests-on-platform",
+    "expect": "problem",
+    "types": [
+     "contradicts_facts"
+    ],
+    "what": "seven robed figures where the passage has six"
+   }
+  ]
+ }
 }
