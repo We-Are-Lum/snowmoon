@@ -62,7 +62,8 @@
     "test:adaptation-pages": "node scripts/editor-data.mjs && NEXT_PUBLIC_URL=https://snowmoon.party next build && tsx scripts/test-adaptation-pages.ts",
     "test:agents": "tsx --conditions=react-server scripts/test-agents.ts",
     "check:snap-live": "tsx scripts/check-snap-live.ts",
-    "check:modal-vc": "tsx scripts/check-modal-vc.ts"
+    "check:modal-vc": "tsx scripts/check-modal-vc.ts",
+    "test:illustration-review": "tsx --conditions=react-server scripts/test-illustration-review.ts"
   },
   "license": "AGPL-3.0-only",
   "description": "",

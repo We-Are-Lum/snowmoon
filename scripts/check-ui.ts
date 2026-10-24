@@ -54,10 +54,17 @@
  *   sign-in, the composer's status and the queue are mocked in the browser.
  * - The account at the foot of the rail and the menu sheet (owner, 2026-10-18): signed out it offers "Sign in with
  *   Farcaster", then "Sign in with a wallet" (the editor's button, with its note); a wallet session (planted in
- *   storage, nothing signed) shows its shortened address and a Sign out that ends it; a Farcaster session shows
+ *   storage, nothing signed; the assistant's status answers it 403, as for a wallet not linked to Farcaster) stays
+ *   signed in on load, and shows its shortened address and a Sign out that ends it; a Farcaster session shows
  *   the Farcaster name and no wallet option. The name is a link to the You page (/you), and the top bar shows an
  *   avatar linking there, between ? and the menu, only when signed in; /you signed out meets the floors and shows
  *   only the sign-in offer (owner, 2026-10-18).
+ * - The owner's image review (/you/illustrations, owner 2026-10-23) at 390, light and dark: signed out, the floors and
+ *   the sign-in offer only; as the owner (API replayed from scripts/fixtures/illustration-review.json), worst first,
+ *   in the owner's order (wrong, partly with a double, partly, matches, not checked), each item with its passage, its
+ *   image's AI label, the check labelled AI with its model, Keep / Regenerate with my note / Drop, a saved decision
+ *   shown, the finding with its fix line, the note box with the publication line, pre-filled with the fix line labelled
+ *   "Drafted by the image check (Argon finding, gpt-oss-120b fix line)" and marked when edited; anyone else sees only the owner line.
  * - The footer line (owner's legal starter, 2026-10-09) reads exactly as written, with Terms, Privacy
  *   and Source linked, at the foot of About, in the menu sheet and at the bottom of the rail; not on a
  *   phone's reading screen. /terms and /privacy meet the floors.
@@ -280,6 +287,19 @@ const plantWallet = (address: string) => {
   const body = btoa(JSON.stringify({ sub: 'w', exp: 4102444800 })).replace(/=+$/, '');
   localStorage.setItem('snowmoon.wallet', JSON.stringify({ token: `x.${body}.y`, address, short: `${address.slice(0, 6)}…${address.slice(-4)}`, exp: 4102444800 }));
 };
+/**
+ * Plant the wallet session, and answer the assistant's status as the server answers a wallet that isn't linked to a
+ * Farcaster account: 403, which keeps the session (owner, 2026-10-22, src/app/api/chat/status/route.ts). The planted
+ * token isn't a real one, so the server itself would answer 401, and a 401 ends a wallet session (client-auth.ts).
+ * Only requests carrying the planted token are answered here; the rest go on to the server.
+ */
+async function plantWalletSession(page: Page) {
+  const planted = `Bearer x.${btoa(JSON.stringify({ sub: 'w', exp: 4102444800 })).replace(/=+$/, '')}.y`;
+  await page.route('**/api/chat/status', (r) =>
+    r.request().headers().authorization === planted ? r.fulfill({ status: 403, json: { error: 'Sign in with Farcaster to use the assistant' } }) : r.fallback(),
+  );
+  await page.evaluate(plantWallet, WALLET_ADDRESS);
+}
 /** The account inside `within` (src/components/app-shell.tsx: Account in the rail, MenuAccount at the top of the
  *  phone menu): signed out, Farcaster then a wallet, both shown. */
 const accountIn = (within: string) => `${within} .menu-account`;
@@ -321,6 +341,7 @@ async function checkAccountSignedOut(page: Page, within: string, where: string) 
 async function checkAccountWallet(page: Page, within: string, where: string) {
   const acct = page.locator(accountIn(within));
   const short = `${WALLET_ADDRESS.slice(0, 6)}…${WALLET_ADDRESS.slice(-4)}`;
+  if (!(await page.evaluate(() => localStorage.getItem('snowmoon.wallet')))) fail(`${where}: the wallet session ended on load (a route it was sent to answered 401)`);
   await acct.locator('.menu-account-name', { hasText: short }).waitFor({ timeout: 10000 }).catch(() => fail(`${where}: a wallet session does not show ${short}`));
   if (await acct.locator('button', { hasText: /Sign in/ }).count()) fail(`${where}: a wallet session still offers sign-in`);
   {
@@ -459,6 +480,73 @@ async function checkMakeImage(page: Page, scheme: string) {
   });
   await ctx.unroute('**/api/images/status**');
   await ctx.unroute('**/api/chat/status');
+}
+
+/**
+ * The owner's image review (/you/illustrations, owner 2026-10-23), at 390. Signed out: the floors and the sign-in offer,
+ * nothing about the check. Signed in as the owner, with the API replayed from scripts/fixtures/illustration-review.json
+ * (real jobs, made-up answers, served out of order): worst first (wrong, partly, matches, not checked), each item has
+ * the passage, its image with the AI label, the check labelled as AI with its model, and the three buttons; the
+ * regenerate note box shows the publication line. Signed in as anyone else (403): only the owner-only line.
+ */
+async function checkIllustrationReview(page: Page, scheme: string) {
+  const where = `/you/illustrations @390 (${scheme})`;
+  const fixture = JSON.parse(readFileSync('scripts/fixtures/illustration-review.json', 'utf8')) as { items: unknown[]; canSave: boolean };
+  let asked = 0;
+  await page.route('**/api/you/illustrations', (r) => {
+    asked++;
+    return r.fulfill({ json: fixture });
+  });
+  await open(page, '/you/illustrations');
+  await page.locator('.you-sign-in button').first().waitFor({ timeout: 10000 }).catch(() => fail(`${where}: signed out, no sign-in offered`));
+  await checkFloors(page, '/you/illustrations @390 (signed out)', scheme);
+  if (await page.locator('.illus-item').count()) fail(`${where}: signed out, the page shows review items`);
+  if (asked) fail(`${where}: signed out, the page asked the review API`);
+  const as = (fid: number) => {
+    const body = Buffer.from(JSON.stringify({ sub: fid, exp: 4102444800 })).toString('base64').replace(/=+$/, '');
+    const session = JSON.stringify({ token: `x.${body}.y`, fid, username: 'check', exp: 4102444800 });
+    return page.evaluate((s) => localStorage.setItem('snowmoon.signin', s), session);
+  };
+  // The planted token isn't a real one: any other signed-in request the shell makes is answered here, so a 401 from the
+  // real server doesn't sign the session out mid-check.
+  await page.route('**/api/chat/status', (r) => r.fulfill({ json: { available: false, model: 'm', host: null, provider: null, route: '', perDay: 30, left: 30 } }));
+  await as(6786);
+  await open(page, '/you/illustrations');
+  await page.locator('.illus-item').first().waitFor({ timeout: 10000 }).catch(() => fail(`${where}: signed in as the owner, no items`));
+  const order = await page.locator('.illus-item').evaluateAll((els) => els.map((e) => e.getAttribute('data-group')));
+  if (order.join(',') !== 'wrong,partly-double,partly,matches,unchecked') fail(`${where}: not in the owner's order (wrong, partly with a double, partly, matches, not checked): ${order.join(', ')}`);
+  for (const [i, v] of order.entries()) {
+    const item = page.locator('.illus-item').nth(i);
+    if (!(await item.locator('.illus-passage p.is-target').count())) fail(`${where}: item ${i + 1} shows no passage`);
+    const imgs = await item.locator('img').count();
+    if (imgs && !(await item.locator('button.ai-label').count())) fail(`${where}: item ${i + 1}'s image has no AI label`);
+    if (v !== 'unchecked' && !/^AI check · by /.test((await item.locator('.ai-check-label').innerText().catch(() => '')) ?? '')) fail(`${where}: item ${i + 1}'s check is not labelled as AI with its model`);
+    const buttons = (await item.locator('.illus-actions button').allTextContents()).map((t) => t.trim()).join('|');
+    if (buttons !== 'Keep|Regenerate with my note|Drop') fail(`${where}: item ${i + 1}'s buttons are "${buttons}"`);
+  }
+  if (!/Your decision: regenerate/.test(await page.locator('.illus-item').nth(2).innerText())) fail(`${where}: a saved decision is not shown with its item`);
+  await checkFloors(page, '/you/illustrations @390 (owner)', scheme);
+  await shot(page, 'phone-390-you-illustrations', scheme);
+  await page.locator('.illus-item').first().locator('.illus-actions button', { hasText: 'Regenerate with my note' }).click();
+  const first = page.locator('.illus-item').first();
+  if (!(await first.locator('.illus-note .publication-line').count())) fail(`${where}: the note box does not show the publication line`);
+  // The note is pre-filled with the check's finding, labelled as drafted by the check (owner, 2026-10-24); editing it says so.
+  const why = (fixture.items as { verdict: string | null; check: { answer: { fix_line: { text: string } } } | null }[]).find((x) => x.verdict === 'wrong')!.check!.answer.fix_line.text;
+  if ((await first.locator('.illus-note textarea').inputValue()) !== why) fail(`${where}: the note is not pre-filled with the check's fix line`);
+  if (!(await first.locator('.illus-fix').count())) fail(`${where}: the fix line is not shown beside the finding`);
+  if (!/Drafted by the image check \(Argon finding, gpt-oss-120b fix line\)/.test(await first.locator('.illus-drafted').innerText().catch(() => ''))) fail(`${where}: the pre-filled note is not labelled as drafted by the image check (both steps)`);
+  await first.locator('.illus-note textarea').fill(`${why} Draw him once.`);
+  if (!/edited by you/i.test(await first.locator('.illus-drafted').innerText().catch(() => ''))) fail(`${where}: an edited note is not marked as edited`);
+  await checkFloors(page, '/you/illustrations @390 (owner, note)', scheme);
+  await page.unroute('**/api/you/illustrations');
+  await page.route('**/api/you/illustrations', (r) => r.fulfill({ status: 403, json: { error: 'Owner only' } }));
+  await as(1234);
+  await open(page, '/you/illustrations');
+  await page.getByText('This page is for the project’s owner.').waitFor({ timeout: 10000 }).catch(() => fail(`${where}: someone else signed in does not see the owner-only line`));
+  if (await page.locator('.illus-item').count()) fail(`${where}: someone else signed in sees review items`);
+  await page.unroute('**/api/you/illustrations');
+  await page.unroute('**/api/chat/status');
+  await page.evaluate(() => localStorage.removeItem('snowmoon.signin'));
 }
 
 async function checkFloors(page: Page, path: string, scheme: string) {
@@ -1571,7 +1659,7 @@ try {
         await page.waitForSelector('.panel .as-signed-out button');
         await checkAccountSignedOut(page, '.rail', `@${width} rail`);
         await shot(page, `desktop-${width}-account-signed-out`, scheme);
-        await page.evaluate(plantWallet, WALLET_ADDRESS);
+        await plantWalletSession(page);
         await open(page, '/chapter/1');
         await shot(page, `desktop-${width}-account-wallet`, scheme);
         await checkAccountWallet(page, '.rail', `@${width} rail`);
@@ -1620,7 +1708,7 @@ try {
     await shot(page, 'phone-390-menu', scheme);
     await page.keyboard.press('Escape');
     // A wallet session in the menu, then Sign out (nothing signed: the session is planted in storage).
-    await page.evaluate(plantWallet, WALLET_ADDRESS);
+    await plantWalletSession(page);
     await open(page, '/chapter/1');
     await page.click('.topbar-icon[aria-label="Menu"]');
     await page.waitForSelector('.menu-sheet');
@@ -1669,6 +1757,7 @@ try {
     await checkFloors(page, '/you @390 (signed out)', scheme);
     if (/Your account|Your work|Balance \$/.test(await page.locator('main.you').innerText().catch(() => ''))) fail(`/you @390 (${scheme}): signed out, the page shows an account, wallet or work`);
     await shot(page, 'phone-390-you-signed-out', scheme);
+    await checkIllustrationReview(page, scheme);
     await open(page, '/chapter/1?view=listen');
     await page.waitForSelector('.listen-pane');
     await checkFloors(page, '/chapter/1?view=listen @390', scheme);

@@ -79,6 +79,8 @@ const nextConfig: NextConfig = {
     '/api/mcp': ['./public/editor/*/v*/data.json'],
     // A moment page reads each version's shot (its frame, times and lines) from the same data.
     '/adaptation/**': ['./public/editor/*/v*/data.json'],
+    // The owner's image review reads each job's characters (their sheets and facts) on request.
+    '/api/you/illustrations': ['./content/snowmoon/designs/characters/**'],
   },
   // The end card's "make your own" link (owner, 2026-10-14): the repository for now; temporary (307),
   // since /make may become a page of its own.

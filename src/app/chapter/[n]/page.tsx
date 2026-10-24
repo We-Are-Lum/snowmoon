@@ -14,7 +14,7 @@ import { loadIllustrations } from '~/lib/illustrations';
 import { QuoteShare } from '~/components/quote-share';
 import { ChapterView } from '~/components/chapter-view';
 import { AiLabel, RecipeLink } from '~/components/recipe-sheet';
-import { AI_LABEL, NOT_AUTHOR_VISIBLE } from '~/lib/ai-declared';
+import { AI_LABEL, NOT_AUTHOR_VISIBLE, REVIEWED_MARK } from '~/lib/ai-declared';
 import { AddImageButton } from '~/components/reader-images';
 import { InfoLabel } from '~/components/info-label';
 import { LABELS } from '~/lib/labels';
@@ -103,7 +103,7 @@ export default async function ChapterPage({ params }: Props) {
           ? { label: narration.label, recipe: narration.recipe, url: narration.url, duration: narration.duration, cues: narration.cues }
           : null
       }
-      images={images.map(({ id, idx, url, alt, recipe }) => ({ id, idx, url, alt, recipe }))}
+      images={images.map(({ id, idx, url, alt, recipe, reviewed }) => ({ id, idx, url, alt, recipe, ...(reviewed ? { reviewed } : {}) }))}
       labels={Object.fromEntries(chapter.blocks.map((b, i) => [b.idx, facts[i].label]).filter(([, l]) => l !== null))}
     >
     <article className="page chapter" data-chapter={n} data-setting={facts.find((f) => f.setting)?.setting ?? undefined}>
@@ -189,6 +189,8 @@ export default async function ChapterPage({ params }: Props) {
                 <figcaption className="block-caption">
                   ¶ {f.label} · <AiLabel kind="image" text={AI_LABEL.image} file={image.recipe} item={image.id} />
                   {b.idx === firstImageIdx && <span className="ai-not-author"> · {NOT_AUTHOR_VISIBLE}</span>}
+                  {/* The owner's image review (2026-10-23): shown only once the owner allows it (ILLUSTRATION_CHECK.reviewMarkPublic). */}
+                  {image.reviewed && <span className="seed-reviewed"> · {REVIEWED_MARK}</span>}
                   {image.lettering && (
                     <>
                       {' · '}

@@ -696,6 +696,26 @@
       "repo": "stabilityai/stable-audio-open-1.0",
       "card_license": "other (stable-audio-community)",
       "status": "Not allowlisted (owner, 2026-10-13): the rule needs a license that clearly allows GPL-3.0 release, and the Stability Community License binds the user (acceptable-use policy, under $1M revenue, no foundation-model training). Run in voice/sound test 4 as owner-only, never published; if a generated sound wins, a conditional status is proposed then. Card revision f21265c1; gated (auto)."
+    },
+    {
+      "repo": "google/gemini-4-argon",
+      "kind": "vision-check",
+      "maker": "Google",
+      "open_weights": false,
+      "status": "Proposed by the coding agent (2026-10-23, branch illustration-check) as the vision model that checks whether each seeded image shows its scene (scripts/check-illustrations.ts). A closed model, named with its provider first wherever its words are shown (owner, 2026-10-18). It judges images; it makes no published asset, and its answers stay owner-only until the owner has read them. Not called yet: the owner's OK on the model and the spend comes first. Alternatives priced in the script: anthropic/claude-opus-5.5, openai/gpt-6.1-sol, google/gemini-3.8-flash.",
+      "hosted": {
+        "host": "Vercel AI Gateway",
+        "endpoints": {
+          "google/gemini-4-argon": null
+        },
+        "price_unit": "USD per million tokens (input, output)",
+        "prices": {
+          "input": 2,
+          "output": 10,
+          "cache_read": 0.1
+        },
+        "price_seen": "2026-10-23"
+      }
     }
   ],
   "excluded": [

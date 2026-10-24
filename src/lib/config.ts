@@ -307,6 +307,24 @@ export function adaptationPagesShown(): boolean {
   return ADAPTATION_PAGES.live || process.env.VERCEL_ENV !== 'production';
 }
 
+/**
+ * The illustration check (owner, 2026-10-23: "Does each image show its scene?"; branch illustration-check). A vision
+ * model checks each seeded key-moment image against its passage (scripts/check-illustrations.ts); the owner decides
+ * keep, regenerate with a note, or drop on /you/illustrations. "Owner-only: nothing public until I've read it."
+ */
+export const ILLUSTRATION_CHECK = {
+  /** Who may open the review page and decide. */
+  owners: [6786] as readonly number[],
+  /**
+   * Shows "Reviewed by a person" under a reviewed image wherever it appears (the chapter and the listen view). Off
+   * until the owner allows anything public; the mark reads the decision the redo writes into the job file.
+   */
+  reviewMarkPublic: false,
+  /** The recommended checker on the Vercel AI Gateway (a closed model, Google's; named first wherever it is shown). */
+  model: 'google/gemini-4-argon',
+  modelName: 'Google Gemini 4 Argon',
+} as const;
+
 /** Moderation only: these FIDs may hide content or dismiss a report. They never promote or rank anything. Owner, 2026-10-08 (decision 20). */
 export const MODERATOR_FIDS: readonly number[] = [6786];
 
