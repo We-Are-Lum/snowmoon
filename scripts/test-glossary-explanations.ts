@@ -19,6 +19,9 @@ import type { Glossary } from './lib/glossary';
 import {
   BAKEOFF_FILE,
   BAKEOFF_KEY_FILE,
+  BAKEOFF_PAGE_FILE,
+  BAKEOFF_SUPPORT_FILE,
+  EXPLANATIONS_DRAFT,
   BAKEOFF_MODELS,
   BAKEOFF_SLUGS,
   CHECK_MODEL,
@@ -125,9 +128,13 @@ if (existsSync(path.join(ROOT, BAKEOFF_FILE))) {
 }
 
 // ---- The key stays out of the repository and the site ----
-ok(BAKEOFF_KEY_FILE.startsWith('private/') && /^private\/$/m.test(read('.gitignore')), 'the bake-off key is not in a git-ignored folder');
+// Every output stays in private/, which git ignores, until the owner has read it (owner, 2026-10-23).
+ok(/^private\/$/m.test(read('.gitignore')), 'private/ is not git-ignored');
+for (const f of [BAKEOFF_FILE, BAKEOFF_SUPPORT_FILE, BAKEOFF_KEY_FILE, BAKEOFF_PAGE_FILE, EXPLANATIONS_DRAFT]) ok(f.startsWith('private/'), `${f} is not in private/`);
+ok(!readdirSync(path.join(ROOT, 'content/snowmoon')).some((f) => /bakeoff/.test(f)), 'bake-off output in content/');
 const walk = (dir: string): string[] => readdirSync(dir).flatMap((f) => (statSync(path.join(dir, f)).isDirectory() ? walk(path.join(dir, f)) : [path.join(dir, f)]));
-const naming = walk(path.join(ROOT, 'src')).filter((f) => /key\.json|glossary-bakeoff\/key|private\//.test(readFileSync(f, 'utf8').replace(/\/\*[\s\S]*?\*\/|\/\/.*$/gm, '')));
+const naming = walk(path.join(ROOT, 'src')).filter((f) => /glossary/.test(path.relative(ROOT, f))).filter((f) => /key\.json|'key'/.test(readFileSync(f, 'utf8').replace(/\/\*[\s\S]*?\*\/|\/\/.*$/gm, '')));
+ok(!/key\.json/.test(read('scripts/glossary-bakeoff-page.ts').replace(/\/\*[\s\S]*?\*\/|\/\/.*$/gm, '')), 'the standalone page reads the key');
 ok(naming.length === 0, `site code names the key: ${naming.map((f) => path.relative(ROOT, f)).join(', ')}`);
 // Owner-only: both routes check the FID before reading anything.
 for (const r of ['src/app/api/glossary/written/[slug]/route.ts', 'src/app/api/glossary/bakeoff/route.ts']) {

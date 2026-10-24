@@ -10,8 +10,8 @@ import { GLOSSARY_WRITTEN, WORK } from './config';
  * a gate, the chapter of its latest citation; a reader sees it only once they have reached that chapter, and the
  * server never sends a sentence past the chapter it is asked for.
  *
- * The bake-off (content/snowmoon/glossary-bakeoff/) is read here too, by label only. Its key (which label is which
- * model) is in private/, which git ignores; nothing here reads it.
+ * The bake-off (private/glossary-bakeoff/, git-ignored) is read here too, by label only; never its key file (which
+ * label is which model).
  */
 export interface WrittenSentence {
   text: string;
@@ -35,9 +35,14 @@ export interface WrittenView {
   hidden: number;
 }
 
+/**
+ * The committed file once the owner has read and published it; before that, the draft in private/ (git-ignored:
+ * present only on the machine that ran the job, so only a server run there can show it).
+ */
 const FILE = path.join(process.cwd(), 'content', WORK.id, 'glossary-explanations.json');
-const BAKEOFF = path.join(process.cwd(), 'content', WORK.id, 'glossary-bakeoff', 'explanations.json');
-const SUPPORT = path.join(process.cwd(), 'content', WORK.id, 'glossary-bakeoff', 'support.json');
+const DRAFT = path.join(process.cwd(), 'private', 'glossary-explanations', 'glossary-explanations.json');
+const BAKEOFF = path.join(process.cwd(), 'private', 'glossary-bakeoff', 'explanations.json');
+const SUPPORT = path.join(process.cwd(), 'private', 'glossary-bakeoff', 'support.json');
 
 export const mayRead = (fid: number | null) => fid !== null && (GLOSSARY_WRITTEN.public || GLOSSARY_WRITTEN.fids.includes(fid));
 /** The bake-off stays with the listed FIDs even if the explanations go public. */
@@ -58,7 +63,10 @@ export const writtenLabel = (model: string, maker: string, openWeights: boolean)
 
 let cache: FileShape | null | undefined;
 function file(): FileShape | null {
-  if (cache === undefined) cache = existsSync(FILE) ? (JSON.parse(readFileSync(FILE, 'utf8')) as FileShape) : null;
+  if (cache === undefined) {
+    const at = existsSync(FILE) ? FILE : existsSync(DRAFT) ? DRAFT : null;
+    cache = at ? (JSON.parse(readFileSync(at, 'utf8')) as FileShape) : null;
+  }
   return cache;
 }
 

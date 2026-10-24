@@ -10,10 +10,18 @@
  *       free model list. The default.
  *   npx tsx --env-file-if-exists=.env.local scripts/glossary-explain.ts bakeoff --run --cap <usd>
  *       The blind bake-off: the five entries (BAKEOFF_SLUGS) with each of the three models. Writes the page's data
- *       (content/snowmoon/glossary-bakeoff/explanations.json, labels A/B/C only) and the key
- *       (private/glossary-bakeoff/key.json, git-ignored: which label is which model, usage, request ids, raw answers).
+ *       (private/glossary-bakeoff/explanations.json, labels A/B/C only) and the key
+ *       (private/glossary-bakeoff/key.json, a separate file: which label is which model, usage, request ids, raw answers).
+ *   npx tsx --env-file-if-exists=.env.local scripts/glossary-explain.ts bakeoff-fill --run --cap <usd>
+ *       Runs the bake-off's failed calls again (same model, same label) and updates both files.
  *   npx tsx --env-file-if-exists=.env.local scripts/glossary-explain.ts all --model <gateway id> --run --cap <usd>
- *       Every entry with one model. Writes content/snowmoon/glossary-explanations.json with its `assist` record.
+ *       Every entry with one model. Writes the draft, private/glossary-explanations/glossary-explanations.json,
+ *       with its `assist` record.
+ *   npx tsx scripts/glossary-explain.ts publish --owner-read
+ *       Only once the owner has read the draft: copies it to content/snowmoon/glossary-explanations.json (committed).
+ *
+ * Every output stays in private/ (git-ignored) until then (owner, 2026-10-23: "keep outputs out of the public repo
+ * until I've read them"): the bake-off's page data, the support check, the key, the raw answers and the draft.
  *
  * Each model reads the book once: the book is the same first user message on every call (after the same system
  * prompt), so later calls read it from the provider's prompt cache. Anthropic needs a cache marker on that message
@@ -35,6 +43,7 @@ import {
   BAKEOFF_MODELS,
   BAKEOFF_SLUGS,
   CHECK_MODEL,
+  EXPLANATIONS_DRAFT,
   EXPLANATIONS_FILE,
   GATEWAY,
   PROMPT_FILE,
@@ -147,7 +156,7 @@ function costOf(u: Usage, p: Price): number {
 async function call(key: string, m: ModelChoice, p: Price, session: string, system: string, user: string, request: string): Promise<Reply> {
   const bookMessage: Record<string, unknown> = { role: 'user', content: user };
   if (m.caching === 'explicit') bookMessage.cache_control = { type: 'ephemeral' };
-  const res = await fetch(`${GATEWAY}/chat/completions`, {
+  const send = () => fetch(`${GATEWAY}/chat/completions`, {
     method: 'POST',
     headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json', 'x-session-affinity': session },
     body: JSON.stringify({
@@ -158,6 +167,14 @@ async function call(key: string, m: ModelChoice, p: Price, session: string, syst
       providerOptions: { gateway: { only: [m.provider] } },
     }),
   });
+  // A busy provider (429, "at capacity"): wait and try the same provider again, 30 s, 90 s, 180 s. A refused call costs nothing.
+  let res = await send();
+  for (const wait of [30_000, 90_000, 180_000]) {
+    if (res.status !== 429) break;
+    console.log(`${m.id}: busy (429), trying again in ${wait / 1000} s`);
+    await new Promise((r) => setTimeout(r, wait));
+    res = await send();
+  }
   const j = (await res.json().catch(() => ({}))) as { id?: string; model?: string; provider?: string; choices?: { message?: { content?: string } }[]; usage?: Usage; error?: { message?: string } };
   if (!res.ok) throw new Error(`${m.id}: gateway ${res.status} ${j.error?.message ?? ''}`.trim());
   const usage = j.usage ?? {};
@@ -187,7 +204,16 @@ async function runModel(key: string, m: ModelChoice, slugs: string[]) {
     const t = glossary.terms.find((x) => x.slug === slug);
     if (!t) throw new Error(`${slug}: not in the glossary`);
     guard(p);
-    const r = await call(key, m, p, session, prompt, book.text, entryRequest(t));
+    let r: Reply;
+    try {
+      r = await call(key, m, p, session, prompt, book.text, entryRequest(t));
+    } catch (e) {
+      // A refused or failed call: recorded, and the run goes on (what was spent so far is kept and written).
+      console.log(`${m.id} ${slug}: ${String(e).slice(0, 200)}`);
+      entries.push({ slug, term: t.term, sentences: [] });
+      calls.push({ slug, requestId: null, usage: {}, usd: 0, raw: '', error: String(e).slice(0, 500) });
+      continue;
+    }
     spent += r.usd;
     if (!served.model) served = { model: r.model, provider: r.provider };
     const read = r.usage.prompt_tokens_details?.cached_tokens ?? r.usage.cache_read_input_tokens ?? 0;
@@ -222,6 +248,16 @@ const ABOUT =
 
 async function main() {
   if (mode === 'estimate') return estimate();
+  if (mode === 'publish') {
+    // Only on the owner's word, after reading the draft: copy it to the committed file, if it passes.
+    if (!args.includes('--owner-read')) throw new Error('publish copies the draft into the repository: add --owner-read only once the owner has read it');
+    const draft = JSON.parse(read(EXPLANATIONS_DRAFT)) as ExplanationsFile;
+    const problems = verifyExplanations(draft.entries, blocksOf(ROOT), glossary);
+    if (problems.length) throw new Error(`the draft fails: ${problems.slice(0, 10).join('; ')}`);
+    writeFileSync(path.join(ROOT, EXPLANATIONS_FILE), JSON.stringify(draft, null, 1) + '\n');
+    console.log(`copied ${EXPLANATIONS_DRAFT} to ${EXPLANATIONS_FILE}`);
+    return;
+  }
   if (mode === 'book') {
     // The exact text every model reads, to look at (rebuilt from the committed chapters; its sha256 is in `assist`).
     mkdirSync(path.join(ROOT, 'private/glossary-explanations'), { recursive: true });
@@ -258,11 +294,31 @@ async function main() {
     mkdirSync(path.dirname(path.join(ROOT, BAKEOFF_FILE)), { recursive: true });
     writeFileSync(
       path.join(ROOT, BAKEOFF_FILE),
-      JSON.stringify({ about: 'The blind bake-off (owner, 2026-10-23): the same prompt and book to three models, labelled A, B and C. Which is which is in a separate key file, not in this repository.', date, prompt_file: PROMPT_FILE, prompt_sha256: sha256(read(PROMPT_FILE)), book_sha256: book.sha256, slugs: BAKEOFF_SLUGS, labels: page }, null, 1) + '\n',
+      JSON.stringify({ about: 'The blind bake-off (owner, 2026-10-23): the same prompt and book to three models, labelled A, B and C. Which is which is in a separate key file.', date, prompt_file: PROMPT_FILE, prompt_sha256: sha256(read(PROMPT_FILE)), book_sha256: book.sha256, slugs: BAKEOFF_SLUGS, labels: page }, null, 1) + '\n',
     );
     mkdirSync(path.dirname(path.join(ROOT, BAKEOFF_KEY_FILE)), { recursive: true });
     writeFileSync(path.join(ROOT, BAKEOFF_KEY_FILE), JSON.stringify({ date, spent_usd: spent, key: keyFile }, null, 1) + '\n');
     console.log(`wrote ${BAKEOFF_FILE} and ${BAKEOFF_KEY_FILE}; spent ${usd(spent)}`);
+    return;
+  }
+  if (mode === 'bakeoff-fill') {
+    // Calls of the bake-off that failed (e.g. a busy provider): run them again with the same model, keep its label.
+    const page = JSON.parse(read(BAKEOFF_FILE));
+    const keyData = JSON.parse(read(BAKEOFF_KEY_FILE));
+    for (const [label, k] of Object.entries(keyData.key as Record<string, { assist: { model: string }; usd: number; calls: { slug: string; error?: string }[] }>)) {
+      const failed = k.calls.filter((c) => c.error).map((c) => c.slug);
+      if (!failed.length) continue;
+      const m = BAKEOFF_MODELS.find((x) => x.id === k.assist.model)!;
+      const r = await runModel(key, m, failed);
+      for (const e of r.entries) page.labels[label].entries[page.labels[label].entries.findIndex((x: Entry) => x.slug === e.slug)] = e;
+      for (const c of r.calls) k.calls[k.calls.findIndex((x) => x.slug === c.slug)] = c;
+      k.usd += r.usd;
+      page.labels[label].problems = verifyExplanations(page.labels[label].entries, blocksOf(ROOT), glossary);
+    }
+    keyData.spent_usd += spent;
+    writeFileSync(path.join(ROOT, BAKEOFF_FILE), JSON.stringify(page, null, 1) + '\n');
+    writeFileSync(path.join(ROOT, BAKEOFF_KEY_FILE), JSON.stringify(keyData, null, 1) + '\n');
+    console.log(`filled; spent ${usd(spent)} this run`);
     return;
   }
   if (mode === 'all') {
@@ -274,14 +330,14 @@ async function main() {
     const r = await runModel(key, m, slugs);
     const problems = verifyExplanations(r.entries, blocksOf(ROOT), glossary);
     const out: ExplanationsFile = { about: ABOUT, assist: r.assist, entries: r.entries };
-    writeFileSync(path.join(ROOT, EXPLANATIONS_FILE), JSON.stringify(out, null, 1) + '\n');
     mkdirSync(path.join(ROOT, 'private/glossary-explanations'), { recursive: true });
+    writeFileSync(path.join(ROOT, EXPLANATIONS_DRAFT), JSON.stringify(out, null, 1) + '\n');
     writeFileSync(path.join(ROOT, `private/glossary-explanations/run-${r.assist.date}.json`), JSON.stringify({ spent_usd: spent, calls: r.calls }, null, 1) + '\n');
-    console.log(`wrote ${EXPLANATIONS_FILE}: ${r.entries.length} entries, ${problems.length} problems; spent ${usd(spent)}`);
+    console.log(`wrote ${EXPLANATIONS_DRAFT}: ${r.entries.length} entries, ${problems.length} problems; spent ${usd(spent)}`);
     if (problems.length) console.log(problems.slice(0, 30).join('\n'));
     return;
   }
-  throw new Error('mode: estimate | book | bakeoff | all');
+  throw new Error('mode: estimate | book | bakeoff | bakeoff-fill | all | publish');
 }
 
 if (!existsSync(path.join(ROOT, PROMPT_FILE))) throw new Error(`${PROMPT_FILE} missing`);

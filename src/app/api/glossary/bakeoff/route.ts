@@ -4,8 +4,9 @@ import { bakeoff, mayReadBakeoff } from '~/lib/glossary-written';
 
 /**
  * GET /api/glossary/bakeoff: the blind bake-off's explanations, labelled A, B and C, with the program's problems and
- * the support check's counts. Owner-only (GLOSSARY_WRITTEN); everyone else gets a 404. Never the key: which label
- * is which model is in private/glossary-bakeoff/key.json, which is not in the repository or the deployment.
+ * the support check's counts. Owner-only (GLOSSARY_WRITTEN); everyone else gets a 404. Never the key (which label
+ * is which model), a separate file that nothing in the site reads. The data is in private/ (git-ignored), so only a
+ * server run on the machine that ran the bake-off has it; a deployment from GitHub answers "not run".
  */
 const noStore = { 'Cache-Control': 'no-store' };
 

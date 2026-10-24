@@ -26,15 +26,23 @@ import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { loadBlocks, quoteSource, type Glossary } from './glossary';
 
+/**
+ * Where the explanations go once the owner has read them and says to publish (committed; the glossary page reads it).
+ * Until then every output stays in private/, which git ignores (owner, 2026-10-23: "keep outputs out of the public
+ * repo until I've read them"): never committed, never in a deployment built from GitHub.
+ */
 export const EXPLANATIONS_FILE = 'content/snowmoon/glossary-explanations.json';
+export const EXPLANATIONS_DRAFT = 'private/glossary-explanations/glossary-explanations.json';
 export const PROMPT_FILE = 'config/prompts/glossary-explain.md';
 export const CHECK_PROMPT_FILE = 'config/prompts/glossary-support-check.md';
 /** The blind bake-off's page data: labels A/B/C only, never a model's name. */
-export const BAKEOFF_FILE = 'content/snowmoon/glossary-bakeoff/explanations.json';
-export const BAKEOFF_SUPPORT_FILE = 'content/snowmoon/glossary-bakeoff/support.json';
+export const BAKEOFF_FILE = 'private/glossary-bakeoff/explanations.json';
+export const BAKEOFF_SUPPORT_FILE = 'private/glossary-bakeoff/support.json';
+/** The blind page as one self-contained file, to open without the site (scripts/glossary-bakeoff-page.ts). */
+export const BAKEOFF_PAGE_FILE = 'private/glossary-bakeoff/page.html';
 /**
- * The key (which label is which model, with each run's usage and request ids). In private/, which git ignores: it
- * is never committed, never deployed, and the page has no way to load it.
+ * The key (which label is which model, with each run's usage, request ids and raw answers): a separate file,
+ * which neither the site nor the blind page reads.
  */
 export const BAKEOFF_KEY_FILE = 'private/glossary-bakeoff/key.json';
 export const CHAPTERS = 32;
@@ -246,7 +254,9 @@ export interface ModelChoice {
 /** The bake-off's three models (owner, 2026-10-23), as found on the gateway's model list on 2026-10-23. */
 export const BAKEOFF_MODELS: ModelChoice[] = [
   { id: 'anthropic/claude-opus-5.5', maker: 'Anthropic', open_weights: false, provider: 'anthropic', effort: 'low', caching: 'explicit' },
-  { id: 'deepseek/deepseek-v4-pro-0813', maker: 'DeepSeek', open_weights: true, provider: 'deepseek', effort: 'low', caching: 'implicit' },
+  // Hosted by Parasail, which the gateway lists with zero data retention and no training (owner, 2026-10-23: "use
+  // the host that keeps nothing"); DeepSeek's own endpoint shows neither. No peak-hour pricing at Parasail.
+  { id: 'deepseek/deepseek-v4-pro-0813', maker: 'DeepSeek', open_weights: true, provider: 'parasail', effort: 'low', caching: 'implicit' },
   { id: 'moonshotai/kimi-k3.1-pro', maker: 'Moonshot AI', open_weights: true, provider: 'moonshotai', effort: 'low', caching: 'implicit' },
 ];
 /** The support check's model: not one of the three, and from a fourth maker. */

@@ -33,8 +33,8 @@ export function GlossaryBakeoff() {
     return (
       <div className="page prose glossary">
         <p className="label">Glossary · bake-off · owner only</p>
-        <h1>Not run yet</h1>
-        <p>No model has been called. The run waits for your go-ahead (scripts/glossary-explain.ts bakeoff).</p>
+        <h1>Not here</h1>
+        <p>Nothing to show on this server. The bake-off&apos;s results stay on the machine that ran it (private/, never pushed): open this page on a server run there.</p>
       </div>
     );
   const b = state.b;

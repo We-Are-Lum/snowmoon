@@ -7,9 +7,9 @@
  *
  *   npx tsx scripts/glossary-support-check.ts                       how many calls, and the estimate; nothing sent
  *   npx tsx --env-file-if-exists=.env.local scripts/glossary-support-check.ts --run --cap <usd>
- *       checks the bake-off (content/snowmoon/glossary-bakeoff/explanations.json) and writes
- *       content/snowmoon/glossary-bakeoff/support.json: per label, each sentence's verdict, and the counts.
- *   ... --file content/snowmoon/glossary-explanations.json --run --cap <usd>
+ *       checks the bake-off (private/glossary-bakeoff/explanations.json) and writes
+ *       private/glossary-bakeoff/support.json: per label, each sentence's verdict, and the counts.
+ *   ... --file private/glossary-explanations/glossary-explanations.json --run --cap <usd>
  *       checks the full file instead, and writes private/glossary-explanations/support.json.
  *
  * A sentence that fails the program's own checks (a citation that isn't a block, a quote that isn't word for
