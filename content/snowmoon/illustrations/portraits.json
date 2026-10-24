@@ -1,0 +1,341 @@
+{
+ "about": "DRAFT, not run (illustration-consistency trial, way a): one head-and-shoulders portrait per character, drawn from that character's cast sheet, to be used as a second reference image beside the sheet. Nothing here is published; the owner looks at the portraits before any trial uses them. Run locally with scripts/illustrate.py (free) or on fal through scripts/consistency/trial.py --portraits (priced there).",
+ "style": "designs/styles/techno-vistas.json",
+ "assist": {
+  "model": "claude-coding-agent",
+  "by": "the coding agent",
+  "drafted": [
+   "portrait prompt",
+   "reference choices"
+  ],
+  "instructions": [
+   "docs/prompts/008a-agent-prompts.md#character-profiles"
+  ],
+  "see": "config/models.json drafting; principle 3"
+ },
+ "jobs": [
+  {
+   "id": "bai-portrait",
+   "chapter": null,
+   "idx": null,
+   "characters": [
+    "designs/characters/bai.json"
+   ],
+   "references": [
+    "cast/bai-sheet"
+   ],
+   "setting": null,
+   "props": [],
+   "prompt": "Head-and-shoulders portrait of the person from reference image 1, alone, facing the viewer, head turned very slightly to one side, face, hair and collar large and sharp in the frame, neutral calm expression, on a plain flat off-white background with no scenery, even lighting. Only this one person, drawn once.",
+   "width": 768,
+   "height": 768,
+   "seed": 7001
+  },
+  {
+   "id": "deluin-portrait",
+   "chapter": null,
+   "idx": null,
+   "characters": [
+    "designs/characters/deluin.json"
+   ],
+   "references": [
+    "cast/deluin-sheet"
+   ],
+   "setting": null,
+   "props": [],
+   "prompt": "Head-and-shoulders portrait of the person from reference image 1, alone, facing the viewer, head turned very slightly to one side, face, hair and collar large and sharp in the frame, neutral calm expression, on a plain flat off-white background with no scenery, even lighting. Only this one person, drawn once.",
+   "width": 768,
+   "height": 768,
+   "seed": 7002
+  },
+  {
+   "id": "delwart-portrait",
+   "chapter": null,
+   "idx": null,
+   "characters": [
+    "designs/characters/delwart.json"
+   ],
+   "references": [
+    "cast/delwart-sheet"
+   ],
+   "setting": null,
+   "props": [],
+   "prompt": "Head-and-shoulders portrait of the person from reference image 1, alone, facing the viewer, head turned very slightly to one side, face, hair and collar large and sharp in the frame, neutral calm expression, on a plain flat off-white background with no scenery, even lighting. Only this one person, drawn once.",
+   "width": 768,
+   "height": 768,
+   "seed": 7003
+  },
+  {
+   "id": "den-portrait",
+   "chapter": null,
+   "idx": null,
+   "characters": [
+    "designs/characters/den.json"
+   ],
+   "references": [
+    "cast/den-sheet"
+   ],
+   "setting": null,
+   "props": [],
+   "prompt": "Head-and-shoulders portrait of the person from reference image 1, alone, facing the viewer, head turned very slightly to one side, face, hair and collar large and sharp in the frame, neutral calm expression, on a plain flat off-white background with no scenery, even lighting. Only this one person, drawn once.",
+   "width": 768,
+   "height": 768,
+   "seed": 7004
+  },
+  {
+   "id": "febric-portrait",
+   "chapter": null,
+   "idx": null,
+   "characters": [
+    "designs/characters/febric.json"
+   ],
+   "references": [
+    "cast/febric-sheet"
+   ],
+   "setting": null,
+   "props": [],
+   "prompt": "Head-and-shoulders portrait of the person from reference image 1, alone, facing the viewer, head turned very slightly to one side, face, hair and collar large and sharp in the frame, neutral calm expression, on a plain flat off-white background with no scenery, even lighting. Only this one person, drawn once.",
+   "width": 768,
+   "height": 768,
+   "seed": 7005
+  },
+  {
+   "id": "fin-portrait",
+   "chapter": null,
+   "idx": null,
+   "characters": [
+    "designs/characters/fin.json"
+   ],
+   "references": [
+    "cast/fin-sheet"
+   ],
+   "setting": null,
+   "props": [],
+   "prompt": "Head-and-shoulders portrait of the person from reference image 1, alone, facing the viewer, head turned very slightly to one side, face, hair and collar large and sharp in the frame, neutral calm expression, on a plain flat off-white background with no scenery, even lighting. Only this one person, drawn once.",
+   "width": 768,
+   "height": 768,
+   "seed": 7006
+  },
+  {
+   "id": "gladias-portrait",
+   "chapter": null,
+   "idx": null,
+   "characters": [
+    "designs/characters/gladias.json"
+   ],
+   "references": [
+    "cast/gladias-sheet"
+   ],
+   "setting": null,
+   "props": [],
+   "prompt": "Head-and-shoulders portrait of the person from reference image 1, alone, facing the viewer, head turned very slightly to one side, face, hair and collar large and sharp in the frame, neutral calm expression, on a plain flat off-white background with no scenery, even lighting. Only this one person, drawn once.",
+   "width": 768,
+   "height": 768,
+   "seed": 7007
+  },
+  {
+   "id": "hreda-portrait",
+   "chapter": null,
+   "idx": null,
+   "characters": [
+    "designs/characters/hreda.json"
+   ],
+   "references": [
+    "cast/hreda-sheet"
+   ],
+   "setting": null,
+   "props": [],
+   "prompt": "Head-and-shoulders portrait of the person from reference image 1, alone, facing the viewer, head turned very slightly to one side, face, hair and collar large and sharp in the frame, neutral calm expression, on a plain flat off-white background with no scenery, even lighting. Only this one person, drawn once.",
+   "width": 768,
+   "height": 768,
+   "seed": 7008
+  },
+  {
+   "id": "jahn-portrait",
+   "chapter": null,
+   "idx": null,
+   "characters": [
+    "designs/characters/jahn.json"
+   ],
+   "references": [
+    "cast/jahn-sheet"
+   ],
+   "setting": null,
+   "props": [],
+   "prompt": "Head-and-shoulders portrait of the person from reference image 1, alone, facing the viewer, head turned very slightly to one side, face, hair and collar large and sharp in the frame, neutral calm expression, on a plain flat off-white background with no scenery, even lighting. Only this one person, drawn once.",
+   "width": 768,
+   "height": 768,
+   "seed": 7009
+  },
+  {
+   "id": "lektor-portrait",
+   "chapter": null,
+   "idx": null,
+   "characters": [
+    "designs/characters/lektor.json"
+   ],
+   "references": [
+    "cast/lektor-sheet"
+   ],
+   "setting": null,
+   "props": [],
+   "prompt": "Head-and-shoulders portrait of the person from reference image 1, alone, facing the viewer, head turned very slightly to one side, face, hair and collar large and sharp in the frame, neutral calm expression, on a plain flat off-white background with no scenery, even lighting. Only this one person, drawn once.",
+   "width": 768,
+   "height": 768,
+   "seed": 7010
+  },
+  {
+   "id": "lily-portrait",
+   "chapter": null,
+   "idx": null,
+   "characters": [
+    "designs/characters/lily.json"
+   ],
+   "references": [
+    "cast/lily-sheet"
+   ],
+   "setting": null,
+   "props": [],
+   "prompt": "Head-and-shoulders portrait of the person from reference image 1, alone, facing the viewer, head turned very slightly to one side, face, hair and collar large and sharp in the frame, neutral calm expression, on a plain flat off-white background with no scenery, even lighting. Only this one person, drawn once.",
+   "width": 768,
+   "height": 768,
+   "seed": 7011
+  },
+  {
+   "id": "min-portrait",
+   "chapter": null,
+   "idx": null,
+   "characters": [
+    "designs/characters/min.json"
+   ],
+   "references": [
+    "cast/min-sheet"
+   ],
+   "setting": null,
+   "props": [],
+   "prompt": "Head-and-shoulders portrait of the person from reference image 1, alone, facing the viewer, head turned very slightly to one side, face, hair and collar large and sharp in the frame, neutral calm expression, on a plain flat off-white background with no scenery, even lighting. Only this one person, drawn once.",
+   "width": 768,
+   "height": 768,
+   "seed": 7012
+  },
+  {
+   "id": "mov-portrait",
+   "chapter": null,
+   "idx": null,
+   "characters": [
+    "designs/characters/mov.json"
+   ],
+   "references": [
+    "cast/mov-sheet"
+   ],
+   "setting": null,
+   "props": [],
+   "prompt": "Head-and-shoulders portrait of the person from reference image 1, alone, facing the viewer, head turned very slightly to one side, face, hair and collar large and sharp in the frame, neutral calm expression, on a plain flat off-white background with no scenery, even lighting. Only this one person, drawn once.",
+   "width": 768,
+   "height": 768,
+   "seed": 7013
+  },
+  {
+   "id": "mu-portrait",
+   "chapter": null,
+   "idx": null,
+   "characters": [
+    "designs/characters/mu.json"
+   ],
+   "references": [
+    "cast/mu-sheet"
+   ],
+   "setting": null,
+   "props": [],
+   "prompt": "Head-and-shoulders portrait of the person from reference image 1, alone, facing the viewer, head turned very slightly to one side, face, hair and collar large and sharp in the frame, neutral calm expression, on a plain flat off-white background with no scenery, even lighting. Only this one person, drawn once.",
+   "width": 768,
+   "height": 768,
+   "seed": 7014
+  },
+  {
+   "id": "seila-portrait",
+   "chapter": null,
+   "idx": null,
+   "characters": [
+    "designs/characters/seila.json"
+   ],
+   "references": [
+    "cast/seila-sheet"
+   ],
+   "setting": null,
+   "props": [],
+   "prompt": "Head-and-shoulders portrait of the person from reference image 1, alone, facing the viewer, head turned very slightly to one side, face, hair and collar large and sharp in the frame, neutral calm expression, on a plain flat off-white background with no scenery, even lighting. Only this one person, drawn once.",
+   "width": 768,
+   "height": 768,
+   "seed": 7015
+  },
+  {
+   "id": "tafindel-portrait",
+   "chapter": null,
+   "idx": null,
+   "characters": [
+    "designs/characters/tafindel.json"
+   ],
+   "references": [
+    "cast/tafindel-sheet"
+   ],
+   "setting": null,
+   "props": [],
+   "prompt": "Head-and-shoulders portrait of the person from reference image 1, alone, facing the viewer, head turned very slightly to one side, face, hair and collar large and sharp in the frame, neutral calm expression, on a plain flat off-white background with no scenery, even lighting. Only this one person, drawn once.",
+   "width": 768,
+   "height": 768,
+   "seed": 7016
+  },
+  {
+   "id": "verdow-portrait",
+   "chapter": null,
+   "idx": null,
+   "characters": [
+    "designs/characters/verdow.json"
+   ],
+   "references": [
+    "cast/verdow-sheet"
+   ],
+   "setting": null,
+   "props": [],
+   "prompt": "Head-and-shoulders portrait of the person from reference image 1, alone, facing the viewer, head turned very slightly to one side, face, hair and collar large and sharp in the frame, neutral calm expression, on a plain flat off-white background with no scenery, even lighting. Only this one person, drawn once.",
+   "width": 768,
+   "height": 768,
+   "seed": 7017
+  },
+  {
+   "id": "zei-portrait",
+   "chapter": null,
+   "idx": null,
+   "characters": [
+    "designs/characters/zei.json"
+   ],
+   "references": [
+    "cast/zei-sheet"
+   ],
+   "setting": null,
+   "props": [],
+   "prompt": "Head-and-shoulders portrait of the person from reference image 1, alone, facing the viewer, head turned very slightly to one side, face, hair and collar large and sharp in the frame, neutral calm expression, on a plain flat off-white background with no scenery, even lighting. Only this one person, drawn once.",
+   "width": 768,
+   "height": 768,
+   "seed": 7018
+  },
+  {
+   "id": "zven-portrait",
+   "chapter": null,
+   "idx": null,
+   "characters": [
+    "designs/characters/zven.json"
+   ],
+   "references": [
+    "cast/zven-sheet"
+   ],
+   "setting": null,
+   "props": [],
+   "prompt": "Head-and-shoulders portrait of the person from reference image 1, alone, facing the viewer, head turned very slightly to one side, face, hair and collar large and sharp in the frame, neutral calm expression, on a plain flat off-white background with no scenery, even lighting. Only this one person, drawn once.",
+   "width": 768,
+   "height": 768,
+   "seed": 7019
+  }
+ ]
+}

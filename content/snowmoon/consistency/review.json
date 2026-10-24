@@ -1,0 +1,158 @@
+{
+ "about": "A check by eye of the measured scores (scores.json). The coding agent (Claude, a closed model) looked at every one of the 106 measured images beside its characters' sheets on 2026-10-23. DRAFT for the owner: the owner's own look decides.",
+ "by": "coding agent (Claude, closed model), 2026-10-23",
+ "finding": "The commonest fault is a double: a character's costume (or hair) copied onto a second person in the same picture. The automatic scores catch that only sometimes (the 'possible double' flag); they mostly measure the figure taken to be the character, and that step fails when a character is small, seated or seen from behind.",
+ "problems": [
+  {
+   "id": "c2-b122-sweeping",
+   "characters": [
+    "zei",
+    "fin"
+   ],
+   "note": "Zei is drawn with an animal's face; Fin's red hooded jacket is copied onto a second, older man with a broom."
+  },
+  {
+   "id": "c14-b030-semifinal-arena",
+   "characters": [
+    "zei"
+   ],
+   "note": "Zei appears twice: a second boy in his orange jacket sits across the arena."
+  },
+  {
+   "id": "c21-b019-civics-score",
+   "characters": [
+    "lily",
+    "seila"
+   ],
+   "note": "Lily wears Seila's rust-orange coat over her grey poncho: clothes swapped between the two references."
+  },
+  {
+   "id": "c9-b105-sealed-car",
+   "characters": [
+    "zei",
+    "den"
+   ],
+   "note": "A second boy beside Zei has Zei's hair with the blue streak."
+  },
+  {
+   "id": "c7-b049-toast",
+   "characters": [
+    "mu",
+    "zei"
+   ],
+   "note": "A third person, blond, wears Zei's orange-and-black outfit."
+  },
+  {
+   "id": "c5-b043-spiral-ramp",
+   "characters": [
+    "zei",
+    "bai"
+   ],
+   "note": "A second boy beside Zei wears a copy of his outfit."
+  },
+  {
+   "id": "c11-b081-broken-redball",
+   "characters": [
+    "zven"
+   ],
+   "note": "Zven appears twice: two boys in his yellow tunic and green shorts."
+  },
+  {
+   "id": "c1-b132-food-boxes",
+   "characters": [
+    "gladias",
+    "zven"
+   ],
+   "note": "A blond boy at the table wears Zven's yellow-and-green tunic."
+  },
+  {
+   "id": "c13-b065-hijacked-screen",
+   "characters": [
+    "seila",
+    "lily"
+   ],
+   "note": "Two girls in Lily's grey poncho."
+  },
+  {
+   "id": "c2-b038-foil-classroom",
+   "characters": [
+    "zei",
+    "fin"
+   ],
+   "note": "Neither Zei (orange jacket, blue streak) nor Fin (red poncho) can be picked out among the students."
+  },
+  {
+   "id": "c28-b057-zven-sofa",
+   "characters": [
+    "zven",
+    "seila"
+   ],
+   "note": "A second woman wears Seila's rust-orange coat."
+  },
+  {
+   "id": "c23-b078-red-call",
+   "characters": [
+    "gladias"
+   ],
+   "note": "Gladias has red hair and a sleeveless olive top, not his chestnut hair and cream sleeves."
+  },
+  {
+   "id": "c19-b110-sealed-tea",
+   "characters": [
+    "gladias",
+    "zei"
+   ],
+   "note": "Zei, small at the back, wears black, without his orange jacket."
+  },
+  {
+   "id": "c19-b098-download-cable",
+   "characters": [
+    "zei"
+   ],
+   "note": "A second figure wears Zei's black bodysuit with cyan seams."
+  },
+  {
+   "id": "c31-b009-reunion-hug",
+   "characters": [
+    "deluin",
+    "zei"
+   ],
+   "note": "A third person, seen from behind, wears an orange jacket like Zei's."
+  }
+ ],
+ "measured_worst10": {
+  "c12-b139-drone-scan": "measurement error: Zei is there, small and seated in the centre, and looks right; a tiny figure at the side was taken for him",
+  "c19-b110-sealed-tea": "real, minor: Zei, small at the back, without his jacket",
+  "c2-b038-foil-classroom": "real: neither character can be picked out",
+  "c23-b004-green-cafeteria": "measurement error: Fin looks right; Gladias is tiny in the background",
+  "c31-b066-broken-gates": "measurement error: Seila stands beside Gladias and looks right, but the detector did not separate her from him",
+  "c4-b003-camera-ladder": "measurement error: Fin looks right (the hair-colour score is off)",
+  "c14-b030-semifinal-arena": "real: Zei appears twice",
+  "c13-b065-hijacked-screen": "real: Lily's poncho on a second girl",
+  "c8-b016-bus-debate": "measurement error: Gladias looks right",
+  "c26-b075-seila-runs": "measurement error: Gladias is seen from behind (the back of his head was taken for a face)"
+ },
+ "by_design": {
+  "c29-b109-zei-weeps": "Zei's white-and-grey jacket: the book's snow jacket (c29-b2)",
+  "c29-b002-snowy-hill-sunrise": "the same snow jacket",
+  "c20-b174-standing-up": "Seila in an open privacy robe (the scene's robe)",
+  "c16-b110-trip-news": "Gladias in an open privacy robe",
+  "c16-b060-helisport-broadcast": "Gladias in an open privacy robe",
+  "c3-b092-booth": "robed (the scene's privacy robe)",
+  "c6-b100-assembly": "robed (the scene's privacy robe)",
+  "c18-b079-pyramid-view": "robed (the scene's privacy robe)"
+ },
+ "trial10": [
+  "c2-b122-sweeping",
+  "c14-b030-semifinal-arena",
+  "c21-b019-civics-score",
+  "c9-b105-sealed-car",
+  "c7-b049-toast",
+  "c5-b043-spiral-ramp",
+  "c11-b081-broken-redball",
+  "c1-b132-food-boxes",
+  "c13-b065-hijacked-screen",
+  "c2-b038-foil-classroom"
+ ],
+ "trial10_why": "The ten worst real problems found by eye, most severe first. Only three of them are in the measured worst 10; the measured list is mostly measurement errors. Six are two-character images, so the who-is-who wording is tested."
+}

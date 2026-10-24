@@ -1,0 +1,11 @@
+/* /you/consistency (owner-only, 2026-10-23). */
+.consistency section { margin: 2rem 0; }
+.consistency-small { font-size: 0.85rem; opacity: 0.8; }
+.consistency-grid { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
+.consistency-card { margin: 0; padding: 6px; border: 1px solid transparent; border-radius: 6px; }
+.consistency-card.is-outlier { border-color: #b3306e; }
+.consistency-frame { position: relative; }
+.consistency-frame img, .consistency-sheet img { width: 100%; height: auto; display: block; }
+.consistency-box { position: absolute; border: 2px solid #f5c400; box-shadow: 0 0 0 1px #000; pointer-events: none; }
+.consistency-flag { color: #b3306e; font-size: 0.85rem; }
+.consistency-sheet { margin: 0 0 8px; max-width: 640px; }
