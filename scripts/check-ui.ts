@@ -60,8 +60,10 @@
  *   only the sign-in offer (owner, 2026-10-18).
  * - The owner's image review (/you/illustrations, owner 2026-10-23) at 390, light and dark: signed out, the floors and
  *   the sign-in offer only; as the owner (API replayed from scripts/fixtures/illustration-review.json), worst first,
- *   each item with its passage, its image's AI label, the check labelled AI with its model, Keep / Regenerate with my
- *   note / Drop, a saved decision shown, the note box with the publication line; anyone else sees only the owner line.
+ *   in the owner's order (wrong, partly with a double, partly, matches, not checked), each item with its passage, its
+ *   image's AI label, the check labelled AI with its model, Keep / Regenerate with my note / Drop, a saved decision
+ *   shown, the note box with the publication line, pre-filled with the check's finding labelled "Drafted by the image
+ *   check (Google Gemini 4 Argon)" and marked when edited; anyone else sees only the owner line.
  * - The footer line (owner's legal starter, 2026-10-09) reads exactly as written, with Terms, Privacy
  *   and Source linked, at the foot of About, in the menu sheet and at the bottom of the rail; not on a
  *   phone's reading screen. /terms and /privacy meet the floors.
@@ -496,8 +498,8 @@ async function checkIllustrationReview(page: Page, scheme: string) {
   await as(6786);
   await open(page, '/you/illustrations');
   await page.locator('.illus-item').first().waitFor({ timeout: 10000 }).catch(() => fail(`${where}: signed in as the owner, no items`));
-  const order = await page.locator('.illus-item').evaluateAll((els) => els.map((e) => e.getAttribute('data-verdict')));
-  if (order.join(',') !== 'wrong,partly,matches,unchecked') fail(`${where}: not worst first (${order.join(', ')})`);
+  const order = await page.locator('.illus-item').evaluateAll((els) => els.map((e) => e.getAttribute('data-group')));
+  if (order.join(',') !== 'wrong,partly-double,partly,matches,unchecked') fail(`${where}: not in the owner's order (wrong, partly with a double, partly, matches, not checked): ${order.join(', ')}`);
   for (const [i, v] of order.entries()) {
     const item = page.locator('.illus-item').nth(i);
     if (!(await item.locator('.illus-passage p.is-target').count())) fail(`${where}: item ${i + 1} shows no passage`);
@@ -507,11 +509,18 @@ async function checkIllustrationReview(page: Page, scheme: string) {
     const buttons = (await item.locator('.illus-actions button').allTextContents()).map((t) => t.trim()).join('|');
     if (buttons !== 'Keep|Regenerate with my note|Drop') fail(`${where}: item ${i + 1}'s buttons are "${buttons}"`);
   }
-  if (!/Your decision: regenerate/.test(await page.locator('.illus-item').nth(1).innerText())) fail(`${where}: a saved decision is not shown with its item`);
+  if (!/Your decision: regenerate/.test(await page.locator('.illus-item').nth(2).innerText())) fail(`${where}: a saved decision is not shown with its item`);
   await checkFloors(page, '/you/illustrations @390 (owner)', scheme);
   await shot(page, 'phone-390-you-illustrations', scheme);
   await page.locator('.illus-item').first().locator('.illus-actions button', { hasText: 'Regenerate with my note' }).click();
-  if (!(await page.locator('.illus-item').first().locator('.illus-note .publication-line').count())) fail(`${where}: the note box does not show the publication line`);
+  const first = page.locator('.illus-item').first();
+  if (!(await first.locator('.illus-note .publication-line').count())) fail(`${where}: the note box does not show the publication line`);
+  // The note is pre-filled with the check's finding, labelled as drafted by the check (owner, 2026-10-24); editing it says so.
+  const why = (fixture.items as { verdict: string | null; check: { answer: { why: string } } | null }[]).find((x) => x.verdict === 'wrong')!.check!.answer.why;
+  if ((await first.locator('.illus-note textarea').inputValue()) !== why) fail(`${where}: the note is not pre-filled with the check's finding`);
+  if (!/Drafted by the image check \(Google Gemini 4 Argon\)/.test(await first.locator('.illus-drafted').innerText().catch(() => ''))) fail(`${where}: the pre-filled note is not labelled as drafted by the image check`);
+  await first.locator('.illus-note textarea').fill(`${why} Draw him once.`);
+  if (!/edited by you/i.test(await first.locator('.illus-drafted').innerText().catch(() => ''))) fail(`${where}: an edited note is not marked as edited`);
   await checkFloors(page, '/you/illustrations @390 (owner, note)', scheme);
   await page.unroute('**/api/you/illustrations');
   await page.route('**/api/you/illustrations', (r) => r.fulfill({ status: 403, json: { error: 'Owner only' } }));

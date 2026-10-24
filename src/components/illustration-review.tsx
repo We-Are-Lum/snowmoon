@@ -6,7 +6,7 @@ import { authFetch, useAuth } from '~/lib/client-auth';
 import { AI_LABEL } from '~/lib/ai-declared';
 import { ILLUSTRATION_CHECK } from '~/lib/config';
 import type { ReviewItem, Decision } from '~/lib/illustration-check/review';
-import { worstFirst } from '~/lib/illustration-check/schema';
+import { GROUP_NAMES, noteCredit, reviewGroup, worstFirst } from '~/lib/illustration-check/schema';
 import { AiLabel } from './recipe-sheet';
 import { PublishedTextField } from './publish-words';
 import { SignInButton } from './sign-in';
@@ -45,10 +45,13 @@ const W = {
   regenerate: 'Regenerate with my note',
   drop: 'Drop',
   noteLabel: 'Your note for the redo (it is added to this image’s prompt, credited to you)',
+  drafted: `Drafted by the image check (${ILLUSTRATION_CHECK.modelName}). Keep it as it is or edit it; saving it approves it.`,
+  draftedEdited: 'Drafted by the image check, edited by you.',
   saveNote: 'Save the note',
   cancel: 'Cancel',
   noteNeeded: 'Write what should change first.',
   decided: (d: string, at: string, fid: number) => `Your decision: ${d} · ${new Date(at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })} · FID ${fid}`,
+  noteBy: (credit: string) => `Note ${credit}`,
   decisionWord: { keep: 'keep', regenerate: 'regenerate', drop: 'drop' } as Record<Decision, string>,
   inJobFile: 'Reviewed by a person (in the job file).',
   couldNot: 'Could not save it',
@@ -123,6 +126,8 @@ export function IllustrationReview() {
 function Item({ item, canSave, reload }: { item: ReviewItem; canSave: boolean; reload: () => Promise<void> }) {
   const [noting, setNoting] = useState(false);
   const [note, setNote] = useState(item.decision?.note ?? '');
+  // The note the check drafted (owner, 2026-10-24): its one-line finding, offered when Regenerate opens an empty box.
+  const [fromCheck, setFromCheck] = useState(Boolean(item.decision?.draftedNote));
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const a = item.check?.answer ?? null;
@@ -134,7 +139,7 @@ function Item({ item, canSave, reload }: { item: ReviewItem; canSave: boolean; r
     const res = await authFetch('/api/you/illustrations', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ jobId: item.id, decision, note: decision === 'regenerate' ? note : note.trim() || null, checkRun: item.check?.run ?? null }),
+      body: JSON.stringify({ jobId: item.id, decision, note: decision === 'regenerate' ? note : note.trim() || null, checkRun: item.check?.run ?? null, fromCheck: decision === 'regenerate' && fromCheck && !!a }),
     }).catch(() => null);
     setBusy(false);
     if (!res?.ok) return setError(((await res?.json().catch(() => null)) as { error?: string } | null)?.error ?? W.couldNot);
@@ -144,7 +149,7 @@ function Item({ item, canSave, reload }: { item: ReviewItem; canSave: boolean; r
 
   const headingId = `illus-${item.id}`;
   return (
-    <li className="illus-item" data-verdict={item.verdict ?? 'unchecked'} data-job={item.id}>
+    <li className="illus-item" data-verdict={item.verdict ?? 'unchecked'} data-group={GROUP_NAMES[reviewGroup(item.verdict, item.double)]} data-job={item.id}>
       <article aria-labelledby={headingId}>
         <h2 id={headingId} className="illus-head">
           <span className={`illus-verdict is-${item.verdict ?? 'unchecked'}`}>{item.verdict ? W.verdict[item.verdict] : W.notChecked}</span>
@@ -226,14 +231,22 @@ function Item({ item, canSave, reload }: { item: ReviewItem; canSave: boolean; r
         ) : (
           <p className="you-note">{W.notChecked}</p>
         )}
-        {item.decision && <p className="you-meta illus-decided">{W.decided(W.decisionWord[item.decision.decision], item.decision.at, item.decision.byFid)}{item.decision.note ? ` · “${item.decision.note}”` : ''}</p>}
+        {item.decision && <p className="you-meta illus-decided">{W.decided(W.decisionWord[item.decision.decision], item.decision.at, item.decision.byFid)}{item.decision.note ? ` · “${item.decision.note}” · ${W.noteBy(noteCredit(item.decision))}` : ''}</p>}
         {item.inJobFile && <p className="you-meta">{W.inJobFile}</p>}
         {canSave && (
           <div className="you-actions illus-actions">
             <button type="button" className="ic-secondary" disabled={busy} aria-pressed={item.decision?.decision === 'keep'} onClick={() => void decide('keep')}>
               {W.keep}
             </button>
-            <button type="button" className="ic-secondary" disabled={busy} aria-expanded={noting} aria-pressed={item.decision?.decision === 'regenerate'} onClick={() => setNoting((v) => !v)}>
+            <button type="button" className="ic-secondary" disabled={busy} aria-expanded={noting} aria-pressed={item.decision?.decision === 'regenerate'}
+              onClick={() => {
+                if (!noting && !note.trim() && a) {
+                  setNote(a.why);
+                  setFromCheck(true);
+                }
+                setNoting((v) => !v);
+              }}
+            >
               {W.regenerate}
             </button>
             <button type="button" className="ic-secondary" disabled={busy} aria-pressed={item.decision?.decision === 'drop'} onClick={() => void decide('drop')}>
@@ -243,6 +256,11 @@ function Item({ item, canSave, reload }: { item: ReviewItem; canSave: boolean; r
         )}
         {canSave && noting && (
           <div className="illus-note">
+            {fromCheck && a && (
+              <p className="you-meta illus-drafted" data-edited={note.trim() !== a.why.trim() ? 'yes' : 'no'}>
+                {note.trim() !== a.why.trim() ? W.draftedEdited : W.drafted}
+              </p>
+            )}
             <PublishedTextField id={`note-${item.id}`} label={W.noteLabel} value={note} onChange={setNote} rows={3} maxLength={1000} />
             <div className="you-actions">
               <button type="button" className="ic-secondary" disabled={busy} onClick={() => void decide('regenerate')}>

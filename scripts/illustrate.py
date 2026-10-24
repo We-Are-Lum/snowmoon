@@ -222,7 +222,8 @@ def main():
             **({
                 # The owner's words, credited to them (principle 2: the words are a signed-in person's).
                 "owner_note": {"text": note["note"].strip(), "by_fid": note["by_fid"], "at": note["at"],
-                               "credit": f"FID {note['by_fid']} (owner), from the image review",
+                               "credit": note.get("credit") or f"written by FID {note['by_fid']}",
+                               "drafted_note": note.get("drafted_note"), "drafted_by": note.get("drafted_by"), "edited": note.get("edited"),
                                "where": "appended to the job's prompt, after the scene"},
                 "replaces": {"sha256": previous["sha256"]} if previous else None,
             } if note else {}),

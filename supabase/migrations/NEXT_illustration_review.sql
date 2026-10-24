@@ -12,7 +12,8 @@
 --    committed to the public repository. One row per run and job; never changed.
 -- 2. studio.illustration_reviews: the owner's decision on a job: keep, regenerate (with a note that the Sunday redo
 --    appends to the job's prompt, credited to the owner) or drop; who decided (FID), when, the note, the picture
---    reviewed (its sha256) and the check run seen. Append-only: a new decision is a new row and the latest one per
+--    reviewed (its sha256) and the check run seen; when the note was pre-filled by the check (owner, 2026-10-24), the
+--    check's drafted text, its model and whether the owner edited it. Append-only: a new decision is a new row and the latest one per
 --    job counts, so every earlier decision stays readable. The page answers only for the owner (src/lib/config.ts
 --    ILLUSTRATION_CHECK.owners); the redo (scripts/illustration-redo.ts) copies the latest decisions into the job
 --    files when the owner runs it.
@@ -42,8 +43,15 @@ create table studio.illustration_reviews (
   decided_at timestamptz not null default now(),
   image_sha256 text check (image_sha256 ~ '^[0-9a-f]{64}$'),
   check_run text check (check_run ~ '^[A-Za-z0-9._-]{1,120}$'),
+  -- Where the note came from (owner, 2026-10-24): Regenerate pre-fills it with the image check's one-line finding, which
+  -- the owner accepts or edits. drafted_note is the check's text as offered, drafted_by the model that wrote it, and
+  -- note_edited whether the owner changed it. All three are empty when the owner wrote the note from scratch.
+  drafted_note text check (drafted_note is null or length(drafted_note) between 1 and 1000),
+  drafted_by text check (drafted_by is null or length(drafted_by) between 1 and 120),
+  note_edited boolean,
   -- A redo needs the owner's note: it is what goes into the job's prompt.
-  constraint regenerate_has_note check (decision <> 'regenerate' or note is not null)
+  constraint regenerate_has_note check (decision <> 'regenerate' or note is not null),
+  constraint drafted_note_complete check ((drafted_note is null) = (drafted_by is null) and (drafted_note is null) = (note_edited is null))
 );
 create index illustration_reviews_job on studio.illustration_reviews (job_id, decided_at desc);
 

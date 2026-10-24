@@ -14,13 +14,15 @@
  *   npx tsx --env-file-if-exists=.env.local scripts/illustration-redo.ts            the plan, nothing written
  *   npx tsx --env-file-if-exists=.env.local scripts/illustration-redo.ts --write    write the job files
  *
- * Step 2 (scripts/illustrate.py --redo, per chapter, printed below): render only the jobs with a redo not yet done,
- * the note appended to the prompt, the recipe crediting the note to the owner ("owner_note"). Step 3: the owner looks
- * at the new pictures; scripts/publish-images.ts publishes them.
+ * Step 2 (scripts/redo-c2.py; owner, 2026-10-24: "Redos use (c) v2"): render only the jobs with a redo not yet done
+ * with Qwen-Image-Edit-2511, the front-view crop of each character's sheet and the location plate, the note appended
+ * to the prompt, the recipe crediting the note as the owner approved it ("owner_note"). Step 3: the owner looks at
+ * the new pictures. (scripts/illustrate.py --redo still works for the local klein model.)
  */
 import { readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { checkJob, type JobReview } from '../src/lib/illustration-check/jobs';
+import { noteCredit } from '../src/lib/illustration-check/schema';
 
 const ROOT = process.cwd();
 const write = process.argv.includes('--write');
@@ -34,6 +36,9 @@ interface Row {
   decided_at: string | Date;
   image_sha256: string | null;
   check_run: string | null;
+  drafted_note?: string | null;
+  drafted_by?: string | null;
+  note_edited?: boolean | null;
 }
 
 async function latest(): Promise<Row[]> {
@@ -47,14 +52,15 @@ async function latest(): Promise<Row[]> {
   if (!url) throw new Error('STUDIO_DATABASE_URL is not set (or pass --decisions=FILE)');
   const { default: postgres } = await import('postgres');
   const sql = postgres(url, { prepare: false, max: 1 });
-  const rows = await sql<Row[]>`select distinct on (job_id) job_id, decision, note, by_fid, decided_at, image_sha256, check_run
+  const rows = await sql<Row[]>`select distinct on (job_id) job_id, decision, note, by_fid, decided_at, image_sha256, check_run, drafted_note, drafted_by, note_edited
     from studio.illustration_reviews order by job_id, decided_at desc, id desc`;
   await sql.end();
   return [...rows];
 }
 
 const rows = await latest();
-const files = new Map<string, { jobs: { id: string; review?: JobReview; redo?: { note: string; by_fid: number; at: string; done?: string } }[] }>();
+type Redo = { note: string; by_fid: number; at: string; credit: string; drafted_note: string | null; drafted_by: string | null; edited: boolean | null; done?: string };
+const files = new Map<string, { jobs: { id: string; review?: JobReview; redo?: Redo }[] }>();
 const load = (f: string) => {
   if (!files.has(f)) files.set(f, JSON.parse(readFileSync(path.join(ROOT, f), 'utf8')));
   return files.get(f)!;
@@ -81,7 +87,10 @@ for (const r of rows) {
   let what: string = r.decision;
   if (r.decision === 'regenerate' && r.note) {
     if (!entry.redo || entry.redo.note !== r.note || entry.redo.at !== at) {
-      entry.redo = { note: r.note, by_fid: Number(r.by_fid), at };
+      // The note's provenance (owner, 2026-10-24): drafted by the image check and approved (or edited and approved) by the
+      // owner, or written by the owner. The redo's recipe repeats it.
+      const credit = noteCredit({ draftedNote: r.drafted_note ?? null, noteEdited: r.note_edited ?? null, byFid: Number(r.by_fid) });
+      entry.redo = { note: r.note, by_fid: Number(r.by_fid), at, credit, drafted_note: r.drafted_note ?? null, drafted_by: r.drafted_by ?? null, edited: r.note_edited ?? null };
       redoChapters.add(job.chapter);
       what = `regenerate with "${r.note}"`;
     } else what = 'regenerate (already recorded)';
@@ -101,4 +110,4 @@ if (!write) {
 for (const [f, spec] of files) writeFileSync(path.join(ROOT, f), JSON.stringify(spec, null, 2) + '\n');
 if (publishedChanged) writeFileSync(path.join(ROOT, publishedFile), JSON.stringify(published, null, 2) + '\n');
 console.log(`\nwrote ${files.size} job file(s)${publishedChanged ? ' and published.json' : ''}.`);
-for (const n of [...redoChapters].sort((a, b) => a - b)) console.log(`  .venv-image/bin/python scripts/illustrate.py content/snowmoon/illustrations/chapter-${n}.json --redo`);
+if (redoChapters.size) console.log('  then: .venv-image/bin/python scripts/redo-c2.py   (the plan; --run renders with Qwen-Image-Edit-2511, way (c) v2)');

@@ -70,10 +70,24 @@ export function parseAnswer(text: string): CheckAnswer | string {
   return a;
 }
 
-/** The order of the review page: wrong, then partly, then matches, then not checked; more problems first. */
-export const VERDICT_RANK: Record<string, number> = { wrong: 0, partly: 1, matches: 2 };
-export function worstFirst<T extends { verdict: string | null; problems: number; chapter: number; idx: number }>(a: T, b: T): number {
-  const ra = a.verdict ? (VERDICT_RANK[a.verdict] ?? 3) : 3;
-  const rb = b.verdict ? (VERDICT_RANK[b.verdict] ?? 3) : 3;
-  return ra - rb || b.problems - a.problems || a.chapter - b.chapter || a.idx - b.idx;
+/**
+ * The order of the review page (owner, 2026-10-24): wrong first; then partly with a double; then the rest of partly;
+ * then matches; then not checked. Within each group, more problems first.
+ */
+export const hasDouble = (problems: { type: string }[] | undefined) => (problems ?? []).some((p) => p.type === 'reference_copy_in_crowd');
+export function reviewGroup(verdict: string | null, double: boolean): number {
+  if (verdict === 'wrong') return 0;
+  if (verdict === 'partly') return double ? 1 : 2;
+  if (verdict === 'matches') return 3;
+  return 4;
+}
+export const GROUP_NAMES = ['wrong', 'partly-double', 'partly', 'matches', 'unchecked'] as const;
+export function worstFirst<T extends { verdict: string | null; double?: boolean; problems: number; chapter: number; idx: number }>(a: T, b: T): number {
+  return reviewGroup(a.verdict, !!a.double) - reviewGroup(b.verdict, !!b.double) || b.problems - a.problems || a.chapter - b.chapter || a.idx - b.idx;
+}
+
+/** How a note is credited, in the decision and in the redo's recipe (owner, 2026-10-24). */
+export function noteCredit(d: { draftedNote: string | null; noteEdited: boolean | null; byFid: number }): string {
+  if (!d.draftedNote) return `written by FID ${d.byFid}`;
+  return d.noteEdited ? `drafted by the image check, edited and approved by FID ${d.byFid}` : `drafted by the image check, approved by FID ${d.byFid}`;
 }

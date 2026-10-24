@@ -3,7 +3,8 @@ import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import path from 'node:path';
 import type postgres from 'postgres';
 import { checkJobs, type CheckJob } from './jobs';
-import { worstFirst, type CheckAnswer } from './schema';
+import { hasDouble, worstFirst, type CheckAnswer } from './schema';
+export { noteCredit } from './schema';
 
 /**
  * The owner's review of the seeded images (/you/illustrations; owner, 2026-10-23). Each item is a job with its
@@ -28,6 +29,10 @@ export interface ReviewDecision {
   at: string;
   imageSha256: string | null;
   checkRun: string | null;
+  /** The check's one-line finding the note was pre-filled with (owner, 2026-10-24), its model, and whether it was edited. */
+  draftedNote: string | null;
+  draftedBy: string | null;
+  noteEdited: boolean | null;
 }
 
 export interface ReviewItem {
@@ -43,6 +48,8 @@ export interface ReviewItem {
   cast: string[];
   check: { run: string; model: string; answer: CheckAnswer } | null;
   verdict: string | null;
+  /** The check reports a double (a reference_copy_in_crowd problem). */
+  double: boolean;
   problems: number;
   decision: ReviewDecision | null;
   /** The decision the redo already wrote into the job file, if any. */
@@ -78,12 +85,12 @@ async function latestChecks(sql: Sql | null): Promise<Map<string, CheckRow>> {
 async function latestDecisions(sql: Sql | null): Promise<{ stored: boolean; byJob: Map<string, ReviewDecision> }> {
   if (!sql) return { stored: false, byJob: new Map() };
   try {
-    const rows = await sql<{ job_id: string; decision: Decision; note: string | null; by_fid: string; decided_at: Date; image_sha256: string | null; check_run: string | null }[]>`
-      select distinct on (job_id) job_id, decision, note, by_fid, decided_at, image_sha256, check_run
+    const rows = await sql<{ job_id: string; decision: Decision; note: string | null; by_fid: string; decided_at: Date; image_sha256: string | null; check_run: string | null; drafted_note: string | null; drafted_by: string | null; note_edited: boolean | null }[]>`
+      select distinct on (job_id) job_id, decision, note, by_fid, decided_at, image_sha256, check_run, drafted_note, drafted_by, note_edited
       from studio.illustration_reviews order by job_id, decided_at desc, id desc`;
     return {
       stored: true,
-      byJob: new Map(rows.map((r) => [r.job_id, { decision: r.decision, note: r.note, byFid: Number(r.by_fid), at: new Date(r.decided_at).toISOString(), imageSha256: r.image_sha256, checkRun: r.check_run }])),
+      byJob: new Map(rows.map((r) => [r.job_id, { decision: r.decision, note: r.note, byFid: Number(r.by_fid), at: new Date(r.decided_at).toISOString(), imageSha256: r.image_sha256, checkRun: r.check_run, draftedNote: r.drafted_note, draftedBy: r.drafted_by, noteEdited: r.note_edited }])),
     };
   } catch (e) {
     if (!missingTable(e)) throw e;
@@ -108,6 +115,7 @@ export async function reviewItems(sql: Sql | null): Promise<{ items: ReviewItem[
       cast: j.cast.map((m) => m.name),
       check: c ? { run: c.run, model: c.model, answer: c.answer } : null,
       verdict: c?.answer.verdict ?? null,
+      double: hasDouble(c?.answer.problems),
       problems: c?.answer.problems.length ?? 0,
       decision: decisions.byJob.get(j.id) ?? null,
       inJobFile: j.review,
@@ -116,7 +124,16 @@ export async function reviewItems(sql: Sql | null): Promise<{ items: ReviewItem[
   return { items: items.sort(worstFirst), canSave: decisions.stored };
 }
 
+/** The latest check of one job (its run, model and one-line finding), for the note the check drafts. */
+export async function latestCheckOf(sql: Sql | null, jobId: string): Promise<{ run: string; model: string; why: string } | null> {
+  const c = (await latestChecks(sql)).get(jobId);
+  return c ? { run: c.run, model: c.model, why: c.answer.why } : null;
+}
+
 /** Adds the owner's decision (a new row; earlier ones stay). The caller has checked the owner. */
-export async function saveDecision(sql: Sql, d: { jobId: string; decision: Decision; note: string | null; byFid: number; imageSha256: string | null; checkRun: string | null }) {
-  await sql`insert into studio.illustration_reviews ${sql({ job_id: d.jobId, decision: d.decision, note: d.note, by_fid: d.byFid, image_sha256: d.imageSha256, check_run: d.checkRun })}`;
+export async function saveDecision(
+  sql: Sql,
+  d: { jobId: string; decision: Decision; note: string | null; byFid: number; imageSha256: string | null; checkRun: string | null; draftedNote: string | null; draftedBy: string | null; noteEdited: boolean | null },
+) {
+  await sql`insert into studio.illustration_reviews ${sql({ job_id: d.jobId, decision: d.decision, note: d.note, by_fid: d.byFid, image_sha256: d.imageSha256, check_run: d.checkRun, drafted_note: d.draftedNote, drafted_by: d.draftedBy, note_edited: d.noteEdited })}`;
 }
