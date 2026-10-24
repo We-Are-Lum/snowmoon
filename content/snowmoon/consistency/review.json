@@ -119,6 +119,67 @@
     "zei"
    ],
    "note": "A third person, seen from behind, wears an orange jacket like Zei's."
+  },
+  {
+   "id": "c27-b114-countdown-chant",
+   "characters": [
+    "zei",
+    "bai"
+   ],
+   "note": "A second person wears Bai's outfit.",
+   "by": "found by eye, coding agent (image-check pilot), 2026-10-24"
+  },
+  {
+   "id": "c7-b100-audience",
+   "characters": [
+    "fin"
+   ],
+   "note": "A second red-haired boy wears Fin's yellow sneakers.",
+   "by": "found by eye, coding agent (image-check pilot), 2026-10-24"
+  },
+  {
+   "id": "c6-b100-assembly",
+   "characters": [
+    "gladias",
+    "mov"
+   ],
+   "note": "Possibly Mov's vest on another man.",
+   "by": "found by eye, coding agent (image-check pilot), 2026-10-24"
+  },
+  {
+   "id": "c2-b003-electronics-street",
+   "characters": [
+    "zei",
+    "fin"
+   ],
+   "note": "Stray text: a garbled shop sign.",
+   "by": "found by eye, coding agent (image-check pilot), 2026-10-24"
+  },
+  {
+   "id": "c16-b060-helisport-broadcast",
+   "characters": [
+    "gladias",
+    "febric"
+   ],
+   "note": "Stray text: a tiny brand mark on a TV.",
+   "by": "found by eye, coding agent (image-check pilot), 2026-10-24"
+  },
+  {
+   "id": "c28-b013-general-arrives",
+   "characters": [
+    "lektor",
+    "den"
+   ],
+   "note": "Den's robe is brown-olive instead of grey.",
+   "by": "found by eye, coding agent (image-check pilot), 2026-10-24"
+  },
+  {
+   "id": "c12-b013-priests-on-platform",
+   "characters": [
+    "zei"
+   ],
+   "note": "Seven robed priests where the passage has six.",
+   "by": "found by eye, coding agent (image-check pilot), 2026-10-24"
   }
  ],
  "measured_worst10": {
@@ -159,5 +220,104 @@
  "unmeasured": {
   "c26-b132-drone-escape": "The Drive copy (sha256 c4a4239e88998d2c…, 2026-10-04 12:22 PDT) is the first render: two drones, seed 26632, recorded in commit 0500a18. The job was rewritten that night (one drone, one rider, seed 27632) and re-rendered; commit 4f381af replaced the recipe (sha256 b0bbfa6c912601b1…). The re-render was never copied to Drive and is no longer on disk. Excluded from publishing in both versions; never in published.json.",
   "c27-b071-tea-robot": "The Drive copy (sha256 60399962853b9068…, 2026-10-04 12:27 PDT) is the first render: Gladias and Zei, seed 27571 (0500a18). Rewritten that night to Gladias alone, seed 28571, and re-rendered; 4f381af replaced the recipe (sha256 9a15e0a83fc7418e…). The re-render was never copied to Drive and is no longer on disk. Excluded from publishing in both versions; never in published.json."
+ },
+ "trial_doubles": {
+  "about": "The trial, double or not, per picture: by eye (coding agent, 2026-10-24) and by the Argon check (google/gemini-4-argon via the illustration-check script, problem type reference_copy_in_crowd; the full answers stay private, private/argon/). No scores; the owner picks by eye.",
+  "a_still_doubled_by_eye": [
+   "c1-b132-food-boxes",
+   "c11-b081-broken-redball",
+   "c13-b065-hijacked-screen",
+   "c21-b019-civics-score",
+   "c7-b049-toast"
+  ],
+  "by_eye": {
+   "c2-b122-sweeping|original": true,
+   "c2-b122-sweeping|a": false,
+   "c2-b122-sweeping|b": true,
+   "c2-b122-sweeping|c2": true,
+   "c14-b030-semifinal-arena|original": true,
+   "c14-b030-semifinal-arena|a": false,
+   "c14-b030-semifinal-arena|b": false,
+   "c14-b030-semifinal-arena|c2": false,
+   "c21-b019-civics-score|original": true,
+   "c21-b019-civics-score|a": true,
+   "c21-b019-civics-score|b": true,
+   "c21-b019-civics-score|c2": true,
+   "c9-b105-sealed-car|original": true,
+   "c9-b105-sealed-car|a": false,
+   "c9-b105-sealed-car|b": true,
+   "c9-b105-sealed-car|c2": false,
+   "c7-b049-toast|original": true,
+   "c7-b049-toast|a": true,
+   "c7-b049-toast|b": true,
+   "c7-b049-toast|c2": false,
+   "c5-b043-spiral-ramp|original": true,
+   "c5-b043-spiral-ramp|a": false,
+   "c5-b043-spiral-ramp|b": true,
+   "c5-b043-spiral-ramp|c2": false,
+   "c11-b081-broken-redball|original": true,
+   "c11-b081-broken-redball|a": true,
+   "c11-b081-broken-redball|b": true,
+   "c11-b081-broken-redball|c2": false,
+   "c1-b132-food-boxes|original": true,
+   "c1-b132-food-boxes|a": true,
+   "c1-b132-food-boxes|b": true,
+   "c1-b132-food-boxes|c2": false,
+   "c13-b065-hijacked-screen|original": true,
+   "c13-b065-hijacked-screen|a": true,
+   "c13-b065-hijacked-screen|b": true,
+   "c13-b065-hijacked-screen|c2": false,
+   "c2-b038-foil-classroom|original": false,
+   "c2-b038-foil-classroom|a": false,
+   "c2-b038-foil-classroom|b": true,
+   "c2-b038-foil-classroom|c2": false
+  },
+  "argon": {
+   "c2-b122-sweeping|original": true,
+   "c2-b122-sweeping|a": false,
+   "c2-b122-sweeping|b": true,
+   "c2-b122-sweeping|c2": true,
+   "c14-b030-semifinal-arena|original": true,
+   "c14-b030-semifinal-arena|a": false,
+   "c14-b030-semifinal-arena|b": true,
+   "c14-b030-semifinal-arena|c2": false,
+   "c21-b019-civics-score|original": true,
+   "c21-b019-civics-score|a": true,
+   "c21-b019-civics-score|b": true,
+   "c21-b019-civics-score|c2": true,
+   "c9-b105-sealed-car|original": true,
+   "c9-b105-sealed-car|a": false,
+   "c9-b105-sealed-car|b": true,
+   "c9-b105-sealed-car|c2": false,
+   "c7-b049-toast|original": true,
+   "c7-b049-toast|a": true,
+   "c7-b049-toast|b": true,
+   "c7-b049-toast|c2": false,
+   "c5-b043-spiral-ramp|original": true,
+   "c5-b043-spiral-ramp|a": false,
+   "c5-b043-spiral-ramp|b": true,
+   "c5-b043-spiral-ramp|c2": false,
+   "c11-b081-broken-redball|original": true,
+   "c11-b081-broken-redball|a": true,
+   "c11-b081-broken-redball|b": true,
+   "c11-b081-broken-redball|c2": false,
+   "c1-b132-food-boxes|original": true,
+   "c1-b132-food-boxes|a": true,
+   "c1-b132-food-boxes|b": true,
+   "c1-b132-food-boxes|c2": false,
+   "c13-b065-hijacked-screen|original": true,
+   "c13-b065-hijacked-screen|a": true,
+   "c13-b065-hijacked-screen|b": true,
+   "c13-b065-hijacked-screen|c2": false,
+   "c2-b038-foil-classroom|original": true,
+   "c2-b038-foil-classroom|a": false,
+   "c2-b038-foil-classroom|b": true,
+   "c2-b038-foil-classroom|c2": false
+  },
+  "notes": {
+   "c2-b038-foil-classroom|c2": "no double, but Fin is missing",
+   "c14-b030-semifinal-arena|b": "Argon: a second figure wears Zei's black bodysuit and grey trousers; on a second look that is fair",
+   "c2-b038-foil-classroom|original": "Argon: Zei's look split across students and Fin's yellow shoes repeated; not confirmed by eye at this size"
+  }
  }
 }
