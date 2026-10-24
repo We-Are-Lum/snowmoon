@@ -149,6 +149,11 @@ function Report({ data }: { data: ConsistencyData }) {
       </section>
       <section>
         <h2>{W.sideBySide}</h2>
+        {review?.owner_pick ? (
+          <p>
+            <b>{review.owner_pick.text}</b>
+          </p>
+        ) : null}
         <p>{W.sideBySideNote}</p>
         {data.trial ? data.trial.map((r) => <TrialRowView key={r.id} row={r} note={notes.get(r.id)} />) : <p>{W.trialLocal}</p>}
       </section>

@@ -49,6 +49,7 @@ export interface Review {
   by_design: Record<string, string>;
   trial10: string[];
   trial10_why: string;
+  owner_pick?: { choice: string; text: string };
 }
 export interface ConsistencyData {
   about: string;

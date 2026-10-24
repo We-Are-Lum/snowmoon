@@ -254,7 +254,7 @@
    "c5-b043-spiral-ramp|original": true,
    "c5-b043-spiral-ramp|a": false,
    "c5-b043-spiral-ramp|b": true,
-   "c5-b043-spiral-ramp|c2": false,
+   "c5-b043-spiral-ramp|c2": true,
    "c11-b081-broken-redball|original": true,
    "c11-b081-broken-redball|a": true,
    "c11-b081-broken-redball|b": true,
@@ -317,7 +317,14 @@
   "notes": {
    "c2-b038-foil-classroom|c2": "no double, but Fin is missing",
    "c14-b030-semifinal-arena|b": "Argon: a second figure wears Zei's black bodysuit and grey trousers; on a second look that is fair",
-   "c2-b038-foil-classroom|original": "Argon: Zei's look split across students and Fin's yellow shoes repeated; not confirmed by eye at this size"
+   "c2-b038-foil-classroom|original": "Argon: Zei's look split across students and Fin's yellow shoes repeated; not confirmed by eye at this size",
+   "c5-b043-spiral-ramp|c2": "by eye yes, partly: a person behind Zei wears an orange-yellow jacket with his white panels (jeans, seen from behind); Argon says no. The first table left this cell unmarked by mistake."
   }
+ },
+ "owner_pick": {
+  "choice": "c2",
+  "text": "(c) v2 front-view crop chosen by the owner, 2026-10-24",
+  "model": "qwen-image-edit-2511",
+  "references": "each sheet's front view (left third) and the location plate"
  }
 }
