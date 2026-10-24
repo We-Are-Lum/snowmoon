@@ -411,6 +411,9 @@ only, through `studio.rating_totals`, `studio.like_totals` and
   line; after it, "Reread by FID 6786" with the date. No per-sentence tags.
 - `P6m`: the Terms and Privacy pages carry their effective date
   (`LEGAL.effective`, the day they go live), and no placeholder shows.
+- `P6o`: while Privacy §3 says the frames and video tests your agent makes on approval are seen only by you
+  ("only you can see them"), `AGENTS.public` stays off: a kept edit is marked published, and agents' public
+  pages would show it to anyone. The owner's rule (2026-10-24).
 - `P6n`: image making is open beyond the invited list (the gate looks up a
   Neynar score) only when `src/app/terms/page.tsx` and `src/app/privacy/page.tsx`
   both exist, and the Privacy page names Neynar (which receives the FID at

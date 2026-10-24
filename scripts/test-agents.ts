@@ -30,7 +30,7 @@ import sharp from 'sharp';
 import { createHash } from 'node:crypto';
 import { privateKeyToAccount } from 'viem/accounts';
 import { createSiweMessage } from 'viem/siwe';
-import { startStage, connect, mcp, tool, ROOT, cimdDocs } from './lib/agents-harness';
+import { startStage, connect, mcp, tool, ROOT, cimdDocs, falSeen } from './lib/agents-harness';
 import { AGENTS as AGENT_CONFIG } from '../src/lib/config';
 
 const failures: string[] = [];
@@ -429,6 +429,10 @@ try {
   const vrun = await asPerson(people.A.token, '/api/drafts', { method: 'POST', body: JSON.stringify({ what: 'version', id: vt.out.version, action: 'run' }) });
   const vid = await asPerson(people.A.token, `/api/pieces/image/${vt.out.version}`);
   check('E11 a video test runs only on approval (fal stood in), kept private, its estimate recorded', vt.ok && vrun.ok && vid.ok && vid.headers.get('content-type') === 'video/mp4', `${vt.error ?? ''} ${vrun.status}`);
+  const seenDownloads = falSeen.downloads.join(',');
+  const anonFal = await fetch(`${S.stubUrl}/video.mp4`);
+  const lc = JSON.parse(falSeen.lifecycle[0] || '{}') as { expiration_duration_seconds?: number; initial_acl?: { default?: string } };
+  check('E11b fal is asked to delete the video after an hour; we read it as our own account, with a fresh CDN token as the Bearer', falSeen.lifecycle.length === 1 && lc.expiration_duration_seconds === 3600 && falSeen.tokens === 1 && seenDownloads === '200' && anonFal.status === 403, `${JSON.stringify(falSeen)} anon ${anonFal.status}`);
   let capAt = 0;
   for (let i = 2; i <= 6; i++) {
     const more = await tool(BASE, edA, 'request_video_test', { adaptation: 1, version: 2, shot: withLine.id, note: `Test ${i}.` });

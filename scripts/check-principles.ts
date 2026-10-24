@@ -24,7 +24,7 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { DEFAULT_TEMPLATES } from '../src/templates';
 import { LiveScreen } from '../src/components/live-screen';
-import { CHAT, IMAGES, REPO_URL } from '../src/lib/config';
+import { AGENTS, CHAT, IMAGES, REPO_URL } from '../src/lib/config';
 import { NOTICE_REVIEW, currentNoticeItems, noticeKey } from '../src/lib/chat/notice';
 import { LEGAL, PRIVACY, TERMS, legalKey } from '../src/lib/legal';
 import { LEARN_TEXT } from '../src/lib/minpentai/learn-text';
@@ -1579,6 +1579,21 @@ add({
   },
   plant: (c) => {
     c.effective = null;
+  },
+});
+// P6o: Privacy §3 says what an agent makes on approval is seen only by its person (owner, 2026-10-24). That holds while
+// agents' public pages are off (AGENTS.public): a kept edit is 'published', and public pages would show it to anyone.
+add({
+  id: 'P6o',
+  principle: 6,
+  name: 'Privacy §3 says agent-made frames and video tests are seen only by you only while AGENTS.public is off',
+  load: async () => ({ public: AGENTS.public as boolean, s3: (PRIVACY.sections.find((s) => s.n === 3)?.body ?? []).flat().join(' ') }),
+  run: (c) =>
+    c.public && c.s3.includes('only you can see them')
+      ? ['AGENTS.public (src/lib/config.ts) is on, but Privacy §3 still says what your agent makes is private ("only you can see them"): kept agent work would be public. Change §3 with the owner first, or keep AGENTS.public off']
+      : [],
+  plant: (c) => {
+    c.public = true;
   },
 });
 

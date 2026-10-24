@@ -43,8 +43,27 @@ async function runFrame(person: number, request: Request, body: { adaptation: nu
   return { ok: true as const, key, sha: sha256(g.made.bytes), spent: g.made.costUsd + (g.guard.costUsd ?? 0), made: { kind: 'frame', label: 'Made here', model: g.made.settings, request_id: g.made.requestId, seed: g.made.seed, prompt, inputs: pictures.map((p) => ({ role: p.role, name: p.name, sha256: p.sha256 })), ...(acting.length ? { direction: acting } : {}) } };
 }
 
-/** The person approved a video test: LongCat-Video 480p on fal, from the shot's frame and their note, kept private. */
-async function runVideo(person: number, body: { adaptation: number; version: number; shot: string; change: Extract<Change, { type: 'video' }> }) {
+/**
+ * fal's CDN file for a video test: deleted an hour after it is made (Privacy §7, owner 2026-10-24). An ACL that forbids
+ * everyone else (initial_acl default "forbid") was asked for too, but in the one real test (2026-10-24, sync fal.run,
+ * LongCat 480p) fal served the file to an anonymous fetch anyway, so it is left out, as the owner said for that case.
+ */
+export const FAL_VIDEO_LIFECYCLE = JSON.stringify({ expiration_duration_seconds: 3600 });
+
+/** A short-lived fal CDN token for our account (fal docs, "Reading a Restricted File"). Never logged. */
+export async function falCdnToken(testUrl: string | null | undefined, auth: Record<string, string>): Promise<string | null> {
+  const r = await fetch(`${testUrl ?? 'https://rest.fal.ai'}/storage/auth/token?storage_type=fal-cdn-v3`, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', ...auth },
+    body: JSON.stringify({ expiration_seconds: 600 }),
+    signal: AbortSignal.timeout(20_000),
+  }).catch(() => null);
+  const j = (await r?.json().catch(() => null)) as { token?: unknown } | null;
+  return r?.ok && typeof j?.token === 'string' ? j.token : null;
+}
+
+/** The person approved a video test: LongCat-Video 480p on fal, from the shot's frame and their note, kept private. Exported only for a one-off real test script; runApproved is its one caller in the site. */
+export async function runVideo(person: number, body: { adaptation: number; version: number; shot: string; change: Extract<Change, { type: 'video' }> }) {
   const data = editorData(body.adaptation, body.version)?.shots.find((s) => s.id === body.shot);
   const frame = typeof data?.frame === 'string' ? publicFile(data.frame as string) : null;
   if (!frame) return { ok: false as const, status: 400, error: 'This shot has no frame to move.' };
@@ -53,17 +72,25 @@ async function runVideo(person: number, body: { adaptation: number; version: num
   const testUrl = process.env.VERCEL ? null : process.env.AGENTS_TEST_FAL_URL;
   const key = process.env.FAL_KEY;
   if (!testUrl && !key) return { ok: false as const, status: 503, error: 'Video tests aren’t set up here.' };
+  const auth: Record<string, string> = key && !testUrl ? { authorization: `Key ${key}` } : {};
   const res = await fetch(`${testUrl ?? 'https://fal.run'}/${body.change.model}`, {
     method: 'POST',
-    // X-Fal-Store-IO: 0 as for every image (src/lib/images/fal.ts): fal keeps no copy of the request or reply.
-    headers: { 'content-type': 'application/json', 'X-Fal-Store-IO': '0', ...(key && !testUrl ? { authorization: `Key ${key}` } : {}) },
+    // X-Fal-Store-IO: 0, as for every image (src/lib/images/fal.ts): fal keeps no request-history copy of the request
+    // or its reply. That header doesn't cover the video file fal puts on its CDN; the lifecycle header does (Privacy §7,
+    // owner 2026-10-24): fal deletes the file an hour after making it. Until then it sits at a link only we are given.
+    headers: { 'content-type': 'application/json', 'X-Fal-Store-IO': '0', 'X-Fal-Object-Lifecycle-Preference': FAL_VIDEO_LIFECYCLE, ...auth },
     body: JSON.stringify({ image_url: `data:image/jpeg;base64,${frame.toString('base64')}`, prompt, enable_safety_checker: true }),
     signal: AbortSignal.timeout(280_000),
   }).catch(() => null);
   const out = (await res?.json().catch(() => null)) as { video?: { url?: string }; request_id?: string } | null;
   const url = out?.video?.url;
   if (!res?.ok || !url) return { ok: false as const, status: 502, error: 'The video model didn’t answer. Nothing was kept; try again later.' };
-  const vid = await fetch(url, { signal: AbortSignal.timeout(60_000) }).then((r) => (r.ok ? r.arrayBuffer() : null)).catch(() => null);
+  // Read as our own account: FAL_KEY exchanged for a short-lived CDN token, sent as the Bearer (works for a file whose
+  // ACL forbids others too, should fal apply one).
+  const token = await falCdnToken(testUrl, auth);
+  const vid = token
+    ? await fetch(url, { headers: { authorization: `Bearer ${token}` }, signal: AbortSignal.timeout(60_000) }).then((r) => (r.ok ? r.arrayBuffer() : null)).catch(() => null)
+    : null;
   if (!vid) return { ok: false as const, status: 502, error: 'The video couldn’t be fetched. Try again later.' };
   const bytes = Buffer.from(vid);
   const stored = await storeMade(bytes, 'mp4');
