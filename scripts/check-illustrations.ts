@@ -182,8 +182,12 @@ function gatewayKey(): string {
 const dataUrl = (buf: Buffer, type: string) => `data:${type};base64,${buf.toString('base64')}`;
 
 async function imageBytes(job: CheckJob): Promise<Buffer> {
-  const res = await fetch(job.image!.url);
-  if (!res.ok) throw new Error(`${job.id}: image ${res.status}`);
+  let res: Response | null = null;
+  for (let i = 0; i < 4 && !res?.ok; i++) {
+    if (i) await new Promise((ok) => setTimeout(ok, 3000 * i));
+    res = await fetch(job.image!.url).catch(() => null);
+  }
+  if (!res?.ok) throw new Error(`${job.id}: image ${res?.status ?? 'unreachable'}`);
   const buf = Buffer.from(await res.arrayBuffer());
   if (sha256(buf) !== job.image!.sha256) throw new Error(`${job.id}: the published image's sha256 doesn't match published.json`);
   return buf;
@@ -242,7 +246,12 @@ async function call(key: string, b: Built): Promise<Result> {
   // A malformed answer is retried once; the cost of every attempt is counted.
   let paid = 0;
   for (let attempt = 1; attempt <= 2; attempt++) {
-    const res = await fetch(ENDPOINT, { method: 'POST', headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+    const res = await fetch(ENDPOINT, { method: 'POST', headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' }, body: JSON.stringify(body) }).catch(() => null);
+    if (!res) {
+      if (attempt === 2) return { ...base, cost_usd: paid, error: 'gateway unreachable' };
+      await new Promise((ok) => setTimeout(ok, 5000));
+      continue;
+    }
     const j = (await res.json().catch(() => ({}))) as {
       id?: string;
       model?: string;
@@ -370,7 +379,9 @@ for (const b of built) {
     console.error(`stopped: $${spent.toFixed(3)} spent; one more job could pass the cap of $${maxUsd}`);
     break;
   }
-  const r = await call(key, b);
+  // A network failure is recorded as an error for that job (nothing was paid for a call that never reached the gateway's
+  // answer) and the run goes on; a later resume retries it.
+  const r: Result = await call(key, b).catch((e: Error) => ({ job: b.job.id, chapter: b.job.chapter, idx: b.job.idx, image: null, inputs_sha256: b.inputs, sheets_sent_as: 'none' as const, answer: null, error: `failed: ${e.message.slice(0, 160)}` }));
   spent += r.cost_usd ?? 0;
   dearest = Math.max(dearest, (r.cost_usd ?? 0) * 1.5);
   const at = results.findIndex((x) => x.job === r.job);
