@@ -6,7 +6,7 @@ import assert from 'node:assert/strict';
 import { mkdtempSync, readFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
-import { callClaude, CapReached, claudeCost, Ledger, toAnthropic, worstCaseClaudeUsd } from './lib/claude-trial';
+import { callClaude, CapReached, claudeCost, Ledger, refuseAmbientAnthropicKey, toAnthropic, worstCaseClaudeUsd } from './lib/claude-trial';
 
 // Prices: a million of each token type.
 const M = 1_000_000;
@@ -62,5 +62,10 @@ const body = JSON.parse(String(s.init.body));
 assert.equal(body.temperature, undefined);
 assert.deepEqual(body.output_config, { effort: 'medium' });
 assert.equal(body.system[0].cache_control.type, 'ephemeral');
+
+// The standard key variable, if set at all (even empty), stops the check.
+assert.throws(() => refuseAmbientAnthropicKey({ ANTHROPIC_API_KEY: '' }));
+refuseAmbientAnthropicKey({ SNOWMOON_ANTHROPIC_KEY: 'x' });
+assert.equal(h['x-api-key'], 'test');
 
 console.log('claude trial helpers: ok');

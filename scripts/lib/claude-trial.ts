@@ -2,8 +2,10 @@
  * The Claude trial (owner, 2026-10-23): Claude Opus 5.5 and Claude Sonnet 5.5 as the answer model in the
  * 50-question check, for comparison with gpt-oss-120b. Evaluation only: the app's chat code is unchanged.
  *
- * Calls the Anthropic Messages API directly with ANTHROPIC_API_KEY (a key from a Snowmoon workspace in the
- * owner's Console organization). Every paid call of the trial, Anthropic's and the gateway's, goes through
+ * Calls the Anthropic Messages API directly with the trial's own key, SNOWMOON_ANTHROPIC_KEY (a key from a
+ * Snowmoon workspace in the owner's Console organization), kept in /Users/nathan/snowmoon/.env.anthropic.local
+ * and loaded with --env-file-if-exists (owner, 2026-10-24: `vercel env pull` rewrites .env.local), and passed
+ * explicitly as the x-api-key header. The standard variable name is never read: see refuseAmbientAnthropicKey. Every paid call of the trial, Anthropic's and the gateway's, goes through
  * one spend ledger whose cap is checked before each call with that call's worst case, so a run stops at the
  * cap instead of passing it.
  */
@@ -61,6 +63,15 @@ export function toAnthropic(messages: Message[]) {
 }
 
 export class CapReached extends Error {}
+
+/**
+ * Owner, 2026-10-24: no session here may rely on the standard Anthropic key variable. If it is set at all,
+ * the check refuses to run rather than risk a tool or library picking it up. (Its name appears only here.)
+ */
+export function refuseAmbientAnthropicKey(env: Record<string, string | undefined> = process.env) {
+  if (env.ANTHROPIC_API_KEY !== undefined)
+    throw new Error('ANTHROPIC_API_KEY is set in the environment; unset it. The trial reads SNOWMOON_ANTHROPIC_KEY only (/Users/nathan/snowmoon/.env.anthropic.local).');
+}
 
 /** The trial's spend ledger, kept in a file so the cap holds across runs (one run per model). */
 export class Ledger {

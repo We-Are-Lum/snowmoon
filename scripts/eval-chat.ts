@@ -5,7 +5,8 @@
  *   VERCEL_OIDC_TOKEN=… npx tsx scripts/eval-chat.ts --full OUT.json   paid: answers, citations, guard
  *   QUESTIONS=fresh-questions.json …                    the held-out set (nothing was tuned on it)
  *   npx tsx scripts/eval-chat.ts --estimate             free: what a Claude answer model would cost (the trial)
- *   ANSWER_MODEL=claude-opus-5-5 ANTHROPIC_API_KEY=… TRIAL_LEDGER=… SEARCH_WORDS=… … --full OUT.json
+ *   ANSWER_MODEL=claude-opus-5-5 TRIAL_LEDGER=… SEARCH_WORDS=… npx tsx --env-file-if-exists=…/.env.anthropic.local … --full OUT.json
+ *       (the key is SNOWMOON_ANTHROPIC_KEY in /Users/nathan/snowmoon/.env.anthropic.local, owner 2026-10-24)
  *       the Claude trial (2026-10-23): a Claude model answers; search words and guards as before. See
  *       docs/proposals/chat-eval/claude-trial/ for the exact commands and the $5 cap.
  *
@@ -27,9 +28,15 @@ import { ask, type Complete } from '../src/lib/chat/ask';
 import { retrieve } from '../src/lib/chat/retrieve';
 import { providerOptions, servedBy } from '../src/lib/chat/provider';
 import { CHAT } from '../src/lib/config';
-import { CapReached, CLAUDE_PRICES, callClaude, isClaude, Ledger, worstCaseClaudeUsd } from './lib/claude-trial';
+import { CapReached, CLAUDE_PRICES, callClaude, isClaude, Ledger, refuseAmbientAnthropicKey, worstCaseClaudeUsd } from './lib/claude-trial';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
+// The trial's key is read from SNOWMOON_ANTHROPIC_KEY only, then removed from the environment so no child
+// process (the seed step) inherits it; the site's Groq key is removed too: the check never uses it.
+refuseAmbientAnthropicKey();
+const trialKey = process.env.SNOWMOON_ANTHROPIC_KEY || undefined;
+delete process.env.SNOWMOON_ANTHROPIC_KEY;
+delete process.env.GROQ_API_KEY;
 const mode = process.argv[2];
 const out = process.argv[3];
 const LIMIT = 15;
@@ -102,12 +109,10 @@ try {
   }
 
   if (mode === '--full') {
-    // The site's Groq key is never used by the check: search words and guards go through the gateway.
-    delete process.env.GROQ_API_KEY;
     const token = process.env.AI_GATEWAY_API_KEY || process.env.VERCEL_OIDC_TOKEN;
     if (!token) throw new Error('no gateway token');
-    const anthropicKey = isClaude(answerModel) ? process.env.ANTHROPIC_API_KEY : undefined;
-    if (isClaude(answerModel) && !anthropicKey) throw new Error('ANSWER_MODEL is a Claude model and ANTHROPIC_API_KEY is not set');
+    const anthropicKey = isClaude(answerModel) ? trialKey : undefined;
+    if (isClaude(answerModel) && !anthropicKey) throw new Error('ANSWER_MODEL is a Claude model and SNOWMOON_ANTHROPIC_KEY is not set (/Users/nathan/snowmoon/.env.anthropic.local)');
     /** The trial's spend across runs, checked before every paid call (TRIAL_LEDGER, TRIAL_CAP_USD). */
     const ledger = process.env.TRIAL_LEDGER ? new Ledger(process.env.TRIAL_LEDGER, Number(process.env.TRIAL_CAP_USD || 5)) : null;
     /** Search words shared across runs (SEARCH_WORDS file), so every answer model gets the same passages. */

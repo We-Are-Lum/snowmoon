@@ -55,13 +55,18 @@ not the estimate, is the bound. The ledger (`spend.json`) adds up every paid cal
 and the gateway's) and checks each call's worst case before sending it; a run that would pass $5 stops and
 saves the questions it finished. Grading costs nothing extra: it is done by coding agents, not by an API call.
 
-## Commands (once `ANTHROPIC_API_KEY` is in `/Users/nathan/snowmoon/.env.local`)
+## Commands (once the owner says "key added")
+
+The key is `SNOWMOON_ANTHROPIC_KEY` in `/Users/nathan/snowmoon/.env.anthropic.local` (owner, 2026-10-24),
+not in `.env.local`, which `vercel env pull` rewrites. It is loaded with a second `--env-file-if-exists`,
+passed explicitly as the `x-api-key` header, and removed from the environment before any child process
+starts. The script refuses to run if the standard Anthropic key variable is set at all.
 
 ```sh
 cd /Users/nathan/snowmoon-chat-opus
 T=docs/proposals/chat-eval/claude-trial
 run() { env QUESTIONS=fresh-questions.json TRIAL_LEDGER=$T/spend.json TRIAL_CAP_USD=5 SEARCH_WORDS=$T/search-words.json EFFORT=medium "$@"; }
-E=--env-file=/Users/nathan/snowmoon/.env.local
+E="--env-file=/Users/nathan/snowmoon/.env.local --env-file-if-exists=/Users/nathan/snowmoon/.env.anthropic.local"
 # smoke test, 2 questions each (~$0.09)
 run FIRST=2 ANSWER_MODEL=claude-opus-5-5   npx tsx $E scripts/eval-chat.ts --full /tmp/smoke-opus.json
 run FIRST=2 ANSWER_MODEL=claude-sonnet-5-5 npx tsx $E scripts/eval-chat.ts --full /tmp/smoke-sonnet.json
@@ -73,6 +78,8 @@ run ANSWER_MODEL=claude-sonnet-5-5 npx tsx $E scripts/eval-chat.ts --full $T/run
 npx tsx scripts/eval-chat-compare.ts table docs/proposals/chat-eval/fresh-run-2-bge.json $T/run-*.json
 npx tsx scripts/eval-chat-compare.ts pack $T/grading docs/proposals/chat-eval/fresh-run-2-bge.json $T/run-*.json
 ```
+
+`$E` is left unquoted on purpose, so it splits into the two flags.
 
 ## Scoring
 
