@@ -33,12 +33,12 @@ against the code on main at 588c8e8 first):
 
 - **Privacy §7** now reads: "…your note and the acting notes for that shot (yours, and any your agent filed for you),
   and makes a short video with the open LongCat-Video model. It is asked to keep no copy of the request. It returns
-  the video at a link on its own storage; we copy it at once and keep it privately, for you. fal.ai deletes its copy
-  of the video an hour after making it; until then it sits at a link only we are given."
-  - This is the owner's wording for the case where the ACL doesn't work. In the one real test (2026-10-24, sync
-    fal.run, LongCat 480p), fal served the file to an anonymous fetch despite `initial_acl` default "forbid".
-  - So `runVideo` asks only for the one-hour expiry (`X-Fal-Object-Lifecycle-Preference`), and reads the file with a
-    short-lived CDN token as the Bearer.
+  the video at a link on its own storage; we copy it at once and keep it privately, for you."
+  - **The owner's deletion line is not in.** In the one real test (2026-10-24, sync fal.run, LongCat 480p), fal served
+    the file to an anonymous fetch despite `initial_acl` default "forbid". It was still served 63 minutes after it was
+    made, despite `expiration_duration_seconds: 3600`. Neither "deletes its copy … an hour after making it" nor "no one
+    else can open it there" is true today. Held for the owner.
+  - `runVideo` still asks for the one-hour expiry, and reads the file with a short-lived CDN token as the Bearer.
 - **Terms 6b:** "Each draft is made at most once" replaces "Each draft can be approved once".
 - **check:principles P6o:** fails if `AGENTS.public` is on while Privacy §3 says "only you can see them".
 

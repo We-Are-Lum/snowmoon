@@ -44,9 +44,10 @@ async function runFrame(person: number, request: Request, body: { adaptation: nu
 }
 
 /**
- * fal's CDN file for a video test: deleted an hour after it is made (Privacy §7, owner 2026-10-24). An ACL that forbids
- * everyone else (initial_acl default "forbid") was asked for too, but in the one real test (2026-10-24, sync fal.run,
- * LongCat 480p) fal served the file to an anonymous fetch anyway, so it is left out, as the owner said for that case.
+ * Asks fal to delete its CDN copy of a video test an hour after making it (owner, 2026-10-24). NOT honoured in the one
+ * real test (2026-10-24, sync fal.run, LongCat 480p): the file was still served anonymously after 63 minutes, and an
+ * initial_acl "forbid" sent with it was ignored too (so it is left out). Privacy §7 claims neither; it changes only
+ * when fal is shown to delete the file.
  */
 export const FAL_VIDEO_LIFECYCLE = JSON.stringify({ expiration_duration_seconds: 3600 });
 
@@ -77,7 +78,7 @@ export async function runVideo(person: number, body: { adaptation: number; versi
     method: 'POST',
     // X-Fal-Store-IO: 0, as for every image (src/lib/images/fal.ts): fal keeps no request-history copy of the request
     // or its reply. That header doesn't cover the video file fal puts on its CDN; the lifecycle header does (Privacy §7,
-    // owner 2026-10-24): fal deletes the file an hour after making it. Until then it sits at a link only we are given.
+    // owner 2026-10-24) asks fal to delete it after an hour, but in the one real test fal didn't (see FAL_VIDEO_LIFECYCLE).
     headers: { 'content-type': 'application/json', 'X-Fal-Store-IO': '0', 'X-Fal-Object-Lifecycle-Preference': FAL_VIDEO_LIFECYCLE, ...auth },
     body: JSON.stringify({ image_url: `data:image/jpeg;base64,${frame.toString('base64')}`, prompt, enable_safety_checker: true }),
     signal: AbortSignal.timeout(280_000),

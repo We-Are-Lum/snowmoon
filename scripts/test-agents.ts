@@ -432,7 +432,7 @@ try {
   const seenDownloads = falSeen.downloads.join(',');
   const anonFal = await fetch(`${S.stubUrl}/video.mp4`);
   const lc = JSON.parse(falSeen.lifecycle[0] || '{}') as { expiration_duration_seconds?: number; initial_acl?: { default?: string } };
-  check('E11b fal is asked to delete the video after an hour; we read it as our own account, with a fresh CDN token as the Bearer', falSeen.lifecycle.length === 1 && lc.expiration_duration_seconds === 3600 && falSeen.tokens === 1 && seenDownloads === '200' && anonFal.status === 403, `${JSON.stringify(falSeen)} anon ${anonFal.status}`);
+  check('E11b fal is asked to delete the video after an hour (Privacy doesn\'t claim it yet); we read it as our own account, with a fresh CDN token as the Bearer', falSeen.lifecycle.length === 1 && lc.expiration_duration_seconds === 3600 && falSeen.tokens === 1 && seenDownloads === '200' && anonFal.status === 403, `${JSON.stringify(falSeen)} anon ${anonFal.status}`);
   let capAt = 0;
   for (let i = 2; i <= 6; i++) {
     const more = await tool(BASE, edA, 'request_video_test', { adaptation: 1, version: 2, shot: withLine.id, note: `Test ${i}.` });
