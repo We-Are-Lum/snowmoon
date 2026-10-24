@@ -227,7 +227,8 @@ async function call(key: string, b: Built): Promise<Result> {
   ];
   const body = {
     model,
-    temperature: 0,
+    // Anthropic's models don't take a temperature while reasoning; the others get 0.
+    ...(model.startsWith('anthropic/') ? {} : { temperature: 0 }),
     max_tokens: 6000,
     reasoning: { effort },
     response_format: { type: 'json_schema', json_schema: { name: 'illustration_check', strict: true, schema: ANSWER_SCHEMA } },
@@ -340,7 +341,7 @@ const record = {
     schema_sha256: sha256(JSON.stringify(ANSWER_SCHEMA)),
     script: 'scripts/check-illustrations.ts',
     date,
-    settings: { temperature: 0, reasoning_effort: effort, zero_data_retention: true, structured_output: 'json_schema strict', image_detail: 'high' },
+    settings: { temperature: model.startsWith('anthropic/') ? 'default (reasoning on)' : 0, reasoning_effort: effort, zero_data_retention: true, structured_output: 'json_schema strict', image_detail: 'high' },
     inputs_sha256: {
       job_files: Object.fromEntries([...new Set(chosen.map((j) => j.jobFile))].map((f) => [f, sha256(readFileSync(path.join(ROOT, f)))])),
       published: sha256(readFileSync(path.join(ROOT, 'content/snowmoon/illustrations/published.json'))),

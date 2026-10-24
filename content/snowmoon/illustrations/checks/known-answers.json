@@ -1,0 +1,212 @@
+{
+ "about": "Known answers for the illustration-check pilot (owner, 2026-10-23: \"make the pilot a test with known answers\"): 15 images with problems found by eye, 5 judged fine. Written before any model was run. Scored by scripts/score-known-answers.ts.",
+ "by": "coding agent (Claude, a closed model), 2026-10-23, by eye. The 15 problems are copied from the consistency review (another coding agent, by eye, beside the sheets; content/snowmoon/consistency/review.json on branch illustration-consistency, PR #48); the 5 fine ones were picked and checked by eye here, beside each character's sheet picture and facts, for doubles, contradictions and stray text. DRAFT for the owner: the owner's own look decides.",
+ "scoring": {
+  "double": "caught when the answer lists a reference_copy_in_crowd problem (also reported: caught under another type)",
+  "problem": "caught when the answer lists any problem and its verdict is not matches",
+  "fine": "flagged when the verdict is not matches (problems listed on a matches verdict are reported too)",
+  "verdict": "agreement: double -> wrong; problem -> partly or wrong; fine -> matches"
+ },
+ "seen_but_not_in_the_test": {
+  "c27-b114-countdown-chant": "a second person at the table wears Bai's back-view outfit (white top with magenta trim, black trousers with a pink seam): a double the consistency review did not list",
+  "c7-b100-audience": "a second red-haired boy beside Fin wears Fin's yellow sneakers: likely a double",
+  "c6-b100-assembly": "a second man wears Mov's olive vest (possible double)",
+  "c2-b003-electronics-street": "garbled letters on a shop sign (stray text)",
+  "c16-b060-helisport-broadcast": "a tiny brand mark on the TV bezel (stray text)",
+  "c28-b013-general-arrives": "Den in a brown-olive robe instead of his grey one, black hair",
+  "c12-b013-priests-on-platform": "seven robed figures where the passage has six"
+ },
+ "items": [
+  {
+   "job": "c2-b122-sweeping",
+   "expect": "double",
+   "verdict": "wrong",
+   "types": [
+    "reference_copy_in_crowd",
+    "other"
+   ],
+   "what": "Zei is drawn with an animal's face; Fin's red hooded jacket is copied onto a second, older man with a broom.",
+   "source": "content/snowmoon/consistency/review.json (branch illustration-consistency, PR #48)"
+  },
+  {
+   "job": "c14-b030-semifinal-arena",
+   "expect": "double",
+   "verdict": "wrong",
+   "types": [
+    "reference_copy_in_crowd"
+   ],
+   "what": "Zei appears twice: a second boy in his orange jacket sits across the arena.",
+   "source": "content/snowmoon/consistency/review.json (branch illustration-consistency, PR #48)"
+  },
+  {
+   "job": "c9-b105-sealed-car",
+   "expect": "double",
+   "verdict": "wrong",
+   "types": [
+    "reference_copy_in_crowd"
+   ],
+   "what": "A second boy beside Zei has Zei's hair with the blue streak.",
+   "source": "content/snowmoon/consistency/review.json (branch illustration-consistency, PR #48)"
+  },
+  {
+   "job": "c7-b049-toast",
+   "expect": "double",
+   "verdict": "wrong",
+   "types": [
+    "reference_copy_in_crowd"
+   ],
+   "what": "A third person, blond, wears Zei's orange-and-black outfit.",
+   "source": "content/snowmoon/consistency/review.json (branch illustration-consistency, PR #48)"
+  },
+  {
+   "job": "c5-b043-spiral-ramp",
+   "expect": "double",
+   "verdict": "wrong",
+   "types": [
+    "reference_copy_in_crowd"
+   ],
+   "what": "A second boy beside Zei wears a copy of his outfit.",
+   "source": "content/snowmoon/consistency/review.json (branch illustration-consistency, PR #48)"
+  },
+  {
+   "job": "c11-b081-broken-redball",
+   "expect": "double",
+   "verdict": "wrong",
+   "types": [
+    "reference_copy_in_crowd"
+   ],
+   "what": "Zven appears twice: two boys in his yellow tunic and green shorts.",
+   "source": "content/snowmoon/consistency/review.json (branch illustration-consistency, PR #48)"
+  },
+  {
+   "job": "c1-b132-food-boxes",
+   "expect": "double",
+   "verdict": "wrong",
+   "types": [
+    "reference_copy_in_crowd"
+   ],
+   "what": "A blond boy at the table wears Zven's yellow-and-green tunic.",
+   "source": "content/snowmoon/consistency/review.json (branch illustration-consistency, PR #48)"
+  },
+  {
+   "job": "c13-b065-hijacked-screen",
+   "expect": "double",
+   "verdict": "wrong",
+   "types": [
+    "reference_copy_in_crowd"
+   ],
+   "what": "Two girls in Lily's grey poncho.",
+   "source": "content/snowmoon/consistency/review.json (branch illustration-consistency, PR #48)"
+  },
+  {
+   "job": "c28-b057-zven-sofa",
+   "expect": "double",
+   "verdict": "wrong",
+   "types": [
+    "reference_copy_in_crowd"
+   ],
+   "what": "A second woman wears Seila's rust-orange coat.",
+   "source": "content/snowmoon/consistency/review.json (branch illustration-consistency, PR #48)"
+  },
+  {
+   "job": "c19-b098-download-cable",
+   "expect": "double",
+   "verdict": "wrong",
+   "types": [
+    "reference_copy_in_crowd"
+   ],
+   "what": "A second figure wears Zei's black bodysuit with cyan seams.",
+   "source": "content/snowmoon/consistency/review.json (branch illustration-consistency, PR #48)"
+  },
+  {
+   "job": "c31-b009-reunion-hug",
+   "expect": "double",
+   "verdict": "wrong",
+   "types": [
+    "reference_copy_in_crowd"
+   ],
+   "what": "A third person, seen from behind, wears an orange jacket like Zei's.",
+   "source": "content/snowmoon/consistency/review.json (branch illustration-consistency, PR #48)"
+  },
+  {
+   "job": "c21-b019-civics-score",
+   "expect": "problem",
+   "verdict": "partly or wrong",
+   "types": [
+    "contradicts_facts"
+   ],
+   "what": "Lily wears Seila's rust-orange coat over her grey poncho: clothes swapped between the two references.",
+   "source": "content/snowmoon/consistency/review.json (branch illustration-consistency, PR #48)"
+  },
+  {
+   "job": "c2-b038-foil-classroom",
+   "expect": "problem",
+   "verdict": "partly or wrong",
+   "types": [
+    "contradicts_facts"
+   ],
+   "what": "Neither Zei (orange jacket, blue streak) nor Fin (red poncho) can be picked out among the students.",
+   "source": "content/snowmoon/consistency/review.json (branch illustration-consistency, PR #48)"
+  },
+  {
+   "job": "c23-b078-red-call",
+   "expect": "problem",
+   "verdict": "partly or wrong",
+   "types": [
+    "contradicts_facts"
+   ],
+   "what": "Gladias has red hair and a sleeveless olive top, not his chestnut hair and cream sleeves.",
+   "source": "content/snowmoon/consistency/review.json (branch illustration-consistency, PR #48)"
+  },
+  {
+   "job": "c19-b110-sealed-tea",
+   "expect": "problem",
+   "verdict": "partly or wrong",
+   "types": [
+    "contradicts_facts"
+   ],
+   "what": "Zei, small at the back, wears black, without his orange jacket.",
+   "source": "content/snowmoon/consistency/review.json (branch illustration-consistency, PR #48)"
+  },
+  {
+   "job": "c28-b064-lily-stands-up",
+   "expect": "fine",
+   "verdict": "matches",
+   "types": [],
+   "what": "Crowded classroom. Lily once (grey poncho, dark leggings, white shoes, ponytail with bangs); the other students wear grey school uniforms, several girls with brown ponytails but none in her poncho; the instructor in a grey uniform. No writing.",
+   "source": "checked by eye beside its sheets and facts by the coding agent, 2026-10-23"
+  },
+  {
+   "job": "c31-b066-broken-gates",
+   "expect": "fine",
+   "verdict": "matches",
+   "types": [],
+   "what": "Crowded gateway. Gladias (green tabard, cream sleeves, ochre sash) and Seila (rust coat with clasps, braids, glasses, olive trousers, tan boots) once each; smashed turnstiles; two guards in purple and grey as the passage says; light snow. No writing.",
+   "source": "checked by eye beside its sheets and facts by the coding agent, 2026-10-23"
+  },
+  {
+   "job": "c15-b005-special-broadcast",
+   "expect": "fine",
+   "verdict": "matches",
+   "types": [],
+   "what": "Crowded restaurant. Jahn once (brown long vest, light-blue shirt, curly black hair, moustache), horrified, facing a screen of drones over a city (the invasion news, shown without words). Diners in plain shirts; none in his vest. No writing.",
+   "source": "checked by eye beside its sheets and facts by the coding agent, 2026-10-23"
+  },
+  {
+   "job": "c12-b070-orientation",
+   "expect": "fine",
+   "verdict": "matches",
+   "types": [],
+   "what": "Crowded hall of about fifty seated people. Zei once (orange jacket, black bodysuit, grey trousers, blue streak, glasses on head) and Deluin once (cream cable sweater with grey hood, green leggings, brown boots); five robed priests at the front. Screens and signs blank. No writing.",
+   "source": "checked by eye beside its sheets and facts by the coding agent, 2026-10-23"
+  },
+  {
+   "job": "c18-b079-pyramid-view",
+   "expect": "fine",
+   "verdict": "matches",
+   "types": [],
+   "what": "Gladias once, in the scene's purple privacy hood over his tabard and sash (by design, per the consistency review), looking at the stepped pyramid; small robed figures far below. No writing.",
+   "source": "checked by eye beside its sheets and facts by the coding agent, 2026-10-23"
+  }
+ ]
+}
