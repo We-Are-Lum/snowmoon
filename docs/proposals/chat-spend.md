@@ -34,3 +34,8 @@ The 50-question check had its own cap of $1 (owner, 2026-10-07) and spent $0.091
 - "What happens to Deluin after Redshire is invaded?" (limit 15) came back marked as held back, with no later chapter sent.
 - "Why does Deluin invite Zei to Redshire?" (limit 14) found nothing: plain FTS missed the passage (c14-b120–b130 says "come" and "visit", not "invite"). This is the case for embeddings later.
 - "What does Deluin mean here?" with c14-b127 attached was **declined by the guard**, a false positive: the reply was commentary. One in seven, in line with the red team's 4 in 60.
+
+### Claude trial (2026-10-24, cap $5, owner 2026-10-23)
+
+Anthropic direct: claude-opus-5-5 $1.02042, claude-sonnet-5-5 $0.42073. Gateway (Groq): gpt-oss-120b $0.03317,
+gpt-oss-safeguard-20b $0.04748. Total $1.52181. Tokens and calls: `chat-eval/claude-trial/README.md`.
