@@ -1,5 +1,6 @@
 /**
- * PREPARED, NOT RUN. The queue test for fal's video files (owner, 2026-10-24: "the queue test with the 5-second length:
+ * RUN ONCE, 2026-10-24 (request 01a16ff1…, $0.025): 75 frames, 5.000 s, so num_frames is honoured; the ACL was
+ * not (anonymous fetch 200, file ACL "allow"). Kept for re-runs. The queue test for fal's video files (owner, 2026-10-24: "the queue test with the 5-second length:
  * up to $0.10"). Run it only on the owner's word:
  *
  *   node --env-file=.env.local node_modules/.bin/tsx scripts/fal-queue-video-test.ts --run
@@ -21,7 +22,8 @@ const FPS = 15;
 const SECONDS = 5;
 const USD_PER_SECOND = 0.005;
 const CAP_USD = 0.1;
-const FRAME = 'public/editor/1/v2/frames/H01-Q3-g1.jpg'; // Fifteen Days v2, shot 0-EST (the owner's own version)
+// Fifteen Days v2, shot 0-EST (the owner's own version). public/editor is generated: run `node scripts/editor-data.mjs` first.
+const FRAME = 'public/editor/1/v2/frames/H01-Q3-g1.jpg';
 const NOTE = 'Slight head turn. (Queue test of fal file deletion and access.)';
 const OUT = path.join(process.env.HOME ?? '/tmp', 'Library/Mobile Documents/com~apple~CloudDocs/snowmoon-takes');
 
@@ -54,14 +56,19 @@ const result = (await (await fetch(q.response_url, { headers: auth })).json()) a
 const url = result.video?.url;
 if (!url) throw new Error('no video link in the result');
 const madeAt = new Date().toISOString();
+// The link first, before anything else can fail (the 2026-10-24 run lost it to a token timeout).
+mkdirSync(OUT, { recursive: true });
+writeFileSync(path.join(OUT, 'fal-queue-video-test.txt'), `${url}\nmade ${madeAt}\nrequest ${q.request_id ?? ''}\n`, { mode: 0o600 });
 
-const tok = (await (await fetch('https://rest.fal.ai/storage/auth/token?storage_type=fal-cdn-v3', { method: 'POST', headers: { 'content-type': 'application/json', ...auth }, body: JSON.stringify({ expiration_seconds: 600 }) })).json()) as { token?: string };
-const withToken = tok.token ? await fetch(url, { headers: { authorization: `Bearer ${tok.token}` } }) : null;
+let token: string | null = null;
+for (let i = 0; i < 4 && !token; i++) {
+  const tok = (await fetch('https://rest.fal.ai/storage/auth/token?storage_type=fal-cdn-v3', { method: 'POST', headers: { 'content-type': 'application/json', ...auth }, body: JSON.stringify({ expiration_seconds: 600 }), signal: AbortSignal.timeout(30_000) }).then((r) => r.json()).catch(() => ({}))) as { token?: string };
+  token = tok.token ?? null;
+}
+const withToken = token ? await fetch(url, { headers: { authorization: `Bearer ${token}` } }) : null;
 const bytes = withToken?.ok ? Buffer.from(await withToken.arrayBuffer()) : null;
 const anon = await fetch(url).then((r) => r.status);
 const acl = await fetch(`https://api.fal.ai/v1/storage/files/acl?url=${encodeURIComponent(url)}`, { headers: auth }).then(async (r) => `${r.status} ${await r.text()}`);
 
-mkdirSync(OUT, { recursive: true });
-writeFileSync(path.join(OUT, 'fal-queue-video-test.txt'), `${url}\nmade ${madeAt}\nrequest ${q.request_id ?? ''}\n`, { mode: 0o600 });
 if (bytes) writeFileSync(path.join(OUT, 'fal-queue-video-test.mp4'), bytes);
 console.log(JSON.stringify({ madeAt, requestId: q.request_id, estimateUsd: estimate, withTokenStatus: withToken?.status ?? 'no token', bytes: bytes?.length ?? 0, anonStatus: anon, acl, linkSavedTo: path.join(OUT, 'fal-queue-video-test.txt') }, null, 1));
