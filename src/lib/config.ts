@@ -463,3 +463,13 @@ export const MINPENTAI_PLAY = {
 export function appUrl(): string {
   return process.env.NEXT_PUBLIC_URL?.replace(/\/$/, '') || 'http://localhost:3000';
 }
+
+/**
+ * The glossary's model-written explanations (owner, 2026-10-23: "Owner-only: nothing public until I've read it").
+ * Served only to these FIDs, by /api/glossary/written and /api/glossary/bakeoff; everyone else gets a 404 and the
+ * pages as served hold none of it. Opening it to readers is the owner's call (set `public`).
+ */
+export const GLOSSARY_WRITTEN = {
+  fids: [SYSTEM_FID] as readonly number[],
+  public: false,
+};

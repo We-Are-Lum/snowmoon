@@ -6,6 +6,8 @@ import { lastChapter, openedChapters } from '~/lib/chat/device';
 import { AiLabel } from '~/components/recipe-sheet';
 import { AI_LABEL } from '~/lib/ai-declared';
 import { blockHref, parsePlace, quoteHtml, type GlossaryIndexEntry, type GlossaryTermView } from '~/lib/glossary-view';
+import { authFetch, useAuth } from '~/lib/client-auth';
+import { GLOSSARY_WRITTEN, REPO_URL } from '~/lib/config';
 
 /**
  * The glossary's index and term pages (data: content/snowmoon/glossary.json).
@@ -171,6 +173,8 @@ export function GlossaryTerm({ t }: { t: GlossaryTermView }) {
         </p>
       )}
 
+      <Written slug={t.slug} through={all ? 32 : furthest} onShowAll={() => setAll(true)} />
+
       <h2>Every mention</h2>
       <ul className="gl-mentions">
         {mentions.map((m) => (
@@ -228,5 +232,64 @@ function Clip({ clip, respelling }: { clip: NonNullable<GlossaryTermView['clip']
         {respelling ? ` · said as ${respelling}, a house choice, unreviewed` : ''}
       </p>
     </div>
+  );
+}
+
+type WrittenData = { label: string; date: string; promptFile: string; sentences: { text: string; cites: string[]; gate: number }[]; hidden: number };
+
+/**
+ * The model-written explanation (owner, 2026-10-23), for the owner only until the owner opens it (GLOSSARY_WRITTEN;
+ * the server checks the FID too and sends nothing to anyone else). The server sends only the sentences whose latest
+ * citation is in a chapter the reader has reached; each sentence links the lines it rests on.
+ */
+function Written({ slug, through, onShowAll }: { slug: string; through: number; onShowAll: () => void }) {
+  const auth = useAuth();
+  const [data, setData] = useState<WrittenData | null>(null);
+  const allowed = auth.kind === 'signed-in' && (GLOSSARY_WRITTEN.public || GLOSSARY_WRITTEN.fids.includes(auth.fid));
+  useEffect(() => {
+    if (!allowed) return;
+    let alive = true;
+    void authFetch(`/api/glossary/written/${slug}?through=${through}`)
+      .then(async (r) => (r.ok ? ((await r.json()) as WrittenData) : null))
+      .catch(() => null)
+      .then((d) => alive && setData(d));
+    return () => {
+      alive = false;
+    };
+  }, [allowed, slug, through]);
+  if (!allowed || !data) return null;
+  return (
+    <section className="gl-written" aria-label="Written explanation">
+      <h2>Written from the book</h2>
+      <p className="gl-written-label">
+        <span className="gl-written-ai">AI</span> {data.label} <span className="gl-meta">· {data.date} · <a href={`${REPO_URL}/blob/main/${data.promptFile}`}>prompt</a> · owner-only draft</span>
+      </p>
+      {data.sentences.length ? (
+        <p className="gl-written-text">
+          {data.sentences.map((s, i) => (
+            <span key={i}>
+              {s.text}{' '}
+              <span className="gl-written-cites">
+                (
+                {s.cites.map((c, k) => (
+                  <span key={c}>
+                    {k > 0 && ', '}
+                    <Link href={blockHref(c)}>{c.replace(/^c(\d+)-b(\d+)$/, 'Ch $1, block $2')}</Link>
+                  </span>
+                ))}
+                ){' '}
+              </span>
+            </span>
+          ))}
+        </p>
+      ) : (
+        <p className="gl-none">Nothing here yet rests only on chapters up to where you&apos;ve read.</p>
+      )}
+      {data.hidden > 0 && (
+        <Cover action="Show them anyway" onShow={onShowAll}>
+          {data.hidden} more {data.hidden === 1 ? 'sentence rests' : 'sentences rest'} on chapters past {through}, where you&apos;ve read to.
+        </Cover>
+      )}
+    </section>
   );
 }
