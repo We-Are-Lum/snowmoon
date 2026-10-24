@@ -9,6 +9,9 @@
  *   npx tsx --env-file-if-exists=.env.local scripts/glossary-support-check.ts --run --cap <usd>
  *       checks the bake-off (private/glossary-bakeoff/explanations.json) and writes
  *       private/glossary-bakeoff/support.json: per label, each sentence's verdict, and the counts.
+ *   ... --context --run --cap <usd>
+ *       the same, but each cited block comes with the block before it (marked CONTEXT, only to show who is
+ *       speaking; config/prompts/glossary-support-check-context.md); writes private/glossary-bakeoff/support-context.json.
  *   ... --file private/glossary-explanations/glossary-explanations.json --run --cap <usd>
  *       checks the full file instead, and writes private/glossary-explanations/support.json.
  *
@@ -18,7 +21,7 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import type { Glossary } from './lib/glossary';
-import { BAKEOFF_FILE, BAKEOFF_SUPPORT_FILE, CHECK_MODEL, CHECK_PROMPT_FILE, GATEWAY, blocksOf, estimateTokens, priceOf, seenText, sha256, verifyExplanations, type Entry, type Price } from './lib/glossary-explain';
+import { BAKEOFF_FILE, BAKEOFF_SUPPORT_CONTEXT_FILE, BAKEOFF_SUPPORT_FILE, CHECK_CONTEXT_PROMPT_FILE, CHECK_MODEL, CHECK_PROMPT_FILE, blockBefore, GATEWAY, blocksOf, estimateTokens, priceOf, seenText, sha256, verifyExplanations, type Entry, type Price } from './lib/glossary-explain';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const read = (f: string) => readFileSync(path.join(ROOT, f), 'utf8');
@@ -27,8 +30,11 @@ const flag = (n: string) => (args.includes(`--${n}`) ? args[args.indexOf(`--${n}
 const RUN = args.includes('--run');
 const CAP = Number(flag('cap') ?? NaN);
 const FILE = flag('file') ?? BAKEOFF_FILE;
-const MAX_TOKENS = 4000;
-const prompt = read(CHECK_PROMPT_FILE).replace(/^<!--[\s\S]*?-->\s*/, '');
+const MAX_TOKENS = 2000; // verdicts run ~500 tokens with reasoning at "low" (first run)
+/** --context: each cited block with the block before it, marked CONTEXT, for who is speaking (a second prompt). */
+const CONTEXT = args.includes('--context');
+const PROMPT = CONTEXT ? CHECK_CONTEXT_PROMPT_FILE : CHECK_PROMPT_FILE;
+const prompt = read(PROMPT).replace(/^<!--[\s\S]*?-->\s*/, '');
 const blocks = blocksOf(ROOT);
 const glossary = JSON.parse(read('content/snowmoon/glossary.json')) as Glossary;
 
@@ -49,12 +55,15 @@ function request(e: Entry): string {
     ...e.sentences.map((s, i) => `${i + 1}. ${s.text}\n   cites: ${s.cites.join(', ')}`),
     '',
     'PASSAGES:',
-    ...cited.map((c) => `[${c}] ${seenText(blocks.get(c)!)}`),
+    ...cited.map((c) => {
+      const before = CONTEXT ? blockBefore(ROOT, c) : null;
+      return (before ? `CONTEXT (the passage before ${c}) [${before}] ${seenText(blocks.get(before)!)}\n` : '') + `[${c}] ${seenText(blocks.get(c)!)}`;
+    }),
   ].join('\n');
 }
 
 async function check(key: string, p: Price, e: Entry) {
-  const res = await fetch(`${GATEWAY}/chat/completions`, {
+  const send = () => fetch(`${GATEWAY}/chat/completions`, {
     method: 'POST',
     headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -65,6 +74,14 @@ async function check(key: string, p: Price, e: Entry) {
       providerOptions: { gateway: { only: [CHECK_MODEL.provider] } },
     }),
   });
+  // Busy or briefly down (429, 5xx): the same provider again after 20, 60 and 120 s. A refused call costs nothing.
+  let res = await send();
+  for (const wait of [20_000, 60_000, 120_000]) {
+    if (res.status !== 429 && res.status < 500) break;
+    console.log(`${CHECK_MODEL.id}: ${res.status}, trying again in ${wait / 1000} s`);
+    await new Promise((r) => setTimeout(r, wait));
+    res = await send();
+  }
   const j = (await res.json().catch(() => ({}))) as { id?: string; model?: string; choices?: { message?: { content?: string } }[]; usage?: { prompt_tokens?: number; completion_tokens?: number; cost?: number } };
   if (!res.ok) throw new Error(`${CHECK_MODEL.id}: gateway ${res.status}`);
   const u = j.usage ?? {};
@@ -88,36 +105,60 @@ if (!Number.isFinite(CAP) || CAP <= 0) throw new Error('--cap <usd> is required 
 const key = process.env.AI_GATEWAY_API_KEY;
 if (!key) throw new Error('AI_GATEWAY_API_KEY not set (run with --env-file-if-exists=.env.local)');
 
+// Saved after every entry, so a failure loses nothing paid for; a second run with --run picks up where it stopped.
+type Row = { n: number; text: string; supported: boolean; why: string; by: 'program' | 'model' };
+const target = FILE === BAKEOFF_FILE ? (CONTEXT ? BAKEOFF_SUPPORT_CONTEXT_FILE : BAKEOFF_SUPPORT_FILE) : `private/glossary-explanations/support${CONTEXT ? '-context' : ''}.json`;
+const prior = existsSync(path.join(ROOT, target)) ? JSON.parse(read(target)) : null;
+const resuming = prior && prior.complete === false && prior.checker?.prompt_sha256 === sha256(read(PROMPT));
+const results: Record<string, Record<string, Row[]>> = resuming ? prior.results : {};
+const before = resuming ? Number(prior.spent_usd) : 0;
 let spent = 0;
-const results: Record<string, Record<string, { n: number; text: string; supported: boolean; why: string; by: 'program' | 'model' }[]>> = {};
-const counts: Record<string, { sentences: number; unsupported: number; by_program: number }> = {};
-let served = '';
-for (const [label, entries] of Object.entries(labels)) {
-  results[label] = {};
-  counts[label] = { sentences: 0, unsupported: 0, by_program: 0 };
-  for (const e of entries) {
-    if (!e.sentences.length) continue;
-    const worst = estimateTokens(prompt + request(e)) * p.input * 1.5 + MAX_TOKENS * p.output;
-    if (spent + worst > CAP) throw new Error(`stopping: spent $${spent.toFixed(3)}; the next call could pass the cap $${CAP}`);
-    const r = await check(key, p, e);
-    spent += r.cost;
-    served ||= r.model;
-    const failing = new Set(verifyExplanations([e], blocks, glossary).map((x) => Number(x.match(/sentence (\d+)/)?.[1] ?? 0)).filter(Boolean));
-    results[label][e.slug] = e.sentences.map((s, i) => {
-      const v = r.verdicts.find((x) => x.n === i + 1);
-      const program = failing.has(i + 1);
-      return { n: i + 1, text: s.text, supported: !program && !!v?.supported, why: program ? 'fails the program check (citation or quote)' : v ? v.why : 'no verdict returned', by: program ? 'program' : 'model' };
-    });
-    for (const s of results[label][e.slug]) {
-      counts[label].sentences++;
-      if (!s.supported) counts[label].unsupported++;
-      if (s.by === 'program') counts[label].by_program++;
-    }
-    console.log(`${label} ${e.slug}: ${results[label][e.slug].filter((s) => !s.supported).length} unsupported of ${e.sentences.length}; total $${spent.toFixed(3)}`);
+let served = resuming ? prior.checker.served : '';
+const total = () => before + spent;
+function save(complete: boolean) {
+  const counts: Record<string, { sentences: number; unsupported: number; by_program: number }> = {};
+  for (const [label, bySlug] of Object.entries(results)) {
+    const rows = Object.values(bySlug).flat();
+    counts[label] = { sentences: rows.length, unsupported: rows.filter((r) => !r.supported).length, by_program: rows.filter((r) => r.by === 'program').length };
   }
+  const out = {
+    about: CONTEXT
+      ? 'Each sentence checked against the blocks it cites, each shown with the block before it (only to see who is speaking), by a model that did not write it, and by the program (citations exist, quotes word for word).'
+      : 'Each sentence checked against the blocks it cites by a model that did not write it, and by the program (citations exist, quotes word for word).',
+    complete,
+    checker: { model: CHECK_MODEL.id, maker: CHECK_MODEL.maker, open_weights: CHECK_MODEL.open_weights, served, prompt_file: PROMPT, prompt_sha256: sha256(read(PROMPT)), context: CONTEXT ? 'each cited block with the block before it' : 'cited blocks only', date: new Date().toISOString().slice(0, 10) },
+    spent_usd: total(),
+    counts,
+    results,
+  };
+  mkdirSync(path.dirname(path.join(ROOT, target)), { recursive: true });
+  writeFileSync(path.join(ROOT, target), JSON.stringify(out, null, 1) + '\n');
 }
-const out = { about: 'Each sentence checked against the blocks it cites by a model that did not write it, and by the program (citations exist, quotes word for word).', checker: { model: CHECK_MODEL.id, maker: CHECK_MODEL.maker, open_weights: CHECK_MODEL.open_weights, served, prompt_file: CHECK_PROMPT_FILE, prompt_sha256: sha256(read(CHECK_PROMPT_FILE)), date: new Date().toISOString().slice(0, 10) }, spent_usd: spent, counts, results };
-const target = FILE === BAKEOFF_FILE ? BAKEOFF_SUPPORT_FILE : 'private/glossary-explanations/support.json';
-mkdirSync(path.dirname(path.join(ROOT, target)), { recursive: true });
-writeFileSync(path.join(ROOT, target), JSON.stringify(out, null, 1) + '\n');
-console.log(`wrote ${target}; spent $${spent.toFixed(3)}`);
+if (resuming) console.log(`resuming ${target}: $${before.toFixed(3)} spent before`);
+try {
+  for (const [label, entries] of Object.entries(labels)) {
+    results[label] ??= {};
+    for (const e of entries) {
+      if (!e.sentences.length || results[label][e.slug]) continue;
+      const worst = estimateTokens(prompt + request(e)) * p.input * 1.5 + MAX_TOKENS * p.output;
+      if (spent + worst > CAP) throw new Error(`stopping: spent $${spent.toFixed(3)} this run; the next call could pass the cap $${CAP}`);
+      const r = await check(key, p, e);
+      spent += r.cost;
+      served ||= r.model;
+      const failing = new Set(verifyExplanations([e], blocks, glossary).map((x) => Number(x.match(/sentence (\d+)/)?.[1] ?? 0)).filter(Boolean));
+      results[label][e.slug] = e.sentences.map((s, i) => {
+        const v = r.verdicts.find((x) => x.n === i + 1);
+        const program = failing.has(i + 1);
+        return { n: i + 1, text: s.text, supported: !program && !!v?.supported, why: program ? 'fails the program check (citation or quote)' : v ? v.why : 'no verdict returned', by: program ? 'program' : 'model' };
+      });
+      save(false);
+      console.log(`${label} ${e.slug}: ${results[label][e.slug].filter((s) => !s.supported).length} unsupported of ${e.sentences.length}; this run $${spent.toFixed(3)}`);
+    }
+  }
+} catch (err) {
+  save(false);
+  console.error(`${String(err).slice(0, 200)}\nsaved what was done to ${target} (incomplete); run again to finish. This run spent $${spent.toFixed(3)}.`);
+  process.exit(1);
+}
+save(true);
+console.log(`wrote ${target}; this run spent $${spent.toFixed(3)}, $${total().toFixed(3)} in all`);

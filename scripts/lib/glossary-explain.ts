@@ -35,9 +35,12 @@ export const EXPLANATIONS_FILE = 'content/snowmoon/glossary-explanations.json';
 export const EXPLANATIONS_DRAFT = 'private/glossary-explanations/glossary-explanations.json';
 export const PROMPT_FILE = 'config/prompts/glossary-explain.md';
 export const CHECK_PROMPT_FILE = 'config/prompts/glossary-support-check.md';
+/** The second check: each cited block with the block before it, to show who is speaking (owner, 2026-10-23). */
+export const CHECK_CONTEXT_PROMPT_FILE = 'config/prompts/glossary-support-check-context.md';
 /** The blind bake-off's page data: labels A/B/C only, never a model's name. */
 export const BAKEOFF_FILE = 'private/glossary-bakeoff/explanations.json';
 export const BAKEOFF_SUPPORT_FILE = 'private/glossary-bakeoff/support.json';
+export const BAKEOFF_SUPPORT_CONTEXT_FILE = 'private/glossary-bakeoff/support-context.json';
 /** The blind page as one self-contained file, to open without the site (scripts/glossary-bakeoff-page.ts). */
 export const BAKEOFF_PAGE_FILE = 'private/glossary-bakeoff/page.html';
 /**
@@ -115,6 +118,14 @@ export function seenText(b: { kind: string; content: string }): string {
     return words || '(a drawing with no words)';
   }
   return quoteSource(b.content).replace(/<[^>]+>/g, ' ').replace(/\s*\n\s*/g, ' ').trim();
+}
+
+/** The block before a block in the book (headings and breaks skipped), or null at a chapter's start. */
+export function blockBefore(root: string, id: string): string | null {
+  const ch = chapterOf(id);
+  const ids = [...blocksOf(root)].filter(([k, b]) => chapterOf(k) === ch && b.kind !== 'heading' && b.kind !== 'break').map(([k]) => k);
+  const i = ids.indexOf(id);
+  return i > 0 ? ids[i - 1] : null;
 }
 
 /** The whole book, serialised with block ids, and its hash. Deterministic. */

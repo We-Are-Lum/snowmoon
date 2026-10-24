@@ -43,6 +43,7 @@ const FILE = path.join(process.cwd(), 'content', WORK.id, 'glossary-explanations
 const DRAFT = path.join(process.cwd(), 'private', 'glossary-explanations', 'glossary-explanations.json');
 const BAKEOFF = path.join(process.cwd(), 'private', 'glossary-bakeoff', 'explanations.json');
 const SUPPORT = path.join(process.cwd(), 'private', 'glossary-bakeoff', 'support.json');
+const SUPPORT_CONTEXT = path.join(process.cwd(), 'private', 'glossary-bakeoff', 'support-context.json');
 
 export const mayRead = (fid: number | null) => fid !== null && (GLOSSARY_WRITTEN.public || GLOSSARY_WRITTEN.fids.includes(fid));
 /** The bake-off stays with the listed FIDs even if the explanations go public. */
@@ -94,24 +95,36 @@ export interface BakeoffView {
   slugs: string[];
   /** A, B, C: each entry's sentences, and the program's problems (citations, quotes, gates). */
   labels: Record<string, { entries: { slug: string; term: string; sentences: WrittenSentence[] }[]; problems: string[] }>;
-  /** The support check, when it has run: the checker, and per label the counts and each sentence's verdict. */
-  support: {
-    checker: { model: string; maker: string; date: string; prompt_file: string };
-    counts: Record<string, { sentences: number; unsupported: number; by_program: number }>;
-    results: Record<string, Record<string, { n: number; supported: boolean; why: string; by: string }[]>>;
-  } | null;
+  /**
+   * The support checks, when they have run: "cited blocks only" (the first), and "with the block before" (each cited
+   * block shown with the one before it, only to see who is speaking). Per label the counts and each verdict.
+   */
+  support: SupportView | null;
+  supportContext: SupportView | null;
 }
+
+export interface SupportView {
+  checker: { model: string; maker: string; date: string; prompt_file: string; context?: string };
+  complete: boolean;
+  counts: Record<string, { sentences: number; unsupported: number; by_program: number }>;
+  results: Record<string, Record<string, { n: number; supported: boolean; why: string; by: string }[]>>;
+}
+const supportAt = (f: string): SupportView | null => {
+  if (!existsSync(f)) return null;
+  const s = JSON.parse(readFileSync(f, 'utf8'));
+  return { checker: s.checker, complete: s.complete !== false, counts: s.counts, results: s.results };
+};
 
 /** The blind bake-off, labels only (never reads the key). Null until it has run. */
 export function bakeoff(): BakeoffView | null {
   if (!existsSync(BAKEOFF)) return null;
   const b = JSON.parse(readFileSync(BAKEOFF, 'utf8'));
-  const s = existsSync(SUPPORT) ? JSON.parse(readFileSync(SUPPORT, 'utf8')) : null;
   return {
     date: b.date,
     promptFile: b.prompt_file,
     slugs: b.slugs,
     labels: b.labels,
-    support: s ? { checker: s.checker, counts: s.counts, results: s.results } : null,
+    support: supportAt(SUPPORT),
+    supportContext: supportAt(SUPPORT_CONTEXT),
   };
 }

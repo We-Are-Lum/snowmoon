@@ -39,7 +39,20 @@ export function GlossaryBakeoff() {
     );
   const b = state.b;
   const labels = Object.keys(b.labels).sort();
-  const verdict = (label: string, slug: string, n: number) => b.support?.results[label]?.[slug]?.find((v) => v.n === n) ?? null;
+  const checks = [
+    { name: 'cited blocks only', s: b.support },
+    { name: 'with the block before', s: b.supportContext },
+  ];
+  const verdicts = (label: string, slug: string, n: number) =>
+    checks
+      .map((c) => ({ name: c.name, v: c.s?.results[label]?.[slug]?.find((x) => x.n === n) ?? null }))
+      .filter((x) => x.v)
+      .map(({ name, v }) => (v!.supported ? ` · ${name}: supported` : ` · ${name}: UNSUPPORTED (${v!.why})`))
+      .join('');
+  const count = (c: (typeof checks)[number], l: string) => {
+    const x = c.s?.counts[l];
+    return x ? `${x.unsupported} of ${x.sentences}${c.s!.complete ? '' : ' (so far)'}` : 'not checked';
+  };
   return (
     <div className="page prose glossary gl-bake">
       <p className="label">Glossary · bake-off · owner only</p>
@@ -53,19 +66,20 @@ export function GlossaryBakeoff() {
           <tr>
             <th>Label</th>
             <th>Sentences</th>
-            <th>Unsupported</th>
+            <th>Unsupported, cited blocks only</th>
+            <th>Unsupported, with the block before</th>
             <th>Program problems</th>
           </tr>
         </thead>
         <tbody>
           {labels.map((l) => {
             const n = b.labels[l].entries.reduce((a, e) => a + e.sentences.length, 0);
-            const c = b.support?.counts[l];
             return (
               <tr key={l}>
                 <td>{l}</td>
                 <td>{n}</td>
-                <td>{c ? `${c.unsupported} of ${c.sentences}` : 'not checked yet'}</td>
+                <td>{count(checks[0], l)}</td>
+                <td>{count(checks[1], l)}</td>
                 <td>{b.labels[l].problems.length}</td>
               </tr>
             );
@@ -75,7 +89,9 @@ export function GlossaryBakeoff() {
       {b.support && (
         <p className="gl-meta">
           Checked by {b.support.checker.model} ({b.support.checker.maker}), not one of the three, against each sentence&apos;s cited blocks only, on{' '}
-          {b.support.checker.date} (<code>{b.support.checker.prompt_file}</code>). A sentence that fails the program&apos;s checks counts as unsupported.
+          {b.support.checker.date}. Two checks: the cited blocks only (<code>{b.support.checker.prompt_file}</code>), and each cited block with the
+          block before it, there only to show who is speaking (<code>{b.supportContext?.checker.prompt_file ?? 'not run yet'}</code>). A sentence that
+          fails the program&apos;s checks counts as unsupported.
         </p>
       )}
       {b.slugs.map((slug) => (
@@ -91,9 +107,9 @@ export function GlossaryBakeoff() {
                 ) : (
                   <ol>
                     {e.sentences.map((s, i) => {
-                      const v = verdict(l, slug, i + 1);
+                      const last = (b.supportContext ?? b.support)?.results[l]?.[slug]?.find((x) => x.n === i + 1);
                       return (
-                        <li key={i} data-supported={v ? String(v.supported) : undefined}>
+                        <li key={i} data-supported={last ? String(last.supported) : undefined}>
                           {s.text}{' '}
                           <span className="gl-written-cites">
                             {s.cites.map((c, k) => (
@@ -103,7 +119,7 @@ export function GlossaryBakeoff() {
                               </span>
                             ))}
                             {' · '}from Ch {s.gate}
-                            {v && (v.supported ? ' · supported' : ` · UNSUPPORTED: ${v.why}`)}
+                            {verdicts(l, slug, i + 1)}
                           </span>
                         </li>
                       );

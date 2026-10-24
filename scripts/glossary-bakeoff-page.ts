@@ -9,16 +9,20 @@
  */
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
-import { BAKEOFF_FILE, BAKEOFF_PAGE_FILE, BAKEOFF_SUPPORT_FILE, type Entry } from './lib/glossary-explain';
+import { BAKEOFF_FILE, BAKEOFF_PAGE_FILE, BAKEOFF_SUPPORT_CONTEXT_FILE, BAKEOFF_SUPPORT_FILE, type Entry } from './lib/glossary-explain';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const read = (f: string) => JSON.parse(readFileSync(path.join(ROOT, f), 'utf8'));
 if (!existsSync(path.join(ROOT, BAKEOFF_FILE))) throw new Error(`${BAKEOFF_FILE} does not exist: run the bake-off first`);
 const b = read(BAKEOFF_FILE) as { date: string; prompt_file: string; slugs: string[]; labels: Record<string, { entries: Entry[]; problems: string[] }> };
 type Verdict = { n: number; supported: boolean; why: string; by: string };
-const s = existsSync(path.join(ROOT, BAKEOFF_SUPPORT_FILE))
-  ? (read(BAKEOFF_SUPPORT_FILE) as { checker: { model: string; maker: string; date: string }; counts: Record<string, { sentences: number; unsupported: number; by_program: number }>; results: Record<string, Record<string, Verdict[]>> })
-  : null;
+type Support = { complete?: boolean; checker: { model: string; maker: string; date: string; prompt_file: string }; counts: Record<string, { sentences: number; unsupported: number; by_program: number }>; results: Record<string, Record<string, Verdict[]>> };
+const at = (f: string) => (existsSync(path.join(ROOT, f)) ? (read(f) as Support) : null);
+const s = at(BAKEOFF_SUPPORT_FILE);
+const checks = [
+  { name: 'cited blocks only', s },
+  { name: 'with the block before', s: at(BAKEOFF_SUPPORT_CONTEXT_FILE) },
+];
 const esc = (t: string) => t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const link = (c: string) => `<a href="https://snowmoon.party/chapter/${c.match(/^c(\d+)/)![1]}#${c}">${c}</a>`;
 const labels = Object.keys(b.labels).sort();
@@ -26,8 +30,8 @@ const labels = Object.keys(b.labels).sort();
 const rows = labels
   .map((l) => {
     const n = b.labels[l].entries.reduce((a, e) => a + e.sentences.length, 0);
-    const c = s?.counts[l];
-    return `<tr><td>${l}</td><td>${n}</td><td>${c ? `${c.unsupported} of ${c.sentences}` : 'not checked'}</td><td>${b.labels[l].problems.length}</td></tr>`;
+    const cells = checks.map((c) => { const x = c.s?.counts[l]; return `<td>${x ? `${x.unsupported} of ${x.sentences}${c.s!.complete === false ? ' (so far)' : ''}` : 'not checked'}</td>`; }).join('');
+    return `<tr><td>${l}</td><td>${n}</td>${cells}<td>${b.labels[l].problems.length}</td></tr>`;
   })
   .join('');
 const sections = b.slugs
@@ -38,9 +42,10 @@ const sections = b.slugs
         const e = b.labels[l].entries.find((x) => x.slug === slug);
         const items = (e?.sentences ?? [])
           .map((x, i) => {
-            const v = s?.results[l]?.[slug]?.find((r) => r.n === i + 1);
-            const mark = v ? (v.supported ? ' · supported' : ` · <b>UNSUPPORTED</b>: ${esc(v.why)}`) : '';
-            return `<li class="${v && !v.supported ? 'bad' : ''}">${esc(x.text)} <small>${x.cites.map(link).join(', ')} · from Ch ${x.gate}${mark}</small></li>`;
+            const vs = checks.map((c) => ({ name: c.name, v: c.s?.results[l]?.[slug]?.find((r) => r.n === i + 1) })).filter((x) => x.v);
+            const mark = vs.map(({ name, v }) => (v!.supported ? ` · ${name}: supported` : ` · ${name}: <b>UNSUPPORTED</b> (${esc(v!.why)})`)).join('');
+            const last = vs[vs.length - 1]?.v;
+            return `<li class="${last && !last.supported ? 'bad' : ''}">${esc(x.text)} <small>${x.cites.map(link).join(', ')} · from Ch ${x.gate}${mark}</small></li>`;
           })
           .join('');
         const probs = b.labels[l].problems.filter((p) => p.startsWith(`${slug} `) || p.startsWith(`${slug}:`)).map((p) => `<p class="prob">Program: ${esc(p)}</p>`).join('');
@@ -55,8 +60,8 @@ const html = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta n
 <p><small>GLOSSARY · BAKE-OFF · PRIVATE (not on GitHub or the site)</small></p>
 <h1>Three models, labelled A, B and C</h1>
 <p>The same prompt (<code>${esc(b.prompt_file)}</code>) and the whole book to each model, on ${esc(b.date)}. Which label is which model is in a separate key file, not in this page. Every chapter is shown.</p>
-<table><thead><tr><th>Label</th><th>Sentences</th><th>Unsupported</th><th>Program problems</th></tr></thead><tbody>${rows}</tbody></table>
-${s ? `<p><small>Checked by ${esc(s.checker.model)} (${esc(s.checker.maker)}), not one of the three, against each sentence's cited blocks only, on ${esc(s.checker.date)}. A sentence that fails the program's checks (citation, word-for-word quote, gate) counts as unsupported.</small></p>` : ''}
+<table><thead><tr><th>Label</th><th>Sentences</th><th>Unsupported, cited blocks only</th><th>Unsupported, with the block before</th><th>Program problems</th></tr></thead><tbody>${rows}</tbody></table>
+${s ? `<p><small>Checked by ${esc(s.checker.model)} (${esc(s.checker.maker)}), not one of the three, on ${esc(s.checker.date)}, twice: against each sentence's cited blocks only, and with each cited block shown with the block before it, there only to show who is speaking. A sentence that fails the program's checks (citation, word-for-word quote, gate) counts as unsupported.</small></p>` : ''}
 ${sections}
 </body></html>
 `;
