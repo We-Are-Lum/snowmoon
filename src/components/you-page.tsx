@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
-import { IMAGES } from '~/lib/config';
+import { ILLUSTRATION_CHECK, IMAGES } from '~/lib/config';
 import { authFetch, signOut, signOutWallet, useAuth, useWalletAlongside, walletFetch } from '~/lib/client-auth';
 import { frameView, labelFor, pictureView, posterAlt, posterView } from '~/lib/scene-posters';
 import type { BoardItem, FrameItem, OwnWork, PictureItem, SceneItem, Who } from '~/lib/you';
@@ -26,6 +26,7 @@ const W = {
   loading: 'Loading…',
   failed: 'Your page didn’t load. Try again in a moment.',
   account: 'Your account',
+  illustrations: 'Review the seeded images (owner only)',
   farcaster: 'Farcaster',
   kindFarcaster: 'Farcaster',
   kindWallet: 'Wallet',
@@ -184,6 +185,12 @@ export function YouPage() {
       <AgentsOnYou />
       {/* The 30-day note about automatic links (owner, 2026-10-22), for everyone signed in. */}
       <LinkNote className="you-note" />
+      {/* The owner's image review (owner, 2026-10-23): a link for the owner only; the page and its API check again. */}
+      {who.kind === 'farcaster' && who.fid !== undefined && ILLUSTRATION_CHECK.owners.includes(who.fid) && (
+        <p className="you-note">
+          <Link href="/you/illustrations">{W.illustrations}</Link>
+        </p>
+      )}
       <section className="you-section" aria-labelledby="you-account">
         <h2 id="you-account">{W.account}</h2>
         <AccountRows

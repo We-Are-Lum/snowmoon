@@ -48,3 +48,22 @@
   .you-item { grid-template-columns: minmax(0, 1fr); }
   .you-facts { grid-template-columns: minmax(0, 1fr); }
 }
+/* The owner's image review (/you/illustrations, 2026-10-23): one job per item, worst first. */
+.illus-list { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 28px; }
+.illus-item article { display: flex; flex-direction: column; gap: 12px; padding-bottom: 24px; border-bottom: 1px solid var(--rule); min-width: 0; }
+.illus-head { margin: 0; display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 12px; font-weight: 400; font-size: 18px; line-height: 1.3; color: var(--ink); }
+.illus-id { font-family: var(--label); font-size: var(--text-label); letter-spacing: var(--ls-label); color: var(--muted); overflow-wrap: anywhere; }
+.illus-verdict { font-family: var(--label); font-size: var(--text-label); letter-spacing: var(--ls-label); text-transform: uppercase; padding: 2px 8px; border: 1px solid currentColor; border-radius: 2px; }
+.illus-verdict.is-wrong { color: var(--warn); }
+.illus-verdict.is-partly { color: var(--ink); border-style: dashed; }
+.illus-verdict.is-matches { color: var(--veridia); }
+.illus-verdict.is-unchecked { color: var(--muted); }
+.illus-passage { display: flex; flex-direction: column; gap: 8px; padding-left: 12px; border-left: 2px solid var(--rule); }
+.illus-passage p { margin: 0; font-size: 16px; line-height: 1.45; color: var(--muted); overflow-wrap: anywhere; white-space: pre-line; }
+.illus-passage p.is-target { color: var(--ink); }
+.illus-passage p.you-meta { font-size: var(--text-label); }
+.illus-check { display: flex; flex-direction: column; gap: 8px; }
+.illus-who, .illus-problems { margin: 4px 0 0; padding-left: 18px; }
+.illus-who-notes { display: block; margin-top: 4px; color: var(--muted); }
+.illus-note { display: flex; flex-direction: column; gap: 8px; }
+.illus-note textarea { width: 100%; font: inherit; font-size: 16px; }

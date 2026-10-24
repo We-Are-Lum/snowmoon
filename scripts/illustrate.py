@@ -16,6 +16,13 @@ Setup (once):
 
 Run:
   .venv-image/bin/python scripts/illustrate.py content/snowmoon/illustrations/test-chapter-1.json
+
+Redo after the owner's image review (owner, 2026-10-23; scripts/illustration-redo.ts writes each "regenerate"
+decision into its job as "redo": {"note", "by_fid", "at"}):
+  .venv-image/bin/python scripts/illustrate.py content/snowmoon/illustrations/chapter-2.json --redo
+renders only the jobs with a redo not yet done, with the owner's note appended to the job's prompt, and records the
+note in the image's recipe credited to the owner ("owner_note"), with the sha256 of the picture it replaces. The
+job's own prompt is not changed; its redo gets "done" with the date.
 """
 
 import argparse
@@ -55,6 +62,12 @@ def reference_paths(job, out):
     return [str((ROOT / "images-out" / r) if "/" in r else (out / r)).removesuffix(".png") + ".png" for r in refs]
 
 
+def redo_note(job):
+    """The owner's note for a redo not yet done, or None."""
+    redo = job.get("redo")
+    return redo if redo and redo.get("note") and not redo.get("done") else None
+
+
 def compose_prompt(job, style):
     """Scene first, then who the references show, then props, then style.
 
@@ -62,6 +75,10 @@ def compose_prompt(job, style):
     painted onto the picture as lettering.
     """
     parts = [job["prompt"]]
+    # The owner's note from the image review goes right after the scene, where it reads as part of it.
+    note = redo_note(job)
+    if note:
+        parts.append(note["note"].strip())
     for i, c in enumerate(job.get("characters", []), start=1):
         profile = load(c)
         parts.append(f"Reference image {i} shows {profile['descriptor']}; keep the same face, hair, build and clothing.")
@@ -87,6 +104,7 @@ def main():
     ap.add_argument("--quantize", type=int, default=4, help="bits; 4 fits an 8 GB Mac")
     ap.add_argument("--only", nargs="*", help="job ids to render")
     ap.add_argument("--force", action="store_true", help="re-render images that already exist")
+    ap.add_argument("--redo", action="store_true", help="render only jobs with an owner's redo note not yet done (the image review)")
     args = ap.parse_args()
 
     from huggingface_hub import snapshot_download
@@ -107,6 +125,10 @@ def main():
     out.mkdir(parents=True, exist_ok=True)
     manifest_path = out / "manifest.json"
     done = {e["id"]: e for e in json.loads(manifest_path.read_text())["images"]} if manifest_path.exists() else {}
+    committed = RECIPES / f"{job_file.stem}.json"
+    if args.redo and not manifest_path.exists() and committed.exists():
+        # The redo replaces some of a chapter's images: keep every other image's committed recipe in the file.
+        done = {e["id"]: e for e in json.loads(committed.read_text())["images"]}
 
     model_path = snapshot_download(MODEL_REPO, revision=MODEL_REVISION)
     loaded = {"kind": None, "model": None}
@@ -145,10 +167,13 @@ def main():
         RECIPES.mkdir(parents=True, exist_ok=True)
         (RECIPES / f"{job_file.stem}.json").write_text(text)
 
+    redone = []
     for job in spec["jobs"]:
         if args.only and job["id"] not in args.only:
             continue
-        if not args.force and job["id"] in done and (out / done[job["id"]]["file"]).exists():
+        if args.redo and not redo_note(job):
+            continue
+        if not args.force and not args.redo and job["id"] in done and (out / done[job["id"]]["file"]).exists():
             continue
         jstyle = job.get("style")
         prompt = compose_prompt(job, jstyle if isinstance(jstyle, dict) else load(jstyle) if jstyle else style)
@@ -178,8 +203,10 @@ def main():
             print(f"  {job['id']}: skipped after two failures", flush=True)
             continue
         path = out / f"{job['id']}.png"
+        previous = done.get(job["id"])
         image.save(str(path))
         secs = time.time() - t
+        note = redo_note(job)
         done[job["id"]] = {
             "id": job["id"],
             "chapter": job.get("chapter"),
@@ -192,11 +219,28 @@ def main():
             "height": job["height"],
             "references": [{"file": Path(r).name, "sha256": sha256_file(r)} for r in refs or []],
             "generation_seconds": round(secs, 1),
+            **({
+                # The owner's words, credited to them (principle 2: the words are a signed-in person's).
+                "owner_note": {"text": note["note"].strip(), "by_fid": note["by_fid"], "at": note["at"],
+                               "credit": f"FID {note['by_fid']} (owner), from the image review",
+                               "where": "appended to the job's prompt, after the scene"},
+                "replaces": {"sha256": previous["sha256"]} if previous else None,
+            } if note else {}),
         }
+        if note:
+            redone.append(job["id"])
         print(f"  {job['id']}: {secs:.0f}s", flush=True)
         write_manifest()
 
     write_manifest()
+    if redone:
+        # Mark each redo done in the job file, so it isn't rendered again; the note stays as it was written.
+        stamp = datetime.now(timezone.utc).isoformat(timespec="seconds")
+        for job in spec["jobs"]:
+            if job["id"] in redone:
+                job["redo"]["done"] = stamp
+        job_file.write_text(json.dumps(spec, indent=2, ensure_ascii=False) + "\n")
+        print(f"redone: {', '.join(redone)}; publish them with scripts/publish-images.ts after the owner has looked", flush=True)
 
 
 if __name__ == "__main__":

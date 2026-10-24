@@ -1,0 +1,276 @@
+{
+ "about": "check:ui fixture for /you/illustrations: real jobs, made-up check answers (no model was called), served out of order so the check proves the page shows them worst first.",
+ "items": [
+  {
+   "id": "c1-b005-toy-drone",
+   "chapter": 1,
+   "idx": 5,
+   "passage": [
+    {
+     "idx": 3,
+     "text": "He looked around, breathed in and briefly stopped to enjoy the nature, dense enough and quiet enough that he almost forgot that he was in the middle of the Kalimar district of Meldan, the capital city of Veridia.",
+     "target": false
+    },
+    {
+     "idx": 4,
+     "text": "Suddenly, a small drone flew over his head. Gladias instinctively checked his watch. Almost immediately, a green checkmark lit up. Even before he could fully process what had happened, his watch had engaged in a zero-knowledge authentication protocol, and received a cryptographic attestation verifying that the drone was a toy, and its navigation algorithm had a safety override that would prevent it from coming within five decimeters of a human without permission. His watch had learned that the drone was not a threat - and nothing else.",
+     "target": false
+    },
+    {
+     "idx": 5,
+     "text": "The drone flew off, and continued above a sidewalk branching off to the left. For a moment, Gladias could briefly see its shape: a small ball, with feather-like rotors on three sides. And the very next moment, a young boy jumped up, and grabbed it with his hand while it was still in the sky.",
+     "target": true
+    },
+    {
+     "idx": 6,
+     "text": "\"Five points for me!\", the boy shouted excitedly.",
+     "target": false
+    },
+    {
+     "idx": 7,
+     "text": "Gladias let his attention wander back to peacefully observing his surroundings. The boy who had just caught the ball was part of a family with four children, the younger two each riding a tricycle.",
+     "target": false
+    }
+   ],
+   "dateline": "Meldan, Veridia · 3724 Snowmoon 3",
+   "image": {
+    "url": "https://media.snowmoon.party/images/seed/c1/c1-b005-toy-drone-ea7f59a8c05f.jpg",
+    "width": 1024,
+    "height": 576,
+    "sha256": "ea7f59a8c05f2caf1774cbc08fa48d27d631e290687a367a4b985ba9a207e684"
+   },
+   "excluded": null,
+   "recipe": "content/snowmoon/recipes/images/chapter-1.json",
+   "prompt": "Wide shot on a quiet morning footpath under tall trees. A figure in a privacy robe walks along the path, seen from the side. Medieval-style houses of large clean stone bricks sit behind the trees, melting into leaves and plants. On a sidewalk branching off to the left, a young boy leaps up and grabs a small ball-shaped toy drone with feather-like rotors out of the air, while two smaller children ride tricycles nearby and their parents watch. Soft green light filtering through the leaves.",
+   "cast": [],
+   "inJobFile": null,
+   "decision": null,
+   "check": {
+    "run": "fixture",
+    "model": "google/gemini-4-argon",
+    "answer": {
+     "who": {
+      "count": 3,
+      "identities": [
+       "unnamed: three people (made-up fixture answer, not a model's)"
+      ],
+      "notes": ""
+     },
+     "setting": "Fixture setting.",
+     "action": "Fixture action.",
+     "time_of_day": "afternoon; agrees",
+     "problems": [],
+     "verdict": "matches",
+     "why": "Fixture: everything the passage needs is there."
+    }
+   },
+   "verdict": "matches",
+   "problems": 0
+  },
+  {
+   "id": "c26-b132-drone-escape",
+   "chapter": 26,
+   "idx": 132,
+   "passage": [
+    {
+     "idx": 130,
+     "text": "Zei was confused, but immediately did the only thing that made sense. The drones were too low for the rope to work. Instead, he directed two of the three remaining drones to slow to a stop, right in front of the presidential residence.",
+     "target": false
+    },
+    {
+     "idx": 131,
+     "text": "Both checkmarks turned green. The drones accelerated again, and sped ahead. Zei directed the third drone to hold back, and fire on all Arctic drones that it could detect.",
+     "target": false
+    },
+    {
+     "idx": 132,
+     "text": "He checked the visual. On each of the two drones that were flying off, someone was holding on tightly to their backs. One was Tafindel, and the other was their man on the inside - his assistant. They were both wearing thermal cloaks. Good job Den, Zei thought.",
+     "target": true
+    },
+    {
+     "idx": 133,
+     "text": "Zei continued to watch the screen intently. Somehow, against all odds, they seemed to have done it?",
+     "target": false
+    },
+    {
+     "idx": 134,
+     "text": "Den cleared his throat and began to speak.",
+     "target": false
+    }
+   ],
+   "dateline": "Meldan, Veridia · 3724 Frostime 6",
+   "image": null,
+   "excluded": "the same man appears twice, even after a rewrite with one rider",
+   "recipe": "content/snowmoon/recipes/images/chapter-26.json",
+   "prompt": "Dramatic shot of a city street at dusk where every streetlight and window flickers chaotically. One large flying drone speeds low between the buildings toward the viewer, and the man from reference image 1, in a hooded silver thermal cloak, clings tightly to its back, his face tense and determined, the wind tugging at his hood. Far behind him, a second drone is only a small dark shape against rising smoke from a grand residence. Cool blues and greys with flickering warm lights.",
+   "cast": [
+    "Tafindel"
+   ],
+   "inJobFile": null,
+   "decision": null,
+   "check": null,
+   "verdict": null,
+   "problems": 0
+  },
+  {
+   "id": "c2-b038-foil-classroom",
+   "chapter": 2,
+   "idx": 38,
+   "passage": [
+    {
+     "idx": 36,
+     "text": "Zei sighed.",
+     "target": false
+    },
+    {
+     "idx": 37,
+     "text": "The four of them walked back up a flight of stairs, entered a large room, and sat down beside each other on one of the rows of chairs.",
+     "target": false
+    },
+    {
+     "idx": 38,
+     "text": "The walls were covered with a thick, hastily organized layer of anti-transmission foil. Coated on top of the foil was a classic aesthetic of Dzego: pictures of cute cartoon animals playing with electronic gadgets and chemistry lab equipment, with a backdrop of green trees and blue skies. At the front of the room, there was an inflated cartoon-style pig on the left and a hamster on the right. The pig, in its left hand, was holding a calculator. The hamster, in its right hand, was holding a vial of some green liquid. With their other two hands, the two together held up a poster with DU's motto:",
+     "target": true
+    },
+    {
+     "idx": 39,
+     "text": "\npa jan li sun zo\nzai gau fe pa jan\n\ngo li sun zo\nbai gau fe go\n",
+     "target": false
+    },
+    {
+     "idx": 40,
+     "text": "\"One man learning will set one man free. A nation learning will make the nation great.\"",
+     "target": false
+    }
+   ],
+   "dateline": "Pafogai Du, Dzego · 3724 Snowmoon 5",
+   "image": {
+    "url": "https://media.snowmoon.party/images/seed/c2/c2-b038-foil-classroom-8d4a2147d5ed.jpg",
+    "width": 1024,
+    "height": 576,
+    "sha256": "8d4a2147d5edb915116afe6d57b53e257a1b310f5ccf1fb0b0bf861224a640e6"
+   },
+   "excluded": null,
+   "recipe": "content/snowmoon/recipes/images/chapter-2.json",
+   "prompt": "Medium-wide view of an underground classroom with rows of chairs full of teenage students. The walls are covered with a thick, hastily applied layer of crinkled silver foil, painted over with cute cartoon animals playing with gadgets and chemistry glassware against green trees and blue sky. At the front stand two large inflatable cartoon figures, a pig holding a calculator and a hamster holding a vial of green liquid, together holding up a plain blank banner. In a row of chairs the boy from reference image 1 sits beside the boy from reference image 2, both looking forward attentively.",
+   "cast": [
+    "Zei Leimin",
+    "Fin"
+   ],
+   "inJobFile": null,
+   "decision": {
+    "decision": "regenerate",
+    "note": "Fixture note.",
+    "byFid": 6786,
+    "at": "2026-10-23T12:00:00.000Z",
+    "imageSha256": null,
+    "checkRun": "fixture"
+   },
+   "check": {
+    "run": "fixture",
+    "model": "google/gemini-4-argon",
+    "answer": {
+     "who": {
+      "count": 3,
+      "identities": [
+       "unnamed: three people (made-up fixture answer, not a model's)"
+      ],
+      "notes": ""
+     },
+     "setting": "Fixture setting.",
+     "action": "Fixture action.",
+     "time_of_day": "afternoon; agrees",
+     "problems": [
+      {
+       "type": "contradicts_facts",
+       "detail": "Fixture: the hair colour differs from the sheet."
+      }
+     ],
+     "verdict": "partly",
+     "why": "Fixture: recognisable, one detail off."
+    }
+   },
+   "verdict": "partly",
+   "problems": 1
+  },
+  {
+   "id": "c27-b114-countdown-chant",
+   "chapter": 27,
+   "idx": 114,
+   "passage": [
+    {
+     "idx": 112,
+     "text": "\"Beat you!\"",
+     "target": false
+    },
+    {
+     "idx": 113,
+     "text": "They kept watching the countdown. As soon as it hit ten, they started chanting in unison:",
+     "target": false
+    },
+    {
+     "idx": 114,
+     "text": "\"PA GU ... SO ... BI ... ZE ... HA ... MU ... FO ... SHI ... LE ... PA ... HUI ZIU FA!\"",
+     "target": true
+    },
+    {
+     "idx": 115,
+     "text": "The screen split into two views. On the left, there were five parallel progress bars showing the computation of five garbled-circuit executions with the five bots. On the right, a large collection of pie charts, one for each question that had been asked. Votes quickly began coming in.",
+     "target": false
+    },
+    {
+     "idx": 116,
+     "text": "\"Let's zoom in to the ones we care about\", Verdow offered.",
+     "target": false
+    }
+   ],
+   "dateline": "3724 Frostime 8",
+   "image": {
+    "url": "https://media.snowmoon.party/images/seed/c27/c27-b114-countdown-chant-5fa436bfd264.jpg",
+    "width": 1024,
+    "height": 576,
+    "sha256": "5fa436bfd264ca9e3a97698a387a12dd4beba390ee903537978a78d641aed52e"
+   },
+   "excluded": null,
+   "recipe": "content/snowmoon/recipes/images/chapter-27.json",
+   "prompt": "Wide shot of a hotel meeting room where seven people sit around a long table facing a wall lit by a projection of soft glowing abstract colored shapes. In the foreground the young man from reference image 1 and the young woman from reference image 2 lean forward, laughing and chanting together with fists raised; the others at the table, seen from behind and in soft focus, join in. Cups of tea on the table. Excited, playful energy, warm indoor light with muted greens.",
+   "cast": [
+    "Zei Leimin",
+    "Bai Jahen"
+   ],
+   "inJobFile": null,
+   "decision": null,
+   "check": {
+    "run": "fixture",
+    "model": "google/gemini-4-argon",
+    "answer": {
+     "who": {
+      "count": 3,
+      "identities": [
+       "unnamed: three people (made-up fixture answer, not a model's)"
+      ],
+      "notes": ""
+     },
+     "setting": "Fixture setting.",
+     "action": "Fixture action.",
+     "time_of_day": "afternoon; agrees",
+     "problems": [
+      {
+       "type": "reference_copy_in_crowd",
+       "detail": "Fixture: a cast member appears twice."
+      },
+      {
+       "type": "stray_text",
+       "detail": "Fixture: garbled letters on the wall."
+      }
+     ],
+     "verdict": "wrong",
+     "why": "Fixture: the same person appears twice."
+    }
+   },
+   "verdict": "wrong",
+   "problems": 2
+  }
+ ],
+ "canSave": true
+}

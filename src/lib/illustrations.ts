@@ -1,7 +1,7 @@
 import 'server-only';
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
-import { WORK } from './config';
+import { ILLUSTRATION_CHECK, WORK } from './config';
 
 /**
  * The project's seeded key-moment images for a chapter, from
@@ -19,6 +19,19 @@ export interface Illustration {
   /** Repo path of the lettering record, for images lettered in code. */
   lettering?: string;
   alt: string;
+  /**
+   * A person reviewed this very picture and kept it (the owner's image review, 2026-10-23; the decision the redo writes
+   * into the job file). Only while ILLUSTRATION_CHECK.reviewMarkPublic is on: off until the owner allows it.
+   */
+  reviewed?: true;
+}
+
+/** Whether the job file records a person's "keep" for this picture (its sha256: the shown one or the clean one). */
+function reviewedKeep(chapter: number, id: string, shas: (string | undefined)[]): boolean {
+  if (!ILLUSTRATION_CHECK.reviewMarkPublic) return false;
+  const file = path.join(process.cwd(), 'content', WORK.id, 'illustrations', `chapter-${chapter}.json`);
+  const review = JSON.parse(readFileSync(file, 'utf8')).jobs.find((j: { id: string }) => j.id === id)?.review as { decision?: string; image_sha256?: string | null } | undefined;
+  return review?.decision === 'keep' && !!review.image_sha256 && shas.includes(review.image_sha256);
 }
 
 /**
@@ -54,7 +67,7 @@ function describe(chapter: number, id: string): string {
   }).replace(/(^|[.!?]\s+)([a-z])/g, (_, lead: string, c: string) => lead + c.toUpperCase()) + lettered;
 }
 
-type Entry = Illustration & { chapter: number; lettered?: { record?: string } };
+type Entry = Illustration & { chapter: number; sha256?: string; clean?: { sha256?: string }; lettered?: { record?: string } };
 let cache: Entry[] | null = null;
 
 function all(): Entry[] {
@@ -68,7 +81,7 @@ function all(): Entry[] {
 export function loadIllustrations(n: number): Illustration[] {
   return all()
     .filter((i) => i.chapter === n)
-    .map(({ id, idx, url, width, height, recipe, lettered }) => ({
+    .map(({ id, idx, url, width, height, recipe, lettered, sha256, clean }) => ({
       id,
       idx,
       url,
@@ -77,5 +90,6 @@ export function loadIllustrations(n: number): Illustration[] {
       recipe,
       ...(lettered?.record ? { lettering: lettered.record } : {}),
       alt: altFor(n, id),
+      ...(reviewedKeep(n, id, [sha256, clean?.sha256]) ? { reviewed: true as const } : {}),
     }));
 }
