@@ -54,7 +54,8 @@
  *   sign-in, the composer's status and the queue are mocked in the browser.
  * - The account at the foot of the rail and the menu sheet (owner, 2026-10-18): signed out it offers "Sign in with
  *   Farcaster", then "Sign in with a wallet" (the editor's button, with its note); a wallet session (planted in
- *   storage, nothing signed) shows its shortened address and a Sign out that ends it; a Farcaster session shows
+ *   storage, nothing signed; the assistant's status answers it 403, as for a wallet not linked to Farcaster) stays
+ *   signed in on load, and shows its shortened address and a Sign out that ends it; a Farcaster session shows
  *   the Farcaster name and no wallet option. The name is a link to the You page (/you), and the top bar shows an
  *   avatar linking there, between ? and the menu, only when signed in; /you signed out meets the floors and shows
  *   only the sign-in offer (owner, 2026-10-18).
@@ -280,6 +281,19 @@ const plantWallet = (address: string) => {
   const body = btoa(JSON.stringify({ sub: 'w', exp: 4102444800 })).replace(/=+$/, '');
   localStorage.setItem('snowmoon.wallet', JSON.stringify({ token: `x.${body}.y`, address, short: `${address.slice(0, 6)}…${address.slice(-4)}`, exp: 4102444800 }));
 };
+/**
+ * Plant the wallet session, and answer the assistant's status as the server answers a wallet that isn't linked to a
+ * Farcaster account: 403, which keeps the session (owner, 2026-10-22, src/app/api/chat/status/route.ts). The planted
+ * token isn't a real one, so the server itself would answer 401, and a 401 ends a wallet session (client-auth.ts).
+ * Only requests carrying the planted token are answered here; the rest go on to the server.
+ */
+async function plantWalletSession(page: Page) {
+  const planted = `Bearer x.${btoa(JSON.stringify({ sub: 'w', exp: 4102444800 })).replace(/=+$/, '')}.y`;
+  await page.route('**/api/chat/status', (r) =>
+    r.request().headers().authorization === planted ? r.fulfill({ status: 403, json: { error: 'Sign in with Farcaster to use the assistant' } }) : r.fallback(),
+  );
+  await page.evaluate(plantWallet, WALLET_ADDRESS);
+}
 /** The account inside `within` (src/components/app-shell.tsx: Account in the rail, MenuAccount at the top of the
  *  phone menu): signed out, Farcaster then a wallet, both shown. */
 const accountIn = (within: string) => `${within} .menu-account`;
@@ -321,6 +335,7 @@ async function checkAccountSignedOut(page: Page, within: string, where: string) 
 async function checkAccountWallet(page: Page, within: string, where: string) {
   const acct = page.locator(accountIn(within));
   const short = `${WALLET_ADDRESS.slice(0, 6)}…${WALLET_ADDRESS.slice(-4)}`;
+  if (!(await page.evaluate(() => localStorage.getItem('snowmoon.wallet')))) fail(`${where}: the wallet session ended on load (a route it was sent to answered 401)`);
   await acct.locator('.menu-account-name', { hasText: short }).waitFor({ timeout: 10000 }).catch(() => fail(`${where}: a wallet session does not show ${short}`));
   if (await acct.locator('button', { hasText: /Sign in/ }).count()) fail(`${where}: a wallet session still offers sign-in`);
   {
@@ -1571,7 +1586,7 @@ try {
         await page.waitForSelector('.panel .as-signed-out button');
         await checkAccountSignedOut(page, '.rail', `@${width} rail`);
         await shot(page, `desktop-${width}-account-signed-out`, scheme);
-        await page.evaluate(plantWallet, WALLET_ADDRESS);
+        await plantWalletSession(page);
         await open(page, '/chapter/1');
         await shot(page, `desktop-${width}-account-wallet`, scheme);
         await checkAccountWallet(page, '.rail', `@${width} rail`);
@@ -1620,7 +1635,7 @@ try {
     await shot(page, 'phone-390-menu', scheme);
     await page.keyboard.press('Escape');
     // A wallet session in the menu, then Sign out (nothing signed: the session is planted in storage).
-    await page.evaluate(plantWallet, WALLET_ADDRESS);
+    await plantWalletSession(page);
     await open(page, '/chapter/1');
     await page.click('.topbar-icon[aria-label="Menu"]');
     await page.waitForSelector('.menu-sheet');
