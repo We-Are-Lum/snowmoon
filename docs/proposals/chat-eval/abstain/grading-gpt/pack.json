@@ -1,0 +1,2638 @@
+[
+ {
+  "id": "f08",
+  "question": "What first got Gladias interested in working on Steering?",
+  "gold": [
+   "c3-b24"
+  ],
+  "answer_fact": "Writing an alternative client for Silverchat, whose open API existed thanks to openness taxes, inspired him to give back.",
+  "blocks": {
+   "c3-b23": "\"So yeah, many of the Keepers think we should bump up more taxes on that kind of behavior. So either they stop, or, well, they keep going and the internet sucks more, but the gov gets enough money that we can pay for everyone to get better healthcare. The problem is, Bluewhale has been driving a hard campaign against it. One Keeper was not careful about their privacy, she and her views got found out recently, it went public, and her husband lost his job only a few days later. No idea if it's connected, but, well, this is why we gotta run this whole tax system with all these cryptographic networks randomly selecting Keepers, anonymous discussion and voting, and privacy robes.\"",
+   "c3-b24": "The mention of Bluewhale brought Gladias back to his younger days, when he had learned programming by writing an alternative client for the other major social platform, Silverchat. That had only been possible, he knew, because the API was open, and the platform allowed developers to make alternative clients and users to export and migrate their data - all decisions that had undoubtedly been motivated, or at least justified to the bean counters, by trying to lower their tax rate on the hardware and software openness rubric. That experience had been what motivated Gladias to contribute back, and get involved in Steering himself.",
+   "c8-b55": "\"Why did you choose to become an Acolyte?\"",
+   "c8-b56": "\"The first hobby project I gave myself when I seriously got into programming as an adult was writing an alternative client for Silverchat. After I finished, I tried to do the same for Bluewhale. And it was so much harder, because they were more closed and proprietary in many ways. That was when I realized just how much value Silverchat's openness was bringing to me that Silverchat itself would never capture. And I had been studying rubrics only a few days before, and it clicked - this, the aspects of a good society that the market alone misses, is exactly why Steering is so important. And so I felt motiv-\""
+  },
+  "answers": [
+   {
+    "label": "K",
+    "answer": "His early programming work on an open\u2011source alternative client for the social platform Silverchat showed him how openness could lower tax rates and benefit users, and that experience motivated him to give back and become involved in the Steering system. [c3-b24]",
+    "cited": [
+     "c3-b24"
+    ]
+   },
+   {
+    "label": "M",
+    "answer": "Gladias first became interested in Steering after his teenage programming project: he wrote an alternative client for the open\u2011source social platform Silverchat. Seeing how the platform\u2019s open API let users export data\u2014and how that openness was justified to lower the \u201chardware and software openness\u201d tax rubric\u2014made him realize the societal value of openness and motivated him to give back by joining the Steering system[c3-b24]. A later reflection links the same insight about openness to why Steering matters, reinforcing that his Silverchat work sparked his involvement[c8-b56].",
+    "cited": [
+     "c3-b24",
+     "c8-b56"
+    ]
+   },
+   {
+    "label": "P",
+    "answer": "Gladias first became interested in Steering after his teenage programming project: he wrote an alternative client for the open\u2011source social platform Silverchat. Seeing how the platform\u2019s openness let developers build freely\u2014and how that openness was tied to lower \u201copenness\u201d tax rates\u2014made him realize the value of open systems and motivated him to give back by joining the Steering system[c3-b24].",
+    "cited": [
+     "c3-b24"
+    ]
+   },
+   {
+    "label": "R",
+    "answer": "Gladias says his first spark came when, after writing an alternative client for the open\u2011source chat platform Silverchat, he realized how much value openness created, and a few days later, while studying rubrics, he connected that insight to why Steering is important for a good society[c8-b56].",
+    "cited": [
+     "c8-b56"
+    ]
+   },
+   {
+    "label": "T",
+    "answer": "He first became interested in Steering after his teenage programming work\u2014writing an alternative client for the open\u2011source platform Silverchat\u2014and seeing how openness lowered tax rates; that experience motivated him to give back and join the Steering system [c3-b24].",
+    "cited": [
+     "c3-b24"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "f26",
+  "question": "What did the Freetown charging companies do to the carmaker that refused to chip in for defense?",
+  "gold": [
+   "c10-b24"
+  ],
+  "answer_fact": "They threatened to block Mogna's cars from about 90% of Freetown's chargers, and Mogna gave in the next day.",
+  "blocks": {
+   "c10-b23": "The robot came back, carrying Jahn's food and water. Jahn picked up the plate of food and put it onto the table. He then picked up the glass of water, and immediately took a sip.",
+   "c10-b24": "\"They're now donating three percent of their revenues to defense, and even colluding to punish companies that don't. Mogna was unwilling to contribute to defense - they said something about corruption, though everyone thought they were just being cheap - and then the charging station makers came together and threatened to lock out Mogna's cars from their grid, ninety percent of charging stations across Freetown, unless they joined in. Yesterday Mogna folded.\""
+  },
+  "answers": [
+   {
+    "label": "K",
+    "answer": "The charging\u2011station makers banded together and threatened to lock Mogna\u2019s cars out of their network\u2014effectively cutting off access to about ninety\u202fpercent of Freetown\u2019s charging stations\u2014unless the carmaker contributed to defense. [c10-b24]",
+    "cited": [
+     "c10-b24"
+    ]
+   },
+   {
+    "label": "M",
+    "answer": "The charging\u2011station makers banded together and threatened to block Mogna\u2019s vehicles from their network\u2014effectively locking Mogna\u2019s cars out of about ninety\u202fpercent of Freetown\u2019s charging stations unless the carmaker contributed to defense. [c10-b24]",
+    "cited": [
+     "c10-b24"
+    ]
+   },
+   {
+    "label": "P",
+    "answer": "The charging\u2011station makers threatened to block Mogna\u2019s cars from their network\u2014locking them out of about ninety\u202fpercent of Freetown\u2019s charging stations\u2014unless the carmaker contributed to defense, which led to Mogna\u2019s collapse. [c10-b24]",
+    "cited": [
+     "c10-b24"
+    ]
+   },
+   {
+    "label": "R",
+    "answer": "The charging\u2011station makers threatened to block Mogna\u2019s cars from their network, effectively locking them out of about ninety\u202fpercent of Freetown\u2019s charging stations unless the carmaker contributed to defense. [c10-b24]",
+    "cited": [
+     "c10-b24"
+    ]
+   },
+   {
+    "label": "T",
+    "answer": "The charging\u2011station makers banded together and threatened to lock out Mogna\u2019s cars from roughly ninety\u202fpercent of Freetown\u2019s charging stations unless the carmaker contributed to defense, after which Mogna folded. [c10-b24]",
+    "cited": [
+     "c10-b24"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "f43",
+  "question": "What did Mov find out when he followed Delwart after the overheard meeting?",
+  "gold": [
+   "c15-b36"
+  ],
+  "answer_fact": "Two more meetings: one with a robed stranger about Silverchat, one with a Keeper about Dreadknot; then Delwart's trail went cold.",
+  "blocks": {
+   "c13-b29": "\"What's going on?\"",
+   "c13-b30": "\"He was a little more careless than usual this time\" , Mov said. \"I followed him to his next meeting. It was with another Keeper. I got the adjacent booth, and I could listen through the vibrations on the wall.\"",
+   "c13-b31": "\"Wow. The GPH booths are that much worse than the ones the Keepers use?\"",
+   "c13-b32": "\"Yep. I don't think enough people know the difference yet.\"",
+   "c13-b33": "\"And we were using those booths for our conversations for months...\"",
+   "c13-b34": "\"Indeed... well, now we know.\"",
+   "c15-b35": "\"Did you manage to track him down any more after that time?\"",
+   "c15-b36": "\"Only two more times after that. First was a meeting with someone in a privacy robe, not sure who, and they were talking a bunch about Silverchat. Second was a meeting with a Keeper, I made out some conversation about Dreadknot. Nothing more since about a month ago, he either changed his location or he got much better at hiding.\""
+  },
+  "answers": [
+   {
+    "label": "K",
+    "answer": "Mov discovered that Delwart went to a second meeting with another Keeper, and by positioning himself in the adjacent booth Mov was able to eavesdrop on it through the wall\u2019s vibrations. [c13-b30]",
+    "cited": [
+     "c13-b30"
+    ]
+   },
+   {
+    "label": "M",
+    "answer": "Mov discovered that Delwart\u2019s next rendez\u2011vous was with another Keeper, and that the Greater Plum Harbor booths are poorly shielded\u2014Mov could eavesdrop on the conversation by picking up wall vibrations from an adjacent booth[c13-b30][c13-b31].",
+    "cited": [
+     "c13-b30",
+     "c13-b31"
+    ]
+   },
+   {
+    "label": "P",
+    "answer": "Mov learned that Delwart\u2019s next meeting was with another Keeper, and that the adjacent GPH booth let Mov listen to the conversation through wall vibrations, showing the booths are far less secure than the Keepers\u2019 own ones[c13-b30][c13-b31][c13-b32][c13-b33].",
+    "cited": [
+     "c13-b30",
+     "c13-b31",
+     "c13-b32",
+     "c13-b33"
+    ]
+   },
+   {
+    "label": "R",
+    "answer": "(not shown: the passages don't say)",
+    "cited": []
+   },
+   {
+    "label": "T",
+    "answer": "Mov learned that Delwart\u2019s next rendez\u2011vous was with another Keeper; by taking the adjacent GPH booth, Mov could eavesdrop on the conversation through wall vibrations, revealing how insecure the public booths are compared with the Keeper\u2011only ones[c13-b30][c13-b31][c13-b32][c13-b33][c13-b34].",
+    "cited": [
+     "c13-b30",
+     "c13-b31",
+     "c13-b32",
+     "c13-b33",
+     "c13-b34"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "f05",
+  "question": "What did the instructor say was wrong with Zei's arm after the attack on the class?",
+  "gold": [
+   "c2-b112"
+  ],
+  "answer_fact": "His scan suggested a broken bone, and he told Zei to go to the hospital that same day.",
+  "blocks": {
+   "c2-b111": "\"Some, but I can handle it.\"",
+   "c2-b112": "\"It looks like a broken bone. Get it checked out at the hospital today. The sooner you go, the sooner you will get better.\""
+  },
+  "answers": [
+   {
+    "label": "K",
+    "answer": "The instructor told Zei that his arm \u201clooks like a broken bone\u201d and advised him to get it checked at a hospital right away[c2-b112].",
+    "cited": [
+     "c2-b112"
+    ]
+   },
+   {
+    "label": "M",
+    "answer": "The instructor said Zei\u2019s arm \u201clooks like a broken bone.\u201d [c2-b112]",
+    "cited": [
+     "c2-b112"
+    ]
+   },
+   {
+    "label": "P",
+    "answer": "The instructor scanned Zei\u2019s arm and told him it appeared to be a broken bone, urging him to see a hospital right away[c2-b112].",
+    "cited": [
+     "c2-b112"
+    ]
+   },
+   {
+    "label": "R",
+    "answer": "The instructor said Zei\u2019s arm \u201clooks like a broken bone.\u201d\u202f[c2-b112]",
+    "cited": [
+     "c2-b112"
+    ]
+   },
+   {
+    "label": "T",
+    "answer": "The instructor said Zei\u2019s arm \u201clooks like a broken bone.\u201d\u202f[c2-b112]",
+    "cited": [
+     "c2-b112"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "f25",
+  "question": "After his attack fell apart, how did Zei manage to come back and win the city final?",
+  "gold": [
+   "c7-b102",
+   "c7-b109",
+   "c7-b105"
+  ],
+  "answer_fact": "He had his AI build a factory with sixteen possible plans, secretly triggered by his own gliders, launching a surprise attack from mid-north.",
+  "blocks": {
+   "c14-b34": "\"FI LE GEI TAU FA.\"",
+   "c14-b35": "Zei immediately understood the meaning of the new rules. The shrines are the only objects that violate mass conservation - though even still, with these new rules, nothing decreases entropy. XOR is not weight-preserving, but it is reversible. So the game board would get more and more full, and more and more messy, over time. The reduced resource allocation meant that the intervention turns were not for building - they were for *steering*.",
+   "c14-b36": "Zei put down his usual walls, gliders and spaceships. This time though, he used some different designs - a steerable symbol-carrying spaceship he had developed months prior, that could change its direction if you intervene in only a few cells.",
+   "c14-b84": "The twelfth intervention turn came. By this point, the debris and stray gliders in the game field were so intense that offense was impossible. Zei simply kept building walls. Hunker down, play defense, outlast.",
+   "c14-b85": "The thirteenth intervention turn came. Zei had built four layers of walls around this ship, and finally the walls were beginning to crumble faster than he could create new ones.",
+   "c14-b86": "Finally, a few hundred turns after that, an alarm buzzed.",
+   "c14-b87": "\"And ... Zei Leimin is the winner!\"",
+   "c14-b88": "Zei let out a sigh of relief.",
+   "c7-b101": "Finally, something inside of Zei's mind clicked.",
+   "c7-b102": "\"Take my fourth westernmost symbol\" , he told the AI. \"Take the best sixteen strategies that you can come up with. Construct near that symbol a factory capable of executing each of those strategies. It should be activated by a glider coming in from the southwest, and the exact strategy chosen should depend on the type of glider and the time it hits. Then, near my second westernmost symbol, make that glider. Allocate eighty percent of resources this intervention turn to this.\"",
+   "c7-b104": "Bai's AI started thinking about countermeasures to all sixteen strategies, but soon hit a limit: it could not optimize defenses against all of them at the same time.",
+   "c7-b105": "Bai's AI also focused on increasing defenses across her own western flank. Zei's *first* gamble paid off, he realized: Bai herself did not realize just how much damage she had done on the west side, and just how little Zei had done to compensate. And so neither she nor her AI realized that by this point, Zei's fourth westernmost symbol could be in the middle of the field.",
+   "c7-b108": "A few hundred turns later, the glider sent by Zei's AI from the west was blocked by the brick that Zei had put in place. A few hundred turns after *that*, the gliders that Zei sent manually crashed into the factory, and activated it.",
+   "c7-b109": "The factory picked a strategy that was none of the four that Bai's AI had focused on planning for. And it was coming from a place that Bai had not expected: the halfway point between the center of the board and the northern edge. The factory quickly started generating symbol-carrying spaceships that began to move toward the east, and a storm of gliders that moved north, and then bounced off of rock formations and Bai's own walls to move toward the west. Bai, and her AI, were caught completely by surprise."
+  },
+  "answers": [
+   {
+    "label": "K",
+    "answer": "He adjusted to the new semi\u2011final rules, realizing the shrines would add non\u2011conserving XOR changes and that resources were now only for steering, not building\u202f[c14-b35]. He deployed his pre\u2011designed, steerable symbol\u2011carrying spaceship together with his usual walls and gliders, using a few intervention turns to guide the ship while the surrounding walls began to crumble\u202f[c14-b36][c14-b85]. When the alarm finally sounded, the board state he had engineered secured his victory, and the announcer declared Zei Leimin the winner\u202f[c14-b87].",
+    "cited": [
+     "c14-b35",
+     "c14-b36",
+     "c14-b85",
+     "c14-b87"
+    ]
+   },
+   {
+    "label": "M",
+    "answer": "(not shown: the passages don't say)",
+    "cited": []
+   },
+   {
+    "label": "P",
+    "answer": "The passages don't say.",
+    "cited": []
+   },
+   {
+    "label": "R",
+    "answer": "He quickly grasped that the shrines and the XOR\u2011based updates meant the board would become ever more cluttered, so the limited resources had to be used for *steering* rather than building\u202f[c14-b35]. He deployed a steerable, symbol\u2011carrying spaceship he had designed months earlier and surrounded it with multiple layers of walls\u202f[c14-b36][c14-b85]. By repeatedly reinforcing the walls and using the ship\u2019s ability to change direction with only a few interventions, he kept the pressure on his opponent until an alarm finally sounded and announced his victory\u202f[c14-b86][c14-b87].",
+    "cited": [
+     "c14-b35",
+     "c14-b36",
+     "c14-b85",
+     "c14-b86",
+     "c14-b87"
+    ]
+   },
+   {
+    "label": "T",
+    "answer": "After the walls he had built around his ship began to crumble, Zei kept playing and eventually the game\u2019s alarm sounded, after which the announcer declared Zei\u202fLeimin the winner, and he sighed in relief[c14-b85][c14-b86][c14-b87][c14-b88].",
+    "cited": [
+     "c14-b85",
+     "c14-b86",
+     "c14-b87",
+     "c14-b88"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "f27",
+  "question": "How can Den's hand device tell that a gadget answering it is really nearby and not relaying answers from somewhere else?",
+  "gold": [
+   "c9-b133"
+  ],
+  "answer_fact": "It pings the device a million times and requires replies within a tenth of a tick, limiting distance to about thirteen meters.",
+  "blocks": {
+   "c9-b132": "\"Yeah I remember. Though it wasn't about manufacturing.\"",
+   "c9-b133": "\"Indeed - it was about how someone verifying could know that responses are not being forwarded from a different device. I can tell you the answer for that too. My hand device has a protocol by which it repeatedly contacts each device a million times, and expects the whole protocol to finish within a tenth of a tick. And so wherever the signature comes from, it has to be within fifty lightfeet away - almost thirteen meters - actually, even closer, because of the latency of the chips themselves.\""
+  },
+  "answers": [
+   {
+    "label": "K",
+    "answer": "Den\u2019s hand device runs a high\u2011frequency challenge\u2011response test: it pings the target device millions of times and requires the entire exchange to finish within a tenth of a tick. That ultra\u2011short latency forces the responder to be within roughly fifty light\u2011feet (about 13\u202fm) of the asker, so a distant relay couldn\u2019t meet the timing constraint.\u202f[c9-b133]",
+    "cited": [
+     "c9-b133"
+    ]
+   },
+   {
+    "label": "M",
+    "answer": "Den\u2019s hand device runs a rapid challenge\u2011response protocol: it pings the target device about a million times and demands that the entire exchange finish in less than a tenth of a tick. That tight deadline limits the round\u2011trip latency to roughly fifty light\u2011feet (\u224813\u202fm), so any reply that meets the timing must be coming from a gadget that is physically nearby rather than being relayed from a distant source.\u202f[c9-b133]",
+    "cited": [
+     "c9-b133"
+    ]
+   },
+   {
+    "label": "P",
+    "answer": "Den\u2019s hand device runs a rapid challenge\u2011response protocol that contacts the target device millions of times and requires the entire exchange to finish within a tenth of a tick; that speed limits the signal\u2019s travel distance to about fifty light\u2011feet (roughly thirteen metres), so any reply must come from a gadget that is physically nearby rather than being relayed from elsewhere[c9-b133].",
+    "cited": [
+     "c9-b133"
+    ]
+   },
+   {
+    "label": "R",
+    "answer": "Den\u2019s device runs a rapid\u2011challenge protocol that pings the target a million times and requires the entire exchange to finish within a tenth of a tick; the tight latency limit (about fifty light\u2011feet, ~13\u202fm, even less because of chip delay) proves the responder is physically nearby rather than being relayed from elsewhere[c9-b133].",
+    "cited": [
+     "c9-b133"
+    ]
+   },
+   {
+    "label": "T",
+    "answer": "Den\u2019s hand device runs a rapid challenge\u2011response protocol that contacts the target device millions of times and demands the whole exchange finish within a tenth of a tick, forcing the responder to be within roughly fifty light\u2011feet (about 13\u202fm) of the device[c9-b133].",
+    "cited": [
+     "c9-b133"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "f46",
+  "question": "How do Keepers in a meeting keep each other from knowing who they are?",
+  "gold": [
+   "c13-b76"
+  ],
+  "answer_fact": "They hide their faces and speak through neck bands that output a freshly randomized AI-generated voice.",
+  "blocks": {
+   "c13-b75": "\"By instinct. Probably some subtle detail of your body language - as they say, ninety percent of our communication is subconscious.\"",
+   "c13-b76": "\"Huh, I guess even after hiding our faces, even after speaking through neck bands and sending out our speech with a re-randomized AI-generated voice, though I still can't tell who of you is male and who is female, these physical privacy tools still have their limits. Well good to see you too, Eighteen.\"",
+   "c6-b73": "\"Heralds are Order members - Keepers or Sentinels - that get randomly selected each year to retire, to be a sort of ambassador helping to create better understanding between the Order and the public. I think Graph Funding members or judges can become Heralds too.\"",
+   "c6-b74": "\"The goal is to provide some transparency. Keepers and Sentinels are very private to protect themselves from manipulation, but they don't want people to get the wrong ideas and start distrusting the whole thing. So Heralds act as a bridge. They're very transparent about how they think and how they did their work - but only after they no longer have any power, so there's no risk from anyone influencing them.\"",
+   "c7-b129": "\"It sounded crazy to me too. But the more I think about it, the more I've come to see their point.\"",
+   "c7-b130": "\"Look at the Veridian Steering system, for example. It's one of the most opaque parts of the government - even the Keepers don't know who each other are - and yet one of the most trustworthy and incorruptible parts precisely for that reason. Similar for the Courts - anonymous, randomly selected committees out of a large pool.\"",
+   "c7-b131": "\"But the Parliament is transparent, and so when it comes to the Parliament's direct decisions - large-scale infrastructure, foreign policy, healthcare, all the things that it's funding - everyone keeps exploiting and outsmarting it. Same with the quadratic funding - actually, it's even worse. Keepers, Sentinels and Court judges are not fully insulated - it is still Parliament committees that are approving them - but at least there's a layer of indirection there, and those positions are also gated by prediction scores.\""
+  },
+  "answers": [
+   {
+    "label": "K",
+    "answer": "Keepers are deliberately kept anonymous: the system uses random\u2011selection, opaque committees so that even fellow Keepers don\u2019t know each other\u2019s identities, preserving privacy and preventing manipulation[c7-b130]. This built\u2011in secrecy is reinforced by the overall policy that Keepers (and Sentinels) remain very private, with only transparent Heralds acting as a bridge after they lose power[c6-b74].",
+    "cited": [
+     "c6-b74",
+     "c7-b130"
+    ]
+   },
+   {
+    "label": "M",
+    "answer": "Keepers remain anonymous to one another because the system is deliberately opaque: the Veridian Steering and other bodies are structured so that even Keepers do not know each other\u2019s identities, with members selected anonymously from a large pool and hidden behind layers of indirection[c7-b130]. This design hides personal identities and thoughts, preventing direct knowledge of who is who[c7-b131].",
+    "cited": [
+     "c7-b130",
+     "c7-b131"
+    ]
+   },
+   {
+    "label": "P",
+    "answer": "Keepers are deliberately kept anonymous: they are drawn into randomly\u2011selected discussion groups or committees so that members don\u2019t learn each other\u2019s identities, and the system is designed so \u2026\u202f[c7-b130]. This anonymity is meant to make the steering system \u2026 because participants cannot be identified or targeted\u202f[c7-b130].",
+    "cited": [
+     "c7-b130"
+    ]
+   },
+   {
+    "label": "R",
+    "answer": "Keepers are organized into opaque, randomly\u2011selected committees so that even the Keepers themselves don\u2019t know the identities of the other members; the system is deliberately designed to keep participants anonymous to each other[c7-b130]. The anonymity is part of the broader structure that makes the steering system \u2026[c7-b130].",
+    "cited": [
+     "c7-b130"
+    ]
+   },
+   {
+    "label": "T",
+    "answer": "Keepers are deliberately kept anonymous: the system is designed so that even the Keepers themselves don\u2019t know who the other Keepers are, using opaque, randomly\u2011selected committees that hide members\u2019 identities from one another[c7-b130]. This anonymity is meant to make the body more trustworthy and resistant to manipulation[c7-b131].",
+    "cited": [
+     "c7-b130",
+     "c7-b131"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "f09",
+  "question": "According to Mov, why does the tax system go to such lengths to keep Keepers anonymous?",
+  "gold": [
+   "c3-b23"
+  ],
+  "answer_fact": "A Keeper whose views became public saw her husband lose his job days later amid Bluewhale's campaign, showing the risk of exposure.",
+  "blocks": {
+   "c3-b22": "\"I see...\"",
+   "c3-b23": "\"So yeah, many of the Keepers think we should bump up more taxes on that kind of behavior. So either they stop, or, well, they keep going and the internet sucks more, but the gov gets enough money that we can pay for everyone to get better healthcare. The problem is, Bluewhale has been driving a hard campaign against it. One Keeper was not careful about their privacy, she and her views got found out recently, it went public, and her husband lost his job only a few days later. No idea if it's connected, but, well, this is why we gotta run this whole tax system with all these cryptographic networks randomly selecting Keepers, anonymous discussion and voting, and privacy robes.\"",
+   "c3-b24": "The mention of Bluewhale brought Gladias back to his younger days, when he had learned programming by writing an alternative client for the other major social platform, Silverchat. That had only been possible, he knew, because the API was open, and the platform allowed developers to make alternative clients and users to export and migrate their data - all decisions that had undoubtedly been motivated, or at least justified to the bean counters, by trying to lower their tax rate on the hardware and software openness rubric. That experience had been what motivated Gladias to contribute back, and get involved in Steering himself.",
+   "c6-b73": "\"Heralds are Order members - Keepers or Sentinels - that get randomly selected each year to retire, to be a sort of ambassador helping to create better understanding between the Order and the public. I think Graph Funding members or judges can become Heralds too.\"",
+   "c6-b74": "\"The goal is to provide some transparency. Keepers and Sentinels are very private to protect themselves from manipulation, but they don't want people to get the wrong ideas and start distrusting the whole thing. So Heralds act as a bridge. They're very transparent about how they think and how they did their work - but only after they no longer have any power, so there's no risk from anyone influencing them.\""
+  },
+  "answers": [
+   {
+    "label": "K",
+    "answer": "Mov says the system hides Keepers so their identities and views can\u2019t be exposed and used against them\u2014privacy breaches have already led to personal retaliation, like a Keeper\u2019s husband losing his job\u2014so the tax system uses cryptographic selection, anonymous discussion and voting, and privacy robes to protect them. [c3-b23]",
+    "cited": [
+     "c3-b23"
+    ]
+   },
+   {
+    "label": "M",
+    "answer": "Mov says the system hides Keepers behind cryptographic selection, anonymous discussion, voting and privacy robes so that their identities can\u2019t be exposed and used against them\u2014privacy shields them from manipulation, retaliation and public distrust.\u202f[c3-b23][c6-b74]",
+    "cited": [
+     "c3-b23",
+     "c6-b74"
+    ]
+   },
+   {
+    "label": "P",
+    "answer": "Mov says the system hides Keepers behind cryptographic selection, anonymous discussion, voting and privacy robes so that their identities can\u2019t be exposed and used against them\u2014privacy breaches have already led to personal retaliation (a Keeper\u2019s husband lost his job after her views were made public), and anonymity shields Keepers from manipulation and harm.\u202f[c3-b23][c3-b24]",
+    "cited": [
+     "c3-b23",
+     "c3-b24"
+    ]
+   },
+   {
+    "label": "R",
+    "answer": "Mov says the system hides Keepers so they aren\u2019t vulnerable to manipulation or personal retaliation\u2014exposure can lead to people being targeted, losing jobs, or being used against the Order\u2014so anonymity protects them and helps keep public trust in the system\u202f[c3-b23][c6-b74].",
+    "cited": [
+     "c3-b23",
+     "c6-b74"
+    ]
+   },
+   {
+    "label": "T",
+    "answer": "The passages don't say.",
+    "cited": []
+   }
+  ]
+ },
+ {
+  "id": "f12",
+  "question": "What does Mu caution Zei about just before the quarter-finals?",
+  "gold": [
+   "c4-b67",
+   "c4-b69"
+  ],
+  "answer_fact": "That he'll be on a team now and isn't a natural diplomat; live coordination with teammates will matter a lot.",
+  "blocks": {
+   "c4-b66": "\"Yep!\"",
+   "c4-b67": "\"Well be careful. Remember, you're going to be part of a team now. You're a math guy, not a diplomat. You didn't even remember my birthday!\"",
+   "c4-b68": "\"Hey, the teams are randomly assigned! No relationships to manage, it's more like math than diplomacy.\"",
+   "c4-b69": "\"You'd be surprised. I think it makes the real-time diplomacy all the more important.\""
+  },
+  "answers": [
+   {
+    "label": "K",
+    "answer": "Mu warns Zei to be careful because he\u2019ll now be part of a team and must handle the diplomatic side of things, not just rely on his math skills\u202f[c4-b67].",
+    "cited": [
+     "c4-b67"
+    ]
+   },
+   {
+    "label": "M",
+    "answer": "Mu warns Zei to be careful, reminding him that he\u2019ll now be part of a team and that he\u2019s a \u201cmath guy, not a diplomat,\u201d even noting he\u2019d forgotten her birthday. [c4-b67]",
+    "cited": [
+     "c4-b67"
+    ]
+   },
+   {
+    "label": "P",
+    "answer": "Mu warns Zei to be careful now that he\u2019ll be part of a team, reminding him that he\u2019s a \u201cmath guy, not a diplomat\u201d and even points out that he didn\u2019t remember her birthday[c4-b67].",
+    "cited": [
+     "c4-b67"
+    ]
+   },
+   {
+    "label": "R",
+    "answer": "(not shown: the passages don't say)",
+    "cited": []
+   },
+   {
+    "label": "T",
+    "answer": "Mu warns Zei to be careful, reminding him that he\u2019ll now be part of a team and that his strength is as a \u201cmath guy,\u201d not as a diplomat, even noting that Zei didn\u2019t remember Mu\u2019s birthday. [c4-b67]",
+    "cited": [
+     "c4-b67"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "f30",
+  "question": "Who was the teenage girl sitting next to Gladias at the citizens' assembly, and what does she want to do?",
+  "gold": [
+   "c6-b79",
+   "c6-b62",
+   "c6-b81"
+  ],
+  "answer_fact": "Pelae, an older teen, who has decided to go into chemistry despite friends warning it will be hard.",
+  "blocks": {
+   "c6-b60": "They picked one of the tables, and sat down.",
+   "c6-b61": "An older teenage girl sat down beside Gladias, and introduced herself.",
+   "c6-b62": "\"Hi, I'm Pelae.\"",
+   "c6-b63": "\"I'm Gladias.\"",
+   "c6-b64": "\"Nice to meet you.\"",
+   "c6-b78": "\"Do you want to join?\" , he added, and then bit his tongue, realizing that he had come uncomfortably close to committing the faux pas of revealing to a stranger his status as an Order member.",
+   "c6-b79": "\"Nah, I've already decided. I'm going into chemistry.\"",
+   "c6-b80": "\"Nice!\"",
+   "c6-b81": "\"My friends think I won't enjoy it and I'll have to work really hard. But I like the challenge.\"",
+   "c6-b92": "As soon as she finished, they heard footsteps. Alagael had walked by and was standing over them.",
+   "c6-b93": "\"Alagael\" , Pelae asked, \"how do the results of these assemblies actually turn into outcomes?\""
+  },
+  "answers": [
+   {
+    "label": "K",
+    "answer": "The teenage girl who sits beside Gladias is introduced as \u201cPelae\u201d\u202f[c6-b61][c6-b62]. The passages provided give only her introduction; they do not state any particular goal or thing she wants to do.",
+    "cited": [
+     "c6-b61",
+     "c6-b62"
+    ]
+   },
+   {
+    "label": "M",
+    "answer": "The teenage girl who sits beside Gladias introduces herself as \u201cPelae\u201d\u202f[c6-b61][c6-b62][c6-b63][c6-b64]. The passage gives her name but does not state any particular goal or what she wants to do, so that information isn\u2019t provided in the cited text.",
+    "cited": [
+     "c6-b61",
+     "c6-b62",
+     "c6-b63",
+     "c6-b64"
+    ]
+   },
+   {
+    "label": "P",
+    "answer": "The teenage girl is named\u202fPelae\u202f[c6-b62]. The passages don\u2019t say what she wants to do.",
+    "cited": [
+     "c6-b62"
+    ]
+   },
+   {
+    "label": "R",
+    "answer": "The teenage girl is Pelae, who introduced herself beside Gladias [c6-b62]. She then asks how the results of the citizens\u2019 assemblies actually turn into outcomes, indicating she wants to understand that process [c6-b93].",
+    "cited": [
+     "c6-b62",
+     "c6-b93"
+    ]
+   },
+   {
+    "label": "T",
+    "answer": "The teenage girl who sits beside Gladias introduces herself as Pelae\u202f[c6-b61][c6-b62][c6-b63][c6-b64]. The passages do not say what she wants to do.",
+    "cited": [
+     "c6-b61",
+     "c6-b62",
+     "c6-b63",
+     "c6-b64"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "f40",
+  "question": "What interrupted the family dinner at the restaurant, and how did Seila react?",
+  "gold": [
+   "c13-b63",
+   "c13-b65",
+   "c13-b62"
+  ],
+  "answer_fact": "A message from Lord Ephelion took over the screen showing Helisport, and Seila got up to unplug the screen herself.",
+  "blocks": {
+   "c13-b61": "The table went silent. They ate slowly, while watching the professional Helisport game that was playing on a nearby screen.",
+   "c13-b62": "Suddenly, the Helisport game cut out, and was replaced by a completely different broadcast.",
+   "c13-b63": "An image of Lord Ephelion appeared on the left side of the screen, and a multi-paragraph message on the right side.",
+   "c13-b64": "The Dead Hand of Egalitarianism, and the Path of Strength All humans are equal, the schools, the posters, the songs, and everything else in Veridia is telling you. Maybe not Dreadknot - but that's exactly why Dreadknot's taxes were bumped up to tier 4 in the audit last year. Nobody is better than anyone else, and if you even dare claim that one human being is better than another, then you are immediately cast out as evil in Veridia. But there is a fundamental flaw in this kind of thinking. If one human being cannot be better than another human being, then that also implies that a human being cannot be better than their former self. Denying the possibility of hierarchy, of vertical difference between people, the fact that there are traits that everyone agrees are good, but that only some actually manage to achieve, is thus also denying the possibility of self-improvement. Do not think that the idea that there are multiple dimensions to goodness and to success saves you from this. Even if there are, some people perform better, and others perform worse, across all the dimensions that matter. Stop looking to society for answers, to Veridia's institutions to make life fair. Life is not fair - and should not be fair. Embrace the competition. Today, you may be weak. But you have it in you to be strong. Do not believe the lie that you are adequate just the way you are. But do believe a truth - the truth that you have it in you to become strong. Take that opportunity. Grow stronger. Grow so strong, that you later look upon your former self with shame. And find the other strong people, the people who will help you on your journey of striving for greatness. Not those who will love you unconditionally - that is slow-burning poison, like sweet candy. But those who will give you love when you win, and a cold shoulder when you lose. Those that give you both the incentive, and the disincentive. You are not good because you are human, you are good because you can win. Only thus, can you train your mind to love winning, and achieve your true potential. With regards, Lord Ephelion Arctic Empire consul to Veridia.",
+   "c13-b65": "Gladias quickly scanned the message, and looked around. Seila had already gotten up from the table, and was trying to figure out how to unplug the screen, even before the restaurant staff could get there themselves."
+  },
+  "answers": [
+   {
+    "label": "K",
+    "answer": "The dinner was interrupted when the Helisport game on the nearby screen cut out and was replaced by a different broadcast\u202f[c13-b62]. Seila immediately got up from the table and began trying to figure out how to unplug the screen, even before the restaurant staff could respond\u202f[c13-b65].",
+    "cited": [
+     "c13-b62",
+     "c13-b65"
+    ]
+   },
+   {
+    "label": "M",
+    "answer": "The Helisport game on the screen suddenly cut out and was replaced by a different broadcast, interrupting the dinner\u202f[c13-b62]. Seila immediately got up from the table and tried to figure out how to unplug the screen, acting before the restaurant staff could respond\u202f[c13-b65].",
+    "cited": [
+     "c13-b62",
+     "c13-b65"
+    ]
+   },
+   {
+    "label": "P",
+    "answer": "The passages don't say.",
+    "cited": []
+   },
+   {
+    "label": "R",
+    "answer": "The dinner was interrupted when the Helisport game on the nearby screen cut out and was replaced by a different broadcast\u202f[c13-b62]. Seila sprang up from the table and hurried to try to unplug the screen before the restaurant staff could intervene\u202f[c13-b65].",
+    "cited": [
+     "c13-b62",
+     "c13-b65"
+    ]
+   },
+   {
+    "label": "T",
+    "answer": "The dinner was interrupted when the Helisport game on the nearby screen cut out and was replaced by an unexpected broadcast\u202f[c13-b62]. Seila immediately rose from the table and began trying to unplug the screen herself, even before the restaurant staff could intervene\u202f[c13-b65].",
+    "cited": [
+     "c13-b62",
+     "c13-b65"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "f02",
+  "question": "Once the kids go off to Vil and Daia, what is Seila planning to do with her time?",
+  "gold": [
+   "c1-b134"
+  ],
+  "answer_fact": "She plans to spend a month or two in Freetown, visit Jahn, and gather material for a blog post on the United Cities.",
+  "blocks": {
+   "c1-b133": "\"Any plans once Vil is here?\" , Gladias asked.",
+   "c1-b134": "\"I'm going to visit Freetown for a month or two, see Jahn, maybe figure out some blog post to write on the United Cities. I've spent so much time reading about their co-governance, actually looking forward to seeing more how it all connects to what's on the ground.\"",
+   "c1-b135": "\"Nice! I'm going to go on some long walks in the forest and take a deep dive with the bot on the environment and biology rubrics. Still have four more audits to do before I can become a Sentinel!\"",
+   "c11-b145": "Seila laughed.",
+   "c11-b146": "Seila clicked a few buttons, and ordered.",
+   "c15-b29": "A moment after that, he flashed with anger toward Delwart.",
+   "c15-b30": "Seila left the room to wake up Zven and get Lily. Within twenty minutes, the four of them were on their way to school, and Gladias and Seila were alone in the house."
+  },
+  "answers": [
+   {
+    "label": "K",
+    "answer": "The passages don't say.",
+    "cited": []
+   },
+   {
+    "label": "M",
+    "answer": "The provided excerpts do not include any statement about Seila\u2019s plans for how she will spend her time after the children go to stay with Vil and Daia. None of the cited passages describe her intended activities.",
+    "cited": []
+   },
+   {
+    "label": "P",
+    "answer": "The passages don't say. They show Seila ordering and fetching food for the family\u202f[c11-b146] and later leaving to wake Zven and Lily for school\u202f[c15-b30].",
+    "cited": [
+     "c11-b146",
+     "c15-b30"
+    ]
+   },
+   {
+    "label": "R",
+    "answer": "The passages don't say.",
+    "cited": []
+   },
+   {
+    "label": "T",
+    "answer": "Seila says she will spend her time taking long walks in the forest while using the bot to dive into the environment and biology rubrics, completing four more audits before she can become a Sentinel\u202f[c1-b135].",
+    "cited": [
+     "c1-b135"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "f06",
+  "question": "How did Zei place in the Minpentai game he played the night before the bombing?",
+  "gold": [
+   "c2-b12"
+  ],
+  "answer_fact": "He came third, using a wall that bounced the opponents' gliders back at them.",
+  "blocks": {
+   "c2-b11": "\"How was the Minpentai game last night?\" , Fin asked.",
+   "c2-b12": "\"I got third place! Finally figured out a wall structure that reflected their gliders right back at them, completely wreaked havoc on their territory.\""
+  },
+  "answers": [
+   {
+    "label": "K",
+    "answer": "The passages don't say.",
+    "cited": []
+   },
+   {
+    "label": "M",
+    "answer": "(not shown: the passages don't say)",
+    "cited": []
+   },
+   {
+    "label": "P",
+    "answer": "The passages don't say.",
+    "cited": []
+   },
+   {
+    "label": "R",
+    "answer": "The provided excerpts do not include Zei\u2019s result in the Minpentai game from the night before the bombing. The conversation only gives Fin\u2019s third\u2011place finish; Zei\u2019s placement isn\u2019t mentioned.",
+    "cited": []
+   },
+   {
+    "label": "T",
+    "answer": "Zei said he placed third in the Minpentai game he played the night before the bombing. [c2-b12]",
+    "cited": [
+     "c2-b12"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "f07",
+  "question": "How did Mov manage to find Gladias when lots of people nearby were wearing identical robes?",
+  "gold": [
+   "c3-b13"
+  ],
+  "answer_fact": "Gladias had left Mov on his trust list, so his AI turned on location sharing with Mov for their planned meeting day.",
+  "blocks": {
+   "c3-b11": "\"No, it's the Arctic Emperor. I'm here to literally suck out your soul.\"",
+   "c3-b12": "\"Okay fine... Wait, I'm like one of a hundred people walking toward the Greater Plum Harbor wearing a privacy robe, how did you figure out where I am?\"",
+   "c3-b13": "\"You put me on your trust list a year ago and never took me off, so our local AIs had permission to enable location sharing. Your AI knew that we were supposed to meet before I shadow you when you go see the mysterious gentleman, so it unlocked location sharing with me for today.\"",
+   "c3-b14": "\"Aaaah, I see ... something something contextual intimacy or whatever the new buzzword is.\""
+  },
+  "answers": [
+   {
+    "label": "K",
+    "answer": "Mov relied on a pre\u2011existing \u201ctrust list\u201d that Gladias had added him to a year earlier. Because the list was never removed, the local AI was allowed to enable location sharing for them, so Mov\u2019s AI could pinpoint Gladias\u2019s position even though many people wore identical privacy robes[c3-b12][c3-b13].",
+    "cited": [
+     "c3-b12",
+     "c3-b13"
+    ]
+   },
+   {
+    "label": "M",
+    "answer": "Mov could locate Gladias because Gladias had added him to his trust list a year earlier and never removed him; that permission let the local AIs turn on location sharing for Mov, so Gladias\u2019s AI knew where he was and unlocked the data for the meeting that day[c3-b13]. The trust\u2011list permission let Mov \u201cshadow\u201d Gladias despite the many identical robes[c3-b12].",
+    "cited": [
+     "c3-b12",
+     "c3-b13"
+    ]
+   },
+   {
+    "label": "P",
+    "answer": "Mov could locate Gladias because Gladias had previously added him to his trust list, which let their local AIs enable location\u2011sharing for that day; the AI then revealed Gladias\u2019s position despite the crowd of identical robes [c3-b13][c3-b14].",
+    "cited": [
+     "c3-b13",
+     "c3-b14"
+    ]
+   },
+   {
+    "label": "R",
+    "answer": "Mov could locate Gladias because Gladias had added Mov to his \u201ctrust list\u201d a year earlier and never removed him; that gave the local AIs permission to enable location sharing between them, so when they were scheduled to meet the AI unlocked sharing for that day and revealed Gladias\u2019s position despite the many identical robes[c3-b13].",
+    "cited": [
+     "c3-b13"
+    ]
+   },
+   {
+    "label": "T",
+    "answer": "Mov located Gladias because Gladias had added Mov to his trust list a year earlier and never removed him, so their local AIs were allowed to enable location sharing; Gladias\u2019s AI knew they were supposed to meet and unlocked that sharing for the day, letting Mov pinpoint him even among many identical robes. [c3-b13][c3-b14]",
+    "cited": [
+     "c3-b13",
+     "c3-b14"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "f14",
+  "question": "After the game, when Bai apologizes, what does Zei ask her for?",
+  "gold": [
+   "c4-b156",
+   "c4-b158"
+  ],
+  "answer_fact": "He asks to come along on her next Redshire vacation, then quickly adds his mom too.",
+  "blocks": {
+   "c14-b11": "\"How have you been?\"",
+   "c14-b12": "\"You're not going to ask me what I've learned about the other players' strategies? You're going into the semi-final today\" , Bai replied.",
+   "c4-b155": "\"I'm sorry.\"",
+   "c4-b156": "\"Come on, you gotta give me something more substantive than that. Say, next time you take a vacation to Redshire, bring me along.\"",
+   "c4-b157": "Then, realizing that the suggestion he just made might give Bai an unintended impression, he quickly added:",
+   "c4-b158": "\"And my mom.\""
+  },
+  "answers": [
+   {
+    "label": "K",
+    "answer": "(not shown: the passages don't say)",
+    "cited": []
+   },
+   {
+    "label": "M",
+    "answer": "(not shown: the passages don't say)",
+    "cited": []
+   },
+   {
+    "label": "P",
+    "answer": "The supplied excerpts do not include a scene where Bai apologizes and Zei makes a request of her, so the answer can\u2019t be drawn from the given passages.",
+    "cited": []
+   },
+   {
+    "label": "R",
+    "answer": "The passages don't say. The closest related moment shows Bai asking Zei what he has learned about the other players\u2019 strategies before the semi\u2011finals\u202f[c14-b12].",
+    "cited": [
+     "c14-b12"
+    ]
+   },
+   {
+    "label": "T",
+    "answer": "The provided passages do not include a moment where Bai apologizes after the game, nor a subsequent request from Zei. Therefore I can\u2019t answer that question from the given text.",
+    "cited": []
+   }
+  ]
+ },
+ {
+  "id": "f15",
+  "question": "Why can't Dzego just build its own all-seeing camera network to counter the Arctic surveillance?",
+  "gold": [
+   "c5-b77",
+   "c5-b78"
+  ],
+  "answer_fact": "Arctic spies are inside Dzego's agencies, so an all-seeing network would become their weapon; cameras instead reveal only suspicious data.",
+  "blocks": {
+   "c10-b146": "\"And so when we release open-source military-relevant anything, it doesn't benefit the Arctics at all, and it's marginally good for us because it makes it easier for us to make more.\"",
+   "c10-b147": "\"But for Dzego, it's a lifeline. They're not set up to invent their own proprietary stuff at the top end, but they're really good at building and adapting from open-source plans. Twenty years ago, when we got our programming languages and formal verification to the point where our devices basically stopped having critical errors in their code that could let someone take it over from the outside, the fact that it was open allowed the Dzegojan to adopt those techniques, and protect themselves much better from Arctic sabotage.\"",
+   "c5-b76": "\"So is Dzego going to, like, add its own counter-surveillance network to keep up?\"",
+   "c5-b77": "\"Well, the problem is, the Arctics got spies inside all the agencies, so if the counter-surveillance network can see too much, then it becomes their own weapon.\"",
+   "c5-b78": "\"That's why we've been trying to figure out the cryptography. Each surveillance camera running an algorithm, revealing data only in those cases where it's suspicious, posting a hash to a cryptographic network every time it reveals so we can track how often it's happening, and then a whole system of hardware attestations and randomized infrared scanning to make sure that the cameras are actually running the code that they say they are.\""
+  },
+  "answers": [
+   {
+    "label": "K",
+    "answer": "The passages don't say.",
+    "cited": []
+   },
+   {
+    "label": "M",
+    "answer": "(not shown: the passages don't say)",
+    "cited": []
+   },
+   {
+    "label": "P",
+    "answer": "The passages explain that Dzego can\u2019t simply create a pervasive camera system because the Arctics have spies inside all the agencies; a counter\u2011surveillance network that can see too much would become a weapon for those spies\u202f[c5-b77]. The discussion instead focuses on cryptographic controls and random inspections rather than an all\u2011seeing network\u202f[c5-b78].",
+    "cited": [
+     "c5-b77",
+     "c5-b78"
+    ]
+   },
+   {
+    "label": "R",
+    "answer": "Dzego can\u2019t simply roll out an all\u2011seeing camera system because a pervasive counter\u2011surveillance network could become a weapon in the hands of the Arctics, who already have spies inside every agency\u202f[c5-b77].\u202fMoreover, Dzego isn\u2019t set up to invent the high\u2011end proprietary hardware such a system would require; it mainly adapts open\u2011source plans rather than creating top\u2011tier technology from scratch\u202f[c10-b147].",
+    "cited": [
+     "c5-b77",
+     "c10-b147"
+    ]
+   },
+   {
+    "label": "T",
+    "answer": "The passages don't say.",
+    "cited": []
+   }
+  ]
+ },
+ {
+  "id": "f23",
+  "question": "What did Zei, Fin and Bai see on their way up the mountain to the city final?",
+  "gold": [
+   "c7-b37",
+   "c7-b33"
+  ],
+  "answer_fact": "An explosion and smoke cloud at the city's biggest chip factory, which Zei suspected was Arctic sabotage.",
+  "blocks": {
+   "c7-b32": "\"But seriously, let's just concentrate on giving everyone a good game.\"",
+   "c7-b33": "Suddenly, the ground shook slightly. A few moments later, from their high vantage point already a third of the way up the mountain, they could see a cloud of smoke emerging in the distance, somewhere in the outskirts of the city.",
+   "c7-b34": "\"Whoa, what is that?\" , Fin asked.",
+   "c7-b35": "Zei took out his hand device, and pointed it at the cloud of smoke.",
+   "c7-b36": "\"Let's check.\"",
+   "c7-b37": "Zei held his hand device pointed at the cloud of smoke and the area below for a moment, and then put it down. \"Geolocated it. It's the largest computer chip manufacturing facility in the city. Remember, the Arctics have been trying hard to stop us from progressing any more in our technology.\"",
+   "c7-b38": "\"Looks like this facility was government-run. I imagine they'll just say it was an accident or something.\""
+  },
+  "answers": [
+   {
+    "label": "K",
+    "answer": "The passages don't say. Zei and Fin, from a high point a third of the way up the mountain, saw a cloud of smoke that Zei identified as the city\u2019s largest computer\u2011chip manufacturing facility[c7-b33][c7-b37].",
+    "cited": [
+     "c7-b33",
+     "c7-b37"
+    ]
+   },
+   {
+    "label": "M",
+    "answer": "On the ascent they noticed a cloud of smoke rising in the distance, visible from about a third of the way up the mountain, and identified it as the city\u2019s largest computer\u2011chip manufacturing facility[c7-b33][c7-b36][c7-b37].",
+    "cited": [
+     "c7-b33",
+     "c7-b36",
+     "c7-b37"
+    ]
+   },
+   {
+    "label": "P",
+    "answer": "On the way up the mountain they noticed a plume of smoke rising in the distance\u2014visible from about a third of the way up. Zei\u2019s hand device identified it as the city\u2019s largest government\u2011run computer\u2011chip manufacturing plant, a target the Arctics have tried to halt.\u202f[c7-b33][c7-b37]",
+    "cited": [
+     "c7-b33",
+     "c7-b37"
+    ]
+   },
+   {
+    "label": "R",
+    "answer": "On their climb they noticed a plume of smoke on the horizon\u2014by the time they were a third of the way up the mountain they could see a cloud of smoke emerging in the outskirts of the city, which Zei identified with his device as the city\u2019s largest government\u2011run computer\u2011chip manufacturing facility[c7-b33][c7-b35][c7-b36][c7-b37].",
+    "cited": [
+     "c7-b33",
+     "c7-b35",
+     "c7-b36",
+     "c7-b37"
+    ]
+   },
+   {
+    "label": "T",
+    "answer": "On the climb they noticed a plume of smoke rising in the distance on the city\u2019s outskirts. Zei scanned it with his hand device and identified it as the city\u2019s largest computer\u2011chip manufacturing plant, a government\u2011run facility that the Arctics have been trying to halt.\u202f[c7-b33][c7-b34][c7-b35][c7-b36][c7-b37][c7-b38]",
+    "cited": [
+     "c7-b33",
+     "c7-b34",
+     "c7-b35",
+     "c7-b36",
+     "c7-b37",
+     "c7-b38"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "f32",
+  "question": "How does Bai really feel about the way Zei beat her in the final?",
+  "gold": [
+   "c9-b21",
+   "c9-b22"
+  ],
+  "answer_fact": "She admires his tactics as beautiful, cleverer than her own trap, and wants to understand how he and Fin think.",
+  "blocks": {
+   "c4-b122": "Pan and Dza did not see any of this. Instead, they saw Zei having greatly wounded Dza, but still struggling to finish him off, while Pan cornered Bai more and more toward the southeast. Emboldened, Pan launched an attack toward the east, seeking to sow chaos in the weakly defended territory in between Zei's home base and the front in the northeast against Dza.",
+   "c4-b123": "Zei saw that Bai was struggling. But the communication line between the two remained silent. She was still too proud to beg.",
+   "c7-b123": "\"Congratulations, you two-\" , Mu began to speak, standing in the waiting room along with Zei and Bai.",
+   "c7-b124": "\"Congratulations, Zei. You only had to wait until our last season to beat me.\"",
+   "c7-b125": "\"You played the best game of your life today, Bai.\"",
+   "c7-b127": "\"The priests did not even know what you two would come up with. They told me that they wanted to make the game a little more ... *realistic* - but they were as curious as anyone else to find out what that means.\"",
+   "c7-b128": "\"Realistic?\" , Bai exclaimed incredulously. \"How is it at all realistic that AIs can read each other's minds?\"",
+   "c9-b20": "She went quiet, and sat back in her chair. She had not planned to say any of that. After a brief pause, she spoke again.",
+   "c9-b21": "\"But those tactics of Zei's, they were beautiful. I was so proud when I put up such perfect defenses along my diagonals and tricked Zei into attacking there. I felt like that was the smartest thing I had done in my whole life. And then he came out and did something even smarter.\"",
+   "c9-b22": "\"I do want to understand you guys better. What drives you, how you think.\""
+  },
+  "answers": [
+   {
+    "label": "K",
+    "answer": "(not shown: the passages don't say)",
+    "cited": []
+   },
+   {
+    "label": "M",
+    "answer": "(not shown: the passages don't say)",
+    "cited": []
+   },
+   {
+    "label": "P",
+    "answer": "The passages don't say. They show that earlier Bai was struggling and \u201ctoo proud to beg\u201d when Zei\u2019s tactics forced her back\u202f[c4-b123], and after the final Mu congratulates her, saying \u2026\u202f[c7-b125].",
+    "cited": [
+     "c4-b123",
+     "c7-b125"
+    ]
+   },
+   {
+    "label": "R",
+    "answer": "The passages only show Bai giving Zei a brief congratulations after his victory (\u2026) and then reacting with an incredulous question about the new AI rule (\u2026)\u202f[c7-b124][c7-b128]. The book does not provide any explicit description of deeper feelings she may have about how Zei beat her.",
+    "cited": [
+     "c7-b124",
+     "c7-b128"
+    ]
+   },
+   {
+    "label": "T",
+    "answer": "The passages don't say.",
+    "cited": []
+   }
+  ]
+ },
+ {
+  "id": "f35",
+  "question": "Why would Bluewhale secretly pay people to donate to a project it didn't even own?",
+  "gold": [
+   "c11-b115"
+  ],
+  "answer_fact": "Its aim was to drain money from anything tied to open platforms, so the closed ecosystem would win by default.",
+  "blocks": {
+   "c11-b112": "Another Keeper interjected:",
+   "c11-b113": "\"Quadratic funding? That round is a mess right now. Someone released a program you can download onto your device and prove that you donated to a particular project researching social media polarization - actually not a very good one - and get a reward. You donate ten zipcoins and get back twenty, they get a hundred including the bounded matching. Lots of people participated. And then yesterday some insider at Bluewhale blew the whistle, apparently that was all their doing.\"",
+   "c11-b114": "\"Bluewhale? But why would they do that? They don't even control the project that was getting that funding.\"",
+   "c11-b115": "\"It doesn't matter where it goes, if it was hiring people from Iptak to come dig holes and then fill them back up again they would still have done it. Their goal is to drain funding from anything that interfaces with open platforms. Starve the open ecosystem, the closed one wins by default.\""
+  },
+  "answers": [
+   {
+    "label": "K",
+    "answer": "Bluewhale\u2019s hidden donations are meant to siphon money away from projects that rely on open platforms, even if the company doesn\u2019t control those projects; by draining funding from anything that interfaces with open systems, they hope to starve the open ecosystem so the closed one can dominate.\u202f[c11-b113][c11-b115]",
+    "cited": [
+     "c11-b113",
+     "c11-b115"
+    ]
+   },
+   {
+    "label": "M",
+    "answer": "(not shown: the passages don't say)",
+    "cited": []
+   },
+   {
+    "label": "P",
+    "answer": "Bluewhale set up the donation\u2011reward scheme to siphon money away from projects that use open platforms, hoping to starve the open ecosystem so that its closed alternatives would dominate\u202f[c11-b115]. The insider\u2019s whistle\u2011blowing revealed that Bluewhale arranged the program even though it didn\u2019t control the project, simply to drain funding from it\u202f[c11-b113].",
+    "cited": [
+     "c11-b113",
+     "c11-b115"
+    ]
+   },
+   {
+    "label": "R",
+    "answer": "The passages don't say.",
+    "cited": []
+   },
+   {
+    "label": "T",
+    "answer": "(not shown: the passages don't say)",
+    "cited": []
+   }
+  ]
+ },
+ {
+  "id": "f37",
+  "question": "Why does Gladias tell Delwart he doesn't expect the Arctics to escalate, when he isn't sure?",
+  "gold": [
+   "c13-b14"
+  ],
+  "answer_fact": "He feared it might happen, but admitting it would earn him a long lecture from Delwart about his biased sources.",
+  "blocks": {
+   "c13-b13": "\"Do you think they'll make a more serious sabotage campaign?\"",
+   "c13-b14": "Gladias thought for a moment. In his heart, he did not know, and while he expected that nothing would happen anytime soon, he feared that the answer might be yes. But he also knew that if he admitted it to Delwart, he would get a long lecture trying to impress on him how biased his sources of evidence were - and that was all *without* him having told Delwart about the time Seila met Zei and Bai in Freetown.",
+   "c13-b15": "\"Probably not.\""
+  },
+  "answers": [
+   {
+    "label": "K",
+    "answer": "(not shown: the passages don't say)",
+    "cited": []
+   },
+   {
+    "label": "M",
+    "answer": "Gladias downplays the threat to Delwart because admitting his uncertainty would provoke a lengthy lecture about how his sources are biased, so he pretends he expects nothing to happen for now[c13-b14].",
+    "cited": [
+     "c13-b14"
+    ]
+   },
+   {
+    "label": "P",
+    "answer": "Gladias keeps his doubts to himself because admitting uncertainty would invite a lengthy lecture about how his sources are biased; he prefers to appear confident that nothing will happen soon rather than risk that criticism[c13-b14].",
+    "cited": [
+     "c13-b14"
+    ]
+   },
+   {
+    "label": "R",
+    "answer": "Gladias says he doesn\u2019t expect the Arctics to step up mainly to dodge the inevitable lecture he would get if he admitted his uncertainty. He knows that telling Delwart he\u2019s worried would prompt a long rebuke about the bias of his evidence, so he down\u2011plays the threat even though he isn\u2019t sure what will happen[c13-b14]. This self\u2011censorship lets him avoid that criticism while still keeping his doubts to himself[c13-b15].",
+    "cited": [
+     "c13-b14",
+     "c13-b15"
+    ]
+   },
+   {
+    "label": "T",
+    "answer": "Gladias keeps his doubt to himself because admitting uncertainty would invite a lengthy lecture about how his sources are biased, so he tells Delwart he doesn\u2019t expect the Arctics to escalate to avoid that criticism. [c13-b14]",
+    "cited": [
+     "c13-b14"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "f45",
+  "question": "How do the shrines work in the semifinal version of Minpentai?",
+  "gold": [
+   "c14-b33"
+  ],
+  "answer_fact": "Every thousand turns, changes inside a shrine are XORed onto areas near its corners, then the shrine resets to a default rock.",
+  "blocks": {
+   "c14-b32": "\"Today, in this very special round, we will see Zei Leimin and Gun Caibai face off. And right after this, the other two players will have their own semi-final match. And in fifteen days, the two winners will face off in an epic best-two-out-of-three, and we will have our national champion!\"",
+   "c14-b33": "\"And of course, today's rule change. The resources you can allocate in each intervention turn are reduced by eighty percent. But in addition, there will be five shrines, four arranged along the center of each edge of the board, and one in the center. Each thousand turns, any changes that had taken place to the contents of the shrine will be applied as an XOR to the regions near the four corners of the shrine, and the shrine will reset to being a default rock formation.\"",
+   "c14-b34": "\"FI LE GEI TAU FA.\"",
+   "c14-b35": "Zei immediately understood the meaning of the new rules. The shrines are the only objects that violate mass conservation - though even still, with these new rules, nothing decreases entropy. XOR is not weight-preserving, but it is reversible. So the game board would get more and more full, and more and more messy, over time. The reduced resource allocation meant that the intervention turns were not for building - they were for *steering*.",
+   "c14-b37": "\"MU GU GEI TAU FA.\"",
+   "c14-b38": "Zei figured out one additional adjustment: he adjusted the positioning of his spaceships so that they could be located right past the shrines after exactly two intervention turns. This would let him send out a glider in exactly the right direction that it would turn a pair of shrines into an eternal glider factory: a glider would bounce back and forth, at each collision it would break off rock to spray even more gliders further north, and then every thousand turns, the rock would reset."
+  },
+  "answers": [
+   {
+    "label": "K",
+    "answer": "The semifinal round adds five \u201cshrines\u201d \u2013 one in the board\u2019s centre and one on each edge \u2013 that act as special cells that can change the board\u2019s material. Every thousand turns the game takes whatever modifications players have made inside a shrine, applies them as an XOR operation to the four corner regions of that shrine, and then resets the shrine to a default rock formation\u202f[c14-b33]. Because XOR is reversible but not weight\u2011preserving, the shrines break ordinary mass\u2011conservation and cause the board to become increasingly full over time\u202f[c14-b35]. With resources cut to 20\u202f% of normal, players use the shrines for \u201csteering\u201d: Zei positions a symbol\u2011carrying spaceship so a glider reaches a shrine at the right moment, turning it into an eternal glider factory that repeatedly spawns attacks\u202f[c14-b38].",
+    "cited": [
+     "c14-b33",
+     "c14-b35",
+     "c14-b38"
+    ]
+   },
+   {
+    "label": "M",
+    "answer": "The semifinal round adds five shrines\u2014four placed at the center of each board edge and one in the center. Every thousand turns the modifications that have been made inside a shrine are applied as an XOR operation to the regions near the shrine\u2019s four corners, after which the shrine resets to a default rock formation [c14-b33]. Because XOR is reversible, the shrines are the only objects that break mass\u2011conservation but still keep the game reversible [c14-b35]. Players can exploit this by positioning gliders so that a shrine becomes an \u201ceternal glider factory,\u201d repeatedly bouncing gliders that break off rock and spawn more gliders before the shrine\u2019s contents are XOR\u2011applied and it resets [c14-b38].",
+    "cited": [
+     "c14-b33",
+     "c14-b35",
+     "c14-b38"
+    ]
+   },
+   {
+    "label": "P",
+    "answer": "In the semifinal round five shrines appear\u202f\u2014\u202fone at the board\u2019s centre and one on each edge. Every thousand turns the data stored in a shrine is XOR\u2011applied to the cells near the four corners of that shrine, after which the shrine resets to a default rock formation. Shrines are the only objects that break mass\u2011conservation, yet the XOR operation is reversible, so they do not lower entropy; with resources cut by eighty percent the intervention turns become a tool for \u201csteering\u201d rather than building. Players can time their ships so gliders hit a shrine, turning it into an eternal glider\u2011factory that repeatedly spawns attacks.\u202f[c14-b33][c14-b35][c14-b38]",
+    "cited": [
+     "c14-b33",
+     "c14-b35",
+     "c14-b38"
+    ]
+   },
+   {
+    "label": "R",
+    "answer": "Every thousand turns any changes made inside a shrine are XOR\u2011applied to the regions near the shrine\u2019s four corners, then the shrine resets to a default rock formation\u202f[c14-b33]. Shrines are the only objects that break mass\u2011conservation, but because XOR is reversible they do not decrease entropy\u202f[c14-b35]. Zei exploits this by timing a spaceship so a glider reflects off a shrine, turning the shrine into an \u201ceternal glider factory\u201d that repeatedly spawns gliders\u202f[c14-b38].",
+    "cited": [
+     "c14-b33",
+     "c14-b35",
+     "c14-b38"
+    ]
+   },
+   {
+    "label": "T",
+    "answer": "(not shown: the passages don't say)",
+    "cited": []
+   }
+  ]
+ },
+ {
+  "id": "f47",
+  "question": "Who is the woman who greets Zei at the train station in the capital?",
+  "gold": [
+   "c12-b16",
+   "c12-b14"
+  ],
+  "answer_fact": "Su, an older Minpentai priest and one of the organizers of the national championship.",
+  "blocks": {
+   "c12-b12": "By this point, the other passengers were almost all off the train. Zei grabbed his bag, and stood up and began to walk out of the train as well.",
+   "c12-b13": "When he stepped out, there were six people wearing Minpentai priest robes waiting for him.",
+   "c12-b14": "\"Welcome to Sadzu Du, Zei\" , the lead priest, an older woman about the same age as Mu, said to him.",
+   "c12-b15": "\"Excited to be here\" , Zei quickly replied. \"Only my second time to the capital.\"",
+   "c12-b16": "\"I'm Su by the way. I'm one of the organizers of the nationals.\""
+  },
+  "answers": [
+   {
+    "label": "K",
+    "answer": "The woman who greets Zei at the train station is the lead priest, an older woman about Mu\u2019s age who introduces herself as\u202fSu and says she is one of the organizers of the nationals[c12-b14][c12-b16].",
+    "cited": [
+     "c12-b14",
+     "c12-b16"
+    ]
+   },
+   {
+    "label": "M",
+    "answer": "The woman is Su, an older priest who is one of the organizers of the nationals\u202f[c12-b14][c12-b16]",
+    "cited": [
+     "c12-b14",
+     "c12-b16"
+    ]
+   },
+   {
+    "label": "P",
+    "answer": "The woman is Su \u2013 the lead Minpentai priest who greets Zei at the station and introduces herself as \u2026[c12-b13][c12-b14][c12-b16].",
+    "cited": [
+     "c12-b13",
+     "c12-b14",
+     "c12-b16"
+    ]
+   },
+   {
+    "label": "R",
+    "answer": "The woman who greets Zei at the capital\u2019s train station is the lead priest, an older woman who introduces herself as Su, one of the organizers of the nationals[c12-b14][c12-b16].",
+    "cited": [
+     "c12-b14",
+     "c12-b16"
+    ]
+   },
+   {
+    "label": "T",
+    "answer": "(not shown: the passages don't say)",
+    "cited": []
+   }
+  ]
+ },
+ {
+  "id": "f01",
+  "question": "Why do the shoes that go with Gladias's robe slow him down when he has to run?",
+  "gold": [
+   "c1-b86"
+  ],
+  "answer_fact": "They have heels to match other robe wearers' height and uneven soles to randomize how he walks.",
+  "blocks": {
+   "c1-b85": "Gladias threw the hand device up into the air, hoping that his pursuer would choose not losing his device over chasing him. He continued running.",
+   "c1-b86": "Despite being slowed down by his shoes, which had high heels to raise his height to the same level as other robe wearers and deliberately uneven soles to randomize his gait, Gladias managed to quickly reach the exit. Distracted by the rest of the commotion, the crowd seemed not to notice."
+  },
+  "answers": [
+   {
+    "label": "K",
+    "answer": "His shoes have high heels that raise his height to match other robe wearers and deliberately uneven soles that randomize his gait, which makes running slower[c1-b86].",
+    "cited": [
+     "c1-b86"
+    ]
+   },
+   {
+    "label": "M",
+    "answer": "The shoes paired with the privacy robe are designed with high heels to match the stature of other robe wearers and with uneven soles that intentionally disrupt a steady stride; those features make quick movement harder, so when Gladias tries to run they impede his speed[c1-b86].",
+    "cited": [
+     "c1-b86"
+    ]
+   },
+   {
+    "label": "P",
+    "answer": "His privacy\u2011robe shoes are built with high heels to match other robe\u2011wearers\u2019 height and with deliberately uneven soles that randomize his gait, so they make his steps less efficient and slow him down when he runs.\u202f[c1-b86]",
+    "cited": [
+     "c1-b86"
+    ]
+   },
+   {
+    "label": "R",
+    "answer": "His shoes have high heels to raise his height to match other robe\u2011wearers and deliberately uneven soles that randomize his gait, which makes running slower. [c1-b86]",
+    "cited": [
+     "c1-b86"
+    ]
+   },
+   {
+    "label": "T",
+    "answer": "His shoes have high heels that raise his height to match other robe\u2011wearers and deliberately uneven soles that randomize his gait, which makes his stride slower when he runs. [c1-b86]",
+    "cited": [
+     "c1-b86"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "f03",
+  "question": "Which menu number does Gladias usually order from the Dzego food truck?",
+  "gold": [
+   "c1-b105"
+  ],
+  "answer_fact": "He orders number ten, the same as usual.",
+  "blocks": {
+   "c1-b104": "\"Well, the Dzego food truck is coming in seven minutes, how about we have that again?\"",
+   "c1-b105": "\"Sure! I assume the number ten for you again?\"",
+   "c6-b1": "**Meldan, Veridia** \u00b7 3724 Rainmoon 12",
+   "c6-b2": "Gladias walked slowly toward the door of his house, keeping his head down so that his privacy robe with its hood could double as shielding from the cold rain. A small roof covered the area right in front of the doorstep. Once he got to the doorstep, he slowly took off his hood. He picked up a food box - the usual number ten from the Dzego food truck - from a small table. He then tapped his watch against a glowing green circle beside the door."
+  },
+  "answers": [
+   {
+    "label": "K",
+    "answer": "Gladias usually orders the number\u202ften from the Dzego food truck[c6-b2][c1-b105].",
+    "cited": [
+     "c1-b105",
+     "c6-b2"
+    ]
+   },
+   {
+    "label": "M",
+    "answer": "Gladias usually orders the number ten from the Dzego food truck. [c6-b2]",
+    "cited": [
+     "c6-b2"
+    ]
+   },
+   {
+    "label": "P",
+    "answer": "Gladias usually orders the number ten menu item from the Dzego food truck. [c6-b2][c1-b105]",
+    "cited": [
+     "c1-b105",
+     "c6-b2"
+    ]
+   },
+   {
+    "label": "R",
+    "answer": "Gladias\u2019s regular choice from the Dzego food truck is the \u201cnumber ten\u201d box\u202f[c6-b2][c1-b105]",
+    "cited": [
+     "c1-b105",
+     "c6-b2"
+    ]
+   },
+   {
+    "label": "T",
+    "answer": "Gladias\u2019s regular order from the Dzego food truck is the \u201cnumber\u202ften\u201d box[c6-b2].",
+    "cited": [
+     "c6-b2"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "f04",
+  "question": "During the thermodynamics lesson, why did Zei keep his Arctic Emperor joke to himself?",
+  "gold": [
+   "c2-b93"
+  ],
+  "answer_fact": "Spelling out such an obvious joke is poor form, and most of the class was likely already thinking it.",
+  "blocks": {
+   "c2-b92": "\"Exactly. Or in other words, you can't go from not knowing more things to not knowing fewer things in a universe with time-reversible physics. In a universe with time-irreversible physics, you *could*, because you can just destroy all the things you don't know.\"",
+   "c2-b93": "\"Just like the Arctic Emperor!\", Zei wanted to shout. But he kept quiet. It's bad form to openly explain a joke that is so obvious, that half the students probably already have on their minds. The instructor and the students briefly paused to appreciate the joke and smirk and enjoy a few moments of mental communion. The instructor then moved on."
+  },
+  "answers": [
+   {
+    "label": "K",
+    "answer": "(not shown: the passages don't say)",
+    "cited": []
+   },
+   {
+    "label": "M",
+    "answer": "Zei stayed silent because he thought it would be rude to spell out a joke that was already obvious to most of the class\u2014explaining it would be \u201cbad form\u201d since half the students probably already got it[c2-b93].",
+    "cited": [
+     "c2-b93"
+    ]
+   },
+   {
+    "label": "P",
+    "answer": "He stayed silent because shouting the punch\u2011line would be \u201cbad form\u201d \u2013 the joke was already obvious and many classmates likely got it, so openly explaining it would be unnecessary. [c2-b93]",
+    "cited": [
+     "c2-b93"
+    ]
+   },
+   {
+    "label": "R",
+    "answer": "Zei stayed silent because he thought it was poor etiquette to openly explain a joke that was already obvious to most of the class\u2014half the students likely already got it, so he didn\u2019t want to point it out directly. [c2-b93]",
+    "cited": [
+     "c2-b93"
+    ]
+   },
+   {
+    "label": "T",
+    "answer": "Zei stayed silent because openly explaining the joke would be \u201cbad form\u201d \u2013 the joke was so obvious that many students probably already got it, so he didn\u2019t want to point it out directly. [c2-b93]",
+    "cited": [
+     "c2-b93"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "f10",
+  "question": "What is the giant pyramid at the southern edge of Pafogai Du really, and what is it used for?",
+  "gold": [
+   "c4-b49"
+  ],
+  "answer_fact": "It's an existing mountain dressed up as a pyramid, its caves turned into offices and homes housing government departments and big businesses.",
+  "blocks": {
+   "c4-b47": "---",
+   "c4-b48": "Zei walked toward the half-kilometer-tall pyramid - the most visible landmark at the southern edge of Pafogai Du. From the outside, it looked like a smooth clad stone pyramid with a square base, like something that had been built by a great civilization a thousand years ago. Interrupting the stone were two rows of trees along a path, starting from the position where Zei was standing ane leading to a point halfway to the top, and another row of trees going horizontally around the pyramid at exactly the halfway height.",
+   "c4-b49": "But the looks were deceptive. Building a pyramid that tall would be far too expensive, even for Veridia, or even the Arctics. This was a pre-existing mountain with pre-existing caves, which was refurbished to look like a pyramid, with the caves converted into living and working spaces. A portion of the Dzego government was located there, along with many major businesses - though space was expensive.",
+   "c4-b50": "Zei stopped at a streetlight, and crossed Dzai Gun street: the last street before Pafogai Du officially ended, and the point at which a straight well-maintained path leading directly to the entrance of the mountain pyramid began."
+  },
+  "answers": [
+   {
+    "label": "K",
+    "answer": "The \u201chalf\u2011kilometer\u2011tall pyramid\u201d is not a newly built monument but a pre\u2011existing mountain that has been reshaped and clad to appear like a smooth stone pyramid; its interior caves have been renovated into living and working spaces. Those spaces now house part of the Dzegojan government and many major businesses, making the structure a functional administrative and commercial hub rather than a purely ceremonial monument. [c4-b48][c4-b49]",
+    "cited": [
+     "c4-b48",
+     "c4-b49"
+    ]
+   },
+   {
+    "label": "M",
+    "answer": "The \u201chalf\u2011kilometer\u2011tall pyramid\u201d is not a newly built structure at all; it is a natural mountain that has been remodeled and clad to appear like a stone pyramid. Its interior caves have been converted into living quarters and workspaces, and a portion of the Dzegojan government as well as many major businesses now occupy the complex, making the space very expensive.\u202f[c4-b48][c4-b49]",
+    "cited": [
+     "c4-b48",
+     "c4-b49"
+    ]
+   },
+   {
+    "label": "P",
+    "answer": "The \u201chalf\u2011kilometer\u2011tall pyramid\u201d is not a newly built monument but a natural mountain that has been remodeled to appear like a stone pyramid. Its interior caves have been turned into apartments, offices and other facilities, and the structure now houses part of the Dzegojan government together with many major businesses, making it an expensive mixed\u2011use complex.\u202f[c4-b48][c4-b49][c4-b50]",
+    "cited": [
+     "c4-b48",
+     "c4-b49",
+     "c4-b50"
+    ]
+   },
+   {
+    "label": "R",
+    "answer": "The \u201cpyramid\u201d is not a newly built monument but a pre\u2011existing mountain whose caves have been renovated to appear as a smooth\u2011sided stone pyramid; the interior has been turned into living and working spaces. A portion of the Dzegojan government and many major businesses are located there, and the space is expensive to occupy[c4-b48][c4-b49].",
+    "cited": [
+     "c4-b48",
+     "c4-b49"
+    ]
+   },
+   {
+    "label": "T",
+    "answer": "The \u201cpyramid\u201d is actually a natural mountain that has been remodeled to look like a stone pyramid; its interior caves were turned into habitable and commercial areas. It now houses part of the Dzego government and many major businesses, serving as living and working space rather than a true monument\u202f[c4-b48][c4-b49].",
+    "cited": [
+     "c4-b48",
+     "c4-b49"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "f11",
+  "question": "Why does Zei say a shield that can never be destroyed can't exist?",
+  "gold": [
+   "c4-b13"
+  ],
+  "answer_fact": "Physics is time-reversible, so whatever can be built can be undone by reversing the steps; every shield must have a weakness.",
+  "blocks": {
+   "c4-b12": "\"Yeah.\"",
+   "c4-b13": "\"Turns out they weren't dumb, we are. Because the laws of physics are time-reversible, nothing can be invincible. Anything that can be created can be destroyed. You just have to take the path that creates it and do the same thing in reverse. So a shield that can't be destroyed is not something that can be created. There has to be a weakness somewhere - it's just a matter of how well you hide it.\""
+  },
+  "answers": [
+   {
+    "label": "K",
+    "answer": "He explains that because the laws of physics are time\u2011reversible, anything that can be made can also be undone by running the creation steps backward; thus a shield with no possible way to be destroyed could never be created, so an invincible shield cannot exist. [c4-b13]",
+    "cited": [
+     "c4-b13"
+    ]
+   },
+   {
+    "label": "M",
+    "answer": "He argues that because the laws of physics are time\u2011reversible, anything that can be built can also be undone by running the creation steps backward; therefore no object can be truly invincible. A shield that could never be destroyed would have to be un\u2011creatable, since its creation could not be reversed, so it must contain some hidden weakness.\u202f[c4-b13]",
+    "cited": [
+     "c4-b13"
+    ]
+   },
+   {
+    "label": "P",
+    "answer": "He explains that because the laws are time\u2011reversible, anything that can be made can also be undone by running the creation steps backward; therefore a shield that cannot be destroyed would never be creatable, since every created thing must have a way to be destroyed. [c4-b13]",
+    "cited": [
+     "c4-b13"
+    ]
+   },
+   {
+    "label": "R",
+    "answer": "He argues that because the laws of physics are time\u2011reversible, anything that can be built can also be un\u2011built by running the creation steps backward; therefore a shield with no possible way to be destroyed would have no way to be created at all, so such an \u201cinvincible\u201d shield cannot exist[c4-b13].",
+    "cited": [
+     "c4-b13"
+    ]
+   },
+   {
+    "label": "T",
+    "answer": "He explains that because the laws of physics are time\u2011reversible, anything that can be made can also be undone by running the creation process backward; therefore a shield that cannot be destroyed would have no way to be created and thus cannot exist[c4-b13].",
+    "cited": [
+     "c4-b13"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "f13",
+  "question": "Watching the quarter-final from far away, what does Fin think Zei wants almost as much as winning?",
+  "gold": [
+   "c4-b119"
+  ],
+  "answer_fact": "Fin believes Zei wants to hear Bai plead with him for help.",
+  "blocks": {
+   "c4-b118": "Watching from the sidelines, Mu sighed. She knew Zei and Bai did not get along, and their side was suffering from it. This was the \"price of anarchy\", she thought - the amount that a group lost from its members independently pursuing their own separate goals without coordinating. She watched intently. The next minute, she knew, would determine if they could figure it out.",
+   "c4-b119": "Watching from his hand device kilometers away, Fin felt his own frustration. Zei wanted to win, Fin knew, but almost as much, Zei wanted to hear Bai beg."
+  },
+  "answers": [
+   {
+    "label": "K",
+    "answer": "Fin believes that, besides winning, Zei most wants to hear Bai beg\u202f\u2014\u202fthat desire is almost as strong as his wish to win[c4-b119].",
+    "cited": [
+     "c4-b119"
+    ]
+   },
+   {
+    "label": "M",
+    "answer": "Fin thinks that, besides winning, Zei wants to hear Bai beg almost as much as the victory itself [c4-b119].",
+    "cited": [
+     "c4-b119"
+    ]
+   },
+   {
+    "label": "P",
+    "answer": "(not shown: the passages don't say)",
+    "cited": []
+   },
+   {
+    "label": "R",
+    "answer": "Fin believes that, besides winning, Zei is eager to hear Bai beg\u202f\u2014\u202fFin thinks Zei wants Bai\u2019s begging almost as much as the victory itself.\u202f[c4-b119]",
+    "cited": [
+     "c4-b119"
+    ]
+   },
+   {
+    "label": "T",
+    "answer": "Fin believes that, besides winning, Zei almost equally wants to hear Bai beg. [c4-b119]",
+    "cited": [
+     "c4-b119"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "f16",
+  "question": "How is the entrance fee worked out at the economics institute Zei and Bai visit in Freetown?",
+  "gold": [
+   "c5-b40"
+  ],
+  "answer_fact": "It rises with the square root of time spent inside and falls as your academic or intellectual reputation score rises.",
+  "blocks": {
+   "c5-b39": "\"Freetown Economics Institute\", a sign read.",
+   "c5-b40": "Right below the name of the institute, the sign listed a schedule of admission fees, featuring a formula that was a function of two variables: increasing with the square root of how much time you spend inside, and decreasing the higher your academic or intellectual reputation score rises.",
+   "c5-b41": "Academic and intellectual reputation score was difficult to get. The kind of reputation you could zero-knowledge-collateralize to get loans or check into hotels, that was easy to get; it was only hard if you had failed to pay back loans or trashed hotel rooms multiple times. Academic and intellectual reputation, on the other hand, required doing serious work."
+  },
+  "answers": [
+   {
+    "label": "K",
+    "answer": "The institute lists a fee formula that depends on two variables: it rises with the\u202fsquare\u2011root of the amount of time you stay inside, and it falls the higher your academic\u202for\u202fintellectual reputation score is\u202f\u2014\u202fthe better your reputation, the lower the charge\u202f[c5-b40]. Academic/intellectual reputation is earned by doing serious work (unlike the easier\u2011to\u2011obtain \u201creputation\u201d used for loans or hotel check\u2011ins)\u202f[c5-b41].",
+    "cited": [
+     "c5-b40",
+     "c5-b41"
+    ]
+   },
+   {
+    "label": "M",
+    "answer": "The institute lists a fee formula that depends on two variables: it rises with the square\u2011root of the amount of time you stay inside, and it falls as your academic\u2011or\u2011intellectual reputation score increases\u202f[c5-b40][c5-b41].",
+    "cited": [
+     "c5-b40",
+     "c5-b41"
+    ]
+   },
+   {
+    "label": "P",
+    "answer": "The institute\u2019s admission price is set by a formula that uses two variables: it rises with the square\u2011root of the amount of time you stay inside, and it falls the higher your academic or intellectual reputation score is\u202f[c5-b40]. Academic/intellectual reputation is earned only by doing serious work, unlike the easier\u2011to\u2011obtain \u201creputation\u201d used for loans\u202f[c5-b41].",
+    "cited": [
+     "c5-b40",
+     "c5-b41"
+    ]
+   },
+   {
+    "label": "R",
+    "answer": "The institute lists a fee formula that depends on two variables: the longer you stay, the higher the charge, rising with the square\u2011root of the time spent inside, and the higher your academic or intellectual reputation score, the lower the charge\u202f[c5-b40]. Academic/intellectual reputation is hard to earn and reflects serious work, unlike a simpler reputation used for loans or hotel check\u2011ins\u202f[c5-b41].",
+    "cited": [
+     "c5-b40",
+     "c5-b41"
+    ]
+   },
+   {
+    "label": "T",
+    "answer": "The institute posts a formula\u2011based schedule: the fee rises with the\u202fsquare\u2011root of the amount of time you stay inside, and it is reduced the higher your academic\u202for\u202fintellectual reputation score is\u202f\u2014\u202fthe better your reputation, the lower the charge\u202f[c5-b40]. The reputation score itself is earned by serious work (as opposed to the easier \u201creputation\u201d used for loans or hotel check\u2011ins)[c5-b41].",
+    "cited": [
+     "c5-b40",
+     "c5-b41"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "f17",
+  "question": "What kind of project does Seila suggest Gladias could take on if he becomes a Keeper?",
+  "gold": [
+   "c5-b113",
+   "c5-b112"
+  ],
+  "answer_fact": "Changing or creating rubrics so companies' products help Dzego more, since current rubrics don't.",
+  "blocks": {
+   "c5-b110": "\"Indeed they do.\"",
+   "c5-b111": "\"What about the rubrics though? Do the rubrics encourage companies to make any of their products more helpful to Dzego in any way?\"",
+   "c5-b112": "Gladias thought for a few moments. \"Not really, at least I can't think of anything.\"",
+   "c5-b113": "\"Well maybe you should become a Keeper. And this could be one of your projects! Figure out how to make or adjust the rubrics to support Dzego better.\""
+  },
+  "answers": [
+   {
+    "label": "K",
+    "answer": "Seila proposes that, as a Keeper, Gladias could work on \u2026\u202f\u2014 a project focused on reshaping the rubric system so it benefits Dzego.\u202f[c5-b111][c5-b113]",
+    "cited": [
+     "c5-b111",
+     "c5-b113"
+    ]
+   },
+   {
+    "label": "M",
+    "answer": "Seila proposes that, as a Keeper, Gladias could work on a project to redesign or tweak the rubrics so they better support Dzego\u2014essentially figuring out how to make the rubrics encourage products or policies that help Dzego.\u202f[c5-b111][c5-b113]",
+    "cited": [
+     "c5-b111",
+     "c5-b113"
+    ]
+   },
+   {
+    "label": "P",
+    "answer": "Seila proposes that, as a Keeper, Gladias could take on a project to design or modify the rubrics so they better support Dzego\u2019s needs[c5-b113].",
+    "cited": [
+     "c5-b113"
+    ]
+   },
+   {
+    "label": "R",
+    "answer": "Seila proposes that, as a Keeper, Gladias could take on a project to redesign or adjust the rubrics so they better support Dzego\u202f\u2014\u202f\u2026\u202f[c5-b113]",
+    "cited": [
+     "c5-b113"
+    ]
+   },
+   {
+    "label": "T",
+    "answer": "(not shown: the passages don't say)",
+    "cited": []
+   }
+  ]
+ },
+ {
+  "id": "f18",
+  "question": "Why did the priests let each player see what the other player's AI was thinking during the city final?",
+  "gold": [
+   "c7-b132",
+   "c7-b130",
+   "c7-b127"
+  ],
+  "answer_fact": "Mu says they wanted it closer to real life, where success depends on concealing your thinking, sometimes even from allies.",
+  "blocks": {
+   "c7-b126": "Mu paused for a few moments.",
+   "c7-b127": "\"The priests did not even know what you two would come up with. They told me that they wanted to make the game a little more ... *realistic* - but they were as curious as anyone else to find out what that means.\"",
+   "c7-b129": "\"It sounded crazy to me too. But the more I think about it, the more I've come to see their point.\"",
+   "c7-b130": "\"Look at the Veridian Steering system, for example. It's one of the most opaque parts of the government - even the Keepers don't know who each other are - and yet one of the most trustworthy and incorruptible parts precisely for that reason. Similar for the Courts - anonymous, randomly selected committees out of a large pool.\"",
+   "c7-b131": "\"But the Parliament is transparent, and so when it comes to the Parliament's direct decisions - large-scale infrastructure, foreign policy, healthcare, all the things that it's funding - everyone keeps exploiting and outsmarting it. Same with the quadratic funding - actually, it's even worse. Keepers, Sentinels and Court judges are not fully insulated - it is still Parliament committees that are approving them - but at least there's a layer of indirection there, and those positions are also gated by prediction scores.\"",
+   "c7-b132": "\"That's the lesson. In the real world, it's not just thinking well that matters, it's also hiding your thoughts - sometimes, even hiding your thoughts from your allies or the people you're meant to serve.\"",
+   "c7-b64": "A new tab suddenly opened up on Zei's display.",
+   "c7-b65": "\"However, the players and their AIs will have full read access to the thought transcripts of each other's AI.\""
+  },
+  "answers": [
+   {
+    "label": "K",
+    "answer": "(not shown: the passages don't say)",
+    "cited": []
+   },
+   {
+    "label": "M",
+    "answer": "(not shown: the passages don't say)",
+    "cited": []
+   },
+   {
+    "label": "P",
+    "answer": "The priests added the rule so the match would feel \u201cmore\u202frealistic\u201d \u2013 they wanted a game that tested not only clever play but also the ability to conceal one\u2019s thinking, even from an opponent you\u2019re supposed to cooperate with. By giving both players full read\u2011access to each other\u2019s AI transcripts they forced the contestants to manage what they revealed, mirroring the book\u2019s theme that in real governance success depends on hiding thoughts as well as thinking well[c7-b127][c7-b130][c7-b132]. The rule itself explicitly granted that access[c7-b65].",
+    "cited": [
+     "c7-b65",
+     "c7-b127",
+     "c7-b130",
+     "c7-b132"
+    ]
+   },
+   {
+    "label": "R",
+    "answer": "The priests added the rule so the final would feel more \u201crealistic\u201d \u2013 they wanted a game where competitors not only think well but must also conceal their thoughts, even from allies. By giving both players full read\u2011access to each other\u2019s AI transcripts they forced a test of strategic secrecy, mirroring the book\u2019s commentary on how real\u2011world institutions balance transparency and hidden intent.\u202f[c7-b65][c7-b127][c7-b132]",
+    "cited": [
+     "c7-b65",
+     "c7-b127",
+     "c7-b132"
+    ]
+   },
+   {
+    "label": "T",
+    "answer": "The passages don\u2019t say. They do show that the new rule for the final round gave both players and their AIs full read access to the other AI\u2019s thought transcripts[c7-b65].",
+    "cited": [
+     "c7-b65"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "f19",
+  "question": "Why didn't Nine believe the bug hidden in the booth table was planted to spy on the Keepers?",
+  "gold": [
+   "c10-b119"
+  ],
+  "answer_fact": "Such bugs usually target careless businesses for market tips; Keepers hear only one of three groups and talk digitally through neck bands.",
+  "blocks": {
+   "c10-b118": "Nine stepped forward and looked at the device briefly.",
+   "c10-b119": "\"I doubt it was meant against us\" , he said. \"Normally, the goal of people who do this is to get information about upcoming business decisions, and trade based on that in the financial markets. Usually, smaller businesses who are less careful. The Order is quite safe against this. Our Keeper group is only one of three discussion groups, so even if you do overhear us all you're only getting one third of the perspective. And we're all speaking through our neck bands so the sound is going between us digitally.\"",
+   "c10-b120": "\"Actually this one had a camera. It can read your lips and your neck, so there might still be enough information to pick up some words, especially if you're a beginner.\""
+  },
+  "answers": [
+   {
+    "label": "K",
+    "answer": "The passages don't say.",
+    "cited": []
+   },
+   {
+    "label": "M",
+    "answer": "Nine says he doubts the device was intended against them, noting that such bugs are normally used to harvest information about upcoming business decisions for market trading, that the Order\u2019s discussions are relatively safe, and that the Keepers represent only one\u2011third of the overall perspective while communicating through encrypted neck\u2011band channels, so the device\u2019s purpose likely wasn\u2019t to spy on their specific group [c10-b119].",
+    "cited": [
+     "c10-b119"
+    ]
+   },
+   {
+    "label": "P",
+    "answer": "Nine says he doubts the device was aimed at the Keepers because, in his view, such bugs are normally used to steal information about upcoming business decisions for market\u2011trading purposes and are aimed at smaller, less\u2011careful firms\u2014not at the highly protected Order\u2019s discussion groups. He notes the Keepers\u2019 group is only one\u2011third of the overall perspective and that they all speak through neck\u2011band links that transmit digitally, so even if the bug captured sound it would yield limited value.\u202f[c10-b119][c10-b120]",
+    "cited": [
+     "c10-b119",
+     "c10-b120"
+    ]
+   },
+   {
+    "label": "R",
+    "answer": "Nine says he doubts the device was aimed at the Keepers because, in his view, such bugs are normally used to steal information for financial\u2011market trades about ordinary business decisions, not to target the Order\u2019s privileged discussion groups. He notes the Order is \u201cquite safe\u201d and that the Keepers are only one of three groups, so even if someone overheard them they\u2019d get only a fraction of the overall picture, and their speech is already routed through encrypted neck\u2011band channels.\u202f[c10-b119][c10-b120]",
+    "cited": [
+     "c10-b119",
+     "c10-b120"
+    ]
+   },
+   {
+    "label": "T",
+    "answer": "Nine says he doubts the device was intended to spy on them because, in his view, such bugs are normally used to harvest information about upcoming business decisions for market trading, not to target a Keeper discussion that represents only one\u2011third of the overall perspective and whose members already communicate digitally via neck\u2011bands; thus the Order\u2019s safeguards and the limited value of overhearing their talk make a direct attack on them unlikely[c10-b119][c10-b120].",
+    "cited": [
+     "c10-b119",
+     "c10-b120"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "f20",
+  "question": "Why does Dzego disguise its training of future defenders as a game instead of just recruiting soldiers openly?",
+  "gold": [
+   "c10-b202"
+  ],
+  "answer_fact": "Any open military effort would be targeted by the Arctics; the game is safe only because it looks like mere sport.",
+  "blocks": {
+   "c10-b193": "Zei stared.",
+   "c10-b194": "\"It's military training.\"",
+   "c10-b195": "\"The whole point of the sport, and why we support it so much, is to raise the next generation of defenders.\"",
+   "c10-b196": "\"We need people who can think quickly, and think strategically under pressure.\"",
+   "c10-b197": "\"People who can compete with their foes, but also cooperate with their allies, even allies that they do not personally get along with.\"",
+   "c10-b198": "\"People who can understand a battlefield, including the battle itself, all the way up to grand strategy and resources and logistics, and all the way down to the level of surveillance and secrecy and trickery, and ultimately entropy itself.\"",
+   "c10-b199": "\"People who can deal with suddenly changing rules.\"",
+   "c10-b201": "\"And people who can work with the latest technology - including AI - but also understand and work around its limits.\"",
+   "c10-b202": "The realizations hit Zei all at once. At first, he had wanted to ask a basic question: why pretend it's a game, why not just have a regular military with regular recruitment? But as soon as he put together the question, he already knew the answer: the Arctics would put all their energy into targeting anything like that. Minpentai was only safe because it pretended to be just a game. But even then, Zei knew, the ruse could not be safe forever."
+  },
+  "answers": [
+   {
+    "label": "K",
+    "answer": "Dzego frames its defender\u2011training as the Minpentai sport to hide it from the Arctics, who would focus on any obvious military program. By pretending the activity is a game, the training stays \u201csafe\u201d and can continue without drawing direct attention, while still teaching rapid strategic thinking, cooperation, battlefield awareness, rule\u2011changing adaptability, and high\u2011tech (AI) skills. The ruse also lets them develop defenders under the cover of competition rather than an overt army.\u202f[c10-b194][c10-b195][c10-b199][c10-b202]",
+    "cited": [
+     "c10-b194",
+     "c10-b195",
+     "c10-b199",
+     "c10-b202"
+    ]
+   },
+   {
+    "label": "M",
+    "answer": "Dzego presents the training as a game to keep the Arctics from focusing their energy on a visible military program; the sport\u2019s fa\u00e7ade makes the effort safer, even if the ruse can\u2019t last forever. [c10-b194][c10-b202]",
+    "cited": [
+     "c10-b194",
+     "c10-b202"
+    ]
+   },
+   {
+    "label": "P",
+    "answer": "(not shown: the passages don't say)",
+    "cited": []
+   },
+   {
+    "label": "R",
+    "answer": "Dzego presents the training as a sport so it can develop quick, strategic thinking, cooperation, battlefield awareness, adaptability to changing rules, and the ability to work with advanced technology while still being framed as harmless competition[c10-b194][c10-b195][c10-b196][c10-b197][c10-b198][c10-b199]. \nThe game cover keeps the program safer from outside scrutiny, because pretending it is just a game makes the training less conspicuous and therefore less vulnerable to the Arctics[c10-b202].",
+    "cited": [
+     "c10-b194",
+     "c10-b195",
+     "c10-b196",
+     "c10-b197",
+     "c10-b198",
+     "c10-b199",
+     "c10-b202"
+    ]
+   },
+   {
+    "label": "T",
+    "answer": "(not shown: the passages don't say)",
+    "cited": []
+   }
+  ]
+ },
+ {
+  "id": "f21",
+  "question": "Why did Gladias stop chasing perfect marks at school?",
+  "gold": [
+   "c8-b54"
+  ],
+  "answer_fact": "After a year of near-perfect grades he felt mostly fear of ruining his record, so he decided it wasn't worth it.",
+  "blocks": {
+   "c8-b53": "\"Why not?\"",
+   "c8-b54": "\"I think I was just not motivated to. I tried very hard for one year, got an average of ninety-seven percent. But then I realized that the main emotion I was feeling, was the fear that if I screwed up even once, my beautiful record would be gone. I even avoided taking the harder classes. At the end of that year, I just felt like that was a game not worth playing. So I put in less effort, and started programming, and then studying law, in my spare time, because those things interested me, and I ended up doing decently well in the programming competitions.\""
+  },
+  "answers": [
+   {
+    "label": "K",
+    "answer": "Gladias says he stopped trying for perfect grades because he wasn\u2019t motivated and feared that a single mistake would ruin his \u201cbeautiful record,\u201d so he avoided harder classes and eventually saw the effort as \u201ca game not worth playing,\u201d turning instead to programming and law in his spare time[c8-b54].",
+    "cited": [
+     "c8-b54"
+    ]
+   },
+   {
+    "label": "M",
+    "answer": "Gladias says he stopped trying to keep perfect grades because the fear of ruining his flawless record overwhelmed him. After a year of intense effort he hit a 97\u202f% average, but the anxiety that one mistake would erase his \u201cbeautiful\u201d transcript made him avoid harder classes. He concluded the pursuit was \u201ca game not worth playing,\u201d so he eased off, focused on programming and law instead\u202f[c8-b54].",
+    "cited": [
+     "c8-b54"
+    ]
+   },
+   {
+    "label": "P",
+    "answer": "He says he stopped after a year of chasing top grades because the fear of a single mistake wiping out his perfect record made the effort feel like a pointless game, so he reduced his effort and turned to programming and law instead [c8-b54].",
+    "cited": [
+     "c8-b54"
+    ]
+   },
+   {
+    "label": "R",
+    "answer": "Gladias says he stopped trying to keep perfect grades because he wasn\u2019t motivated and was haunted by the fear that a single mistake would ruin his flawless record. That anxiety made him avoid harder classes, and he eventually decided the effort wasn\u2019t worth it, turning instead to programming and law in his spare time. [c8-b54]",
+    "cited": [
+     "c8-b54"
+    ]
+   },
+   {
+    "label": "T",
+    "answer": "Gladias says he stopped trying for perfect marks because he feared that a single mistake would ruin his record, which drained his motivation; he began to see the effort as a \u201cgame not worth playing\u201d and therefore reduced his studying, turning instead to programming and law in his spare time[c8-b54].",
+    "cited": [
+     "c8-b54"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "f22",
+  "question": "According to Eighteen, why does publishing military-relevant designs openly matter so much for Dzego?",
+  "gold": [
+   "c10-b147",
+   "c10-b146"
+  ],
+  "answer_fact": "Dzego can't invent top-end tech itself but excels at adapting open designs, as with secure software that protected it from Arctic sabotage.",
+  "blocks": {
+   "c10-b145": "\"I don't think we can look at the situation like it's a black box like that. Let's look at where we are now. The Arctic Empire's technology is the most advanced. Ours is second. On military tech, Dzego and the United Cities are furthest behind.\"",
+   "c10-b146": "\"And so when we release open-source military-relevant anything, it doesn't benefit the Arctics at all, and it's marginally good for us because it makes it easier for us to make more.\"",
+   "c10-b147": "\"But for Dzego, it's a lifeline. They're not set up to invent their own proprietary stuff at the top end, but they're really good at building and adapting from open-source plans. Twenty years ago, when we got our programming languages and formal verification to the point where our devices basically stopped having critical errors in their code that could let someone take it over from the outside, the fact that it was open allowed the Dzegojan to adopt those techniques, and protect themselves much better from Arctic sabotage.\""
+  },
+  "answers": [
+   {
+    "label": "K",
+    "answer": "Eighteen says that open\u2011source military designs are a \u201clifeline\u201d for Dzego because they lack the capacity to create proprietary top\u2011end technology, yet they excel at building and adapting from open\u2011source plans; the openness of earlier advances (e.g., programming languages and formal verification) let Dzegojans adopt those techniques and greatly improve their defence against Arctic sabotage. [c10-b147]",
+    "cited": [
+     "c10-b147"
+    ]
+   },
+   {
+    "label": "M",
+    "answer": "Eighteen explains that open\u2011source military\u2011relevant designs are a \u201clifeline\u201d for Dzego because they lack the capacity to create proprietary top\u2011end technology, yet they are very good at building and adapting from open\u2011source plans; the openness lets them adopt advanced techniques\u2014such as formal\u2011verified programming languages\u2014and thereby protect themselves far better from Arctic sabotage[c10-b147].",
+    "cited": [
+     "c10-b147"
+    ]
+   },
+   {
+    "label": "P",
+    "answer": "Eighteen says that open\u2011source military designs are a \u201clifeline\u201d for Dzego because the country lacks the capacity to create its own proprietary high\u2011end tech, yet it excels at building and adapting open\u2011source plans; the openness lets Dzegojans adopt advanced techniques (like formal verification) and better defend themselves against Arctic sabotage[c10-b147].",
+    "cited": [
+     "c10-b147"
+    ]
+   },
+   {
+    "label": "R",
+    "answer": "Eighteen says that publishing military\u2011relevant designs openly is a \u201clifeline\u201d for Dzego because they lack the capacity to create high\u2011end proprietary technology themselves, yet they excel at taking open\u2011source plans and adapting them. The openness of earlier programming\u2011language and verification advances let Dzegojans adopt those techniques and dramatically improve their defence against Arctic sabotage.\u202f[c10-b147]",
+    "cited": [
+     "c10-b147"
+    ]
+   },
+   {
+    "label": "T",
+    "answer": "Eighteen says that open\u2011source military designs are a \u201clifeline\u201d for Dzego because they lack the capacity to create high\u2011end proprietary technology themselves, yet they excel at building and adapting from openly available plans; the openness of earlier advances (e.g., verified programming languages) let Dzegojans adopt those techniques and better protect themselves from Arctic sabotage [c10-b147].",
+    "cited": [
+     "c10-b147"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "f24",
+  "question": "What did Vil offer Lily as a reward for doing better in civics?",
+  "gold": [
+   "c8-b120"
+  ],
+  "answer_fact": "If she scores over 75 on her next civics test, Vil will take her on his next trip to Northglade.",
+  "blocks": {
+   "c8-b119": "\"These schools really need to get better at connecting these topics like civics to topics that matter in your life. I only went down my path to become an Acolyte because I saw how the Steering incentives were helping to open up the online world so I could participate and write code for it. You will have your moment too.\"",
+   "c8-b120": "\"If you get above seventy-five on your next civics test\" , Vil said, \"I'll take you on my next trip up to Northglade.\""
+  },
+  "answers": [
+   {
+    "label": "K",
+    "answer": "Vil promised Lily a trip to Northglade if she scored above seventy\u2011five on her next civics test. [c8-b120]",
+    "cited": [
+     "c8-b120"
+    ]
+   },
+   {
+    "label": "M",
+    "answer": "Vil promised that if Lily scored above\u202f75 on her next civics test, he would take her on his next trip up to Northglade. [c8-b120]",
+    "cited": [
+     "c8-b120"
+    ]
+   },
+   {
+    "label": "P",
+    "answer": "Vil said that if Lily scores above\u202f75 on her next civics test, he will take her on his next trip up to Northglade\u202f[c8-b120].",
+    "cited": [
+     "c8-b120"
+    ]
+   },
+   {
+    "label": "R",
+    "answer": "Vil says that if Lily scores above\u202f75 on her next civics test, he\u2019ll take her on his next trip up to Northglade. [c8-b120]",
+    "cited": [
+     "c8-b120"
+    ]
+   },
+   {
+    "label": "T",
+    "answer": "Vil promised Lily a trip to Northglade\u2014he said that if she scores above\u202f75 on her next civics test, he\u2019ll take her on his next journey up there[c8-b120].",
+    "cited": [
+     "c8-b120"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "f28",
+  "question": "How does the network Den showed Zei hide who sent a message?",
+  "gold": [
+   "c9-b116",
+   "c9-b119",
+   "c9-b121"
+  ],
+  "answer_fact": "Messages are wrapped in three encryption layers peeled by randomly chosen nodes, so unmasking a sender needs three random nodes colluding.",
+  "blocks": {
+   "c9-b114": "\"Some kind of diagram of the internet?\"",
+   "c9-b115": "\"It's a mixnet. It's how transactions get onto the cryptographic network without people being able to see who sent them.\"",
+   "c9-b116": "\"Each message from each sender gets wrapped with three layers of encryption. That top-level message gets sent to a node on the first layer.\"",
+   "c9-b117": "\"The node on the first layer unwraps the top layer of encryption, and sees another encrypted message, along with the address of which node in the second layer they are supposed to send it to.\"",
+   "c9-b118": "\"The node on the second layer unwraps the next layer of encryption, and sees another encrypted message, along with the address of which node in the third layer they are supposed to send it to.\"",
+   "c9-b119": "\"Finally each node on the third layer unwraps that layer of encryption, and gets the address of the destination, plus the actual payload. And of course, usually, the payload itself is encrypted.\"",
+   "c9-b120": "\"Wow, I didn't realize that's how it works. So you need three nodes to collude to unmask the sender of a message.\"",
+   "c9-b121": "\"Not just three nodes - three *randomly selected* nodes. And if you're paranoid, you can make the inner payload be yet another envelope, requesting to send the message right back through the system in the next round.\""
+  },
+  "answers": [
+   {
+    "label": "K",
+    "answer": "(not shown: the passages don't say)",
+    "cited": []
+   },
+   {
+    "label": "M",
+    "answer": "Den shows Zei a mixnet: each message is wrapped in three encryption layers and sent through three randomly chosen nodes.\u202fThe first node strips the outer layer, learns the address of the second node; the second node strips the next layer and learns the address of the third; the third node strips the final layer, learns the destination address and the payload, but no node ever sees both the sender\u2019s identity and the full message\u202f[c9-b115][c9-b116][c9-b117][c9-b118][c9-b119][c9-b120][c9-b121].",
+    "cited": [
+     "c9-b115",
+     "c9-b116",
+     "c9-b117",
+     "c9-b118",
+     "c9-b119",
+     "c9-b120",
+     "c9-b121"
+    ]
+   },
+   {
+    "label": "P",
+    "answer": "The mixnet wraps each message in three successive encryption layers. The first\u2011layer node strips the outer layer, learns the address of a second\u2011layer node and forwards the still\u2011encrypted payload; the second node does the same for the next layer; the third node finally removes the last layer, learns the destination address and the payload (which may itself be encrypted). Because the sender\u2019s identity is never revealed to any single node, only if the three randomly chosen nodes collude could the sender be uncovered[c9-b115][c9-b116][c9-b117][c9-b118][c9-b119][c9-b120].",
+    "cited": [
+     "c9-b115",
+     "c9-b116",
+     "c9-b117",
+     "c9-b118",
+     "c9-b119",
+     "c9-b120"
+    ]
+   },
+   {
+    "label": "R",
+    "answer": "Den shows Zei a mixnet where each message is wrapped in three encryption layers. The first node strips the outer layer, sees the next encrypted payload and the address of the second node; the second node does the same for the middle layer, and the third node removes the final layer to learn the destination address and payload. Because the three nodes are randomly selected, no single node knows both the sender and the recipient, and only by colluding would they be able to link the message to its origin[c9-b115][c9-b116][c9-b117][c9-b118][c9-b119][c9-b120][c9-b121].",
+    "cited": [
+     "c9-b115",
+     "c9-b116",
+     "c9-b117",
+     "c9-b118",
+     "c9-b119",
+     "c9-b120",
+     "c9-b121"
+    ]
+   },
+   {
+    "label": "T",
+    "answer": "The mixnet wraps each sender\u2019s message in three encryption layers; each node on a layer removes only its layer, learns only the address of the next node, and never sees the original sender, so only three randomly chosen nodes colluding could reveal the source\u202f[c9-b115][c9-b116][c9-b117][c9-b118][c9-b119][c9-b121].",
+    "cited": [
+     "c9-b115",
+     "c9-b116",
+     "c9-b117",
+     "c9-b118",
+     "c9-b119",
+     "c9-b121"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "f29",
+  "question": "If payments in Veridia are private, how does the government make sure shops actually pay sales tax?",
+  "gold": [
+   "c6-b138"
+  ],
+  "answer_fact": "Tax is sent automatically in real time, and enforcement relies on random inspectors ordering and checking a taxed payment type is used.",
+  "blocks": {
+   "c6-b137": "Payment succeeded. Base 10.5 zc Tax 1.1 zc Total 11.6 zc",
+   "c6-b138": "In Veridia, and across much of the world, even the sales tax payments were zero-knowledge. Only Gladias and the restaurant knew that a 10.5 zipcoin order had been made. The sales tax was sent to the government in real time, automatically. The whole scheme was enforced not by auditing spreadsheets, but by random inspection - people coming to order, and verifying that a tax-paying transaction type was used any time that the restaurant requested payment."
+  },
+  "answers": [
+   {
+    "label": "K",
+    "answer": "Sales tax is recorded in a zero\u2011knowledge way so only the buyer and seller see the amount, but the tax is transferred to the government instantly and automatically; compliance is enforced by random inspections in which officials watch transactions and confirm that a tax\u2011paying payment method is used whenever a purchase is made[c6-b138].",
+    "cited": [
+     "c6-b138"
+    ]
+   },
+   {
+    "label": "M",
+    "answer": "The sales tax is sent to the government automatically at the moment of purchase, even though the payment details are zero\u2011knowledge, and compliance is enforced through random inspections\u2014people ordering verify that the transaction type used includes the required tax each time a shop requests payment. [c6-b138]",
+    "cited": [
+     "c6-b138"
+    ]
+   },
+   {
+    "label": "P",
+    "answer": "Sales tax is transmitted to the government instantly and automatically at the moment of purchase, and compliance is ensured through random inspections\u2014people checking that a tax\u2011paying transaction type is used whenever a shop processes a payment, rather than through spreadsheet audits. [c6-b138]",
+    "cited": [
+     "c6-b138"
+    ]
+   },
+   {
+    "label": "R",
+    "answer": "Even though sales\u2011tax payments are zero\u2011knowledge\u2014only the buyer and the shop see the exact amount\u2014the tax is transferred to the government instantly and automatically. Compliance is enforced not by auditing records but by random inspections: auditors or other people can walk in, order something, and check that the transaction uses a tax\u2011paying payment method whenever the shop processes a sale[c6-b138].",
+    "cited": [
+     "c6-b138"
+    ]
+   },
+   {
+    "label": "T",
+    "answer": "Sales tax is collected automatically at the moment of purchase, even though the transaction details remain private (zero\u2011knowledge). Compliance is enforced not through audits but by random inspections\u2014people who place orders check that the merchant uses a tax\u2011paying transaction type each time payment is requested[c6-b138].",
+    "cited": [
+     "c6-b138"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "f31",
+  "question": "What kind things had Lily done for the family that Gladias reminded her of when she was upset?",
+  "gold": [
+   "c8-b117"
+  ],
+  "answer_fact": "She baked Seila a birthday cake and brought Hreda food daily for a month after Hreda's accident.",
+  "blocks": {
+   "c8-b116": "\"You've already tried\" , Lily replied softly, sobbing. \"I got fifty-nine percent on this test. FIFTY-NINE PERCENT. Third-worst in the class.\"",
+   "c8-b117": "\"Well, do you think the smartest kid in your class can bake a birthday cake for Seila the way you did six months ago? Would he bring food to Hreda every day for a month the way you did when she was recovering from that accident years ago?\""
+  },
+  "answers": [
+   {
+    "label": "K",
+    "answer": "(not shown: the passages don't say)",
+    "cited": []
+   },
+   {
+    "label": "M",
+    "answer": "The passages don't say.",
+    "cited": []
+   },
+   {
+    "label": "P",
+    "answer": "(not shown: the passages don't say)",
+    "cited": []
+   },
+   {
+    "label": "R",
+    "answer": "The passages you provided do not include any mention of specific things Lily had done for the family that Gladias reminded her of when she was upset.",
+    "cited": []
+   },
+   {
+    "label": "T",
+    "answer": "(not shown: the passages don't say)",
+    "cited": []
+   }
+  ]
+ },
+ {
+  "id": "f33",
+  "question": "What was the name of the Herald who led the citizens' assembly on public spaces?",
+  "gold": [
+   "c6-b68"
+  ],
+  "answer_fact": "Alagael, who had been a Herald for seven years.",
+  "blocks": {
+   "c6-b67": "The room quickly went silent.",
+   "c6-b68": "\"For those who are new to this assembly, welcome and thank you for coming. I'm Alagael, I've been a Herald for seven years. This is the fourth session of this semester's assembly, the topic is how we can improve Veridia's public spaces to support better in-person social interaction.\""
+  },
+  "answers": [
+   {
+    "label": "K",
+    "answer": "The Herald who opened and led that assembly was Alagael[c6-b68].",
+    "cited": [
+     "c6-b68"
+    ]
+   },
+   {
+    "label": "M",
+    "answer": "The Herald who led the assembly was Alagael[c6-b68].",
+    "cited": [
+     "c6-b68"
+    ]
+   },
+   {
+    "label": "P",
+    "answer": "(not shown: the passages don't say)",
+    "cited": []
+   },
+   {
+    "label": "R",
+    "answer": "The Herald who led the assembly was Alagael[c6-b68].",
+    "cited": [
+     "c6-b68"
+    ]
+   },
+   {
+    "label": "T",
+    "answer": "The Herald who opened and led the assembly on public spaces was Alagael[c6-b68].",
+    "cited": [
+     "c6-b68"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "f34",
+  "question": "What score did Lily get on the civics test she failed?",
+  "gold": [
+   "c8-b116"
+  ],
+  "answer_fact": "59 percent, the third-worst result in her class.",
+  "blocks": {
+   "c8-b115": "\"We can help you. We just have to find some way to engage with the material that you can relate to.\"",
+   "c8-b116": "\"You've already tried\" , Lily replied softly, sobbing. \"I got fifty-nine percent on this test. FIFTY-NINE PERCENT. Third-worst in the class.\""
+  },
+  "answers": [
+   {
+    "label": "K",
+    "answer": "Lily said she got fifty\u2011nine percent on the civics test she failed. [c8-b116]",
+    "cited": [
+     "c8-b116"
+    ]
+   },
+   {
+    "label": "M",
+    "answer": "Lily says she scored fifty\u2011nine percent on the civics test she failed[c8-b116].",
+    "cited": [
+     "c8-b116"
+    ]
+   },
+   {
+    "label": "P",
+    "answer": "(not shown: the passages don't say)",
+    "cited": []
+   },
+   {
+    "label": "R",
+    "answer": "Lily says she scored fifty\u2011nine percent on the civics test she failed[c8-b116].",
+    "cited": [
+     "c8-b116"
+    ]
+   },
+   {
+    "label": "T",
+    "answer": "Lily says she got fifty\u2011nine percent on the civics test she failed. [c8-b116]",
+    "cited": [
+     "c8-b116"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "f36",
+  "question": "Before the semifinal, why does Bai tell Zei not to hurry?",
+  "gold": [
+   "c14-b22",
+   "c14-b23"
+  ],
+  "answer_fact": "She noticed every other player, especially Gun, is too eager to win fast, rushing even when the scoring no longer rewards it.",
+  "blocks": {
+   "c14-b21": "\"So what kind of advice do you have?\"",
+   "c14-b22": "\"If there was one pattern that came up again and again\" , Bai replied, \"it would be this. All the other players - *definitely* Gun, but really all the others too, are way too impatient. They don't just want to win, they want to win quickly.\"",
+   "c14-b23": "\"I know the scoring system of the qualifying rounds incentivizes this, but ... it carried over even past the eight thousand turn threshold, and even in the practice game that I saw between Gun and Deluin. They're not being strategic, they're being fast for the sake of being fast.\"",
+   "c14-b24": "\"So please don't rush things if you don't have to, okay Zei?\"",
+   "c7-b123": "\"Congratulations, you two-\" , Mu began to speak, standing in the waiting room along with Zei and Bai.",
+   "c7-b124": "\"Congratulations, Zei. You only had to wait until our last season to beat me.\""
+  },
+  "answers": [
+   {
+    "label": "K",
+    "answer": "The passages don't say. They show Bai congratulating Zei after the final round (\u201cCongratulations, Zei\u2026\u201d) and discussing the new rule, but contain no statement of Bai telling Zei not to hurry. [c7-b124]",
+    "cited": [
+     "c7-b124"
+    ]
+   },
+   {
+    "label": "M",
+    "answer": "Bai points out that many opponents are overly impatient, trying to win as fast as possible rather than playing strategically\u2014even after the scoring incentives fade past long turn counts\u2014so she asks Zei not to rush his play[c14-b22][c14-b23][c14-b24].",
+    "cited": [
+     "c14-b22",
+     "c14-b23",
+     "c14-b24"
+    ]
+   },
+   {
+    "label": "P",
+    "answer": "Bai points out that many opponents, especially Gun, are overly impatient and try to win as fast as possible\u2014a habit reinforced by the qualifying\u2011round scoring but that persists even in long games.\u202fShe says this rush makes them play without real strategy, just \u2026\u202fTherefore she asks Zei not to rush, warning him that hurrying could lead to the same unstrategic mistakes.\u202f[c14-b22][c14-b23][c14-b24]",
+    "cited": [
+     "c14-b22",
+     "c14-b23",
+     "c14-b24"
+    ]
+   },
+   {
+    "label": "R",
+    "answer": "Bai warns Zei not to rush because she\u2019s noticed a pattern: most of the other competitors (especially Gun but also many others) are overly impatient and try to win as fast as possible, driven by the qualifying\u2011round scoring incentives.\u202fThat speed\u2011first mindset leads them to play unstrategically, so she urges Zei to avoid that mistake and take his time.\u202f[c14-b22][c14-b23][c14-b24]",
+    "cited": [
+     "c14-b22",
+     "c14-b23",
+     "c14-b24"
+    ]
+   },
+   {
+    "label": "T",
+    "answer": "(not shown: the passages don't say)",
+    "cited": []
+   }
+  ]
+ },
+ {
+  "id": "f38",
+  "question": "Why didn't teaming three bots up against Zei on the train help them much?",
+  "gold": [
+   "c12-b10"
+  ],
+  "answer_fact": "That style of play wasn't in their training data, so they made basic errors and ate into each other's negentropy.",
+  "blocks": {
+   "c12-b9": "Fin had never gotten around to writing the harness to fine-tune the AI to play well on custom rulesets, and so Zei was still playing against the stock AI.",
+   "c12-b10": "At that moment, the other AIs resigned. Zei had beaten them one-on-three. To compensate for their lack of skill, he had adjusted the game to only give him one corner and three other AIs the other three corners, and put them all on the same team against him. Even despite this, Zei had won. He realized that the three-on-one did not even help the AIs that much - playing in that style was not in their training data, so they made basic mistakes and cannibalized each other's negentropy.",
+   "c12-b8": "Zei decided he was not in a rush to leave first, and would maximize the quality of his time instead. For about two minutes, he finished his game of Minpentai against a bot."
+  },
+  "answers": [
+   {
+    "label": "K",
+    "answer": "The three\u2011on\u2011one setup didn\u2019t help the AIs much because that style isn\u2019t in their training data; they made basic mistakes and even cannibalized each other\u2019s negentropy, limiting their performance. [c12-b10]",
+    "cited": [
+     "c12-b10"
+    ]
+   },
+   {
+    "label": "M",
+    "answer": "The stock AIs had never been trained for a three\u2011on\u2011one match, so the unusual format wasn\u2019t in their training data; they made basic mistakes and even wasted each other\u2019s resources, so the three\u2011bot team didn\u2019t help much against Zei[c12-b9][c12-b10].",
+    "cited": [
+     "c12-b9",
+     "c12-b10"
+    ]
+   },
+   {
+    "label": "P",
+    "answer": "The three\u2011bot team was ineffective because that three\u2011on\u2011one arrangement was not covered in their training data, leading them to make basic errors and waste effort rather than support each other [c12-b10].",
+    "cited": [
+     "c12-b10"
+    ]
+   },
+   {
+    "label": "R",
+    "answer": "The three AIs struggled because their training never covered a three\u2011on\u2011one, \u201cteam\u2011up\u201d style; the situation wasn\u2019t in their data, so they made basic errors and even wasted each other\u2019s resources, preventing them from posing a real threat to Zei[c12-b10].",
+    "cited": [
+     "c12-b10"
+    ]
+   },
+   {
+    "label": "T",
+    "answer": "The three AIs struggled because their training never covered a three\u2011on\u2011one team format; the unfamiliar setup caused them to make basic errors and even waste each other\u2019s resources, so the extra numbers didn\u2019t improve their performance.\u202f[c12-b10]",
+    "cited": [
+     "c12-b10"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "f39",
+  "question": "Why does Den send Zei back to Pafogai Du after the invasion?",
+  "gold": [
+   "c15-b119"
+  ],
+  "answer_fact": "The cryptographic infrastructure Dzego needs for secure coordination is run from Pafogai Du, and Den will tell him whom to contact.",
+  "blocks": {
+   "c15-b118": "\"The shadow society has to become the society. The shadow government has to become the government. We have to sprint to deploy everything that we have figured out across all of Dzego - before the Arctics can make any moves on us.\"",
+   "c15-b119": "\"The part of this most relevant to you - the cryptographic infrastructure we need so that our coordination can keep functioning and we what needs to be secret can stay secret - is run out of Pafogai Du. So I want you to take the train back - Su can reschedule your ticket for tomorrow - and I'll message you about whom you should reach out to next.\"",
+   "c15-b86": "\"No...\" , Zei pleaded. \"I don't want to win like this.\"",
+   "c15-b87": "\"I know it's already late today, but you should go talk to Den. He's in Sadzu Du, in the southern mountain pyramid right now. He might want you here, or maybe in Pafogai. He will know better than me.\"",
+   "c15-b88": "Zei nodded. Of course this was all more important than the game, he understood. He hoped that Den would put him in Pafogai, so that he could see Fin and his mom again."
+  },
+  "answers": [
+   {
+    "label": "K",
+    "answer": "The passages don't say. They show that Zei hopes Den will place him in Pafogai so he can see Fin and his mother again. [c15-b88]",
+    "cited": [
+     "c15-b88"
+    ]
+   },
+   {
+    "label": "M",
+    "answer": "(not shown: the passages don't say)",
+    "cited": []
+   },
+   {
+    "label": "P",
+    "answer": "The provided passages do not contain any description of an invasion or of Den sending Zee back to Pafogai\u202fDu, so the reason cannot be determined from the given text.",
+    "cited": []
+   },
+   {
+    "label": "R",
+    "answer": "The passages don\u2019t say. They only show that Den is in the southern mountain pyramid and that Zei hopes Den will place him back in Pafogai Du so he can see Fin and his mother again. [c15-b87][c15-b88]",
+    "cited": [
+     "c15-b87",
+     "c15-b88"
+    ]
+   },
+   {
+    "label": "T",
+    "answer": "The provided passages do not contain any information about an invasion or about Den\u2019s reasons for sending Zei back to Pafogai\u202fDu after such an event.",
+    "cited": []
+   }
+  ]
+ },
+ {
+  "id": "f41",
+  "question": "What advice did Zei pass along for the Arctic soldier smuggling messages?",
+  "gold": [
+   "c15-b61",
+   "c15-b110"
+  ],
+  "answer_fact": "Train a model on the data, split bits into random buckets that must XOR to the message, and flip the most natural-looking bit.",
+  "blocks": {
+   "c15-b109": "\"A quarter longhour ago the rates he was charging suddenly dropped by two thirds - we suspect he found some more efficient way to encode data. Interestingly enough neither he nor anyone else has found any better channel than health data so far.\"",
+   "c15-b110": "\"Okay, now I wonder if that was me. I told Deluin to tell the soldier to train an LLM on his own health data and then modify the health data that he is sending out in-flight by flipping the bits that the LLM says are safest to flip, and using XOR over buckets to encode the message so he has a lot of freedom in choosing which bit to flip. Much better for reducing the 'suspiciousness' per bit of hidden data encoded, so he could afford to hide more data inside the same cover traffic.\"",
+   "c15-b60": "Zei thought for a moment, and realized that perhaps the time had arrived for him to become the instructor. He took out a keyboard and started typing furiously.",
+   "c15-b61": "tie dun Or actually, on second thought, he won't answer. But tell him that randomly flipping the least-significant bits, the strategy that everyone always reaches for when they encounter this problem for the first time, is not the ideal solution. Sometimes higher-order bits are totally fine to flip, and sometimes flipping even a least-significant bit is dangerous. What you want to do is: * Train a language model on the actual distribution, so that conditional on what all the other bits are, it can give you probabilities for whether a given bit should be 0 or 1 * Split the data up into buckets - make sure to use the decryption key itself to choose the buckets randomly - and require the bits in the i'th bucket to XOR to the i'th bit in the ciphertext. Within each bucket, use the model to determine which bit's probabilities are closest to 50/50 - meaning both values are \"natural\" for that bit to have in that context - and flip that bit to make the bucket XOR correct. So you're letting the LLM decide which bits are \"least significant\" and okay to flip, instead of just always taking the lowest-order binary digit in each number. \u2192 Deluin be"
+  },
+  "answers": [
+   {
+    "label": "K",
+    "answer": "Zei advised the soldier to replace the usual \u201cflip the lowest\u2011order bit\u201d trick with a data\u2011driven method: first train a language model on the normal health\u2011data stream so it can estimate the natural probability of each bit given its context; then partition the bits into buckets chosen randomly by the decryption key, requiring each bucket\u2019s XOR to equal the corresponding ciphertext bit; finally, within each bucket flip the bit whose model predicts a near\u2011even 0/1 chance, because those bits appear least significant to the statistical model. This lets the soldier embed messages while minimizing detectable anomalies. [c15-b61][c15-b110]",
+    "cited": [
+     "c15-b61",
+     "c15-b110"
+    ]
+   },
+   {
+    "label": "M",
+    "answer": "Zei told the soldier to stop just flipping the lowest\u2011order bits and instead let a language model decide which bits are safe to change: train an LLM on the real health\u2011data distribution, split the data into random buckets (chosen with the decryption key), require each bucket\u2019s XOR to equal the target ciphertext bit, and then use the model to pick a bit whose conditional probability is closest to 50\u202f% and flip that one. This lets the LLM pick the \u201cleast\u2011significant\u201d bits rather than always using the lowest\u2011order bit. [c15-b61]\u202fand\u202f[c15-b110]",
+    "cited": [
+     "c15-b61",
+     "c15-b110"
+    ]
+   },
+   {
+    "label": "P",
+    "answer": "(not shown: the passages don't say)",
+    "cited": []
+   },
+   {
+    "label": "R",
+    "answer": "Zei told the soldier to stop using the na\u00efve \u201cflip the lowest\u2011order bit\u201d trick. Instead, he should train a language model on the real health\u2011data distribution so it can estimate, for each bit, how natural a 0 or 1 is given the surrounding bits. Then he should divide the data into buckets (chosen randomly with the decryption key), require each bucket\u2019s bits to XOR to the target ciphertext bit, and let the model pick the bit in each bucket whose probability is closest to 50\u202f%\u2014the safest one to flip. This lets the LLM decide which bits are effectively \u201cleast significant\u201d for covert encoding. [c15-b61]",
+    "cited": [
+     "c15-b61"
+    ]
+   },
+   {
+    "label": "T",
+    "answer": "(not shown: the passages don't say)",
+    "cited": []
+   }
+  ]
+ },
+ {
+  "id": "f42",
+  "question": "How did Deluin beat Kau in the other semifinal?",
+  "gold": [
+   "c14-b91",
+   "c14-b90",
+   "c14-b93"
+  ],
+  "answer_fact": "He built no mobile ships, just walled himself in using nearby rock resources and reflected Kau's glider storms until Kau was overwhelmed.",
+  "blocks": {
+   "c14-b89": "---",
+   "c14-b90": "Zei sat in the waiting room, watching the game between Deluin and Kau. From the beginning, Zei was surprised, and impressed, by Deluin's strategy. Deluin spent all his attention early on to use the resources in the rock formations near his north and northeast to build walls. Simultaneously, he sent out gliders to try to create eternal glider factories pointing southward.",
+   "c14-b91": "Deluin did not build any mobile symbol-carrying spaceships. Instead, he simply fortified. Kau's eternal glider factories proved to be of limited use: though the gliders would keep coming forever, they would only have any effect for a short period of time. As soon as a storm of gliders came, Deluin would figure out how to reflect it.",
+   "c14-b92": "Zei was impressed. Looks like Deluin had also managed to figure out that he needed to be more patient.",
+   "c14-b93": "Seven thousand turns later, Kau was reduced to hiding behind the southern shrine. But Kau barely survived three thousand turns more: the number of stray gliders and debris kept increasing, and Deluin's walls made him far more protected than Kau was.",
+   "c14-b94": "Ten thousand two hundred turns into the game, Deluin was announced the winner.",
+   "c14-b95": "Deluin stepped out from the elevator."
+  },
+  "answers": [
+   {
+    "label": "K",
+    "answer": "Deluin focused his early turns on using the rock formations north and northeast of his base to build defensive walls while also launching gliders that created \u201ceternal\u201d glider factories pointing southward\u202f[c14-b90].\u202fKau\u2019s response was to build his own eternal glider factories, but they only worked for a short period and Deluin was able to reflect the incoming gliders\u202f[c14-b91].\u202fOver thousands of turns Kau was driven back to hide behind the southern shrine, and as stray gliders and debris accumulated he could no longer survive, while Deluin\u2019s walls kept him protected\u202f[c14-b93].\u202fAfter ten\u2011thousand\u2011two\u2011hundred turns Deluin was declared the winner\u202f[c14-b94].",
+    "cited": [
+     "c14-b90",
+     "c14-b91",
+     "c14-b93",
+     "c14-b94"
+    ]
+   },
+   {
+    "label": "M",
+    "answer": "Deluin began the game by using the rock formations near his north and northeast to build strong walls and by launching gliders that formed \u201ceternal glider factories\u201d pointing southward[c14-b90]. \nKau also built glider factories, but they produced only short\u2011lived streams that Deluin could reflect, while Kau\u2019s defenses were weaker[c14-b91]. \nDeluin\u2019s walls kept him well protected, forcing Kau to retreat behind the southern shrine; as stray gliders and debris accumulated, Kau could survive only a few more thousand turns[c14-b93]. \nAfter ten\u2011thousand\u2011plus turns Deluin was declared the winner[c14-b94].",
+    "cited": [
+     "c14-b90",
+     "c14-b91",
+     "c14-b93",
+     "c14-b94"
+    ]
+   },
+   {
+    "label": "P",
+    "answer": "Deluin\u2019s win came from a patient, defensive game. He spent the opening turns using the north\u2011and\u2011northeast rock formations to build strong walls while launching gliders that formed \u201ceternal glider factories\u201d pointing southward, and he never built any mobile, symbol\u2011carrying ships\u202f[c14-b90][c14-b91][c14-b92].\u202fWhen Kau\u2019s own glider factories sent streams of gliders, Deluin simply reflected them, and the growing tide of stray gliders and debris eventually clogged the board. Kau was forced to hide behind the southern shrine and could not survive the increasing clutter, while Deluin\u2019s walls kept him safe, leading to Deluin\u2019s victory after ten\u2011thousand\u2011plus turns\u202f[c14-b93][c14-b94][c14-b95].",
+    "cited": [
+     "c14-b90",
+     "c14-b91",
+     "c14-b92",
+     "c14-b93",
+     "c14-b94",
+     "c14-b95"
+    ]
+   },
+   {
+    "label": "R",
+    "answer": "Deluin won by playing a patient, defensive game. He spent his early turns building walls from the rock formations near his north and northeast edges and launched gliders that formed \u201ceternal glider factories\u201d pointing southward\u202f[c14-b90]. He never built mobile symbol\u2011carrying ships, instead fortifying his position\u202f[c14-b91]. Kau\u2019s own glider factories produced only short\u2011lived streams, which Deluin learned to reflect\u202f[c14-b91]. As the match progressed, Kau was forced to hide behind the southern shrine, while stray gliders and debris accumulated and Deluin\u2019s walls kept him safe\u202f[c14-b93]. After ten\u2011thousand\u2011plus turns Deluin was declared the winner\u202f[c14-b94].",
+    "cited": [
+     "c14-b90",
+     "c14-b91",
+     "c14-b93",
+     "c14-b94"
+    ]
+   },
+   {
+    "label": "T",
+    "answer": "Deluin\u2019s win came from a pure defensive strategy. He spent the opening turns converting the north\u2011and\u2011northeast rock formations into solid walls while launching gliders that formed \u201ceternal glider factories\u201d aimed southward, rather than building any mobile, symbol\u2011carrying ships[c14-b90]. When Kau\u2019s own glider factories produced streams of gliders, Deluin simply reflected them, keeping his position safe[c14-b91]. Over thousands of turns Kau was forced to hide behind the southern shrine, and the growing tide of stray gliders and debris eventually overwhelmed him, while Deluin\u2019s walls continued to shield him[c14-b93]. After more than ten thousand turns Deluin was declared the winner[c14-b94].",
+    "cited": [
+     "c14-b90",
+     "c14-b91",
+     "c14-b93",
+     "c14-b94"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "f44",
+  "question": "How does the championship keep a player from finding out the day's rule change before their match?",
+  "gold": [
+   "c12-b134",
+   "c12-b133"
+  ],
+  "answer_fact": "Players wait about a longhour in a room with no internet, and their hand devices and watches are collected.",
+  "blocks": {
+   "c12-b132": "A robot arrived, and gave all three of them a cup of tea. They each drank their cup.",
+   "c12-b133": "\"So what now? We sit here for a longhour without internet while the others play, so we don't learn the new rule ahead of time?\"",
+   "c12-b134": "\"Exactly. And no hand devices or watches allowed either. The robot will be coming to pick them up in a minute. You can watch last year's matches on that screen over there.\""
+  },
+  "answers": [
+   {
+    "label": "K",
+    "answer": "(not shown: the passages don't say)",
+    "cited": []
+   },
+   {
+    "label": "M",
+    "answer": "(not shown: the passages don't say)",
+    "cited": []
+   },
+   {
+    "label": "P",
+    "answer": "(not shown: the passages don't say)",
+    "cited": []
+   },
+   {
+    "label": "R",
+    "answer": "(not shown: the passages don't say)",
+    "cited": []
+   },
+   {
+    "label": "T",
+    "answer": "(not shown: the passages don't say)",
+    "cited": []
+   }
+  ]
+ },
+ {
+  "id": "f48",
+  "question": "How did Bai gather her information on the other championship players?",
+  "gold": [
+   "c14-b16"
+  ],
+  "answer_fact": "She watched every game, befriended some players, and joined their practice sessions; nothing illicit.",
+  "blocks": {
+   "c14-b14": "Then, he quickly added:",
+   "c14-b15": "\"You haven't been doing anything *illicit* to get your information, have you?\"",
+   "c14-b16": "\"Don't worry, I'm not some kind of Arctic spy or anything like that. I've just been watching all the games, I made friends with some of the other players, and they let me participate in some of their practice sessions.\""
+  },
+  "answers": [
+   {
+    "label": "K",
+    "answer": "Bai says she learned about the other competitors simply by observing their matches, befriending some of the players, and being invited to take part in their practice sessions\u2014not by any illicit means[c14-b15][c14-b16].",
+    "cited": [
+     "c14-b15",
+     "c14-b16"
+    ]
+   },
+   {
+    "label": "M",
+    "answer": "Bai says she learned about the others by watching every game, befriending other players, and being invited to join their practice sessions\u202f[c14-b16].",
+    "cited": [
+     "c14-b16"
+    ]
+   },
+   {
+    "label": "P",
+    "answer": "Bai says she simply watched all the games, befriended other players, and they let her join their practice sessions to learn their strategies[c14-b16].",
+    "cited": [
+     "c14-b16"
+    ]
+   },
+   {
+    "label": "R",
+    "answer": "Bai says she didn\u2019t use any illegal means; she simply watched all the matches, befriended a number of the other competitors, and they invited her to join their practice sessions, giving her direct insight into their play\u202f[c14-b15][c14-b16].",
+    "cited": [
+     "c14-b15",
+     "c14-b16"
+    ]
+   },
+   {
+    "label": "T",
+    "answer": "Bai says she learned about the other players simply by watching all the games, befriending some of the competitors, and being invited to join their practice sessions\u202f[c14-b16].",
+    "cited": [
+     "c14-b16"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "f49",
+  "question": "What room was Zei given at his hotel in Sadzu Du?",
+  "gold": [
+   "c12-b37"
+  ],
+  "answer_fact": "Room 304; his reputation was over 150, so he didn't need to pay.",
+  "blocks": {
+   "c12-b36": "sen hen zi li die fe 150 zo lia kin \u2713 man dun li jie hu \u2713 cau tie zen ci fan zi li 304",
+   "c12-b37": "Reputation above 150 verified. Payment not needed. Approved, room number is 304."
+  },
+  "answers": [
+   {
+    "label": "K",
+    "answer": "(not shown: the passages don't say)",
+    "cited": []
+   },
+   {
+    "label": "M",
+    "answer": "(not shown: the passages don't say)",
+    "cited": []
+   },
+   {
+    "label": "P",
+    "answer": "Zei was assigned room\u202f304 at the Sadzu\u202fDu hotel.\u202f[c12-b37]",
+    "cited": [
+     "c12-b37"
+    ]
+   },
+   {
+    "label": "R",
+    "answer": "(not shown: the passages don't say)",
+    "cited": []
+   },
+   {
+    "label": "T",
+    "answer": "(not shown: the passages don't say)",
+    "cited": []
+   }
+  ]
+ },
+ {
+  "id": "f50",
+  "question": "In the bottled water ad Gladias walks past, how much heavy water does the brand claim its water has?",
+  "gold": [
+   "c11-b124"
+  ],
+  "answer_fact": "Hydrafill claims 132 parts per million, versus 145 on average for competitors.",
+  "blocks": {
+   "c11-b123": "He passed by the same restaurant where he had bumped into Febric months earlier. On the restaurant's outer wall, he saw an advertisement. On the left side of the advertisement, there was a Hydrafill mascot, clothed in Hydrafill's classic yellow and green colors, hugging a small child, and using his back to shield the child from a jet of sludge-like green-colored water. On the right side of the advertisement, there was the text:",
+   "c11-b124": "> Heavy water, with its atoms of hydrogen replaced by the neutron-bearing isotope deuterium, is known to be toxic in large doses. > > We studied our competitors' water, and found that on average, it contains 145 parts per million heavy water. > > Our water comes from fresh Veridian NORTHERN ICE, bravely extracted only thirty kilometers away from the Arctic border, and it contains 132 parts per million heavy water. > > Hence, our water is TEN PERCENT LESS TOXIC than our competitors. Only WE care about your health. Nobody else does. Hydrafill wants to heal and protect you. Our competitors think you deserve to drown in sludge and die. > > Trust Hydrafill. Buy Hydrafill today."
+  },
+  "answers": [
+   {
+    "label": "K",
+    "answer": "The brand claims its water contains 132\u202fparts per\u202fmillion heavy water. [c11-b124]",
+    "cited": [
+     "c11-b124"
+    ]
+   },
+   {
+    "label": "M",
+    "answer": "The ad says the brand\u2019s water contains **132\u202fparts per million heavy water**[c11-b124].",
+    "cited": [
+     "c11-b124"
+    ]
+   },
+   {
+    "label": "P",
+    "answer": "The ad says the brand\u2019s water contains\u202f132\u202fparts per million heavy water[c11-b124].",
+    "cited": [
+     "c11-b124"
+    ]
+   },
+   {
+    "label": "R",
+    "answer": "The ad says the brand\u2019s water contains 132\u202fparts per million heavy water[c11-b124].",
+    "cited": [
+     "c11-b124"
+    ]
+   },
+   {
+    "label": "T",
+    "answer": "The ad says the brand\u2019s water contains 132\u202fparts per million heavy water[c11-b124].",
+    "cited": [
+     "c11-b124"
+    ]
+   }
+  ]
+ }
+]

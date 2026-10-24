@@ -1,0 +1,1587 @@
+{
+ "questions": 50,
+ "limit": 15,
+ "dense": "BAAI/bge-small-en-v1.5",
+ "variants": [
+  {
+   "variant": "live",
+   "note": "question + search words, 12 hits, 2 blocks either side (today)",
+   "hit": 33,
+   "best": 32,
+   "blocks_avg": 53,
+   "prompt_tokens_avg": 1846
+  },
+  {
+   "variant": "hits-16",
+   "note": "16 hits, ±2",
+   "hit": 34,
+   "best": 33,
+   "blocks_avg": 70,
+   "prompt_tokens_avg": 2456
+  },
+  {
+   "variant": "hits-20",
+   "note": "20 hits, ±2",
+   "hit": 37,
+   "best": 35,
+   "blocks_avg": 87,
+   "prompt_tokens_avg": 3048
+  },
+  {
+   "variant": "hits-24",
+   "note": "24 hits, ±2",
+   "hit": 41,
+   "best": 39,
+   "blocks_avg": 104,
+   "prompt_tokens_avg": 3666
+  },
+  {
+   "variant": "wide-3",
+   "note": "12 hits, ±3",
+   "hit": 35,
+   "best": 33,
+   "blocks_avg": 72,
+   "prompt_tokens_avg": 2521
+  },
+  {
+   "variant": "after-4",
+   "note": "12 hits, 2 before and 4 after",
+   "hit": 36,
+   "best": 34,
+   "blocks_avg": 72,
+   "prompt_tokens_avg": 2606
+  },
+  {
+   "variant": "question-only",
+   "note": "the question alone, no search words, 12 hits ±2",
+   "hit": 36,
+   "best": 34,
+   "blocks_avg": 53,
+   "prompt_tokens_avg": 1774
+  },
+  {
+   "variant": "split-fused",
+   "note": "question alone and question + words searched separately, fused, 12 hits ±2",
+   "hit": 36,
+   "best": 34,
+   "blocks_avg": 52,
+   "prompt_tokens_avg": 1830
+  },
+  {
+   "variant": "bge",
+   "note": "+ BAAI/bge-small-en-v1.5 (local), fused, 12 hits ±2",
+   "hit": 40,
+   "best": 37,
+   "blocks_avg": 52,
+   "prompt_tokens_avg": 2043
+  },
+  {
+   "variant": "bge-16",
+   "note": "+ BAAI/bge-small-en-v1.5, fused, 16 hits ±2",
+   "hit": 41,
+   "best": 38,
+   "blocks_avg": 70,
+   "prompt_tokens_avg": 2637
+  },
+  {
+   "variant": "bge-after-4",
+   "note": "+ BAAI/bge-small-en-v1.5, fused, 12 hits, 2 before 4 after",
+   "hit": 41,
+   "best": 38,
+   "blocks_avg": 71,
+   "prompt_tokens_avg": 2746
+  },
+  {
+   "variant": "bge-question-only",
+   "note": "the question alone (no search words) + BAAI/bge-small-en-v1.5, fused, 12 hits ±2",
+   "hit": 37,
+   "best": 34,
+   "blocks_avg": 53,
+   "prompt_tokens_avg": 1982
+  },
+  {
+   "variant": "bge-question-only-16",
+   "note": "the question alone + BAAI/bge-small-en-v1.5, fused, 16 hits ±2",
+   "hit": 37,
+   "best": 34,
+   "blocks_avg": 69,
+   "prompt_tokens_avg": 2560
+  },
+  {
+   "variant": "bge-split",
+   "note": "question alone, question + words, and BAAI/bge-small-en-v1.5, fused, 12 hits ±2",
+   "hit": 40,
+   "best": 37,
+   "blocks_avg": 52,
+   "prompt_tokens_avg": 1897
+  },
+  {
+   "variant": "bge-split-16",
+   "note": "question alone, question + words, and BAAI/bge-small-en-v1.5, fused, 16 hits ±2",
+   "hit": 42,
+   "best": 39,
+   "blocks_avg": 69,
+   "prompt_tokens_avg": 2455
+  },
+  {
+   "variant": "bge-16-after-4",
+   "note": "+ BAAI/bge-small-en-v1.5, fused, 16 hits, 2 before 4 after",
+   "hit": 41,
+   "best": 38,
+   "blocks_avg": 94,
+   "prompt_tokens_avg": 3579
+  }
+ ],
+ "per_question": {
+  "f01": {
+   "live": true,
+   "hits-16": true,
+   "hits-20": true,
+   "hits-24": true,
+   "wide-3": true,
+   "after-4": true,
+   "question-only": true,
+   "split-fused": true,
+   "bge": true,
+   "bge-16": true,
+   "bge-after-4": true,
+   "bge-question-only": true,
+   "bge-question-only-16": true,
+   "bge-split": true,
+   "bge-split-16": true,
+   "bge-16-after-4": true
+  },
+  "f02": {
+   "live": true,
+   "hits-16": true,
+   "hits-20": true,
+   "hits-24": true,
+   "wide-3": true,
+   "after-4": true,
+   "question-only": true,
+   "split-fused": true,
+   "bge": true,
+   "bge-16": true,
+   "bge-after-4": true,
+   "bge-question-only": true,
+   "bge-question-only-16": true,
+   "bge-split": true,
+   "bge-split-16": true,
+   "bge-16-after-4": true
+  },
+  "f03": {
+   "live": true,
+   "hits-16": true,
+   "hits-20": true,
+   "hits-24": true,
+   "wide-3": true,
+   "after-4": true,
+   "question-only": true,
+   "split-fused": true,
+   "bge": true,
+   "bge-16": true,
+   "bge-after-4": true,
+   "bge-question-only": true,
+   "bge-question-only-16": true,
+   "bge-split": true,
+   "bge-split-16": true,
+   "bge-16-after-4": true
+  },
+  "f04": {
+   "live": true,
+   "hits-16": true,
+   "hits-20": true,
+   "hits-24": true,
+   "wide-3": true,
+   "after-4": true,
+   "question-only": true,
+   "split-fused": true,
+   "bge": true,
+   "bge-16": true,
+   "bge-after-4": true,
+   "bge-question-only": true,
+   "bge-question-only-16": true,
+   "bge-split": true,
+   "bge-split-16": true,
+   "bge-16-after-4": true
+  },
+  "f05": {
+   "live": true,
+   "hits-16": true,
+   "hits-20": true,
+   "hits-24": true,
+   "wide-3": true,
+   "after-4": true,
+   "question-only": true,
+   "split-fused": true,
+   "bge": true,
+   "bge-16": true,
+   "bge-after-4": true,
+   "bge-question-only": false,
+   "bge-question-only-16": false,
+   "bge-split": true,
+   "bge-split-16": true,
+   "bge-16-after-4": true
+  },
+  "f06": {
+   "live": true,
+   "hits-16": true,
+   "hits-20": true,
+   "hits-24": true,
+   "wide-3": true,
+   "after-4": true,
+   "question-only": true,
+   "split-fused": true,
+   "bge": true,
+   "bge-16": true,
+   "bge-after-4": true,
+   "bge-question-only": true,
+   "bge-question-only-16": true,
+   "bge-split": true,
+   "bge-split-16": true,
+   "bge-16-after-4": true
+  },
+  "f07": {
+   "live": true,
+   "hits-16": true,
+   "hits-20": true,
+   "hits-24": true,
+   "wide-3": true,
+   "after-4": true,
+   "question-only": true,
+   "split-fused": true,
+   "bge": false,
+   "bge-16": false,
+   "bge-after-4": false,
+   "bge-question-only": false,
+   "bge-question-only-16": false,
+   "bge-split": true,
+   "bge-split-16": true,
+   "bge-16-after-4": false
+  },
+  "f08": {
+   "live": false,
+   "hits-16": false,
+   "hits-20": true,
+   "hits-24": true,
+   "wide-3": false,
+   "after-4": false,
+   "question-only": true,
+   "split-fused": true,
+   "bge": true,
+   "bge-16": true,
+   "bge-after-4": true,
+   "bge-question-only": false,
+   "bge-question-only-16": false,
+   "bge-split": true,
+   "bge-split-16": true,
+   "bge-16-after-4": true
+  },
+  "f09": {
+   "live": true,
+   "hits-16": true,
+   "hits-20": true,
+   "hits-24": true,
+   "wide-3": true,
+   "after-4": true,
+   "question-only": true,
+   "split-fused": true,
+   "bge": true,
+   "bge-16": true,
+   "bge-after-4": true,
+   "bge-question-only": true,
+   "bge-question-only-16": true,
+   "bge-split": true,
+   "bge-split-16": true,
+   "bge-16-after-4": true
+  },
+  "f10": {
+   "live": true,
+   "hits-16": true,
+   "hits-20": true,
+   "hits-24": true,
+   "wide-3": true,
+   "after-4": true,
+   "question-only": true,
+   "split-fused": true,
+   "bge": true,
+   "bge-16": true,
+   "bge-after-4": true,
+   "bge-question-only": true,
+   "bge-question-only-16": true,
+   "bge-split": true,
+   "bge-split-16": true,
+   "bge-16-after-4": true
+  },
+  "f11": {
+   "live": true,
+   "hits-16": true,
+   "hits-20": true,
+   "hits-24": true,
+   "wide-3": true,
+   "after-4": true,
+   "question-only": true,
+   "split-fused": true,
+   "bge": true,
+   "bge-16": true,
+   "bge-after-4": true,
+   "bge-question-only": true,
+   "bge-question-only-16": true,
+   "bge-split": true,
+   "bge-split-16": true,
+   "bge-16-after-4": true
+  },
+  "f12": {
+   "live": true,
+   "hits-16": true,
+   "hits-20": true,
+   "hits-24": true,
+   "wide-3": true,
+   "after-4": true,
+   "question-only": true,
+   "split-fused": true,
+   "bge": true,
+   "bge-16": true,
+   "bge-after-4": true,
+   "bge-question-only": true,
+   "bge-question-only-16": true,
+   "bge-split": true,
+   "bge-split-16": true,
+   "bge-16-after-4": true
+  },
+  "f13": {
+   "live": true,
+   "hits-16": true,
+   "hits-20": true,
+   "hits-24": true,
+   "wide-3": true,
+   "after-4": true,
+   "question-only": true,
+   "split-fused": true,
+   "bge": true,
+   "bge-16": true,
+   "bge-after-4": true,
+   "bge-question-only": true,
+   "bge-question-only-16": true,
+   "bge-split": true,
+   "bge-split-16": true,
+   "bge-16-after-4": true
+  },
+  "f14": {
+   "live": false,
+   "hits-16": false,
+   "hits-20": false,
+   "hits-24": false,
+   "wide-3": false,
+   "after-4": false,
+   "question-only": false,
+   "split-fused": false,
+   "bge": false,
+   "bge-16": false,
+   "bge-after-4": false,
+   "bge-question-only": false,
+   "bge-question-only-16": false,
+   "bge-split": false,
+   "bge-split-16": false,
+   "bge-16-after-4": false
+  },
+  "f15": {
+   "live": true,
+   "hits-16": true,
+   "hits-20": true,
+   "hits-24": true,
+   "wide-3": true,
+   "after-4": true,
+   "question-only": true,
+   "split-fused": true,
+   "bge": true,
+   "bge-16": true,
+   "bge-after-4": true,
+   "bge-question-only": true,
+   "bge-question-only-16": true,
+   "bge-split": true,
+   "bge-split-16": true,
+   "bge-16-after-4": true
+  },
+  "f16": {
+   "live": true,
+   "hits-16": true,
+   "hits-20": true,
+   "hits-24": true,
+   "wide-3": true,
+   "after-4": true,
+   "question-only": true,
+   "split-fused": true,
+   "bge": true,
+   "bge-16": true,
+   "bge-after-4": true,
+   "bge-question-only": true,
+   "bge-question-only-16": true,
+   "bge-split": true,
+   "bge-split-16": true,
+   "bge-16-after-4": true
+  },
+  "f17": {
+   "live": true,
+   "hits-16": true,
+   "hits-20": true,
+   "hits-24": true,
+   "wide-3": true,
+   "after-4": true,
+   "question-only": true,
+   "split-fused": true,
+   "bge": true,
+   "bge-16": true,
+   "bge-after-4": true,
+   "bge-question-only": true,
+   "bge-question-only-16": true,
+   "bge-split": true,
+   "bge-split-16": true,
+   "bge-16-after-4": true
+  },
+  "f18": {
+   "live": false,
+   "hits-16": false,
+   "hits-20": true,
+   "hits-24": true,
+   "wide-3": false,
+   "after-4": false,
+   "question-only": false,
+   "split-fused": false,
+   "bge": true,
+   "bge-16": true,
+   "bge-after-4": true,
+   "bge-question-only": true,
+   "bge-question-only-16": true,
+   "bge-split": false,
+   "bge-split-16": false,
+   "bge-16-after-4": true
+  },
+  "f19": {
+   "live": false,
+   "hits-16": false,
+   "hits-20": false,
+   "hits-24": true,
+   "wide-3": true,
+   "after-4": true,
+   "question-only": false,
+   "split-fused": false,
+   "bge": true,
+   "bge-16": true,
+   "bge-after-4": true,
+   "bge-question-only": true,
+   "bge-question-only-16": true,
+   "bge-split": true,
+   "bge-split-16": true,
+   "bge-16-after-4": true
+  },
+  "f20": {
+   "live": false,
+   "hits-16": false,
+   "hits-20": false,
+   "hits-24": false,
+   "wide-3": false,
+   "after-4": true,
+   "question-only": false,
+   "split-fused": false,
+   "bge": true,
+   "bge-16": true,
+   "bge-after-4": true,
+   "bge-question-only": true,
+   "bge-question-only-16": true,
+   "bge-split": true,
+   "bge-split-16": true,
+   "bge-16-after-4": true
+  },
+  "f21": {
+   "live": true,
+   "hits-16": true,
+   "hits-20": true,
+   "hits-24": true,
+   "wide-3": true,
+   "after-4": true,
+   "question-only": false,
+   "split-fused": true,
+   "bge": true,
+   "bge-16": true,
+   "bge-after-4": true,
+   "bge-question-only": true,
+   "bge-question-only-16": true,
+   "bge-split": true,
+   "bge-split-16": true,
+   "bge-16-after-4": true
+  },
+  "f22": {
+   "live": true,
+   "hits-16": true,
+   "hits-20": true,
+   "hits-24": true,
+   "wide-3": true,
+   "after-4": true,
+   "question-only": true,
+   "split-fused": true,
+   "bge": true,
+   "bge-16": true,
+   "bge-after-4": true,
+   "bge-question-only": true,
+   "bge-question-only-16": true,
+   "bge-split": true,
+   "bge-split-16": true,
+   "bge-16-after-4": true
+  },
+  "f23": {
+   "live": true,
+   "hits-16": true,
+   "hits-20": true,
+   "hits-24": true,
+   "wide-3": true,
+   "after-4": true,
+   "question-only": true,
+   "split-fused": true,
+   "bge": false,
+   "bge-16": false,
+   "bge-after-4": false,
+   "bge-question-only": false,
+   "bge-question-only-16": false,
+   "bge-split": true,
+   "bge-split-16": true,
+   "bge-16-after-4": false
+  },
+  "f24": {
+   "live": true,
+   "hits-16": true,
+   "hits-20": true,
+   "hits-24": true,
+   "wide-3": true,
+   "after-4": true,
+   "question-only": true,
+   "split-fused": true,
+   "bge": true,
+   "bge-16": true,
+   "bge-after-4": true,
+   "bge-question-only": true,
+   "bge-question-only-16": true,
+   "bge-split": true,
+   "bge-split-16": true,
+   "bge-16-after-4": true
+  },
+  "f25": {
+   "live": false,
+   "hits-16": false,
+   "hits-20": false,
+   "hits-24": true,
+   "wide-3": false,
+   "after-4": false,
+   "question-only": true,
+   "split-fused": false,
+   "bge": false,
+   "bge-16": false,
+   "bge-after-4": false,
+   "bge-question-only": false,
+   "bge-question-only-16": false,
+   "bge-split": false,
+   "bge-split-16": true,
+   "bge-16-after-4": false
+  },
+  "f26": {
+   "live": true,
+   "hits-16": true,
+   "hits-20": true,
+   "hits-24": true,
+   "wide-3": true,
+   "after-4": true,
+   "question-only": true,
+   "split-fused": true,
+   "bge": true,
+   "bge-16": true,
+   "bge-after-4": true,
+   "bge-question-only": true,
+   "bge-question-only-16": true,
+   "bge-split": true,
+   "bge-split-16": true,
+   "bge-16-after-4": true
+  },
+  "f27": {
+   "live": true,
+   "hits-16": true,
+   "hits-20": true,
+   "hits-24": true,
+   "wide-3": true,
+   "after-4": true,
+   "question-only": true,
+   "split-fused": true,
+   "bge": true,
+   "bge-16": true,
+   "bge-after-4": true,
+   "bge-question-only": true,
+   "bge-question-only-16": true,
+   "bge-split": true,
+   "bge-split-16": true,
+   "bge-16-after-4": true
+  },
+  "f28": {
+   "live": true,
+   "hits-16": true,
+   "hits-20": true,
+   "hits-24": true,
+   "wide-3": true,
+   "after-4": true,
+   "question-only": true,
+   "split-fused": true,
+   "bge": true,
+   "bge-16": true,
+   "bge-after-4": true,
+   "bge-question-only": true,
+   "bge-question-only-16": true,
+   "bge-split": true,
+   "bge-split-16": true,
+   "bge-16-after-4": true
+  },
+  "f29": {
+   "live": true,
+   "hits-16": true,
+   "hits-20": true,
+   "hits-24": true,
+   "wide-3": true,
+   "after-4": true,
+   "question-only": true,
+   "split-fused": true,
+   "bge": true,
+   "bge-16": true,
+   "bge-after-4": true,
+   "bge-question-only": true,
+   "bge-question-only-16": true,
+   "bge-split": true,
+   "bge-split-16": true,
+   "bge-16-after-4": true
+  },
+  "f30": {
+   "live": true,
+   "hits-16": true,
+   "hits-20": true,
+   "hits-24": true,
+   "wide-3": true,
+   "after-4": true,
+   "question-only": true,
+   "split-fused": true,
+   "bge": true,
+   "bge-16": true,
+   "bge-after-4": true,
+   "bge-question-only": true,
+   "bge-question-only-16": true,
+   "bge-split": true,
+   "bge-split-16": true,
+   "bge-16-after-4": true
+  },
+  "f31": {
+   "live": false,
+   "hits-16": false,
+   "hits-20": false,
+   "hits-24": false,
+   "wide-3": false,
+   "after-4": false,
+   "question-only": false,
+   "split-fused": false,
+   "bge": false,
+   "bge-16": false,
+   "bge-after-4": false,
+   "bge-question-only": false,
+   "bge-question-only-16": false,
+   "bge-split": false,
+   "bge-split-16": false,
+   "bge-16-after-4": false
+  },
+  "f32": {
+   "live": false,
+   "hits-16": false,
+   "hits-20": false,
+   "hits-24": false,
+   "wide-3": false,
+   "after-4": false,
+   "question-only": false,
+   "split-fused": false,
+   "bge": false,
+   "bge-16": false,
+   "bge-after-4": false,
+   "bge-question-only": false,
+   "bge-question-only-16": false,
+   "bge-split": false,
+   "bge-split-16": false,
+   "bge-16-after-4": false
+  },
+  "f33": {
+   "live": true,
+   "hits-16": true,
+   "hits-20": true,
+   "hits-24": true,
+   "wide-3": true,
+   "after-4": true,
+   "question-only": true,
+   "split-fused": true,
+   "bge": true,
+   "bge-16": true,
+   "bge-after-4": true,
+   "bge-question-only": true,
+   "bge-question-only-16": true,
+   "bge-split": true,
+   "bge-split-16": true,
+   "bge-16-after-4": true
+  },
+  "f34": {
+   "live": true,
+   "hits-16": true,
+   "hits-20": true,
+   "hits-24": true,
+   "wide-3": true,
+   "after-4": true,
+   "question-only": true,
+   "split-fused": true,
+   "bge": true,
+   "bge-16": true,
+   "bge-after-4": true,
+   "bge-question-only": true,
+   "bge-question-only-16": true,
+   "bge-split": true,
+   "bge-split-16": true,
+   "bge-16-after-4": true
+  },
+  "f35": {
+   "live": true,
+   "hits-16": true,
+   "hits-20": true,
+   "hits-24": true,
+   "wide-3": true,
+   "after-4": true,
+   "question-only": true,
+   "split-fused": true,
+   "bge": true,
+   "bge-16": true,
+   "bge-after-4": true,
+   "bge-question-only": true,
+   "bge-question-only-16": true,
+   "bge-split": true,
+   "bge-split-16": true,
+   "bge-16-after-4": true
+  },
+  "f36": {
+   "live": false,
+   "hits-16": false,
+   "hits-20": false,
+   "hits-24": false,
+   "wide-3": false,
+   "after-4": false,
+   "question-only": false,
+   "split-fused": false,
+   "bge": false,
+   "bge-16": false,
+   "bge-after-4": false,
+   "bge-question-only": false,
+   "bge-question-only-16": false,
+   "bge-split": false,
+   "bge-split-16": false,
+   "bge-16-after-4": false
+  },
+  "f37": {
+   "live": false,
+   "hits-16": false,
+   "hits-20": false,
+   "hits-24": false,
+   "wide-3": false,
+   "after-4": false,
+   "question-only": false,
+   "split-fused": false,
+   "bge": true,
+   "bge-16": true,
+   "bge-after-4": true,
+   "bge-question-only": true,
+   "bge-question-only-16": true,
+   "bge-split": true,
+   "bge-split-16": true,
+   "bge-16-after-4": true
+  },
+  "f38": {
+   "live": true,
+   "hits-16": true,
+   "hits-20": true,
+   "hits-24": true,
+   "wide-3": true,
+   "after-4": true,
+   "question-only": true,
+   "split-fused": true,
+   "bge": true,
+   "bge-16": true,
+   "bge-after-4": true,
+   "bge-question-only": true,
+   "bge-question-only-16": true,
+   "bge-split": true,
+   "bge-split-16": true,
+   "bge-16-after-4": true
+  },
+  "f39": {
+   "live": false,
+   "hits-16": true,
+   "hits-20": true,
+   "hits-24": true,
+   "wide-3": false,
+   "after-4": false,
+   "question-only": true,
+   "split-fused": true,
+   "bge": false,
+   "bge-16": false,
+   "bge-after-4": false,
+   "bge-question-only": false,
+   "bge-question-only-16": false,
+   "bge-split": false,
+   "bge-split-16": true,
+   "bge-16-after-4": false
+  },
+  "f40": {
+   "live": false,
+   "hits-16": false,
+   "hits-20": false,
+   "hits-24": true,
+   "wide-3": false,
+   "after-4": false,
+   "question-only": true,
+   "split-fused": true,
+   "bge": true,
+   "bge-16": true,
+   "bge-after-4": true,
+   "bge-question-only": true,
+   "bge-question-only-16": true,
+   "bge-split": true,
+   "bge-split-16": true,
+   "bge-16-after-4": true
+  },
+  "f41": {
+   "live": false,
+   "hits-16": false,
+   "hits-20": false,
+   "hits-24": false,
+   "wide-3": true,
+   "after-4": true,
+   "question-only": false,
+   "split-fused": false,
+   "bge": true,
+   "bge-16": true,
+   "bge-after-4": true,
+   "bge-question-only": true,
+   "bge-question-only-16": true,
+   "bge-split": true,
+   "bge-split-16": true,
+   "bge-16-after-4": true
+  },
+  "f42": {
+   "live": true,
+   "hits-16": true,
+   "hits-20": true,
+   "hits-24": true,
+   "wide-3": true,
+   "after-4": true,
+   "question-only": true,
+   "split-fused": true,
+   "bge": true,
+   "bge-16": true,
+   "bge-after-4": true,
+   "bge-question-only": true,
+   "bge-question-only-16": true,
+   "bge-split": true,
+   "bge-split-16": true,
+   "bge-16-after-4": true
+  },
+  "f43": {
+   "live": false,
+   "hits-16": false,
+   "hits-20": false,
+   "hits-24": false,
+   "wide-3": false,
+   "after-4": false,
+   "question-only": false,
+   "split-fused": false,
+   "bge": false,
+   "bge-16": true,
+   "bge-after-4": true,
+   "bge-question-only": false,
+   "bge-question-only-16": false,
+   "bge-split": false,
+   "bge-split-16": false,
+   "bge-16-after-4": true
+  },
+  "f44": {
+   "live": false,
+   "hits-16": false,
+   "hits-20": true,
+   "hits-24": true,
+   "wide-3": false,
+   "after-4": false,
+   "question-only": false,
+   "split-fused": false,
+   "bge": true,
+   "bge-16": true,
+   "bge-after-4": true,
+   "bge-question-only": true,
+   "bge-question-only-16": true,
+   "bge-split": false,
+   "bge-split-16": false,
+   "bge-16-after-4": true
+  },
+  "f45": {
+   "live": false,
+   "hits-16": false,
+   "hits-20": false,
+   "hits-24": true,
+   "wide-3": false,
+   "after-4": false,
+   "question-only": false,
+   "split-fused": false,
+   "bge": true,
+   "bge-16": true,
+   "bge-after-4": true,
+   "bge-question-only": true,
+   "bge-question-only-16": true,
+   "bge-split": true,
+   "bge-split-16": true,
+   "bge-16-after-4": true
+  },
+  "f46": {
+   "live": false,
+   "hits-16": false,
+   "hits-20": false,
+   "hits-24": false,
+   "wide-3": false,
+   "after-4": false,
+   "question-only": false,
+   "split-fused": false,
+   "bge": false,
+   "bge-16": false,
+   "bge-after-4": false,
+   "bge-question-only": false,
+   "bge-question-only-16": false,
+   "bge-split": false,
+   "bge-split-16": false,
+   "bge-16-after-4": false
+  },
+  "f47": {
+   "live": true,
+   "hits-16": true,
+   "hits-20": true,
+   "hits-24": true,
+   "wide-3": true,
+   "after-4": true,
+   "question-only": true,
+   "split-fused": true,
+   "bge": true,
+   "bge-16": true,
+   "bge-after-4": true,
+   "bge-question-only": true,
+   "bge-question-only-16": true,
+   "bge-split": true,
+   "bge-split-16": true,
+   "bge-16-after-4": true
+  },
+  "f48": {
+   "live": true,
+   "hits-16": true,
+   "hits-20": true,
+   "hits-24": true,
+   "wide-3": true,
+   "after-4": true,
+   "question-only": true,
+   "split-fused": true,
+   "bge": true,
+   "bge-16": true,
+   "bge-after-4": true,
+   "bge-question-only": false,
+   "bge-question-only-16": false,
+   "bge-split": true,
+   "bge-split-16": true,
+   "bge-16-after-4": true
+  },
+  "f49": {
+   "live": true,
+   "hits-16": true,
+   "hits-20": true,
+   "hits-24": true,
+   "wide-3": true,
+   "after-4": true,
+   "question-only": true,
+   "split-fused": true,
+   "bge": true,
+   "bge-16": true,
+   "bge-after-4": true,
+   "bge-question-only": true,
+   "bge-question-only-16": true,
+   "bge-split": true,
+   "bge-split-16": true,
+   "bge-16-after-4": true
+  },
+  "f50": {
+   "live": true,
+   "hits-16": true,
+   "hits-20": true,
+   "hits-24": true,
+   "wide-3": true,
+   "after-4": true,
+   "question-only": true,
+   "split-fused": true,
+   "bge": true,
+   "bge-16": true,
+   "bge-after-4": true,
+   "bge-question-only": true,
+   "bge-question-only-16": true,
+   "bge-split": true,
+   "bge-split-16": true,
+   "bge-16-after-4": true
+  }
+ },
+ "misses": [
+  {
+   "id": "f08",
+   "question": "What first got Gladias interested in working on Steering?",
+   "words": "Gladias steering curiosity inspiration mentor experiment design challenge ship navigation engine project accident observation",
+   "fixed_by": [
+    "hits-20",
+    "hits-24",
+    "question-only",
+    "split-fused",
+    "bge",
+    "bge-16",
+    "bge-after-4",
+    "bge-split",
+    "bge-split-16",
+    "bge-16-after-4"
+   ],
+   "gold": [
+    {
+     "id": "c3-b24",
+     "text": "The mention of Bluewhale brought Gladias back to his younger days, when he had learned programming by writing an alternative client for the other major social platform, Silverchat. That had only been possible, he knew, because the API was open, and the platform allowed developers to make alternative clients and users to export and migrate their data - all decisions that had undoubtedly been motivated, or at least justified to the bean counters, by trying to lower their tax rate on the hardware and software openness rubric. That experience had been what motivated Gladias to contribute back, and get involved in Steering himself.",
+     "rank_with_words": 28,
+     "rank_question_only": 109,
+     "rank_bge": 9,
+     "nearest_hit_offset": 97,
+     "shared_terms": [
+      "experi",
+      "gladia",
+      "steer"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "f14",
+   "question": "After the game, when Bai apologizes, what does Zei ask her for?",
+   "words": "Bai Zei apologizes asks for favor help promise forgiveness game after request answer",
+   "fixed_by": [],
+   "gold": [
+    {
+     "id": "c4-b156",
+     "text": "\"Come on, you gotta give me something more substantive than that. Say, next time you take a vacation to Redshire, bring me along.\"",
+     "rank_with_words": null,
+     "rank_question_only": null,
+     "rank_bge": null,
+     "nearest_hit_offset": -66,
+     "shared_terms": []
+    },
+    {
+     "id": "c4-b158",
+     "text": "\"And my mom.\"",
+     "rank_with_words": null,
+     "rank_question_only": null,
+     "rank_bge": null,
+     "nearest_hit_offset": -68,
+     "shared_terms": []
+    }
+   ]
+  },
+  {
+   "id": "f18",
+   "question": "Why did the priests let each player see what the other player's AI was thinking during the city final?",
+   "words": "priests players AI thinking city final reveal fairness oversight ritual competition transparency control",
+   "fixed_by": [
+    "hits-20",
+    "hits-24",
+    "bge",
+    "bge-16",
+    "bge-after-4",
+    "bge-question-only",
+    "bge-question-only-16",
+    "bge-16-after-4"
+   ],
+   "gold": [
+    {
+     "id": "c7-b132",
+     "text": "\"That's the lesson. In the real world, it's not just thinking well that matters, it's also hiding your thoughts - sometimes, even hiding your thoughts from your allies or the people you're meant to serve.\"",
+     "rank_with_words": 283,
+     "rank_question_only": 266,
+     "rank_bge": null,
+     "nearest_hit_offset": -29,
+     "shared_terms": [
+      "think"
+     ]
+    },
+    {
+     "id": "c7-b130",
+     "text": "\"Look at the Veridian Steering system, for example. It's one of the most opaque parts of the government - even the Keepers don't know who each other are - and yet one of the most trustworthy and incorruptible parts precisely for that reason. Similar for the Courts - anonymous, randomly selected committees out of a large pool.\"",
+     "rank_with_words": null,
+     "rank_question_only": null,
+     "rank_bge": null,
+     "nearest_hit_offset": -27,
+     "shared_terms": []
+    },
+    {
+     "id": "c7-b127",
+     "text": "\"The priests did not even know what you two would come up with. They told me that they wanted to make the game a little more ... *realistic* - but they were as curious as anyone else to find out what that means.\"",
+     "rank_with_words": 70,
+     "rank_question_only": 62,
+     "rank_bge": 1,
+     "nearest_hit_offset": -24,
+     "shared_terms": [
+      "priest"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "f19",
+   "question": "Why didn't Nine believe the bug hidden in the booth table was planted to spy on the Keepers?",
+   "words": "Nine bug booth table planted spy Keepers suspicion evidence motive trust deception",
+   "fixed_by": [
+    "hits-24",
+    "wide-3",
+    "after-4",
+    "bge",
+    "bge-16",
+    "bge-after-4",
+    "bge-question-only",
+    "bge-question-only-16",
+    "bge-split",
+    "bge-split-16",
+    "bge-16-after-4"
+   ],
+   "gold": [
+    {
+     "id": "c10-b119",
+     "text": "\"I doubt it was meant against us\" , he said. \"Normally, the goal of people who do this is to get information about upcoming business decisions, and trade based on that in the financial markets. Usually, smaller businesses who are less careful. The Order is quite safe against this. Our Keeper group is only one of three discussion groups, so even if you do overhear us all you're only getting one third of the perspective. And we're all speaking through our neck bands so the sound is going between us digitally.\"",
+     "rank_with_words": 181,
+     "rank_question_only": 161,
+     "rank_bge": 20,
+     "nearest_hit_offset": -3,
+     "shared_terms": [
+      "keeper"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "f20",
+   "question": "Why does Dzego disguise its training of future defenders as a game instead of just recruiting soldiers openly?",
+   "words": "Dzego training defenders game disguise recruitment soldiers secrecy strategy morale apprenticeship challenge play preparation loyalty deception purpose",
+   "fixed_by": [
+    "after-4",
+    "bge",
+    "bge-16",
+    "bge-after-4",
+    "bge-question-only",
+    "bge-question-only-16",
+    "bge-split",
+    "bge-split-16",
+    "bge-16-after-4"
+   ],
+   "gold": [
+    {
+     "id": "c10-b202",
+     "text": "The realizations hit Zei all at once. At first, he had wanted to ask a basic question: why pretend it's a game, why not just have a regular military with regular recruitment? But as soon as he put together the question, he already knew the answer: the Arctics would put all their energy into targeting anything like that. Minpentai was only safe because it pretended to be just a game. But even then, Zei knew, the ruse could not be safe forever.",
+     "rank_with_words": 39,
+     "rank_question_only": 18,
+     "rank_bge": 5,
+     "nearest_hit_offset": -4,
+     "shared_terms": [
+      "game",
+      "recruit"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "f25",
+   "question": "After his attack fell apart, how did Zei manage to come back and win the city final?",
+   "words": "Zei attack collapse regroup strategy counterattack victory city final arena opponent resilience triumph comeback tactics rally champion",
+   "fixed_by": [
+    "hits-24",
+    "question-only",
+    "bge-split-16"
+   ],
+   "gold": [
+    {
+     "id": "c7-b102",
+     "text": "\"Take my fourth westernmost symbol\" , he told the AI. \"Take the best sixteen strategies that you can come up with. Construct near that symbol a factory capable of executing each of those strategies. It should be activated by a glider coming in from the southwest, and the exact strategy chosen should depend on the type of glider and the time it hits. Then, near my second westernmost symbol, make that glider. Allocate eighty percent of resources this intervention turn to this.\"",
+     "rank_with_words": 102,
+     "rank_question_only": 381,
+     "rank_bge": null,
+     "nearest_hit_offset": -41,
+     "shared_terms": [
+      "come",
+      "strategi"
+     ]
+    },
+    {
+     "id": "c7-b109",
+     "text": "The factory picked a strategy that was none of the four that Bai's AI had focused on planning for. And it was coming from a place that Bai had not expected: the halfway point between the center of the board and the northern edge. The factory quickly started generating symbol-carrying spaceships that began to move toward the east, and a storm of gliders that moved north, and then bounced off of rock formations and Bai's own walls to move toward the west. Bai, and her AI, were caught completely by surprise.",
+     "rank_with_words": 139,
+     "rank_question_only": null,
+     "rank_bge": null,
+     "nearest_hit_offset": -48,
+     "shared_terms": [
+      "come",
+      "strategi"
+     ]
+    },
+    {
+     "id": "c7-b105",
+     "text": "Bai's AI also focused on increasing defenses across her own western flank. Zei's *first* gamble paid off, he realized: Bai herself did not realize just how much damage she had done on the west side, and just how little Zei had done to compensate. And so neither she nor her AI realized that by this point, Zei's fourth westernmost symbol could be in the middle of the field.",
+     "rank_with_words": null,
+     "rank_question_only": null,
+     "rank_bge": null,
+     "nearest_hit_offset": -44,
+     "shared_terms": [
+      "zei"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "f31",
+   "question": "What kind things had Lily done for the family that Gladias reminded her of when she was upset?",
+   "words": "Lily Gladias family helped cooked cleaned mended cared comforted supported chores meals laundry babysat errands kindness upset reminded memory gratitude",
+   "fixed_by": [],
+   "gold": [
+    {
+     "id": "c8-b117",
+     "text": "\"Well, do you think the smartest kid in your class can bake a birthday cake for Seila the way you did six months ago? Would he bring food to Hreda every day for a month the way you did when she was recovering from that accident years ago?\"",
+     "rank_with_words": null,
+     "rank_question_only": null,
+     "rank_bge": null,
+     "nearest_hit_offset": null,
+     "shared_terms": []
+    }
+   ]
+  },
+  {
+   "id": "f32",
+   "question": "How does Bai really feel about the way Zei beat her in the final?",
+   "words": "Bai Zei beat final angry humbled resentful proud disappointed frustrated relieved bitter conflicted",
+   "fixed_by": [],
+   "gold": [
+    {
+     "id": "c9-b21",
+     "text": "\"But those tactics of Zei's, they were beautiful. I was so proud when I put up such perfect defenses along my diagonals and tricked Zei into attacking there. I felt like that was the smartest thing I had done in my whole life. And then he came out and did something even smarter.\"",
+     "rank_with_words": 36,
+     "rank_question_only": null,
+     "rank_bge": null,
+     "nearest_hit_offset": null,
+     "shared_terms": [
+      "proud",
+      "zei"
+     ]
+    },
+    {
+     "id": "c9-b22",
+     "text": "\"I do want to understand you guys better. What drives you, how you think.\"",
+     "rank_with_words": null,
+     "rank_question_only": null,
+     "rank_bge": null,
+     "nearest_hit_offset": null,
+     "shared_terms": []
+    }
+   ]
+  },
+  {
+   "id": "f36",
+   "question": "Before the semifinal, why does Bai tell Zei not to hurry?",
+   "words": "Bai Zei semifinal hurry wait calm patience strategy injury fatigue focus timing pressure confidence opponent",
+   "fixed_by": [],
+   "gold": [
+    {
+     "id": "c14-b22",
+     "text": "\"If there was one pattern that came up again and again\" , Bai replied, \"it would be this. All the other players - *definitely* Gun, but really all the others too, are way too impatient. They don't just want to win, they want to win quickly.\"",
+     "rank_with_words": 267,
+     "rank_question_only": 141,
+     "rank_bge": 33,
+     "nearest_hit_offset": 65,
+     "shared_terms": [
+      "bai"
+     ]
+    },
+    {
+     "id": "c14-b23",
+     "text": "\"I know the scoring system of the qualifying rounds incentivizes this, but ... it carried over even past the eight thousand turn threshold, and even in the practice game that I saw between Gun and Deluin. They're not being strategic, they're being fast for the sake of being fast.\"",
+     "rank_with_words": null,
+     "rank_question_only": null,
+     "rank_bge": null,
+     "nearest_hit_offset": 64,
+     "shared_terms": []
+    }
+   ]
+  },
+  {
+   "id": "f37",
+   "question": "Why does Gladias tell Delwart he doesn't expect the Arctics to escalate, when he isn't sure?",
+   "words": "Gladias Delwart Arctics expect escalate unsure caution diplomacy threat confidence underestimate warning strategy tension negotiation reason doubt reassurance",
+   "fixed_by": [
+    "bge",
+    "bge-16",
+    "bge-after-4",
+    "bge-question-only",
+    "bge-question-only-16",
+    "bge-split",
+    "bge-split-16",
+    "bge-16-after-4"
+   ],
+   "gold": [
+    {
+     "id": "c13-b14",
+     "text": "Gladias thought for a moment. In his heart, he did not know, and while he expected that nothing would happen anytime soon, he feared that the answer might be yes. But he also knew that if he admitted it to Delwart, he would get a long lecture trying to impress on him how biased his sources of evidence were - and that was all *without* him having told Delwart about the time Seila met Zei and Bai in Freetown.",
+     "rank_with_words": 29,
+     "rank_question_only": 15,
+     "rank_bge": 1,
+     "nearest_hit_offset": 72,
+     "shared_terms": [
+      "delwart",
+      "expect",
+      "gladia"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "f39",
+   "question": "Why does Den send Zei back to Pafogai Du after the invasion?",
+   "words": "Den Zei Pafogai Du invasion retreat orders protect strategy exile duty regroup",
+   "fixed_by": [
+    "hits-16",
+    "hits-20",
+    "hits-24",
+    "question-only",
+    "split-fused",
+    "bge-split-16"
+   ],
+   "gold": [
+    {
+     "id": "c15-b119",
+     "text": "\"The part of this most relevant to you - the cryptographic infrastructure we need so that our coordination can keep functioning and we what needs to be secret can stay secret - is run out of Pafogai Du. So I want you to take the train back - Su can reschedule your ticket for tomorrow - and I'll message you about whom you should reach out to next.\"",
+     "rank_with_words": 13,
+     "rank_question_only": 10,
+     "rank_bge": null,
+     "nearest_hit_offset": -31,
+     "shared_terms": [
+      "back",
+      "du",
+      "pafogai"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "f40",
+   "question": "What interrupted the family dinner at the restaurant, and how did Seila react?",
+   "words": "restaurant dinner interruption noise crash door shout waiter Seila gasp startled reacted",
+   "fixed_by": [
+    "hits-24",
+    "question-only",
+    "split-fused",
+    "bge",
+    "bge-16",
+    "bge-after-4",
+    "bge-question-only",
+    "bge-question-only-16",
+    "bge-split",
+    "bge-split-16",
+    "bge-16-after-4"
+   ],
+   "gold": [
+    {
+     "id": "c13-b63",
+     "text": "An image of Lord Ephelion appeared on the left side of the screen, and a multi-paragraph message on the right side.",
+     "rank_with_words": null,
+     "rank_question_only": null,
+     "rank_bge": null,
+     "nearest_hit_offset": -18,
+     "shared_terms": []
+    },
+    {
+     "id": "c13-b65",
+     "text": "Gladias quickly scanned the message, and looked around. Seila had already gotten up from the table, and was trying to figure out how to unplug the screen, even before the restaurant staff could get there themselves.",
+     "rank_with_words": 23,
+     "rank_question_only": 8,
+     "rank_bge": 26,
+     "nearest_hit_offset": -20,
+     "shared_terms": [
+      "restaur",
+      "seila"
+     ]
+    },
+    {
+     "id": "c13-b62",
+     "text": "Suddenly, the Helisport game cut out, and was replaced by a completely different broadcast.",
+     "rank_with_words": null,
+     "rank_question_only": null,
+     "rank_bge": null,
+     "nearest_hit_offset": -17,
+     "shared_terms": []
+    }
+   ]
+  },
+  {
+   "id": "f41",
+   "question": "What advice did Zei pass along for the Arctic soldier smuggling messages?",
+   "words": "Zei advice Arctic soldier smuggling messages conceal silence cold wind cover route caution trust breath night snow",
+   "fixed_by": [
+    "wide-3",
+    "after-4",
+    "bge",
+    "bge-16",
+    "bge-after-4",
+    "bge-question-only",
+    "bge-question-only-16",
+    "bge-split",
+    "bge-split-16",
+    "bge-16-after-4"
+   ],
+   "gold": [
+    {
+     "id": "c15-b61",
+     "text": "tie dun Or actually, on second thought, he won't answer. But tell him that randomly flipping the least-significant bits, the strategy that everyone always reaches for when they encounter this problem for the first time, is not the ideal solution. Sometimes higher-order bits are totally fine to flip, and sometimes flipping even a least-significant bit is dangerous. What you want to do is: * Train a language model on the actual distribution, so that conditional on what all the other bits are, it can give you probabilities for whether a given bit should be 0 or 1 * Split the data up into buckets - make sure to use the decryption key itself to choose the buckets randomly - and require the bits in the i'th bucket to XOR to the i'th bit in the ciphertext. Within each bucket, use the model to determine which bit's probabilities are closest to 50/50 - meaning both values are \"natural\" for that bit to have in that context - and flip that bit to make the bucket XOR correct. So you're letting the LLM decide which bits are \"least significant\" and okay to flip, instead of just always taking the lowest-order binary digit in each number. → Deluin be",
+     "rank_with_words": null,
+     "rank_question_only": null,
+     "rank_bge": null,
+     "nearest_hit_offset": 46,
+     "shared_terms": []
+    },
+    {
+     "id": "c15-b110",
+     "text": "\"Okay, now I wonder if that was me. I told Deluin to tell the soldier to train an LLM on his own health data and then modify the health data that he is sending out in-flight by flipping the bits that the LLM says are safest to flip, and using XOR over buckets to encode the message so he has a lot of freedom in choosing which bit to flip. Much better for reducing the 'suspiciousness' per bit of hidden data encoded, so he could afford to hide more data inside the same cover traffic.\"",
+     "rank_with_words": 29,
+     "rank_question_only": 34,
+     "rank_bge": 47,
+     "nearest_hit_offset": -3,
+     "shared_terms": [
+      "cover",
+      "messag",
+      "soldier"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "f43",
+   "question": "What did Mov find out when he followed Delwart after the overheard meeting?",
+   "words": "Mov Delwart followed overheard meeting discovered secret plan betrayal spy conversation truth evidence hidden information",
+   "fixed_by": [
+    "bge-16",
+    "bge-after-4",
+    "bge-16-after-4"
+   ],
+   "gold": [
+    {
+     "id": "c15-b36",
+     "text": "\"Only two more times after that. First was a meeting with someone in a privacy robe, not sure who, and they were talking a bunch about Silverchat. Second was a meeting with a Keeper, I made out some conversation about Dreadknot. Nothing more since about a month ago, he either changed his location or he got much better at hiding.\"",
+     "rank_with_words": 45,
+     "rank_question_only": 101,
+     "rank_bge": 13,
+     "nearest_hit_offset": null,
+     "shared_terms": [
+      "convers",
+      "meet"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "f44",
+   "question": "How does the championship keep a player from finding out the day's rule change before their match?",
+   "words": "sealed envelopes official referee announcement timed broadcast monitor prevent information match players rules change protocol",
+   "fixed_by": [
+    "hits-20",
+    "hits-24",
+    "bge",
+    "bge-16",
+    "bge-after-4",
+    "bge-question-only",
+    "bge-question-only-16",
+    "bge-16-after-4"
+   ],
+   "gold": [
+    {
+     "id": "c12-b134",
+     "text": "\"Exactly. And no hand devices or watches allowed either. The robot will be coming to pick them up in a minute. You can watch last year's matches on that screen over there.\"",
+     "rank_with_words": 49,
+     "rank_question_only": 24,
+     "rank_bge": 6,
+     "nearest_hit_offset": 12,
+     "shared_terms": [
+      "match"
+     ]
+    },
+    {
+     "id": "c12-b133",
+     "text": "\"So what now? We sit here for a longhour without internet while the others play, so we don't learn the new rule ahead of time?\"",
+     "rank_with_words": 17,
+     "rank_question_only": 47,
+     "rank_bge": null,
+     "nearest_hit_offset": 13,
+     "shared_terms": [
+      "rule",
+      "time"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "f45",
+   "question": "How do the shrines work in the semifinal version of Minpentai?",
+   "words": "shrines activate power tokens players semifinal rules effect summon sacrifice points unlock abilities cooldown trigger reward",
+   "fixed_by": [
+    "hits-24",
+    "bge",
+    "bge-16",
+    "bge-after-4",
+    "bge-question-only",
+    "bge-question-only-16",
+    "bge-split",
+    "bge-split-16",
+    "bge-16-after-4"
+   ],
+   "gold": [
+    {
+     "id": "c14-b33",
+     "text": "\"And of course, today's rule change. The resources you can allocate in each intervention turn are reduced by eighty percent. But in addition, there will be five shrines, four arranged along the center of each edge of the board, and one in the center. Each thousand turns, any changes that had taken place to the contents of the shrine will be applied as an XOR to the regions near the four corners of the shrine, and the shrine will reset to being a default rock formation.\"",
+     "rank_with_words": 23,
+     "rank_question_only": 49,
+     "rank_bge": 3,
+     "nearest_hit_offset": 7,
+     "shared_terms": [
+      "rule",
+      "shrine"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "f46",
+   "question": "How do Keepers in a meeting keep each other from knowing who they are?",
+   "words": "anonymity masks code oath silence names veils gestures whispers protocol concealment ritual",
+   "fixed_by": [],
+   "gold": [
+    {
+     "id": "c13-b76",
+     "text": "\"Huh, I guess even after hiding our faces, even after speaking through neck bands and sending out our speech with a re-randomized AI-generated voice, though I still can't tell who of you is male and who is female, these physical privacy tools still have their limits. Well good to see you too, Eighteen.\"",
+     "rank_with_words": null,
+     "rank_question_only": null,
+     "rank_bge": null,
+     "nearest_hit_offset": -72,
+     "shared_terms": []
+    }
+   ]
+  }
+ ]
+}
