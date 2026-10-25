@@ -112,6 +112,16 @@ export async function storeMade(bytes: Buffer, ext: 'jpg' | 'mp4'): Promise<stri
   return key;
 }
 
+/** A made file's bytes read back from where storeMade put it (the test folder, or the private bucket), or null. */
+export async function readMade(key: string): Promise<Buffer | null> {
+  const dir = testStore();
+  if (dir) {
+    const f = path.join(dir, key);
+    return existsSync(f) ? readFileSync(f) : null;
+  }
+  return getPrivate(key);
+}
+
 export const contentTypeOf = (key: string) => (key.endsWith('.mp4') ? 'video/mp4' : 'image/jpeg');
 
 export async function readImage(key: string): Promise<Buffer | null> {
