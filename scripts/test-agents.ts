@@ -521,6 +521,16 @@ try {
   const noScope = await tool(BASE, edA, 'no_such_tool', {});
   const failsA2 = (await (await asPerson(people.A.token, '/api/drafts')).json()).failures as { tool: string; kind: string }[];
   check('G3 an unknown tool is recorded too', !noScope.ok && failsA2.some((f) => f.tool === 'no_such_tool' && f.kind === 'input'));
+  // No recorded message keeps a value the agent sent (owner, 2026-10-25): whole values, numbers, quoted fragments, odd names.
+  const echo = await tool(BASE, edA, 'get_glossary', { term: 'Zzsecretword Of The Person', through: 1 });
+  const failsEcho = (await (await asPerson(people.A.token, '/api/drafts')).json()).failures as { tool: string; message: string }[];
+  const gRow = failsEcho.find((f) => f.tool === 'get_glossary');
+  check('G6 a refusal that echoes what was sent is recorded without it (the value becomes ‹its name›)', !echo.ok && /Zzsecretword/i.test(echo.error ?? '') && !!gRow && !/zzsecretword/i.test(gRow.message) && gRow.message.includes('‹term›'), JSON.stringify(gRow));
+  const { failureRecord } = await import('../src/lib/agents/edits');
+  const fr1 = failureRecord('leave_note', 'refused: the text "Open on the lights then find her in the" is not allowed', { on: 'x', text: 'Please open on the lights then find her in the crowd, softly.' });
+  const fr2 = failureRecord('draft_storyboard', 'item 1: no shot "11-b1-4x" in version 2', { items: [{ shot: '11-b1-4x' }], version: 2 });
+  const fr3 = failureRecord('Make Zei blue', 'unknown tool: Make Zei blue', { 'my own words': 'a' });
+  check('G7 stripping: a quoted fragment of a longer text, nested values and numbers, a name that isn’t an identifier, a tool name that isn’t one', !/lights/i.test(fr1.message) && fr1.message.includes('‹text›') && !fr2.message.includes('11-b1-4x') && !/version 2\b/.test(fr2.message) && fr2.message.includes('‹items›') && fr2.message.includes('‹version›') && fr3.tool === '(not a tool name)' && !/Zei/.test(fr3.message) && fr3.argNames.join() === 'argument', JSON.stringify([fr1, fr2, fr3]));
   // Notes on drafts (owner, 2026-10-25): an agent's note on its person's own draft saves, privately; on someone else's draft it is refused.
   const draftIdea = await tool(BASE, edA, 'start_idea', { title: 'A draft to note', text: 'Bai waits on the roof while the city lights come on.', adaptation: 1 });
   const onDraft = await tool(BASE, edA, 'leave_note', { on: String(draftIdea.out.version), text: 'Open on the lights, then find her.' });

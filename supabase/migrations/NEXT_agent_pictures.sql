@@ -8,7 +8,11 @@
 -- 2. studio.pieces.kind: four new kinds of draft made by the site's own pipelines on the person's approval:
 --    'picture' (a book moment, Pictures' pipeline), 'sheet' (a character sheet), 'place' and 'style' (designs).
 --
--- Additive and safe to run twice.
+-- MUST RUN AS postgres (the role that owns the `studio` schema), in the Supabase SQL Editor. Requires 0019 (agents).
+-- Dry run first: NEXT_agent_pictures.DRY-RUN.sql (the same, ending in rollback;). Read back after: READ-BACK-agent_pictures.sql.
+-- One transaction: all of it or none. Additive and safe to run twice.
+
+begin;
 
 create table if not exists studio.agent_failures (
   id uuid primary key default gen_random_uuid(),
@@ -29,16 +33,12 @@ do $$ begin
     create policy writer_all on studio.agent_failures for all to studio_writer using (true) with check (true);
   end if;
 end $$;
-revoke all on studio.agent_failures from anon, authenticated;
+-- Nothing for anon and authenticated; the site (studio_writer) may only read and add rows: append-only.
+revoke all on studio.agent_failures from anon, authenticated, studio_writer;
 grant select, insert on studio.agent_failures to studio_writer;
-revoke update, delete, truncate on studio.agent_failures from studio_writer;
 
 alter table studio.pieces drop constraint if exists pieces_kind_check;
 alter table studio.pieces add constraint pieces_kind_check
   check (kind in ('idea', 'storyboard', 'frames', 'character', 'image', 'edit', 'picture', 'sheet', 'place', 'style'));
 
--- Checks after running (each should return what the comment says):
--- select relrowsecurity from pg_class where oid = 'studio.agent_failures'::regclass;            -- true
--- select grantee, privilege_type from information_schema.role_table_grants
---   where table_schema = 'studio' and table_name = 'agent_failures' order by 1, 2;              -- studio_writer INSERT, SELECT only
--- select pg_get_constraintdef(oid) from pg_constraint where conname = 'pieces_kind_check';       -- the ten kinds
+commit;

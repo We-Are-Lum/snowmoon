@@ -128,12 +128,63 @@ export type FailureKind = 'input' | 'error' | 'timeout' | 'refused';
  */
 export async function recordFailure(agent: Agent, tool: string, kind: FailureKind, message: string, args: Record<string, unknown>) {
   try {
-    const names = Object.keys(args ?? {}).slice(0, 20).map((k) => k.slice(0, 60));
+    const kept = failureRecord(tool, message, args);
     await sql()`insert into studio.agent_failures (person, agent_id, agent_name, tool, kind, message, arg_names)
-      values (${agent.person}, ${agent.id}, ${agent.name}, ${tool.slice(0, 80) || '?'}, ${kind}, ${message.slice(0, 1000) || '?'}, ${names})`;
+      values (${agent.person}, ${agent.id}, ${agent.name}, ${kept.tool}, ${kind}, ${kept.message}, ${kept.argNames})`;
   } catch (e) {
     console.error('agent failure not recorded', (e as { code?: string }).code ?? 'unknown');
   }
+}
+
+const IDENT = /^[A-Za-z0-9_]{1,60}$/;
+const escapeRe = (x: string) => x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+/**
+ * What a failure keeps (owner, 2026-10-25: "no recorded failure message contains an argument's value"): the message
+ * with every value the agent sent taken out and replaced by ‹its argument's name›: whole values in any case, numbers
+ * as whole tokens, and any run of 12 or more characters copied from a longer text (a message quoting part of what was
+ * sent). Argument names that aren't plain identifiers, and a tool name that isn't one, are kept as placeholders, so
+ * no words can travel in a name either.
+ */
+export function failureRecord(tool: string, message: string, args: Record<string, unknown>) {
+  const leaves: { name: string; value: string }[] = [];
+  const walk = (v: unknown, name: string, depth: number) => {
+    if (depth > 6) return;
+    if (typeof v === 'string' && v.trim()) leaves.push({ name, value: v.trim() });
+    else if (typeof v === 'number' && Number.isFinite(v)) leaves.push({ name, value: String(v) });
+    else if (Array.isArray(v)) v.forEach((x) => walk(x, name, depth + 1));
+    else if (v && typeof v === 'object') for (const x of Object.values(v)) walk(x, name, depth + 1);
+  };
+  const safeName = (k: string) => (IDENT.test(k) ? k : 'argument');
+  for (const [k, v] of Object.entries(args ?? {})) walk(v, safeName(k), 0);
+  const toolOk = /^[a-z_]{1,60}$/.test(tool);
+  if (!toolOk && tool.trim()) leaves.push({ name: 'tool', value: tool.trim() });
+  let out = message;
+  for (const { name, value } of leaves.sort((a, b) => b.value.length - a.value.length)) {
+    const mark = `‹${name}›`;
+    out = value.length >= 3 && !/^\d+(\.\d+)?$/.test(value)
+      ? out.replace(new RegExp(escapeRe(value), 'gi'), mark)
+      : out.replace(new RegExp(`(?<![\\p{L}\\p{N}_])${escapeRe(value)}(?![\\p{L}\\p{N}_])`, 'giu'), mark);
+    if (value.length >= 12) {
+      // Fragments: any stretch of 12 or more characters of the message that also appears in the value.
+      const low = value.toLowerCase();
+      let i = 0, rebuilt = '';
+      while (i < out.length) {
+        if (out.length - i >= 12 && low.includes(out.slice(i, i + 12).toLowerCase())) {
+          let j = i + 12;
+          while (j < out.length && low.includes(out.slice(i, j + 1).toLowerCase())) j++;
+          rebuilt += mark;
+          i = j;
+        } else rebuilt += out[i++];
+      }
+      out = rebuilt;
+    }
+  }
+  return {
+    tool: toolOk ? tool : '(not a tool name)',
+    message: (out.trim() || '(no message)').slice(0, 1000),
+    argNames: Object.keys(args ?? {}).slice(0, 20).map(safeName),
+  };
 }
 
 type FailureRow = { id: string; person: string; agent_name: string; tool: string; kind: FailureKind; message: string; arg_names: string[]; created_at: Date };
