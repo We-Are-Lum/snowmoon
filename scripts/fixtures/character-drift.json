@@ -1,0 +1,124 @@
+{
+ "about": "Replayed for check:ui: real jobs from driftGrids, two characters, one made-up decision.",
+ "canSave": true,
+ "styles": [
+  {
+   "style": "designs/styles/techno-vistas.json",
+   "name": "Techno vistas",
+   "characters": [
+    {
+     "slug": "bai",
+     "name": "Bai Jahen",
+     "sheet": {
+      "sha256": "21def33df4f734aa8979a2bb152d88b443d511b940eaae0c4a67347f900db73e",
+      "width": 1024,
+      "height": 576
+     },
+     "images": [
+      {
+       "id": "c4-b073-rival",
+       "chapter": 4,
+       "idx": 73,
+       "image": {
+        "url": "https://media.snowmoon.party/images/seed/c4/c4-b073-rival-9d48ce3f97da.jpg",
+        "width": 1024,
+        "height": 576
+       },
+       "recipe": "content/snowmoon/recipes/images/chapter-4.json",
+       "with": [
+        "Zei Leimin"
+       ],
+       "verdict": null,
+       "decision": null
+      },
+      {
+       "id": "c5-b043-spiral-ramp",
+       "chapter": 5,
+       "idx": 43,
+       "image": {
+        "url": "https://media.snowmoon.party/images/seed/c5/c5-b043-spiral-ramp-b8d3547cfeef.jpg",
+        "width": 1024,
+        "height": 576
+       },
+       "recipe": "content/snowmoon/recipes/images/chapter-5.json",
+       "with": [
+        "Zei Leimin"
+       ],
+       "verdict": null,
+       "decision": {
+        "decision": "regenerate",
+        "note": "Fixture note.",
+        "byFid": 6786,
+        "at": "2026-10-25T12:00:00.000Z",
+        "imageSha256": null,
+        "checkRun": null,
+        "draftedNote": null,
+        "draftedBy": null,
+        "noteEdited": null
+       }
+      },
+      {
+       "id": "c7-b035-smoke",
+       "chapter": 7,
+       "idx": 35,
+       "image": {
+        "url": "https://media.snowmoon.party/images/seed/c7/c7-b035-smoke-d8c5a6c7b490.jpg",
+        "width": 1024,
+        "height": 576
+       },
+       "recipe": "content/snowmoon/recipes/images/chapter-7.json",
+       "with": [
+        "Zei Leimin"
+       ],
+       "verdict": null,
+       "decision": null
+      }
+     ]
+    },
+    {
+     "slug": "fin",
+     "name": "Fin",
+     "sheet": {
+      "sha256": "c6e28903e5aee3aad551332c93cfef43570f1f3c195d3a511e4d5bd21490855f",
+      "width": 1024,
+      "height": 576
+     },
+     "images": [
+      {
+       "id": "c2-b003-electronics-street",
+       "chapter": 2,
+       "idx": 3,
+       "image": {
+        "url": "https://media.snowmoon.party/images/seed/c2/c2-b003-electronics-street-59b08371573a.jpg",
+        "width": 1024,
+        "height": 576
+       },
+       "recipe": "content/snowmoon/recipes/images/chapter-2.json",
+       "with": [
+        "Zei Leimin"
+       ],
+       "verdict": null,
+       "decision": null
+      },
+      {
+       "id": "c2-b038-foil-classroom",
+       "chapter": 2,
+       "idx": 38,
+       "image": {
+        "url": "https://media.snowmoon.party/images/seed/c2/c2-b038-foil-classroom-8d4a2147d5ed.jpg",
+        "width": 1024,
+        "height": 576
+       },
+       "recipe": "content/snowmoon/recipes/images/chapter-2.json",
+       "with": [
+        "Zei Leimin"
+       ],
+       "verdict": null,
+       "decision": null
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

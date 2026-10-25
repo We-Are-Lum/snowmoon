@@ -65,6 +65,11 @@
  *   image's AI label, the check labelled AI with its model, Keep / Regenerate with my note / Drop, a saved decision
  *   shown, the finding with its fix line, the note box with the publication line, pre-filled with the fix line labelled
  *   "Drafted by the image check (Argon finding, gpt-oss-120b fix line)" and marked when edited; anyone else sees only the owner line.
+ * - The owner's drift grids (/you/illustrations/characters, owner 2026-10-25) at 390, light and dark: signed out, the
+ *   sign-in offer only and no API call; as the owner (scripts/fixtures/character-drift.json), one fold per character,
+ *   the sheet fetched only when a fold opens, each image with its AI label, a flagged image shown as Regenerate with
+ *   its note, Flag opening the note box with the publication line, and a flag saved as Regenerate with the note through
+ *   POST /api/you/illustrations; anyone else sees only the owner line.
  * - The footer line (owner's legal starter, 2026-10-09) reads exactly as written, with Terms, Privacy
  *   and Source linked, at the foot of About, in the menu sheet and at the bottom of the rail; not on a
  *   phone's reading screen. /terms and /privacy meet the floors.
@@ -546,6 +551,72 @@ async function checkIllustrationReview(page: Page, scheme: string) {
   if (await page.locator('.illus-item').count()) fail(`${where}: someone else signed in sees review items`);
   await page.unroute('**/api/you/illustrations');
   await page.unroute('**/api/chat/status');
+  await page.evaluate(() => localStorage.removeItem('snowmoon.signin'));
+}
+
+/** The owner's drift grids (/you/illustrations/characters, owner 2026-10-25), at 390: see the list at the top. */
+async function checkCharacterDrift(page: Page, scheme: string) {
+  const where = `/you/illustrations/characters @390 (${scheme})`;
+  const fixture = JSON.parse(readFileSync('scripts/fixtures/character-drift.json', 'utf8')) as { styles: { characters: { slug: string; images: { id: string }[] }[] }[] };
+  const chars = fixture.styles[0].characters;
+  let asked = 0;
+  const sheets: string[] = [];
+  const posts: { jobId: string; decision: string; note: string }[] = [];
+  await page.route('**/api/you/illustrations/characters', (r) => {
+    asked++;
+    return r.fulfill({ json: fixture });
+  });
+  await page.route('**/api/you/illustrations/sheet/*', (r) => {
+    sheets.push(r.request().url().split('/').pop()!);
+    return r.fulfill({ status: 200, contentType: 'image/png', body: readFileSync('public/icon.png') });
+  });
+  await page.route('**/api/you/illustrations', (r) => {
+    posts.push(r.request().postDataJSON());
+    return r.fulfill({ json: { saved: 'regenerate' } });
+  });
+  await open(page, '/you/illustrations/characters');
+  await page.locator('.you-sign-in button').first().waitFor({ timeout: 10000 }).catch(() => fail(`${where}: signed out, no sign-in offered`));
+  await checkFloors(page, '/you/illustrations/characters @390 (signed out)', scheme);
+  if (asked || (await page.locator('.drift-char').count())) fail(`${where}: signed out, the page asked for or shows the grids`);
+  const as = (fid: number) => {
+    const body = Buffer.from(JSON.stringify({ sub: fid, exp: 4102444800 })).toString('base64').replace(/=+$/, '');
+    const session = JSON.stringify({ token: `x.${body}.y`, fid, username: 'check', exp: 4102444800 });
+    return page.evaluate((s) => localStorage.setItem('snowmoon.signin', s), session);
+  };
+  await page.route('**/api/chat/status', (r) => r.fulfill({ json: { available: false, model: 'm', host: null, provider: null, route: '', perDay: 30, left: 30 } }));
+  await as(6786);
+  await open(page, '/you/illustrations/characters');
+  await page.locator('.drift-char').first().waitFor({ timeout: 10000 }).catch(() => fail(`${where}: signed in as the owner, no characters`));
+  const folds = await page.locator('.drift-char').evaluateAll((els) => els.map((e) => e.getAttribute('data-character')));
+  if (folds.join(',') !== chars.map((c) => c.slug).join(',')) fail(`${where}: one fold per character expected, got ${folds.join(', ')}`);
+  if (sheets.length) fail(`${where}: a sheet was fetched before its fold was opened`);
+  const first = page.locator('.drift-char').first();
+  await first.locator('summary').click();
+  await first.locator('.drift-sheet img').waitFor({ timeout: 10000 }).catch(() => fail(`${where}: the sheet is not shown when the fold opens`));
+  if (sheets.join(',') !== chars[0].slug) fail(`${where}: opening a fold fetched the sheets ${sheets.join(', ')}`);
+  const tiles = first.locator('.drift-tile');
+  if ((await tiles.count()) !== chars[0].images.length) fail(`${where}: not every image of the character is in the grid`);
+  for (let i = 0; i < (await tiles.count()); i++) if (!(await tiles.nth(i).locator('button.ai-label').count())) fail(`${where}: image ${i + 1} has no AI label`);
+  if (!/Regenerate · “Fixture note\.”/.test(await tiles.nth(1).innerText())) fail(`${where}: a flagged image is not shown as Regenerate with its note`);
+  await checkFloors(page, '/you/illustrations/characters @390 (owner)', scheme);
+  await shot(page, 'phone-390-you-characters', scheme);
+  await tiles.first().locator('button', { hasText: 'Flag' }).click();
+  if (!(await tiles.first().locator('.illus-note .publication-line').count())) fail(`${where}: the note box does not show the publication line`);
+  await tiles.first().locator('button', { hasText: 'Save: regenerate' }).click();
+  if (posts.length) fail(`${where}: an empty note was sent`);
+  await tiles.first().locator('textarea').fill('The jacket is the sheet’s orange.');
+  await tiles.first().locator('button', { hasText: 'Save: regenerate' }).click();
+  await page.waitForTimeout(300);
+  const p = posts[0];
+  if (!p || p.jobId !== chars[0].images[0].id || p.decision !== 'regenerate' || p.note !== 'The jacket is the sheet’s orange.') fail(`${where}: the flag was not saved as Regenerate with the note: ${JSON.stringify(p)}`);
+  await checkFloors(page, '/you/illustrations/characters @390 (owner, flagged)', scheme);
+  await page.unroute('**/api/you/illustrations/characters');
+  await page.route('**/api/you/illustrations/characters', (r) => r.fulfill({ status: 403, json: { error: 'Owner only' } }));
+  await as(1234);
+  await open(page, '/you/illustrations/characters');
+  await page.getByText('This page is for the project’s owner.').waitFor({ timeout: 10000 }).catch(() => fail(`${where}: someone else signed in does not see the owner-only line`));
+  if (await page.locator('.drift-char').count()) fail(`${where}: someone else signed in sees the grids`);
+  for (const u of ['**/api/you/illustrations/characters', '**/api/you/illustrations/sheet/*', '**/api/you/illustrations', '**/api/chat/status']) await page.unroute(u);
   await page.evaluate(() => localStorage.removeItem('snowmoon.signin'));
 }
 
@@ -1758,6 +1829,7 @@ try {
     if (/Your account|Your work|Balance \$/.test(await page.locator('main.you').innerText().catch(() => ''))) fail(`/you @390 (${scheme}): signed out, the page shows an account, wallet or work`);
     await shot(page, 'phone-390-you-signed-out', scheme);
     await checkIllustrationReview(page, scheme);
+    await checkCharacterDrift(page, scheme);
     await open(page, '/chapter/1?view=listen');
     await page.waitForSelector('.listen-pane');
     await checkFloors(page, '/chapter/1?view=listen @390', scheme);

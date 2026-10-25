@@ -62,6 +62,8 @@ export interface CheckJob {
   idx: number;
   /** content/snowmoon/illustrations/chapter-N.json */
   jobFile: string;
+  /** The chapter file's style ("designs/styles/techno-vistas.json"), or null without one. */
+  style: string | null;
   /** The scene prompt as the job file has it (the redo appends the owner's note to this). */
   prompt: string;
   /** The prompt the picture model received, from the image recipe. */
@@ -148,7 +150,8 @@ export function checkJobs(): CheckJob[] {
   for (const { n, file } of chapterFiles()) {
     const recipeFile = path.join('content', 'snowmoon', 'recipes', 'images', `chapter-${n}.json`);
     const recipes = existsSync(path.join(ROOT, recipeFile)) ? (json(path.join(ROOT, recipeFile)).images as { id: string; prompt: string }[]) : [];
-    for (const j of json(file).jobs as RawJob[]) {
+    const doc = json(file) as { style?: string; jobs: RawJob[] };
+    for (const j of doc.jobs) {
       if (typeof j.idx !== 'number') continue;
       const p = pub.get(j.id);
       const lettered = Boolean(j.lettering?.length);
@@ -171,6 +174,7 @@ export function checkJobs(): CheckJob[] {
         chapter: n,
         idx: j.idx,
         jobFile: path.relative(ROOT, file),
+        style: doc.style ?? null,
         prompt: j.prompt,
         composedPrompt: recipes.find((r) => r.id === j.id)?.prompt ?? j.prompt,
         recipeFile,

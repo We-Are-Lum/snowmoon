@@ -3,6 +3,7 @@ import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import path from 'node:path';
 import type postgres from 'postgres';
 import { checkJob, checkJobs, type CheckJob } from './jobs';
+import { castSheets } from './sheets';
 import { draftedByOf, hasDouble, worstFirst, type CheckAnswer } from './schema';
 export { noteCredit } from './schema';
 
@@ -122,6 +123,83 @@ export async function reviewItems(sql: Sql | null): Promise<{ items: ReviewItem[
     };
   });
   return { items: items.sort(worstFirst), canSave: decisions.stored };
+}
+
+/** One seeded image of a character, for the drift grids. */
+export interface DriftImage {
+  id: string;
+  chapter: number;
+  idx: number;
+  image: { url: string; width: number; height: number };
+  recipe: string;
+  /** Others drawn in the same image, by name. */
+  with: string[];
+  verdict: string | null;
+  decision: ReviewDecision | null;
+}
+
+export interface DriftCharacter {
+  slug: string;
+  name: string;
+  /** The cast sheet the images used, served to the owner by /api/you/illustrations/sheet/<slug>. */
+  sheet: { sha256: string; width: number; height: number } | null;
+  images: DriftImage[];
+}
+
+export interface DriftStyle {
+  style: string;
+  name: string;
+  characters: DriftCharacter[];
+}
+
+/**
+ * The drift grids (owner, 2026-10-25: "one grid per character showing every image of them in the same style, side by
+ * side with their sheet, so I can spot drift by eye"): per style, per character, every published image the job names
+ * them in, in story order, with the sheet and the latest decision. Read from committed files and stored decisions
+ * only; nothing here calls a model. Characters with the most images first.
+ */
+export async function driftGrids(sql: Sql | null): Promise<{ styles: DriftStyle[]; canSave: boolean }> {
+  const { items, canSave } = await reviewItems(sql);
+  const byId = new Map(items.map((i) => [i.id, i]));
+  const sheets = castSheets();
+  const styles = new Map<string, Map<string, DriftCharacter>>();
+  for (const j of checkJobs()) {
+    const item = byId.get(j.id);
+    if (!j.image || !item) continue;
+    const style = j.style ?? 'no style';
+    if (!styles.has(style)) styles.set(style, new Map());
+    const chars = styles.get(style)!;
+    for (const m of j.cast) {
+      if (!chars.has(m.slug)) {
+        const s = sheets.get(m.slug);
+        chars.set(m.slug, { slug: m.slug, name: m.name, sheet: s ? { sha256: s.sha256, width: s.width, height: s.height } : null, images: [] });
+      }
+      chars.get(m.slug)!.images.push({
+        id: j.id,
+        chapter: j.chapter,
+        idx: j.idx,
+        image: { url: j.image.url, width: j.image.width, height: j.image.height },
+        recipe: j.recipeFile,
+        with: j.cast.filter((o) => o.slug !== m.slug).map((o) => o.name),
+        verdict: item.verdict,
+        decision: item.decision,
+      });
+    }
+  }
+  const styleName = (file: string) => {
+    const f = path.join(process.cwd(), 'content', 'snowmoon', file);
+    return existsSync(f) ? ((JSON.parse(readFileSync(f, 'utf8')) as { name?: string }).name ?? file) : file;
+  };
+  return {
+    canSave,
+    styles: [...styles].map(([style, chars]) => ({
+      style,
+      name: styleName(style),
+      characters: [...chars.values()]
+        .map((c) => ({ ...c, images: c.images.sort((a, b) => a.chapter - b.chapter || a.idx - b.idx) }))
+        .sort((a, b) => b.images.length - a.images.length || a.name.localeCompare(b.name)),
+    })),
+  };
 }
 
 /**

@@ -27,6 +27,7 @@ const W = {
   loading: 'Loading…',
   failed: 'The review didn’t load. Try again in a moment.',
   lede: (n: number, checked: number) => `${n} images, ${checked} checked. Worst first: wrong, then partly, then matches, then not checked yet.`,
+  drift: 'Compare each character with their sheet',
   checker: `Each check is written by an AI model, ${ILLUSTRATION_CHECK.modelName} (closed, by Google), through the Vercel AI Gateway: it can be wrong. Only you see it.`,
   cantSave: 'Decisions can’t be saved on this copy of the site yet (the review tables aren’t there).',
   passage: (ch: number, dateline: string | null) => `The book, chapter ${ch}${dateline ? ` · ${dateline}` : ''}`,
@@ -116,6 +117,9 @@ export function IllustrationReview() {
     <Frame>
       <p className="you-lede">{W.lede(data.items.length, data.items.filter((i) => i.check).length)}</p>
       <p className="you-note">{W.checker}</p>
+      <p className="you-note">
+        <Link href="/you/illustrations/characters">{W.drift}</Link>
+      </p>
       {!data.canSave && <p className="you-note">{W.cantSave}</p>}
       <ol className="illus-list">
         {[...data.items].sort(worstFirst).map((item) => (

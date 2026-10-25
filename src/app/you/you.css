@@ -67,3 +67,21 @@
 .illus-who-notes { display: block; margin-top: 4px; color: var(--muted); }
 .illus-note { display: flex; flex-direction: column; gap: 8px; }
 .illus-note textarea { width: 100%; font: inherit; font-size: 16px; }
+/* The owner's drift grids (/you/illustrations/characters, 2026-10-25): each character's sheet beside their images. */
+.drift-style { display: flex; flex-direction: column; gap: 12px; }
+.drift-style-name { margin: 8px 0 0; font-weight: 400; }
+.drift-char { border-bottom: 1px solid var(--rule); }
+.drift-summary { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; min-height: var(--tap); padding: 10px 0; cursor: pointer; }
+.drift-name { font-size: 18px; color: var(--ink); }
+.drift-body { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; padding-bottom: 24px; }
+/* The sheet stays in view above the grid while it scrolls, at every width (the column is narrow beside the assistant). */
+.drift-sheet { position: sticky; top: 0; z-index: 1; margin: 0; padding: 8px 0; background: var(--paper); }
+.drift-sheet img { max-height: 30vh; width: 100%; object-fit: contain; }
+.drift-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px; margin: 0; padding: 0; list-style: none; }
+.drift-tile { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.drift-tile img { width: 100%; height: auto; }
+.drift-tile[data-decision='regenerate'] img { outline: 2px solid var(--warn); outline-offset: 2px; }
+.drift-tile p { margin: 0; overflow-wrap: anywhere; }
+.drift-decision.is-regenerate { color: var(--warn); }
+.drift-with { color: var(--muted); }
+
