@@ -68,11 +68,26 @@ check('an unknown protocol version gets the newest', (await rpc('initialize', { 
 check('a notification gets no answer (202)', (await rpc('notifications/initialized', undefined, null)).status === 202);
 const list = (await rpc('tools/list')).body?.result?.tools ?? [];
 const names = list.map((t: any) => t.name).sort().join(',');
-check('tools/list: the seven read tools, each with a schema, all read only', names === 'get_moment,get_passage,get_recipe,get_scene,get_shot,list_scenes,search_book' && list.every((t: any) => t.inputSchema?.type === 'object' && t.annotations?.readOnlyHint === true), names);
+check('tools/list: the eight read tools, each with a schema, all read only', names === 'get_glossary,get_moment,get_passage,get_recipe,get_scene,get_shot,list_scenes,search_book' && list.every((t: any) => t.inputSchema?.type === 'object' && t.annotations?.readOnlyHint === true), names);
 
 const sb = await call('search_book', { query: 'Minpentai', limit: 3 });
 check('search_book: hits with block ids and links, the book and its licence', !sb.isError && sb.structuredContent.hits.length === 3 && /^c\d+-b\d+$/.test(sb.structuredContent.hits[0].block_id) && sb.structuredContent.book.licence === 'GPL-3.0', JSON.stringify(sb).slice(0, 200));
+
+// get_glossary (owner, 2026-10-25): spoiler-aware by chapter, the book's words cited by block. From its own address,
+// so these calls don't count against the rate the later checks rely on.
+ip = 9;
+const g1 = await call('get_glossary', { through: 1 });
+const gAll = await call('get_glossary', {});
+const g1Terms = (g1.structuredContent?.terms ?? []) as { first_chapter: number; first_seen: { block: string } }[];
+check('get_glossary: through chapter 1 lists only terms first met by then, fewer than all, each cited', g1.isError === false && g1Terms.length > 0 && g1Terms.every((t) => t.first_chapter <= 1 && /^c1-b\d+$/.test(t.first_seen.block)) && g1Terms.length < ((gAll.structuredContent?.terms ?? []) as unknown[]).length);
+const lastTerm = ((gAll.structuredContent?.terms ?? []) as { slug: string; first_chapter: number }[]).find((t) => t.first_chapter > 1)!;
+const hidden = await call('get_glossary', { through: 1, term: lastTerm.slug });
+const shown = await call('get_glossary', { term: lastTerm.slug });
+const full = shown.structuredContent as { explanations: { block: string }[]; mentions: string[] } | undefined;
+check('get_glossary: a term first met later is hidden through chapter 1, and its full entry is cited by block', hidden.isError === true && shown.isError === false && !!full && full.mentions.every((m) => /^c\d+-b\d+$/.test(m)) && full.explanations.every((e) => /^c\d+-b\d+$/.test(e.block)));
+ip = 1;
 const gp = await call('get_passage', { chapter: 14, from: 1, to: 5 });
+check('get_passage: says how many blocks the chapter has and that more follow', typeof (gp.structuredContent as any)?.blocks_in_chapter === 'number' && (gp.structuredContent as any)?.more_after === true);
 check('get_passage: the blocks asked for, plain text with ids', !gp.isError && gp.structuredContent.blocks.length >= 1 && gp.structuredContent.blocks.every((b: any) => /^c14-b[1-5]$/.test(b.id) && typeof b.text === 'string'));
 check('get_passage: more than 40 blocks is refused as the tool\'s own error', (await call('get_passage', { chapter: 14, from: 0, to: 500 })).isError === true);
 const ls = await call('list_scenes', {});
@@ -95,7 +110,7 @@ check('an unknown method is refused', (await rpc('resources/list')).body?.error?
 
 ip = 2;
 const rt = await rest('tools');
-check('REST: the same tools listed', rt.ok && ((await rt.json()) as any).tools.length === 7);
+check('REST: the same tools listed', rt.ok && ((await rt.json()) as any).tools.length === 8);
 const rs = await rest('get_shot', '?adaptation=1&version=2&shot=11-b1-4');
 check('REST: get_shot answers the same shot', rs.ok && ((await rs.json()) as any).shot === '11-b1-4');
 check('REST: a bad argument is 400, an unknown tool 404', (await rest('get_shot', '?adaptation=1&version=2&shot=nope')).status === 400 && (await rest('write_line')).status === 404);

@@ -514,7 +514,7 @@ try {
 
   // Step 0 (owner, 2026-10-25): every failed tool call is recorded, with the argument names only, never the values.
   const bad = await tool(BASE, edA, 'leave_note', { on: '00000000-0000-4000-8000-000000000000', text: 'A secret line of the person’s words.' });
-  const failsA = (await (await asPerson(people.A.token, '/api/drafts')).json()).failures as { tool: string; kind: string; message: string; args: string[] }[];
+  const failsA = (await (await asPerson(people.A.token, '/api/drafts')).json()).failures as { id: string; tool: string; kind: string; message: string; args: string[] }[];
   const failsB = (await (await asPerson(people.B.token, '/api/drafts')).json()).failures as { id: string }[];
   const fRow = failsA.find((f) => f.tool === 'leave_note');
   check('G2 a failed tool call is recorded for its person: tool, kind, message, argument names (never the values)', !bad.ok && !!fRow && fRow.kind === 'input' && fRow.args.join(',') === 'on,text' && !JSON.stringify(failsA).includes('secret line') && !failsB.some((f) => f.id === fRow.id), JSON.stringify(fRow));
