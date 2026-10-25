@@ -1,6 +1,7 @@
 import 'server-only';
 import { AGENT_API, appUrl } from '../config';
 import { blockId, chapterNumbers, loadChapter } from '../book';
+import { glossaryThrough } from '../glossary';
 import { plainText, searchBook } from '../book-search';
 import { authorVersions, editorVersion, getAdaptation, getVersion, ownMedia, publicCatalogue, sceneHandleFor, sceneOwner, type Version } from '../adaptation-pages';
 import { editorData, type DataShot } from './data';
@@ -122,7 +123,29 @@ export const TOOLS: Tool[] = [
       if (!ch) throw new ToolInputError(`no chapter ${chapter}; chapters are ${chapterNumbers()[0]} to ${chapterNumbers().at(-1)}`);
       const blocks = ch.blocks.filter((b) => b.idx >= from && b.idx <= to);
       if (blocks.length > AGENT_API.maxBlocks) throw new ToolInputError(`at most ${AGENT_API.maxBlocks} blocks at once`);
-      return { book: BOOK, chapter, url: `${appUrl()}/chapter/${chapter}`, blocks: blocks.map((b) => ({ id: blockId(chapter, b.idx), kind: b.kind, text: plainText(b.content) })) };
+      const last = ch.blocks.at(-1)?.idx ?? 0;
+      return { book: BOOK, chapter, url: `${appUrl()}/chapter/${chapter}`, blocks_in_chapter: ch.blocks.length, last_block: last, more_after: to < last, blocks: blocks.map((b) => ({ id: blockId(chapter, b.idx), kind: b.kind, text: plainText(b.content) })) };
+    },
+  },
+  {
+    name: 'get_glossary',
+    title: 'Read the glossary',
+    description: `The book's invented words (places, groups, things), spoiler-aware: give "through" (the last chapter read, 1 to ${chapterNumbers().at(-1)}; default all) and only what a reader has met by then comes back. Without "term", every term with where it is first met; with "term" (a term, alias or slug), its full entry: the first sentence it appears in, the sentences that explain it, and every mention, each cited by block id (c<chapter>-b<block>). The texts are the book's own words (GPL-3.0); quote them only word for word.`,
+    inputSchema: { type: 'object', properties: { through: { type: 'integer', minimum: 1 }, term: { type: 'string' } }, additionalProperties: false },
+    run: async (args) => {
+      only(args, ['through', 'term']);
+      const lastChapter = chapterNumbers().at(-1)!;
+      const through = int(args, 'through', { min: 1, max: lastChapter, optional: true }) ?? lastChapter;
+      const all = glossaryThrough(through);
+      const url = `${appUrl()}/glossary`;
+      if (args.term === undefined) {
+        return { book: BOOK, through, url, count: all.length, terms: all.map((t) => ({ slug: t.slug, term: t.term, first_chapter: t.first_chapter, first_seen: t.first_seen })) };
+      }
+      if (typeof args.term !== 'string' || !args.term.trim()) throw new ToolInputError('term must be a word');
+      const q = args.term.trim().toLowerCase();
+      const t = all.find((x) => x.slug === q || x.term.toLowerCase() === q || x.aliases.some((a) => a.toLowerCase() === q));
+      if (!t) throw new ToolInputError(`no glossary term "${args.term}" met by chapter ${through}${through < lastChapter ? ' (it may come later: raise "through")' : ''}`);
+      return { book: BOOK, through, url: `${url}/${t.slug}`, ...t };
     },
   },
   {

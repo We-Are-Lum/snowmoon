@@ -3,7 +3,7 @@ import { getPerson } from '~/lib/auth';
 import { agentsOn, allowed } from '~/lib/agents/core';
 import { decide, draftNotesOf, piecesOf } from '~/lib/agents/pieces';
 import { addRequest, openRequests } from '~/lib/agents/requests';
-import { gapsOf } from '~/lib/agents/edits';
+import { failuresOf, gapsOf } from '~/lib/agents/edits';
 import { runApproved } from '~/lib/agents/approve';
 import { hasConsented } from '~/lib/consent';
 
@@ -18,7 +18,7 @@ export async function GET(request: Request) {
   // Only the allowlisted people (the owner) see anything here; everyone else gets the same 404 as before.
   if (!(await allowed(person))) return new NextResponse('Not found', { status: 404 });
   if (person === null) return NextResponse.json({ error: 'Sign in first' }, { status: 401, headers: noStore });
-  return NextResponse.json({ drafts: await piecesOf(person, 'draft'), notes: await draftNotesOf(person), published: await piecesOf(person, 'published'), waiting: await openRequests(person), gaps: await gapsOf(person) }, { headers: noStore });
+  return NextResponse.json({ drafts: await piecesOf(person, 'draft'), notes: await draftNotesOf(person), published: await piecesOf(person, 'published'), waiting: await openRequests(person), gaps: await gapsOf(person), failures: await failuresOf(person) }, { headers: noStore });
 }
 
 export async function POST(request: Request) {

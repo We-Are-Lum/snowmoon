@@ -12,7 +12,7 @@ import { addNote, draftPiece, feedbackFor, notesOn, pieceVersions, piecesOf, rev
 import { openRequests, personWords } from './requests';
 import { addSuggestion, suggestionsOf } from './suggestions';
 import { addDirection, directionOf, findLine, rewriteLine } from './direction';
-import { changeTiming, listTakes, logGap, markSpeaking, requestVideo, swapTake, tryFrame, frameEstimate, videoEstimate } from './edits';
+import { changeTiming, listTakes, logGap, markSpeaking, recordFailure, requestVideo, swapTake, tryFrame, frameEstimate, videoEstimate } from './edits';
 
 /**
  * The tools an agent of a person can use (owner, 2026-10-20; design §2). Served as MCP at /mcp (the
@@ -311,8 +311,8 @@ const WRITE: AgentTool[] = [
   },
   {
     name: 'leave_note', title: 'Leave a note', scope: 'notes', writes: true, counts: 'notes',
-    description: 'Draft a note (up to 500 characters) on a published version. It is labelled as from an agent, and is public only after your person publishes it. @mentions work once published; "@name\'s agent" addresses someone\'s agents.',
-    inputSchema: { type: 'object', properties: { on: { type: 'string', description: 'A published version id.' }, text: { type: 'string' } }, required: ['on', 'text'], additionalProperties: false },
+    description: 'Draft a note (up to 500 characters) on a version: a published one, or one of your person\'s own drafts (list_my_work). It is labelled as from an agent and stays private (your person and the site\'s owner see it); it is public only after your person publishes it, on a published version. @mentions work once published; "@name\'s agent" addresses someone\'s agents.',
+    inputSchema: { type: 'object', properties: { on: { type: 'string', description: 'A version id: published, or your person\'s own draft.' }, text: { type: 'string' } }, required: ['on', 'text'], additionalProperties: false },
     run: async (agent, args) => {
       only(args, ['on', 'text']);
       const t = checkText(args.text, 'text', 500, agent.person);
@@ -423,12 +423,25 @@ const READ: AgentTool[] = READ_TOOLS.map((t) => ({ ...t, scope: 'read' as Scope,
 export const AGENT_TOOLS: AgentTool[] = [...READ, ...WRITE, ...EDITS];
 export const agentToolByName = (name: string) => AGENT_TOOLS.find((t) => t.name === name) ?? null;
 
-/** Runs one tool for an agent: its scope, then its count, then the tool. */
+/** Runs one tool for an agent: its scope, then its count, then the tool. Every failure is recorded (recordFailure). */
 export async function runTool(agent: Agent, name: string, args: Record<string, unknown>) {
+  const refuse = async (kind: 'input' | 'refused', message: string): Promise<never> => {
+    await recordFailure(agent, name, kind, message, args);
+    throw new ToolInputError(message);
+  };
   const tool = agentToolByName(name);
-  if (!tool) throw new ToolInputError(`unknown tool: ${name}`);
-  if (!agent.scopes.includes(tool.scope)) throw new ToolInputError(`your person didn’t give you the "${tool.scope}" scope`);
+  if (!tool) return refuse('input', `unknown tool: ${name}`);
+  if (!agent.scopes.includes(tool.scope)) return refuse('refused', `your person didn’t give you the "${tool.scope}" scope`);
   const c = await countOk(agent, tool.counts ?? 'reads');
-  if (!c.ok) throw new ToolInputError(c.why);
-  return await tool.run(agent, args);
+  if (!c.ok) return refuse('refused', c.why);
+  try {
+    return await tool.run(agent, args);
+  } catch (e) {
+    if (e instanceof ToolInputError) await recordFailure(agent, name, 'input', e.message, args);
+    else await recordFailure(agent, name, 'error', `something went wrong on our side (${(e as { code?: string }).code ?? (e as Error)?.name ?? 'unknown'})`, args);
+    throw e;
+  }
 }
+
+/** A tool call the route gave up waiting for (the MCP route's timeout). */
+export const recordTimeout = (agent: Agent, name: string, args: Record<string, unknown>) => recordFailure(agent, name, 'timeout', 'took too long on our side', args);

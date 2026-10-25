@@ -3,7 +3,8 @@ import { getPerson } from '~/lib/auth';
 import { ToolInputError } from '~/lib/agent/tools';
 import { agentsOn, allowed } from '~/lib/agents/core';
 import { addSuggestion, allSuggestions, suggestionsOf, suggestionsReader } from '~/lib/agents/suggestions';
-import { allGaps } from '~/lib/agents/edits';
+import { allFailures, allGaps } from '~/lib/agents/edits';
+import { allDraftNotes } from '~/lib/agents/pieces';
 
 /**
  * "Suggest an improvement" (owner, 2026-10-22), for the invited people. A person sees their own; the owner
@@ -17,7 +18,7 @@ export async function GET(request: Request) {
   // Only the invited people see anything here; everyone else gets the same 404 as before.
   if (!(await allowed(person))) return new NextResponse('Not found', { status: 404 });
   if (person === null) return NextResponse.json({ error: 'Sign in first' }, { status: 401, headers: noStore });
-  return NextResponse.json({ mine: await suggestionsOf(person), ...(person === suggestionsReader() ? { all: await allSuggestions(person), gaps: await allGaps(person) } : {}) }, { headers: noStore });
+  return NextResponse.json({ mine: await suggestionsOf(person), ...(person === suggestionsReader() ? { all: await allSuggestions(person), gaps: await allGaps(person), failures: await allFailures(person), notes: await allDraftNotes(person) } : {}) }, { headers: noStore });
 }
 
 export async function POST(request: Request) {

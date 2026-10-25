@@ -31,6 +31,27 @@ function terms(): Term[] {
   return cache!;
 }
 
+/**
+ * The glossary for agents (get_glossary; owner, 2026-10-25: "all chapters, spoiler-aware by chapter, cited"): only
+ * what a reader who has read through chapter `through` has met. A term first met later is left out; explanations and
+ * mentions from later chapters are dropped. Every text is the book's own words, with its block id (c<ch>-b<block>).
+ */
+export function glossaryThrough(through: number) {
+  return terms()
+    .filter((t) => t.first_chapter <= through)
+    .map((t) => ({
+      slug: t.slug,
+      term: t.term,
+      aliases: t.aliases,
+      first_chapter: t.first_chapter,
+      first_seen: { block: t.first_sentence.block, text: t.first_sentence.text },
+      explanations: t.explanations.filter((e) => e.chapter <= through).map((e) => ({ block: e.block, text: e.text })),
+      mentions: Object.entries(t.mentions)
+        .filter(([ch]) => Number(ch) <= through)
+        .flatMap(([ch, list]) => list.map((idx) => `c${ch}-b${idx}`)),
+    }));
+}
+
 export function glossarySlugs(): string[] {
   return terms().map((t) => t.slug);
 }

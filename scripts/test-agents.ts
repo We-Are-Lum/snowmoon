@@ -512,6 +512,23 @@ try {
   const gapsB = (await (await asPerson(people.B.token, '/api/drafts')).json()).gaps as unknown[];
   check('G1 log_gap records what was asked and what was missing, on the person’s You page only', gap.ok && gapsA.some((g) => g.asked.includes('coat blue') && g.agent === 'Claude') && gapsB.length === 0);
 
+  // Step 0 (owner, 2026-10-25): every failed tool call is recorded, with the argument names only, never the values.
+  const bad = await tool(BASE, edA, 'leave_note', { on: '00000000-0000-4000-8000-000000000000', text: 'A secret line of the person’s words.' });
+  const failsA = (await (await asPerson(people.A.token, '/api/drafts')).json()).failures as { tool: string; kind: string; message: string; args: string[] }[];
+  const failsB = (await (await asPerson(people.B.token, '/api/drafts')).json()).failures as { id: string }[];
+  const fRow = failsA.find((f) => f.tool === 'leave_note');
+  check('G2 a failed tool call is recorded for its person: tool, kind, message, argument names (never the values)', !bad.ok && !!fRow && fRow.kind === 'input' && fRow.args.join(',') === 'on,text' && !JSON.stringify(failsA).includes('secret line') && !failsB.some((f) => f.id === fRow.id), JSON.stringify(fRow));
+  const noScope = await tool(BASE, edA, 'no_such_tool', {});
+  const failsA2 = (await (await asPerson(people.A.token, '/api/drafts')).json()).failures as { tool: string; kind: string }[];
+  check('G3 an unknown tool is recorded too', !noScope.ok && failsA2.some((f) => f.tool === 'no_such_tool' && f.kind === 'input'));
+  // Notes on drafts (owner, 2026-10-25): an agent's note on its person's own draft saves, privately; on someone else's draft it is refused.
+  const draftIdea = await tool(BASE, edA, 'start_idea', { title: 'A draft to note', text: 'Bai waits on the roof while the city lights come on.', adaptation: 1 });
+  const onDraft = await tool(BASE, edA, 'leave_note', { on: String(draftIdea.out.version), text: 'Open on the lights, then find her.' });
+  const notesA = (await (await asPerson(people.A.token, '/api/drafts')).json()).notes as { id: string; text: string; status: string }[];
+  const otherDraft = await tool(BASE, agentB, 'leave_note', { on: String(draftIdea.out.version), text: 'Someone else’s note on a draft they can’t see.' });
+  check('G4 a note on the person’s own unpublished draft saves as a private draft note, seen on their You page', draftIdea.ok && onDraft.ok && onDraft.out.status === 'draft' && notesA.some((n) => n.text.startsWith('Open on the lights') && n.status === 'draft'), onDraft.error ?? '');
+  check('G5 another person’s agent can’t note a draft it can’t see', !otherDraft.ok);
+
   console.log('FN pause and note on the film (2026-10-22)');
   const film = await asPerson(people.A.token, '/api/requests', { method: 'POST', body: JSON.stringify({ kind: 'note', words: 'Hold on her face a beat longer here.', spoken: true, film: { adaptation: 1, version: 2, seconds: 5.25 } }) });
   const filmBad = await asPerson(people.A.token, '/api/requests', { method: 'POST', body: JSON.stringify({ kind: 'note', words: 'x', film: { adaptation: 1, version: 2, seconds: 99999 } }) });

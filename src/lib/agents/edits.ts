@@ -118,6 +118,42 @@ export async function logGap(agent: Agent, args: Record<string, unknown>) {
   return { gap: g.id, shown: 'to your person on their You page, under "What your agent couldn\'t do", and to the site\'s owner, who reads them as the build list; never published' };
 }
 
+export type FailureKind = 'input' | 'error' | 'timeout' | 'refused';
+
+/**
+ * A tool call that failed (owner, 2026-10-25, step 0: "so we can see what Garance's and my Claude hit"): which tool,
+ * the kind (input: the tool said no to what was sent; refused: a scope or a daily limit; error: our side broke;
+ * timeout), the message the agent was given (or our error's code), and the names of the arguments, never their values.
+ * Seen by the person on /you and by the owner. Never throws: a failure to record must not change the agent's reply.
+ */
+export async function recordFailure(agent: Agent, tool: string, kind: FailureKind, message: string, args: Record<string, unknown>) {
+  try {
+    const names = Object.keys(args ?? {}).slice(0, 20).map((k) => k.slice(0, 60));
+    await sql()`insert into studio.agent_failures (person, agent_id, agent_name, tool, kind, message, arg_names)
+      values (${agent.person}, ${agent.id}, ${agent.name}, ${tool.slice(0, 80) || '?'}, ${kind}, ${message.slice(0, 1000) || '?'}, ${names})`;
+  } catch (e) {
+    console.error('agent failure not recorded', (e as { code?: string }).code ?? 'unknown');
+  }
+}
+
+type FailureRow = { id: string; person: string; agent_name: string; tool: string; kind: FailureKind; message: string; arg_names: string[]; created_at: Date };
+const failureView = (r: FailureRow) => ({ id: r.id, agent: r.agent_name, tool: r.tool, kind: r.kind, message: r.message, args: r.arg_names, createdAt: new Date(r.created_at).toISOString() });
+
+/** A person's agents' failed tool calls, newest first ([] until NEXT_agent_pictures is applied). */
+export async function failuresOf(person: number) {
+  const rows = await sql()<FailureRow[]>`select * from studio.agent_failures where person = ${person} order by created_at desc limit 50`.catch(() => []);
+  return rows.map(failureView);
+}
+
+/** Everyone's failed tool calls, for the owner only, with who. */
+export async function allFailures(reader: number) {
+  if (reader !== suggestionsReader()) return [];
+  const rows = await sql()<FailureRow[]>`select * from studio.agent_failures order by created_at desc limit 200`.catch(() => []);
+  const who = new Map<number, string>();
+  for (const p of new Set(rows.map((r) => Number(r.person)))) who.set(p, (await agentLabel(p, null)).label);
+  return rows.map((r) => ({ ...failureView(r), who: who.get(Number(r.person))! }));
+}
+
 /**
  * Everyone's gaps, for the owner only (owner, 2026-10-22: "I want to see everything someone tries to do that they
  * can't"), with who asked: the build list.

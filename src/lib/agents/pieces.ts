@@ -6,6 +6,7 @@ import { ToolInputError } from '../agent/tools';
 import { sha256, sql, type Agent } from './core';
 import { agentLabel } from './accounts';
 import { markAnswered, requestOf } from './requests';
+import { suggestionsReader } from './suggestions';
 import { editorData } from '../agent/data';
 
 /**
@@ -287,7 +288,11 @@ async function noteView(r: NoteRow): Promise<NoteView> {
  */
 export async function addNote(on: string, person: number, agent: Agent | null, text: string): Promise<NoteView> {
   const v = await versionById(on);
-  if (!v || v.status !== 'published') throw new ToolInputError('notes go on published versions; no published version with that id');
+  // An agent's note (always a draft, private to its person and the owner) may go on any version its person can see:
+  // their own drafts too (owner, 2026-10-25: "a note on a draft or an unpublished version must save"). A person's
+  // own note is public at once, so it still needs a published version.
+  if (!v || (agent ? !visibleTo(v, person) : v.status !== 'published'))
+    throw new ToolInputError(agent ? 'no version with that id that your person can see (list_my_work lists their drafts and published work)' : 'notes go on published versions; no published version with that id');
   const s = sql();
   const hash = sha256(text.toLowerCase().replace(/\s+/g, ' ').trim());
   if (agent) {
@@ -308,6 +313,16 @@ export async function notesOn(versionIds: string[]): Promise<NoteView[]> {
   const rows = await s<NoteRow[]>`select n.id, n.version_id, v.piece_id, n.person, n.agent_name, n.body, n.mentions, n.status, n.created_at
     from studio.notes n join studio.piece_versions v on v.id = n.version_id
     where n.version_id = any(${versionIds}::uuid[]) and n.status = 'published' order by n.created_at`;
+  return Promise.all(rows.map(noteView));
+}
+
+/** Every agent's draft note, for the owner only (owner, 2026-10-25: notes on drafts are "visible to its person and me"). */
+export async function allDraftNotes(reader: number): Promise<NoteView[]> {
+  if (reader !== suggestionsReader()) return [];
+  const s = sql();
+  const rows = await s<NoteRow[]>`select n.id, n.version_id, v.piece_id, n.person, n.agent_name, n.body, n.mentions, n.status, n.created_at
+    from studio.notes n join studio.piece_versions v on v.id = n.version_id
+    where n.status = 'draft' order by n.created_at desc limit 200`;
   return Promise.all(rows.map(noteView));
 }
 

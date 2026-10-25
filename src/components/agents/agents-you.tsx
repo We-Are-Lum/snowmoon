@@ -127,7 +127,7 @@ const whereOf = (x: SuggestionView) => [x.page, x.moment ? `moment ${x.moment}${
  * The owner also sees everyone's here, with who said it and where they were.
  */
 function Suggestions() {
-  const [data, setData] = useState<{ mine: SuggestionView[]; all?: (SuggestionView & { who: string })[]; gaps?: { id: string; who: string; agent: string; asked: string; missing: string; createdAt: string }[] } | null>(null);
+  const [data, setData] = useState<{ mine: SuggestionView[]; all?: (SuggestionView & { who: string })[]; gaps?: { id: string; who: string; agent: string; asked: string; missing: string; createdAt: string }[]; failures?: ({ id: string; agent: string; tool: string; kind: string; message: string; args: string[]; createdAt: string } & { who: string })[]; notes?: NoteView[] } | null>(null);
   const load = useCallback(async () => {
     const r = await authFetch('/api/suggestions').catch(() => null);
     if (r?.ok) setData(await r.json());
@@ -187,7 +187,39 @@ function Suggestions() {
           ))}
         </section>
       )}
+      {data.failures && (
+        <section className="you-section" aria-labelledby="you-failures-all">
+          <h2 id="you-failures-all">{S.allFailures}</h2>
+          <p className="you-note">{S.allFailuresNote}</p>
+          {data.failures.length === 0 && <p className="you-note">None yet.</p>}
+          {data.failures.map((f) => <Failure key={f.id} f={f} who={f.who} />)}
+        </section>
+      )}
+      {data.notes && (
+        <section className="you-section" aria-labelledby="you-notes-all">
+          <h2 id="you-notes-all">{S.allNotes}</h2>
+          <p className="you-note">{S.allNotesNote}</p>
+          {data.notes.length === 0 && <p className="you-note">None yet.</p>}
+          {data.notes.map((n) => (
+            <div className="request-row" key={n.id} data-note-all={n.id}>
+              <p className="you-note"><strong>{n.by}</strong>, {when(n.createdAt)}{n.agent ? `, ${n.agent}` : ""}</p>
+              <p>{n.text}</p>
+            </div>
+          ))}
+        </section>
+      )}
     </>
+  );
+}
+
+/** One failed tool call (step 0): when, which agent and tool, what kind, the message, and the argument names. */
+function Failure({ f, who }: { f: { id: string; agent: string; tool: string; kind: string; message: string; args: string[]; createdAt: string }; who?: string }) {
+  return (
+    <div className="request-row" data-failure={f.id}>
+      <p className="you-note">{who ? <><strong>{who}</strong>, </> : null}{when(f.createdAt)}, {f.agent} · <code>{f.tool}</code> · {W.failureKind[f.kind] ?? f.kind}</p>
+      <p>{f.message}</p>
+      {f.args.length > 0 && <p className="you-note">sent: {f.args.join(', ')}</p>}
+    </div>
   );
 }
 
@@ -195,7 +227,7 @@ export function AgentsOnYou() {
   const [on, setOn] = useState<boolean | null>(null);
   const [agents, setAgents] = useState<AgentRow[]>([]);
   const [scripts, setScripts] = useState<{ adaptation: number; version: number; title: string }[]>([]);
-  const [drafts, setDrafts] = useState<{ drafts: VersionView[]; notes: NoteView[]; published: VersionView[]; waiting: RequestView[]; gaps: { id: string; agent: string; asked: string; missing: string; createdAt: string }[] } | null>(null);
+  const [drafts, setDrafts] = useState<{ drafts: VersionView[]; notes: NoteView[]; published: VersionView[]; waiting: RequestView[]; gaps: { id: string; agent: string; asked: string; missing: string; createdAt: string }[]; failures?: { id: string; agent: string; tool: string; kind: string; message: string; args: string[]; createdAt: string }[] } | null>(null);
   const [name, setName] = useState('');
   const [address, setAddress] = useState('');
   const [message, setMessage] = useState<string | null>(null);
@@ -283,6 +315,13 @@ export function AgentsOnYou() {
               <p className="you-note">{W.gapMissing}: {g.missing}</p>
             </div>
           ))}
+        </section>
+      )}
+      {drafts?.failures && drafts.failures.length > 0 && (
+        <section className="you-section" aria-labelledby="you-failures">
+          <h2 id="you-failures">{W.failures}</h2>
+          <p className="you-note">{W.failuresNote}</p>
+          {drafts.failures.map((f) => <Failure key={f.id} f={f} />)}
         </section>
       )}
       <Suggestions />

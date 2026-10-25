@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { ToolInputError } from '~/lib/agent/tools';
 import { agentFromRequest, agentsOn, issuer } from '~/lib/agents/core';
-import { AGENT_TOOLS, runTool } from '~/lib/agents/tools';
+import { AGENT_TOOLS, recordTimeout, runTool } from '~/lib/agents/tools';
 
 /**
  * The connector for "Add to Claude" and "Add to ChatGPT" (owner, 2026-10-20; docs/agents/design.md §1).
@@ -104,6 +104,7 @@ export async function POST(request: Request) {
       } catch (e) {
         if (e instanceof ToolTimeout) {
           done('timeout');
+          await recordTimeout(agent, name, args as Record<string, unknown>);
           const text = writes
             ? 'That took too long on our side. It may still have been saved: check with list_my_work before trying again.'
             : 'That took too long on our side. Try again in a moment.';
