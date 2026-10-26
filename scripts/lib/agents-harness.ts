@@ -90,7 +90,8 @@ export async function startStage(opts: { scanner?: string; port?: number; transc
       req.resume();
       req.on('end', () => {
         res.writeHead(200, { 'content-type': 'application/json' });
-        res.end(JSON.stringify({ video: { url: `${stubUrlRef.url}/video.mp4` }, request_id: 'test-video-1' }));
+        const n = ++falSeen.videos;
+        res.end(JSON.stringify({ video: { url: `${stubUrlRef.url}/video-${n}.mp4` }, request_id: `test-video-${n}` }));
       });
       return;
     }
@@ -103,7 +104,22 @@ export async function startStage(opts: { scanner?: string; port?: number; transc
       });
       return;
     }
-    if (req.method === 'GET' && req.url === '/video.mp4') {
+    // fal's Platform API, stood in: DELETE a request's payloads (owner, 2026-10-25). After it, the video is gone (404).
+    const del = req.method === 'DELETE' ? /^\/v1\/models\/requests\/([^/]+)\/payloads$/.exec(req.url ?? '') : null;
+    if (del) {
+      const ok = req.headers.authorization === 'Key test';
+      if (ok) falSeen.deletes.push(decodeURIComponent(del[1]));
+      res.writeHead(ok ? 200 : 403, { 'content-type': 'application/json' });
+      res.end(JSON.stringify(ok ? { cdn_delete_results: [{ link: `${stubUrlRef.url}/video-${decodeURIComponent(del[1]).replace('test-video-', '')}.mp4`, exception: null }] } : { error: 'not permitted' }));
+      return;
+    }
+    const vm = req.method === 'GET' ? /^\/video-(\d+)\.mp4$/.exec(req.url ?? '') : null;
+    if (vm) {
+      if (falSeen.deletes.includes(`test-video-${vm[1]}`)) {
+        res.writeHead(404, { 'content-type': 'text/plain' });
+        res.end('gone');
+        return;
+      }
       const ok = req.headers.authorization === `Bearer ${FAL_TEST_CDN_TOKEN}`;
       falSeen.downloads.push(ok ? 200 : 403);
       res.writeHead(ok ? 200 : 403, { 'content-type': ok ? 'video/mp4' : 'text/plain' });
@@ -174,7 +190,7 @@ export async function startStage(opts: { scanner?: string; port?: number; transc
 /** What the stand-in serves at https://cimd.test/<path> (key: "/<path>"): metadata documents and key sets, set by a test. */
 export const cimdDocs = new Map<string, unknown>();
 /** What the fal stand-in saw: each video call's lifecycle header, CDN tokens handed out, and each download's status. */
-export const falSeen = { lifecycle: [] as string[], tokens: 0, downloads: [] as number[] };
+export const falSeen = { lifecycle: [] as string[], tokens: 0, downloads: [] as number[], deletes: [] as string[], videos: 0 };
 const FAL_TEST_CDN_TOKEN = 'test-cdn-token';
 
 /** The OAuth dance a connector does, scripted: register, the person's Allow, the code for tokens. */
