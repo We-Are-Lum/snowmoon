@@ -1319,7 +1319,7 @@ try {
     await open(page, '/references');
     await checkFloors(page, '/references', scheme);
     const choices = (await page.locator('.pictures-menu .pictures-menu-label').allTextContents()).join(' | ');
-    if (choices !== 'Moments | Characters | Settings | Styles') fail(`/images: the menu reads ${choices}`);
+    if (choices !== 'Glossary | Moments | Characters | Settings | Styles') fail(`/references: the menu reads ${choices}`);
     if (await page.locator('.pictures-cover').count()) fail('/images: an image is covered');
     await open(page, '/references?show=moments');
     await checkFloors(page, '/references?show=moments', scheme);
