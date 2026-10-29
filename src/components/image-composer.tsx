@@ -508,7 +508,7 @@ function Sheet({ initial, onClose }: { initial: AddImageDetail; onClose: () => v
                   )}
                   {/* Picks are open to everyone signed in, wallet accounts too (owner, 2026-10-19 and 2026-10-23). */}
                   <p className="ic-note">
-                    <Link href="/images/picks">{picks.styles.length || picks.characters.length || picks.places.length ? D.changePicks : D.noPicks}</Link>
+                    <Link href="/references/picks">{picks.styles.length || picks.characters.length || picks.places.length ? D.changePicks : D.noPicks}</Link>
                   </p>
 
                   <div className="ic-rules">

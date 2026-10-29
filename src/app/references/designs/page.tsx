@@ -32,7 +32,7 @@ export default async function Designs({ searchParams }: { searchParams: Promise<
   return (
     <div className="page prose pictures designs">
       <p className="label ip-crumb">
-        <Link href="/images">← Pictures</Link> · {IMAGES.label}
+        <Link href="/references">← References</Link> · {IMAGES.label}
       </p>
       <h1>{tab === 'characters' ? W.index.tabCharacters : tab === 'places' ? W.index.tabPlaces : W.index.tabStyles}</h1>
       <p>{tab === 'places' ? W.sheets.leadPlaces : tab === 'characters' ? W.index.leadCharacters : W.index.leadStyles}</p>

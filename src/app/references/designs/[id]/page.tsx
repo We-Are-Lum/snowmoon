@@ -61,7 +61,7 @@ export default async function DesignPage({ params }: Props) {
   const pictures = style ? body.samples : (['front', 'side', 'back'] as const).map((k) => body.views[k]).filter((p): p is NonNullable<typeof p> => Boolean(p));
   // A place sheet (2026-10-14) goes back to its place's page.
   const place = d.kind === 'location' ? (sheetPlaces().find((x) => placeTitle(x.name) === d.entity) ?? null) : null;
-  const crumb = style ? { href: '/images/designs', label: W.index.tabStyles } : place ? { href: `/images/designs/place/${place.slug}`, label: d.entity } : { href: `/images/designs/character/${character?.slug ?? ''}`, label: d.entity };
+  const crumb = style ? { href: '/references/designs', label: W.index.tabStyles } : place ? { href: `/references/designs/place/${place.slug}`, label: d.entity } : { href: `/references/designs/character/${character?.slug ?? ''}`, label: d.entity };
   const title = style ? body.title || d.entity : body.title || W.page.sheetBy(by);
 
   const main = (
@@ -76,7 +76,7 @@ export default async function DesignPage({ params }: Props) {
         <p className="dz-meta dz-remix">
           <span className="dz-muted">{W.page.remixedFrom}</span>{' '}
           {rf ? (
-            <Link href={`/images/designs/${rf.versionId}`}>
+            <Link href={`/references/designs/${rf.versionId}`}>
               {rf.title || rf.entity} v{rf.versionNo} · {designByline(rf.byName, rf.byFid, rf.byRole)} →
             </Link>
           ) : (
@@ -99,7 +99,7 @@ export default async function DesignPage({ params }: Props) {
           {/* The style a sheet's views were made in (owner, 2026-10-14); its text is in each view's recipe. */}
           {!style && body.style && (
             <p className="dz-meta">
-              <Link href={`/images/designs/${body.style.version_id}`}>{W.page.madeInStyle(body.style.title)}</Link>
+              <Link href={`/references/designs/${body.style.version_id}`}>{W.page.madeInStyle(body.style.title)}</Link>
             </p>
           )}
         </figure>
@@ -122,7 +122,7 @@ export default async function DesignPage({ params }: Props) {
                 {h.versionId === d.shown.versionId ? (
                   <span aria-current="page">{versionRow(h)}</span>
                 ) : (
-                  <Link href={`/images/designs/${h.versionId}`}>{versionRow(h)}</Link>
+                  <Link href={`/references/designs/${h.versionId}`}>{versionRow(h)}</Link>
                 )}
               </li>
             ))}
@@ -194,7 +194,7 @@ export default async function DesignPage({ params }: Props) {
           <ul className="dz-rows">
             {others.map((o) => (
               <li key={o.versionId}>
-                <Link href={`/images/designs/${o.versionId}`} className="dz-row" aria-current={o.elementId === d.elementId ? 'page' : undefined}>
+                <Link href={`/references/designs/${o.versionId}`} className="dz-row" aria-current={o.elementId === d.elementId ? 'page' : undefined}>
                   {o.thumb ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img className="dz-thumb" src={o.thumb} alt="" width={64} height={48} loading="lazy" />

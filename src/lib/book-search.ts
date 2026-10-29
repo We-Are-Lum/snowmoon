@@ -4,7 +4,7 @@ import { blockFacts } from './reading';
 
 /**
  * The book's committed text (content/snowmoon/text) as the search corpus for "Make an image"
- * (/images/new): paragraphs and quotes, markup removed. Served whole by GET /api/book/text and
+ * (/references/new): paragraphs and quotes, markup removed. Served whole by GET /api/book/text and
  * searched on the reader's device (src/lib/book-search-core.ts); no query reaches the server.
  */
 import { searchCorpus, SEARCH, type CorpusEntry, type SearchResult } from './book-search-core';

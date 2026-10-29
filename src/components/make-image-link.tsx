@@ -5,7 +5,7 @@ import { useCanAddImage } from '~/lib/images/can-add';
 import { createHref, type AddImageDetail } from '~/lib/images/client';
 
 /**
- * A link into "Make an image" (/images/new), for a passage or none. Shown where "Add an image"
+ * A link into "Make an image" (/references/new), for a passage or none. Shown where "Add an image"
  * shows (useCanAddImage: during the trial, a signed-in, invited FID); the page itself is open to all.
  */
 export function MakeImageLink({ passage, className, children }: { passage?: AddImageDetail; className?: string; children: React.ReactNode }) {

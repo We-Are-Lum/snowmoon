@@ -9,7 +9,7 @@ export function NewSheetLink({ kind, slug, name }: { kind: 'character' | 'locati
   const canMake = useCanMakeDesigns();
   if (!canMake) return null;
   return (
-    <Link className="dz-new" href={kind === 'location' ? `/images/designs/new?kind=location&place=${slug}` : `/images/designs/new?kind=character&character=${slug}`}>
+    <Link className="dz-new" href={kind === 'location' ? `/references/designs/new?kind=location&place=${slug}` : `/references/designs/new?kind=character&character=${slug}`}>
       + {IMAGE_WORDING.designs.form.newSheet(name)}
     </Link>
   );
