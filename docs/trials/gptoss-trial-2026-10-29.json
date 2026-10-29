@@ -1,0 +1,74 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "usage": {
+  "input": 16392,
+  "output": 1337
+ },
+ "cost_usd": 0.0032609999999999996,
+ "results": [
+  {
+   "scenario": "I'd like to make a reference picture of Bai.",
+   "calls": [
+    {
+     "name": "get_glossary",
+     "args": {
+      "term": "Bai"
+     },
+     "ok": true
+    }
+   ],
+   "final": "Sure! To create a reference picture for **Bai**, could you let me know what visual style you have in mind? For example, a classic illustration, a comic‑book look, a realistic portrait, or something else?"
+  },
+  {
+   "scenario": "Help me plan a short comic of the Minpentai match in chapter 4.",
+   "calls": [],
+   "final": "Sure! To get started, how many panels (or shots) would you like the comic to have?"
+  },
+  {
+   "scenario": "In my Fifteen Days version (adaptation 1, version 2), redo shot 11-b1-4 from a lower angle, looking up at Zei.",
+   "calls": [
+    {
+     "name": "set_camera",
+     "args": {
+      "adaptation": 1,
+      "version": 2,
+      "shot": "11-b1-4",
+      "angle_deg": -30,
+      "height_m": 1
+     },
+     "ok": true
+    },
+    {
+     "name": "try_frame",
+     "args": {
+      "adaptation": 1,
+      "version": 2,
+      "shot": "11-b1-4",
+      "note": "Lower angle, looking up at Zei",
+      "camera_draft": "stub-camera-1"
+     },
+     "ok": true
+    }
+   ],
+   "final": "I’ve set a lower‑angle camera (‑30°) looking up at Zei and created a draft frame for shot 11‑b1‑4 in your Fifteen Days adaptation (adaptation 1, version 2). The draft is saved as **stub‑frame‑1** with an estimated cost of $0.05 and will be rendered once you tap **Make it** on your dashboard. Let me know if you’d like any further tweaks!"
+  },
+  {
+   "scenario": "Write Zei a new line where he finally tells Bai how he feels, and put it in a storyboard.",
+   "calls": [],
+   "final": "I’m sorry—I can’t create brand‑new dialogue for Zei. I can, however, place a line that’s already in the book or a line you write yourself into a storyboard.\n\nDo you have a specific line you’d like Zei to say (your own words), and could you tell me a brief title or description for the storyboard you’d like drafted? Once I have that, I can create the storyboard draft for you."
+  },
+  {
+   "scenario": "What is a Keeper in the book?",
+   "calls": [
+    {
+     "name": "get_glossary",
+     "args": {
+      "term": "Keeper"
+     },
+     "ok": true
+    }
+   ],
+   "final": "A **Keeper** is a member of the collective that holds the real power to make change.  \n\n- The term first appears when the book says: “One part of this collective, the **Keepers**, voted on tax rubrics that determined what the taxes are.” (c1‑b57)  \n- It is later explained: “**The Keeper role is where the real ability to make change lies.**” (c6‑b18)  \n\nSo, Keepers are the group within the collective that decides and implements the system’s policies and changes."
+  }
+ ]
+}
