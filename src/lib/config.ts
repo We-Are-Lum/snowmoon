@@ -329,6 +329,13 @@ export const ILLUSTRATION_CHECK = {
   modelName: 'Google Gemini 4 Argon',
 } as const;
 
+/**
+ * Admins (owner, 2026-10-29, the next-version plan; principle 5 reread the same day): the owner and @garance. They
+ * may hide content and pick one image per moment or glossary item to show first, always labelled "Picked by @…",
+ * with the reader's switch beside it (P5b, P5d, P5e). Picks aren't built yet; nothing reads this list today.
+ */
+export const ADMINS: readonly number[] = [6786, 193912];
+
 /** Moderation only: these FIDs may hide content or dismiss a report. They never promote or rank anything. Owner, 2026-10-08 (decision 20). */
 export const MODERATOR_FIDS: readonly number[] = [6786];
 
