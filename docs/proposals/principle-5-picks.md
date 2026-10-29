@@ -1,4 +1,4 @@
-# Principle 5 with labelled picks (DRAFT, for the owner's reread)
+# Principle 5 with labelled picks (REREAD by the owner, 2026-10-29, with one change)
 
 Owner, 2026-10-29, on the next-version plan report: "Principle 5: option (a), with a switch on each moment and
 glossary item: 'Picked by @naaate · Most liked · Newest · My picks', remembered per reader, my picks as the starting
@@ -8,7 +8,7 @@ Read here as: the starting view is the admins' pick ("Picked by @naaate", or by 
 picks" in the switch is the reader's own picks. If "my picks as the starting view" meant each reader's own picks,
 say so and only the default in step 3 below changes.
 
-Nothing in docs/principles.md or scripts/check-principles.ts changes until the owner says "reread". The new
+**Reread, 2026-10-29:** "Your reading is right: the admin's pick is the starting view. In the switch, replace 'My picks' with 'Liked by me' (the reader's own likes, which already exist), so no new per-reader pick feature is needed. Update P5d to match." The reread text and checks are in docs/principles.md and scripts/check-principles.ts on branch principle-5-picks; the Terms line is docs/legal/picks-draft.md. The draft below is kept as the record (it still says "My picks"). The new
 checks are written below as they would go in, and each is proven to fail on a planted violation like the others.
 
 ## Today (docs/principles.md §5)
