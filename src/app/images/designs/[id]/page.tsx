@@ -90,7 +90,7 @@ export default async function DesignPage({ params }: Props) {
           <div className="dz-grid">
             {pictures.map((p, i) => (
               // eslint-disable-next-line @next/next/no-img-element
-              <img key={p.sha256} src={p.url} alt={`AI-generated ${style ? 'sample' : (['front', 'side', 'back'] as const).filter((k) => body.views[k])[i] + ' view'}, not by the author`} width={p.recipe.width} height={p.recipe.height} loading="lazy" />
+              <img key={p.sha256} src={p.url} alt={`AI-generated ${style ? 'sample' : (['front', 'side', 'back'] as const).filter((k) => body.views[k])[i] + ' view'}, not by the author`} width={p.recipe.width} height={p.recipe.height} loading="lazy" data-zoom="" tabIndex={0} />
             ))}
           </div>
           <figcaption className="dz-caption">

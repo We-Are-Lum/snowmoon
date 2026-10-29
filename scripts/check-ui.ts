@@ -549,6 +549,34 @@ async function checkIllustrationReview(page: Page, scheme: string) {
   await page.evaluate(() => localStorage.removeItem('snowmoon.signin'));
 }
 
+/**
+ * A picture larger on tap (@garance's agent's suggestion, 2026-10-24), at 390: a chapter's image opens full screen with
+ * its AI label, the floors hold, and Escape and Back each close it, focus back on the picture.
+ */
+async function checkImageZoom(page: Page, scheme: string) {
+  const where = `/chapter/1 zoom @390 (${scheme})`;
+  await open(page, '/chapter/1');
+  const img = page.locator('figure.seed-image img[data-zoom]').first();
+  if (!(await img.count())) return fail(`${where}: no image to enlarge`);
+  await img.scrollIntoViewIfNeeded();
+  await img.click();
+  const layer = page.locator('.image-zoom');
+  await layer.waitFor({ timeout: 5000 }).catch(() => fail(`${where}: tapping the image doesn't enlarge it`));
+  const box = await layer.locator('img').boundingBox();
+  if (!box || box.width < 350) fail(`${where}: the enlarged image is ${box?.width ?? 0}px wide`);
+  if (!/AI-generated image, not by the author/.test(await layer.innerText())) fail(`${where}: the enlarged image has no AI label`);
+  await checkFloors(page, `/chapter/1 zoom @390`, scheme);
+  await page.keyboard.press('Escape');
+  if (await layer.count()) fail(`${where}: Escape doesn't close it`);
+  if (!(await img.evaluate((el) => el === document.activeElement))) fail(`${where}: closing doesn't return focus to the image`);
+  await img.click();
+  await layer.waitFor({ timeout: 5000 });
+  await page.goBack();
+  await page.waitForTimeout(300);
+  if (await layer.count()) fail(`${where}: Back doesn't close it`);
+  if (!page.url().includes('/chapter/1')) fail(`${where}: Back left the chapter (${page.url()})`);
+}
+
 async function checkFloors(page: Page, path: string, scheme: string) {
   const r = await page.evaluate(
     ({ MIN_TEXT, MIN_TAP, IN_WORLD }) => {
@@ -1758,6 +1786,7 @@ try {
     if (/Your account|Your work|Balance \$/.test(await page.locator('main.you').innerText().catch(() => ''))) fail(`/you @390 (${scheme}): signed out, the page shows an account, wallet or work`);
     await shot(page, 'phone-390-you-signed-out', scheme);
     await checkIllustrationReview(page, scheme);
+    await checkImageZoom(page, scheme);
     await open(page, '/chapter/1?view=listen');
     await page.waitForSelector('.listen-pane');
     await checkFloors(page, '/chapter/1?view=listen @390', scheme);
