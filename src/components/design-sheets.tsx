@@ -47,6 +47,25 @@ export type SheetImage = {
 };
 
 /** Not covered by chapter (owner, 2026-10-14: "stop hiding images from parts in the book you haven't read yet"). */
+/** A sheet image's caption: where it is in the book, and its AI label (a reader's, or this edition's seeded image). */
+export function SheetImageCaption({ im }: { im: SheetImage }) {
+  return (
+    <p className="block-caption dz-image-caption">
+      Chapter {im.chapter}
+      {im.where ? ` · ${im.where}` : ''} ·{' '}
+      {im.reader ? (
+        <AiLabel
+          kind="image"
+          text={AI_LABEL.imageBy(im.reader.by)}
+          view={readerImageView({ versionId: im.reader.versionId, by: im.reader.by, prompt: im.reader.prompt, chapter: im.chapter, where: im.where, date: im.reader.date })}
+        />
+      ) : (
+        <AiLabel kind="image" text={AI_LABEL.image} file={im.recipe!.file} item={im.recipe!.item} />
+      )}
+    </p>
+  );
+}
+
 export function SheetImages({ images }: { images: SheetImage[] }) {
   return (
     <section className="dz-images" aria-label={SH.images}>
@@ -60,19 +79,7 @@ export function SheetImages({ images }: { images: SheetImage[] }) {
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={im.url} alt={im.alt} width={1024} height={576} loading="lazy" />
                 </Link>
-                <p className="block-caption dz-image-caption">
-                  Chapter {im.chapter}
-                  {im.where ? ` · ${im.where}` : ''} ·{' '}
-                  {im.reader ? (
-                    <AiLabel
-                      kind="image"
-                      text={AI_LABEL.imageBy(im.reader.by)}
-                      view={readerImageView({ versionId: im.reader.versionId, by: im.reader.by, prompt: im.reader.prompt, chapter: im.chapter, where: im.where, date: im.reader.date })}
-                    />
-                  ) : (
-                    <AiLabel kind="image" text={AI_LABEL.image} file={im.recipe!.file} item={im.recipe!.item} />
-                  )}
-                </p>
+                <SheetImageCaption im={im} />
               </li>
             );
           })}

@@ -1,3 +1,4 @@
+import { InfoLabel } from '~/components/info-label';
 import Link from 'next/link';
 import { IMAGES } from '~/lib/config';
 import { db } from '~/lib/db';
@@ -35,7 +36,17 @@ export default async function Designs({ searchParams }: { searchParams: Promise<
         <Link href="/references">← References</Link> · {IMAGES.label}
       </p>
       <h1>{tab === 'characters' ? W.index.tabCharacters : tab === 'places' ? W.index.tabPlaces : W.index.tabStyles}</h1>
-      <p>{tab === 'places' ? W.sheets.leadPlaces : tab === 'characters' ? W.index.leadCharacters : W.index.leadStyles}</p>
+      {/* Less text, details behind ⓘ (owner, 2026-10-29): the first sentence in view, the rest in the ⓘ. */}
+      {(() => {
+        const lead = tab === 'places' ? W.sheets.leadPlaces : tab === 'characters' ? W.index.leadCharacters : W.index.leadStyles;
+        const cut = lead.indexOf('. ');
+        return (
+          <p>
+            {cut > 0 ? lead.slice(0, cut + 1) : lead}{' '}
+            {cut > 0 && <InfoLabel word="About" kind="about" declaration="About this page" title="About this page" body={[lead]} />}
+          </p>
+        );
+      })()}
       <PicturesMenu current={tab === 'places' ? 'settings' : tab} />
       <DesignIndex
         tab={tab}

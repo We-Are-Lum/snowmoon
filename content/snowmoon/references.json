@@ -1,0 +1,439 @@
+{
+ "about": "References (owner, 2026-10-29, the next-version plan, Phase 1): which character and place sheets belong to each glossary term, so /references/glossary can show one card per term with its images. Matched by the coding agent by name and alias (scripts in the PR); every link marked check: true is uncertain and waits for the owner's review. Terms with no image stay off the page until they have one (owner, 2026-10-29).",
+ "reviewed_by": null,
+ "reviewed_on": null,
+ "terms": [
+  {
+   "term": "arctics",
+   "designs": [
+    {
+     "kind": "place",
+     "slug": "arctic-command-post",
+     "why": "place name contains the term",
+     "check": true
+    }
+   ]
+  },
+  {
+   "term": "autobus",
+   "designs": [
+    {
+     "kind": "place",
+     "slug": "autobus",
+     "why": "same name",
+     "check": false
+    }
+   ]
+  },
+  {
+   "term": "bai",
+   "designs": [
+    {
+     "kind": "character",
+     "slug": "bai",
+     "why": "same name",
+     "check": false
+    }
+   ]
+  },
+  {
+   "term": "daia",
+   "designs": [
+    {
+     "kind": "character",
+     "slug": "daia",
+     "why": "same name",
+     "check": false
+    }
+   ]
+  },
+  {
+   "term": "decentralized-university",
+   "designs": [
+    {
+     "kind": "place",
+     "slug": "foil-classroom",
+     "why": "place name contains the term",
+     "check": true
+    }
+   ]
+  },
+  {
+   "term": "deluin",
+   "designs": [
+    {
+     "kind": "character",
+     "slug": "deluin",
+     "why": "same name",
+     "check": false
+    }
+   ]
+  },
+  {
+   "term": "delwart",
+   "designs": [
+    {
+     "kind": "character",
+     "slug": "delwart",
+     "why": "same name",
+     "check": false
+    }
+   ]
+  },
+  {
+   "term": "den",
+   "designs": [
+    {
+     "kind": "character",
+     "slug": "den",
+     "why": "same name",
+     "check": false
+    }
+   ]
+  },
+  {
+   "term": "ephelion",
+   "designs": [
+    {
+     "kind": "character",
+     "slug": "ephelion",
+     "why": "same name",
+     "check": false
+    }
+   ]
+  },
+  {
+   "term": "febric",
+   "designs": [
+    {
+     "kind": "character",
+     "slug": "febric",
+     "why": "same name",
+     "check": false
+    }
+   ]
+  },
+  {
+   "term": "fin",
+   "designs": [
+    {
+     "kind": "character",
+     "slug": "fin",
+     "why": "same name",
+     "check": false
+    }
+   ]
+  },
+  {
+   "term": "freetown",
+   "designs": [
+    {
+     "kind": "place",
+     "slug": "economics-institute",
+     "why": "place name contains the term",
+     "check": true
+    }
+   ]
+  },
+  {
+   "term": "freetown-economics-institute",
+   "designs": [
+    {
+     "kind": "place",
+     "slug": "economics-institute",
+     "why": "place name contains the term",
+     "check": true
+    }
+   ]
+  },
+  {
+   "term": "gladias",
+   "designs": [
+    {
+     "kind": "character",
+     "slug": "gladias",
+     "why": "same name",
+     "check": false
+    },
+    {
+     "kind": "place",
+     "slug": "family-home",
+     "why": "place name contains the term",
+     "check": true
+    }
+   ]
+  },
+  {
+   "term": "greater-plum-harbor",
+   "designs": [
+    {
+     "kind": "place",
+     "slug": "greater-plum-harbor",
+     "why": "same name",
+     "check": false
+    },
+    {
+     "kind": "place",
+     "slug": "plum-harbor-tea-booth",
+     "why": "place name contains the term",
+     "check": true
+    }
+   ]
+  },
+  {
+   "term": "hreda",
+   "designs": [
+    {
+     "kind": "character",
+     "slug": "hreda",
+     "why": "same name",
+     "check": false
+    }
+   ]
+  },
+  {
+   "term": "hun-min",
+   "designs": [
+    {
+     "kind": "place",
+     "slug": "pafogai-shop-streets",
+     "why": "place name contains the term",
+     "check": true
+    }
+   ]
+  },
+  {
+   "term": "jahn",
+   "designs": [
+    {
+     "kind": "character",
+     "slug": "jahn",
+     "why": "same name",
+     "check": false
+    }
+   ]
+  },
+  {
+   "term": "kalimar",
+   "designs": [
+    {
+     "kind": "place",
+     "slug": "kalimar-footpaths",
+     "why": "place name contains the term",
+     "check": true
+    }
+   ]
+  },
+  {
+   "term": "keepers",
+   "designs": [
+    {
+     "kind": "place",
+     "slug": "order-booths",
+     "why": "place name contains the term",
+     "check": true
+    }
+   ]
+  },
+  {
+   "term": "lektor",
+   "designs": [
+    {
+     "kind": "character",
+     "slug": "lektor",
+     "why": "same name",
+     "check": false
+    }
+   ]
+  },
+  {
+   "term": "meldan",
+   "designs": [
+    {
+     "kind": "place",
+     "slug": "government-hotel",
+     "why": "place name contains the term",
+     "check": true
+    }
+   ]
+  },
+  {
+   "term": "min",
+   "designs": [
+    {
+     "kind": "character",
+     "slug": "min",
+     "why": "same name",
+     "check": false
+    }
+   ]
+  },
+  {
+   "term": "min-2",
+   "designs": [
+    {
+     "kind": "character",
+     "slug": "min",
+     "why": "same name",
+     "check": true
+    }
+   ]
+  },
+  {
+   "term": "minpentai",
+   "designs": [
+    {
+     "kind": "place",
+     "slug": "minpentai-arena",
+     "why": "place name contains the term",
+     "check": true
+    }
+   ]
+  },
+  {
+   "term": "mov",
+   "designs": [
+    {
+     "kind": "character",
+     "slug": "mov",
+     "why": "same name",
+     "check": false
+    }
+   ]
+  },
+  {
+   "term": "mu",
+   "designs": [
+    {
+     "kind": "character",
+     "slug": "mu",
+     "why": "same name",
+     "check": false
+    }
+   ]
+  },
+  {
+   "term": "northshore",
+   "designs": [
+    {
+     "kind": "place",
+     "slug": "elenar-forest-front",
+     "why": "place name contains the term",
+     "check": true
+    }
+   ]
+  },
+  {
+   "term": "pafogai",
+   "designs": [
+    {
+     "kind": "place",
+     "slug": "pafogai-shop-streets",
+     "why": "place name contains the term",
+     "check": true
+    },
+    {
+     "kind": "place",
+     "slug": "mountain-pyramid",
+     "why": "place name contains the term",
+     "check": true
+    },
+    {
+     "kind": "place",
+     "slug": "grand-library",
+     "why": "place name contains the term",
+     "check": true
+    }
+   ]
+  },
+  {
+   "term": "pafogai-du",
+   "designs": [
+    {
+     "kind": "place",
+     "slug": "pafogai-shop-streets",
+     "why": "place name contains the term",
+     "check": true
+    },
+    {
+     "kind": "place",
+     "slug": "mountain-pyramid",
+     "why": "place name contains the term",
+     "check": true
+    },
+    {
+     "kind": "place",
+     "slug": "grand-library",
+     "why": "place name contains the term",
+     "check": true
+    }
+   ]
+  },
+  {
+   "term": "seila",
+   "designs": [
+    {
+     "kind": "character",
+     "slug": "seila",
+     "why": "same name",
+     "check": false
+    }
+   ]
+  },
+  {
+   "term": "tafindel",
+   "designs": [
+    {
+     "kind": "character",
+     "slug": "tafindel",
+     "why": "same name",
+     "check": false
+    }
+   ]
+  },
+  {
+   "term": "verdow",
+   "designs": [
+    {
+     "kind": "character",
+     "slug": "verdow",
+     "why": "same name",
+     "check": false
+    }
+   ]
+  },
+  {
+   "term": "vil",
+   "designs": [
+    {
+     "kind": "character",
+     "slug": "vil",
+     "why": "same name",
+     "check": false
+    }
+   ]
+  },
+  {
+   "term": "zei",
+   "designs": [
+    {
+     "kind": "character",
+     "slug": "zei",
+     "why": "same name",
+     "check": false
+    }
+   ]
+  },
+  {
+   "term": "zven",
+   "designs": [
+    {
+     "kind": "character",
+     "slug": "zven",
+     "why": "same name",
+     "check": false
+    }
+   ]
+  }
+ ]
+}

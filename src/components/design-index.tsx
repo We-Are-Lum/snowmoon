@@ -1,5 +1,6 @@
 'use client';
 
+import { InfoLabel } from './info-label';
 import Link from 'next/link';
 import { useCanMakeDesigns } from '~/lib/images/can-add';
 import { IMAGE_WORDING } from '~/lib/images/wording';
@@ -104,7 +105,11 @@ export function DesignIndex({ tab, sort, styles, characters, places }: { tab: 's
           </ul>
         </>
       )}
-      <p className="dz-footer">{W.index.footer}</p>
+      {/* "Nothing here is official." stays in view (check:ui); the rest behind ⓘ (owner, 2026-10-29). */}
+      <p className="dz-footer">
+        Nothing here is official.{' '}
+        <InfoLabel word="About" kind="about" declaration="About the order" title="Nothing here is official" body={[W.index.footer]} />
+      </p>
       {canMake && (
         <p className="dz-links">
           <Link href="/references/picks">{W.index.myPicksLink}</Link>

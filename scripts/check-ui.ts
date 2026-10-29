@@ -577,6 +577,31 @@ async function checkImageZoom(page: Page, scheme: string) {
   if (!page.url().includes('/chapter/1')) fail(`${where}: Back left the chapter (${page.url()})`);
 }
 
+/**
+ * References: the glossary (owner, 2026-10-29), at 390: one card per word with pictures, each picture with its AI label,
+ * each card's first sentence cited by block; the page's explanation is behind its ⓘ; the floors hold.
+ */
+async function checkReferenceGlossary(page: Page, scheme: string) {
+  const where = `/references/glossary @390 (${scheme})`;
+  await page.evaluate(() => localStorage.setItem('snowmoon.opened', JSON.stringify(Array.from({ length: 32 }, (_, i) => i + 1))));
+  await open(page, '/references/glossary');
+  const cards = page.locator('.ref-card');
+  await cards.first().waitFor({ timeout: 10000 }).catch(() => fail(`${where}: no cards`));
+  const n = await cards.count();
+  for (let i = 0; i < Math.min(n, 6); i++) {
+    const c = cards.nth(i);
+    const imgs = await c.locator('img').count();
+    const labels = await c.locator('button.ai-label').count();
+    if (!imgs || labels < imgs) fail(`${where}: card ${i + 1} has ${imgs} pictures and ${labels} AI labels`);
+    if (!/^c\d+-b\d+$/.test(((await c.locator('.ref-first a').textContent()) ?? '').trim())) fail(`${where}: card ${i + 1}'s first sentence isn't cited by block`);
+  }
+  if (!(await page.locator('button.info-label[data-label="about"]').count())) fail(`${where}: no ⓘ for the page's explanation`);
+  if (!/AI-generated, not by the author/.test(await page.locator('main').innerText())) fail(`${where}: the AI declaration isn't in view`);
+  await checkFloors(page, '/references/glossary @390', scheme);
+  await shot(page, 'phone-390-references-glossary', scheme);
+  await page.evaluate(() => localStorage.removeItem('snowmoon.opened'));
+}
+
 async function checkFloors(page: Page, path: string, scheme: string) {
   const r = await page.evaluate(
     ({ MIN_TEXT, MIN_TAP, IN_WORLD }) => {
@@ -1787,6 +1812,7 @@ try {
     await shot(page, 'phone-390-you-signed-out', scheme);
     await checkIllustrationReview(page, scheme);
     await checkImageZoom(page, scheme);
+    await checkReferenceGlossary(page, scheme);
     await open(page, '/chapter/1?view=listen');
     await page.waitForSelector('.listen-pane');
     await checkFloors(page, '/chapter/1?view=listen @390', scheme);

@@ -141,7 +141,10 @@ export function HomeMinpentai() {
           {playing ? H.game.pause : H.game.resume}
         </button>
       </div>
-      <p className="home-game-caption">{H.game.caption}</p>
+      {/* Less text, details behind ⓘ (owner, 2026-10-29): the heading already says it plays itself. */}
+      <p className="home-game-caption">
+        <InfoLabel word="About" kind="about" declaration="About this board" title={H.game.head} body={[H.game.caption]} />
+      </p>
       <div className="home-game-foot">
         <InfoLabel
           className="ml-tag ml-tag-dashed"
