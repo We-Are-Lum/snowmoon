@@ -661,4 +661,4 @@ img[data-zoom] { cursor: zoom-in; }
 .image-zoom { position: fixed; inset: 0; z-index: 1000; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 16px; background: rgba(12, 12, 12, 0.94); cursor: zoom-out; }
 .image-zoom img { max-width: 100%; max-height: calc(100dvh - 88px); width: auto; height: auto; object-fit: contain; }
 .image-zoom-label { margin: 0; font-family: var(--label); font-size: var(--text-label); letter-spacing: var(--ls-label); color: #e8e6e1; text-align: center; }
-.image-zoom-close { position: absolute; top: 8px; right: 8px; min-width: var(--tap, 44px); min-height: var(--tap, 44px); border: 0; background: transparent; color: #e8e6e1; font-size: 28px; line-height: 1; cursor: pointer; }
+.image-zoom-close { position: absolute; top: 8px; right: 8px; font-family: var(--label); min-width: var(--tap, 44px); min-height: var(--tap, 44px); border: 0; background: transparent; color: #e8e6e1; font-size: 28px; line-height: 1; cursor: pointer; }
