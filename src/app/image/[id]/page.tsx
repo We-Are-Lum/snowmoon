@@ -73,7 +73,7 @@ export default async function ImagePage({ params }: Props) {
       <div className="ip-main">
         <figure className="ip-figure">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={im.url} alt={`AI-generated image: ${im.userPrompt.split(/(?<=[.!?])\s/)[0]}`} width={1024} height={576} />
+          <img src={im.url} alt={`AI-generated image: ${im.userPrompt.split(/(?<=[.!?])\s/)[0]}`} width={1024} height={576} data-zoom="" tabIndex={0} />
           <figcaption className="ip-caption">
             <AiLabel
               kind="image"

@@ -185,7 +185,7 @@ export default async function ChapterPage({ params }: Props) {
             {image && (
               <figure className="seed-image" data-for={id}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={image.url} alt={image.alt} width={image.width} height={image.height} loading="lazy" />
+                <img src={image.url} alt={image.alt} width={image.width} height={image.height} loading="lazy" data-zoom="" tabIndex={0} />
                 <figcaption className="block-caption">
                   ¶ {f.label} · <AiLabel kind="image" text={AI_LABEL.image} file={image.recipe} item={image.id} />
                   {b.idx === firstImageIdx && <span className="ai-not-author"> · {NOT_AUTHOR_VISIBLE}</span>}
