@@ -29,7 +29,7 @@ export function PicturesLatest({ items, empty }: { items: LatestItem[]; empty: R
               </li>
             ) : (
               <li key={it.design.versionId}>
-                <Link href={`/images/designs/${it.design.versionId}`} className="pictures-design">
+                <Link href={`/references/designs/${it.design.versionId}`} className="pictures-design">
                   {it.design.thumb ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img src={it.design.thumb} alt="" width={1024} height={576} loading="lazy" />

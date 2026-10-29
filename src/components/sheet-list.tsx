@@ -29,7 +29,7 @@ export function SheetList({ href, sort, sheets, kind, slug, name }: { href: stri
         <ul className="dz-rows" aria-label={sort === 'built' ? W.index.built : W.index.newest}>
           {sheets.map((s) => (
             <li key={s.versionId}>
-              <Link href={`/images/designs/${s.versionId}`} className="dz-row">
+              <Link href={`/references/designs/${s.versionId}`} className="dz-row">
                 {s.thumb ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img className="dz-thumb" src={s.thumb} alt="" width={64} height={48} loading="lazy" />

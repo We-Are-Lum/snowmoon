@@ -377,7 +377,7 @@ a.ia-button:hover { text-decoration: none; }
 .pictures-passage blockquote p { margin: 0; display: inline; }
 .pictures-passage blockquote p + p::before { content: ' '; }
 
-/* ---------- Make an image (/images/new): choose the text, then the prompt ---------- */
+/* ---------- Make an image (/references/new): choose the text, then the prompt ---------- */
 .make-image .mi-switch { margin: 0 0 4px; }
 .make-image .mi-h { display: block; margin: 18px 0 8px; font-family: var(--label); font-size: var(--text-label); font-weight: 400; line-height: 16px; text-transform: uppercase; color: var(--muted); }
 .make-image h2.mi-h { color: var(--ink); }

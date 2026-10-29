@@ -41,7 +41,7 @@ export default async function PlacePage({ params, searchParams }: Props) {
   return (
     <div className="page prose pictures designs">
       <p className="label ip-crumb">
-        <Link href="/images/designs?tab=places">← {W.index.tabPlaces}</Link> · {IMAGES.label}
+        <Link href="/references/designs?tab=places">← {W.index.tabPlaces}</Link> · {IMAGES.label}
       </p>
       <>
         <h1>{placeTitle(p.name)}</h1>
@@ -61,7 +61,7 @@ export default async function PlacePage({ params, searchParams }: Props) {
             text: SH.appearsRow(s.chapter, s.scene, s.from !== null && s.to !== null ? labelRange(s.from, s.to) : ''),
           }))}
         />
-        <SheetList href={`/images/designs/place/${p.slug}`} sort={sort} sheets={sheets} kind="location" slug={p.slug} name={placeTitle(p.name)} />
+        <SheetList href={`/references/designs/place/${p.slug}`} sort={sort} sheets={sheets} kind="location" slug={p.slug} name={placeTitle(p.name)} />
         <SheetImages images={images} />
         <p className="dz-footer">{W.index.footer}</p>
         <p className="as-draft ic-draftline">{IMAGE_WORDING.draftLine}</p>

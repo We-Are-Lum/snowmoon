@@ -74,7 +74,7 @@ export default function About() {
           own words.
         </p>
       )}
-      <h2 id="pictures">Pictures ({IMAGES.label})</h2>
+      <h2 id="pictures">References ({IMAGES.label})</h2>
       {/* Model-drafted wording (docs/proposals/add-an-image.md, decisions of 2026-10-08). */}
       <p>
         Invited readers can make an image for a passage, with {IMAGES.model.name}, an open-weights model ({IMAGES.model.licence}). Your

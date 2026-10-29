@@ -27,15 +27,15 @@ export function DesignIndex({ tab, sort, styles, characters, places }: { tab: 's
         <>
           <div className="pictures-strip dz-strip">
             <nav className="pictures-sort" aria-label="Order">
-              <Link href="/images/designs" aria-current={sort === 'new' ? 'page' : undefined}>
+              <Link href="/references/designs" aria-current={sort === 'new' ? 'page' : undefined}>
                 {W.index.newest}
               </Link>
-              <Link href="/images/designs?sort=built" aria-current={sort === 'built' ? 'page' : undefined}>
+              <Link href="/references/designs?sort=built" aria-current={sort === 'built' ? 'page' : undefined}>
                 {W.index.built}
               </Link>
             </nav>
             {canMake && (
-              <Link className="dz-new" href="/images/designs/new?kind=style">
+              <Link className="dz-new" href="/references/designs/new?kind=style">
                 {W.index.newStyle}
               </Link>
             )}
@@ -44,7 +44,7 @@ export function DesignIndex({ tab, sort, styles, characters, places }: { tab: 's
             <ul className="dz-rows" aria-label={sort === 'built' ? W.index.built : W.index.newest}>
               {styles.map((s) => (
                 <li key={s.versionId}>
-                  <Link href={`/images/designs/${s.versionId}`} className="dz-row">
+                  <Link href={`/references/designs/${s.versionId}`} className="dz-row">
                     {s.thumb ? (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img className="dz-thumb" src={s.thumb} alt="" width={64} height={48} loading="lazy" />
@@ -74,7 +74,7 @@ export function DesignIndex({ tab, sort, styles, characters, places }: { tab: 's
           <ul className="dz-rows" aria-label={W.sheets.placesOrder}>
             {places.map((p) => (
               <li key={p.slug}>
-                <Link href={`/images/designs/place/${p.slug}`} className="dz-row">
+                <Link href={`/references/designs/place/${p.slug}`} className="dz-row">
                   <span className="dz-row-text">
                     <span className="dz-row-title">{p.name}</span>
                     <span className="dz-row-meta">{W.sheets.scenes(p.scenes)} · {W.index.sheets(p.sheets)}</span>
@@ -92,7 +92,7 @@ export function DesignIndex({ tab, sort, styles, characters, places }: { tab: 's
           <ul className="dz-rows" aria-label={W.index.bookOrder}>
             {characters.map((c) => (
               <li key={c.slug}>
-                <Link href={`/images/designs/character/${c.slug}`} className="dz-row">
+                <Link href={`/references/designs/character/${c.slug}`} className="dz-row">
                   <span className="dz-row-text">
                     <span className="dz-row-title">{c.name}</span>
                     <span className="dz-row-meta">{W.index.sheets(c.sheets)}</span>
@@ -107,7 +107,7 @@ export function DesignIndex({ tab, sort, styles, characters, places }: { tab: 's
       <p className="dz-footer">{W.index.footer}</p>
       {canMake && (
         <p className="dz-links">
-          <Link href="/images/picks">{W.index.myPicksLink}</Link>
+          <Link href="/references/picks">{W.index.myPicksLink}</Link>
         </p>
       )}
       <p className="as-draft ic-draftline">{IMAGE_WORDING.draftLine}</p>

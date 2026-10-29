@@ -3,7 +3,7 @@
 import { forwardRef } from 'react';
 
 /**
- * A search box for the book's own text ("Make an image", /images/new): never published, never
+ * A search box for the book's own text ("Make an image", /references/new): never published, never
  * saved, never sent: the page searches the text served whole by GET /api/book/text on the device. It says so
  * under the box, as PublishedTextField and PrivateTextField do (npm run check:principles P1f
  * checks this wording). Model-drafted wording.

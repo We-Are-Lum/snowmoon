@@ -57,12 +57,13 @@ export default async function Home() {
     { href: '/chapter/1?view=listen', name: 'Listen', what: 'The narrated chapters, and the podcast', meta: '→' },
     { href: '/glossary', name: 'Glossary', what: 'The book’s invented words', meta: '→' },
   ];
+  // The same order as the menu (owner, 2026-10-29): Adaptations, References, Minpentai, the Assistant.
   const more = [
-    { href: '/assistant', name: 'Assistant', what: 'Ask about the book, privately', meta: '→' },
     // Model-drafted (coding agent, 2026-10-18), for the owner.
     { href: '/adaptations', name: 'Adaptations', what: 'Scenes made from the book: watch them, and remix a shot', meta: 'Watch · remix →' },
+    { href: '/references', name: 'References', what: 'Images readers made for passages, each with how it was made', meta: 'Trial →' },
     { href: '/minpentai?mode=learn', name: 'Minpentai', what: 'The game from the book', meta: 'Learn · play →' },
-    { href: '/images', name: 'Pictures', what: 'Images readers made for passages, each with how it was made', meta: 'Trial →' },
+    { href: '/assistant', name: 'Assistant', what: 'Ask about the book, privately', meta: '→' },
   ];
   const row = (r: (typeof book)[number]) => (
     <li key={r.name}>

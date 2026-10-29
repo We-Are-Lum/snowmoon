@@ -34,10 +34,10 @@ export function ImageFeed({ images, sort, empty }: { images: MomentItem[]; sort:
     <>
       <div className="pictures-strip">
         <nav className="pictures-sort" aria-label="Order">
-          <Link href="/images?show=moments" aria-current={sort === 'new' ? 'page' : undefined}>
+          <Link href="/references?show=moments" aria-current={sort === 'new' ? 'page' : undefined}>
             Newest first
           </Link>
-          <Link href="/images?show=moments&sort=liked" aria-current={sort === 'liked' ? 'page' : undefined}>
+          <Link href="/references?show=moments&sort=liked" aria-current={sort === 'liked' ? 'page' : undefined}>
             Most liked
           </Link>
         </nav>
@@ -89,7 +89,7 @@ export function Moment({ im, kind }: { im: MomentItem; kind?: string }) {
       </p>
       {im.setting && (
         <p className="pictures-setting">
-          {W.feed.setting} <Link href={`/images/designs/place/${im.setting.slug}`}>{im.setting.name}</Link>
+          {W.feed.setting} <Link href={`/references/designs/place/${im.setting.slug}`}>{im.setting.name}</Link>
         </p>
       )}
       <p className="block-caption pictures-caption">
