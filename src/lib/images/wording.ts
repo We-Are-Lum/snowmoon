@@ -50,7 +50,7 @@ export const IMAGE_WORDING = {
   signIn: {
     farcasterNote: (perDay: number) => `Established Farcaster accounts can make up to ${perDay} images a day for free.`,
   },
-  /** "Make an image" (/images/new, 2026-10-10): choose a passage, then the composer. Model-drafted wording. */
+  /** "Make an image" (/references/new, 2026-10-10): choose a passage, then the composer. Model-drafted wording. */
   create: {
     title: 'Make an image',
     intro: 'Choose a passage of the book, then describe the image in your own words.',
@@ -372,7 +372,7 @@ export const IMAGE_WORDING_ROWS: { screen: string; where: string; text: string }
   { screen: 'Add an image · compose', where: 'src/components/image-composer.tsx (action bar, when a draft is kept)', text: IMAGE_WORDING.draft.back },
   { screen: 'Add an image · preview', where: 'src/components/image-composer.tsx (preview)', text: IMAGE_WORDING.preview.promptLabel },
   { screen: 'Image page', where: 'src/app/image/[id]/page.tsx (caption; "Open in reader →" is the assistant’s approved row 23, reused)', text: 'AI image · by {byline} (button: opens the recipe sheet) / {date} · Chapter {n} · ¶ {a–b} · Open in reader →' },
-  { screen: 'Image page', where: 'src/app/image/[id]/page.tsx (crumb)', text: '← Pictures · Trial' },
+  { screen: 'Image page', where: 'src/app/image/[id]/page.tsx (crumb)', text: '← References · Trial' },
   { screen: 'Images by readers (in the chapter)', where: 'src/components/reader-images.tsx (bar)', text: '{n} images by readers · ¶ {a–b} · show ▾ / hide ▴' },
   { screen: 'Images by readers (in the chapter)', where: 'src/components/reader-images.tsx (order, now visible)', text: IMAGE_WORDING.reader.order },
   { screen: 'Make an image', where: 'src/components/image-create.tsx (heading)', text: IMAGE_WORDING.create.title },
@@ -393,7 +393,7 @@ export const IMAGE_WORDING_ROWS: { screen: string; where: string; text: string }
   { screen: 'Make an image', where: 'src/components/image-create.tsx (search)', text: IMAGE_WORDING.create.noHits('{q}') },
   { screen: 'Make an image', where: 'src/components/image-create.tsx (search)', text: IMAGE_WORDING.create.more(20).replace('20', '{n}') },
   { screen: 'Make an image', where: 'src/components/image-create.tsx (search)', text: IMAGE_WORDING.create.searchFailed },
-  { screen: 'Pictures (feed)', where: 'src/app/images/page.tsx (button, invited readers only during the trial)', text: IMAGE_WORDING.create.entry },
+  { screen: 'Pictures (feed)', where: 'src/app/references/page.tsx (button, invited readers only during the trial)', text: IMAGE_WORDING.create.entry },
   { screen: 'Image page', where: 'src/app/image/[id]/page.tsx (by the passage)', text: IMAGE_WORDING.create.ofThis },
   { screen: 'Pictures (feed)', where: 'src/components/image-feed.tsx (under each passage)', text: IMAGE_WORDING.create.fromThis },
   { screen: 'Home', where: 'src/components/make-image-link.tsx (Everything you can do here, invited readers only during the trial)', text: 'Make an image · Choose a passage, then describe it · Trial →' },

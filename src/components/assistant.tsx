@@ -143,7 +143,7 @@ function PassageCard({ id }: { id: string }) {
 
 /**
  * A citation: the book's own words, rendered from the stored text by block id. "Make an image of
- * this passage" (shown where "Add an image" shows) links to /images/new with the cited block only:
+ * this passage" (shown where "Add an image" shows) links to /references/new with the cited block only:
  * nothing from the conversation goes in the link. Model-drafted wording.
  */
 function QuoteCard({ q }: { q: Quote }) {

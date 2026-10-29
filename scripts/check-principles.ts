@@ -560,7 +560,7 @@ add({
       ch1,
       glossary,
       sheets,
-      feed: await page('/images'),
+      feed: await page('/references'),
       home: await page('/'),
       imagePage,
       wording: {
@@ -602,7 +602,7 @@ add({
     if (!/\{view\.whose\}/.test(sheetSource)) problems.push('src/components/recipe-sheet.tsx: the sheet does not show "Who made it" (view.whose)');
     // The feed and a reader's image page, as served.
     const captions = [...feed.matchAll(/<p class="block-caption pictures-caption">[\s\S]*?<\/p>/g)].map((m) => m[0]);
-    captions.forEach((c, i) => problems.push(...aiLabelProblems(`/images caption ${i + 1}`, c, 'image')));
+    captions.forEach((c, i) => problems.push(...aiLabelProblems(`/references caption ${i + 1}`, c, 'image')));
     // The home page's "Just made" (src/components/home-feed.tsx): each reader's image with its label, or the empty state.
     const homeCaptions = [...home.matchAll(/<p class="block-caption home-feed-caption">[\s\S]*?<\/p>/g)].map((m) => m[0]);
     homeCaptions.forEach((c, i) => problems.push(...aiLabelProblems(`/ "Just made" ${i + 1}`, c, 'image')));
@@ -1192,9 +1192,9 @@ add({
 // ---------------------------------------------------------------------------
 // P6. No third-party requests; individual ratings not publicly readable.
 // ---------------------------------------------------------------------------
-const PAGES = ['/', '/chapter/1', '/chapter/30', '/about', '/cards', '/adaptations', '/adaptations/dog-dawn', '/share/1/4?img=c1-b005-toy-drone', '/images', '/moderate', '/glossary', '/glossary/zei', '/terms', '/privacy', '/images?show=moments',
+const PAGES = ['/', '/chapter/1', '/chapter/30', '/about', '/cards', '/adaptations', '/adaptations/dog-dawn', '/share/1/4?img=c1-b005-toy-drone', '/references', '/moderate', '/glossary', '/glossary/zei', '/terms', '/privacy', '/references?show=moments',
   // Step 4: styles and character sheets.
-  '/images/designs', '/images/designs?tab=characters', '/images/designs/character/gladias', '/images/picks',
+  '/references/designs', '/references/designs?tab=characters', '/references/designs/character/gladias', '/references/picks',
   // The You page and a public profile (owner, 2026-10-18).
   '/you', '/@naaate'];
 add({

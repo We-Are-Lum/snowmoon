@@ -25,7 +25,7 @@
  *   question (9b) and the daily limit (9c). The API is replayed from results recorded
  *   live (scripts/fixtures/chat-live-2026-10-07.json); quotes are checked against the
  *   stored text by test:chat. --shots=DIR also saves a screenshot of each.
- * - Make an image (/images/new; owner, 2026-10-10), light and dark: browse chapter 1, tap the first and last paragraph,
+ * - Make an image (/references/new; owner, 2026-10-10), light and dark: browse chapter 1, tap the first and last paragraph,
  *   the count and the 8-block cap's message, "Write the prompt" opens the composer (signed out: its sign-in prompt);
  *   search "kalimar" (chapter 1 ¶ 2, marked; tapping it chooses it); the deep link opens the prompt (invited, status
  *   mocked), bad ones fall back to browsing; chapters and hits past where you've read are marked, not hidden. Its
@@ -245,7 +245,7 @@ async function checkAssistant(page: Page, scheme: string) {
     );
     for (const c of cards) {
       const m = c.reader.match(/^\/chapter\/(\d+)#c\d+-b(\d+)$/);
-      const want = m ? `/images/new?chapter=${m[1]}&start=${m[2]}&end=${m[2]}` : '?';
+      const want = m ? `/references/new?chapter=${m[1]}&start=${m[2]}&end=${m[2]}` : '?';
       if (c.make !== want) fail(`/assistant (${scheme}): a quote card's "Make an image" points to ${c.make || 'nothing'}, not ${want}`);
     }
     if (!cards.length) fail(`/assistant (${scheme}): no quote cards to check "Make an image" on`);
@@ -367,7 +367,7 @@ async function checkLegalLine(page: Page, within: string, where: string, scheme:
 }
 
 /**
- * "Make an image" (/images/new; owner, 2026-10-10): choose the text, then the prompt.
+ * "Make an image" (/references/new; owner, 2026-10-10): choose the text, then the prompt.
  * - Browse: the 32 chapters, those past the furthest opened on the device marked, not hidden; chapter 1's
  *   paragraphs; tap the first and the last, the count, the 8-block cap refused with a message; "Write the
  *   prompt" opens the composer on that passage (signed out: its sign-in prompt; invited, status mocked: the prompt).
@@ -381,47 +381,47 @@ async function checkMakeImage(page: Page, scheme: string) {
     localStorage.removeItem('snowmoon.signin');
     localStorage.setItem('snowmoon.read-to', '3');
   });
-  await open(page, '/images');
-  if (await page.locator('.mi-entry').count()) fail(`/images (${scheme}): "Make an image" shows to a signed-out reader`);
-  await open(page, '/images/new');
-  await checkFloors(page, '/images/new (chapters)', scheme);
+  await open(page, '/references');
+  if (await page.locator('.mi-entry').count()) fail(`/references (${scheme}): "Make an image" shows to a signed-out reader`);
+  await open(page, '/references/new');
+  await checkFloors(page, '/references/new (chapters)', scheme);
   const rows = await page.locator('.mi-chapters li').count();
-  if (rows !== 32) fail(`/images/new (${scheme}): ${rows} chapters listed, not 32`);
+  if (rows !== 32) fail(`/references/new (${scheme}): ${rows} chapters listed, not 32`);
   const marked = await page.locator('.mi-chapters li:has(.mi-ahead) .ch-num').allTextContents();
   const opened = await page.evaluate(() => Math.max(...JSON.parse(localStorage.getItem('snowmoon.opened') ?? '[]').concat([Number(localStorage.getItem('snowmoon.read-to') ?? 1)])));
-  if (marked.length !== 32 - opened || marked[0] !== `Chapter ${opened + 1}`) fail(`/images/new (${scheme}): ${marked.length} chapters marked past where you've read (first ${marked[0]}), want ${32 - opened} from Chapter ${opened + 1}`);
-  await page.locator('.mi-chapters a[href="/images/new?chapter=1"]').click();
-  await page.waitForURL('**/images/new?chapter=1');
+  if (marked.length !== 32 - opened || marked[0] !== `Chapter ${opened + 1}`) fail(`/references/new (${scheme}): ${marked.length} chapters marked past where you've read (first ${marked[0]}), want ${32 - opened} from Chapter ${opened + 1}`);
+  await page.locator('.mi-chapters a[href="/references/new?chapter=1"]').click();
+  await page.waitForURL('**/references/new?chapter=1');
   await page.waitForSelector('.mi-pick');
-  await checkFloors(page, '/images/new?chapter=1 (browse)', scheme);
+  await checkFloors(page, '/references/new?chapter=1 (browse)', scheme);
   const picks = await page.locator('.mi-pick').evaluateAll((els) => els.map((e) => Number(e.id.split('-b')[1])));
   const pick = (idx: number) => page.locator(`#c1-b${idx}`).click();
   const countText = async () => ((await page.locator('.mi-count').textContent().catch(() => '')) ?? '').trim();
   await pick(picks[0]);
   await pick(picks[2]);
   const n3 = picks[2] - picks[0] + 1;
-  if (!(await countText()).includes(`${n3} of up to 8 blocks`)) fail(`/images/new (${scheme}): after tapping the first and third paragraphs the count reads "${await countText()}"`);
+  if (!(await countText()).includes(`${n3} of up to 8 blocks`)) fail(`/references/new (${scheme}): after tapping the first and third paragraphs the count reads "${await countText()}"`);
   const pressed = await page.locator('.mi-pick[aria-pressed="true"]').count();
-  if (pressed !== 3) fail(`/images/new (${scheme}): ${pressed} paragraphs marked chosen, not 3`);
+  if (pressed !== 3) fail(`/references/new (${scheme}): ${pressed} paragraphs marked chosen, not 3`);
   // The cap: a new first paragraph, then one too far.
   await pick(picks[0]);
   await pick(picks[10]);
   const cap = ((await page.locator('.mi-cap').textContent().catch(() => '')) ?? '').trim();
-  if (!/up to 8 blocks/.test(cap)) fail(`/images/new (${scheme}): no message when a passage would be over 8 blocks (${cap || 'nothing'})`);
-  if (!(await countText()).includes('1 of up to 8')) fail(`/images/new (${scheme}): a passage over the cap was chosen anyway ("${await countText()}")`);
-  await checkFloors(page, '/images/new?chapter=1 (cap message)', scheme);
+  if (!/up to 8 blocks/.test(cap)) fail(`/references/new (${scheme}): no message when a passage would be over 8 blocks (${cap || 'nothing'})`);
+  if (!(await countText()).includes('1 of up to 8')) fail(`/references/new (${scheme}): a passage over the cap was chosen anyway ("${await countText()}")`);
+  await checkFloors(page, '/references/new?chapter=1 (cap message)', scheme);
   await pick(picks[7]);
-  if (!(await countText()).includes('8 of up to 8')) fail(`/images/new (${scheme}): 8 blocks are not allowed ("${await countText()}")`);
+  if (!(await countText()).includes('8 of up to 8')) fail(`/references/new (${scheme}): 8 blocks are not allowed ("${await countText()}")`);
   // Signed out, "Write the prompt" opens the composer with its sign-in prompt.
   await page.locator('.mi-write').click();
-  await page.waitForSelector('.image-composer', { timeout: 5000 }).catch(() => fail(`/images/new (${scheme}): "Write the prompt" does not open the composer`));
-  if (!/Sign in to make an image/.test((await page.locator('.image-composer').textContent().catch(() => '')) ?? '')) fail(`/images/new (${scheme}): signed out, the composer does not ask to sign in`);
-  if (!/Chapter 1 · ¶ 1–8 · 8 blocks/.test((await page.locator('.image-composer .ic-label').first().textContent().catch(() => '')) ?? '')) fail(`/images/new (${scheme}): the composer is not on the chosen passage (${await page.locator('.image-composer .ic-label').first().textContent().catch(() => '')})`);
-  await checkFloors(page, '/images/new (composer, signed out)', scheme);
+  await page.waitForSelector('.image-composer', { timeout: 5000 }).catch(() => fail(`/references/new (${scheme}): "Write the prompt" does not open the composer`));
+  if (!/Sign in to make an image/.test((await page.locator('.image-composer').textContent().catch(() => '')) ?? '')) fail(`/references/new (${scheme}): signed out, the composer does not ask to sign in`);
+  if (!/Chapter 1 · ¶ 1–8 · 8 blocks/.test((await page.locator('.image-composer .ic-label').first().textContent().catch(() => '')) ?? '')) fail(`/references/new (${scheme}): the composer is not on the chosen passage (${await page.locator('.image-composer .ic-label').first().textContent().catch(() => '')})`);
+  await checkFloors(page, '/references/new (composer, signed out)', scheme);
   await page.keyboard.press('Escape');
 
   // Search.
-  await open(page, '/images/new');
+  await open(page, '/references/new');
   await page.locator('.mi-switch button', { hasText: 'Search' }).click();
   // The search runs on the device: no request after the page has loaded carries what is typed (owner, 2026-10-10).
   const sent: string[] = [];
@@ -429,22 +429,22 @@ async function checkMakeImage(page: Page, scheme: string) {
   page.on('request', watch);
   await page.fill('#mi-q', 'ka');
   await page.waitForTimeout(500);
-  if (await page.locator('.mi-hit').count()) fail(`/images/new (${scheme}): a 2-letter search shows results`);
+  if (await page.locator('.mi-hit').count()) fail(`/references/new (${scheme}): a 2-letter search shows results`);
   await page.fill('#mi-q', 'kalimar');
-  await page.waitForSelector('.mi-hit', { timeout: 5000 }).catch(() => fail(`/images/new (${scheme}): searching "kalimar" shows no hits`));
+  await page.waitForSelector('.mi-hit', { timeout: 5000 }).catch(() => fail(`/references/new (${scheme}): searching "kalimar" shows no hits`));
   page.off('request', watch);
-  if (sent.some((u) => /kalimar/i.test(u))) fail(`/images/new (${scheme}): the search query left the device: ${sent.filter((u) => /kalimar/i.test(u)).slice(0, 2).join(' | ')}`);
+  if (sent.some((u) => /kalimar/i.test(u))) fail(`/references/new (${scheme}): the search query left the device: ${sent.filter((u) => /kalimar/i.test(u)).slice(0, 2).join(' | ')}`);
   const first = page.locator('.mi-hit').first();
-  if ((await first.getAttribute('href')) !== '/images/new?chapter=1&pick=3') fail(`/images/new (${scheme}): the first "kalimar" hit points to ${await first.getAttribute('href')}, not chapter 1 ¶ 2 (c1-b3)`);
-  if ((await first.locator('mark').textContent()) !== 'Kalimar') fail(`/images/new (${scheme}): the hit does not mark "Kalimar"`);
-  if (!(await page.locator('.mi-hit .mi-ahead').count())) fail(`/images/new (${scheme}): hits past where you've read are not marked`);
-  await checkFloors(page, '/images/new (search)', scheme);
+  if ((await first.getAttribute('href')) !== '/references/new?chapter=1&pick=3') fail(`/references/new (${scheme}): the first "kalimar" hit points to ${await first.getAttribute('href')}, not chapter 1 ¶ 2 (c1-b3)`);
+  if ((await first.locator('mark').textContent()) !== 'Kalimar') fail(`/references/new (${scheme}): the hit does not mark "Kalimar"`);
+  if (!(await page.locator('.mi-hit .mi-ahead').count())) fail(`/references/new (${scheme}): hits past where you've read are not marked`);
+  await checkFloors(page, '/references/new (search)', scheme);
   await first.click();
-  await page.waitForURL('**/images/new?chapter=1&pick=3');
-  await page.waitForSelector('#c1-b3[aria-pressed="true"]', { timeout: 5000 }).catch(() => fail(`/images/new (${scheme}): tapping a hit does not choose its paragraph`));
-  if (!(await countText()).includes('¶ 2 · 1 of up to 8')) fail(`/images/new (${scheme}): after a hit the count reads "${await countText()}"`);
+  await page.waitForURL('**/references/new?chapter=1&pick=3');
+  await page.waitForSelector('#c1-b3[aria-pressed="true"]', { timeout: 5000 }).catch(() => fail(`/references/new (${scheme}): tapping a hit does not choose its paragraph`));
+  if (!(await countText()).includes('¶ 2 · 1 of up to 8')) fail(`/references/new (${scheme}): after a hit the count reads "${await countText()}"`);
   await pick(5);
-  if (!(await countText()).includes('¶ 2–4 · 3 of up to 8')) fail(`/images/new (${scheme}): a hit's passage does not widen by tapping ("${await countText()}")`);
+  if (!(await countText()).includes('¶ 2–4 · 3 of up to 8')) fail(`/references/new (${scheme}): a hit's passage does not widen by tapping ("${await countText()}")`);
 
   // The deep link, signed in as an invited FID (session and the composer's status mocked).
   await ctx.route('**/api/images/status**', (r) =>
@@ -456,24 +456,24 @@ async function checkMakeImage(page: Page, scheme: string) {
     const b64 = (o: object) => btoa(JSON.stringify(o)).replace(/=+$/, '');
     localStorage.setItem('snowmoon.signin', JSON.stringify({ token: `x.${b64({ sub: 6786, exp: 4102444800 })}.y`, fid: 6786, username: 'check', exp: 4102444800 }));
   });
-  await open(page, '/images/new?chapter=1&start=3&end=5');
-  await page.waitForSelector('.image-composer textarea', { timeout: 5000 }).catch(() => fail(`/images/new?chapter=1&start=3&end=5 (${scheme}): the deep link does not open the prompt`));
+  await open(page, '/references/new?chapter=1&start=3&end=5');
+  await page.waitForSelector('.image-composer textarea', { timeout: 5000 }).catch(() => fail(`/references/new?chapter=1&start=3&end=5 (${scheme}): the deep link does not open the prompt`));
   const label = ((await page.locator('.image-composer .ic-label').first().textContent().catch(() => '')) ?? '').trim();
-  if (label !== 'Chapter 1 · ¶ 2–4 · 3 blocks') fail(`/images/new (${scheme}): the deep link's composer reads "${label}", not Chapter 1 · ¶ 2–4 · 3 blocks`);
-  await checkFloors(page, '/images/new (deep link, composer invited)', scheme);
+  if (label !== 'Chapter 1 · ¶ 2–4 · 3 blocks') fail(`/references/new (${scheme}): the deep link's composer reads "${label}", not Chapter 1 · ¶ 2–4 · 3 blocks`);
+  await checkFloors(page, '/references/new (deep link, composer invited)', scheme);
   await page.keyboard.press('Escape');
-  if ((await page.locator('.mi-pick[aria-pressed="true"]').count()) !== 3) fail(`/images/new (${scheme}): after closing the composer the deep link's passage is not shown chosen`);
-  for (const bad of ['/images/new?chapter=1&start=3&end=40', '/images/new?chapter=1&start=5&end=3', '/images/new?chapter=99&start=1&end=2']) {
+  if ((await page.locator('.mi-pick[aria-pressed="true"]').count()) !== 3) fail(`/references/new (${scheme}): after closing the composer the deep link's passage is not shown chosen`);
+  for (const bad of ['/references/new?chapter=1&start=3&end=40', '/references/new?chapter=1&start=5&end=3', '/references/new?chapter=99&start=1&end=2']) {
     await open(page, bad);
     await page.waitForTimeout(200);
     if (await page.locator('.image-composer').count()) fail(`${bad} (${scheme}): a bad deep link opens the composer`);
     if (!(await page.locator('.mi-note', { hasText: 'can’t be opened' }).count())) fail(`${bad} (${scheme}): a bad deep link says nothing`);
     if (!(await page.locator('.mi-pick, .mi-chapters li').count())) fail(`${bad} (${scheme}): a bad deep link does not fall back to browsing`);
   }
-  await open(page, '/images');
+  await open(page, '/references');
   const entry = page.locator('.mi-entry');
-  if (!(await entry.count()) || (await entry.getAttribute('href')) !== '/images/new') fail(`/images (${scheme}): no "Make an image" button to /images/new for an invited reader`);
-  await checkFloors(page, '/images (invited)', scheme);
+  if (!(await entry.count()) || (await entry.getAttribute('href')) !== '/references/new') fail(`/references (${scheme}): no "Make an image" button to /references/new for an invited reader`);
+  await checkFloors(page, '/references (invited)', scheme);
   await page.evaluate(() => {
     localStorage.removeItem('snowmoon.signin');
     localStorage.removeItem('snowmoon.read-to');
@@ -1029,17 +1029,17 @@ async function checkAiLabels() {
       await checkVoiceLabel(page, `/glossary/heralds ${tag} (clip)`, '.gl-clip');
       if (!/no word timings/.test((await page.locator('.gl-clip-note').textContent().catch(() => '')) ?? '')) fail(`/glossary/heralds ${tag}: the clip note does not say there are no word timings`);
 
-      await at('/images');
-      await checkPictureLabels(page, `/images ${tag}`, FIXTURE_IMAGES.length);
+      await at('/references');
+      await checkPictureLabels(page, `/references ${tag}`, FIXTURE_IMAGES.length);
       // Browsing (owner, 2026-10-10): each image shows the passage it is of, in the reading type.
       {
         const n = await page.locator('.pictures-list li .pictures-passage blockquote').evaluateAll((els) => els.filter((e) => (e as HTMLElement).innerText.trim().length > 20 && e.getBoundingClientRect().height > 20).length);
-        if (n < FIXTURE_IMAGES.length) fail(`/images ${tag}: ${n} of ${FIXTURE_IMAGES.length} images show the passage they are of`);
+        if (n < FIXTURE_IMAGES.length) fail(`/references ${tag}: ${n} of ${FIXTURE_IMAGES.length} images show the passage they are of`);
         // "Make one from this passage" under each passage (an invited FID here), with the same range.
         const links = await page.locator('.pictures-list li .mi-from').evaluateAll((els) => els.map((e) => e.getAttribute('href')));
-        const want = FIXTURE_IMAGES.map((im) => `/images/new?chapter=1&start=${im.start}&end=${im.end}`);
-        for (const w of want) if (!links.includes(w)) fail(`/images ${tag}: no "Make one from this passage" to ${w} (${links.join(', ') || 'none'})`);
-        if (!(await page.locator('.mi-entry[href="/images/new"]').count())) fail(`/images ${tag}: no "Make an image" button`);
+        const want = FIXTURE_IMAGES.map((im) => `/references/new?chapter=1&start=${im.start}&end=${im.end}`);
+        for (const w of want) if (!links.includes(w)) fail(`/references ${tag}: no "Make one from this passage" to ${w} (${links.join(', ') || 'none'})`);
+        if (!(await page.locator('.mi-entry[href="/references/new"]').count())) fail(`/references ${tag}: no "Make an image" button`);
       }
 
       // Home's "Just made": the fixture's images, newest first, each labelled. With the intro seen: its
@@ -1052,7 +1052,7 @@ async function checkAiLabels() {
       await checkPictureLabels(page, `/image ${tag}`, 1);
       {
         const make = page.locator('.ip-make');
-        const want = `/images/new?chapter=1&start=${FIXTURE_IMAGES[0].start}&end=${FIXTURE_IMAGES[0].end}`;
+        const want = `/references/new?chapter=1&start=${FIXTURE_IMAGES[0].start}&end=${FIXTURE_IMAGES[0].end}`;
         if (!(await make.isVisible().catch(() => false)) || (await make.getAttribute('href')) !== want) fail(`/image ${tag}: no "Make an image of this passage" to ${want}`);
         if (w === 390) await checkFloors(page, `/image ${tag} (Make an image)`, 'light');
         if (w === 390 && SHOTS) {
@@ -1063,7 +1063,7 @@ async function checkAiLabels() {
       // Sheets as text (2026-10-10): "In this image", from the recipe, each linking to its sheet.
       {
         const links = await page.locator('.ip-in-image a').evaluateAll((els) => els.map((e) => e.getAttribute('href')));
-        if (links.join() !== '/images/designs/character/gladias,/images/designs/place/kalimar-footpaths') fail(`/image ${tag}: "In this image" does not link Gladias and the Kalimar footpaths (${links.join()})`);
+        if (links.join() !== '/references/designs/character/gladias,/references/designs/place/kalimar-footpaths') fail(`/image ${tag}: "In this image" does not link Gladias and the Kalimar footpaths (${links.join()})`);
         if (!/In this image/.test((await page.locator('.ip-in-image').textContent().catch(() => '')) ?? '')) fail(`/image ${tag}: no "In this image"`);
         if (w === 390 && SHOTS) {
           await page.locator('.ip-in-image').scrollIntoViewIfNeeded();
@@ -1071,7 +1071,7 @@ async function checkAiLabels() {
         }
       }
       // A sheet page lists the readers' images of it, newest first, each labelled, then the edition's.
-      for (const sheet of ['/images/designs/place/kalimar-footpaths', '/images/designs/character/gladias']) {
+      for (const sheet of ['/references/designs/place/kalimar-footpaths', '/references/designs/character/gladias']) {
         await at(sheet);
         await page.waitForSelector('.dz-image-list');
         await checkPictureLabels(page, `${sheet} ${tag}`, 2);
@@ -1263,25 +1263,25 @@ try {
     await checkFloors(page, '/cards', scheme);
     // Readers' images (slice 1): the feed for everyone; "Add an image" only for a signed-in, invited FID.
     // Pictures' front page (owner, 2026-10-14): the four choices, then the newest of all of them; "Most liked" is on Moments.
-    await open(page, '/images');
-    await checkFloors(page, '/images', scheme);
+    await open(page, '/references');
+    await checkFloors(page, '/references', scheme);
     const choices = (await page.locator('.pictures-menu .pictures-menu-label').allTextContents()).join(' | ');
     if (choices !== 'Moments | Characters | Settings | Styles') fail(`/images: the menu reads ${choices}`);
     if (await page.locator('.pictures-cover').count()) fail('/images: an image is covered');
-    await open(page, '/images?show=moments');
-    await checkFloors(page, '/images?show=moments', scheme);
-    if (!(await page.getByText('Most liked').isVisible())) fail('/images?show=moments: no "Most liked" order');
-    if ((await page.locator('.pictures-menu a[aria-current="page"] .pictures-menu-label').textContent()) !== 'Moments') fail('/images?show=moments: Moments is not marked in the menu');
+    await open(page, '/references?show=moments');
+    await checkFloors(page, '/references?show=moments', scheme);
+    if (!(await page.getByText('Most liked').isVisible())) fail('/references?show=moments: no "Most liked" order');
+    if ((await page.locator('.pictures-menu a[aria-current="page"] .pictures-menu-label').textContent()) !== 'Moments') fail('/references?show=moments: Moments is not marked in the menu');
     await checkMakeImage(page, scheme);
     await checkGlossary(page, scheme);
     // Styles and character sheets (step 4): readable signed out; making and picking only for invited FIDs.
-    for (const p of ['/images/designs', '/images/designs?sort=built', '/images/designs?tab=characters', '/images/designs?tab=places', '/images/designs/character/gladias', '/images/designs/place/autobus', ...(DESIGN ? [`/images/designs/${DESIGN}`] : [])]) {
+    for (const p of ['/references/designs', '/references/designs?sort=built', '/references/designs?tab=characters', '/references/designs?tab=places', '/references/designs/character/gladias', '/references/designs/place/autobus', ...(DESIGN ? [`/references/designs/${DESIGN}`] : [])]) {
       await open(page, p);
       await checkFloors(page, p, scheme);
       if (await page.locator('.dz-new, .dz-fork, .dz-pick-button').count()) fail(`${p}: making or picking shows to a signed-out reader`);
-      if (p.startsWith('/images/designs?') && !(await page.getByText('Nothing here is official.', { exact: false }).count())) fail(`${p}: no "Nothing here is official"`);
+      if (p.startsWith('/references/designs?') && !(await page.getByText('Nothing here is official.', { exact: false }).count())) fail(`${p}: no "Nothing here is official"`);
       // Sheets as text (2026-10-10): the places tab is live; a sheet's book words say Book ⓘ, its shorthand Invented ⓘ.
-      if (p === '/images/designs?tab=places' && (await page.locator('.dz-rows a[href^="/images/designs/place/"]').count()) < 1) fail(`${p} (${scheme}): no places listed`);
+      if (p === '/references/designs?tab=places' && (await page.locator('.dz-rows a[href^="/references/designs/place/"]').count()) < 1) fail(`${p} (${scheme}): no places listed`);
       if (p.includes('/character/') || p.includes('/place/')) {
         await page.waitForSelector('.dz-book');
         for (const [scope, kind, word] of [['.dz-book', 'book', 'Book'], ['.dz-shorthand', 'invented', 'Invented']] as const) {
@@ -1411,16 +1411,16 @@ try {
       // Step 4, signed in and invited (mocked): My picks (private) and the new-style form.
       await ctx.route('**/api/designs/picks', (r) => r.fulfill({ json: { picks: [] } }));
       await ctx.route('**/api/consent', (r) => r.fulfill({ json: { wording: { version: 'v', line: 'l', title: 't', text: ['a'], sha256: 'x' }, signedIn: true, agreed: true } }));
-      await open(page, '/images/picks');
+      await open(page, '/references/picks');
       await page.waitForSelector('.dz-private');
-      await checkFloors(page, '/images/picks (invited)', scheme);
-      if (!/only you see your picks/i.test((await page.textContent('.dz-private')) ?? '')) fail('/images/picks: the private strip is missing');
-      await open(page, '/images/designs/new?kind=style');
+      await checkFloors(page, '/references/picks (invited)', scheme);
+      if (!/only you see your picks/i.test((await page.textContent('.dz-private')) ?? '')) fail('/references/picks: the private strip is missing');
+      await open(page, '/references/designs/new?kind=style');
       await page.waitForSelector('#dz-text');
-      await checkFloors(page, '/images/designs/new (invited)', scheme);
+      await checkFloors(page, '/references/designs/new (invited)', scheme);
       const form = (await page.textContent('.dz-form')) ?? '';
-      if ((form.match(/Public, permanent, GPL-3\.0/g) ?? []).length < 2) fail('/images/designs/new: a published box lacks the publication line');
-      if (!/sent to Groq to be checked \(through Vercel AI Gateway when Groq is busy\) and to fal\.ai/.test(form)) fail('/images/designs/new: the form does not name the hosts that receive the prompt');
+      if ((form.match(/Public, permanent, GPL-3\.0/g) ?? []).length < 2) fail('/references/designs/new: a published box lacks the publication line');
+      if (!/sent to Groq to be checked \(through Vercel AI Gateway when Groq is busy\) and to fal\.ai/.test(form)) fail('/references/designs/new: the form does not name the hosts that receive the prompt');
       await ctx.unroute('**/api/designs/picks');
       await ctx.unroute('**/api/consent');
       await ctx.unroute('**/api/images/generate');
@@ -1446,18 +1446,18 @@ try {
       });
       await ctx.route('**/api/designs/picks', (r) => r.fulfill({ json: { picks: [] } }));
       await ctx.route('**/api/consent', (r) => r.fulfill({ json: { wording: { version: 'v', line: 'l', title: 't', text: ['a'], sha256: 'x' }, signedIn: true, agreed: true } }));
-      await open(page, '/images/picks');
+      await open(page, '/references/picks');
       await page.waitForSelector('.dz-private');
-      await checkFloors(page, '/images/picks (not invited)', scheme);
-      await open(page, '/images/designs');
+      await checkFloors(page, '/references/picks (not invited)', scheme);
+      await open(page, '/references/designs');
       await page.waitForTimeout(200);
-      if (await page.locator('.dz-new').count()) fail(`/images/designs (${scheme}): "New style" shows to a reader who is not invited`);
-      if (await page.locator('a[href="/images/picks"]').count()) fail(`/images/designs (${scheme}): "My picks" shows to a reader who is not invited`);
-      await open(page, '/images/designs/new?kind=style');
+      if (await page.locator('.dz-new').count()) fail(`/references/designs (${scheme}): "New style" shows to a reader who is not invited`);
+      if (await page.locator('a[href="/references/picks"]').count()) fail(`/references/designs (${scheme}): "My picks" shows to a reader who is not invited`);
+      await open(page, '/references/designs/new?kind=style');
       await page.waitForSelector('.dz-form .ic-gate');
-      if (!(await page.getByText('Making styles and character sheets is open to invited readers only, for now.', { exact: false }).isVisible())) fail(`/images/designs/new (${scheme}): no invited-only refusal for a reader who is not invited`);
-      if (await page.locator('#dz-text').count()) fail(`/images/designs/new (${scheme}): the form shows to a reader who is not invited`);
-      await checkFloors(page, '/images/designs/new (not invited)', scheme);
+      if (!(await page.getByText('Making styles and character sheets is open to invited readers only, for now.', { exact: false }).isVisible())) fail(`/references/designs/new (${scheme}): no invited-only refusal for a reader who is not invited`);
+      if (await page.locator('#dz-text').count()) fail(`/references/designs/new (${scheme}): the form shows to a reader who is not invited`);
+      await checkFloors(page, '/references/designs/new (not invited)', scheme);
       await ctx.unroute('**/api/designs/picks');
       await ctx.unroute('**/api/consent');
       await page.evaluate(() => localStorage.removeItem('snowmoon.signin'));

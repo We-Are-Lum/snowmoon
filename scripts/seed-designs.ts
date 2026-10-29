@@ -30,5 +30,5 @@ const url = process.env.STUDIO_DATABASE_URL;
 if (!url) throw new Error('STUDIO_DATABASE_URL is not set');
 const sql = postgres(url, { prepare: false, max: 1 });
 const out = await seedStartingStyle(sql as never, { fid: MAINTAINER_FID, byName: name, text: style.prompt, title: style.name });
-console.log('exists' in out ? 'Already published as a design; nothing written.' : `published: /images/designs/${out.versionId}`);
+console.log('exists' in out ? 'Already published as a design; nothing written.' : `published: /references/designs/${out.versionId}`);
 await sql.end();

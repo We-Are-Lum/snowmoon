@@ -16,7 +16,10 @@ export interface NavItem {
 import { ADAPTATIONS } from './config';
 
 export function navItems(last: number, adaptations: number): NavItem[] {
+  // The order (owner, 2026-10-29, the next-version plan): Adaptations first, then the Book, References (once
+  // Pictures), Minpentai and the Assistant. Read stays one tap away on the home page and in the reader.
   const items: NavItem[] = [
+    { key: 'adaptations', label: 'Adaptations', href: '/adaptations', meta: adaptations ? 'Watch · remix' : undefined },
     {
       key: 'book',
       label: 'Book',
@@ -28,8 +31,7 @@ export function navItems(last: number, adaptations: number): NavItem[] {
         { key: 'glossary', label: 'Glossary', href: '/glossary' },
       ],
     },
-    { key: 'assistant', label: 'Assistant', href: '/assistant' },
-    { key: 'adaptations', label: 'Adaptations', href: '/adaptations', meta: adaptations ? 'Watch · remix' : undefined },
+    { key: 'pictures', label: 'References', href: '/references', meta: 'Trial' },
     {
       key: 'minpentai',
       label: 'Minpentai',
@@ -40,10 +42,10 @@ export function navItems(last: number, adaptations: number): NavItem[] {
         { key: 'mp-play', label: 'Play', href: '/minpentai?mode=free' },
       ],
     },
-    { key: 'pictures', label: 'Pictures', href: '/images', meta: 'Trial' },
+    { key: 'assistant', label: 'Assistant', href: '/assistant' },
   ];
   // Adaptations are out of view for now (ADAPTATIONS.visible).
   return ADAPTATIONS.visible ? items : items.filter((i) => i.key !== 'adaptations');
 }
-/** Destinations shown as coming, as text, not links. None now: Pictures is open as a trial. */
+/** Destinations shown as coming, as text, not links. None now: References (once Pictures) is open as a trial. */
 export const COMING: { label: string; meta: string }[] = [];

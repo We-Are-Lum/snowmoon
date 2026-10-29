@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { bookCorpus } from '~/lib/book-search';
 
 /**
- * The book's text for searching on the reader's device ("Make an image", /images/new): every
+ * The book's text for searching on the reader's device ("Make an image", /references/new): every
  * paragraph and quote as [chapter, idx, ¶ label, text], in reading order. The same for everyone and
  * built with the site, so nothing about a reader or a search reaches the server. Public, GPL v3.
  */

@@ -50,14 +50,14 @@ export function MyPicks() {
           <span className="dz-thumb dz-thumb-empty" aria-hidden="true" />
         )}
         <div className="dz-row-text">
-          <Link className="dz-row-title" href={`/images/designs/${p.versionId}`}>
+          <Link className="dz-row-title" href={`/references/designs/${p.versionId}`}>
             {nameOf(p)} v{p.versionNo}
           </Link>
           <span className="dz-row-meta">
             {!p.available ? W.picks.hidden : p.kind === 'style' ? (i === 0 ? W.picks.used : W.picks.alsoOffered) : p.kind === 'location' ? W.picks.placeUsed : W.picks.charUsed(p.entity.split(' ')[0])}
           </span>
           <span className="dz-pick-actions">
-            <Link href={p.kind === 'style' ? '/images/designs' : p.kind === 'location' ? '/images/designs?tab=places' : '/images/designs?tab=characters'}>{W.picks.change}</Link>
+            <Link href={p.kind === 'style' ? '/references/designs' : p.kind === 'location' ? '/references/designs?tab=places' : '/references/designs?tab=characters'}>{W.picks.change}</Link>
             <button type="button" onClick={() => clear(p)}>
               {W.picks.clear}
             </button>
