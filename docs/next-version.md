@@ -152,3 +152,40 @@ Next version of snowmoon.party: read docs/next-version.md (save this doc there f
 6. Gemini and ChatGPT image models (phase 7): their terms against the book's licence and our principles.
 Then propose what to build first. Phase 0 (glossary, image review, fal, Plan A part 1) stays ahead of all of this.
 ```
+
+## Decisions and additions (owner, 2026-10-29)
+
+Decisions on the plan report (https://claude.ai/artifact/QiHSZNs2siTNwxv2aMPCrL):
+
+1. Principle 5: option (a), with a switch on each moment and glossary item: "Picked by @naaate · Most liked ·
+   Newest · My picks", remembered per reader, the admins' pick as the starting view. Draft: docs/proposals/principle-5-picks.md.
+2. X: no sign-in and no reads for now. Sharing to X uses X's free web share link from the reader's own account;
+   the bot doesn't post on X.
+3. Free generations only with a network's own score: Farcaster (Neynar 0.7) and Lens (threshold after real
+   values). Bluesky can sign in, comment, fork and use agents; free generations only by linking a Farcaster or
+   Lens account. No site-made score.
+4. Glossary terms with no image stay off References until they have one; "Add a reference" sits on the term's page.
+5. The Assistant notice stays visible until the reader's first question, then moves behind ⓘ.
+6. Bot accounts on Farcaster, Bluesky and Lens: the owner creates them (checklist in the plan report).
+
+Additions:
+
+1. Agent parity (Phase 4, on Plan A's branch):
+   - Every image tool takes one "attach to" target: a book moment (c#-b#), an adaptation shot, a reference
+     (character, place, style) or a glossary term. The recipe records the target, which agent drafted it, the
+     tools it used, the prompt and inputs, the model, and the owner's approval.
+   - Camera and staging tools for shots: set the camera (angle, distance, height) and people's positions on the
+     shot's saved layout, as the editor does, then try_frame from it. Same estimate and Make it.
+   - Bringing in Muse's own images stays Plan B (scanner, NCMEC, counsel).
+2. Gaps checklist: every logged gap, failure and suggestion from all invited people, each with a status (done,
+   planned with its phase, or needs the owner's decision). Garance's "make the image larger on click" ships now as
+   its own small PR.
+3. Rename /you to /dashboard (private), with redirects from /you and its sub-pages. Public profile at /@<fname>,
+   matching /@<fname>/<id> for adaptations: published work only.
+4. Plan a piece: the site's assistant becomes an agent with the same tools as external agents (read, draft,
+   attach, try_frame, camera), drafting into the owner's dashboard with the owner's approvals. It guides: what to
+   make (a reference for a character, place or style, or an adaptation, and which kind), then the steps with the
+   existing tools. It never writes story words. Report how this fits with the assistant's current notice and its
+   open-model rule before building.
+
+Order: Phase 0, then Phase 1 in two PRs (the first: menu, rename, redirects, on branch phase1-menu).
