@@ -410,8 +410,8 @@ export const IMAGE_WORDING_ROWS: { screen: string; where: string; text: string }
  * shown with its parameters in braces ({v}, {name}), as the app fills them in. All draft.
  */
 const DESIGN_SCREENS: Record<keyof typeof IMAGE_WORDING.designs, { screen: string; where: string }> = {
-  index: { screen: 'Styles & characters', where: 'src/components/design-index.tsx, src/app/images/designs/page.tsx' },
-  page: { screen: 'A style or a sheet', where: 'src/app/images/designs/[id]/page.tsx, design-picks.tsx, design-book.tsx' },
+  index: { screen: 'Styles & characters', where: 'src/components/design-index.tsx, src/app/references/designs/page.tsx' },
+  page: { screen: 'A style or a sheet', where: 'src/app/references/designs/[id]/page.tsx, design-picks.tsx, design-book.tsx' },
   form: { screen: 'New style, new sheet, fork, new version', where: 'src/components/design-form.tsx' },
   picks: { screen: 'My picks', where: 'src/components/my-picks.tsx' },
   composer: { screen: 'Add an image · compose (from your picks)', where: 'src/components/image-composer.tsx' },
@@ -420,7 +420,7 @@ const DESIGN_SCREENS: Record<keyof typeof IMAGE_WORDING.designs, { screen: strin
   about: { screen: 'About', where: 'src/app/about/page.tsx (Pictures section)' },
   report: { screen: 'Report a style or a sheet', where: 'src/components/image-actions.tsx' },
   moderate: { screen: 'Reports (moderators)', where: 'src/components/moderate-queue.tsx' },
-  sheets: { screen: 'Character and place sheets, and “In this passage”', where: 'src/app/images/designs/place/[slug]/page.tsx, character/[slug]/page.tsx, design-sheets.tsx, image-composer.tsx, src/app/image/[id]/page.tsx, chapter pages' },
+  sheets: { screen: 'Character and place sheets, and “In this passage”', where: 'src/app/references/designs/place/[slug]/page.tsx, character/[slug]/page.tsx, design-sheets.tsx, image-composer.tsx, src/app/image/[id]/page.tsx, chapter pages' },
 };
 function filled(v: unknown): string {
   if (typeof v === 'string') return v;
@@ -434,8 +434,8 @@ for (const [group, strings] of Object.entries(IMAGE_WORDING.designs) as [keyof t
 }
 // Step 4 strings written out in components (P2b reads the AI phrases there), and the picture recipe line.
 IMAGE_WORDING_ROWS.push(
-  { screen: 'A style or a sheet', where: 'src/app/images/designs/[id]/page.tsx (how the pictures were made)', text: '{model} ({id}), open weights, Apache-2.0, on {host}, endpoint {endpoint}. Seed {seed}, request {id}, cost ${cost}, {date}. Made from the front view. Checked by gpt-oss-safeguard-20b and the host’s safety checker. The fixed subject line was drafted by the coding agent. File sha256 {sha256}.' },
-  { screen: 'A style or a sheet', where: 'src/app/images/designs/[id]/page.tsx (built-on list)', text: 'Chapter {n} · AI-generated image · not by the author' },
+  { screen: 'A style or a sheet', where: 'src/app/references/designs/[id]/page.tsx (how the pictures were made)', text: '{model} ({id}), open weights, Apache-2.0, on {host}, endpoint {endpoint}. Seed {seed}, request {id}, cost ${cost}, {date}. Made from the front view. Checked by gpt-oss-safeguard-20b and the host’s safety checker. The fixed subject line was drafted by the coding agent. File sha256 {sha256}.' },
+  { screen: 'A style or a sheet', where: 'src/app/references/designs/[id]/page.tsx (built-on list)', text: 'Chapter {n} · AI-generated image · not by the author' },
   { screen: 'Reports (moderators)', where: 'src/components/moderate-queue.tsx (a design)', text: 'AI-generated pictures · not by the author' },
   { screen: 'Add an image · compose (from your picks)', where: 'src/components/image-composer.tsx (chip key)', text: 'Character' },
   { screen: 'New style, new sheet, fork, new version', where: 'src/lib/images/design-rules.ts (sample subjects, part of each sample’s public prompt)', text: 'A wide street with tall trees and low buildings, a few people walking, daytime. / A small room with a desk, a window and a plant, seen from the doorway. / A footpath through tall trees, a small drone flying overhead. / A market square at dusk, seen from above.' },
