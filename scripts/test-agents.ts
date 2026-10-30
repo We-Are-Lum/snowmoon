@@ -425,6 +425,12 @@ try {
   check('E9 change_timing drafts a new length; under 0.3 s is refused', tm.ok && !tmBad.ok && (tm.out.change as { was: { from_s: number } }).was.from_s >= 0);
   const sp = await tool(BASE, edA, 'mark_speaking', { adaptation: 1, version: 2, shot: withLine.id, who: ['Bai'] });
   check('E10 mark_speaking drafts who speaks', sp.ok && JSON.stringify((sp.out.change as { who: string[] }).who) === '["Bai"]');
+  // set_camera (owner, 2026-10-29): the server refuses a shot that isn't in the person's version, and a person not in the shot.
+  const camBad = await tool(BASE, edA, 'set_camera', { adaptation: 1, version: 2, shot: 'no-such-shot', angle_deg: -30 });
+  const camOther = await tool(BASE, edA, 'set_camera', { adaptation: 1, version: 1, shot: withLine.id, angle_deg: -30 });
+  const camWho = await tool(BASE, edA, 'set_camera', { adaptation: 1, version: 2, shot: withLine.id, people: [{ who: 'Nobody Here', x: 1, z: 1 }] });
+  const cam = await tool(BASE, edA, 'set_camera', { adaptation: 1, version: 2, shot: withLine.id, angle_deg: -30, height_m: 1 });
+  check('E10b set_camera drafts a camera change on the person\'s own shot; a shot that isn\'t there, someone else\'s version, and a person not in the shot are refused', cam.ok && (cam.out.change as { type: string; angle_deg: number }).type === 'camera' && (cam.out.change as { angle_deg: number }).angle_deg === -30 && !camBad.ok && /no shot "no-such-shot"/.test(camBad.error ?? '') && !camOther.ok && !camWho.ok, `${cam.error ?? ''} | ${camBad.error} | ${camOther.error} | ${camWho.error}`);
   const vt = await tool(BASE, edA, 'request_video_test', { adaptation: 1, version: 2, shot: withLine.id, note: 'Steam rising from the cup; the camera holds.' });
   const vrun = await asPerson(people.A.token, '/api/drafts', { method: 'POST', body: JSON.stringify({ what: 'version', id: vt.out.version, action: 'run' }) });
   const vid = await asPerson(people.A.token, `/api/pieces/image/${vt.out.version}`);

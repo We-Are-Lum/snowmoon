@@ -12,7 +12,7 @@ import { addNote, draftPiece, feedbackFor, notesOn, pieceVersions, piecesOf, rev
 import { openRequests, personWords } from './requests';
 import { addSuggestion, suggestionsOf } from './suggestions';
 import { addDirection, directionOf, findLine, rewriteLine } from './direction';
-import { changeTiming, listTakes, logGap, markSpeaking, recordFailure, requestVideo, swapTake, tryFrame, frameEstimate, videoEstimate } from './edits';
+import { changeTiming, listTakes, logGap, markSpeaking, recordFailure, requestVideo, setCamera, swapTake, tryFrame, frameEstimate, videoEstimate } from './edits';
 
 /**
  * The tools an agent of a person can use (owner, 2026-10-20; design §2). Served as MCP at /mcp (the
@@ -341,6 +341,12 @@ const EDITS: AgentTool[] = [
     description: `Draft a new frame for a shot of your person's own version, from their note. Nothing is made yet: their You page shows the estimate (up to about $${frameEstimate()}) and makes it only when they approve; the frame comes from the site's own pipeline (the shot's camera, cast and place, plus the note) and stays private in the draft.`,
     inputSchema: { type: 'object', properties: { ...SHOT_ARGS, note: { type: 'string', description: EDIT_NOTE }, answering: ANSWERING }, required: ['adaptation', 'version', 'shot', 'note'], additionalProperties: false },
     run: async (agent, args) => tryFrame(agent, args),
+  },
+  {
+    name: 'set_camera', title: 'Change a shot\'s camera or staging', scope: 'drafts', writes: true, counts: 'drafts',
+    description: 'Draft a camera and staging change for a shot of your person\'s own version: angle_deg (negative looks up), distance_m, height_m, and people [{who, x, z, facing_deg}] on the shot\'s saved layout (who must be on screen in that shot; get_shot lists them). Refused for a shot that isn\'t in their version. Free: then try_frame draws a frame from it, which waits for their approval.',
+    inputSchema: { type: 'object', properties: { ...SHOT_ARGS, angle_deg: { type: 'number' }, distance_m: { type: 'number' }, height_m: { type: 'number' }, people: { type: 'array', items: { type: 'object' } }, answering: ANSWERING }, required: ['adaptation', 'version', 'shot'], additionalProperties: false },
+    run: async (agent, args) => setCamera(agent, args),
   },
   {
     name: 'swap_take', title: 'Swap a voice take', scope: 'drafts', writes: true, counts: 'drafts',

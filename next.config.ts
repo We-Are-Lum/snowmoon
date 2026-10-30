@@ -56,6 +56,10 @@ const nextConfig: NextConfig = {
       './content/snowmoon/recipes/**',
       // The style a reader may add to an image prompt (src/lib/images/rules.ts).
       './content/snowmoon/designs/styles/**',
+      // The agents' read tools get_sheet and get_references (owner, 2026-10-29).
+      './content/snowmoon/designs/characters/**',
+      './content/snowmoon/designs/locations/**',
+      './content/snowmoon/references.json',
       // A glossary word's share card (src/app/api/glossary-card) reads the glossary on request.
       './content/snowmoon/glossary.json',
       './config/**',

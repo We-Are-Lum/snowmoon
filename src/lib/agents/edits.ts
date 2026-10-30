@@ -29,7 +29,8 @@ export type Change =
   | { type: 'take'; cue: string; line: string; from: string | null; to: string }
   | { type: 'timing'; from_s: number; to_s: number; was: { from_s: number; to_s: number } }
   | { type: 'speaking'; who: string[]; was: string[] }
-  | { type: 'video'; note: string; model: string; seconds: number; estimate_usd: number };
+  | { type: 'video'; note: string; model: string; seconds: number; estimate_usd: number }
+  | { type: 'camera'; angle_deg: number | null; distance_m: number | null; height_m: number | null; people: { who: string; x: number; z: number; facing_deg: number | null }[] };
 
 const posInt = (v: unknown, what: string) => {
   const n = typeof v === 'string' && /^\d{1,6}$/.test(v) ? Number(v) : v;
@@ -70,6 +71,31 @@ async function draftEdit(agent: Agent, adaptation: number, version: number, shot
   const body = { adaptation, version, shot: shot.id, change };
   const out = await draftPiece(agent, 'edit', title, adaptation, body, false, undefined, typeof answering === 'string' ? { request: answering } : {});
   return { ...out, status: 'draft', change, next: change.type === 'frame' || change.type === 'video' ? `Waiting for your person to approve about $${change.estimate_usd} on their You page; nothing is spent before.` : 'Waiting for your person to keep it.' };
+}
+
+const num = (v: unknown, what: string, min: number, max: number) => {
+  if (v === undefined || v === null) return null;
+  if (typeof v !== 'number' || !Number.isFinite(v) || v < min || v > max) throw new ToolInputError(`${what} must be a number from ${min} to ${max}`);
+  return Math.round(v * 100) / 100;
+};
+
+/**
+ * A camera and staging change for a shot (owner, 2026-10-29, Phase 4): angle (degrees; negative looks up), distance
+ * and height (metres), and where people stand on the shot's saved layout. Drafted only: the server refuses a shot that
+ * isn't in the person's own version (ownShot) and a person who isn't in the shot. The new layout is drawn by the
+ * person's browser on their dashboard, as the editor does, before try_frame makes a frame from it; nothing is spent here.
+ */
+export async function setCamera(agent: Agent, args: Record<string, unknown>) {
+  const { adaptation, version, shot } = await ownShot(agent, args);
+  const onScreen = new Set(Array.isArray(shot.who) ? (shot.who as string[]) : []);
+  const people = (Array.isArray(args.people) ? args.people : []).slice(0, 8).map((p, i) => {
+    const o = (p ?? {}) as Record<string, unknown>;
+    if (typeof o.who !== 'string' || !onScreen.has(o.who)) throw new ToolInputError(`people[${i}]: ${typeof o.who === 'string' ? `${o.who} isn't in shot ${shot.id}` : 'who is required'} (on screen: ${[...onScreen].join(', ') || 'nobody'})`);
+    return { who: o.who, x: num(o.x, `people[${i}].x`, -20, 20) ?? 0, z: num(o.z, `people[${i}].z`, -20, 20) ?? 0, facing_deg: num(o.facing_deg, `people[${i}].facing_deg`, -180, 180) };
+  });
+  const change: Change = { type: 'camera', angle_deg: num(args.angle_deg, 'angle_deg', -89, 89), distance_m: num(args.distance_m, 'distance_m', 0.3, 60), height_m: num(args.height_m, 'height_m', 0, 30), people };
+  if (change.angle_deg === null && change.distance_m === null && change.height_m === null && !people.length) throw new ToolInputError('nothing to change: give an angle, a distance, a height or people');
+  return draftEdit(agent, adaptation, version, shot, change, `Shot ${shot.n}: camera and staging`, args.answering);
 }
 
 export async function tryFrame(agent: Agent, args: Record<string, unknown>) {

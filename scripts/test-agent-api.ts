@@ -68,7 +68,7 @@ check('an unknown protocol version gets the newest', (await rpc('initialize', { 
 check('a notification gets no answer (202)', (await rpc('notifications/initialized', undefined, null)).status === 202);
 const list = (await rpc('tools/list')).body?.result?.tools ?? [];
 const names = list.map((t: any) => t.name).sort().join(',');
-check('tools/list: the eight read tools, each with a schema, all read only', names === 'get_glossary,get_moment,get_passage,get_recipe,get_scene,get_shot,list_scenes,search_book' && list.every((t: any) => t.inputSchema?.type === 'object' && t.annotations?.readOnlyHint === true), names);
+check('tools/list: the ten read tools, each with a schema, all read only', names === 'get_glossary,get_moment,get_passage,get_recipe,get_references,get_scene,get_sheet,get_shot,list_scenes,search_book' && list.every((t: any) => t.inputSchema?.type === 'object' && t.annotations?.readOnlyHint === true), names);
 
 const sb = await call('search_book', { query: 'Minpentai', limit: 3 });
 check('search_book: hits with block ids and links, the book and its licence', !sb.isError && sb.structuredContent.hits.length === 3 && /^c\d+-b\d+$/.test(sb.structuredContent.hits[0].block_id) && sb.structuredContent.book.licence === 'GPL-3.0', JSON.stringify(sb).slice(0, 200));
@@ -85,6 +85,16 @@ const hidden = await call('get_glossary', { through: 1, term: lastTerm.slug });
 const shown = await call('get_glossary', { term: lastTerm.slug });
 const full = shown.structuredContent as { explanations: { block: string }[]; mentions: string[] } | undefined;
 check('get_glossary: a term first met later is hidden through chapter 1, and its full entry is cited by block', hidden.isError === true && shown.isError === false && !!full && full.mentions.every((m) => /^c\d+-b\d+$/.test(m)) && full.explanations.every((e) => /^c\d+-b\d+$/.test(e.block)));
+ip = 1;
+// get_sheet and get_references (owner, 2026-10-29): the book's facts word for word at their blocks, the invented look
+// labelled as invented; a word's sheets and pictures, each picture labelled.
+ip = 10;
+const sheet = (await call('get_sheet', { kind: 'character', slug: 'bai' }))?.structuredContent as { book_facts: { block: string; quote: string }[]; invented_look: { note: string } | null } | undefined;
+const blockText = (b: string) => { const [, ch, idx] = /^c(\d+)-b(\d+)$/.exec(b)!; const blocks = JSON.parse(readFileSync(path.join(ROOT, 'content/snowmoon/text', `chapter-${ch}.json`), 'utf8')).blocks as { idx: number; content: string }[]; return (blocks.find((x) => x.idx === Number(idx))?.content ?? '').replace(/<[^>]+>/g, '').replace(/\*\*?/g, ''); };
+check('get_sheet: every book fact is word for word at its block; the invented look says it is invented', !!sheet && sheet.book_facts.length > 0 && sheet.book_facts.every((f) => blockText(f.block).includes(f.quote)) && /Invented/.test(sheet.invented_look?.note ?? ''));
+const noSheet = await call('get_sheet', { kind: 'place', slug: 'not-a-place' });
+const refs = (await call('get_references', { term: 'Zei' }))?.structuredContent as { sheets: { slug: string }[]; pictures: { label: string }[] } | undefined;
+check('get_references: a word\'s sheets and its pictures, each labelled; an unknown sheet is the tool\'s own error', noSheet?.isError === true && !!refs && refs.sheets.some((x) => x.slug === 'zei') && refs.pictures.length > 0 && refs.pictures.every((x) => /AI-generated/.test(x.label)));
 ip = 1;
 const gp = await call('get_passage', { chapter: 14, from: 1, to: 5 });
 check('get_passage: says how many blocks the chapter has and that more follow', typeof (gp.structuredContent as any)?.blocks_in_chapter === 'number' && (gp.structuredContent as any)?.more_after === true);
@@ -110,7 +120,7 @@ check('an unknown method is refused', (await rpc('resources/list')).body?.error?
 
 ip = 2;
 const rt = await rest('tools');
-check('REST: the same tools listed', rt.ok && ((await rt.json()) as any).tools.length === 8);
+check('REST: the same tools listed', rt.ok && ((await rt.json()) as any).tools.length === 10);
 const rs = await rest('get_shot', '?adaptation=1&version=2&shot=11-b1-4');
 check('REST: get_shot answers the same shot', rs.ok && ((await rs.json()) as any).shot === '11-b1-4');
 check('REST: a bad argument is 400, an unknown tool 404', (await rest('get_shot', '?adaptation=1&version=2&shot=nope')).status === 400 && (await rest('write_line')).status === 404);

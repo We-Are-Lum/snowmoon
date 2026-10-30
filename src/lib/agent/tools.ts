@@ -2,6 +2,8 @@ import 'server-only';
 import { AGENT_API, appUrl } from '../config';
 import { blockId, chapterNumbers, loadChapter } from '../book';
 import { glossaryThrough } from '../glossary';
+import { readFileSync, existsSync } from 'node:fs';
+import path from 'node:path';
 import { plainText, searchBook } from '../book-search';
 import { authorVersions, editorVersion, getAdaptation, getVersion, ownMedia, publicCatalogue, sceneHandleFor, sceneOwner, type Version } from '../adaptation-pages';
 import { editorData, type DataShot } from './data';
@@ -146,6 +148,53 @@ export const TOOLS: Tool[] = [
       const t = all.find((x) => x.slug === q || x.term.toLowerCase() === q || x.aliases.some((a) => a.toLowerCase() === q));
       if (!t) throw new ToolInputError(`no glossary term "${args.term}" met by chapter ${through}${through < lastChapter ? ' (it may come later: raise "through")' : ''}`);
       return { book: BOOK, through, url: `${url}/${t.slug}`, ...t };
+    },
+  },
+  {
+    name: 'get_sheet',
+    title: 'Read a character or place sheet',
+    description: 'A character\'s or place\'s sheet as the site keeps it, with what the book says kept apart from what was invented: "book_facts" are the book\'s own words, word for word, each with its block id (c<chapter>-b<block>); "invented_look" is a starting point the edition made up where the book is silent (say so if you use it). Read this before drafting any picture of a character or place. kind: character or place; slug as in get_references or the glossary (zei, bai, minpentai-arena).',
+    inputSchema: { type: 'object', properties: { kind: { enum: ['character', 'place'] }, slug: { type: 'string' } }, required: ['kind', 'slug'], additionalProperties: false },
+    run: async (args) => {
+      only(args, ['kind', 'slug']);
+      const kind = args.kind === 'place' ? 'place' : args.kind === 'character' ? 'character' : null;
+      const slug = typeof args.slug === 'string' && /^[a-z0-9-]{1,60}$/.test(args.slug) ? args.slug : null;
+      if (!kind || !slug) throw new ToolInputError('kind is character or place, and slug is lowercase letters, numbers and hyphens');
+      const f = path.join(process.cwd(), 'content', 'snowmoon', 'designs', kind === 'character' ? 'characters' : 'locations', `${slug}.json`);
+      if (!existsSync(f)) throw new ToolInputError(`no ${kind} sheet "${slug}"; get_references with a glossary word lists the sheets it has`);
+      const d = JSON.parse(readFileSync(f, 'utf8')) as { name: string; about?: string; descriptor?: string; facts?: { chapter: number; idx: number; quote: string; fact?: string }[] };
+      return {
+        book: BOOK,
+        kind,
+        slug,
+        name: d.name,
+        about: d.about ?? null,
+        book_facts: (d.facts ?? []).map((x) => ({ block: blockId(x.chapter, x.idx), quote: x.quote, what_it_tells: x.fact ?? null })),
+        invented_look: d.descriptor ? { text: d.descriptor, note: 'Invented by this edition as a starting point where the book is silent; not the book.' } : null,
+        url: `${appUrl()}/references/designs/${kind === 'character' ? 'character' : 'place'}/${slug}`,
+      };
+    },
+  },
+  {
+    name: 'get_references',
+    title: 'Read a glossary word\'s references',
+    description: 'The character and place sheets this site links to a glossary word (from its reviewed references map), and the pictures already made of them in this edition (each with its chapter and block). Use get_sheet on each sheet for what the book says. Uncertain links waiting for review are left out.',
+    inputSchema: { type: 'object', properties: { term: { type: 'string', description: 'A glossary word, alias or slug.' } }, required: ['term'], additionalProperties: false },
+    run: async (args) => {
+      only(args, ['term']);
+      if (typeof args.term !== 'string' || !args.term.trim()) throw new ToolInputError('term must be a word');
+      const q = args.term.trim().toLowerCase();
+      const t = glossaryThrough(chapterNumbers().at(-1)!).find((x) => x.slug === q || x.term.toLowerCase() === q || x.aliases.some((a) => a.toLowerCase() === q));
+      if (!t) throw new ToolInputError(`no glossary word "${args.term}"`);
+      const mapFile = path.join(process.cwd(), 'content', 'snowmoon', 'references.json');
+      const map = existsSync(mapFile) ? (JSON.parse(readFileSync(mapFile, 'utf8')) as { terms: { term: string; designs: { kind: 'character' | 'place'; slug: string; check: boolean }[] }[] }) : { terms: [] };
+      const sheets = (map.terms.find((x) => x.term === t.slug)?.designs ?? []).filter((d) => !d.check);
+      const published = JSON.parse(readFileSync(path.join(process.cwd(), 'content', 'snowmoon', 'illustrations', 'published.json'), 'utf8')) as { images: { id: string; chapter: number; idx: number; url: string; characters?: string[]; location?: string }[] };
+      const pictures = published.images
+        .filter((im) => sheets.some((s) => (s.kind === 'character' ? (im.characters ?? []).includes(s.slug) : (im.location ?? '').endsWith(`/${s.slug}.json`))))
+        .slice(0, 12)
+        .map((im) => ({ id: im.id, block: blockId(im.chapter, im.idx), url: im.url, label: 'AI-generated image, not by the author' }));
+      return { book: BOOK, term: t.term, slug: t.slug, first_seen: t.first_seen, sheets: sheets.map((s) => ({ kind: s.kind, slug: s.slug })), pictures, note: sheets.length ? undefined : 'No sheet is linked to this word yet.' };
     },
   },
   {
