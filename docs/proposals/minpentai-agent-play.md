@@ -51,8 +51,8 @@ So most of the referee is built. The new work is the tools, the agent-paced cloc
 ## 6. Simultaneous orders, committed and revealed
 
 - An order is a list of placements: `{piece: glider|square|tower, x, y, dir?}`, at most the turn's points.
-- `minpentai_submit_orders` stores the list as that side's `pend` (replacing any earlier one) and returns a **commitment**: `sha256(canonical(placements) || salt)`, with the salt kept by the server. The other side learns only that this side has committed (`opponent_committed: true`), never what.
-- At reveal, both lists and both salts go into the match record, so anyone can check afterwards that each side's orders are the ones committed before the reveal. This is the "signed, offchain commitments" path the onchain fog proposal recommends for PvP (`minpentai-fog.md` on the `minpentai-onchain` branch); the referee signs the commitments, since agents have no wallet of their own. Owner decision: whether the person's wallet should also sign (section 13).
+- `minpentai_submit_orders` stores the list as that side's `pend` (replacing any earlier one) and returns a **commitment**: `sha256(canonical(placements) || salt)`, with the salt kept by the server. The other side sees that this side has committed, and the commitment hash itself (`opponent_commitment`), never the orders. Showing the hash to the opponent at once is what makes it worth something: the referee can't later swap a side's orders without the opponent's copy of the hash disagreeing.
+- At reveal, both lists and both salts go into the match record, so anyone can check afterwards that each side's orders are the ones committed before the reveal. This is the "signed, offchain commitments" path the onchain fog proposal recommends for PvP (`minpentai-fog.md` on the `minpentai-onchain` branch); the referee signs the commitments, since agents have no wallet of their own. Owner decision: whether the person's wallet should also sign (section 14, question 6).
 - Final early: `final: true` on a submission says "I'm done". When both sides are final, the turn reveals at once instead of waiting for the clock. This exists today as `ended` (`playTurn`: "Both ended → the turn resolves now"; the view shows `oppEnded`).
 
 ## 7. Clocks
@@ -138,7 +138,7 @@ All new tools are in a new scope, **`play`**, that the person grants on the cons
 
 **`minpentai_get_view`** (read)
 - In: `{ match_id, since_step?: number, frames?: boolean }`
-- Out: `{ match_id, side, phase: "setup" | "act" | "run" | "over", step, max_steps: 96, turn: number, deadline, rule, R, every, points, cost: { glider, square: 1, tower: 4 }, board: { rocks, mine: { towers, squares, gliders }, seen: { towers, squares, gliders }, last_seen: [{ x, y, step }] }, can_place: [[x, y]...], my_orders: { placements, source, final, commitment } | null, opponent_committed: boolean, opponent_final: boolean, standing_order, counts_seen: { mine, theirs_seen }, frames?: [fogged boards since since_step], live_url }`
+- Out: `{ match_id, side, phase: "setup" | "act" | "run" | "over", step, max_steps: 96, turn: number, deadline, rule, R, every, points, cost: { glider, square: 1, tower: 4 }, board: { rocks, mine: { towers, squares, gliders }, seen: { towers, squares, gliders }, last_seen: [{ x, y, step }] }, can_place: [[x, y]...], my_orders: { placements, source, final, commitment } | null, opponent_commitment: string | null, opponent_final: boolean, standing_order, counts_seen: { mine, theirs_seen }, frames?: [fogged boards since since_step], live_url }`
 - Pieces are `{x, y}` plus `{dx, dy}` for gliders and `hp` for squares. Everything is from this side's view.
 
 **`minpentai_submit_orders`** (write)
