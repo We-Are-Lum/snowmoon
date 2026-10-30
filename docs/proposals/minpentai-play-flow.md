@@ -1,6 +1,6 @@
 # Minpentai: the play flow (sign in, find a game, share, contests)
 
-> DRAFT design, 2026-10-30, for the owner's read. Written by the coding agent (Anthropic's Claude, a closed model). Nothing here is built. Rules invented for this edition · not affiliated with the author. It builds on `docs/proposals/minpentai-agent-play.md` (agent play, the site computer's fallback, presets) and follows the owner's order: one-engine, then the stronger computer, then agent play. **[Unverified]** marks outside facts I didn't confirm against current documentation.
+> DRAFT design, 2026-10-30, v2 (owner's changes of 2026-10-30: the stronger computer moves to right after one-engine; the weekly challenge is open to any method, ranked by result with ties to the earliest submission, no prizes for now). For the owner's read. Written by the coding agent (Anthropic's Claude, a closed model). Nothing here is built. Rules invented for this edition · not affiliated with the author. It builds on `docs/proposals/minpentai-agent-play.md` (agent play, the site computer's fallback, presets) and follows the owner's order: one-engine, then the stronger computer, then agent play. **[Unverified]** marks outside facts I didn't confirm against current documentation.
 
 ## 0. The flow in one picture
 
@@ -63,7 +63,7 @@ Three ways to play any game, chosen per game:
 | **By hand, with a preset** | Places pieces when present; picks `defend`, `attack`, `expand` or `balanced` for turns they miss | The person, else the site computer under the preset |
 | **With your AI** | Talks to their AI (Claude, ChatGPT, any MCP client) through the Snowmoon connector | The AI, else the site computer under the preset |
 
-- The preset is the same as agent play's (`minpentai-agent-play.md` §9), so the site computer is the fallback for everyone, AI or not. It needs the stronger computer (decision 2), and until then turns a person misses simply pass, as today's deadlines do.
+- The preset is the same as agent play's (`minpentai-agent-play.md` §9), so the site computer is the fallback for everyone, AI or not. It needs the stronger computer, which now comes right after one-engine (§8).
 - Every match record says, per turn, who placed: the person, their AI, or the site computer under which preset.
 - Labels on the live view and the record: "by hand", "by hand · site computer on 2 turns (defend)", "@x's AI · Claude (Anthropic app) · says it runs … (self-reported)".
 
@@ -95,11 +95,11 @@ Three ways to play any game, chosen per game:
 
 ## 5. After a game: Choose new game, and same-board challenges from browser Play
 
-Both change Play's controller (`play-game/controller.ts`), which one-engine rewrites, so **both are planned on top of one-engine, not `main`**, after it merges. One-engine already reads a match's version and settings from one place, which is what both need.
+Both change Play's controller (`play-game/controller.ts`), which one-engine rewrites, so **both are planned on top of one-engine, not `main`**, after it merges. Choose new game also waits for the stronger computer (§8, step 2). One-engine already reads a match's version and settings from one place, which is what both need.
 
 ### 5.1 Play it again / Choose new game / Done
 
-- **Play it again:** the same level, the same extra rule (picked or drawn), a new seed. **Choose new game:** opens the picker: computer level (Practice, rungs 1–5 as unlocked) and extra rule (drawn, or one of the four; later, a ruleset such as the book version). **Done:** home.
+- **Play it again:** the same level, the same extra rule (picked or drawn), a new seed. **Choose new game:** opens the picker: computer level (Practice, then the stronger computer's five levels, which land before this picker so it offers them from the start; the ladder's unlocks apply) and extra rule (drawn, or one of the four; later, a ruleset such as the book version). **Done:** home.
 - Works signed out (practice only; the ladder needs a sign-in) and signed in by wallet or Bluesky once parity lands; until then a wallet person sees practice levels only, as today.
 - On the ladder: "Next rung" replaces Play it again after a win; Choose new game is the same picker.
 - **Size: S** on one-engine (the picker already exists in the snap's first page; Play gets the same choices).
@@ -125,11 +125,15 @@ Both change Play's controller (`play-game/controller.ts`), which one-engine rewr
 
 ## 7. Contests
 
-Two formats, in order. Both need the official rules a prize requires (7.3) and **legal review before any prize is offered**.
+Two formats, in order. **No prizes for now** (owner, 2026-10-30). If prizes come later, they need the official rules in 7.3 and **legal review before any prize is offered**.
 
 ### 7.1 Weekly same-board challenge (today's game)
 
-**Format.** Every Monday at 00:00 UTC a board goes up: one seed, one level of the computer, one extra rule, today's game (solo-v1). Anyone plays it as often as they like until Sunday 23:59 UTC. The leaderboard ranks each person's **best verified result**: a win first, then fewest steps, then most towers left, then earliest submission. A board's results are public with the moves, so anyone can replay them.
+**Format.** Every Monday at 00:00 UTC a board goes up: one seed, one level of the computer, one extra rule, today's game (solo-v1). Anyone plays it as often as they like until Sunday 23:59 UTC.
+
+**Open to any method, said plainly on the board's page:** play it yourself, with your own AI, or with the open-source computer. The board is published, and a search over the engine can solve a published board, so there's no way to keep help out and the rules don't try.
+
+**Ranking:** each person's **best verified result**, ranked by the result (a win before a draw before a loss; then fewer steps to win; then more towers left), and **ties to the earliest submission**. A board's results are public with the moves, so anyone can replay them. No prizes for now; the leaderboard is the reward.
 
 | | |
 |---|---|
@@ -137,13 +141,10 @@ Two formats, in order. Both need the official rules a prize requires (7.3) and *
 | **New** | The weekly board (a seed chosen in advance, its hash published before the week starts, the seed revealed at start, so nobody, the site included, picks a board after seeing results); verified submission (the server replays the moves, 5.2); the leaderboard page; the share card per board; a results archive |
 | **Size** | **M** (on one-engine and 5.2) |
 
-**One person, many accounts.** With unlimited attempts on one account, more accounts don't help anyone's best score: a person could play the same board a thousand times on one account. So for the **leaderboard** multiple accounts barely matter. They matter for **prizes** (one prize per person) and for "first to…" or participation rewards, which this format should avoid. Measures:
-- one entry per person: linked logins count as one person (§2.1);
-- prizes only to people who pass winner verification at award time (identity, age, residence; see 7.3), not at entry;
-- a Farcaster account below a quality score (for example Neynar's) can play and appear, but isn't prize-eligible [threshold for the owner];
-- the moves are public, so copied games (two accounts submitting the same move list) are visible; the earliest submission keeps the place.
-
-**"No AI" can't be enforced here.** The board is open, and anyone can run the engine (it's open source) or an AI on their own machine to search for the best line. So the weekly challenge is **one open category**: "any help allowed", said plainly. That is also what makes it fair.
+**One person, many accounts.** With unlimited attempts on one account, more accounts don't help anyone's best score: a person could play the same board a thousand times on one account. With no prizes, multiple accounts can at most crowd the leaderboard. Measures:
+- one row per person: linked logins count as one person (§2.1);
+- the moves are public, so copied games (two accounts submitting the same move list) are visible, and ties go to the earliest submission, so a copy never outranks the original;
+- if prizes come later: one prize per person, winner verification at award time (identity, age, residence; see 7.3), and a Farcaster quality score for eligibility.
 
 ### 7.2 Scheduled agent-play tournament
 
@@ -165,7 +166,7 @@ Two formats, in order. Both need the official rules a prize requires (7.3) and *
 
 **"No agent" is an honour category.** The site can stop connector agents from playing that side, but it can't see a second screen or a local program. The rules should say so ("no AI or computer assistance, on your honour") and say what happens on a credible report (review; disqualification).
 
-### 7.3 What official rules a prize needs (for legal review)
+### 7.3 What official rules a prize would need (for legal review, if prizes come later)
 
 Everything below is a checklist for a lawyer, not legal advice. **Flagged for legal review: all of section 7 before any prize, and anything that charges entry or pays in crypto.**
 
@@ -188,23 +189,24 @@ Everything below is a checklist for a lawyer, not legal advice. **Flagged for le
 | # | Piece | Size | Needs | Why here |
 |---|---|---|---|---|
 | 1 | One-engine merges (with the reach ≤ sight check) | — | owner's OK | everything below builds on it |
-| 2 | Choose new game (5.1) | S | 1 | cheap, asked for |
-| 3 | Same-board challenges from browser Play, server-replayed (5.2) and the share sheet with Farcaster, X, Bluesky and copy (§6) | S–M | 1 | needed by the weekly challenge |
-| 4 | **Weekly same-board challenge** (7.1), unranked and prize-free first | M | 3 | a contest on today's game, soon; runs a few weeks before any prize |
-| 5 | Persons and logins (site-wide), then Minpentai off FID (§2.1, §2.3) | L | — | parity; can run in parallel with 2–4 |
-| 6 | Bluesky sign-in (§2.2) | M | 5, Privacy reread | a third way in |
-| 7 | Open games and daily turns with the deadline cron and notifications (§4.1, §4.2) | M | 1 | play while away |
-| 8 | Stronger computer, then presets and the fallback for everyone (§3) | M (+ its own build) | 1 | owner's order |
-| 9 | Agent play (its own design) | L | 8 | owner's order |
-| 10 | Scheduled play windows (§4.3) | M | 7 | |
-| 11 | Agent-play tournament (7.2) | L | 9, legal review | |
-| — | Any prize (7.1 or 7.2) | — | legal review, official rules, Terms and Privacy | flagged |
+| 2 | **Stronger computer**: five new levels on the base ruleset (owner, 2026-10-30: right after one-engine, so the base ruleset changes once and the picker offers the new levels from the start) | M (+ its own build) | 1 | the difficulty picker in 3 shows these levels |
+| 3 | Choose new game (5.1), with the new five levels | S | 2 | asked for |
+| 4 | Same-board challenges from browser Play, server-replayed (5.2) and the share sheet with Farcaster, X, Bluesky and copy (§6) | S–M | 1 | needed by the weekly challenge |
+| 5 | **Weekly same-board challenge** (7.1), open to any method, no prizes | M | 4 | a contest on today's game, soon |
+| 6 | Persons and logins (site-wide), then Minpentai off FID (§2.1, §2.3) | L | — | parity; can run in parallel with 3–5 |
+| 7 | Bluesky sign-in (§2.2) | M | 6, Privacy reread | a third way in |
+| 8 | Open games and daily turns with the deadline cron and notifications (§4.1, §4.2) | M | 1 | play while away |
+| 9 | Presets and the site-computer fallback for everyone (§3) | S–M | 2 | the fallback uses the stronger computer |
+| 10 | Agent play (its own design) | L | 9 | owner's order |
+| 11 | Scheduled play windows (§4.3) | M | 8 | |
+| 12 | Agent-play tournament (7.2) | L | 10 | |
+| — | Any prize (none for now) | — | legal review, official rules, Terms and Privacy | flagged |
 
 ## 9. Open questions for the owner
 
-1. Prizes at all, and if so which kind (none, recognition only, cash, crypto)? Recognition-only removes most of 7.3.
+1. ~~Prizes~~ Settled: none for now (owner, 2026-10-30).
 2. The weekly board's level: one fixed level (say rung 3), or a level per week?
-3. The Farcaster quality-score threshold for prize eligibility, and whether wallet-only and Bluesky-only people can win prizes (they're harder to tell apart).
+3. (Only if prizes come later.) The Farcaster quality-score threshold for prize eligibility, and whether wallet-only and Bluesky-only people can win prizes.
 4. Persons and logins is a site-wide change: do it now for Minpentai's sake, or after the next-version plan?
 5. Bluesky: sign-in only, or also posting a result for the person (needs a write scope)? This design does sign-in and an intent link only.
 
