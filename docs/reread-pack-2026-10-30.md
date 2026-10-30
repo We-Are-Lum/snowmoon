@@ -8,7 +8,7 @@ yet. Each text goes in with its own feature's merge, never ahead (owner, 2026-10
 So every new sentence below already says "your Dashboard", not "your You page". If you'd rather it waited, say so and
 I'll switch the wording back.
 
-How a merged section reads: where several items add to the same section, section 8 shows the section as it would read
+How a merged section reads: where several items add to the same section, "Combined" (near the end) shows Terms §7 as it would read
 once everything here has shipped, in the order the features merge.
 
 ---
@@ -113,7 +113,7 @@ your reread.
 - fal.ai item, after: "fal.ai receives the prompt for an image you make (or approve from your agent's drafts), and any
   pictures sent with it…" (the rest as today).
 
-### 8a. Terms §6b (Agents), first paragraph
+### 8. Terms §6b (Agents), first paragraph
 
 - Before: "…When an agent drafts something that costs money (a new frame or a video test), it shows the estimated cost,
   and nothing is made until you approve it. Each draft is made at most once, and each day is limited to 20 frames, 5
@@ -268,7 +268,7 @@ for everyone after about 32 make conversations a day. Book questions cost about 
 
 ---
 
-## 8. Terms §7 as it would read with Parts D and E shipped
+## Combined: Terms §7 as it would read with Parts D and E shipped
 
 > Nothing on the Service is official or canonical. We may hide content that breaks these Terms. Admins may also hide the
 > images the project made itself, its starting points, for any reason. Public posts on other networks that link to a
