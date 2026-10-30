@@ -117,7 +117,7 @@ Both change Play's controller (`play-game/controller.ts`), which one-engine rewr
 |---|---|---|
 | **Farcaster** | The snap: a cast with `snowmoon.party/minpentai/play`, a challenge link or `/snap/minpentai` plays in the feed. Share opens Farcaster's composer with the link | Yes (snap); the composer intent from browser Play is new (S) |
 | **X** | A link card (og:image 1200×630, `summary_large_image`); Share opens X's post intent with text and link [Unverified: current intent URL] | Card yes; intent from Play new (S) |
-| **Bluesky** | A link card from the same Open Graph tags (Bluesky's card fetcher reads og:title, og:description, og:image [Unverified]); Share opens Bluesky's compose intent with the text and link | Card yes (the 2026-10-30 link rule sends bots the page); intent new (S) |
+| **Bluesky** | A link card from the same Open Graph tags (Bluesky's card fetcher reads og:title, og:description, og:image [Unverified]); Share opens Bluesky's compose intent with the text and link | Card yes (link-preview bots get the page and its card; the coming snap-link rule must keep that); intent new (S) |
 | **Copy link** | Any of the above | New in Play (S) |
 
 - One share sheet for match results, challenges and ladder wins. The text names the result and the rule ("Won in 49 steps · gliders cost 3 · Rules invented for this edition"), never invents book claims (principle 8h).
