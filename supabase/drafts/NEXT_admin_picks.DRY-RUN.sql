@@ -5,7 +5,7 @@
 -- MUST RUN AS postgres (the role that owns the `studio` schema), in the Supabase SQL Editor. Requires 0001 only.
 -- Dry run first: supabase/drafts/NEXT_admin_picks.DRY-RUN.sql (the same, ending in rollback;).
 -- Read back after: supabase/drafts/READ-BACK-admin_picks.sql (every line should say true).
--- One transaction: all of it or none.
+-- One transaction: all of it or none. Safe to run twice.
 --
 -- What it adds (neither table is publicly readable: no public read policy, and anon and authenticated lose every
 -- privilege 0001's default privileges gave them; the site reads them on the server):
@@ -25,7 +25,7 @@
 
 begin;
 
-create table studio.admin_picks (
+create table if not exists studio.admin_picks (
   id bigint generated always as identity primary key,
   target_kind text not null check (target_kind in ('moment', 'term')),
   target text not null check (
@@ -38,9 +38,9 @@ create table studio.admin_picks (
   picked_at timestamptz not null default now(),
   constraint ref_unless_none check ((image_kind = 'none') = (image_ref is null))
 );
-create index admin_picks_target on studio.admin_picks (target_kind, target, picked_at desc);
+create index if not exists admin_picks_target on studio.admin_picks (target_kind, target, picked_at desc);
 
-create table studio.seeded_hidden (
+create table if not exists studio.seeded_hidden (
   image_id text primary key check (image_id ~ '^c[0-9]{1,2}-b[0-9]{1,4}-[a-z0-9-]{1,80}$'),
   by_fid bigint not null check (by_fid > 0),
   hidden_at timestamptz not null default now()
@@ -48,9 +48,13 @@ create table studio.seeded_hidden (
 
 alter table studio.admin_picks enable row level security;
 alter table studio.seeded_hidden enable row level security;
+drop policy if exists writer_read on studio.admin_picks;
 create policy writer_read on studio.admin_picks for select to studio_writer using (true);
+drop policy if exists writer_insert on studio.admin_picks;
 create policy writer_insert on studio.admin_picks for insert to studio_writer with check (true);
+drop policy if exists writer_read on studio.seeded_hidden;
 create policy writer_read on studio.seeded_hidden for select to studio_writer using (true);
+drop policy if exists writer_insert on studio.seeded_hidden;
 create policy writer_insert on studio.seeded_hidden for insert to studio_writer with check (true);
 revoke all on studio.admin_picks from anon, authenticated;
 revoke all on studio.seeded_hidden from anon, authenticated;
