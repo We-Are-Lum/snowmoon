@@ -15,6 +15,7 @@ import { ExternalLinks } from './external-links';
 import { LegalLine } from './legal-line';
 import { SignInButton } from './sign-in';
 import { ThemeSwitch } from './theme-switch';
+import { ImageZoom } from './image-zoom';
 import { WalletSignInButton } from './wallet';
 import { IMAGE_WORDING } from '~/lib/images/wording';
 import '../app/assistant/assistant.css';
@@ -96,6 +97,7 @@ export function AppShell({ chapters, adaptations, intro, children }: { chapters:
 
   return (
     <div className={`shell${collapsed ? ' rail-collapsed' : ''}${showPanel ? ' with-panel' : ''}`}>
+      <ImageZoom />
       <header className="topbar">
         {path.startsWith('/assistant') ? (
           <Link href={`/chapter/${last}`} className="topbar-icon" aria-label={`Back to Chapter ${last}`}>
