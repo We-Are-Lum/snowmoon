@@ -1131,8 +1131,14 @@ async function checkAiLabels() {
       );
       await page.route('**/api/chat/status**', (r) => r.abort());
       await page.route('**/api/images/status**', async (r) => {
-        const real = (await (await r.fetch()).json()) as Record<string, unknown>;
-        await r.fulfill({ json: { ...real, ready: true, signedIn: true, fid: 6786, invited: true, eligible: true, consented: true, left: 9, publishesLeft: 3 } });
+        // The real answer, then the signed-in parts stood in. A request still in flight when its page closes has nowhere
+        // to go: ignore it (2026-10-30: one closed mid-fetch and the uncaught error ended the whole run).
+        try {
+          const real = (await (await r.fetch()).json()) as Record<string, unknown>;
+          await r.fulfill({ json: { ...real, ready: true, signedIn: true, fid: 6786, invited: true, eligible: true, consented: true, left: 9, publishesLeft: 3 } });
+        } catch (e) {
+          if (!/closed|disposed/i.test(String((e as Error)?.message))) throw e;
+        }
       });
       await page.route('**/api/consent', (r) => r.fulfill({ json: { wording: { sha256: 'x', title: 'x', text: 'x' }, agreed: true } }));
       await page.route('**/api/moderate', (r) =>
