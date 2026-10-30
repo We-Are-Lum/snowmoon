@@ -313,6 +313,9 @@ All four paste files are in iCloud, `snowmoon-takes/overnight-2026-10-21/migrati
 
 Then tell me "applied" for each.
 
+Every read-back also adds a realistic row as the site's role, checks it, deletes it, and ends in `rollback;`, so nothing
+is kept (CLAUDE.md). Each was run against a local database built from its branch's migrations: all rows true.
+
 | # | Migration | Database | Files | Needs | Then |
 |---|---|---|---|---|---|
 | 1 | open-call `0004_opencall_fal_cleanup` | open-call's (`public.opencall_renders`) | `open-call-0004_opencall_fal_cleanup.DRY-RUN.sql`, `open-call-0004_opencall_fal_cleanup.sql`, `READ-BACK-open-call-0004.sql` | 0001–0003 of open-call | I merge open-call's `fal-cleanup` and restart the bench |
