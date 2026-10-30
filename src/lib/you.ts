@@ -279,7 +279,8 @@ export async function publicWork(person: Person, handle: string): Promise<Public
     pub.frames.push(...more.frames);
     pub.boards.push(...more.boards);
   }
-  const [pictures, pieces] = await Promise.all([publicPictures([person, ...wallets]), publicPieces(person)]);
+  // Pictures wait for consent v5's switch, with frames and storyboards (owner, 2026-10-30).
+  const [pictures, pieces] = await Promise.all([PROFILE_LISTS_REMIXES ? publicPictures([person, ...wallets]) : [], publicPieces(person)]);
   return { ...pub, pictures, pieces };
 }
 

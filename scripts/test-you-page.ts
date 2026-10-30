@@ -265,7 +265,7 @@ try {
     check(PROFILE_LISTS_REMIXES ? 'Y4 /@A shows A’s scene, frame and storyboard' : 'Y4 /@A shows A’s scenes, and no frames or storyboards (they wait for consent v5)', has(`/@${A}/1`) && (PROFILE_LISTS_REMIXES ? has(`/remix/${fA}`) && has(`/storyboard/${sA}`) : !has(`/remix/`) && !has(`/storyboard/`)));
     check('Y4 /@A shows nothing hidden', !has(fA2) && !has(sA2) && !has('A HIDDEN'));
     check('Y4 /@A shows nothing of B’s', !has(fB) && !has(sB) && !has('B OWN') && !has(B));
-    check('Y4 /@A shows A’s published picture, linked to its page', has(`/image/${iA}`));
+    check(PROFILE_LISTS_REMIXES ? 'Y4 /@A shows A’s published picture, linked to its page' : 'Y4 /@A lists no pictures yet (they wait for consent v5’s switch, owner 2026-10-30)', PROFILE_LISTS_REMIXES ? has(`/image/${iA}`) : !has(`/image/${iA}`));
     check('Y4 /@A shows no hidden picture, nothing of B’s pictures, no balance', !has(iA2) && !has('A HIDDEN PICTURE') && !has(iB) && !has('B OWN PICTURE') && !/Balance|wallet_payments/.test(p.text));
     check(SHOW_BASENAMES ? 'Y4 /@A names A by Basename' : 'Y4 /@A shows no Basename (off)', SHOW_BASENAMES ? has(BASENAME) : !has(BASENAME));
     check('Y4 /@A is not offered to search engines', /<meta name="robots" content="noindex/.test(p.text));

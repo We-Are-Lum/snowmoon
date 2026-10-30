@@ -39,7 +39,7 @@ const W = {
   // What /@<handle> lists today (src/lib/you.ts publicWork): remix frames and storyboards only once PROFILE_LISTS_REMIXES is on.
   profileNote: PROFILE_LISTS_REMIXES
     ? 'Anyone can open it. It shows the scenes, pictures, remix frames and storyboards you have published here, and nothing you have hidden.'
-    : 'Anyone can open it. It shows the scenes and pictures you have published here, and nothing you have hidden.',
+    : 'Anyone can open it. It shows the scenes you have published here, and nothing you have hidden.',
   noProfile: 'Your public page needs a Farcaster name.',
   signOutFarcaster: 'Sign out',
   signOutWallet: 'Sign out of this wallet',
