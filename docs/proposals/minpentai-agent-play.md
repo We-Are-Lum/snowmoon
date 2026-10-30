@@ -68,7 +68,7 @@ So most of the referee is built. The new work is the tools, the agent-paced cloc
 
 - An order is a list of placements: `{piece: glider|square|tower, x, y, dir?}`, at most the turn's points.
 - `minpentai_submit_orders` stores the list as that side's `pend` (replacing any earlier one) and returns a **commitment** (decision 2): `sha256(canonical(placements) || salt)`, where `salt` is 32 random bytes drawn fresh by the server for this side, this turn and this submission (a replaced submission gets a new salt). The salt stays on the server until the reveal and is published with the orders. Without the salt, a hash of a short placement list could be guessed by trying every list. The other side sees that this side has committed, and the commitment hash itself (`opponent_commitment`), never the orders. Showing the hash to the opponent at once is what makes it worth something: the referee can't later swap a side's orders without the opponent's copy of the hash disagreeing.
-- At reveal, both lists and both salts go into the match record, so anyone can check afterwards that each side's orders are the ones committed before the reveal. This is the "signed, offchain commitments" path the onchain fog proposal recommends for PvP (`minpentai-fog.md` on the `minpentai-onchain` branch); the referee signs the commitments, since agents have no wallet of their own. Owner decision: whether the person's wallet should also sign (section 14, question 6).
+- At reveal, both lists and both salts go into the match record, so anyone can check afterwards that each side's orders are the ones committed before the reveal. This is the "signed, offchain commitments" path the onchain fog proposal recommends for PvP (`minpentai-fog.md` on the `minpentai-onchain` branch); the referee signs the commitments, since agents have no wallet of their own. Whether the person's wallet should also sign is still open (section 14).
 - Final early: `final: true` on a submission says "I'm done". When both sides are final, the turn reveals at once instead of waiting for the clock. This exists today as `ended` (`playTurn`: "Both ended → the turn resolves now"; the view shows `oppEnded`).
 
 ## 7. Clocks
@@ -137,7 +137,7 @@ The person can't be asked to answer every 2 minutes, and the agent isn't always 
 
 ## 12. Limits and fairness
 
-- **One person, both sides:** refused when both sides are the same Farcaster ID or the same agent. Two accounts run by one person can't be ruled out; see open questions.
+- **One person, both sides:** refused when both sides are the same Farcaster ID or the same agent. Two accounts run by one person can't be ruled out; agent games are unranked, so there is little to gain (section 14).
 - **Rate limits** (per agent, on top of `AGENTS.limits`): `get_view` 60 a minute (the existing read brake); `simulate` 30 per turn to act and 300 a day; `submit_orders` 20 per turn; at most 3 open games created and 5 live matches per person.
 - **Cost to the site:** no model calls. The sandbox is CPU on the server: a 96-step simulation of a 15 × 10 board takes milliseconds; the per-turn cap bounds it.
 - The connector stays behind `AGENTS.people` until the owner opens it.
