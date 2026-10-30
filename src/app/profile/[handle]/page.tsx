@@ -5,16 +5,20 @@ import type { Metadata } from 'next';
 import { adaptationPagesShown } from '~/lib/config';
 import { resolveHandle } from '~/lib/adaptation-pages';
 import { AiLabel } from '~/components/recipe-sheet';
-import { frameView, labelFor, posterAlt, posterView } from '~/lib/scene-posters';
-import { publicWork, whoIs } from '~/lib/you';
-import '../../you/you.css';
+import { frameView, labelFor, pictureView, posterAlt, posterView } from '~/lib/scene-posters';
+import { hasPublicWork, publicWork, whoIs } from '~/lib/you';
+import { MadeBy } from '~/components/agents/piece-version';
+import '../../dashboard/you.css';
+import '~/components/agents/agents.css';
 
 /**
- * /@<handle> (rewritten here by next.config.ts): a person's public profile (owner, 2026-10-18): the
- * scenes and remixes they have published, which bylines link to. Public, and only what is already
- * public at its own link: each scene as /@<handle>/<id> shows it, remix frames and storyboards that
- * aren't hidden. Never their pictures' prompts beyond what each frame's page shows, their balance, or
- * anything hidden. /@<handle>/<id> (one scene) is a different route and isn't touched.
+ * /@<handle> (rewritten here by next.config.ts): a person's public profile (owner, 2026-10-18; 2026-10-29:
+ * "Public profile at /@<fname>, matching /@<fname>/<id> for adaptations: published work only"), which
+ * bylines link to. Public, and only what is already public at its own link: each scene as /@<handle>/<id>
+ * shows it, their published pictures (each at /image/<id>), remix frames and storyboards that aren't hidden
+ * (while PROFILE_LISTS_REMIXES allows), and published agent pieces (while /p is public). Never a prompt
+ * beyond what each item's own page shows, their balance, a draft, or anything hidden. /@<handle>/<id>
+ * (one scene) is a different route and isn't touched.
  *
  * The handle resolves as on scene pages (src/lib/adaptation-pages.ts resolveHandle): a Farcaster name
  * (other spellings and old names redirect), or a wallet account's full address. A wallet account with
@@ -33,7 +37,7 @@ const load = cache(async (raw: string) => {
   if (who.kind === 'none') return { kind: 'none' as const };
   if (who.kind === 'redirect') return { kind: 'redirect' as const, to: `/@${who.handle}` };
   const [name, work] = await Promise.all([whoIs(who.person), publicWork(who.person, who.handle)]);
-  const empty = !work.scenes.length && !work.frames.length && !work.boards.length;
+  const empty = !hasPublicWork(work);
   if (empty && who.person < 0) return { kind: 'none' as const };
   return { kind: 'profile' as const, handle: who.handle, person: who.person, name, work, empty };
 });
@@ -56,7 +60,7 @@ export default async function Profile({ params }: Props) {
       <h1 className="you-title">{by}</h1>
       {name.kind === 'wallet' && name.address && <p className="you-meta you-addr">{name.address}</p>}
       {name.kind === 'farcaster' && name.fid && <p className="you-meta">Farcaster ID {name.fid}</p>}
-      {l.empty && <p className="you-note">Nothing published here yet.</p>}
+      {l.empty && <p className="you-note">Nothing published yet.</p>}
 
       {work.scenes.length > 0 && (
         <section className="you-section" aria-labelledby="p-scenes">
@@ -83,6 +87,44 @@ export default async function Profile({ params }: Props) {
                   {s.parentId !== null && ` · remixed from version ${s.parentId}`}
                 </p>
                 {s.aiLabel && <p className="you-meta">{s.aiLabel}</p>}
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {work.pictures.length > 0 && (
+        <section className="you-section" aria-labelledby="p-pictures">
+          <h2 id="p-pictures">Pictures</h2>
+          <ul className="you-frames">
+            {work.pictures.map((p) => (
+              <li key={p.versionId}>
+                <figure className="you-fig">
+                  <Link href={`/image/${p.versionId}`}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={p.url} alt={`AI-generated image for chapter ${p.chapter}, published by ${by}`} width={512} height={288} loading="lazy" />
+                  </Link>
+                  <figcaption>
+                    <AiLabel kind="image" text={labelFor(by)} view={pictureView({ versionId: p.versionId, by, prompt: p.prompt, chapter: p.chapter, at: p.createdAt })} />
+                  </figcaption>
+                </figure>
+                <p className="you-meta">
+                  <Link href={`/image/${p.versionId}`}>Chapter {p.chapter}</Link> · {p.createdAt.slice(0, 10)}
+                </p>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {work.pieces.length > 0 && (
+        <section className="you-section" aria-labelledby="p-pieces">
+          <h2 id="p-pieces">Made with agents</h2>
+          <ul className="piece-list">
+            {work.pieces.map((v) => (
+              <li key={v.id}>
+                <Link href={`/p/${v.piece}`}>{v.title}</Link> <span className="piece-sub">{v.kind}, version {v.n}</span>
+                <MadeBy v={v} />
               </li>
             ))}
           </ul>

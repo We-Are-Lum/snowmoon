@@ -19,7 +19,7 @@ import { agentLabel } from './accounts';
  * - timing: change a shot's start and end;
  * - speaking: mark who is speaking in a shot;
  * - video: a short video test of a shot.
- * A frame or a video costs money, so it is only an estimate until the person approves it on /you; then our
+ * A frame or a video costs money, so it is only an estimate until the person approves it on /dashboard; then our
  * server makes it (Remix's own pipeline for a frame; LongCat-Video 480p on fal for a video), within daily
  * caps, and keeps the result private in the draft. Nothing is applied to the published scene: a kept edit
  * is the person's decision, and putting kept edits into a new version of the scene is the next step.
@@ -69,7 +69,7 @@ export const videoEstimate = () => Math.round(AGENTS.spend.videoUsdPerSecond * A
 async function draftEdit(agent: Agent, adaptation: number, version: number, shot: DataShot, change: Change, title: string, answering?: unknown) {
   const body = { adaptation, version, shot: shot.id, change };
   const out = await draftPiece(agent, 'edit', title, adaptation, body, false, undefined, typeof answering === 'string' ? { request: answering } : {});
-  return { ...out, status: 'draft', change, next: change.type === 'frame' || change.type === 'video' ? `Waiting for your person to approve about $${change.estimate_usd} on their You page; nothing is spent before.` : 'Waiting for your person to keep it.' };
+  return { ...out, status: 'draft', change, next: change.type === 'frame' || change.type === 'video' ? `Waiting for your person to approve about $${change.estimate_usd} on their Dashboard; nothing is spent before.` : 'Waiting for your person to keep it.' };
 }
 
 export async function tryFrame(agent: Agent, args: Record<string, unknown>) {
@@ -115,7 +115,7 @@ export async function logGap(agent: Agent, args: Record<string, unknown>) {
   const asked = note(args.asked, 'asked');
   const missing = note(args.missing, 'missing');
   const [g] = await sql()<{ id: string }[]>`insert into studio.agent_gaps (person, agent_id, agent_name, asked, missing) values (${agent.person}, ${agent.id}, ${agent.name}, ${asked}, ${missing}) returning id`;
-  return { gap: g.id, shown: 'to your person on their You page, under "What your agent couldn\'t do", and to the site\'s owner, who reads them as the build list; never published' };
+  return { gap: g.id, shown: 'to your person on their Dashboard, under "What your agent couldn\'t do", and to the site\'s owner, who reads them as the build list; never published' };
 }
 
 /**

@@ -5,7 +5,7 @@ import path from 'node:path';
 /**
  * The illustration check's inputs (owner, 2026-10-23: "Does each image show its scene?"; branch
  * illustration-check), read from committed files only, so the check script (scripts/check-illustrations.ts),
- * the owner's review page (/you/illustrations) and the Sunday redo (scripts/illustration-redo.ts) see the
+ * the owner's review page (/dashboard/illustrations) and the Sunday redo (scripts/illustration-redo.ts) see the
  * same thing:
  * - the jobs: content/snowmoon/illustrations/chapter-N.json, every job with a block (142 on 2026-10-23);
  * - the image each job shows on the site: published.json's url (the clean, unlettered picture for a

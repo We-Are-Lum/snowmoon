@@ -11,7 +11,7 @@ import { isMaintainer } from '~/lib/remix/frames';
 import { ownWork, whoIs } from '~/lib/you';
 
 /**
- * The You page's data (owner, 2026-10-18): who is signed in and everything they made, hidden things
+ * The Dashboard's data (owner, 2026-10-18): who is signed in and everything they made, hidden things
  * too. Private: the person is the one the request's session names (a Farcaster sign-in, or a wallet
  * sign-in, as the wallet routes take it), never one named in the URL, so nobody can read another
  * person's page. Signed out: 401 and nothing else. Never cached.
@@ -65,7 +65,7 @@ export async function GET(request: Request) {
   );
 }
 
-/** The wallet's link for the You page, and whether the offer applies (only once the table is there). */
+/** The wallet's link for the Dashboard, and whether the offer applies (only once the table is there). */
 async function linkView(account: number, address: string, fid: number | null) {
   const { link, table } = await linkOf(db(), account, address);
   const name = link ? (await whoIs(link.fid)).name : null;

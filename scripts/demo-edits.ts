@@ -3,7 +3,7 @@
  * myself through agents on my phone"). A fresh headless Claude session is the agent, connected to the local
  * site's /mcp with the token its person granted on the real consent page; it gets the person's chat message
  * (a model-drafted stand-in for the owner's words, labelled as such) and uses the edit tools and log_gap. The
- * person then approves the spend and keeps the edits on /you, in a real browser at phone size, with every tap
+ * person then approves the spend and keeps the edits on /dashboard, in a real browser at phone size, with every tap
  * counted. Writes docs/agents/demo-edits/: screenshots, the agent's transcript, and a summary.
  *
  *   npm run build && npx tsx --conditions=react-server scripts/demo-edits.ts
@@ -172,9 +172,9 @@ try {
 
   const pageA = await ctxA.newPage();
   pageA.setDefaultTimeout(30_000);
-  phase = 'review on /you';
-  await pageA.goto(`${BASE}/you`);
-  (taps[phase] ??= []).push('open the You page');
+  phase = 'review on /dashboard';
+  await pageA.goto(`${BASE}/dashboard`);
+  (taps[phase] ??= []).push('open the Dashboard');
   await pageA.locator(reviewRow).first().waitFor({ timeout: 60_000 });
   await pageA.locator('section[aria-labelledby="you-review"]').scrollIntoViewIfNeeded();
   await snap(pageA, 'edits-waiting');
@@ -216,7 +216,7 @@ try {
     await pageA.waitForTimeout(800);
   }
 
-  say('6. What the agent couldn’t do, on /you');
+  say('6. What the agent couldn’t do, on /dashboard');
   phase = 'gaps';
   await pageA.reload();
   const gapsSection = pageA.locator('section[aria-labelledby="you-gaps"]');

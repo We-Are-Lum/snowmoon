@@ -17,7 +17,7 @@ import './agents.css';
 import { exactDollars } from '~/lib/wallet/price-text';
 
 /**
- * On /you (owner, 2026-10-20): the person's agents, each with one-tap Disconnect, linking a wallet
+ * On /dashboard (owner, 2026-10-20): the person's agents, each with one-tap Disconnect, linking a wallet
  * agent, and the review list of what their agents drafted, with Publish and Discard. Hidden entirely
  * while agents are switched off (/api/agents answers 404).
  */
@@ -141,7 +141,7 @@ function Suggestions() {
       <section className="you-section" aria-labelledby="you-suggest">
         <h2 id="you-suggest">{S.suggest}</h2>
         <TellAgent id="you-suggest-box" label={S.suggestLabel} sendLabel={S.suggestSend} whenNote={S.suggestNote} sentNote={S.suggestSent} send={async (words, spoken) => {
-          const r = await authFetch('/api/suggestions', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ words, spoken, page: '/you' }) }).catch(() => null);
+          const r = await authFetch('/api/suggestions', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ words, spoken, page: '/dashboard' }) }).catch(() => null);
           if (r?.ok) {
             void load();
             return null;
@@ -254,7 +254,7 @@ export function AgentsOnYou() {
           <h2 id="you-scripts">{AGENT_WORDING.direction.scripts}</h2>
           <ul className="you-list">
             {scripts.map((x) => (
-              <li key={x.version}><Link href={`/you/script/${x.adaptation}/${x.version}`} data-script-link>{AGENT_WORDING.direction.title(x.title)} (version {x.version})</Link></li>
+              <li key={x.version}><Link href={`/dashboard/script/${x.adaptation}/${x.version}`} data-script-link>{AGENT_WORDING.direction.title(x.title)} (version {x.version})</Link></li>
             ))}
           </ul>
         </section>

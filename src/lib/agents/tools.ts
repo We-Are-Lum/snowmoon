@@ -24,7 +24,7 @@ import { changeTiming, listTakes, logGap, markSpeaking, requestVideo, swapTake, 
  * what they said) or the book's (checked against the block).
  * - Read: the seven read tools of the open read API, plus the person's requests, work and feedback.
  * - Draft: pieces from ideas, storyboards, frames and prompts, character versions, revisions, notes, images.
- * NOTHING here publishes, spends, or speaks as a person: every draft waits for its person on /you.
+ * NOTHING here publishes, spends, or speaks as a person: every draft waits for its person on /dashboard.
  * No tool moves money (Anthropic's directory rule, and ours).
  */
 type Schema = { type: 'object'; properties: Record<string, unknown>; required?: string[]; additionalProperties: false };
@@ -327,7 +327,7 @@ const EDIT_NOTE = 'Your person\'s own words for what they want.';
 
 /**
  * Editing the person's own adaptation (owner, 2026-10-20). Drafts only; a frame or a video costs money and
- * runs only after the person approves the shown estimate on /you.
+ * runs only after the person approves the shown estimate on /dashboard.
  */
 const EDITS: AgentTool[] = [
   {
@@ -338,7 +338,7 @@ const EDITS: AgentTool[] = [
   },
   {
     name: 'try_frame', title: 'Try a new frame for a shot', scope: 'drafts', writes: true, counts: 'drafts',
-    description: `Draft a new frame for a shot of your person's own version, from their note. Nothing is made yet: their You page shows the estimate (up to about $${frameEstimate()}) and makes it only when they approve; the frame comes from the site's own pipeline (the shot's camera, cast and place, plus the note) and stays private in the draft.`,
+    description: `Draft a new frame for a shot of your person's own version, from their note. Nothing is made yet: their Dashboard shows the estimate (up to about $${frameEstimate()}) and makes it only when they approve; the frame comes from the site's own pipeline (the shot's camera, cast and place, plus the note) and stays private in the draft.`,
     inputSchema: { type: 'object', properties: { ...SHOT_ARGS, note: { type: 'string', description: EDIT_NOTE }, answering: ANSWERING }, required: ['adaptation', 'version', 'shot', 'note'], additionalProperties: false },
     run: async (agent, args) => tryFrame(agent, args),
   },
@@ -362,7 +362,7 @@ const EDITS: AgentTool[] = [
   },
   {
     name: 'request_video_test', title: 'Request a video test for a shot', scope: 'drafts', writes: true, counts: 'drafts',
-    description: `Draft a short video test of a shot of your person's own version (LongCat-Video, 480p, 5 seconds, from the shot's frame and their note). Its cost (about $${videoEstimate()}) is shown on their You page; nothing is spent until they approve.`,
+    description: `Draft a short video test of a shot of your person's own version (LongCat-Video, 480p, 5 seconds, from the shot's frame and their note). Its cost (about $${videoEstimate()}) is shown on their Dashboard; nothing is spent until they approve.`,
     inputSchema: { type: 'object', properties: { ...SHOT_ARGS, note: { type: 'string', description: EDIT_NOTE }, answering: ANSWERING }, required: ['adaptation', 'version', 'shot'], additionalProperties: false },
     run: async (agent, args) => requestVideo(agent, args),
   },
@@ -392,14 +392,14 @@ const EDITS: AgentTool[] = [
   },
   {
     name: 'log_gap', title: 'Log something you couldn\'t do', scope: 'read', writes: true,
-    description: 'When your person asks for something none of your tools can do, record it: what they asked (their words) and what was missing. It shows on their You page and to the site\'s owner, who reads it as the build list. Use it instead of guessing or working around a missing tool.',
+    description: 'When your person asks for something none of your tools can do, record it: what they asked (their words) and what was missing. It shows on their Dashboard and to the site\'s owner, who reads it as the build list. Use it instead of guessing or working around a missing tool.',
     inputSchema: { type: 'object', properties: { asked: { type: 'string' }, missing: { type: 'string' } }, required: ['asked', 'missing'], additionalProperties: false },
     run: async (agent, args) => logGap(agent, args),
   },
   {
     name: 'suggest_improvement', title: 'Pass on a suggestion for the site', scope: 'read', writes: true, counts: 'notes',
-    description: 'When your person says how this site could be better (something confusing, missing or broken, a feature they would want, or an idea for how it works), pass it to the site\'s owner in their words, exactly as they gave them (never reworded, summarised or added to). Say where they were if you know: the page (a path like /you) and, for the film, the moment and the time. Only the owner reads these, with your person\'s name; it is never published. For something your tools can\'t do, use log_gap instead.',
-    inputSchema: { type: 'object', properties: { text: { type: 'string', description: 'Your person\'s words, exactly as they gave them.' }, page: { type: 'string', description: 'The path of the page they were on, e.g. /you.' }, moment: { type: 'string', description: 'A moment "<adaptation>/<version>/<shot>", if it is about one.' }, seconds: { type: 'number', description: 'The time in that version\'s video, in seconds.' } }, required: ['text'], additionalProperties: false },
+    description: 'When your person says how this site could be better (something confusing, missing or broken, a feature they would want, or an idea for how it works), pass it to the site\'s owner in their words, exactly as they gave them (never reworded, summarised or added to). Say where they were if you know: the page (a path like /dashboard) and, for the film, the moment and the time. Only the owner reads these, with your person\'s name; it is never published. For something your tools can\'t do, use log_gap instead.',
+    inputSchema: { type: 'object', properties: { text: { type: 'string', description: 'Your person\'s words, exactly as they gave them.' }, page: { type: 'string', description: 'The path of the page they were on, e.g. /dashboard.' }, moment: { type: 'string', description: 'A moment "<adaptation>/<version>/<shot>", if it is about one.' }, seconds: { type: 'number', description: 'The time in that version\'s video, in seconds.' } }, required: ['text'], additionalProperties: false },
     run: async (agent, args) => {
       only(args, ['text', 'page', 'moment', 'seconds']);
       const id = await addSuggestion(agent.person, args.text, false, { page: args.page, moment: args.moment, seconds: args.seconds }, agent);

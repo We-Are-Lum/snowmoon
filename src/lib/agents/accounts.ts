@@ -7,10 +7,10 @@ import { verifySignIn } from '../wallet/chain';
 import { issueTokens, newToken, resourceUrl, sha256, sql, type Scope } from './core';
 
 /**
- * A person's agents, as /you shows them, and the third way in: an agent with its own wallet, for
+ * A person's agents, as /dashboard shows them, and the third way in: an agent with its own wallet, for
  * people who run fleets of agents (design v1, owner 2026-10-19). The person names the agent's address
- * on /you; the agent signs the link message that names its person; then it signs in with that wallet
- * whenever it needs a token. Revoking (one tap on /you) ends every token at once.
+ * on /dashboard; the agent signs the link message that names its person; then it signs in with that wallet
+ * whenever it needs a token. Revoking (one tap on /dashboard) ends every token at once.
  */
 export interface AgentRow {
   id: string;

@@ -7,7 +7,7 @@ import { versionsBy } from '~/lib/adaptation-pages';
 import { editorData } from '~/lib/agent/data';
 
 /**
- * A person's agents, for /you: list them, disconnect one (one tap, at once), or name a wallet agent.
+ * A person's agents, for /dashboard: list them, disconnect one (one tap, at once), or name a wallet agent.
  * Only a signed-in person, about their own agents; never an agent's token (getPerson never takes one).
  */
 const noStore = { 'Cache-Control': 'no-store' };

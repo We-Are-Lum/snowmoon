@@ -573,7 +573,7 @@ await sql.end();
     check('the note shows before its end date, through the whole last day', linkNoteShown(new Date('2026-10-22T12:00:00Z')) && linkNoteShown(new Date(`${until}T23:59:59Z`)));
     check('…and is gone after it, with no deploy', !linkNoteShown(new Date(Date.parse(`${until}T00:00:00Z`) + 24 * 3600 * 1000)) && !linkNoteShown(new Date('2027-01-01T00:00:00Z')));
     const you = readFileSync('src/components/you-page.tsx', 'utf8');
-    check('the note is in the wallet panel and on the You page, by the dated helper', /linkNoteShown\(\)/.test(panel) && /\{linkHint && <LinkNote \/>\}/.test(panel) && (you.match(/<LinkNote className="you-note" \/>/g) ?? []).length === 2);
+    check('the note is in the wallet panel and on the Dashboard, by the dated helper', /linkNoteShown\(\)/.test(panel) && /\{linkHint && <LinkNote \/>\}/.test(panel) && (you.match(/<LinkNote className="you-note" \/>/g) ?? []).length === 2);
   }
   check('the wallet panel tries a remembered payment again when it opens', /tried\.current = true;\s*void claim\(pending, 3\)/.test(panel));
 

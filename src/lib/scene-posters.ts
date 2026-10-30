@@ -2,7 +2,7 @@ import type { RecipeView } from './recipe-view';
 import { AI_LABEL, WHOSE, readerImageView } from './ai-declared';
 
 /**
- * The AI label's recipe sheet for each kind of AI-made picture shown on the You page and on a public
+ * The AI label's recipe sheet for each kind of AI-made picture shown on the Dashboard and on a public
  * profile (/@<handle>), and on the scene card (src/components/scene-card.tsx). Filled from what the
  * screen already has; no model writes anything here. Wording DRAFTED by the coding agent.
  */

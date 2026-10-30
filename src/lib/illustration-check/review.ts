@@ -7,7 +7,7 @@ import { draftedByOf, hasDouble, worstFirst, type CheckAnswer } from './schema';
 export { noteCredit } from './schema';
 
 /**
- * The owner's review of the seeded images (/you/illustrations; owner, 2026-10-23). Each item is a job with its
+ * The owner's review of the seeded images (/dashboard/illustrations; owner, 2026-10-23). Each item is a job with its
  * passage, its image, the vision check's latest answer and the owner's latest decision, worst first: wrong, then
  * partly, then matches, then not checked; within each, more problems first.
  *

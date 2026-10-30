@@ -56,10 +56,10 @@
  *   Farcaster", then "Sign in with a wallet" (the editor's button, with its note); a wallet session (planted in
  *   storage, nothing signed; the assistant's status answers it 403, as for a wallet not linked to Farcaster) stays
  *   signed in on load, and shows its shortened address and a Sign out that ends it; a Farcaster session shows
- *   the Farcaster name and no wallet option. The name is a link to the You page (/you), and the top bar shows an
- *   avatar linking there, between ? and the menu, only when signed in; /you signed out meets the floors and shows
+ *   the Farcaster name and no wallet option. The name is a link to the Dashboard (/dashboard), and the top bar shows an
+ *   avatar linking there, between ? and the menu, only when signed in; /dashboard signed out meets the floors and shows
  *   only the sign-in offer (owner, 2026-10-18).
- * - The owner's image review (/you/illustrations, owner 2026-10-23) at 390, light and dark: signed out, the floors and
+ * - The owner's image review (/dashboard/illustrations, owner 2026-10-23) at 390, light and dark: signed out, the floors and
  *   the sign-in offer only; as the owner (API replayed from scripts/fixtures/illustration-review.json), worst first,
  *   in the owner's order (wrong, partly with a double, partly, matches, not checked), each item with its passage, its
  *   image's AI label, the check labelled AI with its model, Keep / Regenerate with my note / Drop, a saved decision
@@ -503,23 +503,23 @@ async function checkMakeImage(page: Page, scheme: string) {
 }
 
 /**
- * The owner's image review (/you/illustrations, owner 2026-10-23), at 390. Signed out: the floors and the sign-in offer,
+ * The owner's image review (/dashboard/illustrations, owner 2026-10-23), at 390. Signed out: the floors and the sign-in offer,
  * nothing about the check. Signed in as the owner, with the API replayed from scripts/fixtures/illustration-review.json
  * (real jobs, made-up answers, served out of order): worst first (wrong, partly, matches, not checked), each item has
  * the passage, its image with the AI label, the check labelled as AI with its model, and the three buttons; the
  * regenerate note box shows the publication line. Signed in as anyone else (403): only the owner-only line.
  */
 async function checkIllustrationReview(page: Page, scheme: string) {
-  const where = `/you/illustrations @390 (${scheme})`;
+  const where = `/dashboard/illustrations @390 (${scheme})`;
   const fixture = JSON.parse(readFileSync('scripts/fixtures/illustration-review.json', 'utf8')) as { items: unknown[]; canSave: boolean };
   let asked = 0;
   await page.route('**/api/you/illustrations', (r) => {
     asked++;
     return r.fulfill({ json: fixture });
   });
-  await open(page, '/you/illustrations');
+  await open(page, '/dashboard/illustrations');
   await page.locator('.you-sign-in button').first().waitFor({ timeout: 10000 }).catch(() => fail(`${where}: signed out, no sign-in offered`));
-  await checkFloors(page, '/you/illustrations @390 (signed out)', scheme);
+  await checkFloors(page, '/dashboard/illustrations @390 (signed out)', scheme);
   if (await page.locator('.illus-item').count()) fail(`${where}: signed out, the page shows review items`);
   if (asked) fail(`${where}: signed out, the page asked the review API`);
   const as = (fid: number) => {
@@ -531,7 +531,7 @@ async function checkIllustrationReview(page: Page, scheme: string) {
   // real server doesn't sign the session out mid-check.
   await page.route('**/api/chat/status', (r) => r.fulfill({ json: { available: false, model: 'm', host: null, provider: null, route: '', perDay: 30, left: 30 } }));
   await as(6786);
-  await open(page, '/you/illustrations');
+  await open(page, '/dashboard/illustrations');
   await page.locator('.illus-item').first().waitFor({ timeout: 10000 }).catch(() => fail(`${where}: signed in as the owner, no items`));
   const order = await page.locator('.illus-item').evaluateAll((els) => els.map((e) => e.getAttribute('data-group')));
   if (order.join(',') !== 'wrong,partly-double,partly,matches,unchecked') fail(`${where}: not in the owner's order (wrong, partly with a double, partly, matches, not checked): ${order.join(', ')}`);
@@ -545,7 +545,7 @@ async function checkIllustrationReview(page: Page, scheme: string) {
     if (buttons !== 'Keep|Regenerate with my note|Drop') fail(`${where}: item ${i + 1}'s buttons are "${buttons}"`);
   }
   if (!/Your decision: regenerate/.test(await page.locator('.illus-item').nth(2).innerText())) fail(`${where}: a saved decision is not shown with its item`);
-  await checkFloors(page, '/you/illustrations @390 (owner)', scheme);
+  await checkFloors(page, '/dashboard/illustrations @390 (owner)', scheme);
   await shot(page, 'phone-390-you-illustrations', scheme);
   await page.locator('.illus-item').first().locator('.illus-actions button', { hasText: 'Regenerate with my note' }).click();
   const first = page.locator('.illus-item').first();
@@ -557,11 +557,11 @@ async function checkIllustrationReview(page: Page, scheme: string) {
   if (!/Drafted by the image check \(Argon finding, gpt-oss-120b fix line\)/.test(await first.locator('.illus-drafted').innerText().catch(() => ''))) fail(`${where}: the pre-filled note is not labelled as drafted by the image check (both steps)`);
   await first.locator('.illus-note textarea').fill(`${why} Draw him once.`);
   if (!/edited by you/i.test(await first.locator('.illus-drafted').innerText().catch(() => ''))) fail(`${where}: an edited note is not marked as edited`);
-  await checkFloors(page, '/you/illustrations @390 (owner, note)', scheme);
+  await checkFloors(page, '/dashboard/illustrations @390 (owner, note)', scheme);
   await page.unroute('**/api/you/illustrations');
   await page.route('**/api/you/illustrations', (r) => r.fulfill({ status: 403, json: { error: 'Owner only' } }));
   await as(1234);
-  await open(page, '/you/illustrations');
+  await open(page, '/dashboard/illustrations');
   await page.getByText('This page is for the project’s owner.').waitFor({ timeout: 10000 }).catch(() => fail(`${where}: someone else signed in does not see the owner-only line`));
   if (await page.locator('.illus-item').count()) fail(`${where}: someone else signed in sees review items`);
   await page.unroute('**/api/you/illustrations');
@@ -1788,10 +1788,10 @@ try {
     await page.locator('.menu-sheet .menu-account').scrollIntoViewIfNeeded();
     await checkFloors(page, '/chapter/1 @390 (menu, wallet)', scheme);
     await shot(page, 'phone-390-menu-wallet', scheme);
-    // The You page's entry points (owner, 2026-10-18): the name in the menu, and the avatar between ? and the menu.
-    if ((await page.locator('.menu-sheet a.menu-account-name').getAttribute('href').catch(() => null)) !== '/you') fail('@390 menu: a wallet session\'s name is not a link to /you');
-    if ((await page.locator('.topbar-end .topbar-avatar').getAttribute('href').catch(() => null)) !== '/you') fail('@390: a wallet session shows no avatar linking to /you in the top bar');
-    else if (!/^You: /.test((await page.locator('.topbar-avatar').getAttribute('aria-label')) ?? '')) fail('@390: the top bar\'s avatar has no accessible name');
+    // The Dashboard's entry points (owner, 2026-10-18): the name in the menu, and the avatar between ? and the menu.
+    if ((await page.locator('.menu-sheet a.menu-account-name').getAttribute('href').catch(() => null)) !== '/dashboard') fail('@390 menu: a wallet session\'s name is not a link to /dashboard');
+    if ((await page.locator('.topbar-end .topbar-avatar').getAttribute('href').catch(() => null)) !== '/dashboard') fail('@390: a wallet session shows no avatar linking to /dashboard in the top bar');
+    else if (!/^Dashboard: /.test((await page.locator('.topbar-avatar').getAttribute('aria-label')) ?? '')) fail('@390: the top bar\'s avatar has no accessible name');
     await checkAccountWallet(page, '.menu-sheet', '@390 menu');
     await page.keyboard.press('Escape');
     if (await page.locator('.menu-sheet').count()) fail('@390: Escape does not close the menu');
@@ -1824,11 +1824,11 @@ try {
       if (await page.locator('.recipe-sheet').count()) fail('@390: Escape does not close the recipe sheet');
       if (!(await label.evaluate((el) => el === document.activeElement))) fail('@390: closing the recipe sheet does not return focus to the AI label');
     }
-    // The You page signed out (owner, 2026-10-18): the floors, the sign-in offer, and no account, wallet or work.
-    await open(page, '/you');
-    await page.locator('.you-sign-in button').first().waitFor({ timeout: 10000 }).catch(() => fail(`/you @390 (${scheme}): signed out, no sign-in offered`));
-    await checkFloors(page, '/you @390 (signed out)', scheme);
-    if (/Your account|Your work|Balance \$/.test(await page.locator('main.you').innerText().catch(() => ''))) fail(`/you @390 (${scheme}): signed out, the page shows an account, wallet or work`);
+    // The Dashboard signed out (owner, 2026-10-18): the floors, the sign-in offer, and no account, wallet or work.
+    await open(page, '/dashboard');
+    await page.locator('.you-sign-in button').first().waitFor({ timeout: 10000 }).catch(() => fail(`/dashboard @390 (${scheme}): signed out, no sign-in offered`));
+    await checkFloors(page, '/dashboard @390 (signed out)', scheme);
+    if (/Your account|Your work|Balance \$/.test(await page.locator('main.you').innerText().catch(() => ''))) fail(`/dashboard @390 (${scheme}): signed out, the page shows an account, wallet or work`);
     await shot(page, 'phone-390-you-signed-out', scheme);
     await checkIllustrationReview(page, scheme);
     await checkImageZoom(page, scheme);

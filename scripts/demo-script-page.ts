@@ -30,7 +30,7 @@ try {
   const a = A.address.toLowerCase();
   await ctx.addInitScript((v) => localStorage.setItem('snowmoon.wallet', v), JSON.stringify({ token: A.token, address: a, short: `${a.slice(0, 6)}…${a.slice(-4)}`, exp: payload.exp }));
   const page = await ctx.newPage();
-  await page.goto(`${S.BASE}/you/script/1/2`);
+  await page.goto(`${S.BASE}/dashboard/script/1/2`);
   await page.locator('.script-shot').first().waitFor().catch(async () => {
     await page.screenshot({ path: path.join(OUT, '0-failed.png') });
     throw new Error(`no shots: ${(await page.locator('main').innerText().catch(() => '')).slice(0, 300)}`);
@@ -47,7 +47,7 @@ try {
   await other.locator('.script-line-tap').click();
   await other.scrollIntoViewIfNeeded();
   await page.screenshot({ path: path.join(OUT, '5-line-rewrite-open.png') });
-  await page.goto(`${S.BASE}/you`);
+  await page.goto(`${S.BASE}/dashboard`);
   await page.locator('[data-script-link]').first().waitFor({ timeout: 20000 });
   await page.locator('#you-scripts').scrollIntoViewIfNeeded();
   await page.screenshot({ path: path.join(OUT, '6-you-link.png') });

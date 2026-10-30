@@ -9,7 +9,7 @@ import { IMAGES, LINKED_WALLETS, WALLET_LINKS } from '../config';
  *
  * Kept in studio.wallet_links (migration 0026_wallet_links.sql): a row per link, 'verified' (the FID verified the
  * address on Farcaster) or 'signed' (both sign-ins, same session, confirmed). Ending a link sets unlinked_at and
- * ended_by: 'person' (unlinked on the You page) or 'unverified' (owner, 2026-10-22: "a linked wallet is looked up
+ * ended_by: 'person' (unlinked on the Dashboard) or 'unverified' (owner, 2026-10-22: "a linked wallet is looked up
  * again at most once a day, and an automatic ('verified') link ends if that FID no longer verifies the address. A
  * link I made by tapping isn't affected."). At most one active link per wallet.
  * - A wallet the person unlinked is never looked up again.
@@ -95,7 +95,7 @@ export async function linkedFidFor(sql: Sql | null, account: number, address: st
   }
 }
 
-/** The link shown on the You page: the table's, or LINKED_WALLETS' when the table has none. */
+/** The link shown on the Dashboard: the table's, or LINKED_WALLETS' when the table has none. */
 export async function linkOf(sql: Sql | null, account: number, address: string): Promise<{ link: Link | null; table: boolean }> {
   if (isPayTo(address)) return { link: null, table: false };
   const r = sql ? await readLink(sql, account).catch(() => NO_TABLE) : NO_TABLE;
@@ -160,7 +160,7 @@ export async function unlinkFromFid(sql: Sql, fid: number, address: string): Pro
   }
 }
 
-/** The wallets actively linked to a FID in the table, for its You page (the payment address never). */
+/** The wallets actively linked to a FID in the table, for its Dashboard (the payment address never). */
 export async function walletLinksOf(sql: Sql | null, fid: number): Promise<{ account: number; address: string; how: How }[]> {
   if (!sql || fid <= 0) return [];
   try {

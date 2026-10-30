@@ -15,7 +15,7 @@ import { versionById } from './pieces';
 import { priceUsd } from '../wallet/credits';
 
 /**
- * Spending on an edit draft, only when its person approves the shown estimate on /you (owner, 2026-10-20: "cost
+ * Spending on an edit draft, only when its person approves the shown estimate on /dashboard (owner, 2026-10-20: "cost
  * shown, my approval before any spend"). Kept apart from the agent tools on purpose: no agent tool imports this
  * module; only the person's own "Make it" (POST /api/drafts, action run) reaches it.
  */

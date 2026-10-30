@@ -3,7 +3,7 @@ export {};
  * Hide routes answer 503 "try again" when the database fails, never a bare 500 (2026-10-19, docs/db-interleave.md).
  * The database here is an address nothing listens on, so every query fails at once.
  *   npm run test:try-again
- * With the You page, the image and scene Hide routes take a wallet sign-in too, so all four are checked here.
+ * With the Dashboard, the image and scene Hide routes take a wallet sign-in too, so all four are checked here.
  */
 process.env.IMAGES_TICKET_SECRET = 'x'.repeat(48);
 process.env.STUDIO_DATABASE_URL = 'postgres://studio_writer@127.0.0.1:9/postgres';

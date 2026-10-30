@@ -5,7 +5,7 @@ import { ILLUSTRATION_CHECK } from '~/lib/config';
 import { decide, reviewItems } from '~/lib/illustration-check/review';
 
 /**
- * The owner's review of the seeded images (owner, 2026-10-23), behind /you/illustrations. Owner only
+ * The owner's review of the seeded images (owner, 2026-10-23), behind /dashboard/illustrations. Owner only
  * (ILLUSTRATION_CHECK.owners): everyone else gets 401 or 403 and nothing about the check. GET: every job worst first,
  * with its passage, image, the check's fields and the latest decision. POST: a decision (keep, regenerate with a
  * note, or drop), saved as a new row with who decided and when. Nothing here changes a job, a picture or the site;

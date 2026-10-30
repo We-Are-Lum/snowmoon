@@ -12,7 +12,7 @@ import { PublishedTextField } from './publish-words';
 import { SignInButton } from './sign-in';
 
 /**
- * The owner's review of the seeded images (/you/illustrations; owner, 2026-10-23: "Does each image show its scene?").
+ * The owner's review of the seeded images (/dashboard/illustrations; owner, 2026-10-23: "Does each image show its scene?").
  * Worst first: wrong, then partly, then matches, then not checked. Each job shows the passage, the image, the vision
  * check's fields and verdict, and three buttons: keep, regenerate with my note, drop. A decision is saved with who
  * decided and when (studio.illustration_reviews); nothing on the site changes until the owner runs the redo.
@@ -70,7 +70,7 @@ function Frame({ children }: { children: React.ReactNode }) {
   return (
     <main className="you illus-review">
       <p className="you-kicker label">
-        <Link href="/you">You</Link> · Images
+        <Link href="/dashboard">Dashboard</Link> · Images
       </p>
       <h1 className="you-title">{W.title}</h1>
       {children}

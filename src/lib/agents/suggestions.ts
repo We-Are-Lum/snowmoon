@@ -8,8 +8,8 @@ import { clock, momentOk } from './requests';
 /**
  * "Suggest an improvement" (owner, 2026-10-22: "I want to make sure they can leave notes for how to make the
  * experience better"). An invited person says what would make the site better, typed or spoken (spoken ones
- * are transcribed, checked by the person and kept as words; the recording is never kept), from their You page
- * or through their agent. Private to the owner, who reads them on their You page with who said it and where
+ * are transcribed, checked by the person and kept as words; the recording is never kept), from their Dashboard
+ * or through their agent. Private to the owner, who reads them on their Dashboard with who said it and where
  * they were. A person's own agent can read that person's suggestions, nobody else's. Never published.
  */
 export const suggestionsReader = (): number => (agentsTestOn() && /^-?\d+$/.test(process.env.AGENTS_TEST_OWNER ?? '') ? Number(process.env.AGENTS_TEST_OWNER) : SYSTEM_FID);

@@ -2,7 +2,7 @@ import { lookupPfp } from '~/lib/names';
 
 /**
  * /api/pfp/<fid>: a Farcaster account's profile picture, for the avatar in the top bar that opens the
- * You page (owner, 2026-10-18). Served from this site, so the visitor's browser never asks a third
+ * Dashboard (owner, 2026-10-18). Served from this site, so the visitor's browser never asks a third
  * party (principle 6: production pages make no third-party requests): our server looks up where the
  * picture is (Farcaster's public API, the FID only) and fetches it, so its host sees our server, not
  * the visitor. Only https, a named host, no redirects, an image type, at most 1 MB. Public data,

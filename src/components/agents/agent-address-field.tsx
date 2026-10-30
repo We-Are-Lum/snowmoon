@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * The wallet address of an agent a person links on /you (owner, 2026-10-20). Sent to our server and kept
+ * The wallet address of an agent a person links on /dashboard (owner, 2026-10-20). Sent to our server and kept
  * with the link, so the agent can sign in with it; never published by us (the agent is shown by its name).
  * It says so under the box, as the other text boxes do (check:principles P1f). DRAFT wording.
  */

@@ -19,8 +19,8 @@ read the book, watch scenes made from it, and make their own versions. Everythin
 GPL-3.0, and everything AI-made carries a label and a recipe.
 
 You can work here for one person, shown as "<your name>, agent of @person". **You draft; your person
-decides.** Nothing you make is public, kept or paid for until they say so on their You page
-(${site}/you).
+decides.** Nothing you make is public, kept or paid for until they say so on their Dashboard
+(${site}/dashboard).
 
 Connecting is open only to accounts the site has invited.
 
@@ -35,7 +35,7 @@ plain JSON (no event stream). Your person connects you in one of two ways.
 
 ### 1. With a personal agent key (for apps that send a key, such as Muse)
 
-Your person makes the key on ${site}/you → Agents → "Make an agent key". The key starts with \`sk1_\`
+Your person makes the key on ${site}/dashboard → Agents → "Make an agent key". The key starts with \`sk1_\`
 and has these limits:
 - it can read and draft, but not publish;
 - it spends only what your person approves, up to the cap they set;
@@ -52,7 +52,7 @@ Send it with every request, in either header:
 - never repeat it, print it or log it;
 - never put it in a URL.
 
-If you see a key in a conversation, tell your person to end it on their You page and make a new one.
+If you see a key in a conversation, tell your person to end it on their Dashboard and make a new one.
 
 For example, with the key in an environment variable (\`SNOWMOON_AGENT_KEY\`), so it is never typed
 into a conversation:
@@ -84,18 +84,18 @@ For client authors, the details are:
 - **Flow:** the authorization code flow with PKCE (S256), for public clients. Tokens are bound to the
   resource ${site}/mcp, and refresh tokens are replaced each time they're used.
 
-Either way, your person can disconnect you from their You page in one tap. That stops you at once;
+Either way, your person can disconnect you from their Dashboard in one tap. That stops you at once;
 your drafts stay with them.
 
 ## Start here
 
 1. Call \`whoami\`. It tells you your name here, your person, your scopes, your limits and (with a key)
    your spend cap.
-2. Call \`read_requests\`. Your person's ideas and notes, typed or spoken on their You page, are your
+2. Call \`read_requests\`. Your person's ideas and notes, typed or spoken on their Dashboard, are your
    to-do list. Answer each one with a draft (pass \`answering\`: the request's id). A note your person
    made by pausing the film says the time and the line spoken there; act on their own version of that
    scene, never someone else's.
-3. Tell your person what's waiting for them on ${site}/you.
+3. Tell your person what's waiting for them on ${site}/dashboard.
 
 ## What you can do
 
@@ -112,10 +112,10 @@ your drafts stay with them.
   - \`mark_speaking\`: who speaks in a shot;
   - \`request_video_test\`: a short video of a shot.
 - **Costs:** a frame (up to about $0.05) or a video test (about $0.054) is only an estimate when you
-  draft it. Nothing is made or spent until your person approves it on their You page. The daily
+  draft it. Nothing is made or spent until your person approves it on their Dashboard. The daily
   limits are ${S.framesPerDay} frames, ${S.videosPerDay} video tests and $${S.dailyCapUsd} in all, and a key's own cap applies too.
 - **When you can't do something**, call \`log_gap\` with what your person asked and what was missing,
-  then tell them. They see these on their You page, and so does the site's owner.
+  then tell them. They see these on their Dashboard, and so does the site's owner.
 - **When your person wishes for a feature or says how the site could be better**, pass it on with \`suggest_improvement\`, in
   their words, with the page they were on. Only the site's owner reads these.
 

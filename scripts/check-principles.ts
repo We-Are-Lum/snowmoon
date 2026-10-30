@@ -341,7 +341,7 @@ add({
         continue;
       }
       if (file.endsWith('components/agents/agent-key-field.tsx')) {
-        // A personal agent key's name and spend cap on /you (owner, 2026-10-20): kept with the key, never published by us.
+        // A personal agent key's name and spend cap on /dashboard (owner, 2026-10-20): kept with the key, never published by us.
         for (const [what, re] of [['kept with the key', /Kept with the key/], ['never published', /Never published by us/], ['described to screen readers', /aria-describedby/]] as const)
           if (!re.test(text)) problems.push(`${file}: the agent key boxes must say they are ${what}`);
         if (/fetch\(|supabase|\/api\//.test(text)) problems.push(`${file}: the agent key boxes must not send their text anywhere themselves`);
@@ -355,7 +355,7 @@ add({
         continue;
       }
       if (file.endsWith('components/agents/agent-address-field.tsx')) {
-        // A wallet agent's address on /you (owner, 2026-10-20): kept with the link, never published by us.
+        // A wallet agent's address on /dashboard (owner, 2026-10-20): kept with the link, never published by us.
         for (const [what, re] of [['kept with the link', /kept with the link/], ['never published', /Never published by us/], ['described to screen readers', /aria-describedby/]] as const)
           if (!re.test(text)) problems.push(`${file}: the agent address box must say it is ${what}`);
         if (/fetch\(|supabase|\/api\//.test(text)) problems.push(`${file}: the agent address box must not send its text anywhere itself`);
@@ -1255,8 +1255,8 @@ add({
 const PAGES = ['/', '/chapter/1', '/chapter/30', '/about', '/cards', '/adaptations', '/adaptations/dog-dawn', '/share/1/4?img=c1-b005-toy-drone', '/references', '/moderate', '/glossary', '/glossary/zei', '/terms', '/privacy', '/references?show=moments',
   // Step 4: styles and character sheets.
   '/references/designs', '/references/designs?tab=characters', '/references/designs/character/gladias', '/references/picks',
-  // The You page and a public profile (owner, 2026-10-18).
-  '/you', '/@naaate'];
+  // The Dashboard and a public profile (owner, 2026-10-18).
+  '/dashboard', '/@naaate'];
 add({
   id: 'P6a',
   principle: 6,

@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * The two boxes for making a personal agent key on /you (owner, 2026-10-20): the key's name and its spend
+ * The two boxes for making a personal agent key on /dashboard (owner, 2026-10-20): the key's name and its spend
  * cap. Both are sent to our server and kept with the key; neither is ever published by us. Each says so
  * under the box, as the other text boxes do (check:principles P1f). DRAFT wording.
  */

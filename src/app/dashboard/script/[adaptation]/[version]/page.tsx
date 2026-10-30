@@ -5,7 +5,7 @@ import { agentsOn } from '~/lib/agents/core';
 import '../../../you.css';
 
 /**
- * /you/script/<adaptation>/<version>: the script page of a person's own scene version (owner, 2026-10-20). The
+ * /dashboard/script/<adaptation>/<version>: the script page of a person's own scene version (owner, 2026-10-20). The
  * page as served holds nothing private: the script and notes are read in the browser from /api/direction, which
  * answers only for the version's author (and only the allowlisted people while agents are owner-only).
  */

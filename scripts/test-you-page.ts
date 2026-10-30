@@ -1,5 +1,5 @@
 /**
- * The You page (/you) and the public profile (/@<handle>), owner 2026-10-18, end to end on this
+ * The Dashboard (/dashboard) and the public profile (/@<handle>), owner 2026-10-18, end to end on this
  * machine. Fails (exit 1) on any problem. Nothing touches the hosted database, Farcaster or Base.
  *
  *   npm run test:you-page                      (builds first: `next build`, then this script)
@@ -17,13 +17,14 @@
  *   --shots, pictures on media.snowmoon.party (the project's own media host) load too, for the screenshots.
  *
  * Checks:
- *  Y1  signed out: /api/you answers 401 with nothing else; /you as served holds no one's data; in the
+ *  Y1  signed out: /api/you answers 401 with nothing else; /dashboard as served holds no one's data; in the
  *      browser it offers sign-in and shows no account, wallet or work.
  *  Y2  signed in as A: /api/you names A by Basename (name order: Farcaster, Basename, address) and lists
  *      A's own scenes, frames, storyboards and pictures, hidden ones marked, and nothing of B's.
  *  Y3  Hide is refused for someone else's scene, frame, storyboard and picture (403), and theirs stay shown.
- *  Y4  /@<A> shows A's published scenes, frames and storyboards only: nothing hidden, nothing of B's, no
- *      pictures, no prompts beyond a frame's own words, no balance. An address that never signed in,
+ *  Y4  /@<A> shows A's published work only (owner, 2026-10-29): scenes, published pictures (each with its AI
+ *      label, linking to /image/<id>), frames and storyboards while the flag allows; nothing hidden, nothing of
+ *      B's, no balance. An address that never signed in,
  *      and a wallet with nothing published, are both "not found". /@naaate shows Fifteen Days, and
  *      /@naaate/1 is still the scene page.
  *  Y5  Hide on one's own scene without 0015: hidden at once, gone from the profile, and "Show it again"
@@ -33,10 +34,10 @@
  *      Sign out), the wallet panel (balance, price, Add funds, the transaction-hash box) and the frame
  *      price, the four lists; every picture has its AI label (button.ai-label) opening the recipe
  *      sheet; Hide on a frame from the list hides it; no sideways scroll.
- *  Y8  the menu: the signed-in name is a link to /you, and tapping it opens the You page.
+ *  Y8  the menu: the signed-in name is a link to /dashboard, and tapping it opens the Dashboard.
  *  Y9  the top bar: no avatar signed out; a wallet session's drawn avatar, then Farcaster's picture
- *      (from /api/pfp, on this site), between ? and the menu, linking to /you; signed in with Farcaster
- *      and a wallet, the You page shows both accounts, the wallet panel and both accounts' work, and
+ *      (from /api/pfp, on this site), between ? and the menu, linking to /dashboard; signed in with Farcaster
+ *      and a wallet, the Dashboard shows both accounts, the wallet panel and both accounts' work, and
  *      Hide on the wallet's frame uses the wallet's own token.
  */
 import { PROFILE_LISTS_REMIXES, SHOW_BASENAMES } from '../src/lib/you-flags';
@@ -136,7 +137,9 @@ const iA2 = await picture(pA, 'A HIDDEN PICTURE PROMPT OF A', IMG2, true);
 const iB = await picture(pB, 'B OWN PICTURE PROMPT', IMG2);
 await pg.exec('set role studio_writer');
 
-const dbPort = await freePort();
+// --ports=<db>,<site>: fixed ports on a shared machine (otherwise free ones).
+const fixedPorts = arg('ports')?.split(',').map(Number);
+const dbPort = fixedPorts?.[0] ?? (await freePort());
 // The site and this test share PGlite's one session: direct queries wait for the site's Sync (scripts/lib/pglite-gate.ts).
 failOnProtocolErrors(gatePglite(pg), 'test:you-page');
 const dbServer = new PGLiteSocketServer({ db: pg, port: dbPort, host: '127.0.0.1' });
@@ -184,7 +187,7 @@ await new Promise<void>((r) => stub.listen(0, '127.0.0.1', r));
 const stubUrl = `http://127.0.0.1:${(stub.address() as { port: number }).port}`;
 
 // --- the site ------------------------------------------------------------------------------
-const port = await freePort();
+const port = fixedPorts?.[1] ?? (await freePort());
 const BASE = `http://localhost:${port}`;
 const { VERCEL_ENV: _drop, ...env } = process.env;
 const next = spawn(path.join(ROOT, 'node_modules/.bin/next'), ['start', '-p', String(port)], {
@@ -219,9 +222,9 @@ try {
     check('Y1 signed out: /api/you is 401 with nothing else', r.status === 401 && !/work|who|0x/.test(body), `${r.status} ${body.slice(0, 120)}`);
     const bad = await api('/api/you', 'w1.forged.token');
     check('Y1 a forged token: /api/you is 401', bad.status === 401);
-    const page = await html('/you');
+    const page = await html('/dashboard');
     const leaks = [A, B, 'Zei laughing', 'snowfan', 'B OWN'].filter((s) => page.text.includes(s));
-    check('Y1 /you as served holds no one’s data', page.status === 200 && !leaks.length, leaks.join(', '));
+    check('Y1 /dashboard as served holds no one’s data', page.status === 200 && !leaks.length, leaks.join(', '));
   }
 
   // Y2. Signed in as A.
@@ -262,7 +265,8 @@ try {
     check(PROFILE_LISTS_REMIXES ? 'Y4 /@A shows A’s scene, frame and storyboard' : 'Y4 /@A shows A’s scenes only (frames and storyboards wait for consent v5)', has(`/@${A}/1`) && (PROFILE_LISTS_REMIXES ? has(`/remix/${fA}`) && has(`/storyboard/${sA}`) : !has(`/remix/`) && !has(`/storyboard/`)));
     check('Y4 /@A shows nothing hidden', !has(fA2) && !has(sA2) && !has('A HIDDEN'));
     check('Y4 /@A shows nothing of B’s', !has(fB) && !has(sB) && !has('B OWN') && !has(B));
-    check('Y4 /@A shows no pictures, prompts or balance', !has(iA) && !has('footbridge between') && !/Balance|wallet_payments/.test(p.text));
+    check('Y4 /@A shows A’s published picture, linked to its page', has(`/image/${iA}`));
+    check('Y4 /@A shows no hidden picture, nothing of B’s pictures, no balance', !has(iA2) && !has('A HIDDEN PICTURE') && !has(iB) && !has('B OWN PICTURE') && !/Balance|wallet_payments/.test(p.text));
     check(SHOW_BASENAMES ? 'Y4 /@A names A by Basename' : 'Y4 /@A shows no Basename (off)', SHOW_BASENAMES ? has(BASENAME) : !has(BASENAME));
     check('Y4 /@A is not offered to search engines', /<meta name="robots" content="noindex/.test(p.text));
     const nobody = await html(`/@0x${'9'.repeat(40)}`);
@@ -291,7 +295,7 @@ try {
     const fixed = await html(`/@${A}/1/v/${vA2}`);
     check('Y5 the hidden version’s page shows nothing', !fixed.text.includes('(A2)'));
     const you2 = await you(tokenA);
-    check('Y5 the You page marks it hidden, who hid it unrecorded', you2.work.scenes.find((s) => s.versionId === vA2)?.hidden === true && !('hiddenRole' in (you2.work.scenes.find((s) => s.versionId === vA2) ?? {})));
+    check('Y5 the Dashboard marks it hidden, who hid it unrecorded', you2.work.scenes.find((s) => s.versionId === vA2)?.hidden === true && !('hiddenRole' in (you2.work.scenes.find((s) => s.versionId === vA2) ?? {})));
   }
 
   // Y6. With 0015 applied (as postgres, then back to the site's role).
@@ -349,17 +353,17 @@ try {
       // Signed out.
       {
         const page = await newPage(scheme);
-        await page.goto(BASE + '/you', { waitUntil: 'networkidle' });
+        await page.goto(BASE + '/dashboard', { waitUntil: 'networkidle' });
         await page.locator('.you-sign-in button', { hasText: 'Sign in with Farcaster' }).waitFor({ timeout: 10000 }).catch(() => {});
         const t = await page.locator('main.you').innerText();
-        check(`Y1 (${scheme}) /you signed out offers sign-in and shows no account, wallet or work`, /Sign in with Farcaster/i.test(t) && /Sign in with a wallet/i.test(t) && !/Your account|Your work|Balance \$/.test(t), t.slice(0, 200));
+        check(`Y1 (${scheme}) /dashboard signed out offers sign-in and shows no account, wallet or work`, /Sign in with Farcaster/i.test(t) && /Sign in with a wallet/i.test(t) && !/Your account|Your work|Balance \$/.test(t), t.slice(0, 200));
         await shot(page, `you-signed-out-${scheme}`);
         await page.context().close();
       }
       // Signed in as A.
       {
         const page = await newPage(scheme, tokenA);
-        await page.goto(BASE + '/you', { waitUntil: 'networkidle' });
+        await page.goto(BASE + '/dashboard', { waitUntil: 'networkidle' });
         await page.locator('.wallet-balance').waitFor({ timeout: 15000 }).catch(() => {});
         const t = await page.locator('main.you').innerText();
         check(`Y7 (${scheme}) the account: Basename, address, public page, Sign out`, (SHOW_BASENAMES ? t.includes(BASENAME) : !t.includes(BASENAME)) && t.includes(A) && t.includes(`/@${A}`) && /Sign out/i.test(t));
@@ -383,14 +387,14 @@ try {
           await row.getByRole('button', { name: 'Hide this' }).click();
           await row.getByRole('button', { name: 'Show it again' }).waitFor({ timeout: 10000 }).catch(() => {});
           const j = await you(tokenA);
-          check('Y7 Hide on a frame from the You page hides it', j.work.frames.find((f) => f.id === fA)?.hidden === true);
+          check('Y7 Hide on a frame from the Dashboard hides it', j.work.frames.find((f) => f.id === fA)?.hidden === true);
           await row.getByRole('button', { name: 'Show it again' }).click().catch(() => {});
           await page.waitForTimeout(800);
           check('Y7 and "Show it again" brings it back', (await you(tokenA)).work.frames.find((f) => f.id === fA)?.hidden === false);
         }
         await page.context().close();
       }
-      // The menu: the name links to /you.
+      // The menu: the name links to /dashboard.
       {
         const page = await newPage(scheme, tokenA);
         await page.goto(BASE + '/about', { waitUntil: 'networkidle' });
@@ -399,11 +403,11 @@ try {
         const name = page.locator('.menu-sheet a.menu-account-name');
         await name.waitFor({ timeout: 10000 }).catch(() => {});
         await name.scrollIntoViewIfNeeded().catch(() => {});
-        check(`Y8 (${scheme}) the menu’s name is a link to /you`, (await name.getAttribute('href').catch(() => null)) === '/you');
+        check(`Y8 (${scheme}) the menu’s name is a link to /dashboard`, (await name.getAttribute('href').catch(() => null)) === '/dashboard');
         await shot(page, `menu-name-${scheme}`);
         await name.click().catch(() => {});
-        await page.waitForURL('**/you', { timeout: 10000 }).catch(() => {});
-        check(`Y8 (${scheme}) tapping it opens the You page`, page.url().endsWith('/you'));
+        await page.waitForURL('**/dashboard', { timeout: 10000 }).catch(() => {});
+        check(`Y8 (${scheme}) tapping it opens the Dashboard`, page.url().endsWith('/dashboard'));
         await page.context().close();
       }
       // Y9. The top bar's avatar: none signed out; a wallet's drawn avatar; Farcaster's picture, served from this site.
@@ -417,7 +421,7 @@ try {
         const av = w.locator('.topbar-avatar');
         await av.waitFor({ timeout: 10000 }).catch(() => {});
         const label = await av.getAttribute('aria-label').catch(() => null);
-        check(`Y9 (${scheme}) a wallet session: the avatar links to /you, named`, (await av.getAttribute('href').catch(() => null)) === '/you' && label === `You: ${A.slice(0, 6)}…${A.slice(-4)}`, String(label));
+        check(`Y9 (${scheme}) a wallet session: the avatar links to /dashboard, named`, (await av.getAttribute('href').catch(() => null)) === '/dashboard' && label === `Dashboard: ${A.slice(0, 6)}…${A.slice(-4)}`, String(label));
         const order = await w.evaluate(() => Array.from(document.querySelectorAll('.topbar-end > *')).map((e) => e.getAttribute('aria-label') ?? ''));
         check(`Y9 (${scheme}) the avatar sits between ? and the menu`, order.length === 3 && order[0] === 'About' && order[1].startsWith('You:') && order[2] === 'Menu', order.join(' | '));
         await w.context().close();
@@ -450,7 +454,7 @@ try {
         check(`Y9 (${scheme}) Farcaster: the avatar is the profile picture, from this site`, (await img.getAttribute('src').catch(() => null)) === '/api/pfp/6786' && loaded && (await both.locator('.topbar-avatar').getAttribute('aria-label')) === 'You: @naaate');
         await shot(both, `topbar-avatar-${scheme}`);
         await both.locator('.topbar-avatar').click();
-        await both.waitForURL('**/you', { timeout: 10000 }).catch(() => {});
+        await both.waitForURL('**/dashboard', { timeout: 10000 }).catch(() => {});
         await both.locator('.wallet-balance').waitFor({ timeout: 15000 }).catch(() => {});
         const t = await both.locator('main.you').innerText();
         check(`Y9 (${scheme}) both signed in: both accounts, and the wallet panel`, t.includes('@naaate') && t.includes('6786') && t.includes(A) && (SHOW_BASENAMES ? t.includes(BASENAME) : !t.includes(BASENAME)) && /Balance \$5/.test(t) && /Add funds/i.test(t) && /Add a payment by its transaction hash/.test(t) && /Sign out of this wallet/i.test(t), t.slice(0, 400));

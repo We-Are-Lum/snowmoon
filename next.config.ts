@@ -90,6 +90,10 @@ const nextConfig: NextConfig = {
       // Pictures became References (owner, 2026-10-29, the next-version plan): the old addresses go on working.
       { source: '/images', destination: '/references', permanent: true },
       { source: '/images/:path*', destination: '/references/:path*', permanent: true },
+      // The You page became the Dashboard (owner, 2026-10-29: "/you → /dashboard … redirects from /you and its
+      // sub-pages"); its data stays at /api/you, which other pages read too.
+      { source: '/you', destination: '/dashboard', permanent: true },
+      { source: '/you/:path*', destination: '/dashboard/:path*', permanent: true },
     ];
   },
   async headers() {
@@ -124,7 +128,7 @@ const nextConfig: NextConfig = {
       { source: '/@:handle/:id/m/:shot', destination: '/adaptation/:id/by/:handle/m/:shot' },
       { source: '/@:handle/:id/storyboard', destination: '/adaptation/:id/by/:handle/storyboard' },
       { source: '/@:handle/:id', destination: '/adaptation/:id/by/:handle' },
-      // A person's public profile (owner, 2026-10-18, the You page): one segment only, so /@<handle>/<id> above is never caught here.
+      // A person's public profile (owner, 2026-10-18; 2026-10-29: published work only): one segment only, so /@<handle>/<id> above is never caught here.
       { source: '/@:handle', destination: '/profile/:handle' },
       { source: '/:id(\\d{1,9})', destination: '/adaptation/:id' },
     ];

@@ -7,7 +7,7 @@ import { setVersionHidden } from '~/lib/version-hide';
 type Ctx = { params: Promise<{ id: string }> };
 
 /**
- * Hide a published scene version (owner, 2026-10-18, the You page): its maker, or the maintainer, at
+ * Hide a published scene version (owner, 2026-10-18, the Dashboard): its maker, or the maintainer, at
  * once, no approval (src/lib/version-hide.ts). { hide: false } brings it back, by whoever hid it, once
  * the DRAFT migration 0015 records who that was. Checked here, server side, against the signed-in
  * person (a Farcaster FID or a wallet account): nobody can hide someone else's scene.

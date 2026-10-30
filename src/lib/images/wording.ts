@@ -302,7 +302,7 @@ export const IMAGE_WORDING = {
      *  its first publish (ConsentScreen's wallet line). */
     signInNote: 'Signing in is free. It’s a signature, not a payment.',
     /** Under the balance after a wallet sign-in, while the wallet isn't linked (owner, 2026-10-22). DRAFT (coding agent). */
-    linkHint: 'Have a Farcaster account? Link this wallet to it on your You page.',
+    linkHint: 'Have a Farcaster account? Link this wallet to it on your Dashboard.',
     inAdvance: 'A wallet account pays for each image in advance. Your address, shortened, is the byline on images you publish.',
     noWallet: 'No wallet found in this browser. Open this page in your wallet’s browser, or install a wallet extension.',
     wrongSign: 'The wallet didn’t sign. Try again.',

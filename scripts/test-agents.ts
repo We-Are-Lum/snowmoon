@@ -197,7 +197,7 @@ try {
   const publishAsAgent = await fetch(`${BASE}/api/drafts`, { method: 'POST', headers: { 'content-type': 'application/json', authorization: `Bearer ${agentA}` }, body: JSON.stringify({ what: 'version', id: '00000000-0000-4000-8000-000000000000', action: 'publish' }) });
   const noteAsAgent = await fetch(`${BASE}/api/notes`, { method: 'POST', headers: { 'content-type': 'application/json', authorization: `Bearer ${agentA}` }, body: JSON.stringify({ on: 'x', text: 'hi' }) });
   const agentsAsAgent = await fetch(`${BASE}/api/agents`, { headers: { authorization: `Bearer ${agentA}` } });
-  check('P1 an agent’s token is refused as a person (You page, Allow, publish, notes, agents list)', [you, approveAsAgent, publishAsAgent, noteAsAgent, agentsAsAgent].every((r) => r.status === 401 || r.status === 404), [you, approveAsAgent, publishAsAgent, noteAsAgent, agentsAsAgent].map((r) => r.status).join(','));
+  check('P1 an agent’s token is refused as a person (Dashboard, Allow, publish, notes, agents list)', [you, approveAsAgent, publishAsAgent, noteAsAgent, agentsAsAgent].every((r) => r.status === 401 || r.status === 404), [you, approveAsAgent, publishAsAgent, noteAsAgent, agentsAsAgent].map((r) => r.status).join(','));
   const asPersonToken = await mcp(BASE, people.A.token, 'ping');
   check('P2 a person’s token is not an agent’s at /mcp', asPersonToken.status === 401);
 
@@ -516,7 +516,7 @@ try {
   const gap = await tool(BASE, edA, 'log_gap', { asked: 'Make Zei’s coat blue in every shot of the hotel.', missing: 'No tool changes a character across many shots at once.' });
   const gapsA = (await (await asPerson(people.A.token, '/api/drafts')).json()).gaps as { asked: string; agent: string }[];
   const gapsB = (await (await asPerson(people.B.token, '/api/drafts')).json()).gaps as unknown[];
-  check('G1 log_gap records what was asked and what was missing, on the person’s You page only', gap.ok && gapsA.some((g) => g.asked.includes('coat blue') && g.agent === 'Claude') && gapsB.length === 0);
+  check('G1 log_gap records what was asked and what was missing, on the person’s Dashboard only', gap.ok && gapsA.some((g) => g.asked.includes('coat blue') && g.agent === 'Claude') && gapsB.length === 0);
 
   console.log('FN pause and note on the film (2026-10-22)');
   const film = await asPerson(people.A.token, '/api/requests', { method: 'POST', body: JSON.stringify({ kind: 'note', words: 'Hold on her face a beat longer here.', spoken: true, film: { adaptation: 1, version: 2, seconds: 5.25 } }) });
@@ -536,7 +536,7 @@ try {
   check('FN5 the database refuses a time without a moment', !noMomentTime);
 
   console.log('SU suggest an improvement (2026-10-22)');
-  const sugA = await asPerson(people.A.token, '/api/suggestions', { method: 'POST', body: JSON.stringify({ words: 'The re-record sheet should say it opens.', spoken: true, page: '/you' }) });
+  const sugA = await asPerson(people.A.token, '/api/suggestions', { method: 'POST', body: JSON.stringify({ words: 'The re-record sheet should say it opens.', spoken: true, page: '/dashboard' }) });
   const sugB = await asPerson(people.B.token, '/api/suggestions', { method: 'POST', body: JSON.stringify({ words: 'I couldn’t find where my notes went.', page: '/@x/1', moment: '1/2/0-EST', seconds: 4.5 }) });
   const sugEmpty = await asPerson(people.B.token, '/api/suggestions', { method: 'POST', body: JSON.stringify({ words: '   ' }) });
   check('SU1 an invited person can send a suggestion, typed or spoken; an empty one is refused', sugA.ok && sugB.ok && sugEmpty.status === 400, `${sugA.status} ${sugB.status} ${sugEmpty.status}`);
@@ -665,7 +665,7 @@ console.log('M  owner-only mode (public pages off)');
     const made = await asA('/api/agents', { action: 'key', name: 'Muse', capUsd: 0.06 });
     const mk = (await made.json()) as { id: string; key: string; expiresAt: string; spendCapUsd: number };
     const days = (Date.parse(mk.expiresAt) - Date.now()) / 86_400_000;
-    check('K1 a key is made on /you: shown once, sk1_, 30 days, with its cap; not cacheable', made.ok && /^sk1_[A-Za-z0-9_-]{40,}$/.test(mk.key) && days > 29.9 && days < 30.1 && mk.spendCapUsd === 0.06 && (made.headers.get('cache-control') ?? '').includes('no-store'));
+    check('K1 a key is made on /dashboard: shown once, sk1_, 30 days, with its cap; not cacheable', made.ok && /^sk1_[A-Za-z0-9_-]{40,}$/.test(mk.key) && days > 29.9 && days < 30.1 && mk.spendCapUsd === 0.06 && (made.headers.get('cache-control') ?? '').includes('no-store'));
     const unnamed = (await (await asA('/api/agents', { action: 'key', name: '', capUsd: 1 })).json()) as { id?: string; key?: string; error?: string };
     const unnamedRow = JSON.parse(await (await asA('/api/agents')).text()).agents.find((a: { id: string }) => a.id === unnamed.id) as { name?: string } | undefined;
     await asA('/api/agents', { action: 'disconnect', id: unnamed.id });
@@ -696,7 +696,7 @@ console.log('M  owner-only mode (public pages off)');
     const vEst = Number((vt1.out.change as { estimate_usd?: number } | undefined)?.estimate_usd);
     check('K5 the spend cap holds at $0.06: one $0.054 video runs (the measured cost), then a $0.05 frame and a second video are refused', !!v2 && vEst === 0.054 && fr.ok && runV1.ok && runFr.status === 429 && runV2.status === 429 && /spend cap/.test(capErr), `${vEst} ${fr.error ?? ''} ${runV1.status} ${runFr.status} ${runV2.status}`);
     const spentRow = JSON.parse(await (await asA('/api/agents')).text()).agents.find((a: { id: string }) => a.id === mk.id) as { spentUsd: number; spendCapUsd: number };
-    check('K6 /you shows what the key has spent of its cap', spentRow.spentUsd === 0.054 && spentRow.spendCapUsd === 0.06, JSON.stringify(spentRow));
+    check('K6 /dashboard shows what the key has spent of its cap', spentRow.spentUsd === 0.054 && spentRow.spendCapUsd === 0.06, JSON.stringify(spentRow));
     // Two taps at once (owner, 2026-10-24): an approval still in progress counts at its estimate, under one lock per person.
     const race = (await (await asA('/api/agents', { action: 'key', name: 'Race', capUsd: 0.06 })).json()) as { id: string; key: string };
     const ra = await tool(M.BASE, race.key, 'request_video_test', { adaptation: 1, version: 2, shot: shotId, note: 'Snow falls.' });

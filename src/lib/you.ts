@@ -11,10 +11,13 @@ import { basenameOf } from './wallet/basename';
 import { PROFILE_LISTS_REMIXES, SHOW_BASENAMES } from './you-flags';
 import { shortAddress } from './wallet/session';
 import { linkedTo, walletsOf } from './wallet/credit';
+import { imagesBy } from './images/data';
+import { agentsPublic } from './agents/core';
+import { piecesOf, type VersionView } from './agents/pieces';
 
 /**
- * The You page (/you, private to the signed-in person) and the public profile (/@<handle>), owner
- * 2026-10-18: "build the You page". Every read here reuses the tables that hold the work already
+ * The Dashboard (/dashboard, private to the signed-in person) and the public profile (/@<handle>), owner
+ * 2026-10-18: "build the Dashboard". Every read here reuses the tables that hold the work already
  * (0008 images, 0011 wallet accounts, 0012 adaptations, 0013 remix frames and storyboards); nothing
  * new is stored. Two kinds of read, kept apart on purpose:
  * - ownWork(person): everything the person made, hidden things too, for their own page only. The
@@ -236,31 +239,68 @@ async function ownWorkOf(person: Person, handle: string | null): Promise<OwnWork
   };
 }
 
+/** A published picture on a public profile: public already at /image/<versionId>. */
+export interface PublicPicture {
+  versionId: string;
+  url: string;
+  chapter: number;
+  prompt: string;
+  createdAt: string;
+}
+
 export interface PublicWork {
   /** One per adaptation: the version /@<handle>/<id> shows. */
   scenes: (SceneItem & { latestPath: string })[];
   frames: FrameItem[];
   boards: BoardItem[];
+  /** Published pictures (readers' images), newest first. */
+  pictures: PublicPicture[];
+  /** Published agent pieces, the newest published version of each; only while agents' pages (/p) are public. */
+  pieces: VersionView[];
 }
 
+/** Anything on a public profile at all (a byline links to it only then). */
+export const hasPublicWork = (w: PublicWork) => !!(w.scenes.length || w.frames.length || w.boards.length || w.pictures.length || w.pieces.length);
+
 /**
- * What a public profile shows: only what is already public at its own link. Nothing hidden, no pictures, no money. A FID's
- * includes its linked wallets' (as ownWork): their scenes through adaptationsOf and shownVersion, at the FID's own
- * /@<name>/<id> (one per adaptation, as that URL shows), and their frames and boards here.
+ * What a public profile shows: only what is already public at its own link (owner, 2026-10-29: "published work only").
+ * Nothing hidden, no drafts, no money. A FID's includes its linked wallets' (as ownWork): their scenes through
+ * adaptationsOf and shownVersion, at the FID's own /@<name>/<id> (one per adaptation, as that URL shows), and their
+ * frames, boards and pictures here. Pictures are published readers' images (each public at /image/<id>, hidden ones
+ * never come back from imagesBy); agent pieces are listed only while their own pages (/p) are public (AGENTS.public).
  */
 export async function publicWork(person: Person, handle: string): Promise<PublicWork> {
   const pub = await publicWorkOf(person, handle);
-  for (const w of person > 0 ? await walletsOf(db(), person) : []) {
+  const wallets = person > 0 ? await walletsOf(db(), person) : [];
+  for (const w of wallets) {
     const wh = await handleFor(w).catch(() => null);
     if (!wh) continue;
     const more = await publicWorkOf(w, wh);
     pub.frames.push(...more.frames);
     pub.boards.push(...more.boards);
   }
-  return pub;
+  const [pictures, pieces] = await Promise.all([publicPictures([person, ...wallets]), publicPieces(person)]);
+  return { ...pub, pictures, pieces };
 }
 
-async function publicWorkOf(person: Person, handle: string): Promise<PublicWork> {
+async function publicPictures(people: Person[]): Promise<PublicPicture[]> {
+  const sql = db();
+  if (!sql) return [];
+  const images = await orNone(() => imagesBy(sql, people));
+  return images.map((i) => ({ versionId: i.versionId, url: i.url, chapter: i.chapter, prompt: i.userPrompt, createdAt: i.createdAt }));
+}
+
+/** The newest published version of each of the person's agent pieces; none while /p is not public, or with no database. */
+async function publicPieces(person: Person): Promise<VersionView[]> {
+  if (!agentsPublic() || !db()) return [];
+  const versions = await orNone(() => piecesOf(person, 'published'));
+  const seen = new Set<string>();
+  return versions.filter((v) => v.status === 'published' && !seen.has(v.piece) && !!seen.add(v.piece));
+}
+
+type PublicOwn = Omit<PublicWork, 'pictures' | 'pieces'>;
+
+async function publicWorkOf(person: Person, handle: string): Promise<PublicOwn> {
   const scenes: PublicWork['scenes'] = [];
   for (const a of await adaptationsOf(person)) {
     const v = await shownVersion(person, a.id);
@@ -286,5 +326,5 @@ export async function profileHandle(person: Person): Promise<string | null> {
   const handle = await handleFor(person).catch(() => null);
   if (!handle) return null;
   const w = await publicWork(person, handle).catch(() => null);
-  return w && (w.scenes.length || w.frames.length || w.boards.length) ? handle : null;
+  return w && hasPublicWork(w) ? handle : null;
 }

@@ -112,7 +112,7 @@ export async function boardById(sql: Sql, id: string): Promise<Storyboard | null
 }
 
 /**
- * A person's storyboards, newest first: all of them (hidden ones too) for their own You page, or only
+ * A person's storyboards, newest first: all of them (hidden ones too) for their own Dashboard, or only
  * shown ones for their public profile, /@<handle> (owner, 2026-10-18).
  */
 export async function boardsBy(sql: Sql, person: number, o: { hidden: boolean; limit?: number }): Promise<Storyboard[]> {

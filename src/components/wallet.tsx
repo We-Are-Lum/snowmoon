@@ -185,12 +185,12 @@ export function WalletPanel({ onChange, linkHint = true }: { onChange?: () => vo
         </button>
       </p>
       <p className="ic-note">{W.price(exactDollars(b.priceUsd), b.markup)}</p>
-      {/* The 30-day note about automatic links (owner, 2026-10-22); on the You page it shows once, above. */}
+      {/* The 30-day note about automatic links (owner, 2026-10-22); on the Dashboard it shows once, above. */}
       {linkHint && <LinkNote />}
-      {/* After a wallet sign-in, the offer to link it (owner, 2026-10-22); made on the You page. */}
+      {/* After a wallet sign-in, the offer to link it (owner, 2026-10-22); made on the Dashboard. */}
       {linkHint && b.linkOffer && (
         <p className="ic-note">
-          <Link href="/you">{W.linkHint}</Link>
+          <Link href="/dashboard">{W.linkHint}</Link>
         </p>
       )}
       {!b.open ? (

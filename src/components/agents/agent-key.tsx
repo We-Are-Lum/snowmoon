@@ -6,7 +6,7 @@ import { AGENT_WORDING } from '~/lib/agents/wording';
 import { AgentKeyField } from './agent-key-field';
 
 /**
- * Make a personal agent key on /you (owner, 2026-10-20): for an app that connects with a key in a header
+ * Make a personal agent key on /dashboard (owner, 2026-10-20): for an app that connects with a key in a header
  * (Muse). Drafts only, a spend cap, 30 days. The key is shown here once, from the answer to the request
  * that made it, and kept only in this component's memory until "Done": never stored on the device, never
  * sent anywhere else. The name and cap boxes are AgentKeyField (check:principles P1f). DRAFT wording.

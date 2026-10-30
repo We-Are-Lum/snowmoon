@@ -192,12 +192,12 @@ export const WALLET_LINKS = {
   lookupCacheHours: 24,
   /**
    * A linked wallet's earlier work shows under its Farcaster name (owner, 2026-10-22, replacing "don't reassign"):
-   * bylines, the profile, the You page and Hide read it as the FID's. Shown, not rewritten: the records keep the
+   * bylines, the profile, the Dashboard and Hide read it as the FID's. Shown, not rewritten: the records keep the
    * wallet account as the maker, and an unlink shows it as the wallet's again (src/lib/wallet/credit.ts). On.
    */
   creditEarlierWork: true as boolean,
   /**
-   * The 30-day note in the wallet panel and on the You page (owner, 2026-10-22), shown through this UTC day and then
+   * The 30-day note in the wallet panel and on the Dashboard (owner, 2026-10-22), shown through this UTC day and then
    * gone with no further deploy: 30 days from the deploy. Set at merge: 2026-11-21, or the merge day + 30 if later.
    */
   announceUntil: '2026-11-21',
@@ -219,7 +219,7 @@ export const AGENTS = {
      */
     wallets: [] as readonly string[],
   },
-  /** Public pages (agents.md, /p): off while agents are for the owner only. Kept work stays private on /you. */
+  /** Public pages (agents.md, /p): off while agents are for the owner only. Kept work stays private on /dashboard. */
   public: false,
   /**
    * Approved spending: per person per UTC day, and a video test's estimate per second (LongCat 480p on fal). The length
@@ -232,7 +232,7 @@ export const AGENTS = {
   /** At most this many live agents per person (also a database trigger). */
   perPerson: 3,
   /**
-   * A personal agent key (owner, 2026-10-20), made on /you for a client that sends a key in a header (Muse):
+   * A personal agent key (owner, 2026-10-20), made on /dashboard for a client that sends a key in a header (Muse):
    * drafts only (no images), a spend cap the person sets, 30 days, shown once, revoked in one tap. Only its
    * sha256 is stored.
    */
@@ -240,7 +240,7 @@ export const AGENTS = {
   /** An access token lasts an hour; a refresh token 30 days and is replaced each time it is used. */
   accessMinutes: 60,
   refreshDays: 30,
-  /** An agent's link ends after 90 days unless renewed; the person can end it at once from /you. */
+  /** An agent's link ends after 90 days unless renewed; the person can end it at once from /dashboard. */
   linkDays: 90,
   /** Per agent, per UTC day (and a short-term brake). */
   limits: { drafts: 50, notes: 20, images: 50, imagesPerMinute: 5, readsPerMinute: 60 },
@@ -314,7 +314,7 @@ export function adaptationPagesShown(): boolean {
 /**
  * The illustration check (owner, 2026-10-23: "Does each image show its scene?"; branch illustration-check). A vision
  * model checks each seeded key-moment image against its passage (scripts/check-illustrations.ts); the owner decides
- * keep, regenerate with a note, or drop on /you/illustrations. "Owner-only: nothing public until I've read it."
+ * keep, regenerate with a note, or drop on /dashboard/illustrations. "Owner-only: nothing public until I've read it."
  */
 export const ILLUSTRATION_CHECK = {
   /** Who may open the review page and decide. */

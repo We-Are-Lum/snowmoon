@@ -10,7 +10,7 @@ import { configLink, isPayTo } from './links';
  *
  * Shown, not rewritten: every record keeps who made it (the wallet account, minus its number, as the recipes and
  * the publish records say, principle 4). Pages read a linked wallet's work as its FID's: the byline, the profile,
- * the You page and Hide. Unlinking shows it as the wallet's again. While WALLET_LINKS.creditEarlierWork is off,
+ * the Dashboard and Hide. Unlinking shows it as the wallet's again. While WALLET_LINKS.creditEarlierWork is off,
  * nothing here changes anything.
  */
 type Sql = postgres.Sql;

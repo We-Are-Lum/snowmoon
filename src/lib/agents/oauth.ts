@@ -230,7 +230,7 @@ export async function approve(ask: AuthorizeAsk, person: number): Promise<string
       await t`update studio.agents set scopes = ${ask.scopes}, expires_at = now() + make_interval(days => ${AGENTS.linkDays}), name = ${ask.clientName}, client_id = ${ask.clientId} where id = ${agentId}`;
     } else {
       const [live] = await t<{ n: number }[]>`select count(*)::int as n from studio.agents where person = ${person} and revoked_at is null and expires_at > now()`;
-      if (live.n >= AGENTS.perPerson) throw new OAuthError('access_denied', `you already have ${AGENTS.perPerson} agents; disconnect one on your You page first`, 409);
+      if (live.n >= AGENTS.perPerson) throw new OAuthError('access_denied', `you already have ${AGENTS.perPerson} agents; disconnect one on your Dashboard first`, 409);
       [{ id: agentId }] = await t<{ id: string }[]>`insert into studio.agents (person, route, name, client_id, scopes, expires_at)
         values (${person}, 'oauth', ${ask.clientName}, ${ask.clientId}, ${ask.scopes}, now() + make_interval(days => ${AGENTS.linkDays})) returning id`;
     }

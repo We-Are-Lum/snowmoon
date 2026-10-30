@@ -122,6 +122,22 @@ await check('the old /images addresses redirect permanently to /references', asy
   return null;
 });
 
+// The You page became the Dashboard (owner, 2026-10-29): /you and its sub-pages redirect permanently, keeping path and query;
+// the Dashboard and the owner's review answer, and a public profile that doesn't exist is a 404.
+await check('the old /you addresses redirect permanently to /dashboard, which serves', async () => {
+  for (const [from, to] of [['/you', '/dashboard'], ['/you/illustrations', '/dashboard/illustrations'], ['/you/script/1/2', '/dashboard/script/1/2'], ['/you?tab=agents', '/dashboard?tab=agents']]) {
+    const r = await fetch(base + from, { redirect: 'manual' });
+    const loc = (r.headers.get('location') ?? '').replace(base, '');
+    if (r.status !== 308 || loc !== to) return `${from}: expected 308 to ${to}, got ${r.status} ${loc}`;
+  }
+  for (const path of ['/dashboard', '/dashboard/illustrations']) {
+    const r = await get(path);
+    if (r.status !== 200) return `${path} HTTP ${r.status}`;
+  }
+  const unknown = await get('/@no-such-name-zz9q');
+  return unknown.status === 404 ? null : `/@no-such-name-zz9q: expected 404, got ${unknown.status}`;
+});
+
 // Readers' images: the feed renders, and the composer's status answers with the model and the rules
 // (the style file it reads must be in the deployment). Writes refuse anyone signed out.
 await check("readers' images: the feed, the composer's status, and writes need sign-in", async () => {

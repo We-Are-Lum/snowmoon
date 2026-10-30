@@ -223,7 +223,7 @@ export async function publicCatalogue(): Promise<{ adaptation: Adaptation; versi
 
 /**
  * The adaptations a person has something public under: a version they made that isn't hidden, or their
- * page pointing at one (the You page and the public profile, /@<handle>; owner, 2026-10-18).
+ * page pointing at one (the Dashboard and the public profile, /@<handle>; owner, 2026-10-18).
  * Each is then shown with shownVersion, so a profile shows exactly what /@<handle>/<id> shows.
  */
 export async function adaptationsOf(person: Person): Promise<Adaptation[]> {
@@ -246,7 +246,7 @@ export async function adaptationsOf(person: Person): Promise<Adaptation[]> {
 export type HiddenBy = 'maker' | 'maintainer' | null;
 
 /**
- * Every version a person made, hidden ones too, newest first: for their own You page only (never a
+ * Every version a person made, hidden ones too, newest first: for their own Dashboard only (never a
  * public page). `hiddenRole` is read when the DRAFT migration 0015 is applied; until then it is
  * undefined (who hid it isn't recorded, so bringing it back isn't offered).
  */

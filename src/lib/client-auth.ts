@@ -20,7 +20,7 @@ const EVENT = 'snowmoon:signin';
 const WALLET_KEY = 'snowmoon.wallet';
 const WALLET_ROUTES = ['/api/images/status', '/api/images/generate', '/api/images/publish', '/api/consent', '/api/wallet/', '/api/remix/', '/api/you', '/api/scenes/', '/api/make/', '/api/oauth/approve', '/api/agents', '/api/direction', '/api/drafts', '/api/notes', '/api/requests', '/api/designs/picks', '/api/chat/status', '/api/chat/ask'];
 /**
- * Routes matched exactly rather than by prefix: hiding one's own picture (the You page, owner 2026-10-18).
+ * Routes matched exactly rather than by prefix: hiding one's own picture (the Dashboard, owner 2026-10-18).
  * Not every /api/images/<id>/… route: like and report take a Farcaster sign-in only, and a wallet
  * token sent there would be answered 401, which signs the wallet out.
  */
@@ -141,7 +141,7 @@ export function useWalletSession(): WalletSessionState | null {
 }
 
 /**
- * The wallet session, even when a Farcaster sign-in wins everywhere else (the You page and the top bar's
+ * The wallet session, even when a Farcaster sign-in wins everywhere else (the Dashboard and the top bar's
  * avatar show both; owner, 2026-10-18). Null when there is none.
  */
 export function useWalletAlongside(): WalletSessionState | null {
@@ -162,7 +162,7 @@ export function useWalletAlongside(): WalletSessionState | null {
 /** fetch with the person's token when there is one; a plain fetch otherwise. */
 /**
  * fetch with the wallet session's token, whatever else is signed in: for a wallet's own things when the
- * person is signed in with Farcaster too (the You page and top bar, owner 2026-10-18: show both). A
+ * person is signed in with Farcaster too (the Dashboard and top bar, owner 2026-10-18: show both). A
  * plain fetch when there is no wallet session; a 401 ends the wallet session only.
  */
 export async function walletFetch(url: string, init?: RequestInit): Promise<Response> {

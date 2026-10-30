@@ -1,6 +1,6 @@
 /**
  * A personal agent key, end to end, locally (owner, 2026-10-20: "Test with a fresh agent using only that page
- * and a key. Keys never appear in chat or logs."). The person makes a key on /you (a real browser at phone
+ * and a key. Keys never appear in chat or logs."). The person makes a key on /dashboard (a real browser at phone
  * size, taps counted). A fresh headless Claude session gets only the address of agents.md and the key in an
  * environment variable, as an app's secret store would hold it: never in its prompt. It may use curl and
  * nothing else. Then the transcript and the server's output are searched for the key, and the person
@@ -149,10 +149,10 @@ try {
   const ctxA = await personContext(people.A);
   const pageA = await ctxA.newPage();
   pageA.setDefaultTimeout(30_000);
-  say('1. The person makes an agent key on /you (shown once)');
+  say('1. The person makes an agent key on /dashboard (shown once)');
   phase = 'make a key (once)';
-  await pageA.goto(`${BASE}/you`);
-  (taps[phase] ??= []).push('open the You page');
+  await pageA.goto(`${BASE}/dashboard`);
+  (taps[phase] ??= []).push('open the Dashboard');
   // The key is blurred in every screenshot: it is a local test key, and still never shown in an artifact.
   await pageA.addStyleTag({ content: '[data-agent-key] { filter: blur(7px); }' });
   const maker = pageA.locator('details.agent-key');
@@ -187,10 +187,10 @@ try {
   say(`  in the agent's transcript: ${inTranscript ? 'YES (failure)' : 'no'}; in the server's output: ${inLogs ? 'YES (failure)' : 'no'}`);
   if (inTranscript || inLogs) process.exitCode = 1;
 
-  say('4. The person reviews on /you, then ends the key in one tap');
-  phase = 'review on /you';
+  say('4. The person reviews on /dashboard, then ends the key in one tap');
+  phase = 'review on /dashboard';
   await pageA.reload();
-  (taps[phase] ??= []).push('open the You page');
+  (taps[phase] ??= []).push('open the Dashboard');
   await pageA.locator(reviewRow).first().waitFor({ timeout: 60_000 }).catch(() => {});
   await pageA.locator('section[aria-labelledby="you-review"]').scrollIntoViewIfNeeded();
   await snap(pageA, 'drafts-from-the-key');

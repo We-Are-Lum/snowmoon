@@ -5,7 +5,7 @@ import { isMaintainer } from './remix/frames';
 
 /**
  * "Hide" on a published scene version (studio.adaptation_versions.hidden, migration 0012: the one
- * column that may change), from the You page (owner, 2026-10-18: "your work … each with Hide"). The
+ * column that may change), from the Dashboard (owner, 2026-10-18: "your work … each with Hide"). The
  * same rule as remix frames and storyboards: its maker hides their own, the maintainer hides anything.
  * A hidden version leaves every public read at once (0012's public_read policy and shownVersion), and
  * /@<handle>/<id> then shows that person's latest public version, or "nothing here yet".

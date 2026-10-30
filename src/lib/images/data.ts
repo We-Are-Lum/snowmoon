@@ -108,6 +108,17 @@ export async function chapterImages(sql: Sql, chapter: number): Promise<ReaderIm
   return shown(sql, rows.map(shape));
 }
 
+/**
+ * One person's published images, newest first, for their public profile (/@<handle>; owner, 2026-10-29: "published
+ * work only"). `people` is the person and any wallets linked to them, as their images are shown under their name
+ * (src/lib/wallet/credit.ts). Only published images, as everywhere in this file: each is public at /image/<id> already.
+ */
+export async function imagesBy(sql: Sql, people: number[], limit = 60): Promise<ReaderImage[]> {
+  if (!people.length) return [];
+  const rows = await sql`select * from (${SELECT(sql)}) x where x.by_fid in ${sql(people)} order by x.created_at desc limit ${limit}`;
+  return shown(sql, rows.map(shape));
+}
+
 export async function imageByVersion(sql: Sql, versionId: string): Promise<ReaderImage | null> {
   if (!/^[0-9a-f-]{36}$/.test(versionId)) return null;
   const [row] = await sql`select * from (${SELECT(sql)}) x where x.version_id = ${versionId}`;

@@ -9,7 +9,7 @@ import { PublishedTextField } from '../publish-words';
  * The one place a person does the creative act (owner, 2026-10-20): say or type an idea or a note; the
  * agent does the work. Speaking counts as writing: the recording goes to our server to be transcribed and
  * is never kept; the words come back into the box for the person to check, then they send them as theirs.
- * Used on /you (a new idea), on a piece (a note on it), on a moment, and as "Say more" on a draft.
+ * Used on /dashboard (a new idea), on a piece (a note on it), on a moment, and as "Say more" on a draft.
  */
 const W = AGENT_WORDING.tell;
 

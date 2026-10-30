@@ -8,7 +8,7 @@ import { runApproved } from '~/lib/agents/approve';
 import { hasConsented } from '~/lib/consent';
 
 /**
- * The review list on /you: what a person's agents drafted for them. Only the person publishes or
+ * The review list on /dashboard: what a person's agents drafted for them. Only the person publishes or
  * discards; nothing an agent made is public before that.
  */
 const noStore = { 'Cache-Control': 'no-store' };

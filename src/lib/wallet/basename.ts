@@ -14,7 +14,7 @@ import { chain } from './chain';
  * - Cached a day (a miss, an hour). Base not answering in 2.5 seconds counts as no name, not cached,
  *   so a page never waits long on it and the shortened address is shown.
  *
- * Shown only on the You page (to the person themself) and on a wallet account's public profile
+ * Shown only on the Dashboard (to the person themself) and on a wallet account's public profile
  * (/@<address>). DRAFT: the Privacy line naming this lookup is in docs/legal/privacy-you-page-draft.md.
  */
 const L2_RESOLVER = '0xC6d566A56A1aFf6508b41f6c90ff131615583BCD' as const;

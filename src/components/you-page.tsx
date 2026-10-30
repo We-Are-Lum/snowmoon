@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { ILLUSTRATION_CHECK, IMAGES } from '~/lib/config';
 import { authFetch, signOut, signOutWallet, useAuth, useWalletAlongside, walletFetch } from '~/lib/client-auth';
 import { frameView, labelFor, pictureView, posterAlt, posterView } from '~/lib/scene-posters';
+import { PROFILE_LISTS_REMIXES } from '~/lib/you-flags';
 import type { BoardItem, FrameItem, OwnWork, PictureItem, SceneItem, Who } from '~/lib/you';
 import { AiLabel } from './recipe-sheet';
 import { SignInButton } from './sign-in';
@@ -13,7 +14,7 @@ import { AgentsOnYou } from './agents/agents-you';
 import { exactDollars } from '~/lib/wallet/price-text';
 
 /**
- * The You page (owner, 2026-10-18: "build the You page"), reached by tapping your name in the menu:
+ * The Dashboard (owner, 2026-10-18: "build the Dashboard"), reached by tapping your name in the menu:
  * (a) your account, (b) your wallet, (c) your work, each piece with Hide. Private: everything shown is
  * read from /api/you, which answers only for the signed-in person's own session. Signed out, the page
  * shows how to sign in and nothing else.
@@ -21,7 +22,7 @@ import { exactDollars } from '~/lib/wallet/price-text';
  * Every sentence on this page is DRAFT wording for the owner (coding agent, 2026-10-18), kept in W.
  */
 const W = {
-  title: 'You',
+  title: 'Dashboard',
   signedOut: 'Sign in to see your account, your balance and what you have made here. Only you can see this page.',
   loading: 'Loading…',
   failed: 'Your page didn’t load. Try again in a moment.',
@@ -35,7 +36,10 @@ const W = {
   basename: 'Basename',
   address: 'Wallet address',
   profile: 'Your public page',
-  profileNote: 'Anyone can open it. It shows the scenes, remix frames and storyboards you have published here, and nothing you have hidden.',
+  // What /@<handle> lists today (src/lib/you.ts publicWork): remix frames and storyboards only once PROFILE_LISTS_REMIXES is on.
+  profileNote: PROFILE_LISTS_REMIXES
+    ? 'Anyone can open it. It shows the scenes, pictures, remix frames and storyboards you have published here, and nothing you have hidden.'
+    : 'Anyone can open it. It shows the scenes and pictures you have published here, and nothing you have hidden.',
   noProfile: 'Your public page needs a Farcaster name.',
   signOutFarcaster: 'Sign out',
   signOutWallet: 'Sign out of this wallet',
@@ -188,7 +192,7 @@ export function YouPage() {
       {/* The owner's image review (owner, 2026-10-23): a link for the owner only; the page and its API check again. */}
       {who.kind === 'farcaster' && who.fid !== undefined && ILLUSTRATION_CHECK.owners.includes(who.fid) && (
         <p className="you-note">
-          <Link href="/you/illustrations">{W.illustrations}</Link>
+          <Link href="/dashboard/illustrations">{W.illustrations}</Link>
         </p>
       )}
       <section className="you-section" aria-labelledby="you-account">

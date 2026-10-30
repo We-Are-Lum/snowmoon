@@ -157,11 +157,11 @@ try {
   const agentA = await connectInBrowser(ctxA, 'Claude', 'A-connects-claude');
   const agentB = await connectInBrowser(ctxB, 'Claude (second agent)', 'B-connects-second-agent');
 
-  say('2. Idea: A says an idea on /you (spoken; the transcript comes back for A to check)');
+  say('2. Idea: A says an idea on /dashboard (spoken; the transcript comes back for A to check)');
   phase = 'idea → first thing made';
   const pageA = await ctxA.newPage();
-  await pageA.goto(`${BASE}/you`);
-  (taps[phase] ??= []).push('open the You page');
+  await pageA.goto(`${BASE}/dashboard`);
+  (taps[phase] ??= []).push('open the Dashboard');
   await pageA.locator('#you-idea').waitFor();
   await snap(pageA, 'A-you-tell-your-agent', false);
   await tap(pageA, pageA.getByRole('button', { name: 'Speak' }).first(), 'Speak');
@@ -182,7 +182,7 @@ try {
   transcripts.push(s1.md);
   costs += s1.cost;
 
-  // No reload: the You page shows the draft as it lands (it checks while something is waiting).
+  // No reload: the Dashboard shows the draft as it lands (it checks while something is waiting).
   await pageA.locator(reviewRow).first().waitFor({ timeout: 60_000 });
   await pageA.locator('section[aria-labelledby="you-review"]').scrollIntoViewIfNeeded();
   await snap(pageA, 'A-first-thing-made');
@@ -206,7 +206,7 @@ try {
     `You are connected to snowmoon.party as an agent for your person. Call whoami. Another person's piece was just published: piece ${first.piece} (get_piece). Leave one short, specific, constructive note on its latest version (leave_note), about the pictures and timing, not story lines. Tell your person the note is waiting for them.`);
   transcripts.push(s2.md);
   costs += s2.cost;
-  await pageB.goto(`${BASE}/you`);
+  await pageB.goto(`${BASE}/dashboard`);
   await pageB.locator(reviewRow).first().waitFor();
   await tap(pageB, `${reviewRow} button.ic-primary`, 'B: Keep (their agent’s note)');
   await pageB.waitForTimeout(1000);
@@ -214,7 +214,7 @@ try {
   say('5. A reads the notes and tells their agent what to change (spoken, on the piece)');
   phase = 'feedback → revision';
   await pageA.goto(`${BASE}/p/${first.piece}`);
-  (taps[phase] ??= []).push('open the piece (from a notification or /you)');
+  (taps[phase] ??= []).push('open the piece (from a notification or /dashboard)');
   await pageA.locator('#piece-tell').waitFor();
   await snap(pageA, 'A-sees-feedback');
   await tap(pageA, pageA.getByRole('button', { name: 'Speak' }).first(), 'Speak');
@@ -228,7 +228,7 @@ try {
   transcripts.push(s3.md);
   costs += s3.cost;
 
-  // No trip to /you: the new version appears on the piece itself, with Keep, Try again and Say more.
+  // No trip to /dashboard: the new version appears on the piece itself, with Keep, Try again and Say more.
   await pageA.locator('.piece-own-draft .draft-row').first().waitFor({ timeout: 60_000 });
   await pageA.locator('.piece-own-draft').first().scrollIntoViewIfNeeded();
   await snap(pageA, 'A-revision-to-react-to');
@@ -247,7 +247,7 @@ try {
 
   say('6. A disconnects the agent in one tap');
   phase = 'disconnect';
-  await pageA.goto(`${BASE}/you`);
+  await pageA.goto(`${BASE}/dashboard`);
   await tap(pageA, 'section[aria-labelledby="you-agents"] .agent-row button', 'Disconnect');
   await pageA.waitForTimeout(800);
   await pageA.locator('section[aria-labelledby="you-agents"]').scrollIntoViewIfNeeded();
