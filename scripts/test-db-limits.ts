@@ -8,7 +8,8 @@
  *  L3  the next query, sent at once (as the next request would be), opens a new connection and answers;
  *  L4  a slow query that keeps under the limit still answers;
  *  L5  every connection the site opens uses these options (db() and the agent reader), with keepalive, idle,
- *      connect and lifetime limits set.
+ *      connect and lifetime limits set, six connections per instance and one query at a time on each (a query that
+ *      waited for the only connection was often never answered through the pooler; see src/lib/db.ts).
  */
 import net from 'node:net';
 import { readFileSync } from 'node:fs';
@@ -82,8 +83,8 @@ const o = dbOptions() as Record<string, unknown>;
 const src = readFileSync(path.join(ROOT, 'src/lib/db.ts'), 'utf8');
 const calls = [...src.matchAll(/postgres\(url, (\w+\(\))\)/g)].map((m) => m[1]);
 check(
-  'L5 every connection uses the limits: keepalive, idle, connect, lifetime and the silent-socket limit',
-  calls.length === 2 && calls.every((c) => c === 'dbOptions()') && o.keep_alive === DB_LIMITS.keepAliveSeconds && o.idle_timeout === DB_LIMITS.idleSeconds && o.connect_timeout === DB_LIMITS.connectSeconds && o.max_lifetime === DB_LIMITS.lifetimeSeconds && typeof o.socket === 'function',
+  'L5 every connection uses the limits: keepalive, idle, connect, lifetime, the silent-socket limit, six connections, one query at a time on each',
+  calls.length === 2 && calls.every((c) => c === 'dbOptions()') && o.keep_alive === DB_LIMITS.keepAliveSeconds && o.idle_timeout === DB_LIMITS.idleSeconds && o.connect_timeout === DB_LIMITS.connectSeconds && o.max_lifetime === DB_LIMITS.lifetimeSeconds && typeof o.socket === 'function' && o.max === 6 && o.max_pipeline === 1,
   JSON.stringify({ calls, keep_alive: o.keep_alive, idle: o.idle_timeout, connect: o.connect_timeout, life: o.max_lifetime }),
 );
 

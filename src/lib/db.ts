@@ -42,16 +42,21 @@ function limitedSocket(o: { host: string[]; port: number[] }): Promise<net.Socke
   });
 }
 
-/** The options every connection here uses. `socket` is a postgres.js option its types leave out (src/connection.js). */
+/** The options every connection here uses. `socket` and `max_pipeline` are postgres.js options its types leave out (src/connection.js). */
 type Options = postgres.Options<Record<string, postgres.PostgresType>>;
 export const dbOptions = (): Options => ({
   prepare: false, // the transaction pooler does not keep prepared statements
-  max: 1,
+  // Six connections per server instance, one query at a time on each (owner, 2026-10-30; measured on the real pooler
+  // the same day). With one connection (as before), a query that had to wait for it was often never answered: two
+  // queries at once, the second hung on 10 of 10 warm connections; with two connections, three at once, the third hung
+  // 10 of 10. With six: 0 of 456 hung, at 3, 5, 6, 8, 12 and 20 queries at once. Queries one after another never hung.
+  // DB_MAX changes the number, for a local test only.
+  max: Number(process.env.DB_MAX) || 6,
   connect_timeout: DB_LIMITS.connectSeconds,
   idle_timeout: DB_LIMITS.idleSeconds,
   max_lifetime: DB_LIMITS.lifetimeSeconds,
   keep_alive: DB_LIMITS.keepAliveSeconds,
-  ...({ socket: limitedSocket } as unknown as Options),
+  ...({ socket: limitedSocket, max_pipeline: 1 } as unknown as Options),
 });
 
 /**
