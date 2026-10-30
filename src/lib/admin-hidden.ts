@@ -14,10 +14,12 @@ import { db } from './db';
  */
 const BUILDING = process.env.NEXT_PHASE === 'phase-production-build';
 let duringBuild: Promise<Set<string>> | null = null;
+/** The table missing is remembered for a minute at run time, as for picks (src/lib/picks.ts). */
+let missingUntil = 0;
 
 async function read(): Promise<Set<string>> {
   const sql = db();
-  if (!sql) return new Set();
+  if (!sql || Date.now() < missingUntil) return new Set();
   let timer: ReturnType<typeof setTimeout> | undefined;
   const slow = new Promise<never>((_, no) => (timer = setTimeout(() => no(new Error('seeded hides: the read took over 5 s')), 5000)));
   try {
@@ -25,10 +27,13 @@ async function read(): Promise<Set<string>> {
     return new Set(rows.map((r) => r.image_id));
   } catch (e) {
     // The table missing (42P01: NEXT_admin_picks not applied yet) means nothing is hidden. Anything else is a failure.
-    if ((e as { code?: string }).code === '42P01') return new Set();
+    if ((e as { code?: string }).code === '42P01') {
+      if (!BUILDING) missingUntil = Date.now() + 60_000;
+      return new Set();
+    }
     // At build a failed read stops the build; at run time the page shows as built (the seeded images are the project's own).
     if (BUILDING) throw e;
-    console.error('seeded hides: not read', (e as Error).name);
+    console.error('seeded hides: not read', (e as Error).message);
     return new Set();
   } finally {
     clearTimeout(timer);

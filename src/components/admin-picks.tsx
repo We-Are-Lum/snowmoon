@@ -20,7 +20,8 @@ function useAdminPicks(url: string) {
   useEffect(() => {
     let alive = true;
     const made: HTMLElement[] = [];
-    fetch(url)
+    // Given up after 8 seconds: a pick that can't be read in time just isn't shown.
+    fetch(url, { signal: AbortSignal.timeout(8000) })
       .then((r) => (r.ok ? (r.json() as Promise<{ picks: Shown[] }>) : { picks: [] }))
       .then(({ picks }) => {
         if (!alive) return;
