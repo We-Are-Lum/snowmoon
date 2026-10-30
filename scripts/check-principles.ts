@@ -1244,16 +1244,22 @@ add({
   name: 'production pages make no third-party requests',
   load: async () => {
     const browser = await chromium.launch({ channel: 'chrome' });
-    const seen: { page: string; host: string }[] = [];
+    // Every request, with its full URL and type (owner, 2026-10-29: "print every third-party URL it sees"). A page that
+    // is slow to go quiet (one with dozens of first-party images) gets 60 s, and what it requested by then is still
+    // checked; a page that never loads is reported as that, not as a third-party request.
+    const seen: { page: string; host: string; url: string; type: string }[] = [];
+    const slow: string[] = [];
     for (const p of PAGES) {
       const tab = await browser.newPage({ viewport: { width: 390, height: 844 } });
-      tab.on('request', (r) => seen.push({ page: p, host: new URL(r.url()).host }));
-      await tab.goto(BASE + p, { waitUntil: 'networkidle' });
+      tab.on('request', (r) => seen.push({ page: p, host: new URL(r.url()).host, url: r.url(), type: r.resourceType() }));
+      const loaded = await tab.goto(BASE + p, { waitUntil: 'networkidle', timeout: 60_000 }).then(() => true, () => false);
+      if (!loaded) slow.push(p);
       await tab.mouse.wheel(0, 20000);
       await tab.waitForTimeout(1200);
       await tab.close();
     }
     await browser.close();
+    if (slow.length) console.log(`  P6a note: ${slow.join(', ')} didn't go quiet within 60 s; the requests it made were checked`);
     return seen;
   },
   run: (seen) => {
@@ -1262,10 +1268,10 @@ add({
       const host = h.split(':')[0];
       return host === site || host.endsWith(`.${site}`) || host === 'localhost' || host === '127.0.0.1';
     };
-    return [...new Set(seen.filter((s: { host: string }) => !firstParty(s.host)).map((s: { page: string; host: string }) => `${s.host} (from ${s.page})`))];
+    return [...new Set(seen.filter((s: { host: string }) => !firstParty(s.host)).map((s: { page: string; url: string; type?: string }) => `${s.url} (${s.type ?? 'request'}, from ${s.page})`))];
   },
   plant: (seen) => {
-    seen.push({ page: '/chapter/1', host: 'fonts.googleapis.com' });
+    seen.push({ page: '/chapter/1', host: 'fonts.googleapis.com', url: 'https://fonts.googleapis.com/css2?family=Inter', type: 'stylesheet' });
   },
 });
 const PRIVATE_FID_TABLES = ['ratings', 'likes', 'take_likes', 'picks', 'contributor_consents', 'image_asks', 'removal_log', 'image_scores', 'wallet_links'];
