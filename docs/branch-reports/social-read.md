@@ -109,3 +109,10 @@ on a deployment with the switch on. Bluesky was tested live (read only).
 - **P7 (payments never order anything)**: pass; untouched.
 - **P8 (in-world screens)**: pass; untouched.
 - **Legal texts describe today**: held. Switch off until the reread; P6p enforces it.
+
+## Garance's reference (owner's call with Garance, 2026-10-30)
+
+Garance pointed to Objects' Bluesky integration as the model: an artwork's page shows the conversation about it. The
+owner's decision: keep "Posts that link here" as built (posts that link to a page, shown on it), not cross-posted
+replies, for now. Showing the replies to those posts, or posting from the site, would be a later step (Phase 6's
+second half in docs/next-version.md), with its own Privacy lines and, for posting, write access on each network.
