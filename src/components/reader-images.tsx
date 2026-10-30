@@ -9,6 +9,7 @@ import { useCanAddImage } from '~/lib/images/can-add';
 import { IMAGE_WORDING as W } from '~/lib/images/wording';
 import { AI_LABEL, NOT_AUTHOR_VISIBLE, readerImageView } from '~/lib/ai-declared';
 import { AiLabel } from './recipe-sheet';
+import { AdminHide } from './admin-hide';
 
 /**
  * Readers' images in the chapter (decision 4, during the trial): after the last block of their
@@ -111,6 +112,7 @@ function Group({ chapter, images, draftLine, notAuthor, onToggle }: { chapter: n
                   />
                   {notAuthor && i === 0 && <span className="ai-not-author"> · {NOT_AUTHOR_VISIBLE}</span>}{' '}
                   · {im.likes} {im.likes === 1 ? 'like' : 'likes'}
+                  <AdminHide kind="reader" id={im.versionId} />
                 </p>
               </li>
             ))}

@@ -1171,7 +1171,8 @@ add({
   load: async () => walk('src', /\.tsx?$/).map((f) => ({ file: f, text: read(f) })),
   run: (files) =>
     files
-      .filter((f: { file: string; text: string }) => /MODERATOR_FIDS|\bADMINS\b/.test(f.text) && !f.file.endsWith('config.ts'))
+      // Every admin check goes through isAdmin (src/lib/admins.ts, owner 2026-10-29: "ADMINS replaces the scattered owner lists").
+      .filter((f: { file: string; text: string }) => /MODERATOR_FIDS|\bADMINS\b|\bisAdmin\(/.test(f.text) && !f.file.endsWith('config.ts') && !f.file.endsWith('src/lib/admins.ts'))
       // The one write admins may make beyond hiding (owner, reread 2026-10-29): a pick, in studio.admin_picks.
       .map((f: { file: string; text: string }) => ({ ...f, text: f.text.replace(/(insert into|update|delete from)\s+studio\.admin_picks\b[^`]*`/gi, '') }))
       .filter((f: { text: string }) => /status\s*[:=]\s*['"](published|draft)['"]|set\s+status\s*=\s*'(published|draft)'|order by|\.sort\(/i.test(f.text))

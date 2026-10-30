@@ -25,6 +25,16 @@ export const PODCAST_LINKS = { feed: '/podcast.xml', spotify: 'https://open.spot
  */
 export const SYSTEM_FID = 6786;
 
+/**
+ * Admins (owner, 2026-10-29, the next-version plan; principle 5 reread the same day): the owner and @garance. The one
+ * list every admin power reads (owner, 2026-10-29: "ADMINS replaces the scattered owner lists"): hiding seeded and
+ * readers' images in the reader, the review pages, the illustration check, hiding remix frames and scene versions, the
+ * storage check, and the admin caps on "Make an image" (IMAGES.admin). They may pick one image per moment or glossary
+ * item to show first, always labelled "Picked by @…", with the reader's switch beside it (P5b, P5d, P5e).
+ * SYSTEM_FID stays the account system work is credited to; it grants nothing.
+ */
+export const ADMINS: readonly number[] = [6786, 193912];
+
 /** Saved quote cards per FID per day (spam limit; saving costs nothing). */
 export const CARD_SAVES_PER_DAY = 50;
 
@@ -317,8 +327,8 @@ export function adaptationPagesShown(): boolean {
  * keep, regenerate with a note, or drop on /you/illustrations. "Owner-only: nothing public until I've read it."
  */
 export const ILLUSTRATION_CHECK = {
-  /** Who may open the review page and decide. */
-  owners: [6786] as readonly number[],
+  /** Who may open the review page and decide: the admins (owner, 2026-10-29). */
+  owners: ADMINS,
   /**
    * Shows "Reviewed by a person" under a reviewed image wherever it appears (the chapter and the listen view). Off
    * until the owner allows anything public; the mark reads the decision the redo writes into the job file.
@@ -329,15 +339,8 @@ export const ILLUSTRATION_CHECK = {
   modelName: 'Google Gemini 4 Argon',
 } as const;
 
-/**
- * Admins (owner, 2026-10-29, the next-version plan; principle 5 reread the same day): the owner and @garance. They
- * may hide content and pick one image per moment or glossary item to show first, always labelled "Picked by @…",
- * with the reader's switch beside it (P5b, P5d, P5e). Picks aren't built yet; nothing reads this list today.
- */
-export const ADMINS: readonly number[] = [6786, 193912];
-
-/** Moderation only: these FIDs may hide content or dismiss a report. They never promote or rank anything. Owner, 2026-10-08 (decision 20). */
-export const MODERATOR_FIDS: readonly number[] = [6786];
+/** Moderation only: these FIDs may hide content or dismiss a report. They never promote or rank anything. Owner, 2026-10-08 (decision 20). Every admin is one; a moderator who isn't an admin would be added here. */
+export const MODERATOR_FIDS: readonly number[] = [...ADMINS];
 
 /** The public contact for Snowmoon Party: legal, copyright and reports from readers who are signed out (owner, 2026-10-08). */
 export const CONTACT_EMAIL = 'snowmoon@wearelum.xyz';
@@ -382,8 +385,14 @@ export const IMAGES = {
   maxBlocks: 8,
   /** Per person per UTC day; blocked attempts count (decisions 10 and 16). */
   generationsPerDay: 10,
-  /** A higher daily Generate count for these FIDs (owner, 2026-10-13); the daily spend cap still applies to them. */
-  perDayFor: { 6786: 300 } as Readonly<Record<number, number>>,
+  /** A higher daily Generate count for these FIDs (owner, 2026-10-13; every admin since 2026-10-29); the daily spend cap still applies to them. */
+  perDayFor: Object.fromEntries(ADMINS.map((f) => [f, 300])) as Readonly<Record<number, number>>,
+  /**
+   * Admin caps (owner, 2026-10-29: "Make an image from any selected text with admin caps"): an admin's passage may be
+   * any run of blocks in one chapter, up to this many, and the gate (Neynar score) doesn't apply. The daily count is
+   * perDayFor above; the spend cap for everyone still applies.
+   */
+  admin: { maxBlocks: 400 },
   publishesPerDay: 3,
   /** Across everyone, per UTC day (decision 10), kept apart from the assistant's. */
   dailySpendCapUsd: 2,

@@ -570,6 +570,72 @@ async function checkIllustrationReview(page: Page, scheme: string) {
 }
 
 /**
+ * Phase 2 admin tools (owner, 2026-10-29), at 390, with the APIs stood in (the admin_picks migration isn't applied
+ * yet, and the session is planted as in the illustration review): the review page signed out (a sign-in, no items, the
+ * API not asked), as an admin (each image with Pick or Clear, and Hide; the pick marked "Picked by @…"), and as anyone
+ * else (the admins-only line); then a chapter moment with a pick: the picked image first, labelled, the seeded image it
+ * stands in for set aside, the four-way switch, and the reader's choice kept on the device (principle 5, P5d).
+ */
+const REVIEW_API = (u: URL) => u.pathname === '/api/admin/picks/review';
+const PICKS_API = (u: URL) => u.pathname === '/api/admin/picks' && u.searchParams.get('chapter') === '1';
+async function checkAdmin(page: Page, scheme: string) {
+  const where = `/admin/review/chapter/1 @390 (${scheme})`;
+  const seeded = { key: 'c1-b005-toy-drone', kind: 'seeded', url: 'https://media.snowmoon.party/images/seed/c1/c1-b005-toy-drone-ea7f59a8c05f.jpg', alt: 'AI-generated image: a toy drone', href: '/chapter/1#c1-b5', by: null, likes: 0, createdAt: null, hidden: false };
+  const reader = { ...seeded, key: '00000000-0000-4000-8000-000000000001', kind: 'reader', href: '/image/00000000-0000-4000-8000-000000000001', by: '@check', likes: 3, createdAt: '2026-10-29T10:00:00.000Z' };
+  const pick = { targetKind: 'moment', target: 'c1-b5', imageKind: 'reader', imageRef: reader.key, byFid: 6786, by: 'naaate', at: '2026-10-29T11:00:00.000Z' };
+  let asked = 0;
+  await page.route(REVIEW_API, (r) => {
+    asked++;
+    return r.fulfill({ json: { chapter: 1, moments: [{ target: 'c1-b5', idx: 5, images: [seeded, reader], pick }] } });
+  });
+  await open(page, '/admin/review/chapter/1');
+  await page.locator('.you-sign-in button').first().waitFor({ timeout: 10000 }).catch(() => fail(`${where}: signed out, no sign-in offered`));
+  if (await page.locator('.ar-images li').count()) fail(`${where}: signed out, the page shows images`);
+  if (asked) fail(`${where}: signed out, the page asked the review API`);
+  await checkFloors(page, '/admin/review @390 (signed out)', scheme);
+  const as = (fid: number) => {
+    const body = Buffer.from(JSON.stringify({ sub: fid, exp: 4102444800 })).toString('base64').replace(/=+$/, '');
+    const session = JSON.stringify({ token: `x.${body}.y`, fid, username: 'check', exp: 4102444800 });
+    return page.evaluate((s) => localStorage.setItem('snowmoon.signin', s), session);
+  };
+  await page.route('**/api/chat/status', (r) => r.fulfill({ json: { available: false, model: 'm', host: null, provider: null, route: '', perDay: 30, left: 30 } }));
+  await as(6786);
+  await open(page, '/admin/review/chapter/1');
+  await page.locator('.ar-images li').first().waitFor({ timeout: 10000 }).catch(() => fail(`${where}: signed in as an admin, no images`));
+  const rows = await page.locator('.ar-images li').evaluateAll((els) => els.map((e) => [...e.querySelectorAll('.ar-actions button')].map((b) => b.textContent?.trim()).join('|')));
+  if (rows.join(' / ') !== 'Pick for this moment|Hide / Clear the pick|Hide') fail(`${where}: the buttons are "${rows.join(' / ')}"`);
+  if (!/Picked by @naaate/.test(await page.locator('.ar-moment').first().innerText())) fail(`${where}: the pick isn't marked "Picked by @naaate"`);
+  await checkFloors(page, '/admin/review @390 (admin)', scheme);
+  await shot(page, 'phone-390-admin-review', scheme);
+  await page.unroute(REVIEW_API);
+  await page.route(REVIEW_API, (r) => r.fulfill({ status: 403, json: { error: 'Admins only' } }));
+  await as(1234);
+  await open(page, '/admin/review/chapter/1');
+  await page.getByText('This page is for admins.').waitFor({ timeout: 10000 }).catch(() => fail(`${where}: someone else signed in does not see the admins-only line`));
+  await page.unroute(REVIEW_API);
+  await page.evaluate(() => localStorage.removeItem('snowmoon.signin'));
+  // A moment with a pick, in the reader.
+  const at = `/chapter/1 pick @390 (${scheme})`;
+  await page.route(PICKS_API, (r) => r.fulfill({ json: { picks: [{ target: 'c1-b5', pick, options: [seeded, reader] }] } }));
+  await page.evaluate(() => localStorage.removeItem('snowmoon.pick-view'));
+  await open(page, '/chapter/1');
+  const box = page.locator('.admin-pick');
+  await box.waitFor({ timeout: 10000 }).catch(() => fail(`${at}: no pick shown`));
+  const switchText = (await box.locator('.pick-switch button').allTextContents()).map((t) => t.trim()).join('|');
+  if (switchText !== 'Picked by @naaate|Most liked|Newest|Liked by me') fail(`${at}: the switch reads "${switchText}"`);
+  if ((await box.locator('.pick-image a').getAttribute('href')) !== reader.href) fail(`${at}: the picked image isn't shown first`);
+  if (!/AI image · by @check/.test(await box.locator('figcaption').innerText())) fail(`${at}: the shown image has no AI label naming its maker`);
+  if (!(await page.locator('figure.seed-image[data-for="c1-b5"]').evaluate((e) => (e as HTMLElement).hidden))) fail(`${at}: the seeded image the pick stands in for still shows beside it`);
+  await box.locator('.pick-switch button', { hasText: 'Newest' }).click();
+  if ((await page.evaluate(() => localStorage.getItem('snowmoon.pick-view'))) !== 'newest') fail(`${at}: the reader's choice isn't kept on the device`);
+  await checkFloors(page, '/chapter/1 pick @390', scheme);
+  await shot(page, 'phone-390-chapter-pick', scheme);
+  await page.evaluate(() => localStorage.removeItem('snowmoon.pick-view'));
+  await page.unroute(PICKS_API);
+  await page.unroute('**/api/chat/status');
+}
+
+/**
  * A picture larger on tap (@garance's agent's suggestion, 2026-10-24), at 390: a chapter's image opens full screen with
  * its AI label, the floors hold, and Escape and Back each close it, focus back on the picture.
  */
@@ -1831,6 +1897,7 @@ try {
     if (/Your account|Your work|Balance \$/.test(await page.locator('main.you').innerText().catch(() => ''))) fail(`/you @390 (${scheme}): signed out, the page shows an account, wallet or work`);
     await shot(page, 'phone-390-you-signed-out', scheme);
     await checkIllustrationReview(page, scheme);
+    await checkAdmin(page, scheme);
     await checkImageZoom(page, scheme);
     await checkReferenceGlossary(page, scheme);
     await open(page, '/chapter/1?view=listen');

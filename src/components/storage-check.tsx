@@ -2,14 +2,14 @@
 
 import { useState } from 'react';
 import { authFetch, useAuth } from '~/lib/client-auth';
-import { SYSTEM_FID } from '~/lib/config';
+import { isAdmin } from '~/lib/admins';
 
-/** The maintainer's storage check (POST /api/images/storage-check): shown to FID 6786 only. */
+/** The maintainer's storage check (POST /api/images/storage-check): shown to admins only (src/lib/config.ts, ADMINS). */
 export function StorageCheck() {
   const auth = useAuth();
   const [out, setOut] = useState<Record<string, unknown> | null>(null);
   const [busy, setBusy] = useState(false);
-  if (auth.kind !== 'signed-in' || auth.fid !== SYSTEM_FID) return null;
+  if (auth.kind !== 'signed-in' || !isAdmin(auth.fid)) return null;
   const run = async () => {
     setBusy(true);
     const res = await authFetch('/api/images/storage-check', { method: 'POST' });
