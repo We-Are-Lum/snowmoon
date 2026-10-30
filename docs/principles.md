@@ -326,7 +326,7 @@ repo (the prompt log of the request that asked for it).
 dated Oct 5, 2026, with `docs/prompts/008-narration-and-images.md` as
 evidence. Saved cards need a signed-in FID.
 
-## 5. Nothing is marked canon, official, or featured. Moderators can hide and nothing else.
+## 5. Nothing is marked canon, official, or featured. An admin's pick is labelled as a pick, and every reader can switch away from it.
 
 **Source.** "AI as the engine, humans as the steering wheel": the mechanism
 "avoids enshrining any single model … instead, you get an open market of many
@@ -335,18 +335,28 @@ different participants"
 *Inference, not endorsement.* Brief rule 3 ("Nothing is official") is the
 project's own rule from the same idea.
 
-**In this app.** Defaults come from scoring and are labelled as what they are
-("most liked"). Seeded material is a "starting point". Moderators (FIDs in
-`MODERATOR_FIDS`) can set content hidden; they cannot promote, order or label.
+**In this app.** (Owner, reread 2026-10-29, the next-version plan: "option (a)", with the switch.) Admins (FIDs in
+`ADMINS`: the owner and @garance) can hide content, and can pick one image per moment or glossary item to show
+first. A pick is always shown as "Picked by @handle", never as canon, official or featured. Every place that shows a
+pick also shows the switch "Picked by @handle · Most liked · Newest · Liked by me" ("Liked by me": the reader's own
+likes, which only they see); the reader's choice is remembered on their device, and the admin's pick is only the
+starting view. Where no one has picked, the starting view is "Most liked", then "Newest". Seeded material is still a
+"starting point". Moderators (FIDs in `MODERATOR_FIDS`) who are not admins can hide and nothing else. Picks never
+order the feed, search, anyone's own pages, the agent tools or the read API.
 
 **Checked by.**
 - `P5a`: no migration adds a canon/official/featured/pinned field, and no UI
-  string uses those words except to deny them.
-- `P5b`: code that checks moderator FIDs does not publish, order or sort.
-- Review: does any default, badge or ordering reflect a person's choice rather
-  than a stated rule?
+  string uses those words except to deny them. (The pick table is named for what it is, a pick.)
+- `P5b`: code that checks `MODERATOR_FIDS` or `ADMINS` does not publish, order or sort, with one exception:
+  admin code may write `studio.admin_picks`, and nothing else.
+- `P5c`: a hidden image's file leaves the public bucket.
+- `P5d`: every component that shows a pick shows its label ("Picked by @…") and the switch with "Most liked",
+  "Newest" and "Liked by me"; the switch keeps the reader's choice on their device (localStorage) and never sends it.
+- `P5e`: nothing outside the pick code reads `studio.admin_picks` (the feed, search, profiles, the agent tools and
+  the read API stay unpicked).
+- Review: does any default, badge or ordering reflect a person's choice without saying whose?
 
-**Status.** Pass. (No moderation feature exists yet.)
+**Status.** Pass. (Picks aren't built yet: P5d and P5e pass with nothing to check, and fail on a planted violation.)
 
 ## 6. Production pages make no third-party requests. Individual ratings and likes are not publicly readable. Only totals are.
 

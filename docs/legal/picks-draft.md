@@ -1,21 +1,17 @@
-# DRAFT: Privacy line for "My picks", open to everyone
+# Admin picks: the Terms line (DRAFT, for the owner's reread when picks ship)
 
-Branch `picks-everyone`, 2026-10-19. Drafted by the coding agent for the owner's reread. Not in
-`src/lib/legal.ts`; it goes in with the merge that opens picks.
+Principle 5 was reread by the owner on 2026-10-29 (docs/principles.md §5): an admin may pick which image shows first
+for a moment or a glossary item, labelled "Picked by @handle", with the reader's switch "Picked by @handle · Most
+liked · Newest · Liked by me". Picks aren't built yet. This line ships with them, never ahead (owner, 2026-10-18:
+the texts only ever describe what the site does on the day they go live).
 
-What the branch does: anyone signed in, with Farcaster or a wallet, can choose a published style or
-character sheet ("Use as my style", "Use as my {name}") and apply it at Generate. Until now only invited
-FIDs could; the route's own comment held it back because Privacy did not name picks. Making styles and
-sheets stays invited-only.
+## Terms §7 (Hiding and removal), one sentence added at its end
 
-What is stored: one private row per person per style or character (`studio.picks`: who, which design,
-which version, when), read only for the signed-in person and at their Generate; never listed, counted
-or shown to anyone else. A wallet account's picks are kept under its account, apart from any FID. Kept
-until the person clears the pick (or the design is withdrawn).
+> Admins (the site's owner and people the owner names) may pick which image shows first for a moment of the book or
+> a glossary item; it is labelled with who picked it, and you can switch to the most liked, the newest or the images
+> you liked, and every other image stays one tap away.
 
-## Privacy, section 4 ("Kept by us when you sign in"), one item added
+## Privacy: no change
 
-> The styles and character sheets you choose to use in your pictures ("My picks"), which only you can see, until you clear them.
-
-No section 7 change: picking sends nothing anywhere. A picked style's or sheet's text goes to Groq and
-fal.ai only as part of a picture's prompt at Generate, which section 7 already covers.
+The switch's choice stays on the reader's device (localStorage). "Liked by me" uses the likes the site already keeps
+(Privacy §4), shown only to the person who liked them. A pick stores the admin's FID, the image and the time.

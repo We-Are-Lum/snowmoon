@@ -41,7 +41,7 @@ export async function POST(request: Request) {
   } else if (action === 'dismiss') {
     await sql`insert into studio.removal_log ${sql({ element_id: el.elementId, step: 'dismissed', by_fid: fid, role: 'moderator' })}`;
   } else return NextResponse.json({ error: 'Hide or dismiss only' }, { status: 400 });
-  revalidatePath('/images');
-  if (el.type === 'design') revalidatePath('/images/designs', 'layout');
+  revalidatePath('/references');
+  if (el.type === 'design') revalidatePath('/references/designs', 'layout');
   return NextResponse.json({ done: action });
 }

@@ -226,7 +226,7 @@
 .pictures-menu a:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
 .pictures-menu-label { font-family: var(--label); font-size: var(--text-label); line-height: 16px; text-transform: uppercase; }
 .pictures-menu-hint { font-size: 15px; line-height: 1.3; color: var(--muted); }
-@media (min-width: 768px) { .pictures-menu { grid-template-columns: repeat(4, 1fr); } }
+@media (min-width: 768px) { .pictures-menu { grid-template-columns: repeat(5, 1fr); } }
 /* The mixed feed: a moment's setting, and a character sheet's or a style's sample. */
 .pictures-setting { margin: 0; font-family: var(--label); font-size: var(--text-label); line-height: 1.5; text-transform: uppercase; color: var(--muted); }
 .pictures-design { display: block; color: var(--ink); text-decoration: none; }
@@ -377,7 +377,7 @@ a.ia-button:hover { text-decoration: none; }
 .pictures-passage blockquote p { margin: 0; display: inline; }
 .pictures-passage blockquote p + p::before { content: ' '; }
 
-/* ---------- Make an image (/images/new): choose the text, then the prompt ---------- */
+/* ---------- Make an image (/references/new): choose the text, then the prompt ---------- */
 .make-image .mi-switch { margin: 0 0 4px; }
 .make-image .mi-h { display: block; margin: 18px 0 8px; font-family: var(--label); font-size: var(--text-label); font-weight: 400; line-height: 16px; text-transform: uppercase; color: var(--muted); }
 .make-image h2.mi-h { color: var(--ink); }
@@ -442,3 +442,15 @@ a.ia-button:hover { text-decoration: none; }
 .wallet-recover input { font: inherit; font-size: 16px; min-height: var(--tap); padding: 6px 10px; border: 1px solid var(--rule, currentColor); border-radius: 4px; background: transparent; color: inherit; }
 .wallet-recover input:focus-visible { outline: 2px solid var(--ink); outline-offset: 1px; }
 .wallet-recover .ic-secondary { align-self: flex-start; width: auto; padding: 6px 14px; }
+
+/* References: the glossary (owner, 2026-10-29): one card per word with pictures. */
+.ref-cards { list-style: none; margin: 8px 0 0; padding: 0; display: flex; flex-direction: column; gap: 28px; }
+.ref-card { display: flex; flex-direction: column; gap: 10px; padding-bottom: 20px; border-bottom: 1px solid var(--rule); min-width: 0; }
+.ref-term { margin: 0; font-size: 22px; line-height: 1.25; font-weight: 400; }
+.ref-term a { color: var(--ink); text-decoration: none; }
+.ref-first { margin: 0; padding-left: 12px; border-left: 2px solid var(--rule); color: var(--muted); font-size: 16px; line-height: 1.45; }
+.ref-first a { font-family: var(--label); font-size: var(--text-label); letter-spacing: var(--ls-label); }
+.ref-images { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; }
+@media (min-width: 768px) { .ref-images { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.ref-images img { width: 100%; height: auto; display: block; }
+.ref-more { margin: 0; font-family: var(--label); font-size: var(--text-label); letter-spacing: var(--ls-label); }

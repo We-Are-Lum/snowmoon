@@ -7,7 +7,7 @@ import { HOME_TEXT as H } from '~/lib/home';
 import { AiLabel } from './recipe-sheet';
 
 /**
- * "Just made": readers' published images, newest first, from the same query as /images (feed(),
+ * "Just made": readers' published images, newest first, from the same query as /references (feed(),
  * src/lib/images/data.ts), each with the same AI label. Only what exists: images (Design's sample also
  * had styles, character sheets and planning threads, which this edition does not have yet). Nothing is
  * covered by chapter (owner, 2026-10-14). The time is served as a date and shown as "n min ago" once loaded.
@@ -67,7 +67,7 @@ export function HomeFeed({ items, unavailable }: { items: HomeFeedItem[]; unavai
       ) : (
         <p className="home-feed-empty">{unavailable ? H.feed.unavailable : H.feed.empty}</p>
       )}
-      <Link href="/images" className="home-more">
+      <Link href="/references" className="home-more">
         {H.feed.all}
       </Link>
     </section>

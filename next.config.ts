@@ -89,7 +89,12 @@ const nextConfig: NextConfig = {
   // The end card's "make your own" link (owner, 2026-10-14): the repository for now; temporary (307),
   // since /make may become a page of its own.
   async redirects() {
-    return [{ source: '/make', destination: 'https://github.com/We-Are-Lum/snowmoon', permanent: false }];
+    return [
+      { source: '/make', destination: 'https://github.com/We-Are-Lum/snowmoon', permanent: false },
+      // Pictures became References (owner, 2026-10-29, the next-version plan): the old addresses go on working.
+      { source: '/images', destination: '/references', permanent: true },
+      { source: '/images/:path*', destination: '/references/:path*', permanent: true },
+    ];
   },
   async headers() {
     return [

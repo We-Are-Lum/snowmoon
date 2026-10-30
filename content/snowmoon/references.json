@@ -1,19 +1,8 @@
 {
- "about": "References (owner, 2026-10-29, the next-version plan, Phase 1): which character and place sheets belong to each glossary term, so /references/glossary can show one card per term with its images. Matched by the coding agent by name and alias (scripts in the PR); every link marked check: true is uncertain and waits for the owner's review. Terms with no image stay off the page until they have one (owner, 2026-10-29).",
- "reviewed_by": null,
- "reviewed_on": null,
+ "about": "References (owner, 2026-10-29, the next-version plan, Phase 1): which character and place sheets belong to each glossary term, so /references/glossary can show one card per term with its images. Matched by the coding agent by name and alias (scripts in the PR); reviewed by the owner on 2026-10-29 under the rule below. Terms with no image stay off the page until they have one (owner, 2026-10-29).",
+ "reviewed_by": 6786,
+ "reviewed_on": "2026-10-29",
  "terms": [
-  {
-   "term": "arctics",
-   "designs": [
-    {
-     "kind": "place",
-     "slug": "arctic-command-post",
-     "why": "place name contains the term",
-     "check": true
-    }
-   ]
-  },
   {
    "term": "autobus",
    "designs": [
@@ -54,7 +43,7 @@
      "kind": "place",
      "slug": "foil-classroom",
      "why": "place name contains the term",
-     "check": true
+     "check": false
     }
    ]
   },
@@ -131,7 +120,7 @@
      "kind": "place",
      "slug": "economics-institute",
      "why": "place name contains the term",
-     "check": true
+     "check": false
     }
    ]
   },
@@ -142,7 +131,7 @@
      "kind": "place",
      "slug": "economics-institute",
      "why": "place name contains the term",
-     "check": true
+     "check": false
     }
    ]
   },
@@ -154,12 +143,6 @@
      "slug": "gladias",
      "why": "same name",
      "check": false
-    },
-    {
-     "kind": "place",
-     "slug": "family-home",
-     "why": "place name contains the term",
-     "check": true
     }
    ]
   },
@@ -176,7 +159,7 @@
      "kind": "place",
      "slug": "plum-harbor-tea-booth",
      "why": "place name contains the term",
-     "check": true
+     "check": false
     }
    ]
   },
@@ -198,7 +181,7 @@
      "kind": "place",
      "slug": "pafogai-shop-streets",
      "why": "place name contains the term",
-     "check": true
+     "check": false
     }
    ]
   },
@@ -220,18 +203,7 @@
      "kind": "place",
      "slug": "kalimar-footpaths",
      "why": "place name contains the term",
-     "check": true
-    }
-   ]
-  },
-  {
-   "term": "keepers",
-   "designs": [
-    {
-     "kind": "place",
-     "slug": "order-booths",
-     "why": "place name contains the term",
-     "check": true
+     "check": false
     }
    ]
   },
@@ -253,7 +225,7 @@
      "kind": "place",
      "slug": "government-hotel",
      "why": "place name contains the term",
-     "check": true
+     "check": false
     }
    ]
   },
@@ -269,24 +241,13 @@
    ]
   },
   {
-   "term": "min-2",
-   "designs": [
-    {
-     "kind": "character",
-     "slug": "min",
-     "why": "same name",
-     "check": true
-    }
-   ]
-  },
-  {
    "term": "minpentai",
    "designs": [
     {
      "kind": "place",
      "slug": "minpentai-arena",
      "why": "place name contains the term",
-     "check": true
+     "check": false
     }
    ]
   },
@@ -319,7 +280,7 @@
      "kind": "place",
      "slug": "elenar-forest-front",
      "why": "place name contains the term",
-     "check": true
+     "check": false
     }
    ]
   },
@@ -330,19 +291,19 @@
      "kind": "place",
      "slug": "pafogai-shop-streets",
      "why": "place name contains the term",
-     "check": true
+     "check": false
     },
     {
      "kind": "place",
      "slug": "mountain-pyramid",
      "why": "place name contains the term",
-     "check": true
+     "check": false
     },
     {
      "kind": "place",
      "slug": "grand-library",
      "why": "place name contains the term",
-     "check": true
+     "check": false
     }
    ]
   },
@@ -353,19 +314,19 @@
      "kind": "place",
      "slug": "pafogai-shop-streets",
      "why": "place name contains the term",
-     "check": true
+     "check": false
     },
     {
      "kind": "place",
      "slug": "mountain-pyramid",
      "why": "place name contains the term",
-     "check": true
+     "check": false
     },
     {
      "kind": "place",
      "slug": "grand-library",
      "why": "place name contains the term",
-     "check": true
+     "check": false
     }
    ]
   },
@@ -435,5 +396,6 @@
     }
    ]
   }
- ]
+ ],
+ "rule": "A place word may show places inside it; a character, group or faction never gets a place (owner, 2026-10-29). Dropped on review: min-2 (the word for machine) -> Min, gladias -> Gladias and Seila's house, arctics -> Deluin's Arctic command post, keepers -> the Keepers' booths."
 }

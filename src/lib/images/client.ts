@@ -80,5 +80,5 @@ export async function deleteDraft(key: string): Promise<void> {
   });
 }
 
-/** "Make an image" for a passage (/images/new): only the block range goes in the link. */
-export const createHref = (d?: AddImageDetail) => (d ? `/images/new?chapter=${d.chapter}&start=${d.start}&end=${d.end}` : '/images/new');
+/** "Make an image" for a passage (/references/new): only the block range goes in the link. */
+export const createHref = (d?: AddImageDetail) => (d ? `/references/new?chapter=${d.chapter}&start=${d.start}&end=${d.end}` : '/references/new');

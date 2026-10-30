@@ -530,7 +530,7 @@ const READER_IMAGE_FILES = [
 const DESIGN_IMAGE_FILES = [
   'src/components/design-index.tsx',
   'src/components/pictures-latest.tsx',
-  'src/app/images/designs/[id]/page.tsx',
+  'src/app/references/designs/[id]/page.tsx',
   // A character's or a place's sheet rows (2026-10-14: moved out of the character page).
   'src/components/sheet-list.tsx',
   'src/components/design-form.tsx',
@@ -560,7 +560,7 @@ add({
       ch1,
       glossary,
       sheets,
-      feed: await page('/images'),
+      feed: await page('/references'),
       home: await page('/'),
       imagePage,
       wording: {
@@ -602,7 +602,7 @@ add({
     if (!/\{view\.whose\}/.test(sheetSource)) problems.push('src/components/recipe-sheet.tsx: the sheet does not show "Who made it" (view.whose)');
     // The feed and a reader's image page, as served.
     const captions = [...feed.matchAll(/<p class="block-caption pictures-caption">[\s\S]*?<\/p>/g)].map((m) => m[0]);
-    captions.forEach((c, i) => problems.push(...aiLabelProblems(`/images caption ${i + 1}`, c, 'image')));
+    captions.forEach((c, i) => problems.push(...aiLabelProblems(`/references caption ${i + 1}`, c, 'image')));
     // The home page's "Just made" (src/components/home-feed.tsx): each reader's image with its label, or the empty state.
     const homeCaptions = [...home.matchAll(/<p class="block-caption home-feed-caption">[\s\S]*?<\/p>/g)].map((m) => m[0]);
     homeCaptions.forEach((c, i) => problems.push(...aiLabelProblems(`/ "Just made" ${i + 1}`, c, 'image')));
@@ -760,17 +760,32 @@ add({
 // map (content/snowmoon/designs/scenes.json) is what npm run designs:scenes derives, and each
 // assignment's evidence block exists, is inside its part, and is that place's fact or seeded image.
 type SheetFile = { file: string; slug: string; facts: { chapter: number; idx: number; quote: string }[] };
+/** The quote is in the text, and doesn't start or end in the middle of a word (owner, 2026-10-29: "word for word in its block"). */
+const wholeWords = (text: string, q: string) => {
+  for (let i = text.indexOf(q); i >= 0; i = text.indexOf(q, i + 1)) {
+    const before = text[i - 1] ?? ' ', after = text[i + q.length] ?? ' ';
+    const cutStart = /[\p{L}\p{N}]/u.test(q[0]) && /[\p{L}\p{N}]/u.test(before);
+    const cutEnd = /[\p{L}\p{N}]/u.test(q[q.length - 1]) && /[\p{L}\p{N}]/u.test(after);
+    if (!cutStart && !cutEnd) return true;
+  }
+  return false;
+};
+/** Every { chapter, idx, quote } anywhere in a design file (characters, places, props, styles, scenes). */
+const quotesIn = (v: unknown): { chapter: number; idx: number; quote: string }[] =>
+  Array.isArray(v) ? v.flatMap(quotesIn)
+  : v && typeof v === 'object' ? [...(typeof (v as { quote?: unknown }).quote === 'string' && typeof (v as { chapter?: unknown }).chapter === 'number' && typeof (v as { idx?: unknown }).idx === 'number' ? [v as { chapter: number; idx: number; quote: string }] : []), ...Object.values(v).flatMap(quotesIn)]
+  : [];
 add({
   id: 'P2j',
   principle: 2,
-  name: 'sheets: each quote is verbatim at its block, each shown shorthand is labelled Invented and model-drafted, scenes.json is up to date with its evidence in place',
+  name: 'sheets: every quote in designs/** is word for word at its block (never cut mid-word), each shown shorthand is labelled Invented and model-drafted, scenes.json is up to date with its evidence in place',
   load: async () => {
     const { buildScenes } = await import('./designs-scenes');
-    const sheets: SheetFile[] = ['characters', 'locations'].flatMap((d) =>
-      readdirSync(path.join(ROOT, 'content/snowmoon/designs', d)).filter((f) => f.endsWith('.json')).map((f) => {
-        const j = json<{ slug: string; facts?: SheetFile['facts'] }>(`content/snowmoon/designs/${d}/${f}`);
-        return { file: `content/snowmoon/designs/${d}/${f}`, slug: j.slug, facts: j.facts ?? [] };
-      }));
+    // Every quote in content/snowmoon/designs/** (owner, 2026-10-29), not only the characters' and places' facts.
+    const sheets: SheetFile[] = walk('content/snowmoon/designs', /\.json$/).map((file) => {
+        const j = json<{ slug?: string }>(file);
+        return { file, slug: j.slug ?? path.basename(file, '.json'), facts: quotesIn(j) };
+      });
     const sources = walk('src', /\.tsx$/).map((f) => ({ file: f, text: read(f) }));
     return {
       sheets,
@@ -787,7 +802,8 @@ add({
     for (const sh of sheets as SheetFile[]) for (const f of sh.facts) {
       const b = blocks[`c${f.chapter}-b${f.idx}`] as { content: string } | undefined;
       if (!b) problems.push(`${sh.file}: c${f.chapter}-b${f.idx} is not a block of the book`);
-      else if (!b.content.includes(f.quote) && !plain(b.content).includes(f.quote)) problems.push(`${sh.file}: "${f.quote.slice(0, 50)}" is not verbatim at c${f.chapter}-b${f.idx}`);
+      else if (!wholeWords(b.content, f.quote) && !wholeWords(plain(b.content), f.quote))
+        problems.push(`${sh.file}: "${f.quote.slice(0, 50)}" is not word for word at c${f.chapter}-b${f.idx}${b.content.includes(f.quote) || plain(b.content).includes(f.quote) ? ' (it starts or ends mid-word)' : ''}`);
     }
     // The shorthand component: "Invented" in .info-word with the ⓘ (InfoLabel), and the drafted note.
     const comp = (sources as { file: string; text: string }[]).find((x) => x.file === 'src/components/design-sheets.tsx')?.text ?? '';
@@ -835,6 +851,9 @@ add({
     // One word of a quote changed; a descriptor shown bare; an assignment moved off its evidence.
     const sh = (c.sheets as SheetFile[]).find((x) => x.facts.length)!;
     sh.facts[0].quote = sh.facts[0].quote.replace(/\w+/, 'Plainly');
+    // And a quote cut mid-word (bai.json had "…the Pafogai Du Minpe"): the words are in the block, the cut isn't allowed.
+    const cut = (c.sheets as SheetFile[]).flatMap((x) => x.facts).find((f) => f !== sh.facts[0] && /\w{4}$/.test(f.quote))!;
+    cut.quote = cut.quote.slice(0, -2);
     c.sources.push({ file: 'src/app/planted.tsx', text: '<p>{place.descriptor}</p>' });
     const j = JSON.parse(c.committed);
     const p = j.parts.find((x: { place: string | null }) => x.place);
@@ -1148,19 +1167,60 @@ add({
 add({
   id: 'P5b',
   principle: 5,
-  name: 'moderator powers only hide',
+  name: 'moderator and admin powers: hide, and write a labelled pick, nothing else',
   load: async () => walk('src', /\.tsx?$/).map((f) => ({ file: f, text: read(f) })),
   run: (files) =>
     files
-      .filter((f: { file: string; text: string }) => /MODERATOR_FIDS/.test(f.text) && !f.file.endsWith('config.ts'))
+      .filter((f: { file: string; text: string }) => /MODERATOR_FIDS|\bADMINS\b/.test(f.text) && !f.file.endsWith('config.ts'))
+      // The one write admins may make beyond hiding (owner, reread 2026-10-29): a pick, in studio.admin_picks.
+      .map((f: { file: string; text: string }) => ({ ...f, text: f.text.replace(/(insert into|update|delete from)\s+studio\.admin_picks\b[^`]*`/gi, '') }))
       .filter((f: { text: string }) => /status\s*[:=]\s*['"](published|draft)['"]|set\s+status\s*=\s*'(published|draft)'|order by|\.sort\(/i.test(f.text))
-      .map((f: { file: string }) => `${f.file}: moderator code does more than hide`),
+      .map((f: { file: string }) => `${f.file}: moderator or admin code does more than hide or pick`),
   plant: (files) => {
-    files.push({ file: 'src/planted.ts', text: "if (MODERATOR_FIDS.includes(fid)) await sql`update studio.elements set status = 'published'`" });
+    files.push({ file: 'src/planted.ts', text: "if (ADMINS.includes(fid)) await sql`update studio.elements set status = 'published'`" });
   },
 });
-
-// Hidden readers' images (decision 21): out of public reads, and their file gone from the public bucket.
+// A pick is always labelled and switchable, and the reader's choice stays on their device (owner, reread 2026-10-29).
+// Admin picks only (studio.picks is each person's own design picks, a different thing).
+const PICK_RENDER = /\badminPick\b|<AdminPick\b|admin_picks/;
+add({
+  id: 'P5d',
+  principle: 5,
+  name: 'every pick shows "Picked by @…" and the switch (Most liked, Newest, Liked by me); the choice stays on the device',
+  load: async () => walk('src', /\.tsx$/).map((f) => ({ file: f, text: read(f) })),
+  run: (files) => {
+    const problems: string[] = [];
+    const sw = files.find((f: { file: string }) => f.file.endsWith('pick-switch.tsx'));
+    for (const f of files.filter((x: { file: string; text: string }) => PICK_RENDER.test(x.text) && x !== sw)) {
+      if (!/Picked by @|PICK_LABEL/.test(f.text)) problems.push(`${f.file}: shows a pick without "Picked by @…"`);
+      if (!/<PickSwitch\b/.test(f.text)) problems.push(`${f.file}: shows a pick without the switch`);
+    }
+    if (problems.length && !sw) problems.push('src/components/pick-switch.tsx: missing');
+    if (sw) {
+      for (const v of ['Most liked', 'Newest', 'Liked by me']) if (!sw.text.includes(v)) problems.push(`${sw.file}: no "${v}"`);
+      if (!/localStorage/.test(sw.text)) problems.push(`${sw.file}: the choice isn't kept on the device`);
+      if (/method:\s*['"](POST|PUT|PATCH)['"]/i.test(sw.text)) problems.push(`${sw.file}: sends something; the choice must stay on the device`);
+    }
+    return problems;
+  },
+  plant: (files) => {
+    files.push({ file: 'src/components/planted-pick.tsx', text: 'export const X = ({ adminPick }: { adminPick: string }) => <img alt={adminPick} />;' });
+  },
+});
+add({
+  id: 'P5e',
+  principle: 5,
+  name: 'picks order nothing outside the pick code (not the feed, search, profiles, the agent tools or the read API)',
+  load: async () => walk('src', /\.tsx?$/).map((f) => ({ file: f, text: read(f) })),
+  run: (files) =>
+    files
+      .filter((f: { file: string; text: string }) => /\badmin_picks\b/.test(f.text))
+      .filter((f: { file: string }) => !/^src\/lib\/picks\.ts$|pick-switch\.tsx$|^src\/app\/api\/admin\/picks\//.test(f.file))
+      .map((f: { file: string }) => `${f.file}: reads picks outside the pick code (src/lib/picks.ts, the pick switch, /api/admin/picks)`),
+  plant: (files) => {
+    files.push({ file: 'src/lib/images/data.ts', text: 'select e.* from studio.elements e left join studio.admin_picks p on p.element_id = e.id order by p.at' });
+  },
+});
 add({
   id: 'P5c',
   principle: 5,
@@ -1192,9 +1252,9 @@ add({
 // ---------------------------------------------------------------------------
 // P6. No third-party requests; individual ratings not publicly readable.
 // ---------------------------------------------------------------------------
-const PAGES = ['/', '/chapter/1', '/chapter/30', '/about', '/cards', '/adaptations', '/adaptations/dog-dawn', '/share/1/4?img=c1-b005-toy-drone', '/images', '/moderate', '/glossary', '/glossary/zei', '/terms', '/privacy', '/images?show=moments',
+const PAGES = ['/', '/chapter/1', '/chapter/30', '/about', '/cards', '/adaptations', '/adaptations/dog-dawn', '/share/1/4?img=c1-b005-toy-drone', '/references', '/moderate', '/glossary', '/glossary/zei', '/terms', '/privacy', '/references?show=moments',
   // Step 4: styles and character sheets.
-  '/images/designs', '/images/designs?tab=characters', '/images/designs/character/gladias', '/images/picks',
+  '/references/designs', '/references/designs?tab=characters', '/references/designs/character/gladias', '/references/picks',
   // The You page and a public profile (owner, 2026-10-18).
   '/you', '/@naaate'];
 add({
@@ -1203,16 +1263,22 @@ add({
   name: 'production pages make no third-party requests',
   load: async () => {
     const browser = await chromium.launch({ channel: 'chrome' });
-    const seen: { page: string; host: string }[] = [];
+    // Every request, with its full URL and type (owner, 2026-10-29: "print every third-party URL it sees"). A page that
+    // is slow to go quiet (one with dozens of first-party images) gets 60 s, and what it requested by then is still
+    // checked; a page that never loads is reported as that, not as a third-party request.
+    const seen: { page: string; host: string; url: string; type: string }[] = [];
+    const slow: string[] = [];
     for (const p of PAGES) {
       const tab = await browser.newPage({ viewport: { width: 390, height: 844 } });
-      tab.on('request', (r) => seen.push({ page: p, host: new URL(r.url()).host }));
-      await tab.goto(BASE + p, { waitUntil: 'networkidle' });
+      tab.on('request', (r) => seen.push({ page: p, host: new URL(r.url()).host, url: r.url(), type: r.resourceType() }));
+      const loaded = await tab.goto(BASE + p, { waitUntil: 'networkidle', timeout: 60_000 }).then(() => true, () => false);
+      if (!loaded) slow.push(p);
       await tab.mouse.wheel(0, 20000);
       await tab.waitForTimeout(1200);
       await tab.close();
     }
     await browser.close();
+    if (slow.length) console.log(`  P6a note: ${slow.join(', ')} didn't go quiet within 60 s; the requests it made were checked`);
     return seen;
   },
   run: (seen) => {
@@ -1221,10 +1287,10 @@ add({
       const host = h.split(':')[0];
       return host === site || host.endsWith(`.${site}`) || host === 'localhost' || host === '127.0.0.1';
     };
-    return [...new Set(seen.filter((s: { host: string }) => !firstParty(s.host)).map((s: { page: string; host: string }) => `${s.host} (from ${s.page})`))];
+    return [...new Set(seen.filter((s: { host: string }) => !firstParty(s.host)).map((s: { page: string; url: string; type?: string }) => `${s.url} (${s.type ?? 'request'}, from ${s.page})`))];
   },
   plant: (seen) => {
-    seen.push({ page: '/chapter/1', host: 'fonts.googleapis.com' });
+    seen.push({ page: '/chapter/1', host: 'fonts.googleapis.com', url: 'https://fonts.googleapis.com/css2?family=Inter', type: 'stylesheet' });
   },
 });
 const PRIVATE_FID_TABLES = ['ratings', 'likes', 'take_likes', 'picks', 'contributor_consents', 'image_asks', 'removal_log', 'image_scores', 'wallet_links'];

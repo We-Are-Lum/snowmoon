@@ -40,7 +40,7 @@ export default async function NewDesign({ searchParams }: Props) {
   return (
     <div className="page prose dz-page dz-form-page">
       <p className="label ip-crumb">
-        <Link href={src ? `/images/designs/${src.shown.versionId}` : kind === 'style' ? '/images/designs' : place ? `/images/designs/place/${place.slug}` : `/images/designs/character/${character!.slug}`}>
+        <Link href={src ? `/references/designs/${src.shown.versionId}` : kind === 'style' ? '/references/designs' : place ? `/references/designs/place/${place.slug}` : `/references/designs/character/${character!.slug}`}>
           ← {src ? (src.shown.body.title || src.entity) : kind === 'style' ? W.index.tabStyles : place ? placeTitle(place.name) : character!.name}
         </Link>{' '}
         · {IMAGES.label}

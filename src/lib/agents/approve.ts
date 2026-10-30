@@ -2,6 +2,7 @@ import 'server-only';
 import { readFileSync, existsSync } from 'node:fs';
 import path from 'node:path';
 import type postgres from 'postgres';
+import { after } from 'next/server';
 import { editorData } from '../agent/data';
 import { AGENTS, REMIX } from '../config';
 import { generate, remixPictures, remixPrompt } from '../remix/make';
@@ -9,7 +10,7 @@ import { remixShot, savedLayoutPicture } from '../remix/shot';
 import { sha256, sql } from './core';
 import type { Change } from './edits';
 import { actingFor, actingPrompt } from './direction';
-import { storeMade } from './images';
+import { readMade, storeMade } from './images';
 import { versionById } from './pieces';
 import { priceUsd } from '../wallet/credits';
 
@@ -95,7 +96,12 @@ export async function runVideo(person: number, body: { adaptation: number; versi
   if (!vid) return { ok: false as const, status: 502, error: 'The video couldn’t be fetched. Try again later.' };
   const bytes = Buffer.from(vid);
   const stored = await storeMade(bytes, 'mp4');
-  return { ok: true as const, key: stored, sha: sha256(bytes), spent: body.change.estimate_usd, made: { kind: 'video', label: 'Made here', model: body.change.model, host: 'fal.ai', request_id: out?.request_id ?? null, prompt, inputs: [{ role: 'frame', sha256: sha256(frame) }], ...(acting.length ? { direction: acting } : {}), cost_note: 'the estimate (fal returns no price per call)' } };
+  const sha = sha256(bytes);
+  // Our copy is read back and must match what fal sent before fal's copy may be deleted (owner, 2026-10-25).
+  const back = await readMade(stored).catch(() => null);
+  const confirmed = !!back && sha256(back) === sha;
+  const requestId = out?.request_id ?? res.headers.get('x-fal-request-id');
+  return { ok: true as const, key: stored, sha, spent: body.change.estimate_usd, made: { kind: 'video', label: 'Made here', model: body.change.model, host: 'fal.ai', request_id: requestId ?? null, prompt, inputs: [{ role: 'frame', sha256: sha256(frame) }], ...(acting.length ? { direction: acting } : {}), cost_note: 'the estimate (fal returns no price per call)', fal: { request_id: requestId ?? null, copy_confirmed: confirmed, deleted_at: null, error: confirmed ? null : 'our copy did not read back the same; fal\'s copy kept', tried_at: null } } };
 }
 
 /** "Make it": the person approves the spend on their own draft; within the daily caps; at most once. */
@@ -147,5 +153,66 @@ export async function runApproved(person: number, versionId: string, request: Re
   const r = body.change.type === 'frame' ? await runFrame(person, request, body as never) : await runVideo(person, body as never);
   if (!r.ok) return fail(r.status, r.error);
   await s`update studio.piece_versions set spent_usd = ${r.spent}, made = ${s.json(r.made as postgres.JSONValue)}, image_key = ${r.key}, image_sha256 = ${r.sha} where id = ${versionId}`;
+  // fal's copy of a video test is deleted after the response; earlier failures are retried here too. Never blocks this.
+  after(async () => {
+    if (body.change.type === 'video') await cleanupFal(versionId).catch((e) => console.error('fal cleanup', versionId, (e as Error)?.name ?? 'error'));
+    await retryFalCleanups().catch((e) => console.error('fal cleanup retries', (e as Error)?.name ?? 'error'));
+  });
   return { ok: true };
+}
+
+type FalBlock = { request_id: string | null; copy_confirmed: boolean; deleted_at: string | null; error: string | null; tried_at: string | null; files?: number };
+const RETRY_AFTER_MS = 5 * 60_000;
+
+/** fal's Platform API, or the local tests' stand-in. */
+const falPlatform = () => {
+  const testUrl = process.env.VERCEL ? null : process.env.AGENTS_TEST_FAL_URL;
+  return testUrl ? { base: testUrl, key: 'test' } : { base: 'https://api.fal.ai', key: process.env.FAL_CLEANUP_KEY ?? null };
+};
+
+/**
+ * Deletes fal's copy of an approved video test once ours is confirmed (owner, 2026-10-25: "delete fal's copies as soon
+ * as we have ours"): a sha256 re-check of our stored copy against the one recorded, then DELETE
+ * /v1/models/requests/{id}/payloads with FAL_CLEANUP_KEY (a key that may only delete). The outcome is kept in the
+ * draft's recipe (made.fal); a failure is logged and retried by retryFalCleanups. Never touches our copy.
+ */
+export async function cleanupFal(versionId: string): Promise<'deleted' | 'skipped' | 'failed'> {
+  const s = sql();
+  const [v] = await s<{ made: { fal?: FalBlock } | null; image_key: string | null; image_sha256: string | null }[]>`select made, image_key, image_sha256 from studio.piece_versions where id = ${versionId}`;
+  const fal = v?.made?.fal;
+  if (!v || !fal || !fal.request_id || fal.deleted_at || !v.image_key || !v.image_sha256) return 'skipped';
+  const { base, key } = falPlatform();
+  if (!key) return 'skipped';
+  const save = (patch: Partial<FalBlock>) =>
+    s`update studio.piece_versions set made = jsonb_set(made, '{fal}', ${s.json({ ...fal, ...patch, tried_at: new Date().toISOString() } as postgres.JSONValue)}) where id = ${versionId}`;
+  const back = await readMade(v.image_key).catch(() => null);
+  if (!back || sha256(back) !== v.image_sha256) {
+    await save({ copy_confirmed: false, error: 'our copy did not read back the same; fal\'s copy kept' });
+    console.error('fal cleanup: copy not confirmed', versionId);
+    return 'failed';
+  }
+  const r = await fetch(`${base}/v1/models/requests/${encodeURIComponent(fal.request_id)}/payloads`, {
+    method: 'DELETE',
+    headers: { authorization: `Key ${key}`, 'idempotency-key': `snowmoon-${fal.request_id}` },
+    signal: AbortSignal.timeout(20_000),
+  }).catch(() => null);
+  const j = (await r?.json().catch(() => null)) as { cdn_delete_results?: { exception: string | null }[] } | null;
+  const failed = (j?.cdn_delete_results ?? []).filter((x) => x.exception);
+  if (!r?.ok || failed.length) {
+    const error = !r ? 'fal did not answer' : !r.ok ? `fal answered ${r.status}` : `${failed.length} file(s) not deleted`;
+    await save({ copy_confirmed: true, error });
+    console.error('fal cleanup failed', versionId, error);
+    return 'failed';
+  }
+  await save({ copy_confirmed: true, error: null, deleted_at: new Date().toISOString(), files: j?.cdn_delete_results?.length ?? 0 });
+  return 'deleted';
+}
+
+/** Retries video tests whose fal copy wasn't deleted, a few at a time, at most every RETRY_AFTER_MS each. */
+export async function retryFalCleanups(limit = 5) {
+  const before = new Date(Date.now() - RETRY_AFTER_MS).toISOString();
+  const rows = await sql()<{ id: string }[]>`select id from studio.piece_versions
+    where made->'fal'->>'request_id' is not null and made->'fal'->>'deleted_at' is null
+      and coalesce(made->'fal'->>'tried_at', '1970-01-01') < ${before} order by approved_at limit ${limit}`;
+  for (const r of rows) await cleanupFal(r.id);
 }
