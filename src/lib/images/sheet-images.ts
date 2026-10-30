@@ -37,13 +37,13 @@ export async function sheetImages(kind: 'character' | 'place', slug: string, nam
 export function inThisImage(characters: string[], place: string | null): { href: string; name: string }[] {
   const chars = characters.map((s) => sheetCharacters().find((c) => c.slug === s)).filter((c) => c !== undefined);
   return [
-    ...chars.map((c) => ({ href: `/images/designs/character/${c.slug}`, name: c.name })),
+    ...chars.map((c) => ({ href: `/references/designs/character/${c.slug}`, name: c.name })),
     ...(place ? [placeLink(place)].filter((p) => p !== null) : []),
   ];
 }
 function placeLink(slug: string) {
   const p = sheetPlace(slug);
-  return p ? { href: `/images/designs/place/${p.slug}`, name: placeTitle(p.name) } : null;
+  return p ? { href: `/references/designs/place/${p.slug}`, name: placeTitle(p.name) } : null;
 }
 /** For a seeded image (published.json): its characters and place. */
 export function seededInImage(id: string) {

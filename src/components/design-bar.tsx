@@ -27,12 +27,12 @@ export function DesignBar(p: { versionId: string; versionNo: number; elementId: 
         <div className="dz-bar-row">
           <PickButton versionId={p.versionId} versionNo={p.versionNo} elementId={p.elementId} entityId={p.entityId} kind={p.kind} name={p.name} />
           {canMake && (
-            <Link className="ic-secondary dz-fork" href={`/images/designs/new?from=${p.versionId}`}>
+            <Link className="ic-secondary dz-fork" href={`/references/designs/new?from=${p.versionId}`}>
               {W.page.fork}
             </Link>
           )}
           {canMake && mine && (
-            <Link className="ic-secondary dz-fork" href={`/images/designs/new?version=${p.versionId}`}>
+            <Link className="ic-secondary dz-fork" href={`/references/designs/new?version=${p.versionId}`}>
               {W.page.newVersion}
             </Link>
           )}

@@ -80,3 +80,9 @@ export function readerImageView(o: {
     ...(o.versionId ? {} : { notPublished: o.notPublished ?? 'Not yet. Only you can see this draft.' }),
   };
 }
+
+/**
+ * Under a seeded image a person has reviewed and kept (the owner's image review, 2026-10-23). DRAFT wording for the
+ * owner (coding agent); shown only once ILLUSTRATION_CHECK.reviewMarkPublic is on.
+ */
+export const REVIEWED_MARK = 'Reviewed by a person';

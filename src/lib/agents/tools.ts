@@ -392,13 +392,13 @@ const EDITS: AgentTool[] = [
   },
   {
     name: 'log_gap', title: 'Log something you couldn\'t do', scope: 'read', writes: true,
-    description: 'When your person asks for something none of your tools can do, record it: what they asked (their words) and what was missing. It shows on their You page and becomes the build list. Use it instead of guessing or working around a missing tool.',
+    description: 'When your person asks for something none of your tools can do, record it: what they asked (their words) and what was missing. It shows on their You page and to the site\'s owner, who reads it as the build list. Use it instead of guessing or working around a missing tool.',
     inputSchema: { type: 'object', properties: { asked: { type: 'string' }, missing: { type: 'string' } }, required: ['asked', 'missing'], additionalProperties: false },
     run: async (agent, args) => logGap(agent, args),
   },
   {
     name: 'suggest_improvement', title: 'Pass on a suggestion for the site', scope: 'read', writes: true, counts: 'notes',
-    description: 'When your person says how this site could be better (something confusing, missing or broken, or an idea for how it works), pass it to the site\'s owner in their words, exactly as they gave them (never reworded, summarised or added to). Say where they were if you know: the page (a path like /you) and, for the film, the moment and the time. Only the owner reads these, with your person\'s name; it is never published. For something your tools can\'t do, use log_gap instead.',
+    description: 'When your person says how this site could be better (something confusing, missing or broken, a feature they would want, or an idea for how it works), pass it to the site\'s owner in their words, exactly as they gave them (never reworded, summarised or added to). Say where they were if you know: the page (a path like /you) and, for the film, the moment and the time. Only the owner reads these, with your person\'s name; it is never published. For something your tools can\'t do, use log_gap instead.',
     inputSchema: { type: 'object', properties: { text: { type: 'string', description: 'Your person\'s words, exactly as they gave them.' }, page: { type: 'string', description: 'The path of the page they were on, e.g. /you.' }, moment: { type: 'string', description: 'A moment "<adaptation>/<version>/<shot>", if it is about one.' }, seconds: { type: 'number', description: 'The time in that version\'s video, in seconds.' } }, required: ['text'], additionalProperties: false },
     run: async (agent, args) => {
       only(args, ['text', 'page', 'moment', 'seconds']);

@@ -50,6 +50,22 @@ coding agent and its helpers are in `docs/prompts/`.
   the reader's device over the text served whole by `/api/book/text`; the
   query is never sent anywhere, kept or published, and the page may fetch
   only that text).
+- `P1h` (raw voice takes exception, owner 2026-10-23): our Modal conversion
+  code (`modal/chatterbox_vc.py`) keeps no recording. A static read finds no
+  volume write or `.commit()`, no Dict or Queue, no Web Function (Modal keeps
+  their inputs up to 7 days), no network client, no log of the audio, and
+  every temporary folder removed in a `finally`. A local run with a stub
+  model and a stub `modal` (`scripts/modal_vc_proof.py`, no Modal, no
+  spending) leaves no new file under the temp root, the weights path, the
+  working folder or HOME, including when the model raises, times out or is
+  cancelled; no log line or reply holds the input, its base64 or hex; and no
+  live object holds it afterwards. `npm run check:modal-vc` also proves ten
+  planted violations are each caught. Not covered: what Modal's platform
+  keeps outside our code (`docs/proposals/own-voice-v1.md`).
+- `P1i`: the own-voice-v1 consent (`config/consent-own-voice.json`) is used
+  by no page or code under `src/` until `src/app/record` exists, and once it
+  does, only while the `P1h` proof passes (owner, 2026-10-23: "Ship
+  own-voice-v1 only after that passes").
 - `npm run test:db`: after 0005, a recipe is public only if it made a
   published element version or a segment of a narration that is not hidden;
   drafts, hidden work and abandoned attempts stay private.
@@ -70,8 +86,15 @@ are never published. The reason is privacy: a raw recording of a person's
 voice is enough to clone it. The converted line is the published source of
 that line, and its recipe gives the model and revision, the settings, the
 character's reference clip and the sha256 of the raw take, but not the take.
-Conversion runs on the performer's own machine, so the take never leaves it,
-and takes are kept in a private folder outside the repository and outside R2.
+**The rule, in the owner's words (2026-10-22; reread by the owner 2026-10-23):** "Raw recordings are never published and never sent to any service that processes them; they
+stay on my devices and my own encrypted storage." **Temporary exception** (owner, 2026-10-22: "Let's allow a hosted
+service with performers opt in until we get an app for it live", and "hosted means our Modal setup only").
+It ends when the recording app is live. Until then, a recording may be converted on the project's own Modal
+deployment of the allowlisted conversion model, and nowhere else, only if its performer opts in for that
+recording (`own-voice-v1`); it is never published or kept there. No other hosted service, such as fal, is used
+for a recording (`config/models.json`, `chatterbox-vc`). In practice: conversion runs on the performer's own device
+(their computer, or their browser), and takes are kept in a private folder outside the repository and
+outside R2, or in the performer's own end-to-end encrypted storage (iCloud with Advanced Data Protection).
 The performer agrees to `own-voice-v1` (`config/consent.json`) first. Every
 performer gets the same terms. Anyone can still re-run the conversion with
 their own voice or another reference clip; they cannot reproduce the exact
@@ -303,7 +326,7 @@ repo (the prompt log of the request that asked for it).
 dated Oct 5, 2026, with `docs/prompts/008-narration-and-images.md` as
 evidence. Saved cards need a signed-in FID.
 
-## 5. Nothing is marked canon, official, or featured. Moderators can hide and nothing else.
+## 5. Nothing is marked canon, official, or featured. An admin's pick is labelled as a pick, and every reader can switch away from it.
 
 **Source.** "AI as the engine, humans as the steering wheel": the mechanism
 "avoids enshrining any single model … instead, you get an open market of many
@@ -312,18 +335,28 @@ different participants"
 *Inference, not endorsement.* Brief rule 3 ("Nothing is official") is the
 project's own rule from the same idea.
 
-**In this app.** Defaults come from scoring and are labelled as what they are
-("most liked"). Seeded material is a "starting point". Moderators (FIDs in
-`MODERATOR_FIDS`) can set content hidden; they cannot promote, order or label.
+**In this app.** (Owner, reread 2026-10-29, the next-version plan: "option (a)", with the switch.) Admins (FIDs in
+`ADMINS`: the owner and @garance) can hide content, and can pick one image per moment or glossary item to show
+first. A pick is always shown as "Picked by @handle", never as canon, official or featured. Every place that shows a
+pick also shows the switch "Picked by @handle · Most liked · Newest · Liked by me" ("Liked by me": the reader's own
+likes, which only they see); the reader's choice is remembered on their device, and the admin's pick is only the
+starting view. Where no one has picked, the starting view is "Most liked", then "Newest". Seeded material is still a
+"starting point". Moderators (FIDs in `MODERATOR_FIDS`) who are not admins can hide and nothing else. Picks never
+order the feed, search, anyone's own pages, the agent tools or the read API.
 
 **Checked by.**
 - `P5a`: no migration adds a canon/official/featured/pinned field, and no UI
-  string uses those words except to deny them.
-- `P5b`: code that checks moderator FIDs does not publish, order or sort.
-- Review: does any default, badge or ordering reflect a person's choice rather
-  than a stated rule?
+  string uses those words except to deny them. (The pick table is named for what it is, a pick.)
+- `P5b`: code that checks `MODERATOR_FIDS` or `ADMINS` does not publish, order or sort, with one exception:
+  admin code may write `studio.admin_picks`, and nothing else.
+- `P5c`: a hidden image's file leaves the public bucket.
+- `P5d`: every component that shows a pick shows its label ("Picked by @…") and the switch with "Most liked",
+  "Newest" and "Liked by me"; the switch keeps the reader's choice on their device (localStorage) and never sends it.
+- `P5e`: nothing outside the pick code reads `studio.admin_picks` (the feed, search, profiles, the agent tools and
+  the read API stay unpicked).
+- Review: does any default, badge or ordering reflect a person's choice without saying whose?
 
-**Status.** Pass. (No moderation feature exists yet.)
+**Status.** Pass. (Picks aren't built yet: P5d and P5e pass with nothing to check, and fail on a planted violation.)
 
 ## 6. Production pages make no third-party requests. Individual ratings and likes are not publicly readable. Only totals are.
 
@@ -388,6 +421,9 @@ only, through `studio.rating_totals`, `studio.like_totals` and
   line; after it, "Reread by FID 6786" with the date. No per-sentence tags.
 - `P6m`: the Terms and Privacy pages carry their effective date
   (`LEGAL.effective`, the day they go live), and no placeholder shows.
+- `P6o`: while Privacy §3 says the frames and video tests your agent makes on approval are seen only by you
+  ("only you can see them"), `AGENTS.public` stays off: a kept edit is marked published, and agents' public
+  pages would show it to anyone. The owner's rule (2026-10-24).
 - `P6n`: image making is open beyond the invited list (the gate looks up a
   Neynar score) only when `src/app/terms/page.tsx` and `src/app/privacy/page.tsx`
   both exist, and the Privacy page names Neynar (which receives the FID at

@@ -3,10 +3,12 @@ import { getPerson } from '~/lib/auth';
 import { ToolInputError } from '~/lib/agent/tools';
 import { agentsOn, allowed } from '~/lib/agents/core';
 import { addSuggestion, allSuggestions, suggestionsOf, suggestionsReader } from '~/lib/agents/suggestions';
+import { allGaps } from '~/lib/agents/edits';
 
 /**
  * "Suggest an improvement" (owner, 2026-10-22), for the invited people. A person sees their own; the owner
- * also sees everyone's, with who said it and where they were. Never published.
+ * also sees everyone's, with who said it and where they were, and every agent's gaps (what someone asked that
+ * their agent couldn't do; owner, 2026-10-22). Never published.
  */
 const noStore = { 'Cache-Control': 'no-store' };
 export async function GET(request: Request) {
@@ -15,7 +17,7 @@ export async function GET(request: Request) {
   // Only the invited people see anything here; everyone else gets the same 404 as before.
   if (!(await allowed(person))) return new NextResponse('Not found', { status: 404 });
   if (person === null) return NextResponse.json({ error: 'Sign in first' }, { status: 401, headers: noStore });
-  return NextResponse.json({ mine: await suggestionsOf(person), ...(person === suggestionsReader() ? { all: await allSuggestions(person) } : {}) }, { headers: noStore });
+  return NextResponse.json({ mine: await suggestionsOf(person), ...(person === suggestionsReader() ? { all: await allSuggestions(person), gaps: await allGaps(person) } : {}) }, { headers: noStore });
 }
 
 export async function POST(request: Request) {

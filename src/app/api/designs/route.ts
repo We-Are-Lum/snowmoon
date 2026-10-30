@@ -144,8 +144,8 @@ export async function POST(request: Request) {
   };
   try {
     const out = await makeDesign(sql, { fid, mode, kind, styleName: mode === 'create' && kind === 'style' ? title : undefined, character: character ?? undefined, place: place ?? undefined, fromVersionId: typeof body.from === 'string' ? body.from : undefined, body: design });
-    revalidatePath('/images/designs');
-    return NextResponse.json({ versionId: out.versionId, page: `/images/designs/${out.versionId}` });
+    revalidatePath('/references/designs');
+    return NextResponse.json({ versionId: out.versionId, page: `/references/designs/${out.versionId}` });
   } catch (e) {
     if (e instanceof MakeRefused) return no(e.message, e.status);
     throw e;

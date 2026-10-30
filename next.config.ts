@@ -35,6 +35,7 @@ function legalPages(): string {
  */
 const SNAP_MEDIA = 'application/vnd.farcaster.snap+json';
 const ASKS_FOR_SNAP = [{ type: 'header' as const, key: 'accept', value: '.*application/vnd\\.farcaster\\.snap\\+json.*' }];
+const IS_PREFLIGHT = [{ type: 'header' as const, key: 'access-control-request-method' }];
 const snapAlternate = (path: string) => [
   { key: 'Link', value: `<${path}>; rel="alternate"; type="${SNAP_MEDIA}"` },
   { key: 'Vary', value: 'Accept' },
@@ -68,21 +69,33 @@ const nextConfig: NextConfig = {
     ],
     // Remix's Generate reads the shot (its prompt, plate and cast cards) from the editor's data,
     // made at build time from committed files (scripts/editor-data.mjs): only those, not the voices.
-    '/api/remix/**': ['./public/editor/*/v*/data.json', './public/editor/*/v*/plates/**', './public/editor/*/v*/cards/**'],
+    // …and, for a shot made in code, its saved layout (set/, owner 2026-10-22).
+    '/api/remix/**': ['./public/editor/*/v*/data.json', './public/editor/*/v*/plates/**', './public/editor/*/v*/cards/**', './public/editor/*/v*/set/**'],
+    // An agent's frame try or video test, made when its person approves it (src/lib/agents/approve.ts): the same, and
+    // the shot's frame for a video test.
+    '/api/drafts': ['./public/editor/*/v*/data.json', './public/editor/*/v*/plates/**', './public/editor/*/v*/cards/**', './public/editor/*/v*/set/**', './public/editor/*/v*/frames/**'],
     // The agent read API reads the same editor data (src/lib/agent/data.ts).
     '/api/agent/**': ['./public/editor/*/v*/data.json'],
     '/api/mcp': ['./public/editor/*/v*/data.json'],
     // A moment page reads each version's shot (its frame, times and lines) from the same data.
     '/adaptation/**': ['./public/editor/*/v*/data.json'],
+    // The owner's image review reads each job's characters (their sheets and facts) on request.
+    '/api/you/illustrations': ['./content/snowmoon/designs/characters/**'],
   },
   // The end card's "make your own" link (owner, 2026-10-14): the repository for now; temporary (307),
   // since /make may become a page of its own.
   async redirects() {
-    return [{ source: '/make', destination: 'https://github.com/We-Are-Lum/snowmoon', permanent: false }];
+    return [
+      { source: '/make', destination: 'https://github.com/We-Are-Lum/snowmoon', permanent: false },
+      // Pictures became References (owner, 2026-10-29, the next-version plan): the old addresses go on working.
+      { source: '/images', destination: '/references', permanent: true },
+      { source: '/images/:path*', destination: '/references/:path*', permanent: true },
+    ];
   },
   async headers() {
     return [
       { source: '/minpentai', missing: ASKS_FOR_SNAP, headers: snapAlternate('/minpentai') },
+      { source: '/minpentai/play', missing: ASKS_FOR_SNAP, headers: snapAlternate('/minpentai/play') },
       { source: '/minpentai/c/:seg', missing: ASKS_FOR_SNAP, headers: snapAlternate('/minpentai/c/:seg') },
     ];
   },
@@ -92,7 +105,13 @@ const nextConfig: NextConfig = {
   async rewrites() {
     // The snap first (before the app's pages: /minpentai is a page), then the adaptation pages.
     const beforeFiles = [
+      // A browser client (Farcaster's web app) sends X-Snap-Payload with the snap request, so it asks first
+      // (a CORS preflight: OPTIONS, without the snap Accept). The static page's own answer allows no
+      // headers and the browser never sends the request (2026-10-23: no snap in the web composer), so
+      // preflights go to the snap route, which allows them.
+      ...['/minpentai', '/minpentai/play', '/minpentai/c/:seg'].map((source) => ({ source, has: IS_PREFLIGHT, destination: '/snap/minpentai' })),
       { source: '/minpentai', has: ASKS_FOR_SNAP, destination: '/snap/minpentai' },
+      { source: '/minpentai/play', has: ASKS_FOR_SNAP, destination: '/snap/minpentai' },
       { source: '/minpentai/c/:seg', has: ASKS_FOR_SNAP, destination: '/snap/minpentai?c=:seg' },
     ];
     const afterFiles = [

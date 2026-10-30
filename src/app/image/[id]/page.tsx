@@ -68,12 +68,12 @@ export default async function ImagePage({ params }: Props) {
   return (
     <div className="page prose image-page">
       <p className="label ip-crumb">
-        <Link href="/images">← Pictures</Link> · {IMAGES.label}
+        <Link href="/references">← References</Link> · {IMAGES.label}
       </p>
       <div className="ip-main">
         <figure className="ip-figure">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={im.url} alt={`AI-generated image: ${im.userPrompt.split(/(?<=[.!?])\s/)[0]}`} width={1024} height={576} />
+          <img src={im.url} alt={`AI-generated image: ${im.userPrompt.split(/(?<=[.!?])\s/)[0]}`} width={1024} height={576} data-zoom="" tabIndex={0} />
           <figcaption className="ip-caption">
             <AiLabel
               kind="image"
@@ -127,7 +127,7 @@ export default async function ImagePage({ params }: Props) {
               <dt className="ip-wide">{W.designs.image.added}</dt>
               {im.designs.map((d) => (
                 <dd key={d.versionId} className="ip-wide ip-words ip-added">
-                  <Link href={`/images/designs/${d.versionId}`}>
+                  <Link href={`/references/designs/${d.versionId}`}>
                     {d.kind === 'style' ? d.title || d.entity : d.entity} v{d.versionNo} · {d.by}
                   </Link>
                   {d.assist ? ' (text drafted by the coding agent, a closed model)' : ''}: {d.text}

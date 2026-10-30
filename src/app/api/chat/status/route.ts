@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getFid } from '~/lib/auth';
+import { getPerson } from '~/lib/auth';
 import { db } from '~/lib/db';
 import { CHAT } from '~/lib/config';
 import { directKey, gatewayToken, servingAllowed } from '~/lib/chat/model';
@@ -11,8 +11,12 @@ import { usedToday } from '~/lib/chat/limits';
  * 401 when signed out (screen 9d).
  */
 export async function GET(request: Request) {
-  const fid = await getFid(request);
+  // A Farcaster sign-in, or a wallet linked to a FID, asks as that FID (owner, 2026-10-22: Luis, signed in with his linked
+  // wallet, was asked to sign in again); the limit is still counted per Farcaster account. A wallet not linked to one is
+  // answered 403, not 401, so the browser keeps its wallet session.
+  const fid = await getPerson(request);
   if (fid === null) return NextResponse.json({ error: 'Sign in with Farcaster to use the assistant' }, { status: 401 });
+  if (fid < 0) return NextResponse.json({ error: 'Sign in with Farcaster to use the assistant' }, { status: 403 });
   // host: the gateway, named only while it is the fallback route.
   const base = { model: CHAT.modelName, host: CHAT.gatewayFallback ? CHAT.host : null, provider: CHAT.providerName, route: CHAT.route, perDay: CHAT.messagesPerDay };
   if (!servingAllowed()) return NextResponse.json({ ...base, available: false, reason: 'provider-not-chosen', left: 0 });
