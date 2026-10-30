@@ -201,46 +201,65 @@ The branch's notes for this reread (spam, the networks' own terms, "within about
 ## Part F: the assistant as an agent (ships with the feature; not built yet)
 
 You reread the notice and the Privacy §5 paragraph on 2026-10-29 (`docs/legal/assistant-agent-draft.md`). Today's
-decision, routing C, changes where messages go: book questions stay on gpt-oss-120b (Groq), and "make" conversations
-go to Kimi K3 through Vercel AI Gateway, on providers that keep nothing. The reread words said only Groq, so items 12
-and 13 are new drafts. Item 14 repeats the reread words, with "You page" → "Dashboard".
+decisions change where messages go and how making is limited:
+- **Routing C:** book questions stay on gpt-oss-120b (Groq). "Make" conversations go to Kimi K3 through Vercel AI
+  Gateway, **pinned to Baseten**, with no fallback: if Baseten is down, make mode says it's unavailable.
+- **Limits:** make mode has its own cap, about **$3 a day for the whole site** and **10 make conversations per person a
+  day**. Book questions keep the chat's $2 a day.
+
+The reread words said only Groq, so items 12 and 13 are new drafts. Item 14 repeats the reread words, with "You page"
+→ "Dashboard" and the Baseten change.
+
+**Baseten's terms, checked 2026-10-30:**
+- Its security page says its Model APIs keep a zero-data-retention posture: it "does not log or store customer content,
+  or write it to persistent storage, after real-time processing" ([security practices](https://www.baseten.co/security-practices/);
+  [data request policy](https://www.baseten.co/data-request-policy/)).
+- The exception is Baseten's async (queued) inference, which can hold a request for up to 72 hours. The site would call
+  it synchronously, through the gateway's chat endpoint, so the exception doesn't apply.
+- Vercel AI Gateway lists Baseten among the providers with a zero-retention and no-prompt-training agreement for gateway
+  traffic ([Vercel ZDR](https://vercel.com/docs/ai-gateway/security-and-compliance/zdr)).
+- Pinning is done per request (`only: ['baseten']` with `zeroDataRetention: true`). If Baseten can't serve, the gateway
+  refuses rather than going elsewhere.
+- Not found: an express "no training" clause in Baseten's own terms. For gateway traffic it rests on Vercel's agreement.
 
 ### 12. The notice, item 3 (where messages go)
 
 - Before (today, and the 10-29 reread "Unchanged"): "**Your messages go to Groq (not the Grok of X).** Groq runs
   gpt-oss-120b, an open-weights model. When Groq is busy, a message goes through Vercel AI Gateway to Groq instead.
   Both are set to keep nothing, and this app keeps no copy of your messages."
-- After (draft): "**Your messages go to Groq (not the Grok of X), or to Kimi K3 when you make something.** Questions
+- After (draft): "**Your messages go to Groq (not the Grok of X), or to Baseten when you make something.** Questions
   about the book go to Groq, which runs gpt-oss-120b, an open-weights model; when Groq is busy, through Vercel AI
   Gateway instead. gpt-oss-120b also reads each message first, to tell a question from a request to make something.
-  When you ask it to make something, the conversation goes through Vercel AI Gateway to Kimi K3, an open-weights model
-  by Moonshot AI, on providers that keep nothing. All are set to keep nothing, and this app keeps no copy of your
-  messages."
+  When you ask it to make something, the conversation goes through Vercel AI Gateway to Baseten, which runs Kimi K3, an
+  open-weights model by Moonshot AI; if Baseten isn't available, making is paused rather than sent elsewhere. All are
+  set to keep nothing, and this app keeps no copy of your messages."
 
-### 13. Privacy §5 (The assistant), first paragraph, and the §7 Groq item
+### 13. Privacy §5 (The assistant), first paragraph, and §7
 
 - §5 before: "Your question is sent to Groq to be answered, or through Vercel AI Gateway to Groq when Groq is busy.
   Both are set to keep nothing. We keep no copy of your questions or the answers. Under your Farcaster ID we record
   only how many questions you ask and when, to count the daily limit. The assistant's costs are kept only as daily
   totals, without your ID, to track our spending."
 - §5 after (draft): "Your question is sent to Groq to be answered, or through Vercel AI Gateway to Groq when Groq is
-  busy. When you ask the assistant to make something, the conversation is sent through Vercel AI Gateway to Kimi K3,
-  only to providers that keep nothing. All are set to keep nothing. We keep no copy of your questions or the answers.
-  Under your Farcaster ID we record only how many questions you ask and when, to count the daily limit. The
-  assistant's costs, Kimi K3's included, are kept only as daily totals, without your ID, to track our spending and to
-  stop the assistant for the day at its spending limit."
+  busy. When you ask the assistant to make something, the conversation is sent through Vercel AI Gateway to Baseten,
+  which runs Kimi K3, and to no other provider. All are set to keep nothing. We keep no copy of your questions or the
+  answers. Under your Farcaster ID we record only how many questions you ask, and how many times you start making
+  something, and when, to count the daily limits. The assistant's costs are kept only as daily totals, without your ID,
+  to track our spending and to pause the assistant, or its making, for the day when its spending limit is reached."
 - §7 Groq item, after (with item 7): "Groq, and Vercel AI Gateway when Groq is busy, receive assistant questions, and
   the prompts for images you make (or approve from your agent's drafts), which are checked against the published
-  rules. When you ask the assistant to make something, Vercel AI Gateway also receives the conversation and sends it to
-  Kimi K3 on a provider that keeps nothing."
+  rules. When you ask the assistant to make something, Vercel AI Gateway also receives the conversation and passes it
+  to Baseten."
+- §7, a new item after it (draft): "Baseten runs Kimi K3 for the assistant when you ask it to make something. It
+  receives the conversation through Vercel AI Gateway, answers it, and keeps nothing (its zero-data-retention terms,
+  and Vercel's agreement with it)."
 
-Please decide one thing here: the trial's Kimi K3 calls were all served by Baseten, but the gateway may pick any of the
-14 providers with a zero-retention agreement. These lines name the gateway and "a provider that keeps nothing", not
-each provider. If you want each provider named, or Kimi K3 pinned to one provider (and named), say which.
-
-Cost note, for the same decision: you said the assistant's own model cost counts against the chat's daily cap. That cap
-is $2 a day for the whole site (CHAT.dailySpendCapUsd). At about $0.06 a make conversation, the assistant would stop
-for everyone after about 32 make conversations a day. Book questions cost about $0.0009 each.
+**The limits, in numbers:**
+- **Book questions:** the chat's $2 a day for the whole site, and the existing 30 a person a day. About $0.0009 each.
+- **Making:** its own $3 a day for the whole site, and 10 make conversations a person a day. At about $0.06 each, the $3
+  covers about 50 make conversations a day site-wide before making pauses until 00:00 UTC; book questions keep working.
+- **A "make conversation"** is counted when the routing call first says "make something" in a conversation. Later
+  turns in it don't count again.
 
 ### 14. The notice, items 1, 2 and 4, and the §5 agent paragraph (reread 2026-10-29; repeated for the record)
 
@@ -255,7 +274,7 @@ for everyone after about 32 make conversations a day. Book questions cost about 
 - Item 4, before: "**Your questions are saved only on this device.** They are sent to Groq… to be answered, and never
   published…"
 - Item 4, after: "**Your questions stay on this device; drafts go to your Dashboard.** Your questions are sent to Groq
-  (or, when you make something, to Kimi K3) to be answered and never published; another device won't have them. When
+  (or, when you make something, to Baseten) to be answered and never published; another device won't have them. When
   you ask it to make something, its drafts, with the words of your request, are kept privately on your Dashboard until
   you publish or discard them. Anything with a cost waits for you to tap Make it." (Changed from the reread words only
   by "dashboard" → "Dashboard" and "(or, when you make something, to Kimi K3)".)
@@ -265,6 +284,9 @@ for everyone after about 32 make conversations a day. Book questions cost about 
   when one of its tools refuses or fails, or it can't do what you asked, it records that, and the site's owner sees it
   with your name (section 4)."
 - Terms §6b, one sentence (reread): "The site's own assistant can act as your agent too, with the same limits."
+- Terms §6b, a second sentence (new draft, for the make limits): "When you ask the assistant to make something, each
+  day is limited to 10 such conversations for you and to a spending limit for the whole site; when either is reached,
+  making pauses until the next day, and questions about the book still work."
 
 ---
 
