@@ -38,7 +38,7 @@ const ASKS_FOR_SNAP = [{ type: 'header' as const, key: 'accept', value: '.*appli
 const IS_PREFLIGHT = [{ type: 'header' as const, key: 'access-control-request-method' }];
 const snapAlternate = (path: string) => [
   { key: 'Link', value: `<${path}>; rel="alternate"; type="${SNAP_MEDIA}"` },
-  { key: 'Vary', value: 'Accept' },
+  { key: 'Vary', value: 'Accept, X-Snap-Payload, Origin' },
 ];
 
 const nextConfig: NextConfig = {
@@ -97,6 +97,7 @@ const nextConfig: NextConfig = {
       { source: '/minpentai', missing: ASKS_FOR_SNAP, headers: snapAlternate('/minpentai') },
       { source: '/minpentai/play', missing: ASKS_FOR_SNAP, headers: snapAlternate('/minpentai/play') },
       { source: '/minpentai/c/:seg', missing: ASKS_FOR_SNAP, headers: snapAlternate('/minpentai/c/:seg') },
+      { source: '/snap/minpentai', missing: ASKS_FOR_SNAP, headers: snapAlternate('/snap/minpentai') },
     ];
   },
   // Adaptation pages (docs/proposals/adaptation-urls.md). A folder named `@…` is a parallel-route slot

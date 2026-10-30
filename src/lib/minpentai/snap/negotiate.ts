@@ -1,27 +1,31 @@
 /**
- * Who gets the snap at /minpentai/play (owner, 2026-10-23). Farcaster's composer showed a plain card
- * there: most of its GETs reached the static page without asking for the snap by Accept. So that link
- * serves HTML only to a request that clearly prefers text/html, as browsers do, or to a link-preview
- * bot (X's card, and the like), and the snap to everything else. Pure, for src/middleware.ts and tests.
+ * Who gets the snap (owner, 2026-10-30): only a request that asks for it or comes from Farcaster's own
+ * fetch; the web page, with its share card, to everyone else. The same rule on every snap link:
+ * /minpentai, /minpentai/play, /snap/minpentai (the launch cast) and challenge links /minpentai/c/<…>.
+ * Pure, for src/middleware.ts, the snap route and tests.
+ *
+ * A request is Farcaster's when any of these holds:
+ * - it accepts the snap media type (every snap client must send it: https://docs.farcaster.xyz/snap);
+ * - it carries X-Snap-Payload, the header Farcaster's clients add to a snap request (it is why the
+ *   web client's fetch is preflighted; 2026-10-23);
+ * - it is a fetch from Farcaster's web client, whose Origin is farcaster.xyz or warpcast.com (a
+ *   cross-origin fetch carries Origin; a page load, a link-preview bot and a crawler don't).
+ * Nothing else: the user agent is not used. Until 2026-10-30 /minpentai/play did the reverse (the snap
+ * to anything that didn't clearly ask for a page), after Farcaster's composer showed a plain card on
+ * 2026-10-23; the production logs since then show no Farcaster fetch of /minpentai/play to tell us
+ * more, so the composer is re-tested after this change.
  */
 export const SNAP_MEDIA = 'application/vnd.farcaster.snap+json';
 
-/** Link-preview crawlers that read a page's card; they get the page whatever they accept. */
-const PREVIEW_BOT = /Twitterbot|facebookexternalhit|Facebot|Slackbot|Discordbot|TelegramBot|LinkedInBot|WhatsApp|Applebot|Googlebot|bingbot|redditbot|Embedly|Iframely|SkypeUriPreview|Pinterestbot|Mastodon|Bluesky|Cardyb/i;
+/** Farcaster's web origins: farcaster.xyz and warpcast.com, and their subdomains, over https. */
+const FARCASTER_ORIGIN = /^https:\/\/([a-z0-9-]+\.)*(farcaster\.xyz|warpcast\.com)$/i;
 
-/** True when text/html is listed with a quality above 0 (browsers list it first; a bare *\/* is not a preference). */
-export function prefersHtml(accept: string): boolean {
-  return accept.split(',').some((part) => {
-    const [type, ...params] = part.trim().toLowerCase().split(';').map((s) => s.trim());
-    if (type !== 'text/html' && type !== 'application/xhtml+xml') return false;
-    const q = params.find((p) => p.startsWith('q='));
-    return !q || Number(q.slice(2)) > 0;
-  });
-}
+export interface SnapAsk { accept: string | null; payload: string | null; origin: string | null }
 
-export function wantsSnap(accept: string | null, userAgent: string | null): boolean {
-  const a = accept ?? '';
-  if (a.includes(SNAP_MEDIA)) return true;
-  if (PREVIEW_BOT.test(userAgent ?? '')) return false;
-  return !prefersHtml(a);
+export const askOf = (h: Headers): SnapAsk => ({ accept: h.get('accept'), payload: h.get('x-snap-payload'), origin: h.get('origin') });
+
+export function wantsSnap(r: SnapAsk): boolean {
+  if ((r.accept ?? '').toLowerCase().includes(SNAP_MEDIA)) return true;
+  if (r.payload) return true;
+  return FARCASTER_ORIGIN.test((r.origin ?? '').trim());
 }

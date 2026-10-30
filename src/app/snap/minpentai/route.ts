@@ -2,6 +2,7 @@ import { sender, viewer } from '~/lib/minpentai/snap/auth';
 import { CHALLENGE_PATH, decChallenge, splitChallenge } from '~/lib/minpentai/snap/challenge';
 import { Unplayable } from '~/lib/minpentai/snap/match';
 import { act, intro, SNAP_PATH, type Here, type Incoming } from '~/lib/minpentai/snap/pages';
+import { askOf, wantsSnap } from '~/lib/minpentai/snap/negotiate';
 import { drop, load, save } from '~/lib/minpentai/snap/resume';
 import { parse, verified } from '~/lib/minpentai/snap/state';
 
@@ -16,6 +17,8 @@ export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 const MEDIA = 'application/vnd.farcaster.snap+json';
+/** What the choice between the snap and a page depends on (negotiate.ts). */
+const VARY = 'Accept, X-Snap-Payload, Origin';
 /** A preview deployment's bypass, kept on every link so the emulator can reach it. */
 const KEEP = ['x-vercel-protection-bypass'];
 
@@ -35,7 +38,7 @@ function incoming(seg: string | null): Incoming | null {
 
 const snap = (body: unknown, extra: Record<string, string> = {}) =>
   new Response(JSON.stringify(body), {
-    headers: { 'Content-Type': MEDIA, Vary: 'Accept', 'Access-Control-Allow-Origin': '*', 'Cache-Control': 'no-store', ...extra },
+    headers: { 'Content-Type': MEDIA, Vary: VARY, 'Access-Control-Allow-Origin': '*', 'Cache-Control': 'no-store', ...extra },
   });
 
 export async function GET(request: Request) {
@@ -45,21 +48,21 @@ export async function GET(request: Request) {
   // A challenge: ?c=, or the link's own path when the rewrite hands over the original URL.
   const seg = q.get('c') ?? (u.pathname.startsWith(CHALLENGE_PATH) ? u.pathname.slice(CHALLENGE_PATH.length) : null);
   const ch = incoming(seg);
-  const accept = request.headers.get('accept') ?? '';
-  // src/middleware.ts sends /minpentai/play's non-browser requests here with x-snap-serve: the snap,
-  // whatever they accept. Without it (this route's own URL) nothing changes.
+  // The snap only to a request that asks for it or is Farcaster's fetch (negotiate.ts), or one
+  // src/middleware.ts forwards from a snap link with x-snap-serve. Everyone else reaching this route
+  // directly is sent to Play's page by the middleware; this answer is the fallback if it doesn't run.
   const forced = request.headers.get('x-snap-serve') === '1';
-  if (!accept.includes(MEDIA) && !forced) {
+  if (!wantsSnap(askOf(request.headers)) && !forced) {
     // A browser: point at the game, and say there is a snap here.
     const link = `<${h.base}${ch ? CHALLENGE_PATH + ch.seg : SNAP_PATH + (ver ? `?v=${encodeURIComponent(ver)}` : '')}>; rel="alternate"; type="${MEDIA}"`;
     return new Response(
       `<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Minpentai</title><p>Minpentai plays inside a Farcaster cast. <a href="${h.base}/minpentai">Play it here</a>.</p>`,
-      { headers: { 'Content-Type': 'text/html; charset=utf-8', Link: link, Vary: 'Accept' } },
+      { headers: { 'Content-Type': 'text/html; charset=utf-8', Link: link, Vary: VARY } },
     );
   }
   if (seg && !ch) return Response.json({ error: 'Not a challenge link' }, { status: 404, headers: { 'Access-Control-Allow-Origin': '*' } });
   // A challenge's first page is the same for everyone (no Resume on it).
-  if (ch) return snap(intro(h, ch.c.ver, 'no', ch), { 'Cache-Control': 'public, max-age=3600', Vary: 'Accept' });
+  if (ch) return snap(intro(h, ch.c.ver, 'no', ch), { 'Cache-Control': 'public, max-age=3600', Vary: VARY });
   // A signed viewer (optional): offer Resume only if they have a match kept. Anonymous: always
   // offer it, and the POST (always signed) finds out. A viewer we can't verify (a bad header, the hub
   // down) gets the anonymous page rather than an error, so the cast still shows the snap.
@@ -68,7 +71,7 @@ export async function GET(request: Request) {
     console.log(JSON.stringify({ snap: 'minpentai', viewer: who.error, status: who.status }));
     who = null;
   }
-  const vary = { Vary: 'Accept, X-Snap-Payload' };
+  const vary = { Vary: VARY };
   if (!who) return snap(intro(h, ver, 'maybe'), { 'Cache-Control': 'public, max-age=300', ...vary });
   const kept = await load(who.fid);
   return snap(intro(h, ver, kept ? 'yes' : 'no'), { 'Cache-Control': 'private, no-store', ...vary });

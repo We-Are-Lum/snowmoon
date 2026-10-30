@@ -27,7 +27,9 @@ import { GET as snapRoute } from '../src/app/snap/minpentai/route';
 import { GET as cardRoute } from '../src/app/api/minpentai-challenge-card/route';
 import { sender } from '../src/lib/minpentai/snap/auth';
 import nextConfig from '../next.config';
-import { prefersHtml, wantsSnap } from '../src/lib/minpentai/snap/negotiate';
+import { wantsSnap } from '../src/lib/minpentai/snap/negotiate';
+import { NextRequest } from 'next/server';
+import { middleware } from '../src/middleware';
 import { CHALLENGE_PATH, decChallenge, splitChallenge } from '../src/lib/minpentai/snap/challenge';
 import { settings, versionOf } from '../src/lib/minpentai/snap/versions';
 
@@ -546,13 +548,41 @@ async function main() {
     }
   });
 
-  check('/minpentai/play negotiation: HTML only to a clear text/html preference or a link-preview bot; the snap otherwise', () => {
+  // What link-preview bots send (their published user agents; none sends the snap Accept, X-Snap-Payload or Origin).
+  const BOTS: [string, string, string | null][] = [
+    ['Discord', 'Mozilla/5.0 (compatible; Discordbot/2.0; +https://discordapp.com)', '*/*'],
+    ['Slack', 'Slackbot-LinkExpanding 1.0 (+https://api.slack.com/robots)', '*/*'],
+    ['Telegram', 'TelegramBot (like TwitterBot)', null],
+    ['iMessage', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_1) AppleWebKit/601.2.4 (KHTML, like Gecko) Version/9.0.1 Safari/601.2.4 facebookexternalbot/1.1 Facebot Twitterbot/1.0', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'],
+    ['X', 'Twitterbot/1.0', '*/*'],
+  ];
+  check('snap links: the snap only when asked (snap Accept), with X-Snap-Payload or from a Farcaster origin; the page to everyone else', () => {
     const chrome = 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8';
-    assert.ok(prefersHtml(chrome) && !wantsSnap(chrome, 'Mozilla/5.0 (iPhone) Safari/604.1'));
-    assert.ok(!wantsSnap('*/*', 'Twitterbot/1.0'), "X's card");
-    assert.ok(!wantsSnap(null, 'facebookexternalhit/1.1'));
-    for (const a of ['*/*', 'application/json', 'application/json, text/plain, */*', '', 'text/html;q=0']) assert.ok(wantsSnap(a, 'Mozilla/5.0'), `snap for "${a}"`);
-    assert.ok(wantsSnap('application/vnd.farcaster.snap+json', 'Twitterbot/1.0'), 'an explicit ask wins');
+    const no = { accept: null, payload: null, origin: null };
+    assert.ok(wantsSnap({ ...no, accept: 'application/vnd.farcaster.snap+json' }));
+    assert.ok(wantsSnap({ ...no, accept: 'application/json, application/vnd.farcaster.snap+json;q=0.9' }));
+    assert.ok(wantsSnap({ ...no, payload: 'abc' }), 'X-Snap-Payload');
+    for (const o of ['https://farcaster.xyz', 'https://client.farcaster.xyz', 'https://warpcast.com', 'https://www.warpcast.com']) assert.ok(wantsSnap({ ...no, origin: o }), o);
+    for (const o of ['http://farcaster.xyz', 'https://farcaster.xyz.evil.com', 'https://notfarcaster.xyz', 'https://example.com', 'null']) assert.ok(!wantsSnap({ ...no, origin: o }), o);
+    for (const a of [chrome, '*/*', 'application/json', '', null, 'text/html;q=0']) assert.ok(!wantsSnap({ ...no, accept: a }), `page for "${a}"`);
+  });
+
+  check('the middleware: each snap link sends the snap to a snap request and the page to browsers and link-preview bots (Discord, Slack, Telegram, iMessage, X)', () => {
+    const SNAPM = 'application/vnd.farcaster.snap+json';
+    const run = (path: string, headers: Record<string, string>) => middleware(new NextRequest(`https://snowmoon.party${path}`, { headers }));
+    const rewrite = (r: Response) => r.headers.get('x-middleware-rewrite');
+    for (const path of ['/minpentai', '/minpentai/play', '/minpentai/c/vu207s.0.cost3._.C-49-7-0-55.c2Nnz7njlDZWxkdy8L6JcI']) {
+      const toSnap = rewrite(run(path, { accept: SNAPM }));
+      assert.ok(toSnap?.startsWith('https://snowmoon.party/snap/minpentai'), `${path}: snap request → snap route (${toSnap})`);
+      if (path.startsWith('/minpentai/c/')) assert.ok(toSnap!.includes('c=vu207s'), 'the challenge goes with it');
+      assert.ok(rewrite(run(path, { origin: 'https://farcaster.xyz', accept: '*/*' }))?.includes('/snap/minpentai'), `${path}: Farcaster's web fetch`);
+      assert.ok(rewrite(run(path, { 'x-snap-payload': 'e30', accept: '*/*' }))?.includes('/snap/minpentai'), `${path}: X-Snap-Payload`);
+      assert.equal(rewrite(run(path, { accept: 'text/html,*/*;q=0.8', 'user-agent': 'Mozilla/5.0 (iPhone) Safari/604.1' })), null, `${path}: a browser gets the page`);
+      for (const [name, ua, accept] of BOTS) assert.equal(rewrite(run(path, { 'user-agent': ua, ...(accept ? { accept } : {}) })), null, `${path}: ${name} gets the page`);
+    }
+    // The launch cast: the snap route itself, the snap for Farcaster and Play's page (with its card) for the rest.
+    assert.equal(rewrite(run('/snap/minpentai', { accept: SNAPM })), null, '/snap/minpentai: snap request stays on the snap route');
+    for (const [name, ua, accept] of BOTS) assert.equal(rewrite(run('/snap/minpentai', { 'user-agent': ua, ...(accept ? { accept } : {}) })), 'https://snowmoon.party/minpentai/play', `/snap/minpentai: ${name} gets Play's page`);
   });
 
   check('the snap route serves the snap to a request the middleware forwards (x-snap-serve), and the bare page to a browser without it', async () => {
