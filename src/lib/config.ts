@@ -492,3 +492,17 @@ export const MINPENTAI_PLAY = {
 export function appUrl(): string {
   return process.env.NEXT_PUBLIC_URL?.replace(/\/$/, '') || 'http://localhost:3000';
 }
+
+/**
+ * "Fund Snowmoon Party" on /about (owner, 2026-10-30; branch fund-block). A wallet address that takes gifts.
+ * Fail closed: while `address` is null (or not a valid 0x address) the block is shown nowhere. The owner gives
+ * the address. Nothing here reads the chain, the database or who gave (principle 7: a gift buys nothing and
+ * changes no order or default). The tables studio.donations and studio.attestations (0002) stay unused.
+ * `testAddressEnv`: for the local UI check only; ignored on Vercel (where VERCEL is set), see fundAddress().
+ */
+export const FUND = {
+  address: null as string | null,
+  chain: 'Base',
+  accepts: 'USDC or ETH',
+  testAddressEnv: 'FUND_TEST_ADDRESS',
+} as const;

@@ -375,6 +375,35 @@ async function checkAccountWallet(page: Page, within: string, where: string) {
 }
 
 /** The footer line inside `within`: the starter's words exactly, shown, with its three links. */
+/**
+ * "Fund Snowmoon Party" on /about (src/components/fund-block.tsx). Fail closed: with no address configured it is
+ * shown nowhere. To see it before the owner gives an address, build and run this check with FUND_TEST_ADDRESS set
+ * (honoured only off Vercel): the block shows that address, a copy button that copies it, the facts principle 7
+ * asks for (buys nothing, no token), the "What we want to explore" list, one "Draft wording" line, and no QR code.
+ */
+async function checkFund(page: Page, scheme: string) {
+  const want = process.env.FUND_TEST_ADDRESS?.trim();
+  const block = page.locator('.shell-main #fund');
+  if (!want) {
+    if (await block.count()) fail(`/about (${scheme}): the fund block shows with no address configured`);
+    return;
+  }
+  if (!(await block.isVisible())) return fail(`/about (${scheme}): no fund block (FUND_TEST_ADDRESS is set)`);
+  const text = ((await block.textContent()) ?? '').replace(/\s+/g, ' ');
+  if (!/Fund Snowmoon Party/.test(text)) fail(`/about (${scheme}): the fund block has no heading`);
+  if ((await block.locator('[data-fund-address]').textContent())?.trim() !== want) fail(`/about (${scheme}): the fund block shows another address`);
+  if (!/buys nothing/i.test(text) || !/\bno token\b/i.test(text)) fail(`/about (${scheme}): the fund block lacks "buys nothing" or "no token"`);
+  if (!/What we want to explore/.test(text) || (await block.locator('h3 + ul > li').count()) < 4) fail(`/about (${scheme}): the fund block's explore list is missing or short`);
+  if ((await block.locator('.as-draft').count()) !== 1) fail(`/about (${scheme}): the fund block has no "Draft wording" line`);
+  if (await block.locator('img, canvas, svg, iframe').count()) fail(`/about (${scheme}): the fund block draws a picture (no QR code)`);
+  await page.context().grantPermissions(['clipboard-read', 'clipboard-write']).catch(() => {});
+  const button = block.getByRole('button', { name: 'Copy address' });
+  await button.click();
+  if ((await block.locator('.fund-copy').textContent())?.trim() !== 'Copied') fail(`/about (${scheme}): the copy button did not say "Copied"`);
+  const pasted = await page.evaluate(() => navigator.clipboard.readText()).catch(() => null);
+  if (pasted !== null && pasted !== want) fail(`/about (${scheme}): the copy button copied "${pasted}"`);
+}
+
 async function checkLegalLine(page: Page, within: string, where: string, scheme: string) {
   const line = page.locator(`${within} .legal-line`).first();
   if (!(await line.count())) return fail(`${where} (${scheme}): no footer line`);
@@ -1324,6 +1353,7 @@ try {
     if (!(await page.locator('a[href="https://open.spotify.com/show/0J9O3tKC3BI4buQ8Hry3YN"]').count())) fail(`/about (${scheme}): no link to the podcast on Spotify`);
     await checkFloors(page, '/about', scheme);
     await checkLegalLine(page, '.shell-main', '/about', scheme);
+    await checkFund(page, scheme);
     for (const p of ['/terms', '/privacy']) {
       await open(page, p);
       await checkFloors(page, p, scheme);

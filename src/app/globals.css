@@ -662,3 +662,10 @@ img[data-zoom] { cursor: zoom-in; }
 .image-zoom img { max-width: 100%; max-height: calc(100dvh - 88px); width: auto; height: auto; object-fit: contain; }
 .image-zoom-label { margin: 0; font-family: var(--label); font-size: var(--text-label); letter-spacing: var(--ls-label); color: #e8e6e1; text-align: center; }
 .image-zoom-close { position: absolute; top: 8px; right: 8px; font-family: var(--label); min-width: var(--tap, 44px); min-height: var(--tap, 44px); border: 0; background: transparent; color: #e8e6e1; font-size: 28px; line-height: 1; cursor: pointer; }
+
+/* "Fund Snowmoon Party" on /about (src/components/fund-block.tsx): small and quiet. */
+.fund-block { margin-top: var(--space-6); padding-top: var(--space-4); border-top: 1px solid var(--rule); }
+.fund-address { margin: 0 0 8px; }
+.fund-address code { overflow-wrap: anywhere; font-family: var(--label); font-size: var(--text-label); }
+.fund-block .fund-copy { width: auto; padding: 6px 14px; }
+.fund-facts { color: var(--muted); }

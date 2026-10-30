@@ -6,6 +6,7 @@ import { ThemeSwitch } from '~/components/theme-switch';
 import { loadIntro } from '~/lib/intro';
 import { AboutEdition, ReplayIntro } from '~/components/first-visit';
 import { LegalLine } from '~/components/legal-line';
+import { FundBlock } from '~/components/fund-block';
 import consent from '../../../config/consent.json';
 
 const wording = consent.versions[consent.current as keyof typeof consent.versions];
@@ -123,6 +124,8 @@ export default function About() {
       <ThemeSwitch name="theme-about" />
       <h2>No token</h2>
       <p>There is no token. There is no revenue share. Nothing here is an investment.</p>
+      {/* Fund Snowmoon Party: shown only once the owner sets FUND.address (src/lib/config.ts). */}
+      <FundBlock />
       <h2>No canon</h2>
       <p>
         Nothing in this edition is official. Every design, image, and take can be replaced by a better one.
