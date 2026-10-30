@@ -21,7 +21,8 @@ import { act, intro, newMatch, AIM, AIM_TEXT, LEVELS, ROCK, SEEN, SEEN_BG, type 
 import { sightOf } from '../src/lib/minpentai/play-server/view';
 import { parse, serialize, sign, verified, type P, type SnapState } from '../src/lib/minpentai/snap/state';
 import { runGif } from '../src/lib/minpentai/snap/run';
-import { decMatch, encMatch } from '../src/lib/minpentai/snap/moves';
+import { decMatch, encMatch, movesShapeOk, MOVES_MAX } from '../src/lib/minpentai/snap/moves';
+import { readFileSync } from 'node:fs';
 import { GET as runRoute } from '../src/app/snap/minpentai/run/route';
 import { GET as snapRoute } from '../src/app/snap/minpentai/route';
 import { GET as cardRoute } from '../src/app/api/minpentai-challenge-card/route';
@@ -560,6 +561,40 @@ async function main() {
     assert.ok(forced.headers.get('content-type')?.startsWith('application/vnd.farcaster.snap+json'));
     const plain = await snapRoute(new Request('https://snowmoon.party/snap/minpentai', { headers: { accept: '*/*' } }));
     assert.ok(plain.headers.get('content-type')?.startsWith('text/html'), '/snap/minpentai itself unchanged');
+  });
+
+  check('Resume: decMatch accepts exactly what studio.mp_snap_resume\'s check accepts (NEXT_minpentai_resume_moves_check.sql, run in PGlite), and a real saved match round-trips', async () => {
+    const { PGlite } = await import('@electric-sql/pglite');
+    const pg = new PGlite();
+    const sqlFile = readFileSync(new URL('../supabase/migrations/NEXT_minpentai_resume_moves_check.sql', import.meta.url), 'utf8');
+    const expr = /add constraint mp_snap_resume_moves_check\s+check \(([\s\S]+?)\);/.exec(sqlFile)![1];
+    await pg.exec(`create table r (moves text not null constraint mp_snap_resume_moves_check check (${expr}))`);
+    const dbOk = async (m: string) => { try { await pg.query('insert into r (moves) values ($1)', [m]); await pg.exec('delete from r'); return true; } catch { return false; } };
+    // 0025's check, as it is in production: its {0,2000} is refused by Postgres, so every insert fails.
+    await pg.exec(`create table old (moves text check (moves ~ '^[0-9a-z]{1,7}\\.[0-9]{1,3}\\.[A-Za-z0-9_~-]{0,2000}$'))`);
+    await assert.rejects(pg.query('insert into old (moves) values ($1)', ['zpo8ph.2.AbCd~Ef']), /invalid repetition count/);
+    // A real saved match: a full snap match, saved after each finished turn as resume.ts does.
+    const st = newMatch(2, '');
+    st.seed = 2_891_337_105;
+    const saved: string[] = [];
+    for (let i = 0; i < 20; i++) { const p = play(st); if (p.over) break; st.turns.push(plan(p, 'mixed')); saved.push(encMatch(st.seed, st.turns)); }
+    assert.ok(saved.length >= 5 && saved.at(-1)!.split('~').length >= 5, 'several turns saved');
+    for (const m of saved) {
+      assert.ok(await dbOk(m), `the database stores ${m.slice(0, 40)}`);
+      const g = decMatch(m)!;
+      assert.equal(encMatch(g.seed, g.turns), m, 'round trip, byte for byte');
+      const back = { ...st, turns: g.turns };
+      assert.equal(JSON.stringify(play(back).w), JSON.stringify(play({ ...st, turns: st.turns.slice(0, g.turns.length) }).w), 'same board after the round trip');
+    }
+    // The edges: the database and decMatch's shape gate agree on every one.
+    const body = (n: number) => 'A'.repeat(n);
+    const edges = [
+      saved.at(-1)!, 'a.0.', '1z141z3.0.', '1z141z3a.0.', 'A.0.', 'a.999.', 'a.1000.', 'a..', 'a.1.a b', 'a.1.a.b', 'a.1.~~',
+      `1234567.123.${body(2000)}`, `1234567.123.${body(2001)}`, `a.1.${body(2008)}`, `a.1.${body(2009)}`, '', 'a.1.é',
+    ];
+    for (const m of edges) assert.equal(movesShapeOk(m), await dbOk(m), `shape gate and database disagree on ${JSON.stringify(m.slice(0, 30))} (length ${m.length})`);
+    assert.ok(movesShapeOk(`a.1.${body(2008)}`) && !movesShapeOk(`a.1.${body(2009)}`) && MOVES_MAX === 2012, 'the 2012-character limit');
+    await pg.close();
   });
 
   await Promise.all(pending);

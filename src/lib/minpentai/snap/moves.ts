@@ -44,8 +44,21 @@ export function decList(s: string): P[] | null {
 export function encMatch(seed: number, turns: P[][]): string {
   return `${seed.toString(36)}.${turns.length}.${turns.map(encList).join('~')}`;
 }
+
+/**
+ * The shape studio.mp_snap_resume's check accepts (NEXT_minpentai_resume_moves_check.sql), kept
+ * identical here so decMatch accepts exactly what the database can store: at most 2012 characters
+ * (a 7-character seed, a dot, 3 digits, a dot and 2000 characters of placements), with no bounded
+ * repeat over 255, which Postgres refuses (the first check, 0025, said {0,2000} and so failed on every
+ * insert). scripts/test-minpentai-snap.ts runs the same strings through the real constraint in PGlite.
+ */
+export const MOVES_MAX = 2012;
+const MOVES_RE = /^([0-9a-z]{1,7})\.([0-9]{1,3})\.([A-Za-z0-9_~-]*)$/;
+export const movesShapeOk = (text: string) => text.length <= MOVES_MAX && MOVES_RE.test(text);
+
 export function decMatch(text: string): { seed: number; turns: P[][] } | null {
-  const m = /^([0-9a-z]{1,7})\.(\d{1,3})\.([A-Za-z0-9_~-]*)$/.exec(text);
+  if (!movesShapeOk(text)) return null;
+  const m = MOVES_RE.exec(text);
   if (!m) return null;
   const seed = parseInt(m[1], 36), n = Number(m[2]);
   if (seed > 0xffff_ffff) return null;
