@@ -1148,19 +1148,60 @@ add({
 add({
   id: 'P5b',
   principle: 5,
-  name: 'moderator powers only hide',
+  name: 'moderator and admin powers: hide, and write a labelled pick, nothing else',
   load: async () => walk('src', /\.tsx?$/).map((f) => ({ file: f, text: read(f) })),
   run: (files) =>
     files
-      .filter((f: { file: string; text: string }) => /MODERATOR_FIDS/.test(f.text) && !f.file.endsWith('config.ts'))
+      .filter((f: { file: string; text: string }) => /MODERATOR_FIDS|\bADMINS\b/.test(f.text) && !f.file.endsWith('config.ts'))
+      // The one write admins may make beyond hiding (owner, reread 2026-10-29): a pick, in studio.admin_picks.
+      .map((f: { file: string; text: string }) => ({ ...f, text: f.text.replace(/(insert into|update|delete from)\s+studio\.admin_picks\b[^`]*`/gi, '') }))
       .filter((f: { text: string }) => /status\s*[:=]\s*['"](published|draft)['"]|set\s+status\s*=\s*'(published|draft)'|order by|\.sort\(/i.test(f.text))
-      .map((f: { file: string }) => `${f.file}: moderator code does more than hide`),
+      .map((f: { file: string }) => `${f.file}: moderator or admin code does more than hide or pick`),
   plant: (files) => {
-    files.push({ file: 'src/planted.ts', text: "if (MODERATOR_FIDS.includes(fid)) await sql`update studio.elements set status = 'published'`" });
+    files.push({ file: 'src/planted.ts', text: "if (ADMINS.includes(fid)) await sql`update studio.elements set status = 'published'`" });
   },
 });
-
-// Hidden readers' images (decision 21): out of public reads, and their file gone from the public bucket.
+// A pick is always labelled and switchable, and the reader's choice stays on their device (owner, reread 2026-10-29).
+// Admin picks only (studio.picks is each person's own design picks, a different thing).
+const PICK_RENDER = /\badminPick\b|<AdminPick\b|admin_picks/;
+add({
+  id: 'P5d',
+  principle: 5,
+  name: 'every pick shows "Picked by @…" and the switch (Most liked, Newest, Liked by me); the choice stays on the device',
+  load: async () => walk('src', /\.tsx$/).map((f) => ({ file: f, text: read(f) })),
+  run: (files) => {
+    const problems: string[] = [];
+    const sw = files.find((f: { file: string }) => f.file.endsWith('pick-switch.tsx'));
+    for (const f of files.filter((x: { file: string; text: string }) => PICK_RENDER.test(x.text) && x !== sw)) {
+      if (!/Picked by @|PICK_LABEL/.test(f.text)) problems.push(`${f.file}: shows a pick without "Picked by @…"`);
+      if (!/<PickSwitch\b/.test(f.text)) problems.push(`${f.file}: shows a pick without the switch`);
+    }
+    if (problems.length && !sw) problems.push('src/components/pick-switch.tsx: missing');
+    if (sw) {
+      for (const v of ['Most liked', 'Newest', 'Liked by me']) if (!sw.text.includes(v)) problems.push(`${sw.file}: no "${v}"`);
+      if (!/localStorage/.test(sw.text)) problems.push(`${sw.file}: the choice isn't kept on the device`);
+      if (/method:\s*['"](POST|PUT|PATCH)['"]/i.test(sw.text)) problems.push(`${sw.file}: sends something; the choice must stay on the device`);
+    }
+    return problems;
+  },
+  plant: (files) => {
+    files.push({ file: 'src/components/planted-pick.tsx', text: 'export const X = ({ adminPick }: { adminPick: string }) => <img alt={adminPick} />;' });
+  },
+});
+add({
+  id: 'P5e',
+  principle: 5,
+  name: 'picks order nothing outside the pick code (not the feed, search, profiles, the agent tools or the read API)',
+  load: async () => walk('src', /\.tsx?$/).map((f) => ({ file: f, text: read(f) })),
+  run: (files) =>
+    files
+      .filter((f: { file: string; text: string }) => /\badmin_picks\b/.test(f.text))
+      .filter((f: { file: string }) => !/^src\/lib\/picks\.ts$|pick-switch\.tsx$|^src\/app\/api\/admin\/picks\//.test(f.file))
+      .map((f: { file: string }) => `${f.file}: reads picks outside the pick code (src/lib/picks.ts, the pick switch, /api/admin/picks)`),
+  plant: (files) => {
+    files.push({ file: 'src/lib/images/data.ts', text: 'select e.* from studio.elements e left join studio.admin_picks p on p.element_id = e.id order by p.at' });
+  },
+});
 add({
   id: 'P5c',
   principle: 5,
@@ -1203,16 +1244,22 @@ add({
   name: 'production pages make no third-party requests',
   load: async () => {
     const browser = await chromium.launch({ channel: 'chrome' });
-    const seen: { page: string; host: string }[] = [];
+    // Every request, with its full URL and type (owner, 2026-10-29: "print every third-party URL it sees"). A page that
+    // is slow to go quiet (one with dozens of first-party images) gets 60 s, and what it requested by then is still
+    // checked; a page that never loads is reported as that, not as a third-party request.
+    const seen: { page: string; host: string; url: string; type: string }[] = [];
+    const slow: string[] = [];
     for (const p of PAGES) {
       const tab = await browser.newPage({ viewport: { width: 390, height: 844 } });
-      tab.on('request', (r) => seen.push({ page: p, host: new URL(r.url()).host }));
-      await tab.goto(BASE + p, { waitUntil: 'networkidle' });
+      tab.on('request', (r) => seen.push({ page: p, host: new URL(r.url()).host, url: r.url(), type: r.resourceType() }));
+      const loaded = await tab.goto(BASE + p, { waitUntil: 'networkidle', timeout: 60_000 }).then(() => true, () => false);
+      if (!loaded) slow.push(p);
       await tab.mouse.wheel(0, 20000);
       await tab.waitForTimeout(1200);
       await tab.close();
     }
     await browser.close();
+    if (slow.length) console.log(`  P6a note: ${slow.join(', ')} didn't go quiet within 60 s; the requests it made were checked`);
     return seen;
   },
   run: (seen) => {
@@ -1221,10 +1268,10 @@ add({
       const host = h.split(':')[0];
       return host === site || host.endsWith(`.${site}`) || host === 'localhost' || host === '127.0.0.1';
     };
-    return [...new Set(seen.filter((s: { host: string }) => !firstParty(s.host)).map((s: { page: string; host: string }) => `${s.host} (from ${s.page})`))];
+    return [...new Set(seen.filter((s: { host: string }) => !firstParty(s.host)).map((s: { page: string; url: string; type?: string }) => `${s.url} (${s.type ?? 'request'}, from ${s.page})`))];
   },
   plant: (seen) => {
-    seen.push({ page: '/chapter/1', host: 'fonts.googleapis.com' });
+    seen.push({ page: '/chapter/1', host: 'fonts.googleapis.com', url: 'https://fonts.googleapis.com/css2?family=Inter', type: 'stylesheet' });
   },
 });
 const PRIVATE_FID_TABLES = ['ratings', 'likes', 'take_likes', 'picks', 'contributor_consents', 'image_asks', 'removal_log', 'image_scores', 'wallet_links'];
