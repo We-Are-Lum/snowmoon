@@ -1906,6 +1906,8 @@ try {
   // lost its message to a truncated log, and couldn't be root-caused).
   console.error(e);
   console.error(`\nUI CHECK BROKE (last page opened: ${lastOpened}): ${String((e as Error)?.message ?? e).split('\n')[0]}`);
+  // What was checked before the break still counts (2026-10-30): say the problems found so far, or that there were none.
+  console.error(failures.length ? `Before the break, ${failures.length} problem(s):\n- ${failures.join('\n- ')}` : 'Before the break: no problems found.');
   process.exitCode = 1;
 } finally {
   await browser.close();
