@@ -1,8 +1,8 @@
 # Minpentai in the book: a study for the game
 
-> DRAFT, 2026-10-30. Read-only research by the coding agent (Anthropic's Claude, a closed model), for the owner to read. **Spoilers** for chapters 2–15, with short notes from later chapters at the end of part 1. Quotes are the book's words, as committed in `content/snowmoon/text`, with markup removed (`*word*` is the book's emphasis); `[…]` marks words left out. Block IDs are `c<chapter>-b<block>`; on the site, `/chapter/<chapter>#c<chapter>-b<block>`. This edition is not affiliated with the author.
+> DRAFT, 2026-10-30 (v2: pieces split by kind; rocks as a resource on their own). The design that builds on it is `docs/proposals/minpentai-agent-play.md`. Read-only research by the coding agent (Anthropic's Claude, a closed model), for the owner to read. **Spoilers** for chapters 2–15, with short notes from later chapters at the end of part 1. Quotes are the book's words, as committed in `content/snowmoon/text`, with markup removed (`*word*` is the book's emphasis); `[…]` marks words left out. Block IDs are `c<chapter>-b<block>`; on the site, `/chapter/<chapter>#c<chapter>-b<block>`. This edition is not affiliated with the author.
 
-**What this adds to what exists.** `docs/minpentai-rules.md` reads the rules out of the book, and `docs/minpentai/passages.md` lists 152 passages (blocks that name Minpentai or are cited somewhere). Neither has every block that describes play. This file cites over 130 blocks that `passages.md` does not list, almost all from the matches in chapters 4, 7, 10, 12 and 14. It quotes every block in those matches that describes play, sorted by topic (1.1–1.11, with the rest in order in 1.12), then describes every board figure with what changes between frames, compares the book to Play as it is on `main` (02ddf08), and sets out what an AI-commander version would need.
+**What this adds to what exists.** `docs/minpentai-rules.md` reads the rules out of the book, and `docs/minpentai/passages.md` lists 152 passages (blocks that name Minpentai or are cited somewhere). Neither has every block that describes play. This file cites over 130 blocks that `passages.md` does not list, almost all from the matches in chapters 4, 7, 10, 12 and 14. It quotes every block in those matches that describes play, sorted by topic (1.1–1.11, with the rest in order in 1.12). Pieces are split into gliders, glider factories, walls, mirror walls, moving walls, spaceships and symbol-carrying spaceships, then describes every board figure with what changes between frames, compares the book to Play as it is on `main` (02ddf08), and sets out what an AI-commander version would need.
 
 **Where play happens.** Chapter 2 mentions a game (c2-b11, c2-b12). Chapter 4 shows the start of Zei's earlier game (the animation c4-b5) and the 2-v-2 Pafogai Du quarter-final. Chapter 5 mentions the semi-finals (c5-b30). Chapter 7 is the 1-v-1 Pafogai Du final, with AIs. Chapter 10 ends a practice game between Zei and Bai (c10-b159–c10-b164). Chapter 12 opens with a bot game (c12-b8–c12-b10) and plays the national qualifier on a hex grid. Chapter 14 plays the national semi-final with shrines and summarises Deluin's semi-final. The national final is not shown; chapter 15 says Zei won it (c15-b99).
 
@@ -14,55 +14,112 @@ Chapter 2's two figures (c2-b55, c2-b71) are slides about jars of gas in a physi
 
 ### 1.1 Pieces and structures
 
-The board and its rule:
+**The board and its rule.**
 
 - **c4-b7** "This was from my last Minpentai game. We were playing with the 'rotate one eighty if three' rule. Someone discovered this new way to breach the usual wall construction, and flooded their opponent's territory with garbage. I'm trying to figure out some countermeasures."
 - **c4-b8** (Fin) "What's the endgame? Are you trying to get to a perfect wall, or is it rock paper scissors all the way down?"
 - **c4-b9** "Well, remember, the rules are time-reversible. So any wall that can be created in some way can be destroyed in some way."
 - **c4-b13** "Turns out they weren't dumb, we are. Because the laws of physics are time-reversible, nothing can be invincible. Anything that can be created can be destroyed. You just have to take the path that creates it and do the same thing in reverse. So a shield that can't be destroyed is not something that can be created. There has to be a weakness somewhere - it's just a matter of how well you hide it."
+- **c4-b84** "Walls, gliders, rocks, techniques for extracting usable negentropy from rocks, sideways attacks."
 - **c4-b94** "where he was allowed to put down squares during the initiation phase" (the board is made of squares that players put down).
 - **c14-b36** "a steerable symbol-carrying spaceship he had developed months prior, that could change its direction if you intervene in only a few cells."
 - **c14-b35** "The shrines are the only objects that violate mass conservation - though even still, with these new rules, nothing decreases entropy. XOR is not weight-preserving, but it is reversible."
 - **c12-b147** "Today, Minpentai will be played on a hex grid." (so the usual grid is not hexagonal; see 1.11).
 
-The kinds of structure:
+**Gliders.** Small shapes that keep their shape as they move; they bounce, crash, and break things, including their sender's.
 
-- **c4-b84** "Walls, gliders, rocks, techniques for extracting usable negentropy from rocks, sideways attacks."
-- **c2-b12** "I got third place! Finally figured out a wall structure that reflected their gliders right back at them, completely wreaked havoc on their territory."
-- **c4-b95** "Zei saw Bai setting up walls and glider factories - gliders that would fly right to a nearby rock formation, and then reflect one glider back into Bai's territory where a mirror wall would send the glider right back, but also shoot another glider upward."
 - **c4-b106** "Gliders started flying."
-- **c4-b107** "Larger spaceships flew out from Zei and Bai's bases."
-- **c4-b108** "Spaceships flew out, acting as large slow-moving gliders that eventually crashed into a rock formation in a controlled way, leaving behind copies of each player's symbols."
-- **c4-b111** "Zei put down a "moving wall" design that he had perfected - a sort of large glider that flew half as fast, but was optimized for reflecting more basic types of gliders right back at the sender. Right behind his three moving walls, all aimed at Dza's corner of the game board, he put his symbol-carrying spaceships."
 - **c4-b109** "A few stray gliders from Bai accidentally flew into Zei's territory, and wrecked one of his factories. […] When putting up one of his walls, his finger slipped, and he accidentally created a glider that began to fly back toward his own base. Zei cursed silently, but then felt a sigh of relief when the glider harmlessly crashed into a rock formation."
-- **c4-b112** "turning some rock formations into a chaotic mess that blasted gliders everywhere, and destroyed some of Pan's symbols."
+- **c4-b113** "sending three unusual-looking gliders deep into Dza's territory along the edge."
+- **c7-b89** "manually send a large number of gliders down both diagonals, targeted so that one would pass right after the other, to strike both of Bai's home bases."
+- **c7-b110** "Zei's AI took the opportunity to design a storm of gliders to attack Bai's flanks from behind"
+- **c12-b152** "seeing what stayed stable and what turned into a glider. Within one minute, he identified a few gliders and a few static structures that could be used for walls. To his surprise, the gliders that moved the fastest moved ... directly east."
+- **c12-b154** "He watched the gliders carefully, to try to quickly get an intuition for what kinds of shapes can move while preserving their shape."
+- **c14-b56** "To avoid giving up his location, they would not fly north directly - instead, they would reflect off of the northern rock shrine."
+- **c14-b74** "Then, a glider storm came toward Zei's ship from all directions."
+- **c14-b82** "One of the gliders was destroyed, hit by another stray glider before it even left Zei's visual field."
+
+**Glider factories.** Structures that turn rock into more gliders; one can hold a choice of strategies and wait for a trigger.
+
+- **c4-b95** "Zei saw Bai setting up walls and glider factories - gliders that would fly right to a nearby rock formation, and then reflect one glider back into Bai's territory where a mirror wall would send the glider right back, but also shoot another glider upward."
 - **c4-b121** "spent a whole intervention turn to put up walls and build glider factories there. He put up *more* walls, just to let the gliders build up and bounce back and forth."
-- **c4-b131** "Zei's spaceship crashed against the remaining intact southern wall of Pan's home base. It briefly fluttered into chaotic shapes."
-- **c7-b72** "a symbol-carrying spaceship. There were already four created by his AI, but he figured that he would make one all on his own, so that Bai would not see it, and with a different style of moving wall in front of it. He aimed the symbol-carrying spaceship so that it would reflect off a wall that his AI had already constructed, and then move upwards along the middle of the game field."
-- **c7-b85** "Zei's symbol-carrying spaceship reflected off the wall in the south, and began moving north."
-- **c7-b91** "one of Zei's symbol-carrying spaceships on the west was breached, and it exploded into a storm of gliders flying in all directions."
-- **c7-b96** "It quickly crumbled, and exploded into rubble and a dozen gliders."
-- **c7-b102** (a factory as a program) "Construct near that symbol a factory capable of executing each of those strategies. It should be activated by a glider coming in from the southwest, and the exact strategy chosen should depend on the type of glider and the time it hits."
-- **c7-b106** "add a brick south of his factory to block the glider that the AI was sending"
+- **c7-b102** "Construct near that symbol a factory capable of executing each of those strategies. It should be activated by a glider coming in from the southwest, and the exact strategy chosen should depend on the type of glider and the time it hits."
+- **c7-b107** "Part of the factory had been built during the intervention turn, the rest continued to be constructed in real time out of nearby rock formations by gliders."
 - **c7-b109** "The factory quickly started generating symbol-carrying spaceships that began to move toward the east, and a storm of gliders that moved north, and then bounced off of rock formations and Bai's own walls to move toward the west."
 - **c7-b115** "immediately create many glider factories in the northeast, and have their exact style and direction be set off by a trigger that would only appear in ten turns."
 - **c9-b70** (Den) "you figured out a really basic version of that - just sixteen possible algorithms, melded into one factory - and used that, plus a hidden glider to provide the input, to hide your intentions."
-- **c10-b160** "Suddenly, as the spaceship hit a rock formation and was in the process of reflecting, gliders from Bai hit it. The spaceship exploded into a storm of gliders."
+- **c12-b188** "Immediately, Zei switched to the next task: figuring out how to build glider factories."
 - **c14-b38** "an eternal glider factory: a glider would bounce back and forth, at each collision it would break off rock to spray even more gliders further north, and then every thousand turns, the rock would reset."
+- **c14-b46** "it would take him four intervention turns to make a symbol-carrying spaceship or glider factory."
 - **c14-b83** "He figured out how to bounce a glider southward off of one of his own walls so that it would hug the edge of the shrine. […] The glider would bounce back and forth between the center and the north. Each time it hit the center, it would simultaneously release another glider that would go west."
-- **c14-b91** "Kau's eternal glider factories proved to be of limited use: though the gliders would keep coming forever, they would only have any effect for a short period of time. As soon as a storm of gliders came, Deluin would figure out how to reflect it."
+- **c14-b91** "Kau's eternal glider factories proved to be of limited use: though the gliders would keep coming forever, they would only have any effect for a short period of time."
 
-### 1.2 Resources
+**Walls.** Static structures; they stop and bounce gliders, and they wear down.
+
+- **c4-b13** "So a shield that can't be destroyed is not something that can be created."
+- **c4-b109** "spent his next intervention turn putting up more walls facing Bai."
+- **c4-b113** "The gliders hit the wall that Dza had set up around his home base in the northeast corner"
+- **c4-b135** "Zei used his intervention turn to remove his own wall. Dozens of gliders flew in all directions"
+- **c7-b106** "add a brick south of his factory to block the glider that the AI was sending"
+- **c14-b75** "At first, the walls handled it. But then, the gliders kept coming, and soon they began to breach the walls."
+- **c14-b85** "Zei had built four layers of walls around this ship, and finally the walls were beginning to crumble faster than he could create new ones."
+- **c14-b90** "Deluin spent all his attention early on to use the resources in the rock formations near his north and northeast to build walls."
+
+**Mirror walls.** Walls built to send gliders back.
+
+- **c2-b12** "I got third place! Finally figured out a wall structure that reflected their gliders right back at them, completely wreaked havoc on their territory."
+- **c4-b95** "where a mirror wall would send the glider right back, but also shoot another glider upward."
+- **c14-b91** "As soon as a storm of gliders came, Deluin would figure out how to reflect it."
+
+**Moving walls.** A wall that travels, as a large slow glider.
+
+- **c4-b111** "At the front, Zei put down a "moving wall" design that he had perfected - a sort of large glider that flew half as fast, but was optimized for reflecting more basic types of gliders right back at the sender. Right behind his three moving walls, all aimed at Dza's corner of the game board, he put his symbol-carrying spaceships."
+- **c4-b124** "Then, Zei saw that Pan was sending against Zei the same type of moving wall that Zei had used himself."
+- **c7-b72** "with a different style of moving wall in front of it."
+
+**Spaceships.** Large, slow gliders; when they break they become storms of gliders.
+
+- **c4-b107** "Larger spaceships flew out from Zei and Bai's bases."
+- **c4-b108** "Spaceships flew out, acting as large slow-moving gliders that eventually crashed into a rock formation in a controlled way, leaving behind copies of each player's symbols."
+- **c4-b131** "Zei's spaceship crashed against the remaining intact southern wall of Pan's home base. It briefly fluttered into chaotic shapes."
+- **c10-b160** "Suddenly, as the spaceship hit a rock formation and was in the process of reflecting, gliders from Bai hit it. The spaceship exploded into a storm of gliders."
+- **c14-b47** "his spaceship and two of Gun's spaceships flew past each other in the center."
+
+**Symbol-carrying spaceships.** Spaceships that carry a copy of the player's symbol, so they give sight and a place to build as they travel; they can be steered.
+
+- **c4-b111** "Right behind his three moving walls, all aimed at Dza's corner of the game board, he put his symbol-carrying spaceships."
+- **c7-b72** "Zei started planting one last major structure by hand: a symbol-carrying spaceship. There were already four created by his AI, but he figured that he would make one all on his own, so that Bai would not see it, and with a different style of moving wall in front of it. He aimed the symbol-carrying spaceship so that it would reflect off a wall that his AI had already constructed, and then move upwards along the middle of the game field."
+- **c7-b81** "Zei's symbol-carrying spaceship started moving west from the southeast corner. The portion of the game field that Zei could see increased."
+- **c7-b85** "Shortly after that, Zei's symbol-carrying spaceship reflected off the wall in the south, and began moving north."
+- **c7-b91** "Soon, one of Zei's symbol-carrying spaceships on the west was breached, and it exploded into a storm of gliders flying in all directions."
+- **c7-b96** "Then, suddenly, gliders flew at the spaceship from the west, north and east side. It quickly crumbled, and exploded into rubble and a dozen gliders."
+- **c14-b36** "a steerable symbol-carrying spaceship he had developed months prior, that could change its direction if you intervene in only a few cells."
+- **c14-b56** "On his next intervention turn, he steered that spaceship to temporarily stop, just outside of visual range of Gun's northeastern base. He set the spaceship to fire off gliders to destroy the symbols that were undoubtedly in Gun's northeastern base."
+- **c14-b77** "He figured that the existing ship's symbol would get destroyed within a hundred turns, but the wreck could still coast west, and crash into the northern shrine and release a large glider storm southward."
+- **c14-b91** "Deluin did not build any mobile symbol-carrying spaceships. Instead, he simply fortified."
+- **c15-b103** "by pre-publishing most of the data - the symbol-carrying spaceship - and then using only a few bits of manipulation at the end to deploy the most important parts of your strategy."
+
+### 1.2 Rocks as a resource
+
+Rock formations are hidden at first, and gliders that hit them make more gliders, symbols and debris. They are the material everything is built from.
 
 - **c4-b84** "techniques for extracting usable negentropy from rocks"
 - **c4-b108** "For the first few hundred turns, there was no combat - it was simply a matter of expanding into the field and gathering resources. Gliders flew out, interacted with rock formations, and created more gliders."
 - **c4-b99** "Zei intentionally not targeting gliders toward a few rock formations, Bai taking the hint and taking those rock formations herself, and similarly leaving some rock formations to Zei."
+- **c4-b112** "turning some rock formations into a chaotic mess that blasted gliders everywhere, and destroyed some of Pan's symbols."
 - **c7-b82** "Both AI transcripts were focused intensely on exploiting their territories, building more gliders, spaceships and walls, and expanding."
-- **c7-b107** "Part of the factory had been built during the intervention turn, the rest continued to be constructed in real time out of nearby rock formations by gliders."
+- **c7-b107** "the rest continued to be constructed in real time out of nearby rock formations by gliders."
 - **c12-b10** "playing in that style was not in their training data, so they made basic mistakes and cannibalized each other's negentropy."
+- **c12-b157** "He realized that to make actual headway, he would need to interact with the rock formations. He made a couple of guesses about what shape the rock formations in the hexgrid version of Minpentai might look like, and examined the behavior of gliders as they crashed into them."
+- **c12-b177** "As time moved backwards, past the moment of the crash, the rock-formation-plus-symbol turned into a bare rock formation, and two gliders flew back out."
+- **c12-b181** "Zei quickly put up symbols, walls, and gliders that would create symbols if they crashed into favorable rock formations."
+- **c12-b187** "One of his gliders had successfully created a symbol, and revealed a part of the board that showed what the rock formations look like."
+- **c14-b33** "the shrine will reset to being a default rock formation."
+- **c14-b45** "Zei shot off a few gliders to turn more rock formations into symbols and glider factories."
+- **c14-b78** "Zei used a nearby rock formation, which was almost destroyed by the gliders, to bounce a glider"
 - **c14-b90** "Deluin spent all his attention early on to use the resources in the rock formations near his north and northeast to build walls."
 
-Intervention resources (a budget each turn):
+The intervention budget, a second resource handed out each turn:
 
 - **c4-b138** "Zei and Bai could do twice as much together in their intervention turns as Pan could do alone in his."
 - **c4-b116** "Remove one of the two players completely, he thought, and that takes out half the activity in the intervention turns - always the biggest source of surprise."
@@ -71,7 +128,6 @@ Intervention resources (a budget each turn):
 - **c7-b116** "Zei spent half his resources generically shoring up his defenses"
 - **c14-b33** "The resources you can allocate in each intervention turn are reduced by eighty percent."
 - **c14-b35** "The reduced resource allocation meant that the intervention turns were not for building - they were for *steering*."
-- **c14-b46** "while he could make symbols, it would take him four intervention turns to make a symbol-carrying spaceship or glider factory."
 - **c14-b62** "He stopped his symbol-carrying spaceship, and started on a five-intervention-turn-long quest to build another one."
 - **c14-b73** "Zei put all resources into building the new ship. Almost finished."
 
