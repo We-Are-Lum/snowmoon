@@ -105,7 +105,23 @@ const failures: string[] = [];
 const fail = (msg: string) => failures.push(msg);
 
 async function open(page: Page, path: string) {
-  await page.goto(BASE + path, { waitUntil: 'networkidle' });
+  // On a timeout, say which requests were still open (owner, 2026-10-29: root-cause the /minpentai?watch=1 timeouts,
+  // don't rerun them away).
+  const pending = new Map<object, string>();
+  const started = (r: { url: () => string; resourceType: () => string }) => pending.set(r, `${r.resourceType()} ${r.url().replace(BASE, '')}`);
+  const ended = (r: object) => pending.delete(r);
+  page.on('request', started);
+  page.on('requestfinished', ended);
+  page.on('requestfailed', ended);
+  try {
+    await page.goto(BASE + path, { waitUntil: 'networkidle' });
+  } catch (e) {
+    throw new Error(`${path} didn't go quiet: ${pending.size} request(s) still open: ${[...pending.values()].slice(0, 20).join(' | ')}`, { cause: e });
+  } finally {
+    page.off('request', started);
+    page.off('requestfinished', ended);
+    page.off('requestfailed', ended);
+  }
   if (INJECT) await page.addStyleTag({ content: INJECT });
   await page.evaluate(() => document.fonts.ready);
 }
