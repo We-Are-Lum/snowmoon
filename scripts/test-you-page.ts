@@ -262,7 +262,7 @@ try {
     const p = await html(`/@${A}`);
     const has = (s: string) => p.text.includes(s);
     check('Y4 /@A is a page', p.status === 200, String(p.status));
-    check(PROFILE_LISTS_REMIXES ? 'Y4 /@A shows A’s scene, frame and storyboard' : 'Y4 /@A shows A’s scenes only (frames and storyboards wait for consent v5)', has(`/@${A}/1`) && (PROFILE_LISTS_REMIXES ? has(`/remix/${fA}`) && has(`/storyboard/${sA}`) : !has(`/remix/`) && !has(`/storyboard/`)));
+    check(PROFILE_LISTS_REMIXES ? 'Y4 /@A shows A’s scene, frame and storyboard' : 'Y4 /@A shows A’s scenes, and no frames or storyboards (they wait for consent v5)', has(`/@${A}/1`) && (PROFILE_LISTS_REMIXES ? has(`/remix/${fA}`) && has(`/storyboard/${sA}`) : !has(`/remix/`) && !has(`/storyboard/`)));
     check('Y4 /@A shows nothing hidden', !has(fA2) && !has(sA2) && !has('A HIDDEN'));
     check('Y4 /@A shows nothing of B’s', !has(fB) && !has(sB) && !has('B OWN') && !has(B));
     check('Y4 /@A shows A’s published picture, linked to its page', has(`/image/${iA}`));
@@ -423,7 +423,7 @@ try {
         const label = await av.getAttribute('aria-label').catch(() => null);
         check(`Y9 (${scheme}) a wallet session: the avatar links to /dashboard, named`, (await av.getAttribute('href').catch(() => null)) === '/dashboard' && label === `Dashboard: ${A.slice(0, 6)}…${A.slice(-4)}`, String(label));
         const order = await w.evaluate(() => Array.from(document.querySelectorAll('.topbar-end > *')).map((e) => e.getAttribute('aria-label') ?? ''));
-        check(`Y9 (${scheme}) the avatar sits between ? and the menu`, order.length === 3 && order[0] === 'About' && order[1].startsWith('You:') && order[2] === 'Menu', order.join(' | '));
+        check(`Y9 (${scheme}) the avatar sits between ? and the menu`, order.length === 3 && order[0] === 'About' && order[1].startsWith('Dashboard:') && order[2] === 'Menu', order.join(' | '));
         await w.context().close();
 
         // Farcaster and a wallet, both signed in. /api/you is answered in the browser for the Farcaster half
@@ -451,7 +451,7 @@ try {
         const img = both.locator('.topbar-avatar img');
         await img.waitFor({ timeout: 10000 }).catch(() => {});
         const loaded = await img.evaluate((i) => (i as HTMLImageElement).complete && (i as HTMLImageElement).naturalWidth > 0).catch(() => false);
-        check(`Y9 (${scheme}) Farcaster: the avatar is the profile picture, from this site`, (await img.getAttribute('src').catch(() => null)) === '/api/pfp/6786' && loaded && (await both.locator('.topbar-avatar').getAttribute('aria-label')) === 'You: @naaate');
+        check(`Y9 (${scheme}) Farcaster: the avatar is the profile picture, from this site`, (await img.getAttribute('src').catch(() => null)) === '/api/pfp/6786' && loaded && (await both.locator('.topbar-avatar').getAttribute('aria-label')) === 'Dashboard: @naaate');
         await shot(both, `topbar-avatar-${scheme}`);
         await both.locator('.topbar-avatar').click();
         await both.waitForURL('**/dashboard', { timeout: 10000 }).catch(() => {});
