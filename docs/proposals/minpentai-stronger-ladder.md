@@ -21,7 +21,7 @@
 
 - Today a person's progress is one record (opened rung, tries and first win per rung). It becomes one record **per ladder**: `{ ladder: 1 | 3, opened, rec }`, where ladder 1 covers rulesets 1 and 2 (same players, same rungs). Old rows read as ladder 1.
 - The result endpoint takes the ruleset (and so the ladder) with each result, and checks the step against that ruleset's limit.
-- Ladder progress is in the database (`studio.mp_ladder`, keyed by Farcaster ID), so this needs a small `NEXT_` migration (a ladder column, default 1, part of the key), applied before the stronger computer merges, with a read-back that inserts and deletes a realistic row.
+- Ladder progress is in the database (`studio.mp_progress`, migration 0009, keyed by Farcaster ID), so this needs a small `NEXT_` migration (a ladder column, default 1, part of the key), applied before the stronger computer merges, with a read-back that inserts and deletes a realistic row.
 
 ## Alternatives
 
