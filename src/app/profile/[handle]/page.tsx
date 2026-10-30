@@ -15,8 +15,8 @@ import '~/components/agents/agents.css';
  * /@<handle> (rewritten here by next.config.ts): a person's public profile (owner, 2026-10-18; 2026-10-29:
  * "Public profile at /@<fname>, matching /@<fname>/<id> for adaptations: published work only"), which
  * bylines link to. Public, and only what is already public at its own link: each scene as /@<handle>/<id>
- * shows it, and, once consent v5's switch is on (PROFILE_LISTS_REMIXES), their published pictures (each at /image/<id>), remix frames and storyboards that aren't hidden
- * (while PROFILE_LISTS_REMIXES allows), and published agent pieces (while /p is public). Never a prompt
+ * shows it; once consent v5's switch is on (PROFILE_LISTS_REMIXES), their published pictures (each at /image/<id>),
+ * remix frames and storyboards that aren't hidden; and published agent pieces (while /p is public). Never a prompt
  * beyond what each item's own page shows, their balance, a draft, or anything hidden. /@<handle>/<id>
  * (one scene) is a different route and isn't touched.
  *
