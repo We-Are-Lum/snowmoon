@@ -462,6 +462,6 @@ a.ia-button:hover { text-decoration: none; }
 .support .support-address code { font-family: var(--label); font-size: var(--text-label); word-break: break-all; }
 .support .support-warning { border-left: 3px solid var(--ink); padding-left: 10px; }
 .support .support-own { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 8px; margin-top: 10px; }
-.support .support-own label { display: flex; flex-direction: column; gap: 4px; font-family: var(--label); font-size: var(--text-label); }
-.support .support-own input { min-height: 44px; width: 9em; font: inherit; font-size: 16px; padding: 0 8px; }
+.support .amount-field { display: flex; flex-direction: column; gap: 4px; font-family: var(--label); font-size: var(--text-label); }
+.support .amount-field input { min-height: 44px; width: 9em; font: inherit; font-size: 16px; padding: 0 8px; }
 .support .support-error { color: var(--ink); }

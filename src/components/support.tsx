@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { SUPPORT } from '~/lib/config';
 import { SUPPORT_WORDING as W } from '~/lib/support-wording';
 import { give, hasWallet, WalletError } from '~/lib/wallet/client';
+import { AmountField } from './amount-field';
 
 /** The support address in full, with a copy button. It is always SUPPORT.address, passed from the page. */
 export function SupportAddress({ address }: { address: string }) {
@@ -76,10 +77,7 @@ export function SupportSend() {
           void send(Number(own));
         }}
       >
-        <label>
-          {W.other} ($)
-          <input type="number" inputMode="decimal" min={SUPPORT.send.minUsd} max={SUPPORT.send.maxUsd} step="0.01" value={own} onChange={(e) => setOwn(e.target.value)} disabled={busy} />
-        </label>
+        <AmountField label={W.other} value={own} onChange={setOwn} min={SUPPORT.send.minUsd} max={SUPPORT.send.maxUsd} disabled={busy} />
         <button type="submit" className="ic-secondary" disabled={busy || !own}>
           {own ? W.send(Number(own), token) : W.send(0, token).replace('$0 ', '')}
         </button>
