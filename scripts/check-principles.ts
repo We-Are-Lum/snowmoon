@@ -760,17 +760,32 @@ add({
 // map (content/snowmoon/designs/scenes.json) is what npm run designs:scenes derives, and each
 // assignment's evidence block exists, is inside its part, and is that place's fact or seeded image.
 type SheetFile = { file: string; slug: string; facts: { chapter: number; idx: number; quote: string }[] };
+/** The quote is in the text, and doesn't start or end in the middle of a word (owner, 2026-10-29: "word for word in its block"). */
+const wholeWords = (text: string, q: string) => {
+  for (let i = text.indexOf(q); i >= 0; i = text.indexOf(q, i + 1)) {
+    const before = text[i - 1] ?? ' ', after = text[i + q.length] ?? ' ';
+    const cutStart = /[\p{L}\p{N}]/u.test(q[0]) && /[\p{L}\p{N}]/u.test(before);
+    const cutEnd = /[\p{L}\p{N}]/u.test(q[q.length - 1]) && /[\p{L}\p{N}]/u.test(after);
+    if (!cutStart && !cutEnd) return true;
+  }
+  return false;
+};
+/** Every { chapter, idx, quote } anywhere in a design file (characters, places, props, styles, scenes). */
+const quotesIn = (v: unknown): { chapter: number; idx: number; quote: string }[] =>
+  Array.isArray(v) ? v.flatMap(quotesIn)
+  : v && typeof v === 'object' ? [...(typeof (v as { quote?: unknown }).quote === 'string' && typeof (v as { chapter?: unknown }).chapter === 'number' && typeof (v as { idx?: unknown }).idx === 'number' ? [v as { chapter: number; idx: number; quote: string }] : []), ...Object.values(v).flatMap(quotesIn)]
+  : [];
 add({
   id: 'P2j',
   principle: 2,
-  name: 'sheets: each quote is verbatim at its block, each shown shorthand is labelled Invented and model-drafted, scenes.json is up to date with its evidence in place',
+  name: 'sheets: every quote in designs/** is word for word at its block (never cut mid-word), each shown shorthand is labelled Invented and model-drafted, scenes.json is up to date with its evidence in place',
   load: async () => {
     const { buildScenes } = await import('./designs-scenes');
-    const sheets: SheetFile[] = ['characters', 'locations'].flatMap((d) =>
-      readdirSync(path.join(ROOT, 'content/snowmoon/designs', d)).filter((f) => f.endsWith('.json')).map((f) => {
-        const j = json<{ slug: string; facts?: SheetFile['facts'] }>(`content/snowmoon/designs/${d}/${f}`);
-        return { file: `content/snowmoon/designs/${d}/${f}`, slug: j.slug, facts: j.facts ?? [] };
-      }));
+    // Every quote in content/snowmoon/designs/** (owner, 2026-10-29), not only the characters' and places' facts.
+    const sheets: SheetFile[] = walk('content/snowmoon/designs', /\.json$/).map((file) => {
+        const j = json<{ slug?: string }>(file);
+        return { file, slug: j.slug ?? path.basename(file, '.json'), facts: quotesIn(j) };
+      });
     const sources = walk('src', /\.tsx$/).map((f) => ({ file: f, text: read(f) }));
     return {
       sheets,
@@ -787,7 +802,8 @@ add({
     for (const sh of sheets as SheetFile[]) for (const f of sh.facts) {
       const b = blocks[`c${f.chapter}-b${f.idx}`] as { content: string } | undefined;
       if (!b) problems.push(`${sh.file}: c${f.chapter}-b${f.idx} is not a block of the book`);
-      else if (!b.content.includes(f.quote) && !plain(b.content).includes(f.quote)) problems.push(`${sh.file}: "${f.quote.slice(0, 50)}" is not verbatim at c${f.chapter}-b${f.idx}`);
+      else if (!wholeWords(b.content, f.quote) && !wholeWords(plain(b.content), f.quote))
+        problems.push(`${sh.file}: "${f.quote.slice(0, 50)}" is not word for word at c${f.chapter}-b${f.idx}${b.content.includes(f.quote) || plain(b.content).includes(f.quote) ? ' (it starts or ends mid-word)' : ''}`);
     }
     // The shorthand component: "Invented" in .info-word with the ⓘ (InfoLabel), and the drafted note.
     const comp = (sources as { file: string; text: string }[]).find((x) => x.file === 'src/components/design-sheets.tsx')?.text ?? '';
@@ -835,6 +851,9 @@ add({
     // One word of a quote changed; a descriptor shown bare; an assignment moved off its evidence.
     const sh = (c.sheets as SheetFile[]).find((x) => x.facts.length)!;
     sh.facts[0].quote = sh.facts[0].quote.replace(/\w+/, 'Plainly');
+    // And a quote cut mid-word (bai.json had "…the Pafogai Du Minpe"): the words are in the block, the cut isn't allowed.
+    const cut = (c.sheets as SheetFile[]).flatMap((x) => x.facts).find((f) => f !== sh.facts[0] && /\w{4}$/.test(f.quote))!;
+    cut.quote = cut.quote.slice(0, -2);
     c.sources.push({ file: 'src/app/planted.tsx', text: '<p>{place.descriptor}</p>' });
     const j = JSON.parse(c.committed);
     const p = j.parts.find((x: { place: string | null }) => x.place);
