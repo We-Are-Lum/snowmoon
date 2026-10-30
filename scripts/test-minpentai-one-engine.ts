@@ -25,7 +25,10 @@ import { board } from '../src/lib/minpentai/play-game/board';
 import { playMatch, rung } from '../src/lib/minpentai/play-game/players';
 import { parseResult, resultPath } from '../src/lib/minpentai/share-result';
 import { replayVersion } from '../src/lib/minpentai/versions/replay';
-import { engineForSize } from '../src/lib/minpentai/versions/solo-v1';
+import { engineForSize, settingsFor, SOLO_V1 } from '../src/lib/minpentai/versions/solo-v1';
+import { BASE_DRAWN, check, fogProblems, FogError, type Version } from '../src/lib/minpentai/versions/schema';
+import { drawRules } from '../src/lib/minpentai/versions/engine';
+import { VERSIONS as SNAP_VERSIONS, settings as snapSettings } from '../src/lib/minpentai/snap/versions';
 import type { VersionRules } from '../src/lib/minpentai/versions/solo-v1';
 
 let failed = 0, checks = 0;
@@ -153,6 +156,53 @@ ok(parseResult('3', '41') !== null && parseResult('3', '200') === null, 'share: 
 ok(parseResult('3', '200', 'k3x9q2m8ab')?.version === 'k3x9q2m8ab', 'share: a version link allows up to 240 steps');
 ok(parseResult('3', '41', 'NOT-AN-ID!') === null && parseResult('3', '241', 'k3x9q2m8ab') === null, 'share: a bad version ID or too many steps is refused');
 ok(resultPath({ rung: 3, steps: 41 }) === '/minpentai/result?r=3&s=41' && resultPath({ rung: 3, steps: 41, version: 'k3x9q2m8ab' }) === '/minpentai/result?r=3&s=41&v=k3x9q2m8ab', 'share: paths');
+
+// ---------- 5. the fog invariant: placing reach never exceeds sight (owner, 2026-10-30) ----------
+{
+  const throwsFog = (f: () => unknown) => { try { f(); return false; } catch (err) { return err instanceof FogError; } };
+  // Every built-in rule: Play today with each of its drawn rules, by the version check and by the engine.
+  ok(fogProblems({}, BASE_DRAWN).length === 0, 'fog: Play today and its four drawn rules pass the check');
+  for (const d of [{ id: '' }, ...BASE_DRAWN]) {
+    const s = settingsFor(SOLO_V1, d.id);
+    ok(s.reach <= s.sight, `fog: Play with "${d.id || 'no rule'}" has reach ${s.reach} <= sight ${s.sight}`);
+  }
+  for (let seed = 1; seed <= 40; seed++) ok(!throwsFog(() => NewMatch.createMatch(seed, 1_700_000_000_000)), `fog: a Play match starts (seed ${seed})`);
+  // Every listed version: this test's versions (section 2-3) and the snap's, under every drawn rule.
+  for (const [name, ver] of VERSIONS) {
+    ok(fogProblems(ver.set, ver.drawn ?? BASE_DRAWN).length === 0, `fog: version "${name}" passes the check`);
+    for (const d of [{ id: '' }, ...(ver.drawn ?? BASE_DRAWN)]) ok(!throwsFog(() => settingsFor(ver, d.id)), `fog: version "${name}" with "${d.id || 'no rule'}" runs`);
+  }
+  for (const [id, v] of Object.entries(SNAP_VERSIONS)) {
+    // The snap's versions carry one R for both sight and placing (snap/versions.ts settings), under any rule.
+    for (const rule of ['', ...BASE_DRAWN.map((d) => d.id)]) {
+      const st = snapSettings('diag', v, rule as never);
+      ok(st.R >= 1, `fog: snap version ${id} with "${rule || 'drawn'}" sees and places within one R (${st.R})`);
+    }
+  }
+  // A planted bad version: sight 2, reach left at 3. The check refuses it; the engine refuses to run it.
+  const bad: Version = {
+    format: 'snowmoon.minpentai.version/1', title: 'Short sight', different: 'You see 2 squares around your towers.', parent: 'solo-v1', author: '@test',
+    prompt: { text: 'see less', model: 'test', date: '2026-10-30' }, set: { sight: 2 }, changes: [{ what: 'sight', basis: 'invented' }],
+  };
+  ok(check(bad).some((p) => /reach \(3\) is more than sight \(2\)/.test(p)), `fog: the check refuses a version with sight 2 and reach 3 (${check(bad).join('; ')})`);
+  const badRules: VersionRules = { set: bad.set };
+  ok(throwsFog(() => settingsFor(badRules, '')), 'fog: settingsFor refuses it');
+  ok(throwsFog(() => NewMatch.createMatch(7, 1_700_000_000_000, badRules)), 'fog: the server refuses to start a match under it');
+  ok(throwsFog(() => drawRules(badRules, () => 0.1)), 'fog: drawRules refuses it');
+  // Planted in a drawn rule only: base fine, one drawn rule raises reach.
+  const badDrawn: Version = { ...bad, set: {}, drawn: [{ id: 'far', text: 'Place 4 squares away.', set: { reach: 4 } }, { id: 'diag', text: 'Gliders may also fly diagonally.', set: { directions: 8 } }], changes: [{ what: 'drawn', basis: 'invented' }] };
+  ok(check(badDrawn).some((p) => /with drawn rule far, reach \(4\) is more than sight \(3\)/.test(p)), `fog: the check refuses a drawn rule that raises reach (${check(badDrawn).join('; ')})`);
+  ok(throwsFog(() => drawRules(badDrawn, () => 0)), 'fog: drawRules refuses the bad drawn rule when it is drawn');
+  // Planted in the mid-match switch: the second drawn rule is the bad one.
+  const badSwitch: Version = { ...badDrawn, set: { switchAt: 48 }, changes: [{ what: 'drawn', basis: 'invented' }, { what: 'switchAt', basis: 'invented' }] };
+  ok(check(badSwitch).some((p) => /drawn rule far/.test(p)), 'fog: the check refuses it when it would come in at the switch');
+  ok(throwsFog(() => drawRules(badSwitch, (() => { const r = [0.9, 0]; let i = 0; return () => r[i++ % 2]; })())), 'fog: drawRules refuses it as the second rule after the switch');
+  // A good version that sets both, and one that sees further than it places, pass.
+  const good: Version = { ...bad, set: { sight: 6, reach: 6 }, changes: [{ what: 'sight', basis: 'invented' }, { what: 'reach', basis: 'invented' }] };
+  ok(!check(good).some((p) => /reach/.test(p)) && !throwsFog(() => settingsFor({ set: good.set }, '')), 'fog: sight 6 with reach 6 passes');
+  const wide: Version = { ...bad, set: { sight: 5 }, changes: [{ what: 'sight', basis: 'invented' }] };
+  ok(!check(wide).some((p) => /reach/.test(p)) && !throwsFog(() => settingsFor({ set: wide.set }, '')), 'fog: sight 5 with reach 3 passes (seeing further than you place is fine)');
+}
 
 if (failed) { console.error(`${failed} of ${checks} failed`); process.exit(1); }
 console.log(`one engine: ${checks} checks passed`);

@@ -13,7 +13,7 @@ import {
 } from '../play-game/game';
 import type { BoardView } from '../play-game/live-types';
 import { verdict, type Engine } from '../versions/engine';
-import { BASE, type Settings } from '../versions/schema';
+import { BASE, assertFog, type Settings } from '../versions/schema';
 import { SOLO_V1, engineFor, settingsFor, type VersionRules } from '../versions/solo-v1';
 
 export const RULES_VERSION = 'play-rules-draft-1-2026-10-09';
@@ -86,6 +86,7 @@ export interface LiveMatch {
 export function rulesOf(m: Pick<LiveMatch, 'rule' | 'R' | 'every' | 'cost' | 'version'>): { e: Engine; s: Settings } {
   const v = m.version ?? SOLO_V1, base = settingsFor(v, m.rule);
   const s = { ...base, sight: m.R, reach: m.version ? base.reach : m.R, every: m.every, costGlider: m.cost };
+  assertFog(s);
   return { e: engineFor(v, s), s };
 }
 /** A side's points this turn: the setup's or a later turn's, plus any kept. */

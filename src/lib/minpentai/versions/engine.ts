@@ -7,7 +7,7 @@
  * Pure: no DOM, no clock. Settings are data; nothing here runs code from a version.
  */
 import { rng } from '../play-game/rng';
-import { BASE, BASE_DRAWN, type DrawnRule, type Settings, type Version } from './schema';
+import { BASE, BASE_DRAWN, assertFog, type DrawnRule, type Settings, type Version } from './schema';
 
 export { rng };
 export type Side = 'C' | 'A';
@@ -68,10 +68,13 @@ export function drawRules(v: Pick<Version, 'set' | 'drawn'>, r: () => number): {
   const a = r();
   const first = pool.length ? pool[Math.floor(a * pool.length)] : null;
   const s1 = { ...s0, ...(first?.set ?? {}) };
+  assertFog(s1);
   if (!s0.switchAt) return { first, second: null, s1, s2: null };
   const rest = pool.filter((d) => d !== first);
   const second = rest[Math.floor(r() * rest.length)];
-  return { first, second, s1, s2: { ...s0, ...second.set } };
+  const s2 = { ...s0, ...second.set };
+  assertFog(s2);
+  return { first, second, s1, s2 };
 }
 
 /** The engine for one board size; the rules in force are passed to each call. */
