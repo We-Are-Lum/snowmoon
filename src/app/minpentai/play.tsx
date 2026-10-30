@@ -189,6 +189,7 @@ export function Play({ start, onLearn }: { start: 'home' | 'free' | 'ladder' | '
             <>
               <div className="mp-body">
                 <p className="mp-text">Win once to open the next rung. Replay any rung you&apos;ve opened. Only you see this page.</p>
+                <LadderRulesNote prog={ctl.state.prog} />
                 <ol className="mp-rungs">
                   {v.rungs.map((r) => (
                     <li key={r.n}>
@@ -417,5 +418,27 @@ export function Play({ start, onLearn }: { start: 'home' | 'free' | 'ladder' | '
       {v.toastOn && <div className="mp-toast" role="status">{v.toast}</div>}
       {S.scr === 'home' && <span hidden>{auth.kind}</span>}
     </section>
+  );
+}
+
+/**
+ * The one-time note for people who climbed before Play's rules draft 2 (owner, 2026-10-30: keep their
+ * progress, with a note). Shown on the ladder to anyone with progress until they dismiss it; the dismissal
+ * is kept in this browser only (localStorage), like Learn's "done".
+ */
+const RULES_NOTE_KEY = 'mp-ladder-rules-2-seen';
+function LadderRulesNote({ prog }: { prog: LadderProgress }) {
+  const [show, setShow] = useState(false);
+  const had = prog.opened > 1 || Object.keys(prog.rec).length > 0;
+  useEffect(() => {
+    try { setShow(had && !window.localStorage.getItem(RULES_NOTE_KEY)); } catch { setShow(false); }
+  }, [had]);
+  if (!show) return null;
+  const close = () => { try { window.localStorage.setItem(RULES_NOTE_KEY, '1'); } catch { /* shown again next time */ } setShow(false); };
+  return (
+    <div className="mp-ladder-note" role="note">
+      <p className="mp-text"><strong>The rules changed.</strong> Matches now run to step 120 (was 96), and the computer players build up to 10 towers (was 5). Your open rungs and past wins stay. New wins are under the new rules.</p>
+      <button className="mp-btn" onClick={close}>GOT IT</button>
+    </div>
   );
 }
