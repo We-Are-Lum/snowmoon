@@ -13,8 +13,8 @@
  *   to someone else, failed, still confirming, too old, too small; nothing when payTo isn't set.
  * - The balance: a payment is credited once; a Generate is paid at the estimate plus the markup; an
  *   empty balance is refused; while credit-back is off (today), nothing comes back even when nothing is made; once on, a
- *   Generate that fails (check or model didn't answer) is credited back once, for exactly its debit, a refused prompt
- *   stays charged; prepaid costs are counted apart from free ones,
+ *   Generate that gives no picture (check or model didn't answer, prompt refused, picture dropped) is credited back
+ *   once, for exactly its debit; a picture made stays charged; prepaid costs are counted apart from free ones,
  *   so the free daily cap doesn't stop a paying account and prepaid spend has its own cap.
  * - Wallet ↔ Farcaster links (owner, 2026-10-22): verified (Neynar stood in: exactly one FID, two FIDs, none, a
  *   custody address, Neynar down, the lookup off), signed (both proofs through the route, each alone refused),
@@ -33,7 +33,7 @@ import postgres from 'postgres';
 import { privateKeyToAccount } from 'viem/accounts';
 import { createSiweMessage } from 'viem/siwe';
 import { encodeAbiParameters, keccak256, pad, toHex, type PublicClient } from 'viem';
-import { IMAGES } from '../src/lib/config';
+import { IMAGES, REMIX } from '../src/lib/config';
 
 process.env.IMAGES_TICKET_SECRET = 'x'.repeat(48);
 const ROOT = path.resolve(import.meta.dirname, '..');
@@ -169,7 +169,8 @@ const S = sql as unknown as Sql;
 const acct = await accountFor(S, me.address);
 check('an account is made once per address', acct === (await accountFor(S, me.address.toUpperCase().replace('0X', '0x'))));
 const price = priceUsd(IMAGES.reserveUsd);
-check('the price is the estimate plus 30%', Math.abs(price - IMAGES.reserveUsd * 1.3) < 1e-6, String(price));
+check('the price is the estimate plus 30%, rounded up to the nearest $0.001', Math.abs(price - Math.ceil(IMAGES.reserveUsd * 1.3 * 1000 - 1e-9) / 1000) < 1e-9 && price >= IMAGES.reserveUsd * 1.3, String(price));
+check('every price is a whole number of tenths of a cent ($0.001)', [IMAGES.reserveUsd, ...[1, 2, 3, 4].map((n) => REMIX.reserveUsd(n)), IMAGES.editReserveUsd(1)].every((r) => Math.abs(priceUsd(r) * 1000 - Math.round(priceUsd(r) * 1000)) < 1e-9));
 check('an empty balance is refused', !(await reserve(S, -acct)).ok);
 const pay = { txHash: hash, token: 'USDC' as const, amount: 1_000_000n, usd: 1, blockNumber: 100n };
 check('a payment is credited', await credit(S, acct, pay));
@@ -178,7 +179,7 @@ check('$1 pays for this many images', (await generationsLeft(S, -acct)) === Math
 const r1 = await reserve(S, -acct);
 check('a Generate is paid from the balance', r1.ok && Math.abs((await balanceUsd(S, acct)) - (1 - price)) < 1e-6);
 await settle(S, { guard: { costUsd: 0.0001, provider: 'groq', verdict: 'ok' } }, undefined, 'prepaid');
-check('a Generate stays paid for when nothing comes back (no refunds)', Math.abs((await balanceUsd(S, acct)) - (1 - price)) < 1e-6);
+check('settling the real costs never changes what was charged (only a credit-back adds to the balance)', Math.abs((await balanceUsd(S, acct)) - (1 - price)) < 1e-6);
 // --- Credit back a failed Generate (owner, 2026-10-21; migration 0022, IMAGES.prepaid.creditBack) ---------------
 {
   const { creditBack } = await import('../src/lib/wallet/credits');
@@ -197,11 +198,12 @@ check('a Generate stays paid for when nothing comes back (no refunds)', Math.abs
     throw new Error('unused');
   };
 
-  // Off (today, until 0022 and the Terms): a failure stays charged, and the credits table is never read.
-  check('credit-back is off until the owner turns it on', P.creditBack === false);
+  // On since 2026-10-22, with Terms 6a (reading B). The off path is still checked: a failure stays charged.
+  check('credit-back is on, with the reread Terms 6a', P.creditBack === true);
+  P.creditBack = false;
   const offBefore = await balanceUsd(S, acct);
   const off = await paidPicture(S, -acct, req, { checkText: 'a quiet lake', make: unused });
-  check('while off, a failed Generate stays charged (as the Terms say today)', !off.ok && off.status === 503 && Math.abs((await balanceUsd(S, acct)) - (offBefore - price)) < 1e-6 && (await credits()) === 0, JSON.stringify(off));
+  check('while off, a failed Generate stays charged', !off.ok && off.status === 503 && Math.abs((await balanceUsd(S, acct)) - (offBefore - price)) < 1e-6 && (await credits()) === 0, JSON.stringify(off));
 
   P.creditBack = true;
   // Pictures: the prompt check didn't answer, so nothing was made.
@@ -215,12 +217,33 @@ check('a Generate stays paid for when nothing comes back (no refunds)', Math.abs
   const b1 = await balanceUsd(S, acct);
   const failedModel = await generate(S, -acct, req, 'a quiet lake', []);
   check('a Remix frame whose model fails is credited back in full', !failedModel.ok && failedModel.status === 503 && Math.abs((await balanceUsd(S, acct)) - b1) < 1e-6 && (await credits()) === 2, JSON.stringify(failedModel));
-  // A refused prompt is not a failure: it stays charged until the owner decides otherwise.
+  // Reading B (owner, 2026-10-22): a refused prompt gives no picture, so it is credited back too.
   const pic = { role: 'layout', name: 'layout', src: null, file: null, fileSha256: null, bytes: Buffer.from('x'), contentType: 'image/jpeg', width: 8, height: 8 } as never;
   const refused = await generate(S, -acct, req, 'TEST-BLOCK', [pic]);
-  const remixPrice = priceUsd(IMAGES.editReserveUsd(1));
-  check('a refused prompt stays charged', !refused.ok && refused.status === 422 && Math.abs((await balanceUsd(S, acct)) - (b1 - remixPrice)) < 1e-6 && (await credits()) === 2, JSON.stringify(refused));
+  check('a refused prompt (the rules check) is credited back in full, and the person is told', !refused.ok && refused.status === 422 && Math.abs((await balanceUsd(S, acct)) - b1) < 1e-6 && (await credits()) === 3 && refused.error.endsWith(IMAGE_WORDING.prepaid.creditedBack), JSON.stringify(refused));
   delete process.env.REMIX_TEST_FAKES;
+  const reasonOf = async () => (await sql`select reason from studio.wallet_credits order by id desc limit 1`)[0].reason as string;
+  check('…recorded as refused', (await reasonOf()) === 'refused');
+  // A blocked name (no check is asked); the name is read from the list at run time, never written here.
+  const named = (JSON.parse(readFileSync(path.join(ROOT, 'config', 'image-blocked-names.json'), 'utf8')) as { names: string[] }).names[0];
+  const b3 = await balanceUsd(S, acct);
+  const blocked = await paidPicture(S, -acct, req, { checkText: `a portrait of ${named}`, make: unused });
+  check('a prompt naming someone on the blocked list is credited back in full', !blocked.ok && blocked.status === 422 && Math.abs((await balanceUsd(S, acct)) - b3) < 1e-6 && (await reasonOf()) === 'refused', blocked.ok ? 'made' : blocked.error);
+  // The safety checker drops the frame: made, then dropped, so no picture; credited back.
+  process.env.REMIX_TEST_FAKES = '1';
+  const b4 = await balanceUsd(S, acct);
+  const dropped = await generate(S, -acct, req, 'a quiet lake TEST-NSFW', [pic]);
+  check('a frame the safety checker drops is credited back in full, recorded as dropped', !dropped.ok && dropped.status === 422 && Math.abs((await balanceUsd(S, acct)) - b4) < 1e-6 && (await reasonOf()) === 'dropped' && dropped.error.endsWith(IMAGE_WORDING.prepaid.creditedBack), JSON.stringify(dropped.ok ? 'made' : dropped));
+  // A frame that is made stays charged.
+  const b5 = await balanceUsd(S, acct);
+  const nBefore = await credits();
+  const madeOk = await generate(S, -acct, req, 'a quiet lake', [pic]);
+  check('a frame that is made stays charged', madeOk.ok && Math.abs((await balanceUsd(S, acct)) - (b5 - priceUsd(IMAGES.editReserveUsd(1)))) < 1e-6 && (await credits()) === nBefore, madeOk.ok ? '' : madeOk.error);
+  delete process.env.REMIX_TEST_FAKES;
+
+  // "The price shown" (Terms 6a): prices are shown as charged, never rounded for show.
+  const { exactDollars } = await import('../src/lib/wallet/price-text');
+  check('a price is shown in three decimals, exactly as charged', [IMAGES.reserveUsd, ...[1, 2, 3, 4].map((n) => REMIX.reserveUsd(n))].every((r) => /^\d+\.\d{3}$/.test(exactDollars(priceUsd(r))) && Number(exactDollars(priceUsd(r))) === priceUsd(r)) && exactDollars(0.009) === '0.009' && exactDollars(0.054) === '0.054', [IMAGES.reserveUsd, ...[1, 2, 3, 4].map((n) => REMIX.reserveUsd(n))].map((r) => `${exactDollars(priceUsd(r))}=${priceUsd(r)}`).join(' '));
 
   // Once per debit, for exactly what it took, to the same account.
   const [last] = await sql`select id::int as id, usd::float8 as usd from studio.wallet_debits order by id desc limit 1`;
@@ -229,7 +252,7 @@ check('a Generate stays paid for when nothing comes back (no refunds)', Math.abs
   const [same] = await sql`select count(*)::int as n from studio.wallet_credits c join studio.wallet_debits d on d.id = c.debit_id where c.usd <> d.usd or c.account_id <> d.account_id`;
   check('every credit is its own debit’s amount, to its own account', same.n === 0);
   check('a free Generate has nothing to credit back', !(await creditBack(S, undefined, 'failed')));
-  P.creditBack = false;
+  P.creditBack = true;
   globalThis.fetch = realFetch;
 }
 

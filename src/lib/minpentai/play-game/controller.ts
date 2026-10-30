@@ -17,14 +17,15 @@
  *   'desk' at 768 px and wider outside it, else 'phone'.
  */
 import {
-  AR, COL, D4, D8, RUNGS, K, clone, empty, fmt, lit, rng, step, world,
-  type Piece, type Placement, type Side, type World,
+  AR, COL, D4, D8, RULES, RUNGS, K, clone, empty, fmt, lit, rng, step, world,
+  type Piece, type RuleId, type Placement, type Side, type World,
 } from './game';
 import { board, type BoardOpts, type BoardView } from './board';
 import { drawRules, verdict, type Engine, type Kills } from '../versions/engine';
 import type { Settings } from '../versions/schema';
-import { SOLO_V1, SOLO_V1_ENGINE, engineFor, type VersionRules } from '../versions/solo-v1';
+import { SOLO_V1, SOLO_V1_ENGINE, engineFor, settingsFor, type VersionRules } from '../versions/solo-v1';
 import type { LadderProgress } from './live-types';
+import { checkPlacements, type LiveMatch } from '../play-server/match';
 
 export interface Env {
   now(): number;
@@ -170,9 +171,9 @@ export class PlayController {
   /** Escape: close a sheet, else leave full screen. */
   escape() { if (this.state.sheet) this.setState({ sheet: null }); else if (this.state.fs) this.setState({ fs: false, aim: false }); }
 
-  /** A new match: Play today, or the version given (and then the computer player's level, if given). */
-  mk(mode: Mode, rung?: number, opts: { version?: VersionRules; lvl?: number } = {}): Match {
-    const ver = opts.version ?? SOLO_V1, seed = (this.env.now() % 1e6) | 0, r = rng(seed);
+  /** A new match: Play today, or the version given (and then the computer player's level and the seed, if given). */
+  mk(mode: Mode, rung?: number, opts: { version?: VersionRules; lvl?: number; seed?: number } = {}): Match {
+    const ver = opts.version ?? SOLO_V1, seed = opts.seed ?? (this.env.now() % 1e6) | 0, r = rng(seed);
     // The match's first random number draws its rule, as Design's mk does; the rest are the computer's.
     const { first, second, s1, s2 } = drawRules(ver, r), e = engineFor(ver, s1);
     const drawn = first && { id: first.id, text: first.text };
@@ -191,6 +192,42 @@ export class PlayController {
   /** This turn's points for a side: the setup's or a later turn's, plus any kept. */
   budget(o: Side = 'C') { const m = this.m!; return (m.w.step === 0 ? m.s.setupPoints : m.s.points) + m.saved[o]; }
   begin() { this.beginAct(); this.setState({ scr: 'match', piece: 'g', dir: [1, 0], aim: false }); }
+  /**
+   * Carry on a practice match from elsewhere (the Farcaster snap's "Keep playing in the app",
+   * owner 2026-10-21): its seed and Cyan's placements for every finished turn, replayed on this
+   * match's own rng exactly as if they had been played here, each turn checked by the server's
+   * checkPlacements, against the same computer level (0 Practice, 1–5 the rungs' players; still a
+   * practice match, nothing recorded). Lands on the next turn to act (or the result). False if a
+   * turn is refused. `numbers`: the match's extra rule and the numbers it sets, from the drawn rule,
+   * when the snap's player picked a rule or played a version (snap/versions.ts settings; a challenge
+   * link starts here with no turns). The rng is the same either way: mk has drawn its first number.
+   * Play's board only (the snap's versions are Play with a rule picked and numbers changed).
+   */
+  continueMatch(seed: number, turns: { t: Piece; x: number; y: number; dx: number; dy: number }[][], lvl = 0, numbers?: (drawn: RuleId) => { rule: RuleId; R: number; every: number; cost: number }): boolean {
+    this.env.clearInterval(this.rt);
+    const m = this.mk('practice', undefined, { seed, lvl });
+    if (numbers) {
+      const n = numbers(m.rule as RuleId);
+      Object.assign(m, n);
+      m.s = { ...settingsFor(SOLO_V1, n.rule), sight: n.R, reach: n.R, every: n.every, costGlider: n.cost };
+      m.drawn = { id: n.rule, text: RULES[n.rule] };
+    }
+    this.m = m;
+    this.beginAct();
+    for (const turn of turns) {
+      try {
+        m.pend.C = checkPlacements(m as unknown as LiveMatch, 'C', turn);
+      } catch {
+        this.m = null;
+        return false;
+      }
+      this.applyTurn();
+      while (m.phase === 'run') this.runTick();
+      if (m.phase === 'over') return true;
+    }
+    this.setState({ scr: 'match', piece: 'g', dir: [1, 0], aim: false });
+    return true;
+  }
   beginAct() {
     const m = this.m!, w = m.w;
     if (m.next2 && w.step >= m.s.switchAt) { m.s = m.next2.s; m.drawn = m.next2.drawn; m.rule = m.drawn.id; m.R = m.s.sight; m.every = m.s.every; m.cost = m.s.costGlider; m.next2 = null; }
@@ -200,9 +237,14 @@ export class PlayController {
   }
   startRun() {
     const m = this.m; if (!m || m.phase !== 'act') return;
+    this.applyTurn(); m.clock = null; this.setState({ aim: false }); this.runT();
+  }
+  /** Both sides' placements appear, and the run begins (points kept for later turns first). */
+  private applyTurn() {
+    const m = this.m!;
     const left = { C: this.budget('C'), A: this.budget('A') };
     for (const o of ['C', 'A'] as const) m.saved[o] = Math.min(m.s.carryOver, left[o] - m.pend[o].reduce((n, p) => n + m.e.cost(m.s, p.t), 0));
-    m.e.apply(m.w, m.s, m.pend); this.updLS(); m.hist[m.hist.length - 1] = m.e.clone(m.w); m.phase = 'run'; m.clock = null; this.setState({ aim: false }); this.runT();
+    m.e.apply(m.w, m.s, m.pend); this.updLS(); m.hist[m.hist.length - 1] = m.e.clone(m.w); m.phase = 'run';
   }
   private updLS() { const m = this.m!; m.e.updLS(m.w, m.s.sight, { C: m.lsC, A: m.lsA }); }
   runT() { this.env.clearInterval(this.rt); this.rt = this.env.setInterval(() => this.runTick(), this.m!.ff ? 40 : 170); }
