@@ -1,5 +1,7 @@
 'use client';
 
+import { InfoLabel } from './info-label';
+import { MakeImageLink } from './make-image-link';
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { lastChapter, openedChapters } from '~/lib/chat/device';
@@ -66,14 +68,23 @@ export function GlossaryIndex({ entries, total, explained, method }: { entries: 
       <BackLink from={from} last={last} />
       <p className="label">Glossary</p>
       <h1>Invented words</h1>
+      {/* Less text, details behind ⓘ (owner, 2026-10-29). */}
       <p>
-        Names, places and Dzegoban words from the book. Each page quotes the sentences where the book itself explains the word, if
-        it does, and lists every paragraph that mentions it. Nothing here is a definition written by us or by a model.
+        Names, places and Dzegoban words from the book.{' '}
+        <InfoLabel
+          word="About"
+          kind="about"
+          declaration="About the glossary"
+          title="The glossary"
+          body={[
+            'Each page quotes the sentences where the book itself explains the word, if it does, and lists every paragraph that mentions it. Nothing here is a definition written by us or by a model.',
+            `${explained} of ${total} words have a sentence that explains them.`,
+            "Words come from the narration's pronunciation list, the character and place sheets, and a reviewed list; the sentences are picked by a fixed rule.",
+          ]}
+          links={[{ href: method, label: 'How it is built' }]}
+        />
       </p>
-      <p className="gl-meta">
-        {all ? `All ${total} words` : `Words up to Chapter ${furthest}, the furthest you've opened`} · {explained} of {total} have a
-        sentence that explains them
-      </p>
+      <p className="gl-meta">{all ? `All ${total} words` : `Words up to Chapter ${furthest}, the furthest you've opened`}</p>
       <ul className="gl-index">
         {shown.map((e) => (
           <li key={e.slug}>
@@ -89,10 +100,6 @@ export function GlossaryIndex({ entries, total, explained, method }: { entries: 
           {hidden} more {hidden === 1 ? 'word first appears' : 'words first appear'} after Chapter {furthest}, past where you&apos;ve read.
         </Cover>
       )}
-      <p className="gl-method">
-        Words come from the narration&apos;s pronunciation list, the character and place sheets, and a reviewed list; the sentences are
-        picked by a fixed rule. <a href={method}>How it is built</a>
-      </p>
       {DRAFT}
     </div>
   );
@@ -152,6 +159,15 @@ export function GlossaryTerm({ t }: { t: GlossaryTermView }) {
               Chapter {first.chapter}, {first.label}
             </Link>
           </blockquote>
+          {/* "Add a reference" sits here (owner, 2026-10-29): a picture of this word, made from the passage it first appears in. */}
+          {(() => {
+            const idx = Number(/-b(\d+)$/.exec(first.block)?.[1]);
+            return Number.isInteger(idx) ? (
+              <MakeImageLink className="ic-secondary gl-add-ref" passage={{ chapter: first.chapter, start: idx, end: idx }}>
+                Add a reference
+              </MakeImageLink>
+            ) : null;
+          })()}
         </>
       )}
 

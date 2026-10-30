@@ -6,9 +6,10 @@ import { IMAGE_WORDING } from '~/lib/images/wording';
  * clear and accessible"): the same menu on the front page and on each choice's page, the one
  * shown marked. On a phone, two by two.
  */
-export type PicturesChoice = 'moments' | 'characters' | 'settings' | 'styles';
+export type PicturesChoice = 'glossary' | 'moments' | 'characters' | 'settings' | 'styles';
 
 const HREF: Record<PicturesChoice, string> = {
+  glossary: '/references/glossary',
   moments: '/references?show=moments',
   characters: '/references/designs?tab=characters',
   settings: '/references/designs?tab=places',

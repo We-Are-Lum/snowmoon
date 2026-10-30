@@ -30,6 +30,7 @@ export const IMAGE_WORDING = {
   /** Pictures' menu and front page (owner, 2026-10-14: four clear choices; the feed shows all of them). Model-drafted wording. */
   feed: {
     menu: [
+      { key: 'glossary', label: 'Glossary', hint: 'The book’s words, pictured' },
       { key: 'moments', label: 'Moments', hint: 'Images of passages' },
       { key: 'characters', label: 'Characters', hint: 'How the people look' },
       { key: 'settings', label: 'Settings', hint: 'Where it happens' },
