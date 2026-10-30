@@ -9,6 +9,7 @@ import { deliveryFor, posterFor } from '~/lib/scene-delivery';
 import { ShotStrip } from './editor/shot-strip';
 import { SceneActions } from '~/components/scene-actions';
 import { FilmNote } from '~/components/agents/film-note';
+import { SocialPosts } from '~/components/social-posts';
 import './scene.css';
 
 /**
@@ -274,6 +275,9 @@ export async function ScenePage({ adaptation, version, handle, fixed }: { adapta
       <p className="provenance scene-provenance">
         Snowmoon by Vitalik Buterin, GPL v3. An independent adaptation, not affiliated with the author.
       </p>
+
+      {/* Others' posts that link to this page (branch social-read): after the page's own content, apart from it. */}
+      <SocialPosts page={fixed ? fixedPath : latestPath} />
     </div>
   );
 }

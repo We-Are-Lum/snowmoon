@@ -354,6 +354,10 @@ order the feed, search, anyone's own pages, the agent tools or the read API.
   "Newest" and "Liked by me"; the switch keeps the reader's choice on their device (localStorage) and never sends it.
 - `P5e`: nothing outside the pick code reads `studio.admin_picks` (the feed, search, profiles, the agent tools and
   the read API stay unpicked).
+- `P5f` (branch `social-read`, 2026-10-29): "Posts that link here", others' public posts on Farcaster and
+  Bluesky shown under the page they link to, are ordered newest first and by nothing else: in `src/lib/social/`,
+  its components and its moderators' route, every sort is `newestFirst` (by time, then id), no SQL orders them, and no
+  count of likes, recasts, replies or followers, and no score, is read or kept. The proof plants a sort by likes.
 - Review: does any default, badge or ordering reflect a person's choice without saying whose?
 
 **Status.** Pass. (Picks aren't built yet: P5d and P5e pass with nothing to check, and fail on a planted violation.)
@@ -432,6 +436,14 @@ only, through `studio.rating_totals`, `studio.like_totals` and
   has found both page files at build time (`APP_LEGAL_PAGES`) and
   `SNOWMOON_ALERT_URL` is set. It failed on branch `site-images-everyone` alone, by design, until
   the Terms and Privacy pages were merged into it.
+- `P6p` (branch `social-read`, 2026-10-29): "Posts that link here" (`SOCIAL_READ.show`) is on only while the
+  Privacy page's §7 names Bluesky and the page says posts linking here are shown (the owner's rule: legal texts
+  describe today, and ship with the feature). Its posts are read on our server (Neynar's embed-URL feed for Farcaster,
+  Bluesky's public `searchPosts`), kept half an hour in the site's cache, and shown as plain text and a link: no
+  avatar, picture, embed or script from either network reaches the reader's browser (`P6a`; `check:ui` checks the
+  section on an image's page with a fixture and fails on any request outside the site). Hidden posts are kept in
+  `studio.social_hidden` (draft `NEXT_social_read.sql`), private like `removal_log`; until it exists, nothing is shown.
+  `P6g`–`P6j`'s vocabulary includes Bluesky, so About must name it when the Privacy page does.
 - Review: does a new page, embed or script reach another domain? Does a new
   table expose who did what?
 

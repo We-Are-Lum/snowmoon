@@ -14,6 +14,7 @@ import { AiLabel } from '~/components/recipe-sheet';
 import { AI_LABEL, readerImageView } from '~/lib/ai-declared';
 import { inThisImage } from '~/lib/images/sheet-images';
 import { sheetCharacters } from '~/lib/images/sheets';
+import { SocialPosts } from '~/components/social-posts';
 
 /**
  * A reader's image (section 5): the image, what it is, and its whole recipe, readable signed
@@ -184,6 +185,8 @@ export default async function ImagePage({ params }: Props) {
         </details>
         <p className="as-draft ic-draftline">{W.draftLine}</p>
       </div>
+      {/* Others' posts that link to this page (branch social-read): after the page's own content, apart from it. */}
+      <SocialPosts page={`/image/${id}`} />
     </div>
   );
 }

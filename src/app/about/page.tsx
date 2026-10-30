@@ -1,5 +1,5 @@
 import { IMAGE_WORDING } from '~/lib/images/wording';
-import { CHAT, CONTACT_EMAIL, IMAGES, PODCAST_LINKS, REPO_URL, WORK } from '~/lib/config';
+import { CHAT, CONTACT_EMAIL, IMAGES, PODCAST_LINKS, REPO_URL, SOCIAL_READ, WORK } from '~/lib/config';
 import { RULES } from '~/lib/images/rules';
 import { SIGN_IN_SERVICES } from '~/lib/sign-in-text';
 import { ThemeSwitch } from '~/components/theme-switch';
@@ -89,6 +89,17 @@ export default function About() {
         make images. The score is kept for a day.
       </p>
       <p>Rules: {RULES}</p>
+      {/* Model-drafted wording, branch social-read (2026-10-29): shown only once SOCIAL_READ.show is on, after the owner's
+          reread of the Privacy lines (docs/legal/social-read-draft.md), so About and Privacy name Bluesky together (P6h). */}
+      {SOCIAL_READ.show && (
+        <p>
+          Posts that link here: under a chapter, an image or a scene, public posts on Farcaster and Bluesky that link to
+          that page are shown, newest first, with the writer&apos;s handle, the date and a link to the post. Our server finds
+          them, through Neynar for Farcaster and Bluesky&apos;s public API, sending only this site&apos;s address; your browser
+          asks neither. Moderators can hide any of them, and the person who wrote one can ask us to remove it at{' '}
+          <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>.
+        </p>
+      )}
       <p>
         A published image shows who made it, that it is AI-generated and not by the author, and its recipe with the exact prompt.
         It is shown with your name (Farcaster name or wallet address). A Farcaster name is the one Farcaster&apos;s relay gave

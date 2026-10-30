@@ -52,6 +52,10 @@
  *   checkout's production build a second time (.next, so build first) on a free port against an
  *   in-memory database with two published readers' images (scripts/fixtures/reader-images-db.ts);
  *   sign-in, the composer's status and the queue are mocked in the browser.
+ * - Posts that link here (branch social-read): on a fixture image's page, with scripts/fixtures/social-posts.json in place of
+ *   Farcaster and Bluesky (SOCIAL_READ_PREVIEW, SOCIAL_READ_FIXTURE; ignored on production): after the page's own content,
+ *   labelled, newest first, the hidden fixture post left out, each with network, @handle, date, quotation and link; no
+ *   picture and no request outside the site. The moderators' list on /moderate (API mocked) offers Hide on each post.
  * - The account at the foot of the rail and the menu sheet (owner, 2026-10-18): signed out it offers "Sign in with
  *   Farcaster", then "Sign in with a wallet" (the editor's button, with its note); a wallet session (planted in
  *   storage, nothing signed; the assistant's status answers it 403, as for a wallet not linked to Farcaster) stays
@@ -1028,13 +1032,70 @@ async function checkVoiceLabel(page: Page, where: string, scope: string) {
   if (!/ · by \S/.test(visible)) fail(`${where}: the narration label does not name who made it: "${visible}"`);
 }
 
+/** The fixture posts that link to pages here (scripts/fixtures/social-posts.json), read in place of the networks. */
+const SOCIAL_FIXTURE = JSON.parse(readFileSync('scripts/fixtures/social-posts.json', 'utf8')) as { network: string; id: string; handle: string; at: string; url: string; pages: string[] }[];
+
+/**
+ * "Posts that link here" on an image's page (branch social-read), with the fixture: after the page's own content,
+ * labelled, newest first, each with its network, @handle, date, text as a quotation and a link to the post; the hidden
+ * post and the post linking elsewhere are left out; nothing from the networks is loaded (no picture), and no request
+ * leaves the site while the page loads (P6a).
+ */
+async function checkSocialPosts(page: Page, tag: string, w: number, at: (p: string) => Promise<void>) {
+  const where = `/image ${tag} (posts that link here)`;
+  const { FIXTURE_IMAGES, FIXTURE_HIDDEN_POST } = await import('./fixtures/reader-images-db');
+  const path_ = `/image/${FIXTURE_IMAGES[0].version}`;
+  const outside: string[] = [];
+  const watch = (r: { url: () => string }) => {
+    const h = new URL(r.url()).hostname;
+    if (h !== 'localhost' && h !== '127.0.0.1' && !h.endsWith('snowmoon.party')) outside.push(r.url());
+  };
+  page.on('request', watch);
+  await at(path_);
+  page.off('request', watch);
+  if (outside.length) fail(`${where}: the page asked outside the site: ${outside.slice(0, 3).join(', ')}`);
+  const section = page.locator('[data-social-posts]');
+  if (!(await section.count())) return fail(`${where}: no "Posts that link here"`);
+  if (!/Posts that link here/.test((await section.locator('h2').textContent()) ?? '')) fail(`${where}: not labelled "Posts that link here"`);
+  // After the page's own content: the image, its passage and its recipe all come before it.
+  const after = await page.evaluate(() => {
+    const s = document.querySelector('[data-social-posts]')!;
+    return ['.ip-main', '.ip-figure', '.ic-draftline'].every((sel) => {
+      const el = document.querySelector(sel);
+      return el ? Boolean(el.compareDocumentPosition(s) & Node.DOCUMENT_POSITION_FOLLOWING) && !el.contains(s) : false;
+    });
+  });
+  if (!after) fail(`${where}: the section is not after the page's own content`);
+  const want = SOCIAL_FIXTURE.filter((p) => p.pages.includes(path_) && p.id !== FIXTURE_HIDDEN_POST).sort((a, b) => (a.at < b.at ? 1 : -1));
+  const got = await section.locator('li').evaluateAll((els) =>
+    els.map((e) => ({
+      id: e.getAttribute('data-post-id'),
+      meta: e.querySelector('.social-post-meta')?.textContent ?? '',
+      quote: Boolean(e.querySelector('blockquote')?.textContent?.trim()),
+      href: e.querySelector('a.social-post-link')?.getAttribute('href') ?? '',
+    })),
+  );
+  if (got.map((g) => g.id).join() !== want.map((p) => p.id).join()) fail(`${where}: posts ${got.map((g) => g.id).join(', ')}; want ${want.map((p) => p.id).join(', ')} (newest first, the hidden one and the other page's left out)`);
+  for (const [i, p] of want.entries()) {
+    const g = got[i];
+    if (!g) continue;
+    const net = p.network === 'bluesky' ? 'Bluesky' : 'Farcaster';
+    if (!g.meta.includes(net) || !g.meta.includes(`@${p.handle}`) || !g.meta.includes(p.at.slice(0, 10))) fail(`${where}: ${p.id} does not show its network, @handle and date ("${g.meta}")`);
+    if (!g.quote) fail(`${where}: ${p.id}'s text is not shown as a quotation`);
+    if (g.href !== p.url) fail(`${where}: ${p.id} does not link to the post (${g.href})`);
+  }
+  if (await section.locator('img, iframe, video, script').count()) fail(`${where}: something from the networks is loaded in the section`);
+  if (w === 390) await checkFloors(page, where, 'light');
+}
+
 async function checkAiLabels() {
-  const { startReaderImagesDb, FIXTURE_IMAGES } = await import('./fixtures/reader-images-db');
+  const { startReaderImagesDb, FIXTURE_IMAGES, FIXTURE_HIDDEN_POST } = await import('./fixtures/reader-images-db');
   const data = await startReaderImagesDb(await freePort());
   const port = await freePort();
   // This checkout's production build, a second time, reading the local data.
   const server = spawn(process.execPath, [path.join('node_modules', 'next', 'dist', 'bin', 'next'), 'start', '-p', String(port)], {
-    env: { ...process.env, STUDIO_DATABASE_URL: data.url },
+    // "Posts that link here" (branch social-read) on, with the fixture in place of Farcaster and Bluesky.
+    env: { ...process.env, STUDIO_DATABASE_URL: data.url, SOCIAL_READ_PREVIEW: '1', SOCIAL_READ_FIXTURE: 'scripts/fixtures/social-posts.json' },
     stdio: 'ignore',
   });
   const LOCAL = `http://localhost:${port}`;
@@ -1077,6 +1138,9 @@ async function checkAiLabels() {
             ],
           },
         }),
+      );
+      await page.route('**/api/moderate/social', (r) =>
+        r.fulfill({ json: { on: true, ready: true, posts: [...SOCIAL_FIXTURE].sort((a, b) => (a.at < b.at ? 1 : -1)).map((p) => ({ ...p, hidden: p.id === FIXTURE_HIDDEN_POST })) } }),
       );
       const at = async (p: string) => {
         await page.goto(LOCAL + p, { waitUntil: 'networkidle' });
@@ -1168,9 +1232,23 @@ async function checkAiLabels() {
         }
       }
 
+      await checkSocialPosts(page, tag, w, at);
+
       await at('/moderate');
       await page.waitForSelector('.mq-media', { timeout: 10000 }).catch(() => fail(`/moderate ${tag}: the queue did not show`));
       await checkPictureLabels(page, `/moderate ${tag}`, 1);
+      // Posts that link here, for moderators (branch social-read): every post read, each with Hide and its reason.
+      await page.waitForSelector('[data-moderate-social] li', { timeout: 10000 }).catch(() => fail(`/moderate ${tag}: "Posts that link here" did not show for a moderator`));
+      {
+        const rows = page.locator('[data-moderate-social] li');
+        const n = await rows.count();
+        const hidden = await rows.filter({ hasText: 'hidden' }).count();
+        if (n !== SOCIAL_FIXTURE.length) fail(`/moderate ${tag}: ${n} posts listed for moderators, want all ${SOCIAL_FIXTURE.length} read`);
+        if (hidden !== 1) fail(`/moderate ${tag}: ${hidden} posts marked hidden, want 1`);
+        if ((await page.locator('[data-moderate-social] button').count()) !== 2 * (SOCIAL_FIXTURE.length - 1)) fail(`/moderate ${tag}: each post not yet hidden should have its two Hide buttons, and a hidden one none`);
+        if (await page.locator('[data-moderate-social] img').count()) fail(`/moderate ${tag}: a picture in the moderators' list of posts`);
+        if (w === 390) await checkFloors(page, `/moderate ${tag} (posts that link here)`, 'light');
+      }
 
       // The composer: a draft kept on this device, then the preview before publishing.
       await at('/chapter/1');

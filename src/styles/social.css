@@ -1,0 +1,15 @@
+/* "Posts that link here": after the page's own content, set apart by a rule; others' words, not this edition's. */
+.social-posts { margin: 48px auto 24px; padding: 20px 16px 0; max-width: var(--desk-measure); border-top: 1px solid var(--rule); }
+.social-posts-title { margin: 0 0 8px; color: var(--muted); font-weight: 400; }
+.social-posts-note { margin: 0 0 16px; font-family: var(--reading); font-size: 15px; line-height: 1.45; color: var(--muted); }
+.social-posts-note a { color: inherit; text-decoration: underline; }
+.social-posts-list { list-style: none; margin: 0; padding: 0; }
+.social-post { padding: 14px 0 6px; border-top: 1px solid var(--rule); }
+.social-post:first-child { border-top: 0; }
+.social-post-meta { margin: 0 0 6px; color: var(--muted); overflow-wrap: anywhere; }
+.social-post-text { margin: 0 0 4px; padding-left: 12px; border-left: 2px solid var(--rule); font-family: var(--reading); font-size: 16px; line-height: 1.45; color: var(--ink); white-space: pre-line; overflow-wrap: anywhere; }
+.social-post-link { display: inline-flex; align-items: center; min-height: 44px; color: var(--muted); }
+/* The address in the note is a link inside running text: it keeps the line's height (shell.css, WCAG 2.5.8). */
+@media (pointer: coarse) {
+  .social-posts-note a::after { content: none; }
+}

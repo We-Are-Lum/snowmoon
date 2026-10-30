@@ -34,6 +34,9 @@ export const FIXTURE_SHEETS = {
   ],
 };
 
+/** The fixture post hidden in studio.social_hidden (scripts/fixtures/social-posts.json). */
+export const FIXTURE_HIDDEN_POST = 'at://did:plc:fixturefixturefixture0001/app.bsky.feed.post/3mfixhidden';
+
 export async function startReaderImagesDb(port: number): Promise<{ url: string; stop: () => Promise<void> }> {
   const db = new PGlite();
   await db.exec(`create role anon nologin; create role authenticated nologin; create role service_role nologin bypassrls;`);
@@ -54,6 +57,9 @@ export async function startReaderImagesDb(port: number): Promise<{ url: string; 
     );
     await db.query(`insert into studio.anchors (version_id, work_id, chapter, start_idx, end_idx) values ($1,'snowmoon',1,$2,$3)`, [im.version, im.start, im.end]);
   }
+  // "Posts that link here" (branch social-read): one fixture post (scripts/fixtures/social-posts.json) is hidden, so
+  // check:ui sees that a hidden post is left out. Only while the draft migration is in supabase/migrations.
+  await db.exec(`insert into studio.social_hidden (network, post_id, by_fid, reason) values ('bluesky', '${FIXTURE_HIDDEN_POST}', 6786, 'writer_asked')`).catch(() => {});
   const server = new PGLiteSocketServer({ db, port, host: '127.0.0.1' });
   await server.start();
   return {

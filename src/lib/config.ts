@@ -343,6 +343,30 @@ export const MODERATOR_FIDS: readonly number[] = [6786];
 export const CONTACT_EMAIL = 'snowmoon@wearelum.xyz';
 
 /**
+ * "Posts that link here" (owner, 2026-10-29, branch social-read: "posts on Farcaster (Neynar) and Bluesky that link to a
+ * snowmoon.party page, shown newest first on that page, removable on request. Free tiers only, no posting, no bot
+ * account needed"). Read on our server, never in the reader's browser (P6a); newest first only (P5f); hidden per post
+ * by moderators (studio.social_hidden, NEXT_social_read.sql), or on the writer's request to CONTACT_EMAIL.
+ *
+ * `show` stays false until the owner has reread the Privacy §6/§7 lines that describe it (docs/legal/social-read-draft.md;
+ * P6p fails if it is on while §7 doesn't name Bluesky). While it is off, no page asks Neynar or Bluesky anything. Off a
+ * production deployment, SOCIAL_READ_PREVIEW=1 shows it for testing (check:ui does, with a fixture instead of the networks).
+ */
+export const SOCIAL_READ = {
+  show: false,
+  /** How long one look at each network is kept (seconds): each network is asked at most once per half hour. */
+  keepSeconds: 1800,
+  /** Posts asked of each network per look: one page, the most both allow. */
+  perLook: 100,
+  /** At most this many shown on a page, newest first. */
+  perPage: 20,
+  /** A post's text is cut to this many characters, with "…". */
+  maxChars: 500,
+  /** The hosts whose links count as this site's. */
+  hosts: ['snowmoon.party', 'www.snowmoon.party'],
+} as const;
+
+/**
  * Readers add an image to a passage: slice 1, labelled "Trial" (docs/proposals/add-an-image.md;
  * the owner's decisions of 2026-10-08, all as recommended except 11, 12, 18, 20 and 24).
  * Each number below is one of those decisions.

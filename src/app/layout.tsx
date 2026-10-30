@@ -13,6 +13,7 @@ import './globals.css';
 import '../styles/shell.css';
 import '../styles/images.css';
 import '../styles/designs.css';
+import '../styles/social.css';
 
 const url = appUrl();
 

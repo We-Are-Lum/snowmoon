@@ -1,4 +1,5 @@
 import { ModerateQueue } from '~/components/moderate-queue';
+import { ModerateSocial } from '~/components/moderate-social';
 import { StorageCheck } from '~/components/storage-check';
 import { IMAGE_WORDING as W } from '~/lib/images/wording';
 
@@ -11,6 +12,7 @@ export default function Moderate() {
       <h1>Reports</h1>
       <p>Reported images, with each reason, its count and the reporters&apos; notes. Who reported is never shown. Moderators can hide an image or dismiss its reports; nothing else.</p>
       <ModerateQueue />
+      <ModerateSocial />
       <StorageCheck />
       <p className="as-draft ic-draftline">{W.draftLine}</p>
     </div>

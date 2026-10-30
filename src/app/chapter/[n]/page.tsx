@@ -27,6 +27,7 @@ import { ADAPTATIONS } from '~/lib/config';
 // No "cited in" marks in the reader while ADAPTATIONS.inReader is off.
 const adaptationsCiting: typeof citing = (...a) => (ADAPTATIONS.inReader ? citing(...a) : []);
 import type { Block } from '~/lib/book';
+import { SocialPosts } from '~/components/social-posts';
 
 type Props = { params: Promise<{ n: string }> };
 
@@ -38,6 +39,9 @@ function displayOrder(blocks: Block[]): number[] {
 }
 
 export const dynamicParams = false;
+// Built once, then made again at most every half hour when read, for "Posts that link here" (branch social-read;
+// SOCIAL_READ.keepSeconds). Everything else on the page comes from committed files and is the same each time.
+export const revalidate = 1800;
 
 export function generateStaticParams() {
   return chapterNumbers().map((n) => ({ n: String(n) }));
@@ -250,6 +254,8 @@ export default async function ChapterPage({ params }: Props) {
       )}
       <QuoteShare chapter={n} images={images.map(({ id, idx, url, alt }) => ({ id, idx, url, alt }))} />
     </article>
+    {/* Others' posts that link to this chapter (branch social-read): after the chapter, apart from it. */}
+    <SocialPosts page={`/chapter/${n}`} />
     </ChapterView>
   );
 }

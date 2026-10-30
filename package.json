@@ -63,7 +63,8 @@
     "test:agents": "tsx --conditions=react-server scripts/test-agents.ts",
     "check:snap-live": "tsx scripts/check-snap-live.ts",
     "check:modal-vc": "tsx scripts/check-modal-vc.ts",
-    "test:illustration-review": "tsx --conditions=react-server scripts/test-illustration-review.ts"
+    "test:illustration-review": "tsx --conditions=react-server scripts/test-illustration-review.ts",
+    "test:social-read": "tsx --conditions=react-server scripts/test-social-read.ts"
   },
   "license": "AGPL-3.0-only",
   "description": "",

@@ -24,7 +24,7 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { DEFAULT_TEMPLATES } from '../src/templates';
 import { LiveScreen } from '../src/components/live-screen';
-import { AGENTS, CHAT, IMAGES, REPO_URL } from '../src/lib/config';
+import { AGENTS, CHAT, IMAGES, REPO_URL, SOCIAL_READ } from '../src/lib/config';
 import { NOTICE_REVIEW, currentNoticeItems, noticeKey } from '../src/lib/chat/notice';
 import { LEGAL, PRIVACY, TERMS, legalKey } from '../src/lib/legal';
 import { LEARN_TEXT } from '../src/lib/minpentai/learn-text';
@@ -1221,6 +1221,35 @@ add({
     files.push({ file: 'src/lib/images/data.ts', text: 'select e.* from studio.elements e left join studio.admin_picks p on p.element_id = e.id order by p.at' });
   },
 });
+// "Posts that link here" (branch social-read, owner 2026-10-29: "shown newest first"): others' posts are in the order
+// they were posted and nothing else. No count of likes, recasts, replies or followers, and no score, is read or kept.
+const SOCIAL_FILES = /^src\/lib\/social\/|^src\/components\/(social-posts|social-posts-view|moderate-social)\.tsx$|^src\/app\/api\/moderate\/social\//;
+const ENGAGEMENT = /\b(likes?_?count|likeCount|repost_?count|repostCount|recasts?_?count|replies?_?count|replyCount|quoteCount|reactions|follower_?count|followers|score|popular|trending)\b/i;
+add({
+  id: 'P5f',
+  principle: 5,
+  name: 'posts that link here are shown newest first and ordered by nothing else (no engagement counts or scores read)',
+  load: async () => walk('src', /\.tsx?$/).filter((f) => SOCIAL_FILES.test(f)).map((f) => ({ file: f, text: read(f) })),
+  run: (files) => {
+    const problems: string[] = [];
+    if (!files.some((f: { file: string }) => f.file === 'src/lib/social/parse.ts')) problems.push('src/lib/social/parse.ts: missing');
+    for (const { file, text } of files as { file: string; text: string }[]) {
+      // Code only: what the comments say about what is never kept is not reading it.
+      const code = text.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:])\/\/.*$/gm, '$1');
+      for (const m of code.matchAll(/\.sort\(([^)]*)\)/g)) if (m[1].trim() !== 'newestFirst') problems.push(`${file}: sorts by something other than newestFirst: ${m[0].slice(0, 80)}`);
+      if (/order by/i.test(code)) problems.push(`${file}: orders in SQL; posts are ordered only by newestFirst`);
+      const e = code.match(ENGAGEMENT);
+      if (e) problems.push(`${file}: reads "${e[0]}"; nothing about a post's reach is read or kept`);
+    }
+    const parse = (files as { file: string; text: string }[]).find((f) => f.file === 'src/lib/social/parse.ts');
+    if (parse && !/export function newestFirst\(a: SocialPost, b: SocialPost\): number \{\s*return a\.at < b\.at \? 1 : a\.at > b\.at \? -1 : a\.id < b\.id \? -1 : a\.id > b\.id \? 1 : 0;\s*\}/.test(parse.text))
+      problems.push('src/lib/social/parse.ts: newestFirst is not "by time, newest first, then by id"');
+    return problems;
+  },
+  plant: (files) => {
+    files.push({ file: 'src/lib/social/planted.ts', text: 'export const top = (posts) => posts.sort((a, b) => b.likeCount - a.likeCount);' });
+  },
+});
 add({
   id: 'P5c',
   principle: 5,
@@ -1502,6 +1531,8 @@ const SERVICES: [string, RegExp][] = [
   // Owner's Privacy wording of 2026-10-10 names these two as well.
   ['ntfy', /\bntfy\b/g],
   ['Spotify', /\bSpotify\b/g],
+  // "Posts that link here" (branch social-read, 2026-10-29): Bluesky's public API, once the owner's Privacy words name it.
+  ['Bluesky', /\bBluesky\b/g],
 ];
 /** At Generate, the image prompt goes to Groq (the check; through Vercel AI Gateway when Groq is busy) and
  *  fal.ai (the image), the FID to Neynar (the gate). The gateway is named on the consent screen too (owner, 2026-10-10). */
@@ -1660,6 +1691,32 @@ add({
       : [],
   plant: (c) => {
     c.public = true;
+  },
+});
+
+// P6p: "Posts that link here" (branch social-read, 2026-10-29) asks Neynar and Bluesky on our server for posts that link
+// to the site, and shows them on its pages. It is on only once the owner's Privacy words say so: §7 names Bluesky, and
+// the page names the section ("link here"). Legal texts describe today (owner): they ship with the feature, never after.
+add({
+  id: 'P6p',
+  principle: 6,
+  name: '"Posts that link here" is on (SOCIAL_READ.show) only while the Privacy page names Bluesky and says what it shows',
+  load: async () => ({
+    show: SOCIAL_READ.show as boolean,
+    s7: (PRIVACY.sections.find((s) => s.n === 7)?.body ?? []).flat().join(' '),
+    all: PRIVACY.sections.flatMap((s) => s.body.flat()).join(' '),
+  }),
+  run: (c) => {
+    if (!c.show) return [];
+    const problems: string[] = [];
+    if (!/\bBluesky\b/.test(c.s7)) problems.push('SOCIAL_READ.show (src/lib/config.ts) is on, but Privacy §7 does not name Bluesky; reread docs/legal/social-read-draft.md with the owner first, or keep it off');
+    if (!/link(s)? (to )?(a page )?here|Posts that link here/i.test(c.all)) problems.push('SOCIAL_READ.show is on, but the Privacy page does not say that posts linking here are shown');
+    return problems;
+  },
+  plant: (c) => {
+    c.show = true;
+    c.s7 = 'Neynar receives your Farcaster ID.';
+    c.all = c.s7;
   },
 });
 
