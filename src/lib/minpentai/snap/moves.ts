@@ -46,7 +46,7 @@ export function encMatch(seed: number, turns: P[][]): string {
 }
 
 /**
- * The shape studio.mp_snap_resume's check accepts (NEXT_minpentai_resume_moves_check.sql), kept
+ * The shape studio.mp_snap_resume's check accepts (0029_minpentai_resume_moves_check.sql), kept
  * identical here so decMatch accepts exactly what the database can store: at most 2012 characters
  * (a 7-character seed, a dot, 3 digits, a dot and 2000 characters of placements), with no bounded
  * repeat over 255, which Postgres refuses (the first check, 0025, said {0,2000} and so failed on every

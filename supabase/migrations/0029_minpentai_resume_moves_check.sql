@@ -1,5 +1,7 @@
--- NEXT_minpentai_resume_moves_check.sql — fix studio.mp_snap_resume's moves check (0025).
--- DRAFT: not applied. Takes its number at merge (owner's standing rule, 2026-10-22).
+-- 0029_minpentai_resume_moves_check.sql — fix studio.mp_snap_resume's moves check (0025).
+-- APPLIED by the owner on 2026-10-30. Checked read-only afterwards as studio_writer: the constraint is
+-- `length(moves) <= 2012 and moves ~ '^[0-9a-z]{1,7}\.[0-9]{1,3}\.[A-Za-z0-9_~-]*$'`, and the table holds
+-- 0 rows (no test row left). Numbered 0029 at merge (main had 0028; no branch held 0029).
 --
 -- Why: 0025's check said `[A-Za-z0-9_~-]{0,2000}`. Postgres refuses a bounded repeat over 255
 -- ("invalid regular expression: invalid repetition count(s)"), and a check constraint's regex is

@@ -29,6 +29,8 @@ import { GET as cardRoute } from '../src/app/api/minpentai-challenge-card/route'
 import { sender } from '../src/lib/minpentai/snap/auth';
 import nextConfig from '../next.config';
 import { prefersHtml, wantsSnap } from '../src/lib/minpentai/snap/negotiate';
+import { NextRequest } from 'next/server';
+import { middleware, config as mwConfig } from '../src/middleware';
 import { CHALLENGE_PATH, decChallenge, splitChallenge } from '../src/lib/minpentai/snap/challenge';
 import { settings, versionOf } from '../src/lib/minpentai/snap/versions';
 
@@ -563,10 +565,10 @@ async function main() {
     assert.ok(plain.headers.get('content-type')?.startsWith('text/html'), '/snap/minpentai itself unchanged');
   });
 
-  check('Resume: decMatch accepts exactly what studio.mp_snap_resume\'s check accepts (NEXT_minpentai_resume_moves_check.sql, run in PGlite), and a real saved match round-trips', async () => {
+  check('Resume: decMatch accepts exactly what studio.mp_snap_resume\'s check accepts (0029_minpentai_resume_moves_check.sql, run in PGlite), and a real saved match round-trips', async () => {
     const { PGlite } = await import('@electric-sql/pglite');
     const pg = new PGlite();
-    const sqlFile = readFileSync(new URL('../supabase/migrations/NEXT_minpentai_resume_moves_check.sql', import.meta.url), 'utf8');
+    const sqlFile = readFileSync(new URL('../supabase/migrations/0029_minpentai_resume_moves_check.sql', import.meta.url), 'utf8');
     const expr = /add constraint mp_snap_resume_moves_check\s+check \(([\s\S]+?)\);/.exec(sqlFile)![1];
     await pg.exec(`create table r (moves text not null constraint mp_snap_resume_moves_check check (${expr}))`);
     const dbOk = async (m: string) => { try { await pg.query('insert into r (moves) values ($1)', [m]); await pg.exec('delete from r'); return true; } catch { return false; } };
@@ -595,6 +597,30 @@ async function main() {
     for (const m of edges) assert.equal(movesShapeOk(m), await dbOk(m), `shape gate and database disagree on ${JSON.stringify(m.slice(0, 30))} (length ${m.length})`);
     assert.ok(movesShapeOk(`a.1.${body(2008)}`) && !movesShapeOk(`a.1.${body(2009)}`) && MOVES_MAX === 2012, 'the 2012-character limit');
     await pg.close();
+  });
+
+  check('the diagnostic middleware logs the four snap links and routes nothing new: only /minpentai/play GETs, as before', () => {
+    assert.deepEqual(mwConfig.matcher, ['/minpentai', '/minpentai/play', '/minpentai/c/:seg', '/snap/minpentai']);
+    const SNAPM = 'application/vnd.farcaster.snap+json';
+    const heads: Record<string, string>[] = [{ accept: SNAPM }, { accept: '*/*' }, { accept: 'text/html,*/*;q=0.8' }, {}, { 'x-snap-payload': 'e30', origin: 'https://farcaster.xyz' }, { 'user-agent': 'Twitterbot/1.0', accept: '*/*' }];
+    const log = console.log; const lines: string[] = []; console.log = (s: string) => lines.push(s);
+    try {
+      for (const path of ['/minpentai', '/minpentai/c/vu207s.0.cost3._.C-49-7-0-55.c2Nnz7njlDZWxkdy8L6JcI', '/snap/minpentai'])
+        for (const method of ['GET', 'HEAD', 'POST', 'OPTIONS']) for (const headers of heads) {
+          const r = middleware(new NextRequest(`https://snowmoon.party${path}`, { method, headers }));
+          assert.equal(r.headers.get('x-middleware-rewrite'), null, `${method} ${path} must not be rerouted`);
+        }
+      // /minpentai/play: exactly today's rule.
+      for (const headers of heads) {
+        const r = middleware(new NextRequest('https://snowmoon.party/minpentai/play', { headers }));
+        const want = wantsSnap(headers.accept ?? null, headers['user-agent'] ?? null);
+        assert.equal(!!r.headers.get('x-middleware-rewrite')?.endsWith('/snap/minpentai'), want, JSON.stringify(headers));
+      }
+      assert.equal(middleware(new NextRequest('https://snowmoon.party/minpentai/play', { method: 'POST', headers: { accept: '*/*' } })).headers.get('x-middleware-rewrite'), null, 'POST to /minpentai/play passes through');
+    } finally { console.log = log; }
+    const one = JSON.parse(lines.find((l) => l.includes('"/minpentai/c/*"') && l.includes('"OPTIONS"'))!);
+    assert.deepEqual(Object.keys(one), ['snapLog', 'method', 'snap', 'accept', 'payload', 'origin', 'mode', 'ua']);
+    assert.ok(!lines.some((l) => /cookie|authorization|x-snap-payload":"/i.test(l)), 'no cookies, tokens or payloads logged');
   });
 
   await Promise.all(pending);
