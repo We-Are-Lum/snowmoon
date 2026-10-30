@@ -7,7 +7,7 @@
  * the turn to act (the board), the run (the 12 steps as a GIF, run.ts), resign, and the result.
  */
 import { randomInt } from 'node:crypto';
-import { D4, D8, K, RULES, W, XY, inb, lit, type RuleId } from '../play-game/game';
+import { D4, D8, K, MAXS, RULES, W, XY, inb, lit, type RuleId } from '../play-game/game';
 import { play, refusal, type Played } from './match';
 import { LABELS } from '../../labels';
 import { CHALLENGE_PATH, LEVELS, RULE_SHORT, challengeLine, challengeText, decResult, encChallenge, encResult, outcome, type Challenge } from './challenge';
@@ -75,7 +75,7 @@ const TUTORIAL: [string, string[]][] = [
   ]],
   ['Turns', [
     'You get 8 points a turn and place within 3 squares of your towers. Both sides place at once, unseen; then the board runs 12 steps on its own.',
-    'Lose every tower and you lose; at step 96, most towers wins. Each match also draws one of four invented extras, such as diagonal gliders.',
+    `Lose every tower and you lose; at step ${MAXS}, most towers wins. Each match also draws one of four invented extras, such as diagonal gliders.`,
   ]],
   ['Playing here', [
     'Pick a piece (→ glider, ■ square, ◎ tower), then tap a lit square. Pink arrows appear around a new glider: tap one to aim it, or tap the glider to turn it (that also aims off the edge). Tap a square or tower again to take it back.',

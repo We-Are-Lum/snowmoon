@@ -275,6 +275,7 @@ async function main() {
     assert.equal(quit.keep, 'drop');
     for (const k of ['yes', 'no', 'maybe'] as const) valid(intro(H, '', k), `intro resume ${k}`);
     assert.ok(intro(H, '', 'yes').ui.elements.resume, 'Resume shown when kept');
+    assert.ok(JSON.stringify(intro(H, '')).includes('at step 120, most towers wins'), "the rules card says Play's step limit, 120 (draft 2)");
     assert.ok(!intro(H, '', 'no').ui.elements.resume, 'no Resume when nothing kept');
   });
 
