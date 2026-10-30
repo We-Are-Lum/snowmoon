@@ -12,6 +12,7 @@ import { addNote, draftPiece, feedbackFor, notesOn, pieceVersions, piecesOf, rev
 import { openRequests, personWords } from './requests';
 import { addSuggestion, suggestionsOf } from './suggestions';
 import { addDirection, directionOf, findLine, rewriteLine } from './direction';
+import { ATTACH_SCHEMA, STYLE_SCHEMA, draftPicture, draftPlace, draftSheet, draftStyle } from './pictures';
 import { changeTiming, listTakes, logGap, markSpeaking, recordFailure, requestVideo, setCamera, swapTake, tryFrame, frameEstimate, videoEstimate } from './edits';
 
 /**
@@ -206,6 +207,42 @@ const WRITE: AgentTool[] = [
       only(args, ['character', 'title', 'description', 'based_on', 'answering']);
       const b = characterBody(args, agent.person, await personWords(agent.person));
       return { ...(await draftPiece(agent, 'character', title(args.title ?? `${String(args.character)}: a new version`), null, b.body, b.words, undefined, answeringOf(args))), status: 'draft' };
+    },
+  },
+  {
+    name: 'draft_picture', title: 'Draft a picture', scope: 'drafts', writes: true, counts: 'drafts',
+    description: 'Draft a picture attached to one thing (a book moment, a shot, a reference, or a glossary term), in the style your person chose: style is required, and if they haven\'t named one, ask them. prompt is your description of what to draw (never story words); sheets adds a character\'s or place\'s invented look from its sheet, labelled as the edition\'s (don\'t repeat it in prompt). Saved as a private draft with the exact prompt and an estimate; the site makes it only when your person taps Make it on their dashboard.',
+    inputSchema: { type: 'object', properties: { attach: ATTACH_SCHEMA, prompt: { type: 'string', description: 'What to draw, up to 600 characters.' }, style: STYLE_SCHEMA, sheets: { type: 'object', properties: { characters: { type: 'array', items: { type: 'string' }, maxItems: 3 }, place: { type: 'string' } }, additionalProperties: false }, title: { type: 'string' }, answering: ANSWERING }, required: ['attach', 'prompt', 'style'], additionalProperties: false },
+    run: async (agent, args) => {
+      only(args, ['attach', 'prompt', 'style', 'sheets', 'title', 'answering']);
+      return draftPicture(agent, args);
+    },
+  },
+  {
+    name: 'draft_sheet', title: 'Draft a character sheet picture', scope: 'drafts', writes: true, counts: 'drafts',
+    description: 'Draft the front view of a character sheet, in the style your person chose (required; ask if they haven\'t said), from a look in words: one of your person\'s character versions (from_version, from draft_character_version) or look. Attached to the character\'s reference unless you give attach. A private draft with its estimate until your person taps Make it.',
+    inputSchema: { type: 'object', properties: { character: { type: 'string', description: 'The character\'s slug (zei, bai…).' }, style: STYLE_SCHEMA, from_version: { type: 'string' }, look: { type: 'string' }, attach: ATTACH_SCHEMA, title: { type: 'string' }, answering: ANSWERING }, required: ['character', 'style'], additionalProperties: false },
+    run: async (agent, args) => {
+      only(args, ['character', 'style', 'from_version', 'look', 'attach', 'title', 'answering']);
+      return draftSheet(agent, args);
+    },
+  },
+  {
+    name: 'draft_place', title: 'Draft a place picture', scope: 'drafts', writes: true, counts: 'drafts',
+    description: 'Draft a wide view of a place, in the style your person chose (required; ask if they haven\'t said), from its look in words: one of the book\'s places (place, a sheet slug) or a new one (name, with attach). A private draft with its estimate until your person taps Make it.',
+    inputSchema: { type: 'object', properties: { place: { type: 'string' }, name: { type: 'string' }, look: { type: 'string' }, style: STYLE_SCHEMA, attach: ATTACH_SCHEMA, title: { type: 'string' }, answering: ANSWERING }, required: ['look', 'style'], additionalProperties: false },
+    run: async (agent, args) => {
+      only(args, ['place', 'name', 'look', 'style', 'attach', 'title', 'answering']);
+      return draftPlace(agent, args);
+    },
+  },
+  {
+    name: 'draft_style', title: 'Draft a style', scope: 'drafts', writes: true, counts: 'drafts',
+    description: 'Draft a new style in words (name and text, how pictures in it look) and one sample picture of it on the site\'s fixed sample subject. The style is its own text, so it takes no style argument. A private draft with its estimate until your person taps Make it.',
+    inputSchema: { type: 'object', properties: { name: { type: 'string' }, text: { type: 'string' }, attach: ATTACH_SCHEMA, title: { type: 'string' }, answering: ANSWERING }, required: ['name', 'text'], additionalProperties: false },
+    run: async (agent, args) => {
+      only(args, ['name', 'text', 'attach', 'title', 'answering', 'style']);
+      return draftStyle(agent, args);
     },
   },
   {

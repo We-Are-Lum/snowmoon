@@ -49,6 +49,8 @@ export const AGENT_WORDING = {
     /** DRAFT (coding agent, 2026-10-22): a wallet account's frame, at the exact price it is charged. */
     makeFramePaid: (usd: string) => `Make it · $${usd} from your balance`,
     makeVideo: (usd: number) => `Run the test (about $${usd.toFixed(3)})`,
+    /** DRAFT (coding agent, 2026-10-29): a picture, sheet, place or style draft. */
+    makePicture: (usd: number) => `Make it (up to $${usd.toFixed(3)})`,
     making: 'Making it…',
     spent: (usd: number) => `Made, for $${usd.toFixed(3)}.`,
     keep: 'Keep',

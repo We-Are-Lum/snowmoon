@@ -44,7 +44,7 @@ export async function paidPicture(
   sql: Sql,
   fid: number,
   request: Request,
-  job: { checkText: string; spend?: Spend; make: () => Promise<Made> },
+  job: { checkText: string; spend?: Spend; make: () => Promise<Made>; /** The local tests' stand-in for the prompt check (never on Vercel; see agents/approve.ts). */ check?: (text: string) => Promise<Awaited<ReturnType<typeof checkPrompt>>> },
 ): Promise<Paid> {
   const spend = job.spend;
   const funded = fundedBy(fid);
@@ -58,7 +58,7 @@ export async function paidPicture(
   }
   let guard;
   try {
-    guard = await checkPrompt(job.checkText, request);
+    guard = job.check && !process.env.VERCEL ? await job.check(job.checkText) : await checkPrompt(job.checkText, request);
   } catch (e) {
     await settle(sql, {}, spend, funded);
     console.error('image prompt check failed', (e as Error).name);

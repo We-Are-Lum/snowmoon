@@ -456,6 +456,52 @@ try {
   const editList = ((await mcp(BASE, edA, 'tools/list')).body?.result?.tools ?? []).map((t) => t.name);
   check('E13 still nothing that publishes, spends on its own, or pays', ['try_frame', 'swap_take', 'change_timing', 'mark_speaking', 'request_video_test', 'log_gap'].every((n) => editList.includes(n)) && !editList.some((n) => /publish|spend|pay|approve|run/i.test(n)));
 
+  console.log('P  pictures, sheets, places and styles (Plan A part 2): attached to one thing, in a chosen style, made only on Make it');
+  {
+    const noStyle = await tool(BASE, edA, 'draft_picture', { attach: { moment: 'c4-b70' }, prompt: 'Bai walks into the room, grinning.' });
+    const badStyle = await tool(BASE, edA, 'draft_picture', { attach: { moment: 'c4-b70' }, prompt: 'Bai walks in.', style: 'cinematic, high-detail' });
+    check('P1 a picture with no style, or one that isn\'t offered, is refused, and the agent is told to ask its person', !noStyle.ok && /style is required: ask your person/.test(noStyle.error ?? '') && /"Techno vistas"/.test(noStyle.error ?? '') && !badStyle.ok && /Ask your person/.test(badStyle.error ?? ''), `${noStyle.error} | ${badStyle.error}`);
+    const two = await tool(BASE, edA, 'draft_picture', { attach: { moment: 'c4-b70', glossary: 'keeper' }, prompt: 'x', style: 'Techno vistas' });
+    const noBlock = await tool(BASE, edA, 'draft_picture', { attach: { moment: 'c4-b99999' }, prompt: 'x', style: 'Techno vistas' });
+    const noRef = await tool(BASE, edA, 'draft_picture', { attach: { reference: { kind: 'place', slug: 'no-such-place' } }, prompt: 'x', style: 'Techno vistas' });
+    const noShot = await tool(BASE, edA, 'draft_picture', { attach: { shot: { adaptation: 1, version: 2, shot: 'no-such-shot' } }, prompt: 'x', style: 'Techno vistas' });
+    const noTerm = await tool(BASE, edA, 'draft_picture', { attach: { glossary: 'minpentai-arena-x' }, prompt: 'x', style: 'Techno vistas' });
+    check('P2 attach takes exactly one target, and each must exist (a block, a sheet, a shot, a glossary term)', [two, noBlock, noRef, noShot, noTerm].every((r) => !r.ok) && /exactly one/.test(two.error ?? '') && /no block/.test(noBlock.error ?? '') && /no place sheet/.test(noRef.error ?? '') && /no shot "no-such-shot"/.test(noShot.error ?? '') && /no glossary term/.test(noTerm.error ?? ''), [two, noBlock, noRef, noShot, noTerm].map((r) => r.error).join(' | '));
+    const blocked = await tool(BASE, edA, 'draft_picture', { attach: { moment: 'c4-b70' }, prompt: 'A portrait of Vitalik Buterin.', style: 'Techno vistas' });
+    check('P3 a prompt naming someone on the blocked list is refused before any draft', !blocked.ok && /No real people/.test(blocked.error ?? ''), blocked.error ?? '');
+    const desc = 'A tall young woman strides in through a sliding door, grinning, a shopping bag in one hand.';
+    const pic = await tool(BASE, edA, 'draft_picture', { attach: { moment: 'c4-b70' }, prompt: desc, style: 'techno vistas', sheets: { characters: ['bai'] } });
+    const pb = pic.out?.version ? (await S.pg.query<{ body: { prompt: string; parts: { part: string; by: string; text: string }[]; style: { name: string }; attach: { moment: string }; estimate_usd: number; price_usd?: number } }>(`select body from studio.piece_versions where id = $1`, [pic.out.version])).rows[0]?.body : null;
+    check('P4 a picture draft keeps the exact prompt in parts, each with whose words: the agent\'s description, the style, the sheet\'s invented look (the edition\'s, not the book), the site\'s no-words line; an estimate, a wallet\'s exact price', pic.ok && !!pb && pb.prompt.startsWith(desc) && pb.attach.moment === 'c4-b70' && pb.style.name === 'Techno vistas' && pb.parts.map((x) => x.part.split(':')[0]).join(',') === 'description,style,sheet,no-words line' && /the agent/.test(pb.parts[0].by) && /invented look/.test(pb.parts[2].by) && pb.parts.every((x) => pb.prompt.includes(x.text)) && pb.estimate_usd > 0 && typeof pb.price_usd === 'number', pic.error ?? JSON.stringify(pb));
+    const early = await asPerson(people.A.token, '/api/drafts', { method: 'POST', body: JSON.stringify({ what: 'version', id: pic.out.version, action: 'keep' }) });
+    check('P5 a picture can\'t be published before it is made (no recipe yet)', early.status === 404, String(early.status));
+    const prun = await asPerson(people.A.token, '/api/drafts', { method: 'POST', body: JSON.stringify({ what: 'version', id: pic.out.version, action: 'run' }) });
+    const pimg = await asPerson(people.A.token, `/api/pieces/image/${pic.out.version}`);
+    const anonImg = await fetch(`${BASE}/api/pieces/image/${pic.out.version}`);
+    const made = (await S.pg.query<{ made: Record<string, unknown>; image_sha256: string | null }>(`select made, image_sha256 from studio.piece_versions where id = $1`, [pic.out.version])).rows[0];
+    const recipeKeys = ['model', 'request_id', 'seed', 'settings', 'prompt', 'parts', 'style', 'attach', 'inputs', 'cost_usd', 'drafted_by', 'approved_by', 'approved_at'];
+    check('P6 Make it makes it through Pictures\' pipeline (stood in), kept private, with the full recipe: model, request, seed, settings, prompt parts, style, target, inputs, cost, who drafted and who approved', prun.ok && pimg.ok && pimg.headers.get('content-type') === 'image/jpeg' && anonImg.status === 404 && !!made?.image_sha256 && recipeKeys.every((k) => k in made.made) && (made.made.model as { id: string; licence: string }).id === 'z-image-turbo' && String(made.made.drafted_by).startsWith('Claude, agent of') && made.made.prompt === pb?.prompt, `${prun.status} ${JSON.stringify(made?.made)}`);
+    const kept = await asPerson(people.A.token, '/api/drafts', { method: 'POST', body: JSON.stringify({ what: 'version', id: pic.out.version, action: 'keep' }) });
+    check('P7 once made, the person can publish it', kept.ok, String(kept.status));
+    const bad = await tool(BASE, edA, 'draft_picture', { attach: { glossary: 'keeper' }, prompt: 'A TEST-BLOCK booth in a hall.', style: 'Techno vistas' });
+    const badRun = await asPerson(people.A.token, '/api/drafts', { method: 'POST', body: JSON.stringify({ what: 'version', id: bad.out.version, action: 'run' }) });
+    const badRow = (await S.pg.query<{ approved_at: Date | null; image_key: string | null }>(`select approved_at, image_key from studio.piece_versions where id = $1`, [bad.out.version])).rows[0];
+    check('P8 the prompt check still runs on Make it: a refused prompt makes nothing, and the draft can be tried again', bad.ok && badRun.status === 422 && !!badRow && badRow.approved_at === null && badRow.image_key === null, `${bad.error ?? ''} ${badRun.status} ${JSON.stringify(badRow)}`);
+    const cv = await tool(BASE, edA, 'draft_character_version', { character: 'bai', description: 'Tall, dark brown skin, a high puffy ponytail with magenta ends, a lime-green shell vest.' });
+    const sheetNoStyle = await tool(BASE, edA, 'draft_sheet', { character: 'bai', from_version: cv.out?.version });
+    const sheet = await tool(BASE, edA, 'draft_sheet', { character: 'bai', from_version: cv.out?.version, style: 'Techno vistas' });
+    const sb = sheet.out?.version ? (await S.pg.query<{ body: { prompt: string; attach: { reference: { kind: string; slug: string } }; subject: { from_version: string } } }>(`select body from studio.piece_versions where id = $1`, [sheet.out.version])).rows[0]?.body : null;
+    check('P9 draft_sheet: from the person\'s character version, in a chosen style, the site\'s front view line first, attached to the character\'s reference', !sheetNoStyle.ok && sheet.ok && !!sb && sb.prompt.startsWith('Character reference picture') && sb.prompt.includes('lime-green shell vest') && sb.attach.reference.slug === 'bai' && sb.subject.from_version === cv.out.version, `${sheetNoStyle.error} | ${sheet.error ?? JSON.stringify(sb)}`);
+    const placeNew = await tool(BASE, edA, 'draft_place', { name: 'A rooftop garden', look: 'Raised beds, solar sails, a view over the city.', style: 'Techno vistas' });
+    const place = await tool(BASE, edA, 'draft_place', { place: 'minpentai-arena', look: 'A vast dark hall inside a mountain pyramid, steep tiers of seats.', style: 'Techno vistas' });
+    check('P10 draft_place: a book place attaches to its sheet; a new place must say what it belongs to', !placeNew.ok && /needs attach/.test(placeNew.error ?? '') && place.ok && /^Place reference picture/.test(String(place.out.prompt)), `${placeNew.error} | ${place.error ?? ''}`);
+    const styleWithStyle = await tool(BASE, edA, 'draft_style', { name: 'Ink wash', text: 'Loose ink wash, grey and teal.', style: 'Techno vistas' });
+    const style = await tool(BASE, edA, 'draft_style', { name: 'Ink wash', text: 'Loose ink wash, grey and teal, soft edges, paper texture.' });
+    check('P11 draft_style: its own words are the style (it takes no other), with one sample on the site\'s fixed subject', !styleWithStyle.ok && /its own style/.test(styleWithStyle.error ?? '') && style.ok && String(style.out.prompt).startsWith('A wide street with tall trees'), `${styleWithStyle.error} | ${style.error ?? ''}`);
+    const list = ((await mcp(BASE, edA, 'tools/list')).body?.result?.tools ?? []) as unknown as { name: string; inputSchema: { required?: string[] } }[];
+    check('P12 the picture tools are listed, style required on each that takes one', ['draft_picture', 'draft_sheet', 'draft_place'].every((n) => list.find((t) => t.name === n)?.inputSchema.required?.includes('style')) && !!list.find((t) => t.name === 'draft_style'));
+  }
+
   console.log('N  direction notes and line rewrites (the person’s words exactly; never a guessed shot)');
   {
     const said = 'Eyes on the pieces, not on Zei —  he doesn’t look up until “toast”.';
@@ -660,6 +706,8 @@ try {
   const realAgentRoutes = ['src/app/mcp/route.ts', 'src/app/api/agent/v1/[tool]/route.ts', 'src/app/api/oauth/register/route.ts', 'src/app/api/oauth/token/route.ts', 'src/app/api/oauth/revoke/route.ts', 'src/app/api/agents/wallet/link/route.ts', 'src/app/api/agents/wallet/token/route.ts'].map(real);
   check('G1 the real agent routes (/mcp, REST POST) and the agent sign-in routes pass', p(realAgentRoutes).length === 0, p(realAgentRoutes).join('; '));
   check('G2 the real agent tools are draft-only (no publish, keep or spend tool; writers write drafts)', agentToolProblems(readReal).length === 0, agentToolProblems(readReal).join('; '));
+  const viaPictures = readWith({ 'src/lib/agents/pictures.ts': readReal('src/lib/agents/pictures.ts').replace("import { sql, type Agent } from './core';", "import { sql, type Agent } from './core';\nimport { runApproved } from './approve';") });
+  check('G2b a tool module that reaches the spending code (./approve) through another module fails', agentToolProblems(viaPictures).some((x) => x.includes('pictures.ts: imports ./approve')), agentToolProblems(viaPictures).join('; '));
   check('G3 a planted draft-only agent route passes', p([draftOnly]).length === 0, p([draftOnly]).join('; '));
   check('G4 an agent route that can publish fails', p([publishes]).some((x) => x.includes('can publish or keep')), p([publishes]).join('; '));
   check('G5 an agent route that can keep fails', p([keeps]).some((x) => x.includes('can publish or keep') && x.includes('keep')), p([keeps]).join('; '));

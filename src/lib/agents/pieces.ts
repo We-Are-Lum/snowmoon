@@ -19,7 +19,7 @@ import { editorData } from '../agent/data';
  * until their person publishes it). Mentions resolve to people, or to a person's agents.
  */
 type Sql = postgres.Sql;
-export type Kind = 'idea' | 'storyboard' | 'frames' | 'character' | 'image' | 'edit';
+export type Kind = 'idea' | 'storyboard' | 'frames' | 'character' | 'image' | 'edit' | 'picture' | 'sheet' | 'place' | 'style';
 
 export interface Credit {
   version: string;
@@ -237,7 +237,11 @@ export async function decide(person: number, what: 'version' | 'note', id: strin
     const rows = await s`update studio.piece_versions v set status = ${status},
         published_at = case when ${status} = 'published' then now() else null end,
         published_by = case when ${status} = 'published' then ${person}::bigint else null end
-      from studio.pieces p where v.id = ${id} and p.id = v.piece_id and p.person = ${person} and v.status = 'draft' returning v.id`;
+      from studio.pieces p where v.id = ${id} and p.id = v.piece_id and p.person = ${person} and v.status = 'draft'
+        -- A picture, sheet, place or style is published only once made, with its whole recipe (Plan A part 2).
+        and (${status} <> 'published' or p.kind not in ('picture', 'sheet', 'place', 'style')
+          or (v.image_key is not null and v.image_sha256 is not null and v.made ?& array['model', 'request_id', 'prompt', 'parts', 'attach', 'cost_usd', 'drafted_by', 'approved_by', 'approved_at']))
+      returning v.id`;
     return rows.length > 0;
   }
   const rows = await s`update studio.notes set status = ${status}, published_at = case when ${status} = 'published' then now() else null end

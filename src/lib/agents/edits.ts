@@ -104,7 +104,7 @@ export async function setCamera(agent: Agent, args: Record<string, unknown>) {
 }
 
 /** "tilt down 20°", "pan left 15 degrees", "closer", "wider", "higher", "lower": anything else is refused, never guessed. */
-function parseMove(w: unknown, i: number): CameraMove {
+export function parseMove(w: unknown, i: number): CameraMove {
   const t = typeof w === 'string' ? w.trim().toLowerCase().replace(/\s+/g, ' ') : '';
   const m = /^(tilt) (up|down) (\d{1,2}(?:\.\d)?) ?(?:°|deg|degrees)?$|^(pan) (left|right) (\d{1,3}(?:\.\d)?) ?(?:°|deg|degrees)?$/.exec(t);
   if (m) {

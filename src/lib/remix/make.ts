@@ -68,7 +68,7 @@ export type Generated =
   | { ok: true; made: Made; guard: GuardResult; left: number }
   | { ok: false; status: number; error: string; extra: Record<string, unknown> };
 
-async function fakeGuard(text: string): Promise<GuardResult> {
+export async function fakeGuard(text: string): Promise<GuardResult> {
   return { allow: !text.includes('TEST-BLOCK'), category: text.includes('TEST-BLOCK') ? 'test' : null, costUsd: 0, provider: 'test' } as GuardResult;
 }
 async function fakeMake(prompt: string, pictures: RemixPicture[]): Promise<Made> {

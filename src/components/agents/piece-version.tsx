@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { PICTURE_KINDS, type PictureKind } from '~/lib/agents/picture-kinds';
 import { AGENT_WORDING } from '~/lib/agents/wording';
 import type { Credit, NoteView, Stamp, VersionView } from '~/lib/agents/pieces';
 
@@ -128,6 +129,36 @@ function EditChange({ v, mediaSrc }: { v: VersionView; mediaSrc?: string | null 
   );
 }
 
+type PictureDraftBody = { attach: Record<string, unknown>; style: { name: string; by: string } | null; parts: { part: string; by: string; text: string }[]; prompt: string; estimate_usd: number; subject?: { kind: string; name: string } };
+
+/** What a picture draft is attached to, said plainly. */
+function attachSay(a: Record<string, unknown>): { text: string; href: string | null } {
+  if (typeof a.moment === 'string') return { text: `the book, ${a.moment}`, href: blockHref(a.moment) };
+  if (typeof a.shot === 'string') return { text: `shot ${a.shot} of adaptation ${String(a.adaptation)}, version ${String(a.version)}`, href: null };
+  const r = a.reference as { kind: string; slug: string } | undefined;
+  if (r) return { text: `the ${r.kind} reference “${r.slug}”`, href: r.kind === 'style' ? null : `/references/designs/${r.kind}/${r.slug}` };
+  if (typeof a.glossary === 'string') return { text: `the glossary term “${a.glossary}”`, href: `/references/glossary/${a.glossary}` };
+  return { text: 'nothing', href: null };
+}
+
+/** A picture, sheet, place or style draft: what it is for, its style, and (once made) the picture. */
+function PictureDraft({ v, imageSrc }: { v: VersionView; imageSrc?: string | null }) {
+  const b = v.body as unknown as PictureDraftBody;
+  const at = attachSay(b.attach ?? {});
+  return (
+    <div className="piece-edit">
+      {imageSrc && (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img className="piece-image" src={imageSrc} alt={`AI-generated image, not by the author: ${v.title}`} />
+      )}
+      <p className="piece-made-text">
+        {b.subject ? `${b.subject.name}, ` : ''}for {at.href ? <Link href={at.href}>{at.text}</Link> : at.text}
+        {b.style ? <>, in the style “{b.style.name}” ({b.style.by})</> : b.subject?.kind === 'style' ? ', a new style' : ''}.
+      </p>
+    </div>
+  );
+}
+
 /** The work itself: pictures, the person's and the book's words, the agent's description of an idea. */
 function Work({ v, imageSrc }: { v: VersionView; imageSrc?: string | null }) {
   const b = v.body as Record<string, unknown>;
@@ -137,6 +168,7 @@ function Work({ v, imageSrc }: { v: VersionView; imageSrc?: string | null }) {
       {v.kind === 'idea' && String(b.text ?? '').split(/\n{2,}/).map((p, i) => <p key={i} className="piece-made-text">{p}</p>)}
       {v.kind === 'character' && <p className="piece-made-text"><strong>{String(b.character)}</strong>: {String(b.description)}</p>}
       {v.kind === 'edit' && <EditChange v={v} mediaSrc={imageSrc} />}
+      {PICTURE_KINDS.includes(v.kind as PictureKind) && <PictureDraft v={v} imageSrc={imageSrc} />}
       {v.shots.length > 0 && v.kind !== 'edit' && (
         <ol className="piece-strip" aria-label={v.kind === 'storyboard' ? 'The storyboard' : 'The shots'}>
           {v.shots.map((s, i) => (
@@ -211,6 +243,24 @@ function Recipe({ v }: { v: VersionView }) {
               </tbody>
             </table>
           </>
+        );
+      })()}
+      {PICTURE_KINDS.includes(v.kind as PictureKind) && (() => {
+        const pb = b as unknown as PictureDraftBody;
+        const m = v.made as { model?: { name: string; licence: string; host: string }; request_id?: string | null; seed?: number | null; cost_usd?: number; drafted_by?: string; approved_by?: string; approved_at?: string } | null;
+        return (
+          <table className="piece-recipe">
+            <tbody>
+              {(pb.parts ?? []).map((p, i) => <tr key={i}><th>{p.part}</th><td className="piece-prompt">{p.text}</td><td>{p.by}</td></tr>)}
+              {m?.model ? (
+                <>
+                  <tr><th>model</th><td>{m.model.name} ({m.model.licence}, open weights), on {m.model.host}{m.request_id ? `, request ${m.request_id}` : ''}{m.seed !== null && m.seed !== undefined ? `, seed ${m.seed}` : ''}</td><td>made</td></tr>
+                  <tr><th>cost</th><td>${(m.cost_usd ?? 0).toFixed(4)}</td><td>made</td></tr>
+                  <tr><th>who</th><td>drafted by {m.drafted_by}, approved by {m.approved_by}{m.approved_at ? `, ${m.approved_at.slice(0, 16).replace('T', ' ')} UTC` : ''}</td><td></td></tr>
+                </>
+              ) : <tr><th>estimate</th><td>up to ${pb.estimate_usd}</td><td>not made yet</td></tr>}
+            </tbody>
+          </table>
         );
       })()}
       <p className="you-note">GPL-3.0. The words people wrote or said are theirs; the pictures are AI-generated.</p>

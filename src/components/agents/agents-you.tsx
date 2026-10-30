@@ -15,6 +15,7 @@ import { AgentKeyMaker } from './agent-key';
 import { PieceVersion, shortMentions } from './piece-version';
 import './agents.css';
 import { exactDollars } from '~/lib/wallet/price-text';
+import { PICTURE_KINDS, type PictureKind } from '~/lib/agents/picture-kinds';
 
 /**
  * On /you (owner, 2026-10-20): the person's agents, each with one-tap Disconnect, linking a wallet
@@ -59,7 +60,8 @@ export function DraftRow({ v, onDone }: { v: VersionView; onDone: () => void }) 
   };
   // A frame try or a video test costs money: it is made only when the person approves the shown estimate.
   const change = (v.body as { change?: { type?: string; estimate_usd?: number; price_usd?: number } }).change;
-  const needsApproval = v.kind === 'edit' && (change?.type === 'frame' || change?.type === 'video') && !v.approved;
+  const picture = PICTURE_KINDS.includes(v.kind as PictureKind);
+  const needsApproval = ((v.kind === 'edit' && (change?.type === 'frame' || change?.type === 'video')) || picture) && !v.approved;
   return (
     <div className="draft-row" data-draft={v.id}>
       <p><strong>{v.title}</strong> <span className="piece-sub">{v.kind}</span></p>
@@ -67,7 +69,7 @@ export function DraftRow({ v, onDone }: { v: VersionView; onDone: () => void }) 
       {needsApproval && (
         <div className="draft-actions">
           <button type="button" className="ic-primary" disabled={busy} onClick={() => void act('run')}>
-            {busy ? R.making : change?.type === 'video' ? R.makeVideo(change.estimate_usd ?? 0) : typeof change?.price_usd === 'number' ? R.makeFramePaid(exactDollars(change.price_usd)) : R.makeFrame(change?.estimate_usd ?? 0)}
+            {busy ? R.making : picture ? (typeof (v.body as { price_usd?: number }).price_usd === 'number' ? R.makeFramePaid(exactDollars((v.body as { price_usd: number }).price_usd)) : R.makePicture(Number((v.body as { estimate_usd?: number }).estimate_usd ?? 0))) : change?.type === 'video' ? R.makeVideo(change.estimate_usd ?? 0) : typeof change?.price_usd === 'number' ? R.makeFramePaid(exactDollars(change.price_usd)) : R.makeFrame(change?.estimate_usd ?? 0)}
           </button>
         </div>
       )}

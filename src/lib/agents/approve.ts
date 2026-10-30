@@ -4,14 +4,18 @@ import path from 'node:path';
 import type postgres from 'postgres';
 import { after } from 'next/server';
 import { editorData } from '../agent/data';
-import { AGENTS, REMIX } from '../config';
-import { generate, remixPictures, remixPrompt } from '../remix/make';
+import { randomBytes } from 'node:crypto';
+import { AGENTS, IMAGES, REMIX } from '../config';
+import { fakeGuard, generate, remixPictures, remixPrompt } from '../remix/make';
+import { makeImage, type Made } from '../images/fal';
+import { paidPicture } from '../images/paid';
+import { PICTURE_KINDS, type PictureBody, type PictureKind } from './pictures';
 import { remixShot, savedLayoutPicture } from '../remix/shot';
 import { sha256, sql } from './core';
 import type { Change } from './edits';
 import { actingFor, actingPrompt } from './direction';
 import { readMade, storeMade } from './images';
-import { versionById } from './pieces';
+import { versionById, type VersionView } from './pieces';
 import { priceUsd } from '../wallet/credits';
 
 /**
@@ -104,13 +108,54 @@ export async function runVideo(person: number, body: { adaptation: number; versi
   return { ok: true as const, key: stored, sha, spent: body.change.estimate_usd, made: { kind: 'video', label: 'Made here', model: body.change.model, host: 'fal.ai', request_id: requestId ?? null, prompt, inputs: [{ role: 'frame', sha256: sha256(frame) }], ...(acting.length ? { direction: acting } : {}), cost_note: 'the estimate (fal returns no price per call)', fal: { request_id: requestId ?? null, copy_confirmed: confirmed, deleted_at: null, error: confirmed ? null : 'our copy did not read back the same; fal\'s copy kept', tried_at: null } } };
 }
 
+/** The local tests' stand-in for the image model (REMIX_TEST_FAKES=1, never on Vercel): a real JPEG with a unique tail, costing nothing. */
+const fakePictures = () => !process.env.VERCEL && process.env.REMIX_TEST_FAKES === '1';
+async function fakePicture(prompt: string): Promise<Made> {
+  const base = readFileSync(path.join(process.cwd(), 'public', 'editor', '1', 'v2', 'thumbs', 'G08-K2.jpg'));
+  return { bytes: Buffer.concat([base, randomBytes(16)]), contentType: 'image/jpeg', seed: 1, requestId: `test-${randomBytes(4).toString('hex')}`, nsfw: prompt.includes('TEST-NSFW'), costUsd: 0, settings: { test: true } };
+}
+
+/**
+ * The person approved a picture, sheet, place or style draft (owner, 2026-10-29, Plan A part 2): made through Pictures'
+ * own pipeline as the person (the gate, their caps, blocked names, the prompt check, the host's safety checker), from the
+ * exact prompt the draft showed, and kept private in the draft with its full recipe.
+ */
+async function runPicture(person: number, request: Request, v: VersionView) {
+  if (!IMAGES.enabled) return { ok: false as const, status: 503, error: 'Making images is switched off for now.' };
+  const fake = fakePictures();
+  if (!fake && !process.env.FAL_KEY) return { ok: false as const, status: 503, error: 'Making images is not set up here.' };
+  const s = sql();
+  // Who may: the agents allowlist, already checked on the way here (as for a frame try); Pictures' Neynar gate is the
+  // same allowlisted people's, so it isn't asked again. A wallet account is charged the price its Make it showed, or nothing.
+  const body = v.body as unknown as PictureBody;
+  if (person < 0 && body.price_usd !== priceUsd(IMAGES.reserveUsd)) return { ok: false as const, status: 409, error: 'The price of this picture has changed. Ask your agent to draft it again.' };
+  const paid = await paidPicture(s, person, request, { checkText: body.prompt, make: () => (fake ? fakePicture(body.prompt) : makeImage(body.prompt)), ...(fake ? { check: fakeGuard } : {}) });
+  if (!paid.ok) return { ok: false as const, status: paid.status, error: paid.error };
+  const m = paid.made;
+  const key = await storeMade(m.bytes, 'jpg');
+  return {
+    ok: true as const, key, sha: sha256(m.bytes), spent: m.costUsd,
+    made: {
+      kind: v.kind, label: 'Made here',
+      model: { ...body.model, name: IMAGES.model.name, licence: IMAGES.model.licence, weights: 'open' }, settings: m.settings,
+      request_id: m.requestId, seed: m.seed, prompt: body.prompt, parts: body.parts,
+      style: body.style ? { name: body.style.name, version: body.style.version, starting: body.style.starting, by: body.style.by } : null,
+      attach: body.attach, inputs: [], cost_usd: m.costUsd,
+      drafted_by: v.agent ?? v.by, approved_by: v.by, approved_at: new Date().toISOString(),
+      ...(fake ? { test: 'made by the local test stand-in, not a model' } : {}),
+    },
+  };
+}
+
 /** "Make it": the person approves the spend on their own draft; within the daily caps; at most once. */
 export async function runApproved(person: number, versionId: string, request: Request): Promise<{ ok: true } | { ok: false; status: number; error: string }> {
   const v = await versionById(versionId);
-  if (!v || v.person !== person || v.status !== 'draft' || v.kind !== 'edit') return { ok: false, status: 404, error: 'Not found' };
+  const picture = !!v && PICTURE_KINDS.includes(v.kind as PictureKind);
+  if (!v || v.person !== person || v.status !== 'draft' || (v.kind !== 'edit' && !picture)) return { ok: false, status: 404, error: 'Not found' };
   const body = v.body as { adaptation: number; version: number; shot: string; change: Change };
-  if (body.change.type !== 'frame' && body.change.type !== 'video') return { ok: false, status: 400, error: 'Nothing to make for this edit.' };
-  const estimate = body.change.estimate_usd;
+  if (!picture && body.change.type !== 'frame' && body.change.type !== 'video') return { ok: false, status: 400, error: 'Nothing to make for this edit.' };
+  const type = picture ? 'picture' : body.change.type;
+  const estimate = picture ? (v.body as unknown as PictureBody).estimate_usd : (body.change as { estimate_usd: number }).estimate_usd;
   const s = sql();
   // The checks and the claim are one transaction under a lock per person (as Remix's own reserve() does): a second
   // "Make it" for the same person waits here until the first has claimed its draft, then sees it. An approval still
@@ -125,19 +170,19 @@ export async function runApproved(person: number, versionId: string, request: Re
     const [today] = await tx<{ frames: number; videos: number; usd: number }[]>`
       select count(*) filter (where pv.body->'change'->>'type' = 'frame')::int as frames,
              count(*) filter (where pv.body->'change'->>'type' = 'video')::int as videos,
-             coalesce(sum(coalesce(pv.spent_usd, (pv.body->'change'->>'estimate_usd')::numeric, 0)), 0)::float8 as usd
+             coalesce(sum(coalesce(pv.spent_usd, coalesce(pv.body->'change'->>'estimate_usd', pv.body->>'estimate_usd')::numeric, 0)), 0)::float8 as usd
       from studio.piece_versions pv join studio.pieces p on p.id = pv.piece_id
       where p.person = ${person} and (pv.approved_at at time zone 'utc')::date = (now() at time zone 'utc')::date and pv.id <> ${versionId}`;
     const over =
-      body.change.type === 'frame' && today.frames >= AGENTS.spend.framesPerDay ? `${AGENTS.spend.framesPerDay} frame tries a day`
-      : body.change.type === 'video' && today.videos >= AGENTS.spend.videosPerDay ? `${AGENTS.spend.videosPerDay} video tests a day`
+      type === 'frame' && today.frames >= AGENTS.spend.framesPerDay ? `${AGENTS.spend.framesPerDay} frame tries a day`
+      : type === 'video' && today.videos >= AGENTS.spend.videosPerDay ? `${AGENTS.spend.videosPerDay} video tests a day`
       : today.usd + estimate > AGENTS.spend.dailyCapUsd ? `$${AGENTS.spend.dailyCapUsd} a day of approved spending`
       : null;
     if (over) return { ok: false, status: 429, error: `That's the most for today: ${over}. More tomorrow (00:00 UTC).` };
     // A personal key's spend cap: what all its approved drafts have spent (or, still in progress, their estimate), plus this one, stays within it.
     const [key] = await tx<{ cap: string | null; spent: number }[]>`
       select a.spend_cap_usd as cap,
-             (select coalesce(sum(coalesce(o.spent_usd, (o.body->'change'->>'estimate_usd')::numeric, 0)), 0)::float8 from studio.piece_versions o
+             (select coalesce(sum(coalesce(o.spent_usd, coalesce(o.body->'change'->>'estimate_usd', o.body->>'estimate_usd')::numeric, 0)), 0)::float8 from studio.piece_versions o
                where o.agent_id = a.id and o.id <> ${versionId} and (o.spent_usd is not null or o.approved_at is not null)) as spent
       from studio.piece_versions pv join studio.agents a on a.id = pv.agent_id where pv.id = ${versionId}`;
     if (key?.cap !== null && key !== undefined && Number(key.spent) + estimate > Number(key.cap) + 1e-9)
@@ -150,12 +195,12 @@ export async function runApproved(person: number, versionId: string, request: Re
     await s`update studio.piece_versions set approved_at = null where id = ${versionId}`;
     return { ok: false as const, status, error };
   };
-  const r = body.change.type === 'frame' ? await runFrame(person, request, body as never) : await runVideo(person, body as never);
+  const r = picture ? await runPicture(person, request, v) : body.change.type === 'frame' ? await runFrame(person, request, body as never) : await runVideo(person, body as never);
   if (!r.ok) return fail(r.status, r.error);
   await s`update studio.piece_versions set spent_usd = ${r.spent}, made = ${s.json(r.made as postgres.JSONValue)}, image_key = ${r.key}, image_sha256 = ${r.sha} where id = ${versionId}`;
   // fal's copy of a video test is deleted after the response; earlier failures are retried here too. Never blocks this.
   after(async () => {
-    if (body.change.type === 'video') await cleanupFal(versionId).catch((e) => console.error('fal cleanup', versionId, (e as Error)?.name ?? 'error'));
+    if (!picture && body.change.type === 'video') await cleanupFal(versionId).catch((e) => console.error('fal cleanup', versionId, (e as Error)?.name ?? 'error'));
     await retryFalCleanups().catch((e) => console.error('fal cleanup retries', (e as Error)?.name ?? 'error'));
   });
   return { ok: true };

@@ -50,14 +50,19 @@ const TOOLS = 'src/lib/agents/tools.ts';
 const PIECES = 'src/lib/agents/pieces.ts';
 const READ_TOOLS = 'src/lib/agent/tools.ts';
 /** Modules the agent tools import from ./ (each scanned for publish and keep). */
-const TOOL_MODULES = new Set(['core', 'accounts', 'filter', 'images', 'pieces', 'requests', 'edits', 'direction', 'suggestions']);
+const TOOL_MODULES = new Set(['core', 'accounts', 'filter', 'images', 'pieces', 'requests', 'edits', 'direction', 'suggestions', 'pictures', 'picture-kinds']);
 // Direction notes and line rewrites (owner, 2026-10-20) are private to their person and never published; ./direction is
 // scanned for publish and keep like the others. Added to the inspected list by the coding agent; the owner's yes pending.
 // Suggestions (owner, 2026-10-22) go to the owner only and are never published; ./suggestions is scanned like the
 // others. Added to the inspected list by the coding agent; the owner's yes pending.
+// The picture tools (owner, 2026-10-29, Plan A part 2) draft only: ./pictures saves words and an estimate through
+// draftPiece; making the picture is ./approve's, on the person's Make it. Added by the coding agent; the owner's yes pending.
+// A tool module's own ./ imports must be inspected modules too, so none of them can reach ./approve indirectly.
 // The edit tools (owner, 2026-10-20) draft only; spending on an approved edit lives in ./approve, which no tool may
 // import (it isn't in this list, so importing it from tools.ts fails the check).
 /** What tools.ts may take from pieces.ts: the three draft writers (each read below) and readers. Never decide. */
+/** Words only (no code that writes), which the inspected modules may import: checked to import nothing. */
+const TEXT_MODULES = new Set(['wording']);
 const PIECE_WRITERS = ['draftPiece', 'revise', 'addNote'];
 const PIECE_READERS = new Set(['feedbackFor', 'notesOn', 'pieceVersions', 'piecesOf', 'versionById', 'visibleTo', 'type Answering', 'type Kind', 'Answering', 'Kind']);
 
@@ -93,10 +98,13 @@ export function agentToolProblems(read: (rel: string) => string): string[] {
     if (mod === 'pieces') for (const n of imp.names) if (!PIECE_WRITERS.includes(n) && !PIECE_READERS.has(n)) out.push(`${TOOLS}: takes ${n} from ./pieces (only ${PIECE_WRITERS.join(', ')} write, and only drafts)`);
   }
   for (const mod of TOOL_MODULES) {
+    const src = read(`src/lib/agents/${mod}.ts`);
+    for (const imp of importsOf(src)) if (imp.from.startsWith('./') && !TOOL_MODULES.has(imp.from.slice(2)) && !TEXT_MODULES.has(imp.from.slice(2))) out.push(`src/lib/agents/${mod}.ts: imports ${imp.from}, not inspected as draft-only`);
     if (mod === 'pieces') continue;
-    const s = stripComments(read(`src/lib/agents/${mod}.ts`));
+    const s = stripComments(src);
     if (PUBLISH_OR_KEEP.test(s)) out.push(`src/lib/agents/${mod}.ts: publishes or keeps (${s.match(PUBLISH_OR_KEEP)![0]})`);
   }
+  for (const mod of TEXT_MODULES) if (importsOf(read(`src/lib/agents/${mod}.ts`)).length) out.push(`src/lib/agents/${mod}.ts: words only, but it imports code`);
   const pieces = stripComments(read(PIECES));
   for (const n of PIECE_WRITERS) {
     const body = fnBody(pieces, n);
