@@ -12,7 +12,8 @@ import { createPortal } from 'react-dom';
  * name and the ⓘ shown, and plant a missing word.
  *
  * Used for: "Redrawn" (a screen redrawn from a template), "AI description" (Listen, while a
- * spoken description plays), and Minpentai's "Invented", "Draft" and "Book".
+ * spoken description plays), Minpentai's "Invented", "Draft" and "Book", and "About": a page's explanation
+ * moved behind ⓘ (owner, 2026-10-29, the next-version plan: "Less text, with details behind info icons").
  */
 export function InfoLabel({
   word,
@@ -26,7 +27,7 @@ export function InfoLabel({
   /** The label's word, read with the declaration (not shown): "Redrawn", "AI description", "Invented", "Draft", "Book". */
   word: string;
   /** For checks and styling: data-label. */
-  kind: 'redrawn' | 'ai-description' | 'invented' | 'draft' | 'book';
+  kind: 'redrawn' | 'ai-description' | 'invented' | 'draft' | 'book' | 'about';
   /** The full declaration, in one sentence; read by screen readers with the word. */
   declaration: string;
   title: string;
