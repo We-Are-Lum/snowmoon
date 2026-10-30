@@ -153,7 +153,9 @@ function port() {
 {
   const { D } = design();
   eq(D.ROCKS, G.ROCKS, 'rocks'); eq(D.RULES, G.RULES, 'the four new rules'); eq(D.RUNGS, G.RUNGS, 'the rungs'); eq(D.COST, G.COST, 'costs');
-  eq([D.W, D.H, D.MAXS], [G.W, G.H, G.MAXS], 'board size and length');
+  // Design's mockup carries the two fixes of rules draft 2, so its length is Play today's ruleset's (2); game.ts's MAXS is ruleset 1's, frozen.
+  eq([D.W, D.H, D.MAXS], [G.W, G.H, G.maxStepsOf(2)], 'board size and length (ruleset 2)');
+  eq(G.MAXS, 96, 'game.ts MAXS stays ruleset 1\'s 96');
   eq(D.world(), G.world(), 'the practice board'); eq(D.world(true), G.world(true), 'an empty board');
   const r = G.rng(99);
   const dirs = G.D8;

@@ -19,7 +19,7 @@
 import { execFileSync } from 'node:child_process';
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
-import { COST, H, MAXS, RULES, RUNGS, W } from '../src/lib/minpentai/play-game/game';
+import { COST, H, RULES, RUNGS, W, maxStepsOf } from '../src/lib/minpentai/play-game/game';
 import { GONE_MS, PAUSE_MS, POINTS, SETUP_MS, TURN_MS } from '../src/lib/minpentai/play-server/match';
 import { blockParagraphs, loadBook } from './build-minpentai-passages';
 
@@ -120,7 +120,7 @@ const rungNames = RUNGS.slice(1).map((r) => r!.n);
 ok(md.includes(rungNames.join(', ')) && rungNames.length === 5, `agents.md: the rungs are ${rungNames.join(', ')}`);
 for (const t of Object.values(RULES)) ok(md.includes(`"${t}"`), `agents.md does not quote the drawn rule "${t}"`);
 ok(W === 15 && H === 10 && md.includes('15 × 10'), 'the board is not 15 × 10');
-ok(MAXS === 120 && md.includes('step 120'), 'the match does not stop at step 120');
+ok(maxStepsOf(2) === 120 && md.includes('step 120'), 'the match does not stop at step 120 (Play today, ruleset 2)');
 ok(POINTS === 8 && COST.s === 1 && COST.t === 4 && md.includes('8 points a turn: glider 4, square 1, tower 4'), 'the points or costs differ');
 ok(SETUP_MS === 90_000 && TURN_MS === 45_000 && md.includes('90 seconds for setup and 45 for later turns'), 'the one-on-one clocks differ');
 ok(PAUSE_MS === 15_000 && GONE_MS === 60_000 && md.includes('15 seconds pauses the match; 60 seconds more'), 'the pause times differ');

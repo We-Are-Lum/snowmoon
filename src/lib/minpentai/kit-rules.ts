@@ -57,6 +57,7 @@ const ENGINE = 'src/lib/minpentai/engine.ts';
 /** Play's rules run on the one engine (versions/engine.ts); Play's numbers are its base settings (versions/schema.ts). */
 const VENG = 'src/lib/minpentai/versions/engine.ts';
 const SCHEMA = 'src/lib/minpentai/versions/schema.ts';
+const SOLO = 'src/lib/minpentai/versions/solo-v1.ts';
 
 export const KIT_RULES: KitRule[] = [
   /* ---------------- the board and how it changes ---------------- */
@@ -472,7 +473,7 @@ export const KIT_RULES: KitRule[] = [
   {
     id: 'play-step-limit', area: 'ending', source: 'invented',
     rule: 'At step 120 the match stops; most towers wins, and equal is a draw.',
-    code: [{ file: SCHEMA, find: "maxSteps: { text: 'The match stops at this step; most towers wins', min: 24, max: 240, base: 120," }, { file: VENG, find: "if (w.step >= s.maxSteps) return nc > na ? 'C' : na > nc ? 'A' : 'D';" }],
+    code: [{ file: SOLO, find: 'export const SOLO_V2: VersionRules = { set: { maxSteps: 120, botTowers: 10 } };' }, { file: VENG, find: "if (w.step >= s.maxSteps) return nc > na ? 'C' : na > nc ? 'A' : 'D';" }],
     site: 'yes', siteNote: 'Play.',
   },
   {

@@ -25,7 +25,7 @@
       "width": 15,
       "height": 10
     },
-    "steps": 120,
+    "steps": 96,
     "turnEvery": 12,
     "pointsPerTurn": 8,
     "costs": {
@@ -1343,8 +1343,8 @@
       "cites": [],
       "code": [
         {
-          "file": "src/lib/minpentai/versions/schema.ts",
-          "find": "maxSteps: { text: 'The match stops at this step; most towers wins', min: 24, max: 240, base: 120,"
+          "file": "src/lib/minpentai/versions/solo-v1.ts",
+          "find": "export const SOLO_V2: VersionRules = { set: { maxSteps: 120, botTowers: 10 } };"
         },
         {
           "file": "src/lib/minpentai/versions/engine.ts",

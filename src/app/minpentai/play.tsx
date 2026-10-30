@@ -24,6 +24,7 @@ import { PlayController, browserEnv, type Dev } from '~/lib/minpentai/play-game/
 import { RULE_IDS, type RuleId } from '~/lib/minpentai/play-game/game';
 import { CHALLENGE_PATH, decChallenge, outcome, splitChallenge } from '~/lib/minpentai/snap/challenge';
 import { decMatch } from '~/lib/minpentai/snap/moves';
+import { rulesetId } from '~/lib/minpentai/versions/solo-v1';
 import { settings, versionOf } from '~/lib/minpentai/snap/versions';
 import type { LadderProgress } from '~/lib/minpentai/play-game/live-types';
 import { PlayBoard } from './play-board';
@@ -76,15 +77,15 @@ export function Play({ start, onLearn }: { start: 'home' | 'free' | 'ladder' | '
       // The page checked its signature on the server; this reads only the start from it.
       const x = splitChallenge(window.location.pathname.slice(CHALLENGE_PATH.length));
       const c = x && decChallenge(x.body);
-      if (c && ctl.continueMatch(c.seed, [], c.lvl, (drawn) => settings(drawn, versionOf(c.ver), c.rule))) ctl.say(`A challenge: ${outcome(c.res)}, in ${c.res.taps} taps. Same start: your move.`);
+      if (c && ctl.continueMatch(c.seed, [], c.lvl, (drawn) => settings(drawn, versionOf(c.ver), c.rule), c.rs)) ctl.say(`A challenge: ${outcome(c.res)}, in ${c.res.taps} taps. Same start: your move.`);
       else ctl.say('That challenge link could not be read, so here is Play.');
     } else if (start === 'match') {
       // A practice match carried on from the snap (?match=<seed>.<turns>.<moves>, moves.ts; &level=0–5;
-      // &rule= when the player picked the extra rule).
+      // &rule= when the player picked the extra rule; &rs=2 under ruleset 2, none for a link made before rulesets were numbered).
       const q = new URLSearchParams(window.location.search);
       const g = decMatch(q.get('match') ?? ''), lvl = Number(q.get('level') ?? 0), rule = q.get('rule') ?? '';
-      const picked = (RULE_IDS as string[]).includes(rule) ? (rule as RuleId) : null;
-      if (!g || !Number.isInteger(lvl) || lvl < 0 || lvl > 5 || (rule && !picked) || !ctl.continueMatch(g.seed, g.turns, lvl, picked ? (drawn) => settings(drawn, null, picked) : undefined)) ctl.say('That match link could not be read, so here is Play.');
+      const picked = (RULE_IDS as string[]).includes(rule) ? (rule as RuleId) : null, rsText = q.get('rs');
+      if (!g || !Number.isInteger(lvl) || lvl < 0 || lvl > 5 || (rule && !picked) || (rsText !== null && rsText !== '2') || !ctl.continueMatch(g.seed, g.turns, lvl, picked ? (drawn) => settings(drawn, null, picked) : undefined, rulesetId(rsText))) ctl.say('That match link could not be read, so here is Play.');
     }
     ctl.mount(window.location.hash);
     const onK = (e: KeyboardEvent) => { if (e.key === 'Escape') ctl.escape(); };
@@ -324,7 +325,7 @@ export function Play({ start, onLearn }: { start: 'home' | 'free' | 'ladder' | '
                         <div className="mp-opened"><span className="mp-rung-icon on">{v.resCardN}</span><span className="mp-rung-main"><span className="mp-rung-name">{v.resCardT}</span><span className="mp-rung-desc">{v.resCardD}</span></span></div>
                       )}
                       {v.resNote && <p className="mp-text">{v.resNote}</p>}
-                      {v.share && <ShareResult rung={v.share.rung} steps={v.share.steps} />}
+                      {v.share && <ShareResult rung={v.share.rung} steps={v.share.steps} rs={v.share.rs} />}
                       <div className="mp-grow" />
                       <div className="mp-btns">{v.resBtns!.map((b) => <button key={b.label} className={`mp-btn${b.primary ? ' primary' : ''}`} onClick={b.click}>{b.label}</button>)}</div>
                     </div>

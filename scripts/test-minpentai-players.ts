@@ -95,12 +95,13 @@ check(`the view: no opponent piece outside the lit squares, every rock, everythi
 check(`the five rungs (and practice's level 0) plan the same on the view as on the whole board (${positions.length} positions × 6 levels × 2 seats)`, () => {
   for (const p of positions) for (let lvl = 0; lvl <= 5; lvl++) {
     const s = p.w.step * 31 + lvl;
-    const full = botPlan({ w: p.w, lvl, R: p.R, rng: rng(s), cost: p.cost, every: p.every, rule: p.rule, snap: p.snap, lsA: p.lsA });
+    // The positions come from Play's matches, which run under Play today's ruleset (2); a view without a ruleset is Play today's too.
+    const full = botPlan({ w: p.w, lvl, R: p.R, rng: rng(s), cost: p.cost, every: p.every, rule: p.rule, snap: p.snap, lsA: p.lsA, ruleset: 2 });
     const viewed = rung(lvl)({ w: fogView(p.w, 'A', p.R), R: p.R, cost: p.cost, every: p.every, rule: p.rule, points: 8, mine: p.snap.A, lastSeen: { ...p.lsA }, rng: rng(s) });
     if (!same(full, viewed)) return `level ${lvl} at step ${p.w.step} (Amber's seat): ${JSON.stringify(full)} on the board, ${JSON.stringify(viewed)} on the view`;
     const tw = turned(p.w), snapT = { A: p.snap.C.map(turnKey), C: p.snap.A.map(turnKey) };
     const lsT = Object.fromEntries(Object.entries(p.lsC).map(([k, v]) => [turnKey(+k), v]));
-    const fullT = botPlan({ w: tw, lvl, R: p.R, rng: rng(s), cost: p.cost, every: p.every, rule: p.rule, snap: snapT, lsA: lsT });
+    const fullT = botPlan({ w: tw, lvl, R: p.R, rng: rng(s), cost: p.cost, every: p.every, rule: p.rule, snap: snapT, lsA: lsT, ruleset: 2 });
     const viewedT = rung(lvl)({ w: fogView(tw, 'A', p.R), R: p.R, cost: p.cost, every: p.every, rule: p.rule, points: 8, mine: snapT.A, lastSeen: lsT, rng: rng(s) });
     if (!same(fullT, viewedT)) return `level ${lvl} at step ${p.w.step} (Cyan's seat): differs`;
   }

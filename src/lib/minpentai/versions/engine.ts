@@ -17,8 +17,6 @@ const D4: [number, number][] = [[-1, 0], [0, -1], [0, 1], [1, 0]];
 const D8: [number, number][] = [[-1, -1], [0, -1], [1, -1], [-1, 0], [1, 0], [-1, 1], [0, 1], [1, 1]];
 /** Under rocks "split", no new glider once this many are on the board. */
 export const SPLIT_CAP = 60;
-/** The most towers a computer player builds (rungs 3-5). */
-export const BOT_TOWER_CAP = 10;
 /** Play's rocks on its 15 x 10 board (game.ts ROCKS); scaled for other sizes. */
 const PLAY_ROCKS: [number, number][] = [[6, 0], [9, 3], [7, 4], [7, 5], [5, 6], [8, 9]];
 
@@ -304,9 +302,9 @@ export function engine(L: Layout) {
       if (!z.length) z = zone();
       if (z.length) add('g', z[Math.floor(r() * z.length)], -1, 0);
     }
-    // Builders stop at 10 towers, or at the version's limit if lower. It was 5 until 2026-10-22: Luis's
-    // play tests showed the computer needs room to be aggressive (owner, 2026-10-22, with 120 steps).
-    const cap = s.maxTowers ? Math.min(BOT_TOWER_CAP, s.maxTowers) : BOT_TOWER_CAP;
+    // Builders stop at the ruleset's botTowers (5 in solo-v1, 10 in solo-v2: Luis's play tests showed the
+    // computer needs room to be aggressive; owner, 2026-10-22), or at the version's limit if lower.
+    const cap = s.maxTowers ? Math.min(s.botTowers, s.maxTowers) : s.botTowers;
     if (Lv >= 3 && pts >= tc && cnt(b, o) < cap) {
       const z = zone();
       if (z.length) {

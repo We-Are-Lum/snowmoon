@@ -24,13 +24,15 @@
 import path from 'node:path';
 import { readdirSync, readFileSync } from 'node:fs';
 import {
-  COST, D4, D8, K, MAXS, RULES, RULE_IDS, XY, apply, clone, empty, inb, lit, rng, step, towers, updLS, world,
+  COST, D4, D8, K, MAXS, RULES, RULE_IDS, XY, apply, clone, empty, inb, lit, maxStepsOf, rng, step, towers, updLS, world,
   type Placement, type RuleId, type Side, type World,
 } from '../src/lib/minpentai/play-game/game';
+/** New one-on-one matches run under Play's newest ruleset (2): 120 steps. */
+const LIMIT = maxStepsOf(2);
 import type { BoardView, MatchView } from '../src/lib/minpentai/play-game/live-types';
 import {
   GONE_MS, PAUSE_MS, REMATCH_MS, SETUP_MS, STEP_MS, TURN_MS, Refused, advance, askRematch, checkPlacements, createMatch,
-  drawRule, fullBoard, leave, playTurn, resign, touch, type LiveMatch,
+  drawRule, fullBoard, leave, playTurn, resign, rulesOf, touch, type LiveMatch,
 } from '../src/lib/minpentai/play-server/match';
 import { fog, sightOf, viewFor, why } from '../src/lib/minpentai/play-server/view';
 import { freshProgress, recordResult } from '../src/lib/minpentai/play-server/ladder';
@@ -67,7 +69,7 @@ function refCheckEnd(m: Ref): { win: Side | 'D'; why: string } | null {
   if (!c && !a) return { win: 'D', why: `Both sides lost their last tower at step ${n}.` };
   if (!c) return { win: 'A', why: `Your last tower fell at step ${n}.` };
   if (!a) return { win: 'C', why: `Amber's last tower fell at step ${n}.` };
-  if (n >= MAXS) return { win: c > a ? 'C' : a > c ? 'A' : 'D', why: `Time ran out at step ${MAXS}. Amber had ${a} tower${a === 1 ? '' : 's'}, you had ${c}.` };
+  if (n >= LIMIT) return { win: c > a ? 'C' : a > c ? 'A' : 'D', why: `Time ran out at step ${LIMIT}. Amber had ${a} tower${a === 1 ? '' : 's'}, you had ${c}.` };
   return null;
 }
 /** startRun, then runTick until the next beginAct or the end. */
@@ -176,9 +178,9 @@ function randomPlan(m: LiveMatch, side: Side, r: () => number): { t: 'g' | 's' |
     matches++;
     endings.add(m.over!.win);
     if (!refEnd || refEnd.win !== m.over!.win || m.over!.kind !== 'end') flowOk = false;
-    if (refEnd && why(m.over!, 'C', 'wren').replaceAll('@wren', 'Amber') !== refEnd.why) {
+    if (refEnd && why(m.over!, 'C', 'wren', rulesOf(m).s.maxSteps).replaceAll('@wren', 'Amber') !== refEnd.why) {
       flowWhy = false;
-      firstBad ||= `why: "${why(m.over!, 'C', 'wren')}" vs "${refEnd.why}"`;
+      firstBad ||= `why: "${why(m.over!, 'C', 'wren', rulesOf(m).s.maxSteps)}" vs "${refEnd.why}"`;
     }
     const over = viewFor(m, 'C', now, META(m, 'C'));
     if (!over.result || over.result.replay.length !== m.w.step + 1 || !same(over.result.replay, ref.hist.map(fullBoard))) flowOk = false;

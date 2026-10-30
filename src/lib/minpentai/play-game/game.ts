@@ -16,7 +16,7 @@
  * clone, towers, lit, empty, step, botPlan, apply, updLS.
  */
 import { BASE, BASE_DRAWN } from '../versions/schema';
-import { SOLO_V1, SOLO_V1_ENGINE as E, SOLO_V1_LAYOUT, settingsFor } from '../versions/solo-v1';
+import { RULESETS, SOLO_V1_ENGINE as E, SOLO_V1_LAYOUT, maxStepsOf, settingsFor, type RulesetId } from '../versions/solo-v1';
 import type { Placement, Side, World } from '../versions/engine';
 
 export { rng, fmt } from './rng';
@@ -24,8 +24,9 @@ export type { Glider, Placement, Piece, Side, Square, World } from '../versions/
 
 export const W = SOLO_V1_LAYOUT.W;
 export const H = SOLO_V1_LAYOUT.H;
-/** The match stops at this step; most towers wins. */
+/** solo-v1's step limit (96), frozen; a match's own limit is maxStepsOf(its ruleset). */
 export const MAXS = BASE.maxSteps;
+export { maxStepsOf, type RulesetId };
 export const ROCKS: [number, number][] = SOLO_V1_LAYOUT.rocks.map((k) => [k % W, (k / W) | 0]);
 export const COL: Record<Side, string> = { C: '#46D7E8', A: '#FFB43A' };
 export const AR: Record<string, string> = { '1,0': '→', '-1,0': '←', '0,-1': '↑', '0,1': '↓', '1,-1': '↗', '1,1': '↘', '-1,1': '↙', '-1,-1': '↖' };
@@ -78,11 +79,13 @@ export interface PlanInput {
   snap: Record<Side, number[]>;
   /** Where Amber last saw each of Cyan's towers (square → step). */
   lsA: Record<number, number>;
+  /** The match's ruleset (solo-v1.ts RULESETS); absent means 1, the frozen original. */
+  ruleset?: RulesetId;
 }
 
 /** The computer player (Amber): sees only what its towers light (rules page §8). */
 export function botPlan(m: PlanInput): Placement[] {
-  const s = { ...settingsFor(SOLO_V1, m.rule), sight: m.R, reach: m.R, every: m.every, costGlider: m.cost };
+  const s = { ...settingsFor(RULESETS[m.ruleset ?? 1], m.rule), sight: m.R, reach: m.R, every: m.every, costGlider: m.cost };
   return E.botPlan({ w: m.w, s, lvl: m.lvl, rng: m.rng, budget: BASE.points, snap: m.snap, lsA: m.lsA, diag: m.rule === 'diag' });
 }
 

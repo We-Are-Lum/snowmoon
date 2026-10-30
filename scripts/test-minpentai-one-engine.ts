@@ -139,14 +139,19 @@ for (const [name, ver] of VERSIONS) {
   const m = NewMatch.createMatch(5, 1_700_000_000_000, ver);
   const v = viewFor(m, 'C', 1_700_000_000_000, { id: 'x', version: 1, opponent: { fid: 2, username: 'b' } as never });
   const s = { ...{ width: 15, height: 10 }, ...ver.set };
-  ok(v.rules.W === s.width && v.rules.H === s.height && v.rules.maxSteps === (ver.set.maxSteps ?? 120), `server view under "${name}": rules say ${v.rules.W} x ${v.rules.H}, ${v.rules.maxSteps} steps`);
+  ok(v.rules.W === s.width && v.rules.H === s.height && v.rules.maxSteps === (ver.set.maxSteps ?? 96), `server view under "${name}": rules say ${v.rules.W} x ${v.rules.H}, ${v.rules.maxSteps} steps`);
 }
 // A Play-today match saves exactly the fields it always did (no version, no saved points).
 const solo = NewMatch.createMatch(9, 1_700_000_000_000);
 ok(!('version' in solo) && !('saved' in solo), 'server: a Play match is saved with the same fields as before');
 // Since rules draft 2 (2026-10-22) a match also carries its step limit, so a match saved before keeps 96.
-ok(isDeepStrictEqual(Object.keys(solo).sort(), [...Object.keys(OldMatch.createMatch(9, 1_700_000_000_000)), 'maxSteps'].sort()), 'server: a new Play match has exactly the old match\'s fields, plus its step limit');
-ok(solo.maxSteps === 120, 'server: a new Play match runs to step 120');
+ok(isDeepStrictEqual(Object.keys(solo).sort(), [...Object.keys(OldMatch.createMatch(9, 1_700_000_000_000)), 'maxSteps', 'ruleset'].sort()), 'server: a new Play match has exactly the old match\'s fields, plus its step limit and its ruleset');
+ok(solo.maxSteps === 120 && solo.ruleset === 2, 'server: a new Play match runs to step 120 under ruleset 2');
+{
+  // A match saved before rulesets were numbered (no ruleset, no maxSteps) runs as ruleset 1: 96 steps.
+  const old = OldMatch.createMatch(9, 1_700_000_000_000) as unknown as NewMatch.LiveMatch;
+  ok(NewMatch.rulesOf(old).s.maxSteps === 96 && NewMatch.rulesOf(old).s.botTowers === 5, 'server: a match saved before rulesets were numbered runs as ruleset 1 (96 steps)');
+}
 {
   // A match saved before draft 2 (no maxSteps) still ends at step 96.
   const old = OldMatch.createMatch(9, 1_700_000_000_000) as unknown as NewMatch.LiveMatch;
