@@ -30,7 +30,10 @@ export type Change =
   | { type: 'timing'; from_s: number; to_s: number; was: { from_s: number; to_s: number } }
   | { type: 'speaking'; who: string[]; was: string[] }
   | { type: 'video'; note: string; model: string; seconds: number; estimate_usd: number }
-  | { type: 'camera'; angle_deg: number | null; distance_m: number | null; height_m: number | null; people: { who: string; x: number; z: number; facing_deg: number | null }[] };
+  | { type: 'camera'; moves: CameraMove[]; people: { who: string; x: number; z: number; facing_deg: number | null }[] };
+
+/** A camera move in words (owner, 2026-10-29: "set_camera takes words, not signed numbers"), relative to the shot's saved camera. */
+export type CameraMove = { move: 'tilt' | 'pan'; toward: 'up' | 'down' | 'left' | 'right'; degrees: number } | { move: 'closer' | 'wider' | 'higher' | 'lower' };
 
 const posInt = (v: unknown, what: string) => {
   const n = typeof v === 'string' && /^\d{1,6}$/.test(v) ? Number(v) : v;
@@ -88,14 +91,30 @@ const num = (v: unknown, what: string, min: number, max: number) => {
 export async function setCamera(agent: Agent, args: Record<string, unknown>) {
   const { adaptation, version, shot } = await ownShot(agent, args);
   const onScreen = new Set(Array.isArray(shot.who) ? (shot.who as string[]) : []);
+  const words = Array.isArray(args.moves) ? args.moves : typeof args.moves === 'string' ? [args.moves] : [];
+  const moves = words.slice(0, 6).map((w, i) => parseMove(w, i));
   const people = (Array.isArray(args.people) ? args.people : []).slice(0, 8).map((p, i) => {
     const o = (p ?? {}) as Record<string, unknown>;
     if (typeof o.who !== 'string' || !onScreen.has(o.who)) throw new ToolInputError(`people[${i}]: ${typeof o.who === 'string' ? `${o.who} isn't in shot ${shot.id}` : 'who is required'} (on screen: ${[...onScreen].join(', ') || 'nobody'})`);
     return { who: o.who, x: num(o.x, `people[${i}].x`, -20, 20) ?? 0, z: num(o.z, `people[${i}].z`, -20, 20) ?? 0, facing_deg: num(o.facing_deg, `people[${i}].facing_deg`, -180, 180) };
   });
-  const change: Change = { type: 'camera', angle_deg: num(args.angle_deg, 'angle_deg', -89, 89), distance_m: num(args.distance_m, 'distance_m', 0.3, 60), height_m: num(args.height_m, 'height_m', 0, 30), people };
-  if (change.angle_deg === null && change.distance_m === null && change.height_m === null && !people.length) throw new ToolInputError('nothing to change: give an angle, a distance, a height or people');
+  if (!moves.length && !people.length) throw new ToolInputError('nothing to change: give moves (e.g. "tilt down 20°", "pan left 15°", "closer", "wider", "higher", "lower") or people');
+  const change: Change = { type: 'camera', moves, people };
   return draftEdit(agent, adaptation, version, shot, change, `Shot ${shot.n}: camera and staging`, args.answering);
+}
+
+/** "tilt down 20°", "pan left 15 degrees", "closer", "wider", "higher", "lower": anything else is refused, never guessed. */
+function parseMove(w: unknown, i: number): CameraMove {
+  const t = typeof w === 'string' ? w.trim().toLowerCase().replace(/\s+/g, ' ') : '';
+  const m = /^(tilt) (up|down) (\d{1,2}(?:\.\d)?) ?(?:°|deg|degrees)?$|^(pan) (left|right) (\d{1,3}(?:\.\d)?) ?(?:°|deg|degrees)?$/.exec(t);
+  if (m) {
+    const move = (m[1] ?? m[4]) as 'tilt' | 'pan';
+    const degrees = Number(m[3] ?? m[6]);
+    if (degrees <= 0 || degrees > (move === 'tilt' ? 80 : 180)) throw new ToolInputError(`moves[${i}]: ${move} by 1 to ${move === 'tilt' ? 80 : 180} degrees`);
+    return { move, toward: (m[2] ?? m[5]) as 'up' | 'down' | 'left' | 'right', degrees };
+  }
+  if (t === 'closer' || t === 'wider' || t === 'higher' || t === 'lower') return { move: t };
+  throw new ToolInputError(`moves[${i}]: "${String(w).slice(0, 40)}" isn't a move; say "tilt up|down N°", "pan left|right N°", "closer", "wider", "higher" or "lower"`);
 }
 
 export async function tryFrame(agent: Agent, args: Record<string, unknown>) {

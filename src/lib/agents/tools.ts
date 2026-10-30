@@ -344,8 +344,8 @@ const EDITS: AgentTool[] = [
   },
   {
     name: 'set_camera', title: 'Change a shot\'s camera or staging', scope: 'drafts', writes: true, counts: 'drafts',
-    description: 'Draft a camera and staging change for a shot of your person\'s own version: angle_deg (negative looks up), distance_m, height_m, and people [{who, x, z, facing_deg}] on the shot\'s saved layout (who must be on screen in that shot; get_shot lists them). Refused for a shot that isn\'t in their version. Free: then try_frame draws a frame from it, which waits for their approval.',
-    inputSchema: { type: 'object', properties: { ...SHOT_ARGS, angle_deg: { type: 'number' }, distance_m: { type: 'number' }, height_m: { type: 'number' }, people: { type: 'array', items: { type: 'object' } }, answering: ANSWERING }, required: ['adaptation', 'version', 'shot'], additionalProperties: false },
+    description: 'Draft a camera and staging change for a shot of your person\'s own version, in words, relative to the shot\'s camera: moves like "tilt down 20°" (look down), "tilt up 15°" (look up), "pan left 15°", "closer", "wider", "higher", "lower"; and people [{who, x, z, facing_deg}] on the saved layout (who must be on screen; get_shot lists them). Read the shot first. Refused for a shot that isn\'t in their version. Free: then try_frame draws a frame from it, which waits for their approval.',
+    inputSchema: { type: 'object', properties: { ...SHOT_ARGS, moves: { type: 'array', items: { type: 'string' }, description: 'Camera moves in words, e.g. ["tilt up 20°", "closer"].' }, people: { type: 'array', items: { type: 'object' } }, answering: ANSWERING }, required: ['adaptation', 'version', 'shot'], additionalProperties: false },
     run: async (agent, args) => setCamera(agent, args),
   },
   {

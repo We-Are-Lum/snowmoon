@@ -98,7 +98,7 @@ function Lines({ lines }: { lines: { source: string; block?: string; speaker?: s
 
 /** An edit to the person's own scene, said plainly: the shot, what changes, and what it made (if approved). */
 function EditChange({ v, mediaSrc }: { v: VersionView; mediaSrc?: string | null }) {
-  const b = v.body as { shot: string; change: { type: string; note?: string; cue?: string; line?: string; from?: string | null; to?: string; from_s?: number; to_s?: number; was?: { from_s?: number; to_s?: number } | string[]; who?: string[]; estimate_usd?: number; seconds?: number; angle_deg?: number | null; distance_m?: number | null; height_m?: number | null; people?: unknown[] } };
+  const b = v.body as { shot: string; change: { type: string; note?: string; cue?: string; line?: string; from?: string | null; to?: string; from_s?: number; to_s?: number; was?: { from_s?: number; to_s?: number } | string[]; who?: string[]; estimate_usd?: number; seconds?: number; moves?: ({ move: string; toward: string; degrees: number } | { move: string })[]; people?: unknown[] } };
   const c = b.change;
   const shot = v.shots[0];
   const made = (v as VersionView & { made?: { kind: string } | null }).made;
@@ -109,7 +109,7 @@ function EditChange({ v, mediaSrc }: { v: VersionView; mediaSrc?: string | null 
     : c.type === 'timing' ? `Runs ${sec(c.from_s)}–${sec(c.to_s)}${c.was && !Array.isArray(c.was) ? ` (was ${sec(c.was.from_s)}–${sec(c.was.to_s)})` : ''}`
     : c.type === 'speaking' ? `Speaking: ${(c.who ?? []).join(', ')}${Array.isArray(c.was) && c.was.length ? ` (in the shot: ${c.was.join(', ')})` : ''}`
     : c.type === 'video' ? `A ${c.seconds ?? 5}-second video test: “${c.note}”`
-    : c.type === 'camera' ? `Camera: ${[typeof c.angle_deg === 'number' ? `${c.angle_deg}° ${c.angle_deg < 0 ? 'looking up' : 'looking down'}` : null, typeof c.distance_m === 'number' ? `${c.distance_m} m away` : null, typeof c.height_m === 'number' ? `${c.height_m} m high` : null, Array.isArray(c.people) && c.people.length ? `${c.people.length} moved` : null].filter(Boolean).join(', ')}`
+    : c.type === 'camera' ? `Camera: ${[...(Array.isArray(c.moves) ? c.moves.map((m) => ('degrees' in m ? `${m.move} ${m.toward} ${m.degrees}°` : m.move)) : []), ...(Array.isArray(c.people) && c.people.length ? [`${c.people.length} moved`] : [])].join(', ')}`
     : '';
   return (
     <div className="piece-edit">
