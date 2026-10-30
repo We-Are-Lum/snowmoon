@@ -250,6 +250,7 @@ export function check(v: unknown): string[] {
   if (full.setupPoints < Math.min(full.costGlider, full.costSquare, full.costTower)) out.push('setupPoints buy nothing');
   if (full.costGlider > Math.max(full.points + full.carryOver, full.setupPoints)) out.push('no turn has enough points for a glider');
   if (full.maxTowers > 0 && full.maxTowers < full.startTowers) out.push('maxTowers is below startTowers');
+  out.push(...fogProblems(o.set ?? {}, Array.isArray(o.drawn) ? o.drawn : BASE_DRAWN));
   if (o.rocksAt !== undefined) {
     if (!Array.isArray(o.rocksAt) || o.rocksAt.length > 24) out.push('rocksAt must be a list of at most 24 squares');
     else o.rocksAt.forEach((p, i) => {
@@ -274,6 +275,30 @@ export function check(v: unknown): string[] {
   }
   if (allowed.size === 0) out.push('it changes nothing');
   return out;
+}
+
+/**
+ * The fog invariant (owner, 2026-10-30): placing reach never exceeds sight. Placement is checked against
+ * the real board, so a refusal ("that square is taken") on a square a player can't see would tell them
+ * a hidden piece is there. Checked for the version's own settings and for each drawn rule on top of them;
+ * a mid-match switch (switchAt) puts one drawn rule in place of another, so every rule in force at any
+ * step of any match is one of these.
+ */
+export function fogProblems(set: Patch, drawn: DrawnRule[]): string[] {
+  const out: string[] = [];
+  const s0 = { ...BASE, ...set } as Settings;
+  if (s0.reach > s0.sight) out.push(`reach (${s0.reach}) is more than sight (${s0.sight}): placing would reveal hidden pieces`);
+  for (const d of drawn) {
+    const s = { ...s0, ...(d?.set ?? {}) } as Settings;
+    if (s.reach > s.sight) out.push(`with drawn rule ${d?.id}, reach (${s.reach}) is more than sight (${s.sight}): placing would reveal hidden pieces`);
+  }
+  return out;
+}
+
+/** The engine's guard: a match may never run with reach above sight, whatever let its settings through. */
+export class FogError extends Error {}
+export function assertFog(s: Pick<Settings, 'reach' | 'sight'>): void {
+  if (s.reach > s.sight) throw new FogError(`reach (${s.reach}) is more than sight (${s.sight}): a match can't run with placing beyond sight`);
 }
 
 function checkPatch(p: unknown, where: string): string[] {

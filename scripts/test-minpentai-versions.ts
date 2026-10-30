@@ -163,7 +163,8 @@ console.log('check: good accepted, 15 kinds of bad refused');
 // --- every version ends; nothing breaks at the limits ---
 for (const k of SETTING_IDS) for (const val of [SETTINGS[k].min, SETTINGS[k].max]) {
   if (k === 'switchAt' && val > 0) continue;
-  const v = { set: { [k]: val } };
+  // Placing reach may never exceed sight (owner, 2026-10-30): a sight limit comes with reach no further, a reach limit with sight at least as far.
+  const v = { set: { [k]: val, ...(k === 'sight' ? { reach: Math.min(BASE.reach, val) } : k === 'reach' ? { sight: Math.max(BASE.sight, val) } : {}) } };
   for (let i = 0; i < 3; i++) { const m = playVersion(v, 5, 3, 500 + i); ok(m.step > 0 && m.illegal === 0, `${k}=${val}: ended at ${m.step}, illegal ${m.illegal}`); }
 }
 for (const p of PIECE_IDS) for (const o of Object.keys(PIECES[p].options)) for (let i = 0; i < 3; i++) { const m = playVersion({ set: { [p]: o } }, 4, 5, 700 + i); ok(m.step > 0 && m.illegal === 0, `${p}=${o}: illegal ${m.illegal}`); }

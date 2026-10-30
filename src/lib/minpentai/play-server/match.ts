@@ -13,7 +13,7 @@ import {
 } from '../play-game/game';
 import type { BoardView } from '../play-game/live-types';
 import { verdict, type Engine } from '../versions/engine';
-import { BASE, type Settings } from '../versions/schema';
+import { BASE, assertFog, type Settings } from '../versions/schema';
 import { SOLO_V1, engineFor, settingsFor, type VersionRules } from '../versions/solo-v1';
 
 /** Draft 2 (2026-10-22): the step limit 96 -> 120 and the computer's tower cap 5 -> 10. Draft 1: 2026-10-09. */
@@ -93,6 +93,7 @@ export function rulesOf(m: Pick<LiveMatch, 'rule' | 'R' | 'every' | 'cost' | 've
   // A match keeps the step limit it started with: one saved before draft 2 has none, and keeps 96.
   const maxSteps = m.maxSteps ?? (m.version ? base.maxSteps : LEGACY_MAX_STEPS);
   const s = { ...base, sight: m.R, reach: m.version ? base.reach : m.R, every: m.every, costGlider: m.cost, maxSteps };
+  assertFog(s);
   return { e: engineFor(v, s), s };
 }
 /** A side's points this turn: the setup's or a later turn's, plus any kept. */

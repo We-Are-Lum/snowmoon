@@ -5,7 +5,7 @@
  * against the frozen copy in scripts/fixtures/minpentai/).
  */
 import { engine, layout, type Engine, type Layout } from './engine';
-import { BASE, BASE_DRAWN, type DrawnRule, type Settings, type Version } from './schema';
+import { BASE, BASE_DRAWN, assertFog, type DrawnRule, type Settings, type Version } from './schema';
 
 /** What the engine needs of a version: its rules, nothing about who made it. */
 export type VersionRules = Pick<Version, 'set' | 'drawn' | 'rocksAt'>;
@@ -20,7 +20,9 @@ export const drawnOf = (v: VersionRules): DrawnRule[] => v.drawn ?? BASE_DRAWN;
 /** The settings in force under a version once its drawn rule is known (by id; none for ''). */
 export function settingsFor(v: VersionRules, ruleId: string): Settings {
   const d = drawnOf(v).find((x) => x.id === ruleId);
-  return { ...BASE, ...v.set, ...(d?.set ?? {}) };
+  const s: Settings = { ...BASE, ...v.set, ...(d?.set ?? {}) };
+  assertFog(s);
+  return s;
 }
 
 /** The engine for a version's board (Play's own engine object for Play-sized boards). */
