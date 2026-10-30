@@ -589,9 +589,12 @@ async function checkSupport(page: Page, scheme: string) {
   const text = (await page.locator('.support-address code').textContent())?.trim();
   if (text !== SUPPORT.address) fail(`${where}: the address reads "${text}", not ${SUPPORT.address}`);
   if ((await page.locator('.support-address [data-copies]').getAttribute('data-copies')) !== SUPPORT.address) fail(`${where}: the copy button doesn't copy ${SUPPORT.address}`);
-  const svg = (await page.locator('.support-qr').innerHTML()).trim();
-  const want = (await QRCode.toString(SUPPORT.address, { type: 'svg', margin: 1, errorCorrectionLevel: 'M' })).trim();
-  if (svg !== want) fail(`${where}: the QR code isn't the code of ${SUPPORT.address}`);
+  // The modules drawn (each path's d) and the size, compared with the code of SUPPORT.address: the browser rewrites
+  // the markup itself (a path's "/>" becomes "></path>"), so the text can't be compared.
+  const shown = await page.locator('.support-qr svg').evaluate((svg) => ({ box: svg.getAttribute('viewBox'), d: [...svg.querySelectorAll('path')].map((p) => p.getAttribute('d')) }));
+  const svg = await QRCode.toString(SUPPORT.address, { type: 'svg', margin: 1, errorCorrectionLevel: 'M' });
+  const want = { box: /viewBox="([^"]+)"/.exec(svg)?.[1] ?? null, d: [...svg.matchAll(/ d="([^"]+)"/g)].map((m) => m[1]) };
+  if (JSON.stringify(shown) !== JSON.stringify(want)) fail(`${where}: the QR code isn't the code of ${SUPPORT.address}`);
   const splits = await page.locator('a[href^="https://app.splits.org/"]').evaluateAll((as) => as.map((a) => a.getAttribute('href')));
   const wantSplits = SUPPORT.networks.map((n) => SUPPORT.splitsUrl(n.chainId));
   if (splits.join(' ') !== wantSplits.join(' ')) fail(`${where}: the Splits links are ${splits.join(', ')}`);
@@ -1909,6 +1912,8 @@ try {
   // lost its message to a truncated log, and couldn't be root-caused).
   console.error(e);
   console.error(`\nUI CHECK BROKE (last page opened: ${lastOpened}): ${String((e as Error)?.message ?? e).split('\n')[0]}`);
+  // What was checked before the break still counts (2026-10-30): say the problems found so far, or that there were none.
+  console.error(failures.length ? `Before the break, ${failures.length} problem(s):\n- ${failures.join('\n- ')}` : 'Before the break: no problems found.');
   process.exitCode = 1;
 } finally {
   await browser.close();
