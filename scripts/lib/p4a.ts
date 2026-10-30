@@ -56,8 +56,8 @@ const TOOL_MODULES = new Set(['core', 'accounts', 'filter', 'images', 'pieces', 
 // Suggestions (owner, 2026-10-22) go to the owner only and are never published; ./suggestions is scanned like the
 // others. Added to the inspected list by the coding agent; the owner's yes pending.
 // The picture tools (owner, 2026-10-29, Plan A part 2) draft only: ./pictures saves words and an estimate through
-// draftPiece; making the picture is ./approve's, on the person's Make it. Added by the coding agent; the owner's yes pending.
-// A tool module's own ./ imports must be inspected modules too, so none of them can reach ./approve indirectly.
+// draftPiece; making the picture is ./approve's, on the person's Make it. A tool module's own ./ imports must be
+// inspected modules too, so none of them can reach ./approve indirectly. Owner, 2026-10-29: "P4a's stricter inspection: yes."
 // The edit tools (owner, 2026-10-20) draft only; spending on an approved edit lives in ./approve, which no tool may
 // import (it isn't in this list, so importing it from tools.ts fails the check).
 /** What tools.ts may take from pieces.ts: the three draft writers (each read below) and readers. Never decide. */

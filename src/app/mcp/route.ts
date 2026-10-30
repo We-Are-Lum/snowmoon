@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { ToolInputError } from '~/lib/agent/tools';
 import { agentFromRequest, agentsOn, issuer } from '~/lib/agents/core';
-import { AGENT_TOOLS, recordTimeout, runTool } from '~/lib/agents/tools';
+import { AGENT_TOOLS, recordTimeout, runTool, listedTools } from '~/lib/agents/tools';
 
 /**
  * The connector for "Add to Claude" and "Add to ChatGPT" (owner, 2026-10-20; docs/agents/design.md §1).
@@ -84,7 +84,7 @@ export async function POST(request: Request) {
       return reply(msg.id, {});
     case 'tools/list':
       return reply(msg.id, {
-        tools: AGENT_TOOLS.filter((t) => agent.scopes.includes(t.scope)).map(({ name, title, description, inputSchema, writes }) => ({
+        tools: (await listedTools(agent)).map(({ name, title, description, inputSchema, writes }) => ({
           name, title, description, inputSchema,
           annotations: { title, readOnlyHint: !writes, destructiveHint: false, idempotentHint: !writes, openWorldHint: false },
         })),

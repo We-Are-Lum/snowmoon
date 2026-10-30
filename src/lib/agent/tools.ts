@@ -72,14 +72,14 @@ async function versionFacts(v: Version) {
 
 async function publicVersion(adaptation: number, version: number) {
   const v = await getVersion(version);
-  if (!v || v.adaptationId !== adaptation || v.hidden) throw new ToolInputError('no such public version of that adaptation');
+  if (!v || v.adaptationId !== adaptation || v.hidden) throw new ToolInputError('no such public version of that adaptation. Next: list_scenes lists the adaptations and their versions.');
   return v;
 }
 
 function shotOf(adaptation: number, editorVersionId: number, shot: string): { shot: DataShot; title: string; closedModel: unknown } {
   const d = editorData(adaptation, editorVersionId);
   const s = d?.shots.find((x) => x.id === shot);
-  if (!d || !s) throw new ToolInputError('no such shot in that version');
+  if (!d || !s) throw new ToolInputError('no such shot in that version. Next: get_scene lists its shots by id.');
   return { shot: s, title: d.title, closedModel: d.closedModel ?? null };
 }
 
@@ -122,9 +122,12 @@ export const TOOLS: Tool[] = [
       const from = int(args, 'from', { min: 0, max: 99999 })!, to = int(args, 'to', { min: 0, max: 99999 })!;
       if (to < from) throw new ToolInputError('to must not be before from');
       const ch = loadChapter(chapter);
-      if (!ch) throw new ToolInputError(`no chapter ${chapter}; chapters are ${chapterNumbers()[0]} to ${chapterNumbers().at(-1)}`);
+      if (!ch) throw new ToolInputError(`no chapter ${chapter}; chapters are ${chapterNumbers()[0]} to ${chapterNumbers().at(-1)}. Next: search_book finds the chapter a passage is in.`);
       const blocks = ch.blocks.filter((b) => b.idx >= from && b.idx <= to);
-      if (blocks.length > AGENT_API.maxBlocks) throw new ToolInputError(`at most ${AGENT_API.maxBlocks} blocks at once`);
+      if (blocks.length > AGENT_API.maxBlocks) {
+        const until = blocks[AGENT_API.maxBlocks - 1].idx;
+        throw new ToolInputError(`at most ${AGENT_API.maxBlocks} blocks at once. Next: get_passage {chapter: ${chapter}, from: ${blocks[0].idx}, to: ${until}}, then from ${until + 1} (the chapter's last block is ${ch.blocks.at(-1)?.idx ?? 0}).`);
+      }
       const last = ch.blocks.at(-1)?.idx ?? 0;
       return { book: BOOK, chapter, url: `${appUrl()}/chapter/${chapter}`, blocks_in_chapter: ch.blocks.length, last_block: last, more_after: to < last, blocks: blocks.map((b) => ({ id: blockId(chapter, b.idx), kind: b.kind, text: plainText(b.content) })) };
     },
@@ -146,7 +149,13 @@ export const TOOLS: Tool[] = [
       if (typeof args.term !== 'string' || !args.term.trim()) throw new ToolInputError('term must be a word');
       const q = args.term.trim().toLowerCase();
       const t = all.find((x) => x.slug === q || x.term.toLowerCase() === q || x.aliases.some((a) => a.toLowerCase() === q));
-      if (!t) throw new ToolInputError(`no glossary term "${args.term}" met by chapter ${through}${through < lastChapter ? ' (it may come later: raise "through")' : ''}`);
+      if (!t) {
+        // The next valid step (owner, 2026-10-29): a place or character with a sheet, or the tools that find a word.
+        const slug = q.replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+        const sheet = ['location', 'character'].find((k) => existsSync(path.join(process.cwd(), 'content', 'snowmoon', 'designs', k === 'location' ? 'locations' : 'characters', `${slug}.json`)));
+        const next = sheet ? `"${slug}" has a ${sheet === 'location' ? 'place' : 'character'} sheet: get_sheet {kind: "${sheet === 'location' ? 'place' : 'character'}", slug: "${slug}"}.` : 'Next: get_glossary without term lists every term; search_book finds a word in the text.';
+        throw new ToolInputError(`no glossary term "${args.term}" met by chapter ${through}${through < lastChapter ? ' (it may come later: raise "through")' : ''}. ${next}`);
+      }
       return { book: BOOK, through, url: `${url}/${t.slug}`, ...t };
     },
   },
@@ -159,7 +168,7 @@ export const TOOLS: Tool[] = [
       only(args, ['kind', 'slug']);
       const kind = args.kind === 'place' ? 'place' : args.kind === 'character' ? 'character' : null;
       const slug = typeof args.slug === 'string' && /^[a-z0-9-]{1,60}$/.test(args.slug) ? args.slug : null;
-      if (!kind || !slug) throw new ToolInputError('kind is character or place, and slug is lowercase letters, numbers and hyphens');
+      if (!kind || !slug) throw new ToolInputError('kind is character or place, and slug is lowercase letters, numbers and hyphens. Next: get_references with a glossary word gives its sheets\' kind and slug.');
       const f = path.join(process.cwd(), 'content', 'snowmoon', 'designs', kind === 'character' ? 'characters' : 'locations', `${slug}.json`);
       if (!existsSync(f)) throw new ToolInputError(`no ${kind} sheet "${slug}"; get_references with a glossary word lists the sheets it has`);
       const d = JSON.parse(readFileSync(f, 'utf8')) as { name: string; about?: string; descriptor?: string; facts?: { chapter: number; idx: number; quote: string; fact?: string }[] };
@@ -185,7 +194,11 @@ export const TOOLS: Tool[] = [
       if (typeof args.term !== 'string' || !args.term.trim()) throw new ToolInputError('term must be a word');
       const q = args.term.trim().toLowerCase();
       const t = glossaryThrough(chapterNumbers().at(-1)!).find((x) => x.slug === q || x.term.toLowerCase() === q || x.aliases.some((a) => a.toLowerCase() === q));
-      if (!t) throw new ToolInputError(`no glossary word "${args.term}"`);
+      if (!t) {
+        const slug = q.replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+        const sheet = ['location', 'character'].find((k) => existsSync(path.join(process.cwd(), 'content', 'snowmoon', 'designs', k === 'location' ? 'locations' : 'characters', `${slug}.json`)));
+        throw new ToolInputError(`no glossary word "${args.term}". ${sheet ? `"${slug}" has a ${sheet === 'location' ? 'place' : 'character'} sheet: get_sheet {kind: "${sheet === 'location' ? 'place' : 'character'}", slug: "${slug}"}.` : 'Next: get_glossary without term lists every word.'}`);
+      }
       const mapFile = path.join(process.cwd(), 'content', 'snowmoon', 'references.json');
       const map = existsSync(mapFile) ? (JSON.parse(readFileSync(mapFile, 'utf8')) as { terms: { term: string; designs: { kind: 'character' | 'place'; slug: string; check: boolean }[] }[] }) : { terms: [] };
       const sheets = (map.terms.find((x) => x.term === t.slug)?.designs ?? []).filter((d) => !d.check);
@@ -217,7 +230,7 @@ export const TOOLS: Tool[] = [
       only(args, ['adaptation', 'version']);
       const adaptation = int(args, 'adaptation', { min: 1 })!, version = int(args, 'version', { min: 1 })!;
       const a = await getAdaptation(adaptation);
-      if (!a) throw new ToolInputError('no such adaptation');
+      if (!a) throw new ToolInputError('no such adaptation. Next: list_scenes lists them.');
       const v = await publicVersion(adaptation, version);
       const ed = await editorVersion(v);
       const d = editorData(adaptation, ed.id);
@@ -281,7 +294,7 @@ export const TOOLS: Tool[] = [
       const adaptation = int(args, 'adaptation', { min: 1 })!;
       const shot = str(args, 'shot', /^[A-Za-z0-9-]{1,40}$/, 'a shot id');
       const a = await getAdaptation(adaptation);
-      if (!a) throw new ToolInputError('no such adaptation');
+      if (!a) throw new ToolInputError('no such adaptation. Next: list_scenes lists them.');
       // The maker's public versions, the one their page shows first (as on the moment page; a linked wallet's under its FID).
       const versions = await authorVersions(await sceneOwner(a.owner), adaptation);
       const cols = [];
@@ -293,7 +306,7 @@ export const TOOLS: Tool[] = [
         if (!lines.length) lines = (s.lines ?? []).map(lineOut);
         cols.push({ version: v.id, from: s.from, to: s.to, frame: abs(s.frame as string | null), picture: s.picture ?? null, ai_label: v.recipe.ai_label ?? null, video: ownMedia(v.recipe.video_url) });
       }
-      if (!cols.length) throw new ToolInputError('no such shot in this adaptation');
+      if (!cols.length) throw new ToolInputError('no such shot in this adaptation. Next: get_scene lists each version\'s shots by id.');
       const handle = await sceneHandleFor(a.owner);
       return { adaptation, title: a.title, shot, page: handle ? `${appUrl()}/@${handle}/${adaptation}/m/${shot}` : null, lines, versions: cols, licence: 'GPL-3.0' };
     },

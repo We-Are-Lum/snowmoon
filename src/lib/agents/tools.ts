@@ -12,7 +12,7 @@ import { addNote, draftPiece, feedbackFor, notesOn, pieceVersions, piecesOf, rev
 import { openRequests, personWords } from './requests';
 import { addSuggestion, suggestionsOf } from './suggestions';
 import { addDirection, directionOf, findLine, rewriteLine } from './direction';
-import { ATTACH_SCHEMA, STYLE_SCHEMA, draftPicture, draftPlace, draftSheet, draftStyle } from './pictures';
+import { ATTACH_SCHEMA, MAKES, STYLE_SCHEMA, draftPicture, draftPlace, draftSheet, draftStyle, matchRequest, stylesOffered, type PictureStyle } from './pictures';
 import { changeTiming, listTakes, logGap, markSpeaking, recordFailure, requestVideo, setCamera, swapTake, tryFrame, frameEstimate, videoEstimate } from './edits';
 
 /**
@@ -434,8 +434,14 @@ const EDITS: AgentTool[] = [
     run: async (agent, args) => rewriteLine(agent.person, { agent, request: typeof args.answering === 'string' ? args.answering : null }, args),
   },
   {
+    name: 'match_request', title: 'Match what your person wants to make', scope: 'read', writes: true,
+    description: 'Call this first, before answering, whenever your person asks you to make something: their words (asked) and which kind of thing it is (wants). It names the tools that make it. When no tool does (a comic, a video of the book…), it records the gap for the site\'s owner, as log_gap does, and says what to tell your person and what you can make instead.',
+    inputSchema: { type: 'object', properties: { asked: { type: 'string', description: 'Your person\'s request, in their words.' }, wants: { enum: Object.keys(MAKES) } }, required: ['asked', 'wants'], additionalProperties: false },
+    run: async (agent, args) => matchRequest(agent, args),
+  },
+  {
     name: 'log_gap', title: 'Log something you couldn\'t do', scope: 'read', writes: true,
-    description: 'When your person asks for something none of your tools can do, record it: what they asked (their words) and what was missing. It shows on their You page and to the site\'s owner, who reads it as the build list. Use it instead of guessing or working around a missing tool.',
+    description: 'When your person asks for something none of your tools can do, record it before you answer: what they asked (their words) and what was missing (match_request does this for you when nothing makes what they want). It shows on their You page and to the site\'s owner, who reads it as the build list. Use it instead of guessing or working around a missing tool.',
     inputSchema: { type: 'object', properties: { asked: { type: 'string' }, missing: { type: 'string' } }, required: ['asked', 'missing'], additionalProperties: false },
     run: async (agent, args) => logGap(agent, args),
   },
@@ -464,6 +470,16 @@ const EDITS: AgentTool[] = [
 const READ: AgentTool[] = READ_TOOLS.map((t) => ({ ...t, scope: 'read' as Scope, writes: false, run: (_agent: Agent, args: Record<string, unknown>) => t.run(args) }));
 
 export const AGENT_TOOLS: AgentTool[] = [...READ, ...WRITE, ...EDITS];
+/** A tool's schema as listed: a style argument becomes an enum of the styles on offer now (owner, 2026-10-29). */
+export function withStyles(schema: Schema, names: string[]): Schema {
+  if (schema.properties.style !== STYLE_SCHEMA) return schema;
+  return { ...schema, properties: { ...schema.properties, style: { type: 'string', enum: names, description: STYLE_SCHEMA.description } } };
+}
+/** The tools an agent is shown, for its scopes, with the offered styles filled in. */
+export async function listedTools(agent: Pick<Agent, 'scopes'>, offered: () => Promise<PictureStyle[]> = stylesOffered) {
+  const names = (await offered()).map((x) => x.name);
+  return AGENT_TOOLS.filter((t) => agent.scopes.includes(t.scope)).map((t) => ({ ...t, inputSchema: withStyles(t.inputSchema, names) }));
+}
 export const agentToolByName = (name: string) => AGENT_TOOLS.find((t) => t.name === name) ?? null;
 
 /** Runs one tool for an agent: its scope, then its count, then the tool. Every failure is recorded (recordFailure). */

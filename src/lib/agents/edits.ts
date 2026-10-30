@@ -73,7 +73,7 @@ export const videoEstimate = () => Math.round(AGENTS.spend.videoUsdPerSecond * A
 async function draftEdit(agent: Agent, adaptation: number, version: number, shot: DataShot, change: Change, title: string, answering?: unknown) {
   const body = { adaptation, version, shot: shot.id, change };
   const out = await draftPiece(agent, 'edit', title, adaptation, body, false, undefined, typeof answering === 'string' ? { request: answering } : {});
-  return { ...out, status: 'draft', change, next: change.type === 'frame' || change.type === 'video' ? `Waiting for your person to approve about $${change.estimate_usd} on their You page; nothing is spent before.` : 'Waiting for your person to keep it.' };
+  return { ...out, status: 'draft', change, next: change.type === 'frame' || change.type === 'video' ? `Saved as a private draft; nothing is made or spent yet. Next, your person taps Make it on their dashboard (about $${change.estimate_usd}): that makes the ${change.type} privately, inside the draft, seen only by them. Publishing or using it is a separate step, Keep, which only your person can take.` : 'Saved as a private draft. Keep, which only your person can take, is the separate step that uses it.' };
 }
 
 const num = (v: unknown, what: string, min: number, max: number) => {
