@@ -579,8 +579,11 @@ async function checkIllustrationReview(page: Page, scheme: string) {
  */
 async function checkSupport(page: Page, scheme: string) {
   const where = `/support @390 (${scheme})`;
-  let ours = 0;
-  const count = (r: { url: () => string }) => r.url().includes('/api/') && ours++;
+  // What could record a sender: a write to our API, or any request that carries the address. The shell's own reads on
+  // every page (who is signed in, the assistant's status) don't.
+  const ours: string[] = [];
+  const count = (r: { url: () => string; method: () => string; postData: () => string | null }) =>
+    r.url().includes('/api/') && (r.method() !== 'GET' || r.url().includes(SUPPORT.address) || (r.postData() ?? '').includes(SUPPORT.address)) && ours.push(`${r.method()} ${r.url().replace(/^https?:\/\/[^/]+/, '')}`);
   page.on('request', count);
   await open(page, '/support');
   const text = (await page.locator('.support-address code').textContent())?.trim();
@@ -601,7 +604,7 @@ async function checkSupport(page: Page, scheme: string) {
   if (!(await page.locator('.support-own input[type="number"]').count())) fail(`${where}: no box for your own amount`);
   await page.locator('.support-send .wallet-packs button').first().click();
   await page.getByText('No wallet found in this browser').waitFor({ timeout: 5000 }).catch(() => fail(`${where}: Send with no wallet doesn't say so`));
-  if (ours) fail(`${where}: the page asked our API ${ours} time(s); it should record nothing`);
+  if (ours.length) fail(`${where}: the page sent our API something that could record a sender: ${ours.join(', ')}`);
   await checkFloors(page, '/support @390', scheme);
   await shot(page, 'phone-390-support', scheme);
   page.off('request', count);
