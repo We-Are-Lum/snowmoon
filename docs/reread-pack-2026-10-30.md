@@ -277,7 +277,7 @@ The reread words said only Groq, so items 12 and 13 are new drafts. Item 14 repe
   (or, when you make something, to Baseten) to be answered and never published; another device won't have them. When
   you ask it to make something, its drafts, with the words of your request, are kept privately on your Dashboard until
   you publish or discard them. Anything with a cost waits for you to tap Make it." (Changed from the reread words only
-  by "dashboard" → "Dashboard" and "(or, when you make something, to Kimi K3)".)
+  by "dashboard" → "Dashboard" and "(or, when you make something, to Baseten)".)
 - §5, a paragraph added after it (reread): "If you ask the assistant to make something, it works as your agent: it
   saves drafts to your Dashboard (what it drafted, the words of your request that it answers, and the recipe),
   privately, until you publish or discard them. We still keep no copy of the conversation itself. As with any agent,
@@ -287,6 +287,26 @@ The reread words said only Groq, so items 12 and 13 are new drafts. Item 14 repe
 - Terms §6b, a second sentence (new draft, for the make limits): "When you ask the assistant to make something, each
   day is limited to 10 such conversations for you and to a spending limit for the whole site; when either is reached,
   making pauses until the next day, and questions about the book still work."
+
+---
+
+## Part G: "Support this site" (branch `support-page`; no migration)
+
+### 15. Terms: a new section 6c, after 6b (Agents)
+
+- Before: (no such section; §6a covers prepaid payments, which buy generations)
+- After (draft):
+  > **6c. Support.** You can send money to the address on the Support page (a Splits account, on Ethereum or Base) to
+  > help pay for the Service. It is a gift. It buys nothing on the Service and earns no reward, no place in any order,
+  > no score and no say. It is not an investment, and there is no token. It is final: it is never refunded or paid back.
+  > It is not tax-deductible: Lum LLC is not a charity. Send it only on the networks the page names: money sent on any
+  > other network may be lost, and we can't recover it. What the address receives is shared out as its Split says, which
+  > anyone can see on Splits.
+
+No Privacy change while nothing is recorded. The page and "Send with your wallet" call no API of ours, and the
+transaction goes from the sender's wallet straight to the network. Notes for the reread are in
+`docs/legal/support-draft.md` on `support-page`. Also yours to choose: the page's heading, one of "Fund the next scene"
+(shown now), "Back Snowmoon Party" or "Keep the lights on".
 
 ---
 
@@ -334,5 +354,6 @@ transaction, safe to run twice. None depends on another, so a failure in one doe
 4. **social-read:** items 11a to 11e, migration 4 "applied", then its switch.
 5. **Plan A part 2:** items 6 to 9 (after part 1).
 6. **The assistant as an agent:** items 12 to 14, when it's built (routing C).
+7. **support-page:** item 15, after its $1 test send on Base (no migration).
 
 One merge at a time, live checks after each, as always.
