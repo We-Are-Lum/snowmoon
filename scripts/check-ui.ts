@@ -104,7 +104,11 @@ const OWNER_CELLS = 'In the book, pieces are made of cells. Here you play with w
 const failures: string[] = [];
 const fail = (msg: string) => failures.push(msg);
 
+/** The last page open() went to, so a step that breaks after it is named (see the catch at the end). */
+let lastOpened = '(none yet)';
+
 async function open(page: Page, path: string) {
+  lastOpened = path;
   // On a timeout, say which requests were still open (owner, 2026-10-29: root-cause the /minpentai?watch=1 timeouts,
   // don't rerun them away).
   const pending = new Map<object, string>();
@@ -1857,9 +1861,17 @@ try {
     await checkPlayFullScreen(frame, '@424×695', 695);
     await frame.close();
   }
+} catch (e) {
+  // A step that throws (a timeout, a missing element) ends the check: say it on one last line, naming the last page
+  // opened and the first line of the error, so a short log still shows what broke (2026-10-29: a bare TimeoutError
+  // lost its message to a truncated log, and couldn't be root-caused).
+  console.error(e);
+  console.error(`\nUI CHECK BROKE (last page opened: ${lastOpened}): ${String((e as Error)?.message ?? e).split('\n')[0]}`);
+  process.exitCode = 1;
 } finally {
   await browser.close();
 }
+if (process.exitCode === 1) process.exit(1);
 
 if (failures.length) {
   console.error(`\nUI CHECK FAILED (${failures.length}):\n- ` + failures.join('\n- '));
