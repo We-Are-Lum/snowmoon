@@ -6,6 +6,7 @@ import { isAdmin } from '~/lib/admins';
 import { workOf } from '~/lib/images/designs';
 import { moveToPrivate } from '~/lib/images/store';
 import { loadIllustrationById } from '~/lib/illustrations';
+import { forgetHidden } from '~/lib/admin-hidden';
 
 /**
  * An admin's Hide in the reader (owner, 2026-10-29: "an admin Hide in the reader for seeded and readers' images").
@@ -29,8 +30,10 @@ export async function POST(request: Request) {
       console.error('admin hide: seeded_hidden not ready', (e as Error).name);
       return NextResponse.json({ error: 'Hiding seeded images needs the owner’s admin migration (NEXT_admin) first.' }, { status: 503 });
     }
-    revalidatePath(`/chapter/${im.chapter}`);
-    revalidatePath('/references', 'layout');
+    // Everywhere a seeded image can show (owner, 2026-10-30): the chapter and its player, References and the sheets,
+    // the introduction (home, About and every page's "What is this?"), and quote cards and their share pages.
+    forgetHidden();
+    revalidatePath('/', 'layout');
     return NextResponse.json({ done: 'hidden' });
   }
   if (b.kind === 'reader' && typeof b.id === 'string') {

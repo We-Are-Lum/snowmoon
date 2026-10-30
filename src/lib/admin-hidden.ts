@@ -40,7 +40,19 @@ async function read(): Promise<Set<string>> {
   }
 }
 
+/**
+ * At run time the list is kept for 30 seconds in this server instance: every page's shell reads it (the introduction),
+ * so without this each request would query the database. A hide clears it here (forgetHidden) and revalidates the
+ * pages it touches; another instance sees it within 30 seconds.
+ */
+const KEEP_MS = 30_000;
+let kept: { at: number; set: Promise<Set<string>> } | null = null;
+export const forgetHidden = () => {
+  kept = null;
+};
+
 export const hiddenSeeded = cache(async (): Promise<Set<string>> => {
   if (BUILDING) return (duringBuild ??= read());
-  return read();
+  if (!kept || Date.now() - kept.at > KEEP_MS) kept = { at: Date.now(), set: read() };
+  return kept.set;
 });
