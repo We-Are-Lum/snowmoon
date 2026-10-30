@@ -13,3 +13,8 @@
 @media (pointer: coarse) {
   .social-posts-note a::after { content: none; }
 }
+/* The moderators' list of posts read (/moderate): long handles, ids and page paths wrap instead of widening the page. */
+.moderate-social-list { list-style: none; margin: 0; padding: 0; }
+.moderate-social-list > li { min-width: 0; padding: 14px 0; border-top: 1px solid var(--rule); }
+.moderate-social-list p, .moderate-social-list blockquote { overflow-wrap: anywhere; }
+.moderate-social-list blockquote { margin: 6px 0; white-space: pre-line; }

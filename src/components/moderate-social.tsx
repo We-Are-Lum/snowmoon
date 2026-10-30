@@ -57,14 +57,14 @@ export function ModerateSocial() {
                 </a>
               </p>
               {!p.hidden && (
-                <p className="moderate-social-actions">
-                  <button type="button" onClick={() => void hide(p, 'writer_asked')}>
+                <div className="mq-actions">
+                  <button type="button" className="mq-hide" onClick={() => void hide(p, 'writer_asked')}>
                     Hide: the writer asked
-                  </button>{' '}
-                  <button type="button" onClick={() => void hide(p, 'terms')}>
+                  </button>
+                  <button type="button" className="mq-hide" onClick={() => void hide(p, 'terms')}>
                     Hide: breaks the Terms
                   </button>
-                </p>
+                </div>
               )}
             </li>
           ))}
