@@ -112,14 +112,24 @@ await check('auth endpoint rejects anonymous and forged tokens', async () => {
   return forged.status === 401 ? null : `forged token: expected 401, got ${forged.status}`;
 });
 
+// Pictures became References (owner, 2026-10-29): every old address redirects permanently, keeping its path and query.
+await check('the old /images addresses redirect permanently to /references', async () => {
+  for (const [from, to] of [['/images', '/references'], ['/images?show=moments', '/references?show=moments'], ['/images/designs?tab=characters', '/references/designs?tab=characters'], ['/images/designs/character/gladias', '/references/designs/character/gladias']]) {
+    const r = await fetch(base + from, { redirect: 'manual' });
+    const loc = (r.headers.get('location') ?? '').replace(base, '');
+    if (r.status !== 308 || loc !== to) return `${from}: expected 308 to ${to}, got ${r.status} ${loc}`;
+  }
+  return null;
+});
+
 // Readers' images: the feed renders, and the composer's status answers with the model and the rules
 // (the style file it reads must be in the deployment). Writes refuse anyone signed out.
 await check("readers' images: the feed, the composer's status, and writes need sign-in", async () => {
-  // The front page has Pictures' menu; "Most liked" is on Moments (owner, 2026-10-14).
-  const feed = await get('/images');
-  if (feed.status !== 200 || !feed.body.includes('pictures-menu')) return `/images HTTP ${feed.status}, or no Pictures menu`;
-  const moments = await get('/images?show=moments');
-  if (moments.status !== 200 || !moments.body.includes('Most liked')) return `/images?show=moments HTTP ${moments.status}, or no "Most liked"`;
+  // The front page has References' menu (once Pictures); "Most liked" is on Moments (owner, 2026-10-14).
+  const feed = await get('/references');
+  if (feed.status !== 200 || !feed.body.includes('pictures-menu')) return `/references HTTP ${feed.status}, or no References menu`;
+  const moments = await get('/references?show=moments');
+  if (moments.status !== 200 || !moments.body.includes('Most liked')) return `/references?show=moments HTTP ${moments.status}, or no "Most liked"`;
   const st = await fetch(base + '/api/images/status?chapter=1&start=3');
   if (st.status !== 200) return `/api/images/status HTTP ${st.status}`;
   const s = (await st.json()) as { model?: { id?: string }; styles?: { text?: string }[]; rules?: string };

@@ -9,6 +9,7 @@ import { blockFacts } from '~/lib/reading';
 import { makeEdit, makeImage } from '~/lib/images/fal';
 import { mayGenerate } from '~/lib/images/gate';
 import { paidPicture } from '~/lib/images/paid';
+import { generateReserveUsd } from '~/lib/images/price';
 import { finalPrompt, STYLES, styleText, type StyleId } from '~/lib/images/rules';
 import { signTicket, type TicketDesign } from '~/lib/images/ticket';
 import { designByVersion, myPicks, startingStyleRetired, type MyPick } from '~/lib/images/designs';
@@ -27,6 +28,7 @@ import { askedSheets, inPassage, placeTitle, sheetPlaces, sheetsForImage } from 
  * offered, or any published style. The person may add their own picks (character sheets, and a
  * setting sheet, 2026-10-14), each one's text added to the prompt and checked with it. When asked,
  * a picked sheet's views go to FLUX.2 [klein] 4B edit as reference pictures, through the same caps.
+ * Picks are open to everyone signed in, Farcaster or wallet (owner, 2026-10-19 and 2026-10-23); making designs is not.
  *
  * Sheets as text (owner, 2026-10-10): the characters this passage names and its scene's place
  * (src/lib/images/sheets.ts, no model), as the person left them chosen. Only those may be asked
@@ -118,9 +120,9 @@ export async function POST(request: Request) {
 
   // Reference pictures: the chosen sheets' views, front first, up to the model's limit.
   const refs: { url: string; sha256: string; width: number; height: number }[] = [];
-  // A wallet account is charged only a price it was shown (Terms 6a): the page never offers it reference pictures, whose
-  // price differs, so they aren't taken from one here either.
-  if (body.reference === true && fid < 0) return no('Reference pictures aren’t available for wallet accounts yet', 400);
+  // Picks, and a picked sheet's pictures as references, are open to everyone signed in, wallet accounts too (owner,
+  // 2026-10-23). A wallet account is charged the price it was shown (Terms 6a): the composer shows
+  // priceUsd(generateReserveUsd(references)) from the same count of pictures, and that is what reserve() takes.
   if (body.reference === true) {
     for (const p of sheetPicks) for (const k of ['front', 'side', 'back'] as const) if (p.views[k] && refs.length < IMAGES.maxReferences) refs.push({ url: p.views[k]!.url, sha256: p.views[k]!.sha256, width: p.views[k]!.recipe.width, height: p.views[k]!.recipe.height });
     if (!refs.length) return no('None of these sheets has pictures to use as a reference', 400);
@@ -137,7 +139,7 @@ export async function POST(request: Request) {
   // as it will be sent (the person's words, any style, sheet and shorthand text) is checked.
   const paid = await paidPicture(sql, fid, request, {
     checkText: prompt,
-    spend: pictures.length ? { model: IMAGES.editModel, reserveUsd: IMAGES.editReserveUsd(pictures.length) } : undefined,
+    spend: pictures.length ? { model: IMAGES.editModel, reserveUsd: generateReserveUsd(pictures.length) } : undefined,
     make: () => (pictures.length ? makeEdit(prompt, pictures) : makeImage(prompt)),
   });
   if (!paid.ok) return no(paid.error, paid.status, paid.extra);

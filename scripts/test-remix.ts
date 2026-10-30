@@ -249,6 +249,16 @@ try {
     const bad = await fetch(BASE + '/api/remix/generate', { method: 'POST', headers: { 'content-type': 'application/json', authorization: `Bearer ${token}` }, body: JSON.stringify({ adaptation: 1, version: 1, shot: '48-b4-1', words: 'x', layout: 'data:image/png;base64,AAAA' }) });
     check('R9', 'a blocked prompt is refused and nothing saved; a bad layout is refused (400)', /rules don.t allow/.test(warn) && n1.n === n0.n && bad.status === 400, { warn, saved: n1.n - n0.n, bad: bad.status }, await shot(page, 'R9-blocked'));
 
+    // R9b a shot made in code (owner, 2026-10-22: Luis couldn't remix shot 8): no camera, so Generate draws from its saved
+    // depth layout; a shot whose saved frame is a "look" render, not a depth layout, still can't be remixed.
+    const st = async (shotId: string) => ((await (await fetch(`${BASE}/api/remix/status?adaptation=1&version=2&shot=${shotId}`, { headers: { authorization: `Bearer ${token}` } })).json()) as { shot: { remixable: boolean; fixed?: boolean } | null }).shot;
+    const s8 = await st('7-CU-Z');
+    const s2 = await st('1-FLOOR');
+    const fixedGen = await fetch(BASE + '/api/remix/generate', { method: 'POST', headers: { 'content-type': 'application/json', authorization: `Bearer ${token}` }, body: JSON.stringify({ adaptation: 1, version: 2, shot: '7-CU-Z', words: 'Warmer light on his face.', layout: null, camera: { fov: 1 } }) });
+    const fixedRow = (await q1(`select recipe from studio.remix_frames where person = $1 and shot_id = '7-CU-Z' order by created_at desc limit 1`, [-acct])) as { recipe?: { layout?: string; camera?: unknown; pictures?: { role: string; served: string | null; made_from: string | null; width: number; height: number }[] } } | undefined;
+    const lay = fixedRow?.recipe?.pictures?.[0];
+    check('R9b', 'a shot made in code remixes from its saved depth layout (no camera sent or kept); a "look" frame still can\u2019t', s8?.remixable === true && s8?.fixed === true && s2?.remixable === false && fixedGen.status === 200 && lay?.role === 'layout' && lay.served === '/editor/1/v2/set/cov-overlook-CU-Z.depth.jpg' && /cov-overlook-CU-Z\.depth\.png$/.test(lay.made_from ?? '') && lay.width === REMIX.layout.width && lay.height === REMIX.layout.height && fixedRow?.recipe?.camera === null && /^saved/.test(fixedRow?.recipe?.layout ?? ''), { s8, s2, status: fixedGen.status, lay, layout: fixedRow?.recipe?.layout });
+
     // R10 share and hide
     await page.locator('.ed-remix figure').first().getByRole('button', { name: 'Cast it' }).click();
     await page.waitForTimeout(800);

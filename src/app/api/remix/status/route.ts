@@ -32,7 +32,8 @@ export async function GET(request: Request) {
     ready,
     free: remixFreeOn(),
     model: { name: IMAGES.editModel.name, licence: IMAGES.editModel.licence, host: IMAGES.editModel.host },
-    shot: shot ? { id: shot.id, remixable: Boolean(shot.hasCamera && shot.prompt), pictures } : null,
+    // fixed: no camera to move, so Generate draws from the shot's saved layout (owner, 2026-10-22).
+    shot: shot ? { id: shot.id, remixable: Boolean(shot.prompt && (shot.hasCamera || shot.savedLayout)), fixed: !shot.hasCamera && Boolean(shot.savedLayout), pictures } : null,
     // The version's own pictures were drawn by a closed model, and Remix sends another version's shot: said in the panel.
     drawnFrom: shot && shot.from !== version ? { version: shot.from, versionModel: shot.versionModel } : null,
     ownWordsMaxChars: REMIX.ownWordsMaxChars,

@@ -30,6 +30,7 @@ export const IMAGE_WORDING = {
   /** Pictures' menu and front page (owner, 2026-10-14: four clear choices; the feed shows all of them). Model-drafted wording. */
   feed: {
     menu: [
+      { key: 'glossary', label: 'Glossary', hint: 'The book’s words, pictured' },
       { key: 'moments', label: 'Moments', hint: 'Images of passages' },
       { key: 'characters', label: 'Characters', hint: 'How the people look' },
       { key: 'settings', label: 'Settings', hint: 'Where it happens' },
@@ -50,7 +51,7 @@ export const IMAGE_WORDING = {
   signIn: {
     farcasterNote: (perDay: number) => `Established Farcaster accounts can make up to ${perDay} images a day for free.`,
   },
-  /** "Make an image" (/images/new, 2026-10-10): choose a passage, then the composer. Model-drafted wording. */
+  /** "Make an image" (/references/new, 2026-10-10): choose a passage, then the composer. Model-drafted wording. */
   create: {
     title: 'Make an image',
     intro: 'Choose a passage of the book, then describe the image in your own words.',
@@ -179,7 +180,8 @@ export const IMAGE_WORDING = {
       needSamples: (n: number) => `Make at least ${n} sample pictures with this text to publish.`,
       signIn: 'Sign in to make a style or a sheet. For now, making them is open to invited readers only.',
       // Owner, 2026-10-10: "Invited only, for now". Shown by the form and sent by /api/designs and /api/designs/sample.
-      // 2026-10-10: picks too, until the Privacy Policy covers them (the owner's words are pending). Model-drafted.
+      // Picks are open to everyone signed in since 2026-10-19 (Privacy §4 names My picks), and at Generate for wallet
+      // accounts too since 2026-10-23. Model-drafted.
       notInvited: 'Making styles and character sheets is open to invited readers only, for now. Anyone signed in can browse them and use them in their pictures.',
       notReady: 'Making styles and sheets isn’t set up on this deployment yet.',
       consentFirst: 'Before your first style or sheet: how your words are published.',
@@ -224,6 +226,8 @@ export const IMAGE_WORDING = {
       added: 'Added to your prompt, and published with it:',
       addedDrafted: 'Added to your prompt, and published with it (model-drafted):',
       reference: (names: string) => `Use ${names}’s sheet pictures as a reference`,
+      /** DRAFT (coding agent, 2026-10-23): a wallet account's price with the reference pictures, beside the box (Terms 6a). */
+      referencePrice: (usd: string) => `$${usd} with them`,
       referenceModel: 'With a reference the image is made by',
       changePicks: 'Change your picks →',
       noPicks: 'No picks yet. Styles & characters →',
@@ -305,7 +309,7 @@ export const IMAGE_WORDING = {
     /** DRAFT (coding agent, 2026-10-22): the price on the Generate button, as charged (Terms 6a: "the price shown"). */
     priceOnButton: (usd: string) => `$${usd}`,
     balance: (usd: string, n: number) => `Balance $${usd} · about ${n} image${n === 1 ? '' : 's'}`,
-    price: (usd: string, markup: number) => `$${usd} an image: the estimated cost plus ${Math.round(markup * 100)}%, rounded up to $0.001`,
+    price: (usd: string, markup: number) => `$${usd} an image, more with reference pictures: the estimated cost plus ${Math.round(markup * 100)}%, rounded up to $0.001`,
     addFunds: 'Add funds',
     notAddedYet: 'A payment from this wallet hasn’t been added to your balance yet. It’s safe: it’s on Base, and you can add it with its transaction hash below, within 7 days of paying.',
     // The "add a payment by its hash" box (owner, 2026-10-15). DRAFT wording for the owner.
@@ -369,7 +373,7 @@ export const IMAGE_WORDING_ROWS: { screen: string; where: string; text: string }
   { screen: 'Add an image · compose', where: 'src/components/image-composer.tsx (action bar, when a draft is kept)', text: IMAGE_WORDING.draft.back },
   { screen: 'Add an image · preview', where: 'src/components/image-composer.tsx (preview)', text: IMAGE_WORDING.preview.promptLabel },
   { screen: 'Image page', where: 'src/app/image/[id]/page.tsx (caption; "Open in reader →" is the assistant’s approved row 23, reused)', text: 'AI image · by {byline} (button: opens the recipe sheet) / {date} · Chapter {n} · ¶ {a–b} · Open in reader →' },
-  { screen: 'Image page', where: 'src/app/image/[id]/page.tsx (crumb)', text: '← Pictures · Trial' },
+  { screen: 'Image page', where: 'src/app/image/[id]/page.tsx (crumb)', text: '← References · Trial' },
   { screen: 'Images by readers (in the chapter)', where: 'src/components/reader-images.tsx (bar)', text: '{n} images by readers · ¶ {a–b} · show ▾ / hide ▴' },
   { screen: 'Images by readers (in the chapter)', where: 'src/components/reader-images.tsx (order, now visible)', text: IMAGE_WORDING.reader.order },
   { screen: 'Make an image', where: 'src/components/image-create.tsx (heading)', text: IMAGE_WORDING.create.title },
@@ -390,7 +394,7 @@ export const IMAGE_WORDING_ROWS: { screen: string; where: string; text: string }
   { screen: 'Make an image', where: 'src/components/image-create.tsx (search)', text: IMAGE_WORDING.create.noHits('{q}') },
   { screen: 'Make an image', where: 'src/components/image-create.tsx (search)', text: IMAGE_WORDING.create.more(20).replace('20', '{n}') },
   { screen: 'Make an image', where: 'src/components/image-create.tsx (search)', text: IMAGE_WORDING.create.searchFailed },
-  { screen: 'Pictures (feed)', where: 'src/app/images/page.tsx (button, invited readers only during the trial)', text: IMAGE_WORDING.create.entry },
+  { screen: 'Pictures (feed)', where: 'src/app/references/page.tsx (button, invited readers only during the trial)', text: IMAGE_WORDING.create.entry },
   { screen: 'Image page', where: 'src/app/image/[id]/page.tsx (by the passage)', text: IMAGE_WORDING.create.ofThis },
   { screen: 'Pictures (feed)', where: 'src/components/image-feed.tsx (under each passage)', text: IMAGE_WORDING.create.fromThis },
   { screen: 'Home', where: 'src/components/make-image-link.tsx (Everything you can do here, invited readers only during the trial)', text: 'Make an image · Choose a passage, then describe it · Trial →' },
@@ -407,8 +411,8 @@ export const IMAGE_WORDING_ROWS: { screen: string; where: string; text: string }
  * shown with its parameters in braces ({v}, {name}), as the app fills them in. All draft.
  */
 const DESIGN_SCREENS: Record<keyof typeof IMAGE_WORDING.designs, { screen: string; where: string }> = {
-  index: { screen: 'Styles & characters', where: 'src/components/design-index.tsx, src/app/images/designs/page.tsx' },
-  page: { screen: 'A style or a sheet', where: 'src/app/images/designs/[id]/page.tsx, design-picks.tsx, design-book.tsx' },
+  index: { screen: 'Styles & characters', where: 'src/components/design-index.tsx, src/app/references/designs/page.tsx' },
+  page: { screen: 'A style or a sheet', where: 'src/app/references/designs/[id]/page.tsx, design-picks.tsx, design-book.tsx' },
   form: { screen: 'New style, new sheet, fork, new version', where: 'src/components/design-form.tsx' },
   picks: { screen: 'My picks', where: 'src/components/my-picks.tsx' },
   composer: { screen: 'Add an image · compose (from your picks)', where: 'src/components/image-composer.tsx' },
@@ -417,7 +421,7 @@ const DESIGN_SCREENS: Record<keyof typeof IMAGE_WORDING.designs, { screen: strin
   about: { screen: 'About', where: 'src/app/about/page.tsx (Pictures section)' },
   report: { screen: 'Report a style or a sheet', where: 'src/components/image-actions.tsx' },
   moderate: { screen: 'Reports (moderators)', where: 'src/components/moderate-queue.tsx' },
-  sheets: { screen: 'Character and place sheets, and “In this passage”', where: 'src/app/images/designs/place/[slug]/page.tsx, character/[slug]/page.tsx, design-sheets.tsx, image-composer.tsx, src/app/image/[id]/page.tsx, chapter pages' },
+  sheets: { screen: 'Character and place sheets, and “In this passage”', where: 'src/app/references/designs/place/[slug]/page.tsx, character/[slug]/page.tsx, design-sheets.tsx, image-composer.tsx, src/app/image/[id]/page.tsx, chapter pages' },
 };
 function filled(v: unknown): string {
   if (typeof v === 'string') return v;
@@ -431,8 +435,8 @@ for (const [group, strings] of Object.entries(IMAGE_WORDING.designs) as [keyof t
 }
 // Step 4 strings written out in components (P2b reads the AI phrases there), and the picture recipe line.
 IMAGE_WORDING_ROWS.push(
-  { screen: 'A style or a sheet', where: 'src/app/images/designs/[id]/page.tsx (how the pictures were made)', text: '{model} ({id}), open weights, Apache-2.0, on {host}, endpoint {endpoint}. Seed {seed}, request {id}, cost ${cost}, {date}. Made from the front view. Checked by gpt-oss-safeguard-20b and the host’s safety checker. The fixed subject line was drafted by the coding agent. File sha256 {sha256}.' },
-  { screen: 'A style or a sheet', where: 'src/app/images/designs/[id]/page.tsx (built-on list)', text: 'Chapter {n} · AI-generated image · not by the author' },
+  { screen: 'A style or a sheet', where: 'src/app/references/designs/[id]/page.tsx (how the pictures were made)', text: '{model} ({id}), open weights, Apache-2.0, on {host}, endpoint {endpoint}. Seed {seed}, request {id}, cost ${cost}, {date}. Made from the front view. Checked by gpt-oss-safeguard-20b and the host’s safety checker. The fixed subject line was drafted by the coding agent. File sha256 {sha256}.' },
+  { screen: 'A style or a sheet', where: 'src/app/references/designs/[id]/page.tsx (built-on list)', text: 'Chapter {n} · AI-generated image · not by the author' },
   { screen: 'Reports (moderators)', where: 'src/components/moderate-queue.tsx (a design)', text: 'AI-generated pictures · not by the author' },
   { screen: 'Add an image · compose (from your picks)', where: 'src/components/image-composer.tsx (chip key)', text: 'Character' },
   { screen: 'New style, new sheet, fork, new version', where: 'src/lib/images/design-rules.ts (sample subjects, part of each sample’s public prompt)', text: 'A wide street with tall trees and low buildings, a few people walking, daytime. / A small room with a desk, a window and a plant, seen from the doorway. / A footpath through tall trees, a small drone flying overhead. / A market square at dusk, seen from above.' },

@@ -655,3 +655,10 @@ a.provenance { color: var(--muted); }
   font-family: var(--label); font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase;
 }
 .iv-step-body .ai-label { align-self: flex-start; font-family: var(--label); font-size: var(--text-label); text-transform: uppercase; letter-spacing: 0.04em; text-align: left; min-height: 32px; }
+
+/* A picture larger on tap (src/components/image-zoom.tsx): the whole screen, the picture as large as it fits, its AI label kept. */
+img[data-zoom] { cursor: zoom-in; }
+.image-zoom { position: fixed; inset: 0; z-index: 1000; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 16px; background: rgba(12, 12, 12, 0.94); cursor: zoom-out; }
+.image-zoom img { max-width: 100%; max-height: calc(100dvh - 88px); width: auto; height: auto; object-fit: contain; }
+.image-zoom-label { margin: 0; font-family: var(--label); font-size: var(--text-label); letter-spacing: var(--ls-label); color: #e8e6e1; text-align: center; }
+.image-zoom-close { position: absolute; top: 8px; right: 8px; font-family: var(--label); min-width: var(--tap, 44px); min-height: var(--tap, 44px); border: 0; background: transparent; color: #e8e6e1; font-size: 28px; line-height: 1; cursor: pointer; }

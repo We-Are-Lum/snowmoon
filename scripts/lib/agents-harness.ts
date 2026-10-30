@@ -34,6 +34,8 @@ export interface Stage {
   pg: PGlite;
   people: { A: { person: number; token: string; address: string }; B: { person: number; token: string; address: string }; C: { person: number; token: string; address: string }; D: { person: number; token: string; address: string } };
   store: string;
+  /** The stand-in's own address (fal, Farcaster's API, Base). */
+  stubUrl: string;
   stop: () => Promise<void>;
   serverErr: () => string;
   /** Everything the server printed (stdout and stderr), to prove a key never appears in it. */
@@ -81,18 +83,47 @@ export async function startStage(opts: { scanner?: string; port?: number; transc
       res.end(JSON.stringify(doc ?? {}));
       return;
     }
-    // fal's video endpoint, stood in: a video test answers with a link to a tiny file served here.
+    // fal's video endpoint, stood in: a video test answers with a link to a tiny file served here. The stand-in serves
+    // it only with the CDN token from /storage/auth/token (403 otherwise), so the token path is proved.
     if (req.method === 'POST' && (req.url ?? '').startsWith('/fal-ai/')) {
+      falSeen.lifecycle.push(String(req.headers['x-fal-object-lifecycle-preference'] ?? ''));
       req.resume();
       req.on('end', () => {
         res.writeHead(200, { 'content-type': 'application/json' });
-        res.end(JSON.stringify({ video: { url: `${stubUrlRef.url}/video.mp4` }, request_id: 'test-video-1' }));
+        const n = ++falSeen.videos;
+        res.end(JSON.stringify({ video: { url: `${stubUrlRef.url}/video-${n}.mp4` }, request_id: `test-video-${n}` }));
       });
       return;
     }
-    if (req.method === 'GET' && req.url === '/video.mp4') {
-      res.writeHead(200, { 'content-type': 'video/mp4' });
-      res.end(Buffer.from('fake mp4 bytes for the video test stand-in'));
+    if (req.method === 'POST' && req.url === '/storage/auth/token?storage_type=fal-cdn-v3') {
+      falSeen.tokens++;
+      req.resume();
+      req.on('end', () => {
+        res.writeHead(200, { 'content-type': 'application/json' });
+        res.end(JSON.stringify({ token: FAL_TEST_CDN_TOKEN, token_type: 'Bearer', expires_at: new Date(Date.now() + 600_000).toISOString() }));
+      });
+      return;
+    }
+    // fal's Platform API, stood in: DELETE a request's payloads (owner, 2026-10-25). After it, the video is gone (404).
+    const del = req.method === 'DELETE' ? /^\/v1\/models\/requests\/([^/]+)\/payloads$/.exec(req.url ?? '') : null;
+    if (del) {
+      const ok = req.headers.authorization === 'Key test';
+      if (ok) falSeen.deletes.push(decodeURIComponent(del[1]));
+      res.writeHead(ok ? 200 : 403, { 'content-type': 'application/json' });
+      res.end(JSON.stringify(ok ? { cdn_delete_results: [{ link: `${stubUrlRef.url}/video-${decodeURIComponent(del[1]).replace('test-video-', '')}.mp4`, exception: null }] } : { error: 'not permitted' }));
+      return;
+    }
+    const vm = req.method === 'GET' ? /^\/video-(\d+)\.mp4$/.exec(req.url ?? '') : null;
+    if (vm) {
+      if (falSeen.deletes.includes(`test-video-${vm[1]}`)) {
+        res.writeHead(404, { 'content-type': 'text/plain' });
+        res.end('gone');
+        return;
+      }
+      const ok = req.headers.authorization === `Bearer ${FAL_TEST_CDN_TOKEN}`;
+      falSeen.downloads.push(ok ? 200 : 403);
+      res.writeHead(ok ? 200 : 403, { 'content-type': ok ? 'video/mp4' : 'text/plain' });
+      res.end(ok ? Buffer.from('fake mp4 bytes for the video test stand-in') : 'forbidden');
       return;
     }
     if (req.method === 'POST') {
@@ -143,7 +174,7 @@ export async function startStage(opts: { scanner?: string; port?: number; transc
     D: { person: pD, token: signSession(-pD, D)!, address: D },
   };
   return {
-    BASE, pg, people, store,
+    BASE, pg, people, store, stubUrl,
     serverErr: () => serverErr,
     serverLog: () => serverLog,
     stop: async () => {
@@ -158,6 +189,9 @@ export async function startStage(opts: { scanner?: string; port?: number; transc
 
 /** What the stand-in serves at https://cimd.test/<path> (key: "/<path>"): metadata documents and key sets, set by a test. */
 export const cimdDocs = new Map<string, unknown>();
+/** What the fal stand-in saw: each video call's lifecycle header, CDN tokens handed out, and each download's status. */
+export const falSeen = { lifecycle: [] as string[], tokens: 0, downloads: [] as number[], deletes: [] as string[], videos: 0 };
+const FAL_TEST_CDN_TOKEN = 'test-cdn-token';
 
 /** The OAuth dance a connector does, scripted: register, the person's Allow, the code for tokens. */
 export async function connect(BASE: string, personToken: string, clientName: string, scope = 'read drafts images notes') {

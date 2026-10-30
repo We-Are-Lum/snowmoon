@@ -1,5 +1,6 @@
 'use client';
 
+import { InfoLabel } from './info-label';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { sdk } from '@farcaster/miniapp-sdk';
@@ -143,7 +144,7 @@ function PassageCard({ id }: { id: string }) {
 
 /**
  * A citation: the book's own words, rendered from the stored text by block id. "Make an image of
- * this passage" (shown where "Add an image" shows) links to /images/new with the cited block only:
+ * this passage" (shown where "Add an image" shows) links to /references/new with the cited block only:
  * nothing from the conversation goes in the link. Model-drafted wording.
  */
 function QuoteCard({ q }: { q: Quote }) {
@@ -463,6 +464,20 @@ function ThreadView({ id, status, refresh }: { id: string; status: Extract<Statu
   );
 }
 
+/** The signed-out screen's privacy paragraph (the owner's words): in view until a question is saved on this device, then behind ⓘ. */
+function PrivacyNote() {
+  const [asked, setAsked] = useState(false);
+  useEffect(() => setAsked(loadThreads().length > 0), []);
+  const words = `Your questions are saved only on this device. They are sent to ${CHAT.providerName} to be answered${CHAT.gatewayFallback ? ` (through ${CHAT.host} when ${CHAT.providerName} is busy)` : ''} and are never published. The daily limit is counted per Farcaster account.`;
+  return asked ? (
+    <p className="as-body">
+      Saved only on this device. <InfoLabel word="About" kind="about" declaration="Where your questions go" title="Your questions" body={[words]} />
+    </p>
+  ) : (
+    <p className="as-body">{words}</p>
+  );
+}
+
 /** Screen 9d, as in the prototype: what the assistant does, then signing in. */
 function SignedOut({ inApp: _inApp }: { inApp: boolean }) {
   return (
@@ -470,11 +485,8 @@ function SignedOut({ inApp: _inApp }: { inApp: boolean }) {
       <p className="as-label">Sign in to ask questions</p>
       <h1>Your questions need a name to be counted under</h1>
       <p className="as-body">Help with reading the book. It comments; it never writes for you.</p>
-      <p className="as-body">
-        Your questions are saved only on this device. They are sent to {CHAT.providerName} to be answered
-        {CHAT.gatewayFallback ? ` (through ${CHAT.host} when ${CHAT.providerName} is busy)` : ''} and are never published. The daily limit is
-        counted per Farcaster account.
-      </p>
+      {/* Owner, 2026-10-29: in view until the reader's first question (one saved on this device), then behind ⓘ. Same words. */}
+      <PrivacyNote />
       <SignInButton className="menu-signin menu-signin-primary as-signin" />
       {/* The two outside services are named in the sign-in step itself and on About. */}
       <Link className="as-quiet-link" href="/chapter/1">
@@ -496,7 +508,8 @@ export function Assistant({ embedded = false }: { embedded?: boolean } = {}) {
 
   const refresh = useCallback(async () => {
     const res = await authedFetch('/api/chat/status').catch(() => null);
-    if (!res || res.status === 401) {
+    // 403: a wallet not linked to a Farcaster account (its wallet session stays).
+    if (!res || res.status === 401 || res.status === 403) {
       const inApp = await inMiniApp();
       return setStatus({ kind: 'signed-out', inApp });
     }

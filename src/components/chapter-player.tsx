@@ -7,7 +7,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { ReportPronunciation } from './report-pronunciation';
 import { AiLabel } from './recipe-sheet';
-import { AI_DECLARED, AI_LABEL } from '~/lib/ai-declared';
+import { AI_DECLARED, AI_LABEL, REVIEWED_MARK } from '~/lib/ai-declared';
 import { openComposer } from '~/lib/images/client';
 import { useCanAddImage } from '~/lib/images/can-add';
 
@@ -31,6 +31,8 @@ export interface PlayerImage {
   /** Its recipe (repo path) and its id in that recipe, for the recipe sheet. */
   recipe?: string;
   id?: string;
+  /** A person reviewed this picture and kept it (shown only once the owner allows it; src/lib/illustrations.ts). */
+  reviewed?: true;
 }
 interface Props {
   chapter: number;
@@ -298,6 +300,7 @@ export function ChapterPlayer({ chapter, chapters, recipeUrl, url, duration, cue
                 <span className="sr-only"> ({AI_DECLARED.image})</span>
               </>
             )}
+            {image.reviewed && <span className="seed-reviewed"> · {REVIEWED_MARK}</span>}
           </figcaption>
         </figure>
       )}

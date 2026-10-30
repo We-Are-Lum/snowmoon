@@ -31,14 +31,14 @@ export default async function CharacterPage({ params, searchParams }: Props) {
   const sql = db();
   const entityId = sql ? await characterEntity(sql, c).catch(() => null) : null;
   const sheets = sql && entityId ? await listDesigns(sql, 'character', sort, entityId).catch(() => []) : [];
-  const href = `/images/designs/character/${c.slug}`;
+  const href = `/references/designs/character/${c.slug}`;
   // Sheets as text (2026-10-10): the project's summary and shorthand, and the images with them in.
   const sheet = sheetCharacter(c.slug);
   const images = await sheetImages('character', c.slug, c.name);
   return (
     <div className="page prose pictures designs">
       <p className="label ip-crumb">
-        <Link href="/images/designs?tab=characters">← {W.index.tabCharacters}</Link> · {IMAGES.label}
+        <Link href="/references/designs?tab=characters">← {W.index.tabCharacters}</Link> · {IMAGES.label}
       </p>
       <>
         <h1>{c.name}</h1>

@@ -2,6 +2,7 @@ import 'server-only';
 import type postgres from 'postgres';
 import { IMAGES } from '../config';
 import { balanceUsd, debit, priceUsd } from '../wallet/credits';
+import { paysFor } from './price';
 
 /**
  * Caps for readers' images (decision 10). A Generate is counted under the person's FID in
@@ -29,7 +30,7 @@ export function perDay(fid: number): number {
 
 /** For a wallet account: how many text-to-image Generates its balance pays for. */
 export async function generationsLeft(sql: Sql, fid: number): Promise<number> {
-  if (fid < 0) return Math.floor((await balanceUsd(sql, -fid)) / priceUsd(IMAGES.reserveUsd));
+  if (fid < 0) return paysFor(await balanceUsd(sql, -fid), priceUsd(IMAGES.reserveUsd));
   const [r] = await sql`select count(*)::int as n from studio.image_asks where fid = ${fid} and at >= date_trunc('day', now() at time zone 'utc') at time zone 'utc'`;
   return Math.max(0, perDay(fid) - (r?.n ?? 0));
 }
@@ -64,7 +65,7 @@ export async function reserve(sql: Sql, fid: number, spend: Spend = DEFAULT_SPEN
       if (paid.usd + spend.reserveUsd > IMAGES.prepaid.dailyCapUsd) return { ok: false as const, refusal: 'prepaid-spend' as const };
       const debitId = await debit(t, -fid, price);
       await addCost(t, 'prepaid', 'reserved', spend.model.id, '', '', 1, spend.reserveUsd);
-      return { ok: true as const, left: Math.floor((balance - price) / priceUsd(IMAGES.reserveUsd)), debitId };
+      return { ok: true as const, left: paysFor(balance - price, priceUsd(IMAGES.reserveUsd)), debitId };
     }
     const left = await generationsLeft(tx as unknown as Sql, fid);
     if (left <= 0) return { ok: false as const, refusal: 'limit' as const };

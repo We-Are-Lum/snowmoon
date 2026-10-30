@@ -11,7 +11,7 @@ import { searchCorpus, type CorpusEntry } from '~/lib/book-search-core';
 import { SearchField } from './search-field';
 
 /**
- * "Make an image" (/images/new): choose the text, then the prompt (owner, 2026-10-10). Browse a
+ * "Make an image" (/references/new): choose the text, then the prompt (owner, 2026-10-10). Browse a
  * chapter and tap the first paragraph, then the last (up to IMAGES.maxBlocks blocks, counted as the
  * server counts them on Generate), or search the book's text; then "Write the prompt →" opens the
  * composer, the same sheet as in the reader. Paragraphs and quotes can be tapped; screens and
@@ -76,7 +76,7 @@ export function ImageCreate({
   return (
     <div className="page prose pictures make-image">
       <p className="label pictures-label">
-        <Link href="/images">← Pictures</Link> · {IMAGES.label}
+        <Link href="/references">← References</Link> · {IMAGES.label}
       </p>
       <h1>{W.title}</h1>
       <p>{W.intro}</p>
@@ -101,7 +101,7 @@ export function ImageCreate({
           <ol className="chapter-list mi-chapters">
             {chapters.map(({ n, dateline }) => (
               <li key={n}>
-                <Link href={`/images/new?chapter=${n}`}>
+                <Link href={`/references/new?chapter=${n}`}>
                   <span className="ch-num">Chapter {n}</span>
                   <span className="ch-dateline">{dateline}</span>
                   {ahead(n) && <span className="mi-ahead">{W.ahead}</span>}
@@ -113,7 +113,7 @@ export function ImageCreate({
       ) : (
         <section aria-labelledby="mi-chapter">
           <p className="mi-back">
-            <Link href="/images/new">{W.allChapters}</Link>
+            <Link href="/references/new">{W.allChapters}</Link>
           </p>
           <h2 id="mi-chapter" className="mi-h">
             Chapter {chapter.n}
@@ -156,8 +156,8 @@ export function ImageCreate({
             })}
           </article>
           <nav className="chapter-nav" aria-label="Chapters">
-            {chapter.n > 1 ? <Link href={`/images/new?chapter=${chapter.n - 1}`}>← Chapter {chapter.n - 1}</Link> : <span />}
-            {chapter.n < chapters.length ? <Link href={`/images/new?chapter=${chapter.n + 1}`}>Chapter {chapter.n + 1} →</Link> : <span />}
+            {chapter.n > 1 ? <Link href={`/references/new?chapter=${chapter.n - 1}`}>← Chapter {chapter.n - 1}</Link> : <span />}
+            {chapter.n < chapters.length ? <Link href={`/references/new?chapter=${chapter.n + 1}`}>Chapter {chapter.n + 1} →</Link> : <span />}
           </nav>
           {sel && (
             <div className="mi-bar" role="region" aria-label="Your passage">
@@ -248,7 +248,7 @@ function Search({ ahead }: { ahead: (n: number) => boolean }) {
           <ul className="mi-hits">
             {state.hits.map((h) => (
               <li key={`${h.chapter}-${h.idx}`}>
-                <Link href={`/images/new?chapter=${h.chapter}&pick=${h.idx}`} className="mi-hit">
+                <Link href={`/references/new?chapter=${h.chapter}&pick=${h.idx}`} className="mi-hit">
                   <span className="mi-hit-where">
                     Chapter {h.chapter}
                     {h.label !== null ? ` · ¶ ${h.label}` : ''}

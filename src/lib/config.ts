@@ -221,8 +221,12 @@ export const AGENTS = {
   },
   /** Public pages (agents.md, /p): off while agents are for the owner only. Kept work stays private on /you. */
   public: false,
-  /** Approved spending: per person per UTC day, and a video test's estimate per second (LongCat 480p on fal). */
-  spend: { framesPerDay: 20, videosPerDay: 5, dailyCapUsd: 2, videoModel: 'fal-ai/longcat-video/distilled/image-to-video/480p', videoUsdPerSecond: 0.005, videoSeconds: 5 },
+  /**
+   * Approved spending: per person per UTC day, and a video test's estimate per second (LongCat 480p on fal). The length
+   * is what fal actually makes: we send no num_frames, so its default 162 frames, billed at 15 fps, is 10.8 s, about
+   * $0.054 (measured in the real test, owner 2026-10-24). A 5-second length waits for the queue test.
+   */
+  spend: { framesPerDay: 20, videosPerDay: 5, dailyCapUsd: 2, videoModel: 'fal-ai/longcat-video/distilled/image-to-video/480p', videoUsdPerSecond: 0.005, videoSeconds: 10.8 },
   /** What an agent may be given. The person sees every one before agreeing. */
   scopes: ['read', 'drafts', 'images', 'notes'] as const,
   /** At most this many live agents per person (also a database trigger). */
@@ -307,6 +311,31 @@ export function adaptationPagesShown(): boolean {
   return ADAPTATION_PAGES.live || process.env.VERCEL_ENV !== 'production';
 }
 
+/**
+ * The illustration check (owner, 2026-10-23: "Does each image show its scene?"; branch illustration-check). A vision
+ * model checks each seeded key-moment image against its passage (scripts/check-illustrations.ts); the owner decides
+ * keep, regenerate with a note, or drop on /you/illustrations. "Owner-only: nothing public until I've read it."
+ */
+export const ILLUSTRATION_CHECK = {
+  /** Who may open the review page and decide. */
+  owners: [6786] as readonly number[],
+  /**
+   * Shows "Reviewed by a person" under a reviewed image wherever it appears (the chapter and the listen view). Off
+   * until the owner allows anything public; the mark reads the decision the redo writes into the job file.
+   */
+  reviewMarkPublic: false,
+  /** The recommended checker on the Vercel AI Gateway (a closed model, Google's; named first wherever it is shown). */
+  model: 'google/gemini-4-argon',
+  modelName: 'Google Gemini 4 Argon',
+} as const;
+
+/**
+ * Admins (owner, 2026-10-29, the next-version plan; principle 5 reread the same day): the owner and @garance. They
+ * may hide content and pick one image per moment or glossary item to show first, always labelled "Picked by @…",
+ * with the reader's switch beside it (P5b, P5d, P5e). Picks aren't built yet; nothing reads this list today.
+ */
+export const ADMINS: readonly number[] = [6786, 193912];
+
 /** Moderation only: these FIDs may hide content or dismiss a report. They never promote or rank anything. Owner, 2026-10-08 (decision 20). */
 export const MODERATOR_FIDS: readonly number[] = [6786];
 
@@ -389,8 +418,10 @@ export const IMAGES = {
      * Credit back every Generate that gives no picture (the check or the model didn't answer, the prompt was refused,
      * or the safety checker dropped the picture), to the balance only (owner, 2026-10-21: "credit the balance for
      * anything charged but not made"; reading B, 2026-10-22). ON since 2026-10-22, in the same deploy as Terms 6a and
-     * Privacy 4 (reread by the owner, PR #35), after migrations 0022 and 0027. Off again would mean the code stops
-     * reading studio.wallet_credits; turning it off needs a change first (docs/legal/credits-draft.md).
+     * Privacy 4 (reread by the owner, PR #35), after migrations 0022 and 0027. Off means no new credits only: credits
+     * already given stay in the balance (owner, 2026-10-23), and the wallet panel's note goes back to `terms` and no
+     * "added back" line is shown. Turning it off ALSO needs a Terms change and the owner's reread in the same deploy:
+     * Terms 6a promises that a generation that gives no picture is added back, which would stop being true.
      */
     creditBack: true as boolean,
   },

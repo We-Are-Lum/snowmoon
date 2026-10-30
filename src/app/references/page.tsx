@@ -1,3 +1,4 @@
+import { InfoLabel } from '~/components/info-label';
 import { IMAGES } from '~/lib/config';
 import { db } from '~/lib/db';
 import { feed, type ReaderImage } from '~/lib/images/data';
@@ -11,7 +12,7 @@ import { MakeImageLink } from '~/components/make-image-link';
 import { byline, designByline } from '~/lib/images/byline';
 import { IMAGE_WORDING as W } from '~/lib/images/wording';
 
-export const metadata = { title: 'Pictures' };
+export const metadata = { title: 'References' };
 export const revalidate = 60;
 
 /** How many items the front page shows, across all kinds. */
@@ -67,10 +68,11 @@ export default async function Pictures({ searchParams }: { searchParams: Promise
   return (
     <div className="page prose pictures">
       <p className="label pictures-label">{IMAGES.label}</p>
-      <h1>{moments ? W.feed.menu[0].label : 'Pictures'}</h1>
+      <h1>{moments ? W.feed.menu[0].label : 'References'}</h1>
+      {/* Less text, details behind ⓘ (owner, 2026-10-29); the AI declaration stays in view. */}
       <p>
-        {moments ? W.feed.momentsLead : 'Images readers made for the book with an image model: moments from its passages, its characters, its settings, and styles to build on.'}{' '}
-        Each one is AI-generated, not by the author; its page shows the exact prompt that made it.
+        {moments ? W.feed.momentsLead : 'Images readers made for the book.'} Each one is AI-generated, not by the author.{' '}
+        <InfoLabel word="About" kind="about" declaration="About these images" title="References" body={['Images readers made for the book with an image model: moments from its passages, its characters, its settings, and styles to build on. Each one is AI-generated, not by the author; its page shows the exact prompt that made it.']} />
       </p>
       <PicturesMenu current={moments ? 'moments' : null} />
       {/* Choose the text, then the prompt (owner, 2026-10-10); shown where "Add an image" shows. Model-drafted wording. */}

@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
-import { IMAGES } from '~/lib/config';
+import { ILLUSTRATION_CHECK, IMAGES } from '~/lib/config';
 import { authFetch, signOut, signOutWallet, useAuth, useWalletAlongside, walletFetch } from '~/lib/client-auth';
 import { frameView, labelFor, pictureView, posterAlt, posterView } from '~/lib/scene-posters';
 import type { BoardItem, FrameItem, OwnWork, PictureItem, SceneItem, Who } from '~/lib/you';
@@ -26,6 +26,7 @@ const W = {
   loading: 'Loading…',
   failed: 'Your page didn’t load. Try again in a moment.',
   account: 'Your account',
+  illustrations: 'Review the seeded images (owner only)',
   farcaster: 'Farcaster',
   kindFarcaster: 'Farcaster',
   kindWallet: 'Wallet',
@@ -43,7 +44,7 @@ const W = {
   wallet: 'Wallet',
   framePrice: (usd: string) => `Up to $${usd} a Remix frame: the estimated cost plus ${Math.round(IMAGES.prepaid.markup * 100)}%. A frame with fewer pictures sent costs less.`,
   farcasterWallet:
-    'A Farcaster account has no balance here: Pictures and Remix use your free daily count. Sign in with a wallet too to see its balance, add funds or add a payment. While Farcaster is signed in, Pictures and Remix still make things as your Farcaster account.',
+    'A Farcaster account has no balance here: References and Remix use your free daily count. Sign in with a wallet too to see its balance, add funds or add a payment. While Farcaster is signed in, Pictures and Remix still make things as your Farcaster account.',
   work: 'Your work',
   workNote: 'Only you see this list. What isn’t hidden is public at its own link. Hide takes a piece out of view for everyone at once.',
   notStored: 'Saved work can’t be read on this copy of the site, so only built-in scenes are listed.',
@@ -84,7 +85,7 @@ const W = {
   /** Signed in with Farcaster: a wallet linked to this account (owner, 2026-10-22: "Either side can unlink"). */
   linkedWallet: (wallet: string) => `${wallet} is linked to this account: signing in with it signs you in here.`,
   linkedEarlier: (to: string) => `What you made with this wallet shows under ${to}, and is listed with your work below.`,
-  linkedBalance: 'The wallet’s balance stays with the wallet. While linked, Pictures and Remix use the Farcaster account’s free daily count.',
+  linkedBalance: 'The wallet’s balance stays with the wallet. While linked, References and Remix use the Farcaster account’s free daily count.',
   unlink: 'Unlink this wallet',
   unlinkConfirm: 'Unlink? Signing in with this wallet will be the wallet’s own account again.',
   unlinkYes: 'Unlink',
@@ -184,6 +185,12 @@ export function YouPage() {
       <AgentsOnYou />
       {/* The 30-day note about automatic links (owner, 2026-10-22), for everyone signed in. */}
       <LinkNote className="you-note" />
+      {/* The owner's image review (owner, 2026-10-23): a link for the owner only; the page and its API check again. */}
+      {who.kind === 'farcaster' && who.fid !== undefined && ILLUSTRATION_CHECK.owners.includes(who.fid) && (
+        <p className="you-note">
+          <Link href="/you/illustrations">{W.illustrations}</Link>
+        </p>
+      )}
       <section className="you-section" aria-labelledby="you-account">
         <h2 id="you-account">{W.account}</h2>
         <AccountRows

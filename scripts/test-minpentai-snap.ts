@@ -26,6 +26,10 @@ import { GET as runRoute } from '../src/app/snap/minpentai/run/route';
 import { GET as snapRoute } from '../src/app/snap/minpentai/route';
 import { GET as cardRoute } from '../src/app/api/minpentai-challenge-card/route';
 import { sender } from '../src/lib/minpentai/snap/auth';
+import nextConfig from '../next.config';
+import { prefersHtml, wantsSnap } from '../src/lib/minpentai/snap/negotiate';
+import { NextRequest } from 'next/server';
+import { middleware, config as mwConfig } from '../src/middleware';
 import { CHALLENGE_PATH, decChallenge, splitChallenge } from '../src/lib/minpentai/snap/challenge';
 import { settings, versionOf } from '../src/lib/minpentai/snap/versions';
 
@@ -522,6 +526,66 @@ async function main() {
       const r = await sender(new Request('https://snowmoon.party/snap/minpentai?a=start', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) }), 'https://snowmoon.party');
       assert.ok(!r.ok && r.status === 400, JSON.stringify(r));
     }
+  });
+
+  check('a first-page GET whose viewer header fails verification gets the anonymous snap, not an error', async () => {
+    const r = await snapRoute(new Request('https://snowmoon.party/snap/minpentai', { headers: { accept: 'application/vnd.farcaster.snap+json', 'x-snap-payload': 'not-a-jfs' } }));
+    assert.equal(r.status, 200);
+    assert.ok(r.headers.get('content-type')?.startsWith('application/vnd.farcaster.snap+json'));
+    assert.ok(JSON.stringify(await r.json()).includes('Start a match'));
+  });
+
+  check('next.config: the snap links (/minpentai, /minpentai/play, challenges) send preflights and snap requests to the snap route; browsers get the page with Link', async () => {
+    const rw = await (nextConfig.rewrites as () => Promise<{ beforeFiles: { source: string; has?: { key: string }[]; destination: string }[] }>)();
+    for (const source of ['/minpentai', '/minpentai/play', '/minpentai/c/:seg']) {
+      assert.ok(rw.beforeFiles.some((r) => r.source === source && r.has?.[0].key === 'access-control-request-method' && r.destination === '/snap/minpentai'), `${source}: preflight`);
+      assert.ok(rw.beforeFiles.some((r) => r.source === source && r.has?.[0].key === 'accept' && r.destination.startsWith('/snap/minpentai')), `${source}: snap Accept`);
+    }
+    const hs = await (nextConfig.headers as () => Promise<{ source: string; headers: { key: string; value: string }[] }[]>)();
+    for (const source of ['/minpentai', '/minpentai/play', '/minpentai/c/:seg']) {
+      const link = hs.find((x) => x.source === source)?.headers.find((x) => x.key === 'Link')?.value ?? '';
+      assert.ok(link.includes(`<${source}>`) && link.includes('rel="alternate"'), `${source}: Link`);
+    }
+  });
+
+  check('/minpentai/play negotiation: HTML only to a clear text/html preference or a link-preview bot; the snap otherwise', () => {
+    const chrome = 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8';
+    assert.ok(prefersHtml(chrome) && !wantsSnap(chrome, 'Mozilla/5.0 (iPhone) Safari/604.1'));
+    assert.ok(!wantsSnap('*/*', 'Twitterbot/1.0'), "X's card");
+    assert.ok(!wantsSnap(null, 'facebookexternalhit/1.1'));
+    for (const a of ['*/*', 'application/json', 'application/json, text/plain, */*', '', 'text/html;q=0']) assert.ok(wantsSnap(a, 'Mozilla/5.0'), `snap for "${a}"`);
+    assert.ok(wantsSnap('application/vnd.farcaster.snap+json', 'Twitterbot/1.0'), 'an explicit ask wins');
+  });
+
+  check('the snap route serves the snap to a request the middleware forwards (x-snap-serve), and the bare page to a browser without it', async () => {
+    const forced = await snapRoute(new Request('https://snowmoon.party/snap/minpentai', { headers: { accept: '*/*', 'x-snap-serve': '1' } }));
+    assert.ok(forced.headers.get('content-type')?.startsWith('application/vnd.farcaster.snap+json'));
+    const plain = await snapRoute(new Request('https://snowmoon.party/snap/minpentai', { headers: { accept: '*/*' } }));
+    assert.ok(plain.headers.get('content-type')?.startsWith('text/html'), '/snap/minpentai itself unchanged');
+  });
+
+  check('the diagnostic middleware logs the four snap links and routes nothing new: only /minpentai/play GETs, as before', () => {
+    assert.deepEqual(mwConfig.matcher, ['/minpentai', '/minpentai/play', '/minpentai/c/:seg', '/snap/minpentai']);
+    const SNAPM = 'application/vnd.farcaster.snap+json';
+    const heads: Record<string, string>[] = [{ accept: SNAPM }, { accept: '*/*' }, { accept: 'text/html,*/*;q=0.8' }, {}, { 'x-snap-payload': 'e30', origin: 'https://farcaster.xyz' }, { 'user-agent': 'Twitterbot/1.0', accept: '*/*' }];
+    const log = console.log; const lines: string[] = []; console.log = (s: string) => lines.push(s);
+    try {
+      for (const path of ['/minpentai', '/minpentai/c/vu207s.0.cost3._.C-49-7-0-55.c2Nnz7njlDZWxkdy8L6JcI', '/snap/minpentai'])
+        for (const method of ['GET', 'HEAD', 'POST', 'OPTIONS']) for (const headers of heads) {
+          const r = middleware(new NextRequest(`https://snowmoon.party${path}`, { method, headers }));
+          assert.equal(r.headers.get('x-middleware-rewrite'), null, `${method} ${path} must not be rerouted`);
+        }
+      // /minpentai/play: exactly today's rule.
+      for (const headers of heads) {
+        const r = middleware(new NextRequest('https://snowmoon.party/minpentai/play', { headers }));
+        const want = wantsSnap(headers.accept ?? null, headers['user-agent'] ?? null);
+        assert.equal(!!r.headers.get('x-middleware-rewrite')?.endsWith('/snap/minpentai'), want, JSON.stringify(headers));
+      }
+      assert.equal(middleware(new NextRequest('https://snowmoon.party/minpentai/play', { method: 'POST', headers: { accept: '*/*' } })).headers.get('x-middleware-rewrite'), null, 'POST to /minpentai/play passes through');
+    } finally { console.log = log; }
+    const one = JSON.parse(lines.find((l) => l.includes('"/minpentai/c/*"') && l.includes('"OPTIONS"'))!);
+    assert.deepEqual(Object.keys(one), ['snapLog', 'method', 'snap', 'accept', 'payload', 'origin', 'mode', 'ua']);
+    assert.ok(!lines.some((l) => /cookie|authorization|x-snap-payload":"/i.test(l)), 'no cookies, tokens or payloads logged');
   });
 
   await Promise.all(pending);
