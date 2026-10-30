@@ -53,7 +53,8 @@
  *   in-memory database with two published readers' images (scripts/fixtures/reader-images-db.ts);
  *   sign-in, the composer's status and the queue are mocked in the browser.
  * - The account at the foot of the rail and the menu sheet (owner, 2026-10-18): signed out it offers "Sign in with
- *   Farcaster", then "Sign in with a wallet" (the editor's button, with its note); a wallet session (planted in
+ *   Farcaster", then "Sign in with a wallet", as equals (owner, 2026-10-30: the same size and look, a line under each;
+ *   also on /you and in the composer's sign-in step; no Lens or Bluesky while they are off); a wallet session (planted in
  *   storage, nothing signed; the assistant's status answers it 403, as for a wallet not linked to Farcaster) stays
  *   signed in on load, and shows its shortened address and a Sign out that ends it; a Farcaster session shows
  *   the Farcaster name and no wallet option. The name is a link to the You page (/you), and the top bar shows an
@@ -321,7 +322,7 @@ async function plantWalletSession(page: Page) {
   await page.evaluate(plantWallet, WALLET_ADDRESS);
 }
 /** The account inside `within` (src/components/app-shell.tsx: Account in the rail, MenuAccount at the top of the
- *  phone menu): signed out, Farcaster then a wallet, both shown. */
+ *  phone menu): signed out, Farcaster then a wallet, as equals (owner, 2026-10-30). */
 const accountIn = (within: string) => `${within} .menu-account`;
 async function checkAccountSignedOut(page: Page, within: string, where: string) {
   const acct = page.locator(accountIn(within));
@@ -329,13 +330,15 @@ async function checkAccountSignedOut(page: Page, within: string, where: string) 
   const names = await acct.locator('button').evaluateAll((els) => els.filter((e) => (e as HTMLElement).offsetParent !== null).map((e) => e.textContent?.trim()));
   if (names.join(' | ') !== 'Sign in with Farcaster | Sign in with a wallet') fail(`${where}: signed out, the account offers "${names.join(' | ')}" (want Farcaster, then a wallet)`);
   // The phone menu and the wide-screen rail (owner, 2026-10-19): in the menu first in the sheet; in both, two full-width buttons at least 48px tall in the menu's
-  // main font, the first filled, and one line under them.
+  // main font, and the owner's line under them.
   const first = await page.evaluate(() => {
     const a = document.querySelector('.menu-sheet .menu-account');
     const n = document.querySelector('.menu-sheet .nav-list');
     return !!a && !!n && !!(a.compareDocumentPosition(n) & Node.DOCUMENT_POSITION_FOLLOWING);
   });
   if (within === '.menu-sheet' && !first) fail(`${where}: the account is not above the menu's items`);
+  // Farcaster and a wallet as equals (owner, 2026-10-30; src/components/sign-in-choices.tsx): the same box, the same
+  // fill, border, font and weight, each with one line under it; only the ways that are on (no Lens or Bluesky yet).
   const boxes = await acct.locator('button.menu-signin').evaluateAll((els) =>
     els.map((e) => {
       const r = e.getBoundingClientRect();
@@ -343,7 +346,8 @@ async function checkAccountSignedOut(page: Page, within: string, where: string) 
       const box = e.closest('.menu-account') as HTMLElement;
       const bs = getComputedStyle(box);
       const inner = box.clientWidth - parseFloat(bs.paddingLeft) - parseFloat(bs.paddingRight);
-      return { h: r.height, full: r.width >= inner - 1, font: st.fontFamily, bg: st.backgroundColor };
+      const line = e.closest('.signin-choice')?.querySelector('.signin-choice-line')?.textContent?.trim() ?? '';
+      return { w: r.width, h: r.height, full: r.width >= inner - 1, font: st.fontFamily, size: st.fontSize, weight: st.fontWeight, bg: st.backgroundColor, border: st.border, line };
     }),
   );
   const label = await page.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue('--font-label').trim());
@@ -351,11 +355,41 @@ async function checkAccountSignedOut(page: Page, within: string, where: string) 
     if (b.h < 48) fail(`${where}: sign-in button ${i + 1} is ${b.h}px tall (want at least 48)`);
     if (!b.full) fail(`${where}: sign-in button ${i + 1} is not full width`);
     if (/mono/i.test(b.font) || (label && b.font.includes(label))) fail(`${where}: sign-in button ${i + 1} is in the label (mono) font`);
+    if (!b.line) fail(`${where}: sign-in button ${i + 1} has no line under it saying what it is`);
   }
-  if (boxes.length === 2 && boxes[0].bg === boxes[1].bg) fail(`${where}: the Farcaster button is not filled apart from the wallet one`);
+  if (boxes.length !== 2) fail(`${where}: ${boxes.length} sign-in buttons (want 2)`);
+  else {
+    const [a, c] = boxes;
+    if (Math.abs(a.w - c.w) > 0.5 || Math.abs(a.h - c.h) > 0.5) fail(`${where}: the two sign-in buttons are not the same size (${a.w}x${a.h} and ${c.w}x${c.h})`);
+    if (a.bg !== c.bg || a.border !== c.border || a.font !== c.font || a.size !== c.size || a.weight !== c.weight) fail(`${where}: the two sign-in buttons are not styled alike (${JSON.stringify([a, c])})`);
+  }
+  if (await acct.locator('[data-method="lens"], [data-method="bluesky"]').count()) fail(`${where}: a sign-in that isn't built (Lens or Bluesky) is shown`);
   const note = (await acct.locator('.menu-signin-note').textContent())?.trim();
   if (note !== 'Signing in is free. It’s a signature, not a payment.') fail(`${where}: the line under the buttons reads "${note}"`);
   if (await acct.locator('.wallet-sign-in .ic-note:not([role=alert])').count()) fail(`${where}: the wallet's own note still shows in the menu`);
+}
+/** Wherever more than one way to sign in is offered (src/components/sign-in-choices.tsx, owner 2026-10-30): the buttons
+ *  are equals (the same box, fill, border, font and weight), each has a line under it, and only built ways show. */
+async function checkSignInEquals(page: Page, scope: string, where: string, want?: number) {
+  const bs = await page.locator(`${scope} .signin-choice-btn`).evaluateAll((els) =>
+    els
+      .filter((e) => (e as HTMLElement).offsetParent !== null)
+      .map((e) => {
+        const r = e.getBoundingClientRect();
+        const st = getComputedStyle(e);
+        const line = e.closest('.signin-choice')?.querySelector('.signin-choice-line')?.textContent?.trim() ?? '';
+        return { name: e.textContent?.trim(), w: Math.round(r.width * 2) / 2, h: Math.round(r.height * 2) / 2, look: [st.backgroundColor, st.border, st.fontFamily, st.fontSize, st.fontWeight].join(' / '), line };
+      }),
+  );
+  if (want !== undefined && bs.length !== want) fail(`${where}: ${bs.length} sign-in buttons (want ${want}: ${JSON.stringify(bs.map((b) => b.name))})`);
+  if (!bs.length) return fail(`${where}: no sign-in offered`);
+  for (const b of bs) if (!b.line) fail(`${where}: "${b.name}" has no line under it saying what it is`);
+  const [a, ...rest] = bs;
+  for (const b of rest) {
+    if (Math.abs(a.w - b.w) > 0.5 || Math.abs(a.h - b.h) > 0.5) fail(`${where}: "${a.name}" is ${a.w}x${a.h}, "${b.name}" ${b.w}x${b.h} (want the same size)`);
+    if (a.look !== b.look) fail(`${where}: "${a.name}" and "${b.name}" are styled differently (${a.look} | ${b.look})`);
+  }
+  if (await page.locator(`${scope} [data-method="lens"], ${scope} [data-method="bluesky"]`).count()) fail(`${where}: a sign-in that isn't built (Lens or Bluesky) is shown`);
 }
 /** With a wallet session: the shortened address and a Sign out that ends it (back to both options). */
 async function checkAccountWallet(page: Page, within: string, where: string) {
@@ -438,6 +472,7 @@ async function checkMakeImage(page: Page, scheme: string) {
   if (!/Sign in to make an image/.test((await page.locator('.image-composer').textContent().catch(() => '')) ?? '')) fail(`/references/new (${scheme}): signed out, the composer does not ask to sign in`);
   if (!/Chapter 1 · ¶ 1–8 · 8 blocks/.test((await page.locator('.image-composer .ic-label').first().textContent().catch(() => '')) ?? '')) fail(`/references/new (${scheme}): the composer is not on the chosen passage (${await page.locator('.image-composer .ic-label').first().textContent().catch(() => '')})`);
   await checkFloors(page, '/references/new (composer, signed out)', scheme);
+  await checkSignInEquals(page, '.image-composer .ic-gate', `/references/new (${scheme}) composer signed out`);
   await page.keyboard.press('Escape');
 
   // Search.
@@ -1712,12 +1747,15 @@ try {
         if (!current?.includes('Chapter 1')) fail(`@${width}: the rail does not mark the current chapter`);
         // Signed out: the assistant panel is there, with what it does and a sign-in button.
         await page.waitForSelector('.panel .as-signed-out button');
-        // The panel's sign-in is the menu's button (owner, 2026-10-19): full width, at least 48px, the main font, filled.
-        const pb = await page.locator('.panel .as-signed-out button.as-signin').evaluate((e) => {
+        // The panel's sign-in is the menu's button (owner, 2026-10-19; the same list since 2026-10-30): full width, at least 48px,
+        // the main font; Farcaster only (questions are counted per Farcaster account).
+        const pb = await page.locator('.panel .as-signed-out .as-signin button.menu-signin').evaluate((e) => {
           const r = e.getBoundingClientRect();
           const st = getComputedStyle(e);
-          return { h: r.height, w: r.width, pw: (e.parentElement as HTMLElement).clientWidth, font: st.fontFamily, upper: st.textTransform };
+          return { h: r.height, w: r.width, pw: (e.closest('.as-signin') as HTMLElement).clientWidth, font: st.fontFamily, upper: st.textTransform };
         });
+        const panelWays = await page.locator('.panel .as-signed-out .as-signin button').count();
+        if (panelWays !== 1) fail(`@${width}: the assistant panel offers ${panelWays} sign-in buttons (want Farcaster only)`);
         if (pb.h < 47.5 || pb.w < pb.pw - 1 || /mono/i.test(pb.font) || pb.upper === 'uppercase') fail(`@${width}: the assistant panel's sign-in is not the menu's button (${JSON.stringify(pb)})`);
         await shot(page, `desktop-${width}-chapter`, scheme);
         // Minpentai's pages start with the assistant closed (owner, 2026-10-20); opening it there isn't remembered.
@@ -1828,6 +1866,7 @@ try {
     await open(page, '/you');
     await page.locator('.you-sign-in button').first().waitFor({ timeout: 10000 }).catch(() => fail(`/you @390 (${scheme}): signed out, no sign-in offered`));
     await checkFloors(page, '/you @390 (signed out)', scheme);
+    await checkSignInEquals(page, '.you-sign-in', `/you @390 (${scheme}) signed out`, 2);
     if (/Your account|Your work|Balance \$/.test(await page.locator('main.you').innerText().catch(() => ''))) fail(`/you @390 (${scheme}): signed out, the page shows an account, wallet or work`);
     await shot(page, 'phone-390-you-signed-out', scheme);
     await checkIllustrationReview(page, scheme);

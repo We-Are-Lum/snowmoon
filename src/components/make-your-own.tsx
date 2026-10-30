@@ -3,8 +3,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { authFetch, useAuth, useWalletSession } from '~/lib/client-auth';
-import { SignInButton } from './sign-in';
-import { WalletSignInButton } from './wallet';
+import { SignInChoices } from './sign-in-choices';
 import { PrivateDraftField } from './private-draft-field';
 import { PrivateTextField } from './private-text-field';
 import { CHAT } from '~/lib/config';
@@ -116,8 +115,7 @@ export function MakeYourOwn({ walletSignIn = false }: { walletSignIn?: boolean }
       <section className="mk">
         <Header />
         <p>{walletSignIn && auth.kind === 'signed-out' && !auth.inApp ? 'Sign in with Farcaster or a wallet' : 'Sign in with Farcaster'} to start a draft. It stays private to you.</p>
-        <SignInButton />
-        {walletSignIn && auth.kind === 'signed-out' && !auth.inApp && <WalletSignInButton />}
+        <SignInChoices wallet={walletSignIn && auth.kind === 'signed-out' && !auth.inApp} />
       </section>
     );
 

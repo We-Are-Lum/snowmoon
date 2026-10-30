@@ -339,6 +339,26 @@ export const ADMINS: readonly number[] = [6786, 193912];
 /** Moderation only: these FIDs may hide content or dismiss a report. They never promote or rank anything. Owner, 2026-10-08 (decision 20). */
 export const MODERATOR_FIDS: readonly number[] = [6786];
 
+/**
+ * The ways to sign in, in the order they are shown (owner, 2026-10-30: Farcaster and a wallet as equals, with room for
+ * Lens and Bluesky, Bluesky right after Lens; X has no sign-in for now). Only entries that are `on` are shown: the site
+ * describes what works today, so there are no "coming soon" buttons. Lens and Bluesky don't exist yet. Turning one on
+ * also needs its sign-in built (src/components/sign-in-choices.tsx) and the legal texts that name its services.
+ * The labels and the one line under each are in src/lib/sign-in-text.ts.
+ *
+ * Local test only: NEXT_PUBLIC_SIGN_IN_ALL_FOUR=1 shows all four, to check that the layout holds them. The build
+ * refuses it on Vercel (next.config.ts), so it never reaches the site.
+ */
+export const SIGN_IN_METHODS = [
+  { id: 'farcaster', on: true },
+  { id: 'wallet', on: true },
+  { id: 'lens', on: false },
+  { id: 'bluesky', on: false },
+] as const satisfies readonly { id: string; on: boolean }[];
+export type SignInMethod = (typeof SIGN_IN_METHODS)[number]['id'];
+/** The local-only test of four entries (see SIGN_IN_METHODS). */
+export const SIGN_IN_ALL_FOUR = process.env.NEXT_PUBLIC_SIGN_IN_ALL_FOUR === '1' && !process.env.NEXT_PUBLIC_VERCEL_ENV;
+
 /** The public contact for Snowmoon Party: legal, copyright and reports from readers who are signed out (owner, 2026-10-08). */
 export const CONTACT_EMAIL = 'snowmoon@wearelum.xyz';
 

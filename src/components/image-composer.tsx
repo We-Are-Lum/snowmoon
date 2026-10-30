@@ -8,8 +8,8 @@ import { IMAGES } from '~/lib/config';
 import { IMAGE_WORDING as W } from '~/lib/images/wording';
 import { mentions } from '~/lib/images/design-rules';
 import { ConsentScreen, PublishedTextField, PublishFlow, type PublishStep } from './publish-words';
-import { SignInButton } from './sign-in';
-import { WalletPanel, WalletSignInButton } from './wallet';
+import { SignInChoices } from './sign-in-choices';
+import { WalletPanel } from './wallet';
 import { AiLabel } from './recipe-sheet';
 import { AI_LABEL, readerImageView } from '~/lib/ai-declared';
 import { exactDollars } from '~/lib/wallet/price-text';
@@ -173,7 +173,7 @@ function Sheet({ initial, onClose }: { initial: AddImageDetail; onClose: () => v
   const [range, setRange] = useState(initial);
   const [status, setStatus] = useState<Status | null>(null);
   /** On the website, signed out, with wallet sign-in open: the wallet button comes first and is the solid one. */
-  const walletFirst = auth.kind === 'signed-out' && !auth.inApp && !!status?.walletSignIn;
+  const walletOffered = auth.kind === 'signed-out' && !auth.inApp && !!status?.walletSignIn;
   const [prompt, setPrompt] = useState('');
   // Always a style (owner, 2026-10-14; 2026-10-10: without one the model draws realistic pictures): the newest
   // style pick, else the first offered. undefined = not chosen yet; a restored draft keeps its own.
@@ -405,10 +405,9 @@ function Sheet({ initial, onClose }: { initial: AddImageDetail; onClose: () => v
               ) : !signedIn ? (
                 <div className="ic-gate">
                   <p>Sign in to make an image.</p>
-                  {/* On the website the wallet comes first and is the solid button, Farcaster second and outlined
-                      (owner, 2026-10-16 and 2026-10-21). In the Farcaster app there is no wallet button: Farcaster stays as it was. */}
-                  {walletFirst && <WalletSignInButton className="ic-primary" />}
-                  <SignInButton className={walletFirst ? 'ic-secondary' : undefined} />
+                  {/* Farcaster and a wallet as equals, in SIGN_IN_METHODS' order (owner, 2026-10-30). Before: the wallet first and
+                      solid, Farcaster second and outlined (owner, 2026-10-16 and 2026-10-21). In the Farcaster app there is no wallet button. */}
+                  <SignInChoices wallet={walletOffered} />
                   {auth.kind === 'signed-out' && !auth.inApp && <p className="ic-note">{W.signIn.farcasterNote(IMAGES.generationsPerDay)}</p>}
                 </div>
               ) : !status ? (

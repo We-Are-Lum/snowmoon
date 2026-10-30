@@ -41,6 +41,11 @@ const snapAlternate = (path: string) => [
   { key: 'Vary', value: 'Accept' },
 ];
 
+/** The four-entry sign-in test (src/lib/config.ts, SIGN_IN_METHODS) is local only: a Vercel build with it set fails. */
+if (process.env.VERCEL && process.env.NEXT_PUBLIC_SIGN_IN_ALL_FOUR) {
+  throw new Error('NEXT_PUBLIC_SIGN_IN_ALL_FOUR is a local test of the sign-in layout and is refused on Vercel. Remove it from this environment.');
+}
+
 const nextConfig: NextConfig = {
   env: {
     APP_COMMIT: buildCommit(),

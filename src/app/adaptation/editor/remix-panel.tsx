@@ -4,8 +4,8 @@ import { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { authFetch, useAuth, useWalletSession, webNameProof } from '~/lib/client-auth';
 import { ConsentScreen, PublishedTextField } from '~/components/publish-words';
-import { SignInButton } from '~/components/sign-in';
-import { WalletPanel, WalletSignInButton } from '~/components/wallet';
+import { SignInChoices } from '~/components/sign-in-choices';
+import { WalletPanel } from '~/components/wallet';
 import { HideButton, ShareRow } from '../../remix/remix-actions';
 import { AddToStoryboard } from './add-to-storyboard';
 import { exactDollars } from '~/lib/wallet/price-text';
@@ -160,8 +160,7 @@ export function RemixPanel({
       ) : !signedIn ? (
         <div className="ed-row">
           <p className="ed-help">{status.shot?.fixed ? 'Sign in to make a frame of this shot: 10 free a day.' : 'Sign in to make a frame from the camera you set: 10 free a day.'}</p>
-          <SignInButton className="ed-small" />
-          {auth.kind === 'signed-out' && !auth.inApp && status.walletSignIn && <WalletSignInButton className="ed-small" />}
+          <SignInChoices size="small" wallet={auth.kind === 'signed-out' && !auth.inApp && status.walletSignIn} />
         </div>
       ) : status.eligible === false ? (
         <p className="ed-help" role="status">

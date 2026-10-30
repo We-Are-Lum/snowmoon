@@ -91,6 +91,20 @@
 .menu-signin:disabled { opacity: 0.6; cursor: default; }
 .menu-signin:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
 .menu-signin-note { margin: 0; color: var(--muted); font-family: var(--label); font-size: var(--text-label); line-height: 1.5; }
+/* The ways to sign in as equals (owner, 2026-10-30; src/components/sign-in-choices.tsx): the same button for each, one
+   line under it, in a grid that is one column where narrow and side by side where there is room; it holds four. */
+.signin-choices { display: flex; flex-direction: column; gap: 10px; width: 100%; }
+.signin-choice-list {
+  list-style: none; margin: 0; padding: 0; display: grid; gap: 12px 16px;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+}
+.signin-choices-small .signin-choice-list { grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr)); gap: 8px 12px; }
+.signin-choice { display: flex; flex-direction: column; gap: 6px; min-width: 0; margin: 0; }
+.signin-choice .wallet-sign-in { display: flex; flex-direction: column; gap: 6px; }
+.signin-choice .wallet-sign-in .ic-note { margin: 0; }
+.signin-choice-btn.menu-signin { background: transparent; color: var(--ink); border: 1px solid var(--ink); }
+.signin-choice-btn.ed-small { width: 100%; }
+.signin-choice-line { margin: 0; color: var(--muted); font-family: var(--label); font-size: var(--text-label); line-height: 1.5; }
 .menu-account-row {
   display: flex; align-items: center; gap: 12px; width: 100%; min-height: 48px; margin: 0; padding: 8px 0;
   background: none; border: 0; text-align: left; color: var(--ink); font-family: var(--reading); font-size: 20px; line-height: 1.2;

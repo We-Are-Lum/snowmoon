@@ -8,6 +8,7 @@ import { frameView, labelFor, pictureView, posterAlt, posterView } from '~/lib/s
 import type { BoardItem, FrameItem, OwnWork, PictureItem, SceneItem, Who } from '~/lib/you';
 import { AiLabel } from './recipe-sheet';
 import { SignInButton } from './sign-in';
+import { SignInChoices } from './sign-in-choices';
 import { LinkNote, WalletPanel, WalletSignInButton } from './wallet';
 import { AgentsOnYou } from './agents/agents-you';
 import { exactDollars } from '~/lib/wallet/price-text';
@@ -154,8 +155,7 @@ export function YouPage() {
         <p className="you-lede">{W.signedOut}</p>
         <LinkNote className="you-note" />
         <div className="you-sign-in">
-          <SignInButton className="ic-secondary" />
-          {auth.kind === 'signed-out' && !auth.inApp && <WalletSignInButton />}
+          <SignInChoices wallet={auth.kind === 'signed-out' && !auth.inApp} />
         </div>
       </Frame>
     );

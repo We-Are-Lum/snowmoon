@@ -13,11 +13,9 @@ import { Assistant } from './assistant';
 import { ReplayIntro } from './first-visit';
 import { ExternalLinks } from './external-links';
 import { LegalLine } from './legal-line';
-import { SignInButton } from './sign-in';
+import { SignInChoices } from './sign-in-choices';
 import { ThemeSwitch } from './theme-switch';
 import { ImageZoom } from './image-zoom';
-import { WalletSignInButton } from './wallet';
-import { IMAGE_WORDING } from '~/lib/images/wording';
 import '../app/assistant/assistant.css';
 
 /**
@@ -301,14 +299,14 @@ function TopbarAvatar({ auth, current }: { auth: AuthState; current: boolean }) 
 const YOU_TITLE = 'You: your account, wallet and work';
 
 /**
- * Who is signed in, at the foot of the rail and the menu sheet. The name links to /you. Signed out, it offers Farcaster first,
- * then a wallet (owner, 2026-10-18: the simple step; the editor's own wallet sign-in, reused). A wallet
+ * Who is signed in, at the foot of the rail and the menu sheet. The name links to /you. Signed out, it offers Farcaster and
+ * a wallet as equals (owner, 2026-10-30; before, 2026-10-18, Farcaster first and filled). A wallet
  * session (no Farcaster one) shows its shortened address and a Sign out that ends it. Farcaster-only
  * features keep their own sign-in prompts. Inside a Farcaster app there is no wallet option.
  */
 /**
- * The account, at the top of the phone menu and at the foot of the wide-screen rail (owner, 2026-10-19). Signed out: two full-width buttons and one
- * line. Signed in: a row with a monogram and the name (or the shortened address), then Sign out as a row.
+ * The account, at the top of the phone menu and at the foot of the wide-screen rail (owner, 2026-10-19). Signed out: the ways to sign in as equal
+ * full-width buttons, a line under each, and the owner's line under all. Signed in: a row with a monogram and the name (or the shortened address), then Sign out as a row.
  * The monogram is drawn here, not a profile picture: a picture would be fetched from a host Privacy doesn't name.
  */
 function MenuAccount({ auth, where = 'menu' }: { auth: AuthState; where?: 'menu' | 'rail' }) {
@@ -319,9 +317,8 @@ function MenuAccount({ auth, where = 'menu' }: { auth: AuthState; where?: 'menu'
   if (name === null)
     return (
       <div className={`menu-account menu-account-out${at}`}>
-        <SignInButton className="menu-signin menu-signin-primary" label={IMAGE_WORDING.prepaid.menuSignIn} />
-        {auth.kind === 'signed-out' && !auth.inApp && <WalletSignInButton className="menu-signin menu-signin-outline" note={false} />}
-        <p className="menu-signin-note">{IMAGE_WORDING.prepaid.signInNote}</p>
+        {/* Farcaster and a wallet as equals (owner, 2026-10-30), from SIGN_IN_METHODS; inside a Farcaster app, no wallet. */}
+        <SignInChoices wallet={auth.kind === 'signed-out' && !auth.inApp} />
       </div>
     );
   const out = auth.kind === 'signed-in' ? (auth.via === 'website' ? signOut : null) : signOutWallet;

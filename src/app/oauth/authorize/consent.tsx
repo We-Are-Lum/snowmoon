@@ -3,8 +3,7 @@
 import { useEffect, useState } from 'react';
 import { authFetch, useAuth, useWalletSession } from '~/lib/client-auth';
 import { AGENT_WORDING } from '~/lib/agents/wording';
-import { SignInButton } from '~/components/sign-in';
-import { WalletSignInButton } from '~/components/wallet';
+import { SignInChoices } from '~/components/sign-in-choices';
 
 const W = AGENT_WORDING.authorize;
 
@@ -38,8 +37,7 @@ export function AuthorizeConsent({ query, client, scopes, backHost }: { query: s
         <>
           <p>{W.signIn}</p>
           <div className="you-sign-in">
-            <SignInButton className="ic-secondary" />
-            {auth.kind === 'signed-out' && !auth.inApp && <WalletSignInButton />}
+            <SignInChoices wallet={auth.kind === 'signed-out' && !auth.inApp} />
           </div>
         </>
       ) : (

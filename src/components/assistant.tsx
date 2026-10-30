@@ -5,7 +5,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { sdk } from '@farcaster/miniapp-sdk';
 import { authFetch, inMiniApp } from '~/lib/client-auth';
-import { SignInButton } from './sign-in';
+import { SignInChoices } from './sign-in-choices';
 import { MakeImageLink } from './make-image-link';
 import { IMAGE_WORDING } from '~/lib/images/wording';
 import { PrivateTextField } from './private-text-field';
@@ -487,7 +487,11 @@ function SignedOut({ inApp: _inApp }: { inApp: boolean }) {
       <p className="as-body">Help with reading the book. It comments; it never writes for you.</p>
       {/* Owner, 2026-10-29: in view until the reader's first question (one saved on this device), then behind ⓘ. Same words. */}
       <PrivacyNote />
-      <SignInButton className="menu-signin menu-signin-primary as-signin" />
+      {/* The same sign-in list as everywhere (owner, 2026-10-30). Farcaster only here: questions are counted per Farcaster
+          account, and a wallet not linked to one is refused (src/app/api/chat/ask/route.ts). */}
+      <div className="as-signin">
+        <SignInChoices wallet={false} />
+      </div>
       {/* The two outside services are named in the sign-in step itself and on About. */}
       <Link className="as-quiet-link" href="/chapter/1">
         Keep reading without it
