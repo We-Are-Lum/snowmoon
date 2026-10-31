@@ -302,7 +302,7 @@ async function checkAssistant(page: Page, scheme: string) {
   await page.evaluate(() => localStorage.clear());
 }
 
-const LEGAL_LINE = 'Snowmoon Party · operated by Lum LLC · independent, not affiliated with the author · book and adaptations GPL v3 · Terms · Privacy · Source' + (SUPPORT.linked ? ' · Support this site' : '');
+const LEGAL_LINE = 'Snowmoon Party · operated by Lum LLC · independent, not affiliated with the author · book and adaptations GPL v3 · Terms · Privacy · Source' + (SUPPORT.linked ? ' · Support the We Are Lum team' : '');
 const WALLET_ADDRESS = '0x1234567890abcdef1234567890abcdef12345678';
 /** A wallet session in storage, as saveWalletSession keeps it (src/lib/client-auth.ts); never sent anywhere here. */
 const plantWallet = (address: string) => {
@@ -384,7 +384,7 @@ async function checkLegalLine(page: Page, within: string, where: string, scheme:
   if (text !== LEGAL_LINE) fail(`${where} (${scheme}): the footer line reads "${text}"`);
   if (!(await line.isVisible())) fail(`${where} (${scheme}): the footer line is not shown`);
   const hrefs = await line.locator('a').evaluateAll((as) => as.map((a) => `${a.textContent}=${a.getAttribute('href')}`));
-  const want = ['Terms=/terms', 'Privacy=/privacy', 'Source=https://github.com/We-Are-Lum/snowmoon', ...(SUPPORT.linked ? ['Support this site=/support'] : [])];
+  const want = ['Terms=/terms', 'Privacy=/privacy', 'Source=https://github.com/We-Are-Lum/snowmoon', ...(SUPPORT.linked ? ['Support the We Are Lum team=/support'] : [])];
   if (hrefs.join(' ') !== want.join(' ')) fail(`${where} (${scheme}): the footer links are ${hrefs.join(', ')}`);
 }
 
@@ -663,7 +663,7 @@ async function checkSupport(page: Page, scheme: string) {
   if (JSON.stringify(shown) !== JSON.stringify(want)) fail(`${where}: the QR code isn't the code of ${SUPPORT.address}`);
   const body = (await page.locator('main.support').innerText()).replace(/\s+/g, ' ');
   // The owner's words (2026-10-30, simplified page), and nothing else of the old page.
-  for (const words of ['Support this site', 'Send ETH or USDC on Ethereum mainnet or Base to this address, or send below.', 'Other networks: funds may be lost.'])
+  for (const words of ['Support the We Are Lum team', 'We make snowmoon.party. Send ETH or USDC on Ethereum mainnet or Base to this address, or send below.', 'Other networks: funds may be lost.'])
     if (!body.includes(words)) fail(`${where}: doesn't say "${words}"`);
   if (/\b(donat)|splits\.org|Fund the next scene|\$5\b/i.test(body + (await page.locator('main.support').innerHTML()))) fail(`${where}: still shows the old page's copy (donate, Splits, a title option or a preset)`);
   const choices = async (label: string) => (await page.locator(`.support-choice[aria-label="${label}"] button`).allTextContents()).map((t) => t.trim()).join('|');
