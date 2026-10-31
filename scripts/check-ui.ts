@@ -1323,14 +1323,27 @@ try {
         if (!(await label.count()) || !(await label.first().isVisible())) fail(`intro: card ${i + 1} (${cards[i]}) shows an AI image without the AI label`);
         else {
           if (!/\bAI\b/.test((await label.first().innerText()) ?? '')) fail(`intro: card ${i + 1}: the label does not say "AI"`);
+          // Wait for the card to settle: the track slides it in after Next, and a click during the slide can miss.
+          let last = '';
+          for (let t = 0; t < 30; t++) {
+            const box = await label.first().boundingBox();
+            const now = box ? `${Math.round(box.x)},${Math.round(box.y)}` : '';
+            if (box && now === last && box.x >= 0 && box.x + box.width <= 390) break;
+            last = now;
+            await page.waitForTimeout(100);
+          }
           await label.first().click();
           const sheet = page.locator('.recipe-sheet');
-          await sheet.waitFor({ timeout: 5000 }).catch(() => fail(`intro: card ${i + 1}: the AI label does not open the recipe sheet`));
-          // The sheet fetches its recipe after it opens; "Who made it" arrives with it.
-          await sheet.getByText(/not by the author/i).first().waitFor({ timeout: 10000 }).catch(() => fail(`intro: card ${i + 1}: the recipe sheet does not say "not by the author"`));
-          await checkFloors(page, `intro card ${i + 1} (recipe sheet)`, 'light');
-          await page.keyboard.press('Escape');
-          if ((await page.locator('.intro-card').getAttribute('data-card')) !== cards[i]) fail(`intro: card ${i + 1}: closing the recipe sheet moved the intro on`);
+          const opened = await sheet.waitFor({ timeout: 5000 }).then(() => true, () => false);
+          if (!opened) fail(`intro: card ${i + 1}: the AI label does not open the recipe sheet`);
+          else {
+            // The sheet fetches its recipe after it opens; "Who made it" arrives with it.
+            await sheet.getByText(/not by the author/i).first().waitFor({ timeout: 10000 }).catch(() => fail(`intro: card ${i + 1}: the recipe sheet does not say "not by the author"`));
+            await checkFloors(page, `intro card ${i + 1} (recipe sheet)`, 'light');
+            // Escape only when a sheet opened: with none open, Escape closes the intro itself.
+            await page.keyboard.press('Escape');
+            if ((await page.locator('.intro-card').getAttribute('data-card')) !== cards[i]) fail(`intro: card ${i + 1}: closing the recipe sheet moved the intro on`);
+          }
         }
       }
       if (i < cards.length - 1) await page.getByRole('button', { name: 'Next' }).click();
