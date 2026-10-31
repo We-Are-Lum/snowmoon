@@ -162,8 +162,12 @@ Logs are in the session scratchpad (`signin-*.log`).
   status route now has three branches that offer picks; the static count went from 2 to 3). `test:designs` has **one
   failure that is on main too** ("nothing official … on the new screens", `src/components/design-index.tsx`, unchanged
   here: its `title="Nothing here is official"` has no full stop, so the check's exemption misses it).
-- `check:principles` (static, against the live site's pages): see the end of this report.
-- `check:ui`, `test:you-page`, `test:agents`: see the end of this report.
+- `check:principles` (static; its page checks read the live site): **54 pass, 1 fail (P6d, the accepted open item), of
+  55; 55 of 55 proven to fail on a planted violation.** On the first run, P1f caught the Bluesky handle box as a bare
+  text box; it is now `handle-field.tsx`, with its own P1f wording check.
+- `check:ui` against this branch's build (shared lock, port 3321): **passed, 59 pages**, first run. Lens and Bluesky
+  never showed, as expected, because they are off.
+- `test:you-page`: **all 73 checks pass.** `test:agents`: **185 checks pass.**
 
 New or changed checks in `check:principles` (the owner's yes pending on the exemptions):
 - **P4a**: four named sign-in exemptions (lens/challenge, lens/verify, bluesky/start, bluesky/callback), like the
