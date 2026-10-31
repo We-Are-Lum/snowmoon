@@ -1,27 +1,22 @@
 /**
- * Who gets the snap at /minpentai/play (owner, 2026-10-23). Farcaster's composer showed a plain card
- * there: most of its GETs reached the static page without asking for the snap by Accept. So that link
- * serves HTML only to a request that clearly prefers text/html, as browsers do, or to a link-preview
- * bot (X's card, and the like), and the snap to everything else. Pure, for src/middleware.ts and tests.
+ * Who gets what on the snap links (owner, 2026-10-30): /minpentai, /minpentai/play, challenge links
+ * /minpentai/c/<…> and /snap/minpentai (the launch cast). Pure, for src/middleware.ts and tests.
+ *
+ * - A request whose Accept names the snap media type, from anyone, gets the snap (every snap client
+ *   sends it; Farcaster's feed fetches through FarcasterSnapProxy with it).
+ * - Farcaster's composer, whose fetcher's user agent contains "FCBot" (also "Twitterbot like FCBot/0.1"),
+ *   gets the link's page without its fc:frame / fc:miniapp tags: the card tags and an absolute Link header
+ *   to the snap. With those tags the composer shows a mini app card; without them it shows the snap
+ *   (owner's composer test, 2026-10-30: x=1 card, x=2 and x=3 game). Checked before anything else about
+ *   the user agent, since FCBot's contains "Twitterbot".
+ * - Everyone else (browsers, X, Discord, Slack, Telegram, iMessage, crawlers) gets the full page and card.
  */
 export const SNAP_MEDIA = 'application/vnd.farcaster.snap+json';
 
-/** Link-preview crawlers that read a page's card; they get the page whatever they accept. */
-const PREVIEW_BOT = /Twitterbot|facebookexternalhit|Facebot|Slackbot|Discordbot|TelegramBot|LinkedInBot|WhatsApp|Applebot|Googlebot|bingbot|redditbot|Embedly|Iframely|SkypeUriPreview|Pinterestbot|Mastodon|Bluesky|Cardyb/i;
+export type SnapRoute = 'snap' | 'composer' | 'page';
 
-/** True when text/html is listed with a quality above 0 (browsers list it first; a bare *\/* is not a preference). */
-export function prefersHtml(accept: string): boolean {
-  return accept.split(',').some((part) => {
-    const [type, ...params] = part.trim().toLowerCase().split(';').map((s) => s.trim());
-    if (type !== 'text/html' && type !== 'application/xhtml+xml') return false;
-    const q = params.find((p) => p.startsWith('q='));
-    return !q || Number(q.slice(2)) > 0;
-  });
-}
-
-export function wantsSnap(accept: string | null, userAgent: string | null): boolean {
-  const a = accept ?? '';
-  if (a.includes(SNAP_MEDIA)) return true;
-  if (PREVIEW_BOT.test(userAgent ?? '')) return false;
-  return !prefersHtml(a);
+export function snapRoute(accept: string | null, userAgent: string | null): SnapRoute {
+  if ((accept ?? '').toLowerCase().includes(SNAP_MEDIA)) return 'snap';
+  if (/FCBot/.test(userAgent ?? '')) return 'composer';
+  return 'page';
 }
