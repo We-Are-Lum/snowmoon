@@ -31,18 +31,34 @@ export interface SearchLevel {
   pieces?: number;
 }
 
-/** The five levels. Spaced by self-play (scripts/minpentai-search-ladder.ts): each beats the one below most of the time. */
+/**
+ * The levels, weakest first (owner, 2026-10-31: one definition for Play's ladder and agent play). Spaced by
+ * self-play (scripts/minpentai-search-ladder.ts --ladder): each beats the one below; above level 4, two mistake-free
+ * searches only draw, so there is no level 5. 0 is the beginner. Easy and Fair, Play's ladder rungs between the
+ * beginner and level 1, are LADDER_LEVELS.
+ */
 export const SEARCH_LEVELS: Record<number, SearchLevel> = {
-  // The beginner (owner, 2026-10-31): one piece a turn, nine decisions in ten a slip. Against the old Practice player
-  // it scores 43% (40 matches, Play's rules draft 2), so a first-time player usually beats it.
+  // The beginner: one piece a turn, nine decisions in ten a slip. 43% against the old Practice player.
   0: { horizon: 0, mistake: 0.9, sample: 8, beam: 4, steps: 800, pieces: 1 },
-  1: { horizon: 0, mistake: 0.5, sample: 4, beam: 8, steps: 3_000 },
-  2: { horizon: 0, mistake: 0.3, sample: 2, beam: 16, steps: 8_000 },
-  3: { horizon: 6, mistake: 0.12, sample: 1, beam: 24, steps: 20_000 },
-  4: { horizon: 12, mistake: 0.05, sample: 1, beam: 32, steps: 40_000 },
-  5: { horizon: 18, mistake: 0, sample: 1, beam: 48, steps: 80_000 },
+  // Up to three pieces a turn, no look-ahead past the next turn, slips 15%. 53% against Fair.
+  1: { horizon: 0, mistake: 0.15, sample: 2, beam: 12, steps: 6_000, pieces: 3 },
+  2: { horizon: 6, mistake: 0.12, sample: 1, beam: 24, steps: 20_000 },
+  3: { horizon: 12, mistake: 0.05, sample: 1, beam: 32, steps: 40_000 },
+  4: { horizon: 18, mistake: 0, sample: 1, beam: 48, steps: 80_000 },
 };
-export const SEARCH_NAMES = ['Beginner', 'Search 1', 'Search 2', 'Search 3', 'Search 4', 'Search 5'];
+/** The highest level. */
+export const TOP_LEVEL = 4;
+/**
+ * Play's ladder (ruleset 3), weakest first (owner, 2026-10-31: no wall between the beginner and level 1): the beginner,
+ * then two rungs measured against the old ladder's players under ruleset 3's rules, 40 matches, seats swapped:
+ * "Easy" scores 48% against the old Builder, "Fair" 56% against the old Planner (the top of the old ladder).
+ */
+export const LADDER_LEVELS: SearchLevel[] = [
+  SEARCH_LEVELS[0],
+  { horizon: 0, mistake: 0.4, sample: 2, beam: 8, steps: 3_000, pieces: 2 },
+  { horizon: 0, mistake: 0.2, sample: 2, beam: 10, steps: 4_000, pieces: 3 },
+];
+export const SEARCH_NAMES = ['Beginner', 'Level 1', 'Level 2', 'Level 3', 'Level 4'];
 
 /**
  * A standing order's preset (agent play, docs/proposals/minpentai-agent-play.md section 9): what the search
@@ -81,8 +97,8 @@ export function belief(m: Pick<TurnInput, 'view' | 'lastSeen' | 'o' | 'e'>): Wor
 }
 
 /** A turn for side m.o at the given level. */
-export function searchPlan(m: TurnInput & { level: number; preset?: Preset }): Required<Plan> {
-  const { e, s, o } = m, L = SEARCH_LEVELS[m.level];
+export function searchPlan(m: TurnInput & { level: number; preset?: Preset; config?: SearchLevel }): Required<Plan> {
+  const { e, s, o } = m, L = m.config ?? SEARCH_LEVELS[m.level];
   const base = belief(m);
   const per = s.every + L.horizon;
   let steps = 0, sims = 0;
@@ -157,6 +173,9 @@ function groups(e: Engine, w: World, s: Settings, o: Side, snap: number[], point
 }
 
 export const searchPlayer = (level: number): Planner => (m) => searchPlan({ ...m, level });
+/** Play's ladder rung n (1–7): the beginner, Easy, Fair, then levels 1–4. */
+export const ladderLevel = (rung: number): SearchLevel => (rung <= LADDER_LEVELS.length ? LADDER_LEVELS[rung - 1] : SEARCH_LEVELS[rung - LADDER_LEVELS.length]);
+export const ladderPlayer = (rung: number): Planner => (m) => searchPlan({ ...m, level: -1, config: ladderLevel(rung) });
 
 /**
  * One of the ladder's old players (botPlan rung 0–5). It reads the board itself (as it always has; it only uses

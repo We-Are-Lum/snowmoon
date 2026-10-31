@@ -24,12 +24,12 @@ import { board, type BoardOpts, type BoardView } from './board';
 import { drawRules, verdict, type Engine, type Kills } from '../versions/engine';
 import type { Settings } from '../versions/schema';
 import { LADDER, PLAY, RULESETS, SOLO_V1_ENGINE, engineFor, rulesetOfRules, settingsFor, usesSearch, type RulesetId, type VersionRules } from '../versions/solo-v1';
-import { searchPlan } from '../versions/search';
+import { ladderLevel, searchPlan } from '../versions/search';
 
-/** The ladder Play offers (owner, 2026-10-31): the search computer's, six rungs; the old one is kept as history. */
+/** The ladder Play offers (owner, 2026-10-31): the search computer's, seven rungs; the old one is kept as history. */
 const RUNGS = SEARCH_RUNGS;
 /** A match's own ladder: the search computer's under ruleset 3, the old five rungs under the old players. */
-const ladderOf = (v: VersionRules) => (usesSearch(v) ? { R: SEARCH_RUNGS, top: 6 } : { R: OLD_RUNGS, top: 5 });
+const ladderOf = (v: VersionRules) => (usesSearch(v) ? { R: SEARCH_RUNGS, top: 7 } : { R: OLD_RUNGS, top: 5 });
 import type { LadderProgress } from './live-types';
 import { checkPlacements, type LiveMatch } from '../play-server/match';
 
@@ -184,8 +184,8 @@ export class PlayController {
     // The match's first random number draws its rule, as Design's mk does; the rest are the computer's.
     const { first, second, s1, s2 } = drawRules(ver, r), e = engineFor(ver, s1);
     const drawn = first && { id: first.id, text: first.text };
-    // Under the search computer, rung n plays search level n - 1 (rung 1 is the beginner, level 0; so is practice).
-    const lvl = opts.lvl ?? (mode === 'practice' ? 0 : mode === 'ladder' ? (usesSearch(ver) ? rung! - 1 : rung!) : 3);
+    // Under the search computer, the level is the ladder rung (1 the beginner, which practice plays too; search.ts ladderLevel).
+    const lvl = opts.lvl ?? (mode === 'practice' ? (usesSearch(ver) ? 1 : 0) : mode === 'ladder' ? rung! : 3);
     const m: Match = {
       mode, rung, lvl, rule: first?.id ?? '', R: s1.sight, every: s1.every, cost: s1.costGlider, ver, e, s: s1, drawn,
       next2: second && s2 ? { drawn: { id: second.id, text: second.text }, s: s2 } : null, turnAt: 0, saved: { C: 0, A: 0 }, kills: { C: 0, A: 0 },
@@ -243,7 +243,7 @@ export class PlayController {
     m.phase = 'act'; m.turnAt = w.step; m.snap = { C: m.e.towers(w, 'C'), A: m.e.towers(w, 'A') }; m.pend = { C: [], A: [] }; m.ended = m.oppEnded = false; m.lastG = null; m.ff = false;
     m.pend.A = usesSearch(m.ver)
       // The search computer plans from Amber's view only, with the match's own numbers, so a replay plays the same.
-      ? (searchPlan({ e: m.e, s: m.s, o: 'A', view: m.e.fog(w, m.s, 'A'), lastSeen: { ...m.lsA }, snap: m.snap.A, points: this.budget('A'), rng: m.rng, level: m.lvl }).placements as Placement[])
+      ? (searchPlan({ e: m.e, s: m.s, o: 'A', view: m.e.fog(w, m.s, 'A'), lastSeen: { ...m.lsA }, snap: m.snap.A, points: this.budget('A'), rng: m.rng, level: -1, config: ladderLevel(Math.max(1, m.lvl)) }).placements as Placement[])
       : m.e.botPlan({ w, s: m.s, lvl: m.lvl, rng: m.rng, budget: this.budget('A'), snap: m.snap, lsA: m.lsA, diag: m.s.directions === 8 });
     this.setState({ aim: false });
   }
@@ -412,7 +412,7 @@ export class PlayController {
     };
     // ladder
     const sel = s.rungSel || prog.opened;
-    v.rungs = [6, 5, 4, 3, 2, 1].map((n) => {
+    v.rungs = [7, 6, 5, 4, 3, 2, 1].map((n) => {
       const rec = prog.rec[n] || { tries: 0 }, open = n <= prog.opened, won = !!rec.won, isSel = open && n === sel;
       return { n, name: `${n} · ${RUNGS[n]!.n}`, desc: RUNGS[n]!.d, icon: won ? '✓' : String(n), open, won, sel: isSel,
         r1: won ? 'WON IN' : open ? (rec.tries ? `${rec.tries} TR${rec.tries === 1 ? 'Y' : 'IES'}` : '') : 'CLOSED', r2: won ? `${rec.won} STEPS` : open ? 'PLAY →' : '',

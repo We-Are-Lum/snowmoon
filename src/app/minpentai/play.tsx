@@ -85,7 +85,7 @@ export function Play({ start, onLearn }: { start: 'home' | 'free' | 'ladder' | '
       const q = new URLSearchParams(window.location.search);
       const g = decMatch(q.get('match') ?? ''), lvl = Number(q.get('level') ?? 0), rule = q.get('rule') ?? '';
       const picked = (RULE_IDS as string[]).includes(rule) ? (rule as RuleId) : null, rsText = q.get('rs');
-      if (!g || !Number.isInteger(lvl) || lvl < 0 || lvl > 5 || (rule && !picked) || (rsText !== null && rsText !== '2' && rsText !== '3') || !ctl.continueMatch(g.seed, g.turns, lvl, picked ? (drawn) => settings(drawn, null, picked) : undefined, rulesetId(rsText))) ctl.say('That match link could not be read, so here is Play.');
+      if (!g || !Number.isInteger(lvl) || lvl < 0 || lvl > (rsText === '3' ? 7 : 5) || (rule && !picked) || (rsText !== null && rsText !== '2' && rsText !== '3') || !ctl.continueMatch(g.seed, g.turns, lvl, picked ? (drawn) => settings(drawn, null, picked) : undefined, rulesetId(rsText))) ctl.say('That match link could not be read, so here is Play.');
     }
     ctl.mount(window.location.hash);
     const onK = (e: KeyboardEvent) => { if (e.key === 'Escape') ctl.escape(); };
@@ -214,8 +214,8 @@ export function Play({ start, onLearn }: { start: 'home' | 'free' | 'ladder' | '
                 <p className="mp-text">The ladder remembers which rungs you&apos;ve beaten, under your Farcaster account. Only you can see it.</p>
                 <SignInButton className="mp-btn primary" label="SIGN IN WITH FARCASTER" />
               </div>
-              <ol className="mp-rungs-off" aria-label="The six rungs">
-                {[6, 5, 4, 3, 2, 1].map((n) => <li key={n}>{v.rungs.find((r) => r.n === n)!.name}</li>)}
+              <ol className="mp-rungs-off" aria-label="The seven rungs">
+                {[7, 6, 5, 4, 3, 2, 1].map((n) => <li key={n}>{v.rungs.find((r) => r.n === n)!.name}</li>)}
               </ol>
               <div className="mp-grow" />
               <button className="mp-btn" onClick={v.openPractice}>PLAY A PRACTICE MATCH INSTEAD</button>
@@ -440,7 +440,7 @@ function LadderNewNote({ prog }: { prog: LadderProgress }) {
   const close = () => { try { window.localStorage.setItem(NEW_LADDER_KEY, '1'); } catch { /* shown again next time */ } setShow(false); };
   return (
     <div className="mp-ladder-note" role="note">
-      <p className="mp-text"><strong>New computer players.</strong> The ladder now plays a computer that tries its moves on the board as it sees it, from a beginner to five levels. It starts fresh: your wins against the old players are kept below, as history. Matches run to step 120.</p>
+      <p className="mp-text"><strong>New computer players.</strong> The ladder now plays a computer that tries its moves on the board as it sees it, from a beginner through Easy and Fair to four levels. It starts fresh: your wins against the old players are kept below, as history. Matches run to step 120.</p>
       <button className="mp-btn" onClick={close}>GOT IT</button>
     </div>
   );

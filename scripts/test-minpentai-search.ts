@@ -97,7 +97,7 @@ for (const [name, v] of RULESETS) {
 
 // ---------- 3. Whole matches ----------
 for (const [name, v] of RULESETS) {
-  for (const lvl of [1, 3, 5]) {
+  for (const lvl of [1, 3, 4]) {
     const m = playSearchMatch(v, () => ({ C: searchPlayer(lvl), A: searchPlayer(Math.max(1, lvl - 1)) }), 11);
     ok(m.illegal === 0, `${name}: level ${lvl} never makes a refused turn`);
     ok(m.turns.every((t) => t.steps <= SEARCH_LEVELS[t.side === 'C' ? lvl : Math.max(1, lvl - 1)].steps), `${name}: level ${lvl} stays within its step budget`);
@@ -126,7 +126,7 @@ async function browserAgrees() {
       import { playSearchMatch, searchPlayer } from ${JSON.stringify(path.resolve('src/lib/minpentai/versions/search.ts'))};
       import { SOLO_V1 } from ${JSON.stringify(path.resolve('src/lib/minpentai/versions/solo-v1.ts'))};
       import { BOOK_EDITION } from ${JSON.stringify(path.resolve('src/lib/minpentai/versions/book-edition.ts'))};
-      (globalThis as any).run = () => [SOLO_V1, BOOK_EDITION].flatMap((v) => [1, 2].map((seed) => JSON.stringify(playSearchMatch(v, () => ({ C: searchPlayer(5), A: searchPlayer(3) }), seed))));
+      (globalThis as any).run = () => [SOLO_V1, BOOK_EDITION].flatMap((v) => [1, 2].map((seed) => JSON.stringify(playSearchMatch(v, () => ({ C: searchPlayer(4), A: searchPlayer(2) }), seed))));
     `);
     const out = await build({ entryPoints: [entry], bundle: true, write: false, format: 'iife', platform: 'browser', logLevel: 'silent' });
     const code = out.outputFiles[0].text;
@@ -135,8 +135,8 @@ async function browserAgrees() {
       const page = await browser.newPage();
       await page.addScriptTag({ content: code });
       const there: string[] = await page.evaluate(() => (globalThis as unknown as { run: () => string[] }).run());
-      const here = [SOLO_V1, BOOK_EDITION].flatMap((v) => [1, 2].map((seed) => JSON.stringify(playSearchMatch(v, () => ({ C: searchPlayer(5), A: searchPlayer(3) }), seed))));
-      ok(there.length === 4 && isDeepStrictEqual(there, here), 'Chrome plays the same four matches as Node, move for move (level 5 against level 3, Play and the book edition)');
+      const here = [SOLO_V1, BOOK_EDITION].flatMap((v) => [1, 2].map((seed) => JSON.stringify(playSearchMatch(v, () => ({ C: searchPlayer(4), A: searchPlayer(2) }), seed))));
+      ok(there.length === 4 && isDeepStrictEqual(there, here), 'Chrome plays the same four matches as Node, move for move (level 4 against level 2, Play and the book edition)');
     } finally { await browser.close(); }
   } finally { rmSync(dir, { recursive: true, force: true }); }
 }

@@ -12,8 +12,8 @@ import type { LadderProgress } from '../play-game/live-types';
 import { Refused } from './match';
 
 export const RUNGS = 5;
-/** The search computer's ladder (ruleset 3, owner 2026-10-31): six rungs, the beginner first. */
-export const SEARCH_RUNGS = 6;
+/** The search computer's ladder (ruleset 3, owner 2026-10-31): seven rungs, the beginner first. */
+export const SEARCH_RUNGS = 7;
 /** Where the search computer's ladder is kept in a row: under this key of rec, so the old ladder's progress stays as history. */
 export const SEARCH_KEY = 's';
 export const freshProgress = (): LadderProgress => ({ opened: 1, rec: {} });
