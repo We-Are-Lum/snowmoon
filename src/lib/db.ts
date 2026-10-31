@@ -44,14 +44,17 @@ function limitedSocket(o: { host: string[]; port: number[] }): Promise<net.Socke
 
 /** The options every connection here uses. `socket` and `max_pipeline` are postgres.js options its types leave out (src/connection.js). */
 type Options = postgres.Options<Record<string, postgres.PostgresType>>;
-export const dbOptions = (): Options => ({
+/** A database on this machine: the local tests' PGlite, whose socket server accepts one connection (more are refused). */
+const isLocal = (url: string) => /@(127\.0\.0\.1|localhost)(:\d+)?\//.test(url);
+
+export const dbOptions = (url = ''): Options => ({
   prepare: false, // the transaction pooler does not keep prepared statements
   // Six connections per server instance, one query at a time on each (owner, 2026-10-30; measured on the real pooler
   // the same day). With one connection (as before), a query that had to wait for it was often never answered: two
   // queries at once, the second hung on 10 of 10 warm connections; with two connections, three at once, the third hung
   // 10 of 10. With six: 0 of 456 hung, at 3, 5, 6, 8, 12 and 20 queries at once. Queries one after another never hung.
-  // DB_MAX changes the number, for a local test only.
-  max: Number(process.env.DB_MAX) || 6,
+  // A local test database gets one (PGlite's socket server refuses a second). DB_MAX changes the number, for a local test.
+  max: Number(process.env.DB_MAX) || (isLocal(url) ? 1 : 6),
   connect_timeout: DB_LIMITS.connectSeconds,
   idle_timeout: DB_LIMITS.idleSeconds,
   max_lifetime: DB_LIMITS.lifetimeSeconds,
@@ -75,7 +78,7 @@ export function db(): postgres.Sql | null {
   if (!client) {
     // Not kept while unset, so a script that sets it after an early call (scripts/test-wallet.ts) still connects.
     const url = process.env.STUDIO_DATABASE_URL;
-    client = url ? postgres(url, dbOptions()) : null;
+    client = url ? postgres(url, dbOptions(url)) : null;
   }
   return client;
 }
@@ -90,7 +93,7 @@ let agentClient: postgres.Sql | null | undefined;
 export function asAgentReader<T>(fn: () => Promise<T>): Promise<T> {
   if (agentClient === undefined) {
     const url = process.env.AGENT_DATABASE_URL;
-    agentClient = url ? postgres(url, dbOptions()) : null;
+    agentClient = url ? postgres(url, dbOptions(url)) : null;
   }
   return scoped.run(agentClient, fn);
 }
