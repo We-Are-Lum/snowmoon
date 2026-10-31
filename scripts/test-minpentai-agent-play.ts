@@ -133,6 +133,7 @@ playOut('play', 202);
   throwsLike(() => submit(m, { turn: m.turn, placements: [], source: 'agent', final: true, now: now() }), /the match is over/, 'nothing after the end');
   const rec = recordOf(m);
   ok(rec.sides.C.model?.label === 'self-reported' && rec.final_position.towers.some((t) => t.side === 'theirs'), 'after the end the record shows the whole board and the model as self-reported');
+  ok(!JSON.stringify(rec).includes('Rook') && !JSON.stringify(rec).includes(String(m.person)) && !('agent' in rec.sides.C), 'the public record names neither the person nor their agent');
 }
 
 // ---------- 4. The fog review's findings (2026-10-31), kept as tests ----------

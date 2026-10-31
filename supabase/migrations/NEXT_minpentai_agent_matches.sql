@@ -8,7 +8,7 @@
 -- side is shown is computed from it (its own view). `ruleset` is the exact ruleset the match was played under
 -- (e.g. play-3, book-1), so a record replays the same after the rules change. `version` guards saves against two
 -- calls at once; `updated_at` is set by the code on every save and, to be sure, by a trigger.
--- No delete for studio_writer: a record is removed only by the site's owner, by hand, on request (Privacy).
+-- No delete for studio_writer or service_role: a record is removed only by the site's owner, by hand, on request (Privacy).
 --
 -- MUST RUN AS postgres (the owner of the `studio` schema), in the Supabase SQL Editor.
 -- Dry run first: paste everything, but replace the final `commit;` with `rollback;`.
@@ -33,7 +33,7 @@ create table studio.mp_agent_matches (
 create index mp_agent_matches_person on studio.mp_agent_matches (person, over, updated_at desc);
 
 -- Every update stamps updated_at with the real time (clock_timestamp, so it moves even inside one transaction).
-create function studio.mp_agent_matches_touch() returns trigger language plpgsql as $$
+create function studio.mp_agent_matches_touch() returns trigger language plpgsql set search_path = '' as $$
 begin
   new.updated_at := clock_timestamp();
   return new;
@@ -43,8 +43,9 @@ create trigger mp_agent_matches_touch before update on studio.mp_agent_matches
 
 alter table studio.mp_agent_matches enable row level security;
 revoke all on studio.mp_agent_matches from anon, authenticated;
--- The schema's default privileges give studio_writer delete too: taken away, so only the owner removes a record (Privacy).
-revoke delete, truncate on studio.mp_agent_matches from studio_writer;
+-- The schema's default privileges give studio_writer and service_role (the project's secret key) delete too: taken away
+-- from both, so only the owner, as postgres, removes a record (Privacy). Nothing in the site needs either to delete here.
+revoke delete, truncate on studio.mp_agent_matches from studio_writer, service_role;
 grant select, insert, update on studio.mp_agent_matches to studio_writer;
 create policy mp_agent_matches_writer_read on studio.mp_agent_matches for select to studio_writer using (true);
 create policy mp_agent_matches_writer_insert on studio.mp_agent_matches for insert to studio_writer with check (true);
@@ -55,11 +56,13 @@ commit;
 -- Read-back (after commit):
 -- 1. The columns.
 -- select column_name, data_type from information_schema.columns where table_schema = 'studio' and table_name = 'mp_agent_matches' order by ordinal_position;
--- 2. Nobody but the server can read or change it, and the server can't delete: all four false.
+-- 2. Nobody but the server can read or change it, and neither the server nor the secret key can delete: all false.
 -- select has_table_privilege('anon', 'studio.mp_agent_matches', 'select') as anon_reads,
 --        has_table_privilege('authenticated', 'studio.mp_agent_matches', 'select') as authenticated_reads,
 --        has_table_privilege('anon', 'studio.mp_agent_matches', 'insert') as anon_writes,
---        has_table_privilege('studio_writer', 'studio.mp_agent_matches', 'delete') as writer_deletes;
+--        has_table_privilege('studio_writer', 'studio.mp_agent_matches', 'delete') as writer_deletes,
+--        has_table_privilege('service_role', 'studio.mp_agent_matches', 'delete') as secret_key_deletes,
+--        has_table_privilege('service_role', 'studio.mp_agent_matches', 'truncate') as secret_key_truncates;
 -- 3. A realistic row: inserted, updated under its version (the trigger stamps updated_at), read, deleted.
 -- begin;
 -- insert into studio.mp_agent_matches (id, person, agent_id, ruleset, level, state)
@@ -70,6 +73,11 @@ commit;
 -- commit;
 -- 4. Gone.
 -- select count(*) from studio.mp_agent_matches where id = 'readback0001';
--- 5. Bad values refused (each should fail): a ruleset without its number, a level of 5.
+-- 5. Bad values refused: each in its own transaction, rolled back, so a surprise success leaves no row and the next
+--    test still runs. Each insert should fail (a ruleset without its number; a level of 5).
+-- begin;
 -- insert into studio.mp_agent_matches (id, person, ruleset, level, state) values ('readback0002', 1, 'play', 3, '{}');
+-- rollback;
+-- begin;
 -- insert into studio.mp_agent_matches (id, person, ruleset, level, state) values ('readback0003', 1, 'play-3', 5, '{}');
+-- rollback;

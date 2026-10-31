@@ -110,8 +110,12 @@ try {
   const row = (await S.pg.query<{ ruleset: string; level: number; stamped: boolean }>(`select ruleset, level, updated_at > created_at as stamped from studio.mp_agent_matches where id = $1`, [id])).rows[0];
   check('M24 the match is stored under its exact ruleset and level', row?.ruleset === 'book-1' && row.level === 2, JSON.stringify(row));
   check('M25 every save stamps updated_at', row?.stamped === true);
-  const priv = (await S.pg.query<Record<string, boolean>>(`select has_table_privilege('anon', 'studio.mp_agent_matches', 'select') as a, has_table_privilege('authenticated', 'studio.mp_agent_matches', 'select') as b, has_table_privilege('studio_writer', 'studio.mp_agent_matches', 'delete') as c`)).rows[0];
-  check('M26 anon and authenticated can\'t read the table, and the server can\'t delete from it', priv && !priv.a && !priv.b && !priv.c, JSON.stringify(priv));
+  const priv = (await S.pg.query<Record<string, boolean>>(`select has_table_privilege('anon', 'studio.mp_agent_matches', 'select') as a, has_table_privilege('authenticated', 'studio.mp_agent_matches', 'select') as b, has_table_privilege('studio_writer', 'studio.mp_agent_matches', 'delete') as c, has_table_privilege('service_role', 'studio.mp_agent_matches', 'delete') as d, has_table_privilege('service_role', 'studio.mp_agent_matches', 'truncate') as e`)).rows[0];
+  check('M26 anon and authenticated can\'t read the table; neither the server nor the service_role key can delete from it', priv && !priv.a && !priv.b && !priv.c && !priv.d && !priv.e, JSON.stringify(priv));
+  const recBody = JSON.stringify(rec.out);
+  // The person's id as a whole JSON value (it is -3 here, which also appears inside timestamps), their address, their agent's name.
+  const idAsValue = new RegExp(`[:\\[,]${people.A.person}[,\\]}]`);
+  check('M27 the public record names neither the person nor their agent', !recBody.includes('Claude') && !idAsValue.test(recBody) && !recBody.toLowerCase().includes(people.A.address.toLowerCase()) && !/"agent":/.test(recBody), JSON.stringify({ claude: recBody.includes('Claude'), id: idAsValue.test(recBody), addr: recBody.toLowerCase().includes(people.A.address.toLowerCase()), agentKey: /"agent":/.test(recBody) }));
   const lst = await tool(BASE, a.access_token, 'minpentai_list_my_matches', {});
   check('M21 the person\'s matches list it as over', ((lst.out.matches ?? []) as { match_id: string; over: boolean }[]).some((x) => x.match_id === id && x.over));
 } finally {

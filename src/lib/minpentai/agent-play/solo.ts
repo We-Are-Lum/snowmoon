@@ -318,7 +318,9 @@ export function recordOf(m: SoloMatch) {
   const { s, e, rule } = rulesOf(m);
   return {
     match_id: m.id, ruleset: m.ruleset, seed: m.seed, computer_random: m.cpu, computer_random_commitment: m.cpuCommit, rule, level: m.level, created_at: m.createdAt,
-    sides: { C: { kind: 'person', agent: m.agent.name, model: m.agent.model ? { ...m.agent.model, label: 'self-reported' } : null }, A: { kind: 'site computer', level: m.level } },
+    // Nothing that leads back to the person (owner, 2026-10-31): no Farcaster name or ID, and no agent name, since the
+    // site shows agents elsewhere as "<name>, agent of @person". The model, as the agent declared it.
+    sides: { C: { kind: 'person', model: m.agent.model ? { ...m.agent.model, label: 'self-reported' } : null }, A: { kind: 'site computer', level: m.level } },
     turns: m.history.map((h) => ({ turn: h.turn, step: h.step, C: { ...h.C, placements: h.C.placements.map(orderOut) }, A: { ...h.A, placements: h.A.placements.map(orderOut) } })),
     end: m.end,
     final_position: boardOut(e, m.w, PERSON, () => true),
