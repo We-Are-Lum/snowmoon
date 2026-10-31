@@ -11,7 +11,7 @@ The contract is `src/SnowmoonWIP.sol`, about fifty lines of sale logic on top of
 - **The owner creates tokens, and that is the owner's only power.** `createToken(uri, price, start, end, payout)` fixes the metadata URI, the price in wei, the sale window and the payout address. No function changes them afterwards.
   - It checks the URI isn't empty and the price isn't zero.
   - It checks `start < end`, and that `end` is still in the future.
-  - It checks the payout isn't the zero address or the contract itself.
+  - It checks the payout isn't the zero address or the contract itself, and that it's a deployed contract (`payout.code.length > 0`). An EOA, or a split not yet created, is refused with `PayoutNotContract`.
 - **Anyone mints** with `mint(id, quantity, to)`, paying exactly `price × quantity` wei.
   - The mint is open from `start` (inclusive) until `end` (exclusive): `start <= block.timestamp < end`.
   - The payment is recorded against the token before `_mint` runs, since `_mint` calls `onERC1155Received` when `to` is a contract.
@@ -31,6 +31,10 @@ The contract is `src/SnowmoonWIP.sol`, about fifty lines of sale logic on top of
 - No `receive` or `fallback`, so a plain ETH transfer to the contract reverts.
 - ETH forced in some other way stays in the contract for good. That covers `selfdestruct`, a block reward, or ETH already at the address before deploy. It's never counted in any token's proceeds, and no function can send it out.
 - No supply cap: it's an open edition. No free mints, since the price is never zero.
+
+## Ownership
+
+Ownership is `Ownable2Step`: it transfers in two steps (`transferOwnership`, then `acceptOwnership` by the new owner), and `renounceOwnership` is allowed. The owner keeps ownership after the mint. The owner's reason (2026-10-31): "Renouncing can't touch existing tokens or their proceeds, and it's my one-call stop if my wallet is ever compromised."
 
 ## Interface
 
@@ -132,7 +136,7 @@ Do the whole run with Sepolia ETH; make the window short.
 1. **Deploy** (you sign):
    ```sh
    forge create src/SnowmoonWIP.sol:SnowmoonWIP --rpc-url $RPC --browser --broadcast \
-     --constructor-args <YOUR_ADDRESS> "Snowmoon WIP (Sepolia test)" "SNOWMOONWIP" "ipfs://<collection-cid>"
+     --constructor-args <YOUR_ADDRESS> "Snowmoon WIP" "SMWIP" "ipfs://<collection-cid>"
    ```
 2. **Deploy a recipient that rejects ETH** (you sign). This is the test helper `EthRejecter`, which has no `receive`:
    ```sh
@@ -152,16 +156,16 @@ Do the whole run with Sepolia ETH; make the window short.
    cast call <SPLIT> "owner()(address)" --rpc-url $RPC   # must print 0x0000000000000000000000000000000000000000
    cast codesize <SPLIT> --rpc-url $RPC                  # must be greater than 0
    ```
-4. **Create a token** (you sign). Use a window starting now and ending in an hour or two, with a small price:
+4. **Create a token** (you sign). Use the real price, **0.003 ETH = `3000000000000000` wei per edition**; it's fixed forever at creation. Use a window starting now and ending in an hour or two:
    ```sh
    cast send <WIP> "createToken(string,uint256,uint64,uint64,address)" \
-     "ipfs://<token-cid>" 1000000000000000 $(date +%s) $(( $(date +%s) + 7200 )) <SPLIT> \
+     "ipfs://<token-cid>" 3000000000000000 $(date +%s) $(( $(date +%s) + 7200 )) <SPLIT> \
      --rpc-url $RPC --browser
    cast call <WIP> "token(uint256)((string,uint256,uint64,uint64,address))" 1 --rpc-url $RPC
    ```
-5. **Mint** (you, or a second wallet, sign). Try 3 editions at 0.001 ETH; also try a wrong amount and see it revert:
+5. **Mint** (you, or a second wallet, sign). Try 3 editions at 0.003 ETH (0.009 ETH in all); also try a wrong amount and see it revert:
    ```sh
-   cast send <WIP> "mint(uint256,uint256,address)" 1 3 <TO> --value 3000000000000000 --rpc-url $RPC --browser
+   cast send <WIP> "mint(uint256,uint256,address)" 1 3 <TO> --value 9000000000000000 --rpc-url $RPC --browser
    ```
 6. **Release** (any wallet signs): `cast send <WIP> "release(uint256)" 1 --rpc-url $RPC --browser`. Check `cast balance <SPLIT>` and that `proceeds(1)` is 0.
 7. **Distribute** (any wallet signs), with the same struct as step 3:
@@ -182,7 +186,7 @@ After both deploys, verify the source. Etherscan needs your own API key, kept in
 
 ```sh
 forge verify-contract <WIP> src/SnowmoonWIP.sol:SnowmoonWIP --chain sepolia --watch \
-  --constructor-args $(cast abi-encode "constructor(address,string,string,string)" <YOUR_ADDRESS> "Snowmoon WIP (Sepolia test)" "SNOWMOONWIP" "ipfs://<collection-cid>")
+  --constructor-args $(cast abi-encode "constructor(address,string,string,string)" <YOUR_ADDRESS> "Snowmoon WIP" "SMWIP" "ipfs://<collection-cid>")
 # add --etherscan-api-key "$ETHERSCAN_API_KEY" for Etherscan, or --verifier sourcify
 ```
 
@@ -191,13 +195,17 @@ Once it's verified, Etherscan's "Write Contract" tab can mint and release withou
 ### 3. Mainnet
 
 1. **Pin the collection metadata** on IPFS (`contractURI`, ERC-7572: `name`, `description`, `image`, `external_link`).
-2. **Deploy** with the real name, symbol and collection URI, then verify (you sign).
+2. **Deploy** with name `"Snowmoon WIP"`, symbol `"SMWIP"` and the collection URI, then verify (you sign). The constructor args are `<YOUR_ADDRESS> "Snowmoon WIP" "SMWIP" "ipfs://<collection-cid>"`.
 3. **For each final version:**
    - check every recipient address works on mainnet and screen it;
    - create its PushSplit (you sign);
    - before `createToken`, read the split's `owner()` (must be `0x0…0`) and its `cast codesize` on mainnet (must be above 0), as in step 1.3;
    - pin its metadata;
-   - `createToken` with the split as payout and the dates from the challenge config (you sign).
+   - `createToken` with the split as payout, price **`3000000000000000` wei (0.003 ETH) per edition**, and the dates from the challenge config (you sign). The price, like every term, is fixed forever at creation:
+     ```sh
+     cast send <WIP> "createToken(string,uint256,uint64,uint64,address)" \
+       "ipfs://<token-cid>" 3000000000000000 <START> <END> <SPLIT> --rpc-url $RPC --browser
+     ```
 4. **Read back each token** with `token(id)`, and compare it with the plan before announcing.
 5. **When the window closes,** anyone runs `release(id)`, then `distribute` on the split.
 

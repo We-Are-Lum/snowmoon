@@ -3,7 +3,7 @@ pragma solidity 0.8.28;
 
 import {Test} from "forge-std/Test.sol";
 import {SnowmoonWIP} from "../src/SnowmoonWIP.sol";
-import {ForceSender, PaymentCheckingReceiver} from "./utils/Helpers.sol";
+import {ForceSender, PaymentCheckingReceiver, Payout} from "./utils/Helpers.sol";
 
 /// @dev Drives random mints, releases, transfers, forced ETH and time jumps over three tokens.
 contract Handler is Test {
@@ -98,8 +98,8 @@ contract SnowmoonWIPInvariantTest is Test {
     function setUp() public {
         address owner = makeAddr("owner");
         vm.warp(1_796_662_800 - 1 days);
-        wip = new SnowmoonWIP(owner, "Snowmoon WIP", "SNOWMOONWIP", "ipfs://c");
-        payouts = [payable(makeAddr("pA")), payable(makeAddr("pB")), payable(makeAddr("pC"))];
+        wip = new SnowmoonWIP(owner, "Snowmoon WIP", "SMWIP", "ipfs://c");
+        payouts = [payable(address(new Payout())), payable(address(new Payout())), payable(address(new Payout()))];
         uint64 start = uint64(block.timestamp + 1 hours);
         vm.startPrank(owner);
         ids[0] = wip.createToken("ipfs://a", 0.002 ether, start, start + 11 days, payouts[0]);

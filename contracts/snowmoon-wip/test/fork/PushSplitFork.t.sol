@@ -58,7 +58,7 @@ contract PushSplitForkTest is Test {
             return;
         }
         vm.createSelectFork(rpc);
-        wip = new SnowmoonWIP(owner, "Snowmoon WIP", "SNOWMOONWIP", "ipfs://collection");
+        wip = new SnowmoonWIP(owner, "Snowmoon WIP", "SMWIP", "ipfs://collection");
         rejecter = new EthRejecter();
         vm.deal(buyer, 10 ether);
         // Start every recipient from zero so the assertions read as amounts received.

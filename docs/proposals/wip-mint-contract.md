@@ -2,6 +2,10 @@
 
 DRAFT, written by an AI agent (Claude, made by Anthropic) on 2026-10-31 for the owner's review. This is item 8 of the remix-challenge plan. The code is in `contracts/snowmoon-wip/`; its README has the deploy checklist. Nothing is deployed and nothing has been sent to any network.
 
+## Merge order
+
+**This branch merges after the no-token branch, PR #73**, which changes principle 7. That PR must be live before any mint opens. This branch leaves `docs/principles.md` and `scripts/check-principles.ts` alone.
+
 ## First: a principle to settle
 
 **Principle 7 says "No token".** `docs/principles.md` says "There is no token", and P7b says "no token code (ERC-20/721, mint, airdrop) exists in the repo". The home page's first screen carries "Independent adaptation · Not affiliated with the author · No token" (`config/intro.json`).
@@ -12,7 +16,7 @@ The plan's decision (owner, 31 Oct) to mint Snowmoon WIP on mainnet needs one of
 - reword P7 and the first-screen line (for example "no coin" or "no fungible token", if that was the intent);
 - or keep the contract outside this repo.
 
-The agent hasn't changed the principle, the check or the intro line.
+The agent hasn't changed the principle, the check or the intro line. **Update (owner, 2026-10-31):** principle 7 is being changed on the no-token branch, PR #73, not here.
 
 ## Decisions made in the contract
 
@@ -27,13 +31,14 @@ The agent hasn't changed the principle, the check or the intro line.
 | Reentrancy guard | `nonReentrant` on **both** `mint` and `release` (one shared lock) | CEI already keeps the books right. The guard also refuses re-entry from a receiver or a payout outright. The only cost: a contract receiver can't mint again from inside its own receive hook. |
 | `release(id)` | Permissionless. Sends the token's whole recorded balance to its payout, zeroes it first, reverts with `NothingToRelease` when it's 0 | No empty `Released` events. |
 | Payout rejects ETH | The whole `release` reverts (`ReleaseFailed`); the proceeds stay recorded, mints continue, a later release can succeed | A PushSplit accepts ETH, so this shouldn't happen. If it did, nothing is lost or redirected. There's no fallback address, since that would be a second payout. |
-| Payout validation | Not zero, not the contract itself | Whether it's a deployed split is checked by the owner before creation (checklist), not on-chain, so Sepolia dry runs can use any address. |
+| Payout validation | Not zero, not the contract itself, and **must be a deployed contract** (`payout.code.length > 0`, else `PayoutNotContract`) | Owner's decision (2026-10-31). An EOA or a split not yet created is refused. The checklist still has the owner read each split's `owner()` (must be 0) before creation; the contract can't check it's a split. |
 | `receive` / `fallback` | **None**. Plain ETH sends revert | No reason to accept stray ETH. |
 | Forced ETH (selfdestruct, block reward, pre-existing balance) | Ignored by accounting; never paid out by anyone. Releases pay only `proceeds[id]`. | Tested with `selfdestruct`. The mainnet fork test hit a real case: the fresh contract's address already held 0.000577 ETH on mainnet, and it stayed put. |
-| Ownership | `Ownable2Step`: transferable in two steps, and renounceable | **Recommend: keep both.** Transfer lets the owner move creation rights to a Safe or a new wallet without a typo risk. Renouncing freezes the collection (no new tokens) without touching existing tokens, a clean way to end it. The owner can't touch any token's terms or money either way. |
+| Ownership | `Ownable2Step`: transferable in two steps, and renounceable. **Decided by the owner (2026-10-31): stays as is, and the owner keeps ownership after the mint.** | The owner's reason: "Renouncing can't touch existing tokens or their proceeds, and it's my one-call stop if my wallet is ever compromised." The owner can't touch any token's terms or money either way. |
 | `contractURI()` | ERC-7572, set once at deploy, non-empty; no setter (so no `ContractURIUpdated` event) | Collection metadata for marketplaces and explorers. |
 | `uri(id)` | Per-token, reverts for ids that don't exist | Ids run from 1 to `tokenCount`. |
-| `name()` / `symbol()` | Set at deploy | Wallets and Etherscan show them. |
+| `name()` / `symbol()` | Set at deploy: **"Snowmoon WIP" / `SMWIP`** (owner, 2026-10-31) | Wallets and Etherscan show them. |
+| Price | **0.003 ETH (`3000000000000000` wei) per edition, for both tokens** (owner, 2026-10-31) | Passed to each `createToken`; fixed forever at creation. |
 | Royalties | None (no ERC-2981) | Plan decision 11. |
 
 ## Splits
@@ -84,18 +89,19 @@ The agent hasn't changed the principle, the check or the intro line.
 
 ## Open questions for the owner
 
-1. **Principle 7 and the "No token" line** (above). This must be settled before merge or announcement.
+1. **Principle 7 and the "No token" line** (above): being changed on PR #73. This branch merges after it, and #73 must be live before any mint opens.
 2. **Time of day** for start and end, and whether the 18 December call should still fall inside the window.
-3. **Price** in wei per token. It's fixed forever at creation, so convert from USD on the day.
-4. **Collection name and symbol.** The examples use "Snowmoon WIP" / `SNOWMOONWIP`.
-5. **Ownership after the mint:** keep, move to a Safe, or renounce.
+3. **Price:** decided, 0.003 ETH per edition for both tokens.
+4. **Collection name and symbol:** decided, "Snowmoon WIP" / `SMWIP`.
+5. **Ownership after the mint:** decided, the owner keeps it; two-step transfer and renounce stay.
 6. **Review:** the plan asks for a review by a separate agent that hasn't seen the code being written. This hasn't been done yet.
 7. **Farcaster on-device test** of a chain-1 transaction with only Base funds, and of `swapToken` to mainnet ETH.
 8. **Vercel:** the submodules (OpenZeppelin, forge-std) are public. Vercel clones submodules during builds, which adds a little build time. If unwanted, add this branch to `vercel.json`'s `deploymentEnabled: false` list, or vendor nothing and install the dependencies at test time.
 
 ## How it was checked
 
-- **Unit and fuzz tests: 44.** The 3 fuzz tests ran 1,000 times each; the accounting fuzz also passed 20,000 runs.
+- **Unit and fuzz tests: 47.** These include the payout code check: an EOA is refused, an address with no code yet is refused, and a deployed contract is accepted.
+  - The 3 fuzz tests ran 1,000 times each; the accounting fuzz also passed 20,000 runs (at 61dd2a2).
   - A receiver's `onERC1155Received` checks that this mint's payment is already in `proceeds(id)` and `totalProceeds()`.
   - Moving the payment record after `_mint` makes that test and all 5 invariants fail. This was tried locally on 2026-10-31, then reverted.
 - **Invariant tests: 5.** 256 runs × 64 calls each, with `fail_on_revert = true`, so any unexpected revert fails the run.

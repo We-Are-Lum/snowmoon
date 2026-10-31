@@ -7,6 +7,11 @@ import {SnowmoonWIP} from "../../src/SnowmoonWIP.sol";
 /// @dev A contract that rejects every ETH transfer (no receive, no fallback).
 contract EthRejecter {}
 
+/// @dev A payout stand-in: a deployed contract that accepts ETH (a PushSplit in production).
+contract Payout {
+    receive() external payable {}
+}
+
 /// @dev Sends its balance to any address by self-destructing (EIP-6780 still moves the ETH).
 contract ForceSender {
     constructor(address payable target) payable {

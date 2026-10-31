@@ -12,7 +12,8 @@ import {
     ForceSender,
     ReentrantReceiver,
     ReentrantPayout,
-    PaymentCheckingReceiver
+    PaymentCheckingReceiver,
+    Payout
 } from "./utils/Helpers.sol";
 
 contract SnowmoonWIPTest is Test {
@@ -21,8 +22,9 @@ contract SnowmoonWIPTest is Test {
     address owner = makeAddr("owner");
     address buyer = makeAddr("buyer");
     address stranger = makeAddr("stranger");
-    address payable payoutA = payable(makeAddr("payoutA"));
-    address payable payoutB = payable(makeAddr("payoutB"));
+    // Payouts must be deployed contracts; these stand in for PushSplits.
+    address payable payoutA = payable(address(new Payout()));
+    address payable payoutB = payable(address(new Payout()));
 
     // Fixture dates only (2026-12-07 and 2026-12-18, 17:00 UTC). Real dates are creation-time parameters.
     uint64 constant START = 1_796_662_800;
@@ -33,7 +35,7 @@ contract SnowmoonWIPTest is Test {
 
     function setUp() public {
         vm.warp(START - 1 days);
-        wip = new SnowmoonWIP(owner, "Snowmoon WIP", "SNOWMOONWIP", "ipfs://bafyCollection");
+        wip = new SnowmoonWIP(owner, "Snowmoon WIP", "SMWIP", "ipfs://bafyCollection");
         vm.deal(buyer, 1_000 ether);
         vm.deal(stranger, 1 ether);
     }
@@ -53,7 +55,7 @@ contract SnowmoonWIPTest is Test {
     function test_Deploy() public view {
         assertEq(wip.owner(), owner);
         assertEq(wip.name(), "Snowmoon WIP");
-        assertEq(wip.symbol(), "SNOWMOONWIP");
+        assertEq(wip.symbol(), "SMWIP");
         assertEq(wip.contractURI(), "ipfs://bafyCollection");
         assertEq(wip.tokenCount(), 0);
     }
@@ -113,6 +115,42 @@ contract SnowmoonWIPTest is Test {
         wip.createToken(URI_A, PRICE, START, END, payoutA);
         vm.stopPrank();
         assertEq(wip.tokenCount(), 0);
+    }
+
+    function test_Create_PayoutMustBeContract_EOARefused() public {
+        address payable eoa = payable(makeAddr("an-eoa"));
+        vm.prank(owner);
+        vm.expectRevert(abi.encodeWithSelector(SnowmoonWIP.PayoutNotContract.selector, eoa));
+        wip.createToken(URI_A, PRICE, START, END, eoa);
+        assertEq(wip.tokenCount(), 0);
+    }
+
+    function test_Create_PayoutMustBeContract_NotYetDeployedRefused() public {
+        // The address a contract will have, before it exists (like a split not yet created).
+        address payable future = payable(vm.computeCreateAddress(address(this), vm.getNonce(address(this))));
+        assertEq(future.code.length, 0);
+        vm.prank(owner);
+        vm.expectRevert(abi.encodeWithSelector(SnowmoonWIP.PayoutNotContract.selector, future));
+        wip.createToken(URI_A, PRICE, START, END, future);
+
+        // Once deployed at that address, the same payout is accepted.
+        Payout deployed = new Payout();
+        assertEq(address(deployed), future);
+        vm.prank(owner);
+        uint256 id = wip.createToken(URI_A, PRICE, START, END, future);
+        assertEq(wip.token(id).payout, future);
+    }
+
+    function test_Create_PayoutMustBeContract_DeployedAccepted() public {
+        address payable p = payable(address(new Payout()));
+        vm.prank(owner);
+        uint256 id = wip.createToken(URI_A, PRICE, START, END, p);
+        assertEq(wip.token(id).payout, p);
+        // A deployed contract that rejects ETH also passes creation; release then reverts (tested below).
+        address payable r = payable(address(new EthRejecter()));
+        vm.prank(owner);
+        wip.createToken(URI_B, PRICE, START, END, r);
+        assertEq(wip.tokenCount(), 2);
     }
 
     function test_Create_StartInPastIsAllowed() public {
@@ -607,7 +645,7 @@ contract SnowmoonWIPTest is Test {
     function testFuzz_Accounting(uint8[3] memory quantities, uint96 forced, uint8 releaseMask, uint256[3] memory prices)
         public
     {
-        address payable[3] memory payouts = [payoutA, payoutB, payable(makeAddr("payoutC"))];
+        address payable[3] memory payouts = [payoutA, payoutB, payable(address(new Payout()))];
         uint256[3] memory ids;
         for (uint256 i; i < 3; ++i) {
             prices[i] = bound(prices[i], 1, 10 ether);

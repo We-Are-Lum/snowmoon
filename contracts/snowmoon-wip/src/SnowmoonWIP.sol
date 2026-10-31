@@ -56,6 +56,7 @@ contract SnowmoonWIP is ERC1155, Ownable2Step, ReentrancyGuardTransient {
     error ZeroPrice();
     error InvalidWindow(uint64 start, uint64 end);
     error InvalidPayout(address payout);
+    error PayoutNotContract(address payout);
     error TokenDoesNotExist(uint256 id);
     error MintNotOpen(uint256 id, uint64 start, uint64 end);
     error ZeroQuantity();
@@ -84,7 +85,8 @@ contract SnowmoonWIP is ERC1155, Ownable2Step, ReentrancyGuardTransient {
     /// @param price Price per edition in wei, non-zero.
     /// @param start Mint opens at this unix second (inclusive). May be in the past.
     /// @param end Mint closes at this unix second (exclusive). Must be after `start` and in the future.
-    /// @param payout Where `release` sends this token's proceeds. Not zero, not this contract.
+    /// @param payout Where `release` sends this token's proceeds. Must be a deployed contract (a 0xSplits
+    ///        PushSplit), not this one. An address with no code (an EOA, or a split not yet created) is refused.
     /// @return id The new token's id.
     function createToken(string calldata tokenURI, uint256 price, uint64 start, uint64 end, address payable payout)
         external
@@ -95,6 +97,7 @@ contract SnowmoonWIP is ERC1155, Ownable2Step, ReentrancyGuardTransient {
         if (price == 0) revert ZeroPrice();
         if (start >= end || end <= block.timestamp) revert InvalidWindow(start, end);
         if (payout == address(0) || payout == address(this)) revert InvalidPayout(payout);
+        if (payout.code.length == 0) revert PayoutNotContract(payout);
 
         id = ++tokenCount;
         _tokens[id] = Token({uri: tokenURI, price: price, start: start, end: end, payout: payout});
