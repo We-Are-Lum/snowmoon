@@ -657,7 +657,7 @@ async function main() {
   check('a resumed board offers Resign straight away (and every board after the first turn); setup has none', () => {
     const st = { ...newMatch(7, ''), seed: 2_891_337_105 };
     for (let i = 0; i < 2; i++) { const p = play(st); st.turns.push(plan(p, 'mixed')); }
-    const r = act(H, 'resume', null, 7, {}, { ver: '', saved: { seed: st.seed, lvl: st.lvl, ver: st.ver, rule: st.rule, turns: st.turns } });
+    const r = act(H, 'resume', null, 7, {}, { ver: '', saved: { seed: st.seed, lvl: st.lvl, ver: st.ver, rule: st.rule, turns: st.turns, rs: st.rs } });
     valid(r.page, 'resumed board');
     const els = (r.page as unknown as { ui: { elements: Record<string, { props?: { label?: string }; on?: { press?: { params?: { target?: string } } } }> } }).ui.elements;
     assert.ok(els.resign && els.resign.props?.label === 'Resign', 'Resign on the resumed board');
