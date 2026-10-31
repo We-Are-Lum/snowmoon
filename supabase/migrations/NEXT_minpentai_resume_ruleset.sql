@@ -18,13 +18,14 @@ alter table studio.mp_snap_resume
 
 commit;
 
--- Read-back (after commit): the column, then a realistic row under ruleset 2 inserted, read and deleted.
+-- Read-back (after commit): the column, then a realistic row under ruleset 2 inserted, read and deleted. The
+-- test fid 2147483646 fits fid's type (bigint, 0025) and would fit an integer too; no real account has it.
 -- select column_name, data_type, column_default, is_nullable from information_schema.columns
 --   where table_schema = 'studio' and table_name = 'mp_snap_resume' and column_name = 'ruleset';
 -- begin;
 -- insert into studio.mp_snap_resume (fid, lvl, ver, rule, moves, ruleset)
---   values (999999999999, 2, '', '', '1btfdzl.4.FYFICyHeQ2~FYOgTM~FYQ2~FOQ2', 2);
--- select fid, ruleset = 2 as same from studio.mp_snap_resume where fid = 999999999999;
--- delete from studio.mp_snap_resume where fid = 999999999999;
+--   values (2147483646, 2, '', '', '1btfdzl.4.FYFICyHeQ2~FYOgTM~FYQ2~FOQ2', 2);
+-- select fid, ruleset = 2 as same from studio.mp_snap_resume where fid = 2147483646;
+-- delete from studio.mp_snap_resume where fid = 2147483646;
 -- commit;
--- select count(*) from studio.mp_snap_resume where fid = 999999999999;
+-- select count(*) from studio.mp_snap_resume where fid = 2147483646;
