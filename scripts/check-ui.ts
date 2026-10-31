@@ -611,6 +611,8 @@ async function checkSupport(page: Page, scheme: string) {
   // on Base with too little ETH, then with enough. Nothing is sent: Send is only checked, never pressed.
   {
     const ctx = await page.context().browser()!.newContext({ viewport: { width: 390, height: 844 } });
+    // The transpiler's __name helper, as in the main context: without it the stand-in wallet's script doesn't run.
+    await ctx.addInitScript('window.__name = (f) => f');
     await ctx.addInitScript(() => {
       const w = window as unknown as { __wallet: { chainId: number; eth: bigint }; ethereum: unknown };
       w.__wallet = { chainId: 1, eth: 0n };
