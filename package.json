@@ -57,6 +57,8 @@
     "test:minpentai-one-engine": "tsx --conditions=react-server scripts/test-minpentai-one-engine.ts",
     "test:minpentai-book": "tsx scripts/test-minpentai-book.ts",
     "test:minpentai-search": "tsx scripts/test-minpentai-search.ts",
+    "test:minpentai-agent-play": "tsx scripts/test-minpentai-agent-play.ts",
+    "test:minpentai-agent-mcp": "tsx --conditions=react-server scripts/test-minpentai-agent-mcp.ts",
     "test:minpentai-agents": "tsx scripts/test-minpentai-agents-md.ts",
     "minpentai:vs-rungs": "tsx scripts/minpentai-vs-rungs.ts",
     "minpentai:search-ladder": "tsx scripts/minpentai-search-ladder.ts",

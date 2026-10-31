@@ -42,7 +42,11 @@ export const newToken = (prefix: string) => `${prefix}${randomBytes(32).toString
 export const issuer = () => appUrl();
 export const resourceUrl = () => `${appUrl()}${AGENTS.resourcePath}`;
 
-export type Scope = (typeof AGENTS.scopes)[number];
+export type Scope = (typeof AGENTS.scopes)[number] | 'play';
+/** Whether the "play" scope can be granted and used (AGENTS.minpentaiPlay; the local tests can turn it on). */
+export const playOn = () => AGENTS.minpentaiPlay || (agentsTestOn() && process.env.MINPENTAI_PLAY_TEST === '1');
+/** The scopes a person can grant now. */
+export const grantable = (): Scope[] => [...AGENTS.scopes, ...(playOn() ? (['play'] as const) : [])];
 
 export interface Agent {
   id: string;
