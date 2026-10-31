@@ -28,7 +28,8 @@ import { GET as snapRoute } from '../src/app/snap/minpentai/route';
 import { GET as cardRoute } from '../src/app/api/minpentai-challenge-card/route';
 import { sender } from '../src/lib/minpentai/snap/auth';
 import nextConfig from '../next.config';
-import { prefersHtml, wantsSnap } from '../src/lib/minpentai/snap/negotiate';
+import { snapRoute as chooseRoute } from '../src/lib/minpentai/snap/negotiate';
+import { GET as composerCard } from '../src/app/snap/minpentai/card/route';
 import { NextRequest } from 'next/server';
 import { middleware, config as mwConfig } from '../src/middleware';
 import { CHALLENGE_PATH, decChallenge, splitChallenge } from '../src/lib/minpentai/snap/challenge';
@@ -549,15 +550,6 @@ async function main() {
     }
   });
 
-  check('/minpentai/play negotiation: HTML only to a clear text/html preference or a link-preview bot; the snap otherwise', () => {
-    const chrome = 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8';
-    assert.ok(prefersHtml(chrome) && !wantsSnap(chrome, 'Mozilla/5.0 (iPhone) Safari/604.1'));
-    assert.ok(!wantsSnap('*/*', 'Twitterbot/1.0'), "X's card");
-    assert.ok(!wantsSnap(null, 'facebookexternalhit/1.1'));
-    for (const a of ['*/*', 'application/json', 'application/json, text/plain, */*', '', 'text/html;q=0']) assert.ok(wantsSnap(a, 'Mozilla/5.0'), `snap for "${a}"`);
-    assert.ok(wantsSnap('application/vnd.farcaster.snap+json', 'Twitterbot/1.0'), 'an explicit ask wins');
-  });
-
   check('the snap route serves the snap to a request the middleware forwards (x-snap-serve), and the bare page to a browser without it', async () => {
     const forced = await snapRoute(new Request('https://snowmoon.party/snap/minpentai', { headers: { accept: '*/*', 'x-snap-serve': '1' } }));
     assert.ok(forced.headers.get('content-type')?.startsWith('application/vnd.farcaster.snap+json'));
@@ -599,49 +591,77 @@ async function main() {
     await pg.close();
   });
 
-  check('the diagnostic middleware logs the four snap links and routes nothing new: only /minpentai/play GETs, as before', () => {
-    assert.deepEqual(mwConfig.matcher, ['/minpentai', '/minpentai/play', '/minpentai/c/:seg', '/snap/minpentai']);
-    const SNAPM = 'application/vnd.farcaster.snap+json';
-    const heads: Record<string, string>[] = [{ accept: SNAPM }, { accept: '*/*' }, { accept: 'text/html,*/*;q=0.8' }, {}, { 'x-snap-payload': 'e30', origin: 'https://farcaster.xyz' }, { 'user-agent': 'Twitterbot/1.0', accept: '*/*' }];
-    const log = console.log; const lines: string[] = []; console.log = (s: string) => lines.push(s);
-    try {
-      for (const path of ['/minpentai', '/minpentai/c/vu207s.0.cost3._.C-49-7-0-55.c2Nnz7njlDZWxkdy8L6JcI', '/snap/minpentai'])
-        for (const method of ['GET', 'HEAD', 'POST', 'OPTIONS']) for (const headers of heads) {
-          const r = middleware(new NextRequest(`https://snowmoon.party${path}`, { method, headers }));
-          assert.equal(r.headers.get('x-middleware-rewrite'), null, `${method} ${path} must not be rerouted`);
-        }
-      // /minpentai/play: exactly today's rule.
-      for (const headers of heads) {
-        const r = middleware(new NextRequest('https://snowmoon.party/minpentai/play', { headers }));
-        const want = wantsSnap(headers.accept ?? null, headers['user-agent'] ?? null);
-        assert.equal(!!r.headers.get('x-middleware-rewrite')?.endsWith('/snap/minpentai'), want, JSON.stringify(headers));
-      }
-      assert.equal(middleware(new NextRequest('https://snowmoon.party/minpentai/play', { method: 'POST', headers: { accept: '*/*' } })).headers.get('x-middleware-rewrite'), null, 'POST to /minpentai/play passes through');
-    } finally { console.log = log; }
-    const one = JSON.parse(lines.find((l) => l.includes('"/minpentai/c/*"') && l.includes('"OPTIONS"'))!);
-    assert.deepEqual(Object.keys(one), ['snapLog', 'method', 'snap', 'accept', 'payload', 'origin', 'mode', 'ua']);
-    assert.ok(!lines.some((l) => /cookie|authorization|x-snap-payload":"/i.test(l)), 'no cookies, tokens or payloads logged');
+  // What Farcaster and link-preview bots send (from production logs, 2026-10-30, and their published user agents).
+  const FCBOT_HTML = { 'user-agent': 'FCBot/0.1 (like TwitterBot)', accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8' };
+  const FCBOT_JSON = { 'user-agent': 'Twitterbot like FCBot/0.1 FCBot:0.1', accept: 'application/json, text/plain, */*' };
+  const FEED = { 'user-agent': 'FarcasterSnapProxy/1.0', accept: 'application/vnd.farcaster.snap+json', 'x-snap-payload': 'e30' };
+  const OTHERS: [string, Record<string, string>][] = [
+    ['a browser', { 'user-agent': 'Mozilla/5.0 (iPhone) Safari/604.1', accept: 'text/html,application/xhtml+xml,*/*;q=0.8' }],
+    ['X', { 'user-agent': 'Twitterbot/1.0', accept: '*/*' }],
+    ['Discord', { 'user-agent': 'Mozilla/5.0 (compatible; Discordbot/2.0; +https://discordapp.com)', accept: '*/*' }],
+    ['Slack', { 'user-agent': 'Slackbot-LinkExpanding 1.0 (+https://api.slack.com/robots)', accept: '*/*' }],
+    ['Telegram', { 'user-agent': 'TelegramBot (like TwitterBot)' }],
+    ['iMessage', { 'user-agent': 'facebookexternalhit/1.1 Facebot Twitterbot/1.0', accept: 'text/html,*/*;q=0.8' }],
+    ['a fetch with Accept */*', { 'user-agent': 'node', accept: '*/*' }],
+  ];
+  check('snap links: the snap Accept gets the snap; FCBot (before any Twitterbot rule) the composer page; everyone else the page', () => {
+    assert.equal(chooseRoute(FEED.accept, FEED['user-agent']), 'snap');
+    assert.equal(chooseRoute('application/vnd.farcaster.snap+json', 'Twitterbot/1.0'), 'snap', 'the snap Accept from anyone');
+    assert.equal(chooseRoute(FCBOT_HTML.accept, FCBOT_HTML['user-agent']), 'composer');
+    assert.equal(chooseRoute(FCBOT_JSON.accept, FCBOT_JSON['user-agent']), 'composer', 'FCBot\'s user agent contains Twitterbot; FCBot wins');
+    for (const [name, hd] of OTHERS) assert.equal(chooseRoute(hd.accept ?? null, hd['user-agent'] ?? null), 'page', name);
   });
 
-  check('the temporary FCBot experiment: only FCBot with ?x=1-3 on /minpentai/play is rerouted; everything else as before', () => {
-    const run = (path: string, headers: Record<string, string>) => middleware(new NextRequest(`https://snowmoon.party${path}`, { headers }));
+  check('the middleware on the four snap links: snap Accept passes to the snap, FCBot to the composer page, /snap/minpentai shows others Play\'s page, the rest untouched; taps and preflights untouched', () => {
+    assert.deepEqual(mwConfig.matcher, ['/minpentai', '/minpentai/play', '/minpentai/c/:seg', '/snap/minpentai']);
+    const run = (path: string, headers: Record<string, string>, method = 'GET') => middleware(new NextRequest(`https://snowmoon.party${path}`, { method, headers }));
     const rw = (r: Response) => r.headers.get('x-middleware-rewrite');
-    const log = console.log; console.log = () => {};
+    const CH = '/minpentai/c/vu207s.0.cost3._.C-49-7-0-55.c2Nnz7njlDZWxkdy8L6JcI';
+    for (const path of ['/minpentai', '/minpentai/play', CH, '/snap/minpentai']) {
+      assert.equal(rw(run(path, FEED)), null, `${path}: the snap Accept passes through to next.config's rewrite or the snap route`);
+      for (const hd of [FCBOT_HTML, FCBOT_JSON]) {
+        const r = run(path, hd);
+        assert.equal(rw(r), 'https://snowmoon.party/snap/minpentai/card', `${path}: FCBot gets the composer page`);
+        assert.equal(r.headers.get('x-middleware-request-x-snap-card'), path, `${path}: the path goes in x-snap-card`);
+      }
+      for (const [name, hd] of OTHERS) assert.equal(rw(run(path, hd)), path === '/snap/minpentai' ? 'https://snowmoon.party/minpentai/play' : null, `${path}: ${name} gets the page`);
+      for (const method of ['POST', 'OPTIONS']) assert.equal(rw(run(path, FCBOT_JSON, method)), null, `${path}: ${method} untouched`);
+    }
+  });
+
+  check('the composer page: the link\'s card tags without fc:frame / fc:miniapp, an absolute Link to the snap at the same address, the page\'s status; unknown paths refused', async () => {
+    const real = globalThis.fetch;
+    const seen: string[] = [];
+    globalThis.fetch = (async (u: string | URL) => {
+      seen.push(String(u));
+      const forged = String(u).includes('FORGED');
+      return new Response(`<!DOCTYPE html><html><head><title>Minpentai</title><meta name="description" content="d"/><meta property="og:image" content="https://snowmoon.party/c.jpg"/><meta name="twitter:card" content="summary_large_image"/><meta name="fc:miniapp" content="{}"/><meta name="fc:frame" content="{}"/></head><body>x</body></html>`, { status: forged ? 404 : 200 });
+    }) as typeof fetch;
     try {
-      const FC1 = { 'user-agent': 'FCBot/0.1 (like TwitterBot)', accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8' };
-      const FC3 = { 'user-agent': 'Twitterbot like FCBot/0.1 FCBot:0.1', accept: 'application/json, text/plain, */*' };
-      for (const x of ['1', '2', '3']) assert.equal(rw(run(`/minpentai/play?x=${x}&t=9`, FC1)), `https://snowmoon.party/snap/minpentai/probe?x=${x}`, `x=${x}, the composer's HTML request`);
-      assert.equal(rw(run('/minpentai/play?x=1', FC3)), 'https://snowmoon.party/snap/minpentai/probe?x=1');
-      assert.equal(rw(run('/minpentai/play?x=2', FC3)), 'https://snowmoon.party/snap/minpentai/probe?x=2');
-      assert.equal(rw(run('/minpentai/play?x=3', FC3)), 'https://snowmoon.party/snap/minpentai', 'x=3, the composer\'s non-HTML request gets the snap');
-      // Unchanged: no ?x, another x, not FCBot, other links.
-      assert.equal(rw(run('/minpentai/play?t=9', FC1)), null);
-      assert.equal(rw(run('/minpentai/play?x=4', FC1)), null);
-      assert.equal(rw(run('/minpentai/play?x=1', { 'user-agent': 'Twitterbot/1.0', accept: '*/*' })), null, 'X\'s bot with ?x: the page, as today');
-      assert.equal(rw(run('/minpentai/play?x=1', { 'user-agent': 'Mozilla/5.0', accept: 'text/html' })), null, 'a browser with ?x: the page');
-      assert.equal(rw(run('/minpentai/play?x=2', { 'user-agent': 'Mozilla/5.0', accept: 'application/vnd.farcaster.snap+json' })), 'https://snowmoon.party/snap/minpentai', 'the snap Accept: the snap, as today');
-      for (const path of ['/minpentai?x=3', '/snap/minpentai?x=3', '/minpentai/c/vu207s.0.cost3._.C-49-7-0-55.c2Nnz7njlDZWxkdy8L6JcI?x=3']) assert.equal(rw(run(path, FC3)), null, `${path} untouched`);
-    } finally { console.log = log; }
+      for (const [p, from] of [['/minpentai', '/minpentai'], ['/minpentai/play', '/minpentai/play'], ['/snap/minpentai', '/minpentai/play'], ['/minpentai/c/abc.def', '/minpentai/c/abc.def']]) {
+        const r = await composerCard(new Request('https://snowmoon.party/minpentai/play', { headers: { 'x-snap-card': p } }));
+        const html = await r.text();
+        assert.equal(r.status, 200); assert.ok(r.headers.get('content-type')!.startsWith('text/html'));
+        assert.equal(r.headers.get('link'), `<https://snowmoon.party${p}>; rel="alternate"; type="application/vnd.farcaster.snap+json"`, `${p}: absolute Link to itself`);
+        assert.ok(html.includes('og:image') && html.includes('twitter:card') && html.includes('<title>Minpentai</title>'), `${p}: card tags kept`);
+        assert.ok(!html.includes('fc:miniapp') && !html.includes('fc:frame'), `${p}: no fc: tags`);
+        assert.equal(seen.at(-1), `https://snowmoon.party${from}`, `${p}: built from ${from}`);
+      }
+      assert.equal((await composerCard(new Request('https://snowmoon.party/minpentai/c/FORGED', { headers: { 'x-snap-card': '/minpentai/c/FORGED' } }))).status, 404, 'a forged challenge stays 404');
+      for (const p of ['/', '/minpentai/rules', 'https://evil.example/', '/minpentai/c/a/b', '']) assert.equal((await composerCard(new Request('https://snowmoon.party/snap/minpentai/card', { headers: { 'x-snap-card': p } }))).status, 404, `${JSON.stringify(p)} refused`);
+    } finally { globalThis.fetch = real; }
+  });
+
+  check('a resumed board offers Resign straight away (and every board after the first turn); setup has none', () => {
+    const st = { ...newMatch(7, ''), seed: 2_891_337_105 };
+    for (let i = 0; i < 2; i++) { const p = play(st); st.turns.push(plan(p, 'mixed')); }
+    const r = act(H, 'resume', null, 7, {}, { ver: '', saved: { seed: st.seed, lvl: st.lvl, ver: st.ver, rule: st.rule, turns: st.turns } });
+    valid(r.page, 'resumed board');
+    const els = (r.page as unknown as { ui: { elements: Record<string, { props?: { label?: string }; on?: { press?: { params?: { target?: string } } } }> } }).ui.elements;
+    assert.ok(els.resign && els.resign.props?.label === 'Resign', 'Resign on the resumed board');
+    assert.ok(JSON.stringify(els.resign).includes('a=resign'), 'it opens the resign confirmation');
+    const fresh = act(H, 'start', null, 7, {}, { ver: '' });
+    assert.ok(!(fresh.page as unknown as { ui: { elements: Record<string, unknown> } }).ui.elements.resign, 'no Resign at setup');
   });
 
   await Promise.all(pending);
