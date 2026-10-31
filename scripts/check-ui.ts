@@ -74,6 +74,8 @@ import { readFileSync } from 'node:fs';
 import { createServer } from 'node:net';
 import path from 'node:path';
 import { chromium, type Browser, type Page } from 'playwright-core';
+import QRCode from 'qrcode';
+import { SUPPORT } from '../src/lib/config';
 
 const arg = (name: string) => process.argv.slice(2).find((a) => a.startsWith(`--${name}=`))?.split('=').slice(1).join('=');
 const BASE = (arg('url') ?? 'http://localhost:3000').replace(/\/$/, '');
@@ -300,7 +302,7 @@ async function checkAssistant(page: Page, scheme: string) {
   await page.evaluate(() => localStorage.clear());
 }
 
-const LEGAL_LINE = 'Snowmoon Party · operated by Lum LLC · independent, not affiliated with the author · book and adaptations GPL v3 · Terms · Privacy · Source';
+const LEGAL_LINE = 'Snowmoon Party · operated by Lum LLC · independent, not affiliated with the author · book and adaptations GPL v3 · Terms · Privacy · Source' + (SUPPORT.linked ? ' · Support this site' : '');
 const WALLET_ADDRESS = '0x1234567890abcdef1234567890abcdef12345678';
 /** A wallet session in storage, as saveWalletSession keeps it (src/lib/client-auth.ts); never sent anywhere here. */
 const plantWallet = (address: string) => {
@@ -382,7 +384,7 @@ async function checkLegalLine(page: Page, within: string, where: string, scheme:
   if (text !== LEGAL_LINE) fail(`${where} (${scheme}): the footer line reads "${text}"`);
   if (!(await line.isVisible())) fail(`${where} (${scheme}): the footer line is not shown`);
   const hrefs = await line.locator('a').evaluateAll((as) => as.map((a) => `${a.textContent}=${a.getAttribute('href')}`));
-  const want = ['Terms=/terms', 'Privacy=/privacy', 'Source=https://github.com/We-Are-Lum/snowmoon'];
+  const want = ['Terms=/terms', 'Privacy=/privacy', 'Source=https://github.com/We-Are-Lum/snowmoon', ...(SUPPORT.linked ? ['Support this site=/support'] : [])];
   if (hrefs.join(' ') !== want.join(' ')) fail(`${where} (${scheme}): the footer links are ${hrefs.join(', ')}`);
 }
 
@@ -567,6 +569,48 @@ async function checkIllustrationReview(page: Page, scheme: string) {
   await page.unroute('**/api/you/illustrations');
   await page.unroute('**/api/chat/status');
   await page.evaluate(() => localStorage.removeItem('snowmoon.signin'));
+}
+
+/**
+ * "Support this site" (owner, 2026-10-30), at 390: every place on the page shows exactly SUPPORT.address (the text, the
+ * copy button, the QR code, which must be the code of that address, and both Splits links); only Ethereum and Base are
+ * named, with the warning; the presets and the own-amount box; with no wallet in this browser, Send says so and sends
+ * nothing; the floors.
+ */
+async function checkSupport(page: Page, scheme: string) {
+  const where = `/support @390 (${scheme})`;
+  // What could record a sender: a write to our API, or any request that carries the address. The shell's own reads on
+  // every page (who is signed in, the assistant's status) don't.
+  const ours: string[] = [];
+  const count = (r: { url: () => string; method: () => string; postData: () => string | null }) =>
+    r.url().includes('/api/') && (r.method() !== 'GET' || r.url().includes(SUPPORT.address) || (r.postData() ?? '').includes(SUPPORT.address)) && ours.push(`${r.method()} ${r.url().replace(/^https?:\/\/[^/]+/, '')}`);
+  page.on('request', count);
+  await open(page, '/support');
+  const text = (await page.locator('.support-address code').textContent())?.trim();
+  if (text !== SUPPORT.address) fail(`${where}: the address reads "${text}", not ${SUPPORT.address}`);
+  if ((await page.locator('.support-address [data-copies]').getAttribute('data-copies')) !== SUPPORT.address) fail(`${where}: the copy button doesn't copy ${SUPPORT.address}`);
+  // The modules drawn (each path's d) and the size, compared with the code of SUPPORT.address: the browser rewrites
+  // the markup itself (a path's "/>" becomes "></path>"), so the text can't be compared.
+  const shown = await page.locator('.support-qr svg').evaluate((svg) => ({ box: svg.getAttribute('viewBox'), d: [...svg.querySelectorAll('path')].map((p) => p.getAttribute('d')) }));
+  const svg = await QRCode.toString(SUPPORT.address, { type: 'svg', margin: 1, errorCorrectionLevel: 'M' });
+  const want = { box: /viewBox="([^"]+)"/.exec(svg)?.[1] ?? null, d: [...svg.matchAll(/ d="([^"]+)"/g)].map((m) => m[1]) };
+  if (JSON.stringify(shown) !== JSON.stringify(want)) fail(`${where}: the QR code isn't the code of ${SUPPORT.address}`);
+  const splits = await page.locator('a[href^="https://app.splits.org/"]').evaluateAll((as) => as.map((a) => a.getAttribute('href')));
+  const wantSplits = SUPPORT.networks.map((n) => SUPPORT.splitsUrl(n.chainId));
+  if (splits.join(' ') !== wantSplits.join(' ')) fail(`${where}: the Splits links are ${splits.join(', ')}`);
+  const body = (await page.locator('main.support').innerText()).replace(/\s+/g, ' ');
+  if (!/Ethereum or Base: any token on these networks/.test(body)) fail(`${where}: the networks line doesn't name Ethereum and Base`);
+  if (!/Sending on any other network .* may lose the funds/.test(body)) fail(`${where}: no warning about other networks`);
+  if (/\b(donat)/i.test(body)) fail(`${where}: the page says "donate" (owner: not "donate")`);
+  const buttons = (await page.locator('.support-send .wallet-packs button').allTextContents()).map((t) => t.trim()).join('|');
+  if (buttons !== 'Send $5 in USDC|Send $20 in USDC|Send $50 in USDC') fail(`${where}: the presets read "${buttons}"`);
+  if (!(await page.locator('.support-own input[type="number"]').count())) fail(`${where}: no box for your own amount`);
+  await page.locator('.support-send .wallet-packs button').first().click();
+  await page.getByText('No wallet found in this browser').waitFor({ timeout: 5000 }).catch(() => fail(`${where}: Send with no wallet doesn't say so`));
+  if (ours.length) fail(`${where}: the page sent our API something that could record a sender: ${ours.join(', ')}`);
+  await checkFloors(page, '/support @390', scheme);
+  await shot(page, 'phone-390-support', scheme);
+  page.off('request', count);
 }
 
 /**
@@ -1833,6 +1877,7 @@ try {
     await checkIllustrationReview(page, scheme);
     await checkImageZoom(page, scheme);
     await checkReferenceGlossary(page, scheme);
+    await checkSupport(page, scheme);
     await open(page, '/chapter/1?view=listen');
     await page.waitForSelector('.listen-pane');
     await checkFloors(page, '/chapter/1?view=listen @390', scheme);
@@ -1867,6 +1912,8 @@ try {
   // lost its message to a truncated log, and couldn't be root-caused).
   console.error(e);
   console.error(`\nUI CHECK BROKE (last page opened: ${lastOpened}): ${String((e as Error)?.message ?? e).split('\n')[0]}`);
+  // What was checked before the break still counts (2026-10-30): say the problems found so far, or that there were none.
+  console.error(failures.length ? `Before the break, ${failures.length} problem(s):\n- ${failures.join('\n- ')}` : 'Before the break: no problems found.');
   process.exitCode = 1;
 } finally {
   await browser.close();

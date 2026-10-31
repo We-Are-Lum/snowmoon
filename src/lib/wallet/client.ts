@@ -4,7 +4,7 @@ import { createPublicClient, createWalletClient, custom, parseAbi, parseUnits, t
 import { base } from './base-chain';
 import { createSiweMessage } from 'viem/siwe';
 import { authFetch, saveWalletSession } from '../client-auth';
-import { IMAGES } from '../config';
+import { IMAGES, SUPPORT } from '../config';
 import { IMAGE_WORDING } from '../images/wording';
 import { forgetsPending } from './pending';
 
@@ -57,22 +57,22 @@ const USDC = parseAbi(['function transfer(address to, uint256 value) returns (bo
 const FEED = parseAbi(['function latestRoundData() view returns (uint80, int256, uint256, uint256, uint80)']);
 
 /**
- * Pay `usd` in USDC or ETH on Base to the project's address, wait for it to land, then ask our
- * server to add it (it reads the payment on Base and credits it once). Retries while it confirms.
+ * Send `usd` in USDC or ETH on Base to `to`, from this browser's wallet, and wait for it to land (3 confirmations).
+ * Shared by prepaid images (pay) and "Support this site" (give). Returns the transaction's hash.
  */
-export async function pay(opts: { usd: number; token: 'USDC' | 'ETH'; payTo: `0x${string}`; usdc: `0x${string}`; onSent?: (hash: `0x${string}`) => void; onWaiting?: () => void }): Promise<{ added: number; balanceUsd: number }> {
+async function sendOnBase(opts: { usd: number; token: 'USDC' | 'ETH'; to: `0x${string}`; usdc?: `0x${string}`; onSent?: (hash: `0x${string}`) => void; onWaiting?: () => void }): Promise<`0x${string}`> {
   const { p, wallet, account } = await connect();
   await wallet.switchChain({ id: base.id }).catch(() => wallet.addChain({ chain: base }));
   const reader = createPublicClient({ chain: base, transport: custom(p) });
   let hash: `0x${string}`;
   try {
     if (opts.token === 'USDC') {
-      hash = await wallet.writeContract({ account, address: opts.usdc, abi: USDC, functionName: 'transfer', args: [opts.payTo, parseUnits(opts.usd.toFixed(6), 6)] });
+      hash = await wallet.writeContract({ account, address: opts.usdc ?? IMAGES.prepaid.usdc, abi: USDC, functionName: 'transfer', args: [opts.to, parseUnits(opts.usd.toFixed(6), 6)] });
     } else {
       const [, answer] = await reader.readContract({ address: IMAGES.prepaid.ethUsdFeed, abi: FEED, functionName: 'latestRoundData' });
       // usd / (price / 1e8) ETH, in wei.
       const value = (BigInt(Math.round(opts.usd * 1e6)) * 10n ** 20n) / answer;
-      hash = await wallet.sendTransaction({ account, to: opts.payTo, value });
+      hash = await wallet.sendTransaction({ account, to: opts.to, value });
     }
   } catch {
     throw new WalletError('declined');
@@ -81,7 +81,24 @@ export async function pay(opts: { usd: number; token: 'USDC' | 'ETH'; payTo: `0x
   opts.onWaiting?.();
   const receipt = await reader.waitForTransactionReceipt({ hash, confirmations: 3 }).catch(() => null);
   if (receipt && receipt.status !== 'success') throw new WalletError('pay-failed');
-  return claim(hash);
+  return hash;
+}
+
+/**
+ * Pay `usd` in USDC or ETH on Base to the project's address, wait for it to land, then ask our
+ * server to add it (it reads the payment on Base and credits it once). Retries while it confirms.
+ */
+export async function pay(opts: { usd: number; token: 'USDC' | 'ETH'; payTo: `0x${string}`; usdc: `0x${string}`; onSent?: (hash: `0x${string}`) => void; onWaiting?: () => void }): Promise<{ added: number; balanceUsd: number }> {
+  return claim(await sendOnBase({ usd: opts.usd, token: opts.token, to: opts.payTo, usdc: opts.usdc, onSent: opts.onSent, onWaiting: opts.onWaiting }));
+}
+
+/**
+ * "Support this site" (owner, 2026-10-30): send `usd` in USDC or ETH on Base to the support address (SUPPORT.address,
+ * the only place it lives). A gift: nothing is sent to our server and nothing about the sender is recorded; the
+ * page shows the transaction's link once it lands.
+ */
+export async function give(opts: { usd: number; token: 'USDC' | 'ETH'; onSent?: (hash: `0x${string}`) => void }): Promise<`0x${string}`> {
+  return sendOnBase({ usd: opts.usd, token: opts.token, to: SUPPORT.address, onSent: opts.onSent });
 }
 
 /** Ask our server to add a payment already made from this wallet (retries while it confirms). */
