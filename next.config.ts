@@ -95,7 +95,8 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       { source: '/minpentai', missing: ASKS_FOR_SNAP, headers: snapAlternate('/minpentai') },
-      { source: '/minpentai/play', missing: ASKS_FOR_SNAP, headers: snapAlternate('/minpentai/play') },
+      // ?x is the temporary FCBot experiment (src/middleware.ts), which sets its own Link header.
+      { source: '/minpentai/play', missing: [...ASKS_FOR_SNAP, { type: 'query' as const, key: 'x' }], headers: snapAlternate('/minpentai/play') },
       { source: '/minpentai/c/:seg', missing: ASKS_FOR_SNAP, headers: snapAlternate('/minpentai/c/:seg') },
     ];
   },
