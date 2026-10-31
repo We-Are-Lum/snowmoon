@@ -59,7 +59,7 @@ function playOut(ruleset: 'book' | 'play', seed: number) {
     const x = t[o];
     ok(createHash('sha256').update(ordersText(x.placements) + x.salt).digest('hex') === x.commitment && /^[0-9a-f]{64}$/.test(x.salt), `${ruleset}: turn ${t.turn} ${o}: the revealed orders and salt give the commitment`);
   }
-  ok(isDeepStrictEqual(replay(json(m)), json(m).w) && rec.turns.length === m.history.length, `${ruleset}: the record replays to the final board`);
+  ok(JSON.stringify(replay(json(m))) === JSON.stringify(json(m).w) && rec.turns.length === m.history.length, `${ruleset}: the record replays to the final board`);
   return m;
 }
 
@@ -127,6 +127,43 @@ playOut('play', 202);
   throwsLike(() => submit(m, { turn: m.turn, placements: [], source: 'agent', final: true, now: now() }), /the match is over/, 'nothing after the end');
   const rec = recordOf(m);
   ok(rec.sides.C.model?.label === 'self-reported' && rec.final_position.towers.some((t) => t.side === 'theirs'), 'after the end the record shows the whole board and the model as self-reported');
+}
+
+// ---------- 4. The fog review's findings (2026-10-31), kept as tests ----------
+{
+  /** Two real boards that differ only by `change`, out of Cyan's sight; both sides then play the same orders. */
+  type Change = (m: SoloMatch, e: ReturnType<typeof rulesOf>['e']) => void;
+  const twins = (orders: unknown[], turns: number, change: Change, both: Change = () => {}) => {
+    const { m } = start('book', 5);
+    m.pend.A = { ...m.pend.A, placements: [] };
+    both(m, rulesOf(m).e);
+    const a = json(m), b = json(m), { e, s } = rulesOf(m);
+    change(b, e);
+    for (let t = 0; t < turns; t++) for (const x of [a, b]) {
+      submit(x, { turn: x.turn, placements: t === 0 ? parseOrders(orders, s) : [], source: 'agent', final: true, now: now() });
+      x.pend.A = { ...x.pend.A, placements: [] };
+    }
+    const strip = (v: ReturnType<typeof viewFor>) => ({ ...v, opponent_commitment: null, my_orders: null });
+    const sim = (x: SoloMatch) => simulate(x, { scenarios: [{ name: 'wait', placements: [] }], steps: 12 });
+    return isDeepStrictEqual(strip(viewFor(a)), strip(viewFor(b))) && isDeepStrictEqual(sim(a), sim(b));
+  };
+  const amberSquare = (x: number, y: number) => (m: SoloMatch, e: ReturnType<typeof rulesOf>['e']) => { m.w.sq[e.K(x, y)] = { o: 'A', hp: 2 }; };
+  ok(twins([{ piece: 'symbol_glider', x: 4, y: 3, dir: 'E' }], 2, amberSquare(15, 3)), 'F1 your symbol glider coming to rest in the dark does not show where a hidden square is');
+  ok(twins([{ piece: 'moving_wall', x: 4, y: 12, dir: 'E' }], 2, amberSquare(7, 12)), 'F1 your moving wall stopping in the dark does not show where a hidden square is');
+  ok(twins([], 1, (m) => { m.w.gl.push({ id: 900, o: 'A', x: 14, y: 7, dx: -1, dy: 0 }); }, (m, e) => { m.w.sq[e.K(10, 7)] = { o: 'C', hp: 2 }; }), 'F1 your square out of sight does not show the hits a hidden glider gave it');
+  ok(twins([], 1, (m, e) => { m.w.fa = { [e.K(5, 8)]: { o: 'A', dx: 0, dy: 1, hp: 2 } }; m.w.gl.push({ id: 901, o: 'A', x: 9, y: 7, dx: -1, dy: 0 }); }), 'F4 a rock at the edge of sight does not show ore spent by a hidden factory');
+  ok(twins([], 0, (m) => { m.w.mw![0].stop = 1; }, (m) => { m.w.mw = [{ id: 902, o: 'A', x: 5, y: 12, dx: 0, dy: -1, c: [1, 1, 1] }]; }), 'F5 whether an enemy wall has stopped is not in the view or the sandbox');
+  // F6: in a ruleset without ore, a rock out of sight is shown as at the start, whatever happened to it.
+  const { m: p } = start('play', 8);
+  const { e: pe, s: ps } = rulesOf(p), see = pe.lit(p.w, 'C', ps.sight);
+  const far = pe.L.rocks.find((k) => !see.has(k))!;
+  const p2 = json(p); p2.w.rock[far] = 7;
+  ok(isDeepStrictEqual(pe.fog(p.w, ps, 'C'), pe.fog(p2.w, ps, 'C')), 'F6 a rock out of sight shows as it was at the start in every ruleset');
+  // F3: the computer's numbers include a server-only part, different for every match, shown in the record after the end.
+  const c1 = start('book', 9).m, c2 = start('book', 9).m;
+  ok(c1.cpu !== c2.cpu && Number.isInteger(c1.cpu), 'F3 the same seed gets different server-only numbers for the computer');
+  resign(c1);
+  ok(recordOf(c1).computer_random === c1.cpu, 'F3 and the record shows them after the end');
 }
 
 console.log(`minpentai agent play: ${checks} checks passed`);

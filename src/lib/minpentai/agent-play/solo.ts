@@ -44,6 +44,11 @@ export interface SoloMatch {
   agent: { id: string | null; name: string; model: ModelClaim | null };
   /** sha256 of the live link's secret (the link itself is shown once, to the agent that starts the match). */
   linkHash: string;
+  /**
+   * Server-only random numbers mixed into the site computer's own (fog review, 2026-10-31): with the seed alone, an
+   * agent with the open-source engine could sample the computer's exact choices. Shown in the record after the end.
+   */
+  cpu: number;
   createdAt: string;
   /** The real board. Server only: never sent to a side while the match is on. */
   w: World;
@@ -81,7 +86,7 @@ export const commit = (ps: Placement<AnyPiece>[], salt: string) => sha256(orders
 function computerOrders(m: SoloMatch, at: string): Orders {
   const { s, e } = rulesOf(m);
   const o = COMPUTER;
-  const plan = searchPlan({ e, s, o, view: e.fog(m.w, s, o), lastSeen: { ...m.ls[o] }, snap: e.towers(m.w, o), points: pointsOf(m, s), rng: rng(m.seed * 7919 + m.turn * 31 + 1), level: m.level });
+  const plan = searchPlan({ e, s, o, view: e.fog(m.w, s, o), lastSeen: { ...m.ls[o] }, snap: e.towers(m.w, o), points: pointsOf(m, s), rng: rng(((m.seed * 7919 + m.turn * 31 + 1) ^ (m.cpu ?? 0)) >>> 0), level: m.level });
   const salt = randomBytes(32).toString('hex');
   return { placements: plan.placements, source: 'site-computer', salt, commitment: commit(plan.placements, salt), final: true, at };
 }
@@ -100,7 +105,7 @@ export function newSolo(o: { id: string; ruleset: RulesetName; level: number; se
   e.L.towers.C.forEach((k) => (ls.A[k] = 0));
   const m: SoloMatch = {
     v: 1, id: o.id, ruleset: o.ruleset, level: o.level, seed: o.seed, person: o.person, agent: o.agent,
-    linkHash: sha256(linkSecret), createdAt: o.now, w, kills: { C: 0, A: 0 }, ls, turn: 0,
+    linkHash: sha256(linkSecret), cpu: randomBytes(4).readUInt32BE(0) >>> 1, createdAt: o.now, w, kills: { C: 0, A: 0 }, ls, turn: 0,
     pend: { C: null, A: null as unknown as Orders }, standing: null, history: [], end: null,
   };
   m.pend.A = computerOrders(m, o.now);
@@ -151,6 +156,8 @@ export function boardOut(e: Engine, w: World, me: Side, seeOre: (k: number) => b
 export function viewFor(m: SoloMatch) {
   const { s, e, rule } = rulesOf(m);
   const me = PERSON, view = e.fog(m.w, s, me), see = e.lit(m.w, me, s.sight);
+  // Ore only where the rock and every square beside it are in sight (as fog() keeps it).
+  const oreSeen = (k: number) => { const [x, y] = e.XY(k); return see.has(k) && [[1, 0], [-1, 0], [0, 1], [0, -1]].every(([dx, dy]) => !e.inb(x + dx, y + dy) || see.has(e.K(x + dx, y + dy))); };
   const snap = e.towers(m.w, me);
   const can = [...e.lit(m.w, me, s.reach, snap)].filter((k) => e.empty(m.w, k)).sort((a, b) => a - b);
   const over = !!m.end;
@@ -170,7 +177,7 @@ export function viewFor(m: SoloMatch) {
     reach: s.reach,
     points: over ? 0 : pointsOf(m, s),
     costs: costsOf(s),
-    board: boardOut(e, view, me, (k) => see.has(k)),
+    board: boardOut(e, view, me, oreSeen),
     last_seen_enemy_towers: Object.entries(m.ls[me]).filter(([k]) => !view.tw[+k]).map(([k, step]) => ({ x: e.XY(+k)[0], y: e.XY(+k)[1], step })),
     can_place: can.map((k) => [e.XY(k)[0], e.XY(k)[1]]),
     my_orders: m.pend.C ? { placements: m.pend.C.placements.map(orderOut), source: m.pend.C.source, final: m.pend.C.final, commitment: m.pend.C.commitment, ...(m.pend.C.note ? { note: m.pend.C.note } : {}) } : null,
@@ -240,7 +247,7 @@ export function autopilot(m: SoloMatch, o: { turn: number; now: string }) {
   if (o.turn !== m.turn) throw new SoloError(`turn ${o.turn} is not open; the open turn is ${m.turn}`);
   const { s, e } = rulesOf(m);
   const preset = m.standing?.preset ?? 'balanced';
-  const plan = searchPlan({ e, s, o: PERSON, view: e.fog(m.w, s, PERSON), lastSeen: { ...m.ls[PERSON] }, snap: e.towers(m.w, PERSON), points: pointsOf(m, s), rng: rng(m.seed * 7919 + m.turn * 31 + 2), level: FALLBACK_LEVEL, preset });
+  const plan = searchPlan({ e, s, o: PERSON, view: e.fog(m.w, s, PERSON), lastSeen: { ...m.ls[PERSON] }, snap: e.towers(m.w, PERSON), points: pointsOf(m, s), rng: rng(((m.seed * 7919 + m.turn * 31 + 2) ^ (m.cpu ?? 0)) >>> 0), level: FALLBACK_LEVEL, preset });
   return submit(m, { turn: o.turn, placements: plan.placements, source: 'site-computer', final: true, now: o.now, preset });
 }
 
@@ -288,7 +295,7 @@ export function recordOf(m: SoloMatch) {
   if (!m.end) throw new SoloError('no finished match with that id');
   const { s, e, rule } = rulesOf(m);
   return {
-    match_id: m.id, ruleset: m.ruleset, seed: m.seed, rule, level: m.level, created_at: m.createdAt,
+    match_id: m.id, ruleset: m.ruleset, seed: m.seed, computer_random: m.cpu ?? 0, rule, level: m.level, created_at: m.createdAt,
     sides: { C: { kind: 'person', agent: m.agent.name, model: m.agent.model ? { ...m.agent.model, label: 'self-reported' } : null }, A: { kind: 'site computer', level: m.level } },
     turns: m.history.map((h) => ({ turn: h.turn, step: h.step, C: { ...h.C, placements: h.C.placements.map(orderOut) }, A: { ...h.A, placements: h.A.placements.map(orderOut) } })),
     end: m.end,

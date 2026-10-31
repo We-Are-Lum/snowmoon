@@ -61,6 +61,7 @@ try {
   check('M10 no record before the end, in the same words as for no match', !early.ok && early.error === none.error, `${early.error} / ${none.error}`);
 
   let turns = 0, simulated = 0, sitePlayed = false;
+  const finals: number[] = [];
   for (;;) {
     const g = await tool(BASE, a.access_token, 'minpentai_get_view', { match_id: id });
     const v = g.out as unknown as View;
@@ -85,13 +86,16 @@ try {
     } else {
       const wrong = turns === 1 ? await tool(BASE, a.access_token, 'minpentai_submit_orders', { match_id: id, turn: v.turn + 1, placements: [], source: 'agent' }) : null;
       if (wrong) check('M14 orders for a turn that isn\'t open are refused', !wrong.ok && /is not open/.test(wrong.error ?? ''), wrong.error ?? '');
+      const t0 = Date.now();
       const sub = await tool(BASE, a.access_token, 'minpentai_submit_orders', { match_id: id, turn: v.turn, placements: best ? plans[best.name] : [], source: 'agent', final: true });
+      finals.push(Date.now() - t0);
       if (!sub.ok) { check(`M15 turn ${v.turn} accepted`, false, sub.error ?? ''); break; }
       if (turns === 0) check('M15 orders accepted with a commitment', /^[0-9a-f]{64}$/.test(String(sub.out.commitment)));
     }
     turns++;
     if (turns > 30) break;
   }
+  check('M22 every final submit takes at least the fixed time, so its time says nothing about the computer\'s hidden pieces', finals.length > 2 && Math.min(...finals) >= 1450 && Math.max(...finals) - Math.min(...finals) < 400, finals.join(','));
   check('M16 the match is played to the end through the tools', turns >= 3 && simulated >= 3 && sitePlayed, `${turns} turns, ${simulated} simulations`);
   const rec = await tool(BASE, b.access_token, 'minpentai_get_record', { match_id: id });
   check('M17 at the end the record opens, to anyone', rec.ok, rec.error ?? '');

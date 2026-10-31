@@ -17,6 +17,17 @@ import { randomBytes, createHash } from 'node:crypto';
  * exist; a record opens only when the match is over.
  */
 const MAX_LIVE = 5;
+/**
+ * A call that resolves a turn (or starts a match) plans the site computer's next orders from its hidden view, and
+ * planning takes longer the more the computer has. Such calls answer no sooner than this, so their time says
+ * nothing about the dark (fog review, 2026-10-31). Level 5's slowest turn on the book edition is about 0.35 s here.
+ */
+export const RESOLVE_MS = 1500;
+const padFrom = async (started: number) => {
+  const left = RESOLVE_MS - (Date.now() - started);
+  if (left > 0) await new Promise((r) => setTimeout(r, left));
+  else console.log('minpentai agent play: a resolving call took longer than RESOLVE_MS', Date.now() - started);
+};
 
 const only = (args: Record<string, unknown>, keys: string[]) => {
   const extra = Object.keys(args).filter((k) => !keys.includes(k));
@@ -70,9 +81,11 @@ export const MINPENTAI_TOOLS: AgentTool[] = [
       const level = args.level === undefined ? 3 : args.level;
       if (ruleset !== 'book' && ruleset !== 'play') throw new ToolInputError('ruleset must be "book" or "play"');
       if (!Number.isInteger(level) || (level as number) < 1 || (level as number) > 5) throw new ToolInputError('level must be 1 to 5');
+      const started = Date.now();
       if ((await liveCount(agent.person)) >= MAX_LIVE) throw new ToolInputError(`your person already has ${MAX_LIVE} live matches; finish or resign one first`);
       const { m, linkSecret } = guard(() => newSolo({ id: newId(), ruleset, level: level as number, seed: newSeed(), person: agent.person, agent: { id: agent.id, name: agent.name, model: modelOf(args.model) }, now: new Date().toISOString() }));
       await insert(m);
+      await padFrom(started);
       return { match_id: m.id, side: 'Cyan', live_url: liveUrl(m.id, linkSecret), view: viewFor(m) };
     },
   },
@@ -128,11 +141,14 @@ export const MINPENTAI_TOOLS: AgentTool[] = [
       on();
       only(args, ['match_id', 'turn', 'placements', 'source', 'final', 'note']);
       if (args.source !== 'person' && args.source !== 'agent') throw new ToolInputError('source must be "person" or "agent"');
+      const started = Date.now();
       const note = typeof args.note === 'string' ? args.note.replace(/[\x00-\x1f]/g, ' ').slice(0, 280) : undefined;
       const out = await change(agent, args.match_id, (m) => {
         const ps = parseOrders(args.placements, rulesOf(m).s);
         return { r: submit(m, { turn: Number(args.turn), placements: ps, source: args.source as 'person' | 'agent', final: args.final === true, note, now: new Date().toISOString() }), m };
       });
+      // Every final call waits the same (a non-final one plans nothing).
+      if (args.final === true) await padFrom(started);
       return { ...out.r, view: viewFor(out.m) };
     },
   },
@@ -143,7 +159,9 @@ export const MINPENTAI_TOOLS: AgentTool[] = [
     async run(agent, args) {
       on();
       only(args, ['match_id', 'turn']);
+      const started = Date.now();
       const out = await change(agent, args.match_id, (m) => ({ r: autopilot(m, { turn: Number(args.turn), now: new Date().toISOString() }), m }));
+      await padFrom(started);
       return { ...out.r, view: viewFor(out.m) };
     },
   },
