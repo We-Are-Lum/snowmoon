@@ -73,15 +73,15 @@ const PLACEMENTS = {
 export const MINPENTAI_TOOLS: AgentTool[] = [
   {
     name: 'minpentai_start_solo', title: 'Start a Minpentai match against the site computer', scope: 'play', writes: true, counts: 'reads',
-    description: 'Starts a match for your person (Cyan) against the site computer (Amber), on the book edition (default) or Play\'s rules, at level 0 (the beginner) to 4. Returns the match, your side\'s first view, and a live link that shows your person their side only (shown once: give it to your person). Your person decides; you advise and place what they agree to. Rules invented for this edition, not the book\'s.',
-    inputSchema: { type: 'object', properties: { ruleset: { enum: ['book', 'play'] }, level: { type: 'integer', minimum: 0, maximum: 4 }, model: MODEL }, additionalProperties: false },
+    description: 'Starts a match for your person (Cyan) against the site computer (Amber), on the book edition (default) or Play\'s rules, at level 0 (the beginner) to 3. Returns the match, your side\'s first view, and a live link that shows your person their side only (shown once: give it to your person). Your person decides; you advise and place what they agree to. Rules invented for this edition, not the book\'s.',
+    inputSchema: { type: 'object', properties: { ruleset: { enum: ['book', 'play'] }, level: { type: 'integer', minimum: 0, maximum: 3 }, model: MODEL }, additionalProperties: false },
     async run(agent, args) {
       on();
       only(args, ['ruleset', 'level', 'model']);
       const ruleset = args.ruleset === undefined ? 'book' : args.ruleset;
       const level = args.level === undefined ? 2 : args.level;
       if (ruleset !== 'book' && ruleset !== 'play') throw new ToolInputError('ruleset must be "book" or "play"');
-      if (!Number.isInteger(level) || (level as number) < 0 || (level as number) > 4) throw new ToolInputError('level must be 0 (the beginner) to 4');
+      if (!Number.isInteger(level) || (level as number) < 0 || (level as number) > 3) throw new ToolInputError('level must be 0 (the beginner) to 3');
       const started = Date.now();
       if ((await liveCount(agent.person)) >= MAX_LIVE) throw new ToolInputError(`your person already has ${MAX_LIVE} live matches; finish or resign one first`);
       const { m, linkSecret } = guard(() => newSolo({ id: newId(), ruleset: CURRENT[ruleset], level: level as number, seed: newSeed(), person: agent.person, agent: { id: agent.id, name: agent.name, model: modelOf(args.model) }, now: new Date().toISOString() }));
