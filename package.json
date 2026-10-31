@@ -55,6 +55,7 @@
     "test:minpentai-players": "tsx scripts/test-minpentai-players.ts",
     "test:minpentai-versions": "tsx scripts/test-minpentai-versions.ts",
     "test:minpentai-one-engine": "tsx --conditions=react-server scripts/test-minpentai-one-engine.ts",
+    "test:minpentai-book": "tsx scripts/test-minpentai-book.ts",
     "test:minpentai-agents": "tsx scripts/test-minpentai-agents-md.ts",
     "minpentai:vs-rungs": "tsx scripts/minpentai-vs-rungs.ts",
     "check:minpentai-live": "tsx --conditions=react-server scripts/check-minpentai-live.ts",

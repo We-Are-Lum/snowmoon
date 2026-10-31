@@ -11,16 +11,29 @@ import { BASE, BASE_DRAWN, assertFog, type DrawnRule, type Settings, type Versio
 
 export { rng };
 export type Side = 'C' | 'A';
+/** Play's pieces: glider, square, tower. */
 export type Piece = 'g' | 's' | 't';
+/**
+ * The book edition's (off unless a ruleset sets their cost): m mirror wall (dx 1 is "/", -1 is "\\"),
+ * e symbol glider (flies like a glider), w moving wall (x, y is its middle square; dx, dy where it flies),
+ * f glider factory (dx, dy where it fires; its rock is behind it).
+ */
+export type BookPiece = 'm' | 'e' | 'w' | 'f';
+export type AnyPiece = Piece | BookPiece;
 export const other = (s: Side): Side => (s === 'C' ? 'A' : 'C');
 const D4: [number, number][] = [[-1, 0], [0, -1], [0, 1], [1, 0]];
 const D8: [number, number][] = [[-1, -1], [0, -1], [1, -1], [-1, 0], [1, 0], [-1, 1], [0, 1], [1, 1]];
+/** The setting that gives each book-edition piece its cost (0 or absent: off). */
+const BOOK_COST: Record<BookPiece, 'costMirror' | 'costSeed' | 'costWall' | 'costFactory'> = { m: 'costMirror', e: 'costSeed', w: 'costWall', f: 'costFactory' };
+const copyEach = <T extends object>(o: Record<number, T>): Record<number, T> => Object.fromEntries(Object.entries(o).map(([k, v]) => [k, { ...v }]));
 /** Under rocks "split", no new glider once this many are on the board. */
 export const SPLIT_CAP = 60;
 /** Play's rocks on its 15 x 10 board (game.ts ROCKS); scaled for other sizes. */
 const PLAY_ROCKS: [number, number][] = [[6, 0], [9, 3], [7, 4], [7, 5], [5, 6], [8, 9]];
 
-export interface Glider { id: number; o: Side; x: number; y: number; dx: number; dy: number; tx?: number; ty?: number; stay?: number; dead?: boolean }
+export interface Glider { id: number; o: Side; x: number; y: number; dx: number; dy: number; tx?: number; ty?: number; stay?: number; dead?: boolean; /** A symbol glider (book edition). */ seed?: 1 }
+/** Book edition: a moving wall, three squares across its line of flight; c[i] is 1 while square i stands. */
+export interface MovingWall { id: number; o: Side; x: number; y: number; dx: number; dy: number; c: number[]; stop?: 1 }
 export interface Square { o: Side; hp: number }
 export interface World {
   step: number;
@@ -31,11 +44,23 @@ export interface World {
   gl: Glider[];
   nid: number;
   flash: number[];
+  // The book edition's pieces. Absent unless one was made, so Play's worlds keep their shape.
+  /** Mirror walls: slant 1 "/" or -1 "\\", hits left. */
+  mir?: Record<number, { o: Side; d: number; hp: number }>;
+  /** Symbol gliders that have come to rest against something solid. */
+  sd?: Record<number, Side>;
+  /** Symbols formed by three symbol gliders, with the step they formed: they last until the next turn to act. */
+  fs?: Record<number, { o: Side; at: number }>;
+  mw?: MovingWall[];
+  /** Glider factories: where they fire, hits left. The rock that feeds one is behind it. */
+  fa?: Record<number, { o: Side; dx: number; dy: number; hp: number }>;
+  /** Each rock's ore, when rocks hold ore. */
+  ore?: Record<number, number>;
 }
 /** Towers each side has destroyed this match (for "first-blood"). Kept beside the world, not in it,
  * so a world has exactly the shape Play has always saved. */
 export type Kills = Record<Side, number>;
-export interface Placement { t: Piece; o: Side; x: number; y: number; dx: number; dy: number }
+export interface Placement<T extends AnyPiece = Piece> { t: T; o: Side; x: number; y: number; dx: number; dy: number }
 
 /** The board a version starts from: size, rocks, towers. Fixed for the match. */
 export interface Layout { W: number; H: number; rocks: number[]; towers: Record<Side, number[]> }
@@ -90,13 +115,22 @@ export function engine(L: Layout) {
       L.rocks.forEach((k) => (w.rock[k] = s.rocks === 'breakable' ? s.rockHits : 1));
       L.towers.C.forEach((k) => (w.tw[k] = 'C'));
       L.towers.A.forEach((k) => (w.tw[k] = 'A'));
+      if (s.ore) { const ore: Record<number, number> = {}; L.rocks.forEach((k) => (ore[k] = s.ore!)); w.ore = ore; }
     }
     return w;
   }
   function clone(w: World): World {
     const sq: Record<number, Square> = {};
     for (const k in w.sq) sq[k] = { ...w.sq[k] };
-    return { step: w.step, rock: { ...w.rock }, sq, tw: { ...w.tw }, gl: w.gl.map((g) => ({ ...g })), nid: w.nid, flash: (w.flash || []).slice() };
+    const c: World = { step: w.step, rock: { ...w.rock }, sq, tw: { ...w.tw }, gl: w.gl.map((g) => ({ ...g })), nid: w.nid, flash: (w.flash || []).slice() };
+    // The book edition's pieces, only when there are any (Play's worlds keep their shape).
+    if (w.mir) c.mir = copyEach(w.mir);
+    if (w.sd) c.sd = { ...w.sd };
+    if (w.fs) c.fs = copyEach(w.fs);
+    if (w.mw) c.mw = w.mw.map((m) => ({ ...m, c: m.c.slice() }));
+    if (w.fa) c.fa = copyEach(w.fa);
+    if (w.ore) c.ore = { ...w.ore };
+    return c;
   }
   const towers = (w: World, o: Side) => Object.keys(w.tw).filter((k) => w.tw[+k] === o).map(Number);
   function lit(w: World, o: Side, R: number, tws?: number[]): Set<number> {
@@ -107,7 +141,24 @@ export function engine(L: Layout) {
     });
     return s;
   }
-  const empty = (w: World, k: number) => !w.rock[k] && !w.sq[k] && !w.tw[k] && !w.gl.some((g) => K(g.x, g.y) === k);
+  /** A moving wall's three squares, across its line of flight, from one end to the other. */
+  const wallCells = (m: { x: number; y: number; dx: number; dy: number }): [number, number][] => [-1, 0, 1].map((i) => [m.x - i * m.dy, m.y + i * m.dx]);
+  /** The moving wall standing on a square, and which of its squares it is. */
+  function wallAt(w: World, k: number): { m: MovingWall; i: number } | null {
+    for (const m of w.mw ?? []) {
+      const cs = wallCells(m);
+      for (let i = 0; i < 3; i++) if (m.c[i] && inb(cs[i][0], cs[i][1]) && K(cs[i][0], cs[i][1]) === k) return { m, i };
+    }
+    return null;
+  }
+  /** Something a glider can't fly into: a rock, square, tower, or a book-edition piece. */
+  const solid = (w: World, k: number) => !!(w.rock[k] || w.sq[k] || w.tw[k] || w.mir?.[k] || w.sd?.[k] || w.fa?.[k] || (w.mw && wallAt(w, k)));
+  const empty = (w: World, k: number) => !w.rock[k] && !w.sq[k] && !w.tw[k] && !w.gl.some((g) => K(g.x, g.y) === k) && !(w.mir?.[k] || w.sd?.[k] || w.fa?.[k] || (w.mw && wallAt(w, k)));
+  /** Book edition: a forming symbol is walled in when every square a glider could come from is solid or off the board. */
+  const walledIn = (w: World, s: Settings, k: number) => {
+    const [x, y] = XY(k);
+    return (s.directions === 8 ? D8 : D4).every(([dx, dy]) => !inb(x + dx, y + dy) || solid(w, K(x + dx, y + dy)));
+  };
 
   /** One step (game.ts step), with the version's edges, rocks, square hits, own towers, same-side meetings and debris. */
   function step(w: World, s: Settings, kills?: Kills): World {
@@ -144,10 +195,59 @@ export function engine(L: Layout) {
     const born: Glider[] = [];
     const bounce = (g: Glider) => { g.dx = -g.dx; g.dy = -g.dy; };
     const broke = (k: number) => { w.flash.push(k); if (s.debris === 'rock') w.rock[k] = s.rocks === 'breakable' ? s.rockHits : 1; };
+    // The book edition's pieces (none in Play, so none of this runs there).
+    const book = !!(w.mir || w.sd || w.mw || w.fa || w.ore) || gl.some((g) => g.seed), lodged: number[] = [], fed: { k: number; g: Glider }[] = [];
+    /** A symbol glider stops where it is, against what it hit (unless another glider is standing there). */
+    const lodge = (g: Glider) => {
+      g.dead = true;
+      const k = K(g.x, g.y);
+      if (gl.some((h) => h !== g && !h.dead && h.x === g.x && h.y === g.y)) { w.flash.push(k); return; }
+      (w.sd ??= {})[k] = g.o;
+      lodged.push(k);
+    };
+    /** A rock that holds ore feeds each factory standing against it one glider, out of the factory's front (fired once the step's hits are done). */
+    const feed = (k: number) => {
+      const [rx, ry] = XY(k);
+      for (const [dx, dy] of D4) {
+        const f = inb(rx + dx, ry + dy) ? w.fa?.[K(rx + dx, ry + dy)] : undefined;
+        if (!f || f.dx !== dx || f.dy !== dy || !inb(rx + 2 * dx, ry + 2 * dy)) continue;
+        fed.push({ k, g: { id: 0, o: f.o, x: rx + 2 * dx, y: ry + 2 * dy, dx, dy } });
+      }
+    };
+    /** A glider meeting a book-edition piece; false when there is none on the square. */
+    const bookHit = (g: Glider, k: number): boolean => {
+      const mi = w.mir?.[k];
+      if (mi) {
+        if (--mi.hp <= 0) { delete w.mir![k]; g.dead = true; w.flash.push(k); return true; }
+        // "/" turns east to north, "\\" east to south; a diagonal glider flying along the slant goes straight back.
+        const { dx, dy } = g;
+        if (mi.d > 0) { g.dx = -dy; g.dy = -dx; } else { g.dx = dy; g.dy = dx; }
+        if (g.dx === dx && g.dy === dy) bounce(g);
+        return true;
+      }
+      if (w.sd?.[k]) { if (g.seed) lodge(g); else { delete w.sd[k]; g.dead = true; w.flash.push(k); } return true; }
+      const f = w.fa?.[k];
+      if (f) {
+        if (g.seed) lodge(g);
+        else if (f.hp > 1) { f.hp--; bounce(g); } else { delete w.fa![k]; g.dead = true; broke(k); }
+        return true;
+      }
+      const at = w.mw && wallAt(w, k);
+      if (at) {
+        if (g.seed) lodge(g);
+        else if (g.dx * at.m.dx + g.dy * at.m.dy < 0) bounce(g);
+        else { at.m.c[at.i] = 0; g.dead = true; broke(k); }
+        return true;
+      }
+      return false;
+    };
     for (const g of gl.filter((g) => !g.dead).sort((a, b) => a.id - b.id)) {
       if (g.stay) continue;
       const k = K(g.tx!, g.ty!);
+      if (book && bookHit(g, k)) continue;
       if (w.rock[k]) {
+        if (w.ore?.[k]) feed(k);
+        if (g.seed) { lodge(g); continue; }
         if (s.rocks === 'absorb') { g.dead = true; w.flash.push(k); }
         else if (s.rocks === 'breakable' && w.rock[k] <= 1) { delete w.rock[k]; g.dead = true; w.flash.push(k); }
         else {
@@ -159,6 +259,7 @@ export function engine(L: Layout) {
       }
       const q = w.sq[k];
       if (q) {
+        if (g.seed) { lodge(g); continue; }
         if (q.hp > 1) { q.hp--; bounce(g); } else { delete w.sq[k]; g.dead = true; broke(k); }
         continue;
       }
@@ -172,21 +273,88 @@ export function engine(L: Layout) {
     }
     w.gl = gl.filter((g) => !g.dead);
     for (const b of born) { b.id = w.nid++; w.gl.push(b); }
+    if (book) {
+      // A factory fires when its front square is empty and its rock has ore; a rock whose ore is spent crumbles.
+      for (const { k, g: b } of fed) {
+        if (!w.ore?.[k] || !empty(w, K(b.x, b.y))) continue;
+        b.id = w.nid++;
+        w.gl.push(b);
+        if (!--w.ore[k]) { delete w.rock[k]; delete w.ore[k]; w.flash.push(k); }
+      }
+      if (w.mw) moveWalls(w);
+      if (lodged.length) converge(w, lodged);
+    }
     w.step++;
     return w;
   }
 
+  /**
+   * Book edition: moving walls go one square every second step. A wall waits while a glider stands
+   * where it would go, and stops for good at the edge, a rock, a tower or any other piece.
+   */
+  function moveWalls(w: World) {
+    w.mw = w.mw!.filter((m) => m.c.some(Boolean));
+    if (w.step % 2 !== 1) return;
+    for (const m of w.mw) {
+      if (m.stop) continue;
+      let wait = false, stop = false;
+      for (const [x, y] of wallCells(m).filter((_, i) => m.c[i])) {
+        const tx = x + m.dx, ty = y + m.dy;
+        if (!inb(tx, ty) || solid(w, K(tx, ty))) { stop = true; break; }
+        if (w.gl.some((g) => g.x === tx && g.y === ty)) wait = true;
+      }
+      if (stop) m.stop = 1;
+      else if (!wait) { m.x += m.dx; m.y += m.dy; }
+    }
+  }
+
+  /**
+   * Book edition: three symbol gliders of one side at rest within one 3 x 3 box come together into
+   * that side's symbol, on the square of the one that came to rest last. It is a tower until the next
+   * turn to act ends; then it stays only if walled in (apply).
+   */
+  function converge(w: World, lodged: number[]) {
+    for (const k of [...new Set(lodged)].sort((a, b) => a - b)) {
+      const o = w.sd?.[k];
+      if (!o) continue;
+      const [x, y] = XY(k);
+      const near = Object.keys(w.sd!).map(Number).filter((j) => j !== k && w.sd![j] === o && Math.abs(XY(j)[0] - x) <= 2 && Math.abs(XY(j)[1] - y) <= 2).sort((a, b) => a - b);
+      let pair: number[] | null = null;
+      for (let i = 0; i < near.length && !pair; i++) for (let j = i + 1; j < near.length && !pair; j++) {
+        const xs = [x, XY(near[i])[0], XY(near[j])[0]], ys = [y, XY(near[i])[1], XY(near[j])[1]];
+        if (Math.max(...xs) - Math.min(...xs) <= 2 && Math.max(...ys) - Math.min(...ys) <= 2) pair = [near[i], near[j]];
+      }
+      if (!pair) continue;
+      for (const j of [k, ...pair]) delete w.sd![j];
+      w.tw[k] = o;
+      (w.fs ??= {})[k] = { o, at: w.step };
+      w.flash.push(k);
+    }
+  }
+
   /** Both sides' placements appear at once; two on one square cancel (game.ts apply). */
-  function apply(w: World, s: Settings, pend: Record<Side, Placement[]>) {
+  function apply(w: World, s: Settings, pend: Record<Side, Placement<AnyPiece>[]>) {
     const all = [...pend.C, ...pend.A], n: Record<number, number> = {};
-    all.forEach((p) => { const k = K(p.x, p.y); n[k] = (n[k] || 0) + 1; });
+    // A moving wall takes three squares; anything else one.
+    const cells = (p: Placement<AnyPiece>) => (p.t === 'w' ? wallCells(p).map(([x, y]) => K(x, y)) : [K(p.x, p.y)]);
+    all.forEach((p) => { for (const k of cells(p)) n[k] = (n[k] || 0) + 1; });
     all.forEach((p) => {
       const k = K(p.x, p.y);
-      if (n[k] > 1) return;
+      if (cells(p).some((c) => n[c] > 1)) return;
       if (p.t === 'g') w.gl.push({ id: w.nid++, o: p.o, x: p.x, y: p.y, dx: p.dx, dy: p.dy });
       else if (p.t === 's') w.sq[k] = { o: p.o, hp: s.squareHits };
+      else if (p.t === 'm') (w.mir ??= {})[k] = { o: p.o, d: p.dx, hp: s.mirrorHits ?? 3 };
+      else if (p.t === 'e') w.gl.push({ id: w.nid++, o: p.o, x: p.x, y: p.y, dx: p.dx, dy: p.dy, seed: 1 });
+      else if (p.t === 'w') (w.mw ??= []).push({ id: w.nid++, o: p.o, x: p.x, y: p.y, dx: p.dx, dy: p.dy, c: [1, 1, 1] });
+      else if (p.t === 'f') (w.fa ??= {})[k] = { o: p.o, dx: p.dx, dy: p.dy, hp: s.factoryHits ?? 2 };
       else w.tw[k] = p.o;
     });
+    // Book edition: a symbol formed since the last turn to act stays only if this turn walled it in.
+    if (w.fs) for (const k of Object.keys(w.fs).map(Number)) {
+      const f = w.fs[k];
+      delete w.fs[k];
+      if (w.tw[k] === f.o && !walledIn(w, s, k)) { delete w.tw[k]; w.flash.push(k); }
+    }
   }
 
   function updLS(w: World, R: number, ls: Record<Side, Record<number, number>>) {
@@ -194,21 +362,34 @@ export function engine(L: Layout) {
     lit(w, 'A', R).forEach((k) => { if (w.tw[k] === 'C') ls.A[k] = w.step; else delete ls.A[k]; });
   }
 
-  const cost = (s: Settings, t: Piece) => (t === 'g' ? s.costGlider : t === 's' ? s.costSquare : s.costTower);
+  const cost = (s: Settings, t: AnyPiece) => (t === 'g' ? s.costGlider : t === 's' ? s.costSquare : t in BOOK_COST ? s[BOOK_COST[t as BookPiece]] ?? 0 : s.costTower);
 
   /** Why a side's placements break the rules, or null (the server's checkPlacements, for any version). */
-  function refuse(w: World, s: Settings, o: Side, snap: number[], budget: number, ps: Placement[]): string | null {
+  function refuse(w: World, s: Settings, o: Side, snap: number[], budget: number, ps: Placement<AnyPiece>[]): string | null {
     const zone = lit(w, o, s.reach, snap), seen = new Set<number>(), dirs = s.directions === 8 ? D8 : D4;
     let spent = 0, tw = towers(w, o).length;
     for (const p of ps) {
       if (p.o !== o) return 'wrong side';
       if (!inb(p.x, p.y)) return 'off the board';
-      const k = K(p.x, p.y);
-      if (!zone.has(k)) return `out of reach at ${p.x},${p.y}`;
-      if (!empty(w, k)) return `not empty at ${p.x},${p.y}`;
-      if (seen.has(k)) return 'two on one square';
-      seen.add(k);
-      if (p.t === 'g' && !dirs.some(([dx, dy]) => dx === p.dx && dy === p.dy)) return 'a direction the rules do not allow';
+      // Book edition pieces exist only where a ruleset gives them a cost.
+      const bookPiece = p.t in BOOK_COST;
+      if (bookPiece && !(cost(s, p.t) > 0)) return 'not a piece in these rules';
+      // Every square a piece takes must be empty and within reach (so, within sight: nothing hidden decides it).
+      for (const [x, y] of p.t === 'w' ? wallCells(p) : [[p.x, p.y]]) {
+        if (!inb(x, y)) return 'off the board';
+        const k = K(x, y);
+        if (!zone.has(k)) return `out of reach at ${x},${y}`;
+        if (!empty(w, k)) return `not empty at ${x},${y}`;
+        if (seen.has(k)) return 'two on one square';
+        seen.add(k);
+      }
+      if ((p.t === 'g' || p.t === 'e') && !dirs.some(([dx, dy]) => dx === p.dx && dy === p.dy)) return 'a direction the rules do not allow';
+      if ((p.t === 'w' || p.t === 'f') && !D4.some(([dx, dy]) => dx === p.dx && dy === p.dy)) return 'a direction the rules do not allow';
+      if (p.t === 'm' && !((p.dx === 1 || p.dx === -1) && p.dy === 0)) return 'a mirror leans one of two ways';
+      if (p.t === 'f') {
+        const rx = p.x - p.dx, ry = p.y - p.dy;
+        if (!inb(rx, ry) || !w.rock[K(rx, ry)] || !zone.has(K(rx, ry))) return 'a factory needs a rock behind it, within reach';
+      }
       if (p.t === 't' && s.maxTowers && ++tw > s.maxTowers) return 'more towers than allowed';
       spent += cost(s, p.t);
     }
@@ -341,12 +522,20 @@ export function engine(L: Layout) {
     for (const k in w.sq) m.sq[rk(+k)] = { ...w.sq[k], o: other(w.sq[k].o) };
     for (const k in w.rock) m.rock[rk(+k)] = w.rock[k];
     m.gl = w.gl.map((g) => ({ ...g, o: other(g.o), x: W - 1 - g.x, y: H - 1 - g.y, dx: -g.dx, dy: -g.dy }));
+    // Book edition: a half turn keeps a mirror's slant and a wall's order of squares.
+    const keyed = <T,>(o: Record<number, T>, f: (v: T) => T) => Object.fromEntries(Object.entries(o).map(([k, v]) => [rk(+k), f(v)]));
+    if (w.mir) m.mir = keyed(w.mir, (v) => ({ ...v, o: other(v.o) }));
+    if (w.sd) m.sd = keyed(w.sd, other);
+    if (w.fs) m.fs = keyed(w.fs, (v) => ({ ...v, o: other(v.o) }));
+    if (w.fa) m.fa = keyed(w.fa, (v) => ({ ...v, o: other(v.o), dx: -v.dx, dy: -v.dy }));
+    if (w.ore) m.ore = keyed(w.ore, (v) => v);
+    if (w.mw) m.mw = w.mw.map((v) => ({ ...v, o: other(v.o), x: W - 1 - v.x, y: H - 1 - v.y, dx: -v.dx, dy: -v.dy, c: v.c.slice() }));
     return m;
   }
   const turnedKeys = (o: Record<number, number>) => Object.fromEntries(Object.entries(o).map(([k, v]) => [rk(+k), v]));
   const unturn = (p: Placement): Placement => ({ ...p, o: 'C', x: W - 1 - p.x, y: H - 1 - p.y, dx: -p.dx, dy: -p.dy });
 
-  return { L, W, H, K, XY, inb, world, clone, towers, lit, empty, step, apply, updLS, refuse, botPlan, turned, turnedKeys, unturn, cost };
+  return { L, W, H, K, XY, inb, world, clone, towers, lit, empty, step, apply, updLS, refuse, botPlan, turned, turnedKeys, unturn, cost, wallCells, wallAt, solid, walledIn };
 }
 
 export type Engine = ReturnType<typeof engine>;

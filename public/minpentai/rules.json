@@ -892,7 +892,7 @@
       "code": [
         {
           "file": "src/lib/minpentai/versions/engine.ts",
-          "find": "function apply(w: World, s: Settings, pend: Record<Side, Placement[]>) {"
+          "find": "function apply(w: World, s: Settings, pend: Record<Side, Placement<AnyPiece>[]>) {"
         }
       ],
       "site": "yes",

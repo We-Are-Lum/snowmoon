@@ -320,7 +320,7 @@ export const KIT_RULES: KitRule[] = [
   {
     id: 'play-simultaneous', area: 'turns', source: 'invented',
     rule: "Both players act at the same time without seeing each other's choices; everything placed appears at once, and two pieces put on one square cancel each other.",
-    code: [{ file: VENG, find: 'function apply(w: World, s: Settings, pend: Record<Side, Placement[]>) {' }],
+    code: [{ file: VENG, find: 'function apply(w: World, s: Settings, pend: Record<Side, Placement<AnyPiece>[]>) {' }],
     site: 'yes', siteNote: 'Play.',
   },
   {
