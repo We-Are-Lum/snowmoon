@@ -394,16 +394,23 @@ export const CHALLENGE = {
   id: 'remix-2026-11',
   /** The characters, by their file in content/snowmoon/designs/characters (the plan's recommendation: Bai and Zei). */
   characters: ['bai', 'zei'] as readonly string[],
+  /**
+   * Real instants (UTC), each with its America/Los_Angeles wall time (all in PST: the clocks changed on 1 Nov 2026).
+   * Owner, 2026-10-31 (second update). A closing instant is the first that no longer counts.
+   */
   dates: {
-    /** Entries open at the launch: Fri 6 Nov 2026, 00:00 Pacific (PST). The plan says "the 6 Nov launch"; the hour is the agent's reading. */
+    /** Entries open at the launch: Fri 6 Nov 2026, 00:00 Pacific. The plan says "the 6 Nov launch"; the hour is the agent's reading. */
     opens: '2026-11-06T08:00:00Z',
-    /** Entries close after Sun 22 Nov 2026, 23:59 Pacific (PST): this is the first instant that no longer counts, 00:00 on 23 Nov. */
+    /** Entries close after Sun 22 Nov 2026, 23:59 Pacific: this is 00:00 Pacific on 23 Nov, the first instant that no longer counts. */
     closes: '2026-11-23T08:00:00Z',
+    /** The shortlist vote and jurors: Tue 1 Dec 2026, 00:00 Pacific, to the end of Thu 3 Dec 2026 (23:59 Pacific). Not built; undefined in the plan. */
+    shortlistOpens: '2026-12-01T08:00:00Z',
+    shortlistCloses: '2026-12-04T08:00:00Z',
     /** Results at the call: Fri 4 Dec 2026, 09:00 Pacific. */
     results: '2026-12-04T17:00:00Z',
-    /** The mint: from Mon 7 Dec 2026, 00:00 Pacific, to the end of Fri 18 Dec 2026 (23:59 Pacific; this is the first instant after). */
-    mintOpens: '2026-12-07T08:00:00Z',
-    mintCloses: '2026-12-19T08:00:00Z',
+    /** The mint opens Tue 8 Dec 2026, 09:00 Pacific, and closes at the Fri 18 Dec 2026 call, 09:00 Pacific. */
+    mintOpens: '2026-12-08T17:00:00Z',
+    mintCloses: '2026-12-18T17:00:00Z',
   },
   /** The time zone every date is shown in. */
   timeZone: 'America/Los_Angeles',

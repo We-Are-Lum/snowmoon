@@ -9,7 +9,7 @@
 - Bluesky searchPosts on the public API has deliberately returned 403 to cut load. Check it; if it needs a signed-in account, report back and keep manual add.
 - The originality answers need their own score (e.g. the squared gap in log-odds), not the log-ratio one.
 - No tracking of agent-drafted entries; I'm asking Luis to make his by hand.
-- Dates (owner, 2026-10-31): entries close Sun 22 Nov 23:59 PT, results at the 4 Dec call, mint 7 to 18 Dec; all challenge dates live in one config entry.
+- Dates (owner, 2026-10-31): entries close Sun 22 Nov 23:59 PT; shortlist vote and jurors Tue 1 to Thu 3 Dec; results at the Fri 4 Dec call; mint opens Tue 8 Dec 9:00 PT and closes at the Fri 18 Dec call. All challenge dates live in one config entry.
 
 Handoff plan, 31 Oct 2026. For the Snowmoon design chat and for Claude Code. Builds on `snowmoon-fund-starting-small.md` and `snowmoon-deep-funding-pilot.md` in the LUM project.
 

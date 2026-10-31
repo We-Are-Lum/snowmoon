@@ -149,7 +149,6 @@ export default async function ChallengePage() {
           </>
         )}
       </section>
-      <p className="as-draft ic-draftline">{W.draft}</p>
     </div>
   );
 }

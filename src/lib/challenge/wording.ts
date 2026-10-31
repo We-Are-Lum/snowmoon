@@ -16,7 +16,7 @@ export const CHALLENGE_WORDING = {
     `From ${windowText()}, make your own version of Bai or Zei on snowmoon.party: start from any existing sheet, or from someone else’s remix, change it, and publish. Your version gets its own page, credited back to what you built on.`,
   nextHead: 'What happens next.',
   next: () =>
-    `At the call on ${d('results')}, Nate shows the versions of Bai and Zei he’s taking into Episode 1, built from your remixes and credited to you. AI models and a small jury divide the credit for each one among everything it was built on, and we publish how every model did it. Each version is then minted as an open edition in Snowmoon WIP, from ${d('mintOpens')} to ${d('mintCloses')}. What it raises, plus an extra reward pot, goes to everyone it was built on, through a published split on Ethereum.`,
+    `At the call on ${d('results')}, Nate shows the versions of Bai and Zei he’s taking into Episode 1, built from your remixes and credited to you. AI models and a small jury divide the credit for each one among everything it was built on, and we publish how every model did it. Each version is then minted as an open edition in Snowmoon WIP, from ${d('mintOpens', true)} to the call on ${d('mintCloses', true)}. What it raises, plus an extra reward pot, goes to everyone it was built on, through a published split on Ethereum.`,
   bountyHead: 'The bounty.',
   bounty:
     'The poidh bounty goes to the remix that most changes how we see the character while staying true to the book. To be in the running, also post your version’s link as a claim on the bounty.',
