@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { IMAGE_WORDING } from '~/lib/images/wording';
-import { CHAT, CONTACT_EMAIL, IMAGES, PODCAST_LINKS, REPO_URL, WORK } from '~/lib/config';
+import { CHAT, CONTACT_EMAIL, IMAGES, PODCAST_LINKS, REPO_URL, SUPPORT, WORK } from '~/lib/config';
 import { RULES } from '~/lib/images/rules';
 import { SIGN_IN_SERVICES } from '~/lib/sign-in-text';
 import { ThemeSwitch } from '~/components/theme-switch';
@@ -124,11 +124,13 @@ export default function About() {
       <ThemeSwitch name="theme-about" />
       <h2>No token</h2>
       <p>There is no token. There is no revenue share. Nothing here is an investment.</p>
-      {/* "Support this site" (owner, 2026-10-30). Model-drafted wording. */}
-      <p>
-        To help pay for the models and the hosting, you can <Link href="/support">support this site</Link>: a gift, which buys
-        nothing here.
-      </p>
+      {/* "Support this site" (owner, 2026-10-30). Model-drafted wording. Shown once SUPPORT.linked. */}
+      {SUPPORT.linked && (
+        <p>
+          To help pay for the models and the hosting, you can <Link href="/support">support this site</Link>: a gift, which
+          buys nothing here.
+        </p>
+      )}
       <h2>No canon</h2>
       <p>
         Nothing in this edition is official. Every design, image, and take can be replaced by a better one.

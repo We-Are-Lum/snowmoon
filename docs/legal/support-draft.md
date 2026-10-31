@@ -1,12 +1,21 @@
 # "Support this site": the Terms line (DRAFT, for the owner's reread)
 
-Branch `support-page`, 2026-10-30. Drafted by the coding agent (Claude, by Anthropic). In `src/lib/legal.ts` as Terms 6c, awaiting the owner's reread. It
+Branch `support-page`, 2026-10-30. Drafted by the coding agent (Claude, by Anthropic). Reread by the owner on 2026-10-30, who replaced it with a shorter version (below, "As reread"); that version is Terms 6c in `src/lib/legal.ts`. It
 ships in the same merge as the page, after your reread (owner, 2026-10-18: texts describe today).
 
 Owner, 2026-10-30: "Terms line for my reread: a gift, no rewards or refunds, not an investment, not tax-deductible. No
 Privacy change while nothing is recorded."
 
-## Terms: a new section 6c, after 6b (Agents)
+## As reread (owner, 2026-10-30): Terms 6c
+
+> **6c. Support.** You can send money to the address on the Support page (a Splits account on Ethereum or Base) to help
+> pay for the Service. It's a gift: it buys nothing on the Service, isn't an investment, can't be refunded and isn't
+> tax-deductible (Lum LLC is not a charity). Send it only on the networks the page names; money sent on any other
+> network may be lost. How it's shared out is public on Splits.
+
+The footer and About links to /support stay hidden (`SUPPORT.linked` false) until the owner's $1 test passes.
+
+## The first draft (replaced): a new section 6c, after 6b (Agents)
 
 Today there is no section about gifts. §6a (Prepaid generations) covers payments that buy generations; a gift is
 different, so it gets its own short section.

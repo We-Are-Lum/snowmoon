@@ -3,7 +3,8 @@
  * 2026-10-08, updated 2026-10-09 (Privacy sections 3, 4 and 7), 2026-10-22 (wallet ↔ Farcaster links: Privacy
  * sections 4, 6 and 7, Terms sections 4 and 5; docs/legal/wallet-links-draft.md), 2026-10-22 again (Minpentai in
  * Farcaster casts: Privacy sections 4, 6 and 7, Terms section 1; docs/legal/minpentai-snap-draft.md), 2026-10-24 (agents: Privacy
- * sections 3, 4 and 7, Terms section 6b; docs/legal/agents-owner-draft.md) and 2026-10-18 (accounts, wallets and
+ * sections 3, 4 and 7, Terms section 6b; docs/legal/agents-owner-draft.md), 2026-10-30 (Terms section 6c, Support; the
+ * owner's own words; docs/legal/support-draft.md) and 2026-10-18 (accounts, wallets and
  * prepaid generations, the adaptation pages, Remix: drafted by the coding agent, reread by the owner;
  * Terms section 2's last words are the owner's). Only the owner changes the words.
  *
@@ -38,7 +39,7 @@ export const LEGAL: {
     privacy: { words: string; on: string; by: 'FID 6786' } | null;
   };
 } = {
-  effective: '2026-10-24',
+  effective: '2026-10-30',
   // The owner said "Reread" on 2026-10-10 (words 3iuvyo, 1r2aajz), and on 2026-10-18 of the drafted
   // changes ("I've read the drafted Terms and Privacy changes and approve them: this is my 'reread'"),
   // covering both pages at these words.
@@ -57,7 +58,10 @@ export const LEGAL: {
     // shown); video tests paid by us for now; and the agent key paragraph as drafted. The words before were 1gifacz.
     // Later on 2026-10-24, the owner's own words for §6b: "Each draft is made at most once" instead of "Each draft can be
     // approved once". The words before were ph5udk.
-    terms: { words: 'qnacwf', on: '2026-10-24', by: 'FID 6786' },
+    // 2026-10-30, the owner's "Reread §6c, replaced with this shorter version" for the Support page: a new section 6c
+    // "Support" in his own words (a gift; buys nothing, not an investment, no refunds, not tax-deductible; only the
+    // networks the page names; how it's shared out is public on Splits). The words before were qnacwf.
+    terms: { words: 'vd19s3', on: '2026-10-30', by: 'FID 6786' },
     // Plus one sentence the drafted list missed (Privacy §4, images): "your name (Farcaster name or wallet
     // address)", the owner's own words for tonight's publish (2026-10-18), so the page stays true for wallet accounts.
     // 2026-10-19, the owner's "Reread is done" for push 3, at these words: My picks in §4 (the owner's own sentence),
@@ -103,7 +107,7 @@ export const TERMS: LegalDoc = {
     { n: 6, head: 'What you must not do.', body: ['Don\'t post anything unlawful, harassing or sexual involving minors; don\'t post other people\'s private information; don\'t impersonate anyone or present your work as the author\'s or as official; don\'t try to get around sign-in, daily limits or spending caps; don\'t interfere with the Service.'] },
     { n: '6a', head: 'Prepaid generations.', body: ['You can pay in USDC or ETH on Base to the address the Service shows. Each generation is charged to your balance at the price shown when you start it. If a generation doesn\'t give you a picture (a check or the image model didn\'t answer, the rules refused the prompt, or the safety checker dropped the picture), that charge is added back to your balance. Payments are final: what you pay is never refunded or paid out as money, and your balance can only be spent on generations here. A payment made through the Service is added to your balance once it has 3 confirmations, while the page is open or the next time you open your wallet on that device. You can also add a payment from your wallet by its transaction, on the wallet panel. Either way, this works within 7 days of the payment; after that, write to us and we\'ll add it.'] },
     { n: '6b', head: 'Agents.', body: ['Agents are open only to accounts we invite. They can\'t spend money. When an agent drafts something that costs money (a new frame or a video test), it shows the estimated cost, and nothing is made until you approve it. Each draft is made at most once, and each day is limited to 20 frames, 5 video tests and $2 in all. A frame counts like any other Remix frame: on a Farcaster account it uses your free frames for the day; on a wallet account it\'s charged to your balance at the price shown (section 6a). Video tests are paid by us for now.', 'You can make a personal agent key for an app that connects with a key. Keep it secret, as you would a password. Until it ends (after 30 days, or when you disconnect it), anyone holding it can read and draft for you, but not publish. Nothing it drafts is paid for unless you approve it, and never more than the cap you set. If it gets out, disconnect it on your You page.'] },
-    { n: '6c', head: 'Support.', body: ['You can send money to the address on the Support page (a Splits account, on Ethereum or Base) to help pay for the Service. It is a gift. It buys nothing on the Service and earns no reward, no place in any order, no score and no say. It is not an investment, and there is no token. It is final: it is never refunded or paid back. It is not tax-deductible: Lum LLC is not a charity. Send it only on the networks the page names: money sent on any other network may be lost, and we can\'t recover it. What the address receives is shared out as its Split says, which anyone can see on Splits.'] },
+    { n: '6c', head: 'Support.', body: ['You can send money to the address on the Support page (a Splits account on Ethereum or Base) to help pay for the Service. It\'s a gift: it buys nothing on the Service, isn\'t an investment, can\'t be refunded and isn\'t tax-deductible (Lum LLC is not a charity). Send it only on the networks the page names; money sent on any other network may be lost. How it\'s shared out is public on Splits.'] },
     { n: 7, head: 'Hiding and removal.', body: ['Nothing on the Service is official or canonical. We may hide content that breaks these Terms. You may hide your own work yourself where the Service offers "Hide", or ask us to hide it, at any time. How this works is set out in our removal policy, linked from About.'] },
     { n: 8, head: 'AI-made material.', body: ['The narration, many pictures (every frame made in Remix among them) and the assistant\'s answers are produced by AI models and are labelled as such. They can be wrong. The assistant\'s commentary is not the book and is not advice of any kind.'] },
     { n: 9, head: 'Outside services.', body: ['The Service relies on other companies\' services, listed in the Privacy Policy. Their terms apply to their part.'] },

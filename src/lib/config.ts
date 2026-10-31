@@ -349,6 +349,8 @@ export const MODERATOR_FIDS: readonly number[] = [6786];
  */
 export const SUPPORT = {
   address: '0x93eC36379bFEB4db21a2d49102A1e30fC43673a3' as const,
+  /** The footer and About link to /support. Off until the owner's $1 test passes: reachable only by its URL (owner, 2026-10-30). */
+  linked: false as boolean,
   networks: [
     { name: 'Ethereum', chainId: 1, explorer: 'https://etherscan.io' },
     { name: 'Base', chainId: 8453, explorer: 'https://basescan.org' },

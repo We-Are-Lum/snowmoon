@@ -302,7 +302,7 @@ async function checkAssistant(page: Page, scheme: string) {
   await page.evaluate(() => localStorage.clear());
 }
 
-const LEGAL_LINE = 'Snowmoon Party · operated by Lum LLC · independent, not affiliated with the author · book and adaptations GPL v3 · Terms · Privacy · Source · Support this site';
+const LEGAL_LINE = 'Snowmoon Party · operated by Lum LLC · independent, not affiliated with the author · book and adaptations GPL v3 · Terms · Privacy · Source' + (SUPPORT.linked ? ' · Support this site' : '');
 const WALLET_ADDRESS = '0x1234567890abcdef1234567890abcdef12345678';
 /** A wallet session in storage, as saveWalletSession keeps it (src/lib/client-auth.ts); never sent anywhere here. */
 const plantWallet = (address: string) => {
@@ -384,7 +384,7 @@ async function checkLegalLine(page: Page, within: string, where: string, scheme:
   if (text !== LEGAL_LINE) fail(`${where} (${scheme}): the footer line reads "${text}"`);
   if (!(await line.isVisible())) fail(`${where} (${scheme}): the footer line is not shown`);
   const hrefs = await line.locator('a').evaluateAll((as) => as.map((a) => `${a.textContent}=${a.getAttribute('href')}`));
-  const want = ['Terms=/terms', 'Privacy=/privacy', 'Source=https://github.com/We-Are-Lum/snowmoon', 'Support this site=/support'];
+  const want = ['Terms=/terms', 'Privacy=/privacy', 'Source=https://github.com/We-Are-Lum/snowmoon', ...(SUPPORT.linked ? ['Support this site=/support'] : [])];
   if (hrefs.join(' ') !== want.join(' ')) fail(`${where} (${scheme}): the footer links are ${hrefs.join(', ')}`);
 }
 
