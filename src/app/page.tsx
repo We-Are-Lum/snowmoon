@@ -6,7 +6,7 @@ import { db } from '~/lib/db';
 import { feed } from '~/lib/images/data';
 import { byline } from '~/lib/images/byline';
 import { passageLabel } from '~/lib/images/passage';
-import { loadIntro } from '~/lib/intro';
+import { introShown } from '~/lib/seeded-shown';
 import { HOME_MOMENTS, HOME_TEXT as H } from '~/lib/home';
 import { IntroOnce } from '~/components/first-visit';
 import { HomeSky } from '~/components/home-sky';
@@ -29,7 +29,7 @@ export const dynamic = 'force-dynamic';
  * newest readers' images, Minpentai playing itself, everything you can do here, and every chapter.
  */
 export default async function Home() {
-  const intro = loadIntro();
+  const intro = await introShown();
   const chapters = chapterNumbers().map((n) => {
     const ch = loadChapter(n)!;
     return { n, dateline: chapterDateline(ch), setting: blockFacts(ch.blocks).find((f) => f.setting)?.setting ?? null };

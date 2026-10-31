@@ -4,7 +4,7 @@ import { CHAT, CONTACT_EMAIL, IMAGES, PODCAST_LINKS, REPO_URL, SUPPORT, WORK } f
 import { RULES } from '~/lib/images/rules';
 import { SIGN_IN_SERVICES } from '~/lib/sign-in-text';
 import { ThemeSwitch } from '~/components/theme-switch';
-import { loadIntro } from '~/lib/intro';
+import { introShown } from '~/lib/seeded-shown';
 import { AboutEdition, ReplayIntro } from '~/components/first-visit';
 import { LegalLine } from '~/components/legal-line';
 import consent from '../../../config/consent.json';
@@ -13,8 +13,8 @@ const wording = consent.versions[consent.current as keyof typeof consent.version
 
 export const metadata = { title: 'About' };
 
-export default function About() {
-  const intro = loadIntro();
+export default async function About() {
+  const intro = await introShown();
   return (
     <div className="page prose">
       <ReplayIntro intro={intro} />
