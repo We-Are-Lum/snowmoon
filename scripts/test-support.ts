@@ -8,10 +8,13 @@
  *      send's recipient (ETH and USDC), and its balance estimate.
  *  S4  USDC is native USDC on each network (Circle's contracts), not the bridged USDbC.
  *  S5  the networks are exactly Base (8453) and Ethereum (1), as eth_getCode found on 2026-10-30.
- *  S6  nothing here records the sender: the page, its component and the send code call no API of ours.
+ *  S6  nothing here records the sender: the page and the send code call no API of ours; the component asks only
+ *      GET /api/eth-usd (the ETH price, with nothing about the reader), and that route takes no input.
  *  S7  the balance rules, against a stand-in wallet: ETH needs the amount plus the fee; USDC needs the USDC and ETH for
  *      the fee; each shortfall is named.
  *  S8  the send refuses while the wallet is on the other network.
+ *  S9  the ETH estimate's price (owner, 2026-10-31): Chainlink's ETH/USD read on Base; no price when the feed is older
+ *      than two hours, reads zero, or can't be read.
  */
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import path from 'node:path';
@@ -50,7 +53,15 @@ check(
 const nativeUsdc: Record<number, string> = { 8453: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913', 1: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48' };
 check('S4 USDC is native USDC on each network (checksummed), not USDbC', SUPPORT.networks.every((n) => n.usdc === nativeUsdc[n.chainId] && getAddress(n.usdc) === n.usdc) && !SUPPORT.networks.some((n) => n.usdc.toLowerCase() === '0xd9aaec86b65d86f6a7b5b1b0c42ffa531710b6ca'));
 check('S5 the networks are Base (8453) and Ethereum (1)', JSON.stringify(SUPPORT.networks.map((n) => [n.name, n.chainId])) === '[["Base",8453],["Ethereum",1]]');
-check('S6 nothing records the sender: no call to our own API from the page, its component, give() or giftFits()', giveCode.length > 100 && fitsCode.length > 100 && !/fetch\(|authFetch\(|\/api\//.test(page + comp + giveCode + fitsCode));
+const route = read('src/app/api/eth-usd/route.ts');
+const compApi = [...comp.matchAll(/['"`](\/api\/[^'"`]*)['"`]/g)].map((m) => m[1]);
+check(
+  'S6 nothing records the sender: the page and send code call no API of ours; the component asks only GET /api/eth-usd, which takes no input',
+  giveCode.length > 100 && fitsCode.length > 100 && !/fetch\(|authFetch\(|\/api\//.test(page + giveCode + fitsCode) &&
+    JSON.stringify(compApi) === '["/api/eth-usd"]' && !/authFetch\(|method:/.test(comp) &&
+    /export async function GET\(\)/.test(route) && !/request|searchParams|cookies|headers\(\)/i.test(route.replace(/\/\*[\s\S]*?\*\//g, '')),
+  JSON.stringify(compApi),
+);
 
 // S7, S8: a stand-in wallet (EIP-1193) answering the reads the page makes. Fees: base fee 1 gwei, tip 1 gwei; gas 21000
 // for ETH and 60000 for USDC. viem's maxFeePerGas is base × 1.2 + tip = 2.2 gwei; the page adds a fifth to the gas.
@@ -104,6 +115,19 @@ check('S7 the balance rules hold for ETH and USDC on both networks', got.length 
 fake.chainId = 1;
 const wrong = await give({ network: baseNet, token: 'USDC', amount: '1' }).then(() => 'sent', (e) => (e instanceof WalletError ? e.why : String(e)));
 check('S8 the send refuses while the wallet is on the other network', wrong === 'wrong-network', wrong);
+// S9: the price, from a stand-in Base client.
+const { ethUsdNow } = await import('../src/lib/wallet/eth-usd');
+const now = Math.floor(Date.now() / 1000);
+const feed = (answer: bigint, updatedAt: number, fail = false) =>
+  ({ readContract: async () => { if (fail) throw new Error('down'); return [1n, answer, 0n, BigInt(updatedAt), 1n]; } }) as unknown as Parameters<typeof ethUsdNow>[0];
+const p9 = [
+  ['fresh', await ethUsdNow(feed(250000000000n, now - 600)), { usd: 2500, updatedAt: now - 600 }],
+  ['three hours old', await ethUsdNow(feed(250000000000n, now - 3 * 3600)), null],
+  ['zero', await ethUsdNow(feed(0n, now)), null],
+  ['unreadable', await ethUsdNow(feed(0n, now, true)), null],
+] as const;
+const bad9 = p9.filter(([, got, want]) => JSON.stringify(got) !== JSON.stringify(want)).map(([name, got]) => `${name}: ${JSON.stringify(got)}`);
+check('S9 the ETH price: Chainlink on Base, none when stale, zero or unreadable', bad9.length === 0, bad9.join('; '));
 if (failed.length) {
   console.error(`\nSUPPORT TEST FAILED (${failed.length}):\n- ${failed.join('\n- ')}`);
   process.exit(1);

@@ -4,17 +4,18 @@ import { CHAT, CONTACT_EMAIL, IMAGES, PODCAST_LINKS, REPO_URL, SUPPORT, WORK } f
 import { RULES } from '~/lib/images/rules';
 import { SIGN_IN_SERVICES } from '~/lib/sign-in-text';
 import { ThemeSwitch } from '~/components/theme-switch';
-import { loadIntro } from '~/lib/intro';
+import { introShown } from '~/lib/seeded-shown';
 import { AboutEdition, ReplayIntro } from '~/components/first-visit';
 import { LegalLine } from '~/components/legal-line';
 import consent from '../../../config/consent.json';
+import { SUPPORT_WORDING } from '~/lib/support-wording';
 
 const wording = consent.versions[consent.current as keyof typeof consent.versions];
 
 export const metadata = { title: 'About' };
 
-export default function About() {
-  const intro = loadIntro();
+export default async function About() {
+  const intro = await introShown();
   return (
     <div className="page prose">
       <ReplayIntro intro={intro} />
@@ -124,11 +125,10 @@ export default function About() {
       <ThemeSwitch name="theme-about" />
       <h2>Payments</h2>
       <p>Prepaid credit can only be spent on generations here; it can't be transferred or cashed out.</p>
-      {/* "Support this site" (owner, 2026-10-30). Model-drafted wording. Shown once SUPPORT.linked. */}
+      {/* Support (owner, 2026-10-30): just the link, in the owner's words of 2026-10-31. Shown while SUPPORT.linked. */}
       {SUPPORT.linked && (
         <p>
-          To help pay for the models and the hosting, you can <Link href="/support">support this site</Link>: a gift, which
-          buys nothing here.
+          <Link href="/support">{SUPPORT_WORDING.link}</Link>
         </p>
       )}
       <h2>No canon</h2>

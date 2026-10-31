@@ -8,6 +8,7 @@ import { ADAPTATIONS } from '~/lib/config';
 import { ChapterPlayer, type PlayerCue, type PlayerImage } from './chapter-player';
 import { ImageComposer } from './image-composer';
 import { ReaderImages } from './reader-images';
+import { ChapterPicks } from './admin-picks';
 
 /**
  * A chapter, as in the prototype's reader: a context strip; "Ch n / 32" (opens the chapter
@@ -84,6 +85,7 @@ export function ChapterView({
         {children}
       </div>
       <ReaderImages chapter={chapter} />
+      <ChapterPicks chapter={chapter} />
       <ImageComposer />
       {narration && (
         <ChapterPlayer

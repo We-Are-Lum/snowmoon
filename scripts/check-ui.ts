@@ -302,7 +302,7 @@ async function checkAssistant(page: Page, scheme: string) {
   await page.evaluate(() => localStorage.clear());
 }
 
-const LEGAL_LINE = 'Snowmoon Party · operated by Lum LLC · independent, not affiliated with the author · book and adaptations GPL v3 · Terms · Privacy · Source' + (SUPPORT.linked ? ' · Support this site' : '');
+const LEGAL_LINE = 'Snowmoon Party · operated by Lum LLC · independent, not affiliated with the author · book and adaptations GPL v3 · Terms · Privacy · Source' + (SUPPORT.linked ? ' · Support the We Are Lum team' : '');
 const WALLET_ADDRESS = '0x1234567890abcdef1234567890abcdef12345678';
 /** A wallet session in storage, as saveWalletSession keeps it (src/lib/client-auth.ts); never sent anywhere here. */
 const plantWallet = (address: string) => {
@@ -384,7 +384,7 @@ async function checkLegalLine(page: Page, within: string, where: string, scheme:
   if (text !== LEGAL_LINE) fail(`${where} (${scheme}): the footer line reads "${text}"`);
   if (!(await line.isVisible())) fail(`${where} (${scheme}): the footer line is not shown`);
   const hrefs = await line.locator('a').evaluateAll((as) => as.map((a) => `${a.textContent}=${a.getAttribute('href')}`));
-  const want = ['Terms=/terms', 'Privacy=/privacy', 'Source=https://github.com/We-Are-Lum/snowmoon', ...(SUPPORT.linked ? ['Support this site=/support'] : [])];
+  const want = ['Terms=/terms', 'Privacy=/privacy', 'Source=https://github.com/We-Are-Lum/snowmoon', ...(SUPPORT.linked ? ['Support the We Are Lum team=/support'] : [])];
   if (hrefs.join(' ') !== want.join(' ')) fail(`${where} (${scheme}): the footer links are ${hrefs.join(', ')}`);
 }
 
@@ -572,6 +572,72 @@ async function checkIllustrationReview(page: Page, scheme: string) {
 }
 
 /**
+ * Phase 2 admin tools (owner, 2026-10-29), at 390, with the APIs stood in (the admin_picks migration isn't applied
+ * yet, and the session is planted as in the illustration review): the review page signed out (a sign-in, no items, the
+ * API not asked), as an admin (each image with Pick or Clear, and Hide; the pick marked "Picked by @…"), and as anyone
+ * else (the admins-only line); then a chapter moment with a pick: the picked image first, labelled, the seeded image it
+ * stands in for set aside, the four-way switch, and the reader's choice kept on the device (principle 5, P5d).
+ */
+const REVIEW_API = (u: URL) => u.pathname === '/api/admin/picks/review';
+const PICKS_API = (u: URL) => u.pathname === '/api/admin/picks' && u.searchParams.get('chapter') === '1';
+async function checkAdmin(page: Page, scheme: string) {
+  const where = `/admin/review/chapter/1 @390 (${scheme})`;
+  const seeded = { key: 'c1-b005-toy-drone', kind: 'seeded', url: 'https://media.snowmoon.party/images/seed/c1/c1-b005-toy-drone-ea7f59a8c05f.jpg', alt: 'AI-generated image: a toy drone', href: '/chapter/1#c1-b5', by: null, likes: 0, createdAt: null, hidden: false };
+  const reader = { ...seeded, key: '00000000-0000-4000-8000-000000000001', kind: 'reader', href: '/image/00000000-0000-4000-8000-000000000001', by: '@check', likes: 3, createdAt: '2026-10-29T10:00:00.000Z' };
+  const pick = { targetKind: 'moment', target: 'c1-b5', imageKind: 'reader', imageRef: reader.key, byFid: 6786, by: 'naaate', at: '2026-10-29T11:00:00.000Z' };
+  let asked = 0;
+  await page.route(REVIEW_API, (r) => {
+    asked++;
+    return r.fulfill({ json: { chapter: 1, moments: [{ target: 'c1-b5', idx: 5, images: [seeded, reader], pick }] } });
+  });
+  await open(page, '/admin/review/chapter/1');
+  await page.locator('.you-sign-in button').first().waitFor({ timeout: 10000 }).catch(() => fail(`${where}: signed out, no sign-in offered`));
+  if (await page.locator('.ar-images li').count()) fail(`${where}: signed out, the page shows images`);
+  if (asked) fail(`${where}: signed out, the page asked the review API`);
+  await checkFloors(page, '/admin/review @390 (signed out)', scheme);
+  const as = (fid: number) => {
+    const body = Buffer.from(JSON.stringify({ sub: fid, exp: 4102444800 })).toString('base64').replace(/=+$/, '');
+    const session = JSON.stringify({ token: `x.${body}.y`, fid, username: 'check', exp: 4102444800 });
+    return page.evaluate((s) => localStorage.setItem('snowmoon.signin', s), session);
+  };
+  await page.route('**/api/chat/status', (r) => r.fulfill({ json: { available: false, model: 'm', host: null, provider: null, route: '', perDay: 30, left: 30 } }));
+  await as(6786);
+  await open(page, '/admin/review/chapter/1');
+  await page.locator('.ar-images li').first().waitFor({ timeout: 10000 }).catch(() => fail(`${where}: signed in as an admin, no images`));
+  const rows = await page.locator('.ar-images li').evaluateAll((els) => els.map((e) => [...e.querySelectorAll('.ar-actions button')].map((b) => b.textContent?.trim()).join('|')));
+  if (rows.join(' / ') !== 'Pick for this moment|Hide / Clear the pick|Hide') fail(`${where}: the buttons are "${rows.join(' / ')}"`);
+  if (!/Picked by @naaate/.test(await page.locator('.ar-moment').first().innerText())) fail(`${where}: the pick isn't marked "Picked by @naaate"`);
+  await checkFloors(page, '/admin/review @390 (admin)', scheme);
+  await shot(page, 'phone-390-admin-review', scheme);
+  await page.unroute(REVIEW_API);
+  await page.route(REVIEW_API, (r) => r.fulfill({ status: 403, json: { error: 'Admins only' } }));
+  await as(1234);
+  await open(page, '/admin/review/chapter/1');
+  await page.getByText('This page is for admins.').waitFor({ timeout: 10000 }).catch(() => fail(`${where}: someone else signed in does not see the admins-only line`));
+  await page.unroute(REVIEW_API);
+  await page.evaluate(() => localStorage.removeItem('snowmoon.signin'));
+  // A moment with a pick, in the reader.
+  const at = `/chapter/1 pick @390 (${scheme})`;
+  await page.route(PICKS_API, (r) => r.fulfill({ json: { picks: [{ target: 'c1-b5', pick, options: [seeded, reader] }] } }));
+  await page.evaluate(() => localStorage.removeItem('snowmoon.pick-view'));
+  await open(page, '/chapter/1');
+  const box = page.locator('.admin-pick');
+  await box.waitFor({ timeout: 10000 }).catch(() => fail(`${at}: no pick shown`));
+  const switchText = (await box.locator('.pick-switch button').allTextContents()).map((t) => t.trim()).join('|');
+  if (switchText !== 'Picked by @naaate|Most liked|Newest|Liked by me') fail(`${at}: the switch reads "${switchText}"`);
+  if ((await box.locator('.pick-image a').getAttribute('href')) !== reader.href) fail(`${at}: the picked image isn't shown first`);
+  if (!/AI image · by @check/.test(await box.locator('figcaption').innerText())) fail(`${at}: the shown image has no AI label naming its maker`);
+  if (!(await page.locator('figure.seed-image[data-for="c1-b5"]').evaluate((e) => (e as HTMLElement).hidden))) fail(`${at}: the seeded image the pick stands in for still shows beside it`);
+  await box.locator('.pick-switch button', { hasText: 'Newest' }).click();
+  if ((await page.evaluate(() => localStorage.getItem('snowmoon.pick-view'))) !== 'newest') fail(`${at}: the reader's choice isn't kept on the device`);
+  await checkFloors(page, '/chapter/1 pick @390', scheme);
+  await shot(page, 'phone-390-chapter-pick', scheme);
+  await page.evaluate(() => localStorage.removeItem('snowmoon.pick-view'));
+  await page.unroute(PICKS_API);
+  await page.unroute('**/api/chat/status');
+}
+
+/**
  * "Support this site" (owner, 2026-10-30), at 390: every place on the page shows exactly SUPPORT.address (the text, the
  * copy button, the QR code, which must be the code of that address, and both Splits links); only Ethereum and Base are
  * named, with the warning; the presets and the own-amount box; with no wallet in this browser, Send says so and sends
@@ -597,7 +663,16 @@ async function checkSupport(page: Page, scheme: string) {
   if (JSON.stringify(shown) !== JSON.stringify(want)) fail(`${where}: the QR code isn't the code of ${SUPPORT.address}`);
   const body = (await page.locator('main.support').innerText()).replace(/\s+/g, ' ');
   // The owner's words (2026-10-30, simplified page), and nothing else of the old page.
-  for (const words of ['Support this site', 'Send ETH or USDC on Ethereum mainnet or Base to this address, or send below.', 'Other networks: funds may be lost.'])
+  // The links to it (owner, 2026-10-31): About shows just the link, with nothing around it.
+  if (SUPPORT.linked) {
+    await open(page, '/about');
+    // About's own link, not the footer line's (checkLegalLine checks that one on every page).
+    const about = page.locator('main p:not(.legal-line) > a[href="/support"]');
+    if ((await about.count()) !== 1 || (await about.textContent())?.trim() !== 'Support the We Are Lum team') fail(`${where}: About doesn't link "Support the We Are Lum team" to /support`);
+    else if ((await about.locator('xpath=..').innerText()).trim() !== 'Support the We Are Lum team') fail(`${where}: About's support link has words around it`);
+    await open(page, '/support');
+  }
+  for (const words of ['Support the We Are Lum team', 'We make snowmoon.party. Send ETH or USDC on Ethereum mainnet or Base to this address, or send below.', 'Other networks: funds may be lost.'])
     if (!body.includes(words)) fail(`${where}: doesn't say "${words}"`);
   if (/\b(donat)|splits\.org|Fund the next scene|\$5\b/i.test(body + (await page.locator('main.support').innerHTML()))) fail(`${where}: still shows the old page's copy (donate, Splits, a title option or a preset)`);
   const choices = async (label: string) => (await page.locator(`.support-choice[aria-label="${label}"] button`).allTextContents()).map((t) => t.trim()).join('|');
@@ -605,6 +680,23 @@ async function checkSupport(page: Page, scheme: string) {
   if ((await choices('Token')) !== 'ETH|USDC') fail(`${where}: the tokens read "${await choices('Token')}"`);
   if (!(await page.locator('.support-send input[type="number"]').count())) fail(`${where}: no amount box`);
   if ((await page.locator('main.support a[href="/terms"]').textContent())?.trim() !== 'Terms') fail(`${where}: no small Terms link`);
+  // The ETH estimate (owner, 2026-10-31): with ETH chosen, "≈ $" under the amount, live as it's typed, from the price
+  // our server reads on Base (stood in here at $2,500), labelled as an estimate.
+  await page.route('**/api/eth-usd', (r) => r.fulfill({ json: { usd: 2500, updatedAt: Math.floor(Date.now() / 1000) } }));
+  await open(page, '/support');
+  const amountBox = page.locator('.support-send input[type="number"]');
+  // ETH is the default, with "0.01" greyed in the empty box (owner, 2026-10-31); a placeholder isn't an amount, so no estimate.
+  if ((await page.locator('.support-choice[aria-label="Token"] button[aria-checked="true"]').textContent())?.trim() !== 'ETH') fail(`${where}: ETH isn't the default`);
+  if ((await amountBox.getAttribute('placeholder')) !== '0.01' || (await amountBox.inputValue()) !== '') fail(`${where}: the empty amount box doesn't show "0.01" as its placeholder`);
+  if (await page.locator('.support-estimate').count()) fail(`${where}: an estimate shows before an amount is typed`);
+  await amountBox.fill('0.01');
+  await page.getByText("≈ $25.00 (estimate, from Chainlink's ETH/USD)").waitFor({ timeout: 5000 }).catch(() => fail(`${where}: 0.01 ETH doesn't show "≈ $25.00 (estimate…)"`));
+  await amountBox.fill('0.02');
+  await page.getByText('≈ $50.00').waitFor({ timeout: 5000 }).catch(() => fail(`${where}: the estimate doesn't follow the amount as it's typed`));
+  await page.locator('.support-choice[aria-label="Token"] button', { hasText: 'USDC' }).click();
+  if (await page.locator('.support-estimate').count()) fail(`${where}: an ETH estimate shows with USDC chosen`);
+  await page.locator('.support-choice[aria-label="Token"] button', { hasText: 'ETH' }).click();
+  await page.unroute('**/api/eth-usd');
   await page.getByText('No wallet in this browser.').waitFor({ timeout: 5000 }).catch(() => fail(`${where}: with no wallet, it doesn't say so`));
   if (!(await page.locator('.support-send [data-send]').isDisabled())) fail(`${where}: Send is on with no wallet`);
   // A stand-in wallet in the browser (its own context, so no other page sees it): on Ethereum while Base is chosen, then
@@ -1150,8 +1242,14 @@ async function checkAiLabels() {
       );
       await page.route('**/api/chat/status**', (r) => r.abort());
       await page.route('**/api/images/status**', async (r) => {
-        const real = (await (await r.fetch()).json()) as Record<string, unknown>;
-        await r.fulfill({ json: { ...real, ready: true, signedIn: true, fid: 6786, invited: true, eligible: true, consented: true, left: 9, publishesLeft: 3 } });
+        // The real answer, then the signed-in parts stood in. A request still in flight when its page closes has nowhere
+        // to go: ignore it (2026-10-30: one closed mid-fetch and the uncaught error ended the whole run).
+        try {
+          const real = (await (await r.fetch()).json()) as Record<string, unknown>;
+          await r.fulfill({ json: { ...real, ready: true, signedIn: true, fid: 6786, invited: true, eligible: true, consented: true, left: 9, publishesLeft: 3 } });
+        } catch (e) {
+          if (!/closed|disposed/i.test(String((e as Error)?.message))) throw e;
+        }
       });
       await page.route('**/api/consent', (r) => r.fulfill({ json: { wording: { sha256: 'x', title: 'x', text: 'x' }, agreed: true } }));
       await page.route('**/api/moderate', (r) =>
@@ -1336,14 +1434,27 @@ try {
         if (!(await label.count()) || !(await label.first().isVisible())) fail(`intro: card ${i + 1} (${cards[i]}) shows an AI image without the AI label`);
         else {
           if (!/\bAI\b/.test((await label.first().innerText()) ?? '')) fail(`intro: card ${i + 1}: the label does not say "AI"`);
+          // Wait for the card to settle: the track slides it in after Next, and a click during the slide can miss.
+          let last = '';
+          for (let t = 0; t < 30; t++) {
+            const box = await label.first().boundingBox();
+            const now = box ? `${Math.round(box.x)},${Math.round(box.y)}` : '';
+            if (box && now === last && box.x >= 0 && box.x + box.width <= 390) break;
+            last = now;
+            await page.waitForTimeout(100);
+          }
           await label.first().click();
           const sheet = page.locator('.recipe-sheet');
-          await sheet.waitFor({ timeout: 5000 }).catch(() => fail(`intro: card ${i + 1}: the AI label does not open the recipe sheet`));
-          // The sheet fetches its recipe after it opens; "Who made it" arrives with it.
-          await sheet.getByText(/not by the author/i).first().waitFor({ timeout: 10000 }).catch(() => fail(`intro: card ${i + 1}: the recipe sheet does not say "not by the author"`));
-          await checkFloors(page, `intro card ${i + 1} (recipe sheet)`, 'light');
-          await page.keyboard.press('Escape');
-          if ((await page.locator('.intro-card').getAttribute('data-card')) !== cards[i]) fail(`intro: card ${i + 1}: closing the recipe sheet moved the intro on`);
+          const opened = await sheet.waitFor({ timeout: 5000 }).then(() => true, () => false);
+          if (!opened) fail(`intro: card ${i + 1}: the AI label does not open the recipe sheet`);
+          else {
+            // The sheet fetches its recipe after it opens; "Who made it" arrives with it.
+            await sheet.getByText(/not by the author/i).first().waitFor({ timeout: 10000 }).catch(() => fail(`intro: card ${i + 1}: the recipe sheet does not say "not by the author"`));
+            await checkFloors(page, `intro card ${i + 1} (recipe sheet)`, 'light');
+            // Escape only when a sheet opened: with none open, Escape closes the intro itself.
+            await page.keyboard.press('Escape');
+            if ((await page.locator('.intro-card').getAttribute('data-card')) !== cards[i]) fail(`intro: card ${i + 1}: closing the recipe sheet moved the intro on`);
+          }
         }
       }
       if (i < cards.length - 1) await page.getByRole('button', { name: 'Next' }).click();
@@ -1916,6 +2027,7 @@ try {
     if (/Your account|Your work|Balance \$/.test(await page.locator('main.you').innerText().catch(() => ''))) fail(`/you @390 (${scheme}): signed out, the page shows an account, wallet or work`);
     await shot(page, 'phone-390-you-signed-out', scheme);
     await checkIllustrationReview(page, scheme);
+    await checkAdmin(page, scheme);
     await checkImageZoom(page, scheme);
     await checkReferenceGlossary(page, scheme);
     await checkSupport(page, scheme);

@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { APP_NAME, appUrl } from '~/lib/config';
 import { quoteQuery, resolveQuote } from '~/lib/quote';
+import { quoteShown } from '~/lib/seeded-shown';
 import { PAPER } from '~/lib/tokens';
 
 /**
@@ -19,7 +20,8 @@ type Props = {
 async function load({ params, searchParams }: Props) {
   const { n, range } = await params;
   const { q, img } = await searchParams;
-  const quote = resolveQuote(Number(n), range, q, img);
+  // A hidden seeded image is left off the quote (owner, 2026-10-30).
+  const quote = await quoteShown(resolveQuote(Number(n), range, q, img));
   return quote ? { quote, card: `${appUrl()}/api/card/${n}/${range}${quoteQuery(q, img)}` } : null;
 }
 
