@@ -462,8 +462,9 @@ a.ia-button:hover { text-decoration: none; }
 .support .support-address code { font-family: var(--label); font-size: var(--text-label); word-break: break-all; }
 .support .support-warning { border-left: 3px solid var(--ink); padding-left: 10px; }
 .support .support-send { display: flex; flex-direction: column; gap: 12px; margin-top: var(--space-4, 16px); }
-.support .support-choice { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-family: var(--label); font-size: var(--text-label); }
-.support .support-choice .label { min-width: 5em; }
+.support .support-choice { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-family: var(--label); font-size: var(--text-label); }
+.support .support-choice .label { grid-column: 1 / -1; }
+.support .support-choice button { width: 100%; }
 .support .support-go { margin: 0; }
 .support .support-terms { margin-top: var(--space-6, 32px); font-family: var(--label); font-size: var(--text-label); }
 .support .amount-field { display: flex; flex-direction: column; gap: 4px; font-family: var(--label); font-size: var(--text-label); }
