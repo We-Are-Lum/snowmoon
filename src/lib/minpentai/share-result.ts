@@ -1,4 +1,5 @@
 import { MAXS, RUNGS } from './play-game/game';
+import { SETTINGS } from './versions/schema';
 
 /**
  * Sharing a ladder win (owner, 2026-10-19: opt-in, a card made on demand, nothing stored, no ranking).
@@ -6,17 +7,24 @@ import { MAXS, RUNGS } from './play-game/game';
  * keeps nothing about it; the card is drawn from the link each time. The link is not proof of a win:
  * anyone could type one, which is fine because nothing ranks or compares results.
  */
-export type SharedResult = { rung: number; name: string; steps: number };
+export type SharedResult = { rung: number; name: string; steps: number; version?: string };
 
-/** A result from a link's query (r = rung 1–5, s = steps 1–MAXS), or null for anything else. */
-export function parseResult(r: string | null | undefined, s: string | null | undefined): SharedResult | null {
+/** A player-made version's short ID (docs/proposals/minpentai-one-engine-plan.md, part B). */
+export const VERSION_ID = /^[0-9a-hjkmnp-tv-z]{10,12}$/;
+
+/**
+ * A result from a link's query (r = rung 1–5, s = steps 1–MAXS), or null for anything else. With
+ * v (a version's short ID), the win was on that version, which may run up to 240 steps.
+ */
+export function parseResult(r: string | null | undefined, s: string | null | undefined, v?: string | null): SharedResult | null {
   if (!r || !s || !/^[1-5]$/.test(r) || !/^\d{1,3}$/.test(s)) return null;
+  if (v != null && !VERSION_ID.test(v)) return null;
   const rung = Number(r), steps = Number(s);
-  if (steps < 1 || steps > MAXS) return null;
-  return { rung, name: RUNGS[rung]!.n, steps };
+  if (steps < 1 || steps > (v ? SETTINGS.maxSteps.max : MAXS)) return null;
+  return { rung, name: RUNGS[rung]!.n, steps, ...(v ? { version: v } : {}) };
 }
 
-export const resultPath = (x: { rung: number; steps: number }) => `/minpentai/result?r=${x.rung}&s=${x.steps}`;
+export const resultPath = (x: { rung: number; steps: number; version?: string }) => `/minpentai/result?r=${x.rung}&s=${x.steps}${x.version ? `&v=${x.version}` : ''}`;
 
 /** The words a share starts with; the person can change them in the composer before posting. */
 export const resultText = (x: SharedResult) =>
