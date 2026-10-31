@@ -535,7 +535,101 @@ export function engine(L: Layout) {
   const turnedKeys = (o: Record<number, number>) => Object.fromEntries(Object.entries(o).map(([k, v]) => [rk(+k), v]));
   const unturn = (p: Placement): Placement => ({ ...p, o: 'C', x: W - 1 - p.x, y: H - 1 - p.y, dx: -p.dx, dy: -p.dy });
 
-  return { L, W, H, K, XY, inb, world, clone, towers, lit, empty, step, apply, updLS, refuse, botPlan, turned, turnedKeys, unturn, cost, wallCells, wallAt, solid, walledIn };
+  /**
+   * Every single placement side o may make now, in a fixed order (square, then piece, then direction):
+   * each one the placement check accepts on its own, for every piece the rules allow. Placing reads only
+   * squares within reach, so this is the same on the side's own view of the board (fog) as on the real one.
+   */
+  function legal(w: World, s: Settings, o: Side, snap: number[], budget: number): Placement<AnyPiece>[] {
+    const dirs = s.directions === 8 ? D8 : D4, none: [number, number][] = [[0, 0]];
+    const kinds: [AnyPiece, [number, number][]][] = [['g', dirs], ['s', none], ['t', none]];
+    if (s.costMirror) kinds.push(['m', [[1, 0], [-1, 0]]]);
+    if (s.costSeed) kinds.push(['e', dirs]);
+    if (s.costWall) kinds.push(['w', D4]);
+    if (s.costFactory) kinds.push(['f', D4]);
+    const out: Placement<AnyPiece>[] = [];
+    for (const k of [...lit(w, o, s.reach, snap)].sort((a, b) => a - b)) {
+      if (!empty(w, k)) continue;
+      const [x, y] = XY(k);
+      for (const [t, ds] of kinds) for (const [dx, dy] of ds) {
+        const p: Placement<AnyPiece> = { t, o, x, y, dx, dy };
+        if (!refuse(w, s, o, snap, budget, [p])) out.push(p);
+      }
+    }
+    return out;
+  }
+
+  /**
+   * How side o is doing on a board: a side with no towers left first (sooner is better), then 100 a tower
+   * ahead, less 15 for each line a glider could fly along into one of its towers (and more for the enemy's),
+   * half a point a square it sees, 2 a glider of its own in flight; at the step limit, 5,000 more for the side
+   * ahead. Towers are what wins and what gives sight; a symbol still forming counts as the tower it may become.
+   */
+  function score(w: World, s: Settings, o: Side): number {
+    const a = towers(w, o).length, c = towers(w, other(o)).length;
+    if (!a && !c) return 0;
+    if (!c) return 10_000 - w.step;
+    if (!a) return -10_000 + w.step;
+    let mine = 0;
+    for (const g of w.gl) if (g.o === o) mine++;
+    const margin = 100 * (a - c) - 15 * (open(w, s, o) - open(w, s, other(o))) + 0.5 * lit(w, o, s.sight).size + 2 * mine;
+    // At the step limit most towers wins; the margin still counts, so a side behind still tries to catch up.
+    if (w.step >= s.maxSteps) return margin + (a > c ? 5_000 : a < c ? -5_000 : 0);
+    return margin;
+  }
+  /** Lines a glider could fly along into side o's towers: from each tower, each direction gliders fly, open for at least two squares. */
+  function open(w: World, s: Settings, o: Side): number {
+    let n = 0;
+    for (const k of towers(w, o)) {
+      const [x, y] = XY(k);
+      for (const [dx, dy] of s.directions === 8 ? D8 : D4) {
+        let d = 1;
+        while (d <= 2 && inb(x + d * dx, y + d * dy) && !solid(w, K(x + d * dx, y + d * dy))) d++;
+        if (d > 2) n++;
+      }
+    }
+    return n;
+  }
+
+  /**
+   * What side o sees (the same rule as players.ts fogView, with the book edition's pieces): its own pieces,
+   * and every piece on a square within sight of its towers. Rocks are shown everywhere as they were at the
+   * start; where rocks hold ore (and so can crumble), the real rock and its ore only within sight.
+   */
+  function fog(w: World, s: Settings, o: Side): World {
+    const see = lit(w, o, s.sight), v = world(s, true);
+    v.step = w.step;
+    if (w.ore) {
+      const ore: Record<number, number> = {};
+      for (const k of L.rocks) if (!see.has(k)) { v.rock[k] = 1; ore[k] = s.ore ?? 0; }
+      for (const k of see) if (w.rock[k]) { v.rock[k] = w.rock[k]; if (w.ore[k] !== undefined) ore[k] = w.ore[k]; }
+      v.ore = ore;
+    } else for (const k in w.rock) v.rock[k] = w.rock[k];
+    const shown = (k: number | string, owner: Side) => owner === o || see.has(+k);
+    for (const k in w.tw) if (shown(k, w.tw[k])) v.tw[k] = w.tw[k];
+    for (const k in w.sq) if (shown(k, w.sq[k].o)) v.sq[k] = { ...w.sq[k] };
+    // Gliders in sight, numbered afresh in the same order: a real id would count the pieces made out of sight.
+    v.gl = w.gl.filter((g) => see.has(K(g.x, g.y))).sort((a, b) => a.id - b.id).map((g, i) => ({ ...g, id: i + 1, tx: undefined, ty: undefined, stay: undefined, dead: undefined }));
+    v.nid = v.gl.length + 1;
+    const keep = <T extends { o: Side }>(from: Record<number, T> | undefined) => {
+      if (!from) return undefined;
+      const out: Record<number, T> = {};
+      for (const k in from) if (shown(k, from[k].o)) out[k] = { ...from[k] };
+      return out;
+    };
+    if (w.mir) v.mir = keep(w.mir);
+    if (w.fa) v.fa = keep(w.fa);
+    if (w.fs) v.fs = keep(w.fs);
+    if (w.sd) { v.sd = {}; for (const k in w.sd) if (shown(k, w.sd[k])) v.sd[k] = w.sd[k]; }
+    // A moving wall: shown if it is the side's own or any of its squares is in sight; a square out of sight is shown standing.
+    if (w.mw) v.mw = w.mw.filter((m) => m.o === o || wallCells(m).some(([x, y], i) => m.c[i] && inb(x, y) && see.has(K(x, y))))
+      .map((m, j) => ({ ...m, id: j + 1, c: m.c.map((c, i) => { const [x, y] = wallCells(m)[i]; return m.o === o || (inb(x, y) && see.has(K(x, y))) ? c : 1; }) }));
+    // An empty list says nothing; its being there at all would say the enemy has such a piece somewhere.
+    for (const f of ['mir', 'fa', 'fs', 'sd', 'mw'] as const) if (v[f] && !Object.keys(v[f]!).length) delete v[f];
+    return v;
+  }
+
+  return { L, W, H, K, XY, inb, world, clone, towers, lit, empty, step, apply, updLS, refuse, botPlan, turned, turnedKeys, unturn, cost, wallCells, wallAt, solid, walledIn, legal, score, fog, open };
 }
 
 export type Engine = ReturnType<typeof engine>;
