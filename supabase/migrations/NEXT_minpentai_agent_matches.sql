@@ -22,8 +22,8 @@ create table studio.mp_agent_matches (
   agent_id uuid references studio.agents (id) on delete set null,
   -- The exact ruleset: its family and number (play-3: Play's ruleset 3; book-1: the book edition's first).
   ruleset text not null check (ruleset ~ '^(play|book)-[0-9]{1,3}$'),
-  -- The site computer's level: 0 the beginner, 1-5 the search levels.
-  level smallint not null check (level between 0 and 5),
+  -- The site computer's level: 0 the beginner, 1-4 the search levels (versions/search.ts SEARCH_LEVELS).
+  level smallint not null check (level between 0 and 4),
   state jsonb not null check (jsonb_typeof(state) = 'object' and pg_column_size(state) < 400000),
   over boolean not null default false,
   version integer not null default 0,
@@ -43,6 +43,8 @@ create trigger mp_agent_matches_touch before update on studio.mp_agent_matches
 
 alter table studio.mp_agent_matches enable row level security;
 revoke all on studio.mp_agent_matches from anon, authenticated;
+-- The schema's default privileges give studio_writer delete too: taken away, so only the owner removes a record (Privacy).
+revoke delete, truncate on studio.mp_agent_matches from studio_writer;
 grant select, insert, update on studio.mp_agent_matches to studio_writer;
 create policy mp_agent_matches_writer_read on studio.mp_agent_matches for select to studio_writer using (true);
 create policy mp_agent_matches_writer_insert on studio.mp_agent_matches for insert to studio_writer with check (true);
@@ -68,6 +70,6 @@ commit;
 -- commit;
 -- 4. Gone.
 -- select count(*) from studio.mp_agent_matches where id = 'readback0001';
--- 5. Bad values refused (each should fail): a ruleset without its number, a level of 6.
+-- 5. Bad values refused (each should fail): a ruleset without its number, a level of 5.
 -- insert into studio.mp_agent_matches (id, person, ruleset, level, state) values ('readback0002', 1, 'play', 3, '{}');
--- insert into studio.mp_agent_matches (id, person, ruleset, level, state) values ('readback0003', 1, 'play-3', 6, '{}');
+-- insert into studio.mp_agent_matches (id, person, ruleset, level, state) values ('readback0003', 1, 'play-3', 5, '{}');

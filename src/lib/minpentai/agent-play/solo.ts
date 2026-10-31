@@ -16,16 +16,23 @@
 import { createHash, randomBytes, timingSafeEqual } from 'node:crypto';
 import { drawRules, engine, layout, other, rng, verdict, type AnyPiece, type Engine, type Kills, type Placement, type Side, type World } from '../versions/engine';
 import type { Settings } from '../versions/schema';
-import { SOLO_V1, type VersionRules } from '../versions/solo-v1';
+import { SOLO_V3, type VersionRules } from '../versions/solo-v1';
 import { BOOK_EDITION } from '../versions/book-edition';
-import { PRESETS, searchPlan, type Preset } from '../versions/search';
+import { PRESETS, TOP_LEVEL, searchPlan, type Preset } from '../versions/search';
 
-export const RULESETS: Record<'book' | 'play', VersionRules> = { book: BOOK_EDITION, play: SOLO_V1 };
+/**
+ * The exact rulesets a match can be played under (owner, 2026-10-31: a record names its exact ruleset, so it replays
+ * the same after the rules change): play-3 is Play's ruleset 3 (versions/solo-v1.ts), book-1 the book edition as it
+ * is today. A rule change adds a new id; an id never changes meaning.
+ */
+export const RULESETS = { 'book-1': BOOK_EDITION, 'play-3': SOLO_V3 } as const satisfies Record<string, VersionRules>;
 export type RulesetName = keyof typeof RULESETS;
+/** What a new match under each family is played under now. */
+export const CURRENT: Record<'book' | 'play', RulesetName> = { book: 'book-1', play: 'play-3' };
 export const PERSON: Side = 'C';
 export const COMPUTER: Side = 'A';
 /** The search level the site computer uses when it plays the person's own side (the fallback). */
-export const FALLBACK_LEVEL = 3;
+export const FALLBACK_LEVEL = 2;
 
 /** What a person declares about the model their agent runs (as bring_in_image): a label, not checked. */
 export interface ModelClaim { name: string; maker: string; weights: 'open' | 'closed' | 'unknown'; version?: string }
@@ -75,7 +82,7 @@ export function rulesOf(m: Pick<SoloMatch, 'ruleset' | 'seed'>): { s: Settings; 
 }
 const engines = new Map<string, Engine>();
 function engineFor(v: VersionRules, s: Settings): Engine {
-  const key = `${v === BOOK_EDITION ? 'book' : 'play'}:${s.width}x${s.height}`;
+  const key = `${v === BOOK_EDITION ? 'book' : 'play'}:${s.width}x${s.height}:${s.startTowers}`;
   if (!engines.has(key)) engines.set(key, engine(layout(v, s)));
   return engines.get(key)!;
 }
@@ -110,8 +117,8 @@ const pointsOf = (m: Pick<SoloMatch, 'w'>, s: Settings) => (m.w.step === 0 ? s.s
 
 /** A new match. Returns it and the live link's secret (shown once). */
 export function newSolo(o: { id: string; ruleset: RulesetName; level: number; seed: number; person: number; agent: SoloMatch['agent']; now: string }): { m: SoloMatch; linkSecret: string } {
-  if (!(o.ruleset in RULESETS)) throw new SoloError('ruleset must be "book" or "play"');
-  if (!Number.isInteger(o.level) || o.level < 1 || o.level > 5) throw new SoloError('level must be 1 to 5');
+  if (!(o.ruleset in RULESETS)) throw new SoloError(`ruleset must be one of ${Object.keys(RULESETS).join(', ')}`);
+  if (!Number.isInteger(o.level) || o.level < 0 || o.level > TOP_LEVEL) throw new SoloError(`level must be 0 (the beginner) to ${TOP_LEVEL}`);
   const linkSecret = randomBytes(24).toString('base64url'), cpu = randomBytes(32).toString('hex');
   const base = { ruleset: o.ruleset, seed: o.seed };
   const { s, e } = rulesOf(base);
@@ -181,7 +188,7 @@ export function viewFor(m: SoloMatch) {
     match_id: m.id,
     side: 'Cyan',
     opponent: { kind: 'site computer', level: m.level, random_commitment: m.cpuCommit },
-    ruleset: m.ruleset === 'book' ? 'book edition' : 'Play',
+    ruleset: m.ruleset.startsWith('book') ? `the book edition (${m.ruleset})` : `Play (${m.ruleset})`,
     rule,
     phase: over ? 'over' : m.turn === 0 ? 'setup' : 'act',
     turn: m.turn,

@@ -106,6 +106,12 @@ try {
   check('M19 every commitment in the record has its salt', recTurns.length > 0 && recTurns.every((t) => /^[0-9a-f]{64}$/.test(t.C.salt) && /^[0-9a-f]{64}$/.test(t.A.salt) && /^[0-9a-f]{64}$/.test(t.C.commitment)));
   const after = await (await fetch(live)).text();
   check('M20 after the end the live link shows the whole board', /The whole board at the end/.test(after));
+  // The table (NEXT_minpentai_agent_matches.sql v2): the exact ruleset, updated_at stamped on every save, nobody but the server reads it, and the server can't delete.
+  const row = (await S.pg.query<{ ruleset: string; level: number; stamped: boolean }>(`select ruleset, level, updated_at > created_at as stamped from studio.mp_agent_matches where id = $1`, [id])).rows[0];
+  check('M24 the match is stored under its exact ruleset and level', row?.ruleset === 'book-1' && row.level === 2, JSON.stringify(row));
+  check('M25 every save stamps updated_at', row?.stamped === true);
+  const priv = (await S.pg.query<Record<string, boolean>>(`select has_table_privilege('anon', 'studio.mp_agent_matches', 'select') as a, has_table_privilege('authenticated', 'studio.mp_agent_matches', 'select') as b, has_table_privilege('studio_writer', 'studio.mp_agent_matches', 'delete') as c`)).rows[0];
+  check('M26 anon and authenticated can\'t read the table, and the server can\'t delete from it', priv && !priv.a && !priv.b && !priv.c, JSON.stringify(priv));
   const lst = await tool(BASE, a.access_token, 'minpentai_list_my_matches', {});
   check('M21 the person\'s matches list it as over', ((lst.out.matches ?? []) as { match_id: string; over: boolean }[]).some((x) => x.match_id === id && x.over));
 } finally {

@@ -15,13 +15,13 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { isDeepStrictEqual } from 'node:util';
-import { autopilot, checkComputer, ordersText, linkOpens, newSolo, parseOrders, recordOf, replay, resign, rulesOf, setStanding, simulate, SoloError, submit, viewFor, type SoloMatch } from '../src/lib/minpentai/agent-play/solo';
+import { CURRENT, autopilot, checkComputer, ordersText, linkOpens, newSolo, parseOrders, recordOf, replay, resign, rulesOf, setStanding, simulate, SoloError, submit, viewFor, type SoloMatch } from '../src/lib/minpentai/agent-play/solo';
 
 let checks = 0;
 const ok = (cond: unknown, what: string) => { checks++; assert.ok(cond, what); };
 const throwsLike = (f: () => unknown, re: RegExp, what: string) => { checks++; assert.throws(f, (e: unknown) => e instanceof SoloError && re.test((e as Error).message), what); };
 const now = () => new Date().toISOString();
-const start = (ruleset: 'book' | 'play', seed: number, level = 3) => newSolo({ id: `t${String(seed).padStart(11, '0')}`.slice(0, 12), ruleset, level, seed, person: 6786, agent: { id: null, name: 'Rook', model: { name: 'Test model', maker: 'Nobody', weights: 'open' } }, now: now() });
+const start = (family: 'book' | 'play', seed: number, level = 2) => newSolo({ id: `t${String(seed).padStart(11, '0')}`.slice(0, 12), ruleset: CURRENT[family], level, seed, person: 6786, agent: { id: null, name: 'Rook', model: { name: 'Test model', maker: 'Nobody', weights: 'open' } }, now: now() });
 const json = (m: SoloMatch) => JSON.parse(JSON.stringify(m)) as SoloMatch;
 
 /** A scripted agent: from the view only, a tower toward the enemy if it can, else a glider east; it compares two plans with simulate first. */
