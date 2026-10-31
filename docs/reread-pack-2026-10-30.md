@@ -1,5 +1,8 @@
 # Reread pack, 2026-10-30
 
+**For the morning of 2026-10-31, use `docs/morning-sitting-2026-10-31.md`:** the same items, shorter, in the order that
+unblocks the most, with routing C as built. This pack stays as the full record.
+
 Every pending legal draft in one place, each change shown **before** and **after**, then every pending migration in
 the order to apply it. Answer each numbered item with "reread" or your changes. Nothing here is in `src/lib/legal.ts`
 yet. Each text goes in with its own feature's merge, never ahead (owner, 2026-10-18).
