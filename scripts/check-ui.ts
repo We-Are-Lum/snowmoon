@@ -671,6 +671,19 @@ async function checkSupport(page: Page, scheme: string) {
   if ((await choices('Token')) !== 'ETH|USDC') fail(`${where}: the tokens read "${await choices('Token')}"`);
   if (!(await page.locator('.support-send input[type="number"]').count())) fail(`${where}: no amount box`);
   if ((await page.locator('main.support a[href="/terms"]').textContent())?.trim() !== 'Terms') fail(`${where}: no small Terms link`);
+  // The ETH estimate (owner, 2026-10-31): with ETH chosen, "≈ $" under the amount, live as it's typed, from the price
+  // our server reads on Base (stood in here at $2,500), labelled as an estimate.
+  await page.route('**/api/eth-usd', (r) => r.fulfill({ json: { usd: 2500, updatedAt: Math.floor(Date.now() / 1000) } }));
+  await open(page, '/support');
+  const amountBox = page.locator('.support-send input[type="number"]');
+  await amountBox.fill('0.01');
+  await page.getByText("≈ $25.00 (estimate, from Chainlink's ETH/USD)").waitFor({ timeout: 5000 }).catch(() => fail(`${where}: 0.01 ETH doesn't show "≈ $25.00 (estimate…)"`));
+  await amountBox.fill('0.02');
+  await page.getByText('≈ $50.00').waitFor({ timeout: 5000 }).catch(() => fail(`${where}: the estimate doesn't follow the amount as it's typed`));
+  await page.locator('.support-choice[aria-label="Token"] button', { hasText: 'USDC' }).click();
+  if (await page.locator('.support-estimate').count()) fail(`${where}: an ETH estimate shows with USDC chosen`);
+  await page.locator('.support-choice[aria-label="Token"] button', { hasText: 'ETH' }).click();
+  await page.unroute('**/api/eth-usd');
   await page.getByText('No wallet in this browser.').waitFor({ timeout: 5000 }).catch(() => fail(`${where}: with no wallet, it doesn't say so`));
   if (!(await page.locator('.support-send [data-send]').isDisabled())) fail(`${where}: Send is on with no wallet`);
   // A stand-in wallet in the browser (its own context, so no other page sees it): on Ethereum while Base is chosen, then
