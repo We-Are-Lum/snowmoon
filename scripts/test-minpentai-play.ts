@@ -33,6 +33,7 @@ import { PlayController, ruleNote, type Env, type PlayView } from '../src/lib/mi
 import type { Cell } from '../src/lib/minpentai/play-game/board';
 import { look } from '../src/app/minpentai/play-board';
 import { drawPiece } from '../src/app/minpentai/learn-draw';
+import { LADDER, PLAY } from '../src/lib/minpentai/versions/solo-v1';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const html = readFileSync(path.join(ROOT, 'docs/design/minpentai-play-prototype.dc.html'), 'utf8');
@@ -42,7 +43,11 @@ if (!designScript) throw new Error("Design's script block was not found");
  * Design's script here so everything else is still compared line for line. Each must match once. */
 const FIXES: [string, string, string][] = [
   // The Planner stopped building at 3 towers, rungs 3 and 4 at 5 (game.ts, botPlan; 2026-10-20).
-  ['the Planner builds up to 5 towers', 'cnt(b, o) < (L >= 5 ? 3 : 5)', 'cnt(b, o) < 5'],
+  // ... and every builder rung up to 10 since 2026-10-22, with the step limit 120 (owner, after Luis's play tests).
+  ['the builders build up to 10 towers', 'cnt(b, o) < (L >= 5 ? 3 : 5)', 'cnt(b, o) < 10'],
+  ['the step limit is 120', 'const W = 15, H = 10, MAXS = 96,', 'const W = 15, H = 10, MAXS = 120,'],
+  ['the last turn says step 120', 'The match ends at step 96.', 'The match ends at step 120.'],
+  ['the run head says step 120', 'NO MORE TURNS · ENDS AT STEP 96', 'NO MORE TURNS · ENDS AT STEP 120'],
   // An opponent's tower out of sight is drawn as a dimmed tower where last seen (its starting square
   // until first seen), not a dashed "?" outline (owner, 2026-10-21, after a phone test; board.ts).
   ['a last-seen tower is drawn dimmed', "c.bd = '1px dashed #FFB43A'; c.t = '?'; c.fg = '#FFB43A'; c.fs = fz(.4);", "c.bg = '#503A16'; c.sh = ring;"],
@@ -149,7 +154,9 @@ function port() {
 {
   const { D } = design();
   eq(D.ROCKS, G.ROCKS, 'rocks'); eq(D.RULES, G.RULES, 'the four new rules'); eq(D.RUNGS, G.RUNGS, 'the rungs'); eq(D.COST, G.COST, 'costs');
-  eq([D.W, D.H, D.MAXS], [G.W, G.H, G.MAXS], 'board size and length');
+  // Design's mockup carries the two fixes of rules draft 2, so its length is Play today's ruleset's (2); game.ts's MAXS is ruleset 1's, frozen.
+  eq([D.W, D.H, D.MAXS], [G.W, G.H, G.maxStepsOf(2)], 'board size and length (ruleset 2)');
+  eq(G.MAXS, 96, 'game.ts MAXS stays ruleset 1\'s 96');
   eq(D.world(), G.world(), 'the practice board'); eq(D.world(true), G.world(true), 'an empty board');
   const r = G.rng(99);
   const dirs = G.D8;
@@ -200,7 +207,8 @@ function compareView(dv: Any, pv: PlayView, what: string) {
     pAct: v.pAct, pRun: v.pRun, pResult: v.pResult, pStart: v.pStart, pReplay: v.pReplay, pFree: v.pFree, port: v.port, fsBtn: v.fsBtn,
     pieces: v.pieces?.map((p: Any) => [p.label, p.short]), arrows: v.arrows?.map((a: Any) => a.t),
     cells: v.bd.cells.map((c: Any) => [c.bg, c.bd, c.sh, c.fg, c.t, c.fs]), cols: v.bd.cols, cs: v.bd.cs,
-    rungs: v.rungs?.map((r: Any) => [r.name, r.desc, r.icon, r.r1, r.r2]), playRungLabel: v.playRungLabel, ladTag: v.ladTag,
+    // The ladder list is the search computer's six rungs (owner, 2026-10-31), not Design's five: checked on its own below.
+    playRungLabel: v.playRungLabel, ladTag: v.ladTag,
     rpEnd: v.rpEnd, rpBtns: v.rpBtns?.map((b: Any) => b.label),
     fpBtns: v.fpBtns?.map((b: Any) => b.label), fpBtnsFS: v.fpBtnsFS?.map((b: Any) => b.label), fpSides: v.fpSides?.map((b: Any) => b.label), fpPieces: v.fpPieces?.map((b: Any) => b.label),
     fpStarts: v.fpStarts?.map((b: Any) => b.label), fpRules: v.fpRules?.map((b: Any) => [b.label, b.v]), fpSee: v.fpSee?.map((b: Any) => b.label),
@@ -277,7 +285,8 @@ for (const [mode, rung] of [['practice', undefined], ['ladder', 1], ['ladder', 2
     const prog = { opened: 5, rec: {} };
     d.dc.setState({ prog }); p.pc.setState({ prog: JSON.parse(JSON.stringify(prog)) });
     const tms = [d.tm, p.tm];
-    d.dc.openStart(mode, rung); p.pc.openStart(mode, rung);
+    // Design's mockup plays the old players: the page is opened under Play's ruleset (2), not the search computer's (3).
+    d.dc.openStart(mode, rung); p.pc.openStart(mode, rung, { version: PLAY });
     compareView(d.dc.renderVals(), p.pc.view(), `${mode} ${rung ?? ''} seed ${s}: the start screen`);
     d.dc.begin(); p.pc.begin();
     const rr = G.rng(s + 31);
@@ -320,12 +329,20 @@ for (const [mode, rung] of [['practice', undefined], ['ladder', 1], ['ladder', 2
 }
 
 /* ---------- 3. the ladder screen and its progress ---------- */
+// The search computer's ladder (owner, 2026-10-31): seven rungs, so Design's five-rung screen no longer applies.
+// Checked on its own: which rungs are open, what each row shows, and what tapping a closed one says.
 {
-  const { d, p } = both();
-  for (const prog of [{ opened: 1, rec: {} }, { opened: 3, rec: { 1: { tries: 1, won: 38 }, 2: { tries: 3, won: 61 }, 3: { tries: 2 } } }, { opened: 5, rec: { 5: { tries: 4, won: 90 } } }]) {
-    d.dc.setState({ prog: JSON.parse(JSON.stringify(prog)), scr: 'ladder', rungSel: null }); p.pc.setState({ prog: JSON.parse(JSON.stringify(prog)), scr: 'ladder', rungSel: null });
-    compareView(d.dc.renderVals(), p.pc.view(), `the ladder at ${JSON.stringify(prog)}`);
-    for (let i = 0; i < 5; i++) { d.dc.renderVals().rungs[i].click(); p.pc.view().rungs[i].click(); compareView(d.dc.renderVals(), p.pc.view(), `the ladder, rung row ${i} tapped`); }
+  const { p } = both();
+  const SR = ['Beginner', 'Easy', 'Fair', 'Level 1', 'Level 2', 'Level 3', 'Level 4'];
+  for (const prog of [{ opened: 1, rec: {} }, { opened: 3, rec: { 1: { tries: 1, won: 38 }, 2: { tries: 3, won: 61 }, 3: { tries: 2 } } }, { opened: 7, rec: { 7: { tries: 4, won: 90 } } }]) {
+    p.pc.setState({ prog: JSON.parse(JSON.stringify(prog)), scr: 'ladder', rungSel: null });
+    const rows = p.pc.view().rungs;
+    eq(rows.map((r) => [r.n, r.open, r.won]), [7, 6, 5, 4, 3, 2, 1].map((n) => [n, n <= prog.opened, !!(prog.rec as Record<number, { won?: number }>)[n]?.won]), `the ladder at ${JSON.stringify(prog)}: seven rows, open up to ${prog.opened}`);
+    eq(p.pc.view().playRungLabel, `PLAY RUNG ${prog.opened}`, `the ladder at ${JSON.stringify(prog)}: plays the highest open rung`);
+    for (const r of rows.filter((x) => !x.open)) {
+      r.click();
+      eq(p.pc.view().toast, `Win rung ${r.n - 1} (${SR[r.n - 2]}) to open this one.`, `the ladder: a closed rung ${r.n} says which to win`);
+    }
   }
 }
 
@@ -368,7 +385,7 @@ for (const [mode, rung] of [['practice', undefined], ['ladder', 1], ['ladder', 2
 for (const dev of ['phone', 'frame'] as const) {
   clock.now = 7_000_000;
   const { d, p } = both(dev);
-  d.dc.openStart('practice'); p.pc.openStart('practice');
+  d.dc.openStart('practice'); p.pc.openStart('practice', undefined, { version: PLAY });
   d.dc.begin(); p.pc.begin();
   d.dc.setState({ fs: true }); p.pc.setState({ fs: true });
   compareView(d.dc.renderVals(), p.pc.view(), `full screen (${dev}): the upright board`);
@@ -383,4 +400,24 @@ for (const dev of ['phone', 'frame'] as const) {
 }
 
 if (failures.length) report();
-console.log(`play: ${checks} checks, all identical to Design's mockup (${matchesPlayed} matches, practice and every rung, every new rule); pieces drawn with Learn's shapes`);
+{
+  // The ladder list: the search computer's six rungs, the beginner first (owner, 2026-10-31).
+  const env0: Env = { now: () => 0, setInterval: () => 0, clearInterval: () => {}, setTimeout: () => 0, clearTimeout: () => {}, copy: () => {}, href: () => 'https://snowmoon.party/minpentai' };
+  const pc = new PlayController(env0);
+  pc.setState({ prog: { opened: 2, rec: { 1: { tries: 1, won: 40 } } } });
+  eq(pc.view().rungs.map((r) => r.name), ['7 · Level 4', '6 · Level 3', '5 · Level 2', '4 · Level 1', '3 · Fair', '2 · Easy', '1 · Beginner'], 'the ladder lists seven rungs, the beginner first');
+  pc.openStart('ladder', 2);
+  eq([pc.m!.lvl, pc.m!.ver === LADDER], [2, true], 'rung 2 (Easy) plays under ruleset 3');
+  pc.openStart('practice');
+  eq([pc.m!.lvl, pc.m!.ver === LADDER], [1, true], 'practice plays the beginner under ruleset 3');
+  // A ruleset 3 match really plays: every rung's computer makes its setup turn with the search computer, legally.
+  for (const rung of [1, 2, 3, 4, 7]) {
+    pc.openStart('ladder', rung);
+    pc.begin();
+    const m = pc.m!;
+    eq([Array.isArray(m.pend.A), m.e.refuse(m.w, m.s, 'A', m.snap.A, m.s.setupPoints, m.pend.A)], [true, null], `rung ${rung}: the search computer's setup turn is legal`);
+  }
+  if (failures.length) report();
+}
+
+console.log(`play: ${checks} checks: matches identical to Design's mockup under Play's ruleset 2 (${matchesPlayed} matches, practice and every rung, every new rule); the ladder screen is the search computer's seven rungs; pieces drawn with Learn's shapes`);

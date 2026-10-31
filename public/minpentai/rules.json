@@ -1317,7 +1317,7 @@
       ],
       "code": [],
       "site": "no",
-      "siteNote": "Play stops at step 96 (invented)."
+      "siteNote": "Play stops at step 120 (invented; 96 until 2026-10-22)."
     },
     {
       "id": "qualifying-tiebreak",
@@ -1338,13 +1338,13 @@
     {
       "id": "play-step-limit",
       "area": "ending",
-      "rule": "At step 96 the match stops; most towers wins, and equal is a draw.",
+      "rule": "At step 120 the match stops; most towers wins, and equal is a draw.",
       "source": "invented",
       "cites": [],
       "code": [
         {
-          "file": "src/lib/minpentai/versions/schema.ts",
-          "find": "maxSteps: { text: 'The match stops at this step; most towers wins', min: 24, max: 240, base: 96,"
+          "file": "src/lib/minpentai/versions/solo-v1.ts",
+          "find": "export const SOLO_V2: VersionRules = { set: { maxSteps: 120, botTowers: 10 } };"
         },
         {
           "file": "src/lib/minpentai/versions/engine.ts",

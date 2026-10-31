@@ -2,6 +2,9 @@
 
 Written by the coding agent (Anthropic's Claude, a closed model). DRAFT. Output of `npm run minpentai:search-ladder -- --n 20` on the owner's Mac, after the fog review's fixes and with level 3's slips at 12%, six matches running at once (so the times below are slower than one match alone; see the morning report for times measured alone). Levels: `src/lib/minpentai/versions/search.ts` SEARCH_LEVELS.
 
+> Measured with the earlier level definitions (levels 1-5). On 2026-10-31 the levels were redefined: see docs/minpentai/search-ladder-ruleset3-2026-10-31.md.
+
+
 
 Search levels, 20 seeds a pairing, seats swapped (40 matches). Score = wins + half the draws, for the first named.
 

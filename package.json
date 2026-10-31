@@ -52,6 +52,7 @@
     "test:minpentai-ladder": "tsx scripts/test-minpentai-ladder.ts",
     "test:minpentai-play-server": "tsx --conditions=react-server scripts/test-minpentai-play-server.ts",
     "test:minpentai-snap": "tsx --conditions=react-server scripts/test-minpentai-snap.ts",
+    "test:minpentai-resume": "tsx --conditions=react-server scripts/test-minpentai-resume.ts",
     "test:minpentai-players": "tsx scripts/test-minpentai-players.ts",
     "test:minpentai-versions": "tsx scripts/test-minpentai-versions.ts",
     "test:minpentai-one-engine": "tsx --conditions=react-server scripts/test-minpentai-one-engine.ts",

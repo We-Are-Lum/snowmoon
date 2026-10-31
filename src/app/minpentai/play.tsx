@@ -21,9 +21,10 @@ import { useEffect, useMemo, useReducer, useRef, useState } from 'react';
 import Link from 'next/link';
 import { authFetch, inMiniApp, useAuth } from '~/lib/client-auth';
 import { PlayController, browserEnv, type Dev } from '~/lib/minpentai/play-game/controller';
-import { RULE_IDS, type RuleId } from '~/lib/minpentai/play-game/game';
+import { RULE_IDS, RUNGS as OLD_RUNGS, type RuleId } from '~/lib/minpentai/play-game/game';
 import { CHALLENGE_PATH, decChallenge, outcome, splitChallenge } from '~/lib/minpentai/snap/challenge';
 import { decMatch } from '~/lib/minpentai/snap/moves';
+import { rulesetId } from '~/lib/minpentai/versions/solo-v1';
 import { settings, versionOf } from '~/lib/minpentai/snap/versions';
 import type { LadderProgress } from '~/lib/minpentai/play-game/live-types';
 import { PlayBoard } from './play-board';
@@ -37,7 +38,7 @@ const PLAY_BOOK_RULE = 'In the book, "every game there\'s always some kind of ne
 /** Only a well-formed answer replaces the progress; anything else keeps what is shown (never a blank screen). */
 function isProgress(p: unknown): p is LadderProgress {
   const q = p as LadderProgress | null;
-  return !!q && typeof q === 'object' && Number.isInteger(q.opened) && q.opened >= 1 && q.opened <= 5 && !!q.rec && typeof q.rec === 'object';
+  return !!q && typeof q === 'object' && Number.isInteger(q.opened) && q.opened >= 1 && q.opened <= 6 && !!q.rec && typeof q.rec === 'object';
 }
 
 export function Play({ start, onLearn }: { start: 'home' | 'free' | 'ladder' | 'person' | 'match'; onLearn: () => void }) {
@@ -76,15 +77,15 @@ export function Play({ start, onLearn }: { start: 'home' | 'free' | 'ladder' | '
       // The page checked its signature on the server; this reads only the start from it.
       const x = splitChallenge(window.location.pathname.slice(CHALLENGE_PATH.length));
       const c = x && decChallenge(x.body);
-      if (c && ctl.continueMatch(c.seed, [], c.lvl, (drawn) => settings(drawn, versionOf(c.ver), c.rule))) ctl.say(`A challenge: ${outcome(c.res)}, in ${c.res.taps} taps. Same start: your move.`);
+      if (c && ctl.continueMatch(c.seed, [], c.lvl, (drawn) => settings(drawn, versionOf(c.ver), c.rule), c.rs)) ctl.say(`A challenge: ${outcome(c.res)}, in ${c.res.taps} taps. Same start: your move.`);
       else ctl.say('That challenge link could not be read, so here is Play.');
     } else if (start === 'match') {
       // A practice match carried on from the snap (?match=<seed>.<turns>.<moves>, moves.ts; &level=0–5;
-      // &rule= when the player picked the extra rule).
+      // &rule= when the player picked the extra rule; &rs=2 under ruleset 2, none for a link made before rulesets were numbered).
       const q = new URLSearchParams(window.location.search);
       const g = decMatch(q.get('match') ?? ''), lvl = Number(q.get('level') ?? 0), rule = q.get('rule') ?? '';
-      const picked = (RULE_IDS as string[]).includes(rule) ? (rule as RuleId) : null;
-      if (!g || !Number.isInteger(lvl) || lvl < 0 || lvl > 5 || (rule && !picked) || !ctl.continueMatch(g.seed, g.turns, lvl, picked ? (drawn) => settings(drawn, null, picked) : undefined)) ctl.say('That match link could not be read, so here is Play.');
+      const picked = (RULE_IDS as string[]).includes(rule) ? (rule as RuleId) : null, rsText = q.get('rs');
+      if (!g || !Number.isInteger(lvl) || lvl < 0 || lvl > (rsText === '3' ? 7 : 5) || (rule && !picked) || (rsText !== null && rsText !== '2' && rsText !== '3') || !ctl.continueMatch(g.seed, g.turns, lvl, picked ? (drawn) => settings(drawn, null, picked) : undefined, rulesetId(rsText))) ctl.say('That match link could not be read, so here is Play.');
     }
     ctl.mount(window.location.hash);
     const onK = (e: KeyboardEvent) => { if (e.key === 'Escape') ctl.escape(); };
@@ -95,7 +96,8 @@ export function Play({ start, onLearn }: { start: 'home' | 'free' | 'ladder' | '
   useEffect(() => {
     ctl.setState({ signed });
     if (!signed) { ctl.setState({ prog: { opened: 1, rec: {} } }); return; }
-    void authFetch('/api/minpentai/ladder').then((r) => (r.ok ? r.json() : null)).then((p: LadderProgress | null) => { if (isProgress(p)) ctl.setState({ prog: p }); }).catch(() => {});
+    // The search computer's ladder (ruleset 3), with the old ladder's progress as history.
+    void authFetch('/api/minpentai/ladder?l=3').then((r) => (r.ok ? r.json() : null)).then((p: LadderProgress | null) => { if (isProgress(p)) ctl.setState({ prog: p }); }).catch(() => {});
   }, [ctl, signed]);
 
   const v = ctl.view();
@@ -188,6 +190,7 @@ export function Play({ start, onLearn }: { start: 'home' | 'free' | 'ladder' | '
             <>
               <div className="mp-body">
                 <p className="mp-text">Win once to open the next rung. Replay any rung you&apos;ve opened. Only you see this page.</p>
+                <LadderNewNote prog={ctl.state.prog} />
                 <ol className="mp-rungs">
                   {v.rungs.map((r) => (
                     <li key={r.n}>
@@ -200,6 +203,7 @@ export function Play({ start, onLearn }: { start: 'home' | 'free' | 'ladder' | '
                   ))}
                 </ol>
                 <p className="mp-label mp-note">Every rung plays by the same rules and sees only what its towers light. They differ in how they plan, never in what they know.</p>
+                <LadderHistory prog={ctl.state.prog} />
               </div>
               <div className="mp-foot"><button className="mp-btn primary" onClick={v.playRung}>{v.playRungLabel}</button></div>
             </>
@@ -210,8 +214,8 @@ export function Play({ start, onLearn }: { start: 'home' | 'free' | 'ladder' | '
                 <p className="mp-text">The ladder remembers which rungs you&apos;ve beaten, under your Farcaster account. Only you can see it.</p>
                 <SignInButton className="mp-btn primary" label="SIGN IN WITH FARCASTER" />
               </div>
-              <ol className="mp-rungs-off" aria-label="The five rungs">
-                {[5, 4, 3, 2, 1].map((n) => <li key={n}>{v.rungs.find((r) => r.n === n)!.name}</li>)}
+              <ol className="mp-rungs-off" aria-label="The seven rungs">
+                {[7, 6, 5, 4, 3, 2, 1].map((n) => <li key={n}>{v.rungs.find((r) => r.n === n)!.name}</li>)}
               </ol>
               <div className="mp-grow" />
               <button className="mp-btn" onClick={v.openPractice}>PLAY A PRACTICE MATCH INSTEAD</button>
@@ -324,7 +328,7 @@ export function Play({ start, onLearn }: { start: 'home' | 'free' | 'ladder' | '
                         <div className="mp-opened"><span className="mp-rung-icon on">{v.resCardN}</span><span className="mp-rung-main"><span className="mp-rung-name">{v.resCardT}</span><span className="mp-rung-desc">{v.resCardD}</span></span></div>
                       )}
                       {v.resNote && <p className="mp-text">{v.resNote}</p>}
-                      {v.share && <ShareResult rung={v.share.rung} steps={v.share.steps} />}
+                      {v.share && <ShareResult rung={v.share.rung} steps={v.share.steps} rs={v.share.rs} />}
                       <div className="mp-grow" />
                       <div className="mp-btns">{v.resBtns!.map((b) => <button key={b.label} className={`mp-btn${b.primary ? ' primary' : ''}`} onClick={b.click}>{b.label}</button>)}</div>
                     </div>
@@ -415,6 +419,43 @@ export function Play({ start, onLearn }: { start: 'home' | 'free' | 'ladder' | '
 
       {v.toastOn && <div className="mp-toast" role="status">{v.toast}</div>}
       {S.scr === 'home' && <span hidden>{auth.kind}</span>}
+    </section>
+  );
+}
+
+/**
+ * The one-time note for people who climbed the old ladder (owner, 2026-10-31: the search computer replaces the old
+ * players; the new ladder starts fresh, old wins kept as history). Shown to anyone with old progress until they
+ * dismiss it; the dismissal is kept in this browser only (localStorage), like Learn's "done".
+ */
+const NEW_LADDER_KEY = 'mp-ladder-3-seen';
+const hadOld = (prog: LadderProgress) => !!prog.history && (prog.history.opened > 1 || Object.keys(prog.history.rec).length > 0);
+function LadderNewNote({ prog }: { prog: LadderProgress }) {
+  const [show, setShow] = useState(false);
+  const had = hadOld(prog);
+  useEffect(() => {
+    try { setShow(had && !window.localStorage.getItem(NEW_LADDER_KEY)); } catch { setShow(false); }
+  }, [had]);
+  if (!show) return null;
+  const close = () => { try { window.localStorage.setItem(NEW_LADDER_KEY, '1'); } catch { /* shown again next time */ } setShow(false); };
+  return (
+    <div className="mp-ladder-note" role="note">
+      <p className="mp-text"><strong>New computer players.</strong> The ladder now plays a computer that tries its moves on the board as it sees it, from a beginner through Easy and Fair to four levels. It starts fresh: your wins against the old players are kept below, as history. Matches run to step 120.</p>
+      <button className="mp-btn" onClick={close}>GOT IT</button>
+    </div>
+  );
+}
+
+/** The old ladder's wins, kept as history (read only). */
+function LadderHistory({ prog }: { prog: LadderProgress }) {
+  if (!hadOld(prog)) return null;
+  const rows = [1, 2, 3, 4, 5].map((n) => ({ n, r: prog.history!.rec[n] })).filter((x) => x.r);
+  return (
+    <section className="mp-ladder-history" aria-label="The old ladder">
+      <p className="mp-label">THE OLD LADDER · HISTORY</p>
+      <ul>
+        {rows.map(({ n, r }) => <li key={n} className="mp-text">{n} · {OLD_RUNGS[n]!.n}: {r!.won ? `won in ${r!.won} steps` : `${r!.tries} ${r!.tries === 1 ? 'try' : 'tries'}`}</li>)}
+      </ul>
     </section>
   );
 }

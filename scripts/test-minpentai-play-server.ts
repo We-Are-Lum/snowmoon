@@ -24,13 +24,15 @@
 import path from 'node:path';
 import { readdirSync, readFileSync } from 'node:fs';
 import {
-  COST, D4, D8, K, MAXS, RULES, RULE_IDS, XY, apply, clone, empty, inb, lit, rng, step, towers, updLS, world,
+  COST, D4, D8, K, MAXS, RULES, RULE_IDS, XY, apply, clone, empty, inb, lit, maxStepsOf, rng, step, towers, updLS, world,
   type Placement, type RuleId, type Side, type World,
 } from '../src/lib/minpentai/play-game/game';
+/** New one-on-one matches run under Play's newest ruleset (2): 120 steps. */
+const LIMIT = maxStepsOf(2);
 import type { BoardView, MatchView } from '../src/lib/minpentai/play-game/live-types';
 import {
   GONE_MS, PAUSE_MS, REMATCH_MS, SETUP_MS, STEP_MS, TURN_MS, Refused, advance, askRematch, checkPlacements, createMatch,
-  drawRule, fullBoard, leave, playTurn, resign, touch, type LiveMatch,
+  drawRule, fullBoard, leave, playTurn, resign, rulesOf, touch, type LiveMatch,
 } from '../src/lib/minpentai/play-server/match';
 import { fog, sightOf, viewFor, why } from '../src/lib/minpentai/play-server/view';
 import { freshProgress, recordResult } from '../src/lib/minpentai/play-server/ladder';
@@ -67,7 +69,7 @@ function refCheckEnd(m: Ref): { win: Side | 'D'; why: string } | null {
   if (!c && !a) return { win: 'D', why: `Both sides lost their last tower at step ${n}.` };
   if (!c) return { win: 'A', why: `Your last tower fell at step ${n}.` };
   if (!a) return { win: 'C', why: `Amber's last tower fell at step ${n}.` };
-  if (n >= MAXS) return { win: c > a ? 'C' : a > c ? 'A' : 'D', why: `Time ran out at step ${MAXS}. Amber had ${a} tower${a === 1 ? '' : 's'}, you had ${c}.` };
+  if (n >= LIMIT) return { win: c > a ? 'C' : a > c ? 'A' : 'D', why: `Time ran out at step ${LIMIT}. Amber had ${a} tower${a === 1 ? '' : 's'}, you had ${c}.` };
   return null;
 }
 /** startRun, then runTick until the next beginAct or the end. */
@@ -176,9 +178,9 @@ function randomPlan(m: LiveMatch, side: Side, r: () => number): { t: 'g' | 's' |
     matches++;
     endings.add(m.over!.win);
     if (!refEnd || refEnd.win !== m.over!.win || m.over!.kind !== 'end') flowOk = false;
-    if (refEnd && why(m.over!, 'C', 'wren').replaceAll('@wren', 'Amber') !== refEnd.why) {
+    if (refEnd && why(m.over!, 'C', 'wren', rulesOf(m).s.maxSteps).replaceAll('@wren', 'Amber') !== refEnd.why) {
       flowWhy = false;
-      firstBad ||= `why: "${why(m.over!, 'C', 'wren')}" vs "${refEnd.why}"`;
+      firstBad ||= `why: "${why(m.over!, 'C', 'wren', rulesOf(m).s.maxSteps)}" vs "${refEnd.why}"`;
     }
     const over = viewFor(m, 'C', now, META(m, 'C'));
     if (!over.result || over.result.replay.length !== m.w.step + 1 || !same(over.result.replay, ref.hist.map(fullBoard))) flowOk = false;
@@ -344,7 +346,7 @@ function both(m: LiveMatch, from: number, to: number) { for (let t = from; t <= 
   refused('a rung not open yet', () => recordResult(p, { rung: 2, win: 'C', step: 40 }), 409);
   refused('a bad rung', () => recordResult(p, { rung: 0, win: 'C', step: 40 }), 400);
   refused('a bad result', () => recordResult(p, { rung: 1, win: 'X', step: 40 }), 400);
-  refused('a bad step', () => recordResult(p, { rung: 1, win: 'C', step: 97 }), 400);
+  refused('a bad step', () => recordResult(p, { rung: 1, win: 'C', step: 121 }), 400);
   p = recordResult(p, { rung: 1, win: 'A', step: 30 });
   check('a loss: tries + 1, nothing opens', p.opened === 1 && same(p.rec[1], { tries: 1 }));
   p = recordResult(p, { rung: 1, win: 'D', step: 96 });
@@ -392,6 +394,19 @@ function both(m: LiveMatch, from: number, to: number) { for (let t = from; t <= 
     await S.postLadder(sql, 7, { rung: 1, win: 'C', step: 44 });
     check('store: a win is recorded and opens rung 2', same(await S.getLadder(sql, 7), { opened: 2, rec: { 1: { tries: 1, won: 44 } } }));
     check('store: progress is per person', same(await S.getLadder(sql, 8), { opened: 1, rec: {} }));
+    // The search computer's ladder (ruleset 3, owner 2026-10-31): starts fresh, the old ladder kept as history; neither touches the other.
+    const old7 = { opened: 2, rec: { 1: { tries: 1, won: 44 } } };
+    check('store: the new ladder starts fresh, with the old one as history', same(await S.getLadder(sql, 7, 3), { opened: 1, rec: {}, history: old7 }));
+    await S.postLadder(sql, 7, { rung: 1, win: 'C', step: 50, ruleset: 3 });
+    await S.postLadder(sql, 7, { rung: 2, win: 'A', step: 60, ruleset: 3 });
+    check('store: a new-ladder win opens its rung 2, and its loss counts a try', same(await S.getLadder(sql, 7, 3), { opened: 2, rec: { 1: { tries: 1, won: 50 }, 2: { tries: 1 } }, history: old7 }));
+    check('store: the old ladder is unchanged by the new one', same(await S.getLadder(sql, 7), old7));
+    await S.postLadder(sql, 7, { rung: 2, win: 'C', step: 70 });
+    check('store: an old-ladder result (a page from before) keeps the new ladder', same((await S.getLadder(sql, 7, 3)).rec, { 1: { tries: 1, won: 50 }, 2: { tries: 1 } }) && (await S.getLadder(sql, 7)).opened === 3);
+    for (let n = 2; n <= 7; n++) await S.postLadder(sql, 7, { rung: n, win: 'C', step: 80, ruleset: 3 });
+    check('store: the new ladder has seven rungs', (await S.getLadder(sql, 7, 3)).opened === 7);
+    await rejects('store: no rung 8 on the new ladder', S.postLadder(sql, 7, { rung: 8, win: 'C', step: 3, ruleset: 3 }), 400);
+    await rejects('store: no rung 6 on the old ladder', S.postLadder(sql, 7, { rung: 6, win: 'C', step: 3 }), 400);
 
     // Lobby and challenges.
     await rejects('store: challenge without being ready', S.challenge(sql, 7, 8, T0), 409, /ready first/);
