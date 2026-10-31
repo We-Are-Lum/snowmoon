@@ -21,8 +21,8 @@ export function parseResult(r: string | null | undefined, s: string | null | und
   // g: the ruleset the win was under (solo-v1.ts RULESETS); a link made before rulesets were numbered has none and is 1.
   if (g != null && !/^[123]$/.test(g)) return null;
   const rs = rulesetId(g);
-  // Rungs 1–5 on the old ladder, 1–7 on the search computer's (ruleset 3).
-  if (!r || !s || !(rs === 3 ? /^[1-7]$/ : /^[1-5]$/).test(r) || !/^\d{1,3}$/.test(s)) return null;
+  // Rungs 1–5 on the old ladder, 1–6 on the search computer's (ruleset 3).
+  if (!r || !s || !(rs === 3 ? /^[1-6]$/ : /^[1-5]$/).test(r) || !/^\d{1,3}$/.test(s)) return null;
   if (v != null && !VERSION_ID.test(v)) return null;
   const rung = Number(r), steps = Number(s);
   if (steps < 1 || steps > (v ? SETTINGS.maxSteps.max : maxStepsOf(rs))) return null;
@@ -33,4 +33,4 @@ export const resultPath = (x: { rung: number; steps: number; version?: string; r
 
 /** The words a share starts with; the person can change them in the composer before posting. */
 export const resultText = (x: SharedResult) =>
-  `I beat ${x.name}, rung ${x.rung} of ${x.rs === 3 ? 7 : 5} on the Minpentai ladder, in ${x.steps} steps. A game from Snowmoon, with rules invented for this edition.`;
+  `I beat ${x.name}, rung ${x.rung} of ${x.rs === 3 ? 6 : 5} on the Minpentai ladder, in ${x.steps} steps. A game from Snowmoon, with rules invented for this edition.`;

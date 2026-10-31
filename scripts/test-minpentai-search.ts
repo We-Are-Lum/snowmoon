@@ -97,7 +97,7 @@ for (const [name, v] of RULESETS) {
 
 // ---------- 3. Whole matches ----------
 for (const [name, v] of RULESETS) {
-  for (const lvl of [1, 3, 4]) {
+  for (const lvl of [1, 2, 3]) {
     const m = playSearchMatch(v, () => ({ C: searchPlayer(lvl), A: searchPlayer(Math.max(1, lvl - 1)) }), 11);
     ok(m.illegal === 0, `${name}: level ${lvl} never makes a refused turn`);
     ok(m.turns.every((t) => t.steps <= SEARCH_LEVELS[t.side === 'C' ? lvl : Math.max(1, lvl - 1)].steps), `${name}: level ${lvl} stays within its step budget`);
@@ -108,12 +108,12 @@ for (const [name, v] of RULESETS) {
 {
   const used: Record<string, number> = {};
   for (const seed of [1, 2, 3, 4]) {
-    const m = playSearchMatch(BOOK_EDITION, () => ({ C: searchPlayer(4), A: searchPlayer(4) }), seed);
+    const m = playSearchMatch(BOOK_EDITION, () => ({ C: searchPlayer(3), A: searchPlayer(3) }), seed);
     for (const o of ['C', 'A'] as const) for (const [t, n] of Object.entries(m.placed[o])) used[t] = (used[t] ?? 0) + n;
   }
   const book = ['m', 'e', 'w', 'f'].filter((t) => used[t]);
   ok(book.length >= 1, `the search uses the book edition's pieces (${JSON.stringify(used)})`);
-  console.log(`  book edition, level 4 self-play, 4 matches: pieces placed ${JSON.stringify(used)}`);
+  console.log(`  book edition, level 3 self-play, 4 matches: pieces placed ${JSON.stringify(used)}`);
 }
 
 // ---------- 4. Node and the browser agree ----------
@@ -126,7 +126,7 @@ async function browserAgrees() {
       import { playSearchMatch, searchPlayer } from ${JSON.stringify(path.resolve('src/lib/minpentai/versions/search.ts'))};
       import { SOLO_V1 } from ${JSON.stringify(path.resolve('src/lib/minpentai/versions/solo-v1.ts'))};
       import { BOOK_EDITION } from ${JSON.stringify(path.resolve('src/lib/minpentai/versions/book-edition.ts'))};
-      (globalThis as any).run = () => [SOLO_V1, BOOK_EDITION].flatMap((v) => [1, 2].map((seed) => JSON.stringify(playSearchMatch(v, () => ({ C: searchPlayer(4), A: searchPlayer(2) }), seed))));
+      (globalThis as any).run = () => [SOLO_V1, BOOK_EDITION].flatMap((v) => [1, 2].map((seed) => JSON.stringify(playSearchMatch(v, () => ({ C: searchPlayer(3), A: searchPlayer(1) }), seed))));
     `);
     const out = await build({ entryPoints: [entry], bundle: true, write: false, format: 'iife', platform: 'browser', logLevel: 'silent' });
     const code = out.outputFiles[0].text;
@@ -135,8 +135,8 @@ async function browserAgrees() {
       const page = await browser.newPage();
       await page.addScriptTag({ content: code });
       const there: string[] = await page.evaluate(() => (globalThis as unknown as { run: () => string[] }).run());
-      const here = [SOLO_V1, BOOK_EDITION].flatMap((v) => [1, 2].map((seed) => JSON.stringify(playSearchMatch(v, () => ({ C: searchPlayer(4), A: searchPlayer(2) }), seed))));
-      ok(there.length === 4 && isDeepStrictEqual(there, here), 'Chrome plays the same four matches as Node, move for move (level 4 against level 2, Play and the book edition)');
+      const here = [SOLO_V1, BOOK_EDITION].flatMap((v) => [1, 2].map((seed) => JSON.stringify(playSearchMatch(v, () => ({ C: searchPlayer(3), A: searchPlayer(1) }), seed))));
+      ok(there.length === 4 && isDeepStrictEqual(there, here), 'Chrome plays the same four matches as Node, move for move (level 3 against level 1, Play and the book edition)');
     } finally { await browser.close(); }
   } finally { rmSync(dir, { recursive: true, force: true }); }
 }

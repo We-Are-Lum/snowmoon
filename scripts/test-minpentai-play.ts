@@ -329,15 +329,15 @@ for (const [mode, rung] of [['practice', undefined], ['ladder', 1], ['ladder', 2
 }
 
 /* ---------- 3. the ladder screen and its progress ---------- */
-// The search computer's ladder (owner, 2026-10-31): seven rungs, so Design's five-rung screen no longer applies.
+// The search computer's ladder (owner, 2026-10-31): six rungs, so Design's five-rung screen no longer applies.
 // Checked on its own: which rungs are open, what each row shows, and what tapping a closed one says.
 {
   const { p } = both();
-  const SR = ['Beginner', 'Easy', 'Fair', 'Level 1', 'Level 2', 'Level 3', 'Level 4'];
-  for (const prog of [{ opened: 1, rec: {} }, { opened: 3, rec: { 1: { tries: 1, won: 38 }, 2: { tries: 3, won: 61 }, 3: { tries: 2 } } }, { opened: 7, rec: { 7: { tries: 4, won: 90 } } }]) {
+  const SR = ['Beginner', 'Easy', 'Fair', 'Level 1', 'Level 2', 'Level 3'];
+  for (const prog of [{ opened: 1, rec: {} }, { opened: 3, rec: { 1: { tries: 1, won: 38 }, 2: { tries: 3, won: 61 }, 3: { tries: 2 } } }, { opened: 6, rec: { 6: { tries: 4, won: 90 } } }]) {
     p.pc.setState({ prog: JSON.parse(JSON.stringify(prog)), scr: 'ladder', rungSel: null });
     const rows = p.pc.view().rungs;
-    eq(rows.map((r) => [r.n, r.open, r.won]), [7, 6, 5, 4, 3, 2, 1].map((n) => [n, n <= prog.opened, !!(prog.rec as Record<number, { won?: number }>)[n]?.won]), `the ladder at ${JSON.stringify(prog)}: seven rows, open up to ${prog.opened}`);
+    eq(rows.map((r) => [r.n, r.open, r.won]), [6, 5, 4, 3, 2, 1].map((n) => [n, n <= prog.opened, !!(prog.rec as Record<number, { won?: number }>)[n]?.won]), `the ladder at ${JSON.stringify(prog)}: six rows, open up to ${prog.opened}`);
     eq(p.pc.view().playRungLabel, `PLAY RUNG ${prog.opened}`, `the ladder at ${JSON.stringify(prog)}: plays the highest open rung`);
     for (const r of rows.filter((x) => !x.open)) {
       r.click();
@@ -405,13 +405,13 @@ if (failures.length) report();
   const env0: Env = { now: () => 0, setInterval: () => 0, clearInterval: () => {}, setTimeout: () => 0, clearTimeout: () => {}, copy: () => {}, href: () => 'https://snowmoon.party/minpentai' };
   const pc = new PlayController(env0);
   pc.setState({ prog: { opened: 2, rec: { 1: { tries: 1, won: 40 } } } });
-  eq(pc.view().rungs.map((r) => r.name), ['7 · Level 4', '6 · Level 3', '5 · Level 2', '4 · Level 1', '3 · Fair', '2 · Easy', '1 · Beginner'], 'the ladder lists seven rungs, the beginner first');
+  eq(pc.view().rungs.map((r) => r.name), ['6 · Level 3', '5 · Level 2', '4 · Level 1', '3 · Fair', '2 · Easy', '1 · Beginner'], 'the ladder lists six rungs, the beginner first');
   pc.openStart('ladder', 2);
   eq([pc.m!.lvl, pc.m!.ver === LADDER], [2, true], 'rung 2 (Easy) plays under ruleset 3');
   pc.openStart('practice');
   eq([pc.m!.lvl, pc.m!.ver === LADDER], [1, true], 'practice plays the beginner under ruleset 3');
   // A ruleset 3 match really plays: every rung's computer makes its setup turn with the search computer, legally.
-  for (const rung of [1, 2, 3, 4, 7]) {
+  for (const rung of [1, 2, 3, 4, 6]) {
     pc.openStart('ladder', rung);
     pc.begin();
     const m = pc.m!;
@@ -420,4 +420,4 @@ if (failures.length) report();
   if (failures.length) report();
 }
 
-console.log(`play: ${checks} checks: matches identical to Design's mockup under Play's ruleset 2 (${matchesPlayed} matches, practice and every rung, every new rule); the ladder screen is the search computer's seven rungs; pieces drawn with Learn's shapes`);
+console.log(`play: ${checks} checks: matches identical to Design's mockup under Play's ruleset 2 (${matchesPlayed} matches, practice and every rung, every new rule); the ladder screen is the search computer's six rungs; pieces drawn with Learn's shapes`);
