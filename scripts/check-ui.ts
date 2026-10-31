@@ -76,9 +76,10 @@ import path from 'node:path';
 import { chromium, type Browser, type Page } from 'playwright-core';
 import QRCode from 'qrcode';
 import { SUPPORT } from '../src/lib/config';
+import { requireTarget } from './lib/target';
 
 const arg = (name: string) => process.argv.slice(2).find((a) => a.startsWith(`--${name}=`))?.split('=').slice(1).join('=');
-const BASE = (arg('url') ?? 'http://localhost:3000').replace(/\/$/, '');
+const BASE = requireTarget('check:ui');
 const INJECT = arg('inject-css');
 const SHOTS = arg('shots');
 /** A published style or sheet to check too (its version id), when the database has one. */
