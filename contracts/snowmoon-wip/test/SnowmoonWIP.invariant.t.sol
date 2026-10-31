@@ -3,7 +3,7 @@ pragma solidity 0.8.28;
 
 import {Test} from "forge-std/Test.sol";
 import {SnowmoonWIP} from "../src/SnowmoonWIP.sol";
-import {ForceSender} from "./utils/Helpers.sol";
+import {ForceSender, PaymentCheckingReceiver} from "./utils/Helpers.sol";
 
 /// @dev Drives random mints, releases, transfers, forced ETH and time jumps over three tokens.
 contract Handler is Test {
@@ -11,8 +11,11 @@ contract Handler is Test {
     uint256[3] public ids;
     address payable[3] public payouts;
     address[4] public buyers;
+    /// A contract holder that accepts the hook and checks the payment is recorded before it runs.
+    PaymentCheckingReceiver public immutable receiver;
 
     uint256 public ghostForced;
+    uint256 public ghostReceiverMints; // mints that went through the hook-checking contract
     uint256[3] public ghostPaid; // per token, all mint payments ever
     uint256[3] public ghostReleased; // per token, all releases ever
     uint256[3] public ghostMinted; // per token, editions ever minted
@@ -21,22 +24,33 @@ contract Handler is Test {
         wip = wip_;
         ids = ids_;
         payouts = payouts_;
+        receiver = new PaymentCheckingReceiver(wip_);
         for (uint256 i; i < 4; ++i) {
             buyers[i] = makeAddr(string(abi.encodePacked("buyer", vm.toString(i))));
         }
     }
 
     function mint(uint256 tokenSeed, uint256 buyerSeed, uint256 quantity) external {
-        uint256 k = tokenSeed % 3;
         address b = buyers[buyerSeed % 4];
+        _mint(tokenSeed % 3, b, b, quantity);
+    }
+
+    /// A buyer mints to the contract that accepts the hook and checks the payment was recorded first.
+    function mintToContract(uint256 tokenSeed, uint256 buyerSeed, uint256 quantity) external {
+        _mint(tokenSeed % 3, buyers[buyerSeed % 4], address(receiver), quantity);
+    }
+
+    function _mint(uint256 k, address b, address to, uint256 quantity) internal {
         quantity = bound(quantity, 1, 20);
         if (!wip.isOpen(ids[k])) return;
         uint256 cost = wip.token(ids[k]).price * quantity;
         vm.deal(b, cost);
+        receiver.expect(wip.proceeds(ids[k]) + cost, wip.totalProceeds() + cost);
         vm.prank(b);
-        wip.mint{value: cost}(ids[k], quantity, b);
+        wip.mint{value: cost}(ids[k], quantity, to);
         ghostPaid[k] += cost;
         ghostMinted[k] += quantity;
+        if (to == address(receiver)) ghostReceiverMints++;
     }
 
     function release(uint256 tokenSeed, uint256 callerSeed) external {
@@ -124,8 +138,15 @@ contract SnowmoonWIPInvariantTest is Test {
             for (uint256 b; b < 4; ++b) {
                 held += wip.balanceOf(handler.buyerAt(b), ids[i]);
             }
+            held += wip.balanceOf(address(handler.receiver()), ids[i]);
             assertEq(held, handler.ghostMinted(i));
         }
+    }
+
+    /// Every mint to the contract ran its hook, and each hook saw its payment already recorded
+    /// (otherwise the mint reverts, and fail_on_revert fails the run).
+    function afterInvariant() public view {
+        assertEq(handler.receiver().hookCalls(), handler.ghostReceiverMints());
     }
 
     /// Token terms never change.

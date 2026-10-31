@@ -5,8 +5,15 @@ import {Test, stdError} from "forge-std/Test.sol";
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {ReentrancyGuardTransient} from "@openzeppelin/contracts/utils/ReentrancyGuardTransient.sol";
 import {IERC1155Errors} from "@openzeppelin/contracts/interfaces/draft-IERC6093.sol";
+import {IERC1155} from "@openzeppelin/contracts/token/ERC1155/IERC1155.sol";
 import {SnowmoonWIP} from "../src/SnowmoonWIP.sol";
-import {EthRejecter, ForceSender, ReentrantReceiver, ReentrantPayout} from "./utils/Helpers.sol";
+import {
+    EthRejecter,
+    ForceSender,
+    ReentrantReceiver,
+    ReentrantPayout,
+    PaymentCheckingReceiver
+} from "./utils/Helpers.sol";
 
 contract SnowmoonWIPTest is Test {
     SnowmoonWIP wip;
@@ -66,6 +73,8 @@ contract SnowmoonWIPTest is Test {
     function test_Create_StoresTermsAndEmits() public {
         vm.expectEmit(address(wip));
         emit SnowmoonWIP.TokenCreated(1, URI_A, PRICE, START, END, payoutA);
+        vm.expectEmit(address(wip));
+        emit IERC1155.URI(URI_A, 1);
         uint256 id = _create(URI_A, PRICE, payoutA);
         assertEq(id, 1);
         SnowmoonWIP.Token memory t = wip.token(id);
@@ -240,10 +249,54 @@ contract SnowmoonWIPTest is Test {
     function test_Mint_ToAnotherAddress() public {
         uint256 id = _create(URI_A, PRICE, payoutA);
         vm.warp(START);
+        // Buyer (msg.sender, the ERC-1155 operator) and recipient differ; both events name each correctly.
+        vm.expectEmit(address(wip));
+        emit SnowmoonWIP.Minted(id, buyer, stranger, 2, PRICE * 2);
+        vm.expectEmit(address(wip));
+        emit IERC1155.TransferSingle(buyer, address(0), stranger, id, 2);
         vm.prank(buyer);
-        wip.mint{value: PRICE}(id, 1, stranger);
-        assertEq(wip.balanceOf(stranger, id), 1);
+        wip.mint{value: PRICE * 2}(id, 2, stranger);
+        assertEq(wip.balanceOf(stranger, id), 2);
         assertEq(wip.balanceOf(buyer, id), 0);
+    }
+
+    function test_Mint_ToBuyer_TransferSingleFields() public {
+        uint256 id = _create(URI_A, PRICE, payoutA);
+        vm.warp(START);
+        vm.expectEmit(true, true, true, true, address(wip));
+        emit IERC1155.TransferSingle(buyer, address(0), buyer, id, 3);
+        _mint(id, 3);
+    }
+
+    /// @dev Payment is recorded before _mint: the receiver's hook sees this mint's payment already counted.
+    ///      Swapping the order in mint() makes this test fail (checked by hand, 2026-10-31).
+    function test_Mint_ToAcceptingContract_PaymentRecordedBeforeHook() public {
+        uint256 id = _create(URI_A, PRICE, payoutA);
+        uint256 other = _create(URI_B, PRICE * 5, payoutB);
+        PaymentCheckingReceiver r = new PaymentCheckingReceiver(wip);
+        vm.warp(START);
+        // Another token's proceeds count in the total, not in this token's.
+        vm.prank(buyer);
+        wip.mint{value: PRICE * 5}(other, 1, buyer);
+
+        r.expect(PRICE * 3, PRICE * 5 + PRICE * 3);
+        vm.expectEmit(address(wip));
+        emit SnowmoonWIP.Minted(id, buyer, address(r), 3, PRICE * 3);
+        vm.expectEmit(address(wip));
+        emit IERC1155.TransferSingle(buyer, address(0), address(r), id, 3);
+        vm.prank(buyer);
+        wip.mint{value: PRICE * 3}(id, 3, address(r));
+
+        r.expect(PRICE * 4, PRICE * 5 + PRICE * 4);
+        vm.prank(buyer);
+        wip.mint{value: PRICE}(id, 1, address(r));
+
+        assertEq(r.hookCalls(), 2);
+        assertEq(r.seenProceeds(), PRICE * 4);
+        assertEq(r.seenTotal(), PRICE * 9);
+        assertEq(wip.balanceOf(address(r), id), 4);
+        wip.release(id);
+        assertEq(payoutA.balance, PRICE * 4);
     }
 
     function test_Mint_ToZeroReverts() public {
@@ -566,6 +619,7 @@ contract SnowmoonWIPTest is Test {
         for (uint256 i; i < 3; ++i) {
             uint256 q = bound(quantities[i], 0, 50);
             if (q == 0) continue;
+            vm.deal(buyer, prices[i] * q); // exact cost: fuzzed prices x quantities can exceed any fixed deal
             vm.prank(buyer);
             wip.mint{value: prices[i] * q}(ids[i], q, buyer);
             expectedTotal += prices[i] * q;

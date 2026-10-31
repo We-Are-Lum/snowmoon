@@ -95,8 +95,11 @@ The agent hasn't changed the principle, the check or the intro line.
 
 ## How it was checked
 
-- **Unit and fuzz tests: 42.** The 3 fuzz tests ran 1,000 times each.
-- **Invariant tests: 5.** 256 runs × 64 calls each.
+- **Unit and fuzz tests: 44.** The 3 fuzz tests ran 1,000 times each; the accounting fuzz also passed 20,000 runs.
+  - A receiver's `onERC1155Received` checks that this mint's payment is already in `proceeds(id)` and `totalProceeds()`.
+  - Moving the payment record after `_mint` makes that test and all 5 invariants fail. This was tried locally on 2026-10-31, then reverted.
+- **Invariant tests: 5.** 256 runs × 64 calls each, with `fail_on_revert = true`, so any unexpected revert fails the run.
+  - The handler also mints to that hook-checking contract.
 - **Fork tests: 2.** The v2.1 and v2.2 factories, on a mainnet fork, read-only.
 - **Slither 0.11.6:** 5 findings in the contract itself, none a real issue:
   - `arbitrary-send-eth` on `release`: the destination is the token's payout, fixed by the owner at creation. That is the design.

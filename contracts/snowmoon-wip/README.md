@@ -115,6 +115,16 @@ date -d 'TZ="America/Los_Angeles" 2026-12-07 09:00' +%s
 TZ=America/Los_Angeles date -r 1796662800        # macOS; Linux: date -d @1796662800
 ```
 
+### 0. Before any deploy: run every test, including the fork test (required)
+
+All of these must pass on the exact commit you deploy. The fork test is not optional: it is the only test against the real Splits contracts.
+
+```sh
+forge test                                    # unit, fuzz (1,000 runs) and invariant tests
+MAINNET_RPC_URL=https://ethereum-rpc.publicnode.com \
+  forge test --match-path test/fork/PushSplitFork.t.sol -vv   # must show 2 passed, not skipped
+```
+
 ### 1. Sepolia dry run
 
 Do the whole run with Sepolia ETH; make the window short.
@@ -136,7 +146,12 @@ Do the whole run with Sepolia ETH; make the window short.
      0x0000000000000000000000000000000000000000 <YOUR_ADDRESS> \
      --rpc-url $RPC --browser
    ```
-   The split's address is the first indexed topic of the `SplitCreated` log (`cast receipt <tx> --rpc-url $RPC`), and is on Etherscan's transaction page. Check its owner is zero: `cast call <SPLIT> "owner()(address)" --rpc-url $RPC`.
+   The split's address is topic 1 of the `SplitCreated` log (`cast receipt <tx> --rpc-url $RPC`), and is on Etherscan's transaction page.
+   **Before `createToken`, check the split on that chain.** Its owner must be zero, and its code must exist:
+   ```sh
+   cast call <SPLIT> "owner()(address)" --rpc-url $RPC   # must print 0x0000000000000000000000000000000000000000
+   cast codesize <SPLIT> --rpc-url $RPC                  # must be greater than 0
+   ```
 4. **Create a token** (you sign). Use a window starting now and ending in an hour or two, with a small price:
    ```sh
    cast send <WIP> "createToken(string,uint256,uint64,uint64,address)" \
@@ -180,6 +195,7 @@ Once it's verified, Etherscan's "Write Contract" tab can mint and release withou
 3. **For each final version:**
    - check every recipient address works on mainnet and screen it;
    - create its PushSplit (you sign);
+   - before `createToken`, read the split's `owner()` (must be `0x0…0`) and its `cast codesize` on mainnet (must be above 0), as in step 1.3;
    - pin its metadata;
    - `createToken` with the split as payout and the dates from the challenge config (you sign).
 4. **Read back each token** with `token(id)`, and compare it with the plan before announcing.
