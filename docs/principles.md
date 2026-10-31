@@ -354,9 +354,12 @@ order the feed, search, anyone's own pages, the agent tools or the read API.
   "Newest" and "Liked by me"; the switch keeps the reader's choice on their device (localStorage) and never sends it.
 - `P5e`: nothing outside the pick code reads `studio.admin_picks` (the feed, search, profiles, the agent tools and
   the read API stay unpicked).
+- `P5f`: a seeded image an admin hid is gone everywhere it shows (the chapter and its player, References and the
+  sheets, the introduction on home and About, quote cards and their share images): every file that reads seeded images
+  passes them through the hide (owner, 2026-10-30).
 - Review: does any default, badge or ordering reflect a person's choice without saying whose?
 
-**Status.** Pass. (Picks aren't built yet: P5d and P5e pass with nothing to check, and fail on a planted violation.)
+**Status.** Pass. (Picks are built on branch phase2-admin and need 0030_admin_picks, applied 2026-10-31.)
 
 ## 6. Production pages make no third-party requests. Individual ratings and likes are not publicly readable. Only totals are.
 

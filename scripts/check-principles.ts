@@ -1179,7 +1179,8 @@ add({
   load: async () => walk('src', /\.tsx?$/).map((f) => ({ file: f, text: read(f) })),
   run: (files) =>
     files
-      .filter((f: { file: string; text: string }) => /MODERATOR_FIDS|\bADMINS\b/.test(f.text) && !f.file.endsWith('config.ts'))
+      // Every admin check goes through isAdmin (src/lib/admins.ts, owner 2026-10-29: "ADMINS replaces the scattered owner lists").
+      .filter((f: { file: string; text: string }) => /MODERATOR_FIDS|\bADMINS\b|\bisAdmin\(/.test(f.text) && !f.file.endsWith('config.ts') && !f.file.endsWith('src/lib/admins.ts'))
       // The one write admins may make beyond hiding (owner, reread 2026-10-29): a pick, in studio.admin_picks.
       .map((f: { file: string; text: string }) => ({ ...f, text: f.text.replace(/(insert into|update|delete from)\s+studio\.admin_picks\b[^`]*`/gi, '') }))
       .filter((f: { text: string }) => /status\s*[:=]\s*['"](published|draft)['"]|set\s+status\s*=\s*'(published|draft)'|order by|\.sort\(/i.test(f.text))
@@ -1227,6 +1228,28 @@ add({
       .map((f: { file: string }) => `${f.file}: reads picks outside the pick code (src/lib/picks.ts, the pick switch, /api/admin/picks)`),
   plant: (files) => {
     files.push({ file: 'src/lib/images/data.ts', text: 'select e.* from studio.elements e left join studio.admin_picks p on p.element_id = e.id order by p.at' });
+  },
+});
+// A hide on a seeded image reaches everywhere it shows (owner, 2026-10-30: "home, About, quote cards, the player,
+// share images. Add a check."). Every file that reads the seeded images (or the introduction or a quote card, which
+// carry them) must pass them through the hide filter, except the readers themselves and the admin Hide that writes it.
+const SEEDED_READ = /\b(loadIllustrations|seededImages|loadIntro|resolveQuote|loadIllustrationById|resolveIntroImage)\(/;
+const SEEDED_FILTER = /\b(hiddenSeeded|quoteShown|introShown)\(/;
+const SEEDED_SOURCES = new Set(['src/lib/illustrations.ts', 'src/lib/intro.ts', 'src/lib/quote.ts', 'src/lib/images/sheets.ts', 'src/lib/seeded-shown.ts']);
+// The admin Hide looks the image up to hide it.
+const SEEDED_EXEMPT = new Set(['src/app/api/admin/hide/route.ts']);
+add({
+  id: 'P5f',
+  principle: 5,
+  name: 'a hidden seeded image is gone everywhere it shows: every reader of seeded images (the chapter and player, References and sheets, the introduction on home and About, quote cards and share images) goes through the hide',
+  load: async () => walk('src', /\.tsx?$/).map((f) => ({ file: f, text: read(f) })),
+  run: (files) =>
+    files
+      .filter((f: { file: string; text: string }) => SEEDED_READ.test(f.text) && !SEEDED_SOURCES.has(f.file) && !SEEDED_EXEMPT.has(f.file))
+      .filter((f: { text: string }) => !SEEDED_FILTER.test(f.text))
+      .map((f: { file: string; text: string }) => `${f.file}: shows seeded images (${f.text.match(SEEDED_READ)![1]}) without the hide (hiddenSeeded, introShown or quoteShown)`),
+  plant: (files) => {
+    files.push({ file: 'src/app/planted/page.tsx', text: "import { loadIntro } from '~/lib/intro';\nexport default function P() { return <div>{loadIntro().cards.length}</div>; }" });
   },
 });
 add({

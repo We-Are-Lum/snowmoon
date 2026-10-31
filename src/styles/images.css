@@ -455,6 +455,31 @@ a.ia-button:hover { text-decoration: none; }
 .ref-images img { width: 100%; height: auto; display: block; }
 .ref-more { margin: 0; font-family: var(--label); font-size: var(--text-label); letter-spacing: var(--ls-label); }
 
+/* Admin picks (owner, 2026-10-29; principle 5): the picked image, labelled, with the reader's switch under it. */
+.admin-pick { margin: 16px 0 20px; }
+.pick-image { margin: 0; }
+.pick-image img { display: block; width: 100%; height: auto; }
+.pick-none { margin: 0; padding: 24px 0; color: var(--muted); font-family: var(--label); font-size: var(--text-label); }
+.pick-switch { display: flex; flex-wrap: wrap; gap: 0; margin-top: 8px; border-top: 1px solid var(--rule); }
+.pick-switch button {
+  min-height: 44px; padding: 0 12px 0 0; background: none; border: 0; color: var(--link); cursor: pointer;
+  font-family: var(--label); font-size: var(--text-label); line-height: 16px; text-transform: uppercase;
+}
+.pick-switch button + button::before { content: '·'; padding-right: 12px; color: var(--muted); }
+.pick-switch button[aria-pressed='true'] { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+.pick-switch button:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+/* An admin's Hide in the reader: shown to admins only. */
+.admin-hide { min-height: 44px; padding: 0; background: none; border: 0; color: var(--link); cursor: pointer; font-family: var(--label); font-size: var(--text-label); text-transform: uppercase; }
+/* The admins' review pages. */
+.admin-review .ar-index { list-style: none; padding: 0; margin: 0 0 24px; display: grid; gap: 6px; }
+.admin-review .ar-moment { margin: 0 0 28px; }
+.admin-review .ar-head { font-family: var(--label); font-size: var(--text-label); text-transform: uppercase; margin: 0 0 8px; }
+.admin-review .ar-images { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }
+.admin-review .ar-images img { display: block; width: 100%; height: auto; }
+.admin-review .ar-images li.is-hidden img { opacity: 0.35; }
+.admin-review .ar-images li.is-picked { outline: 2px solid var(--ink); outline-offset: 4px; }
+.admin-review .ar-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+.admin-review .ar-hidden, .admin-review .ar-picked { font-family: var(--label); font-size: var(--text-label); text-transform: uppercase; color: var(--muted); }
 /* "Support this site" (owner, 2026-10-30). */
 .support .support-qr { width: 200px; max-width: 60vw; margin: 0 0 12px; background: #fff; padding: 8px; }
 .support .support-qr svg { display: block; width: 100%; height: auto; }
