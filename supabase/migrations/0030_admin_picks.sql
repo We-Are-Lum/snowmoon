@@ -1,10 +1,12 @@
--- DRY RUN of NEXT_admin_picks: ends in rollback, so nothing is kept. (numbered at merge). Branch phase2-admin, owner 2026-10-29 ("Phase 2 admin tools … Draft the
--- admin_picks migration as NEXT_ (begin/commit, dry run and read-back files)"). DRAFT: the owner pastes it in the
--- Supabase SQL Editor; nothing here is applied by the coding agent.
+-- 0030_admin_picks.sql — admin picks and seeded-image hides. Branch phase2-admin, owner 2026-10-29 ("Phase 2 admin
+-- tools … Draft the admin_picks migration as NEXT_").
+-- APPLIED by the owner on 2026-10-31 in the Supabase SQL Editor, as postgres. Read back the same day, all true: both
+-- tables exist with RLS on; anon cannot read either; studio_writer can select and insert, not update or delete; only
+-- studio_writer's read and insert policies exist; a realistic pick, a cleared pick and a hide were inserted, counted
+-- and deleted (in one DO block, since the SQL Editor runs each statement on its own and postgres there can't SET ROLE).
+-- Numbered 0030 at merge (main had 0029; no branch held 0030).
 --
 -- MUST RUN AS postgres (the role that owns the `studio` schema), in the Supabase SQL Editor. Requires 0001 only.
--- Dry run first: supabase/drafts/NEXT_admin_picks.DRY-RUN.sql (the same, ending in rollback;).
--- Read back after: supabase/drafts/READ-BACK-admin_picks.sql (every line should say true).
 -- One transaction: all of it or none. Safe to run twice.
 --
 -- What it adds (neither table is publicly readable: no public read policy, and anon and authenticated lose every
@@ -63,4 +65,4 @@ revoke update, delete, truncate on studio.seeded_hidden from studio_writer;
 grant select, insert on studio.admin_picks to studio_writer;
 grant select, insert on studio.seeded_hidden to studio_writer;
 
-rollback;
+commit;

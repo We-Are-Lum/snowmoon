@@ -359,7 +359,7 @@ order the feed, search, anyone's own pages, the agent tools or the read API.
   passes them through the hide (owner, 2026-10-30).
 - Review: does any default, badge or ordering reflect a person's choice without saying whose?
 
-**Status.** Pass. (Picks are built on branch phase2-admin and need NEXT_admin_picks; until it is applied there are none to show.)
+**Status.** Pass. (Picks are built on branch phase2-admin and need 0030_admin_picks, applied 2026-10-31.)
 
 ## 6. Production pages make no third-party requests. Individual ratings and likes are not publicly readable. Only totals are.
 

@@ -7,7 +7,7 @@ import { handleFor } from './adaptation-pages';
  * (c<chapter>-b<block>) or a glossary term. One of only three places that may read studio.admin_picks (P5e: this file,
  * the pick switch and /api/admin/picks): a pick is shown labelled "Picked by @…" with the reader's switch, and orders
  * nothing else. Append-only: the latest row per target counts; image_kind 'none' clears a pick. Until the owner applies
- * NEXT_admin_picks, the table doesn't exist and every read here answers "no picks".
+ * 0030_admin_picks, the table doesn't exist and every read here answers "no picks".
  */
 type Sql = postgres.Sql;
 export type PickTargetKind = 'moment' | 'term';
@@ -27,7 +27,7 @@ export const MOMENT = /^c([0-9]{1,2})-b([0-9]{1,4})$/;
 export const TERM = /^[a-z0-9-]{1,80}$/;
 
 /**
- * Until the owner applies NEXT_admin_picks the table is missing: remembered for a minute, so readers' pages don't each
+ * Where 0030_admin_picks is missing (a local database without it), the table is missing: remembered for a minute, so readers' pages don't each
  * send a query that can only fail (the server has one database connection; 120 failing reads queued behind a slow one
  * in the UI check, 2026-10-30). A read that takes over 3 seconds is given up: no picks shown, the page as it was.
  */
@@ -57,7 +57,7 @@ export async function currentPicks(sql: Sql, where: { chapter: number } | { term
       by: (await handleFor(Number(r.by_fid)).catch(() => null)) ?? `FID ${r.by_fid}`, at: new Date(r.picked_at).toISOString(),
     })));
   } catch (e) {
-    // NEXT_admin_picks not applied yet (42P01): no picks, and none asked for again for a minute.
+    // 0030_admin_picks missing (42P01): no picks, and none asked for again for a minute.
     if ((e as { code?: string }).code === '42P01') missingUntil = Date.now() + 60_000;
     else console.error('picks: none read', (e as Error).message);
     return [];
