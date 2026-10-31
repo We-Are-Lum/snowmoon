@@ -271,7 +271,8 @@ export function resignPage(h: Here, st: SnapState): SnapPage {
     title: text('Resign this match?', { weight: 'bold' }),
     body: text('It counts as a loss. This is practice, so nothing is recorded.', { size: 'sm' }),
     acts: { type: 'stack', props: { direction: 'horizontal' }, children: ['yes', 'back'] },
-    yes: button('Resign', submit(h, 'resign-yes', st)),
+    // "Yes, resign", not "Resign" again: the owner's phone test tapped the board's Resign four times before the confirm (2026-10-30).
+    yes: button('Yes, resign', submit(h, 'resign-yes', st)),
     back: button('Back', submit(h, 'next', st), true),
   });
 }

@@ -652,6 +652,17 @@ async function main() {
     } finally { globalThis.fetch = real; }
   });
 
+  check('the resign confirmation says "Yes, resign" (not "Resign" again) and confirms; Back goes back', () => {
+    const st = { ...newMatch(7, ''), seed: 2_891_337_105 };
+    const p = play(st); st.turns.push(plan(p, 'mixed'));
+    const conf = act(H, 'resign', st, 7, {}, { ver: '' }).page as unknown as { ui: { elements: Record<string, { props?: { label?: string } }> } };
+    assert.equal(conf.ui.elements.yes?.props?.label, 'Yes, resign');
+    assert.equal(conf.ui.elements.back?.props?.label, 'Back');
+    assert.ok(!Object.values(conf.ui.elements).some((e) => e.props?.label === 'Resign'), 'no button just says Resign on the confirmation');
+    const done = act(H, 'resign-yes', st, 7, {}, { ver: '' });
+    assert.equal(done.keep, 'drop', 'confirming ends the match and drops the kept row');
+  });
+
   check('a resumed board offers Resign straight away (and every board after the first turn); setup has none', () => {
     const st = { ...newMatch(7, ''), seed: 2_891_337_105 };
     for (let i = 0; i < 2; i++) { const p = play(st); st.turns.push(plan(p, 'mixed')); }
