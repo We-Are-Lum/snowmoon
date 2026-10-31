@@ -623,6 +623,27 @@ async function main() {
     assert.ok(!lines.some((l) => /cookie|authorization|x-snap-payload":"/i.test(l)), 'no cookies, tokens or payloads logged');
   });
 
+  check('the temporary FCBot experiment: only FCBot with ?x=1-3 on /minpentai/play is rerouted; everything else as before', () => {
+    const run = (path: string, headers: Record<string, string>) => middleware(new NextRequest(`https://snowmoon.party${path}`, { headers }));
+    const rw = (r: Response) => r.headers.get('x-middleware-rewrite');
+    const log = console.log; console.log = () => {};
+    try {
+      const FC1 = { 'user-agent': 'FCBot/0.1 (like TwitterBot)', accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8' };
+      const FC3 = { 'user-agent': 'Twitterbot like FCBot/0.1 FCBot:0.1', accept: 'application/json, text/plain, */*' };
+      for (const x of ['1', '2', '3']) assert.equal(rw(run(`/minpentai/play?x=${x}&t=9`, FC1)), `https://snowmoon.party/snap/minpentai/probe?x=${x}`, `x=${x}, the composer's HTML request`);
+      assert.equal(rw(run('/minpentai/play?x=1', FC3)), 'https://snowmoon.party/snap/minpentai/probe?x=1');
+      assert.equal(rw(run('/minpentai/play?x=2', FC3)), 'https://snowmoon.party/snap/minpentai/probe?x=2');
+      assert.equal(rw(run('/minpentai/play?x=3', FC3)), 'https://snowmoon.party/snap/minpentai', 'x=3, the composer\'s non-HTML request gets the snap');
+      // Unchanged: no ?x, another x, not FCBot, other links.
+      assert.equal(rw(run('/minpentai/play?t=9', FC1)), null);
+      assert.equal(rw(run('/minpentai/play?x=4', FC1)), null);
+      assert.equal(rw(run('/minpentai/play?x=1', { 'user-agent': 'Twitterbot/1.0', accept: '*/*' })), null, 'X\'s bot with ?x: the page, as today');
+      assert.equal(rw(run('/minpentai/play?x=1', { 'user-agent': 'Mozilla/5.0', accept: 'text/html' })), null, 'a browser with ?x: the page');
+      assert.equal(rw(run('/minpentai/play?x=2', { 'user-agent': 'Mozilla/5.0', accept: 'application/vnd.farcaster.snap+json' })), 'https://snowmoon.party/snap/minpentai', 'the snap Accept: the snap, as today');
+      for (const path of ['/minpentai?x=3', '/snap/minpentai?x=3', '/minpentai/c/vu207s.0.cost3._.C-49-7-0-55.c2Nnz7njlDZWxkdy8L6JcI?x=3']) assert.equal(rw(run(path, FC3)), null, `${path} untouched`);
+    } finally { console.log = log; }
+  });
+
   await Promise.all(pending);
   if (failures) { console.log(`\n${failures} failure(s)`); process.exit(1); }
   console.log('\nall passed');
