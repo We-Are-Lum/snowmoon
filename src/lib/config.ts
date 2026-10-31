@@ -370,6 +370,52 @@ export type SupportNetwork = (typeof SUPPORT.networks)[number];
 export const CONTACT_EMAIL = 'snowmoon@wearelum.xyz';
 
 /**
+ * The remix challenge (owner, 2026-10-31; docs/proposals/remix-challenge-plan.md, branch remix-challenge). Every date
+ * of the challenge lives in `dates` and nowhere else (owner, 2026-10-31: "Keep every challenge date in ONE config
+ * entry"): the page, the rules text, the entry window and the tests read them from here, so changing a date is one
+ * edit. Each is an instant (UTC, with the Pacific wall time beside it); `closes` is the first instant after the last
+ * minute that counts (23:59 Pacific is in, midnight is out). scripts/test-challenge.ts checks each against its
+ * Pacific wall time, and fails if a page or wording file writes a date itself.
+ *
+ * Switches, off until the owner rereads the Privacy and Terms lines in docs/legal/remix-challenge-draft.md (legal texts
+ * describe today; P6q checks it):
+ * - `entries`: entries listed on /challenge, the "Entry" badge on version pages, and "Mark as my entry"
+ *   (studio.challenge_marks, NEXT_remix_challenge.sql; without the table everyone's latest version counts and marking
+ *   says "not available yet"). Deciding eligibility asks Neynar for a maker's score (kept a day, as at Generate).
+ * - `posts`: "Add where you posted it" and "Posted on" on version pages (studio.version_posts, the same migration).
+ *   The server reads the pasted address, checks its host, and asks that network's own API (Neynar, Bluesky's public
+ *   AppView, Lens's API); it never fetches the pasted address.
+ * - `openSheets`: while the window is open, people who pass the Generate gate (a Neynar score of at least
+ *   IMAGES.neynarMinScore) may fork Bai's and Zei's sheets and add versions to their own forks. Making any other
+ *   design stays invited-only (owner, 2026-10-10). Off: only invited FIDs can make sheets, as today.
+ * Agent-drafted entries are not tracked (owner, 2026-10-31).
+ */
+export const CHALLENGE = {
+  id: 'remix-2026-11',
+  /** The characters, by their file in content/snowmoon/designs/characters (the plan's recommendation: Bai and Zei). */
+  characters: ['bai', 'zei'] as readonly string[],
+  dates: {
+    /** Entries open at the launch: Fri 6 Nov 2026, 00:00 Pacific (PST). The plan says "the 6 Nov launch"; the hour is the agent's reading. */
+    opens: '2026-11-06T08:00:00Z',
+    /** Entries close after Sun 22 Nov 2026, 23:59 Pacific (PST): this is the first instant that no longer counts, 00:00 on 23 Nov. */
+    closes: '2026-11-23T08:00:00Z',
+    /** Results at the call: Fri 4 Dec 2026, 09:00 Pacific. */
+    results: '2026-12-04T17:00:00Z',
+    /** The mint: from Mon 7 Dec 2026, 00:00 Pacific, to the end of Fri 18 Dec 2026 (23:59 Pacific; this is the first instant after). */
+    mintOpens: '2026-12-07T08:00:00Z',
+    mintCloses: '2026-12-19T08:00:00Z',
+  },
+  /** The time zone every date is shown in. */
+  timeZone: 'America/Los_Angeles',
+  entries: false as boolean,
+  posts: false as boolean,
+  openSheets: false as boolean,
+  /** "Posted on": at most this many shown per version, newest first; and how many one person may add per UTC day. */
+  postsPerVersion: 30,
+  postsPerPersonPerDay: 20,
+};
+
+/**
  * Readers add an image to a passage: slice 1, labelled "Trial" (docs/proposals/add-an-image.md;
  * the owner's decisions of 2026-10-08, all as recommended except 11, 12, 18, 20 and 24).
  * Each number below is one of those decisions.

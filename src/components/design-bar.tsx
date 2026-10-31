@@ -15,10 +15,11 @@ import { PickButton } from './design-picks';
  */
 const W = IMAGE_WORDING.designs;
 
-export function DesignBar(p: { versionId: string; versionNo: number; elementId: string; entityId: string; kind: 'style' | 'character' | 'location'; name: string; byFid: number }) {
+export function DesignBar(p: { versionId: string; versionNo: number; elementId: string; entityId: string; kind: 'style' | 'character' | 'location'; name: string; byFid: number; challengeOpen?: boolean }) {
   const auth = useAuth();
   const canAdd = useCanAddImage();
-  const canMake = useCanMakeDesigns();
+  // The remix challenge opens forks of its characters' sheets to everyone signed in (CHALLENGE.openSheets; the server checks the gate).
+  const canMake = useCanMakeDesigns() || (Boolean(p.challengeOpen) && auth.kind === 'signed-in');
   const mine = auth.kind === 'signed-in' && auth.fid === p.byFid;
   // A fragment, so the bar row is a child of the page's column and can stay at the foot on a phone.
   return (

@@ -11,6 +11,7 @@ import { placeFirstChapter, placeTitle, sheetPlace } from '~/lib/images/sheets';
 import { bookCharacter, characterNameClash, CHARACTER_NAME_REFUSAL, designByVersion, designPublishesToday, makeDesign, MakeRefused, styleNameTaken, type DesignKind, type MakeMode } from '~/lib/images/designs';
 import { blockedName } from '~/lib/images/rules';
 import { mayGenerate } from '~/lib/images/gate';
+import { openForChallenge } from '~/lib/challenge/open-sheets';
 import { checkWords } from '~/lib/images/paid';
 import { IMAGE_WORDING } from '~/lib/images/wording';
 import { putPublic, storageReady } from '~/lib/images/store';
@@ -51,7 +52,6 @@ export async function POST(request: Request) {
   const fid = await getFid(request);
   if (fid === null) return NextResponse.json({ error: 'Sign in with Farcaster to publish' }, { status: 401 });
   if (!IMAGES.enabled) return no('Publishing is switched off for now', 503);
-  if (!IMAGES.invited.includes(fid)) return no(IMAGE_WORDING.designs.form.notInvited, 403);
   const sql = db();
   if (!sql || !process.env.IMAGES_TICKET_SECRET || !storageReady()) return no('Publishing styles and sheets is not set up on this deployment', 503);
   let body: { mode?: unknown; kind?: unknown; title?: unknown; text?: unknown; character?: unknown; place?: unknown; from?: unknown; samples?: unknown; views?: unknown; nameProof?: unknown };
@@ -63,6 +63,8 @@ export async function POST(request: Request) {
   const mode = (['create', 'fork', 'version'] as const).find((m) => m === body.mode) as MakeMode | undefined;
   const kind = (['style', 'character', 'location'] as const).find((k) => k === body.kind) as DesignKind | undefined;
   if (!mode || !kind) return no('Bad request', 400);
+  // Invited FIDs only, except a challenge character's fork or version while the remix challenge opens them (CHALLENGE.openSheets).
+  if (!IMAGES.invited.includes(fid) && !(await openForChallenge(sql, mode, kind, body.from))) return no(IMAGE_WORDING.designs.form.notInvited, 403);
   const text = typeof body.text === 'string' ? body.text.trim() : '';
   const title = typeof body.title === 'string' ? body.title.trim().replace(/\s+/g, ' ') : '';
   if (!text || text.length > IMAGES.designs.textMaxChars) return no(`Write the text, up to ${IMAGES.designs.textMaxChars} characters`, 400);

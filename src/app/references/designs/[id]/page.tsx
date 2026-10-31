@@ -10,6 +10,14 @@ import { placeTitle, sheetPlaces } from '~/lib/images/sheets';
 import { BookQuotes } from '~/components/design-book';
 import { DesignBar } from '~/components/design-bar';
 import { AiTag } from '~/components/ai-tag';
+import { CHALLENGE } from '~/lib/config';
+import { versionStanding } from '~/lib/challenge/entries';
+import { challengeSheetsOpen, isChallengeCharacter } from '~/lib/challenge/open-sheets';
+import { postsFor } from '~/lib/challenge/posts';
+import { CHALLENGE_WORDING as CW } from '~/lib/challenge/wording';
+import { ChallengeShare } from '~/components/challenge-share';
+import { ChallengeMark } from '~/components/challenge-mark';
+import { PostedOn } from '~/components/posted-on';
 
 /**
  * A style or a character sheet (step 4; Claude Design 4a, 5a and 4-desktop): its name, version and
@@ -63,6 +71,10 @@ export default async function DesignPage({ params }: Props) {
   const place = d.kind === 'location' ? (sheetPlaces().find((x) => placeTitle(x.name) === d.entity) ?? null) : null;
   const crumb = style ? { href: '/references/designs', label: W.index.tabStyles } : place ? { href: `/references/designs/place/${place.slug}`, label: d.entity } : { href: `/references/designs/character/${character?.slug ?? ''}`, label: d.entity };
   const title = style ? body.title || d.entity : body.title || W.page.sheetBy(by);
+  // The remix challenge (owner, 2026-10-31): each part only while its switch is on (CHALLENGE.entries, CHALLENGE.posts).
+  const standing = await versionStanding(sql, d.shown.versionId).catch(() => null);
+  const posts = CHALLENGE.posts ? await postsFor(sql, d.shown.versionId).catch(() => []) : [];
+  const challengeOpen = d.kind === 'character' && challengeSheetsOpen() && isChallengeCharacter(d.entity);
 
   const main = (
     <article className="dz-main">
@@ -85,6 +97,18 @@ export default async function DesignPage({ params }: Props) {
         </p>
       )}
       {body.assist && <p className="dz-meta dz-drafted">{W.page.drafted}</p>}
+      {standing?.kind === 'entry' && (
+        <p className="dz-meta ch-standing">
+          <span className="ch-badge">{CW.badge}</span> {CW.badgeNote(callName)} <Link href="/challenge">{CW.title} →</Link>
+        </p>
+      )}
+      {standing?.kind === 'candidate' && (
+        <div className="dz-meta ch-standing">
+          <p className="dz-muted">{CW.candidateNote}</p>
+          <ChallengeMark versionId={d.shown.versionId} byFid={d.byFid} />
+        </div>
+      )}
+      {standing?.kind === 'admin' && <p className="dz-meta ch-standing dz-muted">{CW.adminNote}</p>}
       {pictures.length ? (
         <figure className={`dz-pictures${style ? '' : ' is-views'}`}>
           <div className="dz-grid">
@@ -178,7 +202,10 @@ export default async function DesignPage({ params }: Props) {
         kind={d.kind}
         name={callName}
         byFid={d.byFid}
+        challengeOpen={challengeOpen}
       />
+      <ChallengeShare versionId={d.shown.versionId} what={style ? title : `${callName}: ${title}`} posts={CHALLENGE.posts} />
+      {posts.length > 0 && <PostedOn versionId={d.shown.versionId} posts={posts.map(({ id, network, handle, at, url }) => ({ id, network, handle, at, url }))} />}
       <p className="as-draft ic-draftline">{IMAGE_WORDING.draftLine}</p>
     </article>
   );

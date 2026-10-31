@@ -234,3 +234,21 @@ a.dz-fork:hover { text-decoration: none; }
 .dz-style-option.is-on { box-shadow: inset 3px 0 0 var(--ink); }
 .dz-style-text { white-space: pre-wrap; color: var(--muted); }
 .dz-slots.is-place .dz-slot img, .dz-slots.is-place .dz-slot-empty { aspect-ratio: 16 / 9; }
+
+/* The remix challenge (2026-10-31): /challenge, the Entry badge, share buttons and "Posted on". */
+.ch-page h2 { margin-top: 28px; }
+.ch-deadline { margin: 8px 0 16px; }
+.ch-badge { display: inline-block; padding: 0 6px; border: 1px solid var(--ink); border-radius: var(--radius); font-family: var(--label); font-size: var(--text-label); line-height: 18px; text-transform: uppercase; }
+.ch-standing { margin: 8px 0 0; }
+.ch-standing p { margin: 0; }
+.ch-share { margin-top: 16px; }
+.ch-guidance { margin-top: 8px; }
+.ch-add { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
+.ch-add input { width: 100%; min-height: 44px; box-sizing: border-box; font: inherit; padding: 6px 8px; border: 1px solid var(--rule); border-radius: var(--radius); background: transparent; color: var(--ink); }
+.ch-add button { align-self: flex-start; min-height: 44px; }
+.ch-posted-list { list-style: none; padding: 0; margin: 8px 0 0; }
+.ch-posted-list li { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 6px 0; border-bottom: 1px solid var(--rule); overflow-wrap: anywhere; }
+.ch-posted-list a { display: inline-block; min-height: 44px; line-height: 44px; }
+.ch-remove { min-width: 88px; }
+.ch-mark button { min-height: 44px; }
+.ch-admin-list a { display: inline-block; min-height: 44px; line-height: 44px; }

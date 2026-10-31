@@ -9,6 +9,7 @@ import { bookCharacter, bookCharacters, designByVersion, listDesigns } from '~/l
 import { RULES } from '~/lib/images/rules';
 import { IMAGE_WORDING } from '~/lib/images/wording';
 import { DesignForm } from '~/components/design-form';
+import { challengeSheetsOpen, isChallengeCharacter } from '~/lib/challenge/open-sheets';
 
 /**
  * Make a style or a sheet (step 4; Claude Design 4b, 4c, 5b): a new style, a sheet for one of the
@@ -71,6 +72,7 @@ export default async function NewDesign({ searchParams }: Props) {
         limits={{ ...IMAGES.designs }}
         models={{ text: IMAGES.model, edit: IMAGES.editModel }}
         suffix={IMAGES.suffix}
+        challengeOpen={Boolean(src && mode !== 'create' && src.kind === 'character' && challengeSheetsOpen() && isChallengeCharacter(src.entity))}
       />
     </div>
   );
