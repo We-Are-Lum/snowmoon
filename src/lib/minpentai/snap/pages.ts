@@ -229,9 +229,12 @@ export function actPage(h: Here, st: SnapState, p: Played, msg: string | null): 
       props: { name: 'cell', cols: W, rows: 10, cells: boardCells(p, st), cellAspectRatio: 'square', gap: 'sm' },
       on: { press: submit(h, 'tap', st) },
     },
-    acts: { type: 'stack', props: { direction: 'horizontal' }, children: ['end', 'undo'] },
+    // Resign on the board from the second turn on, so a resumed match can be resigned straight away
+    // (owner, 2026-10-30), not only after a run; setup has none.
+    acts: { type: 'stack', props: { direction: 'horizontal' }, children: ['end', 'undo', ...(st.turns.length ? ['resign'] : [])] },
     end: button('End turn', submit(h, 'end', st), true),
     undo: button('Undo', submit(h, 'undo', st)),
+    ...(st.turns.length ? { resign: button('Resign', submit(h, 'resign', st)) } : {}),
   });
 }
 
