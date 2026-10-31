@@ -292,6 +292,9 @@ The reread words said only Groq, so items 12 and 13 are new drafts. Item 14 repe
 
 ## Part G: "Support this site" (branch `support-page`; no migration)
 
+**Done:** reread on 2026-10-30 in the owner's shorter words, and merged (#71, 2224efa). The draft below is kept as
+history.
+
 ### 15. Terms: a new section 6c, after 6b (Agents)
 
 - Before: (no such section; §6a covers prepaid payments, which buy generations)
@@ -307,6 +310,28 @@ No Privacy change while nothing is recorded. The page and "Send with your wallet
 transaction goes from the sender's wallet straight to the network. Notes for the reread are in
 `docs/legal/support-draft.md` on `support-page`. Also yours to choose: the page's heading, one of "Fund the next scene"
 (shown now), "Back Snowmoon Party" or "Keep the lights on".
+
+---
+
+## Part H: less "token" talk (branch `no-token`; no migration)
+
+The rest of the branch (the disclaimer line, About, the support page, the podcast description, ATTRIBUTION, principle
+7 and its checks) is as you approved on 2026-10-30. These two lines are the legal part. Notes are in
+`docs/legal/no-token-draft.md` on `no-token`.
+
+### 16. Terms §2 (What this is): one sentence removed
+
+- Before: "… It is not affiliated with or endorsed by the author. There is no token. You can prepay for generations.
+  Payments are final. Nothing else here is for sale."
+- After: "… It is not affiliated with or endorsed by the author. You can prepay for generations. Payments are final.
+  Nothing else here is for sale."
+
+### 17. Privacy §3 (Kept on your device only): the sign-in
+
+- Before: "… and, on the website, a sign-in token that lasts about an hour (a day for a wallet sign-in), and a payment
+  you have sent but not yet seen credited."
+- After: "… and, on the website, your sign-in, which lasts about an hour (a day for a wallet sign-in), and a payment
+  you have sent but not yet seen credited."
 
 ---
 
@@ -354,6 +379,7 @@ transaction, safe to run twice. None depends on another, so a failure in one doe
 4. **social-read:** items 11a to 11e, migration 4 "applied", then its switch.
 5. **Plan A part 2:** items 6 to 9 (after part 1).
 6. **The assistant as an agent:** items 12 to 14, when it's built (routing C).
-7. **support-page:** item 15, after its $1 test send on Base (no migration).
+7. **support-page:** done (#71).
+8. **no-token:** items 16 and 17 (no migration). It can merge as soon as you reread; it doesn't wait for the others.
 
 One merge at a time, live checks after each, as always.
