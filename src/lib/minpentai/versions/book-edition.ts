@@ -91,5 +91,7 @@ export const BOOK_PIECES: BookPieceText[] = [
   },
 ];
 
-/** Names proposed for the edition, for the owner to choose. */
+/** Names proposed for the edition (2026-10-31); the owner asked the agent to pick one. */
 export const EDITION_NAMES = ['Rocks and Mirrors', 'Intervention Turns', 'The Wasteland Field'];
+/** The edition's name: the agent's pick, at the owner's request (2026-10-31). Easy to change. */
+export const EDITION_NAME = 'Rocks and Mirrors';

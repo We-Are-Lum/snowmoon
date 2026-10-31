@@ -10,7 +10,7 @@ import assert from 'node:assert/strict';
 import { isDeepStrictEqual } from 'node:util';
 import { BASE, fogProblems } from '../src/lib/minpentai/versions/schema';
 import { engine, layout, playVersion, type AnyPiece, type Layout, type Placement, type Side, type World } from '../src/lib/minpentai/versions/engine';
-import { BOOK_EDITION, BOOK_PIECES, EDITION_NAMES } from '../src/lib/minpentai/versions/book-edition';
+import { BOOK_EDITION, BOOK_PIECES, EDITION_NAME, EDITION_NAMES } from '../src/lib/minpentai/versions/book-edition';
 import { SCENARIOS, runScenario, scenarioSettings, type Scenario } from '../src/lib/minpentai/versions/book-scenarios';
 import { SOLO_V1_ENGINE } from '../src/lib/minpentai/versions/solo-v1';
 
@@ -192,7 +192,7 @@ const run = (L: Layout, start: Placement<AnyPiece>[], n: number) => {
   ok(illegal === 0, `the ladder's players never make an illegal turn on the book edition (${n} matches)`);
   ok(BOOK_PIECES.length === 4 && BOOK_PIECES.every((p) => p.book.length && p.edition.length), 'every piece quotes the book and states this edition\'s rules');
   ok(BOOK_PIECES.every((p) => p.book.every((q) => /^c\d+-b\d+$/.test(q.block))), 'every quote has its block');
-  ok(EDITION_NAMES.length === 3, 'three names proposed');
+  ok(EDITION_NAMES.length === 3 && EDITION_NAMES.includes(EDITION_NAME), 'three names proposed, one picked');
   ok(new Set(SCENARIOS.map((s) => s.piece)).size === 4, 'a scenario for each piece');
 }
 

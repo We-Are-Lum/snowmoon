@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { BOOK_PIECES, EDITION_NAMES } from '~/lib/minpentai/versions/book-edition';
+import { BOOK_PIECES, EDITION_NAME } from '~/lib/minpentai/versions/book-edition';
 import { SCENARIOS, runScenario, type Scenario } from '~/lib/minpentai/versions/book-scenarios';
 import type { Engine, World } from '~/lib/minpentai/versions/engine';
 import { MinpentaiTags } from '../mp-tags';
@@ -85,7 +85,7 @@ function ScenarioCard({ sc }: { sc: Scenario }) {
 export function BookView() {
   return (
     <article className="mb">
-      <h1>Minpentai: the book edition</h1>
+      <h1>Minpentai: {EDITION_NAME}</h1>
       <MinpentaiTags tags={['book', 'rules', 'draft']} />
       <p>
         A separate set of rules, for a match people choose; Play stays as it is. Four of the structures the book&rsquo;s players build
@@ -93,7 +93,7 @@ export function BookView() {
         rocks that hold ore. Each piece below gives the book&rsquo;s words first, then the rules this edition invented for it, then a
         small board to play.
       </p>
-      <p className="mb-note">Draft names for the edition: {EDITION_NAMES.map((x) => `“${x}”`).join(', ')}. Not playable as a match yet.</p>
+      <p className="mb-note">The book edition. Preview only: not playable as a match until the site&rsquo;s computer uses moving walls and factories.</p>
       {BOOK_PIECES.map((p) => (
         <section key={p.id} className="mb-piece">
           <h2>{p.name}</h2>
