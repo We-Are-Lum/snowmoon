@@ -1,6 +1,6 @@
 # Minpentai overnight, 2026-10-31: morning report
 
-> DRAFT, for the owner. Written by the coding agent (Anthropic's Claude, a closed model) during the overnight run of 2026-10-30/31. Rules invented for this edition · not affiliated with the author.
+> DRAFT, for the owner. Written by the coding agent (Anthropic's Claude, a closed model) during the overnight run of 2026-10-30/31. Rules invented for this edition · not affiliated with the author. Drive copy: "Snowmoon: Minpentai overnight report 2026-10-31".
 
 ## In one minute
 
@@ -103,15 +103,15 @@ Branch `minpentai-agent-play`, commit e5015c3, on top of stage 3.
 **What a person can do** (once you switch it on): tell their own AI (Claude, ChatGPT, any MCP client) "start a Minpentai match on the book edition at level 3". The AI then reads their side, tries plans in the sandbox, says what it would do, and places what the person agrees to. The person watches a live link showing only their side.
 
 **Tools** (scope `play`): `minpentai_start_solo`, `minpentai_list_my_matches`, `minpentai_get_view`, `minpentai_simulate`, `minpentai_submit_orders`, `minpentai_let_site_play_turn`, `minpentai_set_standing_order`, `minpentai_resign`, `minpentai_new_live_link`, `minpentai_get_record`.
-- **get_view** is the side's view only (engine `fog()`). It carries no piece ids or counters, and shows ore only on rocks in sight.
+- **get_view** is the side's view only (engine `fog()`). It carries no piece ids or counters, and shows ore only on rocks fully in sight.
 - **simulate** runs from the side's view plus the agent's own belief, never the real board. A belief piece is refused only where the side can already see, in the same words whether that square is empty or not.
 - **submit_orders** is checked on the real board. Placing reads only squares within reach, all of which the side can see, so a refusal says nothing about the dark. Each submission gets a fresh 32-byte salt and a commitment. The site computer commits its own orders when the turn opens, from its own view, before the person's exist. With `final: true` both sides are revealed and applied together.
 - **get_record** opens only when the match is over, for anyone. Before that it says the same words as for a match that doesn't exist. The record carries every turn's orders, who chose them, and each commitment with its salt.
 - **The live link:** `/minpentai/m/<id>?k=<secret>`. The secret is shown once and stored hashed; `new_live_link` replaces it. It is noindex, sends no referrer, and refreshes itself. It shows the side's view while the match is on and the whole board after.
 
 **Tests:**
-- `npm run test:minpentai-agent-play`, 107 checks, in-process: whole matches with a scripted agent that compares plans in the sandbox; every commitment checked against its revealed orders and salt; the record replays to the final board; the view and the sandbox unchanged by hidden pieces.
-- `npm run test:minpentai-agent-mcp`, 21 checks: the built site on PGlite with every migration. A scripted agent signs in through OAuth asking for `play`, then plays a whole book-edition match through `/mcp` (view, sandbox, standing order, committed orders, one turn handed to the site computer) to the end. Another person's agent is told the same as for a match that doesn't exist. The live link opens only with its secret.
+- `npm run test:minpentai-agent-play`, 115 checks, in-process: whole matches with a scripted agent that compares plans in the sandbox; every commitment checked against its revealed orders and salt; the record replays to the final board; the view and the sandbox unchanged by hidden pieces; each review finding as a twin-board check.
+- `npm run test:minpentai-agent-mcp`, 22 checks: the built site on PGlite with every migration. A scripted agent signs in through OAuth asking for `play`, then plays a whole book-edition match through `/mcp` (view, sandbox, standing order, committed orders, one turn handed to the site computer) to the end. Another person's agent is told the same as for a match that doesn't exist. The live link opens only with its secret, and final submits take a fixed time.
 - `test:agents` (185) and `test:agent-api` (25) still pass.
 
 **Off in production.** `AGENTS.minpentaiPlay` is false. The `play` scope can't be granted, isn't in the OAuth metadata, isn't the default, its tools are listed to no agent, and the live link returns 404. Only the local tests switch it on (`MINPENTAI_PLAY_TEST`, never on Vercel). The consent line for `play` is drafted in `SCOPE_TEXT` but shows nowhere while it's off.
@@ -150,7 +150,7 @@ Each one is easy to change.
 3. **Mirrors turn a glider in place** (on the square before the mirror), as squares and rocks bounce in place in this edition. Moving onto the mirror square would look more like a mirror but needs two pieces on one square.
 4. **The remote symbol, per your reading of c4-b113:** three gliders, one turn, walled in or gone. "Walled in" is every square a glider could reach it from (four sides, or eight under the diagonal rule) being solid or the edge. While it forms it counts as a tower (sight, reach, and the tower count). Several at once form on the first in reading order.
 5. **Factories need their rock within reach,** so a refusal can't tell you whether a rock out of sight has crumbled. Ore is spent only when the factory actually fires.
-6. **Where rocks can crumble, a side sees rocks out of sight as they were at the start,** and their ore only in sight.
+6. **A side sees rocks out of sight as they were at the start,** and their ore only where the rock and the squares beside it are in sight.
 7. **The view renumbers glider and wall ids and drops empty piece lists.** Real ids would count pieces made out of sight, and an empty list would say the enemy has such a piece somewhere. The review test found the empty list (below).
 8. **Search levels:** spaced by slips and look-ahead, not by handicaps. Level 1 is already above the old ladder.
 9. **Agent play, solo, without clocks:** a turn resolves when the person's side marks its orders final. "Let the site computer play this turn" is the explicit fallback, under the standing order's preset (defend, attack, expand, balanced as search weights; level 3).
@@ -165,6 +165,7 @@ Each one is easy to change.
 - A fog leak found by the stage 3 test: an enemy's hidden moving wall left an empty list in Cyan's view. Fixed, and tested.
 - The principles check flagged a function named `canonical` under P5a ("canon"). Renamed.
 - The kit's rules table quoted `apply`'s old first line. Updated (P8g).
+- The first preview build failed because the archived review probes were `.ts` files the build typechecked. Kept as text; rebuilt.
 
 ## What needs you
 
