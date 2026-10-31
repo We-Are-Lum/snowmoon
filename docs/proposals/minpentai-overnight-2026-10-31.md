@@ -6,9 +6,9 @@
 
 - **Stage 1:** #68 (one engine) merged at 29df5fa and live; its live checks passed. The cap10 rules are PR **#75**, with a preview; it waits for you to run the SQL below and say merge. Not confirmed: a snap turn after the deploy (no one tapped in Farcaster overnight).
 - **Stage 2:** the book edition, branch `minpentai-book-edition` (22fed02). All four pieces (mirror wall, symbol glider, moving wall, glider factory) are on a 24 × 14 board, as a separate ruleset. Today's game is unchanged: every identity gate passes untouched. Preview: <https://snowmoon-j6mgl2qak-nates-projects-d1780cff.vercel.app/minpentai/book>.
-- **Stage 3:** the search computer, branch `minpentai-search-computer` (afb347f, on top of stage 2). It has five levels, each beating the one below on Play and on the book edition, and every level beats the old Planner. Node and Chrome play the same moves.
-- **Stage 4:** the AI commander, solo, branch `minpentai-agent-play` (e5015c3, on top of stage 3). Ten connector tools, a live link, and a NEXT_ migration. A scripted agent played a whole book-edition match through the real `/mcp`. Everything stays **off** in production until you approve its consent wording and legal lines.
-- **Stage 5:** [filled in below once the independent review is done].
+- **Stage 3:** the search computer, branch `minpentai-search-computer` (afb347f, on top of stage 2; its final level settings are on `minpentai-agent-play`). It has five levels, each beating the one below on Play and on the book edition over 40 matches a pairing, and every level beats the old Planner. Node and Chrome play the same moves.
+- **Stage 4:** the AI commander, solo, branch `minpentai-agent-play` (e5015c3; with stage 5's fixes 45b0bf0), on top of stage 3. Ten connector tools, a live link, and a NEXT_ migration. A scripted agent played a whole book-edition match through the real `/mcp`. Everything stays **off** in production until you approve its consent wording and legal lines.
+- **Stage 5:** an independent reviewer (a fresh agent that hadn't seen the work) attacked the fog through every channel. It found six problems: three that leak hidden information, a timing side channel and a predictable computer among them. Five are fixed with tests that fail on the old code; the predictability is only partly fixed. It also showed that **live one-on-one on main has the same own-piece leak** (needs you). Top of the stack: `minpentai-agent-play` (45b0bf0), preview <https://snowmoon-l6y95y5nj-nates-projects-d1780cff.vercel.app>.
 - **Nothing else merged or deployed by me.** No migration applied, no legal text changed, no paid model or image call. Production moved once overnight, to 31c9d3b: another session merged #76 (Support) at 08:22.
 
 ## Stage 1: #68 and cap10
@@ -67,12 +67,12 @@ Branch `minpentai-search-computer`, commit afb347f, on top of stage 2.
 
 **The engine now exports** `legal()` (every single placement the placement check accepts, for every piece the rules allow), `score()` and `fog()` (a side's view, book pieces included). The search player (`versions/search.ts`) plans from the view only. It tries every legal placement on a copy of the board as it believes it is, runs the engine to the next turn plus a look-ahead, and keeps the best, one piece at a time. It also tries some moves as groups: three symbol gliders side by side, and walling in a symbol of its own that is still forming. Budgets are counted in **simulated engine steps, never time**. Levels differ in look-ahead, budget, and how often they slip (play any option they tried, drawn from their own seeded numbers).
 
-**Round robin**, 10 seeds a pairing with seats swapped (20 matches). Full table: `docs/minpentai/search-ladder-2026-10-31.md`.
+**Round robin**, final: 20 seeds a pairing with seats swapped (40 matches), after the fog review's fixes. Full table: `docs/minpentai/search-ladder-2026-10-31.md`.
 
 | | 2 vs 1 | 3 vs 2 | 4 vs 3 | 5 vs 4 | vs old Planner (levels 1 to 5) |
 |---|---|---|---|---|---|
-| Play | 70% | 78% | 58% | 68% | 95%, 85%, 93%, 90%, 93% |
-| Book edition | 78% | 60% | 100% | 100% | 73%, 100%, 100%, 98%, 100% |
+| Play | 70% | 76% | 59% | 69% | 85%, 86%, 93%, 89%, 88% |
+| Book edition | 84% | 59% | 100% | 100% | 79%, 98%, 100%, 99%, 100% |
 
 No illegal turn in any match.
 
@@ -120,7 +120,26 @@ Branch `minpentai-agent-play`, commit e5015c3, on top of stage 3.
 
 ## Stage 5: independent review
 
-[Filled in when the review is done.]
+A fresh agent, given the code and the agent-play design but not my reasoning, tried to learn hidden information through error messages, the sandbox, the view, the live link, timing, the record, other people's matches and the commitments. Its probe scripts are kept in `docs/minpentai/fog-review-2026-10-31/`.
+
+**Found, and fixed** (commits fd6d675 and 45b0bf0):
+
+| # | Finding | Severity | Fix | Test |
+|---|---|---|---|---|
+| 1 | **Your own pieces were sensors in the dark.** The view showed a side's own squares, mirrors, factories, resting symbol gliders and moving walls anywhere, with their real state. So a symbol glider sent east came to rest exactly where a hidden square was (2 points for its exact position); a moving wall stopped short of one; and an own square's hits left showed a hidden glider's hit. | High | A side's view holds only what is in sight, its own non-tower pieces included. The person still sees where they placed them in their own turn list. | F1 (three twin-board checks) |
+| 2 | **Timing.** A final submit runs the computer's next plan, which took about 12 ms more per computer tower (102 to 246 ms over HTTP), against a 4 ms non-final baseline. | Medium | Calls that resolve a turn (and the start) answer no sooner than 1.5 s. The reviewer's own HTTP probe now reads 1508 to 1516 ms from 5 to 21 computer towers. | M22 over `/mcp` |
+| 3 | **The computer is predictable.** Book-edition setups at level 5 come in 4 shapes over 60 seeds. With the open-source engine, an agent can keep a handful of candidate hidden boards that always include the real one. | Medium, partly by design | Partly: the computer's numbers now mix in a server-only random value per match, shown in the record after the end, so the seed alone no longer gives its exact choices. Its play is still narrow, and an agent can still sample the distribution. | F3 |
+| 4 | **Ore at the edge of sight** showed a hidden factory firing. | Low | Ore only where the rock and every square beside it are in sight. | F4 |
+| 5 | **A moving wall's stop flag** reached the sandbox. | Low | Never copied into a view. | F5 |
+| 6 | **Rocks out of sight showed their real state** in rulesets without ore (latent: no live ruleset has breakable rocks or rock debris). | Low | Every ruleset: rocks out of sight as at the start. | F6 |
+
+After the fixes, the reviewer's 150-pair differential fuzz (view, sandbox and refusals on twin boards that differ only in the dark) still finds nothing. Each new test fails on the engine before the fixes and passes after. `test:minpentai-agent-play` is now 115 checks and `test:minpentai-agent-mcp` 22. The identity gates are unchanged.
+
+**Tried, no leak:** placement and belief refusals; the sandbox from view plus belief; glider and wall ids; empty lists; another person's match and the record before the end (same words as a match that doesn't exist); the live link's secret (24 bytes, constant-time compare, 404 either way); commitments (fresh 32-byte salts; the computer's orders fixed at the turn's opening); brute-forcing the seed.
+
+**Not reviewed:** the live page's HTML byte for byte, OAuth attacks beyond other people's matches, CPU abuse of the sandbox, timing against Vercel itself, and PvP (not built).
+
+**Found in live code, not changed (needs you):** Play's one-on-one, on main and in production, sends each side its own squares (with hits left) and its own gliders everywhere (`play-server/view.ts` `fog`). A player's own glider out of sight shows where it bounced off a hidden piece, and an own square's hits left shows a hidden glider's hit: the same class as finding 1. Fixing it changes what one-on-one players see, so it's your call. I'd hide own gliders and squares out of sight, as agent play now does.
 
 ## Decisions I made for you
 
@@ -137,7 +156,8 @@ Each one is easy to change.
 9. **Agent play, solo, without clocks:** a turn resolves when the person's side marks its orders final. "Let the site computer play this turn" is the explicit fallback, under the standing order's preset (defend, attack, expand, balanced as search weights; level 3).
 10. **Opponent's revealed orders are not shown during the match,** only in the record after it, since they would show hidden pieces.
 11. **The live link is a random secret stored hashed** (not a signed token), so it can be replaced at once.
-12. **Disk:** the Mac's disk filled at about 07:55. I freed about 5 GB by deleting `.next` and `.vercel/output` (build files, rebuilt on the next build) in my own Minpentai worktrees only. Stages 3 and 4 are stacked in the `snowmoon-book-edition` worktree rather than new worktrees. **The disk is still nearly full**, with about 3 GB free.
+12. **Level 3's slips** were tuned once more after the fog fix (15% to 12%), and the round robin re-run (table above).
+13. **Disk:** the Mac's disk filled at about 07:55. I freed about 5 GB by deleting `.next` and `.vercel/output` (build files, rebuilt on the next build) in my own Minpentai worktrees only. Stages 3 and 4 are stacked in the `snowmoon-book-edition` worktree rather than new worktrees. **The disk is still nearly full**, with about 3 GB free.
 
 ## What failed, and what I fixed
 
@@ -153,7 +173,8 @@ Each one is easy to change.
 3. The book edition: read the four pieces' rules on the preview, and pick a name.
 4. Whether the search computer should replace Play's ladder now, and whether level 1 is too strong for a first match.
 5. Agent play: the consent line for `play`, the Terms and Privacy lines (model label, standing orders, notes, the public record), and applying `NEXT_minpentai_agent_matches.sql`. These come before switching it on.
-6. Disk space: a cleanup plan for old worktrees (you asked for one before deleting anything).
+6. Live one-on-one's own-piece leak (Stage 5): hide own gliders and squares out of sight?
+7. Disk space: a cleanup plan for old worktrees (you asked for one before deleting anything).
 
 ## Principles
 

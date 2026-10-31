@@ -33,7 +33,7 @@ export interface SearchLevel {
 export const SEARCH_LEVELS: Record<number, SearchLevel> = {
   1: { horizon: 0, mistake: 0.5, sample: 4, beam: 8, steps: 3_000 },
   2: { horizon: 0, mistake: 0.3, sample: 2, beam: 16, steps: 8_000 },
-  3: { horizon: 6, mistake: 0.15, sample: 1, beam: 24, steps: 20_000 },
+  3: { horizon: 6, mistake: 0.12, sample: 1, beam: 24, steps: 20_000 },
   4: { horizon: 12, mistake: 0.05, sample: 1, beam: 32, steps: 40_000 },
   5: { horizon: 18, mistake: 0, sample: 1, beam: 48, steps: 80_000 },
 };
