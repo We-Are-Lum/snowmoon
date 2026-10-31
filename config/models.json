@@ -176,6 +176,38 @@
       "role": "guard"
     },
     {
+      "id": "kimi-k3",
+      "kind": "text",
+      "repo": "moonshotai/Kimi-K3",
+      "revision": "f831ab66814297da540d832a5235f8e904f29d06",
+      "license_line": "license: other (license_name: kimi-k3)",
+      "license_checked": {
+        "by": "coding agent (Anthropic's Claude), for the owner to approve",
+        "on": "2026-10-31",
+        "source": "https://huggingface.co/moonshotai/Kimi-K3/blob/main/LICENSE"
+      },
+      "notes": "Moonshot AI's open-weights model, named in the book's AI usage declaration. The assistant's make mode (routing C, owner 2026-10-30): chosen once the routing call says \"make something\"; through Vercel AI Gateway pinned to Baseten, zero data retention, no fallback. Its licence is permissive with conditions: keep the notice; a separate agreement for a Model-as-a-Service business over $20M revenue in 12 months; \"Kimi K3\" shown prominently above 100M monthly users or $20M monthly revenue. None applies to this site; the assistant names Kimi K3 anyway. Off on the site until the owner's reread (CHAT.make.enabled).",
+      "runs_on": "hosted",
+      "hosted": {
+        "host": "Vercel AI Gateway",
+        "endpoints": {
+          "moonshotai/kimi-k3": null
+        },
+        "price_unit": "USD per million tokens (input, output)",
+        "prices": {
+          "input": 3.0,
+          "output": 15.0
+        },
+        "price_seen": "2026-10-31"
+      },
+      "model_record": "gateway model id, date and provider (the host does not expose a weights revision)",
+      "cost_usd_per_unit": null,
+      "license": "Kimi K3 License (permissive, with attribution and scale conditions)",
+      "open_weights": true,
+      "weights": "https://huggingface.co/moonshotai/Kimi-K3",
+      "role": "chat-make"
+    },
+    {
       "id": "qwen3-tts-1.7b-voicedesign",
       "kind": "voice-design",
       "repo": "Qwen/Qwen3-TTS-12Hz-1.7B-VoiceDesign",

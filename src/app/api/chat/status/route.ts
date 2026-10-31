@@ -3,7 +3,10 @@ import { getPerson } from '~/lib/auth';
 import { db } from '~/lib/db';
 import { CHAT } from '~/lib/config';
 import { directKey, gatewayToken, servingAllowed } from '~/lib/chat/model';
-import { usedToday } from '~/lib/chat/limits';
+import { makeStartedToday, usedToday } from '~/lib/chat/limits';
+import { makeTokensReady } from '~/lib/chat/make';
+import { currentNoticeMake } from '~/lib/chat/notice';
+import { makeSettingsOk } from '~/lib/chat/turn';
 
 /**
  * The assistant's state for the signed-in reader: available or not, the model,
@@ -24,7 +27,10 @@ export async function GET(request: Request) {
   if (!sql || (!gatewayToken(request) && !directKey())) return NextResponse.json({ ...base, available: false, reason: 'not-configured', left: 0 });
   try {
     const used = await usedToday(sql, fid);
-    return NextResponse.json({ ...base, available: true, left: Math.max(0, CHAT.messagesPerDay - used) });
+    // Make mode (routing C): named, with this person's make conversations left today, only while it is on.
+    const makeOn = makeSettingsOk() && makeTokensReady() && gatewayToken(request) !== null;
+    const make = makeOn ? { ...currentNoticeMake()!, left: Math.max(0, CHAT.make.conversationsPerDay - (await makeStartedToday(sql, fid))) } : null;
+    return NextResponse.json({ ...base, available: true, left: Math.max(0, CHAT.messagesPerDay - used), make });
   } catch (e) {
     // Most likely migration 0006 is not applied yet.
     console.error('chat status failed', (e as { code?: string }).code ?? (e as Error).name);

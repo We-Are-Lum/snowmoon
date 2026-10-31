@@ -1014,6 +1014,8 @@ add({
     endpoints.set(IMAGES.guardModel, 'src/lib/config.ts IMAGES.guardModel');
     // Step 4: reference pictures (a sheet's side and back views; images made with a sheet's views).
     endpoints.set(IMAGES.editModel.endpoint, 'src/lib/config.ts IMAGES.editModel');
+    // The assistant's make mode (routing C): Kimi K3 through the gateway.
+    endpoints.set(CHAT.make.model, 'src/lib/config.ts CHAT.make.model');
     return { models: json('config/models.json').models, used: [...used.entries()], endpoints: [...endpoints.entries()] };
   },
   run: ({ models, used, endpoints }) => {
@@ -1503,6 +1505,8 @@ const SERVICES: [string, RegExp][] = [
   ['Cloudflare', /\bCloudflare\b/g],
   ['Supabase', /\bSupabase\b/g],
   ['Groq', /\bGroq\b/g],
+  // The assistant's make mode (routing C) sends a conversation to Baseten, through Vercel AI Gateway.
+  ['Baseten', /\bBaseten\b/g],
   ['fal.ai', /\bfal\.ai\b/g],
   ['Farcaster', /\bFarcaster\b(?!(?:['’]s)? (?:ID|name|username|app|mini app)\b)/g],
   ['Neynar', /\bNeynar\b/g],

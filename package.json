@@ -44,6 +44,7 @@
     "publish:scene-video": "tsx --env-file-if-exists=.env.local scripts/publish-scene-video.ts",
     "publish:podcast-cover": "tsx --env-file-if-exists=.env.local scripts/publish-podcast-cover.ts",
     "test:chat-route": "tsx --conditions=react-server scripts/test-chat-route.ts",
+    "test:chat-make": "tsx --conditions=react-server scripts/test-chat-make.ts",
     "build:glossary": "tsx scripts/build-glossary.ts",
     "test:glossary": "tsx scripts/test-glossary.ts",
     "test:minpentai-share": "tsx scripts/test-minpentai-share.ts",

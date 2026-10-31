@@ -24,6 +24,8 @@ export interface ModelReply {
   model: string;
   /** Which route answered: the provider directly, or the gateway. */
   route: 'direct' | 'gateway';
+  /** Tool calls in the reply, when tools were offered (the routing call forces one). */
+  toolCalls?: { name: string; arguments: string }[];
 }
 
 /** The project's own key for the provider, if set. */
@@ -49,7 +51,12 @@ export function promptFile(name: string): string {
 }
 
 type Messages = { role: 'system' | 'user' | 'assistant'; content: string }[];
-type Opts = { maxTokens: number; temperature: number };
+/** tools and toolChoice: OpenAI-style, sent as given (the routing call, src/lib/chat/router.ts). */
+type Opts = { maxTokens: number; temperature: number; tools?: unknown[]; toolChoice?: unknown };
+const toolFields = (o: Opts) => (o.tools ? { tools: o.tools, ...(o.toolChoice ? { tool_choice: o.toolChoice } : {}) } : {});
+type ChoiceMessage = { content?: string; tool_calls?: { function?: { name?: string; arguments?: string } }[] };
+const toolCallsOf = (m: ChoiceMessage | undefined) =>
+  m?.tool_calls?.map((c) => ({ name: c.function?.name ?? '', arguments: c.function?.arguments ?? '' }));
 
 /** Waits and tries again while the answer is "busy"; returns the last response. */
 async function withBusyRetries(send: () => Promise<Response>): Promise<Response> {
@@ -77,13 +84,14 @@ async function completeDirect(key: string, model: string, messages: Messages, op
     fetch(CHAT.direct.endpoint, {
       method: 'POST',
       headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model, messages, max_tokens: opts.maxTokens, temperature: opts.temperature }),
+      body: JSON.stringify({ model, messages, max_tokens: opts.maxTokens, temperature: opts.temperature, ...toolFields(opts) }),
     });
   const res = retry ? await withBusyRetries(send) : await send();
   if (!res.ok) return null;
-  const j = (await res.json().catch(() => ({}))) as { id?: string; model?: string; choices?: { message?: { content?: string } }[]; usage?: { prompt_tokens?: number; completion_tokens?: number } };
+  const j = (await res.json().catch(() => ({}))) as { id?: string; model?: string; choices?: { message?: ChoiceMessage }[]; usage?: { prompt_tokens?: number; completion_tokens?: number } };
   return {
     text: j.choices?.[0]?.message?.content ?? '',
+    toolCalls: toolCallsOf(j.choices?.[0]?.message),
     ...priced(model, j),
     requestId: j.id ?? res.headers.get('x-request-id'),
     provider: CHAT.provider,
@@ -109,7 +117,7 @@ async function completeGateway(token: string, model: string, messages: Messages,
     fetch(CHAT.endpoint, {
       method: 'POST',
       headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model, messages, max_tokens: opts.maxTokens, temperature: opts.temperature, providerOptions: providerOptions() }),
+      body: JSON.stringify({ model, messages, max_tokens: opts.maxTokens, temperature: opts.temperature, ...toolFields(opts), providerOptions: providerOptions() }),
     });
   // The same provider only (owner's condition, principle 6). When it is busy (429;
   // 498, Groq's "flex capacity exceeded"; 503), wait and try again: 1, 2 and 4
@@ -119,7 +127,7 @@ async function completeGateway(token: string, model: string, messages: Messages,
     id?: string;
     model?: string;
     provider?: string;
-    choices?: { message?: { content?: string } }[];
+    choices?: { message?: ChoiceMessage }[];
     usage?: { prompt_tokens?: number; completion_tokens?: number; cost?: number };
   };
   if (!res.ok) throw new ModelUnavailable(`gateway ${res.status}`);
@@ -127,6 +135,7 @@ async function completeGateway(token: string, model: string, messages: Messages,
   if (!servedByPinned(provider)) throw new ModelUnavailable(`served by ${provider}, not the chosen provider`);
   return {
     text: j.choices?.[0]?.message?.content ?? '',
+    toolCalls: toolCallsOf(j.choices?.[0]?.message),
     ...priced(model, j),
     requestId: j.id ?? res.headers.get('x-vercel-id'),
     provider,

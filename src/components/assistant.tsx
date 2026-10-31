@@ -12,8 +12,9 @@ import { PrivateTextField } from './private-text-field';
 import { CHAT } from '~/lib/config';
 import { OWNER_WORDING } from '~/lib/wording';
 import type { AskResult, Quote } from '~/lib/chat/ask';
+import type { MakeResult } from '~/lib/chat/make';
 import type { GlossaryLink } from '~/lib/chat/glossary';
-import { noticeItems, noticeKey } from '~/lib/chat/notice';
+import { noticeItems, noticeKey, type NoticeMake } from '~/lib/chat/notice';
 import type { Part } from '~/lib/chat/sanitize';
 import {
   deleteThread, markNoticeSeen, newThread, noticeSeen, readTo, saveThread, thread as loadThread, threads as loadThreads,
@@ -29,7 +30,7 @@ import {
 type Status =
   | { kind: 'loading' }
   | { kind: 'signed-out'; inApp: boolean }
-  | { kind: 'ready'; available: boolean; reason?: string; model: string; host: string | null; provider: string | null; route: string; perDay: number; left: number };
+  | { kind: 'ready'; available: boolean; reason?: string; model: string; host: string | null; provider: string | null; route: string; perDay: number; left: number; make?: (NonNullable<NoticeMake> & { left: number }) | null };
 
 const authedFetch = authFetch;
 
@@ -43,6 +44,7 @@ function untilUtcMidnight(): string {
 /** The text of an answer, as it was shown, for the thread history sent back to the model. */
 function answerText(m: AnsweredMessage): string {
   const r = m.result;
+  if (r.state === 'made') return r.text;
   if (r.state !== 'answer') return '';
   return r.parts.map((p) => (p.type === 'text' ? p.text : `[${p.id}]`)).join('');
 }
@@ -63,9 +65,9 @@ function DraftLine() {
 }
 
 /** Screen 2: before the first message, until "don't show this again" is ticked for these exact words. */
-function Notice({ host, provider, model, onClose }: { host: string | null; provider: string | null; model: string; onClose: (go: boolean) => void }) {
+function Notice({ host, provider, model, make, onClose }: { host: string | null; provider: string | null; model: string; make: NoticeMake; onClose: (go: boolean) => void }) {
   const [dontShow, setDontShow] = useState(false);
-  const items = noticeItems({ host, provider, model });
+  const items = noticeItems({ host, provider, model, make });
   return (
     <div className="as-overlay" role="dialog" aria-modal="true" aria-labelledby="as-notice-title">
       <div className="as-sheet">
@@ -235,6 +237,37 @@ function Reply({ m, thread, onShow }: { m: AnsweredMessage; thread: Thread; onSh
   const r = m.result;
   const [pick, setPick] = useState(Math.min(32, thread.limit + 1));
   const [hidden, setHidden] = useState(false);
+  // Make mode (routing C). Draft wording by the coding agent (Anthropic's Claude), 2026-10-31; shown only once CHAT.make is on.
+  if (r.state === 'made')
+    return (
+      <div className="as-reply">
+        <p className="as-label">Assistant · making · {r.left} new left today</p>
+        {r.text.split(/\n{2,}/).map((para, i) => (
+          <p key={i}>{para}</p>
+        ))}
+      </div>
+    );
+  if (r.state === 'make-limit')
+    return (
+      <div className="as-reply as-stop">
+        <p className="as-label">Making: 0 left today</p>
+        <p>You’ve started today’s make conversations. They come back at 00:00 UTC, in {untilUtcMidnight()}. Questions about the book still work.</p>
+      </div>
+    );
+  if (r.state === 'make-spend')
+    return (
+      <div className="as-reply as-stop">
+        <p className="as-label">Making is paused for today</p>
+        <p>Making has reached today’s spending limit for everyone. It comes back at 00:00 UTC. Questions about the book still work.</p>
+      </div>
+    );
+  if (r.state === 'make-unavailable')
+    return (
+      <div className="as-reply as-stop">
+        <p className="as-label">Making is unavailable</p>
+        <p>The model that makes things can’t be reached right now, and this conversation isn’t sent anywhere else. Try again later. Questions about the book still work in a new thread.</p>
+      </div>
+    );
   if (r.state === 'answer')
     return (
       <div className="as-reply">
@@ -350,7 +383,7 @@ function ThreadView({ id, status, refresh }: { id: string; status: Extract<Statu
   const send = useCallback(
     async (question: string, limit?: number) => {
       if (!t || !question.trim()) return;
-      const go = noticeSeen(noticeKey(noticeItems(status))) ? true : await new Promise<boolean>((resolve) => setNotice(() => resolve));
+      const go = noticeSeen(noticeKey(noticeItems({ ...status, make: status.make ?? null }))) ? true : await new Promise<boolean>((resolve) => setNotice(() => resolve));
       setNotice(null);
       if (!go) return;
       const th: Thread = { ...t, limit: limit ?? t.limit };
@@ -365,15 +398,15 @@ function ThreadView({ id, status, refresh }: { id: string; status: Extract<Statu
         const res = await authedFetch('/api/chat/ask', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ question: question.trim(), limit: th.limit, attached: th.messages.filter((m) => m.role === 'user').length === 1 ? th.attached : [], history }),
+          body: JSON.stringify({ question: question.trim(), limit: th.limit, attached: th.messages.filter((m) => m.role === 'user').length === 1 ? th.attached : [], history, ...(th.make ? { make: th.make } : {}) }),
         });
         if (res.status === 503) result = { state: 'unavailable' };
         else if (!res.ok) result = { state: 'error', error: ((await res.json().catch(() => ({}))) as { error?: string }).error ?? 'Something went wrong.' };
-        else result = (await res.json()) as AskResult;
+        else result = (await res.json()) as AskResult | MakeResult;
       } catch {
         result = { state: 'error', error: 'No connection. Try again.' };
       }
-      const done: Thread = { ...th, messages: [...th.messages, { role: 'assistant', result, question: question.trim(), at: new Date().toISOString() }] };
+      const done: Thread = { ...th, ...(result.state === 'made' ? { make: result.make } : {}), messages: [...th.messages, { role: 'assistant', result, question: question.trim(), at: new Date().toISOString() }] };
       setT(done);
       saveThread(done);
       setBusy(false);
@@ -451,15 +484,21 @@ function ThreadView({ id, status, refresh }: { id: string; status: Extract<Statu
         </form>
       )}
       <p className="as-foot">
-        <span>
-          {status.model} · open weights · {status.provider}
-          {status.host ? ` (via ${status.host} when busy)` : ''}
-        </span>
+        {t.make && status.make ? (
+          <span>
+            {status.make.model} · open weights · {status.make.provider} via {status.make.host}
+          </span>
+        ) : (
+          <span>
+            {status.model} · open weights · {status.provider}
+            {status.host ? ` (via ${status.host} when busy)` : ''}
+          </span>
+        )}
         <span>
           {status.left} of {status.perDay} left today
         </span>
       </p>
-      {notice && <Notice host={status.host} provider={status.provider} model={status.model} onClose={notice} />}
+      {notice && <Notice host={status.host} provider={status.provider} model={status.model} make={status.make ?? null} onClose={notice} />}
     </section>
   );
 }

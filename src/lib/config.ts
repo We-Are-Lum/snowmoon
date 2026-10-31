@@ -81,6 +81,7 @@ export const CHAT = {
   prices: {
     'openai/gpt-oss-120b': { input: 0.15e-6, output: 0.6e-6 },
     'openai/gpt-oss-safeguard-20b': { input: 0.075e-6, output: 0.3e-6 },
+    'moonshotai/kimi-k3': { input: 3e-6, output: 15e-6 },
   } as Record<string, { input: number; output: number }>,
   /** Answers per FID per UTC day (refusals and held-back answers count). */
   messagesPerDay: 30,
@@ -98,6 +99,44 @@ export const CHAT = {
   /** Turns of the thread sent back with each question. */
   historyTurns: 6,
   questionMaxChars: 600,
+  /**
+   * Routing C (owner, 2026-10-30; docs/trials/trial-5-hybrid-C.md on next-version). Before a turn, a forced routing
+   * call on CHAT.model, through the chat's own route (CHAT.provider), sees only its two lines of instructions
+   * (src/lib/chat/router.ts) and the person's latest message, and answers "question about the book" or "make something".
+   * Book questions go on as above, under CHAT.dailySpendCapUsd; the routing call is counted there too. Once a
+   * conversation is "make", it stays on CHAT.make.model (a signed make token on the device; no routing call).
+   */
+  router: { maxTokens: 400 },
+  /**
+   * Make mode (owner, 2026-10-30): Kimi K3 through Vercel AI Gateway, pinned to Baseten only, zero data retention, no
+   * fallback: if Baseten can't serve, making is unavailable and the person is told so. Its own caps, apart from the
+   * chat's: CHAT.make.dailySpendCapUsd across everyone, and conversationsPerDay per person (a conversation is counted when
+   * its first "make" turn is answered). Counted with no migration: a make conversation is a studio.chat_calls row whose
+   * model is CHAT.make.model; make spend is studio.chat_costs rows with that model (src/lib/chat/limits.ts).
+   * OFF until the owner rereads the notice, Privacy and Terms lines that name Baseten (docs/legal/routing-c-draft.md):
+   * while off, the chat works exactly as before and no routing call is made.
+   */
+  make: {
+    enabled: false as boolean,
+    model: 'moonshotai/kimi-k3',
+    modelName: 'Kimi K3',
+    maker: 'Moonshot AI',
+    host: 'Vercel AI Gateway',
+    provider: 'baseten',
+    providerName: 'Baseten',
+    zeroDataRetention: true,
+    /** USD per day across everyone, for make mode only (owner, 2026-10-30: about $3). */
+    dailySpendCapUsd: 3,
+    /** Make conversations per person per UTC day (owner, 2026-10-30). */
+    conversationsPerDay: 10,
+    /** Model calls in one turn at most (each tool step is one call); trial 5 allowed 20 and used at most 8. */
+    stepsPerTurn: 12,
+    maxTokens: 6000,
+    /** A tool's answer is cut to this many characters before the model reads it (as in trial 5). */
+    toolResultChars: 12000,
+    /** USD per token on Baseten, from the gateway's published list (2026-10-31). The gateway's own per-request cost is used when it gives one. */
+    prices: { input: 3e-6, output: 15e-6 },
+  },
 } as const;
 
 /** Moderation only: these FIDs may hide content. They never promote or rank anything. */

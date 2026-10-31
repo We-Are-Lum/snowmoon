@@ -5,6 +5,7 @@
  * storage by doing nothing.
  */
 import type { AskResult } from './ask';
+import type { MakeResult } from './make';
 
 export interface AskedMessage {
   role: 'user';
@@ -13,7 +14,7 @@ export interface AskedMessage {
 }
 export interface AnsweredMessage {
   role: 'assistant';
-  result: AskResult | { state: 'error'; error: string } | { state: 'unavailable' };
+  result: AskResult | MakeResult | { state: 'error'; error: string } | { state: 'unavailable' };
   /** The question this answers, so a held-back answer can be asked again with more chapters. */
   question: string;
   at: string;
@@ -30,6 +31,8 @@ export interface Thread {
   /** The chapter the thread was opened from ("ask about this chapter"), if any. */
   chapter?: number;
   messages: Message[];
+  /** Routing C: the make token from this thread's last make reply; the thread stays in make mode while it is sent back. */
+  make?: string;
 }
 
 const THREADS = 'snowmoon.ask.threads.v1';
