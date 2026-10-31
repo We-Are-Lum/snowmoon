@@ -3,9 +3,10 @@
  * the four controls). The rest (the states of sending) is the coding agent's, kept as short as the owner asked.
  */
 export const SUPPORT_WORDING = {
-  title: 'Support this site',
-  link: 'Support this site',
-  line: 'Send ETH or USDC on Ethereum mainnet or Base to this address, or send below.',
+  // The owner's words of 2026-10-31: the support goes to the team that makes the site.
+  title: 'Support the We Are Lum team',
+  link: 'Support the We Are Lum team',
+  line: 'We make snowmoon.party. Send ETH or USDC on Ethereum mainnet or Base to this address, or send below.',
   warning: 'Other networks: funds may be lost.',
   qrAlt: (address: string) => `QR code of the address ${address}`,
   copy: 'Copy',
