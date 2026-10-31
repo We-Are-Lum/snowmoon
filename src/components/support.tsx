@@ -56,6 +56,7 @@ export function SupportSend() {
   const [amount, setAmount] = useState('');
   const [wallet, setWallet] = useState<{ found: boolean; account: `0x${string}` | null; chainId: number | null }>({ found: true, account: null, chainId: null });
   const [fit, setFit] = useState<Fit>(null);
+  const [ethUsd, setEthUsd] = useState<number | null>(null);
   const [sent, setSent] = useState<{ kind: 'busy' | 'waiting' | 'done' | 'error'; note: string; hash?: `0x${string}` } | null>(null);
 
   useEffect(() => {
@@ -65,7 +66,25 @@ export function SupportSend() {
     return onWalletChange(read);
   }, []);
 
+  // The ETH price, while ETH is chosen: our server reads Chainlink's ETH/USD on Base (GET /api/eth-usd, which carries
+  // nothing about the reader), again each minute. No price, no estimate.
+  useEffect(() => {
+    if (token !== 'ETH') return;
+    let live = true;
+    const read = () =>
+      void fetch('/api/eth-usd')
+        .then((r) => (r.ok ? (r.json() as Promise<{ usd: number }>) : null))
+        .then((p) => live && setEthUsd(p && p.usd > 0 ? p.usd : null), () => live && setEthUsd(null));
+    read();
+    const t = setInterval(read, 60_000);
+    return () => {
+      live = false;
+      clearInterval(t);
+    };
+  }, [token]);
+
   const value = giftUnits({ token, amount });
+  const estimate = token === 'ETH' && ethUsd !== null && value !== null ? (Number(amount) * ethUsd).toFixed(2) : null;
   const onNetwork = wallet.chainId === network.chainId;
   useEffect(() => {
     if (!wallet.account || !onNetwork || value === null) return setFit(null);
@@ -111,6 +130,11 @@ export function SupportSend() {
       <Choice label={W.network} options={SUPPORT.networks.map((n) => n.name)} value={network.name} onChange={(n) => (setNetwork(SUPPORT.networks.find((x) => x.name === n)!), setSent(null))} disabled={busy} />
       <Choice label={W.token} options={['ETH', 'USDC'] as const} value={token} onChange={(t) => (setToken(t), setSent(null))} disabled={busy} />
       <AmountField label={W.amount} unit={token} value={amount} onChange={(v) => (setAmount(v), setSent(null))} disabled={busy} />
+      {estimate && (
+        <p className="ic-note support-estimate" aria-live="polite">
+          {W.estimate(estimate)}
+        </p>
+      )}
       <p className="support-go">
         {wallet.found && !wallet.account ? (
           <button type="button" className="ic-primary" onClick={() => ask(connectWallet)}>

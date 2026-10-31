@@ -27,4 +27,6 @@ export const SUPPORT_WORDING = {
   failed: 'The transaction failed.',
   noWallet: 'No wallet in this browser.',
   terms: 'Terms',
+  /** Under the amount when ETH is chosen (owner, 2026-10-31): an estimate, from Chainlink's ETH/USD read on Base. */
+  estimate: (usd: string) => `≈ $${usd} (estimate, from Chainlink's ETH/USD)`,
 } as const;
