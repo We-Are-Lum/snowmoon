@@ -45,10 +45,13 @@ export interface SoloMatch {
   /** sha256 of the live link's secret (the link itself is shown once, to the agent that starts the match). */
   linkHash: string;
   /**
-   * Server-only random numbers mixed into the site computer's own (fog review, 2026-10-31): with the seed alone, an
-   * agent with the open-source engine could sample the computer's exact choices. Shown in the record after the end.
+   * 32 server-only random bytes (hex) mixed into the site computer's numbers (fog review, 2026-10-31): with the seed
+   * alone, an agent with the open-source engine could sample the computer's exact choices. Committed at the start
+   * (cpuCommit, shown to the side from the first view) and revealed in the record, so a replay or the onchain
+   * verifier can recompute every computer move (checkComputer) and the server can't choose it afterwards.
    */
-  cpu: number;
+  cpu: string;
+  cpuCommit: string;
   createdAt: string;
   /** The real board. Server only: never sent to a side while the match is on. */
   w: World;
@@ -82,21 +85,34 @@ const sha256 = (x: string | Buffer) => createHash('sha256').update(x).digest('he
 export const ordersText = (ps: Placement<AnyPiece>[]) => JSON.stringify(ps.map((p) => ({ t: p.t, x: p.x, y: p.y, dx: p.dx, dy: p.dy })));
 export const commit = (ps: Placement<AnyPiece>[], salt: string) => sha256(ordersText(ps) + salt);
 
-/** The site computer's orders for its side this turn: from its own view, committed before the person's are known. */
-function computerOrders(m: SoloMatch, at: string): Orders {
+/** The computer's random numbers for a turn: the seed, the turn, and the committed server-only value. */
+const cpuWord = (cpu: string) => parseInt(cpu.slice(0, 8), 16) >>> 1;
+const turnRng = (m: Pick<SoloMatch, 'seed' | 'turn' | 'cpu'>, who: 1 | 2) => rng(((m.seed * 7919 + m.turn * 31 + who) ^ cpuWord(m.cpu)) >>> 0);
+type PlanState = Pick<SoloMatch, 'ruleset' | 'seed' | 'level' | 'cpu' | 'w' | 'ls' | 'turn'>;
+/** What the site computer plays for its own side from this state (its own view only). */
+function computerPlan(m: PlanState) {
   const { s, e } = rulesOf(m);
   const o = COMPUTER;
-  const plan = searchPlan({ e, s, o, view: e.fog(m.w, s, o), lastSeen: { ...m.ls[o] }, snap: e.towers(m.w, o), points: pointsOf(m, s), rng: rng(((m.seed * 7919 + m.turn * 31 + 1) ^ (m.cpu ?? 0)) >>> 0), level: m.level });
-  const salt = randomBytes(32).toString('hex');
-  return { placements: plan.placements, source: 'site-computer', salt, commitment: commit(plan.placements, salt), final: true, at };
+  return searchPlan({ e, s, o, view: e.fog(m.w, s, o), lastSeen: { ...m.ls[o] }, snap: e.towers(m.w, o), points: pointsOf(m, s), rng: turnRng(m, 1), level: m.level }).placements;
 }
-const pointsOf = (m: SoloMatch, s: Settings) => (m.w.step === 0 ? s.setupPoints : s.points);
+/** What the site computer plays for the person's side when asked to (the fallback, under a preset). */
+function fallbackPlan(m: PlanState, preset: Preset) {
+  const { s, e } = rulesOf(m);
+  return searchPlan({ e, s, o: PERSON, view: e.fog(m.w, s, PERSON), lastSeen: { ...m.ls[PERSON] }, snap: e.towers(m.w, PERSON), points: pointsOf(m, s), rng: turnRng(m, 2), level: FALLBACK_LEVEL, preset }).placements;
+}
+/** The site computer's orders for its side this turn: from its own view, committed before the person's are known. */
+function computerOrders(m: SoloMatch, at: string): Orders {
+  const placements = computerPlan(m);
+  const salt = randomBytes(32).toString('hex');
+  return { placements, source: 'site-computer', salt, commitment: commit(placements, salt), final: true, at };
+}
+const pointsOf = (m: Pick<SoloMatch, 'w'>, s: Settings) => (m.w.step === 0 ? s.setupPoints : s.points);
 
 /** A new match. Returns it and the live link's secret (shown once). */
 export function newSolo(o: { id: string; ruleset: RulesetName; level: number; seed: number; person: number; agent: SoloMatch['agent']; now: string }): { m: SoloMatch; linkSecret: string } {
   if (!(o.ruleset in RULESETS)) throw new SoloError('ruleset must be "book" or "play"');
   if (!Number.isInteger(o.level) || o.level < 1 || o.level > 5) throw new SoloError('level must be 1 to 5');
-  const linkSecret = randomBytes(24).toString('base64url');
+  const linkSecret = randomBytes(24).toString('base64url'), cpu = randomBytes(32).toString('hex');
   const base = { ruleset: o.ruleset, seed: o.seed };
   const { s, e } = rulesOf(base);
   const w = e.world(s);
@@ -105,7 +121,7 @@ export function newSolo(o: { id: string; ruleset: RulesetName; level: number; se
   e.L.towers.C.forEach((k) => (ls.A[k] = 0));
   const m: SoloMatch = {
     v: 1, id: o.id, ruleset: o.ruleset, level: o.level, seed: o.seed, person: o.person, agent: o.agent,
-    linkHash: sha256(linkSecret), cpu: randomBytes(4).readUInt32BE(0) >>> 1, createdAt: o.now, w, kills: { C: 0, A: 0 }, ls, turn: 0,
+    linkHash: sha256(linkSecret), cpu, cpuCommit: sha256(cpu), createdAt: o.now, w, kills: { C: 0, A: 0 }, ls, turn: 0,
     pend: { C: null, A: null as unknown as Orders }, standing: null, history: [], end: null,
   };
   m.pend.A = computerOrders(m, o.now);
@@ -164,7 +180,7 @@ export function viewFor(m: SoloMatch) {
   return {
     match_id: m.id,
     side: 'Cyan',
-    opponent: { kind: 'site computer', level: m.level },
+    opponent: { kind: 'site computer', level: m.level, random_commitment: m.cpuCommit },
     ruleset: m.ruleset === 'book' ? 'book edition' : 'Play',
     rule,
     phase: over ? 'over' : m.turn === 0 ? 'setup' : 'act',
@@ -247,8 +263,7 @@ export function autopilot(m: SoloMatch, o: { turn: number; now: string }) {
   if (o.turn !== m.turn) throw new SoloError(`turn ${o.turn} is not open; the open turn is ${m.turn}`);
   const { s, e } = rulesOf(m);
   const preset = m.standing?.preset ?? 'balanced';
-  const plan = searchPlan({ e, s, o: PERSON, view: e.fog(m.w, s, PERSON), lastSeen: { ...m.ls[PERSON] }, snap: e.towers(m.w, PERSON), points: pointsOf(m, s), rng: rng(((m.seed * 7919 + m.turn * 31 + 2) ^ (m.cpu ?? 0)) >>> 0), level: FALLBACK_LEVEL, preset });
-  return submit(m, { turn: o.turn, placements: plan.placements, source: 'site-computer', final: true, now: o.now, preset });
+  return submit(m, { turn: o.turn, placements: fallbackPlan(m, preset), source: 'site-computer', final: true, now: o.now, preset });
 }
 
 /** Both sides' orders revealed and applied together; the engine runs to the next turn to act (or the end). */
@@ -295,7 +310,7 @@ export function recordOf(m: SoloMatch) {
   if (!m.end) throw new SoloError('no finished match with that id');
   const { s, e, rule } = rulesOf(m);
   return {
-    match_id: m.id, ruleset: m.ruleset, seed: m.seed, computer_random: m.cpu ?? 0, rule, level: m.level, created_at: m.createdAt,
+    match_id: m.id, ruleset: m.ruleset, seed: m.seed, computer_random: m.cpu, computer_random_commitment: m.cpuCommit, rule, level: m.level, created_at: m.createdAt,
     sides: { C: { kind: 'person', agent: m.agent.name, model: m.agent.model ? { ...m.agent.model, label: 'self-reported' } : null }, A: { kind: 'site computer', level: m.level } },
     turns: m.history.map((h) => ({ turn: h.turn, step: h.step, C: { ...h.C, placements: h.C.placements.map(orderOut) }, A: { ...h.A, placements: h.A.placements.map(orderOut) } })),
     end: m.end,
@@ -315,6 +330,31 @@ export function replay(m: Pick<SoloMatch, 'ruleset' | 'seed' | 'history' | 'end'
     do { e.step(w, s, kills); if (verdict(e, w, s, kills)) return w; } while (w.step - from < s.every);
   }
   return w;
+}
+
+/**
+ * Checks a finished match the way a replay or the onchain verifier would: the revealed value matches its commitment,
+ * and from the seed, that value and the revealed orders, every move the site computer made (for its own side, and for
+ * the person's side when asked to) comes out the same. Returns the problems found; empty when all agree.
+ */
+export function checkComputer(r: Pick<SoloMatch, 'ruleset' | 'seed' | 'level' | 'cpu' | 'cpuCommit' | 'history'>): string[] {
+  const out: string[] = [];
+  if (sha256(r.cpu) !== r.cpuCommit) out.push('the revealed computer value does not match its commitment');
+  const { s, e } = rulesOf(r);
+  const st: PlanState = { ruleset: r.ruleset, seed: r.seed, level: r.level, cpu: r.cpu, w: e.world(s), ls: { C: {}, A: {} }, turn: 0 };
+  e.L.towers.A.forEach((k) => (st.ls.C[k] = 0));
+  e.L.towers.C.forEach((k) => (st.ls.A[k] = 0));
+  const kills: Kills = { C: 0, A: 0 };
+  for (const h of r.history) {
+    st.turn = h.turn;
+    if (ordersText(computerPlan(st)) !== ordersText(h.A.placements)) out.push(`turn ${h.turn}: the computer's orders don't follow from the record`);
+    if (h.C.source === 'site-computer' && ordersText(fallbackPlan(st, h.C.preset ?? 'balanced')) !== ordersText(h.C.placements)) out.push(`turn ${h.turn}: the site computer's orders for the person don't follow from the record`);
+    e.apply(st.w, s, { C: h.C.placements, A: h.A.placements });
+    e.updLS(st.w, s.sight, st.ls);
+    const from = st.w.step;
+    do { e.step(st.w, s, kills); e.updLS(st.w, s.sight, st.ls); if (verdict(e, st.w, s, kills)) return out; } while (st.w.step - from < s.every);
+  }
+  return out;
 }
 
 // ---------- the sandbox ----------

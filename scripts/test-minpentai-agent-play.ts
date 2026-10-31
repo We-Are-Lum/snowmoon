@@ -15,7 +15,7 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { isDeepStrictEqual } from 'node:util';
-import { autopilot, ordersText, linkOpens, newSolo, parseOrders, recordOf, replay, resign, rulesOf, setStanding, simulate, SoloError, submit, viewFor, type SoloMatch } from '../src/lib/minpentai/agent-play/solo';
+import { autopilot, checkComputer, ordersText, linkOpens, newSolo, parseOrders, recordOf, replay, resign, rulesOf, setStanding, simulate, SoloError, submit, viewFor, type SoloMatch } from '../src/lib/minpentai/agent-play/solo';
 
 let checks = 0;
 const ok = (cond: unknown, what: string) => { checks++; assert.ok(cond, what); };
@@ -59,6 +59,11 @@ function playOut(ruleset: 'book' | 'play', seed: number) {
     const x = t[o];
     ok(createHash('sha256').update(ordersText(x.placements) + x.salt).digest('hex') === x.commitment && /^[0-9a-f]{64}$/.test(x.salt), `${ruleset}: turn ${t.turn} ${o}: the revealed orders and salt give the commitment`);
   }
+  ok(checkComputer(json(m)).length === 0, `${ruleset}: every computer move follows from the seed, the revealed value and the orders (as a verifier would check)`);
+  const forged = json(m); forged.cpu = forged.cpu.replace(/^./, (c) => (c === '0' ? '1' : '0'));
+  ok(checkComputer(forged).some((x) => /does not match its commitment/.test(x)), `${ruleset}: a different value after the fact is caught by the commitment`);
+  const moved = json(m); const t1 = moved.history.find((h) => h.A.placements.length)!; t1.A.placements = t1.A.placements.slice(1);
+  ok(checkComputer(moved).some((x) => /computer's orders don't follow/.test(x)), `${ruleset}: a changed computer move is caught`);
   ok(JSON.stringify(replay(json(m))) === JSON.stringify(json(m).w) && rec.turns.length === m.history.length, `${ruleset}: the record replays to the final board`);
   return m;
 }
@@ -121,6 +126,7 @@ playOut('play', 202);
   setStanding(m, 'Keep my towers safe; build forward only behind walls.', 'defend');
   autopilot(m, { turn: 0, now: now() });
   ok(m.history[0].C.source === 'site-computer' && m.history[0].C.preset === 'defend', 'the site computer played the turn under the preset, and the record says so');
+  ok(checkComputer(json(m)).length === 0, 'and that turn, too, follows from the record');
   ok(viewFor(m).my_turns[0].source === 'site-computer', 'the view shows that turn as the site computer\'s');
   resign(m);
   ok(m.end?.how === 'resigned' && m.end.win === 'A', 'resigning ends the match as a loss');
@@ -161,9 +167,11 @@ playOut('play', 202);
   ok(isDeepStrictEqual(pe.fog(p.w, ps, 'C'), pe.fog(p2.w, ps, 'C')), 'F6 a rock out of sight shows as it was at the start in every ruleset');
   // F3: the computer's numbers include a server-only part, different for every match, shown in the record after the end.
   const c1 = start('book', 9).m, c2 = start('book', 9).m;
-  ok(c1.cpu !== c2.cpu && Number.isInteger(c1.cpu), 'F3 the same seed gets different server-only numbers for the computer');
+  ok(c1.cpu !== c2.cpu && /^[0-9a-f]{64}$/.test(c1.cpu), 'F3 the same seed gets different server-only numbers for the computer (32 bytes)');
+  ok(viewFor(c1).opponent.random_commitment === createHash('sha256').update(c1.cpu).digest('hex') && !JSON.stringify(viewFor(c1)).includes(c1.cpu), 'F3 its commitment is shown from the first view, the value itself is not');
   resign(c1);
-  ok(recordOf(c1).computer_random === c1.cpu, 'F3 and the record shows them after the end');
+  const rec1 = recordOf(c1);
+  ok(rec1.computer_random === c1.cpu && rec1.computer_random_commitment === c1.cpuCommit, 'F3 get_record reveals the value and its commitment after the end');
 }
 
 console.log(`minpentai agent play: ${checks} checks passed`);

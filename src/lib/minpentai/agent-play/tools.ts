@@ -20,9 +20,10 @@ const MAX_LIVE = 5;
 /**
  * A call that resolves a turn (or starts a match) plans the site computer's next orders from its hidden view, and
  * planning takes longer the more the computer has. Such calls answer no sooner than this, so their time says
- * nothing about the dark (fog review, 2026-10-31). Level 5's slowest turn on the book edition is about 0.35 s here.
+ * nothing about the dark (fog review, 2026-10-31). The slowest measured (272 turns at level 5 and 4, both rulesets, owner's Mac, 2026-10-31) took 329 ms; a call that
+ * runs past it is logged, so the number can be raised if the site's servers turn out slower.
  */
-export const RESOLVE_MS = 1500;
+export const RESOLVE_MS = 400;
 const padFrom = async (started: number) => {
   const left = RESOLVE_MS - (Date.now() - started);
   if (left > 0) await new Promise((r) => setTimeout(r, left));

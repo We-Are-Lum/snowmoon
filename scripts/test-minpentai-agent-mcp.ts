@@ -95,14 +95,15 @@ try {
     turns++;
     if (turns > 30) break;
   }
-  check('M22 every final submit takes at least the fixed time, so its time says nothing about the computer\'s hidden pieces', finals.length > 2 && Math.min(...finals) >= 1450 && Math.max(...finals) - Math.min(...finals) < 400, finals.join(','));
+  check('M22 every final submit takes at least the fixed time, so its time says nothing about the computer\'s hidden pieces', finals.length > 2 && Math.min(...finals) >= 390 && Math.max(...finals) - Math.min(...finals) < 150, finals.join(','));
   check('M16 the match is played to the end through the tools', turns >= 3 && simulated >= 3 && sitePlayed, `${turns} turns, ${simulated} simulations`);
   const rec = await tool(BASE, b.access_token, 'minpentai_get_record', { match_id: id });
   check('M17 at the end the record opens, to anyone', rec.ok, rec.error ?? '');
   const recTurns = (rec.out.turns ?? []) as { turn: number; C: { placements: { piece: string; x: number; y: number; dir?: string; slant?: string }[]; salt: string; commitment: string; source: string }; A: { salt: string; commitment: string } }[];
   check('M18 the record shows who chose each turn, the site computer\'s turn included', recTurns.some((t) => t.C.source === 'site-computer') && recTurns.some((t) => t.C.source === 'agent'));
+  const committed = (st.out.view as { opponent: { random_commitment: string } }).opponent.random_commitment;
+  check('M23 the record reveals the computer\'s random value, matching the commitment shown at the start', /^[0-9a-f]{64}$/.test(String(rec.out.computer_random)) && rec.out.computer_random_commitment === committed && createHash('sha256').update(String(rec.out.computer_random)).digest('hex') === committed);
   check('M19 every commitment in the record has its salt', recTurns.length > 0 && recTurns.every((t) => /^[0-9a-f]{64}$/.test(t.C.salt) && /^[0-9a-f]{64}$/.test(t.A.salt) && /^[0-9a-f]{64}$/.test(t.C.commitment)));
-  void createHash;
   const after = await (await fetch(live)).text();
   check('M20 after the end the live link shows the whole board', /The whole board at the end/.test(after));
   const lst = await tool(BASE, a.access_token, 'minpentai_list_my_matches', {});
