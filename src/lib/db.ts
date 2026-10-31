@@ -12,14 +12,14 @@ import postgres from 'postgres';
  * - query: the socket is closed if nothing at all comes back for 30 s. A query waiting on it fails (CONNECTION_CLOSED),
  *   and the next one opens a new connection. (A statement_timeout sent at connect is ignored by the transaction pooler,
  *   tested 2026-10-30: the database's own limit for this role stays 2 minutes.)
- * - idle: a connection unused for 20 s is closed.
+ * - idle: a connection unused for 10 s is closed, so a burst's spare connections go back to the pooler the other Lum apps share (owner, 2026-10-30).
  * - keepalive: TCP keepalive every 10 s.
  * - lifetime: a connection is replaced after 5 minutes, even when busy, so none outlives a network change for long.
  * DB_SILENT_MS changes the query limit, for the local test only (scripts/test-db-limits.ts).
  */
 export const DB_LIMITS = {
   connectSeconds: 10,
-  idleSeconds: 20,
+  idleSeconds: 10,
   lifetimeSeconds: 5 * 60,
   keepAliveSeconds: 10,
   silentMs: Number(process.env.DB_SILENT_MS) || 30_000,

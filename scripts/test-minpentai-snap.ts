@@ -21,7 +21,8 @@ import { act, intro, newMatch, AIM, AIM_TEXT, LEVELS, ROCK, SEEN, SEEN_BG, type 
 import { sightOf } from '../src/lib/minpentai/play-server/view';
 import { parse, serialize, sign, verified, type P, type SnapState } from '../src/lib/minpentai/snap/state';
 import { runGif } from '../src/lib/minpentai/snap/run';
-import { decMatch, encMatch } from '../src/lib/minpentai/snap/moves';
+import { decMatch, encMatch, movesShapeOk, MOVES_MAX } from '../src/lib/minpentai/snap/moves';
+import { readFileSync } from 'node:fs';
 import { GET as runRoute } from '../src/app/snap/minpentai/run/route';
 import { GET as snapRoute } from '../src/app/snap/minpentai/route';
 import { GET as cardRoute } from '../src/app/api/minpentai-challenge-card/route';
@@ -564,6 +565,40 @@ async function main() {
     assert.ok(plain.headers.get('content-type')?.startsWith('text/html'), '/snap/minpentai itself unchanged');
   });
 
+  check('Resume: decMatch accepts exactly what studio.mp_snap_resume\'s check accepts (0029_minpentai_resume_moves_check.sql, run in PGlite), and a real saved match round-trips', async () => {
+    const { PGlite } = await import('@electric-sql/pglite');
+    const pg = new PGlite();
+    const sqlFile = readFileSync(new URL('../supabase/migrations/0029_minpentai_resume_moves_check.sql', import.meta.url), 'utf8');
+    const expr = /add constraint mp_snap_resume_moves_check\s+check \(([\s\S]+?)\);/.exec(sqlFile)![1];
+    await pg.exec(`create table r (moves text not null constraint mp_snap_resume_moves_check check (${expr}))`);
+    const dbOk = async (m: string) => { try { await pg.query('insert into r (moves) values ($1)', [m]); await pg.exec('delete from r'); return true; } catch { return false; } };
+    // 0025's check, as it is in production: its {0,2000} is refused by Postgres, so every insert fails.
+    await pg.exec(`create table old (moves text check (moves ~ '^[0-9a-z]{1,7}\\.[0-9]{1,3}\\.[A-Za-z0-9_~-]{0,2000}$'))`);
+    await assert.rejects(pg.query('insert into old (moves) values ($1)', ['zpo8ph.2.AbCd~Ef']), /invalid repetition count/);
+    // A real saved match: a full snap match, saved after each finished turn as resume.ts does.
+    const st = newMatch(2, '');
+    st.seed = 2_891_337_105;
+    const saved: string[] = [];
+    for (let i = 0; i < 20; i++) { const p = play(st); if (p.over) break; st.turns.push(plan(p, 'mixed')); saved.push(encMatch(st.seed, st.turns)); }
+    assert.ok(saved.length >= 5 && saved.at(-1)!.split('~').length >= 5, 'several turns saved');
+    for (const m of saved) {
+      assert.ok(await dbOk(m), `the database stores ${m.slice(0, 40)}`);
+      const g = decMatch(m)!;
+      assert.equal(encMatch(g.seed, g.turns), m, 'round trip, byte for byte');
+      const back = { ...st, turns: g.turns };
+      assert.equal(JSON.stringify(play(back).w), JSON.stringify(play({ ...st, turns: st.turns.slice(0, g.turns.length) }).w), 'same board after the round trip');
+    }
+    // The edges: the database and decMatch's shape gate agree on every one.
+    const body = (n: number) => 'A'.repeat(n);
+    const edges = [
+      saved.at(-1)!, 'a.0.', '1z141z3.0.', '1z141z3a.0.', 'A.0.', 'a.999.', 'a.1000.', 'a..', 'a.1.a b', 'a.1.a.b', 'a.1.~~',
+      `1234567.123.${body(2000)}`, `1234567.123.${body(2001)}`, `a.1.${body(2008)}`, `a.1.${body(2009)}`, '', 'a.1.é',
+    ];
+    for (const m of edges) assert.equal(movesShapeOk(m), await dbOk(m), `shape gate and database disagree on ${JSON.stringify(m.slice(0, 30))} (length ${m.length})`);
+    assert.ok(movesShapeOk(`a.1.${body(2008)}`) && !movesShapeOk(`a.1.${body(2009)}`) && MOVES_MAX === 2012, 'the 2012-character limit');
+    await pg.close();
+  });
+
   check('the diagnostic middleware logs the four snap links and routes nothing new: only /minpentai/play GETs, as before', () => {
     assert.deepEqual(mwConfig.matcher, ['/minpentai', '/minpentai/play', '/minpentai/c/:seg', '/snap/minpentai']);
     const SNAPM = 'application/vnd.farcaster.snap+json';
@@ -586,6 +621,27 @@ async function main() {
     const one = JSON.parse(lines.find((l) => l.includes('"/minpentai/c/*"') && l.includes('"OPTIONS"'))!);
     assert.deepEqual(Object.keys(one), ['snapLog', 'method', 'snap', 'accept', 'payload', 'origin', 'mode', 'ua']);
     assert.ok(!lines.some((l) => /cookie|authorization|x-snap-payload":"/i.test(l)), 'no cookies, tokens or payloads logged');
+  });
+
+  check('the temporary FCBot experiment: only FCBot with ?x=1-3 on /minpentai/play is rerouted; everything else as before', () => {
+    const run = (path: string, headers: Record<string, string>) => middleware(new NextRequest(`https://snowmoon.party${path}`, { headers }));
+    const rw = (r: Response) => r.headers.get('x-middleware-rewrite');
+    const log = console.log; console.log = () => {};
+    try {
+      const FC1 = { 'user-agent': 'FCBot/0.1 (like TwitterBot)', accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8' };
+      const FC3 = { 'user-agent': 'Twitterbot like FCBot/0.1 FCBot:0.1', accept: 'application/json, text/plain, */*' };
+      for (const x of ['1', '2', '3']) assert.equal(rw(run(`/minpentai/play?x=${x}&t=9`, FC1)), `https://snowmoon.party/snap/minpentai/probe?x=${x}`, `x=${x}, the composer's HTML request`);
+      assert.equal(rw(run('/minpentai/play?x=1', FC3)), 'https://snowmoon.party/snap/minpentai/probe?x=1');
+      assert.equal(rw(run('/minpentai/play?x=2', FC3)), 'https://snowmoon.party/snap/minpentai/probe?x=2');
+      assert.equal(rw(run('/minpentai/play?x=3', FC3)), 'https://snowmoon.party/snap/minpentai', 'x=3, the composer\'s non-HTML request gets the snap');
+      // Unchanged: no ?x, another x, not FCBot, other links.
+      assert.equal(rw(run('/minpentai/play?t=9', FC1)), null);
+      assert.equal(rw(run('/minpentai/play?x=4', FC1)), null);
+      assert.equal(rw(run('/minpentai/play?x=1', { 'user-agent': 'Twitterbot/1.0', accept: '*/*' })), null, 'X\'s bot with ?x: the page, as today');
+      assert.equal(rw(run('/minpentai/play?x=1', { 'user-agent': 'Mozilla/5.0', accept: 'text/html' })), null, 'a browser with ?x: the page');
+      assert.equal(rw(run('/minpentai/play?x=2', { 'user-agent': 'Mozilla/5.0', accept: 'application/vnd.farcaster.snap+json' })), 'https://snowmoon.party/snap/minpentai', 'the snap Accept: the snap, as today');
+      for (const path of ['/minpentai?x=3', '/snap/minpentai?x=3', '/minpentai/c/vu207s.0.cost3._.C-49-7-0-55.c2Nnz7njlDZWxkdy8L6JcI?x=3']) assert.equal(rw(run(path, FC3)), null, `${path} untouched`);
+    } finally { console.log = log; }
   });
 
   await Promise.all(pending);

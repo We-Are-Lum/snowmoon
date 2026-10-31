@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from 'next/server';
-import { wantsSnap } from '~/lib/minpentai/snap/negotiate';
+import { prefersHtml, wantsSnap } from '~/lib/minpentai/snap/negotiate';
 
 /**
  * /minpentai/play, the snap's own link: the snap to anything that doesn't clearly want a web page
@@ -29,6 +29,18 @@ export function middleware(request: NextRequest) {
     mode: (h.get('sec-fetch-mode') ?? '').slice(0, 20),
     ua: (ua ?? '').slice(0, 160),
   }));
+  // TEMPORARY EXPERIMENT (owner, 2026-10-30): only Farcaster's composer fetcher (user agent "FCBot") with ?x=1, 2
+  // or 3 on /minpentai/play, to find what makes the composer show a snap (src/app/snap/minpentai/probe/route.ts).
+  // Every other request is routed exactly as before. Removed once the rule is chosen.
+  const x = request.nextUrl.searchParams.get('x');
+  if (routed && /FCBot/.test(ua ?? '') && (x === '1' || x === '2' || x === '3')) {
+    if (x === '3' && !prefersHtml(accept ?? '')) {
+      const fwd = new Headers(h);
+      fwd.set('x-snap-serve', '1');
+      return NextResponse.rewrite(new URL('/snap/minpentai', request.url), { request: { headers: fwd } });
+    }
+    return NextResponse.rewrite(new URL(`/snap/minpentai/probe?x=${x}`, request.url));
+  }
   if (!routed || !snap) return NextResponse.next();
   const headers = new Headers(h);
   headers.set('x-snap-serve', '1');
