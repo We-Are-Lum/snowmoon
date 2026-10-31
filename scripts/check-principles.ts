@@ -3,7 +3,7 @@
  * planted violation: for every check, a copy of its inputs gets one violation
  * injected, and the check must report it.
  *
- *   npm run check:principles   (exit 0: all ran and passed; 1: a failure; 2: none failed but some did not run)                       checks + proofs, against https://snowmoon.party
+ *   npm run check:principles -- --url=https://snowmoon.party   (exit 0: all ran and passed; 1: a failure or no --url; 2: none failed but some did not run)
  *   npm run check:principles -- --url=http://localhost:3000
  *   npm run check:principles -- --only=P6          one principle
  *
@@ -32,10 +32,11 @@ import { BOOK_TAG, NARRATION_MAX_WORDS, PERSON_TAG, parseBeats } from '../src/li
 import { GLOSSARY_FILE, loadBlocks, verifyGlossary, type Glossary } from './lib/glossary';
 import { p4aProblems } from './lib/p4a';
 import { MODAL_VC_FILE, MODAL_VC_PLANTS, modalVcRun, modalVcStatic } from './lib/modal-vc';
+import { requireTarget } from './lib/target';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const arg = (name: string) => process.argv.slice(2).find((a) => a.startsWith(`--${name}=`))?.split('=').slice(1).join('=');
-const BASE = (arg('url') ?? 'https://snowmoon.party').replace(/\/$/, '');
+const BASE = requireTarget('check:principles');
 const ONLY = arg('only');
 const read = (rel: string) => readFileSync(path.join(ROOT, rel), 'utf8');
 const json = <T = any>(rel: string): T => JSON.parse(read(rel)); // eslint-disable-line @typescript-eslint/no-explicit-any
