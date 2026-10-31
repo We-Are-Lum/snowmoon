@@ -1,10 +1,13 @@
 /**
  * Design's board(): what each square of the Play board shows (docs/design/
  * minpentai-play-prototype.dc.html, script lines 91–117), as data the page draws. Colours are
- * Design's board colours; the page draws each cell as a square of `cs` pixels. `pc` says which piece stands
+ * Design's board colours; the page draws each cell as a square of `cs` pixels. Any board size: the
+ * match's engine (Play's 15 x 10 when none is given) says how wide and tall. `pc` says which piece stands
  * there, so the page draws it with Learn's shapes (owner, 2026-10-21: "Play uses Learn's shapes"): play-board.tsx.
  */
-import { AR, COL, D4, H, K, ROT, W, inb, lit, type Placement, type Side, type World } from './game';
+import { AR, COL, D4, ROT, type Placement, type Side, type World } from './game';
+import type { Engine } from '../versions/engine';
+import { SOLO_V1_ENGINE } from '../versions/solo-v1';
 
 export interface Cell {
   /** Background, border, inset ring, text colour, text, font size (px), as Design draws them. */
@@ -25,9 +28,11 @@ export interface Cell {
    *  upright board), a square's hits left (1 is cracked), and whether it is the visitor's new placement. */
   pc?: CellPiece;
 }
-export interface CellPiece { k: 'tower' | 'glider' | 'square'; side: Side; dir?: [number, number]; hp?: number; mine?: boolean }
+export interface CellPiece { k: 'tower' | 'glider' | 'square'; side: Side; dir?: [number, number]; hp?: number; mine?: boolean; /** Out of sight: drawn dimmed where it was last seen. */ dim?: boolean }
 export interface BoardOpts {
   w: World;
+  /** The match's engine, for its board's size; Play's when absent. */
+  e?: Engine;
   cs: number;
   portrait?: boolean;
   /** Draw only what this side sees; null or undefined shows everything. */
@@ -44,12 +49,14 @@ export interface BoardOpts {
   onAim?: (dx: number, dy: number) => void;
 }
 const NAME: Record<Side, string> = { C: 'Cyan', A: 'Amber' };
+/** Amber's tower colour at 30% over the dark square: a tower last seen here, not in sight now. */
+export const LAST_SEEN = '#503A16';
 const DIRW: Record<string, string> = { '1,0': 'right', '-1,0': 'left', '0,-1': 'up', '0,1': 'down', '1,-1': 'up right', '1,1': 'down right', '-1,1': 'down left', '-1,-1': 'up left' };
 
 export interface BoardView { cells: Cell[]; cols: number; cs: number; tap: (c: Cell) => void }
 
 export function board(o: BoardOpts): BoardView {
-  const { w, cs } = o, vis = o.fog ? lit(w, o.fog, o.R ?? 3) : null;
+  const { w, cs } = o, e = o.e ?? SOLO_V1_ENGINE, { W, H, K, inb } = e, vis = o.fog ? e.lit(w, o.fog, o.R ?? 3) : null;
   const glAt: Record<number, World['gl'][number]> = {}, pAt: Record<number, Placement> = {}, am: Record<number, [number, number]> = {};
   w.gl.forEach((g) => { const k = K(g.x, g.y); if (!glAt[k]) glAt[k] = g; });
   (o.pend || []).forEach((p) => (pAt[K(p.x, p.y)] = p));
@@ -61,7 +68,9 @@ export function board(o: BoardOpts): BoardView {
     const c: Cell = { bg: '#0E0F13', bd: '0', sh: 'none', fg: '#E7E4DD', t: '', fs: fz(0.58), x, y, label: 'empty' };
     if (am[k]) { const [dx, dy] = am[k]; c.bd = '1px dashed #E7E4DD'; c.t = rot(AR[dx + ',' + dy]); c.fs = fz(0.5); c.aim = [dx, dy]; c.label = `aim ${DIRW[dx + ',' + dy]}`; return c; }
     if (w.rock[k]) { c.bg = '#3A3B42'; c.label = 'rock'; return c; }
-    if (vis && !vis.has(k)) { c.bg = '#050507'; c.label = 'dark'; if (o.ls && o.ls[k] !== undefined) { c.bd = '1px dashed #FFB43A'; c.t = '?'; c.fg = '#FFB43A'; c.fs = fz(0.4); c.label = `Amber tower last seen at step ${o.ls[k]}`; } return c; }
+    // An opponent's tower out of sight is drawn dimmed where it was last seen (from the start: its
+    // starting square), and moves only when seen again (owner, 2026-10-21, after a phone test).
+    if (vis && !vis.has(k)) { c.bg = '#050507'; c.label = 'dark'; if (o.ls && o.ls[k] !== undefined) { c.bg = LAST_SEEN; c.sh = ring; c.label = `Amber tower last seen at step ${o.ls[k]}`; c.pc = { k: 'tower', side: 'A', dim: true }; } return c; }
     if (fl.has(k)) { c.bg = '#F4F2ED'; c.label = 'hit'; return c; }
     const t = w.tw[k], q = w.sq[k], g = glAt[k], p = pAt[k];
     if (t) { c.bg = COL[t]; c.sh = ring; c.label = `${NAME[t]} tower`; c.pc = { k: 'tower', side: t }; }
