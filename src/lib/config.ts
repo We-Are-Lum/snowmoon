@@ -342,6 +342,27 @@ export const ILLUSTRATION_CHECK = {
 /** Moderation only: these FIDs may hide content or dismiss a report. They never promote or rank anything. Owner, 2026-10-08 (decision 20). Every admin is one; a moderator who isn't an admin would be added here. */
 export const MODERATOR_FIDS: readonly number[] = [...ADMINS];
 
+/**
+ * "Support this site" (owner, 2026-10-30): the one place the support address lives. Every page, QR code and wallet send
+ * reads it from here (test:support checks that, and that it is checksummed). It is a Splits account (the owner's).
+ * Live on Ethereum and Base only: eth_getCode on 2026-10-30, two public RPCs each, found its code (a 61-byte proxy)
+ * on those two and none on Optimism, Arbitrum, Zora or Polygon. Nothing about a sender is recorded.
+ */
+export const SUPPORT = {
+  address: '0x93eC36379bFEB4db21a2d49102A1e30fC43673a3' as const,
+  /** The footer and About link to /support. Off until the owner's $1 test passes: reachable only by its URL (owner, 2026-10-30). */
+  linked: false as boolean,
+  /**
+   * "Send below" (owner, 2026-10-30, simplified page): Base or Ethereum, in ETH or USDC. USDC is Circle's native USDC on
+   * each network, not the bridged USDbC.
+   */
+  networks: [
+    { name: 'Base', chainId: 8453, explorer: 'https://basescan.org', usdc: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913' as `0x${string}` },
+    { name: 'Ethereum', chainId: 1, explorer: 'https://etherscan.io', usdc: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48' as `0x${string}` },
+  ],
+} as const;
+export type SupportNetwork = (typeof SUPPORT.networks)[number];
+
 /** The public contact for Snowmoon Party: legal, copyright and reports from readers who are signed out (owner, 2026-10-08). */
 export const CONTACT_EMAIL = 'snowmoon@wearelum.xyz';
 

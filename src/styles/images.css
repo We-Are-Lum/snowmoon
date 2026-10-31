@@ -480,3 +480,18 @@ a.ia-button:hover { text-decoration: none; }
 .admin-review .ar-images li.is-picked { outline: 2px solid var(--ink); outline-offset: 4px; }
 .admin-review .ar-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
 .admin-review .ar-hidden, .admin-review .ar-picked { font-family: var(--label); font-size: var(--text-label); text-transform: uppercase; color: var(--muted); }
+/* "Support this site" (owner, 2026-10-30). */
+.support .support-qr { width: 200px; max-width: 60vw; margin: 0 0 12px; background: #fff; padding: 8px; }
+.support .support-qr svg { display: block; width: 100%; height: auto; }
+.support .support-address { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.support .support-address code { font-family: var(--label); font-size: var(--text-label); word-break: break-all; }
+.support .support-warning { border-left: 3px solid var(--ink); padding-left: 10px; }
+.support .support-send { display: flex; flex-direction: column; gap: 12px; margin-top: var(--space-4, 16px); }
+.support .support-choice { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-family: var(--label); font-size: var(--text-label); }
+.support .support-choice .label { grid-column: 1 / -1; }
+.support .support-choice button { width: 100%; }
+.support .support-go { margin: 0; }
+.support .support-terms { margin-top: var(--space-6, 32px); font-family: var(--label); font-size: var(--text-label); }
+.support .amount-field { display: flex; flex-direction: column; gap: 4px; font-family: var(--label); font-size: var(--text-label); }
+.support .amount-field input { min-height: 44px; width: 9em; font: inherit; font-size: 16px; padding: 0 8px; }
+.support .support-error { color: var(--ink); }

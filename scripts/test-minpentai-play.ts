@@ -43,6 +43,11 @@ if (!designScript) throw new Error("Design's script block was not found");
 const FIXES: [string, string, string][] = [
   // The Planner stopped building at 3 towers, rungs 3 and 4 at 5 (game.ts, botPlan; 2026-10-20).
   ['the Planner builds up to 5 towers', 'cnt(b, o) < (L >= 5 ? 3 : 5)', 'cnt(b, o) < 5'],
+  // An opponent's tower out of sight is drawn as a dimmed tower where last seen (its starting square
+  // until first seen), not a dashed "?" outline (owner, 2026-10-21, after a phone test; board.ts).
+  ['a last-seen tower is drawn dimmed', "c.bd = '1px dashed #FFB43A'; c.t = '?'; c.fg = '#FFB43A'; c.fs = fz(.4);", "c.bg = '#503A16'; c.sh = ring;"],
+  ['the start note names the dimmed towers', "'The outlines on the right are where Amber starts.", "'The dimmed towers on the right are where Amber starts."],
+  ['the turn message names the dimmed towers', "the outlines are where you last saw them.", "the dimmed ones are where you last saw them."],
 ];
 let script = designScript;
 for (const [what, from, to] of FIXES) {
@@ -210,6 +215,8 @@ const DIR: Record<string, [number, number]> = Object.fromEntries(Object.entries(
 const NEW = '0 0 0 1px #E7E4DD';
 function designPiece(c: Any) {
   const mine = String(c.sh).endsWith(NEW) || undefined;
+  // A tower out of sight (Design's square, with the dimmed fix above): Learn's tower shape, dimmed.
+  if (c.bg === '#503A16' && String(c.sh).startsWith('inset')) return { k: 'tower', side: 'A', dim: true };
   if (SIDE[c.bg] && String(c.sh).startsWith('inset')) return { k: 'tower', side: SIDE[c.bg], mine };
   const sq = /^2px (solid|dashed) (#\w+)$/.exec(c.bd);
   if (sq && c.bg === '#16181E') return { k: 'square', side: SIDE[sq[2]], hp: sq[1] === 'solid' ? 2 : 1, mine };

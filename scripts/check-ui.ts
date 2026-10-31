@@ -74,6 +74,8 @@ import { readFileSync } from 'node:fs';
 import { createServer } from 'node:net';
 import path from 'node:path';
 import { chromium, type Browser, type Page } from 'playwright-core';
+import QRCode from 'qrcode';
+import { SUPPORT } from '../src/lib/config';
 
 const arg = (name: string) => process.argv.slice(2).find((a) => a.startsWith(`--${name}=`))?.split('=').slice(1).join('=');
 const BASE = (arg('url') ?? 'http://localhost:3000').replace(/\/$/, '');
@@ -300,7 +302,7 @@ async function checkAssistant(page: Page, scheme: string) {
   await page.evaluate(() => localStorage.clear());
 }
 
-const LEGAL_LINE = 'Snowmoon Party · operated by Lum LLC · independent, not affiliated with the author · book and adaptations GPL v3 · Terms · Privacy · Source';
+const LEGAL_LINE = 'Snowmoon Party · operated by Lum LLC · independent, not affiliated with the author · book and adaptations GPL v3 · Terms · Privacy · Source' + (SUPPORT.linked ? ' · Support this site' : '');
 const WALLET_ADDRESS = '0x1234567890abcdef1234567890abcdef12345678';
 /** A wallet session in storage, as saveWalletSession keeps it (src/lib/client-auth.ts); never sent anywhere here. */
 const plantWallet = (address: string) => {
@@ -382,7 +384,7 @@ async function checkLegalLine(page: Page, within: string, where: string, scheme:
   if (text !== LEGAL_LINE) fail(`${where} (${scheme}): the footer line reads "${text}"`);
   if (!(await line.isVisible())) fail(`${where} (${scheme}): the footer line is not shown`);
   const hrefs = await line.locator('a').evaluateAll((as) => as.map((a) => `${a.textContent}=${a.getAttribute('href')}`));
-  const want = ['Terms=/terms', 'Privacy=/privacy', 'Source=https://github.com/We-Are-Lum/snowmoon'];
+  const want = ['Terms=/terms', 'Privacy=/privacy', 'Source=https://github.com/We-Are-Lum/snowmoon', ...(SUPPORT.linked ? ['Support this site=/support'] : [])];
   if (hrefs.join(' ') !== want.join(' ')) fail(`${where} (${scheme}): the footer links are ${hrefs.join(', ')}`);
 }
 
@@ -633,6 +635,89 @@ async function checkAdmin(page: Page, scheme: string) {
   await page.evaluate(() => localStorage.removeItem('snowmoon.pick-view'));
   await page.unroute(PICKS_API);
   await page.unroute('**/api/chat/status');
+}
+
+/**
+ * "Support this site" (owner, 2026-10-30), at 390: every place on the page shows exactly SUPPORT.address (the text, the
+ * copy button, the QR code, which must be the code of that address, and both Splits links); only Ethereum and Base are
+ * named, with the warning; the presets and the own-amount box; with no wallet in this browser, Send says so and sends
+ * nothing; the floors.
+ */
+async function checkSupport(page: Page, scheme: string) {
+  const where = `/support @390 (${scheme})`;
+  // What could record a sender: a write to our API, or any request that carries the address. The shell's own reads on
+  // every page (who is signed in, the assistant's status) don't.
+  const ours: string[] = [];
+  const count = (r: { url: () => string; method: () => string; postData: () => string | null }) =>
+    r.url().includes('/api/') && (r.method() !== 'GET' || r.url().includes(SUPPORT.address) || (r.postData() ?? '').includes(SUPPORT.address)) && ours.push(`${r.method()} ${r.url().replace(/^https?:\/\/[^/]+/, '')}`);
+  page.on('request', count);
+  await open(page, '/support');
+  const text = (await page.locator('.support-address code').textContent())?.trim();
+  if (text !== SUPPORT.address) fail(`${where}: the address reads "${text}", not ${SUPPORT.address}`);
+  if ((await page.locator('.support-address [data-copies]').getAttribute('data-copies')) !== SUPPORT.address) fail(`${where}: the copy button doesn't copy ${SUPPORT.address}`);
+  // The modules drawn (each path's d) and the size, compared with the code of SUPPORT.address: the browser rewrites
+  // the markup itself (a path's "/>" becomes "></path>"), so the text can't be compared.
+  const shown = await page.locator('.support-qr svg').evaluate((svg) => ({ box: svg.getAttribute('viewBox'), d: [...svg.querySelectorAll('path')].map((p) => p.getAttribute('d')) }));
+  const svg = await QRCode.toString(SUPPORT.address, { type: 'svg', margin: 1, errorCorrectionLevel: 'M' });
+  const want = { box: /viewBox="([^"]+)"/.exec(svg)?.[1] ?? null, d: [...svg.matchAll(/ d="([^"]+)"/g)].map((m) => m[1]) };
+  if (JSON.stringify(shown) !== JSON.stringify(want)) fail(`${where}: the QR code isn't the code of ${SUPPORT.address}`);
+  const body = (await page.locator('main.support').innerText()).replace(/\s+/g, ' ');
+  // The owner's words (2026-10-30, simplified page), and nothing else of the old page.
+  for (const words of ['Support this site', 'Send ETH or USDC on Ethereum mainnet or Base to this address, or send below.', 'Other networks: funds may be lost.'])
+    if (!body.includes(words)) fail(`${where}: doesn't say "${words}"`);
+  if (/\b(donat)|splits\.org|Fund the next scene|\$5\b/i.test(body + (await page.locator('main.support').innerHTML()))) fail(`${where}: still shows the old page's copy (donate, Splits, a title option or a preset)`);
+  const choices = async (label: string) => (await page.locator(`.support-choice[aria-label="${label}"] button`).allTextContents()).map((t) => t.trim()).join('|');
+  if ((await choices('Network')) !== 'Base|Ethereum') fail(`${where}: the networks read "${await choices('Network')}"`);
+  if ((await choices('Token')) !== 'ETH|USDC') fail(`${where}: the tokens read "${await choices('Token')}"`);
+  if (!(await page.locator('.support-send input[type="number"]').count())) fail(`${where}: no amount box`);
+  if ((await page.locator('main.support a[href="/terms"]').textContent())?.trim() !== 'Terms') fail(`${where}: no small Terms link`);
+  await page.getByText('No wallet in this browser.').waitFor({ timeout: 5000 }).catch(() => fail(`${where}: with no wallet, it doesn't say so`));
+  if (!(await page.locator('.support-send [data-send]').isDisabled())) fail(`${where}: Send is on with no wallet`);
+  // A stand-in wallet in the browser (its own context, so no other page sees it): on Ethereum while Base is chosen, then
+  // on Base with too little ETH, then with enough. Nothing is sent: Send is only checked, never pressed.
+  {
+    const ctx = await page.context().browser()!.newContext({ viewport: { width: 390, height: 844 } });
+    // The transpiler's __name helper, as in the main context: without it the stand-in wallet's script doesn't run.
+    await ctx.addInitScript('window.__name = (f) => f');
+    await ctx.addInitScript(() => {
+      const w = window as unknown as { __wallet: { chainId: number; eth: bigint }; ethereum: unknown };
+      w.__wallet = { chainId: 1, eth: 0n };
+      const hex = (n: bigint) => `0x${n.toString(16)}`;
+      const subs: Record<string, ((x: unknown) => void)[]> = {};
+      w.ethereum = {
+        on: (e: string, f: (x: unknown) => void) => void (subs[e] ??= []).push(f),
+        removeListener: () => {},
+        request: async ({ method, params }: { method: string; params?: { chainId?: string }[] }) => {
+          const s = w.__wallet;
+          if (method === 'eth_accounts' || method === 'eth_requestAccounts') return ['0x1111111111111111111111111111111111111111'];
+          if (method === 'eth_chainId') return hex(BigInt(s.chainId));
+          if (method === 'wallet_switchEthereumChain') { s.chainId = Number(params![0].chainId); subs.chainChanged?.forEach((f) => f(hex(BigInt(s.chainId)))); return null; }
+          if (method === 'eth_getBalance') return hex(s.eth);
+          if (method === 'eth_estimateGas') return hex(21000n);
+          if (method === 'eth_gasPrice') return hex(2n * 10n ** 9n);
+          if (method === 'eth_maxPriorityFeePerGas') return hex(10n ** 9n);
+          if (method === 'eth_getBlockByNumber') return { number: '0x1', hash: `0x${'0'.repeat(64)}`, baseFeePerGas: hex(10n ** 9n), timestamp: '0x1', transactions: [] };
+          throw new Error(`stand-in wallet: ${method}`);
+        },
+      };
+    });
+    const p = await ctx.newPage();
+    p.on('request', count);
+    await p.goto(BASE + '/support', { waitUntil: 'networkidle' });
+    await p.locator('.support-send input[type="number"]').fill('0.01');
+    const sw = p.getByRole('button', { name: 'Switch to Base' });
+    await sw.waitFor({ timeout: 5000 }).then(() => sw.click(), () => fail(`${where}: a wallet on Ethereum isn't asked to switch to Base`));
+    await p.getByText('Not enough ETH on Base').waitFor({ timeout: 5000 }).catch(() => fail(`${where}: an empty wallet isn't told "Not enough ETH on Base"`));
+    if (!(await p.locator('.support-send [data-send]').isDisabled())) fail(`${where}: Send is on with too little ETH`);
+    await p.evaluate(() => ((window as unknown as { __wallet: { eth: bigint } }).__wallet.eth = 10n ** 18n));
+    await p.locator('.support-send input[type="number"]').fill('0.02');
+    await p.waitForFunction(() => !(document.querySelector('.support-send [data-send]') as HTMLButtonElement | null)?.disabled, null, { timeout: 5000 }).catch(() => fail(`${where}: Send stays off with enough ETH`));
+    await ctx.close();
+  }
+  if (ours.length) fail(`${where}: the page sent our API something that could record a sender: ${ours.join(', ')}`);
+  await checkFloors(page, '/support @390', scheme);
+  await shot(page, 'phone-390-support', scheme);
+  page.off('request', count);
 }
 
 /**
@@ -1919,6 +2004,7 @@ try {
     await checkAdmin(page, scheme);
     await checkImageZoom(page, scheme);
     await checkReferenceGlossary(page, scheme);
+    await checkSupport(page, scheme);
     await open(page, '/chapter/1?view=listen');
     await page.waitForSelector('.listen-pane');
     await checkFloors(page, '/chapter/1?view=listen @390', scheme);

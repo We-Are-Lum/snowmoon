@@ -1,0 +1,30 @@
+/**
+ * "Support this site" (owner, 2026-10-30): the simplified page in the owner's own words (title, line, the warning, and
+ * the four controls). The rest (the states of sending) is the coding agent's, kept as short as the owner asked.
+ */
+export const SUPPORT_WORDING = {
+  title: 'Support this site',
+  link: 'Support this site',
+  line: 'Send ETH or USDC on Ethereum mainnet or Base to this address, or send below.',
+  warning: 'Other networks: funds may be lost.',
+  qrAlt: (address: string) => `QR code of the address ${address}`,
+  copy: 'Copy',
+  copied: 'Copied',
+  network: 'Network',
+  token: 'Token',
+  amount: 'Amount',
+  send: 'Send',
+  connect: 'Connect wallet',
+  switchTo: (network: string) => `Switch to ${network}`,
+  notEnough: (token: string, network: string) => `Not enough ${token} on ${network}`,
+  noGas: 'Not enough ETH for gas',
+  checking: 'Checking your balance…',
+  confirm: 'Confirm in your wallet…',
+  waiting: 'Sent. Waiting for it to land…',
+  thanks: 'Thank you.',
+  tx: 'Transaction',
+  declined: 'Nothing was sent.',
+  failed: 'The transaction failed.',
+  noWallet: 'No wallet in this browser.',
+  terms: 'Terms',
+} as const;
