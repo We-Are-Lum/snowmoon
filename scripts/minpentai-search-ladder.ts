@@ -10,13 +10,13 @@
 import { spawn } from 'node:child_process';
 import { cpus } from 'node:os';
 import { playSearchMatch, rungPlayer, searchPlayer, type Planner } from '../src/lib/minpentai/versions/search';
-import { SOLO_V1, type VersionRules } from '../src/lib/minpentai/versions/solo-v1';
+import { SOLO_V1, SOLO_V3, type VersionRules } from '../src/lib/minpentai/versions/solo-v1';
 import { BOOK_EDITION } from '../src/lib/minpentai/versions/book-edition';
 import type { World } from '../src/lib/minpentai/versions/engine';
 
 const arg = (k: string, d: string) => { const i = process.argv.indexOf(`--${k}`); return i > 0 ? process.argv[i + 1] : d; };
 const N = +arg('n', '10');
-const RULESETS: Record<string, VersionRules> = { play: SOLO_V1, book: BOOK_EDITION };
+const RULESETS: Record<string, VersionRules> = { play: SOLO_V1, book: BOOK_EDITION, ladder: SOLO_V3 };
 
 interface PairResult { ruleset: string; a: string; b: string; w: number; d: number; l: number; ms: number[]; steps: number[]; illegal: number }
 
@@ -55,7 +55,11 @@ async function main() {
   }
   const levels = ['1', '2', '3', '4', '5'];
   const jobs: [string, string, string][] = [];
-  for (const rs of Object.keys(RULESETS)) {
+  // --ladder: Play's ladder (ruleset 3): each rung against the one below, the beginner (0) against the old Practice player.
+  if (process.argv.includes('--ladder')) {
+    for (let i = 1; i <= 5; i++) jobs.push(['ladder', String(i), String(i - 1)]);
+    jobs.push(['ladder', '0', 'r0'], ['ladder', '1', 'r0']);
+  } else for (const rs of ['play', 'book']) {
     for (let i = 0; i < levels.length; i++) for (let j = i + 1; j < levels.length; j++) jobs.push([rs, levels[j], levels[i]]);
     for (const l of levels) jobs.push([rs, l, 'r5']);
   }
@@ -81,11 +85,13 @@ async function main() {
   console.log(`\nSearch levels, ${N} seeds a pairing, seats swapped (${2 * N} matches). Score = wins + half the draws, for the first named.\n`);
   console.log('| Ruleset | Pairing | Won / drawn / lost | Score |');
   console.log('|---|---|---|---|');
-  for (const r of results) console.log(`| ${r.ruleset === 'play' ? 'Play' : 'Book edition'} | ${r.b === 'r5' ? `Search ${r.a} vs Planner (rung 5)` : `Search ${r.a} vs Search ${r.b}`} | ${r.w} / ${r.d} / ${r.l} | ${Math.round((100 * (r.w + r.d / 2)) / (2 * N))}% |`);
+  const nm = (x: string) => (x === 'r5' ? 'Planner (rung 5)' : x === 'r0' ? 'old Practice' : x === '0' ? 'Beginner' : `Search ${x}`);
+  const rsName = (x: string) => (x === 'play' ? 'Play' : x === 'book' ? 'Book edition' : "Play's ladder (ruleset 3)");
+  for (const r of results) console.log(`| ${rsName(r.ruleset)} | ${nm(r.a)} vs ${nm(r.b)} | ${r.w} / ${r.d} / ${r.l} | ${Math.round((100 * (r.w + r.d / 2)) / (2 * N))}% |`);
   console.log('\nTime and simulated steps per turn (this machine, Node):\n');
   console.log('| Ruleset | Level | Median ms | 95th pct ms | Slowest ms | Most steps |');
   console.log('|---|---|---|---|---|---|');
-  for (const rs of Object.keys(RULESETS)) for (const l of levels) {
+  for (const rs of process.argv.includes('--ladder') ? [] : ['play', 'book']) for (const l of levels) {
     const ms: number[] = [], st: number[] = [];
     // A level's own turns: in a pairing a,b both sides' turns are pooled, so take pairings against the Planner only.
     for (const r of results) if (r.ruleset === rs && r.a === l && r.b === 'r5') { ms.push(...r.ms); st.push(...r.steps); }

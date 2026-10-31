@@ -27,17 +27,22 @@ export interface SearchLevel {
   beam: number;
   /** Most simulated engine steps a turn may use. */
   steps: number;
+  /** At most this many pieces a turn (absent: as many as the points buy). The beginner's handicap. */
+  pieces?: number;
 }
 
 /** The five levels. Spaced by self-play (scripts/minpentai-search-ladder.ts): each beats the one below most of the time. */
 export const SEARCH_LEVELS: Record<number, SearchLevel> = {
+  // The beginner (owner, 2026-10-31): one piece a turn, nine decisions in ten a slip. Against the old Practice player
+  // it scores 43% (40 matches, Play's rules draft 2), so a first-time player usually beats it.
+  0: { horizon: 0, mistake: 0.9, sample: 8, beam: 4, steps: 800, pieces: 1 },
   1: { horizon: 0, mistake: 0.5, sample: 4, beam: 8, steps: 3_000 },
   2: { horizon: 0, mistake: 0.3, sample: 2, beam: 16, steps: 8_000 },
-  3: { horizon: 6, mistake: 0.15, sample: 1, beam: 24, steps: 20_000 },
+  3: { horizon: 6, mistake: 0.12, sample: 1, beam: 24, steps: 20_000 },
   4: { horizon: 12, mistake: 0.05, sample: 1, beam: 32, steps: 40_000 },
   5: { horizon: 18, mistake: 0, sample: 1, beam: 48, steps: 80_000 },
 };
-export const SEARCH_NAMES = ['', 'Search 1', 'Search 2', 'Search 3', 'Search 4', 'Search 5'];
+export const SEARCH_NAMES = ['Beginner', 'Search 1', 'Search 2', 'Search 3', 'Search 4', 'Search 5'];
 
 /**
  * A standing order's preset (agent play, docs/proposals/minpentai-agent-play.md section 9): what the search
@@ -105,6 +110,7 @@ export function searchPlan(m: TurnInput & { level: number; preset?: Preset }): R
   let points = m.points, current = simulate([]), first = true;
   const costOf = (ps: Placement<AnyPiece>[]) => ps.reduce((t, p) => t + e.cost(s, p.t), 0);
   for (;;) {
+    if (L.pieces !== undefined && chosen.length >= L.pieces) break;
     const options: { ps: Placement<AnyPiece>[]; v: number }[] = [];
     for (const ps of pool) {
       if (steps + per > L.steps) break;

@@ -34,6 +34,7 @@ import { NextRequest } from 'next/server';
 import { middleware, config as mwConfig } from '../src/middleware';
 import { CHALLENGE_PATH, decChallenge, splitChallenge } from '../src/lib/minpentai/snap/challenge';
 import { settings, versionOf } from '../src/lib/minpentai/snap/versions';
+import { PLAY } from '../src/lib/minpentai/versions/solo-v1';
 
 const H: Here = { base: 'https://snowmoon.party', keep: [] };
 let failures = 0;
@@ -79,7 +80,7 @@ function plan(p: ReturnType<typeof play>, style: 'gliders' | 'mixed'): P[] {
 function controllerRun(seed: number, turns: (c: PlayController) => Placement[]): string[] {
   const env: Env = { now: () => seed, setInterval: () => 0, clearInterval: () => {}, setTimeout: () => 0, clearTimeout: () => {}, copy: () => {}, href: () => '' };
   const c = new PlayController(env);
-  c.openStart('practice');
+  c.openStart('practice', undefined, { version: PLAY });
   c.begin();
   const boards: string[] = [];
   for (let guard = 0; guard < 40; guard++) {

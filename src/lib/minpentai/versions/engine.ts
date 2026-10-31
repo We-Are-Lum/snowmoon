@@ -600,31 +600,41 @@ export function engine(L: Layout) {
   function fog(w: World, s: Settings, o: Side): World {
     const see = lit(w, o, s.sight), v = world(s, true);
     v.step = w.step;
+    // Rocks: out of sight, as they were at the start (a rock can crumble or be hit where nobody sees it); in sight,
+    // as they are. A rock's ore only where it and every square beside it are in sight: otherwise a hidden factory's
+    // firing would show as ore spent (fog review, 2026-10-31).
+    const start = s.rocks === 'breakable' ? s.rockHits : 1;
+    for (const k of L.rocks) if (!see.has(k)) v.rock[k] = start;
+    for (const k of see) if (w.rock[k]) v.rock[k] = w.rock[k];
     if (w.ore) {
       const ore: Record<number, number> = {};
-      for (const k of L.rocks) if (!see.has(k)) { v.rock[k] = 1; ore[k] = s.ore ?? 0; }
-      for (const k of see) if (w.rock[k]) { v.rock[k] = w.rock[k]; if (w.ore[k] !== undefined) ore[k] = w.ore[k]; }
+      const around = (k: number) => { const [x, y] = XY(k); return D4.every(([dx, dy]) => !inb(x + dx, y + dy) || see.has(K(x + dx, y + dy))); };
+      for (const k in v.rock) ore[+k] = see.has(+k) && around(+k) && w.ore[+k] !== undefined ? w.ore[+k] : s.ore ?? 0;
       v.ore = ore;
-    } else for (const k in w.rock) v.rock[k] = w.rock[k];
-    const shown = (k: number | string, owner: Side) => owner === o || see.has(+k);
-    for (const k in w.tw) if (shown(k, w.tw[k])) v.tw[k] = w.tw[k];
-    for (const k in w.sq) if (shown(k, w.sq[k].o)) v.sq[k] = { ...w.sq[k] };
+    }
+    // Only what is in sight, the side's own pieces too: its towers always are; a square, mirror, factory, resting
+    // symbol glider or moving wall out of sight could otherwise sense hidden pieces (where it came to rest, its hits
+    // left). The side knows where it placed them (fog review, 2026-10-31).
+    const shown = (k: number | string) => see.has(+k);
+    for (const k in w.tw) if (w.tw[k] === o || shown(k)) v.tw[k] = w.tw[k];
+    for (const k in w.sq) if (shown(k)) v.sq[k] = { ...w.sq[k] };
     // Gliders in sight, numbered afresh in the same order: a real id would count the pieces made out of sight.
     v.gl = w.gl.filter((g) => see.has(K(g.x, g.y))).sort((a, b) => a.id - b.id).map((g, i) => ({ ...g, id: i + 1, tx: undefined, ty: undefined, stay: undefined, dead: undefined }));
     v.nid = v.gl.length + 1;
-    const keep = <T extends { o: Side }>(from: Record<number, T> | undefined) => {
+    const keep = <T extends object>(from: Record<number, T> | undefined) => {
       if (!from) return undefined;
       const out: Record<number, T> = {};
-      for (const k in from) if (shown(k, from[k].o)) out[k] = { ...from[k] };
+      for (const k in from) if (shown(k)) out[k] = { ...from[k] };
       return out;
     };
     if (w.mir) v.mir = keep(w.mir);
     if (w.fa) v.fa = keep(w.fa);
     if (w.fs) v.fs = keep(w.fs);
-    if (w.sd) { v.sd = {}; for (const k in w.sd) if (shown(k, w.sd[k])) v.sd[k] = w.sd[k]; }
-    // A moving wall: shown if it is the side's own or any of its squares is in sight; a square out of sight is shown standing.
-    if (w.mw) v.mw = w.mw.filter((m) => m.o === o || wallCells(m).some(([x, y], i) => m.c[i] && inb(x, y) && see.has(K(x, y))))
-      .map((m, j) => ({ ...m, id: j + 1, c: m.c.map((c, i) => { const [x, y] = wallCells(m)[i]; return m.o === o || (inb(x, y) && see.has(K(x, y))) ? c : 1; }) }));
+    if (w.sd) { v.sd = {}; for (const k in w.sd) if (shown(k)) v.sd[k] = w.sd[k]; }
+    // A moving wall with any square in sight: where it is and where it flies; a square out of sight shown standing;
+    // never whether it has stopped (that can come from a square out of sight).
+    if (w.mw) v.mw = w.mw.filter((m) => wallCells(m).some(([x, y], i) => m.c[i] && inb(x, y) && see.has(K(x, y))))
+      .map((m, j) => ({ id: j + 1, o: m.o, x: m.x, y: m.y, dx: m.dx, dy: m.dy, c: m.c.map((c, i) => { const [x, y] = wallCells(m)[i]; return inb(x, y) && see.has(K(x, y)) ? c : 1; }) }));
     // An empty list says nothing; its being there at all would say the enemy has such a piece somewhere.
     for (const f of ['mir', 'fa', 'fs', 'sd', 'mw'] as const) if (v[f] && !Object.keys(v[f]!).length) delete v[f];
     return v;

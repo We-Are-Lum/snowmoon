@@ -394,6 +394,19 @@ function both(m: LiveMatch, from: number, to: number) { for (let t = from; t <= 
     await S.postLadder(sql, 7, { rung: 1, win: 'C', step: 44 });
     check('store: a win is recorded and opens rung 2', same(await S.getLadder(sql, 7), { opened: 2, rec: { 1: { tries: 1, won: 44 } } }));
     check('store: progress is per person', same(await S.getLadder(sql, 8), { opened: 1, rec: {} }));
+    // The search computer's ladder (ruleset 3, owner 2026-10-31): starts fresh, the old ladder kept as history; neither touches the other.
+    const old7 = { opened: 2, rec: { 1: { tries: 1, won: 44 } } };
+    check('store: the new ladder starts fresh, with the old one as history', same(await S.getLadder(sql, 7, 3), { opened: 1, rec: {}, history: old7 }));
+    await S.postLadder(sql, 7, { rung: 1, win: 'C', step: 50, ruleset: 3 });
+    await S.postLadder(sql, 7, { rung: 2, win: 'A', step: 60, ruleset: 3 });
+    check('store: a new-ladder win opens its rung 2, and its loss counts a try', same(await S.getLadder(sql, 7, 3), { opened: 2, rec: { 1: { tries: 1, won: 50 }, 2: { tries: 1 } }, history: old7 }));
+    check('store: the old ladder is unchanged by the new one', same(await S.getLadder(sql, 7), old7));
+    await S.postLadder(sql, 7, { rung: 2, win: 'C', step: 70 });
+    check('store: an old-ladder result (a page from before) keeps the new ladder', same((await S.getLadder(sql, 7, 3)).rec, { 1: { tries: 1, won: 50 }, 2: { tries: 1 } }) && (await S.getLadder(sql, 7)).opened === 3);
+    for (let n = 2; n <= 6; n++) await S.postLadder(sql, 7, { rung: n, win: 'C', step: 80, ruleset: 3 });
+    check('store: the new ladder has six rungs', (await S.getLadder(sql, 7, 3)).opened === 6);
+    await rejects('store: no rung 7 on the new ladder', S.postLadder(sql, 7, { rung: 7, win: 'C', step: 3, ruleset: 3 }), 400);
+    await rejects('store: no rung 6 on the old ladder', S.postLadder(sql, 7, { rung: 6, win: 'C', step: 3 }), 400);
 
     // Lobby and challenges.
     await rejects('store: challenge without being ready', S.challenge(sql, 7, 8, T0), 409, /ready first/);

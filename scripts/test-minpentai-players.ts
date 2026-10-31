@@ -23,6 +23,7 @@ import { PlayController, type Env } from '../src/lib/minpentai/play-game/control
 import { H, K, W, apply, botPlan, clone, lit, rng, step, towers, updLS, world, type Placement, type Side, type World } from '../src/lib/minpentai/play-game/game';
 import { PlayerError, fogView, playMatch, rung, tally, turnKey, turned, type Player } from '../src/lib/minpentai/play-game/players';
 import first from './minpentai-players/first-player';
+import { PLAY } from '../src/lib/minpentai/versions/solo-v1';
 
 let pass = 0;
 const failures: string[] = [];
@@ -41,7 +42,7 @@ check('a ladder match on the page (PlayController) ends as playMatch does, for e
     let tick: () => void = () => {};
     const env: Env = { now: () => seed, setInterval: (f) => { tick = f; return 1; }, clearInterval: () => {}, setTimeout: () => 0, clearTimeout: () => {}, copy: () => {}, href: () => '' };
     const ctl = new PlayController(env);
-    ctl.openStart('ladder', lvl);
+    ctl.openStart('ladder', lvl, { version: PLAY });
     ctl.begin();
     const m = ctl.m!;
     const rC = rng((seed ^ 0x5eed) >>> 0);
