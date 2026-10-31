@@ -24,7 +24,7 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { DEFAULT_TEMPLATES } from '../src/templates';
 import { LiveScreen } from '../src/components/live-screen';
-import { AGENTS, CHAT, IMAGES, REPO_URL } from '../src/lib/config';
+import { AGENTS, CHALLENGE, CHAT, IMAGES, REPO_URL } from '../src/lib/config';
 import { NOTICE_REVIEW, currentNoticeItems, noticeKey } from '../src/lib/chat/notice';
 import { LEGAL, PRIVACY, TERMS, legalKey } from '../src/lib/legal';
 import { LEARN_TEXT } from '../src/lib/minpentai/learn-text';
@@ -367,6 +367,15 @@ add({
         for (const [what, re] of [['kept with the link', /kept with the link/], ['never published', /Never published by us/], ['described to screen readers', /aria-describedby/]] as const)
           if (!re.test(text)) problems.push(`${file}: the agent address box must say it is ${what}`);
         if (/fetch\(|supabase|\/api\//.test(text)) problems.push(`${file}: the agent address box must not send its text anywhere itself`);
+        continue;
+      }
+      if (file.endsWith('components/post-link-field.tsx')) {
+        // "Add where you posted it" (the remix challenge, 2026-10-31): a post's address, sent to us, read (never fetched),
+        // and shown on the version's page as the network, the writer's handle, the date and a link.
+        for (const [what, re] of [['sent to us', /Sent to us\./], ['read from the network, never from the address', /never from this address/], ['shown with the network, handle and date, as a link', /network, the writer’s handle and the date, as a link/], ['described to screen readers', /aria-describedby/], ['a single-line address box', /type="url"/]] as const)
+          if (!re.test(text)) problems.push(`${file}: the post address box must say it is ${what}`);
+        if (/fetch\(|supabase|\/api\//.test(text)) problems.push(`${file}: the post address box must not send its text anywhere itself`);
+        if (/<textarea\b/.test(text)) problems.push(`${file}: the post address box must be a single-line input`);
         continue;
       }
       if (file.endsWith('components/tx-hash-field.tsx')) {
@@ -1230,6 +1239,30 @@ add({
     files.push({ file: 'src/lib/images/data.ts', text: 'select e.* from studio.elements e left join studio.admin_picks p on p.element_id = e.id order by p.at' });
   },
 });
+// The remix challenge (owner, 2026-10-31: "No ordering by engagement or payment"): entries, sheets to start from and
+// "Posted on" are in time order and nothing else. In the challenge's code, every .sort() is newestFirst, and no SQL
+// order reads likes, built-on counts, scores, costs or payments.
+const CHALLENGE_FILES = /^src\/lib\/challenge\/|^src\/app\/challenge\/|^src\/app\/api\/challenge\/|^src\/components\/(challenge-[a-z-]+|posted-on|post-link-field)\.tsx$/;
+const NOT_AN_ORDER = /\b(likes?|like_?count|likeCount|built_?on|builtOn|score|repost|recast|repl(y|ies)|followers?|cost|amount|usd|payment|paid|sponsor|donation)\b/i;
+add({
+  id: 'P5g',
+  principle: 5,
+  name: 'the remix challenge orders entries, sheets and "Posted on" by time only (never by likes, built-on, scores or payments)',
+  load: async () => walk('src', /\.tsx?$/).filter((f) => CHALLENGE_FILES.test(f)).map((f) => ({ file: f, text: read(f) })),
+  run: (files) => {
+    const problems: string[] = [];
+    if (!files.some((f: { file: string }) => f.file === 'src/lib/challenge/rules.ts')) problems.push('src/lib/challenge/rules.ts: missing');
+    for (const { file, text } of files as { file: string; text: string }[]) {
+      const code = text.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:])\/\/.*$/gm, '$1');
+      for (const m of code.matchAll(/\.sort\(([^)]*)\)/g)) if (m[1].trim() !== 'newestFirst') problems.push(`${file}: sorts by something other than newestFirst: ${m[0].slice(0, 80)}`);
+      for (const m of code.matchAll(/order by([^`;]{0,160})/gi)) if (NOT_AN_ORDER.test(m[1])) problems.push(`${file}: orders by "${m[1].trim().slice(0, 60)}"`);
+    }
+    return problems;
+  },
+  plant: (files) => {
+    files.push({ file: 'src/lib/challenge/planted.ts', text: 'export const top = (e) => e.sort((a, b) => b.builtOn - a.builtOn);' });
+  },
+});
 // A hide on a seeded image reaches everywhere it shows (owner, 2026-10-30: "home, About, quote cards, the player,
 // share images. Add a check."). Every file that reads the seeded images (or the introduction or a quote card, which
 // carry them) must pass them through the hide filter, except the readers themselves and the admin Hide that writes it.
@@ -1324,7 +1357,7 @@ add({
     seen.push({ page: '/chapter/1', host: 'fonts.googleapis.com', url: 'https://fonts.googleapis.com/css2?family=Inter', type: 'stylesheet' });
   },
 });
-const PRIVATE_FID_TABLES = ['ratings', 'likes', 'take_likes', 'picks', 'contributor_consents', 'image_asks', 'removal_log', 'image_scores', 'wallet_links'];
+const PRIVATE_FID_TABLES = ['ratings', 'likes', 'take_likes', 'picks', 'contributor_consents', 'image_asks', 'removal_log', 'image_scores', 'wallet_links', 'challenge_marks', 'version_posts'];
 add({
   id: 'P6b',
   principle: 6,
@@ -1348,7 +1381,12 @@ add({
       insert into studio.image_scores (fid, score) values (42, 0.8);
       insert into studio.removal_log (element_id, step, by_fid, role, reason) values ('00000000-0000-0000-0000-0000000000b1','reported',42,'reader','spam');
       insert into studio.wallet_accounts (address) values ('0x${'4'.repeat(40)}');
-      insert into studio.wallet_links (account_id, fid, how) select id, 42, 'signed' from studio.wallet_accounts where address = '0x${'4'.repeat(40)}';`);
+      insert into studio.wallet_links (account_id, fid, how) select id, 42, 'signed' from studio.wallet_accounts where address = '0x${'4'.repeat(40)}';
+      -- The remix challenge (NEXT_remix_challenge.sql, while unmerged): a mark and a listed post, by FID 42.
+      do $$ begin if to_regclass('studio.challenge_marks') is not null then
+        insert into studio.challenge_marks (challenge, fid, character, version_id) values ('remix-2026-11', 42, 'bai', '00000000-0000-0000-0000-0000000000f1');
+        insert into studio.version_posts (version_id, network, post_id, handle, posted_at, url, fid) values ('00000000-0000-0000-0000-0000000000f1', 'lens', '1', 'someone', now(), 'https://hey.xyz/posts/abc', 42);
+      end if; end $$;`);
     const problems: string[] = [];
     for (const role of ['anon', 'authenticated']) {
       for (const t of PRIVATE_FID_TABLES) {
@@ -1691,6 +1729,35 @@ add({
       : [],
   plant: (c) => {
     c.public = true;
+  },
+});
+
+// P6q: the remix challenge (branch remix-challenge, owner 2026-10-31). Its entries (CHALLENGE.entries: marks kept, Neynar
+// asked about makers, entries shown) and "Posted on" (CHALLENGE.posts: posts kept, Neynar, Bluesky and Lens asked) are
+// on only once the owner's Privacy words say so (docs/legal/remix-challenge-draft.md). Legal texts describe today.
+add({
+  id: 'P6q',
+  principle: 6,
+  name: 'the remix challenge\'s entries and "Posted on" are on only while the Privacy page says what they keep and send',
+  load: async () => ({
+    entries: CHALLENGE.entries as boolean,
+    posts: CHALLENGE.posts as boolean,
+    s4: (PRIVACY.sections.find((s) => s.n === 4)?.body ?? []).flat().join(' '),
+    s7: (PRIVACY.sections.find((s) => s.n === 7)?.body ?? []).flat().join(' '),
+  }),
+  run: (c) => {
+    const problems: string[] = [];
+    if (c.entries && !/remix challenge/i.test(c.s4)) problems.push('CHALLENGE.entries (src/lib/config.ts) is on, but Privacy §4 does not describe the remix challenge\'s entries; reread docs/legal/remix-challenge-draft.md with the owner first, or keep it off');
+    if (c.entries && !/remix challenge/i.test(c.s7)) problems.push('CHALLENGE.entries is on, but Privacy §7 does not say Neynar receives makers\' FIDs for the remix challenge');
+    if (c.posts && !/remix challenge|posted/i.test(c.s4)) problems.push('CHALLENGE.posts is on, but Privacy §4 does not describe the posts people add');
+    for (const n of ['Bluesky', 'Lens']) if (c.posts && !new RegExp(`\\b${n}\\b`).test(c.s7)) problems.push(`CHALLENGE.posts is on, but Privacy §7 does not name ${n}`);
+    return problems;
+  },
+  plant: (c) => {
+    c.entries = true;
+    c.posts = true;
+    c.s4 = 'Quote cards you save, and your likes.';
+    c.s7 = 'Neynar receives your Farcaster ID.';
   },
 });
 
