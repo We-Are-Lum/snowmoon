@@ -1,6 +1,6 @@
 # "Support this site": the Terms line (DRAFT, for the owner's reread)
 
-Branch `support-page`, 2026-10-30. Drafted by the coding agent (Claude, by Anthropic). Not in `src/lib/legal.ts`. It
+Branch `support-page`, 2026-10-30. Drafted by the coding agent (Claude, by Anthropic). In `src/lib/legal.ts` as Terms 6c, awaiting the owner's reread. It
 ships in the same merge as the page, after your reread (owner, 2026-10-18: texts describe today).
 
 Owner, 2026-10-30: "Terms line for my reread: a gift, no rewards or refunds, not an investment, not tax-deductible. No
