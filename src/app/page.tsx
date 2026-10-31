@@ -24,7 +24,7 @@ export const dynamic = 'force-dynamic';
 /**
  * Home, from Claude Design's HomeWindow (docs/design/home/HomeWindow.dc.html; the site's own top bar,
  * menu and rail stand in for Design's header and menu). The dark hero says, on the first screen, that
- * this is an independent adaptation, not affiliated with the author, with no token (principle 7; the
+ * this is an independent adaptation, not affiliated with the author (principle 7; the
  * owner's ruling moved Design's footer line here, 2026-10-10). Then a moment from the book, the
  * newest readers' images, Minpentai playing itself, everything you can do here, and every chapter.
  */
