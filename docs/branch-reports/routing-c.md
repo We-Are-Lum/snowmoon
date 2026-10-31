@@ -174,7 +174,9 @@ All logs are in the session scratchpad,
 
 **`npx tsc --noEmit -p .`:** passes.
 
-**`npm run check:principles`** (static): see the final run in the reply. P6d is the accepted open item.
+**`npm run check:principles`** (static): 53 pass, 1 fail (P6d, the accepted open item), of 54. All 54 are proven to fail on a planted violation (`routing-c-principles-2.log`).
+
+**`npm run check:ui`** on a fresh build (`next start -p 3320`, under the shared lock): passed, 59 pages, including 8 assistant states in light and dark (`routing-c-check-ui.log`, `routing-c-build.log`).
 - P6e is restamped by the coding agent. The notice's words are unchanged while make mode is off, which CLAUDE.md's P6e note allows.
 
 ## The real trial
