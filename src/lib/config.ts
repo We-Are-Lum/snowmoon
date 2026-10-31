@@ -339,6 +339,28 @@ export const ADMINS: readonly number[] = [6786, 193912];
 /** Moderation only: these FIDs may hide content or dismiss a report. They never promote or rank anything. Owner, 2026-10-08 (decision 20). */
 export const MODERATOR_FIDS: readonly number[] = [6786];
 
+/**
+ * "Support this site" (owner, 2026-10-30): the one place the support address lives. Every page, link, QR code and
+ * wallet send reads it from here (test:support checks that, and that it is checksummed). It is a Splits account (the
+ * owner's): money sent to it is split as the Split says, which anyone can see on Splits.
+ * Live on Ethereum and Base only: eth_getCode on 2026-10-30, two public RPCs each, found its code (a 61-byte proxy)
+ * on those two and none on Optimism, Arbitrum, Zora or Polygon. The page names only these and warns that sending on any
+ * other network may lose the funds. Nothing about a sender is recorded.
+ */
+export const SUPPORT = {
+  address: '0x93eC36379bFEB4db21a2d49102A1e30fC43673a3' as const,
+  /** The footer and About link to /support. Off until the owner's $1 test passes: reachable only by its URL (owner, 2026-10-30). */
+  linked: false as boolean,
+  networks: [
+    { name: 'Ethereum', chainId: 1, explorer: 'https://etherscan.io' },
+    { name: 'Base', chainId: 8453, explorer: 'https://basescan.org' },
+  ],
+  /** The Split on Splits, where anyone can see where the money goes. */
+  splitsUrl: (chainId: number) => `https://app.splits.org/accounts/${SUPPORT.address}/?chainId=${chainId}`,
+  /** "Send with your wallet": on Base only, in ETH or USDC; these amounts in US dollars, or the sender's own. */
+  send: { chainId: 8453, presetsUsd: [5, 20, 50] as const, minUsd: 1, maxUsd: 10_000 },
+} as const;
+
 /** The public contact for Snowmoon Party: legal, copyright and reports from readers who are signed out (owner, 2026-10-08). */
 export const CONTACT_EMAIL = 'snowmoon@wearelum.xyz';
 

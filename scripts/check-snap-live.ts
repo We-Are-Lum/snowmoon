@@ -5,14 +5,14 @@
  *   npm run check:snap-live                       (https://snowmoon.party)
  *   npm run check:snap-live -- --url=https://…    (another public deployment)
  *
- * Checks, for /minpentai and /minpentai/play (the snap's own link):
- * - from another origin in a real browser (Chromium on https://example.com), a fetch with the snap
- *   Accept and with X-Snap-Payload gets the snap: Farcaster's web client sends that header, so the
- *   browser preflights first, and a preflight the page answers allows no headers (2026-10-23: no snap
- *   in the web composer). The same fetch without X-Snap-Payload gets the snap too;
- * - twice each: the snap Accept gets snap JSON (v2.0, "Start a match"); a browser's Accept gets the HTML
- *   page, 200, not a redirect, with the Link header naming the snap (/minpentai also with no Accept);
- *   /minpentai/play also: Accept *\/* gets the snap, X's Twitterbot gets the page and its card;
+ * Checks, for /minpentai, /minpentai/play, a challenge link and /snap/minpentai (the launch cast), the rule of
+ * 2026-10-30: the snap Accept gets the snap twice over; Farcaster's composer (FCBot, both its requests) gets the
+ * card page without fc:frame / fc:miniapp and one absolute Link to the snap at the same address; no Accept,
+ * Accept *\/*, a browser and X, Discord, Slack, Telegram and iMessage's bots get the full page and card.
+ * Also:
+ * - for the same four links, from another origin in a real browser (Chromium on https://example.com), a
+ *   fetch with the snap Accept, with and without X-Snap-Payload, gets the snap: Farcaster's web client
+ *   sends that header, so the browser preflights first (2026-10-23: no snap in the web composer);
  * - /minpentai/play in a browser: Play's home, and the share card (og:image 1200×630,
  *   twitter:card summary_large_image, fc:miniapp's 3:2 image), each image served;
  * - a forged challenge link and its card are 404; an unsigned tap is 400;
@@ -29,6 +29,9 @@ const BASE = (arg('url') ?? 'https://snowmoon.party').replace(/\/$/, '');
 const SNAP = 'application/vnd.farcaster.snap+json';
 const BROWSER = 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8';
 const PATHS = ['/minpentai', '/minpentai/play'];
+/** A real signed challenge link (served in production) and the launch cast's link. */
+const CHALLENGE = '/minpentai/c/vu207s.0.cost3._.C-49-7-0-55.c2Nnz7njlDZWxkdy8L6JcI';
+const LINKS = [...PATHS, CHALLENGE, '/snap/minpentai'];
 const FORGED = '/minpentai/c/ll.3.diag._.C-41-3-0-38.AAAAAAAAAAAAAAAAAAAAAA';
 
 let failures = 0;
@@ -39,26 +42,44 @@ const ok = (pass: boolean, what: string) => {
 const meta = (html: string, key: string) =>
   html.match(new RegExp(`<meta[^>]+(?:name|property)="${key}"[^>]+content="([^"]*)"`))?.[1].replace(/&quot;/g, '"').replace(/&amp;/g, '&');
 
+// What Farcaster sends (production logs, 2026-10-30) and what link-preview bots send (their published user agents).
+const FCBOT: [string, Record<string, string>][] = [
+  ["the composer's HTML request", { 'User-Agent': 'FCBot/0.1 (like TwitterBot)', Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8' }],
+  ["the composer's other request", { 'User-Agent': 'Twitterbot like FCBot/0.1 FCBot:0.1', Accept: 'application/json, text/plain, */*' }],
+];
+const BOTS: [string, Record<string, string>][] = [
+  ['X', { 'User-Agent': 'Twitterbot/1.0', Accept: '*/*' }],
+  ['Discord', { 'User-Agent': 'Mozilla/5.0 (compatible; Discordbot/2.0; +https://discordapp.com)', Accept: '*/*' }],
+  ['Slack', { 'User-Agent': 'Slackbot-LinkExpanding 1.0 (+https://api.slack.com/robots)', Accept: '*/*' }],
+  ['Telegram', { 'User-Agent': 'TelegramBot (like TwitterBot)' }],
+  ['iMessage', { 'User-Agent': 'facebookexternalhit/1.1 Facebot Twitterbot/1.0', Accept: BROWSER }],
+];
+const snapLinks = (r: Response) => (r.headers.get('link') ?? '').split(/,(?=\s*<)/).filter((l) => l.includes(SNAP)).map((l) => l.trim());
+
 async function negotiation() {
-  for (const p of PATHS) {
+  // The rule (owner, 2026-10-30; src/lib/minpentai/snap/negotiate.ts): the snap Accept gets the snap; Farcaster's
+  // composer (FCBot) gets the page's card without fc:frame / fc:miniapp and an absolute Link to the snap;
+  // everyone else gets the full page and card (/snap/minpentai shows Play's).
+  for (const p of LINKS) {
     for (const i of [1, 2]) {
-      let r = await fetch(BASE + p, { headers: { Accept: SNAP }, redirect: 'manual' });
+      const r = await fetch(BASE + p, { headers: { Accept: SNAP }, redirect: 'manual' });
       const j = (await r.json().catch(() => null)) as { version?: string } | null;
-      ok(r.status === 200 && !!r.headers.get('content-type')?.startsWith(SNAP) && j?.version === '2.0' && JSON.stringify(j).includes('Start a match'),
+      ok(r.status === 200 && !!r.headers.get('content-type')?.startsWith(SNAP) && j?.version === '2.0',
         `${p} with the snap Accept #${i}: ${r.status} ${r.headers.get('content-type')} (cache ${r.headers.get('x-vercel-cache')})`);
-      // /minpentai/play serves the snap to anything that doesn't clearly want a page (src/lib/minpentai/snap/negotiate.ts).
-      if (p === '/minpentai/play') {
-        r = await fetch(BASE + p, { headers: { Accept: '*/*' }, redirect: 'manual' });
-        ok(r.status === 200 && !!r.headers.get('content-type')?.startsWith(SNAP), `${p} with Accept */* #${i}: ${r.status} ${r.headers.get('content-type')}`);
-        r = await fetch(BASE + p, { headers: { Accept: '*/*', 'User-Agent': 'Twitterbot/1.0' }, redirect: 'manual' });
-        ok(r.status === 200 && !!r.headers.get('content-type')?.startsWith('text/html') && (await r.text()).includes('twitter:card'), `${p} as X's Twitterbot (*/*) #${i}: ${r.status} ${r.headers.get('content-type')}, card`);
-      }
-      for (const [name, accept] of (p === '/minpentai/play' ? [['a browser Accept', BROWSER]] : [['no Accept', null], ['a browser Accept', BROWSER]]) as [string, string | null][]) {
-        r = await fetch(BASE + p, { headers: accept ? { Accept: accept } : {}, redirect: 'manual' });
-        const html = await r.text();
-        ok(r.status === 200 && !!r.headers.get('content-type')?.startsWith('text/html') && (r.headers.get('link') ?? '').includes(`<${p}>; rel="alternate"; type="${SNAP}"`) && html.includes('<title>'),
-          `${p} with ${name} #${i}: ${r.status} ${r.headers.get('content-type')}, Link ${r.headers.get('link') ? 'yes' : 'no'}`);
-      }
+    }
+    for (const [name, headers] of FCBOT) {
+      const r = await fetch(BASE + p, { headers, redirect: 'manual' });
+      const html = await r.text(), links = snapLinks(r);
+      ok(r.status === 200 && !!r.headers.get('content-type')?.startsWith('text/html') && !html.includes('fc:miniapp') && !html.includes('fc:frame')
+        && !!meta(html, 'og:image') && links.length === 1 && links[0].startsWith(`<${BASE}${p}>`),
+        `${p} as ${name}: ${r.status} ${r.headers.get('content-type')}, fc: tags ${html.includes('fc:') ? 'yes' : 'no'}, og:image ${meta(html, 'og:image') ? 'yes' : 'no'}, snap Link ${links.join(' | ') || 'none'}`);
+    }
+    for (const [name, headers] of [['no Accept', {}], ['Accept */*', { Accept: '*/*' }], ['a browser Accept', { Accept: BROWSER }], ...BOTS] as [string, Record<string, string>][]) {
+      const r = await fetch(BASE + p, { headers, redirect: 'manual' });
+      const html = await r.text(), links = snapLinks(r);
+      ok(r.status === 200 && !!r.headers.get('content-type')?.startsWith('text/html') && html.includes('fc:miniapp') && !!meta(html, 'og:image')
+        && meta(html, 'twitter:card') === 'summary_large_image' && links.length === 1 && links[0].includes(`${p}>`),
+        `${p} as ${name}: ${r.status} ${r.headers.get('content-type')}, full page ${html.includes('fc:miniapp') ? 'yes' : 'no'}, card ${meta(html, 'og:image') ? 'yes' : 'no'}, snap Link ${links.join(' | ') || 'none'}`);
     }
   }
 }
@@ -68,7 +89,7 @@ async function crossOrigin() {
   try {
     const page = await browser.newPage();
     await page.goto('https://example.com');
-    for (const p of PATHS) {
+    for (const p of LINKS) {
       for (const headers of [{ Accept: SNAP }, { Accept: SNAP, 'X-Snap-Payload': 'check-snap-live' }] as Record<string, string>[]) {
         const got = await page.evaluate(async ([u, h]) => {
           try {
@@ -78,7 +99,7 @@ async function crossOrigin() {
             return { status: 0, type: '', body: `blocked: ${(e as Error).message}` };
           }
         }, [BASE + p, headers] as const);
-        ok(got.status === 200 && got.type.startsWith(SNAP) && got.body.includes('Start a match'),
+        ok(got.status === 200 && got.type.startsWith(SNAP) && got.body.includes('"version":"2.0"'),
           `${p} from another origin, ${Object.keys(headers).join(' + ')}: ${got.status ? `${got.status} ${got.type}` : got.body}`);
       }
     }

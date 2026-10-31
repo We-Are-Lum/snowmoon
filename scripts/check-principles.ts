@@ -326,6 +326,14 @@ add({
         if (/fetch\(|supabase|\/api\//.test(text)) problems.push(`${file}: the editor's box must not send its text anywhere itself`);
         continue;
       }
+      if (file.endsWith('components/amount-field.tsx')) {
+        // "Support this site" (owner, 2026-10-30): an amount in dollars for the wallet in this browser to send; never sent
+        // to us, kept or published.
+        for (const [what, re] of [['only an amount, for your wallet', /Only an amount, for your wallet\./], ['never sent to us or published', /Never sent to us or published\./], ['a number box', /type="number"/], ['described to screen readers', /aria-describedby/]] as const)
+          if (!re.test(text)) problems.push(`${file}: the amount box must say it is ${what}`);
+        if (/fetch\(|supabase|\/api\//.test(text)) problems.push(`${file}: the amount box must not send anything itself`);
+        continue;
+      }
       if (file.endsWith('components/search-field.tsx')) {
         // "Make an image" (2026-10-10): a search of the book's own text, run on the reader's device over the text
         // served whole by GET /api/book/text; the query is never sent anywhere, kept or published.
@@ -1252,7 +1260,7 @@ add({
 // ---------------------------------------------------------------------------
 // P6. No third-party requests; individual ratings not publicly readable.
 // ---------------------------------------------------------------------------
-const PAGES = ['/', '/chapter/1', '/chapter/30', '/about', '/cards', '/adaptations', '/adaptations/dog-dawn', '/share/1/4?img=c1-b005-toy-drone', '/references', '/moderate', '/glossary', '/glossary/zei', '/terms', '/privacy', '/references?show=moments',
+const PAGES = ['/', '/chapter/1', '/chapter/30', '/about', '/support', '/cards', '/adaptations', '/adaptations/dog-dawn', '/share/1/4?img=c1-b005-toy-drone', '/references', '/moderate', '/glossary', '/glossary/zei', '/terms', '/privacy', '/references?show=moments',
   // Step 4: styles and character sheets.
   '/references/designs', '/references/designs?tab=characters', '/references/designs/character/gladias', '/references/picks',
   // The You page and a public profile (owner, 2026-10-18).
