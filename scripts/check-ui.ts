@@ -676,6 +676,10 @@ async function checkSupport(page: Page, scheme: string) {
   await page.route('**/api/eth-usd', (r) => r.fulfill({ json: { usd: 2500, updatedAt: Math.floor(Date.now() / 1000) } }));
   await open(page, '/support');
   const amountBox = page.locator('.support-send input[type="number"]');
+  // ETH is the default, with "0.01" greyed in the empty box (owner, 2026-10-31); a placeholder isn't an amount, so no estimate.
+  if ((await page.locator('.support-choice[aria-label="Token"] button[aria-checked="true"]').textContent())?.trim() !== 'ETH') fail(`${where}: ETH isn't the default`);
+  if ((await amountBox.getAttribute('placeholder')) !== '0.01' || (await amountBox.inputValue()) !== '') fail(`${where}: the empty amount box doesn't show "0.01" as its placeholder`);
+  if (await page.locator('.support-estimate').count()) fail(`${where}: an estimate shows before an amount is typed`);
   await amountBox.fill('0.01');
   await page.getByText("≈ $25.00 (estimate, from Chainlink's ETH/USD)").waitFor({ timeout: 5000 }).catch(() => fail(`${where}: 0.01 ETH doesn't show "≈ $25.00 (estimate…)"`));
   await amountBox.fill('0.02');

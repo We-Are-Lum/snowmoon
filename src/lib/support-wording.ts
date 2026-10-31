@@ -13,6 +13,8 @@ export const SUPPORT_WORDING = {
   network: 'Network',
   token: 'Token',
   amount: 'Amount',
+  /** Shown greyed in the empty amount box while ETH is chosen (owner, 2026-10-31); not a value, so no estimate. */
+  ethPlaceholder: '0.01',
   send: 'Send',
   connect: 'Connect wallet',
   switchTo: (network: string) => `Switch to ${network}`,

@@ -129,7 +129,7 @@ export function SupportSend() {
     <div className="support-send">
       <Choice label={W.network} options={SUPPORT.networks.map((n) => n.name)} value={network.name} onChange={(n) => (setNetwork(SUPPORT.networks.find((x) => x.name === n)!), setSent(null))} disabled={busy} />
       <Choice label={W.token} options={['ETH', 'USDC'] as const} value={token} onChange={(t) => (setToken(t), setSent(null))} disabled={busy} />
-      <AmountField label={W.amount} unit={token} value={amount} onChange={(v) => (setAmount(v), setSent(null))} disabled={busy} />
+      <AmountField label={W.amount} unit={token} placeholder={token === 'ETH' ? W.ethPlaceholder : undefined} value={amount} onChange={(v) => (setAmount(v), setSent(null))} disabled={busy} />
       {estimate && (
         <p className="ic-note support-estimate" aria-live="polite">
           {W.estimate(estimate)}
