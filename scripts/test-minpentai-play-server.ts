@@ -33,6 +33,10 @@ import {
   drawRule, fullBoard, leave, playTurn, resign, touch, type LiveMatch,
 } from '../src/lib/minpentai/play-server/match';
 import { fog, sightOf, viewFor, why } from '../src/lib/minpentai/play-server/view';
+import { leftSight } from '../src/lib/minpentai/play-game/left-sight';
+import { SOLO_V1_ENGINE } from '../src/lib/minpentai/versions/solo-v1';
+import { BASE } from '../src/lib/minpentai/versions/schema';
+import { board } from '../src/lib/minpentai/play-game/board';
 import { freshProgress, recordResult } from '../src/lib/minpentai/play-server/ladder';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
@@ -193,6 +197,24 @@ function randomPlan(m: LiveMatch, side: Side, r: () => number): { t: 'g' | 's' |
   check(`the player\'s own squares and gliders out of sight are left out (${ownOut} boards had some, none shown)`, ownOut > 0 && leaks === 0, `${ownOut}`);
   check('the opponent\'s placements are never sent before they appear', mineLeak === 0, `${mineLeak}`);
   check('random matches reach different endings', endings.size >= 2, [...endings].join(','));
+}
+
+// --- Your glider leaving sight: a faded marker where it was last seen (owner, 2026-10-31) ---------------
+{
+  const e = SOLO_V1_ENGINE, K = (x: number, y: number) => y * e.W + x;
+  // Cyan's tower at 1,4 (sight 3), Cyan's glider flying east on row 4, frames as the server sends them (fogged).
+  const full = (x: number, extra: [number, string][] = []): BoardView => ({ step: 12 + x, rock: [], tw: [[K(1, 4), 'C'], [K(13, 5), 'A'], ...extra], sq: [], gl: [[x, 4, 1, 0, 'C']], flash: [] } as unknown as BoardView);
+  const asWorld = (b: BoardView) => { const w = e.world(BASE, true); w.step = b.step; b.tw.forEach(([k, o]) => (w.tw[k] = o)); b.sq.forEach(([k, o, hp]) => (w.sq[k] = { o, hp })); b.gl.forEach(([x, y, dx, dy, o], i) => w.gl.push({ id: i + 1, o, x, y, dx, dy })); return w; };
+  const run = (extra: [number, string][] = []) => [2, 3, 4, 5, 6, 7].map((x) => asWorld(fog(full(x, extra), 'C', 3)));
+  const marks = leftSight(run(), 'C', 3, e);
+  check('left sight: no marker while the glider is in sight', marks.slice(0, 3).every((m) => m.size === 0), JSON.stringify(marks.map((m) => [...m])));
+  check('left sight: when it flies out, a marker on its last square seen, pointing the way it was heading', marks[3].size === 1 && JSON.stringify(marks[3].get(K(4, 4))) === '[1,0]');
+  check('left sight: the marker stays for the rest of the run', marks.slice(3).every((m) => m.size === 1 && m.has(K(4, 4))));
+  // Built only from what Cyan was sent: an Amber tower in the dark changes nothing.
+  const twin = leftSight(run([[K(10, 4), 'A']]), 'C', 3, e);
+  check('left sight: the markers are the same whatever is hidden', JSON.stringify(twin.map((m) => [...m])) === JSON.stringify(marks.map((m) => [...m])));
+  const cell = board({ w: run()[5], e, cs: 26, fog: 'C', R: 3, gone: marks[5] }).cells.find((c) => c.x === 4 && c.y === 4)!;
+  check('left sight: the board draws it as a faded glider on a lit square', !!cell.pc?.faded && cell.pc.k === 'glider' && /flew out of sight/.test(cell.label), JSON.stringify(cell));
 }
 
 // --- Two placements on one square cancel (rules §4; game.ts apply) --------------------------

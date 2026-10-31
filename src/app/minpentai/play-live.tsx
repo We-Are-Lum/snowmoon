@@ -25,6 +25,7 @@ import type { Engine } from '~/lib/minpentai/versions/engine';
 import { BASE } from '~/lib/minpentai/versions/schema';
 import { SOLO_V1_ENGINE, engineForSize } from '~/lib/minpentai/versions/solo-v1';
 import { board } from '~/lib/minpentai/play-game/board';
+import { leftSight } from '~/lib/minpentai/play-game/left-sight';
 import type { BoardView, LobbyView, MatchView, Person } from '~/lib/minpentai/play-game/live-types';
 import { PlayBoard } from './play-board';
 
@@ -350,7 +351,10 @@ function LiveMatch({ id, onDone, onMatch }: { id: string; onDone: () => void; on
   const lightAll = new Set([...lit(now, 'C', reach)].filter((k) => empty(now, k)));
   const zone = showMatched ? lightAll : act && !m.ended ? new Set([...lit(now, 'C', reach, snap)].filter((k) => empty(now, k))) : null;
   const whole = over || !!replay;
-  const bd = board({ w: now, e, cs: port ? 36 : 26, portrait: port, fog: whole ? null : 'C', R, zone, pend, dots, ls: whole ? undefined : ls, flash: playing || !!replay, dirs, onCell });
+  // Your gliders that flew out of sight this run: a faded marker where each was last seen, from the frames you were sent.
+  const goneAll = whole || !m.frames.length ? [] : leftSight(m.frames.map((f) => toWorld(f, flip, e)), 'C', R, e);
+  const gone = goneAll.length ? goneAll[playing ? frameAt! : goneAll.length - 1] : undefined;
+  const bd = board({ w: now, e, cs: port ? 36 : 26, portrait: port, fog: whole ? null : 'C', R, zone, pend, dots, ls: whole ? undefined : ls, gone, flash: playing || !!replay, dirs, onCell });
   const seen = Object.entries(now.tw).filter(([k, o]) => o === 'A' && vis.has(+k)).length;
   const minesN = Object.values(now.tw).filter((o) => o === 'C').length;
   const strip = m.paused ? `STEP ${now.step} · PAUSED` : whole ? `STEP ${now.step} · WHOLE BOARD SHOWN` : showMatched ? `SETUP · CYAN ${rules.startTowers} · AMBER 0 SEEN` : `STEP ${now.step} · CYAN ${minesN} · AMBER ${seen} SEEN`;
