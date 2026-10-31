@@ -666,7 +666,8 @@ async function checkSupport(page: Page, scheme: string) {
   // The links to it (owner, 2026-10-31): About shows just the link, with nothing around it.
   if (SUPPORT.linked) {
     await open(page, '/about');
-    const about = page.locator('main a[href="/support"]');
+    // About's own link, not the footer line's (checkLegalLine checks that one on every page).
+    const about = page.locator('main p:not(.legal-line) > a[href="/support"]');
     if ((await about.count()) !== 1 || (await about.textContent())?.trim() !== 'Support the We Are Lum team') fail(`${where}: About doesn't link "Support the We Are Lum team" to /support`);
     else if ((await about.locator('xpath=..').innerText()).trim() !== 'Support the We Are Lum team') fail(`${where}: About's support link has words around it`);
     await open(page, '/support');
