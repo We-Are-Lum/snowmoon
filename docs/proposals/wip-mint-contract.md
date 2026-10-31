@@ -94,7 +94,7 @@ The agent hasn't changed the principle, the check or the intro line. **Update (o
 3. **Price:** decided, 0.003 ETH per edition for both tokens.
 4. **Collection name and symbol:** decided, "Snowmoon WIP" / `SMWIP`.
 5. **Ownership after the mint:** decided, the owner keeps it; two-step transfer and renounce stay.
-6. **Review:** the plan asks for a review by a separate agent that hasn't seen the code being written. This hasn't been done yet.
+6. **Review:** done. An independent agent review found nothing critical, high or medium; its test findings are fixed (61dd2a2), and its ownership and payout findings were decided by the owner (c53cb85).
 7. **Farcaster on-device test** of a chain-1 transaction with only Base funds, and of `swapToken` to mainnet ETH.
 8. **Vercel:** the submodules (OpenZeppelin, forge-std) are public. Vercel clones submodules during builds, which adds a little build time. If unwanted, add this branch to `vercel.json`'s `deploymentEnabled: false` list, or vendor nothing and install the dependencies at test time.
 
