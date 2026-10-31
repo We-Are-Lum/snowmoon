@@ -26,10 +26,10 @@ import type { Settings } from '../versions/schema';
 import { LADDER, PLAY, RULESETS, SOLO_V1_ENGINE, engineFor, rulesetOfRules, settingsFor, usesSearch, type RulesetId, type VersionRules } from '../versions/solo-v1';
 import { ladderLevel, searchPlan } from '../versions/search';
 
-/** The ladder Play offers (owner, 2026-10-31): the search computer's, seven rungs; the old one is kept as history. */
+/** The ladder Play offers (owner, 2026-10-31): the search computer's, six rungs; the old one is kept as history. */
 const RUNGS = SEARCH_RUNGS;
 /** A match's own ladder: the search computer's under ruleset 3, the old five rungs under the old players. */
-const ladderOf = (v: VersionRules) => (usesSearch(v) ? { R: SEARCH_RUNGS, top: 7 } : { R: OLD_RUNGS, top: 5 });
+const ladderOf = (v: VersionRules) => (usesSearch(v) ? { R: SEARCH_RUNGS, top: 6 } : { R: OLD_RUNGS, top: 5 });
 import type { LadderProgress } from './live-types';
 import { checkPlacements, type LiveMatch } from '../play-server/match';
 
@@ -412,7 +412,7 @@ export class PlayController {
     };
     // ladder
     const sel = s.rungSel || prog.opened;
-    v.rungs = [7, 6, 5, 4, 3, 2, 1].map((n) => {
+    v.rungs = [6, 5, 4, 3, 2, 1].map((n) => {
       const rec = prog.rec[n] || { tries: 0 }, open = n <= prog.opened, won = !!rec.won, isSel = open && n === sel;
       return { n, name: `${n} · ${RUNGS[n]!.n}`, desc: RUNGS[n]!.d, icon: won ? '✓' : String(n), open, won, sel: isSel,
         r1: won ? 'WON IN' : open ? (rec.tries ? `${rec.tries} TR${rec.tries === 1 ? 'Y' : 'IES'}` : '') : 'CLOSED', r2: won ? `${rec.won} STEPS` : open ? 'PLAY →' : '',

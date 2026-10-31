@@ -54,11 +54,11 @@ async function main() {
     process.stdout.write(JSON.stringify(runPair(arg('ruleset', 'play'), a, b)) + '\n');
     return;
   }
-  const levels = ['1', '2', '3', '4'];
+  const levels = ['1', '2', '3'];
   const jobs: [string, string, string][] = [];
   // --ladder: Play's ladder (ruleset 3): each rung against the one below, the beginner (0) against the old Practice player.
   if (process.argv.includes('--ladder')) {
-    for (let i = 2; i <= 7; i++) jobs.push(['ladder', `L${i}`, `L${i - 1}`]);
+    for (let i = 2; i <= 6; i++) jobs.push(['ladder', `L${i}`, `L${i - 1}`]);
     jobs.push(['ladder', 'L1', 'r0'], ['ladder', 'L2', 'r3'], ['ladder', 'L3', 'r5']);
   } else for (const rs of ['play', 'book']) {
     for (let i = 0; i < levels.length; i++) for (let j = i + 1; j < levels.length; j++) jobs.push([rs, levels[j], levels[i]]);
@@ -86,7 +86,7 @@ async function main() {
   console.log(`\nSearch levels, ${N} seeds a pairing, seats swapped (${2 * N} matches). Score = wins + half the draws, for the first named.\n`);
   console.log('| Ruleset | Pairing | Won / drawn / lost | Score |');
   console.log('|---|---|---|---|');
-  const LN = ['', 'Beginner', 'Easy', 'Fair', 'Level 1', 'Level 2', 'Level 3', 'Level 4'];
+  const LN = ['', 'Beginner', 'Easy', 'Fair', 'Level 1', 'Level 2', 'Level 3'];
   const nm = (x: string) => (x === 'r5' ? 'old Planner' : x === 'r3' ? 'old Builder' : x === 'r0' ? 'old Practice' : x.startsWith('L') ? LN[+x.slice(1)] : `Search ${x}`);
   const rsName = (x: string) => (x === 'play' ? 'Play' : x === 'book' ? 'Book edition' : "Play's ladder (ruleset 3)");
   for (const r of results) console.log(`| ${rsName(r.ruleset)} | ${nm(r.a)} vs ${nm(r.b)} | ${r.w} / ${r.d} / ${r.l} | ${Math.round((100 * (r.w + r.d / 2)) / (2 * N))}% |`);

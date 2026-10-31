@@ -27,7 +27,7 @@ function result(mode: 'ladder' | 'practice', win: 'C' | 'A' | 'D', rung = 3) {
 await ok('a ladder win offers sharing, with the rung and the steps', () => {
   // Play's ladder plays the search computer (ruleset 3, owner 2026-10-31), and the share says so.
   assert.deepEqual(result('ladder', 'C', 3).share, { rung: 3, steps: 41, rs: 3 });
-  assert.deepEqual(result('ladder', 'C', 7).share, { rung: 7, steps: 41, rs: 3 });
+  assert.deepEqual(result('ladder', 'C', 6).share, { rung: 6, steps: 41, rs: 3 });
 });
 await ok('a loss, a draw and a practice win offer nothing', () => {
   assert.equal(result('ladder', 'A').share, undefined);
@@ -43,9 +43,9 @@ await ok('the link holds only the rung, the steps and, under ruleset 2, the rule
   assert.equal(parseResult('4', '110'), null, 'an old link (ruleset 1) still stops at 96 steps');
   assert.equal(parseResult('4', '121', null, '2'), null, 'ruleset 2 stops at 120');
   for (const g of ['4', '0', '', 'x']) assert.equal(parseResult('4', '12', null, g), null, `ruleset "${g}" refused`);
-  // Ruleset 3, the search computer's ladder: seven rungs, named its own way.
-  assert.deepEqual(parseResult('7', '100', null, '3'), { rung: 7, name: 'Level 4', steps: 100, rs: 3 });
-  assert.equal(parseResult('8', '100', null, '3'), null, 'no rung 8');
+  // Ruleset 3, the search computer's ladder: six rungs, named its own way.
+  assert.deepEqual(parseResult('6', '100', null, '3'), { rung: 6, name: 'Level 3', steps: 100, rs: 3 });
+  assert.equal(parseResult('7', '100', null, '3'), null, 'no rung 7');
   assert.deepEqual(parseResult('2', '100', null, '3'), { rung: 2, name: 'Easy', steps: 100, rs: 3 });
   assert.equal(parseResult('6', '100', null, '2'), null, 'the old ladder has five rungs');
   assert.match(resultText(parseResult('5', '30')!), /^I beat Planner, rung 5 of 5 on the Minpentai ladder, in 30 steps\. .*invented/);
