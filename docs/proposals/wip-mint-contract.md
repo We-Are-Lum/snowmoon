@@ -56,15 +56,14 @@ The agent hasn't changed the principle, the check or the intro line. **Update (o
 
 ## Dates
 
-- **The dates come from the site's challenge config.** That config isn't on `main` yet; don't copy dates from this doc.
-- **The current window is 7 to 18 December 2026** (it was 20 November to 4 December). It may change again.
-- **The time of day is the owner's to set.** The examples assume 09:00 Pacific for both ends, the time of the calls:
-  - start `1796662800` (2026-12-07 09:00 PST);
-  - end `1797613200` (2026-12-18 09:00 PST);
-  - because `end` is exclusive, the last mint would be at 08:59:59 on the 18th.
-- **To turn a Pacific time into the timestamp:**
-  - macOS: `TZ=America/Los_Angeles date -j -f "%Y-%m-%d %H:%M:%S" "2026-12-07 09:00:00" +%s`
-  - Linux: `date -d 'TZ="America/Los_Angeles" 2026-12-07 09:00' +%s`
+- **The dates come from the site's challenge config.** That config isn't on `main` yet; check the dates there before creating tokens.
+- **The owner's window (2026-10-31):** it opens on Tuesday 8 December 2026 at 09:00 Pacific and closes at the Friday 18 December call, 09:00 Pacific. Earlier drafts had 20 November to 4 December, then 7 to 18 December. Both times are PST, UTC−8:
+  - start `1796749200` (2026-12-08 09:00 PST, 17:00 UTC);
+  - end `1797613200` (2026-12-18 09:00 PST, 17:00 UTC);
+  - `end` is exclusive, so the last possible mint is at 08:59:59 on 18 December, at the start of the call.
+- **How the timestamps were computed:**
+  - macOS: `TZ=America/Los_Angeles date -j -f "%Y-%m-%d %H:%M:%S" "2026-12-08 09:00:00" +%s`
+  - Linux: `date -d 'TZ="America/Los_Angeles" 2026-12-08 09:00' +%s`
 
 ## Paying from Farcaster with funds on Base
 
@@ -90,7 +89,7 @@ The agent hasn't changed the principle, the check or the intro line. **Update (o
 ## Open questions for the owner
 
 1. **Principle 7 and the "No token" line** (above): being changed on PR #73. This branch merges after it, and #73 must be live before any mint opens.
-2. **Time of day** for start and end, and whether the 18 December call should still fall inside the window.
+2. **Window:** decided. It runs from 8 December 09:00 PT to 18 December 09:00 PT, and the mint closes as the call starts.
 3. **Price:** decided, 0.003 ETH per edition for both tokens.
 4. **Collection name and symbol:** decided, "Snowmoon WIP" / `SMWIP`.
 5. **Ownership after the mint:** decided, the owner keeps it; two-step transfer and renounce stay.

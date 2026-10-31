@@ -97,7 +97,7 @@ contract SnowmoonWIPInvariantTest is Test {
 
     function setUp() public {
         address owner = makeAddr("owner");
-        vm.warp(1_796_662_800 - 1 days);
+        vm.warp(1_796_749_200 - 1 days); // a day before the fixture start, 2026-12-08 09:00 PST
         wip = new SnowmoonWIP(owner, "Snowmoon WIP", "SMWIP", "ipfs://c");
         payouts = [payable(address(new Payout())), payable(address(new Payout())), payable(address(new Payout()))];
         uint64 start = uint64(block.timestamp + 1 hours);

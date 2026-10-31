@@ -26,8 +26,8 @@ contract SnowmoonWIPTest is Test {
     address payable payoutA = payable(address(new Payout()));
     address payable payoutB = payable(address(new Payout()));
 
-    // Fixture dates only (2026-12-07 and 2026-12-18, 17:00 UTC). Real dates are creation-time parameters.
-    uint64 constant START = 1_796_662_800;
+    // Fixture dates only (2026-12-08 and 2026-12-18, 09:00 PST = 17:00 UTC). Real dates are creation-time parameters.
+    uint64 constant START = 1_796_749_200;
     uint64 constant END = 1_797_613_200;
     uint256 constant PRICE = 0.002 ether;
     string constant URI_A = "ipfs://bafyA";

@@ -105,18 +105,25 @@ A PushSplit keeps 1 wei, plus a few wei of rounding, for the next distribution. 
 
 ### Dates
 
-**The sale dates come from the site's challenge config**, which isn't on `main` yet; don't copy them from this file. The current example window is **7 to 18 December 2026**, and it may change again. Each token's `start` and `end` are unix timestamps passed to `createToken`.
+**The sale dates come from the site's challenge config**, which isn't on `main` yet. Check them there before creating tokens. Each token's `start` and `end` are unix timestamps passed to `createToken`.
 
-**The time of day is yours to set.** These examples assume **09:00 Pacific**, the time of the calls, for both start and end. `end` is exclusive, so the last mint is at 08:59:59 on 18 December. To include the 18 December call, pick a later end.
+The owner's window (2026-10-31) opens on **Tuesday 8 December 2026 at 09:00 Pacific** and closes at the **Friday 18 December call, 09:00 Pacific**. Both times are PST, UTC−8.
+
+| | Pacific | UTC | Unix timestamp |
+|---|---|---|---|
+| `start` | 2026-12-08 09:00 PST | 2026-12-08 17:00 | `1796749200` |
+| `end` | 2026-12-18 09:00 PST | 2026-12-18 17:00 | `1797613200` |
+
+`end` is exclusive, so the last possible mint is at **08:59:59 on 18 December**, at the start of the call.
 
 ```sh
 # macOS
-TZ=America/Los_Angeles date -j -f "%Y-%m-%d %H:%M:%S" "2026-12-07 09:00:00" +%s   # 1796662800 (start)
+TZ=America/Los_Angeles date -j -f "%Y-%m-%d %H:%M:%S" "2026-12-08 09:00:00" +%s   # 1796749200 (start)
 TZ=America/Los_Angeles date -j -f "%Y-%m-%d %H:%M:%S" "2026-12-18 09:00:00" +%s   # 1797613200 (end)
 # Linux (GNU date)
-date -d 'TZ="America/Los_Angeles" 2026-12-07 09:00' +%s
+date -d 'TZ="America/Los_Angeles" 2026-12-08 09:00' +%s
 # Check a timestamp back
-TZ=America/Los_Angeles date -r 1796662800        # macOS; Linux: date -d @1796662800
+TZ=America/Los_Angeles date -r 1796749200        # macOS; Linux: date -d @1796749200
 ```
 
 ### 0. Before any deploy: run every test, including the fork test (required)
