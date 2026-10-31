@@ -357,6 +357,9 @@ order the feed, search, anyone's own pages, the agent tools or the read API.
 - `P5f`: a seeded image an admin hid is gone everywhere it shows (the chapter and its player, References and the
   sheets, the introduction on home and About, quote cards and their share images): every file that reads seeded images
   passes them through the hide (owner, 2026-10-30).
+- `P5g` (branch remix-challenge, 2026-10-31, pending the owner's yes): the remix challenge's entries, sheets to start
+  from and "Posted on" are in time order only: every `.sort()` in its code is `newestFirst`, and no SQL order reads
+  likes, built-on counts, scores, costs or payments.
 - Review: does any default, badge or ordering reflect a person's choice without saying whose?
 
 **Status.** Pass. (Picks are built on branch phase2-admin and need 0030_admin_picks, applied 2026-10-31.)
@@ -427,6 +430,9 @@ only, through `studio.rating_totals`, `studio.like_totals` and
 - `P6o`: while Privacy §3 says the frames and video tests your agent makes on approval are seen only by you
   ("only you can see them"), `AGENTS.public` stays off: a kept edit is marked published, and agents' public
   pages would show it to anyone. The owner's rule (2026-10-24).
+- `P6q` (branch remix-challenge, 2026-10-31, pending the owner's yes): the remix challenge's entries
+  (`CHALLENGE.entries`) and "Posted on" (`CHALLENGE.posts`) are on only while Privacy §4 describes them and §7 says
+  Neynar receives makers' FIDs for it and, for posts, names Bluesky and Lens (docs/legal/remix-challenge-draft.md).
 - `P6n`: image making is open beyond the invited list (the gate looks up a
   Neynar score) only when `src/app/terms/page.tsx` and `src/app/privacy/page.tsx`
   both exist, and the Privacy page names Neynar (which receives the FID at
