@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { isWalletPerson } from '~/lib/people';
 import { getFid, getPerson, getWallet } from '~/lib/auth';
 import { IMAGES, REMIX, WALLET_LINKS } from '~/lib/config';
 import { db } from '~/lib/db';
@@ -55,7 +56,7 @@ export async function GET(request: Request) {
       work,
       maintainer: isMaintainer(person),
       // What a Remix frame costs a wallet account at most (every picture the edit model takes), as Remix's status says it.
-      prices: person < 0 ? prices() : null,
+      prices: isWalletPerson(person) ? prices() : null,
       wallet: alongside,
       link: w ? await linkView(w.account, w.address, fid) : null,
       // Signed in with Farcaster: the wallets linked to it (other than the one already on this page), each with Unlink.

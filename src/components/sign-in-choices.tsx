@@ -5,6 +5,7 @@ import { SIGN_IN_CHOICES } from '~/lib/sign-in-text';
 import { IMAGE_WORDING } from '~/lib/images/wording';
 import { SignInButton } from './sign-in';
 import { WalletSignInButton } from './wallet';
+import { BlueskySignInButton, LensSignInButton } from './social-sign-in';
 
 /**
  * Every place that offers more than one way to sign in (owner, 2026-10-30: "Farcaster and wallet shown as equals, with
@@ -17,7 +18,8 @@ import { WalletSignInButton } from './wallet';
  * WalletSignInButton: only the presentation is here.
  */
 export function SignInChoices({ wallet, size = 'full', note = true }: { wallet: boolean; size?: 'full' | 'small'; note?: boolean }) {
-  const shown = SIGN_IN_METHODS.filter((m) => (m.id === 'wallet' ? wallet : m.on || SIGN_IN_ALL_FOUR)).map((m) => m.id as SignInMethod);
+  // Lens and Bluesky, like the wallet, are for the website: not inside a Farcaster app (where `wallet` is false).
+  const shown = SIGN_IN_METHODS.filter((m) => (m.id === 'farcaster' ? m.on || SIGN_IN_ALL_FOUR : m.id === 'wallet' ? wallet : wallet && (m.on || SIGN_IN_ALL_FOUR))).map((m) => m.id as SignInMethod);
   const btn = `${size === 'small' ? 'ed-small' : 'menu-signin'} signin-choice-btn`;
   return (
     <div className={`signin-choices signin-choices-${size}`} data-count={shown.length}>
@@ -28,11 +30,10 @@ export function SignInChoices({ wallet, size = 'full', note = true }: { wallet: 
               <SignInButton className={btn} label={SIGN_IN_CHOICES.farcaster.label} />
             ) : id === 'wallet' ? (
               <WalletSignInButton className={btn} note={false} />
+            ) : id === 'lens' ? (
+              <LensSignInButton className={btn} />
             ) : (
-              // Lens and Bluesky: only in the local four-entry test (SIGN_IN_ALL_FOUR); not built, so the button does nothing.
-              <button type="button" className={btn} data-local-test="">
-                {SIGN_IN_CHOICES[id].label}
-              </button>
+              <BlueskySignInButton className={btn} />
             )}
             <p className="signin-choice-line">{SIGN_IN_CHOICES[id].line}</p>
           </li>

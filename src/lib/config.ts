@@ -218,6 +218,12 @@ export const AGENTS = {
      * now … I'll add my sign-in wallet later"). The payment address is not a sign-in wallet.
      */
     wallets: [] as readonly string[],
+    /**
+     * Lens and Bluesky accounts whose sign-in gets in (signin-lens-bluesky): 'lens:<account address, lowercase>' or
+     * 'bluesky:<DID>'. Empty: the owner names them. A Lens or Bluesky account linked to a Farcaster account in the
+     * list gets in as that account.
+     */
+    social: [] as readonly string[],
   },
   /** Public pages (agents.md, /p): off while agents are for the owner only. Kept work stays private on /you. */
   public: false,
@@ -358,6 +364,64 @@ export const SIGN_IN_METHODS = [
 export type SignInMethod = (typeof SIGN_IN_METHODS)[number]['id'];
 /** The local-only test of four entries (see SIGN_IN_METHODS). */
 export const SIGN_IN_ALL_FOUR = process.env.NEXT_PUBLIC_SIGN_IN_ALL_FOUR === '1' && !process.env.NEXT_PUBLIC_VERCEL_ENV;
+
+/**
+ * Whether a way to sign in is open on this deployment: its SIGN_IN_METHODS entry is on, or the local-only test
+ * (SIGN_IN_ALL_FOUR, refused on Vercel) is. The Lens and Bluesky routes answer 404 while it is false, so nothing
+ * about a Lens or Bluesky account reaches us before the Privacy and Terms lines that describe it are live
+ * (docs/legal/signin-lens-bluesky-draft.md; the owner's "reread" turns them on, in the same release).
+ */
+export const signInOpen = (id: SignInMethod): boolean => SIGN_IN_METHODS.some((m) => m.id === id && m.on) || SIGN_IN_ALL_FOUR;
+
+/**
+ * Lens and Bluesky sign-in (branch signin-lens-bluesky, owner's item 5 of 2026-10-31). Off until the owner turns them
+ * on in SIGN_IN_METHODS after rereading the legal drafts.
+ *
+ * Lens: Lens's own authentication (lens.xyz/docs/protocol/authentication): our server asks the Lens API for a
+ * challenge for the account and the wallet that owns or manages it, the wallet signs it in the browser, and Lens
+ * answers with an ID token (RS256, checked against Lens's JWKS) naming the account. We keep none of Lens's tokens.
+ *
+ * Bluesky: AT Protocol OAuth (atproto.com/specs/oauth) as a public client with PKCE, PAR and DPoP. Locally a loopback
+ * client (client_id http://localhost?…, redirect to 127.0.0.1); on the site the client metadata JSON served at
+ * `bluesky.metadataPath`. Scope 'atproto' only: it proves the DID and nothing more. The tokens are used once, to learn
+ * the DID, and never kept.
+ */
+export const SOCIAL_SIGN_IN = {
+  /** A Lens or Bluesky sign-in lasts this long (like a wallet's). */
+  sessionHours: 24,
+  lens: {
+    api: 'https://api.lens.xyz/graphql',
+    jwks: 'https://api.lens.xyz/.well-known/jwks.json',
+    issuer: 'https://api.lens.xyz',
+    /**
+     * The Lens App the sign-in is for (the challenge's `app`, the ID token's `aud`). Lens's own mainnet test App
+     * (lens.xyz/docs/protocol/authentication, "Test App"), for local testing only. OWNER DECISION before turning Lens
+     * on: register this site's own Lens App on Lens Chain and put its address here.
+     */
+    app: '0x8A5Cc31180c37078e1EbA2A23c861Acf351a97cE' as `0x${string}`,
+    /**
+     * THE ONE PLACE the Lens score threshold lives (Lens's "Account Score", lens.xyz/docs/protocol/accounts/fetch;
+     * 0 to about 10000 in the sample in docs/branch-reports/signin-lens-bluesky.md). Null: a Lens account gets no
+     * free generations until the owner sets a number here. A Lens account with a score of at least this number gets
+     * the same free daily count as a Farcaster account.
+     */
+    minScore: null as number | null,
+    /** How long a looked-up score is kept in memory, per server. */
+    scoreCacheMinutes: 60,
+    timeoutMs: 5000,
+  },
+  bluesky: {
+    scope: 'atproto',
+    /** Where the browser comes back to (a page, which finishes the sign-in with what it kept in this tab). */
+    redirectPath: '/sign-in/bluesky',
+    /** The client metadata document on the site; its URL is the client_id. */
+    metadataPath: '/oauth/bluesky/client-metadata.json',
+    plcDirectory: 'https://plc.directory',
+    /** A sign-in started must finish within this. */
+    startMinutes: 10,
+    timeoutMs: 5000,
+  },
+} as const;
 
 /**
  * "Support this site" (owner, 2026-10-30): the one place the support address lives. Every page, link, QR code and

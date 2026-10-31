@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { readingPlace } from '~/lib/glossary-view';
 import { sdk } from '@farcaster/miniapp-sdk';
-import { inMiniApp, signOut, signOutWallet, useAuth, useWalletAlongside, useWalletSession, type AuthState } from '~/lib/client-auth';
+import { inMiniApp, signOut, signOutSocial, signOutWallet, useAuth, useSocialSession, useWalletAlongside, useWalletSession, type AuthState } from '~/lib/client-auth';
 import { lastChapter, openedChapters } from '~/lib/chat/device';
 import { COMING, navItems, type NavItem } from '~/lib/nav';
 import type { Intro } from '~/lib/intro';
@@ -312,7 +312,9 @@ const YOU_TITLE = 'You: your account, wallet and work';
 function MenuAccount({ auth, where = 'menu' }: { auth: AuthState; where?: 'menu' | 'rail' }) {
   const at = where === 'rail' ? ' rail-account' : '';
   const wallet = useWalletSession();
-  const name = auth.kind === 'signed-in' ? (auth.username ? `@${auth.username}` : `FID ${auth.fid}`) : wallet ? wallet.short : null;
+  // A Lens or Bluesky sign-in (branch signin-lens-bluesky), when there is no Farcaster or wallet one.
+  const social = useSocialSession();
+  const name = auth.kind === 'signed-in' ? (auth.username ? `@${auth.username}` : `FID ${auth.fid}`) : wallet ? wallet.short : social ? social.name : null;
   if (auth.kind === 'loading') return <div className={`menu-account${at}`} aria-busy="true" />;
   if (name === null)
     return (
@@ -321,8 +323,8 @@ function MenuAccount({ auth, where = 'menu' }: { auth: AuthState; where?: 'menu'
         <SignInChoices wallet={auth.kind === 'signed-out' && !auth.inApp} />
       </div>
     );
-  const out = auth.kind === 'signed-in' ? (auth.via === 'website' ? signOut : null) : signOutWallet;
-  const letter = auth.kind === 'signed-in' ? (auth.username?.[0] ?? '#') : (wallet?.address[2] ?? '0');
+  const out = auth.kind === 'signed-in' ? (auth.via === 'website' ? signOut : null) : wallet ? signOutWallet : signOutSocial;
+  const letter = auth.kind === 'signed-in' ? (auth.username?.[0] ?? '#') : wallet ? (wallet.address[2] ?? '0') : (social?.name.replace(/^lens\//, '')[0] ?? '#');
   return (
     <div className={`menu-account${at}`}>
       <p className="menu-account-row">

@@ -222,10 +222,11 @@ process.env.APP_LEGAL_PAGES = 'terms+privacy';
     // Making styles and sheets stays invited-only (the two checks above). Same rule as test:designs.
     const code = picks.replace(/\/\*[\s\S]*?\*\//g, '');
     check('picks are open to everyone signed in: no invite gate, a sign-in is required for GET, POST and DELETE', !/invited/.test(code) && /getPerson\(request\)/.test(code) && /status: 401/.test(code) && (code.match(/const w = await who\(request\);\s*if \('error' in w\) return w\.error;/g) ?? []).length === 3);
+    // Three branches offer them (signin-lens-bluesky added the Lens and Bluesky one).
     // At Generate too, Farcaster accounts invited or not and wallet accounts (owner, 2026-10-23: "open picks to everyone
     // at Generate, wallets too"). The daily limits and the gate are unchanged: picks add text, or pictures through the same paid path.
     const statusCode = readFileSync(path.join(ROOT, 'src/app/api/images/status/route.ts'), 'utf8').replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/.*$/gm, '');
-    check('the composer is offered every signed-in person\'s own picks, invited or not, wallet accounts too', /composerPicks\(picks\)/.test(statusCode) && !/invited \?\s*picks/.test(statusCode) && (statusCode.match(/picks: offer\(picks\)/g) ?? []).length === 2 && !/picks: \{ styles: \[\]/.test(statusCode));
+    check('the composer is offered every signed-in person\'s own picks, invited or not, wallet accounts too', /composerPicks\(picks\)/.test(statusCode) && !/invited \?\s*picks/.test(statusCode) && (statusCode.match(/picks: offer\(picks\)/g) ?? []).length === 3 && !/picks: \{ styles: \[\]/.test(statusCode));
     const genCode = readFileSync(path.join(ROOT, 'src/app/api/images/generate/route.ts'), 'utf8');
     check('Generate takes only the person\'s own picks, and opening picks adds no way around the gate or the caps', /\(await myPicks\(sql, fid\)\)\.filter\(\(p\) => p\.available\)/.test(genCode) && genCode.indexOf('await mayGenerate(') < genCode.indexOf('await myPicks(') && genCode.indexOf('await myPicks(') < genCode.indexOf('await paidPicture(') && !/invited/.test(genCode.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/.*$/gm, '')));
     check('the composer links to My picks for everyone signed in', !/status\.invited && \(\s*<p className="ic-note">\s*<Link href="\/images\/picks">/.test(readFileSync(path.join(ROOT, 'src/components/image-composer.tsx'), 'utf8')));

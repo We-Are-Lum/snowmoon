@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { authFetch, useAuth, useWalletSession } from '~/lib/client-auth';
+import { authFetch, useAuth, useSocialSession, useWalletSession } from '~/lib/client-auth';
 import { AGENT_WORDING } from '~/lib/agents/wording';
 import { SignInChoices } from '~/components/sign-in-choices';
 
@@ -10,7 +10,8 @@ const W = AGENT_WORDING.authorize;
 export function AuthorizeConsent({ query, client, scopes, backHost }: { query: string; client: string; scopes: string[]; backHost: string }) {
   const auth = useAuth();
   const wallet = useWalletSession();
-  const signedIn = auth.kind === 'signed-in' || wallet !== null;
+  const social = useSocialSession();
+  const signedIn = auth.kind === 'signed-in' || wallet !== null || social !== null;
   const [handle, setHandle] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);

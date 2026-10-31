@@ -24,7 +24,7 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { DEFAULT_TEMPLATES } from '../src/templates';
 import { LiveScreen } from '../src/components/live-screen';
-import { AGENTS, CHAT, IMAGES, REPO_URL } from '../src/lib/config';
+import { AGENTS, CHAT, IMAGES, REPO_URL, SIGN_IN_METHODS } from '../src/lib/config';
 import { NOTICE_REVIEW, currentNoticeItems, noticeKey } from '../src/lib/chat/notice';
 import { LEGAL, PRIVACY, TERMS, legalKey } from '../src/lib/legal';
 import { LEARN_TEXT } from '../src/lib/minpentai/learn-text';
@@ -367,6 +367,14 @@ add({
         for (const [what, re] of [['kept with the link', /kept with the link/], ['never published', /Never published by us/], ['described to screen readers', /aria-describedby/]] as const)
           if (!re.test(text)) problems.push(`${file}: the agent address box must say it is ${what}`);
         if (/fetch\(|supabase|\/api\//.test(text)) problems.push(`${file}: the agent address box must not send its text anywhere itself`);
+        continue;
+      }
+      if (file.endsWith('components/handle-field.tsx')) {
+        // The Bluesky handle at sign-in (branch signin-lens-bluesky): sent to our server to start the sign-in, never published.
+        for (const [what, re] of [['sent to us to sign you in', /Sent to us to find your Bluesky server and sign you in/], ['never published', /Never published by us/], ['described to screen readers', /aria-describedby/]] as const)
+          if (!re.test(text)) problems.push(`${file}: the handle box must say it is ${what}`);
+        if (/fetch\(|supabase|\/api\//.test(text)) problems.push(`${file}: the handle box must not send its text anywhere itself`);
+        if (/<textarea\b/.test(text)) problems.push(`${file}: the handle box must be a single-line input`);
         continue;
       }
       if (file.endsWith('components/tx-hash-field.tsx')) {
@@ -1301,7 +1309,7 @@ add({
     seen.push({ page: '/chapter/1', host: 'fonts.googleapis.com', url: 'https://fonts.googleapis.com/css2?family=Inter', type: 'stylesheet' });
   },
 });
-const PRIVATE_FID_TABLES = ['ratings', 'likes', 'take_likes', 'picks', 'contributor_consents', 'image_asks', 'removal_log', 'image_scores', 'wallet_links'];
+const PRIVATE_FID_TABLES = ['ratings', 'likes', 'take_likes', 'picks', 'contributor_consents', 'image_asks', 'removal_log', 'image_scores', 'wallet_links', 'social_links'];
 add({
   id: 'P6b',
   principle: 6,
@@ -1325,7 +1333,9 @@ add({
       insert into studio.image_scores (fid, score) values (42, 0.8);
       insert into studio.removal_log (element_id, step, by_fid, role, reason) values ('00000000-0000-0000-0000-0000000000b1','reported',42,'reader','spam');
       insert into studio.wallet_accounts (address) values ('0x${'4'.repeat(40)}');
-      insert into studio.wallet_links (account_id, fid, how) select id, 42, 'signed' from studio.wallet_accounts where address = '0x${'4'.repeat(40)}';`);
+      insert into studio.wallet_links (account_id, fid, how) select id, 42, 'signed' from studio.wallet_accounts where address = '0x${'4'.repeat(40)}';
+      insert into studio.social_accounts (kind, subject, handle) values ('bluesky', 'did:plc:${'a'.repeat(24)}', 'someone.bsky.social');
+      insert into studio.social_links (account_id, fid) select id, 42 from studio.social_accounts where subject = 'did:plc:${'a'.repeat(24)}';`);
     const problems: string[] = [];
     for (const role of ['anon', 'authenticated']) {
       for (const t of PRIVATE_FID_TABLES) {
@@ -1668,6 +1678,37 @@ add({
       : [],
   plant: (c) => {
     c.public = true;
+  },
+});
+
+// P6p (branch signin-lens-bluesky): a way to sign in is shown only when Privacy names the outside service it goes
+// through (§7) and what we keep for it (§4): Lens (the Lens API) and Bluesky (the person's Bluesky server). Turning one on
+// in SIGN_IN_METHODS before the owner has reread those lines (docs/legal/signin-lens-bluesky-draft.md) fails here.
+add({
+  id: 'P6p',
+  principle: 6,
+  name: 'Lens and Bluesky sign-in are on only when Privacy §4 and §7 describe them',
+  load: async () => ({
+    on: SIGN_IN_METHODS.filter((m) => m.on).map((m) => m.id as string),
+    s4: (PRIVACY.sections.find((s) => s.n === 4)?.body ?? []).flat().join(' '),
+    s7: (PRIVACY.sections.find((s) => s.n === 7)?.body ?? []).flat().join(' '),
+  }),
+  run: (c) => {
+    const problems: string[] = [];
+    const need: Record<string, [string, RegExp, RegExp]> = {
+      lens: ['Lens', /\bLens\b/, /\bLens API\b/],
+      bluesky: ['Bluesky', /\bBluesky\b/, /\bBluesky\b[^.]*\b(server|PDS)\b/],
+    };
+    for (const id of c.on) {
+      const n = need[id];
+      if (!n) continue;
+      if (!n[1].test(c.s4)) problems.push(`${n[0]} sign-in is on (SIGN_IN_METHODS), but Privacy §4 doesn't say what is kept for a ${n[0]} account: the owner's reread of docs/legal/signin-lens-bluesky-draft.md first`);
+      if (!n[2].test(c.s7)) problems.push(`${n[0]} sign-in is on (SIGN_IN_METHODS), but Privacy §7 doesn't name the outside service it goes through: the owner's reread of docs/legal/signin-lens-bluesky-draft.md first`);
+    }
+    return problems;
+  },
+  plant: (c) => {
+    c.on = [...c.on, 'bluesky'];
   },
 });
 

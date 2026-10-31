@@ -159,6 +159,71 @@ export function useWalletAlongside(): WalletSessionState | null {
   return state;
 }
 
+/**
+ * A Lens or Bluesky sign-in (branch signin-lens-bluesky; src/lib/social/session.ts), kept apart like the wallet's:
+ * sent only to the routes that take a wallet (WALLET_ROUTES), and only when there is no Farcaster or wallet sign-in
+ * on this device. Lasts a day.
+ */
+const SOCIAL_KEY = 'snowmoon.social';
+
+export interface SocialSessionState {
+  token: string;
+  kind: 'lens' | 'bluesky';
+  /** As shown: the Bluesky handle, or the Lens username ("lens/<name>"), or "a Lens account" / "a Bluesky account". */
+  name: string;
+  exp: number;
+}
+
+function readSocial(): SocialSessionState | null {
+  try {
+    const s = JSON.parse(localStorage.getItem(SOCIAL_KEY) ?? 'null') as SocialSessionState | null;
+    return s && s.exp * 1000 > Date.now() + 120_000 ? s : null;
+  } catch {
+    return null;
+  }
+}
+
+export function saveSocialSession(token: string, kind: 'lens' | 'bluesky', handle: string | null) {
+  const payload = JSON.parse(atob(token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/'))) as { exp: number };
+  try {
+    localStorage.setItem(SOCIAL_KEY, JSON.stringify({ token, kind, name: handle ?? (kind === 'lens' ? 'a Lens account' : 'a Bluesky account'), exp: payload.exp }));
+  } catch {
+    /* storage blocked */
+  }
+  window.dispatchEvent(new Event(EVENT));
+}
+
+export function signOutSocial() {
+  try {
+    localStorage.removeItem(SOCIAL_KEY);
+  } catch {
+    /* nothing stored */
+  }
+  window.dispatchEvent(new Event(EVENT));
+}
+
+/** The Lens or Bluesky session, when it is the one in use (no Farcaster or wallet sign-in here); else null. */
+export function useSocialSession(): SocialSessionState | null {
+  const [state, setState] = useState<SocialSessionState | null>(null);
+  useEffect(() => {
+    let alive = true;
+    const check = async () => {
+      const s = (await inMiniApp()) || readSession() || readWallet() ? null : readSocial();
+      if (alive) setState(s);
+    };
+    void check();
+    const again = () => void check();
+    window.addEventListener(EVENT, again);
+    window.addEventListener('storage', again);
+    return () => {
+      alive = false;
+      window.removeEventListener(EVENT, again);
+      window.removeEventListener('storage', again);
+    };
+  }, []);
+  return state;
+}
+
 /** fetch with the person's token when there is one; a plain fetch otherwise. */
 /**
  * fetch with the wallet session's token, whatever else is signed in: for a wallet's own things when the
@@ -184,11 +249,13 @@ export async function authFetch(url: string, init?: RequestInit): Promise<Respon
   const s = readSession();
   if (!s) {
     const w = takesWallet(url) ? readWallet() : null;
-    if (!w) return fetch(url, init);
+    // A Lens or Bluesky sign-in goes where a wallet's would, when there is no wallet one.
+    const o = !w && takesWallet(url) && !url.startsWith('/api/wallet/') ? readSocial() : null;
+    if (!w && !o) return fetch(url, init);
     const headers = new Headers(init?.headers);
-    headers.set('Authorization', `Bearer ${w.token}`);
+    headers.set('Authorization', `Bearer ${(w ?? o)!.token}`);
     const res = await fetch(url, { ...init, headers });
-    if (res.status === 401) signOutWallet();
+    if (res.status === 401) (w ? signOutWallet : signOutSocial)();
     return res;
   }
   const headers = new Headers(init?.headers);

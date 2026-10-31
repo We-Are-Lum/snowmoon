@@ -102,6 +102,17 @@
 .signin-choice { display: flex; flex-direction: column; gap: 6px; min-width: 0; margin: 0; }
 .signin-choice .wallet-sign-in { display: flex; flex-direction: column; gap: 6px; }
 .signin-choice .wallet-sign-in .ic-note { margin: 0; }
+/* Lens and Bluesky (branch signin-lens-bluesky): what each needs next opens under its button. */
+.signin-choice .social-sign-in { display: flex; flex-direction: column; gap: 6px; }
+.signin-choice .social-sign-in .ic-note { margin: 0; }
+.social-pick { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.social-pick .ed-small { width: 100%; min-height: 44px; }
+.social-handle { display: flex; flex-direction: column; gap: 6px; }
+.social-handle .handle-field { display: flex; flex-direction: column; gap: 6px; }
+.social-handle .handle-field .ic-note { margin: 0; }
+.social-handle label { font-family: var(--label); font-size: var(--text-label); color: var(--muted); }
+.social-handle input { min-height: 44px; font-size: 17px; padding: 6px 10px; border: 1px solid var(--rule); background: var(--paper, transparent); color: var(--ink); }
+.social-handle .ed-small { min-height: 44px; }
 .signin-choice-btn.menu-signin { background: transparent; color: var(--ink); border: 1px solid var(--ink); }
 .signin-choice-btn.ed-small { width: 100%; }
 .signin-choice-line { margin: 0; color: var(--muted); font-family: var(--label); font-size: var(--text-label); line-height: 1.5; }

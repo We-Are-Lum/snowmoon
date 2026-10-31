@@ -3,6 +3,8 @@ import type postgres from 'postgres';
 import { IMAGES, REMIX, remixFreeOn } from '../config';
 import { balanceUsd, debit, priceUsd } from '../wallet/credits';
 import { perDay as picturesPerDay } from '../images/limits';
+import { isSocialPerson, isWalletPerson } from '../people';
+import { freeFor } from '../social/free';
 
 /**
  * Remix's caps, the same shape as Pictures' (src/lib/images/limits.ts), in its own tables
@@ -16,9 +18,10 @@ import { perDay as picturesPerDay } from '../images/limits';
 type Sql = postgres.Sql;
 const TODAY = `(now() at time zone 'utc')::date`;
 
-export type Refusal = 'limit' | 'spend' | 'balance' | 'prepaid-spend' | 'free-off';
+export type Refusal = 'limit' | 'spend' | 'balance' | 'prepaid-spend' | 'free-off' | 'no-free';
 export type Funded = 'free' | 'prepaid';
-export const fundedBy = (person: number): Funded => (person < 0 ? 'prepaid' : 'free');
+/** Only a wallet account pays from a balance; Lens and Bluesky accounts use the free count when freeFor allows. */
+export const fundedBy = (person: number): Funded => (isWalletPerson(person) ? 'prepaid' : 'free');
 /** The owner's higher Pictures count (IMAGES.perDayFor) applies here too; everyone else gets REMIX.generationsPerDay. */
 export const perDay = (person: number) => (person in IMAGES.perDayFor ? picturesPerDay(person) : REMIX.generationsPerDay);
 
@@ -28,7 +31,8 @@ export interface Spend {
 }
 
 export async function generationsLeft(sql: Sql, person: number, reserveUsd: number): Promise<number> {
-  if (person < 0) return Math.floor((await balanceUsd(sql, -person)) / priceUsd(reserveUsd));
+  if (isSocialPerson(person) && !(await freeFor(sql, person)).free) return 0;
+  if (isWalletPerson(person)) return Math.floor((await balanceUsd(sql, -person)) / priceUsd(reserveUsd));
   const [r] = await sql`select count(*)::int as n from studio.remix_asks where person = ${person} and at >= date_trunc('day', now() at time zone 'utc') at time zone 'utc'`;
   return Math.max(0, perDay(person) - (r?.n ?? 0));
 }
@@ -40,11 +44,13 @@ export async function freeSpendToday(sql: Sql): Promise<number> {
 }
 
 export async function reserve(sql: Sql, person: number, spend: Spend): Promise<{ ok: true; left: number; debitId?: number } | { ok: false; refusal: Refusal }> {
+  // A Lens or Bluesky account without free generations (src/lib/social/free.ts) gets none, whichever route asks.
+  if (isSocialPerson(person) && !(await freeFor(sql, person)).free) return { ok: false, refusal: 'no-free' };
   return sql.begin(async (tx) => {
     await tx`select pg_advisory_xact_lock(hashtext('snowmoon.remix.spend'))`;
     await tx`select pg_advisory_xact_lock(hashtext('snowmoon.remix.person'), ${person}::int)`;
     const t = tx as unknown as Sql;
-    if (person < 0) {
+    if (isWalletPerson(person)) {
       const price = priceUsd(spend.reserveUsd);
       const balance = await balanceUsd(t, -person);
       if (balance < price) return { ok: false as const, refusal: 'balance' as const };

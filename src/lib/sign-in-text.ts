@@ -6,11 +6,12 @@ export const SIGN_IN_SERVICES =
  * The ways to sign in, as shown side by side (owner, 2026-10-30: Farcaster and a wallet as equals). The order and which
  * are shown come from SIGN_IN_METHODS (src/lib/config.ts). The two labels are the ones already on the site; each `line`
  * is DRAFT wording (coding agent, 2026-10-30) for the owner's reread: one short line on what that sign-in is.
- * Lens and Bluesky are off and never shown on the site; their words are only for the local layout test.
+ * Lens and Bluesky (branch signin-lens-bluesky) are off and never shown on the site until the owner turns them on after
+ * rereading their legal drafts; their two lines are DRAFT wording too.
  */
 export const SIGN_IN_CHOICES = {
   farcaster: { label: 'Sign in with Farcaster', line: 'Your Farcaster account, approved in the Farcaster app.' },
   wallet: { label: 'Sign in with a wallet', line: 'An Ethereum wallet, in this browser or in your wallet app.' },
-  lens: { label: 'Sign in with Lens', line: 'Your Lens account. (Local layout test: not built.)' },
-  bluesky: { label: 'Sign in with Bluesky', line: 'Your Bluesky account. (Local layout test: not built.)' },
+  lens: { label: 'Sign in with Lens', line: 'Your Lens account, signed for by the wallet that owns or manages it.' },
+  bluesky: { label: 'Sign in with Bluesky', line: 'Your Bluesky account, approved on your Bluesky server.' },
 } as const;

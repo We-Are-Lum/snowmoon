@@ -3,6 +3,8 @@ import { createClient } from '@farcaster/quick-auth';
 import { readSession, type WalletSession } from './wallet/session';
 import { db } from './db';
 import { configLink, linkedFidFor } from './wallet/links';
+import { readSocialSession, type SocialSession } from './social/session';
+import { personForSocial } from './social/accounts';
 
 /**
  * Sign In with Farcaster via Quick Auth, as a bearer token.
@@ -49,7 +51,17 @@ export async function getPerson(request: Request): Promise<number | null> {
   const fid = await getFid(request);
   if (fid !== null) return fid;
   const w = getWallet(request);
-  return w ? (await linkedFidFor(db(), w.account, w.address)) ?? -w.account : null;
+  if (w) return (await linkedFidFor(db(), w.account, w.address)) ?? -w.account;
+  // A Lens or Bluesky sign-in (branch signin-lens-bluesky): its linked FID, the Lens account a Bluesky account is
+  // linked to, or the account itself (src/lib/social/accounts.ts, src/lib/people.ts).
+  const s = getSocial(request);
+  return s ? await personForSocial(db(), s) : null;
+}
+
+/** A Lens or Bluesky sign-in's session (src/lib/social/session.ts), or null. */
+export function getSocial(request: Request): SocialSession | null {
+  const token = (request.headers.get('authorization') ?? '').match(/^Bearer\s+(\S+)$/i)?.[1];
+  return readSocialSession(token);
 }
 
 /** The FID LINKED_WALLETS (config) links an address to, or null; the table may say otherwise (linkedFidFor). */

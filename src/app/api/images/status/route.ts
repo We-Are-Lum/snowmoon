@@ -1,4 +1,6 @@
 import { NextResponse } from 'next/server';
+import { isSocialPerson } from '~/lib/people';
+import { freeFor } from '~/lib/social/free';
 import { getPerson } from '~/lib/auth';
 import { db } from '~/lib/db';
 import { IMAGES } from '~/lib/config';
@@ -77,6 +79,14 @@ export async function GET(request: Request) {
     const [consented, left, publishes, kept, picks] = await Promise.all([
       hasConsented(fid), generationsLeft(sql, fid), publishesLeft(sql, fid), invited || fid < 0 ? Promise.resolve(null) : keptValue(sql, fid), myPicks(sql, fid),
     ]);
+    if (isSocialPerson(fid)) {
+      // A Lens or Bluesky account (not linked to a Farcaster account): free only as src/lib/social/free.ts decides; no balance.
+      const d = await freeFor(sql, fid);
+      return NextResponse.json(
+        { ...base, signedIn: true, fid, invited: false, eligible: d.free, refusal: d.free ? undefined : d.error, consented, left, publishesLeft: publishes, picks: offer(picks) },
+        { headers: { 'Cache-Control': 'no-store' } },
+      );
+    }
     if (fid < 0) {
       // A wallet account: no daily count and no Neynar score; its balance pays (owner, 2026-10-13).
       const open = prepaidOpen() && openToEveryone().open;

@@ -25,7 +25,18 @@ export const P4A_WRAPPERS = [{ module: '~/lib/minpentai/play-server/route', file
 // cannot require one. It writes nothing of ours; it opens a channel on Farcaster's relay.
 // Named exemption (owner, 2026-10-13: wallet sign-in): the wallet sign-in route is the sign-in; it
 // writes only the account row, and only for a signature checked against the wallet.
-export const P4A_EXEMPT = new Set(['src/app/api/auth/web/start/route.ts', 'src/app/api/wallet/sign-in/route.ts']);
+// Named exemptions (branch signin-lens-bluesky, owner's item 5 of 2026-10-31; added by the coding agent, the owner's yes
+// pending): Lens and Bluesky sign-in. The two starts (lens/challenge, bluesky/start) write nothing of ours; the two
+// finishes (lens/verify, bluesky/callback) write only the account row (studio.social_accounts), and only for a proof
+// Lens or the person's Bluesky authorization server accepted. All four answer 404 while their sign-in is off.
+export const P4A_EXEMPT = new Set([
+  'src/app/api/auth/web/start/route.ts',
+  'src/app/api/wallet/sign-in/route.ts',
+  'src/app/api/auth/lens/challenge/route.ts',
+  'src/app/api/auth/lens/verify/route.ts',
+  'src/app/api/auth/bluesky/start/route.ts',
+  'src/app/api/auth/bluesky/callback/route.ts',
+]);
 // Named exemption (owner, 2026-10-19: "read API open without sign-in at a low rate"): MCP sends every message,
 // reads included, as a POST. The MCP route is exempt only while it stays read only: it must not touch the database
 // itself (its one write is the rate counter, inside src/lib/agent/rate.ts) and every tool it serves is read only.

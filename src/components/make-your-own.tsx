@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
-import { authFetch, useAuth, useWalletSession } from '~/lib/client-auth';
+import { authFetch, useAuth, useSocialSession, useWalletSession } from '~/lib/client-auth';
 import { SignInChoices } from './sign-in-choices';
 import { PrivateDraftField } from './private-draft-field';
 import { PrivateTextField } from './private-text-field';
@@ -50,7 +50,8 @@ const noteText = (r: CoachResult) => (r.state === 'note' ? r.parts.map((p) => (p
 export function MakeYourOwn({ walletSignIn = false }: { walletSignIn?: boolean }) {
   const auth = useAuth();
   const wallet = useWalletSession();
-  const signedIn = auth.kind === 'signed-in' || wallet !== null;
+  const social = useSocialSession();
+  const signedIn = auth.kind === 'signed-in' || wallet !== null || social !== null;
   const [drafts, setDrafts] = useState<Saved[] | null>(null);
   const [id, setId] = useState<string | null>(null);
   const [draft, setDraft] = useState<Draft>(emptyDraft());
@@ -64,7 +65,7 @@ export function MakeYourOwn({ walletSignIn = false }: { walletSignIn?: boolean }
   }, []);
   useEffect(() => {
     if (signedIn) void refresh();
-  }, [signedIn, wallet?.address, refresh]);
+  }, [signedIn, wallet?.address, social?.token, refresh]);
 
   const edit = (d: Partial<Draft>) => {
     setDraft((x) => ({ ...x, ...d }));
