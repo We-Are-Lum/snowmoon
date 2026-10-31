@@ -4,7 +4,10 @@
  * rung is open and records the try: tries + 1; the first win records its step; a win on rung n
  * opens rung n + 1 (up to 5); a loss or a draw opens nothing. The prototype's finish, for 'ladder'.
  */
-import { MAXS } from '../play-game/game';
+import { RULESETS, maxStepsOf, type RulesetId } from '../versions/solo-v1';
+
+/** The longest any of Play's rulesets runs: a ladder result's step can't be later (96 under 1, 120 under 2). */
+const LONGEST = Math.max(...(Object.keys(RULESETS).map(Number) as RulesetId[]).map(maxStepsOf));
 import type { LadderProgress } from '../play-game/live-types';
 import { Refused } from './match';
 
@@ -31,7 +34,7 @@ export function recordResult(prog: LadderProgress, body: unknown): LadderProgres
   const rung = b.rung, win = b.win, st = b.step;
   if (!Number.isInteger(rung) || (rung as number) < 1 || (rung as number) > RUNGS) throw new Refused(400, 'Bad rung');
   if (win !== 'C' && win !== 'A' && win !== 'D') throw new Refused(400, 'Bad result');
-  if (!Number.isInteger(st) || (st as number) < 0 || (st as number) > MAXS) throw new Refused(400, 'Bad step');
+  if (!Number.isInteger(st) || (st as number) < 0 || (st as number) > LONGEST) throw new Refused(400, 'Bad step');
   const n = rung as number;
   if (n > prog.opened) throw new Refused(409, 'That rung is not open yet. Beat the one before it first.');
   const rec = { ...prog.rec };

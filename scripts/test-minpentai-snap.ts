@@ -267,8 +267,9 @@ async function main() {
     r = act(H, 'end', st, 7, {}, { ver: '' });
     assert.ok(r.keep && r.keep !== 'drop' && r.keep.save.turns.length === 1, 'the finished turn is kept');
     const saved = (r.keep as { save: Parameters<typeof act>[5]['saved'] & object }).save;
-    // Only seed, level, version and finished turns: no taps, no pending pieces.
-    assert.deepEqual(Object.keys(saved).sort(), ['lvl', 'rule', 'seed', 'turns', 'ver']);
+    // Only seed, level, version, ruleset and finished turns: no taps, no pending pieces.
+    assert.deepEqual(Object.keys(saved).sort(), ['lvl', 'rs', 'rule', 'seed', 'turns', 'ver']);
+    assert.equal(saved.rs, 2, 'a new snap match plays under Play today\'s ruleset (2)');
     const res = act(H, 'resume', null, 7, {}, { ver: '', saved });
     valid(res.page, 'resumed');
     const back = tapState(res.page);
@@ -281,6 +282,7 @@ async function main() {
     assert.equal(quit.keep, 'drop');
     for (const k of ['yes', 'no', 'maybe'] as const) valid(intro(H, '', k), `intro resume ${k}`);
     assert.ok(intro(H, '', 'yes').ui.elements.resume, 'Resume shown when kept');
+    assert.ok(JSON.stringify(intro(H, '')).includes('at step 120, most towers wins'), "the rules card says Play's step limit, 120 (draft 2)");
     assert.ok(!intro(H, '', 'no').ui.elements.resume, 'no Resume when nothing kept');
   });
 
@@ -652,16 +654,74 @@ async function main() {
     } finally { globalThis.fetch = real; }
   });
 
+  check('the resign confirmation says "Yes, resign" (not "Resign" again) and confirms; Back goes back', () => {
+    const st = { ...newMatch(7, ''), seed: 2_891_337_105 };
+    const p = play(st); st.turns.push(plan(p, 'mixed'));
+    const conf = act(H, 'resign', st, 7, {}, { ver: '' }).page as unknown as { ui: { elements: Record<string, { props?: { label?: string } }> } };
+    assert.equal(conf.ui.elements.yes?.props?.label, 'Yes, resign');
+    assert.equal(conf.ui.elements.back?.props?.label, 'Back');
+    assert.ok(!Object.values(conf.ui.elements).some((e) => e.props?.label === 'Resign'), 'no button just says Resign on the confirmation');
+    const done = act(H, 'resign-yes', st, 7, {}, { ver: '' });
+    assert.equal(done.keep, 'drop', 'confirming ends the match and drops the kept row');
+  });
+
   check('a resumed board offers Resign straight away (and every board after the first turn); setup has none', () => {
     const st = { ...newMatch(7, ''), seed: 2_891_337_105 };
     for (let i = 0; i < 2; i++) { const p = play(st); st.turns.push(plan(p, 'mixed')); }
-    const r = act(H, 'resume', null, 7, {}, { ver: '', saved: { seed: st.seed, lvl: st.lvl, ver: st.ver, rule: st.rule, turns: st.turns } });
+    const r = act(H, 'resume', null, 7, {}, { ver: '', saved: { seed: st.seed, lvl: st.lvl, ver: st.ver, rule: st.rule, turns: st.turns, rs: st.rs } });
     valid(r.page, 'resumed board');
     const els = (r.page as unknown as { ui: { elements: Record<string, { props?: { label?: string }; on?: { press?: { params?: { target?: string } } } }> } }).ui.elements;
     assert.ok(els.resign && els.resign.props?.label === 'Resign', 'Resign on the resumed board');
     assert.ok(JSON.stringify(els.resign).includes('a=resign'), 'it opens the resign confirmation');
     const fresh = act(H, 'start', null, 7, {}, { ver: '' });
     assert.ok(!(fresh.page as unknown as { ui: { elements: Record<string, unknown> } }).ui.elements.resign, 'no Resign at setup');
+  });
+
+  check('rulesets: links, tokens and saved matches made before rulesets were numbered load as ruleset 1 and replay exactly as they did; new ones carry 2', async () => {
+    const G1 = await import('./fixtures/minpentai/game-2026-10-21');
+    const { encChallenge, decChallenge } = await import('../src/lib/minpentai/snap/challenge');
+    const { maxStepsOf } = await import('../src/lib/minpentai/versions/solo-v1');
+    // A challenge link from production today (5 fields, no ruleset): ruleset 1, 96 steps; re-encoded byte for byte.
+    const oldBody = 'vu207s.0.cost3._.C-49-7-0-55';
+    const oc = decChallenge(oldBody)!;
+    assert.equal(oc.rs, 1); assert.equal(encChallenge(oc), oldBody, 'an old challenge link re-encodes unchanged');
+    assert.equal(decChallenge('vu207s.0.cost3._.C-110-7-0-55'), null, 'an old link can\'t claim a step past 96');
+    const nc = { ...oc, rs: 2 as const, res: { ...oc.res, step: 110 } };
+    assert.equal(encChallenge(nc), 'vu207s.0.cost3._.C-110-7-0-55.2'); assert.deepEqual(decChallenge(encChallenge(nc)), nc);
+    assert.equal(decChallenge('vu207s.0.cost3._.C-49-7-0-55.3'), null, 'an unknown ruleset is refused');
+    // A snap state token and a run token made before (13 and 7 fields): ruleset 1, and unchanged when written back.
+    const st0 = newMatch(1, '');
+    const old = { ...st0, rs: 1 as const, seed: 99 };
+    const oldText = serialize(old);
+    assert.equal(oldText.split('.').length, 13, 'a ruleset 1 state writes the 13 fields it always did');
+    assert.equal(parse(oldText)!.rs, 1); assert.equal(serialize(parse(oldText)!), oldText);
+    const neu = { ...st0, seed: 99 };
+    assert.equal(neu.rs, 2); assert.equal(parse(serialize(neu))!.rs, 2);
+    // The same seed and moves replay under each ruleset's own rules: ruleset 1 as the frozen game.ts of 2026-10-21.
+    let seen1 = false, seen2 = false;
+    for (let seed = 1; seed <= 40 && !(seen1 && seen2); seed++) {
+      const base = { ...newMatch(1, '', 4), seed };
+      const turns: P[][] = [];
+      let p1 = play({ ...base, rs: 1 });
+      for (let i = 0; i < 20 && !p1.over; i++) { turns.push(plan(p1, 'mixed')); p1 = play({ ...base, rs: 1, turns }); }
+      assert.equal(p1.maxSteps, 96);
+      if (p1.over && p1.over.kind === 'end' && p1.over.step === 96) seen1 = true;
+      const p2 = play({ ...base, rs: 2, turns: turns.slice(0, 2) });
+      assert.equal(p2.maxSteps, 120);
+      if (!p2.over) seen2 = true;
+    }
+    assert.ok(seen1, 'some ruleset 1 match runs to its limit, 96');
+    assert.equal(maxStepsOf(1), G1.MAXS, 'ruleset 1\'s limit is the frozen game.ts\'s');
+    // Play's continue link: no rs means ruleset 1 (made before), rs=2 the new one.
+    const st = { ...newMatch(1, '', 2), seed: 4242 };
+    for (let i = 0; i < 2; i++) { const p = play(st); st.turns.push(plan(p, 'mixed')); }
+    for (const rs of [1, 2] as const) {
+      const env: Env = { now: () => 0, setInterval: () => 0, clearInterval: () => {}, setTimeout: () => 0, clearTimeout: () => {}, copy: () => {}, href: () => '' };
+      const c = new PlayController(env);
+      assert.ok(c.continueMatch(st.seed, st.turns, st.lvl, undefined, rs));
+      assert.equal(JSON.stringify(c.m!.w), JSON.stringify(play({ ...st, rs }).w), `Play continues a ruleset ${rs} match as the snap plays it`);
+      assert.equal(c.m!.s.maxSteps, maxStepsOf(rs));
+    }
   });
 
   await Promise.all(pending);

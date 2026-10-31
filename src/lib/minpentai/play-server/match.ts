@@ -14,9 +14,12 @@ import {
 import type { BoardView } from '../play-game/live-types';
 import { verdict, type Engine } from '../versions/engine';
 import { BASE, assertFog, type Settings } from '../versions/schema';
-import { SOLO_V1, engineFor, settingsFor, type VersionRules } from '../versions/solo-v1';
+import { PLAY, PLAY_RULESET, RULESETS, engineFor, rulesetId, rulesetOfRules, settingsFor, type RulesetId, type VersionRules } from '../versions/solo-v1';
 
-export const RULES_VERSION = 'play-rules-draft-1-2026-10-09';
+/** Draft 2 (2026-10-22): the step limit 96 -> 120 and the computer's tower cap 5 -> 10. Draft 1: 2026-10-09. */
+export const RULES_VERSION = 'play-rules-draft-2-2026-10-22';
+/** The step limit of a one-on-one match saved before draft 2, which carries no maxSteps of its own. */
+export const LEGACY_MAX_STEPS = 96;
 /** Setup's turn to act, later turns, one step of playback (rules §4; the prototype's runT). */
 export const SETUP_MS = 90_000;
 export const TURN_MS = 45_000;
@@ -54,6 +57,10 @@ export interface LiveMatch {
   version?: VersionRules;
   /** Points each side kept from earlier turns (a version's carryOver); absent means none. */
   saved?: Record<Side, number>;
+  /** The match's step limit, fixed when it starts; absent on matches saved before draft 2, which keep 96. */
+  maxSteps?: number;
+  /** Play's ruleset it runs under (solo-v1.ts RULESETS); absent on matches saved before rulesets were numbered, which are 1. */
+  ruleset?: RulesetId;
   w: World;
   lsC: Record<number, number>;
   lsA: Record<number, number>;
@@ -83,14 +90,16 @@ export interface LiveMatch {
  * with the sight, turn spacing and glider cost the match carries). For a match saved before the one
  * engine these are exactly Play's, so it resumes as it was.
  */
-export function rulesOf(m: Pick<LiveMatch, 'rule' | 'R' | 'every' | 'cost' | 'version'>): { e: Engine; s: Settings } {
-  const v = m.version ?? SOLO_V1, base = settingsFor(v, m.rule);
-  const s = { ...base, sight: m.R, reach: m.version ? base.reach : m.R, every: m.every, costGlider: m.cost };
+export function rulesOf(m: Pick<LiveMatch, 'rule' | 'R' | 'every' | 'cost' | 'version' | 'maxSteps' | 'ruleset'>): { e: Engine; s: Settings } {
+  const v = m.version ?? RULESETS[rulesetId(m.ruleset)], base = settingsFor(v, m.rule);
+  // A match keeps the step limit it started with: one saved before draft 2 has none, and keeps 96.
+  const maxSteps = m.maxSteps ?? (m.version ? base.maxSteps : LEGACY_MAX_STEPS);
+  const s = { ...base, sight: m.R, reach: m.version ? base.reach : m.R, every: m.every, costGlider: m.cost, maxSteps };
   assertFog(s);
   return { e: engineFor(v, s), s };
 }
 /** A side's points this turn: the setup's or a later turn's, plus any kept. */
-export const budgetOf = (m: Pick<LiveMatch, 'rule' | 'R' | 'every' | 'cost' | 'version' | 'saved' | 'w'>, side: Side) => {
+export const budgetOf = (m: Pick<LiveMatch, 'rule' | 'R' | 'every' | 'cost' | 'version' | 'maxSteps' | 'ruleset' | 'saved' | 'w'>, side: Side) => {
   const { s } = rulesOf(m);
   return (m.w.step === 0 ? s.setupPoints : s.points) + (m.saved?.[side] ?? 0);
 };
@@ -113,14 +122,14 @@ export function drawRule(seed: number): RuleId {
   return RULE_IDS[Math.floor(r() * RULE_IDS.length)];
 }
 
-/** A new match (the prototype's mk, then beginAct for setup): Play today unless a version is given. */
-export function createMatch(seed: number, now: number, version: VersionRules = SOLO_V1): LiveMatch {
-  const solo = version === SOLO_V1, pool = version.drawn ?? (RULE_IDS.map((id) => ({ id })) as { id: string }[]);
+/** A new match (the prototype's mk, then beginAct for setup): Play today (the newest ruleset) unless a version is given. */
+export function createMatch(seed: number, now: number, version: VersionRules = PLAY): LiveMatch {
+  const rs = rulesetOfRules(version), solo = rs !== null, pool = version.drawn ?? (RULE_IDS.map((id) => ({ id })) as { id: string }[]);
   const rule = solo ? drawRule(seed) : pool.length ? pool[Math.floor(rng(seed)() * pool.length)].id : '';
   const s = settingsFor(version, rule), e = engineFor(version, s);
   const w = e.world(s);
   const m: LiveMatch = {
-    rule, R: s.sight, every: s.every, cost: s.costGlider, ...(solo ? {} : { version, saved: { C: 0, A: 0 } }),
+    rule, R: s.sight, every: s.every, cost: s.costGlider, maxSteps: s.maxSteps, ...(solo ? { ruleset: rs } : { version, saved: { C: 0, A: 0 } }),
     w, lsC: {}, lsA: {}, hist: [], runFrom: null,
     snap: { C: [], A: [] }, pend: { C: [], A: [] }, ended: { C: false, A: false },
     actStart: now, deadline: now + SETUP_MS, paused: null, resumedAt: now, seen: { C: now, A: now },
@@ -144,7 +153,7 @@ function beginAct(m: LiveMatch, start: number, dur: number) {
 
 /** The prototype's checkEnd, without the wording (see view.ts): under Play's rules unless others are given. */
 export function checkEnd(w: World, rules?: { e: Engine; s: Settings }): Side | 'D' | null {
-  const r = rules ?? rulesOf({ rule: '', R: BASE.sight, every: BASE.every, cost: BASE.costGlider });
+  const r = rules ?? rulesOf({ rule: '', R: BASE.sight, every: BASE.every, cost: BASE.costGlider, ruleset: PLAY_RULESET });
   return verdict(r.e, w, r.s);
 }
 

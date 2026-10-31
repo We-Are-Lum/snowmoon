@@ -32,7 +32,7 @@ export interface SettingSpec extends Source {
 export const SETTINGS = {
   width: { text: 'Board width in squares', min: 9, max: 25, base: 15, edition: 'The board is 15 x 10. The book never gives a size; it has edges and corners (c4-b113, c7-b81).' },
   height: { text: 'Board height in squares', min: 6, max: 16, base: 10, edition: 'As width.' },
-  maxSteps: { text: 'The match stops at this step; most towers wins', min: 24, max: 240, base: 96, edition: 'The whole rule. The book has no turn limit (c14-b94).' },
+  maxSteps: { text: 'The match stops at this step; most towers wins', min: 24, max: 240, base: 96, edition: 'The whole rule. The book has no turn limit (c14-b94). 96 in solo-v1; 120 in solo-v2 (2026-10-22).' },
   points: {
     text: 'Points for each turn to act after setup', min: 2, max: 24, base: 8,
     book: { says: 'The resources you can allocate in each intervention turn are reduced by eighty percent.', blocks: ['c14-b33'] },
@@ -76,6 +76,7 @@ export const SETTINGS = {
     edition: 'Placed for you, mirrored, near your own edge (not in a corner).',
   },
   maxTowers: { text: 'Most towers a side may hold (0: no limit)', min: 0, max: 12, base: 0, edition: 'The whole rule.' },
+  botTowers: { text: 'The computer players build at most this many towers', min: 1, max: 16, base: 5, edition: "This edition's computer players: 5 in solo-v1, 10 in solo-v2 (2026-10-22, after Luis's play tests)." },
   carryOver: { text: 'Unspent points kept for the next turn, up to this many (0: none)', min: 0, max: 16, base: 0, edition: 'The whole rule.' },
   rockHits: { text: 'Hits a rock takes, under rocks "breakable"', min: 1, max: 6, base: 3, edition: 'The whole rule.' },
   switchAt: {
