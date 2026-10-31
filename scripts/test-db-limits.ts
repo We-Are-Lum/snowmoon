@@ -79,12 +79,13 @@ check('L3 the next query opens a new connection and answers', again === 3, `${ag
 const [slow] = await sql`select pg_sleep(1), 4 as n`;
 check('L4 a slow query under the limit still answers', slow?.n === 4);
 
-const o = dbOptions() as Record<string, unknown>;
+const o = dbOptions('postgres://studio_writer@pooler.example.com:6543/postgres') as Record<string, unknown>;
+const local = dbOptions('postgres://postgres@127.0.0.1:5432/postgres') as Record<string, unknown>;
 const src = readFileSync(path.join(ROOT, 'src/lib/db.ts'), 'utf8');
-const calls = [...src.matchAll(/postgres\(url, (\w+\(\))\)/g)].map((m) => m[1]);
+const calls = [...src.matchAll(/postgres\(url, (\w+\(url\))\)/g)].map((m) => m[1]);
 check(
-  'L5 every connection uses the limits: keepalive, idle, connect, lifetime, the silent-socket limit, six connections, one query at a time on each',
-  calls.length === 2 && calls.every((c) => c === 'dbOptions()') && o.keep_alive === DB_LIMITS.keepAliveSeconds && o.idle_timeout === DB_LIMITS.idleSeconds && o.connect_timeout === DB_LIMITS.connectSeconds && o.max_lifetime === DB_LIMITS.lifetimeSeconds && typeof o.socket === 'function' && o.max === 6 && o.max_pipeline === 1,
+  'L5 every connection uses the limits: keepalive, idle, connect, lifetime, the silent-socket limit, six connections (one for a local test database), one query at a time on each',
+  calls.length === 2 && calls.every((c) => c === 'dbOptions(url)') && o.keep_alive === DB_LIMITS.keepAliveSeconds && o.idle_timeout === DB_LIMITS.idleSeconds && o.connect_timeout === DB_LIMITS.connectSeconds && o.max_lifetime === DB_LIMITS.lifetimeSeconds && typeof o.socket === 'function' && o.max === 6 && local.max === 1 && o.max_pipeline === 1,
   JSON.stringify({ calls, keep_alive: o.keep_alive, idle: o.idle_timeout, connect: o.connect_timeout, life: o.max_lifetime }),
 );
 
