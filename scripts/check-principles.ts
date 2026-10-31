@@ -1672,7 +1672,7 @@ add({
 });
 
 // ---------------------------------------------------------------------------
-// P7. Payments never enter scoring or ordering. No token. "Not affiliated" on
+// P7. Payments never enter scoring or ordering. No token code. "Not affiliated" on
 //     the first screen.
 // ---------------------------------------------------------------------------
 const PAYMENT = /\b(donations?|credit_grants?|funded_by_grant_id|amount|usd_at_time|cost_usd|sponsor)/i;
@@ -1697,7 +1697,7 @@ add({
 add({
   id: 'P7b',
   principle: 7,
-  name: 'the first screen says "not affiliated" and "no token"; there is no token code',
+  name: 'the first screen says "not affiliated"; there is no token code',
   load: async () => ({
     home: await page('/'),
     code: [...walk('src', /\.tsx?$/), ...walk('supabase/migrations', /\.sql$/), ...walk('scripts', /\.(ts|py)$/)]
@@ -1707,11 +1707,10 @@ add({
   run: ({ home, code }) => {
     const problems: string[] = [];
     // The page's own first words (inside <main>; the rail and the menu come before it in the HTML).
-    // The home hero carries the owner-approved line "… Not affiliated with the author · No token" (config/intro.json).
+    // The home hero carries the owner-approved line "Independent adaptation · Not affiliated with the author" (config/intro.json).
     const main = home.slice(Math.max(0, home.indexOf('<main')));
     const firstScreen = main.replace(/<script[\s\S]*?<\/script>/g, ' ').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').slice(0, 700);
     if (!/not affiliated with the author/i.test(firstScreen)) problems.push('first screen: "not affiliated with the author" is missing');
-    if (!/\bno token\b/i.test(firstScreen)) problems.push('first screen: "no token" is missing');
     for (const { file, text } of code) if (/\b(erc-?20|erc-?721|tokenomics|airdrop|token sale|mint\s*\()/i.test(text)) problems.push(`${file}: token code`);
     return problems;
   },

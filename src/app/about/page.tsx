@@ -122,8 +122,8 @@ export default function About() {
       </p>
       <h2>Theme</h2>
       <ThemeSwitch name="theme-about" />
-      <h2>No token</h2>
-      <p>There is no token. There is no revenue share. Nothing here is an investment.</p>
+      <h2>Payments</h2>
+      <p>Prepaid credit can only be spent on generations here; it can't be transferred or cashed out.</p>
       {/* "Support this site" (owner, 2026-10-30). Model-drafted wording. Shown once SUPPORT.linked. */}
       {SUPPORT.linked && (
         <p>

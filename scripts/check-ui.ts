@@ -15,7 +15,7 @@
  *   and in-world templates may use their own faces.
  * - Paper is #F4F2ED in light mode in every chapter. Datelines take the accent of
  *   their setting: #2E5A3A Veridia, #B3306E Dzego, ink otherwise.
- * - The first screen says: independent adaptation, not affiliated with the author, no token; on the home
+ * - The first screen says: independent adaptation, not affiliated with the author; on the home
  *   page it says so in the dark hero (checkHome, with the home's other checks: How this works, Read from
  *   here, Just made, the Minpentai board).
  * - The live voting screens (c1-b18, c1-b31, c7-b6) start where the book shows them, move by
@@ -599,7 +599,7 @@ async function checkSupport(page: Page, scheme: string) {
   const wantSplits = SUPPORT.networks.map((n) => SUPPORT.splitsUrl(n.chainId));
   if (splits.join(' ') !== wantSplits.join(' ')) fail(`${where}: the Splits links are ${splits.join(', ')}`);
   const body = (await page.locator('main.support').innerText()).replace(/\s+/g, ' ');
-  if (!/Ethereum or Base: any token on these networks/.test(body)) fail(`${where}: the networks line doesn't name Ethereum and Base`);
+  if (!/Ethereum or Base: ETH, USDC or any other asset on these networks/.test(body)) fail(`${where}: the networks line doesn't name Ethereum and Base`);
   if (!/Sending on any other network .* may lose the funds/.test(body)) fail(`${where}: no warning about other networks`);
   if (/\b(donat)/i.test(body)) fail(`${where}: the page says "donate" (owner: not "donate")`);
   const buttons = (await page.locator('.support-send .wallet-packs button').allTextContents()).map((t) => t.trim()).join('|');
@@ -732,7 +732,7 @@ async function checkFloors(page: Page, path: string, scheme: string) {
 /**
  * The home page (src/app/page.tsx, from Design's HomeWindow), at 390 × 844 with the intro seen:
  * - the first screen (elements in the viewport, their own text nodes) says independent adaptation,
- *   not affiliated with the author, no token, and says it in the dark hero (principle 7; owner, 2026-10-10);
+ *   not affiliated with the author, and says it in the dark hero (principle 7; owner, 2026-10-10);
  * - "How this works" opens the intro; "Read from here" lands on the quoted block;
  * - "Just made" shows each image with its AI label, or the empty state;
  * - the Minpentai board steps on its own, and starts paused under reduced motion until Play;
@@ -753,7 +753,7 @@ async function checkHome(page: Page, scheme: 'light' | 'dark') {
   await page.evaluate(() => scrollTo(0, 0));
   const first = await own('body *');
   const hero = await own('.home-hero *');
-  for (const phrase of ['independent adaptation', 'not affiliated with the author', 'no token']) {
+  for (const phrase of ['independent adaptation', 'not affiliated with the author']) {
     if (!first.includes(phrase)) fail(`/ (${scheme}): first screen does not say "${phrase}"`);
     else if (!hero.includes(phrase)) fail(`/ (${scheme}): "${phrase}" is on the first screen but not in the hero`);
   }
