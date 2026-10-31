@@ -38,7 +38,7 @@ export interface SearchLevel {
  * Easy and Fair, Play's ladder rungs between the beginner and level 1, are LADDER_LEVELS.
  */
 export const SEARCH_LEVELS: Record<number, SearchLevel> = {
-  // The beginner: one piece a turn, nine decisions in ten a slip. 43% against the old Practice player.
+  // The beginner: one piece a turn, nine decisions in ten a slip. 40.5% against the old Practice player (200 matches).
   0: { horizon: 0, mistake: 0.9, sample: 8, beam: 4, steps: 800, pieces: 1 },
   // Up to three pieces a turn, no look-ahead past the next turn, slips 12%: 63% against Fair.
   1: { horizon: 0, mistake: 0.12, sample: 2, beam: 12, steps: 6_000, pieces: 3 },
@@ -51,8 +51,8 @@ export const SEARCH_LEVELS: Record<number, SearchLevel> = {
 export const TOP_LEVEL = 3;
 /**
  * Play's ladder (ruleset 3), weakest first (owner, 2026-10-31: no wall between the beginner and level 1): the beginner,
- * then two rungs measured against the old ladder's players under ruleset 3's rules, 40 matches, seats swapped:
- * "Easy" scores 48% against the old Builder, "Fair" 56% against the old Planner (the top of the old ladder).
+ * then two rungs measured against the old ladder's players under ruleset 3's rules, 200 matches, seats swapped:
+ * "Easy" scores 46% against the old Builder, "Fair" 62% against the old Planner (the top of the old ladder).
  */
 export const LADDER_LEVELS: SearchLevel[] = [
   SEARCH_LEVELS[0],
