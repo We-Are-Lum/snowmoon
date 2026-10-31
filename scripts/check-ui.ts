@@ -595,18 +595,57 @@ async function checkSupport(page: Page, scheme: string) {
   const svg = await QRCode.toString(SUPPORT.address, { type: 'svg', margin: 1, errorCorrectionLevel: 'M' });
   const want = { box: /viewBox="([^"]+)"/.exec(svg)?.[1] ?? null, d: [...svg.matchAll(/ d="([^"]+)"/g)].map((m) => m[1]) };
   if (JSON.stringify(shown) !== JSON.stringify(want)) fail(`${where}: the QR code isn't the code of ${SUPPORT.address}`);
-  const splits = await page.locator('a[href^="https://app.splits.org/"]').evaluateAll((as) => as.map((a) => a.getAttribute('href')));
-  const wantSplits = SUPPORT.networks.map((n) => SUPPORT.splitsUrl(n.chainId));
-  if (splits.join(' ') !== wantSplits.join(' ')) fail(`${where}: the Splits links are ${splits.join(', ')}`);
   const body = (await page.locator('main.support').innerText()).replace(/\s+/g, ' ');
-  if (!/Ethereum or Base: any token on these networks/.test(body)) fail(`${where}: the networks line doesn't name Ethereum and Base`);
-  if (!/Sending on any other network .* may lose the funds/.test(body)) fail(`${where}: no warning about other networks`);
-  if (/\b(donat)/i.test(body)) fail(`${where}: the page says "donate" (owner: not "donate")`);
-  const buttons = (await page.locator('.support-send .wallet-packs button').allTextContents()).map((t) => t.trim()).join('|');
-  if (buttons !== 'Send $5 in USDC|Send $20 in USDC|Send $50 in USDC') fail(`${where}: the presets read "${buttons}"`);
-  if (!(await page.locator('.support-own input[type="number"]').count())) fail(`${where}: no box for your own amount`);
-  await page.locator('.support-send .wallet-packs button').first().click();
-  await page.getByText('No wallet found in this browser').waitFor({ timeout: 5000 }).catch(() => fail(`${where}: Send with no wallet doesn't say so`));
+  // The owner's words (2026-10-30, simplified page), and nothing else of the old page.
+  for (const words of ['Support this site', 'Send ETH or USDC on Ethereum mainnet or Base to this address, or send below.', 'Other networks: funds may be lost.'])
+    if (!body.includes(words)) fail(`${where}: doesn't say "${words}"`);
+  if (/\b(donat)|splits\.org|Fund the next scene|\$5\b/i.test(body + (await page.locator('main.support').innerHTML()))) fail(`${where}: still shows the old page's copy (donate, Splits, a title option or a preset)`);
+  const choices = async (label: string) => (await page.locator(`.support-choice[aria-label="${label}"] button`).allTextContents()).map((t) => t.trim()).join('|');
+  if ((await choices('Network')) !== 'Base|Ethereum') fail(`${where}: the networks read "${await choices('Network')}"`);
+  if ((await choices('Token')) !== 'ETH|USDC') fail(`${where}: the tokens read "${await choices('Token')}"`);
+  if (!(await page.locator('.support-send input[type="number"]').count())) fail(`${where}: no amount box`);
+  if ((await page.locator('main.support a[href="/terms"]').textContent())?.trim() !== 'Terms') fail(`${where}: no small Terms link`);
+  await page.getByText('No wallet in this browser.').waitFor({ timeout: 5000 }).catch(() => fail(`${where}: with no wallet, it doesn't say so`));
+  if (!(await page.locator('.support-send [data-send]').isDisabled())) fail(`${where}: Send is on with no wallet`);
+  // A stand-in wallet in the browser (its own context, so no other page sees it): on Ethereum while Base is chosen, then
+  // on Base with too little ETH, then with enough. Nothing is sent: Send is only checked, never pressed.
+  {
+    const ctx = await page.context().browser()!.newContext({ viewport: { width: 390, height: 844 } });
+    await ctx.addInitScript(() => {
+      const w = window as unknown as { __wallet: { chainId: number; eth: bigint }; ethereum: unknown };
+      w.__wallet = { chainId: 1, eth: 0n };
+      const hex = (n: bigint) => `0x${n.toString(16)}`;
+      const subs: Record<string, ((x: unknown) => void)[]> = {};
+      w.ethereum = {
+        on: (e: string, f: (x: unknown) => void) => void (subs[e] ??= []).push(f),
+        removeListener: () => {},
+        request: async ({ method, params }: { method: string; params?: { chainId?: string }[] }) => {
+          const s = w.__wallet;
+          if (method === 'eth_accounts' || method === 'eth_requestAccounts') return ['0x1111111111111111111111111111111111111111'];
+          if (method === 'eth_chainId') return hex(BigInt(s.chainId));
+          if (method === 'wallet_switchEthereumChain') { s.chainId = Number(params![0].chainId); subs.chainChanged?.forEach((f) => f(hex(BigInt(s.chainId)))); return null; }
+          if (method === 'eth_getBalance') return hex(s.eth);
+          if (method === 'eth_estimateGas') return hex(21000n);
+          if (method === 'eth_gasPrice') return hex(2n * 10n ** 9n);
+          if (method === 'eth_maxPriorityFeePerGas') return hex(10n ** 9n);
+          if (method === 'eth_getBlockByNumber') return { number: '0x1', hash: `0x${'0'.repeat(64)}`, baseFeePerGas: hex(10n ** 9n), timestamp: '0x1', transactions: [] };
+          throw new Error(`stand-in wallet: ${method}`);
+        },
+      };
+    });
+    const p = await ctx.newPage();
+    p.on('request', count);
+    await p.goto(BASE + '/support', { waitUntil: 'networkidle' });
+    await p.locator('.support-send input[type="number"]').fill('0.01');
+    const sw = p.getByRole('button', { name: 'Switch to Base' });
+    await sw.waitFor({ timeout: 5000 }).then(() => sw.click(), () => fail(`${where}: a wallet on Ethereum isn't asked to switch to Base`));
+    await p.getByText('Not enough ETH on Base').waitFor({ timeout: 5000 }).catch(() => fail(`${where}: an empty wallet isn't told "Not enough ETH on Base"`));
+    if (!(await p.locator('.support-send [data-send]').isDisabled())) fail(`${where}: Send is on with too little ETH`);
+    await p.evaluate(() => ((window as unknown as { __wallet: { eth: bigint } }).__wallet.eth = 10n ** 18n));
+    await p.locator('.support-send input[type="number"]').fill('0.02');
+    await p.waitForFunction(() => !(document.querySelector('.support-send [data-send]') as HTMLButtonElement | null)?.disabled, null, { timeout: 5000 }).catch(() => fail(`${where}: Send stays off with enough ETH`));
+    await ctx.close();
+  }
   if (ours.length) fail(`${where}: the page sent our API something that could record a sender: ${ours.join(', ')}`);
   await checkFloors(page, '/support @390', scheme);
   await shot(page, 'phone-390-support', scheme);
