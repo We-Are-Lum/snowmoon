@@ -125,10 +125,10 @@ export default async function About() {
       <ThemeSwitch name="theme-about" />
       <h2>No token</h2>
       <p>There is no token. There is no revenue share. Nothing here is an investment.</p>
-      {/* Support (owner, 2026-10-30; link text the owner's of 2026-10-31). Shown once SUPPORT.linked. */}
+      {/* Support (owner, 2026-10-30): just the link, in the owner's words of 2026-10-31. Shown while SUPPORT.linked. */}
       {SUPPORT.linked && (
         <p>
-          <Link href="/support">{SUPPORT_WORDING.link}</Link>, who make this site: a gift, which buys nothing here.
+          <Link href="/support">{SUPPORT_WORDING.link}</Link>
         </p>
       )}
       <h2>No canon</h2>

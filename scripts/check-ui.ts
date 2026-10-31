@@ -663,6 +663,15 @@ async function checkSupport(page: Page, scheme: string) {
   if (JSON.stringify(shown) !== JSON.stringify(want)) fail(`${where}: the QR code isn't the code of ${SUPPORT.address}`);
   const body = (await page.locator('main.support').innerText()).replace(/\s+/g, ' ');
   // The owner's words (2026-10-30, simplified page), and nothing else of the old page.
+  // The links to it (owner, 2026-10-31): About shows just the link, with nothing around it.
+  if (SUPPORT.linked) {
+    await open(page, '/about');
+    // About's own link, not the footer line's (checkLegalLine checks that one on every page).
+    const about = page.locator('main p:not(.legal-line) > a[href="/support"]');
+    if ((await about.count()) !== 1 || (await about.textContent())?.trim() !== 'Support the We Are Lum team') fail(`${where}: About doesn't link "Support the We Are Lum team" to /support`);
+    else if ((await about.locator('xpath=..').innerText()).trim() !== 'Support the We Are Lum team') fail(`${where}: About's support link has words around it`);
+    await open(page, '/support');
+  }
   for (const words of ['Support the We Are Lum team', 'We make snowmoon.party. Send ETH or USDC on Ethereum mainnet or Base to this address, or send below.', 'Other networks: funds may be lost.'])
     if (!body.includes(words)) fail(`${where}: doesn't say "${words}"`);
   if (/\b(donat)|splits\.org|Fund the next scene|\$5\b/i.test(body + (await page.locator('main.support').innerHTML()))) fail(`${where}: still shows the old page's copy (donate, Splits, a title option or a preset)`);
