@@ -53,7 +53,9 @@ create policy mp_agent_matches_writer_update on studio.mp_agent_matches for upda
 
 commit;
 
--- Read-back (after commit):
+-- Read-back (after commit), in four separate runs: the SQL Editor stops at the first error, and pieces 3 and 4 are
+-- meant to fail. Run 1 (columns and privileges: every privilege false), 2 (the row test and the count: stamped true,
+-- count 0), 3 (the first bad insert alone: fails), 4 (the second bad insert alone: fails).
 -- 1. The columns.
 -- select column_name, data_type from information_schema.columns where table_schema = 'studio' and table_name = 'mp_agent_matches' order by ordinal_position;
 -- 2. Nobody but the server can read or change it, and neither the server nor the secret key can delete: all false.
