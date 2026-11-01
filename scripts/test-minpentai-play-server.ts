@@ -35,6 +35,10 @@ import {
   drawRule, fullBoard, leave, playTurn, resign, rulesOf, touch, type LiveMatch,
 } from '../src/lib/minpentai/play-server/match';
 import { fog, sightOf, viewFor, why } from '../src/lib/minpentai/play-server/view';
+import { leftSight } from '../src/lib/minpentai/play-game/left-sight';
+import { SOLO_V1_ENGINE } from '../src/lib/minpentai/versions/solo-v1';
+import { BASE } from '../src/lib/minpentai/versions/schema';
+import { board } from '../src/lib/minpentai/play-game/board';
 import { freshProgress, recordResult } from '../src/lib/minpentai/play-server/ladder';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
@@ -128,7 +132,7 @@ function randomPlan(m: LiveMatch, side: Side, r: () => number): { t: 'g' | 's' |
 
 // --- Same flow as Design's, and no view leaks (random matches) --------------------------------
 {
-  let flowOk = true, flowWhy = true, leaks = 0, missing = 0, frames = 0, matches = 0, mineLeak = 0, endings = new Set<string>();
+  let flowOk = true, flowWhy = true, leaks = 0, missing = 0, ownOut = 0, frames = 0, matches = 0, mineLeak = 0, endings = new Set<string>();
   let firstBad = '';
   for (let seed = 1; seed <= 60; seed++) {
     const r = rng(seed * 7919);
@@ -160,15 +164,18 @@ function randomPlan(m: LiveMatch, side: Side, r: () => number): { t: 'g' | 's' |
         for (const [b, full] of boards) {
           frames++;
           const see = sightOf(full, side, m.R);
-          const ok = (k: number, o: Side) => o === side || see.has(k);
-          for (const [k, o] of b.tw) if (!ok(k, o)) leaks++;
-          for (const [k, o] of b.sq) if (!ok(k, o)) leaks++;
-          for (const [x, y, , , o] of b.gl) if (!ok(K(x, y), o)) leaks++;
+          // Only what is in sight, the side's own squares and gliders too (owner, 2026-10-31); own towers make the sight.
+          for (const [k, o] of b.tw) if (o !== side && !see.has(k)) leaks++;
+          for (const [k] of b.sq) if (!see.has(k)) leaks++;
+          for (const [x, y] of b.gl) if (!see.has(K(x, y))) leaks++;
           for (const k of b.flash) if (!see.has(k)) leaks++;
           const want = fog(full, side, m.R);
           if (b.tw.length !== want.tw.length || b.sq.length !== want.sq.length || b.gl.length !== want.gl.length) missing++;
-          const ownT = full.tw.filter(([, o]) => o === side).length, ownS = full.sq.filter(([, o]) => o === side).length, ownG = full.gl.filter(([, , , , o]) => o === side).length;
-          if (b.tw.filter(([, o]) => o === side).length !== ownT || b.sq.filter(([, o]) => o === side).length !== ownS || b.gl.filter(([, , , , o]) => o === side).length !== ownG) missing++;
+          const ownT = full.tw.filter(([, o]) => o === side).length;
+          if (b.tw.filter(([, o]) => o === side).length !== ownT) missing++;
+          // Everything in sight is there, whoever's it is.
+          if (full.sq.filter(([k]) => see.has(k)).length !== b.sq.length || full.gl.filter(([x, y]) => see.has(K(x, y))).length !== b.gl.length) missing++;
+          if (full.sq.some(([k, o]) => o === side && !see.has(k)) || full.gl.some(([x, y, , , o]) => o === side && !see.has(K(x, y)))) ownOut++;
         }
         if (JSON.stringify(v).includes('"seed"')) leaks++;
         if (!m.over && v.mine.length !== 0) mineLeak++;
@@ -188,9 +195,28 @@ function randomPlan(m: LiveMatch, side: Side, r: () => number): { t: 'g' | 's' |
   check('simultaneous turns resolve exactly as Design\'s flow (board, every step, last seen, snapshots, winner)', flowOk, firstBad);
   check('the ending\'s wording is Design\'s (with the opponent\'s name for Amber)', flowWhy, firstBad);
   check(`no view or frame shows a square out of sight (${matches} matches, ${frames} boards)`, leaks === 0, `${leaks} leaks`);
-  check('every view shows all the player\'s own pieces and everything in sight; a run has every + 1 frames', missing === 0, `${missing}`);
+  check('every view shows the player\'s own towers and everything in sight; a run has every + 1 frames', missing === 0, `${missing}`);
+  check(`the player\'s own squares and gliders out of sight are left out (${ownOut} boards had some, none shown)`, ownOut > 0 && leaks === 0, `${ownOut}`);
   check('the opponent\'s placements are never sent before they appear', mineLeak === 0, `${mineLeak}`);
   check('random matches reach different endings', endings.size >= 2, [...endings].join(','));
+}
+
+// --- Your glider leaving sight: a faded marker where it was last seen (owner, 2026-10-31) ---------------
+{
+  const e = SOLO_V1_ENGINE, K = (x: number, y: number) => y * e.W + x;
+  // Cyan's tower at 1,4 (sight 3), Cyan's glider flying east on row 4, frames as the server sends them (fogged).
+  const full = (x: number, extra: [number, string][] = []): BoardView => ({ step: 12 + x, rock: [], tw: [[K(1, 4), 'C'], [K(13, 5), 'A'], ...extra], sq: [], gl: [[x, 4, 1, 0, 'C']], flash: [] } as unknown as BoardView);
+  const asWorld = (b: BoardView) => { const w = e.world(BASE, true); w.step = b.step; b.tw.forEach(([k, o]) => (w.tw[k] = o)); b.sq.forEach(([k, o, hp]) => (w.sq[k] = { o, hp })); b.gl.forEach(([x, y, dx, dy, o], i) => w.gl.push({ id: i + 1, o, x, y, dx, dy })); return w; };
+  const run = (extra: [number, string][] = []) => [2, 3, 4, 5, 6, 7].map((x) => asWorld(fog(full(x, extra), 'C', 3)));
+  const marks = leftSight(run(), 'C', 3, e);
+  check('left sight: no marker while the glider is in sight', marks.slice(0, 3).every((m) => m.size === 0), JSON.stringify(marks.map((m) => [...m])));
+  check('left sight: when it flies out, a marker on its last square seen, pointing the way it was heading', marks[3].size === 1 && JSON.stringify(marks[3].get(K(4, 4))) === '[1,0]');
+  check('left sight: the marker stays for the rest of the run', marks.slice(3).every((m) => m.size === 1 && m.has(K(4, 4))));
+  // Built only from what Cyan was sent: an Amber tower in the dark changes nothing.
+  const twin = leftSight(run([[K(10, 4), 'A']]), 'C', 3, e);
+  check('left sight: the markers are the same whatever is hidden', JSON.stringify(twin.map((m) => [...m])) === JSON.stringify(marks.map((m) => [...m])));
+  const cell = board({ w: run()[5], e, cs: 26, fog: 'C', R: 3, gone: marks[5] }).cells.find((c) => c.x === 4 && c.y === 4)!;
+  check('left sight: the board draws it as a faded glider on a lit square', !!cell.pc?.faded && cell.pc.k === 'glider' && /flew out of sight/.test(cell.label), JSON.stringify(cell));
 }
 
 // --- Two placements on one square cancel (rules §4; game.ts apply) --------------------------
