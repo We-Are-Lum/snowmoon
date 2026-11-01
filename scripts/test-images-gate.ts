@@ -211,11 +211,12 @@ process.env.APP_LEGAL_PAGES = 'terms+privacy';
   // Samples and views for designs: invited FIDs only (owner, 2026-10-10), then the same gate before anything is paid.
   const sample = readFileSync(path.join(ROOT, 'src/app/api/designs/sample/route.ts'), 'utf8');
   const sat = (s: string) => sample.indexOf(s);
-  check('samples and views are for invited FIDs only, with the drafted refusal', sat('if (!IMAGES.invited.includes(fid)) return no(IMAGE_WORDING.designs.form.notInvited') > 0);
+  // The remix challenge (owner, 2026-10-31): views also open while challengeSheetsOpen() (the window, and Privacy's words).
+  check('samples and views are for invited FIDs only (or a sheet\'s views while the remix challenge opens them), with the drafted refusal', sat('if (!IMAGES.invited.includes(fid) && !viewForChallenge) return no(IMAGE_WORDING.designs.form.notInvited') > 0 && sat('challengeSheetsOpen() ?') > 0 && sat('challengeSheetsOpen() ?') < sat('if (!IMAGES.invited.includes(fid) && !viewForChallenge)'));
   check('samples and views go through the same gate before anything is counted', sat('await mayGenerate(') > sat('hasConsented(fid)') && sat('await mayGenerate(') < sat('await paidPicture('));
   const publish = readFileSync(path.join(ROOT, 'src/app/api/designs/route.ts'), 'utf8');
   const dat = (s: string) => publish.indexOf(s);
-  check('publishing a design is for invited FIDs only, with the drafted refusal', dat('if (!IMAGES.invited.includes(fid)) return no(IMAGE_WORDING.designs.form.notInvited') > 0);
+  check('publishing a design is for invited FIDs only (or a challenge character\'s fork while the remix challenge opens them), with the drafted refusal', dat('if (!IMAGES.invited.includes(fid) && !(await openForChallenge(sql, mode, kind, body.from))) return no(IMAGE_WORDING.designs.form.notInvited') > 0 && dat('await mayGenerate(') > dat('openForChallenge('));
   {
     const picks = readFileSync(path.join(ROOT, 'src/app/api/designs/picks/route.ts'), 'utf8');
     // Picks opened to everyone signed in, Farcaster or wallet (owner, 2026-10-19, e749871; Privacy names them).

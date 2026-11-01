@@ -432,7 +432,9 @@ only, through `studio.rating_totals`, `studio.like_totals` and
   pages would show it to anyone. The owner's rule (2026-10-24).
 - `P6q` (branch remix-challenge, 2026-10-31, pending the owner's yes): the remix challenge's entries
   (`CHALLENGE.entries`) and "Posted on" (`CHALLENGE.posts`) are on only while Privacy §4 describes them and §7 says
-  Neynar receives makers' FIDs for it and, for posts, names Bluesky and Lens (docs/legal/remix-challenge-draft.md).
+  Neynar receives makers' FIDs for it and, for posts, names Bluesky and Lens (docs/legal/remix-challenge-draft.md);
+  and opening sheets to everyone (`CHALLENGE.openSheets`, on) takes effect only inside the entry window and once
+  Privacy §4 describes the challenge.
 - `P6n`: image making is open beyond the invited list (the gate looks up a
   Neynar score) only when `src/app/terms/page.tsx` and `src/app/privacy/page.tsx`
   both exist, and the Privacy page names Neynar (which receives the FID at

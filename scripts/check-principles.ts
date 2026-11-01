@@ -1357,7 +1357,7 @@ add({
     seen.push({ page: '/chapter/1', host: 'fonts.googleapis.com', url: 'https://fonts.googleapis.com/css2?family=Inter', type: 'stylesheet' });
   },
 });
-const PRIVATE_FID_TABLES = ['ratings', 'likes', 'take_likes', 'picks', 'contributor_consents', 'image_asks', 'removal_log', 'image_scores', 'wallet_links', 'challenge_marks', 'version_posts'];
+const PRIVATE_FID_TABLES = ['ratings', 'likes', 'take_likes', 'picks', 'contributor_consents', 'image_asks', 'removal_log', 'image_scores', 'wallet_links', 'challenge_marks', 'version_posts', 'challenge_eligibility'];
 add({
   id: 'P6b',
   principle: 6,
@@ -1386,6 +1386,7 @@ add({
       do $$ begin if to_regclass('studio.challenge_marks') is not null then
         insert into studio.challenge_marks (challenge, fid, character, version_id) values ('remix-2026-11', 42, 'bai', '00000000-0000-0000-0000-0000000000f1');
         insert into studio.version_posts (version_id, network, post_id, handle, posted_at, url, fid) values ('00000000-0000-0000-0000-0000000000f1', 'lens', '1', 'someone', now(), 'https://hey.xyz/posts/abc', 42);
+        insert into studio.challenge_eligibility (version_id, challenge, fid, decision, score, eligible) values ('00000000-0000-0000-0000-0000000000f1', 'remix-2026-11', 42, 'score', 0.8, true);
       end if; end $$;`);
     const problems: string[] = [];
     for (const role of ['anon', 'authenticated']) {
@@ -1738,10 +1739,11 @@ add({
 add({
   id: 'P6q',
   principle: 6,
-  name: 'the remix challenge\'s entries and "Posted on" are on only while the Privacy page says what they keep and send',
+  name: 'the remix challenge\'s entries and "Posted on" are on only while the Privacy page says what they keep and send; open sheets wait for the window and those words',
   load: async () => ({
     entries: CHALLENGE.entries as boolean,
     posts: CHALLENGE.posts as boolean,
+    openSheets: read('src/lib/challenge/open-sheets.ts'),
     s4: (PRIVACY.sections.find((s) => s.n === 4)?.body ?? []).flat().join(' '),
     s7: (PRIVACY.sections.find((s) => s.n === 7)?.body ?? []).flat().join(' '),
   }),
@@ -1751,6 +1753,8 @@ add({
     if (c.entries && !/remix challenge/i.test(c.s7)) problems.push('CHALLENGE.entries is on, but Privacy §7 does not say Neynar receives makers\' FIDs for the remix challenge');
     if (c.posts && !/remix challenge|posted/i.test(c.s4)) problems.push('CHALLENGE.posts is on, but Privacy §4 does not describe the posts people add');
     for (const n of ['Bluesky', 'Lens']) if (c.posts && !new RegExp(`\\b${n}\\b`).test(c.s7)) problems.push(`CHALLENGE.posts is on, but Privacy §7 does not name ${n}`);
+    // CHALLENGE.openSheets is on (owner, 2026-10-31); it may take effect only inside the window and once Privacy describes the challenge.
+    if (!/export const challengeSheetsOpen = [^\n]*phase\(now\) === 'open' && privacyDescribesChallenge\(/.test(c.openSheets)) problems.push('src/lib/challenge/open-sheets.ts: opening sheets to everyone does not wait for the window and the Privacy words');
     return problems;
   },
   plant: (c) => {
@@ -1758,6 +1762,7 @@ add({
     c.posts = true;
     c.s4 = 'Quote cards you save, and your likes.';
     c.s7 = 'Neynar receives your Farcaster ID.';
+    c.openSheets = 'export const challengeSheetsOpen = () => CHALLENGE.openSheets;';
   },
 });
 

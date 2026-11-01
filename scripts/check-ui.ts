@@ -65,7 +65,7 @@
  *   image's AI label, the check labelled AI with its model, Keep / Regenerate with my note / Drop, a saved decision
  *   shown, the finding with its fix line, the note box with the publication line, pre-filled with the fix line labelled
  *   "Drafted by the image check (Argon finding, gpt-oss-120b fix line)" and marked when edited; anyone else sees only the owner line.
- * - The remix challenge (/challenge, 2026-10-31): the floors, light and dark, the "Draft wording" line, Bai and Zei, the
+ * - The remix challenge (/challenge, 2026-10-31): the floors, light and dark, the "Draft wording" line, its six characters in order, the
  *   deadline in Pacific time, the rules, admins not eligible for rewards, no sideways scroll.
  * - The footer line (owner's legal starter, 2026-10-09) reads exactly as written, with Terms, Privacy
  *   and Source linked, at the foot of About, in the menu sheet and at the bottom of the rail; not on a
@@ -1535,7 +1535,10 @@ try {
     {
       const text = (await page.locator('.ch-page').textContent()) ?? '';
       if (!/Draft wording/.test(text)) fail(`/challenge (${scheme}): no "Draft wording" line`);
-      for (const name of ['Bai Jahen', 'Zei Leimin']) if (!(await page.getByRole('heading', { name }).count())) fail(`/challenge (${scheme}): no section for ${name}`);
+      // The characters, in CHALLENGE's order (owner, 2026-10-31): Zei, Bai, Gladias, Seila, Deluin, Mu.
+      const heads = (await page.locator('.ch-character h2').allTextContents()).map((h) => h.split(' ')[0]);
+      if (heads.join() !== 'Zei,Bai,Gladias,Seila,Deluin,Mu') fail(`/challenge (${scheme}): the characters read ${heads.join(', ')}`);
+      if (!/A new sheet made from scratch isn’t an entry/.test(text)) fail(`/challenge (${scheme}): it doesn't say only remixes count`);
       if (!/Entries (open|close|closed) .*Pacific/.test(text)) fail(`/challenge (${scheme}): no deadline in Pacific time`);
       if (!/One entry per person per character/.test(text)) fail(`/challenge (${scheme}): the rules are missing`);
       if (!/aren’t eligible for rewards/.test(text)) fail(`/challenge (${scheme}): it doesn't say admins aren't eligible for rewards`);
