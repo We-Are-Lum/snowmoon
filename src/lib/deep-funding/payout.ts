@@ -15,6 +15,12 @@ import { creditOf, type GraphAnswers } from './scoring';
  * 4. any recipient whose total is under DEEP_FUNDING.minShare (1%) of the pot;
  * 5. any recipient without a usable mainnet address.
  * Rules 1 to 3 are per version; 5 and then 4 are per recipient (a FID), on their total over all their versions.
+ *
+ * Where addresses come from: docs/proposals/payout-addresses.md (a proposal, not built). Before the splits are made,
+ * each recipient confirms a payout address on the site (default: their primary verified Farcaster address); the site
+ * checks it works on mainnet (an ordinary wallet, or a contract wallet deployed there) and screens it; only confirmed
+ * recipients' addresses are stored. `addressOf` returns a confirmed address or null, and `usable` that check's
+ * result: an unconfirmed recipient falls to the Lake by rule 5. Until it is built, the runner takes a checked file.
  */
 
 export type LakeReason = 'owner-originality' | 'book' | 'admin' | 'ineligible' | 'under-min' | 'no-address';
