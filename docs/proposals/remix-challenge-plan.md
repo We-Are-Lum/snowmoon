@@ -10,12 +10,13 @@
 - The originality answers need their own score (e.g. the squared gap in log-odds), not the log-ratio one.
 - No tracking of agent-drafted entries; I'm asking Luis to make his by hand.
 - Dates (owner, 2026-10-31): entries close Sun 22 Nov 23:59 PT; shortlist vote and jurors Tue 1 to Thu 3 Dec; results at the Fri 4 Dec call; mint opens Tue 8 Dec 9:00 PT and closes at the Fri 18 Dec call. All challenge dates live in one config entry.
+- Decisions (owner, 2026-10-31, after the first build): characters Zei, Bai, Gladias, Seila, Deluin and Mu, in that order; entries open at the 6 Nov call, 9:00 PT; entries are forks only; eligibility checked once at publish and stored, never on page view; no wallet path until wallets can make sheets; sheets open to the Neynar check during the window only; the free image cap $15 a day in the window, $2 otherwise; no new invitees; at least three different eligible entrants per character for a final version, credit test and token; one poidh bounty for the whole challenge; the mint said as a plan, not a promise; the shortlist vote stays a date only (not built); the starting sheets from `cast.json`, published as the owner, Gladias held for the privacy-robe check.
 
 Handoff plan, 31 Oct 2026. For the Snowmoon design chat and for Claude Code. Builds on `snowmoon-fund-starting-small.md` and `snowmoon-deep-funding-pilot.md` in the LUM project.
 
 ## The plan in brief
 
-For two weeks from Friday 6 November, people remix the main characters on snowmoon.party, using the site's own tools only. Nate owns the final version of each character, built from the remixes he chooses. On Friday 20 November we show those final versions and announce the poidh bounty winner. We then run a deep funding test, where AI models and a small jury divide the credit for each final version among everything it was built on. Each final version is minted on Ethereum mainnet as an open edition in a new collection, **Snowmoon WIP**. Mint proceeds, plus an extra reward pot from the fund, go to an unchangeable split set by the deep funding result. The mint closes at the 4 December call.
+From the call on Friday 6 November to 23:59 Pacific on Sunday 22 November, people remix the main characters on snowmoon.party, using the site's own tools only. Nate owns the final version of each character, built from the remixes he chooses. The shortlist vote and jurors run from Tuesday 1 to Thursday 3 December; at the Friday 4 December call we show those final versions and announce the poidh bounty winner. Before that call we run a deep funding test, where AI models and a small jury divide the credit for each final version among everything it was built on. Each final version is minted on Ethereum mainnet as an open edition in a new collection, **Snowmoon WIP**. Mint proceeds, plus an extra reward pot from the fund, go to an unchangeable split set by the deep funding result. The mint opens on Tuesday 8 December at 9:00 Pacific and closes at the Friday 18 December call.
 
 ## Decided (Nate, 31 Oct)
 
@@ -36,7 +37,7 @@ For two weeks from Friday 6 November, people remix the main characters on snowmo
 2. **Which characters.** Recommend **Bai and Zei**, the two Episode 1 needs first. More characters give people more choice but make each remix graph shallower.
 3. **What gets minted.** Recommend **Nate's final version** of each character, built from the remixes he picks, which fits owners-not-votes. The alternative is minting the poidh winner's version.
 4. **Nate's own share.** The final version's own originality share would be Nate's, so recommend it goes to the Lake (the support wallet), published as such. Nate doesn't pay himself from the mint.
-5. **Price and window.** A small fixed price, roughly $5 to $10 in ETH. Open from the 20 Nov call to the 4 Dec call.
+5. **Price and window.** A small fixed price, roughly $5 to $10 in ETH. Open from Tue 8 Dec, 9:00 Pacific, to the Fri 18 Dec call.
 6. **poidh bounty.** Recommend a **solo bounty** (Nate funds it and picks the one winner) on Base, where poidh has its reach. An open bounty lets others add money, but then those contributors vote on the winner, weighted by what they put in. The judging line: "the remix that most changes how we see the character while staying true to the book." Amount: Nate to set.
 7. **Extra reward pot.** An amount from the support wallet, paid into each character's split on mainnet when the mint opens. Amount: Nate to set.
 8. **Contract route.** Recommend **our own small contract** on OpenZeppelin's standard ERC-1155 (see the mint section). The fallback, if time runs short, is Manifold Studio with a creator-owned contract and the payout set to the split.
@@ -47,9 +48,9 @@ For two weeks from Friday 6 November, people remix the main characters on snowmo
 
 ## Challenge rules (draft copy)
 
-> **Remix Bai and Zei.** From 6 to 17 November, make your own version of Bai or Zei on snowmoon.party: start from any existing sheet, or from someone else's remix, change it, and publish. Your version gets its own page, credited back to what you built on.
+> **Remix Bai and Zei.** From 6 to 22 November, make your own version of Bai or Zei on snowmoon.party: start from any existing sheet, or from someone else's remix, change it, and publish. Your version gets its own page, credited back to what you built on.
 >
-> **What happens next.** On Friday 20 November, Nate shows the versions of Bai and Zei he's taking into Episode 1, built from your remixes and credited to you. AI models and a small jury divide the credit for each one among everything it was built on, and we publish how every model did it. Each version is then minted as an open edition in Snowmoon WIP. What it raises, plus an extra reward pot, goes to everyone it was built on, through a published split on Ethereum.
+> **What happens next.** At the call on Friday 4 December, Nate shows the versions of Bai and Zei he's taking into Episode 1, built from your remixes and credited to you. AI models and a small jury divide the credit for each one among everything it was built on, and we publish how every model did it. Each version is then minted as an open edition in Snowmoon WIP. What it raises, plus an extra reward pot, goes to everyone it was built on, through a published split on Ethereum.
 >
 > **The bounty.** The poidh bounty goes to the remix that most changes how we see the character while staying true to the book. To be in the running, also post your version's link as a claim on the bounty.
 >
@@ -70,7 +71,7 @@ The site already records what each version came from:
 - Every version keeps its recipe.
 
 **Entries.**
-- **What counts:** a published fork of Bai or Zei (or of another entry) made between the 6 Nov launch and 23:59 Pacific on 17 Nov, by an eligible person.
+- **What counts:** a published fork of Bai or Zei (or of another entry) made between the 6 Nov launch call (9:00 Pacific) and 23:59 Pacific on Sun 22 Nov, by an eligible person.
 - **Who's eligible:** a Farcaster account scoring at least 0.7 on Neynar, someone on the invited list, or a wallet linked to either.
 - **Admins** (Nate, Garance) can make versions but aren't eligible for rewards. Any credit that reaches their work goes to the Lake.
 
@@ -92,7 +93,7 @@ The fuller design is in `snowmoon-deep-funding-pilot.md`. For this test:
 - **Graph per character.** The outcome is Nate's final version. Its parents are the entries he credits. Each entry's parent is what it was forked from, back to the original sheet. The book is the root.
 - **Questions.** Per node, what share is new work, and how the rest divides among its parents. Single-parent nodes only need the first question.
 - **Models.** About six models that can read images. Each gets the same prompt and inputs: the sheet images, the descriptions, the recipes, and the maker's own words. Each runs three times. All maker text is passed as quoted data, never as instructions.
-- **Jurors.** 5 to 9 people with no entries for that character. Each answers about six questions on the site on 18 and 19 Nov, without seeing the model answers. Four are comparisons ("for the final Bai, which mattered more, A or B, and how many times more?") and two are originality ("how much of this version is new?").
+- **Jurors.** 5 to 9 people with no entries for that character. Each answers about six questions on the site from Tue 1 to Thu 3 Dec, without seeing the model answers. Four are comparisons ("for the final Bai, which mattered more, A or B, and how many times more?") and two are originality ("how much of this version is new?").
 - **Scoring.** For each model, the average squared gap between its log-ratios and the jurors'. That gives the leaderboard.
 - **Final weights.** The average of the top three models. Show the fitted mix of all models alongside for comparison.
 - **The money flows down the graph,** and these shares go to the Lake:
@@ -145,14 +146,16 @@ The collection description: "Work-in-progress versions of characters, places and
 | Fri 6 Nov | Launch on the call and in posts. poidh bounty live. | Nate |
 | Sun 8 Nov | Collab chat opens ($LUM birthday) | Nate |
 | Thu 12 Nov | Halfway post showing entries so far | Nate |
-| 6 to 17 Nov | Build: social pages, multi-parent credit, deep funding runner, juror page, contract and Sepolia dry run | Claude Code |
-| Tue 17 Nov, 23:59 PT | Entries close | |
-| Wed 18 Nov | Nate publishes final versions. Models run. Jurors invited. | Nate, Claude Code |
-| Thu 19 Nov | Jurors finish. Results and recipient lists. Address checks. Splits created. Metadata pinned. Tokens created. | Nate, Claude Code |
-| Fri 20 Nov call | Final versions, poidh winner, model comparison, splits shown. Mint opens. | Nate |
-| Fri 4 Dec call | Mint closes. `release` to the splits and distribute, live. Totals published. Road to Episode 1 published. | Nate |
+| 6 to 22 Nov | Build: social pages, multi-parent credit, deep funding runner, juror page, contract and Sepolia dry run | Claude Code |
+| Sun 22 Nov, 23:59 PT | Entries close | |
+| 23 to 30 Nov | Nate publishes final versions. Models run. (Days within this week not set by the owner.) | Nate, Claude Code |
+| Tue 1 to Thu 3 Dec | Shortlist vote and jurors (the vote is not defined yet). | Nate, Claude Code |
+| Fri 4 Dec call | Results: final versions, poidh winner, model comparison, splits shown. | Nate |
+| By Tue 8 Dec | Results and recipient lists. Address checks. Splits created. Metadata pinned. Tokens created. | Nate, Claude Code |
+| Tue 8 Dec, 9:00 PT | Mint opens. | Nate |
+| Fri 18 Dec call | Mint closes. `release` to the splits and distribute, live. Totals published. Road to Episode 1 published. | Nate |
 
-18 and 19 November are tight. If anything slips, open the mint on Monday 23 November instead and close it on 4 December as planned.
+The dates above follow the owner's dates of 2026-10-31 (the Corrections section); on the site they live in one config entry (`CHALLENGE.dates`).
 
 ## Build list for Claude Code
 
@@ -162,7 +165,7 @@ The collection description: "Work-in-progress versions of characters, places and
 3. Share buttons on version pages, and the "Add where you posted it" field with verification.
 4. Config: raise `IMAGES.dailySpendCapUsd` for the challenge window (Nate decides the amount), and add invitees to `IMAGES.invited`.
 
-**During the challenge (by Tue 17 Nov):**
+**During the challenge (by Sun 22 Nov):**
 
 5. Automatic post finding: Bluesky by URL, and Farcaster if Neynar supports it.
 6. Multi-parent credit for the owner's final version.
@@ -179,7 +182,7 @@ The collection description: "Work-in-progress versions of characters, places and
 
 - Entering is free and needs no purchase. Minting doesn't affect entry or rewards. The bounty is judged, not drawn. That keeps it out of lottery territory.
 - The mint is a fixed-price collectible with no promises, roadmap or royalties. The SEC and CFTC's March 2026 interpretation treats digital collectibles as non-securities, with caveats about promising future work, so avoid any such promises.
-- Mint proceeds go straight to contributors through the split. The extra pot and the Lake's share pass through Nate's LLC, so the earlier tax questions apply: payments to people outside the US, and income timing. Ask the tax adviser before 20 Nov.
+- Mint proceeds go straight to contributors through the split. The extra pot and the Lake's share pass through Nate's LLC, so the earlier tax questions apply: payments to people outside the US, and income timing. Ask the tax adviser before the 4 Dec call.
 
 ## Kickoff prompt for Claude Code
 

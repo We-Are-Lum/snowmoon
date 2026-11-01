@@ -3,14 +3,21 @@
 Drafted by the coding agent (Claude, a closed model by Anthropic), 2026-10-31, on branch `remix-challenge`. DRAFT until
 the owner says "reread". Nothing in `src/lib/legal.ts` has changed, and its reread record is untouched.
 
+**Revised 2026-10-31 for the owner's decisions:** eligibility is checked once, at publish, and stored (Neynar is never
+asked when someone views a page); no wallet path; sheets open to everyone who passes the check during the window
+(`openSheets`, which waits for these words by itself); the mint is a plan, not a promise.
+
 Legal texts describe today (owner, 2026-10-18): these lines ship in the same merge as the switches they describe, and
 the switches stay off until then:
 
-- `CHALLENGE.entries` (entries listed, the Entry badge, "Mark as my entry"; stores `studio.challenge_marks`; asks
-  Neynar for makers' scores);
+- `CHALLENGE.entries` (entries listed, the Entry badge, "Mark as my entry"; shows what `studio.challenge_marks` and
+  `studio.challenge_eligibility` hold; the eligibility itself is stored at publish whatever the switch says, since
+  storing it shows nothing);
 - `CHALLENGE.posts` ("Add where you posted it" and "Posted on"; stores `studio.version_posts`; asks Neynar, Bluesky
   and Lens for a post);
-- `CHALLENGE.openSheets` (forks of Bai's and Zei's sheets open to everyone who passes the Generate gate).
+- `CHALLENGE.openSheets` (on in the config): forks of the six characters' sheets open to everyone who passes the
+  Generate gate, only inside the entry window, and only once Privacy §4 describes the remix challenge
+  (`src/lib/challenge/open-sheets.ts`; P6q checks the code waits for both). So these words are what turn it on.
 
 `npm run check:principles` (P6q) fails if `entries` or `posts` is on while Privacy doesn't say what they keep and
 send (it looks for "remix challenge" in §4, and for Bluesky and Lens in §7 when `posts` is on).
@@ -22,15 +29,15 @@ last item) should still ship with them.
 ## Before you reread: a conflict to settle first
 
 **Terms §2 says "There is no token. … Payments are final. Nothing else here is for sale."** and principle 7 says "No
-token", with the home page's first screen saying "No token". The challenge's draft rules (shown on /challenge, marked
-draft) say each final version "is then minted as an open edition in Snowmoon WIP". An ERC-1155 open edition sold for
-ETH is a token sold through the project. These lines don't cover the mint; the owner should decide how "No token"
-reads (for example "no coin or currency token") before the mint wording goes live, and the mint gets its own Terms
-section in the mint's own release.
+token", with the home page's first screen saying "No token". The rules now say only the owner's plan: "We plan to mint
+each final version as an open edition, with what it raises going to everyone it was built on. Details come with the
+mint page." That promises nothing, but it announces a planned token sale next to a first screen that says "No token".
+These lines don't cover the mint; the owner should decide how "No token" reads before the mint page goes live, and the
+mint gets its own Terms section in the mint's own release.
 
 ---
 
-## Privacy §4 (Kept by us when you sign in): two new list items, after "Images you publish, …"
+## Privacy §4 (Kept by us when you sign in): three new list items, after "Images you publish, …"
 
 Before (the item they follow, unchanged):
 
@@ -39,10 +46,15 @@ Before (the item they follow, unchanged):
 
 New items:
 
-> If you take part in the remix challenge: which of your versions you mark as your entry for each character, and when.
-> Whether a version is an entry is shown on its page and on the challenge page. An entry means its maker could take
-> part (an invited account, or a Farcaster account that passes the same check as making images); your score itself is
-> never shown.
+> Character sheets you publish, with their text, their views, your name and the record of how each view was made.
+> These are public. During the remix challenge, anyone who passes the same check as making images can publish a
+> remix of its characters' sheets.
+
+> If you take part in the remix challenge: for each version of a challenge character you publish, whether it can count
+> as an entry and why (you were invited, you are an admin, or your account's score when you published it), decided
+> once when you publish it and kept with it; and which of your versions you mark as your entry for each character, and
+> when. Whether a version is an entry is shown on its page and on the challenge page, with how many people have entered
+> each character; your score itself is never shown.
 
 > If you add where a version was posted: the post's network, its id there, its writer's handle, when it was posted,
 > its address, and who added it and when. The network, handle, date and a link to the post are shown on the
@@ -70,10 +82,11 @@ Before:
 After:
 
 > Neynar receives your Farcaster ID when you first make an image on a given day, to look up its account score, which
-> decides whether you can make images. We keep the score for a day. During the remix challenge, Neynar also receives
-> the Farcaster ID of each person whose version could be an entry, to look up the same score, which decides whether it
-> counts; we keep it for a day. When someone adds a Farcaster post to a version's page, Neynar receives that post's
-> address or id, to read it. When you sign in with a wallet, …
+> decides whether you can make images. We keep the score for a day. During the remix challenge, the score you have
+> when you publish a remix of a challenge character decides whether it can count as an entry; that score (looked up
+> then, at most once, and usually already kept from making its views) is kept with the version. Neynar is never asked
+> about you when someone views a page. When someone adds a Farcaster post to a version's page, Neynar receives that
+> post's address or id, to read it. When you sign in with a wallet, …
 
 ## Privacy §7: a new item, after the Neynar item
 
@@ -96,12 +109,14 @@ After:
 
 ## Terms: a new section 6d, after 6c
 
-> **6d. The remix challenge.** The challenge page sets out its dates, the characters, and what happens after. Entering
-> is free and needs no purchase, and minting isn't needed for anything. A version counts as an entry if it is a remix
-> made on the Service during the challenge, by an account we invited or a Farcaster account that passes the site's
-> check (or a wallet linked to one). One entry per person per character: your latest version counts unless you mark
-> another. Admins can make versions but aren't eligible for rewards. Any rewards are decided as the challenge page
-> says; nothing else is promised. We may change or end the challenge, and the page will say so.
+> **6d. The remix challenge.** The challenge page sets out its dates, the characters, and what happens after. During
+> the challenge, anyone signed in with a Farcaster account that passes the site's check may remix its characters'
+> sheets; making other sheets and styles stays by invitation. Entering is free and needs no purchase, and minting isn't
+> needed for anything. A version counts as an entry if it is a remix (not a sheet made from scratch) made on the
+> Service during the challenge by an account we invited or one that passed the site's check when the version was
+> published. One entry per person per character: your latest version counts unless you mark another. Admins can make
+> versions but aren't eligible for rewards. Anything that follows the challenge, including any mint, is a plan, not a
+> promise, and is decided as the challenge page says. We may change or end the challenge, and the page will say so.
 
 ## Terms §7 (Hiding and removal): one sentence added after "You may hide your own work yourself …"
 
@@ -112,11 +127,12 @@ After:
 
 ## Notes for the owner
 
-- **Neynar for others' FIDs.** Today Neynar receives only the signed-in person's own FID (and wallet address). The
-  entries list asks Neynar about the makers of versions, whoever is reading. It's the same score and the same one-day
-  cache (`studio.image_scores`), so a maker who just published (and passed the gate) is usually answered from the
-  cache. Alternative, if you'd rather not: record the eligibility at publish time (one more column on
-  `challenge_marks`), so Neynar is never asked on a page view.
+- **Neynar only at publish (owner, 2026-10-31).** The decision is made when the maker publishes, by the publish
+  route, from the same lookup the gate just made (kept a day), and stored in `studio.challenge_eligibility` (a score
+  is kept with the version for good, not a day: the Privacy sentence says so). Pages only read it.
+- **The spend cap** ($15 a day inside the window, $2 otherwise) needs no new words: the Terms speak of "spending caps"
+  without amounts.
+- **No wallet path.** Sheets are made with Farcaster only, so the Terms line names Farcaster accounts only.
 - **Admins** are named in Terms §7 already ("the site's owner and people the owner names"); the challenge page says
   "Admins (the site's owner and @garance)".
 - **Words of posts are not kept or shown.** "Posted on" shows network · @handle · date · link only, so no other
