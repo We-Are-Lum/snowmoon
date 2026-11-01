@@ -1,6 +1,6 @@
--- NEXT_minpentai_agent_matches.sql — agent play, solo: a person's matches against the site computer, played with
+-- 0032_minpentai_agent_matches.sql — agent play, solo: a person's matches against the site computer, played with
 -- their own AI through the connector (docs/proposals/minpentai-agent-play.md; src/lib/minpentai/agent-play/).
--- DRAFT v2 (owner's changes of 2026-10-31): not applied. Takes its number at merge (owner's standing rule,
+-- Applied by the owner on 2026-10-31 (read-back passed); numbered 0032 at merge (owner's standing rule,
 -- 2026-10-22). Nothing reads or writes this table until the "play" scope is switched on (AGENTS.minpentaiPlay),
 -- which also needs the owner's reread of the Terms/Privacy lines for agent play.
 --

@@ -1,7 +1,7 @@
 import 'server-only';
 import { ToolInputError } from '../../agent/tools';
 import { appUrl } from '../../config';
-import { playOn, type Agent } from '../../agents/core';
+import { playFor, type Agent } from '../../agents/core';
 import type { AgentTool } from '../../agents/tools';
 import { CURRENT, autopilot, linkOpens, newSolo, parseOrders, recordOf, resign, rulesOf, setStanding, simulate, SoloError, submit, viewFor, type ModelClaim, type SoloMatch } from './solo';
 import { insert, listFor, liveCount, load, newId, newSeed, save, StoreError } from './store';
@@ -34,7 +34,7 @@ const only = (args: Record<string, unknown>, keys: string[]) => {
   const extra = Object.keys(args).filter((k) => !keys.includes(k));
   if (extra.length) throw new ToolInputError(`unknown argument: ${extra.join(', ')}`);
 };
-const on = () => { if (!playOn()) throw new ToolInputError('Minpentai agent play is not open yet'); };
+const on = (agent: Agent) => { if (!playFor(agent.person)) throw new ToolInputError('Minpentai agent play is not open to you yet'); };
 const NOT_YOURS = 'no match of yours with that id (see minpentai_list_my_matches)';
 
 async function mine(agent: Agent, id: unknown) {
@@ -76,7 +76,7 @@ export const MINPENTAI_TOOLS: AgentTool[] = [
     description: 'Starts a match for your person (Cyan) against the site computer (Amber), on the book edition (default) or Play\'s rules, at level 0 (the beginner) to 3. Returns the match, your side\'s first view, and a live link that shows your person their side only (shown once: give it to your person). Your person decides; you advise and place what they agree to. Rules invented for this edition, not the book\'s.',
     inputSchema: { type: 'object', properties: { ruleset: { enum: ['book', 'play'] }, level: { type: 'integer', minimum: 0, maximum: 3 }, model: MODEL }, additionalProperties: false },
     async run(agent, args) {
-      on();
+      on(agent);
       only(args, ['ruleset', 'level', 'model']);
       const ruleset = args.ruleset === undefined ? 'book' : args.ruleset;
       const level = args.level === undefined ? 2 : args.level;
@@ -95,7 +95,7 @@ export const MINPENTAI_TOOLS: AgentTool[] = [
     description: 'Your person\'s agent-play matches, newest first: id, ruleset, level, and whether each is over.',
     inputSchema: { type: 'object', properties: {}, additionalProperties: false },
     async run(agent, args) {
-      on();
+      on(agent);
       only(args, []);
       return { matches: (await listFor(agent.person)).map((r) => ({ match_id: r.id, ruleset: r.ruleset, level: r.level, over: r.over, updated_at: r.updated_at })) };
     },
@@ -105,7 +105,7 @@ export const MINPENTAI_TOOLS: AgentTool[] = [
     description: 'What your side sees now: rocks, your pieces, every piece within sight of your towers, where you last saw enemy towers, the squares you may place on, your pending orders and the opponent\'s commitment (a hash; its orders stay hidden until the reveal). Nothing outside your sight.',
     inputSchema: { type: 'object', properties: { match_id: MATCH }, required: ['match_id'], additionalProperties: false },
     async run(agent, args) {
-      on();
+      on(agent);
       only(args, ['match_id']);
       return viewFor((await mine(agent, args.match_id)).m);
     },
@@ -127,7 +127,7 @@ export const MINPENTAI_TOOLS: AgentTool[] = [
       },
     },
     async run(agent, args) {
-      on();
+      on(agent);
       only(args, ['match_id', 'belief', 'scenarios', 'steps']);
       const { m } = await mine(agent, args.match_id);
       if (m.end) throw new ToolInputError('the match is over: see minpentai_get_record');
@@ -139,7 +139,7 @@ export const MINPENTAI_TOOLS: AgentTool[] = [
     description: 'Your side\'s placements for the open turn, replacing any you sent before. Say whose they are: "person" (your person chose them) or "agent" (you chose them under your person\'s standing order). Returns a commitment (sha256 of the orders and a fresh secret salt, revealed with them after the turn). With final: true the turn resolves now: both sides\' orders are revealed and applied together, and the match runs to the next turn to act.',
     inputSchema: { type: 'object', properties: { match_id: MATCH, turn: { type: 'integer', minimum: 0 }, placements: PLACEMENTS, source: { enum: ['person', 'agent'] }, final: { type: 'boolean' }, note: { type: 'string', maxLength: 280 } }, required: ['match_id', 'turn', 'placements', 'source'], additionalProperties: false },
     async run(agent, args) {
-      on();
+      on(agent);
       only(args, ['match_id', 'turn', 'placements', 'source', 'final', 'note']);
       if (args.source !== 'person' && args.source !== 'agent') throw new ToolInputError('source must be "person" or "agent"');
       const started = Date.now();
@@ -158,7 +158,7 @@ export const MINPENTAI_TOOLS: AgentTool[] = [
     description: 'The site computer plays your side for the open turn, from your side\'s view only, under your standing order\'s preset (balanced if none), and the turn resolves. The record shows the turn as the site computer\'s, not your person\'s or yours.',
     inputSchema: { type: 'object', properties: { match_id: MATCH, turn: { type: 'integer', minimum: 0 } }, required: ['match_id', 'turn'], additionalProperties: false },
     async run(agent, args) {
-      on();
+      on(agent);
       only(args, ['match_id', 'turn']);
       const started = Date.now();
       const out = await change(agent, args.match_id, (m) => ({ r: autopilot(m, { turn: Number(args.turn), now: new Date().toISOString() }), m }));
@@ -171,7 +171,7 @@ export const MINPENTAI_TOOLS: AgentTool[] = [
     description: 'How your person wants this match played, in their words (up to 500 characters), and the nearest preset for the site computer when it plays a turn for them: defend, attack, expand or balanced. Private to your side; shown on your person\'s live link.',
     inputSchema: { type: 'object', properties: { match_id: MATCH, text: { type: 'string', maxLength: 500 }, preset: { enum: ['balanced', 'defend', 'attack', 'expand'] } }, required: ['match_id', 'text', 'preset'], additionalProperties: false },
     async run(agent, args) {
-      on();
+      on(agent);
       only(args, ['match_id', 'text', 'preset']);
       return await change(agent, args.match_id, (m) => setStanding(m, args.text, args.preset));
     },
@@ -181,7 +181,7 @@ export const MINPENTAI_TOOLS: AgentTool[] = [
     description: 'Ends the match as a loss for your side. Only when your person says so.',
     inputSchema: { type: 'object', properties: { match_id: MATCH }, required: ['match_id'], additionalProperties: false },
     async run(agent, args) {
-      on();
+      on(agent);
       only(args, ['match_id']);
       return await change(agent, args.match_id, (m) => resign(m));
     },
@@ -191,7 +191,7 @@ export const MINPENTAI_TOOLS: AgentTool[] = [
     description: 'Makes a new live link for one of your person\'s matches (their side only) and stops the old one working.',
     inputSchema: { type: 'object', properties: { match_id: MATCH }, required: ['match_id'], additionalProperties: false },
     async run(agent, args) {
-      on();
+      on(agent);
       only(args, ['match_id']);
       const secret = randomBytes(24).toString('base64url');
       const id = await change(agent, args.match_id, (m) => { m.linkHash = createHash('sha256').update(secret).digest('hex'); return m.id; });
@@ -202,8 +202,8 @@ export const MINPENTAI_TOOLS: AgentTool[] = [
     name: 'minpentai_get_record', title: 'A finished match\'s record', scope: 'play', writes: false, counts: 'reads',
     description: 'The whole record of a finished match, for anyone: the seed, both sides\' orders every turn with who chose them, each commitment and its salt (so anyone can check the orders are the ones committed), the end and the final board. Not before the match ends.',
     inputSchema: { type: 'object', properties: { match_id: MATCH }, required: ['match_id'], additionalProperties: false },
-    async run(_agent, args) {
-      on();
+    async run(agent, args) {
+      on(agent);
       only(args, ['match_id']);
       const r = typeof args.match_id === 'string' ? await load(args.match_id) : null;
       // Missing and unfinished read the same, so this can't be used to learn that a match exists or how it stands.

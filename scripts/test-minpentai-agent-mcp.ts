@@ -16,6 +16,7 @@ import { createHash } from 'node:crypto';
 import { startStage, connect, mcp, tool } from './lib/agents-harness';
 
 process.env.MINPENTAI_PLAY_TEST = '1';
+// Play is opened to A and B only (as production opens it to the owner only); C is someone it isn't open to.
 const failures: string[] = [];
 let passed = 0;
 const check = (label: string, ok: boolean, detail = '') => {
@@ -23,23 +24,34 @@ const check = (label: string, ok: boolean, detail = '') => {
   console.log(`  ${ok ? 'PASS' : 'FAIL'} ${label}${!ok && detail ? ` (${detail})` : ''}`);
 };
 
+// The wallet people A, B, C, D are -3, -4, -5, -6 in the harness's fresh database (M29 checks A and B).
+process.env.MINPENTAI_PLAY_TEST_PEOPLE = '-3,-4';
 const S = await startStage();
 const { BASE, people } = S;
 type View = { turn: number; phase: string; step: number; can_place: [number, number][]; board: { towers: { x: number; y: number; side: string }[]; squares: { side: string; x: number; y: number }[]; gliders: { side: string; x: number; y: number }[] }; opponent_commitment: string | null; end: { win: string } | null };
 
 try {
   // Scopes: "play" only when asked for, and only then are the tools listed.
+  // An app that asks only for the scopes /mcp names (as Claude does): someone agent play is open to gets "play" too.
   const plain = await connect(BASE, people.A.token, 'Claude');
-  const listPlain = await mcp(BASE, plain.access_token, 'tools/list');
-  check('M1 an agent connected without "play" sees no Minpentai tool', !(listPlain.body?.result?.tools ?? []).some((t) => t.name.startsWith('minpentai_')), JSON.stringify(listPlain.body).slice(0, 200));
-  const refused = await tool(BASE, plain.access_token, 'minpentai_start_solo', {});
-  check('M2 and can\'t call one', !refused.ok && /"play" scope/.test(refused.error ?? ''), refused.error ?? '');
+  const listPlain = ((await mcp(BASE, plain.access_token, 'tools/list')).body?.result?.tools ?? []).map((t) => t.name);
+  check('M1 a person agent play is open to gets the Minpentai tools even when the app asked only for the usual scopes', listPlain.includes('minpentai_start_solo'), listPlain.join(','));
+  const dPlain = await connect(BASE, people.D.token, 'Claude');
+  const refused = await tool(BASE, dPlain.access_token, 'minpentai_start_solo', {});
+  check('M2 someone else connecting the same way gets none, and can\'t call one', !refused.ok && /"play" scope/.test(refused.error ?? ''), refused.error ?? '');
   const a = await connect(BASE, people.A.token, 'Claude', 'read play');
   const init = await mcp(BASE, a.access_token, 'initialize', { protocolVersion: '2025-11-25', capabilities: {}, clientInfo: { name: 'scripted-agent', version: '1' } });
   check('M3 initialize answers as an MCP server', !!(init.body?.result as { serverInfo?: unknown })?.serverInfo);
   const names = ((await mcp(BASE, a.access_token, 'tools/list')).body?.result?.tools ?? []).map((t) => t.name);
   const want = ['minpentai_start_solo', 'minpentai_list_my_matches', 'minpentai_get_view', 'minpentai_simulate', 'minpentai_submit_orders', 'minpentai_let_site_play_turn', 'minpentai_set_standing_order', 'minpentai_resign', 'minpentai_new_live_link', 'minpentai_get_record'];
   check('M4 an agent given "play" sees the Minpentai tools', want.every((n) => names.includes(n)), names.join(','));
+
+  // Someone agent play isn't open to: asking for "play" gets them nothing.
+  const c = await connect(BASE, people.C.token, 'Claude', 'read play');
+  const cList = ((await mcp(BASE, c.access_token, 'tools/list')).body?.result?.tools ?? []).map((t) => t.name);
+  const cTry = await tool(BASE, c.access_token, 'minpentai_start_solo', {});
+  check('M28 a person agent play isn\'t open to: no "play" scope granted, no tool listed, none runs', !cList.some((n) => n.startsWith('minpentai_')) && !cTry.ok, `${cList.join(',')} / ${cTry.error}`);
+  check('M29 the people it is open to are the ones set (A and B here)', [people.A.person, people.B.person].join(',') === process.env.MINPENTAI_PLAY_TEST_PEOPLE, `${people.A.person},${people.B.person}`);
 
   // A whole match.
   const st = await tool(BASE, a.access_token, 'minpentai_start_solo', { ruleset: 'book', level: 2, model: { name: 'Scripted', maker: 'This test', weights: 'open' } });

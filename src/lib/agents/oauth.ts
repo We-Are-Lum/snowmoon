@@ -2,7 +2,7 @@ import 'server-only';
 import { createHash, createPublicKey, timingSafeEqual, constants as cryptoConstants, verify as cryptoVerify, type JsonWebKey } from 'node:crypto';
 import type postgres from 'postgres';
 import { AGENTS } from '../config';
-import { grantable, issueTokens, issuer, newToken, resourceUrl, sha256, sql, type Scope } from './core';
+import { grantable, issueTokens, playFor, issuer, newToken, resourceUrl, sha256, sql, type Scope } from './core';
 
 /**
  * OAuth 2.1 for "Add to Claude" and "Add to ChatGPT" (any MCP client): authorization code with PKCE
@@ -24,7 +24,7 @@ export const SCOPE_TEXT: Record<Scope, string> = {
   drafts: 'draft ideas, storyboards, frames and prompts, character versions, and revisions, for you to publish',
   images: 'bring in images it made elsewhere, with their declared recipe, for you to publish',
   notes: 'read feedback on your work and draft notes, for you to publish',
-  // Shown only while AGENTS.minpentaiPlay is on (off until the owner approves this wording and agent play's legal lines).
+  // Shown only to the people agent play is open to (AGENTS.minpentaiPlay; the owner's approval of 2026-10-31).
   play: 'play Minpentai for you: start matches against the site computer, see only your side, and submit moves',
 };
 
@@ -217,6 +217,11 @@ export async function checkAuthorize(q: URLSearchParams, fetcher?: typeof fetch)
  * reconnecting doesn't use up one of their three), and a one-time code goes back to the client.
  */
 export async function approve(ask: AuthorizeAsk, person: number): Promise<string> {
+  // "play" only for the people agent play is open to (AGENTS.minpentaiPlay); for anyone else it is left out. For them it
+  // is added even when the app didn't ask for it (Claude asks for the scopes /mcp names, which predate it); the Allow
+  // screen lists it for them (authorize/consent.tsx), and the token's scope says what was granted.
+  if (!playFor(person)) ask = { ...ask, scopes: ask.scopes.filter((x) => x !== 'play') };
+  else if (!ask.scopes.includes('play')) ask = { ...ask, scopes: [...ask.scopes, 'play'] };
   const s = sql();
   const code = newToken('sc1_');
   await s.begin(async (tx) => {

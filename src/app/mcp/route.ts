@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { ToolInputError } from '~/lib/agent/tools';
-import { agentFromRequest, agentsOn, issuer, playOn } from '~/lib/agents/core';
+import { agentFromRequest, agentsOn, issuer, playFor } from '~/lib/agents/core';
 import { AGENT_TOOLS, runTool } from '~/lib/agents/tools';
 
 /**
@@ -84,7 +84,7 @@ export async function POST(request: Request) {
       return reply(msg.id, {});
     case 'tools/list':
       return reply(msg.id, {
-        tools: AGENT_TOOLS.filter((t) => agent.scopes.includes(t.scope) && (t.scope !== 'play' || playOn())).map(({ name, title, description, inputSchema, writes }) => ({
+        tools: AGENT_TOOLS.filter((t) => agent.scopes.includes(t.scope) && (t.scope !== 'play' || playFor(agent.person))).map(({ name, title, description, inputSchema, writes }) => ({
           name, title, description, inputSchema,
           annotations: { title, readOnlyHint: !writes, destructiveHint: false, idempotentHint: !writes, openWorldHint: false },
         })),

@@ -5,6 +5,7 @@ import { BOOK_PIECES, EDITION_NAME } from '~/lib/minpentai/versions/book-edition
 import { SCENARIOS, runScenario, type Scenario } from '~/lib/minpentai/versions/book-scenarios';
 import type { Engine, World } from '~/lib/minpentai/versions/engine';
 import { MinpentaiTags } from '../mp-tags';
+import { useAuth } from '~/lib/client-auth';
 
 const CYAN = '#46D7E8', AMBER = '#FFB43A', ROCK = '#4B4C55', GRID = '#16171C', CELL = '#0E0F13';
 const colour = (o: 'C' | 'A') => (o === 'C' ? CYAN : AMBER);
@@ -82,7 +83,18 @@ function ScenarioCard({ sc }: { sc: Scenario }) {
   );
 }
 
-export function BookView() {
+export function BookView({ people }: { people: number[] }) {
+  // Invite-only while the computer doesn't use all four pieces (owner, 2026-11-01).
+  const auth = useAuth();
+  if (!(auth.kind === 'signed-in' && people.includes(auth.fid))) {
+    return (
+      <article className="mb">
+        <h1>Minpentai: {EDITION_NAME}</h1>
+        <MinpentaiTags tags={['rules', 'draft']} />
+        <p>The book edition is invite-only for now.{auth.kind === 'signed-in' ? '' : ' Sign in if you were invited.'}</p>
+      </article>
+    );
+  }
   return (
     <article className="mb">
       <h1>Minpentai: {EDITION_NAME}</h1>

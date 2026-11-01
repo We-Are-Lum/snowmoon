@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { playOn } from '~/lib/agents/core';
+import { playFor } from '~/lib/agents/core';
 import { linkOpens, recordOf, viewFor } from '~/lib/minpentai/agent-play/solo';
 import { load } from '~/lib/minpentai/agent-play/store';
 import { MinpentaiTags } from '../../mp-tags';
@@ -16,10 +16,9 @@ export const metadata = { title: 'Minpentai: your side', robots: { index: false 
  * ?k=; a wrong or missing secret and a missing match read the same. Off while AGENTS.minpentaiPlay is off.
  */
 export default async function LiveLink({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ k?: string }> }) {
-  if (!playOn()) notFound();
   const { id } = await params, { k } = await searchParams;
   const r = await load(id).catch(() => null);
-  if (!r || !linkOpens(r.m, k ?? '')) notFound();
+  if (!r || !playFor(r.m.person) || !linkOpens(r.m, k ?? '')) notFound();
   const m = r.m, v = viewFor(m);
   const end = m.end ? recordOf(m) : null;
   return (
