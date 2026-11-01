@@ -4,7 +4,7 @@ import type postgres from 'postgres';
 import { MINPENTAI_PLAY as L } from '../../config';
 import type { Side } from '../play-game/game';
 import type { LadderProgress, LobbyView, MatchView, Person } from '../play-game/live-types';
-import { readProgress, recordResult } from './ladder';
+import { RUNGS, SEARCH_KEY, SEARCH_RUNGS, readProgress, recordResult } from './ladder';
 import {
   RULES_VERSION, Refused, abandon, advance, askRematch, createMatch, leave, playTurn, resign, touch, type LiveMatch,
 } from './match';
@@ -37,17 +37,35 @@ const isToken = (s: unknown): s is string => typeof s === 'string' && /^[A-Za-z0
 
 // --- The ladder -------------------------------------------------------------------
 
-export async function getLadder(sql: Sql, fid: number): Promise<LadderProgress> {
+/**
+ * A row's two ladders (owner, 2026-10-31): the old one in opened and rec's rung keys (kept as history), the search
+ * computer's under rec.s ({opened, rec}). Writing one never touches the other.
+ */
+const searchOf = (rec: unknown) => {
+  const s = (rec && typeof rec === 'object' ? (rec as Record<string, unknown>)[SEARCH_KEY] : null) as { opened?: unknown; rec?: unknown } | null;
+  return readProgress(s?.opened ?? 1, s?.rec ?? {}, SEARCH_RUNGS);
+};
+
+/** The old ladder (ladder 1), or the search computer's with the old one as history (ladder 3). */
+export async function getLadder(sql: Sql, fid: number, ladder: 1 | 3 = 1): Promise<LadderProgress> {
   const [r] = await sql`select opened, rec from studio.mp_progress where fid = ${fid}`;
-  return r ? readProgress(r.opened, r.rec) : readProgress(1, {});
+  const old = r ? readProgress(r.opened, r.rec) : readProgress(1, {});
+  return ladder === 3 ? { ...searchOf(r?.rec), history: old } : old;
 }
 
 export async function postLadder(sql: Sql, fid: number, body: unknown): Promise<LadderProgress> {
+  const ladder = (body as { ruleset?: unknown } | null)?.ruleset === 3 ? 3 : 1;
   return sql.begin(async (tx) => {
     await tx`insert into studio.mp_progress (fid) values (${fid}) on conflict (fid) do nothing`;
     const [r] = await tx`select opened, rec from studio.mp_progress where fid = ${fid} for update`;
-    const next = recordResult(readProgress(r.opened, r.rec), body);
-    await tx`update studio.mp_progress set opened = ${next.opened}, rec = ${tx.json(next.rec as never)}, updated_at = now() where fid = ${fid}`;
+    const old = readProgress(r.opened, r.rec), kept = (r.rec as Record<string, unknown>)?.[SEARCH_KEY];
+    if (ladder === 3) {
+      const next = recordResult(searchOf(r.rec), body, SEARCH_RUNGS);
+      await tx`update studio.mp_progress set rec = ${tx.json({ ...old.rec, [SEARCH_KEY]: next } as never)}, updated_at = now() where fid = ${fid}`;
+      return { ...next, history: old };
+    }
+    const next = recordResult(old, body, RUNGS);
+    await tx`update studio.mp_progress set opened = ${next.opened}, rec = ${tx.json((kept ? { ...next.rec, [SEARCH_KEY]: kept } : next.rec) as never)}, updated_at = now() where fid = ${fid}`;
     return next;
   });
 }

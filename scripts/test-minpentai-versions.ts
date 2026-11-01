@@ -12,13 +12,26 @@
  *
  *   npx tsx scripts/test-minpentai-versions.ts
  */
+import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { isDeepStrictEqual } from 'node:util';
-// The reference: game.ts as it was before the one engine (2026-10-21), frozen. Play must stay identical to it.
+// The references: game.ts as it was before the one engine (2026-10-21), frozen; and the same with exactly the
+// two rule changes of 2026-10-22 (step limit 96 -> 120, the computer's tower cap 5 -> 10; owner, after Luis's
+// play tests), checked below line by line. Play's ruleset 1 must stay identical to the first, ruleset 2 to the
+// second (owner, 2026-10-30: a rule change is a new ruleset; old links keep replaying under the old one).
+import * as G1 from './fixtures/minpentai/game-2026-10-21';
 import * as G from './fixtures/minpentai/game-2026-10-21';
-// game.ts today: the same names, run on the one engine.
+import * as G2 from './fixtures/minpentai/game-2026-10-22';
+// game.ts today: the same names, run on the one engine (ruleset 1 unless a match names another).
 import * as Adapter from '../src/lib/minpentai/play-game/game';
-const Frozen = G;
+import { SOLO_V1, SOLO_V2, type VersionRules } from '../src/lib/minpentai/versions/solo-v1';
+const Frozen = G1;
+/** game.ts today under ruleset 2: its step limit, and its computer players told the match's ruleset. */
+const Adapter2 = { ...Adapter, MAXS: Adapter.maxStepsOf(2), botPlan: (m: Parameters<typeof Adapter.botPlan>[0]) => Adapter.botPlan({ ...m, ruleset: 2 }) };
+const REFS: { name: string; frozen: unknown; adapter: unknown; rules: VersionRules }[] = [
+  { name: 'ruleset 1 (solo-v1)', frozen: G1, adapter: Adapter, rules: SOLO_V1 },
+  { name: 'ruleset 2 (solo-v2)', frozen: G2, adapter: Adapter2, rules: SOLO_V2 },
+];
 import { engine, layout, playVersion, type World } from '../src/lib/minpentai/versions/engine';
 import { BASE, BASE_DRAWN, PIECES, PIECE_IDS, SETTINGS, SETTING_IDS, asciiEscape, check, jsonSchema, type Version } from '../src/lib/minpentai/versions/schema';
 import { quoteFound } from '../src/lib/minpentai/versions/book';
@@ -29,6 +42,14 @@ import { readVersionLink, versionLink } from '../src/lib/minpentai/versions/link
 const ROOT = path.resolve(import.meta.dirname, '..');
 let failed = 0;
 const ok = (cond: boolean, what: string) => { if (!cond) { failed++; console.error('FAIL ' + what); } };
+{
+  // The 2026-10-22 reference differs from the 2026-10-21 one in exactly these two lines, nothing else.
+  const was = readFileSync(path.join(ROOT, 'scripts/fixtures/minpentai/game-2026-10-21.ts'), 'utf8').split('\n');
+  const now = readFileSync(path.join(ROOT, 'scripts/fixtures/minpentai/game-2026-10-22.ts'), 'utf8').split('\n');
+  const diff = was.map((l, i) => (l === now[i] ? null : `${l.trim()} -> ${now[i].trim()}`)).filter(Boolean);
+  ok(was.length === now.length && diff.join(' | ') === 'export const MAXS = 96; -> export const MAXS = 120; | if (L >= 3 && pts >= 4 && cnt(b, o) < 5) { -> if (L >= 3 && pts >= 4 && cnt(b, o) < 10) {', `the 2026-10-22 reference changes only the step limit and the tower cap: ${diff.join(' | ')}`);
+  console.log('reference: game-2026-10-22 is game-2026-10-21 with only the step limit (120) and the computer\'s tower cap (10) changed');
+}
 
 // --- whole matches: the ladder test's loop on game.ts, recording every turn ---
 const { W, H, K, XY } = G;
@@ -44,7 +65,7 @@ function turned(w: G.World): G.World {
   return m;
 }
 const turnedKeys = (o: Record<number, number>) => Object.fromEntries(Object.entries(o).map(([k, v]) => [rk(+k), v]));
-function playGame(lvlC: number, lvlA: number, seed: number, mod: typeof Frozen | typeof Adapter = Frozen) {
+function playGame(lvlC: number, lvlA: number, seed: number, mod: unknown = Frozen) {
   // The two modules have the same names; a world's rock is typed 1 in the frozen one and a count in the engine.
   const G = mod as unknown as typeof Frozen;
   const r = G.rng(seed), rule: G.RuleId = G.RULE_IDS[Math.floor(r() * G.RULE_IDS.length)];
@@ -69,25 +90,25 @@ function playGame(lvlC: number, lvlA: number, seed: number, mod: typeof Frozen |
 }
 const SEEDS = Number(process.argv[process.argv.indexOf('--seeds') + 1]) || 12;
 let matches = 0;
-for (let c = 0; c <= 5; c++) for (let a = 0; a <= 5; a++) for (let i = 0; i < SEEDS; i++) {
+for (const ref of REFS) for (let c = 0; c <= 5; c++) for (let a = 0; a <= 5; a++) for (let i = 0; i < SEEDS; i++) {
   const seed = 31 * i + 7 * c + a + 1;
-  const g = playGame(c, a, seed), v = playVersion({ set: {} }, c, a, seed);
+  const g = playGame(c, a, seed, ref.frozen), v = playVersion(ref.rules, c, a, seed);
   const same = g.rule === v.first && g.win === v.win && g.step === v.step && v.illegal === 0
     && g.turns.length === v.turns.length && g.turns.every((t, j) => isDeepStrictEqual(t.C, v.turns[j].C) && isDeepStrictEqual(t.A, v.turns[j].A));
-  ok(same, `match C${c} v A${a} seed ${seed}: game.ts ${g.rule} ${g.win}@${g.step}, versions ${v.first} ${v.win}@${v.step} (illegal ${v.illegal})`);
+  ok(same, `${ref.name}: match C${c} v A${a} seed ${seed}: game.ts ${g.rule} ${g.win}@${g.step}, versions ${v.first} ${v.win}@${v.step} (illegal ${v.illegal})`);
   matches++;
 }
-console.log(`whole matches: ${matches} compared`);
+console.log(`whole matches: ${matches} compared (both rulesets against their frozen game.ts)`);
 
 // --- game.ts (now on the engine) plays as the frozen game.ts: the same loop, run through each ---
 let adapted = 0;
-for (let c = 0; c <= 5; c++) for (let a = 0; a <= 5; a++) for (let i = 0; i < SEEDS; i++) {
+for (const ref of REFS) for (let c = 0; c <= 5; c++) for (let a = 0; a <= 5; a++) for (let i = 0; i < SEEDS; i++) {
   const seed = 53 * i + 11 * c + a + 3;
-  const f = playGame(c, a, seed, Frozen), g = playGame(c, a, seed, Adapter);
-  ok(isDeepStrictEqual(f, g), `game.ts on the engine: C${c} v A${a} seed ${seed}: frozen ${f.rule} ${f.win}@${f.step}, now ${g.rule} ${g.win}@${g.step}`);
+  const f = playGame(c, a, seed, ref.frozen), g = playGame(c, a, seed, ref.adapter);
+  ok(isDeepStrictEqual(f, g), `${ref.name}: game.ts on the engine: C${c} v A${a} seed ${seed}: frozen ${f.rule} ${f.win}@${f.step}, now ${g.rule} ${g.win}@${g.step}`);
   adapted++;
 }
-console.log(`game.ts on the engine: ${adapted} whole matches identical to the frozen game.ts, every placement`);
+console.log(`game.ts on the engine: ${adapted} whole matches identical to the frozen game.ts of each ruleset, every placement`);
 
 // --- step() on random boards ---
 const toG = (w: World): G.World => ({ step: w.step, rock: Object.fromEntries(Object.keys(w.rock).map((k) => [k, 1])) as Record<number, 1>, sq: structuredClone(w.sq), tw: { ...w.tw }, gl: w.gl.map((g) => ({ id: g.id, o: g.o, x: g.x, y: g.y, dx: g.dx, dy: g.dy })), nid: w.nid, flash: [] });
@@ -160,7 +181,8 @@ for (const p of PIECE_IDS) for (const o of Object.keys(PIECES[p].options)) for (
 console.log('limits: every setting at its min and max, every piece option, plays to an end with no illegal move');
 
 // --- replay: a person's match under the empty version replays as game.ts plays it (one rng) ---
-function soloGame(level: number, seed: number) {
+function soloGame(level: number, seed: number, mod: unknown = G1) {
+  const G = mod as typeof G1;
   const r = G.rng(seed), rule = G.RULE_IDS[Math.floor(r() * G.RULE_IDS.length)];
   const R = rule === 'sight2' ? 2 : 3, every = rule === 'every8' ? 8 : 12, cost = rule === 'cost3' ? 3 : 4;
   const m = { w: G.world(), R, lsC: { [K(13, 2)]: 0, [K(13, 7)]: 0 } as Record<number, number>, lsA: { [K(1, 2)]: 0, [K(1, 7)]: 0 } as Record<number, number>, pend: { C: [] as G.Placement[], A: [] as G.Placement[] } };
@@ -180,10 +202,10 @@ function soloGame(level: number, seed: number) {
   }
 }
 let replays = 0;
-for (let level = 0; level <= 5; level++) for (let i = 0; i < SEEDS * 3; i++) {
-  const seed = 0x9e3779b9 + 977 * i + level, g = soloGame(level, seed >>> 0);
-  const rp = replayVersion({ set: {} }, { seed: seed >>> 0, level, turns: g.turns, end: { kind: 'end' } });
-  ok(rp.first === g.rule && rp.win === g.win && rp.step === g.step && isDeepStrictEqual(rp.amber, g.amber), `replay level ${level} seed ${seed >>> 0}`);
+for (const ref of REFS) for (let level = 0; level <= 5; level++) for (let i = 0; i < SEEDS * 3; i++) {
+  const seed = 0x9e3779b9 + 977 * i + level, g = soloGame(level, seed >>> 0, ref.frozen);
+  const rp = replayVersion(ref.rules, { seed: seed >>> 0, level, turns: g.turns, end: { kind: 'end' } });
+  ok(rp.first === g.rule && rp.win === g.win && rp.step === g.step && isDeepStrictEqual(rp.amber, g.amber), `${ref.name}: replay level ${level} seed ${seed >>> 0}`);
   replays++;
 }
 let refused = false;
