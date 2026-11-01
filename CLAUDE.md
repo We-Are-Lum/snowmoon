@@ -31,10 +31,11 @@ snowmoon.party is an independent, open adaptation of *Snowmoon* by Vitalik Buter
 
 ## Checks
 
-- **`npm run check:principles`** must pass for anything touching published assets, models, routes, schema, pages or scoring. P6d (no service-role key in the Vercel project) is an accepted open item; everything else must pass. `docs/principles.md` holds the eight principles. If a change would conflict with one, raise it with the owner before resolving it.
+- **`npm run check:principles -- --url=<target>`** must pass for anything touching published assets, models, routes, schema, pages or scoring. P6d (no service-role key in the Vercel project) is an accepted open item; everything else must pass. `docs/principles.md` holds the eight principles. If a change would conflict with one, raise it with the owner before resolving it.
 - **Every task report ends with a "Principles" section:** which principles the work touched, pass or concern for each, and any new tension (owner, 2026-10-05).
 - Run the relevant suite before a PR (`npm run typecheck`, the feature's `test:*` scripts).
-- **Live checks after a deploy:** `check:shipped`, `check:principles --url`, `check:ui --url`, `check:miniapp --url`, and for anything touching the Minpentai snap (routes, `next.config.ts` rewrites or headers, `src/middleware.ts`, snap pages) **`npm run check:snap-live`** against production before calling it live.
+- **Live checks after a deploy:** `check:shipped`, `check:principles`, `check:ui`, `check:miniapp`, and for anything touching the Minpentai snap (routes, `next.config.ts` rewrites or headers, `src/middleware.ts`, snap pages) **`check:snap-live`** against production before calling it live.
+- **Every check names its target** with `--url=…` (production, a preview's address, or localhost); none has a default, and each refuses to run without one (owner, 2026-10-31, after a failed preview build sent a follow-up request to production). Before using a preview's address in a command, make sure it isn't empty.
 
 ## Docs
 
