@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { chapterDateline, chapterNumbers, loadChapter } from '~/lib/book';
 import { glossaryIndex } from '~/lib/glossary';
 import { referenceSheets } from '~/lib/references';
-import '../../you/you.css';
+import '../../dashboard/you.css';
 import '../../../styles/images.css';
 
 /**

@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { loadChapter } from '~/lib/book';
 import { AdminReview } from '~/components/admin-review';
-import '../../../../you/you.css';
+import '../../../../dashboard/you.css';
 import '../../../../../styles/images.css';
 
 /** The admins' review of one chapter (owner, 2026-10-29). The page holds nothing; the images come from an admins-only API. */

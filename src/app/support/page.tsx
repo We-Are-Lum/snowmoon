@@ -3,7 +3,7 @@ import QRCode from 'qrcode';
 import { SUPPORT } from '~/lib/config';
 import { SUPPORT_WORDING as W } from '~/lib/support-wording';
 import { SupportAddress, SupportSend } from '~/components/support';
-import '../you/you.css';
+import '../dashboard/you.css';
 
 /**
  * "Support this site" (owner, 2026-10-30; simplified the same day: "only this, nothing else"). The title and one line,
