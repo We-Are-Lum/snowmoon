@@ -44,8 +44,7 @@ switch stays off until then:
 
 ## Privacy §7 (Outside services): a new item
 
-> For the remix challenge's deep funding test, the Vercel AI Gateway, and through it Baseten, Parasail, Mistral AI and
-> Together AI,
+> For the remix challenge's deep funding test, the Vercel AI Gateway, and through it Baseten, Parasail and Mistral AI,
 > receive published character sheets (the addresses of their pictures, their titles, texts and recipes) and the
 > book's words, to answer how the credit for each final version divides. Every request asks for zero data retention
 > and no training on what is sent. They receive nothing about you beyond what is already public on the version's page,

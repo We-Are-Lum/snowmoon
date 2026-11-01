@@ -424,13 +424,21 @@ check('models: about six, from six different makers', JUDGES.length === 6 && new
 check('models: all open-weight (principle 3); closed ones only as an off, labelled option', JUDGES.every((m) => m.openWeights) && CLOSED_OPTIONAL.every((m) => !m.openWeights));
 {
   const e = estimateUsd(JUDGES, 3, 20);
-  // Per node and run at 12,000 in and 2,500 out: Qwen 0.00838, Mistral 0.00975, DeepSeek 0.0066, GLM 0.00305,
-  // Gemma 0.0028, Nemotron 0.00305 = 0.03363; × 3 runs = 0.10089 a node, so 247 nodes fit under $25.
-  check('estimate: per node and run $0.03363 at 12,000 in and 2,500 out', near(e.perNodeRun, 0.03363, 1e-6), String(e.perNodeRun));
-  check('estimate: 6 models × 3 runs × 20 nodes = $2.02', near(e.total, 2.0178, 1e-4));
-  check('estimate: 247 nodes fit under $25, 248 do not', estimateUsd(JUDGES, 3, 247).total < 25 && estimateUsd(JUDGES, 3, 248).total > 25);
-  check('models: Kimi K3 is no longer one of the six (owner, 2026-11-01)', !JUDGES.some((m) => m.id.startsWith('moonshotai/')));
+  // Per node and run at 12,000 in and 2,500 out: Kimi K3 0.0735, Qwen 0.00838, Mistral 0.00975, DeepSeek 0.0066,
+  // GLM 0.00305, Gemma 0.0028 = 0.10408.
+  check('estimate: per node and run $0.10408 at 12,000 in and 2,500 out', near(e.perNodeRun, 0.10408, 1e-6), String(e.perNodeRun));
+  check('estimate: 6 models × 3 runs × 20 nodes = $6.24', near(e.total, 6.2448, 1e-4));
   check('config: stop and report before $25', DEEP_FUNDING.budgetUsd === 25 && read('scripts/deep-funding.ts').includes('stop and report'));
+  check('estimate: Kimi K3 stays among the six (owner, 2026-11-01), about 71% of the cost', JUDGES.some((m) => m.id === 'moonshotai/kimi-k3') && near(e.perCall.find((p) => p.id === 'moonshotai/kimi-k3')!.usd / e.perNodeRun, 0.706, 0.001));
+  check('estimate: 80 nodes fit under $25, 81 do not', estimateUsd(JUDGES, 3, 80).total < 25 && estimateUsd(JUDGES, 3, 81).total > 25);
+  {
+    const runner = read('scripts/deep-funding.ts');
+    check('runner: plan stops over the cap and asks the owner (raise the cap or drop Kimi K3)', /if \(est\.total > DEEP_FUNDING\.budgetUsd\) \{[\s\S]{0,400}overCap\([\s\S]{0,40}process\.exit\(3\)/.test(runner) && /raise the cap[\s\S]*drop Kimi K3/.test(runner));
+    check('runner: the over-cap check comes before plan returns, so plan reports it', runner.indexOf('if (est.total > DEEP_FUNDING.budgetUsd)') < runner.indexOf("if (step === 'plan') return;"));
+    check('runner: run refuses an estimate over the cap even with --spend-ok, and --budget cannot raise the cap', runner.indexOf("'--spend-ok'") < runner.indexOf('est.total > budget') && /budget > DEEP_FUNDING\.budgetUsd\) throw/.test(runner));
+    check('config: the cap is one setting', DEEP_FUNDING.budgetUsd === 25 && (read('src/lib/config.ts').match(/budgetUsd:/g) ?? []).length === 1);
+    proof('a planted runner without the plan stop is caught', !/if \(est\.total > DEEP_FUNDING\.budgetUsd\) \{[\s\S]{0,400}overCap\([\s\S]{0,40}process\.exit\(3\)/.test(runner.replace('if (est.total > DEEP_FUNDING.budgetUsd) {', 'if (false) {')));
+  }
   check('runner: run needs --spend-ok, and refuses an estimate over the budget', /--spend-ok/.test(read('scripts/deep-funding.ts')) && /est\.total > budget/.test(read('scripts/deep-funding.ts')));
 }
 

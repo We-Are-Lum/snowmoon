@@ -25,23 +25,17 @@ export interface JudgeModel {
 }
 
 export const JUDGES: JudgeModel[] = [
+  { id: 'moonshotai/kimi-k3', maker: 'Moonshot AI', provider: 'baseten', openWeights: true, price: { input: 3, output: 15 }, structured: true, reasons: true },
   { id: 'alibaba/qwen3.8-27b', maker: 'Alibaba (Qwen)', provider: 'parasail', openWeights: true, price: { input: 0.24, output: 2.2 }, structured: true, reasons: true },
   { id: 'mistral/mistral-large-3', maker: 'Mistral AI', provider: 'mistral', openWeights: true, price: { input: 0.5, output: 1.5 }, structured: true, reasons: false },
   { id: 'deepseek/deepseek-v4.1-flash', maker: 'DeepSeek', provider: 'baseten', openWeights: true, price: { input: 0.3, output: 1.2 }, structured: true, reasons: true },
   { id: 'zai/glm-5.3-flash', maker: 'Z.ai (GLM)', provider: 'baseten', openWeights: true, price: { input: 0.15, output: 0.5 }, structured: true, reasons: true },
   { id: 'google/gemma-4-31b-it', maker: 'Google (Gemma)', provider: 'parasail', openWeights: true, price: { input: 0.15, output: 0.4 }, structured: true, reasons: true },
-  /**
-   * In place of Kimi K3 (owner, 2026-11-01: "swap Kimi K3 for a cheaper reserve model"): the cheapest reserve, with
-   * structured output, zero data retention on two providers (Baseten, Together AI), and a sixth maker. Pinned to
-   * Together AI: unquantized there (Baseten serves it in fp4), and $0.15 in rather than $0.20.
-   */
-  { id: 'nvidia/nemotron-3.5-super-vl', maker: 'NVIDIA', provider: 'togetherai', openWeights: true, price: { input: 0.15, output: 0.5 }, structured: true, reasons: true },
 ];
 
 /** Stand-ins if one of the six is unavailable on the day (each open-weight, ZDR and image input on that provider). */
 export const RESERVES: JudgeModel[] = [
-  /** Was in the six until 2026-11-01; 71% of the run's cost alone. */
-  { id: 'moonshotai/kimi-k3', maker: 'Moonshot AI', provider: 'baseten', openWeights: true, price: { input: 3, output: 15 }, structured: true, reasons: true },
+  { id: 'nvidia/nemotron-3.5-super-vl', maker: 'NVIDIA', provider: 'baseten', openWeights: true, price: { input: 0.2, output: 0.5 }, structured: true, reasons: true },
   { id: 'minimax/minimax-m3', maker: 'MiniMax', provider: 'fireworks', openWeights: true, price: { input: 0.3, output: 1.2 }, structured: true, reasons: true },
   { id: 'meta/llama-4-maverick', maker: 'Meta', provider: 'bedrock', openWeights: true, price: { input: 0.24, output: 0.97 }, structured: false, reasons: false },
 ];

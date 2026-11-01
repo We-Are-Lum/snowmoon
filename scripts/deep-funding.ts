@@ -4,7 +4,9 @@
  *
  *   npm run deep-funding -- plan --character bai [--final <version id>]
  *     Reads the graph from the database (a read-only transaction; never writes), writes every prompt, and prints the
- *     cost estimate. No model call.
+ *     node count and the cost estimate. No model call. Run it after entries close, before anything else: if the estimate
+ *     passes the cap (DEEP_FUNDING.budgetUsd, $25), it stops (exit 3) and says to ask the owner, who either raises the
+ *     cap himself or drops Kimi K3 (owner, 2026-11-01).
  *
  *   npm run deep-funding -- run --character bai [--final <id>] --spend-ok [--runs 3] [--budget 25]
  *     Calls each model (src/lib/deep-funding/models.ts JUDGES) on each node DEEP_FUNDING.runsPerModel times, through
@@ -57,6 +59,10 @@ async function readGraph(character: string, final: string): Promise<CreditGraph>
   }
 }
 
+/** What plan says when the estimate passes the cap (owner, 2026-11-01). */
+export const overCap = (usd: number, nodes: number) =>
+  `STOP: ${nodes} nodes, estimated $${usd.toFixed(2)}, over the $${DEEP_FUNDING.budgetUsd} cap (DEEP_FUNDING.budgetUsd). Nothing has run. Ask the owner: raise the cap (he changes DEEP_FUNDING.budgetUsd himself), or drop Kimi K3 from JUDGES (src/lib/deep-funding/models.ts). run refuses this estimate, even with --spend-ok.`;
+
 const promptsFor = (g: CreditGraph, slug: string): NodePrompt[] => askedNodes(g).map((n) => nodePrompt(g, n.id, bookContext(slug)));
 const file = (character: string, what: string) => path.join(OUT, `${character}.${what}.json`);
 
@@ -80,10 +86,17 @@ async function main() {
     const est = estimateUsd(JUDGES, runs, prompts.length);
     writeFileSync(file(character, 'plan'), JSON.stringify({ graph: g, prompts, estimate: est, budgetUsd: budget, models: JUDGES }, null, 1));
     console.log(`${character}: ${g.nodes.length} nodes (${prompts.length} asked), ${JUDGES.length} models × ${runs} runs = ${JUDGES.length * runs * prompts.length} calls`);
-    console.log(`estimate $${est.total.toFixed(2)} (budget $${budget}); written ${path.relative(ROOT, file(character, 'plan'))}`);
+    console.log(`estimate $${est.total.toFixed(2)} (cap $${DEEP_FUNDING.budgetUsd}); written ${path.relative(ROOT, file(character, 'plan'))}`);
+    if (est.total > DEEP_FUNDING.budgetUsd) {
+      // The owner's rule (2026-11-01): over the cap, stop and ask. He either raises DEEP_FUNDING.budgetUsd himself or
+      // drops Kimi K3 from JUDGES; nothing here changes either.
+      console.log(overCap(est.total, prompts.length));
+      process.exit(3);
+    }
     if (step === 'plan') return;
 
     if (!args.includes('--spend-ok')) throw new Error('run calls paid models: pass --spend-ok once the owner has approved the estimate');
+    // --budget may only lower the cap; --spend-ok never lets an estimate over the cap run.
     if (budget > DEEP_FUNDING.budgetUsd) throw new Error(`budget $${budget} is over DEEP_FUNDING.budgetUsd ($${DEEP_FUNDING.budgetUsd}); stop and report`);
     if (est.total > budget) throw new Error(`estimate $${est.total.toFixed(2)} is over the budget $${budget}; stop and report`);
     const key = process.env.AI_GATEWAY_API_KEY;
