@@ -47,6 +47,21 @@ export const RUNGS: ({ n: string; d: string } | null)[] = [
   { n: 'Opportunist', d: "Also uses the match's new rule against you." },
   { n: 'Planner', d: 'Tests its moves ahead on what it can see, and fires twice when it can.' },
 ];
+/**
+ * The search computer's ladder (ruleset 3, owner 2026-10-31): six rungs, index 1–6 (versions/search.ts ladderLevel):
+ * the beginner, Easy, Fair, then levels 1–3. Model-drafted wording.
+ */
+export const SEARCH_RUNGS: ({ n: string; d: string } | null)[] = [
+  null,
+  { n: 'Beginner', d: 'Places one piece a turn, often without a plan. Most first players beat it.' },
+  { n: 'Easy', d: 'Places two pieces a turn, sometimes without a plan. About as strong as the old Builder.' },
+  { n: 'Fair', d: 'Places up to three pieces a turn and seldom slips. About as strong as the old Planner.' },
+  { n: 'Level 1', d: 'Tries its moves on the board as it sees it, up to three pieces a turn. Seldom slips.' },
+  { n: 'Level 2', d: 'Looks a few steps past the next turn, and covers its towers. Rarely slips.' },
+  { n: 'Level 3', d: 'Looks furthest and never slips.' },
+];
+/** A ladder's rungs by ruleset: the search computer's six under 3, the old five otherwise. */
+export const rungsOf = (rs: number) => (rs === 3 ? SEARCH_RUNGS : RUNGS);
 /** Square 1, tower 4; a glider's cost is the match's (4, or 3 under the cost rule). */
 export const COST = { s: BASE.costSquare, t: BASE.costTower } as const;
 

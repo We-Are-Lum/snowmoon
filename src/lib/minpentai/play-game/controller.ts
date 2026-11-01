@@ -17,13 +17,19 @@
  *   'desk' at 768 px and wider outside it, else 'phone'.
  */
 import {
-  AR, COL, D4, D8, RULES, RUNGS, K, clone, empty, fmt, lit, rng, step, world,
+  AR, COL, D4, D8, RULES, RUNGS as OLD_RUNGS, SEARCH_RUNGS, K, clone, empty, fmt, lit, rng, step, world,
   type Piece, type RuleId, type Placement, type Side, type World,
 } from './game';
 import { board, type BoardOpts, type BoardView } from './board';
 import { drawRules, verdict, type Engine, type Kills } from '../versions/engine';
 import type { Settings } from '../versions/schema';
-import { PLAY, RULESETS, SOLO_V1_ENGINE, engineFor, rulesetOfRules, settingsFor, type RulesetId, type VersionRules } from '../versions/solo-v1';
+import { LADDER, PLAY, RULESETS, SOLO_V1_ENGINE, engineFor, rulesetOfRules, settingsFor, usesSearch, type RulesetId, type VersionRules } from '../versions/solo-v1';
+import { ladderLevel, searchPlan } from '../versions/search';
+
+/** The ladder Play offers (owner, 2026-10-31): the search computer's, six rungs; the old one is kept as history. */
+const RUNGS = SEARCH_RUNGS;
+/** A match's own ladder: the search computer's under ruleset 3, the old five rungs under the old players. */
+const ladderOf = (v: VersionRules) => (usesSearch(v) ? { R: SEARCH_RUNGS, top: 6 } : { R: OLD_RUNGS, top: 5 });
 import type { LadderProgress } from './live-types';
 import { checkPlacements, type LiveMatch } from '../play-server/match';
 
@@ -133,7 +139,7 @@ export interface FreeLink {
 
 export interface Hooks {
   /** A ladder match ended: the server records it (the page sends it signed in). */
-  onLadderResult?(r: { rung: number; win: Side | 'D'; step: number }): void;
+  onLadderResult?(r: { rung: number; win: Side | 'D'; step: number; ruleset: number }): void;
   /** Open sign-in (the ladder's "SIGN IN WITH FARCASTER"). */
   signIn?(): void;
   /** The tab bar's LEARN and the Play hub's lessons: open Learn (v3). */
@@ -173,11 +179,13 @@ export class PlayController {
 
   /** A new match: Play today (PLAY, the newest ruleset), or the version or ruleset given (and then the computer player's level and the seed, if given). */
   mk(mode: Mode, rung?: number, opts: { version?: VersionRules; lvl?: number; seed?: number } = {}): Match {
-    const ver = opts.version ?? PLAY, seed = opts.seed ?? (this.env.now() % 1e6) | 0, r = rng(seed);
+    // Practice and the ladder play the search computer (ruleset 3); anything else Play today.
+    const ver = opts.version ?? (mode === 'practice' || mode === 'ladder' ? LADDER : PLAY), seed = opts.seed ?? (this.env.now() % 1e6) | 0, r = rng(seed);
     // The match's first random number draws its rule, as Design's mk does; the rest are the computer's.
     const { first, second, s1, s2 } = drawRules(ver, r), e = engineFor(ver, s1);
     const drawn = first && { id: first.id, text: first.text };
-    const lvl = opts.lvl ?? (mode === 'practice' ? 0 : mode === 'ladder' ? rung! : 3);
+    // Under the search computer, the level is the ladder rung (1 the beginner, which practice plays too; search.ts ladderLevel).
+    const lvl = opts.lvl ?? (mode === 'practice' ? (usesSearch(ver) ? 1 : 0) : mode === 'ladder' ? rung! : 3);
     const m: Match = {
       mode, rung, lvl, rule: first?.id ?? '', R: s1.sight, every: s1.every, cost: s1.costGlider, ver, e, s: s1, drawn,
       next2: second && s2 ? { drawn: { id: second.id, text: second.text }, s: s2 } : null, turnAt: 0, saved: { C: 0, A: 0 }, kills: { C: 0, A: 0 },
@@ -233,7 +241,10 @@ export class PlayController {
     const m = this.m!, w = m.w;
     if (m.next2 && w.step >= m.s.switchAt) { m.s = m.next2.s; m.drawn = m.next2.drawn; m.rule = m.drawn.id; m.R = m.s.sight; m.every = m.s.every; m.cost = m.s.costGlider; m.next2 = null; }
     m.phase = 'act'; m.turnAt = w.step; m.snap = { C: m.e.towers(w, 'C'), A: m.e.towers(w, 'A') }; m.pend = { C: [], A: [] }; m.ended = m.oppEnded = false; m.lastG = null; m.ff = false;
-    m.pend.A = m.e.botPlan({ w, s: m.s, lvl: m.lvl, rng: m.rng, budget: this.budget('A'), snap: m.snap, lsA: m.lsA, diag: m.s.directions === 8 });
+    m.pend.A = usesSearch(m.ver)
+      // The search computer plans from Amber's view only, with the match's own numbers, so a replay plays the same.
+      ? (searchPlan({ e: m.e, s: m.s, o: 'A', view: m.e.fog(w, m.s, 'A'), lastSeen: { ...m.lsA }, snap: m.snap.A, points: this.budget('A'), rng: m.rng, level: -1, config: ladderLevel(Math.max(1, m.lvl)) }).placements as Placement[])
+      : m.e.botPlan({ w, s: m.s, lvl: m.lvl, rng: m.rng, budget: this.budget('A'), snap: m.snap, lsA: m.lsA, diag: m.s.directions === 8 });
     this.setState({ aim: false });
   }
   startRun() {
@@ -275,9 +286,9 @@ export class PlayController {
       r.tries = (r.tries || 0) + 1;
       if (win === 'C' && !r.won) { r.won = m.w.step; delete r.s; }
       rec[rung] = r;
-      const opened = win === 'C' ? Math.max(prog.opened, Math.min(5, rung + 1)) : prog.opened;
+      const opened = win === 'C' ? Math.max(prog.opened, Math.min(ladderOf(m.ver).top, rung + 1)) : prog.opened;
       m.newOpen = opened > prog.opened; prog = { ...prog, rec, opened };
-      this.hooks.onLadderResult?.({ rung, win, step: m.w.step });
+      this.hooks.onLadderResult?.({ rung, win, step: m.w.step, ruleset: rulesetOfRules(m.ver) ?? 1 });
     }
     // Free play's "My last match" is Play's board, so only a Play-sized match can be loaded there.
     if (m.e === SOLO_V1_ENGINE) this.lastStart = m.hist[0];
@@ -401,20 +412,20 @@ export class PlayController {
     };
     // ladder
     const sel = s.rungSel || prog.opened;
-    v.rungs = [5, 4, 3, 2, 1].map((n) => {
+    v.rungs = [6, 5, 4, 3, 2, 1].map((n) => {
       const rec = prog.rec[n] || { tries: 0 }, open = n <= prog.opened, won = !!rec.won, isSel = open && n === sel;
       return { n, name: `${n} · ${RUNGS[n]!.n}`, desc: RUNGS[n]!.d, icon: won ? '✓' : String(n), open, won, sel: isSel,
         r1: won ? 'WON IN' : open ? (rec.tries ? `${rec.tries} TR${rec.tries === 1 ? 'Y' : 'IES'}` : '') : 'CLOSED', r2: won ? `${rec.won} STEPS` : open ? 'PLAY →' : '',
-        click: () => (open ? this.setState({ rungSel: n }) : this.say(`Win rung ${n - 1} to open this one.`)) };
+        click: () => (open ? this.setState({ rungSel: n }) : this.say(`Win rung ${n - 1} (${RUNGS[n - 1]!.n}) to open this one.`)) };
     });
     v.playRungLabel = `PLAY RUNG ${sel}`; v.playRung = () => this.openStart('ladder', sel);
-    const title = (mm: Match): [string, string] => (mm.mode === 'practice' ? ['Practice match', ''] : [`Rung ${mm.rung} · ${RUNGS[mm.rung!]!.n}`, '']);
+    const title = (mm: Match): [string, string] => (mm.mode === 'practice' ? ['Practice match', ''] : [`Rung ${mm.rung} · ${ladderOf(mm.ver).R[mm.rung!]!.n}`, '']);
     if (m && ['start', 'match', 'result', 'replay'].includes(scr)) { const [a, b] = title(m); v.hTitle = a + b; v.hTitleCaps = (a + b).toUpperCase(); v.ruleText = m.drawn?.text ?? 'No new rule this match.'; }
     if (scr === 'start' && m) {
       const w = m.w; v.bd = board({ w, e: m.e, fog: 'C', R: m.s.sight, zone: new Set([...m.e.lit(w, 'C', m.s.reach)].filter((k) => m.e.empty(w, k))), ls: m.lsC, ...P });
       v.strip = `SETUP · CYAN ${m.e.towers(w, 'C').length} · AMBER 0 SEEN`;
       v.hasBack = true; v.hPad = '0'; v.hBack = m.mode === 'ladder' ? go({ scr: 'ladder' }) : go({ scr: 'home', tab: 'play' });
-      v.stDesc = m.mode === 'practice' ? 'A simple rival. It fires gliders at towers it has seen and never defends. Nothing is saved.' : RUNGS[m.rung!]!.d + ' It sees only what its towers light.';
+      v.stDesc = m.mode === 'practice' ? (usesSearch(m.ver) ? `${RUNGS[1]!.d} It sees only what its towers light. Nothing is saved.` : 'A simple rival. It fires gliders at towers it has seen and never defends. Nothing is saved.') : ladderOf(m.ver).R[m.rung!]!.d + ' It sees only what its towers light.';
       const rec = prog.rec[m.rung!] || { tries: 0 };
       v.stNote = m.mode === 'practice' ? 'The dimmed towers on the right are where Amber starts. Starts are mirrored, so you know them.' : ruleNote(m.rule, m.rung!, m.s.directions === 8) + (rec.tries ? `Tries so far: ${rec.tries}.` : 'Win once to open the next rung.');
     }
@@ -451,14 +462,15 @@ export class PlayController {
       v.bd = board({ w: m.w, e: m.e, ...P }); v.strip = `STEP ${m.w.step} · WHOLE BOARD SHOWN`;
       v.resB = r.win === 'C' ? 'You win' : r.win === 'D' ? 'Draw' : 'Amber wins'; v.resWhy = r.why;
       v.resNote = m.mode === 'ladder' && r.win !== 'C' ? (r.win === 'D' ? "Draws don't open the next rung." : '') : '';
-      v.resCard = m.mode === 'ladder' && r.win === 'C' && (!!m.newOpen || m.rung === 5);
+      const LM = ladderOf(m.ver);
+      v.resCard = m.mode === 'ladder' && r.win === 'C' && (!!m.newOpen || m.rung === LM.top);
       // A ladder win can be shared, if the player chooses (owner, 2026-10-19); nothing is sent until they do.
       v.share = m.mode === 'ladder' && r.win === 'C' ? { rung: m.rung!, steps: r.step, rs: rulesetOfRules(m.ver) ?? 1 } : undefined;
-      if (v.resCard) { if (m.rung! < 5) { v.resCardN = String(m.rung! + 1); v.resCardT = `Rung ${m.rung! + 1} · ${RUNGS[m.rung! + 1]!.n} is open`; v.resCardD = RUNGS[m.rung! + 1]!.d; } else { v.resCardN = '✓'; v.resCardT = "You've beaten every rung"; v.resCardD = 'Replay any of them from the ladder.'; } }
+      if (v.resCard) { if (m.rung! < LM.top) { v.resCardN = String(m.rung! + 1); v.resCardT = `Rung ${m.rung! + 1} · ${LM.R[m.rung! + 1]!.n} is open`; v.resCardD = LM.R[m.rung! + 1]!.d; } else { v.resCardN = '✓'; v.resCardT = "You've beaten every rung"; v.resCardD = 'Replay any of them from the ladder.'; } }
       const P1 = (label: string, click: () => void): Btn => ({ label, click, primary: true }), S1 = (label: string, click: () => void): Btn => ({ label, click });
       const watch = S1('WATCH IT AGAIN', () => this.openReplay()), done = S1('DONE', go({ scr: 'home', tab: 'play' }));
       if (m.mode === 'practice') v.resBtns = [P1('PLAY AGAIN', () => this.openStart('practice')), watch, done];
-      else v.resBtns = [r.win === 'C' && m.rung! < 5 ? P1(`PLAY RUNG ${m.rung! + 1}`, () => { this.setState({ rungSel: m.rung! + 1 }); this.openStart('ladder', m.rung! + 1); }) : P1(r.win === 'C' ? 'PLAY RUNG 5 AGAIN' : `TRY RUNG ${m.rung} AGAIN`, () => this.openStart('ladder', m.rung)), watch, S1('THE LADDER', go({ scr: 'ladder' }))];
+      else v.resBtns = [r.win === 'C' && m.rung! < LM.top ? P1(`PLAY RUNG ${m.rung! + 1}`, () => { this.setState({ rungSel: m.rung! + 1 }); this.openStart('ladder', m.rung! + 1); }) : P1(r.win === 'C' ? `PLAY RUNG ${LM.top} AGAIN` : `TRY RUNG ${m.rung} AGAIN`, () => this.openStart('ladder', m.rung)), watch, S1('THE LADDER', go({ scr: 'ladder' }))];
     }
     if (scr === 'replay' && this.rp) {
       const r = this.rp, w = r.hist[r.i]; v.bd = board({ w, e: m?.e, flash: true, ...P }); v.strip = `REPLAY · STEP ${w.step} OF ${r.hist[r.hist.length - 1].step} · WHOLE BOARD`;

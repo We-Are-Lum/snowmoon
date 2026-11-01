@@ -226,3 +226,7 @@ html:has(.mp-play.is-desk.is-fs) :is(.rail, .panel, .panel-reopen) { display: no
 
 /* The one-time note about Play's rules draft 2 on the ladder. */
 .mp-ladder-note { border: 1px solid var(--mp-rule); padding: 10px 12px; margin: 8px 0 12px; display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
+/* The old ladder's wins, kept as history under the search computer's ladder (2026-10-31). */
+.mp-ladder-history { margin-top: 20px; }
+.mp-ladder-history ul { margin: 6px 0 0; padding-left: 18px; }
+.mp-ladder-history li { margin: 2px 0; }

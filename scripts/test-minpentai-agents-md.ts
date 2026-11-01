@@ -114,7 +114,7 @@ const realView = /export interface PlayerView \{([\s\S]*?)\n\}/.exec(players)?.[
 const docView = /interface PlayerView \{([\s\S]*?)\n\}/.exec(viewBlock)?.[1] ?? '';
 ok(fields(realView).length > 5 && JSON.stringify(fields(realView)) === JSON.stringify(fields(docView)), `agents.md: PlayerView's fields are ${fields(docView)}, players.ts's are ${fields(realView)}`);
 ok(/export type Player = \(view: PlayerView\) => Placement\[\];/.test(players) && viewBlock.includes('type Player = (view: PlayerView) => Placement[];'), 'agents.md: the Player type is not players.ts\'s');
-ok(viewBlock.includes("interface Placement { t: 'g' | 's' | 't'; o: 'C' | 'A'; x: number; y: number; dx: number; dy: number }") && /export interface Placement \{ t: Piece; o: Side; x: number; y: number; dx: number; dy: number \}/.test(read('src/lib/minpentai/versions/engine.ts')), 'agents.md: Placement is not the engine\'s (versions/engine.ts; game.ts re-exports it)');
+ok(viewBlock.includes("interface Placement { t: 'g' | 's' | 't'; o: 'C' | 'A'; x: number; y: number; dx: number; dy: number }") && /export interface Placement<T extends AnyPiece = Piece> \{ t: T; o: Side; x: number; y: number; dx: number; dy: number \}/.test(read('src/lib/minpentai/versions/engine.ts')), 'agents.md: Placement is not the engine\'s (versions/engine.ts, Play\'s pieces by default; game.ts re-exports it)');
 // The code's names and numbers.
 const rungNames = RUNGS.slice(1).map((r) => r!.n);
 ok(md.includes(rungNames.join(', ')) && rungNames.length === 5, `agents.md: the rungs are ${rungNames.join(', ')}`);

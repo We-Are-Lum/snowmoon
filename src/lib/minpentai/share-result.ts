@@ -1,4 +1,4 @@
-import { RUNGS } from './play-game/game';
+import { rungsOf } from './play-game/game';
 import { maxStepsOf, rulesetId, type RulesetId } from './versions/solo-v1';
 import { SETTINGS } from './versions/schema';
 
@@ -19,17 +19,18 @@ export const VERSION_ID = /^[0-9a-hjkmnp-tv-z]{10,12}$/;
  */
 export function parseResult(r: string | null | undefined, s: string | null | undefined, v?: string | null, g?: string | null): SharedResult | null {
   // g: the ruleset the win was under (solo-v1.ts RULESETS); a link made before rulesets were numbered has none and is 1.
-  if (g != null && !/^[12]$/.test(g)) return null;
+  if (g != null && !/^[123]$/.test(g)) return null;
   const rs = rulesetId(g);
-  if (!r || !s || !/^[1-5]$/.test(r) || !/^\d{1,3}$/.test(s)) return null;
+  // Rungs 1–5 on the old ladder, 1–6 on the search computer's (ruleset 3).
+  if (!r || !s || !(rs === 3 ? /^[1-6]$/ : /^[1-5]$/).test(r) || !/^\d{1,3}$/.test(s)) return null;
   if (v != null && !VERSION_ID.test(v)) return null;
   const rung = Number(r), steps = Number(s);
   if (steps < 1 || steps > (v ? SETTINGS.maxSteps.max : maxStepsOf(rs))) return null;
-  return { rung, name: RUNGS[rung]!.n, steps, rs, ...(v ? { version: v } : {}) };
+  return { rung, name: rungsOf(rs)[rung]!.n, steps, rs, ...(v ? { version: v } : {}) };
 }
 
 export const resultPath = (x: { rung: number; steps: number; version?: string; rs?: RulesetId }) => `/minpentai/result?r=${x.rung}&s=${x.steps}${x.version ? `&v=${x.version}` : ''}${x.rs && x.rs !== 1 ? `&g=${x.rs}` : ''}`;
 
 /** The words a share starts with; the person can change them in the composer before posting. */
 export const resultText = (x: SharedResult) =>
-  `I beat ${x.name}, rung ${x.rung} of 5 on the Minpentai ladder, in ${x.steps} steps. A game from Snowmoon, with rules invented for this edition.`;
+  `I beat ${x.name}, rung ${x.rung} of ${x.rs === 3 ? 6 : 5} on the Minpentai ladder, in ${x.steps} steps. A game from Snowmoon, with rules invented for this edition.`;

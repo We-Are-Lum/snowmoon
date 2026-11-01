@@ -156,7 +156,24 @@ export const PIECES = {
 export type PieceId = keyof typeof PIECES;
 export const PIECE_IDS = Object.keys(PIECES) as PieceId[];
 
-export type Settings = { [K in SettingId]: number } & { [K in PieceId]: string };
+/**
+ * The book edition's pieces (2026-10-31): numbers only a ruleset that wants them sets. None is in BASE,
+ * so Play's settings, its saved matches and every version's manifest are exactly as before; absent or
+ * 0, the piece is off and the engine never makes one. versions/book-edition.ts turns them on and quotes
+ * the book for each.
+ */
+export const BOOK_SETTINGS = {
+  costMirror: { text: 'A mirror wall costs (0: no mirror walls)', min: 0, max: 12, edition: 'Cost is this edition\'s.' },
+  mirrorHits: { text: 'Hits a mirror wall takes before it breaks', min: 1, max: 6, edition: 'This edition\'s.' },
+  costSeed: { text: 'A symbol glider costs (0: no symbol gliders)', min: 0, max: 12, edition: 'Cost is this edition\'s.' },
+  costWall: { text: 'A moving wall costs (0: no moving walls)', min: 0, max: 16, edition: 'Cost is this edition\'s.' },
+  costFactory: { text: 'A glider factory costs (0: no factories)', min: 0, max: 12, edition: 'Cost is this edition\'s.' },
+  factoryHits: { text: 'Hits a glider factory takes before it breaks', min: 1, max: 4, edition: 'This edition\'s.' },
+  ore: { text: 'Gliders a rock can feed to factories before it crumbles (0: rocks hold no ore)', min: 0, max: 9, edition: 'This edition\'s.' },
+} satisfies Record<string, { text: string; min: number; max: number; edition: string }>;
+export type BookSettingId = keyof typeof BOOK_SETTINGS;
+
+export type Settings = { [K in SettingId]: number } & { [K in PieceId]: string } & Partial<Record<BookSettingId, number>>;
 export type Patch = Partial<Settings>;
 
 export const BASE: Settings = Object.fromEntries([
