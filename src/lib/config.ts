@@ -25,6 +25,16 @@ export const PODCAST_LINKS = { feed: '/podcast.xml', spotify: 'https://open.spot
  */
 export const SYSTEM_FID = 6786;
 
+/**
+ * Admins (owner, 2026-10-29, the next-version plan; principle 5 reread the same day): the owner and @garance. The one
+ * list every admin power reads (owner, 2026-10-29: "ADMINS replaces the scattered owner lists"): hiding seeded and
+ * readers' images in the reader, the review pages, the illustration check, hiding remix frames and scene versions, the
+ * storage check, and the admin caps on "Make an image" (IMAGES.admin). They may pick one image per moment or glossary
+ * item to show first, always labelled "Picked by @…", with the reader's switch beside it (P5b, P5d, P5e).
+ * SYSTEM_FID stays the account system work is credited to; it grants nothing.
+ */
+export const ADMINS: readonly number[] = [6786, 193912];
+
 /** Saved quote cards per FID per day (spam limit; saving costs nothing). */
 export const CARD_SAVES_PER_DAY = 50;
 
@@ -317,8 +327,8 @@ export function adaptationPagesShown(): boolean {
  * keep, regenerate with a note, or drop on /you/illustrations. "Owner-only: nothing public until I've read it."
  */
 export const ILLUSTRATION_CHECK = {
-  /** Who may open the review page and decide. */
-  owners: [6786] as readonly number[],
+  /** Who may open the review page and decide: the admins (owner, 2026-10-29). */
+  owners: ADMINS,
   /**
    * Shows "Reviewed by a person" under a reviewed image wherever it appears (the chapter and the listen view). Off
    * until the owner allows anything public; the mark reads the decision the redo writes into the job file.
@@ -329,37 +339,32 @@ export const ILLUSTRATION_CHECK = {
   modelName: 'Google Gemini 4 Argon',
 } as const;
 
-/**
- * Admins (owner, 2026-10-29, the next-version plan; principle 5 reread the same day): the owner and @garance. They
- * may hide content and pick one image per moment or glossary item to show first, always labelled "Picked by @…",
- * with the reader's switch beside it (P5b, P5d, P5e). Picks aren't built yet; nothing reads this list today.
- */
-export const ADMINS: readonly number[] = [6786, 193912];
-
-/** Moderation only: these FIDs may hide content or dismiss a report. They never promote or rank anything. Owner, 2026-10-08 (decision 20). */
-export const MODERATOR_FIDS: readonly number[] = [6786];
+/** Moderation only: these FIDs may hide content or dismiss a report. They never promote or rank anything. Owner, 2026-10-08 (decision 20). Every admin is one; a moderator who isn't an admin would be added here. */
+export const MODERATOR_FIDS: readonly number[] = [...ADMINS];
 
 /**
- * "Support this site" (owner, 2026-10-30): the one place the support address lives. Every page, link, QR code and
- * wallet send reads it from here (test:support checks that, and that it is checksummed). It is a Splits account (the
- * owner's): money sent to it is split as the Split says, which anyone can see on Splits.
+ * "Support this site" (owner, 2026-10-30): the one place the support address lives. Every page, QR code and wallet send
+ * reads it from here (test:support checks that, and that it is checksummed). It is a Splits account (the owner's).
  * Live on Ethereum and Base only: eth_getCode on 2026-10-30, two public RPCs each, found its code (a 61-byte proxy)
- * on those two and none on Optimism, Arbitrum, Zora or Polygon. The page names only these and warns that sending on any
- * other network may lose the funds. Nothing about a sender is recorded.
+ * on those two and none on Optimism, Arbitrum, Zora or Polygon. Nothing about a sender is recorded.
  */
 export const SUPPORT = {
   address: '0x93eC36379bFEB4db21a2d49102A1e30fC43673a3' as const,
-  /** The footer and About link to /support. Off until the owner's $1 test passes: reachable only by its URL (owner, 2026-10-30). */
-  linked: false as boolean,
+  /**
+   * The footer and About link to /support: on since the owner's $1 test was confirmed among the address's incoming
+   * transfers (0.000446 ETH on Base, 2026-10-31 06:26:19 UTC; owner, 2026-10-31).
+   */
+  linked: true as boolean,
+  /**
+   * "Send below" (owner, 2026-10-30, simplified page): Base or Ethereum, in ETH or USDC. USDC is Circle's native USDC on
+   * each network, not the bridged USDbC.
+   */
   networks: [
-    { name: 'Ethereum', chainId: 1, explorer: 'https://etherscan.io' },
-    { name: 'Base', chainId: 8453, explorer: 'https://basescan.org' },
+    { name: 'Base', chainId: 8453, explorer: 'https://basescan.org', usdc: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913' as `0x${string}` },
+    { name: 'Ethereum', chainId: 1, explorer: 'https://etherscan.io', usdc: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48' as `0x${string}` },
   ],
-  /** The Split on Splits, where anyone can see where the money goes. */
-  splitsUrl: (chainId: number) => `https://app.splits.org/accounts/${SUPPORT.address}/?chainId=${chainId}`,
-  /** "Send with your wallet": on Base only, in ETH or USDC; these amounts in US dollars, or the sender's own. */
-  send: { chainId: 8453, presetsUsd: [5, 20, 50] as const, minUsd: 1, maxUsd: 10_000 },
 } as const;
+export type SupportNetwork = (typeof SUPPORT.networks)[number];
 
 /** The public contact for Snowmoon Party: legal, copyright and reports from readers who are signed out (owner, 2026-10-08). */
 export const CONTACT_EMAIL = 'snowmoon@wearelum.xyz';
@@ -404,8 +409,14 @@ export const IMAGES = {
   maxBlocks: 8,
   /** Per person per UTC day; blocked attempts count (decisions 10 and 16). */
   generationsPerDay: 10,
-  /** A higher daily Generate count for these FIDs (owner, 2026-10-13); the daily spend cap still applies to them. */
-  perDayFor: { 6786: 300 } as Readonly<Record<number, number>>,
+  /** A higher daily Generate count for these FIDs (owner, 2026-10-13; every admin since 2026-10-29); the daily spend cap still applies to them. */
+  perDayFor: Object.fromEntries(ADMINS.map((f) => [f, 300])) as Readonly<Record<number, number>>,
+  /**
+   * Admin caps (owner, 2026-10-29: "Make an image from any selected text with admin caps"): an admin's passage may be
+   * any run of blocks in one chapter, up to this many, and the gate (Neynar score) doesn't apply. The daily count is
+   * perDayFor above; the spend cap for everyone still applies.
+   */
+  admin: { maxBlocks: 400 },
   publishesPerDay: 3,
   /** Across everyone, per UTC day (decision 10), kept apart from the assistant's. */
   dailySpendCapUsd: 2,

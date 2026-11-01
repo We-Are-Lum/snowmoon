@@ -26,7 +26,7 @@ export interface SnapPage {
 }
 
 export const SNAP_PATH = '/snap/minpentai';
-const DISCLAIMER = 'Independent adaptation · Not affiliated with the author · No token';
+const DISCLAIMER = 'Independent adaptation · Not affiliated with the author';
 export { LEVELS };
 /** The extra rule picker's options: glyphs, since the renderer keeps five options in a row only up to
  * 8 characters in all. `?` is the drawn rule. Its label spells them out; the turn screen then names
