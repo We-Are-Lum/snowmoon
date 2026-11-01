@@ -32,7 +32,7 @@ export interface SettingSpec extends Source {
 export const SETTINGS = {
   width: { text: 'Board width in squares', min: 9, max: 25, base: 15, edition: 'The board is 15 x 10. The book never gives a size; it has edges and corners (c4-b113, c7-b81).' },
   height: { text: 'Board height in squares', min: 6, max: 16, base: 10, edition: 'As width.' },
-  maxSteps: { text: 'The match stops at this step; most towers wins', min: 24, max: 240, base: 96, edition: 'The whole rule. The book has no turn limit (c14-b94).' },
+  maxSteps: { text: 'The match stops at this step; most towers wins', min: 24, max: 240, base: 96, edition: 'The whole rule. The book has no turn limit (c14-b94). 96 in solo-v1; 120 in solo-v2 (2026-10-22).' },
   points: {
     text: 'Points for each turn to act after setup', min: 2, max: 24, base: 8,
     book: { says: 'The resources you can allocate in each intervention turn are reduced by eighty percent.', blocks: ['c14-b33'] },
@@ -76,6 +76,7 @@ export const SETTINGS = {
     edition: 'Placed for you, mirrored, near your own edge (not in a corner).',
   },
   maxTowers: { text: 'Most towers a side may hold (0: no limit)', min: 0, max: 12, base: 0, edition: 'The whole rule.' },
+  botTowers: { text: 'The computer players build at most this many towers', min: 1, max: 16, base: 5, edition: "This edition's computer players: 5 in solo-v1, 10 in solo-v2 (2026-10-22, after Luis's play tests)." },
   carryOver: { text: 'Unspent points kept for the next turn, up to this many (0: none)', min: 0, max: 16, base: 0, edition: 'The whole rule.' },
   rockHits: { text: 'Hits a rock takes, under rocks "breakable"', min: 1, max: 6, base: 3, edition: 'The whole rule.' },
   switchAt: {
@@ -155,7 +156,24 @@ export const PIECES = {
 export type PieceId = keyof typeof PIECES;
 export const PIECE_IDS = Object.keys(PIECES) as PieceId[];
 
-export type Settings = { [K in SettingId]: number } & { [K in PieceId]: string };
+/**
+ * The book edition's pieces (2026-10-31): numbers only a ruleset that wants them sets. None is in BASE,
+ * so Play's settings, its saved matches and every version's manifest are exactly as before; absent or
+ * 0, the piece is off and the engine never makes one. versions/book-edition.ts turns them on and quotes
+ * the book for each.
+ */
+export const BOOK_SETTINGS = {
+  costMirror: { text: 'A mirror wall costs (0: no mirror walls)', min: 0, max: 12, edition: 'Cost is this edition\'s.' },
+  mirrorHits: { text: 'Hits a mirror wall takes before it breaks', min: 1, max: 6, edition: 'This edition\'s.' },
+  costSeed: { text: 'A symbol glider costs (0: no symbol gliders)', min: 0, max: 12, edition: 'Cost is this edition\'s.' },
+  costWall: { text: 'A moving wall costs (0: no moving walls)', min: 0, max: 16, edition: 'Cost is this edition\'s.' },
+  costFactory: { text: 'A glider factory costs (0: no factories)', min: 0, max: 12, edition: 'Cost is this edition\'s.' },
+  factoryHits: { text: 'Hits a glider factory takes before it breaks', min: 1, max: 4, edition: 'This edition\'s.' },
+  ore: { text: 'Gliders a rock can feed to factories before it crumbles (0: rocks hold no ore)', min: 0, max: 9, edition: 'This edition\'s.' },
+} satisfies Record<string, { text: string; min: number; max: number; edition: string }>;
+export type BookSettingId = keyof typeof BOOK_SETTINGS;
+
+export type Settings = { [K in SettingId]: number } & { [K in PieceId]: string } & Partial<Record<BookSettingId, number>>;
 export type Patch = Partial<Settings>;
 
 export const BASE: Settings = Object.fromEntries([

@@ -8,6 +8,7 @@ import { introShown } from '~/lib/seeded-shown';
 import { AboutEdition, ReplayIntro } from '~/components/first-visit';
 import { LegalLine } from '~/components/legal-line';
 import consent from '../../../config/consent.json';
+import { SUPPORT_WORDING } from '~/lib/support-wording';
 
 const wording = consent.versions[consent.current as keyof typeof consent.versions];
 
@@ -122,13 +123,12 @@ export default async function About() {
       </p>
       <h2>Theme</h2>
       <ThemeSwitch name="theme-about" />
-      <h2>No token</h2>
-      <p>There is no token. There is no revenue share. Nothing here is an investment.</p>
-      {/* "Support this site" (owner, 2026-10-30). Model-drafted wording. Shown once SUPPORT.linked. */}
+      <h2>Payments</h2>
+      <p>Prepaid credit can only be spent on generations here; it can't be transferred or cashed out. Nothing here is an investment.</p>
+      {/* Support (owner, 2026-10-30): just the link, in the owner's words of 2026-10-31. Shown while SUPPORT.linked. */}
       {SUPPORT.linked && (
         <p>
-          To help pay for the models and the hosting, you can <Link href="/support">support this site</Link>: a gift, which
-          buys nothing here.
+          <Link href="/support">{SUPPORT_WORDING.link}</Link>
         </p>
       )}
       <h2>No canon</h2>

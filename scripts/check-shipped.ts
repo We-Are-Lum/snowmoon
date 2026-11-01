@@ -84,10 +84,10 @@ await check('saved cards: gallery renders and writes need sign-in', async () => 
   return like.status === 401 ? null : `like without sign-in: expected 401, got ${like.status}`;
 });
 
-await check('about page carries attribution and no-token statement', async () => {
+await check('about page carries attribution and the not-affiliated line', async () => {
   const r = await get('/about');
   if (r.status !== 200) return `HTTP ${r.status}`;
-  for (const needle of ['Vitalik Buterin', 'GNU General Public License v3', 'not affiliated', 'There is no token']) {
+  for (const needle of ['Vitalik Buterin', 'GNU General Public License v3', 'not affiliated']) {
     if (!r.body.includes(needle)) return `missing "${needle}"`;
   }
   return null;

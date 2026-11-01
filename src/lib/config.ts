@@ -350,8 +350,11 @@ export const MODERATOR_FIDS: readonly number[] = [...ADMINS];
  */
 export const SUPPORT = {
   address: '0x93eC36379bFEB4db21a2d49102A1e30fC43673a3' as const,
-  /** The footer and About link to /support. Off until the owner's $1 test passes: reachable only by its URL (owner, 2026-10-30). */
-  linked: false as boolean,
+  /**
+   * The footer and About link to /support: on since the owner's $1 test was confirmed among the address's incoming
+   * transfers (0.000446 ETH on Base, 2026-10-31 06:26:19 UTC; owner, 2026-10-31).
+   */
+  linked: true as boolean,
   /**
    * "Send below" (owner, 2026-10-30, simplified page): Base or Ethereum, in ETH or USDC. USDC is Circle's native USDC on
    * each network, not the bridged USDbC.
