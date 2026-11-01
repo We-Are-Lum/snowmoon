@@ -4,14 +4,15 @@ import { sdk } from '@farcaster/miniapp-sdk';
 import { inMiniApp } from '~/lib/client-auth';
 import { appUrl } from '~/lib/config';
 import { parseResult, resultPath, resultText } from '~/lib/minpentai/share-result';
+import type { RulesetId } from '~/lib/minpentai/versions/solo-v1';
 
 /**
  * Share a ladder win, only if the player taps (owner, 2026-10-19). Opens their own Farcaster or X
  * composer with words and a link they can change; we post nothing and store nothing. The card is
  * drawn from the link (src/app/api/minpentai-card).
  */
-export function ShareResult({ rung, steps }: { rung: number; steps: number }) {
-  const x = parseResult(String(rung), String(steps));
+export function ShareResult({ rung, steps, rs }: { rung: number; steps: number; rs?: RulesetId }) {
+  const x = parseResult(String(rung), String(steps), null, rs && rs !== 1 ? String(rs) : null);
   if (!x) return null;
   const url = `${appUrl()}${resultPath(x)}`;
   const text = resultText(x);

@@ -144,9 +144,9 @@ export function PlayPerson({ onBack, invite: inviteToken }: { onBack: () => void
           <div className="mp-body">
             <p className="mp-lead">Say you&apos;re ready, then pick someone who is ready too. You both see the same new rule at the same moment.</p>
             <dl className="mp-facts">
-              <dt>BOARD</dt><dd>15 × 10, 2 towers each, 96 steps</dd>
+              <dt>BOARD</dt><dd>15 × 10, 2 towers each, 120 steps</dd>
               <dt>TIME</dt><dd>90 s to set up, 45 s each turn to act</dd>
-              <dt>LENGTH</dt><dd>About 8 minutes</dd>
+              <dt>LENGTH</dt><dd>About 10 minutes</dd>
               <dt>SHOWN</dt><dd>Your Farcaster name, to signed-in players who are ready, and to your opponent</dd>
             </dl>
             <p className="mp-label">NO RATING, NO RANKING. RESULTS ARE KEPT FOR THE TWO PLAYERS ONLY.</p>

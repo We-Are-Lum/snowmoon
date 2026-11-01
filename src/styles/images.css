@@ -494,4 +494,5 @@ a.ia-button:hover { text-decoration: none; }
 .support .support-terms { margin-top: var(--space-6, 32px); font-family: var(--label); font-size: var(--text-label); }
 .support .amount-field { display: flex; flex-direction: column; gap: 4px; font-family: var(--label); font-size: var(--text-label); }
 .support .amount-field input { min-height: 44px; width: 9em; font: inherit; font-size: 16px; padding: 0 8px; }
+.support .amount-field input::placeholder { color: var(--muted); opacity: 1; }
 .support .support-error { color: var(--ink); }

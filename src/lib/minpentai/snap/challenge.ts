@@ -9,7 +9,8 @@
  *
  * Pure: shared by the snap (server) and Play (client).
  */
-import { MAXS, RULE_IDS, RULES, RUNGS, type RuleId, type Side } from '../play-game/game';
+import { RULE_IDS, RULES, RUNGS, type RuleId, type Side } from '../play-game/game';
+import { maxStepsOf, rulesetId, type RulesetId } from '../versions/solo-v1';
 
 /** The computer players by level (game.ts botPlan): 0 Practice, then the ladder's five rungs. */
 export const LEVELS = ['Practice', ...RUNGS.slice(1).map((r) => r!.n)];
@@ -24,31 +25,34 @@ export interface Result {
   a: number;
   taps: number;
 }
-export interface Challenge { seed: number; lvl: number; rule: RuleId; ver: string; res: Result }
+/** rs: the ruleset (solo-v1.ts RULESETS). A link made before rulesets were numbered has 5 fields and is 1. */
+export interface Challenge { seed: number; lvl: number; rule: RuleId; ver: string; res: Result; rs: RulesetId }
 
 /** A result as one field, no dots: win (C, A or D), `r` if resigned, then step, towers, taps. */
 export const RESULT_RE = /^[CAD]r?-\d{1,3}-\d{1,2}-\d{1,2}-\d{1,4}$/;
 export const encResult = (r: Result) => `${r.win}${r.resigned ? 'r' : ''}-${r.step}-${r.c}-${r.a}-${r.taps}`;
-export function decResult(t: string): Result | null {
+export function decResult(t: string, rs: RulesetId = 1): Result | null {
   if (!RESULT_RE.test(t)) return null;
   const [w, step, c, a, taps] = t.split('-');
   const r = { win: w[0] as Side | 'D', resigned: w.length > 1, step: +step, c: +c, a: +a, taps: +taps };
-  return r.step <= MAXS && !(r.resigned && r.win !== 'A') ? r : null;
+  return r.step <= maxStepsOf(rs) && !(r.resigned && r.win !== 'A') ? r : null;
 }
 
 export const CHALLENGE_PATH = '/minpentai/c/';
 
-/** The signed part of a challenge link: seed (base 36), level, rule, version (`_` for none), result. */
-export const encChallenge = (c: Challenge) => [c.seed.toString(36), c.lvl, c.rule, c.ver || '_', encResult(c.res)].join('.');
+/** The signed part of a challenge link: seed (base 36), level, rule, version (`_` for none), result, and the
+ * ruleset when it isn't 1 (so every link made before rulesets were numbered reads exactly as it did). */
+export const encChallenge = (c: Challenge) => [c.seed.toString(36), c.lvl, c.rule, c.ver || '_', encResult(c.res), ...(c.rs !== 1 ? [c.rs] : [])].join('.');
 
 export function decChallenge(body: string): Challenge | null {
   const f = body.split('.');
-  if (f.length !== 5) return null;
+  if (f.length !== 5 && !(f.length === 6 && f[5] === '2')) return null;
   const [seed, lvl, rule, ver, res] = f;
-  const r = decResult(res);
+  const rs = rulesetId(f[5]);
+  const r = decResult(res, rs);
   if (!/^[0-9a-z]{1,7}$/.test(seed) || !/^[0-5]$/.test(lvl) || !RULE_IDS.includes(rule as RuleId) || !/^(_|[a-z0-9-]{1,40})$/.test(ver) || !r) return null;
   const s = parseInt(seed, 36);
-  return s <= 0xffff_ffff ? { seed: s, lvl: +lvl, rule: rule as RuleId, ver: ver === '_' ? '' : ver, res: r } : null;
+  return s <= 0xffff_ffff ? { seed: s, lvl: +lvl, rule: rule as RuleId, ver: ver === '_' ? '' : ver, res: r, rs } : null;
 }
 
 /** A link's last path segment, `<body>.<signature>`. The signature is checked on the server only. */

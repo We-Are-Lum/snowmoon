@@ -15,7 +15,7 @@
  *   and in-world templates may use their own faces.
  * - Paper is #F4F2ED in light mode in every chapter. Datelines take the accent of
  *   their setting: #2E5A3A Veridia, #B3306E Dzego, ink otherwise.
- * - The first screen says: independent adaptation, not affiliated with the author, no token; on the home
+ * - The first screen says: independent adaptation, not affiliated with the author; on the home
  *   page it says so in the dark hero (checkHome, with the home's other checks: How this works, Read from
  *   here, Just made, the Minpentai board).
  * - The live voting screens (c1-b18, c1-b31, c7-b6) start where the book shows them, move by
@@ -302,7 +302,7 @@ async function checkAssistant(page: Page, scheme: string) {
   await page.evaluate(() => localStorage.clear());
 }
 
-const LEGAL_LINE = 'Snowmoon Party · operated by Lum LLC · independent, not affiliated with the author · book and adaptations GPL v3 · Terms · Privacy · Source' + (SUPPORT.linked ? ' · Support this site' : '');
+const LEGAL_LINE = 'Snowmoon Party · operated by Lum LLC · independent, not affiliated with the author · book and adaptations GPL v3 · Terms · Privacy · Source' + (SUPPORT.linked ? ' · Support the We Are Lum team' : '');
 const WALLET_ADDRESS = '0x1234567890abcdef1234567890abcdef12345678';
 /** A wallet session in storage, as saveWalletSession keeps it (src/lib/client-auth.ts); never sent anywhere here. */
 const plantWallet = (address: string) => {
@@ -384,7 +384,7 @@ async function checkLegalLine(page: Page, within: string, where: string, scheme:
   if (text !== LEGAL_LINE) fail(`${where} (${scheme}): the footer line reads "${text}"`);
   if (!(await line.isVisible())) fail(`${where} (${scheme}): the footer line is not shown`);
   const hrefs = await line.locator('a').evaluateAll((as) => as.map((a) => `${a.textContent}=${a.getAttribute('href')}`));
-  const want = ['Terms=/terms', 'Privacy=/privacy', 'Source=https://github.com/We-Are-Lum/snowmoon', ...(SUPPORT.linked ? ['Support this site=/support'] : [])];
+  const want = ['Terms=/terms', 'Privacy=/privacy', 'Source=https://github.com/We-Are-Lum/snowmoon', ...(SUPPORT.linked ? ['Support the We Are Lum team=/support'] : [])];
   if (hrefs.join(' ') !== want.join(' ')) fail(`${where} (${scheme}): the footer links are ${hrefs.join(', ')}`);
 }
 
@@ -663,7 +663,16 @@ async function checkSupport(page: Page, scheme: string) {
   if (JSON.stringify(shown) !== JSON.stringify(want)) fail(`${where}: the QR code isn't the code of ${SUPPORT.address}`);
   const body = (await page.locator('main.support').innerText()).replace(/\s+/g, ' ');
   // The owner's words (2026-10-30, simplified page), and nothing else of the old page.
-  for (const words of ['Support this site', 'Send ETH or USDC on Ethereum mainnet or Base to this address, or send below.', 'Other networks: funds may be lost.'])
+  // The links to it (owner, 2026-10-31): About shows just the link, with nothing around it.
+  if (SUPPORT.linked) {
+    await open(page, '/about');
+    // About's own link, not the footer line's (checkLegalLine checks that one on every page).
+    const about = page.locator('main p:not(.legal-line) > a[href="/support"]');
+    if ((await about.count()) !== 1 || (await about.textContent())?.trim() !== 'Support the We Are Lum team') fail(`${where}: About doesn't link "Support the We Are Lum team" to /support`);
+    else if ((await about.locator('xpath=..').innerText()).trim() !== 'Support the We Are Lum team') fail(`${where}: About's support link has words around it`);
+    await open(page, '/support');
+  }
+  for (const words of ['Support the We Are Lum team', 'We make snowmoon.party. Send ETH or USDC on Ethereum mainnet or Base to this address, or send below.', 'Other networks: funds may be lost.'])
     if (!body.includes(words)) fail(`${where}: doesn't say "${words}"`);
   if (/\b(donat)|splits\.org|Fund the next scene|\$5\b/i.test(body + (await page.locator('main.support').innerHTML()))) fail(`${where}: still shows the old page's copy (donate, Splits, a title option or a preset)`);
   const choices = async (label: string) => (await page.locator(`.support-choice[aria-label="${label}"] button`).allTextContents()).map((t) => t.trim()).join('|');
@@ -671,6 +680,23 @@ async function checkSupport(page: Page, scheme: string) {
   if ((await choices('Token')) !== 'ETH|USDC') fail(`${where}: the tokens read "${await choices('Token')}"`);
   if (!(await page.locator('.support-send input[type="number"]').count())) fail(`${where}: no amount box`);
   if ((await page.locator('main.support a[href="/terms"]').textContent())?.trim() !== 'Terms') fail(`${where}: no small Terms link`);
+  // The ETH estimate (owner, 2026-10-31): with ETH chosen, "≈ $" under the amount, live as it's typed, from the price
+  // our server reads on Base (stood in here at $2,500), labelled as an estimate.
+  await page.route('**/api/eth-usd', (r) => r.fulfill({ json: { usd: 2500, updatedAt: Math.floor(Date.now() / 1000) } }));
+  await open(page, '/support');
+  const amountBox = page.locator('.support-send input[type="number"]');
+  // ETH is the default, with "0.01" greyed in the empty box (owner, 2026-10-31); a placeholder isn't an amount, so no estimate.
+  if ((await page.locator('.support-choice[aria-label="Token"] button[aria-checked="true"]').textContent())?.trim() !== 'ETH') fail(`${where}: ETH isn't the default`);
+  if ((await amountBox.getAttribute('placeholder')) !== '0.01' || (await amountBox.inputValue()) !== '') fail(`${where}: the empty amount box doesn't show "0.01" as its placeholder`);
+  if (await page.locator('.support-estimate').count()) fail(`${where}: an estimate shows before an amount is typed`);
+  await amountBox.fill('0.01');
+  await page.getByText("≈ $25.00 (estimate, from Chainlink's ETH/USD)").waitFor({ timeout: 5000 }).catch(() => fail(`${where}: 0.01 ETH doesn't show "≈ $25.00 (estimate…)"`));
+  await amountBox.fill('0.02');
+  await page.getByText('≈ $50.00').waitFor({ timeout: 5000 }).catch(() => fail(`${where}: the estimate doesn't follow the amount as it's typed`));
+  await page.locator('.support-choice[aria-label="Token"] button', { hasText: 'USDC' }).click();
+  if (await page.locator('.support-estimate').count()) fail(`${where}: an ETH estimate shows with USDC chosen`);
+  await page.locator('.support-choice[aria-label="Token"] button', { hasText: 'ETH' }).click();
+  await page.unroute('**/api/eth-usd');
   await page.getByText('No wallet in this browser.').waitFor({ timeout: 5000 }).catch(() => fail(`${where}: with no wallet, it doesn't say so`));
   if (!(await page.locator('.support-send [data-send]').isDisabled())) fail(`${where}: Send is on with no wallet`);
   // A stand-in wallet in the browser (its own context, so no other page sees it): on Ethereum while Base is chosen, then
@@ -839,7 +865,7 @@ async function checkFloors(page: Page, path: string, scheme: string) {
 /**
  * The home page (src/app/page.tsx, from Design's HomeWindow), at 390 × 844 with the intro seen:
  * - the first screen (elements in the viewport, their own text nodes) says independent adaptation,
- *   not affiliated with the author, no token, and says it in the dark hero (principle 7; owner, 2026-10-10);
+ *   not affiliated with the author, and says it in the dark hero (principle 7; owner, 2026-10-10);
  * - "How this works" opens the intro; "Read from here" lands on the quoted block;
  * - "Just made" shows each image with its AI label, or the empty state;
  * - the Minpentai board steps on its own, and starts paused under reduced motion until Play;
@@ -860,7 +886,7 @@ async function checkHome(page: Page, scheme: 'light' | 'dark') {
   await page.evaluate(() => scrollTo(0, 0));
   const first = await own('body *');
   const hero = await own('.home-hero *');
-  for (const phrase of ['independent adaptation', 'not affiliated with the author', 'no token']) {
+  for (const phrase of ['independent adaptation', 'not affiliated with the author']) {
     if (!first.includes(phrase)) fail(`/ (${scheme}): first screen does not say "${phrase}"`);
     else if (!hero.includes(phrase)) fail(`/ (${scheme}): "${phrase}" is on the first screen but not in the hero`);
   }
