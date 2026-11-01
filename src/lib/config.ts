@@ -248,7 +248,10 @@ export const AGENTS = {
    * link opens nothing. The local tests add their own people (MINPENTAI_PLAY_TEST, never on Vercel).
    */
   // 6786 the owner; -23 the production test account (wallet 0xE869…f973, above).
-  minpentaiPlay: { people: [6786, -23] as readonly number[] },
+  // Switched OFF 2026-11-01 (owner: "if anything leaks, switch agent play off and tell me"): in production, at level 3,
+  // a final submit's time still grew with the computer's hidden towers (1.0 to 1.8 s against a 400 ms pad). Back on
+  // when the fix is in and the live check passes. Was [6786, -23].
+  minpentaiPlay: { people: [] as readonly number[] },
   /** At most this many live agents per person (also a database trigger). */
   perPerson: 3,
   /**
