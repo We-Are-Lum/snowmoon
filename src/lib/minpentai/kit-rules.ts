@@ -57,6 +57,7 @@ const ENGINE = 'src/lib/minpentai/engine.ts';
 /** Play's rules run on the one engine (versions/engine.ts); Play's numbers are its base settings (versions/schema.ts). */
 const VENG = 'src/lib/minpentai/versions/engine.ts';
 const SCHEMA = 'src/lib/minpentai/versions/schema.ts';
+const SOLO = 'src/lib/minpentai/versions/solo-v1.ts';
 
 export const KIT_RULES: KitRule[] = [
   /* ---------------- the board and how it changes ---------------- */
@@ -320,7 +321,7 @@ export const KIT_RULES: KitRule[] = [
   {
     id: 'play-simultaneous', area: 'turns', source: 'invented',
     rule: "Both players act at the same time without seeing each other's choices; everything placed appears at once, and two pieces put on one square cancel each other.",
-    code: [{ file: VENG, find: 'function apply(w: World, s: Settings, pend: Record<Side, Placement[]>) {' }],
+    code: [{ file: VENG, find: 'function apply(w: World, s: Settings, pend: Record<Side, Placement<AnyPiece>[]>) {' }],
     site: 'yes', siteNote: 'Play.',
   },
   {
@@ -461,7 +462,7 @@ export const KIT_RULES: KitRule[] = [
     id: 'no-turn-limit', area: 'ending', source: 'book', how: 'implied',
     rule: 'Games have no fixed turn limit.',
     cites: [{ block: 'c14-b94', quote: 'Ten thousand two hundred turns into the game, Deluin was announced the winner.' }],
-    site: 'no', siteNote: 'Play stops at step 96 (invented).',
+    site: 'no', siteNote: 'Play stops at step 120 (invented; 96 until 2026-10-22).',
   },
   {
     id: 'qualifying-tiebreak', area: 'ending', source: 'book', how: 'stated',
@@ -471,8 +472,8 @@ export const KIT_RULES: KitRule[] = [
   },
   {
     id: 'play-step-limit', area: 'ending', source: 'invented',
-    rule: 'At step 96 the match stops; most towers wins, and equal is a draw.',
-    code: [{ file: SCHEMA, find: "maxSteps: { text: 'The match stops at this step; most towers wins', min: 24, max: 240, base: 96," }, { file: VENG, find: "if (w.step >= s.maxSteps) return nc > na ? 'C' : na > nc ? 'A' : 'D';" }],
+    rule: 'At step 120 the match stops; most towers wins, and equal is a draw.',
+    code: [{ file: SOLO, find: 'export const SOLO_V2: VersionRules = { set: { maxSteps: 120, botTowers: 10 } };' }, { file: VENG, find: "if (w.step >= s.maxSteps) return nc > na ? 'C' : na > nc ? 'A' : 'D';" }],
     site: 'yes', siteNote: 'Play.',
   },
   {
