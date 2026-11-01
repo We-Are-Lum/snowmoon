@@ -1,6 +1,6 @@
 /**
  * Agent play over the real connector (draft, 2026-10-31): the built site under `next start` with every migration
- * (NEXT_minpentai_agent_matches.sql included) in PGlite, the "play" scope switched on for the test only
+ * (0032_minpentai_agent_matches.sql included) in PGlite, the "play" scope switched on for the test only
  * (MINPENTAI_PLAY_TEST, never on Vercel), and a scripted agent that signs in through OAuth and plays a whole
  * book-edition match against the site computer through /mcp, as an MCP client does (JSON-RPC over HTTP).
  *
@@ -36,7 +36,7 @@ try {
   const plain = await connect(BASE, people.A.token, 'Claude');
   const listPlain = ((await mcp(BASE, plain.access_token, 'tools/list')).body?.result?.tools ?? []).map((t) => t.name);
   check('M1 a person agent play is open to gets the Minpentai tools even when the app asked only for the usual scopes', listPlain.includes('minpentai_start_solo'), listPlain.join(','));
-  const dPlain = await connect(BASE, people.D.token, 'Claude');
+  const dPlain = await connect(BASE, people.C.token, 'Claude');
   const refused = await tool(BASE, dPlain.access_token, 'minpentai_start_solo', {});
   check('M2 someone else connecting the same way gets none, and can\'t call one', !refused.ok && /"play" scope/.test(refused.error ?? ''), refused.error ?? '');
   const a = await connect(BASE, people.A.token, 'Claude', 'read play');
@@ -118,7 +118,7 @@ try {
   check('M19 every commitment in the record has its salt', recTurns.length > 0 && recTurns.every((t) => /^[0-9a-f]{64}$/.test(t.C.salt) && /^[0-9a-f]{64}$/.test(t.A.salt) && /^[0-9a-f]{64}$/.test(t.C.commitment)));
   const after = await (await fetch(live)).text();
   check('M20 after the end the live link shows the whole board', /The whole board at the end/.test(after));
-  // The table (NEXT_minpentai_agent_matches.sql v2): the exact ruleset, updated_at stamped on every save, nobody but the server reads it, and the server can't delete.
+  // The table (0032_minpentai_agent_matches.sql v2): the exact ruleset, updated_at stamped on every save, nobody but the server reads it, and the server can't delete.
   const row = (await S.pg.query<{ ruleset: string; level: number; stamped: boolean }>(`select ruleset, level, updated_at > created_at as stamped from studio.mp_agent_matches where id = $1`, [id])).rows[0];
   check('M24 the match is stored under its exact ruleset and level', row?.ruleset === 'book-1' && row.level === 2, JSON.stringify(row));
   check('M25 every save stamps updated_at', row?.stamped === true);

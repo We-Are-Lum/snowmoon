@@ -1,7 +1,7 @@
 /**
  * Where agent-play matches are kept (draft, 2026-10-31): studio.mp_agent_matches, one row a match, the whole
  * match as JSON (solo.ts SoloMatch), the real board included. Only the server reads it; every answer to a side
- * goes through solo.ts viewFor or simulate. Needs NEXT_minpentai_agent_matches.sql (not applied).
+ * goes through solo.ts viewFor or simulate. Needs 0032_minpentai_agent_matches.sql (applied 2026-10-31).
  *
  * Saves are guarded by a version number, so two calls for the same match at once can't both apply a turn: the
  * second finds the version moved and fails ("try again").
