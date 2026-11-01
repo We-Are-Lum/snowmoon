@@ -10,9 +10,10 @@ asked when someone views a page); no wallet path; sheets open to everyone who pa
 Legal texts describe today (owner, 2026-10-18): these lines ship in the same merge as the switches they describe, and
 the switches stay off until then:
 
-- `CHALLENGE.entries` (entries listed, the Entry badge, "Mark as my entry"; shows what `studio.challenge_marks` and
-  `studio.challenge_eligibility` hold; the eligibility itself is stored at publish whatever the switch says, since
-  storing it shows nothing);
+- `CHALLENGE.entries` (entries listed with each character's count, the Entry badge, "Mark as my entry"; shows what
+  `studio.challenge_marks` and `studio.challenge_eligibility` hold). The eligibility decision is stored at publish only
+  once Privacy §4 describes the remix challenge (`src/lib/challenge/record.ts`), so nothing about a maker is kept
+  before these words are live;
 - `CHALLENGE.posts` ("Add where you posted it" and "Posted on"; stores `studio.version_posts`; asks Neynar, Bluesky
   and Lens for a post);
 - `CHALLENGE.openSheets` (on in the config): forks of the six characters' sheets open to everyone who passes the

@@ -3,6 +3,8 @@ import type postgres from 'postgres';
 import { CHALLENGE, WORK_ID } from '../config';
 import { lookUp } from '../images/neynar';
 import { bookCharacter } from '../images/designs';
+import { PRIVACY } from '../legal';
+import { privacyDescribesChallenge } from './open-sheets';
 import { eligibility, inWindow, needsScore } from './rules';
 
 /**
@@ -13,11 +15,14 @@ import { eligibility, inWindow, needsScore } from './rules';
  * Neynar didn't answer). The score comes from the same lookup the publish gate just made (kept a day in
  * studio.image_scores), so publishing asks Neynar at most once. Never throws: a version whose decision can't be stored
  * simply doesn't count (and the table missing before the owner applies NEXT_remix_challenge is the same).
+ * Nothing is stored until the Privacy page describes the remix challenge (the owner's reread; legal texts describe
+ * today), the same condition that opens sheets to everyone.
  */
 type Sql = postgres.Sql;
 
-export async function recordEligibility(sql: Sql, versionId: string, fid: number, now = new Date()): Promise<'stored' | 'not-a-candidate' | 'not-stored'> {
+export async function recordEligibility(sql: Sql, versionId: string, fid: number, now = new Date(), privacy = PRIVACY): Promise<'stored' | 'not-a-candidate' | 'not-stored'> {
   try {
+    if (!privacyDescribesChallenge(privacy)) return 'not-stored';
     if (!inWindow(now)) return 'not-a-candidate';
     const names = CHALLENGE.characters.map((s) => bookCharacter(s)?.name).filter((n): n is string => Boolean(n));
     const [v] = await sql`

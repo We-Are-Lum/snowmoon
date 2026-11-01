@@ -424,9 +424,12 @@ globalThis.fetch = (async (u: string | URL | Request) => {
 }) as typeof fetch;
 process.env.NEYNAR_API_KEY = 'test-key-not-real';
 /** Publish as the route does: the version, then its eligibility, decided once and stored. */
+const { PRIVACY: P0 } = await import('../src/lib/legal');
+const privacySaid = structuredClone(P0);
+(privacySaid.sections.find((x) => x.n === 4)!.body[1] as string[]).push('If you take part in the remix challenge: …');
 async function publish(m: Parameters<typeof DS.makeDesign>[1]) {
   const out = await DS.makeDesign(S, m);
-  await Rec.recordEligibility(S, out.versionId, m.fid);
+  await Rec.recordEligibility(S, out.versionId, m.fid, new Date(), privacySaid);
   return out;
 }
 const f500a = await publish({ fid: 500, mode: 'fork', kind: 'character', fromVersionId: baiStart.versionId, body: sheet('Bai, older', 3) });
@@ -446,6 +449,13 @@ check('stored at publish: an admin, no score asked', dec(fAdmin.versionId)?.deci
 check('stored at publish: invited, no score asked', dec(f6852.versionId)?.decision === 'invited');
 check('stored at publish: Neynar down means unchecked (not eligible)', dec(f502.versionId)?.decision === 'unchecked' && dec(f502.versionId)?.eligible === false);
 check('a sheet made from scratch gets no decision (not an entry)', !dec(fScratch.versionId));
+{
+  const extra = await DS.makeDesign(S, { fid: 504, mode: 'fork', kind: 'character', fromVersionId: baiStart.versionId, body: sheet('Bai, before the reread', 11) });
+  const r = await Rec.recordEligibility(S, extra.versionId, 504);
+  const [row] = await sql`select 1 from studio.challenge_eligibility where version_id = ${extra.versionId}`;
+  check('nothing is stored about a maker while the Privacy page does not describe the challenge (as today)', r === 'not-stored' && !row);
+  proof('a recorder that ignores the Privacy words would store it', (await Rec.recordEligibility(S, extra.versionId, 504, new Date(), privacySaid)) === 'stored');
+}
 calls.length = 0;
 const st = await E.standing(S);
 const ids = st.entries.map((e) => e.versionId);
