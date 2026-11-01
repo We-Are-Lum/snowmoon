@@ -23,9 +23,12 @@ export function fog(b: BoardView, side: Side, R: number, e: Engine = SOLO_V1_ENG
     step: b.step,
     rock: b.rock.slice(),
     tw: b.tw.filter(([k, o]) => o === side || see.has(k)),
-    sq: b.sq.filter(([k, o]) => o === side || see.has(k)),
+    // Only what is in sight, a side's own squares and gliders too (owner, 2026-10-31): an own glider out of sight
+    // would show where it bounced off a hidden piece, and an own square's hits left a hidden glider's hit. Own
+    // towers are always in sight (they make it).
+    sq: b.sq.filter(([k]) => see.has(k)),
     // Sorted by square, so the order says nothing about when a glider was placed.
-    gl: b.gl.filter(([x, y, , , o]) => o === side || see.has(y * W + x)).sort((a, c) => a[1] * W + a[0] - (c[1] * W + c[0]) || a[2] - c[2] || a[3] - c[3]),
+    gl: b.gl.filter(([x, y]) => see.has(y * W + x)).sort((a, c) => a[1] * W + a[0] - (c[1] * W + c[0]) || a[2] - c[2] || a[3] - c[3]),
     flash: b.flash.filter((k) => see.has(k)),
   };
 }
