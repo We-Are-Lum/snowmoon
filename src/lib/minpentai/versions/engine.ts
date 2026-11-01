@@ -274,6 +274,11 @@ export function engine(L: Layout) {
     w.gl = gl.filter((g) => !g.dead);
     for (const b of born) { b.id = w.nid++; w.gl.push(b); }
     if (book) {
+      // book-3 option: factories fire on their own every factoryEvery steps while their rock has ore.
+      if (s.factoryEvery && w.fa && w.step % s.factoryEvery === 0) for (const k in w.fa) {
+        const f = w.fa[+k], [fx, fy] = XY(+k), rock = K(fx - f.dx, fy - f.dy);
+        if (w.ore?.[rock] && inb(fx + f.dx, fy + f.dy)) fed.push({ k: rock, g: { id: 0, o: f.o, x: fx + f.dx, y: fy + f.dy, dx: f.dx, dy: f.dy } });
+      }
       // A factory fires when its front square is empty and its rock has ore; a rock whose ore is spent crumbles.
       for (const { k, g: b } of fed) {
         if (!w.ore?.[k] || !empty(w, K(b.x, b.y))) continue;
@@ -282,7 +287,7 @@ export function engine(L: Layout) {
         if (!--w.ore[k]) { delete w.rock[k]; delete w.ore[k]; w.flash.push(k); }
       }
       if (w.mw) moveWalls(w);
-      if (lodged.length) converge(w, lodged);
+      if (lodged.length) converge(w, lodged, s);
     }
     w.step++;
     return w;
@@ -313,10 +318,12 @@ export function engine(L: Layout) {
    * that side's symbol, on the square of the one that came to rest last. It is a tower until the next
    * turn to act ends; then it stays only if walled in (apply).
    */
-  function converge(w: World, lodged: number[]) {
+  function converge(w: World, lodged: number[], s: Settings) {
     for (const k of [...new Set(lodged)].sort((a, b) => a - b)) {
       const o = w.sd?.[k];
       if (!o) continue;
+      // book-3 option: no symbol past the tower cap.
+      if (s.symbolsCapped && s.maxTowers && towers(w, o).length >= s.maxTowers) continue;
       const [x, y] = XY(k);
       const near = Object.keys(w.sd!).map(Number).filter((j) => j !== k && w.sd![j] === o && Math.abs(XY(j)[0] - x) <= 2 && Math.abs(XY(j)[1] - y) <= 2).sort((a, b) => a - b);
       let pair: number[] | null = null;

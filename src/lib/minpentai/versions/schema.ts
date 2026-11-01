@@ -170,6 +170,9 @@ export const BOOK_SETTINGS = {
   costFactory: { text: 'A glider factory costs (0: no factories)', min: 0, max: 12, edition: 'Cost is this edition\'s.' },
   factoryHits: { text: 'Hits a glider factory takes before it breaks', min: 1, max: 4, edition: 'This edition\'s.' },
   ore: { text: 'Gliders a rock can feed to factories before it crumbles (0: rocks hold no ore)', min: 0, max: 9, edition: 'This edition\'s.' },
+  // book-3 design options (2026-11-01; off unless set).
+  factoryEvery: { text: 'A factory also fires on its own every this many steps while its rock has ore (0: only when a glider hits the rock)', min: 0, max: 24, edition: 'This edition\'s; after c14-b38, the eternal glider factory.' },
+  symbolsCapped: { text: 'A symbol forms only if its side is under maxTowers (1: yes, 0: no)', min: 0, max: 1, edition: 'This edition\'s.' },
 } satisfies Record<string, { text: string; min: number; max: number; edition: string }>;
 export type BookSettingId = keyof typeof BOOK_SETTINGS;
 
