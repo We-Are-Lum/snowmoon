@@ -18,17 +18,23 @@ import { drawRules, engine, layout, other, rng, verdict, type AnyPiece, type Eng
 import type { Settings } from '../versions/schema';
 import { SOLO_V3, type VersionRules } from '../versions/solo-v1';
 import { BOOK_EDITION } from '../versions/book-edition';
-import { PRESETS, TOP_LEVEL, searchPlan, type Preset } from '../versions/search';
+import { PRESETS, TOP_LEVEL, searchPlan, type BookPlay, type Preset } from '../versions/search';
 
 /**
  * The exact rulesets a match can be played under (owner, 2026-10-31: a record names its exact ruleset, so it replays
  * the same after the rules change): play-3 is Play's ruleset 3 (versions/solo-v1.ts), book-1 the book edition as it
  * is today. A rule change adds a new id; an id never changes meaning.
  */
-export const RULESETS = { 'book-1': BOOK_EDITION, 'play-3': SOLO_V3 } as const satisfies Record<string, VersionRules>;
+export const RULESETS = { 'book-1': BOOK_EDITION, 'book-2': BOOK_EDITION, 'play-3': SOLO_V3 } as const satisfies Record<string, VersionRules>;
+/**
+ * How the site computer plays under each ruleset. book-2 (owner, 2026-11-01: "a new computer means a new ruleset") is
+ * book-1's rules with a computer that uses all four book pieces (search.ts BookPlay); book-1 matches keep replaying with
+ * the computer they were played against.
+ */
+export const COMPUTERS: Record<RulesetName, { book?: BookPlay }> = { 'book-1': {}, 'book-2': { book: { variety: 0, kinds: ['f', 'w', 'm', 'e'], from: 2 } }, 'play-3': {} };
 export type RulesetName = keyof typeof RULESETS;
 /** What a new match under each family is played under now. */
-export const CURRENT: Record<'book' | 'play', RulesetName> = { book: 'book-1', play: 'play-3' };
+export const CURRENT: Record<'book' | 'play', RulesetName> = { book: 'book-2', play: 'play-3' };
 export const PERSON: Side = 'C';
 export const COMPUTER: Side = 'A';
 /** The search level the site computer uses when it plays the person's own side (the fallback). */
@@ -100,12 +106,12 @@ type PlanState = Pick<SoloMatch, 'ruleset' | 'seed' | 'level' | 'cpu' | 'w' | 'l
 function computerPlan(m: PlanState) {
   const { s, e } = rulesOf(m);
   const o = COMPUTER;
-  return searchPlan({ e, s, o, view: e.fog(m.w, s, o), lastSeen: { ...m.ls[o] }, snap: e.towers(m.w, o), points: pointsOf(m, s), rng: turnRng(m, 1), level: m.level }).placements;
+  return searchPlan({ e, s, o, view: e.fog(m.w, s, o), lastSeen: { ...m.ls[o] }, snap: e.towers(m.w, o), points: pointsOf(m, s), rng: turnRng(m, 1), level: m.level, ...COMPUTERS[m.ruleset] }).placements;
 }
 /** What the site computer plays for the person's side when asked to (the fallback, under a preset). */
 function fallbackPlan(m: PlanState, preset: Preset) {
   const { s, e } = rulesOf(m);
-  return searchPlan({ e, s, o: PERSON, view: e.fog(m.w, s, PERSON), lastSeen: { ...m.ls[PERSON] }, snap: e.towers(m.w, PERSON), points: pointsOf(m, s), rng: turnRng(m, 2), level: FALLBACK_LEVEL, preset }).placements;
+  return searchPlan({ e, s, o: PERSON, view: e.fog(m.w, s, PERSON), lastSeen: { ...m.ls[PERSON] }, snap: e.towers(m.w, PERSON), points: pointsOf(m, s), rng: turnRng(m, 2), level: FALLBACK_LEVEL, preset, ...COMPUTERS[m.ruleset] }).placements;
 }
 /** The site computer's orders for its side this turn: from its own view, committed before the person's are known. */
 function computerOrders(m: SoloMatch, at: string): Orders {
@@ -188,7 +194,7 @@ export function viewFor(m: SoloMatch) {
     match_id: m.id,
     side: 'Cyan',
     opponent: { kind: 'site computer', level: m.level, random_commitment: m.cpuCommit },
-    ruleset: m.ruleset.startsWith('book') ? `the book edition (${m.ruleset})` : `Play (${m.ruleset})`,
+    ruleset: m.ruleset.startsWith('book') ? `Rocks and Mirrors, the book edition (${m.ruleset})` : `Play (${m.ruleset})`,
     rule,
     phase: over ? 'over' : m.turn === 0 ? 'setup' : 'act',
     turn: m.turn,
@@ -206,7 +212,7 @@ export function viewFor(m: SoloMatch) {
     my_orders: m.pend.C ? { placements: m.pend.C.placements.map(orderOut), source: m.pend.C.source, final: m.pend.C.final, commitment: m.pend.C.commitment, ...(m.pend.C.note ? { note: m.pend.C.note } : {}) } : null,
     opponent_commitment: over ? null : m.pend.A.commitment,
     standing_order: m.standing,
-    my_turns: m.history.map((h) => ({ turn: h.turn, step: h.step, placements: h.C.placements.map(orderOut), source: h.C.source })),
+    my_turns: m.history.map((h) => ({ turn: h.turn, step: h.step, placements: h.C.placements.map(orderOut), source: h.C.source, ...(h.C.preset ? { preset: h.C.preset } : {}) })),
     end: m.end,
   };
 }

@@ -12,3 +12,13 @@
 .mb-controls button { min-height: 44px; padding: 0 14px; border: 1px solid currentColor; border-radius: 3px; background: none; color: inherit; font: inherit; }
 .mb-controls button:disabled { opacity: 0.4; }
 .mb-refused { color: #FFB43A; }
+/* Tutorial cards (2026-11-01) and the live match page on a phone. */
+.mb-card { border: 1px solid currentColor; border-radius: 4px; padding: 12px 14px; margin: 12px 0; }
+.mb-card h2 { margin: 2px 0 6px; }
+.mb-card p { margin: 4px 0; }
+.mb-live { max-width: 560px; }
+.mb-live .mb-board { touch-action: manipulation; }
+.mb-moves { list-style: none; padding: 0; margin: 6px 0; }
+.mb-moves li { padding: 4px 0; border-bottom: 1px solid rgba(127, 127, 127, 0.25); }
+.mb-who { font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; opacity: 0.75; margin-left: 6px; }
+.mb-status { position: sticky; top: 0; padding: 6px 0; background: inherit; font-size: 14px; }
