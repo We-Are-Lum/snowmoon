@@ -1387,7 +1387,7 @@ add({
       do $$ begin if to_regclass('studio.challenge_marks') is not null then
         insert into studio.challenge_marks (challenge, fid, character, version_id) values ('remix-2026-11', 42, 'bai', '00000000-0000-0000-0000-0000000000f1');
         insert into studio.version_posts (version_id, network, post_id, handle, posted_at, url, fid) values ('00000000-0000-0000-0000-0000000000f1', 'lens', '1', 'someone', now(), 'https://hey.xyz/posts/abc', 42);
-        insert into studio.challenge_eligibility (version_id, challenge, fid, decision, score, eligible) values ('00000000-0000-0000-0000-0000000000f1', 'remix-2026-11', 42, 'score', 0.8, true);
+        insert into studio.challenge_eligibility (version_id, challenge, fid, decision, eligible) values ('00000000-0000-0000-0000-0000000000f1', 'remix-2026-11', 42, 'passed', true);
       end if; end $$;`);
     const problems: string[] = [];
     for (const role of ['anon', 'authenticated']) {
