@@ -1,7 +1,7 @@
 import 'server-only';
 import { actsFor } from './wallet/credit';
 import type postgres from 'postgres';
-import { isMaintainer } from './remix/frames';
+import { isAdmin } from './admins';
 
 /**
  * "Hide" on a published scene version (studio.adaptation_versions.hidden, migration 0012: the one
@@ -43,7 +43,7 @@ export async function setVersionHidden(sql: Sql, person: number, id: number, hid
   if (!v) return { ok: false, status: 404, error: 'No such scene' };
   // A linked wallet's earlier scenes are its FID's (owner, 2026-10-22; src/lib/wallet/credit.ts).
   const maker = await actsFor(sql, person, v.author);
-  const maint = isMaintainer(person);
+  const maint = isAdmin(person);
   // DRAFT wording for the owner.
   if (!maker && !maint) return { ok: false, status: 403, error: 'Only the person who made this scene can hide it.' };
   const recorded = v.role !== undefined;

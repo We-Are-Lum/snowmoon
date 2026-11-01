@@ -1,7 +1,7 @@
 /**
  * Resume's rows carry their ruleset (owner, 2026-10-30): src/lib/minpentai/snap/resume.ts's own save and load,
  * run against a real Postgres (PGlite through pglite-socket, as the site's client connects) with the migration
- * chain applied in order: 0025, 0029 (the moves check fix) and NEXT_minpentai_resume_ruleset.sql.
+ * chain applied in order: 0025, 0029 (the moves check fix) and 0031_minpentai_resume_ruleset.sql.
  *   npm run test:minpentai-resume
  * Checks: a new row stores its ruleset; saving a new match over an existing row (the ON CONFLICT update) replaces
  * the ruleset too, both ways, so a row can't keep an old ruleset for a new match; a row saved before the column
@@ -14,14 +14,14 @@ import { PGlite } from '@electric-sql/pglite';
 import { PGLiteSocketServer } from '@electric-sql/pglite-socket';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
-const MIGRATIONS = ['0025_minpentai_snap_resume.sql', '0029_minpentai_resume_moves_check.sql', 'NEXT_minpentai_resume_ruleset.sql'];
+const MIGRATIONS = ['0025_minpentai_snap_resume.sql', '0029_minpentai_resume_moves_check.sql', '0031_minpentai_resume_ruleset.sql'];
 
 async function main() {
   const pg = new PGlite();
   await pg.exec('create role studio_writer; create role anon; create role authenticated; create schema studio;');
   // A row as today's code (before the ruleset column) saves it.
   for (const f of MIGRATIONS) {
-    if (f.startsWith('NEXT_')) await pg.query(`insert into studio.mp_snap_resume (fid, lvl, ver, rule, moves) values (111, 0, '', 'diag', '1btfdzl.1.FYFICyHeQ2')`);
+    if (f === '0031_minpentai_resume_ruleset.sql') await pg.query(`insert into studio.mp_snap_resume (fid, lvl, ver, rule, moves) values (111, 0, '', 'diag', '1btfdzl.1.FYFICyHeQ2')`);
     await pg.exec(readFileSync(path.join(ROOT, 'supabase/migrations', f), 'utf8'));
   }
   const srv = new PGLiteSocketServer({ db: pg, port: 0, host: '127.0.0.1' });
