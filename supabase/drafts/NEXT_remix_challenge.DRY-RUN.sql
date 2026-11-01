@@ -37,12 +37,10 @@ create table if not exists studio.challenge_eligibility (
   version_id uuid primary key references studio.element_versions(id),
   challenge text not null check (challenge ~ '^[a-z0-9-]{1,40}$'),
   fid bigint not null check (fid > 0),
-  decision text not null check (decision in ('admin', 'invited', 'score', 'below', 'unchecked')),
-  score numeric(6, 5) check (score is null or (score >= 0 and score <= 1)),
+  decision text not null check (decision in ('admin', 'invited', 'passed', 'below', 'unchecked')),
   eligible boolean not null,
   checked_at timestamptz not null default now(),
-  constraint score_with_its_decision check ((decision in ('score', 'below')) = (score is not null)),
-  constraint eligible_follows_decision check (eligible = (decision in ('invited', 'score')))
+  constraint eligible_follows_decision check (eligible = (decision in ('invited', 'passed')))
 );
 create index if not exists challenge_eligibility_person on studio.challenge_eligibility (challenge, fid);
 

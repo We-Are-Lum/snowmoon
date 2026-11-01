@@ -12,6 +12,8 @@ select c.what, c.ok from (
   select 'challenge_marks exists' as what, to_regclass('studio.challenge_marks') is not null as ok
   union all select 'version_posts exists', to_regclass('studio.version_posts') is not null
   union all select 'challenge_eligibility exists', to_regclass('studio.challenge_eligibility') is not null
+  union all select 'challenge_eligibility keeps no score (decision and time only)', to_regclass('studio.challenge_eligibility') is not null and not exists (
+      select 1 from information_schema.columns where table_schema = 'studio' and table_name = 'challenge_eligibility' and column_name = 'score')
   union all select 'challenge_eligibility has RLS on', coalesce((select relrowsecurity from pg_class where oid = to_regclass('studio.challenge_eligibility')), false)
   union all select 'studio_writer can select and insert challenge_eligibility', coalesce(has_table_privilege('studio_writer', to_regclass('studio.challenge_eligibility'), 'SELECT') and has_table_privilege('studio_writer', to_regclass('studio.challenge_eligibility'), 'INSERT'), false)
   union all select 'studio_writer cannot update, delete or truncate challenge_eligibility', coalesce(not (has_table_privilege('studio_writer', to_regclass('studio.challenge_eligibility'), 'UPDATE') or has_table_privilege('studio_writer', to_regclass('studio.challenge_eligibility'), 'DELETE') or has_table_privilege('studio_writer', to_regclass('studio.challenge_eligibility'), 'TRUNCATE')), false)
@@ -43,17 +45,17 @@ begin
     where e.status = 'published' and not exists (select 1 from studio.challenge_eligibility x where x.version_id = v0.id) order by v0.created_at limit 1;
   if v is null then raise exception 'READ-BACK FAILED: no published version to test with'; end if;
 
-  -- A decision that contradicts itself (a score below the threshold marked eligible) is refused.
+  -- A decision that contradicts itself (below the threshold, marked eligible) is refused.
   refused := false;
   begin
-    insert into studio.challenge_eligibility (version_id, challenge, fid, decision, score, eligible) values (v, 'remix-2026-11', 500, 'below', 0.42, true);
+    insert into studio.challenge_eligibility (version_id, challenge, fid, decision, eligible) values (v, 'remix-2026-11', 500, 'below', true);
   exception when check_violation then refused := true;
   end;
   if not refused then raise exception 'READ-BACK FAILED: a contradictory eligibility decision was kept'; end if;
 
-  -- A realistic eligibility decision, as the publish route stores it: FID 500, Neynar score 0.81 at publish.
-  insert into studio.challenge_eligibility (version_id, challenge, fid, decision, score, eligible) values (v, 'remix-2026-11', 500, 'score', 0.81, true);
-  select count(*) into n from studio.challenge_eligibility where version_id = v and fid = 500 and decision = 'score' and score = 0.81 and eligible and checked_at > now() - interval '1 minute';
+  -- A realistic eligibility decision, as the publish route stores it: FID 500 passed the check at publish.
+  insert into studio.challenge_eligibility (version_id, challenge, fid, decision, eligible) values (v, 'remix-2026-11', 500, 'passed', true);
+  select count(*) into n from studio.challenge_eligibility where version_id = v and fid = 500 and decision = 'passed' and eligible and checked_at > now() - interval '1 minute';
   if n <> 1 then raise exception 'READ-BACK FAILED: the eligibility decision did not read back'; end if;
 
   -- A realistic mark: FID 6786 marks this version as their Zei entry.

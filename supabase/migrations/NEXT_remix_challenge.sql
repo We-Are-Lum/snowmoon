@@ -18,9 +18,10 @@
 --    The person who added it, or a moderator, can remove it (a delete: the row is gone).
 -- 3. studio.challenge_eligibility: whether a version can count as an entry, decided once, when it is published
 --    (owner, 2026-10-31: "checked once at publish and stored; never on page view"). One row per version: its maker's
---    FID, the decision ('admin': never eligible; 'invited': IMAGES.invited; 'score' or 'below': the Neynar score at
---    publish, kept here with it; 'unchecked': Neynar didn't answer, so it doesn't count), whether it is eligible, and
---    when it was decided. Pages read only this; Neynar is never asked when someone views a page. Append-only.
+--    FID, the decision ('admin': never eligible; 'invited': IMAGES.invited; 'passed' or 'below': the account's Neynar
+--    score at publish against the challenge's fixed threshold, 0.7; 'unchecked': Neynar didn't answer, so it doesn't
+--    count), whether it is eligible, and when it was decided. The score itself is not kept (owner, 2026-11-01). Pages
+--    read only this; Neynar is never asked when someone views a page. Append-only.
 --
 -- studio_writer's privileges: challenge_marks and challenge_eligibility select and insert (no update, delete or
 -- truncate); version_posts select, insert and delete (no update or truncate).
@@ -60,12 +61,10 @@ create table if not exists studio.challenge_eligibility (
   version_id uuid primary key references studio.element_versions(id),
   challenge text not null check (challenge ~ '^[a-z0-9-]{1,40}$'),
   fid bigint not null check (fid > 0),
-  decision text not null check (decision in ('admin', 'invited', 'score', 'below', 'unchecked')),
-  score numeric(6, 5) check (score is null or (score >= 0 and score <= 1)),
+  decision text not null check (decision in ('admin', 'invited', 'passed', 'below', 'unchecked')),
   eligible boolean not null,
   checked_at timestamptz not null default now(),
-  constraint score_with_its_decision check ((decision in ('score', 'below')) = (score is not null)),
-  constraint eligible_follows_decision check (eligible = (decision in ('invited', 'score')))
+  constraint eligible_follows_decision check (eligible = (decision in ('invited', 'passed')))
 );
 create index if not exists challenge_eligibility_person on studio.challenge_eligibility (challenge, fid);
 
