@@ -239,6 +239,13 @@ export const AGENTS = {
   spend: { framesPerDay: 20, videosPerDay: 5, dailyCapUsd: 2, videoModel: 'fal-ai/longcat-video/distilled/image-to-video/480p', videoUsdPerSecond: 0.005, videoSeconds: 10.8 },
   /** What an agent may be given. The person sees every one before agreeing. */
   scopes: ['read', 'drafts', 'images', 'notes'] as const,
+  /**
+   * The "play" scope (Minpentai agent play): start matches against the site computer, see only your side, submit
+   * moves. Switched on 2026-11-01 for these people only (owner: "switched on for me only, FID 6786"), with 0032 applied
+   * and Terms §6d / Privacy §4 live. Anyone else: the scope isn't granted, its tools aren't listed or run, and a match
+   * link opens nothing. The local tests add their own people (MINPENTAI_PLAY_TEST, never on Vercel).
+   */
+  minpentaiPlay: { people: [6786] as readonly number[] },
   /** At most this many live agents per person (also a database trigger). */
   perPerson: 3,
   /**

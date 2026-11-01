@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import { agentsOn } from '~/lib/agents/core';
 import { checkAuthorize, OAuthError, SCOPE_TEXT } from '~/lib/agents/oauth';
+import { AGENTS } from '~/lib/config';
 import { AGENT_WORDING } from '~/lib/agents/wording';
 import { AuthorizeConsent } from './consent';
 
@@ -23,7 +24,10 @@ export default async function Authorize({ searchParams }: { searchParams: Promis
         <AuthorizeConsent
           query={q.toString()}
           client={ask.clientName}
-          scopes={ask.scopes.map((s) => SCOPE_TEXT[s])}
+          scopes={ask.scopes.filter((s) => s !== 'play').map((s) => SCOPE_TEXT[s])}
+          // "play" is listed only to the people agent play is open to, who are granted it whether or not the app asked
+          // (oauth.ts approve); anyone else is never granted it.
+          play={AGENTS.minpentaiPlay.people.length ? { text: SCOPE_TEXT.play, people: [...AGENTS.minpentaiPlay.people] } : null}
           backHost={new URL(ask.redirectUri).host}
         />
       </div>
