@@ -20,10 +20,13 @@ export const CHALLENGE_WORDING = {
     `From ${windowText()}, make your own version of ${listed(callNames())} on snowmoon.party: start from a published sheet, or from someone else’s remix, change it, and publish. Your version gets its own page, credited back to what you built on.`,
   nextHead: 'What happens next.',
   next: () =>
-    `At the call on ${d('results')}, Nate shows the versions he’s taking into Episode 1, built from your remixes and credited to you. AI models and a small jury divide the credit for each one among everything it was built on, and we publish how every model did it. We plan to mint each final version as an open edition, with what it raises going to everyone it was built on. Details come with the mint page.`,
-  bountyHead: 'The bounty.',
-  bounty:
-    'There is one poidh bounty for the whole challenge. It goes to the remix that most changes how we see a character while staying true to the book. To be in the running, also post your version’s link as a claim on the bounty.',
+    `At the call on ${d('results')}, Nate shows the versions he’s taking into Episode 1, built from your remixes and credited to you. AI models and a small jury divide the credit for each one among everything it was built on, and we publish how every model did it. We plan to mint each final version as an open edition, with what it raises split among everyone it was built on, including the We Are Lum team. Details come with the mint page.`,
+  bountyHead: 'The bounties.',
+  bounty: () =>
+    `There is one poidh bounty for each character, ${numberWord(CHALLENGE.characters.length)} in all, on Ethereum mainnet, each funded and judged by Nate${CHALLENGE.bountyAmount ? `, ${CHALLENGE.bountyAmount} each` : ''}. Each goes to the remix that most changes how we see that character while staying true to the book. To claim one, your version must be an entry for that character here; post its link as a claim on that character’s bounty. Claiming needs a little ETH on mainnet for gas. A bounty can pay out even if its character has fewer than ${numberWord(CHALLENGE.minEntrants)} entrants; if no claim fits, Nate cancels it.`,
+  /** The judging line for one character's bounty (owner, 2026-11-01). */
+  bountyFor: (name: string) => `The bounty for ${name}: the remix that most changes how we see ${name} while staying true to the book.`,
+  bountyLink: (name: string) => `${name}’s bounty on poidh`,
   rulesHead: 'The rules.',
   rules: () => [
     'Make your remix on snowmoon.party with the site’s tools. Every recipe is published.',
@@ -33,6 +36,7 @@ export const CHALLENGE_WORDING = {
     `Each character needs at least ${numberWord(CHALLENGE.minEntrants)} different people with an entry. A character with fewer gets no final version, credit test or mint.`,
     'Entering is free. Minting isn’t needed for anything.',
     'Post your version anywhere with its link. If you’re remixing someone’s post, quote or reply to it.',
+    `An account passes the site’s check with a Neynar score of at least ${CHALLENGE.neynarMinScore}, fixed for the whole challenge.`,
   ],
   adminsLine: 'Admins (the site’s owner and @garance) can make versions too, but aren’t eligible for rewards.',
   notAffiliated: 'An independent adaptation of Snowmoon by Vitalik Buterin (GPL-3.0), not affiliated with him.',
@@ -48,7 +52,6 @@ export const CHALLENGE_WORDING = {
   entriesOff: 'Entries will be listed here once the challenge starts.',
   entrants: (n: number) => `${n} ${n === 1 ? 'person has' : 'people have'} entered`,
   entrantsNeeded: (n: number) => (n >= CHALLENGE.minEntrants ? 'enough for a final version' : `${CHALLENGE.minEntrants - n} more needed for a final version`),
-  held: (name: string) => `${name}’s starting sheet is held for a check before it’s published.`,
   adminsHead: 'Made by admins (not eligible for rewards)',
   badge: 'Entry',
   badgeNote: (name: string) => `This is its maker’s entry for ${name} in the remix challenge.`,

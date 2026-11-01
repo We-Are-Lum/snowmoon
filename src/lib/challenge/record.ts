@@ -11,9 +11,10 @@ import { eligibility, inWindow, needsScore } from './rules';
  * The remix challenge's eligibility, decided once, when a version is published (owner, 2026-10-31: "checked once at
  * publish and stored; never on page view"). Called only by the publish route (/api/designs), after the version is
  * written. For a version of a challenge character's fork made inside the window, it stores the decision in
- * studio.challenge_eligibility: 'admin', 'invited', or the Neynar score at publish ('score' or 'below'; 'unchecked' if
- * Neynar didn't answer). The score comes from the same lookup the publish gate just made (kept a day in
- * studio.image_scores), so publishing asks Neynar at most once. Never throws: a version whose decision can't be stored
+ * studio.challenge_eligibility: 'admin', 'invited', 'passed' or 'below' (the Neynar score at publish against
+ * CHALLENGE.neynarMinScore; the score itself is not kept), or 'unchecked' if Neynar didn't answer, and when. The score
+ * comes from the same lookup the publish gate just made (kept a day in studio.image_scores, as for every Generate), so
+ * publishing asks Neynar at most once. Never throws: a version whose decision can't be stored
  * simply doesn't count (and the table missing before the owner applies NEXT_remix_challenge is the same).
  * Nothing is stored until the Privacy page describes the remix challenge (the owner's reread; legal texts describe
  * today), the same condition that opens sheets to everyone.
@@ -41,10 +42,7 @@ export async function recordEligibility(sql: Sql, versionId: string, fid: number
     const e = eligibility({ maker: fid, score });
     if (e.why === 'not-a-farcaster-account') return 'not-a-candidate';
     const decision = e.why;
-    await sql`insert into studio.challenge_eligibility ${sql({
-      version_id: versionId, challenge: CHALLENGE.id, fid, decision,
-      score: decision === 'score' || decision === 'below' ? score : null, eligible: e.eligible,
-    })} on conflict (version_id) do nothing`;
+    await sql`insert into studio.challenge_eligibility ${sql({ version_id: versionId, challenge: CHALLENGE.id, fid, decision, eligible: e.eligible })} on conflict (version_id) do nothing`;
     return 'stored';
   } catch (e) {
     console.error('challenge: eligibility not stored', (e as { code?: string }).code ?? (e as Error).name);

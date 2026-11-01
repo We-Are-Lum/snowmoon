@@ -2,7 +2,7 @@ import 'server-only';
 import type postgres from 'postgres';
 import { CHALLENGE, WORK_ID } from '../config';
 import { bookCharacter } from '../images/designs';
-import { chooseEntries, eligibility, entrantCounts, inWindow, markKey, newestFirst, type Candidate, type Eligibility } from './rules';
+import { chooseEntries, entrantCounts, fromDecision, type Decision, inWindow, markKey, newestFirst, type Candidate, type Eligibility } from './rules';
 
 /**
  * The remix challenge's entries (owner, 2026-10-31), the server half, for pages. Reads published sheets, the private
@@ -85,22 +85,18 @@ let eligibilityMissingUntil = 0;
 export async function eligibilityOf(sql: Sql, versions: ChallengeVersion[]): Promise<Map<string, Eligibility>> {
   const out = new Map<string, Eligibility>();
   if (!versions.length) return out;
-  const stored = new Map<string, { decision: string; score: number | null }>();
+  const stored = new Map<string, Decision>();
   if (Date.now() >= eligibilityMissingUntil) {
     try {
-      const rows = await sql<{ version_id: string; decision: string; score: string | null }[]>`
-        select version_id, decision, score from studio.challenge_eligibility where challenge = ${CHALLENGE.id} and version_id in ${sql(versions.map((v) => v.versionId))}`;
-      for (const r of rows) stored.set(String(r.version_id), { decision: r.decision, score: r.score === null ? null : Number(r.score) });
+      const rows = await sql<{ version_id: string; decision: Decision }[]>`
+        select version_id, decision from studio.challenge_eligibility where challenge = ${CHALLENGE.id} and version_id in ${sql(versions.map((v) => v.versionId))}`;
+      for (const r of rows) stored.set(String(r.version_id), r.decision);
     } catch (e) {
       if (missing(e)) eligibilityMissingUntil = Date.now() + 60_000;
       else console.error('challenge: eligibility not read', (e as { code?: string }).code ?? (e as Error).name);
     }
   }
-  for (const v of versions) {
-    const s = stored.get(v.versionId);
-    // The stored score is re-read against today's threshold and lists, so a decision can't outlive a list change.
-    out.set(v.versionId, eligibility({ maker: v.maker, score: s?.score ?? null }));
-  }
+  for (const v of versions) out.set(v.versionId, fromDecision(v.maker, stored.get(v.versionId) ?? null));
   return out;
 }
 
