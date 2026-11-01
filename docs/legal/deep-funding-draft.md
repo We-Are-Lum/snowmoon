@@ -21,10 +21,9 @@ switch stays off until then:
 1. **Who receives the book's share** (`DEEP_FUNDING.bookRecipient`, UNSET). The plan sends it to the Lake; the setting
    lets you name another recipient. The Terms line below says "the Lake, unless the challenge page names another
    recipient"; change it once you decide.
-2. **"No token".** Terms §2 says "There is no token" and principle 7's check wants "No token" on the first screen (it
-   fails on production today: the home page's first screen no longer shows "no token"). These lines don't announce a
-   mint; they describe how credit is divided and that the split is a plan. The mint gets its own Terms section in its
-   own release (as the remix-challenge draft says).
+2. **The mint.** These lines don't announce a mint; they describe how credit is divided and that the split is a
+   plan. The mint gets its own Terms section in its own release (main's `docs/legal/no-token-draft.md` covers the end
+   of "no token").
 3. **Which models.** The §7 item names the providers of the six open-weight models in
    `src/lib/deep-funding/models.ts`. If you add a closed model for comparison, its provider must be named here first.
 
@@ -45,7 +44,8 @@ switch stays off until then:
 
 ## Privacy §7 (Outside services): a new item
 
-> For the remix challenge's deep funding test, the Vercel AI Gateway, and through it Baseten, Parasail and Mistral AI,
+> For the remix challenge's deep funding test, the Vercel AI Gateway, and through it Baseten, Parasail, Mistral AI and
+> Together AI,
 > receive published character sheets (the addresses of their pictures, their titles, texts and recipes) and the
 > book's words, to answer how the credit for each final version divides. Every request asks for zero data retention
 > and no training on what is sent. They receive nothing about you beyond what is already public on the version's page,
@@ -72,7 +72,6 @@ switch stays off until then:
   number only. The runner's results file holds juror numbers, never FIDs (`answersByNumber`).
 - **No admin power is added** (P5b): jurors are added by you in the SQL Editor
   (`supabase/drafts/ADD-JUROR-deep_funding.sql`), so the Terms line says "the site's owner invites them".
-- **Addresses.** The payout needs each recipient's mainnet address, checked (an ordinary wallet, or a contract wallet
-  deployed on mainnet) and screened. Where those addresses come from (Farcaster-verified addresses through Neynar) is a
-  later step with its own Privacy line: Neynar would receive recipients' FIDs to read their verified addresses. Not
-  drafted here, because nothing reads addresses yet.
+- **Addresses.** Recipients confirm a payout address on the site before the splits are made: see
+  `docs/proposals/payout-addresses.md`, which carries its own Privacy and Terms lines. Not drafted here, because nothing
+  reads addresses yet.

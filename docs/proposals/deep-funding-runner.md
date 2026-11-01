@@ -142,14 +142,26 @@ including `vision` and `structured-output`, and price). The docs: per-request ZD
 
 | Model id | Maker | Provider (pinned) | ZDR there | Image input there | USD / M tokens (in / out) | Open weights |
 | --- | --- | --- | --- | --- | --- | --- |
-| `moonshotai/kimi-k3` | Moonshot AI | Baseten | yes | yes | 3.00 / 15.00 | yes |
 | `alibaba/qwen3.8-27b` | Alibaba (Qwen) | Parasail | yes | yes | 0.24 / 2.20 | yes |
 | `mistral/mistral-large-3` | Mistral AI | Mistral | yes | yes | 0.50 / 1.50 | yes |
 | `deepseek/deepseek-v4.1-flash` | DeepSeek | Baseten | yes | yes | 0.30 / 1.20 | yes |
 | `zai/glm-5.3-flash` | Z.ai | Baseten | yes | yes | 0.15 / 0.50 | yes |
 | `google/gemma-4-31b-it` | Google | Parasail | yes | yes | 0.15 / 0.40 | yes |
+| `nvidia/nemotron-3.5-super-vl` | NVIDIA | Together AI | yes | yes | 0.15 / 0.50 | yes |
 
-Reserves (open weights, ZDR and image input on that provider): `nvidia/nemotron-3.5-super-vl` (Baseten, 0.20 / 0.50),
+**Kimi K3 swapped out (owner, 2026-11-01).** It was 71% of the run's cost. In its place, from the reserves,
+**NVIDIA Nemotron 3.5 Super VL**, because it is:
+- the cheapest reserve ($0.15 / $0.50 on Together AI, against $0.30 / $1.20 for MiniMax M3 and $0.24 / $0.97 for
+  Llama 4 Maverick);
+- listed with structured output (Llama 4 Maverick isn't, on Bedrock, its only zero-retention provider);
+- zero retention with image input on two providers (Baseten and Together AI), so a second is there if one fails;
+- a sixth maker, keeping the six from six different makers.
+
+It is pinned to Together AI, which serves it unquantized and cheaper; Baseten serves an fp4 build at $0.20 in. The
+gateway only tags it "open-weights"; NVIDIA publishes its models under its own licence terms, so check the licence
+line before the results name it.
+
+Reserves now (open weights, ZDR and image input on that provider): `moonshotai/kimi-k3` (Baseten, 3.00 / 15.00),
 `minimax/minimax-m3` (Fireworks, 0.30 / 1.20), `meta/llama-4-maverick` (Bedrock, 0.24 / 0.97; no structured output).
 Closed, for comparison only if wanted and labelled "closed model" (off): `anthropic/claude-sonnet-5.5` (2 / 10),
 `openai/gpt-6.1-terra` (1 / 5); both list ZDR on every endpoint.
@@ -163,23 +175,22 @@ input and vary by model; the listings show no separate per-image price for these
 At a guessed 12,000 input tokens (up to six pictures of a one-parent node, plus text) and 2,500 output tokens
 (including reasoning) per call:
 
-| Per call | Kimi K3 | Qwen 3.8 27B | Mistral Large 3 | DeepSeek V4.1 Flash | GLM 5.3 Flash | Gemma 4 31B | All six |
+| Per call | Qwen 3.8 27B | Mistral Large 3 | DeepSeek V4.1 Flash | GLM 5.3 Flash | Gemma 4 31B | Nemotron 3.5 Super VL | All six |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| USD | 0.0735 | 0.0084 | 0.0098 | 0.0066 | 0.0031 | 0.0028 | 0.1041 |
+| USD | 0.0084 | 0.0098 | 0.0066 | 0.0031 | 0.0028 | 0.0031 | 0.0336 |
 
-So **$0.312 per node** for 6 models × 3 runs. N nodes cost about 0.312 × N:
+So **$0.101 per node** for 6 models × 3 runs, against $0.312 with Kimi K3. N nodes cost about 0.101 × N:
 
 | Nodes | Example | Cost |
 | --- | --- | --- |
-| 20 | one character, 19 versions | $6.24 |
-| 30 | two characters of 15 | $9.37 |
-| 60 | four characters of 15 | $18.73 |
-| 80 | the most under $25 | $24.98 |
-| 90 | six characters of 15 | $28.10, over: stop and report |
+| 20 | one character, 19 versions | $2.02 |
+| 30 | two characters of 15 | $3.03 |
+| 60 | four characters of 15 | $6.05 |
+| 90 | six characters of 15 | $9.08 |
+| 247 | the most under $25 | $24.92 |
 
-Kimi K3 is 71% of the cost. With the Nemotron reserve in its place the six cost $0.103 per node (about 240 nodes under
-$25). A final with four parents sends up to 15 pictures, so its calls cost more; the runner records real tokens and
-stops before $25 whatever the estimate said. Production has no published character sheets yet (read-only count,
+A final with four parents sends up to 15 pictures, so its calls cost more. The runner records real tokens and stops
+before $25 whatever the estimate said. Production has no published character sheets yet (read-only count,
 2026-11-01), so N is unknown until the challenge runs.
 
 ## Decisions the owner owes
@@ -187,14 +198,14 @@ stops before $25 whatever the estimate said. Production has no published charact
 1. **Who receives the book's share** (`DEEP_FUNDING.bookRecipient`): the Lake, or another address. Until then no
    final payout.
 2. **The score weights** (default equal) and the top-three rule (default 3).
-3. **The six models**, and whether Kimi K3 (71% of the cost) stays; whether any closed model is added for comparison
-   (it would need its provider in Privacy §7 first).
+3. **The six models** (Kimi K3 swapped for Nemotron, 2026-11-01); whether any closed model is added for comparison
+   (it would need its provider in Privacy §7 first); Nemotron's licence line.
 4. **The final versions** (`DEEP_FUNDING.finals`), and how the final credits several entries: the plan says "one
    `remixed_from` plus extra `uses` links … a small interface and server change"; that change isn't built here (the
    graph reads such links when they exist).
 5. **Jurors** (5 to 9 per character), added by you in the SQL Editor.
-6. **Where recipients' addresses come from** and how they are checked (deployed on mainnet, screened). The runner
-   takes a checked file; reading Farcaster-verified addresses through Neynar would need its own Privacy line.
+6. **Payout addresses:** the proposal is `docs/proposals/payout-addresses.md` (each recipient confirms one on the
+   site). Until it is built, the runner takes a checked file.
 7. **Reread** of `docs/legal/deep-funding-draft.md`, then `DEEP_FUNDING.jurors` on.
 8. **Apply** `NEXT_deep_funding_jurors.sql` (after `NEXT_remix_challenge.sql`; it doesn't depend on it, but its add-a-
    juror statement does).
@@ -228,6 +239,10 @@ stops before $25 whatever the estimate said. Production has no published charact
 - **P6 (privacy):** two new private tables (P6b covers them); the juror switch waits for Privacy words (P6r, new,
   pending the owner's yes); every model request asks for ZDR and no training, and a reply without ZDR confirmed is not
   used.
-- **P7 (payments never in scoring; no token):** P7a passes (scores never read payments). P7b fails on production's
-  home page today ("no token" missing from the first screen), not from this branch. Tension: the payout and split
-  this prepares, next to "No token".
+- **P7 (payments never in scoring):** P7a passes (scores never read payments). P7b is main's version since the merge
+  of origin/main (2026-11-01; #73 removed "no token" on purpose).
+
+## Related plans
+
+- `docs/proposals/challenge-record.md`: the challenge record on IPFS, which every Snowmoon WIP token references.
+- `docs/proposals/payout-addresses.md`: recipients confirm a payout address before the splits are made.
