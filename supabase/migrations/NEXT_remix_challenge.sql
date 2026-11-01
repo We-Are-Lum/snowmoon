@@ -6,7 +6,7 @@
 -- One transaction: all of it or none. Safe to run twice. First run supabase/drafts/NEXT_remix_challenge.DRY-RUN.sql
 -- (the same SQL ending in rollback), then this, then both parts of supabase/drafts/READ-BACK-remix_challenge.sql.
 --
--- What it adds (neither table is publicly readable: no public read policy, and anon and authenticated lose every
+-- What it adds (no table is publicly readable: no public read policy, and anon and authenticated lose every
 -- privilege 0001's default privileges gave them; the site reads them on the server, as studio_writer):
 -- 1. studio.challenge_marks: "Mark as my entry". A person (FID) marks one of their own versions as their entry for a
 --    challenge character; append-only, the latest row per (challenge, fid, character) counts. Without a mark, their
@@ -16,9 +16,14 @@
 --    post's id there, the writer's handle, when it was posted, its address (rebuilt by us), who added it (fid: a FID,
 --    or minus a wallet account) and when. Never the post's words, avatar or pictures. One row per post per version.
 --    The person who added it, or a moderator, can remove it (a delete: the row is gone).
+-- 3. studio.challenge_eligibility: whether a version can count as an entry, decided once, when it is published
+--    (owner, 2026-10-31: "checked once at publish and stored; never on page view"). One row per version: its maker's
+--    FID, the decision ('admin': never eligible; 'invited': IMAGES.invited; 'score' or 'below': the Neynar score at
+--    publish, kept here with it; 'unchecked': Neynar didn't answer, so it doesn't count), whether it is eligible, and
+--    when it was decided. Pages read only this; Neynar is never asked when someone views a page. Append-only.
 --
--- studio_writer's privileges: challenge_marks select and insert (no update, delete or truncate); version_posts select,
--- insert and delete (no update or truncate).
+-- studio_writer's privileges: challenge_marks and challenge_eligibility select and insert (no update, delete or
+-- truncate); version_posts select, insert and delete (no update or truncate).
 
 begin;
 
@@ -51,12 +56,30 @@ create table if not exists studio.version_posts (
 create index if not exists version_posts_version on studio.version_posts (version_id, posted_at desc);
 create index if not exists version_posts_person on studio.version_posts (fid, added_at);
 
+create table if not exists studio.challenge_eligibility (
+  version_id uuid primary key references studio.element_versions(id),
+  challenge text not null check (challenge ~ '^[a-z0-9-]{1,40}$'),
+  fid bigint not null check (fid > 0),
+  decision text not null check (decision in ('admin', 'invited', 'score', 'below', 'unchecked')),
+  score numeric(6, 5) check (score is null or (score >= 0 and score <= 1)),
+  eligible boolean not null,
+  checked_at timestamptz not null default now(),
+  constraint score_with_its_decision check ((decision in ('score', 'below')) = (score is not null)),
+  constraint eligible_follows_decision check (eligible = (decision in ('invited', 'score')))
+);
+create index if not exists challenge_eligibility_person on studio.challenge_eligibility (challenge, fid);
+
 alter table studio.challenge_marks enable row level security;
+alter table studio.challenge_eligibility enable row level security;
 alter table studio.version_posts enable row level security;
 drop policy if exists writer_read on studio.challenge_marks;
 create policy writer_read on studio.challenge_marks for select to studio_writer using (true);
 drop policy if exists writer_insert on studio.challenge_marks;
 create policy writer_insert on studio.challenge_marks for insert to studio_writer with check (true);
+drop policy if exists writer_read on studio.challenge_eligibility;
+create policy writer_read on studio.challenge_eligibility for select to studio_writer using (true);
+drop policy if exists writer_insert on studio.challenge_eligibility;
+create policy writer_insert on studio.challenge_eligibility for insert to studio_writer with check (true);
 drop policy if exists writer_read on studio.version_posts;
 create policy writer_read on studio.version_posts for select to studio_writer using (true);
 drop policy if exists writer_insert on studio.version_posts;
@@ -65,9 +88,12 @@ drop policy if exists writer_delete on studio.version_posts;
 create policy writer_delete on studio.version_posts for delete to studio_writer using (true);
 revoke all on studio.challenge_marks from anon, authenticated;
 revoke all on studio.version_posts from anon, authenticated;
+revoke all on studio.challenge_eligibility from anon, authenticated;
 revoke update, delete, truncate on studio.challenge_marks from studio_writer;
 revoke update, truncate on studio.version_posts from studio_writer;
+revoke update, delete, truncate on studio.challenge_eligibility from studio_writer;
 grant select, insert on studio.challenge_marks to studio_writer;
 grant select, insert, delete on studio.version_posts to studio_writer;
+grant select, insert on studio.challenge_eligibility to studio_writer;
 
 commit;
