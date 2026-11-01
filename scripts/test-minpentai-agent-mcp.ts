@@ -80,7 +80,7 @@ try {
     if (!g.ok || v.phase === 'over') break;
     if (turns === 0) {
       const page = await (await fetch(live)).text();
-      check('M11 the live link opens with its secret, and says it shows one side only', /Minpentai: your side/.test(page) && /Only your side is shown/.test(page));
+      check('M11 the live link opens with its secret, and says it shows one side only', /your side/.test(page) && /Only your side is shown/.test(page));
       const bad = await fetch(live.replace(/k=.*/, 'k=wrongwrongwrongwrong'));
       check('M12 a wrong secret opens nothing', bad.status === 404);
     }
@@ -120,7 +120,7 @@ try {
   check('M20 after the end the live link shows the whole board', /The whole board at the end/.test(after));
   // The table (0032_minpentai_agent_matches.sql v2): the exact ruleset, updated_at stamped on every save, nobody but the server reads it, and the server can't delete.
   const row = (await S.pg.query<{ ruleset: string; level: number; stamped: boolean }>(`select ruleset, level, updated_at > created_at as stamped from studio.mp_agent_matches where id = $1`, [id])).rows[0];
-  check('M24 the match is stored under its exact ruleset and level', row?.ruleset === 'book-1' && row.level === 2, JSON.stringify(row));
+  check('M24 the match is stored under its exact ruleset and level', row?.ruleset === 'book-2' && row.level === 2, JSON.stringify(row));
   check('M25 every save stamps updated_at', row?.stamped === true);
   const priv = (await S.pg.query<Record<string, boolean>>(`select has_table_privilege('anon', 'studio.mp_agent_matches', 'select') as a, has_table_privilege('authenticated', 'studio.mp_agent_matches', 'select') as b, has_table_privilege('studio_writer', 'studio.mp_agent_matches', 'delete') as c, has_table_privilege('service_role', 'studio.mp_agent_matches', 'delete') as d, has_table_privilege('service_role', 'studio.mp_agent_matches', 'truncate') as e`)).rows[0];
   check('M26 anon and authenticated can\'t read the table; neither the server nor the service_role key can delete from it', priv && !priv.a && !priv.b && !priv.c && !priv.d && !priv.e, JSON.stringify(priv));

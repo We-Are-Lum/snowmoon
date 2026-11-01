@@ -61,7 +61,7 @@ try {
   token = await connect();
   const names = ((await rpc('tools/list')).result?.tools ?? []).map((t) => t.name);
   check('the test account\'s agent gets the Minpentai tools (play added for invited people)', names.includes('minpentai_start_solo'), names.join(','));
-  const st = await tool('minpentai_start_solo', { ruleset: 'book', level: 1, model: { name: 'Live check script', maker: 'snowmoon.party', weights: 'open' } });
+  const st = await tool('minpentai_start_solo', { ruleset: 'book', level: Number(process.argv.find((a) => a.startsWith('--level='))?.slice(8) ?? 1), model: { name: 'Live check script', maker: 'snowmoon.party', weights: 'open' } });
   check('start a Rocks and Mirrors match', st.ok, st.error ?? '');
   const id = st.out.match_id as string, live = st.out.live_url as string;
   console.log(`  match ${id}`);
@@ -70,10 +70,12 @@ try {
   check('no record before the end, in the same words as for no match', !early.ok && early.error === none.error);
   const page = await fetch(live), bad = await fetch(live.replace(/k=.*/, 'k=wrongwrongwrongwrongwr'));
   check('the live link opens with its secret, and a wrong secret opens nothing', page.ok && bad.status === 404, `${page.status}/${bad.status}`);
-  const finals: number[] = [];
+  const finals: number[] = [], plain: number[] = [];
   let turns = 0, viewOk = 0, simOk = 0, refOk = 0;
   for (;;) {
+    const tg = Date.now();
     const g = await tool('minpentai_get_view', { match_id: id });
+    plain.push(Date.now() - tg);
     const v = g.out;
     if (!g.ok || v.phase === 'over') break;
     const m = await real(id);
@@ -83,7 +85,7 @@ try {
     else check(`turn ${v.turn}: the view is the side's fog view, whatever is hidden`, false);
     // The sandbox: production's answer equals the answer from the real board with the hidden pieces removed.
     const east = [...(v.can_place as [number, number][])].sort((a, b) => b[0] - a[0] || a[1] - b[1]);
-    const sc = { scenarios: [{ name: 'tower', placements: east.length ? [{ piece: 'tower', x: east[0][0], y: east[0][1] }] : [] }, { name: 'symbols', placements: east.length > 2 ? [0, 1, 2].map((i) => ({ piece: 'symbol_glider', x: east[i][0], y: east[i][1], dir: 'E' })) : [] }, { name: 'mirror', placements: east.length ? [{ piece: 'mirror', x: east[0][0], y: east[0][1], slant: '/' }] : [] }], steps: 24 };
+    const sc = { scenarios: [{ name: 'tower', placements: east.length ? [{ piece: 'tower', x: east[0][0], y: east[0][1] }] : [] }, { name: 'symbols', placements: east.length > 2 ? [0, 1, 2].map((i) => ({ piece: 'symbol_glider', x: east[i][0], y: east[i][1], dir: 'E' })) : [] }, { name: 'mirror', placements: east.length ? [{ piece: 'mirror', x: east[0][0], y: east[0][1], slant: '/' }] : [] }], steps: Math.min(24, (v.max_steps as number) - (v.step as number)) };
     const sim = await tool('minpentai_simulate', { match_id: id, ...sc });
     if (sim.ok && isDeepStrictEqual(JSON.parse(JSON.stringify(simulate(withoutHidden(m), sc as never))), sim.out)) simOk++;
     else check(`turn ${v.turn}: the sandbox doesn't depend on hidden pieces`, false, sim.error ?? '');
@@ -111,7 +113,13 @@ try {
   check(`every turn's view was the side's fog view, whatever was hidden (${viewOk} of ${turns})`, viewOk === turns && turns > 3);
   check(`every turn's sandbox answer was the same without the hidden pieces (${simOk} of ${turns})`, simOk === turns);
   check(`every turn's refusal read the same without the hidden pieces (${refOk} of ${turns})`, refOk === turns);
+  const med = (xs: number[]) => [...xs].sort((a, b) => a - b)[xs.length >> 1];
+  console.log(`  get_view (plans nothing): ${plain.join(', ')} ms; final submits: ${finals.join(', ')} ms`);
   check(`final submits take the fixed time, over the network (${finals.join(', ')} ms)`, finals.length > 2 && Math.min(...finals) >= 395);
+  // The padding hides planning only if every final submit's time above the network's is the same: spread within the
+  // spread of calls that plan nothing.
+  const spreadF = Math.max(...finals) - Math.min(...finals), spreadP = Math.max(...plain) - Math.min(...plain);
+  check(`final submits vary no more than calls that plan nothing (final spread ${spreadF} ms, plain ${spreadP} ms, medians ${med(finals)} / ${med(plain)} ms)`, spreadF <= Math.max(150, spreadP * 1.5));
   const rec = await tool('minpentai_get_record', { match_id: id });
   check('at the end the record opens', rec.ok, rec.error ?? '');
   const m = await real(id);

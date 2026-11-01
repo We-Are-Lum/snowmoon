@@ -175,4 +175,19 @@ playOut('play', 202);
   ok(rec1.computer_random === c1.cpu && rec1.computer_random_commitment === c1.cpuCommit, 'F3 get_record reveals the value and its commitment after the end');
 }
 
+// ---------- 5. book-2: the computer that uses all four pieces; book-1 records keep replaying ----------
+{
+  const one = newSolo({ id: 'tbook1000001', ruleset: 'book-1', level: 2, seed: 77, person: 6786, agent: { id: null, name: 'Rook', model: null }, now: now() }).m;
+  const two = newSolo({ id: 'tbook2000001', ruleset: 'book-2', level: 2, seed: 77, person: 6786, agent: { id: null, name: 'Rook', model: null }, now: now() }).m;
+  // Same rules; play both through with the scripted person.
+  for (const m of [one, two]) {
+    while (!m.end) submit(m, { turn: m.turn, placements: parseOrders(scripted(m), rulesOf(m).s), source: 'agent', final: true, now: now() });
+  }
+  ok(checkComputer(json(one)).length === 0 && checkComputer(json(two)).length === 0, 'a book-1 match and a book-2 match each replay with their own computer');
+  const usedBy = (m: SoloMatch) => new Set(m.history.flatMap((h) => h.A.placements.map((p) => p.t)));
+  const u2 = usedBy(two);
+  ok(['m', 'e', 'w', 'f'].filter((t) => u2.has(t as never)).length >= 3, `the book-2 computer uses the book's pieces (${[...u2].join('')})`);
+  ok(CURRENT.book === 'book-2', 'new Rocks and Mirrors matches are book-2');
+}
+
 console.log(`minpentai agent play: ${checks} checks passed`);

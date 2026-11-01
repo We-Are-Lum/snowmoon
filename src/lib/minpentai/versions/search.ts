@@ -98,7 +98,14 @@ export function belief(m: Pick<TurnInput, 'view' | 'lastSeen' | 'o' | 'e'>): Wor
 }
 
 /** A turn for side m.o at the given level. */
-export function searchPlan(m: TurnInput & { level: number; preset?: Preset; config?: SearchLevel }): Required<Plan> {
+/**
+ * A computer that uses the book edition's pieces (ruleset book-2, owner 2026-11-01: "so a match uses all four pieces on
+ * both sides"). Each turn, before its usual search, it considers one book piece it has none of standing, in this order:
+ * a glider factory, a moving wall, a mirror wall, three symbol gliders together. It takes the best placement of that
+ * kind if it scores no worse than `variety` below placing nothing; then the usual search spends the rest.
+ */
+export interface BookPlay { variety: number; kinds?: ('f' | 'w' | 'm' | 'e')[]; /** No book piece before this turn to act (setup is 0): towers come first. */ from?: number }
+export function searchPlan(m: TurnInput & { level: number; preset?: Preset; config?: SearchLevel; book?: BookPlay }): Required<Plan> {
   const { e, s, o } = m, L = m.config ?? SEARCH_LEVELS[m.level];
   const base = belief(m);
   const per = s.every + L.horizon;
@@ -126,8 +133,30 @@ export function searchPlan(m: TurnInput & { level: number; preset?: Preset; conf
   const chosen: Placement<AnyPiece>[] = [];
   let points = m.points, current = simulate([]), first = true;
   const costOf = (ps: Placement<AnyPiece>[]) => ps.reduce((t, p) => t + e.cost(s, p.t), 0);
+  if (m.book && base.step >= (m.book.from ?? 0) * s.every) {
+    const has = { f: Object.values(base.fa ?? {}).some((f) => f.o === o), w: (base.mw ?? []).some((w) => w.o === o && w.c.some(Boolean)), m: Object.values(base.mir ?? {}).some((x) => x.o === o), e: base.gl.some((g) => g.o === o && g.seed) || Object.values(base.sd ?? {}).some((x) => x === o) };
+    const seedGroups = pool.filter((ps) => ps.length === 3 && ps.every((p) => p.t === 'e'));
+    for (const kind of m.book.kinds ?? (['f', 'w', 'm', 'e'] as const)) {
+      if (has[kind] || !(e.cost(s, kind) > 0)) continue;
+      const cands = kind === 'e' ? seedGroups : singles.filter((p) => p.t === kind).map((p) => [p]);
+      let best: { ps: Placement<AnyPiece>[]; v: number } | null = null;
+      for (const ps of cands) {
+        if (steps + per > L.steps) break;
+        if (costOf(ps) > points || e.refuse(base, s, o, m.snap, m.points, ps)) continue;
+        const v = simulate(ps);
+        if (!best || v > best.v) best = { ps, v };
+      }
+      if (best && best.v >= current - m.book.variety) {
+        chosen.push(...best.ps);
+        current = best.v;
+        points -= costOf(best.ps);
+        break; // one book piece a turn
+      }
+    }
+  }
+  const bookPieces = chosen.length; // the book piece, if any, doesn't count against a level's piece limit
   for (;;) {
-    if (L.pieces !== undefined && chosen.length >= L.pieces) break;
+    if (L.pieces !== undefined && chosen.length - bookPieces >= L.pieces) break;
     const options: { ps: Placement<AnyPiece>[]; v: number }[] = [];
     for (const ps of pool) {
       if (steps + per > L.steps) break;

@@ -12,7 +12,7 @@ const colour = (o: 'C' | 'A') => (o === 'C' ? CYAN : AMBER);
 const Z = 28;
 
 /** One frame of a scenario, drawn with Play's colours: towers ringed, squares filled, gliders as arrows. */
-function Board({ e, w }: { e: Engine; w: World }) {
+export function Board({ e, w }: { e: Engine; w: World }) {
   const cells: React.ReactNode[] = [];
   for (let y = 0; y < e.H; y++) for (let x = 0; x < e.W; x++) {
     const k = e.K(x, y), X = x * Z, Y = y * Z, c = X + Z / 2, d = Y + Z / 2, at = e.wallAt(w, k);
@@ -105,7 +105,7 @@ export function BookView({ people }: { people: number[] }) {
         rocks that hold ore. Each piece below gives the book&rsquo;s words first, then the rules this edition invented for it, then a
         small board to play.
       </p>
-      <p className="mb-note">The book edition. Preview only: not playable as a match until the site&rsquo;s computer uses moving walls and factories.</p>
+      <p className="mb-note">The book edition. Invite-only while it&rsquo;s being tried. <a href="/minpentai/book/tutorial">The four pieces in four cards →</a></p>
       {BOOK_PIECES.map((p) => (
         <section key={p.id} className="mb-piece">
           <h2>{p.name}</h2>
