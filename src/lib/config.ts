@@ -227,7 +227,9 @@ export const AGENTS = {
      * Wallets (lowercase addresses) whose sign-in gets in. Empty for now (owner, 2026-10-20: "FID 6786 only for
      * now … I'll add my sign-in wallet later"). The payment address is not a sign-in wallet.
      */
-    wallets: [] as readonly string[],
+    // The production test account for agent play (owner, 2026-11-01: "use a dedicated site test account and tell me
+    // which"): a wallet whose key is kept on the agent's machine only; site account -23. Remove when no longer needed.
+    wallets: ['0xE86987Cc0d1B6746f13B9F90380563080ba5f973'] as readonly string[],
   },
   /** Public pages (agents.md, /p): off while agents are for the owner only. Kept work stays private on /you. */
   public: false,
@@ -245,7 +247,8 @@ export const AGENTS = {
    * and Terms §6d / Privacy §4 live. Anyone else: the scope isn't granted, its tools aren't listed or run, and a match
    * link opens nothing. The local tests add their own people (MINPENTAI_PLAY_TEST, never on Vercel).
    */
-  minpentaiPlay: { people: [6786] as readonly number[] },
+  // 6786 the owner; -23 the production test account (wallet 0xE869…f973, above).
+  minpentaiPlay: { people: [6786, -23] as readonly number[] },
   /** At most this many live agents per person (also a database trigger). */
   perPerson: 3,
   /**
