@@ -1,5 +1,5 @@
--- NEXT_minpentai_resume_ruleset.sql — each kept snap match records the ruleset it was played under.
--- DRAFT: not applied. Takes its number at merge (owner's standing rule, 2026-10-22). Requires 0025 and
+-- 0031_minpentai_resume_ruleset.sql — each kept snap match records the ruleset it was played under.
+-- Applied by the owner on 2026-10-31 (read-back passed); numbered 0031 at merge. Requires 0025 and
 -- the Resume moves-check fix (PR #64). Must be applied before minpentai-cap10-120 merges: from then on the
 -- snap reads and writes this column (src/lib/minpentai/snap/resume.ts).
 --

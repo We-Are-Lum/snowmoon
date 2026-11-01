@@ -1,6 +1,7 @@
 import { ImageResponse } from 'next/og';
 import sharp from 'sharp';
 import { resolveQuote } from '~/lib/quote';
+import { quoteShown } from '~/lib/seeded-shown';
 import { loadFonts, typeset } from '~/lib/card-type';
 
 /**
@@ -37,7 +38,8 @@ const IMAGE_H = 470; // the illustration's band; the quote sits below on a dark 
 export async function GET(request: Request, { params }: { params: Promise<{ n: string; range: string }> }) {
   const { n, range } = await params;
   const sp = new URL(request.url).searchParams;
-  const quote = resolveQuote(Number(n), range, sp.get('q'), sp.get('img'));
+  // A hidden seeded image is left off the card (owner, 2026-10-30).
+  const quote = await quoteShown(resolveQuote(Number(n), range, sp.get('q'), sp.get('img')));
   if (!quote) return new Response('No such quote in the book', { status: 404 });
 
   const withImage = !!quote.image;

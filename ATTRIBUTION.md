@@ -62,7 +62,6 @@ public ledger.
 Contributions to the repository are signed off under the Developer Certificate of Origin; contributions made
 with AI agents are signed off by the person who ran the agent. See `CONTRIBUTING.md`.
 
-There is no token.
 
 ## Narration
 

@@ -3,7 +3,7 @@
  * planted violation: for every check, a copy of its inputs gets one violation
  * injected, and the check must report it.
  *
- *   npm run check:principles   (exit 0: all ran and passed; 1: a failure; 2: none failed but some did not run)                       checks + proofs, against https://snowmoon.party
+ *   npm run check:principles -- --url=https://snowmoon.party   (exit 0: all ran and passed; 1: a failure or no --url; 2: none failed but some did not run)
  *   npm run check:principles -- --url=http://localhost:3000
  *   npm run check:principles -- --only=P6          one principle
  *
@@ -32,10 +32,11 @@ import { BOOK_TAG, NARRATION_MAX_WORDS, PERSON_TAG, parseBeats } from '../src/li
 import { GLOSSARY_FILE, loadBlocks, verifyGlossary, type Glossary } from './lib/glossary';
 import { p4aProblems } from './lib/p4a';
 import { MODAL_VC_FILE, MODAL_VC_PLANTS, modalVcRun, modalVcStatic } from './lib/modal-vc';
+import { requireTarget } from './lib/target';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const arg = (name: string) => process.argv.slice(2).find((a) => a.startsWith(`--${name}=`))?.split('=').slice(1).join('=');
-const BASE = (arg('url') ?? 'https://snowmoon.party').replace(/\/$/, '');
+const BASE = requireTarget('check:principles');
 const ONLY = arg('only');
 const read = (rel: string) => readFileSync(path.join(ROOT, rel), 'utf8');
 const json = <T = any>(rel: string): T => JSON.parse(read(rel)); // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -1179,7 +1180,8 @@ add({
   load: async () => walk('src', /\.tsx?$/).map((f) => ({ file: f, text: read(f) })),
   run: (files) =>
     files
-      .filter((f: { file: string; text: string }) => /MODERATOR_FIDS|\bADMINS\b/.test(f.text) && !f.file.endsWith('config.ts'))
+      // Every admin check goes through isAdmin (src/lib/admins.ts, owner 2026-10-29: "ADMINS replaces the scattered owner lists").
+      .filter((f: { file: string; text: string }) => /MODERATOR_FIDS|\bADMINS\b|\bisAdmin\(/.test(f.text) && !f.file.endsWith('config.ts') && !f.file.endsWith('src/lib/admins.ts'))
       // The one write admins may make beyond hiding (owner, reread 2026-10-29): a pick, in studio.admin_picks.
       .map((f: { file: string; text: string }) => ({ ...f, text: f.text.replace(/(insert into|update|delete from)\s+studio\.admin_picks\b[^`]*`/gi, '') }))
       .filter((f: { text: string }) => /status\s*[:=]\s*['"](published|draft)['"]|set\s+status\s*=\s*'(published|draft)'|order by|\.sort\(/i.test(f.text))
@@ -1227,6 +1229,28 @@ add({
       .map((f: { file: string }) => `${f.file}: reads picks outside the pick code (src/lib/picks.ts, the pick switch, /api/admin/picks)`),
   plant: (files) => {
     files.push({ file: 'src/lib/images/data.ts', text: 'select e.* from studio.elements e left join studio.admin_picks p on p.element_id = e.id order by p.at' });
+  },
+});
+// A hide on a seeded image reaches everywhere it shows (owner, 2026-10-30: "home, About, quote cards, the player,
+// share images. Add a check."). Every file that reads the seeded images (or the introduction or a quote card, which
+// carry them) must pass them through the hide filter, except the readers themselves and the admin Hide that writes it.
+const SEEDED_READ = /\b(loadIllustrations|seededImages|loadIntro|resolveQuote|loadIllustrationById|resolveIntroImage)\(/;
+const SEEDED_FILTER = /\b(hiddenSeeded|quoteShown|introShown)\(/;
+const SEEDED_SOURCES = new Set(['src/lib/illustrations.ts', 'src/lib/intro.ts', 'src/lib/quote.ts', 'src/lib/images/sheets.ts', 'src/lib/seeded-shown.ts']);
+// The admin Hide looks the image up to hide it.
+const SEEDED_EXEMPT = new Set(['src/app/api/admin/hide/route.ts']);
+add({
+  id: 'P5f',
+  principle: 5,
+  name: 'a hidden seeded image is gone everywhere it shows: every reader of seeded images (the chapter and player, References and sheets, the introduction on home and About, quote cards and share images) goes through the hide',
+  load: async () => walk('src', /\.tsx?$/).map((f) => ({ file: f, text: read(f) })),
+  run: (files) =>
+    files
+      .filter((f: { file: string; text: string }) => SEEDED_READ.test(f.text) && !SEEDED_SOURCES.has(f.file) && !SEEDED_EXEMPT.has(f.file))
+      .filter((f: { text: string }) => !SEEDED_FILTER.test(f.text))
+      .map((f: { file: string; text: string }) => `${f.file}: shows seeded images (${f.text.match(SEEDED_READ)![1]}) without the hide (hiddenSeeded, introShown or quoteShown)`),
+  plant: (files) => {
+    files.push({ file: 'src/app/planted/page.tsx', text: "import { loadIntro } from '~/lib/intro';\nexport default function P() { return <div>{loadIntro().cards.length}</div>; }" });
   },
 });
 add({
@@ -1672,7 +1696,7 @@ add({
 });
 
 // ---------------------------------------------------------------------------
-// P7. Payments never enter scoring or ordering. No token. "Not affiliated" on
+// P7. Payments never enter scoring or ordering. Apart from prepaid generations, anything sold is a fixed-price collectible. "Not affiliated" on
 //     the first screen.
 // ---------------------------------------------------------------------------
 const PAYMENT = /\b(donations?|credit_grants?|funded_by_grant_id|amount|usd_at_time|cost_usd|sponsor)/i;
@@ -1697,26 +1721,51 @@ add({
 add({
   id: 'P7b',
   principle: 7,
-  name: 'the first screen says "not affiliated" and "no token"; there is no token code',
+  name: 'the first screen says "not affiliated"; no ERC-20, ERC-721 or airdrop code; the only contract is contracts/snowmoon-wip, with no royalties and no way to change a price',
   load: async () => ({
     home: await page('/'),
     code: [...walk('src', /\.tsx?$/), ...walk('supabase/migrations', /\.sql$/), ...walk('scripts', /\.(ts|py)$/)]
       .filter((f) => !f.endsWith('check-principles.ts'))
       .map((f) => ({ file: f, text: read(f) })),
+    // Every Solidity file in the repository, outside the contract's own libraries and build output.
+    sol: [...walk('contracts', /\.sol$/), ...walk('src', /\.sol$/), ...walk('scripts', /\.sol$/)]
+      .filter((f) => !/(^|\/)(lib|node_modules|out|cache)\//.test(f))
+      .map((f) => ({ file: f, text: read(f) })),
   }),
-  run: ({ home, code }) => {
+  run: ({ home, code, sol }) => {
     const problems: string[] = [];
     // The page's own first words (inside <main>; the rail and the menu come before it in the HTML).
-    // The home hero carries the owner-approved line "… Not affiliated with the author · No token" (config/intro.json).
+    // The home hero carries the owner-approved line "Independent adaptation · Not affiliated with the author" (config/intro.json).
     const main = home.slice(Math.max(0, home.indexOf('<main')));
     const firstScreen = main.replace(/<script[\s\S]*?<\/script>/g, ' ').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').slice(0, 700);
     if (!/not affiliated with the author/i.test(firstScreen)) problems.push('first screen: "not affiliated with the author" is missing');
-    if (!/\bno token\b/i.test(firstScreen)) problems.push('first screen: "no token" is missing');
-    for (const { file, text } of code) if (/\b(erc-?20|erc-?721|tokenomics|airdrop|token sale|mint\s*\()/i.test(text)) problems.push(`${file}: token code`);
+    // Owner, 2026-10-31: anything sold is a fixed-price collectible, with no royalties and no promises.
+    const coin = /\b(erc-?20|erc-?721|airdrop|tokenomics|token sale)\b/i;
+    const royalty = /\b(erc-?2981|royalt\w*)\b/i;
+    for (const { file, text } of code) {
+      if (coin.test(text)) problems.push(`${file}: ERC-20, ERC-721 or airdrop code`);
+      if (royalty.test(text)) problems.push(`${file}: royalty code`);
+    }
+    for (const { file, text } of sol) {
+      if (!file.startsWith('contracts/snowmoon-wip/')) { problems.push(`${file}: a contract outside contracts/snowmoon-wip`); continue; }
+      if (!file.startsWith('contracts/snowmoon-wip/src/')) continue; // its tests and helpers
+      const body = text.replace(/\/\*[\s\S]*?\*\//g, ' ').replace(/\/\/.*$/gm, ' ');
+      if (coin.test(body)) problems.push(`${file}: ERC-20, ERC-721 or airdrop code`);
+      if (royalty.test(body)) problems.push(`${file}: royalty code`);
+      // No way to change a price: no function named for setting one, and a price is written only in createToken.
+      for (const m of body.matchAll(/function\s+(\w+)\s*\(/g)) if (/^_?set\w*price/i.test(m[1])) problems.push(`${file}: ${m[1]} changes a price`);
+      const parts = body.split(/(?=\bfunction\s+\w+\s*\()/);
+      for (const part of parts) {
+        const name = /^function\s+(\w+)/.exec(part)?.[1] ?? '(outside any function)';
+        if (name !== 'createToken' && /\bprice\s*(\+|-|\*|\/)?=(?!=)/i.test(part)) problems.push(`${file}: ${name} writes a price`);
+      }
+    }
     return problems;
   },
   plant: (c) => {
     c.home = c.home.replace(/not affiliated with the author/gi, 'a fan edition');
+    c.sol.push({ file: 'contracts/other/Coin.sol', text: 'contract Coin is ERC20 {}' });
+    c.sol.push({ file: 'contracts/snowmoon-wip/src/Planted.sol', text: 'contract P is ERC2981 { function setPrice(uint256 id, uint256 p) external { tokens[id].price = p; } }' });
   },
 });
 

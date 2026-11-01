@@ -11,6 +11,8 @@ import { DEFAULT_TEMPLATES } from '~/templates';
 import { REPO_URL, WORK } from '~/lib/config';
 import { loadNarration } from '~/lib/narration';
 import { loadIllustrations } from '~/lib/illustrations';
+import { hiddenSeeded } from '~/lib/admin-hidden';
+import { AdminHide } from '~/components/admin-hide';
 import { QuoteShare } from '~/components/quote-share';
 import { ChapterView } from '~/components/chapter-view';
 import { AiLabel, RecipeLink } from '~/components/recipe-sheet';
@@ -81,7 +83,9 @@ export default async function ChapterPage({ params }: Props) {
   const facts = blockFacts(chapter.blocks);
   const scenes = sceneLabels(chapter.blocks, facts);
   const narration = loadNarration(n);
-  const images = loadIllustrations(n);
+  // Seeded images an admin hid (owner, 2026-10-29) aren't shown.
+  const hidden = await hiddenSeeded();
+  const images = loadIllustrations(n).filter((im) => !hidden.has(im.id));
   const imageAt = new Map(images.map((im) => [im.idx, im]));
   // The first picture on the page says "not by the author" where it can be seen (owner, 2026-10-15); readers' strips then don't.
   const firstImageIdx = displayOrder(chapter.blocks).map((i) => chapter.blocks[i]).find((b) => imageAt.has(b.idx))?.idx ?? null;
@@ -191,6 +195,7 @@ export default async function ChapterPage({ params }: Props) {
                   {b.idx === firstImageIdx && <span className="ai-not-author"> · {NOT_AUTHOR_VISIBLE}</span>}
                   {/* The owner's image review (2026-10-23): shown only once the owner allows it (ILLUSTRATION_CHECK.reviewMarkPublic). */}
                   {image.reviewed && <span className="seed-reviewed"> · {REVIEWED_MARK}</span>}
+                  <AdminHide kind="seeded" id={image.id} />
                   {image.lettering && (
                     <>
                       {' · '}

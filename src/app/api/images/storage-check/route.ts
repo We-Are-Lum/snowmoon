@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getFid } from '~/lib/auth';
-import { IMAGES, SYSTEM_FID } from '~/lib/config';
+import { IMAGES } from '~/lib/config';
+import { isAdmin } from '~/lib/admins';
 import { checkStorage } from '~/lib/images/store';
 
 /**
@@ -12,7 +13,7 @@ import { checkStorage } from '~/lib/images/store';
 export async function POST(request: Request) {
   const fid = await getFid(request);
   if (fid === null) return NextResponse.json({ error: 'Sign in' }, { status: 401 });
-  if (fid !== SYSTEM_FID) return NextResponse.json({ error: 'Maintainer only' }, { status: 403 });
+  if (!isAdmin(fid)) return NextResponse.json({ error: 'Maintainer only' }, { status: 403 });
   // Names only, never values. NEYNAR_API_KEY and SNOWMOON_ALERT_URL added for the owner to confirm after the images push (2026-10-10).
   const vars = ['FAL_KEY', 'IMAGES_TICKET_SECRET', 'GROQ_API_KEY', 'STUDIO_DATABASE_URL', 'NEYNAR_API_KEY', 'SNOWMOON_ALERT_URL'].filter((k) => !process.env[k]);
   const storage = await checkStorage();
