@@ -377,30 +377,40 @@ export const CONTACT_EMAIL = 'snowmoon@wearelum.xyz';
  * minute that counts (23:59 Pacific is in, midnight is out). scripts/test-challenge.ts checks each against its
  * Pacific wall time, and fails if a page or wording file writes a date itself.
  *
- * Switches, off until the owner rereads the Privacy and Terms lines in docs/legal/remix-challenge-draft.md (legal texts
- * describe today; P6q checks it):
- * - `entries`: entries listed on /challenge, the "Entry" badge on version pages, and "Mark as my entry"
- *   (studio.challenge_marks, NEXT_remix_challenge.sql; without the table everyone's latest version counts and marking
- *   says "not available yet"). Deciding eligibility asks Neynar for a maker's score (kept a day, as at Generate).
- * - `posts`: "Add where you posted it" and "Posted on" on version pages (studio.version_posts, the same migration).
- *   The server reads the pasted address, checks its host, and asks that network's own API (Neynar, Bluesky's public
+ * Switches (docs/legal/remix-challenge-draft.md; legal texts describe today; P6q checks it):
+ * - `entries` (off until the owner's reread): entries listed on /challenge with each character's count of entrants, the
+ *   "Entry" badge on version pages, and "Mark as my entry" (studio.challenge_marks). Eligibility is decided once, when
+ *   a version is published, and stored (studio.challenge_eligibility; src/lib/challenge/record.ts); pages only read it
+ *   and never ask Neynar (owner, 2026-10-31). Without the tables, only invited makers count and marking says "not
+ *   available yet".
+ * - `posts` (off until the owner's reread): "Add where you posted it" and "Posted on" (studio.version_posts). The
+ *   server reads the pasted address, checks its host, and asks that network's own API (Neynar, Bluesky's public
  *   AppView, Lens's API); it never fetches the pasted address.
- * - `openSheets`: while the window is open, people who pass the Generate gate (a Neynar score of at least
- *   IMAGES.neynarMinScore) may fork Bai's and Zei's sheets and add versions to their own forks. Making any other
- *   design stays invited-only (owner, 2026-10-10). Off: only invited FIDs can make sheets, as today.
+ * - `openSheets` (on): see below; it takes effect only in the window and once Privacy describes the challenge.
+ * All three tables are in NEXT_remix_challenge.sql.
  * Agent-drafted entries are not tracked (owner, 2026-10-31).
  */
 export const CHALLENGE = {
   id: 'remix-2026-11',
-  /** The characters, by their file in content/snowmoon/designs/characters (the plan's recommendation: Bai and Zei). */
-  characters: ['bai', 'zei'] as readonly string[],
+  /** The characters, by their file in content/snowmoon/designs/characters, in the owner's order (owner, 2026-10-31). */
+  characters: ['zei', 'bai', 'gladias', 'seila', 'deluin', 'mu'] as readonly string[],
+  /**
+   * Starting sheets held for the owner's check (owner, 2026-10-31): Gladias, against Garance's privacy-robe note
+   * (docs/garance-call-2026-10-30.md on next-version). /challenge says his starting sheet is held.
+   */
+  held: ['gladias'] as readonly string[],
+  /**
+   * A character gets a final version, a credit test and a token only if at least this many different eligible people
+   * enter it (owner, 2026-10-31). /challenge shows each character's count (a count, never a ranking).
+   */
+  minEntrants: 3,
   /**
    * Real instants (UTC), each with its America/Los_Angeles wall time (all in PST: the clocks changed on 1 Nov 2026).
    * Owner, 2026-10-31 (second update). A closing instant is the first that no longer counts.
    */
   dates: {
-    /** Entries open at the launch: Fri 6 Nov 2026, 00:00 Pacific. The plan says "the 6 Nov launch"; the hour is the agent's reading. */
-    opens: '2026-11-06T08:00:00Z',
+    /** Entries open at the launch call: Fri 6 Nov 2026, 09:00 Pacific (owner, 2026-10-31). */
+    opens: '2026-11-06T17:00:00Z',
     /** Entries close after Sun 22 Nov 2026, 23:59 Pacific: this is 00:00 Pacific on 23 Nov, the first instant that no longer counts. */
     closes: '2026-11-23T08:00:00Z',
     /** The shortlist vote and jurors: Tue 1 Dec 2026, 00:00 Pacific, to the end of Thu 3 Dec 2026 (23:59 Pacific). Not built; undefined in the plan. */
@@ -416,7 +426,14 @@ export const CHALLENGE = {
   timeZone: 'America/Los_Angeles',
   entries: false as boolean,
   posts: false as boolean,
-  openSheets: false as boolean,
+  /**
+   * On (owner, 2026-10-31), but it takes effect only inside the entry window, computed from `dates`
+   * (src/lib/challenge/open-sheets.ts), and only once Privacy describes the challenge (the owner's reread). Before the
+   * open and after the close, sheets are invited-only again with no deploy.
+   */
+  openSheets: true as boolean,
+  /** The site-wide free image spend cap while the entry window is open (owner, 2026-10-31); IMAGES.dailySpendCapUsd otherwise. */
+  dailySpendCapUsd: 15,
   /** "Posted on": at most this many shown per version, newest first; and how many one person may add per UTC day. */
   postsPerVersion: 30,
   postsPerPersonPerDay: 20,
@@ -471,7 +488,10 @@ export const IMAGES = {
    */
   admin: { maxBlocks: 400 },
   publishesPerDay: 3,
-  /** Across everyone, per UTC day (decision 10), kept apart from the assistant's. */
+  /**
+   * Across everyone, per UTC day (decision 10), kept apart from the assistant's. Outside the remix challenge's window;
+   * inside it, CHALLENGE.dailySpendCapUsd. Read through imagesDailySpendCapUsd(), never directly.
+   */
   dailySpendCapUsd: 2,
   /**
    * Wallet sign-in and prepaid generations (owner, 2026-10-13). A wallet account has no free daily
@@ -553,6 +573,16 @@ export const IMAGES = {
 } as const;
 
 /** Minpentai Play's limits and retention (owner, 2026-10-09). Every /api/minpentai/* request counts. */
+/**
+ * The site-wide free image spend cap for a moment (owner, 2026-10-31): CHALLENGE.dailySpendCapUsd from the entry
+ * window's open (included) to its close (excluded), IMAGES.dailySpendCapUsd ($2) at every other time. It reverts by
+ * itself, with no deploy. The cap is per UTC day; the day's spend counted so far is compared with the cap now.
+ */
+export function imagesDailySpendCapUsd(now: Date = new Date()): number {
+  const t = now.getTime();
+  return t >= Date.parse(CHALLENGE.dates.opens) && t < Date.parse(CHALLENGE.dates.closes) ? CHALLENGE.dailySpendCapUsd : IMAGES.dailySpendCapUsd;
+}
+
 export const MINPENTAI_PLAY = {
   /** Per person (FID): requests per minute and per UTC day; over either is 429 with retryAfterMs. */
   perMinute: 60,

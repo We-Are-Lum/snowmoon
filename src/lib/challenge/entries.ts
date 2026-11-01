@@ -2,21 +2,20 @@ import 'server-only';
 import type postgres from 'postgres';
 import { CHALLENGE, WORK_ID } from '../config';
 import { bookCharacter } from '../images/designs';
-import { lookUp } from '../images/neynar';
-import { linkedTo } from '../wallet/credit';
-import { chooseEntries, eligibility, inWindow, markKey, needsScore, newestFirst, type Candidate, type Eligibility } from './rules';
+import { chooseEntries, eligibility, entrantCounts, inWindow, markKey, newestFirst, type Candidate, type Eligibility } from './rules';
 
 /**
- * The remix challenge's entries (owner, 2026-10-31), the server half. Reads published sheets, the private marks
- * (studio.challenge_marks, NEXT_remix_challenge.sql) and, for makers who are neither admins nor invited, their Neynar
- * score (src/lib/images/neynar.ts: kept a day in studio.image_scores, as at Generate; Neynar receives only the FID).
- * Nothing here asks anyone anything while CHALLENGE.entries is off. Without the marks table everyone's latest version
- * counts, and marking answers "not available yet" (as src/lib/picks.ts does without its table).
+ * The remix challenge's entries (owner, 2026-10-31), the server half, for pages. Reads published sheets, the private
+ * marks (studio.challenge_marks) and the eligibility decided once at publish (studio.challenge_eligibility, written by
+ * src/lib/challenge/record.ts; both NEXT_remix_challenge.sql). It never asks Neynar or anyone else anything: viewing a
+ * page makes no outside call (owner, 2026-10-31; scripts/test-challenge.ts proves it). Without the eligibility table,
+ * only invited makers count (decided from the lists alone); without the marks table everyone's latest version counts
+ * and marking answers "not available yet" (as src/lib/picks.ts does without its table).
  */
 type Sql = postgres.Sql;
 
 export interface ChallengeVersion extends Candidate {
-  /** The record's maker: a FID, or minus a wallet account. */
+  /** The record's maker: a FID (sheets are made with Farcaster only). */
   maker: number;
   versionNo: number;
   title: string;
@@ -43,14 +42,13 @@ export async function windowVersions(sql: Sql): Promise<ChallengeVersion[]> {
     join studio.entities en on en.id = e.entity_id
     where e.element_type = 'design' and e.status = 'published' and e.work_id = ${WORK_ID} and en.kind = 'character' and en.name in ${sql(chars)}
       and v.created_at >= ${CHALLENGE.dates.opens}::timestamptz and v.created_at < ${CHALLENGE.dates.closes}::timestamptz`;
-  const links = await linkedTo(sql, rows.map((r) => Number(r.created_by_fid)));
   return rows
     .map((r) => {
       const maker = Number(r.created_by_fid);
       const b = (r.body ?? {}) as { title?: string; by_name?: string | null; samples?: { url: string }[]; views?: { front?: { url: string } } };
       return {
         versionId: String(r.version_id), elementId: String(r.element_id), character: slugOf(String(r.name)), maker,
-        person: maker > 0 ? maker : (links.get(maker) ?? 0), createdAt: new Date(r.created_at).toISOString(), forked: Boolean(r.forked),
+        person: maker > 0 ? maker : 0, createdAt: new Date(r.created_at).toISOString(), forked: Boolean(r.forked),
         versionNo: Number(r.version_no), title: b.title ?? '', byName: b.by_name ?? null, thumb: b.views?.front?.url ?? b.samples?.[0]?.url ?? null,
       };
     })
@@ -78,18 +76,30 @@ export async function readMarks(sql: Sql): Promise<Map<string, string>> {
   return out;
 }
 
-/** Eligibility for each person among the versions; a score is looked up only for those who need one. */
-export async function eligibilityOf(sql: Sql, versions: ChallengeVersion[]): Promise<Map<number, Eligibility>> {
-  const out = new Map<number, Eligibility>();
-  for (const v of versions) {
-    const key = v.person || v.maker;
-    if (out.has(key)) continue;
-    let score: number | null = null;
-    if (v.person > 0 && needsScore(v.person)) {
-      const r = await lookUp(sql, v.person);
-      score = r.ok ? r.value : null;
+let eligibilityMissingUntil = 0;
+
+/**
+ * The eligibility stored for each version (decided at publish). A version with no stored decision counts only if its
+ * maker is invited (and not an admin), which the lists alone decide; no score is ever looked up here.
+ */
+export async function eligibilityOf(sql: Sql, versions: ChallengeVersion[]): Promise<Map<string, Eligibility>> {
+  const out = new Map<string, Eligibility>();
+  if (!versions.length) return out;
+  const stored = new Map<string, { decision: string; score: number | null }>();
+  if (Date.now() >= eligibilityMissingUntil) {
+    try {
+      const rows = await sql<{ version_id: string; decision: string; score: string | null }[]>`
+        select version_id, decision, score from studio.challenge_eligibility where challenge = ${CHALLENGE.id} and version_id in ${sql(versions.map((v) => v.versionId))}`;
+      for (const r of rows) stored.set(String(r.version_id), { decision: r.decision, score: r.score === null ? null : Number(r.score) });
+    } catch (e) {
+      if (missing(e)) eligibilityMissingUntil = Date.now() + 60_000;
+      else console.error('challenge: eligibility not read', (e as { code?: string }).code ?? (e as Error).name);
     }
-    out.set(key, eligibility({ maker: v.maker, linkedFid: v.person > 0 ? v.person : null, score }));
+  }
+  for (const v of versions) {
+    const s = stored.get(v.versionId);
+    // The stored score is re-read against today's threshold and lists, so a decision can't outlive a list change.
+    out.set(v.versionId, eligibility({ maker: v.maker, score: s?.score ?? null }));
   }
   return out;
 }
@@ -98,20 +108,22 @@ export interface Standing {
   entries: ChallengeVersion[];
   /** Versions admins made in the window: shown plainly as not eligible for rewards. */
   byAdmins: ChallengeVersion[];
+  /** Per character, how many different eligible people have entered it (a count, not a ranking). */
+  entrants: Map<string, number>;
 }
 
 /** The entries so far, and the admins' versions, each newest first. Nothing while CHALLENGE.entries is off. */
 export async function standing(sql: Sql): Promise<Standing> {
-  if (!CHALLENGE.entries) return { entries: [], byAdmins: [] };
+  if (!CHALLENGE.entries) return { entries: [], byAdmins: [], entrants: entrantCounts([]) };
   const versions = (await windowVersions(sql)).filter((v) => v.forked);
   const elig = await eligibilityOf(sql, versions);
   const marks = await readMarks(sql);
-  const entries = chooseEntries(versions, marks, (p) => elig.get(p)?.eligible === true);
-  const byAdmins = versions.filter((v) => elig.get(v.person || v.maker)?.why === 'admin');
-  return { entries, byAdmins };
+  const entries = chooseEntries(versions.filter((v) => elig.get(v.versionId)?.eligible === true), marks, () => true);
+  const byAdmins = versions.filter((v) => elig.get(v.versionId)?.why === 'admin');
+  return { entries, byAdmins, entrants: entrantCounts(entries) };
 }
 
-export type VersionStanding = { kind: 'entry'; character: string } | { kind: 'admin' } | { kind: 'candidate'; character: string; mine: boolean } | null;
+export type VersionStanding = { kind: 'entry'; character: string } | { kind: 'admin' } | { kind: 'candidate'; character: string } | null;
 
 /**
  * What a version page shows: "Entry" when it is its maker's entry for the character; the admin line for an admin's
@@ -123,12 +135,12 @@ export async function versionStanding(sql: Sql, versionId: string): Promise<Vers
   const v = all.find((x) => x.versionId === versionId);
   if (!v) return null;
   const mine = all.filter((x) => x.person === v.person && x.maker === v.maker && x.character === v.character);
-  const elig = await eligibilityOf(sql, [v]);
-  const e = elig.get(v.person || v.maker);
+  const elig = await eligibilityOf(sql, mine);
+  const e = elig.get(v.versionId);
   if (e?.why === 'admin') return { kind: 'admin' };
   if (!e?.eligible) return null;
-  const chosen = chooseEntries(mine, await readMarks(sql), () => true)[0];
-  return chosen?.versionId === versionId ? { kind: 'entry', character: v.character } : { kind: 'candidate', character: v.character, mine: true };
+  const chosen = chooseEntries(mine.filter((x) => elig.get(x.versionId)?.eligible === true), await readMarks(sql), () => true)[0];
+  return chosen?.versionId === versionId ? { kind: 'entry', character: v.character } : { kind: 'candidate', character: v.character };
 }
 
 export type MarkResult = { ok: true } | { ok: false; why: string; status: number };

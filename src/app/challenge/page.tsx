@@ -5,18 +5,19 @@ import { designByline } from '~/lib/images/byline';
 import { bookCharacter } from '~/lib/images/designs';
 import { sheetCharacter } from '~/lib/images/sheets';
 import { standing, startingSheets, type Standing } from '~/lib/challenge/entries';
-import { phase } from '~/lib/challenge/rules';
+import { entrantCounts, phase } from '~/lib/challenge/rules';
 import { CHALLENGE_WORDING as W } from '~/lib/challenge/wording';
 import { AiTag } from '~/components/ai-tag';
 
 /**
  * The remix challenge (owner, 2026-10-31; docs/proposals/remix-challenge-plan.md, build list item 1): the rules (the
- * plan's draft copy, marked as draft wording, every date from CHALLENGE.dates), the two characters with the sheets to
+ * plan's draft copy, marked as draft wording, every date from CHALLENGE.dates), the characters (CHALLENGE.characters, in
+ * that order), each with its count of distinct eligible entrants (a count, never a ranking), with the sheets to
  * start from, the entries so far (newest first; only once CHALLENGE.entries is on, after the owner's reread) and the
  * deadline. Readable signed out. Nothing is ordered by likes, payments or anything but time (P5, P7).
  */
 export const revalidate = 60;
-export const metadata = { title: 'Remix Bai and Zei', description: 'The remix challenge on Snowmoon Party: draft rules.' };
+export const metadata = { title: 'Remix the cast', description: 'The remix challenge on Snowmoon Party: draft rules.' };
 
 const callName = (name: string) => name.split(' ')[0];
 
@@ -24,7 +25,8 @@ export default async function ChallengePage() {
   const sql = db();
   const chars = CHALLENGE.characters.map((s) => bookCharacter(s)).filter((c): c is NonNullable<typeof c> => Boolean(c));
   const sheets = await Promise.all(chars.map(async (c) => ({ c, about: sheetCharacter(c.slug)?.about ?? null, list: sql ? await startingSheets(sql, c.slug).catch(() => []) : [] })));
-  const st: Standing = sql && CHALLENGE.entries ? await standing(sql).catch(() => ({ entries: [], byAdmins: [] })) : { entries: [], byAdmins: [] };
+  const none: Standing = { entries: [], byAdmins: [], entrants: entrantCounts([]) };
+  const st: Standing = sql && CHALLENGE.entries ? await standing(sql).catch(() => none) : none;
   const now = phase();
   const nameOf = (slug: string) => callName(chars.find((c) => c.slug === slug)?.name ?? slug);
   return (
@@ -50,7 +52,7 @@ export default async function ChallengePage() {
           <strong>{W.rulesHead}</strong>
         </p>
         <ul>
-          {W.rules.map((r) => (
+          {W.rules().map((r) => (
             <li key={r}>{r}</li>
           ))}
           <li>{W.adminsLine}</li>
@@ -61,6 +63,11 @@ export default async function ChallengePage() {
       {sheets.map(({ c, about, list }) => (
         <section key={c.slug} className="dz-section ch-character" aria-labelledby={`ch-${c.slug}`}>
           <h2 id={`ch-${c.slug}`}>{c.name}</h2>
+          {CHALLENGE.entries && (
+            <p className="dz-meta ch-count">
+              {W.entrants(st.entrants.get(c.slug) ?? 0)} · {W.entrantsNeeded(st.entrants.get(c.slug) ?? 0)}
+            </p>
+          )}
           {about && <p>{about}</p>}
           <p>
             <Link href={`/references/designs/character/${c.slug}`}>{W.readBook(callName(c.name))} →</Link>
@@ -90,6 +97,8 @@ export default async function ChallengePage() {
                 </li>
               ))}
             </ul>
+          ) : CHALLENGE.held.includes(c.slug) ? (
+            <p className="dz-muted">{W.held(callName(c.name))}</p>
           ) : (
             <p className="dz-muted">{W.noSheetYet(callName(c.name))}</p>
           )}

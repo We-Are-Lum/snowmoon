@@ -6,9 +6,9 @@ import { CHALLENGE_LISTS } from './who';
  * each one on stand-ins (docs/proposals/remix-challenge-plan.md; owner, 2026-10-31).
  *
  * - The window: from CHALLENGE.dates.opens (in) to CHALLENGE.dates.closes (out), instants in UTC; shown in Pacific.
- * - What counts: a published fork of Bai or Zei (or of another entry: a fork of any of their sheets is a fork on the
+ * - What counts (forks only): a published fork of a challenge character's sheet (or of another entry: a fork of any of its sheets is a fork on the
  *   same character), one of its versions made inside the window, by an eligible person.
- * - Who is eligible: the maker (a Farcaster ID, or a wallet account linked to one) is on IMAGES.invited, or has a
+ * - Who is eligible: the maker (a Farcaster ID; wallets can't make sheets yet) is on IMAGES.invited, or has a
  *   Neynar score of at least IMAGES.neynarMinScore. Admins (the config's admin list) can make versions but are never eligible.
  * - One entry per person per character: their latest version in the window, unless they marked another.
  *
@@ -67,16 +67,20 @@ export function pacificWallTime(iso: string): string {
 // ---------------------------------------------------------------------------------------------
 export type Eligibility =
   | { eligible: true; person: number; why: 'invited' | 'score' }
-  | { eligible: false; person: number | null; why: 'admin' | 'wallet-not-linked' | 'below' | 'unchecked' };
+  | { eligible: false; person: number | null; why: 'admin' | 'not-a-farcaster-account' | 'below' | 'unchecked' };
 
 /**
- * Whether a maker's versions can be entries. `maker` is the record's maker: a FID (positive) or minus a wallet
- * account's number. `linkedFid` is the FID that wallet is linked to, if any. `score` is the person's Neynar score
- * (null: not known, e.g. Neynar didn't answer; such a person is not counted until it is).
+ * Whether a maker's versions can be entries, decided once, when the version is published (the decision is stored;
+ * pages only read it). `maker` is the record's maker: a FID. `score` is the person's Neynar score at publish (null:
+ * not known, e.g. Neynar didn't answer; such a version doesn't count).
+ *
+ * Wallets (owner, 2026-10-31: drop "or a wallet linked to either" until wallets can make sheets): a maker that isn't a
+ * FID is never eligible. To restore the wallet path later, resolve a wallet maker to the FID it is linked to before
+ * calling this (src/lib/wallet/credit.ts, linkedTo) and pass that FID as `maker`.
  */
-export function eligibility(p: { maker: number; linkedFid: number | null; score: number | null }, lists: { admins: readonly number[]; invited: readonly number[]; min: number } = CHALLENGE_LISTS): Eligibility {
-  const person = p.maker > 0 ? p.maker : p.linkedFid && p.linkedFid > 0 ? p.linkedFid : null;
-  if (person === null) return { eligible: false, person: null, why: 'wallet-not-linked' };
+export function eligibility(p: { maker: number; score: number | null }, lists: { admins: readonly number[]; invited: readonly number[]; min: number } = CHALLENGE_LISTS): Eligibility {
+  if (!(p.maker > 0)) return { eligible: false, person: null, why: 'not-a-farcaster-account' };
+  const person = p.maker;
   if (lists.admins.includes(person)) return { eligible: false, person, why: 'admin' };
   if (lists.invited.includes(person)) return { eligible: true, person, why: 'invited' };
   if (p.score === null || !Number.isFinite(p.score)) return { eligible: false, person, why: 'unchecked' };
@@ -94,7 +98,7 @@ export interface Candidate {
   elementId: string;
   /** The character's slug (CHALLENGE.characters). */
   character: string;
-  /** The person it counts for (a FID): the maker, or the FID a wallet maker is linked to. */
+  /** The person it counts for: the maker's FID. */
   person: number;
   createdAt: string;
   /** The design's first version has a remixed_from link (a fork). */
@@ -129,3 +133,11 @@ export function chooseEntries<C extends Candidate>(candidates: C[], marks: Reado
   }
   return out.sort(newestFirst);
 }
+
+/** For each character, how many different people have an entry (a count shown as is, never a ranking). */
+export function entrantCounts(entries: Pick<Candidate, 'person' | 'character'>[], characters: readonly string[] = CHALLENGE.characters): Map<string, number> {
+  return new Map(characters.map((c) => [c, new Set(entries.filter((e) => e.character === c).map((e) => e.person)).size]));
+}
+
+/** Whether a character has enough entrants for a final version, a credit test and a token (CHALLENGE.minEntrants). */
+export const enoughEntrants = (count: number, min: number = CHALLENGE.minEntrants) => count >= min;

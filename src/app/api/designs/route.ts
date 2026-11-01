@@ -12,6 +12,7 @@ import { bookCharacter, characterNameClash, CHARACTER_NAME_REFUSAL, designByVers
 import { blockedName } from '~/lib/images/rules';
 import { mayGenerate } from '~/lib/images/gate';
 import { openForChallenge } from '~/lib/challenge/open-sheets';
+import { recordEligibility } from '~/lib/challenge/record';
 import { checkWords } from '~/lib/images/paid';
 import { IMAGE_WORDING } from '~/lib/images/wording';
 import { putPublic, storageReady } from '~/lib/images/store';
@@ -146,6 +147,8 @@ export async function POST(request: Request) {
   };
   try {
     const out = await makeDesign(sql, { fid, mode, kind, styleName: mode === 'create' && kind === 'style' ? title : undefined, character: character ?? undefined, place: place ?? undefined, fromVersionId: typeof body.from === 'string' ? body.from : undefined, body: design });
+    // The remix challenge: whether this version can be an entry is decided now, once, and stored (never on page view).
+    if (kind === 'character' && mode !== 'create') await recordEligibility(sql, out.versionId, fid);
     revalidatePath('/references/designs');
     return NextResponse.json({ versionId: out.versionId, page: `/references/designs/${out.versionId}` });
   } catch (e) {
