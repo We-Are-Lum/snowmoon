@@ -1695,7 +1695,7 @@ add({
 });
 
 // ---------------------------------------------------------------------------
-// P7. Payments never enter scoring or ordering. Anything sold is a fixed-price collectible. "Not affiliated" on
+// P7. Payments never enter scoring or ordering. Apart from prepaid generations, anything sold is a fixed-price collectible. "Not affiliated" on
 //     the first screen.
 // ---------------------------------------------------------------------------
 const PAYMENT = /\b(donations?|credit_grants?|funded_by_grant_id|amount|usd_at_time|cost_usd|sponsor)/i;

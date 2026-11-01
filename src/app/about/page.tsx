@@ -124,7 +124,7 @@ export default async function About() {
       <h2>Theme</h2>
       <ThemeSwitch name="theme-about" />
       <h2>Payments</h2>
-      <p>Prepaid credit can only be spent on generations here; it can't be transferred or cashed out.</p>
+      <p>Prepaid credit can only be spent on generations here; it can't be transferred or cashed out. Nothing here is an investment.</p>
       {/* Support (owner, 2026-10-30): just the link, in the owner's words of 2026-10-31. Shown while SUPPORT.linked. */}
       {SUPPORT.linked && (
         <p>

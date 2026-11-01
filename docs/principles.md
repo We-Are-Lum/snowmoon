@@ -476,7 +476,7 @@ ratings and likes and serves the totals.
   address to Neynar, at most once a day per wallet; the Privacy page says so (section 7, reread by the owner on
   2026-10-22).
 
-## 7. Payments never enter scoring or ordering. Anything sold is a fixed-price collectible, with no royalties and no promises. The 'not affiliated' line stays on the first screen.
+## 7. Payments never enter scoring or ordering. Apart from prepaid generations, anything sold is a fixed-price collectible, with no royalties and no promises. The 'not affiliated' line stays on the first screen.
 
 **Source.** "Moving beyond coin voting governance", on why letting money buy
 influence over outcomes fails, starting with "outright attacks through various
@@ -491,7 +491,7 @@ change a score, a sort or a default. Prepaid images (owner, 2026-10-13): a
 wallet account buys images in advance with USDC or ETH on Base, at the
 estimated cost plus 30%. Paying buys images and nothing else: no place in any
 order, no score, no default. Payment is for the service (image generation) and
-is final: no refunds; nothing is held for anyone to withdraw. Anything sold (owner, 2026-10-31) is a fixed-price
+is final: no refunds; nothing is held for anyone to withdraw. Apart from prepaid generations, anything sold (owner, 2026-10-31) is a fixed-price
 collectible, with no royalties and no promises: Snowmoon WIP, open editions on Ethereum mainnet from
 `contracts/snowmoon-wip`, whose price and terms are fixed when each token is created; buying one changes nothing on
 the site. The first screen says the edition is independent, "not affiliated with the author". (Reworded by the

@@ -1,4 +1,4 @@
-# Less "token" talk: the Terms and Privacy lines (DRAFT, for the owner's reread)
+# Less "token" talk: the Terms and Privacy lines (reread by the owner, 2026-10-31)
 
 Branch `no-token`, 2026-10-30. The owner's decision (2026-10-30): remove "no token" talk from the site and say less;
 reword only as plain facts about today. These two lines are already changed in `src/lib/legal.ts` on this branch; they

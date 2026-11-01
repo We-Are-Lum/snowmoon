@@ -66,7 +66,9 @@ export const LEGAL: {
     // admins' pick sentence (docs/legal/picks-draft.md). The words before were vd19s3.
     // 2026-10-31, the owner's "Terms §6c, reread, replaced with" for the Support page: §6c now says the money supports
     // the We Are Lum team, who make the Service (the rest as before, in his words). The words before were 1kta0uf.
-    terms: { words: 'unq90g', on: '2026-10-31', by: 'FID 6786' },
+    // 2026-10-31, the owner's "f: reread done for #73 (no-token)": §2 no longer says "There is no token." (the rest of
+    // §2 unchanged). The words before were unq90g.
+    terms: { words: 'x7zkw', on: '2026-10-31', by: 'FID 6786' },
     // Plus one sentence the drafted list missed (Privacy §4, images): "your name (Farcaster name or wallet
     // address)", the owner's own words for tonight's publish (2026-10-18), so the page stays true for wallet accounts.
     // 2026-10-19, the owner's "Reread is done" for push 3, at these words: My picks in §4 (the owner's own sentence),
@@ -97,7 +99,9 @@ export const LEGAL: {
     // made on its storage, at an unlisted link it gives only to us but that anyone holding it could open, for as long as
     // fal.ai's settings keep it; we don't set a time yet." The deletion line waits for a real test showing the link
     // gone. The words before were bjz6u1.
-    privacy: { words: 'ynzu1t', on: '2026-10-24', by: 'FID 6786' },
+    // 2026-10-31, the owner's "f: reread done for #73 (no-token)": §3's "a sign-in token that lasts about an hour" became
+    // "your sign-in, which lasts about an hour". The words before were ynzu1t.
+    privacy: { words: '16s4wpe', on: '2026-10-31', by: 'FID 6786' },
   },
 };
 
