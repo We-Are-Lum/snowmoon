@@ -476,7 +476,7 @@ ratings and likes and serves the totals.
   address to Neynar, at most once a day per wallet; the Privacy page says so (section 7, reread by the owner on
   2026-10-22).
 
-## 7. Payments never enter scoring or ordering. No token. The "not affiliated" line stays on the first screen.
+## 7. Payments never enter scoring or ordering. Apart from prepaid generations, anything sold is a fixed-price collectible, with no royalties and no promises. The 'not affiliated' line stays on the first screen.
 
 **Source.** "Moving beyond coin voting governance", on why letting money buy
 influence over outcomes fails, starting with "outright attacks through various
@@ -491,22 +491,26 @@ change a score, a sort or a default. Prepaid images (owner, 2026-10-13): a
 wallet account buys images in advance with USDC or ETH on Base, at the
 estimated cost plus 30%. Paying buys images and nothing else: no place in any
 order, no score, no default. Payment is for the service (image generation) and
-is final: no refunds; nothing is held for anyone to withdraw. There is no token. The first screen says
-the edition is independent, "not affiliated with the author", and that there
-is no token.
+is final: no refunds; nothing is held for anyone to withdraw. Apart from prepaid generations, anything sold (owner, 2026-10-31) is a fixed-price
+collectible, with no royalties and no promises: Snowmoon WIP, open editions on Ethereum mainnet from
+`contracts/snowmoon-wip`, whose price and terms are fixed when each token is created; buying one changes nothing on
+the site. The first screen says the edition is independent, "not affiliated with the author". (Reworded by the
+owner: 2026-10-30, the site no longer says "no token"; 2026-10-31, this wording, ahead of the Snowmoon WIP mint.)
 
 **Checked by.**
 - `P7a`: no ordering (`order by`, `.sort`) or scoring code references
   donations, grants, amounts, costs or sponsors.
 - `P7b`: the deployed first screen (the first words of the home page's
-  `<main>`, its dark hero) contains "not affiliated with the author" and "no
-  token" (the owner-approved line "Independent adaptation · Not affiliated
-  with the author · No token", `config/intro.json`; the owner moved it from
-  Design's footer into the hero, 2026-10-10); no token code (ERC-20/721, mint, airdrop) exists in
-  the repo. `npm run check:ui` also checks the first screen at phone size.
+  `<main>`, its dark hero) contains "not affiliated with the author" (the
+  owner-approved line "Independent adaptation · Not affiliated with the
+  author", `config/intro.json`; the owner moved it from
+  Design's footer into the hero, 2026-10-10). No ERC-20, ERC-721 or airdrop code exists in the site's
+  code; the only contract (outside its own libraries) is `contracts/snowmoon-wip`, with no royalty
+  (ERC-2981) code, no function that sets a price, and a price written only in `createToken`.
+  `npm run check:ui` also checks the first screen at phone size.
 - `npm run check:intro`: the first-visit intro's disclaimer (`config/intro.json`),
   shown on card 1 and at the top of /about, keeps "not affiliated with the
-  author" and "no token"; every card and feature marked "live" points at a
+  author"; every card and feature marked "live" points at a
   page that exists.
 - Review: does any payment change what anyone sees first?
 

@@ -66,7 +66,9 @@ export const LEGAL: {
     // admins' pick sentence (docs/legal/picks-draft.md). The words before were vd19s3.
     // 2026-10-31, the owner's "Terms §6c, reread, replaced with" for the Support page: §6c now says the money supports
     // the We Are Lum team, who make the Service (the rest as before, in his words). The words before were 1kta0uf.
-    terms: { words: 'unq90g', on: '2026-10-31', by: 'FID 6786' },
+    // 2026-10-31, the owner's "f: reread done for #73 (no-token)": §2 no longer says "There is no token." (the rest of
+    // §2 unchanged). The words before were unq90g.
+    terms: { words: 'x7zkw', on: '2026-10-31', by: 'FID 6786' },
     // Plus one sentence the drafted list missed (Privacy §4, images): "your name (Farcaster name or wallet
     // address)", the owner's own words for tonight's publish (2026-10-18), so the page stays true for wallet accounts.
     // 2026-10-19, the owner's "Reread is done" for push 3, at these words: My picks in §4 (the owner's own sentence),
@@ -97,7 +99,9 @@ export const LEGAL: {
     // made on its storage, at an unlisted link it gives only to us but that anyone holding it could open, for as long as
     // fal.ai's settings keep it; we don't set a time yet." The deletion line waits for a real test showing the link
     // gone. The words before were bjz6u1.
-    privacy: { words: 'ynzu1t', on: '2026-10-24', by: 'FID 6786' },
+    // 2026-10-31, the owner's "f: reread done for #73 (no-token)": §3's "a sign-in token that lasts about an hour" became
+    // "your sign-in, which lasts about an hour". The words before were ynzu1t.
+    privacy: { words: '16s4wpe', on: '2026-10-31', by: 'FID 6786' },
   },
 };
 
@@ -105,7 +109,7 @@ export const TERMS: LegalDoc = {
   title: 'Terms of Use',
   sections: [
     { n: 1, head: 'Who runs this.', body: ['Snowmoon Party (snowmoon.party, its Farcaster mini app and its game in Farcaster casts, together "the Service") is operated by Lum LLC, a Wyoming limited liability company ("we"). By using the Service you agree to these Terms.'] },
-    { n: 2, head: 'What this is.', body: ['An independent, open edition of the novel Snowmoon by Vitalik Buterin, with read-aloud audio, pictures, a game reconstruction and a reading assistant. It is not affiliated with or endorsed by the author. There is no token. You can prepay for generations. Payments are final. Nothing else here is for sale.'] },
+    { n: 2, head: 'What this is.', body: ['An independent, open edition of the novel Snowmoon by Vitalik Buterin, with read-aloud audio, pictures, a game reconstruction and a reading assistant. It is not affiliated with or endorsed by the author. You can prepay for generations. Payments are final. Nothing else here is for sale.'] },
     { n: 3, head: 'The book and the licence.', body: ['Snowmoon is the author\'s work, released under the GNU General Public License version 3. The text, pictures, audio and code on the Service are offered under that same licence, and the source and the full record of how each piece was made are public in our repository. Nothing in these Terms limits the rights the licence gives you.'] },
     { n: 4, head: 'Who can use it.', body: ['Anyone can read and listen without an account. To sign in you must be at least 18 years old. Your account here is a Farcaster account or a wallet address. You can link a wallet to your Farcaster account; while it is linked, signing in with the wallet is signing in as that account. Other ways to sign in may come later; these Terms will list each one when it does.'] },
     { n: 5, head: 'What you add.', body: ['If you publish something through the Service, or make a frame in Remix (which is saved, and can be seen by anyone with its link, as soon as it is made), it remains yours, and you license it to everyone under GPL version 3. You confirm it is your own work, or that you have the right to license it this way. Your name is shown with it: your Farcaster name, or, for a wallet account, its address shortened. Work made with a wallet that is linked to your Farcaster account is shown with your Farcaster name. Where the Service says so before you publish, the prompts and any planning thread that led to the piece are published with it. Published work is public and others may copy it under the licence. We can hide it on request (see section 7), but we cannot recall copies others have made.'] },
@@ -129,7 +133,7 @@ export const PRIVACY: LegalDoc = {
   sections: [
     { n: 1, head: 'Who we are.', body: ['Lum LLC, a Wyoming limited liability company, operates Snowmoon Party.'] },
     { n: 2, head: 'The short version.', body: ['You can read and listen without an account, and we keep nothing about you when you do. We use no advertising or analytics trackers and set no cookies. We do not sell data.'] },
-    { n: 3, head: 'Kept on your device only.', body: ['Your browser stores a few things so the site works: whether you have seen the introduction, your light or dark setting, where you stopped listening, the furthest chapter you have opened, your questions to the assistant and its answers, drafts of images you make until you publish them, a few other settings of yours, and, on the website, a sign-in token that lasts about an hour (a day for a wallet sign-in), and a payment you have sent but not yet seen credited. These stay on your device. Clearing your browser\'s site data removes them. Frames you make in Remix are not drafts: they are saved by us as soon as they are made (section 4). So are the frames and video tests your agent makes when you approve them, but privately: only you can see them (section 4).'] },
+    { n: 3, head: 'Kept on your device only.', body: ['Your browser stores a few things so the site works: whether you have seen the introduction, your light or dark setting, where you stopped listening, the furthest chapter you have opened, your questions to the assistant and its answers, drafts of images you make until you publish them, a few other settings of yours, and, on the website, your sign-in, which lasts about an hour (a day for a wallet sign-in), and a payment you have sent but not yet seen credited. These stay on your device. Clearing your browser\'s site data removes them. Frames you make in Remix are not drafts: they are saved by us as soon as they are made (section 4). So are the frames and video tests your agent makes when you approve them, but privately: only you can see them (section 4).'] },
     {
       n: 4,
       head: 'Kept by us when you sign in.',
