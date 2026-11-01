@@ -435,6 +435,10 @@ only, through `studio.rating_totals`, `studio.like_totals` and
   Neynar receives makers' FIDs for it and, for posts, names Bluesky and Lens (docs/legal/remix-challenge-draft.md);
   and opening sheets to everyone (`CHALLENGE.openSheets`, on) takes effect only inside the entry window and once
   Privacy §4 describes the challenge.
+- `P6r` (branch deep-funding, 2026-11-01, pending the owner's yes): the deep funding test's juror page and API
+  (`DEEP_FUNDING.jurors`, off) are on only while Privacy §4 describes the jurors' answers
+  (docs/legal/deep-funding-draft.md), and `jurorsOn()` waits for those words whatever the switch says. Jurors are
+  added by the owner in the SQL Editor, never through the site, so no admin gains a power (P5b).
 - `P6n`: image making is open beyond the invited list (the gate looks up a
   Neynar score) only when `src/app/terms/page.tsx` and `src/app/privacy/page.tsx`
   both exist, and the Privacy page names Neynar (which receives the FID at

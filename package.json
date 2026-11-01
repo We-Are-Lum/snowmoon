@@ -68,7 +68,9 @@
     "check:snap-live": "tsx scripts/check-snap-live.ts",
     "check:modal-vc": "tsx scripts/check-modal-vc.ts",
     "test:illustration-review": "tsx --conditions=react-server scripts/test-illustration-review.ts",
-    "test:challenge": "tsx --conditions=react-server scripts/test-challenge.ts"
+    "test:challenge": "tsx --conditions=react-server scripts/test-challenge.ts",
+    "test:deep-funding": "tsx --conditions=react-server scripts/test-deep-funding.ts",
+    "deep-funding": "tsx --conditions=react-server --env-file-if-exists=.env.local scripts/deep-funding.ts"
   },
   "license": "AGPL-3.0-only",
   "description": "",

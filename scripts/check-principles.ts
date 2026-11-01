@@ -24,7 +24,7 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { DEFAULT_TEMPLATES } from '../src/templates';
 import { LiveScreen } from '../src/components/live-screen';
-import { AGENTS, CHALLENGE, CHAT, IMAGES, REPO_URL } from '../src/lib/config';
+import { AGENTS, CHALLENGE, CHAT, DEEP_FUNDING, IMAGES, REPO_URL } from '../src/lib/config';
 import { NOTICE_REVIEW, currentNoticeItems, noticeKey } from '../src/lib/chat/notice';
 import { LEGAL, PRIVACY, TERMS, legalKey } from '../src/lib/legal';
 import { LEARN_TEXT } from '../src/lib/minpentai/learn-text';
@@ -1357,7 +1357,7 @@ add({
     seen.push({ page: '/chapter/1', host: 'fonts.googleapis.com', url: 'https://fonts.googleapis.com/css2?family=Inter', type: 'stylesheet' });
   },
 });
-const PRIVATE_FID_TABLES = ['ratings', 'likes', 'take_likes', 'picks', 'contributor_consents', 'image_asks', 'removal_log', 'image_scores', 'wallet_links', 'challenge_marks', 'version_posts', 'challenge_eligibility'];
+const PRIVATE_FID_TABLES = ['ratings', 'likes', 'take_likes', 'picks', 'contributor_consents', 'image_asks', 'removal_log', 'image_scores', 'wallet_links', 'challenge_marks', 'version_posts', 'challenge_eligibility', 'deep_funding_jurors', 'juror_answers'];
 add({
   id: 'P6b',
   principle: 6,
@@ -1387,6 +1387,11 @@ add({
         insert into studio.challenge_marks (challenge, fid, character, version_id) values ('remix-2026-11', 42, 'bai', '00000000-0000-0000-0000-0000000000f1');
         insert into studio.version_posts (version_id, network, post_id, handle, posted_at, url, fid) values ('00000000-0000-0000-0000-0000000000f1', 'lens', '1', 'someone', now(), 'https://hey.xyz/posts/abc', 42);
         insert into studio.challenge_eligibility (version_id, challenge, fid, decision, score, eligible) values ('00000000-0000-0000-0000-0000000000f1', 'remix-2026-11', 42, 'score', 0.8, true);
+      end if; end $$;
+      -- The deep funding test's jurors (NEXT_deep_funding_jurors.sql, while unmerged): a juror and an answer, by FID 42.
+      do $$ begin if to_regclass('studio.juror_answers') is not null then
+        insert into studio.deep_funding_jurors (challenge, character, fid, added_by) values ('remix-2026-11', 'bai', 42, 6786);
+        insert into studio.juror_answers (challenge, character, final_version_id, fid, question_no, kind, version_a, share) values ('remix-2026-11', 'bai', '00000000-0000-0000-0000-0000000000f1', 42, 5, 'originality', '00000000-0000-0000-0000-0000000000f1', 0.35);
       end if; end $$;`);
     const problems: string[] = [];
     for (const role of ['anon', 'authenticated']) {
@@ -1763,6 +1768,31 @@ add({
     c.s4 = 'Quote cards you save, and your likes.';
     c.s7 = 'Neynar receives your Farcaster ID.';
     c.openSheets = 'export const challengeSheetsOpen = () => CHALLENGE.openSheets;';
+  },
+});
+
+// P6r: the deep funding test's juror page (branch deep-funding, owner 2026-10-31). Jurors' answers are kept
+// (studio.juror_answers) and published by juror number; the page is on only once Privacy says so
+// (docs/legal/deep-funding-draft.md). Legal texts describe today.
+add({
+  id: 'P6r',
+  principle: 6,
+  name: "the deep funding juror page is on only while the Privacy page describes the jurors' answers, and its switch waits for those words",
+  load: async () => ({
+    jurors: DEEP_FUNDING.jurors as boolean,
+    code: read('src/lib/deep-funding/jurors-db.ts'),
+    s4: (PRIVACY.sections.find((s) => s.n === 4)?.body ?? []).flat().join(' '),
+  }),
+  run: (c) => {
+    const problems: string[] = [];
+    if (c.jurors && !/deep funding/i.test(c.s4)) problems.push("DEEP_FUNDING.jurors (src/lib/config.ts) is on, but Privacy §4 does not describe the jurors' answers; reread docs/legal/deep-funding-draft.md with the owner first, or keep it off");
+    if (!/export const jurorsOn = [^\n]*DEEP_FUNDING\.jurors && privacyDescribesJurors\(/.test(c.code)) problems.push('src/lib/deep-funding/jurors-db.ts: jurorsOn does not wait for the Privacy words');
+    return problems;
+  },
+  plant: (c) => {
+    c.jurors = true;
+    c.s4 = 'Quote cards you save, and your likes.';
+    c.code = 'export const jurorsOn = () => DEEP_FUNDING.jurors;';
   },
 });
 

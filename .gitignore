@@ -27,6 +27,8 @@ art-out
 summary-out
 .voice-models
 scenes-out
+# scripts/deep-funding.ts (the owner publishes the results file)
+deep-funding-out
 
 # The live editor's data, made at build time from committed files (scripts/editor-data.mjs)
 /public/editor/

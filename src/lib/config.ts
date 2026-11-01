@@ -440,6 +440,52 @@ export const CHALLENGE = {
 };
 
 /**
+ * The deep funding test (docs/proposals/remix-challenge-plan.md, "Deep funding test", and its Corrections; owner,
+ * 2026-10-31; built on branch deep-funding, docs/proposals/deep-funding-runner.md). AI models and a small jury divide the
+ * credit for each final character version among everything it was built on. Nothing here calls a model by itself: the
+ * runner (scripts/deep-funding.ts) does, only when asked to and only under `budgetUsd`.
+ *
+ * - `jurors` (off): the juror page (/challenge/jurors) and its API. It takes effect only once Privacy describes the
+ *   jurors' answers (docs/legal/deep-funding-draft.md; legal texts describe today), and needs
+ *   NEXT_deep_funding_jurors.sql applied.
+ * - `bookRecipient` (UNSET, null): who receives the credit that reaches the book. 'lake' sends it to the Lake
+ *   (SUPPORT.address); an address sends it there. While it is null the runner refuses to produce final payouts.
+ * - `finals`: each character's final version (the owner's), by version id; empty until the owner picks them.
+ */
+export const DEEP_FUNDING = {
+  jurors: false as boolean,
+  /** Who receives what reaches the book: null (unset; payouts refused), 'lake', or an Ethereum address. The owner decides. */
+  bookRecipient: null as null | 'lake' | `0x${string}`,
+  /** The Lake: the support wallet, where every share the rules hold back goes. */
+  lake: SUPPORT.address as `0x${string}`,
+  /** A recipient whose total is under this share of the pot goes to the Lake (the plan: 1%). */
+  minShare: 0.01,
+  /** Each character's final version id (the owner's), e.g. { bai: '…' }. Empty until the owner picks them. */
+  finals: {} as Record<string, string>,
+  /** Jurors per character (the plan: 5 to 9, with no entries for that character). */
+  jurorsPerCharacter: { min: 5, max: 9 },
+  /** Questions per juror: comparisons ("A or B, and how many times more?") and originality ("how much is new?"). */
+  questions: { compare: 4, originality: 2 },
+  /** The largest "how many times more" a juror can give. */
+  maxRatio: 100,
+  /**
+   * The leaderboard: each model's loss is compare × (mean squared gap in log-ratio) + originality × (mean squared gap
+   * in log-odds). Both gaps are in natural-log units, so equal weights count one unit of either the same.
+   */
+  scoreWeights: { compare: 0.5, originality: 0.5 },
+  /** Originality shares are clamped to [clamp, 1 - clamp] before taking log-odds. */
+  clamp: 0.01,
+  /** A model's credit for a version is floored at this share of the final before taking a log-ratio (a zero has no logarithm). */
+  creditFloor: 0.0001,
+  /** The final weights: the average of this many best models. */
+  topModels: 3,
+  /** Each model answers each node this many times. */
+  runsPerModel: 3,
+  /** Stop and report before spending more than this on model calls (the plan). */
+  budgetUsd: 25,
+};
+
+/**
  * Readers add an image to a passage: slice 1, labelled "Trial" (docs/proposals/add-an-image.md;
  * the owner's decisions of 2026-10-08, all as recommended except 11, 12, 18, 20 and 24).
  * Each number below is one of those decisions.
