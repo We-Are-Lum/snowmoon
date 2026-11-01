@@ -8,8 +8,10 @@ import { WalletSignInButton } from '~/components/wallet';
 
 const W = AGENT_WORDING.authorize;
 
-export function AuthorizeConsent({ query, client, scopes, backHost }: { query: string; client: string; scopes: string[]; backHost: string }) {
+export function AuthorizeConsent({ query, client, scopes, backHost, play = null }: { query: string; client: string; scopes: string[]; backHost: string; play?: { text: string; people: number[] } | null }) {
   const auth = useAuth();
+  // Agent play's line, only for a person it is open to (the server leaves the scope out for anyone else).
+  const shown = play && auth.kind === 'signed-in' && play.people.includes(auth.fid) ? [...scopes, play.text] : scopes;
   const wallet = useWalletSession();
   const signedIn = auth.kind === 'signed-in' || wallet !== null;
   const [handle, setHandle] = useState<string | null>(null);
@@ -46,7 +48,7 @@ export function AuthorizeConsent({ query, client, scopes, backHost }: { query: s
         <>
           <p className="agent-lede">{W.lede(client, short)}</p>
           <p>{W.can}</p>
-          <ul>{scopes.map((s) => <li key={s}>{s}</li>)}</ul>
+          <ul>{shown.map((s) => <li key={s}>{s}</li>)}</ul>
           <p>{W.cannot}</p>
           <p>{W.pays}</p>
           <p className="you-note">{W.limits}</p>

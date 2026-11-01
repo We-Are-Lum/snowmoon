@@ -88,7 +88,8 @@ try {
   // --- R1–R5: the library ------------------------------------------------------------------
   const { reserve, settle, freeSpendToday } = await import('../src/lib/remix/limits');
   const { remixSpend } = await import('../src/lib/remix/make');
-  const { setHidden, saveFrame } = await import('../src/lib/remix/frames');
+  const { saveFrame } = await import('../src/lib/remix/frames');
+  const { setHidden } = await import('../src/lib/remix/hide');
   const { REMIX } = await import('../src/lib/config');
   const spend = remixSpend(4);
   {

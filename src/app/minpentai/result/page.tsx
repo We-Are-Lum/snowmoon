@@ -8,11 +8,11 @@ import { parseResult, resultPath } from '~/lib/minpentai/share-result';
  * Where a shared ladder win points (owner, 2026-10-19). Everything on it comes from its link; nothing
  * is stored and nothing ranks. Not offered to search engines.
  */
-type Props = { searchParams: Promise<{ r?: string; s?: string }> };
+type Props = { searchParams: Promise<{ r?: string; s?: string; g?: string }> };
 
 export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
   const q = await searchParams;
-  const x = parseResult(q.r, q.s);
+  const x = parseResult(q.r, q.s, null, q.g);
   if (!x) return { title: 'Minpentai', robots: { index: false } };
   const url = `${appUrl()}${resultPath(x)}`;
   const card = `${appUrl()}/api/minpentai-card?r=${x.rung}&s=${x.steps}`;
@@ -36,7 +36,7 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
 
 export default async function MinpentaiResultPage({ searchParams }: Props) {
   const q = await searchParams;
-  const x = parseResult(q.r, q.s);
+  const x = parseResult(q.r, q.s, null, q.g);
   return (
     <div className="page prose">
       {x ? (

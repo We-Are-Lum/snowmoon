@@ -35,6 +35,8 @@ function legalPages(): string {
  */
 const SNAP_MEDIA = 'application/vnd.farcaster.snap+json';
 const ASKS_FOR_SNAP = [{ type: 'header' as const, key: 'accept', value: '.*application/vnd\\.farcaster\\.snap\\+json.*' }];
+/** Requests that don't get the full page: the snap Accept, and Farcaster's composer (FCBot, src/lib/minpentai/snap/negotiate.ts). */
+const NOT_PAGE = [...ASKS_FOR_SNAP, { type: 'header' as const, key: 'user-agent', value: '.*FCBot.*' }];
 const IS_PREFLIGHT = [{ type: 'header' as const, key: 'access-control-request-method' }];
 const snapAlternate = (path: string) => [
   { key: 'Link', value: `<${path}>; rel="alternate"; type="${SNAP_MEDIA}"` },
@@ -98,9 +100,12 @@ const nextConfig: NextConfig = {
   },
   async headers() {
     return [
-      { source: '/minpentai', missing: ASKS_FOR_SNAP, headers: snapAlternate('/minpentai') },
-      { source: '/minpentai/play', missing: ASKS_FOR_SNAP, headers: snapAlternate('/minpentai/play') },
-      { source: '/minpentai/c/:seg', missing: ASKS_FOR_SNAP, headers: snapAlternate('/minpentai/c/:seg') },
+      // Not for Farcaster's composer (FCBot): its page carries its own absolute Link (src/app/snap/minpentai/card/route.ts).
+      { source: '/minpentai', missing: NOT_PAGE, headers: snapAlternate('/minpentai') },
+      { source: '/minpentai/play', missing: NOT_PAGE, headers: snapAlternate('/minpentai/play') },
+      { source: '/minpentai/c/:seg', missing: NOT_PAGE, headers: snapAlternate('/minpentai/c/:seg') },
+      // /snap/minpentai shows browsers Play's page (src/middleware.ts) and names itself as the snap.
+      { source: '/snap/minpentai', missing: NOT_PAGE, headers: snapAlternate('/snap/minpentai') },
     ];
   },
   // Adaptation pages (docs/proposals/adaptation-urls.md). A folder named `@…` is a parallel-route slot

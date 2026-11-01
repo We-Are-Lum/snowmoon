@@ -96,6 +96,7 @@ export function PlayBoard({ bd, label, fitHeight = false, grow = false, foot, ch
 /** How a square is painted: Design's colours, except that a piece's square is left empty for its shape (Learn's
  *  board colour, or Design's lit tint under a new glider) and a new placement keeps Design's white outline. */
 export function look(c: Cell, k = 1): React.CSSProperties {
+  if (c.pc?.dim) return { background: '#050507', border: 0, boxShadow: 'none' }; // out of sight: the dark square, the tower dimmed on it
   if (c.pc) return { background: c.pc.mine && c.pc.k === 'glider' ? c.bg : '#0E0F13', border: 0, boxShadow: c.pc.mine ? '0 0 0 1px #E7E4DD' : 'none' };
   return { background: c.bg, border: c.bd === '0' ? 0 : c.bd, boxShadow: scale(c.sh, k), color: c.fg, fontSize: `${Math.max(12, Math.round(parseFloat(c.fs) * k))}px` };
 }
@@ -112,7 +113,7 @@ function PieceShape({ pc, cs }: { pc: CellPiece; cs: number }) {
     g.clearRect(0, 0, px, px);
     drawPiece(g, pc.k, px / 2, px / 2, px, COL[pc.side], { dx: pc.dir?.[0], dy: pc.dir?.[1], hp: pc.hp });
   }, [pc.k, pc.side, pc.dir?.[0], pc.dir?.[1], pc.hp, px]);
-  return <canvas ref={ref} className="mp-piece" width={px} height={px} style={{ width: cs, height: cs }} aria-hidden="true" />;
+  return <canvas ref={ref} className="mp-piece" width={px} height={px} style={{ width: cs, height: cs, opacity: pc.dim || pc.faded ? 0.4 : undefined }} aria-hidden="true" />;
 }
 
 /** Design's inset ring is a fifth of the square: keep it so when the square shrinks. */

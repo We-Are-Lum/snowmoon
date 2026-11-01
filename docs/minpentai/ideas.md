@@ -30,7 +30,7 @@
 - **What:** move the numbers into one file, `config/minpentai.json`:
   - board size: 15×10;
   - rocks;
-  - match length: 96 steps;
+  - match length: 120 steps;
   - turn interval: 12, or 8 under "every8";
   - points per turn: 8;
   - costs: glider 4, square 1, tower 4;

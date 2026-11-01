@@ -19,9 +19,10 @@
  */
 import { XMLParser, XMLValidator } from 'fast-xml-parser';
 import podcastConfig from '../config/podcast.json';
+import { requireTarget } from './lib/target';
 
 const arg = (name: string) => process.argv.slice(2).find((a) => a.startsWith(`--${name}=`))?.split('=').slice(1).join('=');
-const BASE = (arg('url') ?? 'http://localhost:3000').replace(/\/$/, '');
+const BASE = requireTarget('check:podcast');
 const PLANT = arg('plant');
 const failures: string[] = [];
 const notes: string[] = [];

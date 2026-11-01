@@ -4,7 +4,7 @@
     "by": "FID 6786",
     "date": "2026-10-07",
     "show_title": "Snowmoon Party: an independent reading of Snowmoon",
-    "show_description": "Vitalik Buterin's open novel Snowmoon, read aloud one chapter per episode by a synthetic voice. An independent project, not affiliated with the author. No token. Text and audio are GPL v3; every step of how this was made is public at snowmoon.party.",
+    "show_description": "Vitalik Buterin's open novel Snowmoon, read aloud one chapter per episode by a synthetic voice. An independent project, not affiliated with the author. Text and audio are GPL v3; every step of how this was made is public at snowmoon.party.",
     "episode_description_template": "Chapter {n} of Snowmoon by Vitalik Buterin, read by a synthetic voice (Kokoro-82M, stock voice af_heart). An independent reading, not affiliated with the author. Read along: {chapter link}. How this audio was made: {recipe link}. Text and audio: GPL v3.",
     "spoken_opener": "This is an independent reading of Snowmoon, by Vitalik Buterin. The voice is synthetic. A short tone marks a description that is not the book's own words."
   },

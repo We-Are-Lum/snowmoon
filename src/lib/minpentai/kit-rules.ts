@@ -6,7 +6,8 @@
  * Each rule is either FROM THE BOOK (cites blocks; each quote is word for word in its block, checked by
  * scripts/build-minpentai-kit.ts and check:principles P8g) or INVENTED for this edition (names where in
  * the code it lives; each `find` must appear in its file). `site` says whether the site follows it today:
- * - Play: practice, the computer ladder, free play and one-on-one (src/lib/minpentai/play-game/game.ts);
+ * - Play: practice, the computer ladder, free play and one-on-one (the one engine, src/lib/minpentai/versions/engine.ts,
+ *   with Play's numbers as its base settings in versions/schema.ts; play-game/game.ts adapts it for older callers);
  * - Learn: the lessons (src/lib/minpentai/learn-game/, Design's v3, which the rules page says Play replaces);
  * - the book's rule page, /minpentai/rule (src/lib/minpentai/engine.ts).
  *
@@ -53,6 +54,10 @@ const GAME = 'src/lib/minpentai/play-game/game.ts';
 const CTRL = 'src/lib/minpentai/play-game/controller.ts';
 const LIVE = 'src/lib/minpentai/play-server/match.ts';
 const ENGINE = 'src/lib/minpentai/engine.ts';
+/** Play's rules run on the one engine (versions/engine.ts); Play's numbers are its base settings (versions/schema.ts). */
+const VENG = 'src/lib/minpentai/versions/engine.ts';
+const SCHEMA = 'src/lib/minpentai/versions/schema.ts';
+const SOLO = 'src/lib/minpentai/versions/solo-v1.ts';
 
 export const KIT_RULES: KitRule[] = [
   /* ---------------- the board and how it changes ---------------- */
@@ -60,7 +65,7 @@ export const KIT_RULES: KitRule[] = [
     id: 'square-grid', area: 'board', source: 'book', how: 'implied',
     rule: 'The game is played on a grid of squares; a hex grid is announced as a rule change.',
     cites: [{ block: 'c12-b147', quote: 'Today, Minpentai will be played on a hex grid.' }, { block: 'c4-b94', quote: 'put down squares' }, { block: 'c14-b36', quote: 'intervene in only a few cells' }],
-    code: [{ file: GAME, find: 'export const W = 15;' }, { file: ENGINE, find: 'export const WIDTH = 48;' }],
+    code: [{ file: SCHEMA, find: "width: { text: 'Board width in squares', min: 9, max: 25, base: 15," }, { file: ENGINE, find: 'export const WIDTH = 48;' }],
     site: 'yes', siteNote: 'Every board on the site is a grid of squares.',
   },
   {
@@ -102,7 +107,7 @@ export const KIT_RULES: KitRule[] = [
     id: 'turn-is-update', area: 'board', source: 'book', how: 'implied',
     rule: 'One turn is one update of the whole board.',
     cites: [{ block: 'c4-b126', quote: 'Sixty turns until the next intervention turn.' }, { block: 'c14-b94', quote: 'Ten thousand two hundred turns into the game' }],
-    code: [{ file: GAME, find: 'export function step(w: World)' }],
+    code: [{ file: VENG, find: 'function step(w: World, s: Settings, kills?: Kills): World {' }],
     site: 'yes', siteNote: 'Play counts steps; each step moves every glider once.',
   },
   {
@@ -129,27 +134,27 @@ export const KIT_RULES: KitRule[] = [
   {
     id: 'play-board-size', area: 'board', source: 'invented',
     rule: 'The board is 15 × 10 squares.',
-    code: [{ file: GAME, find: 'export const W = 15;' }, { file: GAME, find: 'export const H = 10;' }],
+    code: [{ file: SCHEMA, find: "width: { text: 'Board width in squares', min: 9, max: 25, base: 15," }, { file: SCHEMA, find: "height: { text: 'Board height in squares', min: 6, max: 16, base: 10," }],
     site: 'yes', siteNote: 'Play and Learn.',
   },
   {
     id: 'play-start', area: 'board', source: 'invented',
     rule: 'Each player starts with 2 towers near their own side; the six rocks and the towers are mirrored, so both start even.',
     cites: [{ block: 'c4-b94', quote: 'He drew a few copies of his symbol in the bottom right corner of the board, where he was allowed to put down squares during the initiation phase.' }],
-    code: [{ file: GAME, find: 'export const ROCKS' }, { file: GAME, find: 'export function world' }],
+    code: [{ file: VENG, find: 'const PLAY_ROCKS: [number, number][] = [[6, 0], [9, 3], [7, 4], [7, 5], [5, 6], [8, 9]];' }, { file: VENG, find: 'function world(s: Settings, blank?: boolean): World {' }],
     site: 'yes', siteNote: 'Play. In the book, players draw their own symbols in a home corner at setup.',
   },
   {
     id: 'play-edges-bounce', area: 'board', source: 'invented',
     rule: 'A glider that would leave the board turns back on that side and waits a step.',
-    code: [{ file: GAME, find: 'if (bx) g.dx = -g.dx;' }],
+    code: [{ file: VENG, find: 'if (bx) g.dx = -g.dx;' }],
     site: 'yes', siteNote: 'Play and Learn.',
   },
   {
     id: 'play-no-debris', area: 'board', source: 'invented',
     rule: 'Broken pieces leave nothing behind.',
     cites: [{ block: 'c4-b140', quote: 'a high-entropy wasteland' }],
-    code: [{ file: GAME, find: 'w.gl = gl.filter((g) => !g.dead);' }],
+    code: [{ file: VENG, find: 'w.gl = gl.filter((g) => !g.dead);' }],
     site: 'yes', siteNote: 'Play and Learn.',
   },
   {
@@ -164,14 +169,14 @@ export const KIT_RULES: KitRule[] = [
     id: 'moving-structures', area: 'pieces', source: 'book', how: 'stated',
     rule: 'Moving structures: gliders, and spaceships (large, slow gliders); a "moving wall" is a large glider at half speed.',
     cites: [{ block: 'c4-b108', quote: 'Spaceships flew out, acting as large slow-moving gliders' }, { block: 'c4-b111', quote: 'a sort of large glider that flew half as fast' }],
-    code: [{ file: GAME, find: 'export interface Glider' }],
+    code: [{ file: VENG, find: 'export interface Glider' }],
     site: 'partly', siteNote: 'Play has gliders only; no spaceships or moving walls.',
   },
   {
     id: 'static-structures', area: 'pieces', source: 'book', how: 'stated',
     rule: 'Static structures: walls, rocks and glider factories.',
     cites: [{ block: 'c4-b84', quote: 'Walls, gliders, rocks, techniques for extracting usable negentropy from rocks, sideways attacks.' }, { block: 'c14-b38', quote: 'an eternal glider factory' }],
-    code: [{ file: GAME, find: 'export interface Square' }],
+    code: [{ file: VENG, find: 'export interface Square' }],
     site: 'partly', siteNote: 'Play has squares (walls) and rocks; no factories.',
   },
   {
@@ -184,14 +189,14 @@ export const KIT_RULES: KitRule[] = [
     id: 'no-owner', area: 'pieces', source: 'book', how: 'implied',
     rule: "Cells have no owner: a stray glider can wreck its own side's structures.",
     cites: [{ block: 'c4-b109', quote: "A few stray gliders from Bai accidentally flew into Zei's territory, and wrecked one of his factories." }, { block: 'c4-b109', quote: 'began to fly back toward his own base' }],
-    code: [{ file: GAME, find: 'if (s.hp > 1)' }],
+    code: [{ file: VENG, find: 'if (q.hp > 1) { q.hp--; bounce(g); }' }],
     site: 'partly', siteNote: "Play: any glider cracks any square, its own side's included; but a glider bounces off its own side's tower, and a side's gliders pass through each other.",
   },
   {
     id: 'play-tower', area: 'pieces', source: 'invented',
     rule: "A symbol is drawn as a tower: one square that is a player's score, sight and place to build. Its shape is invented.",
     cites: [{ block: 'c4-b93', quote: 'a pattern of dots' }],
-    code: [{ file: GAME, find: 'tw: Record<number, Side>;' }],
+    code: [{ file: VENG, find: 'tw: Record<number, Side>;' }],
     site: 'yes', siteNote: 'Play and Learn.',
   },
   {
@@ -204,19 +209,19 @@ export const KIT_RULES: KitRule[] = [
     id: 'play-square', area: 'pieces', source: 'invented',
     rule: 'A square sends a glider back; the first hit cracks it, the second breaks it and the glider.',
     cites: [{ block: 'c4-b9', quote: 'any wall that can be created in some way can be destroyed in some way' }],
-    code: [{ file: GAME, find: "else if (p.t === 's') w.sq[k] = { o: p.o, hp: 2 };" }],
+    code: [{ file: VENG, find: "else if (p.t === 's') w.sq[k] = { o: p.o, hp: s.squareHits };" }],
     site: 'yes', siteNote: 'Play and Learn.',
   },
   {
     id: 'play-rock', area: 'pieces', source: 'invented',
     rule: 'A rock is fixed, sends every glider straight back, and never breaks.',
-    code: [{ file: GAME, find: 'if (w.rock[k]) { g.dx = -g.dx; g.dy = -g.dy; continue; }' }],
+    code: [{ file: VENG, find: 'const bounce = (g: Glider) => { g.dx = -g.dx; g.dy = -g.dy; };' }],
     site: 'yes', siteNote: 'Play and Learn. In the book, rocks are a resource (see above).',
   },
   {
     id: 'play-collisions', area: 'pieces', source: 'invented',
     rule: "All gliders move at once. Two gliders of different players break each other if they head for the same square, swap squares or cross; a player's own gliders pass through each other. A glider that hits an opponent's tower destroys it and breaks; one that hits its own side's tower turns back.",
-    code: [{ file: GAME, find: 'if (a.o === b.o) continue;' }, { file: GAME, find: 'if (t !== g.o) { delete w.tw[k];' }],
+    code: [{ file: VENG, find: "if (a.o === b.o && s.sameSide === 'pass') continue;" }, { file: VENG, find: "if (t !== g.o || s.ownTower === 'destroy') { delete w.tw[k];" }],
     site: 'partly', siteNote: 'Play. Learn (v3) still moves gliders one at a time in list order, and lets diagonal gliders crossing in an X pass (rules page §11).',
   },
 
@@ -225,7 +230,7 @@ export const KIT_RULES: KitRule[] = [
     id: 'setup-phase', area: 'turns', source: 'book', how: 'stated',
     rule: 'Before the battle there is a setup phase, with placing allowed only in a home area.',
     cites: [{ block: 'c4-b94', quote: 'where he was allowed to put down squares during the initiation phase' }],
-    code: [{ file: CTRL, find: "v.strip = 'SETUP · CYAN 2 · AMBER 0 SEEN';" }],
+    code: [{ file: CTRL, find: 'v.strip = `SETUP · CYAN ${m.e.towers(w, \'C\').length} · AMBER 0 SEEN`;' }],
     site: 'yes', siteNote: 'Play: a setup turn at step 0, placing near your own towers.',
   },
   {
@@ -239,7 +244,7 @@ export const KIT_RULES: KitRule[] = [
     id: 'act-on-interventions', area: 'turns', source: 'book', how: 'implied',
     rule: 'During the battle, players act only on intervention turns; in between, the board runs on its own.',
     cites: [{ block: 'c7-b92', quote: 'He knew that he would not get to see the results of his attack for a long time.' }],
-    code: [{ file: CTRL, find: 'if (m.w.step % m.every === 0)' }],
+    code: [{ file: CTRL, find: 'if (m.w.step - m.turnAt >= m.s.every) { this.env.clearInterval(this.rt); this.beginAct(); }' }],
     site: 'yes', siteNote: 'Play.',
   },
   {
@@ -285,7 +290,7 @@ export const KIT_RULES: KitRule[] = [
     id: 'interval', area: 'turns', source: 'book', how: 'implied',
     rule: 'Intervention turns come about a thousand turns apart.',
     cites: [{ block: 'c14-b45', quote: 'A thousand turns later, the first intervention turn came.' }, { block: 'c4-b110', quote: 'A thousand turns later, the two sides\' gliders and ships met. At the same time, the first intervention turn came.' }],
-    code: [{ file: CTRL, find: "every: rule === 'every8' ? 8 : 12" }],
+    code: [{ file: SCHEMA, find: "text: 'A turn to act comes every this many steps', min: 4, max: 32, base: 12," }],
     site: 'partly', siteNote: 'Play: every 12 steps (8 under one drawn rule), on a far smaller board. The rules page marks the interval OPEN.',
   },
   {
@@ -304,19 +309,19 @@ export const KIT_RULES: KitRule[] = [
   {
     id: 'play-points', area: 'turns', source: 'invented',
     rule: '8 points each turn: glider 4, square 1, tower 4. Points not spent are lost.',
-    code: [{ file: GAME, find: 'export const COST = { s: 1, t: 4 } as const;' }, { file: LIVE, find: 'export const POINTS = 8;' }],
+    code: [{ file: SCHEMA, find: "costSquare: { text: 'A square costs', min: 1, max: 6, base: 1," }, { file: SCHEMA, find: "costTower: { text: 'A tower costs', min: 1, max: 16, base: 4," }, { file: LIVE, find: 'export const POINTS = 8;' }],
     site: 'yes', siteNote: 'Play and Learn.',
   },
   {
     id: 'play-every-12', area: 'turns', source: 'invented',
     rule: 'A setup turn at step 0, then a turn to act every 12 steps.',
-    code: [{ file: CTRL, find: "every: rule === 'every8' ? 8 : 12" }, { file: LIVE, find: "every: rule === 'every8' ? 8 : 12" }],
+    code: [{ file: SCHEMA, find: "text: 'A turn to act comes every this many steps', min: 4, max: 32, base: 12," }, { file: SCHEMA, find: "{ id: 'every8', text: 'Turns to act come every 8 steps.', set: { every: 8 } }," }],
     site: 'yes', siteNote: 'Play.',
   },
   {
     id: 'play-simultaneous', area: 'turns', source: 'invented',
     rule: "Both players act at the same time without seeing each other's choices; everything placed appears at once, and two pieces put on one square cancel each other.",
-    code: [{ file: GAME, find: 'export function apply' }],
+    code: [{ file: VENG, find: 'function apply(w: World, s: Settings, pend: Record<Side, Placement<AnyPiece>[]>) {' }],
     site: 'yes', siteNote: 'Play.',
   },
   {
@@ -337,7 +342,7 @@ export const KIT_RULES: KitRule[] = [
     id: 'symbol', area: 'sight', source: 'book', how: 'stated',
     rule: 'Each player has a symbol, a pattern of dots; a copy of it anywhere lets its player see within thirty squares.',
     cites: [{ block: 'c4-b93', quote: 'would allow him to see everything within thirty squares' }],
-    code: [{ file: GAME, find: 'export function lit' }],
+    code: [{ file: VENG, find: 'function lit(w: World, o: Side, R: number, tws?: number[]): Set<number> {' }],
     site: 'partly', siteNote: 'Play: towers light 3 squares around them (counting diagonals), not 30; the tower is one square, not a pattern.',
   },
   {
@@ -351,7 +356,7 @@ export const KIT_RULES: KitRule[] = [
     id: 'symbols-made', area: 'sight', source: 'book', how: 'stated',
     rule: 'Symbols are made by placing them, or by gliders and ships crashing into rock.',
     cites: [{ block: 'c4-b108', quote: "leaving behind copies of each player's symbols" }, { block: 'c12-b187', quote: 'One of his gliders had successfully created a symbol' }],
-    code: [{ file: GAME, find: 'else w.tw[k] = p.o;' }],
+    code: [{ file: VENG, find: 'else w.tw[k] = p.o;' }],
     site: 'partly', siteNote: 'Play: towers are only placed, never formed by a collision.',
   },
   {
@@ -364,7 +369,7 @@ export const KIT_RULES: KitRule[] = [
     id: 'symbols-destroyed', area: 'sight', source: 'book', how: 'stated',
     rule: 'Gliders destroy symbols.',
     cites: [{ block: 'c10-b163', quote: 'shredded through both of his remaining symbols' }],
-    code: [{ file: GAME, find: 'if (t !== g.o) { delete w.tw[k];' }],
+    code: [{ file: VENG, find: "if (t !== g.o || s.ownTower === 'destroy') { delete w.tw[k];" }],
     site: 'yes', siteNote: "Play: an opponent's glider destroys a tower.",
   },
   {
@@ -377,7 +382,7 @@ export const KIT_RULES: KitRule[] = [
     id: 'hidden-watcher', area: 'sight', source: 'book', how: 'stated',
     rule: 'A symbol the opponent cannot see can watch their moves.',
     cites: [{ block: 'c10-b162', quote: 'I had a symbol along the path, right in the position where you could not see it.' }],
-    code: [{ file: GAME, find: 'export function updLS' }],
+    code: [{ file: VENG, find: 'function updLS(w: World, R: number, ls: Record<Side, Record<number, number>>) {' }],
     site: 'yes', siteNote: "Play: each side sees only what its own towers light, so a tower in the opponent's dark can watch.",
   },
   {
@@ -395,7 +400,7 @@ export const KIT_RULES: KitRule[] = [
   {
     id: 'play-sight-3', area: 'sight', source: 'invented',
     rule: 'You see every square within 3 of one of your towers (counting diagonals), right now.',
-    code: [{ file: CTRL, find: "R: rule === 'sight2' ? 2 : 3" }],
+    code: [{ file: SCHEMA, find: "text: 'You see every square within this many of your towers', min: 1, max: 30, base: 3," }, { file: SCHEMA, find: "{ id: 'sight2', text: 'You see only 2 squares around your towers.', set: { sight: 2, reach: 2 } }," }],
     site: 'yes', siteNote: 'Play and Learn.',
   },
   {
@@ -408,7 +413,7 @@ export const KIT_RULES: KitRule[] = [
   {
     id: 'play-last-seen', area: 'sight', source: 'invented',
     rule: "An opponent's tower out of sight is drawn as an outline where it was last seen; the count shows only the opponent's towers you can see now.",
-    code: [{ file: GAME, find: 'export function updLS' }, { file: CTRL, find: 'AMBER ${seen} SEEN' }],
+    code: [{ file: VENG, find: 'function updLS(w: World, R: number, ls: Record<Side, Record<number, number>>) {' }, { file: CTRL, find: 'AMBER ${seen} SEEN' }],
     site: 'yes', siteNote: 'Play.',
   },
 
@@ -438,7 +443,7 @@ export const KIT_RULES: KitRule[] = [
     id: 'symbol-count', area: 'ending', source: 'book', how: 'implied',
     rule: 'Standing is measured by symbol count, which does not decide the game by itself.',
     cites: [{ block: 'c4-b138', quote: 'By total symbol count, it was fifteen to fifteen - exactly even.' }, { block: 'c7-b98', quote: 'Seventeen symbols to twenty-two' }],
-    code: [{ file: CTRL, find: 'Time ran out at step ${MAXS}' }],
+    code: [{ file: CTRL, find: 'Time ran out at step ${last}.' }],
     site: 'partly', siteNote: 'Play: the count decides only at the step limit (invented).',
   },
   {
@@ -457,7 +462,7 @@ export const KIT_RULES: KitRule[] = [
     id: 'no-turn-limit', area: 'ending', source: 'book', how: 'implied',
     rule: 'Games have no fixed turn limit.',
     cites: [{ block: 'c14-b94', quote: 'Ten thousand two hundred turns into the game, Deluin was announced the winner.' }],
-    site: 'no', siteNote: 'Play stops at step 96 (invented).',
+    site: 'no', siteNote: 'Play stops at step 120 (invented; 96 until 2026-10-22).',
   },
   {
     id: 'qualifying-tiebreak', area: 'ending', source: 'book', how: 'stated',
@@ -467,8 +472,8 @@ export const KIT_RULES: KitRule[] = [
   },
   {
     id: 'play-step-limit', area: 'ending', source: 'invented',
-    rule: 'At step 96 the match stops; most towers wins, and equal is a draw.',
-    code: [{ file: GAME, find: 'export const MAXS = 96;' }, { file: LIVE, find: "if (w.step >= MAXS) return c > a ? 'C' : a > c ? 'A' : 'D';" }],
+    rule: 'At step 120 the match stops; most towers wins, and equal is a draw.',
+    code: [{ file: SOLO, find: 'export const SOLO_V2: VersionRules = { set: { maxSteps: 120, botTowers: 10 } };' }, { file: VENG, find: "if (w.step >= s.maxSteps) return nc > na ? 'C' : na > nc ? 'A' : 'D';" }],
     site: 'yes', siteNote: 'Play.',
   },
   {
@@ -553,7 +558,7 @@ export const KIT_RULES: KitRule[] = [
   {
     id: 'play-four-rules', area: 'match-rules', source: 'invented',
     rule: 'The four rules one is drawn from: gliders may also fly diagonally; gliders cost 3 points; you see only 2 squares around your towers; turns to act come every 8 steps.',
-    code: [{ file: GAME, find: 'export const RULES: Record<RuleId, string>' }, { file: 'src/lib/minpentai/learn-game/pieces.ts', find: 'export const RULES: NewRule[]' }],
+    code: [{ file: SCHEMA, find: 'export const BASE_DRAWN: DrawnRule[] = [' }, { file: 'src/lib/minpentai/learn-game/pieces.ts', find: 'export const RULES: NewRule[]' }],
     site: 'yes', siteNote: "Play, and Learn's practice match (the same four).",
   },
 
@@ -562,7 +567,7 @@ export const KIT_RULES: KitRule[] = [
     id: 'bots-and-new-rules', area: 'computer', source: 'book', how: 'stated',
     rule: 'Bots play the usual rules better than people, but adapt badly to a new rule.',
     cites: [{ block: 'c7-b14', quote: 'the bots play better than me on stock Minpentai, but they are much worse at adapting to any new situation they don\'t have training data for' }],
-    code: [{ file: GAME, find: "const dirs = m.rule === 'diag' && L >= 4 ? D8 : D4;" }],
+    code: [{ file: VENG, find: 'const dirs = m.diag && Lv >= 4 ? D8 : D4;' }],
     site: 'partly', siteNote: 'On the ladder, only rungs 4 and 5 fly diagonally under that rule; every rung pays the same costs and sees as far.',
   },
   {

@@ -10,7 +10,7 @@
  *
  * The server holds the whole match. A browser only sends placements on its own turn to act and
  * only ever receives what its towers light (rules page §5): its pieces, the rocks, anything within
- * sight, and "last seen" outlines. Both players act at once and in secret (rules page §4).
+ * sight, and "last seen" towers (dimmed). Both players act at once and in secret (rules page §4).
  */
 import type { Piece, RuleId, Side } from './game';
 
@@ -34,10 +34,12 @@ export interface LadderProgress {
   opened: number;
   /** Per rung: tries, and the step of the first win. */
   rec: Record<number, { tries: number; won?: number }>;
+  /** On the search computer's ladder (ruleset 3): the old ladder's progress, kept as history. */
+  history?: { opened: number; rec: Record<number, { tries: number; won?: number }> };
 }
 /** POST /api/minpentai/ladder/result. The match runs in the browser against the computer;
  * the server checks the rung is open and records the try. */
-export interface LadderResultBody { rung: number; win: 'C' | 'A' | 'D'; step: number }
+export interface LadderResultBody { rung: number; win: 'C' | 'A' | 'D'; step: number; /** 3: the search computer's ladder; absent: the old one. */ ruleset?: 3 }
 
 export interface Person { fid: number; username: string }
 
@@ -64,17 +66,36 @@ export interface LobbyView {
 
 export type LivePhase = 'act' | 'run' | 'paused' | 'over';
 
+/** A match's rules as the page shows them: the board's size, the drawn rule's sentence, the
+ * points, costs, step limit, glider directions, sight and placing distance, and each side's starting towers. */
+export interface LiveRules {
+  W: number;
+  H: number;
+  ruleText: string;
+  setupPoints: number;
+  points: number;
+  cost: { g: number; s: number; t: number };
+  maxSteps: number;
+  directions: 4 | 8;
+  sight: number;
+  reach: number;
+  startTowers: number;
+}
+
 /** GET /api/minpentai/match/:id?v=<version>: 204 if the version is unchanged, else this. */
 export interface MatchView {
   id: string;
   version: number;
   you: Side;
   opponent: Person;
-  rule: RuleId;
+  /** The drawn rule's id (one of Play's four in one-on-one). */
+  rule: string;
   /** Sight (3, or 2 under sight2), turn interval (12, or 8), glider cost (4, or 3). */
   R: number;
   every: number;
   cost: number;
+  /** Everything the page needs to draw and explain this match's rules, so it never assumes Play's. */
+  rules: LiveRules;
   phase: LivePhase;
   /** The board as you see it now (at the end of the latest run). */
   board: BoardView;

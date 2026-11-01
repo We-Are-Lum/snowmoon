@@ -8,6 +8,7 @@
  */
 import { randomInt } from 'node:crypto';
 import { D4, D8, K, RULES, W, XY, inb, lit, type RuleId } from '../play-game/game';
+import { PLAY_RULESET, maxStepsOf } from '../versions/solo-v1';
 import { play, refusal, type Played } from './match';
 import { LABELS } from '../../labels';
 import { CHALLENGE_PATH, LEVELS, RULE_SHORT, challengeLine, challengeText, decResult, encChallenge, encResult, outcome, type Challenge } from './challenge';
@@ -25,7 +26,7 @@ export interface SnapPage {
 }
 
 export const SNAP_PATH = '/snap/minpentai';
-const DISCLAIMER = 'Independent adaptation · Not affiliated with the author · No token';
+const DISCLAIMER = 'Independent adaptation · Not affiliated with the author';
 export { LEVELS };
 /** The extra rule picker's options: glyphs, since the renderer keeps five options in a row only up to
  * 8 characters in all. `?` is the drawn rule. Its label spells them out; the turn screen then names
@@ -75,7 +76,7 @@ const TUTORIAL: [string, string[]][] = [
   ]],
   ['Turns', [
     'You get 8 points a turn and place within 3 squares of your towers. Both sides place at once, unseen; then the board runs 12 steps on its own.',
-    'Lose every tower and you lose; at step 96, most towers wins. Each match also draws one of four invented extras, such as diagonal gliders.',
+    `Lose every tower and you lose; at step ${maxStepsOf(PLAY_RULESET)}, most towers wins. Each match also draws one of four invented extras, such as diagonal gliders.`,
   ]],
   ['Playing here', [
     'Pick a piece (→ glider, ■ square, ◎ tower), then tap a lit square. Pink arrows appear around a new glider: tap one to aim it, or tap the glider to turn it (that also aims off the edge). Tap a square or tower again to take it back.',
@@ -229,9 +230,12 @@ export function actPage(h: Here, st: SnapState, p: Played, msg: string | null): 
       props: { name: 'cell', cols: W, rows: 10, cells: boardCells(p, st), cellAspectRatio: 'square', gap: 'sm' },
       on: { press: submit(h, 'tap', st) },
     },
-    acts: { type: 'stack', props: { direction: 'horizontal' }, children: ['end', 'undo'] },
+    // Resign on the board from the second turn on, so a resumed match can be resigned straight away
+    // (owner, 2026-10-30), not only after a run; setup has none.
+    acts: { type: 'stack', props: { direction: 'horizontal' }, children: ['end', 'undo', ...(st.turns.length ? ['resign'] : [])] },
     end: button('End turn', submit(h, 'end', st), true),
     undo: button('Undo', submit(h, 'undo', st)),
+    ...(st.turns.length ? { resign: button('Resign', submit(h, 'resign', st)) } : {}),
   });
 }
 
@@ -243,7 +247,7 @@ function runImage(h: Here, st: SnapState, i: number, reveal = false): string {
   return url(h, `${SNAP_PATH}/run`, { g, h: sign(g), ...(reveal ? { r: '1' } : {}) });
 }
 /** Play, carrying on this match: seed and finished turns (moves.ts encMatch). */
-const inApp = (h: Here, st: SnapState) => url(h, '/minpentai', { match: encMatch(st.seed, st.turns), ...(st.lvl ? { level: String(st.lvl) } : {}), ...(st.rule ? { rule: st.rule } : {}) });
+const inApp = (h: Here, st: SnapState) => url(h, '/minpentai', { match: encMatch(st.seed, st.turns), ...(st.lvl ? { level: String(st.lvl) } : {}), ...(st.rule ? { rule: st.rule } : {}), ...(st.rs !== 1 ? { rs: String(st.rs) } : {}) });
 
 export function runPage(h: Here, st: SnapState, p: Played): SnapPage {
   const i = st.turns.length - 1, run = p.runs[i], last = run.frames[run.frames.length - 1];
@@ -268,7 +272,8 @@ export function resignPage(h: Here, st: SnapState): SnapPage {
     title: text('Resign this match?', { weight: 'bold' }),
     body: text('It counts as a loss. This is practice, so nothing is recorded.', { size: 'sm' }),
     acts: { type: 'stack', props: { direction: 'horizontal' }, children: ['yes', 'back'] },
-    yes: button('Resign', submit(h, 'resign-yes', st)),
+    // "Yes, resign", not "Resign" again: the owner's phone test tapped the board's Resign four times before the confirm (2026-10-30).
+    yes: button('Yes, resign', submit(h, 'resign-yes', st)),
     back: button('Back', submit(h, 'next', st), true),
   });
 }
@@ -283,8 +288,8 @@ export function resultPage(h: Here, st: SnapState, p: Played): SnapPage {
     : `Time ran out at step ${o.step}: you ${o.counts.C}, Amber ${o.counts.A}.`;
   // Share is a challenge (owner, 2026-10-22): the result, editable in the composer, and a link that
   // starts the same match for whoever opens it. The rule is the one played (drawn or picked).
-  const c: Challenge = { seed: st.seed, lvl: st.lvl, rule: p.rule, ver: st.ver, res: { win: o.win, resigned: o.kind === 'resign', step: o.step, c: o.counts.C, a: o.counts.A, taps: st.taps } };
-  const theirs = st.ch ? decResult(st.ch) : null;
+  const c: Challenge = { seed: st.seed, lvl: st.lvl, rule: p.rule, ver: st.ver, rs: st.rs, res: { win: o.win, resigned: o.kind === 'resign', step: o.step, c: o.counts.C, a: o.counts.A, taps: st.taps } };
+  const theirs = st.ch ? decResult(st.ch, st.rs) : null;
   // The match is over: the last run (or, resigned at setup, the board) unfogged, as Play shows it.
   const reveal = p.runs.length ? runImage(h, st, p.runs.length - 1, true) : url(h, `${SNAP_PATH}/run`, (() => { const g = runToken(st, 0); return { g, h: sign(g), r: '1' }; })());
   return page({
@@ -304,15 +309,15 @@ export function resultPage(h: Here, st: SnapState, p: Played): SnapPage {
 // Actions
 
 export function newMatch(fid: number, ver: string, lvl = 0, rule: RuleId | '' = ''): SnapState {
-  return { fid, seed: randomInt(0, 2 ** 32), lvl, ver: versionOf(ver) ? ver : '', rule, ch: '', turns: [], pend: [], aim: -1, tool: 'g', taps: 0, resigned: false };
+  return { fid, seed: randomInt(0, 2 ** 32), lvl, ver: versionOf(ver) ? ver : '', rule, ch: '', turns: [], pend: [], aim: -1, tool: 'g', taps: 0, resigned: false, rs: PLAY_RULESET };
 }
 /** A challenge's match: its seed, level, rule and version, with its result kept to show at the end. */
 export function challenged(fid: number, c: Challenge): SnapState {
-  return { ...newMatch(fid, c.ver, c.lvl, c.rule), seed: c.seed, ch: encResult(c.res) };
+  return { ...newMatch(fid, c.ver, c.lvl, c.rule), seed: c.seed, ch: encResult(c.res), rs: c.rs };
 }
 /** A kept match (resume.ts) as a state at its next turn to act. */
 export function resumed(fid: number, saved: Saved): SnapState {
-  return { fid, seed: saved.seed, lvl: saved.lvl, ver: versionOf(saved.ver) ? saved.ver : '', rule: saved.rule, ch: '', turns: saved.turns, pend: [], aim: -1, tool: 'g', taps: 0, resigned: false };
+  return { fid, seed: saved.seed, lvl: saved.lvl, ver: versionOf(saved.ver) ? saved.ver : '', rule: saved.rule, ch: '', turns: saved.turns, pend: [], aim: -1, tool: 'g', taps: 0, resigned: false, rs: saved.rs };
 }
 
 /** The slider's value: a whole number 0–5, else Practice. */
@@ -348,7 +353,7 @@ function tap(st: SnapState, p: Played, x: number, y: number): string | null {
 
 /** What the route should do with the kept match (resume.ts) after this POST. */
 export type Keep = { save: Saved } | 'drop' | null;
-const kept = (st: SnapState): Keep => ({ save: { seed: st.seed, lvl: st.lvl, ver: st.ver, rule: st.rule, turns: st.turns } });
+const kept = (st: SnapState): Keep => ({ save: { seed: st.seed, lvl: st.lvl, ver: st.ver, rule: st.rule, turns: st.turns, rs: st.rs } });
 
 /**
  * One POST. `st` is the verified match from the link (or null), `inputs` the snap's field values,

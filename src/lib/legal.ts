@@ -3,9 +3,11 @@
  * 2026-10-08, updated 2026-10-09 (Privacy sections 3, 4 and 7), 2026-10-22 (wallet ↔ Farcaster links: Privacy
  * sections 4, 6 and 7, Terms sections 4 and 5; docs/legal/wallet-links-draft.md), 2026-10-22 again (Minpentai in
  * Farcaster casts: Privacy sections 4, 6 and 7, Terms section 1; docs/legal/minpentai-snap-draft.md), 2026-10-24 (agents: Privacy
- * sections 3, 4 and 7, Terms section 6b; docs/legal/agents-owner-draft.md) and 2026-10-18 (accounts, wallets and
+ * sections 3, 4 and 7, Terms section 6b; docs/legal/agents-owner-draft.md), 2026-10-31 (Terms section 7, admin picks and Hide; docs/legal/picks-draft.md), 2026-10-30 (Terms section 6c, Support; the
+ * owner's own words; docs/legal/support-draft.md; reworded 2026-10-31: support for the We Are Lum team) and 2026-10-18 (accounts, wallets and
  * prepaid generations, the adaptation pages, Remix: drafted by the coding agent, reread by the owner;
- * Terms section 2's last words are the owner's). Only the owner changes the words.
+ * Terms section 2's last words are the owner's), 2026-11-01 (agent play: Terms section 6d, Privacy section 4;
+ * docs/legal/minpentai-agent-play-draft.md). Only the owner changes the words.
  *
  * Kept true by check:principles:
  * - P6g–P6j: the Privacy page, About, the assistant's notice and the image consent screen name
@@ -38,7 +40,7 @@ export const LEGAL: {
     privacy: { words: string; on: string; by: 'FID 6786' } | null;
   };
 } = {
-  effective: '2026-10-24',
+  effective: '2026-11-01',
   // The owner said "Reread" on 2026-10-10 (words 3iuvyo, 1r2aajz), and on 2026-10-18 of the drafted
   // changes ("I've read the drafted Terms and Privacy changes and approve them: this is my 'reread'"),
   // covering both pages at these words.
@@ -57,7 +59,19 @@ export const LEGAL: {
     // shown); video tests paid by us for now; and the agent key paragraph as drafted. The words before were 1gifacz.
     // Later on 2026-10-24, the owner's own words for §6b: "Each draft is made at most once" instead of "Each draft can be
     // approved once". The words before were ph5udk.
-    terms: { words: 'qnacwf', on: '2026-10-24', by: 'FID 6786' },
+    // 2026-10-30, the owner's "Reread §6c, replaced with this shorter version" for the Support page: a new section 6c
+    // "Support" in his own words (a gift; buys nothing, not an investment, no refunds, not tax-deductible; only the
+    // networks the page names; how it's shared out is public on Splits). The words before were qnacwf.
+    // 2026-10-31, the owner's "Reread looks good" for admin picks and the admin Hide (phase2-admin, with 0030 applied):
+    // §7 adds "Admins may also hide the images the project made itself, its starting points, for any reason." and the
+    // admins' pick sentence (docs/legal/picks-draft.md). The words before were vd19s3.
+    // 2026-10-31, the owner's "Terms §6c, reread, replaced with" for the Support page: §6c now says the money supports
+    // the We Are Lum team, who make the Service (the rest as before, in his words). The words before were 1kta0uf.
+    // 2026-10-31, the owner's "f: reread done for #73 (no-token)": §2 no longer says "There is no token." (the rest of
+    // §2 unchanged). The words before were unq90g.
+    // 2026-10-31, the owner's approval of agent play's lines (docs/legal/minpentai-agent-play-draft.md v4, "approved,
+    // with one change"): a new section 6d "Minpentai with your agent". The words before were x7zkw.
+    terms: { words: '1ge4d7a', on: '2026-11-01', by: 'FID 6786' },
     // Plus one sentence the drafted list missed (Privacy §4, images): "your name (Farcaster name or wallet
     // address)", the owner's own words for tonight's publish (2026-10-18), so the page stays true for wallet accounts.
     // 2026-10-19, the owner's "Reread is done" for push 3, at these words: My picks in §4 (the owner's own sentence),
@@ -88,7 +102,11 @@ export const LEGAL: {
     // made on its storage, at an unlisted link it gives only to us but that anyone holding it could open, for as long as
     // fal.ai's settings keep it; we don't set a time yet." The deletion line waits for a real test showing the link
     // gone. The words before were bjz6u1.
-    privacy: { words: 'ynzu1t', on: '2026-10-24', by: 'FID 6786' },
+    // 2026-10-31, the owner's "f: reread done for #73 (no-token)": §3's "a sign-in token that lasts about an hour" became
+    // "your sign-in, which lasts about an hour". The words before were ynzu1t.
+    // 2026-10-31, the owner's approval of agent play's lines (v4, with his last sentence "Only we remove match records,
+    // by hand, on request."): a §4 paragraph for Minpentai through your agent. The words before were 16s4wpe.
+    privacy: { words: 'oa9ihf', on: '2026-11-01', by: 'FID 6786' },
   },
 };
 
@@ -96,14 +114,16 @@ export const TERMS: LegalDoc = {
   title: 'Terms of Use',
   sections: [
     { n: 1, head: 'Who runs this.', body: ['Snowmoon Party (snowmoon.party, its Farcaster mini app and its game in Farcaster casts, together "the Service") is operated by Lum LLC, a Wyoming limited liability company ("we"). By using the Service you agree to these Terms.'] },
-    { n: 2, head: 'What this is.', body: ['An independent, open edition of the novel Snowmoon by Vitalik Buterin, with read-aloud audio, pictures, a game reconstruction and a reading assistant. It is not affiliated with or endorsed by the author. There is no token. You can prepay for generations. Payments are final. Nothing else here is for sale.'] },
+    { n: 2, head: 'What this is.', body: ['An independent, open edition of the novel Snowmoon by Vitalik Buterin, with read-aloud audio, pictures, a game reconstruction and a reading assistant. It is not affiliated with or endorsed by the author. You can prepay for generations. Payments are final. Nothing else here is for sale.'] },
     { n: 3, head: 'The book and the licence.', body: ['Snowmoon is the author\'s work, released under the GNU General Public License version 3. The text, pictures, audio and code on the Service are offered under that same licence, and the source and the full record of how each piece was made are public in our repository. Nothing in these Terms limits the rights the licence gives you.'] },
     { n: 4, head: 'Who can use it.', body: ['Anyone can read and listen without an account. To sign in you must be at least 18 years old. Your account here is a Farcaster account or a wallet address. You can link a wallet to your Farcaster account; while it is linked, signing in with the wallet is signing in as that account. Other ways to sign in may come later; these Terms will list each one when it does.'] },
     { n: 5, head: 'What you add.', body: ['If you publish something through the Service, or make a frame in Remix (which is saved, and can be seen by anyone with its link, as soon as it is made), it remains yours, and you license it to everyone under GPL version 3. You confirm it is your own work, or that you have the right to license it this way. Your name is shown with it: your Farcaster name, or, for a wallet account, its address shortened. Work made with a wallet that is linked to your Farcaster account is shown with your Farcaster name. Where the Service says so before you publish, the prompts and any planning thread that led to the piece are published with it. Published work is public and others may copy it under the licence. We can hide it on request (see section 7), but we cannot recall copies others have made.'] },
     { n: 6, head: 'What you must not do.', body: ['Don\'t post anything unlawful, harassing or sexual involving minors; don\'t post other people\'s private information; don\'t impersonate anyone or present your work as the author\'s or as official; don\'t try to get around sign-in, daily limits or spending caps; don\'t interfere with the Service.'] },
     { n: '6a', head: 'Prepaid generations.', body: ['You can pay in USDC or ETH on Base to the address the Service shows. Each generation is charged to your balance at the price shown when you start it. If a generation doesn\'t give you a picture (a check or the image model didn\'t answer, the rules refused the prompt, or the safety checker dropped the picture), that charge is added back to your balance. Payments are final: what you pay is never refunded or paid out as money, and your balance can only be spent on generations here. A payment made through the Service is added to your balance once it has 3 confirmations, while the page is open or the next time you open your wallet on that device. You can also add a payment from your wallet by its transaction, on the wallet panel. Either way, this works within 7 days of the payment; after that, write to us and we\'ll add it.'] },
     { n: '6b', head: 'Agents.', body: ['Agents are open only to accounts we invite. They can\'t spend money. When an agent drafts something that costs money (a new frame or a video test), it shows the estimated cost, and nothing is made until you approve it. Each draft is made at most once, and each day is limited to 20 frames, 5 video tests and $2 in all. A frame counts like any other Remix frame: on a Farcaster account it uses your free frames for the day; on a wallet account it\'s charged to your balance at the price shown (section 6a). Video tests are paid by us for now.', 'You can make a personal agent key for an app that connects with a key. Keep it secret, as you would a password. Until it ends (after 30 days, or when you disconnect it), anyone holding it can read and draft for you, but not publish. Nothing it drafts is paid for unless you approve it, and never more than the cap you set. If it gets out, disconnect it on your You page.'] },
-    { n: 7, head: 'Hiding and removal.', body: ['Nothing on the Service is official or canonical. We may hide content that breaks these Terms. You may hide your own work yourself where the Service offers "Hide", or ask us to hide it, at any time. How this works is set out in our removal policy, linked from About.'] },
+    { n: '6c', head: 'Support.', body: ['You can send money to the address on the Support page (a Splits account on Ethereum or Base) to support the We Are Lum team, who make the Service. It\'s a gift: it buys nothing on the Service, isn\'t an investment, can\'t be refunded and isn\'t tax-deductible (Lum LLC is not a charity). Send it only on the networks the page names; money sent on any other network may be lost. How it\'s shared out is public on Splits.'] },
+    { n: '6d', head: 'Minpentai with your agent.', body: ['If we invite you, your agent can play Minpentai for you against the site\'s computer: start a match, see your side of the board (never the other side\'s while the match is on), try moves in a private sandbox, and send your moves. It sends the moves you choose, or, if you tell it how to play (a standing order), moves it chooses under it; you can also ask the site\'s computer to play a turn for you. Each turn\'s record says whether you, your agent or the site\'s computer chose it. When a match ends, its record is public: the board, every turn\'s moves, who chose them, and the model your agent said it runs (shown as self-reported; we don\'t check it). The record doesn\'t show your Farcaster name or ID, or your agent\'s name. Agent matches don\'t count toward one-on-one results. Most of Minpentai\'s rules are invented for this edition; the book edition\'s pieces are drawn from passages in the book.'] },
+    { n: 7, head: 'Hiding and removal.', body: ['Nothing on the Service is official or canonical. We may hide content that breaks these Terms. Admins may also hide the images the project made itself, its starting points, for any reason. You may hide your own work yourself where the Service offers "Hide", or ask us to hide it, at any time. How this works is set out in our removal policy, linked from About. Admins (the site\'s owner and people the owner names) may pick which image shows first for a moment of the book or a glossary item; it is labelled with who picked it, and you can switch to the most liked, the newest or the images you liked, and every other image stays one tap away.'] },
     { n: 8, head: 'AI-made material.', body: ['The narration, many pictures (every frame made in Remix among them) and the assistant\'s answers are produced by AI models and are labelled as such. They can be wrong. The assistant\'s commentary is not the book and is not advice of any kind.'] },
     { n: 9, head: 'Outside services.', body: ['The Service relies on other companies\' services, listed in the Privacy Policy. Their terms apply to their part.'] },
     { n: 10, head: 'No warranty.', body: ['The Service is provided as is, without warranties of any kind, to the fullest extent the law allows.'] },
@@ -119,7 +139,7 @@ export const PRIVACY: LegalDoc = {
   sections: [
     { n: 1, head: 'Who we are.', body: ['Lum LLC, a Wyoming limited liability company, operates Snowmoon Party.'] },
     { n: 2, head: 'The short version.', body: ['You can read and listen without an account, and we keep nothing about you when you do. We use no advertising or analytics trackers and set no cookies. We do not sell data.'] },
-    { n: 3, head: 'Kept on your device only.', body: ['Your browser stores a few things so the site works: whether you have seen the introduction, your light or dark setting, where you stopped listening, the furthest chapter you have opened, your questions to the assistant and its answers, drafts of images you make until you publish them, a few other settings of yours, and, on the website, a sign-in token that lasts about an hour (a day for a wallet sign-in), and a payment you have sent but not yet seen credited. These stay on your device. Clearing your browser\'s site data removes them. Frames you make in Remix are not drafts: they are saved by us as soon as they are made (section 4). So are the frames and video tests your agent makes when you approve them, but privately: only you can see them (section 4).'] },
+    { n: 3, head: 'Kept on your device only.', body: ['Your browser stores a few things so the site works: whether you have seen the introduction, your light or dark setting, where you stopped listening, the furthest chapter you have opened, your questions to the assistant and its answers, drafts of images you make until you publish them, a few other settings of yours, and, on the website, your sign-in, which lasts about an hour (a day for a wallet sign-in), and a payment you have sent but not yet seen credited. These stay on your device. Clearing your browser\'s site data removes them. Frames you make in Remix are not drafts: they are saved by us as soon as they are made (section 4). So are the frames and video tests your agent makes when you approve them, but privately: only you can see them (section 4).'] },
     {
       n: 4,
       head: 'Kept by us when you sign in.',
@@ -139,6 +159,7 @@ export const PRIVACY: LegalDoc = {
           'The Farcaster usernames we have seen for your ID, so a link with an old name still finds your pages after you rename.',
           'If you play Minpentai: your progress against the computer and the people you block, kept until you ask us to delete them; your matches, deleted 30 days after they end; and invites, deleted when they expire after 24 hours. Challenges you send or receive, deleted an hour after they are answered or expire; and a count of today\'s Play requests and when you last opened a match or the lobby, deleted the next day. While you say you are ready to play, other signed-in players see your Farcaster username.',
           'If you play Minpentai in a Farcaster cast: your latest practice match there, kept with your Farcaster ID (its random seed, the computer level, the extra rule and where you placed your pieces, turn by turn), so you can resume it; deleted when the match ends, or 30 days after your last turn. Nothing else about these matches is kept or recorded.',
+          'If you play Minpentai through your agent (for now, only people the site has invited): each match it starts, kept with your account. That is the board, every turn\'s moves and who chose them (you, your agent or the site\'s computer), when each turn was played, your standing order (its words and the style it was matched to), any note your agent attached to a turn, your agent\'s name and the model it said it runs. While the match is on, only you can see your side, through your agent and your match link; the site\'s computer sees only its own side. When the match ends, the record is public: anyone can read the board, the moves, who chose them, and the model your agent named. It doesn\'t show your Farcaster name or ID, or your agent\'s name (which elsewhere on the site appears as "agent of" you), and your standing order\'s words and your agent\'s notes stay private. Your match link opens your side for anyone who has it, until your agent replaces it; the page tells browsers not to pass it on to other sites. Match records, finished or not, are kept until you ask us to remove them: write to us (section 11) with the match\'s link or id, and we delete the whole record by hand. Only we remove match records, by hand, on request.',
         ],
         'For a wallet account we also keep its address and its prepaid balance and spending: the payments you made to us (transaction, token, amount and its value in US dollars), what each generation cost, and any charge added back to your balance because a generation gave you no picture. This links money to your account, to keep your balance. Payments on Base are public on-chain, as every Base transaction is. A wallet\'s balance stays with the wallet when it is linked to a Farcaster account.',
         'Deletions happen at the next routine clean-up, so they can come a little later than stated.',

@@ -13,8 +13,10 @@
 import { db } from '~/lib/db';
 import { RULE_IDS, type RuleId } from '../play-game/game';
 import { decMatch, encMatch, type P } from './moves';
+import { rulesetId, type RulesetId } from '../versions/solo-v1';
 
-export interface Saved { seed: number; lvl: number; ver: string; rule: RuleId | ''; turns: P[][] }
+/** rs: the ruleset (solo-v1.ts RULESETS); a row saved before rulesets were numbered has 1 (the column's default). */
+export interface Saved { seed: number; lvl: number; ver: string; rule: RuleId | ''; turns: P[][]; rs: RulesetId }
 
 const KEEP_DAYS = 30;
 const memory = new Map<number, { saved: Saved; at: number }>();
@@ -34,11 +36,11 @@ async function loadNow(fid: number): Promise<Saved | null> {
     const m = memory.get(fid);
     return m && Date.now() - m.at < KEEP_DAYS * 86_400_000 ? m.saved : null;
   }
-  const rows = await sql<{ lvl: number; ver: string; rule: string; moves: string }[]>`
-    select lvl, ver, rule, moves from studio.mp_snap_resume where fid = ${fid} and updated_at > now() - make_interval(days => ${KEEP_DAYS})`;
+  const rows = await sql<{ lvl: number; ver: string; rule: string; moves: string; ruleset: number }[]>`
+    select lvl, ver, rule, moves, ruleset from studio.mp_snap_resume where fid = ${fid} and updated_at > now() - make_interval(days => ${KEEP_DAYS})`;
   const r = rows[0];
   const m = r && decMatch(r.moves);
-  return m ? { ...m, lvl: r.lvl, ver: r.ver, rule: RULE_IDS.includes(r.rule as RuleId) ? (r.rule as RuleId) : '' } : null;
+  return m ? { ...m, lvl: r.lvl, ver: r.ver, rule: RULE_IDS.includes(r.rule as RuleId) ? (r.rule as RuleId) : '', rs: rulesetId(r.ruleset) } : null;
 }
 
 async function saveNow(fid: number, s: Saved): Promise<void> {
@@ -46,8 +48,8 @@ async function saveNow(fid: number, s: Saved): Promise<void> {
   if (!sql) { memory.set(fid, { saved: structuredClone(s), at: Date.now() }); return; }
   const moves = encMatch(s.seed, s.turns);
   await sql`
-    insert into studio.mp_snap_resume (fid, lvl, ver, rule, moves) values (${fid}, ${s.lvl}, ${s.ver}, ${s.rule}, ${moves})
-    on conflict (fid) do update set lvl = excluded.lvl, ver = excluded.ver, rule = excluded.rule, moves = excluded.moves, updated_at = now()`;
+    insert into studio.mp_snap_resume (fid, lvl, ver, rule, moves, ruleset) values (${fid}, ${s.lvl}, ${s.ver}, ${s.rule}, ${moves}, ${s.rs})
+    on conflict (fid) do update set lvl = excluded.lvl, ver = excluded.ver, rule = excluded.rule, moves = excluded.moves, ruleset = excluded.ruleset, updated_at = now()`;
   // Retention without a cron: at most once per 10 minutes per instance.
   if (Date.now() - lastSweep > 600_000) {
     lastSweep = Date.now();
