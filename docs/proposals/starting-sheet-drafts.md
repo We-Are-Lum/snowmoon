@@ -1,10 +1,134 @@
-# Starting sheets: front, side and back drafts from the edit model (DRAFT)
+# Starting sheets: front, side and back views from the edit model (DRAFT)
 
 Drafted by the coding agent (Claude, a closed model by Anthropic), 2026-11-01, on branch `starting-sheet-drafts`, for the owner to pick. **DRAFTS ONLY.** Nothing was published, nothing was written to any database, nothing was uploaded to the site's storage (R2). The pictures are local files in `/Users/nathan/snowmoon-starting-drafts/`, not in the repository. Every picture is AI-made and keeps that label wherever it is used.
 
 Follows `docs/proposals/remix-challenge-starting-sheets.md` (branch `remix-challenge`), option B, with the owner's change: use the edit model with each character's existing starting sheet as the reference, for all three views.
 
-Contact sheet (each original next to its three drafts): `/Users/nathan/snowmoon-starting-drafts/index.html`.
+Contact sheet (original, v2 views and first drafts, per character): `/Users/nathan/snowmoon-starting-drafts/index.html`.
+
+## v2 (current): all 18 views redone through the site's own functions
+
+The owner picked option B and asked for all 18 views redone first (2026-11-01): a plain light-grey background, Mu's shoulder panel without "sculpted", and made through the site's own path so the prompt check runs and the recipes are standard. Pictures: `/Users/nathan/snowmoon-starting-drafts/v2/<name>-<view>.jpg`. Script: `/Users/nathan/snowmoon-starting-drafts/v2/make-v2.mts`; log of every call with each view's full recipe: `/Users/nathan/snowmoon-starting-drafts/v2/ledger.json`. The first drafts below stay as they were, for comparison; `index.html` shows original, v2 and first drafts per character.
+
+### What the script calls, and what it does not
+
+Run locally from this worktree (`tsx --conditions=react-server --env-file=.env.local`), importing the site's own modules:
+- `blockedName` (`src/lib/images/rules.ts`), then `checkPrompt` (`src/lib/images/guard.ts`): the site's prompt check, gpt-oss-safeguard-20b against `config/prompts/image-guard.md`, on the full prompt, as `paidPicture` does. `GROQ_API_KEY` is removed from the script's environment, so `complete()` goes through the Vercel AI Gateway (the project's gateway key, Groq pinned, zero data retention), never the site's own Groq key (the batch-jobs rule).
+- `viewPrompt` and `VIEW_LINES` (`src/lib/images/design-rules.ts`): the site's prompt builder and view lines.
+- `makeEdit` (`src/lib/images/fal.ts`): the site's edit-model call, unchanged (its fixed settings; no seed is sent, so fal picks one and it is recorded).
+- `recipeOf` from the publish route (`src/app/api/designs/route.ts`): a Next route file can't export it, so the script holds a verbatim copy and checks it against the route's source text at start (stops if they differ). Each view gets a `SampleTicket` as the sample route would sign it, and `recipeOf(ticket)` is the recipe exactly as publishing would store it.
+- **Not called:** `paidPicture`, `reserve`, `settle`, `recordGuard` (the daily counts and spend tables), `signSampleTicket`, `putPublic` (R2), `makeDesign` (the database). `db()` is never opened. **Nothing was written to the production database, nothing uploaded, nothing published.** So the STOP condition did not arise: the prompt check and the recipe need neither a database write nor an upload; only the spend bookkeeping writes, and it was left out.
+
+### What changed in the prompt
+
+- **Background:** the site has no separate "plain sheet background" wording; its own is the view line's "plain light grey background", kept. The style text was what pulled in skies, so two clauses were removed from Techno vistas for the views: " rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon," and " cinematic wide-angle perspective,". The style text used: "Detailed science fiction comic art: precise fine uniform linework, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, no text, no lettering, no writing, no logos, no numbers."
+- **Side and back are made from the new front view**, as the site's sheet tool does (its recipe's `references` is the front's sha256), not from the original sheet; that keeps the original's skyline out. The front is made from the original sheet (the owner's choice; `references` is the sheet's sha256).
+- **Mu:** "with one sculpted shoulder panel" became "with one shoulder panel"; otherwise word for word.
+- View lines as before (side and back the site's word for word; front in the side line's form, "seen from the front").
+
+### Spend and calls
+
+- **42 calls, $0.17116 in all:** 18 edit-model calls, $0.16810 (fronts 6 × $0.01032, with the 1024 × 576 sheet as reference; sides and backs 12 × $0.00885, with the 576 × 768 front as reference; the site's formula); and 24 prompt checks, $0.00306 (the gateway's own cost figures).
+- The hard cap was $0.40, checked before every call against the worst case (the site's reservations: $0.0015 a check, $0.02 an edit). Worst-case total reached: $0.3960.
+- **Nothing counted toward `IMAGES.dailySpendCapUsd`.** The cap is enforced from the site's spend tables, which only `reserve`/`settle`/`recordGuard` write; none ran, and the database was never opened. So today's visitor budget ($2) is untouched; for that reason today's recorded spend was not read. No caps or config changed.
+
+### The prompt check
+
+**Every view passed before its picture was made.** 5 first answers were refusals with category "unclear" (Zei back twice, Bai front, Deluin back, Mu front): the site's rule treats an empty or unparseable answer as a refusal. Each passed when asked again, as a visitor's retry would. One extra check on Zei's back prompt, with the reply shown, answered `{"allow": true}` after 385 of its 400 tokens, so the "unclear" answers are most likely the model's reasoning running out of tokens (the known case noted in `src/lib/config.ts`), not the prompts. Counted above. fal's safety checker flagged none of the 18.
+
+### Recipe format (one example, Mu side, exactly as `recipeOf` gives it)
+
+```json
+{
+ "prompt": "The same person as in the reference picture, full body, standing, seen from the side, plain light grey background. Keep the face, hair and clothes the same.\n\nDetailed science fiction comic art: precise fine uniform linework, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, no text, no lettering, no writing, no logos, no numbers.\n\nThe person is a woman in her early sixties, small and wiry, medium brown skin, short silver hair in a sharp asymmetric cut, keen eyes behind thin red-framed glasses, wearing a charcoal asymmetric commander's tabard with one shoulder panel and bright yellow piping, over a cobalt-blue seamless long-sleeved bodysuit, slim black segmented trousers, soft grey seamless boots and a slim wrist device.\n\nNo text, no lettering, no signs with words.",
+ "model": "flux2-klein-4b-edit",
+ "endpoint": "fal-ai/flux-2/klein/4b/edit",
+ "host": "fal.ai",
+ "settings": {
+  "image_size": {
+   "width": 576,
+   "height": 768
+  },
+  "num_images": 1,
+  "enable_safety_checker": true,
+  "output_format": "jpeg",
+  "sync_mode": true
+ },
+ "seed": 31879289,
+ "request_id": "01a1982f-bbd9-7031-933b-cee7bdda5613",
+ "cost_usd": 0.0088,
+ "made_at": "2026-11-01T17:37:08.723Z",
+ "width": 576,
+ "height": 768,
+ "references": [
+  {
+   "sha256": "7f90bc9b7f9f63997a31119769f1debbd8e9dc0d22f6908308aa9bac4eab0be3"
+  }
+ ],
+ "style": {
+  "version_id": "unpublished: content/snowmoon/designs/styles/techno-vistas.json (scenery clauses removed for views)",
+  "title": "Techno vistas, views",
+  "text": "Detailed science fiction comic art: precise fine uniform linework, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, no text, no lettering, no writing, no logos, no numbers."
+ },
+ "checks": {
+  "prompt": {
+   "model": "openai/gpt-oss-safeguard-20b",
+   "verdict": "ok"
+  },
+  "host_safety_checker": "passed"
+ },
+ "assist": {
+  "model": "claude-coding-agent",
+  "drafted": [
+   "sample subject or view line"
+  ],
+  "source": "src/lib/images/design-rules.ts"
+ }
+}
+```
+
+Two departures from a recipe made on the site, both because these were not made from a published style or through its sample route:
+- `style.version_id` names the unpublished style file and says the clauses were removed, since Techno vistas has no published version. Publishing would need Techno vistas (or a views variant) published first, or this field set honestly another way.
+- A front with a `references` entry (the original sheet): the site's front is made from text only. The recipe format allows it.
+- Also note `cost_usd` is rounded to 4 decimals by `recipeOf` (0.0088 for $0.00885).
+
+### Per character (v2)
+
+**Zei Leimin.** **Keeps the look; plain background.** Blue streak, visor glasses, orange cropped jacket over the black bodysuit with cyan seams, grey gathered trousers, glowing sneakers. Side is a true profile.
+- front: `/Users/nathan/snowmoon-starting-drafts/v2/zei-front.jpg`, sha256 `564f45deb5b5934c499ad0339ccedadb005f0a09e311231b0ff37e66708707a1`, seed 1187110907, $0.01032
+- side: `/Users/nathan/snowmoon-starting-drafts/v2/zei-side.jpg`, sha256 `d0ac5203a26a4b8d00c6c1a617910fa2c03051a6749657176fc6e17f5548e561`, seed 2098441968, $0.00885
+- back: `/Users/nathan/snowmoon-starting-drafts/v2/zei-back.jpg`, sha256 `7ee79ae8a51b91f2a2b9012f906d474e0347d8cba730f55f700c63e04db6f875`, seed 1571901438, $0.00885
+
+**Bai Jahen.** **Keeps the look; plain background.** One small drift: from behind, the lime vest now covers the upper back (the original's back view shows the white bodysuit there).
+- front: `/Users/nathan/snowmoon-starting-drafts/v2/bai-front.jpg`, sha256 `3d59639ed720bb48baea4a45c6b75640050ea44f196de2b15599e1653783da8e`, seed 965294590, $0.01032
+- side: `/Users/nathan/snowmoon-starting-drafts/v2/bai-side.jpg`, sha256 `74c000a37e978014ed4bc3292b724669ac8a358c33fa3f2a7d9758c47b64577a`, seed 2129115511, $0.00885
+- back: `/Users/nathan/snowmoon-starting-drafts/v2/bai-back.jpg`, sha256 `a6585ca3088a11c24cf42b4b35427b17733fa3da8835c5ea04e733e0dd01686f`, seed 2073201206, $0.00885
+
+**Gladias.** **Keeps the look; plain background. No privacy robe.** Green tabard, cream sleeves, ochre sash, charcoal leggings, beard, earpiece, throat band. Small drift in the back view: the sash's hanging tail shows at the back, and the boots come up higher.
+- front: `/Users/nathan/snowmoon-starting-drafts/v2/gladias-front.jpg`, sha256 `76e95dd38f75d840f10c1d387230ea746722cc1e6d93809b5a4b34eecce597d5`, seed 2015154021, $0.01032
+- side: `/Users/nathan/snowmoon-starting-drafts/v2/gladias-side.jpg`, sha256 `37c793fdec5036bd20a86636dc387719e6d5f357bdbf7b2253ed18ebf7886b3a`, seed 422872616, $0.00885
+- back: `/Users/nathan/snowmoon-starting-drafts/v2/gladias-back.jpg`, sha256 `38987e5444e820f04dabd2bc6e60f63d4618a08f1ec69ab65a5772158e3a36dc`, seed 2143050416, $0.00885
+
+**Seila.** **Keeps the look; plain background.** Braids, round gold glasses, rust coat-dress with three bronze clasps, olive trousers, tan boots. The back view has a buckled half-belt (the original's is plainer).
+- front: `/Users/nathan/snowmoon-starting-drafts/v2/seila-front.jpg`, sha256 `0d9ddc131a061f1c396ccc93334aa73c3fb873ffc271092814c30146b15c23f9`, seed 1016940298, $0.01032
+- side: `/Users/nathan/snowmoon-starting-drafts/v2/seila-side.jpg`, sha256 `606ed412c0a555b820b90898c1b271c71c994b82515a53e5be943533a17f9c1c`, seed 17672628, $0.00885
+- back: `/Users/nathan/snowmoon-starting-drafts/v2/seila-back.jpg`, sha256 `6843bd92475f83d911c7c107748e568e94a9c5525a1ece00acc08c22e54b026e`, seed 1388019085, $0.00885
+
+**Deluin.** **Keeps the look; plain background.** Very close: hair, cream cable-knit tunic, grey hood, dark sash, green trousers, brown boots.
+- front: `/Users/nathan/snowmoon-starting-drafts/v2/deluin-front.jpg`, sha256 `967e5a23d68070239c2c9d446ab0f765172c7b77c803489a3ed8d5ed7b56df2c`, seed 215413207, $0.01032
+- side: `/Users/nathan/snowmoon-starting-drafts/v2/deluin-side.jpg`, sha256 `04df5eed5918460ad2e293a484c935f690a4b2249a437830e12b7f9d1f46c836`, seed 1098096228, $0.00885
+- back: `/Users/nathan/snowmoon-starting-drafts/v2/deluin-back.jpg`, sha256 `7e798718dc05767ec9a6f77415a5b0b3ff42d60b26cd222d070aed6a44e11a6b`, seed 961309483, $0.00885
+
+**Mu.** **Now keeps the look; plain background.** With "sculpted" dropped, the shoulder is the original's smooth cape-like panel with yellow piping in all three views; the armour-like panel of the first drafts is gone.
+- front: `/Users/nathan/snowmoon-starting-drafts/v2/mu-front.jpg`, sha256 `7f90bc9b7f9f63997a31119769f1debbd8e9dc0d22f6908308aa9bac4eab0be3`, seed 1018900662, $0.01032
+- side: `/Users/nathan/snowmoon-starting-drafts/v2/mu-side.jpg`, sha256 `abc66dccffd2bf5cdc227a0bf4803a0ee75322729e6c2260b253141e6fa0dd2f`, seed 31879289, $0.00885
+- back: `/Users/nathan/snowmoon-starting-drafts/v2/mu-back.jpg`, sha256 `d485d194bee4460a12f955e2afa784db945477e4573dfb8ee39a07e4d39d47a9`, seed 544216540, $0.00885
+
+Every background is now plain light grey, with a soft floor shadow and no skyline.
+
+---
+
+# First drafts (earlier the same day, kept for comparison)
 
 ## Spend
 
@@ -115,13 +239,13 @@ Shared by every prompt, after the view line: the Techno vistas text, then the sh
 
 ## Next, for the owner
 
-Pick, per character, between the original crop (option A in the starting-sheets proposal) and these drafts, or ask for redos (Mu's shoulder; a plainer background). Publishing either still needs the steps and approvals in that proposal; nothing here changes them. Gladias stays held.
+Option B was picked; the v2 views above are the candidates. Publishing still needs the steps and approvals in the starting-sheets proposal (and a published style for the views, or an honest `style` field). Gladias is released (2026-11-01) and treated like the others.
 
 ## Principles
 
-- P2 (AI labelled): every draft is AI-made and labelled so in the contact sheet and here. Pass.
+- P1 (recipes complete): v2's recipes are what the site's own builder gives, with every input recorded. Pass, with the two departures noted in the v2 section (unpublished style; a front with a reference).
+- P2 (AI labelled): every picture is AI-made and labelled so in the contact sheet and here. Pass.
 - P4 (people publish): nothing published; the owner picks. Pass.
-- P1 (recipes complete): each draft's exact prompt, model, endpoint, settings, seed, reference sha256 and cost are recorded here and in `ledger.json`. Pass.
-- P6 (data and spend): direct calls with sync mode and `X-Fal-Store-IO: 0`; no database or storage writes; the site's spend cap untouched. Concern, small: the site's prompt check did not run for these calls (fal's safety checker did). If any draft is published, its recipe must say so honestly, as the starting-sheets proposal already notes for option A.
+- P6 (data and spend): v2 ran the site's prompt check (through the gateway, zero data retention, Groq pinned; never the site's own key) and fal's safety checker; fal in sync mode with `X-Fal-Store-IO: 0`; no database or storage writes; the site's spend cap untouched. Pass. (The first drafts' concern, no prompt check, is resolved for v2.)
 - P8 (book vs invented): the character descriptions are this edition's, drafted by the coding agent, as before. Pass.
-- New tension: none.
+- New tension: none. To note: five "unclear" refusals in 24 checks suggests the check's 400-token answer budget is tight for long sheet prompts; a visitor would see "This prompt asks for something the rules don't allow" and retry.
