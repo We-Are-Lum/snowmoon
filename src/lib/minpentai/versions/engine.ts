@@ -302,8 +302,9 @@ export function engine(L: Layout) {
       if (!z.length) z = zone();
       if (z.length) add('g', z[Math.floor(r() * z.length)], -1, 0);
     }
-    // Builders stop at 5 towers (game.ts), or at the version's limit if lower.
-    const cap = s.maxTowers ? Math.min(5, s.maxTowers) : 5;
+    // Builders stop at the ruleset's botTowers (5 in solo-v1, 10 in solo-v2: Luis's play tests showed the
+    // computer needs room to be aggressive; owner, 2026-10-22), or at the version's limit if lower.
+    const cap = s.maxTowers ? Math.min(s.botTowers, s.maxTowers) : s.botTowers;
     if (Lv >= 3 && pts >= tc && cnt(b, o) < cap) {
       const z = zone();
       if (z.length) {

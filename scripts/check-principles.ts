@@ -2142,7 +2142,7 @@ add({
       firsts.push({ id: `first page${ver ? ` (${ver})` : ''}, resume ${resume}`, page: intro(h, ver, resume) as Page });
     }
     // A challenge link's first page (owner, 2026-10-22).
-    const challenge = { seed: 777, lvl: 3, rule: 'diag' as const, ver: '', res: { win: 'C' as const, resigned: false, step: 41, c: 3, a: 0, taps: 38 } };
+    const challenge = { seed: 777, lvl: 3, rule: 'diag' as const, ver: '', rs: 2 as const, res: { win: 'C' as const, resigned: false, step: 41, c: 3, a: 0, taps: 38 } };
     firsts.push({ id: 'first page of a challenge', page: intro(h, '', 'no', { c: challenge, seg: 'x' }) as Page });
     // The other pages of a short match: the board, a run, resign, the result.
     const others: { id: string; page: Page }[] = [];

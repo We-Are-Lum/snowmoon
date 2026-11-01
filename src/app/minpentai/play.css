@@ -223,3 +223,6 @@ html:has(.mp-play.is-desk.is-fs) :is(.rail, .panel, .panel-reopen) { display: no
 .mp-kit-spoilers > summary { min-height: 44px; display: flex; align-items: center; cursor: pointer; font-family: var(--label); font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--link); }
 .mp-kit-spoilers > summary:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
 .mp-kit .mp-rules-note .ml-tag.info-label { min-height: 44px; }
+
+/* The one-time note about Play's rules draft 2 on the ladder. */
+.mp-ladder-note { border: 1px solid var(--mp-rule); padding: 10px 12px; margin: 8px 0 12px; display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }

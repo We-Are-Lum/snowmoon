@@ -23,7 +23,7 @@ import {
 import { board, type BoardOpts, type BoardView } from './board';
 import { drawRules, verdict, type Engine, type Kills } from '../versions/engine';
 import type { Settings } from '../versions/schema';
-import { SOLO_V1, SOLO_V1_ENGINE, engineFor, settingsFor, type VersionRules } from '../versions/solo-v1';
+import { PLAY, RULESETS, SOLO_V1_ENGINE, engineFor, rulesetOfRules, settingsFor, type RulesetId, type VersionRules } from '../versions/solo-v1';
 import type { LadderProgress } from './live-types';
 import { checkPlacements, type LiveMatch } from '../play-server/match';
 
@@ -171,9 +171,9 @@ export class PlayController {
   /** Escape: close a sheet, else leave full screen. */
   escape() { if (this.state.sheet) this.setState({ sheet: null }); else if (this.state.fs) this.setState({ fs: false, aim: false }); }
 
-  /** A new match: Play today, or the version given (and then the computer player's level and the seed, if given). */
+  /** A new match: Play today (PLAY, the newest ruleset), or the version or ruleset given (and then the computer player's level and the seed, if given). */
   mk(mode: Mode, rung?: number, opts: { version?: VersionRules; lvl?: number; seed?: number } = {}): Match {
-    const ver = opts.version ?? SOLO_V1, seed = opts.seed ?? (this.env.now() % 1e6) | 0, r = rng(seed);
+    const ver = opts.version ?? PLAY, seed = opts.seed ?? (this.env.now() % 1e6) | 0, r = rng(seed);
     // The match's first random number draws its rule, as Design's mk does; the rest are the computer's.
     const { first, second, s1, s2 } = drawRules(ver, r), e = engineFor(ver, s1);
     const drawn = first && { id: first.id, text: first.text };
@@ -203,13 +203,14 @@ export class PlayController {
    * link starts here with no turns). The rng is the same either way: mk has drawn its first number.
    * Play's board only (the snap's versions are Play with a rule picked and numbers changed).
    */
-  continueMatch(seed: number, turns: { t: Piece; x: number; y: number; dx: number; dy: number }[][], lvl = 0, numbers?: (drawn: RuleId) => { rule: RuleId; R: number; every: number; cost: number }): boolean {
+  continueMatch(seed: number, turns: { t: Piece; x: number; y: number; dx: number; dy: number }[][], lvl = 0, numbers?: (drawn: RuleId) => { rule: RuleId; R: number; every: number; cost: number }, rs: RulesetId = 1): boolean {
+    // A link made before rulesets were numbered carries none: it replays under 1, the rules it was made with.
     this.env.clearInterval(this.rt);
-    const m = this.mk('practice', undefined, { seed, lvl });
+    const m = this.mk('practice', undefined, { seed, lvl, version: RULESETS[rs] });
     if (numbers) {
       const n = numbers(m.rule as RuleId);
       Object.assign(m, n);
-      m.s = { ...settingsFor(SOLO_V1, n.rule), sight: n.R, reach: n.R, every: n.every, costGlider: n.cost };
+      m.s = { ...settingsFor(RULESETS[rs], n.rule), sight: n.R, reach: n.R, every: n.every, costGlider: n.cost };
       m.drawn = { id: n.rule, text: RULES[n.rule] };
     }
     this.m = m;
@@ -452,7 +453,7 @@ export class PlayController {
       v.resNote = m.mode === 'ladder' && r.win !== 'C' ? (r.win === 'D' ? "Draws don't open the next rung." : '') : '';
       v.resCard = m.mode === 'ladder' && r.win === 'C' && (!!m.newOpen || m.rung === 5);
       // A ladder win can be shared, if the player chooses (owner, 2026-10-19); nothing is sent until they do.
-      v.share = m.mode === 'ladder' && r.win === 'C' ? { rung: m.rung!, steps: r.step } : undefined;
+      v.share = m.mode === 'ladder' && r.win === 'C' ? { rung: m.rung!, steps: r.step, rs: rulesetOfRules(m.ver) ?? 1 } : undefined;
       if (v.resCard) { if (m.rung! < 5) { v.resCardN = String(m.rung! + 1); v.resCardT = `Rung ${m.rung! + 1} · ${RUNGS[m.rung! + 1]!.n} is open`; v.resCardD = RUNGS[m.rung! + 1]!.d; } else { v.resCardN = '✓'; v.resCardT = "You've beaten every rung"; v.resCardD = 'Replay any of them from the ladder.'; } }
       const P1 = (label: string, click: () => void): Btn => ({ label, click, primary: true }), S1 = (label: string, click: () => void): Btn => ({ label, click });
       const watch = S1('WATCH IT AGAIN', () => this.openReplay()), done = S1('DONE', go({ scr: 'home', tab: 'play' }));
@@ -514,7 +515,7 @@ export interface PlayView {
   msg?: string; ruleLine?: string; ptsTxt?: string; ptsShort?: string; endLabel?: string; endTurn?: () => void;
   runHead?: string; runMsg?: string; ffLabel?: string; ffShort?: string; ffDim?: boolean; ffClick?: () => void;
   leaveLabel?: string; askResign?: () => void; askLeave?: () => void; resignText?: string; resign?: () => void; leave?: () => void; leaveTitle?: string; leaveText?: string;
-  resA?: string; resB?: string; resWhy?: string; resNote?: string; resCard?: boolean; resCardN?: string; resCardT?: string; resCardD?: string; resBtns?: Btn[]; share?: { rung: number; steps: number };
+  resA?: string; resB?: string; resWhy?: string; resNote?: string; resCard?: boolean; resCardN?: string; resCardT?: string; resCardD?: string; resBtns?: Btn[]; share?: { rung: number; steps: number; rs: RulesetId };
   rmShow?: boolean; rmText?: string; rmTime?: string;
   rpEnd?: number; rpBtns?: Btn[]; rpDone?: () => void;
   fpBtns?: Btn[]; fpBtnsFS?: Btn[]; fpSides?: { label: string; sw: string; on: boolean; click: () => void }[]; fpPieces?: { label: string; on: boolean; click: () => void }[];
