@@ -73,7 +73,14 @@ export interface SoloMatch {
   ls: Record<Side, Record<number, number>>;
   /** Turns to act so far (0 is setup). */
   turn: number;
-  pend: { C: Orders | null; A: Orders };
+  /**
+   * This turn's orders. The computer's (A) are planned just after the turn opens, once the answer that opened it has
+   * been sent (tools.ts), and kept here until the reveal; null until then (owner, 2026-11-01). They follow from the
+   * board as the turn opened and the committed random value, so when they are planned changes nothing.
+   */
+  pend: { C: Orders | null; A: Orders | null };
+  /** When this turn to act opened (ms since 1970): nothing about the match is answered before openedAt + T (tools.ts). */
+  openedAt: number;
   standing: { text: string; preset: Preset } | null;
   history: RevealedTurn[];
   end: { win: Side | 'D'; how: 'towers' | 'time' | 'resigned'; step: number } | null;
@@ -135,9 +142,8 @@ export function newSolo(o: { id: string; ruleset: RulesetName; level: number; se
   const m: SoloMatch = {
     v: 1, id: o.id, ruleset: o.ruleset, level: o.level, seed: o.seed, person: o.person, agent: o.agent,
     linkHash: sha256(linkSecret), cpu, cpuCommit: sha256(cpu), createdAt: o.now, w, kills: { C: 0, A: 0 }, ls, turn: 0,
-    pend: { C: null, A: null as unknown as Orders }, standing: null, history: [], end: null,
+    pend: { C: null, A: null }, openedAt: Date.parse(o.now) || 0, standing: null, history: [], end: null,
   };
-  m.pend.A = computerOrders(m, o.now);
   return { m, linkSecret };
 }
 
@@ -210,7 +216,6 @@ export function viewFor(m: SoloMatch) {
     last_seen_enemy_towers: Object.entries(m.ls[me]).filter(([k]) => !view.tw[+k]).map(([k, step]) => ({ x: e.XY(+k)[0], y: e.XY(+k)[1], step })),
     can_place: can.map((k) => [e.XY(k)[0], e.XY(k)[1]]),
     my_orders: m.pend.C ? { placements: m.pend.C.placements.map(orderOut), source: m.pend.C.source, final: m.pend.C.final, commitment: m.pend.C.commitment, ...(m.pend.C.note ? { note: m.pend.C.note } : {}) } : null,
-    opponent_commitment: over ? null : m.pend.A.commitment,
     standing_order: m.standing,
     my_turns: m.history.map((h) => ({ turn: h.turn, step: h.step, placements: h.C.placements.map(orderOut), source: h.C.source, ...(h.C.preset ? { preset: h.C.preset } : {}) })),
     end: m.end,
@@ -279,10 +284,21 @@ export function autopilot(m: SoloMatch, o: { turn: number; now: string }) {
   return submit(m, { turn: o.turn, placements: fallbackPlan(m, preset), source: 'site-computer', final: true, now: o.now, preset });
 }
 
+/** Plans the site computer's orders for the open turn if they aren't yet. True if it planned them now. */
+/** The quiet time T (quiet.ts): above the slowest level-3 planning time measured on Vercel, with margin. */
+export const QUIET_MS = 3000;
+
+export function planComputer(m: SoloMatch, now: string): boolean {
+  if (m.end || m.pend.A) return false;
+  m.pend.A = computerOrders(m, now);
+  return true;
+}
+
 /** Both sides' orders revealed and applied together; the engine runs to the next turn to act (or the end). */
 function resolve(m: SoloMatch, now: string) {
   const { s, e } = rulesOf(m);
-  const C = m.pend.C!, A = m.pend.A;
+  planComputer(m, now);
+  const C = m.pend.C!, A = m.pend.A!;
   const strip = ({ final: _f, note: _n, ...x }: Orders) => x;
   m.history.push({ turn: m.turn, step: m.w.step, C: strip(C), A: strip(A) });
   e.apply(m.w, s, { C: C.placements, A: A.placements });
@@ -299,7 +315,8 @@ function resolve(m: SoloMatch, now: string) {
     }
   } while (m.w.step - from < s.every);
   m.turn++;
-  m.pend = { C: null, A: computerOrders(m, now) };
+  m.pend = { C: null, A: null };
+  m.openedAt = Date.parse(now) || 0;
   return { over: false, turn: m.turn, step: m.w.step };
 }
 
