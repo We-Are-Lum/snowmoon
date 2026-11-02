@@ -5,6 +5,7 @@ import { playFor, type Agent } from '../../agents/core';
 import type { AgentTool } from '../../agents/tools';
 import { CURRENT, autopilot, linkOpens, newSolo, parseOrders, recordOf, resign, rulesOf, setStanding, simulate, SoloError, submit, viewFor, type ModelClaim, type SoloMatch } from './solo';
 import { insert, listFor, liveCount, load, newId, newSeed, save, StoreError } from './store';
+import { planSoon, settle } from './quiet';
 import { randomBytes, createHash } from 'node:crypto';
 
 /**
@@ -17,19 +18,6 @@ import { randomBytes, createHash } from 'node:crypto';
  * exist; a record opens only when the match is over.
  */
 const MAX_LIVE = 5;
-/**
- * A call that resolves a turn (or starts a match) plans the site computer's next orders from its hidden view, and
- * planning takes longer the more the computer has. Such calls answer no sooner than this, so their time says
- * nothing about the dark (fog review, 2026-10-31). The slowest measured (272 turns at level 5 and 4, both rulesets, owner's Mac, 2026-10-31) took 329 ms; a call that
- * runs past it is logged, so the number can be raised if the site's servers turn out slower.
- */
-export const RESOLVE_MS = 400;
-const padFrom = async (started: number) => {
-  const left = RESOLVE_MS - (Date.now() - started);
-  if (left > 0) await new Promise((r) => setTimeout(r, left));
-  else console.log('minpentai agent play: a resolving call took longer than RESOLVE_MS', Date.now() - started);
-};
-
 const only = (args: Record<string, unknown>, keys: string[]) => {
   const extra = Object.keys(args).filter((k) => !keys.includes(k));
   if (extra.length) throw new ToolInputError(`unknown argument: ${extra.join(', ')}`);
@@ -37,19 +25,39 @@ const only = (args: Record<string, unknown>, keys: string[]) => {
 const on = (agent: Agent) => { if (!playFor(agent.person)) throw new ToolInputError('Minpentai agent play is not open to you yet'); };
 const NOT_YOURS = 'no match of yours with that id (see minpentai_list_my_matches)';
 
+/** One of the person's matches, after its quiet time (quiet.ts settle): a call's timing says nothing about planning. */
 async function mine(agent: Agent, id: unknown) {
   if (typeof id !== 'string') throw new ToolInputError('match_id must be a match id');
-  const r = await load(id);
-  if (!r || r.m.person !== agent.person) throw new ToolInputError(NOT_YOURS);
+  // Someone else's match, or none, is told so at once: its timing is not this person's to learn from.
+  const peek = await load(id);
+  if (!peek || peek.m.person !== agent.person) throw new ToolInputError(NOT_YOURS);
+  const r = await settle(id);
+  if (!r) throw new ToolInputError(NOT_YOURS);
   return r;
 }
-/** Runs a change on one of the person's matches and saves it; the engine's words come back as the tool's error. */
+/**
+ * Runs a change on one of the person's matches and saves it; the engine's words come back as the tool's error. A save
+ * that meets another (the computer's plan being stored) is tried again on the fresh match, never shown. If the change
+ * opened a new turn, the computer plans it just after this answer is sent.
+ */
 async function change<T>(agent: Agent, id: unknown, f: (m: SoloMatch) => T): Promise<T> {
-  const { m, version } = await mine(agent, id);
-  let out: T;
-  try { out = f(m); } catch (e) { if (e instanceof SoloError) throw new ToolInputError(e.message); throw e; }
-  try { await save(m, version); } catch (e) { if (e instanceof StoreError) throw new ToolInputError(e.message); throw e; }
-  return out;
+  let r = await mine(agent, id);
+  for (let i = 0; ; i++) {
+    const { m, version } = r;
+    const turn = m.turn, over = !!m.end;
+    let out: T;
+    try { out = f(m); } catch (e) { if (e instanceof SoloError) throw new ToolInputError(e.message); throw e; }
+    try {
+      await save(m, version);
+      if (m.turn !== turn && !m.end && !over) planSoon(m.id);
+      return out;
+    } catch (e) {
+      if (!(e instanceof StoreError) || i >= 4) throw e instanceof StoreError ? new ToolInputError('Something went wrong on our side. Try again in a moment.') : e;
+      const again = await load(m.id);
+      if (!again) throw new ToolInputError(NOT_YOURS);
+      r = again;
+    }
+  }
 }
 const guard = <T,>(f: () => T): T => { try { return f(); } catch (e) { if (e instanceof SoloError) throw new ToolInputError(e.message); throw e; } };
 
@@ -82,11 +90,10 @@ export const MINPENTAI_TOOLS: AgentTool[] = [
       const level = args.level === undefined ? 2 : args.level;
       if (ruleset !== 'book' && ruleset !== 'play') throw new ToolInputError('ruleset must be "book" or "play"');
       if (!Number.isInteger(level) || (level as number) < 0 || (level as number) > 3) throw new ToolInputError('level must be 0 (the beginner) to 3');
-      const started = Date.now();
       if ((await liveCount(agent.person)) >= MAX_LIVE) throw new ToolInputError(`your person already has ${MAX_LIVE} live matches; finish or resign one first`);
       const { m, linkSecret } = guard(() => newSolo({ id: newId(), ruleset: CURRENT[ruleset], level: level as number, seed: newSeed(), person: agent.person, agent: { id: agent.id, name: agent.name, model: modelOf(args.model) }, now: new Date().toISOString() }));
       await insert(m);
-      await padFrom(started);
+      planSoon(m.id); // the computer plans its setup just after this answer is sent
       return { match_id: m.id, side: 'Cyan', live_url: liveUrl(m.id, linkSecret), view: viewFor(m) };
     },
   },
@@ -97,7 +104,7 @@ export const MINPENTAI_TOOLS: AgentTool[] = [
     async run(agent, args) {
       on(agent);
       only(args, []);
-      return { matches: (await listFor(agent.person)).map((r) => ({ match_id: r.id, ruleset: r.ruleset, level: r.level, over: r.over, updated_at: r.updated_at })) };
+      return { matches: (await listFor(agent.person)).map((r) => ({ match_id: r.id, ruleset: r.ruleset, level: r.level, over: r.over, started_at: r.created_at })) };
     },
   },
   {
@@ -142,14 +149,11 @@ export const MINPENTAI_TOOLS: AgentTool[] = [
       on(agent);
       only(args, ['match_id', 'turn', 'placements', 'source', 'final', 'note']);
       if (args.source !== 'person' && args.source !== 'agent') throw new ToolInputError('source must be "person" or "agent"');
-      const started = Date.now();
       const note = typeof args.note === 'string' ? args.note.replace(/[\x00-\x1f]/g, ' ').slice(0, 280) : undefined;
       const out = await change(agent, args.match_id, (m) => {
         const ps = parseOrders(args.placements, rulesOf(m).s);
         return { r: submit(m, { turn: Number(args.turn), placements: ps, source: args.source as 'person' | 'agent', final: args.final === true, note, now: new Date().toISOString() }), m };
       });
-      // Every final call waits the same (a non-final one plans nothing).
-      if (args.final === true) await padFrom(started);
       return { ...out.r, view: viewFor(out.m) };
     },
   },
@@ -160,9 +164,7 @@ export const MINPENTAI_TOOLS: AgentTool[] = [
     async run(agent, args) {
       on(agent);
       only(args, ['match_id', 'turn']);
-      const started = Date.now();
       const out = await change(agent, args.match_id, (m) => ({ r: autopilot(m, { turn: Number(args.turn), now: new Date().toISOString() }), m }));
-      await padFrom(started);
       return { ...out.r, view: viewFor(out.m) };
     },
   },
