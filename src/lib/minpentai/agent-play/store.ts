@@ -45,9 +45,10 @@ export async function save(m: SoloMatch, version: number): Promise<void> {
   if (!rows.length) throw new StoreError('the match changed while this call ran; try again');
 }
 
-export async function listFor(person: number, limit = 20): Promise<{ id: string; ruleset: string; level: number; over: boolean; updated_at: string }[]> {
+/** A person's matches, newest first by when they started (not by last save: a save of the computer's plan must not move a match in the list). */
+export async function listFor(person: number, limit = 20): Promise<{ id: string; ruleset: string; level: number; over: boolean; created_at: string }[]> {
   const sql = need();
-  return await sql`select id, ruleset, level, over, updated_at from studio.mp_agent_matches where person = ${person} order by updated_at desc limit ${limit}`;
+  return await sql`select id, ruleset, level, over, created_at from studio.mp_agent_matches where person = ${person} order by created_at desc limit ${limit}`;
 }
 
 /** Live (unfinished) matches a person has: at most 5 at once. */
