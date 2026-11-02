@@ -103,7 +103,7 @@ if (STARTING_STYLE_FILE !== STYLE_FILE) throw new Error('the starting style file
 /** The style's two samples: the scene renders of the style test that chose Techno vistas (style-test-2, AE3). */
 const SAMPLE_IDS = ['ae3-techno-vistas-c1-b005-toy-drone', 'ae3-techno-vistas-c2-b003-street'];
 const LOCAL_ENDPOINT = (m: Record<string, unknown>) => `local: ${m.runtime} ${m.mflux_version}, ${m.repo} @ ${String(m.revision).slice(0, 12)}, ${m.quantize_bits}-bit`;
-const NOT_RUN = { prompt: { model: 'none', verdict: 'not run' }, host_safety_checker: 'not run' } as unknown as DesignPicture['recipe']['checks'];
+const NOT_RUN = { prompt: { model: 'none', verdict: 'not run' }, host_safety_checker: 'not run' } as unknown as DesignPicture['recipe']['checks']; // typed honestly once design-page-recipe-lines is merged
 
 interface Pic { slot: string; bytes: Buffer; sha256: string; key: string; recipe: DesignPicture['recipe']; from: string; notes: string[] }
 
@@ -123,7 +123,7 @@ async function samplePics(): Promise<Pic[]> {
         prompt: r.prompt, model: 'flux2-klein-4b', endpoint: LOCAL_ENDPOINT(test2.model), host: 'local (the maintainer\'s computer)',
         settings: { ...test2.settings, converted: { from: 'png', sha256: r.sha256, to: 'jpeg', quality: 92, note: 'converted for the site; no model' } },
         seed: r.seed, request_id: null, cost_usd: 0, made_at: test2.generated_at, width: r.width, height: r.height,
-        ...(r.references?.length ? { references: r.references.map((x) => ({ sha256: x.sha256 })) } : {}),
+        ...(r.references?.length ? { references: r.references.map((x) => ({ sha256: x.sha256, what: `a reference picture from the same style test (${x.file})` })) } : {}),
         checks: NOT_RUN,
         assist: { model: 'claude-coding-agent', drafted: ['style text', 'image prompt'], source: 'content/snowmoon/recipes/images/style-test-2.json' },
       },
@@ -145,7 +145,8 @@ async function viewPic(c: string, slot: Slot, src: Source, styleVersionId: strin
     const bytes = readFileSync(path.join(DRAFTS, e.file));
     if (sha(bytes) !== e.sha256) throw new Error(`${c} ${slot} v2: file changed`);
     if (e.recipe.style!.text !== styleV2Text) throw new Error('v2 style text unexpected');
-    const recipe = { ...e.recipe, style: { version_id: styleVersionId, title: 'Techno vistas (for views, without its scenery clauses)', text: e.recipe.style!.text } };
+    const references = slot === 'front' ? (e.recipe.references ?? []).map((x) => (x.sha256 === r.sha256 ? { ...x, what: `the original starting sheet (content/snowmoon/recipes/images/cast.json#${r.id})` } : x)) : e.recipe.references;
+    const recipe = { ...e.recipe, ...(references ? { references } : {}), style: { version_id: styleVersionId, title: 'Techno vistas (for views, without its scenery clauses)', text: e.recipe.style!.text } };
     return { slot, bytes, sha256: e.sha256, key: keyFor(e.sha256), recipe, from: e.file, notes: slot === 'front' ? ['made from the original sheet (references: its sha256), not from text'] : [] };
   }
   if (src === 'v1') {
@@ -157,7 +158,7 @@ async function viewPic(c: string, slot: Slot, src: Source, styleVersionId: strin
       notes: ['first draft: the site\'s prompt check did not run (fal\'s safety checker did)', 'made from the original sheet'],
       recipe: {
         prompt: e.prompt, model: 'flux2-klein-4b-edit', endpoint: 'fal-ai/flux-2/klein/4b/edit', host: 'fal.ai', settings: e.settings, seed: e.seed, request_id: e.requestId,
-        cost_usd: Number(e.listUsd.toFixed(4)), made_at: e.at, width: 576, height: 768, references: [{ sha256: e.reference.sha256 }],
+        cost_usd: Number(e.listUsd.toFixed(4)), made_at: e.at, width: 576, height: 768, references: [{ sha256: e.reference.sha256, what: `the original starting sheet (content/snowmoon/recipes/images/cast.json#${r.id})` }],
         style: { version_id: styleVersionId, title: style.name, text: style.prompt },
         checks: { prompt: { model: 'none', verdict: 'not run' }, host_safety_checker: 'passed' } as unknown as DesignPicture['recipe']['checks'],
         assist: SAMPLE_ASSIST as unknown as DesignPicture['recipe']['assist'],
@@ -203,6 +204,8 @@ function sheetText(c: string, p: Record<Slot, Source>): string {
 function pageProblems(pics: Pic[]): string[] {
   const page = read('src/app/references/designs/[id]/page.tsx');
   const out: string[] = [];
+  // Since branch design-page-recipe-lines, every line comes from the recipe (src/lib/images/recipe-lines.ts): nothing fixed to misdescribe.
+  if (/howMade\(p\.recipe/.test(page)) return out;
   for (const p of pics) {
     const r = p.recipe as unknown as { checks: { prompt: { verdict: string }; host_safety_checker: string }; host: string; model: string; references?: unknown[] };
     if (/Checked by gpt-oss-safeguard-20b and the host&apos;s safety checker/.test(page) && (r.checks.prompt.verdict !== 'ok' || r.checks.host_safety_checker !== 'passed'))

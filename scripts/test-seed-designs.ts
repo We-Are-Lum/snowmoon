@@ -60,6 +60,13 @@ check('the dry run plans the style and six sheets', /== 1\. Style: Techno vistas
 check('the dry run lists 20 uploads (2 samples, 18 views)', (dry.stdout.match(/images\/readers\/[0-9a-f]{32}\.jpg {2}sha256/g) ?? []).length === 20);
 check('the dry run reports the page lines that block a real --apply', /BLOCKS --apply/.test(dry.stdout));
 
+// With every view v2: blocked only while the design page prints fixed lines (fixed on branch design-page-recipe-lines).
+const allV2 = path.join(tmp, 'all-v2.json');
+writeFileSync(allV2, JSON.stringify({ zei: 'v2', bai: 'v2', gladias: 'v2', seila: 'v2', deluin: 'v2', mu: 'v2' }));
+const dryV2 = await run(`--picks=${allV2}`);
+const pageReadsRecipes = /howMade\(p\.recipe/.test(read('src/app/references/designs/[id]/page.tsx'));
+check(pageReadsRecipes ? 'all-v2 picks: nothing blocks --apply (the page reads each recipe)' : 'all-v2 picks: blocked while the page prints fixed lines', pageReadsRecipes ? !/BLOCKS --apply/.test(dryV2.stdout) : /BLOCKS --apply: 10 lines/.test(dryV2.stdout), dryV2.stdout.slice(-600));
+check('all-v2 picks: each front names the original sheet as what it was made from', (dryV2.stdout.match(/"what": "the original starting sheet \(content\/snowmoon\/recipes\/images\/cast\.json#[a-z]+-sheet\)"/g) ?? []).length === 6);
 const refused = await run('--apply', `--picks=${picksFile}`);
 check('--apply without --confirm-owner-go refuses', refused.status === 2 && /Nothing done/.test(refused.stderr));
 const refused2 = await run('--apply', '--confirm-owner-go');
