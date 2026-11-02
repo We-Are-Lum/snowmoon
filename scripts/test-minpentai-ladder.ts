@@ -23,7 +23,9 @@ const arg = (name: string) => { const i = process.argv.indexOf(name); return i >
 const N = Number(arg('--n') ?? 40);
 const MARGIN = 0.53;
 /** Pairs [lower, higher] asserted only "not easier" (see the header). */
-const OPEN: [number, number][] = [[3, 4]];
+// Rungs 3-5 are OPEN since 2026-10-22: with the tower cap at 10 they all keep building and play about
+// evenly (46-51% against each other), which the owner accepted until the search players replace them.
+const OPEN: [number, number][] = [[3, 4], [3, 5], [4, 5]];
 
 const rx = (x: number) => W - 1 - x, ry = (y: number) => H - 1 - y, swap = (o: Side): Side => (o === 'C' ? 'A' : 'C');
 const rk = (k: number) => { const [x, y] = XY(k); return K(rx(x), ry(y)); };
@@ -92,4 +94,4 @@ for (let lo = 1; lo <= 5; lo++) for (let hi = lo + 1; hi <= 5; hi++) {
 }
 console.log(`${Math.round((Date.now() - t0) / 1000)} s`);
 if (failures.length) { console.error('FAILED\n' + failures.join('\n')); process.exit(1); }
-console.log('ladder: every rung is harder than the one below it (one pair open)');
+console.log('ladder: every rung is harder than the one below it (rungs 3-5 open: not easier only)');

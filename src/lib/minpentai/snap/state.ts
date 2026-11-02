@@ -10,6 +10,7 @@
  */
 import { createHash, createHmac, timingSafeEqual } from 'node:crypto';
 import { RULE_IDS, type Piece, type RuleId } from '../play-game/game';
+import { rulesetId, type RulesetId } from '../versions/solo-v1';
 import { RESULT_RE } from './challenge';
 import { decList, encList, type P } from './moves';
 
@@ -39,19 +40,23 @@ export interface SnapState {
   taps: number;
   /** Resigned at the current turn to act. */
   resigned: boolean;
+  /** The ruleset (solo-v1.ts RULESETS). Written only when it isn't 1, so a token made before rulesets were
+   * numbered reads as 1 and every 1 token is unchanged. */
+  rs: RulesetId;
 }
 
 export function serialize(s: SnapState): string {
   return [
     s.fid, s.seed.toString(36), s.lvl, s.ver, s.rule, s.ch, s.tool, s.aim + 1, s.taps, s.resigned ? 1 : 0, s.turns.length,
-    s.turns.map(encList).join('~'), encList(s.pend),
+    s.turns.map(encList).join('~'), encList(s.pend), ...(s.rs !== 1 ? [s.rs] : []),
   ].join('.');
 }
 
 export function parse(text: string): SnapState | null {
   const f = text.split('.');
-  if (f.length !== 13) return null;
+  if (f.length !== 13 && !(f.length === 14 && f[13] === '2')) return null;
   const [fid, seed, lvl, ver, rule, ch, tool, aim, taps, res, nT, turnsText, pendText] = f;
+  const rs = rulesetId(f[13]);
   const num = (v: string) => (/^\d{1,10}$/.test(v) ? Number(v) : NaN);
   const st = {
     fid: num(fid), seed: /^[0-9a-z]{1,7}$/.test(seed) ? parseInt(seed, 36) : NaN, lvl: num(lvl), ver, rule: rule as RuleId | '', ch,
@@ -68,7 +73,7 @@ export function parse(text: string): SnapState | null {
   const turns = lists.map(decList);
   const pend = decList(pendText);
   if (turns.some((t) => !t) || !pend) return null;
-  return { ...st, turns: turns as P[][], pend };
+  return { ...st, turns: turns as P[][], pend, rs };
 }
 
 let cachedKey: Buffer | null = null;
@@ -96,12 +101,12 @@ export function verified(text: string | null, sig: string | null): boolean {
 /** The finished part of a match, for its run pictures: no FID, no pending pieces, so the same run
  * has one address whoever asks. `upTo` turns, the last of which led to the run shown. */
 export function runToken(s: SnapState, upTo: number): string {
-  return [s.seed.toString(36), s.lvl, s.ver, s.rule, upTo, s.turns.slice(0, upTo).map(encList).join('~'), s.resigned ? 1 : 0].join('.');
+  return [s.seed.toString(36), s.lvl, s.ver, s.rule, upTo, s.turns.slice(0, upTo).map(encList).join('~'), s.resigned ? 1 : 0, ...(s.rs !== 1 ? [s.rs] : [])].join('.');
 }
-export function parseRunToken(text: string): { seed: number; lvl: number; ver: string; rule: RuleId | ''; turns: P[][]; resigned: boolean } | null {
+export function parseRunToken(text: string): { seed: number; lvl: number; ver: string; rule: RuleId | ''; turns: P[][]; resigned: boolean; rs: RulesetId } | null {
   const f = text.split('.');
-  if (f.length !== 7) return null;
+  if (f.length !== 7 && !(f.length === 8 && f[7] === '2')) return null;
   const [seed, lvl, ver, rule, nT, turnsText, res] = f;
   const s = parse(['0', seed, lvl, ver, rule, '', 'g', '0', '0', res, nT, turnsText, ''].join('.'));
-  return s && { seed: s.seed, lvl: s.lvl, ver: s.ver, rule: s.rule, turns: s.turns, resigned: s.resigned };
+  return s && { seed: s.seed, lvl: s.lvl, ver: s.ver, rule: s.rule, turns: s.turns, resigned: s.resigned, rs: rulesetId(f[7]) };
 }
