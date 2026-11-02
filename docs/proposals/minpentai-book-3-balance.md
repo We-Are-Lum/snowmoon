@@ -34,8 +34,15 @@ Matches out of 20 in which both sides used the piece. Level 2 / level 3.
 | **P** cap 6 counting symbols; symbol 2, mirror 1, wall 4, factory 2; factories every 4 | 4 / 7 | 20 / 20 | 15 / 16 | 2 / 1 | 19 / 17 |
 | Q as P, cap 8 | 5 / 2 | 17 / 20 | 16 / 17 | 0 / 1 | 16 / 19 |
 | S as P, gliders cost 3 | 4 / 7 | 20 / 20 | 15 / 16 | 2 / 1 | 19 / 17 |
+| **T** P + tie-break | 4 / 7 | 20 / 20 | 15 / 16 | 2 / 1 | **7 / 0** |
+| U T + a rock two squares east of each starting tower | 11 / 17 | 20 / 20 | 17 / 18 | 0 / 0 | 20 / 20 |
 
-Note: variant S came out identical to P in every count, which suggests the glider cost may not have taken effect under this runner. Unverified; checking it is part of step 1 of the next steps.
+Variant S checked (2026-11-01, second pass): S lowers the plain glider's cost (4 to 3), not the symbol glider's. The computer places half a plain glider a match under P at level 2, so the change doesn't reach its choices: identical counts are what it plays, not a fault in the runner.
+
+**Round 4 (owner, 2026-11-01: "take variant P as the draft; test the tie-break and factory rocks near each start; skip the mirror term").**
+- **Tie-break (T):** the computer plays exactly as under P (its score doesn't count towers destroyed, so the same moves), and the tie-break settles the level matches: of the 20 at level 2, 12 are won on it and 7 stay drawn; at level 3, 17 are won on it and none drawn.
+- **Rocks by the start (U):** a rock at (3, 3) and (3, 10), and Amber's turned. Factories still aren't built (0 of 20 at both levels), and the rocks shield the starting towers: no tower falls, every match is drawn, tie-break or not. Mirrors are used far more (17 of 20 at level 3), but a board where nothing falls isn't a game. Not taken.
+- **The mirror term in the computer's score:** skipped, as you asked.
 
 ## What it says
 
@@ -50,17 +57,21 @@ Note: variant S came out identical to P in every count, which suggests the glide
    - This is partly the computer, not only the rules: its look-ahead is at most 18 steps past the next turn.
 6. **Caps make draws.** With a cap of 6, most matches end level at the step limit (16–19 of 20). A cap needs a tie-break.
 
-## Recommendation: book-3 = P, plus a tie-break, then a second look at mirrors and factories
+## Recommendation: book-3 = P plus the tie-break (variant T), book-1's rocks
 
 Rules (all this edition's):
 - **Tower cap 6, symbols included:** a symbol doesn't form past the cap.
 - **Costs:** mirror 1, symbol glider 2, moving wall 4, factory 2. Glider, square and tower unchanged.
 - **Factories fire on their own every 4 steps** while their rock has ore (still also when a glider hits the rock).
-- **New, not yet tested: a tie-break at the step limit.** With equal towers, the side that destroyed more enemy pieces wins. That rewards walls and mirrors that send gliders back.
+- **Tie-break at the step limit (tested, variant T):** with towers level, the side that destroyed more enemy towers wins; equal is a draw.
+- **Rocks:** book-1's.
 
-With P, the unforced computer already chooses moving walls and symbol gliders on its own. Mirrors and factories are not there yet. My next steps, if you want them:
-1. Measure the tie-break, and check the glider-cost result above.
-2. Put two factory rocks next to each side's starting towers (rock layout is a rules choice), so a factory is placeable from the first turn.
-3. Give the computer's score a small term for a glider that ends its run turned back toward the enemy (a mirror's worth), so it can see what a mirror does. That's a computer change, measured the same way.
+With T, the unforced computer chooses moving walls and symbol gliders on its own, and mirrors in a third of its matches at level 3. It still almost never builds a factory. That's for you to judge by playing: people may value mirrors and factories more than the computer can.
+
+**In agent play, for you only:** book-3 is a draft ruleset. Start it by name (`ruleset: "book-3"`); new Rocks and Mirrors matches stay book-2. Only the people in `AGENTS.minpentaiPlay.drafts` can start it, and that's you. The view tells your Claude the limits (6 towers with symbols counted, factories every 4 steps, the tie-break). The computer is the plain search, unforced.
+
+Open points for you:
+- **Symbol gliders are still heavy:** 17 to 34 a side a match, against 4 to 6 towers.
+- **The tie-break in the computer's score:** the computer doesn't aim for the tie-break. Adding towers destroyed to its score at the last step would be a computer change, measured the same way.
 
 None of this is merged. book-2 stays live (the computer that is made to use all four pieces), and book-1 records keep replaying. book-3 would be a new ruleset id, so book-1 and book-2 records keep their rules.

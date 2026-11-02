@@ -251,7 +251,9 @@ export const AGENTS = {
   // Switched OFF 2026-11-01 (owner: "if anything leaks, switch agent play off and tell me"): in production, at level 3,
   // a final submit's time still grew with the computer's hidden towers (1.0 to 1.8 s against a 400 ms pad). Back on
   // when the fix is in and the live check passes. Was [6786, -23].
-  minpentaiPlay: { people: [] as readonly number[] },
+  // drafts: who may start a draft ruleset by name (agent-play/solo.ts DRAFTS), book-3 (owner, 2026-11-01: "make book-3
+  // available to me in agent play once it's back on, so I can judge it by playing").
+  minpentaiPlay: { people: [] as readonly number[], drafts: [6786] as readonly number[] },
   /** At most this many live agents per person (also a database trigger). */
   perPerson: 3,
   /**

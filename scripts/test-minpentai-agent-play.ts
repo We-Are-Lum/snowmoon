@@ -15,7 +15,8 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { isDeepStrictEqual } from 'node:util';
-import { CURRENT, autopilot, checkComputer, ordersText, linkOpens, newSolo, parseOrders, recordOf, replay, resign, rulesOf, setStanding, simulate, SoloError, submit, viewFor, type SoloMatch } from '../src/lib/minpentai/agent-play/solo';
+import { verdict } from '../src/lib/minpentai/versions/engine';
+import { CURRENT, DRAFTS, autopilot, checkComputer, ordersText, linkOpens, newSolo, parseOrders, recordOf, replay, resign, rulesOf, setStanding, simulate, SoloError, submit, viewFor, type SoloMatch } from '../src/lib/minpentai/agent-play/solo';
 
 let checks = 0;
 const ok = (cond: unknown, what: string) => { checks++; assert.ok(cond, what); };
@@ -188,6 +189,28 @@ playOut('play', 202);
   const u2 = usedBy(two);
   ok(['m', 'e', 'w', 'f'].filter((t) => u2.has(t as never)).length >= 3, `the book-2 computer uses the book's pieces (${[...u2].join('')})`);
   ok(CURRENT.book === 'book-2', 'new Rocks and Mirrors matches are book-2');
+}
+
+// ---------- 6. book-3 (draft): variant P plus the tie-break; started only by name, by the people it's opened to ----------
+{
+  const three = newSolo({ id: 'tbook3000001', ruleset: 'book-3', level: 2, seed: 78, person: 6786, agent: { id: null, name: 'Rook', model: null }, now: now() }).m;
+  const v3 = viewFor(three) as Record<string, unknown>, v1 = viewFor(newSolo({ id: 'tbook1000002', ruleset: 'book-1', level: 2, seed: 78, person: 6786, agent: { id: null, name: 'Rook', model: null }, now: now() }).m) as Record<string, unknown>;
+  ok(v3.towers_at_most === 6 && v3.symbols_count_toward_the_cap === true && v3.factories_fire_every_steps === 4 && typeof v3.tie_break === 'string', 'the book-3 view says its limits: 6 towers, symbols counted, factories every 4 steps, the tie-break');
+  ok(!('towers_at_most' in v1) && !('tie_break' in v1), 'a book-1 view is unchanged');
+  ok(isDeepStrictEqual(v3.costs, { glider: 4, square: 1, tower: 4, mirror: 1, symbol_glider: 2, moving_wall: 4, factory: 2 }), `book-3's costs (${JSON.stringify(v3.costs)})`);
+  while (!three.end) submit(three, { turn: three.turn, placements: parseOrders(scripted(three), rulesOf(three).s), source: 'agent', final: true, now: now() });
+  ok(checkComputer(json(three)).length === 0, 'a book-3 match plays to the end and replays with its computer');
+  const { e, s } = rulesOf(three);
+  ok(Object.values(three.w.tw).filter((o) => o === 'A').length <= 6 && Object.values(three.w.tw).filter((o) => o === 'C').length <= 6, 'no side ever holds more than 6 towers');
+  // The tie-break, on the final board: towers level at the last step.
+  const w = e.clone(three.w);
+  w.step = s.maxSteps;
+  w.tw = { ...e.world(s).tw }; // each side on its starting towers
+  const nC = e.towers(w, 'C').length, nA = e.towers(w, 'A').length;
+  const lv = e.towers(w, 'C').length === e.towers(w, 'A').length;
+  ok(lv && verdict(e, w, s, { C: 2, A: 1 }) === 'C' && verdict(e, w, s, { C: 1, A: 3 }) === 'A' && verdict(e, w, s, { C: 2, A: 2 }) === 'D', `with towers level at the last step, more enemy towers destroyed wins; equal is a draw (${nC}/${nA})`);
+  ok(verdict(e, w, rulesOf(newSolo({ id: 'tbook1000003', ruleset: 'book-1', level: 2, seed: 78, person: 6786, agent: { id: null, name: 'Rook', model: null }, now: now() }).m).s, { C: 2, A: 1 }) === 'D', 'under book-1 the same board is a draw');
+  ok(CURRENT.book === 'book-2' && DRAFTS.includes('book-3'), 'new Rocks and Mirrors matches stay book-2; book-3 is a draft');
 }
 
 console.log(`minpentai agent play: ${checks} checks passed`);

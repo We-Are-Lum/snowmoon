@@ -1,9 +1,9 @@
 import 'server-only';
 import { ToolInputError } from '../../agent/tools';
-import { appUrl } from '../../config';
+import { AGENTS, appUrl } from '../../config';
 import { playFor, type Agent } from '../../agents/core';
 import type { AgentTool } from '../../agents/tools';
-import { CURRENT, autopilot, linkOpens, newSolo, parseOrders, recordOf, resign, rulesOf, setStanding, simulate, SoloError, submit, viewFor, type ModelClaim, type SoloMatch } from './solo';
+import { CURRENT, DRAFTS, autopilot, linkOpens, newSolo, parseOrders, recordOf, resign, rulesOf, setStanding, simulate, SoloError, submit, viewFor, type ModelClaim, type RulesetName, type SoloMatch } from './solo';
 import { insert, listFor, liveCount, load, newId, newSeed, save, StoreError } from './store';
 import { randomBytes, createHash } from 'node:crypto';
 
@@ -73,18 +73,19 @@ const PLACEMENTS = {
 export const MINPENTAI_TOOLS: AgentTool[] = [
   {
     name: 'minpentai_start_solo', title: 'Start a Minpentai match against the site computer', scope: 'play', writes: true, counts: 'reads',
-    description: 'Starts a match for your person (Cyan) against the site computer (Amber), on the book edition (default) or Play\'s rules, at level 0 (the beginner) to 3. Returns the match, your side\'s first view, and a live link that shows your person their side only (shown once: give it to your person). Your person decides; you advise and place what they agree to. Rules invented for this edition, not the book\'s.',
-    inputSchema: { type: 'object', properties: { ruleset: { enum: ['book', 'play'] }, level: { type: 'integer', minimum: 0, maximum: 3 }, model: MODEL }, additionalProperties: false },
+    description: 'Starts a match for your person (Cyan) against the site computer (Amber), on the book edition (default) or Play\'s rules (or "book-3", a draft of the book edition\'s rebalanced rules, open only to the people it\'s shown to), at level 0 (the beginner) to 3. Returns the match, your side\'s first view, and a live link that shows your person their side only (shown once: give it to your person). Your person decides; you advise and place what they agree to. Rules invented for this edition, not the book\'s.',
+    inputSchema: { type: 'object', properties: { ruleset: { enum: ['book', 'play', ...(DRAFTS as string[])] }, level: { type: 'integer', minimum: 0, maximum: 3 }, model: MODEL }, additionalProperties: false },
     async run(agent, args) {
       on(agent);
       only(args, ['ruleset', 'level', 'model']);
       const ruleset = args.ruleset === undefined ? 'book' : args.ruleset;
       const level = args.level === undefined ? 2 : args.level;
-      if (ruleset !== 'book' && ruleset !== 'play') throw new ToolInputError('ruleset must be "book" or "play"');
+      const draft = (DRAFTS as unknown[]).includes(ruleset) && AGENTS.minpentaiPlay.drafts.includes(agent.person);
+      if (ruleset !== 'book' && ruleset !== 'play' && !draft) throw new ToolInputError('ruleset must be "book" or "play"');
       if (!Number.isInteger(level) || (level as number) < 0 || (level as number) > 3) throw new ToolInputError('level must be 0 (the beginner) to 3');
       const started = Date.now();
       if ((await liveCount(agent.person)) >= MAX_LIVE) throw new ToolInputError(`your person already has ${MAX_LIVE} live matches; finish or resign one first`);
-      const { m, linkSecret } = guard(() => newSolo({ id: newId(), ruleset: CURRENT[ruleset], level: level as number, seed: newSeed(), person: agent.person, agent: { id: agent.id, name: agent.name, model: modelOf(args.model) }, now: new Date().toISOString() }));
+      const { m, linkSecret } = guard(() => newSolo({ id: newId(), ruleset: draft ? (ruleset as RulesetName) : CURRENT[ruleset as 'book' | 'play'], level: level as number, seed: newSeed(), person: agent.person, agent: { id: agent.id, name: agent.name, model: modelOf(args.model) }, now: new Date().toISOString() }));
       await insert(m);
       await padFrom(started);
       return { match_id: m.id, side: 'Cyan', live_url: liveUrl(m.id, linkSecret), view: viewFor(m) };

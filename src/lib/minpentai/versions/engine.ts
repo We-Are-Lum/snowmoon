@@ -662,7 +662,7 @@ export function verdict(e: Engine, w: World, s: Settings, kills: Kills = { C: 0,
   if (!nc && !na) return 'D';
   if (!nc) return 'A';
   if (!na) return 'C';
-  if (w.step >= s.maxSteps) return nc > na ? 'C' : na > nc ? 'A' : 'D';
+  if (w.step >= s.maxSteps) return nc > na ? 'C' : na > nc ? 'A' : s.tieBreak && kills.C !== kills.A ? (kills.C > kills.A ? 'C' : 'A') : 'D';
   return null;
 }
 

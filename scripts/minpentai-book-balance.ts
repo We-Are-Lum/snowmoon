@@ -6,6 +6,7 @@
 import { playSearchMatch, searchPlayer } from '../src/lib/minpentai/versions/search';
 import { BOOK_EDITION } from '../src/lib/minpentai/versions/book-edition';
 const C = { costMirror: 1, costSeed: 1, costWall: 4, costFactory: 2 };
+const P = { maxTowers: 6, symbolsCapped: 1, costMirror: 1, costSeed: 2, costWall: 4, costFactory: 2, factoryEvery: 4 };
 const VARIANTS: Record<string, Record<string, number>> = {
   'A book-1 as is': {},
   // Round 1 (40 runs at levels 2 and 3, 20 matches each).
@@ -27,18 +28,24 @@ const VARIANTS: Record<string, Record<string, number>> = {
   'P cap 6 incl. symbols, symbol 2, mirror 1, wall 4, factory 2, factories every 4': { maxTowers: 6, symbolsCapped: 1, costMirror: 1, costSeed: 2, costWall: 4, costFactory: 2, factoryEvery: 4 },
   'Q as P, cap 8': { maxTowers: 8, symbolsCapped: 1, costMirror: 1, costSeed: 2, costWall: 4, costFactory: 2, factoryEvery: 4 },
   'S as P, gliders cost 3': { maxTowers: 6, symbolsCapped: 1, costMirror: 1, costSeed: 2, costWall: 4, costFactory: 2, factoryEvery: 4, costGlider: 3 },
+  // Round 4 (owner, 2026-11-01: "take variant P as the draft; test the tie-break and factory rocks near each start").
+  'T P + tie-break': { ...P, tieBreak: 1 },
+  'U P + tie-break + rocks by the start': { ...P, tieBreak: 1 },
 };
+/** Variants that move rocks: a rock two squares east of each starting tower, so a factory stands against it from turn 1. */
+const ROCKS: Record<string, [number, number][]> = { 'U P + tie-break + rocks by the start': [...(BOOK_EDITION.rocksAt ?? []), [3, 3], [3, 10]] };
 const [name, lvlArg, nArg] = process.argv.slice(2);
 const patch = VARIANTS[name], lvl = Number(lvlArg), N = Number(nArg);
-const v = { ...BOOK_EDITION, set: { ...BOOK_EDITION.set, ...patch } };
+const v = { ...BOOK_EDITION, set: { ...BOOK_EDITION.set, ...patch }, rocksAt: ROCKS[name] ?? BOOK_EDITION.rocksAt };
 const both: Record<string, number> = { m: 0, e: 0, w: 0, f: 0 }, per: Record<string, number> = {};
-let draws = 0, matches = 0, all4 = 0;
+let draws = 0, matches = 0, all4 = 0, tieBroken = 0;
 for (let seed = 1; seed <= N; seed++) {
   const m = playSearchMatch(v, () => ({ C: searchPlayer(lvl), A: searchPlayer(lvl) }), seed);
   matches++;
   if (m.win === 'D') draws++;
+  if (m.win !== 'D' && m.step >= v.set.maxSteps! && m.towersLeft && m.towersLeft.C === m.towersLeft.A) tieBroken++;
   for (const t of ['m', 'e', 'w', 'f']) { if (m.placed.C[t] && m.placed.A[t]) both[t]++; per[t] = (per[t] ?? 0) + (m.placed.C[t] ?? 0) + (m.placed.A[t] ?? 0); }
   if (['m', 'e', 'w', 'f'].every((t) => m.placed.C[t] && m.placed.A[t])) all4++;
   for (const t of ['t', 'g', 's']) per[t] = (per[t] ?? 0) + (m.placed.C[t] ?? 0) + (m.placed.A[t] ?? 0);
 }
-console.log(JSON.stringify({ name, lvl, matches, draws, all4, both, perMatch: Object.fromEntries(Object.entries(per).map(([k, c]) => [k, +(c / matches / 2).toFixed(1)])) }));
+console.log(JSON.stringify({ name, lvl, matches, draws, tieBroken, all4, both, perMatch: Object.fromEntries(Object.entries(per).map(([k, c]) => [k, +(c / matches / 2).toFixed(1)])) }));
