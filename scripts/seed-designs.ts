@@ -11,6 +11,8 @@
  *   npm run seed:designs                                     dry run, assuming v2 for every view
  *   npm run seed:designs -- --picks=picks.json               dry run with the owner's picks
  *   npm run seed:designs -- --apply --picks=picks.json --confirm-owner-go     write it (after the owner's go)
+ *   npm run seed:designs -- --apply --style-only --confirm-owner-go           the style alone, before the picks (owner,
+ *                                                                             2026-11-02: the style goes up before the sheets)
  *
  * picks.json: { "zei": "v2", "bai": "v1", "mu": { "front": "v2", "side": "original", "back": "v2" }, … } for all six;
  * each value "v2" (the redone views), "v1" (the first drafts) or "original" (a crop of the original sheet, no model).
@@ -52,8 +54,11 @@ const DRAFTS = arg('drafts') || '/Users/nathan/snowmoon-starting-drafts';
 const SAMPLES_DIR = arg('samples') || '/Users/nathan/Library/CloudStorage/GoogleDrive-geko5443@gmail.com/My Drive/Snowmoon images/style test 2';
 const STORAGE_DIR = arg('storage-dir');
 const PICKS_FILE = arg('picks');
+const STYLE_ONLY = has('style-only');
 /** Mirrors CHALLENGE on branch remix-challenge (characters, in the owner's order; dates.opens). */
-const CHARACTERS = ['zei', 'bai', 'gladias', 'seila', 'deluin', 'mu'] as const;
+const ALL_CHARACTERS = ['zei', 'bai', 'gladias', 'seila', 'deluin', 'mu'] as const;
+/** With --style-only, no sheets: the style goes up first, the sheets after the owner's picks. */
+const CHARACTERS: readonly (typeof ALL_CHARACTERS)[number][] = STYLE_ONLY ? [] : ALL_CHARACTERS;
 const OPENS = '2026-11-06T17:00:00Z';
 const SHEET_TITLE = 'Starting point';
 const STYLE_FILE = 'content/snowmoon/designs/styles/techno-vistas.json';
@@ -64,8 +69,8 @@ type Source = 'v2' | 'v1' | 'original';
 const SLOTS: Slot[] = ['front', 'side', 'back'];
 
 // ---- Refusals before anything else ----
-if (APPLY && !(PICKS_FILE && has('confirm-owner-go'))) {
-  console.error('--apply needs both --picks=<file> (the owner\'s picks) and --confirm-owner-go. Nothing done.');
+if (APPLY && !((PICKS_FILE || STYLE_ONLY) && has('confirm-owner-go'))) {
+  console.error('--apply needs --confirm-owner-go and either --picks=<file> (the owner\'s picks) or --style-only. Nothing done.');
   process.exit(2);
 }
 if (APPLY && new Date() >= new Date(OPENS)) {
@@ -86,7 +91,7 @@ const picks: Record<string, Record<Slot, Source>> = {};
     const o = v as Record<string, unknown> | undefined;
     picks[c] = typeof v === 'string' ? { front: one(v), side: one(v), back: one(v) } : { front: one(o?.front), side: one(o?.side), back: one(o?.back) };
   }
-  if (raw) for (const k of Object.keys(raw)) if (!(CHARACTERS as readonly string[]).includes(k)) throw new Error(`picks: unknown character ${k}`);
+  if (raw) for (const k of Object.keys(raw)) if (!(ALL_CHARACTERS as readonly string[]).includes(k)) throw new Error(`picks: unknown character ${k}`);
 }
 
 // ---- Inputs from the repository and the drafts folder ----

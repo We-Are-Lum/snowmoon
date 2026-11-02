@@ -75,6 +75,11 @@ check('--apply without --picks refuses', refused2.status === 2);
 const prodStandIn = await exec(['--db=postgres://x@db.example.com:6543/postgres', `--storage-dir=${storage}`]);
 check('the stand-in storage refuses a remote database', prodStandIn.status !== 0 && /local test database only/.test(prodStandIn.stderr));
 
+// The style alone first (owner, 2026-11-02: the style goes up before the sheets, without picks).
+const styleOnly = await run('--apply', '--style-only', '--confirm-owner-go', `--storage-dir=${storage}`);
+check('--style-only --apply exits 0', styleOnly.status === 0, (styleOnly.stderr || styleOnly.stdout).slice(-800));
+const afterStyle = await counts();
+check('--style-only wrote only the style: 1 entity, 1 element, 1 version, its 2 samples', afterStyle.entities - zero.entities === 1 && afterStyle.elements - zero.elements === 1 && afterStyle.versions - zero.versions === 1 && files().length === 2, JSON.stringify(afterStyle));
 const first = await run('--apply', `--picks=${picksFile}`, '--confirm-owner-go', `--storage-dir=${storage}`);
 check('the first --apply exits 0', first.status === 0, (first.stderr || first.stdout).slice(-800));
 const one = await counts();
