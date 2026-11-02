@@ -27,6 +27,7 @@
     "test:images": "tsx --conditions=react-server scripts/test-images.ts && tsx --conditions=react-server scripts/test-images-gate.ts && tsx --conditions=react-server scripts/test-designs.ts",
     "test:images-gate": "tsx --conditions=react-server scripts/test-images-gate.ts",
     "test:designs": "tsx --conditions=react-server scripts/test-designs.ts",
+    "test:recipe-lines": "tsx --env-file-if-exists=.env.local scripts/test-recipe-lines.tsx",
     "check:real-payment": "tsx --conditions=react-server scripts/check-real-payment.ts",
     "test:db-swaps": "tsx --conditions=react-server scripts/test-db-swaps.ts",
     "test:support": "tsx scripts/test-support.ts",

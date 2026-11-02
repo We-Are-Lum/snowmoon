@@ -6,6 +6,7 @@ import { byline, designByline } from '~/lib/images/byline';
 import { wordDiff } from '~/lib/images/design-rules';
 import { bookCharacters, designByVersion, imagesBuiltOn, listDesigns, picturesOf } from '~/lib/images/designs';
 import { IMAGE_WORDING } from '~/lib/images/wording';
+import { howMade } from '~/lib/images/recipe-lines';
 import { placeTitle, sheetPlaces } from '~/lib/images/sheets';
 import { BookQuotes } from '~/components/design-book';
 import { DesignBar } from '~/components/design-bar';
@@ -160,10 +161,9 @@ export default async function DesignPage({ params }: Props) {
                   <pre className="recipe-prompt">{p.recipe.prompt}</pre>
                 </dd>
                 <dd className="ip-wide">
-                  {p.recipe.model === IMAGES.editModel.id ? IMAGES.editModel.name : IMAGES.model.name} ({p.recipe.model}), open weights, Apache-2.0, on {p.recipe.host}, endpoint{' '}
-                  <span className="recipe-mono">{p.recipe.endpoint}</span>. Seed {p.recipe.seed ?? 'not recorded'}, request {p.recipe.request_id ?? 'not recorded'}, cost ${p.recipe.cost_usd.toFixed(4)},{' '}
-                  {p.recipe.made_at.slice(0, 10)}. {p.recipe.references?.length ? 'Made from the front view. ' : ''}Checked by gpt-oss-safeguard-20b and the host&apos;s safety checker. The fixed
-                  subject line was drafted by the coding agent. File sha256 <span className="recipe-mono">{p.sha256}</span>.
+                  {howMade(p.recipe, p.sha256, body.views.front?.sha256 ?? null, p === body.views.front).map((run, k) =>
+                    run.mono ? <span key={k} className="recipe-mono">{run.text}</span> : <span key={k}>{run.text}</span>,
+                  )}
                 </dd>
               </div>
             ))}
