@@ -21,7 +21,7 @@ import { readdirSync, readFileSync } from 'node:fs';
 import { PGlite } from '@electric-sql/pglite';
 import { PGLiteSocketServer } from '@electric-sql/pglite-socket';
 import postgres from 'postgres';
-import { IMAGES } from '../src/lib/config';
+import { IMAGES, imagesDailySpendCapUsd } from '../src/lib/config';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const failures: string[] = [];
@@ -134,7 +134,7 @@ for (let i = 0; i < IMAGES.generationsPerDay + 1; i++) {
   if (r.ok) await settle(S, {});
 }
 check('FID 6786 is not stopped at the default count', (await generationsLeft(S, 6786)) === 300 - IMAGES.generationsPerDay - 1);
-await sql`insert into studio.image_costs (kind, model, provider, verdict, calls, cost_usd) values ('image', 'test', 'fal.ai', 'ok', 1, ${IMAGES.dailySpendCapUsd})`;
+await sql`insert into studio.image_costs (kind, model, provider, verdict, calls, cost_usd) values ('image', 'test', 'fal.ai', 'ok', 1, ${imagesDailySpendCapUsd()})`;
 const r3 = await reserve(S, 7);
 check('the day\'s spend cap stops a Generate', !r3.ok && r3.refusal === 'spend', JSON.stringify(r3));
 
