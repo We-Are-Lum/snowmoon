@@ -25,6 +25,20 @@ export const BOOK_EDITION: VersionRules = {
   rocksAt: ROCKS,
 };
 
+/**
+ * DRAFT, Rocks and Mirrors book-3 (owner, 2026-11-01: "take variant P as the draft"; design and preview only, open in
+ * agent play to the owner to judge by playing). book-1's board and pieces, rebalanced so the other pieces are worth
+ * buying (docs/proposals/minpentai-book-3-balance.md): at most 6 towers, symbols included; mirror 1, symbol glider 2,
+ * moving wall 4, factory 2; factories fire on their own every 4 steps while their rock has ore; at the last step with
+ * towers level, the side that destroyed more enemy towers wins. All this edition's.
+ */
+export const BOOK_3_DRAFT: VersionRules = {
+  set: { ...BOOK_EDITION.set, maxTowers: 6, symbolsCapped: 1, costMirror: 1, costSeed: 2, costWall: 4, costFactory: 2, factoryEvery: 4, tieBreak: 1 },
+  drawn: [],
+  // book-1's rocks. Rocks beside each start (tried, 2026-11-01) shielded the starting towers: every match a draw.
+  rocksAt: ROCKS,
+};
+
 export interface BookPieceText {
   id: 'm' | 'e' | 'w' | 'f';
   name: string;

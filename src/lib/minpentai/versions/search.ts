@@ -227,6 +227,9 @@ export interface SearchMatch {
   turns: { step: number; side: Side; steps: number; placed: string }[];
   /** How many of each piece each side placed. */
   placed: Record<Side, Record<string, number>>;
+  /** Towers left at the end, and towers each side destroyed. */
+  towersLeft?: Record<Side, number>;
+  kills?: Kills;
 }
 
 /**
@@ -268,7 +271,7 @@ export function playSearchMatch(v: VersionRules, planners: (real: () => World) =
       e.step(w, s, kills);
       e.updLS(w, s.sight, ls);
       const end = verdict(e, w, s, kills);
-      if (end) { out.win = end; out.step = w.step; return out; }
+      if (end) { out.win = end; out.step = w.step; out.towersLeft = { C: e.towers(w, 'C').length, A: e.towers(w, 'A').length }; out.kills = { ...kills }; return out; }
     } while (w.step - from < s.every);
   }
 }
