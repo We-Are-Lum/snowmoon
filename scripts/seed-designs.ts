@@ -266,7 +266,8 @@ say();
 const samples = await samplePics();
 let styleVersionId = before.style?.versionId ?? '<the new Techno vistas version id>';
 const styleBody = (s: DesignPicture[]): DesignBody => ({
-  title: style.name, text: style.prompt, samples: s, views: {}, by_name: BY_NAME, by_name_source: null, role: 'maintainer',
+  // Labelled "starting point" (owner, 2026-11-02); a style has no label field, so the label is in its title.
+  title: `${style.name} (starting point)`, text: style.prompt, samples: s, views: {}, by_name: BY_NAME, by_name_source: null, role: 'maintainer',
   assist: { model: 'claude-coding-agent', drafted: ['style text'], source: STYLE_FILE },
 });
 say('== 1. Style: Techno vistas ==');
