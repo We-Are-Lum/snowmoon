@@ -126,6 +126,56 @@ Two departures from a recipe made on the site, both because these were not made 
 
 Every background is now plain light grey, with a soft floor shadow and no skyline.
 
+## Publishing: `scripts/seed-designs.ts` (built 2026-11-01, dry run only; not applied)
+
+The owner's plan (2026-11-01): when he sends his picks, publish the Techno vistas style first, labelled as the starting point, with its samples, so the sheets' recipes can link to it; then the six sheets from his account (FID 6786), all before Fri 6 Nov, 09:00 Pacific (17:00 UTC). The script replaces the old style-only `seed-designs.ts` (which published the style with no samples).
+
+**What it does.** By default it does a dry run: it opens one read-only transaction (SELECTs only), then prints every R2 key and sha256 it would upload, every row with its full body and each picture's recipe, the order of the writes, what /challenge's "Sheets to start from" would list, and whether `created_at` falls before the window. With `--apply` it writes through the site's own functions: `putPublic` for each picture, then `makeDesign` (mode create) for the style and for each sheet, as FID 6786, `role: 'maintainer'`, byline `naaate`. `--apply` refuses unless both `--picks=<file>` and `--confirm-owner-go` are given. It also refuses from 17:00 UTC on 6 Nov, without the site's readers'-bucket settings, and if `R2_BUCKET` is the book's media bucket. That last case matters: the local `.env.local` points `R2_BUCKET` at `snowmoon-media` and lacks two of the site's storage settings, so production's storage settings are needed for the real run. It is idempotent: an existing starting style (found by `assist.source` = the style file) or an existing sheet (a version 1 by 6786 titled "Starting point", role maintainer, on that character) is skipped, and the sheets then link to the existing style.
+
+**Picks file:** `{ "zei": "v2", "bai": "v1", "mu": { "front": "v2", "side": "original", "back": "v2" }, … }` for all six. Each value is `v2` (the redone views), `v1` (the first drafts) or `original` (a crop of the original sheet, padded to 432 × 576, no model; the proposal's option A).
+
+**Order:** 1. the style: its 2 samples uploaded, then one `makeDesign` transaction (entities: style "Techno vistas"; elements; element_versions v1). 2. each sheet, in the challenge's order (Zei, Bai, Gladias, Seila, Deluin, Mu): its 3 views uploaded, then one `makeDesign` transaction (the character entity unless it exists, the element, version 1, titled "Starting point"). Nothing else is written: no links, recipes table, picks, challenge rows or spend. The route's limit of 3 publishes a day doesn't apply to the script, as with the old seed.
+
+**The style's samples** are the two scene renders from the style test that chose Techno vistas: `ae3-techno-vistas-c1-b005-toy-drone` (png sha256 `e287b2ee…0e81`) and `ae3-techno-vistas-c2-b003-street` (png sha256 `2884c3f7…fcaf`). Both are recorded in `content/snowmoon/recipes/images/style-test-2.json`, and the files are in the owner's Drive, `Snowmoon images/style test 2/`. They were made locally with FLUX.2 [klein] 4B (mflux, 4-bit) and exactly this style text. The script checks each sha256 and that the prompt contains the style text, then converts each to JPEG (quality 92) for the site, which stores JPEGs by sha256. The recipe records the conversion and the PNG's sha256. The same round's two character sheets weren't used: a style's samples are scenes on the site.
+
+**"Labelled starting point":** a design body has no label field. The style keeps its name, "Techno vistas", as its title (the style's name and the views' style link use it), with `role: 'maintainer'` and `assist.source` = the style file, as decision 13's seed did. The sheets are titled "Starting point". If the owner wants the words on the style's page too, that is a small page change, or the style could be named "Techno vistas (starting point)" (it is a name).
+
+**What changes from the ledger's recipes (v2):**
+- `style.version_id` is set to the style's new published version. It was a placeholder string, since the style wasn't published. `style.title` reads "Techno vistas (for views, without its scenery clauses)" and `style.text` stays the shortened text the views were made with, so the recipe stays true to the prompt.
+- **The front's reference is unchanged:** the original sheet's sha256, which is not a published picture. The front really was made from the sheet, so the recipe says so.
+- Nothing else changes.
+- For `v1` picks, a recipe is built from the first ledger with `checks.prompt` "not run". For `original` picks, the original render's recipe is used, with a crop line, host "local" and both checks "not run".
+
+**BLOCKS `--apply` (all picks):** the published page (`src/app/references/designs/[id]/page.tsx`) prints the same lines for every picture, whatever its recipe says. It would say:
+- "Checked by gpt-oss-safeguard-20b and the host's safety checker": untrue for the samples, the crops and the v1 views;
+- "Made from the front view": untrue for every v2 front, which was made from the original sheet;
+- a model of "Z-Image Turbo", for anything not made with the edit model: untrue for the samples and crops.
+
+With all-v2 picks that is 10 lines: 4 for the two samples, 6 for the six fronts. The script lists each one and refuses `--apply` until the page reads these from the recipe. That is a small page change, merged with the owner's OK. It is needed before the go.
+
+**Tests** (`npm run test:seed-designs`, 25 checks) use PGlite with every migration, as `studio_writer`, and a stand-in storage that writes to a temp folder. They mix every source (v2, v1, the crop, and one sheet with mixed views). The checks:
+- the dry run writes nothing;
+- `--apply` refuses without the picks, without `--confirm-owner-go`, and with stand-in storage on a remote database;
+- `--apply` writes 7 entities, 7 elements and 7 versions, plus 20 files named as `putPublic` names them, each matching its sha256;
+- every view's recipe links to the style's version;
+- the /challenge query counts one sheet each before the window;
+- a second `--apply` skips all 7, with no new rows or files.
+
+**Production dry run** (2026-11-02 03:21 UTC, read-only transaction as `studio_writer`):
+- no starting style, no "Techno vistas" style entity, and no character sheets yet;
+- 7 designs and 20 uploads planned;
+- /challenge would list 1 "Starting point" sheet for each of the six (none today);
+- `created_at` comes before the window if applied before 17:00 UTC on 6 Nov (109.6 hours after the run);
+- blocked by the 10 page lines above.
+
+**The command for the owner's go**, after his picks are saved as `/Users/nathan/snowmoon-starting-drafts/picks.json`, the page change is merged and production's storage settings are loaded:
+
+```
+cd /Users/nathan/snowmoon-starting-sheet-drafts && npm run seed:designs -- --picks=/Users/nathan/snowmoon-starting-drafts/picks.json --confirm-owner-go --apply
+```
+
+Run the same without `--confirm-owner-go --apply` first to see the plan with his picks.
+
 ---
 
 # First drafts (earlier the same day, kept for comparison)

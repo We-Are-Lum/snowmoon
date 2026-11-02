@@ -38,6 +38,7 @@
     "test:agent-api": "tsx --conditions=react-server scripts/test-agent-api.ts",
     "test:wallet": "tsx --conditions=react-server scripts/test-wallet.ts",
     "seed:designs": "tsx --conditions=react-server --env-file-if-exists=.env.local scripts/seed-designs.ts",
+    "test:seed-designs": "tsx --conditions=react-server scripts/test-seed-designs.ts",
     "check:miniapp": "tsx scripts/check-miniapp.ts",
     "publish:podcast": "tsx --env-file-if-exists=.env.local scripts/publish-podcast.ts",
     "check:podcast": "tsx scripts/check-podcast.ts",
