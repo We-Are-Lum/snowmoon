@@ -1,4 +1,8 @@
-# The remix challenge: Privacy and Terms lines (reread by the owner, 2026-11-01, with his changes)
+# The remix challenge: Privacy and Terms lines (LIVE: in src/lib/legal.ts, reread by the owner, 2026-11-01)
+
+**Live:** these words are in `src/lib/legal.ts` on branch `remix-challenge` (Terms words `15lsr9u`, Privacy words
+`1frr16h`, effective 2026-11-01), with the owner's reread recorded there; they go live with the merge, together with
+`CHALLENGE.entries` and `CHALLENGE.posts` switched on.
 
 Later on 2026-11-01, the owner's own words for Privacy §4's entry item and its new IPFS item ("The challenge record holds
 fingerprints, not copies"); Terms §6e's IPFS sentence says the same, drafted by the coding agent to match.
@@ -6,16 +10,13 @@ fingerprints, not copies"); Terms §6e's IPFS sentence says the same, drafted by
 Drafted by the coding agent (Claude, a closed model by Anthropic), 2026-10-31, on branch `remix-challenge`. **Reread by
 the owner on 2026-11-01**, with these changes, made here: the challenge's Terms section is 6e (main's 6d is "Minpentai
 with your agent", live since 2026-10-31); the "No token" conflict note is dropped (#73 is live); the Neynar score is not
-kept, only the decision (`passed` or `below`) and when, and the Privacy words say so. Nothing in `src/lib/legal.ts` has
-changed yet, and its reread record is untouched: these words go into legal.ts in the release that turns the switches
-on, with the reread recorded there.
+kept, only the decision (`passed` or `below`) and when, and the Privacy words say so. They are now in `src/lib/legal.ts` (see the top).
 
 **Revised 2026-10-31 for the owner's decisions:** eligibility is checked once, at publish, and stored (Neynar is never
 asked when someone views a page); no wallet path; sheets open to everyone who passes the check during the window
 (`openSheets`, which waits for these words by itself); the mint is a plan, not a promise.
 
-Legal texts describe today (owner, 2026-10-18): these lines ship in the same merge as the switches they describe, and
-the switches stay off until then:
+Legal texts describe today (owner, 2026-10-18): these lines ship in the same merge as the switches they describe:
 
 - `CHALLENGE.entries` (entries listed with each character's count, the Entry badge, "Mark as my entry"; shows what
   `studio.challenge_marks` and `studio.challenge_eligibility` hold). The eligibility decision is stored at publish only

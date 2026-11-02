@@ -391,16 +391,16 @@ export const CONTACT_EMAIL = 'snowmoon@wearelum.xyz';
  * Pacific wall time, and fails if a page or wording file writes a date itself.
  *
  * Switches (docs/legal/remix-challenge-draft.md; legal texts describe today; P6q checks it):
- * - `entries` (off until the owner's reread): entries listed on /challenge with each character's count of entrants, the
+ * - `entries` (on since the owner's reread of 2026-11-01): entries listed on /challenge with each character's count of entrants, the
  *   "Entry" badge on version pages, and "Mark as my entry" (studio.challenge_marks). Eligibility is decided once, when
  *   a version is published, and stored (studio.challenge_eligibility; src/lib/challenge/record.ts); pages only read it
  *   and never ask Neynar (owner, 2026-10-31). Without the tables, only invited makers count and marking says "not
  *   available yet".
- * - `posts` (off until the owner's reread): "Add where you posted it" and "Posted on" (studio.version_posts). The
+ * - `posts` (on since the owner's reread of 2026-11-01): "Add where you posted it" and "Posted on" (studio.version_posts). The
  *   server reads the pasted address, checks its host, and asks that network's own API (Neynar, Bluesky's public
  *   AppView, Lens's API); it never fetches the pasted address.
  * - `openSheets` (on): see below; it takes effect only in the window and once Privacy describes the challenge.
- * All three tables are in NEXT_remix_challenge.sql.
+ * All three tables are in 0033_remix_challenge.sql (applied 2026-11-01).
  * Agent-drafted entries are not tracked (owner, 2026-10-31).
  */
 export const CHALLENGE = {
@@ -445,8 +445,8 @@ export const CHALLENGE = {
   },
   /** The time zone every date is shown in. */
   timeZone: 'America/Los_Angeles',
-  entries: false as boolean,
-  posts: false as boolean,
+  entries: true as boolean,
+  posts: true as boolean,
   /**
    * On (owner, 2026-10-31), but it takes effect only inside the entry window, computed from `dates`
    * (src/lib/challenge/open-sheets.ts), and only once Privacy describes the challenge (the owner's reread). Before the
