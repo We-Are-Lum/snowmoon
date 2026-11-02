@@ -18,6 +18,10 @@ snowmoon.party is an independent, open adaptation of *Snowmoon* by Vitalik Buter
 
 - **One branch and one git worktree per piece of work**, never directly in the main checkout:
   `git worktree add -b <branch> ../snowmoon-<topic> origin/main`, then symlink `node_modules` and copy `.env.local` and `.vercel` (owner, 2026-10-08).
+- **Never run `npm ci` or `npm install` in a worktree whose `node_modules` links to the main checkout**: it empties the
+  shared folder and breaks every other worktree (owner, 2026-11-02, after this happened on 2026-11-01 at 23:17 PT). A
+  worktree that needs an install gets its own copy: remove the symlink first (`rm node_modules`, which removes only the
+  link), then install.
 - Commit and push work to its branch; open a PR when the owner asks for one. Don't leave work only on the local machine.
 - Remove worktrees with `git worktree remove` (never `rm -rf`), only when merged and with no uncommitted or unpushed work; never delete an unmerged branch. Propose a cleanup plan before deleting anything.
 
