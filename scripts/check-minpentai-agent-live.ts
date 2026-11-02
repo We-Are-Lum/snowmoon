@@ -1,7 +1,8 @@
 /**
  * Agent play against a live deployment (owner, 2026-11-01): a whole Rocks and Mirrors match played through the real
- * /mcp by a scripted agent, as the production test account (AGENTS.people.wallets; its key and session are kept on
- * the agent's machine in ~/.snowmoon-test, never in the repo), then the fog review's probes, against what production
+ * /mcp by a scripted agent, as a production test account (a wallet in AGENTS.people.wallets and its account in
+ * AGENTS.minpentaiPlay.people; its key and session kept on the agent's machine in ~/.snowmoon-test, never in the repo),
+ * then the fog review's probes, against what production
  * actually answers. Read-only in the database: each match's real state is read in a read-only transaction and the
  * answers are checked against it; nothing is planted in production.
  *
@@ -78,7 +79,10 @@ try {
   check('the live link opens with its secret, and a wrong secret opens nothing', page.ok && bad.status === 404, `${page.status}/${bad.status}`);
   // Timing: every call on a match waits until QUIET_MS after its turn opened, whether or not the computer has planned.
   // So the first call of each turn answers at (turn opened + QUIET_MS), the same every turn, and later calls quickly.
-  const firsts: number[] = [], plain: number[] = [];
+  // Each turn is timed from when the call that opened it was SENT: the server opens the turn while that call runs, so
+  // the next turn's first answer can't come before sent + QUIET_MS. (Timing from the answer's arrival instead, as the
+  // first version did, puts the call's own server work and trip back inside the measure: about 0.6 s in production.)
+  const firsts: number[] = [], plain: number[] = [], subs: number[] = [];
   let opened = Date.now();
   const amberTowers: number[] = [];
   let turns = 0, viewOk = 0, simOk = 0, refOk = 0;
@@ -109,15 +113,16 @@ try {
     if (!far.ok && far.error === `not accepted: ${localWhy}`) refOk++;
     else check(`turn ${v.turn}: a refusal reads the same whatever is hidden`, false, `${far.error} vs ${localWhy}`);
     if (turns === 2) {
+      opened = Date.now();
       const sp = await tool('minpentai_let_site_play_turn', { match_id: id, turn: v.turn });
       check('the site computer plays a turn for the person, under the standing order', sp.ok, sp.error ?? '');
-      opened = Date.now();
     } else {
       const sc2 = (sim.out.scenarios ?? []) as { name: string; legal: boolean; result?: { my_towers: { now: number } } }[];
       const best = sc2.filter((x) => x.legal).sort((a, b) => b.result!.my_towers.now - a.result!.my_towers.now)[0];
       const pick = best ? sc.scenarios.find((x) => x.name === best.name)!.placements : [];
-      const sub = await tool('minpentai_submit_orders', { match_id: id, turn: v.turn, placements: pick, source: 'agent', final: true });
       opened = Date.now();
+      const sub = await tool('minpentai_submit_orders', { match_id: id, turn: v.turn, placements: pick, source: 'agent', final: true });
+      subs.push(Date.now() - opened);
       if (!sub.ok) { check(`turn ${v.turn} accepted`, false, sub.error ?? ''); break; }
     }
     turns++;
@@ -128,17 +133,18 @@ try {
   check(`every turn's refusal read the same without the hidden pieces (${refOk} of ${turns})`, refOk === turns);
   const med = (xs: number[]) => [...xs].sort((a, b) => a - b)[xs.length >> 1];
   const quiet = Number(process.argv.find((a) => a.startsWith('--quiet='))?.slice(8) ?? 3000);
-  console.log(`  first call of each turn, from the turn opening: ${firsts.join(', ')} ms; sandbox calls later in the turn: ${plain.join(', ')} ms`);
-  check(`the first call of a turn answers no earlier than the quiet time (${quiet} ms, less the answer's trip back)`, firsts.length > 2 && Math.min(...firsts) >= quiet - 150, `min ${Math.min(...firsts)}`);
-  // The quiet time hides planning only if that wait is the same every turn: its spread within the spread of calls
-  // that wait for nothing, and nothing past a whole second (a late plan).
-  const spreadF = Math.max(...firsts) - Math.min(...firsts), spreadP = Math.max(...plain) - Math.min(...plain);
-  check(`the first call's time varies no more than calls that wait for nothing (spread ${spreadF} ms vs ${spreadP} ms, medians ${med(firsts)} / ${med(plain)} ms)`, spreadF <= Math.max(150, spreadP * 1.5));
-  check('no turn waited past the quiet time (no late plan)', Math.max(...firsts) < quiet + 900, `max ${Math.max(...firsts)}`);
+  console.log(`  first call of each turn, from sending the call that opened it: ${firsts.join(', ')} ms; sandbox calls later in the turn: ${plain.join(', ')} ms`);
+  check(`the first call of a turn answers no earlier than the quiet time after the turn opened (${quiet} ms)`, firsts.length > 2 && Math.min(...firsts) >= quiet, `min ${Math.min(...firsts)}`);
+  // The quiet time hides planning only if that wait is the same every turn, up to the network: the interval holds two
+  // round trips (the submit, then the first call), so its spread may be up to the two calls' spreads together.
+  const spread = (xs: number[]) => Math.max(...xs) - Math.min(...xs);
+  const spreadF = spread(firsts), noise = spread(plain) + spread(subs);
+  check(`the first call's time varies no more than the network does (spread ${spreadF} ms; submit ${spread(subs)} + sandbox ${spread(plain)} ms; medians ${med(firsts)} / ${med(subs)} / ${med(plain)} ms)`, spreadF <= Math.max(150, noise * 1.25));
+  check('no turn waited past the quiet time (no late plan)', Math.max(...firsts) - med(subs) < quiet + 900, `max ${Math.max(...firsts)}`);
   // It doesn't follow the hidden board: the computer's towers each turn against that turn's wait.
   const corr = (a: number[], b: number[]) => { const n = Math.min(a.length, b.length), ma = a.slice(0, n).reduce((x, y) => x + y, 0) / n, mb = b.slice(0, n).reduce((x, y) => x + y, 0) / n; let c = 0, va = 0, vb = 0; for (let i = 0; i < n; i++) { c += (a[i] - ma) * (b[i] - mb); va += (a[i] - ma) ** 2; vb += (b[i] - mb) ** 2; } return va && vb ? c / Math.sqrt(va * vb) : 0; };
   const rc = corr(firsts, amberTowers.slice(1));
-  console.log(`  correlation of the wait with the computer's towers: ${rc.toFixed(2)}`);
+  check(`the wait doesn't follow the computer's hidden towers (correlation ${rc.toFixed(2)})`, Math.abs(rc) < 0.6);
   const rec = await tool('minpentai_get_record', { match_id: id });
   check('at the end the record opens', rec.ok, rec.error ?? '');
   const m = await real(id);
