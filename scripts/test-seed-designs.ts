@@ -58,7 +58,8 @@ check('the dry run says it wrote nothing', /Dry run: nothing written, nothing up
 check('the dry run writes no rows', JSON.stringify(await counts()) === JSON.stringify(zero));
 check('the dry run plans the style and six sheets', /== 1\. Style: Techno vistas ==/.test(dry.stdout) && (dry.stdout.match(/^-- .* picks /gm) ?? []).length === 6);
 check('the dry run lists 20 uploads (2 samples, 18 views)', (dry.stdout.match(/images\/readers\/[0-9a-f]{32}\.jpg {2}sha256/g) ?? []).length === 20);
-check('the dry run reports the page lines that block a real --apply', /BLOCKS --apply/.test(dry.stdout));
+const pageFixed = /howMade\(p\.recipe/.test(read('src/app/references/designs/[id]/page.tsx'));
+check(pageFixed ? 'the dry run reports no blocking page lines (the page reads each recipe)' : 'the dry run reports the page lines that block a real --apply', pageFixed !== /BLOCKS --apply/.test(dry.stdout));
 
 // With every view v2: blocked only while the design page prints fixed lines (fixed on branch design-page-recipe-lines).
 const allV2 = path.join(tmp, 'all-v2.json');
