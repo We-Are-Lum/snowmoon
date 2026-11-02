@@ -6,7 +6,7 @@ import { IMAGES } from '../config';
  * "How it was made", one line at a time, read from a picture's own recipe (owner, 2026-11-01: the starting sheets'
  * pictures were made outside the site, so no line may be fixed text). Every picture made on the site gives exactly the
  * words the design page printed before (scripts/test-recipe-lines.ts checks that); a picture made elsewhere gets lines
- * that say what its recipe says. Lines marked DRAFT wait for the owner's wording.
+ * that say what its recipe says. Every line's wording is the owner's (approved as written, 2026-11-02).
  */
 
 /** The recipe fields these lines read (a sheet's or style's picture; DesignPicture['recipe'] is one). */
@@ -63,9 +63,9 @@ export function checksLine(r: RecipeForLines): string {
   const prompt = r.checks?.prompt?.verdict === 'ok' && r.checks.prompt.model && r.checks.prompt.model !== 'none' ? guardName(r.checks.prompt.model) : null;
   const host = r.checks?.host_safety_checker === 'passed';
   if (prompt && host) return `Checked by ${prompt} and the host's safety checker.`;
-  if (prompt) return `Checked by ${prompt}; no safety checker ran.`; // DRAFT wording
-  if (host) return 'Checked by the host\'s safety checker; the site\'s prompt check did not run.'; // DRAFT wording
-  return 'Made outside the site; no prompt check or safety checker ran.'; // DRAFT wording
+  if (prompt) return `Checked by ${prompt}; no safety checker ran.`; // the owner's wording (approved 2026-11-02)
+  if (host) return 'Checked by the host\'s safety checker; the site\'s prompt check did not run.'; // the owner's wording (approved 2026-11-02)
+  return 'Made outside the site; no prompt check or safety checker ran.'; // the owner's wording (approved 2026-11-02)
 }
 
 /** Is everything the image page's fixed sentence claims recorded in these checks? */
@@ -83,11 +83,11 @@ export function madeFromLine(r: RecipeForLines, frontSha256: string | null, isFr
   const refs = r.references ?? [];
   if (refs.length) {
     if (!isFront && frontSha256 && refs.length === 1 && refs[0].sha256 === frontSha256) parts.push('Made from the front view.');
-    else parts.push(...refs.map((x) => `Made from ${x.what ?? 'a reference picture'} (sha256 ${x.sha256.slice(0, 12)}…).`)); // DRAFT wording
+    else parts.push(...refs.map((x) => `Made from ${x.what ?? 'a reference picture'} (sha256 ${x.sha256.slice(0, 12)}…).`)); // the owner's wording (approved 2026-11-02)
   }
   const s = r.settings ?? {};
   const conv = s.converted as { from?: string; sha256?: string; to?: string } | undefined;
-  if (conv?.sha256) parts.push(`Converted from ${String(conv.from ?? '').toUpperCase()} (sha256 ${conv.sha256.slice(0, 12)}…) to ${String(conv.to ?? '').toUpperCase()} for the site; no model.`); // DRAFT wording
+  if (conv?.sha256) parts.push(`Converted from ${String(conv.from ?? '').toUpperCase()} (sha256 ${conv.sha256.slice(0, 12)}…) to ${String(conv.to ?? '').toUpperCase()} for the site; no model.`); // the owner's wording (approved 2026-11-02)
   if (typeof s.derived === 'string') parts.push(`${s.derived.replace(/\.?$/, '.')}`);
   return parts.join(' ');
 }
@@ -99,7 +99,7 @@ export function draftedLine(r: RecipeForLines): string {
   const who = a.model === 'claude-coding-agent' ? 'the coding agent' : a.model;
   if (a.drafted.length === 1 && a.drafted[0] === 'sample subject or view line') return `The fixed subject line was drafted by ${who}.`;
   const list = a.drafted.length > 1 ? `${a.drafted.slice(0, -1).join(', ')} and ${a.drafted[a.drafted.length - 1]}` : a.drafted[0];
-  return `The ${list} ${a.drafted.length > 1 ? 'were' : 'was'} drafted by ${who}.`; // DRAFT wording
+  return `The ${list} ${a.drafted.length > 1 ? 'were' : 'was'} drafted by ${who}.`; // the owner's wording (approved 2026-11-02)
 }
 
 /** The whole "how it was made" line for one picture of a design, as text runs (mono: shown in the code font). */
