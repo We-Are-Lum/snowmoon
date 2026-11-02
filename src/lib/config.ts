@@ -249,7 +249,9 @@ export const AGENTS = {
    */
   // 6786 the owner. Switched off 2026-11-01 for a timing leak at level 3 (#89); back on 2026-11-01 for the owner only,
   // after the fix (#90, a quiet time on every call) passed check:minpentai-agent-live in production at levels 1 to 3.
-  minpentaiPlay: { people: [6786] as readonly number[] },
+  // drafts: who may start a draft ruleset by name (agent-play/solo.ts DRAFTS), book-3 (owner, 2026-11-01: "make book-3
+  // available to me in agent play once it's back on, so I can judge it by playing").
+  minpentaiPlay: { people: [6786] as readonly number[], drafts: [6786] as readonly number[] },
   /** At most this many live agents per person (also a database trigger). */
   perPerson: 3,
   /**

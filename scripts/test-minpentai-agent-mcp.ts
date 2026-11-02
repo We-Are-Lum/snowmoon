@@ -14,6 +14,7 @@
  */
 import { createHash } from 'node:crypto';
 import { startStage, connect, mcp, tool } from './lib/agents-harness';
+import { AGENTS } from '../src/lib/config';
 import { QUIET_MS } from '../src/lib/minpentai/agent-play/solo';
 
 process.env.MINPENTAI_PLAY_TEST = '1';
@@ -53,6 +54,9 @@ try {
   const cTry = await tool(BASE, c.access_token, 'minpentai_start_solo', {});
   check('M28 a person agent play isn\'t open to: no "play" scope granted, no tool listed, none runs', !cList.some((n) => n.startsWith('minpentai_')) && !cTry.ok, `${cList.join(',')} / ${cTry.error}`);
   check('M29 the people it is open to are the ones set (A and B here)', [people.A.person, people.B.person].join(',') === process.env.MINPENTAI_PLAY_TEST_PEOPLE, `${people.A.person},${people.B.person}`);
+
+  const d3 = await tool(BASE, a.access_token, 'minpentai_start_solo', { ruleset: 'book-3', level: 2 });
+  check('M30 a draft ruleset (book-3) starts only for the people it is opened to (the owner): A has play, not drafts', !d3.ok && /ruleset must be/.test(d3.error ?? '') && !AGENTS.minpentaiPlay.drafts.includes(people.A.person), d3.error ?? '');
 
   // A whole match.
   const st = await tool(BASE, a.access_token, 'minpentai_start_solo', { ruleset: 'book', level: 2, model: { name: 'Scripted', maker: 'This test', weights: 'open' } });
