@@ -42,6 +42,8 @@ type Props = {
   limits: { nameMaxChars: number; textMaxChars: number; samplesMin: number; samplesMax: number };
   models: { text: { name: string; licence: string; host: string }; edit: { name: string; licence: string; host: string } };
   suffix: string;
+  /** The remix challenge opens this fork or version to everyone who passes the Generate gate (CHALLENGE.openSheets; the server checks again). */
+  challengeOpen?: boolean;
 };
 
 export function DesignForm(p: Props) {
@@ -79,7 +81,7 @@ export function DesignForm(p: Props) {
   const made = style ? samples.filter(fresh) : (Object.values(views).filter(fresh) as Pic[]);
   const left = status?.left ?? 0;
   const enough = style ? made.length >= p.limits.samplesMin : fresh(views.front);
-  const ready = auth.kind === 'signed-in' && status?.invited && status.ready && status.consented;
+  const ready = auth.kind === 'signed-in' && (status?.invited || p.challengeOpen) && status?.ready && status.consented;
 
   const make = async (slot: 'sample' | ViewSlot, index = 0) => {
     setBusy(slot === 'sample' ? `s${index}` : slot);
@@ -195,7 +197,7 @@ export function DesignForm(p: Props) {
         </div>
       ) : !status ? (
         <p className="ic-note">…</p>
-      ) : !status.invited ? (
+      ) : !(status.invited || p.challengeOpen) ? (
         <p className="ic-gate">{W.form.notInvited}</p>
       ) : !status.ready ? (
         <p className="ic-gate">{W.form.notReady}</p>
