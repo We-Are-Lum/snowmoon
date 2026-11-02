@@ -7,7 +7,7 @@ import { chooseEntries, entrantCounts, fromDecision, type Decision, inWindow, ma
 /**
  * The remix challenge's entries (owner, 2026-10-31), the server half, for pages. Reads published sheets, the private
  * marks (studio.challenge_marks) and the eligibility decided once at publish (studio.challenge_eligibility, written by
- * src/lib/challenge/record.ts; both NEXT_remix_challenge.sql). It never asks Neynar or anyone else anything: viewing a
+ * src/lib/challenge/record.ts; both 0033_remix_challenge.sql). It never asks Neynar or anyone else anything: viewing a
  * page makes no outside call (owner, 2026-10-31; scripts/test-challenge.ts proves it). Without the eligibility table,
  * only invited makers count (decided from the lists alone); without the marks table everyone's latest version counts
  * and marking answers "not available yet" (as src/lib/picks.ts does without its table).

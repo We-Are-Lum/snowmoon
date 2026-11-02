@@ -15,7 +15,7 @@ import { eligibility, inWindow, needsScore } from './rules';
  * CHALLENGE.neynarMinScore; the score itself is not kept), or 'unchecked' if Neynar didn't answer, and when. The score
  * comes from the same lookup the publish gate just made (kept a day in studio.image_scores, as for every Generate), so
  * publishing asks Neynar at most once. Never throws: a version whose decision can't be stored
- * simply doesn't count (and the table missing before the owner applies NEXT_remix_challenge is the same).
+ * simply doesn't count (and the table missing, as on a database without 0033_remix_challenge, is the same).
  * Nothing is stored until the Privacy page describes the remix challenge (the owner's reread; legal texts describe
  * today), the same condition that opens sheets to everyone.
  */

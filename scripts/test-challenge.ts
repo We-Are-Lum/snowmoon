@@ -1,7 +1,7 @@
 /**
  * The remix challenge (owner, 2026-10-31; docs/proposals/remix-challenge-plan.md, branch remix-challenge). Stand-ins
  * only: no network (every network call goes to a recording stand-in), no paid call, no production database (an
- * in-memory Postgres, PGlite, with every migration including NEXT_remix_challenge.sql). Fails (exit 1) on any problem.
+ * in-memory Postgres, PGlite, with every migration including 0033_remix_challenge.sql). Fails (exit 1) on any problem.
  *
  *   npm run test:challenge
  *
@@ -20,7 +20,7 @@
  * - The server never fetches the pasted address: every request goes to an API host, and a request elsewhere is refused.
  * - A post that doesn't link to the version's page is refused.
  * - "Posted on" holds no image, avatar, embed or script.
- * - The migration: the read-back (both parts) passes on it; marks and posts work; without the tables, nothing breaks.
+ * - The migration (0033, applied 2026-11-01): RLS, privileges, no score; marks and posts work; without the tables, nothing breaks.
  */
 import path from 'node:path';
 import { readdirSync, readFileSync } from 'node:fs';
@@ -342,7 +342,11 @@ proof('rules without "forks only" are caught', copyProblems(copy.replace('A new 
   check('sheets open at the opening instant, once Privacy describes the challenge', O.challengeSheetsOpen(at(D0.opens, 0), said));
   check('sheets are open at 23:59:59.999 Pacific on the last day', O.challengeSheetsOpen(at(D0.closes, -1), said));
   check('sheets close again at the close', !O.challengeSheetsOpen(at(D0.closes, 0), said));
-  check('as the Privacy page reads today (no challenge words), sheets stay invited-only even in the window', !O.challengeSheetsOpen(at(D0.opens, 0)));
+  const unsaid = structuredClone(PRIVACY);
+  const s4 = unsaid.sections.find((x) => x.n === 4)!;
+  s4.body = s4.body.map((b) => (Array.isArray(b) ? b.filter((i) => !/remix challenge/i.test(i)) : b));
+  check('the Privacy page now describes the challenge (reread 2026-11-01), so sheets open in the window', O.privacyDescribesChallenge() && O.challengeSheetsOpen(at(D0.opens, 0)));
+  check('without those words, sheets stay invited-only even in the window', !O.challengeSheetsOpen(at(D0.opens, 0), unsaid));
   proof('an opening that ignores the window is caught', ((t: Date) => CHALLENGE.openSheets && O.privacyDescribesChallenge(said))(at(D0.closes, 0)) !== O.challengeSheetsOpen(at(D0.closes, 0), said));
 }
 
@@ -351,48 +355,39 @@ const db = new PGlite();
 await db.exec(`create role anon nologin; create role authenticated nologin; create role service_role nologin bypassrls;`);
 for (const f of readdirSync(path.join(ROOT, 'supabase/migrations')).filter((f) => f.endsWith('.sql')).sort()) await db.exec(read(`supabase/migrations/${f}`));
 await db.exec(`insert into studio.works values ('snowmoon','Snowmoon','GPL-3.0','x') on conflict do nothing`);
-await db.exec(read('supabase/migrations/NEXT_remix_challenge.sql'));
+await db.exec(read('supabase/migrations/0033_remix_challenge.sql'));
 check('the migration is safe to run twice', true);
-const dry = read('supabase/drafts/NEXT_remix_challenge.DRY-RUN.sql');
-const mig = read('supabase/migrations/NEXT_remix_challenge.sql');
-check('the dry run is the migration ending in rollback', dry.slice(dry.indexOf('begin;')).replace(/-- The dry run keeps nothing\.\nrollback;\n$/, 'commit;\n') === mig.slice(mig.indexOf('begin;')));
-// A published version for the read-back to use (it runs on the database directly, before the client connects).
-await db.exec(`insert into studio.entities (id, work_id, kind, name) values ('00000000-0000-0000-0000-00000000e0e0','snowmoon','style','Read-back style');
-  insert into studio.elements (id, work_id, element_type, created_by_fid, entity_id, status) values ('00000000-0000-0000-0000-00000000b0b0','snowmoon','design',6786,'00000000-0000-0000-0000-00000000e0e0','published');
-  insert into studio.element_versions (id, element_id, version_no) values ('00000000-0000-0000-0000-00000000f0f0','00000000-0000-0000-0000-00000000b0b0',1);`);
-// The read-back, part (a): one SELECT, every row true; part (b): the DO block raises nothing.
-const rb = read('supabase/drafts/READ-BACK-remix_challenge.sql');
-const partA = rb.slice(rb.indexOf('select c.what'), rb.indexOf(') c;') + 4);
-const partB = rb.slice(rb.indexOf('do $$'), rb.lastIndexOf('end $$;') + 7);
-const rowsA = await db.query<{ what: string; ok: boolean }>(partA);
-check('read-back (a): every row is true', rowsA.rows.length === 17 && rowsA.rows.every((r) => r.ok === true), JSON.stringify(rowsA.rows.filter((r) => !r.ok)));
-let bErr = '';
-try {
-  await db.exec(partB);
-} catch (e) {
-  bErr = (e as Error).message;
-}
-check('read-back (b): the DO block passes', bErr === '', bErr);
-check('read-back (b): leaves no rows behind', (await db.query<{ n: number }>('select (select count(*) from studio.challenge_marks) + (select count(*) from studio.version_posts) as n')).rows[0].n == 0);
+// What the owner's read-back (a) checked on production (2026-11-01, 17 of 17 true), here on PGlite: RLS on, the
+// privileges as written, no public access, only studio_writer's policies, and no score column.
+const PRIVS = `select c.what, c.ok from (
+  select 'rls on all three' as what, (select bool_and(relrowsecurity) from pg_class where oid in ('studio.challenge_marks'::regclass, 'studio.version_posts'::regclass, 'studio.challenge_eligibility'::regclass)) as ok
+  union all select 'marks and eligibility: select and insert only', bool_and(has_table_privilege('studio_writer', t::regclass, 'SELECT') and has_table_privilege('studio_writer', t::regclass, 'INSERT') and not has_table_privilege('studio_writer', t::regclass, 'UPDATE') and not has_table_privilege('studio_writer', t::regclass, 'DELETE')) from unnest(array['studio.challenge_marks', 'studio.challenge_eligibility']) t
+  union all select 'posts: select, insert, delete, no update', has_table_privilege('studio_writer', 'studio.version_posts', 'DELETE') and not has_table_privilege('studio_writer', 'studio.version_posts', 'UPDATE')
+  union all select 'no public access', not exists (select 1 from unnest(array['anon', 'authenticated']) r, unnest(array['studio.challenge_marks', 'studio.version_posts', 'studio.challenge_eligibility']) t, unnest(array['SELECT', 'INSERT', 'UPDATE', 'DELETE']) p where has_table_privilege(r, t::regclass, p))
+  union all select 'only studio_writer policies', not exists (select 1 from pg_policies where schemaname = 'studio' and tablename in ('challenge_marks', 'version_posts', 'challenge_eligibility') and roles <> '{studio_writer}'::name[])
+  union all select 'no score column', not exists (select 1 from information_schema.columns where table_schema = 'studio' and table_name = 'challenge_eligibility' and column_name = 'score')
+) c`;
+const privs = await db.query<{ what: string; ok: boolean }>(PRIVS);
+check('0033: RLS, privileges, no public access, no score column (as the owner read back)', privs.rows.length === 6 && privs.rows.every((r) => r.ok === true), JSON.stringify(privs.rows.filter((r) => !r.ok)));
 {
-  // Proof: on a table that refuses a realistic row, part (b) fails.
-  await db.exec(`alter table studio.version_posts add constraint planted check (handle <> 'naaate')`);
-  let err = '';
-  try {
-    await db.exec(partB);
-  } catch (e) {
-    err = (e as Error).message;
-  }
-  await db.exec(`alter table studio.version_posts drop constraint planted`);
-  proof('read-back (b) fails when a realistic row is refused', /READ-BACK FAILED|violates/.test(err));
   await db.exec(`grant update on studio.challenge_marks to studio_writer`);
-  const r2 = await db.query<{ ok: boolean }>(partA);
+  const r2 = await db.query<{ ok: boolean }>(PRIVS);
   await db.exec(`revoke update on studio.challenge_marks from studio_writer`);
-  proof('read-back (a) shows false when studio_writer may update marks', r2.rows.some((r) => r.ok === false));
+  proof('a planted update grant on marks is caught', r2.rows.some((r) => r.ok === false));
   await db.exec(`alter table studio.challenge_eligibility add column score numeric`);
-  const r3 = await db.query<{ what: string; ok: boolean }>(partA);
+  const r3 = await db.query<{ what: string; ok: boolean }>(PRIVS);
   await db.exec(`alter table studio.challenge_eligibility drop column score`);
-  proof('read-back (a) shows false when a score column is kept', r3.rows.some((r) => r.ok === false && /no score/.test(r.what)));
+  proof('a planted score column is caught', r3.rows.some((r) => r.ok === false && /score/.test(r.what)));
+  let refused = false;
+  await db.exec(`insert into studio.entities (id, work_id, kind, name) values ('00000000-0000-0000-0000-00000000e0e0','snowmoon','style','Test style');
+    insert into studio.elements (id, work_id, element_type, created_by_fid, entity_id, status) values ('00000000-0000-0000-0000-00000000b0b0','snowmoon','design',6786,'00000000-0000-0000-0000-00000000e0e0','published');
+    insert into studio.element_versions (id, element_id, version_no) values ('00000000-0000-0000-0000-00000000f0f0','00000000-0000-0000-0000-00000000b0b0',1);`);
+  try {
+    await db.exec(`insert into studio.challenge_eligibility (version_id, challenge, fid, decision, eligible) values ('00000000-0000-0000-0000-00000000f0f0', 'remix-2026-11', 500, 'below', true)`);
+  } catch {
+    refused = true;
+  }
+  check('a decision that contradicts itself (below, marked eligible) is refused', refused);
 }
 
 const PORT = 54377;
@@ -467,9 +462,12 @@ check('stored at publish: Neynar down means unchecked (not eligible)', dec(f502.
 check('a sheet made from scratch gets no decision (not an entry)', !dec(fScratch.versionId));
 {
   const extra = await DS.makeDesign(S, { fid: 504, mode: 'fork', kind: 'character', fromVersionId: baiStart.versionId, body: sheet('Bai, before the reread', 11) });
-  const r = await Rec.recordEligibility(S, extra.versionId, 504);
+  const unsaid = structuredClone(P0);
+  const u4 = unsaid.sections.find((x) => x.n === 4)!;
+  u4.body = u4.body.map((b) => (Array.isArray(b) ? b.filter((i) => !/remix challenge/i.test(i)) : b));
+  const r = await Rec.recordEligibility(S, extra.versionId, 504, new Date(), unsaid);
   const [row] = await sql`select 1 from studio.challenge_eligibility where version_id = ${extra.versionId}`;
-  check('nothing is stored about a maker while the Privacy page does not describe the challenge (as today)', r === 'not-stored' && !row);
+  check('nothing is stored about a maker while the Privacy page does not describe the challenge', r === 'not-stored' && !row);
   proof('a recorder that ignores the Privacy words would store it', (await Rec.recordEligibility(S, extra.versionId, 504, new Date(), privacySaid)) === 'stored');
 }
 calls.length = 0;
@@ -564,7 +562,7 @@ await server.stop();
 
 // As committed, the switches are off until the owner's reread.
 const cfg = read('src/lib/config.ts');
-check('as committed, CHALLENGE.entries and posts are off until the reread; openSheets is on (it waits for the window and the Privacy words by itself)', /\n  entries: false as boolean,\n  posts: false as boolean,/.test(cfg) && /\n  openSheets: true as boolean,/.test(cfg));
+check('as committed, CHALLENGE.entries, posts and openSheets are on (owner\'s reread 2026-11-01; openSheets still waits for the window)', /\n  entries: true as boolean,\n  posts: true as boolean,/.test(cfg) && /\n  openSheets: true as boolean,/.test(cfg));
 
 console.log(`test:challenge: ${passed} passed, ${failures.length} failed`);
 if (failures.length) {

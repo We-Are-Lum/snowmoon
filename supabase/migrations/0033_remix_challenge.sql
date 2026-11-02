@@ -1,10 +1,10 @@
--- NEXT_remix_challenge.sql — the remix challenge's entry marks and "Posted on". Branch remix-challenge, owner
--- 2026-10-31 (docs/proposals/remix-challenge-plan.md, build list items 2 and 3). NOT APPLIED. It takes the next free
--- number at merge, checked against origin/main and production.
+-- 0033_remix_challenge.sql — the remix challenge's entry marks, eligibility decisions and "Posted on". Branch
+-- remix-challenge, owner 2026-10-31 and 2026-11-01 (docs/proposals/remix-challenge-plan.md, build list items 2 and 3).
+-- APPLIED by the owner on 2026-11-01 in the Supabase SQL Editor, as postgres. Read back the same day: (a) 17 of 17
+-- true, (b) passed. Numbered 0033 at merge (main had 0032).
 --
 -- MUST RUN AS postgres (the role that owns the `studio` schema), in the Supabase SQL Editor. Requires 0001 only.
--- One transaction: all of it or none. Safe to run twice. First run supabase/drafts/NEXT_remix_challenge.DRY-RUN.sql
--- (the same SQL ending in rollback), then this, then both parts of supabase/drafts/READ-BACK-remix_challenge.sql.
+-- One transaction: all of it or none. Safe to run twice.
 --
 -- What it adds (no table is publicly readable: no public read policy, and anon and authenticated lose every
 -- privilege 0001's default privileges gave them; the site reads them on the server, as studio_writer):

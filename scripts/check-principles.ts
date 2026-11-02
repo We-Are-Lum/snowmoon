@@ -1383,7 +1383,7 @@ add({
       insert into studio.removal_log (element_id, step, by_fid, role, reason) values ('00000000-0000-0000-0000-0000000000b1','reported',42,'reader','spam');
       insert into studio.wallet_accounts (address) values ('0x${'4'.repeat(40)}');
       insert into studio.wallet_links (account_id, fid, how) select id, 42, 'signed' from studio.wallet_accounts where address = '0x${'4'.repeat(40)}';
-      -- The remix challenge (NEXT_remix_challenge.sql, while unmerged): a mark and a listed post, by FID 42.
+      -- The remix challenge (0033_remix_challenge.sql): a mark, a listed post and an eligibility decision, by FID 42.
       do $$ begin if to_regclass('studio.challenge_marks') is not null then
         insert into studio.challenge_marks (challenge, fid, character, version_id) values ('remix-2026-11', 42, 'bai', '00000000-0000-0000-0000-0000000000f1');
         insert into studio.version_posts (version_id, network, post_id, handle, posted_at, url, fid) values ('00000000-0000-0000-0000-0000000000f1', 'lens', '1', 'someone', now(), 'https://hey.xyz/posts/abc', 42);
