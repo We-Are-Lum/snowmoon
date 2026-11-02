@@ -1,5 +1,8 @@
 # The remix challenge: Privacy and Terms lines (reread by the owner, 2026-11-01, with his changes)
 
+Later on 2026-11-01, the owner's own words for Privacy §4's entry item and its new IPFS item ("The challenge record holds
+fingerprints, not copies"); Terms §6e's IPFS sentence says the same, drafted by the coding agent to match.
+
 Drafted by the coding agent (Claude, a closed model by Anthropic), 2026-10-31, on branch `remix-challenge`. **Reread by
 the owner on 2026-11-01**, with these changes, made here: the challenge's Terms section is 6e (main's 6d is "Minpentai
 with your agent", live since 2026-10-31); the "No token" conflict note is dropped (#73 is live); the Neynar score is not
@@ -33,7 +36,7 @@ last item) should still ship with them.
 
 ---
 
-## Privacy §4 (Kept by us when you sign in): three new list items, after "Images you publish, …"
+## Privacy §4 (Kept by us when you sign in): four new list items, after "Images you publish, …"
 
 Before (the item they follow, unchanged):
 
@@ -47,10 +50,15 @@ New items:
 > remix of its characters' sheets.
 
 > If you take part in the remix challenge: for each version of a challenge character you publish, whether it can count
-> as an entry and why (you were invited, you are an admin, or whether your account passed the site's check when you
-> published it), decided once when you publish it and kept with it, with when; and which of your versions you mark as
-> your entry for each character, and when. Whether a version is an entry is shown on its page and on the challenge
-> page, with how many people have entered each character.
+> as an entry and why (you were invited, you are an admin, or whether your account passed the site's check), decided
+> once, when you publish it, and kept with the time it was decided; and which of your versions you mark as your entry
+> for each character, and when. Whether a version is an entry is shown on its page and on the challenge page, with how
+> many people have entered each character.
+
+> When entries close, a record of every entry is published to IPFS and referenced on Ethereum, where it can't be
+> removed: a fingerprint of its pictures and recipe (not the pictures or words themselves), its maker's Farcaster ID,
+> when it was published and what it was built on. Hiding a version later removes it from this site, but not its
+> fingerprint from that record.
 
 > If you add where a version was posted: the post's network, its id there, its writer's handle, when it was posted,
 > its address, and who added it and when. The network, handle, date and a link to the post are shown on the
@@ -110,8 +118,12 @@ After:
 > needed for anything. A version counts as an entry if it is a remix (not a sheet made from scratch) made on the
 > Service during the challenge by an account we invited or one that passed the site's check when the version was
 > published. One entry per person per character: your latest version counts unless you mark another. Admins can make
-> versions but aren't eligible for rewards. Anything that follows the challenge, including any mint, is a plan, not a
-> promise, and is decided as the challenge page says. We may change or end the challenge, and the page will say so.
+> versions but aren't eligible for rewards. When entries close, a record of every entry is published to IPFS and
+> referenced on Ethereum, where it can't be removed: a fingerprint of its pictures and recipe (not the pictures or words
+> themselves), its maker's Farcaster ID, when it was published and what it was built on; hiding a version later removes
+> it from the Service, but not its fingerprint from that record. Anything that follows the challenge, including any
+> mint, is a plan, not a promise, and is decided as the challenge page says. We may change or end the challenge, and
+> the page will say so.
 
 ## Terms §7 (Hiding and removal): one sentence added after "You may hide your own work yourself …"
 
