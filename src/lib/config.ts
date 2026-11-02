@@ -227,9 +227,9 @@ export const AGENTS = {
      * Wallets (lowercase addresses) whose sign-in gets in. Empty for now (owner, 2026-10-20: "FID 6786 only for
      * now … I'll add my sign-in wallet later"). The payment address is not a sign-in wallet.
      */
-    // The production test account for agent play (owner, 2026-11-01: "use a dedicated site test account and tell me
-    // which"): a wallet whose key is kept on the agent's machine only; site account -23. Remove when no longer needed.
-    wallets: ['0xE86987Cc0d1B6746f13B9F90380563080ba5f973'] as readonly string[],
+    // The production test account for agent play (wallet 0xE869…f973, account -23) was here from 2026-11-01 until the
+    // leak fix passed in production; removed at the owner's word, 2026-11-01.
+    wallets: [] as readonly string[],
   },
   /** Public pages (agents.md, /p): off while agents are for the owner only. Kept work stays private on /you. */
   public: false,
@@ -247,15 +247,11 @@ export const AGENTS = {
    * and Terms §6d / Privacy §4 live. Anyone else: the scope isn't granted, its tools aren't listed or run, and a match
    * link opens nothing. The local tests add their own people (MINPENTAI_PLAY_TEST, never on Vercel).
    */
-  // 6786 the owner; -23 the production test account (wallet 0xE869…f973, above).
-  // Switched OFF 2026-11-01 (owner: "if anything leaks, switch agent play off and tell me"): in production, at level 3,
-  // a final submit's time still grew with the computer's hidden towers (1.0 to 1.8 s against a 400 ms pad). Back on
-  // when the fix is in and the live check passes. Was [6786, -23].
-  // The fix (a quiet time on every call, quiet.ts) is checked with the test account alone; the owner goes back on only
-  // after the production check passes at levels 1 to 3 (owner, 2026-11-01).
+  // 6786 the owner. Switched off 2026-11-01 for a timing leak at level 3 (#89); back on 2026-11-01 for the owner only,
+  // after the fix (#90, a quiet time on every call) passed check:minpentai-agent-live in production at levels 1 to 3.
   // drafts: who may start a draft ruleset by name (agent-play/solo.ts DRAFTS), book-3 (owner, 2026-11-01: "make book-3
   // available to me in agent play once it's back on, so I can judge it by playing").
-  minpentaiPlay: { people: [-23] as readonly number[], drafts: [6786] as readonly number[] },
+  minpentaiPlay: { people: [6786] as readonly number[], drafts: [6786] as readonly number[] },
   /** At most this many live agents per person (also a database trigger). */
   perPerson: 3,
   /**
