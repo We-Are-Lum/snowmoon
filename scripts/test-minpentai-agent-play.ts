@@ -15,7 +15,7 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { isDeepStrictEqual } from 'node:util';
-import { CURRENT, autopilot, checkComputer, ordersText, linkOpens, newSolo, parseOrders, recordOf, replay, resign, rulesOf, setStanding, simulate, SoloError, submit, viewFor, type SoloMatch } from '../src/lib/minpentai/agent-play/solo';
+import { CURRENT, autopilot, checkComputer, planComputer, ordersText, linkOpens, newSolo, parseOrders, recordOf, replay, resign, rulesOf, setStanding, simulate, SoloError, submit, viewFor, type SoloMatch } from '../src/lib/minpentai/agent-play/solo';
 
 let checks = 0;
 const ok = (cond: unknown, what: string) => { checks++; assert.ok(cond, what); };
@@ -44,12 +44,13 @@ function playOut(ruleset: 'book' | 'play', seed: number) {
   ok(linkOpens(m, linkSecret) && !linkOpens(m, linkSecret.slice(0, -1) + (linkSecret.endsWith('A') ? 'B' : 'A')) && !linkOpens(m, ''), `${ruleset}: the live link opens with its secret only`);
   let turns = 0;
   while (!m.end && turns < 30) {
+    planComputer(m, now()); // as tools.ts does just after the turn opens
     const before = json(m);
-    const computerCommitted = m.pend.A.commitment;
+    const computerCommitted = m.pend.A!.commitment;
     const ps = parseOrders(scripted(m), rulesOf(m).s);
     const r = submit(m, { turn: m.turn, placements: ps, source: 'agent', final: true, now: now() }) as { commitment: string };
     const h = m.history[m.history.length - 1];
-    ok(h.A.commitment === computerCommitted && before.pend.A.commitment === computerCommitted, `${ruleset}: the computer's orders at turn ${h.turn} are the ones it committed before the person's were sent`);
+    ok(h.A.commitment === computerCommitted && before.pend.A!.commitment === computerCommitted, `${ruleset}: the computer's orders at turn ${h.turn} are the ones it committed before the person's were sent`);
     ok(h.C.commitment === r.commitment, `${ruleset}: the person's orders at turn ${h.turn} are the ones committed`);
     turns++;
   }
@@ -142,13 +143,15 @@ playOut('play', 202);
   type Change = (m: SoloMatch, e: ReturnType<typeof rulesOf>['e']) => void;
   const twins = (orders: unknown[], turns: number, change: Change, both: Change = () => {}) => {
     const { m } = start('book', 5);
-    m.pend.A = { ...m.pend.A, placements: [] };
+    planComputer(m, now());
+    m.pend.A = { ...m.pend.A!, placements: [] };
     both(m, rulesOf(m).e);
     const a = json(m), b = json(m), { e, s } = rulesOf(m);
     change(b, e);
     for (let t = 0; t < turns; t++) for (const x of [a, b]) {
       submit(x, { turn: x.turn, placements: t === 0 ? parseOrders(orders, s) : [], source: 'agent', final: true, now: now() });
-      x.pend.A = { ...x.pend.A, placements: [] };
+      planComputer(x, now());
+      x.pend.A = { ...x.pend.A!, placements: [] };
     }
     const strip = (v: ReturnType<typeof viewFor>) => ({ ...v, opponent_commitment: null, my_orders: null });
     const sim = (x: SoloMatch) => simulate(x, { scenarios: [{ name: 'wait', placements: [] }], steps: 12 });

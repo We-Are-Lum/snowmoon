@@ -251,7 +251,9 @@ export const AGENTS = {
   // Switched OFF 2026-11-01 (owner: "if anything leaks, switch agent play off and tell me"): in production, at level 3,
   // a final submit's time still grew with the computer's hidden towers (1.0 to 1.8 s against a 400 ms pad). Back on
   // when the fix is in and the live check passes. Was [6786, -23].
-  minpentaiPlay: { people: [] as readonly number[] },
+  // The fix (a quiet time on every call, quiet.ts) is checked with the test account alone; the owner goes back on only
+  // after the production check passes at levels 1 to 3 (owner, 2026-11-01).
+  minpentaiPlay: { people: [-23] as readonly number[] },
   /** At most this many live agents per person (also a database trigger). */
   perPerson: 3,
   /**

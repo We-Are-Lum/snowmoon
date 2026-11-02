@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 import { playFor } from '~/lib/agents/core';
 import { linkOpens, recordOf, viewFor } from '~/lib/minpentai/agent-play/solo';
 import { load } from '~/lib/minpentai/agent-play/store';
+import { settle } from '~/lib/minpentai/agent-play/quiet';
 import { MinpentaiTags } from '../../mp-tags';
 import { Refresh } from './refresh';
 import { ViewBoard } from './view-board';
@@ -23,8 +24,10 @@ const say = (p: Move) => `${p.piece.replace(/_/g, ' ')} at ${p.x},${p.y}${p.dir 
  */
 export default async function LiveLink({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ k?: string }> }) {
   const { id } = await params, { k } = await searchParams;
-  const r = await load(id).catch(() => null);
-  if (!r || !playFor(r.m.person) || !linkOpens(r.m, k ?? '')) notFound();
+  const peek = await load(id).catch(() => null);
+  if (!peek || !playFor(peek.m.person) || !linkOpens(peek.m, k ?? '')) notFound();
+  // The same quiet time as every tool call (quiet.ts): the page's timing says nothing about the computer's planning.
+  const r = (await settle(id)) ?? peek;
   const m = r.m, v = viewFor(m);
   const end = m.end ? recordOf(m) : null;
   const last = v.my_turns[v.my_turns.length - 1];
@@ -67,7 +70,7 @@ export default async function LiveLink({ params, searchParams }: { params: Promi
                 {v.my_orders.note ? <p className="mb-note">Note: {v.my_orders.note}</p> : null}
               </>
             ) : <p>No orders yet. {v.points} points to place.</p>}
-            <p className="mb-note">The site computer has committed its orders ({v.opponent_commitment?.slice(0, 12)}…); they are revealed with yours.</p>
+            <p className="mb-note">The site computer&rsquo;s moves this turn follow from the board and its random value, committed at the start ({v.opponent.random_commitment.slice(0, 12)}…); anyone can check them after the end.</p>
           </>
         ) : null}
 
