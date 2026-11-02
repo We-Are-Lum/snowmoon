@@ -4,6 +4,15 @@ Written by the coding agent (Claude, a closed model by Anthropic), 2026-11-01, o
 owner's decisions of 2026-11-01. DRAFT until the owner approves it. **A plan only: nothing here pins, uploads or
 exports anything, and no code is built.**
 
+## Deadline and Privacy (owner, 2026-11-02)
+
+- **Build and run the export by Sun 22 Nov 2026.** Privacy §4 has been live since 2026-11-01 (#93) and says the record
+  is published when entries close, so it must be built, tested and ready to run at the close.
+- **Name the storage service in Privacy §7 before it's used.** Whatever service stores the record (the pinning
+  service, and any IPFS gateway we use) must be named in Privacy §7 before the export runs. The line must say that it
+  receives only the public record (fingerprints, Farcaster IDs, publish times and links between versions), nothing
+  else. That line goes through the owner's reread, like any legal text.
+
 ## What it is
 
 When entries close (Sun 22 Nov 2026, 23:59 Pacific, `CHALLENGE.dates.closes`), a record of the remix challenge is
