@@ -473,7 +473,7 @@ export const KIT_RULES: KitRule[] = [
   {
     id: 'play-step-limit', area: 'ending', source: 'invented',
     rule: 'At step 120 the match stops; most towers wins, and equal is a draw.',
-    code: [{ file: SOLO, find: 'export const SOLO_V2: VersionRules = { set: { maxSteps: 120, botTowers: 10 } };' }, { file: VENG, find: "if (w.step >= s.maxSteps) return nc > na ? 'C' : na > nc ? 'A' : 'D';" }],
+    code: [{ file: SOLO, find: 'export const SOLO_V2: VersionRules = { set: { maxSteps: 120, botTowers: 10 } };' }, { file: VENG, find: "if (w.step >= s.maxSteps) return nc > na ? 'C' : na > nc ? 'A' : s.tieBreak" }],
     site: 'yes', siteNote: 'Play.',
   },
   {

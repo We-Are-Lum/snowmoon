@@ -1,5 +1,6 @@
 import { createHash } from 'node:crypto';
 import { NextResponse } from 'next/server';
+import { challengeSheetsOpen } from '~/lib/challenge/open-sheets';
 import { getFid } from '~/lib/auth';
 import { db } from '~/lib/db';
 import { IMAGES } from '~/lib/config';
@@ -30,7 +31,11 @@ export async function POST(request: Request) {
   const fid = await getFid(request);
   if (fid === null) return NextResponse.json({ error: 'Sign in with Farcaster to make a picture' }, { status: 401 });
   if (!IMAGES.enabled) return no('Making images is switched off for now', 503);
-  if (!IMAGES.invited.includes(fid)) return no(IMAGE_WORDING.designs.form.notInvited, 403, { reason: 'invited' });
+  // Invited FIDs only; while the remix challenge opens sheets (CHALLENGE.openSheets), anyone may make a sheet's views
+  // (front, side, back; not a style's samples). Publishing them stays limited to a challenge character's fork or version.
+  const peek = !IMAGES.invited.includes(fid) && challengeSheetsOpen() ? await request.clone().json().catch(() => ({})) : null;
+  const viewForChallenge = peek !== null && ['front', 'side', 'back'].includes(String((peek as { slot?: unknown }).slot));
+  if (!IMAGES.invited.includes(fid) && !viewForChallenge) return no(IMAGE_WORDING.designs.form.notInvited, 403, { reason: 'invited' });
   const sql = db();
   if (!sql || !process.env.FAL_KEY || !process.env.IMAGES_TICKET_SECRET) return no('Making images is not set up on this deployment', 503);
 

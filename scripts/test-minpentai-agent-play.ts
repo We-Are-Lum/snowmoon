@@ -15,7 +15,8 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { isDeepStrictEqual } from 'node:util';
-import { CURRENT, autopilot, checkComputer, ordersText, linkOpens, newSolo, parseOrders, recordOf, replay, resign, rulesOf, setStanding, simulate, SoloError, submit, viewFor, type SoloMatch } from '../src/lib/minpentai/agent-play/solo';
+import { verdict } from '../src/lib/minpentai/versions/engine';
+import { CURRENT, DRAFTS, autopilot, checkComputer, planComputer, ordersText, linkOpens, newSolo, parseOrders, recordOf, replay, resign, rulesOf, setStanding, simulate, SoloError, submit, viewFor, type SoloMatch } from '../src/lib/minpentai/agent-play/solo';
 
 let checks = 0;
 const ok = (cond: unknown, what: string) => { checks++; assert.ok(cond, what); };
@@ -44,12 +45,13 @@ function playOut(ruleset: 'book' | 'play', seed: number) {
   ok(linkOpens(m, linkSecret) && !linkOpens(m, linkSecret.slice(0, -1) + (linkSecret.endsWith('A') ? 'B' : 'A')) && !linkOpens(m, ''), `${ruleset}: the live link opens with its secret only`);
   let turns = 0;
   while (!m.end && turns < 30) {
+    planComputer(m, now()); // as tools.ts does just after the turn opens
     const before = json(m);
-    const computerCommitted = m.pend.A.commitment;
+    const computerCommitted = m.pend.A!.commitment;
     const ps = parseOrders(scripted(m), rulesOf(m).s);
     const r = submit(m, { turn: m.turn, placements: ps, source: 'agent', final: true, now: now() }) as { commitment: string };
     const h = m.history[m.history.length - 1];
-    ok(h.A.commitment === computerCommitted && before.pend.A.commitment === computerCommitted, `${ruleset}: the computer's orders at turn ${h.turn} are the ones it committed before the person's were sent`);
+    ok(h.A.commitment === computerCommitted && before.pend.A!.commitment === computerCommitted, `${ruleset}: the computer's orders at turn ${h.turn} are the ones it committed before the person's were sent`);
     ok(h.C.commitment === r.commitment, `${ruleset}: the person's orders at turn ${h.turn} are the ones committed`);
     turns++;
   }
@@ -142,13 +144,15 @@ playOut('play', 202);
   type Change = (m: SoloMatch, e: ReturnType<typeof rulesOf>['e']) => void;
   const twins = (orders: unknown[], turns: number, change: Change, both: Change = () => {}) => {
     const { m } = start('book', 5);
-    m.pend.A = { ...m.pend.A, placements: [] };
+    planComputer(m, now());
+    m.pend.A = { ...m.pend.A!, placements: [] };
     both(m, rulesOf(m).e);
     const a = json(m), b = json(m), { e, s } = rulesOf(m);
     change(b, e);
     for (let t = 0; t < turns; t++) for (const x of [a, b]) {
       submit(x, { turn: x.turn, placements: t === 0 ? parseOrders(orders, s) : [], source: 'agent', final: true, now: now() });
-      x.pend.A = { ...x.pend.A, placements: [] };
+      planComputer(x, now());
+      x.pend.A = { ...x.pend.A!, placements: [] };
     }
     const strip = (v: ReturnType<typeof viewFor>) => ({ ...v, opponent_commitment: null, my_orders: null });
     const sim = (x: SoloMatch) => simulate(x, { scenarios: [{ name: 'wait', placements: [] }], steps: 12 });
@@ -188,6 +192,28 @@ playOut('play', 202);
   const u2 = usedBy(two);
   ok(['m', 'e', 'w', 'f'].filter((t) => u2.has(t as never)).length >= 3, `the book-2 computer uses the book's pieces (${[...u2].join('')})`);
   ok(CURRENT.book === 'book-2', 'new Rocks and Mirrors matches are book-2');
+}
+
+// ---------- 6. book-3 (draft): variant P plus the tie-break; started only by name, by the people it's opened to ----------
+{
+  const three = newSolo({ id: 'tbook3000001', ruleset: 'book-3', level: 2, seed: 78, person: 6786, agent: { id: null, name: 'Rook', model: null }, now: now() }).m;
+  const v3 = viewFor(three) as Record<string, unknown>, v1 = viewFor(newSolo({ id: 'tbook1000002', ruleset: 'book-1', level: 2, seed: 78, person: 6786, agent: { id: null, name: 'Rook', model: null }, now: now() }).m) as Record<string, unknown>;
+  ok(v3.towers_at_most === 6 && v3.symbols_count_toward_the_cap === true && v3.factories_fire_every_steps === 4 && typeof v3.tie_break === 'string', 'the book-3 view says its limits: 6 towers, symbols counted, factories every 4 steps, the tie-break');
+  ok(!('towers_at_most' in v1) && !('tie_break' in v1), 'a book-1 view is unchanged');
+  ok(isDeepStrictEqual(v3.costs, { glider: 4, square: 1, tower: 4, mirror: 1, symbol_glider: 2, moving_wall: 4, factory: 2 }), `book-3's costs (${JSON.stringify(v3.costs)})`);
+  while (!three.end) submit(three, { turn: three.turn, placements: parseOrders(scripted(three), rulesOf(three).s), source: 'agent', final: true, now: now() });
+  ok(checkComputer(json(three)).length === 0, 'a book-3 match plays to the end and replays with its computer');
+  const { e, s } = rulesOf(three);
+  ok(Object.values(three.w.tw).filter((o) => o === 'A').length <= 6 && Object.values(three.w.tw).filter((o) => o === 'C').length <= 6, 'no side ever holds more than 6 towers');
+  // The tie-break, on the final board: towers level at the last step.
+  const w = e.clone(three.w);
+  w.step = s.maxSteps;
+  w.tw = { ...e.world(s).tw }; // each side on its starting towers
+  const nC = e.towers(w, 'C').length, nA = e.towers(w, 'A').length;
+  const lv = e.towers(w, 'C').length === e.towers(w, 'A').length;
+  ok(lv && verdict(e, w, s, { C: 2, A: 1 }) === 'C' && verdict(e, w, s, { C: 1, A: 3 }) === 'A' && verdict(e, w, s, { C: 2, A: 2 }) === 'D', `with towers level at the last step, more enemy towers destroyed wins; equal is a draw (${nC}/${nA})`);
+  ok(verdict(e, w, rulesOf(newSolo({ id: 'tbook1000003', ruleset: 'book-1', level: 2, seed: 78, person: 6786, agent: { id: null, name: 'Rook', model: null }, now: now() }).m).s, { C: 2, A: 1 }) === 'D', 'under book-1 the same board is a draw');
+  ok(CURRENT.book === 'book-2' && DRAFTS.includes('book-3'), 'new Rocks and Mirrors matches stay book-2; book-3 is a draft');
 }
 
 console.log(`minpentai agent play: ${checks} checks passed`);

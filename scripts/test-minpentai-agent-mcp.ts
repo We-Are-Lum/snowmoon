@@ -14,6 +14,8 @@
  */
 import { createHash } from 'node:crypto';
 import { startStage, connect, mcp, tool } from './lib/agents-harness';
+import { AGENTS } from '../src/lib/config';
+import { QUIET_MS } from '../src/lib/minpentai/agent-play/solo';
 
 process.env.MINPENTAI_PLAY_TEST = '1';
 // Play is opened to A and B only (as production opens it to the owner only); C is someone it isn't open to.
@@ -53,6 +55,9 @@ try {
   check('M28 a person agent play isn\'t open to: no "play" scope granted, no tool listed, none runs', !cList.some((n) => n.startsWith('minpentai_')) && !cTry.ok, `${cList.join(',')} / ${cTry.error}`);
   check('M29 the people it is open to are the ones set (A and B here)', [people.A.person, people.B.person].join(',') === process.env.MINPENTAI_PLAY_TEST_PEOPLE, `${people.A.person},${people.B.person}`);
 
+  const d3 = await tool(BASE, a.access_token, 'minpentai_start_solo', { ruleset: 'book-3', level: 2 });
+  check('M30 a draft ruleset (book-3) starts only for the people it is opened to (the owner): A has play, not drafts', !d3.ok && /ruleset must be/.test(d3.error ?? '') && !AGENTS.minpentaiPlay.drafts.includes(people.A.person), d3.error ?? '');
+
   // A whole match.
   const st = await tool(BASE, a.access_token, 'minpentai_start_solo', { ruleset: 'book', level: 2, model: { name: 'Scripted', maker: 'This test', weights: 'open' } });
   check('M5 start a book-edition match', st.ok && typeof st.out.match_id === 'string', st.error ?? '');
@@ -73,11 +78,14 @@ try {
   check('M10 no record before the end, in the same words as for no match', !early.ok && early.error === none.error, `${early.error} / ${none.error}`);
 
   let turns = 0, simulated = 0, sitePlayed = false;
-  const finals: number[] = [];
+  const firsts: number[] = [];
+  let opened = 0;
   for (;;) {
     const g = await tool(BASE, a.access_token, 'minpentai_get_view', { match_id: id });
+    const t1 = Date.now();
     const v = g.out as unknown as View;
-    if (!g.ok || v.phase === 'over') break;
+    if (!g.ok || v.phase === 'over') break; // an ended match answers at once: its record is public
+    if (opened) firsts.push(t1 - opened);
     if (turns === 0) {
       const page = await (await fetch(live)).text();
       check('M11 the live link opens with its secret, and says it shows one side only', /your side/.test(page) && /Only your side is shown/.test(page));
@@ -94,20 +102,20 @@ try {
     if (turns === 3) {
       const sp = await tool(BASE, a.access_token, 'minpentai_let_site_play_turn', { match_id: id, turn: v.turn });
       sitePlayed = sp.ok;
+      opened = Date.now();
       check('M13 the site computer plays a turn for the person when asked', sp.ok, sp.error ?? '');
     } else {
       const wrong = turns === 1 ? await tool(BASE, a.access_token, 'minpentai_submit_orders', { match_id: id, turn: v.turn + 1, placements: [], source: 'agent' }) : null;
       if (wrong) check('M14 orders for a turn that isn\'t open are refused', !wrong.ok && /is not open/.test(wrong.error ?? ''), wrong.error ?? '');
-      const t0 = Date.now();
       const sub = await tool(BASE, a.access_token, 'minpentai_submit_orders', { match_id: id, turn: v.turn, placements: best ? plans[best.name] : [], source: 'agent', final: true });
-      finals.push(Date.now() - t0);
+      opened = Date.now();
       if (!sub.ok) { check(`M15 turn ${v.turn} accepted`, false, sub.error ?? ''); break; }
       if (turns === 0) check('M15 orders accepted with a commitment', /^[0-9a-f]{64}$/.test(String(sub.out.commitment)));
     }
     turns++;
     if (turns > 30) break;
   }
-  check('M22 every final submit takes at least the fixed time, so its time says nothing about the computer\'s hidden pieces', finals.length > 2 && Math.min(...finals) >= 390 && Math.max(...finals) - Math.min(...finals) < 150, finals.join(','));
+  check('M22 each turn\'s first call answers at the quiet time after the turn opened, the same every turn, so it says nothing about the computer\'s planning', firsts.length > 2 && Math.min(...firsts) >= QUIET_MS - 150 && Math.max(...firsts) - Math.min(...firsts) < 150, firsts.join(','));
   check('M16 the match is played to the end through the tools', turns >= 3 && simulated >= 3 && sitePlayed, `${turns} turns, ${simulated} simulations`);
   const rec = await tool(BASE, b.access_token, 'minpentai_get_record', { match_id: id });
   check('M17 at the end the record opens, to anyone', rec.ok, rec.error ?? '');
