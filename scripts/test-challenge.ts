@@ -593,6 +593,11 @@ check('as committed, CHALLENGE.entries, posts and openSheets are on (owner\'s re
   const invite = (src: string) => /\{challengeOpen && !standing && \(\s*<p className="dz-meta ch-standing ch-invite">\s*\{CW\.sheetInvite\(callName\)\} <Link href="\/challenge">/.test(src);
   check('R5 a challenge character\'s sheet links to /challenge while the window is open', invite(read('src/app/references/designs/[id]/page.tsx')) && /fork this sheet/.test(CW.sheetInvite('Zei')) && CW.sheetInvite('Zei').startsWith('Zei '));
   proof('R5 a sheet page without the link is caught', !invite(read('src/app/references/designs/[id]/page.tsx').replace('{CW.sheetInvite(callName)} <Link href="/challenge">', '{CW.sheetInvite(callName)} <Link href="/references">')));
+  // R6: after "Mark as my entry" said "Marked as your entry.", the button stayed.
+  const markSrc = read('src/components/challenge-mark.tsx');
+  const hides = (src: string) => /if \(r\?\.ok\) setDone\(true\);/.test(src) && /\{!done && \(\s*<button/.test(src);
+  check('R6 once marked, "Mark as my entry" goes', hides(markSrc));
+  proof('R6 a button that stays after marking is caught', !hides(markSrc.replace('{!done && (', '{(')));
 }
 
 console.log(`test:challenge: ${passed} passed, ${failures.length} failed`);
