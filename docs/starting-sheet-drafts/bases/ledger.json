@@ -1,0 +1,4815 @@
+{
+ "cap_usd": 3,
+ "calls": [
+  {
+   "char": "zei",
+   "view": "front",
+   "style": "Bolder",
+   "path": "edit",
+   "kind": "prompt-check",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 0.0001488,
+   "worstUsd": 0.0015,
+   "at": "2026-11-03T08:23:15.196Z"
+  },
+  {
+   "char": "zei",
+   "view": "front",
+   "style": "Bolder",
+   "path": "edit",
+   "kind": "image",
+   "file": "bases/zei-front-bolder-edit.jpg",
+   "sha256": "e980565f972fd4594bb40af0ee9e5d12c8f748bbac8def1680f1e731733ddad5",
+   "nsfw": false,
+   "costUsd": 0.01032192,
+   "worstUsd": 0.02,
+   "recipe": {
+    "prompt": "The same person as in the reference picture, full body, standing, seen from the front, plain light grey background. Keep the face, hair and clothes the same.\n\nDetailed science fiction comic art: bold confident outer contours with fine inner linework, figures when present are seen distinct from the background, rich mechanical and architectural detail, cel-shaded flat color with soft hard-edged shadows, clean and bright, clear readable faces and hands.\n\nThe person is a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head.\n\nNo text, no lettering, no signs with words.",
+    "model": "flux2-klein-4b-edit",
+    "endpoint": "fal-ai/flux-2/klein/4b/edit",
+    "host": "fal.ai",
+    "settings": {
+     "image_size": {
+      "width": 576,
+      "height": 768
+     },
+     "num_images": 1,
+     "enable_safety_checker": true,
+     "output_format": "jpeg",
+     "sync_mode": true
+    },
+    "seed": 805797434,
+    "request_id": "01a1a081-6150-7a10-941b-80b95a1600be",
+    "cost_usd": 0.0103,
+    "made_at": "2026-11-03T08:23:17.885Z",
+    "width": 576,
+    "height": 768,
+    "references": [
+     {
+      "sha256": "cd6e71769d0d468bbfc5dbb4269aa62b14a92efaa45aef33bfc1b9fd0ba8d867"
+     }
+    ],
+    "style": {
+     "version_id": "9e255ec2-6851-415d-a1ca-41254412c878",
+     "title": "Bolder",
+     "text": "Detailed science fiction comic art: bold confident outer contours with fine inner linework, figures when present are seen distinct from the background, rich mechanical and architectural detail, cel-shaded flat color with soft hard-edged shadows, clean and bright, clear readable faces and hands."
+    },
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "passed"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    }
+   }
+  },
+  {
+   "char": "zei",
+   "view": "front",
+   "style": "Mood",
+   "path": "edit",
+   "kind": "prompt-check",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 0.000116625,
+   "worstUsd": 0.0015,
+   "at": "2026-11-03T08:23:18.592Z"
+  },
+  {
+   "char": "zei",
+   "view": "front",
+   "style": "Mood",
+   "path": "edit",
+   "kind": "image",
+   "file": "bases/zei-front-mood-edit.jpg",
+   "sha256": "bc06f68f9682c7e298bd3c2663936b7d36b682e4dcbd2e1580990a4ba3e761f0",
+   "nsfw": false,
+   "costUsd": 0.01032192,
+   "worstUsd": 0.02,
+   "recipe": {
+    "prompt": "The same person as in the reference picture, full body, standing, seen from the front, plain light grey background. Keep the face, hair and clothes the same.\n\nIntense, highly detailed graphic novel look. Moody. Expressive. Dark lines, bold colors. Visible brushstrokes.\n\nThe person is a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head.\n\nNo text, no lettering, no signs with words.",
+    "model": "flux2-klein-4b-edit",
+    "endpoint": "fal-ai/flux-2/klein/4b/edit",
+    "host": "fal.ai",
+    "settings": {
+     "image_size": {
+      "width": 576,
+      "height": 768
+     },
+     "num_images": 1,
+     "enable_safety_checker": true,
+     "output_format": "jpeg",
+     "sync_mode": true
+    },
+    "seed": 1832851212,
+    "request_id": "01a1a081-6bb7-72c1-bc04-ab6b641b54b1",
+    "cost_usd": 0.0103,
+    "made_at": "2026-11-03T08:23:20.594Z",
+    "width": 576,
+    "height": 768,
+    "references": [
+     {
+      "sha256": "cd6e71769d0d468bbfc5dbb4269aa62b14a92efaa45aef33bfc1b9fd0ba8d867"
+     }
+    ],
+    "style": {
+     "version_id": "712ca63f-de6e-46bf-b3ad-7007b1120e16",
+     "title": "Mood",
+     "text": "Intense, highly detailed graphic novel look. Moody. Expressive. Dark lines, bold colors. Visible brushstrokes."
+    },
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "passed"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    }
+   }
+  },
+  {
+   "char": "zei",
+   "view": "front",
+   "style": "Quiet",
+   "path": "edit",
+   "kind": "prompt-check",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "allow": false,
+   "category": "unclear",
+   "provider": "groq",
+   "costUsd": 0.0001536,
+   "worstUsd": 0.0015,
+   "at": "2026-11-03T08:23:21.306Z"
+  },
+  {
+   "char": "zei",
+   "view": "front",
+   "style": "Quiet",
+   "path": "edit",
+   "kind": "prompt-check",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 0.0001275,
+   "worstUsd": 0.0015,
+   "at": "2026-11-03T08:23:21.881Z"
+  },
+  {
+   "char": "zei",
+   "view": "front",
+   "style": "Quiet",
+   "path": "edit",
+   "kind": "image",
+   "file": "bases/zei-front-quiet-edit.jpg",
+   "sha256": "bf60323d3a696468839131b29a6f10ea2392ec187e5803d3a13c7974862e883e",
+   "nsfw": false,
+   "costUsd": 0.01032192,
+   "worstUsd": 0.02,
+   "recipe": {
+    "prompt": "The same person as in the reference picture, full body, standing, seen from the front, plain light grey background. Keep the face, hair and clothes the same.\n\nDetailed science fiction comic art: precise fine uniform linework, restrained cel-shaded color in muted soft tones, simple uncluttered backgrounds with plenty of empty space, soft natural light, the focus on faces, hands and posture, calm and intimate.\n\nThe person is a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head.\n\nNo text, no lettering, no signs with words.",
+    "model": "flux2-klein-4b-edit",
+    "endpoint": "fal-ai/flux-2/klein/4b/edit",
+    "host": "fal.ai",
+    "settings": {
+     "image_size": {
+      "width": 576,
+      "height": 768
+     },
+     "num_images": 1,
+     "enable_safety_checker": true,
+     "output_format": "jpeg",
+     "sync_mode": true
+    },
+    "seed": 1796943069,
+    "request_id": "01a1a081-7943-7a42-96a2-8307a913cde7",
+    "cost_usd": 0.0103,
+    "made_at": "2026-11-03T08:23:24.196Z",
+    "width": 576,
+    "height": 768,
+    "references": [
+     {
+      "sha256": "cd6e71769d0d468bbfc5dbb4269aa62b14a92efaa45aef33bfc1b9fd0ba8d867"
+     }
+    ],
+    "style": {
+     "version_id": "3b1c6e9d-d5f2-465d-8db9-da1341d2c4cc",
+     "title": "Quiet",
+     "text": "Detailed science fiction comic art: precise fine uniform linework, restrained cel-shaded color in muted soft tones, simple uncluttered backgrounds with plenty of empty space, soft natural light, the focus on faces, hands and posture, calm and intimate."
+    },
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "passed"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    }
+   }
+  },
+  {
+   "char": "zei",
+   "view": "front",
+   "style": "Bolder",
+   "path": "text",
+   "kind": "prompt-check",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 0.0000786,
+   "worstUsd": 0.0015,
+   "at": "2026-11-03T08:23:30.171Z"
+  },
+  {
+   "char": "zei",
+   "view": "front",
+   "style": "Bolder",
+   "path": "text",
+   "kind": "image",
+   "file": "bases/zei-front-bolder-text.jpg",
+   "sha256": "bca3e007ff3a37396e53e6352e9f79b0e6db7bcf3da00926531e730a151ecf59",
+   "nsfw": false,
+   "costUsd": 0.00221184,
+   "worstUsd": 0.004999999999999999,
+   "recipe": {
+    "prompt": "Character reference picture: one person, full body, standing, seen from the front, plain light grey background.\n\nDetailed science fiction comic art: bold confident outer contours with fine inner linework, figures when present are seen distinct from the background, rich mechanical and architectural detail, cel-shaded flat color with soft hard-edged shadows, clean and bright, clear readable faces and hands.\n\nThe person is a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head.\n\nNo text, no lettering, no signs with words.",
+    "model": "z-image-turbo",
+    "endpoint": "fal-ai/z-image/turbo",
+    "host": "fal.ai",
+    "settings": {
+     "image_size": {
+      "width": 576,
+      "height": 768
+     },
+     "num_images": 1,
+     "num_inference_steps": 8,
+     "enable_safety_checker": true,
+     "enable_prompt_expansion": false,
+     "output_format": "jpeg",
+     "sync_mode": true
+    },
+    "seed": 1198339137,
+    "request_id": "01a1a081-997f-7c81-867d-6d1a3a887bf8",
+    "cost_usd": 0.0022,
+    "made_at": "2026-11-03T08:23:32.581Z",
+    "width": 576,
+    "height": 768,
+    "style": {
+     "version_id": "9e255ec2-6851-415d-a1ca-41254412c878",
+     "title": "Bolder",
+     "text": "Detailed science fiction comic art: bold confident outer contours with fine inner linework, figures when present are seen distinct from the background, rich mechanical and architectural detail, cel-shaded flat color with soft hard-edged shadows, clean and bright, clear readable faces and hands."
+    },
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "passed"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    }
+   }
+  },
+  {
+   "char": "zei",
+   "view": "front",
+   "style": "Mood",
+   "path": "text",
+   "kind": "prompt-check",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 0.000085725,
+   "worstUsd": 0.0015,
+   "at": "2026-11-03T08:23:33.065Z"
+  },
+  {
+   "char": "zei",
+   "view": "front",
+   "style": "Mood",
+   "path": "text",
+   "kind": "image",
+   "file": "bases/zei-front-mood-text.jpg",
+   "sha256": "2e1e22d205b3354293877939392f06968d3d95975d59181ba0cddefb3c70e8a1",
+   "nsfw": false,
+   "costUsd": 0.00221184,
+   "worstUsd": 0.004999999999999999,
+   "recipe": {
+    "prompt": "Character reference picture: one person, full body, standing, seen from the front, plain light grey background.\n\nIntense, highly detailed graphic novel look. Moody. Expressive. Dark lines, bold colors. Visible brushstrokes.\n\nThe person is a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head.\n\nNo text, no lettering, no signs with words.",
+    "model": "z-image-turbo",
+    "endpoint": "fal-ai/z-image/turbo",
+    "host": "fal.ai",
+    "settings": {
+     "image_size": {
+      "width": 576,
+      "height": 768
+     },
+     "num_images": 1,
+     "num_inference_steps": 8,
+     "enable_safety_checker": true,
+     "enable_prompt_expansion": false,
+     "output_format": "jpeg",
+     "sync_mode": true
+    },
+    "seed": 742192686,
+    "request_id": "01a1a081-a427-7492-8599-8cc28a3f8f8a",
+    "cost_usd": 0.0022,
+    "made_at": "2026-11-03T08:23:35.347Z",
+    "width": 576,
+    "height": 768,
+    "style": {
+     "version_id": "712ca63f-de6e-46bf-b3ad-7007b1120e16",
+     "title": "Mood",
+     "text": "Intense, highly detailed graphic novel look. Moody. Expressive. Dark lines, bold colors. Visible brushstrokes."
+    },
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "passed"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    }
+   }
+  },
+  {
+   "char": "zei",
+   "view": "front",
+   "style": "Quiet",
+   "path": "text",
+   "kind": "prompt-check",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 0.0000912,
+   "worstUsd": 0.0015,
+   "at": "2026-11-03T08:23:35.880Z"
+  },
+  {
+   "char": "zei",
+   "view": "front",
+   "style": "Quiet",
+   "path": "text",
+   "kind": "image",
+   "file": "bases/zei-front-quiet-text.jpg",
+   "sha256": "2c7c8d4120a0222cc0727d37686423f0b8ba9aaf26378318439b924c8387561c",
+   "nsfw": false,
+   "costUsd": 0.00221184,
+   "worstUsd": 0.004999999999999999,
+   "recipe": {
+    "prompt": "Character reference picture: one person, full body, standing, seen from the front, plain light grey background.\n\nDetailed science fiction comic art: precise fine uniform linework, restrained cel-shaded color in muted soft tones, simple uncluttered backgrounds with plenty of empty space, soft natural light, the focus on faces, hands and posture, calm and intimate.\n\nThe person is a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head.\n\nNo text, no lettering, no signs with words.",
+    "model": "z-image-turbo",
+    "endpoint": "fal-ai/z-image/turbo",
+    "host": "fal.ai",
+    "settings": {
+     "image_size": {
+      "width": 576,
+      "height": 768
+     },
+     "num_images": 1,
+     "num_inference_steps": 8,
+     "enable_safety_checker": true,
+     "enable_prompt_expansion": false,
+     "output_format": "jpeg",
+     "sync_mode": true
+    },
+    "seed": 1492909549,
+    "request_id": "01a1a081-af23-73e3-97e7-4b938737c8e2",
+    "cost_usd": 0.0022,
+    "made_at": "2026-11-03T08:23:37.989Z",
+    "width": 576,
+    "height": 768,
+    "style": {
+     "version_id": "3b1c6e9d-d5f2-465d-8db9-da1341d2c4cc",
+     "title": "Quiet",
+     "text": "Detailed science fiction comic art: precise fine uniform linework, restrained cel-shaded color in muted soft tones, simple uncluttered backgrounds with plenty of empty space, soft natural light, the focus on faces, hands and posture, calm and intimate."
+    },
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "passed"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    }
+   }
+  },
+  {
+   "char": "zei",
+   "view": "front",
+   "style": "core",
+   "path": "edit",
+   "kind": "prompt-check",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "allow": false,
+   "category": "unclear",
+   "provider": "groq",
+   "costUsd": 0.000153525,
+   "worstUsd": 0.0015,
+   "at": "2026-11-03T08:23:56.364Z"
+  },
+  {
+   "char": "zei",
+   "view": "front",
+   "style": "core",
+   "path": "edit",
+   "kind": "prompt-check",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 0.000125925,
+   "worstUsd": 0.0015,
+   "at": "2026-11-03T08:23:56.992Z"
+  },
+  {
+   "char": "zei",
+   "view": "front",
+   "style": "core",
+   "path": "edit",
+   "kind": "image",
+   "file": "bases/zei-front-core-edit.jpg",
+   "sha256": "08f9f6b07ef40ecd525bb1b8f184d6b6396dc53477854e8cfeec4a0879d02841",
+   "nsfw": false,
+   "costUsd": 0.01032192,
+   "worstUsd": 0.02,
+   "recipe": {
+    "prompt": "The same person as in the reference picture, full body, standing, seen from the front, plain light grey background. Keep the face, hair and clothes the same.\n\nDetailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail, cel-shaded flat color with soft hard-edged shadows, warm low golden light with long soft shadows, gentle warm palette, clear readable faces and hands.\n\nThe person is a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head.\n\nNo text, no lettering, no signs with words.",
+    "model": "flux2-klein-4b-edit",
+    "endpoint": "fal-ai/flux-2/klein/4b/edit",
+    "host": "fal.ai",
+    "settings": {
+     "image_size": {
+      "width": 576,
+      "height": 768
+     },
+     "num_images": 1,
+     "enable_safety_checker": true,
+     "output_format": "jpeg",
+     "sync_mode": true
+    },
+    "seed": 402523227,
+    "request_id": "01a1a082-02c6-7342-8239-278c48c0bd87",
+    "cost_usd": 0.0103,
+    "made_at": "2026-11-03T08:24:01.344Z",
+    "width": 576,
+    "height": 768,
+    "references": [
+     {
+      "sha256": "cd6e71769d0d468bbfc5dbb4269aa62b14a92efaa45aef33bfc1b9fd0ba8d867"
+     }
+    ],
+    "style": {
+     "version_id": "6cbf8e03-8ef3-4ad1-95a4-2cc68f64c537",
+     "title": "warm light",
+     "text": "Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail, cel-shaded flat color with soft hard-edged shadows, warm low golden light with long soft shadows, gentle warm palette, clear readable faces and hands."
+    },
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "passed"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    }
+   }
+  },
+  {
+   "char": "zei",
+   "view": "front",
+   "style": "Printed",
+   "path": "edit",
+   "kind": "prompt-check",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 0.000127875,
+   "worstUsd": 0.0015,
+   "at": "2026-11-03T08:24:02.359Z"
+  },
+  {
+   "char": "zei",
+   "view": "front",
+   "style": "Printed",
+   "path": "edit",
+   "kind": "image",
+   "file": "bases/zei-front-printed-edit.jpg",
+   "sha256": "4b0e2c048ef025b41a278a9e68a26c52aed5d9401cff7f4daf7915c38ba5b6fd",
+   "nsfw": false,
+   "costUsd": 0.01032192,
+   "worstUsd": 0.02,
+   "recipe": {
+    "prompt": "The same person as in the reference picture, full body, standing, seen from the front, plain light grey background. Keep the face, hair and clothes the same.\n\nDetailed science fiction comic art: precise fine uniform linework, cel-shaded flat color with soft hard-edged shadows, a subtle printed-paper texture with fine halftone dots in the shadows and slightly offset color, rich mechanical and architectural detail, clear readable faces and hands.\n\nThe person is a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head.\n\nNo text, no lettering, no signs with words.",
+    "model": "flux2-klein-4b-edit",
+    "endpoint": "fal-ai/flux-2/klein/4b/edit",
+    "host": "fal.ai",
+    "settings": {
+     "image_size": {
+      "width": 576,
+      "height": 768
+     },
+     "num_images": 1,
+     "enable_safety_checker": true,
+     "output_format": "jpeg",
+     "sync_mode": true
+    },
+    "seed": 1298165595,
+    "request_id": "01a1a082-189e-7c12-bb96-bf9d0eaa9f56",
+    "cost_usd": 0.0103,
+    "made_at": "2026-11-03T08:24:07.308Z",
+    "width": 576,
+    "height": 768,
+    "references": [
+     {
+      "sha256": "cd6e71769d0d468bbfc5dbb4269aa62b14a92efaa45aef33bfc1b9fd0ba8d867"
+     }
+    ],
+    "style": {
+     "version_id": "b83aa0d7-3d53-4a6f-948c-bf7dff2387e9",
+     "title": "Printed",
+     "text": "Detailed science fiction comic art: precise fine uniform linework, cel-shaded flat color with soft hard-edged shadows, a subtle printed-paper texture with fine halftone dots in the shadows and slightly offset color, rich mechanical and architectural detail, clear readable faces and hands."
+    },
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "passed"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    }
+   }
+  },
+  {
+   "char": "bai",
+   "view": "front",
+   "style": "Bolder",
+   "path": "edit",
+   "kind": "prompt-check",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "allow": false,
+   "category": "unclear",
+   "provider": "groq",
+   "costUsd": 0.000152475,
+   "worstUsd": 0.0015,
+   "at": "2026-11-03T08:24:08.349Z"
+  },
+  {
+   "char": "bai",
+   "view": "front",
+   "style": "Bolder",
+   "path": "edit",
+   "kind": "prompt-check",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 0.000084975,
+   "worstUsd": 0.0015,
+   "at": "2026-11-03T08:24:08.887Z"
+  },
+  {
+   "char": "bai",
+   "view": "front",
+   "style": "Bolder",
+   "path": "edit",
+   "kind": "image",
+   "file": "bases/bai-front-bolder-edit.jpg",
+   "sha256": "6c4e1b40614962e6a62b5e2e51a779f031437e65e21026e82fae3784286760ef",
+   "nsfw": false,
+   "costUsd": 0.01032192,
+   "worstUsd": 0.02,
+   "recipe": {
+    "prompt": "The same person as in the reference picture, full body, standing, seen from the front, plain light grey background. Keep the face, hair and clothes the same.\n\nDetailed science fiction comic art: bold confident outer contours with fine inner linework, figures when present are seen distinct from the background, rich mechanical and architectural detail, cel-shaded flat color with soft hard-edged shadows, clean and bright, clear readable faces and hands.\n\nThe person is a young woman of about eighteen, tall and athletic, dark brown skin, hair pulled into a high puffy ponytail dyed magenta at the ends, a confident sly grin, wearing a lime-green modular shell vest with a bulky angular collar and reflective piping, a white seamless sleeveless bodysuit with glowing magenta seams, black wide gathered trousers with segmented knees, chunky black boots with glowing soles and a hip pouch.\n\nNo text, no lettering, no signs with words.",
+    "model": "flux2-klein-4b-edit",
+    "endpoint": "fal-ai/flux-2/klein/4b/edit",
+    "host": "fal.ai",
+    "settings": {
+     "image_size": {
+      "width": 576,
+      "height": 768
+     },
+     "num_images": 1,
+     "enable_safety_checker": true,
+     "output_format": "jpeg",
+     "sync_mode": true
+    },
+    "seed": 1009192465,
+    "request_id": "01a1a082-310e-7ce0-bbc2-4e87a160aaa5",
+    "cost_usd": 0.0103,
+    "made_at": "2026-11-03T08:24:13.355Z",
+    "width": 576,
+    "height": 768,
+    "references": [
+     {
+      "sha256": "21def33df4f734aa8979a2bb152d88b443d511b940eaae0c4a67347f900db73e"
+     }
+    ],
+    "style": {
+     "version_id": "9e255ec2-6851-415d-a1ca-41254412c878",
+     "title": "Bolder",
+     "text": "Detailed science fiction comic art: bold confident outer contours with fine inner linework, figures when present are seen distinct from the background, rich mechanical and architectural detail, cel-shaded flat color with soft hard-edged shadows, clean and bright, clear readable faces and hands."
+    },
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "passed"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    }
+   }
+  },
+  {
+   "char": "bai",
+   "view": "front",
+   "style": "core",
+   "path": "edit",
+   "kind": "prompt-check",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 0.0001509,
+   "worstUsd": 0.0015,
+   "at": "2026-11-03T08:24:14.206Z"
+  },
+  {
+   "char": "bai",
+   "view": "front",
+   "style": "core",
+   "path": "edit",
+   "kind": "image",
+   "file": "bases/bai-front-core-edit.jpg",
+   "sha256": "51fc5c95370dea9ddf41ef0a39f77b395cfef5d11edf69ac723d95e93ec5a4d9",
+   "nsfw": false,
+   "costUsd": 0.01032192,
+   "worstUsd": 0.02,
+   "recipe": {
+    "prompt": "The same person as in the reference picture, full body, standing, seen from the front, plain light grey background. Keep the face, hair and clothes the same.\n\nDetailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail, cel-shaded flat color with soft hard-edged shadows, warm low golden light with long soft shadows, gentle warm palette, clear readable faces and hands.\n\nThe person is a young woman of about eighteen, tall and athletic, dark brown skin, hair pulled into a high puffy ponytail dyed magenta at the ends, a confident sly grin, wearing a lime-green modular shell vest with a bulky angular collar and reflective piping, a white seamless sleeveless bodysuit with glowing magenta seams, black wide gathered trousers with segmented knees, chunky black boots with glowing soles and a hip pouch.\n\nNo text, no lettering, no signs with words.",
+    "model": "flux2-klein-4b-edit",
+    "endpoint": "fal-ai/flux-2/klein/4b/edit",
+    "host": "fal.ai",
+    "settings": {
+     "image_size": {
+      "width": 576,
+      "height": 768
+     },
+     "num_images": 1,
+     "enable_safety_checker": true,
+     "output_format": "jpeg",
+     "sync_mode": true
+    },
+    "seed": 2041043948,
+    "request_id": "01a1a082-44ef-7880-af73-7d717a852c20",
+    "cost_usd": 0.0103,
+    "made_at": "2026-11-03T08:24:16.604Z",
+    "width": 576,
+    "height": 768,
+    "references": [
+     {
+      "sha256": "21def33df4f734aa8979a2bb152d88b443d511b940eaae0c4a67347f900db73e"
+     }
+    ],
+    "style": {
+     "version_id": "6cbf8e03-8ef3-4ad1-95a4-2cc68f64c537",
+     "title": "warm light",
+     "text": "Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail, cel-shaded flat color with soft hard-edged shadows, warm low golden light with long soft shadows, gentle warm palette, clear readable faces and hands."
+    },
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "passed"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    }
+   }
+  },
+  {
+   "char": "bai",
+   "view": "front",
+   "style": "Mood",
+   "path": "edit",
+   "kind": "prompt-check",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "allow": false,
+   "category": "unclear",
+   "provider": "groq",
+   "costUsd": 0.0001503,
+   "worstUsd": 0.0015,
+   "at": "2026-11-03T08:24:18.037Z"
+  },
+  {
+   "char": "bai",
+   "view": "front",
+   "style": "Mood",
+   "path": "edit",
+   "kind": "prompt-check",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 0.0001227,
+   "worstUsd": 0.0015,
+   "at": "2026-11-03T08:24:18.647Z"
+  },
+  {
+   "char": "bai",
+   "view": "front",
+   "style": "Mood",
+   "path": "edit",
+   "kind": "image",
+   "file": "bases/bai-front-mood-edit.jpg",
+   "sha256": "7a84728e7a5a9e55cfcdd02d5fbda1dfd1dec395488084cdf7803278d5e3871d",
+   "nsfw": false,
+   "costUsd": 0.01032192,
+   "worstUsd": 0.02,
+   "recipe": {
+    "prompt": "The same person as in the reference picture, full body, standing, seen from the front, plain light grey background. Keep the face, hair and clothes the same.\n\nIntense, highly detailed graphic novel look. Moody. Expressive. Dark lines, bold colors. Visible brushstrokes.\n\nThe person is a young woman of about eighteen, tall and athletic, dark brown skin, hair pulled into a high puffy ponytail dyed magenta at the ends, a confident sly grin, wearing a lime-green modular shell vest with a bulky angular collar and reflective piping, a white seamless sleeveless bodysuit with glowing magenta seams, black wide gathered trousers with segmented knees, chunky black boots with glowing soles and a hip pouch.\n\nNo text, no lettering, no signs with words.",
+    "model": "flux2-klein-4b-edit",
+    "endpoint": "fal-ai/flux-2/klein/4b/edit",
+    "host": "fal.ai",
+    "settings": {
+     "image_size": {
+      "width": 576,
+      "height": 768
+     },
+     "num_images": 1,
+     "enable_safety_checker": true,
+     "output_format": "jpeg",
+     "sync_mode": true
+    },
+    "seed": 635007503,
+    "request_id": "01a1a082-5647-7241-871c-de411f1bce4b",
+    "cost_usd": 0.0103,
+    "made_at": "2026-11-03T08:24:20.988Z",
+    "width": 576,
+    "height": 768,
+    "references": [
+     {
+      "sha256": "21def33df4f734aa8979a2bb152d88b443d511b940eaae0c4a67347f900db73e"
+     }
+    ],
+    "style": {
+     "version_id": "712ca63f-de6e-46bf-b3ad-7007b1120e16",
+     "title": "Mood",
+     "text": "Intense, highly detailed graphic novel look. Moody. Expressive. Dark lines, bold colors. Visible brushstrokes."
+    },
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "passed"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    }
+   }
+  },
+  {
+   "char": "bai",
+   "view": "front",
+   "style": "Printed",
+   "path": "edit",
+   "kind": "prompt-check",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 0.00014175,
+   "worstUsd": 0.0015,
+   "at": "2026-11-03T08:24:21.678Z"
+  },
+  {
+   "char": "bai",
+   "view": "front",
+   "style": "Printed",
+   "path": "edit",
+   "kind": "image",
+   "file": "bases/bai-front-printed-edit.jpg",
+   "sha256": "7662a3b34ee15b2712ae8796a2152e8a6bed9b87481637f60f3953b80287abdd",
+   "nsfw": false,
+   "costUsd": 0.01032192,
+   "worstUsd": 0.02,
+   "recipe": {
+    "prompt": "The same person as in the reference picture, full body, standing, seen from the front, plain light grey background. Keep the face, hair and clothes the same.\n\nDetailed science fiction comic art: precise fine uniform linework, cel-shaded flat color with soft hard-edged shadows, a subtle printed-paper texture with fine halftone dots in the shadows and slightly offset color, rich mechanical and architectural detail, clear readable faces and hands.\n\nThe person is a young woman of about eighteen, tall and athletic, dark brown skin, hair pulled into a high puffy ponytail dyed magenta at the ends, a confident sly grin, wearing a lime-green modular shell vest with a bulky angular collar and reflective piping, a white seamless sleeveless bodysuit with glowing magenta seams, black wide gathered trousers with segmented knees, chunky black boots with glowing soles and a hip pouch.\n\nNo text, no lettering, no signs with words.",
+    "model": "flux2-klein-4b-edit",
+    "endpoint": "fal-ai/flux-2/klein/4b/edit",
+    "host": "fal.ai",
+    "settings": {
+     "image_size": {
+      "width": 576,
+      "height": 768
+     },
+     "num_images": 1,
+     "enable_safety_checker": true,
+     "output_format": "jpeg",
+     "sync_mode": true
+    },
+    "seed": 1330277458,
+    "request_id": "01a1a082-6222-71e0-b4d0-9d1ad751af9e",
+    "cost_usd": 0.0103,
+    "made_at": "2026-11-03T08:24:24.132Z",
+    "width": 576,
+    "height": 768,
+    "references": [
+     {
+      "sha256": "21def33df4f734aa8979a2bb152d88b443d511b940eaae0c4a67347f900db73e"
+     }
+    ],
+    "style": {
+     "version_id": "b83aa0d7-3d53-4a6f-948c-bf7dff2387e9",
+     "title": "Printed",
+     "text": "Detailed science fiction comic art: precise fine uniform linework, cel-shaded flat color with soft hard-edged shadows, a subtle printed-paper texture with fine halftone dots in the shadows and slightly offset color, rich mechanical and architectural detail, clear readable faces and hands."
+    },
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "passed"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    }
+   }
+  },
+  {
+   "char": "bai",
+   "view": "front",
+   "style": "Quiet",
+   "path": "edit",
+   "kind": "prompt-check",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 0.000122775,
+   "worstUsd": 0.0015,
+   "at": "2026-11-03T08:24:24.951Z"
+  },
+  {
+   "char": "bai",
+   "view": "front",
+   "style": "Quiet",
+   "path": "edit",
+   "kind": "image",
+   "file": "bases/bai-front-quiet-edit.jpg",
+   "sha256": "1cada0f90a981cfff25bb7a1689b0998be7d83ea16b739587766173895c4b7e6",
+   "nsfw": false,
+   "costUsd": 0.01032192,
+   "worstUsd": 0.02,
+   "recipe": {
+    "prompt": "The same person as in the reference picture, full body, standing, seen from the front, plain light grey background. Keep the face, hair and clothes the same.\n\nDetailed science fiction comic art: precise fine uniform linework, restrained cel-shaded color in muted soft tones, simple uncluttered backgrounds with plenty of empty space, soft natural light, the focus on faces, hands and posture, calm and intimate.\n\nThe person is a young woman of about eighteen, tall and athletic, dark brown skin, hair pulled into a high puffy ponytail dyed magenta at the ends, a confident sly grin, wearing a lime-green modular shell vest with a bulky angular collar and reflective piping, a white seamless sleeveless bodysuit with glowing magenta seams, black wide gathered trousers with segmented knees, chunky black boots with glowing soles and a hip pouch.\n\nNo text, no lettering, no signs with words.",
+    "model": "flux2-klein-4b-edit",
+    "endpoint": "fal-ai/flux-2/klein/4b/edit",
+    "host": "fal.ai",
+    "settings": {
+     "image_size": {
+      "width": 576,
+      "height": 768
+     },
+     "num_images": 1,
+     "enable_safety_checker": true,
+     "output_format": "jpeg",
+     "sync_mode": true
+    },
+    "seed": 191067511,
+    "request_id": "01a1a082-6f93-76d3-9b46-ef928a8e56b5",
+    "cost_usd": 0.0103,
+    "made_at": "2026-11-03T08:24:28.962Z",
+    "width": 576,
+    "height": 768,
+    "references": [
+     {
+      "sha256": "21def33df4f734aa8979a2bb152d88b443d511b940eaae0c4a67347f900db73e"
+     }
+    ],
+    "style": {
+     "version_id": "3b1c6e9d-d5f2-465d-8db9-da1341d2c4cc",
+     "title": "Quiet",
+     "text": "Detailed science fiction comic art: precise fine uniform linework, restrained cel-shaded color in muted soft tones, simple uncluttered backgrounds with plenty of empty space, soft natural light, the focus on faces, hands and posture, calm and intimate."
+    },
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "passed"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    }
+   }
+  },
+  {
+   "char": "gladias",
+   "view": "front",
+   "style": "Bolder",
+   "path": "edit",
+   "kind": "prompt-check",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 0.000107175,
+   "worstUsd": 0.0015,
+   "at": "2026-11-03T08:24:29.718Z"
+  },
+  {
+   "char": "gladias",
+   "view": "front",
+   "style": "Bolder",
+   "path": "edit",
+   "kind": "image",
+   "file": "bases/gladias-front-bolder-edit.jpg",
+   "sha256": "7d2c4b9ead5dda0a94da78a85538d3493ebd3bc5e4fd1cc3669504c824297f52",
+   "nsfw": false,
+   "costUsd": 0.01032192,
+   "worstUsd": 0.02,
+   "recipe": {
+    "prompt": "The same person as in the reference picture, full body, standing, seen from the front, plain light grey background. Keep the face, hair and clothes the same.\n\nDetailed science fiction comic art: bold confident outer contours with fine inner linework, figures when present are seen distinct from the background, rich mechanical and architectural detail, cel-shaded flat color with soft hard-edged shadows, clean and bright, clear readable faces and hands.\n\nThe person is a man of about forty, slim and of medium height, light olive skin, short wavy chestnut-brown hair, a neatly trimmed short beard and hazel eyes, wearing a long sleeveless moss-green woven tabard with a sculpted standing collar that rises to his jaw, over a fitted cream long-sleeved bodysuit with seamless panels, a wide ochre cloth sash at the waist, slim tapered charcoal leggings, smooth seamless grey boots with thick soft soles, a thin silver band around his throat, a small earpiece and a slim pale ceramic wrist device.\n\nNo text, no lettering, no signs with words.",
+    "model": "flux2-klein-4b-edit",
+    "endpoint": "fal-ai/flux-2/klein/4b/edit",
+    "host": "fal.ai",
+    "settings": {
+     "image_size": {
+      "width": 576,
+      "height": 768
+     },
+     "num_images": 1,
+     "enable_safety_checker": true,
+     "output_format": "jpeg",
+     "sync_mode": true
+    },
+    "seed": 1317326773,
+    "request_id": "01a1a082-817f-7f72-98f3-85d3407bd3cc",
+    "cost_usd": 0.0103,
+    "made_at": "2026-11-03T08:24:32.378Z",
+    "width": 576,
+    "height": 768,
+    "references": [
+     {
+      "sha256": "5b0c9d56c09f120d12be9657721f93eec56ec71c6f7c721312dc54a1a10e8d57"
+     }
+    ],
+    "style": {
+     "version_id": "9e255ec2-6851-415d-a1ca-41254412c878",
+     "title": "Bolder",
+     "text": "Detailed science fiction comic art: bold confident outer contours with fine inner linework, figures when present are seen distinct from the background, rich mechanical and architectural detail, cel-shaded flat color with soft hard-edged shadows, clean and bright, clear readable faces and hands."
+    },
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "passed"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    }
+   }
+  },
+  {
+   "char": "gladias",
+   "view": "front",
+   "style": "core",
+   "path": "edit",
+   "kind": "prompt-check",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 0.0001122,
+   "worstUsd": 0.0015,
+   "at": "2026-11-03T08:24:33.028Z"
+  },
+  {
+   "char": "gladias",
+   "view": "front",
+   "style": "core",
+   "path": "edit",
+   "kind": "image",
+   "file": "bases/gladias-front-core-edit.jpg",
+   "sha256": "64aa38d1287b9f03cb29f3c7844ae2b1f61378ae3fe7c42197b7954fd78447ad",
+   "nsfw": false,
+   "costUsd": 0.01032192,
+   "worstUsd": 0.02,
+   "recipe": {
+    "prompt": "The same person as in the reference picture, full body, standing, seen from the front, plain light grey background. Keep the face, hair and clothes the same.\n\nDetailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail, cel-shaded flat color with soft hard-edged shadows, warm low golden light with long soft shadows, gentle warm palette, clear readable faces and hands.\n\nThe person is a man of about forty, slim and of medium height, light olive skin, short wavy chestnut-brown hair, a neatly trimmed short beard and hazel eyes, wearing a long sleeveless moss-green woven tabard with a sculpted standing collar that rises to his jaw, over a fitted cream long-sleeved bodysuit with seamless panels, a wide ochre cloth sash at the waist, slim tapered charcoal leggings, smooth seamless grey boots with thick soft soles, a thin silver band around his throat, a small earpiece and a slim pale ceramic wrist device.\n\nNo text, no lettering, no signs with words.",
+    "model": "flux2-klein-4b-edit",
+    "endpoint": "fal-ai/flux-2/klein/4b/edit",
+    "host": "fal.ai",
+    "settings": {
+     "image_size": {
+      "width": 576,
+      "height": 768
+     },
+     "num_images": 1,
+     "enable_safety_checker": true,
+     "output_format": "jpeg",
+     "sync_mode": true
+    },
+    "seed": 1710764233,
+    "request_id": "01a1a082-8f5b-7c63-ad56-d75e5a63506a",
+    "cost_usd": 0.0103,
+    "made_at": "2026-11-03T08:24:36.717Z",
+    "width": 576,
+    "height": 768,
+    "references": [
+     {
+      "sha256": "5b0c9d56c09f120d12be9657721f93eec56ec71c6f7c721312dc54a1a10e8d57"
+     }
+    ],
+    "style": {
+     "version_id": "6cbf8e03-8ef3-4ad1-95a4-2cc68f64c537",
+     "title": "warm light",
+     "text": "Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail, cel-shaded flat color with soft hard-edged shadows, warm low golden light with long soft shadows, gentle warm palette, clear readable faces and hands."
+    },
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "passed"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    }
+   }
+  },
+  {
+   "char": "gladias",
+   "view": "front",
+   "style": "Mood",
+   "path": "edit",
+   "kind": "prompt-check",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 0.0000651,
+   "worstUsd": 0.0015,
+   "at": "2026-11-03T08:24:37.115Z"
+  },
+  {
+   "char": "gladias",
+   "view": "front",
+   "style": "Mood",
+   "path": "edit",
+   "kind": "image",
+   "file": "bases/gladias-front-mood-edit.jpg",
+   "sha256": "2c6c376512046eafbc1988b1eea2e24cd3c02ebfaeb3c605093bd440d93c0617",
+   "nsfw": false,
+   "costUsd": 0.01032192,
+   "worstUsd": 0.02,
+   "recipe": {
+    "prompt": "The same person as in the reference picture, full body, standing, seen from the front, plain light grey background. Keep the face, hair and clothes the same.\n\nIntense, highly detailed graphic novel look. Moody. Expressive. Dark lines, bold colors. Visible brushstrokes.\n\nThe person is a man of about forty, slim and of medium height, light olive skin, short wavy chestnut-brown hair, a neatly trimmed short beard and hazel eyes, wearing a long sleeveless moss-green woven tabard with a sculpted standing collar that rises to his jaw, over a fitted cream long-sleeved bodysuit with seamless panels, a wide ochre cloth sash at the waist, slim tapered charcoal leggings, smooth seamless grey boots with thick soft soles, a thin silver band around his throat, a small earpiece and a slim pale ceramic wrist device.\n\nNo text, no lettering, no signs with words.",
+    "model": "flux2-klein-4b-edit",
+    "endpoint": "fal-ai/flux-2/klein/4b/edit",
+    "host": "fal.ai",
+    "settings": {
+     "image_size": {
+      "width": 576,
+      "height": 768
+     },
+     "num_images": 1,
+     "enable_safety_checker": true,
+     "output_format": "jpeg",
+     "sync_mode": true
+    },
+    "seed": 184604659,
+    "request_id": "01a1a082-9e93-7fe3-a2b8-20c9d4bb2ca4",
+    "cost_usd": 0.0103,
+    "made_at": "2026-11-03T08:24:40.075Z",
+    "width": 576,
+    "height": 768,
+    "references": [
+     {
+      "sha256": "5b0c9d56c09f120d12be9657721f93eec56ec71c6f7c721312dc54a1a10e8d57"
+     }
+    ],
+    "style": {
+     "version_id": "712ca63f-de6e-46bf-b3ad-7007b1120e16",
+     "title": "Mood",
+     "text": "Intense, highly detailed graphic novel look. Moody. Expressive. Dark lines, bold colors. Visible brushstrokes."
+    },
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "passed"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    }
+   }
+  },
+  {
+   "char": "gladias",
+   "view": "front",
+   "style": "Printed",
+   "path": "edit",
+   "kind": "prompt-check",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 0.00011085,
+   "worstUsd": 0.0015,
+   "at": "2026-11-03T08:24:40.642Z"
+  },
+  {
+   "char": "gladias",
+   "view": "front",
+   "style": "Printed",
+   "path": "edit",
+   "kind": "image",
+   "file": "bases/gladias-front-printed-edit.jpg",
+   "sha256": "3bf9a587b0ba6c9d8e10776e88c97ac3e0c428399235f43ff9e255e21665a278",
+   "nsfw": false,
+   "costUsd": 0.01032192,
+   "worstUsd": 0.02,
+   "recipe": {
+    "prompt": "The same person as in the reference picture, full body, standing, seen from the front, plain light grey background. Keep the face, hair and clothes the same.\n\nDetailed science fiction comic art: precise fine uniform linework, cel-shaded flat color with soft hard-edged shadows, a subtle printed-paper texture with fine halftone dots in the shadows and slightly offset color, rich mechanical and architectural detail, clear readable faces and hands.\n\nThe person is a man of about forty, slim and of medium height, light olive skin, short wavy chestnut-brown hair, a neatly trimmed short beard and hazel eyes, wearing a long sleeveless moss-green woven tabard with a sculpted standing collar that rises to his jaw, over a fitted cream long-sleeved bodysuit with seamless panels, a wide ochre cloth sash at the waist, slim tapered charcoal leggings, smooth seamless grey boots with thick soft soles, a thin silver band around his throat, a small earpiece and a slim pale ceramic wrist device.\n\nNo text, no lettering, no signs with words.",
+    "model": "flux2-klein-4b-edit",
+    "endpoint": "fal-ai/flux-2/klein/4b/edit",
+    "host": "fal.ai",
+    "settings": {
+     "image_size": {
+      "width": 576,
+      "height": 768
+     },
+     "num_images": 1,
+     "enable_safety_checker": true,
+     "output_format": "jpeg",
+     "sync_mode": true
+    },
+    "seed": 62125302,
+    "request_id": "01a1a082-ac2f-7f20-98a7-926a77390498",
+    "cost_usd": 0.0103,
+    "made_at": "2026-11-03T08:24:43.541Z",
+    "width": 576,
+    "height": 768,
+    "references": [
+     {
+      "sha256": "5b0c9d56c09f120d12be9657721f93eec56ec71c6f7c721312dc54a1a10e8d57"
+     }
+    ],
+    "style": {
+     "version_id": "b83aa0d7-3d53-4a6f-948c-bf7dff2387e9",
+     "title": "Printed",
+     "text": "Detailed science fiction comic art: precise fine uniform linework, cel-shaded flat color with soft hard-edged shadows, a subtle printed-paper texture with fine halftone dots in the shadows and slightly offset color, rich mechanical and architectural detail, clear readable faces and hands."
+    },
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "passed"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    }
+   }
+  },
+  {
+   "char": "gladias",
+   "view": "front",
+   "style": "Quiet",
+   "path": "edit",
+   "kind": "prompt-check",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 0.000085275,
+   "worstUsd": 0.0015,
+   "at": "2026-11-03T08:24:44.080Z"
+  },
+  {
+   "char": "gladias",
+   "view": "front",
+   "style": "Quiet",
+   "path": "edit",
+   "kind": "image",
+   "file": "bases/gladias-front-quiet-edit.jpg",
+   "sha256": "3113732e13ad0041660b55e201075d41f11da84887bdfd49200a58e6334026a7",
+   "nsfw": false,
+   "costUsd": 0.01032192,
+   "worstUsd": 0.02,
+   "recipe": {
+    "prompt": "The same person as in the reference picture, full body, standing, seen from the front, plain light grey background. Keep the face, hair and clothes the same.\n\nDetailed science fiction comic art: precise fine uniform linework, restrained cel-shaded color in muted soft tones, simple uncluttered backgrounds with plenty of empty space, soft natural light, the focus on faces, hands and posture, calm and intimate.\n\nThe person is a man of about forty, slim and of medium height, light olive skin, short wavy chestnut-brown hair, a neatly trimmed short beard and hazel eyes, wearing a long sleeveless moss-green woven tabard with a sculpted standing collar that rises to his jaw, over a fitted cream long-sleeved bodysuit with seamless panels, a wide ochre cloth sash at the waist, slim tapered charcoal leggings, smooth seamless grey boots with thick soft soles, a thin silver band around his throat, a small earpiece and a slim pale ceramic wrist device.\n\nNo text, no lettering, no signs with words.",
+    "model": "flux2-klein-4b-edit",
+    "endpoint": "fal-ai/flux-2/klein/4b/edit",
+    "host": "fal.ai",
+    "settings": {
+     "image_size": {
+      "width": 576,
+      "height": 768
+     },
+     "num_images": 1,
+     "enable_safety_checker": true,
+     "output_format": "jpeg",
+     "sync_mode": true
+    },
+    "seed": 680985530,
+    "request_id": "01a1a082-b9a3-7c20-9de9-5ec7b545a9c7",
+    "cost_usd": 0.0103,
+    "made_at": "2026-11-03T08:24:46.542Z",
+    "width": 576,
+    "height": 768,
+    "references": [
+     {
+      "sha256": "5b0c9d56c09f120d12be9657721f93eec56ec71c6f7c721312dc54a1a10e8d57"
+     }
+    ],
+    "style": {
+     "version_id": "3b1c6e9d-d5f2-465d-8db9-da1341d2c4cc",
+     "title": "Quiet",
+     "text": "Detailed science fiction comic art: precise fine uniform linework, restrained cel-shaded color in muted soft tones, simple uncluttered backgrounds with plenty of empty space, soft natural light, the focus on faces, hands and posture, calm and intimate."
+    },
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "passed"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    }
+   }
+  },
+  {
+   "char": "seila",
+   "view": "front",
+   "style": "Bolder",
+   "path": "edit",
+   "kind": "prompt-check",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 0.000111225,
+   "worstUsd": 0.0015,
+   "at": "2026-11-03T08:24:47.151Z"
+  },
+  {
+   "char": "seila",
+   "view": "front",
+   "style": "Bolder",
+   "path": "edit",
+   "kind": "image",
+   "file": "bases/seila-front-bolder-edit.jpg",
+   "sha256": "45e6eee190d24f12ca924e94df79c1e6dbb903d2785bc81d8e189650e0d1dd4c",
+   "nsfw": false,
+   "costUsd": 0.01032192,
+   "worstUsd": 0.02,
+   "recipe": {
+    "prompt": "The same person as in the reference picture, full body, standing, seen from the front, plain light grey background. Keep the face, hair and clothes the same.\n\nDetailed science fiction comic art: bold confident outer contours with fine inner linework, figures when present are seen distinct from the background, rich mechanical and architectural detail, cel-shaded flat color with soft hard-edged shadows, clean and bright, clear readable faces and hands.\n\nThe person is a woman in her late thirties, tall and slender, deep brown skin, black hair in shoulder-length braids gathered loosely back, alert dark eyes behind small round gold-rimmed glasses, wearing a long rust-orange woven coat-dress with a sculpted high funnel collar, an asymmetric closure of three bronze clasps running from shoulder to hip and a split hem, over an oatmeal seamless bodysuit, olive gathered trousers, soft tan seamless ankle boots and a thin band around her throat.\n\nNo text, no lettering, no signs with words.",
+    "model": "flux2-klein-4b-edit",
+    "endpoint": "fal-ai/flux-2/klein/4b/edit",
+    "host": "fal.ai",
+    "settings": {
+     "image_size": {
+      "width": 576,
+      "height": 768
+     },
+     "num_images": 1,
+     "enable_safety_checker": true,
+     "output_format": "jpeg",
+     "sync_mode": true
+    },
+    "seed": 774690635,
+    "request_id": "01a1a082-c59e-7ac0-b35c-b39be235f22e",
+    "cost_usd": 0.0103,
+    "made_at": "2026-11-03T08:24:50.314Z",
+    "width": 576,
+    "height": 768,
+    "references": [
+     {
+      "sha256": "62f2f7ce966c5cc0c425af17edf58640bf587fff0486f5a7bb62530abfb447c4"
+     }
+    ],
+    "style": {
+     "version_id": "9e255ec2-6851-415d-a1ca-41254412c878",
+     "title": "Bolder",
+     "text": "Detailed science fiction comic art: bold confident outer contours with fine inner linework, figures when present are seen distinct from the background, rich mechanical and architectural detail, cel-shaded flat color with soft hard-edged shadows, clean and bright, clear readable faces and hands."
+    },
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "passed"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    }
+   }
+  },
+  {
+   "char": "seila",
+   "view": "front",
+   "style": "core",
+   "path": "edit",
+   "kind": "prompt-check",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 0.00008985,
+   "worstUsd": 0.0015,
+   "at": "2026-11-03T08:24:50.825Z"
+  },
+  {
+   "char": "seila",
+   "view": "front",
+   "style": "core",
+   "path": "edit",
+   "kind": "image",
+   "file": "bases/seila-front-core-edit.jpg",
+   "sha256": "f38afb88991ae75a37a8a834d7a7c2919ea930abfcd89c973ce587c178c17e0f",
+   "nsfw": false,
+   "costUsd": 0.01032192,
+   "worstUsd": 0.02,
+   "recipe": {
+    "prompt": "The same person as in the reference picture, full body, standing, seen from the front, plain light grey background. Keep the face, hair and clothes the same.\n\nDetailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail, cel-shaded flat color with soft hard-edged shadows, warm low golden light with long soft shadows, gentle warm palette, clear readable faces and hands.\n\nThe person is a woman in her late thirties, tall and slender, deep brown skin, black hair in shoulder-length braids gathered loosely back, alert dark eyes behind small round gold-rimmed glasses, wearing a long rust-orange woven coat-dress with a sculpted high funnel collar, an asymmetric closure of three bronze clasps running from shoulder to hip and a split hem, over an oatmeal seamless bodysuit, olive gathered trousers, soft tan seamless ankle boots and a thin band around her throat.\n\nNo text, no lettering, no signs with words.",
+    "model": "flux2-klein-4b-edit",
+    "endpoint": "fal-ai/flux-2/klein/4b/edit",
+    "host": "fal.ai",
+    "settings": {
+     "image_size": {
+      "width": 576,
+      "height": 768
+     },
+     "num_images": 1,
+     "enable_safety_checker": true,
+     "output_format": "jpeg",
+     "sync_mode": true
+    },
+    "seed": 1174220510,
+    "request_id": "01a1a082-d42b-7552-a4e0-1053e66c2b37",
+    "cost_usd": 0.0103,
+    "made_at": "2026-11-03T08:24:53.285Z",
+    "width": 576,
+    "height": 768,
+    "references": [
+     {
+      "sha256": "62f2f7ce966c5cc0c425af17edf58640bf587fff0486f5a7bb62530abfb447c4"
+     }
+    ],
+    "style": {
+     "version_id": "6cbf8e03-8ef3-4ad1-95a4-2cc68f64c537",
+     "title": "warm light",
+     "text": "Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail, cel-shaded flat color with soft hard-edged shadows, warm low golden light with long soft shadows, gentle warm palette, clear readable faces and hands."
+    },
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "passed"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    }
+   }
+  },
+  {
+   "char": "seila",
+   "view": "front",
+   "style": "Mood",
+   "path": "edit",
+   "kind": "prompt-check",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "allow": false,
+   "category": "unclear",
+   "provider": "groq",
+   "costUsd": 0.00015135,
+   "worstUsd": 0.0015,
+   "at": "2026-11-03T08:24:53.966Z"
+  },
+  {
+   "char": "seila",
+   "view": "front",
+   "style": "Mood",
+   "path": "edit",
+   "kind": "prompt-check",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 0.00011685,
+   "worstUsd": 0.0015,
+   "at": "2026-11-03T08:24:54.525Z"
+  },
+  {
+   "char": "seila",
+   "view": "front",
+   "style": "Mood",
+   "path": "edit",
+   "kind": "image",
+   "file": "bases/seila-front-mood-edit.jpg",
+   "sha256": "2fd4b81e942a268fdc211c540e81c0da1a7938c63683224c040bad0f831f3584",
+   "nsfw": false,
+   "costUsd": 0.01032192,
+   "worstUsd": 0.02,
+   "recipe": {
+    "prompt": "The same person as in the reference picture, full body, standing, seen from the front, plain light grey background. Keep the face, hair and clothes the same.\n\nIntense, highly detailed graphic novel look. Moody. Expressive. Dark lines, bold colors. Visible brushstrokes.\n\nThe person is a woman in her late thirties, tall and slender, deep brown skin, black hair in shoulder-length braids gathered loosely back, alert dark eyes behind small round gold-rimmed glasses, wearing a long rust-orange woven coat-dress with a sculpted high funnel collar, an asymmetric closure of three bronze clasps running from shoulder to hip and a split hem, over an oatmeal seamless bodysuit, olive gathered trousers, soft tan seamless ankle boots and a thin band around her throat.\n\nNo text, no lettering, no signs with words.",
+    "model": "flux2-klein-4b-edit",
+    "endpoint": "fal-ai/flux-2/klein/4b/edit",
+    "host": "fal.ai",
+    "settings": {
+     "image_size": {
+      "width": 576,
+      "height": 768
+     },
+     "num_images": 1,
+     "enable_safety_checker": true,
+     "output_format": "jpeg",
+     "sync_mode": true
+    },
+    "seed": 1810937258,
+    "request_id": "01a1a082-e274-7b90-8602-134863b64d1f",
+    "cost_usd": 0.0103,
+    "made_at": "2026-11-03T08:24:57.493Z",
+    "width": 576,
+    "height": 768,
+    "references": [
+     {
+      "sha256": "62f2f7ce966c5cc0c425af17edf58640bf587fff0486f5a7bb62530abfb447c4"
+     }
+    ],
+    "style": {
+     "version_id": "712ca63f-de6e-46bf-b3ad-7007b1120e16",
+     "title": "Mood",
+     "text": "Intense, highly detailed graphic novel look. Moody. Expressive. Dark lines, bold colors. Visible brushstrokes."
+    },
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "passed"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    }
+   }
+  },
+  {
+   "char": "seila",
+   "view": "front",
+   "style": "Printed",
+   "path": "edit",
+   "kind": "prompt-check",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 0.0000711,
+   "worstUsd": 0.0015,
+   "at": "2026-11-03T08:24:57.945Z"
+  },
+  {
+   "char": "seila",
+   "view": "front",
+   "style": "Printed",
+   "path": "edit",
+   "kind": "image",
+   "file": "bases/seila-front-printed-edit.jpg",
+   "sha256": "0cda46aa3e76c4d03262f01139df1bd3cb0c7758325a7051e38f99ff2cde8226",
+   "nsfw": false,
+   "costUsd": 0.01032192,
+   "worstUsd": 0.02,
+   "recipe": {
+    "prompt": "The same person as in the reference picture, full body, standing, seen from the front, plain light grey background. Keep the face, hair and clothes the same.\n\nDetailed science fiction comic art: precise fine uniform linework, cel-shaded flat color with soft hard-edged shadows, a subtle printed-paper texture with fine halftone dots in the shadows and slightly offset color, rich mechanical and architectural detail, clear readable faces and hands.\n\nThe person is a woman in her late thirties, tall and slender, deep brown skin, black hair in shoulder-length braids gathered loosely back, alert dark eyes behind small round gold-rimmed glasses, wearing a long rust-orange woven coat-dress with a sculpted high funnel collar, an asymmetric closure of three bronze clasps running from shoulder to hip and a split hem, over an oatmeal seamless bodysuit, olive gathered trousers, soft tan seamless ankle boots and a thin band around her throat.\n\nNo text, no lettering, no signs with words.",
+    "model": "flux2-klein-4b-edit",
+    "endpoint": "fal-ai/flux-2/klein/4b/edit",
+    "host": "fal.ai",
+    "settings": {
+     "image_size": {
+      "width": 576,
+      "height": 768
+     },
+     "num_images": 1,
+     "enable_safety_checker": true,
+     "output_format": "jpeg",
+     "sync_mode": true
+    },
+    "seed": 1762895451,
+    "request_id": "01a1a082-f193-7353-81ea-880cc912451e",
+    "cost_usd": 0.0103,
+    "made_at": "2026-11-03T08:25:03.647Z",
+    "width": 576,
+    "height": 768,
+    "references": [
+     {
+      "sha256": "62f2f7ce966c5cc0c425af17edf58640bf587fff0486f5a7bb62530abfb447c4"
+     }
+    ],
+    "style": {
+     "version_id": "b83aa0d7-3d53-4a6f-948c-bf7dff2387e9",
+     "title": "Printed",
+     "text": "Detailed science fiction comic art: precise fine uniform linework, cel-shaded flat color with soft hard-edged shadows, a subtle printed-paper texture with fine halftone dots in the shadows and slightly offset color, rich mechanical and architectural detail, clear readable faces and hands."
+    },
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "passed"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    }
+   }
+  },
+  {
+   "char": "seila",
+   "view": "front",
+   "style": "Quiet",
+   "path": "edit",
+   "kind": "prompt-check",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 0.000123825,
+   "worstUsd": 0.0015,
+   "at": "2026-11-03T08:25:04.480Z"
+  },
+  {
+   "char": "seila",
+   "view": "front",
+   "style": "Quiet",
+   "path": "edit",
+   "kind": "image",
+   "file": "bases/seila-front-quiet-edit.jpg",
+   "sha256": "442fb3f36e370ddd99b9dc3802672998fb5484927c0d77901f78566750a798d8",
+   "nsfw": false,
+   "costUsd": 0.01032192,
+   "worstUsd": 0.02,
+   "recipe": {
+    "prompt": "The same person as in the reference picture, full body, standing, seen from the front, plain light grey background. Keep the face, hair and clothes the same.\n\nDetailed science fiction comic art: precise fine uniform linework, restrained cel-shaded color in muted soft tones, simple uncluttered backgrounds with plenty of empty space, soft natural light, the focus on faces, hands and posture, calm and intimate.\n\nThe person is a woman in her late thirties, tall and slender, deep brown skin, black hair in shoulder-length braids gathered loosely back, alert dark eyes behind small round gold-rimmed glasses, wearing a long rust-orange woven coat-dress with a sculpted high funnel collar, an asymmetric closure of three bronze clasps running from shoulder to hip and a split hem, over an oatmeal seamless bodysuit, olive gathered trousers, soft tan seamless ankle boots and a thin band around her throat.\n\nNo text, no lettering, no signs with words.",
+    "model": "flux2-klein-4b-edit",
+    "endpoint": "fal-ai/flux-2/klein/4b/edit",
+    "host": "fal.ai",
+    "settings": {
+     "image_size": {
+      "width": 576,
+      "height": 768
+     },
+     "num_images": 1,
+     "enable_safety_checker": true,
+     "output_format": "jpeg",
+     "sync_mode": true
+    },
+    "seed": 533408200,
+    "request_id": "01a1a083-0977-7902-9775-0aada99e114f",
+    "cost_usd": 0.0103,
+    "made_at": "2026-11-03T08:25:07.220Z",
+    "width": 576,
+    "height": 768,
+    "references": [
+     {
+      "sha256": "62f2f7ce966c5cc0c425af17edf58640bf587fff0486f5a7bb62530abfb447c4"
+     }
+    ],
+    "style": {
+     "version_id": "3b1c6e9d-d5f2-465d-8db9-da1341d2c4cc",
+     "title": "Quiet",
+     "text": "Detailed science fiction comic art: precise fine uniform linework, restrained cel-shaded color in muted soft tones, simple uncluttered backgrounds with plenty of empty space, soft natural light, the focus on faces, hands and posture, calm and intimate."
+    },
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "passed"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    }
+   }
+  },
+  {
+   "char": "deluin",
+   "view": "front",
+   "style": "Bolder",
+   "path": "edit",
+   "kind": "prompt-check",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 0.00013065,
+   "worstUsd": 0.0015,
+   "at": "2026-11-03T08:25:08.020Z"
+  },
+  {
+   "char": "deluin",
+   "view": "front",
+   "style": "Bolder",
+   "path": "edit",
+   "kind": "image",
+   "file": "bases/deluin-front-bolder-edit.jpg",
+   "sha256": "1ff1c7df6a9f8719252b1d1dc1705837fe220c86ce67c75a3e8669ab3f3db5fb",
+   "nsfw": false,
+   "costUsd": 0.01032192,
+   "worstUsd": 0.02,
+   "recipe": {
+    "prompt": "The same person as in the reference picture, full body, standing, seen from the front, plain light grey background. Keep the face, hair and clothes the same.\n\nDetailed science fiction comic art: bold confident outer contours with fine inner linework, figures when present are seen distinct from the background, rich mechanical and architectural detail, cel-shaded flat color with soft hard-edged shadows, clean and bright, clear readable faces and hands.\n\nThe person is a young man of about eighteen, tall and long-limbed, pale skin, wavy shoulder-length light-brown hair, grey-green eyes and a calm, slightly serious face, wearing a thick cream cable-knit sweater cut as a long asymmetric tunic with a high folded collar and a light grey hood, dark green slim segmented trousers, a narrow dark sash and sturdy brown seamless boots.\n\nNo text, no lettering, no signs with words.",
+    "model": "flux2-klein-4b-edit",
+    "endpoint": "fal-ai/flux-2/klein/4b/edit",
+    "host": "fal.ai",
+    "settings": {
+     "image_size": {
+      "width": 576,
+      "height": 768
+     },
+     "num_images": 1,
+     "enable_safety_checker": true,
+     "output_format": "jpeg",
+     "sync_mode": true
+    },
+    "seed": 297106727,
+    "request_id": "01a1a083-172f-7ef2-99f9-e9678d464562",
+    "cost_usd": 0.0103,
+    "made_at": "2026-11-03T08:25:10.790Z",
+    "width": 576,
+    "height": 768,
+    "references": [
+     {
+      "sha256": "3edf7878c7001438c4c7133005517cba0d1679bed4988fadc58947d428934384"
+     }
+    ],
+    "style": {
+     "version_id": "9e255ec2-6851-415d-a1ca-41254412c878",
+     "title": "Bolder",
+     "text": "Detailed science fiction comic art: bold confident outer contours with fine inner linework, figures when present are seen distinct from the background, rich mechanical and architectural detail, cel-shaded flat color with soft hard-edged shadows, clean and bright, clear readable faces and hands."
+    },
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "passed"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    }
+   }
+  },
+  {
+   "char": "deluin",
+   "view": "front",
+   "style": "core",
+   "path": "edit",
+   "kind": "prompt-check",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "allow": false,
+   "category": "unclear",
+   "provider": "groq",
+   "costUsd": 0.000151575,
+   "worstUsd": 0.0015,
+   "at": "2026-11-03T08:25:11.551Z"
+  },
+  {
+   "char": "deluin",
+   "view": "front",
+   "style": "core",
+   "path": "edit",
+   "kind": "prompt-check",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 0.000113775,
+   "worstUsd": 0.0015,
+   "at": "2026-11-03T08:25:12.967Z"
+  },
+  {
+   "char": "deluin",
+   "view": "front",
+   "style": "core",
+   "path": "edit",
+   "kind": "image",
+   "file": "bases/deluin-front-core-edit.jpg",
+   "sha256": "89847ef05d78e6029ce70e70fb3ad8bf8238424783b7a77befd68b92b8e44d8a",
+   "nsfw": false,
+   "costUsd": 0.01032192,
+   "worstUsd": 0.02,
+   "recipe": {
+    "prompt": "The same person as in the reference picture, full body, standing, seen from the front, plain light grey background. Keep the face, hair and clothes the same.\n\nDetailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail, cel-shaded flat color with soft hard-edged shadows, warm low golden light with long soft shadows, gentle warm palette, clear readable faces and hands.\n\nThe person is a young man of about eighteen, tall and long-limbed, pale skin, wavy shoulder-length light-brown hair, grey-green eyes and a calm, slightly serious face, wearing a thick cream cable-knit sweater cut as a long asymmetric tunic with a high folded collar and a light grey hood, dark green slim segmented trousers, a narrow dark sash and sturdy brown seamless boots.\n\nNo text, no lettering, no signs with words.",
+    "model": "flux2-klein-4b-edit",
+    "endpoint": "fal-ai/flux-2/klein/4b/edit",
+    "host": "fal.ai",
+    "settings": {
+     "image_size": {
+      "width": 576,
+      "height": 768
+     },
+     "num_images": 1,
+     "enable_safety_checker": true,
+     "output_format": "jpeg",
+     "sync_mode": true
+    },
+    "seed": 964294962,
+    "request_id": "01a1a083-2f8b-7562-aa26-5f63d99b01a2",
+    "cost_usd": 0.0103,
+    "made_at": "2026-11-03T08:25:18.922Z",
+    "width": 576,
+    "height": 768,
+    "references": [
+     {
+      "sha256": "3edf7878c7001438c4c7133005517cba0d1679bed4988fadc58947d428934384"
+     }
+    ],
+    "style": {
+     "version_id": "6cbf8e03-8ef3-4ad1-95a4-2cc68f64c537",
+     "title": "warm light",
+     "text": "Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail, cel-shaded flat color with soft hard-edged shadows, warm low golden light with long soft shadows, gentle warm palette, clear readable faces and hands."
+    },
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "passed"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    }
+   }
+  },
+  {
+   "char": "deluin",
+   "view": "front",
+   "style": "Mood",
+   "path": "edit",
+   "kind": "prompt-check",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "allow": false,
+   "category": "unclear",
+   "provider": "groq",
+   "costUsd": 0.000149775,
+   "worstUsd": 0.0015,
+   "at": "2026-11-03T08:25:20.562Z"
+  },
+  {
+   "char": "deluin",
+   "view": "front",
+   "style": "Mood",
+   "path": "edit",
+   "kind": "prompt-check",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 0.000117675,
+   "worstUsd": 0.0015,
+   "at": "2026-11-03T08:25:21.556Z"
+  },
+  {
+   "char": "deluin",
+   "view": "front",
+   "style": "Mood",
+   "path": "edit",
+   "kind": "image",
+   "file": "bases/deluin-front-mood-edit.jpg",
+   "sha256": "c110474f3e512f509e7932ea758db2241941de347f1fe3b0fb8e9087a6dc1f50",
+   "nsfw": false,
+   "costUsd": 0.01032192,
+   "worstUsd": 0.02,
+   "recipe": {
+    "prompt": "The same person as in the reference picture, full body, standing, seen from the front, plain light grey background. Keep the face, hair and clothes the same.\n\nIntense, highly detailed graphic novel look. Moody. Expressive. Dark lines, bold colors. Visible brushstrokes.\n\nThe person is a young man of about eighteen, tall and long-limbed, pale skin, wavy shoulder-length light-brown hair, grey-green eyes and a calm, slightly serious face, wearing a thick cream cable-knit sweater cut as a long asymmetric tunic with a high folded collar and a light grey hood, dark green slim segmented trousers, a narrow dark sash and sturdy brown seamless boots.\n\nNo text, no lettering, no signs with words.",
+    "model": "flux2-klein-4b-edit",
+    "endpoint": "fal-ai/flux-2/klein/4b/edit",
+    "host": "fal.ai",
+    "settings": {
+     "image_size": {
+      "width": 576,
+      "height": 768
+     },
+     "num_images": 1,
+     "enable_safety_checker": true,
+     "output_format": "jpeg",
+     "sync_mode": true
+    },
+    "seed": 1101058027,
+    "request_id": "01a1a083-4c13-7ab3-9661-d8d7ace0a4da",
+    "cost_usd": 0.0103,
+    "made_at": "2026-11-03T08:25:26.047Z",
+    "width": 576,
+    "height": 768,
+    "references": [
+     {
+      "sha256": "3edf7878c7001438c4c7133005517cba0d1679bed4988fadc58947d428934384"
+     }
+    ],
+    "style": {
+     "version_id": "712ca63f-de6e-46bf-b3ad-7007b1120e16",
+     "title": "Mood",
+     "text": "Intense, highly detailed graphic novel look. Moody. Expressive. Dark lines, bold colors. Visible brushstrokes."
+    },
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "passed"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    }
+   }
+  },
+  {
+   "char": "deluin",
+   "view": "front",
+   "style": "Printed",
+   "path": "edit",
+   "kind": "prompt-check",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "allow": false,
+   "category": "unclear",
+   "provider": "groq",
+   "costUsd": 0.000152025,
+   "worstUsd": 0.0015,
+   "at": "2026-11-03T08:25:27.155Z"
+  },
+  {
+   "char": "deluin",
+   "view": "front",
+   "style": "Printed",
+   "path": "edit",
+   "kind": "prompt-check",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 0.000115125,
+   "worstUsd": 0.0015,
+   "at": "2026-11-03T08:25:27.711Z"
+  },
+  {
+   "char": "deluin",
+   "view": "front",
+   "style": "Printed",
+   "path": "edit",
+   "kind": "image",
+   "file": "bases/deluin-front-printed-edit.jpg",
+   "sha256": "60e3d6a00ce93932e069dc29d42619837e87837589162ff065e043a92ec66923",
+   "nsfw": false,
+   "costUsd": 0.01032192,
+   "worstUsd": 0.02,
+   "recipe": {
+    "prompt": "The same person as in the reference picture, full body, standing, seen from the front, plain light grey background. Keep the face, hair and clothes the same.\n\nDetailed science fiction comic art: precise fine uniform linework, cel-shaded flat color with soft hard-edged shadows, a subtle printed-paper texture with fine halftone dots in the shadows and slightly offset color, rich mechanical and architectural detail, clear readable faces and hands.\n\nThe person is a young man of about eighteen, tall and long-limbed, pale skin, wavy shoulder-length light-brown hair, grey-green eyes and a calm, slightly serious face, wearing a thick cream cable-knit sweater cut as a long asymmetric tunic with a high folded collar and a light grey hood, dark green slim segmented trousers, a narrow dark sash and sturdy brown seamless boots.\n\nNo text, no lettering, no signs with words.",
+    "model": "flux2-klein-4b-edit",
+    "endpoint": "fal-ai/flux-2/klein/4b/edit",
+    "host": "fal.ai",
+    "settings": {
+     "image_size": {
+      "width": 576,
+      "height": 768
+     },
+     "num_images": 1,
+     "enable_safety_checker": true,
+     "output_format": "jpeg",
+     "sync_mode": true
+    },
+    "seed": 208775336,
+    "request_id": "01a1a083-644f-7e00-8f1f-ae450d5b6683",
+    "cost_usd": 0.0103,
+    "made_at": "2026-11-03T08:25:31.633Z",
+    "width": 576,
+    "height": 768,
+    "references": [
+     {
+      "sha256": "3edf7878c7001438c4c7133005517cba0d1679bed4988fadc58947d428934384"
+     }
+    ],
+    "style": {
+     "version_id": "b83aa0d7-3d53-4a6f-948c-bf7dff2387e9",
+     "title": "Printed",
+     "text": "Detailed science fiction comic art: precise fine uniform linework, cel-shaded flat color with soft hard-edged shadows, a subtle printed-paper texture with fine halftone dots in the shadows and slightly offset color, rich mechanical and architectural detail, clear readable faces and hands."
+    },
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "passed"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    }
+   }
+  },
+  {
+   "char": "deluin",
+   "view": "front",
+   "style": "Quiet",
+   "path": "edit",
+   "kind": "prompt-check",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 0.00011055,
+   "worstUsd": 0.0015,
+   "at": "2026-11-03T08:25:32.250Z"
+  },
+  {
+   "char": "deluin",
+   "view": "front",
+   "style": "Quiet",
+   "path": "edit",
+   "kind": "image",
+   "file": "bases/deluin-front-quiet-edit.jpg",
+   "sha256": "41b05d7a791e2c12ba27c75e92f045bba4625152a655382897b9883fdb9c31ef",
+   "nsfw": false,
+   "costUsd": 0.01032192,
+   "worstUsd": 0.02,
+   "recipe": {
+    "prompt": "The same person as in the reference picture, full body, standing, seen from the front, plain light grey background. Keep the face, hair and clothes the same.\n\nDetailed science fiction comic art: precise fine uniform linework, restrained cel-shaded color in muted soft tones, simple uncluttered backgrounds with plenty of empty space, soft natural light, the focus on faces, hands and posture, calm and intimate.\n\nThe person is a young man of about eighteen, tall and long-limbed, pale skin, wavy shoulder-length light-brown hair, grey-green eyes and a calm, slightly serious face, wearing a thick cream cable-knit sweater cut as a long asymmetric tunic with a high folded collar and a light grey hood, dark green slim segmented trousers, a narrow dark sash and sturdy brown seamless boots.\n\nNo text, no lettering, no signs with words.",
+    "model": "flux2-klein-4b-edit",
+    "endpoint": "fal-ai/flux-2/klein/4b/edit",
+    "host": "fal.ai",
+    "settings": {
+     "image_size": {
+      "width": 576,
+      "height": 768
+     },
+     "num_images": 1,
+     "enable_safety_checker": true,
+     "output_format": "jpeg",
+     "sync_mode": true
+    },
+    "seed": 1593010041,
+    "request_id": "01a1a083-75cb-7ef2-9364-0be759768b9b",
+    "cost_usd": 0.0103,
+    "made_at": "2026-11-03T08:25:34.657Z",
+    "width": 576,
+    "height": 768,
+    "references": [
+     {
+      "sha256": "3edf7878c7001438c4c7133005517cba0d1679bed4988fadc58947d428934384"
+     }
+    ],
+    "style": {
+     "version_id": "3b1c6e9d-d5f2-465d-8db9-da1341d2c4cc",
+     "title": "Quiet",
+     "text": "Detailed science fiction comic art: precise fine uniform linework, restrained cel-shaded color in muted soft tones, simple uncluttered backgrounds with plenty of empty space, soft natural light, the focus on faces, hands and posture, calm and intimate."
+    },
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "passed"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    }
+   }
+  },
+  {
+   "char": "mu",
+   "view": "front",
+   "style": "Bolder",
+   "path": "edit",
+   "kind": "prompt-check",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 0.0001245,
+   "worstUsd": 0.0015,
+   "at": "2026-11-03T08:25:35.243Z"
+  },
+  {
+   "char": "mu",
+   "view": "front",
+   "style": "Bolder",
+   "path": "edit",
+   "kind": "image",
+   "file": "bases/mu-front-bolder-edit.jpg",
+   "sha256": "9f8a8a7d1dad859931320676d2d7968ff4f506951e702707258efd3bbba821a6",
+   "nsfw": false,
+   "costUsd": 0.01032192,
+   "worstUsd": 0.02,
+   "recipe": {
+    "prompt": "The same person as in the reference picture, full body, standing, seen from the front, plain light grey background. Keep the face, hair and clothes the same.\n\nDetailed science fiction comic art: bold confident outer contours with fine inner linework, figures when present are seen distinct from the background, rich mechanical and architectural detail, cel-shaded flat color with soft hard-edged shadows, clean and bright, clear readable faces and hands.\n\nThe person is a woman in her early sixties, small and wiry, medium brown skin, short silver hair in a sharp asymmetric cut, keen eyes behind thin red-framed glasses, wearing a charcoal asymmetric commander's tabard with one shoulder panel and bright yellow piping, over a cobalt-blue seamless long-sleeved bodysuit, slim black segmented trousers, soft grey seamless boots and a slim wrist device.\n\nNo text, no lettering, no signs with words.",
+    "model": "flux2-klein-4b-edit",
+    "endpoint": "fal-ai/flux-2/klein/4b/edit",
+    "host": "fal.ai",
+    "settings": {
+     "image_size": {
+      "width": 576,
+      "height": 768
+     },
+     "num_images": 1,
+     "enable_safety_checker": true,
+     "output_format": "jpeg",
+     "sync_mode": true
+    },
+    "seed": 631678560,
+    "request_id": "01a1a083-8240-7090-b6eb-625da4f3ad56",
+    "cost_usd": 0.0103,
+    "made_at": "2026-11-03T08:25:37.947Z",
+    "width": 576,
+    "height": 768,
+    "references": [
+     {
+      "sha256": "e1854964c41862db245d46cc188ba84af6235fb95c38a79d55fe9281abf3aec7"
+     }
+    ],
+    "style": {
+     "version_id": "9e255ec2-6851-415d-a1ca-41254412c878",
+     "title": "Bolder",
+     "text": "Detailed science fiction comic art: bold confident outer contours with fine inner linework, figures when present are seen distinct from the background, rich mechanical and architectural detail, cel-shaded flat color with soft hard-edged shadows, clean and bright, clear readable faces and hands."
+    },
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "passed"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    }
+   }
+  },
+  {
+   "char": "mu",
+   "view": "front",
+   "style": "core",
+   "path": "edit",
+   "kind": "prompt-check",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "allow": false,
+   "category": "unclear",
+   "provider": "groq",
+   "costUsd": 0.000151725,
+   "worstUsd": 0.0015,
+   "at": "2026-11-03T08:25:38.658Z"
+  },
+  {
+   "char": "mu",
+   "view": "front",
+   "style": "core",
+   "path": "edit",
+   "kind": "prompt-check",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 0.000083025,
+   "worstUsd": 0.0015,
+   "at": "2026-11-03T08:25:39.146Z"
+  },
+  {
+   "char": "mu",
+   "view": "front",
+   "style": "core",
+   "path": "edit",
+   "kind": "image",
+   "file": "bases/mu-front-core-edit.jpg",
+   "sha256": "eb4f264e9c3e5570e7cd36152cc522e4179db5ef219525a87c6ab6493ce9b6e9",
+   "nsfw": false,
+   "costUsd": 0.01032192,
+   "worstUsd": 0.02,
+   "recipe": {
+    "prompt": "The same person as in the reference picture, full body, standing, seen from the front, plain light grey background. Keep the face, hair and clothes the same.\n\nDetailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail, cel-shaded flat color with soft hard-edged shadows, warm low golden light with long soft shadows, gentle warm palette, clear readable faces and hands.\n\nThe person is a woman in her early sixties, small and wiry, medium brown skin, short silver hair in a sharp asymmetric cut, keen eyes behind thin red-framed glasses, wearing a charcoal asymmetric commander's tabard with one shoulder panel and bright yellow piping, over a cobalt-blue seamless long-sleeved bodysuit, slim black segmented trousers, soft grey seamless boots and a slim wrist device.\n\nNo text, no lettering, no signs with words.",
+    "model": "flux2-klein-4b-edit",
+    "endpoint": "fal-ai/flux-2/klein/4b/edit",
+    "host": "fal.ai",
+    "settings": {
+     "image_size": {
+      "width": 576,
+      "height": 768
+     },
+     "num_images": 1,
+     "enable_safety_checker": true,
+     "output_format": "jpeg",
+     "sync_mode": true
+    },
+    "seed": 692808223,
+    "request_id": "01a1a083-913f-76f1-9d1b-16dba031065c",
+    "cost_usd": 0.0103,
+    "made_at": "2026-11-03T08:25:41.879Z",
+    "width": 576,
+    "height": 768,
+    "references": [
+     {
+      "sha256": "e1854964c41862db245d46cc188ba84af6235fb95c38a79d55fe9281abf3aec7"
+     }
+    ],
+    "style": {
+     "version_id": "6cbf8e03-8ef3-4ad1-95a4-2cc68f64c537",
+     "title": "warm light",
+     "text": "Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail, cel-shaded flat color with soft hard-edged shadows, warm low golden light with long soft shadows, gentle warm palette, clear readable faces and hands."
+    },
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "passed"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    }
+   }
+  },
+  {
+   "char": "mu",
+   "view": "front",
+   "style": "Mood",
+   "path": "edit",
+   "kind": "prompt-check",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "allow": false,
+   "category": "unclear",
+   "provider": "groq",
+   "costUsd": 0.000149925,
+   "worstUsd": 0.0015,
+   "at": "2026-11-03T08:25:42.688Z"
+  },
+  {
+   "char": "mu",
+   "view": "front",
+   "style": "Mood",
+   "path": "edit",
+   "kind": "prompt-check",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 0.000080325,
+   "worstUsd": 0.0015,
+   "at": "2026-11-03T08:25:43.153Z"
+  },
+  {
+   "char": "mu",
+   "view": "front",
+   "style": "Mood",
+   "path": "edit",
+   "kind": "image",
+   "file": "bases/mu-front-mood-edit.jpg",
+   "sha256": "c0ad678244398ff030bc467d2b01109c8b3c8befd198490c3380738c9bdfb3bf",
+   "nsfw": false,
+   "costUsd": 0.01032192,
+   "worstUsd": 0.02,
+   "recipe": {
+    "prompt": "The same person as in the reference picture, full body, standing, seen from the front, plain light grey background. Keep the face, hair and clothes the same.\n\nIntense, highly detailed graphic novel look. Moody. Expressive. Dark lines, bold colors. Visible brushstrokes.\n\nThe person is a woman in her early sixties, small and wiry, medium brown skin, short silver hair in a sharp asymmetric cut, keen eyes behind thin red-framed glasses, wearing a charcoal asymmetric commander's tabard with one shoulder panel and bright yellow piping, over a cobalt-blue seamless long-sleeved bodysuit, slim black segmented trousers, soft grey seamless boots and a slim wrist device.\n\nNo text, no lettering, no signs with words.",
+    "model": "flux2-klein-4b-edit",
+    "endpoint": "fal-ai/flux-2/klein/4b/edit",
+    "host": "fal.ai",
+    "settings": {
+     "image_size": {
+      "width": 576,
+      "height": 768
+     },
+     "num_images": 1,
+     "enable_safety_checker": true,
+     "output_format": "jpeg",
+     "sync_mode": true
+    },
+    "seed": 699128189,
+    "request_id": "01a1a083-a06b-7a60-8a0a-09f62e7c14bc",
+    "cost_usd": 0.0103,
+    "made_at": "2026-11-03T08:25:45.343Z",
+    "width": 576,
+    "height": 768,
+    "references": [
+     {
+      "sha256": "e1854964c41862db245d46cc188ba84af6235fb95c38a79d55fe9281abf3aec7"
+     }
+    ],
+    "style": {
+     "version_id": "712ca63f-de6e-46bf-b3ad-7007b1120e16",
+     "title": "Mood",
+     "text": "Intense, highly detailed graphic novel look. Moody. Expressive. Dark lines, bold colors. Visible brushstrokes."
+    },
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "passed"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    }
+   }
+  },
+  {
+   "char": "mu",
+   "view": "front",
+   "style": "Printed",
+   "path": "edit",
+   "kind": "prompt-check",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "allow": false,
+   "category": "unclear",
+   "provider": "groq",
+   "costUsd": 0.000152175,
+   "worstUsd": 0.0015,
+   "at": "2026-11-03T08:25:46.047Z"
+  },
+  {
+   "char": "mu",
+   "view": "front",
+   "style": "Printed",
+   "path": "edit",
+   "kind": "prompt-check",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 0.000120375,
+   "worstUsd": 0.0015,
+   "at": "2026-11-03T08:25:46.842Z"
+  },
+  {
+   "char": "mu",
+   "view": "front",
+   "style": "Printed",
+   "path": "edit",
+   "kind": "image",
+   "file": "bases/mu-front-printed-edit.jpg",
+   "sha256": "635ad89ea7c692bf649f66dec5916950a05fba819a951ebf3f436745841720e9",
+   "nsfw": false,
+   "costUsd": 0.01032192,
+   "worstUsd": 0.02,
+   "recipe": {
+    "prompt": "The same person as in the reference picture, full body, standing, seen from the front, plain light grey background. Keep the face, hair and clothes the same.\n\nDetailed science fiction comic art: precise fine uniform linework, cel-shaded flat color with soft hard-edged shadows, a subtle printed-paper texture with fine halftone dots in the shadows and slightly offset color, rich mechanical and architectural detail, clear readable faces and hands.\n\nThe person is a woman in her early sixties, small and wiry, medium brown skin, short silver hair in a sharp asymmetric cut, keen eyes behind thin red-framed glasses, wearing a charcoal asymmetric commander's tabard with one shoulder panel and bright yellow piping, over a cobalt-blue seamless long-sleeved bodysuit, slim black segmented trousers, soft grey seamless boots and a slim wrist device.\n\nNo text, no lettering, no signs with words.",
+    "model": "flux2-klein-4b-edit",
+    "endpoint": "fal-ai/flux-2/klein/4b/edit",
+    "host": "fal.ai",
+    "settings": {
+     "image_size": {
+      "width": 576,
+      "height": 768
+     },
+     "num_images": 1,
+     "enable_safety_checker": true,
+     "output_format": "jpeg",
+     "sync_mode": true
+    },
+    "seed": 1063204589,
+    "request_id": "01a1a083-aec7-7800-8311-150ecc97da6d",
+    "cost_usd": 0.0103,
+    "made_at": "2026-11-03T08:25:50.023Z",
+    "width": 576,
+    "height": 768,
+    "references": [
+     {
+      "sha256": "e1854964c41862db245d46cc188ba84af6235fb95c38a79d55fe9281abf3aec7"
+     }
+    ],
+    "style": {
+     "version_id": "b83aa0d7-3d53-4a6f-948c-bf7dff2387e9",
+     "title": "Printed",
+     "text": "Detailed science fiction comic art: precise fine uniform linework, cel-shaded flat color with soft hard-edged shadows, a subtle printed-paper texture with fine halftone dots in the shadows and slightly offset color, rich mechanical and architectural detail, clear readable faces and hands."
+    },
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "passed"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    }
+   }
+  },
+  {
+   "char": "mu",
+   "view": "front",
+   "style": "Quiet",
+   "path": "edit",
+   "kind": "prompt-check",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 0.0001251,
+   "worstUsd": 0.0015,
+   "at": "2026-11-03T08:25:50.615Z"
+  },
+  {
+   "char": "mu",
+   "view": "front",
+   "style": "Quiet",
+   "path": "edit",
+   "kind": "image",
+   "file": "bases/mu-front-quiet-edit.jpg",
+   "sha256": "ac14b5b1629ad388454267023736b176b06c82411f21ede7e0d433bea1abca84",
+   "nsfw": false,
+   "costUsd": 0.01032192,
+   "worstUsd": 0.02,
+   "recipe": {
+    "prompt": "The same person as in the reference picture, full body, standing, seen from the front, plain light grey background. Keep the face, hair and clothes the same.\n\nDetailed science fiction comic art: precise fine uniform linework, restrained cel-shaded color in muted soft tones, simple uncluttered backgrounds with plenty of empty space, soft natural light, the focus on faces, hands and posture, calm and intimate.\n\nThe person is a woman in her early sixties, small and wiry, medium brown skin, short silver hair in a sharp asymmetric cut, keen eyes behind thin red-framed glasses, wearing a charcoal asymmetric commander's tabard with one shoulder panel and bright yellow piping, over a cobalt-blue seamless long-sleeved bodysuit, slim black segmented trousers, soft grey seamless boots and a slim wrist device.\n\nNo text, no lettering, no signs with words.",
+    "model": "flux2-klein-4b-edit",
+    "endpoint": "fal-ai/flux-2/klein/4b/edit",
+    "host": "fal.ai",
+    "settings": {
+     "image_size": {
+      "width": 576,
+      "height": 768
+     },
+     "num_images": 1,
+     "enable_safety_checker": true,
+     "output_format": "jpeg",
+     "sync_mode": true
+    },
+    "seed": 83667364,
+    "request_id": "01a1a083-bd87-73e2-901f-dde8df3c8ec5",
+    "cost_usd": 0.0103,
+    "made_at": "2026-11-03T08:25:52.462Z",
+    "width": 576,
+    "height": 768,
+    "references": [
+     {
+      "sha256": "e1854964c41862db245d46cc188ba84af6235fb95c38a79d55fe9281abf3aec7"
+     }
+    ],
+    "style": {
+     "version_id": "3b1c6e9d-d5f2-465d-8db9-da1341d2c4cc",
+     "title": "Quiet",
+     "text": "Detailed science fiction comic art: precise fine uniform linework, restrained cel-shaded color in muted soft tones, simple uncluttered backgrounds with plenty of empty space, soft natural light, the focus on faces, hands and posture, calm and intimate."
+    },
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "passed"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    }
+   }
+  },
+  {
+   "char": "zei",
+   "view": "side",
+   "seedLabel": "A",
+   "kind": "prompt-check",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "allow": false,
+   "category": "unclear",
+   "provider": "groq",
+   "costUsd": 0.000153225,
+   "worstUsd": 0.0015,
+   "at": "2026-11-03T08:25:58.847Z"
+  },
+  {
+   "char": "zei",
+   "view": "side",
+   "seedLabel": "A",
+   "kind": "prompt-check",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 0.000139125,
+   "worstUsd": 0.0015,
+   "at": "2026-11-03T08:25:59.524Z"
+  },
+  {
+   "char": "zei",
+   "view": "side",
+   "seedLabel": "A",
+   "kind": "image",
+   "file": "bases/zei-side-seed-A.jpg",
+   "sha256": "09321e8836421f02c5ac292a424c9fef41c09f84e87b6816d1a52b14e1108be5",
+   "nsfw": false,
+   "costUsd": 0.00884736,
+   "worstUsd": 0.02,
+   "recipe": {
+    "prompt": "The same person as in the reference picture, full body, standing, seen from the side, plain light grey background. Keep the face, hair and clothes the same.\n\nDetailed science fiction comic art: precise fine uniform linework, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, no text, no lettering, no writing, no logos, no numbers.\n\nThe person is a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head.\n\nNo text, no lettering, no signs with words.",
+    "model": "flux2-klein-4b-edit",
+    "endpoint": "fal-ai/flux-2/klein/4b/edit",
+    "host": "fal.ai",
+    "settings": {
+     "image_size": {
+      "width": 576,
+      "height": 768
+     },
+     "num_images": 1,
+     "enable_safety_checker": true,
+     "output_format": "jpeg",
+     "sync_mode": true
+    },
+    "seed": 928937381,
+    "request_id": "01a1a083-e1a3-7d12-abfe-5b5353e7cc19",
+    "cost_usd": 0.0088,
+    "made_at": "2026-11-03T08:26:01.787Z",
+    "width": 576,
+    "height": 768,
+    "references": [
+     {
+      "sha256": "564f45deb5b5934c499ad0339ccedadb005f0a09e311231b0ff37e66708707a1"
+     }
+    ],
+    "style": {
+     "version_id": "unpublished: content/snowmoon/designs/styles/techno-vistas.json (scenery clauses removed for views)",
+     "title": "Techno vistas, views",
+     "text": "Detailed science fiction comic art: precise fine uniform linework, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, no text, no lettering, no writing, no logos, no numbers."
+    },
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "passed"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    }
+   }
+  },
+  {
+   "char": "zei",
+   "view": "side",
+   "seedLabel": "B",
+   "kind": "prompt-check",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 0.000116925,
+   "worstUsd": 0.0015,
+   "at": "2026-11-03T08:26:02.413Z"
+  },
+  {
+   "char": "zei",
+   "view": "side",
+   "seedLabel": "B",
+   "kind": "image",
+   "file": "bases/zei-side-seed-B.jpg",
+   "sha256": "bcaab13a7e01df0aee99f65fedc17bfd75d961895d8a2b05518034181c58aa34",
+   "nsfw": false,
+   "costUsd": 0.00884736,
+   "worstUsd": 0.02,
+   "recipe": {
+    "prompt": "The same person as in the reference picture, full body, standing, seen from the side, plain light grey background. Keep the face, hair and clothes the same.\n\nDetailed science fiction comic art: precise fine uniform linework, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, no text, no lettering, no writing, no logos, no numbers.\n\nThe person is a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head.\n\nNo text, no lettering, no signs with words.",
+    "model": "flux2-klein-4b-edit",
+    "endpoint": "fal-ai/flux-2/klein/4b/edit",
+    "host": "fal.ai",
+    "settings": {
+     "image_size": {
+      "width": 576,
+      "height": 768
+     },
+     "num_images": 1,
+     "enable_safety_checker": true,
+     "output_format": "jpeg",
+     "sync_mode": true
+    },
+    "seed": 1681127908,
+    "request_id": "01a1a083-eba3-7303-9b65-7cc4ffbb17c0",
+    "cost_usd": 0.0088,
+    "made_at": "2026-11-03T08:26:08.605Z",
+    "width": 576,
+    "height": 768,
+    "references": [
+     {
+      "sha256": "564f45deb5b5934c499ad0339ccedadb005f0a09e311231b0ff37e66708707a1"
+     }
+    ],
+    "style": {
+     "version_id": "unpublished: content/snowmoon/designs/styles/techno-vistas.json (scenery clauses removed for views)",
+     "title": "Techno vistas, views",
+     "text": "Detailed science fiction comic art: precise fine uniform linework, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, no text, no lettering, no writing, no logos, no numbers."
+    },
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "passed"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    }
+   }
+  },
+  {
+   "char": "zei",
+   "view": "side",
+   "seedLabel": "C",
+   "kind": "prompt-check",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 0.000142125,
+   "worstUsd": 0.0015,
+   "at": "2026-11-03T08:26:09.615Z"
+  },
+  {
+   "char": "zei",
+   "view": "side",
+   "seedLabel": "C",
+   "kind": "image",
+   "file": "bases/zei-side-seed-C.jpg",
+   "sha256": "fb8e6cb6887420bef70ce48666d8949e5b60462fcaeb252b08355fcd3cd1e9af",
+   "nsfw": false,
+   "costUsd": 0.00884736,
+   "worstUsd": 0.02,
+   "recipe": {
+    "prompt": "The same person as in the reference picture, full body, standing, seen from the side, plain light grey background. Keep the face, hair and clothes the same.\n\nDetailed science fiction comic art: precise fine uniform linework, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, no text, no lettering, no writing, no logos, no numbers.\n\nThe person is a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head.\n\nNo text, no lettering, no signs with words.",
+    "model": "flux2-klein-4b-edit",
+    "endpoint": "fal-ai/flux-2/klein/4b/edit",
+    "host": "fal.ai",
+    "settings": {
+     "image_size": {
+      "width": 576,
+      "height": 768
+     },
+     "num_images": 1,
+     "enable_safety_checker": true,
+     "output_format": "jpeg",
+     "sync_mode": true
+    },
+    "seed": 1711586004,
+    "request_id": "01a1a084-083b-75b0-8799-0e7b40bd55a6",
+    "cost_usd": 0.0088,
+    "made_at": "2026-11-03T08:26:11.605Z",
+    "width": 576,
+    "height": 768,
+    "references": [
+     {
+      "sha256": "564f45deb5b5934c499ad0339ccedadb005f0a09e311231b0ff37e66708707a1"
+     }
+    ],
+    "style": {
+     "version_id": "unpublished: content/snowmoon/designs/styles/techno-vistas.json (scenery clauses removed for views)",
+     "title": "Techno vistas, views",
+     "text": "Detailed science fiction comic art: precise fine uniform linework, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, no text, no lettering, no writing, no logos, no numbers."
+    },
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "passed"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    }
+   }
+  },
+  {
+   "char": "zei",
+   "view": "front",
+   "style": "Mood",
+   "path": "closed:gpt-image-2.5-sunburst",
+   "kind": "prompt-check",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 0.000099225,
+   "worstUsd": 0.0015,
+   "at": "2026-11-03T08:26:38.746Z"
+  },
+  {
+   "char": "zei",
+   "view": "front",
+   "style": "Mood",
+   "path": "closed:gpt-image-2.5-sunburst",
+   "kind": "image",
+   "file": "bases/zei-front-closed-gpt.jpg",
+   "sha256": "5326c6f92812ede7d9390081c912ad02e1dab7c78ecc4ca4a2a6a22a841dfd7c",
+   "nsfw": false,
+   "costUsd": 0.046733,
+   "worstUsd": 0.08,
+   "recipe": {
+    "prompt": "The same person as in the reference picture, full body, standing, seen from the front, plain light grey background. Keep the face, hair and clothes the same.\n\nIntense, highly detailed graphic novel look. Moody. Expressive. Dark lines, bold colors. Visible brushstrokes.\n\nThe person is a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head.\n\nNo text, no lettering, no signs with words.",
+    "model": "gpt-image-2.5-sunburst",
+    "endpoint": "openai/gpt-image-2.5-sunburst",
+    "host": "Vercel AI Gateway",
+    "settings": {
+     "size": "1024x1536",
+     "quality": "high",
+     "n": 1,
+     "output_format": "png",
+     "gateway": {
+      "disallowPromptTraining": true
+     },
+     "converted": {
+      "from": "png",
+      "sha256": "1a235785adfbc1e234b177691105e9b56018e129e2df71f9b7616ae9106c9693",
+      "to": "jpeg",
+      "resized_to": {
+       "width": 576,
+       "height": 768
+      },
+      "fit": "contain, padded with the picture's own corner colour"
+     }
+    },
+    "seed": null,
+    "request_id": "gen_01M6G88ZEYRWQ8EFNF81AH54RC",
+    "cost_usd": 0.0467,
+    "made_at": "2026-11-03T08:27:10.799Z",
+    "width": 576,
+    "height": 768,
+    "references": [
+     {
+      "sha256": "cd6e71769d0d468bbfc5dbb4269aa62b14a92efaa45aef33bfc1b9fd0ba8d867"
+     }
+    ],
+    "style": {
+     "version_id": "712ca63f-de6e-46bf-b3ad-7007b1120e16",
+     "title": "Mood",
+     "text": "Intense, highly detailed graphic novel look. Moody. Expressive. Dark lines, bold colors. Visible brushstrokes."
+    },
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "passed"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    }
+   },
+   "closed_model": true,
+   "maker": "OpenAI",
+   "response_meta": {
+    "created": 1793694428,
+    "usage": {
+     "total_tokens": 2141,
+     "input_tokens": 769,
+     "output_tokens": 1372,
+     "input_tokens_details": {
+      "text_tokens": 193,
+      "image_tokens": 576
+     }
+    },
+    "providerMetadata": {
+     "openai": {
+      "images": [
+       {
+        "imageTokens": 576,
+        "textTokens": 193,
+        "created": 1793694428,
+        "size": "1024x1536",
+        "quality": "high",
+        "background": "opaque",
+        "outputFormat": "png"
+       }
+      ]
+     },
+     "gateway": {
+      "routing": {
+       "originalModelId": "openai/gpt-image-2.5-sunburst",
+       "resolvedProvider": "openai",
+       "fallbacksAvailable": [],
+       "planningReasoning": "System credentials planned for: openai. Disallow prompt training requested: all 1 attempts disallow prompt training",
+       "canonicalSlug": "openai/gpt-image-2.5-sunburst",
+       "finalProvider": "openai",
+       "modelAttemptCount": 1,
+       "modelAttempts": [
+        {
+         "canonicalSlug": "openai/gpt-image-2.5-sunburst",
+         "success": true,
+         "providerAttemptCount": 1,
+         "providerAttempts": [
+          {
+           "provider": "openai",
+           "credentialType": "system",
+           "success": true,
+           "startTime": 1793694399990,
+           "endTime": 1793694428385,
+           "statusCode": 200
+          }
+         ]
+        }
+       ],
+       "totalProviderAttemptCount": 1
+      },
+      "cost": "0.046733",
+      "marketCost": "0.046733",
+      "surchargeCost": "0",
+      "gatewayCost": "0.046733",
+      "inferenceCost": "0.046733",
+      "inputInferenceCost": "0",
+      "outputInferenceCost": "0.046733",
+      "enabledDisallowPromptTraining": true,
+      "generationId": "gen_01M6G88ZEYRWQ8EFNF81AH54RC"
+     }
+    }
+   }
+  },
+  {
+   "char": "zei",
+   "view": "front",
+   "style": "Bolder",
+   "path": "closed:gemini-3.1-flash-image",
+   "kind": "prompt-check",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "allow": false,
+   "category": "unclear",
+   "provider": "groq",
+   "costUsd": 0.0001539,
+   "worstUsd": 0.0015,
+   "at": "2026-11-03T08:27:12.160Z"
+  },
+  {
+   "char": "zei",
+   "view": "front",
+   "style": "Bolder",
+   "path": "closed:gemini-3.1-flash-image",
+   "kind": "prompt-check",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "allow": false,
+   "category": "unclear",
+   "provider": "groq",
+   "costUsd": 0.0001443,
+   "worstUsd": 0.0015,
+   "at": "2026-11-03T08:27:12.843Z"
+  },
+  {
+   "char": "zei",
+   "view": "front",
+   "style": "Bolder",
+   "path": "closed:gemini-3.1-flash-image",
+   "kind": "prompt-check",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 0.0001023,
+   "worstUsd": 0.0015,
+   "at": "2026-11-03T08:27:13.398Z"
+  },
+  {
+   "char": "zei",
+   "view": "front",
+   "style": "Bolder",
+   "path": "closed:gemini-3.1-flash-image",
+   "kind": "image",
+   "file": "bases/zei-front-closed-gemini.jpg",
+   "sha256": "7dc7aa1cae4afd268355f3616fcb28a076272b5a1bcbdae4119209797286abcb",
+   "nsfw": false,
+   "costUsd": 0.067665,
+   "worstUsd": 0.09,
+   "recipe": {
+    "prompt": "The same person as in the reference picture, full body, standing, seen from the front, plain light grey background. Keep the face, hair and clothes the same.\n\nDetailed science fiction comic art: bold confident outer contours with fine inner linework, figures when present are seen distinct from the background, rich mechanical and architectural detail, cel-shaded flat color with soft hard-edged shadows, clean and bright, clear readable faces and hands.\n\nThe person is a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head.\n\nNo text, no lettering, no signs with words.",
+    "model": "gemini-3.1-flash-image",
+    "endpoint": "google/gemini-3.1-flash-image",
+    "host": "Vercel AI Gateway",
+    "settings": {
+     "modalities": [
+      "text",
+      "image"
+     ],
+     "aspect_ratio": "3:4",
+     "gateway": {
+      "disallowPromptTraining": true
+     },
+     "converted": {
+      "from": "png",
+      "sha256": "aa17a0891b8116a6a9bc20eaed724cebf45318d6ba5113e33ea79f495253a2f3",
+      "to": "jpeg",
+      "resized_to": {
+       "width": 576,
+       "height": 768
+      },
+      "fit": "contain, padded with the picture's own corner colour"
+     }
+    },
+    "seed": null,
+    "request_id": "gen_01M6G8A1674RDHAG5X6A57SRGH",
+    "cost_usd": 0.0677,
+    "made_at": "2026-11-03T08:27:27.177Z",
+    "width": 576,
+    "height": 768,
+    "references": [
+     {
+      "sha256": "cd6e71769d0d468bbfc5dbb4269aa62b14a92efaa45aef33bfc1b9fd0ba8d867"
+     }
+    ],
+    "style": {
+     "version_id": "9e255ec2-6851-415d-a1ca-41254412c878",
+     "title": "Bolder",
+     "text": "Detailed science fiction comic art: bold confident outer contours with fine inner linework, figures when present are seen distinct from the background, rich mechanical and architectural detail, cel-shaded flat color with soft hard-edged shadows, clean and bright, clear readable faces and hands."
+    },
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "passed"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    }
+   },
+   "closed_model": true,
+   "maker": "Google",
+   "response_meta": {
+    "id": "gen_01M6G8A1674RDHAG5X6A57SRGH",
+    "model": "google/gemini-3.1-flash-image",
+    "usage": {
+     "prompt_tokens": 1330,
+     "completion_tokens": 1120,
+     "total_tokens": 2450,
+     "cost": 0.067665,
+     "is_byok": false,
+     "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0
+     },
+     "cost_details": {
+      "upstream_inference_cost": null,
+      "upstream_inference_prompt_cost": 0,
+      "upstream_inference_completions_cost": 0
+     },
+     "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "image_tokens": 0
+     },
+     "cache_creation_input_tokens": 0,
+     "market_cost": 0.067665,
+     "gateway_cost": 0.067665
+    },
+    "text": "",
+    "provider_metadata": {
+     "vertex": {
+      "promptFeedback": null,
+      "groundingMetadata": null,
+      "urlContextMetadata": null,
+      "safetyRatings": null,
+      "usageMetadata": {
+       "promptTokenCount": 1330,
+       "candidatesTokenCount": 1120,
+       "totalTokenCount": 2450,
+       "trafficType": "ON_DEMAND",
+       "promptTokensDetails": [
+        {
+         "modality": "TEXT",
+         "tokenCount": 210
+        },
+        {
+         "modality": "IMAGE",
+         "tokenCount": 1120
+        }
+       ],
+       "candidatesTokensDetails": [
+        {
+         "modality": "IMAGE",
+         "tokenCount": 1120
+        }
+       ]
+      },
+      "finishMessage": null,
+      "serviceTier": null
+     },
+     "gateway": {
+      "routing": {
+       "originalModelId": "google/gemini-3.1-flash-image",
+       "resolvedProvider": "vertex",
+       "fallbacksAvailable": [
+        "google"
+       ],
+       "planningReasoning": "System credentials planned for: vertex, google. Disallow prompt training requested: all 2 attempts disallow prompt training",
+       "canonicalSlug": "google/gemini-3.1-flash-image",
+       "finalProvider": "vertex",
+       "modelAttemptCount": 1,
+       "modelAttempts": [
+        {
+         "canonicalSlug": "google/gemini-3.1-flash-image",
+         "success": true,
+         "providerAttemptCount": 1,
+         "providerAttempts": [
+          {
+           "provider": "vertex",
+           "credentialType": "system",
+           "success": true,
+           "startTime": 1793694434555,
+           "endTime": 1793694445603,
+           "statusCode": 200,
+           "providerResponseId": "4prpau2-LZqJ4OUPkuHf4Ak"
+          }
+         ]
+        }
+       ],
+       "totalProviderAttemptCount": 1,
+       "affinity": {
+        "outcome": "skipped_below_min_prefix"
+       },
+       "clientSessionId": "932c827462af6d8e1648441790f193f9",
+       "clientSessionIdSource": "fingerprint"
+      },
+      "cost": "0.067665",
+      "marketCost": "0.067665",
+      "surchargeCost": "0",
+      "gatewayCost": "0.067665",
+      "inferenceCost": "0.067665",
+      "inputInferenceCost": "0.000665",
+      "outputInferenceCost": "0.067",
+      "enabledDisallowPromptTraining": true,
+      "generationId": "gen_01M6G8A1674RDHAG5X6A57SRGH"
+     }
+    }
+   }
+  },
+  {
+   "char": "bai",
+   "view": "front",
+   "style": "Mood",
+   "path": "closed:gpt-image-2.5-sunburst",
+   "kind": "prompt-check",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 0.0001323,
+   "worstUsd": 0.0015,
+   "at": "2026-11-03T08:27:59.195Z"
+  },
+  {
+   "char": "bai",
+   "view": "front",
+   "style": "Mood",
+   "path": "closed:gpt-image-2.5-sunburst",
+   "kind": "image",
+   "file": "bases/bai-front-closed-gpt.jpg",
+   "sha256": "7389023180272730bbb222edcd80ff0e7bc4a4ea2ed19424c1b2b9603387f292",
+   "nsfw": false,
+   "costUsd": 0.046638,
+   "worstUsd": 0.08,
+   "recipe": {
+    "prompt": "The same person as in the reference picture, full body, standing, seen from the front, plain light grey background. Keep the face, hair and clothes the same.\n\nIntense, highly detailed graphic novel look. Moody. Expressive. Dark lines, bold colors. Visible brushstrokes.\n\nThe person is a young woman of about eighteen, tall and athletic, dark brown skin, hair pulled into a high puffy ponytail dyed magenta at the ends, a confident sly grin, wearing a lime-green modular shell vest with a bulky angular collar and reflective piping, a white seamless sleeveless bodysuit with glowing magenta seams, black wide gathered trousers with segmented knees, chunky black boots with glowing soles and a hip pouch.\n\nNo text, no lettering, no signs with words.",
+    "model": "gpt-image-2.5-sunburst",
+    "endpoint": "openai/gpt-image-2.5-sunburst",
+    "host": "Vercel AI Gateway",
+    "settings": {
+     "size": "1024x1536",
+     "quality": "high",
+     "n": 1,
+     "output_format": "png",
+     "gateway": {
+      "disallowPromptTraining": true
+     },
+     "converted": {
+      "from": "png",
+      "sha256": "84845c258d9da0c2fa2a22022f5aea13b15c0d23e09ef9ff76201ccaef9ab7f3",
+      "to": "jpeg",
+      "resized_to": {
+       "width": 576,
+       "height": 768
+      },
+      "fit": "contain, padded with the picture's own corner colour"
+     }
+    },
+    "seed": null,
+    "request_id": "gen_01M6G8BEXW0BF1W11VEYHKJ6NB",
+    "cost_usd": 0.0466,
+    "made_at": "2026-11-03T08:28:32.352Z",
+    "width": 576,
+    "height": 768,
+    "references": [
+     {
+      "sha256": "21def33df4f734aa8979a2bb152d88b443d511b940eaae0c4a67347f900db73e"
+     }
+    ],
+    "style": {
+     "version_id": "712ca63f-de6e-46bf-b3ad-7007b1120e16",
+     "title": "Mood",
+     "text": "Intense, highly detailed graphic novel look. Moody. Expressive. Dark lines, bold colors. Visible brushstrokes."
+    },
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "passed"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    }
+   },
+   "closed_model": true,
+   "maker": "OpenAI",
+   "response_meta": {
+    "created": 1793694510,
+    "usage": {
+     "total_tokens": 2122,
+     "input_tokens": 750,
+     "output_tokens": 1372,
+     "input_tokens_details": {
+      "text_tokens": 174,
+      "image_tokens": 576
+     }
+    },
+    "providerMetadata": {
+     "openai": {
+      "images": [
+       {
+        "imageTokens": 576,
+        "textTokens": 174,
+        "created": 1793694509,
+        "size": "1024x1536",
+        "quality": "high",
+        "background": "opaque",
+        "outputFormat": "png"
+       }
+      ]
+     },
+     "gateway": {
+      "routing": {
+       "originalModelId": "openai/gpt-image-2.5-sunburst",
+       "resolvedProvider": "openai",
+       "fallbacksAvailable": [],
+       "planningReasoning": "System credentials planned for: openai. Disallow prompt training requested: all 1 attempts disallow prompt training",
+       "canonicalSlug": "openai/gpt-image-2.5-sunburst",
+       "finalProvider": "openai",
+       "modelAttemptCount": 1,
+       "modelAttempts": [
+        {
+         "canonicalSlug": "openai/gpt-image-2.5-sunburst",
+         "success": true,
+         "providerAttemptCount": 1,
+         "providerAttempts": [
+          {
+           "provider": "openai",
+           "credentialType": "system",
+           "success": true,
+           "startTime": 1793694481377,
+           "endTime": 1793694510080,
+           "statusCode": 200
+          }
+         ]
+        }
+       ],
+       "totalProviderAttemptCount": 1
+      },
+      "cost": "0.046638",
+      "marketCost": "0.046638",
+      "surchargeCost": "0",
+      "gatewayCost": "0.046638",
+      "inferenceCost": "0.046638",
+      "inputInferenceCost": "0",
+      "outputInferenceCost": "0.046638",
+      "enabledDisallowPromptTraining": true,
+      "generationId": "gen_01M6G8BEXW0BF1W11VEYHKJ6NB"
+     }
+    }
+   }
+  },
+  {
+   "char": "gladias",
+   "view": "front",
+   "style": "Mood",
+   "path": "closed:gpt-image-2.5-sunburst",
+   "kind": "prompt-check",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 0.00009,
+   "worstUsd": 0.0015,
+   "at": "2026-11-03T08:28:32.937Z"
+  },
+  {
+   "char": "gladias",
+   "view": "front",
+   "style": "Mood",
+   "path": "closed:gpt-image-2.5-sunburst",
+   "kind": "image",
+   "file": "bases/gladias-front-closed-gpt.jpg",
+   "sha256": "b31125e19632188b22b50fe066385bb2b600511ff70d4be80d019773f09c6f2e",
+   "nsfw": false,
+   "costUsd": 0.046798,
+   "worstUsd": 0.08,
+   "recipe": {
+    "prompt": "The same person as in the reference picture, full body, standing, seen from the front, plain light grey background. Keep the face, hair and clothes the same.\n\nIntense, highly detailed graphic novel look. Moody. Expressive. Dark lines, bold colors. Visible brushstrokes.\n\nThe person is a man of about forty, slim and of medium height, light olive skin, short wavy chestnut-brown hair, a neatly trimmed short beard and hazel eyes, wearing a long sleeveless moss-green woven tabard with a sculpted standing collar that rises to his jaw, over a fitted cream long-sleeved bodysuit with seamless panels, a wide ochre cloth sash at the waist, slim tapered charcoal leggings, smooth seamless grey boots with thick soft soles, a thin silver band around his throat, a small earpiece and a slim pale ceramic wrist device.\n\nNo text, no lettering, no signs with words.",
+    "model": "gpt-image-2.5-sunburst",
+    "endpoint": "openai/gpt-image-2.5-sunburst",
+    "host": "Vercel AI Gateway",
+    "settings": {
+     "size": "1024x1536",
+     "quality": "high",
+     "n": 1,
+     "output_format": "png",
+     "gateway": {
+      "disallowPromptTraining": true
+     },
+     "converted": {
+      "from": "png",
+      "sha256": "2001370b67d55d8ef1720a5dd8eba5b13dec05e3fe1e0a63d6884c14574b45da",
+      "to": "jpeg",
+      "resized_to": {
+       "width": 576,
+       "height": 768
+      },
+      "fit": "contain, padded with the picture's own corner colour"
+     }
+    },
+    "seed": null,
+    "request_id": "gen_01M6G8CF3B0X8QXTX8XMGNZAXK",
+    "cost_usd": 0.0468,
+    "made_at": "2026-11-03T08:29:09.936Z",
+    "width": 576,
+    "height": 768,
+    "references": [
+     {
+      "sha256": "5b0c9d56c09f120d12be9657721f93eec56ec71c6f7c721312dc54a1a10e8d57"
+     }
+    ],
+    "style": {
+     "version_id": "712ca63f-de6e-46bf-b3ad-7007b1120e16",
+     "title": "Mood",
+     "text": "Intense, highly detailed graphic novel look. Moody. Expressive. Dark lines, bold colors. Visible brushstrokes."
+    },
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "passed"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    }
+   },
+   "closed_model": true,
+   "maker": "OpenAI",
+   "response_meta": {
+    "created": 1793694546,
+    "usage": {
+     "total_tokens": 2154,
+     "input_tokens": 782,
+     "output_tokens": 1372,
+     "input_tokens_details": {
+      "text_tokens": 206,
+      "image_tokens": 576
+     }
+    },
+    "providerMetadata": {
+     "openai": {
+      "images": [
+       {
+        "imageTokens": 576,
+        "textTokens": 206,
+        "created": 1793694546,
+        "size": "1024x1536",
+        "quality": "high",
+        "background": "opaque",
+        "outputFormat": "png"
+       }
+      ]
+     },
+     "gateway": {
+      "routing": {
+       "originalModelId": "openai/gpt-image-2.5-sunburst",
+       "resolvedProvider": "openai",
+       "fallbacksAvailable": [],
+       "planningReasoning": "System credentials planned for: openai. Disallow prompt training requested: all 1 attempts disallow prompt training",
+       "canonicalSlug": "openai/gpt-image-2.5-sunburst",
+       "finalProvider": "openai",
+       "modelAttemptCount": 1,
+       "modelAttempts": [
+        {
+         "canonicalSlug": "openai/gpt-image-2.5-sunburst",
+         "success": true,
+         "providerAttemptCount": 1,
+         "providerAttempts": [
+          {
+           "provider": "openai",
+           "credentialType": "system",
+           "success": true,
+           "startTime": 1793694514313,
+           "endTime": 1793694546489,
+           "statusCode": 200
+          }
+         ]
+        }
+       ],
+       "totalProviderAttemptCount": 1
+      },
+      "cost": "0.046798",
+      "marketCost": "0.046798",
+      "surchargeCost": "0",
+      "gatewayCost": "0.046798",
+      "inferenceCost": "0.046798",
+      "inputInferenceCost": "0",
+      "outputInferenceCost": "0.046798",
+      "enabledDisallowPromptTraining": true,
+      "generationId": "gen_01M6G8CF3B0X8QXTX8XMGNZAXK"
+     }
+    }
+   }
+  },
+  {
+   "char": "seila",
+   "view": "front",
+   "style": "Mood",
+   "path": "closed:gpt-image-2.5-sunburst",
+   "kind": "prompt-check",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 0.00010395,
+   "worstUsd": 0.0015,
+   "at": "2026-11-03T08:29:10.551Z"
+  },
+  {
+   "char": "seila",
+   "view": "front",
+   "style": "Mood",
+   "path": "closed:gpt-image-2.5-sunburst",
+   "kind": "image",
+   "file": "bases/seila-front-closed-gpt.jpg",
+   "sha256": "13131b6ce1290e8c92ea938713cdfa8e2792fb6b80712ed87188ef58e485e712",
+   "nsfw": false,
+   "costUsd": 0.046708,
+   "worstUsd": 0.08,
+   "recipe": {
+    "prompt": "The same person as in the reference picture, full body, standing, seen from the front, plain light grey background. Keep the face, hair and clothes the same.\n\nIntense, highly detailed graphic novel look. Moody. Expressive. Dark lines, bold colors. Visible brushstrokes.\n\nThe person is a woman in her late thirties, tall and slender, deep brown skin, black hair in shoulder-length braids gathered loosely back, alert dark eyes behind small round gold-rimmed glasses, wearing a long rust-orange woven coat-dress with a sculpted high funnel collar, an asymmetric closure of three bronze clasps running from shoulder to hip and a split hem, over an oatmeal seamless bodysuit, olive gathered trousers, soft tan seamless ankle boots and a thin band around her throat.\n\nNo text, no lettering, no signs with words.",
+    "model": "gpt-image-2.5-sunburst",
+    "endpoint": "openai/gpt-image-2.5-sunburst",
+    "host": "Vercel AI Gateway",
+    "settings": {
+     "size": "1024x1536",
+     "quality": "high",
+     "n": 1,
+     "output_format": "png",
+     "gateway": {
+      "disallowPromptTraining": true
+     },
+     "converted": {
+      "from": "png",
+      "sha256": "5adf331d6b64bc0921a1fb2a50053b011229c3aa947e483e760a41c1090d0301",
+      "to": "jpeg",
+      "resized_to": {
+       "width": 576,
+       "height": 768
+      },
+      "fit": "contain, padded with the picture's own corner colour"
+     }
+    },
+    "seed": null,
+    "request_id": "gen_01M6G8DKWY5G0RFE6TP5MWB4SS",
+    "cost_usd": 0.0467,
+    "made_at": "2026-11-03T08:29:43.666Z",
+    "width": 576,
+    "height": 768,
+    "references": [
+     {
+      "sha256": "62f2f7ce966c5cc0c425af17edf58640bf587fff0486f5a7bb62530abfb447c4"
+     }
+    ],
+    "style": {
+     "version_id": "712ca63f-de6e-46bf-b3ad-7007b1120e16",
+     "title": "Mood",
+     "text": "Intense, highly detailed graphic novel look. Moody. Expressive. Dark lines, bold colors. Visible brushstrokes."
+    },
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "passed"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    }
+   },
+   "closed_model": true,
+   "maker": "OpenAI",
+   "response_meta": {
+    "created": 1793694580,
+    "usage": {
+     "total_tokens": 2136,
+     "input_tokens": 764,
+     "output_tokens": 1372,
+     "input_tokens_details": {
+      "text_tokens": 188,
+      "image_tokens": 576
+     }
+    },
+    "providerMetadata": {
+     "openai": {
+      "images": [
+       {
+        "imageTokens": 576,
+        "textTokens": 188,
+        "created": 1793694580,
+        "size": "1024x1536",
+        "quality": "high",
+        "background": "opaque",
+        "outputFormat": "png"
+       }
+      ]
+     },
+     "gateway": {
+      "routing": {
+       "originalModelId": "openai/gpt-image-2.5-sunburst",
+       "resolvedProvider": "openai",
+       "fallbacksAvailable": [],
+       "planningReasoning": "System credentials planned for: openai. Disallow prompt training requested: all 1 attempts disallow prompt training",
+       "canonicalSlug": "openai/gpt-image-2.5-sunburst",
+       "finalProvider": "openai",
+       "modelAttemptCount": 1,
+       "modelAttempts": [
+        {
+         "canonicalSlug": "openai/gpt-image-2.5-sunburst",
+         "success": true,
+         "providerAttemptCount": 1,
+         "providerAttempts": [
+          {
+           "provider": "openai",
+           "credentialType": "system",
+           "success": true,
+           "startTime": 1793694551998,
+           "endTime": 1793694580808,
+           "statusCode": 200
+          }
+         ]
+        }
+       ],
+       "totalProviderAttemptCount": 1
+      },
+      "cost": "0.046708",
+      "marketCost": "0.046708",
+      "surchargeCost": "0",
+      "gatewayCost": "0.046708",
+      "inferenceCost": "0.046708",
+      "inputInferenceCost": "0",
+      "outputInferenceCost": "0.046708",
+      "enabledDisallowPromptTraining": true,
+      "generationId": "gen_01M6G8DKWY5G0RFE6TP5MWB4SS"
+     }
+    }
+   }
+  },
+  {
+   "char": "deluin",
+   "view": "front",
+   "style": "Mood",
+   "path": "closed:gpt-image-2.5-sunburst",
+   "kind": "prompt-check",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 0.000136575,
+   "worstUsd": 0.0015,
+   "at": "2026-11-03T08:29:44.728Z"
+  },
+  {
+   "char": "deluin",
+   "view": "front",
+   "style": "Mood",
+   "path": "closed:gpt-image-2.5-sunburst",
+   "kind": "image",
+   "file": "bases/deluin-front-closed-gpt.jpg",
+   "sha256": "2e71f7a4a14502579d31885d36018a7c7341f99aaf3add3fb443b9be5f45daa4",
+   "nsfw": false,
+   "costUsd": 0.046603,
+   "worstUsd": 0.08,
+   "recipe": {
+    "prompt": "The same person as in the reference picture, full body, standing, seen from the front, plain light grey background. Keep the face, hair and clothes the same.\n\nIntense, highly detailed graphic novel look. Moody. Expressive. Dark lines, bold colors. Visible brushstrokes.\n\nThe person is a young man of about eighteen, tall and long-limbed, pale skin, wavy shoulder-length light-brown hair, grey-green eyes and a calm, slightly serious face, wearing a thick cream cable-knit sweater cut as a long asymmetric tunic with a high folded collar and a light grey hood, dark green slim segmented trousers, a narrow dark sash and sturdy brown seamless boots.\n\nNo text, no lettering, no signs with words.",
+    "model": "gpt-image-2.5-sunburst",
+    "endpoint": "openai/gpt-image-2.5-sunburst",
+    "host": "Vercel AI Gateway",
+    "settings": {
+     "size": "1024x1536",
+     "quality": "high",
+     "n": 1,
+     "output_format": "png",
+     "gateway": {
+      "disallowPromptTraining": true
+     },
+     "converted": {
+      "from": "png",
+      "sha256": "394ae7ab5a90f3b2c04b3a1feff712bda73bb68eaec29d52d75379f3010971de",
+      "to": "jpeg",
+      "resized_to": {
+       "width": 576,
+       "height": 768
+      },
+      "fit": "contain, padded with the picture's own corner colour"
+     }
+    },
+    "seed": null,
+    "request_id": "gen_01M6G8EP9DQA0SJ358MV5BW38T",
+    "cost_usd": 0.0466,
+    "made_at": "2026-11-03T08:30:27.183Z",
+    "width": 576,
+    "height": 768,
+    "references": [
+     {
+      "sha256": "3edf7878c7001438c4c7133005517cba0d1679bed4988fadc58947d428934384"
+     }
+    ],
+    "style": {
+     "version_id": "712ca63f-de6e-46bf-b3ad-7007b1120e16",
+     "title": "Mood",
+     "text": "Intense, highly detailed graphic novel look. Moody. Expressive. Dark lines, bold colors. Visible brushstrokes."
+    },
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "passed"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    }
+   },
+   "closed_model": true,
+   "maker": "OpenAI",
+   "response_meta": {
+    "created": 1793694623,
+    "usage": {
+     "total_tokens": 2115,
+     "input_tokens": 743,
+     "output_tokens": 1372,
+     "input_tokens_details": {
+      "text_tokens": 167,
+      "image_tokens": 576
+     }
+    },
+    "providerMetadata": {
+     "openai": {
+      "images": [
+       {
+        "imageTokens": 576,
+        "textTokens": 167,
+        "created": 1793694622,
+        "size": "1024x1536",
+        "quality": "high",
+        "background": "opaque",
+        "outputFormat": "png"
+       }
+      ]
+     },
+     "gateway": {
+      "routing": {
+       "originalModelId": "openai/gpt-image-2.5-sunburst",
+       "resolvedProvider": "openai",
+       "fallbacksAvailable": [],
+       "planningReasoning": "System credentials planned for: openai. Disallow prompt training requested: all 1 attempts disallow prompt training",
+       "canonicalSlug": "openai/gpt-image-2.5-sunburst",
+       "finalProvider": "openai",
+       "modelAttemptCount": 1,
+       "modelAttempts": [
+        {
+         "canonicalSlug": "openai/gpt-image-2.5-sunburst",
+         "success": true,
+         "providerAttemptCount": 1,
+         "providerAttempts": [
+          {
+           "provider": "openai",
+           "credentialType": "system",
+           "success": true,
+           "startTime": 1793694587208,
+           "endTime": 1793694623407,
+           "statusCode": 200
+          }
+         ]
+        }
+       ],
+       "totalProviderAttemptCount": 1
+      },
+      "cost": "0.046603",
+      "marketCost": "0.046603",
+      "surchargeCost": "0",
+      "gatewayCost": "0.046603",
+      "inferenceCost": "0.046603",
+      "inputInferenceCost": "0",
+      "outputInferenceCost": "0.046603",
+      "enabledDisallowPromptTraining": true,
+      "generationId": "gen_01M6G8EP9DQA0SJ358MV5BW38T"
+     }
+    }
+   }
+  },
+  {
+   "char": "mu",
+   "view": "front",
+   "style": "Mood",
+   "path": "closed:gpt-image-2.5-sunburst",
+   "kind": "prompt-check",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 0.000111225,
+   "worstUsd": 0.0015,
+   "at": "2026-11-03T08:30:27.987Z"
+  },
+  {
+   "char": "mu",
+   "view": "front",
+   "style": "Mood",
+   "path": "closed:gpt-image-2.5-sunburst",
+   "kind": "image",
+   "file": "bases/mu-front-closed-gpt.jpg",
+   "sha256": "f775bda841d47148d812d2948f27285f0cf9e003efbfd87e5246970e8b0dcd33",
+   "nsfw": false,
+   "costUsd": 0.046613,
+   "worstUsd": 0.08,
+   "recipe": {
+    "prompt": "The same person as in the reference picture, full body, standing, seen from the front, plain light grey background. Keep the face, hair and clothes the same.\n\nIntense, highly detailed graphic novel look. Moody. Expressive. Dark lines, bold colors. Visible brushstrokes.\n\nThe person is a woman in her early sixties, small and wiry, medium brown skin, short silver hair in a sharp asymmetric cut, keen eyes behind thin red-framed glasses, wearing a charcoal asymmetric commander's tabard with one shoulder panel and bright yellow piping, over a cobalt-blue seamless long-sleeved bodysuit, slim black segmented trousers, soft grey seamless boots and a slim wrist device.\n\nNo text, no lettering, no signs with words.",
+    "model": "gpt-image-2.5-sunburst",
+    "endpoint": "openai/gpt-image-2.5-sunburst",
+    "host": "Vercel AI Gateway",
+    "settings": {
+     "size": "1024x1536",
+     "quality": "high",
+     "n": 1,
+     "output_format": "png",
+     "gateway": {
+      "disallowPromptTraining": true
+     },
+     "converted": {
+      "from": "png",
+      "sha256": "8ac20fdab9ec4f0b1ec92874055c40e1d8ac8987d168550e7971d079b6d30362",
+      "to": "jpeg",
+      "resized_to": {
+       "width": 576,
+       "height": 768
+      },
+      "fit": "contain, padded with the picture's own corner colour"
+     }
+    },
+    "seed": null,
+    "request_id": "gen_01M6G8FZ1Y72EBS3J331WF7TEG",
+    "cost_usd": 0.0466,
+    "made_at": "2026-11-03T08:31:02.326Z",
+    "width": 576,
+    "height": 768,
+    "references": [
+     {
+      "sha256": "e1854964c41862db245d46cc188ba84af6235fb95c38a79d55fe9281abf3aec7"
+     }
+    ],
+    "style": {
+     "version_id": "712ca63f-de6e-46bf-b3ad-7007b1120e16",
+     "title": "Mood",
+     "text": "Intense, highly detailed graphic novel look. Moody. Expressive. Dark lines, bold colors. Visible brushstrokes."
+    },
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "passed"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    }
+   },
+   "closed_model": true,
+   "maker": "OpenAI",
+   "response_meta": {
+    "created": 1793694660,
+    "usage": {
+     "total_tokens": 2117,
+     "input_tokens": 745,
+     "output_tokens": 1372,
+     "input_tokens_details": {
+      "text_tokens": 169,
+      "image_tokens": 576
+     }
+    },
+    "providerMetadata": {
+     "openai": {
+      "images": [
+       {
+        "imageTokens": 576,
+        "textTokens": 169,
+        "created": 1793694660,
+        "size": "1024x1536",
+        "quality": "high",
+        "background": "opaque",
+        "outputFormat": "png"
+       }
+      ]
+     },
+     "gateway": {
+      "routing": {
+       "originalModelId": "openai/gpt-image-2.5-sunburst",
+       "resolvedProvider": "openai",
+       "fallbacksAvailable": [],
+       "planningReasoning": "System credentials planned for: openai. Disallow prompt training requested: all 1 attempts disallow prompt training",
+       "canonicalSlug": "openai/gpt-image-2.5-sunburst",
+       "finalProvider": "openai",
+       "modelAttemptCount": 1,
+       "modelAttempts": [
+        {
+         "canonicalSlug": "openai/gpt-image-2.5-sunburst",
+         "success": true,
+         "providerAttemptCount": 1,
+         "providerAttempts": [
+          {
+           "provider": "openai",
+           "credentialType": "system",
+           "success": true,
+           "startTime": 1793694628953,
+           "endTime": 1793694660620,
+           "statusCode": 200
+          }
+         ]
+        }
+       ],
+       "totalProviderAttemptCount": 1
+      },
+      "cost": "0.046613",
+      "marketCost": "0.046613",
+      "surchargeCost": "0",
+      "gatewayCost": "0.046613",
+      "inferenceCost": "0.046613",
+      "inputInferenceCost": "0",
+      "outputInferenceCost": "0.046613",
+      "enabledDisallowPromptTraining": true,
+      "generationId": "gen_01M6G8FZ1Y72EBS3J331WF7TEG"
+     }
+    }
+   }
+  },
+  {
+   "char": "bai",
+   "view": "front",
+   "style": "Bolder",
+   "path": "closed:gemini-3.1-flash-image",
+   "kind": "prompt-check",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 0.000148575,
+   "worstUsd": 0.0015,
+   "at": "2026-11-03T08:31:04.303Z"
+  },
+  {
+   "char": "bai",
+   "view": "front",
+   "style": "Bolder",
+   "path": "closed:gemini-3.1-flash-image",
+   "kind": "image",
+   "file": "bases/bai-front-closed-gemini.jpg",
+   "sha256": "47a8b97f148da336c59ec0346350d21276efad14f1c25dd625136786c6858771",
+   "nsfw": false,
+   "costUsd": 0.067748,
+   "worstUsd": 0.09,
+   "recipe": {
+    "prompt": "The same person as in the reference picture, full body, standing, seen from the front, plain light grey background. Keep the face, hair and clothes the same.\n\nDetailed science fiction comic art: bold confident outer contours with fine inner linework, figures when present are seen distinct from the background, rich mechanical and architectural detail, cel-shaded flat color with soft hard-edged shadows, clean and bright, clear readable faces and hands.\n\nThe person is a young woman of about eighteen, tall and athletic, dark brown skin, hair pulled into a high puffy ponytail dyed magenta at the ends, a confident sly grin, wearing a lime-green modular shell vest with a bulky angular collar and reflective piping, a white seamless sleeveless bodysuit with glowing magenta seams, black wide gathered trousers with segmented knees, chunky black boots with glowing soles and a hip pouch.\n\nNo text, no lettering, no signs with words.",
+    "model": "gemini-3.1-flash-image",
+    "endpoint": "google/gemini-3.1-flash-image",
+    "host": "Vercel AI Gateway",
+    "settings": {
+     "modalities": [
+      "text",
+      "image"
+     ],
+     "aspect_ratio": "3:4",
+     "gateway": {
+      "disallowPromptTraining": true
+     },
+     "converted": {
+      "from": "png",
+      "sha256": "5d6336e92082ee5ad0c3b24c8a2127588b5b5ecaa5d6122c42a429015d823b7d",
+      "to": "jpeg",
+      "resized_to": {
+       "width": 576,
+       "height": 768
+      },
+      "fit": "contain, padded with the picture's own corner colour"
+     }
+    },
+    "seed": null,
+    "request_id": "gen_01M6G8H2PNDRVXXN5BAHPXV3W2",
+    "cost_usd": 0.0677,
+    "made_at": "2026-11-03T08:31:15.014Z",
+    "width": 576,
+    "height": 768,
+    "references": [
+     {
+      "sha256": "21def33df4f734aa8979a2bb152d88b443d511b940eaae0c4a67347f900db73e"
+     }
+    ],
+    "style": {
+     "version_id": "9e255ec2-6851-415d-a1ca-41254412c878",
+     "title": "Bolder",
+     "text": "Detailed science fiction comic art: bold confident outer contours with fine inner linework, figures when present are seen distinct from the background, rich mechanical and architectural detail, cel-shaded flat color with soft hard-edged shadows, clean and bright, clear readable faces and hands."
+    },
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "passed"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    }
+   },
+   "closed_model": true,
+   "maker": "Google",
+   "response_meta": {
+    "id": "gen_01M6G8H2PNDRVXXN5BAHPXV3W2",
+    "model": "google/gemini-3.1-flash-image",
+    "usage": {
+     "prompt_tokens": 1304,
+     "completion_tokens": 1152,
+     "total_tokens": 2456,
+     "cost": 0.067748,
+     "is_byok": false,
+     "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0
+     },
+     "cost_details": {
+      "upstream_inference_cost": null,
+      "upstream_inference_prompt_cost": 0,
+      "upstream_inference_completions_cost": 0
+     },
+     "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "image_tokens": 0
+     },
+     "cache_creation_input_tokens": 0,
+     "market_cost": 0.067748,
+     "gateway_cost": 0.067748
+    },
+    "text": "I have generated the full-body character portrait as requested, maintaining the original sci-fi comic art style with a front view on a plain light grey background.",
+    "provider_metadata": {
+     "vertex": {
+      "promptFeedback": null,
+      "groundingMetadata": null,
+      "urlContextMetadata": null,
+      "safetyRatings": null,
+      "usageMetadata": {
+       "promptTokenCount": 1304,
+       "candidatesTokenCount": 1152,
+       "totalTokenCount": 2456,
+       "trafficType": "ON_DEMAND",
+       "promptTokensDetails": [
+        {
+         "modality": "TEXT",
+         "tokenCount": 184
+        },
+        {
+         "modality": "IMAGE",
+         "tokenCount": 1120
+        }
+       ],
+       "candidatesTokensDetails": [
+        {
+         "modality": "IMAGE",
+         "tokenCount": 1120
+        },
+        {
+         "modality": "TEXT",
+         "tokenCount": 32
+        }
+       ]
+      },
+      "finishMessage": null,
+      "serviceTier": null
+     },
+     "gateway": {
+      "routing": {
+       "originalModelId": "google/gemini-3.1-flash-image",
+       "resolvedProvider": "vertex",
+       "fallbacksAvailable": [
+        "google"
+       ],
+       "planningReasoning": "System credentials planned for: vertex, google. Disallow prompt training requested: all 2 attempts disallow prompt training",
+       "canonicalSlug": "google/gemini-3.1-flash-image",
+       "finalProvider": "vertex",
+       "modelAttemptCount": 1,
+       "modelAttempts": [
+        {
+         "canonicalSlug": "google/gemini-3.1-flash-image",
+         "success": true,
+         "providerAttemptCount": 1,
+         "providerAttempts": [
+          {
+           "provider": "vertex",
+           "credentialType": "system",
+           "success": true,
+           "startTime": 1793694665460,
+           "endTime": 1793694674165,
+           "statusCode": 200,
+           "providerResponseId": "yZvparGsJo30idMPhoK3uAU"
+          }
+         ]
+        }
+       ],
+       "totalProviderAttemptCount": 1,
+       "affinity": {
+        "outcome": "skipped_below_min_prefix"
+       },
+       "clientSessionId": "2bbd6a2efff3d84c8ec65f8c75117ef1",
+       "clientSessionIdSource": "fingerprint"
+      },
+      "cost": "0.067748",
+      "marketCost": "0.067748",
+      "surchargeCost": "0",
+      "gatewayCost": "0.067748",
+      "inferenceCost": "0.067748",
+      "inputInferenceCost": "0.000652",
+      "outputInferenceCost": "0.067096",
+      "enabledDisallowPromptTraining": true,
+      "generationId": "gen_01M6G8H2PNDRVXXN5BAHPXV3W2"
+     }
+    }
+   }
+  },
+  {
+   "char": "gladias",
+   "view": "front",
+   "style": "Bolder",
+   "path": "closed:gemini-3.1-flash-image",
+   "kind": "prompt-check",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 0.000106275,
+   "worstUsd": 0.0015,
+   "at": "2026-11-03T08:31:15.587Z"
+  },
+  {
+   "char": "gladias",
+   "view": "front",
+   "style": "Bolder",
+   "path": "closed:gemini-3.1-flash-image",
+   "kind": "image",
+   "file": "bases/gladias-front-closed-gemini.jpg",
+   "sha256": "00ff20dc61f7507183d567899efd2230c99543c41c7bdbf267a9abc796238cac",
+   "nsfw": false,
+   "costUsd": 0.067668,
+   "worstUsd": 0.09,
+   "recipe": {
+    "prompt": "The same person as in the reference picture, full body, standing, seen from the front, plain light grey background. Keep the face, hair and clothes the same.\n\nDetailed science fiction comic art: bold confident outer contours with fine inner linework, figures when present are seen distinct from the background, rich mechanical and architectural detail, cel-shaded flat color with soft hard-edged shadows, clean and bright, clear readable faces and hands.\n\nThe person is a man of about forty, slim and of medium height, light olive skin, short wavy chestnut-brown hair, a neatly trimmed short beard and hazel eyes, wearing a long sleeveless moss-green woven tabard with a sculpted standing collar that rises to his jaw, over a fitted cream long-sleeved bodysuit with seamless panels, a wide ochre cloth sash at the waist, slim tapered charcoal leggings, smooth seamless grey boots with thick soft soles, a thin silver band around his throat, a small earpiece and a slim pale ceramic wrist device.\n\nNo text, no lettering, no signs with words.",
+    "model": "gemini-3.1-flash-image",
+    "endpoint": "google/gemini-3.1-flash-image",
+    "host": "Vercel AI Gateway",
+    "settings": {
+     "modalities": [
+      "text",
+      "image"
+     ],
+     "aspect_ratio": "3:4",
+     "gateway": {
+      "disallowPromptTraining": true
+     },
+     "converted": {
+      "from": "png",
+      "sha256": "5f1b42785bcff19805a6fa3667a674f890a4a02de58337e9cd645d3eb173c712",
+      "to": "jpeg",
+      "resized_to": {
+       "width": 576,
+       "height": 768
+      },
+      "fit": "contain, padded with the picture's own corner colour"
+     }
+    },
+    "seed": null,
+    "request_id": "gen_01M6G8HDVATYEPPB5JV8EFD7SW",
+    "cost_usd": 0.0677,
+    "made_at": "2026-11-03T08:31:26.470Z",
+    "width": 576,
+    "height": 768,
+    "references": [
+     {
+      "sha256": "5b0c9d56c09f120d12be9657721f93eec56ec71c6f7c721312dc54a1a10e8d57"
+     }
+    ],
+    "style": {
+     "version_id": "9e255ec2-6851-415d-a1ca-41254412c878",
+     "title": "Bolder",
+     "text": "Detailed science fiction comic art: bold confident outer contours with fine inner linework, figures when present are seen distinct from the background, rich mechanical and architectural detail, cel-shaded flat color with soft hard-edged shadows, clean and bright, clear readable faces and hands."
+    },
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "passed"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    }
+   },
+   "closed_model": true,
+   "maker": "Google",
+   "response_meta": {
+    "id": "gen_01M6G8HDVATYEPPB5JV8EFD7SW",
+    "model": "google/gemini-3.1-flash-image",
+    "usage": {
+     "prompt_tokens": 1336,
+     "completion_tokens": 1120,
+     "total_tokens": 2456,
+     "cost": 0.067668,
+     "is_byok": false,
+     "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0
+     },
+     "cost_details": {
+      "upstream_inference_cost": null,
+      "upstream_inference_prompt_cost": 0,
+      "upstream_inference_completions_cost": 0
+     },
+     "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "image_tokens": 0
+     },
+     "cache_creation_input_tokens": 0,
+     "market_cost": 0.067668,
+     "gateway_cost": 0.067668
+    },
+    "text": "",
+    "provider_metadata": {
+     "vertex": {
+      "promptFeedback": null,
+      "groundingMetadata": null,
+      "urlContextMetadata": null,
+      "safetyRatings": null,
+      "usageMetadata": {
+       "promptTokenCount": 1336,
+       "candidatesTokenCount": 1120,
+       "totalTokenCount": 2456,
+       "trafficType": "ON_DEMAND",
+       "promptTokensDetails": [
+        {
+         "modality": "TEXT",
+         "tokenCount": 216
+        },
+        {
+         "modality": "IMAGE",
+         "tokenCount": 1120
+        }
+       ],
+       "candidatesTokensDetails": [
+        {
+         "modality": "IMAGE",
+         "tokenCount": 1120
+        }
+       ]
+      },
+      "finishMessage": null,
+      "serviceTier": null
+     },
+     "gateway": {
+      "routing": {
+       "originalModelId": "google/gemini-3.1-flash-image",
+       "resolvedProvider": "vertex",
+       "fallbacksAvailable": [
+        "google"
+       ],
+       "planningReasoning": "System credentials planned for: vertex, google. Disallow prompt training requested: all 2 attempts disallow prompt training",
+       "canonicalSlug": "google/gemini-3.1-flash-image",
+       "finalProvider": "vertex",
+       "modelAttemptCount": 1,
+       "modelAttempts": [
+        {
+         "canonicalSlug": "google/gemini-3.1-flash-image",
+         "success": true,
+         "providerAttemptCount": 1,
+         "providerAttempts": [
+          {
+           "provider": "vertex",
+           "credentialType": "system",
+           "success": true,
+           "startTime": 1793694676873,
+           "endTime": 1793694685278,
+           "statusCode": 200,
+           "providerResponseId": "1ZvpatxOlZvI6A_NtouxCQ"
+          }
+         ]
+        }
+       ],
+       "totalProviderAttemptCount": 1,
+       "affinity": {
+        "outcome": "skipped_below_min_prefix"
+       },
+       "clientSessionId": "353255fb93159379f65d63abbe5cb68f",
+       "clientSessionIdSource": "fingerprint"
+      },
+      "cost": "0.067668",
+      "marketCost": "0.067668",
+      "surchargeCost": "0",
+      "gatewayCost": "0.067668",
+      "inferenceCost": "0.067668",
+      "inputInferenceCost": "0.000668",
+      "outputInferenceCost": "0.067",
+      "enabledDisallowPromptTraining": true,
+      "generationId": "gen_01M6G8HDVATYEPPB5JV8EFD7SW"
+     }
+    }
+   }
+  },
+  {
+   "char": "seila",
+   "view": "front",
+   "style": "Bolder",
+   "path": "closed:gemini-3.1-flash-image",
+   "kind": "prompt-check",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 0.000100725,
+   "worstUsd": 0.0015,
+   "at": "2026-11-03T08:31:27.159Z"
+  },
+  {
+   "char": "seila",
+   "view": "front",
+   "style": "Bolder",
+   "path": "closed:gemini-3.1-flash-image",
+   "kind": "image",
+   "file": "bases/seila-front-closed-gemini.jpg",
+   "sha256": "2eb6faaae99ed909c0b9d0434a8ff89c2dc349f64c3bb3dd7fb04e76897afce4",
+   "nsfw": false,
+   "costUsd": 0.0676605,
+   "worstUsd": 0.09,
+   "recipe": {
+    "prompt": "The same person as in the reference picture, full body, standing, seen from the front, plain light grey background. Keep the face, hair and clothes the same.\n\nDetailed science fiction comic art: bold confident outer contours with fine inner linework, figures when present are seen distinct from the background, rich mechanical and architectural detail, cel-shaded flat color with soft hard-edged shadows, clean and bright, clear readable faces and hands.\n\nThe person is a woman in her late thirties, tall and slender, deep brown skin, black hair in shoulder-length braids gathered loosely back, alert dark eyes behind small round gold-rimmed glasses, wearing a long rust-orange woven coat-dress with a sculpted high funnel collar, an asymmetric closure of three bronze clasps running from shoulder to hip and a split hem, over an oatmeal seamless bodysuit, olive gathered trousers, soft tan seamless ankle boots and a thin band around her throat.\n\nNo text, no lettering, no signs with words.",
+    "model": "gemini-3.1-flash-image",
+    "endpoint": "google/gemini-3.1-flash-image",
+    "host": "Vercel AI Gateway",
+    "settings": {
+     "modalities": [
+      "text",
+      "image"
+     ],
+     "aspect_ratio": "3:4",
+     "gateway": {
+      "disallowPromptTraining": true
+     },
+     "converted": {
+      "from": "png",
+      "sha256": "0f17e4c2404117bc926b3874fb9bbbed9ab405c5e2e17d329e2e1714201f8739",
+      "to": "jpeg",
+      "resized_to": {
+       "width": 576,
+       "height": 768
+      },
+      "fit": "contain, padded with the picture's own corner colour"
+     }
+    },
+    "seed": null,
+    "request_id": "gen_01M6G8HSBGKM7JHSPC5QW2HD7A",
+    "cost_usd": 0.0677,
+    "made_at": "2026-11-03T08:31:38.370Z",
+    "width": 576,
+    "height": 768,
+    "references": [
+     {
+      "sha256": "62f2f7ce966c5cc0c425af17edf58640bf587fff0486f5a7bb62530abfb447c4"
+     }
+    ],
+    "style": {
+     "version_id": "9e255ec2-6851-415d-a1ca-41254412c878",
+     "title": "Bolder",
+     "text": "Detailed science fiction comic art: bold confident outer contours with fine inner linework, figures when present are seen distinct from the background, rich mechanical and architectural detail, cel-shaded flat color with soft hard-edged shadows, clean and bright, clear readable faces and hands."
+    },
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "passed"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    }
+   },
+   "closed_model": true,
+   "maker": "Google",
+   "response_meta": {
+    "id": "gen_01M6G8HSBGKM7JHSPC5QW2HD7A",
+    "model": "google/gemini-3.1-flash-image",
+    "usage": {
+     "prompt_tokens": 1321,
+     "completion_tokens": 1120,
+     "total_tokens": 2441,
+     "cost": 0.0676605,
+     "is_byok": false,
+     "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0
+     },
+     "cost_details": {
+      "upstream_inference_cost": null,
+      "upstream_inference_prompt_cost": 0,
+      "upstream_inference_completions_cost": 0
+     },
+     "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "image_tokens": 0
+     },
+     "cache_creation_input_tokens": 0,
+     "market_cost": 0.0676605,
+     "gateway_cost": 0.0676605
+    },
+    "text": "",
+    "provider_metadata": {
+     "vertex": {
+      "promptFeedback": null,
+      "groundingMetadata": null,
+      "urlContextMetadata": null,
+      "safetyRatings": null,
+      "usageMetadata": {
+       "promptTokenCount": 1321,
+       "candidatesTokenCount": 1120,
+       "totalTokenCount": 2441,
+       "trafficType": "ON_DEMAND",
+       "promptTokensDetails": [
+        {
+         "modality": "TEXT",
+         "tokenCount": 201
+        },
+        {
+         "modality": "IMAGE",
+         "tokenCount": 1120
+        }
+       ],
+       "candidatesTokensDetails": [
+        {
+         "modality": "IMAGE",
+         "tokenCount": 1120
+        }
+       ]
+      },
+      "finishMessage": null,
+      "serviceTier": null
+     },
+     "gateway": {
+      "routing": {
+       "originalModelId": "google/gemini-3.1-flash-image",
+       "resolvedProvider": "vertex",
+       "fallbacksAvailable": [
+        "google"
+       ],
+       "planningReasoning": "System credentials planned for: vertex, google. Disallow prompt training requested: all 2 attempts disallow prompt training",
+       "canonicalSlug": "google/gemini-3.1-flash-image",
+       "finalProvider": "vertex",
+       "modelAttemptCount": 1,
+       "modelAttempts": [
+        {
+         "canonicalSlug": "google/gemini-3.1-flash-image",
+         "success": true,
+         "providerAttemptCount": 1,
+         "providerAttempts": [
+          {
+           "provider": "vertex",
+           "credentialType": "system",
+           "success": true,
+           "startTime": 1793694688656,
+           "endTime": 1793694697250,
+           "statusCode": 200,
+           "providerResponseId": "4JvpaqWsNImFyOgPzfHUmQE"
+          }
+         ]
+        }
+       ],
+       "totalProviderAttemptCount": 1,
+       "affinity": {
+        "outcome": "skipped_below_min_prefix"
+       },
+       "clientSessionId": "e38cfbbdb8eb72583dd55e4f68d80ee1",
+       "clientSessionIdSource": "fingerprint"
+      },
+      "cost": "0.0676605",
+      "marketCost": "0.0676605",
+      "surchargeCost": "0",
+      "gatewayCost": "0.0676605",
+      "inferenceCost": "0.0676605",
+      "inputInferenceCost": "0.0006605",
+      "outputInferenceCost": "0.067",
+      "enabledDisallowPromptTraining": true,
+      "generationId": "gen_01M6G8HSBGKM7JHSPC5QW2HD7A"
+     }
+    }
+   }
+  },
+  {
+   "char": "deluin",
+   "view": "front",
+   "style": "Bolder",
+   "path": "closed:gemini-3.1-flash-image",
+   "kind": "prompt-check",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 0.00010725,
+   "worstUsd": 0.0015,
+   "at": "2026-11-03T08:31:39.000Z"
+  },
+  {
+   "char": "deluin",
+   "view": "front",
+   "style": "Bolder",
+   "path": "closed:gemini-3.1-flash-image",
+   "kind": "image",
+   "file": "bases/deluin-front-closed-gemini.jpg",
+   "sha256": "0bc5c4c180b75a0be6b1b53e7ce50ee7d5cb49a934f85cb2f485036b35b89f66",
+   "nsfw": false,
+   "costUsd": 0.067652,
+   "worstUsd": 0.09,
+   "recipe": {
+    "prompt": "The same person as in the reference picture, full body, standing, seen from the front, plain light grey background. Keep the face, hair and clothes the same.\n\nDetailed science fiction comic art: bold confident outer contours with fine inner linework, figures when present are seen distinct from the background, rich mechanical and architectural detail, cel-shaded flat color with soft hard-edged shadows, clean and bright, clear readable faces and hands.\n\nThe person is a young man of about eighteen, tall and long-limbed, pale skin, wavy shoulder-length light-brown hair, grey-green eyes and a calm, slightly serious face, wearing a thick cream cable-knit sweater cut as a long asymmetric tunic with a high folded collar and a light grey hood, dark green slim segmented trousers, a narrow dark sash and sturdy brown seamless boots.\n\nNo text, no lettering, no signs with words.",
+    "model": "gemini-3.1-flash-image",
+    "endpoint": "google/gemini-3.1-flash-image",
+    "host": "Vercel AI Gateway",
+    "settings": {
+     "modalities": [
+      "text",
+      "image"
+     ],
+     "aspect_ratio": "3:4",
+     "gateway": {
+      "disallowPromptTraining": true
+     },
+     "converted": {
+      "from": "png",
+      "sha256": "8025ea7ff48c717a2670f70068ab14d34a0118c7dbe5935e9ea92f4a46dffe0a",
+      "to": "jpeg",
+      "resized_to": {
+       "width": 576,
+       "height": 768
+      },
+      "fit": "contain, padded with the picture's own corner colour"
+     }
+    },
+    "seed": null,
+    "request_id": "gen_01M6G8J4VQK629KHSMVNH8WTCC",
+    "cost_usd": 0.0677,
+    "made_at": "2026-11-03T08:31:49.868Z",
+    "width": 576,
+    "height": 768,
+    "references": [
+     {
+      "sha256": "3edf7878c7001438c4c7133005517cba0d1679bed4988fadc58947d428934384"
+     }
+    ],
+    "style": {
+     "version_id": "9e255ec2-6851-415d-a1ca-41254412c878",
+     "title": "Bolder",
+     "text": "Detailed science fiction comic art: bold confident outer contours with fine inner linework, figures when present are seen distinct from the background, rich mechanical and architectural detail, cel-shaded flat color with soft hard-edged shadows, clean and bright, clear readable faces and hands."
+    },
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "passed"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    }
+   },
+   "closed_model": true,
+   "maker": "Google",
+   "response_meta": {
+    "id": "gen_01M6G8J4VQK629KHSMVNH8WTCC",
+    "model": "google/gemini-3.1-flash-image",
+    "usage": {
+     "prompt_tokens": 1304,
+     "completion_tokens": 1120,
+     "total_tokens": 2424,
+     "cost": 0.067652,
+     "is_byok": false,
+     "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0
+     },
+     "cost_details": {
+      "upstream_inference_cost": null,
+      "upstream_inference_prompt_cost": 0,
+      "upstream_inference_completions_cost": 0
+     },
+     "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "image_tokens": 0
+     },
+     "cache_creation_input_tokens": 0,
+     "market_cost": 0.067652,
+     "gateway_cost": 0.067652
+    },
+    "text": "",
+    "provider_metadata": {
+     "vertex": {
+      "promptFeedback": null,
+      "groundingMetadata": null,
+      "urlContextMetadata": null,
+      "safetyRatings": null,
+      "usageMetadata": {
+       "promptTokenCount": 1304,
+       "candidatesTokenCount": 1120,
+       "totalTokenCount": 2424,
+       "trafficType": "ON_DEMAND",
+       "promptTokensDetails": [
+        {
+         "modality": "TEXT",
+         "tokenCount": 184
+        },
+        {
+         "modality": "IMAGE",
+         "tokenCount": 1120
+        }
+       ],
+       "candidatesTokensDetails": [
+        {
+         "modality": "IMAGE",
+         "tokenCount": 1120
+        }
+       ]
+      },
+      "finishMessage": null,
+      "serviceTier": null
+     },
+     "gateway": {
+      "routing": {
+       "originalModelId": "google/gemini-3.1-flash-image",
+       "resolvedProvider": "vertex",
+       "fallbacksAvailable": [
+        "google"
+       ],
+       "planningReasoning": "System credentials planned for: vertex, google. Disallow prompt training requested: all 2 attempts disallow prompt training",
+       "canonicalSlug": "google/gemini-3.1-flash-image",
+       "finalProvider": "vertex",
+       "modelAttemptCount": 1,
+       "modelAttempts": [
+        {
+         "canonicalSlug": "google/gemini-3.1-flash-image",
+         "success": true,
+         "providerAttemptCount": 1,
+         "providerAttempts": [
+          {
+           "provider": "vertex",
+           "credentialType": "system",
+           "success": true,
+           "startTime": 1793694700559,
+           "endTime": 1793694708254,
+           "statusCode": 200,
+           "providerResponseId": "7Jvpat3fKr2DotkPssbYmAU"
+          }
+         ]
+        }
+       ],
+       "totalProviderAttemptCount": 1,
+       "affinity": {
+        "outcome": "skipped_below_min_prefix"
+       },
+       "clientSessionId": "97aeae428fbd6fa303891bbcf3c1dc3b",
+       "clientSessionIdSource": "fingerprint"
+      },
+      "cost": "0.067652",
+      "marketCost": "0.067652",
+      "surchargeCost": "0",
+      "gatewayCost": "0.067652",
+      "inferenceCost": "0.067652",
+      "inputInferenceCost": "0.000652",
+      "outputInferenceCost": "0.067",
+      "enabledDisallowPromptTraining": true,
+      "generationId": "gen_01M6G8J4VQK629KHSMVNH8WTCC"
+     }
+    }
+   }
+  },
+  {
+   "char": "mu",
+   "view": "front",
+   "style": "Bolder",
+   "path": "closed:gemini-3.1-flash-image",
+   "kind": "prompt-check",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 0.0001074,
+   "worstUsd": 0.0015,
+   "at": "2026-11-03T08:31:50.429Z"
+  },
+  {
+   "char": "mu",
+   "view": "front",
+   "style": "Bolder",
+   "path": "closed:gemini-3.1-flash-image",
+   "kind": "image",
+   "file": "bases/mu-front-closed-gemini.jpg",
+   "sha256": "65ac87f48924d56136d46a89a109ecf8b77fb95157faedc6a4db65d0ebd46e56",
+   "nsfw": false,
+   "costUsd": 0.067652,
+   "worstUsd": 0.09,
+   "recipe": {
+    "prompt": "The same person as in the reference picture, full body, standing, seen from the front, plain light grey background. Keep the face, hair and clothes the same.\n\nDetailed science fiction comic art: bold confident outer contours with fine inner linework, figures when present are seen distinct from the background, rich mechanical and architectural detail, cel-shaded flat color with soft hard-edged shadows, clean and bright, clear readable faces and hands.\n\nThe person is a woman in her early sixties, small and wiry, medium brown skin, short silver hair in a sharp asymmetric cut, keen eyes behind thin red-framed glasses, wearing a charcoal asymmetric commander's tabard with one shoulder panel and bright yellow piping, over a cobalt-blue seamless long-sleeved bodysuit, slim black segmented trousers, soft grey seamless boots and a slim wrist device.\n\nNo text, no lettering, no signs with words.",
+    "model": "gemini-3.1-flash-image",
+    "endpoint": "google/gemini-3.1-flash-image",
+    "host": "Vercel AI Gateway",
+    "settings": {
+     "modalities": [
+      "text",
+      "image"
+     ],
+     "aspect_ratio": "3:4",
+     "gateway": {
+      "disallowPromptTraining": true
+     },
+     "converted": {
+      "from": "png",
+      "sha256": "a1f47383f501dde62d8dc8b884b282c1de65adad627d6871a83dffb669ccdabb",
+      "to": "jpeg",
+      "resized_to": {
+       "width": 576,
+       "height": 768
+      },
+      "fit": "contain, padded with the picture's own corner colour"
+     }
+    },
+    "seed": null,
+    "request_id": "gen_01M6G8JG10A2WX22WYZZ1A8GE5",
+    "cost_usd": 0.0677,
+    "made_at": "2026-11-03T08:32:00.603Z",
+    "width": 576,
+    "height": 768,
+    "references": [
+     {
+      "sha256": "e1854964c41862db245d46cc188ba84af6235fb95c38a79d55fe9281abf3aec7"
+     }
+    ],
+    "style": {
+     "version_id": "9e255ec2-6851-415d-a1ca-41254412c878",
+     "title": "Bolder",
+     "text": "Detailed science fiction comic art: bold confident outer contours with fine inner linework, figures when present are seen distinct from the background, rich mechanical and architectural detail, cel-shaded flat color with soft hard-edged shadows, clean and bright, clear readable faces and hands."
+    },
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "passed"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    }
+   },
+   "closed_model": true,
+   "maker": "Google",
+   "response_meta": {
+    "id": "gen_01M6G8JG10A2WX22WYZZ1A8GE5",
+    "model": "google/gemini-3.1-flash-image",
+    "usage": {
+     "prompt_tokens": 1304,
+     "completion_tokens": 1120,
+     "total_tokens": 2424,
+     "cost": 0.067652,
+     "is_byok": false,
+     "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0
+     },
+     "cost_details": {
+      "upstream_inference_cost": null,
+      "upstream_inference_prompt_cost": 0,
+      "upstream_inference_completions_cost": 0
+     },
+     "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "image_tokens": 0
+     },
+     "cache_creation_input_tokens": 0,
+     "market_cost": 0.067652,
+     "gateway_cost": 0.067652
+    },
+    "text": "",
+    "provider_metadata": {
+     "vertex": {
+      "promptFeedback": null,
+      "groundingMetadata": null,
+      "urlContextMetadata": null,
+      "safetyRatings": null,
+      "usageMetadata": {
+       "promptTokenCount": 1304,
+       "candidatesTokenCount": 1120,
+       "totalTokenCount": 2424,
+       "trafficType": "ON_DEMAND",
+       "promptTokensDetails": [
+        {
+         "modality": "IMAGE",
+         "tokenCount": 1120
+        },
+        {
+         "modality": "TEXT",
+         "tokenCount": 184
+        }
+       ],
+       "candidatesTokensDetails": [
+        {
+         "modality": "IMAGE",
+         "tokenCount": 1120
+        }
+       ]
+      },
+      "finishMessage": null,
+      "serviceTier": null
+     },
+     "gateway": {
+      "routing": {
+       "originalModelId": "google/gemini-3.1-flash-image",
+       "resolvedProvider": "vertex",
+       "fallbacksAvailable": [
+        "google"
+       ],
+       "planningReasoning": "System credentials planned for: vertex, google. Disallow prompt training requested: all 2 attempts disallow prompt training",
+       "canonicalSlug": "google/gemini-3.1-flash-image",
+       "finalProvider": "vertex",
+       "modelAttemptCount": 1,
+       "modelAttempts": [
+        {
+         "canonicalSlug": "google/gemini-3.1-flash-image",
+         "success": true,
+         "providerAttemptCount": 1,
+         "providerAttempts": [
+          {
+           "provider": "vertex",
+           "credentialType": "system",
+           "success": true,
+           "startTime": 1793694711907,
+           "endTime": 1793694719408,
+           "statusCode": 200,
+           "providerResponseId": "-JvparbhBreIyOgPi7qB0Ak"
+          }
+         ]
+        }
+       ],
+       "totalProviderAttemptCount": 1,
+       "affinity": {
+        "outcome": "skipped_below_min_prefix"
+       },
+       "clientSessionId": "dd131ad474e2718b9ac004c4ed68a196",
+       "clientSessionIdSource": "fingerprint"
+      },
+      "cost": "0.067652",
+      "marketCost": "0.067652",
+      "surchargeCost": "0",
+      "gatewayCost": "0.067652",
+      "inferenceCost": "0.067652",
+      "inputInferenceCost": "0.000652",
+      "outputInferenceCost": "0.067",
+      "enabledDisallowPromptTraining": true,
+      "generationId": "gen_01M6G8JG10A2WX22WYZZ1A8GE5"
+     }
+    }
+   }
+  }
+ ]
+}

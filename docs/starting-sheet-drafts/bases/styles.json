@@ -1,0 +1,1124 @@
+[
+ {
+  "name": "Bolder",
+  "element_id": "9b3b059d-4d42-4219-a708-327fdfe56d23",
+  "status": "published",
+  "created_by_fid": "6786",
+  "version_id": "9e255ec2-6851-415d-a1ca-41254412c878",
+  "version_no": 1,
+  "created_at": "2026-10-13T21:55:43.291Z",
+  "body": {
+   "text": "Detailed science fiction comic art: bold confident outer contours with fine inner linework, figures when present are seen distinct from the background, rich mechanical and architectural detail, cel-shaded flat color with soft hard-edged shadows, clean and bright, clear readable faces and hands.",
+   "title": "Bolder",
+   "views": {},
+   "assist": null,
+   "by_name": "naaate",
+   "samples": [
+    {
+     "url": "https://pictures.snowmoon.party/images/readers/00e4c56b168531a8485ea3fa4ab9bf17.jpg",
+     "recipe": {
+      "host": "fal.ai",
+      "seed": 312899921,
+      "model": "z-image-turbo",
+      "width": 1024,
+      "assist": {
+       "model": "claude-coding-agent",
+       "source": "src/lib/images/design-rules.ts",
+       "drafted": [
+        "sample subject or view line"
+       ]
+      },
+      "checks": {
+       "prompt": {
+        "model": "openai/gpt-oss-safeguard-20b",
+        "verdict": "ok"
+       },
+       "host_safety_checker": "passed"
+      },
+      "height": 576,
+      "prompt": "A wide street with tall trees and low buildings, a few people walking, daytime.\n\nDetailed science fiction comic art: bold confident outer contours with fine inner linework, figures when present are seen distinct from the background, rich mechanical and architectural detail, cel-shaded flat color with soft hard-edged shadows, clean and bright, clear readable faces and hands.\n\nNo text, no lettering, no signs with words.",
+      "made_at": "2026-10-13T21:54:20.500Z",
+      "cost_usd": 0.0029,
+      "endpoint": "fal-ai/z-image/turbo",
+      "settings": {
+       "sync_mode": true,
+       "image_size": {
+        "width": 1024,
+        "height": 576
+       },
+       "num_images": 1,
+       "output_format": "jpeg",
+       "num_inference_steps": 8,
+       "enable_safety_checker": true,
+       "enable_prompt_expansion": false
+      },
+      "request_id": "01a13742-5ed0-7482-bb3e-1ea295d4142e"
+     },
+     "sha256": "00e4c56b168531a8485ea3fa4ab9bf178f6c8f99b915f72a647733df9f80ffab"
+    },
+    {
+     "url": "https://pictures.snowmoon.party/images/readers/72fc17be2d37121ec4146b4ab062b2f1.jpg",
+     "recipe": {
+      "host": "fal.ai",
+      "seed": 46905328,
+      "model": "z-image-turbo",
+      "width": 1024,
+      "assist": {
+       "model": "claude-coding-agent",
+       "source": "src/lib/images/design-rules.ts",
+       "drafted": [
+        "sample subject or view line"
+       ]
+      },
+      "checks": {
+       "prompt": {
+        "model": "openai/gpt-oss-safeguard-20b",
+        "verdict": "ok"
+       },
+       "host_safety_checker": "passed"
+      },
+      "height": 576,
+      "prompt": "A small room with a desk, a window and a plant, seen from the doorway.\n\nDetailed science fiction comic art: bold confident outer contours with fine inner linework, figures when present are seen distinct from the background, rich mechanical and architectural detail, cel-shaded flat color with soft hard-edged shadows, clean and bright, clear readable faces and hands.\n\nNo text, no lettering, no signs with words.",
+      "made_at": "2026-10-13T21:54:55.410Z",
+      "cost_usd": 0.0029,
+      "endpoint": "fal-ai/z-image/turbo",
+      "settings": {
+       "sync_mode": true,
+       "image_size": {
+        "width": 1024,
+        "height": 576
+       },
+       "num_images": 1,
+       "output_format": "jpeg",
+       "num_inference_steps": 8,
+       "enable_safety_checker": true,
+       "enable_prompt_expansion": false
+      },
+      "request_id": "01a13742-e8aa-73e1-a1ac-8fd992eae373"
+     },
+     "sha256": "72fc17be2d37121ec4146b4ab062b2f14b459d894cfb13a839fc67f73c7e8fd8"
+    },
+    {
+     "url": "https://pictures.snowmoon.party/images/readers/e2602f4be520ceea8e42dc3df96bf615.jpg",
+     "recipe": {
+      "host": "fal.ai",
+      "seed": 1270186592,
+      "model": "z-image-turbo",
+      "width": 1024,
+      "assist": {
+       "model": "claude-coding-agent",
+       "source": "src/lib/images/design-rules.ts",
+       "drafted": [
+        "sample subject or view line"
+       ]
+      },
+      "checks": {
+       "prompt": {
+        "model": "openai/gpt-oss-safeguard-20b",
+        "verdict": "ok"
+       },
+       "host_safety_checker": "passed"
+      },
+      "height": 576,
+      "prompt": "A footpath through tall trees, a small drone flying overhead.\n\nDetailed science fiction comic art: bold confident outer contours with fine inner linework, figures when present are seen distinct from the background, rich mechanical and architectural detail, cel-shaded flat color with soft hard-edged shadows, clean and bright, clear readable faces and hands.\n\nNo text, no lettering, no signs with words.",
+      "made_at": "2026-10-13T21:55:06.730Z",
+      "cost_usd": 0.0029,
+      "endpoint": "fal-ai/z-image/turbo",
+      "settings": {
+       "sync_mode": true,
+       "image_size": {
+        "width": 1024,
+        "height": 576
+       },
+       "num_images": 1,
+       "output_format": "jpeg",
+       "num_inference_steps": 8,
+       "enable_safety_checker": true,
+       "enable_prompt_expansion": false
+      },
+      "request_id": "01a13743-14b1-7fa2-8104-f0280f4fdc3f"
+     },
+     "sha256": "e2602f4be520ceea8e42dc3df96bf615c3847cac05f0322035b13d34b5299049"
+    },
+    {
+     "url": "https://pictures.snowmoon.party/images/readers/c9c755de73d6c24582de2dd3ebf516bc.jpg",
+     "recipe": {
+      "host": "fal.ai",
+      "seed": 1549192875,
+      "model": "z-image-turbo",
+      "width": 1024,
+      "assist": {
+       "model": "claude-coding-agent",
+       "source": "src/lib/images/design-rules.ts",
+       "drafted": [
+        "sample subject or view line"
+       ]
+      },
+      "checks": {
+       "prompt": {
+        "model": "openai/gpt-oss-safeguard-20b",
+        "verdict": "ok"
+       },
+       "host_safety_checker": "passed"
+      },
+      "height": 576,
+      "prompt": "A market square at dusk, seen from above.\n\nDetailed science fiction comic art: bold confident outer contours with fine inner linework, figures when present are seen distinct from the background, rich mechanical and architectural detail, cel-shaded flat color with soft hard-edged shadows, clean and bright, clear readable faces and hands.\n\nNo text, no lettering, no signs with words.",
+      "made_at": "2026-10-13T21:55:14.615Z",
+      "cost_usd": 0.0029,
+      "endpoint": "fal-ai/z-image/turbo",
+      "settings": {
+       "sync_mode": true,
+       "image_size": {
+        "width": 1024,
+        "height": 576
+       },
+       "num_images": 1,
+       "output_format": "jpeg",
+       "num_inference_steps": 8,
+       "enable_safety_checker": true,
+       "enable_prompt_expansion": false
+      },
+      "request_id": "01a13743-2e80-7ae1-acb5-21b7e53320fe"
+     },
+     "sha256": "c9c755de73d6c24582de2dd3ebf516bc26c2dec1d01e12d4fc2e8ee38e4d95c5"
+    }
+   ],
+   "by_name_source": "relay"
+  }
+ },
+ {
+  "name": "core",
+  "element_id": "fcb40c63-dfb9-47be-9e0a-cbacb7cf023e",
+  "status": "published",
+  "created_by_fid": "6786",
+  "version_id": "227626d9-463c-4798-8525-1796e31595a4",
+  "version_no": 1,
+  "created_at": "2026-10-13T18:22:32.805Z",
+  "body": {
+   "text": "Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail where the scene has it, cel-shaded flat color with soft hard-edged shadows, clean and bright, clear readable faces and hands, framing chosen to suit the moment, from wide views to close-ups.",
+   "title": "core",
+   "views": {},
+   "assist": null,
+   "by_name": "naaate",
+   "samples": [
+    {
+     "url": "https://pictures.snowmoon.party/images/readers/daf46dcaf2d8f5a70dba9792011141b6.jpg",
+     "recipe": {
+      "host": "fal.ai",
+      "seed": 469340633,
+      "model": "z-image-turbo",
+      "width": 1024,
+      "assist": {
+       "model": "claude-coding-agent",
+       "source": "src/lib/images/design-rules.ts",
+       "drafted": [
+        "sample subject or view line"
+       ]
+      },
+      "checks": {
+       "prompt": {
+        "model": "openai/gpt-oss-safeguard-20b",
+        "verdict": "ok"
+       },
+       "host_safety_checker": "passed"
+      },
+      "height": 576,
+      "prompt": "A wide street with tall trees and low buildings, a few people walking, daytime.\n\nDetailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail where the scene has it, cel-shaded flat color with soft hard-edged shadows, clean and bright, clear readable faces and hands, framing chosen to suit the moment, from wide views to close-ups.\n\nNo text, no lettering, no signs with words.",
+      "made_at": "2026-10-13T17:54:53.140Z",
+      "cost_usd": 0.0029,
+      "endpoint": "fal-ai/z-image/turbo",
+      "settings": {
+       "sync_mode": true,
+       "image_size": {
+        "width": 1024,
+        "height": 576
+       },
+       "num_images": 1,
+       "output_format": "jpeg",
+       "num_inference_steps": 8,
+       "enable_safety_checker": true,
+       "enable_prompt_expansion": false
+      },
+      "request_id": "01a13667-2516-7eb2-be76-3d06bdd796d7"
+     },
+     "sha256": "daf46dcaf2d8f5a70dba9792011141b6ba1be86d1e293e5250dd5ab786390106"
+    },
+    {
+     "url": "https://pictures.snowmoon.party/images/readers/cd03ddcba55d67d33e8a347acddb3fdd.jpg",
+     "recipe": {
+      "host": "fal.ai",
+      "seed": 1224540233,
+      "model": "z-image-turbo",
+      "width": 1024,
+      "assist": {
+       "model": "claude-coding-agent",
+       "source": "src/lib/images/design-rules.ts",
+       "drafted": [
+        "sample subject or view line"
+       ]
+      },
+      "checks": {
+       "prompt": {
+        "model": "openai/gpt-oss-safeguard-20b",
+        "verdict": "ok"
+       },
+       "host_safety_checker": "passed"
+      },
+      "height": 576,
+      "prompt": "A small room with a desk, a window and a plant, seen from the doorway.\n\nDetailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail where the scene has it, cel-shaded flat color with soft hard-edged shadows, clean and bright, clear readable faces and hands, framing chosen to suit the moment, from wide views to close-ups.\n\nNo text, no lettering, no signs with words.",
+      "made_at": "2026-10-13T17:55:01.468Z",
+      "cost_usd": 0.0029,
+      "endpoint": "fal-ai/z-image/turbo",
+      "settings": {
+       "sync_mode": true,
+       "image_size": {
+        "width": 1024,
+        "height": 576
+       },
+       "num_images": 1,
+       "output_format": "jpeg",
+       "num_inference_steps": 8,
+       "enable_safety_checker": true,
+       "enable_prompt_expansion": false
+      },
+      "request_id": "01a13667-454c-78f3-996a-acfa01579145"
+     },
+     "sha256": "cd03ddcba55d67d33e8a347acddb3fdd8697eea5d9e779363000bc5f9f9a8355"
+    },
+    {
+     "url": "https://pictures.snowmoon.party/images/readers/1814c690d14c207700c7643397e20490.jpg",
+     "recipe": {
+      "host": "fal.ai",
+      "seed": 963717113,
+      "model": "z-image-turbo",
+      "width": 1024,
+      "assist": {
+       "model": "claude-coding-agent",
+       "source": "src/lib/images/design-rules.ts",
+       "drafted": [
+        "sample subject or view line"
+       ]
+      },
+      "checks": {
+       "prompt": {
+        "model": "openai/gpt-oss-safeguard-20b",
+        "verdict": "ok"
+       },
+       "host_safety_checker": "passed"
+      },
+      "height": 576,
+      "prompt": "A footpath through tall trees, a small drone flying overhead.\n\nDetailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail where the scene has it, cel-shaded flat color with soft hard-edged shadows, clean and bright, clear readable faces and hands, framing chosen to suit the moment, from wide views to close-ups.\n\nNo text, no lettering, no signs with words.",
+      "made_at": "2026-10-13T17:55:20.614Z",
+      "cost_usd": 0.0029,
+      "endpoint": "fal-ai/z-image/turbo",
+      "settings": {
+       "sync_mode": true,
+       "image_size": {
+        "width": 1024,
+        "height": 576
+       },
+       "num_images": 1,
+       "output_format": "jpeg",
+       "num_inference_steps": 8,
+       "enable_safety_checker": true,
+       "enable_prompt_expansion": false
+      },
+      "request_id": "01a13667-8fe6-7e71-9770-68307121bbc8"
+     },
+     "sha256": "1814c690d14c207700c7643397e2049020500332e2102817e746d9e62eca9d0b"
+    },
+    {
+     "url": "https://pictures.snowmoon.party/images/readers/ddeca7513e2ecee56e65cea4f8f31222.jpg",
+     "recipe": {
+      "host": "fal.ai",
+      "seed": 1988768606,
+      "model": "z-image-turbo",
+      "width": 1024,
+      "assist": {
+       "model": "claude-coding-agent",
+       "source": "src/lib/images/design-rules.ts",
+       "drafted": [
+        "sample subject or view line"
+       ]
+      },
+      "checks": {
+       "prompt": {
+        "model": "openai/gpt-oss-safeguard-20b",
+        "verdict": "ok"
+       },
+       "host_safety_checker": "passed"
+      },
+      "height": 576,
+      "prompt": "A market square at dusk, seen from above.\n\nDetailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail where the scene has it, cel-shaded flat color with soft hard-edged shadows, clean and bright, clear readable faces and hands, framing chosen to suit the moment, from wide views to close-ups.\n\nNo text, no lettering, no signs with words.",
+      "made_at": "2026-10-13T17:55:29.324Z",
+      "cost_usd": 0.0029,
+      "endpoint": "fal-ai/z-image/turbo",
+      "settings": {
+       "sync_mode": true,
+       "image_size": {
+        "width": 1024,
+        "height": 576
+       },
+       "num_images": 1,
+       "output_format": "jpeg",
+       "num_inference_steps": 8,
+       "enable_safety_checker": true,
+       "enable_prompt_expansion": false
+      },
+      "request_id": "01a13667-b258-7911-8f15-e675c9c9ea6e"
+     },
+     "sha256": "ddeca7513e2ecee56e65cea4f8f31222b286cdf315ecfb73adf2e9510d5c0e2e"
+    }
+   ],
+   "by_name_source": "relay"
+  }
+ },
+ {
+  "name": "core",
+  "element_id": "fcb40c63-dfb9-47be-9e0a-cbacb7cf023e",
+  "status": "published",
+  "created_by_fid": "6786",
+  "version_id": "6cbf8e03-8ef3-4ad1-95a4-2cc68f64c537",
+  "version_no": 2,
+  "created_at": "2026-10-13T18:25:12.606Z",
+  "body": {
+   "text": "Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail, cel-shaded flat color with soft hard-edged shadows, warm low golden light with long soft shadows, gentle warm palette, clear readable faces and hands.",
+   "title": "warm light",
+   "views": {},
+   "assist": null,
+   "by_name": "naaate",
+   "samples": [
+    {
+     "url": "https://pictures.snowmoon.party/images/readers/641692caf8184514792b4be2a221a17e.jpg",
+     "recipe": {
+      "host": "fal.ai",
+      "seed": 1997822077,
+      "model": "z-image-turbo",
+      "width": 1024,
+      "assist": {
+       "model": "claude-coding-agent",
+       "source": "src/lib/images/design-rules.ts",
+       "drafted": [
+        "sample subject or view line"
+       ]
+      },
+      "checks": {
+       "prompt": {
+        "model": "openai/gpt-oss-safeguard-20b",
+        "verdict": "ok"
+       },
+       "host_safety_checker": "passed"
+      },
+      "height": 576,
+      "prompt": "A wide street with tall trees and low buildings, a few people walking, daytime.\n\nDetailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail, cel-shaded flat color with soft hard-edged shadows, warm low golden light with long soft shadows, gentle warm palette, clear readable faces and hands.\n\nNo text, no lettering, no signs with words.",
+      "made_at": "2026-10-13T18:24:08.558Z",
+      "cost_usd": 0.0029,
+      "endpoint": "fal-ai/z-image/turbo",
+      "settings": {
+       "sync_mode": true,
+       "image_size": {
+        "width": 1024,
+        "height": 576
+       },
+       "num_images": 1,
+       "output_format": "jpeg",
+       "num_inference_steps": 8,
+       "enable_safety_checker": true,
+       "enable_prompt_expansion": false
+      },
+      "request_id": "01a13681-ee06-79c3-997d-bcbbaf1eda1b"
+     },
+     "sha256": "641692caf8184514792b4be2a221a17e1b87f7d414fab01caaf3e62fd8c8c818"
+    },
+    {
+     "url": "https://pictures.snowmoon.party/images/readers/2c4beebd22442ac5e9f30648b413ff8d.jpg",
+     "recipe": {
+      "host": "fal.ai",
+      "seed": 1773307269,
+      "model": "z-image-turbo",
+      "width": 1024,
+      "assist": {
+       "model": "claude-coding-agent",
+       "source": "src/lib/images/design-rules.ts",
+       "drafted": [
+        "sample subject or view line"
+       ]
+      },
+      "checks": {
+       "prompt": {
+        "model": "openai/gpt-oss-safeguard-20b",
+        "verdict": "ok"
+       },
+       "host_safety_checker": "passed"
+      },
+      "height": 576,
+      "prompt": "A small room with a desk, a window and a plant, seen from the doorway.\n\nDetailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail, cel-shaded flat color with soft hard-edged shadows, warm low golden light with long soft shadows, gentle warm palette, clear readable faces and hands.\n\nNo text, no lettering, no signs with words.",
+      "made_at": "2026-10-13T18:24:15.997Z",
+      "cost_usd": 0.0029,
+      "endpoint": "fal-ai/z-image/turbo",
+      "settings": {
+       "sync_mode": true,
+       "image_size": {
+        "width": 1024,
+        "height": 576
+       },
+       "num_images": 1,
+       "output_format": "jpeg",
+       "num_inference_steps": 8,
+       "enable_safety_checker": true,
+       "enable_prompt_expansion": false
+      },
+      "request_id": "01a13682-0b2b-7710-8c20-bee537586fbe"
+     },
+     "sha256": "2c4beebd22442ac5e9f30648b413ff8d35b69a5e39fd0961796ab8ef9f036ca9"
+    },
+    {
+     "url": "https://pictures.snowmoon.party/images/readers/55f9c49e92c1b1c1d051dd45fdd5e06c.jpg",
+     "recipe": {
+      "host": "fal.ai",
+      "seed": 1552988305,
+      "model": "z-image-turbo",
+      "width": 1024,
+      "assist": {
+       "model": "claude-coding-agent",
+       "source": "src/lib/images/design-rules.ts",
+       "drafted": [
+        "sample subject or view line"
+       ]
+      },
+      "checks": {
+       "prompt": {
+        "model": "openai/gpt-oss-safeguard-20b",
+        "verdict": "ok"
+       },
+       "host_safety_checker": "passed"
+      },
+      "height": 576,
+      "prompt": "A footpath through tall trees, a small drone flying overhead.\n\nDetailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail, cel-shaded flat color with soft hard-edged shadows, warm low golden light with long soft shadows, gentle warm palette, clear readable faces and hands.\n\nNo text, no lettering, no signs with words.",
+      "made_at": "2026-10-13T18:24:41.716Z",
+      "cost_usd": 0.0029,
+      "endpoint": "fal-ai/z-image/turbo",
+      "settings": {
+       "sync_mode": true,
+       "image_size": {
+        "width": 1024,
+        "height": 576
+       },
+       "num_images": 1,
+       "output_format": "jpeg",
+       "num_inference_steps": 8,
+       "enable_safety_checker": true,
+       "enable_prompt_expansion": false
+      },
+      "request_id": "01a13682-6f9e-70f1-a0af-e5a1861589e4"
+     },
+     "sha256": "55f9c49e92c1b1c1d051dd45fdd5e06ca1802ec04192cb4f44144c773f1d162a"
+    },
+    {
+     "url": "https://pictures.snowmoon.party/images/readers/bfa3f192dc7a5f5a3823bcb48a0a38db.jpg",
+     "recipe": {
+      "host": "fal.ai",
+      "seed": 339123277,
+      "model": "z-image-turbo",
+      "width": 1024,
+      "assist": {
+       "model": "claude-coding-agent",
+       "source": "src/lib/images/design-rules.ts",
+       "drafted": [
+        "sample subject or view line"
+       ]
+      },
+      "checks": {
+       "prompt": {
+        "model": "openai/gpt-oss-safeguard-20b",
+        "verdict": "ok"
+       },
+       "host_safety_checker": "passed"
+      },
+      "height": 576,
+      "prompt": "A market square at dusk, seen from above.\n\nDetailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail, cel-shaded flat color with soft hard-edged shadows, warm low golden light with long soft shadows, gentle warm palette, clear readable faces and hands.\n\nNo text, no lettering, no signs with words.",
+      "made_at": "2026-10-13T18:24:47.703Z",
+      "cost_usd": 0.0029,
+      "endpoint": "fal-ai/z-image/turbo",
+      "settings": {
+       "sync_mode": true,
+       "image_size": {
+        "width": 1024,
+        "height": 576
+       },
+       "num_images": 1,
+       "output_format": "jpeg",
+       "num_inference_steps": 8,
+       "enable_safety_checker": true,
+       "enable_prompt_expansion": false
+      },
+      "request_id": "01a13682-872b-75f2-808c-24368bb7747d"
+     },
+     "sha256": "bfa3f192dc7a5f5a3823bcb48a0a38dbcfdf4f7714c1d7efbbe5c6554ef588d7"
+    }
+   ],
+   "by_name_source": "relay"
+  }
+ },
+ {
+  "name": "Mood",
+  "element_id": "048f0d38-0061-4754-9099-5a2eabb33cb5",
+  "status": "published",
+  "created_by_fid": "6786",
+  "version_id": "712ca63f-de6e-46bf-b3ad-7007b1120e16",
+  "version_no": 1,
+  "created_at": "2026-10-15T07:35:34.078Z",
+  "body": {
+   "text": "Intense, highly detailed graphic novel look. Moody. Expressive. Dark lines, bold colors. Visible brushstrokes.",
+   "title": "Mood",
+   "views": {},
+   "assist": null,
+   "by_name": "naaate",
+   "samples": [
+    {
+     "url": "https://pictures.snowmoon.party/images/readers/7af7efadf40af372c083001dcf03543e.jpg",
+     "recipe": {
+      "host": "fal.ai",
+      "seed": 816000758,
+      "model": "z-image-turbo",
+      "width": 1024,
+      "assist": {
+       "model": "claude-coding-agent",
+       "source": "src/lib/images/design-rules.ts",
+       "drafted": [
+        "sample subject or view line"
+       ]
+      },
+      "checks": {
+       "prompt": {
+        "model": "openai/gpt-oss-safeguard-20b",
+        "verdict": "ok"
+       },
+       "host_safety_checker": "passed"
+      },
+      "height": 576,
+      "prompt": "A wide street with tall trees and low buildings, a few people walking, daytime.\n\nIntense, highly detailed graphic novel look. Moody. Expressive. Dark lines, bold colors. Visible brushstrokes.\n\nNo text, no lettering, no signs with words.",
+      "made_at": "2026-10-15T07:34:41.820Z",
+      "cost_usd": 0.0029,
+      "endpoint": "fal-ai/z-image/turbo",
+      "settings": {
+       "sync_mode": true,
+       "image_size": {
+        "width": 1024,
+        "height": 576
+       },
+       "num_images": 1,
+       "output_format": "jpeg",
+       "num_inference_steps": 8,
+       "enable_safety_checker": true,
+       "enable_prompt_expansion": false
+      },
+      "request_id": "01a13e7c-10be-7543-9726-867b35235cc1"
+     },
+     "sha256": "7af7efadf40af372c083001dcf03543e65eb084403fa0accbf593952582023ac"
+    },
+    {
+     "url": "https://pictures.snowmoon.party/images/readers/e4a6ffa67ffa6f24732eb389b27e0367.jpg",
+     "recipe": {
+      "host": "fal.ai",
+      "seed": 1779788177,
+      "model": "z-image-turbo",
+      "width": 1024,
+      "assist": {
+       "model": "claude-coding-agent",
+       "source": "src/lib/images/design-rules.ts",
+       "drafted": [
+        "sample subject or view line"
+       ]
+      },
+      "checks": {
+       "prompt": {
+        "model": "openai/gpt-oss-safeguard-20b",
+        "verdict": "ok"
+       },
+       "host_safety_checker": "passed"
+      },
+      "height": 576,
+      "prompt": "A small room with a desk, a window and a plant, seen from the doorway.\n\nIntense, highly detailed graphic novel look. Moody. Expressive. Dark lines, bold colors. Visible brushstrokes.\n\nNo text, no lettering, no signs with words.",
+      "made_at": "2026-10-15T07:34:47.458Z",
+      "cost_usd": 0.0029,
+      "endpoint": "fal-ai/z-image/turbo",
+      "settings": {
+       "sync_mode": true,
+       "image_size": {
+        "width": 1024,
+        "height": 576
+       },
+       "num_images": 1,
+       "output_format": "jpeg",
+       "num_inference_steps": 8,
+       "enable_safety_checker": true,
+       "enable_prompt_expansion": false
+      },
+      "request_id": "01a13e7c-2737-78f1-a6e7-14cffd0fa91d"
+     },
+     "sha256": "e4a6ffa67ffa6f24732eb389b27e0367d8851e626cd743b6a21bccc5fd498584"
+    },
+    {
+     "url": "https://pictures.snowmoon.party/images/readers/7dbd8992f333896b030622e5dd3a8e00.jpg",
+     "recipe": {
+      "host": "fal.ai",
+      "seed": 1322512222,
+      "model": "z-image-turbo",
+      "width": 1024,
+      "assist": {
+       "model": "claude-coding-agent",
+       "source": "src/lib/images/design-rules.ts",
+       "drafted": [
+        "sample subject or view line"
+       ]
+      },
+      "checks": {
+       "prompt": {
+        "model": "openai/gpt-oss-safeguard-20b",
+        "verdict": "ok"
+       },
+       "host_safety_checker": "passed"
+      },
+      "height": 576,
+      "prompt": "A footpath through tall trees, a small drone flying overhead.\n\nIntense, highly detailed graphic novel look. Moody. Expressive. Dark lines, bold colors. Visible brushstrokes.\n\nNo text, no lettering, no signs with words.",
+      "made_at": "2026-10-15T07:35:01.098Z",
+      "cost_usd": 0.0029,
+      "endpoint": "fal-ai/z-image/turbo",
+      "settings": {
+       "sync_mode": true,
+       "image_size": {
+        "width": 1024,
+        "height": 576
+       },
+       "num_images": 1,
+       "output_format": "jpeg",
+       "num_inference_steps": 8,
+       "enable_safety_checker": true,
+       "enable_prompt_expansion": false
+      },
+      "request_id": "01a13e7c-5aa3-7813-86c6-ff461c10eba1"
+     },
+     "sha256": "7dbd8992f333896b030622e5dd3a8e009a33144aca71210be19f0a4d766778cc"
+    },
+    {
+     "url": "https://pictures.snowmoon.party/images/readers/0798822cebc0b16d181e8c899ea7b8f4.jpg",
+     "recipe": {
+      "host": "fal.ai",
+      "seed": 1931191797,
+      "model": "z-image-turbo",
+      "width": 1024,
+      "assist": {
+       "model": "claude-coding-agent",
+       "source": "src/lib/images/design-rules.ts",
+       "drafted": [
+        "sample subject or view line"
+       ]
+      },
+      "checks": {
+       "prompt": {
+        "model": "openai/gpt-oss-safeguard-20b",
+        "verdict": "ok"
+       },
+       "host_safety_checker": "passed"
+      },
+      "height": 576,
+      "prompt": "A market square at dusk, seen from above.\n\nIntense, highly detailed graphic novel look. Moody. Expressive. Dark lines, bold colors. Visible brushstrokes.\n\nNo text, no lettering, no signs with words.",
+      "made_at": "2026-10-15T07:35:06.770Z",
+      "cost_usd": 0.0029,
+      "endpoint": "fal-ai/z-image/turbo",
+      "settings": {
+       "sync_mode": true,
+       "image_size": {
+        "width": 1024,
+        "height": 576
+       },
+       "num_images": 1,
+       "output_format": "jpeg",
+       "num_inference_steps": 8,
+       "enable_safety_checker": true,
+       "enable_prompt_expansion": false
+      },
+      "request_id": "01a13e7c-727f-7ba1-867b-60d2ae72eb38"
+     },
+     "sha256": "0798822cebc0b16d181e8c899ea7b8f4921d9dfb8457b53ee3c8169a869428a3"
+    }
+   ],
+   "by_name_source": "relay"
+  }
+ },
+ {
+  "name": "Printed",
+  "element_id": "bbcb319f-c2c5-4163-a547-78d8dcbcc440",
+  "status": "published",
+  "created_by_fid": "6786",
+  "version_id": "b83aa0d7-3d53-4a6f-948c-bf7dff2387e9",
+  "version_no": 1,
+  "created_at": "2026-10-14T05:41:04.279Z",
+  "body": {
+   "text": "Detailed science fiction comic art: precise fine uniform linework, cel-shaded flat color with soft hard-edged shadows, a subtle printed-paper texture with fine halftone dots in the shadows and slightly offset color, rich mechanical and architectural detail, clear readable faces and hands.",
+   "title": "Printed",
+   "views": {},
+   "assist": null,
+   "by_name": "naaate",
+   "samples": [
+    {
+     "url": "https://pictures.snowmoon.party/images/readers/206a0a4c414bb51eb3858b7c64eb79e5.jpg",
+     "recipe": {
+      "host": "fal.ai",
+      "seed": 1242888944,
+      "model": "z-image-turbo",
+      "width": 1024,
+      "assist": {
+       "model": "claude-coding-agent",
+       "source": "src/lib/images/design-rules.ts",
+       "drafted": [
+        "sample subject or view line"
+       ]
+      },
+      "checks": {
+       "prompt": {
+        "model": "openai/gpt-oss-safeguard-20b",
+        "verdict": "ok"
+       },
+       "host_safety_checker": "passed"
+      },
+      "height": 576,
+      "prompt": "A wide street with tall trees and low buildings, a few people walking, daytime.\n\nDetailed science fiction comic art: precise fine uniform linework, cel-shaded flat color with soft hard-edged shadows, a subtle printed-paper texture with fine halftone dots in the shadows and slightly offset color, rich mechanical and architectural detail, clear readable faces and hands.\n\nNo text, no lettering, no signs with words.",
+      "made_at": "2026-10-14T05:40:37.131Z",
+      "cost_usd": 0.0029,
+      "endpoint": "fal-ai/z-image/turbo",
+      "settings": {
+       "sync_mode": true,
+       "image_size": {
+        "width": 1024,
+        "height": 576
+       },
+       "num_images": 1,
+       "output_format": "jpeg",
+       "num_inference_steps": 8,
+       "enable_safety_checker": true,
+       "enable_prompt_expansion": false
+      },
+      "request_id": "01a138ed-435a-7c53-9f62-095ca80854d8"
+     },
+     "sha256": "206a0a4c414bb51eb3858b7c64eb79e5466002971e3b134371d68f238ead4735"
+    },
+    {
+     "url": "https://pictures.snowmoon.party/images/readers/a34393f5b7630db098846e4ecbe0c6df.jpg",
+     "recipe": {
+      "host": "fal.ai",
+      "seed": 952115244,
+      "model": "z-image-turbo",
+      "width": 1024,
+      "assist": {
+       "model": "claude-coding-agent",
+       "source": "src/lib/images/design-rules.ts",
+       "drafted": [
+        "sample subject or view line"
+       ]
+      },
+      "checks": {
+       "prompt": {
+        "model": "openai/gpt-oss-safeguard-20b",
+        "verdict": "ok"
+       },
+       "host_safety_checker": "passed"
+      },
+      "height": 576,
+      "prompt": "A small room with a desk, a window and a plant, seen from the doorway.\n\nDetailed science fiction comic art: precise fine uniform linework, cel-shaded flat color with soft hard-edged shadows, a subtle printed-paper texture with fine halftone dots in the shadows and slightly offset color, rich mechanical and architectural detail, clear readable faces and hands.\n\nNo text, no lettering, no signs with words.",
+      "made_at": "2026-10-14T05:40:41.544Z",
+      "cost_usd": 0.0029,
+      "endpoint": "fal-ai/z-image/turbo",
+      "settings": {
+       "sync_mode": true,
+       "image_size": {
+        "width": 1024,
+        "height": 576
+       },
+       "num_images": 1,
+       "output_format": "jpeg",
+       "num_inference_steps": 8,
+       "enable_safety_checker": true,
+       "enable_prompt_expansion": false
+      },
+      "request_id": "01a138ed-54b1-7ed1-96dc-059a01bb8e8f"
+     },
+     "sha256": "a34393f5b7630db098846e4ecbe0c6df5e373cbbc99855a7ac0501d13df6224f"
+    },
+    {
+     "url": "https://pictures.snowmoon.party/images/readers/aaddd59b62c45eae18817ff34f8edeba.jpg",
+     "recipe": {
+      "host": "fal.ai",
+      "seed": 1658468515,
+      "model": "z-image-turbo",
+      "width": 1024,
+      "assist": {
+       "model": "claude-coding-agent",
+       "source": "src/lib/images/design-rules.ts",
+       "drafted": [
+        "sample subject or view line"
+       ]
+      },
+      "checks": {
+       "prompt": {
+        "model": "openai/gpt-oss-safeguard-20b",
+        "verdict": "ok"
+       },
+       "host_safety_checker": "passed"
+      },
+      "height": 576,
+      "prompt": "A footpath through tall trees, a small drone flying overhead.\n\nDetailed science fiction comic art: precise fine uniform linework, cel-shaded flat color with soft hard-edged shadows, a subtle printed-paper texture with fine halftone dots in the shadows and slightly offset color, rich mechanical and architectural detail, clear readable faces and hands.\n\nNo text, no lettering, no signs with words.",
+      "made_at": "2026-10-14T05:40:50.327Z",
+      "cost_usd": 0.0029,
+      "endpoint": "fal-ai/z-image/turbo",
+      "settings": {
+       "sync_mode": true,
+       "image_size": {
+        "width": 1024,
+        "height": 576
+       },
+       "num_images": 1,
+       "output_format": "jpeg",
+       "num_inference_steps": 8,
+       "enable_safety_checker": true,
+       "enable_prompt_expansion": false
+      },
+      "request_id": "01a138ed-76fb-73f0-8082-2b031b1d39bf"
+     },
+     "sha256": "aaddd59b62c45eae18817ff34f8edebae0ae762cae964007a8b59ee1fdeca4ff"
+    },
+    {
+     "url": "https://pictures.snowmoon.party/images/readers/141c38f3c25afc0dc1f837779874ba48.jpg",
+     "recipe": {
+      "host": "fal.ai",
+      "seed": 1216161635,
+      "model": "z-image-turbo",
+      "width": 1024,
+      "assist": {
+       "model": "claude-coding-agent",
+       "source": "src/lib/images/design-rules.ts",
+       "drafted": [
+        "sample subject or view line"
+       ]
+      },
+      "checks": {
+       "prompt": {
+        "model": "openai/gpt-oss-safeguard-20b",
+        "verdict": "ok"
+       },
+       "host_safety_checker": "passed"
+      },
+      "height": 576,
+      "prompt": "A market square at dusk, seen from above.\n\nDetailed science fiction comic art: precise fine uniform linework, cel-shaded flat color with soft hard-edged shadows, a subtle printed-paper texture with fine halftone dots in the shadows and slightly offset color, rich mechanical and architectural detail, clear readable faces and hands.\n\nNo text, no lettering, no signs with words.",
+      "made_at": "2026-10-14T05:40:54.974Z",
+      "cost_usd": 0.0029,
+      "endpoint": "fal-ai/z-image/turbo",
+      "settings": {
+       "sync_mode": true,
+       "image_size": {
+        "width": 1024,
+        "height": 576
+       },
+       "num_images": 1,
+       "output_format": "jpeg",
+       "num_inference_steps": 8,
+       "enable_safety_checker": true,
+       "enable_prompt_expansion": false
+      },
+      "request_id": "01a138ed-8826-7003-b645-a5d24a6d1080"
+     },
+     "sha256": "141c38f3c25afc0dc1f837779874ba4804a688dea27f0896383614250130268b"
+    }
+   ],
+   "by_name_source": "farcaster-api"
+  }
+ },
+ {
+  "name": "Quiet",
+  "element_id": "38e45a77-bbaa-4673-aacc-288ec89fffaa",
+  "status": "published",
+  "created_by_fid": "6786",
+  "version_id": "3b1c6e9d-d5f2-465d-8db9-da1341d2c4cc",
+  "version_no": 1,
+  "created_at": "2026-10-14T05:40:03.411Z",
+  "body": {
+   "text": "Detailed science fiction comic art: precise fine uniform linework, restrained cel-shaded color in muted soft tones, simple uncluttered backgrounds with plenty of empty space, soft natural light, the focus on faces, hands and posture, calm and intimate.",
+   "title": "Quiet",
+   "views": {},
+   "assist": null,
+   "by_name": "naaate",
+   "samples": [
+    {
+     "url": "https://pictures.snowmoon.party/images/readers/794beb09bbdb5eedcde517084f7a7e31.jpg",
+     "recipe": {
+      "host": "fal.ai",
+      "seed": 1688463684,
+      "model": "z-image-turbo",
+      "width": 1024,
+      "assist": {
+       "model": "claude-coding-agent",
+       "source": "src/lib/images/design-rules.ts",
+       "drafted": [
+        "sample subject or view line"
+       ]
+      },
+      "checks": {
+       "prompt": {
+        "model": "openai/gpt-oss-safeguard-20b",
+        "verdict": "ok"
+       },
+       "host_safety_checker": "passed"
+      },
+      "height": 576,
+      "prompt": "A wide street with tall trees and low buildings, a few people walking, daytime.\n\nDetailed science fiction comic art: precise fine uniform linework, restrained cel-shaded color in muted soft tones, simple uncluttered backgrounds with plenty of empty space, soft natural light, the focus on faces, hands and posture, calm and intimate.\n\nNo text, no lettering, no signs with words.",
+      "made_at": "2026-10-14T05:39:30.075Z",
+      "cost_usd": 0.0029,
+      "endpoint": "fal-ai/z-image/turbo",
+      "settings": {
+       "sync_mode": true,
+       "image_size": {
+        "width": 1024,
+        "height": 576
+       },
+       "num_images": 1,
+       "output_format": "jpeg",
+       "num_inference_steps": 8,
+       "enable_safety_checker": true,
+       "enable_prompt_expansion": false
+      },
+      "request_id": "01a138ec-3dda-77d0-9693-75711896c80d"
+     },
+     "sha256": "794beb09bbdb5eedcde517084f7a7e311692fe1cbd12af5dd60eeb2737f42e6d"
+    },
+    {
+     "url": "https://pictures.snowmoon.party/images/readers/cd6d93a29fa3f7fb963e1d2e982ef0b5.jpg",
+     "recipe": {
+      "host": "fal.ai",
+      "seed": 971851833,
+      "model": "z-image-turbo",
+      "width": 1024,
+      "assist": {
+       "model": "claude-coding-agent",
+       "source": "src/lib/images/design-rules.ts",
+       "drafted": [
+        "sample subject or view line"
+       ]
+      },
+      "checks": {
+       "prompt": {
+        "model": "openai/gpt-oss-safeguard-20b",
+        "verdict": "ok"
+       },
+       "host_safety_checker": "passed"
+      },
+      "height": 576,
+      "prompt": "A small room with a desk, a window and a plant, seen from the doorway.\n\nDetailed science fiction comic art: precise fine uniform linework, restrained cel-shaded color in muted soft tones, simple uncluttered backgrounds with plenty of empty space, soft natural light, the focus on faces, hands and posture, calm and intimate.\n\nNo text, no lettering, no signs with words.",
+      "made_at": "2026-10-14T05:39:34.394Z",
+      "cost_usd": 0.0029,
+      "endpoint": "fal-ai/z-image/turbo",
+      "settings": {
+       "sync_mode": true,
+       "image_size": {
+        "width": 1024,
+        "height": 576
+       },
+       "num_images": 1,
+       "output_format": "jpeg",
+       "num_inference_steps": 8,
+       "enable_safety_checker": true,
+       "enable_prompt_expansion": false
+      },
+      "request_id": "01a138ec-4e62-74c1-90ea-502139e8944d"
+     },
+     "sha256": "cd6d93a29fa3f7fb963e1d2e982ef0b5594abc313736d609dd8f26b2e54e40e1"
+    },
+    {
+     "url": "https://pictures.snowmoon.party/images/readers/9912ca64425caf9987baa92f606f46a6.jpg",
+     "recipe": {
+      "host": "fal.ai",
+      "seed": 588534010,
+      "model": "z-image-turbo",
+      "width": 1024,
+      "assist": {
+       "model": "claude-coding-agent",
+       "source": "src/lib/images/design-rules.ts",
+       "drafted": [
+        "sample subject or view line"
+       ]
+      },
+      "checks": {
+       "prompt": {
+        "model": "openai/gpt-oss-safeguard-20b",
+        "verdict": "ok"
+       },
+       "host_safety_checker": "passed"
+      },
+      "height": 576,
+      "prompt": "A footpath through tall trees, a small drone flying overhead.\n\nDetailed science fiction comic art: precise fine uniform linework, restrained cel-shaded color in muted soft tones, simple uncluttered backgrounds with plenty of empty space, soft natural light, the focus on faces, hands and posture, calm and intimate.\n\nNo text, no lettering, no signs with words.",
+      "made_at": "2026-10-14T05:39:41.487Z",
+      "cost_usd": 0.0029,
+      "endpoint": "fal-ai/z-image/turbo",
+      "settings": {
+       "sync_mode": true,
+       "image_size": {
+        "width": 1024,
+        "height": 576
+       },
+       "num_images": 1,
+       "output_format": "jpeg",
+       "num_inference_steps": 8,
+       "enable_safety_checker": true,
+       "enable_prompt_expansion": false
+      },
+      "request_id": "01a138ec-6a20-77b0-9081-4dcad1b759a8"
+     },
+     "sha256": "9912ca64425caf9987baa92f606f46a698855954e9320e038a2a7a071d89eb81"
+    },
+    {
+     "url": "https://pictures.snowmoon.party/images/readers/48b2914eacb75ab39c31f705e5d7a7fb.jpg",
+     "recipe": {
+      "host": "fal.ai",
+      "seed": 868310010,
+      "model": "z-image-turbo",
+      "width": 1024,
+      "assist": {
+       "model": "claude-coding-agent",
+       "source": "src/lib/images/design-rules.ts",
+       "drafted": [
+        "sample subject or view line"
+       ]
+      },
+      "checks": {
+       "prompt": {
+        "model": "openai/gpt-oss-safeguard-20b",
+        "verdict": "ok"
+       },
+       "host_safety_checker": "passed"
+      },
+      "height": 576,
+      "prompt": "A market square at dusk, seen from above.\n\nDetailed science fiction comic art: precise fine uniform linework, restrained cel-shaded color in muted soft tones, simple uncluttered backgrounds with plenty of empty space, soft natural light, the focus on faces, hands and posture, calm and intimate.\n\nNo text, no lettering, no signs with words.",
+      "made_at": "2026-10-14T05:39:53.815Z",
+      "cost_usd": 0.0029,
+      "endpoint": "fal-ai/z-image/turbo",
+      "settings": {
+       "sync_mode": true,
+       "image_size": {
+        "width": 1024,
+        "height": 576
+       },
+       "num_images": 1,
+       "output_format": "jpeg",
+       "num_inference_steps": 8,
+       "enable_safety_checker": true,
+       "enable_prompt_expansion": false
+      },
+      "request_id": "01a138ec-9a4d-7850-a833-1479bd3be63a"
+     },
+     "sha256": "48b2914eacb75ab39c31f705e5d7a7fbbf0addc61f316f16f2fd5af4c33d6685"
+    }
+   ],
+   "by_name_source": "farcaster-api"
+  }
+ }
+]
