@@ -82,7 +82,6 @@ export const LEARN_TEXT = {
     diffHref: '/minpentai/rules#lessons-vs-play',
   },
   /** Owner's words (2026-10-20), on every watch screen: the broadcast is not the game played here. */
-  broadcastNote: 'The full game, as the book describes it, has four players. What you\'ll play here is a simpler two-player version.',
   /** Owner's words (2026-10-20), after what the practice match shows only to teach (Amber's towers in setup, hits in the dark). */
   /** The owner's sentence for hits shown in the dark (2026-10-20). */
   teachHits: 'Shown here to teach. In a real match, you\'ll only see the hits your towers light.',
