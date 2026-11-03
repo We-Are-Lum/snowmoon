@@ -25,7 +25,8 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { DEFAULT_TEMPLATES } from '../src/templates';
 import { LiveScreen } from '../src/components/live-screen';
 import { AGENTS, CHALLENGE, CHAT, IMAGES, REPO_URL, imagesDailySpendCapUsd } from '../src/lib/config';
-import { challengeOpenNow, challengeVisibleTo, entriesOpen } from '../src/lib/challenge/rules';
+import { challengeOpenNow, entriesOpen } from '../src/lib/challenge/rules';
+import { challengeVisibleTo } from '../src/lib/challenge/visibility';
 import { NOTICE_REVIEW, currentNoticeItems, noticeKey } from '../src/lib/chat/notice';
 import { LEGAL, PRIVACY, TERMS, legalKey } from '../src/lib/legal';
 import { LEARN_TEXT } from '../src/lib/minpentai/learn-text';
@@ -1793,7 +1794,7 @@ add({
     const problems: string[] = [];
     if (c.cap !== IMAGES.dailySpendCapUsd) problems.push(`the free image cap at ${c.at} is $${c.cap}, not IMAGES.dailySpendCapUsd ($${IMAGES.dailySpendCapUsd}): it rose by date alone (imagesDailySpendCapUsd in src/lib/config.ts must read CHALLENGE.public)`);
     if (c.entries || c.open) problems.push(`entries are open at ${c.at} with CHALLENGE.public off (entriesOpen / challengeOpenNow in src/lib/challenge/rules.ts must read CHALLENGE.public)`);
-    if (!/export const challengeSheetsOpen = \([^)]*pub: boolean = CHALLENGE\.public\) => pub && CHALLENGE\.openSheets && phase\(now\) === 'open'/.test(c.sheets)) problems.push('src/lib/challenge/open-sheets.ts: open sheet-making does not wait for CHALLENGE.public');
+    if (!/export const challengeSheetsOpen = \([^\n]*pub: boolean = CHALLENGE\.public\) => pub && CHALLENGE\.openSheets && phase\(now\) === 'open'/.test(c.sheets)) problems.push('src/lib/challenge/open-sheets.ts: open sheet-making does not wait for CHALLENGE.public');
     if (!/if \(!entriesOpen\(now\)\) return 'not-a-candidate';/.test(c.record)) problems.push('src/lib/challenge/record.ts: eligibility is recorded (and Neynar asked) without CHALLENGE.public');
     if (c.visibleToNonAdmin) problems.push('challengeVisibleTo lets a non-admin see the challenge while CHALLENGE.public is off');
     if (c.status !== 404) problems.push(`${BASE}/challenge answers ${c.status} to a signed-out visitor, not 404`);

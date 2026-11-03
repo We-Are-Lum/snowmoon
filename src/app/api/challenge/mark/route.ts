@@ -3,7 +3,7 @@ import { revalidatePath } from 'next/cache';
 import { getFid } from '~/lib/auth';
 import { db } from '~/lib/db';
 import { markEntry } from '~/lib/challenge/entries';
-import { challengeVisibleTo } from '~/lib/challenge/rules';
+import { challengeVisibleTo } from '~/lib/challenge/visibility';
 
 /**
  * "Mark as my entry" (the remix challenge, owner 2026-10-31): a signed-in person marks one of their own versions made
