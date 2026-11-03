@@ -202,6 +202,59 @@ export function signOutSocial() {
   window.dispatchEvent(new Event(EVENT));
 }
 
+/**
+ * The Lens or Bluesky session kept on this device, whatever else is signed in: the You page sends it beside a Farcaster
+ * sign-in (X-Social-Session) to offer and make a link (owner, 2026-11-04, 3a).
+ */
+export const socialOnDevice = (): SocialSessionState | null => readSocial();
+
+/**
+ * A second Lens or Bluesky sign-in, kept only to link it (a Bluesky account to the Lens account signed in): it never
+ * signs anyone in, and is dropped once the link is made or refused.
+ */
+const SOCIAL_LINK_KEY = 'snowmoon.social.link';
+export function saveSocialLinkSession(token: string, kind: 'lens' | 'bluesky', handle: string | null) {
+  const payload = JSON.parse(atob(token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/'))) as { exp: number };
+  try {
+    localStorage.setItem(SOCIAL_LINK_KEY, JSON.stringify({ token, kind, name: handle ?? (kind === 'lens' ? 'a Lens account' : 'a Bluesky account'), exp: payload.exp }));
+  } catch {
+    /* storage blocked */
+  }
+  window.dispatchEvent(new Event(EVENT));
+}
+export function socialLinkSession(): SocialSessionState | null {
+  try {
+    const s = JSON.parse(localStorage.getItem(SOCIAL_LINK_KEY) ?? 'null') as SocialSessionState | null;
+    return s && s.exp * 1000 > Date.now() + 120_000 ? s : null;
+  } catch {
+    return null;
+  }
+}
+export function dropSocialLinkSession() {
+  try {
+    localStorage.removeItem(SOCIAL_LINK_KEY);
+  } catch {
+    /* nothing stored */
+  }
+  window.dispatchEvent(new Event(EVENT));
+}
+
+/** Both Lens/Bluesky slots on this device, re-read whenever a sign-in changes (the You page's link panel). */
+export function useSocialDevice(): { main: SocialSessionState | null; link: SocialSessionState | null } {
+  const [state, setState] = useState<{ main: SocialSessionState | null; link: SocialSessionState | null }>({ main: null, link: null });
+  useEffect(() => {
+    const check = () => setState({ main: readSocial(), link: socialLinkSession() });
+    check();
+    window.addEventListener(EVENT, check);
+    window.addEventListener('storage', check);
+    return () => {
+      window.removeEventListener(EVENT, check);
+      window.removeEventListener('storage', check);
+    };
+  }, []);
+  return state;
+}
+
 /** The Lens or Bluesky session, when it is the one in use (no Farcaster or wallet sign-in here); else null. */
 export function useSocialSession(): SocialSessionState | null {
   const [state, setState] = useState<SocialSessionState | null>(null);

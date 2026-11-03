@@ -12,7 +12,7 @@ import { lensAccounts, signInWithLens, SocialError, startBlueskySignIn, SOCIAL_W
  */
 const say = (e: unknown) => (e instanceof SocialError ? e.message : SOCIAL_WORDING.server);
 
-export function LensSignInButton({ className }: { className: string }) {
+export function LensSignInButton({ className, label, onDone }: { className: string; label?: string; onDone?: () => void }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [choosing, setChoosing] = useState<{ wallet: `0x${string}`; accounts: LensChoice[] } | null>(null);
@@ -22,6 +22,7 @@ export function LensSignInButton({ className }: { className: string }) {
     try {
       await signInWithLens(wallet, a.address);
       setChoosing(null);
+      onDone?.();
     } catch (e) {
       setError(say(e));
     } finally {
@@ -44,7 +45,7 @@ export function LensSignInButton({ className }: { className: string }) {
   return (
     <div className="social-sign-in">
       <button type="button" className={className} onClick={() => void start()} disabled={busy}>
-        {busy ? '…' : SIGN_IN_CHOICES.lens.label}
+        {busy ? '…' : (label ?? SIGN_IN_CHOICES.lens.label)}
       </button>
       {choosing && (
         <ul className="social-pick" aria-label="Your Lens accounts">
@@ -62,7 +63,7 @@ export function LensSignInButton({ className }: { className: string }) {
   );
 }
 
-export function BlueskySignInButton({ className }: { className: string }) {
+export function BlueskySignInButton({ className, forLink = false, label }: { className: string; forLink?: boolean; label?: string }) {
   const [open, setOpen] = useState(false);
   const [handle, setHandle] = useState('');
   const [busy, setBusy] = useState(false);
@@ -71,7 +72,7 @@ export function BlueskySignInButton({ className }: { className: string }) {
     setBusy(true);
     setError(null);
     try {
-      await startBlueskySignIn(handle);
+      await startBlueskySignIn(handle, { forLink });
     } catch (e) {
       setError(say(e));
       setBusy(false);
@@ -80,7 +81,7 @@ export function BlueskySignInButton({ className }: { className: string }) {
   return (
     <div className="social-sign-in">
       <button type="button" className={className} onClick={() => setOpen((o) => !o)} aria-expanded={open}>
-        {SIGN_IN_CHOICES.bluesky.label}
+        {label ?? SIGN_IN_CHOICES.bluesky.label}
       </button>
       {open && (
         <form className="social-handle" onSubmit={(e) => { e.preventDefault(); void go(); }}>

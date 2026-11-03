@@ -3,7 +3,9 @@
 import { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { ILLUSTRATION_CHECK, IMAGES } from '~/lib/config';
-import { authFetch, signOut, signOutWallet, useAuth, useWalletAlongside, walletFetch } from '~/lib/client-auth';
+import { authFetch, signOut, signOutSocial, signOutWallet, useAuth, useSocialDevice, useSocialSession, useWalletAlongside, walletFetch } from '~/lib/client-auth';
+import { signInOpen } from '~/lib/config';
+import { SocialLinks, type SocialView } from './social-links';
 import { frameView, labelFor, pictureView, posterAlt, posterView } from '~/lib/scene-posters';
 import type { BoardItem, FrameItem, OwnWork, PictureItem, SceneItem, Who } from '~/lib/you';
 import { AiLabel } from './recipe-sheet';
@@ -107,6 +109,8 @@ interface YouData extends Side {
   link: LinkView | null;
   /** Signed in with Farcaster: the wallets linked to it, other than the one in `link`. */
   linkedWallets: { address: string; short: string; how: LinkHow }[];
+  /** Lens and Bluesky links (owner, 2026-11-04, 3a), while either sign-in is on. */
+  social: SocialView | null;
 }
 /** How a link reads: 'maintainer' is LINKED_WALLETS or seeded from it (src/app/api/you/route.ts). */
 type LinkHow = 'verified' | 'signed' | 'maintainer';
@@ -131,18 +135,29 @@ export function YouPage() {
   const wallet = useWalletAlongside();
   const [data, setData] = useState<YouData | null>(null);
   const [failed, setFailed] = useState(false);
-  const signedIn = auth.kind === 'signed-in' || (auth.kind === 'signed-out' && wallet !== null);
+  // A Lens or Bluesky sign-in: the one in use (nothing else signed in), and both slots on this device for the link panel.
+  const social = useSocialSession();
+  const device = useSocialDevice();
+  const signedIn = auth.kind === 'signed-in' || (auth.kind === 'signed-out' && (wallet !== null || social !== null));
   const both = auth.kind === 'signed-in' && wallet !== null;
-  const key = `${auth.kind === 'signed-in' ? `f${auth.fid}` : ''}${wallet ? `w${wallet.address}` : ''}`;
+  // The Lens or Bluesky account the link panel is about: beside a Farcaster sign-in, the one on this device; signed in
+  // with Lens, a Bluesky sign-in kept only to link it; signed in with Lens or Bluesky alone, that one.
+  const hereToken = auth.kind === 'signed-in' ? device.main : social?.kind === 'lens' && device.link ? device.link : social;
+  const besideToken = auth.kind === 'signed-in' ? device.main : social?.kind === 'lens' ? device.link : null;
+  const key = `${auth.kind === 'signed-in' ? `f${auth.fid}` : ''}${wallet ? `w${wallet.address}` : ''}${social ? `s${social.token.slice(-12)}` : ''}${besideToken ? `b${besideToken.token.slice(-12)}` : ''}`;
 
   const load = useCallback(async () => {
     setFailed(false);
-    // With both, the Farcaster token goes as usual and the wallet's own token beside it (src/app/api/you/route.ts).
-    const res = await authFetch('/api/you', both && wallet ? { headers: { 'x-wallet-session': wallet.token } } : undefined).catch(() => null);
+    // With both, the Farcaster token goes as usual and the wallet's own token beside it (src/app/api/you/route.ts);
+    // a Lens or Bluesky sign-in beside it goes the same way, for the link panel.
+    const headers: Record<string, string> = {};
+    if (both && wallet) headers['x-wallet-session'] = wallet.token;
+    if (besideToken) headers['x-social-session'] = besideToken.token;
+    const res = await authFetch('/api/you', Object.keys(headers).length ? { headers } : undefined).catch(() => null);
     if (res?.ok) setData((await res.json()) as YouData);
     else if (res?.status === 401) setData(null);
     else setFailed(true);
-  }, [both, wallet]);
+  }, [both, wallet, besideToken]);
   useEffect(() => {
     setData(null);
     if (key && auth.kind !== 'loading') void load();
@@ -195,12 +210,23 @@ export function YouPage() {
         <h2 id="you-account">{W.account}</h2>
         <AccountRows
           who={who}
-          signOut={auth.kind === 'signed-in' && auth.via === 'farcaster-app' ? null : auth.kind === 'signed-in' ? signOut : signOutWallet}
+          signOut={auth.kind === 'signed-in' && auth.via === 'farcaster-app' ? null : auth.kind === 'signed-in' ? signOut : wallet ? signOutWallet : signOutSocial}
           viaWallet={auth.kind !== 'signed-in' && who.kind === 'farcaster'}
         />
         {data.wallet && <AccountRows who={data.wallet.who} signOut={signOutWallet} />}
         {data.link && <LinkPanel view={data.link} to={who.kind === 'farcaster' ? who : null} reload={load} />}
         {(data.linkedWallets ?? []).map((lw) => <LinkedWallet key={lw.address} w={lw} reload={load} />)}
+        {data.social && (
+          <SocialLinks
+            view={data.social}
+            hereToken={hereToken}
+            bearer={auth.kind === 'signed-in' ? null : social}
+            farcaster={auth.kind === 'signed-in'}
+            lensOn={signInOpen('lens')}
+            blueskyOn={signInOpen('bluesky')}
+            reload={() => void load()}
+          />
+        )}
       </section>
 
       <section className="you-section" aria-labelledby="you-wallet">

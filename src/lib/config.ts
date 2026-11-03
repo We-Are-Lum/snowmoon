@@ -405,6 +405,11 @@ export const signInOpen = (id: SignInMethod): boolean => SIGN_IN_METHODS.some((m
 export const SOCIAL_SIGN_IN = {
   /** A Lens or Bluesky sign-in lasts this long (like a wallet's). */
   sessionHours: 24,
+  /**
+   * Owner, 2026-11-04 (3a, with the 30-day sentence): "An account you unlink can be linked to a different account
+   * only after 30 days." Linking it again to the same account is allowed at any time (src/lib/social/accounts.ts).
+   */
+  relinkWaitDays: 30,
   lens: {
     api: 'https://api.lens.xyz/graphql',
     jwks: 'https://api.lens.xyz/.well-known/jwks.json',
@@ -417,13 +422,21 @@ export const SOCIAL_SIGN_IN = {
     app: '0x8A5Cc31180c37078e1EbA2A23c861Acf351a97cE' as `0x${string}`,
     /**
      * THE ONE PLACE the Lens score threshold lives (Lens's "Account Score", lens.xyz/docs/protocol/accounts/fetch;
-     * 0 to about 10000 in the sample in docs/branch-reports/signin-lens-bluesky.md). Null: a Lens account gets no
-     * free generations until the owner sets a number here. A Lens account with a score of at least this number gets
-     * the same free daily count as a Farcaster account.
+     * 0 to about 10000 in the sample in docs/branch-reports/signin-lens-bluesky.md). Owner, 2026-11-04: "1,000 to
+     * start". A Lens account (not linked) whose score is at least this gets the same free daily count as a Farcaster
+     * account. Null would turn Lens's free counts off.
      */
-    minScore: null as number | null,
-    /** How long a looked-up score is kept in memory, per server. */
-    scoreCacheMinutes: 60,
+    minScore: 1000 as number | null,
+    /**
+     * Owner, 2026-11-04 (variant B, and "store the decision, not the score"): the score is looked up only at Generate,
+     * the same moment as Neynar's, and only when there is no current decision. Only the decision is kept (passed or
+     * not, when, and the threshold used), in the shared check-decisions store (src/lib/checks/decisions.ts, network
+     * 'lens', keyed by the Lens address): a pass lasts passDays; a fail is asked again no sooner than failRecheckHours
+     * later (sooner on a report, a hidden picture or a new threshold). The score is never stored, logged or sent to
+     * the page.
+     */
+    passDays: 90,
+    failRecheckHours: 24,
     timeoutMs: 5000,
   },
   bluesky: {

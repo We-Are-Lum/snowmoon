@@ -1,7 +1,7 @@
 'use client';
 
 import { createWalletClient, custom, type EIP1193Provider } from 'viem';
-import { saveSocialSession } from '../client-auth';
+import { saveSocialLinkSession, saveSocialSession } from '../client-auth';
 
 /**
  * Lens and Bluesky sign-in in the browser (branch signin-lens-bluesky). The server does the checking
@@ -65,14 +65,18 @@ export async function signInWithLens(wallet: `0x${string}`, account: `0x${string
 }
 
 const PENDING = 'snowmoon.bluesky.pending';
+/** Set when the Bluesky sign-in is only to link it to the Lens account signed in (the You page). */
+const FOR_LINK = 'snowmoon.bluesky.for-link';
 
 /** Start a Bluesky sign-in: the browser leaves for the person's Bluesky authorization server. */
-export async function startBlueskySignIn(handle: string): Promise<void> {
+export async function startBlueskySignIn(handle: string, opts: { forLink?: boolean } = {}): Promise<void> {
   const res = await fetch('/api/auth/bluesky/start', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ handle }) }).catch(() => null);
   const out = (await res?.json().catch(() => ({}))) as { url?: string; sealed?: string; error?: string };
   if (!res?.ok || !out.url || !out.sealed) throw new SocialError(out.error ?? SOCIAL_WORDING.server);
   try {
     sessionStorage.setItem(PENDING, out.sealed);
+    if (opts.forLink) sessionStorage.setItem(FOR_LINK, '1');
+    else sessionStorage.removeItem(FOR_LINK);
   } catch {
     throw new SocialError(SOCIAL_WORDING.server);
   }
@@ -82,9 +86,12 @@ export async function startBlueskySignIn(handle: string): Promise<void> {
 /** Finish it, on /sign-in/bluesky, with what the authorization server put in the address. */
 export async function finishBlueskySignIn(params: URLSearchParams): Promise<string | null> {
   let sealed: string | null = null;
+  let forLink = false;
   try {
     sealed = sessionStorage.getItem(PENDING);
+    forLink = sessionStorage.getItem(FOR_LINK) === '1';
     sessionStorage.removeItem(PENDING);
+    sessionStorage.removeItem(FOR_LINK);
   } catch {
     sealed = null;
   }
@@ -97,6 +104,6 @@ export async function finishBlueskySignIn(params: URLSearchParams): Promise<stri
   }).catch(() => null);
   const out = (await res?.json().catch(() => ({}))) as { token?: string; handle?: string | null; error?: string };
   if (!res?.ok || !out.token) throw new SocialError(out.error ?? SOCIAL_WORDING.server);
-  saveSocialSession(out.token, 'bluesky', out.handle ?? null);
+  (forLink ? saveSocialLinkSession : saveSocialSession)(out.token, 'bluesky', out.handle ?? null);
   return out.handle ?? null;
 }

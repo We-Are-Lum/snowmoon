@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server';
 import { isWalletPerson } from '~/lib/people';
-import { getFid, getPerson, getWallet } from '~/lib/auth';
+import { getFid, getPerson, getSocial, getWallet } from '~/lib/auth';
+import { signInOpen } from '~/lib/config';
+import { activeSocialLink, linkedToMe, relinkWait, socialAccount } from '~/lib/social/accounts';
+import { readSocialSession, type SocialSession } from '~/lib/social/session';
 import { IMAGES, REMIX, WALLET_LINKS } from '~/lib/config';
 import { db } from '~/lib/db';
 import { configLink, isPayTo, linkOf, walletLinksOf } from '~/lib/wallet/links';
@@ -61,6 +64,8 @@ export async function GET(request: Request) {
       link: w ? await linkView(w.account, w.address, fid) : null,
       // Signed in with Farcaster: the wallets linked to it (other than the one already on this page), each with Unlink.
       linkedWallets: fid !== null ? await linkedWalletsView(fid, w?.account ?? null) : [],
+      // Lens and Bluesky links (owner, 2026-11-04, 3a): the panel's data, only while either sign-in is on.
+      social: signInOpen('lens') || signInOpen('bluesky') ? await socialView(request, fid).catch(() => null) : null,
     },
     { headers: noStore },
   );
@@ -87,4 +92,43 @@ const shownHow = (how: 'verified' | 'signed' | 'config', address: string, fid: n
 async function linkedWalletsView(fid: number, except: number | null) {
   const rows = await walletLinksOf(db(), fid).catch(() => []);
   return rows.filter((r) => r.account !== except).map((r) => ({ address: r.address, short: shortAddress(r.address), how: shownHow(r.how, r.address, fid) }));
+}
+
+/**
+ * Lens and Bluesky links for the You page (owner, 2026-11-04, 3a; src/components/social-links.tsx):
+ * - `here`: the Lens or Bluesky account signed in on this device (the bearer, or `X-Social-Session` beside a Farcaster
+ *   or Lens sign-in): its link, or the offer to link it to the Farcaster account (or, for Bluesky, the Lens account)
+ *   signed in beside it, with the 30-day wait if it applies;
+ * - `linked`: the accounts linked to the Farcaster account (or Lens account) signed in, each with Unlink.
+ * Each token answers only for itself; nothing is linked here (src/app/api/social-link does that, with both proofs).
+ */
+async function socialView(request: Request, fid: number | null) {
+  const sql = db();
+  if (!sql) return null;
+  const own = fid === null ? getSocial(request) : null;
+  const beside = readSocialSession(request.headers.get('x-social-session'));
+  const here: SocialSession | null = beside && beside.account !== own?.account ? beside : own;
+  // What the account here could link to: the Farcaster sign-in, or (Bluesky only) the Lens sign-in that is the bearer.
+  const toLens = own?.kind === 'lens' && here?.kind === 'bluesky' && here.account !== own.account ? own : null;
+  const nameOf = (kind: 'lens' | 'bluesky', handle: string | null) => handle ?? (kind === 'lens' ? 'a Lens account' : 'a Bluesky account');
+  let hereView = null;
+  if (here) {
+    const link = await activeSocialLink(sql, here.account);
+    const toName = link ? ('fid' in link.target ? (await whoIs(link.target.fid)).name : nameOf('lens', (await socialAccount(sql, link.target.lensAccount))?.handle ?? null)) : null;
+    const wait = link ? null : await relinkWait(sql, here.account).catch(() => null);
+    const offerTo = link ? null : fid !== null ? { fid, name: (await whoIs(fid)).name } : toLens ? { lens: true as const, name: nameOf('lens', toLens.handle) } : null;
+    // The wait applies only when the offer is to a different account than the one it was linked to.
+    const waitHere = wait && offerTo && !('fid' in wait.target && 'fid' in offerTo && wait.target.fid === offerTo.fid) && !('lensAccount' in wait.target && toLens && wait.target.lensAccount === toLens.account) ? wait.until : null;
+    hereView = {
+      account: here.account,
+      kind: here.kind,
+      name: nameOf(here.kind, here.handle),
+      linked: link ? { to: toName, at: link.linkedAt, fid: 'fid' in link.target ? link.target.fid : null } : null,
+      offer: offerTo,
+      waitUntil: waitHere,
+    };
+  }
+  const me = fid !== null ? { fid } : own?.kind === 'lens' ? { lensAccount: own.account } : null;
+  const linked = me ? (await linkedToMe(sql, me)).filter((r) => r.account !== here?.account).map((r) => ({ account: r.account, kind: r.kind, name: r.handle ?? (r.kind === 'lens' ? 'a Lens account' : 'a Bluesky account'), at: r.linkedAt })) : [];
+  return { here: hereView, linked, canAddBluesky: own?.kind === 'lens' && signInOpen('bluesky') && !toLens };
 }
