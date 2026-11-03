@@ -1,5 +1,5 @@
 import 'server-only';
-import { IMAGES } from '../config';
+import { CHAT, IMAGES } from '../config';
 import { complete, gatewayToken, promptFile } from '../chat/model';
 
 /**
@@ -13,6 +13,16 @@ export interface GuardResult {
   category: string | null;
   costUsd: number;
   provider: string | null;
+}
+
+/**
+ * The most one prompt check can cost, for the reservation: every character of the policy and the prompt counted as a
+ * token (real text is about four characters a token), a margin for the chat's framing, and every allowed output token,
+ * at the published price. The reservation's share for the check (IMAGES.reserveUsd - IMAGES.pricePerMp) must cover it.
+ */
+export function guardWorstUsd(promptChars: number, maxTokens: number, policyChars = promptFile('image-guard.md').length): number {
+  const price = CHAT.prices[IMAGES.guardModel];
+  return (policyChars + promptChars + 100) * price.input + maxTokens * price.output;
 }
 
 /** maxTokens covers the model's reasoning and its one-line answer: run out, and the answer is empty (a refusal). */

@@ -51,6 +51,8 @@ export default async function ChallengePage() {
         <strong>{now === 'before' ? W.opensOn() : now === 'open' ? W.deadline() : W.closed()}</strong>
         {now === 'before' && ` ${W.deadline()}`}
       </p>
+      {/* Who can enter, up front (owner, 2026-11-03; launch rehearsal item 2): no lookup here, the score is checked at Generate. */}
+      {now !== 'closed' && <p className="ch-who">{W.whoCanEnter()}</p>}
       <section className="ch-rules">
         <p>{W.intro()}</p>
         <p>
@@ -144,7 +146,7 @@ export default async function ChallengePage() {
                     )}
                     <span className="dz-row-text">
                       <span className="dz-row-title">
-                        <span className="ch-badge">{W.badge}</span> {nameOf(e.character)}: {e.title || nameOf(e.character)}
+                        <span className="ch-badge">{W.badge}</span> {W.entryLabel(nameOf(e.character), e.title)}
                       </span>
                       <span className="dz-row-meta">
                         {designByline(e.byName, e.maker)} · v{e.versionNo}
@@ -170,7 +172,7 @@ export default async function ChallengePage() {
               {st.byAdmins.map((v) => (
                 <li key={v.versionId}>
                   <Link href={`/references/designs/${v.versionId}`}>
-                    {nameOf(v.character)}: {v.title || nameOf(v.character)} · {designByline(v.byName, v.maker)} · v{v.versionNo}
+                    {W.entryLabel(nameOf(v.character), v.title)} · {designByline(v.byName, v.maker)} · v{v.versionNo}
                   </Link>
                 </li>
               ))}
