@@ -583,6 +583,13 @@ export const IMAGES = {
   designs: {
     nameMaxChars: 60,
     textMaxChars: 600,
+    /**
+     * Tokens for the prompt check on a sheet's view prompt (the view line, the style's text and the sheet's text, up to
+     * about 1,350 characters), as Remix's (REMIX.guardMaxTokens): at 400 the check can spend them all reasoning and
+     * give no answer, which counts as a refusal (owner, 2026-11-03). Only the tokens used are billed; the worst case
+     * still fits the prompt check's share of the reservation (scripts/test-designs.ts checks it).
+     */
+    guardMaxTokens: 1200,
     /** A style needs at least this many sample pictures, made with its text (Design 4b). */
     samplesMin: 2,
     samplesMax: 4,
