@@ -78,7 +78,8 @@ const S = sql as unknown as Sql;
 
 const { NEYNAR } = await import('../src/lib/images/neynar');
 const { mayGenerate, GATE_WORDING } = await import('../src/lib/images/gate');
-const { keptValue } = await import('../src/lib/images/neynar');
+const { keptDecision, neynarRule } = await import('../src/lib/images/neynar');
+const CD = await import('../src/lib/checks/decisions');
 const { reserve, settle, generationsLeft, publishesLeft } = await import('../src/lib/images/limits');
 const { alertReports, alertBody, reportsWaiting } = await import('../src/lib/images/alert');
 
@@ -95,7 +96,10 @@ const counted = async (fid: number) => {
     (select count(*)::int from studio.image_costs where kind = 'reserved' and calls <> 0) as reserved`;
   return r;
 };
-const kept = async (fid: number) => (await sql`select count(*)::int as n from studio.image_scores where fid = ${fid}`)[0].n;
+/** Decisions kept for a FID (any threshold), and every kept score (none, from the migration on). */
+const kept = async (fid: number) => (await sql`select count(*)::int as n from studio.check_decisions where network = 'farcaster' and account = ${String(fid)}`)[0].n;
+const scores = async () => (await pg.query<{ n: number }>(`select count(*)::int as n from studio.image_scores`)).rows[0].n;
+const age = (fid: number, interval: string) => pg.exec(`update studio.check_decisions set decided_at = now() - interval '${interval}' where network = 'farcaster' and account = '${fid}'`);
 
 /** What the generate route does with the gate: refuse first, or count and reserve. */
 async function attempt(fid: number) {
@@ -122,33 +126,112 @@ if (asked[0]) {
   check('the lookup carries no other header (no cookie, no token, no name)', extra.length === 0, extra.join(', '));
   check('the lookup sends no cookie or authorization', !asked[0].headers.cookie && !asked[0].headers.authorization);
 }
-check('the value is kept for a day', (await kept(100)) === 1);
 
+// No score kept (owner, 2026-11-04): only the decision, when, and the threshold.
+const [d100] = await sql`select * from studio.check_decisions where network = 'farcaster' and account = '100'`;
+check('a decision is kept: passed, when, the threshold', d100?.passed === true && d100.threshold === neynarRule(IMAGES.neynarMinScore) && d100.decided_at instanceof Date, JSON.stringify(d100));
+check('no score kept: the decision row holds no number, and image_scores stays empty', d100 !== undefined && !Object.values(d100).some((v) => typeof v === 'number' || (typeof v === 'string' && /^0\.\d+$/.test(v))) && (await scores()) === 0, JSON.stringify(d100));
+{
+  // Planted: a gate that still keeps the score. It must be caught by the same two checks.
+  await pg.exec(`insert into studio.image_scores (fid, score) values (100, 0.85)`);
+  proof('a kept score is caught', (await scores()) === 1);
+  await pg.exec(`delete from studio.image_scores`);
+}
+check('the writer can no longer keep a score', await sql`insert into studio.image_scores (fid, score) values (1, 0.9)`.then(() => false, () => true));
+
+// A pass is reused for 90 days with no lookup.
 heard = [];
 await attempt(100);
-check('a second Generate within a day does not ask Neynar again', toNeynar().length === 0, String(toNeynar().length));
-await pg.exec(`update studio.image_scores set fetched_at = now() - interval '25 hours' where fid = 100`);
-await pg.exec(`insert into studio.image_scores (fid, score, fetched_at) values (555, 0.9, now() - interval '2 days')`);
+check('a second Generate the same day does not ask Neynar', toNeynar().length === 0, String(toNeynar().length));
+await age(100, '89 days 23 hours');
+heard = [];
+check('a pass 89 days 23 hours old passes with no lookup', (await attempt(100)).ok === true && toNeynar().length === 0, String(toNeynar().length));
+{
+  // Planted: a pass treated as current for only a day (the old score cache) is caught.
+  const real = (await import('../src/lib/config')).CHECKS.passDays;
+  (await import('../src/lib/config')).CHECKS.passDays = 1;
+  heard = [];
+  await attempt(100);
+  proof('a pass kept only a day would ask Neynar again', toNeynar().length === 1);
+  (await import('../src/lib/config')).CHECKS.passDays = real;
+  await age(100, '89 days 23 hours');
+}
+await age(100, '90 days 1 minute');
 heard = [];
 await attempt(100);
-check('after a day it asks again', toNeynar().length === 1, String(toNeynar().length));
-check('rows older than a day are deleted', (await kept(555)) === 0);
+check('after 90 days it asks again', toNeynar().length === 1, String(toNeynar().length));
 
 heard = [];
 check('exactly 0.7 passes', (await attempt(103)).ok === true);
 
+// A fail is not asked again before 24 hours.
 const before101 = await counted(101);
+heard = [];
 const low = await mayGenerate(S, 101);
 check('0.69 is refused with 403', !low.ok && low.status === 403 && low.reason === 'score', JSON.stringify(low));
 if (!low.ok) {
-  check('the refusal says the score and the threshold', low.error === GATE_WORDING.below(0.69) && low.error.includes('Yours is 0.69') && low.error.includes('0.7 or more'), low.error);
+  check('the refusal says the score just looked up, and the threshold', low.error === GATE_WORDING.below(0.69) && low.error.includes('Yours is 0.69') && low.error.includes('0.7 or more'), low.error);
   check('the refusal says everything else still works', /Reading, listening, saving cards and everything else still work/.test(low.error));
 }
+check('a fail is kept as a decision, not a score', (await kept(101)) >= 1 && (await keptDecision(S, 101, IMAGES.neynarMinScore))?.passed === false);
+neynar = (fid) => (fid === 101 ? user(101, 0.95) : fid === 100 ? user(100, 0.85) : fid === 103 ? user(103, 0.7) : { status: 500, body: {} });
+await age(101, '23 hours 59 minutes');
+heard = [];
 const low2 = await attempt(101);
 const after101 = await counted(101);
-check('a refused score counts nothing', !low2.ok && after101.asks === 0 && after101.reserved === before101.reserved, JSON.stringify(after101));
-check('the status can show a kept low score without asking Neynar', await (async () => { heard = []; const v = await keptValue(S, 101); return v !== null && Math.abs(v - 0.69) < 1e-9 && toNeynar().length === 0; })());
+check('a fail 23 hours 59 minutes old is refused again without asking Neynar', !low2.ok && toNeynar().length === 0, String(toNeynar().length));
+if (!low2.ok) check('the kept fail says when it can be checked again, and no score', low2.error === GATE_WORDING.belowKept(new Date(Date.now() + 60_000)) && !/Yours is/.test(low2.error), low2.error);
+check('a refused check counts nothing', !low2.ok && after101.asks === 0 && after101.reserved === before101.reserved, JSON.stringify(after101));
+{
+  // Planted: a fail treated as current for no time at all would ask again at once.
+  const C = (await import('../src/lib/config')).CHECKS;
+  const real = C.failHours;
+  C.failHours = 0;
+  heard = [];
+  await mayGenerate(S, 101);
+  proof('a fail re-checked before 24 hours is caught', toNeynar().length === 1);
+  C.failHours = real;
+  await CD.decide(S, 'farcaster', '101', false, neynarRule(IMAGES.neynarMinScore));
+}
+await age(101, '24 hours 1 minute');
+heard = [];
+check('after 24 hours a fail is asked again (and now passes)', (await attempt(101)).ok === true && toNeynar().length === 1);
+check('the status reads the kept decision without asking Neynar', await (async () => { heard = []; const v = await keptDecision(S, 101, IMAGES.neynarMinScore); return v?.passed === true && toNeynar().length === 0; })());
 check('a score just under is never shown as 0.70', GATE_WORDING.below(0.6999).includes('Yours is 0.69'));
+check('the kept-fail wording: "about 1 hour" and "about 24 hours"', GATE_WORDING.belowKept(new Date(Date.now() + 1000)).includes('about 1 hour.') && GATE_WORDING.belowKept(new Date(Date.now() + 86_400_000 - 1000)).includes('about 24 hours.'));
+
+// Re-checked early: the threshold changed.
+{
+  const real = IMAGES.neynarMinScore;
+  (IMAGES as { neynarMinScore: number }).neynarMinScore = 0.8;
+  heard = [];
+  const r = await mayGenerate(S, 100);
+  check('a new threshold asks again, at once, though a pass is current under the old one', toNeynar().length === 1 && r.ok === true, `${toNeynar().length} ${JSON.stringify(r)}`);
+  (IMAGES as { neynarMinScore: number }).neynarMinScore = real;
+  heard = [];
+  await mayGenerate(S, 100);
+  proof('a reader that ignored the threshold would not have asked', toNeynar().length === 0);
+}
+
+// Re-checked early: a report, or a picture hidden by a moderator, an admin or a rule. Exercised through the API the
+// routes call (markForRecheck / recheckMaker); the routes' wiring is checked in their source below.
+heard = [];
+await attempt(103);
+check('a current pass: no lookup', toNeynar().length === 0);
+await CD.recheckMaker(S, 103);
+heard = [];
+await attempt(103);
+check('after a report or hide, the next Generate asks Neynar again', toNeynar().length === 1, String(toNeynar().length));
+{
+  const route = (f: string) => readFileSync(path.join(ROOT, f), 'utf8');
+  const report = route('src/app/api/images/[id]/report/route.ts');
+  check('every report withdraws the maker\'s pass, after the report is logged', report.indexOf('await recheckMaker(sql, el.byFid)') > report.indexOf("step: 'reported'"));
+  check('a moderator\'s hide withdraws the maker\'s pass', /await recheckMaker\(sql, el\.byFid\)/.test(route('src/app/api/moderate/route.ts')));
+  check('an admin\'s hide withdraws the maker\'s pass', /await recheckMaker\(sql, el\.byFid\)/.test(route('src/app/api/admin/hide/route.ts')));
+  check('an admin\'s hide of a remix frame withdraws the maker\'s pass', /if \(role === 'maintainer' \|\| CHECKS\.recheckOnOwnHide\) await recheckMaker\(sql, f\.person\)/.test(route('src/lib/remix/hide.ts')));
+  check('a maker\'s own hide does so only if the owner turns it on', /if \(CHECKS\.recheckOnOwnHide\) await recheckMaker\(sql, el\.byFid\)/.test(route('src/app/api/images/[id]/hide/route.ts')));
+  proof('a report route without the re-check is caught', report.replace('await recheckMaker(sql, el.byFid)', '').indexOf('await recheckMaker(sql, el.byFid)') < 0);
+}
 
 // Every way Neynar can fail: refused, nothing kept, nothing counted.
 const failing: [string, () => void, () => void][] = [
@@ -376,7 +459,7 @@ for (const f of ['src/app/api/images/[id]/report/route.ts', 'src/app/api/images/
 // --- Private, as the other per-person tables -------------------------------------------------
 await sql.end();
 for (const role of ['anon', 'authenticated']) {
-  for (const t of ['image_scores', 'alert_state']) {
+  for (const t of ['image_scores', 'check_decisions', 'alert_state']) {
     await pg.exec(`set role ${role}`);
     try {
       await pg.query(`select count(*) from studio.${t}`);

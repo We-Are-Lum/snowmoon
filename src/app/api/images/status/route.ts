@@ -11,8 +11,8 @@ import { RULES, styleText } from '~/lib/images/rules';
 import { loadChapter } from '~/lib/book';
 import { blockFacts } from '~/lib/reading';
 import { storageReady } from '~/lib/images/store';
-import { keptValue } from '~/lib/images/neynar';
-import { GATE_WORDING, openToEveryone } from '~/lib/images/gate';
+import { keptDecision } from '~/lib/images/neynar';
+import { GATE_WORDING, openToEveryone, refusalFor } from '~/lib/images/gate';
 import { IMAGE_WORDING } from '~/lib/images/wording';
 import { balanceUsd, prepaidOpen, priceUsd } from '~/lib/wallet/credits';
 import { generateReserveUsd } from '~/lib/images/price';
@@ -80,7 +80,7 @@ export async function GET(request: Request) {
   if (!sql) return NextResponse.json({ ...base, signedIn: true, fid, invited, eligible: invited ? true : null }, { headers: { 'Cache-Control': 'no-store' } });
   try {
     const [consented, left, publishes, kept, picks] = await Promise.all([
-      hasConsented(fid), generationsLeft(sql, fid), publishesLeft(sql, fid), invited || fid < 0 ? Promise.resolve(null) : keptValue(sql, fid), myPicks(sql, fid),
+      hasConsented(fid), generationsLeft(sql, fid), publishesLeft(sql, fid), invited || fid < 0 ? Promise.resolve(null) : keptDecision(sql, fid, IMAGES.neynarMinScore), myPicks(sql, fid),
     ]);
     if (isSocialPerson(fid)) {
       // A Lens or Bluesky account (not linked to a Farcaster account): free only as src/lib/social/free.ts decides; no balance.
@@ -100,8 +100,9 @@ export async function GET(request: Request) {
         { headers: { 'Cache-Control': 'no-store' } },
       );
     }
-    const eligible = invited ? true : kept === null ? null : kept >= IMAGES.neynarMinScore;
-    const refusal = eligible === false && kept !== null ? GATE_WORDING.below(kept) : undefined;
+    // The kept decision only (no score is kept, and none is asked for on a page load).
+    const eligible = invited ? true : kept === null ? null : kept.passed;
+    const refusal = kept !== null && !kept.passed ? refusalFor({ score: null, decidedAt: kept.decidedAt }) : undefined;
     return NextResponse.json({ ...base, perDay: perDay(fid), signedIn: true, fid, invited, eligible, refusal, consented, left, publishesLeft: publishes, picks: offer(picks) }, { headers: { 'Cache-Control': 'no-store' } });
   } catch (e) {
     console.error('images status failed', (e as { code?: string }).code ?? (e as Error).name);

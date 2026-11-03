@@ -5,8 +5,8 @@ import { getPerson } from '~/lib/auth';
 import { db } from '~/lib/db';
 import { IMAGES, REMIX, remixFreeOn, remixGenerateOn } from '~/lib/config';
 import { hasConsented } from '~/lib/consent';
-import { keptValue } from '~/lib/images/neynar';
-import { GATE_WORDING, openToEveryone } from '~/lib/images/gate';
+import { keptDecision } from '~/lib/images/neynar';
+import { GATE_WORDING, openToEveryone, refusalFor } from '~/lib/images/gate';
 import { IMAGE_WORDING } from '~/lib/images/wording';
 import { balanceUsd, prepaidOpen, priceUsd } from '~/lib/wallet/credits';
 import { generationsLeft, perDay } from '~/lib/remix/limits';
@@ -52,7 +52,7 @@ export async function GET(request: Request) {
     const [consented, left, kept, frames] = await Promise.all([
       hasConsented(person),
       generationsLeft(sql, person, reserveUsd),
-      invited || person < 0 ? Promise.resolve(null) : keptValue(sql, person),
+      invited || person < 0 ? Promise.resolve(null) : keptDecision(sql, person, IMAGES.neynarMinScore),
       shot ? myFrames(sql, person, version, shot.id) : Promise.resolve([]),
     ]);
     const mine = frames.map((f) => ({ id: f.id, url: f.imageUrl, words: f.ownWords, hidden: f.hidden, hiddenRole: f.hiddenRole, at: f.createdAt, page: `/remix/${f.id}` }));
@@ -69,8 +69,9 @@ export async function GET(request: Request) {
         { headers: noStore },
       );
     }
-    const eligible = invited ? true : kept === null ? null : kept >= IMAGES.neynarMinScore;
-    const refusal = eligible === false && kept !== null ? GATE_WORDING.below(kept) : undefined;
+    // The kept decision only (no score is kept, and none is asked for on a page load).
+    const eligible = invited ? true : kept === null ? null : kept.passed;
+    const refusal = kept !== null && !kept.passed ? refusalFor({ score: null, decidedAt: kept.decidedAt }) : undefined;
     return NextResponse.json({ ...base, signedIn: true, perDay: perDay(person), eligible, refusal, consented, left, frames: mine, maintainer: isAdmin(person) }, { headers: noStore });
   } catch (e) {
     console.error('remix status failed', (e as { code?: string }).code ?? (e as Error).name);
