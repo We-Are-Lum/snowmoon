@@ -1,5 +1,9 @@
 # Payout addresses (DRAFT, a proposal only)
 
+> **Partly replaced (2026-11-04):** `docs/proposals/challenge-payout.md` proposes one pot for the whole contest (the
+> owner's winnings plus the mint), payouts on Base, a passkey-wallet option, and a missing address shared among the
+> others instead of going to the Lake. Where they differ, that proposal is the newer one.
+
 Written by the coding agent (Claude, a closed model by Anthropic), 2026-11-01, on branch `deep-funding`, for the
 owner's decision of 2026-11-01. DRAFT until the owner approves it. **A proposal only: no code, no migration file, no
 legal text changed.** `src/lib/deep-funding/payout.ts` points here.

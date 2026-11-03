@@ -1,5 +1,9 @@
 # The deep funding runner (DRAFT)
 
+> **Partly replaced (2026-11-04):** `docs/proposals/challenge-payout.md` proposes one pot for the whole contest (the
+> owner's winnings plus the mint), payouts on Base, a passkey-wallet option, and a missing address shared among the
+> others instead of going to the Lake. Where they differ, that proposal is the newer one.
+
 Written by the coding agent (Claude, a closed model by Anthropic), 2026-11-01, on branch `deep-funding` (from
 `remix-challenge`). DRAFT until the owner approves it. Builds item 7 of `docs/proposals/remix-challenge-plan.md`
 ("Deep funding test"), with its Corrections of 2026-10-31. Nothing here has called a model, spent money, applied a

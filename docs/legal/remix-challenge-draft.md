@@ -142,8 +142,6 @@ After:
 - **The spend cap** ($15 a day inside the window, $2 otherwise) needs no new words: the Terms speak of "spending caps"
   without amounts.
 - **No wallet path.** Sheets are made with Farcaster only, so the Terms line names Farcaster accounts only.
-- **The bounties** (one solo poidh bounty per character, on Ethereum mainnet) are run on poidh under its terms; the
-  Terms section's "decided as the challenge page says" covers them, and the rules on /challenge describe them.
 - **Admins** are named in Terms §7 already ("the site's owner and people the owner names"); the challenge page says
   "Admins (the site's owner and @garance)".
 - **Words of posts are not kept or shown.** "Posted on" shows network · @handle · date · link only, so no other
