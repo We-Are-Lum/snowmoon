@@ -35,6 +35,9 @@ export const LIMIT_SAY = {
   spend: 'Image making has reached today’s spending limit for everyone. It comes back at 00:00 UTC.',
   balance: IMAGE_WORDING.prepaid.lowBalance,
   'prepaid-spend': IMAGE_WORDING.prepaid.dailyCap,
+  // Model choice (branch remix-model-choice, DRAFT wording).
+  'closed-limit': IMAGE_WORDING.designs.models.closedLimit,
+  'closed-spend': IMAGE_WORDING.designs.models.closedSpend,
 } as const;
 const say = (refusal: keyof typeof LIMIT_SAY, fid: number) => (refusal === 'limit' ? LIMIT_SAY.limit(perDay(fid)) : LIMIT_SAY[refusal]);
 /** A failure's words, and, when a wallet account's Generate was credited back, that it was. */

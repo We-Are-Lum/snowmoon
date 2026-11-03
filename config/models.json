@@ -648,12 +648,94 @@
           "openai/gpt-image-2.5-sunburst": null
         },
         "price_unit": "USD per image, as the gateway reports it per call",
-        "price_seen": "2026-10-18",
+        "price_seen": "2026-11-04: https://ai-gateway.vercel.sh/v1/models, $5 per million input tokens, $30 per million output tokens (cache read $1.25); the bases run of 2026-11-03: $0.0466 to $0.0468 a picture at 1024x1536, quality high",
         "note": "Costs per call are in adaptations/fifteen-days/preprod/gpt/costs.jsonl (on scenes-sound)."
       },
       "model_record": "gateway model id, date and the gateway's response metadata (the host exposes no weights revision; there are no public weights)",
       "cost_usd_per_unit": null,
       "license": "proprietary (OpenAI)",
+      "open_weights": false,
+      "weights": null,
+      "terms_checked": {
+        "by": "coding agent (Claude, a closed model by Anthropic), branch remix-model-choice; DRAFT, for the owner's review",
+        "on": "2026-11-04",
+        "for": "publishing its pictures under GPL-3.0 and minting them (the Snowmoon WIP open edition), through the Vercel AI Gateway",
+        "verdict": "allowed",
+        "clauses": [
+          {
+            "source": "https://vercel.com/legal/ai-product-terms (section 8.1, last updated 2026-03-17)",
+            "quote": "Any Customer Content provided to or received from such Non-Vercel Service is subject to the terms and conditions and privacy notices of the applicable third party."
+          },
+          {
+            "source": "https://vercel.com/legal/ai-product-terms (section 'Your Rights')",
+            "quote": "As between you and Vercel, and to the extent permitted by applicable law, you own Customer Content and Vercel assigns to you Vercel's rights, if any, in the Output."
+          },
+          {
+            "source": "https://openai.com/policies/terms-of-use (the gateway's listed OpenAI terms, https://vercel.com/legal/notices-and-license-information)",
+            "quote": "As between you and OpenAI, and to the extent permitted by applicable law, you (a) retain your ownership rights in Input and (b) own the Output. We hereby assign to you all our right, title, and interest, if any, in and to Output."
+          },
+          {
+            "source": "https://openai.com/policies/terms-of-use",
+            "quote": "Represent that Output was human-generated when it was not.",
+            "note": "a use OpenAI's terms forbid; every picture here is labelled AI-made and names the model, so it is met"
+          }
+        ],
+        "caveat": "openai.com returned 403 to the agent's fetch; the OpenAI quotes are its published Terms of Use wording as found by search, to be confirmed on the live page by the owner before the switch goes on."
+      }
+    },
+    {
+      "id": "gemini-3.1-flash-image",
+      "kind": "image",
+      "name": "Gemini 3.1 Flash Image",
+      "maker": "Google",
+      "repo": "google/gemini-3.1-flash-image",
+      "revision": null,
+      "license_line": "proprietary: Google's terms; weights not published",
+      "license_checked": {
+        "by": "coding agent (closed models allowed, owner 2026-10-18)",
+        "on": "2026-11-03",
+        "source": "branch starting-sheet-drafts (the bases run)"
+      },
+      "terms_checked": {
+        "by": "coding agent (Claude, a closed model by Anthropic), branch remix-model-choice; DRAFT, for the owner's review",
+        "on": "2026-11-04",
+        "for": "publishing its pictures under GPL-3.0 and minting them (the Snowmoon WIP open edition), through the Vercel AI Gateway, pinned to Google Vertex AI",
+        "verdict": "allowed",
+        "clauses": [
+          {
+            "source": "https://vercel.com/legal/ai-product-terms (section 8.1, last updated 2026-03-17)",
+            "quote": "Any Customer Content provided to or received from such Non-Vercel Service is subject to the terms and conditions and privacy notices of the applicable third party."
+          },
+          {
+            "source": "https://cloud.google.com/terms/service-terms (Service Specific Terms, General Service Terms section 20(a), Generative AI Services; the gateway's listed Google Vertex AI terms)",
+            "quote": "Generated Output is Customer Data. As between Customer and Google, Google does not assert any ownership rights in any new intellectual property created in the Generated Output."
+          },
+          {
+            "source": "https://cloud.google.com/terms/service-terms (section 17(b))",
+            "quote": "Customer will not, and will not allow End Users to, use output from an AI/ML Service (including Generated Output) to: (i) substitute, replace, or circumvent the use of a Google Model, directly or indirectly, or (ii) create or improve models similar to a Google Model.",
+            "note": "the only use restriction found; publishing, licensing and minting pictures are none of these"
+          },
+          {
+            "source": "https://cloud.google.com/terms/service-terms (section 18)",
+            "quote": "Google will not use Customer Data to train or fine-tune any AI/ML models without Customer's prior permission or instruction."
+          }
+        ],
+        "caveat": "Requests must be pinned to Vertex (providerOptions.gateway.only: ['vertex']); the gateway's other Google listing points to https://policies.google.com/terms/generative-ai, which says it no longer applies since 2024-05-22 and states no ownership clause."
+      },
+      "notes": "A closed model (principle 3: reported). Used 2026-11-03 for six front concepts of the challenge characters (branch starting-sheet-drafts), through the Vercel AI Gateway /v1/chat/completions (image output, aspect 3:4), served by Google Vertex, $0.0677 a picture as the gateway reported it. Offered on the remix form behind IMAGES.designs.modelChoice (branch remix-model-choice, off). The weights are not published by its maker, so no one can rerun it outside Google.",
+      "added": "2026-11-03",
+      "runs_on": "hosted",
+      "hosted": {
+        "host": "Vercel AI Gateway",
+        "endpoints": {
+          "google/gemini-3.1-flash-image": null
+        },
+        "price_unit": "USD per image (1K) plus tokens, as the gateway reports it per call",
+        "price_seen": "2026-11-04: https://ai-gateway.vercel.sh/v1/models, $0.067 per 1K image, $0.50 per million input tokens, $3 per million output tokens"
+      },
+      "model_record": "gateway model id, date and the gateway's generation id (the host exposes no weights revision; there are no public weights)",
+      "cost_usd_per_unit": null,
+      "license": "proprietary (Google)",
       "open_weights": false,
       "weights": null
     },
@@ -716,6 +798,11 @@
         },
         "price_seen": "2026-10-23"
       }
+    },
+    {
+      "repo": "Qwen/Qwen-Image-Edit-2511",
+      "card_license": "apache-2.0",
+      "status": "Licence passes (card: \"license: apache-2.0\"; \"Qwen-Image is licensed under Apache 2.0.\", https://huggingface.co/Qwen/Qwen-Image-Edit-2511, revision 6f3ccc0b, read 2026-11-04). On fal.ai as fal-ai/qwen-image-edit-2511, $0.03 per megapixel (fal's pricing API, 2026-11-04), with a safety checker. Its card claims \"improved character consistency\", the side/back problem. Not offered on the remix form yet (branch remix-model-choice): it edits only (no front from text), and no picture of it has been made for a sheet; a paid three-view test comes first (owner's decision)."
     }
   ],
   "excluded": [
@@ -755,6 +842,11 @@
       "repo": "HKUSTAudio/AudioX",
       "reason": "license: cc-by-nc-4.0",
       "checked": "2026-10-15"
+    },
+    {
+      "repo": "black-forest-labs/flux-3-image-klein",
+      "reason": "license: other (flux-kommunity-license), gated: the card's licence cannot be read without accepting it, and the rule needs a licence that clearly allows publishing outputs under GPL-3.0 (the gateway lists it as bfl/flux-3-image-klein, tagged open-weights, $0.009 per 1024x1024 image)",
+      "checked": "2026-11-04"
     }
   ],
   "drafting": [

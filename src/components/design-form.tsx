@@ -24,7 +24,9 @@ import { AiTag } from './ai-tag';
  * "Preview and publish" shows the design as readers will see it first.
  */
 const W = IMAGE_WORDING.designs;
-type Pic = { ticket: string; image: string; text: string; style: string | null };
+type Pic = { ticket: string; image: string; text: string; style: string | null; choice?: string };
+/** A model the remixer may choose for the sheet (IMAGES.designs.modelChoice): its label is read from config/models.json on the server. */
+type ModelOption = { id: string; name: string; terms: string; open: boolean; maker: string | null; perRemixUsd: number };
 type StyleOption = { versionId: string; title: string; by: string; text: string; thumb: string | null };
 type Status = { ready: boolean; invited?: boolean; consented?: boolean; left?: number; perDay: number; signedIn: boolean };
 type Wording = { version: string; line: string; title: string; text: string[]; sha256: string };
@@ -46,6 +48,8 @@ type Props = {
   suffix: string;
   /** The remix challenge opens this fork or version to everyone who passes the Generate gate (CHALLENGE.openSheets; the server checks again). */
   challengeOpen?: boolean;
+  /** Model choice (branch remix-model-choice): given only on a character sheet's remix while IMAGES.designs.modelChoice is on; the open default first. */
+  modelChoices?: ModelOption[];
 };
 
 export function DesignForm(p: Props) {
@@ -75,6 +79,10 @@ export function DesignForm(p: Props) {
     if (pickedStyle) setViewStyle((v) => v ?? pickedStyle);
   }, [pickedStyle]);
   const chosen = p.styles.find((s) => s.versionId === viewStyle) ?? null;
+  // One model per sheet: chosen once; views made with another are marked to make again.
+  const choices = p.modelChoices && p.modelChoices.length > 1 ? p.modelChoices : null;
+  const [modelId, setModelId] = useState<string>(choices?.[0].id ?? 'open');
+  const model = choices?.find((m) => m.id === modelId) ?? null;
 
   const refresh = useCallback(async () => {
     const res = await authFetch('/api/images/status').catch(() => null);
@@ -85,7 +93,8 @@ export function DesignForm(p: Props) {
   }, [refresh, auth.kind]);
 
   const clean = text.trim();
-  const fresh = (x: Pic | null | undefined): x is Pic => Boolean(x && x.text === clean && (style || x.style === viewStyle));
+  const fresh = (x: Pic | null | undefined): x is Pic => Boolean(x && x.text === clean && (style || (x.style === viewStyle && (x.choice ?? 'open') === modelId)));
+  const modelStale = !style && Object.values(views).some((x) => x && x.text === clean && x.style === viewStyle && (x.choice ?? 'open') !== modelId);
   const stale = [...samples, ...Object.values(views)].some((x) => x && x.text !== clean);
   const styleStale = !style && Object.values(views).some((x) => x && x.text === clean && x.style !== viewStyle);
   const made = style ? samples.filter(fresh) : (Object.values(views).filter(fresh) as Pic[]);
@@ -101,11 +110,11 @@ export function DesignForm(p: Props) {
       const res = await authFetch('/api/designs/sample', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ slot, index, kind: p.kind, text: clean, ...(style ? {} : { style: viewStyle }), ...(front ? { front: { ticket: front.ticket, image: front.image } } : {}) }),
+        body: JSON.stringify({ slot, index, kind: p.kind, text: clean, ...(style ? {} : { style: viewStyle }), ...(choices && !style ? { model: modelId } : {}), ...(front ? { front: { ticket: front.ticket, image: front.image } } : {}) }),
       });
       const out = (await res.json().catch(() => ({}))) as { ticket?: string; image?: string; error?: string };
       if (res.ok && out.ticket && out.image) {
-        const pic = { ticket: out.ticket, image: out.image, text: clean, style: style ? null : viewStyle };
+        const pic = { ticket: out.ticket, image: out.image, text: clean, style: style ? null : viewStyle, ...(choices && !style ? { choice: modelId } : {}) };
         if (slot === 'sample') setSamples((s) => s.map((x, i) => (i === index ? pic : x)));
         else setViews((v) => ({ ...v, [slot]: pic }));
       } else setNote(out.error ?? 'Could not make the picture');
@@ -282,6 +291,31 @@ export function DesignForm(p: Props) {
             </fieldset>
           )}
 
+          {!style && choices && (
+            <fieldset className="dz-section dz-model-pick">
+              <legend className="dz-label">{W.models.legend}</legend>
+              <ul className="dz-rows">
+                {choices.map((m) => (
+                  <li key={m.id}>
+                    <label className={`dz-row dz-style-option${modelId === m.id ? ' is-on' : ''}`}>
+                      <input type="radio" name="dz-model" value={m.id} checked={modelId === m.id} onChange={() => setModelId(m.id)} />
+                      <span className="dz-row-text">
+                        <span className="dz-row-title">{m.open ? W.models.openDefault : m.name}</span>
+                        <span className="dz-row-meta">
+                          {m.open ? m.name : null}
+                          {m.open ? ' · ' : ''}
+                          {m.terms} · about ${m.perRemixUsd.toFixed(2)} for three views
+                        </span>
+                      </span>
+                    </label>
+                  </li>
+                ))}
+              </ul>
+              <p className="dz-note">{W.models.note}</p>
+              {model && !model.open && model.maker && <p className="dz-note">{W.models.closedNote(model.maker)}</p>}
+            </fieldset>
+          )}
+
           <section className="dz-section" aria-label={style ? 'Sample images' : 'Views'}>
             <p className="dz-label">{style ? W.form.samples(p.limits.samplesMin, p.limits.samplesMax) : W.form.views}</p>
             <ul className={`dz-slots${style ? '' : ' is-views'}${p.kind === 'location' ? ' is-place' : ''}`}>
@@ -307,15 +341,24 @@ export function DesignForm(p: Props) {
             {!style && <p className="dz-note">{W.form.viewsShared}</p>}
             {stale && <p className="ic-error">{W.form.stale}</p>}
             {styleStale && <p className="ic-error">{W.form.viewStyleChanged}</p>}
+            {modelStale && <p className="ic-error">{W.models.changed}</p>}
             {!style && !chosen && p.styles.length > 0 && <p className="dz-note">{W.form.viewStyleFirst}</p>}
             <p className="dz-note">{W.form.left(left)}</p>
             <p className="dz-note">{W.form.promptIs(p.suffix)}</p>
             <p className="ic-model">
+              {model && !model.open ? (
+                <>
+                  {model.name} · {model.terms} · runs through Vercel AI Gateway
+                </>
+              ) : (
+                <>
               {p.models.text.name} · open weights, {p.models.text.licence} · runs on {p.models.text.host}
               {!style && (
                 <>
                   <br />
                   {W.form.viewModel}: {p.models.edit.name} · open weights, {p.models.edit.licence} · runs on {p.models.edit.host}
+                </>
+              )}
                 </>
               )}
             </p>
@@ -327,7 +370,7 @@ export function DesignForm(p: Props) {
           </div>
           <div className="dz-publish">
             <PublishFlow
-              disabled={!enough || stale || styleStale || busy !== null || (style && !title.trim())}
+              disabled={!enough || stale || styleStale || modelStale || busy !== null || (style && !title.trim())}
               preview={
                 <div className="dz-preview">
                   <p className="dz-title">{title.trim() || (style ? '' : W.page.sheetBy(auth.kind === 'signed-in' && auth.username ? `@${auth.username}` : 'you'))}</p>

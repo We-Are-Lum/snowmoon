@@ -58,10 +58,24 @@ export function modelLine(r: RecipeForLines): { lead: string; endpoint: string |
 
 const guardName = (m: string) => m.replace(/^openai\//, '');
 
+/** Made by a closed model (config/models.json: open_weights false)? */
+export const isClosed = (id: string): boolean => modelTerms(id).startsWith('a closed model');
+
+/** The closed-model safety line (agreed wording, branch challenge-three-bases), with the prompt check's name. */
+export const closedChecksLine = (prompt: string) => `Checked by ${prompt}; made by a closed model whose own safety filters we can't see.`;
+
+/**
+ * A closed model's recipe can't be re-run exactly (branch remix-model-choice; DRAFT wording, the owner's to approve):
+ * its weights aren't published and its maker can change or retire it, and it takes no seed.
+ */
+export const RERUN_LINE = 'This recipe can\'t be re-run exactly: the model is closed, its weights aren\'t published, and its maker can change or retire it.';
+
 /** The checks the recipe records, and only those. */
 export function checksLine(r: RecipeForLines): string {
   const prompt = r.checks?.prompt?.verdict === 'ok' && r.checks.prompt.model && r.checks.prompt.model !== 'none' ? guardName(r.checks.prompt.model) : null;
   const host = r.checks?.host_safety_checker === 'passed';
+  // A closed model returns no safety checker result; its maker's own filters run where we can't see them.
+  if (prompt && !host && isClosed(r.model)) return closedChecksLine(prompt);
   if (prompt && host) return `Checked by ${prompt} and the host's safety checker.`;
   if (prompt) return `Checked by ${prompt}; no safety checker ran.`; // the owner's wording (approved 2026-11-02)
   if (host) return 'Checked by the host\'s safety checker; the site\'s prompt check did not run.'; // the owner's wording (approved 2026-11-02)
@@ -114,7 +128,8 @@ export function howMade(
   if (m.endpoint !== null) runs.push({ text: m.endpoint, mono: true }, { text: '.' });
   const from = madeFromLine(r, frontSha256, isFront);
   const drafted = draftedLine(r);
-  runs.push({ text: ` Seed ${r.seed ?? 'not recorded'}, request ${r.request_id ?? 'not recorded'}, cost $${r.cost_usd.toFixed(4)}, ${r.made_at.slice(0, 10)}. ${from ? `${from} ` : ''}${checksLine(r)} ${drafted ? `${drafted} ` : ''}File sha256 ` });
+  const rerun = isClosed(r.model) ? `${RERUN_LINE} ` : '';
+  runs.push({ text: ` Seed ${r.seed ?? 'not recorded'}, request ${r.request_id ?? 'not recorded'}, cost $${r.cost_usd.toFixed(4)}, ${r.made_at.slice(0, 10)}. ${from ? `${from} ` : ''}${checksLine(r)} ${rerun}${drafted ? `${drafted} ` : ''}File sha256 ` });
   runs.push({ text: sha256, mono: true }, { text: '.' });
   return runs;
 }

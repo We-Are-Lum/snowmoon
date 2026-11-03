@@ -597,7 +597,33 @@ export const IMAGES = {
     publishesPerDay: 3,
     /** At most this many picked characters' sheets are added to one image. */
     maxCharacters: 3,
+    /**
+     * Model choice for remixers (branch remix-model-choice, DRAFT, 2026-11-04): a picker on the remix (fork) form of a
+     * character sheet, the site's open models first and the default, then the closed models of SHEET_MODELS
+     * (src/lib/images/sheet-models.ts). One model per sheet. OFF: the picker is hidden and the server refuses any
+     * model but the open default. Turn it on only in the release whose Privacy names each closed model's provider
+     * (scripts/check-principles.ts P6s) and once migration NEXT_remix_model_choice.sql is applied.
+     */
+    modelChoice: false as boolean,
   },
+} as const;
+
+/**
+ * Closed models' own caps (branch remix-model-choice, suggested by the owner, 2026-11-04). A closed model's picture
+ * counts in its own daily count per person, not in the open 10 (IMAGES.generationsPerDay), and its spend has its own
+ * site-wide daily cap, inside the free cap of the moment (imagesDailySpendCapUsd(): the challenge's $15 in its window):
+ * both caps are checked, under the same lock, before anything is spent (src/lib/images/limits.ts).
+ */
+export const CLOSED_IMAGES = {
+  perPersonPerDay: 6,
+  dailySpendCapUsd: 5,
+  /**
+   * Google's Service Specific Terms §20(d): no use of a Generative AI Service "as part of a website … that is directed
+   * towards or is likely to be accessed by individuals under the age of 18" (docs/proposals/closed-model-bases.md).
+   * A remixer's own Generate is a use on the website, so Gemini is offered only once the owner accepts a reading of
+   * that clause (signing in needs 18+, Terms §4) and sets this. Until then the picker offers GPT only, besides the open default.
+   */
+  geminiAgeReadingAccepted: false as boolean,
 } as const;
 
 /** Minpentai Play's limits and retention (owner, 2026-10-09). Every /api/minpentai/* request counts. */
