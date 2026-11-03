@@ -25,7 +25,7 @@ import { readdirSync, readFileSync } from 'node:fs';
 import { PGlite } from '@electric-sql/pglite';
 import { PGLiteSocketServer } from '@electric-sql/pglite-socket';
 import postgres from 'postgres';
-import { IMAGES } from '../src/lib/config';
+import { IMAGES, imagesDailySpendCapUsd } from '../src/lib/config';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const failures: string[] = [];
@@ -211,11 +211,12 @@ process.env.APP_LEGAL_PAGES = 'terms+privacy';
   // Samples and views for designs: invited FIDs only (owner, 2026-10-10), then the same gate before anything is paid.
   const sample = readFileSync(path.join(ROOT, 'src/app/api/designs/sample/route.ts'), 'utf8');
   const sat = (s: string) => sample.indexOf(s);
-  check('samples and views are for invited FIDs only, with the drafted refusal', sat('if (!IMAGES.invited.includes(fid)) return no(IMAGE_WORDING.designs.form.notInvited') > 0);
+  // The remix challenge (owner, 2026-10-31): views also open while challengeSheetsOpen() (the window, and Privacy's words).
+  check('samples and views are for invited FIDs only (or a sheet\'s views while the remix challenge opens them), with the drafted refusal', sat('if (!IMAGES.invited.includes(fid) && !viewForChallenge) return no(IMAGE_WORDING.designs.form.notInvited') > 0 && sat('challengeSheetsOpen() ?') > 0 && sat('challengeSheetsOpen() ?') < sat('if (!IMAGES.invited.includes(fid) && !viewForChallenge)'));
   check('samples and views go through the same gate before anything is counted', sat('await mayGenerate(') > sat('hasConsented(fid)') && sat('await mayGenerate(') < sat('await paidPicture('));
   const publish = readFileSync(path.join(ROOT, 'src/app/api/designs/route.ts'), 'utf8');
   const dat = (s: string) => publish.indexOf(s);
-  check('publishing a design is for invited FIDs only, with the drafted refusal', dat('if (!IMAGES.invited.includes(fid)) return no(IMAGE_WORDING.designs.form.notInvited') > 0);
+  check('publishing a design is for invited FIDs only (or a challenge character\'s fork while the remix challenge opens them), with the drafted refusal', dat('if (!IMAGES.invited.includes(fid) && !(await openForChallenge(sql, mode, kind, body.from))) return no(IMAGE_WORDING.designs.form.notInvited') > 0 && dat('await mayGenerate(') > dat('openForChallenge('));
   {
     const picks = readFileSync(path.join(ROOT, 'src/app/api/designs/picks/route.ts'), 'utf8');
     // Picks opened to everyone signed in, Farcaster or wallet (owner, 2026-10-19, e749871; Privacy names them).
@@ -257,7 +258,9 @@ process.env.APP_LEGAL_PAGES = 'terms+privacy';
   const guardWorst = (prompt: string) => (system + Buffer.byteLength(prompt)) * guardPrice.input + 400 * guardPrice.output;
   const imageWorst = 1 * IMAGES.pricePerMp; // fal may round up to 1 MP
   const guardSrc = readFileSync(path.join(ROOT, 'src/lib/images/guard.ts'), 'utf8');
-  check('the Pictures prompt check answers in at most 400 tokens', /maxTokens = 400\)/.test(guardSrc) && /checkPrompt\(job\.checkText, request\)/.test(readFileSync(path.join(ROOT, 'src/lib/images/paid.ts'), 'utf8')));
+  // A sheet's views get their own budget (IMAGES.designs.guardMaxTokens, owner 2026-11-03; test:designs checks its reserve); Pictures keeps 400.
+  const generateSrc = readFileSync(path.join(ROOT, 'src/app/api/images/generate/route.ts'), 'utf8');
+  check('the Pictures prompt check answers in at most 400 tokens', /maxTokens = 400\)/.test(guardSrc) && /checkPrompt\(job\.checkText, request, job\.guardMaxTokens\)/.test(readFileSync(path.join(ROOT, 'src/lib/images/paid.ts'), 'utf8')) && !/guardMaxTokens/.test(generateSrc));
   check('with every pick at its longest, the prompt check still fits the reserve, so picks as text leave the price as it is', imageWorst + guardWorst(worstPrompt) <= IMAGES.reserveUsd, `${imageWorst} + ${guardWorst(worstPrompt).toFixed(6)} vs ${IMAGES.reserveUsd} (no picks: ${guardWorst(plain).toFixed(6)})`);
 }
 
@@ -277,10 +280,10 @@ await sql`insert into studio.works values ('snowmoon','Snowmoon','GPL-3.0','x') 
 for (let i = 0; i < IMAGES.publishesPerDay; i++) await sql`insert into studio.elements (work_id, element_type, created_by_fid) values ('snowmoon', 'image', 201)`;
 check('3 publishes a day per person', (await publishesLeft(S, 201)) === 0 && (await publishesLeft(S, 202)) === IMAGES.publishesPerDay);
 const [spentToday] = await sql`select coalesce(sum(cost_usd), 0)::float8 as usd from studio.image_costs where day = (now() at time zone 'utc')::date`;
-await sql`insert into studio.image_costs (kind, model, provider, verdict, calls, cost_usd) values ('image', 'today', 'fal.ai', 'ok', 1, ${IMAGES.dailySpendCapUsd - spentToday.usd - IMAGES.reserveUsd / 2})`;
+await sql`insert into studio.image_costs (kind, model, provider, verdict, calls, cost_usd) values ('image', 'today', 'fal.ai', 'ok', 1, ${imagesDailySpendCapUsd() - spentToday.usd - IMAGES.reserveUsd / 2})`;
 const capped = await reserve(S, 203);
 check('$2 a day across everyone, then refused', !capped.ok && capped.refusal === 'spend', JSON.stringify(capped));
-check('the daily cap is $2', IMAGES.dailySpendCapUsd === 2 && IMAGES.generationsPerDay === 10 && IMAGES.publishesPerDay === 3 && IMAGES.label === 'Trial');
+check('the daily cap is $2 outside the remix challenge window', IMAGES.dailySpendCapUsd === 2 && IMAGES.generationsPerDay === 10 && IMAGES.publishesPerDay === 3 && IMAGES.label === 'Trial');
 
 // --- Report alerts ----------------------------------------------------------------------
 const el = async (by: number) => (await sql`insert into studio.elements (work_id, element_type, created_by_fid, status) values ('snowmoon', 'image', ${by}, 'published') returning id`)[0].id as string;

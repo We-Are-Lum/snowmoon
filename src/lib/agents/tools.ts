@@ -4,7 +4,7 @@ import path from 'node:path';
 import { TOOLS as READ_TOOLS, ToolInputError } from '../agent/tools';
 import { editorData } from '../agent/data';
 import { AGENTS } from '../config';
-import { countOk, dailyLimits, sql, type Agent, type Counted, type Scope } from './core';
+import { countOk, dailyLimits, playFor, sql, type Agent, type Counted, type Scope } from './core';
 import { revoke, agentLabel } from './accounts';
 import { checkLines, checkPlain, checkText, storyWordsAllowed } from './filter';
 import { bringIn, imagesOpen, ScanMatch, type Declared } from './images';
@@ -14,6 +14,7 @@ import { addSuggestion, suggestionsOf } from './suggestions';
 import { addDirection, directionOf, findLine, rewriteLine } from './direction';
 import { ATTACH_SCHEMA, MAKES, STYLE_SCHEMA, draftPicture, draftPlace, draftSheet, draftStyle, matchRequest, stylesOffered, type PictureStyle } from './pictures';
 import { changeTiming, listTakes, logGap, markSpeaking, recordFailure, requestVideo, setCamera, swapTake, tryFrame, frameEstimate, videoEstimate } from './edits';
+import { MINPENTAI_TOOLS } from '../minpentai/agent-play/tools';
 
 /**
  * The tools an agent of a person can use (owner, 2026-10-20; design §2). Served as MCP at /mcp (the
@@ -469,16 +470,17 @@ const EDITS: AgentTool[] = [
 /** The open read tools, as tools of a signed-in agent (scope read). */
 const READ: AgentTool[] = READ_TOOLS.map((t) => ({ ...t, scope: 'read' as Scope, writes: false, run: (_agent: Agent, args: Record<string, unknown>) => t.run(args) }));
 
-export const AGENT_TOOLS: AgentTool[] = [...READ, ...WRITE, ...EDITS];
+// Minpentai agent play (scope "play"): listed to no agent while AGENTS.minpentaiPlay is off.
+export const AGENT_TOOLS: AgentTool[] = [...READ, ...WRITE, ...EDITS, ...MINPENTAI_TOOLS];
 /** A tool's schema as listed: a style argument becomes an enum of the styles on offer now (owner, 2026-10-29). */
 export function withStyles(schema: Schema, names: string[]): Schema {
   if (schema.properties.style !== STYLE_SCHEMA) return schema;
   return { ...schema, properties: { ...schema.properties, style: { type: 'string', enum: names, description: STYLE_SCHEMA.description } } };
 }
 /** The tools an agent is shown, for its scopes, with the offered styles filled in. */
-export async function listedTools(agent: Pick<Agent, 'scopes'>, offered: () => Promise<PictureStyle[]> = stylesOffered) {
+export async function listedTools(agent: Pick<Agent, 'scopes' | 'person'>, offered: () => Promise<PictureStyle[]> = stylesOffered) {
   const names = (await offered()).map((x) => x.name);
-  return AGENT_TOOLS.filter((t) => agent.scopes.includes(t.scope)).map((t) => ({ ...t, inputSchema: withStyles(t.inputSchema, names) }));
+  return AGENT_TOOLS.filter((t) => agent.scopes.includes(t.scope) && (t.scope !== 'play' || playFor(agent.person))).map((t) => ({ ...t, inputSchema: withStyles(t.inputSchema, names) }));
 }
 export const agentToolByName = (name: string) => AGENT_TOOLS.find((t) => t.name === name) ?? null;
 

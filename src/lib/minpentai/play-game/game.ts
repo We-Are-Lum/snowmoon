@@ -16,7 +16,7 @@
  * clone, towers, lit, empty, step, botPlan, apply, updLS.
  */
 import { BASE, BASE_DRAWN } from '../versions/schema';
-import { SOLO_V1, SOLO_V1_ENGINE as E, SOLO_V1_LAYOUT, settingsFor } from '../versions/solo-v1';
+import { RULESETS, SOLO_V1_ENGINE as E, SOLO_V1_LAYOUT, maxStepsOf, settingsFor, type RulesetId } from '../versions/solo-v1';
 import type { Placement, Side, World } from '../versions/engine';
 
 export { rng, fmt } from './rng';
@@ -24,8 +24,9 @@ export type { Glider, Placement, Piece, Side, Square, World } from '../versions/
 
 export const W = SOLO_V1_LAYOUT.W;
 export const H = SOLO_V1_LAYOUT.H;
-/** The match stops at this step; most towers wins. */
+/** solo-v1's step limit (96), frozen; a match's own limit is maxStepsOf(its ruleset). */
 export const MAXS = BASE.maxSteps;
+export { maxStepsOf, type RulesetId };
 export const ROCKS: [number, number][] = SOLO_V1_LAYOUT.rocks.map((k) => [k % W, (k / W) | 0]);
 export const COL: Record<Side, string> = { C: '#46D7E8', A: '#FFB43A' };
 export const AR: Record<string, string> = { '1,0': '→', '-1,0': '←', '0,-1': '↑', '0,1': '↓', '1,-1': '↗', '1,1': '↘', '-1,1': '↙', '-1,-1': '↖' };
@@ -46,6 +47,21 @@ export const RUNGS: ({ n: string; d: string } | null)[] = [
   { n: 'Opportunist', d: "Also uses the match's new rule against you." },
   { n: 'Planner', d: 'Tests its moves ahead on what it can see, and fires twice when it can.' },
 ];
+/**
+ * The search computer's ladder (ruleset 3, owner 2026-10-31): six rungs, index 1–6 (versions/search.ts ladderLevel):
+ * the beginner, Easy, Fair, then levels 1–3. Model-drafted wording.
+ */
+export const SEARCH_RUNGS: ({ n: string; d: string } | null)[] = [
+  null,
+  { n: 'Beginner', d: 'Places one piece a turn, often without a plan. Most first players beat it.' },
+  { n: 'Easy', d: 'Places two pieces a turn, sometimes without a plan. About as strong as the old Builder.' },
+  { n: 'Fair', d: 'Places up to three pieces a turn and seldom slips. About as strong as the old Planner.' },
+  { n: 'Level 1', d: 'Tries its moves on the board as it sees it, up to three pieces a turn. Seldom slips.' },
+  { n: 'Level 2', d: 'Looks a few steps past the next turn, and covers its towers. Rarely slips.' },
+  { n: 'Level 3', d: 'Looks furthest and never slips.' },
+];
+/** A ladder's rungs by ruleset: the search computer's six under 3, the old five otherwise. */
+export const rungsOf = (rs: number) => (rs === 3 ? SEARCH_RUNGS : RUNGS);
 /** Square 1, tower 4; a glider's cost is the match's (4, or 3 under the cost rule). */
 export const COST = { s: BASE.costSquare, t: BASE.costTower } as const;
 
@@ -78,11 +94,13 @@ export interface PlanInput {
   snap: Record<Side, number[]>;
   /** Where Amber last saw each of Cyan's towers (square → step). */
   lsA: Record<number, number>;
+  /** The match's ruleset (solo-v1.ts RULESETS); absent means 1, the frozen original. */
+  ruleset?: RulesetId;
 }
 
 /** The computer player (Amber): sees only what its towers light (rules page §8). */
 export function botPlan(m: PlanInput): Placement[] {
-  const s = { ...settingsFor(SOLO_V1, m.rule), sight: m.R, reach: m.R, every: m.every, costGlider: m.cost };
+  const s = { ...settingsFor(RULESETS[m.ruleset ?? 1], m.rule), sight: m.R, reach: m.R, every: m.every, costGlider: m.cost };
   return E.botPlan({ w: m.w, s, lvl: m.lvl, rng: m.rng, budget: BASE.points, snap: m.snap, lsA: m.lsA, diag: m.rule === 'diag' });
 }
 

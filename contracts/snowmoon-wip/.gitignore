@@ -1,0 +1,7 @@
+# Foundry build outputs
+out/
+cache/
+broadcast/
+# Never commit keys or local env
+.env
+.env.*

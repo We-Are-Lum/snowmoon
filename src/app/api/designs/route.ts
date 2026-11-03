@@ -11,6 +11,9 @@ import { placeFirstChapter, placeTitle, sheetPlace } from '~/lib/images/sheets';
 import { bookCharacter, characterNameClash, CHARACTER_NAME_REFUSAL, designByVersion, designPublishesToday, makeDesign, MakeRefused, styleNameTaken, type DesignKind, type MakeMode } from '~/lib/images/designs';
 import { blockedName } from '~/lib/images/rules';
 import { mayGenerate } from '~/lib/images/gate';
+import { openForChallenge } from '~/lib/challenge/open-sheets';
+import { recordEligibility } from '~/lib/challenge/record';
+import { publishStanding } from '~/lib/challenge/entries';
 import { checkWords } from '~/lib/images/paid';
 import { IMAGE_WORDING } from '~/lib/images/wording';
 import { putPublic, storageReady } from '~/lib/images/store';
@@ -51,7 +54,6 @@ export async function POST(request: Request) {
   const fid = await getFid(request);
   if (fid === null) return NextResponse.json({ error: 'Sign in with Farcaster to publish' }, { status: 401 });
   if (!IMAGES.enabled) return no('Publishing is switched off for now', 503);
-  if (!IMAGES.invited.includes(fid)) return no(IMAGE_WORDING.designs.form.notInvited, 403);
   const sql = db();
   if (!sql || !process.env.IMAGES_TICKET_SECRET || !storageReady()) return no('Publishing styles and sheets is not set up on this deployment', 503);
   let body: { mode?: unknown; kind?: unknown; title?: unknown; text?: unknown; character?: unknown; place?: unknown; from?: unknown; samples?: unknown; views?: unknown; nameProof?: unknown };
@@ -63,6 +65,8 @@ export async function POST(request: Request) {
   const mode = (['create', 'fork', 'version'] as const).find((m) => m === body.mode) as MakeMode | undefined;
   const kind = (['style', 'character', 'location'] as const).find((k) => k === body.kind) as DesignKind | undefined;
   if (!mode || !kind) return no('Bad request', 400);
+  // Invited FIDs only, except a challenge character's fork or version while the remix challenge opens them (CHALLENGE.openSheets).
+  if (!IMAGES.invited.includes(fid) && !(await openForChallenge(sql, mode, kind, body.from))) return no(IMAGE_WORDING.designs.form.notInvited, 403);
   const text = typeof body.text === 'string' ? body.text.trim() : '';
   const title = typeof body.title === 'string' ? body.title.trim().replace(/\s+/g, ' ') : '';
   if (!text || text.length > IMAGES.designs.textMaxChars) return no(`Write the text, up to ${IMAGES.designs.textMaxChars} characters`, 400);
@@ -118,12 +122,12 @@ export async function POST(request: Request) {
   }
 
   // Refusals that need no pictures come before any picture is put on the public bucket.
-  if (mode === 'create' && kind === 'style' && (await styleNameTaken(sql, title))) return no('A style with this name already exists. Fork it, or choose another name.', 409);
+  if (mode === 'create' && kind === 'style' && (await styleNameTaken(sql, title))) return no('A style with this name already exists. Remix it, or choose another name.', 409);
   if (kind === 'style' && characterNameClash(title)) return no(CHARACTER_NAME_REFUSAL, 409);
   if (mode !== 'create') {
     const src = typeof body.from === 'string' ? await designByVersion(sql, body.from) : null;
     if (!src || src.kind !== kind) return no('No such design', 404);
-    if (mode === 'version' && src.byFid !== fid) return no('Only its maker can add a version. Fork it to make your own.', 403);
+    if (mode === 'version' && src.byFid !== fid) return no('Only its maker can add a version. Remix it to make your own.', 403);
   }
 
   // The name is published too: the model check reads it (decision 1); the text was checked with its pictures.
@@ -144,8 +148,19 @@ export async function POST(request: Request) {
   };
   try {
     const out = await makeDesign(sql, { fid, mode, kind, styleName: mode === 'create' && kind === 'style' ? title : undefined, character: character ?? undefined, place: place ?? undefined, fromVersionId: typeof body.from === 'string' ? body.from : undefined, body: design });
+    // The remix challenge: whether this version can be an entry is decided now, once, and stored (never on page view).
+    let challenge: { kind: 'entry' | 'unchecked'; name: string } | null = null;
+    if (kind === 'character' && mode !== 'create') {
+      await recordEligibility(sql, out.versionId, fid);
+      // Its count and entries list change now, as after a mark (launch rehearsal, 2026-11-02: /challenge lagged up to a minute).
+      revalidatePath('/challenge');
+      // The confirmation says whether it is now an entry, or that it won't count because Neynar didn't answer (owner, 2026-11-03).
+      const st = await publishStanding(sql, out.versionId);
+      const full = st ? (bookCharacter(st.character)?.name ?? st.character) : '';
+      if (st) challenge = { kind: st.kind, name: full.split(' ').find((w) => !/^(Lord|General|Senator)$/.test(w)) ?? full };
+    }
     revalidatePath('/references/designs');
-    return NextResponse.json({ versionId: out.versionId, page: `/references/designs/${out.versionId}` });
+    return NextResponse.json({ versionId: out.versionId, page: `/references/designs/${out.versionId}`, challenge });
   } catch (e) {
     if (e instanceof MakeRefused) return no(e.message, e.status);
     throw e;

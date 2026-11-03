@@ -4,6 +4,7 @@ import { referenceCards } from '~/lib/references';
 import { InfoLabel } from '~/components/info-label';
 import { PicturesMenu } from '~/components/pictures-menu';
 import { ReferenceCards } from '~/components/reference-cards';
+import { ReferencePicks } from '~/components/admin-picks';
 import '../../../styles/images.css';
 import '../../../styles/designs.css';
 
@@ -37,6 +38,7 @@ export default async function GlossaryReferences() {
       </p>
       <PicturesMenu current="glossary" />
       {cards.length ? <ReferenceCards cards={cards} /> : <p className="dz-note">No word has a picture yet.</p>}
+      {cards.length > 0 && <ReferencePicks />}
     </div>
   );
 }

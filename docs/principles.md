@@ -354,9 +354,15 @@ order the feed, search, anyone's own pages, the agent tools or the read API.
   "Newest" and "Liked by me"; the switch keeps the reader's choice on their device (localStorage) and never sends it.
 - `P5e`: nothing outside the pick code reads `studio.admin_picks` (the feed, search, profiles, the agent tools and
   the read API stay unpicked).
+- `P5f`: a seeded image an admin hid is gone everywhere it shows (the chapter and its player, References and the
+  sheets, the introduction on home and About, quote cards and their share images): every file that reads seeded images
+  passes them through the hide (owner, 2026-10-30).
+- `P5g` (branch remix-challenge, 2026-10-31, pending the owner's yes): the remix challenge's entries, sheets to start
+  from and "Posted on" are in time order only: every `.sort()` in its code is `newestFirst`, and no SQL order reads
+  likes, built-on counts, scores, costs or payments.
 - Review: does any default, badge or ordering reflect a person's choice without saying whose?
 
-**Status.** Pass. (Picks aren't built yet: P5d and P5e pass with nothing to check, and fail on a planted violation.)
+**Status.** Pass. (Picks are built on branch phase2-admin and need 0030_admin_picks, applied 2026-10-31.)
 
 ## 6. Production pages make no third-party requests. Individual ratings and likes are not publicly readable. Only totals are.
 
@@ -424,6 +430,11 @@ only, through `studio.rating_totals`, `studio.like_totals` and
 - `P6o`: while Privacy §3 says the frames and video tests your agent makes on approval are seen only by you
   ("only you can see them"), `AGENTS.public` stays off: a kept edit is marked published, and agents' public
   pages would show it to anyone. The owner's rule (2026-10-24).
+- `P6q` (branch remix-challenge, 2026-10-31, pending the owner's yes): the remix challenge's entries
+  (`CHALLENGE.entries`) and "Posted on" (`CHALLENGE.posts`) are on only while Privacy §4 describes them and §7 says
+  Neynar receives makers' FIDs for it and, for posts, names Bluesky and Lens (docs/legal/remix-challenge-draft.md);
+  and opening sheets to everyone (`CHALLENGE.openSheets`, on) takes effect only inside the entry window and once
+  Privacy §4 describes the challenge.
 - `P6n`: image making is open beyond the invited list (the gate looks up a
   Neynar score) only when `src/app/terms/page.tsx` and `src/app/privacy/page.tsx`
   both exist, and the Privacy page names Neynar (which receives the FID at
@@ -473,7 +484,7 @@ ratings and likes and serves the totals.
   address to Neynar, at most once a day per wallet; the Privacy page says so (section 7, reread by the owner on
   2026-10-22).
 
-## 7. Payments never enter scoring or ordering. No token. The "not affiliated" line stays on the first screen.
+## 7. Payments never enter scoring or ordering. Apart from prepaid generations, anything sold is a fixed-price collectible, with no royalties and no promises. The 'not affiliated' line stays on the first screen.
 
 **Source.** "Moving beyond coin voting governance", on why letting money buy
 influence over outcomes fails, starting with "outright attacks through various
@@ -488,22 +499,26 @@ change a score, a sort or a default. Prepaid images (owner, 2026-10-13): a
 wallet account buys images in advance with USDC or ETH on Base, at the
 estimated cost plus 30%. Paying buys images and nothing else: no place in any
 order, no score, no default. Payment is for the service (image generation) and
-is final: no refunds; nothing is held for anyone to withdraw. There is no token. The first screen says
-the edition is independent, "not affiliated with the author", and that there
-is no token.
+is final: no refunds; nothing is held for anyone to withdraw. Apart from prepaid generations, anything sold (owner, 2026-10-31) is a fixed-price
+collectible, with no royalties and no promises: Snowmoon WIP, open editions on Ethereum mainnet from
+`contracts/snowmoon-wip`, whose price and terms are fixed when each token is created; buying one changes nothing on
+the site. The first screen says the edition is independent, "not affiliated with the author". (Reworded by the
+owner: 2026-10-30, the site no longer says "no token"; 2026-10-31, this wording, ahead of the Snowmoon WIP mint.)
 
 **Checked by.**
 - `P7a`: no ordering (`order by`, `.sort`) or scoring code references
   donations, grants, amounts, costs or sponsors.
 - `P7b`: the deployed first screen (the first words of the home page's
-  `<main>`, its dark hero) contains "not affiliated with the author" and "no
-  token" (the owner-approved line "Independent adaptation · Not affiliated
-  with the author · No token", `config/intro.json`; the owner moved it from
-  Design's footer into the hero, 2026-10-10); no token code (ERC-20/721, mint, airdrop) exists in
-  the repo. `npm run check:ui` also checks the first screen at phone size.
+  `<main>`, its dark hero) contains "not affiliated with the author" (the
+  owner-approved line "Independent adaptation · Not affiliated with the
+  author", `config/intro.json`; the owner moved it from
+  Design's footer into the hero, 2026-10-10). No ERC-20, ERC-721 or airdrop code exists in the site's
+  code; the only contract (outside its own libraries) is `contracts/snowmoon-wip`, with no royalty
+  (ERC-2981) code, no function that sets a price, and a price written only in `createToken`.
+  `npm run check:ui` also checks the first screen at phone size.
 - `npm run check:intro`: the first-visit intro's disclaimer (`config/intro.json`),
   shown on card 1 and at the top of /about, keeps "not affiliated with the
-  author" and "no token"; every card and feature marked "live" points at a
+  author"; every card and feature marked "live" points at a
   page that exists.
 - Review: does any payment change what anyone sees first?
 

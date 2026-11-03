@@ -113,7 +113,7 @@ function PieceShape({ pc, cs }: { pc: CellPiece; cs: number }) {
     g.clearRect(0, 0, px, px);
     drawPiece(g, pc.k, px / 2, px / 2, px, COL[pc.side], { dx: pc.dir?.[0], dy: pc.dir?.[1], hp: pc.hp });
   }, [pc.k, pc.side, pc.dir?.[0], pc.dir?.[1], pc.hp, px]);
-  return <canvas ref={ref} className="mp-piece" width={px} height={px} style={{ width: cs, height: cs, opacity: pc.dim ? 0.4 : undefined }} aria-hidden="true" />;
+  return <canvas ref={ref} className="mp-piece" width={px} height={px} style={{ width: cs, height: cs, opacity: pc.dim || pc.faded ? 0.4 : undefined }} aria-hidden="true" />;
 }
 
 /** Design's inset ring is a fifth of the square: keep it so when the square shrinks. */

@@ -3,7 +3,7 @@
  * planted violation: for every check, a copy of its inputs gets one violation
  * injected, and the check must report it.
  *
- *   npm run check:principles   (exit 0: all ran and passed; 1: a failure; 2: none failed but some did not run)                       checks + proofs, against https://snowmoon.party
+ *   npm run check:principles -- --url=https://snowmoon.party   (exit 0: all ran and passed; 1: a failure or no --url; 2: none failed but some did not run)
  *   npm run check:principles -- --url=http://localhost:3000
  *   npm run check:principles -- --only=P6          one principle
  *
@@ -24,7 +24,7 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { DEFAULT_TEMPLATES } from '../src/templates';
 import { LiveScreen } from '../src/components/live-screen';
-import { AGENTS, CHAT, IMAGES, REPO_URL } from '../src/lib/config';
+import { AGENTS, CHALLENGE, CHAT, IMAGES, REPO_URL } from '../src/lib/config';
 import { NOTICE_REVIEW, currentNoticeItems, noticeKey } from '../src/lib/chat/notice';
 import { LEGAL, PRIVACY, TERMS, legalKey } from '../src/lib/legal';
 import { LEARN_TEXT } from '../src/lib/minpentai/learn-text';
@@ -32,10 +32,11 @@ import { BOOK_TAG, NARRATION_MAX_WORDS, PERSON_TAG, parseBeats } from '../src/li
 import { GLOSSARY_FILE, loadBlocks, verifyGlossary, type Glossary } from './lib/glossary';
 import { p4aProblems } from './lib/p4a';
 import { MODAL_VC_FILE, MODAL_VC_PLANTS, modalVcRun, modalVcStatic } from './lib/modal-vc';
+import { requireTarget } from './lib/target';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const arg = (name: string) => process.argv.slice(2).find((a) => a.startsWith(`--${name}=`))?.split('=').slice(1).join('=');
-const BASE = (arg('url') ?? 'https://snowmoon.party').replace(/\/$/, '');
+const BASE = requireTarget('check:principles');
 const ONLY = arg('only');
 const read = (rel: string) => readFileSync(path.join(ROOT, rel), 'utf8');
 const json = <T = any>(rel: string): T => JSON.parse(read(rel)); // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -367,6 +368,15 @@ add({
         for (const [what, re] of [['kept with the link', /kept with the link/], ['never published', /Never published by us/], ['described to screen readers', /aria-describedby/]] as const)
           if (!re.test(text)) problems.push(`${file}: the agent address box must say it is ${what}`);
         if (/fetch\(|supabase|\/api\//.test(text)) problems.push(`${file}: the agent address box must not send its text anywhere itself`);
+        continue;
+      }
+      if (file.endsWith('components/post-link-field.tsx')) {
+        // "Add where you posted it" (the remix challenge, 2026-10-31): a post's address, sent to us, read (never fetched),
+        // and shown on the version's page as the network, the writer's handle, the date and a link.
+        for (const [what, re] of [['sent to us', /Sent to us\./], ['read from the network, never from the address', /never from this address/], ['shown with the network, handle and date, as a link', /network, the writer’s handle and the date, as a link/], ['described to screen readers', /aria-describedby/], ['a single-line address box', /type="url"/]] as const)
+          if (!re.test(text)) problems.push(`${file}: the post address box must say it is ${what}`);
+        if (/fetch\(|supabase|\/api\//.test(text)) problems.push(`${file}: the post address box must not send its text anywhere itself`);
+        if (/<textarea\b/.test(text)) problems.push(`${file}: the post address box must be a single-line input`);
         continue;
       }
       if (file.endsWith('components/tx-hash-field.tsx')) {
@@ -1181,7 +1191,8 @@ add({
   load: async () => walk('src', /\.tsx?$/).map((f) => ({ file: f, text: read(f) })),
   run: (files) =>
     files
-      .filter((f: { file: string; text: string }) => /MODERATOR_FIDS|\bADMINS\b/.test(f.text) && !f.file.endsWith('config.ts'))
+      // Every admin check goes through isAdmin (src/lib/admins.ts, owner 2026-10-29: "ADMINS replaces the scattered owner lists").
+      .filter((f: { file: string; text: string }) => /MODERATOR_FIDS|\bADMINS\b|\bisAdmin\(/.test(f.text) && !f.file.endsWith('config.ts') && !f.file.endsWith('src/lib/admins.ts'))
       // The one write admins may make beyond hiding (owner, reread 2026-10-29): a pick, in studio.admin_picks.
       .map((f: { file: string; text: string }) => ({ ...f, text: f.text.replace(/(insert into|update|delete from)\s+studio\.admin_picks\b[^`]*`/gi, '') }))
       .filter((f: { text: string }) => /status\s*[:=]\s*['"](published|draft)['"]|set\s+status\s*=\s*'(published|draft)'|order by|\.sort\(/i.test(f.text))
@@ -1229,6 +1240,52 @@ add({
       .map((f: { file: string }) => `${f.file}: reads picks outside the pick code (src/lib/picks.ts, the pick switch, /api/admin/picks)`),
   plant: (files) => {
     files.push({ file: 'src/lib/images/data.ts', text: 'select e.* from studio.elements e left join studio.admin_picks p on p.element_id = e.id order by p.at' });
+  },
+});
+// The remix challenge (owner, 2026-10-31: "No ordering by engagement or payment"): entries, sheets to start from and
+// "Posted on" are in time order and nothing else. In the challenge's code, every .sort() is newestFirst, and no SQL
+// order reads likes, built-on counts, scores, costs or payments.
+const CHALLENGE_FILES = /^src\/lib\/challenge\/|^src\/app\/challenge\/|^src\/app\/api\/challenge\/|^src\/components\/(challenge-[a-z-]+|posted-on|post-link-field)\.tsx$/;
+const NOT_AN_ORDER = /\b(likes?|like_?count|likeCount|built_?on|builtOn|score|repost|recast|repl(y|ies)|followers?|cost|amount|usd|payment|paid|sponsor|donation)\b/i;
+add({
+  id: 'P5g',
+  principle: 5,
+  name: 'the remix challenge orders entries, sheets and "Posted on" by time only (never by likes, built-on, scores or payments)',
+  load: async () => walk('src', /\.tsx?$/).filter((f) => CHALLENGE_FILES.test(f)).map((f) => ({ file: f, text: read(f) })),
+  run: (files) => {
+    const problems: string[] = [];
+    if (!files.some((f: { file: string }) => f.file === 'src/lib/challenge/rules.ts')) problems.push('src/lib/challenge/rules.ts: missing');
+    for (const { file, text } of files as { file: string; text: string }[]) {
+      const code = text.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:])\/\/.*$/gm, '$1');
+      for (const m of code.matchAll(/\.sort\(([^)]*)\)/g)) if (m[1].trim() !== 'newestFirst') problems.push(`${file}: sorts by something other than newestFirst: ${m[0].slice(0, 80)}`);
+      for (const m of code.matchAll(/order by([^`;]{0,160})/gi)) if (NOT_AN_ORDER.test(m[1])) problems.push(`${file}: orders by "${m[1].trim().slice(0, 60)}"`);
+    }
+    return problems;
+  },
+  plant: (files) => {
+    files.push({ file: 'src/lib/challenge/planted.ts', text: 'export const top = (e) => e.sort((a, b) => b.builtOn - a.builtOn);' });
+  },
+});
+// A hide on a seeded image reaches everywhere it shows (owner, 2026-10-30: "home, About, quote cards, the player,
+// share images. Add a check."). Every file that reads the seeded images (or the introduction or a quote card, which
+// carry them) must pass them through the hide filter, except the readers themselves and the admin Hide that writes it.
+const SEEDED_READ = /\b(loadIllustrations|seededImages|loadIntro|resolveQuote|loadIllustrationById|resolveIntroImage)\(/;
+const SEEDED_FILTER = /\b(hiddenSeeded|quoteShown|introShown)\(/;
+const SEEDED_SOURCES = new Set(['src/lib/illustrations.ts', 'src/lib/intro.ts', 'src/lib/quote.ts', 'src/lib/images/sheets.ts', 'src/lib/seeded-shown.ts']);
+// The admin Hide looks the image up to hide it.
+const SEEDED_EXEMPT = new Set(['src/app/api/admin/hide/route.ts']);
+add({
+  id: 'P5f',
+  principle: 5,
+  name: 'a hidden seeded image is gone everywhere it shows: every reader of seeded images (the chapter and player, References and sheets, the introduction on home and About, quote cards and share images) goes through the hide',
+  load: async () => walk('src', /\.tsx?$/).map((f) => ({ file: f, text: read(f) })),
+  run: (files) =>
+    files
+      .filter((f: { file: string; text: string }) => SEEDED_READ.test(f.text) && !SEEDED_SOURCES.has(f.file) && !SEEDED_EXEMPT.has(f.file))
+      .filter((f: { text: string }) => !SEEDED_FILTER.test(f.text))
+      .map((f: { file: string; text: string }) => `${f.file}: shows seeded images (${f.text.match(SEEDED_READ)![1]}) without the hide (hiddenSeeded, introShown or quoteShown)`),
+  plant: (files) => {
+    files.push({ file: 'src/app/planted/page.tsx', text: "import { loadIntro } from '~/lib/intro';\nexport default function P() { return <div>{loadIntro().cards.length}</div>; }" });
   },
 });
 add({
@@ -1303,7 +1360,7 @@ add({
     seen.push({ page: '/chapter/1', host: 'fonts.googleapis.com', url: 'https://fonts.googleapis.com/css2?family=Inter', type: 'stylesheet' });
   },
 });
-const PRIVATE_FID_TABLES = ['ratings', 'likes', 'take_likes', 'picks', 'contributor_consents', 'image_asks', 'removal_log', 'image_scores', 'wallet_links'];
+const PRIVATE_FID_TABLES = ['ratings', 'likes', 'take_likes', 'picks', 'contributor_consents', 'image_asks', 'removal_log', 'image_scores', 'wallet_links', 'challenge_marks', 'version_posts', 'challenge_eligibility'];
 add({
   id: 'P6b',
   principle: 6,
@@ -1327,7 +1384,13 @@ add({
       insert into studio.image_scores (fid, score) values (42, 0.8);
       insert into studio.removal_log (element_id, step, by_fid, role, reason) values ('00000000-0000-0000-0000-0000000000b1','reported',42,'reader','spam');
       insert into studio.wallet_accounts (address) values ('0x${'4'.repeat(40)}');
-      insert into studio.wallet_links (account_id, fid, how) select id, 42, 'signed' from studio.wallet_accounts where address = '0x${'4'.repeat(40)}';`);
+      insert into studio.wallet_links (account_id, fid, how) select id, 42, 'signed' from studio.wallet_accounts where address = '0x${'4'.repeat(40)}';
+      -- The remix challenge (0033_remix_challenge.sql): a mark, a listed post and an eligibility decision, by FID 42.
+      do $$ begin if to_regclass('studio.challenge_marks') is not null then
+        insert into studio.challenge_marks (challenge, fid, character, version_id) values ('remix-2026-11', 42, 'bai', '00000000-0000-0000-0000-0000000000f1');
+        insert into studio.version_posts (version_id, network, post_id, handle, posted_at, url, fid) values ('00000000-0000-0000-0000-0000000000f1', 'lens', '1', 'someone', now(), 'https://hey.xyz/posts/abc', 42);
+        insert into studio.challenge_eligibility (version_id, challenge, fid, decision, eligible) values ('00000000-0000-0000-0000-0000000000f1', 'remix-2026-11', 42, 'passed', true);
+      end if; end $$;`);
     const problems: string[] = [];
     for (const role of ['anon', 'authenticated']) {
       for (const t of PRIVATE_FID_TABLES) {
@@ -1675,8 +1738,41 @@ add({
   },
 });
 
+// P6q: the remix challenge (branch remix-challenge, owner 2026-10-31). Its entries (CHALLENGE.entries: marks kept, Neynar
+// asked about makers, entries shown) and "Posted on" (CHALLENGE.posts: posts kept, Neynar, Bluesky and Lens asked) are
+// on only once the owner's Privacy words say so (docs/legal/remix-challenge-draft.md). Legal texts describe today.
+add({
+  id: 'P6q',
+  principle: 6,
+  name: 'the remix challenge\'s entries and "Posted on" are on only while the Privacy page says what they keep and send; open sheets wait for the window and those words',
+  load: async () => ({
+    entries: CHALLENGE.entries as boolean,
+    posts: CHALLENGE.posts as boolean,
+    openSheets: read('src/lib/challenge/open-sheets.ts'),
+    s4: (PRIVACY.sections.find((s) => s.n === 4)?.body ?? []).flat().join(' '),
+    s7: (PRIVACY.sections.find((s) => s.n === 7)?.body ?? []).flat().join(' '),
+  }),
+  run: (c) => {
+    const problems: string[] = [];
+    if (c.entries && !/remix challenge/i.test(c.s4)) problems.push('CHALLENGE.entries (src/lib/config.ts) is on, but Privacy §4 does not describe the remix challenge\'s entries; reread docs/legal/remix-challenge-draft.md with the owner first, or keep it off');
+    if (c.entries && !/remix challenge/i.test(c.s7)) problems.push('CHALLENGE.entries is on, but Privacy §7 does not say Neynar receives makers\' FIDs for the remix challenge');
+    if (c.posts && !/remix challenge|posted/i.test(c.s4)) problems.push('CHALLENGE.posts is on, but Privacy §4 does not describe the posts people add');
+    for (const n of ['Bluesky', 'Lens']) if (c.posts && !new RegExp(`\\b${n}\\b`).test(c.s7)) problems.push(`CHALLENGE.posts is on, but Privacy §7 does not name ${n}`);
+    // CHALLENGE.openSheets is on (owner, 2026-10-31); it may take effect only inside the window and once Privacy describes the challenge.
+    if (!/export const challengeSheetsOpen = [^\n]*phase\(now\) === 'open' && privacyDescribesChallenge\(/.test(c.openSheets)) problems.push('src/lib/challenge/open-sheets.ts: opening sheets to everyone does not wait for the window and the Privacy words');
+    return problems;
+  },
+  plant: (c) => {
+    c.entries = true;
+    c.posts = true;
+    c.s4 = 'Quote cards you save, and your likes.';
+    c.s7 = 'Neynar receives your Farcaster ID.';
+    c.openSheets = 'export const challengeSheetsOpen = () => CHALLENGE.openSheets;';
+  },
+});
+
 // ---------------------------------------------------------------------------
-// P7. Payments never enter scoring or ordering. No token. "Not affiliated" on
+// P7. Payments never enter scoring or ordering. Apart from prepaid generations, anything sold is a fixed-price collectible. "Not affiliated" on
 //     the first screen.
 // ---------------------------------------------------------------------------
 const PAYMENT = /\b(donations?|credit_grants?|funded_by_grant_id|amount|usd_at_time|cost_usd|sponsor)/i;
@@ -1701,26 +1797,51 @@ add({
 add({
   id: 'P7b',
   principle: 7,
-  name: 'the first screen says "not affiliated" and "no token"; there is no token code',
+  name: 'the first screen says "not affiliated"; no ERC-20, ERC-721 or airdrop code; the only contract is contracts/snowmoon-wip, with no royalties and no way to change a price',
   load: async () => ({
     home: await page('/'),
     code: [...walk('src', /\.tsx?$/), ...walk('supabase/migrations', /\.sql$/), ...walk('scripts', /\.(ts|py)$/)]
       .filter((f) => !f.endsWith('check-principles.ts'))
       .map((f) => ({ file: f, text: read(f) })),
+    // Every Solidity file in the repository, outside the contract's own libraries and build output.
+    sol: [...walk('contracts', /\.sol$/), ...walk('src', /\.sol$/), ...walk('scripts', /\.sol$/)]
+      .filter((f) => !/(^|\/)(lib|node_modules|out|cache)\//.test(f))
+      .map((f) => ({ file: f, text: read(f) })),
   }),
-  run: ({ home, code }) => {
+  run: ({ home, code, sol }) => {
     const problems: string[] = [];
     // The page's own first words (inside <main>; the rail and the menu come before it in the HTML).
-    // The home hero carries the owner-approved line "… Not affiliated with the author · No token" (config/intro.json).
+    // The home hero carries the owner-approved line "Independent adaptation · Not affiliated with the author" (config/intro.json).
     const main = home.slice(Math.max(0, home.indexOf('<main')));
     const firstScreen = main.replace(/<script[\s\S]*?<\/script>/g, ' ').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').slice(0, 700);
     if (!/not affiliated with the author/i.test(firstScreen)) problems.push('first screen: "not affiliated with the author" is missing');
-    if (!/\bno token\b/i.test(firstScreen)) problems.push('first screen: "no token" is missing');
-    for (const { file, text } of code) if (/\b(erc-?20|erc-?721|tokenomics|airdrop|token sale|mint\s*\()/i.test(text)) problems.push(`${file}: token code`);
+    // Owner, 2026-10-31: anything sold is a fixed-price collectible, with no royalties and no promises.
+    const coin = /\b(erc-?20|erc-?721|airdrop|tokenomics|token sale)\b/i;
+    const royalty = /\b(erc-?2981|royalt\w*)\b/i;
+    for (const { file, text } of code) {
+      if (coin.test(text)) problems.push(`${file}: ERC-20, ERC-721 or airdrop code`);
+      if (royalty.test(text)) problems.push(`${file}: royalty code`);
+    }
+    for (const { file, text } of sol) {
+      if (!file.startsWith('contracts/snowmoon-wip/')) { problems.push(`${file}: a contract outside contracts/snowmoon-wip`); continue; }
+      if (!file.startsWith('contracts/snowmoon-wip/src/')) continue; // its tests and helpers
+      const body = text.replace(/\/\*[\s\S]*?\*\//g, ' ').replace(/\/\/.*$/gm, ' ');
+      if (coin.test(body)) problems.push(`${file}: ERC-20, ERC-721 or airdrop code`);
+      if (royalty.test(body)) problems.push(`${file}: royalty code`);
+      // No way to change a price: no function named for setting one, and a price is written only in createToken.
+      for (const m of body.matchAll(/function\s+(\w+)\s*\(/g)) if (/^_?set\w*price/i.test(m[1])) problems.push(`${file}: ${m[1]} changes a price`);
+      const parts = body.split(/(?=\bfunction\s+\w+\s*\()/);
+      for (const part of parts) {
+        const name = /^function\s+(\w+)/.exec(part)?.[1] ?? '(outside any function)';
+        if (name !== 'createToken' && /\bprice\s*(\+|-|\*|\/)?=(?!=)/i.test(part)) problems.push(`${file}: ${name} writes a price`);
+      }
+    }
     return problems;
   },
   plant: (c) => {
     c.home = c.home.replace(/not affiliated with the author/gi, 'a fan edition');
+    c.sol.push({ file: 'contracts/other/Coin.sol', text: 'contract Coin is ERC20 {}' });
+    c.sol.push({ file: 'contracts/snowmoon-wip/src/Planted.sol', text: 'contract P is ERC2981 { function setPrice(uint256 id, uint256 p) external { tokens[id].price = p; } }' });
   },
 });
 
@@ -2098,7 +2219,7 @@ add({
       firsts.push({ id: `first page${ver ? ` (${ver})` : ''}, resume ${resume}`, page: intro(h, ver, resume) as Page });
     }
     // A challenge link's first page (owner, 2026-10-22).
-    const challenge = { seed: 777, lvl: 3, rule: 'diag' as const, ver: '', res: { win: 'C' as const, resigned: false, step: 41, c: 3, a: 0, taps: 38 } };
+    const challenge = { seed: 777, lvl: 3, rule: 'diag' as const, ver: '', rs: 2 as const, res: { win: 'C' as const, resigned: false, step: 41, c: 3, a: 0, taps: 38 } };
     firsts.push({ id: 'first page of a challenge', page: intro(h, '', 'no', { c: challenge, seg: 'x' }) as Page });
     // The other pages of a short match: the board, a run, resign, the result.
     const others: { id: string; page: Page }[] = [];

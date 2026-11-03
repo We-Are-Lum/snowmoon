@@ -6,7 +6,7 @@ import { db } from '~/lib/db';
 import { feed } from '~/lib/images/data';
 import { byline } from '~/lib/images/byline';
 import { passageLabel } from '~/lib/images/passage';
-import { loadIntro } from '~/lib/intro';
+import { introShown } from '~/lib/seeded-shown';
 import { HOME_MOMENTS, HOME_TEXT as H } from '~/lib/home';
 import { IntroOnce } from '~/components/first-visit';
 import { HomeSky } from '~/components/home-sky';
@@ -15,6 +15,7 @@ import { HomeMomentCard } from '~/components/home-moment';
 import { HomeFeed, type HomeFeedItem } from '~/components/home-feed';
 import { HomeMinpentai } from '~/components/home-minpentai';
 import { SceneCard } from '~/components/scene-card';
+import { CHALLENGE_WORDING as CW } from '~/lib/challenge/wording';
 import '../styles/home.css';
 
 // Rendered per request, like /images: "Just made" is the newest images now. (With ISR, revalidate = 60,
@@ -24,12 +25,12 @@ export const dynamic = 'force-dynamic';
 /**
  * Home, from Claude Design's HomeWindow (docs/design/home/HomeWindow.dc.html; the site's own top bar,
  * menu and rail stand in for Design's header and menu). The dark hero says, on the first screen, that
- * this is an independent adaptation, not affiliated with the author, with no token (principle 7; the
+ * this is an independent adaptation, not affiliated with the author (principle 7; the
  * owner's ruling moved Design's footer line here, 2026-10-10). Then a moment from the book, the
  * newest readers' images, Minpentai playing itself, everything you can do here, and every chapter.
  */
 export default async function Home() {
-  const intro = loadIntro();
+  const intro = await introShown();
   const chapters = chapterNumbers().map((n) => {
     const ch = loadChapter(n)!;
     return { n, dateline: chapterDateline(ch), setting: blockFacts(ch.blocks).find((f) => f.setting)?.setting ?? null };
@@ -64,13 +65,17 @@ export default async function Home() {
     { href: '/references', name: 'References', what: 'Images readers made for passages, each with how it was made', meta: 'Trial →' },
     { href: '/minpentai?mode=learn', name: 'Minpentai', what: 'The game from the book', meta: 'Learn · play →' },
     { href: '/assistant', name: 'Assistant', what: 'Ask about the book, privately', meta: '→' },
+    // The remix challenge (owner, 2026-11-03: a /challenge link on the home page), last, as in the menu. Its line is
+    // new wording, drafted by the coding agent: marked "Draft wording" until the owner approves it.
+    { href: '/challenge', name: CW.title, what: CW.homeLine(), meta: '→', draft: true },
   ];
-  const row = (r: (typeof book)[number]) => (
+  const row = (r: (typeof book)[number] & { draft?: boolean }) => (
     <li key={r.name}>
       <Link href={r.href}>
         <span className="home-do-text">
           <span className="home-do-name">{r.name}</span>
           <span className="home-do-what">{r.what}</span>
+          {r.draft && <span className="as-draft ic-draftline">{CW.draftShort}</span>}
         </span>
         <span className="home-do-meta">{r.meta}</span>
       </Link>

@@ -108,6 +108,8 @@ export const IMAGE_WORDING = {
       remixedFrom: 'Remixed from',
       remixedHidden: 'a design that was hidden',
       drafted: 'The project’s starting style. Its text was drafted by the coding agent, a closed model.',
+      /** A starting sheet's line (the seed's sheets carry `assist` too; launch rehearsal, 2026-11-02: the style's line misdescribed them). */
+      draftedSheet: 'The project’s starting sheet. Its text was drafted by the coding agent, a closed model.',
       samplesCaption: 'Sample images',
       viewsCaption: 'Front, side, back',
       placeViewsCaption: 'Wide, other side, closer',
@@ -127,7 +129,8 @@ export const IMAGE_WORDING = {
       useCharacter: (name: string) => `Use as my ${name}`,
       myCharacter: (name: string, v: number) => `My ${name} · v${v} · clear`,
       switchTo: (v: number) => `Switch my pick to v${v}`,
-      fork: 'Fork',
+      // The button and the form's title (owner, 2026-11-03: "Remix", not "Fork"; one wording for every style and sheet).
+      fork: 'Remix',
       newVersion: 'New version',
       picked: 'Kept as your pick. Only you see this.',
       pickFailed: 'Could not change your pick. Try again.',
@@ -142,7 +145,8 @@ export const IMAGE_WORDING = {
     form: {
       newStyle: 'New style',
       newSheet: (name: string) => `New ${name} sheet`,
-      fork: 'Fork',
+      // The button and the form's title (owner, 2026-11-03: "Remix", not "Fork"; one wording for every style and sheet).
+      fork: 'Remix',
       newVersion: 'New version',
       band: (what: string) => `Remixed from ${what}`,
       bandNote: (by: string) => `Shown on yours for good. It credits ${by}.`,
@@ -179,6 +183,8 @@ export const IMAGE_WORDING = {
       promptIs: (suffix: string) => `Each picture’s prompt is its line above, then your text, then “${suffix}”`,
       needSamples: (n: number) => `Make at least ${n} sample pictures with this text to publish.`,
       signIn: 'Sign in to make a style or a sheet. For now, making them is open to invited readers only.',
+      /** While the remix challenge opens this sheet (launch rehearsal, 2026-11-02: the line above told challenge visitors it was invited-only). */
+      signInChallenge: 'Sign in with Farcaster to remix this sheet. During the remix challenge, anyone whose account passes the site’s check can remix it.',
       // Owner, 2026-10-10: "Invited only, for now". Shown by the form and sent by /api/designs and /api/designs/sample.
       // Picks are open to everyone signed in since 2026-10-19 (Privacy §4 names My picks), and at Generate for wallet
       // accounts too since 2026-10-23. Model-drafted.
@@ -435,7 +441,7 @@ for (const [group, strings] of Object.entries(IMAGE_WORDING.designs) as [keyof t
 }
 // Step 4 strings written out in components (P2b reads the AI phrases there), and the picture recipe line.
 IMAGE_WORDING_ROWS.push(
-  { screen: 'A style or a sheet', where: 'src/app/references/designs/[id]/page.tsx (how the pictures were made)', text: '{model} ({id}), open weights, Apache-2.0, on {host}, endpoint {endpoint}. Seed {seed}, request {id}, cost ${cost}, {date}. Made from the front view. Checked by gpt-oss-safeguard-20b and the host’s safety checker. The fixed subject line was drafted by the coding agent. File sha256 {sha256}.' },
+  { screen: 'A style or a sheet', where: 'src/app/references/designs/[id]/page.tsx (how the pictures were made)', text: '{model} ({id}), {open weights, licence | a closed model by maker}, on {host}, endpoint {endpoint} (or: run locally ({runtime}) on {computer}.) Seed {seed}, request {id}, cost ${cost}, {date}. {Made from the front view. | Made from {what} (sha256 …). | Converted from PNG (sha256 …) to JPEG for the site; no model. | the crop line} {Checked by gpt-oss-safeguard-20b and the host’s safety checker. | Made outside the site; no prompt check or safety checker ran.} {The fixed subject line was drafted by the coding agent. | The … were drafted by the coding agent.} File sha256 {sha256}. Every part is read from the picture’s own recipe (src/lib/images/recipe-lines.ts); the owner approved this wording, 2026-11-02.' },
   { screen: 'A style or a sheet', where: 'src/app/references/designs/[id]/page.tsx (built-on list)', text: 'Chapter {n} · AI-generated image · not by the author' },
   { screen: 'Reports (moderators)', where: 'src/components/moderate-queue.tsx (a design)', text: 'AI-generated pictures · not by the author' },
   { screen: 'Add an image · compose (from your picks)', where: 'src/components/image-composer.tsx (chip key)', text: 'Character' },

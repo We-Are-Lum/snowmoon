@@ -4,7 +4,7 @@ import { chapterNumbers } from '~/lib/book';
 import { adaptationsConfig } from '~/lib/adaptations';
 import { AppShell } from '~/components/app-shell';
 import { WhatIsThis } from '~/components/first-visit';
-import { loadIntro } from '~/lib/intro';
+import { introShown } from '~/lib/seeded-shown';
 import { APP_NAME, appUrl } from '~/lib/config';
 import { PAPER } from '~/lib/tokens';
 import { THEME_SCRIPT } from '~/lib/theme';
@@ -65,7 +65,9 @@ export const viewport: Viewport = {
   themeColor: PAPER,
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  // A hidden seeded image is off the introduction everywhere (owner, 2026-10-30).
+  const intro = await introShown();
   return (
     <html lang="en" data-theme="light" suppressHydrationWarning className={`${Crimson_Pro.variable} ${DM_Mono.variable} ${Instrument_Sans.variable}`}>
       <head>
@@ -74,8 +76,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body>
         {/* The frame from the prototype: phone top bar and menu; tablet and desktop rail; desktop assistant (src/components/app-shell.tsx). */}
-        <AppShell chapters={chapterNumbers().length} adaptations={adaptationsConfig().seeds.length} intro={loadIntro()}>
-          <WhatIsThis intro={loadIntro()} />
+        <AppShell chapters={chapterNumbers().length} adaptations={adaptationsConfig().seeds.length} intro={intro}>
+          <WhatIsThis intro={intro} />
           <main>{children}</main>
         </AppShell>
       </body>
