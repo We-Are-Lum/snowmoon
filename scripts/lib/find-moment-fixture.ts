@@ -1,6 +1,6 @@
 /**
  * A recorded "Find a moment" reply and the real blocks it is checked against, shared by test:find-moment and
- * check:principles (P2k, P2l, SPa). Recorded only: no model is called. The blocks are the book's, read from
+ * check:principles (P2k, P2l, P9a). Recorded only: no model is called. The blocks are the book's, read from
  * content/snowmoon/text/chapter-N.json (as the database holds them).
  *
  * The person has opened chapters 1 to 5 and asks about Bai. The reply has three good picks and these planted ones:

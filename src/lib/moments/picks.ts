@@ -5,7 +5,7 @@ import { pronounSlips } from '../make/cast';
 /**
  * "Find a moment"'s checks on the model's picks (docs/proposals/remix-moments.md 2.2, 2.3 and 3.3). Pure: the passages
  * are passed in as read from the database by book search, never the model's or the device's copy. The flow that calls
- * the model is src/lib/sheet-help/find-moment.ts; check:principles P2k, P2l and SPa and test:find-moment run these.
+ * the model is src/lib/sheet-help/find-moment.ts; check:principles P2k, P2l and P9a and test:find-moment run these.
  *
  * A pick line is `c<ch>-b<idx> | <the exact sentence or sentences> | <why, or nothing>`. It is dropped unless:
  * - its id was among the passages search returned (the model can't bring in a passage from memory);
@@ -167,7 +167,7 @@ export function fillFromSearch(moments: Moment[], ranked: SearchedBlock[], o: Pi
 }
 
 /**
- * The rule every shown result must keep, whatever the flow did (test:find-moment, check:principles P2k, P2l, SPa):
+ * The rule every shown result must keep, whatever the flow did (test:find-moment, check:principles P2k, P2l, P9a):
  * each quote is exactly its block's words at a block that search returned within the limit; each why passes checkWhy.
  */
 export function momentResultProblems(moments: Moment[], passages: Map<string, SearchedBlock>, o: PickOptions & { min: number; maxWords: number; runWords: number; pastLimit: boolean }): string[] {
@@ -199,7 +199,7 @@ export function momentResultProblems(moments: Moment[], passages: Map<string, Se
 /**
  * One reply, screened: parsed, each pick checked against its block, each why checked (a failed why is dropped, its
  * quote kept). What the flow (src/lib/sheet-help/find-moment.ts) does with every model reply before the guard; also
- * what check:principles P2k, P2l and SPa run on their recorded reply.
+ * what check:principles P2k, P2l and P9a run on their recorded reply.
  */
 export function screenPicks(
   text: string,

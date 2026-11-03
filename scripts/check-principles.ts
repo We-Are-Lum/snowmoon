@@ -788,7 +788,7 @@ add({
   },
 });
 
-// P2k, P2l and SPa: "Find a moment" in "Ask for help" (branch find-a-moment, owner 2026-11-04;
+// P2k, P2l (and P9a, below, under draft principle 9): "Find a moment" in "Ask for help" (branch find-a-moment, owner 2026-11-04;
 // docs/proposals/remix-moments.md §2, §3 and §7). Run on a recorded reply (scripts/lib/find-moment-fixture.ts) against
 // the book's real blocks: no model is called. test:find-moment runs the whole flow on PGlite.
 const findMomentScreen = async () => {
@@ -845,9 +845,11 @@ add({
     c.ui = c.ui.replace('<q>{m.quote}</q>', '<q>{m.quote} {m.why}</q>');
   },
 });
+// P9a (draft principle 9, nothing past where you've read; DRAFT, for the owner's OK, 2026-11-04): "Find a moment"
+// keeps within the furthest chapter opened. Was SPa under principle 2 until the owner made spoilers their own principle.
 add({
-  id: 'SPa',
-  principle: 2,
+  id: 'P9a',
+  principle: 9,
   name: '"Find a moment" never shows a passage past the person\'s furthest chapter unless they turned on "include later chapters", which is off each time the panel opens',
   load: async () => {
     const base = await findMomentScreen();
@@ -1919,7 +1921,7 @@ add({
 add({
   id: 'P6w',
   principle: 6,
-  name: '"Find a moment" is on only while Privacy §5 describes it, and goes live only with "Ask for help"',
+  name: '"Find a moment" is on only while Privacy §5 carries the owner\'s words for it, and goes live only with "Ask for help"',
   load: async () => ({
     on: SHEET_HELP.findMoment as boolean,
     flag: read('src/lib/sheet-help/flag.ts'),
@@ -1929,10 +1931,16 @@ add({
   }),
   run: (c) => {
     const problems: string[] = [];
-    if (c.on && !/Find a moment/.test(c.s5)) problems.push('SHEET_HELP.findMoment (src/lib/config.ts) is on, but Privacy §5 does not name "Find a moment"; reread docs/legal/find-a-moment-draft.md with the owner first, or keep it off');
-    if (c.on && !/passages/.test(c.s5)) problems.push('SHEET_HELP.findMoment is on, but Privacy §5 does not say the passages found are sent');
-    if (c.on && !/\bGroq\b/.test(c.s5)) problems.push('SHEET_HELP.findMoment is on, but Privacy §5 does not name Groq');
-    if (c.on && !/one of those messages/.test(c.s5)) problems.push('SHEET_HELP.findMoment is on, but Privacy §5 does not say a search counts as one of the "Ask for help" messages');
+    // The owner's words (2026-11-04, docs/legal/find-a-moment-draft.md v2).
+    const owners: [RegExp, string][] = [
+      [/'Find a moment' sends what you describe, the character you choose/, 'what it sends ("\'Find a moment\' sends what you describe, the character you choose")'],
+      [/the furthest chapter you['’]ve opened \(or that you chose to include later chapters\)/, 'the chapter limit ("the furthest chapter you\'ve opened (or that you chose to include later chapters)")'],
+      [/with the passages book search found/, 'the passages ("with the passages book search found")'],
+      [/Each search counts as one of those messages/, 'the shared count ("Each search counts as one of those messages")'],
+      [/we keep nothing else about it/, 'what is kept ("we keep nothing else about it")'],
+      [/\bGroq\b/, 'Groq'],
+    ];
+    if (c.on) for (const [re, what] of owners) if (!re.test(c.s5)) problems.push(`SHEET_HELP.findMoment (src/lib/config.ts) is on, but Privacy §5 does not say ${what}; reread docs/legal/find-a-moment-draft.md with the owner first, or keep it off`);
     if (!/export const privacyDescribesFindMoment = [^\n]*\/Find a moment\/\.test\(section\(privacy, 5\)\)/.test(c.flag)) problems.push('src/lib/sheet-help/flag.ts: the Privacy test for "Find a moment" does not read §5');
     if (!/export const findMomentLive = [^\n]*SHEET_HELP\.findMoment && sheetHelpLive\(now, privacy\) && privacyDescribesFindMoment\(privacy\)/.test(c.flag)) problems.push('src/lib/sheet-help/flag.ts: "Find a moment" going live does not wait for its switch, "Ask for help" and the Privacy words');
     if (!/export async function POST\(request: Request\) \{\n\s*if \(!findMomentLive\(\)\) return NextResponse\.json\(\{ error: 'Not found' \}, \{ status: 404 \}\);/.test(c.route)) problems.push('src/app/api/sheet-help/moment/route.ts: the route does not answer 404 first while "Find a moment" is not live');

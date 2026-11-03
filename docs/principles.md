@@ -1,7 +1,8 @@
 # Principles
 
 Eight principles this edition holds itself to. Each one is **our inference from
-public writing**, mostly the author's. None is a statement by the author about
+public writing**, mostly the author's. (A ninth, on spoilers, is drafted below for
+the owner's OK: it is the owner's own rule, not inferred from the author.) None is a statement by the author about
 this project, and none implies the author endorses it. The project is
 independent and not affiliated with him.
 
@@ -220,10 +221,7 @@ in 25 words or fewer and records `written_by { fid, date }`.
 - `P2l` (same branch): "Find a moment"'s model words, the "why", never sit where they could be taken for the book's:
   rendered outside the quote (`<q>`), with the AI label, no quote marks, and no run of 5 words shared with any passage it
   was sent. The proof plants a why copying six words of c4-b70 and a render that puts the why inside `<q>`.
-- `SPa` (same branch; spoilers, not one of the eight principles, filed under 2 for now): "Find a moment" never shows a
-  passage past the furthest chapter the device has opened unless the person turned on "Include chapters past Chapter
-  N", which starts off each time the panel opens and is never stored; the limit is clamped to 1–32, with no floor at the
-  character's first chapter. The proof plants a c30 passage at limit 5 and a limit raised to the first chapter.
+- Spoilers ("Find a moment" within the furthest chapter) moved to draft principle 9 as `P9a`.
 - `P2g`: on every chapter page as served, each screen redrawn from a template
   (`data-source="template"`) carries one ⓘ label named "Redrawn": the ⓘ shown,
   the word and the declaration served with it as its accessible name, and a
@@ -633,6 +631,79 @@ once the owner picks a version.)
   source's drawing.
 
 **Status.** Pass.
+
+---
+
+## 9. Nothing past where a reader has read is shown, or sent to a model on their behalf, unless they choose it each time.
+
+**DRAFT, for the owner's OK.** Drafted by the coding agent (Claude, a closed model by Anthropic), 2026-11-04, on
+branch `find-a-moment`, at the owner's request (2026-11-04: "the spoiler check becomes its own principle, applied
+site-wide"). Unlike principles 1 to 8, this one is the owner's own rule for this edition, not inferred from the
+author's writing. Nothing here is built except P9a.
+
+**The principle.** Every surface that draws on the book keeps to the furthest chapter opened on the reader's own
+device. Anything past it is left out or covered, and the surface says that something is held back, until the reader
+chooses to see it. That choice is made in the open, for that one view, search or thread, and is never assumed: not
+from a link, not from a character's first chapter, not from an earlier visit. How far someone has read stays on their
+device. The server learns it only as the number a request carries for its own limit, and never keeps it.
+
+**What it means in this app.**
+
+- **The limit** is `max(openedChapters())` (`src/lib/chat/device.ts`), or chapter 1 before the device has been read
+  (and in the server's HTML). Every request that searches or quotes the book carries it, and the server clamps it to
+  1–32 and searches and quotes nothing past it.
+- **No floors.** A surface never raises the limit to where a character or place first appears. If that is past the
+  limit, it says so, with the choice.
+- **The choice** to include later chapters belongs to the reader, is shown beside the result, and starts off. A
+  surface may keep a choice within one thread or one open page. It never carries over into a new one.
+- **What is held back says so** ("Better matches may be in later chapters", "2 more in later chapters"), with no words
+  from past the limit.
+- **Names count.** A character, place or word first met past the limit is a spoiler too, in lists and pickers as well
+  as in quotes.
+- **What this edition invents** about the book (a sheet's shorthand, a summary, a model's reason) is held to the same
+  limit as the book's words when it is drawn from later chapters.
+
+**How it is checked.**
+
+- `P9a` (built; was `SPa` under principle 2): "Find a moment" never shows a passage past the furthest chapter the
+  device has opened unless the person turned on "Include chapters past Chapter N", which starts off each time the panel
+  opens and is never stored. The limit is clamped to 1–32, with no floor at the character's first chapter. The proof
+  plants a c30 passage at limit 5 and a limit raised to the first chapter. `test:find-moment` (M3, M6) runs the whole
+  flow.
+- `P9b` (proposed): the assistant's server refuses a limit outside 1–32 and any attached block, citation or glossary
+  word past it. A new thread opened from a link (`/assistant?block=…` or `?chapter=…`) never starts past `readTo()`
+  unless the reader chooses. Today the first part holds and the second does not (below). *Planted:* a thread opened
+  with `?chapter=20` on a device that has read to 3.
+- `P9c` (proposed): a sheet's "What the book says" (`BookQuotes`) shows only quotes up to the limit, and the served
+  page carries no later quote, neither in its HTML text nor in its page data. Later quotes are counted, not quoted
+  ("N more in later chapters"), as "Where it appears" already does for places. *Planted:* a chapter 24 fact in the
+  served page data for a reader at 4.
+- `P9d` (proposed): "Ask for help" (the prompt suggestions) never sends the model facts or passages past the limit, and
+  has no floor at the character's first chapter. *Planted:* `validateHelp` raising a limit of 2 to Bai's chapter 4.
+  Today this fails (below).
+- `P9e` (proposed): lists and pickers that name the book's characters and places (the sheets index, "Find a moment"'s
+  character picker) cover a name first met past the limit, with its chapter and the choice to show it. *Planted:*
+  Lektor (chapter 28) listed by name to a reader at 4. Today this fails (below).
+- `P9f` (proposed, when "Set in the book" ships after 22 Nov): a version's moment is covered in the served HTML and
+  shown only after hydration on a device that has reached its chapter, or after "Show anyway" for that view
+  (`docs/proposals/remix-moments.md` 3.2, its `SPb`). *Planted:* the quote in the server HTML.
+- Already following it, checked elsewhere: the glossary's covers (`check:ui`), the Pictures feed's covers, the
+  Minpentai kit's closed Spoilers section from chapter 15 (`P8g`).
+- Review: does a new surface that reads the book take the device's limit, start any "include later" choice off, and say
+  what it holds back?
+
+**Status** (2026-11-04, branch `find-a-moment`):
+
+| Surface | Code path | Keeps within the furthest chapter today? |
+|---|---|---|
+| "Find a moment" | `src/components/find-moment.tsx` sends `upTo: max(openedChapters())`; `validateMoment` and `findMoment` (`src/lib/sheet-help/find-moment.ts`) clamp it to 1–32, add no floor, use 32 only with `pastLimit === true`; `retrieve()` searches `chapter <= limit`; `checkPicks` drops anything past it | **Passages: yes** (P9a). **Character picker: no.** It lists the whole cast by name (`bookCharacters()` in `src/app/references/designs/new/page.tsx`), including characters first met past the limit (e.g. Lektor, chapter 28). |
+| The assistant | `src/components/assistant.tsx` starts a thread at `readTo()`; `validate` in `src/lib/chat/ask.ts` refuses a limit outside 1–32 and attached blocks past it; `retrieve()`, `blocksById()` (citations), `glossaryWords()` and the support check all take the limit; later matches give only a `heldBack` flag, never text | **Mostly.** A thread opened from a link (`?block=c20-b5` or `?chapter=20`) starts at `max(readTo(), that chapter)`, so a link can raise the limit past what the device has opened without the reader choosing it. A thread's chosen limit is also remembered with the thread on the device, so a later visit to that thread keeps it. The model may know the book from its training; answers must cite passages within the limit and pass the support check, which keeps this narrow but does not rule it out. |
+| Sheet facts ("What the book says") | `BookQuotes` (`src/components/design-book.tsx`) shows `quotes.filter(q => q.chapter <= furthest)`, nothing until the device is read | **On screen: yes.** But every quote is passed to the client component, so later chapters' quotes are in the page's data (readable in the page source). No count of later quotes is shown. |
+| A sheet's shorthand | `Shorthand` (`src/components/design-sheets.tsx`), the descriptor in `content/snowmoon/designs/characters/*.json`, labelled "Invented" | **Not checked.** It is shown to everyone. It was drafted by the coding agent from facts that include later chapters (e.g. Gladias's sheet has facts from chapter 24). It describes looks, not events. |
+| "Ask for help" (prompt suggestions) | `validateHelp` (`src/lib/sheet-help/help.ts`) sets `upTo = max(firstChapter, …)`; facts and search use that | **No.** It floors the limit at the character's first chapter, so a reader before that chapter has later facts and passages sent to the model. A fact the model cites is shown as a quote, with the book's words from the database, so a reader at chapter 2 can be shown a chapter 4 quote. It applies only beside the challenge characters' sheets, and only while "Ask for help" is live (it is off today). |
+| The sheets index | `src/app/references/designs/page.tsx` passes every character and place with its `firstChapter` to `design-index.tsx` | **No.** Names of characters and places first met past the limit are listed uncovered. |
+
+Not fixed here (owner, 2026-11-04: "don't fix it yet").
 
 ---
 
