@@ -17,8 +17,12 @@ import { createHash, randomBytes, timingSafeEqual } from 'node:crypto';
 import { drawRules, engine, layout, other, rng, verdict, type AnyPiece, type Engine, type Kills, type Placement, type Side, type World } from '../versions/engine';
 import type { Settings } from '../versions/schema';
 import { SOLO_V3, type VersionRules } from '../versions/solo-v1';
+import { TurnWatch } from './summary';
 import { BOOK_3_DRAFT, BOOK_EDITION } from '../versions/book-edition';
 import { PRESETS, TOP_LEVEL, searchPlan, type BookPlay, type Preset } from '../versions/search';
+import { appUrl } from '../../config';
+import { PIECES_PAGE, rulesText } from './rules-text';
+import { converging, laneWarnings } from './help';
 
 /**
  * The exact rulesets a match can be played under (owner, 2026-10-31: a record names its exact ruleset, so it replays
@@ -87,6 +91,8 @@ export interface SoloMatch {
   pend: { C: Orders | null; A: Orders | null };
   /** When this turn to act opened (ms since 1970): nothing about the match is answered before openedAt + T (tools.ts). */
   openedAt: number;
+  /** The person's summary of the last turn played (summary.ts): what their side saw, in words. */
+  summary?: { turn: number; from: number; lines: string[] };
   standing: { text: string; preset: Preset } | null;
   history: RevealedTurn[];
   end: { win: Side | 'D'; how: 'towers' | 'time' | 'resigned'; step: number } | null;
@@ -193,6 +199,18 @@ export function boardOut(e: Engine, w: World, me: Side, seeOre: (k: number) => b
   };
 }
 
+/** The name a view gives the match's ruleset. */
+const rulesetName = (r: RulesetName) => (r.startsWith('book') ? `Rocks and Mirrors, the book edition (${r})` : `Play (${r})`);
+
+/**
+ * The match's rules as plain lines, generated from its settings (rules-text.ts), and where the person can read how the
+ * pieces work (owner, 2026-11-02). Depends only on the ruleset and its drawn rule, never on the board.
+ */
+export function rulesFor(m: Pick<SoloMatch, 'ruleset' | 'seed'>) {
+  const { s, rule } = rulesOf(m);
+  return { rules: rulesText(s, { name: rulesetName(m.ruleset), drawn: rule }), how_the_pieces_work: `${appUrl()}${PIECES_PAGE}` };
+}
+
 /** Everything the person's side is shown: its view of the board and the turn. Nothing else. */
 export function viewFor(m: SoloMatch) {
   const { s, e, rule } = rulesOf(m);
@@ -206,7 +224,7 @@ export function viewFor(m: SoloMatch) {
     match_id: m.id,
     side: 'Cyan',
     opponent: { kind: 'site computer', level: m.level, random_commitment: m.cpuCommit },
-    ruleset: m.ruleset.startsWith('book') ? `Rocks and Mirrors, the book edition (${m.ruleset})` : `Play (${m.ruleset})`,
+    ruleset: rulesetName(m.ruleset),
     rule,
     phase: over ? 'over' : m.turn === 0 ? 'setup' : 'act',
     turn: m.turn,
@@ -229,6 +247,10 @@ export function viewFor(m: SoloMatch) {
     standing_order: m.standing,
     my_turns: m.history.map((h) => ({ turn: h.turn, step: h.step, placements: h.C.placements.map(orderOut), source: h.C.source, ...(h.C.preset ? { preset: h.C.preset } : {}) })),
     end: m.end,
+    // Agent help (2026-11-02), kept in their own fields: the rules for this ruleset, and the person's page.
+    ...rulesFor(m),
+    // What the person's side saw happen in the last turn's steps, in words (summary.ts); empty before the first.
+    last_turn_summary: m.summary ? { turn: m.summary.turn, from_step: m.summary.from, lines: m.summary.lines } : null,
   };
 }
 
@@ -313,17 +335,23 @@ function resolve(m: SoloMatch, now: string) {
   m.history.push({ turn: m.turn, step: m.w.step, C: strip(C), A: strip(A) });
   e.apply(m.w, s, { C: C.placements, A: A.placements });
   e.updLS(m.w, s.sight, m.ls);
-  const from = m.w.step;
+  // The person's turn summary, from their side's view at each step (summary.ts).
+  const watch = new TurnWatch(e, s, PERSON, m.w, m.kills, C.placements);
+  const from = m.w.step, turn = m.turn;
+  const note = () => { m.summary = { turn, from, lines: watch.done() }; };
   do {
     e.step(m.w, s, m.kills);
     e.updLS(m.w, s.sight, m.ls);
+    watch.look(m.w);
     const v = verdict(e, m.w, s, m.kills);
     if (v) {
+      note();
       m.end = { win: v, how: e.towers(m.w, 'C').length && e.towers(m.w, 'A').length ? 'time' : 'towers', step: m.w.step };
       m.pend = { C: null, A: m.pend.A };
       return { over: true, end: m.end };
     }
   } while (m.w.step - from < s.every);
+  note();
   m.turn++;
   m.pend = { C: null, A: null };
   m.openedAt = Date.parse(now) || 0;
@@ -434,6 +462,8 @@ export function simulate(m: SoloMatch, args: { belief?: Belief; scenarios: { nam
   const n = args.steps === undefined ? Math.min(s.every, remaining) : args.steps;
   if (!Number.isInteger(n) || n < 1 || n > Math.min(remaining, 96)) throw new SoloError(`steps must be 1 to ${Math.min(remaining, 96)}`);
   const snap = e.towers(board, me), pts = pointsOf(m, s);
+  // My symbols formed last turn, still waiting to be walled in (decided when this turn's placements appear).
+  const waiting = Object.keys(board.fs ?? {}).map(Number).filter((k) => board.fs![k].o === me && board.tw[k] === me);
   return {
     based_on: `your view at step ${board.step}, and your belief`,
     scenarios: args.scenarios.map((sc) => {
@@ -445,10 +475,21 @@ export function simulate(m: SoloMatch, args: { belief?: Belief; scenarios: { nam
       const w = e.clone(board);
       const mine0 = e.towers(w, me), theirs0 = e.towers(w, them);
       e.apply(w, s, { C: ps, A: [] });
+      const walled = waiting.map((k) => ({ x: e.XY(k)[0], y: e.XY(k)[1], stays: w.tw[k] === me }));
       for (let i = 0; i < n && w.step < s.maxSteps; i++) e.step(w, s);
       const lost = (ks: number[], o: Side) => ks.filter((k) => w.tw[k] !== o).map((k) => ({ x: e.XY(k)[0], y: e.XY(k)[1] }));
+      // apply() cleared last turn's symbols, so every symbol marked now formed during these steps.
+      const formed = Object.keys(w.fs ?? {}).map(Number).filter((k) => w.fs![k].o === me).sort((a, b) => a - b);
+      // Lane warnings from the side's view alone (not the belief: launch cells are all in sight anyway).
+      const warnings = laneWarnings(e, view, s, e.towers(view, me), ps);
       return {
         name, legal: true, cost: ps.reduce((t, p) => t + e.cost(s, p.t), 0),
+        ...(warnings.length ? { warnings } : {}),
+        ...(s.costSeed ? {
+          symbols: formed.map((k) => ({ x: e.XY(k)[0], y: e.XY(k)[1], step: w.fs![k].at + 1, formed: true, standing_at_end: w.tw[k] === me })),
+          symbol_gliders_resting: Object.keys(w.sd ?? {}).map(Number).filter((k) => w.sd![k] === me).sort((a, b) => a - b).map((k) => ({ x: e.XY(k)[0], y: e.XY(k)[1] })),
+          ...(walled.length ? { last_turns_symbols: walled } : {}),
+        } : {}),
         result: {
           step: w.step,
           my_towers: { now: e.towers(w, me).length, lost: lost(mine0, me) },
@@ -461,3 +502,25 @@ export function simulate(m: SoloMatch, args: { belief?: Belief; scenarios: { nam
 }
 export interface Belief { towers?: { x: number; y: number }[]; squares?: { x: number; y: number; hits_left?: number }[]; gliders?: { x: number; y: number; dir: string }[] }
 
+
+/**
+ * Three symbol-glider launches that converge on a target square (owner, 2026-11-02: "a helper that returns three
+ * converging launches for a target square"). From the side's view only, with no guesses about the dark: each option
+ * is checked by flying its three launches together in the engine (help.ts converging). Stores nothing.
+ */
+export function symbolLaunches(m: SoloMatch, args: { x: unknown; y: unknown }) {
+  if (m.end) throw new SoloError('the match is over');
+  if (!Number.isInteger(args.x) || !Number.isInteger(args.y)) throw new SoloError('x and y must be whole numbers');
+  const { s, e } = rulesOf(m);
+  const me = PERSON, view = e.fog(m.w, s, me), x = args.x as number, y = args.y as number;
+  const pts = pointsOf(m, s), cost = 3 * (s.costSeed ?? 0);
+  const r = converging(e, e.clone(view), s, me, e.towers(view, me), pts, x, y);
+  return {
+    target: { x, y },
+    based_on: `your view at step ${view.step}, with nothing assumed about what you can't see (an enemy glider or piece in the dark can still stop them)`,
+    ...(s.costSeed ? { cost, points: pts, affordable: r.affordable, ...(r.affordable ? {} : { cant_afford: `three symbol gliders cost ${cost}; you have ${pts} points this turn` }) } : {}),
+    options: r.options.map((o) => ({ launches: o.launches, rest_at: o.rests, symbol_forms: { ...o.symbol, before_next_turn: o.symbol.step <= view.step + s.every } })),
+    ...(r.why_none ? { why_none: r.why_none } : {}),
+    ...(r.options.length ? { then: 'List the three launches in the order given (gliders move in the order they were placed; the order was part of the check). The symbol is a tower from the step it forms. It stays past your next turn to act only if every square a glider could reach it from is solid or off the board when that turn\'s placements appear: wall it in then.' } : {}),
+  };
+}
