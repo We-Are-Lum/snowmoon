@@ -578,6 +578,11 @@ check('as committed, CHALLENGE.entries, posts and openSheets are on (owner\'s re
   const signInLine = (src: string) => /<p>\{p\.challengeOpen \? W\.form\.signInChallenge : W\.form\.signIn\}<\/p>/.test(src);
   check('R2 signed out, a challenge sheet\'s fork form asks to sign in to remix it, not "invited readers only"', signInLine(form) && !/invited/i.test(IF.signInChallenge) && /remix/i.test(IF.signInChallenge));
   proof('R2 the invited-only line shown during the challenge is caught', !signInLine(form.replace('{p.challengeOpen ? W.form.signInChallenge : W.form.signIn}', '{W.form.signIn}')));
+  // R3: the cap could be read through the site's own function only; the image status route now says it too.
+  const status = read('src/app/api/images/status/route.ts');
+  const capInStatus = (src: string) => /dailySpendCapUsd: imagesDailySpendCapUsd\(\)/.test(src) && !/IMAGES\.dailySpendCapUsd/.test(src);
+  check('R3 the image status route gives the day\'s spend cap through imagesDailySpendCapUsd()', capInStatus(status));
+  proof('R3 a status cap read straight from IMAGES (never $15) is caught', !capInStatus(status.replace('dailySpendCapUsd: imagesDailySpendCapUsd()', 'dailySpendCapUsd: IMAGES.dailySpendCapUsd')));
 }
 
 console.log(`test:challenge: ${passed} passed, ${failures.length} failed`);
