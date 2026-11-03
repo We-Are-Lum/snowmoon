@@ -1,7 +1,8 @@
 # Wording for approval: the remix challenge, 2026-11-04
 
 DRAFT, written by the coding agent (Claude, a closed model by Anthropic), overnight 2026-11-03, for the owner's review.
-Branch `wording-for-approval`, from `origin/main` at 17e2c63.
+Branch `wording-for-approval`. **Version 2:** refreshed against `origin/main` at 645cba1 (PR #99, `launch-fixes`,
+merged). Version 1 was 12d9d88, read against 17e2c63.
 
 One list of every user-facing string on the remix challenge's path that is still drafted wording, with its exact text,
 where it shows, and its source. Reply by number: "W3 ok", "W7 change to …".
@@ -15,22 +16,22 @@ lines (`src/lib/images/recipe-lines.ts`, approved 2026-11-02).
   `{n}` a number; `{network}` Farcaster, Bluesky or Lens. Other braces are named where they appear.
 - Every date is built from `CHALLENGE.dates` in `src/lib/config.ts`, never written in the copy. Each is shown here as
   it renders today, in **[brackets]**: `[6 to 22 November]`, `[Friday 6 November, 09:00 Pacific]`,
-  `[Sunday 22 November, 23:59 Pacific]`, `[Friday 4 December]`. Numbers from the config are bracketed the same way:
-  `[six]` characters, `[three]` entrants, `[0.7]` score.
+  `[Sunday 22 November, 23:59 Pacific]`, `[Friday 4 December]`, and the short form `[Fri 6 Nov, 09:00 PT]`. Numbers
+  from the config are bracketed the same way: `[six]` characters, `[three]` entrants, `[0.7]` score.
 - **States:** *signed out*; *signed in, passing* (invited, or a Neynar score of 0.7 or more); *below 0.7*; *before*
   the window (until Fri 6 Nov 09:00 Pacific), *in the window*, *after the close* (from Mon 23 Nov 00:00 Pacific).
   "Any" means every state.
-- Lines marked **from launch-rehearsal** are on branch `origin/launch-rehearsal` (fixes R1–R9, 26462b3), not on main.
-- **launch-fixes:** when this list was read (2026-11-03, 00:22 PST), branch `launch-fixes` was local only (not on
-  GitHub), at the same commit as `launch-rehearsal` (26462b3), with no uncommitted changes. So it had no new strings
-  yet. Its planned items are listed in section 9 with what shows today, so the owner can still choose the words.
-  Anything it adds later is not in this list.
+- **CHANGED since v1** marks an item whose text (or where it shows) differs from 12d9d88. **NOW ON MAIN** marks an
+  item that v1 listed from `launch-rehearsal` and that #99 merged.
+- **Not on main** marks the lines from branch `origin/challenge-three-bases` (unmerged, 005d178): W81 and W82.
+- W numbers are the same as v1. The items v1 listed as "planned" (W69–W76) now hold #99's merged strings; W78–W82 are
+  new.
 
 ## 1. The challenge page, /challenge
 
 Readable signed out. Every line shows in every state unless its state says otherwise.
 
-**W1** · page title and tab title · any
+**W1** · page title, tab title, and the menu's and home page's link name (W76) · any
 > Remix the cast
 
 `src/lib/challenge/wording.ts:17`; tab title `src/app/challenge/page.tsx:20`.
@@ -44,30 +45,32 @@ Readable signed out. Every line shows in every state unless its state says other
 > Draft wording: drafted for the owner, not yet approved.
 
 `src/lib/challenge/wording.ts:18`, shown at `src/app/challenge/page.tsx:49` · Remove when this list is approved;
-check:ui checks this line is there, so it changes with it (rehearsal report, item 4).
+check:ui checks this line is there, so it changes with it.
 
 **W4** · the date line, bold · before the window (followed by W5 in plain text)
 > Entries open [Friday 6 November, 09:00 Pacific].
 
-`src/lib/challenge/wording.ts:44`, `src/app/challenge/page.tsx:51` · launch-fixes plans "Entries open Fri 6 Nov,
-09:00 PT" (short form, see W72): choose one form for every date line.
+`src/lib/challenge/wording.ts:54`, `src/app/challenge/page.tsx:51` · Choice: #99 kept this long form here, but the
+refusal to mark before the open uses the short form "Entries open [Fri 6 Nov, 09:00 PT]." (W72). One form everywhere,
+or both?
 
 **W5** · the date line · in the window (bold), and before it (after W4)
 > Entries close [Sunday 22 November, 23:59 Pacific].
 
-`src/lib/challenge/wording.ts:43`, `src/app/challenge/page.tsx:51–52`.
+`src/lib/challenge/wording.ts:53`, `src/app/challenge/page.tsx:51–52`.
 
 **W6** · the date line, bold · after the close
 > Entries closed [Sunday 22 November, 23:59 Pacific].
 
-`src/lib/challenge/wording.ts:45`, `src/app/challenge/page.tsx:51`.
+`src/lib/challenge/wording.ts:55`, `src/app/challenge/page.tsx:51`.
 
 **W7** · the introduction · any
 > From [6 to 22 November], make your own version of Zei, Bai, Gladias, Seila, Deluin or Mu on snowmoon.party: start
 > from a published sheet, or from someone else’s remix, change it, and publish. Your version gets its own page,
 > credited back to what you built on.
 
-`src/lib/challenge/wording.ts:19–20` · The names come from `CHALLENGE.characters`, in the owner's order.
+`src/lib/challenge/wording.ts:28–29` · The names come from `CHALLENGE.characters`, in the owner's order. "start from
+a published sheet" may need to match the three-bases rule (W81) if that branch merges.
 
 **W8** · "What happens next." (bold head, then the paragraph) · any
 > **What happens next.** At the call on [Friday 4 December], Nate shows the versions he’s taking into Episode 1,
@@ -76,7 +79,7 @@ check:ui checks this line is there, so it changes with it (rehearsal report, ite
 > edition, with what it raises split among everyone it was built on, including the We Are Lum team. Details come
 > with the mint page.
 
-`src/lib/challenge/wording.ts:21–23`.
+`src/lib/challenge/wording.ts:30–32`.
 
 **W9** · "The bounties." (bold head, then the paragraph) · any
 > **The bounties.** There is one poidh bounty for each character, [six] in all, on Ethereum mainnet, each funded and
@@ -85,68 +88,67 @@ check:ui checks this line is there, so it changes with it (rehearsal report, ite
 > character’s bounty. Claiming needs a little ETH on mainnet for gas. A bounty can pay out even if its character has
 > fewer than [three] entrants; if no claim fits, Nate cancels it.
 
-`src/lib/challenge/wording.ts:24–26` · Once `CHALLENGE.bountyAmount` is set, "judged by Nate" becomes "judged by
-Nate, {amount} each". Neither the amount nor the six bounty addresses are set yet (rehearsal report, item 5).
+`src/lib/challenge/wording.ts:33–35` · Once `CHALLENGE.bountyAmount` is set, "judged by Nate" becomes "judged by
+Nate, {amount} each". Neither the amount nor the six bounty addresses are set yet.
 
 **W10** · the rules' head · any
 > **The rules.**
 
-`src/lib/challenge/wording.ts:30`.
+`src/lib/challenge/wording.ts:39`.
 
 **W11** · rule 1 · any
 > Make your remix on snowmoon.party with the site’s tools. Every recipe is published.
 
-`src/lib/challenge/wording.ts:32`.
+`src/lib/challenge/wording.ts:41`.
 
 **W12** · rule 2 · any
 > Only remixes count: start from a published sheet or someone else’s remix. A new sheet made from scratch isn’t an
 > entry.
 
-`src/lib/challenge/wording.ts:33`.
+`src/lib/challenge/wording.ts:42` · Branch `challenge-three-bases` (not on main) replaces it with W81.
 
 **W13** · rule 3 · any
 > One entry per person per character. Your latest version counts unless you mark another.
 
-`src/lib/challenge/wording.ts:34`.
+`src/lib/challenge/wording.ts:43`.
 
-**W14** · rule 4 · any
-> To count as an entry, sign in with a Farcaster account that passes the site’s check. It’s checked once, when you
-> publish.
+**W14** · rule 4 · any · **CHANGED since v1** (the reworded rule; also W71)
+> To remix at all, sign in with a Farcaster account that passes the site’s check. An account below it can’t make the
+> pictures, so it can’t remix or enter. It’s checked when you press Generate, and again when you publish.
 
-`src/lib/challenge/wording.ts:35` · Open: the rehearsal found it reads as if a failing account could still remix
-(it can't make a single view), and the score is in fact first looked up at Generate (item 3 and its legal note).
-launch-fixes plans to reword it (W71).
+`src/lib/challenge/wording.ts:45`. v1: "To count as an entry, sign in with a Farcaster account that passes the site’s
+check. It’s checked once, when you publish."
 
 **W15** · rule 5 · any
 > Each character needs at least [three] different people with an entry. A character with fewer gets no final
 > version, credit test or mint.
 
-`src/lib/challenge/wording.ts:36`.
+`src/lib/challenge/wording.ts:46`.
 
 **W16** · rule 6 · any
 > Entering is free. Minting isn’t needed for anything.
 
-`src/lib/challenge/wording.ts:37`.
+`src/lib/challenge/wording.ts:47`.
 
 **W17** · rule 7 · any
 > Post your version anywhere with its link. If you’re remixing someone’s post, quote or reply to it.
 
-`src/lib/challenge/wording.ts:38`.
+`src/lib/challenge/wording.ts:48`.
 
 **W18** · rule 8 · any
 > An account passes the site’s check with a Neynar score of at least [0.7], fixed for the whole challenge.
 
-`src/lib/challenge/wording.ts:39`.
+`src/lib/challenge/wording.ts:49` · Choice: W70 now says the score above the rules too; one of the two could go.
 
 **W19** · the last rule (admins) · any
 > Admins (the site’s owner and @garance) can make versions too, but aren’t eligible for rewards.
 
-`src/lib/challenge/wording.ts:41`, shown at `src/app/challenge/page.tsx:69`.
+`src/lib/challenge/wording.ts:51`, shown at `src/app/challenge/page.tsx:71`.
 
 **W20** · under the rules · any
 > An independent adaptation of Snowmoon by Vitalik Buterin (GPL-3.0), not affiliated with him.
 
-`src/lib/challenge/wording.ts:42`.
+`src/lib/challenge/wording.ts:52`.
 
 **W21** · each character's count, under its name · any (while `CHALLENGE.entries` is on, as committed)
 > {n} person has entered · {k} more needed for a final version
@@ -154,187 +156,188 @@ launch-fixes plans to reword it (W71).
 with "{n} people have entered" for any other number, and "enough for a final version" once {n} reaches [three].
 Example with none: "0 people have entered · 3 more needed for a final version".
 
-`src/lib/challenge/wording.ts:53–54`, `src/app/challenge/page.tsx:79`.
+`src/lib/challenge/wording.ts:63–64`, `src/app/challenge/page.tsx:81`.
 
 **W22** · each character's bounty line · any
 > The bounty for {character}: the remix that most changes how we see {character} while staying true to the book.
 
-`src/lib/challenge/wording.ts:28`, `src/app/challenge/page.tsx:84`.
+`src/lib/challenge/wording.ts:37`, `src/app/challenge/page.tsx:86`.
 
 **W23** · the bounty link, after W22 · only once that character's poidh address is set
 > {character}’s bounty on poidh →
 
-`src/lib/challenge/wording.ts:29`, `src/app/challenge/page.tsx:89`.
+`src/lib/challenge/wording.ts:38`, `src/app/challenge/page.tsx:91`.
 
 **W24** · link to the character's book page · any
 > What the book says about {character} →
 
-`src/lib/challenge/wording.ts:48`, `src/app/challenge/page.tsx:95`.
+`src/lib/challenge/wording.ts:58`, `src/app/challenge/page.tsx:97`.
 
 **W25** · label over the starting sheets · any
 > Sheets to start from
 
-`src/lib/challenge/wording.ts:46`.
+`src/lib/challenge/wording.ts:56`, `src/app/challenge/page.tsx:99` · Branch `challenge-three-bases` shows W82 instead
+once a character's bases are picked.
 
 **W26** · when a character has no published sheet · any
 > No sheet of {character} is published yet.
 
-`src/lib/challenge/wording.ts:47`.
+`src/lib/challenge/wording.ts:57`, `src/app/challenge/page.tsx:125`.
 
 **W27** · the entries list's head · any
 > Entries so far
 
-`src/lib/challenge/wording.ts:49`.
+`src/lib/challenge/wording.ts:59`.
 
 **W28** · under W27 · when there are entries
 > Newest first.
 
-`src/lib/challenge/wording.ts:50`.
+`src/lib/challenge/wording.ts:60`.
 
 **W29** · under W27 · no entries yet
 > No entries yet.
 
-`src/lib/challenge/wording.ts:51`.
+`src/lib/challenge/wording.ts:61`.
 
 **W30** · under W27 · only if `CHALLENGE.entries` is turned off (it is on, as committed)
 > Entries will be listed here once the challenge starts.
 
-`src/lib/challenge/wording.ts:52`.
+`src/lib/challenge/wording.ts:62`.
 
 **W31** · the badge on an entry's row (and on its page, W36) · any
 > Entry
 
-`src/lib/challenge/wording.ts:56`.
+`src/lib/challenge/wording.ts:66`.
 
-**W32** · an entry's row title, after W31 · any · **from launch-rehearsal (R4; may still change)**
+**W32** · an entry's row title, after W31 · any · **NOW ON MAIN** (R4; words unchanged)
 > {character}: {title}
 
-or "{character}" alone when the sheet has no name. On main today an untitled entry reads "{character}: {character}"
-("Bai: Bai"). Each row's line under it is "{byline} · v{n}".
+or "{character}" alone when the sheet has no name. Each row's line under it is "{byline} · v{n}".
 
-launch-rehearsal `src/lib/challenge/wording.ts:58`, `src/app/challenge/page.tsx:147`.
+`src/lib/challenge/wording.ts:68`, `src/app/challenge/page.tsx:149`.
 
 **W33** · head over admins' versions · when an admin has made one
 > Made by admins (not eligible for rewards)
 
-`src/lib/challenge/wording.ts:55`. Each row is "{character}: {title} · {byline} · v{n}" (R4 applies here too,
-`src/app/challenge/page.tsx:173` on launch-rehearsal).
+`src/lib/challenge/wording.ts:65`. Each row is "{character}: {title} · {byline} · v{n}", or "{character} · …" when
+untitled (`src/app/challenge/page.tsx:175`).
 
 **W34** · picture descriptions, read aloud and served beside each thumbnail (not visible) · any
 > AI-generated front view of {full name}, not by the author
 
 and in the entries list "AI-generated front view, not by the author".
 
-`src/app/challenge/page.tsx:105` and `:141`.
+`src/app/challenge/page.tsx:107` and `:143`.
 
 ## 2. A character's sheet or version page, /references/designs/{id}
 
 The challenge lines show only on Zei's, Bai's, Gladias's, Seila's, Deluin's and Mu's sheets.
 
-**W35** · the starting sheets' line, under the title · any · **from launch-rehearsal (R1; may still change)**
+**W35** · the starting sheets' line, under the title · any · **NOW ON MAIN** (R1; words unchanged)
 > The project’s starting sheet. Its text was drafted by the coding agent, a closed model.
 
-launch-rehearsal `src/lib/images/wording.ts:112`, `src/app/references/designs/[id]/page.tsx:101`. On main a starting
-sheet says "The project’s starting style. Its text was drafted by the coding agent, a closed model."
-(`src/lib/images/wording.ts:110`).
+`src/lib/images/wording.ts:112`, `src/app/references/designs/[id]/page.tsx:101`.
 
 **W36** · on a version that is its maker's entry · any
 > Entry This is its maker’s entry for {character} in the remix challenge. Remix the cast →
 
-`src/lib/challenge/wording.ts:56–57`, `src/app/references/designs/[id]/page.tsx:103` ("Entry" is the badge, W31;
-"Remix the cast →" links to /challenge).
+`src/lib/challenge/wording.ts:66` and `:69`, `src/app/references/designs/[id]/page.tsx:104` ("Entry" is the badge,
+W31; "Remix the cast →" links to /challenge).
 
-**W37** · on a sheet that isn't an entry · in the window · **from launch-rehearsal (R5; may still change)**
-> {character} is in the remix challenge: fork this sheet, change it and publish to enter. Remix the cast →
+**W37** · on a sheet that isn't an entry · in the window · **CHANGED since v1** ("fork" became "remix"), **NOW ON
+MAIN** (R5)
+> {character} is in the remix challenge: remix this sheet, change it and publish to enter. Remix the cast →
 
-launch-rehearsal `src/lib/challenge/wording.ts:61`, `src/app/references/designs/[id]/page.tsx:120` · Says "fork"; see
-W69 if the button becomes "Remix".
+`src/lib/challenge/wording.ts:71`, `src/app/references/designs/[id]/page.tsx:120`. v1 (launch-rehearsal): "… fork this
+sheet, change it and publish to enter."
 
 **W38** · on a version made in the window that isn't its maker's entry (a "candidate") · in the window
 > Made during the remix challenge. Its maker’s latest version counts unless they mark another.
 
-`src/lib/challenge/wording.ts:58`, `src/app/references/designs/[id]/page.tsx:108`.
+`src/lib/challenge/wording.ts:72`, `src/app/references/designs/[id]/page.tsx:111`.
 
-**W39** · a candidate, after the close · **from launch-rehearsal (R9; may still change)**
+**W39** · a candidate, after the close · **NOW ON MAIN** (R9; words unchanged)
 > Made during the remix challenge. Entries are closed: its maker’s entry for {character} is another version.
 
-launch-rehearsal `src/lib/challenge/wording.ts:64`, `src/app/references/designs/[id]/page.tsx:115`. On main, W38 and
-the W40 button still show after the close.
+`src/lib/challenge/wording.ts:74`, `src/app/references/designs/[id]/page.tsx:115`. After the close the W40 button
+isn't offered.
 
 **W40** · the button under W38 · its maker only, signed in, in the window
 > Mark as my entry
 
-`src/lib/challenge/wording.ts:60`, `src/components/challenge-mark.tsx:20`. On launch-rehearsal (R6) the button goes
-once marked.
+`src/lib/challenge/wording.ts:76`, `src/components/challenge-mark.tsx:24`. It goes once marked (R6, now on main).
 
 **W41** · after W40 · marked
 > Marked as your entry.
 
-`src/lib/challenge/wording.ts:61`.
+`src/lib/challenge/wording.ts:77`.
 
-**W42** · after W40 · refused (from the server)
-> Entries aren’t open yet. · Entries are closed. · You can mark only your own version, made during the challenge. ·
-> Marking another version isn’t available yet. Your latest version counts. · Sign in with Farcaster to mark your
-> entry · Could not mark it
+**W42** · after W40 · refused (from the server) · **CHANGED since v1** (one refusal added: W72)
+> Entries open [Fri 6 Nov, 09:00 PT].  *(before the window: W72)* · Entries aren’t open yet.  *(only if entries are
+> switched off)* · Entries are closed. · You can mark only your own version, made during the challenge. · Marking
+> another version isn’t available yet. Your latest version counts. · Sign in with Farcaster to mark your entry ·
+> Could not mark it
 
-`src/lib/challenge/entries.ts:144–147`; `src/app/api/challenge/mark/route.ts:14`; fallback
-`src/components/challenge-mark.tsx:15`. (Also "Not set up on this deployment" and "Bad request", which only a broken
+`src/lib/challenge/entries.ts:166–171`; `src/app/api/challenge/mark/route.ts:14`; fallback
+`src/components/challenge-mark.tsx:16`. (Also "Not set up on this deployment" and "Bad request", which only a broken
 deployment or request shows.)
 
 **W43** · on a version an admin made in the window · any
 > Made by an admin during the remix challenge: admins aren’t eligible for rewards.
 
-`src/lib/challenge/wording.ts:59`, `src/app/references/designs/[id]/page.tsx:112`.
+`src/lib/challenge/wording.ts:75`, `src/app/references/designs/[id]/page.tsx:117`.
 
 **W44** · the bar's buttons · signed in (in the window, anyone signed in on a challenge sheet; otherwise invited
-readers); "New version" on your own sheet only
-> Fork · New version
+readers); "New version" on your own sheet only · **CHANGED since v1** ("Fork" became "Remix")
+> Remix · New version
 
-`src/lib/images/wording.ts:130–131`, `src/components/design-bar.tsx:32` and `:37` · Open: "Fork" vs "Remix"
-(rehearsal item 15). launch-fixes plans a "Remix" button (W69).
+`src/lib/images/wording.ts:133–134`, `src/components/design-bar.tsx:32` and `:37`. On every style and sheet, not only
+the challenge's (W69).
 
 **W45** · the page's draft line, at the foot · any
 > Draft wording
 
-`src/lib/images/wording.ts:12`, `src/app/references/designs/[id]/page.tsx:209` · Covers the whole page, including
+`src/lib/images/wording.ts:12`, `src/app/references/designs/[id]/page.tsx:219` · Covers the whole page, including
 the image wording that predates the challenge.
 
-## 3. The fork form, /references/designs/new?from={id}
+## 3. The remix form, /references/designs/new?from={id}
 
-The form for forking a challenge character's sheet. Its title is **"Fork"** (`src/lib/images/wording.ts:145`,
-`src/app/references/designs/new/page.tsx:40`), or "New version" (`:146`) for a new version of your own sheet.
+The form for remixing a challenge character's sheet. **CHANGED since v1:** its title is now **"Remix"** (was "Fork";
+`src/lib/images/wording.ts:149`, `src/app/references/designs/new/page.tsx:40`), or "New version" (`:150`) for a new
+version of your own sheet.
 
 **W46** · the credit band, at the top · any
 > Remixed from {source title} v{n} · {source byline}
 >
 > Shown on yours for good. It credits {source byline}.
 
-`src/lib/images/wording.ts:147–148`, `src/components/design-form.tsx:185` and `:187`. The first line is repeated in
-the preview (`:312`).
+`src/lib/images/wording.ts:151–152`, `src/components/design-form.tsx:205` and `:207`. The first line is repeated in
+the preview (`:334`).
 
-**W47** · the sign-in gate · signed out, on a challenge sheet in the window · **from launch-rehearsal (R2; may still
-change)**
+**W47** · the sign-in gate · signed out, on a challenge sheet in the window · **CHANGED since v1** (its last words),
+**NOW ON MAIN** (R2)
 > Sign in with Farcaster to remix this sheet. During the remix challenge, anyone whose account passes the site’s check
-> can fork it.
+> can remix it.
 
-launch-rehearsal `src/lib/images/wording.ts:185`, `src/components/design-form.tsx:196`. On main every signed-out
-visitor reads "Sign in to make a style or a sheet. For now, making them is open to invited readers only."
-(`src/lib/images/wording.ts:181`, `src/components/design-form.tsx:195`).
+`src/lib/images/wording.ts:187`, `src/components/design-form.tsx:215`. v1 (launch-rehearsal) ended "can fork it."
+Outside the window, signed out: "Sign in to make a style or a sheet. For now, making them is open to invited readers
+only." (`src/lib/images/wording.ts:185`).
 
 **W48** · the gate · signed in but not invited, outside the window (also the server's refusal after the close)
 > Making styles and character sheets is open to invited readers only, for now. Anyone signed in can browse them and
 > use them in their pictures.
 
-`src/lib/images/wording.ts:185`, `src/components/design-form.tsx:201`; sent by `src/app/api/designs/sample/route.ts:38`
-and `src/app/api/designs/route.ts:68` · Open: after the close a challenge entrant reads "invited readers only" with
-no word that the challenge ended.
+`src/lib/images/wording.ts:191`, `src/components/design-form.tsx:221`; sent by
+`src/app/api/designs/sample/route.ts:38` and `src/app/api/designs/route.ts:69` · Open: after the close a challenge
+entrant reads "invited readers only" with no word that the challenge ended.
 
-**W49** · the consent gate · signed in, before the first agreement
+**W49** · the consent gate · signed in, before the first agreement · **CHANGED since v1** (W70 now shows above it,
+for a reader who isn't invited, on a challenge sheet in the window)
 > Before your first style or sheet: how your words are published.
 >
 > [button] Read and agree
 
-`src/lib/images/wording.ts:187–188`, `src/components/design-form.tsx:206` and `:208`. Then the consent screen
+`src/lib/images/wording.ts:193–194`, `src/components/design-form.tsx:227` and `:229`. Then the consent screen
 (section 4).
 
 **W50** · the form's fields and notes · signed in, agreed
@@ -347,7 +350,7 @@ no word that the challenge ended.
 > Your text is sent to Groq to be checked (through Vercel AI Gateway when Groq is busy) and to fal.ai to make the
 > pictures. It becomes public only if you publish.
 
-`src/lib/images/wording.ts:150`, `:152`, `:159`, `:160`; `src/components/design-form.tsx:214`, `:217`, `:227`, `:230`.
+`src/lib/images/wording.ts:154`, `:156`, `:163`, `:164`; `src/components/design-form.tsx:235`, `:238`, `:248`, `:251`.
 Each box also shows the publication line from `config/consent.json` (legal, left out).
 
 **W51** · the style choice · signed in, agreed
@@ -358,11 +361,11 @@ Each box also shows the publication line from `config/consent.json` (legal, left
 >
 > No styles are published yet. Publish a style first.  *(only when none is published)*
 >
-> Choose a style first.  *(while none is chosen; on launch-rehearsal, R8, the source's style starts chosen)*
+> Choose a style first.  *(while none is chosen; a remix now starts with its source's style chosen, R8)*
 >
 > The style changed since these views were made. Make them again.  *(after changing style)*
 
-`src/lib/images/wording.ts:154–158`; `src/components/design-form.tsx:234`, `:260`, `:257`, `:283`, `:282`.
+`src/lib/images/wording.ts:158–162`; `src/components/design-form.tsx:255`, `:281`, `:278`, `:310`, `:309`.
 
 **W52** · the views · signed in, agreed
 > Views · front, side, back
@@ -382,8 +385,8 @@ Each box also shows the publication line from `config/consent.json` (legal, left
 >
 > Make the front view first.  *(under Publish, until the front view is made)*
 
-`src/lib/images/wording.ts:162`, `:164–168`, `:170`, `:173`, `:179`, `:169`; `src/components/design-form.tsx:265`,
-`:168`, `:280`, `:281`, `:284`, `:285`, `:286–291`, `:329`; the suffix is `IMAGES.suffix`, `src/lib/config.ts:491`.
+`src/lib/images/wording.ts:166`, `:168–172`, `:174`, `:177`, `:183`, `:173`; `src/components/design-form.tsx:286`,
+`:179`, `:307`, `:308`, `:311`, `:312`, `:313–318`, `:351`; the suffix is `IMAGES.suffix` in `src/lib/config.ts`.
 
 **W53** · the three view lines, each beside its view (also part of every view's prompt) · signed in, agreed
 > front: Character reference picture: one person, full body, standing, seen from the front, plain light grey
@@ -395,7 +398,7 @@ Each box also shows the publication line from `config/consent.json` (legal, left
 > back: The same person as in the reference picture, full body, standing, seen from behind, plain light grey
 > background. Keep the hair and clothes the same.
 
-`src/lib/images/design-rules.ts:22–25`, shown at `src/components/design-form.tsx:275` · Model-drafted prompt lines,
+`src/lib/images/design-rules.ts:22–25`, shown at `src/components/design-form.tsx:302` · Model-drafted prompt lines,
 not the recipe lines approved 2026-11-02. Changing them changes every new view's prompt.
 
 **W54** · the rules box · signed in, agreed
@@ -405,9 +408,10 @@ not the recipe lines approved 2026-11-02. Changing them changes every new view's
 > book; nothing that happens later. No real people. No sexual content. Nothing violent or hateful. No characters or
 > logos from other works. Don’t ask for words in the picture.
 
-`src/lib/images/wording.ts:17` and `:172`; `src/lib/images/rules.ts:32`; `src/components/design-form.tsx:298–299`.
+`src/lib/images/wording.ts:17` and `:176`; `src/lib/images/rules.ts:32`; `src/components/design-form.tsx:325–326`.
 
-**W55** · Generate refused · below 0.7 (at the first Generate of the day)
+**W55** · Generate refused · below 0.7 (at the first Generate of the day) · **CHANGED since v1** (where it shows:
+now right under the view buttons, scrolled into view; the words are the same)
 > Image making is open to Farcaster accounts with a Neynar score of [0.7] or more, to keep out spam accounts. Yours is
 > {score}. Reading, listening, saving cards and everything else still work.
 
@@ -415,26 +419,25 @@ and, when Neynar can't be reached:
 > Image making can’t check your account right now (Neynar, which scores Farcaster accounts, can’t be reached). Try
 > again later. Reading, listening, saving cards and everything else still work.
 
-`src/lib/images/gate.ts:28–31`, shown at `src/components/design-form.tsx:101` (under the rules) · Open: the
-rehearsal found it shows below the screen, so the tap seems to do nothing (item 2, options a/b). launch-fixes plans
-a shorter line before Generate (W70).
+`src/lib/images/gate.ts:28–31`, shown at `src/components/design-form.tsx:293`. Every other refusal at Generate shows
+in the same place.
 
-**W56** · the form's other messages · signed in
-> Published. See it  *(after Publish)*
+**W56** · the form's other messages · signed in · **CHANGED since v1** (the publish confirmation for an entry is now
+W73)
+> Published. See it  *(after Publish, when it isn't an entry: a style, a place, or outside the window)*
 >
 > Could not make the picture · No connection. Try again. · Could not record your agreement · Could not publish ·
 > Sign in with Farcaster to make a picture · Making styles and sheets isn’t set up on this deployment yet.
 
-`src/lib/images/wording.ts:177–178`, `:186`; `src/components/design-form.tsx:177`, `:101`, `:103`, `:141`, `:128`,
-`:203`; `src/app/api/designs/sample/route.ts:32` · Open: "Published. See it" doesn't say "This is your entry for
-{character}" (rehearsal item 14). launch-fixes plans that line (W73).
+`src/lib/images/wording.ts:181–182`, `:192`; `src/components/design-form.tsx:189–190`, `:111`, `:113`, `:152`, `:138`,
+`:223`; `src/app/api/designs/sample/route.ts:32`.
 
-The form's foot shows the same **"Draft wording"** line as W45 (`src/components/design-form.tsx:338`).
+The form's foot shows the same **"Draft wording"** line as W45 (`src/components/design-form.tsx:360`).
 
 ## 4. The consent screen, before a first Generate or publish
 
 The title and paragraphs come from `config/consent.json` (own-words-v4) and are left out as legal text. The screen's
-own lines, from `src/components/publish-words.tsx`:
+own lines, from `src/components/publish-words.tsx` (unchanged by #99):
 
 **W57** · under the consent text · signed in
 > Your words will be shown as @{username}.
@@ -451,7 +454,7 @@ or, for a wallet account, "Your words will be shown with your address, {address}
 
 `src/components/publish-words.tsx:63`, `:66`, `:69`.
 
-## 5. Preview and publish (the fork form's foot)
+## 5. Preview and publish (the remix form's foot)
 
 **W59** · the publish flow · signed in, agreed
 > [button] Preview
@@ -468,9 +471,8 @@ or, for a wallet account, "Your words will be shown with your address, {address}
 > publish  *(errors)*
 
 `src/components/publish-words.tsx:131`, `:137`, `:144`, `:147`, `:91`, `:92`, `:113`, `:122`;
-`src/lib/images/wording.ts:135`, `:112`, `:115`, `:118`; `src/components/design-form.tsx:311`, `:320–323` · These are
-site-wide publish lines, not challenge-only; listed because entrants pass through them. The publication line after
-"Preview" is the consent wording's (legal, left out).
+`src/lib/images/wording.ts:138`, `:114`, `:117`, `:120`; `src/components/design-form.tsx:333`, `:342–345` · Site-wide
+publish lines, listed because entrants pass through them.
 
 ## 6. Share this version (every sheet and style page)
 
@@ -481,22 +483,21 @@ site-wide publish lines, not challenge-only; listed because entrants pass throug
 
 Each button's spoken label is "Post on {network}".
 
-`src/lib/challenge/wording.ts:63–64`; `src/components/challenge-share.tsx:60`, `:65–76`.
+`src/lib/challenge/wording.ts:79–80`; `src/components/challenge-share.tsx:62`, `:67–78`.
 
-**W61** · the share text, prefilled in each network's compose box (followed by the page's link) · any
+**W61** · the share text, prefilled in each network's compose box (followed by the page's link) · any page except a
+challenge character's sheet in the window (that one uses W74)
 > {character}: {title}, made on Snowmoon Party
 
-On a sheet with no name, {title} is "Sheet by {byline}", so "Bai: Sheet by @rehearsal-di, made on Snowmoon Party". On
-a style, "{style title}, made on Snowmoon Party".
+On a sheet with no name, {title} is "Sheet by {byline}". On a style, "{style title}, made on Snowmoon Party".
 
-`src/lib/challenge/wording.ts:65`; built at `src/app/references/designs/[id]/page.tsx:207` and
-`src/components/challenge-share.tsx:29` · Open: doesn't name the challenge or the bounty (rehearsal item 16).
-launch-fixes plans a challenge share text (W74).
+`src/lib/challenge/wording.ts:81`; built at `src/app/references/designs/[id]/page.tsx:217` and
+`src/components/challenge-share.tsx:31`.
 
 **W62** · under the buttons · any
 > If you’re remixing someone’s post, quote or reply to it on the same network. Always include your version’s link.
 
-`src/lib/challenge/wording.ts:66`, `src/components/challenge-share.tsx:79`.
+`src/lib/challenge/wording.ts:92`, `src/components/challenge-share.tsx:81`.
 
 ## 7. Add where you posted it (under Share)
 
@@ -509,7 +510,7 @@ launch-fixes plans a challenge share text (W74).
 >
 > [button] Add
 
-`src/lib/challenge/wording.ts:67–69`; `src/components/challenge-share.tsx:88–91`;
+`src/lib/challenge/wording.ts:93–95`; `src/components/challenge-share.tsx:90–93`;
 `src/components/post-link-field.tsx:15`.
 
 **W64** · the post-link box line, under the box · signed in
@@ -521,7 +522,7 @@ launch-fixes plans a challenge share text (W74).
 **W65** · after Add · added, or already there
 > Added. · Already listed.
 
-`src/lib/challenge/wording.ts:70–71`. In the Farcaster app, a cast made with the Farcaster button is added the same
+`src/lib/challenge/wording.ts:96–97`. In the Farcaster app, a cast made with the Farcaster button is added the same
 way and shows the same line.
 
 **W66** · after Add · refused (from the server)
@@ -546,7 +547,7 @@ way and shows the same line.
 > Sign in to add where you posted it · No such version · Could not add it
 
 `src/lib/challenge/post-links.ts:55–57`; `src/lib/challenge/posts.ts:21–27`;
-`src/app/api/challenge/posts/route.ts:33`, `:44`; fallback `src/components/challenge-share.tsx:41`.
+`src/app/api/challenge/posts/route.ts:33`, `:44`; fallback `src/components/challenge-share.tsx:43`.
 
 ## 8. Posted on (a version's page, once a post is listed)
 
@@ -558,59 +559,128 @@ way and shows the same line.
 > Posts that link to this page, newest first, as their writers or the people who added them listed them. Shown as
 > links only.
 
-`src/lib/challenge/wording.ts:72–74`; `src/components/posted-on.tsx:43`, `:49–51`, `:62`.
+`src/lib/challenge/wording.ts:98–100`; `src/components/posted-on.tsx:43`, `:49–51`, `:62`.
 
 **W68** · on a post you added (or any, for a moderator) · signed in
 > [button] Remove
 >
 > Only the person who added it, or a moderator, can remove it  *(refused)* · Sign in first
 
-`src/lib/challenge/wording.ts:75`, `src/components/posted-on.tsx:56`; `src/app/api/challenge/posts/route.ts:69`, `:57`.
+`src/lib/challenge/wording.ts:101`, `src/components/posted-on.tsx:56`; `src/app/api/challenge/posts/route.ts:69`,
+`:57`.
 
-## 9. launch-fixes: planned, not yet written (as read 2026-11-03, 00:22 PST)
+## 9. The launch fixes, as merged in #99 (645cba1)
 
-**From launch-fixes (may still change).** None of these was on the branch yet. Each shows what is on main today, so
-the owner can approve the idea and the words together, or wait for the branch's own words.
+All **CHANGED since v1**: v1 listed these as planned, with no words yet.
 
-**W69** · the "Remix" button · the sheet page's bar (W44) and the fork form's title
-> Today: Fork
+**W69** · "Remix" in place of "Fork" · signed in · every place it now shows:
+> Remix
 
-Planned: "Remix". Choice: also the form's title, and "fork" in W37 and W47.
+- the sheet and style page's button: `src/lib/images/wording.ts:133`, `src/components/design-bar.tsx:32` (W44);
+- the form's title: `src/lib/images/wording.ts:149`, `src/app/references/designs/new/page.tsx:40` (section 3);
+- the sheet page's challenge line, "…remix this sheet…": `src/lib/challenge/wording.ts:71` (W37);
+- the signed-out gate, "…can remix it.": `src/lib/images/wording.ts:187` (W47);
+- two server refusals, "Remix it…": W78 and W79.
 
-**W70** · the below-0.7 line · fork form, before Generate · below 0.7
-> Entering needs a Farcaster account with a Neynar score of 0.7 or more; we check when you press Generate.
+No user-facing "Fork" is left on the challenge's path. (The code still calls the mode `fork`, and the URL still uses
+`?from=`; neither is shown as words.)
 
-The words as the task gave them; the score should come from `CHALLENGE.neynarMinScore`, like W18.
+**W70** · who can enter, up front · /challenge (under the date line, before the window and in it; not after the
+close), and the remix form (above W49, and again under the view buttons) for a reader who isn't invited, on a
+challenge sheet in the window
+> Entering needs a Farcaster account with a Neynar score of [0.7] or more; we check when you press Generate.
 
-**W71** · the reworded rule · /challenge (replaces W14)
-> Today: To count as an entry, sign in with a Farcaster account that passes the site’s check. It’s checked once,
-> when you publish.
+`src/lib/challenge/wording.ts:27`; `src/app/challenge/page.tsx:55`; `src/components/design-form.tsx:226` and `:297`.
+The owner's exact words (2026-11-03), with the score from `CHALLENGE.neynarMinScore`. No new lookup: the score is read
+at Generate.
 
-**W72** · the opening date line · /challenge, before the window (replaces W4)
-> Entries open Fri 6 Nov, 09:00 PT
+**W71** · the reworded rule · /challenge · any
+> To remix at all, sign in with a Farcaster account that passes the site’s check. An account below it can’t make the
+> pictures, so it can’t remix or enter. It’s checked when you press Generate, and again when you publish.
 
-Built from config. Choice: this short form or W4's long form ("Friday 6 November, 09:00 Pacific"), and the same for
-W5 and W6.
+`src/lib/challenge/wording.ts:45` (the same line as W14; reply on either).
 
-**W73** · after Publish · fork form, a challenge character's fork, in the window
-> This is your entry for {character}
+**W72** · marking refused before the window · a version page, its maker, before Fri 6 Nov 09:00 Pacific
+> Entries open [Fri 6 Nov, 09:00 PT].
 
-Today: "Published. See it" (W56).
+`src/lib/challenge/entries.ts:168`, built by `shortDateText('opens')` in `src/lib/challenge/rules.ts:54–59` · This is
+the only place the short form shows; /challenge's own date line keeps the long form (W4). Before #99 this case said
+"Entries are closed."
 
-**W74** · the challenge share text · Share (replaces W61 on a challenge character's version)
-> Today: {character}: {title}, made on Snowmoon Party
+**W73** · the publish confirmation · remix form, a version that is now its maker's entry (a challenge character, in the
+window, passing)
+> Published. This is your entry for {character}. See it
 
-**W75** · the "unchecked" notice · a version whose maker's check couldn't run at publish (`why: 'unchecked'` in
-`src/lib/challenge/rules.ts:70`)
-> Today: nothing is shown; the version just isn't counted.
+`src/lib/images/wording.ts:181` ("Published."), `src/lib/challenge/wording.ts:85` ("This is your entry for
+{character}."), `src/lib/images/wording.ts:182` ("See it", a link); shown at `src/components/design-form.tsx:189–190`.
+A "Draft wording" line shows under it (W80).
 
-**W76** · the home page and the menu's link to /challenge · any
-> Today: none (the rehearsal's item 1). The menu order is the owner's (2026-10-29).
+**W74** · the challenge share text · Share, on a challenge character's sheet, in the window (followed by the page's
+link)
+> {character}: {title}, made on Snowmoon Party. Remix the cast: the remix challenge is open until [Sunday 22 November,
+> 23:59 Pacific].
 
-**W77** · R1–R9's wording · as on launch-rehearsal: W32 (R4), W35 (R1), W37 (R5), W39 (R9), W47 (R2). R3, R6, R7 and
-R8 change no words.
+`src/lib/challenge/wording.ts:83`; chosen at `src/components/challenge-share.tsx:31`, switched on at
+`src/app/references/designs/[id]/page.tsx:217`. Before and after the window, and on other pages, W61. Choice: the
+text has no link to /challenge; only the version's link follows it.
 
-## 10. About: naming Bluesky and Lens for "Posted on"
+**W75** · the "unchecked" notice · remix form, after Publish, when Neynar didn't answer at publish (the version is
+published but doesn't count)
+> This version won’t count as your entry for {character}: Neynar, which scores Farcaster accounts, didn’t answer when
+> you published, so the site couldn’t check your account. Publish another version later to enter; an earlier entry
+> for {character}, if you have one, still counts.
+
+`src/lib/challenge/wording.ts:90–91`, shown at `src/components/design-form.tsx:194` (under "Published. See it"), with
+W80 under it. Shown only at publish; the version's page then shows no challenge line.
+
+**W76** · the link to /challenge from the menu and the home page · any
+> Menu: Remix the cast
+>
+> Home page row: **Remix the cast** · The remix challenge, [6 to 22 November]: remix a character and publish it ·
+> Draft wording · →
+
+Menu: `src/lib/nav.ts:48` (last, after Assistant). Home row: name W1, its line `src/lib/challenge/wording.ts:22`, the
+small "Draft wording" marker `src/lib/challenge/wording.ts:20`, shown at `src/app/page.tsx:70` and `:78` (last row,
+after Assistant). Choice: the home row stays after the window too (it still reads "6 to 22 November" then).
+
+**W77** · R1–R9's wording, now on main · W32 (R4), W35 (R1), W37 (R5, now "remix"), W39 (R9), W47 (R2, now "remix").
+R3, R6, R7 and R8 change no words.
+
+## 10. New since v1
+
+**W78** · server refusal · someone else's sheet, "New version" asked for (normally not offered) · **CHANGED since v1**
+(was "Fork it…"; not listed in v1)
+> Only its maker can add a version. Remix it to make your own.
+
+`src/app/api/designs/route.ts:130`, `src/lib/images/designs.ts:318`.
+
+**W79** · server refusal · a new style whose name is taken · **CHANGED since v1** (was "Fork it…"; not listed in v1)
+> A style with this name already exists. Remix it, or choose another name.
+
+`src/app/api/designs/route.ts:125`, `src/lib/images/designs.ts:293` · Styles only, not the challenge's path; listed
+because #99 changed it.
+
+**W80** · the draft line under the publish confirmation · remix form, after Publish, when W73 or W75 shows
+> Draft wording
+
+`src/lib/images/wording.ts:12`, shown at `src/components/design-form.tsx:197`.
+
+**W81** · rule 2, three bases · /challenge · any · **Not on main:** branch `origin/challenge-three-bases` (005d178)
+> Only remixes count: for each character, start from any of its three bases, or someone else’s remix. A new sheet made
+> from scratch isn’t an entry.
+
+That branch's `src/lib/challenge/wording.ts:34` (replaces W12) · On that branch the rule changes whether or not a
+character's bases are picked yet, and W7 still says "start from a published sheet".
+
+**W82** · label over the starting sheets, three bases · /challenge, once a character's bases are picked · **Not on
+main:** branch `origin/challenge-three-bases`
+> Bases to start from
+
+That branch's `src/lib/challenge/wording.ts` (`startFromBases`) and `src/app/challenge/page.tsx` (replaces W25 then).
+
+## 11. About: naming Bluesky and Lens for "Posted on"
+
+Unchanged by #99: `src/app/about/page.tsx` and the P6 checks are the same on 645cba1.
 
 **Why.** Privacy §7 names Bluesky and Lens: "Bluesky and Lens receive the details of a post someone adds to a
 version's page … so our server can read the post and check it links there." (`src/lib/legal.ts:198`). About names
@@ -618,7 +688,7 @@ neither. Branch `social-read` adds Bluesky to the services check:principles comp
 (`['Bluesky', /\bBluesky\b/g]` in `SERVICES`, `scripts/check-principles.ts`), so P6h will fail with "the Privacy
 page names Bluesky; About does not" once it merges.
 
-**What the checks compare** (`scripts/check-principles.ts:1557–1665` on main):
+**What the checks compare** (`scripts/check-principles.ts`, P6g–P6j):
 
 - The vocabulary is `SERVICES`: a list of names, each with a pattern (Vercel AI Gateway, Vercel, Cloudflare, Supabase,
   Groq, fal.ai, Farcaster's services, Neynar, GitHub, ntfy, Spotify; social-read adds Bluesky). A service not on it
@@ -665,4 +735,7 @@ Farcaster, where what you post is public." to
 
 ## Count
 
-77 numbered items (W1–W77): 63 on main, 5 from launch-rehearsal (R1, R2, R4, R5, R9), and 9 in section 9 (launch-fixes's planned items: 8 strings not yet written, plus W77 pointing at the rehearsal items). Several items hold a few short lines of one screen state (buttons, errors). Plus section 10's proposed About line and its optional second sentence.
+82 numbered items (W1–W82): 80 on main and 2 on the unmerged `challenge-three-bases` branch (W81, W82). W77 only
+points to other items. 18 items are marked CHANGED since v1 (W14, W37, W42, W44, W47, W49, W55, W56, W69–W76, W78,
+W79); 3 more are NOW ON MAIN with the same words (W32, W35, W39). W78–W82 are new to the list (W78 and W79 were already on main, worded "Fork it…", and #99 changed them). Several items hold a few short
+lines of one screen state (buttons, errors). Plus section 11's proposed About line and its optional second sentence.
