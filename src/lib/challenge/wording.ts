@@ -30,7 +30,8 @@ export const CHALLENGE_WORDING = {
   rulesHead: 'The rules.',
   rules: () => [
     'Make your remix on snowmoon.party with the site’s tools. Every recipe is published.',
-    'Only remixes count: start from a published sheet or someone else’s remix. A new sheet made from scratch isn’t an entry.',
+    // Draft wording (owner, 2026-11-03: three bases per character).
+    'Only remixes count: for each character, start from any of its three bases, or someone else’s remix. A new sheet made from scratch isn’t an entry.',
     'One entry per person per character. Your latest version counts unless you mark another.',
     'To count as an entry, sign in with a Farcaster account that passes the site’s check. It’s checked once, when you publish.',
     `Each character needs at least ${numberWord(CHALLENGE.minEntrants)} different people with an entry. A character with fewer gets no final version, credit test or mint.`,
@@ -44,6 +45,8 @@ export const CHALLENGE_WORDING = {
   opensOn: () => `Entries open ${d('opens', true)}.`,
   closed: () => `Entries closed ${d('closes', true)}.`,
   startFrom: 'Sheets to start from',
+  /** Once a character's bases are picked (CHALLENGE.bases). Draft wording (owner, 2026-11-03). */
+  startFromBases: 'Bases to start from',
   noSheetYet: (name: string) => `No sheet of ${name} is published yet.`,
   readBook: (name: string) => `What the book says about ${name}`,
   entriesHead: 'Entries so far',

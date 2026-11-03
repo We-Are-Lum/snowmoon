@@ -116,7 +116,10 @@ export interface Candidate {
   /** The person it counts for: the maker's FID. */
   person: number;
   createdAt: string;
-  /** The design's first version has a remixed_from link (a fork). */
+  /**
+   * The design is a remix that counts: its first version was remixed from one of the character's bases, or from a
+   * remix of one (remixOfBase below; while the character has no bases yet, from any sheet).
+   */
   forked: boolean;
 }
 
@@ -156,3 +159,45 @@ export function entrantCounts(entries: Pick<Candidate, 'person' | 'character'>[]
 
 /** Whether a character has enough entrants for a final version, a credit test and a token (CHALLENGE.minEntrants). */
 export const enoughEntrants = (count: number, min: number = CHALLENGE.minEntrants) => count >= min;
+
+// ---------------------------------------------------------------------------------------------
+// The bases: three per character (owner, 2026-11-03)
+// ---------------------------------------------------------------------------------------------
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+/** A character's bases, as configured (CHALLENGE.bases): design ids, at most CHALLENGE.maxBases, empty until picked. */
+export function basesOf(character: string, bases: Record<string, readonly string[]> = CHALLENGE.bases): string[] {
+  return (bases[character] ?? []).filter((id) => UUID.test(id)).slice(0, CHALLENGE.maxBases).map((id) => id.toLowerCase());
+}
+
+/** What is wrong with the bases config, if anything (scripts/test-challenge.ts runs it on the committed config). */
+export function basesProblems(bases: Record<string, readonly string[]> = CHALLENGE.bases, characters: readonly string[] = CHALLENGE.characters): string[] {
+  const p: string[] = [];
+  for (const c of characters) if (!Array.isArray(bases[c])) p.push(`${c}: no bases list`);
+  for (const [c, ids] of Object.entries(bases)) {
+    if (!characters.includes(c)) p.push(`${c}: not a challenge character`);
+    if (ids.length > CHALLENGE.maxBases) p.push(`${c}: ${ids.length} bases, more than ${CHALLENGE.maxBases}`);
+    for (const id of ids) if (!UUID.test(id)) p.push(`${c}: "${id}" is not a design id`);
+    if (new Set(ids).size !== ids.length) p.push(`${c}: a base is listed twice`);
+  }
+  return p;
+}
+
+/** One step back along a design's remix line: the version its first version was remixed from, and that version's design. */
+export interface Ancestor {
+  elementId: string;
+  versionId: string;
+}
+
+/**
+ * Whether a design counts as a remix for the challenge, from its remix line (its first version's remixed_from, then
+ * that design's, and so on). A design made from scratch has no line and never counts. Once the character has bases,
+ * the line must reach one of them: a fork of a base, or of anyone's remix of a base (an entry or not). While the
+ * character has no bases yet, any fork counts, as before the three bases.
+ */
+export function remixOfBase(character: string, line: readonly Ancestor[], bases: Record<string, readonly string[]> = CHALLENGE.bases): boolean {
+  if (!line.length) return false;
+  const b = basesOf(character, bases);
+  if (!b.length) return true;
+  return line.some((a) => b.includes(a.elementId.toLowerCase()) || b.includes(a.versionId.toLowerCase()));
+}

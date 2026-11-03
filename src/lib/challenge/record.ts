@@ -5,12 +5,14 @@ import { lookUp } from '../images/neynar';
 import { bookCharacter } from '../images/designs';
 import { PRIVACY } from '../legal';
 import { privacyDescribesChallenge } from './open-sheets';
-import { eligibility, inWindow, needsScore } from './rules';
+import { remixLines } from './lineage';
+import { eligibility, inWindow, needsScore, remixOfBase } from './rules';
 
 /**
  * The remix challenge's eligibility, decided once, when a version is published (owner, 2026-10-31: "checked once at
  * publish and stored; never on page view"). Called only by the publish route (/api/designs), after the version is
- * written. For a version of a challenge character's fork made inside the window, it stores the decision in
+ * written. For a version of a challenge character's fork made inside the window (a fork of one of its bases, or of a
+ * remix of one; CHALLENGE.bases), it stores the decision in
  * studio.challenge_eligibility: 'admin', 'invited', 'passed' or 'below' (the Neynar score at publish against
  * CHALLENGE.neynarMinScore; the score itself is not kept), or 'unchecked' if Neynar didn't answer, and when. The score
  * comes from the same lookup the publish gate just made (kept a day in studio.image_scores, as for every Generate), so
@@ -27,13 +29,15 @@ export async function recordEligibility(sql: Sql, versionId: string, fid: number
     if (!inWindow(now)) return 'not-a-candidate';
     const names = CHALLENGE.characters.map((s) => bookCharacter(s)?.name).filter((n): n is string => Boolean(n));
     const [v] = await sql`
-      select e.created_by_fid,
-        exists (select 1 from studio.element_versions v1 join studio.links l on l.from_version_id = v1.id and l.kind = 'remixed_from'
-                where v1.element_id = e.id and v1.version_no = 1) as forked
+      select e.created_by_fid, e.id as element_id, en.name
       from studio.element_versions v join studio.elements e on e.id = v.element_id join studio.entities en on en.id = e.entity_id
       where v.id = ${versionId} and e.element_type = 'design' and e.status = 'published' and e.work_id = ${WORK_ID}
         and en.kind = 'character' and en.name in ${sql(names)}`;
-    if (!v || !v.forked || Number(v.created_by_fid) !== fid) return 'not-a-candidate';
+    if (!v || Number(v.created_by_fid) !== fid) return 'not-a-candidate';
+    // A remix that counts: a fork of one of the character's bases, or of a remix of one (CHALLENGE.bases).
+    const slug = CHALLENGE.characters.find((s) => bookCharacter(s)?.name === String(v.name)) ?? '';
+    const line = (await remixLines(sql, [String(v.element_id)])).get(String(v.element_id)) ?? [];
+    if (!remixOfBase(slug, line)) return 'not-a-candidate';
     let score: number | null = null;
     if (fid > 0 && needsScore(fid)) {
       const r = await lookUp(sql, fid);

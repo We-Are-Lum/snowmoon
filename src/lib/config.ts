@@ -408,6 +408,15 @@ export const CHALLENGE = {
   /** The characters, by their file in content/snowmoon/designs/characters, in the owner's order (owner, 2026-10-31). */
   characters: ['zei', 'bai', 'gladias', 'seila', 'deluin', 'mu'] as readonly string[],
   /**
+   * Each character's bases (owner, 2026-11-03): up to CHALLENGE.maxBases published sheets to start from, in the same
+   * three styles for every character, so each set reads as one cast. Each entry is a design's id: its element id (any
+   * version of it) or one version's id (the id in /references/designs/<id>). Designs have no slugs. Empty until the
+   * owner picks. An entry is a fork of any base, or of a remix of one (src/lib/challenge/rules.ts, remixOfBase); while
+   * a character's list is empty, a fork of any of its sheets counts, as before, so nothing breaks before the picks.
+   */
+  bases: { zei: [], bai: [], gladias: [], seila: [], deluin: [], mu: [] } as Record<string, readonly string[]>,
+  maxBases: 3,
+  /**
    * A character gets a final version, a credit test and a token only if at least this many different eligible people
    * enter it (owner, 2026-10-31). /challenge shows each character's count (a count, never a ranking).
    */

@@ -2,7 +2,8 @@ import 'server-only';
 import type postgres from 'postgres';
 import { CHALLENGE, WORK_ID } from '../config';
 import { bookCharacter } from '../images/designs';
-import { chooseEntries, entrantCounts, fromDecision, type Decision, inWindow, markKey, newestFirst, type Candidate, type Eligibility } from './rules';
+import { remixLines } from './lineage';
+import { basesOf, chooseEntries, entrantCounts, fromDecision, type Decision, inWindow, markKey, newestFirst, remixOfBase, type Candidate, type Eligibility } from './rules';
 
 /**
  * The remix challenge's entries (owner, 2026-10-31), the server half, for pages. Reads published sheets, the private
@@ -28,27 +29,28 @@ const slugOf = (name: string) => names().find((c) => c.name === name)?.slug ?? '
 
 /**
  * Versions of published sheets for the challenge's characters made inside the window, each with whether its design is
- * a fork (its first version remixed from another sheet). Newest first.
+ * a remix that counts: a fork of one of the character's bases, or of a remix of one (CHALLENGE.bases; while the
+ * character has none yet, a fork of any sheet). Newest first.
  */
 export async function windowVersions(sql: Sql): Promise<ChallengeVersion[]> {
   const chars = names().map((c) => c.name);
   if (!chars.length) return [];
   const rows = await sql`
-    select v.id as version_id, e.id as element_id, en.name, e.created_by_fid, v.created_at, v.version_no, v.body,
-      exists (select 1 from studio.element_versions v1 join studio.links l on l.from_version_id = v1.id and l.kind = 'remixed_from'
-              where v1.element_id = e.id and v1.version_no = 1) as forked
+    select v.id as version_id, e.id as element_id, en.name, e.created_by_fid, v.created_at, v.version_no, v.body
     from studio.element_versions v
     join studio.elements e on e.id = v.element_id
     join studio.entities en on en.id = e.entity_id
     where e.element_type = 'design' and e.status = 'published' and e.work_id = ${WORK_ID} and en.kind = 'character' and en.name in ${sql(chars)}
       and v.created_at >= ${CHALLENGE.dates.opens}::timestamptz and v.created_at < ${CHALLENGE.dates.closes}::timestamptz`;
+  const lines = await remixLines(sql, [...new Set(rows.map((r) => String(r.element_id)))]);
   return rows
     .map((r) => {
       const maker = Number(r.created_by_fid);
+      const character = slugOf(String(r.name));
       const b = (r.body ?? {}) as { title?: string; by_name?: string | null; samples?: { url: string }[]; views?: { front?: { url: string } } };
       return {
-        versionId: String(r.version_id), elementId: String(r.element_id), character: slugOf(String(r.name)), maker,
-        person: maker > 0 ? maker : 0, createdAt: new Date(r.created_at).toISOString(), forked: Boolean(r.forked),
+        versionId: String(r.version_id), elementId: String(r.element_id), character, maker,
+        person: maker > 0 ? maker : 0, createdAt: new Date(r.created_at).toISOString(), forked: remixOfBase(character, lines.get(String(r.element_id)) ?? []),
         versionNo: Number(r.version_no), title: b.title ?? '', byName: b.by_name ?? null, thumb: b.views?.front?.url ?? b.samples?.[0]?.url ?? null,
       };
     })
@@ -162,10 +164,33 @@ export async function markEntry(sql: Sql, fid: number, versionId: string, now = 
   }
 }
 
-/** Published sheets for a character made before the window opened: what to start from. Newest first. */
-export async function startingSheets(sql: Sql, slug: string): Promise<{ versionId: string; title: string; byName: string | null; byFid: number; thumb: string | null; createdAt: string }[]> {
+type StartingSheet = { versionId: string; title: string; byName: string | null; byFid: number; thumb: string | null; createdAt: string };
+const sheetRow = (r: Record<string, unknown>): StartingSheet => {
+  const b = (r.body ?? {}) as { title?: string; by_name?: string | null; views?: { front?: { url: string } } };
+  return { versionId: String(r.id), title: b.title ?? '', byName: b.by_name ?? null, byFid: Number(r.created_by_fid), thumb: b.views?.front?.url ?? null, createdAt: new Date(r.created_at as string).toISOString() };
+};
+
+/**
+ * What to start from. Once the character's bases are picked (CHALLENGE.bases): those, newest first, each a
+ * published sheet of this character (an element id at its newest version, a version id as that version); an id
+ * that isn't one is left out. Before the picks: published sheets for the character made before the window opened,
+ * newest first, as before the three bases.
+ */
+export async function startingSheets(sql: Sql, slug: string): Promise<StartingSheet[]> {
   const c = bookCharacter(slug);
   if (!c) return [];
+  const bases = basesOf(slug);
+  if (bases.length) {
+    const rows = await sql`
+      select distinct on (e.id) v.id, v.body, v.created_at, e.created_by_fid, e.id as element_id from studio.elements e
+      join studio.entities en on en.id = e.entity_id
+      join studio.element_versions v on v.element_id = e.id
+      where e.element_type = 'design' and e.status = 'published' and e.work_id = ${WORK_ID} and en.kind = 'character' and en.name = ${c.name}
+        and (e.id::text in ${sql(bases)} or v.id::text in ${sql(bases)})
+      order by e.id, (v.id::text in ${sql(bases)}) desc, v.version_no desc`;
+    // Newest first, as every challenge list (P5g: by time only); the config's order isn't used.
+    return rows.map(sheetRow).sort(newestFirst);
+  }
   // Each sheet at its newest version from before the window (distinct on picks it); then newest first.
   const rows = await sql`
     select * from (
@@ -176,8 +201,5 @@ export async function startingSheets(sql: Sql, slug: string): Promise<{ versionI
         and v.created_at < ${CHALLENGE.dates.opens}::timestamptz
       order by e.id, v.version_no desc) x
     order by x.created_at desc limit 24`;
-  return rows.map((r) => {
-    const b = (r.body ?? {}) as { title?: string; by_name?: string | null; views?: { front?: { url: string } } };
-    return { versionId: String(r.id), title: b.title ?? '', byName: b.by_name ?? null, byFid: Number(r.created_by_fid), thumb: b.views?.front?.url ?? null, createdAt: new Date(r.created_at).toISOString() };
-  });
+  return rows.map(sheetRow);
 }
