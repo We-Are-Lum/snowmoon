@@ -2,7 +2,7 @@
  * The Minpentai snap on a live deployment, as Farcaster's clients and browsers reach it. Run after every
  * snap change is deployed (owner, 2026-10-23), against production by default:
  *
- *   npm run check:snap-live                       (https://snowmoon.party)
+ *   npm run check:snap-live -- --url=https://snowmoon.party   (production; the target is always named)
  *   npm run check:snap-live -- --url=https://…    (another public deployment)
  *
  * Checks, for /minpentai, /minpentai/play, a challenge link and /snap/minpentai (the launch cast), the rule of
@@ -23,9 +23,10 @@
  */
 import { generateKeyPairSync, sign } from 'node:crypto';
 import { chromium } from 'playwright-core';
+import { requireTarget } from './lib/target';
 
 const arg = (name: string) => process.argv.slice(2).find((a) => a.startsWith(`--${name}=`))?.split('=').slice(1).join('=');
-const BASE = (arg('url') ?? 'https://snowmoon.party').replace(/\/$/, '');
+const BASE = requireTarget('check:snap-live');
 const SNAP = 'application/vnd.farcaster.snap+json';
 const BROWSER = 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8';
 const PATHS = ['/minpentai', '/minpentai/play'];

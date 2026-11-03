@@ -13,6 +13,7 @@ import { openRequests, personWords } from './requests';
 import { addSuggestion, suggestionsOf } from './suggestions';
 import { addDirection, directionOf, findLine, rewriteLine } from './direction';
 import { changeTiming, listTakes, logGap, markSpeaking, requestVideo, swapTake, tryFrame, frameEstimate, videoEstimate } from './edits';
+import { MINPENTAI_TOOLS } from '../minpentai/agent-play/tools';
 
 /**
  * The tools an agent of a person can use (owner, 2026-10-20; design §2). Served as MCP at /mcp (the
@@ -420,7 +421,8 @@ const EDITS: AgentTool[] = [
 /** The open read tools, as tools of a signed-in agent (scope read). */
 const READ: AgentTool[] = READ_TOOLS.map((t) => ({ ...t, scope: 'read' as Scope, writes: false, run: (_agent: Agent, args: Record<string, unknown>) => t.run(args) }));
 
-export const AGENT_TOOLS: AgentTool[] = [...READ, ...WRITE, ...EDITS];
+// Minpentai agent play (scope "play"): listed to no agent while AGENTS.minpentaiPlay is off.
+export const AGENT_TOOLS: AgentTool[] = [...READ, ...WRITE, ...EDITS, ...MINPENTAI_TOOLS];
 export const agentToolByName = (name: string) => AGENT_TOOLS.find((t) => t.name === name) ?? null;
 
 /** Runs one tool for an agent: its scope, then its count, then the tool. */

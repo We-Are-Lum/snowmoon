@@ -8,7 +8,7 @@ import { linkedTo } from '~/lib/wallet/credit';
 import { shortAddress } from '~/lib/wallet/session';
 import { priceUsd } from '~/lib/wallet/credits';
 import { readSession } from '~/lib/wallet/session';
-import { isMaintainer } from '~/lib/remix/frames';
+import { isAdmin } from '~/lib/admins';
 import { ownWork, whoIs } from '~/lib/you';
 
 /**
@@ -54,7 +54,7 @@ export async function GET(request: Request) {
     {
       who,
       work,
-      maintainer: isMaintainer(person),
+      maintainer: isAdmin(person),
       // What a Remix frame costs a wallet account at most (every picture the edit model takes), as Remix's status says it.
       prices: isWalletPerson(person) ? prices() : null,
       wallet: alongside,

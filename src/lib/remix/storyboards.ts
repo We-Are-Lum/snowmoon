@@ -1,8 +1,6 @@
 import 'server-only';
-import { actsFor } from '../wallet/credit';
 import type postgres from 'postgres';
 import { REMIX } from '../config';
-import { isMaintainer } from './frames';
 import { versionIndex } from './shot';
 
 /**
@@ -32,7 +30,7 @@ export interface Storyboard {
   createdAt: string;
 }
 
-const row = (r: Record<string, unknown>): Storyboard => ({
+const rowOf = (r: Record<string, unknown>): Storyboard => ({
   id: String(r.id),
   adaptationId: Number(r.adaptation_id),
   versionId: Number(r.version_id),
@@ -97,7 +95,7 @@ export async function saveBoard(sql: Sql, b: { adaptation: number; version: numb
     takes: sql.json(b.takes as never),
     by_name: b.byName,
   })} returning *`;
-  return row(r);
+  return rowOf(r);
 }
 
 export async function boardsToday(sql: Sql, person: number): Promise<number> {
@@ -108,7 +106,7 @@ export async function boardsToday(sql: Sql, person: number): Promise<number> {
 export async function boardById(sql: Sql, id: string): Promise<Storyboard | null> {
   if (!isId(id)) return null;
   const [r] = await sql`select * from studio.storyboards where id = ${id}`;
-  return r ? row(r) : null;
+  return r ? rowOf(r) : null;
 }
 
 /**
@@ -119,7 +117,7 @@ export async function boardsBy(sql: Sql, person: number, o: { hidden: boolean; l
   const rs = o.hidden
     ? await sql`select * from studio.storyboards where person = ${person} order by created_at desc limit ${o.limit ?? 100}`
     : await sql`select * from studio.storyboards where person = ${person} and not hidden order by created_at desc limit ${o.limit ?? 100}`;
-  return rs.map(row);
+  return rs.map(rowOf);
 }
 
 /** The remix frames a board shows, by id: their image and whether they are still shown. */
@@ -130,19 +128,4 @@ export async function boardFrames(sql: Sql, b: Storyboard): Promise<Record<strin
   return Object.fromEntries(rows.map((r) => [String(r.id), { url: String(r.image_url), hidden: Boolean(r.hidden) }]));
 }
 
-export async function setBoardHidden(sql: Sql, person: number, id: string, hide: boolean): Promise<{ ok: true; board: Storyboard } | { ok: false; status: number; error: string }> {
-  const b = await boardById(sql, id);
-  if (!b) return { ok: false, status: 404, error: 'No such storyboard' };
-  const maker = await actsFor(sql, person, b.person);
-  const maint = isMaintainer(person);
-  if (!maker && !maint) return { ok: false, status: 403, error: 'Only the person who made this storyboard can hide it.' };
-  if (hide) {
-    if (b.hidden) return { ok: true, board: b };
-    const [r] = await sql`update studio.storyboards set hidden = true, hidden_by = ${person}, hidden_role = ${maker ? 'maker' : 'maintainer'}, hidden_at = now() where id = ${id} returning *`;
-    return { ok: true, board: row(r) };
-  }
-  if (!b.hidden) return { ok: true, board: b };
-  if (b.hiddenRole === 'maintainer' ? !maint : !maker) return { ok: false, status: 403, error: 'Only whoever hid it can bring it back.' };
-  const [r] = await sql`update studio.storyboards set hidden = false, hidden_by = null, hidden_role = null, hidden_at = null where id = ${id} returning *`;
-  return { ok: true, board: row(r) };
-}
+export const boardRow = (r: Record<string, unknown>): Storyboard => rowOf(r);

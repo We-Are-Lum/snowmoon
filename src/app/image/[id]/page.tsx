@@ -4,6 +4,7 @@ import type { Metadata } from 'next';
 import { APP_NAME, IMAGES, appUrl } from '~/lib/config';
 import { db } from '~/lib/db';
 import { imageByVersion } from '~/lib/images/data';
+import { bothChecksRan, checksLine, type RecipeForLines } from '~/lib/images/recipe-lines';
 import { passageLabel, passageText } from '~/lib/images/passage';
 import { IMAGE_WORDING as W } from '~/lib/images/wording';
 import { byline } from '~/lib/images/byline';
@@ -168,7 +169,7 @@ export default async function ImagePage({ params }: Props) {
             {im.seed !== null ? `, seed ${im.seed}` : ''}
           </dd>
           <dt>Checks</dt>
-          <dd>The prompt was checked by gpt-oss-safeguard-20b against the published rules, and the image by the host&apos;s safety checker, before anyone saw it.</dd>
+          <dd>{bothChecksRan(im.checks) ? <>The prompt was checked by gpt-oss-safeguard-20b against the published rules, and the image by the host&apos;s safety checker, before anyone saw it.</> : checksLine({ model: im.model, endpoint: '', host: im.host ?? '', checks: im.checks as RecipeForLines['checks'] })}</dd>
           <dt>Request</dt>
           <dd className="recipe-mono">{im.requestId ?? 'not recorded'}</dd>
           <dt>Cost</dt>

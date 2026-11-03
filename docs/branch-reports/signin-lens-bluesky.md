@@ -127,8 +127,11 @@ Readings:
 ## The migration
 
 `supabase/migrations/NEXT_signin_lens_bluesky.sql` (numbered at merge): **A** dry run (ends in rollback), **B** the
-migration, **C** the read-back (reads, then a realistic Lens account, a Bluesky account, a sign-in again, a link to FID
-6786 and its end, as `studio_writer`; deleted as postgres; rollback). The same blocks are in
+migration, **C** the read-back in two parts (2026-11-02): (a) one read-only select whose 10 rows should all be true
+(columns, row-level security, the six policies, studio_writer's table and column privileges, nothing for anon and
+authenticated, the one-active-link index); (b) one `do $$` block that adds a realistic Lens account, a Bluesky account,
+a sign-in again, a link to FID 6786, a second active link (refused) and the link's end, checks each, deletes them, and
+raises "READ-BACK FAILED" if anything is wrong. Checked on PGlite on top of main's 0001–0033. The same blocks are in
 `supabase/drafts/NEXT_signin_lens_bluesky.DRY-RUN.sql` and `supabase/drafts/READ-BACK-signin_lens_bluesky.sql`. Run as
 postgres in the Supabase SQL Editor. **Not applied.**
 

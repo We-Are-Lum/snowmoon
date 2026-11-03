@@ -1,6 +1,7 @@
 import 'server-only';
 import { db } from '../db';
 import { loadIllustrations } from '../illustrations';
+import { hiddenSeeded } from '../admin-hidden';
 import { imagesWithSheet } from './data';
 import { byline } from './byline';
 import { passageLabel } from './passage';
@@ -22,7 +23,10 @@ export async function sheetImages(kind: 'character' | 'place', slug: string, nam
       reader: { versionId: im.versionId, by, prompt: im.userPrompt, date: im.createdAt.slice(0, 10) }, recipe: null,
     };
   });
+  // Seeded images an admin hid (owner, 2026-10-29) aren't shown here either.
+  const hidden = await hiddenSeeded();
   const seeded = seededImages()
+    .filter((s) => !hidden.has(s.id))
     .filter((s) => (kind === 'place' ? slugOfLocation(s.location) === slug : (s.characters ?? []).includes(slug)))
     .sort((a, b) => a.chapter - b.chapter || a.idx - b.idx)
     .map((s): SheetImage => ({

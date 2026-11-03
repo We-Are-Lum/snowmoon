@@ -2,7 +2,7 @@ import 'server-only';
 import { createHash, createPublicKey, timingSafeEqual, constants as cryptoConstants, verify as cryptoVerify, type JsonWebKey } from 'node:crypto';
 import type postgres from 'postgres';
 import { AGENTS } from '../config';
-import { issueTokens, issuer, newToken, resourceUrl, sha256, sql, type Scope } from './core';
+import { grantable, issueTokens, playFor, issuer, newToken, resourceUrl, sha256, sql, type Scope } from './core';
 
 /**
  * OAuth 2.1 for "Add to Claude" and "Add to ChatGPT" (any MCP client): authorization code with PKCE
@@ -24,6 +24,8 @@ export const SCOPE_TEXT: Record<Scope, string> = {
   drafts: 'draft ideas, storyboards, frames and prompts, character versions, and revisions, for you to publish',
   images: 'bring in images it made elsewhere, with their declared recipe, for you to publish',
   notes: 'read feedback on your work and draft notes, for you to publish',
+  // Shown only to the people agent play is open to (AGENTS.minpentaiPlay; the owner's approval of 2026-10-31).
+  play: 'play Minpentai for you: start matches against the site computer, see only your side, and submit moves',
 };
 
 export function authServerMetadata() {
@@ -44,7 +46,7 @@ export function authServerMetadata() {
     token_endpoint_auth_signing_alg_values_supported: [...ASSERTION_ALGS],
     client_id_metadata_document_supported: true,
     authorization_response_iss_parameter_supported: true,
-    scopes_supported: [...AGENTS.scopes, 'offline_access'],
+    scopes_supported: [...grantable(), 'offline_access'],
     service_documentation: `${iss}/agents.md`,
   };
 }
@@ -53,7 +55,7 @@ export function protectedResourceMetadata() {
   return {
     resource: resourceUrl(),
     authorization_servers: [issuer()],
-    scopes_supported: [...AGENTS.scopes],
+    scopes_supported: [...grantable()],
     bearer_methods_supported: ['header'],
     resource_name: 'Snowmoon Party',
     resource_documentation: `${issuer()}/agents.md`,
@@ -204,7 +206,7 @@ export async function checkAuthorize(q: URLSearchParams, fetcher?: typeof fetch)
   const resource = q.get('resource') ?? resourceUrl();
   if (resource !== resourceUrl()) throw new OAuthError('invalid_target', `the resource must be ${resourceUrl()}`);
   const asked = (q.get('scope') ?? '').split(/\s+/).filter(Boolean);
-  const known = asked.filter((s): s is Scope => (AGENTS.scopes as readonly string[]).includes(s));
+  const known = asked.filter((s): s is Scope => (grantable() as string[]).includes(s));
   const scopes = known.length ? known : [...AGENTS.scopes];
   if (!scopes.includes('read')) scopes.unshift('read');
   return { clientId, clientName: client.name, redirectUri, state: q.get('state'), codeChallenge: challenge, scopes, resource };
@@ -215,6 +217,11 @@ export async function checkAuthorize(q: URLSearchParams, fetcher?: typeof fetch)
  * reconnecting doesn't use up one of their three), and a one-time code goes back to the client.
  */
 export async function approve(ask: AuthorizeAsk, person: number): Promise<string> {
+  // "play" only for the people agent play is open to (AGENTS.minpentaiPlay); for anyone else it is left out. For them it
+  // is added even when the app didn't ask for it (Claude asks for the scopes /mcp names, which predate it); the Allow
+  // screen lists it for them (authorize/consent.tsx), and the token's scope says what was granted.
+  if (!playFor(person)) ask = { ...ask, scopes: ask.scopes.filter((x) => x !== 'play') };
+  else if (!ask.scopes.includes('play')) ask = { ...ask, scopes: [...ask.scopes, 'play'] };
   const s = sql();
   const code = newToken('sc1_');
   await s.begin(async (tx) => {

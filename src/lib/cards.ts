@@ -4,6 +4,7 @@ import { appUrl, CARD_SAVES_PER_DAY, WORK_ID } from './config';
 import { db } from './db';
 import type { QuoteCardSpec, TextBody } from './element-body';
 import { quoteQuery, resolveQuote, type Quote } from './quote';
+import { quoteShown } from './seeded-shown';
 
 /**
  * Saved quote cards (brief §4f, step 2). A saved card is a `text` element:
@@ -137,14 +138,18 @@ export async function listCards(sort: 'top' | 'new', limit = 60): Promise<SavedC
   if (!sql) return [];
   const order = sort === 'top' ? 'likes desc, created_at desc' : 'created_at desc';
   const rows = await sql.unsafe<Row[]>(`select * from (${CARD_ROWS}) c order by ${order} limit ${Number(limit)}`, [WORK_ID]);
-  return rows.map(toCard).filter((c): c is SavedCard => c !== null);
+  return Promise.all(rows.map(toCard).filter((c): c is SavedCard => c !== null).map(shown));
 }
+
+/** A saved card without its picture when the picture is a hidden seeded image (owner, 2026-10-30). */
+const shown = async (c: SavedCard): Promise<SavedCard> => ({ ...c, quote: (await quoteShown(c.quote)) ?? c.quote });
 
 export async function getCard(versionId: string): Promise<SavedCard | null> {
   const sql = db();
   if (!sql || !/^[0-9a-f-]{36}$/.test(versionId)) return null;
   const [row] = await sql.unsafe<Row[]>(`${CARD_ROWS} and v.id = $2`, [WORK_ID, versionId]);
-  return row ? toCard(row) : null;
+  const card = row ? toCard(row) : null;
+  return card ? shown(card) : null;
 }
 
 /** Like or unlike a saved card. Returns the new count and the caller's state. */

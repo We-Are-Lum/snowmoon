@@ -3,10 +3,17 @@
 Branch `signin-lens-bluesky`, 2026-10-31. Drafted by the coding agent (Anthropic's Claude, a closed model). **Not
 reread.** Nothing here is in `src/lib/legal.ts`: its words and its reread record are unchanged on this branch.
 
+**Re-anchored 2026-11-02** on main at 17e2c63 (after #73 no-token, #93 the remix challenge, Minpentai's agent play and
+#96): every "Today" quote below is main's current wording, checked word for word against `src/lib/legal.ts`. Only §3's
+quote had changed (#73: "a sign-in token that lasts about an hour" became "your sign-in, which lasts about an hour");
+its proposal now follows main's words with the same additions as before. The other proposals are unchanged.
+
 Lens and Bluesky sign-in are **off** (`SIGN_IN_METHODS` in `src/lib/config.ts`: `lens` and `bluesky` are `on: false`).
 While off, every Lens and Bluesky route answers 404 and nothing about a Lens or Bluesky account reaches us. They are
 turned on in the same release as these lines, after the owner's "reread" (CLAUDE.md: legal texts describe today).
-`check:principles` P6p fails if either is turned on while Privacy §4 and §7 don't describe it.
+`check:principles` P6p fails if either is turned on while Privacy §4 and §7 don't describe it (§4: "a Lens account" /
+"a Bluesky account"; §7: Lens's API or api.lens.xyz, and the Bluesky server named as "your PDS"; since the remix
+challenge, §7 already names Bluesky and Lens for reading posts, so the check looks for these sign-in words).
 
 Two choices change the words; each is marked below:
 
@@ -54,6 +61,10 @@ See the linking-UI choice at the top.
 
 ## 2. Privacy §7 (Outside services and what they receive)
 
+Placement on main today: the Farcaster item, then Neynar, then the remix challenge's "Bluesky and Lens receive the
+details of a post someone adds to a version's page" item. 2a and 2b go between the Farcaster and Neynar items; the
+challenge's Bluesky and Lens item stays as it is (it is about reading posts, not signing in).
+
 ### 2a. New item, after the Farcaster item: Lens
 
 **Proposed, variant A (threshold null; today's code):**
@@ -77,10 +88,10 @@ What it describes: `startBluesky` / `finishBluesky` in `src/lib/social/atproto.t
 Not in the owner's list, but §3 would stop being true without it.
 
 **Today (the phrase):**
-> …and, on the website, a sign-in token that lasts about an hour (a day for a wallet sign-in), and a payment you have sent but not yet seen credited.
+> …and, on the website, your sign-in, which lasts about an hour (a day for a wallet sign-in), and a payment you have sent but not yet seen credited.
 
 **Proposed:**
-> …and, on the website, a sign-in token that lasts about an hour (a day for a wallet, Lens or Bluesky sign-in), a note of a Bluesky sign-in under way, kept in that tab for at most ten minutes, and a payment you have sent but not yet seen credited.
+> …and, on the website, your sign-in, which lasts about an hour (a day for a wallet, Lens or Bluesky sign-in), a note of a Bluesky sign-in under way, kept in that tab for at most ten minutes, and a payment you have sent but not yet seen credited.
 
 ## 4. Privacy §6 (What you publish) — also needed, one phrase
 
@@ -108,6 +119,13 @@ Not in the owner's list, but §3 would stop being true without it.
 
 **Proposed:**
 > Your name is shown with it: your Farcaster name; for a wallet account, its address shortened; for a Lens account, its Lens username; for a Bluesky account, its handle.
+
+## Main's newer lines that need no change
+
+- Terms §6d (Minpentai with your agent) and §6e (the remix challenge), and Privacy §4's and §7's remix challenge
+  items: unchanged. §6e opens the challenge to "a Farcaster account that passes the site's check", and the code
+  agrees: a version made by a Lens or Bluesky account (not linked to a Farcaster account) is never a candidate
+  (`src/lib/challenge/record.ts`, "not-a-farcaster-account"). Agents stay by invitation (Farcaster accounts).
 
 ## What else changes when they are turned on
 

@@ -4,8 +4,9 @@ import { revalidatePath } from 'next/cache';
 import { getPerson } from '~/lib/auth';
 import { db } from '~/lib/db';
 import { tryAgain } from '~/lib/try-again';
-import { isMaintainer } from '~/lib/remix/frames';
-import { boardById, setBoardHidden } from '~/lib/remix/storyboards';
+import { isAdmin } from '~/lib/admins';
+import { boardById } from '~/lib/remix/storyboards';
+import { setBoardHidden } from '~/lib/remix/hide';
 
 type Ctx = { params: Promise<{ id: string }> };
 
@@ -34,7 +35,7 @@ export async function GET(request: Request, { params }: Ctx) {
   const { id } = await params;
   const b = await boardById(sql, id);
   const maker = !!b && (await actsFor(sql, person, b.person));
-  const maint = isMaintainer(person);
+  const maint = isAdmin(person);
   const canUnhide = !!b && b.hidden && (b.hiddenRole === 'maintainer' ? maint : maker);
   return NextResponse.json({ canHide: !!b && (maker || maint), hidden: b?.hidden ?? false, canUnhide, as: maker ? 'maker' : maint ? 'maintainer' : null }, { headers: { 'Cache-Control': 'no-store' } });
 }

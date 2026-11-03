@@ -8,6 +8,7 @@ import { loadChapter } from '~/lib/book';
 import { blockFacts } from '~/lib/reading';
 import { makeEdit, makeImage } from '~/lib/images/fal';
 import { mayGenerate } from '~/lib/images/gate';
+import { isAdmin } from '~/lib/admins';
 import { paidPicture } from '~/lib/images/paid';
 import { generateReserveUsd } from '~/lib/images/price';
 import { finalPrompt, STYLES, styleText, type StyleId } from '~/lib/images/rules';
@@ -73,7 +74,9 @@ export async function POST(request: Request) {
   if (!ch) return no('No such chapter', 400);
   const idx = ch.blocks.map((b) => b.idx);
   if (!idx.includes(start) || !idx.includes(end) || end < start) return no('Choose a passage in this chapter', 400);
-  if (idx.filter((i) => i >= start && i <= end).length > IMAGES.maxBlocks) return no(`A passage can be up to ${IMAGES.maxBlocks} blocks`, 400);
+  // Admins may make an image from any run of blocks in the chapter (owner, 2026-10-29: "admin caps").
+  const maxBlocks = isAdmin(fid) ? IMAGES.admin.maxBlocks : IMAGES.maxBlocks;
+  if (idx.filter((i) => i >= start && i <= end).length > maxBlocks) return no(`A passage can be up to ${maxBlocks} blocks`, 400);
   if (!userPrompt || userPrompt.length > IMAGES.promptMaxChars) return no(`Describe the image in up to ${IMAGES.promptMaxChars} characters`, 400);
   const designStyle = isId(style) ? style : null;
   if (style === null) return no('Choose a style first', 400, { reason: 'style' });
