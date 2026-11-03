@@ -1,0 +1,57 @@
+# Sign-in final words: three changed lines (DRAFT)
+
+For the owner, 2026-11-04. Drafted by the coding agent (Anthropic's Claude, a closed model). Branch
+`signin-lens-bluesky`. Source: your answers to `docs/legal/signin-reread-list.md` (branch `signin-reread-list`).
+
+Everything else you approved word for word is in `src/lib/legal.ts` on this branch as drafted (items 5, 6, 7, 8, the
+first part of 9, 10 and 11). These three lines are new words, so they need your final OK. **Until you OK them, the
+reread record stays at the old words**, the pages show their "Draft wording" line on a preview, and
+check:principles P6k and P6l fail on this branch, as they should.
+
+Say "OK" (or give changes) for each of 1–3. With all three OK as written, the record becomes privacy `1p8b2dj`,
+terms `f2hfa7`, dated the day you say so, and `LEGAL.effective` becomes the merge day.
+
+## 1. Privacy §7, the Lens item (item 9, its second part)
+
+Why it changed: variant B now looks the score up at Generate (as Neynar's), not when the image or frame maker opens;
+and your rule of 2026-11-04, "store the decision, not the score". The wording of the kept part is check-decisions'
+("we keep only whether your account passed and when, for up to 90 days").
+
+**Before** (as drafted in the reread list, with variant B):
+> When you open the image or frame maker, or make an image or a frame, without a linked Farcaster account, Lens's API also receives your Lens account's address, to look up its Lens score, which decides whether you get free images and frames. We keep the score in memory for up to an hour.
+
+**After:**
+> When you make an image or a frame without a linked Farcaster account, and we have no current decision for your Lens account, Lens's API also receives your Lens account's address, to look up its Lens score, which decides whether you get free images and frames. We keep only whether your account passed and when, for up to 90 days, never the score. Lens is never asked about you when someone views a page or when you open the image or frame maker.
+
+What the code does (`src/lib/social/lens-check.ts`): a pass is reused for 90 days and a fail for 24 hours with no
+call to Lens; a report, a hidden picture or a new threshold makes the next Generate ask again. The stored row is the
+network ('lens'), the Lens address, the rule ('lens-score>=1000'), passed or not, and when
+(`studio.check_decisions`, from `check-decisions`). Note: a fail is kept only 24 hours; "up to 90 days" is the
+longest anything is kept.
+
+## 2. Privacy §4, the link item (item 7): the 30-day sentence added
+
+Your words (answer 3a). It's in code too: `src/lib/social/accounts.ts` refuses a link to a different account
+within 30 days of an unlink; relinking to the same account is allowed at any time.
+
+**Before** (item 7 as drafted):
+> If your Lens or Bluesky account is linked to your Farcaster account, or your Bluesky account to your Lens account (you linked them while signed in with both): which is linked to which, and when it was linked or unlinked. While linked, signing in with it is signing in as that account. You can unlink it on your You page.
+
+**After:**
+> If your Lens or Bluesky account is linked to your Farcaster account, or your Bluesky account to your Lens account (you linked them while signed in with both): which is linked to which, and when it was linked or unlinked. While linked, signing in with it is signing in as that account. You can unlink it on your You page. An account you unlink can be linked to a different account only after 30 days.
+
+## 3. Terms §4 (Who can use it)
+
+Why it changed: your answer 5. A Bluesky account that passes the site's check gets free images and frames too, not
+only a linked one (the check on `bluesky-check`: made before 6 November 2026, and 5 posts in the last 30 days).
+
+**Before** (item 12 as drafted, variant B):
+> Anyone can read and listen without an account. To sign in you must be at least 18 years old. Your account here is a Farcaster account, a wallet address, a Lens account or a Bluesky account. You can link a wallet, a Lens account or a Bluesky account to your Farcaster account, and a Bluesky account to your Lens account; while it is linked, signing in with it is signing in as that account. Free daily images and frames come with a Farcaster account, and with a Lens account whose Lens score is at least the one the Service shows; a Bluesky account gets them only while it is linked to a Farcaster or Lens account. To prepay for generations, sign in with a wallet (section 6a).
+
+**After:**
+> Anyone can read and listen without an account. To sign in you must be at least 18 years old. Your account here is a Farcaster account, a wallet address, a Lens account or a Bluesky account. You can link a wallet, a Lens account or a Bluesky account to your Farcaster account, and a Bluesky account to your Lens account; while it is linked, signing in with it is signing in as that account. Free daily images and frames come with a Farcaster account, with a Lens account whose Lens score is at least the one the Service shows, and with a Bluesky account that passes the site's check (made before 6 November 2026, with at least 5 posts in the last 30 days); a Bluesky account that doesn't pass gets them only while it is linked to a Farcaster or Lens account. To prepay for generations, sign in with a wallet (section 6a).
+
+Note: this sentence describes the Bluesky check, which lives on `bluesky-check`. It is true only once that branch
+is in the same release (it merges this branch in, and ships with Bluesky sign-in on 12 November). If Bluesky sign-in
+shipped without the check, the "Before" wording would be the true one. The Bluesky check's own Privacy lines (its §7
+item, retention for 24 hours) are `bluesky-check`'s, in `docs/legal/bluesky-check-draft.md`.
