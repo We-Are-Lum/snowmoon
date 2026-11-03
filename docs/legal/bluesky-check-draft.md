@@ -21,7 +21,7 @@ way as Neynar's score today. Only the decision ('passed', 'new', 'idle'), its ti
 (`SOCIAL_SIGN_IN.bluesky.check.on = false`), and it only matters once Bluesky sign-in is on.
 
 **Owner's decisions (2026-11-04):** the check is approved as planned (made before 6 November 2026, and 5 posts in the
-last 30 days; only the decision kept, for 24 hours). The remix challenge is admin-only on Friday (another branch gates
+last 30 days); later the same day, "store the decision, not the numbers": a pass kept 90 days, a fail re-asked after 24 hours. The remix challenge is admin-only on Friday (another branch gates
 it), so the check isn't needed then: it ships with Bluesky sign-in on 12 November, in the same release as these lines.
 
 ## 1. Privacy §7 (Outside services and what they receive): a new item, after the Neynar item
