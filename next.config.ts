@@ -92,6 +92,8 @@ const nextConfig: NextConfig = {
       // Pictures became References (owner, 2026-10-29, the next-version plan): the old addresses go on working.
       { source: '/images', destination: '/references', permanent: true },
       { source: '/images/:path*', destination: '/references/:path*', permanent: true },
+      // Support became Fund (owner, 2026-11-04): /support goes on working.
+      { source: '/support', destination: '/fund', permanent: true },
     ];
   },
   async headers() {

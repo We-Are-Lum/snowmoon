@@ -4,7 +4,7 @@ import { createPublicClient, createWalletClient, custom, parseAbi, parseUnits, t
 import { base, ethereum } from './base-chain';
 import { createSiweMessage } from 'viem/siwe';
 import { authFetch, saveWalletSession } from '../client-auth';
-import { IMAGES, SUPPORT, type SupportNetwork } from '../config';
+import { IMAGES, FUND, type FundNetwork } from '../config';
 import { IMAGE_WORDING } from '../images/wording';
 import { forgetsPending } from './pending';
 
@@ -93,11 +93,12 @@ export async function pay(opts: { usd: number; token: 'USDC' | 'ETH'; payTo: `0x
 }
 
 /**
- * "Support this site" (owner, 2026-10-30, simplified page): a gift of `amount` ETH or USDC on Base or Ethereum to the
- * support address (SUPPORT.address, the only place it lives). Every read and the send go through the wallet in this
+ * "Fund this project" (owner, 2026-11-04; the Support page of 2026-10-30): a gift of `amount` ETH or USDC on Base or
+ * Ethereum to the Fund address (FUND.address, the only place it lives), only on a chain where the account is set up
+ * (FUND.chains). Every read and the send go through the wallet in this
  * browser; nothing is sent to our server and nothing about the sender is recorded.
  */
-export type Gift = { network: SupportNetwork; token: 'ETH' | 'USDC'; amount: string };
+export type Gift = { network: FundNetwork; token: 'ETH' | 'USDC'; amount: string };
 const chainOf = (chainId: number) => (chainId === ethereum.id ? ethereum : base);
 /** The amount in the token's smallest units (USDC has 6 decimals, ETH 18); null if it isn't a positive amount. */
 export function giftUnits(g: Pick<Gift, 'token' | 'amount'>): bigint | null {
@@ -157,16 +158,17 @@ export async function giftFits(g: Gift, account: `0x${string}`): Promise<'ok' | 
   if (g.token === 'USDC') {
     const usdc = await reader.readContract({ address: g.network.usdc, abi: USDC, functionName: 'balanceOf', args: [account] });
     if (usdc < value) return 'not-enough';
-    const gas = await reader.estimateContractGas({ account, address: g.network.usdc, abi: USDC, functionName: 'transfer', args: [SUPPORT.address, value] });
+    const gas = await reader.estimateContractGas({ account, address: g.network.usdc, abi: USDC, functionName: 'transfer', args: [FUND.address, value] });
     return eth >= fee(gas) ? 'ok' : 'no-gas';
   }
   if (eth < value) return 'not-enough';
-  const gas = await reader.estimateGas({ account, to: SUPPORT.address, value });
+  const gas = await reader.estimateGas({ account, to: FUND.address, value });
   return eth >= value + fee(gas) ? 'ok' : 'not-enough';
 }
 
 /** Send the gift from this browser's wallet, which must already be on the gift's network. Returns once it has landed. */
 export async function give(g: Gift & { onSent?: (hash: `0x${string}`) => void }): Promise<`0x${string}`> {
+  if (!FUND.chains[g.network.key]) throw new WalletError('wrong-network');
   const { p, wallet, account } = await connect();
   const chain = chainOf(g.network.chainId);
   const value = giftUnits(g);
@@ -177,8 +179,8 @@ export async function give(g: Gift & { onSent?: (hash: `0x${string}`) => void })
   try {
     hash =
       g.token === 'USDC'
-        ? await wallet.writeContract({ account, chain, address: g.network.usdc, abi: USDC, functionName: 'transfer', args: [SUPPORT.address, value] })
-        : await wallet.sendTransaction({ account, chain, to: SUPPORT.address, value });
+        ? await wallet.writeContract({ account, chain, address: g.network.usdc, abi: USDC, functionName: 'transfer', args: [FUND.address, value] })
+        : await wallet.sendTransaction({ account, chain, to: FUND.address, value });
   } catch {
     throw new WalletError('declined');
   }

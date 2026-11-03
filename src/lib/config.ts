@@ -356,28 +356,44 @@ export const ILLUSTRATION_CHECK = {
 export const MODERATOR_FIDS: readonly number[] = [...ADMINS];
 
 /**
- * "Support this site" (owner, 2026-10-30): the one place the support address lives. Every page, QR code and wallet send
- * reads it from here (test:support checks that, and that it is checksummed). It is a Splits account (the owner's).
- * Live on Ethereum and Base only: eth_getCode on 2026-10-30, two public RPCs each, found its code (a 61-byte proxy)
- * on those two and none on Optimism, Arbitrum, Zora or Polygon. Nothing about a sender is recorded.
+ * "Fund this project" (owner, 2026-11-04; the page was "Support the We Are Lum team" at /support, owner 2026-10-30):
+ * the one place the Fund address lives. Every page, QR code and wallet send reads it from here (test:support checks
+ * that, and that it is checksummed). It receives ETH and USDC on Ethereum and Base, as sent, with no conversion.
+ *
+ * The address is a Splits Teams account (owner, 2026-11-04): a smart account the team controls, not a split, so
+ * nothing divides what it receives automatically. Checked 2026-11-04 (coordinator, then eth_getCode by the coding
+ * agent): the same 61-byte ERC-1967 proxy on both chains, implementation 0x15ec0fa66a0d96a64d67c58368641fbe9325f3fa,
+ * deployed through EntryPoint v0.7 by factory 0x8e6af8ed94e87b4402d0272c5d6b0d47f0483e7c, owner
+ * 0xe0e5c6e8f61993e9f0937fbe44679dc00eb3b8aa. Set up on Base in tx
+ * 0xac8790fb999d4a0c578a515aa4e7652405a8a2622b2cdeb99f04ef608041051d (block 53474251) and on Ethereum in tx
+ * 0xd9c5396d9667f89408cd1d929a2f9cb7a2012d46c67b503a7797030814dfa68a (block 26336698).
+ *
+ * The old support address (0x93eC36379bFEB4db21a2d49102A1e30fC43673a3, a Splits account) is no longer shown here; the
+ * site's other payments keep their own addresses (prepaid generations: IMAGES.prepaid.payTo). Nothing about a sender
+ * is recorded.
  */
-export const SUPPORT = {
-  address: '0x93eC36379bFEB4db21a2d49102A1e30fC43673a3' as const,
-  /**
-   * The footer and About link to /support: on since the owner's $1 test was confirmed among the address's incoming
-   * transfers (0.000446 ETH on Base, 2026-10-31 06:26:19 UTC; owner, 2026-10-31).
-   */
+export const FUND = {
+  address: '0xe29f1FC6B5afEd31897e8B388d9c1145a4e819d5' as const,
+  /** The menu (under "Remix the cast"), the footer and About link to /fund (/support redirects there). */
   linked: true as boolean,
   /**
+   * Per chain, whether the account is set up there (owner, 2026-11-04). The page names and offers only a ready chain.
+   * check:principles P7c reads eth_getCode at the address on each ready chain's public RPC and fails if it's empty.
+   * Base and Ethereum both ready since 2026-11-04 (code read on both).
+   */
+  chains: { base: true, ethereum: true } as Record<'base' | 'ethereum', boolean>,
+  /**
    * "Send below" (owner, 2026-10-30, simplified page): Base or Ethereum, in ETH or USDC. USDC is Circle's native USDC on
-   * each network, not the bridged USDbC.
+   * each network, not the bridged USDbC. `rpc` is the chain's public endpoint, used only by check:principles P7c.
    */
   networks: [
-    { name: 'Base', chainId: 8453, explorer: 'https://basescan.org', usdc: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913' as `0x${string}` },
-    { name: 'Ethereum', chainId: 1, explorer: 'https://etherscan.io', usdc: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48' as `0x${string}` },
+    { key: 'base', name: 'Base', chainId: 8453, explorer: 'https://basescan.org', usdc: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913' as `0x${string}`, rpc: 'https://mainnet.base.org' },
+    { key: 'ethereum', name: 'Ethereum', chainId: 1, explorer: 'https://etherscan.io', usdc: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48' as `0x${string}`, rpc: 'https://ethereum-rpc.publicnode.com' },
   ],
 } as const;
-export type SupportNetwork = (typeof SUPPORT.networks)[number];
+export type FundNetwork = (typeof FUND.networks)[number];
+/** The networks the Fund page names and offers: only those where the account is set up (FUND.chains). */
+export const fundNetworks = (): FundNetwork[] => FUND.networks.filter((n) => FUND.chains[n.key]);
 
 /** The public contact for Snowmoon Party: legal, copyright and reports from readers who are signed out (owner, 2026-10-08). */
 export const CONTACT_EMAIL = 'snowmoon@wearelum.xyz';

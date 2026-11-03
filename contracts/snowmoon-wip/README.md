@@ -99,6 +99,28 @@ Distribute with `distribute(split, 0xEeee…EEeE, distributor)`, passing the sam
 
 A PushSplit keeps 1 wei, plus a few wei of rounding, for the next distribution. A recipient that can't take ETH within 100,000 gas gets its share as a SplitsWarehouse balance instead.
 
+## The team's share: the Fund account
+
+Each token's payout is a PushSplit. The share of it that goes to the We Are Lum team (the Lake: the final version's
+own originality share and every share the deep funding rules hold back) goes to the **Fund account**,
+`0xe29f1FC6B5afEd31897e8B388d9c1145a4e819d5` (owner, 2026-11-04), the same address as the site's Fund page
+(`FUND.address` in `src/lib/config.ts`). It replaces the old support address (`0x93eC…73a3`, a Splits account) in this
+role; the old address stays for the site's other payments.
+
+- It is a **Splits Teams account**: a smart account the team controls (an ERC-1967 proxy, implementation
+  `0x15ec0fa66a0d96a64d67c58368641fbe9325f3fa`, made through EntryPoint v0.7 by factory
+  `0x8e6af8ed94e87b4402d0272c5d6b0d47f0483e7c`), not a split.
+- Set up on **Ethereum** (tx `0xd9c5396d9667f89408cd1d929a2f9cb7a2012d46c67b503a7797030814dfa68a`, block 26336698) and
+  on **Base** (tx `0xac8790fb999d4a0c578a515aa4e7652405a8a2622b2cdeb99f04ef608041051d`, block 53474251). A smart account
+  only works as a recipient on a chain where it is set up; check `cast codesize` before putting it in a split.
+- The fork test uses this real address as the team's recipient: on a mainnet fork (and, run against Base's public RPC,
+  on a Base fork), the PushSplit pays it directly, within the split's 100,000 gas, with nothing held for it in
+  SplitsWarehouse (checked 2026-11-04, both factories, both chains).
+
+```sh
+cast codesize 0xe29f1FC6B5afEd31897e8B388d9c1145a4e819d5 --rpc-url $RPC   # must be 61 (the proxy) on the chain you deploy to
+```
+
 ## Deploy checklist (for the owner)
 
 **Claude Code never handles keys.** Every step marked **you sign** is done in your own wallet. With Foundry, `--browser` opens your browser wallet to sign, and `--ledger` works for a Ledger. Never use `--private-key` or `-i`. Run from `contracts/snowmoon-wip/` after `forge build`. `$RPC` is any RPC URL: `https://ethereum-sepolia-rpc.publicnode.com` for Sepolia, or `https://ethereum-rpc.publicnode.com` for mainnet.
@@ -204,7 +226,8 @@ Once it's verified, Etherscan's "Write Contract" tab can mint and release withou
 1. **Pin the collection metadata** on IPFS (`contractURI`, ERC-7572: `name`, `description`, `image`, `external_link`).
 2. **Deploy** with name `"Snowmoon WIP"`, symbol `"SMWIP"` and the collection URI, then verify (you sign). The constructor args are `<YOUR_ADDRESS> "Snowmoon WIP" "SMWIP" "ipfs://<collection-cid>"`.
 3. **For each final version:**
-   - check every recipient address works on mainnet and screen it;
+   - check every recipient address works on mainnet and screen it; the team's share goes to the Fund account,
+     `0xe29f1FC6B5afEd31897e8B388d9c1145a4e819d5` (see "The team's share", above);
    - create its PushSplit (you sign);
    - before `createToken`, read the split's `owner()` (must be `0x0…0`) and its `cast codesize` on mainnet (must be above 0), as in step 1.3;
    - pin its metadata;

@@ -48,7 +48,11 @@ contract PushSplitForkTest is Test {
     address keeper = makeAddr("snowmoon-wip-fork-keeper");
     address alice = makeAddr("snowmoon-wip-fork-alice");
     address bob = makeAddr("snowmoon-wip-fork-bob");
-    address lake = makeAddr("snowmoon-wip-fork-lake");
+    // The team's share (owner, 2026-11-04): the Fund account, a Splits Teams smart account (an ERC-1967 proxy, set up on
+    // mainnet in tx 0xd9c5396d9667f89408cd1d929a2f9cb7a2012d46c67b503a7797030814dfa68a). The real address, so the fork
+    // shows a PushSplit pays it directly (within the split's 100,000 gas), not through SplitsWarehouse.
+    address constant TEAM = 0xe29f1FC6B5afEd31897e8B388d9c1145a4e819d5;
+    address lake = TEAM;
     EthRejecter rejecter;
 
     function setUp() public {
@@ -66,6 +70,7 @@ contract PushSplitForkTest is Test {
         vm.deal(alice, 0);
         vm.deal(bob, 0);
         vm.deal(lake, 0);
+        assertGt(TEAM.code.length, 0, "the Fund account is set up on mainnet");
     }
 
     function _split() internal view returns (Split memory s) {
@@ -129,7 +134,8 @@ contract PushSplitForkTest is Test {
         uint256 distributed = total - 1;
         assertEq(alice.balance, distributed * 400_000 / 1_000_000, "alice paid");
         assertEq(bob.balance, distributed * 300_000 / 1_000_000, "bob paid");
-        assertEq(lake.balance, distributed * 100_000 / 1_000_000, "lake paid");
+        assertEq(lake.balance, distributed * 100_000 / 1_000_000, "the team's Fund account paid directly");
+        assertEq(ISplitsWarehouse(SPLITS_WAREHOUSE).balanceOf(lake, NATIVE_TOKEN_ID), 0, "nothing held for the team");
         assertEq(keeper.balance, 0, "no distributor fee");
 
         // The rejecting recipient's share is held for it in SplitsWarehouse as an ERC-6909 balance.

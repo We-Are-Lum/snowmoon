@@ -1,12 +1,26 @@
+import { fundNetworks } from './config';
+
+/** The ready chains in words: "Ethereum mainnet or Base", or the one that is ready (FUND.chains). */
+const chainWords = () => {
+  const names = fundNetworks().map((n) => (n.key === 'ethereum' ? 'Ethereum mainnet' : n.name));
+  // Ethereum first, as the owner's line of 2026-10-31 had it.
+  names.sort((a, b) => (a.startsWith('Ethereum') ? -1 : b.startsWith('Ethereum') ? 1 : 0));
+  return names.join(' or ');
+};
+
 /**
- * "Support this site" (owner, 2026-10-30): the simplified page in the owner's own words (title, line, the warning, and
- * the four controls). The rest (the states of sending) is the coding agent's, kept as short as the owner asked.
+ * "Fund this project" (owner, 2026-11-04; "Support this site", 2026-10-30): the simplified page in the owner's own
+ * words (title, line, the warning, and the four controls). The rest (the states of sending) is the coding agent's,
+ * kept as short as the owner asked. The line names only the chains where the account is set up (FUND.chains).
  */
 export const SUPPORT_WORDING = {
-  // The owner's words of 2026-10-31: the support goes to the team that makes the site.
-  title: 'Support the We Are Lum team',
-  link: 'Support the We Are Lum team',
-  line: 'We make snowmoon.party. Send ETH or USDC on Ethereum mainnet or Base to this address, or send below.',
+  // The owner's words of 2026-11-04: menu label "Fund", page title "Fund this project".
+  title: 'Fund this project',
+  /** The footer and About link: the page's title (draft: the owner named only the menu label and the title). */
+  link: 'Fund this project',
+  /** The menu item, in the menu's first section under "Remix the cast" (owner, 2026-11-04). */
+  menu: 'Fund',
+  line: `We make snowmoon.party. Send ETH or USDC on ${chainWords()} to this address, or send below.`,
   warning: 'Other networks: funds may be lost.',
   qrAlt: (address: string) => `QR code of the address ${address}`,
   copy: 'Copy',

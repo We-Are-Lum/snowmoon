@@ -1,12 +1,15 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { SUPPORT, type SupportNetwork } from '~/lib/config';
+import { fundNetworks, type FundNetwork } from '~/lib/config';
 import { SUPPORT_WORDING as W } from '~/lib/support-wording';
 import { connectWallet, give, giftFits, giftUnits, hasWallet, onWalletChange, switchWallet, walletState, WalletError } from '~/lib/wallet/client';
 import { AmountField } from './amount-field';
 
-/** The support address in full, with a copy button. It is always SUPPORT.address, passed from the page. */
+/** The chains the Fund account is set up on (FUND.chains); only these are offered. */
+const NETS = fundNetworks();
+
+/** The Fund address in full, with a copy button. It is always FUND.address, passed from the page. */
 export function SupportAddress({ address }: { address: string }) {
   const [copied, setCopied] = useState(false);
   return (
@@ -45,13 +48,13 @@ function Choice<T extends string>({ label, options, value, onChange, disabled }:
 type Fit = 'ok' | 'not-enough' | 'no-gas' | 'checking' | null;
 
 /**
- * The send (owner, 2026-10-30): network (Base or Ethereum), token (ETH or USDC), amount, Send. Before offering the
+ * The send (owner, 2026-10-30): network (Base or Ethereum, whichever FUND.chains marks ready), token (ETH or USDC), amount, Send. Before offering the
  * transaction it reads the wallet's balances on that network (giftFits) and keeps Send off when they don't cover the
  * amount and the fee; a wallet on the other network is asked to switch first. Afterwards the transaction's link and
  * "Thank you." Every read and the send go through the wallet in this browser; nothing is sent to our server.
  */
 export function SupportSend() {
-  const [network, setNetwork] = useState<SupportNetwork>(SUPPORT.networks[0]);
+  const [network, setNetwork] = useState<FundNetwork>(NETS[0]);
   const [token, setToken] = useState<'ETH' | 'USDC'>('ETH');
   const [amount, setAmount] = useState('');
   const [wallet, setWallet] = useState<{ found: boolean; account: `0x${string}` | null; chainId: number | null }>({ found: true, account: null, chainId: null });
@@ -127,7 +130,7 @@ export function SupportSend() {
           : null;
   return (
     <div className="support-send">
-      <Choice label={W.network} options={SUPPORT.networks.map((n) => n.name)} value={network.name} onChange={(n) => (setNetwork(SUPPORT.networks.find((x) => x.name === n)!), setSent(null))} disabled={busy} />
+      <Choice label={W.network} options={NETS.map((n) => n.name)} value={network.name} onChange={(n) => (setNetwork(NETS.find((x) => x.name === n)!), setSent(null))} disabled={busy} />
       <Choice label={W.token} options={['ETH', 'USDC'] as const} value={token} onChange={(t) => (setToken(t), setSent(null))} disabled={busy} />
       <AmountField label={W.amount} unit={token} placeholder={token === 'ETH' ? W.ethPlaceholder : undefined} value={amount} onChange={(v) => (setAmount(v), setSent(null))} disabled={busy} />
       {estimate && (

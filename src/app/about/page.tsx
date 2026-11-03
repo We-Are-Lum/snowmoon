@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { IMAGE_WORDING } from '~/lib/images/wording';
-import { CHAT, CONTACT_EMAIL, IMAGES, PODCAST_LINKS, REPO_URL, SUPPORT, WORK } from '~/lib/config';
+import { CHAT, CONTACT_EMAIL, IMAGES, PODCAST_LINKS, REPO_URL, FUND, WORK } from '~/lib/config';
 import { RULES } from '~/lib/images/rules';
 import { SIGN_IN_SERVICES } from '~/lib/sign-in-text';
 import { ThemeSwitch } from '~/components/theme-switch';
@@ -129,10 +129,10 @@ export default async function About() {
       <ThemeSwitch name="theme-about" />
       <h2>Payments</h2>
       <p>Prepaid credit can only be spent on generations here; it can't be transferred or cashed out. Nothing here is an investment.</p>
-      {/* Support (owner, 2026-10-30): just the link, in the owner's words of 2026-10-31. Shown while SUPPORT.linked. */}
-      {SUPPORT.linked && (
+      {/* Fund (owner, 2026-11-04; Support, 2026-10-30): just the link, the page's title. Shown while FUND.linked. */}
+      {FUND.linked && (
         <p>
-          <Link href="/support">{SUPPORT_WORDING.link}</Link>
+          <Link href="/fund">{SUPPORT_WORDING.link}</Link>
         </p>
       )}
       <h2>No canon</h2>

@@ -24,7 +24,7 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { DEFAULT_TEMPLATES } from '../src/templates';
 import { LiveScreen } from '../src/components/live-screen';
-import { AGENTS, CHALLENGE, CHAT, IMAGES, REPO_URL } from '../src/lib/config';
+import { AGENTS, CHALLENGE, CHAT, FUND, IMAGES, REPO_URL } from '../src/lib/config';
 import { NOTICE_REVIEW, currentNoticeItems, noticeKey } from '../src/lib/chat/notice';
 import { LEGAL, PRIVACY, TERMS, legalKey } from '../src/lib/legal';
 import { LEARN_TEXT } from '../src/lib/minpentai/learn-text';
@@ -1309,7 +1309,7 @@ add({
 // ---------------------------------------------------------------------------
 // P6. No third-party requests; individual ratings not publicly readable.
 // ---------------------------------------------------------------------------
-const PAGES = ['/', '/chapter/1', '/chapter/30', '/about', '/support', '/cards', '/adaptations', '/adaptations/dog-dawn', '/share/1/4?img=c1-b005-toy-drone', '/references', '/moderate', '/glossary', '/glossary/zei', '/terms', '/privacy', '/references?show=moments',
+const PAGES = ['/', '/chapter/1', '/chapter/30', '/about', '/fund', '/cards', '/adaptations', '/adaptations/dog-dawn', '/share/1/4?img=c1-b005-toy-drone', '/references', '/moderate', '/glossary', '/glossary/zei', '/terms', '/privacy', '/references?show=moments',
   // Step 4: styles and character sheets.
   '/references/designs', '/references/designs?tab=characters', '/references/designs/character/gladias', '/references/picks',
   // The You page and a public profile (owner, 2026-10-18).
@@ -1853,6 +1853,41 @@ add({
     c.home = c.home.replace(/not affiliated with the author/gi, 'a fan edition');
     c.sol.push({ file: 'contracts/other/Coin.sol', text: 'contract Coin is ERC20 {}' });
     c.sol.push({ file: 'contracts/snowmoon-wip/src/Planted.sol', text: 'contract P is ERC2981 { function setPrice(uint256 id, uint256 p) external { tokens[id].price = p; } }' });
+  },
+});
+
+// P7c: the Fund account is set up on every chain the page offers (owner, 2026-11-04). FUND.address is a Splits Teams
+// smart account; on a chain where it has no code, nobody may control the address, so money sent there could be lost.
+// For each chain FUND.chains marks ready, eth_getCode at the address on that chain's public RPC (FUND.networks[].rpc)
+// must not be empty. Planted: Ethereum marked ready while it has no code.
+add({
+  id: 'P7c',
+  principle: 7,
+  name: 'the Fund page offers only chains where its account is set up (eth_getCode not empty on each ready chain)',
+  load: async () => {
+    const code: Record<string, string> = {};
+    for (const n of FUND.networks) {
+      if (!FUND.chains[n.key]) continue;
+      const r = await fetch(n.rpc, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'eth_getCode', params: [FUND.address, 'latest'] }),
+        signal: AbortSignal.timeout(15_000),
+      });
+      const j = (await r.json()) as { result?: string; error?: unknown };
+      if (typeof j.result !== 'string') throw new Error(`eth_getCode on ${n.name} (${n.rpc}) gave no result`);
+      code[n.key] = j.result;
+    }
+    return { chains: { ...FUND.chains } as Record<string, boolean>, code };
+  },
+  run: (c) =>
+    Object.entries(c.chains)
+      .filter(([, ready]) => ready)
+      .filter(([k]) => !/^0x[0-9a-f]{2,}$/i.test(c.code[k] ?? ''))
+      .map(([k]) => `FUND.chains.${k} is true (src/lib/config.ts), but ${FUND.address} has no code on ${k}: set the account up there first, or mark it false`),
+  plant: (c) => {
+    c.chains.ethereum = true;
+    c.code.ethereum = '0x';
   },
 });
 

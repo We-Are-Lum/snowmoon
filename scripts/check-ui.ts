@@ -77,7 +77,8 @@ import { createServer } from 'node:net';
 import path from 'node:path';
 import { chromium, type Browser, type Page } from 'playwright-core';
 import QRCode from 'qrcode';
-import { SUPPORT } from '../src/lib/config';
+import { FUND, fundNetworks } from '../src/lib/config';
+import { SUPPORT_WORDING } from '../src/lib/support-wording';
 import { requireTarget } from './lib/target';
 
 const arg = (name: string) => process.argv.slice(2).find((a) => a.startsWith(`--${name}=`))?.split('=').slice(1).join('=');
@@ -305,7 +306,7 @@ async function checkAssistant(page: Page, scheme: string) {
   await page.evaluate(() => localStorage.clear());
 }
 
-const LEGAL_LINE = 'Snowmoon Party · operated by Lum LLC · independent, not affiliated with the author · book and adaptations GPL v3 · Terms · Privacy · Source' + (SUPPORT.linked ? ' · Support the We Are Lum team' : '');
+const LEGAL_LINE = 'Snowmoon Party · operated by Lum LLC · independent, not affiliated with the author · book and adaptations GPL v3 · Terms · Privacy · Source' + (FUND.linked ? ' · Fund this project' : '');
 const WALLET_ADDRESS = '0x1234567890abcdef1234567890abcdef12345678';
 /** A wallet session in storage, as saveWalletSession keeps it (src/lib/client-auth.ts); never sent anywhere here. */
 const plantWallet = (address: string) => {
@@ -387,7 +388,7 @@ async function checkLegalLine(page: Page, within: string, where: string, scheme:
   if (text !== LEGAL_LINE) fail(`${where} (${scheme}): the footer line reads "${text}"`);
   if (!(await line.isVisible())) fail(`${where} (${scheme}): the footer line is not shown`);
   const hrefs = await line.locator('a').evaluateAll((as) => as.map((a) => `${a.textContent}=${a.getAttribute('href')}`));
-  const want = ['Terms=/terms', 'Privacy=/privacy', 'Source=https://github.com/We-Are-Lum/snowmoon', ...(SUPPORT.linked ? ['Support the We Are Lum team=/support'] : [])];
+  const want = ['Terms=/terms', 'Privacy=/privacy', 'Source=https://github.com/We-Are-Lum/snowmoon', ...(FUND.linked ? ['Fund this project=/fund'] : [])];
   if (hrefs.join(' ') !== want.join(' ')) fail(`${where} (${scheme}): the footer links are ${hrefs.join(', ')}`);
 }
 
@@ -641,52 +642,63 @@ async function checkAdmin(page: Page, scheme: string) {
 }
 
 /**
- * "Support this site" (owner, 2026-10-30), at 390: every place on the page shows exactly SUPPORT.address (the text, the
+ * "Fund this project" (owner, 2026-11-04; "Support this site", 2026-10-30), at 390: /support lands on /fund; the menu
+ * has "Fund" right under "Remix the cast"; every place on the page shows exactly FUND.address (the text, the
  * copy button, the QR code, which must be the code of that address, and both Splits links); only Ethereum and Base are
  * named, with the warning; the presets and the own-amount box; with no wallet in this browser, Send says so and sends
  * nothing; the floors.
  */
 async function checkSupport(page: Page, scheme: string) {
-  const where = `/support @390 (${scheme})`;
+  const where = `/fund @390 (${scheme})`;
   // What could record a sender: a write to our API, or any request that carries the address. The shell's own reads on
   // every page (who is signed in, the assistant's status) don't.
   const ours: string[] = [];
   const count = (r: { url: () => string; method: () => string; postData: () => string | null }) =>
-    r.url().includes('/api/') && (r.method() !== 'GET' || r.url().includes(SUPPORT.address) || (r.postData() ?? '').includes(SUPPORT.address)) && ours.push(`${r.method()} ${r.url().replace(/^https?:\/\/[^/]+/, '')}`);
+    r.url().includes('/api/') && (r.method() !== 'GET' || r.url().includes(FUND.address) || (r.postData() ?? '').includes(FUND.address)) && ours.push(`${r.method()} ${r.url().replace(/^https?:\/\/[^/]+/, '')}`);
   page.on('request', count);
+  // Old links keep working (owner, 2026-11-04): /support redirects to /fund.
   await open(page, '/support');
+  if (new URL(page.url()).pathname !== '/fund') fail(`${where}: /support lands on ${new URL(page.url()).pathname}, not /fund`);
+  await open(page, '/fund');
   const text = (await page.locator('.support-address code').textContent())?.trim();
-  if (text !== SUPPORT.address) fail(`${where}: the address reads "${text}", not ${SUPPORT.address}`);
-  if ((await page.locator('.support-address [data-copies]').getAttribute('data-copies')) !== SUPPORT.address) fail(`${where}: the copy button doesn't copy ${SUPPORT.address}`);
-  // The modules drawn (each path's d) and the size, compared with the code of SUPPORT.address: the browser rewrites
+  if (text !== FUND.address) fail(`${where}: the address reads "${text}", not ${FUND.address}`);
+  if ((await page.locator('.support-address [data-copies]').getAttribute('data-copies')) !== FUND.address) fail(`${where}: the copy button doesn't copy ${FUND.address}`);
+  // The modules drawn (each path's d) and the size, compared with the code of FUND.address: the browser rewrites
   // the markup itself (a path's "/>" becomes "></path>"), so the text can't be compared.
   const shown = await page.locator('.support-qr svg').evaluate((svg) => ({ box: svg.getAttribute('viewBox'), d: [...svg.querySelectorAll('path')].map((p) => p.getAttribute('d')) }));
-  const svg = await QRCode.toString(SUPPORT.address, { type: 'svg', margin: 1, errorCorrectionLevel: 'M' });
+  const svg = await QRCode.toString(FUND.address, { type: 'svg', margin: 1, errorCorrectionLevel: 'M' });
   const want = { box: /viewBox="([^"]+)"/.exec(svg)?.[1] ?? null, d: [...svg.matchAll(/ d="([^"]+)"/g)].map((m) => m[1]) };
-  if (JSON.stringify(shown) !== JSON.stringify(want)) fail(`${where}: the QR code isn't the code of ${SUPPORT.address}`);
+  if (JSON.stringify(shown) !== JSON.stringify(want)) fail(`${where}: the QR code isn't the code of ${FUND.address}`);
   const body = (await page.locator('main.support').innerText()).replace(/\s+/g, ' ');
   // The owner's words (2026-10-30, simplified page), and nothing else of the old page.
   // The links to it (owner, 2026-10-31): About shows just the link, with nothing around it.
-  if (SUPPORT.linked) {
+  if (FUND.linked) {
     await open(page, '/about');
     // About's own link, not the footer line's (checkLegalLine checks that one on every page).
-    const about = page.locator('main p:not(.legal-line) > a[href="/support"]');
-    if ((await about.count()) !== 1 || (await about.textContent())?.trim() !== 'Support the We Are Lum team') fail(`${where}: About doesn't link "Support the We Are Lum team" to /support`);
-    else if ((await about.locator('xpath=..').innerText()).trim() !== 'Support the We Are Lum team') fail(`${where}: About's support link has words around it`);
-    await open(page, '/support');
+    const about = page.locator('main p:not(.legal-line) > a[href="/fund"]');
+    if ((await about.count()) !== 1 || (await about.textContent())?.trim() !== 'Fund this project') fail(`${where}: About doesn't link "Fund this project" to /fund`);
+    else if ((await about.locator('xpath=..').innerText()).trim() !== 'Fund this project') fail(`${where}: About's Fund link has words around it`);
+    // The menu (owner, 2026-11-04): "Fund" in its first section, right under "Remix the cast".
+    await page.locator('button[aria-label="Open the menu"], button[aria-label="Menu"]').first().click().catch(() => {});
+    if (await page.locator('.menu-sheet').count()) {
+      const labels = (await page.locator('.menu-sheet .nav-list > li > a > span:first-child').allTextContents()).map((t) => t.trim());
+      if (labels[labels.indexOf('Remix the cast') + 1] !== 'Fund') fail(`${where}: the menu doesn't have "Fund" right under "Remix the cast" (${labels.join(' | ')})`);
+      if ((await page.locator('.menu-sheet .nav-list a', { hasText: /^Fund$/ }).getAttribute('href')) !== '/fund') fail(`${where}: the menu's Fund doesn't link to /fund`);
+    } else fail(`${where}: couldn't open the menu to find Fund`);
+    await open(page, '/fund');
   }
-  for (const words of ['Support the We Are Lum team', 'We make snowmoon.party. Send ETH or USDC on Ethereum mainnet or Base to this address, or send below.', 'Other networks: funds may be lost.'])
+  for (const words of ['Fund this project', SUPPORT_WORDING.line, 'Other networks: funds may be lost.'])
     if (!body.includes(words)) fail(`${where}: doesn't say "${words}"`);
   if (/\b(donat)|splits\.org|Fund the next scene|\$5\b/i.test(body + (await page.locator('main.support').innerHTML()))) fail(`${where}: still shows the old page's copy (donate, Splits, a title option or a preset)`);
   const choices = async (label: string) => (await page.locator(`.support-choice[aria-label="${label}"] button`).allTextContents()).map((t) => t.trim()).join('|');
-  if ((await choices('Network')) !== 'Base|Ethereum') fail(`${where}: the networks read "${await choices('Network')}"`);
+  if ((await choices('Network')) !== fundNetworks().map((n) => n.name).join('|')) fail(`${where}: the networks read "${await choices('Network')}"`);
   if ((await choices('Token')) !== 'ETH|USDC') fail(`${where}: the tokens read "${await choices('Token')}"`);
   if (!(await page.locator('.support-send input[type="number"]').count())) fail(`${where}: no amount box`);
   if ((await page.locator('main.support a[href="/terms"]').textContent())?.trim() !== 'Terms') fail(`${where}: no small Terms link`);
   // The ETH estimate (owner, 2026-10-31): with ETH chosen, "≈ $" under the amount, live as it's typed, from the price
   // our server reads on Base (stood in here at $2,500), labelled as an estimate.
   await page.route('**/api/eth-usd', (r) => r.fulfill({ json: { usd: 2500, updatedAt: Math.floor(Date.now() / 1000) } }));
-  await open(page, '/support');
+  await open(page, '/fund');
   const amountBox = page.locator('.support-send input[type="number"]');
   // ETH is the default, with "0.01" greyed in the empty box (owner, 2026-10-31); a placeholder isn't an amount, so no estimate.
   if ((await page.locator('.support-choice[aria-label="Token"] button[aria-checked="true"]').textContent())?.trim() !== 'ETH') fail(`${where}: ETH isn't the default`);
@@ -732,7 +744,7 @@ async function checkSupport(page: Page, scheme: string) {
     });
     const p = await ctx.newPage();
     p.on('request', count);
-    await p.goto(BASE + '/support', { waitUntil: 'networkidle' });
+    await p.goto(BASE + '/fund', { waitUntil: 'networkidle' });
     await p.locator('.support-send input[type="number"]').fill('0.01');
     const sw = p.getByRole('button', { name: 'Switch to Base' });
     await sw.waitFor({ timeout: 5000 }).then(() => sw.click(), () => fail(`${where}: a wallet on Ethereum isn't asked to switch to Base`));
@@ -744,8 +756,8 @@ async function checkSupport(page: Page, scheme: string) {
     await ctx.close();
   }
   if (ours.length) fail(`${where}: the page sent our API something that could record a sender: ${ours.join(', ')}`);
-  await checkFloors(page, '/support @390', scheme);
-  await shot(page, 'phone-390-support', scheme);
+  await checkFloors(page, '/fund @390', scheme);
+  await shot(page, 'phone-390-fund', scheme);
   page.off('request', count);
 }
 

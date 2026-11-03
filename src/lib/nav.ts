@@ -13,7 +13,8 @@ export interface NavItem {
   children?: NavItem[];
 }
 
-import { ADAPTATIONS } from './config';
+import { ADAPTATIONS, FUND } from './config';
+import { SUPPORT_WORDING } from './support-wording';
 
 export function navItems(last: number, adaptations: number): NavItem[] {
   // The order (owner, 2026-10-29, the next-version plan): Adaptations first, then the Book, References (once
@@ -46,6 +47,8 @@ export function navItems(last: number, adaptations: number): NavItem[] {
     // The remix challenge (owner, 2026-11-03: a /challenge link in the menu). Its page's own title; last, so the
     // owner's order above is unchanged.
     { key: 'challenge', label: 'Remix the cast', href: '/challenge' },
+    // Fund (owner, 2026-11-04): in the menu's first section, under "Remix the cast"; the footer link stays.
+    ...(FUND.linked ? [{ key: 'fund', label: SUPPORT_WORDING.menu, href: '/fund' }] : []),
   ];
   // Adaptations are out of view for now (ADAPTATIONS.visible).
   return ADAPTATIONS.visible ? items : items.filter((i) => i.key !== 'adaptations');

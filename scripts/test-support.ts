@@ -1,10 +1,10 @@
 /**
  * "Support this site" (owner, 2026-10-30: "Keep it in one constant, checksummed, and test that every place shows exactly
  * that constant"; the page simplified the same day). Static checks over the code, then the balance rules run against a
- * stand-in wallet; check:ui checks the served page (the text, the copy button and the QR code against SUPPORT.address).
- *  S1  SUPPORT.address is checksummed (EIP-55): viem's getAddress returns it unchanged.
+ * stand-in wallet; check:ui checks the served page (the text, the copy button and the QR code against FUND.address).
+ *  S1  FUND.address is checksummed (EIP-55): viem's getAddress returns it unchanged.
  *  S2  the address is written in exactly one place in src/ (config.ts), in any letter case; nowhere else.
- *  S3  every place that shows or uses it reads SUPPORT.address: the page (text and QR code), the copy button, and the
+ *  S3  every place that shows or uses it reads FUND.address: the page (text and QR code), the copy button, and the
  *      send's recipient (ETH and USDC), and its balance estimate.
  *  S4  USDC is native USDC on each network (Circle's contracts), not the bridged USDbC.
  *  S5  the networks are exactly Base (8453) and Ethereum (1), as eth_getCode found on 2026-10-30.
@@ -15,11 +15,15 @@
  *  S8  the send refuses while the wallet is on the other network.
  *  S9  the ETH estimate's price (owner, 2026-10-31): Chainlink's ETH/USD read on Base; no price when the feed is older
  *      than two hours, reads zero, or can't be read.
+ *  S10 Fund (owner, 2026-11-04): the page offers and names only the chains FUND.chains marks ready (the send's choice
+ *      reads fundNetworks(), the line names those chains, and the send refuses a chain not ready, before asking the
+ *      wallet anything); /support redirects to /fund; the menu has "Fund" right under "Remix the cast"; the prepaid
+ *      address (IMAGES.prepaid.payTo) is not the Fund address.
  */
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import path from 'node:path';
 import { getAddress } from 'viem';
-import { SUPPORT } from '../src/lib/config';
+import { FUND, IMAGES, fundNetworks } from '../src/lib/config';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 let passed = 0;
@@ -32,27 +36,27 @@ const walk = (d: string): string[] => readdirSync(d).flatMap((f) => { const p = 
 const rel = (p: string) => path.relative(ROOT, p);
 const read = (p: string) => readFileSync(path.join(ROOT, p), 'utf8');
 
-check('S1 SUPPORT.address is checksummed', getAddress(SUPPORT.address) === SUPPORT.address, `${SUPPORT.address} vs ${getAddress(SUPPORT.address)}`);
+check('S1 FUND.address is checksummed', getAddress(FUND.address) === FUND.address, `${FUND.address} vs ${getAddress(FUND.address)}`);
 
-const bare = SUPPORT.address.slice(2).toLowerCase();
+const bare = FUND.address.slice(2).toLowerCase();
 const holders = walk(path.join(ROOT, 'src')).filter((f) => readFileSync(f, 'utf8').toLowerCase().includes(bare)).map(rel);
 check('S2 the address is written only in src/lib/config.ts', holders.length === 1 && holders[0] === 'src/lib/config.ts', holders.join(', '));
 
-const page = read('src/app/support/page.tsx');
+const page = read('src/app/fund/page.tsx');
 const comp = read('src/components/support.tsx');
 const client = read('src/lib/wallet/client.ts');
 const fnBody = (src: string, head: string) => { const i = src.indexOf(head); return i < 0 ? '' : src.slice(i, src.indexOf('\n}\n', i) + 2); };
 const giveCode = fnBody(client, 'export async function give');
 const fitsCode = fnBody(client, 'export async function giftFits');
 check(
-  'S3 the page (text and QR code), the copy button and the send all read SUPPORT.address',
-  /QRCode\.toString\(SUPPORT\.address/.test(page) && /<SupportAddress address=\{SUPPORT\.address\}/.test(page) && /data-qr-of=\{SUPPORT\.address\}/.test(page) &&
+  'S3 the page (text and QR code), the copy button and the send all read FUND.address',
+  /QRCode\.toString\(FUND\.address/.test(page) && /<SupportAddress address=\{FUND\.address\}/.test(page) && /data-qr-of=\{FUND\.address\}/.test(page) &&
     /data-copies=\{address\}/.test(comp) && /writeText\(address\)/.test(comp) &&
-    /args: \[SUPPORT\.address, value\]/.test(giveCode) && /to: SUPPORT\.address, value/.test(giveCode) && /SUPPORT\.address/.test(fitsCode),
+    /args: \[FUND\.address, value\]/.test(giveCode) && /to: FUND\.address, value/.test(giveCode) && /FUND\.address/.test(fitsCode),
 );
 const nativeUsdc: Record<number, string> = { 8453: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913', 1: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48' };
-check('S4 USDC is native USDC on each network (checksummed), not USDbC', SUPPORT.networks.every((n) => n.usdc === nativeUsdc[n.chainId] && getAddress(n.usdc) === n.usdc) && !SUPPORT.networks.some((n) => n.usdc.toLowerCase() === '0xd9aaec86b65d86f6a7b5b1b0c42ffa531710b6ca'));
-check('S5 the networks are Base (8453) and Ethereum (1)', JSON.stringify(SUPPORT.networks.map((n) => [n.name, n.chainId])) === '[["Base",8453],["Ethereum",1]]');
+check('S4 USDC is native USDC on each network (checksummed), not USDbC', FUND.networks.every((n) => n.usdc === nativeUsdc[n.chainId] && getAddress(n.usdc) === n.usdc) && !FUND.networks.some((n) => n.usdc.toLowerCase() === '0xd9aaec86b65d86f6a7b5b1b0c42ffa531710b6ca'));
+check('S5 the networks are Base (8453) and Ethereum (1)', JSON.stringify(FUND.networks.map((n) => [n.name, n.chainId])) === '[["Base",8453],["Ethereum",1]]');
 const route = read('src/app/api/eth-usd/route.ts');
 const compApi = [...comp.matchAll(/['"`](\/api\/[^'"`]*)['"`]/g)].map((m) => m[1]);
 check(
@@ -93,7 +97,7 @@ Object.assign(globalThis, { addEventListener() {}, removeEventListener() {} });
 };
 const { giftFits, give, WalletError } = await import('../src/lib/wallet/client');
 const acct = '0x1111111111111111111111111111111111111111' as const;
-const [baseNet, ethNet] = SUPPORT.networks;
+const [baseNet, ethNet] = FUND.networks;
 const ethFee = ((21000n * 12n) / 10n) * (22n * GWEI / 10n); // 25200 gas × 2.2 gwei
 const usdcFee = ((60000n * 12n) / 10n) * (22n * GWEI / 10n);
 const cases: [string, () => void, Parameters<typeof giftFits>[0], string][] = [
@@ -128,6 +132,33 @@ const p9 = [
 ] as const;
 const bad9 = p9.filter(([, got, want]) => JSON.stringify(got) !== JSON.stringify(want)).map(([name, got]) => `${name}: ${JSON.stringify(got)}`);
 check('S9 the ETH price: Chainlink on Base, none when stale, zero or unreadable', bad9.length === 0, bad9.join('; '));
+// S10: the ready chains only.
+{
+  const { SUPPORT_WORDING } = await import('../src/lib/support-wording');
+  const { navItems } = await import('../src/lib/nav');
+  const nextConfig = read('next.config.ts');
+  const problems: string[] = [];
+  const ready = FUND.networks.filter((n) => FUND.chains[n.key]).map((n) => n.key);
+  if (JSON.stringify(fundNetworks().map((n) => n.key)) !== JSON.stringify(ready)) problems.push('fundNetworks() is not the ready chains');
+  if (!/const NETS = fundNetworks\(\)/.test(comp) || /FUND\.networks/.test(comp)) problems.push('the send component offers chains other than fundNetworks()');
+  if (FUND.chains.base && !/\bBase\b/.test(SUPPORT_WORDING.line)) problems.push('the line does not name Base while it is ready');
+  if (FUND.chains.ethereum !== /Ethereum/.test(SUPPORT_WORDING.line)) problems.push('the line names Ethereum exactly when it is ready: not so');
+  if (!/if \(!FUND\.chains\[g\.network\.key\]\) throw new WalletError\('wrong-network'\);\n  const \{ p, wallet, account \} = await connect\(\);/.test(giveCode)) problems.push('give() does not refuse a chain that is not ready before asking the wallet');
+  if (!/\{ source: '\/support', destination: '\/fund', permanent: true \}/.test(nextConfig)) problems.push('/support does not redirect to /fund');
+  const keys = navItems(30, 0).map((i) => i.key);
+  if (FUND.linked && keys[keys.indexOf('challenge') + 1] !== 'fund') problems.push(`the menu's Fund is not right under Remix the cast: ${keys.join(',')}`);
+  if (navItems(30, 0).find((i) => i.key === 'fund')?.label !== 'Fund' && FUND.linked) problems.push('the menu label is not "Fund"');
+  if (SUPPORT_WORDING.title !== 'Fund this project') problems.push('the title is not "Fund this project"');
+  if (IMAGES.prepaid.payTo?.toLowerCase() === FUND.address.toLowerCase()) problems.push('prepaid generations pay to the Fund address');
+  check('S10 Fund: only ready chains are named and offered; /support redirects; menu under Remix the cast; prepaid keeps its own address', problems.length === 0, problems.join('; '));
+  // Planted: a chain not ready must leave the line and the send.
+  const saved = { ...FUND.chains };
+  (FUND.chains as Record<string, boolean>).ethereum = false;
+  const planted = fundNetworks().map((n) => n.key).join(',');
+  const refused = await give({ network: FUND.networks[1], token: 'ETH', amount: '0.01' }).then(() => 'sent', (e) => (e instanceof WalletError ? e.why : String(e)));
+  Object.assign(FUND.chains, saved);
+  check('S10 planted: Ethereum marked not ready leaves only Base, and the send to Ethereum is refused', planted === 'base' && refused === 'wrong-network', `${planted} / ${refused}`);
+}
 if (failed.length) {
   console.error(`\nSUPPORT TEST FAILED (${failed.length}):\n- ${failed.join('\n- ')}`);
   process.exit(1);

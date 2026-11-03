@@ -524,6 +524,10 @@ owner: 2026-10-30, the site no longer says "no token"; 2026-10-31, this wording,
   code; the only contract (outside its own libraries) is `contracts/snowmoon-wip`, with no royalty
   (ERC-2981) code, no function that sets a price, and a price written only in `createToken`.
   `npm run check:ui` also checks the first screen at phone size.
+- `P7c` (branch fund-page, 2026-11-04, the owner's decision): the Fund page (`/fund`; `/support` redirects there)
+  names and offers only the chains `FUND.chains` marks ready, and for each one `eth_getCode` at `FUND.address` (a
+  Splits Teams smart account) on that chain's public RPC is not empty. Its planted violation is Ethereum marked ready
+  while it has no code, which must fail.
 - `npm run check:intro`: the first-visit intro's disclaimer (`config/intro.json`),
   shown on card 1 and at the top of /about, keeps "not affiliated with the
   author"; every card and feature marked "live" points at a
