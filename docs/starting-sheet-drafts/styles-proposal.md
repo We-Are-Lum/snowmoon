@@ -10,6 +10,23 @@ is AI-made and keeps that label wherever it is used.
 Plan file: [`styles-plan.json`](styles-plan.json). Every number below comes from
 `npm run seed:designs -- --bases-plan`, which reads that file and calls nothing (no model, database or network).
 
+## Owner's decisions, 2026-11-04 (recorded)
+
+- **Style test approved, capped at $0.35, drafts only.** Done: [styles-test.md](styles-test.md), **$0.08879 spent**.
+  Gouache by Gemini paints; Gouache by the open model doesn't (it keeps its outlines); Miniature by the open model works.
+  The two GPT Image 2.5 Sunburst fronts were refused before any call: OpenAI has no zero-data-retention endpoint for it
+  on the gateway.
+- **Every new closed call** sets `zeroDataRetention: true` and `disallowPromptTraining: true` and pins its provider
+  (Google to `vertex`, OpenAI to `openai`), in the shared batch path `scripts/lib/batch-model.ts` (`test:batch-model`).
+  Nothing is sent unless the gateway lists that provider with both.
+- **Plan:** A (**Gouache, Printed, Miniature**) if the reread lands by Thu 5 Nov; otherwise B, with Gouache by the open
+  model if the test showed it can paint, else Mood. **The test says it can't, so B is Mood, Printed, Miniature.**
+- **Closed styles are gated like bases:** `closedStyleRefusal` (src/lib/challenge/bases.ts), called by the seed script
+  before it publishes a style.
+- **Still open: Neon night.** It can't be made by OpenAI under the ZDR rule. Owner to choose: Gemini (Google), the open
+  model, or drop it.
+- No further spending until the owner OKs the samples and the bases.
+
 ## What the drafts show first
 
 The five open drafts of 2026-11-03 ([bases.md](bases.md)) **barely differ from each other**. Side by side, Zei in
@@ -36,9 +53,9 @@ tunic yellow.
 | 3 | **Mood** | dark-line graphic novel, brushy | Z-Image Turbo, open weights | 4, [published](https://pictures.snowmoon.party/images/readers/7af7efadf40af372c083001dcf03543e.jpg). Front: [Zei](bases/zei-front-mood-edit.jpg), [Mu](bases/mu-front-mood-edit.jpg) | The darkest and most expressive of the open styles; the only one with brushstrokes. |
 | 4 | **Printed** | printed comic: halftone, offset colour | Z-Image Turbo, open weights | 4, [published](https://pictures.snowmoon.party/images/readers/206a0a4c414bb51eb3858b7c64eb79e5.jpg). Front: [Zei](bases/zei-front-printed-edit.jpg), [Gladias](bases/gladias-front-printed-edit.jpg) | Paper texture, halftone dots in the shadows, slightly offset colour: reads as ink on paper. |
 | 5 | **Quiet** | muted, empty space | Z-Image Turbo, open weights | 4, [published](https://pictures.snowmoon.party/images/readers/794beb09bbdb5eedcde517084f7a7e31.jpg). Front: [Zei](bases/zei-front-quiet-edit.jpg), [Bai](bases/bai-front-quiet-edit.jpg) | Muted tones and plain backgrounds, the focus on faces and posture. (Its Zei draft lost the jacket's front.) |
-| 6 | **Miniature** (new) | a photographed 3D model | Z-Image Turbo, open weights | 4 to make | The only 3D, photographic look: a painted figurine under studio light. |
-| 7 | **Gouache** (new) | painted, no outlines | **Gemini 3.1 Flash Image, a closed model by Google** | 4 to make | The only one with no ink outlines: opaque paint and paper grain. |
-| 8 | **Neon night** (new) | night light, glow, reflections | **GPT Image 2.5 Sunburst, a closed model by OpenAI** | 4 to make | The only night palette: lit by glowing panels, wet reflections, rim light. |
+| 6 | **Miniature** (new) | a photographed 3D model | Z-Image Turbo, open weights | 4 to make; test front: [Zei](styles-test/zei-front-miniature-open.jpg) | The only 3D, photographic look: a painted figurine under studio light. |
+| 7 | **Gouache** (new) | painted, no outlines | **Gemini 3.1 Flash Image, a closed model by Google** | 4 to make; test front: [Zei](styles-test/zei-front-gouache-gemini.jpg) (and [by the open model](styles-test/zei-front-gouache-open.jpg), which doesn't paint) | The only one with no ink outlines: opaque paint and paper grain. |
+| 8 | **Neon night** (new) | night light, glow, reflections | **GPT Image 2.5 Sunburst, a closed model by OpenAI** (blocked: no ZDR endpoint; maker to be decided) | 4 to make | The only night palette: lit by glowing panels, wet reflections, rim light. |
 
 The new texts, each under the site's 600 characters, naming no artist, studio or film:
 
@@ -77,9 +94,7 @@ open drafts (Mood is darker and inkier, the same drawing underneath). If the sty
 Gouache convincingly, plan B should use **Gouache made by the open model** instead of Mood, which keeps the same three
 names and order in both plans.
 
-**Risk to both plans:** Miniature on the open edit model is untested. If the test shows the edit model won't leave the
-sheet's drawing, Miniature needs the closed model too (plan A's cost for that style rises from $0.0285 to $0.2035 a
-base), and plan B has no 3D base.
+**Tested (styles-test.md):** Miniature on the open edit model does leave the sheet's drawing (a photographed toy figure), so it holds in both plans; Gouache by the open model does not paint, so plan B uses Mood.
 
 Characters, in book-mention order: Zei, Gladias, Bai, Seila, Deluin, Mu. (`CHALLENGE.characters` lists them
 Zei, Bai, Gladias, Seila, Deluin, Mu, "the owner's order"; this doesn't change it.) Each base is a sheet with three
@@ -128,8 +143,9 @@ To spend least if the reread is uncertain: make the shared Printed and Miniature
    Privacy §7, Terms §8 and About lines into `src/lib/legal.ts` (P6s fails otherwise). Two things for that reread:
    - The drafted §7 line covers "the remix challenge's bases and references". A closed **style's samples** are neither,
      so for the closed styles it should read "the remix challenge's bases, styles and references" (and Terms §8 the same).
-   - New closed calls should set `zeroDataRetention: true` and, for Google, `only: ['vertex']`. Every closed picture
-     published would then be new and made with ZDR, which allows the draft's variant B wording (no copy kept).
+   - Every new closed call now sets `zeroDataRetention: true`, `disallowPromptTraining: true` and its provider pin
+     (owner, 2026-11-04). With only Google's Vertex pictures published, the draft's variant B wording (no copy kept) is
+     accurate; it is now the draft's recommended line (branch `closed-model-bases`).
 4. **Fallback:** if the reread hasn't landed by **Thu 5 Nov**, plan B: three open styles (Mood, Printed, Miniature),
    no closed picture published anywhere, `closedBasesAllowed` stays false. The closed styles can join the group after
    the reread; the bases stay as published.
@@ -137,9 +153,8 @@ To spend least if the reread is uncertain: make the shared Printed and Miniature
    after that.
 
 **Code today:** `closedBaseRefusal` (src/lib/challenge/bases.ts) refuses a closed-model base while the flag is off, and
-it reads samples as well as views. But nothing on the site refuses publishing a closed-model **style**: the gate is on
-bases only. The plan mode applies it to the styles' samples too ("PUBLISH WAITS"); the run that publishes them must do
-the same.
+it reads samples as well as views. Since 2026-11-04 its sibling `closedStyleRefusal` gates a style whose samples name a closed model the same way; the
+seed script calls it before it publishes a style, and the plan mode shows it ("PUBLISH WAITS").
 
 ## The seed script
 
@@ -164,8 +179,8 @@ yet: whether the same reading covers the Gouache style's **samples** (the same k
 
 1. **Styles:** keep the group of eight as listed, or drop or rename any; OK or rewrite the three new texts.
 2. **Bases:** plan A's three (Gouache, Printed, Miniature) and plan B's (Mood, Printed, Miniature), or others.
-3. **"OK to spend up to $1.05 on the styles"** (the style test $0.31 and the samples $0.74, at worst). The style test
-   goes first and its five pictures come back for a look before the samples.
+3. ~~The style test~~: done ($0.08879, styles-test.md). Next: **"OK to spend up to $0.74 on the samples"** (less if
+   Neon night is dropped or changes maker), and **Neon night's maker** (Gemini, the open model, or drop it).
 4. **Bases spend, separately** (the brief allows spending on the styles only): "OK to spend up to $3.76 on plan A's
    bases" or "up to $1.87 on plan B's".
 5. **The reread** of the closed-model-bases Privacy, Terms and About lines, with "styles" added, by Thu 5 Nov; and

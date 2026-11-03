@@ -181,6 +181,14 @@ proof('two entries for one person and character are caught', (() => {
   check('once closedBasesAllowed is true, a closed-model base (OpenAI, Google) is accepted', BA.closedBaseRefusal(body('gpt-image-2.5-sunburst'), true) === null && BA.closedBaseRefusal(body('gemini-3.1-flash-image'), true) === null);
   check('a model not on config/models.json is refused even when closed bases are allowed', /not on the model list/.test(BA.closedBaseRefusal(body('some-new-model'), true) ?? ''));
   proof('a closed-model base let through before the reread is caught', BA.closedBaseRefusal(body('gpt-image-2.5-sunburst'), false) !== null && BA.closedBaseRefusal(body('gpt-image-2.5-sunburst'), true) === null);
+  // Styles (owner, 2026-11-04): a style whose samples name a closed model waits like a base.
+  const style = (...models: string[]) => ({ samples: models.map((m) => ({ url: 'u', sha256: 'a'.repeat(64), recipe: recipe(m) })) });
+  check('a style with open-model samples is never refused', BA.closedStyleRefusal(style('z-image-turbo', 'flux2-klein-4b'), false) === null);
+  check('a style with one closed-model sample is refused while closedBasesAllowed is false, naming the model and its maker', (BA.closedStyleRefusal(style('z-image-turbo', 'gemini-3.1-flash-image'), false) ?? '').includes('Gemini 3.1 Flash Image, a closed model by Google'));
+  check('once closedBasesAllowed is true, a closed-model style is accepted; an unlisted model still is not', BA.closedStyleRefusal(style('gemini-3.1-flash-image'), true) === null && /not on the model list/.test(BA.closedStyleRefusal(style('some-new-model'), true) ?? ''));
+  proof('a closed-model style published before the reread is caught', BA.closedStyleRefusal(style('gpt-image-2.5-sunburst'), false) !== null);
+  const seedSrc = read('scripts/seed-designs.ts');
+  check('the seed script\'s publish path calls closedStyleRefusal before it writes a style', seedSrc.includes('closedStyleRefusal(') && seedSrc.lastIndexOf('closedStyleRefusal(') < seedSrc.indexOf("kind: 'style', styleName"));
   const B1 = '11111111-1111-4111-8111-111111111111', B2 = '22222222-2222-4222-8222-222222222222';
   const step = (elementId: string) => ({ elementId, versionId: `${elementId.slice(0, 8)}-0000-4000-8000-000000000000` });
   check('a fork of a refused base does not count, and the character\'s bases stay picked (a fork of any sheet does not count instead)', !R.remixOfBase('zei', [step(B2)], { zei: [B1, B2] }, new Set([B2])) && R.remixOfBase('zei', [step(B1)], { zei: [B1, B2] }, new Set([B2])) && !R.remixOfBase('zei', [step('99999999-9999-4999-8999-999999999999')], { zei: [B2] }, new Set([B2])));

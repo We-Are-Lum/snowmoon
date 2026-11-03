@@ -42,6 +42,20 @@ export function closedBaseRefusal(body: Pick<DesignBody, 'samples' | 'views'>, a
 }
 
 /**
+ * Why a style can't be published yet, or null when it can (owner, 2026-11-04: closed styles' samples are gated like
+ * bases). A style whose samples name a closed model waits for the same switch, CHALLENGE.closedBasesAllowed, which waits
+ * for the owner's reread of the lines naming the providers ("the remix challenge's bases, styles and references"). For
+ * the script that publishes styles (scripts/seed-designs.ts): call it before writing.
+ */
+export function closedStyleRefusal(body: Pick<DesignBody, 'samples'>, allowed: boolean = CHALLENGE.closedBasesAllowed): string | null {
+  const found = closedModelsIn({ samples: body.samples ?? [], views: {} });
+  const unlisted = found.filter((f) => !f.listed);
+  if (unlisted.length) return `samples made with ${unlisted.map((f) => f.label).join(', ')}: add the model to config/models.json first`;
+  if (found.length && !allowed) return `samples made with ${found.map((f) => f.label).join(', ')}: a closed-model style waits for CHALLENGE.closedBasesAllowed (the owner's reread of the Terms and Privacy lines)`;
+  return null;
+}
+
+/**
  * The configured bases (CHALLENGE.bases) that are refused, with why: each base id read from the database (an element
  * id: every version of it; a version id: that version) and checked with closedBaseRefusal. Read-only. An id that is no
  * published sheet isn't listed here (startingSheets leaves it out). Empty while no bases are picked.

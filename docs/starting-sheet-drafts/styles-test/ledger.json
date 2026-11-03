@@ -1,0 +1,373 @@
+{
+ "cap_usd": 0.35,
+ "calls": [
+  {
+   "char": "zei",
+   "view": "front",
+   "style": "Miniature",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "kind": "prompt-check",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 0.000144975,
+   "worstUsd": 0.0015,
+   "at": "2026-11-03T20:55:06.819Z"
+  },
+  {
+   "char": "zei",
+   "view": "front",
+   "style": "Miniature",
+   "model": "flux2-klein-4b-edit",
+   "kind": "image",
+   "file": "styles-test/zei-front-miniature-open.jpg",
+   "sha256": "7133dde80e7438c0e85695f256688f10b17c5153373c470a3c8704aaec23cc35",
+   "nsfw": false,
+   "open_weights": true,
+   "maker": "Black Forest Labs (open weights, Apache-2.0)",
+   "costUsd": 0.01032192,
+   "worstUsd": 0.02,
+   "recipe": {
+    "prompt": "The same person as in the reference picture, full body, standing, seen from the front, plain light grey background. Keep the face, hair and clothes the same.\n\nA photograph of a hand-painted miniature model: smooth sculpted resin and painted wood with a satin finish, softly rounded simplified forms, any people as small painted figurines, soft studio light, soft shadows on the ground, shallow depth of field, clear readable faces and hands.\n\nThe person is a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head.\n\nNo text, no lettering, no signs with words.",
+    "model": "flux2-klein-4b-edit",
+    "endpoint": "fal-ai/flux-2/klein/4b/edit",
+    "host": "fal.ai",
+    "settings": {
+     "image_size": {
+      "width": 576,
+      "height": 768
+     },
+     "num_images": 1,
+     "enable_safety_checker": true,
+     "output_format": "jpeg",
+     "sync_mode": true
+    },
+    "seed": 320328868,
+    "request_id": "01a1a331-b8a8-76e3-9afa-0c2d6b614735",
+    "cost_usd": 0.0103,
+    "made_at": "2026-11-03T20:55:06.821Z",
+    "width": 576,
+    "height": 768,
+    "references": [
+     {
+      "sha256": "cd6e71769d0d468bbfc5dbb4269aa62b14a92efaa45aef33bfc1b9fd0ba8d867",
+      "what": "the original starting sheet (content/snowmoon/recipes/images/cast.json#zei-sheet)"
+     }
+    ],
+    "style": {
+     "version_id": "unpublished: docs/starting-sheet-drafts/styles-plan.json",
+     "title": "Miniature",
+     "text": "A photograph of a hand-painted miniature model: smooth sculpted resin and painted wood with a satin finish, softly rounded simplified forms, any people as small painted figurines, soft studio light, soft shadows on the ground, shallow depth of field, clear readable faces and hands."
+    },
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "passed"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line",
+      "style text"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    }
+   },
+   "at": "2026-11-03T20:55:06.821Z"
+  },
+  {
+   "char": "zei",
+   "view": "front",
+   "style": "Gouache",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "kind": "prompt-check",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 0.0001662,
+   "worstUsd": 0.0015,
+   "at": "2026-11-03T20:55:10.325Z"
+  },
+  {
+   "char": "zei",
+   "view": "front",
+   "style": "Gouache",
+   "model": "flux2-klein-4b-edit",
+   "kind": "image",
+   "file": "styles-test/zei-front-gouache-open.jpg",
+   "sha256": "26cb17cd35f0fb15a1a74d80700bfabf63ca14100d8619381bebb8da2bd6f688",
+   "nsfw": false,
+   "open_weights": true,
+   "maker": "Black Forest Labs (open weights, Apache-2.0)",
+   "costUsd": 0.01032192,
+   "worstUsd": 0.02,
+   "recipe": {
+    "prompt": "The same person as in the reference picture, full body, standing, seen from the front, plain light grey background. Keep the face, hair and clothes the same.\n\nPainted illustration in opaque gouache on textured paper: visible flat brush strokes and dry-brush edges, soft shapes with no ink outlines, a limited warm palette with a few saturated accents, gentle daylight, the paper's grain showing through, clear readable faces and hands.\n\nThe person is a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head.\n\nNo text, no lettering, no signs with words.",
+    "model": "flux2-klein-4b-edit",
+    "endpoint": "fal-ai/flux-2/klein/4b/edit",
+    "host": "fal.ai",
+    "settings": {
+     "image_size": {
+      "width": 576,
+      "height": 768
+     },
+     "num_images": 1,
+     "enable_safety_checker": true,
+     "output_format": "jpeg",
+     "sync_mode": true
+    },
+    "seed": 559137432,
+    "request_id": "01a1a331-c51a-7da2-aa94-ef15b1c41487",
+    "cost_usd": 0.0103,
+    "made_at": "2026-11-03T20:55:10.326Z",
+    "width": 576,
+    "height": 768,
+    "references": [
+     {
+      "sha256": "cd6e71769d0d468bbfc5dbb4269aa62b14a92efaa45aef33bfc1b9fd0ba8d867",
+      "what": "the original starting sheet (content/snowmoon/recipes/images/cast.json#zei-sheet)"
+     }
+    ],
+    "style": {
+     "version_id": "unpublished: docs/starting-sheet-drafts/styles-plan.json",
+     "title": "Gouache",
+     "text": "Painted illustration in opaque gouache on textured paper: visible flat brush strokes and dry-brush edges, soft shapes with no ink outlines, a limited warm palette with a few saturated accents, gentle daylight, the paper's grain showing through, clear readable faces and hands."
+    },
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "passed"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line",
+      "style text"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    }
+   },
+   "at": "2026-11-03T20:55:10.326Z"
+  },
+  {
+   "char": "zei",
+   "view": "front",
+   "style": "Gouache",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "kind": "prompt-check",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 0.0001659,
+   "worstUsd": 0.0015,
+   "at": "2026-11-03T20:55:13.280Z"
+  },
+  {
+   "char": "zei",
+   "view": "front",
+   "style": "Gouache",
+   "model": "gemini-3.1-flash-image",
+   "kind": "image",
+   "file": "styles-test/zei-front-gouache-gemini.jpg",
+   "sha256": "fc14548179449756f1325747b16aee740e8cfb9529f7d82f02f03c5dadbf7f8e",
+   "closed_model": true,
+   "maker": "Google",
+   "costUsd": 0.067665,
+   "worstUsd": 0.09,
+   "recipe": {
+    "prompt": "The same person as in the reference picture, full body, standing, seen from the front, plain light grey background. Keep the face, hair and clothes the same.\n\nPainted illustration in opaque gouache on textured paper: visible flat brush strokes and dry-brush edges, soft shapes with no ink outlines, a limited warm palette with a few saturated accents, gentle daylight, the paper's grain showing through, clear readable faces and hands.\n\nThe person is a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head.\n\nNo text, no lettering, no signs with words.",
+    "model": "gemini-3.1-flash-image",
+    "endpoint": "google/gemini-3.1-flash-image",
+    "host": "Vercel AI Gateway",
+    "settings": {
+     "modalities": [
+      "text",
+      "image"
+     ],
+     "aspect_ratio": "3:4",
+     "gateway": {
+      "only": [
+       "vertex"
+      ],
+      "zeroDataRetention": true,
+      "disallowPromptTraining": true
+     },
+     "converted": {
+      "from": "image/png",
+      "sha256": "eb8892c35a42870a0476833e5ef714365deb6ca935b304262f6be84365061705",
+      "to": "jpeg",
+      "resized_to": {
+       "width": 576,
+       "height": 768
+      },
+      "fit": "contain, padded with the picture's own corner colour"
+     }
+    },
+    "seed": null,
+    "request_id": "gen_01M6HK3P33JET0A9FHH1VR1QGB",
+    "cost_usd": 0.0677,
+    "made_at": "2026-11-03T20:55:13.280Z",
+    "width": 576,
+    "height": 768,
+    "references": [
+     {
+      "sha256": "cd6e71769d0d468bbfc5dbb4269aa62b14a92efaa45aef33bfc1b9fd0ba8d867",
+      "what": "the original starting sheet (content/snowmoon/recipes/images/cast.json#zei-sheet)"
+     }
+    ],
+    "style": {
+     "version_id": "unpublished: docs/starting-sheet-drafts/styles-plan.json",
+     "title": "Gouache",
+     "text": "Painted illustration in opaque gouache on textured paper: visible flat brush strokes and dry-brush edges, soft shapes with no ink outlines, a limited warm palette with a few saturated accents, gentle daylight, the paper's grain showing through, clear readable faces and hands."
+    },
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "not run"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line",
+      "style text"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    }
+   },
+   "response_meta": {
+    "id": "gen_01M6HK3P33JET0A9FHH1VR1QGB",
+    "model": "google/gemini-3.1-flash-image",
+    "usage": {
+     "prompt_tokens": 1330,
+     "completion_tokens": 1120,
+     "total_tokens": 2450,
+     "cost": 0.067665,
+     "is_byok": false,
+     "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0
+     },
+     "cost_details": {
+      "upstream_inference_cost": null,
+      "upstream_inference_prompt_cost": 0,
+      "upstream_inference_completions_cost": 0
+     },
+     "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "image_tokens": 0
+     },
+     "cache_creation_input_tokens": 0,
+     "market_cost": 0.067665,
+     "gateway_cost": 0.067665
+    },
+    "provider_metadata": {
+     "vertex": {
+      "promptFeedback": null,
+      "groundingMetadata": null,
+      "urlContextMetadata": null,
+      "safetyRatings": null,
+      "usageMetadata": {
+       "promptTokenCount": 1330,
+       "candidatesTokenCount": 1120,
+       "totalTokenCount": 2450,
+       "trafficType": "ON_DEMAND",
+       "promptTokensDetails": [
+        {
+         "modality": "IMAGE",
+         "tokenCount": 1120
+        },
+        {
+         "modality": "TEXT",
+         "tokenCount": 210
+        }
+       ],
+       "candidatesTokensDetails": [
+        {
+         "modality": "IMAGE",
+         "tokenCount": 1120
+        }
+       ]
+      },
+      "finishMessage": null,
+      "serviceTier": null
+     },
+     "gateway": {
+      "routing": {
+       "originalModelId": "google/gemini-3.1-flash-image",
+       "resolvedProvider": "vertex",
+       "fallbacksAvailable": [],
+       "planningReasoning": "Provider set restricted to: vertex. System credentials planned for: vertex. ZDR requested: all 1 attempts support ZDR. Execution order: vertex(system). Disallow prompt training requested: all 1 attempts disallow prompt training",
+       "canonicalSlug": "google/gemini-3.1-flash-image",
+       "finalProvider": "vertex",
+       "modelAttemptCount": 1,
+       "modelAttempts": [
+        {
+         "canonicalSlug": "google/gemini-3.1-flash-image",
+         "success": true,
+         "providerAttemptCount": 1,
+         "providerAttempts": [
+          {
+           "provider": "vertex",
+           "credentialType": "system",
+           "success": true,
+           "startTime": 1793739315356,
+           "endTime": 1793739324383,
+           "statusCode": 200,
+           "providerResponseId": "M0rqavWPJ7Xs0MMPi4vB0Ag"
+          }
+         ]
+        }
+       ],
+       "totalProviderAttemptCount": 1,
+       "affinity": {
+        "outcome": "skipped_below_min_prefix"
+       },
+       "clientSessionId": "36ea714527b38b0c13d3a3bad22a07db",
+       "clientSessionIdSource": "fingerprint"
+      },
+      "cost": "0.067665",
+      "marketCost": "0.067665",
+      "surchargeCost": "0",
+      "gatewayCost": "0.067665",
+      "inferenceCost": "0.067665",
+      "inputInferenceCost": "0.000665",
+      "outputInferenceCost": "0.067",
+      "enabledZeroDataRetention": true,
+      "enabledDisallowPromptTraining": true,
+      "generationId": "gen_01M6HK3P33JET0A9FHH1VR1QGB"
+     }
+    }
+   },
+   "at": "2026-11-03T20:55:13.280Z"
+  },
+  {
+   "char": "zei",
+   "view": "front",
+   "style": "Gouache",
+   "model": "gpt-image-2.5-sunburst",
+   "kind": "refused",
+   "why": "gpt-image-2.5-sunburst: the gateway's openai endpoint has no zero data retention (has_zdr false); not calling",
+   "costUsd": 0,
+   "worstUsd": 0,
+   "at": "2026-11-03T20:55:26.240Z"
+  },
+  {
+   "char": "zei",
+   "view": "front",
+   "style": "Neon night",
+   "model": "gpt-image-2.5-sunburst",
+   "kind": "refused",
+   "why": "gpt-image-2.5-sunburst: the gateway's openai endpoint has no zero data retention (has_zdr false); not calling",
+   "costUsd": 0,
+   "worstUsd": 0,
+   "at": "2026-11-03T20:55:26.300Z"
+  }
+ ]
+}

@@ -1,48 +1,137 @@
 {
   "about": "The challenge's styles and bases, as proposed in styles-proposal.md (DRAFT, drafted by the coding agent, Claude, a closed model by Anthropic, 2026-11-03). Read by `npm run seed:designs -- --bases-plan`, which prices it and calls nothing. Existing styles are named as published (body.title); new styles carry their full text. Each style's `model` is the model its samples are made with; each plan's `bases` lists the three base styles in their fixed order (CHALLENGE.baseStyles) with the model that makes the bases' views.",
   "styles": [
-    { "name": "Techno vistas (starting point)", "status": "to publish (seed --style-only)", "kind": "clean cel, wide skies", "model": "flux2-klein-4b", "samples": 2, "samples_made": true },
-    { "name": "Bolder", "status": "published", "kind": "bold-outline comic", "model": "z-image-turbo", "samples": 4, "samples_made": true },
-    { "name": "Mood", "status": "published", "kind": "dark-line graphic novel, brushy", "model": "z-image-turbo", "samples": 4, "samples_made": true },
-    { "name": "Printed", "status": "published", "kind": "printed comic: halftone, offset colour", "model": "z-image-turbo", "samples": 4, "samples_made": true },
-    { "name": "Quiet", "status": "published", "kind": "muted, empty space", "model": "z-image-turbo", "samples": 4, "samples_made": true },
     {
-      "name": "Miniature", "status": "new", "kind": "photographed 3D model", "model": "z-image-turbo", "samples": 4, "samples_made": false,
+      "name": "Techno vistas (starting point)",
+      "status": "to publish (seed --style-only)",
+      "kind": "clean cel, wide skies",
+      "model": "flux2-klein-4b",
+      "samples": 2,
+      "samples_made": true
+    },
+    {
+      "name": "Bolder",
+      "status": "published",
+      "kind": "bold-outline comic",
+      "model": "z-image-turbo",
+      "samples": 4,
+      "samples_made": true
+    },
+    {
+      "name": "Mood",
+      "status": "published",
+      "kind": "dark-line graphic novel, brushy",
+      "model": "z-image-turbo",
+      "samples": 4,
+      "samples_made": true
+    },
+    {
+      "name": "Printed",
+      "status": "published",
+      "kind": "printed comic: halftone, offset colour",
+      "model": "z-image-turbo",
+      "samples": 4,
+      "samples_made": true
+    },
+    {
+      "name": "Quiet",
+      "status": "published",
+      "kind": "muted, empty space",
+      "model": "z-image-turbo",
+      "samples": 4,
+      "samples_made": true
+    },
+    {
+      "name": "Miniature",
+      "status": "new",
+      "kind": "photographed 3D model",
+      "model": "z-image-turbo",
+      "samples": 4,
+      "samples_made": false,
       "text": "A photograph of a hand-painted miniature model: smooth sculpted resin and painted wood with a satin finish, softly rounded simplified forms, any people as small painted figurines, soft studio light, soft shadows on the ground, shallow depth of field, clear readable faces and hands."
     },
     {
-      "name": "Gouache", "status": "new", "kind": "painted, no outlines", "model": "gemini-3.1-flash-image", "samples": 4, "samples_made": false,
+      "name": "Gouache",
+      "status": "new",
+      "kind": "painted, no outlines",
+      "model": "gemini-3.1-flash-image",
+      "samples": 4,
+      "samples_made": false,
       "text": "Painted illustration in opaque gouache on textured paper: visible flat brush strokes and dry-brush edges, soft shapes with no ink outlines, a limited warm palette with a few saturated accents, gentle daylight, the paper's grain showing through, clear readable faces and hands."
     },
     {
-      "name": "Neon night", "status": "new", "kind": "night light, glow and reflections", "model": "gpt-image-2.5-sunburst", "samples": 4, "samples_made": false,
+      "name": "Neon night",
+      "status": "blocked: OpenAI has no ZDR",
+      "kind": "night light, glow and reflections",
+      "model": "gpt-image-2.5-sunburst",
+      "samples": 4,
+      "samples_made": false,
       "text": "Painted digital illustration at night: deep blue and violet shadows, light from glowing coloured panels in cyan and magenta, glossy wet reflections, strong rim light on figures, high contrast, crisp edges on figures and a soft glow around lights, clear readable faces and hands."
     }
   ],
   "style_test": [
-    { "style": "Miniature", "model": "flux2-klein-4b-edit", "what": "Zei front from the original sheet" },
-    { "style": "Gouache", "model": "gemini-3.1-flash-image", "what": "Zei front from the original sheet" },
-    { "style": "Gouache", "model": "gpt-image-2.5-sunburst", "what": "Zei front from the original sheet" },
-    { "style": "Gouache", "model": "flux2-klein-4b-edit", "what": "Zei front from the original sheet (does the open model paint? decides the fallback)" },
-    { "style": "Neon night", "model": "gpt-image-2.5-sunburst", "what": "Zei front from the original sheet" }
+    {
+      "style": "Miniature",
+      "model": "flux2-klein-4b-edit",
+      "what": "Zei front from the original sheet"
+    },
+    {
+      "style": "Gouache",
+      "model": "gemini-3.1-flash-image",
+      "what": "Zei front from the original sheet"
+    },
+    {
+      "style": "Gouache",
+      "model": "gpt-image-2.5-sunburst",
+      "what": "Zei front from the original sheet"
+    },
+    {
+      "style": "Gouache",
+      "model": "flux2-klein-4b-edit",
+      "what": "Zei front from the original sheet (does the open model paint? decides the fallback)"
+    },
+    {
+      "style": "Neon night",
+      "model": "gpt-image-2.5-sunburst",
+      "what": "Zei front from the original sheet"
+    }
   ],
   "plans": {
     "A": {
-      "about": "With the owner's reread of the closed-model-bases lines and CHALLENGE.closedBasesAllowed on: painterly by a closed model, printed and 3D by the open model.",
+      "about": "If the owner's reread of the closed-model-bases lines lands by Thu 5 Nov and CHALLENGE.closedBasesAllowed turns on: painterly by Gemini (Google, on Vertex, ZDR), printed and 3D by the open model (owner, 2026-11-04).",
       "bases": [
-        { "style": "Gouache", "model": "gemini-3.1-flash-image" },
-        { "style": "Printed", "model": "flux2-klein-4b-edit" },
-        { "style": "Miniature", "model": "flux2-klein-4b-edit" }
+        {
+          "style": "Gouache",
+          "model": "gemini-3.1-flash-image"
+        },
+        {
+          "style": "Printed",
+          "model": "flux2-klein-4b-edit"
+        },
+        {
+          "style": "Miniature",
+          "model": "flux2-klein-4b-edit"
+        }
       ]
     },
     "B": {
-      "about": "Fallback if the reread hasn't landed by Thu 5 Nov: three open styles, no closed picture published anywhere.",
+      "about": "Fallback if the reread hasn't landed by Thu 5 Nov: three open styles, no closed picture published anywhere. Mood, not Gouache by the open model: the style test (2026-11-03, styles-test.md) showed the open model keeps its outlines and doesn't paint.",
       "bases": [
-        { "style": "Mood", "model": "flux2-klein-4b-edit" },
-        { "style": "Printed", "model": "flux2-klein-4b-edit" },
-        { "style": "Miniature", "model": "flux2-klein-4b-edit" }
+        {
+          "style": "Mood",
+          "model": "flux2-klein-4b-edit"
+        },
+        {
+          "style": "Printed",
+          "model": "flux2-klein-4b-edit"
+        },
+        {
+          "style": "Miniature",
+          "model": "flux2-klein-4b-edit"
+        }
       ]
     }
   },
-  "retake_share": 0.5
+  "retake_share": 0.5,
+  "style_test_results": "styles-test.md and styles-test/ledger.json (2026-11-03): three fronts made for $0.08879; the two GPT Image 2.5 Sunburst rows refused before any call (no ZDR on the gateway's OpenAI endpoint)."
 }

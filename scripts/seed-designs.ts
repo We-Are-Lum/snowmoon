@@ -96,7 +96,7 @@ if (has('bases-plan')) {
  */
 async function basesPlan() {
   const { CHALLENGE } = await import('../src/lib/config');
-  const { closedBaseRefusal, closedModelsIn } = await import('../src/lib/challenge/bases');
+  const { closedBaseRefusal, closedStyleRefusal, closedModelsIn } = await import('../src/lib/challenge/bases');
   const { modelName } = await import('../src/lib/images/recipe-lines');
   const P = await import('./lib/bases-plan');
   const plan = P.readPlan(ROOT);
@@ -114,7 +114,7 @@ async function basesPlan() {
     const c = P.pictureCost(s.model, 'text'), k = P.checkCost(n);
     const est = n * c.est + k.est, worst = n * c.worst + k.worst;
     styleEst += est; styleWorst += worst;
-    const why = closedBaseRefusal(P.stubBody(Array.from({ length: s.samples }, () => ({ slot: 'sample' as const, model: s.model }))) as never, allowed);
+    const why = closedStyleRefusal(P.stubBody(Array.from({ length: s.samples }, () => ({ slot: 'sample' as const, model: s.model }))) as never, allowed);
     out(`  ${s.name.padEnd(31)} ${s.status.padEnd(30)} samples by ${label(s.model)}`);
     out(`  ${''.padEnd(31)} ${n ? `${n} to make: ${P.usd(est)} (worst ${P.usd(worst)}); ${c.how}` : 'samples already made: $0'}${why ? `\n  ${''.padEnd(31)} PUBLISH WAITS: ${why}` : ''}`);
   }
@@ -474,6 +474,10 @@ const put = async (p: Pic): Promise<string> => {
 };
 say();
 if (!before.style) {
+  // Closed styles' samples are gated like bases (owner, 2026-11-04): refused before anything is uploaded or written.
+  const { closedStyleRefusal } = await import('../src/lib/challenge/bases');
+  const styleWhy = closedStyleRefusal({ samples: samples.map((p) => ({ url: '', sha256: p.sha256, recipe: p.recipe })) });
+  if (styleWhy) { say(`Refusing --apply: the style's ${styleWhy}. Nothing done.`); await finish(6); }
   const urls = await Promise.all(samples.map(put));
   const out = await makeDesign(sql as unknown as Sql, { fid: MAINTAINER_FID, mode: 'create', kind: 'style', styleName: style.name, body: styleBody(samples.map((p, i) => ({ url: urls[i], sha256: p.sha256, recipe: p.recipe }))) });
   styleVersionId = out.versionId;
