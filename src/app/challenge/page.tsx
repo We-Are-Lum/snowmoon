@@ -5,7 +5,7 @@ import { designByline } from '~/lib/images/byline';
 import { bookCharacter } from '~/lib/images/designs';
 import { sheetCharacter } from '~/lib/images/sheets';
 import { standing, startingSheets, type Standing } from '~/lib/challenge/entries';
-import { entrantCounts, phase } from '~/lib/challenge/rules';
+import { basesOf, entrantCounts, phase } from '~/lib/challenge/rules';
 import { CHALLENGE_WORDING as W } from '~/lib/challenge/wording';
 import { AiTag } from '~/components/ai-tag';
 
@@ -96,7 +96,7 @@ export default async function ChallengePage() {
           <p>
             <Link href={`/references/designs/character/${c.slug}`}>{W.readBook(callName(c.name))} →</Link>
           </p>
-          <p className="dz-label">{W.startFrom}</p>
+          <p className="dz-label">{basesOf(c.slug).length ? W.startFromBases : W.startFrom}</p>
           {list.length ? (
             <ul className="dz-rows">
               {list.map((s) => (

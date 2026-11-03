@@ -8,7 +8,7 @@ not repeated here, only cited) and adds what changes when **a remixer**, not the
 with a closed model.
 
 Legal texts describe today (owner, 2026-10-18): these lines go into `src/lib/legal.ts` and `config/consent.json` in the
-same release that turns `IMAGES.designs.modelChoice` on, never ahead of it. `check:principles` P6s fails while the switch
+same release that turns `IMAGES.designs.modelChoice` on, never ahead of it. `check:principles` P6t fails while the switch
 is on and Privacy §4, §7 or the consent screen lack them; P6g, P6h and P6i now know OpenAI and Google
 (`SERVICES` in `scripts/check-principles.ts`), so About must name them too.
 
@@ -79,7 +79,7 @@ is on and Privacy §4, §7 or the consent screen lack them; P6g, P6h and P6i now
 
 **When Gemini is offered as well**, the first sentence reads "…its maker (OpenAI, for GPT Image 2.5 Sunburst; Google,
 for Gemini 3.1 Flash Image) receives…", and the last ends "…apart from OpenAI's safety checks; Google's runs on its
-Vertex AI service." `CLOSED_IMAGES.geminiAgeReadingAccepted` and this sentence change in the same release (P6s follows
+Vertex AI service." `CLOSED_IMAGES.geminiAgeReadingAccepted` and this sentence change in the same release (P6t follows
 the list offered).
 
 **If `closed-model-bases`' own §7 item ships first** (the project's own bases), the two can be one item: "OpenAI and

@@ -12,7 +12,7 @@
  *      on an in-memory Postgres with every migration, NEXT_remix_model_choice.sql included;
  *  M5  the recipe lines: the closed label, the closed safety line and the can't-be-re-run line; open lines unchanged;
  *  M6  the safety line is the agreed wording, word for word;
- *  M7  the switch can't be on without Privacy (P6s) and the consent screen naming each provider;
+ *  M7  the switch can't be on without Privacy (P6t) and the consent screen naming each provider;
  *  M8  a closed call sends only the prompt and pictures, with zero data retention, no prompt training and a pinned
  *      provider, and reads a recorded answer's picture and cost.
  */
@@ -27,7 +27,7 @@ import { PRIVACY } from '../src/lib/legal';
 import { DEFAULT_SHEET_MODEL, SHEET_MODELS, oneChoice, sheetModel, sheetModelProblems, sheetModelsOffered, type SheetModel } from '../src/lib/images/sheet-models';
 import { modelChoicesFor } from '../src/lib/images/model-choice-view';
 import { closedChecksLine, checksLine, howMade, modelTerms, RERUN_LINE } from '../src/lib/images/recipe-lines';
-import { p6sProblems, type P6sInput } from './lib/p6s';
+import { p6tProblems, type P6tInput } from './lib/p6t';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const read = (rel: string) => readFileSync(path.join(ROOT, rel), 'utf8');
@@ -237,13 +237,13 @@ proven(
 proven(
   'M6 the closed safety line is the agreed wording, word for word',
   () => [...need(closedChecksLine('gpt-oss-safeguard-20b') === SAFETY, `got "${closedChecksLine('gpt-oss-safeguard-20b')}"`), ...need(checksLine(recipe(GPT.views.id, GPT.views.endpoint, 'Vercel AI Gateway', 'not run')) === SAFETY, 'checksLine differs')],
-  () => need(checksLine(recipe(GPT.views.id, GPT.views.endpoint, 'Vercel AI Gateway', 'passed')) === SAFETY, 'a closed recipe claiming the host checker gets another line'),
+  () => need(checksLine(recipe(IMAGES.editModel.id, IMAGES.editModel.endpoint, 'fal.ai', 'not run')) === SAFETY, 'an open recipe without the host checker does not get the closed line'),
 );
 
 // --- M7: the switch can't be on without Privacy ------------------------------------------------------------------
 const consent = JSON.parse(read('config/consent.json'));
 const w = consent.versions[consent.current];
-const today: P6sInput = {
+const today: P6tInput = {
   on: IMAGES.designs.modelChoice,
   providers: [...new Set(sheetModelsOffered(true).filter((m) => !m.open).map((m) => m.provider.name))],
   s4: (PRIVACY.sections.find((s) => s.n === 4)?.body ?? []).flat().join(' '),
@@ -253,11 +253,11 @@ const today: P6sInput = {
 // The draft's words (docs/legal/remix-model-choice-draft.md), as they would be in legal.ts and consent.json.
 const draft = read('docs/legal/remix-model-choice-draft.md');
 const quoted = (label: string) => (draft.split(`<!-- ${label} -->`)[1] ?? '').split('<!-- end -->')[0].replace(/^\s*>\s?/gm, '').replace(/\s+/g, ' ').trim();
-const withDraft: P6sInput = { ...today, on: true, s4: `${today.s4} ${quoted('privacy-4')}`, s7: [...today.s7, quoted('privacy-7')], consent: `${today.consent}\n${quoted('consent')}` };
+const withDraft: P6tInput = { ...today, on: true, s4: `${today.s4} ${quoted('privacy-4')}`, s7: [...today.s7, quoted('privacy-7')], consent: `${today.consent}\n${quoted('consent')}` };
 proven(
-  'M7 the switch can\'t be on without Privacy §4, §7 and the consent screen naming each provider (P6s)',
-  () => [...p6sProblems(today), ...p6sProblems(withDraft), ...need(quoted('privacy-7').length > 0 && quoted('consent').length > 0, 'the draft\'s quoted lines are missing')],
-  () => p6sProblems({ ...today, on: true }),
+  'M7 the switch can\'t be on without Privacy §4, §7 and the consent screen naming each provider (P6t)',
+  () => [...p6tProblems(today), ...p6tProblems(withDraft), ...need(quoted('privacy-7').length > 0 && quoted('consent').length > 0, 'the draft\'s quoted lines are missing')],
+  () => p6tProblems({ ...today, on: true }),
 );
 
 // --- M8: a closed call, on stand-ins -----------------------------------------------------------------------------
