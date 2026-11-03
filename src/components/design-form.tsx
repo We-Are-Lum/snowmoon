@@ -49,7 +49,7 @@ type Props = {
   /** The remix challenge opens this fork or version to everyone who passes the Generate gate (CHALLENGE.openSheets; the server checks again). */
   challengeOpen?: boolean;
   /** "Ask for help" (src/lib/sheet-help/), only while it is live and only on a challenge character's sheet; else null. */
-  help?: { perDay: number; route: string; model: string; partMaxChars: number; partMaxWords: number; servedDays: number } | null;
+  help?: { perDay: number; route: string; model: string; partMaxChars: number; partMaxWords: number; servedDays: number; moment?: { cast: { slug: string; name: string }[]; character: string; moodMax: number } | null } | null;
 };
 
 export function DesignForm(p: Props) {
@@ -255,6 +255,7 @@ export function DesignForm(p: Props) {
               route={p.help.route}
               model={p.help.model}
               servedDays={p.help.servedDays}
+              moment={p.help.moment ?? null}
               onAccept={(next, after) => {
                 setText(next);
                 setHelpWords((w) => [...w, after]);

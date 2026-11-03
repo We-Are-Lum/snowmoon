@@ -30,3 +30,32 @@ export const SHEET_HELP_WORDING = {
   /** In each picture's "How it was made" (src/lib/images/recipe-lines.ts). */
   recipeLine: (model: string) => `The prompt includes words from AI suggestions (“Ask for help”, ${model}).`,
 };
+
+/**
+ * "Find a moment"'s words on screen (docs/proposals/remix-moments.md §2). Model-drafted by the coding agent (Anthropic's
+ * Claude), 2026-11-04, for the owner to rewrite. Pure. The AI "why" is shown under `why`, labelled as AI, never in quote
+ * marks (owner, 2026-11-04).
+ */
+export const FIND_MOMENT_WORDING = {
+  tabChange: 'Suggest a change',
+  tab: 'Find a moment',
+  intro: 'Describe a mood or a situation, and it looks through the book for moments that fit. Every passage shown is the book’s own words, checked word for word.',
+  sends: (route: string) => `What you describe, the character, the passages found and how far you’ve read go to ${route}, set to keep nothing. We keep nothing about it; it counts as one of your Ask for help messages.`,
+  moodLabel: 'Mood or situation',
+  placeholder: 'e.g. tired after a long argument, trying to stay polite',
+  character: 'Character',
+  pastLimit: (n: number) => `Include chapters past Chapter ${n}`,
+  pastLimitNote: 'Off each time you open this. Passages past where you’ve read are marked.',
+  find: 'Find',
+  finding: 'Looking…',
+  chapter: (n: number) => `Chapter ${n}`,
+  pastRead: 'Past where you’ve read',
+  fromSearch: 'From search',
+  why: 'Why it may fit',
+  whysLeftOut: 'Its reasons were left out: a check flagged them. The passages are the book’s words.',
+  makeImage: 'Make an image here',
+  read: 'Read it',
+  notYet: (name: string, n: number) => `${name} first appears in Chapter ${n}, past where you’ve read.`,
+  none: 'Nothing in the book matched that. Try other words.',
+  heldBack: 'Better matches may be in later chapters.',
+};

@@ -10,7 +10,7 @@ import { RULES } from '~/lib/images/rules';
 import { IMAGE_WORDING } from '~/lib/images/wording';
 import { DesignForm } from '~/components/design-form';
 import { challengeSheetsOpen, isChallengeCharacter } from '~/lib/challenge/open-sheets';
-import { sheetHelpLive } from '~/lib/sheet-help/flag';
+import { findMomentLive, sheetHelpLive } from '~/lib/sheet-help/flag';
 
 /**
  * Make a style or a sheet (step 4; Claude Design 4b, 4c, 5b): a new style, a sheet for one of the
@@ -40,7 +40,9 @@ export default async function NewDesign({ searchParams }: Props) {
   const callName = character ? (character.name.split(' ').find((w) => !/^(Lord|General|Senator)$/.test(w)) ?? character.name) : '';
   const challengeOpen = Boolean(src && mode !== 'create' && src.kind === 'character' && challengeSheetsOpen() && isChallengeCharacter(src.entity));
   // "Ask for help" (docs/proposals/sheet-help.md): only beside a challenge character's sheet, and only while it is live.
-  const help = challengeOpen && sheetHelpLive() ? { perDay: SHEET_HELP.perDay, route: CHAT.route, model: CHAT.modelName, partMaxChars: SHEET_HELP.partMaxChars, partMaxWords: SHEET_HELP.partMaxWords, servedDays: SHEET_HELP.servedDays } : null;
+  const help = challengeOpen && sheetHelpLive() ? { perDay: SHEET_HELP.perDay, route: CHAT.route, model: CHAT.modelName, partMaxChars: SHEET_HELP.partMaxChars, partMaxWords: SHEET_HELP.partMaxWords, servedDays: SHEET_HELP.servedDays,
+    // "Find a moment" (docs/proposals/remix-moments.md §2): its own switch, and Privacy §5 describing it.
+    moment: character && findMomentLive() ? { cast: bookCharacters().map((c) => ({ slug: c.slug, name: c.name })), character: character.slug, moodMax: SHEET_HELP.moment.moodMax } : null } : null;
   const title = mode === 'fork' ? W.form.fork : mode === 'version' ? W.form.newVersion : kind === 'style' ? W.form.newStyle : W.form.newSheet(place ? placeTitle(place.name) : callName);
   return (
     <div className="page prose dz-page dz-form-page">

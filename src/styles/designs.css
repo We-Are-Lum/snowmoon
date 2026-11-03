@@ -266,3 +266,10 @@ a.dz-fork:hover { text-decoration: none; }
 .sh-ask textarea { width: 100%; box-sizing: border-box; }
 .sh-actions { margin: 0.3rem 0; }
 .sh-actions button, .sh-help summary { min-height: 44px; }
+/* "Find a moment" (src/components/find-moment.tsx): the book's words in the quote, the AI's reason apart from it. */
+.sh-tabs { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0.4rem 0; }
+.sh-tabs button, .sh-moment select { min-height: 44px; }
+.sh-moments { list-style: none; padding: 0; margin: 0.5rem 0; display: grid; gap: 0.75rem; }
+.sh-moment-item figure { margin: 0; }
+.sh-moment-item q { quotes: none; }
+.sh-why { margin: 0.2rem 0; font-style: normal; }

@@ -4,8 +4,9 @@ import { useState } from 'react';
 import { authFetch } from '~/lib/client-auth';
 import { openedChapters } from '~/lib/chat/device';
 import { applyProposal, type PartLimits } from '~/lib/sheet-help/part';
-import { SHEET_HELP_WORDING as W } from '~/lib/sheet-help/wording';
+import { FIND_MOMENT_WORDING as FM, SHEET_HELP_WORDING as W } from '~/lib/sheet-help/wording';
 import { AiTag } from './ai-tag';
+import { FindMoment } from './find-moment';
 import { HelpMessageField } from './help-message-field';
 
 /**
@@ -33,8 +34,14 @@ export function SheetHelp(p: {
   model: string;
   servedDays: number;
   onAccept: (next: string, after: string) => void;
+  /** "Find a moment" (src/components/find-moment.tsx): only while it is live (findMomentLive), else null. */
+  moment?: { cast: { slug: string; name: string }[]; character: string; moodMax: number } | null;
 }) {
   const [turns, setTurns] = useState<Turn[]>([]);
+  const [tab, setTab] = useState<'change' | 'moment'>('change');
+  // Counts each opening of the panel: "Find a moment" is mounted afresh each time, so its "include later chapters"
+  // switch starts off every time the panel opens (docs/proposals/remix-moments.md 3.3).
+  const [opened, setOpened] = useState(0);
   const [message, setMessage] = useState('');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -86,10 +93,24 @@ export function SheetHelp(p: {
   };
 
   return (
-    <details className="dz-section sh-help">
+    <details className="dz-section sh-help" onToggle={(e) => (e.currentTarget as HTMLDetailsElement).open && setOpened((n) => n + 1)}>
       <summary>
         {W.open} <AiTag />
       </summary>
+      {p.moment && (
+        <p className="sh-tabs" role="tablist">
+          <button type="button" role="tab" aria-selected={tab === 'change'} className={tab === 'change' ? 'ic-primary' : 'ic-link'} onClick={() => setTab('change')}>
+            {FM.tabChange}
+          </button>{' '}
+          <button type="button" role="tab" aria-selected={tab === 'moment'} className={tab === 'moment' ? 'ic-primary' : 'ic-link'} onClick={() => setTab('moment')}>
+            {FM.tab}
+          </button>
+        </p>
+      )}
+      {p.moment && tab === 'moment' && opened > 0 && (
+        <FindMoment key={opened} from={p.from} cast={p.moment.cast} character={p.moment.character} moodMax={p.moment.moodMax} route={p.route} limitWords={W.limit} spendWords={W.spend} leftWords={W.left} />
+      )}
+      <div hidden={!!p.moment && tab === 'moment'}>
       <p className="dz-note">{W.optional}</p>
       <p className="dz-note">{W.sends(p.route, p.servedDays)}</p>
       <ol className="sh-turns">
@@ -145,6 +166,7 @@ export function SheetHelp(p: {
         {left !== null && <span className="dz-note">{W.left(left)}</span>}
       </p>
       {error && <p className="ic-error" role="status">{error}</p>}
+      </div>
       <p className="ic-model">{W.model(p.model)}</p>
     </details>
   );
