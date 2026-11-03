@@ -12,7 +12,7 @@ export const runtime = 'nodejs';
 
 export async function GET(request: Request) {
   const q = new URL(request.url).searchParams;
-  const x = parseResult(q.get('r'), q.get('s'));
+  const x = parseResult(q.get('r'), q.get('s'), null, q.get('g'));
   if (!x) return new Response('No such result', { status: 404 });
   const W = 1200, H = q.get('shape') === 'embed' ? 800 : 630;
   const muted = '#6A675F';

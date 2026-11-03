@@ -83,7 +83,7 @@ on a deployment with the switch on. Bluesky was tested live (read only).
    `supabase/drafts/NEXT_social_read.DRY-RUN.sql` (changes nothing), then `supabase/migrations/NEXT_social_read.sql`,
    then `supabase/drafts/READ-BACK-social_read.sql` to see it worked. Say "applied". It gets its number at merge.
 3. **Turn it on**: `SOCIAL_READ.show = true` in `src/lib/config.ts`, in the same merge as the reread words. The check
-   P6p fails if it's on before Privacy names Bluesky. About then shows a short paragraph too.
+   P6r fails if it's on before Privacy names Bluesky. About then shows a short paragraph too.
 4. Optional choices (in the legal draft's notes): 20 posts per page, 500 characters, every half hour; whether to filter
    Farcaster spam by Neynar score (not built; for now, hide by hand).
 5. After it's live: open a page someone has linked to, and `/moderate`, to see the first real posts.
@@ -97,18 +97,18 @@ on a deployment with the switch on. Bluesky was tested live (read only).
   page's own content, with "not part of this edition". They are never placed inside a piece or the book's text.
 - **P4 (publishing needs a signed-in person)**: pass. The new routes (`/api/moderate/social`) refuse without a signed-in
   moderator or admin (P4a passes). Nothing model-made is published.
-- **P5 (nothing featured; picks labelled)**: pass. Newest first only; new check **P5f** fails if anything in the
+- **P5 (nothing featured; picks labelled)**: pass. Newest first only; new check **P5h** fails if anything in the
   feature sorts by something else or reads like/repost/reply/follower counts or a score. Moderator code only hides
   (P5b passes).
 - **P6 (no third-party requests; private rows)**: pass, with the localhost P6a note above. Posts are read on our server
   and shown as text and links; no avatar, image or script from either network. The hide list is private (no public
-  read). New check **P6p**: the switch can't be on while Privacy doesn't name Bluesky. Bluesky added to the outside
+  read). New check **P6r**: the switch can't be on while Privacy doesn't name Bluesky. Bluesky added to the outside
   services the Privacy page, About, the notice and the consent screen must agree on (P6g–P6j). **Concern, for you:**
   this is the first feature that shows other people's personal data (handles, words) from outside the site on our
   pages; the legal draft says what, from where, how long, and how to have it removed.
 - **P7 (payments never order anything)**: pass; untouched.
 - **P8 (in-world screens)**: pass; untouched.
-- **Legal texts describe today**: held. Switch off until the reread; P6p enforces it.
+- **Legal texts describe today**: held. Switch off until the reread; P6r enforces it.
 
 ## Garance's reference (owner's call with Garance, 2026-10-30)
 
@@ -116,3 +116,28 @@ Garance pointed to Objects' Bluesky integration as the model: an artwork's page 
 owner's decision: keep "Posts that link here" as built (posts that link to a page, shown on it), not cross-posted
 replies, for now. Showing the replies to those posts, or posting from the site, would be a later step (Phase 6's
 second half in docs/next-version.md), with its own Privacy lines and, for posting, write access on each network.
+
+## Merge of main, 2026-11-02 (main at 17e2c63)
+
+Merged with a merge commit (no rebase), by the coding agent (Anthropic's Claude).
+
+- **Check ids renumbered** (what they check is unchanged): this branch's **P5f → P5h** (main's P5f is the seeded-image
+  hide, P5g the challenge's order) and **P6p → P6r** (P6p is the sign-in branch's, P6q main's challenge check). The
+  comments in `src/lib/social/parse.ts`, `src/components/social-posts.tsx`, `src/lib/config.ts`, the legal draft and
+  `docs/principles.md` follow.
+- **Conflicts:** `docs/principles.md`, `scripts/check-principles.ts`, `package.json`, `src/app/about/page.tsx`,
+  `src/lib/config.ts`: both sides kept (main's P5f, P5g and P6q beside this branch's checks; main's Payments, Support
+  link and `CHALLENGE` beside `SOCIAL_READ`; main's three new scripts beside `test:social-read`).
+- **Read-back** rewritten in the two-part form: (a) one select whose six rows should all be true, (b) one `do $$` block
+  that adds a hide of each kind, checks them, checks a second hide of the same post is refused, deletes them, and
+  raises "READ-BACK FAILED" otherwise. Checked on PGlite on top of main's 0001–0033, and with planted faults.
+- **Open, for the owner: P6h fails against production.** Since the remix challenge, production's Privacy §7 names
+  Bluesky (and Lens) for "Posted on", but About names neither. This branch adds Bluesky to the services P6g–P6j compare,
+  so `check:principles --url=https://snowmoon.party` fails P6h ("the Privacy page names Bluesky; About does not"). On
+  main it passes only because main's list doesn't include Bluesky or Lens. Options: (1) About names Bluesky and Lens
+  for "Posted on" (new About words, yours to approve; main's gap either way), and the list gains Lens too; (2) the
+  Bluesky entry counts only while `SOCIAL_READ.show` is on (the About paragraph here then covers it), leaving main's
+  gap unchecked. Not chosen by the agent; the branch is merged locally but not pushed until you decide.
+- **Ahead, with the sign-in branch:** both branches use `src/lib/social/`. P5h reads every file there and fails on the
+  word "score"; `signin-lens-bluesky` adds `src/lib/social/free.ts` and `lens.ts`, which read the Lens score. When both
+  are on main, P5h needs scoping to this feature's files (`parse.ts`, `read.ts`) or one of the folders renaming.

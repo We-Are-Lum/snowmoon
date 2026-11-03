@@ -44,10 +44,12 @@ export interface DesignPicture {
     made_at: string;
     width: number;
     height: number;
-    references?: { sha256: string }[];
+    /** What it was made from, by sha256; `what` says what that picture is when it isn't the sheet's own front view. */
+    references?: { sha256: string; what?: string }[];
     /** A sheet's view: the style version whose text is in the prompt, as it was then. */
     style?: { version_id: string; title: string; text: string };
-    checks: { prompt: { model: string; verdict: 'ok' }; host_safety_checker: 'passed' };
+    /** The checks that ran. 'not run' for a picture made outside the site (the starting sheets, 2026-11-01); the page says so. */
+    checks: { prompt: { model: string; verdict: 'ok' | 'not run' }; host_safety_checker: 'passed' | 'not run' };
     assist: { model: string; drafted: string[]; source?: string } | null;
   };
 }

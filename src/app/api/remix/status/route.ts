@@ -9,7 +9,8 @@ import { IMAGE_WORDING } from '~/lib/images/wording';
 import { balanceUsd, prepaidOpen, priceUsd } from '~/lib/wallet/credits';
 import { generationsLeft, perDay } from '~/lib/remix/limits';
 import { remixPictures, testFakes } from '~/lib/remix/make';
-import { frameStorageReady, isMaintainer, myFrames } from '~/lib/remix/frames';
+import { frameStorageReady, myFrames } from '~/lib/remix/frames';
+import { isAdmin } from '~/lib/admins';
 import { remixShot } from '~/lib/remix/shot';
 
 /**
@@ -63,7 +64,7 @@ export async function GET(request: Request) {
     }
     const eligible = invited ? true : kept === null ? null : kept >= IMAGES.neynarMinScore;
     const refusal = eligible === false && kept !== null ? GATE_WORDING.below(kept) : undefined;
-    return NextResponse.json({ ...base, signedIn: true, perDay: perDay(person), eligible, refusal, consented, left, frames: mine, maintainer: isMaintainer(person) }, { headers: noStore });
+    return NextResponse.json({ ...base, signedIn: true, perDay: perDay(person), eligible, refusal, consented, left, frames: mine, maintainer: isAdmin(person) }, { headers: noStore });
   } catch (e) {
     console.error('remix status failed', (e as { code?: string }).code ?? (e as Error).name);
     return NextResponse.json({ ...base, ready: false, signedIn: true, eligible: invited ? true : null, consented: false, frames: [] }, { headers: noStore });

@@ -93,3 +93,11 @@ export function loadIllustrations(n: number): Illustration[] {
       ...(reviewedKeep(n, id, [sha256, clean?.sha256]) ? { reviewed: true as const } : {}),
     }));
 }
+
+/** One seeded image by its id (c<chapter>-b<block>-<slug>), with its chapter; null if there's none. */
+export function loadIllustrationById(id: string): (Illustration & { chapter: number }) | null {
+  const e = all().find((i) => i.id === id);
+  if (!e) return null;
+  const im = loadIllustrations(e.chapter).find((i) => i.id === id);
+  return im ? { ...im, chapter: e.chapter } : null;
+}

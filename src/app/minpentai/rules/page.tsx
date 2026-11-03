@@ -7,7 +7,7 @@ export const metadata = { title: 'Minpentai in this edition: the rules' };
 /** Where the lessons (Learn) differ from Play: exactly these five (owner, 2026-10-20). Model-drafted wording. */
 const LESSONS_VS_PLAY: [what: string, text: string][] = [
   ['The broadcast', 'It shows four players on a 48×32 board. Play is two players on 15 × 10.'],
-  ['Amber’s towers in setup', 'The practice match in the lessons shows Amber’s towers during setup. In Play you see only outlines of where they start.'],
+  ['Amber’s towers in setup', 'The practice match in the lessons shows Amber’s towers during setup. In Play you see them dimmed where they start, until you see them.'],
   ['Hits in the dark', 'The practice match in the lessons marks a tower lost, a square broken and a crash with a ring, even in the dark. In Play you see only the hits your towers light.'],
   ['Cells', 'The lessons have a CELLS button that draws each piece as a few cells. Play has no cell view: you play with whole squares.'],
   ['Pause', 'The practice match in the lessons can be paused. Play’s practice match has no pause; it can fast-forward to your next turn.'],

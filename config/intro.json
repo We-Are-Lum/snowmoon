@@ -5,7 +5,7 @@
   "model_drafted_note": "Wording from the design board (Claude Design, model-drafted placeholder copy), adapted by the coding agent on Oct 7, 2026 so it says only what is true: the board's '[Author name]' and '[LICENCE NAME]' are filled in, and 'play the game' is moved to the planned list because the game is not on the main site yet. Earlier wording (v1) was drafted by the coding agent on Oct 6, 2026. Shown labelled as model-drafted until the owner edits it; set model_drafted to false, with edited_by_fid and edited_on, when they do. Owner (FID 6786) on 2026-10-08: card 1, the eyebrows of cards 2–4, card 5 and the disclaimer approved as written; the deal, record and now lines rewritten; the feature lists set to what is live (docs/prompts/011-wording-decisions.md). 2026-10-08, later: adaptations taken out of view (owner); the coding agent removed \"Browse adaptation seeds\" from the live list and the words \"and browse adaptation seeds\" from the owner's line on card 4, nothing else.",
   "edited_by_fid": 6786,
   "edited_on": "2026-10-08",
-  "disclaimer": "Independent adaptation · Not affiliated with the author · No token",
+  "disclaimer": "Independent adaptation · Not affiliated with the author",
   "cards": [
     {
       "id": "book",

@@ -47,7 +47,7 @@ function rulesJson(passages: Passage[]) {
     page: '/minpentai/build',
     docs: 'docs/minpentai/',
     site: {
-      play: 'Practice, the computer ladder, free play and one-on-one: src/lib/minpentai/play-game/game.ts',
+      play: 'Practice, the computer ladder, free play and one-on-one: src/lib/minpentai/versions/engine.ts (Play is its base settings, versions/schema.ts)',
       learn: "The lessons: src/lib/minpentai/learn-game/ (Design's v3; the rules page says Play's rules replace it)",
       rulePage: "/minpentai/rule, the rule recovered from the book's figure: src/lib/minpentai/engine.ts",
     },
@@ -93,7 +93,7 @@ function rulesMd(passages: Passage[]) {
     '',
     '- **From the book**: the cited blocks say it (stated) or it follows from what they describe (implied), as read in `docs/minpentai-rules.md`. Every quote is word for word in its block; `npm run test:minpentai-kit` checks.',
     '- **Invented**: this edition\'s, with where it is in the code. Where the book says something nearby, its words are cited too.',
-    '- **Site**: whether the site follows the rule today. Play is practice, the ladder, free play and one-on-one (`play-game/game.ts`); Learn is the lessons (`learn-game/`, v3); the book\'s rule page is `/minpentai/rule` (`engine.ts`).',
+    '- **Site**: whether the site follows the rule today. Play is practice, the ladder, free play and one-on-one (`versions/engine.ts`, with Play\'s numbers as the base settings in `versions/schema.ts`); Learn is the lessons (`learn-game/`, v3); the book\'s rule page is `/minpentai/rule` (`engine.ts`).',
     '',
   ];
   for (const [area, title] of Object.entries(AREAS)) {

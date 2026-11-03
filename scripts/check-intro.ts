@@ -14,8 +14,7 @@
  * - Every feature is "live" or "planned"; a live feature links to a page that
  *   exists, so nothing reads as available that isn't.
  * - The disclaimer, shown on card 1 and at the top of /about, says the
- *   edition is independent ("not affiliated with the author") and that there
- *   is no token (principle 7).
+ *   edition is independent ("not affiliated with the author") (principle 7).
  *
  * Every rule is proven to fail on a planted violation each time it runs.
  */
@@ -74,7 +73,6 @@ function problems(file: IntroFile): string[] {
   if (!(file.features ?? []).some((f) => f.status === 'live')) out.push('no live features');
   const d = (file.disclaimer ?? '').toLowerCase();
   if (!d.includes('not affiliated with the author')) out.push('the disclaimer must say the edition is "not affiliated with the author"');
-  if (!/\bno token\b/.test(d)) out.push('the disclaimer must say there is no token');
   return out;
 }
 
@@ -84,8 +82,7 @@ const failures = problems(intro);
 const planted: [string, (f: IntroFile) => void][] = [
   ['live card to a missing page', (f) => (f.cards[1].href = '/chapter/999')],
   ['live card with no link', (f) => (f.cards[2].href = null)],
-  ['disclaimer without the no-token line', (f) => (f.disclaimer = 'Independent adaptation · Not affiliated with the author')],
-  ['disclaimer without the independence line', (f) => (f.disclaimer = 'An illustrated edition · No token')],
+  ['disclaimer without the independence line', (f) => (f.disclaimer = 'An illustrated edition')],
   ['an image that is not published', (f) => (f.cards[1].image = 'published:c99-b001-nothing')],
   ['two sentences on a card', (f) => (f.cards[4].line = 'One. Two.')],
   ['a live feature with no page', (f) => (f.features[0].href = '/minpentai-nowhere')],

@@ -21,7 +21,7 @@ https://github.com/We-Are-Lum/snowmoon (public). The site is a Next.js app in Ty
 
 | What | Where |
 |---|---|
-| **Play**: the real game (practice, the computer ladder, free play, one-on-one) | `src/lib/minpentai/play-game/game.ts`: the board, `step`, `apply`, `lit`, `updLS`, the four drawn rules (`RULES`), the five computer players (`RUNGS`, `botPlan`) |
+| **Play**: the real game (practice, the computer ladder, free play, one-on-one) | `src/lib/minpentai/versions/engine.ts` (the one engine: `step`, `apply`, `lit`, `updLS`, `botPlan`), with Play's numbers and its four drawn rules as the base settings in `versions/schema.ts`; `play-game/game.ts` keeps the old names (`RULES`, `RUNGS`, …) as an adapter |
 | Play in the browser | `src/lib/minpentai/play-game/controller.ts` (the match flow, without React), `src/app/minpentai/play.tsx` (the page) |
 | One-on-one on the server | `src/lib/minpentai/play-server/match.ts` (clocks, the end, `checkPlacements`), `src/lib/minpentai/play-server/store.ts`, `src/app/api/minpentai/` |
 | Computer players outside the page | `src/lib/minpentai/play-game/players.ts`, `scripts/minpentai-vs-rungs.ts` (below) |
@@ -79,7 +79,7 @@ npm run minpentai:vs-rungs -- --round-robin
 
 ## The rules
 
-These are Play's rules as `game.ts`, `controller.ts` and `play-server/match.ts` run them. The marks follow the rules page (draft 1). **From the book** gives the block it rests on: c4-b84 is chapter 4, block 84, and its words are in `docs/minpentai/passages.md`. **Invented** means this edition made it up. The same rules, machine-readable, are in https://snowmoon.party/minpentai/rules.json (`public/minpentai/rules.json`, generated from `src/lib/minpentai/kit-rules.ts` by `scripts/build-minpentai-kit.ts`): every rule marked from the book, with its block and words, or invented, with where it is in the code, and whether the site follows it. The page https://snowmoon.party/minpentai/build shows them with the passages. The rules page (https://snowmoon.party/minpentai/rules) and `docs/minpentai-rules.md` are the documents the marks below follow.
+These are Play's rules as `versions/engine.ts`, `controller.ts` and `play-server/match.ts` run them. The marks follow the rules page (draft 1). **From the book** gives the block it rests on: c4-b84 is chapter 4, block 84, and its words are in `docs/minpentai/passages.md`. **Invented** means this edition made it up. The same rules, machine-readable, are in https://snowmoon.party/minpentai/rules.json (`public/minpentai/rules.json`, generated from `src/lib/minpentai/kit-rules.ts` by `scripts/build-minpentai-kit.ts`): every rule marked from the book, with its block and words, or invented, with where it is in the code, and whether the site follows it. The page https://snowmoon.party/minpentai/build shows them with the passages. The rules page (https://snowmoon.party/minpentai/rules) and `docs/minpentai-rules.md` are the documents the marks below follow.
 
 The board
 
@@ -118,7 +118,7 @@ Sight
 How a match ends
 
 - A side with no towers left loses; both at the same step is a draw. From the book: a player whose symbols are gone is out (c4-b136–b138).
-- At step 96 the match stops: most towers wins, equal is a draw. Invented.
+- At step 120 the match stops: most towers wins, equal is a draw. Invented (it was 96 until 2026-10-22).
 - You may resign in practice, the ladder and one-on-one; it counts as a loss. From the book (c4-b141, c10-b164). The computer players never resign.
 - One-on-one: a player not heard from for 15 seconds pauses the match; 60 seconds more counts as resigning (during setup, the match is cancelled with no result). Invented.
 
@@ -128,7 +128,7 @@ The match's new rule
 
 The computer players
 
-- The ladder has five rungs, in `RUNGS` and `botPlan` in `game.ts`: Rival, Blocker, Builder, Opportunist, Planner. Their behaviours are invented. The book has bots too: "the bots play better than me on stock Minpentai, but they are much worse at adapting to any new situation they don't have training data for" (c7-b14).
+- The ladder has five rungs, named in `RUNGS` (`game.ts`) and played by `botPlan` in `versions/engine.ts`: Rival, Blocker, Builder, Opportunist, Planner. Their behaviours are invented. The book has bots too: "the bots play better than me on stock Minpentai, but they are much worse at adapting to any new situation they don't have training data for" (c7-b14).
 
 ## The book's passages
 
@@ -215,7 +215,7 @@ Playing your player on the site is not built: the ladder is the five rungs in `b
 These are ideas, not features. None of them is built.
 
 1. **Idea: a stronger player.** Write one, run it against the five, and send it with its table. Nothing on the site changes.
-2. **Idea: a new drawn rule.** Add it to `RULES` in `game.ts` and wherever it changes a number: `mk` in `controller.ts`, `createMatch` in `play-server/match.ts` and `playMatch` in `players.ts`; then the rules page.
+2. **Idea: a new drawn rule.** Add it to `BASE_DRAWN` in `versions/schema.ts` as a change of settings; the engine, Play, one-on-one and replays all read it from there. Then the rules page.
 3. **Idea: a computer player that plays either colour.** `botPlan` always plays Amber; `players.ts` turns the board for Cyan.
 4. **Idea: a replay file.** A match as one JSON file (seed, rule, every turn's placements) that plays back on the page. `playMatch` already returns the placements.
 5. **Idea: Learn on Play's rules.** Bring the lessons from v3 to Play's rules, using section 11 of the rules page.

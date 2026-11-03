@@ -9,7 +9,7 @@
  * Pure: no clock, no network. scripts/test-minpentai-snap.ts plays the same seeds through
  * PlayController and checks every board matches.
  */
-import { K, MAXS, RULE_IDS, apply, botPlan, rng, step, towers, updLS, world, type Placement, type RuleId, type Side, type World } from '../play-game/game';
+import { K, RULE_IDS, apply, botPlan, maxStepsOf, rng, step, towers, updLS, world, type Placement, type RuleId, type RulesetId, type Side, type World } from '../play-game/game';
 import type { BoardView } from '../play-game/live-types';
 import { checkPlacements, fullBoard, type LiveMatch } from '../play-server/match';
 import { fog } from '../play-server/view';
@@ -40,16 +40,21 @@ export interface Played {
   /** The match the way checkPlacements reads it, for checking this turn's placements. */
   live: LiveMatch;
   over: null | { win: Side | 'D'; step: number; counts: Record<Side, number>; kind: 'end' | 'resign' };
+  /** The ruleset it plays under (solo-v1.ts RULESETS) and that ruleset's step limit. */
+  rs: RulesetId;
+  maxSteps: number;
 }
 
 export class Unplayable extends Error {}
 
-export function play(input: { seed: number; lvl: number; ver: string; rule: RuleId | ''; turns: P[][]; resigned: boolean }): Played {
+export function play(input: { seed: number; lvl: number; ver: string; rule: RuleId | ''; turns: P[][]; resigned: boolean; rs?: RulesetId }): Played {
+  // A match carries its ruleset; one made before rulesets were numbered carries none and plays as 1.
+  const rs: RulesetId = input.rs ?? 1, maxSteps = maxStepsOf(rs);
   const r = rng(input.seed);
   const drawn = RULE_IDS[Math.floor(r() * RULE_IDS.length)];
   const set = settings(drawn, versionOf(input.ver), input.rule);
   const m = {
-    lvl: input.lvl, ...set, rng: r, w: world(),
+    lvl: input.lvl, ...set, ruleset: rs, maxSteps, rng: r, w: world(),
     pend: { C: [] as Placement[], A: [] as Placement[] },
     snap: { C: [] as number[], A: [] as number[] },
     lsC: { [K(13, 2)]: 0, [K(13, 7)]: 0 } as Record<number, number>,
@@ -57,7 +62,7 @@ export function play(input: { seed: number; lvl: number; ver: string; rule: Rule
   };
   const runs: Run[] = [];
   const out = (over: Played['over']): Played => ({
-    drawn, ...set, w: m.w, snapC: m.snap.C, lsC: m.lsC, runs, live: m as unknown as LiveMatch, over,
+    drawn, ...set, rs, maxSteps, w: m.w, snapC: m.snap.C, lsC: m.lsC, runs, live: m as unknown as LiveMatch, over,
   });
   const counts = () => ({ C: towers(m.w, 'C').length, A: towers(m.w, 'A').length });
   for (let t = 0; ; t++) {
@@ -86,7 +91,7 @@ export function play(input: { seed: number; lvl: number; ver: string; rule: Rule
       run.ls.push({ ...m.lsC });
       run.full.push(b);
       const { C: c, A: a } = counts();
-      if (!c || !a || m.w.step >= MAXS) {
+      if (!c || !a || m.w.step >= maxSteps) {
         if (t + 1 !== input.turns.length) throw new Unplayable(`the match ended at step ${m.w.step} with turns left over`);
         return out({ win: !c && !a ? 'D' : !c ? 'A' : !a ? 'C' : c > a ? 'C' : a > c ? 'A' : 'D', step: m.w.step, counts: { C: c, A: a }, kind: 'end' });
       }

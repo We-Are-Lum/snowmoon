@@ -1,0 +1,3121 @@
+{
+ "date": "2026-10-21",
+ "model": "openai/gpt-oss-120b",
+ "provider": "groq",
+ "gateway": {
+  "gateway": {
+   "zeroDataRetention": true,
+   "only": [
+    "groq"
+   ],
+   "disallowPromptTraining": true
+  }
+ },
+ "results": [
+  {
+   "i": 0,
+   "idea": "Gliders should wrap around the edges, like Pac-Man.",
+   "fits": "yes",
+   "cannot": "",
+   "attempts": 1,
+   "model": {
+    "model": "openai/gpt-oss-120b",
+    "provider": "groq",
+    "costUsd": 0.00092985,
+    "promptTokens": 5395,
+    "completionTokens": 201,
+    "ms": 1720
+   },
+   "version": {
+    "format": "snowmoon.minpentai.version/1",
+    "parent": "solo-v1",
+    "author": "@spike",
+    "prompt": {
+     "text": "Gliders should wrap around the edges, like Pac-Man.",
+     "model": "openai/gpt-oss-120b",
+     "date": "2026-10-21"
+    },
+    "title": "Gliders wrap around edges",
+    "different": "Gliders wrap around board edges instead of bouncing",
+    "set": {
+     "edges": "wrap"
+    },
+    "changes": [
+     {
+      "what": "edges",
+      "basis": "invented"
+     }
+    ]
+   },
+   "report": {
+    "matches": 200,
+    "allEnd": true,
+    "errors": [],
+    "illegal": 0,
+    "maxGliders": 20,
+    "ms": 56810,
+    "side": {
+     "cyan": 62,
+     "amber": 51,
+     "draws": 87,
+     "cyanScore": 0.5275
+    },
+    "levels": [
+     {
+      "level": 0,
+      "name": "Practice",
+      "score": 0.18,
+      "played": 50
+     },
+     {
+      "level": 1,
+      "name": "Rival",
+      "score": 0.2,
+      "played": 50
+     },
+     {
+      "level": 2,
+      "name": "Blocker",
+      "score": 0.22,
+      "played": 50
+     },
+     {
+      "level": 3,
+      "name": "Builder",
+      "score": 0.8152173913043478,
+      "played": 46
+     },
+     {
+      "level": 4,
+      "name": "Opportunist",
+      "score": 0.8260869565217391,
+      "played": 46
+     },
+     {
+      "level": 5,
+      "name": "Planner",
+      "score": 0.8369565217391305,
+      "played": 46
+     }
+    ],
+    "plannerOverRival": 1,
+    "skillGap": 0.6360869565217391,
+    "length": {
+     "median": 96,
+     "p10": 14,
+     "p90": 96,
+     "byTime": 0.565,
+     "turnsMedian": 7
+    },
+    "setupDecides": 0,
+    "firstLeadHolds": 0,
+    "mirror": 56,
+    "mirrorDraws": 0.7857142857142857,
+    "overBeforeTurn2": 0,
+    "drawn": {
+     "sight2": 60,
+     "diag": 50,
+     "cost3": 42,
+     "every8": 48
+    },
+    "checks": [
+     {
+      "id": "allEnd",
+      "ok": true,
+      "value": 200,
+      "need": "200 matches end, no errors, no illegal moves"
+     },
+     {
+      "id": "sideSkew",
+      "ok": true,
+      "value": 0.5275,
+      "need": "Cyan's score within 0.1 of 0.5"
+     },
+     {
+      "id": "draws",
+      "ok": true,
+      "value": 0.435,
+      "need": "draws at most 0.6"
+     },
+     {
+      "id": "plannerOverRival",
+      "ok": true,
+      "value": 1,
+      "need": "Planner beats Rival at least 0.6"
+     },
+     {
+      "id": "skillGap",
+      "ok": true,
+      "value": 0.6360869565217391,
+      "need": "rungs 3-5 score at least 0.1 above practice and rung 1"
+     },
+     {
+      "id": "minTurns",
+      "ok": true,
+      "value": 7,
+      "need": "median match has at least 2 turns after setup"
+     },
+     {
+      "id": "setupDecides",
+      "ok": true,
+      "value": 0,
+      "need": "setup alone decides at most 0.25"
+     }
+    ],
+    "playable": true
+   },
+   "outcome": "playable",
+   "playtestMs": 56814
+  },
+  {
+   "i": 1,
+   "idea": "Make it closer to the book: you can see thirty squares.",
+   "fits": "yes",
+   "cannot": "",
+   "attempts": 2,
+   "model": {
+    "model": "openai/gpt-oss-120b",
+    "provider": "groq",
+    "costUsd": 0.00207075,
+    "promptTokens": 10913,
+    "completionTokens": 723,
+    "ms": 4005
+   },
+   "version": {
+    "format": "snowmoon.minpentai.version/1",
+    "parent": "solo-v1",
+    "author": "@spike",
+    "prompt": {
+     "text": "Make it closer to the book: you can see thirty squares.",
+     "model": "openai/gpt-oss-120b",
+     "date": "2026-10-21"
+    },
+    "title": "Increase sight to thirty squares",
+    "different": "Sight range increased from 3 to 30 squares",
+    "set": {
+     "sight": 30
+    },
+    "changes": [
+     {
+      "what": "sight",
+      "basis": "book",
+      "says": "would allow him to see everything within thirty squares",
+      "blocks": [
+       "c4-b93"
+      ]
+     }
+    ]
+   },
+   "report": {
+    "matches": 200,
+    "allEnd": true,
+    "errors": [],
+    "illegal": 0,
+    "maxGliders": 18,
+    "ms": 64826,
+    "side": {
+     "cyan": 63,
+     "amber": 53,
+     "draws": 84,
+     "cyanScore": 0.525
+    },
+    "levels": [
+     {
+      "level": 0,
+      "name": "Practice",
+      "score": 0.12,
+      "played": 50
+     },
+     {
+      "level": 1,
+      "name": "Rival",
+      "score": 0.15,
+      "played": 50
+     },
+     {
+      "level": 2,
+      "name": "Blocker",
+      "score": 0.33,
+      "played": 50
+     },
+     {
+      "level": 3,
+      "name": "Builder",
+      "score": 0.8152173913043478,
+      "played": 46
+     },
+     {
+      "level": 4,
+      "name": "Opportunist",
+      "score": 0.8369565217391305,
+      "played": 46
+     },
+     {
+      "level": 5,
+      "name": "Planner",
+      "score": 0.8260869565217391,
+      "played": 46
+     }
+    ],
+    "plannerOverRival": 1,
+    "skillGap": 0.6910869565217391,
+    "length": {
+     "median": 96,
+     "p10": 28,
+     "p90": 96,
+     "byTime": 0.615,
+     "turnsMedian": 7
+    },
+    "setupDecides": 0,
+    "firstLeadHolds": 0.5,
+    "mirror": 56,
+    "mirrorDraws": 0.8571428571428571,
+    "overBeforeTurn2": 0,
+    "drawn": {
+     "sight2": 60,
+     "diag": 50,
+     "cost3": 42,
+     "every8": 48
+    },
+    "checks": [
+     {
+      "id": "allEnd",
+      "ok": true,
+      "value": 200,
+      "need": "200 matches end, no errors, no illegal moves"
+     },
+     {
+      "id": "sideSkew",
+      "ok": true,
+      "value": 0.525,
+      "need": "Cyan's score within 0.1 of 0.5"
+     },
+     {
+      "id": "draws",
+      "ok": true,
+      "value": 0.42,
+      "need": "draws at most 0.6"
+     },
+     {
+      "id": "plannerOverRival",
+      "ok": true,
+      "value": 1,
+      "need": "Planner beats Rival at least 0.6"
+     },
+     {
+      "id": "skillGap",
+      "ok": true,
+      "value": 0.6910869565217391,
+      "need": "rungs 3-5 score at least 0.1 above practice and rung 1"
+     },
+     {
+      "id": "minTurns",
+      "ok": true,
+      "value": 7,
+      "need": "median match has at least 2 turns after setup"
+     },
+     {
+      "id": "setupDecides",
+      "ok": true,
+      "value": 0,
+      "need": "setup alone decides at most 0.25"
+     }
+    ],
+    "playable": true
+   },
+   "outcome": "playable",
+   "playtestMs": 64835
+  },
+  {
+   "i": 2,
+   "idea": "Fog of war should be brutal. You only see one square around your towers.",
+   "fits": "yes",
+   "cannot": "",
+   "attempts": 1,
+   "model": {
+    "model": "openai/gpt-oss-120b",
+    "provider": "groq",
+    "costUsd": 0.00096885,
+    "promptTokens": 5399,
+    "completionTokens": 265,
+    "ms": 2210
+   },
+   "version": {
+    "format": "snowmoon.minpentai.version/1",
+    "parent": "solo-v1",
+    "author": "@spike",
+    "prompt": {
+     "text": "Fog of war should be brutal. You only see one square around your towers.",
+     "model": "openai/gpt-oss-120b",
+     "date": "2026-10-21"
+    },
+    "title": "Brutal Fog of War",
+    "different": "Sight reduced from 3 to 1 square around towers",
+    "set": {
+     "sight": 1
+    },
+    "changes": [
+     {
+      "what": "sight",
+      "basis": "invented"
+     }
+    ]
+   },
+   "report": {
+    "matches": 200,
+    "allEnd": true,
+    "errors": [],
+    "illegal": 0,
+    "maxGliders": 20,
+    "ms": 64748,
+    "side": {
+     "cyan": 62,
+     "amber": 48,
+     "draws": 90,
+     "cyanScore": 0.535
+    },
+    "levels": [
+     {
+      "level": 0,
+      "name": "Practice",
+      "score": 0.13,
+      "played": 50
+     },
+     {
+      "level": 1,
+      "name": "Rival",
+      "score": 0.17,
+      "played": 50
+     },
+     {
+      "level": 2,
+      "name": "Blocker",
+      "score": 0.3,
+      "played": 50
+     },
+     {
+      "level": 3,
+      "name": "Builder",
+      "score": 0.8260869565217391,
+      "played": 46
+     },
+     {
+      "level": 4,
+      "name": "Opportunist",
+      "score": 0.8043478260869565,
+      "played": 46
+     },
+     {
+      "level": 5,
+      "name": "Planner",
+      "score": 0.8478260869565217,
+      "played": 46
+     }
+    ],
+    "plannerOverRival": 1,
+    "skillGap": 0.6760869565217392,
+    "length": {
+     "median": 96,
+     "p10": 33,
+     "p90": 96,
+     "byTime": 0.66,
+     "turnsMedian": 7
+    },
+    "setupDecides": 0,
+    "firstLeadHolds": 0,
+    "mirror": 56,
+    "mirrorDraws": 0.9642857142857143,
+    "overBeforeTurn2": 0,
+    "drawn": {
+     "sight2": 60,
+     "diag": 50,
+     "cost3": 42,
+     "every8": 48
+    },
+    "checks": [
+     {
+      "id": "allEnd",
+      "ok": true,
+      "value": 200,
+      "need": "200 matches end, no errors, no illegal moves"
+     },
+     {
+      "id": "sideSkew",
+      "ok": true,
+      "value": 0.535,
+      "need": "Cyan's score within 0.1 of 0.5"
+     },
+     {
+      "id": "draws",
+      "ok": true,
+      "value": 0.45,
+      "need": "draws at most 0.6"
+     },
+     {
+      "id": "plannerOverRival",
+      "ok": true,
+      "value": 1,
+      "need": "Planner beats Rival at least 0.6"
+     },
+     {
+      "id": "skillGap",
+      "ok": true,
+      "value": 0.6760869565217392,
+      "need": "rungs 3-5 score at least 0.1 above practice and rung 1"
+     },
+     {
+      "id": "minTurns",
+      "ok": true,
+      "value": 7,
+      "need": "median match has at least 2 turns after setup"
+     },
+     {
+      "id": "setupDecides",
+      "ok": true,
+      "value": 0,
+      "need": "setup alone decides at most 0.25"
+     }
+    ],
+    "playable": true
+   },
+   "outcome": "playable",
+   "playtestMs": 64757
+  },
+  {
+   "i": 3,
+   "idea": "Les carr\u00e9s devraient r\u00e9sister \u00e0 trois coups.",
+   "fits": "yes",
+   "cannot": "",
+   "attempts": 1,
+   "model": {
+    "model": "openai/gpt-oss-120b",
+    "provider": "groq",
+    "costUsd": 0.00093375,
+    "promptTokens": 5393,
+    "completionTokens": 208,
+    "ms": 17476
+   },
+   "version": {
+    "format": "snowmoon.minpentai.version/1",
+    "parent": "solo-v1",
+    "author": "@spike",
+    "prompt": {
+     "text": "Les carr\\u00e9s devraient r\\u00e9sister \\u00e0 trois coups.",
+     "model": "openai/gpt-oss-120b",
+     "date": "2026-10-21"
+    },
+    "title": "Squares resist three hits",
+    "different": "Squares now need three hits to break instead of two",
+    "set": {
+     "squareHits": 3
+    },
+    "changes": [
+     {
+      "what": "squareHits",
+      "basis": "invented"
+     }
+    ]
+   },
+   "report": {
+    "matches": 200,
+    "allEnd": true,
+    "errors": [],
+    "illegal": 0,
+    "maxGliders": 20,
+    "ms": 64980,
+    "side": {
+     "cyan": 55,
+     "amber": 57,
+     "draws": 88,
+     "cyanScore": 0.495
+    },
+    "levels": [
+     {
+      "level": 0,
+      "name": "Practice",
+      "score": 0.19,
+      "played": 50
+     },
+     {
+      "level": 1,
+      "name": "Rival",
+      "score": 0.17,
+      "played": 50
+     },
+     {
+      "level": 2,
+      "name": "Blocker",
+      "score": 0.24,
+      "played": 50
+     },
+     {
+      "level": 3,
+      "name": "Builder",
+      "score": 0.8043478260869565,
+      "played": 46
+     },
+     {
+      "level": 4,
+      "name": "Opportunist",
+      "score": 0.8369565217391305,
+      "played": 46
+     },
+     {
+      "level": 5,
+      "name": "Planner",
+      "score": 0.8369565217391305,
+      "played": 46
+     }
+    ],
+    "plannerOverRival": 1,
+    "skillGap": 0.6460869565217391,
+    "length": {
+     "median": 96,
+     "p10": 33,
+     "p90": 96,
+     "byTime": 0.625,
+     "turnsMedian": 7
+    },
+    "setupDecides": 0,
+    "firstLeadHolds": 0,
+    "mirror": 56,
+    "mirrorDraws": 0.8571428571428571,
+    "overBeforeTurn2": 0,
+    "drawn": {
+     "sight2": 60,
+     "diag": 50,
+     "cost3": 42,
+     "every8": 48
+    },
+    "checks": [
+     {
+      "id": "allEnd",
+      "ok": true,
+      "value": 200,
+      "need": "200 matches end, no errors, no illegal moves"
+     },
+     {
+      "id": "sideSkew",
+      "ok": true,
+      "value": 0.495,
+      "need": "Cyan's score within 0.1 of 0.5"
+     },
+     {
+      "id": "draws",
+      "ok": true,
+      "value": 0.44,
+      "need": "draws at most 0.6"
+     },
+     {
+      "id": "plannerOverRival",
+      "ok": true,
+      "value": 1,
+      "need": "Planner beats Rival at least 0.6"
+     },
+     {
+      "id": "skillGap",
+      "ok": true,
+      "value": 0.6460869565217391,
+      "need": "rungs 3-5 score at least 0.1 above practice and rung 1"
+     },
+     {
+      "id": "minTurns",
+      "ok": true,
+      "value": 7,
+      "need": "median match has at least 2 turns after setup"
+     },
+     {
+      "id": "setupDecides",
+      "ok": true,
+      "value": 0,
+      "need": "setup alone decides at most 0.25"
+     }
+    ],
+    "playable": true
+   },
+   "outcome": "playable",
+   "playtestMs": 64986
+  },
+  {
+   "i": 4,
+   "idea": "Rocks should make new gliders when something hits them, like in the book.",
+   "fits": "yes",
+   "cannot": "",
+   "attempts": 3,
+   "model": {
+    "model": "openai/gpt-oss-120b",
+    "provider": "groq",
+    "costUsd": 0.0028360499999999997,
+    "promptTokens": 16603,
+    "completionTokens": 1248,
+    "ms": 71713
+   },
+   "version": {
+    "format": "snowmoon.minpentai.version/1",
+    "parent": "solo-v1",
+    "author": "@spike",
+    "prompt": {
+     "text": "Rocks should make new gliders when something hits them, like in the book.",
+     "model": "openai/gpt-oss-120b",
+     "date": "2026-10-21"
+    },
+    "title": "Rocks spawn gliders on impact",
+    "different": "Rocks now split gliders, creating a new same-side glider on hit",
+    "set": {
+     "rocks": "split"
+    },
+    "changes": [
+     {
+      "what": "rocks",
+      "basis": "book",
+      "says": "Gliders flew out, interacted with rock formations, and created more gliders",
+      "blocks": [
+       "c4-b108"
+      ]
+     }
+    ]
+   },
+   "report": {
+    "matches": 200,
+    "allEnd": true,
+    "errors": [],
+    "illegal": 0,
+    "maxGliders": 23,
+    "ms": 64309,
+    "side": {
+     "cyan": 65,
+     "amber": 59,
+     "draws": 76,
+     "cyanScore": 0.515
+    },
+    "levels": [
+     {
+      "level": 0,
+      "name": "Practice",
+      "score": 0.13,
+      "played": 50
+     },
+     {
+      "level": 1,
+      "name": "Rival",
+      "score": 0.17,
+      "played": 50
+     },
+     {
+      "level": 2,
+      "name": "Blocker",
+      "score": 0.3,
+      "played": 50
+     },
+     {
+      "level": 3,
+      "name": "Builder",
+      "score": 0.8043478260869565,
+      "played": 46
+     },
+     {
+      "level": 4,
+      "name": "Opportunist",
+      "score": 0.8369565217391305,
+      "played": 46
+     },
+     {
+      "level": 5,
+      "name": "Planner",
+      "score": 0.8369565217391305,
+      "played": 46
+     }
+    ],
+    "plannerOverRival": 1,
+    "skillGap": 0.6760869565217391,
+    "length": {
+     "median": 96,
+     "p10": 33,
+     "p90": 96,
+     "byTime": 0.635,
+     "turnsMedian": 7
+    },
+    "setupDecides": 0,
+    "firstLeadHolds": 0,
+    "mirror": 56,
+    "mirrorDraws": 0.7857142857142857,
+    "overBeforeTurn2": 0,
+    "drawn": {
+     "sight2": 60,
+     "diag": 50,
+     "cost3": 42,
+     "every8": 48
+    },
+    "checks": [
+     {
+      "id": "allEnd",
+      "ok": true,
+      "value": 200,
+      "need": "200 matches end, no errors, no illegal moves"
+     },
+     {
+      "id": "sideSkew",
+      "ok": true,
+      "value": 0.515,
+      "need": "Cyan's score within 0.1 of 0.5"
+     },
+     {
+      "id": "draws",
+      "ok": true,
+      "value": 0.38,
+      "need": "draws at most 0.6"
+     },
+     {
+      "id": "plannerOverRival",
+      "ok": true,
+      "value": 1,
+      "need": "Planner beats Rival at least 0.6"
+     },
+     {
+      "id": "skillGap",
+      "ok": true,
+      "value": 0.6760869565217391,
+      "need": "rungs 3-5 score at least 0.1 above practice and rung 1"
+     },
+     {
+      "id": "minTurns",
+      "ok": true,
+      "value": 7,
+      "need": "median match has at least 2 turns after setup"
+     },
+     {
+      "id": "setupDecides",
+      "ok": true,
+      "value": 0,
+      "need": "setup alone decides at most 0.25"
+     }
+    ],
+    "playable": true,
+    "outcomes": "D96 D96 D96 D96 A96 C96 A40 C37 A27 C27 A49 C43 D96 D96 D96 C96 A35 C41 A27 C25 A69 C37 D96 D96 A49 C36 A73 C33 A37 C61 D96 D96 D96 D96 D96 D96 C96 C96 A96 A96 C96 C96 D96 D96 C33 C33 D96 C96 A96 C96 A37 C40 A33 C25 D96 D96 D96 D96 A37 C39 A96 C96 A35 C25 D96 D96 A96 C40 A96 C96 A36 C25 A96 A96 D96 D96 A96 D96 A96 A96 A96 A96 D96 D96 D96 D96 D96 D96 A96 C96 A43 C33 A37 C37 A40 C40 D96 D96 D96 C96 A33 C14 A96 C96 A27 C27 D96 D96 A96 C96 A75 C61 A49 C60 D96 D96 A96 D96 D96 D96 D96 D96 C96 C96 D96 D96 D96 D96 D96 D96 D96 C96 A28 C33 A25 C14 A86 C37 D96 D96 D96 C96 A66 C49 A96 C96 A33 C14 D96 D96 A96 C96 A37 C37 A39 C42 D96 D96 D96 D96 D96 D96 D96 D96 A96 A96 C96 C96 D96 D96 D96 D96 D96 C96 A37 C37 A96 C96 A37 C39 D96 D96 D96 D96 A41 C25 A37 C37 A37 C64 D96 D96 A36 C33 A62 C49 A96 C96 C96 C96"
+   },
+   "outcome": "playable",
+   "playtestMs": 64315
+  },
+  {
+   "i": 5,
+   "idea": "Total chaos: your own gliders can destroy your own towers.",
+   "fits": "yes",
+   "cannot": "",
+   "attempts": 1,
+   "model": {
+    "model": "openai/gpt-oss-120b",
+    "provider": "groq",
+    "costUsd": 0.0010062,
+    "promptTokens": 5396,
+    "completionTokens": 328,
+    "ms": 2250
+   },
+   "version": {
+    "format": "snowmoon.minpentai.version/1",
+    "parent": "solo-v1",
+    "author": "@spike",
+    "prompt": {
+     "text": "Total chaos: your own gliders can destroy your own towers.",
+     "model": "openai/gpt-oss-120b",
+     "date": "2026-10-21"
+    },
+    "title": "Own gliders can destroy own towers",
+    "different": "ownTower rule changed from bounce to destroy",
+    "set": {
+     "ownTower": "destroy"
+    },
+    "changes": [
+     {
+      "what": "ownTower",
+      "basis": "invented"
+     }
+    ]
+   },
+   "report": {
+    "matches": 200,
+    "allEnd": true,
+    "errors": [],
+    "illegal": 0,
+    "maxGliders": 11,
+    "ms": 47983,
+    "side": {
+     "cyan": 80,
+     "amber": 66,
+     "draws": 54,
+     "cyanScore": 0.535
+    },
+    "levels": [
+     {
+      "level": 0,
+      "name": "Practice",
+      "score": 0.14,
+      "played": 50
+     },
+     {
+      "level": 1,
+      "name": "Rival",
+      "score": 0.12,
+      "played": 50
+     },
+     {
+      "level": 2,
+      "name": "Blocker",
+      "score": 0.35,
+      "played": 50
+     },
+     {
+      "level": 3,
+      "name": "Builder",
+      "score": 0.782608695652174,
+      "played": 46
+     },
+     {
+      "level": 4,
+      "name": "Opportunist",
+      "score": 0.8260869565217391,
+      "played": 46
+     },
+     {
+      "level": 5,
+      "name": "Planner",
+      "score": 0.8586956521739131,
+      "played": 46
+     }
+    ],
+    "plannerOverRival": 1,
+    "skillGap": 0.692463768115942,
+    "length": {
+     "median": 50,
+     "p10": 26,
+     "p90": 96,
+     "byTime": 0.335,
+     "turnsMedian": 4
+    },
+    "setupDecides": 0,
+    "firstLeadHolds": 0,
+    "mirror": 56,
+    "mirrorDraws": 0.7142857142857143,
+    "overBeforeTurn2": 0,
+    "drawn": {
+     "sight2": 60,
+     "diag": 50,
+     "cost3": 42,
+     "every8": 48
+    },
+    "checks": [
+     {
+      "id": "allEnd",
+      "ok": true,
+      "value": 200,
+      "need": "200 matches end, no errors, no illegal moves"
+     },
+     {
+      "id": "sideSkew",
+      "ok": true,
+      "value": 0.535,
+      "need": "Cyan's score within 0.1 of 0.5"
+     },
+     {
+      "id": "draws",
+      "ok": true,
+      "value": 0.27,
+      "need": "draws at most 0.6"
+     },
+     {
+      "id": "plannerOverRival",
+      "ok": true,
+      "value": 1,
+      "need": "Planner beats Rival at least 0.6"
+     },
+     {
+      "id": "skillGap",
+      "ok": true,
+      "value": 0.692463768115942,
+      "need": "rungs 3-5 score at least 0.1 above practice and rung 1"
+     },
+     {
+      "id": "minTurns",
+      "ok": true,
+      "value": 4,
+      "need": "median match has at least 2 turns after setup"
+     },
+     {
+      "id": "setupDecides",
+      "ok": true,
+      "value": 0,
+      "need": "setup alone decides at most 0.25"
+     }
+    ],
+    "playable": true,
+    "outcomes": "D86 D86 C37 C37 A66 C67 A36 C37 A27 C27 A49 C27 D74 D74 A37 C18 A35 C41 A27 C25 A69 C19 D96 D96 A49 C36 D96 C33 A61 C61 D96 D96 A96 A96 D96 D96 A96 A96 A96 A96 C96 C96 D37 D37 C33 C33 A58 C35 A73 C68 A37 C40 A27 C25 C40 C40 A34 C19 A37 C37 A37 C49 A19 C25 D96 D96 A96 C49 A96 C96 A36 C25 D96 D96 D96 D96 A96 D96 A96 A96 A96 A96 D96 D96 A49 A49 C85 C85 A30 C19 A27 C26 A37 C18 A40 C38 C37 C37 C37 C44 A26 C14 A61 C74 A27 C27 D96 D96 A96 C73 A49 C61 A49 C49 D96 D96 A96 C96 D96 C96 D96 D96 C96 C96 D96 D96 D49 D49 D61 D61 C37 C32 A28 C26 A25 C14 A85 C37 D37 D37 A36 C31 A66 C48 A49 C85 A26 C14 D96 D96 A87 C96 A49 C37 A51 C42 D96 D96 D96 D96 D96 D96 C96 C96 A96 D96 D96 D96 D60 D60 C36 C36 C37 C31 A37 C18 A62 C38 A37 C31 D50 D50 A19 C50 A19 C25 A37 C37 A37 C64 D96 D96 A36 C33 A62 C49 A73 C96 C96 C96"
+   },
+   "outcome": "playable",
+   "playtestMs": 47992
+  },
+  {
+   "i": 6,
+   "idea": "A huge board, 25 by 16, with much longer matches.",
+   "fits": "yes",
+   "cannot": "",
+   "attempts": 1,
+   "model": {
+    "model": "openai/gpt-oss-120b",
+    "provider": "groq",
+    "costUsd": 0.0007413,
+    "promptTokens": 5398,
+    "completionTokens": 558,
+    "ms": 10550
+   },
+   "version": {
+    "format": "snowmoon.minpentai.version/1",
+    "parent": "solo-v1",
+    "author": "@spike",
+    "prompt": {
+     "text": "A huge board, 25 by 16, with much longer matches.",
+     "model": "openai/gpt-oss-120b",
+     "date": "2026-10-21"
+    },
+    "title": "Huge board and long match",
+    "different": "Board size 25x16 and match length increased to 240 steps.",
+    "set": {
+     "width": 25,
+     "height": 16,
+     "maxSteps": 240
+    },
+    "changes": [
+     {
+      "what": "width",
+      "basis": "invented"
+     },
+     {
+      "what": "height",
+      "basis": "invented"
+     },
+     {
+      "what": "maxSteps",
+      "basis": "invented"
+     }
+    ]
+   },
+   "report": {
+    "matches": 200,
+    "allEnd": true,
+    "errors": [],
+    "illegal": 0,
+    "maxGliders": 65,
+    "ms": 238954,
+    "side": {
+     "cyan": 45,
+     "amber": 45,
+     "draws": 110,
+     "cyanScore": 0.5
+    },
+    "levels": [
+     {
+      "level": 0,
+      "name": "Practice",
+      "score": 0.2,
+      "played": 50
+     },
+     {
+      "level": 1,
+      "name": "Rival",
+      "score": 0.2,
+      "played": 50
+     },
+     {
+      "level": 2,
+      "name": "Blocker",
+      "score": 0.2,
+      "played": 50
+     },
+     {
+      "level": 3,
+      "name": "Builder",
+      "score": 0.8260869565217391,
+      "played": 46
+     },
+     {
+      "level": 4,
+      "name": "Opportunist",
+      "score": 0.8260869565217391,
+      "played": 46
+     },
+     {
+      "level": 5,
+      "name": "Planner",
+      "score": 0.8260869565217391,
+      "played": 46
+     }
+    ],
+    "plannerOverRival": 1,
+    "skillGap": 0.6260869565217391,
+    "length": {
+     "median": 240,
+     "p10": 240,
+     "p90": 240,
+     "byTime": 0.935,
+     "turnsMedian": 19
+    },
+    "setupDecides": 0,
+    "firstLeadHolds": 0,
+    "mirror": 56,
+    "mirrorDraws": 1,
+    "overBeforeTurn2": 0,
+    "drawn": {
+     "sight2": 60,
+     "diag": 50,
+     "cost3": 42,
+     "every8": 48
+    },
+    "checks": [
+     {
+      "id": "allEnd",
+      "ok": true,
+      "value": 200,
+      "need": "200 matches end, no errors, no illegal moves"
+     },
+     {
+      "id": "sideSkew",
+      "ok": true,
+      "value": 0.5,
+      "need": "Cyan's score within 0.1 of 0.5"
+     },
+     {
+      "id": "draws",
+      "ok": true,
+      "value": 0.55,
+      "need": "draws at most 0.6"
+     },
+     {
+      "id": "plannerOverRival",
+      "ok": true,
+      "value": 1,
+      "need": "Planner beats Rival at least 0.6"
+     },
+     {
+      "id": "skillGap",
+      "ok": true,
+      "value": 0.6260869565217391,
+      "need": "rungs 3-5 score at least 0.1 above practice and rung 1"
+     },
+     {
+      "id": "minTurns",
+      "ok": true,
+      "value": 19,
+      "need": "median match has at least 2 turns after setup"
+     },
+     {
+      "id": "setupDecides",
+      "ok": true,
+      "value": 0,
+      "need": "setup alone decides at most 0.25"
+     }
+    ],
+    "playable": true,
+    "outcomes": "D240 D240 D240 D240 D240 D240 A240 C240 A46 C55 A240 C56 D240 D240 D240 D240 A240 C240 A240 C240 A240 C240 D240 D240 A240 C240 A240 C240 A240 C240 D240 D240 D240 D240 D240 D240 D240 D240 D240 D240 D240 D240 D240 D240 D240 D240 D240 D240 A240 C240 A240 C240 A240 C240 D240 D240 D240 D240 A240 C240 A240 C240 A240 C80 D240 D240 A240 C240 A240 C240 A240 C240 D240 D240 D240 D240 D240 D240 D240 D240 D240 D240 D240 D240 D240 D240 D240 D240 D240 D240 A240 C240 A240 C240 A46 C55 D240 D240 D240 D240 A240 C240 A240 C240 A55 C46 D240 D240 A240 C240 A240 C240 A240 C109 D240 D240 D240 D240 D240 D240 D240 D240 D240 D240 D240 D240 D240 D240 D240 D240 D240 D240 A240 C240 A240 C240 A46 C46 D240 D240 D240 D240 A240 C240 A240 C240 A240 C240 D240 D240 A240 C240 A240 C240 A240 C240 D240 D240 D240 D240 D240 D240 D240 D240 D240 D240 D240 D240 D240 D240 D240 D240 D240 D240 A240 C240 A240 C240 A240 C240 D240 D240 D240 D240 A240 C240 A103 C55 A240 C240 D240 D240 A240 C240 A240 C240 A240 C240 D240 D240"
+   },
+   "outcome": "playable",
+   "playtestMs": 238957
+  },
+  {
+   "i": 7,
+   "idea": "A tiny 9 by 6 board for a quick knife fight.",
+   "fits": "yes",
+   "cannot": "",
+   "attempts": 1,
+   "model": {
+    "model": "openai/gpt-oss-120b",
+    "provider": "groq",
+    "costUsd": 0.00108735,
+    "promptTokens": 5397,
+    "completionTokens": 463,
+    "ms": 4418
+   },
+   "version": {
+    "format": "snowmoon.minpentai.version/1",
+    "parent": "solo-v1",
+    "author": "@spike",
+    "prompt": {
+     "text": "A tiny 9 by 6 board for a quick knife fight.",
+     "model": "openai/gpt-oss-120b",
+     "date": "2026-10-21"
+    },
+    "title": "Tiny 9x6 board",
+    "different": "Board size reduced to 9x6 (from 15x10)",
+    "set": {
+     "width": 9,
+     "height": 6
+    },
+    "changes": [
+     {
+      "what": "width",
+      "basis": "invented"
+     },
+     {
+      "what": "height",
+      "basis": "invented"
+     }
+    ]
+   },
+   "report": {
+    "matches": 200,
+    "allEnd": true,
+    "errors": [],
+    "illegal": 0,
+    "maxGliders": 14,
+    "ms": 25792,
+    "side": {
+     "cyan": 68,
+     "amber": 63,
+     "draws": 69,
+     "cyanScore": 0.5125
+    },
+    "levels": [
+     {
+      "level": 0,
+      "name": "Practice",
+      "score": 0.15,
+      "played": 50
+     },
+     {
+      "level": 1,
+      "name": "Rival",
+      "score": 0.16,
+      "played": 50
+     },
+     {
+      "level": 2,
+      "name": "Blocker",
+      "score": 0.29,
+      "played": 50
+     },
+     {
+      "level": 3,
+      "name": "Builder",
+      "score": 0.8043478260869565,
+      "played": 46
+     },
+     {
+      "level": 4,
+      "name": "Opportunist",
+      "score": 0.8478260869565217,
+      "played": 46
+     },
+     {
+      "level": 5,
+      "name": "Planner",
+      "score": 0.8260869565217391,
+      "played": 46
+     }
+    ],
+    "plannerOverRival": 1,
+    "skillGap": 0.6710869565217391,
+    "length": {
+     "median": 73,
+     "p10": 15,
+     "p90": 96,
+     "byTime": 0.475,
+     "turnsMedian": 6
+    },
+    "setupDecides": 0,
+    "firstLeadHolds": 0.3333333333333333,
+    "mirror": 56,
+    "mirrorDraws": 0.7142857142857143,
+    "overBeforeTurn2": 0,
+    "drawn": {
+     "sight2": 60,
+     "diag": 50,
+     "cost3": 42,
+     "every8": 48
+    },
+    "checks": [
+     {
+      "id": "allEnd",
+      "ok": true,
+      "value": 200,
+      "need": "200 matches end, no errors, no illegal moves"
+     },
+     {
+      "id": "sideSkew",
+      "ok": true,
+      "value": 0.5125,
+      "need": "Cyan's score within 0.1 of 0.5"
+     },
+     {
+      "id": "draws",
+      "ok": true,
+      "value": 0.345,
+      "need": "draws at most 0.6"
+     },
+     {
+      "id": "plannerOverRival",
+      "ok": true,
+      "value": 1,
+      "need": "Planner beats Rival at least 0.6"
+     },
+     {
+      "id": "skillGap",
+      "ok": true,
+      "value": 0.6710869565217391,
+      "need": "rungs 3-5 score at least 0.1 above practice and rung 1"
+     },
+     {
+      "id": "minTurns",
+      "ok": true,
+      "value": 6,
+      "need": "median match has at least 2 turns after setup"
+     },
+     {
+      "id": "setupDecides",
+      "ok": true,
+      "value": 0,
+      "need": "setup alone decides at most 0.25"
+     }
+    ],
+    "playable": true,
+    "outcomes": "D96 D96 D96 D96 D96 C51 A25 C25 A25 C31 A9 C9 C15 C15 A39 C87 A25 C17 A17 C17 A31 C25 D96 D96 A9 C9 A9 C9 A19 C25 D96 D96 C96 C96 C96 C96 D96 D96 D96 D96 A96 A96 D96 D96 C51 C51 D96 D96 A91 C25 A25 C25 A9 C17 D44 D44 D96 D96 A19 C25 A26 C37 A17 C9 D96 D96 A25 C13 A49 C96 A15 C17 D96 D96 D96 D96 D96 D96 D96 D96 A96 A96 D96 D96 D96 D96 D96 D96 A51 C63 A25 C23 A13 C25 A19 C31 A76 A76 D96 C96 A17 C17 A37 C37 A19 C61 D96 D96 A37 C49 A19 C13 A13 C13 D96 D96 A96 C96 D96 D96 D96 D96 D96 D96 C96 C96 D96 D96 D96 D96 D96 C96 A15 C9 A9 C17 A37 C31 D96 D96 A63 D96 A25 C49 A25 C25 A17 C17 D96 D96 A13 C25 A25 C13 A25 C19 A96 A96 A96 A96 C96 C96 C96 C96 A96 A96 D96 D96 A15 A15 D96 D96 D96 C96 A25 C25 A25 C26 A37 C19 D96 D96 D96 D96 A17 C9 A25 C19 A19 C13 D96 D96 A15 C9 A73 C61 A49 C61 C96 C96"
+   },
+   "outcome": "playable",
+   "playtestMs": 25792
+  },
+  {
+   "i": 8,
+   "idea": "Halfway through the match the rules suddenly change, like that semi-final in chapter 5.",
+   "fits": "yes",
+   "cannot": "",
+   "attempts": 2,
+   "model": {
+    "model": "openai/gpt-oss-120b",
+    "provider": "groq",
+    "costUsd": 0.0026649,
+    "promptTokens": 10966,
+    "completionTokens": 1700,
+    "ms": 13335
+   },
+   "version": {
+    "format": "snowmoon.minpentai.version/1",
+    "parent": "solo-v1",
+    "author": "@spike",
+    "prompt": {
+     "text": "Halfway through the match the rules suddenly change, like that semi-final in chapter 5.",
+     "model": "openai/gpt-oss-120b",
+     "date": "2026-10-21"
+    },
+    "title": "Mid-match rule change",
+    "different": "A rule switch occurs at step 48, altering settings mid-match.",
+    "set": {
+     "switchAt": 48
+    },
+    "changes": [
+     {
+      "what": "switchAt",
+      "basis": "invented"
+     },
+     {
+      "what": "drawn",
+      "basis": "invented"
+     }
+    ],
+    "drawn": [
+     {
+      "id": "mid-change",
+      "text": "At step 48, glider cost increases by 1",
+      "set": {
+       "costGlider": 5
+      }
+     },
+     {
+      "id": "mid-dir",
+      "text": "At step 48, gliders may also move diagonally",
+      "set": {
+       "directions": 8
+      }
+     }
+    ]
+   },
+   "report": {
+    "matches": 200,
+    "allEnd": true,
+    "errors": [],
+    "illegal": 0,
+    "maxGliders": 14,
+    "ms": 57999,
+    "side": {
+     "cyan": 61,
+     "amber": 66,
+     "draws": 73,
+     "cyanScore": 0.4875
+    },
+    "levels": [
+     {
+      "level": 0,
+      "name": "Practice",
+      "score": 0.1,
+      "played": 50
+     },
+     {
+      "level": 1,
+      "name": "Rival",
+      "score": 0.13,
+      "played": 50
+     },
+     {
+      "level": 2,
+      "name": "Blocker",
+      "score": 0.37,
+      "played": 50
+     },
+     {
+      "level": 3,
+      "name": "Builder",
+      "score": 0.8260869565217391,
+      "played": 46
+     },
+     {
+      "level": 4,
+      "name": "Opportunist",
+      "score": 0.8260869565217391,
+      "played": 46
+     },
+     {
+      "level": 5,
+      "name": "Planner",
+      "score": 0.8260869565217391,
+      "played": 46
+     }
+    ],
+    "plannerOverRival": 1,
+    "skillGap": 0.7110869565217391,
+    "length": {
+     "median": 96,
+     "p10": 37,
+     "p90": 96,
+     "byTime": 0.66,
+     "turnsMedian": 7
+    },
+    "setupDecides": 0,
+    "firstLeadHolds": 0,
+    "mirror": 56,
+    "mirrorDraws": 0.7857142857142857,
+    "overBeforeTurn2": 0,
+    "drawn": {
+     "mid-dir then mid-change": 108,
+     "mid-change then mid-dir": 92
+    },
+    "checks": [
+     {
+      "id": "allEnd",
+      "ok": true,
+      "value": 200,
+      "need": "200 matches end, no errors, no illegal moves"
+     },
+     {
+      "id": "sideSkew",
+      "ok": true,
+      "value": 0.4875,
+      "need": "Cyan's score within 0.1 of 0.5"
+     },
+     {
+      "id": "draws",
+      "ok": true,
+      "value": 0.365,
+      "need": "draws at most 0.6"
+     },
+     {
+      "id": "plannerOverRival",
+      "ok": true,
+      "value": 1,
+      "need": "Planner beats Rival at least 0.6"
+     },
+     {
+      "id": "skillGap",
+      "ok": true,
+      "value": 0.7110869565217391,
+      "need": "rungs 3-5 score at least 0.1 above practice and rung 1"
+     },
+     {
+      "id": "minTurns",
+      "ok": true,
+      "value": 7,
+      "need": "median match has at least 2 turns after setup"
+     },
+     {
+      "id": "setupDecides",
+      "ok": true,
+      "value": 0,
+      "need": "setup alone decides at most 0.25"
+     }
+    ],
+    "playable": true,
+    "outcomes": "D96 D96 D96 D96 A96 C96 A96 C85 A66 C75 A96 C37 D96 D96 D96 C96 A51 C96 A18 C27 A85 C96 D96 D96 A96 C52 A52 C49 A85 C96 C96 C96 A96 A96 D96 D96 A96 A96 D96 D96 D96 D96 D96 D96 D96 D96 A96 C96 A49 C38 A66 C88 A37 C51 D96 D96 A96 C96 A96 C87 A18 C27 A18 C37 D96 D96 A96 C88 A96 C52 A39 C37 D96 D96 D96 D96 D96 D96 D96 D96 A96 A96 A96 A96 D96 D96 D96 D96 A96 C96 A47 C37 A66 C86 A85 C88 D96 D96 A96 C96 A37 C37 A37 C37 A78 C75 D96 D96 A96 C49 A87 C96 A85 C96 D96 D96 D96 D96 A96 D96 C96 C96 A96 A96 D96 D96 D96 D96 D96 D96 A96 C96 A40 C37 A37 C27 A87 C75 D96 D96 D96 C96 A96 C96 A37 C37 A37 C37 D96 D96 A96 C96 A96 C96 A96 C90 D96 D96 D96 D96 D96 A96 D96 D96 D96 D96 A96 A96 D96 D96 D96 D96 A96 C96 A85 C85 A37 C27 A66 C87 D96 D96 D96 C96 A47 C37 A66 C85 A95 C96 D96 D96 A52 C40 A96 C96 A49 C42 C96 C96"
+   },
+   "outcome": "playable",
+   "playtestMs": 58010
+  },
+  {
+   "i": 9,
+   "idea": "Cut the budget by eighty percent, like the national semi-finals.",
+   "fits": "partly",
+   "cannot": "cannot reduce the budget by exactly eighty percent; only whole-number point values are allowed",
+   "attempts": 1,
+   "model": {
+    "model": "openai/gpt-oss-120b",
+    "provider": "groq",
+    "costUsd": 0.0011598,
+    "promptTokens": 7956,
+    "completionTokens": 616,
+    "ms": 5206
+   },
+   "version": {
+    "format": "snowmoon.minpentai.version/1",
+    "parent": "solo-v1",
+    "author": "@spike",
+    "prompt": {
+     "text": "Cut the budget by eighty percent, like the national semi-finals.",
+     "model": "openai/gpt-oss-120b",
+     "date": "2026-10-21"
+    },
+    "title": "Reduced budget (80% cut)",
+    "different": "Points per turn and setup points reduced to minimum values (2), approximating an 80% cut",
+    "set": {
+     "points": 2,
+     "setupPoints": 2
+    },
+    "changes": [
+     {
+      "what": "points",
+      "basis": "invented"
+     },
+     {
+      "what": "setupPoints",
+      "basis": "invented"
+     }
+    ]
+   },
+   "report": {
+    "matches": 200,
+    "allEnd": true,
+    "errors": [],
+    "illegal": 0,
+    "maxGliders": 0,
+    "ms": 342,
+    "side": {
+     "cyan": 0,
+     "amber": 0,
+     "draws": 200,
+     "cyanScore": 0.5
+    },
+    "levels": [
+     {
+      "level": 0,
+      "name": "Practice",
+      "score": 0.5,
+      "played": 50
+     },
+     {
+      "level": 1,
+      "name": "Rival",
+      "score": 0.5,
+      "played": 50
+     },
+     {
+      "level": 2,
+      "name": "Blocker",
+      "score": 0.5,
+      "played": 50
+     },
+     {
+      "level": 3,
+      "name": "Builder",
+      "score": 0.5,
+      "played": 46
+     },
+     {
+      "level": 4,
+      "name": "Opportunist",
+      "score": 0.5,
+      "played": 46
+     },
+     {
+      "level": 5,
+      "name": "Planner",
+      "score": 0.5,
+      "played": 46
+     }
+    ],
+    "plannerOverRival": 0.5,
+    "skillGap": 0,
+    "length": {
+     "median": 96,
+     "p10": 96,
+     "p90": 96,
+     "byTime": 1,
+     "turnsMedian": 7
+    },
+    "setupDecides": 0,
+    "firstLeadHolds": 0,
+    "mirror": 56,
+    "mirrorDraws": 1,
+    "overBeforeTurn2": 0,
+    "drawn": {
+     "sight2": 60,
+     "diag": 50,
+     "cost3": 42,
+     "every8": 48
+    },
+    "checks": [
+     {
+      "id": "allEnd",
+      "ok": true,
+      "value": 200,
+      "need": "200 matches end, no errors, no illegal moves"
+     },
+     {
+      "id": "sideSkew",
+      "ok": true,
+      "value": 0.5,
+      "need": "Cyan's score within 0.1 of 0.5"
+     },
+     {
+      "id": "draws",
+      "ok": false,
+      "value": 1,
+      "need": "draws at most 0.6"
+     },
+     {
+      "id": "plannerOverRival",
+      "ok": false,
+      "value": 0.5,
+      "need": "Planner beats Rival at least 0.6"
+     },
+     {
+      "id": "skillGap",
+      "ok": false,
+      "value": 0,
+      "need": "rungs 3-5 score at least 0.1 above practice and rung 1"
+     },
+     {
+      "id": "minTurns",
+      "ok": true,
+      "value": 7,
+      "need": "median match has at least 2 turns after setup"
+     },
+     {
+      "id": "setupDecides",
+      "ok": true,
+      "value": 0,
+      "need": "setup alone decides at most 0.25"
+     }
+    ],
+    "playable": false,
+    "outcomes": "D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96"
+   },
+   "outcome": "fixed by dropping part",
+   "fix": {
+    "change": "points back to Play's 8 (drops part of the idea)",
+    "version": {
+     "format": "snowmoon.minpentai.version/1",
+     "parent": "solo-v1",
+     "author": "@spike",
+     "prompt": {
+      "text": "Cut the budget by eighty percent, like the national semi-finals.",
+      "model": "openai/gpt-oss-120b",
+      "date": "2026-10-21"
+     },
+     "title": "Reduced budget (80% cut)",
+     "different": "Points per turn and setup points reduced to minimum values (2), approximating an 80% cut",
+     "set": {
+      "setupPoints": 2
+     },
+     "changes": [
+      {
+       "what": "setupPoints",
+       "basis": "invented"
+      }
+     ]
+    },
+    "report": {
+     "matches": 200,
+     "allEnd": true,
+     "errors": [],
+     "illegal": 0,
+     "maxGliders": 18,
+     "ms": 16851,
+     "side": {
+      "cyan": 60,
+      "amber": 62,
+      "draws": 78,
+      "cyanScore": 0.495
+     },
+     "levels": [
+      {
+       "level": 0,
+       "name": "Practice",
+       "score": 0.11,
+       "played": 50
+      },
+      {
+       "level": 1,
+       "name": "Rival",
+       "score": 0.14,
+       "played": 50
+      },
+      {
+       "level": 2,
+       "name": "Blocker",
+       "score": 0.35,
+       "played": 50
+      },
+      {
+       "level": 3,
+       "name": "Builder",
+       "score": 0.7934782608695652,
+       "played": 46
+      },
+      {
+       "level": 4,
+       "name": "Opportunist",
+       "score": 0.8478260869565217,
+       "played": 46
+      },
+      {
+       "level": 5,
+       "name": "Planner",
+       "score": 0.8369565217391305,
+       "played": 46
+      }
+     ],
+     "plannerOverRival": 1,
+     "skillGap": 0.7010869565217391,
+     "length": {
+      "median": 96,
+      "p10": 41,
+      "p90": 96,
+      "byTime": 0.64,
+      "turnsMedian": 7
+     },
+     "setupDecides": 0,
+     "firstLeadHolds": 0,
+     "mirror": 56,
+     "mirrorDraws": 0.8571428571428571,
+     "overBeforeTurn2": 0,
+     "drawn": {
+      "sight2": 60,
+      "diag": 50,
+      "cost3": 42,
+      "every8": 48
+     },
+     "checks": [
+      {
+       "id": "allEnd",
+       "ok": true,
+       "value": 200,
+       "need": "200 matches end, no errors, no illegal moves"
+      },
+      {
+       "id": "sideSkew",
+       "ok": true,
+       "value": 0.495,
+       "need": "Cyan's score within 0.1 of 0.5"
+      },
+      {
+       "id": "draws",
+       "ok": true,
+       "value": 0.39,
+       "need": "draws at most 0.6"
+      },
+      {
+       "id": "plannerOverRival",
+       "ok": true,
+       "value": 1,
+       "need": "Planner beats Rival at least 0.6"
+      },
+      {
+       "id": "skillGap",
+       "ok": true,
+       "value": 0.7010869565217391,
+       "need": "rungs 3-5 score at least 0.1 above practice and rung 1"
+      },
+      {
+       "id": "minTurns",
+       "ok": true,
+       "value": 7,
+       "need": "median match has at least 2 turns after setup"
+      },
+      {
+       "id": "setupDecides",
+       "ok": true,
+       "value": 0,
+       "need": "setup alone decides at most 0.25"
+      }
+     ],
+     "playable": true,
+     "outcomes": "D96 D96 D96 D96 A96 C96 A52 C49 A39 C39 A57 C59 D96 D96 A96 C96 A43 C49 A35 C33 A81 C49 D96 D96 A57 C44 A81 C41 A49 C73 D96 D96 D96 D96 D96 D96 A96 A96 D96 D96 C96 C96 D96 D96 C41 C41 D96 C96 A96 C96 A49 C52 A41 C33 D96 D96 D96 D96 A49 C51 A96 C96 A43 C33 D96 D96 A96 C52 A96 C96 A66 C33 D96 D96 D96 D96 A96 D96 D96 D96 A96 A96 D96 D96 D96 D96 D96 D96 A96 C96 A51 C41 A49 C49 A52 C52 D96 D96 A96 C96 A33 C22 A96 C96 A39 C39 D96 D96 A96 C96 A51 C73 A49 C73 A96 A96 A96 C96 D96 D96 D96 D96 D96 D96 A96 A96 D96 D96 D96 D96 A96 C96 A36 C41 A33 C22 A96 C49 D96 D96 A96 C96 A78 C61 A96 C96 A33 C22 D96 D96 A96 C96 A49 C49 A51 C54 D96 D96 D96 D96 D96 D96 D96 D96 C96 C96 D96 D96 D96 D96 D96 D96 A96 C96 A49 C49 A96 C96 A49 C51 D96 D96 D96 D96 A49 C33 A49 C49 A49 C76 D96 D96 A51 C41 A85 C61 A96 C96 D96 D96"
+    }
+   },
+   "options": [
+    "points back to Play's 8 (drops part of the idea)",
+    "setupPoints back to Play's 8 (drops part of the idea)"
+   ],
+   "tried": [
+    {
+     "change": "points 2 -> 4",
+     "screen": false
+    },
+    {
+     "change": "setupPoints 2 -> 4",
+     "screen": false
+    },
+    {
+     "change": "maxSteps 96 -> 192 (new)",
+     "screen": false
+    },
+    {
+     "change": "every 12 -> 16 (new)",
+     "screen": false
+    },
+    {
+     "change": "points 2 -> 5",
+     "screen": false
+    },
+    {
+     "change": "setupPoints 2 -> 5",
+     "screen": false
+    },
+    {
+     "change": "points 2 -> 7",
+     "screen": false
+    },
+    {
+     "change": "setupPoints 2 -> 7",
+     "screen": false
+    },
+    {
+     "change": "points back to Play's 8 (drops part of the idea)",
+     "screen": true,
+     "full": true
+    },
+    {
+     "change": "setupPoints back to Play's 8 (drops part of the idea)",
+     "screen": true,
+     "full": true
+    }
+   ],
+   "playtestMs": 41724,
+   "rerun": "2026-10-21: re-run after the fix search stopped offering a fix that undoes part of the idea without saying so"
+  },
+  {
+   "i": 10,
+   "idea": "Debris: anything that breaks turns into rock, until the field is a wasteland.",
+   "fits": "partly",
+   "cannot": "gliders cannot be turned into rock when destroyed",
+   "attempts": 1,
+   "model": {
+    "model": "openai/gpt-oss-120b",
+    "provider": "groq",
+    "costUsd": 0.00113535,
+    "promptTokens": 5401,
+    "completionTokens": 542,
+    "ms": 2403
+   },
+   "version": {
+    "format": "snowmoon.minpentai.version/1",
+    "parent": "solo-v1",
+    "author": "@spike",
+    "prompt": {
+     "text": "Debris: anything that breaks turns into rock, until the field is a wasteland.",
+     "model": "openai/gpt-oss-120b",
+     "date": "2026-10-21"
+    },
+    "title": "Debris becomes rock",
+    "different": "Broken squares and towers leave rocks as debris",
+    "set": {
+     "debris": "rock"
+    },
+    "changes": [
+     {
+      "what": "debris",
+      "basis": "invented"
+     }
+    ]
+   },
+   "report": {
+    "matches": 200,
+    "allEnd": true,
+    "errors": [],
+    "illegal": 0,
+    "maxGliders": 18,
+    "ms": 44281,
+    "side": {
+     "cyan": 63,
+     "amber": 61,
+     "draws": 76,
+     "cyanScore": 0.505
+    },
+    "levels": [
+     {
+      "level": 0,
+      "name": "Practice",
+      "score": 0.1,
+      "played": 50
+     },
+     {
+      "level": 1,
+      "name": "Rival",
+      "score": 0.15,
+      "played": 50
+     },
+     {
+      "level": 2,
+      "name": "Blocker",
+      "score": 0.35,
+      "played": 50
+     },
+     {
+      "level": 3,
+      "name": "Builder",
+      "score": 0.8260869565217391,
+      "played": 46
+     },
+     {
+      "level": 4,
+      "name": "Opportunist",
+      "score": 0.8152173913043478,
+      "played": 46
+     },
+     {
+      "level": 5,
+      "name": "Planner",
+      "score": 0.8369565217391305,
+      "played": 46
+     }
+    ],
+    "plannerOverRival": 1,
+    "skillGap": 0.7010869565217391,
+    "length": {
+     "median": 96,
+     "p10": 33,
+     "p90": 96,
+     "byTime": 0.58,
+     "turnsMedian": 7
+    },
+    "setupDecides": 0,
+    "firstLeadHolds": 0,
+    "mirror": 56,
+    "mirrorDraws": 0.8214285714285714,
+    "overBeforeTurn2": 0,
+    "drawn": {
+     "sight2": 60,
+     "diag": 50,
+     "cost3": 42,
+     "every8": 48
+    },
+    "checks": [
+     {
+      "id": "allEnd",
+      "ok": true,
+      "value": 200,
+      "need": "200 matches end, no errors, no illegal moves"
+     },
+     {
+      "id": "sideSkew",
+      "ok": true,
+      "value": 0.505,
+      "need": "Cyan's score within 0.1 of 0.5"
+     },
+     {
+      "id": "draws",
+      "ok": true,
+      "value": 0.38,
+      "need": "draws at most 0.6"
+     },
+     {
+      "id": "plannerOverRival",
+      "ok": true,
+      "value": 1,
+      "need": "Planner beats Rival at least 0.6"
+     },
+     {
+      "id": "skillGap",
+      "ok": true,
+      "value": 0.7010869565217391,
+      "need": "rungs 3-5 score at least 0.1 above practice and rung 1"
+     },
+     {
+      "id": "minTurns",
+      "ok": true,
+      "value": 7,
+      "need": "median match has at least 2 turns after setup"
+     },
+     {
+      "id": "setupDecides",
+      "ok": true,
+      "value": 0,
+      "need": "setup alone decides at most 0.25"
+     }
+    ],
+    "playable": true,
+    "outcomes": "D96 D96 D96 D96 A96 C93 A38 C37 A39 C27 A41 C33 D96 D96 D96 C96 A41 C41 A26 C25 A62 C37 D96 D96 A41 C36 A44 C33 A61 C51 D96 D96 D96 D96 A96 A96 C96 C96 A96 A96 D96 D96 D96 D96 A34 C33 A96 C96 A42 C94 A18 C30 A33 C25 D96 D96 A96 C96 A37 C37 A96 C96 A34 C25 D96 D96 A62 C49 A96 C96 A36 C25 A96 A96 D96 D96 D96 D96 C96 C96 A96 A96 D96 D96 D96 D96 D96 D96 A96 C96 A33 C33 A37 C37 A40 C22 D96 D96 D96 C82 A34 C14 A96 C96 A38 C22 D96 D96 A96 C96 A62 C49 A49 C49 D96 D96 D96 D96 D96 D96 D96 D96 D96 C96 D96 D96 D96 D96 D96 D96 D96 C82 A28 C36 A25 C14 A37 C37 D96 D96 D96 C96 A63 C49 A96 C80 A33 C14 D96 D96 A64 C64 A49 C52 A61 C61 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 C96 C96 D96 D96 D96 D96 D96 C58 A49 C37 A42 C96 A49 C38 D96 D96 A96 C96 A33 C25 A18 C30 A37 C64 D96 D96 A36 C33 A62 C49 A96 C96 A96 A96"
+   },
+   "outcome": "playable",
+   "playtestMs": 44286
+  },
+  {
+   "i": 11,
+   "idea": "Sudden death: the first tower destroyed wins the match.",
+   "fits": "yes",
+   "cannot": "",
+   "attempts": 1,
+   "model": {
+    "model": "openai/gpt-oss-120b",
+    "provider": "groq",
+    "costUsd": 0.00099405,
+    "promptTokens": 5395,
+    "completionTokens": 308,
+    "ms": 1633
+   },
+   "version": {
+    "format": "snowmoon.minpentai.version/1",
+    "parent": "solo-v1",
+    "author": "@spike",
+    "prompt": {
+     "text": "Sudden death: the first tower destroyed wins the match.",
+     "model": "openai/gpt-oss-120b",
+     "date": "2026-10-21"
+    },
+    "title": "Sudden death first-blood win",
+    "different": "win condition changed to first-blood: first tower destroyed ends the match",
+    "set": {
+     "win": "first-blood"
+    },
+    "changes": [
+     {
+      "what": "win",
+      "basis": "invented"
+     }
+    ]
+   },
+   "report": {
+    "matches": 200,
+    "allEnd": true,
+    "errors": [],
+    "illegal": 0,
+    "maxGliders": 4,
+    "ms": 25606,
+    "side": {
+     "cyan": 64,
+     "amber": 48,
+     "draws": 88,
+     "cyanScore": 0.54
+    },
+    "levels": [
+     {
+      "level": 0,
+      "name": "Practice",
+      "score": 0.19,
+      "played": 50
+     },
+     {
+      "level": 1,
+      "name": "Rival",
+      "score": 0.19,
+      "played": 50
+     },
+     {
+      "level": 2,
+      "name": "Blocker",
+      "score": 0.82,
+      "played": 50
+     },
+     {
+      "level": 3,
+      "name": "Builder",
+      "score": 0.5978260869565217,
+      "played": 46
+     },
+     {
+      "level": 4,
+      "name": "Opportunist",
+      "score": 0.5760869565217391,
+      "played": 46
+     },
+     {
+      "level": 5,
+      "name": "Planner",
+      "score": 0.6521739130434783,
+      "played": 46
+     }
+    ],
+    "plannerOverRival": 0.95,
+    "skillGap": 0.41869565217391297,
+    "length": {
+     "median": 21,
+     "p10": 9,
+     "p90": 57,
+     "byTime": 0.055,
+     "turnsMedian": 1
+    },
+    "setupDecides": 0.10714285714285714,
+    "firstLeadHolds": 0,
+    "mirror": 56,
+    "mirrorDraws": 0.75,
+    "overBeforeTurn2": 0.165,
+    "drawn": {
+     "sight2": 60,
+     "diag": 50,
+     "cost3": 42,
+     "every8": 48
+    },
+    "checks": [
+     {
+      "id": "allEnd",
+      "ok": true,
+      "value": 200,
+      "need": "200 matches end, no errors, no illegal moves"
+     },
+     {
+      "id": "sideSkew",
+      "ok": true,
+      "value": 0.54,
+      "need": "Cyan's score within 0.1 of 0.5"
+     },
+     {
+      "id": "draws",
+      "ok": true,
+      "value": 0.44,
+      "need": "draws at most 0.6"
+     },
+     {
+      "id": "plannerOverRival",
+      "ok": true,
+      "value": 0.95,
+      "need": "Planner beats Rival at least 0.6"
+     },
+     {
+      "id": "skillGap",
+      "ok": true,
+      "value": 0.41869565217391297,
+      "need": "rungs 3-5 score at least 0.1 above practice and rung 1"
+     },
+     {
+      "id": "minTurns",
+      "ok": false,
+      "value": 1,
+      "need": "median match has at least 2 turns after setup"
+     },
+     {
+      "id": "setupDecides",
+      "ok": true,
+      "value": 0.10714285714285714,
+      "need": "setup alone decides at most 0.25"
+     }
+    ],
+    "playable": false,
+    "outcomes": "C58 C58 D10 D10 A57 C57 A9 C27 D9 C18 D25 C14 C45 C45 A9 C9 D25 C25 D9 D9 D37 C9 D96 D96 D25 A17 D25 A17 C21 A21 D17 D17 D14 D14 D20 D20 D25 D25 D18 D18 C37 C37 C10 C10 C25 C25 A49 C25 C8 C52 D9 C18 A14 C25 A9 A9 A25 C9 A18 C9 D10 C20 A9 C14 D96 D96 D37 A21 C22 A22 C17 C25 D37 D37 C60 C60 D17 D17 D25 D25 D18 D18 D20 D20 D23 D23 C58 C58 A21 C9 A14 C14 A27 C9 A27 C9 C10 C10 A10 C34 A14 C9 A30 C40 A18 C9 D96 D96 A96 A46 D37 A21 C21 A21 D18 D18 A15 D18 D30 D30 D30 D30 D49 D49 D25 D25 D23 D23 D33 D33 D10 C22 A19 C14 A19 D9 D9 C27 D10 D10 A9 C21 D37 A6 A20 C52 A14 C9 D96 D96 D37 D37 A32 A21 A32 D37 D25 D25 D20 D20 D20 D20 D18 D18 D18 D18 D20 D20 D34 D34 A10 A10 A10 C22 A9 C9 A20 D10 A18 C18 C22 C22 A9 C41 A9 C19 D9 C18 A27 C37 D96 D96 C17 A17 C33 A33 C22 C61 D14 D14"
+   },
+   "outcome": "fixed",
+   "fix": {
+    "change": "every 12 -> 6 (new)",
+    "version": {
+     "format": "snowmoon.minpentai.version/1",
+     "parent": "solo-v1",
+     "author": "@spike",
+     "prompt": {
+      "text": "Sudden death: the first tower destroyed wins the match.",
+      "model": "openai/gpt-oss-120b",
+      "date": "2026-10-21"
+     },
+     "title": "Sudden death first-blood win",
+     "different": "win condition changed to first-blood: first tower destroyed ends the match",
+     "set": {
+      "win": "first-blood",
+      "every": 6
+     },
+     "changes": [
+      {
+       "what": "win",
+       "basis": "invented"
+      },
+      {
+       "what": "every",
+       "basis": "invented"
+      }
+     ]
+    },
+    "report": {
+     "matches": 200,
+     "allEnd": true,
+     "errors": [],
+     "illegal": 0,
+     "maxGliders": 6,
+     "ms": 36606,
+     "side": {
+      "cyan": 66,
+      "amber": 57,
+      "draws": 77,
+      "cyanScore": 0.5225
+     },
+     "levels": [
+      {
+       "level": 0,
+       "name": "Practice",
+       "score": 0.16,
+       "played": 50
+      },
+      {
+       "level": 1,
+       "name": "Rival",
+       "score": 0.2,
+       "played": 50
+      },
+      {
+       "level": 2,
+       "name": "Blocker",
+       "score": 0.7,
+       "played": 50
+      },
+      {
+       "level": 3,
+       "name": "Builder",
+       "score": 0.6304347826086957,
+       "played": 46
+      },
+      {
+       "level": 4,
+       "name": "Opportunist",
+       "score": 0.6195652173913043,
+       "played": 46
+      },
+      {
+       "level": 5,
+       "name": "Planner",
+       "score": 0.7282608695652174,
+       "played": 46
+      }
+     ],
+     "plannerOverRival": 0.95,
+     "skillGap": 0.4794202898550724,
+     "length": {
+      "median": 18,
+      "p10": 9,
+      "p90": 39,
+      "byTime": 0.065,
+      "turnsMedian": 2
+     },
+     "setupDecides": 0.10714285714285714,
+     "firstLeadHolds": 0,
+     "mirror": 56,
+     "mirrorDraws": 0.5714285714285714,
+     "overBeforeTurn2": 0.005,
+     "drawn": {
+      "sight2": 60,
+      "diag": 50,
+      "cost3": 42,
+      "every8": 48
+     },
+     "checks": [
+      {
+       "id": "allEnd",
+       "ok": true,
+       "value": 200,
+       "need": "200 matches end, no errors, no illegal moves"
+      },
+      {
+       "id": "sideSkew",
+       "ok": true,
+       "value": 0.5225,
+       "need": "Cyan's score within 0.1 of 0.5"
+      },
+      {
+       "id": "draws",
+       "ok": true,
+       "value": 0.385,
+       "need": "draws at most 0.6"
+      },
+      {
+       "id": "plannerOverRival",
+       "ok": true,
+       "value": 0.95,
+       "need": "Planner beats Rival at least 0.6"
+      },
+      {
+       "id": "skillGap",
+       "ok": true,
+       "value": 0.4794202898550724,
+       "need": "rungs 3-5 score at least 0.1 above practice and rung 1"
+      },
+      {
+       "id": "minTurns",
+       "ok": true,
+       "value": 2,
+       "need": "median match has at least 2 turns after setup"
+      },
+      {
+       "id": "setupDecides",
+       "ok": true,
+       "value": 0.10714285714285714,
+       "need": "setup alone decides at most 0.25"
+      }
+     ],
+     "playable": true,
+     "outcomes": "C34 C34 C10 C10 A39 C33 A9 C15 A12 C12 D25 C14 C27 C27 A9 C9 D25 C25 D9 D9 D19 C12 D96 D96 D25 A17 D25 A17 A25 D25 D17 D17 D14 D14 D25 D25 D13 D13 D12 D12 C19 C19 C10 C10 C25 C25 A49 C25 A52 C28 A12 C12 A14 C25 A9 A9 A25 C9 A12 C9 D10 A16 A9 C14 D96 D96 D19 D25 C16 A16 C17 C25 D19 D19 C42 C42 D17 D17 D13 D13 D12 D12 D29 D29 A28 A28 C34 C34 A21 C9 A14 C14 A15 C9 A15 C9 C10 C10 A22 C22 A14 C9 A18 C22 A12 C9 D96 D96 A96 C96 D19 D19 A25 C23 D12 D12 A9 D12 D18 D18 D18 D18 D25 D25 D13 D13 C17 C17 D21 D21 A16 C16 A19 C14 A19 D9 A9 C15 C22 C22 A9 C21 D19 A6 A14 C28 A14 C9 D96 D96 D19 D19 A19 D19 D19 D19 D13 D13 D24 D24 D24 D24 D12 D12 D12 D12 A27 A27 A22 A22 A28 A28 A10 C40 C10 C9 A18 A10 A12 C12 A28 A28 A9 C41 A9 C19 A9 C12 A15 C19 D96 D96 C17 A17 D19 D19 C16 C96 D14 D14"
+    }
+   },
+   "tried": [
+    {
+     "change": "every 12 -> 6 (new)",
+     "screen": true,
+     "full": true
+    }
+   ],
+   "playtestMs": 74348
+  },
+  {
+   "i": 12,
+   "idea": "Gliders cost 1 point but towers cost 16.",
+   "fits": "yes",
+   "cannot": "",
+   "attempts": 1,
+   "model": {
+    "model": "openai/gpt-oss-120b",
+    "provider": "groq",
+    "costUsd": 0.00092505,
+    "promptTokens": 7699,
+    "completionTokens": 289,
+    "ms": 1532
+   },
+   "version": {
+    "format": "snowmoon.minpentai.version/1",
+    "parent": "solo-v1",
+    "author": "@spike",
+    "prompt": {
+     "text": "Gliders cost 1 point but towers cost 16.",
+     "model": "openai/gpt-oss-120b",
+     "date": "2026-10-21"
+    },
+    "title": "Cheap gliders, expensive towers",
+    "different": "Glider cost set to 1 point; tower cost set to 16 points.",
+    "set": {
+     "costGlider": 1,
+     "costTower": 16
+    },
+    "changes": [
+     {
+      "what": "costGlider",
+      "basis": "invented"
+     },
+     {
+      "what": "costTower",
+      "basis": "invented"
+     }
+    ]
+   },
+   "report": {
+    "matches": 200,
+    "allEnd": true,
+    "errors": [],
+    "illegal": 0,
+    "maxGliders": 20,
+    "ms": 39206,
+    "side": {
+     "cyan": 39,
+     "amber": 21,
+     "draws": 140,
+     "cyanScore": 0.545
+    },
+    "levels": [
+     {
+      "level": 0,
+      "name": "Practice",
+      "score": 0.25,
+      "played": 50
+     },
+     {
+      "level": 1,
+      "name": "Rival",
+      "score": 0.27,
+      "played": 50
+     },
+     {
+      "level": 2,
+      "name": "Blocker",
+      "score": 0.56,
+      "played": 50
+     },
+     {
+      "level": 3,
+      "name": "Builder",
+      "score": 0.5434782608695652,
+      "played": 46
+     },
+     {
+      "level": 4,
+      "name": "Opportunist",
+      "score": 0.5978260869565217,
+      "played": 46
+     },
+     {
+      "level": 5,
+      "name": "Planner",
+      "score": 0.8152173913043478,
+      "played": 46
+     }
+    ],
+    "plannerOverRival": 1,
+    "skillGap": 0.39217391304347815,
+    "length": {
+     "median": 96,
+     "p10": 96,
+     "p90": 96,
+     "byTime": 0.915,
+     "turnsMedian": 7
+    },
+    "setupDecides": 0,
+    "firstLeadHolds": 0,
+    "mirror": 56,
+    "mirrorDraws": 1,
+    "overBeforeTurn2": 0,
+    "drawn": {
+     "sight2": 60,
+     "diag": 50,
+     "cost3": 42,
+     "every8": 48
+    },
+    "checks": [
+     {
+      "id": "allEnd",
+      "ok": true,
+      "value": 200,
+      "need": "200 matches end, no errors, no illegal moves"
+     },
+     {
+      "id": "sideSkew",
+      "ok": true,
+      "value": 0.545,
+      "need": "Cyan's score within 0.1 of 0.5"
+     },
+     {
+      "id": "draws",
+      "ok": false,
+      "value": 0.7,
+      "need": "draws at most 0.6"
+     },
+     {
+      "id": "plannerOverRival",
+      "ok": true,
+      "value": 1,
+      "need": "Planner beats Rival at least 0.6"
+     },
+     {
+      "id": "skillGap",
+      "ok": true,
+      "value": 0.39217391304347815,
+      "need": "rungs 3-5 score at least 0.1 above practice and rung 1"
+     },
+     {
+      "id": "minTurns",
+      "ok": true,
+      "value": 7,
+      "need": "median match has at least 2 turns after setup"
+     },
+     {
+      "id": "setupDecides",
+      "ok": true,
+      "value": 0,
+      "need": "setup alone decides at most 0.25"
+     }
+    ],
+    "playable": false,
+    "outcomes": "D96 D96 D96 D96 A96 C96 D96 C96 D96 D96 A49 C49 D96 D96 D96 C96 D96 D96 D96 D96 A46 C46 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 C96 D96 D96 D96 D96 D96 D96 D96 D96 C33 C33 D96 C96 D96 C96 D96 D96 A17 C17 D96 D96 D96 D96 A96 C96 D96 C96 A17 C42 D96 D96 D96 D96 D96 D96 A96 C96 D96 D96 D96 D96 A96 C96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 A96 C96 D96 C96 A96 C96 A96 C96 D96 D96 D96 C96 A96 D96 A96 C96 A96 C96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 C96 D96 D96 D96 C96 D96 D96 D96 D96 D96 D96 D96 C96 D96 D96 D96 C96 A96 D96 D96 D96 D96 C96 A96 C96 A96 C96 A42 C17 D96 D96 D96 D96 D96 D96 D96 C70 D96 D96 D96 D96 D96 C96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 D96 C96 D96 C96 A96 C96 A46 C46 D96 D96 D96 D96 D96 D96 D96 D96 A46 C46 D96 D96 D96 D96 D96 D96 D96 C96 D96 D96"
+   },
+   "outcome": "fixed",
+   "fix": {
+    "change": "costTower 16 -> 7",
+    "version": {
+     "format": "snowmoon.minpentai.version/1",
+     "parent": "solo-v1",
+     "author": "@spike",
+     "prompt": {
+      "text": "Gliders cost 1 point but towers cost 16.",
+      "model": "openai/gpt-oss-120b",
+      "date": "2026-10-21"
+     },
+     "title": "Cheap gliders, expensive towers",
+     "different": "Glider cost set to 1 point; tower cost set to 16 points.",
+     "set": {
+      "costGlider": 1,
+      "costTower": 7
+     },
+     "changes": [
+      {
+       "what": "costGlider",
+       "basis": "invented"
+      },
+      {
+       "what": "costTower",
+       "basis": "invented"
+      }
+     ]
+    },
+    "report": {
+     "matches": 200,
+     "allEnd": true,
+     "errors": [],
+     "illegal": 0,
+     "maxGliders": 20,
+     "ms": 19502,
+     "side": {
+      "cyan": 57,
+      "amber": 47,
+      "draws": 96,
+      "cyanScore": 0.525
+     },
+     "levels": [
+      {
+       "level": 0,
+       "name": "Practice",
+       "score": 0.15,
+       "played": 50
+      },
+      {
+       "level": 1,
+       "name": "Rival",
+       "score": 0.17,
+       "played": 50
+      },
+      {
+       "level": 2,
+       "name": "Blocker",
+       "score": 0.37,
+       "played": 50
+      },
+      {
+       "level": 3,
+       "name": "Builder",
+       "score": 0.7608695652173914,
+       "played": 46
+      },
+      {
+       "level": 4,
+       "name": "Opportunist",
+       "score": 0.782608695652174,
+       "played": 46
+      },
+      {
+       "level": 5,
+       "name": "Planner",
+       "score": 0.8369565217391305,
+       "played": 46
+      }
+     ],
+     "plannerOverRival": 1,
+     "skillGap": 0.6334782608695653,
+     "length": {
+      "median": 96,
+      "p10": 33,
+      "p90": 96,
+      "byTime": 0.69,
+      "turnsMedian": 7
+     },
+     "setupDecides": 0,
+     "firstLeadHolds": 0,
+     "mirror": 56,
+     "mirrorDraws": 0.9642857142857143,
+     "overBeforeTurn2": 0,
+     "drawn": {
+      "sight2": 60,
+      "diag": 50,
+      "cost3": 42,
+      "every8": 48
+     },
+     "checks": [
+      {
+       "id": "allEnd",
+       "ok": true,
+       "value": 200,
+       "need": "200 matches end, no errors, no illegal moves"
+      },
+      {
+       "id": "sideSkew",
+       "ok": true,
+       "value": 0.525,
+       "need": "Cyan's score within 0.1 of 0.5"
+      },
+      {
+       "id": "draws",
+       "ok": true,
+       "value": 0.48,
+       "need": "draws at most 0.6"
+      },
+      {
+       "id": "plannerOverRival",
+       "ok": true,
+       "value": 1,
+       "need": "Planner beats Rival at least 0.6"
+      },
+      {
+       "id": "skillGap",
+       "ok": true,
+       "value": 0.6334782608695653,
+       "need": "rungs 3-5 score at least 0.1 above practice and rung 1"
+      },
+      {
+       "id": "minTurns",
+       "ok": true,
+       "value": 7,
+       "need": "median match has at least 2 turns after setup"
+      },
+      {
+       "id": "setupDecides",
+       "ok": true,
+       "value": 0,
+       "need": "setup alone decides at most 0.25"
+      }
+     ],
+     "playable": true,
+     "outcomes": "D96 D96 D96 D96 A96 C96 D96 C96 A27 C27 A41 C33 D96 D96 D96 C96 A35 C41 A27 C25 A46 C46 D96 D96 A49 C36 A73 C33 A37 C61 D96 D96 D96 D96 D96 D96 D96 D96 A96 A96 D96 D96 D96 D96 C33 C33 D96 C96 A96 C96 A37 C40 A33 C25 D96 D96 D96 D96 A37 C39 A96 C96 A35 C25 D96 D96 A96 C40 A96 C96 A36 C25 D96 D96 D96 D96 A96 D96 D96 D96 A96 A96 D96 D96 D96 D96 D96 D96 A96 C96 A43 C33 A96 C96 A40 C40 D96 D96 D96 C96 A33 C14 A96 C96 A27 C27 D96 D96 A96 C96 D96 D96 A49 C61 D96 D96 A96 D96 D96 D96 D96 D96 C96 C96 D96 D96 D96 D96 D96 D96 D96 C96 A28 C33 A25 C14 A86 C37 D96 D96 D96 C96 A66 C49 A96 C96 A20 C14 D96 D96 D96 D96 D96 D96 D96 C70 D96 D96 D96 D96 D96 D96 D96 D96 D96 C96 D96 D96 D96 D96 D96 D96 D96 C96 D96 C96 A96 C96 A46 C46 D96 D96 D96 D96 A41 C25 A37 C37 A46 C46 D96 D96 A36 C33 A62 C49 A96 C96 C96 C96"
+    }
+   },
+   "tried": [
+    {
+     "change": "costGlider 1 -> 2",
+     "screen": false
+    },
+    {
+     "change": "costTower 16 -> 13",
+     "screen": false
+    },
+    {
+     "change": "maxSteps 96 -> 192 (new)",
+     "screen": false
+    },
+    {
+     "change": "points 8 -> 12 (new)",
+     "screen": false
+    },
+    {
+     "change": "costGlider 1 -> 3",
+     "screen": false
+    },
+    {
+     "change": "costTower 16 -> 10",
+     "screen": false
+    },
+    {
+     "change": "costTower 16 -> 7",
+     "screen": true,
+     "full": true
+    }
+   ],
+   "playtestMs": 112001
+  },
+  {
+   "i": 13,
+   "idea": "Let me save up unspent points for the next turn.",
+   "fits": "yes",
+   "cannot": "",
+   "attempts": 1,
+   "model": {
+    "model": "openai/gpt-oss-120b",
+    "provider": "groq",
+    "costUsd": 0.00098085,
+    "promptTokens": 5395,
+    "completionTokens": 286,
+    "ms": 1774
+   },
+   "version": {
+    "format": "snowmoon.minpentai.version/1",
+    "parent": "solo-v1",
+    "author": "@spike",
+    "prompt": {
+     "text": "Let me save up unspent points for the next turn.",
+     "model": "openai/gpt-oss-120b",
+     "date": "2026-10-21"
+    },
+    "title": "Carry over unspent points",
+    "different": "carryOver set to 8, allowing points to be saved for the next turn",
+    "set": {
+     "carryOver": 8
+    },
+    "changes": [
+     {
+      "what": "carryOver",
+      "basis": "invented"
+     }
+    ]
+   },
+   "report": {
+    "matches": 200,
+    "allEnd": true,
+    "errors": [],
+    "illegal": 0,
+    "maxGliders": 20,
+    "ms": 44627,
+    "side": {
+     "cyan": 64,
+     "amber": 57,
+     "draws": 79,
+     "cyanScore": 0.5175
+    },
+    "levels": [
+     {
+      "level": 0,
+      "name": "Practice",
+      "score": 0.13,
+      "played": 50
+     },
+     {
+      "level": 1,
+      "name": "Rival",
+      "score": 0.17,
+      "played": 50
+     },
+     {
+      "level": 2,
+      "name": "Blocker",
+      "score": 0.3,
+      "played": 50
+     },
+     {
+      "level": 3,
+      "name": "Builder",
+      "score": 0.8043478260869565,
+      "played": 46
+     },
+     {
+      "level": 4,
+      "name": "Opportunist",
+      "score": 0.8260869565217391,
+      "played": 46
+     },
+     {
+      "level": 5,
+      "name": "Planner",
+      "score": 0.8478260869565217,
+      "played": 46
+     }
+    ],
+    "plannerOverRival": 1,
+    "skillGap": 0.6760869565217392,
+    "length": {
+     "median": 96,
+     "p10": 33,
+     "p90": 96,
+     "byTime": 0.635,
+     "turnsMedian": 7
+    },
+    "setupDecides": 0,
+    "firstLeadHolds": 0,
+    "mirror": 56,
+    "mirrorDraws": 0.8214285714285714,
+    "overBeforeTurn2": 0,
+    "drawn": {
+     "sight2": 60,
+     "diag": 50,
+     "cost3": 42,
+     "every8": 48
+    },
+    "checks": [
+     {
+      "id": "allEnd",
+      "ok": true,
+      "value": 200,
+      "need": "200 matches end, no errors, no illegal moves"
+     },
+     {
+      "id": "sideSkew",
+      "ok": true,
+      "value": 0.5175,
+      "need": "Cyan's score within 0.1 of 0.5"
+     },
+     {
+      "id": "draws",
+      "ok": true,
+      "value": 0.395,
+      "need": "draws at most 0.6"
+     },
+     {
+      "id": "plannerOverRival",
+      "ok": true,
+      "value": 1,
+      "need": "Planner beats Rival at least 0.6"
+     },
+     {
+      "id": "skillGap",
+      "ok": true,
+      "value": 0.6760869565217392,
+      "need": "rungs 3-5 score at least 0.1 above practice and rung 1"
+     },
+     {
+      "id": "minTurns",
+      "ok": true,
+      "value": 7,
+      "need": "median match has at least 2 turns after setup"
+     },
+     {
+      "id": "setupDecides",
+      "ok": true,
+      "value": 0,
+      "need": "setup alone decides at most 0.25"
+     }
+    ],
+    "playable": true,
+    "outcomes": "D96 D96 D96 D96 A96 C96 A40 C37 A27 C27 A49 C43 D96 D96 D96 C96 A35 C41 A27 C25 A69 C37 D96 D96 A49 C36 A73 C33 A37 C61 D96 D96 D96 D96 D96 D96 C96 C96 A96 A96 C96 C96 D96 D96 C33 C33 D96 C96 A96 C96 A37 C40 A33 C25 D96 D96 D96 D96 A37 C39 A96 C96 A35 C25 D96 D96 A96 C40 A96 C96 A36 C25 A96 A96 D96 D96 A96 D96 A96 A96 A96 A96 D96 D96 D96 D96 D96 D96 A96 C96 A43 C33 A37 C37 A40 C40 D96 D96 D96 C96 A33 C14 A96 C96 A27 C27 D96 D96 A96 C96 A75 C61 A49 C61 D96 D96 A96 D96 D96 D96 D96 D96 C96 C96 D96 D96 D96 D96 D96 D96 D96 C96 A28 C33 A25 C14 A86 C37 D96 D96 D96 C96 A66 C49 A96 C96 A33 C14 D96 D96 A96 C96 A37 C37 A39 C42 D96 D96 D96 D96 D96 D96 D96 D96 D96 C96 D96 D96 D96 D96 D96 D96 D96 C96 A37 C37 A96 C96 A37 C39 D96 D96 D96 D96 A41 C25 A37 C37 A37 C64 D96 D96 A36 C33 A62 C49 A96 C96 C96 C96"
+   },
+   "outcome": "playable",
+   "playtestMs": 44629
+  },
+  {
+   "i": 14,
+   "idea": "Play it on a hex grid.",
+   "fits": "no",
+   "cannot": "hex grid cannot be represented in the menu",
+   "attempts": 1,
+   "model": {
+    "model": "openai/gpt-oss-120b",
+    "provider": "groq",
+    "costUsd": 0.0007401,
+    "promptTokens": 6670,
+    "completionTokens": 238,
+    "ms": 3365
+   },
+   "outcome": "declined",
+   "version": {
+    "format": "snowmoon.minpentai.version/1",
+    "parent": "solo-v1",
+    "author": "@spike",
+    "prompt": {
+     "text": "Play it on a hex grid.",
+     "model": "openai/gpt-oss-120b",
+     "date": "2026-10-21"
+    },
+    "title": "Hex grid not supported",
+    "different": "uses a hex grid instead of square grid",
+    "set": {},
+    "changes": []
+   }
+  },
+  {
+   "i": 15,
+   "idea": "Each player has a personal AI and can read the other AI's thoughts.",
+   "fits": "no",
+   "cannot": "The idea of AI thought sharing cannot be expressed with any setting or rule in the menu",
+   "attempts": 2,
+   "model": {
+    "model": "openai/gpt-oss-120b",
+    "provider": "groq",
+    "costUsd": 0.0018513,
+    "promptTokens": 10910,
+    "completionTokens": 1030,
+    "ms": 14150
+   },
+   "outcome": "declined",
+   "version": {
+    "format": "snowmoon.minpentai.version/1",
+    "parent": "solo-v1",
+    "author": "@spike",
+    "prompt": {
+     "text": "Each player has a personal AI and can read the other AI's thoughts.",
+     "model": "openai/gpt-oss-120b",
+     "date": "2026-10-21"
+    },
+    "title": "AI Thought Sharing Not Supported",
+    "different": "No menu option implements AI thought sharing",
+    "set": {},
+    "changes": []
+   }
+  },
+  {
+   "i": 16,
+   "idea": "Gliders should fly two squares a step.",
+   "fits": "no",
+   "cannot": "Gliders moving two squares per step is not supported by the menu.",
+   "attempts": 1,
+   "model": {
+    "model": "openai/gpt-oss-120b",
+    "provider": "groq",
+    "costUsd": 0.0009366,
+    "promptTokens": 5392,
+    "completionTokens": 213,
+    "ms": 3590
+   },
+   "outcome": "declined",
+   "version": {
+    "format": "snowmoon.minpentai.version/1",
+    "parent": "solo-v1",
+    "author": "@spike",
+    "prompt": {
+     "text": "Gliders should fly two squares a step.",
+     "model": "openai/gpt-oss-120b",
+     "date": "2026-10-21"
+    },
+    "title": "Gliders travel two squares per step",
+    "different": "Gliders travel two squares each step instead of one.",
+    "set": {},
+    "changes": []
+   }
+  },
+  {
+   "i": 17,
+   "idea": "Pineapples everywhere, and the gliders are made of cheese.",
+   "fits": "no",
+   "cannot": "The idea adds pineapples and cheese gliders, which are not supported by the menu.",
+   "attempts": 1,
+   "model": {
+    "model": "openai/gpt-oss-120b",
+    "provider": "groq",
+    "costUsd": 0.0011019,
+    "promptTokens": 5398,
+    "completionTokens": 487,
+    "ms": 8802
+   },
+   "outcome": "declined",
+   "version": {
+    "format": "snowmoon.minpentai.version/1",
+    "parent": "solo-v1",
+    "author": "@spike",
+    "prompt": {
+     "text": "Pineapples everywhere, and the gliders are made of cheese.",
+     "model": "openai/gpt-oss-120b",
+     "date": "2026-10-21"
+    },
+    "title": "Pineapples and cheese gliders not possible",
+    "different": "No change possible because the menu lacks pineapples or cheese gliders.",
+    "set": {},
+    "changes": []
+   }
+  },
+  {
+   "i": 18,
+   "idea": "Five shrines that XOR their changes onto the board every thousand turns.",
+   "fits": "no",
+   "cannot": "The menu has no way to add shrines or define XOR behavior",
+   "attempts": 1,
+   "model": {
+    "model": "openai/gpt-oss-120b",
+    "provider": "groq",
+    "costUsd": 0.00093615,
+    "promptTokens": 6933,
+    "completionTokens": 499,
+    "ms": 5461
+   },
+   "outcome": "declined",
+   "version": {
+    "format": "snowmoon.minpentai.version/1",
+    "parent": "solo-v1",
+    "author": "@spike",
+    "prompt": {
+     "text": "Five shrines that XOR their changes onto the board every thousand turns.",
+     "model": "openai/gpt-oss-120b",
+     "date": "2026-10-21"
+    },
+    "title": "Shrines not supported",
+    "different": "No changes; shrines cannot be represented with current menu",
+    "set": {},
+    "changes": []
+   }
+  },
+  {
+   "i": 19,
+   "idea": "Make it so I always win against the computer.",
+   "fits": "no",
+   "cannot": "The menu cannot create asymmetric rules that guarantee the player always wins against the computer.",
+   "attempts": 1,
+   "model": {
+    "model": "openai/gpt-oss-120b",
+    "provider": "groq",
+    "costUsd": 0.00111135,
+    "promptTokens": 5393,
+    "completionTokens": 504,
+    "ms": 5062
+   },
+   "outcome": "declined",
+   "version": {
+    "format": "snowmoon.minpentai.version/1",
+    "parent": "solo-v1",
+    "author": "@spike",
+    "prompt": {
+     "text": "Make it so I always win against the computer.",
+     "model": "openai/gpt-oss-120b",
+     "date": "2026-10-21"
+    },
+    "title": "Cannot guarantee win with symmetric settings",
+    "different": "No change; menu cannot ensure player always wins",
+    "set": {},
+    "changes": []
+   }
+  }
+ ],
+ "retryDiagnostic": {
+  "note": "Ideas 2, 5 and 9 re-run once more with each attempt's problems recorded (they needed retries in the main run). Not counted in the results.",
+  "runs": [
+   {
+    "i": 1,
+    "idea": "Make it closer to the book: you can see thirty squares.",
+    "fits": "yes",
+    "cannot": "",
+    "attempts": 2,
+    "attemptErrors": [
+     [
+      "the quote for sight is not in c4-b93: quote the passage exactly, or mark it invented"
+     ],
+     []
+    ],
+    "model": {
+     "model": "openai/gpt-oss-120b",
+     "provider": "groq",
+     "costUsd": 0.0020508,
+     "promptTokens": 10916,
+     "completionTokens": 689,
+     "ms": 3147
+    },
+    "version": {
+     "format": "snowmoon.minpentai.version/1",
+     "parent": "solo-v1",
+     "author": "@spike",
+     "prompt": {
+      "text": "Make it closer to the book: you can see thirty squares.",
+      "model": "openai/gpt-oss-120b",
+      "date": "2026-10-21"
+     },
+     "title": "Increased vision range to 30 squares",
+     "different": "Sight range increased from 3 to 30 squares",
+     "set": {
+      "sight": 30
+     },
+     "changes": [
+      {
+       "what": "sight",
+       "basis": "book",
+       "says": "would allow him to see everything within thirty squares",
+       "blocks": [
+        "c4-b93"
+       ]
+      }
+     ]
+    },
+    "outcome": "playable",
+    "playtestMs": 28090
+   },
+   {
+    "i": 4,
+    "idea": "Rocks should make new gliders when something hits them, like in the book.",
+    "fits": "yes",
+    "cannot": "",
+    "attempts": 2,
+    "attemptErrors": [
+     [
+      "the quote for rocks is not in c4-b108: quote the passage exactly, or mark it invented"
+     ],
+     []
+    ],
+    "model": {
+     "model": "openai/gpt-oss-120b",
+     "provider": "groq",
+     "costUsd": 0.0016951499999999999,
+     "promptTokens": 10933,
+     "completionTokens": 764,
+     "ms": 10302
+    },
+    "version": {
+     "format": "snowmoon.minpentai.version/1",
+     "parent": "solo-v1",
+     "author": "@spike",
+     "prompt": {
+      "text": "Rocks should make new gliders when something hits them, like in the book.",
+      "model": "openai/gpt-oss-120b",
+      "date": "2026-10-21"
+     },
+     "title": "Rocks split gliders into extra glider",
+     "different": "Rocks now split gliders, creating a second glider of the same side when hit",
+     "set": {
+      "rocks": "split"
+     },
+     "changes": [
+      {
+       "what": "rocks",
+       "basis": "book",
+       "says": "Gliders flew out, interacted with rock formations, and created more gliders",
+       "blocks": [
+        "c4-b108"
+       ]
+      }
+     ]
+    },
+    "outcome": "playable",
+    "playtestMs": 30521
+   },
+   {
+    "i": 8,
+    "idea": "Halfway through the match the rules suddenly change, like that semi-final in chapter 5.",
+    "fits": "yes",
+    "cannot": "",
+    "attempts": 3,
+    "attemptErrors": [
+     [
+      "title must be printable ASCII",
+      "set.drawn is not a setting or rule piece",
+      "changes[2] names costGlider, which this version does not change"
+     ],
+     [
+      "drawn[0].set changes nothing",
+      "changes[2] names costGlider, which this version does not change"
+     ],
+     []
+    ],
+    "model": {
+     "model": "openai/gpt-oss-120b",
+     "provider": "groq",
+     "costUsd": 0.0037616999999999998,
+     "promptTokens": 16746,
+     "completionTokens": 2083,
+     "ms": 22696
+    },
+    "version": {
+     "format": "snowmoon.minpentai.version/1",
+     "parent": "solo-v1",
+     "author": "@spike",
+     "prompt": {
+      "text": "Halfway through the match the rules suddenly change, like that semi-final in chapter 5.",
+      "model": "openai/gpt-oss-120b",
+      "date": "2026-10-21"
+     },
+     "title": "Mid-match rule switch",
+     "different": "Adds a rule change at step 48 via switchAt and a second drawn rule",
+     "set": {
+      "switchAt": 48
+     },
+     "changes": [
+      {
+       "what": "switchAt",
+       "basis": "invented"
+      },
+      {
+       "what": "drawn",
+       "basis": "invented"
+      }
+     ],
+     "drawn": [
+      {
+       "id": "first",
+       "text": "First drawn rule: sight set to 3.",
+       "set": {
+        "sight": 3
+       }
+      },
+      {
+       "id": "second",
+       "text": "Second drawn rule: glider cost increased.",
+       "set": {
+        "costGlider": 5
+       }
+      }
+     ]
+    },
+    "outcome": "playable",
+    "playtestMs": 19565
+   }
+  ]
+ }
+}

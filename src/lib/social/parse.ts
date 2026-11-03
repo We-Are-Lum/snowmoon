@@ -2,7 +2,7 @@ import { SOCIAL_READ } from '../config';
 
 /**
  * "Posts that link here": the pure half (no network, no database), so scripts/test-social-read.ts can check it on
- * fixtures. What a post becomes, which page of ours it links to, and the order: newest first, nothing else (P5f).
+ * fixtures. What a post becomes, which page of ours it links to, and the order: newest first, nothing else (P5h).
  */
 
 export type Network = 'farcaster' | 'bluesky';
@@ -150,7 +150,7 @@ export type Hidden = ReadonlySet<string>;
 export const hiddenFrom = (rows: { network: string; post_id: string }[]): Hidden => new Set(rows.map((r) => hideKey(r.network as Network, r.post_id)));
 export const isHidden = (p: SocialPost, h: Hidden) => h.has(hideKey(p.network, p.id));
 
-/** The posts for one page: not hidden, each once, newest first (the only order; P5f), at most perPage. */
+/** The posts for one page: not hidden, each once, newest first (the only order; P5h), at most perPage. */
 export function postsForPage(all: SocialPost[], page: string, hidden: Hidden): SocialPost[] {
   const key = pageKey(page);
   const seen = new Set<string>();

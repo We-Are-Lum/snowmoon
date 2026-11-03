@@ -3,19 +3,16 @@
  * target URL is running the expected commit and serves the core routes, and
  * website sign-in gets as far as a Farcaster link and QR code.
  *
- *   npm run check:shipped                         target NEXT_PUBLIC_URL, expect local HEAD
+ *   npm run check:shipped -- --url=https://snowmoon.party   expect local HEAD there (the target is always named)
  *   npm run check:shipped -- --url=https://...    another target
  *   npm run check:shipped -- --commit=<sha>       expect a specific commit
  */
 import { execSync } from 'node:child_process';
+import { requireTarget } from './lib/target';
 
 const arg = (name: string) => process.argv.slice(2).find((a) => a.startsWith(`--${name}=`))?.split('=').slice(1).join('=');
 
-const base = (arg('url') ?? process.env.NEXT_PUBLIC_URL ?? '').replace(/\/$/, '');
-if (!base) {
-  console.error('No target: pass --url=... or set NEXT_PUBLIC_URL');
-  process.exit(1);
-}
+const base = requireTarget('check:shipped');
 const expected = arg('commit') ?? execSync('git rev-parse HEAD').toString().trim();
 
 const failures: string[] = [];
@@ -87,10 +84,10 @@ await check('saved cards: gallery renders and writes need sign-in', async () => 
   return like.status === 401 ? null : `like without sign-in: expected 401, got ${like.status}`;
 });
 
-await check('about page carries attribution and no-token statement', async () => {
+await check('about page carries attribution and the not-affiliated line', async () => {
   const r = await get('/about');
   if (r.status !== 200) return `HTTP ${r.status}`;
-  for (const needle of ['Vitalik Buterin', 'GNU General Public License v3', 'not affiliated', 'There is no token']) {
+  for (const needle of ['Vitalik Buterin', 'GNU General Public License v3', 'not affiliated']) {
     if (!r.body.includes(needle)) return `missing "${needle}"`;
   }
   return null;

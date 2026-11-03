@@ -23,7 +23,7 @@ import { readdirSync, readFileSync } from 'node:fs';
 import { PGlite } from '@electric-sql/pglite';
 import { PGLiteSocketServer } from '@electric-sql/pglite-socket';
 import postgres from 'postgres';
-import { IMAGES } from '../src/lib/config';
+import { IMAGES, imagesDailySpendCapUsd } from '../src/lib/config';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const failures: string[] = [];
@@ -246,7 +246,7 @@ const over = await paidPicture(S, 7000, new Request('http://x'), { checkText: 'a
 check('the day\'s limit stops an edit call before anything is spent', !over.ok && over.status === 429 && made === 0);
 // The daily cap (the all-days cap is gone, owner 2026-10-09): fill today to 3 cents under it.
 const [spentToday] = await sql`select coalesce(sum(cost_usd), 0)::float8 as usd from studio.image_costs where day = (now() at time zone 'utc')::date`;
-await sql`insert into studio.image_costs (kind, model, provider, verdict, calls, cost_usd) values ('image', 'test', 'fal.ai', 'ok', 1, ${IMAGES.dailySpendCapUsd - spentToday.usd - 0.03})`;
+await sql`insert into studio.image_costs (kind, model, provider, verdict, calls, cost_usd) values ('image', 'test', 'fal.ai', 'ok', 1, ${imagesDailySpendCapUsd() - spentToday.usd - 0.03})`;
 const cap = await reserve(S, 7001, edit);
 check('the daily spend cap stops an edit whose worst case would pass it', !cap.ok && cap.refusal === 'spend', JSON.stringify(cap));
 const cheap = await reserve(S, 7001);

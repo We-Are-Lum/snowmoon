@@ -19,7 +19,7 @@
 import { execFileSync } from 'node:child_process';
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
-import { COST, H, MAXS, RULES, RUNGS, W } from '../src/lib/minpentai/play-game/game';
+import { COST, H, RULES, RUNGS, W, maxStepsOf } from '../src/lib/minpentai/play-game/game';
 import { GONE_MS, PAUSE_MS, POINTS, SETUP_MS, TURN_MS } from '../src/lib/minpentai/play-server/match';
 import { blockParagraphs, loadBook } from './build-minpentai-passages';
 
@@ -114,13 +114,13 @@ const realView = /export interface PlayerView \{([\s\S]*?)\n\}/.exec(players)?.[
 const docView = /interface PlayerView \{([\s\S]*?)\n\}/.exec(viewBlock)?.[1] ?? '';
 ok(fields(realView).length > 5 && JSON.stringify(fields(realView)) === JSON.stringify(fields(docView)), `agents.md: PlayerView's fields are ${fields(docView)}, players.ts's are ${fields(realView)}`);
 ok(/export type Player = \(view: PlayerView\) => Placement\[\];/.test(players) && viewBlock.includes('type Player = (view: PlayerView) => Placement[];'), 'agents.md: the Player type is not players.ts\'s');
-ok(viewBlock.includes("interface Placement { t: 'g' | 's' | 't'; o: 'C' | 'A'; x: number; y: number; dx: number; dy: number }") && /export interface Placement \{ t: Piece; o: Side; x: number; y: number; dx: number; dy: number \}/.test(read('src/lib/minpentai/play-game/game.ts')), 'agents.md: Placement is not game.ts\'s');
+ok(viewBlock.includes("interface Placement { t: 'g' | 's' | 't'; o: 'C' | 'A'; x: number; y: number; dx: number; dy: number }") && /export interface Placement<T extends AnyPiece = Piece> \{ t: T; o: Side; x: number; y: number; dx: number; dy: number \}/.test(read('src/lib/minpentai/versions/engine.ts')), 'agents.md: Placement is not the engine\'s (versions/engine.ts, Play\'s pieces by default; game.ts re-exports it)');
 // The code's names and numbers.
 const rungNames = RUNGS.slice(1).map((r) => r!.n);
 ok(md.includes(rungNames.join(', ')) && rungNames.length === 5, `agents.md: the rungs are ${rungNames.join(', ')}`);
 for (const t of Object.values(RULES)) ok(md.includes(`"${t}"`), `agents.md does not quote the drawn rule "${t}"`);
 ok(W === 15 && H === 10 && md.includes('15 × 10'), 'the board is not 15 × 10');
-ok(MAXS === 96 && md.includes('step 96'), 'the match does not stop at step 96');
+ok(maxStepsOf(2) === 120 && md.includes('step 120'), 'the match does not stop at step 120 (Play today, ruleset 2)');
 ok(POINTS === 8 && COST.s === 1 && COST.t === 4 && md.includes('8 points a turn: glider 4, square 1, tower 4'), 'the points or costs differ');
 ok(SETUP_MS === 90_000 && TURN_MS === 45_000 && md.includes('90 seconds for setup and 45 for later turns'), 'the one-on-one clocks differ');
 ok(PAUSE_MS === 15_000 && GONE_MS === 60_000 && md.includes('15 seconds pauses the match; 60 seconds more'), 'the pause times differ');

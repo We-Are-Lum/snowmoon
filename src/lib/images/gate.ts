@@ -1,4 +1,5 @@
 import 'server-only';
+import { isAdmin } from '../admins';
 import type postgres from 'postgres';
 import { IMAGES } from '../config';
 import { lookUp, shown } from './neynar';
@@ -41,7 +42,8 @@ export function openToEveryone(): { open: boolean; missing: string[] } {
 }
 
 export async function mayGenerate(sql: Sql, fid: number): Promise<Gate> {
-  if (IMAGES.invited.includes(fid)) return { ok: true };
+  // Invited FIDs and admins (admin caps, owner 2026-10-29) skip the score.
+  if (IMAGES.invited.includes(fid) || isAdmin(fid)) return { ok: true };
   const launch = openToEveryone();
   if (!launch.open) {
     console.error('images: not open to everyone yet; missing', launch.missing.join(', '));

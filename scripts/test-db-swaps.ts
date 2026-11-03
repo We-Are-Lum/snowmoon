@@ -38,8 +38,9 @@ process.env.REMIX_TEST_FAKES = 'store';
 process.env.REMIX_TEST_STORE = mkdtempSync(path.join(tmpdir(), 'db-swaps-'));
 process.env.STUDIO_DATABASE_URL = `postgres://studio_writer@127.0.0.1:${(srv as unknown as { port: number }).port}/postgres`;
 const { db } = await import('../src/lib/db');
-const { saveFrame, setHidden, frameById } = await import('../src/lib/remix/frames');
-const { saveBoard, setBoardHidden } = await import('../src/lib/remix/storyboards');
+const { saveFrame, frameById } = await import('../src/lib/remix/frames');
+const { saveBoard } = await import('../src/lib/remix/storyboards');
+const { setHidden, setBoardHidden } = await import('../src/lib/remix/hide');
 const sql = db()!;
 
 const sha = (s: string) => createHash('sha256').update(s).digest('hex');

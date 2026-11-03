@@ -34,7 +34,7 @@ import postgres from 'postgres';
 import { privateKeyToAccount } from 'viem/accounts';
 import { createSiweMessage } from 'viem/siwe';
 import { encodeAbiParameters, keccak256, pad, toHex, type PublicClient } from 'viem';
-import { IMAGES, REMIX } from '../src/lib/config';
+import { IMAGES, REMIX, imagesDailySpendCapUsd } from '../src/lib/config';
 
 process.env.IMAGES_TICKET_SECRET = 'x'.repeat(48);
 const ROOT = path.resolve(import.meta.dirname, '..');
@@ -281,7 +281,7 @@ const asks = await sql`select count(*)::int as n from studio.image_asks where fi
 check('a wallet Generate is not counted against a daily limit', asks[0].n === 0);
 const [costs] = await sql`select coalesce(sum(cost_usd) filter (where funded = 'prepaid'), 0)::float8 as prepaid, coalesce(sum(cost_usd) filter (where funded = 'free'), 0)::float8 as free from studio.image_costs`;
 check('prepaid costs are counted apart, still with no person', costs.prepaid > 0 && costs.free === 0, JSON.stringify(costs));
-await sql`insert into studio.image_costs (funded, kind, model, provider, verdict, calls, cost_usd) values ('free', 'image', 'test', 'fal.ai', 'ok', 1, ${IMAGES.dailySpendCapUsd})`;
+await sql`insert into studio.image_costs (funded, kind, model, provider, verdict, calls, cost_usd) values ('free', 'image', 'test', 'fal.ai', 'ok', 1, ${imagesDailySpendCapUsd()})`;
 const freeStopped = await reserve(S, 6787);
 const paidGoes = await reserve(S, -acct);
 check('the free cap stops free Generates but not paying ones', !freeStopped.ok && freeStopped.refusal === 'spend' && paidGoes.ok, JSON.stringify({ freeStopped, paidGoes }));
