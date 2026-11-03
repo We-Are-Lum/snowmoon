@@ -8,17 +8,22 @@ import { CHALLENGE_WORDING as W } from '~/lib/challenge/wording';
 export function ChallengeMark({ versionId, byFid }: { versionId: string; byFid: number }) {
   const auth = useAuth();
   const [note, setNote] = useState<string | null>(null);
+  const [done, setDone] = useState(false);
   if (auth.kind !== 'signed-in' || auth.fid !== byFid) return null;
   const mark = async () => {
     const r = await authFetch('/api/challenge/mark', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ versionId }) }).catch(() => null);
     const out = (await r?.json().catch(() => ({}))) as { error?: string } | undefined;
     setNote(r?.ok ? W.marked : (out?.error ?? 'Could not mark it'));
+    if (r?.ok) setDone(true);
   };
   return (
     <p className="ch-mark">
-      <button type="button" className="ic-secondary" onClick={mark}>
-        {W.mark}
-      </button>
+      {/* Once marked, the button goes (launch rehearsal, 2026-11-02: it stayed, inviting a second tap). */}
+      {!done && (
+        <button type="button" className="ic-secondary" onClick={mark}>
+          {W.mark}
+        </button>
+      )}
       {note && <span role="status"> {note}</span>}
     </p>
   );
