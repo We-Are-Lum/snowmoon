@@ -56,10 +56,15 @@ export interface World {
   fa?: Record<number, { o: Side; dx: number; dy: number; hp: number }>;
   /** Each rock's ore, when rocks hold ore. */
   ore?: Record<number, number>;
+  /** Towers that formed from symbols and were kept (book-4's maxSymbolTowers counts them). */
+  sy?: Record<number, Side>;
 }
 /** Towers each side has destroyed this match (for "first-blood"). Kept beside the world, not in it,
  * so a world has exactly the shape Play has always saved. */
-export type Kills = Record<Side, number>;
+export type Kills = Record<Side, number> & {
+  /** When given, each tower destroyed: by which side's glider, where, at which step (book-4's kill reports). */
+  log?: { o: Side; k: number; step: number }[];
+};
 export interface Placement<T extends AnyPiece = Piece> { t: T; o: Side; x: number; y: number; dx: number; dy: number }
 
 /** The board a version starts from: size, rocks, towers. Fixed for the match. */
@@ -75,7 +80,7 @@ function startRows(H: number, n: number): number[] {
 export function layout(v: Pick<Version, 'rocksAt'>, s: Settings): Layout {
   const W = s.width, H = s.height, K = (x: number, y: number) => y * W + x;
   const turn = (k: number) => W * H - 1 - k;
-  const twC = startRows(H, s.startTowers).map((y) => K(1, y));
+  const twC = startRows(H, s.startTowers).map((y) => K(s.startX ?? 1, y));
   const twA = twC.map(turn);
   const taken = new Set([...twC, ...twA]);
   const half = v.rocksAt ?? (W === 15 && H === 10 ? PLAY_ROCKS : PLAY_ROCKS.map(([x, y]) => [Math.round((x * (W - 1)) / 14), Math.round((y * (H - 1)) / 9)] as [number, number]));
@@ -127,6 +132,7 @@ export function engine(L: Layout) {
     if (w.mir) c.mir = copyEach(w.mir);
     if (w.sd) c.sd = { ...w.sd };
     if (w.fs) c.fs = copyEach(w.fs);
+    if (w.sy) c.sy = { ...w.sy };
     if (w.mw) c.mw = w.mw.map((m) => ({ ...m, c: m.c.slice() }));
     if (w.fa) c.fa = copyEach(w.fa);
     if (w.ore) c.ore = { ...w.ore };
@@ -141,6 +147,22 @@ export function engine(L: Layout) {
     });
     return s;
   }
+  /**
+   * What side o sees: within sight of its towers, and (book-4 options) around its gliders in flight. Without those
+   * options it is lit(w, o, s.sight) exactly. Placement reach stays the towers' alone (lit), so reach never exceeds sight.
+   */
+  function sees(w: World, s: Settings, o: Side): Set<number> {
+    const out = lit(w, o, s.sight);
+    if (!s.gliderSight && !s.symbolGliderSight) return out;
+    for (const g of w.gl) {
+      if (g.o !== o || g.dead) continue;
+      const R = g.seed ? s.symbolGliderSight ?? 0 : s.gliderSight ?? 0;
+      for (let dy = -R; dy <= R; dy++) for (let dx = -R; dx <= R; dx++) if (R && inb(g.x + dx, g.y + dy)) out.add(K(g.x + dx, g.y + dy));
+    }
+    return out;
+  }
+  /** Towers side o holds that formed from symbols (maxSymbolTowers). */
+  const symbolTowers = (w: World, o: Side) => Object.keys(w.sy ?? {}).filter((k) => w.sy![+k] === o && w.tw[+k] === o).length;
   /** A moving wall's three squares, across its line of flight, from one end to the other. */
   const wallCells = (m: { x: number; y: number; dx: number; dy: number }): [number, number][] => [-1, 0, 1].map((i) => [m.x - i * m.dy, m.y + i * m.dx]);
   /** The moving wall standing on a square, and which of its squares it is. */
@@ -265,7 +287,7 @@ export function engine(L: Layout) {
       }
       const t = w.tw[k];
       if (t) {
-        if (t !== g.o || s.ownTower === 'destroy') { delete w.tw[k]; g.dead = true; if (kills) kills[g.o]++; broke(k); } else bounce(g);
+        if (t !== g.o || s.ownTower === 'destroy') { delete w.tw[k]; g.dead = true; if (kills) { kills[g.o]++; kills.log?.push({ o: g.o, k, step: w.step + 1 }); } broke(k); } else bounce(g);
         continue;
       }
       g.x = g.tx!;
@@ -324,6 +346,8 @@ export function engine(L: Layout) {
       if (!o) continue;
       // book-3 option: no symbol past the tower cap.
       if (s.symbolsCapped && s.maxTowers && towers(w, o).length >= s.maxTowers) continue;
+      // book-4 option: symbols have a limit of their own.
+      if (s.maxSymbolTowers && symbolTowers(w, o) >= s.maxSymbolTowers) continue;
       const [x, y] = XY(k);
       const near = Object.keys(w.sd!).map(Number).filter((j) => j !== k && w.sd![j] === o && Math.abs(XY(j)[0] - x) <= 2 && Math.abs(XY(j)[1] - y) <= 2).sort((a, b) => a - b);
       let pair: number[] | null = null;
@@ -335,6 +359,7 @@ export function engine(L: Layout) {
       for (const j of [k, ...pair]) delete w.sd![j];
       w.tw[k] = o;
       (w.fs ??= {})[k] = { o, at: w.step };
+      if (s.maxSymbolTowers) (w.sy ??= {})[k] = o;
       w.flash.push(k);
     }
   }
@@ -367,6 +392,15 @@ export function engine(L: Layout) {
   function updLS(w: World, R: number, ls: Record<Side, Record<number, number>>) {
     lit(w, 'C', R).forEach((k) => { if (w.tw[k] === 'A') ls.C[k] = w.step; else delete ls.C[k]; });
     lit(w, 'A', R).forEach((k) => { if (w.tw[k] === 'C') ls.A[k] = w.step; else delete ls.A[k]; });
+  }
+  /**
+   * updLS for the book edition's options: what each side sees (sees(), gliders' sight included), and with killReports
+   * a destroyed enemy tower leaves the killer's last-seen at once. Without the options it is updLS(w, s.sight, ls).
+   */
+  function updSeen(w: World, s: Settings, ls: Record<Side, Record<number, number>>, kills?: Kills) {
+    if (!s.gliderSight && !s.symbolGliderSight) updLS(w, s.sight, ls);
+    else for (const [o, e] of [['C', 'A'], ['A', 'C']] as const) sees(w, s, o).forEach((k) => { if (w.tw[k] === e) ls[o][k] = w.step; else delete ls[o][k]; });
+    if (s.killReports) for (const x of kills?.log ?? []) if (w.tw[x.k] !== other(x.o)) delete ls[x.o][x.k];
   }
 
   const cost = (s: Settings, t: AnyPiece) => (t === 'g' ? s.costGlider : t === 's' ? s.costSquare : t in BOOK_COST ? s[BOOK_COST[t as BookPiece]] ?? 0 : s.costTower);
@@ -580,7 +614,7 @@ export function engine(L: Layout) {
     if (!a) return -10_000 + w.step;
     let mine = 0;
     for (const g of w.gl) if (g.o === o) mine++;
-    const margin = 100 * (a - c) - 15 * (open(w, s, o) - open(w, s, other(o))) + 0.5 * lit(w, o, s.sight).size + 2 * mine;
+    const margin = 100 * (a - c) - 15 * (open(w, s, o) - open(w, s, other(o))) + 0.5 * sees(w, s, o).size + 2 * mine;
     // At the step limit most towers wins; the margin still counts, so a side behind still tries to catch up.
     if (w.step >= s.maxSteps) return margin + (a > c ? 5_000 : a < c ? -5_000 : 0);
     return margin;
@@ -605,7 +639,7 @@ export function engine(L: Layout) {
    * start; where rocks hold ore (and so can crumble), the real rock and its ore only within sight.
    */
   function fog(w: World, s: Settings, o: Side): World {
-    const see = lit(w, o, s.sight), v = world(s, true);
+    const see = sees(w, s, o), v = world(s, true);
     v.step = w.step;
     // Rocks: out of sight, as they were at the start (a rock can crumble or be hit where nobody sees it); in sight,
     // as they are. A rock's ore only where it and every square beside it are in sight: otherwise a hidden factory's
@@ -635,6 +669,8 @@ export function engine(L: Layout) {
       return out;
     };
     if (w.mir) v.mir = keep(w.mir);
+    // The side's own towers that formed from symbols (its own pieces: it knows which).
+    if (w.sy) { const sy: Record<number, Side> = {}; for (const k in w.sy) if (w.sy[k] === o && v.tw[k] === o) sy[+k] = o; v.sy = sy; }
     if (w.fa) v.fa = keep(w.fa);
     if (w.fs) v.fs = keep(w.fs);
     if (w.sd) { v.sd = {}; for (const k in w.sd) if (shown(k)) v.sd[k] = w.sd[k]; }
@@ -647,7 +683,7 @@ export function engine(L: Layout) {
     return v;
   }
 
-  return { L, W, H, K, XY, inb, world, clone, towers, lit, empty, step, apply, updLS, refuse, botPlan, turned, turnedKeys, unturn, cost, wallCells, wallAt, solid, walledIn, legal, score, fog, open };
+  return { L, W, H, K, XY, inb, world, clone, towers, lit, sees, symbolTowers, empty, step, apply, updLS, updSeen, refuse, botPlan, turned, turnedKeys, unturn, cost, wallCells, wallAt, solid, walledIn, legal, score, fog, open };
 }
 
 export type Engine = ReturnType<typeof engine>;

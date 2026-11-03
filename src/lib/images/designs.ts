@@ -290,7 +290,7 @@ export async function makeDesign(sql: Sql, m: MakeInput): Promise<{ versionId: s
     if (m.mode === 'create' && m.kind === 'style') {
       const name = (m.styleName ?? '').trim();
       if (!name) throw new MakeRefused(400, 'Give the style a name');
-      if (await styleNameTaken(t, name)) throw new MakeRefused(409, 'A style with this name already exists. Fork it, or choose another name.');
+      if (await styleNameTaken(t, name)) throw new MakeRefused(409, 'A style with this name already exists. Remix it, or choose another name.');
       if (characterNameClash(name)) throw new MakeRefused(409, CHARACTER_NAME_REFUSAL);
       const [en] = await t`insert into studio.entities ${t({ work_id: WORK_ID, kind: 'style', name })} returning id`;
       entityId = String(en.id);
@@ -315,7 +315,7 @@ export async function makeDesign(sql: Sql, m: MakeInput): Promise<{ versionId: s
       entityId = String(src.entity_id);
       if (m.mode === 'fork') remixFrom = String(src.id);
       else {
-        if (Number(src.created_by_fid) !== m.fid) throw new MakeRefused(403, 'Only its maker can add a version. Fork it to make your own.');
+        if (Number(src.created_by_fid) !== m.fid) throw new MakeRefused(403, 'Only its maker can add a version. Remix it to make your own.');
         elementId = String(src.element_id);
         const [mx] = await t`select max(version_no)::int as n from studio.element_versions where element_id = ${elementId}`;
         versionNo = Number(mx.n) + 1;

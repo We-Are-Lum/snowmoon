@@ -31,6 +31,7 @@ import { LEARN_TEXT } from '../src/lib/minpentai/learn-text';
 import { BOOK_TAG, NARRATION_MAX_WORDS, PERSON_TAG, parseBeats } from '../src/lib/script-beats';
 import { GLOSSARY_FILE, loadBlocks, verifyGlossary, type Glossary } from './lib/glossary';
 import { p4aProblems } from './lib/p4a';
+import { CHALLENGE_FILES as P5G_FILES, p5gProblems } from './lib/p5g';
 import { MODAL_VC_FILE, MODAL_VC_PLANTS, modalVcRun, modalVcStatic } from './lib/modal-vc';
 import { requireTarget } from './lib/target';
 
@@ -1249,27 +1250,18 @@ add({
   },
 });
 // The remix challenge (owner, 2026-10-31: "No ordering by engagement or payment"): entries, sheets to start from and
-// "Posted on" are in time order and nothing else. In the challenge's code, every .sort() is newestFirst, and no SQL
-// order reads likes, built-on counts, scores, costs or payments.
-const CHALLENGE_FILES = /^src\/lib\/challenge\/|^src\/app\/challenge\/|^src\/app\/api\/challenge\/|^src\/components\/(challenge-[a-z-]+|posted-on|post-link-field)\.tsx$/;
-const NOT_AN_ORDER = /\b(likes?|like_?count|likeCount|built_?on|builtOn|score|repost|recast|repl(y|ies)|followers?|cost|amount|usd|payment|paid|sponsor|donation)\b/i;
+// "Posted on" are in time order and nothing else (scripts/lib/p5g.ts). One narrow exception (owner, 2026-11-04): "Bases
+// to start from" may follow the bases' fixed style order (CHALLENGE.baseStyles), there only; entries stay time order.
 add({
   id: 'P5g',
   principle: 5,
-  name: 'the remix challenge orders entries, sheets and "Posted on" by time only (never by likes, built-on, scores or payments)',
-  load: async () => walk('src', /\.tsx?$/).filter((f) => CHALLENGE_FILES.test(f)).map((f) => ({ file: f, text: read(f) })),
-  run: (files) => {
-    const problems: string[] = [];
-    if (!files.some((f: { file: string }) => f.file === 'src/lib/challenge/rules.ts')) problems.push('src/lib/challenge/rules.ts: missing');
-    for (const { file, text } of files as { file: string; text: string }[]) {
-      const code = text.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:])\/\/.*$/gm, '$1');
-      for (const m of code.matchAll(/\.sort\(([^)]*)\)/g)) if (m[1].trim() !== 'newestFirst') problems.push(`${file}: sorts by something other than newestFirst: ${m[0].slice(0, 80)}`);
-      for (const m of code.matchAll(/order by([^`;]{0,160})/gi)) if (NOT_AN_ORDER.test(m[1])) problems.push(`${file}: orders by "${m[1].trim().slice(0, 60)}"`);
-    }
-    return problems;
-  },
+  name: 'the remix challenge orders entries, sheets and "Posted on" by time only (never by likes, built-on, scores or payments); only "Bases to start from" may follow the bases\' fixed style order',
+  load: async () => walk('src', /\.tsx?$/).filter((f) => P5G_FILES.test(f)).map((f) => ({ file: f, text: read(f) })),
+  run: (files) => p5gProblems(files),
   plant: (files) => {
-    files.push({ file: 'src/lib/challenge/planted.ts', text: 'export const top = (e) => e.sort((a, b) => b.builtOn - a.builtOn);' });
+    // An entries list ordered by style: the bases' exception must not reach it.
+    const i = files.findIndex((f: { file: string }) => f.file === 'src/lib/challenge/entries.ts');
+    files[i] = { ...files[i], text: files[i].text.replace(/export async function standing\(/, 'export const planted = (entries) => entries.sort(baseStyleOrder);\nexport async function standing(') };
   },
 });
 // A hide on a seeded image reaches everywhere it shows (owner, 2026-10-30: "home, About, quote cards, the player,
@@ -1808,6 +1800,29 @@ add({
     c.s4 = 'Quote cards you save, and your likes.';
     c.s7 = 'Neynar receives your Farcaster ID.';
     c.openSheets = 'export const challengeSheetsOpen = () => CHALLENGE.openSheets;';
+  },
+});
+
+// P6s: bases made by closed models (owner, 2026-11-04). Bases and references may be made by several models, closed
+// ones included; a closed-model base is refused until CHALLENGE.closedBasesAllowed (src/lib/challenge/bases.ts), and
+// that may be true only once the Privacy page names the providers that receive the base's prompt and pictures, OpenAI
+// and Google, for the bases (docs/legal/closed-model-bases-draft.md, branch closed-model-bases). Legal texts describe today.
+const CLOSED_BASE_PROVIDERS = ['OpenAI', 'Google'] as const;
+add({
+  id: 'P6s',
+  principle: 6,
+  name: 'closed-model bases (CHALLENGE.closedBasesAllowed) are allowed only while the Privacy page names OpenAI and Google for the bases and references',
+  load: async () => ({ allowed: CHALLENGE.closedBasesAllowed as boolean, units: PRIVACY.sections.flatMap((sec) => sec.body.map((u) => (Array.isArray(u) ? u.join(' ') : u))) }),
+  run: (c) => {
+    if (!c.allowed) return [];
+    const forBases = c.units.filter((u: string) => /\b(bases?|references?|starting sheets?)\b/i.test(u));
+    return CLOSED_BASE_PROVIDERS.filter((n) => !forBases.some((u: string) => new RegExp(`\\b${n}\\b`).test(u))).map(
+      (n) => `CHALLENGE.closedBasesAllowed (src/lib/config.ts) is true, but no Privacy paragraph names ${n} for the challenge's bases and references; reread docs/legal/closed-model-bases-draft.md with the owner first, or keep it false`,
+    );
+  },
+  plant: (c) => {
+    c.allowed = true;
+    c.units = c.units.map((u: string) => u.replace(/\bOpenAI\b/g, 'a model maker'));
   },
 });
 

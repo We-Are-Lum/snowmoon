@@ -9,6 +9,7 @@ snowmoon.party is an independent, open adaptation of *Snowmoon* by Vitalik Buter
 - **Nothing merges to `main` or goes live without the owner's OK.** Pushing to `main` deploys production. Once the owner OKs a merge, the agent does it (owner, 2026-10-21 and 2026-10-30).
 - **Merge only the PRs the owner names, one at a time, in the order given.** Use a **merge commit** (`gh pr merge --merge`), never squash, rebase or force.
 - **After each merge:** wait for the Vercel deploy (`https://snowmoon.party/api/version` shows the merge commit), run the live checks (below), and report before merging the next. If a check fails, stop and tell the owner.
+- **Redeploy production with `vercel redeploy` on the current production deployment, never `vercel --prod` from a working tree (it's shared)** (owner, 2026-11-03).
 - **Revert only for a real failure** caused by the change. A timeout or flaky check on a page the change doesn't touch isn't a reason to revert: re-run it, and report it (owner, 2026-10-30).
 - **Legal texts need the owner's reread.** Never merge a PR that changes Terms, Privacy or the consent screen (`src/lib/legal.ts`, `consent.json`, `docs/legal/`) until the owner says "reread".
 - **Legal texts describe today.** They only ever describe what the site does on the day they go live. A feature's Terms/Privacy/consent lines are drafted in the feature's own branch and ship in the same release, never ahead of it (owner, 2026-10-18).

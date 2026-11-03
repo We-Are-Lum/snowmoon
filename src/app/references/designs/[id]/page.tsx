@@ -13,6 +13,7 @@ import { DesignBar } from '~/components/design-bar';
 import { AiTag } from '~/components/ai-tag';
 import { CHALLENGE } from '~/lib/config';
 import { versionStanding } from '~/lib/challenge/entries';
+import { phase } from '~/lib/challenge/rules';
 import { challengeSheetsOpen, isChallengeCharacter } from '~/lib/challenge/open-sheets';
 import { postsFor } from '~/lib/challenge/posts';
 import { CHALLENGE_WORDING as CW } from '~/lib/challenge/wording';
@@ -97,19 +98,28 @@ export default async function DesignPage({ params }: Props) {
           )}
         </p>
       )}
-      {body.assist && <p className="dz-meta dz-drafted">{W.page.drafted}</p>}
+      {body.assist && <p className="dz-meta dz-drafted">{style ? W.page.drafted : W.page.draftedSheet}</p>}
       {standing?.kind === 'entry' && (
         <p className="dz-meta ch-standing">
           <span className="ch-badge">{CW.badge}</span> {CW.badgeNote(callName)} <Link href="/challenge">{CW.title} →</Link>
         </p>
       )}
-      {standing?.kind === 'candidate' && (
-        <div className="dz-meta ch-standing">
-          <p className="dz-muted">{CW.candidateNote}</p>
-          <ChallengeMark versionId={d.shown.versionId} byFid={d.byFid} />
-        </div>
-      )}
+      {standing?.kind === 'candidate' &&
+        // After the close a mark is refused, so no button is offered (launch rehearsal, 2026-11-02).
+        (phase() === 'open' ? (
+          <div className="dz-meta ch-standing">
+            <p className="dz-muted">{CW.candidateNote}</p>
+            <ChallengeMark versionId={d.shown.versionId} byFid={d.byFid} />
+          </div>
+        ) : (
+          <p className="dz-meta ch-standing dz-muted">{CW.candidateClosedNote(callName)}</p>
+        ))}
       {standing?.kind === 'admin' && <p className="dz-meta ch-standing dz-muted">{CW.adminNote}</p>}
+      {challengeOpen && !standing && (
+        <p className="dz-meta ch-standing ch-invite">
+          {CW.sheetInvite(callName)} <Link href="/challenge">{CW.title} →</Link>
+        </p>
+      )}
       {pictures.length ? (
         <figure className={`dz-pictures${style ? '' : ' is-views'}`}>
           <div className="dz-grid">
@@ -204,7 +214,7 @@ export default async function DesignPage({ params }: Props) {
         byFid={d.byFid}
         challengeOpen={challengeOpen}
       />
-      <ChallengeShare versionId={d.shown.versionId} what={style ? title : `${callName}: ${title}`} posts={CHALLENGE.posts} />
+      <ChallengeShare versionId={d.shown.versionId} what={style ? title : `${callName}: ${title}`} posts={CHALLENGE.posts} inChallenge={d.kind === 'character' && isChallengeCharacter(d.entity) && phase() === 'open'} />
       {posts.length > 0 && <PostedOn versionId={d.shown.versionId} posts={posts.map(({ id, network, handle, at, url }) => ({ id, network, handle, at, url }))} />}
       <p className="as-draft ic-draftline">{IMAGE_WORDING.draftLine}</p>
     </article>

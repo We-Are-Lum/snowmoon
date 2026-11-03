@@ -47,7 +47,7 @@ export async function paidPicture(
   sql: Sql,
   fid: number,
   request: Request,
-  job: { checkText: string; spend?: Spend; make: () => Promise<Made> },
+  job: { checkText: string; spend?: Spend; make: () => Promise<Made>; /** The prompt check's token budget (a sheet's views: IMAGES.designs.guardMaxTokens). */ guardMaxTokens?: number },
 ): Promise<Paid> {
   const spend = job.spend;
   const funded = fundedBy(fid);
@@ -61,7 +61,7 @@ export async function paidPicture(
   }
   let guard;
   try {
-    guard = await checkPrompt(job.checkText, request);
+    guard = await checkPrompt(job.checkText, request, job.guardMaxTokens);
   } catch (e) {
     await settle(sql, {}, spend, funded);
     console.error('image prompt check failed', (e as Error).name);
