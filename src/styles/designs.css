@@ -253,3 +253,22 @@ a.dz-fork:hover { text-decoration: none; }
 .ch-mark button { min-height: 44px; }
 .ch-admin-list a { display: inline-block; min-height: 44px; line-height: 44px; }
 .ch-bounty a { display: inline-block; min-height: 44px; line-height: 44px; }
+
+/* A challenge character's sheet as a landing page (owner, 2026-11-04): the front view large, the maker, a big Remix
+   button, the like slot (off: empty) and "Posted on"; signed out, a line on what this is linking /challenge. */
+.rl-landing { display: flex; flex-direction: column; gap: 14px; margin: 0 0 22px; padding-bottom: 20px; border-bottom: 1px solid var(--rule); }
+.rl-arrival { margin: 0; padding: 12px 14px; font-size: var(--text-small); line-height: 1.4; color: var(--body); background: var(--card); border: 1px solid var(--rule); border-radius: 6px; }
+.rl-figure { margin: 0; display: flex; flex-direction: column; gap: 8px; }
+.rl-picture { display: block; width: 100%; max-width: 560px; height: auto; max-height: 78vh; object-fit: contain; margin: 0 auto; background: var(--soft); border-radius: 4px; }
+.rl-caption { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 12px; font-family: var(--label); font-size: var(--text-label); line-height: 1.5; text-transform: uppercase; color: var(--ink); }
+.rl-maker { font-weight: 500; }
+.rl-ai { display: inline-flex; align-items: center; gap: 6px; }
+.rl-actions { display: flex; flex-direction: column; gap: 8px; }
+.rl-remix { display: flex; align-items: center; justify-content: center; min-height: 56px; padding: 0 24px; border-radius: 6px; background: var(--btn); color: var(--btn-ink); font-family: var(--label); font-size: 16px; letter-spacing: var(--ls-label); text-transform: uppercase; text-decoration: none; }
+a.rl-remix:hover { text-decoration: none; opacity: 0.92; }
+a.rl-remix:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+.rl-note { margin: 0; font-size: 15px; line-height: 1.4; color: var(--body); }
+.rl-landing .ch-posted { margin: 0; }
+@media (min-width: 768px) {
+  .rl-remix { align-self: flex-start; min-width: 280px; }
+}
