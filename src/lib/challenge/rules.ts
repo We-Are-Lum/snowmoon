@@ -83,21 +83,22 @@ export type Eligibility =
 
 /**
  * Whether a maker's versions can be entries, decided once, when the version is published (the decision is stored;
- * pages only read it). `maker` is the record's maker: a FID. `score` is the person's Neynar score at publish (null:
- * not known, e.g. Neynar didn't answer; such a version doesn't count). The score is compared with
- * CHALLENGE.neynarMinScore and then forgotten: only the decision ('passed' or 'below') is stored (owner, 2026-11-01).
+ * pages only read it). `maker` is the record's maker: a FID. `passed` is whether the person's account passes the
+ * challenge's Neynar check (CHALLENGE.neynarMinScore) at publish: the stored check decision while one is current, or a
+ * lookup made then (src/lib/images/neynar.ts, checkNeynar); null if not known, e.g. Neynar didn't answer, and such a
+ * version doesn't count. No score is involved here or stored anywhere (owner, 2026-11-01 and 2026-11-04).
  *
  * Wallets (owner, 2026-10-31: drop "or a wallet linked to either" until wallets can make sheets): a maker that isn't a
  * FID is never eligible. To restore the wallet path later, resolve a wallet maker to the FID it is linked to before
  * calling this (src/lib/wallet/credit.ts, linkedTo) and pass that FID as `maker`.
  */
-export function eligibility(p: { maker: number; score: number | null }, lists: { admins: readonly number[]; invited: readonly number[]; min: number } = CHALLENGE_LISTS): Eligibility {
+export function eligibility(p: { maker: number; passed: boolean | null }, lists: { admins: readonly number[]; invited: readonly number[] } = CHALLENGE_LISTS): Eligibility {
   if (!(p.maker > 0)) return { eligible: false, person: null, why: 'not-a-farcaster-account' };
   const person = p.maker;
   if (lists.admins.includes(person)) return { eligible: false, person, why: 'admin' };
   if (lists.invited.includes(person)) return { eligible: true, person, why: 'invited' };
-  if (p.score === null || !Number.isFinite(p.score)) return { eligible: false, person, why: 'unchecked' };
-  return p.score >= lists.min ? { eligible: true, person, why: 'passed' } : { eligible: false, person, why: 'below' };
+  if (p.passed === null) return { eligible: false, person, why: 'unchecked' };
+  return p.passed ? { eligible: true, person, why: 'passed' } : { eligible: false, person, why: 'below' };
 }
 
 export type Decision = 'admin' | 'invited' | 'passed' | 'below' | 'unchecked';
@@ -114,7 +115,7 @@ export function fromDecision(maker: number, decision: Decision | null, lists: { 
   return { eligible: false, person: maker, why: decision === 'below' ? 'below' : 'unchecked' };
 }
 
-/** Whether a FID needs a score lookup at all (admins and invited people never do). */
+/** Whether a FID needs the Neynar check at all (admins and invited people never do). */
 export const needsScore = (fid: number) => !CHALLENGE_LISTS.admins.includes(fid) && !CHALLENGE_LISTS.invited.includes(fid);
 
 // ---------------------------------------------------------------------------------------------
