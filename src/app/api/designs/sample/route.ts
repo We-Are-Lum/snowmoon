@@ -1,7 +1,7 @@
 import { createHash } from 'node:crypto';
 import { NextResponse } from 'next/server';
 import { challengeSheetsOpen } from '~/lib/challenge/open-sheets';
-import { getFid } from '~/lib/auth';
+import { designPerson, notSignedInStatus } from '~/lib/social/design-person';
 import { db } from '~/lib/db';
 import { IMAGES } from '~/lib/config';
 import { hasConsented } from '~/lib/consent';
@@ -28,8 +28,9 @@ const SLOTS = ['sample', 'front', 'side', 'back'] as const;
 type Slot = (typeof SLOTS)[number];
 
 export async function POST(request: Request) {
-  const fid = await getFid(request);
-  if (fid === null) return NextResponse.json({ error: 'Sign in with Farcaster to make a picture' }, { status: 401 });
+  // A Farcaster sign-in; a Bluesky one too once its check is on (src/lib/social/design-person.ts).
+  const fid = await designPerson(request);
+  if (fid === null) return NextResponse.json({ error: 'Sign in with Farcaster to make a picture' }, { status: notSignedInStatus(request) });
   if (!IMAGES.enabled) return no('Making images is switched off for now', 503);
   // Invited FIDs only; while the remix challenge opens sheets (CHALLENGE.openSheets), anyone may make a sheet's views
   // (front, side, back; not a style's samples). Publishing them stays limited to a challenge character's fork or version.

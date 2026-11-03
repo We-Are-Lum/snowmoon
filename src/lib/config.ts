@@ -421,6 +421,9 @@ export const SOCIAL_SIGN_IN = {
      * free generations until the owner sets a number here. A Lens account with a score of at least this number gets
      * the same free daily count as a Farcaster account.
      */
+    // Planned for 12 November (owner, 2026-11-04): Lens's check is its Lens score against this threshold, in the same
+    // release as Lens sign-in. The number is still the owner's to set; the sample in docs/branch-reports/
+    // signin-lens-bluesky.md suggests 1000 (about one account in eleven of a broad sample, no new account).
     minScore: null as number | null,
     /** How long a looked-up score is kept in memory, per server. */
     scoreCacheMinutes: 60,
@@ -436,6 +439,30 @@ export const SOCIAL_SIGN_IN = {
     /** A sign-in started must finish within this. */
     startMinutes: 10,
     timeoutMs: 5000,
+    /**
+     * The Bluesky check (owner, 2026-11-04): a Bluesky account that isn't linked to a Farcaster or Lens account gets
+     * the free daily counts, and can remix and enter the remix challenge, only if it passes, the same way a Farcaster
+     * account passes Neynar's score (src/lib/social/bluesky-check.ts). Two signals, from Bluesky's public AppView
+     * (app.bsky.actor.getProfile and app.bsky.feed.getAuthorFeed; no key), asked with the account's DID only:
+     * 1. the account was made before `createdBefore` (6 Nov 2026, 00:00 Pacific), so new accounts can't be made for it;
+     * 2. it posted at least `minRecentPosts` times (its own posts and replies, not reposts) in the last `recentDays`
+     *    days, by Bluesky's own clock (each post's indexedAt) as well as the post's, so old idle accounts can't
+     *    drain the daily cap.
+     * Only the decision ('passed', 'new' or 'idle') and when it was made are kept (studio.bluesky_checks), for
+     * `cacheHours`, as Neynar's score is; never the dates or counts. If Bluesky can't be reached, refused, as for
+     * Neynar. Off (`on: false`) until the owner's reread of its Privacy and Terms lines, and only matters once Bluesky
+     * sign-in is on.
+     */
+    check: {
+      on: false as boolean,
+      appView: 'https://public.api.bsky.app',
+      createdBefore: '2026-11-06T08:00:00Z',
+      recentDays: 30,
+      minRecentPosts: 5,
+      /** How many of the newest feed items are read (one request); enough to find minRecentPosts among reposts. */
+      feedLimit: 50,
+      cacheHours: 24,
+    },
   },
 } as const;
 

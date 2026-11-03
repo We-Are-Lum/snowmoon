@@ -24,7 +24,7 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { DEFAULT_TEMPLATES } from '../src/templates';
 import { LiveScreen } from '../src/components/live-screen';
-import { AGENTS, CHALLENGE, CHAT, IMAGES, REPO_URL, SIGN_IN_METHODS } from '../src/lib/config';
+import { AGENTS, CHALLENGE, CHAT, IMAGES, REPO_URL, SIGN_IN_METHODS, SOCIAL_SIGN_IN } from '../src/lib/config';
 import { NOTICE_REVIEW, currentNoticeItems, noticeKey } from '../src/lib/chat/notice';
 import { LEGAL, PRIVACY, TERMS, legalKey } from '../src/lib/legal';
 import { LEARN_TEXT } from '../src/lib/minpentai/learn-text';
@@ -1767,6 +1767,27 @@ add({
   },
   plant: (c) => {
     c.on = [...c.on, 'bluesky'];
+  },
+});
+
+// P6v (branch bluesky-check, owner 2026-11-04): the Bluesky check (SOCIAL_SIGN_IN.bluesky.check) is on only once Privacy
+// §7 names Bluesky's AppView (public.api.bsky.app), says the DID is what it receives, and that only the outcome is
+// kept (docs/legal/bluesky-check-draft.md, the owner's reread). Legal texts describe today.
+add({
+  id: 'P6v',
+  principle: 6,
+  name: 'the Bluesky check is on only when Privacy §7 names the AppView, the DID it receives, and that only the outcome is kept',
+  load: async () => ({ on: SOCIAL_SIGN_IN.bluesky.check.on as boolean, s7: (PRIVACY.sections.find((s) => s.n === 7)?.body ?? []).flat().join(' ') }),
+  run: (c) => {
+    if (!c.on) return [];
+    const problems: string[] = [];
+    if (!/public\.api\.bsky\.app/.test(c.s7) || !/\bDID\b/.test(c.s7)) problems.push('the Bluesky check is on (SOCIAL_SIGN_IN.bluesky.check.on), but Privacy §7 doesn\'t name Bluesky\'s AppView (public.api.bsky.app) and the DID it receives: the owner\'s reread of docs/legal/bluesky-check-draft.md first');
+    if (!/keep only its outcome/.test(c.s7)) problems.push('the Bluesky check is on, but Privacy §7 doesn\'t say only its outcome is kept');
+    return problems;
+  },
+  plant: (c) => {
+    c.on = true;
+    c.s7 = c.s7.replace(/public\.api\.bsky\.app/g, 'the AppView');
   },
 });
 

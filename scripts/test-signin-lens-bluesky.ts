@@ -628,7 +628,7 @@ add({
     // Fresh database: every migration but this one, then the dry run alone must leave nothing.
     const fresh = new PGlite();
     await fresh.exec(`create role anon nologin; create role authenticated nologin; create role service_role nologin bypassrls;`);
-    for (const f of migrations.filter((f) => !f.startsWith('NEXT_signin'))) await fresh.exec(readFileSync(path.join(ROOT, 'supabase/migrations', f), 'utf8'));
+    for (const f of migrations.filter((f) => !f.startsWith('NEXT_signin') && !f.startsWith('NEXT_social'))) await fresh.exec(readFileSync(path.join(ROOT, 'supabase/migrations', f), 'utf8'));
     await fresh.exec(a);
     const afterDry = (await fresh.query<{ n: number }>(`select count(*)::int as n from pg_tables where schemaname = 'studio' and tablename like 'social_%'`)).rows[0].n;
     await fresh.exec(b);
