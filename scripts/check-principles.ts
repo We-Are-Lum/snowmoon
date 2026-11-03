@@ -33,6 +33,9 @@ import { GLOSSARY_FILE, loadBlocks, verifyGlossary, type Glossary } from './lib/
 import { p4aProblems } from './lib/p4a';
 import { MODAL_VC_FILE, MODAL_VC_PLANTS, modalVcRun, modalVcStatic } from './lib/modal-vc';
 import { requireTarget } from './lib/target';
+import { DEFAULT_SHEET_MODEL, SHEET_MODELS, sheetModelProblems, sheetModelsOffered } from '../src/lib/images/sheet-models';
+import { modelChoicesFor } from '../src/lib/images/model-choice-view';
+import { p6sProblems } from './lib/p6s';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const arg = (name: string) => process.argv.slice(2).find((a) => a.startsWith(`--${name}=`))?.split('=').slice(1).join('=');
@@ -1024,6 +1027,8 @@ add({
     endpoints.set(IMAGES.guardModel, 'src/lib/config.ts IMAGES.guardModel');
     // Step 4: reference pictures (a sheet's side and back views; images made with a sheet's views).
     endpoints.set(IMAGES.editModel.endpoint, 'src/lib/config.ts IMAGES.editModel');
+    // Model choice (IMAGES.designs.modelChoice): every model a sheet's views can be made with, offered or not.
+    for (const m of SHEET_MODELS) for (const c of [m.front, m.views]) endpoints.set(c.endpoint, `src/lib/images/sheet-models.ts ${m.id}`);
     return { models: json('config/models.json').models, used: [...used.entries()], endpoints: [...endpoints.entries()] };
   },
   run: ({ models, used, endpoints }) => {
@@ -1098,6 +1103,40 @@ add({
   plant: (c) => {
     c.skipped = '';
     c.ids = [...c.ids, '00000000-0000-0000-0000-00000000dead'];
+  },
+});
+
+// P3e (branch remix-model-choice): the remix form's model picker keeps the open models the default and first in the
+// list, whether the switch is on or off; every closed choice names its maker; every model it calls is on the allowlist.
+add({
+  id: 'P3e',
+  principle: 3,
+  name: 'the default is open: the remix form\'s model choice lists the open models first, as the default; closed ones name their maker and are allowlisted',
+  load: async () => ({
+    all: clone(SHEET_MODELS) as unknown as (typeof SHEET_MODELS)[number][],
+    offeredOn: sheetModelsOffered(true, true).map((m) => m.id) as string[],
+    offeredOff: sheetModelsOffered(false).map((m) => m.id) as string[],
+    form: (modelChoicesFor('fork', 'character', true) ?? []).map((m) => ({ id: m.id, open: m.open })),
+    allowlist: (json('config/models.json').models as { id: string; open_weights: boolean; maker?: string }[]),
+  }),
+  run: (c) => {
+    const p = sheetModelProblems(c.all);
+    if (c.offeredOn[0] !== DEFAULT_SHEET_MODEL) p.push(`with the switch on, the first choice offered is ${c.offeredOn[0]}`);
+    if (c.offeredOff.length !== 1 || c.offeredOff[0] !== DEFAULT_SHEET_MODEL) p.push(`with the switch off, more than the open default is offered: ${c.offeredOff.join(', ')}`);
+    if (!c.form.length || c.form[0].id !== DEFAULT_SHEET_MODEL || !c.form[0].open) p.push('the remix form does not show the open default first');
+    for (const m of c.all) {
+      for (const id of [m.front.id, m.views.id]) {
+        const a = c.allowlist.find((x) => x.id === id || x.id === id.replace(/-edit$/, ''));
+        if (!a) { p.push(`${m.id}: ${id} is not on config/models.json`); continue; }
+        if (a.open_weights !== m.open) p.push(`${m.id}: says ${m.open ? 'open' : 'closed'}, config/models.json says open_weights ${a.open_weights}`);
+        if (!m.open && a.maker !== m.maker) p.push(`${m.id}: maker ${m.maker} differs from config/models.json (${a.maker})`);
+      }
+    }
+    return p;
+  },
+  plant: (c) => {
+    c.all = [...c.all].reverse();
+    c.form = [...c.form].reverse();
   },
 });
 
@@ -1572,11 +1611,19 @@ const SERVICES: [string, RegExp][] = [
   ['GitHub', /\bGitHub\b/g],
   // Owner's Privacy wording of 2026-10-10 names these two as well.
   ['ntfy', /\bntfy\b/g],
+  // Closed models' makers, as providers that receive prompts and pictures through Vercel AI Gateway (branches
+  // closed-model-bases and remix-model-choice, 2026-11-04). "gpt-oss" names a model, not the provider receiving anything.
+  ['OpenAI', /\bOpenAI\b/g],
+  ['Google', /\bGoogle\b(?! Fonts)/g],
   ['Spotify', /\bSpotify\b/g],
 ];
 /** At Generate, the image prompt goes to Groq (the check; through Vercel AI Gateway when Groq is busy) and
  *  fal.ai (the image), the FID to Neynar (the gate). The gateway is named on the consent screen too (owner, 2026-10-10). */
-const AT_GENERATE = ['Groq', 'Vercel AI Gateway', 'fal.ai', 'Neynar'];
+const AT_GENERATE = [
+  'Groq', 'Vercel AI Gateway', 'fal.ai', 'Neynar',
+  // With model choice on (IMAGES.designs.modelChoice), each offered closed model's maker receives the prompt too.
+  ...new Set(sheetModelsOffered(IMAGES.designs.modelChoice).filter((m) => !m.open).map((m) => m.provider.name)),
+];
 const named = (text: string) => new Set(SERVICES.filter(([, re]) => text.match(re)).map(([n]) => n));
 const diff = (a: Set<string>, b: Set<string>) => [...a].filter((x) => !b.has(x));
 const pageText = (html: string, sel: string) => {
@@ -1764,6 +1811,36 @@ add({
     c.s4 = 'Quote cards you save, and your likes.';
     c.s7 = 'Neynar receives your Farcaster ID.';
     c.openSheets = 'export const challengeSheetsOpen = () => CHALLENGE.openSheets;';
+  },
+});
+
+// P6s (branch remix-model-choice, 2026-11-04): model choice (IMAGES.designs.modelChoice) sends a remixer's prompt and
+// front view to each offered closed model's maker through Vercel AI Gateway. The switch may be on only while Privacy
+// names each of them there, with what it receives and how it is kept, and the consent screen names them (legal texts
+// describe today). P6s was free on main and on deep-funding, social-read (P6p), sheet-help, find-a-moment and
+// challenge-three-bases (P6r is taken on three of them) when picked.
+add({
+  id: 'P6s',
+  principle: 6,
+  name: 'model choice is on only while Privacy §4 and §7 and the consent screen name each offered closed model\'s maker, through Vercel AI Gateway',
+  load: async () => {
+    const c = json('config/consent.json');
+    const w = c.versions[c.current];
+    return {
+      on: IMAGES.designs.modelChoice as boolean,
+      providers: [...new Set(sheetModelsOffered(true).filter((m) => !m.open).map((m) => m.provider.name))] as string[],
+      s4: (PRIVACY.sections.find((s) => s.n === 4)?.body ?? []).flat().join(' '),
+      s7: (PRIVACY.sections.find((s) => s.n === 7)?.body ?? []).flat() as string[],
+      consent: [w.line, w.title, ...w.text].join('\n'),
+    };
+  },
+  run: (c) => p6sProblems(c),
+  plant: (c) => {
+    c.on = true;
+    c.providers = ['OpenAI'];
+    c.s7 = ['Vercel hosts the site.'];
+    c.consent = 'Your prompt goes to fal.ai.';
+    c.s4 = 'Character sheets you publish.';
   },
 });
 
