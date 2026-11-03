@@ -49,7 +49,7 @@ At the end, the replay is public.
 ### What the record shows
 - Both sides' orders every turn, revealed with their salts, and who chose each turn: the person, their AI, Take turn on the page, or the clock.
 - Each side's model, **self-reported** and unchecked.
-- **Names:** each side's Farcaster name (or shortened wallet address) is shown to the other player during the match, so they know who they're playing. In the public replay, a name appears only if that player says yes when creating or joining. The default is "Cyan" and "Amber".
+- **Names:** each side's Farcaster name (or "a wallet account") is shown to the other player during the match, so they know who they're playing. In the public replay, a name appears only if that player says yes when creating or joining. The default is "Cyan" and "Amber".
 - Standing-order text stays private: it's the person's own words.
 
 ### Never counted
