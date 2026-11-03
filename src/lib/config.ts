@@ -421,9 +421,6 @@ export const SOCIAL_SIGN_IN = {
      * free generations until the owner sets a number here. A Lens account with a score of at least this number gets
      * the same free daily count as a Farcaster account.
      */
-    // Planned for 12 November (owner, 2026-11-04): Lens's check is its Lens score against this threshold, in the same
-    // release as Lens sign-in. The number is still the owner's to set; the sample in docs/branch-reports/
-    // signin-lens-bluesky.md suggests 1000 (about one account in eleven of a broad sample, no new account).
     minScore: null as number | null,
     /** How long a looked-up score is kept in memory, per server. */
     scoreCacheMinutes: 60,

@@ -20,9 +20,9 @@ way as Neynar's score today. Only the decision ('passed', 'new', 'idle') and its
 `src/lib/social/free.ts`, `src/lib/challenge/record.ts`; migration `NEXT_social_bluesky_check.sql`. The check is off
 (`SOCIAL_SIGN_IN.bluesky.check.on = false`), and it only matters once Bluesky sign-in is on.
 
-**When it ships.** Bluesky sign-in and its lines (`docs/legal/signin-lens-bluesky-draft.md`) and these lines ship in the
-same release: on Friday 6 November only if the owner's reread of signin-lens-bluesky lands by Wednesday; otherwise both
-on 12 November (owner, 2026-11-04).
+**Owner's decisions (2026-11-04):** the check is approved as planned (made before 6 November 2026, and 5 posts in the
+last 30 days; only the decision kept, for 24 hours). The remix challenge is admin-only on Friday (another branch gates
+it), so the check isn't needed then: it ships with Bluesky sign-in on 12 November, in the same release as these lines.
 
 ## 1. Privacy §7 (Outside services and what they receive): a new item, after the Neynar item
 
@@ -67,19 +67,11 @@ Note: the record itself isn't built yet; whoever builds it must write a Bluesky 
 **Proposed:**
 > …its maker's Farcaster ID (or, for a Bluesky account, its DID), when it was published and what it was built on; hiding a version later…
 
-## 4. Terms §4 (Who can use it): a change to the sign-in draft, not yet in legal.ts
+## 4. Terms §4 (Who can use it): on signin-lens-bluesky, not here
 
-Terms §4 today names only Farcaster and wallets; its Lens and Bluesky version is in
-`docs/legal/signin-lens-bluesky-draft.md` §5 and goes into `legal.ts` with sign-in. That draft's sentence "Free daily
-images and frames come with a Farcaster account; a Lens or Bluesky account gets them only while it is linked to one."
-would no longer be true. **Proposed replacement (variant A, Lens threshold still null):**
-> Free daily images and frames come with a Farcaster account, and with a Bluesky account that passes the site's Bluesky check (made before 6 November 2026, and at least 5 posts of its own in the last 30 days); a Lens account gets them only while it is linked to a Farcaster account.
-
-**Variant B (once the owner sets a Lens score threshold, planned 12 November):**
-> Free daily images and frames come with a Farcaster account, with a Bluesky account that passes the site's Bluesky check (made before 6 November 2026, and at least 5 posts of its own in the last 30 days), and with a Lens account whose Lens score is at least the one the Service shows.
-
-The sign-in draft's §6e note ("a version made by a Lens or Bluesky account … is never a candidate") is no longer true
-for Bluesky with the check on; for Lens it stays true until 12 November.
+Terms §4's Lens and Bluesky wording belongs to the sign-in branch: the owner's reread answers there (2026-11-04) reword
+it so that a Bluesky account that passes the site's check gets free images and frames. This branch changes only the
+Bluesky check's own lines (sections 1 to 3 above) and takes §4 from signin-lens-bluesky when it is merged in.
 
 ## 5. Words on the site that will need the same change (not legal text; owned by the challenge pages)
 
@@ -94,8 +86,6 @@ on. The refusals a Bluesky account sees (`BLUESKY_CHECK_WORDING` in `src/lib/soc
 
 ## Lens (12 November)
 
-Left for 12 November, with Lens sign-in. Planned: Lens's own check is its Lens score against `SOCIAL_SIGN_IN.lens.minScore`
-(null today: no Lens account gets free generations, and the score is never looked up). The number is the owner's; the
-sample in `docs/branch-reports/signin-lens-bluesky.md` suggests 1000. Its Privacy line is variant B of the sign-in
-draft's §2a; to match this check, its "We keep the score in memory for up to an hour" may become "We keep only whether
-it passed, for a day".
+Left for 12 November, with Lens sign-in. Planned (owner, 2026-11-04, applied on signin-lens-bluesky): Lens's check is
+its Lens score, looked up at Generate, against a threshold of 1,000 (`SOCIAL_SIGN_IN.lens.minScore`). Its Privacy line
+is the sign-in draft's §2a variant B.
