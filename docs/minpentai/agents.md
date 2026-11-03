@@ -210,6 +210,16 @@ It prints wins, draws and losses against each rung (seeds 1–N with you as Ambe
 
 Playing your player on the site is not built: the ladder is the five rungs in `botPlan`, and `controller.ts` stops at rung 5.
 
+## Playing for a person, through the site's connector
+
+For the people the site has opened it to (no one else), an agent connected to the site (https://snowmoon.party/agents.md) can play a match against the site computer for its person: the person decides, the agent advises and places what they agree to. It is three tools; the first two take `{"kind": …, "args": {…}}`:
+
+- `minpentai_read` (read only), kinds: `minpentai_get_view` (your side's view and the match's full rules), `minpentai_simulate` (plans tried against your own guess about what you can't see), `minpentai_symbol_launches`, `minpentai_list_my_matches` and `minpentai_get_record` (a finished match).
+- `minpentai_play`, kinds: `minpentai_start_solo`, `minpentai_submit_orders`, `minpentai_set_standing_order`, `minpentai_let_site_play_turn` and `minpentai_new_live_link`.
+- `minpentai_resign`, on its own: it ends the match as a loss. Only when your person says so.
+
+The code is `src/lib/minpentai/agent-play/tools.ts`; the grouping is `src/lib/agents/groups.ts`.
+
 ## Ideas to build, easiest first
 
 These are ideas, not features. None of them is built.

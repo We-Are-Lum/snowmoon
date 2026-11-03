@@ -20,6 +20,8 @@ import { readFileSync } from 'node:fs';
 import { isDeepStrictEqual } from 'node:util';
 import postgres from 'postgres';
 import { requireTarget } from './lib/target';
+import { callFor } from '../src/lib/agents/groups';
+import { kindsOf } from './lib/agent-kinds';
 import { checkComputer, ordersText, rulesOf, simulate, viewFor, type SoloMatch } from '../src/lib/minpentai/agent-play/solo';
 
 const BASE = requireTarget('check:minpentai-agent-live');
@@ -50,7 +52,8 @@ async function connect(): Promise<string> {
 }
 let token = '';
 const rpc = async (method: string, params: Record<string, unknown> = {}) => (await (await fetch(`${BASE}/mcp`, { method: 'POST', headers: { 'content-type': 'application/json', authorization: `Bearer ${token}` }, body: JSON.stringify({ jsonrpc: '2.0', id: 1, method, params }) })).json()) as { result?: { structuredContent?: Record<string, unknown>; isError?: boolean; content?: { text: string }[]; tools?: { name: string }[] } };
-const tool = async (name: string, args: Record<string, unknown> = {}) => { const r = (await rpc('tools/call', { name, arguments: args })).result; return { ok: r?.isError === false, out: (r?.structuredContent ?? {}) as Record<string, any>, error: r?.isError ? r.content?.[0]?.text ?? '' : null }; };
+// Called by the tool's own name, through its group (owner, 2026-11-04: src/lib/agents/groups.ts).
+const tool = async (name: string, args: Record<string, unknown> = {}) => { const r = (await rpc('tools/call', callFor(name, args))).result; return { ok: r?.isError === false, out: (r?.structuredContent ?? {}) as Record<string, any>, error: r?.isError ? r.content?.[0]?.text ?? '' : null }; };
 
 /** The real board with every enemy piece the person's side can't see taken away (the "twin" the fog review compared with). */
 function withoutHidden(m: SoloMatch): SoloMatch {
@@ -66,7 +69,7 @@ function withoutHidden(m: SoloMatch): SoloMatch {
 
 try {
   token = await connect();
-  const names = ((await rpc('tools/list')).result?.tools ?? []).map((t) => t.name);
+  const names = kindsOf((await rpc('tools/list')).result?.tools as never).map((t) => t.name);
   check('the test account\'s agent gets the Minpentai tools (play added for invited people)', names.includes('minpentai_start_solo'), names.join(','));
   const st = await tool('minpentai_start_solo', { ruleset: 'book', level: Number(process.argv.find((a) => a.startsWith('--level='))?.slice(8) ?? 1), model: { name: 'Live check script', maker: 'snowmoon.party', weights: 'open' } });
   check('start a Rocks and Mirrors match', st.ok, st.error ?? '');

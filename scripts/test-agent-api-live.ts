@@ -14,6 +14,7 @@ import { spawn } from 'node:child_process';
 import { PGlite } from '@electric-sql/pglite';
 import { PGLiteSocketServer } from '@electric-sql/pglite-socket';
 import { failOnProtocolErrors, gatePglite } from './lib/pglite-gate';
+import { kindsOf } from './lib/agent-kinds';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const failures: string[] = [];
@@ -60,12 +61,13 @@ try {
     const r = await fetch(BASE + '/api/mcp', { method: 'POST', headers: { 'content-type': 'application/json', 'x-forwarded-for': `198.51.100.${ip}` }, body: JSON.stringify({ jsonrpc: '2.0', id: 1, method, ...(params ? { params } : {}) }) });
     return { status: r.status, body: (await r.json().catch(() => null)) as any };
   };
-  const call = async (name: string, args: Record<string, unknown>) => (await rpc('tools/call', { name, arguments: args })).body?.result;
+  // Grouped (owner, 2026-11-04): search_book on its own, every other read tool a kind of read.
+  const call = async (name: string, args: Record<string, unknown>) => (await rpc('tools/call', name === 'search_book' ? { name, arguments: args } : { name: 'read', arguments: { kind: name, args } })).body?.result;
 
   const init = await rpc('initialize', { protocolVersion: '2025-06-18', capabilities: {}, clientInfo: { name: 'live', version: '0' } });
   check('MCP initialize over HTTP', init.status === 200 && init.body?.result?.protocolVersion === '2025-06-18');
   const tools = (await rpc('tools/list')).body?.result?.tools ?? [];
-  check('tools/list over HTTP: 7 read-only tools', tools.length === 7 && tools.every((t: any) => t.annotations?.readOnlyHint));
+  check('tools/list over HTTP: search_book and read (ten read tools in all), all read-only', tools.length === 2 && kindsOf(tools).length === 10 && tools.every((t: any) => t.annotations?.readOnlyHint));
   const ls = await call('list_scenes', {});
   check('list_scenes through the read-only role: versions 2 and 1, never the hidden one', JSON.stringify(ls?.structuredContent?.scenes?.[0]?.versions?.map((v: any) => v.version)) === '[2,1]' && !JSON.stringify(ls).includes('SECRET'), JSON.stringify(ls).slice(0, 300));
   check('bylines come through the role (current name)', ls?.structuredContent?.scenes?.[0]?.versions?.[0]?.by === '@naaate');
@@ -77,12 +79,12 @@ try {
   check('get_recipe over HTTP names the closed model', (await call('get_recipe', { adaptation: 1, version: 2, shot: '11-b1-4' }))?.structuredContent?.recipe?.chain?.[0]?.model?.closed === true);
   check('a hidden version is refused over HTTP', (await call('get_scene', { adaptation: 1, version: 3 }))?.isError === true);
   ip = 2;
-  const rest = await fetch(BASE + '/api/agent/v1/get_scene?adaptation=1&version=2', { headers: { 'x-forwarded-for': '198.51.100.2' } });
+  const rest = await fetch(BASE + '/api/agent/v1/read?kind=get_scene&adaptation=1&version=2', { headers: { 'x-forwarded-for': '198.51.100.2' } });
   const rj = (await rest.json()) as any;
   check('REST over HTTP: get_scene, 85 shots, open to any origin', rest.ok && rj.shots?.length === 85 && rest.headers.get('access-control-allow-origin') === '*');
   ip = 3;
   let last = 0;
-  for (let i = 0; i < 21; i++) last = (await fetch(BASE + '/api/agent/v1/list_scenes', { headers: { 'x-forwarded-for': '198.51.100.3' } })).status;
+  for (let i = 0; i < 21; i++) last = (await fetch(BASE + '/api/agent/v1/read?kind=list_scenes', { headers: { 'x-forwarded-for': '198.51.100.3' } })).status;
   check('the 21st request in a minute from one caller is refused (429)', last === 429);
   const rows = (await db.query<{ caller: string }>('select caller from studio.api_rate')).rows;
   check('the counter holds hashes, never an address', rows.length > 0 && rows.every((r) => /^[0-9a-f]{32}$/.test(r.caller)) && !JSON.stringify(rows).includes('198.51.100'));

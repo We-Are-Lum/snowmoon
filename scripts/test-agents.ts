@@ -30,7 +30,8 @@ import sharp from 'sharp';
 import { createHash } from 'node:crypto';
 import { privateKeyToAccount } from 'viem/accounts';
 import { createSiweMessage } from 'viem/siwe';
-import { startStage, connect, mcp, tool, ROOT, cimdDocs, falSeen } from './lib/agents-harness';
+import { startStage, connect, mcp, tool, toolAs, listedKinds, ROOT, cimdDocs, falSeen } from './lib/agents-harness';
+import { GROUPS } from '../src/lib/agents/groups';
 import { AGENTS as AGENT_CONFIG } from '../src/lib/config';
 
 const failures: string[] = [];
@@ -204,10 +205,28 @@ try {
   console.log('T  tools');
   const init = await mcp(BASE, agentA, 'initialize', { protocolVersion: '2025-11-25' });
   check('T1 initialize answers 2025-11-25 with instructions', Boolean(init.body?.result && (init.body.result as { protocolVersion?: string }).protocolVersion === '2025-11-25'));
-  const list = (await mcp(BASE, agentA, 'tools/list')).body?.result?.tools ?? [];
+  const served = ((await mcp(BASE, agentA, 'tools/list')).body?.result?.tools ?? []) as unknown as { name: string; annotations: Record<string, unknown>; inputSchema: Record<string, unknown> }[];
+  const list = await listedKinds(BASE, agentA);
   const names = list.map((t) => t.name);
   check('T2 the tools: reads, drafts, feedback, notes, images; nothing that publishes, spends or pays', ['whoami', 'start_idea', 'draft_storyboard', 'draft_frames', 'draft_character_version', 'bring_in_image', 'read_feedback', 'propose_revision', 'leave_note', 'search_book'].every((n) => names.includes(n)) && !names.some((n) => /publish|spend|pay|buy|wallet|transfer/i.test(n)), names.join(','));
   check('T3 write tools are marked as writes, read tools read-only, every tool titled', list.every((t) => typeof t.annotations.title === 'string') && list.find((t) => t.name === 'start_idea')!.annotations.readOnlyHint === false && list.find((t) => t.name === 'search_book')!.annotations.readOnlyHint === true);
+  // Grouped (owner, 2026-11-04): fewer tools to approve; each takes {kind, args}, strictly, with its group's hints.
+  const servedNames = served.map((t) => t.name);
+  check('TG1 the tools are the groups: read, search_book, whoami, draft, edit_my_version, leave_note, tell_the_site, bring_in_image', servedNames.join(',') === 'read,search_book,whoami,draft,edit_my_version,leave_note,tell_the_site,bring_in_image', servedNames.join(','));
+  check('TG2 read-only only on read, search_book and whoami; nothing destructive; nothing open-world', served.every((t) => t.annotations.readOnlyHint === ['read', 'search_book', 'whoami'].includes(t.name) && t.annotations.destructiveHint === false && t.annotations.openWorldHint === false && t.annotations.idempotentHint === t.annotations.readOnlyHint), JSON.stringify(served.map((t) => [t.name, t.annotations])));
+  const grouped = served.filter((t) => (t.inputSchema.properties as Record<string, unknown>).kind);
+  check('TG3 a grouped tool\'s schema: an object with kind (an enum) and args (one strict branch per kind, titled with it); no union at the top', grouped.length === 4 && grouped.every((t) => { const p = t.inputSchema.properties as { kind: { enum: string[] }; args: { anyOf: { title: string; additionalProperties: boolean; type: string }[] } }; return t.inputSchema.type === 'object' && t.inputSchema.additionalProperties === false && !('anyOf' in t.inputSchema) && !('oneOf' in t.inputSchema) && JSON.stringify(p.kind.enum) === JSON.stringify(p.args.anyOf.map((b) => b.title)) && p.args.anyOf.every((b) => b.type === 'object' && b.additionalProperties === false); }));
+  const { AGENT_TOOLS, ungrouped } = await import('../src/lib/agents/tools');
+  const kindsAll = GROUPS.flatMap((g) => g.kinds ?? [g.name]);
+  check('TG4 all 52 tools are in exactly one of the 11 groups, as the owner mapped them', AGENT_TOOLS.length === 52 && kindsAll.length === 52 && new Set(kindsAll).size === 52 && GROUPS.length === 11 && ungrouped().length === 0, `${AGENT_TOOLS.length} ${kindsAll.length} ${ungrouped().join(',')}`);
+  const oldName = await toolAs(BASE, agentA, 'start_idea', { title: 'x', text: 'y' });
+  const badKind = await toolAs(BASE, agentA, 'draft', { kind: 'publish_it', args: {} });
+  const extraTop = await toolAs(BASE, agentA, 'read', { kind: 'list_scenes', args: {}, also: 1 });
+  const extraArg = await toolAs(BASE, agentA, 'read', { kind: 'get_scene', args: { adaptation: 1, version: 2, bogus: true } });
+  const wrongArgs = await toolAs(BASE, agentA, 'read', { kind: 'list_scenes', args: [1] });
+  check('TG5 an old name, an unknown kind, an extra field (top or in args) and args that aren\'t an object are each refused in words', !oldName.ok && /unknown tool: start_idea/.test(oldName.error ?? '') && !badKind.ok && /kind must be one of start_idea/.test(badKind.error ?? '') && !extraTop.ok && /unknown argument: also/.test(extraTop.error ?? '') && !extraArg.ok && /unknown argument: bogus/.test(extraArg.error ?? '') && !wrongArgs.ok && /args must be an object/.test(wrongArgs.error ?? ''), [oldName.error, badKind.error, extraTop.error, extraArg.error, wrongArgs.error].join(' | '));
+  const noArgs = await toolAs(BASE, agentA, 'read', { kind: 'read_requests' });
+  check('TG6 a kind with no fields can leave args out', noArgs.ok, noArgs.error ?? '');
   const who = await tool(BASE, agentA, 'whoami');
   check('T4 whoami: “Claude, agent of @0xa11c…a11c”, drafts only', who.ok && String(who.out.you).startsWith('Claude, agent of @0xa11c') && String(who.out.rule).includes('your person publishes'), JSON.stringify(who.out));
 
@@ -237,7 +256,7 @@ try {
   check('T13 links only to snowmoon.party', !link.ok && /snowmoon\.party/.test(link.error ?? ''));
   const readOnly = (await connect(BASE, people.C.token, 'Reader', 'read')).access_token;
   const scoped = await tool(BASE, readOnly, 'start_idea', { title: 'x', text: 'y' });
-  const scopedList = ((await mcp(BASE, readOnly, 'tools/list')).body?.result?.tools ?? []).map((t) => t.name);
+  const scopedList = (await listedKinds(BASE, readOnly)).map((t) => t.name);
   check('T14 an agent given only "read" sees no draft tools and can’t draft', !scoped.ok && !scopedList.includes('start_idea') && scopedList.includes('search_book'));
 
   console.log('D  drafts stay private until the person publishes');
@@ -453,7 +472,7 @@ try {
     if (!r.ok) { capAt = i; check('E12 the daily cap stops the sixth video test, saying why', r.status === 429 && /most for today/.test((await r.json()).error ?? '')); break; }
   }
   check('E12b …at exactly the sixth', capAt === 6, String(capAt));
-  const editList = ((await mcp(BASE, edA, 'tools/list')).body?.result?.tools ?? []).map((t) => t.name);
+  const editList = (await listedKinds(BASE, edA)).map((t) => t.name);
   check('E13 still nothing that publishes, spends on its own, or pays', ['try_frame', 'swap_take', 'change_timing', 'mark_speaking', 'request_video_test', 'log_gap'].every((n) => editList.includes(n)) && !editList.some((n) => /publish|spend|pay|approve|run/i.test(n)));
 
   console.log('P  pictures, sheets, places and styles (Plan A part 2): attached to one thing, in a chosen style, made only on Make it');
@@ -516,9 +535,9 @@ try {
     const tooMany = await tool(BASE, edA, 'get_passage', { chapter: 4, from: 1, to: 120 });
     const picks = await tool(BASE, edA, 'match_request', { asked: 'A picture of the arena.', wants: 'a picture for a glossary term' });
     check('P18 more than 40 blocks: the refusal gives the exact next call; a picture request lists only the offered styles to ask about', !tooMany.ok && /Next: get_passage \{chapter: 4, from: 1, to: \d+\}/.test(tooMany.error ?? '') && picks.ok && JSON.stringify(picks.out.styles_offered) === '["Techno vistas"]', `${tooMany.error} | ${JSON.stringify(picks.out)}`);
-    const listed = ((await mcp(BASE, edA, 'tools/list')).body?.result?.tools ?? []) as unknown as { name: string; inputSchema: { properties: Record<string, { enum?: string[] }> } }[];
+    const listed = (await listedKinds(BASE, edA)) as unknown as { name: string; inputSchema: { properties: Record<string, { enum?: string[] }> } }[];
     check('P17 tools/list gives style as an enum of the offered styles on each picture tool', ['draft_picture', 'draft_sheet', 'draft_place'].every((n) => JSON.stringify(listed.find((t) => t.name === n)?.inputSchema.properties.style?.enum) === '["Techno vistas"]'), JSON.stringify(listed.find((t) => t.name === 'draft_picture')?.inputSchema.properties.style));
-    const list = ((await mcp(BASE, edA, 'tools/list')).body?.result?.tools ?? []) as unknown as { name: string; inputSchema: { required?: string[] } }[];
+    const list = (await listedKinds(BASE, edA)) as unknown as { name: string; inputSchema: { required?: string[] } }[];
     check('P12 the picture tools are listed, style required on each that takes one', ['draft_picture', 'draft_sheet', 'draft_place'].every((n) => list.find((t) => t.name === n)?.inputSchema.required?.includes('style')) && !!list.find((t) => t.name === 'draft_style'));
   }
 
@@ -581,7 +600,7 @@ try {
     const unconfirmedOwn = await S.pg.query(`insert into studio.direction_notes (person, adaptation_id, version, kind, shot, body) values ($1, 1, 2, 'intent', '14-b1-6', 'x')`, [people.A.person]).then(() => 'kept', (e: Error) => e.message);
     check('N14 the tables refuse a note on a version that doesn’t exist, and a row the person filed without confirmed_at', /foreign key/i.test(noVersion) && /check constraint/i.test(unconfirmedOwn), `${noVersion} | ${unconfirmedOwn}`);
     check('N15 the owner’s agents have higher daily counts (500 drafts, 200 notes, 150 images); everyone else keeps 50, 20 and 50; the per-minute brakes are the same', AGENT_CONFIG.limitsFor[6786]?.drafts === 500 && AGENT_CONFIG.limitsFor[6786]?.notes === 200 && AGENT_CONFIG.limitsFor[6786]?.images === 150 && AGENT_CONFIG.limits.drafts === 50 && AGENT_CONFIG.limits.notes === 20 && AGENT_CONFIG.limits.images === 50 && !('imagesPerMinute' in (AGENT_CONFIG.limitsFor[6786] ?? {})));
-    const dList = ((await mcp(BASE, edA, 'tools/list')).body?.result?.tools ?? []).map((t) => t.name);
+    const dList = (await listedKinds(BASE, edA)).map((t) => t.name);
     check('N12 the four direction tools are there, and still nothing that publishes or spends', ['find_line', 'get_direction', 'add_direction', 'rewrite_line'].every((n) => dList.includes(n)) && !dList.some((n) => /publish|spend|pay|approve|run/i.test(n)));
   }
 
@@ -718,10 +737,10 @@ try {
   const real = (f: string) => ({ file: f, src: readReal(f) });
   const head = "import { NextResponse } from 'next/server';\nimport { agentFromRequest } from '~/lib/agents/core';\n";
   const guard = "  const agent = await agentFromRequest(request).catch(() => null);\n  if (!agent) return NextResponse.json({ error: 'token' }, { status: 401 });\n";
-  const draftOnly = { file: 'src/app/api/planted-draft/route.ts', src: `${head}import { runTool } from '~/lib/agents/tools';\nexport async function POST(request: Request) {\n${guard}  return NextResponse.json(await runTool(agent, 'start_idea', await request.json()));\n}\n` };
+  const draftOnly = { file: 'src/app/api/planted-draft/route.ts', src: `${head}import { runTool } from '~/lib/agents/tools';\nexport async function POST(request: Request) {\n${guard}  return NextResponse.json(await runTool(agent, 'draft', { kind: 'start_idea', args: await request.json() }));\n}\n` };
   const publishes = { file: 'src/app/api/planted-publish/route.ts', src: `${head}import { decide } from '~/lib/agents/pieces';\nexport async function POST(request: Request) {\n${guard}  const b = await request.json();\n  return NextResponse.json({ ok: await decide(agent.person, 'version', b.id, 'publish') });\n}\n` };
-  const keeps = { file: 'src/app/api/planted-keep/route.ts', src: `${head}import { runTool } from '~/lib/agents/tools';\nexport async function POST(request: Request) {\n${guard}  const b = await request.json();\n  await fetch('/api/drafts', { method: 'POST', body: JSON.stringify({ what: 'version', id: b.id, action: 'keep' }) });\n  return NextResponse.json(await runTool(agent, 'start_idea', b));\n}\n` };
-  const noToken = { file: 'src/app/api/planted-open/route.ts', src: `import { NextResponse } from 'next/server';\nimport { runTool } from '~/lib/agents/tools';\nexport async function POST(request: Request) {\n  return NextResponse.json(await runTool({} as never, 'start_idea', await request.json()));\n}\n` };
+  const keeps = { file: 'src/app/api/planted-keep/route.ts', src: `${head}import { runTool } from '~/lib/agents/tools';\nexport async function POST(request: Request) {\n${guard}  const b = await request.json();\n  await fetch('/api/drafts', { method: 'POST', body: JSON.stringify({ what: 'version', id: b.id, action: 'keep' }) });\n  return NextResponse.json(await runTool(agent, 'draft', { kind: 'start_idea', args: b }));\n}\n` };
+  const noToken = { file: 'src/app/api/planted-open/route.ts', src: `import { NextResponse } from 'next/server';\nimport { runTool } from '~/lib/agents/tools';\nexport async function POST(request: Request) {\n  return NextResponse.json(await runTool({} as never, 'draft', { kind: 'start_idea', args: await request.json() }));\n}\n` };
   const p = (r: { file: string; src: string }[], read = readReal) => p4aProblems(r, read);
   const realAgentRoutes = ['src/app/mcp/route.ts', 'src/app/api/agent/v1/[tool]/route.ts', 'src/app/api/oauth/register/route.ts', 'src/app/api/oauth/token/route.ts', 'src/app/api/oauth/revoke/route.ts', 'src/app/api/agents/wallet/link/route.ts', 'src/app/api/agents/wallet/token/route.ts'].map(real);
   check('G1 the real agent routes (/mcp, REST POST) and the agent sign-in routes pass', p(realAgentRoutes).length === 0, p(realAgentRoutes).join('; '));
@@ -732,6 +751,18 @@ try {
   check('G4 an agent route that can publish fails', p([publishes]).some((x) => x.includes('can publish or keep')), p([publishes]).join('; '));
   check('G5 an agent route that can keep fails', p([keeps]).some((x) => x.includes('can publish or keep') && x.includes('keep')), p([keeps]).join('; '));
   check('G6 a route reaching the tools without an agent\'s token fails', p([noToken]).some((x) => x.includes('without an agent\'s token')));
+  // The grouped tools (owner, 2026-11-04): a group's names and kinds are inspected like the tools'.
+  const groupsSrc = readReal('src/lib/agents/groups.ts');
+  const strayKind = agentToolProblems(readWith({ 'src/lib/agents/groups.ts': groupsSrc.replace("'get_scene', ", "'get_scene', 'run_approved', ") }));
+  check('G2c a group serving a kind that isn\'t an inspected tool fails', strayKind.some((x) => x.includes('"run_approved", which is not an inspected tool')), strayKind.join('; '));
+  const publishGroup = agentToolProblems(readWith({ 'src/lib/agents/groups.ts': groupsSrc.replace("name: 'tell_the_site'", "name: 'publish_all'") }));
+  check('G2d a group named for publishing fails', publishGroup.some((x) => x.includes('"publish_all" publishes')), publishGroup.join('; '));
+  const twoGroups = agentToolProblems(readWith({ 'src/lib/agents/groups.ts': groupsSrc.replace("'log_gap', 'suggest_improvement'", "'log_gap', 'suggest_improvement', 'get_scene'") }));
+  check('G2e a kind in two groups fails', twoGroups.some((x) => x.includes('"get_scene" is in two groups')), twoGroups.join('; '));
+  const mpSpends = agentToolProblems(readWith({ 'src/lib/minpentai/agent-play/tools.ts': readReal('src/lib/minpentai/agent-play/tools.ts').replace("import 'server-only';", "import 'server-only';\nimport { runApproved } from '../../agents/approve';") }));
+  check('G2f the Minpentai tools reaching the spending code (agents/approve) fail', mpSpends.some((x) => x.includes('agent-play/tools.ts: imports ../../agents/approve, which spends')), mpSpends.join('; '));
+  const paidDirect = agentToolProblems(readWith({ 'src/lib/agents/tools.ts': readReal('src/lib/agents/tools.ts').replace("import 'server-only';", "import 'server-only';\nimport { paidPicture } from '../images/paid';") }));
+  check('G2g the tools importing a paid picture (images/paid) directly fail', paidDirect.some((x) => x.includes('imports ../images/paid')), paidDirect.join('; '));
   const tools = readReal('src/lib/agents/tools.ts');
   const keepTool = tools.replace("name: 'leave_note',", "name: 'keep_draft',");
   check('G7 a tool that keeps, served to agents, fails the draft-only route too', p([draftOnly], readWith({ 'src/lib/agents/tools.ts': keepTool })).some((x) => x.includes('keep_draft')));
@@ -757,6 +788,8 @@ console.log('M  owner-only mode (public pages off)');
     const mcpAnon = await fetch(`${M.BASE}/mcp`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: '{"jsonrpc":"2.0","id":1,"method":"ping"}' });
     const mdText = md.ok ? await md.text() : '';
     check('M1 agents.md is there (site-wide) and names the endpoint and the key header; /p is not; the connector and its metadata are', md.ok && mdText.split('\n')[2] === 'Connecting is open only to accounts the site has invited for now.' && mdText.includes(`${M.BASE}/mcp`) && mdText.includes('X-Snowmoon-Key') && !/sk1_[A-Za-z0-9_-]{20}/.test(mdText) && list.status === 404 && meta.ok && mcpAnon.status === 401, `${md.status} ${list.status} ${meta.status} ${mcpAnon.status}`);
+    const nonPlay = GROUPS.filter((g) => !g.name.startsWith('minpentai_'));
+    check('M1b agents.md names every tool group and every kind it serves, and how to call a kind', nonPlay.every((g) => mdText.includes(`\`${g.name}\``) && (g.kinds ?? []).every((k) => mdText.includes(`\`${k}\``))) && mdText.includes('{"kind": …, "args": {…}}'), nonPlay.flatMap((g) => [g.name, ...(g.kinds ?? [])]).filter((n) => !mdText.includes(`\`${n}\``)).join(','));
     const owner = await connect(M.BASE, M.people.A.token, 'Claude');
     const idea = await tool(M.BASE, owner.access_token, 'start_idea', { title: 'x', text: 'an idea' });
     await fetch(`${M.BASE}/api/drafts`, { method: 'POST', headers: { 'content-type': 'application/json', authorization: `Bearer ${M.people.A.token}` }, body: JSON.stringify({ what: 'version', id: idea.out.version, action: 'keep' }) });
@@ -780,7 +813,7 @@ console.log('M  owner-only mode (public pages off)');
     const viaHeader = await fetch(`${M.BASE}/mcp`, { method: 'POST', headers: { 'content-type': 'application/json', 'X-Snowmoon-Key': mk.key }, body: JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'tools/call', params: { name: 'whoami', arguments: {} } }) });
     const hv = ((await viaHeader.json()) as { result?: { structuredContent?: Record<string, unknown> } }).result?.structuredContent ?? {};
     check('K3 the key works as a bearer token and in the X-Snowmoon-Key header; whoami shows the cap', viaBearer.ok && (viaBearer.out as { spend_cap_usd?: number }).spend_cap_usd === 0.06 && (hv as { spend_cap_usd?: number }).spend_cap_usd === 0.06);
-    const kTools = ((await mcp(M.BASE, mk.key, 'tools/list')).body?.result?.tools ?? []).map((t) => t.name);
+    const kTools = (await listedKinds(M.BASE, mk.key)).map((t) => t.name);
     const kAsPerson = await fetch(`${M.BASE}/api/drafts`, { headers: { authorization: `Bearer ${mk.key}` } });
     const inUrl = await fetch(`${M.BASE}/mcp?key=${mk.key}`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: '{"jsonrpc":"2.0","id":1,"method":"ping"}' });
     check('K4 drafts only: no image tool, no way to the person’s own routes, and never from a URL', kTools.includes('try_frame') && !kTools.includes('bring_in_image') && kAsPerson.status !== 200 && inUrl.status === 401, `${kAsPerson.status} ${inUrl.status}`);

@@ -15,6 +15,9 @@ import path from 'node:path';
 import { PGlite } from '@electric-sql/pglite';
 import { PGLiteSocketServer } from '@electric-sql/pglite-socket';
 import { failOnProtocolErrors, gatePglite } from './pglite-gate';
+import { callFor } from '../../src/lib/agents/groups';
+import { kindsOf, type Listed } from './agent-kinds';
+export { kindsOf, type KindListed } from './agent-kinds';
 
 export const ROOT = path.resolve(import.meta.dirname, '../..');
 const SECRET = 'z'.repeat(48);
@@ -215,8 +218,22 @@ export async function mcp(BASE: string, token: string, method: string, params: R
   return { status: r.status, headers: r.headers, body: (await r.json().catch(() => null)) as { result?: { structuredContent?: Record<string, unknown>; isError?: boolean; content?: { text: string }[]; tools?: { name: string; annotations: Record<string, unknown> }[] }; error?: { message: string } } | null };
 }
 
+/**
+ * Calls a tool by its own name, through the tool that serves it now (owner, 2026-11-04): a kind goes to its group
+ * as {kind, args} (src/lib/agents/groups.ts callFor); a tool on its own, or a name that is no tool, as it is.
+ * toolAs calls a served name with exactly the arguments given.
+ */
 export async function tool(BASE: string, token: string, name: string, args: Record<string, unknown> = {}) {
+  const c = callFor(name, args);
+  return toolAs(BASE, token, c.name, c.arguments);
+}
+export async function toolAs(BASE: string, token: string, name: string, args: Record<string, unknown> = {}) {
   const r = await mcp(BASE, token, 'tools/call', { name, arguments: args });
   const res = r.body?.result;
   return { ok: res?.isError === false, out: (res?.structuredContent ?? {}) as Record<string, unknown> & { version?: string; piece?: string }, error: res?.isError ? res.content?.[0]?.text ?? '' : null };
+}
+
+/** The kinds an agent is shown (kindsOf its tools/list). */
+export async function listedKinds(BASE: string, token: string) {
+  return kindsOf((await mcp(BASE, token, 'tools/list')).body?.result?.tools as Listed[] | undefined);
 }

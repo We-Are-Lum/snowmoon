@@ -7,6 +7,13 @@ consent v5.
 
 ## What it is
 
+**Grouped (owner, 2026-11-04; branch `agent-tools-grouped`, not live).** The tools are now served as two: `search_book`,
+and `read`, which takes `{"kind": <one of the tools below>, "args": {<its arguments>}}`. Over REST:
+`GET /api/agent/v1/read?kind=get_shot&adaptation=1&version=2&shot=…` (or `&args=<the arguments as JSON>`, needed for
+`get_sheet`, whose own argument is called `kind`), and `GET /api/agent/v1/search_book?query=…`. The old per-tool
+names and paths are gone. The table below lists the kinds (plus `get_glossary`, `get_sheet` and `get_references`, added
+since).
+
 The same seven read-only tools, served two ways:
 - **MCP**, Streamable HTTP: `POST https://snowmoon.party/api/mcp`, one JSON-RPC message per request, answered as
   `application/json`. There's no session and no stream. Methods: `initialize`, `ping`, `tools/list`, `tools/call`.

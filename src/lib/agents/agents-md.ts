@@ -91,33 +91,50 @@ your drafts stay with them.
 
 1. Call \`whoami\`. It tells you your name here, your person, your scopes, your limits and (with a key)
    your spend cap.
-2. Call \`read_requests\`. Your person's ideas and notes, typed or spoken on their You page, are your
-   to-do list. Answer each one with a draft (pass \`answering\`: the request's id). A note your person
-   made by pausing the film says the time and the line spoken there; act on their own version of that
-   scene, never someone else's.
+2. Call \`read\` with \`{"kind": "read_requests"}\`. Your person's ideas and notes, typed or spoken on
+   their You page, are your to-do list. Answer each one with a draft (pass \`answering\`: the request's id).
+   A note your person made by pausing the film says the time and the line spoken there; act on their own
+   version of that scene, never someone else's.
 3. Tell your person what's waiting for them on ${site}/you.
 
-## What you can do
+## The tools
 
-- **Read:** \`search_book\`, \`get_passage\`, \`list_scenes\`, \`get_scene\`, \`get_shot\`, \`get_recipe\`,
-  \`get_moment\`, \`list_my_work\`, \`get_piece\`, \`read_requests\`, \`read_feedback\`,
-  \`read_my_suggestions\`.
-- **Draft** (private until your person keeps it): \`start_idea\`, \`draft_storyboard\`, \`draft_frames\`
-  (prompts for shots), \`draft_character_version\`, \`propose_revision\`, \`leave_note\`.
-- **Edit your person's own scene version** (each one is a draft for them to keep):
-  - \`list_takes\`: a shot's lines and the voice takes for each;
+Most tools are groups: you call one with \`{"kind": …, "args": {…}}\`, where \`kind\` says what to do
+and \`args\` holds that kind's own fields (leave it out for a kind with none). A field a kind doesn't
+take is refused. For example:
+
+    {"name": "read", "arguments": {"kind": "get_shot", "args": {"adaptation": 1, "version": 2, "shot": "11-b1-4"}}}
+
+- **\`read\`** (read only), kinds: \`get_scene\`, \`get_shot\`, \`get_moment\`, \`get_passage\`,
+  \`get_piece\`, \`get_recipe\`, \`list_scenes\`, \`list_takes\` (a shot's lines and the voice takes
+  for each), \`list_my_work\`, \`find_line\`, \`get_direction\`, \`read_feedback\`, \`read_requests\`,
+  \`read_my_suggestions\`, \`get_sheet\`, \`get_glossary\`, \`get_references\` and \`match_request\`
+  (what your person wants to make, matched to the kinds that make it; when nothing does, it records the
+  gap for the site's owner).
+- **\`search_book\`** and **\`whoami\`** (read only), on their own.
+- **\`draft\`** (private until your person keeps it), kinds: \`start_idea\`, \`draft_storyboard\`,
+  \`draft_frames\` (prompts for shots), \`draft_character_version\`, \`propose_revision\`,
+  \`rewrite_line\` and \`add_direction\` (your person's own words, exactly), \`draft_picture\`,
+  \`draft_sheet\`, \`draft_place\` and \`draft_style\`.
+- **\`edit_my_version\`**: edits to your person's own scene version, each a draft for them to keep.
+  Kinds:
   - \`try_frame\`: a new frame for a shot, from your person's note;
+  - \`set_camera\`: a shot's camera and staging, in words;
   - \`swap_take\`: another take of a line;
   - \`change_timing\`: a shot's start and end;
   - \`mark_speaking\`: who speaks in a shot;
   - \`request_video_test\`: a short video of a shot.
-- **Costs:** a frame (up to about $0.05) or a video test (about $0.054) is only an estimate when you
-  draft it. Nothing is made or spent until your person approves it on their You page. The daily
+- **\`leave_note\`**: a draft note on a version, on its own.
+- **\`tell_the_site\`**, kinds: \`log_gap\` (when you can't do something: what your person asked and
+  what was missing, then tell them; they see these on their You page, and so does the site's owner) and
+  \`suggest_improvement\` (when your person wishes for a feature or says how the site could be better:
+  their words, with the page they were on; only the site's owner reads these).
+- **\`bring_in_image\`**: an image you made elsewhere, with its recipe as you declare it, on its own.
+- **Costs:** a frame (up to about $0.05), a video test (about $0.054) or a picture is only an estimate
+  when you draft it. Nothing is made or spent until your person approves it on their You page. The daily
   limits are ${S.framesPerDay} frames, ${S.videosPerDay} video tests and $${S.dailyCapUsd} in all, and a key's own cap applies too.
-- **When you can't do something**, call \`log_gap\` with what your person asked and what was missing,
-  then tell them. They see these on their You page, and so does the site's owner.
-- **When your person wishes for a feature or says how the site could be better**, pass it on with \`suggest_improvement\`, in
-  their words, with the page they were on. Only the site's owner reads these.
+
+Each kind keeps its own limits and is recorded under its own name when it fails.
 
 ## Limits
 
@@ -139,8 +156,11 @@ ${AGENTS.perPerson} agents at a time.
 ${AGENT_API.enabled ? `
 ## Without connecting
 
-The read-only tools (\`search_book\`, \`get_passage\`, \`list_scenes\`, \`get_scene\`, \`get_shot\`,
-\`get_recipe\`, \`get_moment\`) are open at ${site}/api/mcp and as \`GET ${site}/api/agent/v1/<tool>\`, at
-20 requests a minute. They show only what the site shows anyone.
+The read-only tools are open at ${site}/api/mcp: \`search_book\`, and \`read\` with the kinds
+\`get_passage\`, \`get_glossary\`, \`get_sheet\`, \`get_references\`, \`list_scenes\`, \`get_scene\`,
+\`get_shot\`, \`get_recipe\` and \`get_moment\`. As REST they are
+\`GET ${site}/api/agent/v1/read?kind=<kind>&<its fields>\` (or \`&args=<its fields as JSON>\`) and
+\`GET ${site}/api/agent/v1/search_book?query=…\`, at 20 requests a minute. They show only what the site
+shows anyone.
 ` : ''}`;
 }

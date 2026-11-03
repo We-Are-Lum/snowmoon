@@ -11,6 +11,7 @@ import { readdirSync, readFileSync } from 'node:fs';
 import { PGlite } from '@electric-sql/pglite';
 import { PGLiteSocketServer } from '@electric-sql/pglite-socket';
 import { failOnProtocolErrors, gatePglite } from './lib/pglite-gate';
+import { kindsOf } from './lib/agent-kinds';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const failures: string[] = [];
@@ -55,8 +56,10 @@ const rpc = async (method: string, params?: unknown, id: number | null = 1) => {
   try { body = text ? JSON.parse(text) : null; } catch { body = null; }
   return { status: res.status, body };
 };
-const call = async (name: string, args: Record<string, unknown>) => (await rpc('tools/call', { name, arguments: args })).body?.result;
-const rest = async (tool: string, q = '') => REST(new Request(`https://snowmoon.party/api/agent/v1/${tool}${q}`, { headers: { 'x-forwarded-for': from() } }), { params: Promise.resolve({ tool }) });
+// Grouped (owner, 2026-11-04): search_book on its own, every other read tool a kind of read.
+const call = async (name: string, args: Record<string, unknown>) => (await rpc('tools/call', name === 'search_book' ? { name, arguments: args } : { name: 'read', arguments: { kind: name, args } })).body?.result;
+const restAs = async (tool: string, q = '') => REST(new Request(`https://snowmoon.party/api/agent/v1/${tool}${q}`, { headers: { 'x-forwarded-for': from() } }), { params: Promise.resolve({ tool }) });
+const rest = async (tool: string, q = '') => (tool === 'tools' || tool === 'search_book' ? restAs(tool, q) : restAs('read', `?kind=${tool}${q ? `&${q.slice(1)}` : ''}`));
 
 delete process.env.AGENT_API_TEST;
 check('switched off (AGENT_API.enabled false): nothing is answered', (await rpc('initialize')).status === 404 && (await rest('tools')).status === 404);
@@ -66,9 +69,12 @@ const init = await rpc('initialize', { protocolVersion: '2025-06-18', capabiliti
 check('initialize answers the protocol, the server and its instructions', init.body?.result?.protocolVersion === '2025-06-18' && init.body?.result?.capabilities?.tools && /read-only/i.test(init.body?.result?.instructions ?? '') && /not affiliated/i.test(init.body?.result?.instructions ?? ''));
 check('an unknown protocol version gets the newest', (await rpc('initialize', { protocolVersion: '1999-01-01' })).body?.result?.protocolVersion === '2025-06-18');
 check('a notification gets no answer (202)', (await rpc('notifications/initialized', undefined, null)).status === 202);
-const list = (await rpc('tools/list')).body?.result?.tools ?? [];
+const served = (await rpc('tools/list')).body?.result?.tools ?? [];
+const list = kindsOf(served);
 const names = list.map((t: any) => t.name).sort().join(',');
 check('tools/list: the ten read tools, each with a schema, all read only', names === 'get_glossary,get_moment,get_passage,get_recipe,get_references,get_scene,get_sheet,get_shot,list_scenes,search_book' && list.every((t: any) => t.inputSchema?.type === 'object' && t.annotations?.readOnlyHint === true), names);
+check('tools/list: grouped as two tools, read (a kind for each read tool, strictly) and search_book', served.map((t: any) => t.name).join(',') === 'search_book,read' && served.every((t: any) => t.inputSchema?.additionalProperties === false && !t.inputSchema?.anyOf) && list.every((t: any) => t.inputSchema?.additionalProperties === false), served.map((t: any) => t.name).join(','));
+check('a read kind with a field it doesn\'t take, or an unknown kind, is the tool\'s own error', (await rpc('tools/call', { name: 'read', arguments: { kind: 'get_scene', args: { adaptation: 1, version: 2, extra: 1 } } })).body?.result?.isError === true && (await rpc('tools/call', { name: 'read', arguments: { kind: 'search_book', args: { query: 'Minpentai' } } })).body?.result?.isError === true && (await rpc('tools/call', { name: 'get_scene', arguments: { adaptation: 1, version: 2 } })).body?.error?.code === -32602);
 
 const sb = await call('search_book', { query: 'Minpentai', limit: 3 });
 check('search_book: hits with block ids and links, the book and its licence', !sb.isError && sb.structuredContent.hits.length === 3 && /^c\d+-b\d+$/.test(sb.structuredContent.hits[0].block_id) && sb.structuredContent.book.licence === 'GPL-3.0', JSON.stringify(sb).slice(0, 200));
@@ -120,10 +126,13 @@ check('an unknown method is refused', (await rpc('resources/list')).body?.error?
 
 ip = 2;
 const rt = await rest('tools');
-check('REST: the same tools listed', rt.ok && ((await rt.json()) as any).tools.length === 10);
+const rtj = (await rt.json()) as any;
+check('REST: the same tools listed', rt.ok && rtj.tools.length === 2 && kindsOf(rtj.tools).length === 10);
 const rs = await rest('get_shot', '?adaptation=1&version=2&shot=11-b1-4');
 check('REST: get_shot answers the same shot', rs.ok && ((await rs.json()) as any).shot === '11-b1-4');
-check('REST: a bad argument is 400, an unknown tool 404', (await rest('get_shot', '?adaptation=1&version=2&shot=nope')).status === 400 && (await rest('write_line')).status === 404);
+const rsheet = await restAs('read', `?kind=get_sheet&args=${encodeURIComponent(JSON.stringify({ kind: 'character', slug: 'bai' }))}`);
+check('REST: a kind\'s fields as JSON in args (get_sheet has its own kind); the old per-tool path is gone (404)', rsheet.ok && Array.isArray(((await rsheet.json()) as any).book_facts) && (await restAs('get_shot', '?adaptation=1&version=2&shot=11-b1-4')).status === 404);
+check('REST: a bad argument is 400, an unknown tool 404', (await rest('get_shot', '?adaptation=1&version=2&shot=nope')).status === 400 && (await restAs('write_line')).status === 404 && (await rest('write_line')).status === 400);
 
 ip = 3;
 let last = 0;

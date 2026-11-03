@@ -13,7 +13,7 @@
  * side's view while the match is on.
  */
 import { createHash } from 'node:crypto';
-import { startStage, connect, mcp, tool } from './lib/agents-harness';
+import { startStage, connect, mcp, tool, listedKinds } from './lib/agents-harness';
 import { AGENTS } from '../src/lib/config';
 import { QUIET_MS } from '../src/lib/minpentai/agent-play/solo';
 
@@ -36,7 +36,7 @@ try {
   // Scopes: "play" only when asked for, and only then are the tools listed.
   // An app that asks only for the scopes /mcp names (as Claude does): someone agent play is open to gets "play" too.
   const plain = await connect(BASE, people.A.token, 'Claude');
-  const listPlain = ((await mcp(BASE, plain.access_token, 'tools/list')).body?.result?.tools ?? []).map((t) => t.name);
+  const listPlain = (await listedKinds(BASE, plain.access_token)).map((t) => t.name);
   check('M1 a person agent play is open to gets the Minpentai tools even when the app asked only for the usual scopes', listPlain.includes('minpentai_start_solo'), listPlain.join(','));
   const dPlain = await connect(BASE, people.C.token, 'Claude');
   const refused = await tool(BASE, dPlain.access_token, 'minpentai_start_solo', {});
@@ -44,13 +44,17 @@ try {
   const a = await connect(BASE, people.A.token, 'Claude', 'read play');
   const init = await mcp(BASE, a.access_token, 'initialize', { protocolVersion: '2025-11-25', capabilities: {}, clientInfo: { name: 'scripted-agent', version: '1' } });
   check('M3 initialize answers as an MCP server', !!(init.body?.result as { serverInfo?: unknown })?.serverInfo);
-  const names = ((await mcp(BASE, a.access_token, 'tools/list')).body?.result?.tools ?? []).map((t) => t.name);
+  const names = (await listedKinds(BASE, a.access_token)).map((t) => t.name);
   const want = ['minpentai_start_solo', 'minpentai_list_my_matches', 'minpentai_get_view', 'minpentai_simulate', 'minpentai_symbol_launches', 'minpentai_submit_orders', 'minpentai_let_site_play_turn', 'minpentai_set_standing_order', 'minpentai_resign', 'minpentai_new_live_link', 'minpentai_get_record'];
   check('M4 an agent given "play" sees the Minpentai tools', want.every((n) => names.includes(n)), names.join(','));
+  // Grouped (owner, 2026-11-04): the Minpentai tools as three, minpentai_resign alone and marked destructive.
+  const mServed = ((await mcp(BASE, a.access_token, 'tools/list')).body?.result?.tools ?? []).filter((t) => t.name.startsWith('minpentai_'));
+  const hint = (n: string) => mServed.find((t) => t.name === n)?.annotations ?? {};
+  check('M4b the Minpentai tools are minpentai_read (read-only), minpentai_play and minpentai_resign (destructive, alone)', mServed.map((t) => t.name).join(',') === 'minpentai_read,minpentai_play,minpentai_resign' && hint('minpentai_read').readOnlyHint === true && hint('minpentai_play').readOnlyHint === false && hint('minpentai_play').destructiveHint === false && hint('minpentai_resign').destructiveHint === true && hint('minpentai_resign').readOnlyHint === false, JSON.stringify(mServed.map((t) => [t.name, t.annotations])));
 
   // Someone agent play isn't open to: asking for "play" gets them nothing.
   const c = await connect(BASE, people.C.token, 'Claude', 'read play');
-  const cList = ((await mcp(BASE, c.access_token, 'tools/list')).body?.result?.tools ?? []).map((t) => t.name);
+  const cList = (await listedKinds(BASE, c.access_token)).map((t) => t.name);
   const cTry = await tool(BASE, c.access_token, 'minpentai_start_solo', {});
   check('M28 a person agent play isn\'t open to: no "play" scope granted, no tool listed, none runs', !cList.some((n) => n.startsWith('minpentai_')) && !cTry.ok, `${cList.join(',')} / ${cTry.error}`);
   check('M29 the people it is open to are the ones set (A and B here)', [people.A.person, people.B.person].join(',') === process.env.MINPENTAI_PLAY_TEST_PEOPLE, `${people.A.person},${people.B.person}`);
@@ -76,7 +80,7 @@ try {
   const cLaunch = await tool(BASE, c.access_token, 'minpentai_symbol_launches', { match_id: id, x: 9, y: 3 });
   check('M32 someone agent play isn\'t open to can\'t call the launches helper', !cLaunch.ok && !cList.includes('minpentai_symbol_launches'), cLaunch.error ?? '');
   const ownLaunch = await tool(BASE, a.access_token, 'minpentai_symbol_launches', { match_id: id, x: 9, y: 3 });
-  const tools = (await mcp(BASE, a.access_token, 'tools/list')).body?.result?.tools as { name: string; description?: string }[] | undefined;
+  const tools = await listedKinds(BASE, a.access_token);
   const desc = (n: string) => tools?.find((x) => x.name === n)?.description ?? '';
   check('M33 the person\'s own agent gets launches (or why none) for its match, and the view carries the rules and the pieces page', ownLaunch.ok && Array.isArray(ownLaunch.out.options) && (ownLaunch.out.options.length > 0 || typeof ownLaunch.out.why_none === 'string') && Array.isArray((st.out.view as { rules?: unknown }).rules) && /\/minpentai\/book$/.test(String((st.out.view as { how_the_pieces_work?: unknown }).how_the_pieces_work)), ownLaunch.error ?? JSON.stringify(ownLaunch.out).slice(0, 200));
   check('M34 the tool descriptions say the launch directions, own pieces blocking launch cells, bounce and chip, head-on, convergence with an example, and sight', ['minpentai_start_solo', 'minpentai_get_view', 'minpentai_simulate', 'minpentai_submit_orders'].every((n) => /N, E, S or W only/.test(desc(n)) && /your own squares and pieces take away your own launch cells/.test(desc(n)) && /chip your own squares/.test(desc(n)) && /head-on/.test(desc(n))) && /rows 4, 5, 6/.test(desc('minpentai_simulate')) && /rows 4, 5, 6/.test(desc('minpentai_symbol_launches')) && /Sight: you see within/.test(desc('minpentai_get_view')));
