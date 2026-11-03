@@ -60,6 +60,8 @@ export const CHALLENGE_WORDING = {
   /** On a challenge character's sheet that isn't an entry, while the window is open (launch rehearsal, 2026-11-02: no page but an entry linked to /challenge). */
   sheetInvite: (name: string) => `${name} is in the remix challenge: fork this sheet, change it and publish to enter.`,
   candidateNote: 'Made during the remix challenge. Its maker’s latest version counts unless they mark another.',
+  /** A candidate's note once entries are closed: marking is refused then (launch rehearsal, 2026-11-02). */
+  candidateClosedNote: (name: string) => `Made during the remix challenge. Entries are closed: its maker’s entry for ${name} is another version.`,
   adminNote: 'Made by an admin during the remix challenge: admins aren’t eligible for rewards.',
   mark: 'Mark as my entry',
   marked: 'Marked as your entry.',

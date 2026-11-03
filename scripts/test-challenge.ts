@@ -608,6 +608,11 @@ check('as committed, CHALLENGE.entries, posts and openSheets are on (owner\'s re
   const preselect = (f: string, n: string) => /useState<string \| null>\(\(\) => \(p\.source\?\.style && p\.styles\.some\(\(s\) => s\.versionId === p\.source!\.style\) \? p\.source\.style : null\)\)/.test(f) && /style: src\.shown\.body\.style\?\.version_id \?\? null,/.test(n);
   check('R8 a fork or new version starts with its source\'s style chosen (when still published)', preselect(form, newPage));
   proof('R8 a form that starts with no style is caught', !preselect(form.replace('useState<string | null>(() => (p.source?.style', 'useState<string | null>(() => (null && p.source?.style'), newPage));
+  // R9: after the close, a candidate's page still offered "Mark as my entry", which then said "Entries are closed."
+  const vp = read('src/app/references/designs/[id]/page.tsx');
+  const closedNoButton = (src: string) => /standing\?\.kind === 'candidate' &&[\s\S]{0,200}\(phase\(\) === 'open' \?[\s\S]{0,300}<ChallengeMark[\s\S]{0,120}\) : \(\s*<p className="dz-meta ch-standing dz-muted">\{CW\.candidateClosedNote\(callName\)\}<\/p>/.test(src);
+  check('R9 after the close a candidate shows the closed note and no mark button', closedNoButton(vp) && /Entries are closed/.test(CW.candidateClosedNote('Bai')) && /Bai/.test(CW.candidateClosedNote('Bai')));
+  proof('R9 a mark button offered after the close is caught', !closedNoButton(vp.replace("(phase() === 'open' ?", '(true ?').replace(/\(phase\(\) === 'open' \?/, '(true ?')) || !closedNoButton(vp.replace('{CW.candidateClosedNote(callName)}', '<ChallengeMark versionId={d.shown.versionId} byFid={d.byFid} />')));
 }
 
 console.log(`test:challenge: ${passed} passed, ${failures.length} failed`);
