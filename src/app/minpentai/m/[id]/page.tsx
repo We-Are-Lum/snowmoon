@@ -59,6 +59,12 @@ export default async function LiveLink({ params, searchParams }: { params: Promi
             <ul className="mb-moves">{last.placements.length ? last.placements.map((p, i) => <li key={i}>{say(p as Move)}<span className="mb-who">{WHO[last.source] ?? last.source}</span></li>) : <li>Nothing placed.</li>}</ul>
           </>
         ) : <p>No turn played yet.</p>}
+        {v.last_turn_summary ? (
+          <>
+            <h3>What your side saw happen (steps {v.last_turn_summary.from_step}–{v.last_turn_summary.from_step + v.every})</h3>
+            <ul className="mb-moves">{v.last_turn_summary.lines.map((l, i) => <li key={i}>{l}</li>)}</ul>
+          </>
+        ) : null}
 
         {!end ? (
           <>

@@ -20,7 +20,7 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { isDeepStrictEqual } from 'node:util';
-import { verdict, type AnyPiece, type Placement } from '../src/lib/minpentai/versions/engine';
+import { verdict, type AnyPiece, type Kills, type Placement } from '../src/lib/minpentai/versions/engine';
 import { CURRENT, DRAFTS, RULESETS, autopilot, checkComputer, planComputer, ordersText, linkOpens, newSolo, parseOrders, recordOf, replay, resign, rulesFor, rulesOf, setStanding, simulate, SoloError, submit, symbolLaunches, viewFor, type RulesetName, type SoloMatch } from '../src/lib/minpentai/agent-play/solo';
 
 let checks = 0;
@@ -252,7 +252,7 @@ playOut('play', 202);
   {
     const m = mk('book-2', 32), v = viewFor(m) as Record<string, unknown>;
     const old = ['match_id', 'side', 'opponent', 'ruleset', 'rule', 'phase', 'turn', 'step', 'max_steps', 'every', 'board_size', 'sight', 'reach', 'points', 'costs', 'board', 'last_seen_enemy_towers', 'can_place', 'my_orders', 'standing_order', 'my_turns', 'end'];
-    ok(isDeepStrictEqual(Object.keys(v), [...old, 'rules', 'how_the_pieces_work']) && isDeepStrictEqual(viewFor(json(m)), v), 'the view keeps every field it had, adds only rules and how_the_pieces_work, and is the same each time');
+    ok(isDeepStrictEqual(Object.keys(v), [...old, 'rules', 'how_the_pieces_work', 'last_turn_summary']) && isDeepStrictEqual(viewFor(json(m)), v), 'the view keeps every field it had, adds only rules, how_the_pieces_work and last_turn_summary, and is the same each time');
   }
   // The lines' claims, checked against the engine on a bare book-3 board.
   {
@@ -320,6 +320,49 @@ playOut('play', 202);
     ok(front.warnings?.some((w) => new RegExp(`square at \\(${Math.max(...xs)},${y}\\) stands in .*launched E from \\(${Math.max(...xs) - 1},${y}\\)`).test(w)) === true, `a square at the front of row ${y} warns it stands in the lane E from the cell behind it`);
     ok(!gl.warnings, 'a glider placement warns of nothing (it flies off its square)');
   }
+}
+
+// ---------- 9. the turn summary: only what the person's side saw ----------
+{
+  // A glider of Cyan's destroyed just outside Cyan's sight must read exactly as one that flew on out of sight.
+  const mk = (id: string) => newSolo({ id, ruleset: 'book-1', level: 1, seed: 91, person: 6786, agent: { id: null, name: 'Rook', model: null }, now: now() }).m;
+  const lines = (hidden: boolean) => {
+    const m = mk(hidden ? 'tsum00000001' : 'tsum00000002'), { e, s } = rulesOf(m);
+    const [tx, ty] = e.XY(e.L.towers.C[0]), edge = tx + s.sight; // the last column Cyan sees on that row
+    if (hidden) m.w.tw[e.K(edge + 1, ty)] = 'A';
+    ok(!e.lit(m.w, 'C', s.sight).has(e.K(edge + 1, ty)), 'the square past the glider is out of Cyan\'s sight');
+    m.w.gl.push({ id: 900, o: 'C', x: edge, y: ty, dx: 1, dy: 0 } as never);
+    planComputer(m, now());
+    m.pend.A = { ...m.pend.A!, placements: [] }; // the computer places nothing, so both boards differ only by that tower
+    submit(m, { turn: 0, placements: [], source: 'agent', final: true, now: now() });
+    return { lines: (viewFor(m) as Record<string, any>).last_turn_summary.lines as string[], killed: m.kills.C };
+  };
+  const real = lines(true), twin = lines(false);
+  ok(real.killed === 1 && twin.killed === 0, 'the hidden tower was destroyed in one match and not in the other');
+  ok(isDeepStrictEqual(real.lines, twin.lines), `the summaries read the same (${JSON.stringify(real.lines)})`);
+  ok(real.lines.some((l) => /left your sight at/.test(l)), 'it says the glider left sight');
+  // A whole match: every square a summary line names was in Cyan's sight at that step, or is Cyan's own placement.
+  const m = start('book', 92).m;
+  let named = 0, outside = 0;
+  while (!m.end) {
+    const placed = parseOrders(scripted(m), rulesOf(m).s);
+    submit(m, { turn: m.turn, placements: placed, source: 'agent', final: true, now: now() });
+    const sum = (viewFor(m) as Record<string, any>).last_turn_summary;
+    ok(sum && sum.turn === m.history[m.history.length - 1].turn && sum.lines.length > 0, 'every turn played has a summary');
+    // Replay to the turn's start and record Cyan's sight at every step of it.
+    const { e, s } = rulesOf(m), w = e.world(s), k: Kills = { C: 0, A: 0 }, sight = new Map<number, Set<number>>();
+    for (const h of m.history) { e.apply(w, s, { C: h.C.placements, A: h.A.placements }); const from = w.step; if (h.turn === sum.turn) sight.set(w.step, e.lit(w, 'C', s.sight)); do { e.step(w, s, k); if (h.turn === sum.turn) sight.set(w.step, e.lit(w, 'C', s.sight)); } while (w.step - from < s.every && !verdict(e, w, s, k)); }
+    for (const l of sum.lines as string[]) {
+      if (/^You placed/.test(l)) continue;
+      const mm = l.match(/\((\d+), (\d+)\).*step (\d+)/);
+      if (!mm) continue;
+      named++;
+      const [x, y, st] = [+mm[1], +mm[2], +mm[3]];
+      const seen = [st - 1, st, st + 1].some((t) => sight.get(t)?.has(e.K(x, y)));
+      if (!seen && !/lost your tower/.test(l)) { outside++; console.log('  outside sight:', l); }
+    }
+  }
+  ok(named > 0 && outside === 0, `every square the summaries name was in Cyan's sight then (${named} named)`);
 }
 
 console.log(`minpentai agent play: ${checks} checks passed`);

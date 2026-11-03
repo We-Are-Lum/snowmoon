@@ -17,6 +17,7 @@ import { createHash, randomBytes, timingSafeEqual } from 'node:crypto';
 import { drawRules, engine, layout, other, rng, verdict, type AnyPiece, type Engine, type Kills, type Placement, type Side, type World } from '../versions/engine';
 import type { Settings } from '../versions/schema';
 import { SOLO_V3, type VersionRules } from '../versions/solo-v1';
+import { TurnWatch } from './summary';
 import { BOOK_3_DRAFT, BOOK_EDITION } from '../versions/book-edition';
 import { PRESETS, TOP_LEVEL, searchPlan, type BookPlay, type Preset } from '../versions/search';
 import { appUrl } from '../../config';
@@ -90,6 +91,8 @@ export interface SoloMatch {
   pend: { C: Orders | null; A: Orders | null };
   /** When this turn to act opened (ms since 1970): nothing about the match is answered before openedAt + T (tools.ts). */
   openedAt: number;
+  /** The person's summary of the last turn played (summary.ts): what their side saw, in words. */
+  summary?: { turn: number; from: number; lines: string[] };
   standing: { text: string; preset: Preset } | null;
   history: RevealedTurn[];
   end: { win: Side | 'D'; how: 'towers' | 'time' | 'resigned'; step: number } | null;
@@ -246,6 +249,8 @@ export function viewFor(m: SoloMatch) {
     end: m.end,
     // Agent help (2026-11-02), kept in their own fields: the rules for this ruleset, and the person's page.
     ...rulesFor(m),
+    // What the person's side saw happen in the last turn's steps, in words (summary.ts); empty before the first.
+    last_turn_summary: m.summary ? { turn: m.summary.turn, from_step: m.summary.from, lines: m.summary.lines } : null,
   };
 }
 
@@ -330,17 +335,23 @@ function resolve(m: SoloMatch, now: string) {
   m.history.push({ turn: m.turn, step: m.w.step, C: strip(C), A: strip(A) });
   e.apply(m.w, s, { C: C.placements, A: A.placements });
   e.updLS(m.w, s.sight, m.ls);
-  const from = m.w.step;
+  // The person's turn summary, from their side's view at each step (summary.ts).
+  const watch = new TurnWatch(e, s, PERSON, m.w, m.kills, C.placements);
+  const from = m.w.step, turn = m.turn;
+  const note = () => { m.summary = { turn, from, lines: watch.done() }; };
   do {
     e.step(m.w, s, m.kills);
     e.updLS(m.w, s.sight, m.ls);
+    watch.look(m.w);
     const v = verdict(e, m.w, s, m.kills);
     if (v) {
+      note();
       m.end = { win: v, how: e.towers(m.w, 'C').length && e.towers(m.w, 'A').length ? 'time' : 'towers', step: m.w.step };
       m.pend = { C: null, A: m.pend.A };
       return { over: true, end: m.end };
     }
   } while (m.w.step - from < s.every);
+  note();
   m.turn++;
   m.pend = { C: null, A: null };
   m.openedAt = Date.parse(now) || 0;
