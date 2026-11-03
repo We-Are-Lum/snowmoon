@@ -603,6 +603,11 @@ check('as committed, CHALLENGE.entries, posts and openSheets are on (owner\'s re
   const refreshes = (src: string) => /await recordEligibility\(sql, out\.versionId, fid\);\s*\/\/[^\n]*\n\s*revalidatePath\('\/challenge'\);/.test(src);
   check('R7 publishing a challenge character\'s fork or version refreshes /challenge', refreshes(designsRoute) && /revalidatePath\('\/challenge'\)/.test(read('src/app/api/challenge/mark/route.ts')));
   proof('R7 a publish that leaves /challenge stale is caught', !refreshes(designsRoute.replace("revalidatePath('/challenge');", '')));
+  // R8: a fork's form chose no style, so every forker met "Choose a style first." with one style on offer.
+  const newPage = read('src/app/references/designs/new/page.tsx');
+  const preselect = (f: string, n: string) => /useState<string \| null>\(\(\) => \(p\.source\?\.style && p\.styles\.some\(\(s\) => s\.versionId === p\.source!\.style\) \? p\.source\.style : null\)\)/.test(f) && /style: src\.shown\.body\.style\?\.version_id \?\? null,/.test(n);
+  check('R8 a fork or new version starts with its source\'s style chosen (when still published)', preselect(form, newPage));
+  proof('R8 a form that starts with no style is caught', !preselect(form.replace('useState<string | null>(() => (p.source?.style', 'useState<string | null>(() => (null && p.source?.style'), newPage));
 }
 
 console.log(`test:challenge: ${passed} passed, ${failures.length} failed`);

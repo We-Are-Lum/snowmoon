@@ -33,7 +33,8 @@ type Props = {
   character: { slug: string; name: string; callName: string; quotes: { chapter: number; idx: number; quote: string }[]; firstChapter: number } | null;
   /** A place sheet's place (2026-10-14): its views are made with the place lines. */
   place: { slug: string; name: string; quotes: { chapter: number; idx: number; quote: string }[] } | null;
-  source: { versionId: string; title: string; entity: string; by: string; versionNo: number; text: string; drafted: boolean } | null;
+  /** `style`: the style the source's views were made in, chosen to start with when it is still published (launch rehearsal, 2026-11-02). */
+  source: { versionId: string; title: string; entity: string; by: string; versionNo: number; text: string; drafted: boolean; style?: string | null } | null;
   subjects: string[];
   /** Published styles a sheet's views can be made in (newest first). */
   styles: StyleOption[];
@@ -58,7 +59,7 @@ export function DesignForm(p: Props) {
   const [status, setStatus] = useState<Status | null>(null);
   const [consent, setConsent] = useState<Wording | null>(null);
   const [published, setPublished] = useState<string | null>(null);
-  const [viewStyle, setViewStyle] = useState<string | null>(null);
+  const [viewStyle, setViewStyle] = useState<string | null>(() => (p.source?.style && p.styles.some((s) => s.versionId === p.source!.style) ? p.source.style : null));
   const picks = useMyPicks();
   const pickedStyle = picks?.find((x) => x.kind === 'style' && p.styles.some((s) => s.versionId === x.versionId))?.versionId ?? null;
   useEffect(() => {
