@@ -11,12 +11,17 @@
  *      is refused the same way whether or not something is there.
  *   3. The rules of a turn: refusals in plain words, a wrong turn number, a record before the end, resigning, the
  *      site computer playing a turn under a preset, the live link's secret.
+ *   7. Agent help (2026-11-02): the rules lines generated from each ruleset (numbers equal the settings; book-3 and
+ *      play-3 differ where their settings do), the lines' claims checked against the engine (bounce chips your own
+ *      square, the convergence example, the order of two symbol gliders on one row), minpentai_symbol_launches' options
+ *      really forming in simulate, simulate's symbols field and lane warnings, and the view unchanged but for the
+ *      added fields.
  */
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { isDeepStrictEqual } from 'node:util';
-import { verdict } from '../src/lib/minpentai/versions/engine';
-import { CURRENT, DRAFTS, autopilot, checkComputer, planComputer, ordersText, linkOpens, newSolo, parseOrders, recordOf, replay, resign, rulesOf, setStanding, simulate, SoloError, submit, viewFor, type SoloMatch } from '../src/lib/minpentai/agent-play/solo';
+import { verdict, type AnyPiece, type Placement } from '../src/lib/minpentai/versions/engine';
+import { CURRENT, DRAFTS, RULESETS, autopilot, checkComputer, planComputer, ordersText, linkOpens, newSolo, parseOrders, recordOf, replay, resign, rulesFor, rulesOf, setStanding, simulate, SoloError, submit, symbolLaunches, viewFor, type RulesetName, type SoloMatch } from '../src/lib/minpentai/agent-play/solo';
 
 let checks = 0;
 const ok = (cond: unknown, what: string) => { checks++; assert.ok(cond, what); };
@@ -99,6 +104,8 @@ playOut('play', 202);
   ok(isDeepStrictEqual(strip(viewFor(hidden)), strip(v)), 'the view is the same whatever is hidden');
   const sc = { scenarios: [{ name: 'wait', placements: [] }, { name: 'shoot', placements: [{ piece: 'glider', x: (v.can_place as number[][])[0][0], y: (v.can_place as number[][])[0][1], dir: 'E' }] }], steps: 24 };
   ok(isDeepStrictEqual(simulate(hidden, sc), simulate(m, sc)), "simulate's answer is the same whatever is hidden");
+  const tgt = (v.can_place as number[][])[0];
+  ok(isDeepStrictEqual(symbolLaunches(hidden, { x: tgt[0] + 4, y: tgt[1] }), symbolLaunches(m, { x: tgt[0] + 4, y: tgt[1] })) && isDeepStrictEqual(viewFor(hidden).rules, v.rules), "symbol_launches' answer and the rules lines are the same whatever is hidden");
   // A belief piece on a square in sight is refused the same way whether it holds a piece or not.
   const seenEmpty = [...see].find((k) => e.empty(m.w, k))!, seenFull = Object.keys(m.w.tw).map(Number).find((k) => see.has(k))!;
   const said = (k: number) => { try { simulate(m, { belief: { towers: [{ x: e.XY(k)[0], y: e.XY(k)[1] }] }, scenarios: [{ name: 'x', placements: [] }] }); return 'accepted'; } catch (err) { return (err as Error).message.replace(/\d+,\d+/, 'X'); } };
@@ -214,6 +221,105 @@ playOut('play', 202);
   ok(lv && verdict(e, w, s, { C: 2, A: 1 }) === 'C' && verdict(e, w, s, { C: 1, A: 3 }) === 'A' && verdict(e, w, s, { C: 2, A: 2 }) === 'D', `with towers level at the last step, more enemy towers destroyed wins; equal is a draw (${nC}/${nA})`);
   ok(verdict(e, w, rulesOf(newSolo({ id: 'tbook1000003', ruleset: 'book-1', level: 2, seed: 78, person: 6786, agent: { id: null, name: 'Rook', model: null }, now: now() }).m).s, { C: 2, A: 1 }) === 'D', 'under book-1 the same board is a draw');
   ok(CURRENT.book === 'book-2' && DRAFTS.includes('book-3'), 'new Rocks and Mirrors matches stay book-2; book-3 is a draft');
+}
+
+// ---------- 7. Agent help (2026-11-02) ----------
+{
+  const mk = (ruleset: RulesetName, seed: number) => newSolo({ id: `th${ruleset}${seed}`.slice(0, 12), ruleset, level: 2, seed, person: 6786, agent: { id: null, name: 'Rook', model: null }, now: now() }).m;
+  // Rules lines: every number from the settings.
+  for (const ruleset of Object.keys(RULESETS) as RulesetName[]) {
+    const m = mk(ruleset, 31), { s } = rulesOf(m), L = rulesFor(m).rules, all = L.join('\n');
+    const has = (x: string) => all.includes(x);
+    ok(s.carryOver === 0 && has('Unspent points are lost'), `${ruleset}: no carry-over in the settings, as agent play's points (pointsOf) assume, and the lines say so`);
+    ok(has(`Board: ${s.width} x ${s.height} squares`) && has(`every ${s.every} steps`) && has(`stops at step ${s.maxSteps}`) && has(`Points: ${s.setupPoints} at setup, ${s.points} each later turn`), `${ruleset}: board, steps and points in the lines equal the settings`);
+    ok(has(`Costs: glider ${s.costGlider}, square ${s.costSquare}, tower ${s.costTower}`) && (!s.costSeed || has(`symbol glider ${s.costSeed}`)) && (!s.costFactory || has(`factory ${s.costFactory}`)), `${ruleset}: costs equal the settings`);
+    ok(has(`within ${s.reach} squares`) && has(`within ${s.sight} of any of your towers`), `${ruleset}: reach ${s.reach} and sight ${s.sight}`);
+    ok(has(s.directions === 4 ? 'fly N, E, S or W only' : 'any of 8 directions'), `${ruleset}: launch directions (${s.directions})`);
+    ok(has("this edition's invented rules") && L.every((l) => typeof l === 'string' && l.length > 0 && l.length < 1200), `${ruleset}: labelled as this edition's invented rules, plain lines`);
+    ok(!!s.costSeed === has('Convergence:') && !!s.costSeed === has('Convergence example:'), `${ruleset}: the convergence rule and its example where symbol gliders exist`);
+    ok(s.maxTowers ? has(`at most ${s.maxTowers}`) && has(s.symbolsCapped ? 'Symbols count toward the cap' : 'not stopped by the cap') : has('no limit'), `${ruleset}: the tower cap`);
+    ok(s.factoryEvery ? has(`every ${s.factoryEvery} steps`) : !s.costFactory || has('only when its rock is hit'), `${ruleset}: factory timing`);
+    ok(has(s.tieBreak ? 'destroyed more enemy towers' : 'level is a draw'), `${ruleset}: the tie-break`);
+    const v = viewFor(m) as Record<string, unknown>;
+    ok(isDeepStrictEqual(v.rules, L) && /\/minpentai\/book$/.test(String(v.how_the_pieces_work)), `${ruleset}: the view carries the rules and the pieces page`);
+  }
+  const b3 = rulesFor(mk('book-3', 1)).rules, p3 = rulesFor(mk('play-3', 1)).rules;
+  ok(b3.some((l) => /at most 6/.test(l)) && p3.some((l) => /no limit/.test(l)) && !p3.some((l) => /Symbol glider|Mirror|Factory/.test(l)), 'book-3 and play-3 lines differ where their settings do');
+  // A Play match whose drawn rule allows diagonals says 8 directions, and names its drawn rule.
+  const diag = Array.from({ length: 60 }, (_, i) => mk('play-3', i + 1)).find((m) => rulesOf(m).s.directions === 8)!;
+  ok(!!diag && rulesFor(diag).rules.some((l) => /any of 8 directions/.test(l)) && rulesFor(diag).rules.some((l) => /drawn rule: Gliders may also fly diagonally/.test(l)), 'a Play match drawn with diagonals says 8 directions and its drawn rule');
+  // The view is unchanged but for the two added fields.
+  {
+    const m = mk('book-2', 32), v = viewFor(m) as Record<string, unknown>;
+    const old = ['match_id', 'side', 'opponent', 'ruleset', 'rule', 'phase', 'turn', 'step', 'max_steps', 'every', 'board_size', 'sight', 'reach', 'points', 'costs', 'board', 'last_seen_enemy_towers', 'can_place', 'my_orders', 'standing_order', 'my_turns', 'end'];
+    ok(isDeepStrictEqual(Object.keys(v), [...old, 'rules', 'how_the_pieces_work']) && isDeepStrictEqual(viewFor(json(m)), v), 'the view keeps every field it had, adds only rules and how_the_pieces_work, and is the same each time');
+  }
+  // The lines' claims, checked against the engine on a bare book-3 board.
+  {
+    const m = mk('book-3', 2), { s, e } = rulesOf(m);
+    const bare = () => { const w = e.world(s, true); w.tw[e.K(0, 0)] = 'C'; w.tw[e.K(23, 13)] = 'A'; return w; };
+    const P = (t: AnyPiece, x: number, y: number, dx = 0, dy = 0): Placement<AnyPiece> => ({ t, o: 'C', x, y, dx, dy });
+    // Bounce: a glider off a rock comes back and chips your own square.
+    let w = bare(); w.rock[e.K(8, 5)] = 1;
+    e.apply(w, s, { C: [P('s', 3, 5), P('g', 5, 5, 1, 0)], A: [] });
+    for (let i = 0; i < 8; i++) e.step(w, s);
+    ok(w.sq[e.K(3, 5)]?.hp === s.squareHits - 1, 'a glider that bounces off a rock flies back and chips your own square (as the lines say)');
+    // The convergence example: E on rows 4, 5, 6 against a column at x = 15 forms at (14,4).
+    w = bare(); for (const y of [4, 5, 6]) w.rock[e.K(15, y)] = 1;
+    e.apply(w, s, { C: [4, 5, 6].map((y) => P('e', 10, y, 1, 0)), A: [] });
+    for (let i = 0; i < 8; i++) e.step(w, s);
+    ok(w.tw[e.K(14, 4)] === 'C' && w.fs?.[e.K(14, 4)]?.o === 'C' && !w.sd?.[e.K(14, 5)], 'the convergence example forms at (14,4), as the lines say');
+    w = bare(); for (const y of [3, 5, 8]) w.rock[e.K(15, y)] = 1;
+    e.apply(w, s, { C: [3, 5, 8].map((y) => P('e', 10, y, 1, 0)), A: [] });
+    for (let i = 0; i < 8; i++) e.step(w, s);
+    ok(!w.fs && Object.keys(w.sd ?? {}).length === 3, 'rows 3, 5 and 8 rest but never form');
+    // An edge doesn't stop a symbol glider.
+    w = bare(); e.apply(w, s, { C: [P('e', 20, 7, 1, 0)], A: [] });
+    for (let i = 0; i < 5; i++) e.step(w, s);
+    ok(!w.sd && w.gl.length === 1 && w.gl[0].dx === -1, 'a symbol glider bounces off the edge instead of resting');
+    // Two on one row: front listed first rests both; back listed first loses the front one.
+    const row = (order: number[]) => { const x = bare(); x.rock[e.K(15, 9)] = 1; e.apply(x, s, { C: order.map((sx) => P('e', sx, 9, 1, 0)), A: [] }); for (let i = 0; i < 8; i++) e.step(x, s); return Object.keys(x.sd ?? {}).length; };
+    ok(row([12, 11]) === 2 && row([11, 12]) === 1, 'two symbol gliders on one row: both rest only with the front one listed first');
+  }
+  // minpentai_symbol_launches: each option really forms in simulate, where and when it says.
+  {
+    const m = mk('book-2', 11), v = viewFor(m);
+    const towers = v.board.towers.filter((t) => t.side === 'mine');
+    const target = v.board.rocks.map((r) => ({ x: r.x - 1, y: r.y })).find((t) => towers.some((tw) => Math.abs(tw.y - t.y) <= 3) && symbolLaunches(m, t).options.length >= 2);
+    ok(!!target, `a target near a rock with at least two options (${JSON.stringify(target)})`);
+    const r = symbolLaunches(m, target!);
+    ok(r.options.length >= 2 && r.options.length <= 3 && r.affordable === true && r.cost === 3 * rulesOf(m).s.costSeed!, 'up to three options, each three symbol gliders, with the cost and whether it is affordable');
+    const sim = simulate(m, { scenarios: r.options.map((o, i) => ({ name: `o${i}`, placements: o.launches })), steps: 24 });
+    sim.scenarios.forEach((sc, i) => {
+      const o = r.options[i], got = (sc as { symbols?: { x: number; y: number; step: number }[] }).symbols ?? [];
+      ok(sc.legal && got.some((x) => x.x === o.symbol_forms.x && x.y === o.symbol_forms.y && x.step === o.symbol_forms.step), `option ${i}: simulate forms the symbol at (${o.symbol_forms.x},${o.symbol_forms.y}) at step ${o.symbol_forms.step}`);
+      ok(o.launches.every((l) => (v.can_place as number[][]).some(([x, y]) => x === l.x && y === l.y) && ['N', 'E', 'S', 'W'].includes(l.dir)) && o.rest_at.every((p) => Math.abs(p.x - target!.x) <= 1 && Math.abs(p.y - target!.y) <= 1), `option ${i}: launches from can_place in N/E/S/W, resting inside the 3 x 3 box`);
+    });
+    const open = symbolLaunches(m, { x: 12, y: 7 });
+    ok(!open.options.length && /no launch of yours reaches|nothing there stops them|three are needed/.test(open.why_none ?? ''), `no option says why (${open.why_none})`);
+    ok(/no symbol gliders/.test(symbolLaunches(mk('play-3', 3), { x: 5, y: 5 }).why_none ?? ''), 'Play: no symbol gliders, said so');
+    const capped = mk('book-3', 4), { e } = rulesOf(capped);
+    for (const [x, y] of [[2, 2], [2, 4], [2, 6], [3, 3]]) capped.w.tw[e.K(x, y)] = 'C';
+    ok(/the cap/.test(symbolLaunches(capped, { x: 6, y: 5 }).why_none ?? ''), 'book-3 at 6 towers: no symbol can form, the cap said');
+    const poor = mk('book-2', 11); poor.w.step = 12; // a later turn: 10 points, still enough for three at 2
+    ok(symbolLaunches(poor, target!).points === 10, 'the points are this turn\'s');
+  }
+  // simulate's lane warnings: a row left with no launch cell, and a square in front of launch cells.
+  {
+    const m = mk('book-2', 11), v = viewFor(m);
+    const rows = new Map<number, number[]>();
+    for (const [x, y] of v.can_place as number[][]) rows.set(y, [...(rows.get(y) ?? []), x]);
+    const [y, xs] = [...rows].find(([, xs]) => xs.length >= 3)!;
+    const sim = simulate(m, { scenarios: [
+      { name: 'fill', placements: xs.map((x) => ({ piece: 'square', x, y })) },
+      { name: 'front', placements: [{ piece: 'square', x: Math.max(...xs), y }] },
+      { name: 'glider', placements: [{ piece: 'glider', x: Math.max(...xs), y, dir: 'E' }] },
+    ] }) as { scenarios: { name: string; warnings?: string[] }[] };
+    const [fill, front, gl] = sim.scenarios;
+    ok(fill.warnings?.some((w) => w.includes(`leaves row ${y} with no launch cell`)) === true, `filling row ${y}'s launch cells warns that it leaves row ${y} with no launch cell`);
+    ok(front.warnings?.some((w) => new RegExp(`square at \\(${Math.max(...xs)},${y}\\) stands in .*launched E from \\(${Math.max(...xs) - 1},${y}\\)`).test(w)) === true, `a square at the front of row ${y} warns it stands in the lane E from the cell behind it`);
+    ok(!gl.warnings, 'a glider placement warns of nothing (it flies off its square)');
+  }
 }
 
 console.log(`minpentai agent play: ${checks} checks passed`);

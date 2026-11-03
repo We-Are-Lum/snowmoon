@@ -3,7 +3,9 @@ import { ToolInputError } from '../../agent/tools';
 import { AGENTS, appUrl } from '../../config';
 import { playFor, type Agent } from '../../agents/core';
 import type { AgentTool } from '../../agents/tools';
-import { CURRENT, DRAFTS, autopilot, linkOpens, newSolo, parseOrders, recordOf, resign, rulesOf, setStanding, simulate, SoloError, submit, viewFor, type ModelClaim, type RulesetName, type SoloMatch } from './solo';
+import { CURRENT, DRAFTS, RULESETS, autopilot, linkOpens, newSolo, parseOrders, recordOf, resign, rulesOf, setStanding, simulate, SoloError, submit, symbolLaunches, viewFor, type ModelClaim, type RulesetName, type SoloMatch } from './solo';
+import { PIECES_PAGE, toolNotes } from './rules-text';
+import { BASE, BASE_DRAWN } from '../versions/schema';
 import { insert, listFor, liveCount, load, newId, newSeed, save, StoreError } from './store';
 import { planSoon, settle } from './quiet';
 import { randomBytes, createHash } from 'node:crypto';
@@ -68,6 +70,12 @@ function modelOf(v: unknown): ModelClaim | null {
   const t = (s: string) => s.replace(/[^\x20-\x7e]/g, '').slice(0, 60);
   return { name: t(m.name), maker: t(m.maker), weights: m.weights, ...(typeof m.version === 'string' ? { version: t(m.version) } : {}) };
 }
+/**
+ * The rules lines tool descriptions carry (owner, 2026-11-02), generated from the settings new matches are played
+ * under, so they can't drift from the engine; each match's view has its exact rules in "rules".
+ */
+const NOTES = toolNotes(rulesOf({ ruleset: CURRENT.book, seed: 1 }).s, { ...BASE, ...RULESETS[CURRENT.play].set }, (RULESETS[CURRENT.play].drawn ?? BASE_DRAWN).map((d) => d.set));
+const PAGE = `The view's "rules" lists every rule of the match; "how_the_pieces_work" (${PIECES_PAGE}) is a page for your person to read, invite-only: you can't open it, and you don't need to.`;
 const liveUrl = (id: string, secret: string) => `${appUrl()}/minpentai/m/${id}?k=${secret}`;
 
 const MODEL = { type: 'object', properties: { name: { type: 'string' }, maker: { type: 'string' }, weights: { enum: ['open', 'closed', 'unknown'] }, version: { type: 'string' } }, required: ['name', 'maker', 'weights'], additionalProperties: false, description: 'The model you run, as you declare it. Shown as self-reported; never checked.' };
@@ -81,7 +89,7 @@ const PLACEMENTS = {
 export const MINPENTAI_TOOLS: AgentTool[] = [
   {
     name: 'minpentai_start_solo', title: 'Start a Minpentai match against the site computer', scope: 'play', writes: true, counts: 'reads',
-    description: 'Starts a match for your person (Cyan) against the site computer (Amber), on the book edition (default) or Play\'s rules (or "book-3", a draft of the book edition\'s rebalanced rules, open only to the people it\'s shown to), at level 0 (the beginner) to 3. Returns the match, your side\'s first view, and a live link that shows your person their side only (shown once: give it to your person). Your person decides; you advise and place what they agree to. Rules invented for this edition, not the book\'s.',
+    description: `Starts a match for your person (Cyan) against the site computer (Amber), on the book edition (default) or Play\'s rules (or "book-3", a draft of the book edition\'s rebalanced rules, open only to the people it\'s shown to), at level 0 (the beginner) to 3. Returns the match, your side\'s first view, and a live link that shows your person their side only (shown once: give it to your person). Your person decides; you advise and place what they agree to. Rules invented for this edition, not the book\'s. ${NOTES.core} ${NOTES.convergence} ${NOTES.sight} ${PAGE}`,
     inputSchema: { type: 'object', properties: { ruleset: { enum: ['book', 'play', ...(DRAFTS as string[])] }, level: { type: 'integer', minimum: 0, maximum: 3 }, model: MODEL }, additionalProperties: false },
     async run(agent, args) {
       on(agent);
@@ -110,7 +118,7 @@ export const MINPENTAI_TOOLS: AgentTool[] = [
   },
   {
     name: 'minpentai_get_view', title: 'Your side of a Minpentai match', scope: 'play', writes: false, counts: 'reads',
-    description: 'What your side sees now: rocks, your pieces, every piece within sight of your towers, where you last saw enemy towers, the squares you may place on, your pending orders and the opponent\'s commitment (a hash; its orders stay hidden until the reveal). Nothing outside your sight.',
+    description: `What your side sees now: rocks, your pieces, every piece within sight of your towers, where you last saw enemy towers, the squares you may place on (can_place), your pending orders and the opponent's commitment (a hash; its orders stay hidden until the reveal). Nothing outside your sight. Also the match's full rules ("rules", generated from its ruleset: read them before your first turn). ${NOTES.core} ${NOTES.sight} ${PAGE}`,
     inputSchema: { type: 'object', properties: { match_id: MATCH }, required: ['match_id'], additionalProperties: false },
     async run(agent, args) {
       on(agent);
@@ -120,7 +128,7 @@ export const MINPENTAI_TOOLS: AgentTool[] = [
   },
   {
     name: 'minpentai_simulate', title: 'Try plans against your guess', scope: 'play', writes: false, counts: 'reads',
-    description: 'Runs the engine from your side\'s view plus your own belief about the dark (enemy towers, squares and gliders you suppose are where you can\'t see), for 1 to 6 scenarios of your placements, to the next turn to act (or `steps`). Never reads the hidden board: a belief piece is refused only where you can already see. Stores nothing.',
+    description: `Runs the engine from your side\'s view plus your own belief about the dark (enemy towers, squares and gliders you suppose are where you can\'t see), for 1 to 6 scenarios of your placements, to the next turn to act (or \`steps\`). Never reads the hidden board: a belief piece is refused only where you can already see. Stores nothing. Each scenario also says, on the book edition, which symbols form (symbols: x, y, the step it forms) and where your symbol gliders rest (symbol_gliders_resting), and whether last turn's symbol stays walled in (last_turns_symbols); and "warnings" for placements that block your own launch lanes: a row or column left with no launch cell, or a piece standing in the line in front of one of your launch cells (measured with the towers you have now, on your view). ${NOTES.core} ${NOTES.convergence}`,
     inputSchema: {
       type: 'object', additionalProperties: false, required: ['match_id', 'scenarios'],
       properties: {
@@ -143,8 +151,20 @@ export const MINPENTAI_TOOLS: AgentTool[] = [
     },
   },
   {
+    name: 'minpentai_symbol_launches', title: 'Three symbol gliders that form your symbol on a square', scope: 'play', writes: false, counts: 'reads',
+    description: `Book edition: for a target square (x, y), up to three options, each three symbol-glider launches (from your can_place squares, in directions the rules allow) that come to rest inside the 3 x 3 box around the target and form your symbol there, with where and at which step each comes to rest and the step the symbol forms. Each option was flown in the engine, all three together, from your side's view with nothing assumed about what you can't see (an enemy piece in the dark can still stop them). If there is none it says why (nothing in that line to stop them, the target out of every lane, the tower cap), and whether you can afford three this turn. Stores nothing; place them with minpentai_submit_orders. ${NOTES.convergence}`,
+    inputSchema: { type: 'object', properties: { match_id: MATCH, x: { type: 'integer', minimum: 0 }, y: { type: 'integer', minimum: 0 } }, required: ['match_id', 'x', 'y'], additionalProperties: false },
+    async run(agent, args) {
+      on(agent);
+      only(args, ['match_id', 'x', 'y']);
+      const { m } = await mine(agent, args.match_id);
+      if (m.end) throw new ToolInputError('the match is over: see minpentai_get_record');
+      return guard(() => symbolLaunches(m, { x: args.x, y: args.y }));
+    },
+  },
+  {
     name: 'minpentai_submit_orders', title: 'Submit your side\'s orders', scope: 'play', writes: true, counts: 'reads',
-    description: 'Your side\'s placements for the open turn, replacing any you sent before. Say whose they are: "person" (your person chose them) or "agent" (you chose them under your person\'s standing order). Returns a commitment (sha256 of the orders and a fresh secret salt, revealed with them after the turn). With final: true the turn resolves now: both sides\' orders are revealed and applied together, and the match runs to the next turn to act.',
+    description: `Your side's placements for the open turn, replacing any you sent before. Say whose they are: "person" (your person chose them) or "agent" (you chose them under your person\'s standing order). Returns a commitment (sha256 of the orders and a fresh secret salt, revealed with them after the turn). With final: true the turn resolves now: both sides\' orders are revealed and applied together, and the match runs to the next turn to act. Try them in minpentai_simulate first: it warns when a placement blocks your own launch lanes. ${NOTES.core}`,
     inputSchema: { type: 'object', properties: { match_id: MATCH, turn: { type: 'integer', minimum: 0 }, placements: PLACEMENTS, source: { enum: ['person', 'agent'] }, final: { type: 'boolean' }, note: { type: 'string', maxLength: 280 } }, required: ['match_id', 'turn', 'placements', 'source'], additionalProperties: false },
     async run(agent, args) {
       on(agent);
