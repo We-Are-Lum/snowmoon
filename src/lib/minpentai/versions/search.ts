@@ -105,7 +105,17 @@ export function belief(m: Pick<TurnInput, 'view' | 'lastSeen' | 'o' | 'e'>): Wor
  * kind if it scores no worse than `variety` below placing nothing; then the usual search spends the rest.
  */
 export interface BookPlay { variety: number; kinds?: ('f' | 'w' | 'm' | 'e')[]; /** No book piece before this turn to act (setup is 0): towers come first. */ from?: number }
-export function searchPlan(m: TurnInput & { level: number; preset?: Preset; config?: SearchLevel; book?: BookPlay }): Required<Plan> {
+/**
+ * book-4's computer (owner, 2026-11-02, after the book-3 playtest: level 2 sent symbol gliders that could never meet,
+ * and left most of its points unspent). Off unless a ruleset's computer sets them, so every other computer, and every
+ * record it made, plays exactly as before.
+ * - formingSymbols: three symbol gliders are tried only where a sandbox run from its own view shows them forming a
+ *   symbol, side by side or staggered.
+ * - seedScore: what a symbol glider of its own in flight is worth to its score (plain gliders stay at 2).
+ * - spendTies: when points it doesn't spend would be lost, it also takes a placement that scores no worse.
+ */
+export interface Computer { formingSymbols?: boolean; seedScore?: number; spendTies?: boolean }
+export function searchPlan(m: TurnInput & { level: number; preset?: Preset; config?: SearchLevel; book?: BookPlay; comp?: Computer }): Required<Plan> {
   const { e, s, o } = m, L = m.config ?? SEARCH_LEVELS[m.level];
   const base = belief(m);
   const per = s.every + L.horizon;
@@ -120,7 +130,8 @@ export function searchPlan(m: TurnInput & { level: number; preset?: Preset; conf
       steps++;
       if (!e.towers(sw, 'C').length || !e.towers(sw, 'A').length) break;
     }
-    return e.score(sw, s, o) + (m.preset && m.preset !== 'balanced' ? presetTerm(e, sw, s, o, m.preset) : 0);
+    const seeds = m.comp?.seedScore !== undefined ? sw.gl.filter((g) => g.o === o && g.seed && !g.dead).length * (m.comp.seedScore - 2) : 0;
+    return e.score(sw, s, o) + seeds + (m.preset && m.preset !== 'balanced' ? presetTerm(e, sw, s, o, m.preset) : 0);
   };
 
   // Options: every single legal placement (in an order drawn from this side's own numbers, so a budget
@@ -128,7 +139,7 @@ export function searchPlan(m: TurnInput & { level: number; preset?: Preset; conf
   const singles = e.legal(base, s, o, m.snap, m.points);
   for (let i = singles.length - 1; i > 0; i--) { const j = Math.floor(m.rng() * (i + 1)); [singles[i], singles[j]] = [singles[j], singles[i]]; }
   let pool: Placement<AnyPiece>[][] = singles.filter((_, i) => i % L.sample === 0).map((p) => [p]);
-  pool.push(...groups(e, base, s, o, m.snap, m.points, singles));
+  pool.push(...groups(e, base, s, o, m.snap, m.points, singles, m.comp?.formingSymbols ? s.every * 2 : 0));
 
   const chosen: Placement<AnyPiece>[] = [];
   let points = m.points, current = simulate([]), first = true;
@@ -169,7 +180,8 @@ export function searchPlan(m: TurnInput & { level: number; preset?: Preset; conf
     if (first) { pool = options.slice(0, L.beam).map((x) => x.ps); first = false; }
     let pick = options[0];
     if (L.mistake > 0 && options.length > 1 && m.rng() < L.mistake) pick = options[Math.floor(m.rng() * options.length)];
-    if (pick.v <= current && pick === options[0]) break; // nothing helps
+    // Nothing helps. (spendTies: points it would lose are spent on a placement that does no harm.)
+    if (pick === options[0] && (pick.v < current || (pick.v === current && !(m.comp?.spendTies && points - costOf(pick.ps) >= 0 && points > s.carryOver)))) break;
     chosen.push(...pick.ps);
     current = pick.v;
     points -= costOf(pick.ps);
@@ -182,14 +194,28 @@ export function searchPlan(m: TurnInput & { level: number; preset?: Preset; conf
  * Moves worth trying only together: three symbol gliders flying side by side (they rest together and form a
  * symbol), and walling in a symbol of its own that is still forming (squares on every open side).
  */
-function groups(e: Engine, w: World, s: Settings, o: Side, snap: number[], points: number, singles: Placement<AnyPiece>[]): Placement<AnyPiece>[][] {
+function groups(e: Engine, w: World, s: Settings, o: Side, snap: number[], points: number, singles: Placement<AnyPiece>[], forming = 0): Placement<AnyPiece>[][] {
   const out: Placement<AnyPiece>[][] = [];
   const ok = (ps: Placement<AnyPiece>[]) => !e.refuse(w, s, o, snap, points, ps);
+  /** forming > 0: a sandbox run of `forming` steps from this view, these three alone, forms a symbol of o's. */
+  const forms = (ps: Placement<AnyPiece>[]) => {
+    const sw = e.clone(w);
+    e.apply(sw, s, o === 'C' ? { C: ps, A: [] } : { C: [], A: ps });
+    for (let i = 0; i < forming; i++) { e.step(sw, s); if (Object.values(sw.fs ?? {}).some((f) => f.o === o)) return true; if (!sw.gl.some((g) => g.seed && g.o === o)) return false; }
+    return false;
+  };
+  const seen = new Set<string>();
   for (const p of singles) {
     if (p.t !== 'e' || (p.dx && p.dy)) continue;
-    const side = (n: number): Placement<AnyPiece> => ({ ...p, x: p.x - n * p.dy, y: p.y + n * p.dx });
-    const three = [side(-1), p, side(1)];
-    if (ok(three)) out.push(three);
+    const side = (n: number, fwd = 0): Placement<AnyPiece> => ({ ...p, x: p.x - n * p.dy + fwd * p.dx, y: p.y + n * p.dx + fwd * p.dy });
+    // Side by side; with forming, also staggered (the outer two a square ahead or behind), kept only if they form.
+    const shapes = forming ? [[side(-1), p, side(1)], [side(-1, 1), p, side(1, 1)], [side(-1, -1), p, side(1, -1)], [side(-1), p, side(1, 1)], [side(-1, 1), p, side(1)]] : [[side(-1), p, side(1)]];
+    for (const three of shapes) {
+      const id = three.map((q) => `${q.x},${q.y},${q.dx},${q.dy}`).sort().join('|');
+      if (seen.has(id)) continue;
+      seen.add(id);
+      if (ok(three) && (!forming || forms(three))) out.push(three);
+    }
   }
   for (const k in w.fs ?? {}) {
     if (w.fs![+k].o !== o) continue;
@@ -230,6 +256,13 @@ export interface SearchMatch {
   /** Towers left at the end, and towers each side destroyed. */
   towersLeft?: Record<Side, number>;
   kills?: Kills;
+  /** The first step each side saw any enemy piece (absent: never). */
+  firstSight?: Partial<Record<Side, number>>;
+  /** Points each side spent, turn by turn, and the points it had. */
+  spent?: Record<Side, number[]>;
+  had?: Record<Side, number[]>;
+  /** Symbols each side formed (three symbol gliders coming to rest together). */
+  formed?: Record<Side, number>;
 }
 
 /**
@@ -248,8 +281,13 @@ export function playSearchMatch(v: VersionRules, planners: (real: () => World) =
   L.towers.C.forEach((k) => (ls.A[k] = 0));
   const rs: Record<Side, () => number> = { C: rng(seed * 13 + 5), A: rng(seed * 7 + 1) };
   const P = planners(() => w);
-  const out: SearchMatch = { win: 'D', step: 0, illegal: 0, turns: [], placed: { C: {}, A: {} } };
-  const saved: Record<Side, number> = { C: 0, A: 0 }, kills: Kills = { C: 0, A: 0 };
+  const out: SearchMatch = { win: 'D', step: 0, illegal: 0, turns: [], placed: { C: {}, A: {} }, firstSight: {}, spent: { C: [], A: [] }, had: { C: [], A: [] }, formed: { C: 0, A: 0 } };
+  const saved: Record<Side, number> = { C: 0, A: 0 }, kills: Kills = { C: 0, A: 0, ...(s1.killReports ? { log: [] } : {}) };
+  // Measures for the balance runs (nothing here changes the match).
+  const enemyPieces = (o: Side) => { const x = o === 'C' ? 'A' : 'C', ks: number[] = []; for (const k in w.tw) if (w.tw[k] === x) ks.push(+k); for (const k in w.sq) if (w.sq[k].o === x) ks.push(+k); for (const g of w.gl) if (g.o === x) ks.push(e.K(g.x, g.y)); for (const f of ['mir', 'fa', 'sd'] as const) for (const k in w[f] ?? {}) { const v = (w[f] as Record<number, unknown>)[+k]; if ((typeof v === 'string' ? v : (v as { o: Side }).o) === x) ks.push(+k); } return ks; };
+  const look = () => { for (const o of ['C', 'A'] as const) if (out.firstSight![o] === undefined) { const see = e.sees(w, s, o); if (enemyPieces(o).some((k) => see.has(k))) out.firstSight![o] = w.step; } };
+  const seenFs = new Set<string>();
+  const countFormed = () => { for (const k in w.fs ?? {}) { const id = `${k}@${w.fs![+k].at}`; if (!seenFs.has(id)) { seenFs.add(id); out.formed![w.fs![+k].o]++; } } };
   for (;;) {
     if (s2 && s === s1 && w.step >= s1.switchAt) s = s2;
     const snap = { C: e.towers(w, 'C'), A: e.towers(w, 'A') };
@@ -263,13 +301,17 @@ export function playSearchMatch(v: VersionRules, planners: (real: () => World) =
       for (const p of ps) out.placed[o][p.t] = (out.placed[o][p.t] ?? 0) + 1;
       out.turns.push({ step: w.step, side: o, steps: plan.steps ?? 0, placed: ps.map((p) => p.t).join('') });
     }
+    for (const o of ['C', 'A'] as const) { const sp = pend[o].reduce((t, p) => t + e.cost(s, p.t), 0); out.spent![o].push(sp); out.had![o].push(pts(o)); }
     for (const o of ['C', 'A'] as const) saved[o] = Math.min(s.carryOver, pts(o) - pend[o].reduce((t, p) => t + e.cost(s, p.t), 0));
     e.apply(w, s, pend);
-    e.updLS(w, s.sight, ls);
+    e.updSeen(w, s, ls, kills);
+    look();
     const from = w.step;
     do {
       e.step(w, s, kills);
-      e.updLS(w, s.sight, ls);
+      e.updSeen(w, s, ls, kills);
+      look();
+      countFormed();
       const end = verdict(e, w, s, kills);
       if (end) { out.win = end; out.step = w.step; out.towersLeft = { C: e.towers(w, 'C').length, A: e.towers(w, 'A').length }; out.kills = { ...kills }; return out; }
     } while (w.step - from < s.every);

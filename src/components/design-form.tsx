@@ -1,10 +1,11 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { authFetch, useAuth, webNameProof } from '~/lib/client-auth';
 import { VIEW_NAMES, wordDiff, type ViewSlot } from '~/lib/images/design-rules';
 import { IMAGE_WORDING } from '~/lib/images/wording';
+import { CHALLENGE_WORDING as CW } from '~/lib/challenge/wording';
 import { ConsentScreen, PublishedTextField, PublishFlow } from './publish-words';
 import { SignInButton } from './sign-in';
 import { BookQuotes } from './design-book';
@@ -33,7 +34,8 @@ type Props = {
   character: { slug: string; name: string; callName: string; quotes: { chapter: number; idx: number; quote: string }[]; firstChapter: number } | null;
   /** A place sheet's place (2026-10-14): its views are made with the place lines. */
   place: { slug: string; name: string; quotes: { chapter: number; idx: number; quote: string }[] } | null;
-  source: { versionId: string; title: string; entity: string; by: string; versionNo: number; text: string; drafted: boolean } | null;
+  /** `style`: the style the source's views were made in, chosen to start with when it is still published (launch rehearsal, 2026-11-02). */
+  source: { versionId: string; title: string; entity: string; by: string; versionNo: number; text: string; drafted: boolean; style?: string | null } | null;
   subjects: string[];
   /** Published styles a sheet's views can be made in (newest first). */
   styles: StyleOption[];
@@ -58,7 +60,15 @@ export function DesignForm(p: Props) {
   const [status, setStatus] = useState<Status | null>(null);
   const [consent, setConsent] = useState<Wording | null>(null);
   const [published, setPublished] = useState<string | null>(null);
-  const [viewStyle, setViewStyle] = useState<string | null>(null);
+  /** What the publish said about the remix challenge: this version is the maker's entry, or Neynar didn't answer so it doesn't count. */
+  const [entry, setEntry] = useState<{ kind: 'entry' | 'unchecked'; name: string } | null>(null);
+  // A refusal at Generate (a score below the check, the day's limit…) shows beside the Generate buttons and is
+  // scrolled into view (launch rehearsal, 2026-11-02: it appeared 174px below the screen at 390px wide).
+  const noteRef = useRef<HTMLParagraphElement>(null);
+  useEffect(() => {
+    if (note) noteRef.current?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  }, [note]);
+  const [viewStyle, setViewStyle] = useState<string | null>(() => (p.source?.style && p.styles.some((s) => s.versionId === p.source!.style) ? p.source.style : null));
   const picks = useMyPicks();
   const pickedStyle = picks?.find((x) => x.kind === 'style' && p.styles.some((s) => s.versionId === x.versionId))?.versionId ?? null;
   useEffect(() => {
@@ -124,8 +134,9 @@ export function DesignForm(p: Props) {
         nameProof: webNameProof(),
       }),
     });
-    const out = (await res.json().catch(() => ({}))) as { page?: string; error?: string };
+    const out = (await res.json().catch(() => ({}))) as { page?: string; error?: string; challenge?: { kind: 'entry' | 'unchecked'; name: string } | null };
     if (!res.ok || !out.page) throw new Error(out.error ?? 'Could not publish');
+    setEntry(out.challenge?.kind === 'entry' || out.challenge?.kind === 'unchecked' ? out.challenge : null);
     setPublished(out.page);
   };
 
@@ -173,9 +184,18 @@ export function DesignForm(p: Props) {
 
   if (published)
     return (
-      <p className="ic-done">
-        {W.form.published} <Link href={published}>{W.form.see}</Link>
-      </p>
+      <>
+        <p className="ic-done">
+          {W.form.published} {entry?.kind === 'entry' && `${CW.publishedEntry(entry.name)} `}
+          <Link href={published}>{W.form.see}</Link>
+        </p>
+        {entry?.kind === 'unchecked' && (
+          <p className="ic-error ch-unchecked" role="status">
+            {CW.publishedUnchecked(entry.name)}
+          </p>
+        )}
+        {entry && <p className="as-draft ic-draftline">{IMAGE_WORDING.draftLine}</p>}
+      </>
     );
   return (
     <div className="dz-form">
@@ -192,7 +212,7 @@ export function DesignForm(p: Props) {
 
       {auth.kind !== 'signed-in' ? (
         <div className="ic-gate">
-          <p>{W.form.signIn}</p>
+          <p>{p.challengeOpen ? W.form.signInChallenge : W.form.signIn}</p>
           <SignInButton />
         </div>
       ) : !status ? (
@@ -203,6 +223,7 @@ export function DesignForm(p: Props) {
         <p className="ic-gate">{W.form.notReady}</p>
       ) : !status.consented ? (
         <div className="ic-gate">
+          {p.challengeOpen && !status.invited && <p className="ch-who">{CW.whoCanEnter()}</p>}
           <p>{W.form.consentFirst}</p>
           <button type="button" className="ic-primary" onClick={startConsent}>
             {W.form.readAndAgree}
@@ -268,6 +289,12 @@ export function DesignForm(p: Props) {
                 ? samples.map((x, i) => pictureFor('sample', i, x, p.subjects[i]))
                 : (['front', 'side', 'back'] as const).map((k, i) => pictureFor(k, i, views[k], p.viewLines[k]))}
             </ul>
+            {note && (
+              <p ref={noteRef} className="ic-error dz-make-note" role="status">
+                {note}
+              </p>
+            )}
+            {p.challengeOpen && !status.invited && <p className="dz-note ch-who">{CW.whoCanEnter()}</p>}
             {!style && (
               <ul className="dz-view-lines">
                 {(['front', 'side', 'back'] as const).map((k) => (
@@ -298,11 +325,6 @@ export function DesignForm(p: Props) {
             <p className="ic-label">{IMAGE_WORDING.composer.rulesLabel}</p>
             <p>{style ? W.form.styleRules : W.form.sheetRules} {p.rules}</p>
           </div>
-          {note && (
-            <p className="ic-error" role="status">
-              {note}
-            </p>
-          )}
           <div className="dz-publish">
             <PublishFlow
               disabled={!enough || stale || styleStale || busy !== null || (style && !title.trim())}
