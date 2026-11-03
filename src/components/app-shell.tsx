@@ -8,6 +8,8 @@ import { sdk } from '@farcaster/miniapp-sdk';
 import { inMiniApp, signOut, signOutWallet, useAuth, useWalletAlongside, useWalletSession, type AuthState } from '~/lib/client-auth';
 import { lastChapter, openedChapters } from '~/lib/chat/device';
 import { COMING, navItems, type NavItem } from '~/lib/nav';
+import { CHALLENGE } from '~/lib/config';
+import { isAdmin } from '~/lib/admins';
 import type { Intro } from '~/lib/intro';
 import { Assistant } from './assistant';
 import { ReplayIntro } from './first-visit';
@@ -89,7 +91,8 @@ export function AppShell({ chapters, adaptations, intro, children }: { chapters:
     }
   };
   const current = Number(path.match(/^\/chapter\/(\d+)/)?.[1] ?? 0);
-  const items = navItems(last, adaptations);
+  // The remix challenge's item: for everyone once the owner opens it (CHALLENGE.public), for admins before.
+  const items = navItems(last, adaptations, CHALLENGE.public || (auth.kind === 'signed-in' && isAdmin(auth.fid)));
   const onMp = path === '/minpentai' || path.startsWith('/minpentai/');
   const showPanel = (onMp ? mpPanel : panel) && !path.startsWith('/assistant');
   const openPanel = () => (onMp ? setMpPanel(true) : (setPanel(true), remember('snowmoon.panel', null)));

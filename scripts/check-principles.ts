@@ -24,7 +24,8 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { DEFAULT_TEMPLATES } from '../src/templates';
 import { LiveScreen } from '../src/components/live-screen';
-import { AGENTS, CHALLENGE, CHAT, IMAGES, REPO_URL } from '../src/lib/config';
+import { AGENTS, CHALLENGE, CHAT, IMAGES, REPO_URL, imagesDailySpendCapUsd } from '../src/lib/config';
+import { challengeOpenNow, challengeVisibleTo, entriesOpen } from '../src/lib/challenge/rules';
 import { NOTICE_REVIEW, currentNoticeItems, noticeKey } from '../src/lib/chat/notice';
 import { LEGAL, PRIVACY, TERMS, legalKey } from '../src/lib/legal';
 import { LEARN_TEXT } from '../src/lib/minpentai/learn-text';
@@ -1756,6 +1757,58 @@ add({
     c.s4 = 'Quote cards you save, and your likes.';
     c.s7 = 'Neynar receives your Farcaster ID.';
     c.openSheets = 'export const challengeSheetsOpen = () => CHALLENGE.openSheets;';
+  },
+});
+
+// P6u: the remix challenge is admin-only until the owner opens it (owner, 2026-11-04: "/challenge is admin-only for
+// now"; nothing opens by date alone). While CHALLENGE.public is off, with the clock past the open date (dates.opens):
+// entries are not taken (no eligibility stored at publish, so Neynar isn't asked; no marking), sheets stay
+// invited-only, the free image cap stays IMAGES.dailySpendCapUsd (not the $15), only admins may see the challenge, and
+// the target answers /challenge with 404 to a signed-out visitor, with neither it nor the home page naming the
+// challenge. Once the owner turns CHALLENGE.public on, this check has nothing to hold.
+add({
+  id: 'P6u',
+  principle: 6,
+  name: 'while CHALLENGE.public is off, the dates open nothing (entries, open sheets, the $15 cap) and /challenge answers 404 to a non-admin',
+  load: async () => {
+    const at = new Date(Date.parse(CHALLENGE.dates.opens) + 3600_000);
+    const r = await fetch(`${BASE}/challenge`, { headers: { 'cache-control': 'no-cache' }, redirect: 'manual' }).catch(() => null);
+    return {
+      pub: CHALLENGE.public as boolean,
+      at: at.toISOString(),
+      cap: imagesDailySpendCapUsd(at),
+      entries: entriesOpen(at),
+      open: challengeOpenNow(at),
+      // Signed out, a stand-in FID and an invited one who isn't an admin (6852).
+      visibleToNonAdmin: [null, 501, ...IMAGES.invited.filter((f) => !challengeVisibleTo(f, false))].some((f) => challengeVisibleTo(f)),
+      sheets: read('src/lib/challenge/open-sheets.ts'),
+      record: read('src/lib/challenge/record.ts'),
+      status: r?.status ?? 0,
+      html: r ? await r.text() : '',
+      home: await page('/'),
+    };
+  },
+  run: (c) => {
+    if (c.pub) return [];
+    const problems: string[] = [];
+    if (c.cap !== IMAGES.dailySpendCapUsd) problems.push(`the free image cap at ${c.at} is $${c.cap}, not IMAGES.dailySpendCapUsd ($${IMAGES.dailySpendCapUsd}): it rose by date alone (imagesDailySpendCapUsd in src/lib/config.ts must read CHALLENGE.public)`);
+    if (c.entries || c.open) problems.push(`entries are open at ${c.at} with CHALLENGE.public off (entriesOpen / challengeOpenNow in src/lib/challenge/rules.ts must read CHALLENGE.public)`);
+    if (!/export const challengeSheetsOpen = \([^)]*pub: boolean = CHALLENGE\.public\) => pub && CHALLENGE\.openSheets && phase\(now\) === 'open'/.test(c.sheets)) problems.push('src/lib/challenge/open-sheets.ts: open sheet-making does not wait for CHALLENGE.public');
+    if (!/if \(!entriesOpen\(now\)\) return 'not-a-candidate';/.test(c.record)) problems.push('src/lib/challenge/record.ts: eligibility is recorded (and Neynar asked) without CHALLENGE.public');
+    if (c.visibleToNonAdmin) problems.push('challengeVisibleTo lets a non-admin see the challenge while CHALLENGE.public is off');
+    if (c.status !== 404) problems.push(`${BASE}/challenge answers ${c.status} to a signed-out visitor, not 404`);
+    // The whole HTML, its inline page data included; a link to /challenge in the markup itself.
+    for (const [where, html] of [['/challenge', c.html], ['/', c.home]] as const) {
+      const m = /Remix the cast|remix challenge/i.exec(String(html)) ?? /href="\/challenge"/.exec(String(html).replace(/<script[\s\S]*?<\/script>/gi, ''));
+      if (m) problems.push(`${BASE}${where}: its HTML names the challenge ("${m[0]}")`);
+    }
+    return problems;
+  },
+  plant: (c) => {
+    c.cap = CHALLENGE.dailySpendCapUsd;
+    c.entries = true;
+    c.sheets = 'export const challengeSheetsOpen = (now = new Date()) => CHALLENGE.openSheets && phase(now) === \'open\';';
+    c.status = 200;
   },
 });
 

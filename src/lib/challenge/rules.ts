@@ -1,4 +1,5 @@
 import { CHALLENGE } from '../config';
+import { isAdmin } from '../admins';
 import { CHALLENGE_LISTS } from './who';
 
 /**
@@ -30,6 +31,25 @@ export function phase(now: Date = new Date(), dates: { opens: string; closes: st
   const t = now.getTime();
   return t < ms(dates.opens) ? 'before' : t < ms(dates.closes) ? 'open' : 'closed';
 }
+
+/**
+ * Whether the challenge is open now (owner, 2026-11-04: "nothing opens by date alone"): the owner's switch
+ * (CHALLENGE.public) and inside the window. Everything the dates used to switch on by themselves reads this: entries
+ * (eligibility at publish, marking), open sheet-making and the challenge share text. The cap reads the same switch
+ * (imagesDailySpendCapUsd in src/lib/config.ts).
+ */
+export function challengeOpenNow(now: Date = new Date(), pub: boolean = CHALLENGE.public, dates: { opens: string; closes: string } = CHALLENGE.dates): boolean {
+  return pub && phase(now, dates) === 'open';
+}
+
+/** Entries are taken now: CHALLENGE.entries, and the challenge open (challengeOpenNow). */
+export const entriesOpen = (now: Date = new Date(), pub: boolean = CHALLENGE.public) => CHALLENGE.entries && challengeOpenNow(now, pub);
+
+/**
+ * Who may see the challenge (owner, 2026-11-04: "/challenge is admin-only for now"): everyone once the owner opens it
+ * (CHALLENGE.public), admins (ADMINS) before. Pages and the challenge APIs answer "not found" to everyone else.
+ */
+export const challengeVisibleTo = (person: number | null | undefined, pub: boolean = CHALLENGE.public) => pub || isAdmin(person);
 
 /**
  * A date of the challenge as people read it, in Pacific time, built from CHALLENGE.dates only. A closing instant
