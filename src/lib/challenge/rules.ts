@@ -47,6 +47,18 @@ export function dateText(key: DateKey, opts: { time?: boolean } = {}, dates: Rec
   return `${day}, ${hm} Pacific`;
 }
 
+/**
+ * A date of the challenge in short, "Fri 6 Nov, 09:00 PT" (owner, 2026-11-03: marking before the open says "Entries
+ * open Fri 6 Nov, 09:00 PT"), built from CHALLENGE.dates only. A closing instant at midnight is shown as its last minute.
+ */
+export function shortDateText(key: DateKey, dates: Record<DateKey, string> = CHALLENGE.dates): string {
+  const closing = (key === 'closes' || key === 'mintCloses' || key === 'shortlistCloses') && pacificWallTime(dates[key]).endsWith(' 00:00');
+  const at = new Date(ms(dates[key]) - (closing ? 60_000 : 0));
+  const parts = new Intl.DateTimeFormat('en-GB', { timeZone: CHALLENGE.timeZone, weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).formatToParts(at);
+  const get = (t: string) => parts.find((p) => p.type === t)?.value ?? '';
+  return `${get('weekday')} ${get('day')} ${get('month')}, ${get('hour')}:${get('minute')} PT`;
+}
+
 /** "6 to 22 November": the window as a span, from the config. */
 export function windowText(dates: Record<DateKey, string> = CHALLENGE.dates): string {
   const d = (k: DateKey) => dateText(k, {}, dates).split(' ').slice(1); // [day, month]
@@ -116,7 +128,10 @@ export interface Candidate {
   /** The person it counts for: the maker's FID. */
   person: number;
   createdAt: string;
-  /** The design's first version has a remixed_from link (a fork). */
+  /**
+   * The design is a remix that counts: its first version was remixed from one of the character's bases, or from a
+   * remix of one (remixOfBase below; while the character has no bases yet, from any sheet).
+   */
   forked: boolean;
 }
 
@@ -156,3 +171,62 @@ export function entrantCounts(entries: Pick<Candidate, 'person' | 'character'>[]
 
 /** Whether a character has enough entrants for a final version, a credit test and a token (CHALLENGE.minEntrants). */
 export const enoughEntrants = (count: number, min: number = CHALLENGE.minEntrants) => count >= min;
+
+// ---------------------------------------------------------------------------------------------
+// The bases: three per character (owner, 2026-11-03)
+// ---------------------------------------------------------------------------------------------
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+/** A character's bases, as configured (CHALLENGE.bases): design ids, at most CHALLENGE.maxBases, empty until picked. */
+export function basesOf(character: string, bases: Record<string, readonly string[]> = CHALLENGE.bases): string[] {
+  return (bases[character] ?? []).filter((id) => UUID.test(id)).slice(0, CHALLENGE.maxBases).map((id) => id.toLowerCase());
+}
+
+/** What is wrong with the bases config, if anything (scripts/test-challenge.ts runs it on the committed config). */
+export function basesProblems(bases: Record<string, readonly string[]> = CHALLENGE.bases, characters: readonly string[] = CHALLENGE.characters): string[] {
+  const p: string[] = [];
+  for (const c of characters) if (!Array.isArray(bases[c])) p.push(`${c}: no bases list`);
+  for (const [c, ids] of Object.entries(bases)) {
+    if (!characters.includes(c)) p.push(`${c}: not a challenge character`);
+    if (ids.length > CHALLENGE.maxBases) p.push(`${c}: ${ids.length} bases, more than ${CHALLENGE.maxBases}`);
+    for (const id of ids) if (!UUID.test(id)) p.push(`${c}: "${id}" is not a design id`);
+    if (new Set(ids).size !== ids.length) p.push(`${c}: a base is listed twice`);
+  }
+  return p;
+}
+
+/** One step back along a design's remix line: the version its first version was remixed from, and that version's design. */
+export interface Ancestor {
+  elementId: string;
+  versionId: string;
+}
+
+/**
+ * Whether a design counts as a remix for the challenge, from its remix line (its first version's remixed_from, then
+ * that design's, and so on). A design made from scratch has no line and never counts. Once the character has bases,
+ * the line must reach one of them: a fork of a base, or of anyone's remix of a base (an entry or not). While the
+ * character has no bases yet, any fork counts, as before the three bases.
+ */
+export function remixOfBase(character: string, line: readonly Ancestor[], bases: Record<string, readonly string[]> = CHALLENGE.bases, refused: ReadonlySet<string> | ReadonlyMap<string, unknown> = new Set()): boolean {
+  if (!line.length) return false;
+  const picked = basesOf(character, bases);
+  if (!picked.length) return true;
+  // A refused base (a closed-model base before CHALLENGE.closedBasesAllowed; src/lib/challenge/bases.ts) is not one
+  // to start from, but the character's bases stay picked: a fork of any sheet doesn't count instead.
+  const b = picked.filter((id) => !refused.has(id));
+  return line.some((a) => b.includes(a.elementId.toLowerCase()) || b.includes(a.versionId.toLowerCase()));
+}
+
+/**
+ * The bases' fixed style order (owner, 2026-11-04): by each base's style's place in CHALLENGE.baseStyles, the same for
+ * every character, so the casts line up; a style not listed comes after. Used only for "Bases to start from"
+ * (src/lib/challenge/entries.ts, startingSheets), after newestFirst, so bases of one style (or none listed) stay newest
+ * first. check:principles P5g allows this order there and nowhere else: entries and every other list are time order.
+ */
+export function baseStyleOrder(a: { style: string | null }, b: { style: string | null }): number {
+  const at = (s: string | null) => {
+    const i = s === null ? -1 : CHALLENGE.baseStyles.findIndex((x) => x.toLowerCase() === s.toLowerCase());
+    return i < 0 ? CHALLENGE.baseStyles.length : i;
+  };
+  return at(a.style) - at(b.style);
+}

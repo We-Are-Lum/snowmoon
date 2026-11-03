@@ -174,6 +174,12 @@ export const BOOK_SETTINGS = {
   factoryEvery: { text: 'A factory also fires on its own every this many steps while its rock has ore (0: only when a glider hits the rock)', min: 0, max: 24, edition: 'This edition\'s; after c14-b38, the eternal glider factory.' },
   symbolsCapped: { text: 'A symbol forms only if its side is under maxTowers (1: yes, 0: no)', min: 0, max: 1, edition: 'This edition\'s.' },
   tieBreak: { text: 'At the last step with towers level, the side that destroyed more enemy towers wins (1: yes, 0: a draw)', min: 0, max: 1, edition: 'This edition\'s.' },
+  // book-4 design options (2026-11-02; off unless set).
+  startX: { text: 'Column of the starting towers, counted from each side\'s own edge (absent: 1)', min: 0, max: 10, edition: 'This edition\'s.' },
+  symbolGliderSight: { text: 'A side sees this far around each of its symbol gliders in flight (0: they carry no sight)', min: 0, max: 3, edition: 'This edition\'s; after c7-b81, "The portion of the game field that Zei could see increased" as his symbol-carrying spaceship moved.' },
+  gliderSight: { text: 'A side sees this far around each of its plain gliders in flight (0: they carry no sight)', min: 0, max: 3, edition: 'Invented: the book gives sight to symbols and symbol-carrying ships, not plain gliders.' },
+  maxSymbolTowers: { text: 'Most towers formed by symbols a side may hold (0: no limit of its own)', min: 0, max: 12, edition: 'This edition\'s.' },
+  killReports: { text: 'A side learns the square of every enemy tower its gliders destroy, seen or not, and a running count for both sides (1: yes)', min: 0, max: 1, edition: 'This edition\'s.' },
 } satisfies Record<string, { text: string; min: number; max: number; edition: string }>;
 export type BookSettingId = keyof typeof BOOK_SETTINGS;
 

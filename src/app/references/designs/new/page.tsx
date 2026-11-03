@@ -62,6 +62,7 @@ export default async function NewDesign({ searchParams }: Props) {
                 versionNo: src.shown.versionNo,
                 text: src.shown.body.text,
                 drafted: Boolean(src.shown.body.assist),
+                style: src.shown.body.style?.version_id ?? null,
               }
             : null
         }

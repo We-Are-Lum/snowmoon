@@ -1,8 +1,11 @@
 import 'server-only';
 import type postgres from 'postgres';
+import { remixLines } from './lineage';
+import { refusedBases } from './bases';
+import { baseStyleOrder, basesOf, remixOfBase } from './rules';
 import { CHALLENGE, WORK_ID } from '../config';
 import { bookCharacter } from '../images/designs';
-import { chooseEntries, entrantCounts, fromDecision, type Decision, inWindow, markKey, newestFirst, type Candidate, type Eligibility } from './rules';
+import { chooseEntries, entrantCounts, fromDecision, type Decision, inWindow, markKey, newestFirst, phase, shortDateText, type Candidate, type Eligibility } from './rules';
 
 /**
  * The remix challenge's entries (owner, 2026-10-31), the server half, for pages. Reads published sheets, the private
@@ -28,27 +31,29 @@ const slugOf = (name: string) => names().find((c) => c.name === name)?.slug ?? '
 
 /**
  * Versions of published sheets for the challenge's characters made inside the window, each with whether its design is
- * a fork (its first version remixed from another sheet). Newest first.
+ * a remix that counts: a fork of one of the character's bases, or of a remix of one (CHALLENGE.bases; while the
+ * character has none yet, a fork of any sheet). Newest first.
  */
 export async function windowVersions(sql: Sql): Promise<ChallengeVersion[]> {
   const chars = names().map((c) => c.name);
   if (!chars.length) return [];
   const rows = await sql`
-    select v.id as version_id, e.id as element_id, en.name, e.created_by_fid, v.created_at, v.version_no, v.body,
-      exists (select 1 from studio.element_versions v1 join studio.links l on l.from_version_id = v1.id and l.kind = 'remixed_from'
-              where v1.element_id = e.id and v1.version_no = 1) as forked
+    select v.id as version_id, e.id as element_id, en.name, e.created_by_fid, v.created_at, v.version_no, v.body
     from studio.element_versions v
     join studio.elements e on e.id = v.element_id
     join studio.entities en on en.id = e.entity_id
     where e.element_type = 'design' and e.status = 'published' and e.work_id = ${WORK_ID} and en.kind = 'character' and en.name in ${sql(chars)}
       and v.created_at >= ${CHALLENGE.dates.opens}::timestamptz and v.created_at < ${CHALLENGE.dates.closes}::timestamptz`;
+  const lines = await remixLines(sql, [...new Set(rows.map((r) => String(r.element_id)))]);
+  const refused = await refusedBases(sql);
   return rows
     .map((r) => {
       const maker = Number(r.created_by_fid);
+      const character = slugOf(String(r.name));
       const b = (r.body ?? {}) as { title?: string; by_name?: string | null; samples?: { url: string }[]; views?: { front?: { url: string } } };
       return {
-        versionId: String(r.version_id), elementId: String(r.element_id), character: slugOf(String(r.name)), maker,
-        person: maker > 0 ? maker : 0, createdAt: new Date(r.created_at).toISOString(), forked: Boolean(r.forked),
+        versionId: String(r.version_id), elementId: String(r.element_id), character, maker,
+        person: maker > 0 ? maker : 0, createdAt: new Date(r.created_at).toISOString(), forked: remixOfBase(character, lines.get(String(r.element_id)) ?? [], CHALLENGE.bases, refused),
         versionNo: Number(r.version_no), title: b.title ?? '', byName: b.by_name ?? null, thumb: b.views?.front?.url ?? b.samples?.[0]?.url ?? null,
       };
     })
@@ -139,17 +144,42 @@ export async function versionStanding(sql: Sql, versionId: string): Promise<Vers
   return chosen?.versionId === versionId ? { kind: 'entry', character: v.character } : { kind: 'candidate', character: v.character };
 }
 
+/**
+ * What the publish confirmation says about the remix challenge (owner, 2026-11-03), read right after the decision is
+ * stored (src/lib/challenge/record.ts): 'entry' when the new version is its maker's entry for the character, 'unchecked'
+ * when Neynar didn't answer at publish, so it doesn't count. Otherwise nothing. No outside call: the stored decision
+ * and the lists only. Never throws: a confirmation without the line is better than a publish that seems to fail.
+ */
+export async function publishStanding(sql: Sql, versionId: string): Promise<{ kind: 'entry' | 'unchecked'; character: string } | null> {
+  if (!CHALLENGE.entries) return null;
+  try {
+    const s = await versionStanding(sql, versionId);
+    if (s?.kind === 'entry') return s;
+    if (s) return null;
+    const [r] = await sql<{ decision: string }[]>`select decision from studio.challenge_eligibility where version_id = ${versionId} and challenge = ${CHALLENGE.id}`;
+    if (r?.decision !== 'unchecked') return null;
+    const v = (await windowVersions(sql)).find((x) => x.versionId === versionId && x.forked);
+    return v ? { kind: 'unchecked', character: v.character } : null;
+  } catch (e) {
+    console.error('challenge: standing at publish not read', (e as { code?: string }).code ?? (e as Error).name);
+    return null;
+  }
+}
+
 export type MarkResult = { ok: true } | { ok: false; why: string; status: number };
 export const MARK_WORDING = {
   off: 'Entries aren’t open yet.',
+  /** Before the window (owner, 2026-11-03: not "Entries are closed"), its date built from CHALLENGE.dates. */
+  opens: () => `Entries open ${shortDateText('opens')}.`,
   closed: 'Entries are closed.',
   notYours: 'You can mark only your own version, made during the challenge.',
   notYet: 'Marking another version isn’t available yet. Your latest version counts.',
-} as const;
+};
 
 /** Mark one of your own versions in the window as your entry for its character (the latest mark counts). */
 export async function markEntry(sql: Sql, fid: number, versionId: string, now = new Date()): Promise<MarkResult> {
   if (!CHALLENGE.entries) return { ok: false, why: MARK_WORDING.off, status: 503 };
+  if (phase(now) === 'before') return { ok: false, why: MARK_WORDING.opens(), status: 409 };
   if (!inWindow(now)) return { ok: false, why: MARK_WORDING.closed, status: 409 };
   const v = (await windowVersions(sql)).find((x) => x.versionId === versionId && x.forked);
   if (!v || v.person !== fid) return { ok: false, why: MARK_WORDING.notYours, status: 403 };
@@ -162,10 +192,38 @@ export async function markEntry(sql: Sql, fid: number, versionId: string, now = 
   }
 }
 
-/** Published sheets for a character made before the window opened: what to start from. Newest first. */
-export async function startingSheets(sql: Sql, slug: string): Promise<{ versionId: string; title: string; byName: string | null; byFid: number; thumb: string | null; createdAt: string }[]> {
+/** `style`: the published style the sheet's views were made in (body.style.title), for the bases' style order. */
+type StartingSheet = { versionId: string; title: string; byName: string | null; byFid: number; thumb: string | null; createdAt: string; style: string | null };
+const sheetRow = (r: Record<string, unknown>): StartingSheet => {
+  const b = (r.body ?? {}) as { title?: string; by_name?: string | null; views?: { front?: { url: string } }; style?: { title?: string } | null };
+  return { versionId: String(r.id), title: b.title ?? '', byName: b.by_name ?? null, byFid: Number(r.created_by_fid), thumb: b.views?.front?.url ?? null, createdAt: new Date(r.created_at as string).toISOString(), style: b.style?.title ?? null };
+};
+
+/**
+ * What to start from. Once the character's bases are picked (CHALLENGE.bases): those, newest first, each a
+ * published sheet of this character (an element id at its newest version, a version id as that version); an id
+ * that isn't one is left out. Before the picks: published sheets for the character made before the window opened,
+ * newest first, as before the three bases.
+ */
+export async function startingSheets(sql: Sql, slug: string): Promise<StartingSheet[]> {
   const c = bookCharacter(slug);
   if (!c) return [];
+  const bases = basesOf(slug);
+  if (bases.length) {
+    const rows = await sql`
+      select distinct on (e.id) v.id, v.body, v.created_at, e.created_by_fid, e.id as element_id from studio.elements e
+      join studio.entities en on en.id = e.entity_id
+      join studio.element_versions v on v.element_id = e.id
+      where e.element_type = 'design' and e.status = 'published' and e.work_id = ${WORK_ID} and en.kind = 'character' and en.name = ${c.name}
+        and (e.id::text in ${sql(bases)} or v.id::text in ${sql(bases)})
+      order by e.id, (v.id::text in ${sql(bases)}) desc, v.version_no desc`;
+    // A refused base (a closed-model base before CHALLENGE.closedBasesAllowed) is left out.
+    const refused = await refusedBases(sql);
+    const usable = rows.filter((r) => !refused.has(String(r.element_id)) && !refused.has(String(r.id)));
+    // In the bases' fixed style order (CHALLENGE.baseStyles), newest first within a style: the one challenge list not
+    // in time order only (P5g allows it here, for the bases; owner, 2026-11-04). With no styles set, newest first.
+    return usable.map(sheetRow).sort(newestFirst).sort(baseStyleOrder);
+  }
   // Each sheet at its newest version from before the window (distinct on picks it); then newest first.
   const rows = await sql`
     select * from (
@@ -176,8 +234,5 @@ export async function startingSheets(sql: Sql, slug: string): Promise<{ versionI
         and v.created_at < ${CHALLENGE.dates.opens}::timestamptz
       order by e.id, v.version_no desc) x
     order by x.created_at desc limit 24`;
-  return rows.map((r) => {
-    const b = (r.body ?? {}) as { title?: string; by_name?: string | null; views?: { front?: { url: string } } };
-    return { versionId: String(r.id), title: b.title ?? '', byName: b.by_name ?? null, byFid: Number(r.created_by_fid), thumb: b.views?.front?.url ?? null, createdAt: new Date(r.created_at).toISOString() };
-  });
+  return rows.map(sheetRow);
 }

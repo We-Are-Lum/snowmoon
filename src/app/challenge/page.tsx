@@ -5,7 +5,7 @@ import { designByline } from '~/lib/images/byline';
 import { bookCharacter } from '~/lib/images/designs';
 import { sheetCharacter } from '~/lib/images/sheets';
 import { standing, startingSheets, type Standing } from '~/lib/challenge/entries';
-import { entrantCounts, phase } from '~/lib/challenge/rules';
+import { basesOf, entrantCounts, phase } from '~/lib/challenge/rules';
 import { CHALLENGE_WORDING as W } from '~/lib/challenge/wording';
 import { AiTag } from '~/components/ai-tag';
 
@@ -51,6 +51,8 @@ export default async function ChallengePage() {
         <strong>{now === 'before' ? W.opensOn() : now === 'open' ? W.deadline() : W.closed()}</strong>
         {now === 'before' && ` ${W.deadline()}`}
       </p>
+      {/* Who can enter, up front (owner, 2026-11-03; launch rehearsal item 2): no lookup here, the score is checked at Generate. */}
+      {now !== 'closed' && <p className="ch-who">{W.whoCanEnter()}</p>}
       <section className="ch-rules">
         <p>{W.intro()}</p>
         <p>
@@ -94,7 +96,7 @@ export default async function ChallengePage() {
           <p>
             <Link href={`/references/designs/character/${c.slug}`}>{W.readBook(callName(c.name))} →</Link>
           </p>
-          <p className="dz-label">{W.startFrom}</p>
+          <p className="dz-label">{basesOf(c.slug).length ? W.startFromBases : W.startFrom}</p>
           {list.length ? (
             <ul className="dz-rows">
               {list.map((s) => (
@@ -144,7 +146,7 @@ export default async function ChallengePage() {
                     )}
                     <span className="dz-row-text">
                       <span className="dz-row-title">
-                        <span className="ch-badge">{W.badge}</span> {nameOf(e.character)}: {e.title || nameOf(e.character)}
+                        <span className="ch-badge">{W.badge}</span> {W.entryLabel(nameOf(e.character), e.title)}
                       </span>
                       <span className="dz-row-meta">
                         {designByline(e.byName, e.maker)} · v{e.versionNo}
@@ -170,7 +172,7 @@ export default async function ChallengePage() {
               {st.byAdmins.map((v) => (
                 <li key={v.versionId}>
                   <Link href={`/references/designs/${v.versionId}`}>
-                    {nameOf(v.character)}: {v.title || nameOf(v.character)} · {designByline(v.byName, v.maker)} · v{v.versionNo}
+                    {W.entryLabel(nameOf(v.character), v.title)} · {designByline(v.byName, v.maker)} · v{v.versionNo}
                   </Link>
                 </li>
               ))}

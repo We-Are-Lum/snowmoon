@@ -89,6 +89,8 @@ export async function POST(request: Request) {
   const paid = await paidPicture(sql, fid, request, {
     checkText: prompt,
     spend,
+    // A sheet's view prompt is long (view line, style text, sheet text): the larger budget, as Remix's (owner, 2026-11-03).
+    guardMaxTokens: slot === 'sample' ? undefined : IMAGES.designs.guardMaxTokens,
     make: () => (front ? makeEdit(prompt, [{ bytes: front.bytes, contentType: 'image/jpeg', ...size }], size) : makeImage(prompt, size)),
   });
   if (!paid.ok) return no(paid.error, paid.status, paid.extra);
