@@ -7,6 +7,8 @@
  * c1-b18 is a screen, not a sentence, and is left out; Design's c1-b20 sentence is in c1-b19; its
  * c1-b9 stopped mid-sentence and is given here whole.
  */
+import { checkMomentQuote, momentSource } from './moments/quote';
+
 export interface HomeMoment {
   chapter: number;
   /** The block it is quoted from: c<chapter>-b<idx>. */
@@ -31,12 +33,13 @@ export const HOME_MOMENTS: HomeMoment[] = [
   { chapter: 1, block: 'c1-b19', text: 'As a citizen of Veridia, he had been randomly selected by cryptographic sortition to vote on how much he liked the building.' },
 ];
 
-/** The block's text that moments are quoted from: only the speaker-colour span tags removed. */
-export const momentSource = (content: string) => content.replace(/<\/?span[^>]*>/g, '');
+/** The block's text that moments are quoted from: only the speaker-colour span tags removed (src/lib/moments/quote.ts). */
+export { momentSource };
 
 /**
  * Problems with the moments, given each block's content by id: a block that is missing or not a
  * paragraph, a chapter that does not match the id, or a text that is not whole sentences of it.
+ * The words are checked by the shared checkMomentQuote (src/lib/moments/quote.ts), as "Find a moment"'s are.
  */
 export function momentProblems(moments: HomeMoment[], blocks: Map<string, { kind: string; content: string }>): string[] {
   const problems: string[] = [];
@@ -44,14 +47,12 @@ export function momentProblems(moments: HomeMoment[], blocks: Map<string, { kind
     const b = blocks.get(m.block);
     if (!b) { problems.push(`${m.block}: no such block`); continue; }
     if (!m.block.startsWith(`c${m.chapter}-b`)) problems.push(`${m.block}: listed under chapter ${m.chapter}`);
-    if (b.kind !== 'paragraph' && b.kind !== 'quote') problems.push(`${m.block}: a ${b.kind}, not a sentence of the book`);
-    const src = momentSource(b.content);
-    const at = src.indexOf(m.text);
-    if (!m.text.trim() || at < 0) { problems.push(`${m.block}: "${m.text.slice(0, 50)}…" is not verbatim in the block`); continue; }
-    // Whole sentences: it starts the block or follows a sentence end, and ends one.
-    const before = src.slice(0, at), after = src.slice(at + m.text.length);
-    if (!(before === '' || /[.!?…]["”’)]?\s$/.test(before)) || !/[.!?…]["”’)]?$/.test(m.text) || !(after === '' || /^\s/.test(after)))
-      problems.push(`${m.block}: "${m.text.slice(0, 50)}…" is not whole sentences of the block`);
+    const c = checkMomentQuote(b, m.text);
+    if (c.ok) continue;
+    if (c.reason === 'not-a-sentence-block') problems.push(`${m.block}: a ${b.kind}, not a sentence of the book`);
+    else if (c.reason === 'not-whole-sentences') problems.push(`${m.block}: "${m.text.slice(0, 50)}…" is not whole sentences of the block`);
+    else if (c.reason === 'too-long') problems.push(`${m.block}: "${m.text.slice(0, 50)}…" is longer than a moment may be`);
+    else problems.push(`${m.block}: "${m.text.slice(0, 50)}…" is not verbatim in the block`);
   }
   return problems;
 }
