@@ -846,6 +846,26 @@ check('as committed, CHALLENGE.entries, posts and openSheets are on (owner\'s re
   check('i the confirmation\'s new lines carry a Draft wording line', /\{entry && <p className="as-draft ic-draftline">\{IMAGE_WORDING\.draftLine\}<\/p>\}/.test(form));
 }
 
+// --- A remix page as a landing page (owner, 2026-11-04) ------------------------------------------------------------
+{
+  const L = await import('../src/lib/challenge/landing');
+  const pic = (u: string) => ({ url: u, sha256: 'a'.repeat(64), recipe: { width: 576, height: 768 } }) as never;
+  const views = { front: pic('f'), side: pic('s') };
+  check('l1 the landing picture is the front view', L.landingPicture({ views })?.url === 'f');
+  check('l1 no front view: no landing and no preview picture', L.landingPicture({ views: { side: pic('s') } }) === null && !L.isLanding({ kind: 'character', challengeCharacter: true, body: { views: { side: pic('s') } } }));
+  proof('l1 a landing for a style or a character outside the challenge is caught', !L.isLanding({ kind: 'style', challengeCharacter: true, body: { views } }) && !L.isLanding({ kind: 'character', challengeCharacter: false, body: { views } }));
+  const open = L.landingAction('v1', 'open');
+  check('l2 open: the Remix button opens that version\'s remix form', 'href' in open && open.href === '/references/designs/new?from=v1');
+  check('l2 before and after: a line in its place, with the date from CHALLENGE.dates', ['before', 'closed'].every((ph) => { const a = L.landingAction('v1', ph as 'before'); return 'line' in a && /Pacific/.test(a.line); }) && (L.landingAction('v1', 'before') as { line: string }).line.includes(R.dateText('opens', { time: true })));
+  check('l3 the signed-out line names the challenge and its dates', L.LANDING_WORDING.arrival('Zei', 'open').includes(R.windowText()) && /remix challenge/.test(L.LANDING_WORDING.arrival('Zei', 'before')));
+  const meta = L.landingMetadata({ versionId: 'v1', name: 'Zei', title: '', by: '@a' });
+  const embed = JSON.parse(String((meta.other as Record<string, string>)['fc:miniapp']));
+  check('l4 the embed: version 1, a button of at most 32 characters opening the page, the 3:2 card', embed.version === '1' && embed.button.title.length <= 32 && embed.button.action.type === 'launch_frame' && embed.button.action.url.endsWith('/references/designs/v1') && embed.imageUrl.endsWith('/api/design-card/v1') && L.CARD_SIZE.embed.width * 2 === L.CARD_SIZE.embed.height * 3);
+  check('l4 Open Graph and twitter:card for Bluesky and Lens', (meta.twitter as { card?: string })?.card === 'summary_large_image' && JSON.stringify(meta.openGraph).includes('/api/design-card/v1?shape=og'));
+  check('l5 a hidden or unpublished version: no picture, and the site embed blanked', L.NO_PREVIEW.openGraph === null && L.NO_PREVIEW.twitter === null && Object.values(L.NO_PREVIEW.other ?? {}).every((v) => v === ''));
+  check('l6 likes are off (planned 12 November): the slot renders nothing', L.likesOn() === false && /if \(!likesOn\(\)\) return null;/.test(read('src/components/challenge-like.tsx')));
+}
+
 console.log(`test:challenge: ${passed} passed, ${failures.length} failed`);
 if (failures.length) {
   for (const f of failures) console.log(`  FAIL ${f}`);

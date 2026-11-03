@@ -85,8 +85,12 @@ export function landingMetadata(p: { versionId: string; name: string; title: str
   };
 }
 
-/** A hidden, unpublished or missing version: no preview picture at all, not even the site's own embed. */
-export const NO_PREVIEW: Metadata = { title: 'Not found', robots: { index: false }, openGraph: null, twitter: null, other: {} };
+/**
+ * A hidden, unpublished or missing version: no preview picture at all, not even the site's own embed. Next merges
+ * `other` key by key and leaves out a tag whose content is empty, so the root layout's fc:miniapp and fc:frame are
+ * blanked here rather than dropped.
+ */
+export const NO_PREVIEW: Metadata = { title: 'Not found', robots: { index: false }, openGraph: null, twitter: null, other: { 'fc:miniapp': '', 'fc:frame': '' } };
 
 /** Likes are planned for 12 November and off until then (CHALLENGE.likes); the slot renders nothing while off. */
 export const likesOn = () => CHALLENGE.likes;

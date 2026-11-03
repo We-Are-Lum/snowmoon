@@ -12,6 +12,8 @@
  * - Learn Minpentai and Free play fill the 424×695 frame: no site top bar, a × back to the site.
  * - The page can be framed (no X-Frame-Options or frame-ancestors).
  * - /assistant has its own embed, so a cast link opens the assistant.
+ * - A remix page (/references/designs/<id>, owner 2026-11-04) has its embed ("Remix this", a 3:2 PNG card) and link
+ *   preview (Open Graph, twitter:card, 1200×630); a hidden or unpublished one has none (fixture build, on localhost).
  * - /minpentai has its share card: "Start the tutorial" opens /minpentai?lesson=1, 1200×800 embed, 1200×630 og:image
  *   and twitter:card summary_large_image; a shared win (/minpentai/result) keeps its own card.
  * The Quick Auth server and the chat API are mocked: what is checked is the client's
@@ -87,6 +89,112 @@ for (const h of ['/minpentai', '/minpentai?lesson=1']) {
   if (!String(e?.imageUrl).endsWith('/api/minpentai-card?r=3&s=42&shape=embed')) fail(`${h}: the win card's embed image changed (${e?.imageUrl})`);
   if (!t['og:image']?.endsWith('/api/minpentai-card?r=3&s=42') || t['twitter:card'] !== 'summary_large_image') fail(`${h}: the win card's link preview changed (${t['og:image']}, ${t['twitter:card']})`);
   if (!/^image\/jpeg/.test(await imageKind(e?.imageUrl ?? '', h))) fail(`${h}: the win card's embed image is not drawn as a JPEG`);
+}
+
+// A remix page (owner, 2026-11-04: every remix page is a landing page whose link preview shows the picture): its
+// fc:miniapp and fc:frame embed, "Remix this" opening that version's page, a 3:2 card (a 1200×800 PNG, within the spec's
+// 600×400 to 3000×2000 and 10 MB, cached), and Open Graph and twitter:card (1200×630) for Bluesky and Lens. A hidden or
+// unpublished version answers 404 with no preview picture at all, and its card answers 404.
+// On the target: --design=<version id>, or the first sheet listed on a challenge character's page (none before the
+// first is published: then said, not failed). Against localhost, also this checkout's build on the fixture database
+// (scripts/fixtures/reader-images-db.ts: a published remix, a base, a hidden remix and a draft).
+const pngSize = (b: Buffer) => (b.subarray(1, 4).toString() === 'PNG' ? { w: b.readUInt32BE(16), h: b.readUInt32BE(20) } : null);
+async function checkRemixEmbed(base: string, id: string, where: string) {
+  const res = await fetch(`${base}/references/designs/${id}`);
+  if (!res.ok) return fail(`${where}: /references/designs/${id} answers ${res.status}`);
+  const t = metaTags(await res.text());
+  for (const name of ['fc:miniapp', 'fc:frame']) {
+    let e: { version?: string; imageUrl?: string; button?: { title?: string; action?: { type?: string; url?: string; splashImageUrl?: string } } } | null = null;
+    try {
+      e = JSON.parse(t[name] ?? 'null');
+    } catch {
+      fail(`${where}: ${name} is not JSON`);
+    }
+    if (!e) {
+      fail(`${where}: no ${name} embed`);
+      continue;
+    }
+    if (e.version !== '1') fail(`${where}: ${name} version is ${e.version}`);
+    if (e.button?.title !== 'Remix this' || (e.button.title ?? '').length > 32) fail(`${where}: ${name} button is "${e.button?.title}"`);
+    if (e.button?.action?.type !== 'launch_frame') fail(`${where}: ${name} action is ${e.button?.action?.type}, not launch_frame`);
+    if (!String(e.button?.action?.url).endsWith(`/references/designs/${id}`)) fail(`${where}: ${name} button opens ${e.button?.action?.url}, not this version's page`);
+    if (!String(e.imageUrl).endsWith(`/api/design-card/${id}`) || String(e.imageUrl).length > 1024) fail(`${where}: ${name} image is ${e.imageUrl}`);
+    else {
+      const r = await fetch(base + new URL(e.imageUrl!).pathname);
+      const b = Buffer.from(await r.arrayBuffer());
+      const sz = pngSize(b);
+      if (!r.ok || !sz) fail(`${where}: ${name} image answers ${r.status} ${r.headers.get('content-type')}, not a PNG`);
+      else {
+        if (sz.w * 2 !== sz.h * 3) fail(`${where}: ${name} image is ${sz.w}×${sz.h}, not 3:2`);
+        if (sz.w < 600 || sz.h < 400 || sz.w > 3000 || sz.h > 2000) fail(`${where}: ${name} image is ${sz.w}×${sz.h}, outside 600×400 to 3000×2000`);
+        if (b.length >= 10_000_000) fail(`${where}: ${name} image is ${b.length} bytes, not under 10 MB`);
+        if (!/max-age=[1-9]/.test(r.headers.get('cache-control') ?? '')) fail(`${where}: ${name} image has no non-zero max-age`);
+      }
+    }
+  }
+  if (t['twitter:card'] !== 'summary_large_image') fail(`${where}: twitter:card is ${t['twitter:card']}`);
+  for (const k of ['og:title', 'og:description', 'twitter:title', 'twitter:description']) if (!t[k]) fail(`${where}: no ${k}`);
+  if (!/not by the author/.test(t['og:description'] ?? '')) fail(`${where}: og:description doesn't say the picture is AI-generated, not by the author`);
+  for (const k of ['og:image', 'twitter:image']) {
+    if (!t[k]?.endsWith(`/api/design-card/${id}?shape=og`)) fail(`${where}: ${k} is ${t[k]}`);
+    else {
+      const u = new URL(t[k]);
+      const b = Buffer.from(await (await fetch(base + u.pathname + u.search)).arrayBuffer());
+      const sz = pngSize(b);
+      if (!sz || sz.w !== 1200 || sz.h !== 630) fail(`${where}: ${k} is not a 1200×630 PNG`);
+    }
+  }
+  if (t['og:image:width'] !== '1200' || t['og:image:height'] !== '630') fail(`${where}: og:image is not declared 1200×630`);
+}
+async function checkNoPreview(base: string, id: string, where: string) {
+  const res = await fetch(`${base}/references/designs/${id}`);
+  if (res.status !== 404) fail(`${where}: /references/designs/${id} answers ${res.status}, not 404`);
+  const t = metaTags(await res.text());
+  for (const k of ['fc:miniapp', 'fc:frame', 'og:image', 'twitter:image']) if (t[k]) fail(`${where}: a hidden or unpublished version's page has ${k} (${t[k].slice(0, 80)})`);
+  for (const q of ['', '?shape=og']) {
+    const r = await fetch(`${base}/api/design-card/${id}${q}`);
+    if (r.status !== 404) fail(`${where}: its card${q} answers ${r.status}, not 404`);
+  }
+}
+let remixNote = '';
+{
+  const { CHALLENGE } = await import('../src/lib/config');
+  let id = arg('design') ?? null;
+  for (const slug of id ? [] : CHALLENGE.characters) {
+    const html = await (await fetch(`${BASE}/references/designs/character/${slug}`)).text();
+    id = html.match(/href="\/references\/designs\/([0-9a-f-]{36})"/)?.[1] ?? null;
+    if (id) break;
+  }
+  if (id) await checkRemixEmbed(BASE, id, `remix page ${id.slice(0, 8)}`);
+  else remixNote = 'no challenge character sheet is published on the target yet, so its remix embed was not checked there';
+  if (/^(localhost|127\.0\.0\.1)$/.test(new URL(BASE).hostname)) {
+    const { spawn, execFileSync } = await import('node:child_process');
+    const { createServer } = await import('node:net');
+    const freePort = () => new Promise<number>((resolve) => { const s = createServer().listen(0, () => { const p = (s.address() as { port: number }).port; s.close(() => resolve(p)); }); });
+    const { startReaderImagesDb, FIXTURE_DESIGNS: D } = await import('./fixtures/reader-images-db');
+    const data = await startReaderImagesDb(await freePort(), { designs: true });
+    const port = await freePort();
+    const server = spawn(process.execPath, ['node_modules/next/dist/bin/next', 'start', '-p', String(port)], { env: { ...process.env, STUDIO_DATABASE_URL: data.url }, stdio: 'ignore' });
+    const LOCAL = `http://localhost:${port}`;
+    try {
+      for (let i = 0; !(await fetch(LOCAL).then((r) => r.ok, () => false)); i++) {
+        if (i > 120) throw new Error('the local build did not start (run next build first)');
+        await new Promise((r) => setTimeout(r, 500));
+      }
+      const head = execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim();
+      const built = ((await (await fetch(`${LOCAL}/api/version`)).json()) as { commit?: string }).commit ?? 'unknown';
+      if (built !== head) fail(`remix pages (fixture): the local build is from ${built.slice(0, 7)}, this checkout is at ${head.slice(0, 7)}; run next build first`);
+      else {
+        await checkRemixEmbed(LOCAL, D.remix.version, 'remix page (fixture remix)');
+        await checkRemixEmbed(LOCAL, D.base.version, 'remix page (fixture base)');
+        await checkNoPreview(LOCAL, D.hidden.version, 'remix page (fixture hidden)');
+        await checkNoPreview(LOCAL, D.draft.version, 'remix page (fixture draft)');
+      }
+    } finally {
+      server.kill();
+      await data.stop();
+    }
+  }
 }
 
 // Chrome blocks a page framing localhost unless the framing page is local too; this one is routed, so allow it.
@@ -214,4 +322,4 @@ if (failures.length) {
   console.error(`MINIAPP CHECK FAILED (${failures.length}):\n- ` + failures.join('\n- '));
   process.exit(1);
 }
-console.log(`miniapp check passed: ${BASE}, home, a chapter, the assistant and Learn Minpentai (full screen) and Minpentai Play in a stand-in Farcaster client; the /minpentai share card and the win card's embed`);
+console.log(`miniapp check passed: ${BASE}, home, a chapter, the assistant and Learn Minpentai (full screen) and Minpentai Play in a stand-in Farcaster client; the /minpentai share card and the win card's embed; a remix page's embed and link preview${remixNote ? ` (${remixNote})` : ''}`);
