@@ -47,6 +47,17 @@ export function modelTerms(id: string): string {
   return `open weights, ${m.license ?? 'licence not recorded'}`;
 }
 
+/**
+ * Whether the model list marks this model closed (open_weights false), and its maker. A model not on the list is
+ * neither open nor closed here (null): check:principles P3b keeps every model in use on the list.
+ */
+export function closedModel(id: string): { closed: boolean; maker: string | null } | null {
+  const base = id.replace(/-edit$/, '');
+  const m = modelList().find((x) => x.id === id || x.id === base);
+  if (!m) return null;
+  return { closed: m.open_weights === false, maker: m.maker ?? null };
+}
+
 const isLocal = (host: string) => /^local\b/i.test(host);
 
 /** The model line's words before the seed: "<name> (<id>), open weights, Apache-2.0, on <host>, endpoint " + the endpoint. */
@@ -62,6 +73,8 @@ const guardName = (m: string) => m.replace(/^openai\//, '');
 export function checksLine(r: RecipeForLines): string {
   const prompt = r.checks?.prompt?.verdict === 'ok' && r.checks.prompt.model && r.checks.prompt.model !== 'none' ? guardName(r.checks.prompt.model) : null;
   const host = r.checks?.host_safety_checker === 'passed';
+  // A closed model's picture (owner, 2026-11-04): its maker's own filters may have run, but nothing records them.
+  if (prompt && closedModel(r.model)?.closed) return `Checked by ${prompt}; made by a closed model whose own safety filters we can't see.`; // the owner's wording (approved 2026-11-04)
   if (prompt && host) return `Checked by ${prompt} and the host's safety checker.`;
   if (prompt) return `Checked by ${prompt}; no safety checker ran.`; // the owner's wording (approved 2026-11-02)
   if (host) return 'Checked by the host\'s safety checker; the site\'s prompt check did not run.'; // the owner's wording (approved 2026-11-02)
