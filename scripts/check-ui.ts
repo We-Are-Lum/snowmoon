@@ -77,6 +77,7 @@ import { createServer } from 'node:net';
 import path from 'node:path';
 import { chromium, type Browser, type Page } from 'playwright-core';
 import QRCode from 'qrcode';
+import { BOOK_MENTIONS } from '../src/lib/character-order';
 import { SUPPORT } from '../src/lib/config';
 import { requireTarget } from './lib/target';
 
@@ -797,6 +798,13 @@ async function checkReferenceGlossary(page: Page, scheme: string) {
   }
   if (!(await page.locator('button.info-label[data-label="about"]').count())) fail(`${where}: no ⓘ for the page's explanation`);
   if (!/AI-generated, not by the author/.test(await page.locator('main').innerText())) fail(`${where}: the AI declaration isn't in view`);
+  // The characters first, most named in the book first (owner, 2026-11-04), then the other words.
+  {
+    const terms = await cards.evaluateAll((els) => els.map((e) => e.getAttribute('data-term') ?? ''));
+    const rank = new Map(BOOK_MENTIONS.map((c, i) => [c.slug, i]));
+    const ranks = terms.map((t) => rank.get(t) ?? Infinity);
+    if (ranks.some((r, i) => i > 0 && r < ranks[i - 1])) fail(`${where}: the characters aren't first, most named first: ${terms.join(', ')}`);
+  }
   await checkFloors(page, '/references/glossary @390', scheme);
   await shot(page, 'phone-390-references-glossary', scheme);
   await page.evaluate(() => localStorage.removeItem('snowmoon.opened'));
@@ -1536,9 +1544,9 @@ try {
     {
       const text = (await page.locator('.ch-page').textContent()) ?? '';
       if (!/Draft wording/.test(text)) fail(`/challenge (${scheme}): no "Draft wording" line`);
-      // The characters, in CHALLENGE's order (owner, 2026-10-31): Zei, Bai, Gladias, Seila, Deluin, Mu.
+      // The characters, most named in the book first (owner, 2026-11-04; content/snowmoon/characters-by-mentions.json).
       const heads = (await page.locator('.ch-character h2').allTextContents()).map((h) => h.split(' ')[0]);
-      if (heads.join() !== 'Zei,Bai,Gladias,Seila,Deluin,Mu') fail(`/challenge (${scheme}): the characters read ${heads.join(', ')}`);
+      if (heads.join() !== 'Zei,Gladias,Bai,Seila,Deluin,Mu') fail(`/challenge (${scheme}): the characters read ${heads.join(', ')}`);
       if (!/A new sheet made from scratch isn’t an entry/.test(text)) fail(`/challenge (${scheme}): it doesn't say only remixes count`);
       if (!/Entries (open|close|closed) .*Pacific/.test(text)) fail(`/challenge (${scheme}): no deadline in Pacific time`);
       if (!/One entry per person per character/.test(text)) fail(`/challenge (${scheme}): the rules are missing`);
@@ -1571,6 +1579,11 @@ try {
       if (p.startsWith('/references/designs?') && !(await page.getByText('Nothing here is official.', { exact: false }).count())) fail(`${p}: no "Nothing here is official"`);
       // Sheets as text (2026-10-10): the places tab is live; a sheet's book words say Book ⓘ, its shorthand Invented ⓘ.
       if (p === '/references/designs?tab=places' && (await page.locator('.dz-rows a[href^="/references/designs/place/"]').count()) < 1) fail(`${p} (${scheme}): no places listed`);
+      // The Characters tab: every character, most named in the book first (owner, 2026-11-04).
+      if (p === '/references/designs?tab=characters') {
+        const rows = await page.locator('.dz-rows a[href^="/references/designs/character/"]').evaluateAll((els) => els.map((e) => (e.getAttribute('href') ?? '').split('/').pop()));
+        if (rows.join() !== BOOK_MENTIONS.map((c) => c.slug).join()) fail(`${p} (${scheme}): the characters aren't most named first: ${rows.join(', ')}`);
+      }
       if (p.includes('/character/') || p.includes('/place/')) {
         await page.waitForSelector('.dz-book');
         for (const [scope, kind, word] of [['.dz-book', 'book', 'Book'], ['.dz-shorthand', 'invented', 'Invented']] as const) {

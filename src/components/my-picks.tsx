@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { authFetch, useAuth } from '~/lib/client-auth';
+import { inBookOrder } from '~/lib/character-order';
 import { wordDiff } from '~/lib/images/design-rules';
 import { IMAGE_WORDING } from '~/lib/images/wording';
 import { changePick, useMyPicks, type PickView } from './design-picks';
@@ -34,7 +35,8 @@ export function MyPicks() {
     );
 
   const styles = (picks ?? []).filter((p) => p.kind === 'style');
-  const chars = (picks ?? []).filter((p) => p.kind === 'character');
+  // Characters most named in the book first (owner, 2026-11-04).
+  const chars = inBookOrder((picks ?? []).filter((p) => p.kind === 'character'), (p) => p.entity);
   const places = (picks ?? []).filter((p) => p.kind === 'location');
   const clear = async (p: PickView) => {
     await changePick('DELETE', { entityId: p.entityId });

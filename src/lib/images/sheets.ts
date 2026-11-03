@@ -2,6 +2,7 @@ import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { blockFacts, READABLE_KINDS, type BlockLike } from '../reading';
 import { IMAGE_WORDING } from './wording';
+import { inBookOrder } from '../character-order';
 
 /**
  * Character and place sheets as text (owner, 2026-10-10: "text summaries of key characters and
@@ -70,14 +71,15 @@ const byFact = (a: Fact, b: Fact) => a.chapter - b.chapter || a.idx - b.idx;
 
 let chars: SheetCharacter[] | null = null;
 export function sheetCharacters(): SheetCharacter[] {
-  chars ??= files('characters').map((f) => {
+  // In the book's order: most named first (owner, 2026-11-04; src/lib/character-order.ts).
+  chars ??= inBookOrder(files('characters').map((f) => {
     const c = readJson<{ slug: string; name: string; setting?: string; about?: string; descriptor?: string; facts?: Fact[]; aliases?: string[]; name_exclusions?: string[]; first_appearance?: { chapter: number } | null }>(`${DESIGNS}/characters/${f}`);
     const facts = [...(c.facts ?? [])].sort(byFact);
     return {
       kind: 'character' as const, slug: c.slug, name: c.name, setting: c.setting ?? null, about: c.about ?? '', descriptor: c.descriptor ?? '', facts,
       firstChapter: c.first_appearance?.chapter ?? facts[0]?.chapter ?? 1, names: namesFor(c), exclusions: c.name_exclusions ?? [],
     };
-  });
+  }), (c) => c.slug);
   return chars;
 }
 let places: SheetPlace[] | null = null;
@@ -219,21 +221,16 @@ const plain = (s: string) => s.replace(/<[^>]+>/g, ' ').replace(/\*\*|__/g, '').
 export function inPassageOf(ch: Chapter, start: number, end: number): InPassage {
   const blocks = ch.blocks.filter((b) => b.idx >= start && b.idx <= end && READABLE_KINDS.has(b.kind));
   const text = blocks.map((b) => plain(b.content));
-  // In the order the passage first names them.
+  // In the book's order, most named first (owner, 2026-11-04), like every character list; sheetCharacters() is in it.
   const found = sheetCharacters()
     .map((c) => {
-      for (let i = 0; i < text.length; i++) {
-        const as = namedAs(text[i], c.names, c.exclusions);
-        if (as) {
-          const t = c.exclusions.reduce((s, x) => s.split(x).join(' '), text[i]);
-          return { slug: c.slug, name: c.name, as, at: i * 100_000 + t.search(wordRe(as)) };
-        }
+      for (const t of text) {
+        const as = namedAs(t, c.names, c.exclusions);
+        if (as) return { slug: c.slug, name: c.name, as };
       }
       return null;
     })
-    .filter((x): x is { slug: string; name: string; as: string; at: number } => x !== null)
-    .sort((a, b) => a.at - b.at)
-    .map(({ slug, name, as }) => ({ slug, name, as }));
+    .filter((x): x is { slug: string; name: string; as: string } => x !== null);
   // The part the passage mostly sits in (ties: the earlier part).
   const parts = loadScenes().parts.filter((p) => p.chapter === ch.chapter && p.end >= start && p.start <= end);
   const ids = ch.blocks.filter((b) => b.idx >= start && b.idx <= end).map((b) => b.idx);

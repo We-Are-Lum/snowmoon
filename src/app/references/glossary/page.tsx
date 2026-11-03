@@ -32,6 +32,7 @@ export default async function GlossaryReferences() {
           title="Glossary references"
           body={[
             'One card for each word of the glossary that has a picture yet: the sentence where the book first uses it, and pictures from its character or setting sheets.',
+            'The characters come first, the ones the book names most first; then the other words, in the order a reader meets them.',
             'A word with no picture yet isn\'t here; its glossary page has "Add a reference".',
           ]}
         />
