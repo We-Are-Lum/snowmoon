@@ -24,7 +24,7 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { DEFAULT_TEMPLATES } from '../src/templates';
 import { LiveScreen } from '../src/components/live-screen';
-import { AGENTS, CHALLENGE, CHAT, IMAGES, REPO_URL } from '../src/lib/config';
+import { AGENTS, CHALLENGE, CHAT, IMAGES, REPO_URL, SHEET_HELP } from '../src/lib/config';
 import { NOTICE_REVIEW, currentNoticeItems, noticeKey } from '../src/lib/chat/notice';
 import { LEGAL, PRIVACY, TERMS, legalKey } from '../src/lib/legal';
 import { LEARN_TEXT } from '../src/lib/minpentai/learn-text';
@@ -317,6 +317,21 @@ add({
         ] as const)
           if (!re.test(text)) problems.push(`${file}: the private box must say it is ${what}`);
         if (/fetch\(|supabase|\/api\//.test(text)) problems.push(`${file}: the private box must not send its text anywhere itself`);
+        continue;
+      }
+      if (file.endsWith('components/help-message-field.tsx')) {
+        // "Ask for help" beside a sheet's text (branch sheet-help, 2026-11-02): the message is kept only in the open
+        // page, sent with the sheet's text to the provider (and the gateway while it is the fallback), never published.
+        for (const [what, re] of [
+          ['kept only on this page', /Kept only on this page\./],
+          ['sent to the provider (CHAT.providerName)', /Sent with this sheet’s text to \{CHAT\.providerName\}/],
+          ['naming the gateway while it is the fallback', /CHAT\.gatewayFallback \? ` \(through \$\{CHAT\.host\}/],
+          ['never published', /Never published/],
+          ['labelled draft', /as-draft/],
+          ['described to screen readers', /aria-describedby/],
+        ] as const)
+          if (!re.test(text)) problems.push(`${file}: the help message box must say it is ${what}`);
+        if (/fetch\(|supabase|\/api\//.test(text)) problems.push(`${file}: the help message box must not send its text anywhere itself`);
         continue;
       }
       if (file.endsWith('components/local-text-field.tsx')) {
@@ -1764,6 +1779,39 @@ add({
     c.s4 = 'Quote cards you save, and your likes.';
     c.s7 = 'Neynar receives your Farcaster ID.';
     c.openSheets = 'export const challengeSheetsOpen = () => CHALLENGE.openSheets;';
+  },
+});
+
+// P6r: "Ask for help" beside a sheet's prompt box (branch sheet-help, owner 2026-10-31). It sends the person's message,
+// the sheet's text and recipe and the character's facts to Groq (or through Vercel AI Gateway), and labels the recipe of
+// what it helped with. Legal texts describe today: SHEET_HELP.on may be on only while Privacy §5 says what it sends and
+// keeps and §6 says the recipe shows it (docs/legal/sheet-help-draft.md), and the live check must wait for those words
+// and the challenge's window whatever the switch says.
+add({
+  id: 'P6r',
+  principle: 6,
+  name: '"Ask for help" is on only while Privacy §5 and §6 describe it, and it takes effect only in the challenge window',
+  load: async () => ({
+    on: SHEET_HELP.on as boolean,
+    flag: read('src/lib/sheet-help/flag.ts'),
+    route: read('src/app/api/sheet-help/route.ts'),
+    s5: (PRIVACY.sections.find((s) => s.n === 5)?.body ?? []).flat().join(' '),
+    s6: (PRIVACY.sections.find((s) => s.n === 6)?.body ?? []).flat().join(' '),
+  }),
+  run: (c) => {
+    const problems: string[] = [];
+    if (c.on && !/Ask for help/.test(c.s5)) problems.push('SHEET_HELP.on (src/lib/config.ts) is on, but Privacy §5 does not say what "Ask for help" sends and keeps; reread docs/legal/sheet-help-draft.md with the owner first, or keep it off');
+    if (c.on && !/Ask for help/.test(c.s6)) problems.push('SHEET_HELP.on is on, but Privacy §6 does not say the recipe shows words from "Ask for help"');
+    if (c.on && !/\bGroq\b/.test(c.s5)) problems.push('SHEET_HELP.on is on, but Privacy §5 does not name Groq');
+    if (!/export const sheetHelpLive = [^\n]*SHEET_HELP\.on && privacyDescribesSheetHelp\(privacy\) && challengeSheetsOpen\(/.test(c.flag)) problems.push('src/lib/sheet-help/flag.ts: "Ask for help" going live does not wait for the switch, the Privacy words and the challenge window');
+    if (!/if \(!sheetHelpLive\(\)\) return NextResponse\.json\(\{ error: 'Not found' \}, \{ status: 404 \}\)/.test(c.route)) problems.push('src/app/api/sheet-help/route.ts: the route does not answer 404 first while "Ask for help" is not live');
+    return problems;
+  },
+  plant: (c) => {
+    c.on = true;
+    c.s5 = 'Your question is sent to Groq to be answered.';
+    c.s6 = 'Anything you publish is public.';
+    c.flag = 'export const sheetHelpLive = () => SHEET_HELP.on;';
   },
 });
 

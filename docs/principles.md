@@ -435,6 +435,11 @@ only, through `studio.rating_totals`, `studio.like_totals` and
   Neynar receives makers' FIDs for it and, for posts, names Bluesky and Lens (docs/legal/remix-challenge-draft.md);
   and opening sheets to everyone (`CHALLENGE.openSheets`, on) takes effect only inside the entry window and once
   Privacy §4 describes the challenge.
+- `P6r` (branch sheet-help, 2026-11-02, pending the owner's reread): "Ask for help" beside a character sheet's
+  prompt box (`SHEET_HELP.on`, off) is on only while Privacy §5 says what it sends, to Groq, and keeps, and §6 says the
+  recipe shows words from it (docs/legal/sheet-help-draft.md); and going live (`sheetHelpLive`,
+  src/lib/sheet-help/flag.ts) waits for the switch, those words and the challenge's window, with the route answering
+  404 first otherwise.
 - `P6n`: image making is open beyond the invited list (the gate looks up a
   Neynar score) only when `src/app/terms/page.tsx` and `src/app/privacy/page.tsx`
   both exist, and the Privacy page names Neynar (which receives the FID at
