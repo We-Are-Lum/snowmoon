@@ -8,6 +8,7 @@ import { CAST, pronounSlips } from '../make/cast';
 import { checkNote, checkPromptWords } from './no-story';
 import { promptParts, refuseProposal, type PartRefusal } from './part';
 import { recordHelp, reserveHelp } from './limits';
+import { recordServed } from './served';
 
 /**
  * "Ask for help" beside a character sheet's prompt box, during the remix challenge (docs/proposals/sheet-help.md,
@@ -43,7 +44,7 @@ export interface HelpInput {
 }
 
 export type HelpResult =
-  | { state: 'proposal'; before: string; after: string; why: string; quotes: Quote[]; receipt: string | null; left: number; regenerated: boolean; checks: { part: 'ok'; pattern: 'ok'; guard: 'ok' } }
+  | { state: 'proposal'; before: string; after: string; why: string; quotes: Quote[]; left: number; regenerated: boolean; checks: { part: 'ok'; pattern: 'ok'; guard: 'ok' } }
   | { state: 'note'; text: string; quotes: Quote[]; left: number; regenerated: boolean; checks: { pattern: 'ok'; guard: 'ok' } }
   | { state: 'declined'; left: number }
   | { state: 'limit'; perDay: number }
@@ -57,8 +58,8 @@ export interface HelpDeps {
   guardPolicy: string;
   /** Sent before the one retry; {{REASON}} is what the checks found. */
   reminder: string;
-  /** Signs a proposal for the recipe's label at publish (src/lib/sheet-help/receipt.ts). */
-  sign: (r: { fid: number; character: string; after: string; model: string; at: string }) => string | null;
+  /** The sheet version being remixed (`from`): a served suggestion is recorded for it (src/lib/sheet-help/served.ts). */
+  from: string;
   /** The book search; the coach's (src/lib/chat/retrieve.ts) unless a test passes a stand-in. */
   retrieve?: (sql: postgres.Sql, query: string, limit: number) => Promise<Retrieved>;
   /** The character's facts from the book (bookCharacter(slug).quotes); passed in so this file needs no file reads. */
@@ -186,8 +187,9 @@ export async function sheetHelp(deps: HelpDeps, input: HelpInput): Promise<HelpR
   const note = parsed.kind === 'note' ? parsed.text : parsed.why;
   const { text: shownNote, quotes } = await citations(sql, note, allowed, limit);
   if (parsed.kind === 'note') return { state: 'note', text: shownNote, quotes, left: slot.left, regenerated, checks: { pattern: 'ok', guard: 'ok' } };
-  const receipt = deps.sign({ fid, character: input.character, after: parsed.after, model: CHAT.model, at: new Date().toISOString() });
-  return { state: 'proposal', before: parsed.before, after: parsed.after, why: shownNote, quotes, receipt, left: slot.left, regenerated, checks: { part: 'ok', pattern: 'ok', guard: 'ok' } };
+  // Served: the server keeps a fingerprint of the suggested words, for the label at publish (never the message).
+  await recordServed(sql, fid, deps.from, parsed.after);
+  return { state: 'proposal', before: parsed.before, after: parsed.after, why: shownNote, quotes, left: slot.left, regenerated, checks: { part: 'ok', pattern: 'ok', guard: 'ok' } };
 }
 
 async function replyOnce(deps: HelpDeps, messages: Message[]): Promise<string> {

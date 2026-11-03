@@ -12,12 +12,12 @@ import { HelpMessageField } from './help-message-field';
  * "Ask for help" beside a character sheet's prompt box (docs/proposals/sheet-help.md), shown only while it is live
  * (src/lib/sheet-help/flag.ts). Optional and closed to start with; the plain text box stays the main way to make a
  * sheet. Each answer is a change to one part of the text, shown as before and after: Accept changes the text (and keeps
- * the suggestion's signed receipt, so the published recipe says it includes words from AI suggestions); Reject leaves
+ * the server, which recorded what it served, labels the published recipe when those words are in it); Reject leaves
  * it as it was. Nothing changes the text without that tap. The conversation stays on this page only.
  */
 type Quote = { id: string; chapter: number; label: number | null; html: string };
 type Answer =
-  | { state: 'proposal'; before: string; after: string; why: string; quotes: Quote[]; receipt: string | null; left: number }
+  | { state: 'proposal'; before: string; after: string; why: string; quotes: Quote[]; left: number }
   | { state: 'note'; text: string; quotes: Quote[]; left: number }
   | { state: 'declined'; left: number }
   | { state: 'limit'; perDay: number }
@@ -31,7 +31,8 @@ export function SheetHelp(p: {
   limits: PartLimits;
   route: string;
   model: string;
-  onAccept: (next: string, receipt: string | null, after: string) => void;
+  servedDays: number;
+  onAccept: (next: string, after: string) => void;
 }) {
   const [turns, setTurns] = useState<Turn[]>([]);
   const [message, setMessage] = useState('');
@@ -77,7 +78,7 @@ export function SheetHelp(p: {
       const next = applyProposal(p.text, { before: t.answer.before, after: t.answer.after }, p.limits);
       if (next === null) decided = 'stale';
       else {
-        p.onAccept(next, t.answer.receipt, t.answer.after);
+        p.onAccept(next, t.answer.after);
         decided = 'accepted';
       }
     }
@@ -90,7 +91,7 @@ export function SheetHelp(p: {
         {W.open} <AiTag />
       </summary>
       <p className="dz-note">{W.optional}</p>
-      <p className="dz-note">{W.sends(p.route)}</p>
+      <p className="dz-note">{W.sends(p.route, p.servedDays)}</p>
       <ol className="sh-turns">
         {turns.map((t, i) =>
           t.role === 'user' ? (

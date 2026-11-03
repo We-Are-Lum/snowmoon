@@ -40,7 +40,7 @@ export default async function NewDesign({ searchParams }: Props) {
   const callName = character ? (character.name.split(' ').find((w) => !/^(Lord|General|Senator)$/.test(w)) ?? character.name) : '';
   const challengeOpen = Boolean(src && mode !== 'create' && src.kind === 'character' && challengeSheetsOpen() && isChallengeCharacter(src.entity));
   // "Ask for help" (docs/proposals/sheet-help.md): only beside a challenge character's sheet, and only while it is live.
-  const help = challengeOpen && sheetHelpLive() ? { perDay: SHEET_HELP.perDay, route: CHAT.route, model: CHAT.modelName, partMaxChars: SHEET_HELP.partMaxChars, partMaxWords: SHEET_HELP.partMaxWords } : null;
+  const help = challengeOpen && sheetHelpLive() ? { perDay: SHEET_HELP.perDay, route: CHAT.route, model: CHAT.modelName, partMaxChars: SHEET_HELP.partMaxChars, partMaxWords: SHEET_HELP.partMaxWords, servedDays: SHEET_HELP.servedDays } : null;
   const title = mode === 'fork' ? W.form.fork : mode === 'version' ? W.form.newVersion : kind === 'style' ? W.form.newStyle : W.form.newSheet(place ? placeTitle(place.name) : callName);
   return (
     <div className="page prose dz-page dz-form-page">

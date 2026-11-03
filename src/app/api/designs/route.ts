@@ -6,8 +6,7 @@ import { db } from '~/lib/db';
 import { IMAGES } from '~/lib/config';
 import { hasConsented } from '~/lib/consent';
 import type { DesignBody, DesignPicture, SheetHelpMark } from '~/lib/element-body';
-import { acceptedIn } from '~/lib/sheet-help/receipt';
-import { helpMark } from '~/lib/sheet-help/mark';
+import { helpLabelFor } from '~/lib/sheet-help/served';
 import { SAMPLE_ASSIST, viewLinesFor } from '~/lib/images/design-rules';
 import { placeFirstChapter, placeTitle, sheetPlace } from '~/lib/images/sheets';
 import { bookCharacter, characterNameClash, CHARACTER_NAME_REFUSAL, designByVersion, designPublishesToday, makeDesign, MakeRefused, styleNameTaken, type DesignKind, type MakeMode } from '~/lib/images/designs';
@@ -58,7 +57,7 @@ export async function POST(request: Request) {
   if (!IMAGES.enabled) return no('Publishing is switched off for now', 503);
   const sql = db();
   if (!sql || !process.env.IMAGES_TICKET_SECRET || !storageReady()) return no('Publishing styles and sheets is not set up on this deployment', 503);
-  let body: { mode?: unknown; kind?: unknown; title?: unknown; text?: unknown; character?: unknown; place?: unknown; from?: unknown; samples?: unknown; views?: unknown; nameProof?: unknown; help?: unknown };
+  let body: { mode?: unknown; kind?: unknown; title?: unknown; text?: unknown; character?: unknown; place?: unknown; from?: unknown; samples?: unknown; views?: unknown; nameProof?: unknown };
   try {
     body = await request.json();
   } catch {
@@ -137,9 +136,9 @@ export async function POST(request: Request) {
   if (!named2.ok) return no(named2.error, named2.status);
 
   const by = await bylineName(fid, body.nameProof);
-  // "Ask for help": the text is labelled when it still holds words the person accepted from a signed suggestion
-  // (src/lib/sheet-help/receipt.ts), in the page's body and in every picture's recipe.
-  const help = helpMark(acceptedIn(body.help, fid, text));
+  // "Ask for help": labelled by the server, when this person's published text holds words it served them for this
+  // sheet within SHEET_HELP.servedDays (src/lib/sheet-help/served.ts); in the page's body and every picture's recipe.
+  const help = await helpLabelFor(sql, { fid, mode, kind, from: body.from, text });
   const put = async (p: { t: SampleTicket; bytes: Buffer }): Promise<DesignPicture> => ({ url: await putPublic(p.t.sha256, p.bytes, 'image/jpeg'), sha256: p.t.sha256, recipe: recipeOf(p.t, help) });
   const design: DesignBody = {
     title,

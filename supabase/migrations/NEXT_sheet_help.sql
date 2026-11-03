@@ -1,5 +1,5 @@
 -- NEXT_sheet_help.sql — "Ask for help" beside a character sheet's prompt box, during the remix challenge: its own daily
--- count and its own daily cost totals. Branch sheet-help (docs/proposals/sheet-help.md, approved by the owner
+-- count, its own daily cost totals, and a fingerprint of each suggestion it served (for the recipe's label). Branch sheet-help (docs/proposals/sheet-help.md, approved by the owner
 -- 2026-10-31). NOT APPLIED. It takes the next free number at merge (main has 0033), checked against origin/main and
 -- production.
 --
@@ -12,7 +12,7 @@
 -- to add a column to; and two caps that the owner set separately (the coach's 50 a day and $1, this one's 20 a day and
 -- $1) are clearest summed from separate rows, with no `kind` filter that a later query could forget.
 --
--- What it adds (neither table is publicly readable: no public read policy, and anon and authenticated lose every
+-- What it adds (no table is publicly readable: no public read policy, and anon and authenticated lose every
 -- privilege 0001's default privileges gave them; the site reads them on the server, as studio_writer):
 -- 1. studio.sheet_help_calls: one row per message, the FID and the time, nothing else (no message, no reply, no
 --    cost), to count SHEET_HELP.perDay (20) a day per person (src/lib/sheet-help/limits.ts). Only rows older than two
@@ -21,8 +21,15 @@
 --    studio.chat_costs (0007), summed for its $1 a day across everyone (SHEET_HELP.dailySpendCapUsd). Added to,
 --    never removed: no delete.
 --
--- studio_writer's privileges: sheet_help_calls select, insert, delete (old rows only, by policy); sheet_help_costs
--- select, insert, update. No truncate on either.
+-- 3. studio.sheet_help_served (owner, 2026-11-03: the label is set by the server, comparing the published prompt with
+--    the suggestions it served, not by the browser): one row per suggestion shown, with the FID, the sheet version it
+--    was for (the version being remixed), when, and a fingerprint of the suggested words (the model's words; never the
+--    person's message): the sha256 of the words normalised, and how many words. Not the words: publishing compares by
+--    hashing every run of that many words in the published text (src/lib/sheet-help/served.ts). Kept two days
+--    (SHEET_HELP.servedDays); only older rows can be deleted; no update.
+--
+-- studio_writer's privileges: sheet_help_calls and sheet_help_served select, insert, delete (old rows only, by
+-- policy); sheet_help_costs select, insert, update. No truncate on any.
 
 begin;
 
@@ -46,8 +53,19 @@ create table if not exists studio.sheet_help_costs (
   primary key (day, kind, model, provider, guard)
 );
 
+create table if not exists studio.sheet_help_served (
+  fid bigint not null check (fid > 0),
+  version_id uuid not null references studio.element_versions(id),
+  words_sha256 text not null check (words_sha256 ~ '^[0-9a-f]{64}$'),
+  words_count int not null check (words_count between 1 and 24),
+  at timestamptz not null default now()
+);
+create index if not exists sheet_help_served_lookup on studio.sheet_help_served (fid, version_id, at);
+create index if not exists sheet_help_served_at on studio.sheet_help_served (at);
+
 alter table studio.sheet_help_calls enable row level security;
 alter table studio.sheet_help_costs enable row level security;
+alter table studio.sheet_help_served enable row level security;
 drop policy if exists writer_read on studio.sheet_help_calls;
 create policy writer_read on studio.sheet_help_calls for select to studio_writer using (true);
 drop policy if exists writer_insert on studio.sheet_help_calls;
@@ -62,12 +80,22 @@ create policy writer_insert on studio.sheet_help_costs for insert to studio_writ
 -- Totals are added to (update), never removed.
 drop policy if exists writer_update on studio.sheet_help_costs;
 create policy writer_update on studio.sheet_help_costs for update to studio_writer using (true) with check (true);
+drop policy if exists writer_read on studio.sheet_help_served;
+create policy writer_read on studio.sheet_help_served for select to studio_writer using (true);
+drop policy if exists writer_insert on studio.sheet_help_served;
+create policy writer_insert on studio.sheet_help_served for insert to studio_writer with check (true);
+-- Only rows past the two-day window can be deleted (the site deletes them as new ones come in).
+drop policy if exists writer_delete_old on studio.sheet_help_served;
+create policy writer_delete_old on studio.sheet_help_served for delete to studio_writer using (at < now() - interval '2 days');
 
 revoke all on studio.sheet_help_calls from anon, authenticated;
 revoke all on studio.sheet_help_costs from anon, authenticated;
+revoke all on studio.sheet_help_served from anon, authenticated;
 revoke update, truncate, references, trigger on studio.sheet_help_calls from studio_writer;
 revoke delete, truncate, references, trigger on studio.sheet_help_costs from studio_writer;
+revoke update, truncate, references, trigger on studio.sheet_help_served from studio_writer;
 grant select, insert, delete on studio.sheet_help_calls to studio_writer;
 grant select, insert, update on studio.sheet_help_costs to studio_writer;
+grant select, insert, delete on studio.sheet_help_served to studio_writer;
 
 commit;

@@ -6,7 +6,6 @@ import { bookCharacters, designByVersion } from '~/lib/images/designs';
 import { isChallengeCharacter } from '~/lib/challenge/open-sheets';
 import { sheetHelpLive } from '~/lib/sheet-help/flag';
 import { sheetHelp, validateHelp, HelpError } from '~/lib/sheet-help/help';
-import { signReceipt } from '~/lib/sheet-help/receipt';
 
 /**
  * "Ask for help": one message (src/lib/sheet-help/help.ts). 404 unless it is live (SHEET_HELP.on, Privacy describing
@@ -35,7 +34,7 @@ export async function POST(request: Request) {
         systemPrompt: promptFile('sheet-help.md'),
         guardPolicy: promptFile('sheet-help-guard.md'),
         reminder: promptFile('sheet-help-reminder.md'),
-        sign: signReceipt,
+        from: src!.shown.versionId,
         facts: character.quotes,
         who: { name: character.name, firstChapter: character.firstChapter },
       },

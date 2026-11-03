@@ -47,7 +47,7 @@ type Props = {
   /** The remix challenge opens this fork or version to everyone who passes the Generate gate (CHALLENGE.openSheets; the server checks again). */
   challengeOpen?: boolean;
   /** "Ask for help" (src/lib/sheet-help/), only while it is live and only on a challenge character's sheet; else null. */
-  help?: { perDay: number; route: string; model: string; partMaxChars: number; partMaxWords: number } | null;
+  help?: { perDay: number; route: string; model: string; partMaxChars: number; partMaxWords: number; servedDays: number } | null;
 };
 
 export function DesignForm(p: Props) {
@@ -63,8 +63,8 @@ export function DesignForm(p: Props) {
   const [consent, setConsent] = useState<Wording | null>(null);
   const [published, setPublished] = useState<string | null>(null);
   const [viewStyle, setViewStyle] = useState<string | null>(null);
-  /** Signed receipts of the "Ask for help" suggestions accepted here; sent at publish, where only those still in the text count. */
-  const [helpReceipts, setHelpReceipts] = useState<{ token: string; after: string }[]>([]);
+  /** "Ask for help" words accepted here, for the preview's label only: the server labels the published recipe itself. */
+  const [helpWords, setHelpWords] = useState<string[]>([]);
   const picks = useMyPicks();
   const pickedStyle = picks?.find((x) => x.kind === 'style' && p.styles.some((s) => s.versionId === x.versionId))?.versionId ?? null;
   useEffect(() => {
@@ -128,7 +128,6 @@ export function DesignForm(p: Props) {
         samples: style ? made.map((x) => ({ ticket: x.ticket, image: x.image })) : undefined,
         views: style ? undefined : Object.fromEntries(Object.entries(views).filter(([, x]) => fresh(x)).map(([k, x]) => [k, { ticket: x!.ticket, image: x!.image }])),
         nameProof: webNameProof(),
-        help: helpReceipts.filter((r) => clean.toLowerCase().includes(r.after.toLowerCase())).map((r) => r.token),
       }),
     });
     const out = (await res.json().catch(() => ({}))) as { page?: string; error?: string };
@@ -234,9 +233,10 @@ export function DesignForm(p: Props) {
               limits={{ partMaxChars: p.help.partMaxChars, partMaxWords: p.help.partMaxWords, textMaxChars: p.limits.textMaxChars }}
               route={p.help.route}
               model={p.help.model}
-              onAccept={(next, receipt, after) => {
+              servedDays={p.help.servedDays}
+              onAccept={(next, after) => {
                 setText(next);
-                if (receipt) setHelpReceipts((r) => [...r, { token: receipt, after }]);
+                setHelpWords((w) => [...w, after]);
               }}
             />
           )}
@@ -343,7 +343,7 @@ export function DesignForm(p: Props) {
                   {!style && chosen && <p className="dz-meta">{W.page.madeInStyle(chosen.title)}</p>}
                   <p className="dz-label">{style ? W.page.styleText : W.page.sheetText(p.character?.callName ?? p.place?.name ?? '')}</p>
                   <p className="dz-text">{clean}</p>
-                  {helpReceipts.some((r) => clean.toLowerCase().includes(r.after.toLowerCase())) && <p className="dz-meta">{SHEET_HELP_WORDING.pageLine}</p>}
+                  {helpWords.some((w) => clean.toLowerCase().includes(w.toLowerCase())) && <p className="dz-meta">{SHEET_HELP_WORDING.pageLine}</p>}
                 </div>
               }
               onPublish={publish}

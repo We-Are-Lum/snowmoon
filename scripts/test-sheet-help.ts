@@ -19,9 +19,12 @@
  *  H5 the guard flow: flagged, one retry with the reminder, then a decline; a guard with no verdict fails closed; the
  *     guard runs after the pattern checks; what the model reads (message, book facts up to the chapter limit, draft and
  *     recipe text; never later chapters, never pictures).
- *  H6 the label in the recipe: a published sheet whose text keeps accepted words says "includes words from AI
- *     suggestions" on its page and in each picture's recipe; receipts are signed, per person, expire, and count only
- *     while their words are in the text; whole-prompt marking until per-phrase marking is built.
+ *  H6 the label in the recipe, set by the server (owner, 2026-11-03): a published sheet whose text holds words the
+ *     server served that person for that sheet, within SHEET_HELP.servedDays (case and spaces normalised), says
+ *     "includes words from AI suggestions" on its page and in each picture's recipe; another person's, another sheet's
+ *     or an expired suggestion doesn't label it; nothing from the browser is read (a browser that drops everything is
+ *     still labelled); only a fingerprint of the served words is kept, never the message. Old rows are deleted.
+ *     Whole-prompt marking until per-phrase marking is built.
  *  H7 the switch: off in the config; even on, it waits for Privacy §5 and §6 and the challenge's window; the route
  *     answers 404 first.
  *  H8 the migration: safe twice; the dry run keeps nothing and is the same SQL; the two-part read-back passes, and
@@ -33,7 +36,6 @@ import { PGlite } from '@electric-sql/pglite';
 import { PGLiteSocketServer } from '@electric-sql/pglite-socket';
 import postgres from 'postgres';
 
-process.env.IMAGES_TICKET_SECRET = 'sheet-help-test-secret-not-a-real-one';
 const ROOT = path.resolve(import.meta.dirname, '..');
 const failures: string[] = [];
 let passed = 0;
@@ -46,7 +48,7 @@ const { CHAT, IMAGES, SHEET_HELP, CHALLENGE } = await import('../src/lib/config'
 const P = await import('../src/lib/sheet-help/part');
 const NS = await import('../src/lib/sheet-help/no-story');
 const H = await import('../src/lib/sheet-help/help');
-const R = await import('../src/lib/sheet-help/receipt');
+const SV = await import('../src/lib/sheet-help/served');
 const M = await import('../src/lib/sheet-help/mark');
 const F = await import('../src/lib/sheet-help/flag');
 const O = await import('../src/lib/challenge/open-sheets');
@@ -133,7 +135,7 @@ const DRAFT = 'eighteen, sharp dark eyes, short black hair tied back, a long gre
   const acceptOnly = (src: string) => /if \(accept\) \{[\s\S]*applyProposal\([\s\S]*p\.onAccept\(/.test(src) && (src.match(/p\.onAccept\(/g) ?? []).length === 1 && /let decided[^\n]*= 'rejected'/.test(src);
   check('H3 the page changes the text only in Accept; Reject marks the suggestion rejected and changes nothing', acceptOnly(decide));
   proof('a planted Reject that also applies the change is caught', !acceptOnly(decide.replace("let decided: 'accepted' | 'rejected' | 'stale' = 'rejected';", "let decided: 'accepted' | 'rejected' | 'stale' = 'rejected';\n    p.onAccept(p.text, null, '');")));
-  check('H3 the form keeps a receipt only on Accept, and sends only those whose words are still in the text', /onAccept=\{\(next, receipt, after\) => \{\s*setText\(next\);\s*if \(receipt\) setHelpReceipts/.test(read('src/components/design-form.tsx')) && /help: helpReceipts\.filter\(\(r\) => clean\.toLowerCase\(\)\.includes\(r\.after\.toLowerCase\(\)\)\)/.test(read('src/components/design-form.tsx')));
+  check('H3 the form sends nothing about suggestions at publish (the server labels it)', !/help:|helpReceipts|receipt/.test(read('src/components/design-form.tsx').slice(read('src/components/design-form.tsx').indexOf('const publish'), read('src/components/design-form.tsx').indexOf('const startConsent'))));
 }
 
 // --- The database --------------------------------------------------------------------------------------------------
@@ -141,6 +143,12 @@ const db = new PGlite();
 await db.exec(`create role anon nologin; create role authenticated nologin; create role service_role nologin bypassrls;`);
 for (const f of readdirSync(path.join(ROOT, 'supabase/migrations')).filter((f) => /^\d{4}_.*\.sql$/.test(f)).sort()) await db.exec(read(`supabase/migrations/${f}`));
 await db.exec(`insert into studio.works values ('snowmoon','Snowmoon','GPL-3.0','x') on conflict do nothing`);
+// Two published sheet versions (Bai's, as the challenge's sheets are): help is served for a version being remixed.
+const SHEET_A = '00000000-0000-0000-0000-0000000000a1';
+const SHEET_B = '00000000-0000-0000-0000-0000000000b1';
+await db.exec(`insert into studio.entities (id, work_id, kind, name) values ('00000000-0000-0000-0000-00000000e0e1','snowmoon','character','Bai');
+  insert into studio.elements (id, work_id, element_type, created_by_fid, entity_id, status) values ('00000000-0000-0000-0000-0000000000e1','snowmoon','design',6786,'00000000-0000-0000-0000-00000000e0e1','published'), ('00000000-0000-0000-0000-0000000000e2','snowmoon','design',6852,'00000000-0000-0000-0000-00000000e0e1','published');
+  insert into studio.element_versions (id, element_id, version_no) values ('${SHEET_A}','00000000-0000-0000-0000-0000000000e1',1), ('${SHEET_B}','00000000-0000-0000-0000-0000000000e2',1);`);
 
 // --- H8 the migration and its read-back ---------------------------------------------------------------------------
 const MIG = read('supabase/migrations/NEXT_sheet_help.sql');
@@ -166,14 +174,14 @@ const body = (s: string) => s.replace(/^(--[^\n]*\n|\s*\n)*/, '').replace(/\n(co
   check('H8 read-back (b) is one do block with no set role and no temp table', /^do \$\$[\s\S]*end \$\$;\s*$/.test(partB.replace(/^--[^\n]*\n/gm, '').trim()) && !/set role|temp(orary)? table/i.test(partB) && /READ-BACK FAILED/.test(partB) && /insert into studio\.sheet_help_calls/.test(partB) && /delete from studio\.sheet_help_calls/.test(partB));
   const runA = async () => (await db.query<{ what: string; ok: boolean }>(selectA)).rows;
   const a = await runA();
-  check('H8 read-back (a): every row true', a.length === 14 && a.every((r) => r.ok === true), a.filter((r) => !r.ok));
+  check('H8 read-back (a): every row true', a.length === 21 && a.every((r) => r.ok === true), a.filter((r) => !r.ok));
   let bErr = '';
   try {
     await db.exec(partB);
   } catch (e) {
     bErr = (e as Error).message;
   }
-  check('H8 read-back (b) passes and leaves nothing', bErr === '' && (await db.query<{ n: number }>(`select (select count(*) from studio.sheet_help_calls) + (select count(*) from studio.sheet_help_costs) as n`)).rows[0].n == 0, bErr);
+  check('H8 read-back (b) passes and leaves nothing', bErr === '' && (await db.query<{ n: number }>(`select (select count(*) from studio.sheet_help_calls) + (select count(*) from studio.sheet_help_costs) + (select count(*) from studio.sheet_help_served) as n`)).rows[0].n == 0, bErr);
   await db.exec(`grant update on studio.sheet_help_calls to studio_writer`);
   const a2 = await runA();
   await db.exec(`revoke update on studio.sheet_help_calls from studio_writer`);
@@ -191,6 +199,20 @@ const body = (s: string) => s.replace(/^(--[^\n]*\n|\s*\n)*/, '').replace(/\n(co
   }
   await db.exec(`delete from studio.sheet_help_calls; delete from studio.sheet_help_costs; alter table studio.sheet_help_calls add constraint sheet_help_calls_fid_check check (fid > 0)`);
   proof('read-back (b) catches a planted missing FID check', /READ-BACK FAILED/.test(b2));
+  await db.exec(`grant update on studio.sheet_help_served to studio_writer`);
+  const a4 = await runA();
+  await db.exec(`revoke update on studio.sheet_help_served from studio_writer`);
+  proof('read-back (a) catches a planted update grant on served suggestions', a4.some((r) => !r.ok && /sheet_help_served/.test(r.what)));
+  await db.exec(`alter table studio.sheet_help_served drop constraint sheet_help_served_words_sha256_check`);
+  let b3 = '';
+  try {
+    await db.exec(partB);
+  } catch (e) {
+    b3 = (e as Error).message;
+  }
+  await db.exec(`delete from studio.sheet_help_served; delete from studio.sheet_help_calls; delete from studio.sheet_help_costs; alter table studio.sheet_help_served add constraint sheet_help_served_words_sha256_check check (words_sha256 ~ '^[0-9a-f]{64}$')`);
+  proof('read-back (b) catches served words kept as plain text (the fingerprint check removed)', /READ-BACK FAILED: served words kept as plain text/.test(b3));
+  check('H8 the read-back’s fingerprint (computed in SQL) is the one the site computes', RB.includes(SV.fingerprint(SV.words('storm-blue wool coat'))));
   check('H8 the code writes the columns the migration makes', /insert into studio\.sheet_help_calls \(fid\)/.test(read('src/lib/sheet-help/limits.ts')) && /fid bigint not null check \(fid > 0\)/.test(MIG));
 }
 
@@ -228,7 +250,7 @@ const deps = (fid: number, complete: Parameters<typeof H.sheetHelp>[0]['complete
   systemPrompt: prompt('sheet-help.md'),
   guardPolicy: prompt('sheet-help-guard.md'),
   reminder: prompt('sheet-help-reminder.md'),
-  sign: R.signReceipt,
+  from: SHEET_A,
   retrieve: async () => ({ passages: [{ id: 'c4-b70', chapter: 4, idx: 70, kind: 'paragraph', content: 'A recorded passage about Bai.' }], heldBack: false }),
   facts: bai.quotes,
   who: { name: bai.name, firstChapter: bai.firstChapter },
@@ -237,6 +259,7 @@ const input = (message: string, draft = DRAFT, upTo = 5) => H.validateHelp({ mes
 const resetDb = async () => {
   await sql`delete from studio.sheet_help_calls`;
   await sql`delete from studio.sheet_help_costs`;
+  await sql`delete from studio.sheet_help_served`;
 };
 
 try {
@@ -246,7 +269,7 @@ try {
     const good = 'PART: grey\nCHANGE: storm-blue\nWHY: The book puts her by the sea [c4-b73], and blue keeps that.';
     const r1 = recorded([good], ['OK visual only']);
     const out = await H.sheetHelp(deps(500, r1.complete), input('her coat feels too plain'));
-    check('H5 a proposal that passes every check is shown, with its signed receipt and the book’s words', out.state === 'proposal' && out.before === 'grey' && out.after === 'storm-blue' && !!out.receipt && out.quotes.length === 1 && out.quotes[0].id === 'c4-b73' && /Bai walked up closer/.test(out.quotes[0].html) && !out.regenerated, out);
+    check('H5 a proposal that passes every check is shown, and the book’s words', out.state === 'proposal' && out.before === 'grey' && out.after === 'storm-blue' && out.quotes.length === 1 && out.quotes[0].id === 'c4-b73' && /Bai walked up closer/.test(out.quotes[0].html) && !out.regenerated, out);
     const u = r1.calls[0].messages.map((m) => m.content).join('\n');
     check('H5 the model reads the message, the draft, the recipe text and the book’s facts up to the chapter limit', u.includes('her coat feels too plain') && u.includes(DRAFT) && u.includes('soft ink lines') && u.includes('[c4-b73]') && u.includes('[c4-b70]') && /the book uses "she" for Bai/.test(u));
     check('H5 … and nothing from later chapters (the reader is at chapter 5: Bai’s chapter 9 and 24 facts are left out)', !u.includes('[c9-') && !u.includes('[c24-'));
@@ -304,7 +327,7 @@ try {
     const note = 'NONE: I change one part of your text at a time. Which part would you like to start with: the coat, or her hair?';
     const r3 = recorded([note], ['OK']);
     const o3 = await H.sheetHelp(deps(501, r3.complete), input('write the whole thing'));
-    check('H2 asked for a whole prompt: a note, with no prompt and no receipt', o3.state === 'note' && /one part/.test(o3.text) && !('receipt' in o3), o3);
+    check('H2 asked for a whole prompt: a note, with no prompt', o3.state === 'note' && /one part/.test(o3.text) && !('after' in o3), o3);
     const line = 'NONE: Try: "You afraid of me, Zei?" as her line.';
     const r4 = recorded([line, line], ['OK']);
     const o4 = await H.sheetHelp(deps(501, r4.complete), input('give her a line'));
@@ -380,18 +403,46 @@ try {
     SHEET_HELP.marking = saved;
     proof('per-phrase marking, switched on before it is built, is refused rather than mislabelled', threw);
 
-    const now = new Date();
-    const tok = R.signReceipt({ fid: 500, character: 'bai', after: 'storm-blue', model: CHAT.model, at: now.toISOString() })!;
-    const text = DRAFT.replace('grey', 'storm-blue');
-    check('H6 a signed receipt whose words are in the published text counts', R.acceptedIn([tok], 500, text, now).length === 1);
-    check('H6 … not for another person', R.acceptedIn([tok], 501, text, now).length === 0);
-    check('H6 … not once its words are gone from the text', R.acceptedIn([tok], 500, DRAFT, now).length === 0);
-    check('H6 … not after SHEET_HELP.receiptHours', R.acceptedIn([tok], 500, text, new Date(now.getTime() + (SHEET_HELP.receiptHours + 1) * 3600_000)).length === 0);
-    const [b, s] = tok.split('.');
-    const forged = `${Buffer.from(JSON.stringify({ ...JSON.parse(Buffer.from(b, 'base64url').toString()), fid: 999 })).toString('base64url')}.${s}`;
-    proof('a forged receipt (FID changed, signature kept) is refused', R.acceptedIn([forged], 999, text, now).length === 0 && R.readReceipt(forged) === null);
+    // The server's record: a suggestion served to FID 800 for sheet A.
+    await resetDb();
+    const served = 'PART: grey\nCHANGE: storm-blue wool\nWHY: blue keeps the sea.';
+    const msg = 'my secret idea about her coat';
+    const sv = await H.sheetHelp(deps(800, recorded([served], ['OK']).complete), input(msg));
+    const rows = await sql`select * from studio.sheet_help_served`;
+    check('H6 serving a suggestion records one row: the FID, the sheet, a fingerprint and a word count, and the time', sv.state === 'proposal' && rows.length === 1 && Number(rows[0].fid) === 800 && rows[0].version_id === SHEET_A && rows[0].words_sha256 === SV.fingerprint(['storm-blue', 'wool']) && rows[0].words_count === 2 && Object.keys(rows[0]).sort().join() === 'at,fid,version_id,words_count,words_sha256', rows);
+    check('H6 … never the words in plain text, the message or the draft', !JSON.stringify(rows).includes('storm-blue') && !JSON.stringify(rows).includes(msg) && !JSON.stringify(rows).includes('grey'));
+    const declinedBefore = (await sql`select count(*)::int as n from studio.sheet_help_served`)[0].n;
+    await H.sheetHelp(deps(800, recorded(['PART: grey\nCHANGE: grey as she says goodbye\nWHY: x', 'PART: grey\nCHANGE: grey as she says goodbye\nWHY: x']).complete), input('x'));
+    await H.sheetHelp(deps(800, recorded(['NONE: Which part first?'], ['OK']).complete), input('x'));
+    check('H6 a declined reply or a note records nothing', (await sql`select count(*)::int as n from studio.sheet_help_served`)[0].n === declinedBefore);
+    const label = (fid: number, from: string, text: string, mode = 'fork') => SV.helpLabelFor(S, { fid, mode, kind: 'character', from, text });
+    const published = DRAFT.replace('grey', 'Storm-Blue   \n WOOL');
+    const yes = await label(800, SHEET_A, published);
+    check('H6 a published prompt holding a served suggestion is labelled (case and spaces normalised)', yes?.marking === 'whole-prompt' && yes.model === CHAT.model && yes.tool === 'ask-for-help', yes);
+    check('H6 one without it is not', (await label(800, SHEET_A, DRAFT)) === null && (await label(800, SHEET_A, DRAFT.replace('grey', 'storm-blue'))) === null);
+    check('H6 another person’s suggestion doesn’t label yours', (await label(801, SHEET_A, published)) === null);
+    check('H6 a suggestion for another sheet doesn’t label this one', (await label(800, SHEET_B, published)) === null);
+    check('H6 a new sheet from nothing or a style is never labelled', (await label(800, SHEET_A, published, 'create')) === null && (await SV.helpLabelFor(S, { fid: 800, mode: 'fork', kind: 'style', from: SHEET_A, text: published })) === null);
+    // A browser that drops everything: publishing reads no help field at all; the label comes from the server's record.
     const route = read('src/app/api/designs/route.ts');
-    check('H6 publishing labels the body and every picture’s recipe from the receipts', /const help = helpMark\(acceptedIn\(body\.help, fid, text\)\)/.test(route) && /recipe: recipeOf\(p\.t, help\)/.test(route) && /\.\.\.\(help \? \{ help \} : \{\}\),\n\s*\.\.\.\(views\.front/.test(route));
+    const fromServer = /const help = await helpLabelFor\(sql, \{ fid, mode, kind, from: body\.from, text \}\);/.test(route) && !/body\.help|receipt|acceptedIn/.test(route);
+    check('H6 a browser that drops the receipt (sends nothing about help) is still labelled: the route reads only the server’s record', fromServer && (await label(800, SHEET_A, published)) !== null);
+    proof('a planted route that reads the label from the browser is caught', !(/const help = await helpLabelFor\(sql, \{ fid, mode, kind, from: body\.from, text \}\);/.test(route.replace('const help = await helpLabelFor(sql, { fid, mode, kind, from: body.from, text });', 'const help = body.help ? helpMark([{ model: CHAT.model }]) : null;'))));
+    check('H6 publishing labels the body and every picture’s recipe', /recipe: recipeOf\(p\.t, help\)/.test(route) && /\.\.\.\(help \? \{ help \} : \{\}\),\n\s*\.\.\.\(views\.front/.test(route));
+    proof('normalising matters: the raw words’ fingerprint would miss "Storm-Blue WOOL"', SV.fingerprint(['Storm-Blue', 'WOOL']) !== SV.fingerprint(SV.words('Storm-Blue WOOL')) && SV.runs(published, 2).has(SV.fingerprint(['storm-blue', 'wool'])));
+    await sql`insert into studio.sheet_help_served (fid, version_id, words_sha256, words_count) values (801, ${SHEET_A}, ${SV.fingerprint(['storm-blue', 'wool'])}, 2)`;
+    proof('a planted row for that other person does label theirs (so the FID is what kept it out)', (await label(801, SHEET_A, published)) !== null);
+    await sql`update studio.sheet_help_served set at = now() - make_interval(days => ${SHEET_HELP.servedDays}) - interval '1 minute'`;
+    check(`H6 an expired suggestion (older than ${SHEET_HELP.servedDays} days) doesn’t label`, SHEET_HELP.servedDays === 2 && (await label(800, SHEET_A, published)) === null);
+    const savedDays = SHEET_HELP.servedDays;
+    SHEET_HELP.servedDays = 10;
+    const plantedWindow = await label(800, SHEET_A, published);
+    SHEET_HELP.servedDays = savedDays;
+    proof('a planted longer window would label with the expired suggestion (so the window is what kept it out)', plantedWindow !== null);
+    await SV.recordServed(S, 802, SHEET_A, 'scuffed boots');
+    const left = await sql`select fid from studio.sheet_help_served`;
+    check('H6 rows past the window are deleted as new ones come in', left.length === 1 && Number(left[0].fid) === 802, left);
+    check('H6 the receipt mechanism is gone', !readdirSync(path.join(ROOT, 'src/lib/sheet-help')).includes('receipt.ts') && !/receipt/i.test(read('src/components/sheet-help.tsx') + read('src/lib/sheet-help/help.ts') + read('src/app/api/sheet-help/route.ts')));
     const page = read('src/app/references/designs/[id]/page.tsx');
     check('H6 the sheet’s page shows the label', /\{body\.help && <p className="dz-meta dz-drafted">\{SHEET_HELP_WORDING\.pageLine\}<\/p>\}/.test(page) && /includes words from AI suggestions/i.test(SHEET_HELP_WORDING.pageLine));
     check('H6 the design page reads the recipe line from recipe-lines.ts', /howMade\(p\.recipe/.test(page) && /helpLine\(r\)/.test(read('src/lib/images/recipe-lines.ts')));

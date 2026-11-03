@@ -6,7 +6,7 @@
 export const SHEET_HELP_WORDING = {
   open: 'Ask for help',
   optional: 'Optional. It suggests a change to one part of your text at a time; you accept or reject it. Entries are judged the same either way.',
-  sends: (route: string) => `Your message, this text, the rest of the recipe and what the book says about the character go to ${route}, set to keep nothing. We keep no copy.`,
+  sends: (route: string, days: number) => `Your message, this text, the rest of the recipe and what the book says about the character go to ${route}, set to keep nothing. We keep no copy of the conversation; we keep a fingerprint of each change it suggests, with your Farcaster ID, for ${days} days, so that if you publish those words the recipe says so.`,
   placeholder: 'What would you like to change? (e.g. “her coat feels too modern”)',
   send: 'Ask',
   asking: 'Thinking…',

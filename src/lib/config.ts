@@ -486,8 +486,11 @@ export const SHEET_HELP = {
   /** The longest replacement for one part of the prompt, in characters and in words. */
   partMaxChars: 160,
   partMaxWords: 24,
-  /** A signed suggestion stays usable for publishing this long (it holds the suggested words, the FID and the time). */
-  receiptHours: 24,
+  /**
+   * How long the server keeps a fingerprint of each suggestion it served (studio.sheet_help_served, with the FID and the
+   * sheet), so that publishing that sheet with those words labels its recipe (owner, 2026-11-03). Deleted after.
+   */
+  servedDays: 2,
   /**
    * How accepted words are marked in the recipe (owner, 2026-10-31): per phrase if agent-pictures part 2 (which records
    * whose words each part of a prompt is) has merged by Tue 10 Nov; otherwise the whole prompt is labelled. Part 2 has

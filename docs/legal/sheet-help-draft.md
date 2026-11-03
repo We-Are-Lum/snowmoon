@@ -6,7 +6,8 @@ there only after the owner says "reread", in the same release that switches `SHE
 today, owner 2026-10-18).
 
 `npm run check:principles` (P6r) fails if `SHEET_HELP.on` is on while Privacy §5 doesn't say what "Ask for help"
-sends (naming Groq) and keeps, or §6 doesn't say the recipe shows it. Even with the switch on, the feature waits for
+sends (naming Groq) and keeps (including "for 2 days", the served suggestions' window), or §6 doesn't say the recipe
+shows it. Even with the switch on, the feature waits for
 these words by itself (`sheetHelpLive`, `src/lib/sheet-help/flag.ts`, which looks for "Ask for help" in §5 and §6), and
 for the challenge's entry window.
 
@@ -19,7 +20,11 @@ word. Each "after" is the same text with the new words added at the end; nothing
 
 ---
 
-## Privacy §5 (The assistant.): three new sentences, at the end
+## Privacy §5 (The assistant.): four new sentences, at the end
+
+Revised 2026-11-03 for the owner's decision that the server, not the browser, sets the recipe's label: the third
+sentence (the fingerprints kept for 2 days, `SHEET_HELP.servedDays`) is new, and "we record only" became "we also
+record", since the count is no longer the only thing kept under your ID.
 
 **Before:**
 
@@ -27,7 +32,7 @@ word. Each "after" is the same text with the new words added at the end; nothing
 
 **After:**
 
-> Your question is sent to Groq to be answered, or through Vercel AI Gateway to Groq when Groq is busy. Both are set to keep nothing. We keep no copy of your questions or the answers. Under your Farcaster ID we record only how many questions you ask and when, to count the daily limit. The assistant's costs are kept only as daily totals, without your ID, to track our spending. On a character sheet, 'Ask for help' sends your message, the sheet's prompt draft and recipe, and the character's facts from the book to Groq (or through Vercel AI Gateway when Groq is busy), set to keep nothing. We keep no copy of the conversation. Under your Farcaster ID we record only how many messages you send and when, to count the daily limit; costs are kept as daily totals without your ID.
+> Your question is sent to Groq to be answered, or through Vercel AI Gateway to Groq when Groq is busy. Both are set to keep nothing. We keep no copy of your questions or the answers. Under your Farcaster ID we record only how many questions you ask and when, to count the daily limit. The assistant's costs are kept only as daily totals, without your ID, to track our spending. On a character sheet, 'Ask for help' sends your message, the sheet's prompt draft and recipe, and the character's facts from the book to Groq (or through Vercel AI Gateway when Groq is busy), set to keep nothing. We keep no copy of the conversation. We keep a fingerprint of each change it suggests to you (not the words themselves, and never your message), with your Farcaster ID and the sheet, for 2 days, so that if you publish that sheet with those words, its recipe says it includes words from AI suggestions. Under your Farcaster ID we also record how many messages you send and when, to count the daily limit; costs are kept as daily totals without your ID.
 
 ## Privacy §6 (What you publish.): one sentence, at the end
 

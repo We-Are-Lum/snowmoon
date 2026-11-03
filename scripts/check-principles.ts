@@ -1793,6 +1793,7 @@ add({
   name: '"Ask for help" is on only while Privacy §5 and §6 describe it, and it takes effect only in the challenge window',
   load: async () => ({
     on: SHEET_HELP.on as boolean,
+    days: SHEET_HELP.servedDays,
     flag: read('src/lib/sheet-help/flag.ts'),
     route: read('src/app/api/sheet-help/route.ts'),
     s5: (PRIVACY.sections.find((s) => s.n === 5)?.body ?? []).flat().join(' '),
@@ -1803,6 +1804,7 @@ add({
     if (c.on && !/Ask for help/.test(c.s5)) problems.push('SHEET_HELP.on (src/lib/config.ts) is on, but Privacy §5 does not say what "Ask for help" sends and keeps; reread docs/legal/sheet-help-draft.md with the owner first, or keep it off');
     if (c.on && !/Ask for help/.test(c.s6)) problems.push('SHEET_HELP.on is on, but Privacy §6 does not say the recipe shows words from "Ask for help"');
     if (c.on && !/\bGroq\b/.test(c.s5)) problems.push('SHEET_HELP.on is on, but Privacy §5 does not name Groq');
+    if (c.on && !new RegExp(`for ${c.days} days`).test(c.s5)) problems.push(`SHEET_HELP.on is on, but Privacy §5 does not say the suggestions served are kept for ${c.days} days (SHEET_HELP.servedDays)`);
     if (!/export const sheetHelpLive = [^\n]*SHEET_HELP\.on && privacyDescribesSheetHelp\(privacy\) && challengeSheetsOpen\(/.test(c.flag)) problems.push('src/lib/sheet-help/flag.ts: "Ask for help" going live does not wait for the switch, the Privacy words and the challenge window');
     if (!/if \(!sheetHelpLive\(\)\) return NextResponse\.json\(\{ error: 'Not found' \}, \{ status: 404 \}\)/.test(c.route)) problems.push('src/app/api/sheet-help/route.ts: the route does not answer 404 first while "Ask for help" is not live');
     return problems;
