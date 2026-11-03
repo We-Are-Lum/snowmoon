@@ -19,6 +19,7 @@ import { CHALLENGE_WORDING as CW } from '~/lib/challenge/wording';
 import { ChallengeShare } from '~/components/challenge-share';
 import { ChallengeMark } from '~/components/challenge-mark';
 import { PostedOn } from '~/components/posted-on';
+import { SHEET_HELP_WORDING } from '~/lib/sheet-help/wording';
 
 /**
  * A style or a character sheet (step 4; Claude Design 4a, 5a and 4-desktop): its name, version and
@@ -98,6 +99,7 @@ export default async function DesignPage({ params }: Props) {
         </p>
       )}
       {body.assist && <p className="dz-meta dz-drafted">{W.page.drafted}</p>}
+      {body.help && <p className="dz-meta dz-drafted">{SHEET_HELP_WORDING.pageLine}</p>}
       {standing?.kind === 'entry' && (
         <p className="dz-meta ch-standing">
           <span className="ch-badge">{CW.badge}</span> {CW.badgeNote(callName)} <Link href="/challenge">{CW.title} →</Link>

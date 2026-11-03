@@ -26,6 +26,19 @@ export interface DesignBody {
    * of the style guides). Absent on styles, and on sheets published before 2026-10-15.
    */
   style?: { version_id: string; title: string } | null;
+  /**
+   * "Ask for help" (docs/proposals/sheet-help.md): set when the text includes words the person accepted from its
+   * suggestions. Marking is 'whole-prompt' (the text is labelled "includes words from AI suggestions") until per-phrase
+   * marking is built. Absent otherwise.
+   */
+  help?: SheetHelpMark | null;
+}
+
+/** Which model's suggestions the text includes, and how they are marked (SHEET_HELP.marking). */
+export interface SheetHelpMark {
+  tool: 'ask-for-help';
+  model: string;
+  marking: 'whole-prompt';
 }
 
 export interface DesignPicture {
@@ -51,6 +64,8 @@ export interface DesignPicture {
     /** The checks that ran. 'not run' for a picture made outside the site (the starting sheets, 2026-11-01); the page says so. */
     checks: { prompt: { model: string; verdict: 'ok' | 'not run' }; host_safety_checker: 'passed' | 'not run' };
     assist: { model: string; drafted: string[]; source?: string } | null;
+    /** Its prompt includes words accepted from "Ask for help" (see DesignBody.help). Absent otherwise. */
+    help?: SheetHelpMark | null;
   };
 }
 

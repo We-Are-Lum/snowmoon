@@ -1,6 +1,7 @@
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { IMAGES } from '../config';
+import { SHEET_HELP_WORDING } from '../sheet-help/wording';
 
 /**
  * "How it was made", one line at a time, read from a picture's own recipe (owner, 2026-11-01: the starting sheets'
@@ -18,6 +19,8 @@ export interface RecipeForLines {
   references?: { sha256: string; what?: string }[];
   checks?: { prompt?: { model?: string; verdict?: string } | null; host_safety_checker?: string | null } | null;
   assist?: { model: string; drafted: string[]; source?: string } | null;
+  /** "Ask for help" (src/lib/sheet-help/): the prompt includes words the person accepted from its suggestions. */
+  help?: { tool: 'ask-for-help'; model: string; marking: 'whole-prompt' } | null;
 }
 
 type ModelEntry = { id: string; name?: string; maker?: string; license?: string; open_weights?: boolean };
@@ -102,6 +105,16 @@ export function draftedLine(r: RecipeForLines): string {
   return `The ${list} ${a.drafted.length > 1 ? 'were' : 'was'} drafted by ${who}.`; // the owner's wording (approved 2026-11-02)
 }
 
+/**
+ * "Ask for help" (docs/proposals/sheet-help.md; owner, 2026-10-31): the whole prompt is labelled "includes words from
+ * AI suggestions" while marking is 'whole-prompt' (agent-pictures part 2, which would let each phrase be marked, has
+ * not merged). Empty when the recipe has no help. Model-drafted wording around the owner's label, for his approval.
+ */
+export function helpLine(r: RecipeForLines): string {
+  if (!r.help) return '';
+  return SHEET_HELP_WORDING.recipeLine(r.help.model.replace(/^openai\//, ''));
+}
+
 /** The whole "how it was made" line for one picture of a design, as text runs (mono: shown in the code font). */
 export function howMade(
   r: RecipeForLines & { seed: number | null; request_id: string | null; cost_usd: number; made_at: string },
@@ -114,7 +127,8 @@ export function howMade(
   if (m.endpoint !== null) runs.push({ text: m.endpoint, mono: true }, { text: '.' });
   const from = madeFromLine(r, frontSha256, isFront);
   const drafted = draftedLine(r);
-  runs.push({ text: ` Seed ${r.seed ?? 'not recorded'}, request ${r.request_id ?? 'not recorded'}, cost $${r.cost_usd.toFixed(4)}, ${r.made_at.slice(0, 10)}. ${from ? `${from} ` : ''}${checksLine(r)} ${drafted ? `${drafted} ` : ''}File sha256 ` });
+  const help = helpLine(r);
+  runs.push({ text: ` Seed ${r.seed ?? 'not recorded'}, request ${r.request_id ?? 'not recorded'}, cost $${r.cost_usd.toFixed(4)}, ${r.made_at.slice(0, 10)}. ${from ? `${from} ` : ''}${checksLine(r)} ${drafted ? `${drafted} ` : ''}${help ? `${help} ` : ''}File sha256 ` });
   runs.push({ text: sha256, mono: true }, { text: '.' });
   return runs;
 }

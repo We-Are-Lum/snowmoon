@@ -253,3 +253,16 @@ a.dz-fork:hover { text-decoration: none; }
 .ch-mark button { min-height: 44px; }
 .ch-admin-list a { display: inline-block; min-height: 44px; line-height: 44px; }
 .ch-bounty a { display: inline-block; min-height: 44px; line-height: 44px; }
+
+/* "Ask for help" beside a sheet's text (src/components/sheet-help.tsx). */
+.sh-help summary { cursor: pointer; }
+.sh-turns { list-style: none; padding: 0; margin: 0.5rem 0; display: grid; gap: 0.5rem; }
+.sh-you { justify-self: end; max-width: 90%; padding: 0.4rem 0.6rem; border-radius: 0.5rem; background: var(--surface-2, rgba(127, 127, 127, 0.12)); overflow-wrap: anywhere; }
+.sh-ai { max-width: 100%; overflow-wrap: anywhere; }
+.sh-change p { margin: 0.2rem 0; }
+.sh-change del { text-decoration: line-through; opacity: 0.75; }
+.sh-change ins { text-decoration: none; background: rgba(127, 200, 127, 0.25); }
+.sh-quote { margin: 0.3rem 0; padding-left: 0.6rem; border-left: 2px solid currentColor; opacity: 0.85; font-size: 0.9em; }
+.sh-ask textarea { width: 100%; box-sizing: border-box; }
+.sh-actions { margin: 0.3rem 0; }
+.sh-actions button, .sh-help summary { min-height: 44px; }

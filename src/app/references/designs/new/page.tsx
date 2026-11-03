@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { IMAGES } from '~/lib/config';
+import { CHAT, IMAGES, SHEET_HELP } from '~/lib/config';
 import { db } from '~/lib/db';
 import { designByline } from '~/lib/images/byline';
 import { SAMPLE_SUBJECTS, viewLinesFor } from '~/lib/images/design-rules';
@@ -10,6 +10,7 @@ import { RULES } from '~/lib/images/rules';
 import { IMAGE_WORDING } from '~/lib/images/wording';
 import { DesignForm } from '~/components/design-form';
 import { challengeSheetsOpen, isChallengeCharacter } from '~/lib/challenge/open-sheets';
+import { sheetHelpLive } from '~/lib/sheet-help/flag';
 
 /**
  * Make a style or a sheet (step 4; Claude Design 4b, 4c, 5b): a new style, a sheet for one of the
@@ -37,6 +38,9 @@ export default async function NewDesign({ searchParams }: Props) {
   // A sheet's views are made in one of the published styles (owner, 2026-10-14).
   const styles = kind !== 'style' && sql ? await listDesigns(sql, 'style').catch(() => []) : [];
   const callName = character ? (character.name.split(' ').find((w) => !/^(Lord|General|Senator)$/.test(w)) ?? character.name) : '';
+  const challengeOpen = Boolean(src && mode !== 'create' && src.kind === 'character' && challengeSheetsOpen() && isChallengeCharacter(src.entity));
+  // "Ask for help" (docs/proposals/sheet-help.md): only beside a challenge character's sheet, and only while it is live.
+  const help = challengeOpen && sheetHelpLive() ? { perDay: SHEET_HELP.perDay, route: CHAT.route, model: CHAT.modelName, partMaxChars: SHEET_HELP.partMaxChars, partMaxWords: SHEET_HELP.partMaxWords } : null;
   const title = mode === 'fork' ? W.form.fork : mode === 'version' ? W.form.newVersion : kind === 'style' ? W.form.newStyle : W.form.newSheet(place ? placeTitle(place.name) : callName);
   return (
     <div className="page prose dz-page dz-form-page">
@@ -72,7 +76,8 @@ export default async function NewDesign({ searchParams }: Props) {
         limits={{ ...IMAGES.designs }}
         models={{ text: IMAGES.model, edit: IMAGES.editModel }}
         suffix={IMAGES.suffix}
-        challengeOpen={Boolean(src && mode !== 'create' && src.kind === 'character' && challengeSheetsOpen() && isChallengeCharacter(src.entity))}
+        challengeOpen={challengeOpen}
+        help={help}
       />
     </div>
   );

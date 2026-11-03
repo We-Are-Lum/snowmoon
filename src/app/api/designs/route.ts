@@ -5,7 +5,9 @@ import { getFid } from '~/lib/auth';
 import { db } from '~/lib/db';
 import { IMAGES } from '~/lib/config';
 import { hasConsented } from '~/lib/consent';
-import type { DesignBody, DesignPicture } from '~/lib/element-body';
+import type { DesignBody, DesignPicture, SheetHelpMark } from '~/lib/element-body';
+import { acceptedIn } from '~/lib/sheet-help/receipt';
+import { helpMark } from '~/lib/sheet-help/mark';
 import { SAMPLE_ASSIST, viewLinesFor } from '~/lib/images/design-rules';
 import { placeFirstChapter, placeTitle, sheetPlace } from '~/lib/images/sheets';
 import { bookCharacter, characterNameClash, CHARACTER_NAME_REFUSAL, designByVersion, designPublishesToday, makeDesign, MakeRefused, styleNameTaken, type DesignKind, type MakeMode } from '~/lib/images/designs';
@@ -42,11 +44,12 @@ function picture(p: Pic | undefined, fid: number, text: string): { t: SampleTick
   return { t, bytes };
 }
 
-const recipeOf = (t: SampleTicket): DesignPicture['recipe'] => ({
+const recipeOf = (t: SampleTicket, help: SheetHelpMark | null): DesignPicture['recipe'] => ({
   prompt: t.prompt, model: t.model, endpoint: t.endpoint, host: t.host, settings: t.settings, seed: t.seed, request_id: t.requestId,
   cost_usd: Number(t.costUsd.toFixed(4)), made_at: t.at, width: t.width, height: t.height, ...(t.references ? { references: t.references } : {}),
   ...(t.style ? { style: { version_id: t.style.versionId, title: t.style.title, text: t.style.text } } : {}),
   checks: { prompt: t.guard, host_safety_checker: 'passed' }, assist: SAMPLE_ASSIST as unknown as DesignPicture['recipe']['assist'],
+  ...(help ? { help } : {}),
 });
 
 export async function POST(request: Request) {
@@ -55,7 +58,7 @@ export async function POST(request: Request) {
   if (!IMAGES.enabled) return no('Publishing is switched off for now', 503);
   const sql = db();
   if (!sql || !process.env.IMAGES_TICKET_SECRET || !storageReady()) return no('Publishing styles and sheets is not set up on this deployment', 503);
-  let body: { mode?: unknown; kind?: unknown; title?: unknown; text?: unknown; character?: unknown; place?: unknown; from?: unknown; samples?: unknown; views?: unknown; nameProof?: unknown };
+  let body: { mode?: unknown; kind?: unknown; title?: unknown; text?: unknown; character?: unknown; place?: unknown; from?: unknown; samples?: unknown; views?: unknown; nameProof?: unknown; help?: unknown };
   try {
     body = await request.json();
   } catch {
@@ -134,7 +137,10 @@ export async function POST(request: Request) {
   if (!named2.ok) return no(named2.error, named2.status);
 
   const by = await bylineName(fid, body.nameProof);
-  const put = async (p: { t: SampleTicket; bytes: Buffer }): Promise<DesignPicture> => ({ url: await putPublic(p.t.sha256, p.bytes, 'image/jpeg'), sha256: p.t.sha256, recipe: recipeOf(p.t) });
+  // "Ask for help": the text is labelled when it still holds words the person accepted from a signed suggestion
+  // (src/lib/sheet-help/receipt.ts), in the page's body and in every picture's recipe.
+  const help = helpMark(acceptedIn(body.help, fid, text));
+  const put = async (p: { t: SampleTicket; bytes: Buffer }): Promise<DesignPicture> => ({ url: await putPublic(p.t.sha256, p.bytes, 'image/jpeg'), sha256: p.t.sha256, recipe: recipeOf(p.t, help) });
   const design: DesignBody = {
     title,
     text,
@@ -143,6 +149,7 @@ export async function POST(request: Request) {
     by_name: by.name,
     by_name_source: by.source,
     assist: null,
+    ...(help ? { help } : {}),
     ...(views.front ? { style: { version_id: views.front.t.style!.versionId, title: views.front.t.style!.title } } : {}),
   };
   try {

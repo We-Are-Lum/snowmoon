@@ -461,6 +461,42 @@ export const CHALLENGE = {
 };
 
 /**
+ * "Ask for help" beside a character sheet's prompt box, during the remix challenge (docs/proposals/sheet-help.md,
+ * approved by the owner 2026-10-31; src/lib/sheet-help/). An optional chat: the person's message, the character's facts
+ * from the book, the sheet's prompt draft and its recipe text go to CHAT.model by CHAT's route (text only), and the
+ * answer is a proposed change to ONE part of the prompt, shown as before and after, which the person accepts or
+ * rejects. It never drafts the whole prompt, and never writes dialogue, narration or story lines (its own guard policy,
+ * config/prompts/sheet-help-guard.md).
+ *
+ * `on` is OFF until the owner rereads its Privacy and Terms lines (docs/legal/sheet-help-draft.md) and the migration
+ * (supabase/migrations/NEXT_sheet_help.sql) is applied. Even on, it takes effect only while the challenge's sheets are
+ * open (the entry window) and only once Privacy §5 and §6 describe it (src/lib/sheet-help/flag.ts; principle check P6r).
+ * Turning it on is a reviewed commit, not an environment variable.
+ */
+export const SHEET_HELP = {
+  on: false as boolean,
+  /** Messages per person (FID) per UTC day (owner, 2026-10-31). A declined reply counts. */
+  perDay: 20,
+  /** Total spend per UTC day across everyone, in USD, from its own cost rows (owner, 2026-10-31). */
+  dailySpendCapUsd: 1,
+  /** One message, in characters. */
+  messageMax: 600,
+  /** Earlier turns sent with a message, from the device. */
+  historyTurns: 6,
+  /** The longest replacement for one part of the prompt, in characters and in words. */
+  partMaxChars: 160,
+  partMaxWords: 24,
+  /** A signed suggestion stays usable for publishing this long (it holds the suggested words, the FID and the time). */
+  receiptHours: 24,
+  /**
+   * How accepted words are marked in the recipe (owner, 2026-10-31): per phrase if agent-pictures part 2 (which records
+   * whose words each part of a prompt is) has merged by Tue 10 Nov; otherwise the whole prompt is labelled. Part 2 has
+   * not merged (checked 2026-11-02), so: the whole prompt. Per-phrase marking comes later.
+   */
+  marking: 'whole-prompt' as 'whole-prompt' | 'per-phrase',
+};
+
+/**
  * Readers add an image to a passage: slice 1, labelled "Trial" (docs/proposals/add-an-image.md;
  * the owner's decisions of 2026-10-08, all as recommended except 11, 12, 18, 20 and 24).
  * Each number below is one of those decisions.

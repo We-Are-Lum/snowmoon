@@ -87,7 +87,7 @@ const ROWS = (sql: Sql) => sql`
 
 const bodyOf = (b: unknown): DesignBody => {
   const o = (b ?? {}) as Partial<DesignBody> & { description?: string };
-  return { title: o.title ?? '', text: o.text ?? o.description ?? '', samples: o.samples ?? [], views: o.views ?? {}, by_name: o.by_name ?? null, by_name_source: o.by_name_source ?? null, assist: o.assist ?? null, role: o.role ?? null, style: o.style ?? null };
+  return { title: o.title ?? '', text: o.text ?? o.description ?? '', samples: o.samples ?? [], views: o.views ?? {}, by_name: o.by_name ?? null, by_name_source: o.by_name_source ?? null, assist: o.assist ?? null, role: o.role ?? null, style: o.style ?? null, help: o.help ?? null };
 };
 
 function shape(r: Record<string, unknown>): DesignRow {
