@@ -1,7 +1,8 @@
 import { createHash } from 'node:crypto';
 import { NextResponse } from 'next/server';
 import { revalidatePath } from 'next/cache';
-import { designPerson, notSignedInStatus } from '~/lib/social/design-person';
+import { designPerson } from '~/lib/social/design-person';
+import { getSocial, getWallet } from '~/lib/auth';
 import { isSocialPerson } from '~/lib/people';
 import { socialByline } from '~/lib/social/byline';
 import { db } from '~/lib/db';
@@ -55,7 +56,9 @@ const recipeOf = (t: SampleTicket): DesignPicture['recipe'] => ({
 export async function POST(request: Request) {
   // A Farcaster sign-in; a Bluesky one too once its check is on (src/lib/social/design-person.ts).
   const fid = await designPerson(request);
-  if (fid === null) return NextResponse.json({ error: 'Sign in with Farcaster to publish' }, { status: notSignedInStatus(request) });
+  // A wallet or another sign-in that can't make sheets: 403, since a 401 would sign it out.
+  if (fid === null && (getWallet(request) || getSocial(request))) return NextResponse.json({ error: 'Sign in with Farcaster to publish' }, { status: 403 });
+  if (fid === null) return NextResponse.json({ error: 'Sign in with Farcaster to publish' }, { status: 401 });
   if (!IMAGES.enabled) return no('Publishing is switched off for now', 503);
   const sql = db();
   if (!sql || !process.env.IMAGES_TICKET_SECRET || !storageReady()) return no('Publishing styles and sheets is not set up on this deployment', 503);

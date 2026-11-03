@@ -1,5 +1,5 @@
 import 'server-only';
-import { getFid, getPerson, getSocial, getWallet } from '../auth';
+import { getFid, getPerson, getSocial } from '../auth';
 import { SIGN_IN_METHODS, SOCIAL_SIGN_IN } from '../config';
 
 /**
@@ -11,9 +11,6 @@ import { SIGN_IN_METHODS, SOCIAL_SIGN_IN } from '../config';
  * Wallet and Lens sign-ins can't make sheets yet. Both switches are off: nothing changes until the owner's reread.
  */
 export const blueskyMakesSheets = () => Boolean(SIGN_IN_METHODS.find((m) => m.id === 'bluesky')?.on) && SOCIAL_SIGN_IN.bluesky.check.on;
-
-/** The answer when no one who may make sheets is signed in: 403 for a wallet or other sign-in (a 401 would sign it out). */
-export const notSignedInStatus = (request: Request) => (getWallet(request) || getSocial(request) ? 403 : 401);
 
 export async function designPerson(request: Request): Promise<number | null> {
   const fid = await getFid(request);
