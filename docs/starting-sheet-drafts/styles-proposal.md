@@ -179,8 +179,8 @@ yet: whether the same reading covers the Gouache style's **samples** (the same k
 
 1. **Styles:** keep the group of eight as listed, or drop or rename any; OK or rewrite the three new texts.
 2. **Bases:** plan A's three (Gouache, Printed, Miniature) and plan B's (Mood, Printed, Miniature), or others.
-3. ~~The style test~~: done ($0.08879, styles-test.md). Next: **"OK to spend up to $0.74 on the samples"** (less if
-   Neon night is dropped or changes maker), and **Neon night's maker** (Gemini, the open model, or drop it).
+3. ~~The style test~~: done ($0.08879, styles-test.md). Next: **"OK to spend up to $0.41 on the Miniature and Gouache
+   samples"** (worst; estimate $0.28), plus up to $0.37 if Neon night is made by Gemini, and **Neon night's maker** (Gemini, the open model, or drop it).
 4. **Bases spend, separately** (the brief allows spending on the styles only): "OK to spend up to $3.76 on plan A's
    bases" or "up to $1.87 on plan B's".
 5. **The reread** of the closed-model-bases Privacy, Terms and About lines, with "styles" added, by Thu 5 Nov; and
