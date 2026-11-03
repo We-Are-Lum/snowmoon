@@ -8,7 +8,7 @@ import { spawnSync } from 'node:child_process';
 import path from 'node:path';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
-const CHECKS = ['check:principles', 'check:snap-live', 'check:miniapp', 'check:podcast', 'check:ui', 'check:shipped'];
+const CHECKS = ['check:principles', 'check:snap-live', 'check:miniapp', 'check:podcast', 'check:ui', 'check:shipped', 'check:launch'];
 let failed = 0, checks = 0;
 for (const c of CHECKS) for (const args of [[], ['--url=snowmoon.party'], ['--url=']]) {
   checks++;
