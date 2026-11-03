@@ -405,6 +405,18 @@ export const CONTACT_EMAIL = 'snowmoon@wearelum.xyz';
  */
 export const CHALLENGE = {
   id: 'remix-2026-11',
+  /**
+   * The owner's switch (owner, 2026-11-04: "/challenge is admin-only for now"). While false:
+   * - /challenge, /api/challenge/* and every way into them (the menu item, the home row, the challenge share text, and
+   *   on sheet pages the Entry badge, "Mark as my entry", the challenge lines and "Posted on") are for admins only
+   *   (ADMINS); everyone else gets "not found", as agent pages do while AGENTS.public is off;
+   * - nothing the dates would switch on opens by itself: entries (eligibility recorded at publish, marking), open
+   *   sheet-making (openSheets) and the challenge's free image cap (dailySpendCapUsd) all stay off, whatever the clock
+   *   says. `dates` stay as they are, for when the owner opens it with a new open date.
+   * Only the owner turns it on. check:principles P6u proves it: with this off and the clock past `dates.opens`, entries,
+   * open sheets and the $15 cap are off and /challenge answers 404 to a non-admin.
+   */
+  public: false as boolean,
   /** The characters, by their file in content/snowmoon/designs/characters, in the owner's order (owner, 2026-10-31). */
   characters: ['zei', 'bai', 'gladias', 'seila', 'deluin', 'mu'] as readonly string[],
   /**
@@ -629,12 +641,14 @@ export const IMAGES = {
 /** Minpentai Play's limits and retention (owner, 2026-10-09). Every /api/minpentai/* request counts. */
 /**
  * The site-wide free image spend cap for a moment (owner, 2026-10-31): CHALLENGE.dailySpendCapUsd from the entry
- * window's open (included) to its close (excluded), IMAGES.dailySpendCapUsd ($2) at every other time. It reverts by
+ * window's open (included) to its close (excluded), once the owner has opened the challenge (CHALLENGE.public; owner,
+ * 2026-11-04), IMAGES.dailySpendCapUsd ($2) at every other time. It reverts by
  * itself, with no deploy. The cap is per UTC day; the day's spend counted so far is compared with the cap now.
  */
 export function imagesDailySpendCapUsd(now: Date = new Date()): number {
   const t = now.getTime();
-  return t >= Date.parse(CHALLENGE.dates.opens) && t < Date.parse(CHALLENGE.dates.closes) ? CHALLENGE.dailySpendCapUsd : IMAGES.dailySpendCapUsd;
+  // Only once the owner has opened the challenge (CHALLENGE.public): the dates alone never raise the cap.
+  return CHALLENGE.public && t >= Date.parse(CHALLENGE.dates.opens) && t < Date.parse(CHALLENGE.dates.closes) ? CHALLENGE.dailySpendCapUsd : IMAGES.dailySpendCapUsd;
 }
 
 export const MINPENTAI_PLAY = {
