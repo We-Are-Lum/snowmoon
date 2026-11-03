@@ -259,7 +259,9 @@ process.env.APP_LEGAL_PAGES = 'terms+privacy';
   const guardWorst = (prompt: string) => (system + Buffer.byteLength(prompt)) * guardPrice.input + 400 * guardPrice.output;
   const imageWorst = 1 * IMAGES.pricePerMp; // fal may round up to 1 MP
   const guardSrc = readFileSync(path.join(ROOT, 'src/lib/images/guard.ts'), 'utf8');
-  check('the Pictures prompt check answers in at most 400 tokens', /maxTokens = 400\)/.test(guardSrc) && /checkPrompt\(job\.checkText, request\)/.test(readFileSync(path.join(ROOT, 'src/lib/images/paid.ts'), 'utf8')));
+  // A sheet's views get their own budget (IMAGES.designs.guardMaxTokens, owner 2026-11-03; test:designs checks its reserve); Pictures keeps 400.
+  const generateSrc = readFileSync(path.join(ROOT, 'src/app/api/images/generate/route.ts'), 'utf8');
+  check('the Pictures prompt check answers in at most 400 tokens', /maxTokens = 400\)/.test(guardSrc) && /checkPrompt\(job\.checkText, request, job\.guardMaxTokens\)/.test(readFileSync(path.join(ROOT, 'src/lib/images/paid.ts'), 'utf8')) && !/guardMaxTokens/.test(generateSrc));
   check('with every pick at its longest, the prompt check still fits the reserve, so picks as text leave the price as it is', imageWorst + guardWorst(worstPrompt) <= IMAGES.reserveUsd, `${imageWorst} + ${guardWorst(worstPrompt).toFixed(6)} vs ${IMAGES.reserveUsd} (no picks: ${guardWorst(plain).toFixed(6)})`);
 }
 
