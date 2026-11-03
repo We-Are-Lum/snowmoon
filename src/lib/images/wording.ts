@@ -181,6 +181,8 @@ export const IMAGE_WORDING = {
       promptIs: (suffix: string) => `Each picture’s prompt is its line above, then your text, then “${suffix}”`,
       needSamples: (n: number) => `Make at least ${n} sample pictures with this text to publish.`,
       signIn: 'Sign in to make a style or a sheet. For now, making them is open to invited readers only.',
+      /** While the remix challenge opens this sheet (launch rehearsal, 2026-11-02: the line above told challenge visitors it was invited-only). */
+      signInChallenge: 'Sign in with Farcaster to remix this sheet. During the remix challenge, anyone whose account passes the site’s check can fork it.',
       // Owner, 2026-10-10: "Invited only, for now". Shown by the form and sent by /api/designs and /api/designs/sample.
       // Picks are open to everyone signed in since 2026-10-19 (Privacy §4 names My picks), and at Generate for wallet
       // accounts too since 2026-10-23. Model-drafted.

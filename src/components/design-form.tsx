@@ -192,7 +192,7 @@ export function DesignForm(p: Props) {
 
       {auth.kind !== 'signed-in' ? (
         <div className="ic-gate">
-          <p>{W.form.signIn}</p>
+          <p>{p.challengeOpen ? W.form.signInChallenge : W.form.signIn}</p>
           <SignInButton />
         </div>
       ) : !status ? (

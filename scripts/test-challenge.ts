@@ -572,6 +572,12 @@ check('as committed, CHALLENGE.entries, posts and openSheets are on (owner\'s re
   const draftedLine = (src: string) => /body\.assist && <p className="dz-meta dz-drafted">\{style \? W\.page\.drafted : W\.page\.draftedSheet\}<\/p>/.test(src);
   check('R1 a sheet drafted by the coding agent says "starting sheet", a style "starting style"', draftedLine(page) && /starting sheet/.test(IW.draftedSheet) && !/style/.test(IW.draftedSheet) && /starting style/.test(IW.drafted));
   proof('R1 the style line shown on every design is caught', !draftedLine(page.replace('{style ? W.page.drafted : W.page.draftedSheet}', '{W.page.drafted}')));
+  // R2: signed out on a challenge sheet's fork form, the visitor read "open to invited readers only".
+  const form = read('src/components/design-form.tsx');
+  const IF = (await import('../src/lib/images/wording')).IMAGE_WORDING.designs.form;
+  const signInLine = (src: string) => /<p>\{p\.challengeOpen \? W\.form\.signInChallenge : W\.form\.signIn\}<\/p>/.test(src);
+  check('R2 signed out, a challenge sheet\'s fork form asks to sign in to remix it, not "invited readers only"', signInLine(form) && !/invited/i.test(IF.signInChallenge) && /remix/i.test(IF.signInChallenge));
+  proof('R2 the invited-only line shown during the challenge is caught', !signInLine(form.replace('{p.challengeOpen ? W.form.signInChallenge : W.form.signIn}', '{W.form.signIn}')));
 }
 
 console.log(`test:challenge: ${passed} passed, ${failures.length} failed`);
