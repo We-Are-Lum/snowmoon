@@ -1350,7 +1350,7 @@ add({
     seen.push({ page: '/chapter/1', host: 'fonts.googleapis.com', url: 'https://fonts.googleapis.com/css2?family=Inter', type: 'stylesheet' });
   },
 });
-const PRIVATE_FID_TABLES = ['ratings', 'likes', 'take_likes', 'picks', 'contributor_consents', 'image_asks', 'removal_log', 'image_scores', 'wallet_links', 'challenge_marks', 'version_posts', 'challenge_eligibility'];
+const PRIVATE_FID_TABLES = ['ratings', 'likes', 'take_likes', 'picks', 'contributor_consents', 'image_asks', 'removal_log', 'image_scores', 'wallet_links', 'challenge_marks', 'version_posts', 'challenge_eligibility', 'sheet_remix_asks'];
 add({
   id: 'P6b',
   principle: 6,
@@ -1380,6 +1380,10 @@ add({
         insert into studio.challenge_marks (challenge, fid, character, version_id) values ('remix-2026-11', 42, 'bai', '00000000-0000-0000-0000-0000000000f1');
         insert into studio.version_posts (version_id, network, post_id, handle, posted_at, url, fid) values ('00000000-0000-0000-0000-0000000000f1', 'lens', '1', 'someone', now(), 'https://hey.xyz/posts/abc', 42);
         insert into studio.challenge_eligibility (version_id, challenge, fid, decision, eligible) values ('00000000-0000-0000-0000-0000000000f1', 'remix-2026-11', 42, 'passed', true);
+      end if; end $$;
+      -- Free remixes (NEXT_remix_count.sql, branch remix-submit): one view of a remix, by FID 42.
+      do $$ begin if to_regclass('studio.sheet_remix_asks') is not null then
+        insert into studio.sheet_remix_asks (remix, fid, units, slot) values ('00000000-0000-4000-8000-0000000000a1', 42, 1, 'front');
       end if; end $$;`);
     const problems: string[] = [];
     for (const role of ['anon', 'authenticated']) {
@@ -1756,6 +1760,33 @@ add({
     c.s4 = 'Quote cards you save, and your likes.';
     c.s7 = 'Neynar receives your Farcaster ID.';
     c.openSheets = 'export const challengeSheetsOpen = () => CHALLENGE.openSheets;';
+  },
+});
+
+// P6u: Submit (branch remix-submit, owner 2026-11-04). A remix becomes an entry only when its maker presses Submit,
+// which keeps the submission and the post link (studio.challenge_marks, studio.version_posts). Legal texts describe
+// today: while entries are on, Privacy §4 must say what Submit keeps, and the code must keep marks only through Submit
+// (no "latest version counts" path left). P6u was free on main and every remote branch (2026-11-04).
+add({
+  id: 'P6u',
+  principle: 6,
+  name: 'Submit: while entries are on, Privacy §4 says what Submit keeps (the submission and the post link), and only Submit writes a submission',
+  load: async () => ({
+    entries: CHALLENGE.entries as boolean,
+    s4: (PRIVACY.sections.find((s) => s.n === 4)?.body ?? []).flat().join(' '),
+    writers: walk('src', /\.tsx?$/).filter((f) => /insert into studio\.challenge_marks/.test(read(f))),
+  }),
+  run: (c) => {
+    const problems: string[] = [];
+    if (c.entries && !/you submit as an entry/i.test(c.s4)) problems.push('CHALLENGE.entries is on, but Privacy §4 does not say what Submit keeps (docs/legal/remix-submit-draft.md)');
+    if (c.entries && !/link to your post/i.test(c.s4)) problems.push('CHALLENGE.entries is on, but Privacy §4 does not say Submit keeps the link to your post');
+    if (c.writers.join() !== 'src/lib/challenge/entries.ts') problems.push(`submissions are written outside Submit (src/lib/challenge/entries.ts, submitEntry): ${c.writers.join(', ') || 'nowhere'}`);
+    return problems;
+  },
+  plant: (c) => {
+    c.entries = true;
+    c.s4 = 'If you take part in the remix challenge: which of your versions you mark as your entry for each character, and when.';
+    c.writers = ['src/lib/challenge/entries.ts', 'src/app/api/challenge/mark/route.ts'];
   },
 });
 

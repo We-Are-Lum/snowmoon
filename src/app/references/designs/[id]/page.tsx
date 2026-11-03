@@ -18,7 +18,7 @@ import { challengeSheetsOpen, isChallengeCharacter } from '~/lib/challenge/open-
 import { postsFor } from '~/lib/challenge/posts';
 import { CHALLENGE_WORDING as CW } from '~/lib/challenge/wording';
 import { ChallengeShare } from '~/components/challenge-share';
-import { ChallengeMark } from '~/components/challenge-mark';
+import { ChallengeSubmit } from '~/components/challenge-submit';
 import { PostedOn } from '~/components/posted-on';
 
 /**
@@ -100,16 +100,20 @@ export default async function DesignPage({ params }: Props) {
       )}
       {body.assist && <p className="dz-meta dz-drafted">{style ? W.page.drafted : W.page.draftedSheet}</p>}
       {standing?.kind === 'entry' && (
-        <p className="dz-meta ch-standing">
-          <span className="ch-badge">{CW.badge}</span> {CW.badgeNote(callName)} <Link href="/challenge">{CW.title} →</Link>
-        </p>
+        <div className="dz-meta ch-standing">
+          <p>
+            <span className="ch-badge">{CW.badge}</span> {CW.badgeNote(callName)} <Link href="/challenge">{CW.title} →</Link>
+          </p>
+          {/* Its maker can withdraw it until entries close (owner, 2026-11-04). */}
+          {phase() === 'open' && <ChallengeSubmit versionId={d.shown.versionId} byFid={d.byFid} submitted open />}
+        </div>
       )}
       {standing?.kind === 'candidate' &&
-        // After the close a mark is refused, so no button is offered (launch rehearsal, 2026-11-02).
+        // After the close Submit is refused, so nothing is offered (launch rehearsal, 2026-11-02).
         (phase() === 'open' ? (
           <div className="dz-meta ch-standing">
-            <p className="dz-muted">{CW.candidateNote}</p>
-            <ChallengeMark versionId={d.shown.versionId} byFid={d.byFid} />
+            <p className="dz-muted">{CW.candidateNote(callName)}</p>
+            <ChallengeSubmit versionId={d.shown.versionId} byFid={d.byFid} submitted={false} open />
           </div>
         ) : (
           <p className="dz-meta ch-standing dz-muted">{CW.candidateClosedNote(callName)}</p>

@@ -128,6 +128,11 @@ export async function POST(request: Request) {
     const src = typeof body.from === 'string' ? await designByVersion(sql, body.from) : null;
     if (!src || src.kind !== kind) return no('No such design', 404);
     if (mode === 'version' && src.byFid !== fid) return no('Only its maker can add a version. Remix it to make your own.', 403);
+    // A remix's front view starts from the source's front view, as a reference picture (owner, 2026-11-04: "the source
+    // is always a reference picture"); its recipe records it. A source with no front view (text alone) has none to send.
+    const srcFront = kind !== 'style' ? src.shown.body.views?.front : undefined;
+    if (srcFront && views.front && !(views.front.t.source?.sha256 === srcFront.sha256 && views.front.t.references?.some((r) => r.sha256 === srcFront.sha256)))
+      return no('The front view wasn’t made from the sheet you’re remixing. Make it again here.', 400);
   }
 
   // The name is published too: the model check reads it (decision 1); the text was checked with its pictures.
@@ -149,12 +154,12 @@ export async function POST(request: Request) {
   try {
     const out = await makeDesign(sql, { fid, mode, kind, styleName: mode === 'create' && kind === 'style' ? title : undefined, character: character ?? undefined, place: place ?? undefined, fromVersionId: typeof body.from === 'string' ? body.from : undefined, body: design });
     // The remix challenge: whether this version can be an entry is decided now, once, and stored (never on page view).
-    let challenge: { kind: 'entry' | 'unchecked'; name: string } | null = null;
+    let challenge: { kind: 'candidate' | 'unchecked'; name: string } | null = null;
     if (kind === 'character' && mode !== 'create') {
       await recordEligibility(sql, out.versionId, fid);
       // Its count and entries list change now, as after a mark (launch rehearsal, 2026-11-02: /challenge lagged up to a minute).
       revalidatePath('/challenge');
-      // The confirmation says whether it is now an entry, or that it won't count because Neynar didn't answer (owner, 2026-11-03).
+      // The confirmation says it can be submitted as an entry, or that it can't because Neynar didn't answer (owner, 2026-11-03; Submit, 2026-11-04).
       const st = await publishStanding(sql, out.versionId);
       const full = st ? (bookCharacter(st.character)?.name ?? st.character) : '';
       if (st) challenge = { kind: st.kind, name: full.split(' ').find((w) => !/^(Lord|General|Senator)$/.test(w)) ?? full };

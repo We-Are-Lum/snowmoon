@@ -98,6 +98,10 @@ export interface SampleTicket {
   references?: { sha256: string }[];
   /** For a sheet's views: the published style version whose text is in the prompt. */
   style?: { versionId: string; title: string; text: string };
+  /** For a remix's front view (owner, 2026-11-04): the version remixed, whose front view was sent as a reference picture. */
+  source?: { versionId: string; sha256: string };
+  /** For a sheet's views counted as a remix: the remix's id (src/lib/images/remixes.ts). */
+  remix?: string;
   guard: { model: string; verdict: 'ok' };
   at: string;
 }
@@ -162,4 +166,26 @@ export function recipeAssist(t: Pick<Ticket, 'style' | 'designs' | 'sheets'>) {
     sources.push(SHORTHAND_ASSIST_SOURCE);
   }
   return drafted.length ? { model: 'claude-coding-agent', drafted, source: sources.join('; ') } : null;
+}
+
+/**
+ * A remix in progress (owner, 2026-11-04: count remixes, not pictures): its id, whose it is and the units it uses.
+ * Given with every view of the remix, made or failed, so the person makes its other views, or one again, inside it.
+ */
+export interface RemixTicket {
+  v: 1;
+  kind: 'remix';
+  fid: number;
+  remix: string;
+  units: number;
+  at: string;
+}
+
+export function signRemixTicket(t: RemixTicket): string {
+  return sign(t);
+}
+
+export function readRemixTicket(token: string): RemixTicket | null {
+  const t = read(token);
+  return t && t.kind === 'remix' ? (t as unknown as RemixTicket) : null;
 }

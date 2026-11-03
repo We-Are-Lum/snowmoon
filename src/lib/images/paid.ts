@@ -35,6 +35,9 @@ export const LIMIT_SAY = {
   spend: 'Image making has reached today’s spending limit for everyone. It comes back at 00:00 UTC.',
   balance: IMAGE_WORDING.prepaid.lowBalance,
   'prepaid-spend': IMAGE_WORDING.prepaid.dailyCap,
+  // Free remixes (owner, 2026-11-04). Draft wording.
+  'remix-limit': `You’ve made today’s ${IMAGES.designs.remixesPerDay} remixes. More tomorrow (00:00 UTC).`,
+  'remix-used': `This remix has used its ${IMAGES.designs.picturesPerRemix} pictures. Press Remix to start a new one.`,
 } as const;
 const say = (refusal: keyof typeof LIMIT_SAY, fid: number) => (refusal === 'limit' ? LIMIT_SAY.limit(perDay(fid)) : LIMIT_SAY[refusal]);
 /** A failure's words, and, when a wallet account's Generate was credited back, that it was. */

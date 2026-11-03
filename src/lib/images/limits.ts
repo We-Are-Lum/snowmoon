@@ -3,6 +3,7 @@ import type postgres from 'postgres';
 import { IMAGES, imagesDailySpendCapUsd } from '../config';
 import { balanceUsd, debit, priceUsd } from '../wallet/credits';
 import { paysFor } from './price';
+import { countsRemixes, remixesLeft, remixRefusal, type RemixRefusal } from './remixes';
 
 /**
  * Caps for readers' images (decision 10). A Generate is counted under the person's FID in
@@ -19,7 +20,7 @@ import { paysFor } from './price';
 type Sql = postgres.Sql;
 const TODAY = `(now() at time zone 'utc')::date`;
 
-export type Refusal = 'limit' | 'spend' | 'balance' | 'prepaid-spend';
+export type Refusal = 'limit' | 'spend' | 'balance' | 'prepaid-spend' | RemixRefusal;
 export type Funded = 'free' | 'prepaid';
 export const fundedBy = (fid: number): Funded => (fid < 0 ? 'prepaid' : 'free');
 
@@ -45,6 +46,38 @@ export async function publishesLeft(sql: Sql, fid: number): Promise<number> {
 export interface Spend {
   model: { id: string; host: string };
   reserveUsd: number;
+  /**
+   * A sheet's view inside a remix (owner, 2026-11-04: count remixes, not pictures): its remix's id, the units it uses
+   * (src/lib/images/remixes.ts, remixUnits) and whether this view starts it. Counted as a remix only for people
+   * countsRemixes() names, and only once studio.sheet_remix_asks exists (NEXT_remix_count.sql); otherwise as a picture.
+   */
+  remix?: { id: string; units: number; starts: boolean; slot: 'front' | 'side' | 'back' };
+}
+
+/** The start of today (UTC), as the other daily counts read it. */
+const UTC_DAY = `date_trunc('day', now() at time zone 'utc') at time zone 'utc'`;
+
+/** Whether remixes are counted on this database yet (NEXT_remix_count.sql applied). */
+async function remixTable(sql: Sql): Promise<boolean> {
+  const [r] = await sql<{ ok: boolean }[]>`select to_regclass('studio.sheet_remix_asks') is not null as ok`;
+  return Boolean(r?.ok);
+}
+
+/** The units of the remixes this person started today (each remix once, at its first view). */
+async function remixesUsedToday(sql: Sql, fid: number): Promise<number> {
+  const [r] = await sql<{ n: number }[]>`select coalesce(sum(units), 0)::int as n from (
+      select distinct on (remix) remix, units, at from studio.sheet_remix_asks where fid = ${fid} order by remix, at) x
+    where x.at >= ${sql.unsafe(UTC_DAY)}`;
+  return Number(r?.n ?? 0);
+}
+
+/**
+ * For the form: how many remixes this person has left today, or null when their views count as pictures (an admin,
+ * an invited maker, a wallet account, or a database without studio.sheet_remix_asks).
+ */
+export async function remixesLeftToday(sql: Sql, fid: number): Promise<number | null> {
+  if (!countsRemixes(fid) || !(await remixTable(sql))) return null;
+  return remixesLeft(await remixesUsedToday(sql, fid));
 }
 const DEFAULT_SPEND: Spend = { model: IMAGES.model, reserveUsd: IMAGES.reserveUsd };
 
@@ -67,7 +100,20 @@ export async function reserve(sql: Sql, fid: number, spend: Spend = DEFAULT_SPEN
       await addCost(t, 'prepaid', 'reserved', spend.model.id, '', '', 1, spend.reserveUsd);
       return { ok: true as const, left: paysFor(balance - price, priceUsd(IMAGES.reserveUsd)), debitId };
     }
-    const left = await generationsLeft(tx as unknown as Sql, fid);
+    // A sheet's view inside a remix, for someone who counts remixes (owner, 2026-11-04): the remix count, not the pictures'.
+    const t = tx as unknown as Sql;
+    if (spend.remix && countsRemixes(fid) && (await remixTable(t))) {
+      const used = await remixesUsedToday(t, fid);
+      const [tr] = await tx<{ n: number }[]>`select count(*)::int as n from studio.sheet_remix_asks where remix = ${spend.remix.id} and fid = ${fid}`;
+      const refusal = remixRefusal({ starts: spend.remix.starts, units: spend.remix.units, used, tries: Number(tr?.n ?? 0) });
+      if (refusal) return { ok: false as const, refusal };
+      const [day] = await tx`select coalesce(sum(cost_usd), 0)::float8 as usd from studio.image_costs where day = ${tx.unsafe(TODAY)} and funded = 'free'`;
+      if (day.usd + spend.reserveUsd > imagesDailySpendCapUsd()) return { ok: false as const, refusal: 'spend' as const };
+      await tx`insert into studio.sheet_remix_asks ${tx({ remix: spend.remix.id, fid, units: spend.remix.units, slot: spend.remix.slot })}`;
+      await addCost(t, 'free', 'reserved', spend.model.id, '', '', 1, spend.reserveUsd);
+      return { ok: true as const, left: remixesLeft(used + (spend.remix.starts ? spend.remix.units : 0)) };
+    }
+    const left = await generationsLeft(t, fid);
     if (left <= 0) return { ok: false as const, refusal: 'limit' as const };
     const [today] = await tx`select coalesce(sum(cost_usd), 0)::float8 as usd from studio.image_costs where day = ${tx.unsafe(TODAY)} and funded = 'free'`;
     if (today.usd + spend.reserveUsd > imagesDailySpendCapUsd()) return { ok: false as const, refusal: 'spend' as const };

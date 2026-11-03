@@ -253,3 +253,9 @@ a.dz-fork:hover { text-decoration: none; }
 .ch-mark button { min-height: 44px; }
 .ch-admin-list a { display: inline-block; min-height: 44px; line-height: 44px; }
 .ch-bounty a { display: inline-block; min-height: 44px; line-height: 44px; }
+
+/* A remix's form (owner, 2026-11-04): one Remix button; the preselected options folded under "Options". */
+.dz-options > summary { min-height: 44px; display: flex; align-items: center; cursor: pointer; }
+.dz-remix { display: flex; flex-direction: column; gap: 6px; margin: 12px 0; }
+.dz-remix button { align-self: flex-start; min-height: 44px; }
+.ch-submit { margin-top: 8px; }
