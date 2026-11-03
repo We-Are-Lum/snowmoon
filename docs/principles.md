@@ -362,7 +362,17 @@ order the feed, search, anyone's own pages, the agent tools or the read API.
   likes, built-on counts, scores, costs or payments. One narrow exception (owner, 2026-11-04; branch
   challenge-three-bases): "Bases to start from" may follow the bases' fixed style order (`CHALLENGE.baseStyles`), by
   `.sort(baseStyleOrder)` inside `startingSheets` only; entries and every other challenge list stay time order. Its
-  planted violation is an entries list ordered by style, which must fail (scripts/lib/p5g.ts).
+  planted violation is an entries list ordered by style, which must fail (scripts/lib/p5g.ts). A second narrow
+  exception (owner, 2026-11-04; branch challenge-landing): /challenge's random selection, a fresh, unweighted shuffle on
+  each visit, drawn from all published remixes of the six characters; no weighting, no counts, no featuring.
+  Randomness in the challenge's code lives only in `shuffleFresh` (src/lib/challenge/shuffle.ts), which takes a list of
+  an unconstrained type and reads nothing about an item, called only by the random selection, on the whole list. It
+  runs in the browser on each visit, from the full list the cached page carries. Its planted violation is a weighted
+  shuffle, which must fail.
+- `P5i` (branch challenge-landing, 2026-11-04, the owner's decision): while the challenge runs, its remix cards (the
+  random selection and "See all") show no remix, like or built-on count, and the feed (/challenge/remixes) has no "most
+  remixed" or other sort: newest first, filterable by character. A viewer's "most remixed" sort may come back after
+  entries close, by the owner's decision then. Its planted violation is a like count on a card.
 - Review: does any default, badge or ordering reflect a person's choice without saying whose?
 
 **Status.** Pass. (Picks are built on branch phase2-admin and need 0030_admin_picks, applied 2026-10-31.)

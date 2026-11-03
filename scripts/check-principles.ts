@@ -31,7 +31,7 @@ import { LEARN_TEXT } from '../src/lib/minpentai/learn-text';
 import { BOOK_TAG, NARRATION_MAX_WORDS, PERSON_TAG, parseBeats } from '../src/lib/script-beats';
 import { GLOSSARY_FILE, loadBlocks, verifyGlossary, type Glossary } from './lib/glossary';
 import { p4aProblems } from './lib/p4a';
-import { CHALLENGE_FILES as P5G_FILES, p5gProblems } from './lib/p5g';
+import { CHALLENGE_FILES as P5G_FILES, P5I_FILES, p5gProblems, p5iProblems } from './lib/p5g';
 import { MODAL_VC_FILE, MODAL_VC_PLANTS, modalVcRun, modalVcStatic } from './lib/modal-vc';
 import { requireTarget } from './lib/target';
 
@@ -1244,16 +1244,32 @@ add({
 // The remix challenge (owner, 2026-10-31: "No ordering by engagement or payment"): entries, sheets to start from and
 // "Posted on" are in time order and nothing else (scripts/lib/p5g.ts). One narrow exception (owner, 2026-11-04): "Bases
 // to start from" may follow the bases' fixed style order (CHALLENGE.baseStyles), there only; entries stay time order.
+// A second (owner, 2026-11-04): /challenge's random selection, a fresh unweighted shuffle of every remix on each visit.
 add({
   id: 'P5g',
   principle: 5,
-  name: 'the remix challenge orders entries, sheets and "Posted on" by time only (never by likes, built-on, scores or payments); only "Bases to start from" may follow the bases\' fixed style order',
+  name: 'the remix challenge orders entries, sheets and "Posted on" by time only (never by likes, built-on, scores or payments); only "Bases to start from" may follow the bases\' fixed style order, and only /challenge\'s random selection may shuffle, unweighted, every remix',
   load: async () => walk('src', /\.tsx?$/).filter((f) => P5G_FILES.test(f)).map((f) => ({ file: f, text: read(f) })),
   run: (files) => p5gProblems(files),
   plant: (files) => {
-    // An entries list ordered by style: the bases' exception must not reach it.
-    const i = files.findIndex((f: { file: string }) => f.file === 'src/lib/challenge/entries.ts');
-    files[i] = { ...files[i], text: files[i].text.replace(/export async function standing\(/, 'export const planted = (entries) => entries.sort(baseStyleOrder);\nexport async function standing(') };
+    // A weighted shuffle (owner, 2026-11-04): the random selection's exception must not let one through. (The bases'
+    // planted violation, an entries list ordered by style, is proven in scripts/test-challenge.ts.)
+    const i = files.findIndex((f: { file: string }) => f.file === 'src/lib/challenge/shuffle.ts');
+    files[i] = { ...files[i], text: files[i].text.replace('export function shuffleFresh<T>(items: readonly T[]', 'export function shuffleFresh<T extends { likes: number }>(items: readonly T[]').replace('const j = below(i + 1, random);', 'const j = below(Math.min(i + 1, 1 + out[i].likes), random);') };
+  },
+});
+// While the challenge runs (owner, 2026-11-04): no remix, like or built-on count on its remix cards, and no "most
+// remixed" sort on the feed: newest first, by character, and nothing else (scripts/lib/p5g.ts, p5iProblems).
+add({
+  id: 'P5i',
+  principle: 5,
+  name: 'the challenge\'s remix cards and feed show no remix, like or built-on count, and the feed has no "most remixed" sort (newest first only)',
+  load: async () => P5I_FILES.map((f) => ({ file: f, text: read(f) })),
+  run: (files) => p5iProblems(files),
+  plant: (files) => {
+    // A like count on the card.
+    const i = files.findIndex((f: { file: string }) => f.file === 'src/components/challenge-remix-card.tsx');
+    files[i] = { ...files[i], text: files[i].text.replace('<span className="ch-card-by">', '<span className="ch-card-likes">{r.likes} likes</span><span className="ch-card-by">') };
   },
 });
 // A hide on a seeded image reaches everywhere it shows (owner, 2026-10-30: "home, About, quote cards, the player,

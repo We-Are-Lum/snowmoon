@@ -444,14 +444,6 @@ export const CHALLENGE = {
    */
   neynarMinScore: 0.7,
   /**
-   * The bounties (owner, 2026-11-01): one solo poidh bounty per character, on Ethereum mainnet, funded and judged by the
-   * owner. Claims must be entries for that character. A bounty can pay out even if its character misses minEntrants;
-   * if no claim fits, the owner cancels it. Each bounty's poidh address, null until the bounty exists (/challenge links
-   * it only when set), and the amount, the same for each, null until the owner sets it (e.g. '0.05 ETH').
-   */
-  bounties: { zei: null, bai: null, gladias: null, seila: null, deluin: null, mu: null } as Record<string, string | null>,
-  bountyAmount: null as string | null,
-  /**
    * Real instants (UTC), each with its America/Los_Angeles wall time (all in PST: the clocks changed on 1 Nov 2026).
    * Owner, 2026-10-31 (second update). A closing instant is the first that no longer counts.
    */

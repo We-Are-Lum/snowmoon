@@ -9,7 +9,7 @@
  * must report it.
  * - Eligibility (decided once at publish and stored; pages never ask Neynar): invited, or a Neynar score at or above the
  *   threshold; refused: below it, no score, a wallet account, admins. The spend cap ($15 in the window, $2 outside),
- *   sheets opening only in the window and once Privacy says so, the rules copy (forks only, three entrants, a bounty per character,
+ *   sheets opening only in the window and once Privacy says so, the rules copy (forks only, three entrants, no bounty,
  *   the mint as a plan), and the count of distinct entrants per character.
  * - One entry per person per character: the latest in the window, or the one marked; a mark of something else is
  *   ignored; a wallet and its FID are one person.
@@ -212,6 +212,61 @@ proof('two entries for one person and character are caught', (() => {
   proof('P5g: entries ordered by built-on counts still fail', p5gProblems([...files, { file: 'src/lib/challenge/planted.ts', text: 'export const top = (e) => e.sort((a, b) => b.builtOn - a.builtOn);' }]).length === 1);
 }
 
+// --- /challenge as a landing page (owner, 2026-11-04): the random selection (P5g's second exception) and P5i -------
+{
+  const { shuffleFresh } = await import('../src/lib/challenge/shuffle');
+  const { p5gProblems, p5iProblems, CHALLENGE_FILES, P5I_FILES } = await import('./lib/p5g');
+  // Uniform: over many shuffles of four items, each item lands in each place about a quarter of the time, and all 24
+  // orders appear. A seeded generator, so the test never flakes.
+  let s = 12345;
+  // mulberry32: a small seeded generator with good low bits.
+  const seeded = () => {
+    s = (s + 0x6d2b79f5) | 0;
+    let x = Math.imul(s ^ (s >>> 15), 1 | s);
+    x = (x + Math.imul(x ^ (x >>> 7), 61 | x)) ^ x;
+    return ((x ^ (x >>> 14)) >>> 0) / 2 ** 32;
+  };
+  const uniformity = (shuffle: (xs: readonly number[]) => number[], n = 48_000) => {
+    const at = [0, 1, 2, 3].map(() => [0, 0, 0, 0]);
+    const orders = new Set<string>();
+    for (let k = 0; k < n; k++) {
+      const o = shuffle([0, 1, 2, 3]);
+      o.forEach((x, i) => at[x][i]++);
+      orders.add(o.join());
+    }
+    const worst = Math.max(...at.flat().map((c) => Math.abs(c / n - 0.25)));
+    return { worst, orders: orders.size };
+  };
+  const u = uniformity((xs) => shuffleFresh(xs, seeded));
+  check('the random selection is unweighted: every remix lands in every place about equally, and every order appears', u.worst < 0.01 && u.orders === 24, `worst ${u.worst.toFixed(4)}, ${u.orders} orders`);
+  const real = uniformity((xs) => shuffleFresh(xs), 24_000);
+  check('the default (crypto) shuffle is unweighted too', real.worst < 0.015 && real.orders === 24, `worst ${real.worst.toFixed(4)}`);
+  // A planted weighted shuffle (the first item, "most liked", kept on top half the time) must fail the same test.
+  const weighted = (xs: readonly number[]) => (seeded() < 0.5 ? [xs[0], ...shuffleFresh(xs.slice(1), seeded)] : shuffleFresh(xs, seeded));
+  proof('a weighted shuffle fails the uniformity test', uniformity(weighted).worst >= 0.01);
+  const input = [1, 2, 3, 4, 5];
+  const out = shuffleFresh(input);
+  check('the shuffle keeps every remix once and leaves the list as it was', out.slice().sort().join() === '1,2,3,4,5' && input.join() === '1,2,3,4,5');
+  // P5g on the code: the exception holds, and every way past it fails.
+  const files = walk('src').filter((f) => CHALLENGE_FILES.test(f)).map((f) => ({ file: f, text: read(f) }));
+  const plantIn = (file: string, f: (x: string) => string) => files.map((x) => (x.file === file ? { ...x, text: f(x.text) } : x));
+  check('P5g passes with the random selection (shuffle.ts, used once, on every remix)', p5gProblems(files).length === 0, p5gProblems(files).join('; '));
+  check('the random selection really shuffles every remix in the browser', /shuffleFresh\(all\)/.test(read('src/components/challenge-remix-pick.tsx')) && /'use client'/.test(read('src/components/challenge-remix-pick.tsx')) && /await remixes\(sql\)/.test(read('src/app/challenge/page.tsx')));
+  proof('P5g: a weighted shuffle (it reads likes) fails', p5gProblems(plantIn('src/lib/challenge/shuffle.ts', (x) => x.replace('export function shuffleFresh<T>(items: readonly T[]', 'export function shuffleFresh<T extends { likes: number }>(items: readonly T[]').replace('const j = below(i + 1, random);', 'const j = below(Math.min(i + 1, 1 + out[i].likes), random);'))).length > 0);
+  proof('P5g: a shuffle with weights fails', p5gProblems(plantIn('src/lib/challenge/shuffle.ts', (x) => x.replace('const j = below(i + 1, random);', 'const j = below(i + 1, () => random() ** weight);'))).length > 0);
+  proof('P5g: a sort by chance on the page (outside the shuffle) fails', p5gProblems(plantIn('src/app/challenge/page.tsx', (x) => `${x}\nexport const planted = (e: number[]) => e.sort(() => Math.random() - 0.5);`)).length > 0);
+  proof('P5g: shuffling only some remixes (a featured few) fails', p5gProblems(plantIn('src/components/challenge-remix-pick.tsx', (x) => x.replace('shuffleFresh(all)', 'shuffleFresh(all.slice(0, 6))'))).length > 0);
+  proof('P5g: the selection drawn from a limited list fails', p5gProblems(plantIn('src/app/challenge/page.tsx', (x) => x.replace('await remixes(sql)', 'await remixes(sql, { limit: 12 })'))).length > 0);
+  proof('P5g: a shuffle elsewhere (the feed) fails', p5gProblems([...files, { file: 'src/app/challenge/remixes/page.tsx', text: `${read('src/app/challenge/remixes/page.tsx')}\nconst x = shuffleFresh(cards);` }].filter((f, i, a) => a.findIndex((y) => y.file === f.file) === i || f.text.includes('const x = shuffleFresh'))).length > 0);
+  // P5i: no counts on cards, no "most remixed" sort.
+  const p5i = P5I_FILES.map((f) => ({ file: f, text: read(f) }));
+  const plant5i = (file: string, f: (x: string) => string) => p5i.map((x) => (x.file === file ? { ...x, text: f(x.text) } : x));
+  check('P5i passes: no remix, like or built-on count on the cards, no "most remixed" sort', p5iProblems(p5i).length === 0, p5iProblems(p5i).join('; '));
+  proof('P5i: a like count on a card fails', p5iProblems(plant5i('src/components/challenge-remix-card.tsx', (x) => x.replace('<span className="ch-card-by">', '<span>{r.likes} likes</span><span className="ch-card-by">'))).length > 0);
+  proof('P5i: a remix count read for the feed fails', p5iProblems(plant5i('src/lib/challenge/remixes.ts', (x) => x.replace('select e.id as element_id,', 'select (select count(*) from studio.links) as remix_count, e.id as element_id,'))).length > 0);
+  proof('P5i: a "most remixed" sort on the feed fails', p5iProblems(plant5i('src/app/challenge/remixes/page.tsx', (x) => x.replace("type Props = { searchParams: Promise<{ character?: string; before?: string }> };", "type Props = { searchParams: Promise<{ character?: string; before?: string; sort?: string }> };\nconst mostRemixedFirst = (s?: string) => s === 'most-remixed';"))).length > 0);
+}
+
 // --- The post address: the host allow-list ----------------------------------------------------------------------
 const good: [string, string][] = [
   ['https://farcaster.xyz/naaate/0x0a1b2c3d', 'farcaster'],
@@ -374,9 +429,10 @@ check('the guidance line is shown', share.includes('If you’re remixing someone
 
 // --- The rules copy (owner's decisions, 2026-10-31) -------------------------------------------------------------
 const W = (await import('../src/lib/challenge/wording')).CHALLENGE_WORDING;
-const copy = [W.intro(), W.next(), W.bounty(), ...W.rules(), W.adminsLine].join(' ');
+const copy = [W.intro(), W.next(), ...W.rules(), W.adminsLine].join(' ');
 const MINT_PLAN = 'We plan to mint each final version as an open edition, with what it raises split among everyone it was built on, including the We Are Lum team. Details come with the mint page.';
 const PROMISES = /\b(will be minted|is then minted|minted as|reward pot|extra reward|split on|token for you|you will (get|receive)|guaranteed?|\$\s?\d|\d+\s?(ETH|USDC|dollars))\b|\bwallet\b/i;
+const NO_BOUNTY = /\bbount(y|ies)\b|\bpoidh\b/i;
 function copyProblems(t: string): string[] {
   const p: string[] = [];
   if (!t.includes(MINT_PLAN)) p.push('the mint is not said as the owner\'s plan sentence');
@@ -384,22 +440,23 @@ function copyProblems(t: string): string[] {
   if (m) p.push(`promises or a wallet path: "${m[0]}"`);
   if (!/A new sheet made from scratch isn’t an entry/.test(t)) p.push('it does not say only remixes (forks) count');
   if (!new RegExp(`at least ${['zero', 'one', 'two', 'three', 'four', 'five'][CHALLENGE.minEntrants] ?? CHALLENGE.minEntrants} different people`).test(t)) p.push('the minimum number of entrants is missing or not the config\'s');
-  if (!/one poidh bounty for each character, six in all, on Ethereum mainnet/i.test(t)) p.push('the bounties are not one per character, on Ethereum mainnet');
-  if (!/must be an entry for that character/.test(t)) p.push('claims are not limited to entries for that character');
-  if (!/a little ETH on mainnet for gas/.test(t)) p.push('the gas note is missing');
-  if (!/can pay out even if its character has fewer than/.test(t) || !/if no claim fits, Nate cancels it/.test(t)) p.push('the minimum or the cancel rule for bounties is missing');
+  // No bounties at all (owner, 2026-11-04): no bounty, no poidh, anywhere in the challenge's words.
+  if (NO_BOUNTY.test(t)) p.push(`a bounty is back: "${t.match(NO_BOUNTY)![0]}"`);
   return p;
 }
-check('the rules copy: the owner\'s mint sentence, forks only, three entrants, a bounty per character on mainnet, no promises, no wallet path', copyProblems(copy).length === 0, copyProblems(copy).join('; '));
+check('the rules copy: the owner\'s mint sentence, forks only, three entrants, no bounty, no promises, no wallet path', copyProblems(copy).length === 0, copyProblems(copy).join('; '));
 check('the rules name the six characters in the owner\'s order', W.intro().includes('Zei, Bai, Gladias, Seila, Deluin or Mu'));
 proof('a promised mint is caught', copyProblems(copy.replace(MINT_PLAN, 'Each version is then minted as an open edition in Snowmoon WIP.')).length > 0);
 proof('a reward pot is caught', copyProblems(`${copy} Plus an extra reward pot.`).length > 0);
 proof('a wallet path back in the rules is caught', copyProblems(`${copy} Or a wallet linked to one.`).length > 0);
-proof('one bounty for the whole challenge (the old rule) is caught', copyProblems(copy.replace(/one poidh bounty for each character, six in all, on Ethereum mainnet/i, 'one poidh bounty for the whole challenge')).length > 0);
-proof('a bounty on Base instead of mainnet is caught', copyProblems(copy.replace('on Ethereum mainnet', 'on Base')).length > 0);
-check('the judging line names the character', W.bountyFor('Zei') === 'The bounty for Zei: the remix that most changes how we see Zei while staying true to the book.');
-check('bounty addresses and the amount are unset until the owner sets them', CHALLENGE.characters.every((c) => c in CHALLENGE.bounties && CHALLENGE.bounties[c] === null) && CHALLENGE.bountyAmount === null);
-check('no amount is shown while it is unset', !/ ETH each/.test(W.bounty()));
+proof('a bounty back in the rules (the old per-character rule) is caught', copyProblems(`${copy} There is one poidh bounty for each character.`).length > 0);
+{
+  // No bounty anywhere in the challenge (owner, 2026-11-04): not in the config, not in any of its words, not on its pages.
+  const words = Object.values(W).flatMap((v) => (typeof v === 'function' ? [String((v as (...a: string[]) => unknown)('Zei', 'Zei'))] : Array.isArray(v) ? v.map(String) : [String(v)])).join(' ');
+  const pages = ['src/app/challenge', 'src/lib/challenge'].flatMap((d) => readdirSync(path.join(ROOT, d), { recursive: true }).map(String).filter((f) => /\.tsx?$/.test(f)).map((f) => readFileSync(path.join(ROOT, d, f), 'utf8'))).join('\n');
+  check('no bounty: none in the config, the wording or the challenge\'s pages', !('bounties' in CHALLENGE) && !('bountyAmount' in CHALLENGE) && !NO_BOUNTY.test(words) && !NO_BOUNTY.test(pages), (words.match(NO_BOUNTY) ?? pages.match(NO_BOUNTY) ?? [''])[0]);
+  proof('a bounty planted in a page is caught', NO_BOUNTY.test(`${pages}\n<p>The poidh bounty</p>`));
+}
 proof('rules without "forks only" are caught', copyProblems(copy.replace('A new sheet made from scratch isn’t an entry.', '')).length > 0);
 
 // --- Sheets open to everyone only inside the window, and only once Privacy says so -------------------------------
@@ -554,6 +611,26 @@ check('entries: not an admin; the admin is listed apart', !ids.includes(fAdmin.v
 check('entries: not the starting sheets made before the window', !ids.includes(baiStart.versionId) && !ids.includes(zeiStart.versionId));
 check('entries: one per person per character', ids.length === 3, ids.join());
 check('entrants per character: Bai 2 (500, 6852), Zei 1 (6852), others 0, in CHALLENGE order', [...st.entrants].map(([c, n]) => `${c}:${n}`).join() === 'zei:1,bai:2,gladias:0,seila:0,deluin:0,mu:0', [...st.entrants].map(([c, n]) => `${c}:${n}`).join());
+{
+  // The remixes on /challenge and its feed (owner, 2026-11-04): every published fork of a challenge character, newest
+  // first, at its newest version; never a sheet made from scratch.
+  const RX = await import('../src/lib/challenge/remixes');
+  const all = await RX.remixes(S as never);
+  const ids = all.map((r) => r.versionId);
+  check('remixes: every fork of a challenge character, at its newest version (f500 at v2), and no sheet from scratch', ids.includes(f500b.versionId) && !ids.includes(f500a.versionId) && ids.includes(f501.versionId) && ids.includes(fAdmin.versionId) && !ids.includes(baiStart.versionId) && !ids.includes(zeiStart.versionId), ids.join());
+  check('remixes: newest first (by when each remix was made)', all.every((r, i) => i === 0 || all[i - 1].createdAt >= r.createdAt));
+  check('remixes: each names its character', all.find((r) => r.versionId === fAdmin.versionId)?.character === 'zei' && all.find((r) => r.versionId === f501.versionId)?.character === 'bai');
+  const zei = await RX.remixes(S as never, { character: 'zei' });
+  check('the feed\'s filter: Zei shows only Zei\'s remixes', zei.length > 0 && zei.every((r) => r.character === 'zei'), zei.map((r) => r.character).join());
+  check('the feed\'s filter: a slug that isn\'t a challenge character shows nothing', (await RX.remixes(S as never, { character: 'nobody' })).length === 0);
+  const first = await RX.remixes(S as never, { limit: 2 });
+  const rest = await RX.remixes(S as never, { before: RX.parseCursor(RX.cursorOf(first[first.length - 1])) });
+  check('the feed\'s pages: the next page starts after the last card, with no gap and no overlap', [...first, ...rest].map((r) => r.versionId).join() === ids.join(), `${[...first, ...rest].map((r) => r.versionId).join()} / ${ids.join()}`);
+  const page = await RX.remixFeed(S as never, { before: 'not-a-cursor' });
+  check('the feed: a bad cursor is ignored (the newest page)', page.cards.map((r) => r.versionId).join() === ids.slice(0, RX.FEED_PAGE).join() && page.next === null);
+  const wrong = [...first, ...(await RX.remixes(S as never, { before: RX.parseCursor(RX.cursorOf(first[0])) }))].map((r) => r.versionId);
+  proof('a page cut at the wrong card (an overlap) is caught', new Set(wrong).size !== wrong.length || wrong.join() !== ids.join());
+}
 check('three entrants are needed (CHALLENGE.minEntrants)', CHALLENGE.minEntrants === 3 && !R.enoughEntrants(2) && R.enoughEntrants(3));
 proof('a count that adds one person twice is caught', R.entrantCounts([{ person: 1, character: 'bai' }, { person: 1, character: 'bai' }]).get('bai') === 1);
 check('the version page: Entry on the entry, the admin line on the admin\'s', (await E.versionStanding(S, f500b.versionId))?.kind === 'entry' && (await E.versionStanding(S, fAdmin.versionId))?.kind === 'admin' && (await E.versionStanding(S, f501.versionId)) === null);
@@ -572,7 +649,7 @@ check('viewing pages (the challenge, version pages, starting sheets) made no out
   await Ny.lookUp(S, 777);
   proof('a Neynar lookup during a page view would be caught', calls.some((u) => u.includes('api.neynar.com')));
   calls.length = 0;
-  const pageCode = ['src/lib/challenge/entries.ts', 'src/app/challenge/page.tsx', 'src/app/references/designs/[id]/page.tsx'].map((f) => ({ f, t: read(f) }));
+  const pageCode = ['src/lib/challenge/entries.ts', 'src/lib/challenge/remixes.ts', 'src/app/challenge/page.tsx', 'src/app/challenge/rules/page.tsx', 'src/app/challenge/remixes/page.tsx', 'src/app/references/designs/[id]/page.tsx'].map((f) => ({ f, t: read(f) }));
   const asks = (t: string) => /from '[^']*(images\/neynar|challenge\/record)'|\blookUp\(|recordEligibility\(/.test(t);
   check('no page-side code imports the Neynar lookup or the publish-time recorder', pageCode.every((x) => !asks(x.t)), pageCode.filter((x) => asks(x.t)).map((x) => x.f).join());
   proof('a page that imports the lookup is caught', asks("import { lookUp } from '../images/neynar';"));
@@ -769,9 +846,10 @@ check('as committed, CHALLENGE.entries, posts and openSheets are on (owner\'s re
   proof('R3 a status cap read straight from IMAGES (never $15) is caught', !capInStatus(status.replace('dailySpendCapUsd: imagesDailySpendCapUsd()', 'dailySpendCapUsd: IMAGES.dailySpendCapUsd')));
   // R4: an untitled entry's row read "Bai: Bai".
   const CW = (await import('../src/lib/challenge/wording')).CHALLENGE_WORDING;
-  const chPage = read('src/app/challenge/page.tsx');
+  // The entries moved to the rules page with the short /challenge (owner, 2026-11-04).
+  const chPage = read('src/app/challenge/rules/page.tsx');
   check('R4 an untitled entry\'s row is the character alone; a titled one adds its name', CW.entryLabel('Bai', '') === 'Bai' && CW.entryLabel('Bai', '  ') === 'Bai' && CW.entryLabel('Bai', 'Rain coat') === 'Bai: Rain coat');
-  check('R4 /challenge builds both lists\' rows with entryLabel', (chPage.match(/W\.entryLabel\(/g) ?? []).length === 2 && !/\|\| nameOf\(/.test(chPage));
+  check('R4 /challenge/rules builds both lists\' rows with entryLabel', (chPage.match(/W\.entryLabel\(/g) ?? []).length === 2 && !/\|\| nameOf\(/.test(chPage));
   proof('R4 a row that repeats the name is caught', /\|\| nameOf\(/.test(chPage.replace('{W.entryLabel(nameOf(e.character), e.title)}', '{nameOf(e.character)}: {e.title || nameOf(e.character)}')));
   // R5: a newcomer on a starting sheet had no way to /challenge (only an entry's badge linked there).
   const invite = (src: string) => /\{challengeOpen && !standing && \(\s*<p className="dz-meta ch-standing ch-invite">\s*\{CW\.sheetInvite\(callName\)\} <Link href="\/challenge">/.test(src);
@@ -813,8 +891,9 @@ check('as committed, CHALLENGE.entries, posts and openSheets are on (owner\'s re
   // c. Below 0.7: said up front, in the owner's words; the refusal beside Generate, scrolled into view; no new lookup.
   const owner = 'Entering needs a Farcaster account with a Neynar score of 0.7 or more; we check when you press Generate.';
   check('c the up-front line is the owner\'s words exactly', CW.whoCanEnter() === owner, CW.whoCanEnter());
-  const chPage = read('src/app/challenge/page.tsx');
-  check('c /challenge says it up front, under the deadline', /<\/p>\s*\{\/\*[^*]*\*\/\}\s*\{now !== 'closed' && <p className="ch-who">\{W\.whoCanEnter\(\)\}<\/p>\}\s*<section className="ch-rules">/.test(chPage));
+  // With the short /challenge (owner, 2026-11-04), it sits at the top of the rules page, under the deadline.
+  const chPage = read('src/app/challenge/rules/page.tsx');
+  check('c /challenge/rules says it up front, under the deadline', /<\/p>\s*\{\/\*[^*]*\*\/\}\s*\{now !== 'closed' && <p className="ch-who">\{W\.whoCanEnter\(\)\}<\/p>\}\s*<p className="ch-intro">/.test(chPage));
   const form = read('src/components/design-form.tsx');
   const beforeConsent = (src: string) => /<div className="ic-gate">\s*\{p\.challengeOpen && !status\.invited && <p className="ch-who">\{CW\.whoCanEnter\(\)\}<\/p>\}\s*<p>\{W\.form\.consentFirst\}<\/p>/.test(src);
   check('c a challenge fork form says it before the consent screen', beforeConsent(form));
