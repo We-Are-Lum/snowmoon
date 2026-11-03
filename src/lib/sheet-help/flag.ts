@@ -15,3 +15,13 @@ const section = (privacy: typeof PRIVACY, n: number) => (privacy.sections.find((
 export const privacyDescribesSheetHelp = (privacy = PRIVACY) => /Ask for help/.test(section(privacy, 5)) && /Ask for help/.test(section(privacy, 6));
 
 export const sheetHelpLive = (now = new Date(), privacy = PRIVACY) => SHEET_HELP.on && privacyDescribesSheetHelp(privacy) && challengeSheetsOpen(now, privacy);
+
+/**
+ * "Find a moment", a tab of "Ask for help" (docs/proposals/remix-moments.md §2; owner, 2026-11-04). Its own switch,
+ * SHEET_HELP.findMoment, OFF. Even on, it is live only while "Ask for help" is live and Privacy §5 describes it (what it
+ * sends: what the person describes, the passages found, and the chapter limit; and that it counts as one of the
+ * messages). The draft sentence is in docs/legal/find-a-moment-draft.md. Principle check P6w reads these lines.
+ */
+export const privacyDescribesFindMoment = (privacy = PRIVACY) => /Find a moment/.test(section(privacy, 5)) && /passages/.test(section(privacy, 5));
+
+export const findMomentLive = (now = new Date(), privacy = PRIVACY) => SHEET_HELP.findMoment && sheetHelpLive(now, privacy) && privacyDescribesFindMoment(privacy);

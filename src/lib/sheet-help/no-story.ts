@@ -20,7 +20,7 @@ import { checkNoWriting } from '../make/no-writing';
 export type StoryReason = 'quoted' | 'speech' | 'story' | 'speaker' | 'script' | 'label';
 
 const QUOTE_MARK = /["“”«»„]|(?:^|\s)'[^']+'(?=\s|$|[.,;:!?])/;
-const SPEAKER_LINE = /^\s*[A-Z][\p{L}'-]+(?:\s+[A-Z][\p{L}'-]+)?\s*(?:\([^)]*\))?\s*:\s*\S/u;
+export const SPEAKER_LINE = /^\s*[A-Z][\p{L}'-]+(?:\s+[A-Z][\p{L}'-]+)?\s*(?:\([^)]*\))?\s*:\s*\S/u;
 const SPEECH = /\b(?:says?|said|saying|speaks?|speaking|spoke|whisper\w*|shout\w*|yell\w*|asks?|asked|replies|replied|tells?|told|mutters?|murmurs?|exclaims?|narrat\w*|narrator|dialogue|monologue|voice-?over|caption\w*|subtitles?|speech bubbles?|word balloons?|thought bubbles?|lettering|inscription|the words?|text (?:reading|that reads|saying)|(?:a )?sign (?:reading|that reads|saying)|reads? aloud)\b/i;
 const STORY = /\b(?:then|later|afterwards?|suddenly|meanwhile|once upon|days? later|years? later|after (?:the|he|she|they|his|her)|remembers?|remembered|decides?|decided|realis(?:es|ed)|realiz(?:es|ed)|wonders?|wondered|feels? that|knows? that|in this chapter|in the story|the moment (?:when|where))\b/i;
 

@@ -497,6 +497,27 @@ export const SHEET_HELP = {
    * not merged (checked 2026-11-02), so: the whole prompt. Per-phrase marking comes later.
    */
   marking: 'whole-prompt' as 'whole-prompt' | 'per-phrase',
+  /**
+   * "Find a moment", a tab of "Ask for help" (docs/proposals/remix-moments.md §2; owner, 2026-11-04: ships with the
+   * 12 Nov release without attaching, only "Make an image here" and "Read it"). Its own switch, OFF: even on, it waits
+   * for "Ask for help" to be live and for Privacy §5 to describe it (src/lib/sheet-help/flag.ts, check:principles
+   * P6w; the draft sentence is in docs/legal/find-a-moment-draft.md). A search is one of "Ask for help"'s perDay
+   * messages and counts against its dailySpendCapUsd: no count of its own.
+   */
+  findMoment: false as boolean,
+  moment: {
+    /** What the person describes (a mood or a situation), in characters. */
+    moodMax: 200,
+    /** Book search hits sent to the model, each with its neighbours (CHAT.neighbours). */
+    hits: 12,
+    /** How many passages are shown: the model picks at least min and at most max. */
+    min: 3,
+    max: 5,
+    /** The model's "why" beside a passage, in words. Labelled as AI, never in quote marks, never stored. */
+    whyMaxWords: 20,
+    /** A "why" may share no run of this many words with any passage it was sent (it can't pass the book's words off as its own). */
+    copyRunWords: 5,
+  },
 };
 
 /**
