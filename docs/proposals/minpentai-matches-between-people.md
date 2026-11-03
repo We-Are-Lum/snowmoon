@@ -82,9 +82,13 @@ Nothing on the site notifies anyone today. Proposal, in order:
 - **Free matches use the cheapest model,** Claude Haiku 5.5. They run under a **daily site-wide spend cap** that the owner sets. When the cap is reached, free matches pause until the next day (UTC); paid ones go on.
 - **Proposed:**
   - **N = 3** free a day per account.
-  - A **$5 a day** cap: about 70 matches at the worst case, about 125 at a typical one.
+  - A **$2 a day** cap to start (owner, 2026-11-03; the owner raises it): about 28 matches at the worst case, about 50 at a typical one.
   - Paid practice: **$0.10** a match with Claude Haiku 5.5, or **$1.50** with Claude Sonnet 5.5, the official model.
 - **Why it's cheap:** one match's AI side costs at most $0.07 on Claude Haiku 5.5, with the chat trimmed each turn and at most 6 sandbox calls a turn (see the costs below). So 3 free a day cost at most $0.21 per account per day.
+- **What a person sees when the day's cap is used up** (before they start a match; one already started always finishes):
+  > Today's free practice matches with the site's AI are used up, across the whole site. They come back at midnight UTC (in 5 h 12 min). You can still play now with credits ($0.10 a match), or for free through your own AI.
+- **When their own 3 are used:**
+  > You've played your 3 free practice matches with the site's AI today. More with credits ($0.10 a match), or for free through your own AI. Your free ones come back at midnight UTC.
 
 ## Official matches (design only)
 
@@ -120,20 +124,72 @@ Sign in with Farcaster, Lens or Bluesky, and pass that network's reputation bar.
 - **1 official match free a day** per person (linked accounts count as one). More cost credits.
 - **Official play always uses the in-site AI** (Claude Sonnet 5.5 recommended): one AI side per person.
 - **Proposed price:** **$1.50** of credits for each extra official match. It covers the worst case of $1.21 an AI side (trimmed chat, capped sandbox).
-- **Free official matches** need their own daily site-wide cap, set by the owner. Proposed: **$25 a day**, about 20 free official matches at the worst case, about 30 at a typical one. When it's reached, free official matches pause until the next day, and paid ones go on.
+- **Free official matches** have their own daily site-wide cap, set by the owner: **$10 a day** to start (owner, 2026-11-03; the owner raises it). That's about 8 free official matches at the worst case, about 12 at a typical one. When it's reached, free official matches pause until the next day, and paid ones go on.
+- **What a person sees when the day's cap is used up** (before starting; a match already started always finishes):
+  > Today's free official matches are used up, across the whole site. Yours isn't lost: it's still there tomorrow, from midnight UTC (in 5 h 12 min). You can play an official match now with credits ($1.50).
+- **When their own free one is used:**
+  > You've played today's free official match. Another costs $1.50 in credits; tomorrow's free one comes at midnight UTC.
+
+### The $1.50 margin after payment costs
+**How credits are bought today:** USDC or ETH on Base, sent from the person's own wallet. The suggested packs are **$1, $5 and $20**, and any amount of at least $0.50 is credited (`WALLET.packsUsd`, `minUsd`). There is no card processor.
+- **USDC:** the payer pays Base's gas (a cent or less), and we receive the full amount. Payment cost to us: about 0.
+- **ETH:** the same, plus about 0.3% when we convert it to dollars.
+
+| How the credits were bought | Payment cost per $1.50 match | Margin, typical match ($0.79 of AI) | Margin, worst case ($1.21) |
+|---|---|---|---|
+| USDC, any pack | about $0.00 | **$0.71** | **$0.29** |
+| ETH, any pack | about $0.005 | $0.70 | $0.28 |
+| *If we ever add cards (2.9% + $0.30 per purchase):* | | | |
+| $20 pack | $0.07 | $0.64 | $0.22 |
+| $5 pack | $0.13 | $0.58 | $0.16 |
+| $1 pack | $0.49 (33% of each dollar) | $0.22 | **−$0.20, a loss** |
+
+- So with today's crypto credits, $1.50 keeps at least $0.29 a match even at the worst case.
+- If cards are ever added, the smallest card pack should be $5.
+- **Paid practice** with Claude Haiku 5.5 at $0.10 keeps $0.03 at the worst case on crypto credits, and nothing on a card. So paid practice is for crypto credits only, or its price would have to rise.
 
 ### Official computer matches
 - **What it is:** your in-site AI against the site computer.
 - **Confirmed: the computer plays like a real player,** from its own fogged view.
   - It plans from `engine.fog` of its side, plus where it last saw your towers (`solo.ts computerPlan`; the search builds its belief from that view, `search.ts belief`). It never reads the real board.
   - Its moves follow from the board and a random value committed before the match, so anyone can recompute them from the record.
-  - (Play's old ladder rungs did read the real board, `rungPlayer`. They aren't used here.)
+  - Correction to v2: Play's old computer levels (`botPlan`: Practice and the old rungs) aren't used here either. They're handed the whole board, but plan only from what their towers light (see "Play's computer and the fog", below).
 - **Ruleset and level:** you choose the ruleset (the official ones of the season), and a level from 1 to 3.
   - **You move up** by winning 3 of your last 5 official matches at a level, which unlocks the next.
   - You can always play a lower level.
 - **A public leaderboard per ruleset shows every official result,** as a win rate per level: wins over matches, at each level.
-  - It's **ranked by the highest level where your win rate's lower 90% bound (Wilson) is at least 50%,** with at least 5 matches there; ties go by that bound.
   - **Every official match counts.** A loss is never hidden, so paying for retries adds losses as well as wins and can't buy rank.
+- **Placement:** a person is placed at the highest level where the **Wilson lower bound** of their win rate is at least 50%. The bound is one-sided, at a stated confidence.
+
+  | Matches at the level | Wins needed at 90% (z = 1.645) | Wins needed at 95% (z = 1.96) |
+  |---|---|---|
+  | 5 | 5 | 5 |
+  | 10 | 8 | 9 |
+  | 15 | 11 | 12 |
+  | 20 | 14 | 15 |
+  | 30 | 20 | 21 |
+
+  (At 95%, 4 of 5 gives a lower bound of 0.38, short of the bar. At 90% it's 0.44, still short.)
+- **Proposed: 90%.** At 95% a level needs a near-perfect record early on (9 of 10), so most people would sit a level below where they win. At 90% that's 8 of 10, still well above chance: a person who really wins half their matches there would reach it about 5% of the time over 10 matches. It's a ranking, not a proof, and losses always count. If the owner prefers 95%, the table above is the bar.
+- **Ranked within a level** by that same lower bound, so the top isn't a big tie: everyone placed at level 3 is ordered by their level-3 bound, highest first, then level 2, and so on. The board shows each person's wins and matches at every level, not just the one they're placed at.
+- **Moving up** (separate from placement): winning 3 of your last 5 at a level unlocks the next. Unlocking only lets you play it; your place comes from the bound.
+
+### Play's computer and the fog (owner's question, 2026-11-03)
+**What Play's pages say.** The rules page, §8 "Computer players": "They play by every rule above. They see only what their own towers light, get the same 8 points, build towers, and fly diagonally when the rule allows it." The same page's table of changes from Design says the old Practice bot "sees through fog", changed to "Same sight, points and pieces as you (§8)".
+
+**What the code does:**
+- **Play's ruleset 3 ladder** (the search computer) plans from the fog view only (`play-game/controller.ts`: `searchPlan({ view: e.fog(w, s, 'A') … })`).
+- **The older computer** (`engine.botPlan`, used by rulesets 1 and 2, the snap, and Practice) is *passed the whole board*, but builds its own belief from what it may know:
+  - its own towers;
+  - your towers where it last saw them;
+  - squares and gliders only on squares its towers light.
+
+  Its one direct read of the real board is whether a placement square is empty, and placement squares are always within its sight (reach never exceeds sight).
+- **Checked by a test:** `test:minpentai-players` passes "the five rungs (and practice's level 0) plan the same on the view as on the whole board", over positions from Play's matches, from both seats.
+
+**So §8 is true today:** no Play computer uses anything its towers don't light.
+
+**Proposed fix, as hardening:** pass `botPlan` the fog view instead of the whole board, so no future change could let it read hidden pieces by accident. The test above already shows the moves stay identical, so saved Play matches and the snap replay unchanged. The wording stays.
 
 ### Official matches between people
 - **Each person has** a win/loss record tied to their social login (linked accounts share it), and a **Glicko-2 rating per season.**
@@ -210,8 +266,8 @@ Sign in with Farcaster, Lens or Bluesky, and pass that network's reputation bar.
 **Recommendation:**
 - **Season 1:** Claude Sonnet 5.5 at low effort; the chat trimmed each turn; at most 6 sandbox calls a turn.
 - **Price: $1.50 per player per official match** past the free one a day. It covers one AI side's worst case ($1.21) with about 1.2× headroom, and the playtest-like case ($0.79) with about 1.9×.
-- **Free practice with the in-site AI:** Claude Haiku 5.5, 3 a day per account, under a $5 daily site-wide cap. Paid practice: $0.10 a match (Claude Haiku 5.5) or $1.50 (Claude Sonnet 5.5).
-- **Free official matches:** under a $25 daily site-wide cap. The owner sets both caps.
+- **Free practice with the in-site AI:** Claude Haiku 5.5, 3 a day per account, under a $2 daily site-wide cap to start. Paid practice: $0.10 a match (Claude Haiku 5.5) or $1.50 (Claude Sonnet 5.5).
+- **Free official matches:** under a $10 daily site-wide cap to start. The owner sets both caps.
 - Claude Haiku 5.5 would cost about $0.25 per player, but only with trimming. Without it, a heavy match costs 20× more.
 - Measure the real cost on the first 20 official matches (paid calls: the owner's OK first), then set the season's fee.
 - **No prizes from fees.** The fee pays for the AI and nothing else, and the page says so.
@@ -248,7 +304,11 @@ Sign in with Farcaster, Lens or Bluesky, and pass that network's reputation bar.
 - **Test:** the 3D component's props equal the 2D component's, the same object, and no other match data reaches it.
 
 **Layout and fallbacks.**
-- Wide screens: 2D and 3D side by side. Phones: a 2D/3D toggle (2D by default).
+- Wide screens: 2D and 3D side by side.
+- **Phones: 3D by default where it holds the frame target, 2D otherwise** (owner, 2026-11-03: most play is on phones, and the 3D is the point).
+  - On a phone's first replay, the page measures frame times over the first two seconds of 3D. If they hold the target (a median of 50 frames a second or better), 3D stays. If not, it switches to 2D and says: "Switched to 2D to keep it smooth. Tap 3D to try again."
+  - A 2D/3D toggle is always there.
+  - **The person's choice is remembered** on that device (localStorage). A choice they made always wins over the automatic one.
 - **2D only** when WebGL is missing or the person has asked for reduced motion (`prefers-reduced-motion`), and on any error in the 3D view.
 - **Loaded only when a replay opens:** the 3D code is a separate chunk (`next/dynamic`), fetched when the replay is on screen.
 
@@ -318,7 +378,8 @@ That is a deliberate exception to "only we remove match records, by hand". Until
   - the in-site AI's model provider (Anthropic), which receives the board and your chat with the AI;
   - what of the chat we keep;
   - public leaderboards showing your social name;
-  - linked accounts.
+  - linked accounts;
+  - **flagging accounts that share a wallet or payment address** (or have lopsided results against each other) for review by an admin, and what a review can lead to: merged records or voided results.
 
 ## What was built for practice matches (this branch, PR #101)
 1. **Migration `NEXT_minpentai_practice.sql`:** no new table. It adds three columns to `studio.mp_agent_matches` (0032):
