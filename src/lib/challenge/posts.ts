@@ -7,7 +7,7 @@ import { API_HOSTS, bskyPostsRequest, firstRequest, linksToVersion, parseBskyPos
  * "Add where you posted it" and "Posted on" (owner, 2026-10-31), the server half. Off until CHALLENGE.posts is on
  * (after the owner's reread of docs/legal/remix-challenge-draft.md). The post is read from its network's own API
  * (post-links.ts builds every request; this file checks each one goes to API_HOSTS before sending it); the pasted
- * address is never fetched. Stored in studio.version_posts (NEXT_remix_challenge.sql): the network, the post's id, the
+ * address is never fetched. Stored in studio.version_posts (0033_remix_challenge.sql): the network, the post's id, the
  * writer's handle, the date, our rebuilt address, who added it and when. Never its words, avatar or pictures.
  * Without the table, nothing is listed and adding says "not available yet".
  */

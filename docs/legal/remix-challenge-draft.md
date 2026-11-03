@@ -1,14 +1,22 @@
-# The remix challenge: Privacy and Terms lines (DRAFT, for the owner's reread)
+# The remix challenge: Privacy and Terms lines (LIVE: in src/lib/legal.ts, reread by the owner, 2026-11-01)
 
-Drafted by the coding agent (Claude, a closed model by Anthropic), 2026-10-31, on branch `remix-challenge`. DRAFT until
-the owner says "reread". Nothing in `src/lib/legal.ts` has changed, and its reread record is untouched.
+**Live:** these words are in `src/lib/legal.ts` on branch `remix-challenge` (Terms words `15lsr9u`, Privacy words
+`1frr16h`, effective 2026-11-01), with the owner's reread recorded there; they go live with the merge, together with
+`CHALLENGE.entries` and `CHALLENGE.posts` switched on.
+
+Later on 2026-11-01, the owner's own words for Privacy §4's entry item and its new IPFS item ("The challenge record holds
+fingerprints, not copies"); Terms §6e's IPFS sentence says the same, drafted by the coding agent to match.
+
+Drafted by the coding agent (Claude, a closed model by Anthropic), 2026-10-31, on branch `remix-challenge`. **Reread by
+the owner on 2026-11-01**, with these changes, made here: the challenge's Terms section is 6e (main's 6d is "Minpentai
+with your agent", live since 2026-10-31); the "No token" conflict note is dropped (#73 is live); the Neynar score is not
+kept, only the decision (`passed` or `below`) and when, and the Privacy words say so. They are now in `src/lib/legal.ts` (see the top).
 
 **Revised 2026-10-31 for the owner's decisions:** eligibility is checked once, at publish, and stored (Neynar is never
 asked when someone views a page); no wallet path; sheets open to everyone who passes the check during the window
 (`openSheets`, which waits for these words by itself); the mint is a plan, not a promise.
 
-Legal texts describe today (owner, 2026-10-18): these lines ship in the same merge as the switches they describe, and
-the switches stay off until then:
+Legal texts describe today (owner, 2026-10-18): these lines ship in the same merge as the switches they describe:
 
 - `CHALLENGE.entries` (entries listed with each character's count, the Entry badge, "Mark as my entry"; shows what
   `studio.challenge_marks` and `studio.challenge_eligibility` hold). The eligibility decision is stored at publish only
@@ -27,18 +35,9 @@ The share buttons (plain links to each network's compose page, or the Farcaster 
 nothing and load nothing from those networks, so they are not behind a switch; the one line about them below (§7's
 last item) should still ship with them.
 
-## Before you reread: a conflict to settle first
-
-**Terms §2 says "There is no token. … Payments are final. Nothing else here is for sale."** and principle 7 says "No
-token", with the home page's first screen saying "No token". The rules now say only the owner's plan: "We plan to mint
-each final version as an open edition, with what it raises going to everyone it was built on. Details come with the
-mint page." That promises nothing, but it announces a planned token sale next to a first screen that says "No token".
-These lines don't cover the mint; the owner should decide how "No token" reads before the mint page goes live, and the
-mint gets its own Terms section in the mint's own release.
-
 ---
 
-## Privacy §4 (Kept by us when you sign in): three new list items, after "Images you publish, …"
+## Privacy §4 (Kept by us when you sign in): four new list items, after "Images you publish, …"
 
 Before (the item they follow, unchanged):
 
@@ -52,10 +51,15 @@ New items:
 > remix of its characters' sheets.
 
 > If you take part in the remix challenge: for each version of a challenge character you publish, whether it can count
-> as an entry and why (you were invited, you are an admin, or your account's score when you published it), decided
-> once when you publish it and kept with it; and which of your versions you mark as your entry for each character, and
-> when. Whether a version is an entry is shown on its page and on the challenge page, with how many people have entered
-> each character; your score itself is never shown.
+> as an entry and why (you were invited, you are an admin, or whether your account passed the site's check), decided
+> once, when you publish it, and kept with the time it was decided; and which of your versions you mark as your entry
+> for each character, and when. Whether a version is an entry is shown on its page and on the challenge page, with how
+> many people have entered each character.
+
+> When entries close, a record of every entry is published to IPFS and referenced on Ethereum, where it can't be
+> removed: a fingerprint of its pictures and recipe (not the pictures or words themselves), its maker's Farcaster ID,
+> when it was published and what it was built on. Hiding a version later removes it from this site, but not its
+> fingerprint from that record.
 
 > If you add where a version was posted: the post's network, its id there, its writer's handle, when it was posted,
 > its address, and who added it and when. The network, handle, date and a link to the post are shown on the
@@ -83,11 +87,10 @@ Before:
 After:
 
 > Neynar receives your Farcaster ID when you first make an image on a given day, to look up its account score, which
-> decides whether you can make images. We keep the score for a day. During the remix challenge, the score you have
-> when you publish a remix of a challenge character decides whether it can count as an entry; that score (looked up
-> then, at most once, and usually already kept from making its views) is kept with the version. Neynar is never asked
-> about you when someone views a page. When someone adds a Farcaster post to a version's page, Neynar receives that
-> post's address or id, to read it. When you sign in with a wallet, …
+> decides whether you can make images. We keep the score for a day. During the remix challenge, that check also
+> decides, once, when you publish a remix of a challenge character, whether it can count as an entry. Neynar is never
+> asked about you when someone views a page. When someone adds a Farcaster post to a version's page, Neynar receives
+> that post's address or id, to read it. When you sign in with a wallet, …
 
 ## Privacy §7: a new item, after the Neynar item
 
@@ -108,16 +111,20 @@ After:
 
 ---
 
-## Terms: a new section 6d, after 6c
+## Terms: a new section 6e, after 6d (main's 6d is "Minpentai with your agent")
 
-> **6d. The remix challenge.** The challenge page sets out its dates, the characters, and what happens after. During
+> **6e. The remix challenge.** The challenge page sets out its dates, the characters, and what happens after. During
 > the challenge, anyone signed in with a Farcaster account that passes the site's check may remix its characters'
 > sheets; making other sheets and styles stays by invitation. Entering is free and needs no purchase, and minting isn't
 > needed for anything. A version counts as an entry if it is a remix (not a sheet made from scratch) made on the
 > Service during the challenge by an account we invited or one that passed the site's check when the version was
 > published. One entry per person per character: your latest version counts unless you mark another. Admins can make
-> versions but aren't eligible for rewards. Anything that follows the challenge, including any mint, is a plan, not a
-> promise, and is decided as the challenge page says. We may change or end the challenge, and the page will say so.
+> versions but aren't eligible for rewards. When entries close, a record of every entry is published to IPFS and
+> referenced on Ethereum, where it can't be removed: a fingerprint of its pictures and recipe (not the pictures or words
+> themselves), its maker's Farcaster ID, when it was published and what it was built on; hiding a version later removes
+> it from the Service, but not its fingerprint from that record. Anything that follows the challenge, including any
+> mint, is a plan, not a promise, and is decided as the challenge page says. We may change or end the challenge, and
+> the page will say so.
 
 ## Terms §7 (Hiding and removal): one sentence added after "You may hide your own work yourself …"
 
@@ -128,12 +135,15 @@ After:
 
 ## Notes for the owner
 
-- **Neynar only at publish (owner, 2026-10-31).** The decision is made when the maker publishes, by the publish
-  route, from the same lookup the gate just made (kept a day), and stored in `studio.challenge_eligibility` (a score
-  is kept with the version for good, not a day: the Privacy sentence says so). Pages only read it.
+- **Neynar only at publish (owner, 2026-10-31), no score kept (owner, 2026-11-01).** The decision is made when the
+  maker publishes, from the same lookup the gate just made (that score kept a day in `studio.image_scores`, as for
+  every Generate), against the challenge's fixed threshold of 0.7 (`CHALLENGE.neynarMinScore`), and only the decision
+  and its time are stored in `studio.challenge_eligibility`. Pages only read it.
 - **The spend cap** ($15 a day inside the window, $2 otherwise) needs no new words: the Terms speak of "spending caps"
   without amounts.
 - **No wallet path.** Sheets are made with Farcaster only, so the Terms line names Farcaster accounts only.
+- **The bounties** (one solo poidh bounty per character, on Ethereum mainnet) are run on poidh under its terms; the
+  Terms section's "decided as the challenge page says" covers them, and the rules on /challenge describe them.
 - **Admins** are named in Terms §7 already ("the site's owner and people the owner names"); the challenge page says
   "Admins (the site's owner and @garance)".
 - **Words of posts are not kept or shown.** "Posted on" shows network · @handle · date · link only, so no other

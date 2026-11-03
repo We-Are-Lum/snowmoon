@@ -227,9 +227,9 @@ export const AGENTS = {
      * Wallets (lowercase addresses) whose sign-in gets in. Empty for now (owner, 2026-10-20: "FID 6786 only for
      * now … I'll add my sign-in wallet later"). The payment address is not a sign-in wallet.
      */
-    // The production test account for agent play (owner, 2026-11-01: "use a dedicated site test account and tell me
-    // which"): a wallet whose key is kept on the agent's machine only; site account -23. Remove when no longer needed.
-    wallets: ['0xE86987Cc0d1B6746f13B9F90380563080ba5f973'] as readonly string[],
+    // The production test account for agent play (wallet 0xE869…f973, account -23) was here from 2026-11-01 until the
+    // leak fix passed in production; removed at the owner's word, 2026-11-01.
+    wallets: [] as readonly string[],
   },
   /** Public pages (agents.md, /p): off while agents are for the owner only. Kept work stays private on /you. */
   public: false,
@@ -247,11 +247,11 @@ export const AGENTS = {
    * and Terms §6d / Privacy §4 live. Anyone else: the scope isn't granted, its tools aren't listed or run, and a match
    * link opens nothing. The local tests add their own people (MINPENTAI_PLAY_TEST, never on Vercel).
    */
-  // 6786 the owner; -23 the production test account (wallet 0xE869…f973, above).
-  // Switched OFF 2026-11-01 (owner: "if anything leaks, switch agent play off and tell me"): in production, at level 3,
-  // a final submit's time still grew with the computer's hidden towers (1.0 to 1.8 s against a 400 ms pad). Back on
-  // when the fix is in and the live check passes. Was [6786, -23].
-  minpentaiPlay: { people: [] as readonly number[] },
+  // 6786 the owner. Switched off 2026-11-01 for a timing leak at level 3 (#89); back on 2026-11-01 for the owner only,
+  // after the fix (#90, a quiet time on every call) passed check:minpentai-agent-live in production at levels 1 to 3.
+  // drafts: who may start a draft ruleset by name (agent-play/solo.ts DRAFTS), book-3 (owner, 2026-11-01: "make book-3
+  // available to me in agent play once it's back on, so I can judge it by playing").
+  minpentaiPlay: { people: [6786] as readonly number[], drafts: [6786] as readonly number[] },
   /** At most this many live agents per person (also a database trigger). */
   perPerson: 3,
   /**
@@ -391,16 +391,16 @@ export const CONTACT_EMAIL = 'snowmoon@wearelum.xyz';
  * Pacific wall time, and fails if a page or wording file writes a date itself.
  *
  * Switches (docs/legal/remix-challenge-draft.md; legal texts describe today; P6q checks it):
- * - `entries` (off until the owner's reread): entries listed on /challenge with each character's count of entrants, the
+ * - `entries` (on since the owner's reread of 2026-11-01): entries listed on /challenge with each character's count of entrants, the
  *   "Entry" badge on version pages, and "Mark as my entry" (studio.challenge_marks). Eligibility is decided once, when
  *   a version is published, and stored (studio.challenge_eligibility; src/lib/challenge/record.ts); pages only read it
  *   and never ask Neynar (owner, 2026-10-31). Without the tables, only invited makers count and marking says "not
  *   available yet".
- * - `posts` (off until the owner's reread): "Add where you posted it" and "Posted on" (studio.version_posts). The
+ * - `posts` (on since the owner's reread of 2026-11-01): "Add where you posted it" and "Posted on" (studio.version_posts). The
  *   server reads the pasted address, checks its host, and asks that network's own API (Neynar, Bluesky's public
  *   AppView, Lens's API); it never fetches the pasted address.
  * - `openSheets` (on): see below; it takes effect only in the window and once Privacy describes the challenge.
- * All three tables are in NEXT_remix_challenge.sql.
+ * All three tables are in 0033_remix_challenge.sql (applied 2026-11-01).
  * Agent-drafted entries are not tracked (owner, 2026-10-31).
  */
 export const CHALLENGE = {
@@ -408,15 +408,23 @@ export const CHALLENGE = {
   /** The characters, by their file in content/snowmoon/designs/characters, in the owner's order (owner, 2026-10-31). */
   characters: ['zei', 'bai', 'gladias', 'seila', 'deluin', 'mu'] as readonly string[],
   /**
-   * Starting sheets held for the owner's check (owner, 2026-10-31): Gladias, against Garance's privacy-robe note
-   * (docs/garance-call-2026-10-30.md on next-version). /challenge says his starting sheet is held.
-   */
-  held: ['gladias'] as readonly string[],
-  /**
    * A character gets a final version, a credit test and a token only if at least this many different eligible people
    * enter it (owner, 2026-10-31). /challenge shows each character's count (a count, never a ranking).
    */
   minEntrants: 3,
+  /**
+   * The Neynar score an entrant's account must have when a version is published (owner, 2026-11-01). Fixed for the whole
+   * challenge, whatever IMAGES.neynarMinScore becomes; only the decision (passed or below) is kept, never the score.
+   */
+  neynarMinScore: 0.7,
+  /**
+   * The bounties (owner, 2026-11-01): one solo poidh bounty per character, on Ethereum mainnet, funded and judged by the
+   * owner. Claims must be entries for that character. A bounty can pay out even if its character misses minEntrants;
+   * if no claim fits, the owner cancels it. Each bounty's poidh address, null until the bounty exists (/challenge links
+   * it only when set), and the amount, the same for each, null until the owner sets it (e.g. '0.05 ETH').
+   */
+  bounties: { zei: null, bai: null, gladias: null, seila: null, deluin: null, mu: null } as Record<string, string | null>,
+  bountyAmount: null as string | null,
   /**
    * Real instants (UTC), each with its America/Los_Angeles wall time (all in PST: the clocks changed on 1 Nov 2026).
    * Owner, 2026-10-31 (second update). A closing instant is the first that no longer counts.
@@ -437,8 +445,8 @@ export const CHALLENGE = {
   },
   /** The time zone every date is shown in. */
   timeZone: 'America/Los_Angeles',
-  entries: false as boolean,
-  posts: false as boolean,
+  entries: true as boolean,
+  posts: true as boolean,
   /**
    * On (owner, 2026-10-31), but it takes effect only inside the entry window, computed from `dates`
    * (src/lib/challenge/open-sheets.ts), and only once Privacy describes the challenge (the owner's reread). Before the

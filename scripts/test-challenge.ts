@@ -1,7 +1,7 @@
 /**
  * The remix challenge (owner, 2026-10-31; docs/proposals/remix-challenge-plan.md, branch remix-challenge). Stand-ins
  * only: no network (every network call goes to a recording stand-in), no paid call, no production database (an
- * in-memory Postgres, PGlite, with every migration including NEXT_remix_challenge.sql). Fails (exit 1) on any problem.
+ * in-memory Postgres, PGlite, with every migration including 0033_remix_challenge.sql). Fails (exit 1) on any problem.
  *
  *   npm run test:challenge
  *
@@ -9,7 +9,7 @@
  * must report it.
  * - Eligibility (decided once at publish and stored; pages never ask Neynar): invited, or a Neynar score at or above the
  *   threshold; refused: below it, no score, a wallet account, admins. The spend cap ($15 in the window, $2 outside),
- *   sheets opening only in the window and once Privacy says so, the rules copy (forks only, three entrants, one bounty,
+ *   sheets opening only in the window and once Privacy says so, the rules copy (forks only, three entrants, a bounty per character,
  *   the mint as a plan), and the count of distinct entrants per character.
  * - One entry per person per character: the latest in the window, or the one marked; a mark of something else is
  *   ignored; a wallet and its FID are one person.
@@ -20,7 +20,7 @@
  * - The server never fetches the pasted address: every request goes to an API host, and a request elsewhere is refused.
  * - A post that doesn't link to the version's page is refused.
  * - "Posted on" holds no image, avatar, embed or script.
- * - The migration: the read-back (both parts) passes on it; marks and posts work; without the tables, nothing breaks.
+ * - The migration (0033, applied 2026-11-01): RLS, privileges, no score; marks and posts work; without the tables, nothing breaks.
  */
 import path from 'node:path';
 import { readdirSync, readFileSync } from 'node:fs';
@@ -48,7 +48,7 @@ const L = await import('../src/lib/challenge/post-links');
 const lists = { admins: [6786, 193912], invited: [6786, 6852], min: 0.7 };
 const el = (maker: number, score: number | null) => R.eligibility({ maker, score }, lists);
 check('an invited FID is eligible without a score', el(6852, null).eligible && el(6852, null).why === 'invited');
-check('a score at the threshold (0.7) is eligible', el(500, 0.7).eligible && el(500, 0.7).why === 'score');
+check('a score at the threshold (0.7) passes', el(500, 0.7).eligible && el(500, 0.7).why === 'passed');
 check('a score above the threshold is eligible', el(500, 0.93).eligible);
 check('refused: a score just below the threshold (0.699)', !el(500, 0.699).eligible && el(500, 0.699).why === 'below');
 check('refused: no score (Neynar did not answer at publish)', !el(500, null).eligible && el(500, null).why === 'unchecked');
@@ -56,9 +56,12 @@ check('refused: a wallet account, even with a high score (wallets can’t make s
 check('refused: an admin, even invited (6786)', !el(6786, 1).eligible && el(6786, 1).why === 'admin');
 check('refused: an admin with a high score (193912)', !el(193912, 0.99).eligible && el(193912, 0.99).why === 'admin');
 check('the real lists: every admin is refused', ADMINS.every((a) => R.eligibility({ maker: a, score: 1 }).why === 'admin'));
-check('the real threshold is IMAGES.neynarMinScore', R.eligibility({ maker: 999999, score: IMAGES.neynarMinScore }).eligible && !R.eligibility({ maker: 999999, score: IMAGES.neynarMinScore - 0.001 }).eligible);
+check('the challenge\'s own threshold, fixed at 0.7 (CHALLENGE.neynarMinScore), is the one applied', CHALLENGE.neynarMinScore === 0.7 && R.eligibility({ maker: 999999, score: 0.7 }).eligible && !R.eligibility({ maker: 999999, score: 0.699 }).eligible);
+check('the challenge threshold does not follow IMAGES.neynarMinScore', /min: CHALLENGE\.neynarMinScore/.test(read('src/lib/challenge/who.ts')) && !/IMAGES\.neynarMinScore/.test(read('src/lib/challenge/who.ts')));
+proof('a threshold read from IMAGES (which may change) is caught', /IMAGES\.neynarMinScore/.test(read('src/lib/challenge/who.ts').replace('CHALLENGE.neynarMinScore', 'IMAGES.neynarMinScore')));
+check('a stored decision is read back with the lists applied again (an admin never, invited always, else as decided)', R.fromDecision(193912, 'passed').why === 'admin' && R.fromDecision(6852, null).eligible && R.fromDecision(500, 'passed').eligible && !R.fromDecision(500, 'below').eligible && !R.fromDecision(500, null).eligible);
 proof('an admin let through is caught', R.eligibility({ maker: 77, score: 1 }, { ...lists, admins: [77] }).why === 'admin' && R.eligibility({ maker: 77, score: 1 }, { ...lists, admins: [] }).eligible);
-proof('a wallet path let back in is caught', R.eligibility({ maker: -7, score: 0.99 }, lists).eligible === false && el(-7, 0.99).why !== 'score');
+proof('a wallet path let back in is caught', R.eligibility({ maker: -7, score: 0.99 }, lists).eligible === false && el(-7, 0.99).why !== 'passed');
 
 // --- The window, in Pacific time ---------------------------------------------------------------------------------
 const D0 = CHALLENGE.dates;
@@ -300,8 +303,8 @@ check('the guidance line is shown', share.includes('If you’re remixing someone
 
 // --- The rules copy (owner's decisions, 2026-10-31) -------------------------------------------------------------
 const W = (await import('../src/lib/challenge/wording')).CHALLENGE_WORDING;
-const copy = [W.intro(), W.next(), W.bounty, ...W.rules(), W.adminsLine].join(' ');
-const MINT_PLAN = 'We plan to mint each final version as an open edition, with what it raises going to everyone it was built on. Details come with the mint page.';
+const copy = [W.intro(), W.next(), W.bounty(), ...W.rules(), W.adminsLine].join(' ');
+const MINT_PLAN = 'We plan to mint each final version as an open edition, with what it raises split among everyone it was built on, including the We Are Lum team. Details come with the mint page.';
 const PROMISES = /\b(will be minted|is then minted|minted as|reward pot|extra reward|split on|token for you|you will (get|receive)|guaranteed?|\$\s?\d|\d+\s?(ETH|USDC|dollars))\b|\bwallet\b/i;
 function copyProblems(t: string): string[] {
   const p: string[] = [];
@@ -310,15 +313,22 @@ function copyProblems(t: string): string[] {
   if (m) p.push(`promises or a wallet path: "${m[0]}"`);
   if (!/A new sheet made from scratch isn’t an entry/.test(t)) p.push('it does not say only remixes (forks) count');
   if (!new RegExp(`at least ${['zero', 'one', 'two', 'three', 'four', 'five'][CHALLENGE.minEntrants] ?? CHALLENGE.minEntrants} different people`).test(t)) p.push('the minimum number of entrants is missing or not the config\'s');
-  if (!/one poidh bounty for the whole challenge/i.test(t)) p.push('the bounty is not one for the whole challenge');
+  if (!/one poidh bounty for each character, six in all, on Ethereum mainnet/i.test(t)) p.push('the bounties are not one per character, on Ethereum mainnet');
+  if (!/must be an entry for that character/.test(t)) p.push('claims are not limited to entries for that character');
+  if (!/a little ETH on mainnet for gas/.test(t)) p.push('the gas note is missing');
+  if (!/can pay out even if its character has fewer than/.test(t) || !/if no claim fits, Nate cancels it/.test(t)) p.push('the minimum or the cancel rule for bounties is missing');
   return p;
 }
-check('the rules copy: the mint as a plan, forks only, three entrants, one bounty, no promises, no wallet path', copyProblems(copy).length === 0, copyProblems(copy).join('; '));
+check('the rules copy: the owner\'s mint sentence, forks only, three entrants, a bounty per character on mainnet, no promises, no wallet path', copyProblems(copy).length === 0, copyProblems(copy).join('; '));
 check('the rules name the six characters in the owner\'s order', W.intro().includes('Zei, Bai, Gladias, Seila, Deluin or Mu'));
 proof('a promised mint is caught', copyProblems(copy.replace(MINT_PLAN, 'Each version is then minted as an open edition in Snowmoon WIP.')).length > 0);
 proof('a reward pot is caught', copyProblems(`${copy} Plus an extra reward pot.`).length > 0);
 proof('a wallet path back in the rules is caught', copyProblems(`${copy} Or a wallet linked to one.`).length > 0);
-proof('a bounty per character is caught', copyProblems(copy.replace(/one poidh bounty for the whole challenge/i, 'a poidh bounty for each character')).length > 0);
+proof('one bounty for the whole challenge (the old rule) is caught', copyProblems(copy.replace(/one poidh bounty for each character, six in all, on Ethereum mainnet/i, 'one poidh bounty for the whole challenge')).length > 0);
+proof('a bounty on Base instead of mainnet is caught', copyProblems(copy.replace('on Ethereum mainnet', 'on Base')).length > 0);
+check('the judging line names the character', W.bountyFor('Zei') === 'The bounty for Zei: the remix that most changes how we see Zei while staying true to the book.');
+check('bounty addresses and the amount are unset until the owner sets them', CHALLENGE.characters.every((c) => c in CHALLENGE.bounties && CHALLENGE.bounties[c] === null) && CHALLENGE.bountyAmount === null);
+check('no amount is shown while it is unset', !/ ETH each/.test(W.bounty()));
 proof('rules without "forks only" are caught', copyProblems(copy.replace('A new sheet made from scratch isn’t an entry.', '')).length > 0);
 
 // --- Sheets open to everyone only inside the window, and only once Privacy says so -------------------------------
@@ -332,7 +342,11 @@ proof('rules without "forks only" are caught', copyProblems(copy.replace('A new 
   check('sheets open at the opening instant, once Privacy describes the challenge', O.challengeSheetsOpen(at(D0.opens, 0), said));
   check('sheets are open at 23:59:59.999 Pacific on the last day', O.challengeSheetsOpen(at(D0.closes, -1), said));
   check('sheets close again at the close', !O.challengeSheetsOpen(at(D0.closes, 0), said));
-  check('as the Privacy page reads today (no challenge words), sheets stay invited-only even in the window', !O.challengeSheetsOpen(at(D0.opens, 0)));
+  const unsaid = structuredClone(PRIVACY);
+  const s4 = unsaid.sections.find((x) => x.n === 4)!;
+  s4.body = s4.body.map((b) => (Array.isArray(b) ? b.filter((i) => !/remix challenge/i.test(i)) : b));
+  check('the Privacy page now describes the challenge (reread 2026-11-01), so sheets open in the window', O.privacyDescribesChallenge() && O.challengeSheetsOpen(at(D0.opens, 0)));
+  check('without those words, sheets stay invited-only even in the window', !O.challengeSheetsOpen(at(D0.opens, 0), unsaid));
   proof('an opening that ignores the window is caught', ((t: Date) => CHALLENGE.openSheets && O.privacyDescribesChallenge(said))(at(D0.closes, 0)) !== O.challengeSheetsOpen(at(D0.closes, 0), said));
 }
 
@@ -341,44 +355,39 @@ const db = new PGlite();
 await db.exec(`create role anon nologin; create role authenticated nologin; create role service_role nologin bypassrls;`);
 for (const f of readdirSync(path.join(ROOT, 'supabase/migrations')).filter((f) => f.endsWith('.sql')).sort()) await db.exec(read(`supabase/migrations/${f}`));
 await db.exec(`insert into studio.works values ('snowmoon','Snowmoon','GPL-3.0','x') on conflict do nothing`);
-await db.exec(read('supabase/migrations/NEXT_remix_challenge.sql'));
+await db.exec(read('supabase/migrations/0033_remix_challenge.sql'));
 check('the migration is safe to run twice', true);
-const dry = read('supabase/drafts/NEXT_remix_challenge.DRY-RUN.sql');
-const mig = read('supabase/migrations/NEXT_remix_challenge.sql');
-check('the dry run is the migration ending in rollback', dry.slice(dry.indexOf('begin;')).replace(/-- The dry run keeps nothing\.\nrollback;\n$/, 'commit;\n') === mig.slice(mig.indexOf('begin;')));
-// A published version for the read-back to use (it runs on the database directly, before the client connects).
-await db.exec(`insert into studio.entities (id, work_id, kind, name) values ('00000000-0000-0000-0000-00000000e0e0','snowmoon','style','Read-back style');
-  insert into studio.elements (id, work_id, element_type, created_by_fid, entity_id, status) values ('00000000-0000-0000-0000-00000000b0b0','snowmoon','design',6786,'00000000-0000-0000-0000-00000000e0e0','published');
-  insert into studio.element_versions (id, element_id, version_no) values ('00000000-0000-0000-0000-00000000f0f0','00000000-0000-0000-0000-00000000b0b0',1);`);
-// The read-back, part (a): one SELECT, every row true; part (b): the DO block raises nothing.
-const rb = read('supabase/drafts/READ-BACK-remix_challenge.sql');
-const partA = rb.slice(rb.indexOf('select c.what'), rb.indexOf(') c;') + 4);
-const partB = rb.slice(rb.indexOf('do $$'), rb.lastIndexOf('end $$;') + 7);
-const rowsA = await db.query<{ what: string; ok: boolean }>(partA);
-check('read-back (a): every row is true', rowsA.rows.length === 16 && rowsA.rows.every((r) => r.ok === true), JSON.stringify(rowsA.rows.filter((r) => !r.ok)));
-let bErr = '';
-try {
-  await db.exec(partB);
-} catch (e) {
-  bErr = (e as Error).message;
-}
-check('read-back (b): the DO block passes', bErr === '', bErr);
-check('read-back (b): leaves no rows behind', (await db.query<{ n: number }>('select (select count(*) from studio.challenge_marks) + (select count(*) from studio.version_posts) as n')).rows[0].n == 0);
+// What the owner's read-back (a) checked on production (2026-11-01, 17 of 17 true), here on PGlite: RLS on, the
+// privileges as written, no public access, only studio_writer's policies, and no score column.
+const PRIVS = `select c.what, c.ok from (
+  select 'rls on all three' as what, (select bool_and(relrowsecurity) from pg_class where oid in ('studio.challenge_marks'::regclass, 'studio.version_posts'::regclass, 'studio.challenge_eligibility'::regclass)) as ok
+  union all select 'marks and eligibility: select and insert only', bool_and(has_table_privilege('studio_writer', t::regclass, 'SELECT') and has_table_privilege('studio_writer', t::regclass, 'INSERT') and not has_table_privilege('studio_writer', t::regclass, 'UPDATE') and not has_table_privilege('studio_writer', t::regclass, 'DELETE')) from unnest(array['studio.challenge_marks', 'studio.challenge_eligibility']) t
+  union all select 'posts: select, insert, delete, no update', has_table_privilege('studio_writer', 'studio.version_posts', 'DELETE') and not has_table_privilege('studio_writer', 'studio.version_posts', 'UPDATE')
+  union all select 'no public access', not exists (select 1 from unnest(array['anon', 'authenticated']) r, unnest(array['studio.challenge_marks', 'studio.version_posts', 'studio.challenge_eligibility']) t, unnest(array['SELECT', 'INSERT', 'UPDATE', 'DELETE']) p where has_table_privilege(r, t::regclass, p))
+  union all select 'only studio_writer policies', not exists (select 1 from pg_policies where schemaname = 'studio' and tablename in ('challenge_marks', 'version_posts', 'challenge_eligibility') and roles <> '{studio_writer}'::name[])
+  union all select 'no score column', not exists (select 1 from information_schema.columns where table_schema = 'studio' and table_name = 'challenge_eligibility' and column_name = 'score')
+) c`;
+const privs = await db.query<{ what: string; ok: boolean }>(PRIVS);
+check('0033: RLS, privileges, no public access, no score column (as the owner read back)', privs.rows.length === 6 && privs.rows.every((r) => r.ok === true), JSON.stringify(privs.rows.filter((r) => !r.ok)));
 {
-  // Proof: on a table that refuses a realistic row, part (b) fails.
-  await db.exec(`alter table studio.version_posts add constraint planted check (handle <> 'naaate')`);
-  let err = '';
-  try {
-    await db.exec(partB);
-  } catch (e) {
-    err = (e as Error).message;
-  }
-  await db.exec(`alter table studio.version_posts drop constraint planted`);
-  proof('read-back (b) fails when a realistic row is refused', /READ-BACK FAILED|violates/.test(err));
   await db.exec(`grant update on studio.challenge_marks to studio_writer`);
-  const r2 = await db.query<{ ok: boolean }>(partA);
+  const r2 = await db.query<{ ok: boolean }>(PRIVS);
   await db.exec(`revoke update on studio.challenge_marks from studio_writer`);
-  proof('read-back (a) shows false when studio_writer may update marks', r2.rows.some((r) => r.ok === false));
+  proof('a planted update grant on marks is caught', r2.rows.some((r) => r.ok === false));
+  await db.exec(`alter table studio.challenge_eligibility add column score numeric`);
+  const r3 = await db.query<{ what: string; ok: boolean }>(PRIVS);
+  await db.exec(`alter table studio.challenge_eligibility drop column score`);
+  proof('a planted score column is caught', r3.rows.some((r) => r.ok === false && /score/.test(r.what)));
+  let refused = false;
+  await db.exec(`insert into studio.entities (id, work_id, kind, name) values ('00000000-0000-0000-0000-00000000e0e0','snowmoon','style','Test style');
+    insert into studio.elements (id, work_id, element_type, created_by_fid, entity_id, status) values ('00000000-0000-0000-0000-00000000b0b0','snowmoon','design',6786,'00000000-0000-0000-0000-00000000e0e0','published');
+    insert into studio.element_versions (id, element_id, version_no) values ('00000000-0000-0000-0000-00000000f0f0','00000000-0000-0000-0000-00000000b0b0',1);`);
+  try {
+    await db.exec(`insert into studio.challenge_eligibility (version_id, challenge, fid, decision, eligible) values ('00000000-0000-0000-0000-00000000f0f0', 'remix-2026-11', 500, 'below', true)`);
+  } catch {
+    refused = true;
+  }
+  check('a decision that contradicts itself (below, marked eligible) is refused', refused);
 }
 
 const PORT = 54377;
@@ -441,19 +450,24 @@ const fOfEntry = await publish({ fid: 6852, mode: 'fork', kind: 'character', fro
 const f502 = await publish({ fid: 502, mode: 'fork', kind: 'character', fromVersionId: zeiStart.versionId, body: sheet('Zei, Neynar down', 9) });
 const fScratch = await publish({ fid: 503, mode: 'create', kind: 'character', character: zeiC, body: sheet('Zei from scratch', 10) });
 check('publishing asked Neynar only for the one maker it had no score for (502), once', calls.length === 1 && calls[0].includes('api.neynar.com') && calls[0].includes('502'), calls.join(' '));
-const stored = await sql<{ version_id: string; decision: string; score: string | null; eligible: boolean }[]>`select version_id, decision, score, eligible from studio.challenge_eligibility`;
+const stored = await sql<{ version_id: string; decision: string; eligible: boolean }[]>`select version_id, decision, eligible from studio.challenge_eligibility`;
+const cols = await sql<{ column_name: string }[]>`select column_name from information_schema.columns where table_schema = 'studio' and table_name = 'challenge_eligibility'`;
+check('the stored decision keeps no score (owner, 2026-11-01)', !cols.some((c) => /score/.test(c.column_name)), cols.map((c) => c.column_name).join());
 const dec = (v: string) => stored.find((r) => r.version_id === v);
-check('stored at publish: the score with its decision (0.81, eligible)', dec(f500a.versionId)?.decision === 'score' && Number(dec(f500a.versionId)?.score) === 0.81 && dec(f500a.versionId)?.eligible === true);
-check('stored at publish: below the threshold (0.42, not eligible)', dec(f501.versionId)?.decision === 'below' && dec(f501.versionId)?.eligible === false);
-check('stored at publish: an admin, no score asked', dec(fAdmin.versionId)?.decision === 'admin' && dec(fAdmin.versionId)?.score === null);
+check('stored at publish: passed (0.81 ≥ 0.7), eligible, the score not kept', dec(f500a.versionId)?.decision === 'passed' && dec(f500a.versionId)?.eligible === true);
+check('stored at publish: below (0.42), not eligible', dec(f501.versionId)?.decision === 'below' && dec(f501.versionId)?.eligible === false);
+check('stored at publish: an admin', dec(fAdmin.versionId)?.decision === 'admin' && dec(fAdmin.versionId)?.eligible === false);
 check('stored at publish: invited, no score asked', dec(f6852.versionId)?.decision === 'invited');
 check('stored at publish: Neynar down means unchecked (not eligible)', dec(f502.versionId)?.decision === 'unchecked' && dec(f502.versionId)?.eligible === false);
 check('a sheet made from scratch gets no decision (not an entry)', !dec(fScratch.versionId));
 {
   const extra = await DS.makeDesign(S, { fid: 504, mode: 'fork', kind: 'character', fromVersionId: baiStart.versionId, body: sheet('Bai, before the reread', 11) });
-  const r = await Rec.recordEligibility(S, extra.versionId, 504);
+  const unsaid = structuredClone(P0);
+  const u4 = unsaid.sections.find((x) => x.n === 4)!;
+  u4.body = u4.body.map((b) => (Array.isArray(b) ? b.filter((i) => !/remix challenge/i.test(i)) : b));
+  const r = await Rec.recordEligibility(S, extra.versionId, 504, new Date(), unsaid);
   const [row] = await sql`select 1 from studio.challenge_eligibility where version_id = ${extra.versionId}`;
-  check('nothing is stored about a maker while the Privacy page does not describe the challenge (as today)', r === 'not-stored' && !row);
+  check('nothing is stored about a maker while the Privacy page does not describe the challenge', r === 'not-stored' && !row);
   proof('a recorder that ignores the Privacy words would store it', (await Rec.recordEligibility(S, extra.versionId, 504, new Date(), privacySaid)) === 'stored');
 }
 calls.length = 0;
@@ -548,7 +562,7 @@ await server.stop();
 
 // As committed, the switches are off until the owner's reread.
 const cfg = read('src/lib/config.ts');
-check('as committed, CHALLENGE.entries and posts are off until the reread; openSheets is on (it waits for the window and the Privacy words by itself)', /\n  entries: false as boolean,\n  posts: false as boolean,/.test(cfg) && /\n  openSheets: true as boolean,/.test(cfg));
+check('as committed, CHALLENGE.entries, posts and openSheets are on (owner\'s reread 2026-11-01; openSheets still waits for the window)', /\n  entries: true as boolean,\n  posts: true as boolean,/.test(cfg) && /\n  openSheets: true as boolean,/.test(cfg));
 
 console.log(`test:challenge: ${passed} passed, ${failures.length} failed`);
 if (failures.length) {

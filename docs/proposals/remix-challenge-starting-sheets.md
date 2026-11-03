@@ -35,7 +35,11 @@ labelled "starting point", with their recipes. Hold Gladias for the privacy-robe
 
 (`…` is `/Users/nathan/Library/CloudStorage/GoogleDrive-geko5443@gmail.com/My Drive`.)
 
-## Gladias and the privacy robe: held
+## Gladias and the privacy robe: released (owner, 2026-11-01)
+
+**Update 2026-11-01:** the owner released Gladias: Garance's note was about the privacy robe's own look, not Gladias's
+sheet. `CHALLENGE.held` is gone, and his sheet can be published with the others. The check below is kept for the record.
+
 
 Gladias's starting sheet **does not show the privacy robe.** All three views show him in a moss-green sleeveless tabard
 with a standing collar, a cream long-sleeved bodysuit, an ochre sash, charcoal leggings and grey boots, face and hair

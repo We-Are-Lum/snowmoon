@@ -25,7 +25,7 @@ import { readdirSync, readFileSync } from 'node:fs';
 import { PGlite } from '@electric-sql/pglite';
 import { PGLiteSocketServer } from '@electric-sql/pglite-socket';
 import postgres from 'postgres';
-import { IMAGES } from '../src/lib/config';
+import { IMAGES, imagesDailySpendCapUsd } from '../src/lib/config';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const failures: string[] = [];
@@ -278,10 +278,10 @@ await sql`insert into studio.works values ('snowmoon','Snowmoon','GPL-3.0','x') 
 for (let i = 0; i < IMAGES.publishesPerDay; i++) await sql`insert into studio.elements (work_id, element_type, created_by_fid) values ('snowmoon', 'image', 201)`;
 check('3 publishes a day per person', (await publishesLeft(S, 201)) === 0 && (await publishesLeft(S, 202)) === IMAGES.publishesPerDay);
 const [spentToday] = await sql`select coalesce(sum(cost_usd), 0)::float8 as usd from studio.image_costs where day = (now() at time zone 'utc')::date`;
-await sql`insert into studio.image_costs (kind, model, provider, verdict, calls, cost_usd) values ('image', 'today', 'fal.ai', 'ok', 1, ${IMAGES.dailySpendCapUsd - spentToday.usd - IMAGES.reserveUsd / 2})`;
+await sql`insert into studio.image_costs (kind, model, provider, verdict, calls, cost_usd) values ('image', 'today', 'fal.ai', 'ok', 1, ${imagesDailySpendCapUsd() - spentToday.usd - IMAGES.reserveUsd / 2})`;
 const capped = await reserve(S, 203);
 check('$2 a day across everyone, then refused', !capped.ok && capped.refusal === 'spend', JSON.stringify(capped));
-check('the daily cap is $2', IMAGES.dailySpendCapUsd === 2 && IMAGES.generationsPerDay === 10 && IMAGES.publishesPerDay === 3 && IMAGES.label === 'Trial');
+check('the daily cap is $2 outside the remix challenge window', IMAGES.dailySpendCapUsd === 2 && IMAGES.generationsPerDay === 10 && IMAGES.publishesPerDay === 3 && IMAGES.label === 'Trial');
 
 // --- Report alerts ----------------------------------------------------------------------
 const el = async (by: number) => (await sql`insert into studio.elements (work_id, element_type, created_by_fid, status) values ('snowmoon', 'image', ${by}, 'published') returning id`)[0].id as string;

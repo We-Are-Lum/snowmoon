@@ -83,11 +83,11 @@ const links: LinkRow[] = [
   { from: V.I, to: V.A2, kind: 'uses' },
 ];
 const eligibility = [
-  { versionId: V.A, fid: 500, decision: 'score' as const, eligible: true },
-  { versionId: V.A2, fid: 500, decision: 'score' as const, eligible: true },
+  { versionId: V.A, fid: 500, decision: 'passed' as const, eligible: true },
+  { versionId: V.A2, fid: 500, decision: 'passed' as const, eligible: true },
   { versionId: V.B, fid: 501, decision: 'invited' as const, eligible: true },
   { versionId: V.C, fid: 502, decision: 'below' as const, eligible: false },
-  { versionId: V.D, fid: 503, decision: 'score' as const, eligible: true },
+  { versionId: V.D, fid: 503, decision: 'passed' as const, eligible: true },
 ];
 const build = (o: Partial<Parameters<typeof buildGraph>[0]> = {}) => buildGraph({ character: 'bai', final: V.F, versions, links, eligibility, admins: ADMINS, ...o });
 const g = build();

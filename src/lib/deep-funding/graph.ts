@@ -48,7 +48,7 @@ export interface LinkRow {
 export interface EligibilityRow {
   versionId: string;
   fid: number;
-  decision: 'admin' | 'invited' | 'score' | 'below' | 'unchecked';
+  decision: 'admin' | 'invited' | 'passed' | 'below' | 'unchecked';
   eligible: boolean;
 }
 

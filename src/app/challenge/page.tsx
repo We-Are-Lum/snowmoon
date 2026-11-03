@@ -20,6 +20,17 @@ export const revalidate = 60;
 export const metadata = { title: 'Remix the cast', description: 'The remix challenge on Snowmoon Party: draft rules.' };
 
 const callName = (name: string) => name.split(' ')[0];
+/** A character's poidh bounty, only once its address is set (CHALLENGE.bounties) and it is on poidh.xyz over https. */
+const bountyUrl = (slug: string): string | null => {
+  const u = CHALLENGE.bounties[slug];
+  if (!u) return null;
+  try {
+    const p = new URL(u);
+    return p.protocol === 'https:' && (p.hostname === 'poidh.xyz' || p.hostname === 'www.poidh.xyz') ? p.toString() : null;
+  } catch {
+    return null;
+  }
+};
 
 export default async function ChallengePage() {
   const sql = db();
@@ -46,7 +57,7 @@ export default async function ChallengePage() {
           <strong>{W.nextHead}</strong> {W.next()}
         </p>
         <p>
-          <strong>{W.bountyHead}</strong> {W.bounty}
+          <strong>{W.bountyHead}</strong> {W.bounty()}
         </p>
         <p>
           <strong>{W.rulesHead}</strong>
@@ -69,6 +80,17 @@ export default async function ChallengePage() {
             </p>
           )}
           {about && <p>{about}</p>}
+          <p className="ch-bounty">
+            {W.bountyFor(callName(c.name))}
+            {bountyUrl(c.slug) && (
+              <>
+                {' '}
+                <a href={bountyUrl(c.slug)!} target="_blank" rel="noopener noreferrer">
+                  {W.bountyLink(callName(c.name))} →
+                </a>
+              </>
+            )}
+          </p>
           <p>
             <Link href={`/references/designs/character/${c.slug}`}>{W.readBook(callName(c.name))} →</Link>
           </p>
@@ -97,8 +119,6 @@ export default async function ChallengePage() {
                 </li>
               ))}
             </ul>
-          ) : CHALLENGE.held.includes(c.slug) ? (
-            <p className="dz-muted">{W.held(callName(c.name))}</p>
           ) : (
             <p className="dz-muted">{W.noSheetYet(callName(c.name))}</p>
           )}

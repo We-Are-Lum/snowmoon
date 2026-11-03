@@ -66,13 +66,14 @@ export function pacificWallTime(iso: string): string {
 // Eligibility
 // ---------------------------------------------------------------------------------------------
 export type Eligibility =
-  | { eligible: true; person: number; why: 'invited' | 'score' }
+  | { eligible: true; person: number; why: 'invited' | 'passed' }
   | { eligible: false; person: number | null; why: 'admin' | 'not-a-farcaster-account' | 'below' | 'unchecked' };
 
 /**
  * Whether a maker's versions can be entries, decided once, when the version is published (the decision is stored;
  * pages only read it). `maker` is the record's maker: a FID. `score` is the person's Neynar score at publish (null:
- * not known, e.g. Neynar didn't answer; such a version doesn't count).
+ * not known, e.g. Neynar didn't answer; such a version doesn't count). The score is compared with
+ * CHALLENGE.neynarMinScore and then forgotten: only the decision ('passed' or 'below') is stored (owner, 2026-11-01).
  *
  * Wallets (owner, 2026-10-31: drop "or a wallet linked to either" until wallets can make sheets): a maker that isn't a
  * FID is never eligible. To restore the wallet path later, resolve a wallet maker to the FID it is linked to before
@@ -84,7 +85,21 @@ export function eligibility(p: { maker: number; score: number | null }, lists: {
   if (lists.admins.includes(person)) return { eligible: false, person, why: 'admin' };
   if (lists.invited.includes(person)) return { eligible: true, person, why: 'invited' };
   if (p.score === null || !Number.isFinite(p.score)) return { eligible: false, person, why: 'unchecked' };
-  return p.score >= lists.min ? { eligible: true, person, why: 'score' } : { eligible: false, person, why: 'below' };
+  return p.score >= lists.min ? { eligible: true, person, why: 'passed' } : { eligible: false, person, why: 'below' };
+}
+
+export type Decision = 'admin' | 'invited' | 'passed' | 'below' | 'unchecked';
+
+/**
+ * A stored decision, read back for a page. The lists are applied again (an admin is never eligible, an invited person
+ * always is); otherwise the decision made at publish stands. No score is involved.
+ */
+export function fromDecision(maker: number, decision: Decision | null, lists: { admins: readonly number[]; invited: readonly number[] } = CHALLENGE_LISTS): Eligibility {
+  if (!(maker > 0)) return { eligible: false, person: null, why: 'not-a-farcaster-account' };
+  if (lists.admins.includes(maker)) return { eligible: false, person: maker, why: 'admin' };
+  if (lists.invited.includes(maker)) return { eligible: true, person: maker, why: 'invited' };
+  if (decision === 'passed') return { eligible: true, person: maker, why: 'passed' };
+  return { eligible: false, person: maker, why: decision === 'below' ? 'below' : 'unchecked' };
 }
 
 /** Whether a FID needs a score lookup at all (admins and invited people never do). */
