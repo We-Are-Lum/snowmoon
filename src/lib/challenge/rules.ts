@@ -47,6 +47,18 @@ export function dateText(key: DateKey, opts: { time?: boolean } = {}, dates: Rec
   return `${day}, ${hm} Pacific`;
 }
 
+/**
+ * A date of the challenge in short, "Fri 6 Nov, 09:00 PT" (owner, 2026-11-03: marking before the open says "Entries
+ * open Fri 6 Nov, 09:00 PT"), built from CHALLENGE.dates only. A closing instant at midnight is shown as its last minute.
+ */
+export function shortDateText(key: DateKey, dates: Record<DateKey, string> = CHALLENGE.dates): string {
+  const closing = (key === 'closes' || key === 'mintCloses' || key === 'shortlistCloses') && pacificWallTime(dates[key]).endsWith(' 00:00');
+  const at = new Date(ms(dates[key]) - (closing ? 60_000 : 0));
+  const parts = new Intl.DateTimeFormat('en-GB', { timeZone: CHALLENGE.timeZone, weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).formatToParts(at);
+  const get = (t: string) => parts.find((p) => p.type === t)?.value ?? '';
+  return `${get('weekday')} ${get('day')} ${get('month')}, ${get('hour')}:${get('minute')} PT`;
+}
+
 /** "6 to 22 November": the window as a span, from the config. */
 export function windowText(dates: Record<DateKey, string> = CHALLENGE.dates): string {
   const d = (k: DateKey) => dateText(k, {}, dates).split(' ').slice(1); // [day, month]

@@ -4,7 +4,7 @@ import { remixLines } from './lineage';
 import { basesOf, remixOfBase } from './rules';
 import { CHALLENGE, WORK_ID } from '../config';
 import { bookCharacter } from '../images/designs';
-import { chooseEntries, entrantCounts, fromDecision, type Decision, inWindow, markKey, newestFirst, type Candidate, type Eligibility } from './rules';
+import { chooseEntries, entrantCounts, fromDecision, type Decision, inWindow, markKey, newestFirst, phase, shortDateText, type Candidate, type Eligibility } from './rules';
 
 /**
  * The remix challenge's entries (owner, 2026-10-31), the server half, for pages. Reads published sheets, the private
@@ -142,17 +142,42 @@ export async function versionStanding(sql: Sql, versionId: string): Promise<Vers
   return chosen?.versionId === versionId ? { kind: 'entry', character: v.character } : { kind: 'candidate', character: v.character };
 }
 
+/**
+ * What the publish confirmation says about the remix challenge (owner, 2026-11-03), read right after the decision is
+ * stored (src/lib/challenge/record.ts): 'entry' when the new version is its maker's entry for the character, 'unchecked'
+ * when Neynar didn't answer at publish, so it doesn't count. Otherwise nothing. No outside call: the stored decision
+ * and the lists only. Never throws: a confirmation without the line is better than a publish that seems to fail.
+ */
+export async function publishStanding(sql: Sql, versionId: string): Promise<{ kind: 'entry' | 'unchecked'; character: string } | null> {
+  if (!CHALLENGE.entries) return null;
+  try {
+    const s = await versionStanding(sql, versionId);
+    if (s?.kind === 'entry') return s;
+    if (s) return null;
+    const [r] = await sql<{ decision: string }[]>`select decision from studio.challenge_eligibility where version_id = ${versionId} and challenge = ${CHALLENGE.id}`;
+    if (r?.decision !== 'unchecked') return null;
+    const v = (await windowVersions(sql)).find((x) => x.versionId === versionId && x.forked);
+    return v ? { kind: 'unchecked', character: v.character } : null;
+  } catch (e) {
+    console.error('challenge: standing at publish not read', (e as { code?: string }).code ?? (e as Error).name);
+    return null;
+  }
+}
+
 export type MarkResult = { ok: true } | { ok: false; why: string; status: number };
 export const MARK_WORDING = {
   off: 'Entries aren’t open yet.',
+  /** Before the window (owner, 2026-11-03: not "Entries are closed"), its date built from CHALLENGE.dates. */
+  opens: () => `Entries open ${shortDateText('opens')}.`,
   closed: 'Entries are closed.',
   notYours: 'You can mark only your own version, made during the challenge.',
   notYet: 'Marking another version isn’t available yet. Your latest version counts.',
-} as const;
+};
 
 /** Mark one of your own versions in the window as your entry for its character (the latest mark counts). */
 export async function markEntry(sql: Sql, fid: number, versionId: string, now = new Date()): Promise<MarkResult> {
   if (!CHALLENGE.entries) return { ok: false, why: MARK_WORDING.off, status: 503 };
+  if (phase(now) === 'before') return { ok: false, why: MARK_WORDING.opens(), status: 409 };
   if (!inWindow(now)) return { ok: false, why: MARK_WORDING.closed, status: 409 };
   const v = (await windowVersions(sql)).find((x) => x.versionId === versionId && x.forked);
   if (!v || v.person !== fid) return { ok: false, why: MARK_WORDING.notYours, status: 403 };

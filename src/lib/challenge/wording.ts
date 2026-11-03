@@ -16,6 +16,15 @@ const numberWord = (n: number) => ['no', 'one', 'two', 'three', 'four', 'five', 
 export const CHALLENGE_WORDING = {
   title: 'Remix the cast',
   draft: 'Draft wording: drafted for the owner, not yet approved.',
+  /** The short marker, where a page has only one new line (the home page's row). */
+  draftShort: 'Draft wording',
+  /** The home page's row for /challenge (owner, 2026-11-03: a link on the home page). Draft wording. */
+  homeLine: () => `The remix challenge, ${windowText()}: remix a character and publish it`,
+  /**
+   * Who can enter, said up front: on /challenge and before the consent screen of a challenge fork (owner, 2026-11-03,
+   * these exact words). The score is the one already looked up at Generate: no new Neynar lookup.
+   */
+  whoCanEnter: () => `Entering needs a Farcaster account with a Neynar score of ${CHALLENGE.neynarMinScore} or more; we check when you press Generate.`,
   intro: () =>
     `From ${windowText()}, make your own version of ${listed(callNames())} on snowmoon.party: start from a published sheet, or from someone else’s remix, change it, and publish. Your version gets its own page, credited back to what you built on.`,
   nextHead: 'What happens next.',
@@ -33,7 +42,8 @@ export const CHALLENGE_WORDING = {
     // Draft wording (owner, 2026-11-03: three bases per character).
     'Only remixes count: for each character, start from any of its three bases, or someone else’s remix. A new sheet made from scratch isn’t an entry.',
     'One entry per person per character. Your latest version counts unless you mark another.',
-    'To count as an entry, sign in with a Farcaster account that passes the site’s check. It’s checked once, when you publish.',
+    // Draft wording (owner, 2026-11-03: make it clear an account below the check can't remix; launch rehearsal item 3).
+    'To remix at all, sign in with a Farcaster account that passes the site’s check. An account below it can’t make the pictures, so it can’t remix or enter. It’s checked when you press Generate, and again when you publish.',
     `Each character needs at least ${numberWord(CHALLENGE.minEntrants)} different people with an entry. A character with fewer gets no final version, credit test or mint.`,
     'Entering is free. Minting isn’t needed for anything.',
     'Post your version anywhere with its link. If you’re remixing someone’s post, quote or reply to it.',
@@ -57,8 +67,14 @@ export const CHALLENGE_WORDING = {
   entrantsNeeded: (n: number) => (n >= CHALLENGE.minEntrants ? 'enough for a final version' : `${CHALLENGE.minEntrants - n} more needed for a final version`),
   adminsHead: 'Made by admins (not eligible for rewards)',
   badge: 'Entry',
+  /** An entry's row: the character, then the sheet's name when it has one (launch rehearsal, 2026-11-02: an untitled sheet read "Bai: Bai"). */
+  entryLabel: (name: string, title: string) => (title.trim() ? `${name}: ${title.trim()}` : name),
   badgeNote: (name: string) => `This is its maker’s entry for ${name} in the remix challenge.`,
+  /** On a challenge character's sheet that isn't an entry, while the window is open (launch rehearsal, 2026-11-02: no page but an entry linked to /challenge). */
+  sheetInvite: (name: string) => `${name} is in the remix challenge: remix this sheet, change it and publish to enter.`,
   candidateNote: 'Made during the remix challenge. Its maker’s latest version counts unless they mark another.',
+  /** A candidate's note once entries are closed: marking is refused then (launch rehearsal, 2026-11-02). */
+  candidateClosedNote: (name: string) => `Made during the remix challenge. Entries are closed: its maker’s entry for ${name} is another version.`,
   adminNote: 'Made by an admin during the remix challenge: admins aren’t eligible for rewards.',
   mark: 'Mark as my entry',
   marked: 'Marked as your entry.',
@@ -66,6 +82,16 @@ export const CHALLENGE_WORDING = {
   shareHead: 'Share this version',
   shareOn: (network: string) => `Post on ${network}`,
   shareText: (what: string) => `${what}, made on Snowmoon Party`,
+  /** While entries are open, on a challenge character's sheet (owner, 2026-11-03: the share text mentions the challenge). Draft wording. */
+  shareTextOpen: (what: string) => `${what}, made on Snowmoon Party. Remix the cast: the remix challenge is open until ${d('closes', true)}.`,
+  /** The publish confirmation of a version that is its maker's entry (owner, 2026-11-03: these words). */
+  publishedEntry: (name: string) => `This is your entry for ${name}.`,
+  /**
+   * The publish confirmation when Neynar didn't answer at publish (decision 'unchecked'): the version is published but
+   * doesn't count (owner, 2026-11-03: accept it, and say so on the spot). Draft wording.
+   */
+  publishedUnchecked: (name: string) =>
+    `This version won’t count as your entry for ${name}: Neynar, which scores Farcaster accounts, didn’t answer when you published, so the site couldn’t check your account. Publish another version later to enter; an earlier entry for ${name}, if you have one, still counts.`,
   guidance: 'If you’re remixing someone’s post, quote or reply to it on the same network. Always include your version’s link.',
   addHead: 'Add where you posted it',
   addLabel: 'Your post’s address (Farcaster, Bluesky or Lens)',
