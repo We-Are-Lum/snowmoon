@@ -1,5 +1,7 @@
 # Starting sheets: original, v1 and v2, for the owner's pick
 
+**Newest (2026-11-03): the challenge's styles and bases, proposal and cost:** [styles-proposal.md](styles-proposal.md).
+
 **New (2026-11-03): three bases per character.** Fronts in the five published styles and two closed-model concepts, one contact sheet per character, plus three Zei side seeds: [bases.md](bases.md).
 
 Drafts only; nothing here is published on the site. Reply with picks like **"Zei v2, Bai v1"**, or per view (**"Mu v2, but v1 back"**), or **"original"** for a crop of the original sheet.

@@ -13,6 +13,10 @@
  *   npm run seed:designs -- --apply --picks=picks.json --confirm-owner-go     write it (after the owner's go)
  *   npm run seed:designs -- --apply --style-only --confirm-owner-go           the style alone, before the picks (owner,
  *                                                                             2026-11-02: the style goes up before the sheets)
+ *   npm run seed:designs -- --bases-plan                     the challenge's styles and three bases per character
+ *                                                            (docs/starting-sheet-drafts/styles-plan.json), priced, in
+ *                                                            the fixed style order, each checked with closedBaseRefusal;
+ *                                                            calls nothing (no model, database or network)
  *
  * picks.json: { "zei": "v2", "bai": "v1", "mu": { "front": "v2", "side": "original", "back": "v2" }, … } for all six;
  * each value "v2" (the redone views), "v1" (the first drafts) or "original" (a crop of the original sheet, no model).
@@ -76,6 +80,93 @@ if (APPLY && !((PICKS_FILE || STYLE_ONLY) && has('confirm-owner-go'))) {
 if (APPLY && new Date() >= new Date(OPENS)) {
   console.error(`The window opened at ${OPENS}: a sheet made now would not be a starting sheet. Nothing done.`);
   process.exit(2);
+}
+
+// ---- --bases-plan: the challenge's styles and three bases per character, planned and priced; calls nothing ----
+if (has('bases-plan')) {
+  if (APPLY) { console.error('--bases-plan only prints a plan; it never writes. Nothing done.'); process.exit(2); }
+  await basesPlan();
+  process.exit(0);
+}
+
+/**
+ * The plan in docs/starting-sheet-drafts/styles-plan.json (styles-proposal.md): each style's samples, the style test,
+ * and for plan A and plan B the three bases per character, in the fixed style order (CHALLENGE.baseStyles), every view
+ * checked with closedBaseRefusal against CHALLENGE.closedBasesAllowed as committed. No model, database or network call.
+ */
+async function basesPlan() {
+  const { CHALLENGE } = await import('../src/lib/config');
+  const { closedBaseRefusal, closedModelsIn } = await import('../src/lib/challenge/bases');
+  const { modelName } = await import('../src/lib/images/recipe-lines');
+  const P = await import('./lib/bases-plan');
+  const plan = P.readPlan(ROOT);
+  const allowed = CHALLENGE.closedBasesAllowed;
+  const label = (m: string) => closedModelsIn(P.stubBody([{ slot: 'front', model: m }]) as never)[0]?.label ?? `${modelName(m)}, open weights`;
+  const out = (s = '') => console.log(s);
+  out('seed-designs --bases-plan: a plan only. No model, database, storage or network call is made.');
+  out(`CHALLENGE.closedBasesAllowed is ${allowed} (committed); CHALLENGE.baseStyles is [${CHALLENGE.baseStyles.map((s) => JSON.stringify(s)).join(', ')}].`);
+  out();
+
+  out('== Styles: samples ==');
+  let styleEst = 0, styleWorst = 0;
+  for (const s of plan.styles) {
+    const n = s.samples_made ? 0 : s.samples;
+    const c = P.pictureCost(s.model, 'text'), k = P.checkCost(n);
+    const est = n * c.est + k.est, worst = n * c.worst + k.worst;
+    styleEst += est; styleWorst += worst;
+    const why = closedBaseRefusal(P.stubBody(Array.from({ length: s.samples }, () => ({ slot: 'sample' as const, model: s.model }))) as never, allowed);
+    out(`  ${s.name.padEnd(31)} ${s.status.padEnd(30)} samples by ${label(s.model)}`);
+    out(`  ${''.padEnd(31)} ${n ? `${n} to make: ${P.usd(est)} (worst ${P.usd(worst)}); ${c.how}` : 'samples already made: $0'}${why ? `\n  ${''.padEnd(31)} PUBLISH WAITS: ${why}` : ''}`);
+  }
+  out(`  styles' samples: ${P.usd(styleEst)} (worst ${P.usd(styleWorst)})`);
+  out();
+
+  out('== Style test: one Zei front per row, before the samples ==');
+  let testEst = 0, testWorst = 0;
+  for (const t of plan.style_test) {
+    const c = P.pictureCost(t.model, 'sheet'), k = P.checkCost(1);
+    testEst += c.est + k.est; testWorst += c.worst + k.worst;
+    out(`  ${t.style.padEnd(12)} ${label(t.model).padEnd(50)} ${P.usd(c.est + k.est)} (worst ${P.usd(c.worst + k.worst)})  ${t.what}`);
+  }
+  out(`  style test: ${P.usd(testEst)} (worst ${P.usd(testWorst)}). Drafts only: never published.`);
+  out();
+
+  for (const [id, p] of Object.entries(plan.plans)) {
+    out(`== Plan ${id}: three bases per character ==`);
+    out(`  ${p.about}`);
+    if (p.bases.length !== CHALLENGE.maxBases) throw new Error(`plan ${id}: ${p.bases.length} bases, CHALLENGE.maxBases is ${CHALLENGE.maxBases}`);
+    for (const b of p.bases) if (!plan.styles.some((s) => s.name === b.style)) throw new Error(`plan ${id}: ${b.style} is not in the styles`);
+    out(`  fixed style order, the same for every character: CHALLENGE.baseStyles = [${p.bases.map((b) => JSON.stringify(b.style)).join(', ')}]`);
+    let views = 0, viewsEst = 0, viewsWorst = 0, refused = 0;
+    for (const b of p.bases) {
+      const f = P.pictureCost(b.model, 'sheet'), s = P.pictureCost(b.model, 'front'), k = P.checkCost(3);
+      out(`  one base in ${b.style} (${label(b.model)}): front from the sheet ${P.usd(f.est)}, side and back from the front ${P.usd(s.est)} each, 3 prompt checks; ${P.usd(f.est + 2 * s.est + k.est)} (worst ${P.usd(f.worst + 2 * s.worst + k.worst)})`);
+    }
+    for (const c of CHALLENGE.characters) {
+      const row: string[] = [];
+      for (const [i, b] of p.bases.entries()) {
+        const body = P.stubBody((['front', 'side', 'back'] as const).map((slot) => ({ slot, model: b.model })));
+        const why = closedBaseRefusal(body as never, allowed);
+        if (why) refused++;
+        const f = P.pictureCost(b.model, 'sheet'), s = P.pictureCost(b.model, 'front');
+        views += 3; viewsEst += f.est + 2 * s.est; viewsWorst += f.worst + 2 * s.worst;
+        row.push(`${i + 1}. ${b.style}${why ? ' [REFUSED while closedBasesAllowed is false]' : ''}`);
+      }
+      out(`  ${c.padEnd(8)} ${row.join('   ')}`);
+    }
+    const bases = CHALLENGE.characters.length * p.bases.length;
+    const k = P.checkCost(views);
+    const est = viewsEst + k.est;
+    const retake = plan.retake_share * est;
+    const worst = (1 + plan.retake_share) * (viewsWorst + k.worst);
+    out(`  ${bases} bases, ${views} views: ${P.usd(est)}; retake allowance (${Math.round(plan.retake_share * 100)}% of the views made again) ${P.usd(retake)}; total ${P.usd(est + retake)}`);
+    out(`  worst case (every view and every retake at its reserve, two prompt checks each): ${P.usd(worst)}`);
+    if (refused) out(`  ${refused} of ${bases} bases are refused by closedBaseRefusal until the owner's reread lands and CHALLENGE.closedBasesAllowed turns on.`);
+    else out('  closedBaseRefusal refuses none: every view is by an open model.');
+    out();
+  }
+  out('Nothing was called. To make any of it: the owner\'s picks and an OK to spend, then a separate run.');
+  await new Promise((r) => process.stdout.write('', () => r(null)));
 }
 
 // ---- Picks ----
