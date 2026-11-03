@@ -269,6 +269,17 @@ playOut('play', 202);
   ok(!v3.last_seen_enemy_towers.some((t: { x: number; y: number }) => t.x === tx && t.y === ty), 'the destroyed tower leaves Cyan\'s last-seen');
   ok(!JSON.stringify(v3.board).includes(`"x":${tx},"y":${ty}`) || r3.e.sees(m3.w, r3.s, 'C').has(target), 'nothing else about that square is shown');
   ok(DRAFTS.includes('book-4') && CURRENT.book === 'book-2', 'book-4 is a draft, started by name; new matches stay book-2');
+  // A symbol tower that goes takes its marker with it: a plain tower later placed on that square isn't a symbol tower.
+  {
+    const m5 = mk('tbook4000006', 86), { e, s } = rulesOf(m5), k = e.K(8, 7);
+    m5.w.tw[k] = 'C'; (m5.w.sy ??= {})[k] = 'C';
+    ok(e.symbolTowers(m5.w, 'C') === 1, 'a symbol tower counts');
+    m5.w.gl.push({ id: 990, o: 'A', x: 10, y: 7, dx: -1, dy: 0 } as never);
+    e.step(m5.w, s); e.step(m5.w, s);
+    ok(!m5.w.tw[k] && !m5.w.sy?.[k], `destroyed by a glider, its marker is cleared too`);
+    e.apply(m5.w, s, { C: [{ t: 't', o: 'C', x: 8, y: 7, dx: 0, dy: 0 }], A: [] });
+    ok(m5.w.tw[k] === 'C' && e.symbolTowers(m5.w, 'C') === 0, 'a plain tower placed there later is not counted as a symbol tower');
+  }
   const r4 = rulesFor(mk('tbook4000004', 84)).rules.join('\n');
   ok(/within 2 of each of your symbol gliders while it flies/.test(r4) && !/Only towers give sight/.test(r4) && /at most 2 towers formed from symbols/.test(r4) && /Kill reports:/.test(r4) && /Board: 18 x 14/.test(r4), 'book-4\'s rule lines say its sight, symbol limit, kill reports and board');
   ok(/Only towers give sight/.test(rulesFor(mk('tbook4000005', 85) as never && newSolo({ id: 'tbook3000009', ruleset: 'book-3', level: 2, seed: 85, person: 6786, agent: { id: null, name: 'Rook', model: null }, now: now() }).m).rules.join('\n')), 'book-3\'s still say only towers give sight');

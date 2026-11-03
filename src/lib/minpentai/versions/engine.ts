@@ -287,7 +287,7 @@ export function engine(L: Layout) {
       }
       const t = w.tw[k];
       if (t) {
-        if (t !== g.o || s.ownTower === 'destroy') { delete w.tw[k]; g.dead = true; if (kills) { kills[g.o]++; kills.log?.push({ o: g.o, k, step: w.step + 1 }); } broke(k); } else bounce(g);
+        if (t !== g.o || s.ownTower === 'destroy') { delete w.tw[k]; if (w.sy) delete w.sy[k]; g.dead = true; if (kills) { kills[g.o]++; kills.log?.push({ o: g.o, k, step: w.step + 1 }); } broke(k); } else bounce(g);
         continue;
       }
       g.x = g.tx!;
@@ -385,7 +385,7 @@ export function engine(L: Layout) {
     if (w.fs) for (const k of Object.keys(w.fs).map(Number)) {
       const f = w.fs[k];
       delete w.fs[k];
-      if (w.tw[k] === f.o && !walledIn(w, s, k)) { delete w.tw[k]; w.flash.push(k); }
+      if (w.tw[k] === f.o && !walledIn(w, s, k)) { delete w.tw[k]; if (w.sy) delete w.sy[k]; w.flash.push(k); }
     }
   }
 
