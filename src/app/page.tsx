@@ -15,6 +15,7 @@ import { HomeMomentCard } from '~/components/home-moment';
 import { HomeFeed, type HomeFeedItem } from '~/components/home-feed';
 import { HomeMinpentai } from '~/components/home-minpentai';
 import { SceneCard } from '~/components/scene-card';
+import { CHALLENGE_WORDING as CW } from '~/lib/challenge/wording';
 import '../styles/home.css';
 
 // Rendered per request, like /images: "Just made" is the newest images now. (With ISR, revalidate = 60,
@@ -64,13 +65,17 @@ export default async function Home() {
     { href: '/references', name: 'References', what: 'Images readers made for passages, each with how it was made', meta: 'Trial →' },
     { href: '/minpentai?mode=learn', name: 'Minpentai', what: 'The game from the book', meta: 'Learn · play →' },
     { href: '/assistant', name: 'Assistant', what: 'Ask about the book, privately', meta: '→' },
+    // The remix challenge (owner, 2026-11-03: a /challenge link on the home page), last, as in the menu. Its line is
+    // new wording, drafted by the coding agent: marked "Draft wording" until the owner approves it.
+    { href: '/challenge', name: CW.title, what: CW.homeLine(), meta: '→', draft: true },
   ];
-  const row = (r: (typeof book)[number]) => (
+  const row = (r: (typeof book)[number] & { draft?: boolean }) => (
     <li key={r.name}>
       <Link href={r.href}>
         <span className="home-do-text">
           <span className="home-do-name">{r.name}</span>
           <span className="home-do-what">{r.what}</span>
+          {r.draft && <span className="as-draft ic-draftline">{CW.draftShort}</span>}
         </span>
         <span className="home-do-meta">{r.meta}</span>
       </Link>

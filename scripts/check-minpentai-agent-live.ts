@@ -95,7 +95,8 @@ try {
     const m = await real(id);
     amberTowers.push(Object.values(m.w.tw).filter((o) => o === 'A').length);
     // The view is exactly the fog view of the real board, and the same with every hidden enemy piece removed.
-    const strip = (x: Record<string, unknown>) => ({ ...x, opponent_commitment: null, my_orders: null });
+    // how_the_pieces_work is this deployment's own address (appUrl), which a local run may not share.
+    const strip = (x: Record<string, unknown>) => ({ ...x, opponent_commitment: null, my_orders: null, how_the_pieces_work: null });
     if (isDeepStrictEqual(strip(JSON.parse(JSON.stringify(viewFor(m)))), strip(v)) && isDeepStrictEqual(strip(JSON.parse(JSON.stringify(viewFor(withoutHidden(m))))), strip(v))) viewOk++;
     else check(`turn ${v.turn}: the view is the side's fog view, whatever is hidden`, false);
     // The sandbox: production's answer equals the answer from the real board with the hidden pieces removed.

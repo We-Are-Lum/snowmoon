@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { isAdmin } from '~/lib/admins';
 import { getPerson } from '~/lib/auth';
 import { db } from '~/lib/db';
-import { IMAGES } from '~/lib/config';
+import { IMAGES, imagesDailySpendCapUsd } from '~/lib/config';
 import { hasConsented } from '~/lib/consent';
 import { generationsLeft, perDay, publishesLeft } from '~/lib/images/limits';
 import { RULES, styleText } from '~/lib/images/rules';
@@ -70,7 +70,9 @@ export async function GET(request: Request) {
     maxCharacters: IMAGES.designs.maxCharacters,
   };
   const editModel = { name: IMAGES.editModel.name, licence: IMAGES.editModel.licence, host: IMAGES.editModel.host };
-  const base = { label: IMAGES.label, model: IMAGES.model, editModel, rules: RULES, perDay: IMAGES.generationsPerDay, publishesPerDay: IMAGES.publishesPerDay, maxBlocks: isAdmin(fid) ? IMAGES.admin.maxBlocks : IMAGES.maxBlocks, styles, ready, inPassage: passageSheets, walletSignIn: prepaidOpen() };
+  const base = { label: IMAGES.label, model: IMAGES.model, editModel, rules: RULES, perDay: IMAGES.generationsPerDay, publishesPerDay: IMAGES.publishesPerDay, maxBlocks: isAdmin(fid) ? IMAGES.admin.maxBlocks : IMAGES.maxBlocks, styles, ready, inPassage: passageSheets, walletSignIn: prepaidOpen(),
+    // The site-wide free spend cap today ($15 in the remix challenge's window, $2 otherwise), read as the spend check reads it (launch rehearsal, 2026-11-02).
+    dailySpendCapUsd: imagesDailySpendCapUsd() };
   if (fid === null) return NextResponse.json({ ...base, signedIn: false }, { headers: { 'Cache-Control': 'no-store' } });
   const invited = IMAGES.invited.includes(fid);
   if (!sql) return NextResponse.json({ ...base, signedIn: true, fid, invited, eligible: invited ? true : null }, { headers: { 'Cache-Control': 'no-store' } });
