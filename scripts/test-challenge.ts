@@ -564,6 +564,16 @@ await server.stop();
 const cfg = read('src/lib/config.ts');
 check('as committed, CHALLENGE.entries, posts and openSheets are on (owner\'s reread 2026-11-01; openSheets still waits for the window)', /\n  entries: true as boolean,\n  posts: true as boolean,/.test(cfg) && /\n  openSheets: true as boolean,/.test(cfg));
 
+// --- Launch rehearsal fixes (2026-11-02; docs/launch-rehearsal-2026-11.md) ----------------------------------------
+{
+  const page = read('src/app/references/designs/[id]/page.tsx');
+  const IW = (await import('../src/lib/images/wording')).IMAGE_WORDING.designs.page;
+  // R1: a starting sheet's page called it "the project's starting style".
+  const draftedLine = (src: string) => /body\.assist && <p className="dz-meta dz-drafted">\{style \? W\.page\.drafted : W\.page\.draftedSheet\}<\/p>/.test(src);
+  check('R1 a sheet drafted by the coding agent says "starting sheet", a style "starting style"', draftedLine(page) && /starting sheet/.test(IW.draftedSheet) && !/style/.test(IW.draftedSheet) && /starting style/.test(IW.drafted));
+  proof('R1 the style line shown on every design is caught', !draftedLine(page.replace('{style ? W.page.drafted : W.page.draftedSheet}', '{W.page.drafted}')));
+}
+
 console.log(`test:challenge: ${passed} passed, ${failures.length} failed`);
 if (failures.length) {
   for (const f of failures) console.log(`  FAIL ${f}`);

@@ -97,7 +97,7 @@ export default async function DesignPage({ params }: Props) {
           )}
         </p>
       )}
-      {body.assist && <p className="dz-meta dz-drafted">{W.page.drafted}</p>}
+      {body.assist && <p className="dz-meta dz-drafted">{style ? W.page.drafted : W.page.draftedSheet}</p>}
       {standing?.kind === 'entry' && (
         <p className="dz-meta ch-standing">
           <span className="ch-badge">{CW.badge}</span> {CW.badgeNote(callName)} <Link href="/challenge">{CW.title} →</Link>

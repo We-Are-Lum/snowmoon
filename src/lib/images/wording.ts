@@ -108,6 +108,8 @@ export const IMAGE_WORDING = {
       remixedFrom: 'Remixed from',
       remixedHidden: 'a design that was hidden',
       drafted: 'The project’s starting style. Its text was drafted by the coding agent, a closed model.',
+      /** A starting sheet's line (the seed's sheets carry `assist` too; launch rehearsal, 2026-11-02: the style's line misdescribed them). */
+      draftedSheet: 'The project’s starting sheet. Its text was drafted by the coding agent, a closed model.',
       samplesCaption: 'Sample images',
       viewsCaption: 'Front, side, back',
       placeViewsCaption: 'Wide, other side, closer',
