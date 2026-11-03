@@ -7,6 +7,9 @@
  *    rendered beside the new, text compared).
  * 2. Planted recipes the old page misdescribed (a front made from another picture, a local render, a crop, a converted
  *    sample, a first draft with no prompt check) now get lines that say what their recipe says.
+ * 3. A closed model's picture (owner, 2026-11-04) names the model and its maker and, when the prompt check ran, says
+ *    "Checked by gpt-oss-safeguard-20b; made by a closed model whose own safety filters we can't see."; the open lines
+ *    are unchanged (--live compares every production picture).
  */
 import React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
@@ -15,7 +18,7 @@ import postgres from 'postgres';
 import { IMAGES } from '../src/lib/config';
 import type { DesignPicture } from '../src/lib/element-body';
 import { SAMPLE_ASSIST } from '../src/lib/images/design-rules';
-import { bothChecksRan, howMade } from '../src/lib/images/recipe-lines';
+import { bothChecksRan, checksLine, closedModel, howMade } from '../src/lib/images/recipe-lines';
 
 const failures: string[] = [];
 let passed = 0;
@@ -82,6 +85,23 @@ check('planted crop: the crop line, no checks claimed, no "front view"', nc.incl
 const nv1 = newText(v1, null, true);
 check('planted first draft: only the safety checker is claimed', nv1.includes('Checked by the host\'s safety checker; the site\'s prompt check did not run.') && !nv1.includes('gpt-oss'), nv1);
 check('the image page keeps its sentence only when both checks are recorded', bothChecksRan({ prompt: guard, host_safety_checker: 'passed' }) && !bothChecksRan({}) && !bothChecksRan(local.checks));
+
+// ---- 2b. Closed models (owner, 2026-11-04): bases and references may be made by closed models, labelled as now ----
+const CLOSED_LINE = 'Checked by gpt-oss-safeguard-20b; made by a closed model whose own safety filters we can\'t see.';
+const gpt: DesignPicture = { url: 'u', sha256: '9'.repeat(64), recipe: base({ model: 'gpt-image-2.5-sunburst', endpoint: 'openai/gpt-image-2.5-sunburst', host: 'Vercel AI Gateway', cost_usd: 0.0467, references: [{ sha256: sheetSha, what: 'the original starting sheet (cast.json#zei-sheet)' }], checks: { prompt: guard, host_safety_checker: 'not run' } }) };
+const gem: DesignPicture = { url: 'u', sha256: '6'.repeat(64), recipe: base({ model: 'gemini-3.1-flash-image', endpoint: 'google/gemini-3.1-flash-image', host: 'Vercel AI Gateway', cost_usd: 0.0677, checks: { prompt: guard, host_safety_checker: 'not run' } }) };
+const ngpt = newText(gpt, null, true), ngem = newText(gem, null, true);
+check('closed: the safety line for a closed model\'s picture, exactly as the owner wrote it', ngpt.includes(` ${CLOSED_LINE} `) && ngem.includes(` ${CLOSED_LINE} `), `${ngpt}\n      ${ngem}`);
+check('closed: the model and its maker are named first, as now', ngpt.startsWith('GPT Image 2.5 Sunburst (gpt-image-2.5-sunburst), a closed model by OpenAI, on Vercel AI Gateway, endpoint openai/gpt-image-2.5-sunburst.') && ngem.startsWith('Gemini 3.1 Flash Image (gemini-3.1-flash-image), a closed model by Google, on Vercel AI Gateway, endpoint google/gemini-3.1-flash-image.'), `${ngpt}\n      ${ngem}`);
+check('closed: no open-model claim and no "no safety checker ran" for a closed model', !/open weights|no safety checker ran/.test(ngpt + ngem));
+check('closed: even with a host checker recorded, a closed model\'s picture gets the closed line', checksLine({ ...gpt.recipe, checks: { prompt: guard, host_safety_checker: 'passed' } }) === CLOSED_LINE);
+check('closed: without the prompt check, a closed model\'s picture is not said to be checked', checksLine({ ...gpt.recipe, checks: { prompt: { model: 'none', verdict: 'not run' }, host_safety_checker: 'not run' } }) === 'Made outside the site; no prompt check or safety checker ran.');
+check('closed: the edit model and Z-Image are open (their lines are unchanged)', closedModel(IMAGES.editModel.id)?.closed === false && closedModel(IMAGES.model.id)?.closed === false && closedModel('gpt-image-2.5-sunburst')?.closed === true && closedModel('gemini-3.1-flash-image')?.maker === 'Google' && closedModel('not-a-model') === null);
+check('open: a prompt check alone on an open model still reads as before', checksLine({ ...front.recipe, checks: { prompt: guard, host_safety_checker: 'not run' } }) === 'Checked by gpt-oss-safeguard-20b; no safety checker ran.');
+check('open: both checks on an open model still read as before', checksLine(front.recipe) === 'Checked by gpt-oss-safeguard-20b and the host\'s safety checker.');
+// A planted mistake: the closed line on an open model's picture would change the open lines.
+const planted = (r: R) => (r.model === 'z-image-turbo' ? CLOSED_LINE : checksLine(r));
+check('proof: the closed line on an open model\'s picture is caught', planted(front.recipe) !== checksLine(front.recipe) && oldText(front) !== oldText(front).replace('Checked by gpt-oss-safeguard-20b and the host\'s safety checker.', CLOSED_LINE));
 
 // ---- 3. Optional: every picture of every published design on production, read-only ----
 if (process.argv.includes('--live')) {
