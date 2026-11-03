@@ -78,6 +78,8 @@
     "test:challenge": "tsx --conditions=react-server scripts/test-challenge.ts",
     "test:deep-funding": "tsx --conditions=react-server scripts/test-deep-funding.ts",
     "deep-funding": "tsx --conditions=react-server --env-file-if-exists=.env.local scripts/deep-funding.ts",
+    "challenge-record": "tsx --conditions=react-server --env-file-if-exists=.env.local scripts/challenge-record.ts",
+    "test:challenge-record": "tsx --conditions=react-server scripts/test-challenge-record.ts",
     "test:check-targets": "tsx scripts/test-check-targets.ts",
     "check:minpentai-agent-live": "tsx --conditions=react-server --env-file-if-exists=.env.local scripts/check-minpentai-agent-live.ts"
   },

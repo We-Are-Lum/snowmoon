@@ -38,10 +38,14 @@ async function hasEligibility(sql: Sql): Promise<boolean> {
   return Boolean(r?.ok);
 }
 
-export async function loadGraph(sql: Sql, character: string, finalVersionId: string): Promise<CreditGraph> {
+/**
+ * Every version reachable from `start` by studio.links (and each design's first version), with every link from them.
+ * Selects only. Also used by the challenge record (src/lib/challenge-record/record.ts).
+ */
+export async function loadRows(sql: Sql, start: string[]): Promise<{ versions: Map<string, VersionRow>; links: LinkRow[] }> {
   const versions = new Map<string, VersionRow>();
   const links: LinkRow[] = [];
-  let todo = [finalVersionId];
+  let todo = [...new Set(start)];
   while (todo.length) {
     const got = await versionsByIds(sql, todo.filter((id) => !versions.has(id)));
     for (const v of got) versions.set(v.id, v);
@@ -62,6 +66,11 @@ export async function loadGraph(sql: Sql, character: string, finalVersionId: str
     }
     todo = [...new Set(next)];
   }
+  return { versions, links };
+}
+
+export async function loadGraph(sql: Sql, character: string, finalVersionId: string): Promise<CreditGraph> {
+  const { versions, links } = await loadRows(sql, [finalVersionId]);
   let eligibility: EligibilityRow[] = [];
   if (await hasEligibility(sql)) {
     const ids = [...versions.keys()];

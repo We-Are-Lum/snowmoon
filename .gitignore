@@ -29,6 +29,8 @@ summary-out
 scenes-out
 # scripts/deep-funding.ts (the owner publishes the results file)
 deep-funding-out
+# scripts/challenge-record.ts (written locally only; the owner pins it)
+challenge-record-out
 
 # The live editor's data, made at build time from committed files (scripts/editor-data.mjs)
 /public/editor/
