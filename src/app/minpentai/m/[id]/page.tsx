@@ -41,6 +41,12 @@ export default async function LiveLink({ params, searchParams }: { params: Promi
             : `Step ${v.step} of ${v.max_steps} · turn ${v.turn}${v.phase === 'setup' ? ' (setup)' : ''}`}
         </p>
         <h1>{book ? 'Rocks and Mirrors' : 'Minpentai'}: your side</h1>
+        {'towers_destroyed' in v && v.towers_destroyed ? (
+          <p className="mb-status">
+            Towers destroyed: <strong>you {v.towers_destroyed.by_you}</strong> · the site computer {v.towers_destroyed.by_opponent}
+            {v.your_kills?.length ? <> (yours: {v.your_kills.map((x) => `(${x.x}, ${x.y}) at step ${x.step}`).join(', ')})</> : null}. With towers level at the last step, more destroyed wins.
+          </p>
+        ) : null}
         <MinpentaiTags tags={['rules', 'draft']} />
         {end ? (
           <>
