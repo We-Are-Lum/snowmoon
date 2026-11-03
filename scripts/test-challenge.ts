@@ -583,6 +583,12 @@ check('as committed, CHALLENGE.entries, posts and openSheets are on (owner\'s re
   const capInStatus = (src: string) => /dailySpendCapUsd: imagesDailySpendCapUsd\(\)/.test(src) && !/IMAGES\.dailySpendCapUsd/.test(src);
   check('R3 the image status route gives the day\'s spend cap through imagesDailySpendCapUsd()', capInStatus(status));
   proof('R3 a status cap read straight from IMAGES (never $15) is caught', !capInStatus(status.replace('dailySpendCapUsd: imagesDailySpendCapUsd()', 'dailySpendCapUsd: IMAGES.dailySpendCapUsd')));
+  // R4: an untitled entry's row read "Bai: Bai".
+  const CW = (await import('../src/lib/challenge/wording')).CHALLENGE_WORDING;
+  const chPage = read('src/app/challenge/page.tsx');
+  check('R4 an untitled entry\'s row is the character alone; a titled one adds its name', CW.entryLabel('Bai', '') === 'Bai' && CW.entryLabel('Bai', '  ') === 'Bai' && CW.entryLabel('Bai', 'Rain coat') === 'Bai: Rain coat');
+  check('R4 /challenge builds both lists\' rows with entryLabel', (chPage.match(/W\.entryLabel\(/g) ?? []).length === 2 && !/\|\| nameOf\(/.test(chPage));
+  proof('R4 a row that repeats the name is caught', /\|\| nameOf\(/.test(chPage.replace('{W.entryLabel(nameOf(e.character), e.title)}', '{nameOf(e.character)}: {e.title || nameOf(e.character)}')));
 }
 
 console.log(`test:challenge: ${passed} passed, ${failures.length} failed`);

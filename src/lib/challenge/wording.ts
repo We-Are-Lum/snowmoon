@@ -54,6 +54,8 @@ export const CHALLENGE_WORDING = {
   entrantsNeeded: (n: number) => (n >= CHALLENGE.minEntrants ? 'enough for a final version' : `${CHALLENGE.minEntrants - n} more needed for a final version`),
   adminsHead: 'Made by admins (not eligible for rewards)',
   badge: 'Entry',
+  /** An entry's row: the character, then the sheet's name when it has one (launch rehearsal, 2026-11-02: an untitled sheet read "Bai: Bai"). */
+  entryLabel: (name: string, title: string) => (title.trim() ? `${name}: ${title.trim()}` : name),
   badgeNote: (name: string) => `This is its maker’s entry for ${name} in the remix challenge.`,
   candidateNote: 'Made during the remix challenge. Its maker’s latest version counts unless they mark another.',
   adminNote: 'Made by an admin during the remix challenge: admins aren’t eligible for rewards.',
