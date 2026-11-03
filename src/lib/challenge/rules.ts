@@ -207,9 +207,26 @@ export interface Ancestor {
  * the line must reach one of them: a fork of a base, or of anyone's remix of a base (an entry or not). While the
  * character has no bases yet, any fork counts, as before the three bases.
  */
-export function remixOfBase(character: string, line: readonly Ancestor[], bases: Record<string, readonly string[]> = CHALLENGE.bases): boolean {
+export function remixOfBase(character: string, line: readonly Ancestor[], bases: Record<string, readonly string[]> = CHALLENGE.bases, refused: ReadonlySet<string> | ReadonlyMap<string, unknown> = new Set()): boolean {
   if (!line.length) return false;
-  const b = basesOf(character, bases);
-  if (!b.length) return true;
+  const picked = basesOf(character, bases);
+  if (!picked.length) return true;
+  // A refused base (a closed-model base before CHALLENGE.closedBasesAllowed; src/lib/challenge/bases.ts) is not one
+  // to start from, but the character's bases stay picked: a fork of any sheet doesn't count instead.
+  const b = picked.filter((id) => !refused.has(id));
   return line.some((a) => b.includes(a.elementId.toLowerCase()) || b.includes(a.versionId.toLowerCase()));
+}
+
+/**
+ * The bases' fixed style order (owner, 2026-11-04): by each base's style's place in CHALLENGE.baseStyles, the same for
+ * every character, so the casts line up; a style not listed comes after. Used only for "Bases to start from"
+ * (src/lib/challenge/entries.ts, startingSheets), after newestFirst, so bases of one style (or none listed) stay newest
+ * first. check:principles P5g allows this order there and nowhere else: entries and every other list are time order.
+ */
+export function baseStyleOrder(a: { style: string | null }, b: { style: string | null }): number {
+  const at = (s: string | null) => {
+    const i = s === null ? -1 : CHALLENGE.baseStyles.findIndex((x) => x.toLowerCase() === s.toLowerCase());
+    return i < 0 ? CHALLENGE.baseStyles.length : i;
+  };
+  return at(a.style) - at(b.style);
 }

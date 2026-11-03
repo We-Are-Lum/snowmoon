@@ -1,7 +1,8 @@
 import 'server-only';
 import type postgres from 'postgres';
 import { remixLines } from './lineage';
-import { basesOf, remixOfBase } from './rules';
+import { refusedBases } from './bases';
+import { baseStyleOrder, basesOf, remixOfBase } from './rules';
 import { CHALLENGE, WORK_ID } from '../config';
 import { bookCharacter } from '../images/designs';
 import { chooseEntries, entrantCounts, fromDecision, type Decision, inWindow, markKey, newestFirst, phase, shortDateText, type Candidate, type Eligibility } from './rules';
@@ -44,6 +45,7 @@ export async function windowVersions(sql: Sql): Promise<ChallengeVersion[]> {
     where e.element_type = 'design' and e.status = 'published' and e.work_id = ${WORK_ID} and en.kind = 'character' and en.name in ${sql(chars)}
       and v.created_at >= ${CHALLENGE.dates.opens}::timestamptz and v.created_at < ${CHALLENGE.dates.closes}::timestamptz`;
   const lines = await remixLines(sql, [...new Set(rows.map((r) => String(r.element_id)))]);
+  const refused = await refusedBases(sql);
   return rows
     .map((r) => {
       const maker = Number(r.created_by_fid);
@@ -51,7 +53,7 @@ export async function windowVersions(sql: Sql): Promise<ChallengeVersion[]> {
       const b = (r.body ?? {}) as { title?: string; by_name?: string | null; samples?: { url: string }[]; views?: { front?: { url: string } } };
       return {
         versionId: String(r.version_id), elementId: String(r.element_id), character, maker,
-        person: maker > 0 ? maker : 0, createdAt: new Date(r.created_at).toISOString(), forked: remixOfBase(character, lines.get(String(r.element_id)) ?? []),
+        person: maker > 0 ? maker : 0, createdAt: new Date(r.created_at).toISOString(), forked: remixOfBase(character, lines.get(String(r.element_id)) ?? [], CHALLENGE.bases, refused),
         versionNo: Number(r.version_no), title: b.title ?? '', byName: b.by_name ?? null, thumb: b.views?.front?.url ?? b.samples?.[0]?.url ?? null,
       };
     })
@@ -190,10 +192,11 @@ export async function markEntry(sql: Sql, fid: number, versionId: string, now = 
   }
 }
 
-type StartingSheet = { versionId: string; title: string; byName: string | null; byFid: number; thumb: string | null; createdAt: string };
+/** `style`: the published style the sheet's views were made in (body.style.title), for the bases' style order. */
+type StartingSheet = { versionId: string; title: string; byName: string | null; byFid: number; thumb: string | null; createdAt: string; style: string | null };
 const sheetRow = (r: Record<string, unknown>): StartingSheet => {
-  const b = (r.body ?? {}) as { title?: string; by_name?: string | null; views?: { front?: { url: string } } };
-  return { versionId: String(r.id), title: b.title ?? '', byName: b.by_name ?? null, byFid: Number(r.created_by_fid), thumb: b.views?.front?.url ?? null, createdAt: new Date(r.created_at as string).toISOString() };
+  const b = (r.body ?? {}) as { title?: string; by_name?: string | null; views?: { front?: { url: string } }; style?: { title?: string } | null };
+  return { versionId: String(r.id), title: b.title ?? '', byName: b.by_name ?? null, byFid: Number(r.created_by_fid), thumb: b.views?.front?.url ?? null, createdAt: new Date(r.created_at as string).toISOString(), style: b.style?.title ?? null };
 };
 
 /**
@@ -214,8 +217,12 @@ export async function startingSheets(sql: Sql, slug: string): Promise<StartingSh
       where e.element_type = 'design' and e.status = 'published' and e.work_id = ${WORK_ID} and en.kind = 'character' and en.name = ${c.name}
         and (e.id::text in ${sql(bases)} or v.id::text in ${sql(bases)})
       order by e.id, (v.id::text in ${sql(bases)}) desc, v.version_no desc`;
-    // Newest first, as every challenge list (P5g: by time only); the config's order isn't used.
-    return rows.map(sheetRow).sort(newestFirst);
+    // A refused base (a closed-model base before CHALLENGE.closedBasesAllowed) is left out.
+    const refused = await refusedBases(sql);
+    const usable = rows.filter((r) => !refused.has(String(r.element_id)) && !refused.has(String(r.id)));
+    // In the bases' fixed style order (CHALLENGE.baseStyles), newest first within a style: the one challenge list not
+    // in time order only (P5g allows it here, for the bases; owner, 2026-11-04). With no styles set, newest first.
+    return usable.map(sheetRow).sort(newestFirst).sort(baseStyleOrder);
   }
   // Each sheet at its newest version from before the window (distinct on picks it); then newest first.
   const rows = await sql`

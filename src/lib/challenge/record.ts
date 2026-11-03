@@ -5,6 +5,7 @@ import { lookUp } from '../images/neynar';
 import { bookCharacter } from '../images/designs';
 import { PRIVACY } from '../legal';
 import { privacyDescribesChallenge } from './open-sheets';
+import { refusedBases } from './bases';
 import { remixLines } from './lineage';
 import { eligibility, inWindow, needsScore, remixOfBase } from './rules';
 
@@ -37,7 +38,7 @@ export async function recordEligibility(sql: Sql, versionId: string, fid: number
     // A remix that counts: a fork of one of the character's bases, or of a remix of one (CHALLENGE.bases).
     const slug = CHALLENGE.characters.find((s) => bookCharacter(s)?.name === String(v.name)) ?? '';
     const line = (await remixLines(sql, [String(v.element_id)])).get(String(v.element_id)) ?? [];
-    if (!remixOfBase(slug, line)) return 'not-a-candidate';
+    if (!remixOfBase(slug, line, CHALLENGE.bases, await refusedBases(sql))) return 'not-a-candidate';
     let score: number | null = null;
     if (fid > 0 && needsScore(fid)) {
       const r = await lookUp(sql, fid);

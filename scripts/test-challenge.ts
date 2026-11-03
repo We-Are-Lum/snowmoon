@@ -166,6 +166,52 @@ proof('two entries for one person and character are caught', (() => {
   proof('the old rule (any fork), used once the bases are picked, is caught', anyFork(otherLine) !== R.remixOfBase('zei', otherLine, bases));
 }
 
+// --- Bases by closed models, the bases' style order, and P5g's one exception (owner, 2026-11-04) --------------------
+{
+  const BA = await import('../src/lib/challenge/bases');
+  const { p5gProblems, CHALLENGE_FILES } = await import('./lib/p5g');
+  const recipe = (model: string) => ({ prompt: 'p', model, endpoint: 'e', host: 'h', settings: {}, seed: 1, request_id: 'r', cost_usd: 0.05, made_at: '2026-11-04T00:00:00.000Z', width: 576, height: 768, checks: { prompt: { model: IMAGES.guardModel, verdict: 'ok' as const }, host_safety_checker: 'not run' as const }, assist: null });
+  const body = (...models: string[]) => ({ samples: [], views: Object.fromEntries(models.map((m, i) => [(['front', 'side', 'back'] as const)[i], { url: 'u', sha256: 'a'.repeat(64), recipe: recipe(m) }])) });
+  check('committed: closed-model bases are not allowed yet (CHALLENGE.closedBasesAllowed false, until the owner\'s reread)', CHALLENGE.closedBasesAllowed === false);
+  check('committed: the bases\' style order is empty until the owner picks the styles', Array.isArray(CHALLENGE.baseStyles) && CHALLENGE.baseStyles.length === 0);
+  check('a base made by open models is never refused', BA.closedBaseRefusal(body('flux2-klein-4b-edit', 'flux2-klein-4b-edit'), false) === null && BA.closedBaseRefusal(body('z-image-turbo'), true) === null);
+  const gpt = BA.closedBaseRefusal(body('gpt-image-2.5-sunburst'), false) ?? '';
+  check('a base whose front was made by a closed model is refused while closedBasesAllowed is false, naming the model and its maker', gpt.includes('GPT Image 2.5 Sunburst, a closed model by OpenAI') && gpt.includes('CHALLENGE.closedBasesAllowed'), gpt);
+  check('a closed model in a side view alone is enough to refuse it', BA.closedBaseRefusal(body('flux2-klein-4b-edit', 'gemini-3.1-flash-image'), false)?.includes('Gemini 3.1 Flash Image, a closed model by Google') === true);
+  check('once closedBasesAllowed is true, a closed-model base (OpenAI, Google) is accepted', BA.closedBaseRefusal(body('gpt-image-2.5-sunburst'), true) === null && BA.closedBaseRefusal(body('gemini-3.1-flash-image'), true) === null);
+  check('a model not on config/models.json is refused even when closed bases are allowed', /not on the model list/.test(BA.closedBaseRefusal(body('some-new-model'), true) ?? ''));
+  proof('a closed-model base let through before the reread is caught', BA.closedBaseRefusal(body('gpt-image-2.5-sunburst'), false) !== null && BA.closedBaseRefusal(body('gpt-image-2.5-sunburst'), true) === null);
+  const B1 = '11111111-1111-4111-8111-111111111111', B2 = '22222222-2222-4222-8222-222222222222';
+  const step = (elementId: string) => ({ elementId, versionId: `${elementId.slice(0, 8)}-0000-4000-8000-000000000000` });
+  check('a fork of a refused base does not count, and the character\'s bases stay picked (a fork of any sheet does not count instead)', !R.remixOfBase('zei', [step(B2)], { zei: [B1, B2] }, new Set([B2])) && R.remixOfBase('zei', [step(B1)], { zei: [B1, B2] }, new Set([B2])) && !R.remixOfBase('zei', [step('99999999-9999-4999-8999-999999999999')], { zei: [B2] }, new Set([B2])));
+  // The style order.
+  const saved = CHALLENGE.baseStyles;
+  CHALLENGE.baseStyles = ['Bolder', 'Printed', 'Mood'];
+  const sheets = (styles: (string | null)[]) => styles.map((style, i) => ({ style, createdAt: new Date(Date.UTC(2026, 10, 1, i)).toISOString(), versionId: `${style}-${i}` }));
+  const zeiOrder = sheets(['Mood', 'Bolder', null, 'Printed']).sort(R.newestFirst).sort(R.baseStyleOrder).map((x) => x.style);
+  const baiOrder = sheets(['Printed', 'Mood', 'Bolder']).sort(R.newestFirst).sort(R.baseStyleOrder).map((x) => x.style);
+  check('the bases follow CHALLENGE.baseStyles, the same order for every character (an unlisted style after)', zeiOrder.join() === 'Bolder,Printed,Mood,' && baiOrder.join() === 'Bolder,Printed,Mood', `${zeiOrder.join()} / ${baiOrder.join()}`);
+  check('the style order ignores case', R.baseStyleOrder({ style: 'bolder' }, { style: 'Mood' }) < 0);
+  const ties = sheets(['Mood', 'Mood']).sort(R.newestFirst).sort(R.baseStyleOrder).map((x) => x.versionId);
+  check('two bases of one style stay newest first', ties.join() === 'Mood-1,Mood-0', ties.join());
+  CHALLENGE.baseStyles = [];
+  check('with no styles set, the order is newest first', sheets(['Mood', 'Bolder']).sort(R.newestFirst).sort(R.baseStyleOrder).map((x) => x.versionId).join() === 'Bolder-1,Mood-0');
+  CHALLENGE.baseStyles = saved;
+  // P5g: the committed code passes, and the exception reaches only "Bases to start from".
+  const files = walk('src').filter((f) => CHALLENGE_FILES.test(f)).map((f) => ({ file: f, text: read(f) }));
+  const p5g = p5gProblems(files);
+  check('P5g passes on the committed challenge code, with "Bases to start from" in style order', p5g.length === 0, p5g.join('; '));
+  check('"Bases to start from" really is ordered by style (startingSheets sorts by baseStyleOrder)', /sort\(newestFirst\)\.sort\(baseStyleOrder\)/.test(read('src/lib/challenge/entries.ts')));
+  const plantIn = (file: string, f: (t: string) => string) => files.map((x) => (x.file === file ? { ...x, text: f(x.text) } : x));
+  proof('P5g: an entries list ordered by style fails (standing)', p5gProblems(plantIn('src/lib/challenge/entries.ts', (t) => t.replace('const entries = chooseEntries(', 'const entries = [...chooseEntries(').replace(', marks, () => true);\n  const byAdmins', ', marks, () => true)].sort(baseStyleOrder);\n  const byAdmins'))).some((p) => /orders by style outside/.test(p)));
+  proof('P5g: an entries list ordered by style fails (a new top-level list in entries.ts)', p5gProblems(plantIn('src/lib/challenge/entries.ts', (t) => t.replace('export async function standing(', 'export const planted = (e: { style: string | null }[]) => e.sort(baseStyleOrder);\nexport async function standing('))).length === 1);
+  proof('P5g: the challenge page re-sorting by style fails', p5gProblems(plantIn('src/app/challenge/page.tsx', (t) => `${t}\nexport const planted = (e: { style: string | null }[]) => e.sort(baseStyleOrder);`)).length === 1);
+  proof('P5g: "Posted on" ordered by style fails', p5gProblems([...files, { file: 'src/components/posted-on.tsx', text: 'export const p = (x) => x.sort(baseStyleOrder);' }]).length >= 1);
+  proof('P5g: a style order that reads something else (likes) fails', p5gProblems(plantIn('src/lib/challenge/rules.ts', (t) => t.replace('return at(a.style) - at(b.style);', 'return at(a.style) - at(b.style) || b.likes - a.likes;'))).length === 1);
+  proof('P5g: a style order that reads another setting fails', p5gProblems(plantIn('src/lib/challenge/rules.ts', (t) => t.replace('return at(a.style) - at(b.style);', 'return at(a.style) - at(b.style) || CHALLENGE.minEntrants;'))).length === 1);
+  proof('P5g: entries ordered by built-on counts still fail', p5gProblems([...files, { file: 'src/lib/challenge/planted.ts', text: 'export const top = (e) => e.sort((a, b) => b.builtOn - a.builtOn);' }]).length === 1);
+}
+
 // --- The post address: the host allow-list ----------------------------------------------------------------------
 const good: [string, string][] = [
   ['https://farcaster.xyz/naaate/0x0a1b2c3d', 'farcaster'],
@@ -584,6 +630,63 @@ check('the sheets to start from are those made before the window', (await E.star
   await sql`delete from studio.challenge_eligibility where version_id in (select v.id from studio.element_versions v where v.element_id in ${sql(made)})`;
   const st6 = await E.standing(S);
   check('bases: with the bases empty and the test sheets hidden, the entries are as before', st6.entries.map((e) => e.versionId).sort().join() === st2.entries.map((e) => e.versionId).sort().join());
+}
+
+// Closed-model bases, the bases' style order and an admin's remix, in the database (owner, 2026-11-04). Everything made
+// here is hidden and the settings put back afterwards, so the checks below see what they saw before.
+{
+  const made: string[] = [];
+  const mk = async (m: Parameters<typeof DS.makeDesign>[1]) => { const o = await publish(m); made.push(o.elementId); return o; };
+  const styled = (text: string, n: number, title: string) => ({ ...sheet(text, n), style: { version_id: '00000000-0000-4000-8000-0000000000aa', title } });
+  const closedPic = (n: number) => ({ ...pic(n), recipe: { ...pic(n).recipe, model: 'gpt-image-2.5-sunburst', endpoint: 'openai/gpt-image-2.5-sunburst', host: 'Vercel AI Gateway', checks: { prompt: { model: IMAGES.guardModel, verdict: 'ok' as const }, host_safety_checker: 'not run' as const } } });
+  const bA = await mk({ fid: 6786, mode: 'create', kind: 'character', character: bai, body: styled('Bai, Printed', 41, 'Printed') });
+  const bB = await mk({ fid: 6786, mode: 'create', kind: 'character', character: bai, body: styled('Bai, Bolder', 42, 'Bolder') });
+  const bC = await mk({ fid: 6786, mode: 'create', kind: 'character', character: bai, body: styled('Bai, Mood', 43, 'Mood') });
+  const bX = await mk({ fid: 6786, mode: 'create', kind: 'character', character: bai, body: { ...styled('Bai, closed concept', 44, 'Bolder'), views: { front: closedPic(44) } } });
+  const zA = await mk({ fid: 6786, mode: 'create', kind: 'character', character: zeiC, body: styled('Zei, Mood', 45, 'Mood') });
+  const zB = await mk({ fid: 6786, mode: 'create', kind: 'character', character: zeiC, body: styled('Zei, Printed', 46, 'Printed') });
+  const zC = await mk({ fid: 6786, mode: 'create', kind: 'character', character: zeiC, body: styled('Zei, Bolder', 47, 'Bolder') });
+  const [xr] = await sql`select body from studio.element_versions where id = ${bX.versionId}`;
+  check('closed bases: the publish path accepts a sheet whose recipe names a closed model, as recorded', (xr?.body as { views: { front: { recipe: { model: string } } } })?.views.front.recipe.model === 'gpt-image-2.5-sunburst');
+  CHALLENGE.bases.bai = [bA.elementId, bB.elementId, bC.elementId];
+  CHALLENGE.bases.zei = [zA.elementId, zB.elementId, zC.elementId];
+  const order = async (c: string) => (await E.startingSheets(S, c)).map((x) => x.style).join();
+  check('style order: with CHALLENGE.baseStyles empty, the bases are newest first', (await order('bai')) === 'Mood,Bolder,Printed' && (await order('zei')) === 'Bolder,Printed,Mood', `${await order('bai')} / ${await order('zei')}`);
+  CHALLENGE.baseStyles = ['Bolder', 'Printed', 'Mood'];
+  check('style order: each character\'s bases follow CHALLENGE.baseStyles, the same for both, so the casts line up', (await order('bai')) === 'Bolder,Printed,Mood' && (await order('zei')) === 'Bolder,Printed,Mood', `${await order('bai')} / ${await order('zei')}`);
+  await sql`insert into studio.image_scores (fid, score) values (520, 0.9), (521, 0.9), (522, 0.9), (523, 0.9)`;
+  const eOld = await mk({ fid: 520, mode: 'fork', kind: 'character', fromVersionId: bB.versionId, body: styled('Bai from Bolder', 48, 'Mood') });
+  await new Promise((r) => setTimeout(r, 15));
+  const eNew = await mk({ fid: 521, mode: 'fork', kind: 'character', fromVersionId: bC.versionId, body: styled('Bai from Mood', 49, 'Bolder') });
+  const ent = (await E.standing(S)).entries;
+  check('style order: the entries stay newest first, whatever their style', ent.findIndex((e) => e.versionId === eNew.versionId) < ent.findIndex((e) => e.versionId === eOld.versionId) && ent.findIndex((e) => e.versionId === eOld.versionId) >= 0);
+  // An admin's remix of a base isn't an entry, but it is "someone else's remix": a fork of it counts.
+  const adm = await mk({ fid: 6786, mode: 'fork', kind: 'character', fromVersionId: bA.versionId, body: styled('Bai, the admin\'s remix', 50, 'Printed') });
+  const fromAdm = await mk({ fid: 522, mode: 'fork', kind: 'character', fromVersionId: adm.versionId, body: styled('Bai from the admin\'s remix', 51, 'Printed') });
+  const st7 = await E.standing(S);
+  check('an admin\'s remix of a base is not an entry (shown as the admin\'s)', !st7.entries.some((e) => e.versionId === adm.versionId) && st7.byAdmins.some((e) => e.versionId === adm.versionId));
+  check('a fork of an admin\'s remix of a base counts (someone else\'s remix need not be an entry)', st7.entries.some((e) => e.versionId === fromAdm.versionId));
+  // A closed-model base, before and after CHALLENGE.closedBasesAllowed.
+  CHALLENGE.bases.bai = [bA.elementId, bB.elementId, bX.elementId];
+  const starts = async () => (await E.startingSheets(S, 'bai')).map((x) => x.versionId);
+  check('closed bases: while not allowed, a closed-model base is left out of "Bases to start from"', !(await starts()).includes(bX.versionId) && (await starts()).length === 2);
+  const fX = await mk({ fid: 523, mode: 'fork', kind: 'character', fromVersionId: bX.versionId, body: styled('Bai from the closed concept', 52, 'Bolder') });
+  check('closed bases: while not allowed, a fork of a closed-model base is not an entry, and nothing is stored for it', !(await E.standing(S)).entries.some((e) => e.versionId === fX.versionId) && !(await sql`select 1 from studio.challenge_eligibility where version_id = ${fX.versionId}`).length);
+  CHALLENGE.closedBasesAllowed = true;
+  check('closed bases: once allowed, the closed-model base is listed, in its style\'s place (Bolder, newest first within it)', (await starts()).join() === [bX.versionId, bB.versionId, bA.versionId].join(), (await starts()).join());
+  const BA = await import('../src/lib/challenge/bases');
+  check('closed bases: once allowed, none is refused', (await BA.refusedBases(S as never)).size === 0);
+  CHALLENGE.closedBasesAllowed = false;
+  check('closed bases: the refusal names the base by its id and says why', ((await BA.refusedBases(S as never)).get(bX.elementId) ?? '').includes('a closed model by OpenAI'));
+  CHALLENGE.bases.bai = [bA.elementId, bX.versionId];
+  check('closed bases: a base named by its version id is refused the same way', (await BA.refusedBases(S as never)).has(bX.versionId) && !(await starts()).includes(bX.versionId));
+  CHALLENGE.bases.bai = [];
+  CHALLENGE.bases.zei = [];
+  CHALLENGE.baseStyles = [];
+  await sql`update studio.elements set status = 'hidden' where id in ${sql(made)}`;
+  await sql`delete from studio.challenge_eligibility where version_id in (select v.id from studio.element_versions v where v.element_id in ${sql(made)})`;
+  const st8 = await E.standing(S);
+  check('closed bases: afterwards, with the settings put back, the entries are as before', st8.entries.map((e) => e.versionId).sort().join() === st2.entries.map((e) => e.versionId).sort().join());
 }
 
 globalThis.fetch = realFetch;

@@ -417,6 +417,23 @@ export const CHALLENGE = {
   bases: { zei: [], bai: [], gladias: [], seila: [], deluin: [], mu: [] } as Record<string, readonly string[]>,
   maxBases: 3,
   /**
+   * The bases' fixed style order (owner, 2026-11-04): within a character its bases are listed in this order, the same
+   * for every character, so the casts line up. Each entry is a published style's name, as a sheet's views record it
+   * (body.style.title). A base whose style isn't listed comes after, newest first. Empty until the owner picks the
+   * styles; while empty, the bases are listed newest first. This is the only challenge list not in time order (P5g
+   * allows it for "Bases to start from" only; entries and every other list stay newest first).
+   */
+  baseStyles: [] as readonly string[],
+  /**
+   * Bases and references may be made by several models, closed ones included, each labelled with its maker (owner,
+   * 2026-11-04). A base whose pictures name a closed model is refused (src/lib/challenge/bases.ts) until this is true,
+   * and it stays false until the owner rereads the Terms and Privacy lines that name the providers (OpenAI and Google;
+   * docs/legal/closed-model-bases-draft.md, branch closed-model-bases). check:principles P6s fails if it is true while
+   * the Privacy page doesn't name OpenAI and Google for it. Remixers keep the open models: the remix and fork form's
+   * model choice is unchanged.
+   */
+  closedBasesAllowed: false as boolean,
+  /**
    * A character gets a final version, a credit test and a token only if at least this many different eligible people
    * enter it (owner, 2026-10-31). /challenge shows each character's count (a count, never a ranking).
    */
