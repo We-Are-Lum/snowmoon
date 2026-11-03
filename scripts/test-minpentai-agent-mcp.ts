@@ -176,6 +176,65 @@ try {
     check('M43 the live page replays the turn just played, from your side\'s view', /Last turn, step by step: what your side saw/.test(page1) && /took this turn on the live page/.test(page1));
     void t0;
   }
+
+  // Practice matches between people (owner, 2026-11-03): A creates, B joins with the invite, both play, the record opens at the end.
+  {
+    const bConn = await connect(BASE, people.B.token, 'Claude', 'read play');
+    const cr = await tool(BASE, a.access_token, 'minpentai_create_practice', { ruleset: 'book-2', clock: '24h', show_name: true });
+    check('P1 a person creates a private practice match and gets a single-use invite', cr.ok && /\/minpentai\/practice\/join\?m=/.test(String(cr.out.invite_url)), cr.error ?? '');
+    const pid = cr.out.match_id as string, inv = new URL(String(cr.out.invite_url)), liveC = cr.out.live_url as string;
+    const joinPage = await fetch(`${BASE}/minpentai/practice/join?m=${pid}&i=${inv.searchParams.get('i')}`);
+    check('P2 the invite page opens and says who invites', joinPage.ok && /invites you to a practice match/.test(await joinPage.text()));
+    const joinRoute = (token: string | null, body: Record<string, unknown>) => fetch(`${BASE}/api/minpentai/practice/join`, { method: 'POST', headers: { 'content-type': 'application/json', ...(token ? { authorization: `Bearer ${token}` } : {}) }, body: JSON.stringify(body) });
+    const cJoin = await joinRoute(people.C.token, { match_id: pid, invite: inv.searchParams.get('i') });
+    check('P3 someone practice isn\'t open to can\'t join', cJoin.status === 403, String(cJoin.status));
+    const bad = await tool(BASE, bConn.access_token, 'minpentai_join_practice', { match_id: pid, invite: 'wrongwrongwrongwrongwrong' });
+    check('P4 a wrong invite is refused', !bad.ok && /doesn't open/.test(bad.error ?? ''), bad.error ?? '');
+    const bj = await tool(BASE, bConn.access_token, 'minpentai_join_practice', { match_id: pid, invite: inv.searchParams.get('i'), model: { name: 'Model B', maker: 'B maker', weights: 'open' } });
+    check('P5 the invited person joins as Amber through their AI', bj.ok && bj.out.side === 'Amber' && (bj.out.view as Record<string, any>).opponent.name !== undefined, bj.error ?? '');
+    const again = await joinRoute(people.B.token, { match_id: pid, invite: inv.searchParams.get('i') });
+    check('P6 the invite is used up', again.status === 400);
+    const liveA = bj.out.live_url as string;
+    const vC0 = (await tool(BASE, a.access_token, 'minpentai_get_view', { match_id: pid })).out as Record<string, any>;
+    const cCell = vC0.can_place[0];
+    const subC = await tool(BASE, a.access_token, 'minpentai_submit_orders', { match_id: pid, turn: 0, placements: [{ piece: 'tower', x: cCell[0], y: cCell[1] }], source: 'agent', final: true });
+    check('P7 Cyan\'s final orders wait for Amber\'s', subC.ok && subC.out.waiting_for !== undefined && (subC.out.view as Record<string, any>).turn === 0, subC.error ?? '');
+    const vA = (await tool(BASE, bConn.access_token, 'minpentai_get_view', { match_id: pid })).out as Record<string, any>;
+    check('P8 Amber sees only that Cyan\'s orders are in, as a commitment', vA.side === 'Amber' && vA.opponent.sent_final_orders === true && vA.opponent.commitment === subC.out.commitment && !JSON.stringify(vA).includes(`"x":${cCell[0]},"y":${cCell[1]},"side":"theirs"`));
+    const aCell = vA.can_place[0];
+    const draftA = await tool(BASE, bConn.access_token, 'minpentai_submit_orders', { match_id: pid, turn: 0, placements: [{ piece: 'tower', x: aCell[0], y: aCell[1] }], source: 'agent', final: false });
+    const pageA = await (await fetch(liveA)).text();
+    check('P9 Amber\'s live page shows her draft and who she plays, nothing of Cyan\'s orders', draftA.ok && /drafted these orders/.test(pageA) && /Their orders are in, sealed/.test(pageA));
+    const take = (token: string) => fetch(`${BASE}/api/minpentai/m/${pid}/take-turn`, { method: 'POST', headers: { 'content-type': 'application/json', authorization: `Bearer ${token}` }, body: JSON.stringify({ turn: 0 }) });
+    const tookA = await take(people.B.token);
+    check('P10 Amber takes her turn on the page; the turn resolves', tookA.ok && ((await tool(BASE, a.access_token, 'minpentai_get_view', { match_id: pid })).out as Record<string, any>).turn === 1);
+    const vA1 = (await tool(BASE, bConn.access_token, 'minpentai_get_view', { match_id: pid })).out as Record<string, any>;
+    check('P11 each side has its own summary; Amber\'s says she took it on the page', vA1.my_turns[0].taken_on_the_live_page === true && /took this turn on the live page/.test(vA1.last_turn_summary.lines[0]));
+    const recEarly = await fetch(`${BASE}/minpentai/practice/${pid}`);
+    check('P12 nobody can watch the match while it is on', recEarly.status === 404);
+    const mineB = await tool(BASE, bConn.access_token, 'minpentai_list_my_matches', {});
+    check('P13 the match is in Amber\'s list too', ((mineB.out.matches ?? []) as { match_id: string; kind: string }[]).some((x) => x.match_id === pid && /practice/.test(x.kind)));
+    const rs = await tool(BASE, a.access_token, 'minpentai_resign', { match_id: pid });
+    const recPage = await fetch(`${BASE}/minpentai/practice/${pid}`), recText = await recPage.text();
+    const rec = await tool(BASE, a.access_token, 'minpentai_get_record', { match_id: pid });
+    check('P14 at the end the record and replay are public, with names only where chosen and models self-reported', rs.ok && recPage.ok && /never counted toward any ranking/.test(recText) && /self-reported/.test(recText) && rec.ok && 'name' in (rec.out.sides as Record<string, any>).C && !('name' in (rec.out.sides as Record<string, any>).A));
+    const pageAfter = await fetch(liveC);
+    check('P15 the live link still opens after the end', pageAfter.ok);
+    // A public match: on the open list until someone joins from the page.
+    const pub = await tool(BASE, a.access_token, 'minpentai_create_practice', { public: true, clock: '15m' });
+    const open = await tool(BASE, bConn.access_token, 'minpentai_list_open_practice', {});
+    check('P16 a public match is on the open list for others', pub.ok && ((open.out.open ?? []) as { match_id: string }[]).some((x) => x.match_id === pub.out.match_id));
+    const listPage = await (await fetch(`${BASE}/minpentai/practice`)).text();
+    check('P17 the open list page shows it', /Waiting for a player/.test(listPage) && /turn clock 15 minutes/.test(listPage));
+    const pj = await joinRoute(people.B.token, { match_id: pub.out.match_id });
+    const pjBody = (await pj.json()) as { live_url?: string };
+    check('P18 joining from the page gives Amber her live link; the match leaves the list', pj.ok && /\/minpentai\/m\//.test(pjBody.live_url ?? '') && !(((await tool(BASE, bConn.access_token, 'minpentai_list_open_practice', {})).out.open ?? []) as { match_id: string }[]).some((x) => x.match_id === pub.out.match_id));
+    const alerts = await tool(BASE, bConn.access_token, 'minpentai_practice_alerts', { match_id: pub.out.match_id, on: true });
+    check('P19 a player can turn on "your turn" alerts (a private topic)', alerts.ok && /^snowmoon-[0-9a-f]{24}$/.test(String(alerts.out.topic)));
+    const clock = await fetch(`${BASE}/api/minpentai/practice/clock`);
+    check('P20 the clock\'s sweep is off until CRON_SECRET is set', clock.status === 503);
+    await tool(BASE, a.access_token, 'minpentai_resign', { match_id: pub.out.match_id });
+  }
 } finally {
   await S.stop();
 }

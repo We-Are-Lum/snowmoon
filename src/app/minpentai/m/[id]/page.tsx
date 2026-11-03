@@ -1,8 +1,9 @@
 import { notFound } from 'next/navigation';
 import { playFor } from '~/lib/agents/core';
-import { draftInfo, linkOpens, recordOf, turnFrames, viewFor } from '~/lib/minpentai/agent-play/solo';
+import { draftInfo, linkSide, recordOf, turnFrames, viewFor } from '~/lib/minpentai/agent-play/solo';
 import { load } from '~/lib/minpentai/agent-play/store';
 import { settle } from '~/lib/minpentai/agent-play/quiet';
+import { clocked } from '~/lib/minpentai/agent-play/act';
 import { MinpentaiTags } from '../../mp-tags';
 import { Refresh } from './refresh';
 import { ViewBoard } from './view-board';
@@ -28,16 +29,20 @@ const say = (p: Move) => `${p.piece.replace(/_/g, ' ')} at ${p.x},${p.y}${p.dir 
 export default async function LiveLink({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ k?: string; turn?: string }> }) {
   const { id } = await params, { k, turn: turnParam } = await searchParams;
   const peek = await load(id).catch(() => null);
-  if (!peek || !playFor(peek.m.person) || !linkOpens(peek.m, k ?? '')) notFound();
+  // A practice match has a link per player, each opening that player's side only.
+  const side = peek ? linkSide(peek.m, k ?? '') : null;
+  const owner = peek && side ? (peek.m.versus ? peek.m.versus.players[side] : peek.m.person) : null;
+  if (!peek || !side || owner === null || !playFor(owner)) notFound();
   // The same quiet time as every tool call (quiet.ts): the page's timing says nothing about the computer's planning.
-  const r = (await settle(id)) ?? peek;
-  const m = r.m, v = viewFor(m);
+  // A practice match has no computer to hide, but its clock runs on every read (act.ts clocked).
+  const r = (peek.m.versus ? await clocked(id) : await settle(id)) ?? peek;
+  const m = r.m, v = viewFor(m, side), vs = m.versus;
   const end = m.end ? recordOf(m) : null;
   const last = v.my_turns[v.my_turns.length - 1];
-  const draft = draftInfo(m);
+  const draft = draftInfo(m, side);
   // The replay: the last turn played while the match is on (your side's view); any turn, whole board, once it's over.
   const replayTurn = end && turnParam !== undefined && m.history.some((h) => h.turn === Number(turnParam)) ? Number(turnParam) : last?.turn;
-  const frames = replayTurn !== undefined ? turnFrames(m, replayTurn, !!end) : [];
+  const frames = replayTurn !== undefined ? turnFrames(m, replayTurn, !!end, side) : [];
   const book = m.ruleset.startsWith('book');
   return (
     <div className="page minpentai">
@@ -63,7 +68,7 @@ export default async function LiveLink({ params, searchParams }: { params: Promi
         ) : (
           <ViewBoard board={v.board} width={v.board_size.width} height={v.board_size.height} canPlace={v.can_place} lastSeen={v.last_seen_enemy_towers} marks={last ? last.placements : []} ghosts={draft && !draft.final ? draft.placements : []} />
         )}
-        <p className="mb-note">You are Cyan, against the site computer (level {v.opponent.level}). Only your side is shown while the match is on: what your towers see, and where you last saw the enemy&rsquo;s.{book ? <> <a href="/minpentai/book/tutorial">How the pieces work →</a></> : null}</p>
+        <p className="mb-note">{vs ? `You are ${v.side}, against ${v.opponent.joined ? v.opponent.name : 'a player who hasn’t joined yet'} (a practice match).` : `You are Cyan, against the site computer (level ${v.opponent.level}).`} Only your side is shown while the match is on: what your towers see, and where you last saw the enemy&rsquo;s.{book ? <> <a href="/minpentai/book/tutorial">How the pieces work →</a></> : null}</p>
 
         {frames.length ? (
           <>
@@ -105,7 +110,16 @@ export default async function LiveLink({ params, searchParams }: { params: Promi
                 {v.my_orders.note ? <p className="mb-note">Note: {v.my_orders.note}</p> : null}
               </>
             ) : <p>No orders yet. {v.points} points to place.</p>}
-            <p className="mb-note">The site computer&rsquo;s moves this turn follow from the board and its random value, committed at the start ({v.opponent.random_commitment.slice(0, 12)}…); anyone can check them after the end.</p>
+            {vs ? (
+              <p className="mb-note">
+                {v.opponent.joined ? <>Playing <strong>{v.opponent.name}</strong>. </> : 'Waiting for someone to join. '}
+                {v.opponent.sent_final_orders ? `Their orders are in, sealed (${(v.opponent.commitment ?? '').slice(0, 12)}…). ` : v.opponent.joined ? 'Their orders aren’t in yet. ' : ''}
+                {vs.deadline ? `This turn’s clock runs out ${new Date(vs.deadline).toUTCString()}; then the site computer plays any side whose orders aren’t in, under its standing order.` : ''}
+                {' '}A practice match: never counted toward any ranking.
+              </p>
+            ) : (
+              <p className="mb-note">The site computer&rsquo;s moves this turn follow from the board and its random value, committed at the start ({(v.opponent.random_commitment ?? '').slice(0, 12)}…); anyone can check them after the end.</p>
+            )}
           </>
         ) : null}
 
