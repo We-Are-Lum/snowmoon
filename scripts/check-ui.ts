@@ -2087,8 +2087,12 @@ try {
     if (!existsSync('.next/BUILD_ID')) fail('live page layout: no local build of this checkout; run next build first');
     else {
       lastOpened = '/minpentai/m/… (local stage)';
-      const { liveLayoutCheck } = await import('./lib/live-layout');
-      await liveLayoutCheck(browser, fail);
+      // Its own process, in server mode: the stage runs the agent-play code, which only loads there.
+      const { spawnSync } = await import('node:child_process');
+      const run = spawnSync('npx', ['tsx', '--conditions=react-server', 'scripts/check-live-layout.ts'], { encoding: 'utf8', timeout: 900_000 });
+      const line = (run.stdout ?? '').split('\n').find((l) => l.startsWith('LIVE_LAYOUT '));
+      if (!line) fail(`live page layout: the check didn't finish (${(run.stderr ?? '').split('\n').filter(Boolean).slice(-1)[0] ?? run.status})`);
+      else for (const f of JSON.parse(line.slice('LIVE_LAYOUT '.length)) as string[]) fail(f);
     }
   }
 } catch (e) {
