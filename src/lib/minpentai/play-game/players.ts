@@ -22,7 +22,7 @@ import { checkPlacements, type LiveMatch } from '../play-server/match';
 import { drawRules, verdict, type Engine, type Kills } from '../versions/engine';
 import type { Settings } from '../versions/schema';
 import { BASE } from '../versions/schema';
-import { SOLO_V1, SOLO_V1_ENGINE, engineFor, engineForSize, settingsFor, type VersionRules } from '../versions/solo-v1';
+import { PLAY, RULESETS, SOLO_V1_ENGINE, engineFor, engineForSize, rulesetOfRules, settingsFor, type RulesetId, type VersionRules } from '../versions/solo-v1';
 
 /** What a player is given at each turn to act. It plays Amber ('A'); the opponent is Cyan ('C'). */
 export interface PlayerView {
@@ -48,7 +48,7 @@ export interface PlayerView {
 
 /** Under a player-made version, the view also carries every setting in force and the board's size.
  * Only the site's own computer players read these for now; the documented view (agents.md) is PlayerView. */
-type VersionView = PlayerView & { settings?: Settings; W?: number; H?: number };
+type VersionView = PlayerView & { settings?: Settings; W?: number; H?: number; /** Play's ruleset, when the match runs under one (solo-v1.ts RULESETS). */ ruleset?: RulesetId };
 
 /** A player: one turn's placements. Gliders take dx, dy (straight; diagonal too under 'diag'); squares and towers 0, 0. */
 export type Player = (view: PlayerView) => Placement[];
@@ -58,9 +58,10 @@ export const rung = (n: number): Player => (view) => {
   const v = view as VersionView, s = v.settings ?? settingsOfView(v), e = v.W && v.H ? engineForSize(v.W, v.H) : SOLO_V1_ENGINE;
   return e.botPlan({ w: v.w, s, lvl: n, rng: v.rng, budget: v.points, snap: { A: v.mine, C: [] }, lsA: v.lastSeen, diag: s.directions === 8 });
 };
-/** Play's settings for a view that names only R, cost, every and the rule (players written before versions). */
+/** Play's settings for a view that names only R, cost, every and the rule (players written before versions):
+ * the match's ruleset when the view carries one, else Play today's. */
 function settingsOfView(v: PlayerView): Settings {
-  const s = settingsFor(SOLO_V1, v.rule);
+  const s = settingsFor((v as VersionView).ruleset ? RULESETS[(v as VersionView).ruleset!] : PLAY, v.rule);
   return { ...s, sight: v.R, reach: v.R, every: v.every, costGlider: v.cost };
 }
 
@@ -115,17 +116,17 @@ export interface MatchResult {
  * one-on-one server draws it, and Amber's random numbers continue from that draw, as a practice or
  * ladder match on the page does with the same seed (controller.ts, mk). Cyan's are their own
  * (rng(seed ^ 0x5eed)). Ends as the page's checkEnd does: a side with no towers loses (both at
- * once: a draw); at the version's last step (96 in Play) most towers wins, equal is a draw.
+ * once: a draw); at the version's last step (120 in Play) most towers wins, equal is a draw.
  */
-export function playMatch(cyan: Player, amber: Player, seed: number, version: VersionRules = SOLO_V1): MatchResult {
+export function playMatch(cyan: Player, amber: Player, seed: number, version: VersionRules = PLAY): MatchResult {
   const rA = rng(seed);
   const { first, second, s1, s2 } = drawRules(version, rA);
   const rC = rng((seed ^ 0x5eed) >>> 0);
-  const e = engineFor(version, s1), solo = version === SOLO_V1;
+  const e = engineFor(version, s1), rs = rulesetOfRules(version), solo = rs !== null;
   let s = s1, rule = first?.id ?? '';
   const m = {
     w: e.world(s1), R: s.sight, rule, cost: s.costGlider, every: s.every,
-    ...(solo ? {} : { version, saved: { C: 0, A: 0 } as Record<Side, number> }),
+    ...((solo ? { ruleset: rs! } : { version, saved: { C: 0, A: 0 } }) as { ruleset?: RulesetId; version?: VersionRules; saved?: Record<Side, number> }),
     lsC: Object.fromEntries(e.L.towers.A.map((k) => [k, 0])) as Record<number, number>,
     lsA: Object.fromEntries(e.L.towers.C.map((k) => [k, 0])) as Record<number, number>,
     pend: { C: [] as Placement[], A: [] as Placement[] },
@@ -152,7 +153,7 @@ export function playMatch(cyan: Player, amber: Player, seed: number, version: Ve
     m.snap = { C: e.towers(w, 'C'), A: e.towers(w, 'A') };
     const pts = (o: Side) => (w.step === 0 ? s.setupPoints : s.points) + (m.saved?.[o] ?? 0);
     const view = (o: Side, board: World, mine: number[], lastSeen: Record<number, number>, r: () => number): VersionView =>
-      ({ w: fogView(board, 'A', s.sight, e), R: s.sight, cost: s.costGlider, every: s.every, rule, points: pts(o), mine, lastSeen, rng: r, ...(solo ? {} : { settings: s, W: e.W, H: e.H }) });
+      ({ w: fogView(board, 'A', s.sight, e), R: s.sight, cost: s.costGlider, every: s.every, rule, points: pts(o), mine, lastSeen, rng: r, ...(solo ? { ruleset: rs! } : { settings: s, W: e.W, H: e.H }) });
     const a = ask('A', amber, view('A', w, m.snap.A.slice(), { ...m.lsA }, rA));
     const c = ask('C', cyan, view('C', turned(w, e), m.snap.C.map(tk), Object.fromEntries(Object.entries(m.lsC).map(([k, v]) => [tk(+k), v])), rC));
     const back = c.map((p) => ({ ...p, o: 'C' as Side, x: e.W - 1 - p.x, y: e.H - 1 - p.y, dx: -p.dx || 0, dy: -p.dy || 0 }));
@@ -176,7 +177,7 @@ export interface Tally { win: number; draw: number; loss: number; refused: strin
  * `player` against `opponent` over n seeds in each seat: as Amber on seeds from, from+1, …; as
  * Cyan on seeds from+10000, …. A refused turn ends that match as a loss and is listed.
  */
-export function tally(player: Player, opponent: Player, n: number, from = 1, version: VersionRules = SOLO_V1): Tally {
+export function tally(player: Player, opponent: Player, n: number, from = 1, version: VersionRules = PLAY): Tally {
   const t: Tally = { win: 0, draw: 0, loss: 0, refused: [] };
   const add = (r: Side | 'D', me: Side) => { if (r === 'D') t.draw++; else if (r === me) t.win++; else t.loss++; };
   for (let i = 0; i < n; i++) {

@@ -23,7 +23,7 @@ import { readdirSync, readFileSync } from 'node:fs';
 import { PGlite } from '@electric-sql/pglite';
 import { PGLiteSocketServer } from '@electric-sql/pglite-socket';
 import postgres from 'postgres';
-import { IMAGES } from '../src/lib/config';
+import { IMAGES, imagesDailySpendCapUsd } from '../src/lib/config';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const failures: string[] = [];
@@ -46,6 +46,25 @@ check("a view's prompt is the view line, the style's text, the sheet's text, no-
 const { finalPrompt } = await import('../src/lib/images/rules');
 check('sheets come after the style, before the no-words line', finalPrompt('A path', 'STYLE', ['SHEET']) === `A path\n\nSTYLE\n\nSHEET\n\n${IMAGES.suffix}`);
 check('an image with no picks keeps the same prompt as before', finalPrompt('A path', null) === `A path\n\n${IMAGES.suffix}`);
+
+// --- The prompt check's budget for a sheet's views (owner, 2026-11-03) ------------------------------------------
+{
+  const { guardWorstUsd } = await import('../src/lib/images/guard');
+  const { REMIX } = await import('../src/lib/config');
+  const sampleRoute = read('src/app/api/designs/sample/route.ts');
+  const budgetPassed = (src: string) => /guardMaxTokens: slot === 'sample' \? undefined : IMAGES\.designs\.guardMaxTokens,/.test(src);
+  check('a sheet view\'s prompt check gets the larger budget (1,200 tokens, as Remix), a style sample keeps the default', IMAGES.designs.guardMaxTokens === 1200 && IMAGES.designs.guardMaxTokens === REMIX.guardMaxTokens && budgetPassed(sampleRoute));
+  check('paidPicture hands the budget to the prompt check', /checkPrompt\(job\.checkText, request, job\.guardMaxTokens\)/.test(read('src/lib/images/paid.ts')));
+  check('the prompt check\'s default stays 400 for everything else', /maxTokens = 400\)/.test(read('src/lib/images/guard.ts')));
+  check('proof: a route that drops the sheet budget is caught', !budgetPassed(sampleRoute.replace("guardMaxTokens: slot === 'sample' ? undefined : IMAGES.designs.guardMaxTokens,", '')));
+  // The longest view prompt a sheet can send: the longest view line, a style's and a sheet's text at their limits.
+  const longest = Math.max(...Object.values(VIEW_LINES).map((l) => viewPrompt(l, 'x'.repeat(IMAGES.designs.textMaxChars), 'y'.repeat(IMAGES.designs.textMaxChars)).length));
+  const share = IMAGES.reserveUsd - IMAGES.pricePerMp; // the reservation's share for the prompt check
+  const editShare = IMAGES.editReserveUsd(1) - 2 * IMAGES.editPricePerMp; // a side or back view: front in, one picture out
+  const worst = guardWorstUsd(longest, IMAGES.designs.guardMaxTokens);
+  check('the worst-case prompt check at the sheet budget fits the reservation (a front view, and a side or back from it)', worst > 0 && worst <= share + 1e-12 && worst <= editShare + 1e-12, `worst $${worst.toFixed(6)}, share $${share.toFixed(6)}, edit share $${editShare.toFixed(6)}`);
+  check('proof: a budget the reservation can\'t cover is caught', guardWorstUsd(longest, 10_000) > share);
+}
 
 // --- Signed records: a sample's is not an image's ----------------------------------
 process.env.IMAGES_TICKET_SECRET = 'z'.repeat(40);
@@ -218,7 +237,7 @@ const { IMAGE_WORDING } = await import('../src/lib/images/wording');
 check('the order labels say what they are', IMAGE_WORDING.designs.index.newest === 'Newest first' && IMAGE_WORDING.designs.index.built === 'Most built on');
 const MARK = /\b(canon|canonical|official|featured|pinned|editor'?s pick|staff pick)\b/i;
 const designFiles = src.filter(({ f }) => /design|my-picks|images\/picks/.test(f));
-check('nothing official, featured or pinned on the new screens', designFiles.every(({ t }) => !MARK.test(t.replace(/Nothing here is official\./g, '').replace(/\/\*[\s\S]*?\*\/|\/\/.*$/gm, ''))), designFiles.filter(({ t }) => MARK.test(t.replace(/Nothing here is official\./g, '').replace(/\/\*[\s\S]*?\*\/|\/\/.*$/gm, ''))).map(({ f }) => f).join(', '));
+check('nothing official, featured or pinned on the new screens', designFiles.every(({ t }) => !MARK.test(t.replace(/Nothing here is official\.?/g, '').replace(/\/\*[\s\S]*?\*\/|\/\/.*$/gm, ''))), designFiles.filter(({ t }) => MARK.test(t.replace(/Nothing here is official\.?/g, '').replace(/\/\*[\s\S]*?\*\/|\/\/.*$/gm, ''))).map(({ f }) => f).join(', '));
 
 // The caps: an edit call is counted and reserved like any Generate, with its own worst case.
 const { reserve, settle, generationsLeft } = await import('../src/lib/images/limits');
@@ -246,7 +265,7 @@ const over = await paidPicture(S, 7000, new Request('http://x'), { checkText: 'a
 check('the day\'s limit stops an edit call before anything is spent', !over.ok && over.status === 429 && made === 0);
 // The daily cap (the all-days cap is gone, owner 2026-10-09): fill today to 3 cents under it.
 const [spentToday] = await sql`select coalesce(sum(cost_usd), 0)::float8 as usd from studio.image_costs where day = (now() at time zone 'utc')::date`;
-await sql`insert into studio.image_costs (kind, model, provider, verdict, calls, cost_usd) values ('image', 'test', 'fal.ai', 'ok', 1, ${IMAGES.dailySpendCapUsd - spentToday.usd - 0.03})`;
+await sql`insert into studio.image_costs (kind, model, provider, verdict, calls, cost_usd) values ('image', 'test', 'fal.ai', 'ok', 1, ${imagesDailySpendCapUsd() - spentToday.usd - 0.03})`;
 const cap = await reserve(S, 7001, edit);
 check('the daily spend cap stops an edit whose worst case would pass it', !cap.ok && cap.refusal === 'spend', JSON.stringify(cap));
 const cheap = await reserve(S, 7001);

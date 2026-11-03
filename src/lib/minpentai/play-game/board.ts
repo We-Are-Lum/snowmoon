@@ -28,7 +28,7 @@ export interface Cell {
    *  upright board), a square's hits left (1 is cracked), and whether it is the visitor's new placement. */
   pc?: CellPiece;
 }
-export interface CellPiece { k: 'tower' | 'glider' | 'square'; side: Side; dir?: [number, number]; hp?: number; mine?: boolean; /** Out of sight: drawn dimmed where it was last seen. */ dim?: boolean }
+export interface CellPiece { k: 'tower' | 'glider' | 'square'; side: Side; dir?: [number, number]; hp?: number; mine?: boolean; /** Out of sight: drawn dimmed where it was last seen. */ dim?: boolean; /** Your glider's last square seen before it flew out of sight: the arrow faded, the square as it is. */ faded?: boolean }
 export interface BoardOpts {
   w: World;
   /** The match's engine, for its board's size; Play's when absent. */
@@ -42,6 +42,8 @@ export interface BoardOpts {
   pend?: Placement[];
   dots?: Set<number>;
   ls?: Record<number, number>;
+  /** Your own gliders' last squares seen before they flew out of sight this run (left-sight.ts): drawn faded, pointing the way they were heading. */
+  gone?: Map<number, [number, number]>;
   flash?: boolean;
   aim?: { x: number; y: number } | null;
   dirs?: [number, number][];
@@ -51,6 +53,8 @@ export interface BoardOpts {
 const NAME: Record<Side, string> = { C: 'Cyan', A: 'Amber' };
 /** Amber's tower colour at 30% over the dark square: a tower last seen here, not in sight now. */
 export const LAST_SEEN = '#503A16';
+/** Cyan at about 35% over the dark square: your glider was last seen here before it flew out of sight. */
+export const GONE = '#245A62';
 const DIRW: Record<string, string> = { '1,0': 'right', '-1,0': 'left', '0,-1': 'up', '0,1': 'down', '1,-1': 'up right', '1,1': 'down right', '-1,1': 'down left', '-1,-1': 'up left' };
 
 export interface BoardView { cells: Cell[]; cols: number; cs: number; tap: (c: Cell) => void }
@@ -82,6 +86,7 @@ export function board(o: BoardOpts): BoardView {
       else if (p.t === 's') { c.bd = '2px solid ' + col; c.bg = '#16181E'; c.sh = pr; c.label = 'your new square'; c.pc = { k: 'square', side, hp: 2, mine: true }; }
       else { c.fg = col; c.t = rot(AR[p.dx + ',' + p.dy]); c.sh = pr; c.bg = '#14272C'; c.label = `your new glider, flying ${DIRW[p.dx + ',' + p.dy]}`; c.pc = { k: 'glider', side, dir: turn(p.dx, p.dy), mine: true }; }
     }
+    else if (o.gone && o.gone.has(k)) { const [dx, dy] = o.gone.get(k)!; c.fg = GONE; c.t = rot(AR[dx + ',' + dy]); c.label = `your glider flew out of sight from here, ${DIRW[dx + ',' + dy]}`; c.pc = { k: 'glider', side: 'C', dir: turn(dx, dy), faded: true }; if (o.zone && o.zone.has(k)) c.bg = '#14272C'; }
     else if (o.dots && o.dots.has(k)) { c.t = '·'; c.fg = COL.C; c.fs = fz(0.7); c.label = 'your glider’s path'; if (o.zone && o.zone.has(k)) c.bg = '#14272C'; }
     else if (o.zone && o.zone.has(k)) { c.bg = '#14272C'; c.label = 'lit, you can place here'; }
     return c;

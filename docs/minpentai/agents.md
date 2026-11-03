@@ -118,7 +118,7 @@ Sight
 How a match ends
 
 - A side with no towers left loses; both at the same step is a draw. From the book: a player whose symbols are gone is out (c4-b136–b138).
-- At step 96 the match stops: most towers wins, equal is a draw. Invented.
+- At step 120 the match stops: most towers wins, equal is a draw. Invented (it was 96 until 2026-10-22).
 - You may resign in practice, the ladder and one-on-one; it counts as a loss. From the book (c4-b141, c10-b164). The computer players never resign.
 - One-on-one: a player not heard from for 15 seconds pauses the match; 60 seconds more counts as resigning (during setup, the match is cancelled with no result). Invented.
 

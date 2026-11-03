@@ -658,6 +658,36 @@
       "weights": null
     },
     {
+      "id": "gemini-3.1-flash-image",
+      "kind": "image",
+      "name": "Gemini 3.1 Flash Image",
+      "maker": "Google",
+      "repo": "google/gemini-3.1-flash-image",
+      "revision": null,
+      "license_line": "proprietary: Google's terms; weights not published",
+      "license_checked": {
+        "by": "coding agent (closed models allowed, owner 2026-10-18)",
+        "on": "2026-11-03",
+        "source": "Google's terms (not quoted here yet: owner to review that they allow publishing the pictures under GPL-3.0)"
+      },
+      "notes": "A closed model (principle 3: reported). Used once, 2026-11-03, for six front concepts of the challenge characters (branch starting-sheet-drafts, docs/starting-sheet-drafts/bases.md), drafts for the owner's pick only, not on the site: through the Vercel AI Gateway /v1/chat/completions (image output, aspect 3:4), each character's starting sheet as the reference, with the gateway's disallowPromptTraining option; served by Google Vertex. $0.0677 a picture, as the gateway reported it. The weights are not published by its maker, so no one can rerun it outside Google.",
+      "added": "2026-11-03",
+      "runs_on": "hosted",
+      "hosted": {
+        "host": "Vercel AI Gateway",
+        "endpoints": {
+          "google/gemini-3.1-flash-image": null
+        },
+        "price_unit": "USD per image (1K), as the gateway reports it per call",
+        "price_seen": "2026-11-03: the gateway's model list, $0.067 per 1K image plus tokens"
+      },
+      "model_record": "gateway model id, date and the gateway's generation id (the host exposes no weights revision; there are no public weights)",
+      "cost_usd_per_unit": null,
+      "license": "proprietary (Google)",
+      "open_weights": false,
+      "weights": null
+    },
+    {
       "id": "whisper-large-v3-turbo",
       "kind": "transcription",
       "repo": "openai/whisper-large-v3-turbo",

@@ -227,6 +227,8 @@ export const AGENTS = {
      * Wallets (lowercase addresses) whose sign-in gets in. Empty for now (owner, 2026-10-20: "FID 6786 only for
      * now … I'll add my sign-in wallet later"). The payment address is not a sign-in wallet.
      */
+    // The production test account for agent play (wallet 0xE869…f973, account -23) was here from 2026-11-01 until the
+    // leak fix passed in production; removed at the owner's word, 2026-11-01.
     wallets: [] as readonly string[],
   },
   /** Public pages (agents.md, /p): off while agents are for the owner only. Kept work stays private on /you. */
@@ -239,6 +241,17 @@ export const AGENTS = {
   spend: { framesPerDay: 20, videosPerDay: 5, dailyCapUsd: 2, videoModel: 'fal-ai/longcat-video/distilled/image-to-video/480p', videoUsdPerSecond: 0.005, videoSeconds: 10.8 },
   /** What an agent may be given. The person sees every one before agreeing. */
   scopes: ['read', 'drafts', 'images', 'notes'] as const,
+  /**
+   * The "play" scope (Minpentai agent play): start matches against the site computer, see only your side, submit
+   * moves. Switched on 2026-11-01 for these people only (owner: "switched on for me only, FID 6786"), with 0032 applied
+   * and Terms §6d / Privacy §4 live. Anyone else: the scope isn't granted, its tools aren't listed or run, and a match
+   * link opens nothing. The local tests add their own people (MINPENTAI_PLAY_TEST, never on Vercel).
+   */
+  // 6786 the owner. Switched off 2026-11-01 for a timing leak at level 3 (#89); back on 2026-11-01 for the owner only,
+  // after the fix (#90, a quiet time on every call) passed check:minpentai-agent-live in production at levels 1 to 3.
+  // drafts: who may start a draft ruleset by name (agent-play/solo.ts DRAFTS), book-3 (owner, 2026-11-01: "make book-3
+  // available to me in agent play once it's back on, so I can judge it by playing").
+  minpentaiPlay: { people: [6786] as readonly number[], drafts: [6786] as readonly number[] },
   /** At most this many live agents per person (also a database trigger). */
   perPerson: 3,
   /**
@@ -370,6 +383,110 @@ export type SupportNetwork = (typeof SUPPORT.networks)[number];
 export const CONTACT_EMAIL = 'snowmoon@wearelum.xyz';
 
 /**
+ * The remix challenge (owner, 2026-10-31; docs/proposals/remix-challenge-plan.md, branch remix-challenge). Every date
+ * of the challenge lives in `dates` and nowhere else (owner, 2026-10-31: "Keep every challenge date in ONE config
+ * entry"): the page, the rules text, the entry window and the tests read them from here, so changing a date is one
+ * edit. Each is an instant (UTC, with the Pacific wall time beside it); `closes` is the first instant after the last
+ * minute that counts (23:59 Pacific is in, midnight is out). scripts/test-challenge.ts checks each against its
+ * Pacific wall time, and fails if a page or wording file writes a date itself.
+ *
+ * Switches (docs/legal/remix-challenge-draft.md; legal texts describe today; P6q checks it):
+ * - `entries` (on since the owner's reread of 2026-11-01): entries listed on /challenge with each character's count of entrants, the
+ *   "Entry" badge on version pages, and "Mark as my entry" (studio.challenge_marks). Eligibility is decided once, when
+ *   a version is published, and stored (studio.challenge_eligibility; src/lib/challenge/record.ts); pages only read it
+ *   and never ask Neynar (owner, 2026-10-31). Without the tables, only invited makers count and marking says "not
+ *   available yet".
+ * - `posts` (on since the owner's reread of 2026-11-01): "Add where you posted it" and "Posted on" (studio.version_posts). The
+ *   server reads the pasted address, checks its host, and asks that network's own API (Neynar, Bluesky's public
+ *   AppView, Lens's API); it never fetches the pasted address.
+ * - `openSheets` (on): see below; it takes effect only in the window and once Privacy describes the challenge.
+ * All three tables are in 0033_remix_challenge.sql (applied 2026-11-01).
+ * Agent-drafted entries are not tracked (owner, 2026-10-31).
+ */
+export const CHALLENGE = {
+  id: 'remix-2026-11',
+  /** The characters, by their file in content/snowmoon/designs/characters, in the owner's order (owner, 2026-10-31). */
+  characters: ['zei', 'bai', 'gladias', 'seila', 'deluin', 'mu'] as readonly string[],
+  /**
+   * Each character's bases (owner, 2026-11-03): up to CHALLENGE.maxBases published sheets to start from, in the same
+   * three styles for every character, so each set reads as one cast. Each entry is a design's id: its element id (any
+   * version of it) or one version's id (the id in /references/designs/<id>). Designs have no slugs. Empty until the
+   * owner picks. An entry is a fork of any base, or of a remix of one (src/lib/challenge/rules.ts, remixOfBase); while
+   * a character's list is empty, a fork of any of its sheets counts, as before, so nothing breaks before the picks.
+   */
+  bases: { zei: [], bai: [], gladias: [], seila: [], deluin: [], mu: [] } as Record<string, readonly string[]>,
+  maxBases: 3,
+  /**
+   * The bases' fixed style order (owner, 2026-11-04): within a character its bases are listed in this order, the same
+   * for every character, so the casts line up. Each entry is a published style's name, as a sheet's views record it
+   * (body.style.title). A base whose style isn't listed comes after, newest first. Empty until the owner picks the
+   * styles; while empty, the bases are listed newest first. This is the only challenge list not in time order (P5g
+   * allows it for "Bases to start from" only; entries and every other list stay newest first).
+   */
+  baseStyles: [] as readonly string[],
+  /**
+   * Bases and references may be made by several models, closed ones included, each labelled with its maker (owner,
+   * 2026-11-04). A base whose pictures name a closed model is refused (src/lib/challenge/bases.ts) until this is true,
+   * and it stays false until the owner rereads the Terms and Privacy lines that name the providers (OpenAI and Google;
+   * docs/legal/closed-model-bases-draft.md, branch closed-model-bases). check:principles P6s fails if it is true while
+   * the Privacy page doesn't name OpenAI and Google for it. Remixers keep the open models: the remix and fork form's
+   * model choice is unchanged.
+   */
+  closedBasesAllowed: false as boolean,
+  /**
+   * A character gets a final version, a credit test and a token only if at least this many different eligible people
+   * enter it (owner, 2026-10-31). /challenge shows each character's count (a count, never a ranking).
+   */
+  minEntrants: 3,
+  /**
+   * The Neynar score an entrant's account must have when a version is published (owner, 2026-11-01). Fixed for the whole
+   * challenge, whatever IMAGES.neynarMinScore becomes; only the decision (passed or below) is kept, never the score.
+   */
+  neynarMinScore: 0.7,
+  /**
+   * The bounties (owner, 2026-11-01): one solo poidh bounty per character, on Ethereum mainnet, funded and judged by the
+   * owner. Claims must be entries for that character. A bounty can pay out even if its character misses minEntrants;
+   * if no claim fits, the owner cancels it. Each bounty's poidh address, null until the bounty exists (/challenge links
+   * it only when set), and the amount, the same for each, null until the owner sets it (e.g. '0.05 ETH').
+   */
+  bounties: { zei: null, bai: null, gladias: null, seila: null, deluin: null, mu: null } as Record<string, string | null>,
+  bountyAmount: null as string | null,
+  /**
+   * Real instants (UTC), each with its America/Los_Angeles wall time (all in PST: the clocks changed on 1 Nov 2026).
+   * Owner, 2026-10-31 (second update). A closing instant is the first that no longer counts.
+   */
+  dates: {
+    /** Entries open at the launch call: Fri 6 Nov 2026, 09:00 Pacific (owner, 2026-10-31). */
+    opens: '2026-11-06T17:00:00Z',
+    /** Entries close after Sun 22 Nov 2026, 23:59 Pacific: this is 00:00 Pacific on 23 Nov, the first instant that no longer counts. */
+    closes: '2026-11-23T08:00:00Z',
+    /** The shortlist vote and jurors: Tue 1 Dec 2026, 00:00 Pacific, to the end of Thu 3 Dec 2026 (23:59 Pacific). Not built; undefined in the plan. */
+    shortlistOpens: '2026-12-01T08:00:00Z',
+    shortlistCloses: '2026-12-04T08:00:00Z',
+    /** Results at the call: Fri 4 Dec 2026, 09:00 Pacific. */
+    results: '2026-12-04T17:00:00Z',
+    /** The mint opens Tue 8 Dec 2026, 09:00 Pacific, and closes at the Fri 18 Dec 2026 call, 09:00 Pacific. */
+    mintOpens: '2026-12-08T17:00:00Z',
+    mintCloses: '2026-12-18T17:00:00Z',
+  },
+  /** The time zone every date is shown in. */
+  timeZone: 'America/Los_Angeles',
+  entries: true as boolean,
+  posts: true as boolean,
+  /**
+   * On (owner, 2026-10-31), but it takes effect only inside the entry window, computed from `dates`
+   * (src/lib/challenge/open-sheets.ts), and only once Privacy describes the challenge (the owner's reread). Before the
+   * open and after the close, sheets are invited-only again with no deploy.
+   */
+  openSheets: true as boolean,
+  /** The site-wide free image spend cap while the entry window is open (owner, 2026-10-31); IMAGES.dailySpendCapUsd otherwise. */
+  dailySpendCapUsd: 15,
+  /** "Posted on": at most this many shown per version, newest first; and how many one person may add per UTC day. */
+  postsPerVersion: 30,
+  postsPerPersonPerDay: 20,
+};
+
+/**
  * Readers add an image to a passage: slice 1, labelled "Trial" (docs/proposals/add-an-image.md;
  * the owner's decisions of 2026-10-08, all as recommended except 11, 12, 18, 20 and 24).
  * Each number below is one of those decisions.
@@ -418,7 +535,10 @@ export const IMAGES = {
    */
   admin: { maxBlocks: 400 },
   publishesPerDay: 3,
-  /** Across everyone, per UTC day (decision 10), kept apart from the assistant's. */
+  /**
+   * Across everyone, per UTC day (decision 10), kept apart from the assistant's. Outside the remix challenge's window;
+   * inside it, CHALLENGE.dailySpendCapUsd. Read through imagesDailySpendCapUsd(), never directly.
+   */
   dailySpendCapUsd: 2,
   /**
    * Wallet sign-in and prepaid generations (owner, 2026-10-13). A wallet account has no free daily
@@ -489,6 +609,13 @@ export const IMAGES = {
   designs: {
     nameMaxChars: 60,
     textMaxChars: 600,
+    /**
+     * Tokens for the prompt check on a sheet's view prompt (the view line, the style's text and the sheet's text, up to
+     * about 1,350 characters), as Remix's (REMIX.guardMaxTokens): at 400 the check can spend them all reasoning and
+     * give no answer, which counts as a refusal (owner, 2026-11-03). Only the tokens used are billed; the worst case
+     * still fits the prompt check's share of the reservation (scripts/test-designs.ts checks it).
+     */
+    guardMaxTokens: 1200,
     /** A style needs at least this many sample pictures, made with its text (Design 4b). */
     samplesMin: 2,
     samplesMax: 4,
@@ -500,6 +627,16 @@ export const IMAGES = {
 } as const;
 
 /** Minpentai Play's limits and retention (owner, 2026-10-09). Every /api/minpentai/* request counts. */
+/**
+ * The site-wide free image spend cap for a moment (owner, 2026-10-31): CHALLENGE.dailySpendCapUsd from the entry
+ * window's open (included) to its close (excluded), IMAGES.dailySpendCapUsd ($2) at every other time. It reverts by
+ * itself, with no deploy. The cap is per UTC day; the day's spend counted so far is compared with the cap now.
+ */
+export function imagesDailySpendCapUsd(now: Date = new Date()): number {
+  const t = now.getTime();
+  return t >= Date.parse(CHALLENGE.dates.opens) && t < Date.parse(CHALLENGE.dates.closes) ? CHALLENGE.dailySpendCapUsd : IMAGES.dailySpendCapUsd;
+}
+
 export const MINPENTAI_PLAY = {
   /** Per person (FID): requests per minute and per UTC day; over either is 429 with retryAfterMs. */
   perMinute: 60,
