@@ -3,8 +3,12 @@
 > DRAFT, for the owner. Written by the coding agent (Anthropic's Claude, a closed model), 2026-11-03. Rules invented for this edition; Rocks and Mirrors' pieces drawn from passages in the book · not affiliated with the author. Nothing here is live. Terms and Privacy changes are drafts for the owner's reread.
 
 Two kinds of match:
-- **Practice:** free, built first, on branch `minpentai-practice`.
+- **Practice:** free over MCP, built first, on branch `minpentai-practice`. With the in-site AI: credits, or a few free a day (design).
 - **Official:** design only.
+
+Plus a **3D replay** of each turn, designed here and built once #100 merges.
+
+*Updated 2026-11-03 (owner, with Garance): the 3D replay; practice with the in-site AI; official entry through Farcaster, Lens or Bluesky; one person, one record; official computer matches and their leaderboard; weekly PvP rulesets.*
 
 Both use the agent-play engine, views and tools that already exist (#86–#100): the fog view, the sandbox, the rule texts, the turn summary, Take turn and the replay.
 
@@ -70,6 +74,18 @@ Nothing on the site notifies anyone today. Proposal, in order:
 - Each side's view is the same fog view agent play uses, for its own side.
 - The quiet time (#90) was about hiding the site computer's planning. With two people there's no computer planning, so calls aren't delayed. A call does show whether the other side has sent orders, but the commitment already says that, by design.
 
+### Practice with the in-site AI
+- **What it is:** practice where your side is played through the site's own AI. It's the chat beside the board that official matches use, and works against a person or the site computer.
+- **How it's paid for:**
+  - **With credits:** the prepaid balance the site already has, from a wallet linked to your account.
+  - **Free:** **N a day** for accounts that pass a reputation bar (the same as official entry, below).
+- **Free matches use the cheapest model,** Claude Haiku 5.5. They run under a **daily site-wide spend cap** that the owner sets. When the cap is reached, free matches pause until the next day (UTC); paid ones go on.
+- **Proposed:**
+  - **N = 3** free a day per account.
+  - A **$5 a day** cap: about 70 matches at the worst case, about 125 at a typical one.
+  - Paid practice: **$0.10** a match with Claude Haiku 5.5, or **$1.50** with Claude Sonnet 5.5, the official model.
+- **Why it's cheap:** one match's AI side costs at most $0.07 on Claude Haiku 5.5, with the chat trimmed each turn and at most 6 sandbox calls a turn (see the costs below). So 3 free a day cost at most $0.21 per account per day.
+
 ## Official matches (design only)
 
 ### Same AI on both sides
@@ -79,21 +95,59 @@ Nothing on the site notifies anyone today. Proposal, in order:
 - Outside AIs over MCP can't play official matches.
 
 ### Who can enter
-- **Farcaster accounts:**
-  - a Neynar user score of at least 0.7, the bar images already use;
-  - the account at least 90 days old;
-  - at least 50 followers.
-- **Bluesky accounts:**
-  - at least 90 days old;
-  - at least 50 followers;
-  - at least 20 posts;
-  - not labelled as spam by Bluesky's moderation.
+Sign in with Farcaster, Lens or Bluesky, and pass that network's reputation bar. **Farcaster first**: its sign-in and its score lookup already exist. Lens and Bluesky need their sign-in built.
 
-  **This needs Bluesky sign-in, which the site doesn't have** (Bluesky is used today only to check post links).
+| Network | Sign-in | Proposed bar |
+|---|---|---|
+| **Farcaster** | exists | A Neynar user score of at least 0.7 (the bar images already use), plus the account at least 90 days old and at least 50 followers |
+| **Lens** | to build (Lens's own sign-in for apps) | Lens publishes an official ML-based "Account Score" through its API ([Lens docs: fetch accounts](https://lens.xyz/docs/protocol/accounts/fetch)); its range isn't documented, so set a threshold after sampling real accounts. Plus the account at least 90 days old, at least 50 followers and at least 20 posts |
+| **Bluesky** | to build (atproto OAuth) | No score exists. The account at least 90 days old, at least 50 followers, at least 20 posts, and no spam or impersonation label from Bluesky's moderation service |
+
 - **Wallet-only accounts:** practice only.
-- **Practice itself stays on the agent-play allowlist** (owner, 2026-11-03) until the owner opens it.
+- **When it's checked:** at entry; the result is kept for a day, as the image score is.
 
-The bar is checked at entry and kept for a day, as the image score is.
+### One person, one official record
+- **Linked accounts share one record.** A person can link their Farcaster, Lens and Bluesky accounts (and wallets) by signing in with each from the same session; the site already links wallets to Farcaster. All linked accounts share one official record, one rating and one daily free match.
+- **What we can't do:** prove that two unlinked accounts on different networks aren't the same person. Nothing on the site sees across networks unless a person links them.
+- **What we can do:**
+  - each network's bar, which makes fresh accounts useless;
+  - a fee after the first free match a day, so a second identity costs money to play;
+  - repeat dampening and the weekly pair cap in the rating, so two of your own identities playing each other gain little;
+  - flag pairs that share a wallet or payment address, or have lopsided results, for review by an admin.
+- **What we say:** "One person, one record: link your accounts and they share it. We can't see accounts you don't link; if we find two that are one person, we merge their records or void the results."
+
+### Free and paid
+- **1 official match free a day** per person (linked accounts count as one). More cost credits.
+- **Official play always uses the in-site AI** (Claude Sonnet 5.5 recommended): one AI side per person.
+- **Proposed price:** **$1.50** of credits for each extra official match. It covers the worst case of $1.21 an AI side (trimmed chat, capped sandbox).
+- **Free official matches** need their own daily site-wide cap, set by the owner. Proposed: **$25 a day**, about 20 free official matches at the worst case, about 30 at a typical one. When it's reached, free official matches pause until the next day, and paid ones go on.
+
+### Official computer matches
+- **What it is:** your in-site AI against the site computer.
+- **Confirmed: the computer plays like a real player,** from its own fogged view.
+  - It plans from `engine.fog` of its side, plus where it last saw your towers (`solo.ts computerPlan`; the search builds its belief from that view, `search.ts belief`). It never reads the real board.
+  - Its moves follow from the board and a random value committed before the match, so anyone can recompute them from the record.
+  - (Play's old ladder rungs did read the real board, `rungPlayer`. They aren't used here.)
+- **Ruleset and level:** you choose the ruleset (the official ones of the season), and a level from 1 to 3.
+  - **You move up** by winning 3 of your last 5 official matches at a level, which unlocks the next.
+  - You can always play a lower level.
+- **A public leaderboard per ruleset shows every official result,** as a win rate per level: wins over matches, at each level.
+  - It's **ranked by the highest level where your win rate's lower 90% bound (Wilson) is at least 50%,** with at least 5 matches there; ties go by that bound.
+  - **Every official match counts.** A loss is never hidden, so paying for retries adds losses as well as wins and can't buy rank.
+
+### Official matches between people
+- **Each person has** a win/loss record tied to their social login (linked accounts share it), and a **Glicko-2 rating per season.**
+- **Repeat wins count less:** the nth rated match between the same two people in a season counts 1/n, and at most 3 rated matches a week between the same pair.
+- **Ratings are provisional until** 10 matches against at least 5 different opponents. Provisional ratings aren't shown on the board.
+- **Resigning before turn 3** gives the resigner a loss, but the winner gains nothing.
+- So **the top of the board is real people who beat many different real people.**
+
+### Weekly rulesets for official matches between people
+- **The ruleset may change week to week,** and the page says so up front.
+- **Each week's ruleset is drawn at random from tested rulesets only:** ones that passed the self-play bar (contact, spending and destroyed towers) and that the owner has played.
+- **Committed before the week starts:** a week ahead we publish `sha256(week, ruleset id, a secret salt)`. When the week opens we reveal the ruleset and the salt, so anyone can check we didn't change it.
+- **Optional, to prove the draw itself was fair:** draw it from a public random beacon, such as drand round R mod the number of tested rulesets. R is chosen before that round exists, and the list and R are published with the commitment.
+- Official computer matches keep the ruleset you choose.
 
 ### The fee covers the AI, no prizes
 
@@ -140,6 +194,14 @@ The bar is checked at entry and kept for a day, as the image score is.
 | **At most 6 simulate a turn, every turn at the cap** | **is trimmed each turn** | 108 | **28k** | **$0.14** | **$2.42** | **$4.83** |
 | Playtest-like, capped at 6 | is trimmed each turn | 68 | 28k | $0.09 | $1.58 | $3.16 |
 
+**Per AI side** (practice with the in-site AI and official computer matches have one AI side; official matches between people have two, one paid by each person). The chat is trimmed each turn, with at most 6 sandbox calls a turn:
+
+| Case | Claude Haiku 5.5 | Claude Sonnet 5.5 | Claude Opus 5.5 |
+|---|---|---|---|
+| Light (2 sandbox calls a turn) | $0.04 | $0.70 | $1.41 |
+| Playtest-like, capped | $0.04 | $0.79 | $1.58 |
+| Every turn at the cap of 6 | $0.07 | $1.21 | $2.42 |
+
 **What it says:**
 1. **The in-platform AI must trim its chat each turn.** It keeps the current view and that turn's sandbox answers, plus a short summary of each past turn. Kept whole, a match's prompt passes 100k by mid-match, Claude Haiku 5.5's calls pay 5×, and every model costs 1.5–2.5× more.
 2. **A cap on sandbox calls per turn** (6 proposed) bounds the worst case. The playtest's turn 4 had 17.
@@ -147,7 +209,9 @@ The bar is checked at entry and kept for a day, as the image score is.
 
 **Recommendation:**
 - **Season 1:** Claude Sonnet 5.5 at low effort; the chat trimmed each turn; at most 6 sandbox calls a turn.
-- **Fee: $1.50 per player per match** ($3.00 a match). It covers the capped worst case ($2.42) with about 1.2× headroom, and the playtest-like case with about 1.9×.
+- **Price: $1.50 per player per official match** past the free one a day. It covers one AI side's worst case ($1.21) with about 1.2× headroom, and the playtest-like case ($0.79) with about 1.9×.
+- **Free practice with the in-site AI:** Claude Haiku 5.5, 3 a day per account, under a $5 daily site-wide cap. Paid practice: $0.10 a match (Claude Haiku 5.5) or $1.50 (Claude Sonnet 5.5).
+- **Free official matches:** under a $25 daily site-wide cap. The owner sets both caps.
 - Claude Haiku 5.5 would cost about $0.25 per player, but only with trimming. Without it, a heavy match costs 20× more.
 - Measure the real cost on the first 20 official matches (paid calls: the owner's OK first), then set the season's fee.
 - **No prizes from fees.** The fee pays for the AI and nothing else, and the page says so.
@@ -173,6 +237,53 @@ The bar is checked at entry and kept for a day, as the image score is.
 - An official result means **both sides played with the same in-platform AI for every move, under the same rules and clock.** It doesn't mean no other help.
 - Proposed page wording: "Official matches are played with the site's AI, the same for both players. We can't see or stop help from outside the site, so a result says who won with the site's AI, not who played alone."
 
+## The 3D replay (build once #100 merges)
+
+**Why:** so taking a turn feels exciting. A 3D version of each turn's replay sits beside the 2D one, synced to the same play, pause and step controls. The dark is a cloud over the board.
+
+**Fog: built only from the 2D replay's frames.**
+- The 3D view receives exactly the frames the 2D replay gets (`turnFrames`): each frame's board in that side's fog view, plus the squares it sees. Nothing else.
+- The page never receives a hidden piece.
+- The cloud is drawn over the squares out of sight. It covers nothing, because nothing hidden was sent.
+- **Test:** the 3D component's props equal the 2D component's, the same object, and no other match data reaches it.
+
+**Layout and fallbacks.**
+- Wide screens: 2D and 3D side by side. Phones: a 2D/3D toggle (2D by default).
+- **2D only** when WebGL is missing or the person has asked for reduced motion (`prefers-reduced-motion`), and on any error in the 3D view.
+- **Loaded only when a replay opens:** the 3D code is a separate chunk (`next/dynamic`), fetched when the replay is on screen.
+
+**Look: this edition's own abstract pieces.** No outside styles named.
+
+| Piece | Shape |
+|---|---|
+| Board | low slate tiles |
+| Rocks | faceted grey stones |
+| Towers | hexagonal columns with a glowing ring in the side's colour |
+| Squares | low blocks that crack as they lose hits |
+| Gliders | small darts that glide between squares over each step |
+| Symbol gliders | darts carrying a small orb |
+| Mirrors | thin angled slabs |
+| Factories | squat cubes with a mouth facing where they fire |
+| Moving walls | three linked bars |
+
+- **Hits:** a short burst of light where something breaks, shown only where the frame shows it.
+- **The cloud:** soft, slowly drifting fog columns over unseen squares. It thins where a square comes into sight, and closes where one leaves.
+- **Camera:** a fixed three-quarter view from your side, with a slow drift; no free camera on phones.
+
+**Smooth on a mid-range phone.**
+- Instanced meshes: one draw call per piece kind, at most 24 × 14 tiles.
+- The device pixel ratio capped at 1.5, no real-time shadows, and the cloud a single instanced billboard layer with a noise texture.
+- Animation interpolates between the engine's frames, so pieces move smoothly without inventing positions.
+- **Target:** 60 frames a second on a mid-range phone, checked with Chrome's 4× CPU throttle on a phone-sized screen. The recording before the merge shows it.
+- three.js is already a dependency, so nothing new is added.
+
+**After the match ends:** the whole board in 3D for any turn, with no cloud, from the same whole-board frames as the 2D replay.
+
+**Later (design only): a short clip to share.**
+- After the end only, rendered from the whole-board frames to a canvas and recorded (`MediaRecorder`, a few seconds of webm/mp4).
+- The person chooses the turn and shares the file.
+- Never during a match, so a clip can't leak a side's view.
+
 ## Terms and Privacy changes (drafts, for the owner's reread)
 
 **Terms, new section 6f "Practice matches between people."**
@@ -191,9 +302,23 @@ The bar is checked at entry and kept for a day, as the image score is.
 
 That is a deliberate exception to "only we remove match records, by hand". Until it is built, the draft says what happens today.
 
-**Official matches,** when built, would need these further sections (not drafted yet):
-- Terms: the fee, no prizes, the leaderboard and its seasons, the review of flagged matches, what an official result means.
-- Privacy: account-age and follower checks, Neynar and Bluesky lookups, and the in-platform AI's model provider (it receives the board and your chat in official matches).
+**Practice with the in-site AI and official matches,** when built, would need these further sections. They aren't drafted yet; these are the points each must cover:
+- **Terms:**
+  - credits and what they pay for (the AI, nothing else);
+  - free daily matches and that they pause when the site's daily cap is reached;
+  - no prizes;
+  - the leaderboards: per ruleset for computer matches, and the PvP rating per season;
+  - weekly rulesets, committed by hash before the week;
+  - one person, one record: linked accounts share it, and we may merge records or void results;
+  - review of flagged matches;
+  - what an official result means, and doesn't.
+- **Privacy:**
+  - Lens and Bluesky sign-in;
+  - the account checks: Neynar for Farcaster, Lens's account score, and Bluesky's profile and labels;
+  - the in-site AI's model provider (Anthropic), which receives the board and your chat with the AI;
+  - what of the chat we keep;
+  - public leaderboards showing your social name;
+  - linked accounts.
 
 ## What was built for practice matches (this branch, PR #101)
 1. **Migration `NEXT_minpentai_practice.sql`:** no new table. It adds three columns to `studio.mp_agent_matches` (0032):
