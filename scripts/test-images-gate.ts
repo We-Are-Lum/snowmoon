@@ -31,6 +31,7 @@ const ROOT = path.resolve(import.meta.dirname, '..');
 const failures: string[] = [];
 let passed = 0;
 const check = (label: string, ok: boolean, detail = '') => (ok ? passed++ : failures.push(`${label}${detail ? `: ${detail}` : ''}`));
+const proof = (label: string, caught: boolean) => check(`proof: ${label}`, caught, 'the planted violation was not caught');
 
 // --- Stand-ins for Neynar and ntfy ------------------------------------------------
 type Heard = { method: string; url: string; headers: IncomingHttpHeaders; body: string };
@@ -133,9 +134,9 @@ check('a decision is kept: passed, when, the threshold', d100?.passed === true &
 check('no score kept: the decision row holds no number, and image_scores stays empty', d100 !== undefined && !Object.values(d100).some((v) => typeof v === 'number' || (typeof v === 'string' && /^0\.\d+$/.test(v))) && (await scores()) === 0, JSON.stringify(d100));
 {
   // Planted: a gate that still keeps the score. It must be caught by the same two checks.
-  await pg.exec(`insert into studio.image_scores (fid, score) values (100, 0.85)`);
+  await pg.exec(`reset role; insert into studio.image_scores (fid, score) values (100, 0.85); set role studio_writer;`);
   proof('a kept score is caught', (await scores()) === 1);
-  await pg.exec(`delete from studio.image_scores`);
+  await pg.exec(`reset role; delete from studio.image_scores; set role studio_writer;`);
 }
 check('the writer can no longer keep a score', await sql`insert into studio.image_scores (fid, score) values (1, 0.9)`.then(() => false, () => true));
 
