@@ -486,6 +486,14 @@ check('entrants per character: Bai 2 (500, 6852), Zei 1 (6852), others 0, in CHA
 check('three entrants are needed (CHALLENGE.minEntrants)', CHALLENGE.minEntrants === 3 && !R.enoughEntrants(2) && R.enoughEntrants(3));
 proof('a count that adds one person twice is caught', R.entrantCounts([{ person: 1, character: 'bai' }, { person: 1, character: 'bai' }]).get('bai') === 1);
 check('the version page: Entry on the entry, the admin line on the admin\'s', (await E.versionStanding(S, f500b.versionId))?.kind === 'entry' && (await E.versionStanding(S, fAdmin.versionId))?.kind === 'admin' && (await E.versionStanding(S, f501.versionId)) === null);
+// The publish confirmation (owner, 2026-11-03): an entry says so; Neynar down says it won't count; otherwise nothing.
+{
+  const e = await E.publishStanding(S, f500b.versionId);
+  const u = await E.publishStanding(S, f502.versionId);
+  check('e2 at publish, the maker\'s entry is told "This is your entry for …"', e?.kind === 'entry' && e.character === 'bai', JSON.stringify(e));
+  check('i at publish, a version Neynar couldn\'t check is told it won\'t count', u?.kind === 'unchecked' && u.character === 'zei', JSON.stringify(u));
+  check('at publish, a score below the check, an admin\'s, an earlier version and a new sheet get no line', (await E.publishStanding(S, f501.versionId)) === null && (await E.publishStanding(S, fAdmin.versionId)) === null && (await E.publishStanding(S, f500a.versionId)) === null && (await E.publishStanding(S, fScratch.versionId)) === null);
+}
 await E.startingSheets(S, 'bai');
 check('viewing pages (the challenge, version pages, starting sheets) made no outside call at all', calls.length === 0, calls.join(' '));
 {
@@ -503,6 +511,12 @@ check('marking: your earlier version', (await E.markEntry(S, 500, f500a.versionI
 const st2 = await E.standing(S);
 check('a marked version counts instead of the latest', st2.entries.some((e) => e.versionId === f500a.versionId) && !st2.entries.some((e) => e.versionId === f500b.versionId));
 check('marking after the window closes is refused', !(await E.markEntry(S, 500, f500b.versionId, new Date(Date.parse(CHALLENGE.dates.closes)))).ok);
+{
+  const early = await E.markEntry(S, 500, f500b.versionId, new Date(Date.parse(CHALLENGE.dates.opens) - 1));
+  const late = await E.markEntry(S, 500, f500b.versionId, new Date(Date.parse(CHALLENGE.dates.closes)));
+  check('h marking before the open says when entries open, not "Entries are closed"', !early.ok && early.why === E.MARK_WORDING.opens() && /^Entries open /.test(early.why) && !late.ok && late.why === E.MARK_WORDING.closed, JSON.stringify(early));
+  proof('h a refusal before the open that says "closed" is caught', ((w: string) => /^Entries open /.test(w))(E.MARK_WORDING.closed) === false);
+}
 check('the sheets to start from are those made before the window', (await E.startingSheets(S, 'bai')).map((s) => s.versionId).join() === baiStart.versionId);
 
 globalThis.fetch = realFetch;
@@ -591,7 +605,7 @@ check('as committed, CHALLENGE.entries, posts and openSheets are on (owner\'s re
   proof('R4 a row that repeats the name is caught', /\|\| nameOf\(/.test(chPage.replace('{W.entryLabel(nameOf(e.character), e.title)}', '{nameOf(e.character)}: {e.title || nameOf(e.character)}')));
   // R5: a newcomer on a starting sheet had no way to /challenge (only an entry's badge linked there).
   const invite = (src: string) => /\{challengeOpen && !standing && \(\s*<p className="dz-meta ch-standing ch-invite">\s*\{CW\.sheetInvite\(callName\)\} <Link href="\/challenge">/.test(src);
-  check('R5 a challenge character\'s sheet links to /challenge while the window is open', invite(read('src/app/references/designs/[id]/page.tsx')) && /fork this sheet/.test(CW.sheetInvite('Zei')) && CW.sheetInvite('Zei').startsWith('Zei '));
+  check('R5 a challenge character\'s sheet links to /challenge while the window is open', invite(read('src/app/references/designs/[id]/page.tsx')) && /remix this sheet/.test(CW.sheetInvite('Zei')) && CW.sheetInvite('Zei').startsWith('Zei '));
   proof('R5 a sheet page without the link is caught', !invite(read('src/app/references/designs/[id]/page.tsx').replace('{CW.sheetInvite(callName)} <Link href="/challenge">', '{CW.sheetInvite(callName)} <Link href="/references">')));
   // R6: after "Mark as my entry" said "Marked as your entry.", the button stayed.
   const markSrc = read('src/components/challenge-mark.tsx');
@@ -613,6 +627,53 @@ check('as committed, CHALLENGE.entries, posts and openSheets are on (owner\'s re
   const closedNoButton = (src: string) => /standing\?\.kind === 'candidate' &&[\s\S]{0,200}\(phase\(\) === 'open' \?[\s\S]{0,300}<ChallengeMark[\s\S]{0,120}\) : \(\s*<p className="dz-meta ch-standing dz-muted">\{CW\.candidateClosedNote\(callName\)\}<\/p>/.test(src);
   check('R9 after the close a candidate shows the closed note and no mark button', closedNoButton(vp) && /Entries are closed/.test(CW.candidateClosedNote('Bai')) && /Bai/.test(CW.candidateClosedNote('Bai')));
   proof('R9 a mark button offered after the close is caught', !closedNoButton(vp.replace("(phase() === 'open' ?", '(true ?').replace(/\(phase\(\) === 'open' \?/, '(true ?')) || !closedNoButton(vp.replace('{CW.candidateClosedNote(callName)}', '<ChallengeMark versionId={d.shown.versionId} byFid={d.byFid} />')));
+}
+
+// --- Launch fixes (owner, 2026-11-03) -----------------------------------------------------------------------------
+{
+  const CW = (await import('../src/lib/challenge/wording')).CHALLENGE_WORDING;
+  const IW = (await import('../src/lib/images/wording')).IMAGE_WORDING.designs;
+  const { navItems } = await import('../src/lib/nav');
+  // b. /challenge from the menu and the home page.
+  check('b the menu links to /challenge, after the owner\'s order', navItems(1, 0).some((i) => i.href === '/challenge' && i.label === CW.title) && navItems(1, 0).at(-1)?.key === 'challenge');
+  const home = read('src/app/page.tsx');
+  const homeRow = (src: string) => /\{ href: '\/challenge', name: CW\.title, what: CW\.homeLine\(\), meta: '→', draft: true \}/.test(src) && /\{r\.draft && <span className="as-draft ic-draftline">\{CW\.draftShort\}<\/span>\}/.test(src);
+  check('b the home page links to /challenge, its new line marked Draft wording', homeRow(home) && /remix/.test(CW.homeLine()) && CW.draftShort === 'Draft wording');
+  proof('b a home page without the row is caught', !homeRow(home.replace("href: '/challenge'", "href: '/references'")));
+  // c. Below 0.7: said up front, in the owner's words; the refusal beside Generate, scrolled into view; no new lookup.
+  const owner = 'Entering needs a Farcaster account with a Neynar score of 0.7 or more; we check when you press Generate.';
+  check('c the up-front line is the owner\'s words exactly', CW.whoCanEnter() === owner, CW.whoCanEnter());
+  const chPage = read('src/app/challenge/page.tsx');
+  check('c /challenge says it up front, under the deadline', /<\/p>\s*\{\/\*[^*]*\*\/\}\s*\{now !== 'closed' && <p className="ch-who">\{W\.whoCanEnter\(\)\}<\/p>\}\s*<section className="ch-rules">/.test(chPage));
+  const form = read('src/components/design-form.tsx');
+  const beforeConsent = (src: string) => /<div className="ic-gate">\s*\{p\.challengeOpen && !status\.invited && <p className="ch-who">\{CW\.whoCanEnter\(\)\}<\/p>\}\s*<p>\{W\.form\.consentFirst\}<\/p>/.test(src);
+  check('c a challenge fork form says it before the consent screen', beforeConsent(form));
+  proof('c a consent gate without the line is caught', !beforeConsent(form.replace('{p.challengeOpen && !status.invited && <p className="ch-who">{CW.whoCanEnter()}</p>}\n          <p>{W.form.consentFirst}</p>', '<p>{W.form.consentFirst}</p>')));
+  const beside = (src: string) => /pictureFor\(k, i, views\[k\], p\.viewLines\[k\]\)\)\}\s*<\/ul>\s*\{note && \(\s*<p ref=\{noteRef\} className="ic-error dz-make-note" role="status">/.test(src) && /if \(note\) noteRef\.current\?\.scrollIntoView\(/.test(src) && (src.match(/\{note\}/g) ?? []).length === 1;
+  check('c a refusal at Generate shows right under the Generate buttons, once, and is scrolled into view', beside(form));
+  proof('c the refusal back under the rules is caught', !beside(form.replace('if (note) noteRef.current?.scrollIntoView(', 'if (note) void (')));
+  const lookups = walk('src').filter((f) => /\blookUp\(/.test(read(f))).sort();
+  check('c no new Neynar lookup: only the Generate gate and the publish recorder call it (and its own file)', lookups.join() === ['src/lib/challenge/record.ts', 'src/lib/images/gate.ts', 'src/lib/images/neynar.ts'].join(), lookups.join());
+  // d. The rule says an account below the check can't remix.
+  const rules = CW.rules().join(' ');
+  check('d the rule says an account below the check can\'t remix', /can’t remix or enter/.test(rules) && !/To count as an entry, sign in/.test(rules));
+  // e. Remix, not Fork; the entry line at publish; the share text in the window.
+  check('e1 the button and the form\'s title say "Remix" (one wording, every style and sheet)', IW.page.fork === 'Remix' && IW.form.fork === 'Remix' && /\{W\.page\.fork\}/.test(read('src/components/design-bar.tsx')) && /W\.form\.fork/.test(read('src/app/references/designs/new/page.tsx')));
+  check('e1 no "Fork" left in what people read', !walk('src').some((f) => /'[^']*\bFork\b[^']*'/.test(stripComments(read(f)))));
+  check('e2 the entry line is the owner\'s words', CW.publishedEntry('Bai') === 'This is your entry for Bai.');
+  const route = read('src/app/api/designs/route.ts');
+  check('e2 the publish route answers with the standing at publish', /const st = await publishStanding\(sql, out\.versionId\);/.test(route) && /page: `\/references\/designs\/\$\{out\.versionId\}`, challenge \}/.test(route));
+  check('e2 the confirmation shows it', /\{entry\?\.kind === 'entry' && `\$\{CW\.publishedEntry\(entry\.name\)\} `\}/.test(form));
+  const share = read('src/components/challenge-share.tsx');
+  const vp = read('src/app/references/designs/[id]/page.tsx');
+  const shareSwitch = (s1: string, v1: string) => /const text = inChallenge \? W\.shareTextOpen\(what\) : W\.shareText\(what\);/.test(s1) && /inChallenge=\{d\.kind === 'character' && isChallengeCharacter\(d\.entity\) && phase\(\) === 'open'\}/.test(v1);
+  check('e3 in the window, a challenge sheet\'s share text mentions the challenge; outside it, as before', shareSwitch(share, vp) && /remix challenge/.test(CW.shareTextOpen('Bai: x')) && CW.shareTextOpen('Bai: x').startsWith('Bai: x, made on Snowmoon Party') && CW.shareText('Bai: x') === 'Bai: x, made on Snowmoon Party' && CW.shareTextOpen('x').includes(R.dateText('closes', { time: true })));
+  proof('e3 a share text that ignores the window is caught', !shareSwitch(share, vp.replace("phase() === 'open'}", "true}")));
+  // h. Before the open, from CHALLENGE.dates.
+  check('h "Entries open Fri 6 Nov, 09:00 PT", built from CHALLENGE.dates', E.MARK_WORDING.opens() === 'Entries open Fri 6 Nov, 09:00 PT.' && R.shortDateText('opens', { ...CHALLENGE.dates, opens: '2026-11-13T17:00:00Z' }) === 'Fri 13 Nov, 09:00 PT', E.MARK_WORDING.opens());
+  // i. Neynar down: published, and told on the spot.
+  check('i the unchecked line says it won\'t count, and why', /won’t count/.test(CW.publishedUnchecked('Zei')) && /Neynar/.test(CW.publishedUnchecked('Zei')) && /\{entry\?\.kind === 'unchecked' && \(\s*<p className="ic-error ch-unchecked" role="status">\s*\{CW\.publishedUnchecked\(entry\.name\)\}/.test(form));
+  check('i the confirmation\'s new lines carry a Draft wording line', /\{entry && <p className="as-draft ic-draftline">\{IMAGE_WORDING\.draftLine\}<\/p>\}/.test(form));
 }
 
 console.log(`test:challenge: ${passed} passed, ${failures.length} failed`);

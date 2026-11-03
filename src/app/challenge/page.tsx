@@ -51,6 +51,8 @@ export default async function ChallengePage() {
         <strong>{now === 'before' ? W.opensOn() : now === 'open' ? W.deadline() : W.closed()}</strong>
         {now === 'before' && ` ${W.deadline()}`}
       </p>
+      {/* Who can enter, up front (owner, 2026-11-03; launch rehearsal item 2): no lookup here, the score is checked at Generate. */}
+      {now !== 'closed' && <p className="ch-who">{W.whoCanEnter()}</p>}
       <section className="ch-rules">
         <p>{W.intro()}</p>
         <p>

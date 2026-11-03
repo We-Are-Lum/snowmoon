@@ -214,7 +214,7 @@ export default async function DesignPage({ params }: Props) {
         byFid={d.byFid}
         challengeOpen={challengeOpen}
       />
-      <ChallengeShare versionId={d.shown.versionId} what={style ? title : `${callName}: ${title}`} posts={CHALLENGE.posts} />
+      <ChallengeShare versionId={d.shown.versionId} what={style ? title : `${callName}: ${title}`} posts={CHALLENGE.posts} inChallenge={d.kind === 'character' && isChallengeCharacter(d.entity) && phase() === 'open'} />
       {posts.length > 0 && <PostedOn versionId={d.shown.versionId} posts={posts.map(({ id, network, handle, at, url }) => ({ id, network, handle, at, url }))} />}
       <p className="as-draft ic-draftline">{IMAGE_WORDING.draftLine}</p>
     </article>

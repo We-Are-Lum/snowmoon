@@ -129,7 +129,8 @@ export const IMAGE_WORDING = {
       useCharacter: (name: string) => `Use as my ${name}`,
       myCharacter: (name: string, v: number) => `My ${name} · v${v} · clear`,
       switchTo: (v: number) => `Switch my pick to v${v}`,
-      fork: 'Fork',
+      // The button and the form's title (owner, 2026-11-03: "Remix", not "Fork"; one wording for every style and sheet).
+      fork: 'Remix',
       newVersion: 'New version',
       picked: 'Kept as your pick. Only you see this.',
       pickFailed: 'Could not change your pick. Try again.',
@@ -144,7 +145,8 @@ export const IMAGE_WORDING = {
     form: {
       newStyle: 'New style',
       newSheet: (name: string) => `New ${name} sheet`,
-      fork: 'Fork',
+      // The button and the form's title (owner, 2026-11-03: "Remix", not "Fork"; one wording for every style and sheet).
+      fork: 'Remix',
       newVersion: 'New version',
       band: (what: string) => `Remixed from ${what}`,
       bandNote: (by: string) => `Shown on yours for good. It credits ${by}.`,
@@ -182,7 +184,7 @@ export const IMAGE_WORDING = {
       needSamples: (n: number) => `Make at least ${n} sample pictures with this text to publish.`,
       signIn: 'Sign in to make a style or a sheet. For now, making them is open to invited readers only.',
       /** While the remix challenge opens this sheet (launch rehearsal, 2026-11-02: the line above told challenge visitors it was invited-only). */
-      signInChallenge: 'Sign in with Farcaster to remix this sheet. During the remix challenge, anyone whose account passes the site’s check can fork it.',
+      signInChallenge: 'Sign in with Farcaster to remix this sheet. During the remix challenge, anyone whose account passes the site’s check can remix it.',
       // Owner, 2026-10-10: "Invited only, for now". Shown by the form and sent by /api/designs and /api/designs/sample.
       // Picks are open to everyone signed in since 2026-10-19 (Privacy §4 names My picks), and at Generate for wallet
       // accounts too since 2026-10-23. Model-drafted.
