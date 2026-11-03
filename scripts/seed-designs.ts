@@ -139,6 +139,12 @@ async function samplePics(): Promise<Pic[]> {
 
 const STYLE_V2_REMOVED = [' rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon,', ' cinematic wide-angle perspective,'];
 const styleV2Text = STYLE_V2_REMOVED.reduce((t, r) => t.replace(r, ''), style.prompt);
+/**
+ * The style's title as published (owner, 2026-11-02: labelled "starting point"; a style has no label field). The sheets
+ * and their views' recipes name the style by it, as a fork made on the site does (owner, 2026-11-03; launch rehearsal
+ * item 17: the sheets said "Techno vistas", a fork in the same style "Techno vistas (starting point)").
+ */
+const STYLE_TITLE = `${style.name} (starting point)`;
 
 async function viewPic(c: string, slot: Slot, src: Source, styleVersionId: string): Promise<Pic> {
   const r = cast.images.find((x) => x.id === `${c}-sheet`)!;
@@ -151,8 +157,9 @@ async function viewPic(c: string, slot: Slot, src: Source, styleVersionId: strin
     if (sha(bytes) !== e.sha256) throw new Error(`${c} ${slot} v2: file changed`);
     if (e.recipe.style!.text !== styleV2Text) throw new Error('v2 style text unexpected');
     const references = slot === 'front' ? (e.recipe.references ?? []).map((x) => (x.sha256 === r.sha256 ? { ...x, what: `the original starting sheet (content/snowmoon/recipes/images/cast.json#${r.id})` } : x)) : e.recipe.references;
-    const recipe = { ...e.recipe, ...(references ? { references } : {}), style: { version_id: styleVersionId, title: 'Techno vistas (for views, without its scenery clauses)', text: e.recipe.style!.text } };
-    return { slot, bytes, sha256: e.sha256, key: keyFor(e.sha256), recipe, from: e.file, notes: slot === 'front' ? ['made from the original sheet (references: its sha256), not from text'] : [] };
+    // Named as published; its text is the one these views were made with: the style's without its scenery clauses.
+    const recipe = { ...e.recipe, ...(references ? { references } : {}), style: { version_id: styleVersionId, title: STYLE_TITLE, text: e.recipe.style!.text } };
+    return { slot, bytes, sha256: e.sha256, key: keyFor(e.sha256), recipe, from: e.file, notes: [...(slot === 'front' ? ['made from the original sheet (references: its sha256), not from text'] : []), 'the style\'s text without its scenery clauses'] };
   }
   if (src === 'v1') {
     const e = ledger1.calls.find((x) => x.char === c && x.view === slot)!;
@@ -164,7 +171,7 @@ async function viewPic(c: string, slot: Slot, src: Source, styleVersionId: strin
       recipe: {
         prompt: e.prompt, model: 'flux2-klein-4b-edit', endpoint: 'fal-ai/flux-2/klein/4b/edit', host: 'fal.ai', settings: e.settings, seed: e.seed, request_id: e.requestId,
         cost_usd: Number(e.listUsd.toFixed(4)), made_at: e.at, width: 576, height: 768, references: [{ sha256: e.reference.sha256, what: `the original starting sheet (content/snowmoon/recipes/images/cast.json#${r.id})` }],
-        style: { version_id: styleVersionId, title: style.name, text: style.prompt },
+        style: { version_id: styleVersionId, title: STYLE_TITLE, text: style.prompt },
         checks: { prompt: { model: 'none', verdict: 'not run' }, host_safety_checker: 'passed' } as unknown as DesignPicture['recipe']['checks'],
         assist: SAMPLE_ASSIST as unknown as DesignPicture['recipe']['assist'],
       },
@@ -186,7 +193,7 @@ async function viewPic(c: string, slot: Slot, src: Source, styleVersionId: strin
       prompt: r.prompt, model: 'flux2-klein-4b', endpoint: LOCAL_ENDPOINT(cast.model), host: 'local (the maintainer\'s computer)',
       settings: { ...cast.settings, derived: `Cropped from ${r.sha256} at x ${x0}-${x1}, padded to 432 x 576 with the sheet's own background; no model` },
       seed: r.seed, request_id: null, cost_usd: 0, made_at: cast.generated_at, width: 432, height: 576,
-      style: { version_id: styleVersionId, title: style.name, text: style.prompt },
+      style: { version_id: styleVersionId, title: STYLE_TITLE, text: style.prompt },
       checks: NOT_RUN,
       assist: { model: 'claude-coding-agent', drafted: ['character profile', 'image prompt', 'reference choices'], source: `content/snowmoon/recipes/images/cast.json#${r.id}` },
     },
@@ -272,7 +279,7 @@ const samples = await samplePics();
 let styleVersionId = before.style?.versionId ?? '<the new Techno vistas version id>';
 const styleBody = (s: DesignPicture[]): DesignBody => ({
   // Labelled "starting point" (owner, 2026-11-02); a style has no label field, so the label is in its title.
-  title: `${style.name} (starting point)`, text: style.prompt, samples: s, views: {}, by_name: BY_NAME, by_name_source: null, role: 'maintainer',
+  title: STYLE_TITLE, text: style.prompt, samples: s, views: {}, by_name: BY_NAME, by_name_source: null, role: 'maintainer',
   assist: { model: 'claude-coding-agent', drafted: ['style text'], source: STYLE_FILE },
 });
 say('== 1. Style: Techno vistas ==');
@@ -300,7 +307,7 @@ for (const c of CHARACTERS) {
     views: Object.fromEntries(pics.map((p) => [p.slot, { url: urls[p.slot], sha256: p.sha256, recipe: { ...p.recipe, style: { ...p.recipe.style!, version_id: vid } } }])),
     by_name: BY_NAME, by_name_source: null, role: 'maintainer',
     assist: { model: 'claude-coding-agent', drafted: ['character profile', 'view prompts'], source: `content/snowmoon/recipes/images/cast.json#${r.id}` },
-    style: { version_id: vid, title: style.name },
+    style: { version_id: vid, title: STYLE_TITLE },
   });
   sheetPlans.push({ c, name: ch.name, pics, body });
   if (!before.sheets[c].existing) problems.push(...pageProblems(pics));

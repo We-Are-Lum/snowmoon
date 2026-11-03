@@ -94,6 +94,10 @@ check('the style has its 2 samples, each in storage by its sha256', st.body.samp
 const sheets = await sql`select en.name, v.body, v.created_at, e.created_by_fid from studio.element_versions v join studio.elements e on e.id = v.element_id join studio.entities en on en.id = e.entity_id where en.kind = 'character' order by en.name`;
 check('six sheets, each "Starting point" by 6786', sheets.length === 6 && sheets.every((s) => s.body.title === 'Starting point' && Number(s.created_by_fid) === 6786 && s.body.role === 'maintainer'));
 check('every view of every sheet links to the style\'s version', sheets.every((s) => s.body.style.version_id === st.id && ['front', 'side', 'back'].every((k) => s.body.views[k].recipe.style.version_id === st.id)));
+// The sheets name the style as published, like a fork made on the site (owner, 2026-11-03; launch rehearsal item 17).
+const namesAsPublished = (list: typeof sheets) => list.every((s) => s.body.style.title === st.body.title && ['front', 'side', 'back'].every((k) => s.body.views[k].recipe.style.title === st.body.title));
+check('every sheet and every view\'s recipe name the style as published, "Techno vistas (starting point)"', st.body.title === 'Techno vistas (starting point)' && namesAsPublished(sheets));
+check('proof: a sheet naming the style "Techno vistas" is caught', !namesAsPublished(sheets.map((s, i) => (i === 0 ? { ...s, body: { ...s.body, style: { ...s.body.style, title: 'Techno vistas' } } } : s)) as typeof sheets));
 check('every stored view file matches its sha256', sheets.every((s) => ['front', 'side', 'back'].every((k) => {
   const f = path.join(storage, 'images/readers', `${s.body.views[k].sha256.slice(0, 32)}.jpg`);
   return execFileSync('shasum', ['-a', '256', f], { encoding: 'utf8' }).slice(0, 64) === s.body.views[k].sha256;
