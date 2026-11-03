@@ -20,9 +20,10 @@
 import { build } from 'esbuild';
 import { chromium, type Frame } from 'playwright-core';
 import { CHAT } from '../src/lib/config';
+import { requireTarget } from './lib/target';
 
 const arg = (name: string) => process.argv.slice(2).find((a) => a.startsWith(`--${name}=`))?.split('=').slice(1).join('=');
-const BASE = (arg('url') ?? 'http://localhost:3000').replace(/\/$/, '');
+const BASE = requireTarget('check:miniapp');
 const HOST = 'http://localhost:3199/';
 const failures: string[] = [];
 const fail = (m: string) => failures.push(m);

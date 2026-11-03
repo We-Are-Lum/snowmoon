@@ -65,6 +65,8 @@
  *   image's AI label, the check labelled AI with its model, Keep / Regenerate with my note / Drop, a saved decision
  *   shown, the finding with its fix line, the note box with the publication line, pre-filled with the fix line labelled
  *   "Drafted by the image check (Argon finding, gpt-oss-120b fix line)" and marked when edited; anyone else sees only the owner line.
+ * - The remix challenge (/challenge, 2026-10-31): the floors, light and dark, the "Draft wording" line, its six characters in order, the
+ *   deadline in Pacific time, the rules, admins not eligible for rewards, no sideways scroll.
  * - The footer line (owner's legal starter, 2026-10-09) reads exactly as written, with Terms, Privacy
  *   and Source linked, at the foot of About, in the menu sheet and at the bottom of the rail; not on a
  *   phone's reading screen. /terms and /privacy meet the floors.
@@ -76,9 +78,10 @@ import path from 'node:path';
 import { chromium, type Browser, type Page } from 'playwright-core';
 import QRCode from 'qrcode';
 import { SUPPORT } from '../src/lib/config';
+import { requireTarget } from './lib/target';
 
 const arg = (name: string) => process.argv.slice(2).find((a) => a.startsWith(`--${name}=`))?.split('=').slice(1).join('=');
-const BASE = (arg('url') ?? 'http://localhost:3000').replace(/\/$/, '');
+const BASE = requireTarget('check:ui');
 const INJECT = arg('inject-css');
 const SHOTS = arg('shots');
 /** A published style or sheet to check too (its version id), when the database has one. */
@@ -1525,6 +1528,23 @@ try {
       await checkFloors(page, p, scheme);
       await checkLegalLine(page, '.shell-main', p, scheme);
       if (!(await page.locator('.shell-main a[href="/about"]').count())) fail(`${p} (${scheme}): no link back to About`);
+    }
+    // The remix challenge (2026-10-31): the floors, the draft line, both characters, the deadline built from the config,
+    // the rules, and no sideways scroll at phone width.
+    await open(page, '/challenge');
+    await checkFloors(page, '/challenge', scheme);
+    {
+      const text = (await page.locator('.ch-page').textContent()) ?? '';
+      if (!/Draft wording/.test(text)) fail(`/challenge (${scheme}): no "Draft wording" line`);
+      // The characters, in CHALLENGE's order (owner, 2026-10-31): Zei, Bai, Gladias, Seila, Deluin, Mu.
+      const heads = (await page.locator('.ch-character h2').allTextContents()).map((h) => h.split(' ')[0]);
+      if (heads.join() !== 'Zei,Bai,Gladias,Seila,Deluin,Mu') fail(`/challenge (${scheme}): the characters read ${heads.join(', ')}`);
+      if (!/A new sheet made from scratch isn’t an entry/.test(text)) fail(`/challenge (${scheme}): it doesn't say only remixes count`);
+      if (!/Entries (open|close|closed) .*Pacific/.test(text)) fail(`/challenge (${scheme}): no deadline in Pacific time`);
+      if (!/One entry per person per character/.test(text)) fail(`/challenge (${scheme}): the rules are missing`);
+      if (!/aren’t eligible for rewards/.test(text)) fail(`/challenge (${scheme}): it doesn't say admins aren't eligible for rewards`);
+      const wide = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1);
+      if (wide) fail(`/challenge (${scheme}): scrolls sideways`);
     }
     await checkAssistant(page, scheme);
     await checkLiveScreens(page, scheme);

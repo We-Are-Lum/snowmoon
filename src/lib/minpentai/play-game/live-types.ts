@@ -34,10 +34,12 @@ export interface LadderProgress {
   opened: number;
   /** Per rung: tries, and the step of the first win. */
   rec: Record<number, { tries: number; won?: number }>;
+  /** On the search computer's ladder (ruleset 3): the old ladder's progress, kept as history. */
+  history?: { opened: number; rec: Record<number, { tries: number; won?: number }> };
 }
 /** POST /api/minpentai/ladder/result. The match runs in the browser against the computer;
  * the server checks the rung is open and records the try. */
-export interface LadderResultBody { rung: number; win: 'C' | 'A' | 'D'; step: number }
+export interface LadderResultBody { rung: number; win: 'C' | 'A' | 'D'; step: number; /** 3: the search computer's ladder; absent: the old one. */ ruleset?: 3 }
 
 export interface Person { fid: number; username: string }
 

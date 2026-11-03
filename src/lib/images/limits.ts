@@ -1,6 +1,6 @@
 import 'server-only';
 import type postgres from 'postgres';
-import { IMAGES } from '../config';
+import { IMAGES, imagesDailySpendCapUsd } from '../config';
 import { balanceUsd, debit, priceUsd } from '../wallet/credits';
 import { paysFor } from './price';
 
@@ -70,7 +70,7 @@ export async function reserve(sql: Sql, fid: number, spend: Spend = DEFAULT_SPEN
     const left = await generationsLeft(tx as unknown as Sql, fid);
     if (left <= 0) return { ok: false as const, refusal: 'limit' as const };
     const [today] = await tx`select coalesce(sum(cost_usd), 0)::float8 as usd from studio.image_costs where day = ${tx.unsafe(TODAY)} and funded = 'free'`;
-    if (today.usd + spend.reserveUsd > IMAGES.dailySpendCapUsd) return { ok: false as const, refusal: 'spend' as const };
+    if (today.usd + spend.reserveUsd > imagesDailySpendCapUsd()) return { ok: false as const, refusal: 'spend' as const };
     await tx`insert into studio.image_asks (fid) values (${fid})`;
     await addCost(tx as unknown as Sql, 'free', 'reserved', spend.model.id, '', '', 1, spend.reserveUsd);
     return { ok: true as const, left: left - 1 };
@@ -85,7 +85,7 @@ export async function reserve(sql: Sql, fid: number, spend: Spend = DEFAULT_SPEN
 export async function wordsCheckFits(sql: Sql): Promise<boolean> {
   const [today] = await sql`select coalesce(sum(cost_usd), 0)::float8 as usd from studio.image_costs where day = ${sql.unsafe(TODAY)} and funded = 'free'`;
   const worst = IMAGES.reserveUsd - IMAGES.pricePerMp;
-  return today.usd + worst <= IMAGES.dailySpendCapUsd;
+  return today.usd + worst <= imagesDailySpendCapUsd();
 }
 
 export async function recordGuard(sql: Sql, guard: { costUsd: number; provider: string | null; verdict: 'ok' | 'blocked' }) {
