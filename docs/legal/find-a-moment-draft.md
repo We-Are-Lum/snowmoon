@@ -1,4 +1,4 @@
-# "Find a moment" in "Ask for help": one Privacy sentence (DRAFT, for the owner's reread)
+# "Find a moment" in "Ask for help": its Privacy §5 words (DRAFT, for the owner's reread)
 
 **DRAFT, v2 (2026-11-04).** v2 takes the owner's own words for the sentence (2026-11-04), replacing the agent's
 v1 draft; it still goes with "Ask for help"'s reread. Drafted by the coding agent (Claude, a closed model by Anthropic), 2026-11-04, on branch `find-a-moment`
@@ -16,7 +16,7 @@ the switch on, it waits for these words by itself (`findMomentLive`, `src/lib/sh
 
 Every "before" is main's `src/lib/legal.ts` at `26bf405`, word for word (unchanged since `17e2c63`, which
 `sheet-help-draft.md` quotes). The "after" includes "Ask for help"'s draft words for the same section, marked
-[sheet-help], so the two read together; the one new sentence is marked [new]. Nothing else changes.
+[sheet-help], so the two read together; the new words (the owner's, two sentences) are marked [new]. Nothing else changes.
 
 ---
 
@@ -30,7 +30,7 @@ Every "before" is main's `src/lib/legal.ts` at `26bf405`, word for word (unchang
 
 > Your question is sent to Groq to be answered, or through Vercel AI Gateway to Groq when Groq is busy. Both are set to keep nothing. We keep no copy of your questions or the answers. Under your Farcaster ID we record only how many questions you ask and when, to count the daily limit. The assistant's costs are kept only as daily totals, without your ID, to track our spending. [sheet-help] On a character sheet, 'Ask for help' sends your message, the sheet's prompt draft and recipe, and the character's facts from the book to Groq (or through Vercel AI Gateway when Groq is busy), set to keep nothing. We keep no copy of the conversation. We keep a fingerprint of each change it suggests to you (not the words themselves, and never your message), with your Farcaster ID and the sheet, for 2 days, so that if you publish that sheet with those words, its recipe says it includes words from AI suggestions. Under your Farcaster ID we also record how many messages you send and when, to count the daily limit; costs are kept as daily totals without your ID. [new] 'Find a moment' sends what you describe, the character you choose and the furthest chapter you've opened (or that you chose to include later chapters), with the passages book search found, the same way. Each search counts as one of those messages, and we keep nothing else about it.
 
-**The new sentence alone** (for pasting; the owner's words, two sentences, kept as one block):
+**The new words alone** (for pasting; the owner's words, two sentences, kept as one block):
 
 > 'Find a moment' sends what you describe, the character you choose and the furthest chapter you've opened (or that you chose to include later chapters), with the passages book search found, the same way. Each search counts as one of those messages, and we keep nothing else about it.
 

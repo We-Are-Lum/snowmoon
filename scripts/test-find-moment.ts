@@ -140,7 +140,7 @@ const CAST_STUB = [{ slug: 'bai' }, { slug: 'zei' }];
   const add6 = (p: typeof PRIVACY, words: string) => ({ ...p, sections: p.sections.map((x) => (x.n === 6 ? { ...x, body: [...x.body, words] } : x)) });
   const helpWords = add6(add5(PRIVACY, "On a character sheet, 'Ask for help' sends your message … to Groq"), "… words it suggested to you in 'Ask for help' …");
   const draft = read('docs/legal/find-a-moment-draft.md');
-  const sentence = draft.match(/\*\*The new sentence alone\*\* \(for pasting[^)]*\):\n\n> (.*)\n/)?.[1] ?? '';
+  const sentence = draft.match(/\*\*The new words alone\*\* \(for pasting[^)]*\):\n\n> (.*)\n/)?.[1] ?? '';
   const both = add5(helpWords, sentence);
   const inWindow = new Date(Date.parse(CHALLENGE.dates.opens) + 3600_000);
   SHEET_HELP.on = true;
