@@ -51,7 +51,7 @@ The options are below. Each can be used on its own (100% by deep funding) or wit
 
 Who is an "eligible submitter" for the 20%: proposed, a person with at least one eligible entry in a **counting**
 character, whether or not the final used it. A person whose only entries are in characters that didn't reach three
-submitters has no deep funding result to stand on. Including them is a one-word change (decision 3 below).
+submitters has no deep funding result to stand on. Including them is a one-word change (the owner's list, item 2).
 
 ### Worked example (made-up numbers)
 
@@ -73,7 +73,7 @@ submitters has no deep funding result to stand on. Including them is a one-word 
 
 The owner's and the book's shares go to the Lake, as the runner does today (`DEEP_FUNDING.lake`, the team's Fund
 account since 2026-11-04). The runner's under-1% rule is left off here: with the 20% share, nobody's payout is dust
-(decision 5).
+(the owner's list, item 4).
 
 **Each character's part of the 80% (2.08 ETH):**
 
@@ -117,7 +117,7 @@ C 0.1956, D 0.0991, F 0.0599, G 0.0487, H 0.0431, I 0.1481, J 0.0851, L 0.1691, 
 account: the owner's own originality share and the book's share. "All of it is distributed by the deep funding
 result" is true, since the result names those shares. But if the owner means all of it goes to the participants,
 those two shares should instead be shared among the makers. With B and 20/80, people would then get 2.59 ETH in all,
-for example A 0.508 and L 0.274 (decision 4).
+for example A 0.508 and L 0.274 (the owner's list, item 3).
 
 ### Recommendation
 
@@ -165,7 +165,7 @@ or toward the three submitters.
   before the mint opens on Tue 8 Dec at 09:00.
 
 Three days is short. A longer deadline means a later mint, since each token's payout is fixed at `createToken`
-(decision 7).
+(the owner's list, item 5).
 
 ### The screens
 
@@ -292,7 +292,7 @@ Checked 2026-11-03. The live help pages refused the fetch tool in places, and th
     telemetry off if the SDK allows it (**to check**).
   - Name Coinbase in Privacy §7, as above.
   - Add a P6 check that the SDK is imported nowhere else.
-  - This is a narrow, opt-in exception to "production pages make no third-party requests" (decision 9).
+  - This is a narrow, opt-in exception to "production pages make no third-party requests" (the owner's list, item 6).
 - **Alternatives:**
   - **The Farcaster app's own wallet.** Most recipients already have it, and its address is usually their verified
     one, so "Use your wallet" covers them with no new wallet at all. This is likely the most common path.
