@@ -1,6 +1,6 @@
 # Starting sheets: original, v1 and v2, for the owner's pick
 
-**New (2026-11-04): favourites.** Candidate pictures of each character from our adaptations and the seeded images, for remixes of the bases, with the cost: [favourites.md](favourites.md).
+**New (2026-11-04): favourites, v2.** 29 clean candidate pictures (10 cropped to the character) from Fifteen Days and the seeded images, for three-view remixes of the bases, with the cost and what was dropped: [favourites.md](favourites.md).
 
 **New (2026-11-03): three bases per character.** Fronts in the five published styles and two closed-model concepts, one contact sheet per character, plus three Zei side seeds: [bases.md](bases.md).
 

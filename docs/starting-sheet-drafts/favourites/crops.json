@@ -1,0 +1,236 @@
+{
+ "about": "Crops of seeded images for the favourites (owner, 2026-11-04): no model; Pillow 11.3.0 Image.crop on the published JPEG (sha256 checked against content/snowmoon/illustrations/published.json). box = x, y, w, h in the original's pixels. The local PNG is the crop at full resolution, for the make step; the committed JPEG is a small copy for the doc. Recommended for the make step: scale the PNG to fit 576 x 768 (Lanczos) before sending, recorded in the recipe.",
+ "tool": "Pillow 11.3.0",
+ "crops": {
+  "zei-F6": {
+   "original": "c4-b149-new-rule",
+   "original_url": "https://media.snowmoon.party/images/seed/c4/c4-b149-new-rule-65e8e38b1d4e.jpg",
+   "original_sha256": "65e8e38b1d4ee656e74db63f0c1f634672838fdd820090144e276561cadd15a3",
+   "original_size": [
+    1024,
+    576
+   ],
+   "box": {
+    "x": 560,
+    "y": 150,
+    "w": 190,
+    "h": 426
+   },
+   "crop_png_local": "/Users/nathan/snowmoon-starting-drafts/favourites/crops/zei-F6.png",
+   "crop_png_sha256": "7e43ce1918609867738de586da1f936a96559d834c76395fa6d1e19bd0a1b2e5",
+   "committed_copy": "docs/starting-sheet-drafts/favourites/crops/zei-F6.jpg",
+   "committed_copy_sha256": "e55babf73e20ff2ab73536a30f15fd6f978ed9e315e77ea621648e5c5cd44263",
+   "send_size_recommended": [
+    343,
+    768
+   ]
+  },
+  "bai-F8": {
+   "original": "c14-b027-lobby-breakfast",
+   "original_url": "https://media.snowmoon.party/images/seed/c14/c14-b027-lobby-breakfast-5ccd90418a03.jpg",
+   "original_sha256": "5ccd90418a0329f8e48ff832bcb3352670c0c6f5d7d065d65dee8f09fc52d5f8",
+   "original_size": [
+    1024,
+    576
+   ],
+   "box": {
+    "x": 515,
+    "y": 160,
+    "w": 160,
+    "h": 390
+   },
+   "crop_png_local": "/Users/nathan/snowmoon-starting-drafts/favourites/crops/bai-F8.png",
+   "crop_png_sha256": "7420d131e2c7b578a01f598726bef69116ba6b911d9a204be8f5438d95e715d8",
+   "committed_copy": "docs/starting-sheet-drafts/favourites/crops/bai-F8.jpg",
+   "committed_copy_sha256": "67ada8d0fa004145bc844baea720f37a51ec194a69415ec568e2f9a87d635cb5",
+   "send_size_recommended": [
+    315,
+    768
+   ]
+  },
+  "gladias-F2": {
+   "original": "c5-b091-watch-call",
+   "original_url": "https://media.snowmoon.party/images/seed/c5/c5-b091-watch-call-1d085761f92c.jpg",
+   "original_sha256": "1d085761f92c287c92533aedd1faaff6c1accf922aee8dd76f6dd4a805a2209e",
+   "original_size": [
+    1024,
+    576
+   ],
+   "box": {
+    "x": 610,
+    "y": 70,
+    "w": 300,
+    "h": 506
+   },
+   "crop_png_local": "/Users/nathan/snowmoon-starting-drafts/favourites/crops/gladias-F2.png",
+   "crop_png_sha256": "b86c74c75f37a1500cf371287d72971f7ab7b0daecc6a94d4e6e69fb403c962b",
+   "committed_copy": "docs/starting-sheet-drafts/favourites/crops/gladias-F2.jpg",
+   "committed_copy_sha256": "3feb1e462bd2aa240a8b833acf0e7e82588766055a64d2809b86c569cbcfe22a",
+   "send_size_recommended": [
+    455,
+    768
+   ]
+  },
+  "gladias-F3": {
+   "original": "c32-b111-roof-home",
+   "original_url": "https://media.snowmoon.party/images/seed/c32/c32-b111-roof-home-9fe8999d7215.jpg",
+   "original_sha256": "9fe8999d7215a09851cbf38dbe6361c1a644b9d14280365cb7b5c55daa6fff76",
+   "original_size": [
+    1024,
+    576
+   ],
+   "box": {
+    "x": 150,
+    "y": 30,
+    "w": 280,
+    "h": 546
+   },
+   "crop_png_local": "/Users/nathan/snowmoon-starting-drafts/favourites/crops/gladias-F3.png",
+   "crop_png_sha256": "65db674e7281aa93ceb6c8247c39d43a143bab891ccd0917c51be3ebe73b7446",
+   "committed_copy": "docs/starting-sheet-drafts/favourites/crops/gladias-F3.jpg",
+   "committed_copy_sha256": "6ac94f6b05861cd89f40ab5aa343a67d54e74cd043d0679d7b0ffc1acd62b5bb",
+   "send_size_recommended": [
+    394,
+    768
+   ]
+  },
+  "gladias-F5": {
+   "original": "c25-b017-tapping-circles",
+   "original_url": "https://media.snowmoon.party/images/seed/c25/c25-b017-tapping-circles-7738df3c6921.jpg",
+   "original_sha256": "7738df3c6921cf7515a35a9dfee1dd44cd343718313ae611a88ae167d14eaa17",
+   "original_size": [
+    1024,
+    576
+   ],
+   "box": {
+    "x": 80,
+    "y": 30,
+    "w": 420,
+    "h": 546
+   },
+   "crop_png_local": "/Users/nathan/snowmoon-starting-drafts/favourites/crops/gladias-F5.png",
+   "crop_png_sha256": "d19b960445a54f530a599b6b7ccae8c08f34f745634dc026e0b3893b350e8100",
+   "committed_copy": "docs/starting-sheet-drafts/favourites/crops/gladias-F5.jpg",
+   "committed_copy_sha256": "b56b28d9113f75fe3ca5da815500043835fdfec499f89fd28ddd811ffcde01bb",
+   "send_size_recommended": [
+    576,
+    749
+   ]
+  },
+  "gladias-F6": {
+   "original": "c19-b110-sealed-tea",
+   "original_url": "https://media.snowmoon.party/images/seed/c19/c19-b110-sealed-tea-e5768c853917.jpg",
+   "original_sha256": "e5768c853917973bd96890581809327621d5d97c3f9968a3f074f30eb4b8079a",
+   "original_size": [
+    1024,
+    576
+   ],
+   "box": {
+    "x": 200,
+    "y": 15,
+    "w": 330,
+    "h": 561
+   },
+   "crop_png_local": "/Users/nathan/snowmoon-starting-drafts/favourites/crops/gladias-F6.png",
+   "crop_png_sha256": "850e8b5c14353fd54ac68de32c6166e6917c296721d774e5e44e3a6b5b28f2da",
+   "committed_copy": "docs/starting-sheet-drafts/favourites/crops/gladias-F6.jpg",
+   "committed_copy_sha256": "ad5d60550c651dd6c98bf0f06bde7939b5d2e9426061a6f2cbea9418a173e337",
+   "send_size_recommended": [
+    452,
+    768
+   ]
+  },
+  "seila-F3": {
+   "original": "c5-b091-watch-call",
+   "original_url": "https://media.snowmoon.party/images/seed/c5/c5-b091-watch-call-1d085761f92c.jpg",
+   "original_sha256": "1d085761f92c287c92533aedd1faaff6c1accf922aee8dd76f6dd4a805a2209e",
+   "original_size": [
+    1024,
+    576
+   ],
+   "box": {
+    "x": 180,
+    "y": 120,
+    "w": 360,
+    "h": 456
+   },
+   "crop_png_local": "/Users/nathan/snowmoon-starting-drafts/favourites/crops/seila-F3.png",
+   "crop_png_sha256": "3e76d606426c9f860a9779d6b24542bff0a1959175f8df5080c4ab3b643958e8",
+   "committed_copy": "docs/starting-sheet-drafts/favourites/crops/seila-F3.jpg",
+   "committed_copy_sha256": "4fc1329e89c9752bbbe3164372c6f766c1ab2f9706ad2d47038f133b52680dfd",
+   "send_size_recommended": [
+    576,
+    730
+   ]
+  },
+  "seila-F4": {
+   "original": "c32-b111-roof-home",
+   "original_url": "https://media.snowmoon.party/images/seed/c32/c32-b111-roof-home-9fe8999d7215.jpg",
+   "original_sha256": "9fe8999d7215a09851cbf38dbe6361c1a644b9d14280365cb7b5c55daa6fff76",
+   "original_size": [
+    1024,
+    576
+   ],
+   "box": {
+    "x": 530,
+    "y": 55,
+    "w": 240,
+    "h": 521
+   },
+   "crop_png_local": "/Users/nathan/snowmoon-starting-drafts/favourites/crops/seila-F4.png",
+   "crop_png_sha256": "d37df2a0871c26e42dc98a3c1f04e77270ed1396a3d76171edf2d3df0369b9ab",
+   "committed_copy": "docs/starting-sheet-drafts/favourites/crops/seila-F4.jpg",
+   "committed_copy_sha256": "bede00da0a1ece9a7b8acb5f484ab57388d31512b75153ea24f69a2278c9b2b3",
+   "send_size_recommended": [
+    354,
+    768
+   ]
+  },
+  "seila-F6": {
+   "original": "c26-b075-seila-runs",
+   "original_url": "https://media.snowmoon.party/images/seed/c26/c26-b075-seila-runs-6f52c2656c60.jpg",
+   "original_sha256": "6f52c2656c607aaf598837159ce3b6dbe8cda8b5811b2eaea7572b4041b3652f",
+   "original_size": [
+    1024,
+    576
+   ],
+   "box": {
+    "x": 240,
+    "y": 90,
+    "w": 260,
+    "h": 450
+   },
+   "crop_png_local": "/Users/nathan/snowmoon-starting-drafts/favourites/crops/seila-F6.png",
+   "crop_png_sha256": "4675afb32523aa15ba0abb684abc68e30f1746f3ccfd44d32dd26a5578ed9172",
+   "committed_copy": "docs/starting-sheet-drafts/favourites/crops/seila-F6.jpg",
+   "committed_copy_sha256": "a8aad0077b8eb5d23ee580bab98691f1eb33dce109193b026bf3ffd42070801b",
+   "send_size_recommended": [
+    444,
+    768
+   ]
+  },
+  "mu-F1": {
+   "original": "c4-b149-new-rule",
+   "original_url": "https://media.snowmoon.party/images/seed/c4/c4-b149-new-rule-65e8e38b1d4e.jpg",
+   "original_sha256": "65e8e38b1d4ee656e74db63f0c1f634672838fdd820090144e276561cadd15a3",
+   "original_size": [
+    1024,
+    576
+   ],
+   "box": {
+    "x": 300,
+    "y": 190,
+    "w": 175,
+    "h": 386
+   },
+   "crop_png_local": "/Users/nathan/snowmoon-starting-drafts/favourites/crops/mu-F1.png",
+   "crop_png_sha256": "60955532f02a4048444330888a15d16ee45aab1cd0aa59025f4eee4f3e17077a",
+   "committed_copy": "docs/starting-sheet-drafts/favourites/crops/mu-F1.jpg",
+   "committed_copy_sha256": "df9206222c3307537e420ded1244845e0350231821d5234000172280a00d5c0e",
+   "send_size_recommended": [
+    348,
+    768
+   ]
+  }
+ }
+}
