@@ -598,6 +598,11 @@ check('as committed, CHALLENGE.entries, posts and openSheets are on (owner\'s re
   const hides = (src: string) => /if \(r\?\.ok\) setDone\(true\);/.test(src) && /\{!done && \(\s*<button/.test(src);
   check('R6 once marked, "Mark as my entry" goes', hides(markSrc));
   proof('R6 a button that stays after marking is caught', !hides(markSrc.replace('{!done && (', '{(')));
+  // R7: publishing a fork or version didn't refresh /challenge (marking did).
+  const designsRoute = read('src/app/api/designs/route.ts');
+  const refreshes = (src: string) => /await recordEligibility\(sql, out\.versionId, fid\);\s*\/\/[^\n]*\n\s*revalidatePath\('\/challenge'\);/.test(src);
+  check('R7 publishing a challenge character\'s fork or version refreshes /challenge', refreshes(designsRoute) && /revalidatePath\('\/challenge'\)/.test(read('src/app/api/challenge/mark/route.ts')));
+  proof('R7 a publish that leaves /challenge stale is caught', !refreshes(designsRoute.replace("revalidatePath('/challenge');", '')));
 }
 
 console.log(`test:challenge: ${passed} passed, ${failures.length} failed`);

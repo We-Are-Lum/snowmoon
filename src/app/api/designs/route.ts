@@ -148,7 +148,11 @@ export async function POST(request: Request) {
   try {
     const out = await makeDesign(sql, { fid, mode, kind, styleName: mode === 'create' && kind === 'style' ? title : undefined, character: character ?? undefined, place: place ?? undefined, fromVersionId: typeof body.from === 'string' ? body.from : undefined, body: design });
     // The remix challenge: whether this version can be an entry is decided now, once, and stored (never on page view).
-    if (kind === 'character' && mode !== 'create') await recordEligibility(sql, out.versionId, fid);
+    if (kind === 'character' && mode !== 'create') {
+      await recordEligibility(sql, out.versionId, fid);
+      // Its count and entries list change now, as after a mark (launch rehearsal, 2026-11-02: /challenge lagged up to a minute).
+      revalidatePath('/challenge');
+    }
     revalidatePath('/references/designs');
     return NextResponse.json({ versionId: out.versionId, page: `/references/designs/${out.versionId}` });
   } catch (e) {
