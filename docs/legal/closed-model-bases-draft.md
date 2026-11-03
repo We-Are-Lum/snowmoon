@@ -48,6 +48,13 @@ of the pictures the project makes itself: the remix challenge's bases and refere
 Days' second version."
 
 Notes:
+- **Decision recorded (owner, 2026-11-04): Google's under-18 clause is fine for bases he makes** (Cloud Service Specific
+  Terms §20(d); the proposal's Google section). Gemini is used only in a batch job the owner runs, never by a visitor, so
+  these lines need no age wording. This is not the reread: the lines above still need the owner's reread before any
+  closed base is published and `CHALLENGE.closedBasesAllowed` turns on.
+- If the challenge's closed **styles** are published (styles-proposal.md, branch `challenge-styles`: Gouache by Google,
+  Neon night by OpenAI), their samples are neither bases nor references: "the remix challenge's bases and references"
+  would read "the remix challenge's bases, styles and references", here and in Terms §8. For the owner's reread.
 - "the project makes itself" matches Terms §7 ("the images the project made itself, its starting points").
 - This item is about the project's pictures, not users' data. It is in §7 because P6g to P6j compare the outside
   services named across Privacy, About, the notice and consent, and because readers should be able to see who has seen

@@ -113,6 +113,10 @@ too).
   says only that the Service "is not directed to children under 13". Our use is a batch job on the owner's machine, not
   a feature of the website: no visitor ever uses Gemini, only its finished pictures are shown. That reading is
   reasonable but not certain.
+  **Decision recorded (owner, 2026-11-04): Google's under-18 clause is fine for bases he makes.** Gemini stays a batch
+  job the owner runs, never a visitor-facing feature. The Privacy lines still need his reread before any closed base is
+  published. Not yet asked: whether the same reading covers a closed style's samples made the same way
+  (docs/starting-sheet-drafts/styles-proposal.md, branch `challenge-styles`).
 - **Attribution, labelling, provenance.** No contractual attribution requirement for images (the Gemini API terms
   mention attribution only "when returned as part of an API call", where law requires it). Generative AI Prohibited Use
   Policy, last modified 2024-12-17 (<https://policies.google.com/terms/generative-ai/use-policy>), incorporated by §20(c):
@@ -177,7 +181,7 @@ providers' terms (above).
 | Training other models | We must not use Output to build competing models (OSA §3.3(e); ToU) | We must not use output to build similar models (§17(a), (b)) | — |
 | Attribution / labelling | Don't present as human-made (ToU); no deceit or likeness misuse (Usage Policies) | Don't misrepresent provenance to deceive (Prohibited Use Policy 4.5) | Disclose AI use to end users (§8.3) |
 | C2PA / watermark | C2PA manifest + watermark action in the PNG; our JPEG strips the manifest | C2PA + SynthID + "Made with Google AI" in the PNG; our JPEG strips them | — |
-| Age | Minors need consent to *use* the services (OSA §3.3(c)): no visitor uses them | **Unclear:** no use "as part of a website … likely to be accessed by" under-18s (§20(d)) | — |
+| Age | Minors need consent to *use* the services (OSA §3.3(c)): no visitor uses them | No use "as part of a website … likely to be accessed by" under-18s (§20(d)); **owner, 2026-11-04: fine for bases he makes** (batch only) | — |
 | Applies through the gateway | Yes, via Vercel §8.1 and its notice | Yes, same | We are Vercel's customer |
 | **Publishable under GPL-3.0** | **Yes, with conditions** | **Yes, with conditions** (age clause unclear) | **Yes** |
 
