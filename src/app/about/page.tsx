@@ -113,12 +113,16 @@ export default async function About() {
         Farcaster app it happens by itself. On this website, {SIGN_IN_SERVICES.charAt(0).toLowerCase() + SIGN_IN_SERVICES.slice(1)}
       </p>
       <h2 id="services">Where it runs</h2>
-      {/* Model-drafted wording: the outside services the Privacy Policy names that are not named above (check:principles P6h). */}
+      {/* Model-drafted wording: the outside services the Privacy Policy names that are not named above (check:principles P6h).
+          The report-or-share sentence and the "adds a post" sentence are the owner's words, approved as written (2026-11-04;
+          docs/wording-for-approval-2026-11-04.md section 11 on branch wording-for-approval). */}
       <p>
         Vercel hosts the site and sees your IP address and browser details, as any web host does. Cloudflare stores and serves
-        the pictures and audio. Supabase holds the database. A report link for the narration opens GitHub or Farcaster, where
-        what you post is public. When an image is reported, ntfy delivers us a short alert that carries no content and
-        nothing about you. Every outside service, and what each receives, is in the <a href="/privacy">Privacy Policy</a>;
+        the pictures and audio. Supabase holds the database. A report or share link opens GitHub, Farcaster, X, Bluesky or
+        Lens, where what you post is public. When an image is reported, ntfy delivers us a short alert that carries no content
+        and nothing about you. When someone adds a post to a version's page, our server asks Bluesky or Lens for that post,
+        sending only its details, to check that it links there; it sends nothing about you, and your browser never contacts
+        them for this. Every outside service, and what each receives, is in the <a href="/privacy">Privacy Policy</a>;
         the rules for using this site are in the <a href="/terms">Terms</a>.
       </p>
       <h2>Theme</h2>
