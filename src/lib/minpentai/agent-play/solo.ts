@@ -18,8 +18,8 @@ import { drawRules, engine, layout, other, rng, verdict, type AnyPiece, type Eng
 import type { Settings } from '../versions/schema';
 import { SOLO_V3, type VersionRules } from '../versions/solo-v1';
 import { TurnWatch } from './summary';
-import { BOOK_3_DRAFT, BOOK_EDITION } from '../versions/book-edition';
-import { PRESETS, TOP_LEVEL, searchPlan, type BookPlay, type Preset } from '../versions/search';
+import { BOOK_3_DRAFT, BOOK_4_DRAFT, BOOK_EDITION } from '../versions/book-edition';
+import { PRESETS, TOP_LEVEL, searchPlan, type BookPlay, type Computer, type Preset } from '../versions/search';
 import { appUrl } from '../../config';
 import { PIECES_PAGE, rulesText } from './rules-text';
 import { converging, laneWarnings } from './help';
@@ -29,19 +29,19 @@ import { converging, laneWarnings } from './help';
  * the same after the rules change): play-3 is Play's ruleset 3 (versions/solo-v1.ts), book-1 the book edition as it
  * is today. A rule change adds a new id; an id never changes meaning.
  */
-export const RULESETS = { 'book-1': BOOK_EDITION, 'book-2': BOOK_EDITION, 'book-3': BOOK_3_DRAFT, 'play-3': SOLO_V3 } as const satisfies Record<string, VersionRules>;
+export const RULESETS = { 'book-1': BOOK_EDITION, 'book-2': BOOK_EDITION, 'book-3': BOOK_3_DRAFT, 'book-4': BOOK_4_DRAFT, 'play-3': SOLO_V3 } as const satisfies Record<string, VersionRules>;
 /**
  * How the site computer plays under each ruleset. book-2 (owner, 2026-11-01: "a new computer means a new ruleset") is
  * book-1's rules with a computer that uses all four book pieces (search.ts BookPlay); book-1 matches keep replaying with
  * the computer they were played against.
  */
-export const COMPUTERS: Record<RulesetName, { book?: BookPlay }> = { 'book-1': {}, 'book-2': { book: { variety: 0, kinds: ['f', 'w', 'm', 'e'], from: 2 } }, 'book-3': {}, 'play-3': {} };
+export const COMPUTERS: Record<RulesetName, { book?: BookPlay; comp?: Computer }> = { 'book-1': {}, 'book-2': { book: { variety: 0, kinds: ['f', 'w', 'm', 'e'], from: 2 } }, 'book-3': {}, 'book-4': { comp: { formingSymbols: true, seedScore: 0, spendTies: true } }, 'play-3': {} };
 /**
  * Draft rulesets: started only by name, and only by the people in AGENTS.minpentaiPlay.drafts. book-3's computer is the
  * plain search, unforced: under book-3's rules it chooses the pieces on its own (or doesn't), which is what the draft
  * is for.
  */
-export const DRAFTS: readonly RulesetName[] = ['book-3'];
+export const DRAFTS: readonly RulesetName[] = ['book-3', 'book-4'];
 export type RulesetName = keyof typeof RULESETS;
 /** What a new match under each family is played under now. */
 export const CURRENT: Record<'book' | 'play', RulesetName> = { book: 'book-2', play: 'play-3' };
@@ -153,7 +153,7 @@ export function newSolo(o: { id: string; ruleset: RulesetName; level: number; se
   e.L.towers.C.forEach((k) => (ls.A[k] = 0));
   const m: SoloMatch = {
     v: 1, id: o.id, ruleset: o.ruleset, level: o.level, seed: o.seed, person: o.person, agent: o.agent,
-    linkHash: sha256(linkSecret), cpu, cpuCommit: sha256(cpu), createdAt: o.now, w, kills: { C: 0, A: 0 }, ls, turn: 0,
+    linkHash: sha256(linkSecret), cpu, cpuCommit: sha256(cpu), createdAt: o.now, w, kills: { C: 0, A: 0, ...(s.killReports ? { log: [] } : {}) }, ls, turn: 0,
     pend: { C: null, A: null }, openedAt: Date.parse(o.now) || 0, standing: null, history: [], end: null,
   };
   return { m, linkSecret };
@@ -214,7 +214,7 @@ export function rulesFor(m: Pick<SoloMatch, 'ruleset' | 'seed'>) {
 /** Everything the person's side is shown: its view of the board and the turn. Nothing else. */
 export function viewFor(m: SoloMatch) {
   const { s, e, rule } = rulesOf(m);
-  const me = PERSON, view = e.fog(m.w, s, me), see = e.lit(m.w, me, s.sight);
+  const me = PERSON, view = e.fog(m.w, s, me), see = e.sees(m.w, s, me);
   // Ore only where the rock and every square beside it are in sight (as fog() keeps it).
   const oreSeen = (k: number) => { const [x, y] = e.XY(k); return see.has(k) && [[1, 0], [-1, 0], [0, 1], [0, -1]].every(([dx, dy]) => !e.inb(x + dx, y + dy) || see.has(e.K(x + dx, y + dy))); };
   const snap = e.towers(m.w, me);
@@ -236,8 +236,13 @@ export function viewFor(m: SoloMatch) {
     reach: s.reach,
     points: over ? 0 : pointsOf(m, s),
     costs: costsOf(s),
+    // book-4's kill reports: every enemy tower this side's gliders destroyed, seen or not, and the count for both
+    // sides (the tie-break counts them). Nothing else from the dark.
+    ...(s.killReports ? { towers_destroyed: { by_you: m.kills.C, by_opponent: m.kills.A }, your_kills: (m.kills.log ?? []).filter((x) => x.o === me).map((x) => ({ x: e.XY(x.k)[0], y: e.XY(x.k)[1], step: x.step })) } : {}),
+    ...(s.gliderSight || s.symbolGliderSight ? { glider_sight: { plain: s.gliderSight ?? 0, symbol: s.symbolGliderSight ?? 0 } } : {}),
     // book-3's limits, said only where a ruleset sets them (book-1 and book-2 views are unchanged).
     ...(s.maxTowers ? { towers_at_most: s.maxTowers, ...(s.symbolsCapped ? { symbols_count_toward_the_cap: true } : {}) } : {}),
+    ...(s.maxSymbolTowers ? { symbol_towers_at_most: s.maxSymbolTowers, symbol_towers_now: e.symbolTowers(m.w, me) } : {}),
     ...(s.factoryEvery ? { factories_fire_every_steps: s.factoryEvery } : {}),
     ...(s.tieBreak ? { tie_break: 'at the last step with towers level, the side that destroyed more enemy towers wins' } : {}),
     board: boardOut(e, view, me, oreSeen),
@@ -334,14 +339,14 @@ function resolve(m: SoloMatch, now: string) {
   const strip = ({ final: _f, note: _n, ...x }: Orders) => x;
   m.history.push({ turn: m.turn, step: m.w.step, C: strip(C), A: strip(A) });
   e.apply(m.w, s, { C: C.placements, A: A.placements });
-  e.updLS(m.w, s.sight, m.ls);
+  e.updSeen(m.w, s, m.ls, m.kills);
   // The person's turn summary, from their side's view at each step (summary.ts).
   const watch = new TurnWatch(e, s, PERSON, m.w, m.kills, C.placements);
   const from = m.w.step, turn = m.turn;
   const note = () => { m.summary = { turn, from, lines: watch.done() }; };
   do {
     e.step(m.w, s, m.kills);
-    e.updLS(m.w, s.sight, m.ls);
+    e.updSeen(m.w, s, m.ls, m.kills);
     watch.look(m.w);
     const v = verdict(e, m.w, s, m.kills);
     if (v) {
@@ -414,15 +419,15 @@ export function checkComputer(r: Pick<SoloMatch, 'ruleset' | 'seed' | 'level' | 
   const st: PlanState = { ruleset: r.ruleset, seed: r.seed, level: r.level, cpu: r.cpu, w: e.world(s), ls: { C: {}, A: {} }, turn: 0 };
   e.L.towers.A.forEach((k) => (st.ls.C[k] = 0));
   e.L.towers.C.forEach((k) => (st.ls.A[k] = 0));
-  const kills: Kills = { C: 0, A: 0 };
+  const kills: Kills = { C: 0, A: 0, ...(s.killReports ? { log: [] } : {}) };
   for (const h of r.history) {
     st.turn = h.turn;
     if (ordersText(computerPlan(st)) !== ordersText(h.A.placements)) out.push(`turn ${h.turn}: the computer's orders don't follow from the record`);
     if (h.C.source === 'site-computer' && ordersText(fallbackPlan(st, h.C.preset ?? 'balanced')) !== ordersText(h.C.placements)) out.push(`turn ${h.turn}: the site computer's orders for the person don't follow from the record`);
     e.apply(st.w, s, { C: h.C.placements, A: h.A.placements });
-    e.updLS(st.w, s.sight, st.ls);
+    e.updSeen(st.w, s, st.ls, kills);
     const from = st.w.step;
-    do { e.step(st.w, s, kills); e.updLS(st.w, s.sight, st.ls); if (verdict(e, st.w, s, kills)) return out; } while (st.w.step - from < s.every);
+    do { e.step(st.w, s, kills); e.updSeen(st.w, s, st.ls, kills); if (verdict(e, st.w, s, kills)) return out; } while (st.w.step - from < s.every);
   }
   return out;
 }
@@ -437,7 +442,7 @@ export function checkComputer(r: Pick<SoloMatch, 'ruleset' | 'seed' | 'level' | 
 export function simulate(m: SoloMatch, args: { belief?: Belief; scenarios: { name: string; placements: unknown }[]; steps?: number }) {
   const { s, e } = rulesOf(m);
   const me = PERSON, them = other(me);
-  const view = e.fog(m.w, s, me), see = e.lit(view, me, s.sight);
+  const view = e.fog(m.w, s, me), see = e.sees(view, s, me);
   const board = e.clone(view);
   const b = args.belief ?? {};
   const put = (x: unknown, y: unknown, what: string) => {

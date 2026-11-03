@@ -89,7 +89,7 @@ const PLACEMENTS = {
 export const MINPENTAI_TOOLS: AgentTool[] = [
   {
     name: 'minpentai_start_solo', title: 'Start a Minpentai match against the site computer', scope: 'play', writes: true, counts: 'reads',
-    description: `Starts a match for your person (Cyan) against the site computer (Amber), on the book edition (default) or Play\'s rules (or "book-3", a draft of the book edition\'s rebalanced rules, open only to the people it\'s shown to), at level 0 (the beginner) to 3. Returns the match, your side\'s first view, and a live link that shows your person their side only (shown once: give it to your person). Your person decides; you advise and place what they agree to. Rules invented for this edition, not the book\'s. ${NOTES.core} ${NOTES.convergence} ${NOTES.sight} ${PAGE}`,
+    description: `Starts a match for your person (Cyan) against the site computer (Amber), on the book edition (default) or Play\'s rules (or a draft of the book edition\'s rebalanced rules, "book-3" or "book-4", open only to the people they\'re shown to), at level 0 (the beginner) to 3. Returns the match, your side\'s first view, and a live link that shows your person their side only (shown once: give it to your person). Your person decides; you advise and place what they agree to. Rules invented for this edition, not the book\'s. ${NOTES.core} ${NOTES.convergence} ${NOTES.sight} ${PAGE}`,
     inputSchema: { type: 'object', properties: { ruleset: { enum: ['book', 'play', ...(DRAFTS as string[])] }, level: { type: 'integer', minimum: 0, maximum: 3 }, model: MODEL }, additionalProperties: false },
     async run(agent, args) {
       on(agent);

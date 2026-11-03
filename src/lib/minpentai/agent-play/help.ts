@@ -93,6 +93,7 @@ export function converging(e: Engine, board: World, s: Settings, me: Side, snap:
   if (!s.costSeed) return { options: [], why_none: 'this ruleset has no symbol gliders', affordable: false };
   if (!e.inb(tx, ty)) return { options: [], why_none: `(${tx},${ty}) is off the board`, affordable };
   if (s.symbolsCapped && s.maxTowers && e.towers(board, me).length >= s.maxTowers) return { options: [], why_none: `you hold ${s.maxTowers} towers, the cap: no symbol can form until you have fewer`, affordable };
+  if (s.maxSymbolTowers && e.symbolTowers(board, me) >= s.maxSymbolTowers) return { options: [], why_none: `you hold ${s.maxSymbolTowers} towers formed from symbols, the most allowed: no symbol can form until you have fewer`, affordable };
   const inBox = (k: number) => { const [x, y] = e.XY(k); return Math.abs(x - tx) <= 1 && Math.abs(y - ty) <= 1; };
   const horizon = Math.min(s.maxSteps - board.step, 48);
   if (horizon < 1) return { options: [], why_none: 'the match has no steps left', affordable };

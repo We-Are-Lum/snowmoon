@@ -39,6 +39,22 @@ export const BOOK_3_DRAFT: VersionRules = {
   rocksAt: ROCKS,
 };
 
+/**
+ * DRAFT, Rocks and Mirrors book-4 (owner, 2026-11-02, after playing book-3: "make contact happen", "symbols shouldn't be
+ * blocked by the tower cap", and kill reports). book-3, plus (docs/proposals/minpentai-book-4.md, variant r5):
+ * - an 18-wide board (book-3's is 24): first contact by turn 3 in every self-play match, at every level;
+ * - symbol gliders see 2 squares around them while they fly (after c7-b81, a symbol-carrying ship widening what its
+ *   side sees);
+ * - symbols form past the tower cap, but a side holds at most 2 towers formed from symbols;
+ * - a side learns the square of every enemy tower its gliders destroy, and both sides' counts (the tie-break uses them).
+ * All this edition's.
+ */
+export const BOOK_4_DRAFT: VersionRules = {
+  set: { ...BOOK_3_DRAFT.set, width: 18, symbolsCapped: 0, maxSymbolTowers: 2, symbolGliderSight: 2, killReports: 1 },
+  drawn: [],
+  rocksAt: ROCKS,
+};
+
 export interface BookPieceText {
   id: 'm' | 'e' | 'w' | 'f';
   name: string;
