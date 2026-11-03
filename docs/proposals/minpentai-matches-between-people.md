@@ -12,7 +12,7 @@ Both use the agent-play engine, views and tools that already exist (#86–#100):
 
 ### How a match goes
 1. **Creating.** A person creates a match. They choose:
-   - the ruleset: book-2 (default) or Play's play-3; drafts such as book-4 only for people on the drafts list;
+   - the ruleset: book-2 or Play's play-3, and drafts such as book-4 for people on the drafts list. The default is book-4 for people on the drafts list (the ruleset tuned for contact, owner 2026-11-03), and book-2 for everyone else;
    - the turn clock;
    - private (invite link) or public (on the open list).
 
@@ -31,7 +31,7 @@ Both use the agent-play engine, views and tools that already exist (#86–#100):
 
 | Choice | Default | Options |
 |---|---|---|
-| Ruleset | book-2 | book-2, play-3; drafts by name for the drafts list |
+| Ruleset | book-4 for people on the drafts list; book-2 for everyone else | book-2, play-3; drafts by name for the drafts list |
 | Turn clock | 24 hours | 15 minutes (both playing now), 4 hours, 24 hours |
 | Visibility | private invite | public |
 | Invite link | single-use, 24 hours | — |
@@ -63,8 +63,8 @@ Nothing on the site notifies anyone today. Proposal, in order:
 2. **Later:** Farcaster mini app notifications for people who added the app. That needs the mini app's webhook, which we don't have yet, and a Privacy change.
 
 ### Turn clock enforcement
-- Without a scheduled job, the clock is enforced whenever either player, or either live page, looks at the match. An overdue turn resolves first.
-- A Vercel cron job every 5 minutes would also resolve overdue turns and send notifications. It needs a `CRON_SECRET` environment variable, which only the owner can add. The build includes the route, which does nothing until the secret is set.
+- The clock is enforced whenever either player, or either live page, looks at the match: an overdue turn resolves first. **That's enough for now (owner, 2026-11-03): no cron job.**
+- If one is wanted later, a Vercel cron job would also resolve overdue turns and send alerts when nobody looks. The build includes its route (`/api/minpentai/practice/clock`), which stays off (503) until the owner sets `CRON_SECRET` and adds a schedule to `vercel.json`. Neither is done.
 
 ### Fog and timing
 - Each side's view is the same fog view agent play uses, for its own side.
@@ -91,40 +91,66 @@ Nothing on the site notifies anyone today. Proposal, in order:
 
   **This needs Bluesky sign-in, which the site doesn't have** (Bluesky is used today only to check post links).
 - **Wallet-only accounts:** practice only.
+- **Practice itself stays on the agent-play allowlist** (owner, 2026-11-03) until the owner opens it.
 
 The bar is checked at entry and kept for a day, as the image score is.
 
 ### The fee covers the AI, no prizes
-I measured the payloads of a real book-4 match on this branch's code; no paid model calls were made.
 
-| Payload | Tokens |
-|---|---|
-| Tool definitions | about 4.8k |
-| `get_view` | about 3.4k |
-| `simulate`, 2 plans | about 0.5k |
-| Symbol helper | about 0.2k |
+**Prices, from Anthropic's official pricing page (platform.claude.com/docs/en/about-claude/pricing, read 2026-11-03), per million tokens:**
 
-**Assumptions** about how an in-platform AI plays a turn:
-- four model calls: view, two sandbox calls, then orders and a reply;
-- the tools and system prompt cached, about 6.3k;
-- about 5.5k of new input per call, because only the current view is kept, not every past one;
-- about 2k output a turn, thinking included.
+| Model | Input | 5-minute cache write | Cache read | Output |
+|---|---|---|---|---|
+| Claude Haiku 5.5, prompt up to 100,000 tokens | $0.10 | $0.125 | $0.01 | $0.50 |
+| Claude Haiku 5.5, **prompt over 100,000 tokens** | $0.50 | $0.625 | $0.05 | $2.50 |
+| Claude Sonnet 5.5 | $2 | $2.50 | $0.10 | $10 |
+| Claude Opus 5.5 | $4 | $5 | $0.20 | $20 |
 
-Over 12 turns that's about 300k cached and 265k new input tokens and 24k output tokens a side, so for **both sides**: about 0.6M cached, 0.53M new and 48k output.
+**The long-prompt tier is real, and only for Claude Haiku 5.5.**
+- The page's words: "a request whose prompt is over 100,000 tokens pays higher prices. A request's prompt length counts all of its input tokens, including cache reads and cache writes. Each request is priced on its own".
+- So the whole request pays 5×, output included.
+- Claude Sonnet 5.5 and Claude Opus 5.5 have no long-prompt tier: "a 900k-token request is billed at the same per-token rate as a 9k-token request".
+- (The first version of this doc used $0.20 for Claude Sonnet 5.5's cache reads; it's $0.10.)
 
-| Model (per million tokens: input / output / cached read) | AI cost of one match, both sides | Proposed fee per player |
-|---|---|---|
-| Claude Haiku 5.5 ($0.10 / $0.50 / ≈$0.01) | ≈ $0.08 | $0.25 |
-| Claude Sonnet 5.5 ($2 / $10 / $0.20) | ≈ $1.66 | $1.50 |
-| Claude Opus 5.5 ($4 / $20 / $0.20) | ≈ $3.20 | $3.00 |
+**How a match's context grows.** Every tool call is a model call, and each resends the whole conversation so far. The model below:
+- **Measured sizes:** tool definitions about 4.8k tokens, `get_view` about 3.4k, a `simulate` answer about 0.6k, a `submit_orders` answer with its view about 3.6k.
+- **Assumed:** a 1.5k system prompt; 0.3k of arguments and 0.4k of thinking and text per call; a 0.25k reply and a 0.06k message from the person per turn; caching on the whole prefix.
+
+**How many calls a turn: the owner's book-3 playtest.** Counted from production's logs on 2026-11-03, match coj2y7jbdnll:
+
+| Turn | `simulate` | `get_view` | `submit_orders` |
+|---|---|---|---|
+| 0 | 1 | 1 | 0 (plus start and the standing order) |
+| 1 | 3 | 1 | 1 |
+| 2 | 1 | 1 | 1 |
+| 3 | 2 | 1 | 2 |
+| **4** | **17** | 1 | 1 |
+| 5 | 3 | 1 | 1 |
+
+**One 12-turn match, both sides, AI cost** (arithmetic from the model above; no paid calls):
+
+| Case | The chat... | Calls a side | Largest prompt | Claude Haiku 5.5 | Claude Sonnet 5.5 | Claude Opus 5.5 |
+|---|---|---|---|---|---|---|
+| Light (2 simulate a turn) | keeps everything | 60 | 142k | $0.41 (19 calls over 100k) | $2.13 | $4.25 |
+| Light | is trimmed each turn | 60 | 23k | $0.08 | $1.41 | $2.82 |
+| Playtest-like (1, 3, 1, 2, 17, 3, twice) | keeps everything | 90 | 181k | $0.90 (42 over 100k) | $3.48 | $6.96 |
+| Playtest-like | is trimmed each turn | 90 | 42k | $0.12 | $2.09 | $4.17 |
+| Heavy (17 simulate every turn) | keeps everything | 240 | 376k | $5.16 (179 over 100k) | $13.44 | $26.89 |
+| Heavy | is trimmed each turn | 240 | 42k | $0.33 | $5.44 | $10.88 |
+| **At most 6 simulate a turn, every turn at the cap** | **is trimmed each turn** | 108 | **28k** | **$0.14** | **$2.42** | **$4.83** |
+| Playtest-like, capped at 6 | is trimmed each turn | 68 | 28k | $0.09 | $1.58 | $3.16 |
+
+**What it says:**
+1. **The in-platform AI must trim its chat each turn.** It keeps the current view and that turn's sandbox answers, plus a short summary of each past turn. Kept whole, a match's prompt passes 100k by mid-match, Claude Haiku 5.5's calls pay 5×, and every model costs 1.5–2.5× more.
+2. **A cap on sandbox calls per turn** (6 proposed) bounds the worst case. The playtest's turn 4 had 17.
+3. Output (thinking included) is most of the cost on Claude Sonnet 5.5 and Claude Opus 5.5, so the effort setting matters as much as the model.
 
 **Recommendation:**
-- **Season 1:** Claude Sonnet 5.5 at low effort, **$1.50 per player per match**, paid from the prepaid wallet balance the site already has.
-- The fee leaves about 1.8× headroom for longer chats, retries and cache misses.
-- Measure the real cost on the first 20 official matches, then set the season's fee.
+- **Season 1:** Claude Sonnet 5.5 at low effort; the chat trimmed each turn; at most 6 sandbox calls a turn.
+- **Fee: $1.50 per player per match** ($3.00 a match). It covers the capped worst case ($2.42) with about 1.2× headroom, and the playtest-like case with about 1.9×.
+- Claude Haiku 5.5 would cost about $0.25 per player, but only with trimming. Without it, a heavy match costs 20× more.
+- Measure the real cost on the first 20 official matches (paid calls: the owner's OK first), then set the season's fee.
 - **No prizes from fees.** The fee pays for the AI and nothing else, and the page says so.
-
-**Before any number is final:** these are estimates. A measured match needs real model calls, which need the owner's OK because they spend money.
 
 ### The leaderboard, per season
 - **One ruleset per season.** The page says up front that rules and process change each season.
@@ -153,34 +179,47 @@ Over 12 turns that's about 300k cached and 265k new input tokens and 24k output 
 > If we let you play Minpentai against another person, each of you plays through your own agent or on your live page. Your orders stay sealed until both sides have sent theirs; the other player sees only that you sent them, as a commitment. If your turn's clock runs out, the site's computer plays the turn for you under your standing order. Nobody can watch a match while it is on. When it ends, its replay is public: the board, every turn's orders, who chose them (you, your agent, the site's computer or the clock), and the model each agent said it runs (shown as self-reported; we don't check it). Your name is shown to the other player during the match, and in the public replay only if you choose. Practice matches never count toward any ranking. Be civil; we may end a match and hide its record if it breaks these Terms.
 
 **Privacy section 4, new bullet.**
-> If you play a practice match against another person: the match is kept with both players' accounts, including its board, every turn's orders and who chose them, the turn clock, and your standing order. The other player learns your name while the match is on, and everyone sees the replay once it ends (with your name only if you chose that). Your standing order's words stay private. Invite links are kept as a hash until they're used or expire after 24 hours. Matches are deleted 30 days after they end, except their public replay, unless you ask us to remove your name from it.
+> If you play a practice match against another person: the match is kept with both players' accounts, including its board, every turn's orders and who chose them, the turn clock, and your standing order. The other player learns your name while the match is on, and everyone sees the replay once it ends (with your name only if you chose that). Your standing order's words stay private. An invite link is kept only as a hash; it is cleared when used and stops working after 24 hours. Match records, finished or not, are kept until either player asks us to remove them: write to us (section 11) with the match's link or id, and we delete the whole record by hand. Only we remove match records, by hand, on request.
 
 **Privacy section 7, new sentence (only if ntfy turn alerts are kept).**
 > ntfy delivers "your turn" alerts to the private topic you choose to subscribe to. An alert carries only that it's your turn and a link to your match. ntfy learns the topic name, not who you are.
+
+*Why not "deleted 30 days after they end": nothing would delete them.* The table can't delete rows (the site's roles have no delete), and there's no scheduled job. Deleting after 30 days would need three things:
+- a database function, created by a migration the owner applies as postgres, that deletes only finished practice matches older than 30 days;
+- a cron job calling it, which needs `CRON_SECRET` and a `vercel.json` schedule;
+- a test that it deletes only those.
+
+That is a deliberate exception to "only we remove match records, by hand". Until it is built, the draft says what happens today.
 
 **Official matches,** when built, would need these further sections (not drafted yet):
 - Terms: the fee, no prizes, the leaderboard and its seasons, the review of flagged matches, what an official result means.
 - Privacy: account-age and follower checks, Neynar and Bluesky lookups, and the in-platform AI's model provider (it receives the board and your chat in official matches).
 
-## Build plan for practice matches (this branch)
-1. **Migration `NEXT_minpentai_versus.sql`:** table `studio.mp_versus`, with the two people, ruleset, clock, privacy, state, version, the invite hash and its expiry, and timestamps. The owner applies it as postgres.
-2. **`agent-play/versus.ts`:**
-   - the match, with orders sealed by per-turn commitments per side;
-   - resolving when both are in, or when the clock forces the missing side;
-   - each side's view (the fog view and summary from solo.ts, for Cyan or Amber);
-   - the record.
-3. **New tools:** `minpentai_create_practice`, `minpentai_list_open_practice`, `minpentai_join_practice`. The existing match tools take a practice match id too.
+## What was built for practice matches (this branch, PR #101)
+1. **Migration `NEXT_minpentai_practice.sql`:** no new table. It adds three columns to `studio.mp_agent_matches` (0032):
+   - `kind` ('solo' or 'practice');
+   - `opponent` (Amber's person);
+   - `open` (public, waiting for a player).
+
+   Practice matches are saved, versioned and read like agent matches. No grant changes; nobody can delete. The owner applies it as postgres when #101 is ready, numbered then.
+2. **`agent-play/solo.ts`, by side:** every function takes a side, Cyan by default, so solo play is unchanged.
+   - A practice match is a match with a `versus` block: both players, the names, show-name choices, Amber's agent, the clock and its deadline, public or private, the invite's hash and expiry, Amber's live link, standing order and summary, and opted-in alert topics.
+   - Orders are sealed by per-turn commitments.
+   - A turn resolves when both sides' final orders are in, or when the clock plays the late side (`runClock`).
+   - Turns the clock plays come from the committed random value, so they can be checked from the record (`checkComputer`).
+3. **Tools:**
+   - New: `minpentai_create_practice`, `minpentai_list_open_practice`, `minpentai_join_practice`, `minpentai_practice_alerts`.
+   - Every existing match tool acts for the caller's side.
+   - No quiet time between people (there's no computer planning to hide).
+   - The clock runs on every read (`act.ts clocked`).
 4. **Pages:**
-   - the live page for either side, with Take turn;
-   - an invite page that joins as Amber;
-   - the open list;
-   - the public replay after the end.
-5. **The clock:** enforced on every read, plus a cron route that's off until `CRON_SECRET` is set.
-6. **Tests:**
-   - sealed orders, and commitments revealed correctly;
-   - the clock firing the standing order;
-   - single-use invites;
-   - no view of the other side;
-   - no spectator during the match;
-   - the replay after the end;
-   - never counted.
+   - the live page for either side, with Take turn (#100);
+   - `/minpentai/practice/join` (an invite);
+   - `/minpentai/practice` (the open list);
+   - `/minpentai/practice/[id]` (the public record and replay after the end; missing while the match is on).
+5. **The clock:** on every read. The sweep route `/api/minpentai/practice/clock` stays off: no cron for now.
+6. **Alerts:** an opt-in private ntfy topic per player.
+7. **Who can play:** the agent-play allowlist only.
+8. **Tests:**
+   - in-process: invites, sealed orders, Amber's fog view against a copy with Cyan's hidden pieces removed, the clock (once, and both players away), resign, the record, and links per side;
+   - over `/mcp` (P1–P21): the whole flow with two people and one who isn't on the allowlist, and the default ruleset.

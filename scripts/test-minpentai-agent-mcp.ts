@@ -28,6 +28,8 @@ const check = (label: string, ok: boolean, detail = '') => {
 
 // The wallet people A, B, C, D are -3, -4, -5, -6 in the harness's fresh database (M29 checks A and B).
 process.env.MINPENTAI_PLAY_TEST_PEOPLE = '-3,-4';
+// Drafts are opened to B only (as production opens them to the owner only): A has play but not drafts (M30, P21).
+process.env.MINPENTAI_DRAFTS_TEST_PEOPLE = '-4';
 const S = await startStage();
 const { BASE, people } = S;
 type View = { turn: number; phase: string; step: number; can_place: [number, number][]; board: { towers: { x: number; y: number; side: string }[]; squares: { side: string; x: number; y: number }[]; gliders: { side: string; x: number; y: number }[] }; opponent_commitment: string | null; end: { win: string } | null };
@@ -183,6 +185,11 @@ try {
     const cr = await tool(BASE, a.access_token, 'minpentai_create_practice', { ruleset: 'book-2', clock: '24h', show_name: true });
     check('P1 a person creates a private practice match and gets a single-use invite', cr.ok && /\/minpentai\/practice\/join\?m=/.test(String(cr.out.invite_url)), cr.error ?? '');
     const pid = cr.out.match_id as string, inv = new URL(String(cr.out.invite_url)), liveC = cr.out.live_url as string;
+    const dflt = await tool(BASE, a.access_token, 'minpentai_create_practice', {});
+    const dfltB = await tool(BASE, bConn.access_token, 'minpentai_create_practice', {});
+    check('P21 the default ruleset: book-4 for someone drafts are open to, book-2 for everyone else', /\(book-2\)/.test(String((dflt.out.view as Record<string, any>)?.ruleset)) && /\(book-4\)/.test(String((dfltB.out.view as Record<string, any>)?.ruleset)), `${(dflt.out.view as Record<string, any>)?.ruleset} / ${(dfltB.out.view as Record<string, any>)?.ruleset}`);
+    await tool(BASE, a.access_token, 'minpentai_resign', { match_id: dflt.out.match_id });
+    await tool(BASE, bConn.access_token, 'minpentai_resign', { match_id: dfltB.out.match_id });
     const joinPage = await fetch(`${BASE}/minpentai/practice/join?m=${pid}&i=${inv.searchParams.get('i')}`);
     check('P2 the invite page opens and says who invites', joinPage.ok && /invites you to a practice match/.test(await joinPage.text()));
     const joinRoute = (token: string | null, body: Record<string, unknown>) => fetch(`${BASE}/api/minpentai/practice/join`, { method: 'POST', headers: { 'content-type': 'application/json', ...(token ? { authorization: `Bearer ${token}` } : {}) }, body: JSON.stringify(body) });
