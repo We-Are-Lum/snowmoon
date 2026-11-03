@@ -1,9 +1,10 @@
 import 'server-only';
 import type postgres from 'postgres';
+import { remixLines } from './lineage';
+import { basesOf, remixOfBase } from './rules';
 import { CHALLENGE, WORK_ID } from '../config';
 import { bookCharacter } from '../images/designs';
-import { remixLines } from './lineage';
-import { basesOf, chooseEntries, entrantCounts, fromDecision, type Decision, inWindow, markKey, newestFirst, remixOfBase, type Candidate, type Eligibility } from './rules';
+import { chooseEntries, entrantCounts, fromDecision, type Decision, inWindow, markKey, newestFirst, type Candidate, type Eligibility } from './rules';
 
 /**
  * The remix challenge's entries (owner, 2026-10-31), the server half, for pages. Reads published sheets, the private
