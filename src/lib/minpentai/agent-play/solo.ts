@@ -17,7 +17,7 @@ import { createHash, randomBytes, timingSafeEqual } from 'node:crypto';
 import { drawRules, engine, layout, other, rng, verdict, type AnyPiece, type Engine, type Kills, type Placement, type Side, type World } from '../versions/engine';
 import type { Settings } from '../versions/schema';
 import { SOLO_V3, type VersionRules } from '../versions/solo-v1';
-import { BOOK_3_DRAFT, BOOK_EDITION } from '../versions/book-edition';
+import { BOOK_3_DRAFT, BOOK_4_DRAFT, BOOK_EDITION } from '../versions/book-edition';
 import { PRESETS, TOP_LEVEL, searchPlan, type BookPlay, type Computer, type Preset } from '../versions/search';
 
 /**
@@ -25,19 +25,19 @@ import { PRESETS, TOP_LEVEL, searchPlan, type BookPlay, type Computer, type Pres
  * the same after the rules change): play-3 is Play's ruleset 3 (versions/solo-v1.ts), book-1 the book edition as it
  * is today. A rule change adds a new id; an id never changes meaning.
  */
-export const RULESETS = { 'book-1': BOOK_EDITION, 'book-2': BOOK_EDITION, 'book-3': BOOK_3_DRAFT, 'play-3': SOLO_V3 } as const satisfies Record<string, VersionRules>;
+export const RULESETS = { 'book-1': BOOK_EDITION, 'book-2': BOOK_EDITION, 'book-3': BOOK_3_DRAFT, 'book-4': BOOK_4_DRAFT, 'play-3': SOLO_V3 } as const satisfies Record<string, VersionRules>;
 /**
  * How the site computer plays under each ruleset. book-2 (owner, 2026-11-01: "a new computer means a new ruleset") is
  * book-1's rules with a computer that uses all four book pieces (search.ts BookPlay); book-1 matches keep replaying with
  * the computer they were played against.
  */
-export const COMPUTERS: Record<RulesetName, { book?: BookPlay; comp?: Computer }> = { 'book-1': {}, 'book-2': { book: { variety: 0, kinds: ['f', 'w', 'm', 'e'], from: 2 } }, 'book-3': {}, 'play-3': {} };
+export const COMPUTERS: Record<RulesetName, { book?: BookPlay; comp?: Computer }> = { 'book-1': {}, 'book-2': { book: { variety: 0, kinds: ['f', 'w', 'm', 'e'], from: 2 } }, 'book-3': {}, 'book-4': { comp: { formingSymbols: true, seedScore: 0, spendTies: true } }, 'play-3': {} };
 /**
  * Draft rulesets: started only by name, and only by the people in AGENTS.minpentaiPlay.drafts. book-3's computer is the
  * plain search, unforced: under book-3's rules it chooses the pieces on its own (or doesn't), which is what the draft
  * is for.
  */
-export const DRAFTS: readonly RulesetName[] = ['book-3'];
+export const DRAFTS: readonly RulesetName[] = ['book-3', 'book-4'];
 export type RulesetName = keyof typeof RULESETS;
 /** What a new match under each family is played under now. */
 export const CURRENT: Record<'book' | 'play', RulesetName> = { book: 'book-2', play: 'play-3' };

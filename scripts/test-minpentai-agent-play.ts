@@ -216,4 +216,50 @@ playOut('play', 202);
   ok(CURRENT.book === 'book-2' && DRAFTS.includes('book-3'), 'new Rocks and Mirrors matches stay book-2; book-3 is a draft');
 }
 
+// ---------- 7. book-4 (draft): 18 wide, symbol gliders see 2, at most 2 symbol towers, kill reports ----------
+{
+  const mk = (id: string, seed: number) => newSolo({ id, ruleset: 'book-4', level: 2, seed, person: 6786, agent: { id: null, name: 'Rook', model: null }, now: now() }).m;
+  const four = mk('tbook4000001', 81);
+  const v0 = viewFor(four) as Record<string, any>;
+  ok(v0.board_size.width === 18 && v0.glider_sight?.symbol === 2 && v0.towers_destroyed?.by_you === 0 && Array.isArray(v0.your_kills), 'the book-4 view: 18 wide, symbol gliders\' sight, the kill count from the start');
+  let reported = 0, dropped = true, viewsFog = true;
+  while (!four.end) {
+    // The view is the fog view, and the same with every hidden enemy piece removed (kill reports name only squares of towers already gone).
+    planComputer(four, now());
+    const { e, s } = rulesOf(four);
+    const twin = json(four), see = e.sees(twin.w, s, 'C');
+    for (const k of Object.keys(twin.w.tw)) if (twin.w.tw[+k] === 'A' && !see.has(+k)) delete twin.w.tw[+k];
+    for (const k of Object.keys(twin.w.sq)) if (twin.w.sq[+k].o === 'A' && !see.has(+k)) delete twin.w.sq[+k];
+    twin.w.gl = twin.w.gl.filter((g) => g.o !== 'A' || see.has(e.K(g.x, g.y)));
+    for (const f of ['mir', 'fa'] as const) { const o = twin.w[f] as Record<number, { o: string }> | undefined; if (o) for (const k of Object.keys(o)) if (o[+k].o === 'A' && !see.has(+k)) delete o[+k]; }
+    if (twin.w.sd) for (const k of Object.keys(twin.w.sd)) if (twin.w.sd[+k] === 'A' && !see.has(+k)) delete twin.w.sd[+k];
+    if (twin.w.mw) twin.w.mw = twin.w.mw.filter((w) => w.o !== 'A' || e.wallCells(w).some(([x, y], i) => w.c[i] && e.inb(x, y) && see.has(e.K(x, y))));
+    const strip = (x: Record<string, unknown>) => ({ ...x, my_orders: null });
+    if (!isDeepStrictEqual(strip(JSON.parse(JSON.stringify(viewFor(four)))), strip(JSON.parse(JSON.stringify(viewFor(twin)))))) viewsFog = false;
+    submit(four, { turn: four.turn, placements: parseOrders(scripted(four), rulesOf(four).s), source: 'agent', final: true, now: now() });
+    const v = viewFor(four) as Record<string, any>;
+    reported = v.your_kills.length;
+    if (v.towers_destroyed.by_you !== four.kills.C || v.your_kills.length !== four.kills.C) dropped = false;
+    for (const x of v.your_kills) if (v.last_seen_enemy_towers.some((t: { x: number; y: number }) => t.x === x.x && t.y === x.y) && !Object.keys(four.w.tw).some((k) => +k === rulesOf(four).e.K(x.x, x.y) && four.w.tw[+k] === 'A')) dropped = false;
+  }
+  ok(viewsFog, 'every book-4 view is the same with every hidden enemy piece removed');
+  ok(dropped, `every tower your gliders destroyed is reported with its square and counted, and leaves your last-seen (${reported} reported)`);
+  ok(checkComputer(json(four)).length === 0, 'a book-4 match plays to the end and replays with its computer');
+  // Symbol gliders see 2 around them: a symbol glider of Cyan's in flight lights the squares beside it.
+  const m2 = mk('tbook4000002', 82), r2 = rulesOf(m2);
+  m2.w.gl.push({ id: 99, o: 'C', x: 9, y: 7, dx: 1, dy: 0, seed: 1 } as never);
+  const lit = r2.e.sees(m2.w, r2.s, 'C');
+  ok(lit.has(r2.e.K(11, 9)) && lit.has(r2.e.K(7, 5)) && !lit.has(r2.e.K(12, 7)) && !r2.e.lit(m2.w, 'C', r2.s.reach).has(r2.e.K(11, 9)), 'a symbol glider sees 2 around it; placement reach stays the towers\'');
+  // A kill out of sight: a Cyan glider aimed at one of Amber's starting towers (which Cyan last saw at step 0).
+  const m3 = mk('tbook4000003', 83), r3 = rulesOf(m3), target = r3.e.L.towers.A[0], [tx, ty] = r3.e.XY(target);
+  ok(!r3.e.sees(m3.w, r3.s, 'C').has(target) && m3.ls.C[target] === 0, 'the target tower is out of Cyan\'s sight, last seen at the start');
+  m3.w.gl.push({ id: 999, o: 'C', x: tx - 3, y: ty, dx: 1, dy: 0 } as never);
+  submit(m3, { turn: 0, placements: [], source: 'agent', final: true, now: now() });
+  const v3 = viewFor(m3) as Record<string, any>;
+  ok(m3.kills.C === 1 && v3.towers_destroyed.by_you === 1 && v3.your_kills.length === 1 && v3.your_kills[0].x === tx && v3.your_kills[0].y === ty && v3.your_kills[0].step >= 1 && v3.your_kills[0].step <= 4, `the kill is reported with its square and step (${JSON.stringify(v3.your_kills)})`);
+  ok(!v3.last_seen_enemy_towers.some((t: { x: number; y: number }) => t.x === tx && t.y === ty), 'the destroyed tower leaves Cyan\'s last-seen');
+  ok(!JSON.stringify(v3.board).includes(`"x":${tx},"y":${ty}`) || r3.e.sees(m3.w, r3.s, 'C').has(target), 'nothing else about that square is shown');
+  ok(DRAFTS.includes('book-4') && CURRENT.book === 'book-2', 'book-4 is a draft, started by name; new matches stay book-2');
+}
+
 console.log(`minpentai agent play: ${checks} checks passed`);
