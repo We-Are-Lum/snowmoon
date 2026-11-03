@@ -23,12 +23,16 @@
  * sheets are open to everyone, the cap, the bounties set, and whether the launch kit's hand-written dates match
  * CHALLENGE.dates. scripts/test-check-launch.ts tests it.
  *
+ * Admin-only (owner, 2026-11-04): while CHALLENGE.public is off, it expects everything off at any instant: /challenge
+ * answers 404 signed out and names nothing of the challenge, sheets stay invited-only, entries aren't taken, the cap is
+ * IMAGES.dailySpendCapUsd ($2). The starting-sheet and bounty sections, which read /challenge, are skipped then.
+ *
  * Drafted by Claude Code (Claude, a closed model by Anthropic) for the owner, 2026-11-02.
  */
 import { execFileSync } from 'node:child_process';
 import path from 'node:path';
 import { CHALLENGE, IMAGES, imagesDailySpendCapUsd } from '../src/lib/config';
-import { dateText, phase, pacificWallTime } from '../src/lib/challenge/rules';
+import { dateText, entriesOpen, phase, pacificWallTime } from '../src/lib/challenge/rules';
 import { CHALLENGE_WORDING as W } from '../src/lib/challenge/wording';
 import { privacyDescribesChallenge } from '../src/lib/challenge/open-sheets';
 import { requireTarget } from './lib/target';
@@ -54,6 +58,9 @@ const bountySet = () => CHALLENGE.characters.filter((s) => CHALLENGE.bounties[s]
 
 interface Expected {
   at: string;
+  /** CHALLENGE.public: the owner's switch. Off: admin-only, /challenge answers 404 and nothing opens by date. */
+  public: boolean;
+  entriesTaken: boolean;
   pacific: string;
   phase: 'before' | 'open' | 'closed';
   deadlineLine: string;
@@ -69,12 +76,15 @@ interface Expected {
 function expectedAt(at: Date): Expected {
   const ph = phase(at);
   const privacy = privacyDescribesChallenge();
+  const pub = CHALLENGE.public as boolean;
   return {
     at: at.toISOString(),
+    public: pub,
+    entriesTaken: entriesOpen(at),
     pacific: pacificWallTime(at.toISOString()),
     phase: ph,
-    deadlineLine: ph === 'before' ? W.opensOn() : ph === 'open' ? W.deadline() : W.closed(),
-    sheetsOpenToEveryone: CHALLENGE.openSheets && ph === 'open' && privacy,
+    deadlineLine: !pub ? 'not found (admin-only: CHALLENGE.public is off)' : ph === 'before' ? W.opensOn() : ph === 'open' ? W.deadline() : W.closed(),
+    sheetsOpenToEveryone: pub && CHALLENGE.openSheets && ph === 'open' && privacy,
     privacyDescribesChallenge: privacy,
     capUsd: imagesDailySpendCapUsd(at),
     bounties: bountySet(),
@@ -92,7 +102,8 @@ const note = (what: string) => console.log(`note ${what}`);
 const label = (ph: Expected['phase']) => (ph === 'before' ? 'BEFORE LAUNCH' : ph === 'open' ? 'OPEN' : 'CLOSED');
 
 function printExpected(e: Expected) {
-  console.log(`at ${e.at} (${e.pacific} Pacific): ${label(e.phase)}`);
+  console.log(`at ${e.at} (${e.pacific} Pacific): ${label(e.phase)} by the dates; CHALLENGE.public ${e.public ? 'on' : 'OFF: admin-only, nothing opens by date'}`);
+  console.log(`  entries taken: ${e.entriesTaken ? 'yes' : 'no'}`);
   console.log(`  /challenge should say: "${e.deadlineLine}"`);
   console.log(`  sheets open to everyone who passes the gate: ${e.sheetsOpenToEveryone ? 'yes' : 'no'} (openSheets ${CHALLENGE.openSheets ? 'on' : 'off'}, Privacy describes the challenge: ${e.privacyDescribesChallenge ? 'yes' : 'no'})`);
   console.log(`  free image cap: $${e.capUsd} (IMAGES $${IMAGES.dailySpendCapUsd} outside the window, CHALLENGE $${CHALLENGE.dailySpendCapUsd} inside)`);
@@ -183,14 +194,25 @@ for (let i = 0; nearBoundary && i < 4 && !unescape(page.text).includes(exp.deadl
   page = await get('/challenge');
 }
 const html = unescape(page.text);
-ok(page.status === 200, `/challenge answers 200 (${page.status})`);
+if (!exp.public) {
+  // Admin-only: a signed-out GET is the usual "not found", with nothing of the challenge in it.
+  ok(page.status === 404, `/challenge answers 404 signed out (${page.status}): admin-only, CHALLENGE.public is off`);
+  const named = /Remix the cast|remix challenge/i.exec(html);
+  ok(!named, `/challenge's HTML names nothing of the challenge${named ? ` (found "${named[0]}")` : ''}`);
+  const home = unescape((await get('/')).text);
+  const homeNamed = /Remix the cast|remix challenge/i.exec(home);
+  ok(!homeNamed, `the home page names nothing of the challenge${homeNamed ? ` (found "${homeNamed[0]}")` : ''}`);
+  ok(!exp.sheetsOpenToEveryone && !exp.entriesTaken && exp.capUsd === IMAGES.dailySpendCapUsd, `the code opens nothing: sheets invited-only, no entries, cap $${exp.capUsd}`);
+  note('starting sheets and bounties are on /challenge, which is admin-only: not checked signed out');
+}
+if (exp.public) ok(page.status === 200, `/challenge answers 200 (${page.status})`);
 const served = /Entries (open|close|closed) [A-Z][a-z]+day \d+ [A-Z][a-z]+, \d\d:\d\d Pacific\./.exec(html)?.[0] ?? '(no deadline line found)';
-ok(served === exp.deadlineLine, `/challenge says "${served}" (expected "${exp.deadlineLine}": ${label(exp.phase)})`);
-const servedPhase = served.startsWith('Entries open') ? 'before' : served.startsWith('Entries closed') ? 'closed' : served.startsWith('Entries close') ? 'open' : 'unknown';
+if (exp.public) ok(served === exp.deadlineLine, `/challenge says "${served}" (expected "${exp.deadlineLine}": ${label(exp.phase)})`);
+const servedPhase = !exp.public ? 'admin-only' : served.startsWith('Entries open') ? 'before' : served.startsWith('Entries closed') ? 'closed' : served.startsWith('Entries close') ? 'open' : 'unknown';
 
 // 3. The six starting sheets, and the fork switch on each first one.
 const sheetLinks: Record<string, string | null> = {};
-for (const slug of CHALLENGE.characters) {
+for (const slug of exp.public ? CHALLENGE.characters : []) {
   const s = section(html, slug);
   const id = /href="\/references\/designs\/([0-9a-f-]{36})"/.exec(s)?.[1] ?? null;
   sheetLinks[slug] = id;
@@ -249,15 +271,15 @@ if (flag('skip-signin')) {
 }
 
 // 6. Bounties: links for the characters whose address is set, none for the others; the amount once set.
-for (const slug of CHALLENGE.characters) {
+for (const slug of exp.public ? CHALLENGE.characters : []) {
   const s = section(html, slug);
   const link = /href="(https:\/\/(?:www\.)?poidh\.xyz\/[^"]*)"/.exec(s)?.[1] ?? null;
   const want = CHALLENGE.bounties[slug];
   if (want) ok(link !== null && link === new URL(want).toString(), `${callName(slug)}: bounty link shown (${link ?? 'none'})`);
   else ok(link === null, `${callName(slug)}: no bounty link yet (address not set)${link ? `, but the page links ${link}` : ''}`);
 }
-if (CHALLENGE.bountyAmount) ok(html.includes(`, ${CHALLENGE.bountyAmount} each`), `the bounty paragraph names the amount (${CHALLENGE.bountyAmount})`);
+if (exp.public && CHALLENGE.bountyAmount) ok(html.includes(`, ${CHALLENGE.bountyAmount} each`), `the bounty paragraph names the amount (${CHALLENGE.bountyAmount})`);
 else note('bounty amount not set (CHALLENGE.bountyAmount is null)');
 
-console.log(`\ncheck:launch: production is ${servedPhase === 'before' ? 'BEFORE LAUNCH' : servedPhase === 'open' ? 'OPEN' : servedPhase === 'closed' ? 'CLOSED' : 'UNKNOWN'} (served), the code expects ${label(exp.phase)}; cap $${exp.capUsd}; ${failures ? `${failures} failed` : 'every check passed'}`);
+console.log(`\ncheck:launch: production is ${servedPhase === 'admin-only' ? 'ADMIN-ONLY (404 signed out)' : servedPhase === 'before' ? 'BEFORE LAUNCH' : servedPhase === 'open' ? 'OPEN' : servedPhase === 'closed' ? 'CLOSED' : 'UNKNOWN'} (served), the code expects ${label(exp.phase)}; cap $${exp.capUsd}; ${failures ? `${failures} failed` : 'every check passed'}`);
 process.exit(failures ? 1 : 0);

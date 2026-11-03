@@ -23,6 +23,9 @@ const ok = (pass: boolean, what: string) => {
 };
 
 const opens = ms(CHALLENGE.dates.opens), closes = ms(CHALLENGE.dates.closes);
+// Admin-only (owner, 2026-11-04): while CHALLENGE.public is off, every instant expects everything off.
+const off = !CHALLENGE.public;
+const NOT_FOUND = /^not found \(admin-only/;
 const cases: { at: string; phase: string; cap: number; sheets: boolean; line: RegExp }[] = [
   { at: '2026-11-02T12:00:00Z', phase: 'before', cap: IMAGES.dailySpendCapUsd, sheets: false, line: /^Entries open Friday 6 November, 09:00 Pacific\.$/ },
   { at: iso(opens - 1000), phase: 'before', cap: IMAGES.dailySpendCapUsd, sheets: false, line: /^Entries open / },
@@ -32,10 +35,11 @@ const cases: { at: string; phase: string; cap: number; sheets: boolean; line: Re
   { at: iso(closes), phase: 'closed', cap: IMAGES.dailySpendCapUsd, sheets: false, line: /^Entries closed Sunday 22 November, 23:59 Pacific\.$/ },
 ];
 
-for (const c of cases) {
+for (const c0 of cases) {
+  const c = off ? { ...c0, cap: IMAGES.dailySpendCapUsd, sheets: false, line: NOT_FOUND } : c0;
   const r = run(`--at=${c.at}`);
   const line = r.stdout.split('\n').find((l) => l.startsWith('expected '));
-  let e: { phase?: string; capUsd?: number; sheetsOpenToEveryone?: boolean; deadlineLine?: string; kitDatesMatch?: boolean; bounties?: string[] } = {};
+  let e: { public?: boolean; entriesTaken?: boolean; phase?: string; capUsd?: number; sheetsOpenToEveryone?: boolean; deadlineLine?: string; kitDatesMatch?: boolean; bounties?: string[] } = {};
   try {
     e = JSON.parse(line?.slice('expected '.length) ?? '{}');
   } catch {
@@ -46,6 +50,7 @@ for (const c of cases) {
   ok(e.capUsd === c.cap, `${c.at}: cap $${e.capUsd} (want $${c.cap})`);
   ok(e.sheetsOpenToEveryone === c.sheets, `${c.at}: sheets open to everyone ${e.sheetsOpenToEveryone} (want ${c.sheets})`);
   ok(c.line.test(e.deadlineLine ?? ''), `${c.at}: /challenge line "${e.deadlineLine}"`);
+  ok(e.public === CHALLENGE.public && e.entriesTaken === (!off && c.phase === 'open'), `${c.at}: public ${e.public}, entries taken ${e.entriesTaken}`);
   ok(e.kitDatesMatch === true, `${c.at}: the launch kit's dates match CHALLENGE.dates`);
   ok(JSON.stringify(e.bounties) === JSON.stringify(CHALLENGE.characters.filter((s) => CHALLENGE.bounties[s])), `${c.at}: bounties set ${JSON.stringify(e.bounties)}`);
 }
