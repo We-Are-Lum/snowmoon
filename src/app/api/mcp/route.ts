@@ -1,13 +1,14 @@
 import { NextResponse } from 'next/server';
 import { AGENT_API } from '~/lib/config';
-import { ToolInputError, TOOLS, toolByName } from '~/lib/agent/tools';
+import { ToolInputError, OPEN_TOOLS, openToolByName } from '~/lib/agent/tools';
 import { agentApiOn, rateOk } from '~/lib/agent/rate';
 import { asAgentReader } from '~/lib/agent/reader';
 
 /**
  * The agent read API as an MCP server (owner, 2026-10-19), over Streamable HTTP: one POST per JSON-RPC message,
  * answered with application/json (no stream, no session). initialize, ping, tools/list, tools/call. Read only:
- * the tools are those of src/lib/agent/tools.ts, the same as /api/agent/v1/<tool>. Open without sign-in at a
+ * the tools are those of src/lib/agent/tools.ts, grouped as search_book and read (owner, 2026-11-04: kind picks
+ * the read tool), the same as /api/agent/v1/<tool>. Open without sign-in at a
  * low rate. SWITCHED OFF (AGENT_API.enabled).
  */
 type Msg = { jsonrpc?: string; id?: string | number | null; method?: string; params?: Record<string, unknown> };
@@ -52,10 +53,10 @@ async function handle(request: Request) {
     case 'ping':
       return reply(msg.id, {});
     case 'tools/list':
-      return reply(msg.id, { tools: TOOLS.map(({ name, title, description, inputSchema }) => ({ name, title, description, inputSchema, annotations: { readOnlyHint: true, openWorldHint: false } })) });
+      return reply(msg.id, { tools: OPEN_TOOLS.map(({ name, title, description, inputSchema }) => ({ name, title, description, inputSchema, annotations: { title, readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false } })) });
     case 'tools/call': {
       const name = typeof msg.params?.name === 'string' ? msg.params.name : '';
-      const tool = toolByName(name);
+      const tool = openToolByName(name);
       if (!tool) return fail(msg.id, -32602, `Unknown tool: ${name}`);
       const args = msg.params?.arguments ?? {};
       if (typeof args !== 'object' || Array.isArray(args) || args === null) return fail(msg.id, -32602, 'arguments must be an object');
@@ -65,7 +66,7 @@ async function handle(request: Request) {
       } catch (e) {
         // A bad argument is the tool's own error, so the agent can correct itself; anything else is ours.
         if (e instanceof ToolInputError) return reply(msg.id, { content: [{ type: 'text', text: e.message }], isError: true });
-        console.error('mcp tool failed', name, (e as { code?: string }).code ?? (e as Error)?.name ?? 'unknown');
+        console.error('mcp tool failed', name === 'read' && typeof (args as Record<string, unknown>).kind === 'string' ? String((args as Record<string, unknown>).kind).slice(0, 40) : name, (e as { code?: string }).code ?? (e as Error)?.name ?? 'unknown');
         return reply(msg.id, { content: [{ type: 'text', text: 'Something went wrong on our side. Try again in a moment.' }], isError: true });
       }
     }

@@ -1,7 +1,7 @@
 import 'server-only';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
-import { TOOLS as READ_TOOLS, ToolInputError } from '../agent/tools';
+import { TOOLS as READ_TOOLS, ToolInputError, kindSchema, pickKind, strictArgs } from '../agent/tools';
 import { editorData } from '../agent/data';
 import { AGENTS } from '../config';
 import { countOk, dailyLimits, playFor, sql, type Agent, type Counted, type Scope } from './core';
@@ -15,6 +15,7 @@ import { addDirection, directionOf, findLine, rewriteLine } from './direction';
 import { ATTACH_SCHEMA, MAKES, STYLE_SCHEMA, draftPicture, draftPlace, draftSheet, draftStyle, matchRequest, stylesOffered, type PictureStyle } from './pictures';
 import { changeTiming, listTakes, logGap, markSpeaking, recordFailure, requestVideo, setCamera, swapTake, tryFrame, frameEstimate, videoEstimate } from './edits';
 import { MINPENTAI_TOOLS } from '../minpentai/agent-play/tools';
+import { GROUPS, type Group } from './groups';
 
 /**
  * The tools an agent of a person can use (owner, 2026-10-20; design §2). Served as MCP at /mcp (the
@@ -38,6 +39,8 @@ export interface AgentTool {
   scope: Scope;
   writes: boolean;
   counts?: Counted;
+  /** Fields the tool takes apart from its schema's, to refuse them in its own words (draft_style's style). */
+  accepts?: string[];
   run: (agent: Agent, args: Record<string, unknown>) => Promise<unknown>;
 }
 
@@ -138,7 +141,7 @@ const WRITE: AgentTool[] = [
     run: async (agent, args) => {
       only(args, []);
       const who = await agentLabel(agent.person, agent.name);
-      return { you: who.label, person: `@${who.short}`, scopes: agent.scopes, ...(agent.spendCapUsd !== null ? { spend_cap_usd: agent.spendCapUsd, spend_note: 'Your key\'s cap for all the spending your person approves on your drafts.' } : {}), limits_per_day: dailyLimits(agent.person), story_words: storyWordsAllowed(agent.person) ? 'allowed (test switch), labelled' : 'never yours: place your person\'s own words (exactly as they said them) or the book\'s; if a line is missing, leave it out and ask', how_to_work: 'Call read_requests: your person\'s ideas and notes are your to-do list. Answer each with a draft (answering: its id). They react with keep, try again, or say more; those come back as requests. To edit their own scene, use list_takes, try_frame, swap_take, change_timing, mark_speaking or request_video_test; anything with a cost waits for their approval. If no tool can do what they asked, call log_gap.', bringing_in_images: imagesOpen() ? 'open' : 'not open yet', rule: 'You draft; your person publishes. Nothing you make is public until they do.' };
+      return { you: who.label, person: `@${who.short}`, scopes: agent.scopes, ...(agent.spendCapUsd !== null ? { spend_cap_usd: agent.spendCapUsd, spend_note: 'Your key\'s cap for all the spending your person approves on your drafts.' } : {}), limits_per_day: dailyLimits(agent.person), story_words: storyWordsAllowed(agent.person) ? 'allowed (test switch), labelled' : 'never yours: place your person\'s own words (exactly as they said them) or the book\'s; if a line is missing, leave it out and ask', how_to_work: 'Grouped tools take {kind, args}. Call read with kind read_requests: your person\'s ideas and notes are your to-do list. Answer each with a draft (draft, answering: its id). They react with keep, try again, or say more; those come back as requests. To edit their own scene, use read kind list_takes, then edit_my_version (try_frame, set_camera, swap_take, change_timing, mark_speaking or request_video_test); anything with a cost waits for their approval. If no tool can do what they asked, call tell_the_site with kind log_gap.', bringing_in_images: imagesOpen() ? 'open' : 'not open yet', rule: 'You draft; your person publishes. Nothing you make is public until they do.' };
     },
   },
   {
@@ -238,7 +241,7 @@ const WRITE: AgentTool[] = [
     },
   },
   {
-    name: 'draft_style', title: 'Draft a style', scope: 'drafts', writes: true, counts: 'drafts',
+    name: 'draft_style', title: 'Draft a style', scope: 'drafts', writes: true, counts: 'drafts', accepts: ['style'],
     description: 'Draft a new style in words (name and text, how pictures in it look) and one sample picture of it on the site\'s fixed sample subject. The style is its own text, so it takes no style argument. A private draft with its estimate until your person taps Make it.',
     inputSchema: { type: 'object', properties: { name: { type: 'string' }, text: { type: 'string' }, attach: ATTACH_SCHEMA, title: { type: 'string' }, answering: ANSWERING }, required: ['name', 'text'], additionalProperties: false },
     run: async (agent, args) => {
@@ -470,39 +473,100 @@ const EDITS: AgentTool[] = [
 /** The open read tools, as tools of a signed-in agent (scope read). */
 const READ: AgentTool[] = READ_TOOLS.map((t) => ({ ...t, scope: 'read' as Scope, writes: false, run: (_agent: Agent, args: Record<string, unknown>) => t.run(args) }));
 
-// Minpentai agent play (scope "play"): listed to no agent while AGENTS.minpentaiPlay is off.
+/**
+ * Every tool, by its own name: each one is a kind of a grouped tool (./groups), or a tool on its own. Minpentai agent
+ * play (scope "play") is listed to no agent while AGENTS.minpentaiPlay is off.
+ */
 export const AGENT_TOOLS: AgentTool[] = [...READ, ...WRITE, ...EDITS, ...MINPENTAI_TOOLS];
+export const agentToolByName = (name: string) => AGENT_TOOLS.find((t) => t.name === name) ?? null;
+
+/** A grouped tool as served: its kinds, which an agent sees only for the scopes it has. */
+export interface ServedTool { name: string; title: string; description: string; group: Group; kinds: AgentTool[] }
+export const SERVED: ServedTool[] = GROUPS.map((g) => {
+  const kinds = (g.kinds ?? [g.name]).map((k) => {
+    const t = agentToolByName(k);
+    if (!t) throw new Error(`group ${g.name}: no tool ${k}`);
+    return t;
+  });
+  return { name: g.name, title: g.title ?? kinds[0].title, description: g.description ?? kinds[0].description, group: g, kinds };
+});
+/** Every tool is in exactly one group (checked by test:agents and P4a too). */
+export const ungrouped = () => AGENT_TOOLS.filter((t) => SERVED.filter((s) => s.kinds.includes(t)).length !== 1).map((t) => t.name);
+
 /** A tool's schema as listed: a style argument becomes an enum of the styles on offer now (owner, 2026-10-29). */
 export function withStyles(schema: Schema, names: string[]): Schema {
   if (schema.properties.style !== STYLE_SCHEMA) return schema;
   return { ...schema, properties: { ...schema.properties, style: { type: 'string', enum: names, description: STYLE_SCHEMA.description } } };
 }
-/** The tools an agent is shown, for its scopes, with the offered styles filled in. */
+const sees = (agent: Pick<Agent, 'scopes' | 'person'>, t: AgentTool) => agent.scopes.includes(t.scope) && (t.scope !== 'play' || playFor(agent.person));
+/**
+ * The tools an agent is shown: each group with the kinds its scopes allow (a group with none isn't shown), the
+ * offered styles filled in, and the group's hints.
+ */
 export async function listedTools(agent: Pick<Agent, 'scopes' | 'person'>, offered: () => Promise<PictureStyle[]> = stylesOffered) {
   const names = (await offered()).map((x) => x.name);
-  return AGENT_TOOLS.filter((t) => agent.scopes.includes(t.scope) && (t.scope !== 'play' || playFor(agent.person))).map((t) => ({ ...t, inputSchema: withStyles(t.inputSchema, names) }));
+  return SERVED.flatMap((s) => {
+    const kinds = s.kinds.filter((t) => sees(agent, t)).map((t) => ({ ...t, inputSchema: withStyles(t.inputSchema, names) }));
+    if (!kinds.length) return [];
+    const inputSchema = s.group.kinds ? kindSchema(kinds) : kinds[0].inputSchema;
+    return [{ name: s.name, title: s.title, description: s.description, inputSchema, annotations: { title: s.title, ...s.group.hints }, kinds: kinds.map((k) => k.name) }];
+  });
 }
-export const agentToolByName = (name: string) => AGENT_TOOLS.find((t) => t.name === name) ?? null;
 
-/** Runs one tool for an agent: its scope, then its count, then the tool. Every failure is recorded (recordFailure). */
+/**
+ * A call's tool and its own arguments: for a grouped tool, the kind and its args. Null when there is no such tool.
+ * A bad kind or args is the grouped tool's own error.
+ */
+export function kindOf(name: string, args: Record<string, unknown>): { tool: AgentTool; args: Record<string, unknown> } | null {
+  const s = SERVED.find((x) => x.name === name);
+  if (!s) return null;
+  if (!s.group.kinds) return { tool: s.kinds[0], args };
+  const { member, args: inner } = pickKind(s.name, s.kinds, args);
+  return { tool: member, args: inner };
+}
+/** Whether a call can write (so a timeout may still have saved it). */
+export function callWrites(name: string, args: Record<string, unknown>) {
+  try { return kindOf(name, args)?.tool.writes ?? false; } catch { return false; }
+}
+/** The name a call is logged under: the kind's, as before grouping (or the tool's own). */
+export function callName(name: string, args: Record<string, unknown>) {
+  try { return kindOf(name, args)?.tool.name ?? name; } catch { return name; }
+}
+
+/**
+ * Runs one tool for an agent: the kind (for a grouped tool), its scope, then its count, then the kind with its own
+ * arguments, strictly. Every failure is recorded (recordFailure) under the kind's own name, with its own arguments.
+ */
 export async function runTool(agent: Agent, name: string, args: Record<string, unknown>) {
-  const refuse = async (kind: 'input' | 'refused', message: string): Promise<never> => {
-    await recordFailure(agent, name, kind, message, args);
+  const refuse = async (as: string, kind: 'input' | 'refused', message: string, a: Record<string, unknown>): Promise<never> => {
+    await recordFailure(agent, as, kind, message, a);
     throw new ToolInputError(message);
   };
-  const tool = agentToolByName(name);
-  if (!tool) return refuse('input', `unknown tool: ${name}`);
-  if (!agent.scopes.includes(tool.scope)) return refuse('refused', `your person didn’t give you the "${tool.scope}" scope`);
-  const c = await countOk(agent, tool.counts ?? 'reads');
-  if (!c.ok) return refuse('refused', c.why);
+  let picked;
   try {
-    return await tool.run(agent, args);
+    picked = kindOf(name, args);
   } catch (e) {
-    if (e instanceof ToolInputError) await recordFailure(agent, name, 'input', e.message, args);
-    else await recordFailure(agent, name, 'error', `something went wrong on our side (${(e as { code?: string }).code ?? (e as Error)?.name ?? 'unknown'})`, args);
+    if (e instanceof ToolInputError) return refuse(name, 'input', e.message, args);
+    throw e;
+  }
+  if (!picked) return refuse(name, 'input', `unknown tool: ${name}`, args);
+  const { tool, args: own } = picked;
+  if (!agent.scopes.includes(tool.scope)) return refuse(tool.name, 'refused', `your person didn’t give you the "${tool.scope}" scope`, own);
+  const c = await countOk(agent, tool.counts ?? 'reads');
+  if (!c.ok) return refuse(tool.name, 'refused', c.why, own);
+  try {
+    strictArgs(tool.inputSchema, own, tool.accepts);
+    return await tool.run(agent, own);
+  } catch (e) {
+    if (e instanceof ToolInputError) await recordFailure(agent, tool.name, 'input', e.message, own);
+    else await recordFailure(agent, tool.name, 'error', `something went wrong on our side (${(e as { code?: string }).code ?? (e as Error)?.name ?? 'unknown'})`, own);
     throw e;
   }
 }
 
-/** A tool call the route gave up waiting for (the MCP route's timeout). */
-export const recordTimeout = (agent: Agent, name: string, args: Record<string, unknown>) => recordFailure(agent, name, 'timeout', 'took too long on our side', args);
+/** A tool call the route gave up waiting for (the MCP route's timeout), under the kind's own name. */
+export const recordTimeout = (agent: Agent, name: string, args: Record<string, unknown>) => {
+  let as = name, own = args;
+  try { const k = kindOf(name, args); if (k) { as = k.tool.name; own = k.args; } } catch { /* recorded under the tool's name */ }
+  return recordFailure(agent, as, 'timeout', 'took too long on our side', own);
+};

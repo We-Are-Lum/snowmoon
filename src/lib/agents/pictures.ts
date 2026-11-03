@@ -326,8 +326,8 @@ export const STYLE_SCHEMA = { type: 'string', description: 'Required: the style 
  * as log_gap would, before the agent answers, and the reply says what to tell the person and what can be made instead.
  */
 export const MAKES: Record<string, string | null> = {
-  'a reference picture of a character': 'get_sheet {kind: "character"}, then draft_sheet (the sheet\'s front view) or draft_picture with attach {reference: {kind: "character", slug}}. The character alone.',
-  'a reference picture of a place': 'get_sheet {kind: "place"}, then draft_place, or draft_picture with attach {reference: {kind: "place", slug}}. No people.',
+  'a reference picture of a character': 'read get_sheet (args {kind: "character", slug}), then draft draft_sheet (the sheet\'s front view) or draft_picture with attach {reference: {kind: "character", slug}}. The character alone.',
+  'a reference picture of a place': 'read get_sheet (args {kind: "place", slug}), then draft draft_place, or draft_picture with attach {reference: {kind: "place", slug}}. No people.',
   'a new style': 'draft_style (its name and words; one sample picture).',
   'a picture of a moment in the book': 'search_book or get_passage for the block, then draft_picture with attach {moment: "c<chapter>-b<block>"}.',
   'a picture for a glossary term': 'get_references for its sheets, then draft_picture with attach {glossary: term}, or the sheet\'s reference.',
@@ -340,6 +340,8 @@ export const MAKES: Record<string, string | null> = {
   'music or sound': null,
   'something else': null,
 };
+/** The names in MAKES are kinds of the grouped tools (owner, 2026-11-04). */
+const KINDS_NOTE = 'Each name is a kind: call its group with {kind, args} (get_… and list_… in read; start_idea and draft_… in draft; try_frame, set_camera, swap_take, change_timing, mark_speaking and request_video_test in edit_my_version); search_book is a tool of its own.';
 export async function matchRequest(agent: Agent, args: Record<string, unknown>, ctx: PictureCtx = {}) {
   const asked = checkPlain(args.asked, 'asked (your person\'s words)', 1000);
   const wants = typeof args.wants === 'string' && args.wants in MAKES ? args.wants : null;
@@ -347,9 +349,9 @@ export async function matchRequest(agent: Agent, args: Record<string, unknown>, 
   const steps = MAKES[wants];
   if (steps && /draft_(picture|sheet|place)/.test(steps)) {
     const styles = (await (ctx.offered ?? stylesOffered)()).map((x) => x.name);
-    return { tools: steps, styles_offered: styles, next: `Do these steps. A picture needs a style your person chose: if they haven't named one, ask, offering only ${styles.map((x) => `"${x}"`).join(', ')}.` };
+    return { tools: steps, kinds: KINDS_NOTE, styles_offered: styles, next: `Do these steps. A picture needs a style your person chose: if they haven't named one, ask, offering only ${styles.map((x) => `"${x}"`).join(', ')}.` };
   }
-  if (steps) return { tools: steps, next: 'Do these steps; ask your person one short question when something is missing.' };
+  if (steps) return { tools: steps, kinds: KINDS_NOTE, next: 'Do these steps; ask your person one short question when something is missing.' };
   const missing = `No tool makes ${wants}.`;
   await (ctx.gap ? ctx.gap(asked, missing) : logGap(agent, { asked, missing }));
   return {

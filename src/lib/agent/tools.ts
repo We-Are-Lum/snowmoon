@@ -314,3 +314,57 @@ export const TOOLS: Tool[] = [
 ];
 
 export const toolByName = (name: string) => TOOLS.find((t) => t.name === name) ?? null;
+
+/**
+ * Grouped tools (owner, 2026-11-04; src/lib/agents/groups.ts): one tool takes {kind, args}, where kind is one of the
+ * tools it groups and args are that tool's own fields. The schema is a union of each kind's own schema (args.anyOf,
+ * each branch titled with its kind), nested under args because MCP clients refuse a union at a tool's top level.
+ */
+type Kinded = { name: string; title: string; description: string; inputSchema: Schema };
+export function kindSchema(members: Kinded[]): Schema {
+  return {
+    type: 'object',
+    properties: {
+      kind: { enum: members.map((m) => m.name), description: 'Which one: each kind is described in args (the branch with its title).' },
+      args: { description: 'That kind\'s own fields (leave out for a kind with none). Unknown fields are refused.', anyOf: members.map((m) => ({ title: m.name, description: `${m.title}. ${m.description}`, ...m.inputSchema })) },
+    },
+    required: ['kind'],
+    additionalProperties: false,
+  };
+}
+/** A grouped call's kind and its own arguments, or the tool's own error. */
+export function pickKind<T extends Kinded>(group: string, members: T[], args: Record<string, unknown>): { member: T; args: Record<string, unknown> } {
+  only(args, ['kind', 'args']);
+  const member = members.find((m) => m.name === args.kind);
+  if (!member) throw new ToolInputError(`${group}: kind must be one of ${members.map((m) => m.name).join(', ')}`);
+  const inner = args.args === undefined || args.args === null ? {} : args.args;
+  if (typeof inner !== 'object' || Array.isArray(inner)) throw new ToolInputError(`${group}: args must be an object of ${member.name}'s fields`);
+  return { member, args: inner as Record<string, unknown> };
+}
+/** A kind's fields, strictly: anything its schema doesn't name is refused (as each tool's own check words it). */
+export function strictArgs(schema: Schema, args: Record<string, unknown>, accepts: string[] = []) {
+  only(args, [...Object.keys(schema.properties), ...accepts]);
+}
+
+/**
+ * The open read API's tools (/api/mcp and GET /api/agent/v1/<tool>), grouped as a signed-in agent's are: search_book,
+ * and read with the open read tools as its kinds.
+ */
+const OPEN_KINDS = TOOLS.filter((t) => t.name !== 'search_book');
+export const OPEN_TOOLS: Tool[] = [
+  toolByName('search_book')!,
+  {
+    name: 'read',
+    title: 'Read the book and published scenes',
+    description: 'Read-only. Pick a kind and give its fields in args.',
+    inputSchema: kindSchema(OPEN_KINDS),
+    run: async (args) => {
+      const { member, args: inner } = pickKind('read', OPEN_KINDS, args);
+      strictArgs(member.inputSchema, inner);
+      return member.run(inner);
+    },
+  },
+];
+export const openToolByName = (name: string) => OPEN_TOOLS.find((t) => t.name === name) ?? null;
+/** The open read kinds, for GET /api/agent/v1/read?kind=… */
+export const openKind = (kind: string) => OPEN_KINDS.find((t) => t.name === kind) ?? null;

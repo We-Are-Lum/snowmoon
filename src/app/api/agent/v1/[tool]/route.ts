@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { ToolInputError, TOOLS, toolByName } from '~/lib/agent/tools';
+import { ToolInputError, OPEN_TOOLS, openToolByName } from '~/lib/agent/tools';
 import { agentApiOn, rateOk } from '~/lib/agent/rate';
 import { asAgentReader } from '~/lib/agent/reader';
 import { tryAgain } from '~/lib/try-again';
@@ -8,7 +8,9 @@ import { runTool } from '~/lib/agents/tools';
 
 /**
  * The agent read API as REST (owner, 2026-10-19): GET /api/agent/v1/<tool>?<arguments>, the same tools as
- * /api/mcp. GET /api/agent/v1/tools lists them with their argument schemas. Open without sign-in at a low rate.
+ * /api/mcp: search_book, and read, whose kind picks the read tool (owner, 2026-11-04):
+ * GET /api/agent/v1/read?kind=get_shot&adaptation=1&version=2&shot=… (or &args=<that kind's fields as JSON>, for a
+ * kind with a field named kind, such as get_sheet). GET /api/agent/v1/tools lists them with their argument schemas. Open without sign-in at a low rate.
  * GETs are read only. POST is for an agent of a person (its own token: OAuth, or a linked wallet's), with the
  * same tools as /mcp, drafts included (owner, 2026-10-20; docs/agents/design.md). SWITCHED OFF (AGENT_API.enabled,
  * AGENTS.enabled).
@@ -26,14 +28,26 @@ async function handle(request: Request, { params }: { params: Promise<{ tool: st
   try {
     const rate = await rateOk(request);
     if (!rate.ok) return rate.status === 429 ? no('Too many requests: at most 20 a minute', 429, { 'Retry-After': String(rate.retryAfter ?? 60) }) : no('Not available here', 503);
-    if (name === 'tools') return NextResponse.json({ tools: TOOLS.map(({ name, title, description, inputSchema }) => ({ name, title, description, inputSchema })) }, { headers });
-    const tool = toolByName(name);
+    if (name === 'tools') return NextResponse.json({ tools: OPEN_TOOLS.map(({ name, title, description, inputSchema }) => ({ name, title, description, inputSchema })) }, { headers });
+    const tool = openToolByName(name);
     if (!tool) return no(`No such tool: ${name}`, 404);
-    const args = Object.fromEntries(new URL(request.url).searchParams.entries());
-    return NextResponse.json(await tool.run(args), { headers });
+    const query = Object.fromEntries(new URL(request.url).searchParams.entries());
+    return NextResponse.json(await tool.run(name === 'read' ? readArgs(query) : query), { headers });
   } catch (e) {
     if (e instanceof ToolInputError) return no(e.message, 400);
     return tryAgain('agent api', e);
+  }
+}
+
+/** A GET's query as read's {kind, args}: the other parameters are the kind's fields, or args holds them as JSON. */
+function readArgs(query: Record<string, string>): Record<string, unknown> {
+  const { kind, args, ...rest } = query;
+  if (args === undefined) return { kind, args: rest };
+  if (Object.keys(rest).length) throw new ToolInputError('give the kind\'s fields either in args (as JSON) or as parameters, not both');
+  try {
+    return { kind, args: JSON.parse(args) };
+  } catch {
+    throw new ToolInputError('args must be JSON');
   }
 }
 

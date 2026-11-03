@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { ToolInputError } from '~/lib/agent/tools';
 import { agentFromRequest, agentsOn, issuer } from '~/lib/agents/core';
-import { AGENT_TOOLS, recordTimeout, runTool, listedTools } from '~/lib/agents/tools';
+import { callName, callWrites, recordTimeout, runTool, listedTools } from '~/lib/agents/tools';
 
 /**
  * The connector for "Add to Claude" and "Add to ChatGPT" (owner, 2026-10-20; docs/agents/design.md §1).
@@ -44,9 +44,10 @@ const unauthorized = (why: string) =>
 const INSTRUCTIONS =
   'You are acting for one person on snowmoon.party, an independent open adaptation of Snowmoon by Vitalik Buterin (GPL-3.0), not affiliated with him. ' +
   'You appear as "<your name>, agent of @person". You draft; your person publishes: nothing you make is public until they publish it from their You page. ' +
-  'You can read the book and published scenes, draft ideas, storyboards, frame prompts and character versions, bring in images with their recipe as you declare it, read feedback, propose revisions (credited), and draft notes. ' +
-  'On your person\'s own scene versions you can draft edits: try_frame (a new frame from their note), swap_take, change_timing, mark_speaking and request_video_test (list_takes shows a shot\'s lines and takes). A frame or video costs money: you only draft it with its estimate, and your person approves the spend on their You page. ' +
-  'When your person asks for something no tool can do, call log_gap with what they asked and what was missing, then tell them. When they wish for a feature or say how the site could be better, pass it on with suggest_improvement, in their words. The site\'s owner reads both. ' +
+  'The tools are grouped: read, draft, edit_my_version, tell_the_site and the Minpentai ones take {kind, args}, where kind names what to do (get_scene, start_idea, try_frame, log_gap…) and args are its own fields. ' +
+  'With read you can read the book and published scenes, your person\'s requests, work and feedback. With draft you draft ideas, storyboards, frame prompts, character versions, pictures, revisions (credited) and your person\'s direction notes and line rewrites; leave_note drafts a note; bring_in_image brings in an image with its recipe as you declare it. ' +
+  'On your person\'s own scene versions, edit_my_version drafts edits: try_frame (a new frame from their note), set_camera, swap_take, change_timing, mark_speaking and request_video_test (read list_takes shows a shot\'s lines and takes). A frame or video costs money: you only draft it with its estimate, and your person approves the spend on their You page. ' +
+  'When your person asks for something no tool can do, call tell_the_site with kind log_gap (what they asked and what was missing), then tell them. When they wish for a feature or say how the site could be better, pass it on with tell_the_site kind suggest_improvement, in their words. The site\'s owner reads both. ' +
   'Story lines are what characters say, or narration; your person\'s idea or notes are not lines. Name the book\'s characters freely (Zei, Deluin, Bai…). Quote the book only word for word, citing its block (c<chapter>-b<block>). Never present yourself as a person. Don\'t name or depict real people, and don\'t name artists, studios or films in prompts. Call whoami first.';
 
 export async function GET() {
@@ -84,19 +85,18 @@ export async function POST(request: Request) {
       return reply(msg.id, {});
     case 'tools/list':
       return reply(msg.id, {
-        tools: (await listedTools(agent)).map(({ name, title, description, inputSchema, writes }) => ({
-          name, title, description, inputSchema,
-          annotations: { title, readOnlyHint: !writes, destructiveHint: false, idempotentHint: !writes, openWorldHint: false },
-        })),
+        tools: (await listedTools(agent)).map(({ name, title, description, inputSchema, annotations }) => ({ name, title, description, inputSchema, annotations })),
       });
     case 'tools/call': {
       const name = typeof msg.params?.name === 'string' ? msg.params.name : '';
       const args = msg.params?.arguments ?? {};
       if (typeof args !== 'object' || Array.isArray(args) || args === null) return fail(msg.id, -32602, 'arguments must be an object');
       const started = Date.now();
-      const writes = AGENT_TOOLS.find((t) => t.name === name)?.writes ?? false;
-      console.log('agent tool start', name);
-      const done = (outcome: string) => console.log('agent tool', name, outcome, `${Date.now() - started}ms`);
+      // Logged by the kind's name (the tool's own name before grouping, owner 2026-11-04), never by what was asked.
+      const writes = callWrites(name, args as Record<string, unknown>);
+      const logged = callName(name, args as Record<string, unknown>);
+      console.log('agent tool start', logged);
+      const done = (outcome: string) => console.log('agent tool', logged, outcome, `${Date.now() - started}ms`);
       try {
         const out = (await withTimeout(runTool(agent, name, args as Record<string, unknown>), TOOL_TIMEOUT_MS)) as Record<string, unknown>;
         done('ok');
@@ -106,13 +106,13 @@ export async function POST(request: Request) {
           done('timeout');
           await recordTimeout(agent, name, args as Record<string, unknown>);
           const text = writes
-            ? 'That took too long on our side. It may still have been saved: check with list_my_work before trying again.'
+            ? 'That took too long on our side. It may still have been saved: check with read (kind list_my_work) before trying again.'
             : 'That took too long on our side. Try again in a moment.';
           return reply(msg.id, { content: [{ type: 'text', text }], isError: true });
         }
         done(e instanceof ToolInputError ? 'input-error' : 'error');
         if (e instanceof ToolInputError) return reply(msg.id, { content: [{ type: 'text', text: e.message }], isError: true });
-        console.error('agent tool failed', name, (e as { code?: string }).code ?? (e as Error)?.message ?? 'unknown');
+        console.error('agent tool failed', logged, (e as { code?: string }).code ?? (e as Error)?.message ?? 'unknown');
         return reply(msg.id, { content: [{ type: 'text', text: 'Something went wrong on our side. Try again in a moment.' }], isError: true });
       }
     }

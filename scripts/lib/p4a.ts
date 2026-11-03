@@ -49,8 +49,23 @@ const AGENT_ROUTE_IMPORTS = new Set(['next/server', '~/lib/agents/core', '~/lib/
 const TOOLS = 'src/lib/agents/tools.ts';
 const PIECES = 'src/lib/agents/pieces.ts';
 const READ_TOOLS = 'src/lib/agent/tools.ts';
+/** The grouped tools (owner, 2026-11-04): names only; every kind must be a tool defined in TOOL_FILES. */
+const GROUPS = 'src/lib/agents/groups.ts';
+/** The Minpentai agent-play tools (scope "play"), which tools.ts serves too: scanned like a tool module. */
+const MINPENTAI_TOOLS = 'src/lib/minpentai/agent-play/tools.ts';
+const TOOL_FILES = [TOOLS, READ_TOOLS, MINPENTAI_TOOLS];
+/** What tools.ts may import from outside src/lib/agents: the read tools, the editor data, settings, Minpentai's tools. */
+const TOOLS_OUTSIDE = new Set(['../agent/tools', '../agent/data', '../config', '../minpentai/agent-play/tools', 'node:fs', 'node:path', 'server-only']);
+/**
+ * Code that spends on an approval: ./approve (an approved draft's frame, video or picture) and images/paid (a paid
+ * picture). No tool module, and nothing the Minpentai tools import, may import either. (./edits takes remixPictures,
+ * a pure count, from remix/make, which also holds Remix's own spending; not listed here, see the owner's note.)
+ */
+const SPENDING = /(^|\/)(approve|images\/paid)$/;
 /** Modules the agent tools import from ./ (each scanned for publish and keep). */
-const TOOL_MODULES = new Set(['core', 'accounts', 'filter', 'images', 'pieces', 'requests', 'edits', 'direction', 'suggestions', 'pictures', 'picture-kinds']);
+const TOOL_MODULES = new Set(['core', 'accounts', 'filter', 'images', 'pieces', 'requests', 'edits', 'direction', 'suggestions', 'pictures', 'picture-kinds', 'groups']);
+// ./groups (owner, 2026-11-04: the tools grouped so people approve fewer) holds names and hints only and imports nothing;
+// it is checked below: its names, and that every kind it lists is a tool defined in the inspected tool files.
 // Direction notes and line rewrites (owner, 2026-10-20) are private to their person and never published; ./direction is
 // scanned for publish and keep like the others. Added to the inspected list by the coding agent; the owner's yes pending.
 // Suggestions (owner, 2026-10-22) go to the owner only and are never published; ./suggestions is scanned like the
@@ -87,9 +102,32 @@ function fnBody(src: string, name: string): string | null {
 export function agentToolProblems(read: (rel: string) => string): string[] {
   const out: string[] = [];
   const tools = stripComments(read(TOOLS));
-  // Tool names, here and in the open read tools it serves too.
-  for (const f of [TOOLS, READ_TOOLS])
-    for (const m of stripComments(read(f)).matchAll(/\bname:\s*'([a-z_]+)'/g)) if (TOOL_NAME_BAD.test(m[1])) out.push(`${f}: tool "${m[1]}" publishes, keeps or spends`);
+  // Tool names, here, in the open read tools and the Minpentai tools it serves too, and the groups' names.
+  const defined = new Set<string>();
+  for (const f of TOOL_FILES)
+    for (const m of stripComments(read(f)).matchAll(/\bname:\s*'([a-z_]+)'/g)) {
+      defined.add(m[1]);
+      if (TOOL_NAME_BAD.test(m[1])) out.push(`${f}: tool "${m[1]}" publishes, keeps or spends`);
+    }
+  // The groups: names that say no publish, keep or spend, each kind a tool defined above, each tool in one group only.
+  const groups = stripComments(read(GROUPS));
+  if (importsOf(groups).length) out.push(`${GROUPS}: names only, but it imports code`);
+  const listed: string[] = [];
+  for (const g of groups.matchAll(/\bname:\s*'([a-z_]+)'(?:[^}]*?\bkinds:\s*(null|\[[^\]]*\]))?/g)) {
+    if (TOOL_NAME_BAD.test(g[1])) out.push(`${GROUPS}: group "${g[1]}" publishes, keeps or spends`);
+    const kinds = !g[2] || g[2] === 'null' ? [g[1]] : [...g[2].matchAll(/'([a-z_]+)'/g)].map((k) => k[1]);
+    for (const k of kinds) {
+      if (!defined.has(k)) out.push(`${GROUPS}: group "${g[1]}" serves "${k}", which is not an inspected tool`);
+      if (TOOL_NAME_BAD.test(k)) out.push(`${GROUPS}: kind "${k}" publishes, keeps or spends`);
+      if (listed.includes(k)) out.push(`${GROUPS}: "${k}" is in two groups`);
+      listed.push(k);
+    }
+  }
+  // Imports from outside ./: only the inspected ones; the Minpentai tools never publish, keep or reach spending code.
+  for (const imp of importsOf(tools)) if (!imp.from.startsWith('./') && !TOOLS_OUTSIDE.has(imp.from)) out.push(`${TOOLS}: imports ${imp.from}, not inspected as draft-only`);
+  const mp = stripComments(read(MINPENTAI_TOOLS));
+  if (PUBLISH_OR_KEEP.test(mp)) out.push(`${MINPENTAI_TOOLS}: publishes or keeps (${mp.match(PUBLISH_OR_KEEP)![0]})`);
+  for (const imp of importsOf(read(MINPENTAI_TOOLS))) if (SPENDING.test(imp.from)) out.push(`${MINPENTAI_TOOLS}: imports ${imp.from}, which spends`);
   if (PUBLISH_OR_KEEP.test(tools)) out.push(`${TOOLS}: publishes or keeps (${tools.match(PUBLISH_OR_KEEP)![0]})`);
   for (const imp of importsOf(tools)) {
     if (!imp.from.startsWith('./')) continue;
@@ -100,6 +138,7 @@ export function agentToolProblems(read: (rel: string) => string): string[] {
   for (const mod of TOOL_MODULES) {
     const src = read(`src/lib/agents/${mod}.ts`);
     for (const imp of importsOf(src)) if (imp.from.startsWith('./') && !TOOL_MODULES.has(imp.from.slice(2)) && !TEXT_MODULES.has(imp.from.slice(2))) out.push(`src/lib/agents/${mod}.ts: imports ${imp.from}, not inspected as draft-only`);
+    for (const imp of importsOf(src)) if (SPENDING.test(imp.from)) out.push(`src/lib/agents/${mod}.ts: imports ${imp.from}, which spends`);
     if (mod === 'pieces') continue;
     const s = stripComments(src);
     if (PUBLISH_OR_KEEP.test(s)) out.push(`src/lib/agents/${mod}.ts: publishes or keeps (${s.match(PUBLISH_OR_KEEP)![0]})`);
