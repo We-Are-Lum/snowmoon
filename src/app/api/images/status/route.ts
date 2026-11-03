@@ -84,9 +84,10 @@ export async function GET(request: Request) {
     ]);
     if (isSocialPerson(fid)) {
       // A Lens or Bluesky account (not linked to a Farcaster account): free only as src/lib/social/free.ts decides; no balance.
-      const d = await freeFor(sql, fid);
+      // Never asks Lens here (variant B: only Generate does); with no decision yet, eligible is null until Generate.
+      const d = await freeFor(sql, fid, { lookUp: false });
       return NextResponse.json(
-        { ...base, signedIn: true, fid, invited: false, eligible: d.free, refusal: d.free ? undefined : d.error, consented, left, publishesLeft: publishes, picks: offer(picks) },
+        { ...base, signedIn: true, fid, invited: false, eligible: d ? d.free : null, refusal: d && !d.free ? d.error : undefined, consented, left, publishesLeft: publishes, picks: offer(picks) },
         { headers: { 'Cache-Control': 'no-store' } },
       );
     }

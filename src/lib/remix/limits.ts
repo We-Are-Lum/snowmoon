@@ -31,7 +31,8 @@ export interface Spend {
 }
 
 export async function generationsLeft(sql: Sql, person: number, reserveUsd: number): Promise<number> {
-  if (isSocialPerson(person) && !(await freeFor(sql, person)).free) return 0;
+  // Never asks Lens (the count is shown when the maker opens); a decision already made counts, none yet shows the count.
+  if (isSocialPerson(person) && (await freeFor(sql, person, { lookUp: false }))?.free === false) return 0;
   if (isWalletPerson(person)) return Math.floor((await balanceUsd(sql, -person)) / priceUsd(reserveUsd));
   const [r] = await sql`select count(*)::int as n from studio.remix_asks where person = ${person} and at >= date_trunc('day', now() at time zone 'utc') at time zone 'utc'`;
   return Math.max(0, perDay(person) - (r?.n ?? 0));

@@ -1,6 +1,8 @@
 import 'server-only';
 import type postgres from 'postgres';
 import { CHECKS } from '../config';
+import { isSocialPerson, socialAccountOf } from '../people';
+import { socialAccount } from '../social/accounts';
 
 /**
  * Stored decisions for sign-in checks (owner, 2026-11-04: "look each account up as rarely as possible"; "store the
@@ -127,4 +129,9 @@ export async function anyCurrentPass(sql: Sql, accounts: readonly Account[]): Pr
  */
 export async function recheckMaker(sql: Sql, maker: number): Promise<void> {
   if (maker > 0) await markForRecheck(sql, 'farcaster', maker);
+  // A Lens account's own maker number (signin-lens-bluesky): its Lens pass is withdrawn too (owner, 2026-11-04).
+  if (isSocialPerson(maker)) {
+    const row = await socialAccount(sql, socialAccountOf(maker)).catch(() => null);
+    if (row?.kind === 'lens') await markForRecheck(sql, 'lens', row.subject);
+  }
 }

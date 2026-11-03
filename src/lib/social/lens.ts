@@ -18,7 +18,8 @@ import { SOCIAL_SIGN_IN } from '../config';
  *
  * The score (Lens's "Account Score", lens.xyz/docs/protocol/accounts/fetch: "a probability-based measure that
  * evaluates an account's signal strength … calculated using a set of ML algorithms that consider factors like
- * follower graphs, content, and other variables") is read from `account { score }`, with only the account address.
+ * follower graphs, content, and other variables") is read from `account { score }`, with only the account address,
+ * only at Generate and only when there is no current decision (src/lib/social/lens-check.ts). It is never kept.
  *
  * `LENS_HTTP.fetch` is replaced only by the tests.
  */
@@ -122,7 +123,6 @@ async function lensKeys(fresh = false) {
 /** Only the tests: forget the cached keys. */
 export const forgetLensKeys = () => {
   jwks = null;
-  scores.clear();
 };
 
 /** The ID token's claims, if Lens signed it (RS256) for our App, unexpired, as an account owner or manager. */
@@ -168,18 +168,16 @@ export async function lensUsername(account: string): Promise<string | null> {
   }
 }
 
-const scores = new Map<string, { score: number; at: number }>();
-/** The Lens score of an account, kept in memory for scoreCacheMinutes; null when Lens can't be reached. */
-export async function lensScore(account: string): Promise<number | null> {
-  const a = account.toLowerCase();
-  const hit = scores.get(a);
-  if (hit && Date.now() - hit.at < SOCIAL_SIGN_IN.lens.scoreCacheMinutes * 60_000) return hit.score;
+/**
+ * The Lens score of an account, asked of Lens now; null when Lens can't be reached or gives none. Nothing is kept here:
+ * only the decision made from it is stored (src/lib/social/lens-check.ts, on the shared check-decisions store), and the
+ * score itself is never stored, logged or sent to the page (owner, 2026-11-04).
+ */
+export async function lensScoreNow(account: string): Promise<number | null> {
   try {
-    const d = await gql<{ account: { score: number } | null }>('query($a: EvmAddress!) { account(request: { address: $a }) { score } }', { a });
+    const d = await gql<{ account: { score: number } | null }>('query($a: EvmAddress!) { account(request: { address: $a }) { score } }', { a: account.toLowerCase() });
     const score = d.account?.score;
-    if (typeof score !== 'number' || !Number.isFinite(score)) return null;
-    scores.set(a, { score, at: Date.now() });
-    return score;
+    return typeof score === 'number' && Number.isFinite(score) ? score : null;
   } catch {
     return null;
   }

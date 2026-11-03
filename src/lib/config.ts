@@ -427,16 +427,13 @@ export const SOCIAL_SIGN_IN = {
      * account. Null would turn Lens's free counts off.
      */
     minScore: 1000 as number | null,
-    /**
+    /*
      * Owner, 2026-11-04 (variant B, and "store the decision, not the score"): the score is looked up only at Generate,
      * the same moment as Neynar's, and only when there is no current decision. Only the decision is kept (passed or
-     * not, when, and the threshold used), in the shared check-decisions store (src/lib/checks/decisions.ts, network
-     * 'lens', keyed by the Lens address): a pass lasts passDays; a fail is asked again no sooner than failRecheckHours
-     * later (sooner on a report, a hidden picture or a new threshold). The score is never stored, logged or sent to
-     * the page.
+     * not, when, and the rule 'lens-score>=<minScore>'), in the shared store (src/lib/checks/decisions.ts, network
+     * 'lens', keyed by the Lens address; CHECKS.passDays and CHECKS.failHours). The score is never stored, logged or
+     * sent to the page (src/lib/social/lens-check.ts).
      */
-    passDays: 90,
-    failRecheckHours: 24,
     timeoutMs: 5000,
   },
   bluesky: {
