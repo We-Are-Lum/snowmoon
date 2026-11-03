@@ -87,6 +87,11 @@ export interface WalletSessionState {
   /** 0x1234…abcd, the byline. */
   short: string;
   exp: number;
+  /**
+   * The Farcaster account this wallet signs in as (src/lib/wallet/links.ts), as the server last said (2026-11-04:
+   * the menu kept showing the address of a wallet the server had linked). Null: not linked. Absent: not asked yet.
+   */
+  linked?: { fid: number; name: string } | null;
 }
 
 function readWallet(): WalletSessionState | null {
@@ -109,6 +114,34 @@ export function saveWalletSession(token: string, address: string) {
   window.dispatchEvent(new Event(EVENT));
 }
 
+/**
+ * Ask the server who this wallet signs in as (the balance route, which also makes the automatic link), and keep the
+ * answer with the session. Once per page load at most; right after a sign-in, and for a session kept from before
+ * the menu showed links. Failures leave the session as it was.
+ */
+let linkAsked: Promise<void> | null = null;
+export function refreshWalletLink(force = false): Promise<void> {
+  if (linkAsked && !force) return linkAsked;
+  linkAsked = (async () => {
+    const w = readWallet();
+    if (!w) return;
+    const res = await walletFetch('/api/wallet/balance').catch(() => null);
+    if (!res?.ok) return;
+    const b = (await res.json().catch(() => null)) as { address?: string; linked?: { fid: number; name: string } | null } | null;
+    const now = readWallet();
+    if (!b || !now || now.token !== w.token || b.address?.toLowerCase() !== now.address) return;
+    const linked = b.linked && Number.isInteger(b.linked.fid) && typeof b.linked.name === 'string' ? { fid: b.linked.fid, name: b.linked.name } : null;
+    if (now.linked !== undefined && now.linked?.fid === linked?.fid && now.linked?.name === linked?.name) return;
+    try {
+      localStorage.setItem(WALLET_KEY, JSON.stringify({ ...now, linked }));
+    } catch {
+      return;
+    }
+    window.dispatchEvent(new Event(EVENT));
+  })();
+  return linkAsked;
+}
+
 export function signOutWallet() {
   try {
     localStorage.removeItem(WALLET_KEY);
@@ -126,6 +159,8 @@ export function useWalletSession(): WalletSessionState | null {
     const check = async () => {
       const w = (await inMiniApp()) || readSession() ? null : readWallet();
       if (alive) setState(w);
+      // A session that hasn't asked yet (one kept from before 2026-11-04) asks once.
+      if (w && w.linked === undefined) void refreshWalletLink();
     };
     void check();
     const again = () => void check();
