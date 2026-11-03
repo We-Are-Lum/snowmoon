@@ -210,6 +210,20 @@ in 25 words or fewer and records `written_by { fid, date }`.
   changed), at a block id that exists (`check:ui` follows "Read from here" and
   checks it lands on that block). The proof changes one word and adds Design's screen block c1-b18
   as if it were a sentence.
+- `P2k` (branch find-a-moment, 2026-11-04, pending the owner's reread of its Privacy line): every quote "Find a
+  moment" shows is an exact substring of its block, checked by the one shared function `checkMomentQuote`
+  (`src/lib/moments/quote.ts`, which P2i's home moments also use), at a block book search returned; the quote shown is
+  the block's own text at the checked offsets. Run on a recorded reply against the book's real blocks
+  (`scripts/lib/find-moment-fixture.ts`): a changed word, a quote across two blocks and an id search never returned are
+  dropped. The proof changes one word of a shown quote. Nothing is stored yet ("Set in the book" waits until after
+  22 Nov); when it ships, P2k also reads the stored rows.
+- `P2l` (same branch): "Find a moment"'s model words, the "why", never sit where they could be taken for the book's:
+  rendered outside the quote (`<q>`), with the AI label, no quote marks, and no run of 5 words shared with any passage it
+  was sent. The proof plants a why copying six words of c4-b70 and a render that puts the why inside `<q>`.
+- `SPa` (same branch; spoilers, not one of the eight principles, filed under 2 for now): "Find a moment" never shows a
+  passage past the furthest chapter the device has opened unless the person turned on "Include chapters past Chapter
+  N", which starts off each time the panel opens and is never stored; the limit is clamped to 1–32, with no floor at the
+  character's first chapter. The proof plants a c30 passage at limit 5 and a limit raised to the first chapter.
 - `P2g`: on every chapter page as served, each screen redrawn from a template
   (`data-source="template"`) carries one ⓘ label named "Redrawn": the ⓘ shown,
   the word and the declaration served with it as its accessible name, and a
@@ -440,6 +454,12 @@ only, through `studio.rating_totals`, `studio.like_totals` and
   recipe shows words from it (docs/legal/sheet-help-draft.md); and going live (`sheetHelpLive`,
   src/lib/sheet-help/flag.ts) waits for the switch, those words and the challenge's window, with the route answering
   404 first otherwise.
+- `P6w` (branch find-a-moment, 2026-11-04, pending the owner's reread): "Find a moment" (`SHEET_HELP.findMoment`,
+  off) is on only while Privacy §5 names it, says it sends the passages found, names Groq and says a search counts as
+  one of the "Ask for help" messages (docs/legal/find-a-moment-draft.md); going live (`findMomentLive`,
+  src/lib/sheet-help/flag.ts) waits for the switch, "Ask for help" being live and those words, with its route answering
+  404 first and the form offering the tab only while live. (P6s–P6v are named in the remix-moments and shortlist-vote
+  proposals, so this takes P6w.)
 - `P6n`: image making is open beyond the invited list (the gate looks up a
   Neynar score) only when `src/app/terms/page.tsx` and `src/app/privacy/page.tsx`
   both exist, and the Privacy page names Neynar (which receives the FID at

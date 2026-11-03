@@ -325,6 +325,7 @@ add({
         for (const [what, re] of [
           ['kept only on this page', /Kept only on this page\./],
           ['sent to the provider (CHAT.providerName)', /Sent with this sheet’s text to \{CHAT\.providerName\}/],
+          ['in "Find a moment", sent with passages from the book to the provider', /Sent with passages from the book to \{CHAT\.providerName\}/],
           ['naming the gateway while it is the fallback', /CHAT\.gatewayFallback \? ` \(through \$\{CHAT\.host\}/],
           ['never published', /Never published/],
           ['labelled draft', /as-draft/],
@@ -784,6 +785,100 @@ add({
     // One word changed in a real sentence, and Design's screen block c1-b18 quoted as if a sentence.
     c.moments[0].text = c.moments[0].text.replace(/\w+/, 'Quietly');
     c.moments.push({ chapter: 1, block: 'c1-b18', text: 'Vote on: Badra St #1103.' });
+  },
+});
+
+// P2k, P2l and SPa: "Find a moment" in "Ask for help" (branch find-a-moment, owner 2026-11-04;
+// docs/proposals/remix-moments.md §2, §3 and §7). Run on a recorded reply (scripts/lib/find-moment-fixture.ts) against
+// the book's real blocks: no model is called. test:find-moment runs the whole flow on PGlite.
+const findMomentScreen = async () => {
+  const F = await import('./lib/find-moment-fixture');
+  const { screenPicks } = await import('../src/lib/moments/picks');
+  const { within, later } = F.fixturePassages(ROOT);
+  const passages = new Map([...within, later].map((p) => [p.id, p]));
+  const o = { limit: F.FIXTURE_LIMIT, upTo: F.FIXTURE_UP_TO, max: SHEET_HELP.moment.max, maxWords: SHEET_HELP.moment.whyMaxWords, runWords: SHEET_HELP.moment.copyRunWords };
+  const r = screenPicks(F.FIXTURE_REPLY, passages, o, F.FIXTURE_MOOD);
+  return { passages, shown: r.moments, o, flow: read('src/lib/sheet-help/find-moment.ts'), picks: read('src/lib/moments/picks.ts'), ui: read('src/components/find-moment.tsx') };
+};
+add({
+  id: 'P2k',
+  principle: 2,
+  name: 'every quote "Find a moment" shows is an exact substring of its block (checkMomentQuote), at a block search returned; a changed word or a quote across two blocks is dropped',
+  load: findMomentScreen,
+  run: async (c) => {
+    const { momentResultProblems } = await import('../src/lib/moments/picks');
+    const problems = momentResultProblems(c.shown, c.passages, { ...c.o, min: SHEET_HELP.moment.min, pastLimit: false });
+    if (c.shown.some((m: { id: string }) => m.id === 'c4-b74')) problems.push('c4-b74: a quote with a changed word, or across two blocks, was shown');
+    if (c.shown.some((m: { id: string }) => m.id === 'c9-b1')) problems.push('c9-b1: a passage search never returned was shown');
+    if (c.shown.length < SHEET_HELP.moment.min) problems.push(`the recorded reply's ${SHEET_HELP.moment.min} good picks were not all shown`);
+    if (!/const c = checkMomentQuote\(b, l\.quote\);/.test(c.picks) || !/quote: c\.text/.test(c.picks)) problems.push('src/lib/moments/picks.ts: picks are not checked by checkMomentQuote, or the quote shown is not the block\'s own text at the checked offsets');
+    if (!/screenPicks\(text, passages,/.test(c.flow)) problems.push('src/lib/sheet-help/find-moment.ts: a model reply reaches the result without screenPicks');
+    return problems;
+  },
+  plant: (c) => {
+    // One word changed in a shown quote, as if the check had been skipped.
+    c.shown[0].quote = c.shown[0].quote.replace(/\w+/, 'Quietly');
+  },
+});
+add({
+  id: 'P2l',
+  principle: 2,
+  name: '"Find a moment"\'s model words (the "why") never sit where they could be taken for the book\'s: outside the quote, labelled AI, no quote marks, no run of the book\'s words',
+  load: findMomentScreen,
+  run: (c) => {
+    const problems: string[] = [];
+    const byId = new Map(c.shown.map((m: { id: string; why: string | null }) => [m.id, m.why]));
+    if (byId.get('c4-b70')) problems.push('c4-b70: a why that copies the book\'s words was shown');
+    if (byId.get('c4-b76')) problems.push('c4-b76: a why in quote marks was shown');
+    const ui = c.ui as string;
+    if (/<q>[^<]*\{m\.why/.test(ui) || /<blockquote[^>]*>[\s\S]*?\{m\.why[\s\S]*?<\/blockquote>/.test(ui)) problems.push('src/components/find-moment.tsx: the why is rendered inside the quote');
+    if (!/<q>\{m\.quote\}<\/q>/.test(ui)) problems.push('src/components/find-moment.tsx: the quote is not set as the book\'s words (<q>)');
+    if (!/data-ai="why"[^\n]*\n?[^\n]*<AiTag[^>]*\/> \{m\.why\}/.test(ui)) problems.push('src/components/find-moment.tsx: the why is not shown with the AI label');
+    for (const m of c.shown as { id: string; why: string | null }[]) {
+      if (!m.why) continue;
+      if (/["“”«»„]/.test(m.why)) problems.push(`${m.id}: the why has quote marks`);
+    }
+    return problems;
+  },
+  plant: (c) => {
+    c.shown.find((m: { id: string }) => m.id === 'c4-b70')!.why = 'Another woman walked in, about the same age as Zei';
+    c.ui = c.ui.replace('<q>{m.quote}</q>', '<q>{m.quote} {m.why}</q>');
+  },
+});
+add({
+  id: 'SPa',
+  principle: 2,
+  name: '"Find a moment" never shows a passage past the person\'s furthest chapter unless they turned on "include later chapters", which is off each time the panel opens',
+  load: async () => {
+    const base = await findMomentScreen();
+    const { validateMoment } = await import('../src/lib/sheet-help/find-moment');
+    const cast = [{ slug: 'bai' }];
+    return {
+      ...base,
+      clamped: validateMoment({ mood: 'x', upTo: 99 }, cast, 'bai').upTo,
+      noFloor: validateMoment({ mood: 'x', upTo: 2 }, cast, 'bai').upTo,
+      optInDefault: validateMoment({ mood: 'x', upTo: 5 }, cast, 'bai').pastLimit,
+      optInString: validateMoment({ mood: 'x', upTo: 5, pastLimit: 'true' }, cast, 'bai').pastLimit,
+      sheetHelp: read('src/components/sheet-help.tsx'),
+    };
+  },
+  run: async (c) => {
+    const { momentResultProblems } = await import('../src/lib/moments/picks');
+    const problems = momentResultProblems(c.shown, c.passages, { ...c.o, min: SHEET_HELP.moment.min, pastLimit: false }).filter((p) => /past/.test(p));
+    if (c.shown.some((m: { chapter: number }) => m.chapter > c.o.upTo)) problems.push('a passage past the furthest chapter opened was shown without "include later chapters"');
+    if (c.clamped !== 32) problems.push(`a limit of 99 was not clamped to 32 (got ${c.clamped})`);
+    if (c.noFloor !== 2) problems.push(`the limit was raised to the character's first chapter (got ${c.noFloor} for 2): that would show passages not yet read`);
+    if (c.optInDefault !== false || c.optInString !== false) problems.push('"include later chapters" is on without the person turning it on');
+    if (!/export const PAST_LIMIT_DEFAULT = false;/.test(c.ui) || !/useState\(PAST_LIMIT_DEFAULT\)/.test(c.ui)) problems.push('src/components/find-moment.tsx: "include later chapters" does not start off');
+    if (/localStorage|sessionStorage/.test(c.ui)) problems.push('src/components/find-moment.tsx: the panel remembers something on the device');
+    if (!/<FindMoment key=\{opened\}/.test(c.sheetHelp)) problems.push('src/components/sheet-help.tsx: "Find a moment" is not mounted afresh each time the panel opens');
+    if (!/const limit = input\.pastLimit \? LAST_CHAPTER : input\.upTo;/.test(c.flow)) problems.push('src/lib/sheet-help/find-moment.ts: the search limit is not the furthest chapter unless the person opted in');
+    return problems;
+  },
+  plant: (c) => {
+    const later = c.passages.get('c30-b6');
+    c.shown.push({ id: later!.id, chapter: 30, idx: 6, quote: 'Fin responded almost immediately.', why: null, from: 'pick', pastRead: true });
+    c.noFloor = 4;
   },
 });
 
@@ -1814,6 +1909,40 @@ add({
     c.s5 = 'Your question is sent to Groq to be answered.';
     c.s6 = 'Anything you publish is public.';
     c.flag = 'export const sheetHelpLive = () => SHEET_HELP.on;';
+  },
+});
+
+// P6w: "Find a moment", a tab of "Ask for help" (branch find-a-moment, owner 2026-11-04). It sends what the person
+// describes, the character, the passages found and the chapter limit to Groq (or through Vercel AI Gateway) and counts
+// as one of "Ask for help"'s messages. Legal texts describe today: SHEET_HELP.findMoment may be on only while Privacy §5
+// says so (docs/legal/find-a-moment-draft.md), and going live waits for those words and for "Ask for help" itself.
+add({
+  id: 'P6w',
+  principle: 6,
+  name: '"Find a moment" is on only while Privacy §5 describes it, and goes live only with "Ask for help"',
+  load: async () => ({
+    on: SHEET_HELP.findMoment as boolean,
+    flag: read('src/lib/sheet-help/flag.ts'),
+    route: read('src/app/api/sheet-help/moment/route.ts'),
+    page: read('src/app/references/designs/new/page.tsx'),
+    s5: (PRIVACY.sections.find((s) => s.n === 5)?.body ?? []).flat().join(' '),
+  }),
+  run: (c) => {
+    const problems: string[] = [];
+    if (c.on && !/Find a moment/.test(c.s5)) problems.push('SHEET_HELP.findMoment (src/lib/config.ts) is on, but Privacy §5 does not name "Find a moment"; reread docs/legal/find-a-moment-draft.md with the owner first, or keep it off');
+    if (c.on && !/passages/.test(c.s5)) problems.push('SHEET_HELP.findMoment is on, but Privacy §5 does not say the passages found are sent');
+    if (c.on && !/\bGroq\b/.test(c.s5)) problems.push('SHEET_HELP.findMoment is on, but Privacy §5 does not name Groq');
+    if (c.on && !/one of those messages/.test(c.s5)) problems.push('SHEET_HELP.findMoment is on, but Privacy §5 does not say a search counts as one of the "Ask for help" messages');
+    if (!/export const privacyDescribesFindMoment = [^\n]*\/Find a moment\/\.test\(section\(privacy, 5\)\)/.test(c.flag)) problems.push('src/lib/sheet-help/flag.ts: the Privacy test for "Find a moment" does not read §5');
+    if (!/export const findMomentLive = [^\n]*SHEET_HELP\.findMoment && sheetHelpLive\(now, privacy\) && privacyDescribesFindMoment\(privacy\)/.test(c.flag)) problems.push('src/lib/sheet-help/flag.ts: "Find a moment" going live does not wait for its switch, "Ask for help" and the Privacy words');
+    if (!/export async function POST\(request: Request\) \{\n\s*if \(!findMomentLive\(\)\) return NextResponse\.json\(\{ error: 'Not found' \}, \{ status: 404 \}\);/.test(c.route)) problems.push('src/app/api/sheet-help/moment/route.ts: the route does not answer 404 first while "Find a moment" is not live');
+    if (!/moment: character && findMomentLive\(\) \?/.test(c.page)) problems.push('src/app/references/designs/new/page.tsx: the tab is offered without findMomentLive()');
+    return problems;
+  },
+  plant: (c) => {
+    c.on = true;
+    c.s5 = 'Your question is sent to Groq to be answered.';
+    c.flag = 'export const findMomentLive = () => SHEET_HELP.findMoment;';
   },
 });
 
