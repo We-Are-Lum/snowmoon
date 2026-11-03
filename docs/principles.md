@@ -359,7 +359,10 @@ order the feed, search, anyone's own pages, the agent tools or the read API.
   passes them through the hide (owner, 2026-10-30).
 - `P5g` (branch remix-challenge, 2026-10-31, pending the owner's yes): the remix challenge's entries, sheets to start
   from and "Posted on" are in time order only: every `.sort()` in its code is `newestFirst`, and no SQL order reads
-  likes, built-on counts, scores, costs or payments.
+  likes, built-on counts, scores, costs or payments. One narrow exception (owner, 2026-11-04; branch
+  challenge-three-bases): "Bases to start from" may follow the bases' fixed style order (`CHALLENGE.baseStyles`), by
+  `.sort(baseStyleOrder)` inside `startingSheets` only; entries and every other challenge list stay time order. Its
+  planted violation is an entries list ordered by style, which must fail (scripts/lib/p5g.ts).
 - Review: does any default, badge or ordering reflect a person's choice without saying whose?
 
 **Status.** Pass. (Picks are built on branch phase2-admin and need 0030_admin_picks, applied 2026-10-31.)
@@ -439,6 +442,11 @@ only, through `studio.rating_totals`, `studio.like_totals` and
   (`DEEP_FUNDING.jurors`, off) are on only while Privacy §4 describes the jurors' answers
   (docs/legal/deep-funding-draft.md), and `jurorsOn()` waits for those words whatever the switch says. Jurors are
   added by the owner in the SQL Editor, never through the site, so no admin gains a power (P5b).
+- `P6s` (branch challenge-three-bases, 2026-11-04, the owner's decision): bases and references may be made by closed
+  models, labelled with their maker, but a closed-model base is refused until `CHALLENGE.closedBasesAllowed` is true,
+  and that may be true only while a Privacy paragraph about the bases and references names OpenAI and Google
+  (docs/legal/closed-model-bases-draft.md, branch closed-model-bases). The id is free on main and every branch
+  (P6p is social-read's, P6r is deep-funding's and sheet-help's).
 - `P6n`: image making is open beyond the invited list (the gate looks up a
   Neynar score) only when `src/app/terms/page.tsx` and `src/app/privacy/page.tsx`
   both exist, and the Privacy page names Neynar (which receives the FID at

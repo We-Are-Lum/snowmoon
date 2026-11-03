@@ -408,6 +408,32 @@ export const CHALLENGE = {
   /** The characters, by their file in content/snowmoon/designs/characters, in the owner's order (owner, 2026-10-31). */
   characters: ['zei', 'bai', 'gladias', 'seila', 'deluin', 'mu'] as readonly string[],
   /**
+   * Each character's bases (owner, 2026-11-03): up to CHALLENGE.maxBases published sheets to start from, in the same
+   * three styles for every character, so each set reads as one cast. Each entry is a design's id: its element id (any
+   * version of it) or one version's id (the id in /references/designs/<id>). Designs have no slugs. Empty until the
+   * owner picks. An entry is a fork of any base, or of a remix of one (src/lib/challenge/rules.ts, remixOfBase); while
+   * a character's list is empty, a fork of any of its sheets counts, as before, so nothing breaks before the picks.
+   */
+  bases: { zei: [], bai: [], gladias: [], seila: [], deluin: [], mu: [] } as Record<string, readonly string[]>,
+  maxBases: 3,
+  /**
+   * The bases' fixed style order (owner, 2026-11-04): within a character its bases are listed in this order, the same
+   * for every character, so the casts line up. Each entry is a published style's name, as a sheet's views record it
+   * (body.style.title). A base whose style isn't listed comes after, newest first. Empty until the owner picks the
+   * styles; while empty, the bases are listed newest first. This is the only challenge list not in time order (P5g
+   * allows it for "Bases to start from" only; entries and every other list stay newest first).
+   */
+  baseStyles: [] as readonly string[],
+  /**
+   * Bases and references may be made by several models, closed ones included, each labelled with its maker (owner,
+   * 2026-11-04). A base whose pictures name a closed model is refused (src/lib/challenge/bases.ts) until this is true,
+   * and it stays false until the owner rereads the Terms and Privacy lines that name the providers (OpenAI and Google;
+   * docs/legal/closed-model-bases-draft.md, branch closed-model-bases). check:principles P6s fails if it is true while
+   * the Privacy page doesn't name OpenAI and Google for it. Remixers keep the open models: the remix and fork form's
+   * model choice is unchanged.
+   */
+  closedBasesAllowed: false as boolean,
+  /**
    * A character gets a final version, a credit test and a token only if at least this many different eligible people
    * enter it (owner, 2026-10-31). /challenge shows each character's count (a count, never a ranking).
    */
@@ -629,6 +655,13 @@ export const IMAGES = {
   designs: {
     nameMaxChars: 60,
     textMaxChars: 600,
+    /**
+     * Tokens for the prompt check on a sheet's view prompt (the view line, the style's text and the sheet's text, up to
+     * about 1,350 characters), as Remix's (REMIX.guardMaxTokens): at 400 the check can spend them all reasoning and
+     * give no answer, which counts as a refusal (owner, 2026-11-03). Only the tokens used are billed; the worst case
+     * still fits the prompt check's share of the reservation (scripts/test-designs.ts checks it).
+     */
+    guardMaxTokens: 1200,
     /** A style needs at least this many sample pictures, made with its text (Design 4b). */
     samplesMin: 2,
     samplesMax: 4,

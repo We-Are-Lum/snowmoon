@@ -41,6 +41,12 @@ export default async function LiveLink({ params, searchParams }: { params: Promi
             : `Step ${v.step} of ${v.max_steps} · turn ${v.turn}${v.phase === 'setup' ? ' (setup)' : ''}`}
         </p>
         <h1>{book ? 'Rocks and Mirrors' : 'Minpentai'}: your side</h1>
+        {'towers_destroyed' in v && v.towers_destroyed ? (
+          <p className="mb-status">
+            Towers destroyed: <strong>you {v.towers_destroyed.by_you}</strong> · the site computer {v.towers_destroyed.by_opponent}
+            {v.your_kills?.length ? <> (yours: {v.your_kills.map((x) => `(${x.x}, ${x.y}) at step ${x.step}`).join(', ')})</> : null}. With towers level at the last step, more destroyed wins.
+          </p>
+        ) : null}
         <MinpentaiTags tags={['rules', 'draft']} />
         {end ? (
           <>
@@ -59,6 +65,12 @@ export default async function LiveLink({ params, searchParams }: { params: Promi
             <ul className="mb-moves">{last.placements.length ? last.placements.map((p, i) => <li key={i}>{say(p as Move)}<span className="mb-who">{WHO[last.source] ?? last.source}</span></li>) : <li>Nothing placed.</li>}</ul>
           </>
         ) : <p>No turn played yet.</p>}
+        {v.last_turn_summary ? (
+          <>
+            <h3>What your side saw happen (steps {v.last_turn_summary.from_step}–{v.last_turn_summary.from_step + v.every})</h3>
+            <ul className="mb-moves">{v.last_turn_summary.lines.map((l, i) => <li key={i}>{l}</li>)}</ul>
+          </>
+        ) : null}
 
         {!end ? (
           <>
