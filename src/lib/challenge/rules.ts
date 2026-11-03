@@ -1,5 +1,4 @@
 import { CHALLENGE } from '../config';
-import { isAdmin } from '../admins';
 import { CHALLENGE_LISTS } from './who';
 
 /**
@@ -45,11 +44,6 @@ export function challengeOpenNow(now: Date = new Date(), pub: boolean = CHALLENG
 /** Entries are taken now: CHALLENGE.entries, and the challenge open (challengeOpenNow). */
 export const entriesOpen = (now: Date = new Date(), pub: boolean = CHALLENGE.public) => CHALLENGE.entries && challengeOpenNow(now, pub);
 
-/**
- * Who may see the challenge (owner, 2026-11-04: "/challenge is admin-only for now"): everyone once the owner opens it
- * (CHALLENGE.public), admins (ADMINS) before. Pages and the challenge APIs answer "not found" to everyone else.
- */
-export const challengeVisibleTo = (person: number | null | undefined, pub: boolean = CHALLENGE.public) => pub || isAdmin(person);
 
 /**
  * A date of the challenge as people read it, in Pacific time, built from CHALLENGE.dates only. A closing instant

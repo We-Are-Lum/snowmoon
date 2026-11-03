@@ -4,7 +4,7 @@ import { remixLines } from './lineage';
 import { refusedBases } from './bases';
 import { baseStyleOrder, basesOf, remixOfBase } from './rules';
 import { CHALLENGE, WORK_ID } from '../config';
-import { isAdmin } from '../admins';
+import { challengeVisibleTo } from './visibility';
 import { bookCharacter } from '../images/designs';
 import { chooseEntries, entrantCounts, fromDecision, type Decision, inWindow, markKey, newestFirst, phase, shortDateText, type Candidate, type Eligibility } from './rules';
 
@@ -183,7 +183,7 @@ export async function markEntry(sql: Sql, fid: number, versionId: string, now = 
   if (!CHALLENGE.entries) return { ok: false, why: MARK_WORDING.off, status: 503 };
   // Until the owner opens the challenge (CHALLENGE.public; owner, 2026-11-04), only admins may mark, to test it; an
   // admin's version is never an entry (admins aren't eligible), so their marks change no one's standing.
-  if (!CHALLENGE.public && !isAdmin(fid)) return { ok: false, why: MARK_WORDING.off, status: 503 };
+  if (!challengeVisibleTo(fid)) return { ok: false, why: MARK_WORDING.off, status: 503 };
   if (phase(now) === 'before') return { ok: false, why: MARK_WORDING.opens(), status: 409 };
   if (!inWindow(now)) return { ok: false, why: MARK_WORDING.closed, status: 409 };
   const v = (await windowVersions(sql)).find((x) => x.versionId === versionId && x.forked);

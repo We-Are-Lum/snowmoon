@@ -3,7 +3,7 @@ import { getFid } from '~/lib/auth';
 import { db } from '~/lib/db';
 import { bookCharacters, designByVersion } from '~/lib/images/designs';
 import { sheetChallenge } from '~/lib/challenge/sheet-lines';
-import { challengeVisibleTo } from '~/lib/challenge/rules';
+import { challengeVisibleTo } from '~/lib/challenge/visibility';
 
 /**
  * GET ?versionId=: a sheet page's remix-challenge lines and "Posted on", for admins while the challenge is admin-only

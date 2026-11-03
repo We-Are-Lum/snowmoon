@@ -7,7 +7,7 @@ import { isModerator } from '~/lib/challenge/moderators';
 import { castFromHash, readPostAddress } from '~/lib/challenge/post-links';
 import { addPost, POSTS_WORDING, postsFor, removeOwnPost, verifiedPost } from '~/lib/challenge/posts';
 import { designByVersion } from '~/lib/images/designs';
-import { challengeVisibleTo } from '~/lib/challenge/rules';
+import { challengeVisibleTo } from '~/lib/challenge/visibility';
 
 /**
  * "Add where you posted it" (owner, 2026-10-31). POST { versionId, url } or { versionId, castHash } (the cast the
