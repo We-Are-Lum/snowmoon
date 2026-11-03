@@ -1428,6 +1428,17 @@ async function checkChallengeLanding() {
     }
     const { CHALLENGE } = await import('../src/lib/config');
     const remixIds = new Set(FX.remixes.map((r) => r.versionId));
+    // /challenge is cached (revalidate 60), built from whatever database the build saw: the first request serves that
+    // copy and renders a fresh one from the local data in the background. Wait for the fresh one.
+    for (let i = 0; ; i++) {
+      const html = await fetch(`${LOCAL}/challenge`).then((r) => r.text(), () => '');
+      if (html.includes(FX.sheets.zei[0])) break;
+      if (i > 60) {
+        fail('/challenge (local data): the page never showed the local data');
+        break;
+      }
+      await new Promise((r) => setTimeout(r, 1000));
+    }
     for (const [w, h, touch, scheme] of [
       [390, 844, true, 'light'],
       [390, 844, true, 'dark'],
@@ -1477,7 +1488,7 @@ async function checkChallengeLanding() {
       // The random selection: six remixes, all from the remixes, no repeats, no counts; a fresh order on each visit.
       const seen: string[] = [];
       for (let k = 0; k < 6; k++) {
-        if (k) await at('/challenge');
+        if (k) await page.goto(LOCAL + '/challenge', { waitUntil: 'domcontentloaded' });
         await page.waitForSelector('.ch-pick[data-shuffled="true"]', { timeout: 10000 }).catch(() => fail(`/challenge ${tag}: the random selection didn't show`));
         const pick = await page.locator('.ch-pick .ch-card').evaluateAll((els) => els.map((e) => e.getAttribute('data-version') ?? ''));
         if (pick.length !== Math.min(6, remixIds.size) || new Set(pick).size !== pick.length || !pick.every((v) => remixIds.has(v))) fail(`/challenge ${tag}: the random selection shows ${pick.join()}`);

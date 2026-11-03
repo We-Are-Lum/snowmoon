@@ -1,6 +1,6 @@
 /**
  * Local data for check:ui's /challenge landing checks (owner, 2026-11-04): an in-memory Postgres (PGlite) with the
- * migrations, three published sheets each of Zei and Bai from before the window (the triptych while the bases aren't
+ * migrations, three published sheets each of Zei and Bai from before the window, newer than its remixes (the triptych while the bases aren't
  * picked), none of Gladias (the empty state), and eight remixes of Zei and Bai (the random selection and the feed),
  * served on a local port. Nothing here touches the live database. The pictures reuse two seeded illustrations' public
  * files, so nothing new is uploaded.
@@ -21,7 +21,8 @@ export const FIXTURE_CHALLENGE = (() => {
   const remixes: { versionId: string; character: string; createdAt: string; from: string; title: string }[] = [];
   let n = 0;
   for (const c of ['zei', 'bai']) for (let i = 0; i < 3; i++) sheets[c].push(id(3, ++n));
-  // Newest first: the sheets were made on 20 Oct, one hour apart, the first listed the newest.
+  // Newest first. The sheets were made on 2 Nov, one hour apart, the first listed the newest, after the remixes (30 Oct),
+  // so before the bases are picked the triptych shows them (the newest sheets of the character).
   for (let i = 0; i < 8; i++) {
     const character = i % 2 ? 'bai' : 'zei';
     remixes.push({ versionId: id(5, i + 1), character, createdAt: new Date(Date.UTC(2026, 9, 30, 20 - i)).toISOString(), from: sheets[character][i % 3], title: `Remix ${i + 1}` });
@@ -50,7 +51,7 @@ export async function startChallengeDb(port: number): Promise<{ url: string; sto
     await db.query(`insert into studio.element_versions (id, element_id, version_no, body, created_at) values ($1,$2,1,$3,$4)`, [versionId, element, body(title, pic), at]);
   };
   for (const c of ['zei', 'bai'] as const) {
-    for (const [i, v] of FIXTURE_CHALLENGE.sheets[c].entries()) await design(c, v, new Date(Date.UTC(2026, 9, 20, 12 - i)).toISOString(), `Sheet ${i + 1}`, PICS[i % 2], 6786);
+    for (const [i, v] of FIXTURE_CHALLENGE.sheets[c].entries()) await design(c, v, new Date(Date.UTC(2026, 10, 2, 12 - i)).toISOString(), `Sheet ${i + 1}`, PICS[i % 2], 6786);
   }
   for (const [i, r] of FIXTURE_CHALLENGE.remixes.entries()) {
     await design(r.character, r.versionId, r.createdAt, r.title, PICS[i % 2], 500 + i);
