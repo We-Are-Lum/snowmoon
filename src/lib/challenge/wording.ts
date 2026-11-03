@@ -57,6 +57,8 @@ export const CHALLENGE_WORDING = {
   /** An entry's row: the character, then the sheet's name when it has one (launch rehearsal, 2026-11-02: an untitled sheet read "Bai: Bai"). */
   entryLabel: (name: string, title: string) => (title.trim() ? `${name}: ${title.trim()}` : name),
   badgeNote: (name: string) => `This is its maker’s entry for ${name} in the remix challenge.`,
+  /** On a challenge character's sheet that isn't an entry, while the window is open (launch rehearsal, 2026-11-02: no page but an entry linked to /challenge). */
+  sheetInvite: (name: string) => `${name} is in the remix challenge: fork this sheet, change it and publish to enter.`,
   candidateNote: 'Made during the remix challenge. Its maker’s latest version counts unless they mark another.',
   adminNote: 'Made by an admin during the remix challenge: admins aren’t eligible for rewards.',
   mark: 'Mark as my entry',

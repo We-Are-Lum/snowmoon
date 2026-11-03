@@ -110,6 +110,11 @@ export default async function DesignPage({ params }: Props) {
         </div>
       )}
       {standing?.kind === 'admin' && <p className="dz-meta ch-standing dz-muted">{CW.adminNote}</p>}
+      {challengeOpen && !standing && (
+        <p className="dz-meta ch-standing ch-invite">
+          {CW.sheetInvite(callName)} <Link href="/challenge">{CW.title} →</Link>
+        </p>
+      )}
       {pictures.length ? (
         <figure className={`dz-pictures${style ? '' : ' is-views'}`}>
           <div className="dz-grid">

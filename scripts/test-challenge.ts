@@ -589,6 +589,10 @@ check('as committed, CHALLENGE.entries, posts and openSheets are on (owner\'s re
   check('R4 an untitled entry\'s row is the character alone; a titled one adds its name', CW.entryLabel('Bai', '') === 'Bai' && CW.entryLabel('Bai', '  ') === 'Bai' && CW.entryLabel('Bai', 'Rain coat') === 'Bai: Rain coat');
   check('R4 /challenge builds both lists\' rows with entryLabel', (chPage.match(/W\.entryLabel\(/g) ?? []).length === 2 && !/\|\| nameOf\(/.test(chPage));
   proof('R4 a row that repeats the name is caught', /\|\| nameOf\(/.test(chPage.replace('{W.entryLabel(nameOf(e.character), e.title)}', '{nameOf(e.character)}: {e.title || nameOf(e.character)}')));
+  // R5: a newcomer on a starting sheet had no way to /challenge (only an entry's badge linked there).
+  const invite = (src: string) => /\{challengeOpen && !standing && \(\s*<p className="dz-meta ch-standing ch-invite">\s*\{CW\.sheetInvite\(callName\)\} <Link href="\/challenge">/.test(src);
+  check('R5 a challenge character\'s sheet links to /challenge while the window is open', invite(read('src/app/references/designs/[id]/page.tsx')) && /fork this sheet/.test(CW.sheetInvite('Zei')) && CW.sheetInvite('Zei').startsWith('Zei '));
+  proof('R5 a sheet page without the link is caught', !invite(read('src/app/references/designs/[id]/page.tsx').replace('{CW.sheetInvite(callName)} <Link href="/challenge">', '{CW.sheetInvite(callName)} <Link href="/references">')));
 }
 
 console.log(`test:challenge: ${passed} passed, ${failures.length} failed`);
