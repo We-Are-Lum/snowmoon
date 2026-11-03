@@ -134,6 +134,17 @@ Fixes, re-shot | `fixed-R2-signed-out-fork-form.png`, `fixed-R4-entries-list.png
 - **R9** After the close, a candidate's page shows "Made during the remix challenge. Entries are closed: its maker's
   entry for <Name> is another version." and no button.
 
+## Checks run on this branch
+
+- `npx tsc --noEmit -p .`: passes.
+- `npm run test:challenge`: 224 passed, 0 failed (205 before the fixes, plus R1 to R9's checks and proofs).
+- `npm run check:principles -- --url=https://snowmoon.party`: 56 of 57 pass. Only P6d fails, the accepted open item.
+  All 57 are proven to fail on a planted violation.
+- `npm run check:ui -- --url=http://localhost:3325`, under the shared lock, against this branch's build (a049ddb) with
+  the same fakes and local database: passes (59 pages). The first try failed on /support: its ETH/USD read (Base's
+  public RPC) was refused by the rehearsal's network block and never settled. The preload then answered that RPC with a
+  stand-in price, and the run passed.
+
 ## Proof that nothing real was called
 
 - **No real key in the site.** Every variable `.env.local` defines was set to a fake for the server (`FAL_KEY`,
@@ -141,9 +152,9 @@ Fixes, re-shot | `fixed-R2-signed-out-fork-form.png`, `fixed-R4-entries-list.png
   `STUDIO_DATABASE_URL` the local PGlite). The build ran with no database at all.
 - **No connection off this machine.** The preload refused every TCP connection and DNS lookup to anything but
   localhost, and logged each one. The full log is `net-log.jsonl` next to the screenshots. Answered by stand-ins:
-  fal.ai 13, prompt check 13, Neynar score 4, Neynar cast 4, Farcaster names 16, Quick Auth JWKS 4, R2 10. Refused, and
+  fal.ai 13, prompt check 13, Neynar score 4, Neynar cast 4, Farcaster names 44, Quick Auth JWKS 4, R2 10, Base RPC 6 (check:ui's /support). Refused, and
   never reached: `telemetry.nextjs.org` (Next's telemetry, during the first build), `auth.farcaster.xyz/nonce` (the
-  website's sign-in, once), `registry.npmjs.org` (npx, 3 connections). Nothing reached fal.ai, Groq, the AI Gateway,
+  website's sign-in, once), `registry.npmjs.org` (npx, 3 connections), and `mainnet.base.org` (the first check:ui try, before its stand-in). Nothing reached fal.ai, Groq, the AI Gateway,
   Neynar, R2, Supabase or production.
 - **The browser** was refused every request off the local site, except the stand-in host page, the stand-in pictures
   and `auth.farcaster.xyz` (answered locally). The only off-site request recorded was the Bluesky compose tab a tap
