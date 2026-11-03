@@ -113,7 +113,7 @@ with a passing score that is unlinked from its FID has a second set of caps.
   sign in, so a lost wallet can be removed.
 - The account becomes a person of its own again (a new `people` row), with `ended_by = 'person'`. Its earlier work
   shows under its own name again. A `verified` wallet that its FID stops verifying ends with `unverified`, as now.
-- The wait rule (section 7, A2) starts. Unlinking never changes a stored check decision or a submission.
+- The wait rule (section 8, A2) starts. Unlinking never changes a stored check decision or a submission.
 
 ## 5. Two people's accounts meeting
 
