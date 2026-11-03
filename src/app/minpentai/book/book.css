@@ -21,4 +21,18 @@
 .mb-moves { list-style: none; padding: 0; margin: 6px 0; }
 .mb-moves li { padding: 4px 0; border-bottom: 1px solid rgba(127, 127, 127, 0.25); }
 .mb-who { font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; opacity: 0.75; margin-left: 6px; }
-.mb-status { position: sticky; top: 0; padding: 6px 0; background: inherit; font-size: 14px; }
+.mb-status { position: sticky; top: 0; z-index: 2; padding: 6px 0; background: var(--paper); font-size: 14px; }
+
+/* The live page's draft, Take turn and replay (owner, 2026-11-03). */
+.mb-take { margin: 0.75rem 0; }
+.mb-take-button { font: inherit; font-weight: 600; padding: 0.55rem 1.1rem; border-radius: 6px; border: 1px solid #46D7E8; background: #46D7E8; color: #0E0F13; cursor: pointer; }
+.mb-take-button:disabled { opacity: 0.6; cursor: wait; }
+.mb-error { color: #FF8A7A; }
+.mb-warnings { list-style: none; padding: 0; margin: 0.5rem 0; }
+.mb-warnings li { border-left: 3px solid #FFB43A; padding-left: 0.5rem; margin: 0.25rem 0; }
+.mb-replay { display: grid; gap: 1rem; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); align-items: start; }
+@media (max-width: 720px) { .mb-replay { grid-template-columns: 1fr; } }
+.mb-replay-controls { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; margin-top: 0.4rem; }
+.mb-replay-controls button { font: inherit; padding: 0.3rem 0.7rem; border-radius: 6px; border: 1px solid #4B4C55; background: transparent; color: inherit; cursor: pointer; }
+.mb-replay-summary { font-size: 0.92em; }
+.mb-tally { font-size: 14px; margin: 4px 0 10px; }

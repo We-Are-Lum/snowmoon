@@ -21,7 +21,7 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { isDeepStrictEqual } from 'node:util';
 import { verdict, type AnyPiece, type Kills, type Placement } from '../src/lib/minpentai/versions/engine';
-import { CURRENT, DRAFTS, RULESETS, autopilot, checkComputer, planComputer, ordersText, linkOpens, newSolo, parseOrders, recordOf, replay, resign, rulesFor, rulesOf, setStanding, simulate, SoloError, submit, symbolLaunches, viewFor, type RulesetName, type SoloMatch } from '../src/lib/minpentai/agent-play/solo';
+import { CURRENT, DRAFTS, RULESETS, draftInfo, takeTurnOnPage, turnFrames, autopilot, checkComputer, planComputer, ordersText, linkOpens, newSolo, parseOrders, recordOf, replay, resign, rulesFor, rulesOf, setStanding, simulate, SoloError, submit, symbolLaunches, viewFor, type RulesetName, type SoloMatch } from '../src/lib/minpentai/agent-play/solo';
 
 let checks = 0;
 const ok = (cond: unknown, what: string) => { checks++; assert.ok(cond, what); };
@@ -425,6 +425,43 @@ playOut('play', 202);
     }
   }
   ok(named > 0 && outside === 0, `every square the summaries name was in Cyan's sight then (${named} named)`);
+}
+
+// ---------- 10. The live page: Take turn and the replay's frames (owner, 2026-11-03) ----------
+{
+  const mk = (id: string, ruleset: RulesetName, seed: number) => newSolo({ id, ruleset, level: 1, seed, person: 6786, agent: { id: null, name: 'Rook', model: null }, now: now() }).m;
+  const m = mk('tpage0000001', 'book-4', 101);
+  throwsLike(() => takeTurnOnPage(m, { turn: 0, now: now() }), /no draft/, 'Take turn with no draft is refused');
+  submit(m, { turn: 0, placements: parseOrders(scripted(m), rulesOf(m).s), source: 'agent', final: false, now: now() });
+  const d = draftInfo(m)!;
+  ok(d && !d.final && d.source === 'agent' && d.cost <= d.points && Array.isArray(d.warnings), 'the draft shows its pieces, cost against points and lane warnings');
+  takeTurnOnPage(m, { turn: 0, now: now() });
+  const h = m.history[0].C;
+  ok(m.turn === 1 && h.source === 'person' && h.via === 'page' && h.drafted_by === 'agent', 'taken on the page: recorded as the person\'s, via the page, drafted by the AI');
+  const v = viewFor(m) as Record<string, any>;
+  ok(v.my_turns[0].taken_on_the_live_page === true && v.my_turns[0].drafted_by === 'agent' && /took this turn on the live page/.test(v.last_turn_summary.lines[0]), 'get_view tells the AI, and the summary says so first');
+  ok(checkComputer(json(m)).length === 0, 'the computer still replays');
+  // Frames: one as the placements appear, then one a step; each only what Cyan sees.
+  while (!m.end && m.turn < 4) submit(m, { turn: m.turn, placements: parseOrders(scripted(m), rulesOf(m).s), source: 'agent', final: true, now: now() });
+  const { e, s } = rulesOf(m);
+  let fogOk = true, count = true;
+  for (const t of m.history.map((x) => x.turn)) {
+    const fr = turnFrames(m, t);
+    if (fr.length !== s.every + 1 || fr[0].step !== m.history[t].step) count = false;
+    for (const f of fr) {
+      const lit = new Set((f.seen ?? []).map(([x, y]) => e.K(x, y)));
+      const theirs = [...f.board.gliders, ...f.board.squares, ...(f.board.resting_symbol_gliders ?? []), ...(f.board.mirrors ?? []), ...(f.board.factories ?? [])].filter((p) => p.side === 'theirs');
+      const theirTowers = f.board.towers.filter((q) => q.side === 'theirs');
+      const myGliders = f.board.gliders.filter((g) => g.side === 'mine');
+      if ([...theirs, ...theirTowers, ...myGliders].some((p) => !lit.has(e.K(p.x, p.y)))) fogOk = false;
+    }
+  }
+  ok(count, 'each turn has 13 frames: the placements appearing, then 12 steps');
+  ok(fogOk, 'in every frame, every enemy piece and every glider of yours shown is in your sight');
+  throwsLike(() => turnFrames(m, 0, true), /only once the match is over/, 'the whole board only after the end');
+  resign(m);
+  const whole = turnFrames(m, 1, true);
+  ok(whole.length === s.every + 1 && whole.every((f) => f.seen === null) && whole.some((f) => f.board.towers.some((q) => q.side === 'theirs')), 'after the end, the replay shows the whole board');
 }
 
 console.log(`minpentai agent play: ${checks} checks passed`);

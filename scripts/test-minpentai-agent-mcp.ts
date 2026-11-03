@@ -109,22 +109,22 @@ try {
     const sc = (sim.out.scenarios ?? []) as { name: 'tower' | 'glider'; legal: boolean; result?: { my_towers: { now: number } } }[];
     const best = sc.filter((s) => s.legal).sort((p, q) => q.result!.my_towers.now - p.result!.my_towers.now)[0];
     if (turns === 3) {
+      opened = Date.now(); // timed from sending: this call opens the next turn, then plans the person's side before answering
       const sp = await tool(BASE, a.access_token, 'minpentai_let_site_play_turn', { match_id: id, turn: v.turn });
       sitePlayed = sp.ok;
-      opened = Date.now();
       check('M13 the site computer plays a turn for the person when asked', sp.ok, sp.error ?? '');
     } else {
       const wrong = turns === 1 ? await tool(BASE, a.access_token, 'minpentai_submit_orders', { match_id: id, turn: v.turn + 1, placements: [], source: 'agent' }) : null;
       if (wrong) check('M14 orders for a turn that isn\'t open are refused', !wrong.ok && /is not open/.test(wrong.error ?? ''), wrong.error ?? '');
       const sub = await tool(BASE, a.access_token, 'minpentai_submit_orders', { match_id: id, turn: v.turn, placements: best ? plans[best.name] : [], source: 'agent', final: true });
-      opened = Date.now();
+      opened = Date.now(); // a final submit opens the next turn a few ms before it answers: timed from its answer
       if (!sub.ok) { check(`M15 turn ${v.turn} accepted`, false, sub.error ?? ''); break; }
       if (turns === 0) check('M15 orders accepted with a commitment', /^[0-9a-f]{64}$/.test(String(sub.out.commitment)));
     }
     turns++;
     if (turns > 30) break;
   }
-  check('M22 each turn\'s first call answers at the quiet time after the turn opened, the same every turn, so it says nothing about the computer\'s planning', firsts.length > 2 && Math.min(...firsts) >= QUIET_MS - 150 && Math.max(...firsts) - Math.min(...firsts) < 150, firsts.join(','));
+  check('M22 each turn\'s first call answers at the quiet time after the turn opened, the same every turn, so it says nothing about the computer\'s planning', firsts.length > 2 && Math.min(...firsts) >= QUIET_MS - 100 && Math.max(...firsts) - Math.min(...firsts) < 150, firsts.join(','));
   check('M16 the match is played to the end through the tools', turns >= 3 && simulated >= 3 && sitePlayed, `${turns} turns, ${simulated} simulations`);
   const rec = await tool(BASE, b.access_token, 'minpentai_get_record', { match_id: id });
   check('M17 at the end the record opens, to anyone', rec.ok, rec.error ?? '');
@@ -147,6 +147,35 @@ try {
   check('M27 the public record names neither the person nor their agent', !recBody.includes('Claude') && !idAsValue.test(recBody) && !recBody.toLowerCase().includes(people.A.address.toLowerCase()) && !/"agent":/.test(recBody), JSON.stringify({ claude: recBody.includes('Claude'), id: idAsValue.test(recBody), addr: recBody.toLowerCase().includes(people.A.address.toLowerCase()), agentKey: /"agent":/.test(recBody) }));
   const lst = await tool(BASE, a.access_token, 'minpentai_list_my_matches', {});
   check('M21 the person\'s matches list it as over', ((lst.out.matches ?? []) as { match_id: string; over: boolean }[]).some((x) => x.match_id === id && x.over));
+
+  // The live page's Take turn (owner, 2026-11-03): the AI drafts, the person approves on the page, signed in.
+  {
+    const st2 = await tool(BASE, a.access_token, 'minpentai_start_solo', { ruleset: 'book', level: 1 });
+    const id2 = st2.out.match_id as string, live2 = st2.out.live_url as string;
+    const v0 = st2.out.view as unknown as View, cell = v0.can_place[0];
+    const draft = await tool(BASE, a.access_token, 'minpentai_submit_orders', { match_id: id2, turn: 0, placements: [{ piece: 'tower', x: cell[0], y: cell[1] }], source: 'agent', final: false });
+    check('M35 the AI drafts without final', draft.ok, draft.error ?? '');
+    const page0 = await (await fetch(live2)).text();
+    check('M36 the live page shows the draft with its cost and the Take turn control', /drafted these orders/.test(page0) && /of \d+ points/.test(page0));
+    const take = (token: string | null, turn = 0) => fetch(`${BASE}/api/minpentai/m/${id2}/take-turn`, { method: 'POST', headers: { 'content-type': 'application/json', ...(token ? { authorization: `Bearer ${token}` } : {}) }, body: JSON.stringify({ turn }) });
+    const noAuth = await take(null), other = await take(people.B.token), stranger = await take(people.C.token);
+    check('M37 the link alone can\'t take a turn; another invited person or a stranger is told there is no such match', noAuth.status === 401 && other.status === 404 && stranger.status === 404, `${noAuth.status}/${other.status}/${stranger.status}`);
+    const still = await tool(BASE, a.access_token, 'minpentai_get_view', { match_id: id2 });
+    check('M38 nothing was taken by them', (still.out as unknown as View).turn === 0);
+    const t0 = Date.now(), mine = await take(people.A.token), body = (await mine.json()) as { ok?: boolean; error?: string };
+    check('M39 the match\'s person, signed in, takes the turn on the page', mine.ok && body.ok === true, body.error ?? String(mine.status));
+    const after = await tool(BASE, a.access_token, 'minpentai_get_view', { match_id: id2 });
+    const turns2 = (after.out.my_turns ?? []) as { turn: number; source: string; taken_on_the_live_page?: boolean; drafted_by?: string }[];
+    const sum2 = after.out.last_turn_summary as { turn: number; lines: string[] } | null;
+    check('M40 get_view shows the AI the turn was taken on the page, as the person\'s, drafted by the AI, and its summary', (after.out as unknown as View).turn === 1 && turns2[0]?.source === 'person' && turns2[0]?.taken_on_the_live_page === true && turns2[0]?.drafted_by === 'agent' && !!sum2 && /took this turn on the live page/.test(sum2.lines[0] ?? ''), JSON.stringify({ t: turns2[0], s: sum2?.lines?.[0] }));
+    const again = await take(people.A.token, 0), againBody = (await again.json()) as { error?: string };
+    check('M41 a second Take turn for a turn already played is refused in the engine\'s words', again.status === 400 && /is not open/.test(againBody.error ?? ''), againBody.error ?? '');
+    const nodraft = await take(people.A.token, 1), nodraftBody = (await nodraft.json()) as { error?: string };
+    check('M42 with no draft there is nothing to take', nodraft.status === 400 && /no draft/.test(nodraftBody.error ?? ''), nodraftBody.error ?? '');
+    const page1 = await (await fetch(live2)).text();
+    check('M43 the live page replays the turn just played, from your side\'s view', /Last turn, step by step: what your side saw/.test(page1) && /took this turn on the live page/.test(page1));
+    void t0;
+  }
 } finally {
   await S.stop();
 }
