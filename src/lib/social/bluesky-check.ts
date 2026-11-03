@@ -15,8 +15,12 @@ import { ATPROTO_HTTP, isDid } from './atproto';
  * Asked of Bluesky's public AppView (public.api.bsky.app: app.bsky.actor.getProfile, app.bsky.feed.getAuthorFeed),
  * with the account's DID only, no key, through the same guarded fetch as the sign-in (https, public host, 5 s, no
  * redirects, 100 kB). Decided at Generate (the gate) and at publish (the challenge's eligibility), the same way as
- * Neynar today. Only the decision and its time are kept, in studio.bluesky_checks, one row per account, for
- * cacheHours; the dates and counts are compared in memory and forgotten. A failed lookup is never stored.
+ * Neynar today. Only the decision, its time and the threshold used are kept, in studio.bluesky_checks, one row per
+ * account (owner, 2026-11-04): a pass lasts passDays (90), a fail is asked again no sooner than failHours (24) later,
+ * and any decision is asked again once the threshold changes. The dates and counts are compared in memory and
+ * forgotten. A failed lookup is never stored. Branch check-decisions builds the shared store for every network; this
+ * file's blueskyDecision is the one place to move onto it. Re-asking earlier when the account is reported or a
+ * picture of its is hidden comes with that store.
  *
  * Wording: DRAFT, drafted by the coding agent (Anthropic's Claude, a closed model), for the owner's reread.
  */
@@ -39,6 +43,10 @@ export const BLUESKY_CHECK_WORDING = {
     `Free images and frames are open to Bluesky accounts that posted at least ${RULES.minRecentPosts} times in the last ${RULES.recentDays} days, to keep out unused accounts. Link a Farcaster account, or sign in with a wallet to pay.`,
   unreachable: 'We can’t check your Bluesky account right now (Bluesky can’t be reached). Try again later.',
 } as const;
+
+/** The threshold a decision was made under, kept with it: a change of rules makes every decision stale. */
+export const thresholdKey = (rules: { createdBefore: string; recentDays: number; minRecentPosts: number } = RULES) =>
+  `made<${rules.createdBefore};posts>=${rules.minRecentPosts}/${rules.recentDays}d`;
 
 /** The decision, from the facts. Pure: the tests plant accounts here. */
 export function decideBluesky(f: BlueskyFacts, now: Date = new Date(), rules: { createdBefore: string; recentDays: number; minRecentPosts: number } = RULES): BlueskyDecision {
@@ -87,13 +95,16 @@ export async function blueskyFacts(did: string): Promise<BlueskyFacts> {
 const missing = (e: unknown) => (e as { code?: string }).code === '42P01';
 
 /**
- * The account's decision: the stored one if it is fresh (cacheHours), else asked of Bluesky now and stored (the
+ * The account's decision: the stored one if it still holds (a pass for passDays, a fail for failHours, same threshold), else asked of Bluesky now and stored (the
  * decision and its time only). `facts` is replaced only by the tests.
  */
 export async function blueskyDecision(sql: Sql, account: { id: number; subject: string }, facts: (did: string) => Promise<BlueskyFacts> = blueskyFacts, now: Date = new Date()): Promise<BlueskyLookup> {
-  const fresh = new Date(now.getTime() - RULES.cacheHours * 3_600_000);
+  const threshold = thresholdKey();
+  const passFrom = new Date(now.getTime() - RULES.passDays * 86_400_000);
+  const failFrom = new Date(now.getTime() - RULES.failHours * 3_600_000);
   try {
-    const [row] = await sql<{ decision: BlueskyDecision }[]>`select decision from studio.bluesky_checks where account_id = ${account.id} and checked_at > ${fresh}`;
+    const [row] = await sql<{ decision: BlueskyDecision }[]>`select decision from studio.bluesky_checks where account_id = ${account.id}
+      and threshold = ${threshold} and checked_at > (case when decision = 'passed' then ${passFrom}::timestamptz else ${failFrom}::timestamptz end)`;
     if (row) return { ok: true, decision: row.decision };
   } catch (e) {
     if (!missing(e)) throw e;
@@ -105,7 +116,7 @@ export async function blueskyDecision(sql: Sql, account: { id: number; subject: 
   } catch (e) {
     return { ok: false, why: (e as Error).message || 'unreachable' };
   }
-  await sql`insert into studio.bluesky_checks (account_id, decision, checked_at) values (${account.id}, ${decision}, ${now})
-    on conflict (account_id) do update set decision = excluded.decision, checked_at = excluded.checked_at`;
+  await sql`insert into studio.bluesky_checks (account_id, decision, checked_at, threshold) values (${account.id}, ${decision}, ${now}, ${threshold})
+    on conflict (account_id) do update set decision = excluded.decision, checked_at = excluded.checked_at, threshold = excluded.threshold`;
   return { ok: true, decision };
 }

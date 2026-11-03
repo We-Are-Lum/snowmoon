@@ -1782,7 +1782,7 @@ add({
     if (!c.on) return [];
     const problems: string[] = [];
     if (!/public\.api\.bsky\.app/.test(c.s7) || !/\bDID\b/.test(c.s7)) problems.push('the Bluesky check is on (SOCIAL_SIGN_IN.bluesky.check.on), but Privacy §7 doesn\'t name Bluesky\'s AppView (public.api.bsky.app) and the DID it receives: the owner\'s reread of docs/legal/bluesky-check-draft.md first');
-    if (!/keep only its outcome/.test(c.s7)) problems.push('the Bluesky check is on, but Privacy §7 doesn\'t say only its outcome is kept');
+    if (!/keep only whether your account passed/.test(c.s7)) problems.push('the Bluesky check is on, but Privacy §7 doesn\'t say only its outcome is kept');
     return problems;
   },
   plant: (c) => {

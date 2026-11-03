@@ -445,8 +445,9 @@ export const SOCIAL_SIGN_IN = {
      * 2. it posted at least `minRecentPosts` times (its own posts and replies, not reposts) in the last `recentDays`
      *    days, by Bluesky's own clock (each post's indexedAt) as well as the post's, so old idle accounts can't
      *    drain the daily cap.
-     * Only the decision ('passed', 'new' or 'idle') and when it was made are kept (studio.bluesky_checks), for
-     * `cacheHours`, as Neynar's score is; never the dates or counts. If Bluesky can't be reached, refused, as for
+     * Only the decision ('passed', 'new' or 'idle'), when it was made and the threshold used are kept
+     * (studio.bluesky_checks; owner, 2026-11-04: store the decision, not the numbers): a pass for `passDays`, a fail
+     * asked again no sooner than `failHours` later, or at once if the threshold changes. Never the dates or counts. If Bluesky can't be reached, refused, as for
      * Neynar. Off (`on: false`) until the owner's reread of its Privacy and Terms lines, and only matters once Bluesky
      * sign-in is on.
      */
@@ -458,7 +459,9 @@ export const SOCIAL_SIGN_IN = {
       minRecentPosts: 5,
       /** How many of the newest feed items are read (one request); enough to find minRecentPosts among reposts. */
       feedLimit: 50,
-      cacheHours: 24,
+      /** A pass lasts this long; a fail is asked again no sooner than failHours later (owner, 2026-11-04). */
+      passDays: 90,
+      failHours: 24,
     },
   },
 } as const;

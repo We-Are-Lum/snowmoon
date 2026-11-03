@@ -14,9 +14,10 @@
 --
 -- What it changes (none of it publicly readable):
 -- 1. studio.bluesky_checks: one row per Bluesky account (studio.social_accounts), its latest decision ('passed',
---    'new': made on or after the cut-off date, 'idle': too few recent posts) and when it was made. Never the
---    account's creation date, its posts, or any count: those are compared in memory and forgotten. A decision older
---    than a day is made again at the next Generate (SOCIAL_SIGN_IN.bluesky.check.cacheHours), as Neynar's score is.
+--    'new': made on or after the cut-off date, 'idle': too few recent posts), when it was made, and the threshold it
+--    was made under (owner, 2026-11-04: store the decision, not the numbers). Never the account's creation date, its
+--    posts, or any count: those are compared in memory and forgotten. A pass lasts 90 days; a fail is asked again no
+--    sooner than 24 hours later; a changed threshold asks again at once (SOCIAL_SIGN_IN.bluesky.check).
 -- 2. studio.challenge_eligibility: a version made by a Bluesky account (person number at or below -1,000,000,000,
 --    src/lib/people.ts) can now have a decision, and a new column `account` says whose check made it ('farcaster':
 --    Neynar's score or the invited and admin lists, as before; 'bluesky': the Bluesky check). Existing rows are
@@ -29,7 +30,9 @@ begin;
 create table studio.bluesky_checks (
   account_id bigint primary key references studio.social_accounts(id),
   decision text not null check (decision in ('passed', 'new', 'idle')),
-  checked_at timestamptz not null default now()
+  checked_at timestamptz not null default now(),
+  -- The rules it was decided under (src/lib/social/bluesky-check.ts, thresholdKey): never a count or a date of the account's.
+  threshold text not null check (threshold ~ '^made<[0-9T:.Z-]{10,30};posts>=[0-9]{1,3}/[0-9]{1,3}d$')
 );
 alter table studio.bluesky_checks enable row level security;
 create policy writer_insert on studio.bluesky_checks for insert to studio_writer with check (true);
@@ -38,7 +41,7 @@ create policy writer_update on studio.bluesky_checks for update to studio_writer
 revoke all on studio.bluesky_checks from anon, authenticated;
 revoke update, delete, truncate, references, trigger on studio.bluesky_checks from studio_writer;
 grant select, insert on studio.bluesky_checks to studio_writer;
-grant update (decision, checked_at) on studio.bluesky_checks to studio_writer;
+grant update (decision, checked_at, threshold) on studio.bluesky_checks to studio_writer;
 
 alter table studio.challenge_eligibility drop constraint challenge_eligibility_fid_check;
 alter table studio.challenge_eligibility add constraint challenge_eligibility_fid_check check (fid > 0 or fid <= -1000000000);
@@ -55,7 +58,9 @@ begin;
 create table studio.bluesky_checks (
   account_id bigint primary key references studio.social_accounts(id),
   decision text not null check (decision in ('passed', 'new', 'idle')),
-  checked_at timestamptz not null default now()
+  checked_at timestamptz not null default now(),
+  -- The rules it was decided under (src/lib/social/bluesky-check.ts, thresholdKey): never a count or a date of the account's.
+  threshold text not null check (threshold ~ '^made<[0-9T:.Z-]{10,30};posts>=[0-9]{1,3}/[0-9]{1,3}d$')
 );
 alter table studio.bluesky_checks enable row level security;
 create policy writer_insert on studio.bluesky_checks for insert to studio_writer with check (true);
@@ -64,7 +69,7 @@ create policy writer_update on studio.bluesky_checks for update to studio_writer
 revoke all on studio.bluesky_checks from anon, authenticated;
 revoke update, delete, truncate, references, trigger on studio.bluesky_checks from studio_writer;
 grant select, insert on studio.bluesky_checks to studio_writer;
-grant update (decision, checked_at) on studio.bluesky_checks to studio_writer;
+grant update (decision, checked_at, threshold) on studio.bluesky_checks to studio_writer;
 
 alter table studio.challenge_eligibility drop constraint challenge_eligibility_fid_check;
 alter table studio.challenge_eligibility add constraint challenge_eligibility_fid_check check (fid > 0 or fid <= -1000000000);
@@ -79,17 +84,17 @@ commit;
 
 -- (a) one read-only select: every row's ok should be true.
 select what, ok from (values
-  ('bluesky_checks has exactly its 3 columns (no date, post or count column)',
-    (select count(*) from information_schema.columns where table_schema = 'studio' and table_name = 'bluesky_checks') = 3
+  ('bluesky_checks has exactly its 4 columns (no date, post or count column)',
+    (select count(*) from information_schema.columns where table_schema = 'studio' and table_name = 'bluesky_checks') = 4
     and (select count(*) from information_schema.columns where table_schema = 'studio' and table_name = 'bluesky_checks'
-      and column_name in ('account_id', 'decision', 'checked_at')) = 3),
+      and column_name in ('account_id', 'decision', 'checked_at', 'threshold')) = 4),
   ('row-level security is on',
     (select relrowsecurity from pg_class where oid = 'studio.bluesky_checks'::regclass)),
   ('its three policies, all for studio_writer, and no others',
     (select count(*) from pg_policies where schemaname = 'studio' and tablename = 'bluesky_checks' and roles = '{studio_writer}'
       and policyname in ('writer_insert', 'writer_read', 'writer_update')) = 3
     and (select count(*) from pg_policies where schemaname = 'studio' and tablename = 'bluesky_checks') = 3),
-  ('studio_writer may select, insert and update the decision and its time, not delete or truncate',
+  ('studio_writer may select, insert and update the decision, its time and threshold, not delete or truncate',
     has_table_privilege('studio_writer', 'studio.bluesky_checks', 'select') and has_table_privilege('studio_writer', 'studio.bluesky_checks', 'insert')
     and has_column_privilege('studio_writer', 'studio.bluesky_checks', 'decision', 'update') and has_column_privilege('studio_writer', 'studio.bluesky_checks', 'checked_at', 'update')
     and not has_column_privilege('studio_writer', 'studio.bluesky_checks', 'account_id', 'update')
@@ -116,11 +121,17 @@ declare
   refused boolean;
 begin
   insert into studio.social_accounts (kind, subject, handle) values ('bluesky', 'did:plc:readbackcheckaaaaaaaaaaa', 'readback.bsky.social') returning id into sky;
-  insert into studio.bluesky_checks (account_id, decision) values (sky, 'idle');
-  insert into studio.bluesky_checks (account_id, decision, checked_at) values (sky, 'passed', now())
-    on conflict (account_id) do update set decision = excluded.decision, checked_at = excluded.checked_at;
+  insert into studio.bluesky_checks (account_id, decision, threshold) values (sky, 'idle', 'made<2026-11-06T08:00:00Z;posts>=5/30d');
+  insert into studio.bluesky_checks (account_id, decision, checked_at, threshold) values (sky, 'passed', now(), 'made<2026-11-06T08:00:00Z;posts>=5/30d')
+    on conflict (account_id) do update set decision = excluded.decision, checked_at = excluded.checked_at, threshold = excluded.threshold;
   select count(*) into n from studio.bluesky_checks where account_id = sky and decision = 'passed';
   if n <> 1 then raise exception 'READ-BACK FAILED: % rows for the account after a second decision, not 1 passed', n; end if;
+  refused := false;
+  begin
+    update studio.bluesky_checks set threshold = '412 posts' where account_id = sky;
+  exception when check_violation then refused := true;
+  end;
+  if not refused then raise exception 'READ-BACK FAILED: a threshold that isn''t the rules'' key was accepted'; end if;
   refused := false;
   begin
     update studio.bluesky_checks set decision = 'maybe' where account_id = sky;

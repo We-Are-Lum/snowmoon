@@ -54,7 +54,7 @@ const accounts = await import('../src/lib/social/accounts');
 const people = await import('../src/lib/people');
 const { freeFor } = await import('../src/lib/social/free');
 const R = await import('../src/lib/challenge/rules');
-const cfg = SOCIAL_SIGN_IN.bluesky.check as { on: boolean; createdBefore: string; recentDays: number; minRecentPosts: number; cacheHours: number };
+const cfg = SOCIAL_SIGN_IN.bluesky.check as { on: boolean; createdBefore: string; recentDays: number; minRecentPosts: number; passDays: number; failHours: number };
 
 const NOW = new Date();
 const day = 86_400_000;
@@ -143,8 +143,34 @@ const realFacts = (did: string) => B.blueskyFacts(did);
   const a = await B.blueskyDecision(S, old, counting, NOW);
   const b = await B.blueskyDecision(S, old, counting, new Date(NOW.getTime() + 3_600_000));
   check('K4 an old active account passes, and its decision is reused within the day (one lookup)', a.ok && a.decision === 'passed' && b.ok && b.decision === 'passed' && calls === 1, `calls ${calls}`);
-  const c = await B.blueskyDecision(S, old, counting, new Date(NOW.getTime() + (cfg.cacheHours + 1) * 3_600_000));
-  check('K4 a decision older than a day is asked again', c.ok && calls === 2);
+  const at = (h: number) => new Date(NOW.getTime() + h * 3_600_000);
+  await B.blueskyDecision(S, old, counting, at((cfg.passDays - 1) * 24));
+  check('K4 a pass lasts 90 days (owner, 2026-11-04): reused at 89 days', calls === 1, `calls ${calls}`);
+  const c = await B.blueskyDecision(S, old, counting, at((cfg.passDays + 1) * 24));
+  check('K4 a pass older than 90 days is asked again', c.ok && calls === 2);
+  // A fail: reused within 24 hours, asked again after.
+  let idleCalls = 0;
+  const countIdle = (did: string) => (idleCalls++, realFacts(did));
+  const T0 = at((cfg.passDays + 2) * 24);
+  const plus = (h: number) => new Date(T0.getTime() + h * 3_600_000);
+  await B.blueskyDecision(S, idle, countIdle, T0);
+  await B.blueskyDecision(S, idle, countIdle, plus(cfg.failHours - 1));
+  check('K4 a fail is not asked again within 24 hours', idleCalls === 1, `calls ${idleCalls}`);
+  await B.blueskyDecision(S, idle, countIdle, plus(cfg.failHours + 1));
+  check('K4 a fail is asked again after 24 hours', idleCalls === 2, `calls ${idleCalls}`);
+  // A changed threshold asks again at once, even for a fresh pass.
+  const was = cfg.minRecentPosts;
+  cfg.minRecentPosts = 4;
+  await B.blueskyDecision(S, old, counting, at((cfg.passDays + 1) * 24 + 1));
+  check('K4 a changed threshold asks again at once', calls === 3, `calls ${calls}`);
+  cfg.minRecentPosts = was;
+  await B.blueskyDecision(S, old, counting, at((cfg.passDays + 1) * 24 + 2));
+  const [{ threshold }] = await sql<{ threshold: string }[]>`select threshold from studio.bluesky_checks where account_id = ${old.id}`;
+  check('K3 the threshold used is kept with the decision', threshold === B.thresholdKey(), threshold);
+  // The checks above ran days ahead; start the rest from today's clock.
+  await sql`reset role`;
+  await sql`delete from studio.bluesky_checks where account_id in ${sql([old.id, idle.id])}`;
+  await sql`set role studio_writer`;
   const n = await B.blueskyDecision(S, fresh, realFacts, NOW);
   const i = await B.blueskyDecision(S, idle, realFacts, NOW);
   check('K1 the new account is refused through the AppView', n.ok && n.decision === 'new');
@@ -157,8 +183,8 @@ const realFacts = (did: string) => B.blueskyFacts(did);
   const cols = (await sql<{ column_name: string }[]>`select column_name from information_schema.columns where table_schema = 'studio' and table_name = 'bluesky_checks' order by 1`).map((r) => r.column_name);
   const rows = await sql`select * from studio.bluesky_checks`;
   const RAW = ['2023-04-02', '2026-11-08', '900', '4000', '120', 'old.bsky.social', 'words never read'];
-  const rawIn = (cs: string[], rs: unknown[]) => cs.join() !== 'account_id,checked_at,decision' || rs.some((r) => RAW.some((x) => JSON.stringify(r).includes(x)));
-  check('K3 bluesky_checks has only account_id, decision and checked_at', !rawIn(cols, rows), `${cols.join()} ${JSON.stringify(rows)}`);
+  const rawIn = (cs: string[], rs: unknown[]) => cs.join() !== 'account_id,checked_at,decision,threshold' || rs.some((r) => RAW.some((x) => JSON.stringify(r).includes(x)));
+  check('K3 bluesky_checks has only account_id, decision, checked_at and threshold', !rawIn(cols, rows), `${cols.join()} ${JSON.stringify(rows)}`);
   // Nothing else in the database holds the facts either (every studio table, every row).
   const tables = (await sql<{ t: string }[]>`select table_name as t from information_schema.tables where table_schema = 'studio' and table_type = 'BASE TABLE'`).map((r) => r.t);
   await sql`reset role`;
@@ -246,7 +272,7 @@ const realFacts = (did: string) => B.blueskyFacts(did);
   check('K8 the read-back select: every row true', oks.length === 8 && oks.every((r) => r.ok === true), JSON.stringify(oks));
   check('K8 the read-back do block passes and keeps nothing', Number(kept) === 0, `kept ${kept}`);
   // Anon and authenticated read nothing.
-  await f.exec(`insert into studio.social_accounts (kind, subject) values ('bluesky', 'did:plc:anonreadaaaaaaaaaaaaaaaa'); insert into studio.bluesky_checks (account_id, decision) select id, 'passed' from studio.social_accounts`);
+  await f.exec(`insert into studio.social_accounts (kind, subject) values ('bluesky', 'did:plc:anonreadaaaaaaaaaaaaaaaa'); insert into studio.bluesky_checks (account_id, decision, threshold) select id, 'passed', 'made<2026-11-06T08:00:00Z;posts>=5/30d' from studio.social_accounts`);
   const leaks: string[] = [];
   for (const role of ['anon', 'authenticated']) {
     await f.exec(`set role ${role}`);

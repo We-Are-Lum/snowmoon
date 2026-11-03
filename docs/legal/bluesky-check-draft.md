@@ -14,8 +14,8 @@ counterpart of Neynar's score:
 
 Asked of Bluesky's public AppView (`public.api.bsky.app`, `app.bsky.actor.getProfile` and
 `app.bsky.feed.getAuthorFeed`), with the account's DID only and no key. Decided at Generate and at publish, the same
-way as Neynar's score today. Only the decision ('passed', 'new', 'idle') and its time are kept, in
-`studio.bluesky_checks`, for a day; the remix challenge keeps its per-version decision as it does for Neynar
+way as Neynar's score today. Only the decision ('passed', 'new', 'idle'), its time and the threshold used are kept, in
+`studio.bluesky_checks` (a pass for 90 days, a fail re-asked after 24 hours); the remix challenge keeps its per-version decision as it does for Neynar
 (`studio.challenge_eligibility`, now with `account` = 'bluesky'). Code: `src/lib/social/bluesky-check.ts`,
 `src/lib/social/free.ts`, `src/lib/challenge/record.ts`; migration `NEXT_social_bluesky_check.sql`. The check is off
 (`SOCIAL_SIGN_IN.bluesky.check.on = false`), and it only matters once Bluesky sign-in is on.
@@ -27,11 +27,15 @@ it), so the check isn't needed then: it ships with Bluesky sign-in on 12 Novembe
 ## 1. Privacy §7 (Outside services and what they receive): a new item, after the Neynar item
 
 **Proposed (new):**
-> If you sign in with Bluesky and your Bluesky account isn't linked to a Farcaster account: when you first make an image or a frame on a given day, and when you publish a remix during the remix challenge, our server sends your Bluesky account's identifier (its DID, not your handle) to Bluesky's public AppView (public.api.bsky.app), to read when your account was made and its latest posts. This check decides whether you can make images and frames for free and whether a remix can count as an entry. We keep only its outcome (passed, made too recently, or too few recent posts) and when it was decided, for a day; never the dates or posts we read. Bluesky is never asked about you when someone views a page.
+> If you sign in with Bluesky and your Bluesky account isn't linked to a Farcaster account: when you first make an image or a frame on a given day, and when you publish a remix during the remix challenge, our server sends your Bluesky account's identifier (its DID, not your handle) to Bluesky's public AppView (public.api.bsky.app), to read when your account was made and its latest posts. This check decides whether you can make images and frames for free and whether a remix can count as an entry. We keep only whether your account passed and when, for up to 90 days; never the dates or posts we read. Bluesky is never asked about you when someone views a page.
 
 What it describes: `blueskyFacts` sends `GET /xrpc/app.bsky.actor.getProfile?actor=<DID>` and
 `GET /xrpc/app.bsky.feed.getAuthorFeed?actor=<DID>&limit=50&filter=posts_with_replies`, from our server only (never the
-browser), and nothing else about the person. "A day": `SOCIAL_SIGN_IN.bluesky.check.cacheHours` (24), as Neynar's.
+browser), and nothing else about the person. "For up to 90 days" (owner, 2026-11-04: store the decision, not the
+numbers; the words are check-decisions' draft): a pass is kept 90 days (`passDays`); a fail is kept with its time and
+asked again no sooner than 24 hours later (`failHours`), or at once if the threshold changes; the threshold used is
+kept with it (`thresholdKey`, the rules, never a number of the account's). Re-asking early when the account is reported
+or one of its pictures is hidden comes with branch check-decisions' shared store, which this check moves onto.
 
 ## 2. Privacy §4 (Kept by us when you sign in): the remix challenge's items, two phrases
 
