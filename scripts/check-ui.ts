@@ -2079,6 +2079,18 @@ try {
     await checkPlayFullScreen(frame, '@424×695', 695);
     await frame.close();
   }
+  // The live match page's layout (owner, 2026-11-03): at 390 × 844 and on a desktop, the board, Take turn and the
+  // replay's controls in view without scrolling, before and after taking a turn. It needs a match, a signed-in player and
+  // an AI, so it runs on its own local stage from this checkout's build (scripts/lib/live-layout.ts).
+  {
+    const { existsSync } = await import('node:fs');
+    if (!existsSync('.next/BUILD_ID')) fail('live page layout: no local build of this checkout; run next build first');
+    else {
+      lastOpened = '/minpentai/m/… (local stage)';
+      const { liveLayoutCheck } = await import('./lib/live-layout');
+      await liveLayoutCheck(browser, fail);
+    }
+  }
 } catch (e) {
   // A step that throws (a timeout, a missing element) ends the check: say it on one last line, naming the last page
   // opened and the first line of the error, so a short log still shows what broke (2026-10-29: a bare TimeoutError
@@ -2097,4 +2109,4 @@ if (failures.length) {
   console.error(`\nUI CHECK FAILED (${failures.length}):\n- ` + failures.join('\n- '));
   process.exit(1);
 }
-console.log(`ui check passed: ${BASE}, ${38 + MINPENTAI_LESSONS + 4} pages, Make an image (browse, the 8-block cap, search, deep links, its links from the feed, an image's page and the assistant), the chapter sheet, the glossary's covers and back link, and 8 assistant states × light and dark; 10 pages and Learn's desktop layout (watch, lesson, practice) at 1024, 1440 and 2000; AI labels on 9 screens at 390 and 1440`);
+console.log(`ui check passed: ${BASE}, ${38 + MINPENTAI_LESSONS + 4} pages, Make an image (browse, the 8-block cap, search, deep links, its links from the feed, an image's page and the assistant), the chapter sheet, the glossary's covers and back link, and 8 assistant states × light and dark; 10 pages and Learn's desktop layout (watch, lesson, practice) at 1024, 1440 and 2000; AI labels on 9 screens at 390 and 1440; the live match page's layout at 390 × 844 and 1440 × 900, before and after taking a turn (local stage)`);

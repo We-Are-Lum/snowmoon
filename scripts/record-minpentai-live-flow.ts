@@ -30,7 +30,7 @@ try {
   const id = st.out.match_id as string, live = st.out.live_url as string;
   console.log(`match ${id}`);
 
-  const ctx = await browser.newContext({ viewport: { width: 820, height: 1180 }, deviceScaleFactor: 1, recordVideo: { dir: OUT, size: { width: 820, height: 1180 } } });
+  const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, recordVideo: { dir: OUT, size: { width: 390, height: 844 } } });
   // Signed in as the match's person (a wallet sign-in, as the site keeps it).
   await ctx.addInitScript(([token, address]: readonly [string, string]) => {
     const exp = JSON.parse(atob(token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/'))).exp;
@@ -60,24 +60,32 @@ try {
     if (!d.ok) throw new Error(`draft turn ${v.turn}: ${d.error}`);
     console.log(`turn ${v.turn}: the AI drafted ${placements.length} placements`);
 
-    await page.goto(live, { waitUntil: 'networkidle' });
-    await page.getByText('drafted these orders').scrollIntoViewIfNeeded();
+    // The page stays open: the draft appears with its refresh, Take turn plays the turn in place, then the new turn shows.
+    if (t === 0) await page.goto(live, { waitUntil: 'networkidle' });
+    await page.locator('.mb-take-button').waitFor({ timeout: 20_000 });
     await page.waitForTimeout(2500); // the draft on the board, its cost and any warnings
-    await page.screenshot({ path: path.join(OUT, `turn-${v.turn}-draft.png`), fullPage: true });
+    await page.screenshot({ path: path.join(OUT, `turn-${v.turn}-draft.png`) });
     await page.getByRole('button', { name: 'Take turn' }).click();
-    await page.getByText('Last turn, step by step').waitFor({ timeout: 30_000 });
-    await page.getByText('Last turn, step by step').scrollIntoViewIfNeeded();
-    await page.waitForTimeout(7000); // the replay plays its 13 frames
-    await page.screenshot({ path: path.join(OUT, `turn-${v.turn}-replay.png`), fullPage: true });
+    await page.getByRole('button', { name: 'Pause' }).waitFor({ timeout: 30_000 });
+    await page.waitForTimeout(3000);
+    await page.screenshot({ path: path.join(OUT, `turn-${v.turn}-replay.png`) });
+    await page.getByRole('button', { name: /^Replay turn/ }).waitFor({ timeout: 20_000 });
+    await page.waitForTimeout(2000); // back to the new turn
     const after = (await tool(BASE, a.access_token, 'minpentai_get_view', { match_id: id })).out as Record<string, any>;
     console.log(`  back in chat, get_view: turn ${after.turn}; ${after.my_turns.at(-1)?.taken_on_the_live_page ? 'taken on the live page' : '?'}; summary: ${after.last_turn_summary?.lines?.[0]}`);
   }
-  // The end: resign, then the whole board's replay.
+  // A past turn, opened in place below.
+  await page.locator('.mb-past-row').first().scrollIntoViewIfNeeded();
+  await page.locator('.mb-past-row').first().click();
+  await page.locator('.mb-past-body .mb-board').waitFor({ timeout: 15_000 });
+  await page.waitForTimeout(4000);
+  await page.screenshot({ path: path.join(OUT, 'past-turn-open.png') });
+  // The end: resign, then the last turn on the whole board.
   await tool(BASE, a.access_token, 'minpentai_resign', { match_id: id });
   await page.goto(live, { waitUntil: 'networkidle' });
-  await page.getByText('the whole board').first().scrollIntoViewIfNeeded();
+  await page.getByRole('button', { name: /^Replay turn/ }).click();
   await page.waitForTimeout(7000);
-  await page.screenshot({ path: path.join(OUT, 'end-whole-board.png'), fullPage: true });
+  await page.screenshot({ path: path.join(OUT, 'end-whole-board.png') });
   await ctx.close();
   const vid = readdirSync(OUT).find((f) => f.endsWith('.webm') && f !== 'live-flow.webm');
   if (vid) renameSync(path.join(OUT, vid), path.join(OUT, 'live-flow.webm'));

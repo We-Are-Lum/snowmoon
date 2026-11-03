@@ -134,7 +134,7 @@ try {
   check('M23 the record reveals the computer\'s random value, matching the commitment shown at the start', /^[0-9a-f]{64}$/.test(String(rec.out.computer_random)) && rec.out.computer_random_commitment === committed && createHash('sha256').update(String(rec.out.computer_random)).digest('hex') === committed);
   check('M19 every commitment in the record has its salt', recTurns.length > 0 && recTurns.every((t) => /^[0-9a-f]{64}$/.test(t.C.salt) && /^[0-9a-f]{64}$/.test(t.A.salt) && /^[0-9a-f]{64}$/.test(t.C.commitment)));
   const after = await (await fetch(live)).text();
-  check('M20 after the end the live link shows the whole board', /The whole board at the end/.test(after));
+  check('M20 after the end the live link shows the whole board', /Over at step/.test(after) && /The whole board at this step/.test(after));
   // The table (0032_minpentai_agent_matches.sql v2): the exact ruleset, updated_at stamped on every save, nobody but the server reads it, and the server can't delete.
   const row = (await S.pg.query<{ ruleset: string; level: number; stamped: boolean }>(`select ruleset, level, updated_at > created_at as stamped from studio.mp_agent_matches where id = $1`, [id])).rows[0];
   check('M24 the match is stored under its exact ruleset and level', row?.ruleset === 'book-2' && row.level === 2, JSON.stringify(row));
@@ -156,7 +156,7 @@ try {
     const draft = await tool(BASE, a.access_token, 'minpentai_submit_orders', { match_id: id2, turn: 0, placements: [{ piece: 'tower', x: cell[0], y: cell[1] }], source: 'agent', final: false });
     check('M35 the AI drafts without final', draft.ok, draft.error ?? '');
     const page0 = await (await fetch(live2)).text();
-    check('M36 the live page shows the draft with its cost and the Take turn control', /drafted these orders/.test(page0) && /of \d+ points/.test(page0));
+    check('M36 the live page shows the draft with its cost and the Take turn control', /drafted this turn/.test(page0) && /of \d+ points/.test(page0));
     const take = (token: string | null, turn = 0) => fetch(`${BASE}/api/minpentai/m/${id2}/take-turn`, { method: 'POST', headers: { 'content-type': 'application/json', ...(token ? { authorization: `Bearer ${token}` } : {}) }, body: JSON.stringify({ turn }) });
     const noAuth = await take(null), other = await take(people.B.token), stranger = await take(people.C.token);
     check('M37 the link alone can\'t take a turn; another invited person or a stranger is told there is no such match', noAuth.status === 401 && other.status === 404 && stranger.status === 404, `${noAuth.status}/${other.status}/${stranger.status}`);
@@ -173,7 +173,7 @@ try {
     const nodraft = await take(people.A.token, 1), nodraftBody = (await nodraft.json()) as { error?: string };
     check('M42 with no draft there is nothing to take', nodraft.status === 400 && /no draft/.test(nodraftBody.error ?? ''), nodraftBody.error ?? '');
     const page1 = await (await fetch(live2)).text();
-    check('M43 the live page replays the turn just played, from your side\'s view', /Last turn, step by step: what your side saw/.test(page1) && /took this turn on the live page/.test(page1));
+    check('M43 the live page shows the turn just played, ready to replay in place, with its summary', /Replay turn 0/.test(page1) && /took this turn on the live page/.test(page1));
     void t0;
   }
 } finally {
