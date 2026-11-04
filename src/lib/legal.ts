@@ -8,8 +8,8 @@
  * prepaid generations, the adaptation pages, Remix: drafted by the coding agent, reread by the owner;
  * Terms section 2's last words are the owner's), 2026-11-01 (agent play: Terms section 6d, Privacy section 4;
  * docs/legal/minpentai-agent-play-draft.md), 2026-11-01 again (the remix challenge: Terms sections 6e and 7, Privacy
- * sections 4, 6 and 7; docs/legal/remix-challenge-draft.md), and, drafted and awaiting the owner's reread, 2026-11-04 (the
- * furthest chapter sent with assistant questions: Privacy section 3; docs/legal/privacy-furthest-chapter-draft.md).
+ * sections 4, 6 and 7; docs/legal/remix-challenge-draft.md), and 2026-11-04 (the furthest chapter sent with assistant
+ * questions: Privacy section 3; docs/legal/privacy-furthest-chapter-draft.md).
  * Only the owner changes the words.
  *
  * Kept true by check:principles:
@@ -119,17 +119,16 @@ export const LEGAL: {
     // entries, the IPFS record and the posts you add; §6 adds a sentence on entries; §7's Neynar item adds the challenge
     // check (once, at publish; never on a page view) and reading an added Farcaster post, a new item for Bluesky and
     // Lens, and Bluesky and Lens in the share-link item. The words before were oa9ihf.
-    // PENDING the owner's reread (branch privacy-furthest-chapter, 2026-11-04; docs/legal/privacy-furthest-chapter-draft.md):
-    // §3's "These stay on your device." adds that the assistant sends the furthest chapter, as a number (or another
-    // chapter chosen for a conversation), with each question and its search of the book, so that answers stay within it,
-    // and that it isn't kept. Drafted by the coding agent; the owner kept the parenthesis (2026-11-04); not reread. The
-    // record below stays at main's words (1wgu7z) until the owner says "reread"; then set words to the new key (129tv6s),
-    // on to that day, and effective to the merge day.
     // 2026-11-04, the owner's "reread done for its Privacy §4 and §7 lines, including 'no longer has it' in place of
     // 'no longer verifies it'" (branch wallet-fid-link; docs/legal/wallet-fid-link-draft.md): §4's link reason and §7's
     // Neynar wallet sentences add the custody address (the address that owns a Farcaster account) beside a verified one.
     // The words before were 1frr16h.
-    privacy: { words: '1wgu7z', on: '2026-11-04', by: 'FID 6786' },
+    // 2026-11-04, reread pack item 1 (branch privacy-furthest-chapter; docs/legal/privacy-furthest-chapter-draft.md),
+    // reviewed by the coordinator, approved by the owner, 2026-11-04 (1.1: keep the parenthesis): §3's "These stay on
+    // your device." adds that the assistant sends the furthest chapter, as a number (or another chapter chosen for a
+    // conversation), with each question and its search of the book, so that answers stay within it, and that it isn't
+    // kept. The words before were 1wgu7z.
+    privacy: { words: '129tv6s', on: '2026-11-04', by: 'FID 6786' },
   },
 };
 

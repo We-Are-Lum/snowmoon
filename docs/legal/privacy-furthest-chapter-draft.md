@@ -1,18 +1,20 @@
-# Privacy §3: the furthest chapter, sent with assistant questions (DRAFT)
+# Privacy §3: the furthest chapter, sent with assistant questions (reread 2026-11-04)
 
-Drafted by the coding agent (Claude, a closed model by Anthropic), DRAFT. Not reread by the owner.
+Drafted by the coding agent (Claude, a closed model by Anthropic).
+
+**Reread record: reviewed by the coordinator, approved by the owner, 2026-11-04** (reread pack item 1: 1.1 keep the
+parenthesis; 1.2 as recommended, drafted on `find-a-moment`). The clause below is the draft as approved, not
+redrafted. `LEGAL.ownerReread.privacy` is set to its key, `129tv6s`, on 2026-11-04. `LEGAL.effective` reads 2026-11-04;
+if the branch merges on a later day, set it to the merge day.
 
 Branch `privacy-furthest-chapter`, 2026-11-04. The owner's request (2026-11-04): "Privacy §3 is wrong today: the
 assistant already sends the furthest chapter as a number. Fix it on main now, separately. Draft one clause for my OK
 saying it's sent as a number with questions and searches, so that answers stay within it, and that it isn't kept."
 
 The change is already made in `src/lib/legal.ts` on this branch. Main (wallet-fid-link, reread 2026-11-04) was merged
-in on 2026-11-04; main's words win everywhere else. `LEGAL.ownerReread.privacy` stays at main's words (`1wgu7z`, reread
-2026-11-04) until the owner says "reread". The new words' key, for the clause as drafted on top of main, is **`129tv6s`**
+in on 2026-11-04; main's words win everywhere else. The new words' key, for the clause as drafted on top of main, is **`129tv6s`**
 (Terms unchanged at `15lsr9u`). The earlier key `1ruixoi` was computed on the words before wallet-fid-link and is stale.
-Until the reread, check:principles' P6k fails on this branch, as it should. On the reread: set `ownerReread.privacy` to
-`{ words: '129tv6s', on: <day>, by: 'FID 6786' }` and `LEGAL.effective` to the merge day. If main's Privacy words change
-again before then, the key has to be recomputed.
+If main's Privacy words change again before this merges, the key has to be recomputed and reread again.
 
 The owner's answer on the parenthesis (2026-11-04, reread pack item 1.1): keep it.
 
