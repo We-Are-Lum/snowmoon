@@ -439,15 +439,22 @@ export function engine(L: Layout) {
 
   /**
    * The computer player (Amber), game.ts botPlan with the version's numbers: its budget, costs,
-   * reach, sight, directions, tower cap and step limit. It sees only what its towers light.
+   * reach, sight, directions, tower cap and step limit. It sees only what its towers light: whatever
+   * board it is handed (the real one, a view, or the board turned for Cyan's seat), the first thing it
+   * does is take Amber's view of it (fog), and it reads nothing else (owner, 2026-11-03: option 3, every
+   * computer plans from its own fog view). So no caller can hand it the real board.
+   * scripts/test-minpentai-players.ts checks that changing anything hidden changes no plan.
    */
   function botPlan(m: { w: World; s: Settings; lvl: number; rng: () => number; budget: number; snap: Record<Side, number[]>; lsA: Record<number, number>; diag: boolean }): Placement[] {
-    const w = m.w, s = m.s, o: Side = 'A', e: Side = 'C', Lv = m.lvl, r = m.rng, gc = s.costGlider, sc = s.costSquare, tc = s.costTower;
+    // fog is idempotent (a view's view is the view), so a caller that already passes a view plans the same.
+    const w = fog(m.w, m.s, 'A'), s = m.s, o: Side = 'A', e: Side = 'C', Lv = m.lvl, r = m.rng, gc = s.costGlider, sc = s.costSquare, tc = s.costTower;
     const used = new Set<number>(), out: Placement[] = [];
     let pts = m.budget;
     const zoneAll = [...lit(w, o, s.reach, m.snap.A)].filter((k) => empty(w, k));
     const zone = () => zoneAll.filter((k) => !used.has(k));
     const see = lit(w, o, s.sight);
+    // What it believes, all from the view: rocks as it sees them, its towers, enemy towers where it last saw them,
+    // squares and gliders within its towers' sight (its own squares out of sight are not in the view).
     const b = world(s, true);
     Object.assign(b.rock, w.rock);
     b.step = w.step;

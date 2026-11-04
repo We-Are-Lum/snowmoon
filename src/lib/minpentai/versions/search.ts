@@ -6,7 +6,8 @@
  * engine, it plays any ruleset the engine plays, the book edition's pieces included.
  *
  * What it sees: only its side's view (engine fog()), plus the enemy towers where it last saw them. It never
- * reads the real board; the match runner below hands it the view, nothing else.
+ * reads the real board: every caller hands it the view, and searchPlan takes the view of what it is given again
+ * itself, so a caller can't hand it more (owner, 2026-11-03: every computer plans from its own fog view).
  *
  * Deterministic: no clock and no Math.random. Its only randomness is its own seeded rng (the order it tries
  * placements in, and a level's deliberate mistakes). Its budget is a number of simulated engine steps, the
@@ -78,7 +79,8 @@ export interface TurnInput {
   e: Engine;
   s: Settings;
   o: Side;
-  /** This side's view of the board (engine fog()): a copy. */
+  /** This side's view of the board (engine fog()): a copy. searchPlan takes the view of whatever it is given, so
+   * even the real board passed here by mistake is seen only as the side's view. */
   view: World;
   /** Where this side last saw each enemy tower: square → step. */
   lastSeen: Record<number, number>;
@@ -117,7 +119,9 @@ export interface BookPlay { variety: number; kinds?: ('f' | 'w' | 'm' | 'e')[]; 
 export interface Computer { formingSymbols?: boolean; seedScore?: number; spendTies?: boolean }
 export function searchPlan(m: TurnInput & { level: number; preset?: Preset; config?: SearchLevel; book?: BookPlay; comp?: Computer }): Required<Plan> {
   const { e, s, o } = m, L = m.config ?? SEARCH_LEVELS[m.level];
-  const base = belief(m);
+  // Its own view of what it was given, first (owner, 2026-11-03: every computer plans from its own fog view). fog is
+  // idempotent, so a caller that passes the view (all of them) plans exactly as before.
+  const base = belief({ ...m, view: e.fog(m.view, s, o) });
   const per = s.every + L.horizon;
   let steps = 0, sims = 0;
   const simulate = (ours: Placement<AnyPiece>[]): number => {
@@ -234,14 +238,14 @@ export const ladderLevel = (rung: number): SearchLevel => (rung <= LADDER_LEVELS
 export const ladderPlayer = (rung: number): Planner => (m) => searchPlan({ ...m, level: -1, config: ladderLevel(rung) });
 
 /**
- * One of the ladder's old players (botPlan rung 0–5). It reads the board itself (as it always has; it only uses
- * what its towers light), so the runner gives it the real board turned for Cyan's seat. For comparison only.
+ * One of the ladder's old players (botPlan rung 0–5), given its side's view like any other player (the view turned
+ * for Cyan's seat). botPlan takes Amber's view of whatever board it gets, so it sees only what its towers light.
  */
-export const rungPlayer = (lvl: number, real: () => World): Planner => (m) => {
-  const { e, s } = m, w = real(), diag = s.directions === 8;
-  if (m.o === 'A') return { placements: e.botPlan({ w, s, lvl, rng: m.rng, budget: m.points, snap: { A: m.snap, C: [] }, lsA: m.lastSeen, diag }) };
+export const rungPlayer = (lvl: number): Planner => (m) => {
+  const { e, s } = m, diag = s.directions === 8;
+  if (m.o === 'A') return { placements: e.botPlan({ w: m.view, s, lvl, rng: m.rng, budget: m.points, snap: { A: m.snap, C: [] }, lsA: m.lastSeen, diag }) };
   const rk = (k: number) => e.W * e.H - 1 - k;
-  return { placements: e.botPlan({ w: e.turned(w), s, lvl, rng: m.rng, budget: m.points, snap: { A: m.snap.map(rk), C: [] }, lsA: e.turnedKeys(m.lastSeen), diag }).map(e.unturn) };
+  return { placements: e.botPlan({ w: e.turned(m.view), s, lvl, rng: m.rng, budget: m.points, snap: { A: m.snap.map(rk), C: [] }, lsA: e.turnedKeys(m.lastSeen), diag }).map(e.unturn) };
 };
 
 export interface SearchMatch {
@@ -268,9 +272,10 @@ export interface SearchMatch {
 /**
  * A whole match between two planners under a ruleset, the way a match is served: both sides plan from their
  * own view at the same time, the real board's placement check decides, then the engine runs to the next turn.
- * `planners` gets the real board only for the old rungs (rungPlayer); search players get their view.
+ * Every player, the old rungs (rungPlayer) too, gets only its view. `onTurn` (tests and measures only) is shown a copy
+ * of the real board at each turn to act, before anyone plans; it never reaches a player.
  */
-export function playSearchMatch(v: VersionRules, planners: (real: () => World) => Record<Side, Planner>, seed: number): SearchMatch {
+export function playSearchMatch(v: VersionRules, planners: () => Record<Side, Planner>, seed: number, onTurn?: (real: World, s: Settings) => void): SearchMatch {
   const r = rng(seed);
   const { s1, s2 } = drawRules(v, r);
   const L = layout(v, s1), e = engine(L);
@@ -280,7 +285,7 @@ export function playSearchMatch(v: VersionRules, planners: (real: () => World) =
   L.towers.A.forEach((k) => (ls.C[k] = 0));
   L.towers.C.forEach((k) => (ls.A[k] = 0));
   const rs: Record<Side, () => number> = { C: rng(seed * 13 + 5), A: rng(seed * 7 + 1) };
-  const P = planners(() => w);
+  const P = planners();
   const out: SearchMatch = { win: 'D', step: 0, illegal: 0, turns: [], placed: { C: {}, A: {} }, firstSight: {}, spent: { C: [], A: [] }, had: { C: [], A: [] }, formed: { C: 0, A: 0 } };
   const saved: Record<Side, number> = { C: 0, A: 0 }, kills: Kills = { C: 0, A: 0, ...(s1.killReports ? { log: [] } : {}) };
   // Measures for the balance runs (nothing here changes the match).
@@ -293,6 +298,7 @@ export function playSearchMatch(v: VersionRules, planners: (real: () => World) =
     const snap = { C: e.towers(w, 'C'), A: e.towers(w, 'A') };
     const pts = (o: Side) => (w.step === 0 ? s.setupPoints : s.points) + saved[o];
     const pend: Record<Side, Placement<AnyPiece>[]> = { C: [], A: [] };
+    onTurn?.(e.clone(w), s);
     for (const o of ['C', 'A'] as const) {
       const plan = P[o]({ e, s, o, view: e.fog(w, s, o), lastSeen: { ...ls[o] }, snap: snap[o], points: pts(o), rng: rs[o] });
       let ps = plan.placements;
