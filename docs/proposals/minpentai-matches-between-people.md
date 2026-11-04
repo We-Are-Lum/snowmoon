@@ -187,9 +187,20 @@ Sign in with Farcaster, Lens or Bluesky, and pass that network's reputation bar.
   Its one direct read of the real board is whether a placement square is empty, and placement squares are always within its sight (reach never exceeds sight).
 - **Checked by a test:** `test:minpentai-players` passes "the five rungs (and practice's level 0) plan the same on the view as on the whole board", over positions from Play's matches, from both seats.
 
-**So §8 is true today:** no Play computer uses anything its towers don't light.
+**Corrected 2026-11-03, after testing the hardening.** §8 is *almost* true. A new check compares the old computer's plan on the whole board with its plan on the engine's fog view, at every decision of 2,396 decisions (Play rulesets 1 and 2, levels 0–5 against each other, both seats).
+- **1 of the 2,396 differs:** ruleset 1, seed 12, the computer playing Cyan at step 48.
+- **The cause:** the old computer keeps *its own squares wherever they are*, as they are now. The fog view, as Play's one-on-one shows people since #79, hides your own squares out of sight.
+  - In that position, three of its squares were out of sight because the tower they were placed by had fallen. They were undamaged, so nothing hidden was used.
+  - In general, the computer would also know if an unseen glider had chipped or broken one of those squares: a small leak.
+  - In the 2,396 decisions, no differing decision involved an already-damaged out-of-sight square.
+- **What it means for passing the fog view:** moves change in rare positions, about 1 decision in 2,400. Saved Play matches under rulesets 1 and 2, and snap records (the snap still uses this computer), recompute the computer's moves from the seed, so any of them that hit such a position would no longer replay exactly.
 
-**Proposed fix, as hardening:** pass `botPlan` the fog view instead of the whole board, so no future change could let it read hidden pieces by accident. The test above already shows the moves stay identical, so saved Play matches and the snap replay unchanged. The wording stays.
+**Options:**
+1. **Change the wording, keep the moves.** §8 would say: "They see only what their own towers light, and where their own squares are." Every record replays exactly, and the leak stays: an unseen hit on its own out-of-sight square.
+2. **Fog it fully, under a new id.** The computer gets the engine's fog view in new rulesets only: a new Play ruleset and the snap's next version. Old ones keep their moves, and their records replay exactly.
+3. **Fog it fully now.** The cleanest code, but rare old records stop replaying exactly.
+
+**Recommended: 1 now, and 2 the next time Play or the snap gets a new ruleset.** Play's current ladder (ruleset 3) already uses the search computer, which plans from the fog view.
 
 ### Official matches between people
 - **Each person has** a win/loss record tied to their social login (linked accounts share it), and a **Glicko-2 rating per season.**
