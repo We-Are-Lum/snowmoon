@@ -31,5 +31,5 @@ for (const level of levels) {
     longest += best; maxRun = Math.max(maxRun, best);
   }
   const pc = (x: number) => `${Math.round((100 * x) / N)}%`;
-  console.log(JSON.stringify({ ruleset, computer: computer ?? 'first', level, matches: N, rushWin: pc(win), draw: pc(draw), rushLoss: pc(loss), rushWonBy2ndTurn: early, how, openingKillsMean: +(opening / N).toFixed(2), rushKillsMean: +(kr / N).toFixed(1), computerKillsMean: +(kc / N).toFixed(1), towersAtEnd: { rush: +(tr / N).toFixed(1), computer: +(tcp / N).toFixed(1) }, turnsMean: +(turns / N).toFixed(1), draggingTurnsMean: +(drag / N).toFixed(1), longestDragRunMean: +(longest / N).toFixed(1), longestDragRunMax: maxRun }));
+  console.log(JSON.stringify({ ruleset, computer: computer ?? 'its own (no revisions)', level, matches: N, rushWin: pc(win), draw: pc(draw), rushLoss: pc(loss), rushWonBy2ndTurn: early, how, openingKillsMean: +(opening / N).toFixed(2), rushKillsMean: +(kr / N).toFixed(1), computerKillsMean: +(kc / N).toFixed(1), towersAtEnd: { rush: +(tr / N).toFixed(1), computer: +(tcp / N).toFixed(1) }, turnsMean: +(turns / N).toFixed(1), draggingTurnsMean: +(drag / N).toFixed(1), longestDragRunMean: +(longest / N).toFixed(1), longestDragRunMax: maxRun }));
 }
