@@ -31,15 +31,15 @@ const browser = await chromium.launch({ channel: 'chrome', args: ['--enable-gpu'
 try {
   const a = await connect(BASE, people.A.token, 'Claude', 'read play');
   type V = { turn: number; phase: string; can_place: [number, number][] };
-  const draft = async (id: string, t: number) => {
+  const draft = async (id: string, t: number, passive = false) => {
     const v = (await tool(BASE, a.access_token, 'minpentai_get_view', { match_id: id })).out as unknown as V;
-    if (v.phase === 'over') return false;
+    if (v.phase === 'over') return -1;
     const east = [...v.can_place].sort((p, q) => q[0] - p[0] || p[1] - q[1]);
     // Towers at setup; then gliders east from rows that change each turn, so they reach the enemy's side.
-    const placements = v.turn === 0 ? east.slice(0, 2).map(([x, y]) => ({ piece: 'tower', x, y })) : east.filter((_, i) => (i + t) % 3 === 0).slice(0, 2).map(([x, y]) => ({ piece: 'glider', x, y, dir: 'E' }));
+    const placements = passive ? [] : v.turn === 0 ? east.slice(0, 2).map(([x, y]) => ({ piece: 'tower', x, y })) : east.filter((_, i) => (i + t) % 3 === 0).slice(0, 2).map(([x, y]) => ({ piece: 'glider', x, y, dir: 'E' }));
     const d = await tool(BASE, a.access_token, 'minpentai_submit_orders', { match_id: id, turn: v.turn, placements, source: 'agent', final: false });
     if (!d.ok) throw new Error(`draft turn ${v.turn}: ${d.error}`);
-    return true;
+    return v.turn;
   };
   const film = async (name: string, width: number, height: number, script: (f: Filmer) => Promise<void>) => {
     const st = await tool(BASE, a.access_token, 'minpentai_start_solo', { ruleset: 'book-4', level: 3, model: { name: 'Scripted AI', maker: 'this recording', weights: 'open' } });
@@ -68,12 +68,14 @@ try {
         }
         throw new Error(`not seen in ${max} ms: ${loc}`);
       },
-      async turn(t, shoot = true) {
-        if (!(await draft(id, t))) return false;
+      async turn(t, shoot = true, passive = false) {
+        const turn = await draft(id, t, passive);
+        if (turn < 0) return false;
         await f.until(page.locator('.mb-take-button'), 60_000, shoot);
         if (shoot) await f.shoot(1500); // the plan, on the 2D board
         await page.getByRole('button', { name: 'Take turn' }).click();
-        await f.until(page.getByRole('button', { name: /^Watch turn \d+ again in 2D/ }), 90_000, shoot);
+        // Done when this turn's own Watch again shows (the last turn's shows until the new one arrives).
+        await f.until(page.getByRole('button', { name: `Watch turn ${turn} again in 2D` }), 90_000, shoot);
         if (shoot) await f.shoot(800);
         return true;
       },
@@ -116,7 +118,8 @@ try {
     let t = 3;
     for (; t < 40; t++) {
       const at = f.mark();
-      if (!(await f.turn(t))) break;
+      // Placing nothing from here, so the computer can take the last tower: the match ends on a tower, not the clock.
+      if (!(await f.turn(t, true, true))) break;
       if (await page.getByText(/^Over at step/).isVisible()) break;
       f.cut(at);
     }
@@ -143,5 +146,5 @@ interface Filmer {
   /** Step until `loc` shows (filmed, or fast without screenshots). */
   until(loc: Locator, max?: number, shoot?: boolean): Promise<void>;
   /** Draft and take a turn on the page, through its action and replays. False once the match is over. */
-  turn(t: number, shoot?: boolean): Promise<boolean>;
+  turn(t: number, shoot?: boolean, passive?: boolean): Promise<boolean>;
 }

@@ -192,10 +192,11 @@ export function buildReplayScene(T: T3, el: HTMLElement, W: number, H: number, q
       const u = Math.min(1, (now - focusOn.since) / focusOn.ms), fx = X(focusOn.at[0]), fz = Z(focusOn.at[1]);
       const sm = (x: number) => x * x * (3 - 2 * x);
       let a = -.34, r = 4.2, h = 3.2, lookY = .5, wide = 0;
-      if (focusOn.mode === 'close') { r = 4.4 - .8 * sm(u); h = 2.6 - .4 * sm(u); a = -.3 + .25 * u; }
-      else if (focusOn.mode === 'orbit') { r = 4.6; h = 3; a = -.6 + 1.6 * sm(u); }
-      else if (focusOn.mode === 'sweep') { const v = sm(Math.min(1, u * 1.4)); r = 9 - 5.6 * v; h = 7.5 - 5.3 * v; a = -1 + 1.2 * sm(u); }
-      else { const inT = Math.min(1, u / .55), out = Math.max(0, (u - .62) / .38); r = 6 - 2.8 * sm(inT); h = 4.5 - 2.6 * sm(inT); a = -.8 + .6 * u; wide = sm(out); lookY = .4; }
+      // Never closer than about 5 squares, so nearby pieces don't fill the frame.
+      if (focusOn.mode === 'close') { r = 6 - .9 * sm(u); h = 4.4 - .6 * sm(u); a = -.3 + .25 * u; }
+      else if (focusOn.mode === 'orbit') { r = 6.2; h = 4.6; a = -.6 + 1.6 * sm(u); }
+      else if (focusOn.mode === 'sweep') { const v = sm(Math.min(1, u * 1.4)); r = 10 - 4.6 * v; h = 8.5 - 4.4 * v; a = -1 + 1.2 * sm(u); }
+      else { const inT = Math.min(1, u / .55), out = Math.max(0, (u - .62) / .38); r = 8 - 2.6 * sm(inT); h = 6.5 - 2.6 * sm(inT); a = -.8 + .6 * u; wide = sm(out); lookY = .4; }
       const near: [number, number, number] = [fx + Math.sin(a) * r, h, fz + Math.cos(a) * r], far: [number, number, number] = [0, fit * 1.45, fit * .55];
       cam.aim(near.map((v, i) => v + (far[i] - v) * wide) as [number, number, number], [fx * (1 - wide), lookY * (1 - wide), fz * (1 - wide)]);
       cam.update(dt, shake, 5);
