@@ -41,7 +41,8 @@ Caps and free remixes count per person, not per account, and a person passes the
 10. **The challenge record** names each maker by the public id of the account they submitted with: a Farcaster ID,
    a Lens address or a Bluesky DID. Never the person id.
 11. **A refusal offers a next step** (section 12): "Link another account" (the networks not linked yet), or prepay
-   with a wallet. Until linking is built, only the prepay route.
+   with a wallet. Until linking is built, only the prepay route. Its words and A5 (2 moves in 365 days) are approved
+   (reread pack item 10; reviewed by the coordinator, approved by the owner, 2026-11-04).
 
 ## 1. How identity works today
 
@@ -178,8 +179,8 @@ When the account being added already belongs to a person with other accounts, or
 - **A3. Caps follow the account's history and the person's** (section 6).
 - **A4. A check follows the account.** In one challenge, an account that passed for one person never passes for
   another.
-- **A5. Few moves.** An account can change person at most 2 times in 90 days. After that it stays where it is (no
-  manual moves for now). Section 12.4 proposes tightening this to 2 times in 365 days.
+- **A5. Few moves.** An account can change person at most 2 times in 365 days. After that it stays where it is (no
+  manual moves for now). Owner, 2026-11-04 (reread pack 10.4: "365 days"; was 90 days).
 - **A6. Limits per person**: one Farcaster, one Lens, one Bluesky, three wallets (owner, 2026-11-04: up to 3). This also stops one person
   gathering many passing accounts of one kind.
 - **A7. Freeze during a challenge.** From an account's first submission until that challenge's payout, the account
@@ -285,14 +286,17 @@ FID, as today.
 3. Manual merges: **none for now** (section 5).
 4. The challenge's IPFS record: **the public id of the account submitted with** (Farcaster ID, Lens address or
    Bluesky DID); its Privacy §4 and Terms §6e words are drafted in section 10, for a reread later.
-5. New: a refusal that offers a next step (section 12). Its wording waits for the owner's OK.
+5. New: a refusal that offers a next step (section 12). Its words are approved (reread pack item 10, 2026-11-04):
+   10.1 yes, the per-network detail stays as a third line under "Why?"; 10.3 yes, Submit (b) ends "then publish a new
+   version and submit it."; 10.4 A5 is 2 moves in 365 days.
 
 ## 12. A refusal that offers a next step (owner, 2026-11-04)
 
 "When someone's check doesn't pass, the refusal offers a next step instead of a dead end": **Link another account**
 (only the networks not linked yet, among Farcaster, Bluesky and Lens; if any linked account passes, they pass), or
-**prepay with a wallet** (the existing paid route). Until linking is built, only the prepay route. **Nothing is
-built for this yet:** the interim refusal waits for the owner's OK of its words.
+**prepay with a wallet** (the existing paid route). Until linking is built, only the prepay route. **Approved**
+(reread pack item 10; reviewed by the coordinator, approved by the owner, 2026-11-04). **Nothing is built for this
+yet** on this branch; (b) waits until linking is built.
 
 ### 12.1 Today's refusals (before), word for word
 
@@ -314,34 +318,36 @@ The prepay route they point to: a wallet sign-in ("Sign in with a wallet", `IMAG
 Support address (`SUPPORT.address`, a Splits account) is a gift and buys nothing; it is not a prepay route and the
 refusal never names it.
 
-### 12.2 The new refusal, two short lines (Drafted by the coding agent, for the owner's OK)
+### 12.2 The new refusal, two short lines (approved by the owner, 2026-11-04)
 
-**(a) Interim, until linking is built (prepay only).** Drafted by the coding agent, for the owner's OK.
+Drafted by the coding agent; approved in the reread pack, item 10 (reviewed by the coordinator, approved by the
+owner, 2026-11-04).
+
+**(a) Interim, until linking is built (prepay only).**
 > Your account doesn’t pass the site’s check for free images and frames.
 > You can still make them: sign in with a wallet and prepay.
 
-**(b) After linking is built.** Drafted by the coding agent, for the owner's OK. `{networks}` lists only the ones
+**(b) After linking is built.** `{networks}` lists only the ones
 the person hasn't linked, in this order: Farcaster, Lens, Bluesky ("a Farcaster or Lens account", "a Lens account",
 …); with all three linked, line 2 is (a)'s.
 > Your account doesn’t pass the site’s check for free images and frames.
 > Link {networks} that passes, or sign in with a wallet and prepay.
 
-The first line replaces the score sentence; the per-network detail (the threshold, and for Neynar today the
-person's own score) can stay as a third line under "Why?" if the owner wants it.
+The first line replaces the score sentence. The per-network detail (the threshold, and for Neynar today the
+person's own score) stays as a third line under "Why?" (owner, 2026-11-04, 10.1: yes).
 
 **Challenge Submit is different.** Prepaying makes pictures, but a version made by a wallet account, or by an
 account below the check, can't count as an entry (Terms §6e: an account "that passed the site's check when the
 version was published", or invited). So on Submit:
-- (a) interim, Drafted by the coding agent, for the owner's OK:
+- (a) interim:
   > This version can’t count as an entry: your account didn’t pass the site’s check when you published it.
   > You can still remix and share it, but only an account that passes can enter.
-- (b) after linking, Drafted by the coding agent, for the owner's OK:
+- (b) after linking (owner, 2026-11-04, 10.3: with Submit, publishing alone doesn't enter):
   > This version can’t count as an entry: your account didn’t pass the site’s check when you published it.
-  > Link {networks} that passes, then publish a new version to enter.
+  > Link {networks} that passes, then publish a new version and submit it.
 
-**Tension to settle:** the owner's note lists challenge Submit among the refusals that offer prepay. Prepay doesn't
-make an entry, so offering it there would mislead. The drafts above leave it out of Submit. Say if you want it in
-anyway (for example "Prepay to keep making pictures; they won't count as entries").
+**Settled (owner, 2026-11-04, 10.2):** Submit never offers prepay. Prepay doesn't make an entry, so offering it
+there would mislead.
 
 ### 12.3 Which refusals, and their code paths
 
@@ -363,23 +369,21 @@ Only the person sees a refusal. The networks it names come from their own links,
 | Pass it from person to person quickly | **A2** the 30-day wait before an unlinked account can join someone else; during the wait it gets nothing of its own |
 | Rotate accounts to reset daily caps | **A3** caps follow both histories: the person's rows and the account's |
 | Lend it during a challenge to make several people eligible | **A4** in one challenge, an account that passed for one person never passes for another |
-| Lend it many times a year | **A5** at most 2 moves in 90 days |
+| Lend it many times a year | **A5** at most 2 moves in 365 days |
 | Gather many strong accounts of one kind | **A6** per person: 1 Farcaster, 1 Lens, 1 Bluesky, 3 wallets |
 | Link a strong account to submit, then pass it on before payout | **A7** an account with a submission stays with its person until that challenge's payout |
 | Probe links by brute force | **A8** 10 link attempts a day per person |
 
 **The worst case, honestly.** A2 and A5 together: an account can join a new person, leave, wait 30 days, join
-another, and so on, at most 2 joins in any 90 days. That is about **8 people a year** for one strong account
-(2 per 90 days; the 30-day wait alone would allow about 12). Each of them gets free daily images and frames while
-linked, though never two at once (A1), and caps follow the account (A3). In a challenge it helps **only one
+another, at most 2 moves in any 365 days. That is at most **3 people a year** for one strong account (where it
+started plus 2; with 90 days it was about 8, and the 30-day wait alone would allow about 12). Each of them gets free
+daily images and frames while linked, though never two at once (A1), and caps follow the account (A3). In a challenge it helps **only one
 person** (A4 and A7), so rewards can't be multiplied. What it can multiply is free images and frames, spread over a
 year.
 
-**Is that acceptable?** For free pictures alone it is a small leak, but it is the one way a single good account
-becomes many. **Proposed, tighter: A5 becomes "at most 2 moves in 365 days"**, which caps one strong account at 3
-people a year (where it started plus 2), and still leaves room for a real mistake. A cheaper alternative is to
-count a linked account's pass only after the link is 30 days old, which makes each loan cost a month; it can be
-added later if A5 isn't enough. The owner chooses; neither is built.
+**The owner's choice (2026-11-04, 10.4): 365 days.** It still leaves room for a real mistake. A cheaper
+alternative, counting a linked account's pass only after the link is 30 days old, can be added later if A5 isn't
+enough. Neither is built.
 
 ### 12.5 Privacy
 
