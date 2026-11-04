@@ -1422,10 +1422,12 @@ if (/^http:\/\/(localhost|127\.0\.0\.1)(:|\/|$)/.test(BASE)) {
 }
 const browser = await chromium.launch({ channel: 'chrome' });
 // A protected Vercel preview: under VERCEL_OIDC_TOKEN, every request to the preview's own origin carries it (never to
-// any other origin a page loads), in every browser context and in this script's own fetches. Never printed.
+// any other origin a page loads), in every browser context and in this script's own fetches. Never printed. Only this
+// project's preview hosts get it (owner, 2026-11-03), never any other vercel.app address.
+const PREVIEW_HOST = /^snowmoon-[a-z0-9-]+-nates-projects-d1780cff\.vercel\.app$/;
 {
-  const token = process.env.VERCEL_OIDC_TOKEN, origin = new URL(BASE).origin;
-  if (token && /\.vercel\.app$/.test(new URL(BASE).hostname)) {
+  const token = process.env.VERCEL_OIDC_TOKEN, url = new URL(BASE), origin = url.origin;
+  if (token && url.protocol === 'https:' && PREVIEW_HOST.test(url.hostname)) {
     const header = { 'x-vercel-trusted-oidc-idp-token': token };
     const guard = async (ctx: Awaited<ReturnType<Browser['newContext']>>) => {
       await ctx.route((u) => u.origin === origin, (route) => route.continue({ headers: { ...route.request().headers(), ...header } }));
