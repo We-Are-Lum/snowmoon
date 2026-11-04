@@ -1870,6 +1870,7 @@ add({
     const problems: string[] = [];
     if (c.entries && !/you submit as an entry/i.test(c.s4)) problems.push('CHALLENGE.entries is on, but Privacy §4 does not say what Submit keeps (docs/legal/remix-submit-draft.md)');
     if (c.entries && !/link to your own post/i.test(c.s4)) problems.push('CHALLENGE.entries is on, but Privacy §4 does not say Submit keeps the link to your own post');
+    if (c.entries && !/checks with its network that you wrote it/i.test(c.s4)) problems.push('CHALLENGE.entries is on, but Privacy §4 does not say Submit checks that you wrote the post');
     // Answer 9.4 (owner, 2026-11-04): the post must be the submitter's own. The route checks it; §4 says "your own post".
     if (!/const mine = writerCheck\(got\.post, \{ fid, blueskyDids: [^}]*\}\);\s*if \(mine === 'not-yours'\) return no\(SUBMIT_WORDING\.notYourPost, 403\);\s*if \(mine === 'unknown'\) return no\(SUBMIT_WORDING\.blueskyUnknown, 403\);/.test(c.route))
       problems.push('src/app/api/challenge/submit/route.ts: Submit does not check that the post is the submitter\'s own (writerCheck)');

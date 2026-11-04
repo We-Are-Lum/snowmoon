@@ -3,8 +3,9 @@
 Drafted by the coding agent (Claude Opus 5.5, a closed model by Anthropic) on 2026-11-04, on branch `remix-submit`.
 **Reread:** reread pack item 9, reviewed by the coordinator, approved by the owner on 2026-11-04 as the reread: 9.1–9.3
 as recommended; 9.4, the post must be the submitter's own. `LEGAL.ownerReread` is set to these words (Terms
-`1l0ppvm`, Privacy `j7y15c`; before, `15lsr9u` and `1wgu7z`). Answer 9.4 added three words: Terms §6e "their own
-post", Privacy §4 "your own post". If any word below changes, the keys must be computed and reread again.
+`1l0ppvm`, Privacy `16bnvqx`; before, `15lsr9u` and `1wgu7z`). Answer 9.4 added three words: Terms §6e "their own
+post", Privacy §4 "your own post". The approved §4 clause "for a Farcaster or Bluesky post, the site checks with its
+network that you wrote it" was dropped by an agent and restored on the owner's word (2026-11-04, 14:15). If any word below changes, the keys must be computed and reread again.
 
 Legal texts describe today (owner, 2026-10-18): these lines ship in the same merge as Submit, the cap of three and the
 free-remix count, never ahead of them. "Before" is main's `src/lib/legal.ts` word for word (at 233f5e0); "after" is the
@@ -56,7 +57,7 @@ Before:
 
 After:
 
-> If you take part in the remix challenge: for each version of a challenge character you publish, whether it can count as an entry and why (you were invited, you are an admin, or whether your account passed the site's check), decided once, when you publish it, and kept with the time it was decided; and each version you submit as an entry (up to three), with its character and when you submitted it. Submitting needs the link to your own post about it, which is kept and listed on the version's page like any post you add (below). If you withdraw a submission, it is deleted; the post stays listed until you remove it. Whether a version is an entry is shown on its page and on the challenge page, with how many people have submitted for each character.
+> If you take part in the remix challenge: for each version of a challenge character you publish, whether it can count as an entry and why (you were invited, you are an admin, or whether your account passed the site's check), decided once, when you publish it, and kept with the time it was decided; and each version you submit as an entry (up to three), with its character and when you submitted it. Submitting needs the link to your own post about it, which is kept and listed on the version's page like any post you add (below); for a Farcaster or Bluesky post, the site checks with its network that you wrote it. If you withdraw a submission, it is deleted; the post stays listed until you remove it. Whether a version is an entry is shown on its page and on the challenge page, with how many people have submitted for each character.
 
 ## Privacy §4: the daily-limits item (free remixes)
 
