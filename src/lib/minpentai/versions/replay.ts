@@ -5,6 +5,11 @@
  * plans first each turn; the person's placements are checked against the version's rules.
  *
  * Pure. A version's ruleset manifest (manifest.ts) pins this file as its replay entry.
+ *
+ * The computer plans from its own fog view only since 2026-11-03 (owner: option 3; engine botPlan). A match played
+ * before then may not replay: its computer moves can differ, and then a later placement of the person's is refused
+ * (ReplayError) or the match ends elsewhere. Nothing on the site replays through here; a page that did would show
+ * "Start a new match" for a ReplayError, as Play and the snap do.
  */
 import { drawRules, engine, layout, rng, verdict, type Kills, type Placement, type Side, type World } from './engine';
 import type { Version } from './schema';
