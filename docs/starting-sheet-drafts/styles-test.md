@@ -44,6 +44,9 @@ shows `openai/gpt-image-2.5-sunburst` served only by OpenAI with `has_zdr: false
 So **Neon night can't be made by OpenAI under the ZDR rule.** The owner chose Gemini (2026-11-04): its four samples are
 in [neon-night-samples.md](neon-night-samples.md).
 
+**Later the same day (owner, 2026-11-04):** OpenAI is allowed without zero data retention for the owner's bases and
+styles, with what it keeps recorded. The two GPT fronts were not remade (no spend without the owner's OK).
+
 ## What the test shows
 
 - **Gouache by Gemini works.** It reads as paint on paper: no ink outlines, soft brushed edges, the paper's grain and a

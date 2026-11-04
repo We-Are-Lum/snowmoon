@@ -27,6 +27,26 @@ Plan file: [`styles-plan.json`](styles-plan.json). Every number below comes from
   [neon-night-samples.md](neon-night-samples.md), **$0.26850 spent** (cap $0.35).
 - No further spending until the owner OKs the samples and the bases.
 
+## Owner's decisions, 2026-11-04, later the same day (recorded)
+
+- **Closed models without zero data retention are allowed for the bases and styles the owner makes, GPT Image 2.5
+  Sunburst included.** `scripts/lib/batch-model.ts` now: training off and the provider pin on every call; zero data
+  retention required only for Google on Vertex; OpenAI allowed without it, after the gateway's endpoint list is read, with
+  what OpenAI keeps recorded in each picture's settings (its recipe) and the ledger: "By default, abuse monitoring logs
+  are generated for all API feature usage and retained for up to 30 days, unless longer retention is required by law, or
+  is reasonably necessary to protect our services or any third party from harm." (OpenAI, "Your data",
+  https://developers.openai.com/api/docs/guides/your-data, read 2026-11-03; its table gives `/v1/images/edits` "30 days"
+  of abuse monitoring retention and no application state). `test:batch-model`: 22 passed, a planted violation for each
+  rule.
+- Neon night and Gouache stay on Gemini, as made. Nothing remade, nothing spent.
+- **The 12 closed drafts of 2026-11-03 (bases.md) are usable again only if their recipes record what was kept. They
+  don't:** each recipe records `gateway: { disallowPromptTraining: true }` and nothing about retention; the ledger (not
+  the recipe) records the provider that served each (OpenAI for the six GPT, Vertex for the six Gemini), and no zero data
+  retention was asked. To use one, a retention line has to be added to its recipe first (no new call needed for the GPT
+  ones: OpenAI's default above applies; for the Gemini ones, Vertex's default without ZDR, not yet read).
+- **Google's under-18 clause: decided.** Gemini is allowed, for bases and for remixers. The owner's reason: the Terms
+  already require people to be 18 or older to sign in, and only signed-in people can generate.
+
 ## What the drafts show first
 
 The five open drafts of 2026-11-03 ([bases.md](bases.md)) **barely differ from each other**. Side by side, Zei in
@@ -173,8 +193,8 @@ the picks and the OK to spend.
 **Google's under-18 clause is fine for bases the owner makes.** Gemini 3.1 Flash Image is used only in a batch job the
 owner runs, never as a visitor-facing feature; visitors see only the finished pictures. Recorded in
 `docs/proposals/closed-model-bases.md` and the notes of `docs/legal/closed-model-bases-draft.md` (branch
-`closed-model-bases`). The Privacy lines still need the owner's reread before any closed base is published. Not asked
-yet: whether the same reading covers the Gouache style's **samples** (the same kind of batch job, by Google).
+`closed-model-bases`). The Privacy lines still need the owner's reread before any closed base is published. Superseded later
+the same day: Gemini is allowed for bases and for remixers (see the decisions above).
 
 ## What the owner needs to say
 
