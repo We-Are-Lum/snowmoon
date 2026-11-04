@@ -1,4 +1,8 @@
-# "Ask for help" beside the sheet prompt box: Privacy and Terms lines (DRAFT, for the owner's reread)
+# "Ask for help" beside the sheet prompt box: Privacy and Terms lines (reread 2026-11-04)
+
+**Reread record: reviewed by the coordinator, approved by the owner, 2026-11-04** (reread pack item 7: 7.1 yes, 7.2
+Farcaster-only, the floor fixed first; Overlap C in the owner's own words). The lines below are the drafts as approved;
+none was redrafted. They still go into `src/lib/legal.ts` only in the release that switches `SHEET_HELP.on` on.
 
 **DRAFT.** Drafted by the coding agent (Claude, a closed model by Anthropic), 2026-11-02, on branch `sheet-help`, from
 the lines the owner approved in `docs/proposals/sheet-help.md` (2026-10-31). **Not in `src/lib/legal.ts`.** They go in
@@ -36,13 +40,16 @@ record", since the count is no longer the only thing kept under your ID.
 
 ## Privacy §6 (What you publish.): one sentence, at the end
 
+The sentence uses the owner's own wording (2026-11-04, reread pack Overlap C): "words that 'Ask for help' suggested to
+you", so the sentence names what suggested them. Before that it read "words it suggested to you in 'Ask for help'".
+
 **Before:**
 
 > Anything you publish, and every frame you make in Remix, is public, shown with your name (your Farcaster name, or, for a wallet account, its address shortened; your Farcaster ID on quote cards), the date, and the record of how it was made. If you link a wallet to your Farcaster account, what you made with the wallet, before and after linking, is shown under your Farcaster name, so anyone can see that the two are yours; if you unlink it, that work is shown with the wallet's address again. See the Terms, sections 5 and 7. If you share a Minpentai win, your own Farcaster or X app posts it; its link carries only the opponent you beat and the number of steps, its card is drawn from that link, and we keep nothing about it. If you share a Minpentai challenge from a Farcaster cast, your Farcaster app posts it; its link carries the match's start (its random seed, the computer level and the extra rule) and your result (how and at which step it ended, how many towers were left and how many taps you used). It does not carry your moves or your Farcaster ID, though anyone who opens the link can read what it does carry. Its card is drawn from that link, and we keep nothing about it. During the remix challenge, a version of one of its characters that you publish may be shown as your entry, on its page and on the challenge page.
 
 **After:**
 
-> Anything you publish, and every frame you make in Remix, is public, shown with your name (your Farcaster name, or, for a wallet account, its address shortened; your Farcaster ID on quote cards), the date, and the record of how it was made. If you link a wallet to your Farcaster account, what you made with the wallet, before and after linking, is shown under your Farcaster name, so anyone can see that the two are yours; if you unlink it, that work is shown with the wallet's address again. See the Terms, sections 5 and 7. If you share a Minpentai win, your own Farcaster or X app posts it; its link carries only the opponent you beat and the number of steps, its card is drawn from that link, and we keep nothing about it. If you share a Minpentai challenge from a Farcaster cast, your Farcaster app posts it; its link carries the match's start (its random seed, the computer level and the extra rule) and your result (how and at which step it ended, how many towers were left and how many taps you used). It does not carry your moves or your Farcaster ID, though anyone who opens the link can read what it does carry. Its card is drawn from that link, and we keep nothing about it. During the remix challenge, a version of one of its characters that you publish may be shown as your entry, on its page and on the challenge page. If you publish a sheet whose prompt includes words it suggested to you in 'Ask for help', its recipe says it includes words from AI suggestions.
+> Anything you publish, and every frame you make in Remix, is public, shown with your name (your Farcaster name, or, for a wallet account, its address shortened; your Farcaster ID on quote cards), the date, and the record of how it was made. If you link a wallet to your Farcaster account, what you made with the wallet, before and after linking, is shown under your Farcaster name, so anyone can see that the two are yours; if you unlink it, that work is shown with the wallet's address again. See the Terms, sections 5 and 7. If you share a Minpentai win, your own Farcaster or X app posts it; its link carries only the opponent you beat and the number of steps, its card is drawn from that link, and we keep nothing about it. If you share a Minpentai challenge from a Farcaster cast, your Farcaster app posts it; its link carries the match's start (its random seed, the computer level and the extra rule) and your result (how and at which step it ended, how many towers were left and how many taps you used). It does not carry your moves or your Farcaster ID, though anyone who opens the link can read what it does carry. Its card is drawn from that link, and we keep nothing about it. During the remix challenge, a version of one of its characters that you publish may be shown as your entry, on its page and on the challenge page. If you publish a sheet whose prompt includes words that 'Ask for help' suggested to you, its recipe says it includes words from AI suggestions.
 
 ## Terms §6e (The remix challenge.): one sentence, at the end
 
