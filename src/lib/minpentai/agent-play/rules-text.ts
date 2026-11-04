@@ -117,6 +117,6 @@ export function toolNotes(book: Settings, play: Settings, drawn: Partial<Setting
     convergence: book.costSeed
       ? 'Book edition: three of your symbol gliders resting inside one 3 x 3 box form your symbol (a tower) at once. A symbol glider rests one square short of a rock, square, factory, moving wall or resting symbol glider, never at an edge, a mirror or your own tower. Example: three launched E on rows 4, 5, 6 toward a column of rocks or squares at x = 15 rest at x = 14 and form at (14,4); rows 3, 5, 8 never can. It stays past your next turn only if walled in then.'
       : '',
-    sight: `Sight: you see within ${sight} squares of your towers (counting diagonals)${drawsSight ? ', unless a drawn rule changes it' : ''}; only towers give sight.`,
+    sight: `Sight: you see within ${sight} squares of your towers (counting diagonals)${drawsSight ? ', unless a drawn rule changes it' : ''}; in the default ruleset only towers give sight. Other rulesets differ (book-4's symbol gliders see as they fly): the match's own "rules" in get_view win.`,
   };
 }

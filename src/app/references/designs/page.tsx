@@ -19,7 +19,7 @@ const W = IMAGE_WORDING.designs;
 /**
  * Styles, characters and settings (step 4; Claude Design's 4-desktop index and the prototype's
  * library), chosen from Pictures' menu (owner, 2026-10-14). Styles: readers' styles, newest first or most built on, the order always
- * named. Characters: the book's characters, each with its sheets. Nothing is official or featured;
+ * named. Characters: the book's characters, each with its sheets, most named in the book first (owner, 2026-11-04). Nothing is official or featured;
  * no pick is counted or shown here. Places (2026-10-10): the book's places as text sheets, in the
  * order the book first goes there.
  */

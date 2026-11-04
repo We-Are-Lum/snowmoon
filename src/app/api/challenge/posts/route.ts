@@ -7,19 +7,24 @@ import { isModerator } from '~/lib/challenge/moderators';
 import { castFromHash, readPostAddress } from '~/lib/challenge/post-links';
 import { addPost, POSTS_WORDING, postsFor, removeOwnPost, verifiedPost } from '~/lib/challenge/posts';
 import { designByVersion } from '~/lib/images/designs';
+import { challengeVisibleTo } from '~/lib/challenge/visibility';
 
 /**
  * "Add where you posted it" (owner, 2026-10-31). POST { versionId, url } or { versionId, castHash } (the cast the
  * Farcaster app just made through composeCast). The address is only read: its host must be exactly one of the three
  * networks', and the post is then asked of that network's own API (src/lib/challenge/post-links.ts); the address
  * itself is never fetched. The post must link to the version's page. DELETE { id }: the person who added it, or a
- * moderator, removes it. Off (503) while CHALLENGE.posts is off.
+ * moderator, removes it. Off (503) while CHALLENGE.posts is off. While the challenge is admin-only (CHALLENGE.public
+ * off; owner, 2026-11-04), every method answers 404 to everyone but an admin, as /challenge does.
  */
+const hidden = (person: number | null) => (challengeVisibleTo(person) ? null : NextResponse.json({ error: 'Not found' }, { status: 404 }));
 const no = (error: string, status: number) => NextResponse.json({ error }, { status });
 
 /** GET ?versionId=: which listed posts the signed-in person may remove (the ones they added; all of them for a moderator). */
 export async function GET(request: Request) {
   const person = await getPerson(request);
+  const no404 = hidden(person);
+  if (no404) return no404;
   if (person === null) return NextResponse.json({ removable: [] });
   const sql = db();
   const versionId = new URL(request.url).searchParams.get('versionId') ?? '';
@@ -30,6 +35,8 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   const person = await getPerson(request);
+  const no404 = hidden(person);
+  if (no404) return no404;
   if (person === null) return NextResponse.json({ error: 'Sign in to add where you posted it' }, { status: 401 });
   if (!CHALLENGE.posts) return no(POSTS_WORDING.off, 503);
   const sql = db();
@@ -54,6 +61,8 @@ export async function POST(request: Request) {
 
 export async function DELETE(request: Request) {
   const person = await getPerson(request);
+  const no404 = hidden(person);
+  if (no404) return no404;
   if (person === null) return NextResponse.json({ error: 'Sign in first' }, { status: 401 });
   const sql = db();
   if (!sql) return no('Not set up on this deployment', 503);

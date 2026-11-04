@@ -11,6 +11,7 @@ import { IMAGE_WORDING } from '~/lib/images/wording';
 import { DesignForm } from '~/components/design-form';
 import { challengeSheetsOpen, isChallengeCharacter } from '~/lib/challenge/open-sheets';
 import { modelChoicesFor } from '~/lib/images/model-choice-view';
+import { CHALLENGE_WORDING as CW } from '~/lib/challenge/wording';
 
 /**
  * Make a style or a sheet (step 4; Claude Design 4b, 4c, 5b): a new style, a sheet for one of the
@@ -36,6 +37,8 @@ export default async function NewDesign({ searchParams }: Props) {
   if (kind === 'location' && !place) notFound();
   const mode = q.version && src ? 'version' : src ? 'fork' : 'create';
   // A sheet's views are made in one of the published styles (owner, 2026-10-14).
+  // The remix challenge opens this fork or version to everyone who passes the gate (challengeSheetsOpen: the owner's switch, the window, Privacy).
+  const challengeOpen = Boolean(src && mode !== 'create' && src.kind === 'character' && challengeSheetsOpen() && isChallengeCharacter(src.entity));
   const styles = kind !== 'style' && sql ? await listDesigns(sql, 'style').catch(() => []) : [];
   const callName = character ? (character.name.split(' ').find((w) => !/^(Lord|General|Senator)$/.test(w)) ?? character.name) : '';
   const title = mode === 'fork' ? W.form.fork : mode === 'version' ? W.form.newVersion : kind === 'style' ? W.form.newStyle : W.form.newSheet(place ? placeTitle(place.name) : callName);
@@ -74,8 +77,9 @@ export default async function NewDesign({ searchParams }: Props) {
         limits={{ ...IMAGES.designs }}
         models={{ text: IMAGES.model, edit: IMAGES.editModel }}
         suffix={IMAGES.suffix}
-        challengeOpen={Boolean(src && mode !== 'create' && src.kind === 'character' && challengeSheetsOpen() && isChallengeCharacter(src.entity))}
         modelChoices={modelChoicesFor(mode, kind)}
+        challengeOpen={challengeOpen}
+        whoCanEnter={challengeOpen ? CW.whoCanEnter() : undefined}
       />
     </div>
   );

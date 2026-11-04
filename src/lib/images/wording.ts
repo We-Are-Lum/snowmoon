@@ -100,7 +100,7 @@ export const IMAGE_WORDING = {
       yourPick: '○ Your pick',
       noSheets: 'No sheets yet.',
       drafted: 'Text drafted by the coding agent, a closed model',
-      bookOrder: 'In the order the book first tells of them',
+      bookOrder: 'Most named in the book first',
       myPicksLink: 'My picks →',
     },
     page: {
