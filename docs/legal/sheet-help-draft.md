@@ -56,13 +56,36 @@ record", since the count is no longer the only thing kept under your ID.
 
 ---
 
+## Privacy §7 (outside services), the Groq item: three words added
+
+The owner's answer (2026-11-04, reread pack 7.1): yes, add "'Ask for help' messages", so §7's list stays complete.
+DRAFT, for the owner's reread with §5 and §6. Before is main's `src/lib/legal.ts` at `70d36ef`, word for word.
+
+**Before:**
+
+> Groq, and Vercel AI Gateway when Groq is busy, receive assistant questions, and the prompts for images you make, which are checked against the published rules.
+
+**After:**
+
+> Groq, and Vercel AI Gateway when Groq is busy, receive assistant questions, 'Ask for help' messages, and the prompts for images you make, which are checked against the published rules.
+
+---
+
+## What §5's words rely on in the code (2026-11-04)
+
+- **"Under your Farcaster ID".** Ask for help is for Farcaster accounts only on 12 Nov (owner, 2026-11-04, pack 7.2).
+  The route reads a Quick Auth sign-in only (`getFid`, never `getPerson` or a wallet session) and refuses anything but
+  a positive FID; `sheetHelp` refuses one too, before anything is reserved or sent (test:sheet-help H9). If Lens or
+  Bluesky accounts may use it later, these words must widen first.
+- **The chapter limit.** The device sends its furthest chapter opened (`max(openedChapters())`). The server no longer
+  raises it to the character's first chapter, and refuses a request without one (owner, 2026-11-04, pack 7.4 and 12.1;
+  principle 9, P9d; test:sheet-help H9). A reader before the character's first chapter sends the model none of its
+  facts.
+
+---
+
 ## For the owner to decide (not drafted as lines)
 
-- **Privacy §7 (outside services).** Its Groq item says Groq and Vercel AI Gateway "receive assistant questions, and the
-  prompts for images you make". §5's new words already say "Ask for help" goes to Groq, so §7 could stay as it is, or
-  add "'Ask for help' messages" to that item. The proposal names no §7 change; the agent suggests adding it, so §7's
-  list stays complete:
-  > Groq, and Vercel AI Gateway when Groq is busy, receive assistant questions, 'Ask for help' messages, and the prompts for images you make, which are checked against the published rules.
 - **Privacy §3 (kept on your device).** The conversation is kept only in the open page (not in the browser's storage),
   and is gone when the page is left; nothing to add, unless the owner wants that said.
 - **The consent screen** is unchanged: "Ask for help" publishes nothing by itself; what is published is the sheet, with

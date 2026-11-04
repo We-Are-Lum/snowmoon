@@ -15,8 +15,9 @@ import { sheetHelp, validateHelp, HelpError } from '~/lib/sheet-help/help';
  */
 export async function POST(request: Request) {
   if (!sheetHelpLive()) return NextResponse.json({ error: 'Not found' }, { status: 404 });
+  // Farcaster only (owner, 2026-11-04): getFid reads a Quick Auth token, never a wallet, Lens or Bluesky sign-in.
   const fid = await getFid(request);
-  if (fid === null) return NextResponse.json({ error: 'Sign in with Farcaster to ask for help' }, { status: 401 });
+  if (fid === null || !Number.isInteger(fid) || fid <= 0) return NextResponse.json({ error: 'Sign in with Farcaster to ask for help' }, { status: 401 });
   const sql = db();
   const token = gatewayToken(request);
   if (!sql || (!token && !directKey()) || !servingAllowed()) return NextResponse.json({ error: 'Help is not available on this deployment' }, { status: 503 });
@@ -25,7 +26,7 @@ export async function POST(request: Request) {
   const character = src && src.kind === 'character' && isChallengeCharacter(src.entity) ? (bookCharacters().find((c) => c.name === src.entity) ?? null) : null;
   if (!character) return NextResponse.json({ error: 'Help is only on the challenge’s character sheets' }, { status: 404 });
   try {
-    const input = validateHelp(raw, character.slug, character.firstChapter);
+    const input = validateHelp(raw, character.slug);
     const result = await sheetHelp(
       {
         sql,

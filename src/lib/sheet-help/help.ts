@@ -19,7 +19,7 @@ import { recordServed } from './served';
  * and its own limits (src/lib/sheet-help/limits.ts).
  *
  * What the model reads: the person's message, the character's facts from the book (the sheet's "What the book says"
- * and the search's passages, up to the chapters the reader has opened, never before the character's first chapter),
+ * and the search's passages, up to the furthest chapter the reader has opened, with no floor: principle 9, P9d),
  * the sheet's prompt draft and the rest of its recipe text. Text only: never the sheet's pictures.
  *
  * Its answer is one proposed change to ONE part of the draft (src/lib/sheet-help/part.ts), shown as before and after,
@@ -83,7 +83,12 @@ const LIMITS = () => ({ partMaxChars: SHEET_HELP.partMaxChars, partMaxWords: SHE
 /** The worst case of one message, reserved before any call: two replies (the retry) and four guard calls. */
 export const helpWorstUsd = () => worstCaseUsd(2 * ANSWER_TOKENS, 4 * GUARD_TOKENS, INPUT_TOKENS);
 
-export function validateHelp(raw: unknown, character: string, firstChapter: number): HelpInput {
+/**
+ * The chapter limit is the number the reader's device sends: its furthest chapter opened (max(openedChapters())), or
+ * later chapters the reader chose for that one thread. There is no floor (principle 9, P9d; owner, 2026-11-04): never
+ * the character's first chapter, never a default. A request without a whole number 1–32 is refused.
+ */
+export function validateHelp(raw: unknown, character: string): HelpInput {
   const r = (raw ?? {}) as Record<string, unknown>;
   const message = String(r.message ?? '').trim();
   if (!message) throw new HelpError('Say what you want first.');
@@ -91,8 +96,8 @@ export function validateHelp(raw: unknown, character: string, firstChapter: numb
   const draft = String(r.draft ?? '');
   if (draft.length > IMAGES.designs.textMaxChars) throw new HelpError('The sheet’s text is too long.');
   const recipe = String(r.recipe ?? '').slice(0, 3000);
-  const n = Math.floor(Number(r.upTo));
-  const upTo = Math.min(32, Math.max(firstChapter, Number.isFinite(n) ? n : firstChapter));
+  const upTo = typeof r.upTo === 'number' ? r.upTo : NaN;
+  if (!Number.isInteger(upTo) || upTo < 1 || upTo > 32) throw new HelpError('No chapter limit.');
   const history = (Array.isArray(r.history) ? r.history : [])
     .filter((h): h is { role: 'user' | 'assistant'; text: string } => !!h && (h.role === 'user' || h.role === 'assistant') && typeof h.text === 'string')
     .slice(-SHEET_HELP.historyTurns)
@@ -129,6 +134,9 @@ const plain = (s: string) => s.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').tri
 
 export async function sheetHelp(deps: HelpDeps, input: HelpInput): Promise<HelpResult> {
   const { sql, fid } = deps;
+  // Farcaster accounts only (owner, 2026-11-04: Privacy §5 says "Under your Farcaster ID"). A wallet account's number
+  // is negative (getPerson), and Lens or Bluesky accounts have no FID; none of them may use it.
+  if (!Number.isInteger(fid) || fid <= 0) throw new HelpError('Sign in with Farcaster to ask for help', 401);
   const slot = await reserveHelp(sql, fid, helpWorstUsd());
   if (!slot.ok) return slot.reason === 'limit' ? { state: 'limit', perDay: SHEET_HELP.perDay } : { state: 'spend' };
 

@@ -27,6 +27,10 @@
  *     Whole-prompt marking until per-phrase marking is built.
  *  H7 the switch: off in the config; even on, it waits for Privacy §5 and §6 and the challenge's window; the route
  *     answers 404 first.
+ *  H9 no floor (principle 9, P9d; owner, 2026-11-04): the chapter limit is the number the device sends (its furthest
+ *     chapter opened, or later chapters chosen for that thread), never raised to the character's first chapter; a
+ *     request with no limit is refused; a reader before the character's first chapter sends the model none of its
+ *     facts. Farcaster only: a wallet account (a negative number) is refused before anything is reserved or sent.
  *  H8 the migration: safe twice; the dry run keeps nothing and is the same SQL; the two-part read-back passes, and
  *     catches a planted bad grant, a planted extra column and a planted missing check.
  */
@@ -255,7 +259,7 @@ const deps = (fid: number, complete: Parameters<typeof H.sheetHelp>[0]['complete
   facts: bai.quotes,
   who: { name: bai.name, firstChapter: bai.firstChapter },
 });
-const input = (message: string, draft = DRAFT, upTo = 5) => H.validateHelp({ message, draft, recipe: 'The style’s text: soft ink lines\nFront view: full body, facing us\nAdded to every prompt: no text', upTo }, 'bai', bai.firstChapter);
+const input = (message: string, draft = DRAFT, upTo = 5) => H.validateHelp({ message, draft, recipe: 'The style’s text: soft ink lines\nFront view: full body, facing us\nAdded to every prompt: no text', upTo }, 'bai');
 const resetDb = async () => {
   await sql`delete from studio.sheet_help_calls`;
   await sql`delete from studio.sheet_help_costs`;
@@ -447,6 +451,53 @@ try {
     check('H6 the sheet’s page shows the label', /\{body\.help && <p className="dz-meta dz-drafted">\{SHEET_HELP_WORDING\.pageLine\}<\/p>\}/.test(page) && /includes words from AI suggestions/i.test(SHEET_HELP_WORDING.pageLine));
     check('H6 the design page reads the recipe line from recipe-lines.ts', /howMade\(p\.recipe/.test(page) && /helpLine\(r\)/.test(read('src/lib/images/recipe-lines.ts')));
     proof('a recipe with help but no line printed is caught', RL.howMade({ ...base, help: mark }, 'a'.repeat(64), null, true).map((r) => r.text).join('') !== without);
+  }
+
+  // --- H9 no floor, and Farcaster only ----------------------------------------------------------------------------
+  {
+    await resetDb();
+    check('H9 Bai first appears in chapter 4 (the case below is a reader before that)', bai.firstChapter === 4, bai.firstChapter);
+    const early = input('her coat', DRAFT, 2);
+    check('H9 a reader at chapter 2 keeps limit 2: no floor at the character’s first chapter', early.upTo === 2, early.upTo);
+    const noFloor = (v: typeof H.validateHelp) => {
+      const got = [1, 2, 3].map((n) => v({ message: 'x', draft: DRAFT, upTo: n }, 'bai').upTo);
+      return got.every((g, i) => g === i + 1) ? [] : [`limits ${JSON.stringify(got)} for a device at chapters 1–3`];
+    };
+    check('H9 the limit is the device’s number for every chapter before Bai’s first', noFloor(H.validateHelp).length === 0, noFloor(H.validateHelp));
+    const floored: typeof H.validateHelp = (raw, c) => {
+      const i = H.validateHelp(raw, c);
+      return { ...i, upTo: Math.max(bai.firstChapter, i.upTo) };
+    };
+    proof('a planted floor at the character’s first chapter is caught', noFloor(floored).length > 0);
+    check('H9 a later choice for that one thread is kept as sent', input('her coat', DRAFT, 24).upTo === 24);
+    for (const bad of [undefined, null, '5', 0, 33, 2.5, NaN])
+      check(`H9 no whole-number limit 1–32 (${String(bad)}): refused, never defaulted`, (() => {
+        try {
+          H.validateHelp({ message: 'x', draft: DRAFT, upTo: bad }, 'bai');
+          return false;
+        } catch (e) {
+          return e instanceof H.HelpError && e.message === 'No chapter limit.';
+        }
+      })());
+    const r = recorded(['NONE: The book has not shown Bai yet, so start from your own idea.'], ['OK visual only']);
+    let asked = 0;
+    const within = async (_s: unknown, _q: string, limit: number) => {
+      asked = limit;
+      const all = [{ id: 'c1-b5', chapter: 1, idx: 5, kind: 'paragraph', content: 'A recorded chapter 1 passage.' }, { id: 'c4-b70', chapter: 4, idx: 70, kind: 'paragraph', content: 'A recorded passage about Bai.' }];
+      return { passages: all.filter((x) => x.chapter <= limit), heldBack: all.some((x) => x.chapter > limit) };
+    };
+    const o = await H.sheetHelp({ ...deps(501, r.complete), retrieve: within }, early);
+    const u = r.calls[0]?.messages.at(-1)?.content ?? '';
+    check('H9 a reader at chapter 2 sends the model no facts about Bai (all are from chapter 4 on)', o.state === 'note' && !/\[c(4|5|7|9|24)-b/.test(u) && u.includes('(chapters 1–2)') && u.includes('(nothing yet)') && u.includes('[c1-b5]'), { state: o.state, u: u.slice(0, 300) });
+    check('H9 … and the book search is asked for chapters 1–2 only', asked === 2 && /Passages from chapters 1–2:/.test(u), asked);
+
+    const before = r.calls.length;
+    const w = await H.sheetHelp(deps(-7, r.complete), input('her coat')).then(() => 'answered', (e) => (e instanceof H.HelpError && e.status === 401 ? 'refused' : String(e)));
+    const rows = await sql`select count(*)::int as n from studio.sheet_help_calls where fid = -7`.catch(() => [{ n: 0 }]);
+    check('H9 a wallet account (a negative number) is refused, with no model call and no row', w === 'refused' && r.calls.length === before && rows[0].n === 0, w);
+    const route = read('src/app/api/sheet-help/route.ts');
+    check('H9 the route reads a Farcaster sign-in only (getFid), never getPerson or a wallet session, and refuses anything but a positive FID', /const fid = await getFid\(request\);\n\s*if \(fid === null \|\| !Number\.isInteger\(fid\) \|\| fid <= 0\) return/.test(route) && !/getPerson|getWallet/.test(route));
+    check('H9 the device sends its furthest chapter opened, with no floor', /upTo: Math\.max\(1, \.\.\.openedChapters\(\)\)/.test(read('src/components/sheet-help.tsx')) && !/firstChapter/.test(read('src/components/sheet-help.tsx')));
   }
 
   // --- H7 the switch --------------------------------------------------------------------------------------------
