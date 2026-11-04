@@ -118,7 +118,9 @@ export default async function About() {
           docs/wording-for-approval-2026-11-04.md section 11 on branch wording-for-approval). */}
       <p>
         Vercel hosts the site and sees your IP address and browser details, as any web host does. Cloudflare stores and serves
-        the pictures and audio. Supabase holds the database. A report or share link opens GitHub, Farcaster, X, Bluesky or
+        the pictures and audio. Supabase holds the database. Some of the project's own pictures (the remix challenge's bases,
+        styles and references) are made with closed models by OpenAI and Google, through Vercel AI Gateway: they receive the
+        prompt and the reference pictures, nothing about you. A report or share link opens GitHub, Farcaster, X, Bluesky or
         Lens, where what you post is public. When an image is reported, ntfy delivers us a short alert that carries no content
         and nothing about you. When someone adds a post to a version's page, our server asks Bluesky or Lens for that post,
         sending only its details, to check that it links there; it sends nothing about you, and your browser never contacts

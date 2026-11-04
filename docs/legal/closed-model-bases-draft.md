@@ -1,4 +1,8 @@
-# Closed-model bases: Privacy, Terms and About lines (DRAFT, not reread)
+# Closed-model bases: Privacy, Terms and About lines (reread by the owner, 2026-11-04)
+
+> **Reread (owner, 2026-11-04): Privacy §7, Terms §8 and About approved as drafted** (at 54b895e2). They are now in
+> `src/lib/legal.ts` and `src/app/about/page.tsx` on this branch, with `LEGAL.ownerReread` updated. Not merged;
+> `CHALLENGE.closedBasesAllowed` stays false.
 
 Drafted by the coding agent (Claude, a closed model by Anthropic), on branch `closed-model-bases`, for the owner's
 decision of 2026-11-04: several models may make the remix challenge's bases, styles and references, closed ones included,
