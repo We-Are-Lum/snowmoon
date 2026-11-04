@@ -1421,6 +1421,23 @@ if (/^http:\/\/(localhost|127\.0\.0\.1)(:|\/|$)/.test(BASE)) {
   }
 }
 const browser = await chromium.launch({ channel: 'chrome' });
+// A protected Vercel preview: under VERCEL_OIDC_TOKEN, every request to the preview's own origin carries it (never to
+// any other origin a page loads), in every browser context and in this script's own fetches. Never printed.
+{
+  const token = process.env.VERCEL_OIDC_TOKEN, origin = new URL(BASE).origin;
+  if (token && /\.vercel\.app$/.test(new URL(BASE).hostname)) {
+    const header = { 'x-vercel-trusted-oidc-idp-token': token };
+    const guard = async (ctx: Awaited<ReturnType<Browser['newContext']>>) => {
+      await ctx.route((u) => u.origin === origin, (route) => route.continue({ headers: { ...route.request().headers(), ...header } }));
+      return ctx;
+    };
+    const newContext = browser.newContext.bind(browser);
+    browser.newContext = async (o) => guard(await newContext(o));
+    browser.newPage = async (o) => (await browser.newContext(o)).newPage();
+    const plain = globalThis.fetch;
+    globalThis.fetch = (u, init = {}) => (new URL(String(u instanceof Request ? u.url : u)).origin === origin ? plain(u, { ...init, headers: { ...(init.headers as Record<string, string> | undefined), ...header } }) : plain(u, init));
+  }
+}
 try {
   await checkAiLabels();
   await checkMarkdownPages();
@@ -2108,6 +2125,22 @@ try {
     await checkPlayFullScreen(frame, '@424×695', 695);
     await frame.close();
   }
+  // The live match page's layout (owner, 2026-11-03): at 390 × 844 and on a desktop, the board, Take turn and the
+  // replay's controls in view without scrolling, before and after taking a turn. It needs a match, a signed-in player and
+  // an AI, so it runs on its own local stage from this checkout's build (scripts/lib/live-layout.ts).
+  {
+    const { existsSync } = await import('node:fs');
+    if (!existsSync('.next/BUILD_ID')) fail('live page layout: no local build of this checkout; run next build first');
+    else {
+      lastOpened = '/minpentai/m/… (local stage)';
+      // Its own process, in server mode: the stage runs the agent-play code, which only loads there.
+      const { spawnSync } = await import('node:child_process');
+      const run = spawnSync('npx', ['tsx', '--conditions=react-server', 'scripts/check-live-layout.ts'], { encoding: 'utf8', timeout: 900_000 });
+      const line = (run.stdout ?? '').split('\n').find((l) => l.startsWith('LIVE_LAYOUT '));
+      if (!line) fail(`live page layout: the check didn't finish (${(run.stderr ?? '').split('\n').filter(Boolean).slice(-1)[0] ?? run.status})`);
+      else for (const f of JSON.parse(line.slice('LIVE_LAYOUT '.length)) as string[]) fail(f);
+    }
+  }
 } catch (e) {
   // A step that throws (a timeout, a missing element) ends the check: say it on one last line, naming the last page
   // opened and the first line of the error, so a short log still shows what broke (2026-10-29: a bare TimeoutError
@@ -2126,4 +2159,4 @@ if (failures.length) {
   console.error(`\nUI CHECK FAILED (${failures.length}):\n- ` + failures.join('\n- '));
   process.exit(1);
 }
-console.log(`ui check passed: ${BASE}, ${38 + MINPENTAI_LESSONS + 4} pages, Make an image (browse, the 8-block cap, search, deep links, its links from the feed, an image's page and the assistant), the chapter sheet, the glossary's covers and back link, and 8 assistant states × light and dark; 10 pages and Learn's desktop layout (watch, lesson, practice) at 1024, 1440 and 2000; AI labels on 9 screens at 390 and 1440`);
+console.log(`ui check passed: ${BASE}, ${38 + MINPENTAI_LESSONS + 4} pages, Make an image (browse, the 8-block cap, search, deep links, its links from the feed, an image's page and the assistant), the chapter sheet, the glossary's covers and back link, and 8 assistant states × light and dark; 10 pages and Learn's desktop layout (watch, lesson, practice) at 1024, 1440 and 2000; AI labels on 9 screens at 390 and 1440; the live match page's layout at 390 × 844 and 1440 × 900, before and after taking a turn (local stage)`);
