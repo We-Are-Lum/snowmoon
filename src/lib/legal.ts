@@ -41,7 +41,7 @@ export const LEGAL: {
     privacy: { words: string; on: string; by: 'FID 6786' } | null;
   };
 } = {
-  effective: '2026-11-01',
+  effective: '2026-11-04',
   // The owner said "Reread" on 2026-10-10 (words 3iuvyo, 1r2aajz), and on 2026-10-18 of the drafted
   // changes ("I've read the drafted Terms and Privacy changes and approve them: this is my 'reread'"),
   // covering both pages at these words.
@@ -117,11 +117,11 @@ export const LEGAL: {
     // entries, the IPFS record and the posts you add; §6 adds a sentence on entries; §7's Neynar item adds the challenge
     // check (once, at publish; never on a page view) and reading an added Farcaster post, a new item for Bluesky and
     // Lens, and Bluesky and Lens in the share-link item. The words before were oa9ihf.
-    // PENDING the owner's reread (branch wallet-fid-link, 2026-11-04; docs/legal/wallet-fid-link-draft.md): §4's link
-    // reason and §7's Neynar wallet sentence add the custody address (the address that owns a Farcaster account) beside a
-    // verified one. Until the owner says "reread", these words don't match and check:principles P6k fails on purpose;
-    // ownerReread is set only on the owner's word.
-    privacy: { words: '1frr16h', on: '2026-11-01', by: 'FID 6786' },
+    // 2026-11-04, the owner's "reread done for its Privacy §4 and §7 lines, including 'no longer has it' in place of
+    // 'no longer verifies it'" (branch wallet-fid-link; docs/legal/wallet-fid-link-draft.md): §4's link reason and §7's
+    // Neynar wallet sentences add the custody address (the address that owns a Farcaster account) beside a verified one.
+    // The words before were 1frr16h.
+    privacy: { words: '1wgu7z', on: '2026-11-04', by: 'FID 6786' },
   },
 };
 
