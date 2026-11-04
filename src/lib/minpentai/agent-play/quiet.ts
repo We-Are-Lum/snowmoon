@@ -47,6 +47,8 @@ export function planSoon(id: string) {
 export async function settle(id: string): Promise<{ m: SoloMatch; version: number } | null> {
   let r = await load(id);
   if (!r) return null;
+  // Between people there is no site computer planning to hide (practice matches): no quiet time.
+  if (r.m.versus) return r;
   const opened = r.m.openedAt ?? 0;
   await sleepUntil(opened + QUIET_MS);
   r = await load(id);

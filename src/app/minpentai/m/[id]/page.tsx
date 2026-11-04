@@ -1,8 +1,9 @@
 import { notFound } from 'next/navigation';
 import { playFor } from '~/lib/agents/core';
-import { draftInfo, linkOpens, turnFrames, turnSummaries, viewFor } from '~/lib/minpentai/agent-play/solo';
+import { draftInfo, linkSide, turnFrames, turnSummaries, viewFor } from '~/lib/minpentai/agent-play/solo';
 import { load } from '~/lib/minpentai/agent-play/store';
 import { settle } from '~/lib/minpentai/agent-play/quiet';
+import { clocked } from '~/lib/minpentai/agent-play/act';
 import { MinpentaiTags } from '../../mp-tags';
 import { Refresh } from './refresh';
 import { LiveTop } from './live-top';
@@ -35,18 +36,23 @@ const brief = (ps: Move[]) => {
 export default async function LiveLink({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ k?: string }> }) {
   const { id } = await params, { k } = await searchParams;
   const peek = await load(id).catch(() => null);
-  if (!peek || !playFor(peek.m.person) || !linkOpens(peek.m, k ?? '')) notFound();
+  // A practice match has a link per player, each opening that player's side only.
+  const side = peek ? linkSide(peek.m, k ?? '') : null;
+  const owner = peek && side ? (peek.m.versus ? peek.m.versus.players[side] : peek.m.person) : null;
+  if (!peek || !side || owner === null || !playFor(owner)) notFound();
   // The same quiet time as every tool call (quiet.ts): the page's timing says nothing about the computer's planning.
-  const r = (await settle(id)) ?? peek;
-  const m = r.m, v = viewFor(m), end = m.end;
-  const draft = draftInfo(m);
+  // A practice match has no computer to hide, but its clock runs on every read (act.ts clocked).
+  const r = (peek.m.versus ? await clocked(id) : await settle(id)) ?? peek;
+  const m = r.m, v = viewFor(m, side), end = m.end, vs = m.versus;
+  const draft = draftInfo(m, side);
   const book = m.ruleset.startsWith('book');
   const latestTurn = m.history.at(-1)?.turn;
-  const sums = turnSummaries(m);
+  const sums = turnSummaries(m, side);
   const last = v.my_turns.at(-1);
+  const them = vs ? (v.opponent.joined ? v.opponent.name : 'a player who hasn’t joined yet') : `the site computer, level ${v.opponent.level}`;
   const status = end
-    ? `Over at step ${end.step}: ${end.win === 'C' ? 'you won' : end.win === 'A' ? 'the site computer won' : 'a draw'}${end.how === 'resigned' ? ' (resigned)' : ''}.`
-    : `Turn ${v.turn}${v.phase === 'setup' ? ' (setup)' : ''} · step ${v.step}/${v.max_steps} · you (Cyan) v the site computer, level ${v.opponent.level}`;
+    ? `Over at step ${end.step}: ${end.win === side ? 'you won' : end.win === 'D' ? 'a draw' : vs ? `${v.opponent.name} won` : 'the site computer won'}${end.how === 'resigned' ? ' (resigned)' : ''}.`
+    : `Turn ${v.turn}${v.phase === 'setup' ? ' (setup)' : ''} · step ${v.step}/${v.max_steps} · you (${v.side}) v ${them}${vs ? ' · practice, never counted' : ''}`;
   const tally = 'towers_destroyed' in v && v.towers_destroyed ? `destroyed ${v.towers_destroyed.by_you}–${v.towers_destroyed.by_opponent}` : null;
   const past = v.my_turns.filter((t) => t.turn !== latestTurn).reverse().map((t) => ({
     turn: t.turn, step: t.step, line: brief(t.placements as Move[]), kills: sums.find((x) => x.turn === t.turn)?.kills ?? 0,
@@ -62,13 +68,19 @@ export default async function LiveLink({ params, searchParams }: { params: Promi
           current={{ board: v.board, canPlace: v.can_place, lastSeen: v.last_seen_enemy_towers, marks: last ? last.placements : [] }}
           draft={draft && !draft.final ? { placements: draft.placements, cost: draft.cost, points: draft.points, warnings: draft.warnings, note: draft.note, who: cap(WHO[draft.source] ?? draft.source) } : null}
           canTake={!end} turn={v.turn} points={v.points}
-          latest={latestTurn !== undefined ? { turn: latestTurn, frames: turnFrames(m, latestTurn, !!end), whole: !!end } : null}
+          latest={latestTurn !== undefined ? { turn: latestTurn, frames: turnFrames(m, latestTurn, !!end, side), whole: !!end } : null}
           summary={v.last_turn_summary?.lines ?? null}
         />
         <PastTurns matchId={m.id} secret={k ?? ''} width={v.board_size.width} height={v.board_size.height} whole={!!end} items={past} />
         <footer className="mb-live-foot">
           <p className="mb-note">Standing order: {v.standing_order ? <>&ldquo;{v.standing_order.text}&rdquo; ({PRESET[v.standing_order.preset]})</> : 'none, so if the site computer plays a turn for you, it plays balanced'}.</p>
-          {!end ? <p className="mb-note">Only your side is shown while the match is on: what your towers see, and where you last saw the enemy&rsquo;s. The site computer&rsquo;s moves follow from the board and its random value, committed at the start ({v.opponent.random_commitment.slice(0, 12)}…); anyone can check them after the end.</p> : null}
+          {!end && vs ? (
+            <p className="mb-note">
+              {v.opponent.sent_final_orders ? `Their orders are in, sealed (${(v.opponent.commitment ?? '').slice(0, 12)}…). ` : v.opponent.joined ? 'Their orders aren’t in yet. ' : ''}
+              {vs.deadline ? `This turn’s clock runs out ${new Date(vs.deadline).toUTCString()}; then the site computer plays any side whose orders aren’t in, under its standing order. ` : ''}
+              Only your side is shown while the match is on. A practice match: never counted toward any ranking.
+            </p>
+          ) : !end ? <p className="mb-note">Only your side is shown while the match is on: what your towers see, and where you last saw the enemy&rsquo;s. The site computer&rsquo;s moves follow from the board and its random value, committed at the start ({(v.opponent.random_commitment ?? '').slice(0, 12)}…); anyone can check them after the end.</p> : null}
           <p className="mb-live-links">
             <a href={book ? '/minpentai/book' : '/minpentai/rules'}>Rules</a>
             {book ? <> · <a href="/minpentai/book/tutorial">How the pieces work</a></> : null}
