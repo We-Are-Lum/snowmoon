@@ -2,6 +2,7 @@ import 'server-only';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { WORK } from './config';
+import { BOOK_MENTIONS, mentionRank } from './character-order';
 import { sheetImages } from './images/sheet-images';
 import { placeTitle, sheetCharacters, sheetPlace } from './images/sheets';
 import type { SheetImage } from '~/components/design-sheets';
@@ -44,7 +45,19 @@ export function referenceSheets(term: string): ReferenceCard['sheets'] {
     .filter((x) => x !== null);
 }
 
-/** Every glossary term with at least one image, in the order a reader meets them. */
+const characterRank = (c: Pick<ReferenceCard, 'sheets'>) => {
+  const s = c.sheets.find((x) => x.kind === 'character');
+  return s ? mentionRank(s.slug) : BOOK_MENTIONS.length + 1;
+};
+/** The glossary's order: cards of characters first, most named in the book first; then the rest by first chapter, then term. */
+export const byReferenceOrder = (a: Pick<ReferenceCard, 'sheets' | 'chapter' | 'term'>, b: Pick<ReferenceCard, 'sheets' | 'chapter' | 'term'>) =>
+  characterRank(a) - characterRank(b) || a.chapter - b.chapter || a.term.localeCompare(b.term);
+
+/**
+ * Every glossary term with at least one image: the characters first, most named in the book first (owner, 2026-11-04:
+ * characters in that order everywhere they are listed; src/lib/character-order.ts), then the other words in the order
+ * a reader meets them.
+ */
 export async function referenceCards(): Promise<ReferenceCard[]> {
   const terms = read<{ terms: Term[] }>('glossary.json').terms;
   const cards: ReferenceCard[] = [];
@@ -57,5 +70,5 @@ export async function referenceCards(): Promise<ReferenceCard[]> {
     if (!images.length) continue;
     cards.push({ slug: t.slug, term: t.term, chapter: t.first_chapter, firstSentence: { block: t.first_sentence.block, text: t.first_sentence.text }, sheets, images: images.slice(0, SHOWN), total: images.length });
   }
-  return cards.sort((a, b) => a.chapter - b.chapter || a.term.localeCompare(b.term));
+  return cards.sort(byReferenceOrder);
 }

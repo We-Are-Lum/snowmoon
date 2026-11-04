@@ -12,7 +12,6 @@ import { cpus } from 'node:os';
 import { ladderPlayer, playSearchMatch, rungPlayer, searchPlayer, type Planner } from '../src/lib/minpentai/versions/search';
 import { SOLO_V1, SOLO_V3, type VersionRules } from '../src/lib/minpentai/versions/solo-v1';
 import { BOOK_EDITION } from '../src/lib/minpentai/versions/book-edition';
-import type { World } from '../src/lib/minpentai/versions/engine';
 
 const arg = (k: string, d: string) => { const i = process.argv.indexOf(`--${k}`); return i > 0 ? process.argv[i + 1] : d; };
 const N = +arg('n', '10');
@@ -20,9 +19,9 @@ const RULESETS: Record<string, VersionRules> = { play: SOLO_V1, book: BOOK_EDITI
 
 interface PairResult { ruleset: string; a: string; b: string; w: number; d: number; l: number; ms: number[]; steps: number[]; illegal: number }
 
-function player(name: string, real: () => World, ms: number[], steps: number[]): Planner {
+function player(name: string, ms: number[], steps: number[]): Planner {
   // r<n>: an old ladder player; L<n>: Play's ladder rung n (ruleset 3); a number: a search level.
-  const p = name.startsWith('r') ? rungPlayer(+name.slice(1), real) : name.startsWith('L') ? ladderPlayer(+name.slice(1)) : searchPlayer(+name);
+  const p = name.startsWith('r') ? rungPlayer(+name.slice(1)) : name.startsWith('L') ? ladderPlayer(+name.slice(1)) : searchPlayer(+name);
   return (m) => {
     const t0 = performance.now();
     const out = p(m);
@@ -35,9 +34,9 @@ function runPair(ruleset: string, a: string, b: string): PairResult {
   const r: PairResult = { ruleset, a, b, w: 0, d: 0, l: 0, ms: [], steps: [], illegal: 0 };
   for (let seed = 1; seed <= N; seed++) {
     for (const aSide of ['C', 'A'] as const) {
-      const m = playSearchMatch(RULESETS[ruleset], (real) => aSide === 'C'
-        ? { C: player(a, real, r.ms, r.steps), A: player(b, real, r.ms, r.steps) }
-        : { C: player(b, real, r.ms, r.steps), A: player(a, real, r.ms, r.steps) }, seed);
+      const m = playSearchMatch(RULESETS[ruleset], () => aSide === 'C'
+        ? { C: player(a, r.ms, r.steps), A: player(b, r.ms, r.steps) }
+        : { C: player(b, r.ms, r.steps), A: player(a, r.ms, r.steps) }, seed);
       r.illegal += m.illegal;
       if (m.win === aSide) r.w++; else if (m.win === 'D') r.d++; else r.l++;
     }

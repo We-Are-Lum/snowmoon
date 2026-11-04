@@ -3,7 +3,8 @@
 import { useEffect, useState } from 'react';
 import { sdk } from '@farcaster/miniapp-sdk';
 import { authFetch, useAuth, useWalletSession } from '~/lib/client-auth';
-import { CHALLENGE_WORDING as W } from '~/lib/challenge/wording';
+import { SHARE_WORDING as W } from '~/lib/challenge/share-wording';
+import { isAdmin } from '~/lib/admins';
 import { PostLinkField } from './post-link-field';
 
 /**
@@ -11,10 +12,11 @@ import { PostLinkField } from './post-link-field';
  * link. Inside the Farcaster app, composeCast; its answer carries the new cast's hash (@farcaster/miniapp-sdk 0.3.0:
  * { cast: { hash } | null }), which is added to "Posted on" when that is on. Elsewhere, plain links to each network's
  * own compose page: no script or request of theirs on our page (P6a).
- * Then, when CHALLENGE.posts is on, "Add where you posted it". `inChallenge` (a challenge character's sheet while
- * entries are open) makes the text mention the challenge.
+ * Then, when `posts` is on (CHALLENGE.posts, once the owner has opened the challenge), "Add where you posted it"; while
+ * the challenge is admin-only (owner, 2026-11-04), only admins see it, to test. `text` is the post's words, written by
+ * the server (it mentions the challenge only while the challenge is open), so no challenge words are in this script.
  */
-export function ChallengeShare({ versionId, what, posts, inChallenge = false }: { versionId: string; what: string; posts: boolean; inChallenge?: boolean }) {
+export function ChallengeShare({ versionId, text, posts }: { versionId: string; text: string; posts: boolean }) {
   const auth = useAuth();
   const wallet = useWalletSession();
   const [inApp, setInApp] = useState(false);
@@ -27,9 +29,8 @@ export function ChallengeShare({ versionId, what, posts, inChallenge = false }: 
     setOrigin(window.location.origin);
   }, []);
   const url = `${origin}/references/designs/${versionId}`;
-  // While entries are open, a challenge character's sheet mentions the challenge (owner, 2026-11-03); otherwise as before.
-  const text = inChallenge ? W.shareTextOpen(what) : W.shareText(what);
   const signedIn = auth.kind === 'signed-in' || wallet !== null;
+  const canAdd = signedIn && (posts || (auth.kind === 'signed-in' && isAdmin(auth.fid)));
 
   const add = async (payload: { url: string } | { castHash: string }) => {
     setBusy(true);
@@ -45,7 +46,7 @@ export function ChallengeShare({ versionId, what, posts, inChallenge = false }: 
 
   const cast = async () => {
     const r = await sdk.actions.composeCast({ text, embeds: [url] }).catch(() => null);
-    if (posts && signedIn && r?.cast?.hash) await add({ castHash: r.cast.hash });
+    if (canAdd && r?.cast?.hash) await add({ castHash: r.cast.hash });
   };
   const farcaster = (() => {
     const u = new URL('https://farcaster.xyz/~/compose');
@@ -79,7 +80,7 @@ export function ChallengeShare({ versionId, what, posts, inChallenge = false }: 
         </a>
       </div>
       <p className="ia-note ch-guidance">{W.guidance}</p>
-      {posts && signedIn && (
+      {canAdd && (
         <form
           className="ch-add"
           onSubmit={(e) => {
