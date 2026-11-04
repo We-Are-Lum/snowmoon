@@ -63,3 +63,38 @@ Note: this sentence describes the Bluesky check, which lives on `bluesky-check`.
 is in the same release (it merges this branch in, and ships with Bluesky sign-in on 12 November). If Bluesky sign-in
 shipped without the check, the "Before" wording would be the true one. The Bluesky check's own Privacy lines (its §7
 item, retention for 24 hours) are `bluesky-check`'s, in `docs/legal/bluesky-check-draft.md`.
+
+## The owner's answers (2026-11-04, reread pack items 3.1 to 3.5 and 6.1)
+
+"Reviewed by the coordinator, approved by the owner." Recorded in `LEGAL.ownerReread` (Terms `15utl87`, Privacy
+`iqpiw8`), since every changed line is approved as drafted or is the owner's own words:
+
+- **3.1, 3.2:** as drafted.
+- **3.3, Terms §4:** no numbers for the Bluesky rule. The owner's words: "a Bluesky account that passes the site's
+  check (Privacy, section 7)". Privacy §7 keeps the details (branch `bluesky-check`).
+- **3.4:** Privacy §4 gains check-decisions' Lens item, with the Farcaster item's own sentence: "A pass is removed
+  sooner if your account is reported or one of your pictures is hidden by a moderator."
+- **3.5 and 6.1:** one new consent version for everyone, `own-words-v5` (below). It needs the owner's reread.
+
+## Consent own-words-v5 (DRAFT, written by the coding agent, Claude by Anthropic; not reread)
+
+`config/consent.json` now has `own-words-v5` as current. Its line and title, and its first four paragraphs, are v4's.
+
+**Paragraph 5. Before (v4):**
+
+> It is shown with your name: your Farcaster name, or, for a wallet account, its address shortened.
+
+**After:**
+
+> It is shown with your name: your Farcaster name; for a wallet account, its address shortened; for a Lens account, its Lens username; for a Bluesky account, its handle.
+
+**Paragraph 6. Before (v4):**
+
+> To make an image, your prompt is sent to Groq to be checked (through Vercel AI Gateway when Groq is busy) and to fal.ai to make it, and your Farcaster ID to Neynar to check your account's score. In Remix, every frame you make is saved and public at its link as soon as it is made, with your words. Elsewhere, drafts you don’t publish stay on your device.
+
+**After** (two new sentences after the first):
+
+> To make an image, your prompt is sent to Groq to be checked (through Vercel AI Gateway when Groq is busy) and to fal.ai to make it, and your Farcaster ID to Neynar to check your account's score. With a Lens account, its address goes to Lens instead, to check its Lens score; with a Bluesky account, its identifier goes to Bluesky, to check its age and recent posts. [the closed-model sentence from remix-model-choice] In Remix, every frame you make is saved and public at its link as soon as it is made, with your words. Elsewhere, drafts you don’t publish stay on your device.
+
+**When it can ship:** only in a release that has Lens and Bluesky sign-in, the Bluesky check (`bluesky-check`) and
+model choice (`remix-model-choice`, switch on). Its closed-model sentence is true only once model choice is live.

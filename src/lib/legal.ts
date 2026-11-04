@@ -77,9 +77,10 @@ export const LEGAL: {
     // changes: the section is 6e, not 6d; no "No token" note; no Neynar score kept; and his own IPFS-record wording, which
     // 6e's sentence matches. A new section 6e "The remix challenge." and a §7 sentence on posts added to a version's
     // page. The words before were 1ge4d7a.
-    // 2026-11-04, Lens and Bluesky sign-in: §5's byline (item 8) is in, approved as drafted; §4 is reworded (Bluesky
-    // check) and waits for the owner's final OK (docs/legal/signin-final-words.md). See the privacy note below.
-    terms: { words: '15lsr9u', on: '2026-11-01', by: 'FID 6786' },
+    // 2026-11-04, Lens and Bluesky sign-in: §5's byline (item 8), approved as drafted, and §4 with the owner's own
+    // words for the Bluesky check: "a Bluesky account that passes the site's check (Privacy, section 7)" (reread pack
+    // 3.3; "reviewed by the coordinator, approved by the owner", 2026-11-04). The words before were 15lsr9u.
+    terms: { words: '15utl87', on: '2026-11-04', by: 'FID 6786' },
     // Plus one sentence the drafted list missed (Privacy §4, images): "your name (Farcaster name or wallet
     // address)", the owner's own words for tonight's publish (2026-10-18), so the page stays true for wallet accounts.
     // 2026-10-19, the owner's "Reread is done" for push 3, at these words: My picks in §4 (the owner's own sentence),
@@ -124,23 +125,13 @@ export const LEGAL: {
     // 'no longer verifies it'" (branch wallet-fid-link; docs/legal/wallet-fid-link-draft.md): §4's link reason and §7's
     // Neynar wallet sentences add the custody address (the address that owns a Farcaster account) beside a verified one.
     // The words before were 1frr16h.
-    // PENDING the owner's reread (branch check-decisions; docs/legal/check-decisions-draft.md): §7's Neynar item keeps
-    // only the decision and when (90 days a pass, a day a fail; sooner after a report or a moderator's hide, or a new
-    // threshold), and §4 adds the decision as an item. The reread above (1wgu7z) is for the words before these.
-    // 2026-11-04, Lens and Bluesky sign-in (docs/legal/signin-reread-list.md, branch signin-lens-bluesky): the owner
-    // approved items 5–12 as drafted, except Terms §4 (item 12, reworded for the Bluesky check), and chose variant B,
-    // the threshold 1,000, unlinking (a) with the 30-day sentence, and the four P4a exemptions. Approved word for word
-    // and in below: items 5, 6, 7 (without its new last sentence), 8, 9's first part, 10 and 11. NOT YET RECORDED:
-    // three lines are new words that need his final
-    // OK (docs/legal/signin-final-words.md): Privacy §7's Lens line (looked up at Generate; only the decision kept),
-    // Privacy §4's 30-day sentence, and Terms §4 (reworded for the Bluesky check). Until he OKs them, both records stay
-    // at the words below, and P6k and P6l fail on this branch, as they should.
-    // §7's Lens line uses check-decisions' wording for what is kept (merged 2026-11-04), so the privacy words also hold
-    // check-decisions' pending Neynar lines. When he OKs both (signin-final-words.md and check-decisions-draft.md) as
-    // written: new privacy and terms words, recomputed from what he rereads (the old 'qdj3pt' and 'f2hfa7' are
-    // stale since main's 1wgu7z), on the day he says so, by 'FID 6786'; and
-    // LEGAL.effective becomes the merge day.
-    privacy: { words: '1wgu7z', on: '2026-11-04', by: 'FID 6786' },
+    // 2026-11-04, the reread pack ("reviewed by the coordinator, approved by the owner"): check-decisions (item 2, as
+    // drafted: §7's Neynar item keeps only the decision and when; §4 adds the decision as an item) and Lens and Bluesky
+    // sign-in (item 3: §7's Lens line and §4's 30-day sentence as drafted; §4's Lens check item from check-decisions,
+    // with the Farcaster item's own sentence "A pass is removed sooner if your account is reported or one of your
+    // pictures is hidden by a moderator.", 3.4). The earlier sign-in items 5–11 were approved as drafted
+    // (docs/legal/signin-reread-list.md). The words before were 1wgu7z. LEGAL.effective becomes the merge day.
+    privacy: { words: 'iqpiw8', on: '2026-11-04', by: 'FID 6786' },
   },
 };
 
@@ -150,7 +141,7 @@ export const TERMS: LegalDoc = {
     { n: 1, head: 'Who runs this.', body: ['Snowmoon Party (snowmoon.party, its Farcaster mini app and its game in Farcaster casts, together "the Service") is operated by Lum LLC, a Wyoming limited liability company ("we"). By using the Service you agree to these Terms.'] },
     { n: 2, head: 'What this is.', body: ['An independent, open edition of the novel Snowmoon by Vitalik Buterin, with read-aloud audio, pictures, a game reconstruction and a reading assistant. It is not affiliated with or endorsed by the author. You can prepay for generations. Payments are final. Nothing else here is for sale.'] },
     { n: 3, head: 'The book and the licence.', body: ['Snowmoon is the author\'s work, released under the GNU General Public License version 3. The text, pictures, audio and code on the Service are offered under that same licence, and the source and the full record of how each piece was made are public in our repository. Nothing in these Terms limits the rights the licence gives you.'] },
-    { n: 4, head: 'Who can use it.', body: ['Anyone can read and listen without an account. To sign in you must be at least 18 years old. Your account here is a Farcaster account, a wallet address, a Lens account or a Bluesky account. You can link a wallet, a Lens account or a Bluesky account to your Farcaster account, and a Bluesky account to your Lens account; while it is linked, signing in with it is signing in as that account. Free daily images and frames come with a Farcaster account, with a Lens account whose Lens score is at least the one the Service shows, and with a Bluesky account that passes the site\'s check (made before 6 November 2026, with at least 5 posts in the last 30 days); a Bluesky account that doesn\'t pass gets them only while it is linked to a Farcaster or Lens account. To prepay for generations, sign in with a wallet (section 6a).'] },
+    { n: 4, head: 'Who can use it.', body: ['Anyone can read and listen without an account. To sign in you must be at least 18 years old. Your account here is a Farcaster account, a wallet address, a Lens account or a Bluesky account. You can link a wallet, a Lens account or a Bluesky account to your Farcaster account, and a Bluesky account to your Lens account; while it is linked, signing in with it is signing in as that account. Free daily images and frames come with a Farcaster account, with a Lens account whose Lens score is at least the one the Service shows, and with a Bluesky account that passes the site\'s check (Privacy, section 7); a Bluesky account that doesn\'t pass gets them only while it is linked to a Farcaster or Lens account. To prepay for generations, sign in with a wallet (section 6a).'] },
     { n: 5, head: 'What you add.', body: ['If you publish something through the Service, or make a frame in Remix (which is saved, and can be seen by anyone with its link, as soon as it is made), it remains yours, and you license it to everyone under GPL version 3. You confirm it is your own work, or that you have the right to license it this way. Your name is shown with it: your Farcaster name; for a wallet account, its address shortened; for a Lens account, its Lens username; for a Bluesky account, its handle. Work made with a wallet that is linked to your Farcaster account is shown with your Farcaster name. Where the Service says so before you publish, the prompts and any planning thread that led to the piece are published with it. Published work is public and others may copy it under the licence. We can hide it on request (see section 7), but we cannot recall copies others have made.'] },
     { n: 6, head: 'What you must not do.', body: ['Don\'t post anything unlawful, harassing or sexual involving minors; don\'t post other people\'s private information; don\'t impersonate anyone or present your work as the author\'s or as official; don\'t try to get around sign-in, daily limits or spending caps; don\'t interfere with the Service.'] },
     { n: '6a', head: 'Prepaid generations.', body: ['You can pay in USDC or ETH on Base to the address the Service shows. Each generation is charged to your balance at the price shown when you start it. If a generation doesn\'t give you a picture (a check or the image model didn\'t answer, the rules refused the prompt, or the safety checker dropped the picture), that charge is added back to your balance. Payments are final: what you pay is never refunded or paid out as money, and your balance can only be spent on generations here. A payment made through the Service is added to your balance once it has 3 confirmations, while the page is open or the next time you open your wallet on that device. You can also add a payment from your wallet by its transaction, on the wallet panel. Either way, this works within 7 days of the payment; after that, write to us and we\'ll add it.'] },
@@ -196,7 +187,7 @@ export const PRIVACY: LegalDoc = {
           'The styles and character sheets you choose to use in your pictures ("My picks"), kept until you clear them and seen only by you. An image you publish shows the ones it used, in its recipe.',
           'How many images and Remix frames you make each day, to count the daily limits, and the reports you make.',
           'Whether your Farcaster account passed the check for making images (its Neynar score against the score needed), when that was decided, and the score needed then; never the score itself. A pass is kept for 90 days and a fail for a day. A pass is removed sooner if your account is reported or one of your pictures is hidden by a moderator.',
-          'Whether your Lens account passed the check for making images (its Lens score against the score needed), when that was decided, and the score needed then; never the score itself. A pass is kept for 90 days and a fail for a day.',
+          'Whether your Lens account passed the check for making images (its Lens score against the score needed), when that was decided, and the score needed then; never the score itself. A pass is kept for 90 days and a fail for a day. A pass is removed sooner if your account is reported or one of your pictures is hidden by a moderator.',
           'If you use an agent here (for now, only people the site has invited): the edits it drafts for your own scene versions (a new frame, another voice take, a shot\'s timing, who speaks in a shot, a video test), each with the note it was drafted from. A frame or video test you approve is kept with what it cost, the model and the pictures sent, privately and only for you. When your agent can\'t do something you asked, it may record what you asked and what was missing. That record is shown to you on your You page, and to the site\'s owner, who reads them, with your name, to decide what to build next. It is never published.',
           'If you make an agent key: its name, the spend cap you set, when it was made, when it ends (30 days later) and when it was last used. The key itself is shown to you once and kept only in coded form, so we can\'t show it again; it isn\'t written to our logs.',
           'The Farcaster usernames we have seen for your ID, so a link with an old name still finds your pages after you rename.',
