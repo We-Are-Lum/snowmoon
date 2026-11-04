@@ -55,7 +55,8 @@
       },
       "mismatch": "The file used here (uploaded by the owner, 2576 x 1438, sha256 b955b192ae0d6b7474bef82fb795996146c75fe3f205c61db7fd8e6375421e4f) is not the card's saved copy (1206 x 674, sha256 0b394efb\u2026c9c86), though the card says nothing was paid or upscaled. It is used because it is what we have; the crop boxes are on it. The owner is asked whether it is an upscale or another export.",
       "later_uses_context_only": "The card lists later uses (as --sref for Deluin sheets E1, F1, F2 and six PFP samples S1\u2013S6); not part of this job."
-    }
+    },
+    "file_used": "an enlarged copy of unknown origin: the card's own file (FAV_bai_zei_flatcel.jpg, 1206 x 674, sha256 0b394efb30fefcd0f02b84ac127fa6ba07b657bbd203818ddf4d0239f7bc9c86) was searched for on 2026-11-04 (Spotlight, ~/Downloads, ~/Pictures, ~/Desktop, ~/Documents, ~/snowmoon*, the owner's Drive) and not found, so the owner's upload (2576 x 1438) is used; the crop boxes are on it"
   },
   "styles": {
     "Animated series": "Animated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands.",

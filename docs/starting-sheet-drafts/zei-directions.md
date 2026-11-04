@@ -42,6 +42,8 @@ every call on the worst case (worst reached $0.9680). Nothing was left out.
   `0b394efb30fefcd0f02b84ac127fa6ba07b657bbd203818ddf4d0239f7bc9c86`. The file the owner uploaded here, used for the crops,
   is 2576 × 1438, sha256 `b955b192ae0d6b7474bef82fb795996146c75fe3f205c61db7fd8e6375421e4f`. It is not the saved copy,
   though the card says "Nothing paid or upscaled". **Question for the owner: is it an upscale, or another export?**
+  The card's own file was searched for on disk and in Drive (2026-11-04) and not found, so the upload is used and
+  recorded as **an enlarged copy of unknown origin**.
 - The card's later uses (as a style reference for Deluin's sheets and six profile-picture samples) are not part of this
   job; noted as context only.
 
