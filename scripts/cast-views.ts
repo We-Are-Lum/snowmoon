@@ -28,7 +28,7 @@ import { CLOSED_IMAGE_MODELS, closedImage, retentionRefusal, type ClosedImageMod
 const ROOT = path.resolve(import.meta.dirname, '..');
 const DIR = path.join(ROOT, 'docs/starting-sheet-drafts/directions');
 const LEDGER = path.join(DIR, 'ledger.json');
-const CAP = 1.75; // raised to $1.75 by the owner, 2026-11-04 (was $1)
+const CAP = 2.3; // raised to $1.75 by the owner, 2026-11-04 (was $1); +$0.55 for Seila's, Deluin's and Mu's views (owner, 2026-11-04)
 const GUARD_WORST = 0.0015;
 const DRY = process.argv.includes('--dry');
 const sha = (b: Buffer) => createHash('sha256').update(b).digest('hex');
@@ -50,7 +50,10 @@ const BASES: { char: string; front: string }[] = [
 type Row = Record<string, unknown> & { costUsd: number; worstUsd: number };
 const ledger = JSON.parse(readFileSync(LEDGER, 'utf8')) as { calls: Row[] } & Record<string, unknown>;
 const save = () => writeFileSync(LEDGER, JSON.stringify(ledger, null, 1));
-const spent = () => ledger.calls.reduce((n, c) => n + c.costUsd, 0);
+// The recast tests (scripts/recast-fronts.ts) have their own $0.30 cap and don't count here.
+const spent = () => ledger.calls.filter((c) => c.recast !== true).reduce((n, c) => n + c.costUsd, 0);
+/** Held until the owner picks Deluin's recast (owner, 2026-11-04). */
+const HELD = new Set(['deluin']);
 const gate = (what: string, worst: number) => {
   const after = spent() + worst;
   if (after > CAP + 1e-9) {
@@ -70,6 +73,7 @@ if (!DRY) for (const r of await Promise.all((['gpt-image-2.5-sunburst', 'gemini-
 console.log(`spent so far $${spent().toFixed(5)}; cap $${CAP}`);
 
 for (const b of BASES) {
+  if (HELD.has(b.char)) { console.log('held', b.char); continue; }
   const frontRow = ledger.calls.find((c) => c.kind === 'image' && c.file === b.front) as (Row & { model: ClosedImageModel; sha256: string; recipe: { prompt: string; style: { title: string } } }) | undefined;
   if (!frontRow) throw new Error(`no recipe for ${b.front}`);
   const frontBytes = readFileSync(path.join(DIR, '..', b.front));

@@ -16,7 +16,11 @@ Grounded and Bold are dropped (owner, 2026-11-04) and are not on this sheet.
 the $1.75 cap** (raised by the owner, 2026-11-04). Each call was gated first: spent so far plus its worst case ($0.08
 for GPT, $0.09 for Gemini, $0.0015 for a check) within $1.75.
 
-**6 of 12 made.** Seila, Deluin and Mu have no views yet: the cap has $0.02643 left, under one Gemini view's worst case.
+**10 of 12 made** (2026-11-04, after the gateway top-up; cap raised by $0.55 to $2.30): Seila's and Mu's views, 4
+pictures and 4 prompt checks, $0.27121. **Total $1.99478 of $2.30.** Each view's skin matches its front and its sheet's
+words (Seila deep brown, Mu medium brown). Deluin's two views are held until you pick his recast; Gladias's two views
+above are of his current look and are made again after his pick (`recast-contact-sheet.md`). The recast tests have
+their own $0.30 cap and are not counted here.
 The seventh call (Seila's side prompt check) also got a 402 from the gateway (payment required), so it made nothing and
 cost nothing. Still needed for the last six Gemini views: about $0.41 at today's prices, $0.549 at the worst case.
 
@@ -96,11 +100,15 @@ Gemini 3.1 Flash Image · a closed model by Google · $0.0671
 
 ### Seila · side
 
-Not made yet: over the cap.
+<img src="directions/seila-animated-side-gemini.jpg" width="320" alt="Seila, side, AI-generated draft">
+
+Gemini 3.1 Flash Image · a closed model by Google · $0.0677
 
 ### Seila · back
 
-Not made yet: over the cap.
+<img src="directions/seila-animated-back-gemini.jpg" width="320" alt="Seila, back, AI-generated draft">
+
+Gemini 3.1 Flash Image · a closed model by Google · $0.0677
 
 ## Deluin
 
@@ -112,11 +120,11 @@ Gemini 3.1 Flash Image · a closed model by Google · $0.0671
 
 ### Deluin · side
 
-Not made yet: over the cap.
+Held until you pick Deluin's recast (owner, 2026-11-04; recast-contact-sheet.md).
 
 ### Deluin · back
 
-Not made yet: over the cap.
+Held until you pick Deluin's recast (owner, 2026-11-04; recast-contact-sheet.md).
 
 ## Mu
 
@@ -128,8 +136,12 @@ Gemini 3.1 Flash Image · a closed model by Google · $0.0671
 
 ### Mu · side
 
-Not made yet: over the cap.
+<img src="directions/mu-animated-side-gemini.jpg" width="320" alt="Mu, side, AI-generated draft">
+
+Gemini 3.1 Flash Image · a closed model by Google · $0.0677
 
 ### Mu · back
 
-Not made yet: over the cap.
+<img src="directions/mu-animated-back-gemini.jpg" width="320" alt="Mu, back, AI-generated draft">
+
+Gemini 3.1 Flash Image · a closed model by Google · $0.0677
