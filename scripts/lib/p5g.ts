@@ -11,7 +11,7 @@
  * only CHALLENGE.baseStyles. Entries and every other list stay newest first.
  */
 export const CHALLENGE_FILES = /^src\/lib\/challenge\/|^src\/app\/challenge\/|^src\/app\/api\/challenge\/|^src\/components\/(challenge-[a-z-]+|posted-on|post-link-field)\.tsx$/;
-const NOT_AN_ORDER = /\b(likes?|like_?count|likeCount|built_?on|builtOn|score|repost|recast|repl(y|ies)|followers?|cost|amount|usd|payment|paid|sponsor|donation)\b/i;
+export const NOT_AN_ORDER = /\b(likes?|like_?count|likeCount|built_?on|builtOn|score|repost|recast|repl(y|ies)|followers?|cost|amount|usd|payment|paid|sponsor|donation)\b/i;
 const BASES_FILE = 'src/lib/challenge/entries.ts';
 const RULES_FILE = 'src/lib/challenge/rules.ts';
 

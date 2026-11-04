@@ -3,6 +3,7 @@ import { revalidatePath } from 'next/cache';
 import { getFid } from '~/lib/auth';
 import { db } from '~/lib/db';
 import { markEntry } from '~/lib/challenge/entries';
+import { challengeVisibleTo } from '~/lib/challenge/visibility';
 
 /**
  * "Mark as my entry" (the remix challenge, owner 2026-10-31): a signed-in person marks one of their own versions made
@@ -11,6 +12,7 @@ import { markEntry } from '~/lib/challenge/entries';
  */
 export async function POST(request: Request) {
   const fid = await getFid(request);
+  if (!challengeVisibleTo(fid)) return NextResponse.json({ error: 'Not found' }, { status: 404 });
   if (fid === null) return NextResponse.json({ error: 'Sign in with Farcaster to mark your entry' }, { status: 401 });
   const sql = db();
   if (!sql) return NextResponse.json({ error: 'Not set up on this deployment' }, { status: 503 });
