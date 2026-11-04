@@ -23,8 +23,8 @@ Plan file: [`styles-plan.json`](styles-plan.json). Every number below comes from
   model if the test showed it can paint, else Mood. **The test says it can't, so B is Mood, Printed, Miniature.**
 - **Closed styles are gated like bases:** `closedStyleRefusal` (src/lib/challenge/bases.ts), called by the seed script
   before it publishes a style.
-- **Still open: Neon night.** It can't be made by OpenAI under the ZDR rule. Owner to choose: Gemini (Google), the open
-  model, or drop it.
+- **Neon night is made by Gemini (Google)** (owner, 2026-11-04), so only Google is named. Its four samples are drafts:
+  [neon-night-samples.md](neon-night-samples.md), **$0.26850 spent** (cap $0.35).
 - No further spending until the owner OKs the samples and the bases.
 
 ## What the drafts show first
@@ -42,7 +42,7 @@ need new styles with stronger texts, and a small style test first to see whether
 
 ## The group: eight styles to choose from
 
-Five exist; three are new. Two of the new ones are made with closed models and labelled so. `core` ("warm light") stays
+Five exist; three are new. Two of the new ones (Gouache, Neon night) are made with a closed model by Google and labelled so. `core` ("warm light") stays
 published on the site but is left out of the group: it is Bolder with warm light, and in the drafts it turned Deluin's
 tunic yellow.
 
@@ -55,7 +55,7 @@ tunic yellow.
 | 5 | **Quiet** | muted, empty space | Z-Image Turbo, open weights | 4, [published](https://pictures.snowmoon.party/images/readers/794beb09bbdb5eedcde517084f7a7e31.jpg). Front: [Zei](bases/zei-front-quiet-edit.jpg), [Bai](bases/bai-front-quiet-edit.jpg) | Muted tones and plain backgrounds, the focus on faces and posture. (Its Zei draft lost the jacket's front.) |
 | 6 | **Miniature** (new) | a photographed 3D model | Z-Image Turbo, open weights | 4 to make; test front: [Zei](styles-test/zei-front-miniature-open.jpg) | The only 3D, photographic look: a painted figurine under studio light. |
 | 7 | **Gouache** (new) | painted, no outlines | **Gemini 3.1 Flash Image, a closed model by Google** | 4 to make; test front: [Zei](styles-test/zei-front-gouache-gemini.jpg) (and [by the open model](styles-test/zei-front-gouache-open.jpg), which doesn't paint) | The only one with no ink outlines: opaque paint and paper grain. |
-| 8 | **Neon night** (new) | night light, glow, reflections | **GPT Image 2.5 Sunburst, a closed model by OpenAI** (blocked: no ZDR endpoint; maker to be decided) | 4 to make | The only night palette: lit by glowing panels, wet reflections, rim light. |
+| 8 | **Neon night** (new) | night light, glow, reflections | **Gemini 3.1 Flash Image, a closed model by Google** (owner, 2026-11-04) | 4 made as drafts: [neon-night-samples.md](neon-night-samples.md) | The only night palette: lit by glowing panels, wet reflections, rim light. |
 
 The new texts, each under the site's 600 characters, naming no artist, studio or film:
 
@@ -113,9 +113,10 @@ $0.005 a Z-Image picture, $0.09 Gemini, $0.08 GPT, $0.0015 a prompt check (two p
 |---|---|---|
 | One style sample, Miniature (Z-Image Turbo) | $0.0031 | $0.0080 |
 | One style sample, Gouache (Gemini, closed, Google) | $0.0678 | $0.0930 |
-| One style sample, Neon night (GPT, closed, OpenAI) | $0.0468 | $0.0830 |
-| **Style test:** 5 Zei fronts (Miniature open; Gouache on Gemini, GPT and open; Neon night on GPT), drafts only | **$0.1825** | **$0.3050** |
-| **Style samples:** 12 (4 for each new style) | **$0.4711** | **$0.7360** |
+| One style sample, Neon night (Gemini, closed, Google; measured 2026-11-03) | $0.0671 | $0.0765 |
+| **Style test** (done: 3 fronts; the 2 GPT rows refused) | **$0.08879 spent** | cap $0.35 |
+| **Neon night's 4 samples** (done, drafts) | **$0.26850 spent** | cap $0.35 |
+| **Style samples still to make:** 8 (Miniature 4, Gouache 4) | **$0.2837** | **$0.4040** |
 | One base, open (3 views, FLUX.2 [klein] edit) | $0.0285 | $0.0690 |
 | One base, Gouache (3 views, Gemini, closed, Google) | $0.2035 | $0.2790 |
 | **Plan A, 18 bases** (6 Gouache, 6 Printed, 6 Miniature) | $1.5628 | |
@@ -179,8 +180,8 @@ yet: whether the same reading covers the Gouache style's **samples** (the same k
 
 1. **Styles:** keep the group of eight as listed, or drop or rename any; OK or rewrite the three new texts.
 2. **Bases:** plan A's three (Gouache, Printed, Miniature) and plan B's (Mood, Printed, Miniature), or others.
-3. ~~The style test~~: done ($0.08879, styles-test.md). Next: **"OK to spend up to $0.41 on the Miniature and Gouache
-   samples"** (worst; estimate $0.28), plus up to $0.37 if Neon night is made by Gemini, and **Neon night's maker** (Gemini, the open model, or drop it).
+3. ~~The style test~~ and ~~Neon night's samples~~: done ($0.08879 and $0.26850). Next: **"OK to spend up to $0.41 on
+   the Miniature and Gouache samples"** (worst; estimate $0.28).
 4. **Bases spend, separately** (the brief allows spending on the styles only): "OK to spend up to $3.76 on plan A's
    bases" or "up to $1.87 on plan B's".
 5. **The reread** of the closed-model-bases Privacy, Terms and About lines, with "styles" added, by Thu 5 Nov; and

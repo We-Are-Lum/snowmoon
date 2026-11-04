@@ -49,11 +49,29 @@ export async function retentionRefusal(model: ClosedImageModel, f: Fetch = fetch
   return null;
 }
 
-/** The request for a front made from one reference picture. Pure: nothing is sent. */
-export function closedImageRequest(model: ClosedImageModel, prompt: string, ref: { bytes: Buffer; contentType: string }) {
+/**
+ * Worst case for a Gemini picture made from text alone (a style sample): the gateway's list price, $0.067 per 1K image,
+ * plus its input tokens at $0.50 per million (a 600-character prompt is a few hundred) and a margin: $0.075. With a
+ * reference picture the reserve stays CLOSED_IMAGE_MODELS' $0.09.
+ */
+export const GEMINI_TEXT_WORST_USD = 0.075;
+
+/**
+ * The request for one picture: from a reference picture (a sheet's front) or, with `ref` null, from text alone (a style
+ * sample, `aspect` e.g. '16:9'; Gemini only). Pure: nothing is sent.
+ */
+export function closedImageRequest(model: ClosedImageModel, prompt: string, ref: { bytes: Buffer; contentType: string } | null, aspect = '3:4') {
   const m = CLOSED_IMAGE_MODELS[model];
-  const dataUrl = `data:${ref.contentType};base64,${ref.bytes.toString('base64')}`;
   const gateway = gatewayOptions(model);
+  if (!ref) {
+    if (model !== 'gemini-3.1-flash-image') throw new Error(`${model}: text-only pictures are made with Gemini only here`);
+    const settings = { modalities: ['text', 'image'], aspect_ratio: aspect };
+    const body = { model: m.slug, modalities: settings.modalities, messages: [{ role: 'user', content: [{ type: 'text', text: prompt }] }],
+      providerOptions: { gateway, google: { imageConfig: { aspectRatio: aspect } } } };
+    assertGatewayOptions(model, body);
+    return { url: `${GATEWAY}/chat/completions`, body, settings: { ...settings, gateway } };
+  }
+  const dataUrl = `data:${ref.contentType};base64,${ref.bytes.toString('base64')}`;
   if (model === 'gpt-image-2.5-sunburst') {
     const settings = { size: '1024x1536', quality: 'high', n: 1, output_format: 'png' };
     const body = { model: m.slug, prompt, images: [{ image_url: dataUrl }], ...settings, providerOptions: { gateway } };
@@ -73,14 +91,14 @@ export function closedImageRequest(model: ClosedImageModel, prompt: string, ref:
 export interface ClosedMade { bytes: Buffer; contentType: string; requestId: string | null; costUsd: number; settings: Record<string, unknown>; meta: Record<string, unknown> }
 
 /** Makes one picture. Refuses (throws, nothing sent) unless the pinned provider offers ZDR and no training. */
-export async function closedImage(model: ClosedImageModel, prompt: string, ref: { bytes: Buffer; contentType: string }, opts: { key?: string; fetch?: Fetch } = {}): Promise<ClosedMade> {
+export async function closedImage(model: ClosedImageModel, prompt: string, ref: { bytes: Buffer; contentType: string } | null, opts: { key?: string; fetch?: Fetch; aspect?: string } = {}): Promise<ClosedMade> {
   const f = opts.fetch ?? fetch;
   const key = opts.key ?? process.env.AI_GATEWAY_API_KEY;
   if (!key) throw new Error('no AI_GATEWAY_API_KEY');
   const why = await retentionRefusal(model, f);
   if (why) throw new Error(why);
   const m = CLOSED_IMAGE_MODELS[model];
-  const req = closedImageRequest(model, prompt, ref);
+  const req = closedImageRequest(model, prompt, ref, opts.aspect);
   const res = await f(req.url, { method: 'POST', headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' }, body: JSON.stringify(req.body) });
   const body = (await res.json().catch(() => ({}))) as any;
   if (model === 'gpt-image-2.5-sunburst') {

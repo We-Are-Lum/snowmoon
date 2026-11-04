@@ -41,8 +41,8 @@ call must set zero data retention (owner, 2026-11-04), and the gateway's own end
 shows `openai/gpt-image-2.5-sunburst` served only by OpenAI with `has_zdr: false`. The shared batch path
 (`scripts/lib/batch-model.ts`) refuses such a call and sends nothing; cost $0.
 
-So **Neon night can't be made by OpenAI under the ZDR rule.** Options for the owner: make Neon night with Gemini 3.1 Flash
-Image (Google, Vertex, ZDR; about $0.068 for its test front), with the open model, or drop it.
+So **Neon night can't be made by OpenAI under the ZDR rule.** The owner chose Gemini (2026-11-04): its four samples are
+in [neon-night-samples.md](neon-night-samples.md).
 
 ## What the test shows
 

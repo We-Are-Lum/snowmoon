@@ -61,11 +61,11 @@
     },
     {
       "name": "Neon night",
-      "status": "blocked: OpenAI has no ZDR",
+      "status": "4 drafts made (Google)",
       "kind": "night light, glow and reflections",
-      "model": "gpt-image-2.5-sunburst",
+      "model": "gemini-3.1-flash-image",
       "samples": 4,
-      "samples_made": false,
+      "samples_made": true,
       "text": "Painted digital illustration at night: deep blue and violet shadows, light from glowing coloured panels in cyan and magenta, glossy wet reflections, strong rim light on figures, high contrast, crisp edges on figures and a soft glow around lights, clear readable faces and hands."
     }
   ],
@@ -92,8 +92,8 @@
     },
     {
       "style": "Neon night",
-      "model": "gpt-image-2.5-sunburst",
-      "what": "Zei front from the original sheet"
+      "model": "gemini-3.1-flash-image",
+      "what": "not made: replaced by the four samples (neon-night-samples.md)"
     }
   ],
   "plans": {

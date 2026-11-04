@@ -1,0 +1,717 @@
+{
+ "cap_usd": 0.35,
+ "calls": [
+  {
+   "style": "Neon night",
+   "slot": "sample",
+   "n": 1,
+   "kind": "prompt-check",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 0.0000939,
+   "worstUsd": 0.0015,
+   "at": "2026-11-04T01:48:14.703Z"
+  },
+  {
+   "style": "Neon night",
+   "slot": "sample",
+   "n": 1,
+   "kind": "image",
+   "file": "neon-night/neon-night-sample-1.jpg",
+   "sha256": "5205f655f3472322e27b45693138c3a3da73d6e98435e7877c542166ad03a697",
+   "closed_model": true,
+   "maker": "Google",
+   "costUsd": 0.067041,
+   "worstUsd": 0.075,
+   "recipe": {
+    "prompt": "A wide street with tall trees and low buildings, a few people walking, daytime.\n\nPainted digital illustration at night: deep blue and violet shadows, light from glowing coloured panels in cyan and magenta, glossy wet reflections, strong rim light on figures, high contrast, crisp edges on figures and a soft glow around lights, clear readable faces and hands.\n\nNo text, no lettering, no signs with words.",
+    "model": "gemini-3.1-flash-image",
+    "endpoint": "google/gemini-3.1-flash-image",
+    "host": "Vercel AI Gateway",
+    "settings": {
+     "modalities": [
+      "text",
+      "image"
+     ],
+     "aspect_ratio": "16:9",
+     "gateway": {
+      "only": [
+       "vertex"
+      ],
+      "zeroDataRetention": true,
+      "disallowPromptTraining": true
+     },
+     "converted": {
+      "from": "image/png",
+      "sha256": "11202ceee1aff44679b1b324835a5fb0f2a0afc88e4f2d94b84fb174f24c9830",
+      "to": "jpeg",
+      "resized_to": {
+       "width": 1024,
+       "height": 576
+      },
+      "fit": "contain, padded with the picture's own corner colour"
+     }
+    },
+    "seed": null,
+    "request_id": "gen_01M6J3W5T83FPSW2JAJQ1TFG4B",
+    "cost_usd": 0.067,
+    "made_at": "2026-11-04T01:48:14.704Z",
+    "width": 1024,
+    "height": 576,
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "not run"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line",
+      "style text"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    }
+   },
+   "response_meta": {
+    "id": "gen_01M6J3W5T83FPSW2JAJQ1TFG4B",
+    "model": "google/gemini-3.1-flash-image",
+    "usage": {
+     "prompt_tokens": 82,
+     "completion_tokens": 1120,
+     "total_tokens": 1202,
+     "cost": 0.067041,
+     "is_byok": false,
+     "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0
+     },
+     "cost_details": {
+      "upstream_inference_cost": null,
+      "upstream_inference_prompt_cost": 0,
+      "upstream_inference_completions_cost": 0
+     },
+     "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "image_tokens": 0
+     },
+     "cache_creation_input_tokens": 0,
+     "market_cost": 0.067041,
+     "gateway_cost": 0.067041
+    },
+    "provider_metadata": {
+     "vertex": {
+      "promptFeedback": null,
+      "groundingMetadata": null,
+      "urlContextMetadata": null,
+      "safetyRatings": null,
+      "usageMetadata": {
+       "promptTokenCount": 82,
+       "candidatesTokenCount": 1120,
+       "totalTokenCount": 1202,
+       "trafficType": "ON_DEMAND",
+       "promptTokensDetails": [
+        {
+         "modality": "TEXT",
+         "tokenCount": 82
+        }
+       ],
+       "candidatesTokensDetails": [
+        {
+         "modality": "IMAGE",
+         "tokenCount": 1120
+        }
+       ]
+      },
+      "finishMessage": null,
+      "serviceTier": null
+     },
+     "gateway": {
+      "routing": {
+       "originalModelId": "google/gemini-3.1-flash-image",
+       "resolvedProvider": "vertex",
+       "fallbacksAvailable": [],
+       "planningReasoning": "Provider set restricted to: vertex. System credentials planned for: vertex. ZDR requested: all 1 attempts support ZDR. Execution order: vertex(system). Disallow prompt training requested: all 1 attempts disallow prompt training",
+       "canonicalSlug": "google/gemini-3.1-flash-image",
+       "finalProvider": "vertex",
+       "modelAttemptCount": 1,
+       "modelAttempts": [
+        {
+         "canonicalSlug": "google/gemini-3.1-flash-image",
+         "success": true,
+         "providerAttemptCount": 1,
+         "providerAttempts": [
+          {
+           "provider": "vertex",
+           "credentialType": "system",
+           "success": true,
+           "startTime": 1793756895073,
+           "endTime": 1793756903673,
+           "statusCode": 200,
+           "providerResponseId": "347qarT5DICRyOgPkaKy0QM"
+          }
+         ]
+        }
+       ],
+       "totalProviderAttemptCount": 1,
+       "affinity": {
+        "outcome": "skipped_below_min_prefix"
+       },
+       "clientSessionId": "08eccdb6b51d917190166a88de7947a7",
+       "clientSessionIdSource": "fingerprint"
+      },
+      "cost": "0.067041",
+      "marketCost": "0.067041",
+      "surchargeCost": "0",
+      "gatewayCost": "0.067041",
+      "inferenceCost": "0.067041",
+      "inputInferenceCost": "0.000041",
+      "outputInferenceCost": "0.067",
+      "enabledZeroDataRetention": true,
+      "enabledDisallowPromptTraining": true,
+      "generationId": "gen_01M6J3W5T83FPSW2JAJQ1TFG4B"
+     }
+    }
+   },
+   "at": "2026-11-04T01:48:14.704Z"
+  },
+  {
+   "style": "Neon night",
+   "slot": "sample",
+   "n": 2,
+   "kind": "prompt-check",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 0.000084375,
+   "worstUsd": 0.0015,
+   "at": "2026-11-04T01:48:26.844Z"
+  },
+  {
+   "style": "Neon night",
+   "slot": "sample",
+   "n": 2,
+   "kind": "image",
+   "file": "neon-night/neon-night-sample-2.jpg",
+   "sha256": "4eb3d2ca5184a85e4bdba0cfb7b1e7604aed2a296dfab62924e42004ae2e1ced",
+   "closed_model": true,
+   "maker": "Google",
+   "costUsd": 0.0670415,
+   "worstUsd": 0.075,
+   "recipe": {
+    "prompt": "A small room with a desk, a window and a plant, seen from the doorway.\n\nPainted digital illustration at night: deep blue and violet shadows, light from glowing coloured panels in cyan and magenta, glossy wet reflections, strong rim light on figures, high contrast, crisp edges on figures and a soft glow around lights, clear readable faces and hands.\n\nNo text, no lettering, no signs with words.",
+    "model": "gemini-3.1-flash-image",
+    "endpoint": "google/gemini-3.1-flash-image",
+    "host": "Vercel AI Gateway",
+    "settings": {
+     "modalities": [
+      "text",
+      "image"
+     ],
+     "aspect_ratio": "16:9",
+     "gateway": {
+      "only": [
+       "vertex"
+      ],
+      "zeroDataRetention": true,
+      "disallowPromptTraining": true
+     },
+     "converted": {
+      "from": "image/png",
+      "sha256": "782ccb5fa4661c62515a37484387d1a806b7fcbe80f56873ea01797d652a1b22",
+      "to": "jpeg",
+      "resized_to": {
+       "width": 1024,
+       "height": 576
+      },
+      "fit": "contain, padded with the picture's own corner colour"
+     }
+    },
+    "seed": null,
+    "request_id": "gen_01M6J3WHPQ3VYSQ1GBPMRA93GD",
+    "cost_usd": 0.067,
+    "made_at": "2026-11-04T01:48:26.845Z",
+    "width": 1024,
+    "height": 576,
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "not run"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line",
+      "style text"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    }
+   },
+   "response_meta": {
+    "id": "gen_01M6J3WHPQ3VYSQ1GBPMRA93GD",
+    "model": "google/gemini-3.1-flash-image",
+    "usage": {
+     "prompt_tokens": 83,
+     "completion_tokens": 1120,
+     "total_tokens": 1203,
+     "cost": 0.0670415,
+     "is_byok": false,
+     "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0
+     },
+     "cost_details": {
+      "upstream_inference_cost": null,
+      "upstream_inference_prompt_cost": 0,
+      "upstream_inference_completions_cost": 0
+     },
+     "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "image_tokens": 0
+     },
+     "cache_creation_input_tokens": 0,
+     "market_cost": 0.0670415,
+     "gateway_cost": 0.0670415
+    },
+    "provider_metadata": {
+     "vertex": {
+      "promptFeedback": null,
+      "groundingMetadata": null,
+      "urlContextMetadata": null,
+      "safetyRatings": null,
+      "usageMetadata": {
+       "promptTokenCount": 83,
+       "candidatesTokenCount": 1120,
+       "totalTokenCount": 1203,
+       "trafficType": "ON_DEMAND",
+       "promptTokensDetails": [
+        {
+         "modality": "TEXT",
+         "tokenCount": 83
+        }
+       ],
+       "candidatesTokensDetails": [
+        {
+         "modality": "IMAGE",
+         "tokenCount": 1120
+        }
+       ]
+      },
+      "finishMessage": null,
+      "serviceTier": null
+     },
+     "gateway": {
+      "routing": {
+       "originalModelId": "google/gemini-3.1-flash-image",
+       "resolvedProvider": "vertex",
+       "fallbacksAvailable": [],
+       "planningReasoning": "Provider set restricted to: vertex. System credentials planned for: vertex. ZDR requested: all 1 attempts support ZDR. Execution order: vertex(system). Disallow prompt training requested: all 1 attempts disallow prompt training",
+       "canonicalSlug": "google/gemini-3.1-flash-image",
+       "finalProvider": "vertex",
+       "modelAttemptCount": 1,
+       "modelAttempts": [
+        {
+         "canonicalSlug": "google/gemini-3.1-flash-image",
+         "success": true,
+         "providerAttemptCount": 1,
+         "providerAttempts": [
+          {
+           "provider": "vertex",
+           "credentialType": "system",
+           "success": true,
+           "startTime": 1793756907259,
+           "endTime": 1793756915167,
+           "statusCode": 200,
+           "providerResponseId": "647qaqeTGJHS0vcPkNrGiAI"
+          }
+         ]
+        }
+       ],
+       "totalProviderAttemptCount": 1,
+       "affinity": {
+        "outcome": "skipped_below_min_prefix"
+       },
+       "clientSessionId": "878682aeafeedd3856c43218be703ab5",
+       "clientSessionIdSource": "fingerprint"
+      },
+      "cost": "0.0670415",
+      "marketCost": "0.0670415",
+      "surchargeCost": "0",
+      "gatewayCost": "0.0670415",
+      "inferenceCost": "0.0670415",
+      "inputInferenceCost": "0.0000415",
+      "outputInferenceCost": "0.067",
+      "enabledZeroDataRetention": true,
+      "enabledDisallowPromptTraining": true,
+      "generationId": "gen_01M6J3WHPQ3VYSQ1GBPMRA93GD"
+     }
+    }
+   },
+   "at": "2026-11-04T01:48:26.845Z"
+  },
+  {
+   "style": "Neon night",
+   "slot": "sample",
+   "n": 3,
+   "kind": "prompt-check",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 0.0000906,
+   "worstUsd": 0.0015,
+   "at": "2026-11-04T01:48:40.518Z"
+  },
+  {
+   "style": "Neon night",
+   "slot": "sample",
+   "n": 3,
+   "kind": "image",
+   "file": "neon-night/neon-night-sample-3.jpg",
+   "sha256": "5751d899a4bafd85baf3e51f5c1d79d3c921a7dec22050a1cfeda24d2588e039",
+   "closed_model": true,
+   "maker": "Google",
+   "costUsd": 0.0670385,
+   "worstUsd": 0.075,
+   "recipe": {
+    "prompt": "A footpath through tall trees, a small drone flying overhead.\n\nPainted digital illustration at night: deep blue and violet shadows, light from glowing coloured panels in cyan and magenta, glossy wet reflections, strong rim light on figures, high contrast, crisp edges on figures and a soft glow around lights, clear readable faces and hands.\n\nNo text, no lettering, no signs with words.",
+    "model": "gemini-3.1-flash-image",
+    "endpoint": "google/gemini-3.1-flash-image",
+    "host": "Vercel AI Gateway",
+    "settings": {
+     "modalities": [
+      "text",
+      "image"
+     ],
+     "aspect_ratio": "16:9",
+     "gateway": {
+      "only": [
+       "vertex"
+      ],
+      "zeroDataRetention": true,
+      "disallowPromptTraining": true
+     },
+     "converted": {
+      "from": "image/png",
+      "sha256": "df1456675bfe366aa749bb82b7f01d3b0afa6408db0ce5e6ea0e15b039ed7629",
+      "to": "jpeg",
+      "resized_to": {
+       "width": 1024,
+       "height": 576
+      },
+      "fit": "contain, padded with the picture's own corner colour"
+     }
+    },
+    "seed": null,
+    "request_id": "gen_01M6J3WZ3SCYE08SYES51QEZW0",
+    "cost_usd": 0.067,
+    "made_at": "2026-11-04T01:48:40.524Z",
+    "width": 1024,
+    "height": 576,
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "not run"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line",
+      "style text"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    }
+   },
+   "response_meta": {
+    "id": "gen_01M6J3WZ3SCYE08SYES51QEZW0",
+    "model": "google/gemini-3.1-flash-image",
+    "usage": {
+     "prompt_tokens": 77,
+     "completion_tokens": 1120,
+     "total_tokens": 1197,
+     "cost": 0.0670385,
+     "is_byok": false,
+     "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0
+     },
+     "cost_details": {
+      "upstream_inference_cost": null,
+      "upstream_inference_prompt_cost": 0,
+      "upstream_inference_completions_cost": 0
+     },
+     "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "image_tokens": 0
+     },
+     "cache_creation_input_tokens": 0,
+     "market_cost": 0.0670385,
+     "gateway_cost": 0.0670385
+    },
+    "provider_metadata": {
+     "vertex": {
+      "promptFeedback": null,
+      "groundingMetadata": null,
+      "urlContextMetadata": null,
+      "safetyRatings": null,
+      "usageMetadata": {
+       "promptTokenCount": 77,
+       "candidatesTokenCount": 1120,
+       "totalTokenCount": 1197,
+       "trafficType": "ON_DEMAND",
+       "promptTokensDetails": [
+        {
+         "modality": "TEXT",
+         "tokenCount": 77
+        }
+       ],
+       "candidatesTokensDetails": [
+        {
+         "modality": "IMAGE",
+         "tokenCount": 1120
+        }
+       ]
+      },
+      "finishMessage": null,
+      "serviceTier": null
+     },
+     "gateway": {
+      "routing": {
+       "originalModelId": "google/gemini-3.1-flash-image",
+       "resolvedProvider": "vertex",
+       "fallbacksAvailable": [],
+       "planningReasoning": "Provider set restricted to: vertex. System credentials planned for: vertex. ZDR requested: all 1 attempts support ZDR. Execution order: vertex(system). Disallow prompt training requested: all 1 attempts disallow prompt training",
+       "canonicalSlug": "google/gemini-3.1-flash-image",
+       "finalProvider": "vertex",
+       "modelAttemptCount": 1,
+       "modelAttempts": [
+        {
+         "canonicalSlug": "google/gemini-3.1-flash-image",
+         "success": true,
+         "providerAttemptCount": 1,
+         "providerAttempts": [
+          {
+           "provider": "vertex",
+           "credentialType": "system",
+           "success": true,
+           "startTime": 1793756920998,
+           "endTime": 1793756928916,
+           "statusCode": 200,
+           "providerResponseId": "-Y7qasn2BZHS0vcPkNrGiAI"
+          }
+         ]
+        }
+       ],
+       "totalProviderAttemptCount": 1,
+       "affinity": {
+        "outcome": "skipped_below_min_prefix"
+       },
+       "clientSessionId": "c145a1158a0fac597d12ab4a1be21df5",
+       "clientSessionIdSource": "fingerprint"
+      },
+      "cost": "0.0670385",
+      "marketCost": "0.0670385",
+      "surchargeCost": "0",
+      "gatewayCost": "0.0670385",
+      "inferenceCost": "0.0670385",
+      "inputInferenceCost": "0.0000385",
+      "outputInferenceCost": "0.067",
+      "enabledZeroDataRetention": true,
+      "enabledDisallowPromptTraining": true,
+      "generationId": "gen_01M6J3WZ3SCYE08SYES51QEZW0"
+     }
+    }
+   },
+   "at": "2026-11-04T01:48:40.524Z"
+  },
+  {
+   "style": "Neon night",
+   "slot": "sample",
+   "n": 4,
+   "kind": "prompt-check",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 0.000071775,
+   "worstUsd": 0.0015,
+   "at": "2026-11-04T01:48:56.170Z"
+  },
+  {
+   "style": "Neon night",
+   "slot": "sample",
+   "n": 4,
+   "kind": "image",
+   "file": "neon-night/neon-night-sample-4.jpg",
+   "sha256": "ff19c608826219966dda6ab24a250cd9bfc8fd3d7344cb1815cc1f2d4a7ac3be",
+   "closed_model": true,
+   "maker": "Google",
+   "costUsd": 0.0670375,
+   "worstUsd": 0.075,
+   "recipe": {
+    "prompt": "A market square at dusk, seen from above.\n\nPainted digital illustration at night: deep blue and violet shadows, light from glowing coloured panels in cyan and magenta, glossy wet reflections, strong rim light on figures, high contrast, crisp edges on figures and a soft glow around lights, clear readable faces and hands.\n\nNo text, no lettering, no signs with words.",
+    "model": "gemini-3.1-flash-image",
+    "endpoint": "google/gemini-3.1-flash-image",
+    "host": "Vercel AI Gateway",
+    "settings": {
+     "modalities": [
+      "text",
+      "image"
+     ],
+     "aspect_ratio": "16:9",
+     "gateway": {
+      "only": [
+       "vertex"
+      ],
+      "zeroDataRetention": true,
+      "disallowPromptTraining": true
+     },
+     "converted": {
+      "from": "image/png",
+      "sha256": "14880ecd7d7d0cf7e3dcda07ea17e843222f5e3a9120aa3692afcb3cb381ca26",
+      "to": "jpeg",
+      "resized_to": {
+       "width": 1024,
+       "height": 576
+      },
+      "fit": "contain, padded with the picture's own corner colour"
+     }
+    },
+    "seed": null,
+    "request_id": "gen_01M6J3XECXDPYEKHW7PGFKWS4K",
+    "cost_usd": 0.067,
+    "made_at": "2026-11-04T01:48:56.171Z",
+    "width": 1024,
+    "height": 576,
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "not run"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line",
+      "style text"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    }
+   },
+   "response_meta": {
+    "id": "gen_01M6J3XECXDPYEKHW7PGFKWS4K",
+    "model": "google/gemini-3.1-flash-image",
+    "usage": {
+     "prompt_tokens": 75,
+     "completion_tokens": 1120,
+     "total_tokens": 1195,
+     "cost": 0.0670375,
+     "is_byok": false,
+     "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0
+     },
+     "cost_details": {
+      "upstream_inference_cost": null,
+      "upstream_inference_prompt_cost": 0,
+      "upstream_inference_completions_cost": 0
+     },
+     "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "image_tokens": 0
+     },
+     "cache_creation_input_tokens": 0,
+     "market_cost": 0.0670375,
+     "gateway_cost": 0.0670375
+    },
+    "provider_metadata": {
+     "vertex": {
+      "promptFeedback": null,
+      "groundingMetadata": null,
+      "urlContextMetadata": null,
+      "safetyRatings": null,
+      "usageMetadata": {
+       "promptTokenCount": 75,
+       "candidatesTokenCount": 1120,
+       "totalTokenCount": 1195,
+       "trafficType": "ON_DEMAND",
+       "promptTokensDetails": [
+        {
+         "modality": "TEXT",
+         "tokenCount": 75
+        }
+       ],
+       "candidatesTokensDetails": [
+        {
+         "modality": "IMAGE",
+         "tokenCount": 1120
+        }
+       ]
+      },
+      "finishMessage": null,
+      "serviceTier": null
+     },
+     "gateway": {
+      "routing": {
+       "originalModelId": "google/gemini-3.1-flash-image",
+       "resolvedProvider": "vertex",
+       "fallbacksAvailable": [],
+       "planningReasoning": "Provider set restricted to: vertex. System credentials planned for: vertex. ZDR requested: all 1 attempts support ZDR. Execution order: vertex(system). Disallow prompt training requested: all 1 attempts disallow prompt training",
+       "canonicalSlug": "google/gemini-3.1-flash-image",
+       "finalProvider": "vertex",
+       "modelAttemptCount": 1,
+       "modelAttempts": [
+        {
+         "canonicalSlug": "google/gemini-3.1-flash-image",
+         "success": true,
+         "providerAttemptCount": 1,
+         "providerAttempts": [
+          {
+           "provider": "vertex",
+           "credentialType": "system",
+           "success": true,
+           "startTime": 1793756936647,
+           "endTime": 1793756945771,
+           "statusCode": 200,
+           "providerResponseId": "CI_qaofZLqGnw8cP76OViQE"
+          }
+         ]
+        }
+       ],
+       "totalProviderAttemptCount": 1,
+       "affinity": {
+        "outcome": "skipped_below_min_prefix"
+       },
+       "clientSessionId": "6bb275dff8b7c34bf7b6ca3bd9f29f72",
+       "clientSessionIdSource": "fingerprint"
+      },
+      "cost": "0.0670375",
+      "marketCost": "0.0670375",
+      "surchargeCost": "0",
+      "gatewayCost": "0.0670375",
+      "inferenceCost": "0.0670375",
+      "inputInferenceCost": "0.0000375",
+      "outputInferenceCost": "0.067",
+      "enabledZeroDataRetention": true,
+      "enabledDisallowPromptTraining": true,
+      "generationId": "gen_01M6J3XECXDPYEKHW7PGFKWS4K"
+     }
+    }
+   },
+   "at": "2026-11-04T01:48:56.171Z"
+  }
+ ]
+}

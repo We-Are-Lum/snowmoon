@@ -32,6 +32,12 @@ for (const [m, provider] of [['gemini-3.1-flash-image', 'vertex'], ['gpt-image-2
   check(`${m}: the recipe's settings record the same options`, JSON.stringify((r.settings as any).gateway) === JSON.stringify(g));
   check(`${m}: sent to the Vercel AI Gateway only`, r.url.startsWith('https://ai-gateway.vercel.sh/v1/'));
 }
+{
+  const r = B.closedImageRequest('gemini-3.1-flash-image', 'a sample', null, '16:9');
+  const b = r.body as any;
+  check('a text-only Gemini sample: no picture sent, 16:9, the same gateway options', b.messages[0].content.length === 1 && b.messages[0].content[0].type === 'text' && b.providerOptions.google.imageConfig.aspectRatio === '16:9' && b.providerOptions.gateway.zeroDataRetention === true && b.providerOptions.gateway.only[0] === 'vertex');
+  check('a text-only GPT picture is refused (not built)', throws(() => B.closedImageRequest('gpt-image-2.5-sunburst', 'p', null), /Gemini only/));
+}
 // Planted proofs: a body missing any option is caught.
 check('proof: a body without zeroDataRetention is refused', throws(() => B.assertGatewayOptions('gemini-3.1-flash-image', { providerOptions: { gateway: { only: ['vertex'], disallowPromptTraining: true } } }), /zeroDataRetention/));
 check('proof: a body without disallowPromptTraining is refused', throws(() => B.assertGatewayOptions('gpt-image-2.5-sunburst', { providerOptions: { gateway: { only: ['openai'], zeroDataRetention: true } } }), /disallowPromptTraining/));
