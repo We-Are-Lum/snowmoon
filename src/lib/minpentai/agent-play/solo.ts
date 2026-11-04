@@ -364,6 +364,12 @@ export function turnFrames(m: SoloMatch, turn: number, whole = false) {
   return [];
 }
 
+/** The squares the person's side sees now, as a replay frame gives them (the 3D view's cloud covers the rest). */
+export function sightOf(m: SoloMatch): [number, number][] {
+  const { s, e } = rulesOf(m);
+  return [...e.sees(m.w, s, PERSON)].sort((a, b) => a - b).map((k) => e.XY(k));
+}
+
 /** The site computer plays the person's own side this turn, under the standing order's preset (the fallback). */
 export function autopilot(m: SoloMatch, o: { turn: number; now: string }) {
   if (m.end) throw new SoloError('the match is over');

@@ -23,6 +23,17 @@ async function inView(page: Page, at: string, fail: Fail, sels: [string, string]
 }
 
 /**
+ * On a desktop the 3D view stays beside the 2D board the whole time (owner, 2026-11-03), and the 2D board is the one you
+ * plan on; on a phone, only one board. Skipped where this machine's 3D couldn't hold the frame target (the page says so).
+ */
+async function besideCheck(page: Page, size: string, at: string, fail: Fail) {
+  const slow = await page.getByText(/couldn’t keep up|didn’t start here/).count();
+  const n3 = await page.locator('.mb-top-board .mb-board3d').count(), n2 = await page.locator('.mb-top-board .mb-board').count();
+  if (size === 'desktop' && !slow && (n3 !== 1 || n2 !== 1)) fail(`${at}: the 2D board and the 3D view aren't both there (2D ${n2}, 3D ${n3})`);
+  if (size === 'phone' && n2 + n3 !== 1) fail(`${at}: a phone shows one board (2D ${n2}, 3D ${n3})`);
+}
+
+/**
  * Starts a stage, plays a book-4 match's first turns through it at each size, and checks the layout. `record`, if given,
  * keeps a video of the phone run in that directory.
  */
@@ -64,10 +75,12 @@ export async function liveLayoutCheck(browser: Browser, fail: Fail, opts: { reco
         // The replay plays in place on the same board.
         await page.getByRole('button', { name: 'Pause' }).waitFor({ timeout: 30_000 });
         await inView(page, `${at}, while its replay plays`, fail, top.filter(([n]) => n !== 'the Take turn button'));
+        await besideCheck(page, size.name, `${at}, while its action plays`, fail);
         await page.waitForTimeout(3500);
         await opts.shots?.(page, `live-${size.name}-turn${turn}-replay`);
-        await page.getByRole('button', { name: /^Replay turn/ }).waitFor({ timeout: 15_000 }); // finished: back to this turn
+        await page.getByRole('button', { name: /^Watch turn \d+ again in 2D/ }).waitFor({ timeout: 20_000 }); // finished: back to this turn
         await inView(page, `${at}, after its replay`, fail, top.filter(([n]) => n !== 'the Take turn button'));
+        await besideCheck(page, size.name, `${at}, after its action`, fail);
       }
       // After the last turn taken, the next draft: everything in view again.
       await draft();
@@ -79,7 +92,9 @@ export async function liveLayoutCheck(browser: Browser, fail: Fail, opts: { reco
       const rows = await page.locator('.mb-past-row').count();
       if (rows < 2) fail(`/minpentai/m/… @${size.width}×${size.height}: past turns aren't listed (${rows})`);
       await page.locator('.mb-past-row').first().click();
+      await page.getByRole('button', { name: /^Watch turn \d+ in 2D/ }).click({ timeout: 15_000 });
       await page.locator('.mb-past-body .mb-board').waitFor({ timeout: 15_000 });
+      await page.getByRole('button', { name: 'Skip' }).last().click();
       await opts.shots?.(page, `live-${size.name}-past-open`);
       await tool(S.BASE, a.access_token, 'minpentai_resign', { match_id: id });
       await ctx.close();

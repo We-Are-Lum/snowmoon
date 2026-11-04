@@ -1,205 +1,222 @@
 /**
- * The 3D replay (owner, 2026-11-03; docs/proposals/minpentai-matches-between-people.md, "The 3D replay"). Drawn only
- * from the frames the 2D replay is given (solo.ts turnFrames: a board in the side's fog view, and the squares it sees),
- * so it can't show anything the page wasn't sent. The dark is a cloud over the squares out of sight: it covers nothing,
- * because nothing hidden was sent. Once the match is over the frames are the whole board, and there is no cloud.
+ * The 3D action (owner, 2026-11-03: "2D is for thinking; 3D is for the action"). It looks and moves like the tutorial's
+ * 3D broadcast, from the same parts (../../scene-kit.ts): the dark stage in fog, filmic light, glowing pieces, flashes
+ * and debris, a camera that eases. Drawn only from the frames the 2D board is given (solo.ts turnFrames: a board in the
+ * side's fog view, and the squares it sees), so it can't show anything the page wasn't sent. Every effect comes from
+ * replay-events.ts, which reads only those frames and fires only on squares in sight. The dark is a cloud over the
+ * squares out of sight; it drifts and covers nothing, because nothing hidden was sent. Once the match is over the
+ * frames are the whole board, and there is no cloud.
  *
- * This edition's own abstract pieces: low slate tiles; faceted stones for rocks; hexagonal columns with a ring for towers;
- * low blocks for squares; darts for gliders (a small orb for symbol gliders); thin slabs for mirrors; squat cubes for
- * factories; bars for moving walls. three.js is the bundled three (package.json), loaded only when a replay opens.
+ * This edition's own abstract pieces: grey blocks for rocks; for towers a metal column under a floating, turning
+ * emblem in the side's colour; for gliders a chevron of small lit cubes (a bright core for symbol gliders); low blocks
+ * for squares; thin slabs for mirrors; squat cubes for factories; bars for moving walls.
  *
- * Built for a mid-range phone: one instanced mesh per kind of piece, the pixel ratio capped at 1.5, no shadows, the
- * cloud a single instanced layer.
+ * Two quality levels: high (shadows, pixel ratio up to 1.5, more debris) and low (none of those), so a phone can hold
+ * its frame target; the page measures and steps down, and plays the action in 2D if even low can't hold it.
  */
 import type * as THREE_NS from 'three';
 import type { boardOut } from '~/lib/minpentai/agent-play/solo';
+import { easeCamera, fpsMeter, glowTexture, makeDebris, makeFlashes, makeRenderer, makeStage, type Quality } from '../../scene-kit';
+import { dirOf, replayEvents, type ReplayEvent } from './replay-events';
 
 type T3 = typeof THREE_NS;
 type Board = ReturnType<typeof boardOut>;
 export interface ReplayScene {
-  /** Show a frame. `prev`, when given, is the frame before it: gliders glide from there over one step's time. */
+  /** Show a frame. `prev`, when given, is the frame before it: the action between them plays over `stepMs`. */
   show(board: Board, seen: [number, number][] | null, prev: Board | null, stepMs: number): void;
-  /** Median frames a second over the first two seconds drawn (null until measured). */
-  fps(): number | null;
+  setQuality(q: Quality): void;
+  /** Median frames a second since the last reset (0 until there are enough frames), and the seconds measured. */
+  fps(): { fps: number; seconds: number };
+  resetFps(): void;
   dispose(): void;
 }
 
-const CYAN = 0x46d7e8, AMBER = 0xffb43a, ROCK = 0x5a5b64, TILE = 0x17181d, TILE_SEEN = 0x1f2c30;
-const DIR: Record<string, [number, number]> = { N: [0, -1], NE: [1, -1], E: [1, 0], SE: [1, 1], S: [0, 1], SW: [-1, 1], W: [-1, 0], NW: [-1, -1] };
+const CYAN = '#46D7E8', AMBER = '#FFB43A';
+const sideCol = (side: string | null) => (side === 'mine' ? CYAN : side === 'theirs' ? AMBER : '#8A8C96');
+/** The glider's chevron: five cubes, (forward, across) in squares, pointing along its heading. */
+const CHEVRON: [number, number][] = [[.24, 0], [.06, -.16], [.06, .16], [-.12, -.32], [-.12, .32]];
+/** A tower's emblem: a small plus of cubes. */
+const EMBLEM: [number, number, number][] = [[0, 0, 0], [1, 0, 0], [-1, 0, 0], [0, 0, 1], [0, 0, -1], [0, 1, 0]];
 
-export function buildReplayScene(T: T3, el: HTMLElement, W: number, H: number): ReplayScene {
-  const renderer = new T.WebGLRenderer({ antialias: true, powerPreference: 'low-power' });
-  renderer.setPixelRatio(Math.min(1.5, window.devicePixelRatio || 1));
-  renderer.outputColorSpace = T.SRGBColorSpace;
+export function buildReplayScene(T: T3, el: HTMLElement, W: number, H: number, quality: Quality = 'high'): ReplayScene {
   const size = () => [Math.max(1, el.clientWidth), Math.max(1, el.clientHeight)] as const;
-  renderer.setSize(...size());
-  el.appendChild(renderer.domElement);
-  renderer.domElement.style.display = 'block';
+  let q = quality;
+  const renderer = makeRenderer(T, el, ...size(), { quality: q, maxRatio: q === 'high' ? 1.5 : 1 });
   const scene = new T.Scene();
-  scene.background = new T.Color('#060608');
-  const camera = new T.PerspectiveCamera(42, size()[0] / size()[1], 0.1, 200);
-  scene.add(new T.HemisphereLight(0x9fb3c8, 0x101014, 1.1));
-  const sun = new T.DirectionalLight(0xffffff, 1.2);
-  sun.position.set(-6, 14, 8);
-  scene.add(sun);
+  const camera = new T.PerspectiveCamera(42, size()[0] / size()[1], .1, 400);
+  const stage = makeStage(T, scene, W, H, { fog: .012 });
+  const glowTex = glowTexture(T);
+  const flashes = makeFlashes(T, scene, glowTex, 24);
+  const debris = makeDebris(T, scene, 700, true);
+  const cam = easeCamera(T, camera);
+  const meter = fpsMeter();
 
-  const X = (x: number) => x - W / 2 + 0.5, Z = (y: number) => y - H / 2 + 0.5;
-  const m4 = new T.Matrix4(), q = new T.Quaternion(), v = new T.Vector3(), s3 = new T.Vector3(), up = new T.Vector3(0, 1, 0), col = new T.Color();
-  const disposables: { dispose(): void }[] = [];
-  const inst = (geo: THREE_NS.BufferGeometry, mat: THREE_NS.Material, n: number) => {
+  const X = (x: number) => x - W / 2 + .5, Z = (y: number) => y - H / 2 + .5;
+  const D = new T.Object3D(), C = new T.Color();
+  const disposables: { dispose(): void }[] = [glowTex];
+  const inst = (geo: THREE_NS.BufferGeometry, mat: THREE_NS.Material, n: number, shadow = true) => {
     const mesh = new T.InstancedMesh(geo, mat, n);
-    mesh.count = 0;
-    mesh.frustumCulled = false;
+    mesh.count = 0; mesh.frustumCulled = false; mesh.castShadow = shadow; mesh.receiveShadow = true;
+    mesh.instanceMatrix.setUsage(T.DynamicDrawUsage);
     disposables.push(geo, mat);
     scene.add(mesh);
     return mesh;
   };
-  const std = (color: number, extra: Partial<THREE_NS.MeshStandardMaterialParameters> = {}) => new T.MeshStandardMaterial({ color, roughness: 0.75, metalness: 0.05, ...extra });
+  const box = () => new T.BoxGeometry(1, 1, 1);
+  const std = (extra: Partial<THREE_NS.MeshStandardMaterialParameters> = {}) => new T.MeshStandardMaterial({ color: '#ffffff', roughness: .6, ...extra });
 
-  // The board: one tile a square, a touch lighter where the side sees.
-  const tiles = inst(new T.BoxGeometry(0.94, 0.12, 0.94), std(0xffffff), W * H);
-  for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
-    m4.makeTranslation(X(x), -0.06, Z(y));
-    tiles.setMatrixAt(y * W + x, m4);
-    tiles.setColorAt(y * W + x, col.set(TILE));
-  }
-  tiles.count = W * H;
-  const rocks = inst(new T.DodecahedronGeometry(0.36, 0), std(ROCK, { flatShading: true }), W * H);
-  const towers = inst(new T.CylinderGeometry(0.3, 0.34, 0.9, 6), std(0xffffff, { emissive: 0x000000 }), 64);
-  const rings = inst(new T.TorusGeometry(0.38, 0.04, 6, 24), new T.MeshBasicMaterial({ color: 0xffffff }), 64);
-  const squares = inst(new T.BoxGeometry(0.7, 0.28, 0.7), std(0xffffff), W * H);
-  const darts = inst(new T.ConeGeometry(0.17, 0.5, 4), std(0xffffff, { emissive: 0x111111 }), 240);
-  const orbs = inst(new T.SphereGeometry(0.1, 10, 8), new T.MeshBasicMaterial({ color: 0xffffff }), 240);
-  const resting = inst(new T.SphereGeometry(0.17, 12, 10), std(0xffffff), W * H);
-  const mirrors = inst(new T.BoxGeometry(0.9, 0.5, 0.06), std(0xffffff, { metalness: 0.4, roughness: 0.3 }), W * H);
-  const factories = inst(new T.BoxGeometry(0.62, 0.42, 0.62), std(0xffffff), W * H);
-  const walls = inst(new T.BoxGeometry(0.86, 0.38, 0.86), std(0xffffff, { transparent: true, opacity: 0.85 }), W * H);
-  const flashes = inst(new T.SphereGeometry(0.4, 12, 10), new T.MeshBasicMaterial({ color: 0xfff4d6, transparent: true, opacity: 0.7, depthWrite: false }), 64);
-
-  // The cloud: soft drifting puffs over the squares out of sight, from one canvas-made texture.
-  const tex = (() => {
-    const c = document.createElement('canvas');
-    c.width = c.height = 64;
+  // The squares the side sees: a faint light on the field, like the broadcast's sight discs.
+  const sight = inst(new T.PlaneGeometry(.96, .96), new T.MeshBasicMaterial({ color: CYAN, transparent: true, opacity: .07, depthWrite: false }), W * H, false);
+  const rocks = inst(box(), std({ color: '#4B4C55', roughness: .85 }), W * H);
+  const columns = inst(new T.CylinderGeometry(.12, .24, 1.3, 10), std({ color: '#5A5E6C', metalness: .6, roughness: .35, emissive: '#15161B' }), 64);
+  const emblems = inst(box(), new T.MeshBasicMaterial({ color: '#ffffff' }), 64 * EMBLEM.length, false);
+  const bases = inst(new T.RingGeometry(.3, .42, 28), new T.MeshBasicMaterial({ color: '#ffffff', side: T.DoubleSide }), 64, false);
+  const squares = inst(box(), std({ roughness: .5, emissive: '#111111' }), W * H);
+  const mirrors = inst(box(), std({ metalness: .5, roughness: .25 }), W * H);
+  const factories = inst(box(), std(), W * H);
+  const walls = inst(box(), std({ roughness: .5, emissive: '#111111' }), W * H);
+  const resting = inst(new T.SphereGeometry(.16, 12, 10), new T.MeshBasicMaterial({ color: '#ffffff' }), W * H, false);
+  const cubes = inst(box(), new T.MeshBasicMaterial({ color: '#ffffff' }), 300 * CHEVRON.length, false);
+  // Glows: one additive point per glider, tower and symbol core (the broadcast's glow layer).
+  const GMAX = 400, gpos = new Float32Array(GMAX * 3), gcol = new Float32Array(GMAX * 3), pg = new T.BufferGeometry();
+  pg.setAttribute('position', new T.BufferAttribute(gpos, 3)); pg.setAttribute('color', new T.BufferAttribute(gcol, 3));
+  const glowMat = new T.PointsMaterial({ size: 1.9, map: glowTex, vertexColors: true, transparent: true, depthWrite: false, blending: T.AdditiveBlending, sizeAttenuation: true });
+  const glow = new T.Points(pg, glowMat); glow.frustumCulled = false; scene.add(glow); disposables.push(pg, glowMat);
+  // The cloud: soft puffs over the squares out of sight, drifting.
+  const cloudTex = (() => {
+    const c = document.createElement('canvas'); c.width = c.height = 64;
     const g = c.getContext('2d')!, grad = g.createRadialGradient(32, 32, 4, 32, 32, 32);
-    grad.addColorStop(0, 'rgba(210,214,226,0.9)');
-    grad.addColorStop(1, 'rgba(210,214,226,0)');
-    g.fillStyle = grad;
-    g.fillRect(0, 0, 64, 64);
-    const t = new T.CanvasTexture(c);
-    disposables.push(t);
-    return t;
+    grad.addColorStop(0, 'rgba(200,205,220,0.95)'); grad.addColorStop(.6, 'rgba(200,205,220,0.6)'); grad.addColorStop(1, 'rgba(200,205,220,0)');
+    g.fillStyle = grad; g.fillRect(0, 0, 64, 64);
+    const t = new T.CanvasTexture(c); disposables.push(t); return t;
   })();
-  const cloud = inst(new T.PlaneGeometry(1.7, 1.7), new T.MeshBasicMaterial({ map: tex, transparent: true, opacity: 0.55, depthWrite: false, color: 0x9aa0b4 }), W * H);
+  const cloud = inst(new T.PlaneGeometry(1.9, 1.9), new T.MeshBasicMaterial({ map: cloudTex, transparent: true, opacity: .6, depthWrite: false, color: '#7E8496' }), W * H * 2, false);
   const cloudCells: [number, number][] = [];
 
-  const sideColor = (side: string) => (side === 'mine' ? CYAN : AMBER);
-  const put = (mesh: THREE_NS.InstancedMesh, i: number, x: number, y: number, z: number, opts: { color?: number; scale?: number | [number, number, number]; rot?: THREE_NS.Quaternion } = {}) => {
-    const sc = opts.scale ?? 1;
-    s3.set(...(Array.isArray(sc) ? sc : ([sc, sc, sc] as [number, number, number])));
-    m4.compose(v.set(x, y, z), opts.rot ?? q.identity(), s3);
-    mesh.setMatrixAt(i, m4);
-    if (opts.color !== undefined) mesh.setColorAt(i, col.set(opts.color));
+  const setQ = (nq: Quality) => {
+    q = nq;
+    renderer.setPixelRatio(Math.min(q === 'high' ? 1.5 : 1, window.devicePixelRatio || 1));
+    renderer.shadowMap.enabled = q === 'high';
+    stage.sun.castShadow = q === 'high';
+    scene.traverse((o) => { const m = (o as THREE_NS.Mesh).material as THREE_NS.Material | undefined; if (m) m.needsUpdate = true; });
   };
-  const finish = (mesh: THREE_NS.InstancedMesh, n: number) => {
-    mesh.count = n;
-    mesh.instanceMatrix.needsUpdate = true;
-    if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true;
+  setQ(q);
+
+  const finish = (mesh: THREE_NS.InstancedMesh, n: number) => { mesh.count = n; mesh.instanceMatrix.needsUpdate = true; if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true; };
+  const place = (mesh: THREE_NS.InstancedMesh, i: number, x: number, y: number, z: number, sx: number, sy: number, sz: number, color?: string, ry = 0) => {
+    D.position.set(x, y, z); D.rotation.set(0, ry, 0); D.scale.set(sx, sy, sz); D.updateMatrix();
+    mesh.setMatrixAt(i, D.matrix);
+    if (color) mesh.setColorAt(i, C.set(color));
   };
 
-  let current: { board: Board; prev: Board | null; at: number; stepMs: number; flashAt: [number, number][]; prevAt: Set<string> } | null = null;
-  // Rotations, made once: a piece facing each direction, a ring lying flat, a puff lying flat, mirrors leaning.
-  const dirQs = new Map(Object.entries(DIR).map(([k, [dx, dy]]) => [k, new T.Quaternion().setFromUnitVectors(up, new T.Vector3(dx, 0, dy).normalize())]));
-  const dirQ = (dir: string) => dirQs.get(dir) ?? dirQs.get('E')!;
-  const flat = new T.Quaternion().setFromAxisAngle(new T.Vector3(1, 0, 0), Math.PI / 2), flatDown = new T.Quaternion().setFromAxisAngle(new T.Vector3(1, 0, 0), -Math.PI / 2);
-  const lean = { '/': new T.Quaternion().setFromAxisAngle(up, Math.PI / 4), '\\': new T.Quaternion().setFromAxisAngle(up, -Math.PI / 4) } as Record<string, THREE_NS.Quaternion>;
+  type Glider = { side: string; from: [number, number]; to: [number, number]; dir: string; symbol?: boolean; fade: 'in' | 'out' | null };
+  let state: { board: Board; gliders: Glider[]; at: number; stepMs: number } | null = null;
+  let shake = 0;
 
   function show(board: Board, seen: [number, number][] | null, prev: Board | null, stepMs: number) {
-    // Tiles: lighter where the side sees (the whole board after the end).
+    const ev = replayEvents(prev, board, seen, [W, H]);
+    // The static pieces, as this frame shows them.
     const lit = seen ? new Set(seen.map(([x, y]) => y * W + x)) : null;
-    for (let k = 0; k < W * H; k++) tiles.setColorAt(k, col.set(!lit || lit.has(k) ? TILE_SEEN : TILE));
-    if (tiles.instanceColor) tiles.instanceColor.needsUpdate = true;
     let n = 0;
-    for (const r of board.rocks) put(rocks, n++, X(r.x), 0.28, Z(r.y), { scale: [1, 0.8, 1] });
-    finish(rocks, n);
-    n = 0;
-    for (const t of board.towers) {
-      put(towers, n, X(t.x), 0.45, Z(t.y), { color: sideColor(t.side), scale: t.forming ? [1, 0.6, 1] : 1 });
-      put(rings, n, X(t.x), 0.93, Z(t.y), { color: sideColor(t.side), rot: flat });
-      n++;
-    }
-    finish(towers, n); finish(rings, n);
-    n = 0;
-    for (const sq of board.squares) put(squares, n++, X(sq.x), 0.14, Z(sq.y), { color: sideColor(sq.side), scale: [1, sq.hits_left > 1 ? 1 : 0.55, 1] });
-    finish(squares, n);
-    n = 0;
-    for (const m of board.mirrors ?? []) put(mirrors, n++, X(m.x), 0.25, Z(m.y), { color: sideColor(m.side), rot: lean[m.slant] ?? lean['/'] });
-    finish(mirrors, n);
-    n = 0;
-    for (const f of board.factories ?? []) put(factories, n++, X(f.x), 0.21, Z(f.y), { color: sideColor(f.side), rot: dirQ(f.dir) });
-    finish(factories, n);
-    n = 0;
-    for (const w of board.moving_walls ?? []) for (const c of w.squares) put(walls, n++, X(c.x), 0.19, Z(c.y), { color: sideColor(w.side) });
-    finish(walls, n);
-    n = 0;
-    for (const r of board.resting_symbol_gliders ?? []) put(resting, n++, X(r.x), 0.18, Z(r.y), { color: sideColor(r.side) });
-    finish(resting, n);
-    // The cloud: one puff a square out of sight; none once the match is over.
+    if (lit) for (const k of lit) { D.position.set(X(k % W), .015, Z(Math.floor(k / W))); D.rotation.set(-Math.PI / 2, 0, 0); D.scale.set(1, 1, 1); D.updateMatrix(); sight.setMatrixAt(n++, D.matrix); }
+    finish(sight, n);
+    n = 0; for (const r of board.rocks) place(rocks, n++, X(r.x), .35, Z(r.y), .94, .7, .94); finish(rocks, n);
+    n = 0; for (const s of board.squares) place(squares, n++, X(s.x), .2, Z(s.y), .74, s.hits_left > 1 ? .4 : .22, .74, C.set(sideCol(s.side)).multiplyScalar(.6).getStyle()); finish(squares, n);
+    n = 0; for (const m of board.mirrors ?? []) place(mirrors, n++, X(m.x), .3, Z(m.y), .95, .6, .07, sideCol(m.side), m.slant === '/' ? Math.PI / 4 : -Math.PI / 4); finish(mirrors, n);
+    n = 0; for (const f of board.factories ?? []) place(factories, n++, X(f.x), .22, Z(f.y), .62, .44, .62, C.set(sideCol(f.side)).multiplyScalar(.7).getStyle()); finish(factories, n);
+    n = 0; for (const w of board.moving_walls ?? []) for (const c of w.squares) place(walls, n++, X(c.x), .2, Z(c.y), .86, .4, .86, C.set(sideCol(w.side)).multiplyScalar(.55).getStyle()); finish(walls, n);
+    n = 0; for (const r of board.resting_symbol_gliders ?? []) place(resting, n++, X(r.x), .2, Z(r.y), 1, 1, 1, sideCol(r.side)); finish(resting, n);
+    n = 0; for (const t of board.towers) { D.position.set(X(t.x), .02, Z(t.y)); D.rotation.set(-Math.PI / 2, 0, 0); D.scale.set(1, 1, 1); D.updateMatrix(); bases.setMatrixAt(n, D.matrix); bases.setColorAt(n, C.set(sideCol(t.side))); n++; } finish(bases, n);
+    // The cloud: two puffs a square out of sight; none once the match is over.
     cloudCells.length = 0;
     if (lit) for (let k = 0; k < W * H; k++) if (!lit.has(k)) cloudCells.push([k % W, Math.floor(k / W)]);
-    cloud.count = cloudCells.length;
-    // A hit: where a tower, square, mirror or factory stood in the last frame and doesn't now, a flash (only what both
-    // frames show: the side saw it go).
-    const flashAt: [number, number][] = [];
-    if (prev) {
-      const now = new Set([...board.towers, ...board.squares, ...(board.mirrors ?? []), ...(board.factories ?? [])].map((p) => p.y * W + p.x));
-      for (const p of [...prev.towers, ...prev.squares, ...(prev.mirrors ?? []), ...(prev.factories ?? [])]) if (!now.has(p.y * W + p.x) && (!lit || lit.has(p.y * W + p.x))) flashAt.push([p.x, p.y]);
+    // Gliders: where each was a step ago and where it is (replay-events), and the ones fading out into the dark.
+    const gliders: Glider[] = [];
+    for (const e of ev) {
+      if (e.kind === 'glide') gliders.push({ side: e.side, from: e.from, to: e.to, dir: e.dir, symbol: e.symbol, fade: null });
+      else if (e.kind === 'leave') { const [dx, dy] = dirOf(e.dir); gliders.push({ side: e.side, from: e.at, to: [e.at[0] + dx, e.at[1] + dy], dir: e.dir, fade: 'out' }); }
     }
-    current = { board, prev, at: performance.now(), stepMs, flashAt, prevAt: new Set((prev?.gliders ?? []).map((g) => `${g.x},${g.y},${g.dir},${g.side}`)) };
+    for (const g of board.gliders) if (!ev.some((e) => e.kind === 'glide' && e.to[0] === g.x && e.to[1] === g.y && e.side === g.side)) gliders.push({ side: g.side, from: [g.x, g.y], to: [g.x, g.y], dir: g.dir, symbol: g.symbol, fade: prev ? 'in' : null });
+    state = { board, gliders, at: performance.now(), stepMs, };
+    // Effects, each on a square in sight (replay-events fires no other).
+    fire(ev);
   }
 
-  // The camera: a three-quarter view from Cyan's side, drifting slowly.
+  function fire(ev: ReplayEvent[]) {
+    const many = q === 'high' ? 1 : .35;
+    for (const e of ev) {
+      if (e.kind === 'destroyed') {
+        const [x, y] = e.at, big = e.piece === 'tower';
+        flashes.fire(X(x), big ? 1.4 : .7, Z(y), e.piece === 'rock' ? '#C9CBD6' : sideCol(e.side), big ? 4.2 : 2.2, big ? .9 : .55);
+        debris.burst(X(x), Z(y), e.piece === 'rock' ? '#6A6C76' : sideCol(e.side), Math.round((big ? 46 : e.piece === 'rock' ? 22 : 16) * many), big ? 1.2 : .8);
+        if (big) shake = Math.max(shake, .22);
+      } else if (e.kind === 'hit') {
+        flashes.fire(X(e.at[0]), .6, Z(e.at[1]), '#FFF4D6', 1.6, .4);
+        debris.burst(X(e.at[0]), Z(e.at[1]), sideCol(e.side), Math.round(6 * many), .6);
+      } else if (e.kind === 'stopped') {
+        flashes.fire(X(e.at[0]), .5, Z(e.at[1]), sideCol(e.side), 1.4, .35);
+        debris.burst(X(e.at[0]), Z(e.at[1]), sideCol(e.side), Math.round(5 * many), .5);
+      }
+    }
+  }
+
+  // The camera: a three-quarter view from Cyan's side, swaying slowly, as the broadcast's cameras do.
   const R = Math.max(W, H);
-  const aim = () => {
-    const t = performance.now() / 1000, a = -0.55 + Math.sin(t * 0.07) * 0.06;
-    camera.position.set(Math.sin(a) * R * 0.75, R * 0.72, Math.cos(a) * R * 0.75);
-    camera.lookAt(0, 0, 0);
-  };
-  const deltas: number[] = [];
-  let started = 0, last = 0, raf = 0, measured: number | null = null;
+  let raf = 0, last = 0;
   const frame = (now: number) => {
     raf = requestAnimationFrame(frame);
-    if (!started) started = now;
-    if (last && now - started < 2000) deltas.push(now - last);
-    else if (measured === null && now - started >= 2000 && deltas.length) { const d = [...deltas].sort((a, b) => a - b)[deltas.length >> 1]; measured = 1000 / d; }
+    const dt = last ? Math.min(.1, (now - last) / 1000) : 0;
     last = now;
-    if (current) {
-      const k = Math.min(1, (now - current.at) / Math.max(1, current.stepMs * 0.9)), e = k * k * (3 - 2 * k);
-      // Gliders: from where they were one step ago (the same side and direction) to where they are.
-      const prevAt = current.prevAt;
-      let n = 0;
-      for (const g of current.board.gliders) {
-        const [dx, dy] = DIR[g.dir] ?? [0, 0], from = prevAt.has(`${g.x - dx},${g.y - dy},${g.dir},${g.side}`);
-        const gx = from ? g.x - dx + dx * e : g.x, gy = from ? g.y - dy + dy * e : g.y;
-        put(darts, n, X(gx), 0.3, Z(gy), { color: sideColor(g.side), rot: dirQ(g.dir), scale: from ? 1 : 0.4 + 0.6 * e });
-        if (g.symbol) put(orbs, n, X(gx), 0.55, Z(gy), { color: sideColor(g.side) });
-        else put(orbs, n, 0, -50, 0);
-        n++;
-      }
-      finish(darts, n); finish(orbs, n);
-      let f = 0;
-      for (const [x, y] of current.flashAt) put(flashes, f++, X(x), 0.4, Z(y), { scale: 0.4 + 1.4 * e });
-      (flashes.material as THREE_NS.MeshBasicMaterial).opacity = 0.7 * (1 - e);
-      finish(flashes, f);
-    }
-    // The cloud drifts.
+    meter.tick(dt);
     const t = now / 1000;
-    for (let i = 0; i < cloudCells.length; i++) {
-      const [x, y] = cloudCells[i], b = Math.sin(t * 0.6 + x * 1.7 + y * 0.9) * 0.06;
-      put(cloud, i, X(x) + Math.sin(t * 0.2 + y) * 0.1, 0.75 + b, Z(y), { rot: flatDown, scale: 1 + 0.08 * Math.sin(t * 0.4 + i) });
+    // Far enough to frame the whole board at any width (the fov is vertical, so a narrow frame needs more distance).
+    const fit = Math.max(H, W / camera.aspect) / 2 / Math.tan((camera.fov * Math.PI) / 360);
+    const a = -.34 + Math.sin(t * .09) * .07, d = fit * (1.27 + Math.sin(t * .13) * .03);
+    cam.aim([Math.sin(a) * d * .66, d * .75, Math.cos(a) * d * .66], [0, 0, -H * .04]);
+    shake = Math.max(0, shake - dt * .6);
+    cam.update(dt, shake);
+    if (state) {
+      const k = state.stepMs > 0 ? Math.min(1, (now - state.at) / (state.stepMs * .92)) : 1, e = k * k * (3 - 2 * k);
+      let n = 0, gn = 0;
+      const glowAt = (x: number, y: number, z: number, col: string, s: number) => { if (gn >= GMAX) return; C.set(col).multiplyScalar(s); gpos.set([x, y, z], gn * 3); gcol.set([C.r, C.g, C.b], gn * 3); gn++; };
+      for (const g of state.gliders) {
+        const [dx, dy] = dirOf(g.dir), len = Math.hypot(dx, dy) || 1, fx = dx / len, fz = dy / len;
+        const gx = X(g.from[0] + (g.to[0] - g.from[0]) * e), gz = Z(g.from[1] + (g.to[1] - g.from[1]) * e);
+        const vis = g.fade === 'in' ? e : g.fade === 'out' ? 1 - e : 1, y = .42 + Math.sin(t * 6 + g.from[0] * 1.3 + g.from[1]) * .05;
+        const col = sideCol(g.side), sz = .16 * Math.max(.001, vis);
+        for (const [f, s] of CHEVRON) place(cubes, n++, gx + fx * f - fz * s, y, gz + fz * f + fx * s, sz, sz, sz, col);
+        glowAt(gx, y, gz, col, (g.symbol ? 1.3 : 1) * vis);
+        if (g.symbol) glowAt(gx, y + .1, gz, '#FFFFFF', .8 * vis);
+      }
+      finish(cubes, n);
+      // Towers: the column, and the emblem floating and turning over it.
+      let c = 0, m = 0;
+      for (const tw of state.board.towers) {
+        const x = X(tw.x), z = Z(tw.y), col = sideCol(tw.side), h = tw.forming ? .6 : 1, ey = .65 + 1.3 * h + Math.sin(t * 1.6 + tw.x) * .06, ry = t * .8 + tw.y;
+        place(columns, c++, x, .65 * h, z, 1, h, 1);
+        for (const [a, b, u] of EMBLEM) {
+          const ca = Math.cos(ry), sa = Math.sin(ry);
+          place(emblems, m++, x + (a * ca - u * sa) * .21, ey + b * .21, z + (a * sa + u * ca) * .21, .19, .19, .19, col, ry);
+        }
+        glowAt(x, ey, z, col, 1.6);
+      }
+      finish(columns, c); finish(emblems, m);
+      glow.geometry.setDrawRange(0, gn); pg.attributes.position.needsUpdate = true; pg.attributes.color.needsUpdate = true;
     }
-    cloud.count = cloudCells.length;
-    cloud.instanceMatrix.needsUpdate = true;
-    aim();
+    // The cloud drifts: each puff wanders a little around its square and breathes, never off it by more than a third.
+    let ci = 0;
+    for (let i = 0; i < cloudCells.length; i++) {
+      const [x, y] = cloudCells[i];
+      for (let j = 0; j < 2; j++) {
+        const ph = x * 1.7 + y * .9 + j * 2.1;
+        D.position.set(X(x) + Math.sin(t * .23 + ph) * .3, .95 + j * .22 + Math.sin(t * .5 + ph) * .06, Z(y) + Math.cos(t * .19 + ph) * .3);
+        D.rotation.set(-Math.PI / 2, 0, t * .05 * (j ? -1 : 1) + ph); D.scale.setScalar(1 + .1 * Math.sin(t * .4 + ph)); D.updateMatrix();
+        cloud.setMatrixAt(ci++, D.matrix);
+      }
+    }
+    finish(cloud, ci);
+    flashes.update(dt);
+    debris.update(dt);
     renderer.render(scene, camera);
   };
   raf = requestAnimationFrame(frame);
@@ -208,7 +225,9 @@ export function buildReplayScene(T: T3, el: HTMLElement, W: number, H: number): 
 
   return {
     show,
-    fps: () => measured,
+    setQuality: setQ,
+    fps: () => ({ fps: meter.fps(), seconds: meter.seconds() }),
+    resetFps: () => meter.reset(),
     dispose() {
       cancelAnimationFrame(raf);
       ro.disconnect();

@@ -1,134 +1,100 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { ViewBoard, type Ghost } from './view-board';
 import { TakeTurn } from './take-turn';
+import { PlaybackControls, usePlayback } from './playback';
+import { use3D } from './use-3d';
 import type { boardOut, turnFrames } from '~/lib/minpentai/agent-play/solo';
 
-// The 3D replay's code (and three.js) loads only when a replay opens: this component mounts only then.
+// three.js and the 3D scene load only where the 3D view shows: beside the board on a wide screen, or when the action
+// plays in 3D on a phone.
 const Board3D = dynamic(() => import('./board-3d').then((m) => m.Board3D), { ssr: false });
-const VIEW_KEY = 'snowmoon.replay.view';
-/**
- * Whether 3D is offered (owner, 2026-11-03): only with WebGL, and never when the person has asked for reduced motion.
- * Wide screens show 2D and 3D side by side; phones show one, 3D by default where it holds the frame rate, and remember
- * the person's choice.
- */
-function use3D() {
-  const [can, setCan] = useState(false), [wide, setWide] = useState(false), [view, setView] = useState<'2d' | '3d'>('3d'), [chosen, setChosen] = useState(false);
-  useEffect(() => {
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    let gl = false;
-    try { const c = document.createElement('canvas'); gl = !!(c.getContext('webgl2') || c.getContext('webgl')); } catch { gl = false; }
-    setCan(gl && !reduce);
-    const mq = window.matchMedia('(min-width: 1100px)'), onWide = () => setWide(mq.matches);
-    onWide(); mq.addEventListener('change', onWide);
-    try { const v = localStorage.getItem(VIEW_KEY); if (v === '2d' || v === '3d') { setView(v); setChosen(true); } } catch { /* storage blocked */ }
-    return () => mq.removeEventListener('change', onWide);
-  }, []);
-  const choose = (v: '2d' | '3d') => { setView(v); setChosen(true); try { localStorage.setItem(VIEW_KEY, v); } catch { /* storage blocked */ } };
-  return { can, wide, view, chosen, choose, setView };
-}
 
 type Board = ReturnType<typeof boardOut>;
 type Frame = ReturnType<typeof turnFrames>[number];
 export interface Draft { placements: Ghost[]; cost: number; points: number; warnings: string[]; note?: string; who: string }
 
 /**
- * The live page's top block (owner, 2026-11-03: "This turn" at the top, one screen with no scrolling): one board that
- * shows this turn with the AI's draft on it, and plays the turn just taken in place when a new turn arrives (no jump,
- * no scroll), then shows the new turn. Beside or under it: points and cost, lane warnings, Take turn, the replay's
- * controls, and the last turn's summary, compact with "more". The frames are the engine's, from the side's view only
- * (solo.ts turnFrames); nothing else about the board is passed in.
+ * The live page's top block: one screen with no scrolling (owner, 2026-11-03), and "2D is for thinking; 3D is for the
+ * action". The 2D board is always the board you plan on: this turn, with the AI's draft on it. Wide screens keep the
+ * 3D view beside it the whole time; when a turn plays, its action plays there. Phones have one board: with "Animate
+ * action in 3D" on (the default), the action plays in 3D in the board's place, then the 2D board returns; off, it plays
+ * in 2D. Watch again, in 2D or 3D. Every playback has Skip and 2x. Without WebGL, with reduced motion, or where 3D
+ * can't hold the frame target, everything is 2D. The frames are the engine's, from the side's view only (solo.ts
+ * turnFrames); the 2D and the 3D board are given the same frame, nothing else about the board.
  */
 export function LiveTop(p: {
   matchId: string; width: number; height: number; status: string; tally: string | null;
-  current: { board: Board; canPlace: number[][]; lastSeen: { x: number; y: number }[]; marks: { x: number; y: number }[] };
+  current: { board: Board; seen: [number, number][]; canPlace: number[][]; lastSeen: { x: number; y: number }[]; marks: { x: number; y: number }[] };
   draft: Draft | null; canTake: boolean; turn: number; points: number;
   latest: { turn: number; frames: Frame[]; whole: boolean } | null;
   summary: string[] | null;
 }) {
-  const [mode, setMode] = useState<'current' | 'replay'>(p.latest?.whole ? 'replay' : 'current');
-  const [i, setI] = useState(p.latest?.whole && p.latest ? p.latest.frames.length - 1 : 0);
-  const [playing, setPlaying] = useState(false);
-  // Started by itself after a new turn arrived: when it finishes, go back to this turn. Any step or pause by the person
-  // cancels that (they're looking at the replay).
-  const [auto, setAuto] = useState(false);
+  const d3 = use3D(), [note, setNote] = useState<string | null>(null);
+  const frames = p.latest?.frames ?? [], whole = !!p.latest?.whole;
+  // The action playing now, and where: '3d' in the 3D view, '2d' in the 2D board's place.
+  const [play, setPlay] = useState<'2d' | '3d' | null>(null);
+  const done = useCallback(() => setPlay(null), []);
+  const pb = usePlayback(frames, done, false);
+  const start = (view: '2d' | '3d') => { setPlay(view); pb.restart(); };
   const [more, setMore] = useState(false), [moreWarn, setMoreWarn] = useState(false);
-  // A new turn arrived (this page took it, or the AI did while it was open): play it in place.
-  const seen = useRef(p.latest?.turn ?? -1);
+  // A new turn arrived (this page took it, or the AI did while it was open): play its action.
+  const seenTurn = useRef(p.latest?.turn ?? -1);
   useEffect(() => {
     const t = p.latest?.turn ?? -1;
-    if (t > seen.current) { seen.current = t; setMode('replay'); setI(0); setPlaying(true); setAuto(true); setMore(false); }
+    if (t > seenTurn.current) { seenTurn.current = t; setMore(false); start(d3.on && (d3.wide || d3.animate) ? '3d' : '2d'); }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [p.latest?.turn]);
-  const n = p.latest?.frames.length ?? 0;
-  useEffect(() => {
-    if (!playing || mode !== 'replay') return;
-    const id = window.setInterval(() => setI((k) => Math.min(k + 1, n - 1)), 450);
-    return () => window.clearInterval(id);
-  }, [playing, mode, n]);
-  // At the last frame it stops; if it started by itself, the board shows the new turn (with the next draft when there is
-  // one) a moment later.
-  useEffect(() => {
-    if (mode !== 'replay' || i < n - 1) return;
-    if (playing) { setPlaying(false); return; }
-    if (!auto || p.latest?.whole) return;
-    const t = window.setTimeout(() => { setMode('current'); setAuto(false); }, 1200);
-    return () => window.clearTimeout(t);
-  }, [mode, i, n, playing, auto, p.latest?.whole]);
+  // 3D couldn't keep up, or didn't start: the action carries on in 2D from the same step.
+  const off3d = (why: string) => { d3.markSlow(); setNote(why); setPlay((v) => (v === '3d' ? '2d' : v)); };
 
-  const replaying = mode === 'replay' && p.latest && n;
-  const f = replaying ? p.latest!.frames[Math.min(i, n - 1)] : null;
-  const prevFrame = replaying && i > 0 ? p.latest!.frames[Math.min(i, n - 1) - 1] : null;
-  const d3 = use3D(), [d3note, setD3note] = useState<string | null>(null);
-  // 3D only for a replay; on a wide screen beside the 2D board, on a phone in its place.
-  const show3d = !!f && d3.can && d3.view === '3d', side3d = show3d && d3.wide;
+  const f = play ? pb.f : null;
+  const last = frames.at(-1);
+  // When nothing plays: the 2D board is this turn's plan (or the whole board once it's over); the 3D view shows the board
+  // as it stands, from the same view.
+  const idle = whole && last ? { board: last.board, seen: null } : { board: p.current.board, seen: p.current.seen };
+  const v3 = play === '3d' && f ? { board: f.board, prev: pb.prev?.board ?? null, seen: whole ? null : (f.seen as [number, number][]), stepMs: pb.stepMs } : { board: idle.board, prev: null, seen: idle.seen, stepMs: 0 };
+  const beside = d3.on && d3.wide;
+  const show3d = beside || (play === '3d' && d3.on);
   const summary = p.summary ?? [];
   const warns = p.draft?.warnings ?? [];
   return (
     <section className="mb-top" aria-label="This turn">
       <div className="mb-top-board" style={{ ['--ar' as string]: p.width / p.height }}>
         <p className="mb-top-status">{p.status}{p.tally ? ` · ${p.tally}` : ''}</p>
-        {f ? (
-          <div className={side3d ? 'mb-boards mb-boards-2' : 'mb-boards'}>
-            {!show3d || side3d ? <ViewBoard board={f.board} width={p.width} height={p.height} seen={p.latest!.whole ? null : (f.seen as [number, number][])} label={p.latest!.whole ? 'The whole board at this step' : 'Your side’s view at this step'} /> : null}
-            {show3d ? (
-              <Board3D
-                board={f.board} prev={prevFrame?.board ?? null} seen={p.latest!.whole ? null : (f.seen as [number, number][])} width={p.width} height={p.height} stepMs={450}
-                onFps={(fps) => { if (!d3.wide && !d3.chosen && fps < 50) { d3.setView('2d'); setD3note('Switched to 2D to keep it smooth. Tap 3D to try again.'); } }}
-                onFail={() => { d3.setView('2d'); setD3note('3D didn’t start here, so this is 2D.'); }}
-              />
-            ) : null}
-          </div>
-        ) : (
-          <ViewBoard board={p.current.board} width={p.width} height={p.height} canPlace={p.current.canPlace} lastSeen={p.current.lastSeen} marks={p.current.marks} ghosts={p.draft?.placements ?? []} />
-        )}
-        <div className="mb-replay-controls mb-top-controls">
-          {p.latest ? (
-            <>
-              <button type="button" aria-label="Step back" onClick={() => { setAuto(false); setMode('replay'); setPlaying(false); setI((k) => Math.max(0, k - 1)); }}>◀</button>
-              <button type="button" onClick={() => {
-                setAuto(false);
-                if (mode !== 'replay') { setMode('replay'); setI(0); setPlaying(true); return; }
-                if (i + 1 >= n) setI(0);
-                setPlaying((x) => !x);
-              }}>{mode === 'replay' && playing ? 'Pause' : `Replay turn ${p.latest.turn}`}</button>
-              <button type="button" aria-label="Step forward" onClick={() => { setAuto(false); setMode('replay'); setPlaying(false); setI((k) => Math.min(n - 1, k + 1)); }}>▶</button>
-              {mode === 'replay' && !p.latest.whole ? <button type="button" onClick={() => { setAuto(false); setPlaying(false); setMode('current'); }}>This turn</button> : null}
-              {f ? <span className="mb-note">{`Step ${f.step}${i === 0 ? ' (placements appear)' : ''}${p.latest.whole ? ' · whole board' : ' · shaded: out of sight'}`}</span> : null}
-            </>
-          ) : <span className="mb-note">No turn played yet.</span>}
-          {/* Room for the 2D/3D toggle (the 3D replay, to come). */}
-          <span className="mb-viewtoggle">
-            {d3.can ? (
-              <span role="group" aria-label="Replay view">
-                <button type="button" aria-pressed={d3.view === '2d'} onClick={() => { d3.choose('2d'); setD3note(null); }}>2D</button>
-                <button type="button" aria-pressed={d3.view === '3d'} onClick={() => { d3.choose('3d'); setD3note(null); }}>3D</button>
-              </span>
-            ) : null}
-          </span>
+        <div className={beside ? 'mb-boards mb-boards-2' : 'mb-boards'}>
+          {beside || play !== '3d' ? (
+            play === '2d' && f ? (
+              <ViewBoard board={f.board} width={p.width} height={p.height} seen={whole ? null : (f.seen as [number, number][])} label={whole ? 'The whole board at this step' : 'Your side’s view at this step'} />
+            ) : whole && last ? (
+              <ViewBoard board={last.board} width={p.width} height={p.height} seen={null} label="The whole board at the end" />
+            ) : (
+              <ViewBoard board={p.current.board} width={p.width} height={p.height} canPlace={p.current.canPlace} lastSeen={p.current.lastSeen} marks={p.current.marks} ghosts={p.draft?.placements ?? []} />
+            )
+          ) : null}
+          {show3d ? (
+            <Board3D {...v3} width={p.width} height={p.height}
+              onSlow={() => off3d('3D couldn’t keep up on this device, so the action plays in 2D.')}
+              onFail={() => off3d('3D didn’t start here, so the action plays in 2D.')}
+            />
+          ) : null}
         </div>
-        {d3note ? <p className="mb-note" role="status">{d3note}</p> : null}
+        <div className="mb-replay-controls mb-top-controls">
+          {play && f ? <PlaybackControls p={pb} whole={whole} label={`Turn ${p.latest!.turn}${play === '3d' ? ', 3D' : ''}`} />
+            : p.latest ? (
+              <>
+                <span className="mb-note">Watch turn {p.latest.turn} again</span>
+                <button type="button" aria-label={`Watch turn ${p.latest.turn} again in 2D`} onClick={() => start('2d')}>2D</button>
+                {d3.on ? <button type="button" aria-label={`Watch turn ${p.latest.turn} again in 3D`} onClick={() => start('3d')}>3D</button> : null}
+              </>
+            ) : <span className="mb-note">No turn played yet.</span>}
+          {d3.can && !d3.wide ? (
+            <label className="mb-animate"><input type="checkbox" checked={d3.animate} onChange={(e) => d3.setAnimate(e.target.checked)} /> Animate action in 3D</label>
+          ) : null}
+        </div>
+        {note ? <p className="mb-note" role="status">{note}</p> : null}
       </div>
       <div className="mb-top-side">
         {p.draft ? (

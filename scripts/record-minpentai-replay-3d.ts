@@ -1,7 +1,8 @@
 /**
- * A recording of the 3D replay (owner, 2026-11-03: "show me a recording before asking to merge"), from a local match as
- * in record-minpentai-live-flow.ts: on a phone (3D by default, one tap to 2D and back) and on a desktop (2D and 3D side
- * by side), then the end: resign, and the last turn on the whole board in 3D with no cloud.
+ * A recording of the 3D action (owner, 2026-11-03: "2D is for thinking; 3D is for the action"), from a local match as in
+ * record-minpentai-live-flow.ts. On a phone: turns whose action plays in 3D in the board's place, Watch again in 2D at
+ * 2x and in 3D with Skip, "Animate action in 3D" off for a turn played in 2D, a past turn watched in 3D, and the end:
+ * the whole board in 3D with no cloud. On a desktop the same, with the 3D view beside the 2D board throughout.
  *
  *   npx next build && npx tsx --conditions=react-server scripts/record-minpentai-replay-3d.ts [out-dir]
  *
@@ -30,7 +31,8 @@ try {
     const d = await tool(BASE, a.access_token, 'minpentai_submit_orders', { match_id: id, turn: v.turn, placements, source: 'agent', final: false });
     if (!d.ok) throw new Error(`draft turn ${v.turn}: ${d.error}`);
   };
-  const run = async (name: string, width: number, height: number, turns: number, extra: (page: Page, t: number) => Promise<void>, end: boolean) => {
+  const afterAction = async (page: Page) => { await page.getByRole('button', { name: /^Watch turn \d+ again in 2D/ }).waitFor({ timeout: 40_000 }); await page.waitForTimeout(1200); };
+  const run = async (name: string, width: number, height: number) => {
     const st = await tool(BASE, a.access_token, 'minpentai_start_solo', { ruleset: 'book-4', level: 2, model: { name: 'Scripted AI', maker: 'this recording', weights: 'open' } });
     if (!st.ok) throw new Error(`start: ${st.error}`);
     const id = st.out.match_id as string, live = st.out.live_url as string;
@@ -42,40 +44,60 @@ try {
       localStorage.setItem('snowmoon.wallet', JSON.stringify({ token, address: address.toLowerCase(), short: address.slice(0, 6), exp }));
     }, [people.A.token, people.A.address] as const);
     const page = await ctx.newPage();
-    for (let t = 0; t < turns; t++) {
+    const take = async (t: number) => {
       await draft(id);
       if (t === 0) await page.goto(live, { waitUntil: 'networkidle' });
       await page.locator('.mb-take-button').waitFor({ timeout: 20_000 });
-      await page.waitForTimeout(2000);
+      await page.waitForTimeout(1800); // the plan on the 2D board
       await page.getByRole('button', { name: 'Take turn' }).click();
       await page.getByRole('button', { name: 'Pause' }).waitFor({ timeout: 30_000 });
-      await page.waitForTimeout(3000);
-      await page.screenshot({ path: path.join(OUT, `${name}-turn${t}-replay.png`) });
-      await extra(page, t);
-      await page.getByRole('button', { name: /^Replay turn/ }).waitFor({ timeout: 30_000 });
-      await page.waitForTimeout(1500);
+      await page.waitForTimeout(2500);
+      await page.screenshot({ path: path.join(OUT, `${name}-turn${t}-action.png`) });
+      await afterAction(page);
+    };
+    // Three turns, the action in 3D (beside the board on a desktop; in its place on a phone, then the 2D board returns).
+    for (let t = 0; t < 3; t++) await take(t);
+    // Watch again in 2D at 2x, then in 3D, skipped part way.
+    await page.getByRole('button', { name: /^Watch turn \d+ again in 2D/ }).click();
+    await page.getByRole('button', { name: '2x' }).click();
+    await page.waitForTimeout(2500);
+    await page.screenshot({ path: path.join(OUT, `${name}-watch-2d-2x.png`) });
+    await afterAction(page);
+    await page.getByRole('button', { name: /^Watch turn \d+ again in 3D/ }).click();
+    await page.waitForTimeout(2500);
+    await page.getByRole('button', { name: 'Skip' }).click();
+    await afterAction(page);
+    if (name === 'phone') {
+      // The setting off: the next turn's action plays in 2D.
+      await page.getByLabel('Animate action in 3D').uncheck();
+      await page.waitForTimeout(800);
+      await take(3);
+      await page.getByLabel('Animate action in 3D').check();
     }
-    if (end) {
-      await tool(BASE, a.access_token, 'minpentai_resign', { match_id: id });
-      await page.goto(live, { waitUntil: 'networkidle' });
-      await page.waitForTimeout(1500);
-      await page.getByRole('button', { name: /^Replay turn/ }).click();
-      await page.waitForTimeout(8000);
-      await page.screenshot({ path: path.join(OUT, `${name}-end-whole-board.png`) });
-    }
+    // A past turn, watched in 3D in place.
+    await page.locator('.mb-past-row').first().scrollIntoViewIfNeeded();
+    await page.locator('.mb-past-row').first().click();
+    await page.getByRole('button', { name: /^Watch turn \d+ in 3D/ }).click();
+    await page.waitForTimeout(3500);
+    await page.screenshot({ path: path.join(OUT, `${name}-past-3d.png`) });
+    await page.getByRole('button', { name: 'Skip' }).last().click();
+    await page.waitForTimeout(800);
+    // The end: resign, then the last turn on the whole board, in 3D with no cloud.
+    await tool(BASE, a.access_token, 'minpentai_resign', { match_id: id });
+    await page.goto(live, { waitUntil: 'networkidle' });
+    await page.waitForTimeout(2500);
+    await page.getByRole('button', { name: /^Watch turn \d+ again in 3D/ }).click();
+    await page.waitForTimeout(4500);
+    await page.screenshot({ path: path.join(OUT, `${name}-end-whole-board.png`) });
+    await afterAction(page);
+    await page.waitForTimeout(1500);
     await ctx.close();
     const vid = readdirSync(dir).find((f) => f.endsWith('.webm'));
     if (vid) renameSync(path.join(dir, vid), path.join(OUT, `${name}.webm`));
     console.log(`recorded: ${OUT}/${name}.webm`);
   };
-  // Phone: 3D by default; on the second turn, 2D for a moment, then back to 3D.
-  await run('phone', 390, 844, 3, async (page, t) => {
-    if (t !== 1) return;
-    await page.getByRole('button', { name: '2D', exact: true }).click();
-    await page.waitForTimeout(2500);
-    await page.getByRole('button', { name: '3D', exact: true }).click();
-  }, true);
-  await run('desktop', 1440, 900, 3, async () => {}, true);
+  await run('phone', 390, 844);
+  await run('desktop', 1440, 900);
 } catch (e) {
   console.error('recording failed:', e);
   process.exitCode = 1;
