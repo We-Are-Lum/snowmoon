@@ -180,6 +180,8 @@ export const BOOK_SETTINGS = {
   gliderSight: { text: 'A side sees this far around each of its plain gliders in flight (0: they carry no sight)', min: 0, max: 3, edition: 'Invented: the book gives sight to symbols and symbol-carrying ships, not plain gliders.' },
   maxSymbolTowers: { text: 'Most towers formed by symbols a side may hold (0: no limit of its own)', min: 0, max: 12, edition: 'This edition\'s.' },
   killReports: { text: 'A side learns the square of every enemy tower its gliders destroy, seen or not, and a running count for both sides (1: yes)', min: 0, max: 1, edition: 'This edition\'s.' },
+  // book-5 draft option (2026-11-04; off unless set).
+  startWalls: { text: 'Each starting tower starts with a square of its side on every open square beside it (1: yes)', min: 0, max: 1, edition: 'This edition\'s; after c4-b113, "the wall that Dza had set up around his home base".' },
 } satisfies Record<string, { text: string; min: number; max: number; edition: string }>;
 export type BookSettingId = keyof typeof BOOK_SETTINGS;
 

@@ -38,6 +38,10 @@ export const VARIANTS: Record<string, Variant> = {
   'r5 18 wide + 2 symbol towers + symbol scouts 2': { set: { width: 18, ...U, maxSymbolTowers: 2, symbolGliderSight: 2 }, comp: F },
   'r6 col 5 + 2 symbol towers + symbol scouts 2': { set: { startX: 5, ...U, maxSymbolTowers: 2, symbolGliderSight: 2 }, comp: F },
   'r7 18 wide + col 3 + 2 symbol towers': { set: { width: 18, startX: 3, ...U, maxSymbolTowers: 2 }, comp: F },
+  // 2026-11-04, after the book-4 playtest: book-4 (r5) with its computer's revision 2, which guards its towers.
+  'g1 book-4, guarding computer': { set: { width: 18, ...U, maxSymbolTowers: 2, symbolGliderSight: 2 }, comp: { ...F, guard: true } },
+  // The book-5 draft: book-4 with towers that start walled, and the guarding computer.
+  'g2 book-5 towers start walled, guarding computer': { set: { width: 18, ...U, maxSymbolTowers: 2, symbolGliderSight: 2, startWalls: 1 }, comp: { ...F, guard: true } },
 };
 
 const [name, lvlArg, nArg] = process.argv.slice(2);
