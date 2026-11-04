@@ -9,7 +9,7 @@ import { liveLayoutCheck } from './lib/live-layout';
 const fails: string[] = [];
 const browser = await chromium.launch({ channel: 'chrome' });
 try { await liveLayoutCheck(browser, (m) => fails.push(m)); }
-catch (e) { fails.push(`live page layout broke: ${String((e as Error)?.message ?? e).split('\n')[0]}`); }
+catch (e) { console.error(e); fails.push(`live page layout broke: ${String((e as Error)?.message ?? e).split("\n")[0]}`); }
 finally { await browser.close(); }
 console.log(`LIVE_LAYOUT ${JSON.stringify(fails)}`);
 process.exit(0);
