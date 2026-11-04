@@ -1,16 +1,20 @@
-# Model choice for remixers: Privacy, consent, Terms, About lines and the closed models' notice (DRAFT v2, not reread)
+# Model choice for remixers: Privacy, Terms, About lines and the closed models' notice, which is their consent (DRAFT v3, not reread)
 
 Drafted by the coding agent (Claude, a closed model by Anthropic), 2026-11-04, on branch `remix-model-choice`. **v2**
 folds in the owner's decisions of 2026-11-04: closed models without zero retention are allowed, with a notice; Gemini is
-allowed for remixers; a one-time "I'm 18 or older" on the same screen as the first notice. **Not reread by the owner.**
-The Privacy §3, §4 and §7 lines and the notices are in `src/lib/legal.ts` on this branch, pending the reread (so P6k is
-red until then); `config/consent.json` is not changed (its new version is a decision owed). Not legal advice. It builds
+allowed for remixers; a one-time "I'm 18 or older" on the same screen as the first notice. **v3** folds in the owner's
+answers to the reread pack of 2026-11-04 (items 5.3, 5.4, 6.1 to 6.5): the notice is the closed models' consent, and
+own-words-v5 is dropped; Google's own 24-hour in-memory cache is named; OpenAI's retention has one description; the live
+pages were re-checked (below). **Not reread by the owner.** The Privacy §3, §4 and §7 lines and the notices are in
+`src/lib/legal.ts` on this branch, pending the reread (so P6k is red until then); `config/consent.json` is not changed,
+and won't be. Not legal advice. It builds
 on `closed-model-bases` ([`docs/proposals/closed-model-bases.md`](../proposals/closed-model-bases.md)) and
 [`age-terms-closed-models.md`](age-terms-closed-models.md).
 
 Legal texts describe today (owner, 2026-10-18): these lines go live in the same release that turns
 `IMAGES.designs.modelChoice` on, never ahead of it. `check:principles` P6t fails while the switch is on and Privacy §4,
-§7 (each maker with its retention, `CLOSED_PROVIDERS[maker].retentionWords`) or the consent screen lack them.
+§7 (each maker with its retention, `CLOSED_PROVIDERS[maker].retentionWords`) or a maker's notice lack them. P6j compares
+each maker's notice with what that maker receives (owner, 2026-11-04, choice 6.1).
 
 "Before" is main's `src/lib/legal.ts` and `config/consent.json` (`own-words-v4`) at `d42b7d8`.
 
@@ -36,6 +40,11 @@ Legal texts describe today (owner, 2026-10-18): these lines go live in the same 
   words, so changed words without a new version fail `test:model-choice`). The first notice a device sees also asks "I'm
   18 or older"; until it is ticked, neither button works and no closed model can be picked. Both answers are kept on the
   device only (`snowmoon.model-notice.<maker>`, `snowmoon.adult-confirmed`); nothing is sent.
+- **The notice is the consent** (owner, 2026-11-04, choice 6.1). It shows only when someone picks a closed model, so
+  people who never pick one are never asked again; the consent screen (`own-words-v4`) stays as it is and describes the
+  open models' route. The answer stays on the device (decided). P6j reads the notice's words, not a record of the
+  answer, so it needs no server record. Honestly: the server can't check that a notice was answered before a closed
+  call, as with the 18+ box; the form makes no closed call before it (M14).
 - **The label** beside each closed model in the picker, always, whether or not its notice was answered.
 - Counts and caps as v1: 6 closed pictures a person a day apart from the open 10; closed spend under its own $5 cap
   inside the free cap. Same prompt check; the recipe's closed safety line.
@@ -50,9 +59,24 @@ the page):
   retention "30 days"; Application state retention "None"; Zero Data Retention eligible "Yes, see below for limitations".
 - "data sent to the OpenAI API is not used to train or improve OpenAI models".
 - "If the classifier detects potential CSAM content, the image will be retained for manual review".
-- Through the gateway this is OpenAI's default, not ZDR: the gateway offers no ZDR for this model (above). OpenAI's terms
-  pages on openai.com/policies still refuse the fetch (HTTP 403); the ownership and usage quotes in v1 come from the CDN
-  PDF and dated copies, **to re-check on the live pages**.
+- The same page, re-read 2026-11-04 (choice 6.5), for the longer cases: "unless longer retention is required by law, or
+  is reasonably necessary to protect our services" (the sentence goes on), and "If the classifier detects potential CSAM
+  content, the image will be retained for manual review". It also says "As of March 1, 2023, data sent to the OpenAI API
+  is not used to train or improve OpenAI models".
+- Through the gateway this is OpenAI's default, not ZDR: the gateway offers no ZDR for this model (above).
+
+**OpenAI's live policy pages, re-checked 2026-11-04 (choice 6.5), by the fetch tool:**
+- <https://openai.com/policies/services-agreement/>: **refused** (HTTP 403).
+- <https://openai.com/policies/terms-of-use/>: **refused** (HTTP 403).
+- <https://openai.com/policies/usage-policies/>: **refused** (HTTP 403).
+- <https://cdn.openai.com/osa/openai-services-agreement.pdf> (the agreement as a PDF, served by OpenAI): **read**. Footer
+  "OpenAI Services Agreement ONLINE v.010126". §4.1, word for word: "As between Customer and OpenAI, to the extent
+  permitted by applicable law, Customer: (a) retains all ownership rights in Input; and (b) owns all Output. OpenAI hereby
+  assigns to Customer all OpenAI's right, title, and interest, if any, in and to Output." §3.3, Restrictions: "Customer
+  will not, and will not permit End Users to: … (c) allow minors to use OpenAI Services without consent from their parent
+  or guardian". Both match v1's quotes.
+- The Terms of Use and Usage Policies quotes (no "human-generated" passing-off; nothing on NFTs or minting) still come
+  from dated copies only. **Still to re-check** when the live pages open.
 
 **Google** (Gemini 3.1 Flash Image, Vertex AI), from
 <https://docs.cloud.google.com/vertex-ai/generative-ai/docs/data-governance> (read 2026-11-04; no date on the page):
@@ -62,9 +86,13 @@ the page):
   possible when using some Advanced AI features".
 - Through the gateway, calls are routed only to Vertex under Vercel's ZDR agreement
   (<https://vercel.com/docs/ai-gateway/security-and-compliance/zdr>, last updated 2026-09-22: Google Vertex AI "ZDR").
-  What that agreement covers of the caching and abuse logging above isn't public. **The notice and §7 say "set to keep no
-  copy … through the gateway's zero-retention agreement", which is what Vercel states; the owner may prefer to add
-  Google's own 24-hour cache.**
+  What that agreement covers of the caching and abuse logging above isn't public.
+- Re-read 2026-11-04 for choice 6.3: "Implicit caching stores Customer Data (inputs, outputs, and derived data) in
+  memory." and "It's deleted no later than 24 hours after it's written." Turning caching off for a project "disables
+  both in-memory caching and durable caching, and no cached data is retained" (that project is Vercel's; we can't set it).
+  **The owner chose (2026-11-04, 6.3) to name this cache** in the notice, the §7 item, About and the picker label.
+- Not named (an open question): "Google may log prompts to detect potential abuse", with no period stated, for customers
+  under the Google Cloud Platform Terms of Service.
 
 **Vercel AI Gateway** itself (same ZDR page): "AI Gateway has a ZDR policy and does not retain prompts, outputs, or
 sensitive data."
@@ -73,7 +101,7 @@ sensitive data."
 
 **Before:** none.
 
-**After, OpenAI** (notice version 1):
+**Before:** v1 (the reread pack, 6a). **After, OpenAI** (notice version 2):
 
 > **A closed model by OpenAI**
 >
@@ -82,10 +110,13 @@ sensitive data."
 > OpenAI receives your prompt for each view and, for the side and back, the front view it made, through Vercel AI
 > Gateway. Nothing else about you.
 >
-> OpenAI may keep them for up to 30 days to check for abuse, and longer if its checks flag a picture for review. It
-> doesn't train its models on them. The gateway keeps no copy.
+> OpenAI may keep them for up to 30 days to watch for abuse, and longer if its checks flag a picture for review or
+> where the law requires it. It doesn't train its models on them. The gateway keeps no copy.
 
-**After, Google** (notice version 1):
+(v1's last paragraph: "OpenAI may keep them for up to 30 days to check for abuse, and longer if its checks flag a picture
+for review. It doesn't train its models on them. The gateway keeps no copy.")
+
+**After, Google** (notice version 2):
 
 > **A closed model by Google**
 >
@@ -94,8 +125,12 @@ sensitive data."
 > Google receives your prompt for each view and, for the side and back, the front view it made, through Vercel AI
 > Gateway. Nothing else about you.
 >
-> Google is set to keep no copy, through the gateway's zero-retention agreement with Google Vertex AI, and doesn't
-> train its models on them. The gateway keeps no copy.
+> Google is set to keep no copy, through the gateway's zero-retention agreement with Google Vertex AI. Google's own
+> page says it may hold them in memory for up to 24 hours, to answer faster. It doesn't train its models on them. The
+> gateway keeps no copy.
+
+(v1's last paragraph: "Google is set to keep no copy, through the gateway's zero-retention agreement with Google Vertex
+AI, and doesn't train its models on them. The gateway keeps no copy.")
 
 **With the first notice a device sees** (either maker), below the text:
 
@@ -107,8 +142,8 @@ sensitive data."
 
 ## The labels beside each closed model in the picker, word for word
 
-- GPT Image 2.5 Sunburst: "OpenAI keeps prompts up to 30 days"
-- Gemini 3.1 Flash Image: "Google keeps no copy"
+- GPT Image 2.5 Sunburst: "OpenAI keeps prompts up to 30 days" (unchanged)
+- Gemini 3.1 Flash Image: before "Google keeps no copy"; after **"Google keeps no copy, past a 24-hour cache"**
 
 ## The 18+ confirmation and the notice: one screen
 
@@ -171,35 +206,46 @@ are 18 or older, can Generate, no minor should reach OpenAI; the box adds a remi
 <!-- privacy-7 -->
 > If you choose a closed model when you remix a character's sheet, its maker receives, through Vercel AI Gateway, the
 > prompt for each view and, for the side and back, the front view it made. It receives nothing else about you, and
-> your browser never contacts it. OpenAI (for GPT Image 2.5 Sunburst) may keep them for up to 30 days to check for
-> abuse, and longer if its checks flag a picture for review; it does not train its models on them. Google (for Gemini
-> 3.1 Flash Image) is set to keep no copy, through the gateway's zero-retention agreement with Google Vertex AI, and
-> does not train its models on them. The gateway itself keeps no copy.
+> your browser never contacts it. OpenAI (for GPT Image 2.5 Sunburst) may keep them for up to 30 days to watch for
+> abuse, and longer if its checks flag a picture for review or where the law requires it; it does not train its models
+> on them. Google (for Gemini 3.1 Flash Image) is set to keep no copy, through the gateway's zero-retention agreement
+> with Google Vertex AI, though Google's own page says it may hold them in memory for up to 24 hours, to answer faster;
+> it does not train its models on them. The gateway itself keeps no copy.
 <!-- end -->
+
+(v2, the reread pack's 6f: "… OpenAI (for GPT Image 2.5 Sunburst) may keep them for up to 30 days to check for abuse,
+and longer if its checks flag a picture for review; it does not train its models on them. Google (for Gemini 3.1 Flash
+Image) is set to keep no copy, through the gateway's zero-retention agreement with Google Vertex AI, and does not train
+its models on them. …")
+
+### The bases item (closed-model-bases, reread 2026-11-04): one sentence reopened (choice 6.4)
+
+One description of OpenAI's retention, in both §7 items and the notice. **This reopens the bases item's reread for this
+one sentence.**
+
+**Before:**
+
+> OpenAI may keep our prompts, reference pictures and the pictures it makes for up to 30 days to watch for abuse, and
+> longer only where the law requires it or to protect its services or others from harm.
+
+**After:**
+
+> OpenAI may keep our prompts, reference pictures and the pictures it makes for up to 30 days to watch for abuse, and
+> longer if its checks flag a picture for review or where the law requires it.
+
+Note: OpenAI's page also allows longer retention where "reasonably necessary to protect our services"; the one
+description (the pack's suggestion) leaves that case out. The owner may want it back in all three.
 
 If `closed-model-bases`' own §7 item (the project's bases) ships too, the two stay separate items: theirs is about the
 project's own pictures, this one about a remixer's.
 
-## The consent screen (`config/consent.json`): its last paragraph, a new version (`own-words-v5`), not changed on the branch
+## Consent: the notice, not a new consent version (owner, 2026-11-04, choice 6.1)
 
-P6j compares the consent screen with what receives the prompt at Generate; with the switch on, OpenAI and Google do.
-
-**Before (`own-words-v4`, last paragraph):**
-
-> To make an image, your prompt is sent to Groq to be checked (through Vercel AI Gateway when Groq is busy) and to
-> fal.ai to make it, and your Farcaster ID to Neynar to check your account's score. In Remix, every frame you make is
-> saved and public at its link as soon as it is made, with your words. Elsewhere, drafts you don't publish stay on your
-> device.
-
-**After:**
-
-<!-- consent -->
-> To make an image, your prompt is sent to Groq to be checked (through Vercel AI Gateway when Groq is busy) and to
-> fal.ai to make it, and your Farcaster ID to Neynar to check your account's score. If you choose a closed model for a
-> sheet's views, the prompt and the front view go to its maker (OpenAI or Google) through Vercel AI Gateway instead of
-> fal.ai; OpenAI may keep them for up to 30 days. In Remix, every frame you make is saved and public at its link as soon
-> as it is made, with your words. Elsewhere, drafts you don't publish stay on your device.
-<!-- end -->
+v2 drafted `own-words-v5`, a new consent version everyone would agree to again. **Dropped.** The owner chose a separate
+consent, shown only when someone picks a closed model: the first notice per maker (with the 18+ box, the first time a
+device sees one) is that consent. People who never use closed models aren't asked again. `config/consent.json` stays at
+`own-words-v4`, which describes the open models' route (Groq, Vercel AI Gateway, fal.ai, Neynar); P6j checks it names
+exactly those, and checks each maker's notice against what that maker receives.
 
 ## Terms §8 (AI-made material): one sentence added at the end
 
@@ -232,7 +278,9 @@ P6h needs About to name the services Privacy names; `SERVICES` now has OpenAI an
 
 > … Supabase holds the database. If you choose a closed model when you remix a character's sheet, its maker (OpenAI or
 > Google) receives the prompt and the front view through Vercel AI Gateway, and nothing about you; OpenAI may keep them
-> for up to 30 days, Google is set to keep no copy, and neither trains on them. …
+> for up to 30 days, Google is set to keep no copy past a 24-hour cache in memory, and neither trains on them. …
+
+(v2: "… OpenAI may keep them for up to 30 days, Google is set to keep no copy, and neither trains on them.")
 
 (In `src/app/about/page.tsx` on the branch, since Privacy §7 now names OpenAI and Google and P6h compares the two; it ships with them.)
 The assistant's notice (P6i) doesn't change: no assistant question goes to OpenAI or Google.
@@ -274,17 +322,36 @@ The publish adds one more prompt check (the sheet's name), ~$0.0001, for every m
 36 GPT remixes (or 24 Gemini); at 6 closed pictures a person, two remixes each, so 18 people a day (12 with Gemini).
 The GPT front is estimated, not measured (the bases made every front from a reference picture).
 
+## Midjourney's live terms, re-checked 2026-11-04 (choice 5.3)
+
+The reference picture's recipe (branch challenge-styles) quotes Midjourney's terms from a dated third-party copy (TOS
+Tracker, captured 2026-07-03). Re-checked on the live pages by the fetch tool, 2026-11-04:
+
+- <https://docs.midjourney.com/hc/en-us/articles/32083055291277-Terms-of-Service>: **refused** (HTTP 403).
+- <https://www.midjourney.com/terms-of-service>: **refused** (HTTP 403).
+- <https://docs.midjourney.com/docs/terms-of-service>: **refused** (HTTP 403).
+
+So the quotes are still unconfirmed on the live page. **Nothing made from the Midjourney reference is published** until
+the owner (or a browser the owner opens) reads the live page and it matches.
+
+`check:principles` (choice 5.4): Midjourney is a maker named for provenance (`PROVENANCE_ONLY`), not a service in
+`SERVICES`, so P6g and P6h ask for no Privacy line; P6h checks that About, if it names Midjourney, says the site sends
+nothing to it.
+
 ## Decisions owed (the owner's)
 
-1. Reread the notices, the labels, the 18+ line and Privacy §3, §4 and §7 (in `legal.ts` on the branch), and the consent
-   and About lines (draft only); they ship in the release that turns the switch on.
-2. The consent screen: a new version (`own-words-v5`, everyone agrees again) or a separate consent only when a closed
-   model is chosen.
-3. The 18+ box: whether a device-only reminder meets OpenAI's minors clause in your reading (it is not a verification).
-4. Google's wording: "set to keep no copy" (Vercel's ZDR agreement), or also Google's own 24-hour in-memory cache.
-5. OpenAI's live terms pages (openai.com/policies) still refuse the fetch: re-check the v1 ownership and usage quotes there.
+1. Reread the notices (v2), the Google label, the 18+ line and Privacy §3, §4 and §7 (in `legal.ts` on the branch),
+   the bases item's reopened OpenAI sentence, and the About line; they ship in the release that turns the switch on.
+2. Whether "reasonably necessary to protect our services" (OpenAI's own words) goes back into the one description.
+3. Google's abuse logging (no period stated): name it, or not.
+4. The bases item's Google sentence ("Google, on its Vertex AI, keeps no copy.") has the same 24-hour cache gap; it was
+   not reopened.
+5. OpenAI's Terms of Use and Usage Policies, and Midjourney's terms, still refuse the fetch: read them in a browser.
 6. Content credentials: publish the original PNG with its C2PA manifest beside the JPEG (proposed), or only record it (built).
 7. Closed models for wallet (prepaid) accounts: refused for now.
 8. Whether a closed-model remix can be a challenge entry and be minted.
 9. The form's other wording and the recipe's "can't be re-run exactly" line (`IMAGE_WORDING.designs.models`, recipe-lines.ts).
 10. Whether to add Qwen-Image-Edit-2511 after a three-view test.
+
+Decided 2026-11-04 (reread pack answers): 6.1 the notice is the consent, no own-words-v5; 6.2 the device-only 18+ box is
+enough; 6.3 name Google's cache; 6.4 one OpenAI description; 5.4 Midjourney is provenance-only in the checks.
