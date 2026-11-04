@@ -190,8 +190,9 @@ export const WALLET_LINKS = {
    */
   offer: true as boolean,
   /**
-   * The automatic link ('verified'), on a wallet's signed-in request: its address is sent to Neynar (user by verified
-   * address), and a wallet that exactly one Farcaster account has verified is linked to it. A linked wallet is looked
+   * The automatic link ('verified'), on a wallet's signed-in request: its address is sent to Neynar (user by custody
+   * or verified address, since 2026-11-04), and a wallet that is the custody address of, or verified by, exactly one
+   * Farcaster account is linked to it. A linked wallet is looked
    * up again at most once a day, and a verified link ends if that FID no longer verifies the address; a tapped link
    * isn't affected; a wallet the person unlinked isn't looked up again (owner, 2026-10-22). ON, in the same deploy
    * as the Privacy line that says so (section 7, reread by the owner on 2026-10-22) and migration 0026, which the
@@ -405,8 +406,20 @@ export const CONTACT_EMAIL = 'snowmoon@wearelum.xyz';
  */
 export const CHALLENGE = {
   id: 'remix-2026-11',
-  /** The characters, by their file in content/snowmoon/designs/characters, in the owner's order (owner, 2026-10-31). */
-  characters: ['zei', 'bai', 'gladias', 'seila', 'deluin', 'mu'] as readonly string[],
+  /**
+   * The owner's switch (owner, 2026-11-04: "/challenge is admin-only for now"). While false:
+   * - /challenge, /api/challenge/* and every way into them (the menu item, the home row, the challenge share text, and
+   *   on sheet pages the Entry badge, "Mark as my entry", the challenge lines and "Posted on") are for admins only
+   *   (ADMINS); everyone else gets "not found", as agent pages do while AGENTS.public is off;
+   * - nothing the dates would switch on opens by itself: entries (eligibility recorded at publish, marking), open
+   *   sheet-making (openSheets) and the challenge's free image cap (dailySpendCapUsd) all stay off, whatever the clock
+   *   says. `dates` stay as they are, for when the owner opens it with a new open date.
+   * Only the owner turns it on. check:principles P6u proves it: with this off and the clock past `dates.opens`, entries,
+   * open sheets and the $15 cap are off and /challenge answers 404 to a non-admin.
+   */
+  public: false as boolean,
+  /** The characters, by their file in content/snowmoon/designs/characters, most named in the book first (owner, 2026-11-04; content/snowmoon/characters-by-mentions.json, checked by test:character-order and P5h). */
+  characters: ['zei', 'gladias', 'bai', 'seila', 'deluin', 'mu'] as readonly string[],
   /**
    * Each character's bases (owner, 2026-11-03): up to CHALLENGE.maxBases published sheets to start from, in the same
    * three styles for every character, so each set reads as one cast. Each entry is a design's id: its element id (any
@@ -675,12 +688,14 @@ export const IMAGES = {
 /** Minpentai Play's limits and retention (owner, 2026-10-09). Every /api/minpentai/* request counts. */
 /**
  * The site-wide free image spend cap for a moment (owner, 2026-10-31): CHALLENGE.dailySpendCapUsd from the entry
- * window's open (included) to its close (excluded), IMAGES.dailySpendCapUsd ($2) at every other time. It reverts by
+ * window's open (included) to its close (excluded), once the owner has opened the challenge (CHALLENGE.public; owner,
+ * 2026-11-04), IMAGES.dailySpendCapUsd ($2) at every other time. It reverts by
  * itself, with no deploy. The cap is per UTC day; the day's spend counted so far is compared with the cap now.
  */
 export function imagesDailySpendCapUsd(now: Date = new Date()): number {
   const t = now.getTime();
-  return t >= Date.parse(CHALLENGE.dates.opens) && t < Date.parse(CHALLENGE.dates.closes) ? CHALLENGE.dailySpendCapUsd : IMAGES.dailySpendCapUsd;
+  // Only once the owner has opened the challenge (CHALLENGE.public): the dates alone never raise the cap.
+  return CHALLENGE.public && t >= Date.parse(CHALLENGE.dates.opens) && t < Date.parse(CHALLENGE.dates.closes) ? CHALLENGE.dailySpendCapUsd : IMAGES.dailySpendCapUsd;
 }
 
 export const MINPENTAI_PLAY = {

@@ -363,6 +363,12 @@ order the feed, search, anyone's own pages, the agent tools or the read API.
   challenge-three-bases): "Bases to start from" may follow the bases' fixed style order (`CHALLENGE.baseStyles`), by
   `.sort(baseStyleOrder)` inside `startingSheets` only; entries and every other challenge list stay time order. Its
   planted violation is an entries list ordered by style, which must fail (scripts/lib/p5g.ts).
+- `P5h` (branch characters-by-mentions, 2026-11-04, the owner's decision: "list characters by how often they're named
+  in the book, most first, everywhere characters are listed"): character lists take one order, from the book's text
+  only: `content/snowmoon/characters-by-mentions.json` must match the text as it is now (regenerated in the check), be
+  in its own order (mentions, then name), and be read by `src/lib/character-order.ts`, which reads nothing else; the
+  challenge's characters (`CHALLENGE.characters`) must be in that order. Planted: the challenge's characters by
+  entrants.
 - Review: does any default, badge or ordering reflect a person's choice without saying whose?
 
 **Status.** Pass. (Picks are built on branch phase2-admin and need 0030_admin_picks, applied 2026-10-31.)

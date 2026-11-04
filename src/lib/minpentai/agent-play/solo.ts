@@ -54,7 +54,11 @@ export const FALLBACK_LEVEL = 2;
 export interface ModelClaim { name: string; maker: string; weights: 'open' | 'closed' | 'unknown'; version?: string }
 
 export type Source = 'agent' | 'person' | 'autopilot' | 'site-computer';
-export interface Orders { placements: Placement<AnyPiece>[]; source: Source; preset?: Preset; salt: string; commitment: string; final: boolean; note?: string; at: string }
+export interface Orders {
+  placements: Placement<AnyPiece>[]; source: Source; preset?: Preset; salt: string; commitment: string; final: boolean; note?: string; at: string;
+  /** Taken with the live page's Take turn (owner, 2026-11-03): who drafted the orders the person approved there. */
+  via?: 'page'; drafted_by?: Source;
+}
 export interface RevealedTurn { turn: number; step: number; C: Omit<Orders, 'final' | 'note'>; A: Omit<Orders, 'final' | 'note'> }
 
 export interface SoloMatch {
@@ -250,7 +254,7 @@ export function viewFor(m: SoloMatch) {
     can_place: can.map((k) => [e.XY(k)[0], e.XY(k)[1]]),
     my_orders: m.pend.C ? { placements: m.pend.C.placements.map(orderOut), source: m.pend.C.source, final: m.pend.C.final, commitment: m.pend.C.commitment, ...(m.pend.C.note ? { note: m.pend.C.note } : {}) } : null,
     standing_order: m.standing,
-    my_turns: m.history.map((h) => ({ turn: h.turn, step: h.step, placements: h.C.placements.map(orderOut), source: h.C.source, ...(h.C.preset ? { preset: h.C.preset } : {}) })),
+    my_turns: m.history.map((h) => ({ turn: h.turn, step: h.step, placements: h.C.placements.map(orderOut), source: h.C.source, ...(h.C.preset ? { preset: h.C.preset } : {}), ...(h.C.via === 'page' ? { taken_on_the_live_page: true, drafted_by: h.C.drafted_by } : {}) })),
     end: m.end,
     // Agent help (2026-11-02), kept in their own fields: the rules for this ruleset, and the person's page.
     ...rulesFor(m),
@@ -297,7 +301,7 @@ export function parseOrders(list: unknown, s: Settings): Placement<AnyPiece>[] {
  * real board: placing reads only squares within reach, all of which the side can see (the fog invariant), so a
  * refusal says nothing about the dark. With `final`, the turn resolves at once.
  */
-export function submit(m: SoloMatch, o: { turn: number; placements: Placement<AnyPiece>[]; source: Source; final: boolean; note?: string; now: string; preset?: Preset }) {
+export function submit(m: SoloMatch, o: { turn: number; placements: Placement<AnyPiece>[]; source: Source; final: boolean; note?: string; now: string; preset?: Preset; via?: 'page'; drafted_by?: Source }) {
   if (m.end) throw new SoloError('the match is over');
   if (o.turn !== m.turn) throw new SoloError(`turn ${o.turn} is not open; the open turn is ${m.turn}`);
   const { s, e } = rulesOf(m);
@@ -305,11 +309,59 @@ export function submit(m: SoloMatch, o: { turn: number; placements: Placement<An
   if (why) throw new SoloError(`not accepted: ${why}`);
   const replaced = !!m.pend.C;
   const salt = randomBytes(32).toString('hex');
-  m.pend.C = { placements: o.placements, source: o.source, ...(o.preset ? { preset: o.preset } : {}), salt, commitment: commit(o.placements, salt), final: o.final, ...(o.note ? { note: o.note } : {}), at: o.now };
+  m.pend.C = { placements: o.placements, source: o.source, ...(o.preset ? { preset: o.preset } : {}), salt, commitment: commit(o.placements, salt), final: o.final, ...(o.note ? { note: o.note } : {}), ...(o.via ? { via: o.via, drafted_by: o.drafted_by } : {}), at: o.now };
   const spent = o.placements.reduce((t, p) => t + e.cost(s, p.t), 0);
   const out = { accepted: true, commitment: m.pend.C.commitment, replaced_previous: replaced, points_left: pointsOf(m, s) - spent };
   if (o.final) return { ...out, resolved: resolve(m, o.now) };
   return out;
+}
+
+/**
+ * The live page's Take turn (owner, 2026-11-03): the person, signed in, approves the draft their AI sent with
+ * submit_orders (final: false). Recorded as the person's ("person"), taken on the page, with who drafted it.
+ */
+export function takeTurnOnPage(m: SoloMatch, o: { turn: number; now: string }) {
+  if (m.end) throw new SoloError('the match is over');
+  if (o.turn !== m.turn) throw new SoloError(`turn ${o.turn} is not open; the open turn is ${m.turn}`);
+  const d = m.pend.C;
+  if (!d) throw new SoloError('there is no draft to take: ask your AI to send this turn\'s orders with final: false first');
+  return submit(m, { turn: o.turn, placements: d.placements, source: 'person', final: true, note: d.note, now: o.now, via: 'page', drafted_by: d.source });
+}
+
+/** The open turn's draft as the live page shows it: the pieces, their cost against the points, and lane warnings. */
+export function draftInfo(m: SoloMatch) {
+  const d = m.pend.C;
+  if (!d || m.end) return null;
+  const { s, e } = rulesOf(m), view = e.fog(m.w, s, PERSON);
+  const cost = d.placements.reduce((t, p) => t + e.cost(s, p.t), 0);
+  return { placements: d.placements.map(orderOut), source: d.source, final: d.final, cost, points: pointsOf(m, s), warnings: laneWarnings(e, view, s, e.towers(view, PERSON), d.placements), ...(d.note ? { note: d.note } : {}) };
+}
+
+/**
+ * A turn's steps as frames (owner, 2026-11-03: "the page animates the turn's 12 steps, with frames from my side's fog
+ * only"), from the engine: the board as the turn's placements appear, then after each step. While the match is on, each
+ * frame is the person's side's view (engine.fog: their gliders and squares in sight, enemy pieces while in sight,
+ * book-4's symbol-glider sight) and the squares it sees; once it's over, `whole` gives the whole board.
+ */
+export function turnFrames(m: SoloMatch, turn: number, whole = false) {
+  if (whole && !m.end) throw new SoloError('the whole board only once the match is over');
+  const { s, e } = rulesOf(m);
+  const w = e.world(s), kills: Kills = { C: 0, A: 0 };
+  const frame = () => {
+    if (whole) return { step: w.step, board: boardOut(e, w, PERSON, () => true), seen: null };
+    const see = e.sees(w, s, PERSON), view = e.fog(w, s, PERSON);
+    const oreSeen = (k: number) => { const [x, y] = e.XY(k); return see.has(k) && [[1, 0], [-1, 0], [0, 1], [0, -1]].every(([dx, dy]) => !e.inb(x + dx, y + dy) || see.has(e.K(x + dx, y + dy))); };
+    return { step: w.step, board: boardOut(e, view, PERSON, oreSeen), seen: [...see].sort((a, b) => a - b).map((k) => e.XY(k)) };
+  };
+  for (const h of m.history) {
+    e.apply(w, s, { C: h.C.placements, A: h.A.placements });
+    const from = w.step, out = h.turn === turn ? [frame()] : null;
+    let over = false;
+    do { e.step(w, s, kills); out?.push(frame()); if (verdict(e, w, s, kills)) { over = true; break; } } while (w.step - from < s.every);
+    if (out) return out;
+    if (over) break;
+  }
+  return [];
 }
 
 /** The site computer plays the person's own side this turn, under the standing order's preset (the fallback). */
@@ -331,6 +383,34 @@ export function planComputer(m: SoloMatch, now: string): boolean {
   return true;
 }
 
+/** A side's turn summary watcher (summary.ts), with the turn's opening lines (taken on the live page). */
+function watchTurn(e: Engine, s: Settings, me: Side, w: World, kills: Kills, o: Pick<Orders, 'placements' | 'via' | 'drafted_by'>) {
+  const watch = new TurnWatch(e, s, me, w, kills, o.placements);
+  if (o.via === 'page') watch.say(`Your person took this turn on the live page, approving the orders ${o.drafted_by === 'agent' ? 'you (their AI) drafted' : 'drafted before'}.`);
+  return watch;
+}
+
+/**
+ * Every turn's summary for a side, rebuilt from the record (the same watcher, the same frames the turn ran through):
+ * the live page's past turns (owner, 2026-11-03). Index = turn. Also the towers that side's gliders destroyed in it,
+ * where the ruleset reports kills (otherwise only those destroyed in its sight).
+ */
+export function turnSummaries(m: SoloMatch, me: Side = PERSON): { turn: number; lines: string[]; kills: number }[] {
+  const { s, e } = rulesOf(m);
+  const w = e.world(s), kills: Kills = { C: 0, A: 0, ...(s.killReports ? { log: [] } : {}) };
+  const out: { turn: number; lines: string[]; kills: number }[] = [];
+  for (const h of m.history) {
+    e.apply(w, s, { C: h.C.placements, A: h.A.placements });
+    const watch = watchTurn(e, s, me, w, kills, h[me]);
+    const before = kills[me], from = w.step;
+    do { e.step(w, s, kills); watch.look(w); if (verdict(e, w, s, kills)) break; } while (w.step - from < s.every);
+    const lines = watch.done();
+    out.push({ turn: h.turn, lines, kills: s.killReports ? kills[me] - before : lines.filter((l) => /^The enemy tower at .* was destroyed/.test(l)).length });
+    if (verdict(e, w, s, kills)) break;
+  }
+  return out;
+}
+
 /** Both sides' orders revealed and applied together; the engine runs to the next turn to act (or the end). */
 function resolve(m: SoloMatch, now: string) {
   const { s, e } = rulesOf(m);
@@ -341,7 +421,7 @@ function resolve(m: SoloMatch, now: string) {
   e.apply(m.w, s, { C: C.placements, A: A.placements });
   e.updSeen(m.w, s, m.ls, m.kills);
   // The person's turn summary, from their side's view at each step (summary.ts).
-  const watch = new TurnWatch(e, s, PERSON, m.w, m.kills, C.placements);
+  const watch = watchTurn(e, s, PERSON, m.w, m.kills, C);
   const from = m.w.step, turn = m.turn;
   const note = () => { m.summary = { turn, from, lines: watch.done() }; };
   do {

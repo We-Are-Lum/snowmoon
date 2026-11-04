@@ -4,6 +4,24 @@ DRAFT, written by the coding agent (Claude, a closed model by Anthropic), overni
 Branch `launch-rehearsal`. Screenshots are in `/Users/nathan/snowmoon-rehearsal-shots/` on the owner's computer (not
 committed).
 
+## Update 2026-11-04: the challenge is admin-only for now
+
+The owner's change of plan (2026-11-04): /challenge is admin-only, and nothing opens by date alone. Branch
+`challenge-admin-only` adds the owner's switch, `CHALLENGE.public` (`src/lib/config.ts`), off. While it is off:
+
+- /challenge answers 404 to everyone but an admin (ADMINS: 6786, 193912), and its HTML says nothing of the challenge;
+  an admin signed in sees the page in the browser, from `GET /api/challenge/view` (admins only). `/api/challenge/mark`,
+  `/api/challenge/posts` and `/api/challenge/standing` answer 404 to non-admins.
+- No menu item and no home row (admins get the menu item); on sheet pages no Entry badge, candidate or admin line,
+  invite, "Mark as my entry" or "Posted on" in the served page (admins see them in the browser, drawn as if open, to
+  test); the share text never mentions the challenge.
+- At Fri 6 Nov 09:00 PT nothing switches on: no eligibility stored at publish (so Neynar isn't asked), no marking by
+  non-admins, sheets stay invited-only (`openSheets` waits for the switch), and the free image cap stays $2, not $15.
+- `check:principles` P6u holds it, with a planted violation; `test:challenge` and `check:ui` check it too.
+
+The steps below describe the challenge as it will be once the owner opens it (a new open date in `CHALLENGE.dates`,
+then `CHALLENGE.public: true`, in one release). Rehearse again then.
+
 ## What was rehearsed, and how
 
 The whole entrant path for the remix challenge (`/challenge`, starting sheets, fork, publish, Entry badge, marking,

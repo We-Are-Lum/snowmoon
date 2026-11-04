@@ -1,13 +1,14 @@
 import 'server-only';
 import { ToolInputError } from '../../agent/tools';
 import { AGENTS, appUrl } from '../../config';
-import { playFor, type Agent } from '../../agents/core';
+import { draftsFor, playFor, type Agent } from '../../agents/core';
 import type { AgentTool } from '../../agents/tools';
 import { CURRENT, DRAFTS, RULESETS, autopilot, linkOpens, newSolo, parseOrders, recordOf, resign, rulesOf, setStanding, simulate, SoloError, submit, symbolLaunches, viewFor, type ModelClaim, type RulesetName, type SoloMatch } from './solo';
 import { PIECES_PAGE, toolNotes } from './rules-text';
 import { BASE, BASE_DRAWN } from '../versions/schema';
 import { insert, listFor, liveCount, load, newId, newSeed, save, StoreError } from './store';
-import { planSoon, settle } from './quiet';
+import { planSoon } from './quiet';
+import { changeFor, mineFor, NOT_YOURS } from './act';
 import { randomBytes, createHash } from 'node:crypto';
 
 /**
@@ -25,42 +26,9 @@ const only = (args: Record<string, unknown>, keys: string[]) => {
   if (extra.length) throw new ToolInputError(`unknown argument: ${extra.join(', ')}`);
 };
 const on = (agent: Agent) => { if (!playFor(agent.person)) throw new ToolInputError('Minpentai agent play is not open to you yet'); };
-const NOT_YOURS = 'no match of yours with that id (see minpentai_list_my_matches)';
 
-/** One of the person's matches, after its quiet time (quiet.ts settle): a call's timing says nothing about planning. */
-async function mine(agent: Agent, id: unknown) {
-  if (typeof id !== 'string') throw new ToolInputError('match_id must be a match id');
-  // Someone else's match, or none, is told so at once: its timing is not this person's to learn from.
-  const peek = await load(id);
-  if (!peek || peek.m.person !== agent.person) throw new ToolInputError(NOT_YOURS);
-  const r = await settle(id);
-  if (!r) throw new ToolInputError(NOT_YOURS);
-  return r;
-}
-/**
- * Runs a change on one of the person's matches and saves it; the engine's words come back as the tool's error. A save
- * that meets another (the computer's plan being stored) is tried again on the fresh match, never shown. If the change
- * opened a new turn, the computer plans it just after this answer is sent.
- */
-async function change<T>(agent: Agent, id: unknown, f: (m: SoloMatch) => T): Promise<T> {
-  let r = await mine(agent, id);
-  for (let i = 0; ; i++) {
-    const { m, version } = r;
-    const turn = m.turn, over = !!m.end;
-    let out: T;
-    try { out = f(m); } catch (e) { if (e instanceof SoloError) throw new ToolInputError(e.message); throw e; }
-    try {
-      await save(m, version);
-      if (m.turn !== turn && !m.end && !over) planSoon(m.id);
-      return out;
-    } catch (e) {
-      if (!(e instanceof StoreError) || i >= 4) throw e instanceof StoreError ? new ToolInputError('Something went wrong on our side. Try again in a moment.') : e;
-      const again = await load(m.id);
-      if (!again) throw new ToolInputError(NOT_YOURS);
-      r = again;
-    }
-  }
-}
+const mine = (agent: Agent, id: unknown) => mineFor(agent.person, id);
+const change = <T,>(agent: Agent, id: unknown, f: (m: SoloMatch) => T): Promise<T> => changeFor(agent.person, id, f);
 const guard = <T,>(f: () => T): T => { try { return f(); } catch (e) { if (e instanceof SoloError) throw new ToolInputError(e.message); throw e; } };
 
 function modelOf(v: unknown): ModelClaim | null {
@@ -96,7 +64,7 @@ export const MINPENTAI_TOOLS: AgentTool[] = [
       only(args, ['ruleset', 'level', 'model']);
       const ruleset = args.ruleset === undefined ? 'book' : args.ruleset;
       const level = args.level === undefined ? 2 : args.level;
-      const draft = (DRAFTS as unknown[]).includes(ruleset) && AGENTS.minpentaiPlay.drafts.includes(agent.person);
+      const draft = (DRAFTS as unknown[]).includes(ruleset) && draftsFor(agent.person);
       if (ruleset !== 'book' && ruleset !== 'play' && !draft) throw new ToolInputError('ruleset must be "book" or "play"');
       if (!Number.isInteger(level) || (level as number) < 0 || (level as number) > 3) throw new ToolInputError('level must be 0 (the beginner) to 3');
       if ((await liveCount(agent.person)) >= MAX_LIVE) throw new ToolInputError(`your person already has ${MAX_LIVE} live matches; finish or resign one first`);
@@ -118,7 +86,7 @@ export const MINPENTAI_TOOLS: AgentTool[] = [
   },
   {
     name: 'minpentai_get_view', title: 'Your side of a Minpentai match', scope: 'play', writes: false, counts: 'reads',
-    description: `What your side sees now: rocks, your pieces, every piece within sight of your towers, where you last saw enemy towers, the squares you may place on (can_place), your pending orders and the opponent's commitment (a hash; its orders stay hidden until the reveal). Nothing outside your sight. Also the match's full rules ("rules", generated from its ruleset: read them before your first turn). ${NOTES.core} ${NOTES.sight} ${PAGE}`,
+    description: `What your side sees now (call it at the start of every exchange: your person may have taken the turn on their live page, in which case my_turns marks it taken_on_the_live_page and last_turn_summary tells what happened): rocks, your pieces, every piece within sight of your towers, where you last saw enemy towers, the squares you may place on (can_place), your pending orders and the opponent's commitment (a hash; its orders stay hidden until the reveal). Nothing outside your sight. Also the match's full rules ("rules", generated from its ruleset: read them before your first turn). ${NOTES.core} ${NOTES.sight} ${PAGE}`,
     inputSchema: { type: 'object', properties: { match_id: MATCH }, required: ['match_id'], additionalProperties: false },
     async run(agent, args) {
       on(agent);
@@ -164,7 +132,7 @@ export const MINPENTAI_TOOLS: AgentTool[] = [
   },
   {
     name: 'minpentai_submit_orders', title: 'Submit your side\'s orders', scope: 'play', writes: true, counts: 'reads',
-    description: `Your side's placements for the open turn, replacing any you sent before. Say whose they are: "person" (your person chose them) or "agent" (you chose them under your person\'s standing order). Returns a commitment (sha256 of the orders and a fresh secret salt, revealed with them after the turn). With final: true the turn resolves now: both sides\' orders are revealed and applied together, and the match runs to the next turn to act. Try them in minpentai_simulate first: it warns when a placement blocks your own launch lanes. ${NOTES.core}`,
+    description: `Your side's placements for the open turn, replacing any you sent before. Sent with final: false they are a draft: your person sees it on their live page (faint on the board, its cost and lane warnings) and can approve it there with Take turn, which plays the turn as theirs; or they tell you to send it with final: true. Say whose they are: "person" (your person chose them) or "agent" (you chose them under your person\'s standing order). Returns a commitment (sha256 of the orders and a fresh secret salt, revealed with them after the turn). With final: true the turn resolves now: both sides\' orders are revealed and applied together, and the match runs to the next turn to act. Try them in minpentai_simulate first: it warns when a placement blocks your own launch lanes. ${NOTES.core}`,
     inputSchema: { type: 'object', properties: { match_id: MATCH, turn: { type: 'integer', minimum: 0 }, placements: PLACEMENTS, source: { enum: ['person', 'agent'] }, final: { type: 'boolean' }, note: { type: 'string', maxLength: 280 } }, required: ['match_id', 'turn', 'placements', 'source'], additionalProperties: false },
     async run(agent, args) {
       on(agent);

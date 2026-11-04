@@ -50,6 +50,11 @@ export const playOn = () => AGENTS.minpentaiPlay.people.length > 0 || playTest()
 export const playFor = (person: number) => AGENTS.minpentaiPlay.people.includes(person) || (playTest() && testPlayPeople(person));
 /** The local tests may open play to some of their people only (MINPENTAI_PLAY_TEST_PEOPLE, comma-separated; unset: all). */
 const testPlayPeople = (person: number) => { const list = (process.env.MINPENTAI_PLAY_TEST_PEOPLE ?? '').split(',').filter(Boolean).map(Number); return !list.length || list.includes(person); };
+/**
+ * Whether this person may start a draft ruleset by name (AGENTS.minpentaiPlay.drafts). The local tests and the
+ * recording script may add theirs (MINPENTAI_DRAFTS_TEST_PEOPLE), only where the agent tests are on (never on Vercel).
+ */
+export const draftsFor = (person: number) => AGENTS.minpentaiPlay.drafts.includes(person) || (playTest() && (process.env.MINPENTAI_DRAFTS_TEST_PEOPLE ?? '').split(',').filter(Boolean).map(Number).includes(person));
 /** The scopes a person can grant now. */
 export const grantable = (): Scope[] => [...AGENTS.scopes, ...(playOn() ? (['play'] as const) : [])];
 
