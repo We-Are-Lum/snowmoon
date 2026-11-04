@@ -50,7 +50,7 @@ export async function GET(request: Request) {
     const [consented, left, kept, frames] = await Promise.all([
       hasConsented(person),
       generationsLeft(sql, person, reserveUsd),
-      invited || person < 0 ? Promise.resolve(null) : keptDecision(sql, person, IMAGES.neynarMinScore),
+      invited || person < 0 ? Promise.resolve(null) : keptDecision(sql, person, IMAGES.neynarMinScore).catch(() => null),
       shot ? myFrames(sql, person, version, shot.id) : Promise.resolve([]),
     ]);
     const mine = frames.map((f) => ({ id: f.id, url: f.imageUrl, words: f.ownWords, hidden: f.hidden, hiddenRole: f.hiddenRole, at: f.createdAt, page: `/remix/${f.id}` }));
