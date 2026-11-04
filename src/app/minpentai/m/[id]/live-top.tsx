@@ -32,6 +32,10 @@ export function LiveTop(p: {
   draft: Draft | null; canTake: boolean; turn: number; points: number;
   latest: { turn: number; frames: Frame[]; whole: boolean } | null;
   summary: string[] | null;
+  /** Up to 3 big moments of the last turn (kills, losses, enemy towers spotted, symbols formed), shown first. */
+  big: string[];
+  /** While the match goes on after kills: where the enemy's towers are, as far as this side knows. */
+  still: string | null;
 }) {
   const d3 = use3D(), [note, setNote] = useState<string | null>(null);
   const frames = p.latest?.frames ?? [], whole = !!p.latest?.whole;
@@ -133,10 +137,15 @@ export function LiveTop(p: {
         {summary.length && p.latest ? (
           <div className="mb-top-summary">
             <p className="mb-note">Turn {p.latest.turn}, what your side saw:</p>
-            <ul className="mb-moves">
-              {(more ? summary : summary.slice(0, 2)).map((l, k) => <li key={k}>{l}</li>)}
-            </ul>
-            {summary.length > 2 ? <button type="button" className="mb-more" onClick={() => setMore((x) => !x)}>{more ? 'less' : `more (${summary.length - 2})`}</button> : null}
+            {/* The turn's big moments first (owner, 2026-11-04), then the whole summary under "more". */}
+            {p.big.length ? <ul className="mb-moves mb-big">{p.big.map((l, k) => <li key={k}>{l}</li>)}</ul> : null}
+            {more || !p.big.length ? (
+              <ul className="mb-moves">
+                {(more ? summary : summary.slice(0, 2)).map((l, k) => <li key={k}>{l}</li>)}
+              </ul>
+            ) : null}
+            {p.still ? <p className="mb-note mb-still">{p.still}</p> : null}
+            {summary.length > (p.big.length ? 0 : 2) ? <button type="button" className="mb-more" onClick={() => setMore((x) => !x)}>{more ? 'less' : p.big.length ? `the whole turn (${summary.length} lines)` : `more (${summary.length - 2})`}</button> : null}
           </div>
         ) : null}
       </div>

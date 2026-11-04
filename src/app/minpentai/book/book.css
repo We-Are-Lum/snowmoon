@@ -52,6 +52,9 @@
 .mb-top-draft .mb-take { margin: 6px 0 0; }
 .mb-top-summary .mb-moves { margin: 2px 0; font-size: 14px; }
 .mb-top-summary .mb-moves li { padding: 2px 0; }
+/* The turn's big moments, ahead of the rest (owner, 2026-11-04). */
+.mb-top-summary .mb-big li { font-weight: 600; border-bottom: 0; }
+.mb-top-summary .mb-still { margin: 2px 0; font-size: 13px; }
 .mb-more { font: inherit; font-size: 13px; background: none; border: 0; padding: 2px 0; color: inherit; text-decoration: underline; cursor: pointer; }
 .mb-warnings .mb-more { border: 0; }
 @media (min-width: 900px) {
