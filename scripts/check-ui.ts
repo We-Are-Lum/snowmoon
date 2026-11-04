@@ -1411,6 +1411,23 @@ if (/^http:\/\/(localhost|127\.0\.0\.1)(:|\/|$)/.test(BASE)) {
   }
 }
 const browser = await chromium.launch({ channel: 'chrome' });
+// A protected Vercel preview: under VERCEL_OIDC_TOKEN, every request to the preview's own origin carries it (never to
+// any other origin a page loads), in every browser context and in this script's own fetches. Never printed.
+{
+  const token = process.env.VERCEL_OIDC_TOKEN, origin = new URL(BASE).origin;
+  if (token && /\.vercel\.app$/.test(new URL(BASE).hostname)) {
+    const header = { 'x-vercel-trusted-oidc-idp-token': token };
+    const guard = async (ctx: Awaited<ReturnType<Browser['newContext']>>) => {
+      await ctx.route((u) => u.origin === origin, (route) => route.continue({ headers: { ...route.request().headers(), ...header } }));
+      return ctx;
+    };
+    const newContext = browser.newContext.bind(browser);
+    browser.newContext = async (o) => guard(await newContext(o));
+    browser.newPage = async (o) => (await browser.newContext(o)).newPage();
+    const plain = globalThis.fetch;
+    globalThis.fetch = (u, init = {}) => (new URL(String(u instanceof Request ? u.url : u)).origin === origin ? plain(u, { ...init, headers: { ...(init.headers as Record<string, string> | undefined), ...header } }) : plain(u, init));
+  }
+}
 try {
   await checkAiLabels();
   await checkMarkdownPages();
