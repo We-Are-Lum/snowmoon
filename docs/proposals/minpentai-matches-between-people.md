@@ -170,7 +170,7 @@ Sign in with Farcaster, Lens or Bluesky, and pass that network's reputation bar.
   | 30 | 20 | 21 |
 
   (At 95%, 4 of 5 gives a lower bound of 0.38, short of the bar. At 90% it's 0.44, still short.)
-- **Proposed: 90%.** At 95% a level needs a near-perfect record early on (9 of 10), so most people would sit a level below where they win. At 90% that's 8 of 10, still well above chance: a person who really wins half their matches there would reach it about 5% of the time over 10 matches. It's a ranking, not a proof, and losses always count. If the owner prefers 95%, the table above is the bar.
+- **Decided: 90% (owner, 2026-11-03).** At 95% a level needs a near-perfect record early on (9 of 10), so most people would sit a level below where they win. At 90% that's 8 of 10, still well above chance: a person who really wins half their matches there would reach it about 5% of the time over 10 matches. It's a ranking, not a proof, and losses always count. (95% was the alternative; the table above shows it.)
 - **Ranked within a level** by that same lower bound, so the top isn't a big tie: everyone placed at level 3 is ordered by their level-3 bound, highest first, then level 2, and so on. The board shows each person's wins and matches at every level, not just the one they're placed at.
 - **Moving up** (separate from placement): winning 3 of your last 5 at a level unlocks the next. Unlocking only lets you play it; your place comes from the bound.
 
