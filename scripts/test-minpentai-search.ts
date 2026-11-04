@@ -33,15 +33,7 @@ function positions(v: VersionRules, seeds: number[]): { e: Engine; s: Settings; 
   for (const seed of seeds) {
     const { s1 } = drawRules(v, rng(seed));
     const e = engine(layout(v, s1));
-    let last = -1;
-    playSearchMatch(v, (real) => {
-      const keep = (p: ReturnType<typeof searchPlayer>) => (m: Parameters<ReturnType<typeof searchPlayer>>[0]) => {
-        const w = real();
-        if (w.step !== last) { out.push({ e, s: m.s, w: e.clone(w) }); last = w.step; }
-        return p(m);
-      };
-      return { C: keep(searchPlayer(2)), A: keep(searchPlayer(3)) };
-    }, seed);
+    playSearchMatch(v, () => ({ C: searchPlayer(2), A: searchPlayer(3) }), seed, (w, s) => out.push({ e, s, w }));
   }
   return out;
 }

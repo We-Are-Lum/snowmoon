@@ -21,7 +21,7 @@
  */
 import { build } from 'esbuild';
 import { chromium, type Frame } from 'playwright-core';
-import { CHAT } from '../src/lib/config';
+import { CHALLENGE, CHAT } from '../src/lib/config';
 import { requireTarget } from './lib/target';
 
 const arg = (name: string) => process.argv.slice(2).find((a) => a.startsWith(`--${name}=`))?.split('=').slice(1).join('=');
@@ -146,6 +146,19 @@ async function checkRemixEmbed(base: string, id: string, where: string) {
   }
   if (t['og:image:width'] !== '1200' || t['og:image:height'] !== '630') fail(`${where}: og:image is not declared 1200×630`);
 }
+// While the challenge is admin-only (CHALLENGE.public off; owner, 2026-11-04): a published sheet's page answers, but has no
+// remix preview ("Remix this", the challenge card) and its card answers 404.
+async function checkNoRemixPreview(base: string, id: string, where: string) {
+  const res = await fetch(`${base}/references/designs/${id}`);
+  if (!res.ok) return fail(`${where}: /references/designs/${id} answers ${res.status}`);
+  const t = metaTags(await res.text());
+  for (const name of ['fc:miniapp', 'fc:frame']) if ((t[name] ?? '').includes('Remix this') || (t[name] ?? '').includes('/api/design-card/')) fail(`${where}: ${name} is the remix embed while the challenge is admin-only`);
+  for (const k of ['og:image', 'twitter:image']) if ((t[k] ?? '').includes('/api/design-card/')) fail(`${where}: ${k} is the challenge card while the challenge is admin-only`);
+  for (const q of ['', '?shape=og']) {
+    const r = await fetch(`${base}/api/design-card/${id}${q}`);
+    if (r.status !== 404) fail(`${where}: its card${q} answers ${r.status} while the challenge is admin-only, not 404`);
+  }
+}
 async function checkNoPreview(base: string, id: string, where: string) {
   const res = await fetch(`${base}/references/designs/${id}`);
   if (res.status !== 404) fail(`${where}: /references/designs/${id} answers ${res.status}, not 404`);
@@ -165,7 +178,8 @@ let remixNote = '';
     id = html.match(/href="\/references\/designs\/([0-9a-f-]{36})"/)?.[1] ?? null;
     if (id) break;
   }
-  if (id) await checkRemixEmbed(BASE, id, `remix page ${id.slice(0, 8)}`);
+  const remixCheck = CHALLENGE.public ? checkRemixEmbed : checkNoRemixPreview;
+  if (id) await remixCheck(BASE, id, `remix page ${id.slice(0, 8)}`);
   else remixNote = 'no challenge character sheet is published on the target yet, so its remix embed was not checked there';
   if (/^(localhost|127\.0\.0\.1)$/.test(new URL(BASE).hostname)) {
     const { spawn, execFileSync } = await import('node:child_process');
@@ -185,8 +199,8 @@ let remixNote = '';
       const built = ((await (await fetch(`${LOCAL}/api/version`)).json()) as { commit?: string }).commit ?? 'unknown';
       if (built !== head) fail(`remix pages (fixture): the local build is from ${built.slice(0, 7)}, this checkout is at ${head.slice(0, 7)}; run next build first`);
       else {
-        await checkRemixEmbed(LOCAL, D.remix.version, 'remix page (fixture remix)');
-        await checkRemixEmbed(LOCAL, D.base.version, 'remix page (fixture base)');
+        await remixCheck(LOCAL, D.remix.version, 'remix page (fixture remix)');
+        await remixCheck(LOCAL, D.base.version, 'remix page (fixture base)');
         await checkNoPreview(LOCAL, D.hidden.version, 'remix page (fixture hidden)');
         await checkNoPreview(LOCAL, D.draft.version, 'remix page (fixture draft)');
       }

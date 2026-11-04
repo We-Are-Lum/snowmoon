@@ -24,9 +24,13 @@ export function landingPicture(body: Pick<DesignBody, 'views'>): DesignPicture |
   return body.views.front ?? null;
 }
 
-/** Whether this page is a landing page: a challenge character's sheet with a front view. */
-export const isLanding = (p: { kind: string; challengeCharacter: boolean; body: Pick<DesignBody, 'views'> }) =>
-  p.kind === 'character' && p.challengeCharacter && landingPicture(p.body) !== null;
+/**
+ * Whether this page is a landing page: a challenge character's sheet with a front view, once the owner has opened the
+ * challenge (CHALLENGE.public; owner, 2026-11-04: admin-only for now, with no open date). While it is off there is no
+ * landing, no Remix button, no "Remixing opens …" line and no challenge link preview or card, for anyone.
+ */
+export const isLanding = (p: { kind: string; challengeCharacter: boolean; body: Pick<DesignBody, 'views'> }, pub: boolean = CHALLENGE.public) =>
+  pub && p.kind === 'character' && p.challengeCharacter && landingPicture(p.body) !== null;
 
 /** The big button: the remix form for this version while entries are open; a line in its place otherwise. */
 export function landingAction(versionId: string, ph: Phase): { href: string; label: string } | { line: string } {
@@ -44,9 +48,19 @@ export const LANDING_WORDING = {
   remixNote: (name: string) => `Start your own ${name} from this one: change it, make the pictures, publish.`,
   maker: (by: string) => `Made by ${by}`,
   remixOf: (by: string) => `A remix by ${by}`,
+  /**
+   * "Remixing opens" here (about the button); /challenge says "Entries open" (reread pack 11.2; reviewed by the
+   * coordinator, approved by the owner, 2026-11-04).
+   */
   opensLine: () => `Remixing opens ${dateText('opens', { time: true })}.`,
   closedLine: () => `Entries closed ${dateText('closes', { time: true })}.`,
-  /** For someone arriving from a post, signed out: what this is, and how to remix (one or two lines, linking /challenge). */
+  /**
+   * For someone arriving from a post, signed out: what this is, and how to remix (one or two lines, linking /challenge).
+   * Reread pack 11.1 (reviewed by the coordinator, approved by the owner, 2026-11-04): once Bluesky accounts can
+   * remix, "sign in with Farcaster, press Remix, …" becomes "sign in, press Remix, change it and publish". There's no
+   * switch for Bluesky remixing on main yet (signin-lens-bluesky's SIGN_IN_METHODS is unmerged), so the change ships in
+   * that release, tied to its switch.
+   */
   arrival: (name: string, ph: Phase) =>
     ph === 'closed'
       ? `This is a version of ${name} from Snowmoon’s remix challenge, which ran ${windowText()}.`

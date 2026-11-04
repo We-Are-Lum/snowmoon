@@ -12,14 +12,13 @@ import { BookQuotes } from '~/components/design-book';
 import { DesignBar } from '~/components/design-bar';
 import { AiTag } from '~/components/ai-tag';
 import { CHALLENGE } from '~/lib/config';
-import { versionStanding } from '~/lib/challenge/entries';
-import { phase } from '~/lib/challenge/rules';
+import { challengeOpenNow, phase } from '~/lib/challenge/rules';
 import { challengeSheetsOpen, isChallengeCharacter } from '~/lib/challenge/open-sheets';
-import { postsFor } from '~/lib/challenge/posts';
+import { sheetChallenge } from '~/lib/challenge/sheet-lines';
 import { CHALLENGE_WORDING as CW } from '~/lib/challenge/wording';
 import { ChallengeShare } from '~/components/challenge-share';
-import { ChallengeMark } from '~/components/challenge-mark';
-import { PostedOn } from '~/components/posted-on';
+import { ChallengeLines, ChallengePosts } from '~/components/challenge-lines';
+import { ChallengeAdminSheet } from '~/components/challenge-admin-sheet';
 import { ChallengeRemixLanding } from '~/components/challenge-remix-landing';
 import { NO_PREVIEW, isLanding, landingMetadata, landingPicture } from '~/lib/challenge/landing';
 import type { Metadata } from 'next';
@@ -85,18 +84,23 @@ export default async function DesignPage({ params }: Props) {
   const place = d.kind === 'location' ? (sheetPlaces().find((x) => placeTitle(x.name) === d.entity) ?? null) : null;
   const crumb = style ? { href: '/references/designs', label: W.index.tabStyles } : place ? { href: `/references/designs/place/${place.slug}`, label: d.entity } : { href: `/references/designs/character/${character?.slug ?? ''}`, label: d.entity };
   const title = style ? body.title || d.entity : body.title || W.page.sheetBy(by);
-  // The remix challenge (owner, 2026-10-31): each part only while its switch is on (CHALLENGE.entries, CHALLENGE.posts).
-  const standing = await versionStanding(sql, d.shown.versionId).catch(() => null);
-  const posts = CHALLENGE.posts ? await postsFor(sql, d.shown.versionId).catch(() => []) : [];
+  // The remix challenge (owner, 2026-10-31): each part only while its switch is on (CHALLENGE.entries, CHALLENGE.posts),
+  // and only once the owner has opened it (CHALLENGE.public; owner, 2026-11-04). Until then the page as served says
+  // nothing of it, and admins see its lines in the browser (ChallengeAdminSheet, from an admins-only API).
+  const ch = CHALLENGE.public ? await sheetChallenge(sql, { kind: d.kind, entity: d.entity, versionId: d.shown.versionId }, callName) : null;
   const challengeOpen = d.kind === 'character' && challengeSheetsOpen() && isChallengeCharacter(d.entity);
-  // A landing page for someone arriving from a post (owner, 2026-11-04): a challenge character's sheet with a front view.
-  const landing = isLanding({ kind: d.kind, challengeCharacter: isChallengeCharacter(d.entity), body });
-  const postItems = posts.map(({ id, network, handle, at, url }) => ({ id, network, handle, at, url }));
+  // The share text mentions the challenge only while it is open (owner, 2026-11-03), on a challenge character's sheet.
+  const what = style ? title : `${callName}: ${title}`;
+  const shareText = d.kind === 'character' && isChallengeCharacter(d.entity) && challengeOpenNow() ? CW.shareTextOpen(what) : CW.shareText(what);
+  // A landing page for someone arriving from a post (owner, 2026-11-04): a challenge character's sheet with a front view,
+  // once the owner has opened the challenge (CHALLENGE.public, read by isLanding). While it is admin-only the page as
+  // served says nothing of it: no landing, no Remix button, no "Remixing opens …" line, no challenge preview.
+  const landing = ch !== null && isLanding({ kind: d.kind, challengeCharacter: isChallengeCharacter(d.entity), body });
 
   const main = (
     <article className="dz-main">
-      {landing && (
-        <ChallengeRemixLanding versionId={d.shown.versionId} name={callName} title={body.title} by={by} remix={Boolean(d.remixedFrom)} front={landingPicture(body)!} phase={challengeOpen ? 'open' : phase() === 'closed' ? 'closed' : 'before'} posts={postItems} />
+      {landing && ch && (
+        <ChallengeRemixLanding versionId={d.shown.versionId} name={callName} title={body.title} by={by} remix={Boolean(d.remixedFrom)} front={landingPicture(body)!} phase={challengeOpen ? 'open' : phase() === 'closed' ? 'closed' : 'before'} posts={ch.posts} />
       )}
       {character && <BookQuotes name={character.name} quotes={character.quotes} />}
       <h1 className="dz-title">{title}</h1>
@@ -117,27 +121,7 @@ export default async function DesignPage({ params }: Props) {
         </p>
       )}
       {body.assist && <p className="dz-meta dz-drafted">{style ? W.page.drafted : W.page.draftedSheet}</p>}
-      {standing?.kind === 'entry' && (
-        <p className="dz-meta ch-standing">
-          <span className="ch-badge">{CW.badge}</span> {CW.badgeNote(callName)} <Link href="/challenge">{CW.title} →</Link>
-        </p>
-      )}
-      {standing?.kind === 'candidate' &&
-        // After the close a mark is refused, so no button is offered (launch rehearsal, 2026-11-02).
-        (phase() === 'open' ? (
-          <div className="dz-meta ch-standing">
-            <p className="dz-muted">{CW.candidateNote}</p>
-            <ChallengeMark versionId={d.shown.versionId} byFid={d.byFid} />
-          </div>
-        ) : (
-          <p className="dz-meta ch-standing dz-muted">{CW.candidateClosedNote(callName)}</p>
-        ))}
-      {standing?.kind === 'admin' && <p className="dz-meta ch-standing dz-muted">{CW.adminNote}</p>}
-      {challengeOpen && !standing && (
-        <p className="dz-meta ch-standing ch-invite">
-          {CW.sheetInvite(callName)} <Link href="/challenge">{CW.title} →</Link>
-        </p>
-      )}
+      {ch ? <ChallengeLines c={ch} versionId={d.shown.versionId} byFid={d.byFid} /> : <ChallengeAdminSheet versionId={d.shown.versionId} byFid={d.byFid} part="lines" />}
       {pictures.length ? (
         <figure className={`dz-pictures${style ? '' : ' is-views'}`}>
           <div className="dz-grid">
@@ -232,9 +216,9 @@ export default async function DesignPage({ params }: Props) {
         byFid={d.byFid}
         challengeOpen={challengeOpen}
       />
-      <ChallengeShare versionId={d.shown.versionId} what={style ? title : `${callName}: ${title}`} posts={CHALLENGE.posts} inChallenge={d.kind === 'character' && isChallengeCharacter(d.entity) && phase() === 'open'} />
+      <ChallengeShare versionId={d.shown.versionId} text={shareText} posts={CHALLENGE.public && CHALLENGE.posts} />
       {/* On a landing page "Posted on" sits at the top, with the picture. */}
-      {!landing && posts.length > 0 && <PostedOn versionId={d.shown.versionId} posts={postItems} />}
+      {ch ? !landing && <ChallengePosts c={ch} versionId={d.shown.versionId} /> : <ChallengeAdminSheet versionId={d.shown.versionId} byFid={d.byFid} part="posts" />}
       <p className="as-draft ic-draftline">{IMAGE_WORDING.draftLine}</p>
     </article>
   );

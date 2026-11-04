@@ -24,14 +24,17 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { DEFAULT_TEMPLATES } from '../src/templates';
 import { LiveScreen } from '../src/components/live-screen';
-import { AGENTS, CHALLENGE, CHAT, IMAGES, REPO_URL } from '../src/lib/config';
+import { AGENTS, CHALLENGE, CHAT, IMAGES, REPO_URL, imagesDailySpendCapUsd } from '../src/lib/config';
+import { challengeOpenNow, entriesOpen } from '../src/lib/challenge/rules';
+import { challengeVisibleTo } from '../src/lib/challenge/visibility';
 import { NOTICE_REVIEW, currentNoticeItems, noticeKey } from '../src/lib/chat/notice';
 import { LEGAL, PRIVACY, TERMS, legalKey } from '../src/lib/legal';
 import { LEARN_TEXT } from '../src/lib/minpentai/learn-text';
 import { BOOK_TAG, NARRATION_MAX_WORDS, PERSON_TAG, parseBeats } from '../src/lib/script-beats';
+import { MENTIONS_FILE, byMentionsThenName, mentionsFile } from './lib/character-mentions';
 import { GLOSSARY_FILE, loadBlocks, verifyGlossary, type Glossary } from './lib/glossary';
 import { p4aProblems } from './lib/p4a';
-import { CHALLENGE_FILES as P5G_FILES, p5gProblems } from './lib/p5g';
+import { CHALLENGE_FILES as P5G_FILES, NOT_AN_ORDER, p5gProblems } from './lib/p5g';
 import { MODAL_VC_FILE, MODAL_VC_PLANTS, modalVcRun, modalVcStatic } from './lib/modal-vc';
 import { requireTarget } from './lib/target';
 
@@ -1256,6 +1259,40 @@ add({
     files[i] = { ...files[i], text: files[i].text.replace(/export async function standing\(/, 'export const planted = (entries) => entries.sort(baseStyleOrder);\nexport async function standing(') };
   },
 });
+// Character lists (owner, 2026-11-04: "list characters by how often they're named in the book, most first, everywhere
+// characters are listed"). An order by the book's text is allowed; nothing else may order the characters. The order file
+// must match the text as it is now, be in its own order, and be read by code that reads nothing else; the challenge's
+// characters (CHALLENGE.characters, a fixed list in the config) must be in that order.
+add({
+  id: 'P5h',
+  principle: 5,
+  name: "character lists are in the book's order (how often the book names them, then name), never by engagement: the order file matches the text, and the challenge's characters follow it",
+  load: async () => ({
+    file: existsSync(path.join(ROOT, MENTIONS_FILE)) ? read(MENTIONS_FILE) : '',
+    fresh: mentionsFile(ROOT),
+    reader: read('src/lib/character-order.ts'),
+    challenge: [...CHALLENGE.characters],
+  }),
+  run: ({ file, fresh, reader, challenge }: { file: string; fresh: string; reader: string; challenge: string[] }) => {
+    const problems: string[] = [];
+    if (file !== fresh) problems.push(`${MENTIONS_FILE}: out of date with the book text or the character files (npm run characters:mentions -- --write)`);
+    const rows = file ? (JSON.parse(file) as { characters: { slug: string; name: string; mentions: number }[] }).characters : [];
+    rows.forEach((r, i) => {
+      if (i > 0 && byMentionsThenName(rows[i - 1], r) > 0) problems.push(`${MENTIONS_FILE}: ${r.slug} is after ${rows[i - 1].slug} but not in the order (mentions, then name)`);
+    });
+    const code = reader.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:])\/\/.*$/gm, '$1');
+    const imports = [...code.matchAll(/^import .* from '([^']+)'/gm)].map((m) => m[1]);
+    if (imports.join() !== '../../content/snowmoon/characters-by-mentions.json') problems.push(`src/lib/character-order.ts: reads more than the order file: ${imports.join(', ')}`);
+    if (NOT_AN_ORDER.test(code)) problems.push(`src/lib/character-order.ts: orders by "${code.match(NOT_AN_ORDER)![0]}"`);
+    const order = rows.map((r) => r.slug).filter((s) => challenge.includes(s));
+    if (order.join() !== challenge.join()) problems.push(`src/lib/config.ts: CHALLENGE.characters is ${challenge.join(', ')}; the book's order is ${order.join(', ')}`);
+    return problems;
+  },
+  plant: (c: { challenge: string[] }) => {
+    // The challenge's characters by entrants, most first: an order by engagement.
+    c.challenge = ['mu', 'deluin', 'seila', 'bai', 'gladias', 'zei'];
+  },
+});
 // A hide on a seeded image reaches everywhere it shows (owner, 2026-10-30: "home, About, quote cards, the player,
 // share images. Add a check."). Every file that reads the seeded images (or the introduction or a quote card, which
 // carry them) must pass them through the hide filter, except the readers themselves and the admin Hide that writes it.
@@ -1756,6 +1793,58 @@ add({
     c.s4 = 'Quote cards you save, and your likes.';
     c.s7 = 'Neynar receives your Farcaster ID.';
     c.openSheets = 'export const challengeSheetsOpen = () => CHALLENGE.openSheets;';
+  },
+});
+
+// P6u: the remix challenge is admin-only until the owner opens it (owner, 2026-11-04: "/challenge is admin-only for
+// now"; nothing opens by date alone). While CHALLENGE.public is off, with the clock past the open date (dates.opens):
+// entries are not taken (no eligibility stored at publish, so Neynar isn't asked; no marking), sheets stay
+// invited-only, the free image cap stays IMAGES.dailySpendCapUsd (not the $15), only admins may see the challenge, and
+// the target answers /challenge with 404 to a signed-out visitor, with neither it nor the home page naming the
+// challenge. Once the owner turns CHALLENGE.public on, this check has nothing to hold.
+add({
+  id: 'P6u',
+  principle: 6,
+  name: 'while CHALLENGE.public is off, the dates open nothing (entries, open sheets, the $15 cap) and /challenge answers 404 to a non-admin',
+  load: async () => {
+    const at = new Date(Date.parse(CHALLENGE.dates.opens) + 3600_000);
+    const r = await fetch(`${BASE}/challenge`, { headers: { 'cache-control': 'no-cache' }, redirect: 'manual' }).catch(() => null);
+    return {
+      pub: CHALLENGE.public as boolean,
+      at: at.toISOString(),
+      cap: imagesDailySpendCapUsd(at),
+      entries: entriesOpen(at),
+      open: challengeOpenNow(at),
+      // Signed out, a stand-in FID and an invited one who isn't an admin (6852).
+      visibleToNonAdmin: [null, 501, ...IMAGES.invited.filter((f) => !challengeVisibleTo(f, false))].some((f) => challengeVisibleTo(f)),
+      sheets: read('src/lib/challenge/open-sheets.ts'),
+      record: read('src/lib/challenge/record.ts'),
+      status: r?.status ?? 0,
+      html: r ? await r.text() : '',
+      home: await page('/'),
+    };
+  },
+  run: (c) => {
+    if (c.pub) return [];
+    const problems: string[] = [];
+    if (c.cap !== IMAGES.dailySpendCapUsd) problems.push(`the free image cap at ${c.at} is $${c.cap}, not IMAGES.dailySpendCapUsd ($${IMAGES.dailySpendCapUsd}): it rose by date alone (imagesDailySpendCapUsd in src/lib/config.ts must read CHALLENGE.public)`);
+    if (c.entries || c.open) problems.push(`entries are open at ${c.at} with CHALLENGE.public off (entriesOpen / challengeOpenNow in src/lib/challenge/rules.ts must read CHALLENGE.public)`);
+    if (!/export const challengeSheetsOpen = \([^\n]*pub: boolean = CHALLENGE\.public\) => pub && CHALLENGE\.openSheets && phase\(now\) === 'open'/.test(c.sheets)) problems.push('src/lib/challenge/open-sheets.ts: open sheet-making does not wait for CHALLENGE.public');
+    if (!/if \(!entriesOpen\(now\)\) return 'not-a-candidate';/.test(c.record)) problems.push('src/lib/challenge/record.ts: eligibility is recorded (and Neynar asked) without CHALLENGE.public');
+    if (c.visibleToNonAdmin) problems.push('challengeVisibleTo lets a non-admin see the challenge while CHALLENGE.public is off');
+    if (c.status !== 404) problems.push(`${BASE}/challenge answers ${c.status} to a signed-out visitor, not 404`);
+    // The whole HTML, its inline page data included; a link to /challenge in the markup itself.
+    for (const [where, html] of [['/challenge', c.html], ['/', c.home]] as const) {
+      const m = /Remix the cast|remix challenge/i.exec(String(html)) ?? /href="\/challenge"/.exec(String(html).replace(/<script[\s\S]*?<\/script>/gi, ''));
+      if (m) problems.push(`${BASE}${where}: its HTML names the challenge ("${m[0]}")`);
+    }
+    return problems;
+  },
+  plant: (c) => {
+    c.cap = CHALLENGE.dailySpendCapUsd;
+    c.entries = true;
+    c.sheets = 'export const challengeSheetsOpen = (now = new Date()) => CHALLENGE.openSheets && phase(now) === \'open\';';
+    c.status = 200;
   },
 });
 
