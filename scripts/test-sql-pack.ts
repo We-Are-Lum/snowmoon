@@ -178,6 +178,11 @@ const PLANTS: Record<K, [string, string][]> = {
     ['extra grant: studio_writer may delete', `grant delete on studio.sheet_remix_asks to studio_writer;`],
     ['wrong column type: units as integer', `alter table studio.sheet_remix_asks alter column units type integer;`],
     ['missing policy: writer_insert dropped', `drop policy writer_insert on studio.sheet_remix_asks;`],
+    // The fid check (owner, 2026-11-04): an FID and a Bluesky account accepted, a wallet's number refused.
+    ['fid check takes a wallet\'s number', `alter table studio.sheet_remix_asks drop constraint sheet_remix_asks_fid_check; alter table studio.sheet_remix_asks add constraint sheet_remix_asks_fid_check check (fid <> 0);`],
+    ['fid check not widened (FIDs only): a Bluesky account refused', `alter table studio.sheet_remix_asks drop constraint sheet_remix_asks_fid_check; alter table studio.sheet_remix_asks add constraint sheet_remix_asks_fid_check check (fid > 0);`],
+    ['fid check refuses an FID (Bluesky accounts only)', `alter table studio.sheet_remix_asks drop constraint sheet_remix_asks_fid_check; alter table studio.sheet_remix_asks add constraint sheet_remix_asks_fid_check check (fid <= -1000000000);`],
+    ['fid check dropped', `alter table studio.sheet_remix_asks drop constraint sheet_remix_asks_fid_check;`],
   ],
   '4': [
     ['missing policy: writer_delete dropped', `drop policy writer_delete on studio.challenge_marks;`],
@@ -292,14 +297,27 @@ for (const k of ORDER) {
   await pg.exec(get('1B'));
   check('re-running 1 after 2..5 changes nothing', (await snapshot()) === done, diff(done, await snapshot()));
 
-  // A finding for the owner, not a fault: 3's fid check refuses a Bluesky account's person number.
-  let refused = false;
-  await pg
-    .exec(`begin; insert into studio.sheet_remix_asks (remix, fid, units, slot) values (gen_random_uuid(), -1000000001, 1, 'front'); rollback;`)
-    .catch(() => (refused = true));
-  await pg.exec('rollback;').catch(() => {});
-  check('finding: sheet_remix_asks (3) refuses a Bluesky account\'s person number (owner\'s decision; see the doc)', refused);
+  // 3's fid check (owner, 2026-11-04): an FID and a Bluesky account's number accepted; a wallet's number and zero refused.
+  const takes = async (fid: number) => {
+    let ok = true;
+    await pg.exec(`begin; insert into studio.sheet_remix_asks (remix, fid, units, slot) values (gen_random_uuid(), ${fid}, 1, 'front'); rollback;`).catch(() => (ok = false));
+    await pg.exec('rollback;').catch(() => {});
+    return ok;
+  };
+  const verdicts = [await takes(6852), await takes(-1000000000), await takes(-1000000001), await takes(-500), await takes(-999999999), await takes(0)];
+  check('3: sheet_remix_asks takes an FID and a Bluesky account (-1,000,000,000 and below), refuses a wallet\'s number and zero', verdicts.join() === 'true,true,true,false,false,false', verdicts.join());
   check('the database is as it was at the end', (await snapshot()) === done);
+
+  // 5's Bluesky rule label follows bluesky-check's read-back (owner, 2026-11-04: rolling, age30d+5posts30d).
+  const rb = gitShow('bluesky-check', 'supabase/drafts/READ-BACK-social_bluesky_check.sql');
+  if (rb === null) log.push('skip 5 rule label against origin/bluesky-check: git show unavailable');
+  else {
+    const label = (sql: string) => /rule constant text := '([^']+)';/.exec(sql)?.[1] ?? '';
+    const same = (c: string, d: string) => label(d) !== '' && label(d) === label(rb) && c.includes(`''${label(rb)}''`);
+    check(`5 C and D use bluesky-check's rule label (${label(rb)})`, same(get('5C'), get('5D')), label(get('5D')));
+    const old = 'made-before-2026-11-06+5posts30d';
+    check('5 planted: a D still on the old fixed-date label — caught', !same(get('5C'), get('5D').replace(label(rb), old)));
+  }
 }
 
 await pg.close();
