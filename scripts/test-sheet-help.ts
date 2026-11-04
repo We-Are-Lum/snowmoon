@@ -504,7 +504,7 @@ try {
   {
     check('H7 SHEET_HELP.on is off in the config', SHEET_HELP.on === false);
     check('H7 not live now', F.sheetHelpLive() === false);
-    const said = { ...PRIVACY, sections: PRIVACY.sections.map((x) => (x.n === 5 ? { ...x, body: [...x.body, "On a character sheet, 'Ask for help' sends your message … to Groq"] } : x.n === 6 ? { ...x, body: [...x.body, "… words it suggested to you in 'Ask for help' …"] } : x)) } as typeof PRIVACY;
+    const said = { ...PRIVACY, sections: PRIVACY.sections.map((x) => (x.n === 5 ? { ...x, body: [...x.body, "On a character sheet, 'Ask for help' sends your message … to Groq"] } : x.n === 6 ? { ...x, body: [...x.body, "… words that 'Ask for help' suggested to you …"] } : x)) } as typeof PRIVACY;
     const inWindow = new Date(Date.parse(CHALLENGE.dates.opens) + 3600_000);
     const after = new Date(Date.parse(CHALLENGE.dates.closes) + 1);
     SHEET_HELP.on = true;
