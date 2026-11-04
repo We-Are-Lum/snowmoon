@@ -20,7 +20,7 @@ Legal texts describe today (owner, 2026-10-18): these lines go live in the same 
 The two descriptions, word for word, used everywhere each maker is described (`CLOSED_PROVIDERS[maker].retentionWords`):
 
 - **OpenAI** (the owner's own words, 6.4): "may keep them for up to 30 days to check for abuse, and longer if needed to deal with abuse or required by law".
-- **Google** (6.3): "keeps no copy, except in memory for up to 24 hours".
+- **Google** (6.3): "keeps no copy, except in memory for up to 24 hours, and may keep logs to check for abuse, for up to 90 days".
 
 "Before" is main's `src/lib/legal.ts` and `config/consent.json` (`own-words-v4`) at `d42b7d8`.
 
@@ -30,7 +30,7 @@ For `own-words-v5` (built by another agent on `signin-lens-bluesky`), added to t
 account's score." Copy it word for word:
 
 <!-- consent -->
-> If you choose a closed model for a character sheet, your prompt, and the front view the model made, go through Vercel AI Gateway to its maker instead of fal.ai: OpenAI, which may keep them for up to 30 days to check for abuse, and longer if needed to deal with abuse or required by law, or Google, which keeps no copy, except in memory for up to 24 hours.
+> If you choose a closed model for a character sheet, your prompt, and the front view the model made, go through Vercel AI Gateway to its maker instead of fal.ai: OpenAI, which may keep them for up to 30 days to check for abuse, and longer if needed to deal with abuse or required by law, or Google, which keeps no copy, except in memory for up to 24 hours, and may keep logs to check for abuse, for up to 90 days.
 <!-- end -->
 
 It may ship only in the release that turns model choice on (legal texts describe today). So v5 with this sentence and
@@ -130,7 +130,7 @@ Vertex AI, and doesn't train its models on them. The gateway keeps no copy."
 
 **After** (v2; the zero-retention agreement is an implementation detail and moves to the recipe):
 
-> Google keeps no copy, except in memory for up to 24 hours, and doesn't train its models on them. The gateway keeps no copy.
+> Google keeps no copy, except in memory for up to 24 hours, and may keep logs to check for abuse, for up to 90 days. It doesn't train its models on them. The gateway keeps no copy.
 
 **With the first notice a device sees** (unchanged):
 
@@ -204,7 +204,7 @@ are 18 or older, can Generate, no minor should reach OpenAI; the box adds a remi
 **After:**
 
 <!-- privacy-7 -->
-> If you choose a closed model when you remix a character's sheet, its maker, OpenAI or Google, receives through Vercel AI Gateway your prompt for each view and, for the side and back, the front view it made. It receives nothing else about you, and may not train on them. OpenAI may keep them for up to 30 days to check for abuse, and longer if needed to deal with abuse or required by law. Google keeps no copy, except in memory for up to 24 hours. The gateway keeps no copy.
+> If you choose a closed model when you remix a character's sheet, its maker, OpenAI or Google, receives through Vercel AI Gateway your prompt for each view and, for the side and back, the front view it made. It receives nothing else about you, and may not train on them. OpenAI may keep them for up to 30 days to check for abuse, and longer if needed to deal with abuse or required by law. Google keeps no copy, except in memory for up to 24 hours, and may keep logs to check for abuse, for up to 90 days. The gateway keeps no copy.
 <!-- end -->
 
 (6f, before: "… It receives nothing else about you, and your browser never contacts it. OpenAI (for GPT Image 2.5
@@ -244,13 +244,13 @@ prompt and the front view through Vercel AI Gateway, and nothing about you; Open
 Google is set to keep no copy, and neither trains on them."
 
 - **A1, closed-model-bases alone:**
-  > OpenAI and Google receive, through Vercel AI Gateway, the prompts and pictures for some of the project's own pictures, and nothing about you, and neither may train on them (OpenAI may keep them for up to 30 days to check for abuse, and longer if needed to deal with abuse or required by law; Google keeps no copy, except in memory for up to 24 hours).
+  > OpenAI and Google receive, through Vercel AI Gateway, the prompts and pictures for some of the project's own pictures, and nothing about you, and neither may train on them (OpenAI may keep them for up to 30 days to check for abuse, and longer if needed to deal with abuse or required by law; Google keeps no copy, except in memory for up to 24 hours, and may keep logs to check for abuse, for up to 90 days).
 - **A2, plus the Midjourney pictures:**
-  > OpenAI and Google receive, through Vercel AI Gateway, the prompts and pictures for some of the project's own pictures, and nothing about you, and neither may train on them (OpenAI may keep them for up to 30 days to check for abuse, and longer if needed to deal with abuse or required by law; Google keeps no copy, except in memory for up to 24 hours); the site sends nothing to Midjourney, which the owner used outside the site for some pictures.
+  > OpenAI and Google receive, through Vercel AI Gateway, the prompts and pictures for some of the project's own pictures, and nothing about you, and neither may train on them (OpenAI may keep them for up to 30 days to check for abuse, and longer if needed to deal with abuse or required by law; Google keeps no copy, except in memory for up to 24 hours, and may keep logs to check for abuse, for up to 90 days); the site sends nothing to Midjourney, which the owner used outside the site for some pictures.
 - **A3, plus model choice:**
-  > OpenAI and Google receive, through Vercel AI Gateway, the prompts and pictures for some of the project's own pictures and for a sheet a remixer makes with one of their closed models, and nothing about you, and neither may train on them (OpenAI may keep them for up to 30 days to check for abuse, and longer if needed to deal with abuse or required by law; Google keeps no copy, except in memory for up to 24 hours); the site sends nothing to Midjourney, which the owner used outside the site for some pictures.
+  > OpenAI and Google receive, through Vercel AI Gateway, the prompts and pictures for some of the project's own pictures and for a sheet a remixer makes with one of their closed models, and nothing about you, and neither may train on them (OpenAI may keep them for up to 30 days to check for abuse, and longer if needed to deal with abuse or required by law; Google keeps no copy, except in memory for up to 24 hours, and may keep logs to check for abuse, for up to 90 days); the site sends nothing to Midjourney, which the owner used outside the site for some pictures.
 - **This branch alone** (in `src/app/about/page.tsx` now, since main has no bases sentence):
-  > If you choose a closed model when you remix a character's sheet, its maker, OpenAI or Google, receives your prompt and the front view through Vercel AI Gateway, and nothing about you, and neither may train on them (OpenAI may keep them for up to 30 days to check for abuse, and longer if needed to deal with abuse or required by law; Google keeps no copy, except in memory for up to 24 hours).
+  > If you choose a closed model when you remix a character's sheet, its maker, OpenAI or Google, receives your prompt and the front view through Vercel AI Gateway, and nothing about you, and neither may train on them (OpenAI may keep them for up to 30 days to check for abuse, and longer if needed to deal with abuse or required by law; Google keeps no copy, except in memory for up to 24 hours, and may keep logs to check for abuse, for up to 90 days).
 
 P6h: About names OpenAI and Google, as Privacy does; if it names Midjourney, it must say the site sends nothing to it.
 

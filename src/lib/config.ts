@@ -679,7 +679,7 @@ export const CLOSED_IMAGES = {
  */
 export const CLOSED_PROVIDERS = {
   OpenAI: { noticeVersion: 2, noticeWords: '804666e058e7', retentionWords: 'for up to 30 days to check for abuse, and longer if needed to deal with abuse or required by law', gateway: { disallowPromptTraining: true } },
-  Google: { noticeVersion: 2, noticeWords: '2a0dff0194fd', retentionWords: 'no copy, except in memory for up to 24 hours', gateway: { zeroDataRetention: true, disallowPromptTraining: true } },
+  Google: { noticeVersion: 2, noticeWords: '69a0dde93f95', retentionWords: 'no copy, except in memory for up to 24 hours, and may keep logs to check for abuse, for up to 90 days', gateway: { zeroDataRetention: true, disallowPromptTraining: true } },
 } as const satisfies Record<string, { noticeVersion: number; noticeWords: string; retentionWords: string; gateway: { zeroDataRetention?: boolean; disallowPromptTraining: boolean } }>;
 export type ClosedProvider = keyof typeof CLOSED_PROVIDERS;
 
