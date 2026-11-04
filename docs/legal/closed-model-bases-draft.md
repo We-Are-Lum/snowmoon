@@ -1,4 +1,51 @@
-# Closed-model bases: Privacy, Terms and About lines (reread by the owner, 2026-11-04)
+# Closed-model bases: Privacy, Terms and About lines (redraft v2, 2026-11-04, DRAFT, not reread)
+
+> **Redraft v2 (2026-11-04, after the 11:20 restart), not reread.** The owner's decisions on the reread pack (the
+> coordinator's review, approved by the owner) reopen all three lines reread earlier today: **6.4** one OpenAI
+> description everywhere, in the owner's words; **6.3** Google's in-memory cache; **8** one sentence each in Terms §8
+> and About; and the standing rule: the shortest true sentence, no implementation details (gateway accounts, internal
+> labels, thresholds) in legal texts. The new words are in `src/lib/legal.ts` and `src/app/about/page.tsx` on this
+> branch. `LEGAL.ownerReread` is **not** changed, so P6k and P6l fail until the owner rereads them. Not merged.
+> Drafted by the coding agent (Claude, a closed model by Anthropic).
+
+## Redraft v2: before and after
+
+**Privacy §7, the bases item.** The 6.4 sentence is the owner's own wording, but it replaces this item's reread OpenAI
+sentence, so the item's reread reopens there; 6.3 adds Google's cache; and "We send the gateway only … from its own
+accounts with OpenAI and Google …" goes (an implementation detail; the recipe keeps it).
+
+Before (reread 2026-11-04):
+
+> OpenAI and Google, through Vercel AI Gateway, receive the prompt and the reference pictures for some of the pictures the project makes itself: the remix challenge's bases, styles and references. They receive nothing about you, and your browser never contacts them. We send the gateway only the prompt, the pictures and the picture's settings, and it passes them on from its own accounts with OpenAI and Google, set so that neither may train on them. Google, on its Vertex AI, keeps no copy. OpenAI may keep our prompts, reference pictures and the pictures it makes for up to 30 days to watch for abuse, and longer only where the law requires it or to protect its services or others from harm. Each picture's recipe names the model and its maker.
+
+After:
+
+> OpenAI and Google receive, through Vercel AI Gateway, the prompt and the reference pictures for some of the pictures the project makes itself, such as the remix challenge's bases, styles and references. They receive nothing about you, and may not train on them. OpenAI may keep them for up to 30 days to check for abuse, and longer if a picture is flagged for review or the law requires it. Google keeps no copy, except in memory for up to 24 hours. Each picture's recipe names the model and its maker.
+
+**Terms §8.** Before (reread 2026-11-04), two sentences after main's last:
+
+> Some of the project's own pictures, among them some of the remix challenge's bases, styles and references, are made with closed models by OpenAI and Google, named with their maker on each picture's recipe. Their makers' terms let us publish them and bind us, not you: we offer these pictures under the licence in section 3, as far as anyone holds rights in them, since a picture made wholly by a model may have no copyright at all.
+
+After (T1, this branch alone):
+
+> Some of the project's own pictures are made with closed models by OpenAI and Google, named with their maker on each picture's recipe; they are offered under the licence in section 3, as far as anyone holds rights in them, and their makers' terms bind us, not you.
+
+**About, "Where it runs".** Before (reread 2026-11-04):
+
+> Some of the project's own pictures (the remix challenge's bases, styles and references) are made with closed models by OpenAI and Google, through Vercel AI Gateway: they receive the prompt and the reference pictures, nothing about you.
+
+After (A1, this branch alone):
+
+> OpenAI and Google receive, through Vercel AI Gateway, the prompts and pictures for some of the project's own pictures, and nothing about you, and neither may train on them (OpenAI may keep them for up to 30 days to check for abuse, and longer if a picture is flagged for review or the law requires it; Google keeps no copy, except in memory for up to 24 hours).
+
+**Which release carries which version.** T1 and A1 are true with this branch alone. The day the first picture the owner
+made with Midjourney is published, T2 and A2 replace them; when model choice for remixers is on, T3 and A3. All are in
+`docs/legal/remix-model-choice-draft.md` on `remix-model-choice` ("Terms §8 and About: one sentence each, by release"),
+and T2 and A2 in `midjourney-reference-draft.md` here. A2 and A3 name Midjourney, so they need the 5.4 check change
+(`PROVENANCE_ONLY`, on `remix-model-choice`) in the same release.
+
+## The reread version (2026-11-04, kept for the record)
+
 
 > **Reread (owner, 2026-11-04): Privacy §7, Terms §8 and About approved as drafted** (at 54b895e2). They are now in
 > `src/lib/legal.ts` and `src/app/about/page.tsx` on this branch, with `LEGAL.ownerReread` updated. Not merged;
