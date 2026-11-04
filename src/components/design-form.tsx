@@ -10,6 +10,8 @@ import { SignInButton } from './sign-in';
 import { BookQuotes } from './design-book';
 import { useMyPicks } from './design-picks';
 import { AiTag } from './ai-tag';
+import { ModelNotice, ModelPicker, type ModelOption } from './model-picker';
+import { answerNotice, browserStore, mayPick, noticeFor } from '~/lib/images/model-notice';
 
 /**
  * New style, new sheet, fork, or new version (step 4; Claude Design 4b, 4c, 5b). The name and the
@@ -25,7 +27,6 @@ import { AiTag } from './ai-tag';
 const W = IMAGE_WORDING.designs;
 type Pic = { ticket: string; image: string; text: string; style: string | null; choice?: string };
 /** A model the remixer may choose for the sheet (IMAGES.designs.modelChoice): its label is read from config/models.json on the server. */
-type ModelOption = { id: string; name: string; terms: string; open: boolean; maker: string | null; perRemixUsd: number };
 type StyleOption = { versionId: string; title: string; by: string; text: string; thumb: string | null };
 type Status = { ready: boolean; invited?: boolean; consented?: boolean; left?: number; perDay: number; signedIn: boolean };
 type Wording = { version: string; line: string; title: string; text: string[]; sha256: string };
@@ -84,6 +85,24 @@ export function DesignForm(p: Props) {
   const choices = p.modelChoices && p.modelChoices.length > 1 ? p.modelChoices : null;
   const [modelId, setModelId] = useState<string>(choices?.[0].id ?? 'open');
   const model = choices?.find((m) => m.id === modelId) ?? null;
+  // The closed models' notice (src/lib/images/model-notice.ts): once per maker, on this device only; the first one asks 18+.
+  const seenNotices = useRef(new Set<string>());
+  const [notice, setNotice] = useState<{ pick: ModelOption; askAdult: boolean } | null>(null);
+  const [adultTicked, setAdultTicked] = useState(false);
+  const pickModel = (m: ModelOption) => {
+    if (m.open || !m.maker) return setModelId(m.id);
+    const n = noticeFor(m.maker, browserStore(), seenNotices.current);
+    if (!n.show) return setModelId(m.id);
+    setNotice({ pick: m, askAdult: n.askAdult });
+  };
+  const answer = (button: 'ok' | 'never') => {
+    if (!notice?.pick.maker) return;
+    if (!answerNotice(notice.pick.maker, button, adultTicked, browserStore(), seenNotices.current)) return;
+    setModelId(notice.pick.id);
+    setNotice(null);
+  };
+  // A closed choice works only once its notice (and the 18+ box) has been answered on this device.
+  const modelReady = !model || model.open || !model.maker || mayPick(model.maker, browserStore(), seenNotices.current);
 
   const refresh = useCallback(async () => {
     const res = await authFetch('/api/images/status').catch(() => null);
@@ -183,7 +202,7 @@ export function DesignForm(p: Props) {
           type="button"
           className="ic-link dz-slot-go"
           onClick={() => make(slot, i)}
-          disabled={!ready || busy !== null || !clean || left <= 0 || needsFront || needsStyle}
+          disabled={!ready || busy !== null || !clean || left <= 0 || needsFront || needsStyle || !modelReady}
           aria-label={`${pic ? W.form.again : W.form.generate}: ${label}`}
         >
           {busy === key ? W.form.making : pic ? W.form.again : W.form.generate}
@@ -295,25 +314,9 @@ export function DesignForm(p: Props) {
           {!style && choices && (
             <fieldset className="dz-section dz-model-pick">
               <legend className="dz-label">{W.models.legend}</legend>
-              <ul className="dz-rows">
-                {choices.map((m) => (
-                  <li key={m.id}>
-                    <label className={`dz-row dz-style-option${modelId === m.id ? ' is-on' : ''}`}>
-                      <input type="radio" name="dz-model" value={m.id} checked={modelId === m.id} onChange={() => setModelId(m.id)} />
-                      <span className="dz-row-text">
-                        <span className="dz-row-title">{m.open ? W.models.openDefault : m.name}</span>
-                        <span className="dz-row-meta">
-                          {m.open ? m.name : null}
-                          {m.open ? ' · ' : ''}
-                          {m.terms} · about ${m.perRemixUsd.toFixed(2)} for three views
-                        </span>
-                      </span>
-                    </label>
-                  </li>
-                ))}
-              </ul>
+              <ModelPicker choices={choices} modelId={modelId} onPick={pickModel} />
+              {notice?.pick.maker && <ModelNotice maker={notice.pick.maker} askAdult={notice.askAdult} adultTicked={adultTicked} onTick={setAdultTicked} onAnswer={answer} />}
               <p className="dz-note">{W.models.note}</p>
-              {model && !model.open && model.maker && <p className="dz-note">{W.models.closedNote(model.maker)}</p>}
             </fieldset>
           )}
 

@@ -658,12 +658,30 @@ export const CLOSED_IMAGES = {
   dailySpendCapUsd: 5,
   /**
    * Google's Service Specific Terms §20(d): no use of a Generative AI Service "as part of a website … that is directed
-   * towards or is likely to be accessed by individuals under the age of 18" (docs/proposals/closed-model-bases.md).
-   * A remixer's own Generate is a use on the website, so Gemini is offered only once the owner accepts a reading of
-   * that clause (signing in needs 18+, Terms §4) and sets this. Until then the picker offers GPT only, besides the open default.
+   * towards or is likely to be accessed by individuals under the age of 18" (docs/legal/age-terms-closed-models.md).
+   * DECIDED by the owner, 2026-11-04: Gemini is allowed for remixers. His reason: the Terms already require 18+ to sign
+   * in (Terms §4), and only signed-in people can generate; the first closed-model notice also asks each device for a
+   * one-time "I'm 18 or older" (src/lib/images/model-notice.ts).
    */
-  geminiAgeReadingAccepted: false as boolean,
+  geminiAgeReadingAccepted: true as boolean,
 } as const;
+
+/**
+ * Each closed model's maker, as the remix form's notice and Privacy §7 describe it (owner, 2026-11-04: closed models
+ * without zero retention are allowed, with a notice). The notice's words are in src/lib/legal.ts (MODEL_NOTICES);
+ * `noticeVersion` goes up whenever they, or the maker's terms they describe, change, and a device that asked not to be
+ * reminded sees the notice again. `noticeWords` is the first 12 hex of the sha256 of those words, so a change of words
+ * without a new version fails scripts/test-model-choice.ts. `retentionWords` must appear in Privacy §7's item for the
+ * maker (check:principles P6t). `gateway`: what each call asks of Vercel AI Gateway, as the gateway offers it for that
+ * model (https://ai-gateway.vercel.sh/v1/models/<model>/endpoints, read 2026-11-04): OpenAI's gpt-image-2.5-sunburst
+ * has has_zdr false and has_no_training true; Google Vertex AI's gemini-3.1-flash-image has has_zdr true and
+ * has_no_training true. The owner's batch calls (bases and styles) keep zero retention whatever this says.
+ */
+export const CLOSED_PROVIDERS = {
+  OpenAI: { noticeVersion: 1, noticeWords: 'b5f2b41e408e', retentionWords: 'up to 30 days', gateway: { disallowPromptTraining: true } },
+  Google: { noticeVersion: 1, noticeWords: '89bdf7c04cf4', retentionWords: 'keep no copy', gateway: { zeroDataRetention: true, disallowPromptTraining: true } },
+} as const satisfies Record<string, { noticeVersion: number; noticeWords: string; retentionWords: string; gateway: { zeroDataRetention?: boolean; disallowPromptTraining: boolean } }>;
+export type ClosedProvider = keyof typeof CLOSED_PROVIDERS;
 
 /** Minpentai Play's limits and retention (owner, 2026-10-09). Every /api/minpentai/* request counts. */
 /**

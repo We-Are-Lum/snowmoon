@@ -1,5 +1,6 @@
 import { IMAGES } from '../config';
 import { modelTerms } from './recipe-lines';
+import { MODEL_NOTICES } from '../legal';
 import { sheetModelsOffered, type SheetModel } from './sheet-models';
 
 /**
@@ -9,7 +10,12 @@ import { sheetModelsOffered, type SheetModel } from './sheet-models';
  */
 export function modelChoicesFor(mode: string, kind: string, on: boolean = IMAGES.designs.modelChoice) {
   if (!on || mode !== 'fork' || kind !== 'character') return undefined;
-  return sheetModelsOffered(on).map((m) => ({ id: m.id, name: m.name, terms: choiceTerms(m), open: m.open, maker: m.maker, perRemixUsd: perRemixUsd(m) }));
+  return sheetModelsOffered(on).map((m) => ({ id: m.id, name: m.name, terms: choiceTerms(m), open: m.open, maker: m.maker, perRemixUsd: perRemixUsd(m), retention: retentionLabel(m) }));
+}
+
+/** A closed model's retention label (MODEL_NOTICES, legal.ts), shown beside it in the picker always; null for the open models. */
+export function retentionLabel(m: SheetModel): string | null {
+  return m.open || !m.maker ? null : (MODEL_NOTICES[m.maker as keyof typeof MODEL_NOTICES]?.label ?? null);
 }
 
 /** The label for a choice: the front's model's, and the views' too when they differ (the open default: both open). */

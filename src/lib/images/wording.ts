@@ -147,8 +147,6 @@ export const IMAGE_WORDING = {
       legend: 'Model for this sheet',
       note: 'Chosen once for the whole sheet: the front, side and back all come from this model. Changing it marks the views to make again.',
       openDefault: 'The site’s open models (the default)',
-      closedNote: (maker: string) =>
-        `A closed model by ${maker}. Its weights aren’t published, so its recipe can’t be re-run exactly. ${maker} receives your prompt and, for the side and back, the front view, through Vercel AI Gateway, set to keep nothing and not to train on them. Nothing else about you is sent.`,
       closedLeft: (n: number) => `${n} closed-model ${n === 1 ? 'picture' : 'pictures'} left today (apart from the open ones)`,
       closedLimit: 'You’ve made today’s pictures with closed models. The open models still work; closed ones come back at 00:00 UTC.',
       closedSpend: 'Closed models have reached today’s spending limit for everyone. The open models still work; closed ones come back at 00:00 UTC.',

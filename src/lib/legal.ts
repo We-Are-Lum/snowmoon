@@ -155,7 +155,7 @@ export const PRIVACY: LegalDoc = {
   sections: [
     { n: 1, head: 'Who we are.', body: ['Lum LLC, a Wyoming limited liability company, operates Snowmoon Party.'] },
     { n: 2, head: 'The short version.', body: ['You can read and listen without an account, and we keep nothing about you when you do. We use no advertising or analytics trackers and set no cookies. We do not sell data.'] },
-    { n: 3, head: 'Kept on your device only.', body: ['Your browser stores a few things so the site works: whether you have seen the introduction, your light or dark setting, where you stopped listening, the furthest chapter you have opened, your questions to the assistant and its answers, drafts of images you make until you publish them, a few other settings of yours, and, on the website, your sign-in, which lasts about an hour (a day for a wallet sign-in), and a payment you have sent but not yet seen credited. These stay on your device. Clearing your browser\'s site data removes them. Frames you make in Remix are not drafts: they are saved by us as soon as they are made (section 4). So are the frames and video tests your agent makes when you approve them, but privately: only you can see them (section 4).'] },
+    { n: 3, head: 'Kept on your device only.', body: ['Your browser stores a few things so the site works: whether you have seen the introduction, your light or dark setting, where you stopped listening, the furthest chapter you have opened, your questions to the assistant and its answers, drafts of images you make until you publish them, a few other settings of yours, and, on the website, your sign-in, which lasts about an hour (a day for a wallet sign-in), and a payment you have sent but not yet seen credited. If you choose a closed model when you remix a character\'s sheet, it also stores that you confirmed you are 18 or older, and which makers\' notices you asked not to be shown again; we don\'t receive either. These stay on your device. Clearing your browser\'s site data removes them. Frames you make in Remix are not drafts: they are saved by us as soon as they are made (section 4). So are the frames and video tests your agent makes when you approve them, but privately: only you can see them (section 4).'] },
     {
       n: 4,
       head: 'Kept by us when you sign in.',
@@ -166,7 +166,7 @@ export const PRIVACY: LegalDoc = {
           'That you agreed to the terms for publishing, and any of your own work you have hidden.',
           'If your wallet is linked to your Farcaster account (because Farcaster lists the wallet\'s address as that account\'s, as its custody address or as an address it verified, or because you linked them while signed in with both): which wallet is linked to which account, how, when it was linked or unlinked, and why a link ended. While linked, signing in with the wallet is signing in as that account. You can unlink it on your You page.',
           'Images you publish, with their prompt, your name (Farcaster name or wallet address) and the record of how they were made. These are public.',
-          'Character sheets you publish, with their text, their views, your name and the record of how each view was made. These are public. During the remix challenge, anyone who passes the same check as making images can publish a remix of its characters\' sheets.',
+          'Character sheets you publish, with their text, their views, your name and the record of how each view was made. These are public. During the remix challenge, anyone who passes the same check as making images can publish a remix of its characters\' sheets. When you remix a character\'s sheet you can choose the model that makes all of its views: the site\'s open models, or a closed model, named with its maker on the form and in each view\'s record. How many pictures you make with closed models each day is counted apart from the others.',
           'If you take part in the remix challenge: for each version of a challenge character you publish, whether it can count as an entry and why (you were invited, you are an admin, or whether your account passed the site\'s check), decided once, when you publish it, and kept with the time it was decided; and which of your versions you mark as your entry for each character, and when. Whether a version is an entry is shown on its page and on the challenge page, with how many people have entered each character.',
           'When entries close, a record of every entry is published to IPFS and referenced on Ethereum, where it can\'t be removed: a fingerprint of its pictures and recipe (not the pictures or words themselves), its maker\'s Farcaster ID, when it was published and what it was built on. Hiding a version later removes it from this site, but not its fingerprint from that record.',
           'If you add where a version was posted: the post\'s network, its id there, its writer\'s handle, when it was posted, its address, and who added it and when. The network, handle, date and a link to the post are shown on the version\'s page; who added it isn\'t. You can remove a post you added; a moderator can remove any of them, on its writer\'s request or under the Terms.',
@@ -197,6 +197,7 @@ export const PRIVACY: LegalDoc = {
           'Supabase holds our database.',
           'Groq, and Vercel AI Gateway when Groq is busy, receive assistant questions, and the prompts for images you make, which are checked against the published rules.',
           'fal.ai receives the prompt for an image you make, and any pictures sent with it (in Remix: a depth picture of the camera you set, and the shot\'s place and cast pictures), and makes the image. It is asked to keep no copy. For a video test you approve, fal.ai receives the shot\'s frame (already public on the site), your note and the acting notes for that shot (yours, and any your agent filed for you), and makes a short video with the open LongCat-Video model. It is asked to keep no copy of the request. It returns the video at a link on its own storage; we copy it at once and keep it privately, for you. fal.ai keeps the video it made on its storage, at an unlisted link it gives only to us but that anyone holding it could open, for as long as fal.ai\'s settings keep it; we don\'t set a time yet.',
+          'If you choose a closed model when you remix a character\'s sheet, its maker receives, through Vercel AI Gateway, the prompt for each view and, for the side and back, the front view it made. It receives nothing else about you, and your browser never contacts it. OpenAI (for GPT Image 2.5 Sunburst) may keep them for up to 30 days to check for abuse, and longer if its checks flag a picture for review; it does not train its models on them. Google (for Gemini 3.1 Flash Image) is set to keep no copy, through the gateway\'s zero-retention agreement with Google Vertex AI, and does not train its models on them. The gateway itself keeps no copy.',
           'Farcaster\'s sign-in services confirm who you are when you sign in. They learn your Farcaster ID and that you signed in here, not what you read or ask. Farcaster\'s public API receives a Farcaster ID when we look up the username to show with published work, and in Minpentai\'s lobby and matches, and a username when a page is opened at /@name.',
           'Neynar receives your Farcaster ID when you first make an image on a given day, to look up its account score, which decides whether you can make images. We keep the score for a day. During the remix challenge, that check also decides, once, when you publish a remix of a challenge character, whether it can count as an entry. Neynar is never asked about you when someone views a page. When someone adds a Farcaster post to a version\'s page, Neynar receives that post\'s address or id, to read it. When you sign in with a wallet, Neynar also receives the wallet\'s address, to find the Farcaster account whose custody address it is or that has verified it; if exactly one account has it, your wallet is linked to that account (section 4). We keep the answer for a day. A linked wallet is looked up again at most once a day, and its link ends if that account no longer has it; a wallet you unlinked isn\'t looked up again. When you play Minpentai inside a Farcaster cast, your Farcaster app signs each tap, and we ask Neynar\'s Farcaster hub which signing keys your Farcaster ID has, to check the signature: Neynar receives your Farcaster ID, and we keep its answer in memory for five minutes.',
           'Bluesky and Lens receive the details of a post someone adds to a version\'s page (Bluesky: its writer\'s handle or account id and the post\'s id; Lens: the post\'s id), so our server can read the post and check it links there. They receive nothing about you or the person who added it, and your browser never contacts them for this.',
@@ -214,6 +215,40 @@ export const PRIVACY: LegalDoc = {
     { n: 11, head: 'Contact.', body: ['snowmoon@wearelum.xyz'] },
   ],
 };
+
+/**
+ * The closed models' notices on the remix form (owner, 2026-11-04; branch remix-model-choice, DRAFT, pending the owner's
+ * reread), one per maker, shown the first time a device picks one of that maker's models, and again when the maker's
+ * notice version (src/lib/config.ts CLOSED_PROVIDERS) goes up. The label shows beside the model in the picker always.
+ * The 18+ line and its box show with the first notice a device sees. Facts and their sources:
+ * docs/legal/remix-model-choice-draft.md.
+ */
+export const MODEL_NOTICES = {
+  OpenAI: {
+    label: 'OpenAI keeps prompts up to 30 days',
+    title: 'A closed model by OpenAI',
+    text: [
+      'GPT Image 2.5 Sunburst is made by OpenAI. Its weights aren\'t published, so its recipe can\'t be re-run exactly.',
+      'OpenAI receives your prompt for each view and, for the side and back, the front view it made, through Vercel AI Gateway. Nothing else about you.',
+      'OpenAI may keep them for up to 30 days to check for abuse, and longer if its checks flag a picture for review. It doesn\'t train its models on them. The gateway keeps no copy.',
+    ],
+  },
+  Google: {
+    label: 'Google keeps no copy',
+    title: 'A closed model by Google',
+    text: [
+      'Gemini 3.1 Flash Image is made by Google. Its weights aren\'t published, so its recipe can\'t be re-run exactly.',
+      'Google receives your prompt for each view and, for the side and back, the front view it made, through Vercel AI Gateway. Nothing else about you.',
+      'Google is set to keep no copy, through the gateway\'s zero-retention agreement with Google Vertex AI, and doesn\'t train its models on them. The gateway keeps no copy.',
+    ],
+  },
+} as const;
+/** With the first closed-model notice a device sees: the 18+ reminder and its box (the Terms' rule; not a verification). */
+export const ADULT_CONFIRM = {
+  line: 'Closed models are for people 18 or older, as signing in here is (Terms, section 4).',
+  box: 'I\'m 18 or older',
+} as const;
+export const NOTICE_BUTTONS = { ok: 'OK', never: 'Don\'t remind me again' } as const;
 
 /** A short key for a page's exact words (its title and every section), like the notice's noticeKey. */
 export function legalKey(doc: LegalDoc): string {

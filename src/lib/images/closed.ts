@@ -1,7 +1,7 @@
 import 'server-only';
 import { createHash } from 'node:crypto';
 import sharp from 'sharp';
-import { IMAGES } from '../config';
+import { CLOSED_PROVIDERS, IMAGES, type ClosedProvider } from '../config';
 import { gatewayToken } from '../chat/model';
 import { ImageUnavailable, type Made } from './fal';
 import type { SheetModel, ViewSlot } from './sheet-models';
@@ -13,14 +13,17 @@ import type { SheetModel, ViewSlot } from './sheet-models';
  * Flash Image at /v1/chat/completions with image output. The provider receives the prompt and, for a side or back, the
  * front view; nothing else about the person (no user field, no FID, no IP: the call comes from our server).
  *
- * Every call asks the gateway for zero data retention and no prompt training, and pins the provider whose terms were
+ * Every call asks the gateway for what it offers for that model (CLOSED_PROVIDERS[maker].gateway: no prompt training
+ * for both; zero data retention for Google Vertex AI only, since the gateway offers none for OpenAI's image model; owner,
+ * 2026-11-04: closed models without zero retention are allowed, with a notice), and pins the provider whose terms were
  * checked (OpenAI for GPT, Google Vertex AI for Gemini: Google's Vertex terms are the ones quoted in
  * docs/legal/remix-model-choice-draft.md). The picture comes back as a PNG at the model's own size; it is stored as the
  * site stores views (JPEG at IMAGES.viewSize, the whole picture scaled to fit and padded with its own corner colour,
  * no model), and the recipe records the conversion and the original's sha256.
  */
 export const GATEWAY_URL = 'https://ai-gateway.vercel.sh/v1';
-export const GATEWAY_DATA = { zeroDataRetention: true, disallowPromptTraining: true } as const;
+/** What the gateway is asked to do with a call's data, per maker (src/lib/config.ts CLOSED_PROVIDERS). */
+export const gatewayDataFor = (maker: string) => CLOSED_PROVIDERS[maker as ClosedProvider]?.gateway ?? null;
 const PIN: Record<string, string[]> = { 'openai/gpt-image-2.5-sunburst': ['openai'], 'google/gemini-3.1-flash-image': ['vertex'] };
 
 export interface ClosedRequest {
@@ -35,7 +38,9 @@ export function closedRequest(m: SheetModel, slot: ViewSlot, prompt: string, fro
   const call = slot === 'front' ? m.front : m.views;
   if (m.open) throw new Error('not a closed model');
   if ((slot === 'front') !== (front === null)) throw new Error('a front from text; a side or back from the front');
-  const gateway = { ...GATEWAY_DATA, only: PIN[call.endpoint] };
+  const data = gatewayDataFor(m.maker ?? '');
+  if (!data) throw new Error(`no gateway settings for ${m.maker}`);
+  const gateway = { ...data, only: PIN[call.endpoint] };
   if (!gateway.only) throw new Error(`no provider chosen for ${call.endpoint}`);
   if (m.id === 'gpt-image-2.5-sunburst') {
     const settings = { size: '1024x1536', quality: 'high', n: 1, output_format: 'png' };
