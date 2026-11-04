@@ -369,6 +369,10 @@ order the feed, search, anyone's own pages, the agent tools or the read API.
   an unconstrained type and reads nothing about an item, called only by the random selection, on the whole list. It
   runs in the browser on each visit, from the full list the cached page carries. Its planted violation is a weighted
   shuffle, which must fail.
+  A third narrow exception (owner, 2026-11-04; branch challenge-landing; **pending the owner's yes**): beside each
+  character's one base, /challenge shows the owner's first remixes of it (`CHALLENGE.firstRemixes`, at most two), in
+  the order the owner sets in the config. Chosen by the owner, never by a count, a like or a payment; no sort reads
+  them. Empty slots until they exist.
 - `P5i` (branch challenge-landing, 2026-11-04, the owner's decision): while the challenge runs, its remix cards (the
   random selection and "See all") show no remix, like or built-on count, and the feed (/challenge/remixes) has no "most
   remixed" or other sort: newest first, filterable by character. A viewer's "most remixed" sort may come back after

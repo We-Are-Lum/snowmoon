@@ -143,12 +143,17 @@ proof('two entries for one person and character are caught', (() => {
   return new Set(planted.map((c) => R.markKey(c.person, c.character))).size !== planted.length;
 })());
 
-// --- The three bases (owner, 2026-11-03) --------------------------------------------------------------------------
+// --- The bases (owner, 2026-11-03: three; 2026-11-04 after the restart: one per character) -----------------------
 {
+  const committedMax = CHALLENGE.maxBases;
+  check('committed: one base per character (owner, 2026-11-04)', committedMax === 1);
+  check('committed: at most one base is used', R.basesOf('zei', { zei: ['11111111-1111-4111-8111-111111111111', '22222222-2222-4222-8222-222222222222'] }).length === 1);
+  // The rule itself works for any number; the checks below exercise it with three.
+  CHALLENGE.maxBases = 3;
   const B1 = '11111111-1111-4111-8111-111111111111', B2 = '22222222-2222-4222-8222-222222222222', B3 = '33333333-3333-4333-8333-333333333333';
   const bases = { zei: [B1, B2, B3], bai: [] as string[] };
   const step = (elementId: string, versionId = `${elementId.slice(0, 8)}-0000-4000-8000-000000000000`) => ({ elementId, versionId });
-  check('the committed bases: a list for each of the six characters, each empty or up to three design ids', R.basesProblems().length === 0 && CHALLENGE.characters.every((c) => Array.isArray(CHALLENGE.bases[c]) && CHALLENGE.bases[c].length <= 3), R.basesProblems().join('; '));
+  check('the committed bases: a list for each of the six characters, each empty or up to CHALLENGE.maxBases design ids', R.basesProblems().length === 0 && CHALLENGE.characters.every((c) => Array.isArray(CHALLENGE.bases[c]) && CHALLENGE.bases[c].length <= committedMax), R.basesProblems().join('; '));
   check('a fork of each base counts (by its element id)', [B1, B2, B3].every((b) => R.remixOfBase('zei', [step(b)], bases)));
   check('a fork of a base counts when the base is named by one version\'s id', R.remixOfBase('zei', [{ elementId: 'aaaaaaaa-0000-4000-8000-000000000000', versionId: B2 }], { zei: [B2] }));
   check('a fork of an entry (a remix of a base) counts', R.remixOfBase('zei', [step('eeeeeeee-0000-4000-8000-00000000000e'), step(B3)], bases));
@@ -164,6 +169,18 @@ proof('two entries for one person and character are caught', (() => {
   const otherLine = [step('99999999-9999-4999-8999-999999999999')];
   const anyFork = (line: { elementId: string; versionId: string }[]) => line.length > 0; // the rule before the bases
   proof('the old rule (any fork), used once the bases are picked, is caught', anyFork(otherLine) !== R.remixOfBase('zei', otherLine, bases));
+  CHALLENGE.maxBases = committedMax;
+}
+
+// --- The owner's first remixes beside each base (owner, 2026-11-04) -------------------------------------------------
+{
+  const F1 = '11111111-1111-4111-8111-111111111111', F2 = '22222222-2222-4222-8222-222222222222', F3 = '33333333-3333-4333-8333-333333333333';
+  const empty = Object.fromEntries(CHALLENGE.characters.map((c) => [c, [] as string[]]));
+  check('committed: two first remixes shown per character, and every list empty until they exist', CHALLENGE.firstRemixesShown === 2 && R.firstRemixesProblems().length === 0 && CHALLENGE.characters.every((c) => CHALLENGE.firstRemixes[c].length === 0), R.firstRemixesProblems().join('; '));
+  check('first remixes: at most two are used, in the order given', R.firstRemixesOf('zei', { zei: [F2, F1, F3] }).join() === [F2, F1].join());
+  proof('a third first remix is caught', R.firstRemixesProblems({ ...empty, zei: [F1, F2, F3] }).length === 1);
+  proof('a first remix that is not a design id is caught', R.firstRemixesProblems({ ...empty, zei: ['zei-remix'] }).length === 1);
+  proof('a missing character list is caught', R.firstRemixesProblems({ zei: [] }).length === 5);
 }
 
 // --- Bases by closed models, the bases' style order, and P5g's one exception (owner, 2026-11-04) --------------------
@@ -671,6 +688,8 @@ check('the sheets to start from are those made before the window', (await E.star
 // fork of a sheet that isn't a base don't; the list to start from is the bases, in order. Then everything made here is
 // hidden and the bases emptied again, so the checks below see what they saw before.
 {
+  const committedMax = CHALLENGE.maxBases;
+  CHALLENGE.maxBases = 3; // the rule with three bases; one is committed (owner, 2026-11-04)
   const made: string[] = [];
   const mk = async (m: Parameters<typeof DS.makeDesign>[1]) => { const o = await publish(m); made.push(o.elementId); return o; };
   const b1 = await mk({ fid: 6786, mode: 'create', kind: 'character', character: bai, body: sheet('Bai, base one', 21) });
@@ -707,11 +726,14 @@ check('the sheets to start from are those made before the window', (await E.star
   await sql`delete from studio.challenge_eligibility where version_id in (select v.id from studio.element_versions v where v.element_id in ${sql(made)})`;
   const st6 = await E.standing(S);
   check('bases: with the bases empty and the test sheets hidden, the entries are as before', st6.entries.map((e) => e.versionId).sort().join() === st2.entries.map((e) => e.versionId).sort().join());
+  CHALLENGE.maxBases = committedMax;
 }
 
 // Closed-model bases, the bases' style order and an admin's remix, in the database (owner, 2026-11-04). Everything made
 // here is hidden and the settings put back afterwards, so the checks below see what they saw before.
 {
+  const committedMax2 = CHALLENGE.maxBases;
+  CHALLENGE.maxBases = 3; // the rule with several bases; one is committed (owner, 2026-11-04)
   const made: string[] = [];
   const mk = async (m: Parameters<typeof DS.makeDesign>[1]) => { const o = await publish(m); made.push(o.elementId); return o; };
   const styled = (text: string, n: number, title: string) => ({ ...sheet(text, n), style: { version_id: '00000000-0000-4000-8000-0000000000aa', title } });
@@ -764,6 +786,7 @@ check('the sheets to start from are those made before the window', (await E.star
   await sql`delete from studio.challenge_eligibility where version_id in (select v.id from studio.element_versions v where v.element_id in ${sql(made)})`;
   const st8 = await E.standing(S);
   check('closed bases: afterwards, with the settings put back, the entries are as before', st8.entries.map((e) => e.versionId).sort().join() === st2.entries.map((e) => e.versionId).sort().join());
+  CHALLENGE.maxBases = committedMax2;
 }
 
 globalThis.fetch = realFetch;

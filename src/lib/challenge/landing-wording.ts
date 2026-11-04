@@ -13,21 +13,25 @@ export const LANDING_WORDING = {
   line: (now: ReturnType<typeof phase> = phase()) =>
     now === 'closed'
       ? `Entries closed ${shortDateText('closes')}. Every remix is below.`
-      : `Pick a character, tap one of its bases, then Remix to make it your own. Entries ${now === 'before' ? `open ${shortDateText('opens')} and ` : ''}close ${shortDateText('closes')}.`,
+      : `Pick a character, tap its base or a first remix, then Remix to make it your own. Entries ${now === 'before' ? `open ${shortDateText('opens')} and ` : ''}close ${shortDateText('closes')}.`,
   rulesLink: 'Rules',
   rulesTitle: 'The rules',
   countsHead: 'Entrants so far',
-  /** A base's tile when its style has no name. */
-  baseLabel: (n: number) => `Base ${n}`,
-  sheetLabel: (n: number) => `Sheet ${n}`,
-  /** Before a base is tapped. */
-  pickFirst: 'Tap a base to remix it',
+  /** The base's tile when its style has no name. */
+  baseLabel: 'Base',
+  sheetLabel: 'Sheet',
+  /** The owner's first remixes beside the base (owner, 2026-11-04), and the slot for one that doesn't exist yet. */
+  firstRemixLabel: 'First remix',
+  firstRemixEmpty: 'First remix: not here yet',
+  /** Before a picture is tapped. */
+  pickFirst: 'Tap a picture to remix it',
   remix: 'Remix',
   seeBase: 'See this base',
   seeSheet: 'See this sheet',
-  /** Before the character's bases are picked (CHALLENGE.bases empty). */
-  noBasesYet: (name: string) => `${name}’s three bases aren’t picked yet. Until they are, remix any published sheet of ${name}.`,
-  noBasesNoSheet: (name: string) => `${name}’s three bases aren’t picked yet, and no sheet of ${name} is published yet.`,
+  seeRemix: 'See this remix',
+  /** Before the character's base is picked (CHALLENGE.bases empty). */
+  noBasesYet: (name: string) => `${name}’s base isn’t picked yet. Until it is, remix any published sheet of ${name}.`,
+  noBasesNoSheet: (name: string) => `${name}’s base isn’t picked yet, and no sheet of ${name} is published yet.`,
   remixesHead: 'Remixes',
   remixesNote: 'A random few from every published remix, picked again on each visit.',
   remixesNone: 'No remixes yet. Be the first: pick a character above.',

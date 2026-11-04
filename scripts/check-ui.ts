@@ -69,7 +69,7 @@
  *   deadline (in its one line), the "Rules" link, no sideways scroll; /challenge/rules (the short page's rules, owner
  *   2026-11-04): the floors, the deadline in Pacific time, who can enter, the rules, admins not eligible for rewards. As a landing page (owner,
  *   2026-11-04), on local data (scripts/fixtures/challenge-db.ts) at 390 light and dark, in the 424 × 695 Farcaster
- *   frame and at 1440: the characters in CHALLENGE.characters' order; Zei's triptych, three tiles side by side, Remix
+ *   frame and at 1440: the characters in CHALLENGE.characters' order; Zei's row, its base and two first-remix slots side by side, Remix
  *   offered only once one is tapped and then opening that sheet's remix form; the empty states before the bases (and
  *   for a character with no sheet); the random selection, six remixes, none repeated, no counts, a different order
  *   over six visits; "See all", every remix newest first, the filter showing Bai's only, and Gladias' empty state.
@@ -1462,27 +1462,32 @@ async function checkChallengeLanding() {
       // The characters in CHALLENGE.characters' order, whatever it is.
       const order = await page.locator('.ch-character').evaluateAll((els) => els.map((e) => e.getAttribute('data-character')));
       if (order.join() !== CHALLENGE.characters.join()) fail(`/challenge ${tag}: the characters read ${order.join()}, not CHALLENGE.characters (${CHALLENGE.characters.join()})`);
-      // The triptych: Zei's three tiles side by side, in the server's order; tap the second, then Remix opens its form.
+      // Zei's row (owner, 2026-11-04, after the restart): the base (before it's picked, the newest sheet), then two slots
+      // for the owner's first remixes, empty until they exist; three side by side. Tap the base, then Remix opens its form.
       const zei = page.locator('.ch-character[data-character="zei"] .ch-bases');
-      const tiles = zei.locator('.ch-tile');
+      const tiles = zei.locator('button.ch-tile');
       const ids = await tiles.evaluateAll((els) => els.map((e) => e.getAttribute('data-version')));
-      if (ids.join() !== FX.sheets.zei.join()) fail(`/challenge ${tag}: Zei's triptych shows ${ids.join()}, not its three sheets newest first`);
-      const boxes = await tiles.evaluateAll((els) => els.map((e) => e.getBoundingClientRect()).map((b) => ({ x: b.x, y: b.y, w: b.width })));
-      if (boxes.length !== 3 || !boxes.every((b, i) => i === 0 || (Math.abs(b.y - boxes[0].y) < 1 && b.x > boxes[i - 1].x))) fail(`/challenge ${tag}: Zei's three tiles aren't side by side`);
+      const firsts = CHALLENGE.firstRemixes.zei.length;
+      if (ids[0] !== FX.sheets.zei[0] || ids.length !== 1 + firsts) fail(`/challenge ${tag}: Zei's row starts with ${ids.join()}, not its newest sheet and ${firsts} first remixes`);
+      const empties = await zei.locator('.ch-slot-empty').count();
+      if (empties !== CHALLENGE.firstRemixesShown - firsts) fail(`/challenge ${tag}: Zei's row has ${empties} empty first-remix slots, not ${CHALLENGE.firstRemixesShown - firsts}`);
+      if (empties && !/First remix: not here yet/.test((await zei.locator('.ch-slot-empty').first().textContent()) ?? '')) fail(`/challenge ${tag}: an empty slot doesn't say so`);
+      const boxes = await zei.locator('.ch-tile').evaluateAll((els) => els.map((e) => e.getBoundingClientRect()).map((b) => ({ x: b.x, y: b.y, w: b.width })));
+      if (boxes.length !== 3 || !boxes.every((b, i) => i === 0 || (Math.abs(b.y - boxes[0].y) < 1 && b.x > boxes[i - 1].x))) fail(`/challenge ${tag}: Zei's base and two first-remix slots aren't side by side`);
       if (!(await zei.locator('[data-ai="tag"]').count())) fail(`/challenge ${tag}: the triptych has no AI label`);
       if (!(await zei.locator('button.ch-remix[disabled]').count())) fail(`/challenge ${tag}: Remix is offered before a base is tapped`);
       await zei.scrollIntoViewIfNeeded();
       await snap('triptych');
-      await tiles.nth(1).click();
-      if ((await tiles.nth(1).getAttribute('aria-pressed')) !== 'true' || (await tiles.nth(0).getAttribute('aria-pressed')) !== 'false') fail(`/challenge ${tag}: tapping the second tile doesn't pick it alone`);
+      await tiles.nth(0).click();
+      if ((await tiles.nth(0).getAttribute('aria-pressed')) !== 'true') fail(`/challenge ${tag}: tapping the base doesn't pick it`);
       const remix = zei.locator('a.ch-remix');
       const href = await remix.getAttribute('href').catch(() => null);
-      if (href !== `/references/designs/new?from=${FX.sheets.zei[1]}`) fail(`/challenge ${tag}: Remix goes to ${href}, not the second sheet's remix form`);
+      if (href !== `/references/designs/new?from=${FX.sheets.zei[0]}`) fail(`/challenge ${tag}: Remix goes to ${href}, not the base's remix form`);
       if ((await remix.textContent())?.trim() !== 'Remix') fail(`/challenge ${tag}: the button doesn't say Remix`);
       await checkFloors(page, `/challenge ${tag} (a base picked)`, scheme);
       await snap('triptych-picked');
       // Before the bases are picked (CHALLENGE.bases empty): the page says so; a character with no sheet still reads well.
-      if (CHALLENGE.bases.zei.length === 0 && !/aren’t picked yet/.test((await page.locator('.ch-character[data-character="zei"] .ch-no-bases').textContent().catch(() => '')) ?? '')) fail(`/challenge ${tag}: no word that Zei's bases aren't picked yet`);
+      if (CHALLENGE.bases.zei.length === 0 && !/isn’t picked yet/.test((await page.locator('.ch-character[data-character="zei"] .ch-no-bases').textContent().catch(() => '')) ?? '')) fail(`/challenge ${tag}: no word that Zei's base isn't picked yet`);
       const gl = page.locator('.ch-character[data-character="gladias"]');
       if ((await gl.locator('.ch-tile').count()) || !/no sheet of Gladias is published yet/.test((await gl.textContent()) ?? '')) fail(`/challenge ${tag}: Gladias, with no sheet, doesn't say so`);
       // The random selection: six remixes, all from the remixes, no repeats, no counts; a fresh order on each visit.

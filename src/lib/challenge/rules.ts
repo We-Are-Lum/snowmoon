@@ -207,6 +207,21 @@ export interface Ancestor {
  * the line must reach one of them: a fork of a base, or of anyone's remix of a base (an entry or not). While the
  * character has no bases yet, any fork counts, as before the three bases.
  */
+/** The owner's first remixes of a character, as configured (CHALLENGE.firstRemixes): design ids, at most CHALLENGE.firstRemixesShown. */
+export function firstRemixesOf(character: string, list: Record<string, readonly string[]> = CHALLENGE.firstRemixes): string[] {
+  return (list[character] ?? []).filter((id) => UUID.test(id)).slice(0, CHALLENGE.firstRemixesShown).map((id) => id.toLowerCase());
+}
+/** What's wrong with CHALLENGE.firstRemixes: a list for each character, design ids only, at most firstRemixesShown. */
+export function firstRemixesProblems(list: Record<string, readonly string[]> = CHALLENGE.firstRemixes): string[] {
+  const p: string[] = [];
+  for (const c of CHALLENGE.characters) {
+    const ids = list[c];
+    if (!Array.isArray(ids)) { p.push(`${c}: no first-remixes list`); continue; }
+    if (ids.length > CHALLENGE.firstRemixesShown) p.push(`${c}: ${ids.length} first remixes, more than ${CHALLENGE.firstRemixesShown}`);
+    for (const id of ids) if (!UUID.test(id)) p.push(`${c}: "${id}" is not a design id`);
+  }
+  return p;
+}
 export function remixOfBase(character: string, line: readonly Ancestor[], bases: Record<string, readonly string[]> = CHALLENGE.bases, refused: ReadonlySet<string> | ReadonlyMap<string, unknown> = new Set()): boolean {
   if (!line.length) return false;
   const picked = basesOf(character, bases);

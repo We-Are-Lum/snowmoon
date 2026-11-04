@@ -267,6 +267,8 @@ a.dz-fork:hover { text-decoration: none; }
 .ch-tile-empty, .ch-card-empty { border: 1px dashed var(--muted); background: transparent; box-sizing: border-box; }
 .ch-tile-label { font-family: var(--label); font-size: var(--text-label); line-height: 16px; text-transform: uppercase; color: var(--muted); overflow-wrap: anywhere; }
 .ch-tile[aria-pressed='true'] .ch-tile-label { color: var(--ink); }
+/* An empty slot for a first remix that doesn't exist yet (owner, 2026-11-04): not a button, nothing to tap. */
+.ch-slot-empty { border-style: dashed; border-color: var(--muted); cursor: default; }
 .ch-bases-ai { margin: 2px 0 0; }
 .ch-bases-act { display: flex; flex-direction: column; gap: 4px; margin-top: 6px; }
 .ch-remix { display: inline-flex; align-items: center; justify-content: center; text-decoration: none; box-sizing: border-box; }

@@ -33,8 +33,8 @@ export const CHALLENGE_WORDING = {
   rulesHead: 'The rules.',
   rules: () => [
     'Make your remix on snowmoon.party with the site’s tools. Every recipe is published.',
-    // Draft wording (owner, 2026-11-03: three bases per character).
-    'Only remixes count: for each character, start from any of its three bases, or someone else’s remix. A new sheet made from scratch isn’t an entry.',
+    // Draft wording (owner, 2026-11-04: one base per character; was three, 2026-11-03).
+    'Only remixes count: for each character, start from its base, or someone else’s remix. A new sheet made from scratch isn’t an entry.',
     'One entry per person per character. Your latest version counts unless you mark another.',
     // Draft wording (owner, 2026-11-03: make it clear an account below the check can't remix; launch rehearsal item 3).
     'To remix at all, sign in with a Farcaster account that passes the site’s check. An account below it can’t make the pictures, so it can’t remix or enter. It’s checked when you press Generate, and again when you publish.',

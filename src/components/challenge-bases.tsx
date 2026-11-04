@@ -7,28 +7,31 @@ import { LANDING_WORDING as L } from '~/lib/challenge/landing-wording';
 import { AiTag } from './ai-tag';
 
 /**
- * A character's bases as a triptych on /challenge (owner, 2026-11-04): up to three tiles side by side, in the order
- * the server gives (the bases' fixed style order, CHALLENGE.baseStyles), each captioned with its style. Tap one, then
- * Remix opens that base's remix form (/references/designs/new?from=<version>). Before the bases are picked, the same
- * row shows up to three of the character's published sheets, newest first, as "Sheet 1, 2, 3"; any of them can be
- * remixed then. The form itself asks for sign-in and checks who may make pictures.
+ * A character's row on /challenge (owner, 2026-11-04, after the restart): its one base, then the owner's first
+ * remixes of it (CHALLENGE.firstRemixes, up to CHALLENGE.firstRemixesShown), side by side. A first remix that doesn't
+ * exist yet is an empty slot. Tap a picture, then Remix opens its remix form (/references/designs/new?from=<version>);
+ * a remix of a first remix counts, as a remix of any remix of the base does. Before the base is picked, the row starts
+ * with the character's newest published sheet ("Sheet"), which can be remixed then. The form itself asks for sign-in
+ * and checks who may make pictures.
  */
-export type BaseTile = { versionId: string; title: string; byName: string | null; byFid: number; thumb: string | null; style: string | null };
+export type BaseTile = { kind: 'base' | 'sheet' | 'remix'; versionId: string; title: string; byName: string | null; byFid: number; thumb: string | null; style: string | null };
 
-export function ChallengeBases({ slug, name, tiles, bases }: { slug: string; name: string; tiles: BaseTile[]; bases: boolean }) {
+export function ChallengeBases({ slug, name, tiles, emptySlots }: { slug: string; name: string; tiles: BaseTile[]; emptySlots: number }) {
   const [picked, setPicked] = useState<string | null>(null);
   const tile = tiles.find((t) => t.versionId === picked) ?? null;
-  const label = (t: BaseTile, i: number) => t.style || (bases ? L.baseLabel(i + 1) : L.sheetLabel(i + 1));
+  const label = (t: BaseTile) => (t.kind === 'remix' ? L.firstRemixLabel : t.kind === 'base' ? t.style || L.baseLabel : L.sheetLabel);
+  const see = (t: BaseTile) => (t.kind === 'remix' ? L.seeRemix : t.kind === 'base' ? L.seeBase : L.seeSheet);
   return (
     <div className="ch-bases" data-character={slug}>
       <ul className="ch-triptych" role="list">
-        {tiles.map((t, i) => (
+        {tiles.map((t) => (
           <li key={t.versionId}>
             <button
               type="button"
               className="ch-tile"
               aria-pressed={picked === t.versionId}
               data-version={t.versionId}
+              data-kind={t.kind}
               onClick={() => setPicked((p) => (p === t.versionId ? null : t.versionId))}
             >
               {t.thumb ? (
@@ -37,8 +40,16 @@ export function ChallengeBases({ slug, name, tiles, bases }: { slug: string; nam
               ) : (
                 <span className="ch-tile-img ch-tile-empty" aria-hidden="true" />
               )}
-              <span className="ch-tile-label">{label(t, i)}</span>
+              <span className="ch-tile-label">{label(t)}</span>
             </button>
+          </li>
+        ))}
+        {Array.from({ length: emptySlots }, (_, i) => (
+          <li key={`empty-${i}`}>
+            <div className="ch-tile ch-slot-empty" data-kind="remix-slot">
+              <span className="ch-tile-img ch-tile-empty" aria-hidden="true" />
+              <span className="ch-tile-label">{L.firstRemixEmpty}</span>
+            </div>
           </li>
         ))}
       </ul>
@@ -54,8 +65,8 @@ export function ChallengeBases({ slug, name, tiles, bases }: { slug: string; nam
               {L.remix}
             </Link>
             <p className="dz-meta ch-picked">
-              {label(tile, tiles.indexOf(tile))}: {tile.title.trim() || name} · {designByline(tile.byName, tile.byFid)} ·{' '}
-              <Link href={`/references/designs/${tile.versionId}`}>{bases ? L.seeBase : L.seeSheet}</Link>
+              {label(tile)}: {tile.title.trim() || name} · {designByline(tile.byName, tile.byFid)} ·{' '}
+              <Link href={`/references/designs/${tile.versionId}`}>{see(tile)}</Link>
             </p>
           </>
         ) : (

@@ -4,10 +4,10 @@ import { db } from '~/lib/db';
 import { bookCharacter } from '~/lib/images/designs';
 import { startingSheets } from '~/lib/challenge/entries';
 import { PICK_SIZE, remixes } from '~/lib/challenge/remixes';
-import { basesOf } from '~/lib/challenge/rules';
+import { basesOf, firstRemixesOf } from '~/lib/challenge/rules';
 import { CHALLENGE_WORDING as W } from '~/lib/challenge/wording';
 import { LANDING_WORDING as L } from '~/lib/challenge/landing-wording';
-import { ChallengeBases } from '~/components/challenge-bases';
+import { ChallengeBases, type BaseTile } from '~/components/challenge-bases';
 import { ChallengeRemixPick } from '~/components/challenge-remix-pick';
 
 /**
@@ -16,9 +16,10 @@ import { ChallengeRemixPick } from '~/components/challenge-remix-pick';
  * link"). Draft for the owner's OK: what was cut, and where it went, is in docs/proposals/challenge-short-page.md.
  *
  * - The title and one line (what to do, and the deadline, built from CHALLENGE.dates), and "Rules" (/challenge/rules).
- * - Each character (CHALLENGE.characters, in that order) with its three bases as a triptych (CHALLENGE.bases, in
- *   CHALLENGE.baseStyles' order): tap one, then Remix opens its remix form. Before the bases are picked, up to three of
- *   its published sheets, newest first.
+ * - Each character (CHALLENGE.characters, in that order) with its one base (CHALLENGE.bases; owner, 2026-11-04, after
+ *   the restart) and the owner's first remixes of it (CHALLENGE.firstRemixes, up to CHALLENGE.firstRemixesShown), in a
+ *   row of three: an empty slot for each first remix that doesn't exist yet. Tap one, then Remix opens its remix form.
+ *   Before the base is picked, the row starts with the character's newest published sheet.
  * - A random few remixes, shuffled afresh in the browser on each visit from the full list (P5g's one exception:
  *   unweighted, no counts, no featuring), and "See all" (/challenge/remixes, newest first, by character). Proposed to
  *   the owner as staying; the owner's list doesn't name them.
@@ -50,12 +51,19 @@ export default async function ChallengePage() {
       {sheets.map(({ c, list }) => {
         const name = callName(c.name);
         const bases = basesOf(c.slug).length > 0;
-        const tiles = list.slice(0, CHALLENGE.maxBases);
+        const starts: BaseTile[] = list.slice(0, CHALLENGE.maxBases).map((s) => ({ kind: bases ? 'base' : 'sheet', versionId: s.versionId, title: s.title, byName: s.byName, byFid: s.byFid, thumb: s.thumb, style: bases ? s.style : null }));
+        // The owner's first remixes, in CHALLENGE.firstRemixes' order, each found among the published remixes of this
+        // character by its element or version id; one that isn't published (or isn't this character's) is left out.
+        const firsts: BaseTile[] = firstRemixesOf(c.slug)
+          .map((id) => all.find((r) => r.character === c.slug && (r.versionId.toLowerCase() === id || r.elementId.toLowerCase() === id)))
+          .filter((r): r is NonNullable<typeof r> => Boolean(r))
+          .map((r) => ({ kind: 'remix', versionId: r.versionId, title: r.title, byName: r.byName, byFid: r.byFid, thumb: r.thumb, style: null }));
+        const tiles = [...starts, ...firsts];
         return (
           <section key={c.slug} className="dz-section ch-character" aria-labelledby={`ch-${c.slug}`} data-character={c.slug}>
             <h2 id={`ch-${c.slug}`}>{c.name}</h2>
             {!bases && <p className="dz-muted ch-no-bases">{tiles.length ? L.noBasesYet(name) : L.noBasesNoSheet(name)}</p>}
-            {tiles.length > 0 && <ChallengeBases slug={c.slug} name={name} bases={bases} tiles={tiles.map((s) => ({ versionId: s.versionId, title: s.title, byName: s.byName, byFid: s.byFid, thumb: s.thumb, style: bases ? s.style : null }))} />}
+            {starts.length > 0 && <ChallengeBases slug={c.slug} name={name} tiles={tiles} emptySlots={CHALLENGE.firstRemixesShown - firsts.length} />}
           </section>
         );
       })}
