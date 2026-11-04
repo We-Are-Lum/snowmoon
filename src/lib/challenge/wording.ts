@@ -1,5 +1,6 @@
 import { CHALLENGE } from '../config';
 import { dateText, windowText } from './rules';
+import { SHARE_WORDING } from './share-wording';
 
 /**
  * The remix challenge's words. DRAFT wording: the rules are the plan's draft copy (docs/proposals/remix-challenge-plan.md,
@@ -39,7 +40,8 @@ export const CHALLENGE_WORDING = {
   rulesHead: 'The rules.',
   rules: () => [
     'Make your remix on snowmoon.party with the site’s tools. Every recipe is published.',
-    'Only remixes count: start from a published sheet or someone else’s remix. A new sheet made from scratch isn’t an entry.',
+    // Draft wording (owner, 2026-11-03: three bases per character).
+    'Only remixes count: for each character, start from any of its three bases, or someone else’s remix. A new sheet made from scratch isn’t an entry.',
     'One entry per person per character. Your latest version counts unless you mark another.',
     // Draft wording (owner, 2026-11-03: make it clear an account below the check can't remix; launch rehearsal item 3).
     'To remix at all, sign in with a Farcaster account that passes the site’s check. An account below it can’t make the pictures, so it can’t remix or enter. It’s checked when you press Generate, and again when you publish.',
@@ -54,6 +56,8 @@ export const CHALLENGE_WORDING = {
   opensOn: () => `Entries open ${d('opens', true)}.`,
   closed: () => `Entries closed ${d('closes', true)}.`,
   startFrom: 'Sheets to start from',
+  /** Once a character's bases are picked (CHALLENGE.bases). Draft wording (owner, 2026-11-03). */
+  startFromBases: 'Bases to start from',
   noSheetYet: (name: string) => `No sheet of ${name} is published yet.`,
   readBook: (name: string) => `What the book says about ${name}`,
   entriesHead: 'Entries so far',
@@ -75,10 +79,8 @@ export const CHALLENGE_WORDING = {
   adminNote: 'Made by an admin during the remix challenge: admins aren’t eligible for rewards.',
   mark: 'Mark as my entry',
   marked: 'Marked as your entry.',
-  // Share and "Posted on".
-  shareHead: 'Share this version',
-  shareOn: (network: string) => `Post on ${network}`,
-  shareText: (what: string) => `${what}, made on Snowmoon Party`,
+  // Share and "Posted on": the words that don't name the challenge are in ./share-wording.ts.
+  ...SHARE_WORDING,
   /** While entries are open, on a challenge character's sheet (owner, 2026-11-03: the share text mentions the challenge). Draft wording. */
   shareTextOpen: (what: string) => `${what}, made on Snowmoon Party. Remix the cast: the remix challenge is open until ${d('closes', true)}.`,
   /** The publish confirmation of a version that is its maker's entry (owner, 2026-11-03: these words). */
@@ -89,16 +91,6 @@ export const CHALLENGE_WORDING = {
    */
   publishedUnchecked: (name: string) =>
     `This version won’t count as your entry for ${name}: Neynar, which scores Farcaster accounts, didn’t answer when you published, so the site couldn’t check your account. Publish another version later to enter; an earlier entry for ${name}, if you have one, still counts.`,
-  guidance: 'If you’re remixing someone’s post, quote or reply to it on the same network. Always include your version’s link.',
-  addHead: 'Add where you posted it',
-  addLabel: 'Your post’s address (Farcaster, Bluesky or Lens)',
-  addButton: 'Add',
-  added: 'Added.',
-  already: 'Already listed.',
-  postedOnHead: 'Posted on',
-  postedOnNote: 'Posts that link to this page, newest first, as their writers or the people who added them listed them. Shown as links only.',
-  seeIt: (network: string) => `See it on ${network}`,
-  remove: 'Remove',
 };
 
 export const CHALLENGE_CHARACTERS = CHALLENGE.characters;

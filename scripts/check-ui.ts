@@ -66,7 +66,8 @@
  *   shown, the finding with its fix line, the note box with the publication line, pre-filled with the fix line labelled
  *   "Drafted by the image check (Argon finding, gpt-oss-120b fix line)" and marked when edited; anyone else sees only the owner line.
  * - The remix challenge (/challenge, 2026-10-31): the floors, light and dark, the "Draft wording" line, its six characters in order, the
- *   deadline in Pacific time, the rules, admins not eligible for rewards, no sideways scroll.
+ *   deadline in Pacific time, the rules, admins not eligible for rewards, no sideways scroll. While it is admin-only
+ *   (CHALLENGE.public off; owner, 2026-11-04): signed out, status 404 with nothing of the challenge in the HTML or on screen.
  * - The footer line (owner's legal starter, 2026-10-09) reads exactly as written, with Terms, Privacy
  *   and Source linked, at the foot of About, in the menu sheet and at the bottom of the rail; not on a
  *   phone's reading screen. /terms and /privacy meet the floors.
@@ -78,7 +79,7 @@ import path from 'node:path';
 import { chromium, type Browser, type Page } from 'playwright-core';
 import QRCode from 'qrcode';
 import { BOOK_MENTIONS } from '../src/lib/character-order';
-import { SUPPORT } from '../src/lib/config';
+import { CHALLENGE, SUPPORT } from '../src/lib/config';
 import { requireTarget } from './lib/target';
 
 const arg = (name: string) => process.argv.slice(2).find((a) => a.startsWith(`--${name}=`))?.split('=').slice(1).join('=');
@@ -102,7 +103,8 @@ const MINPENTAI_HOOD = 'lesson=8';
 /** Lesson 1's title (src/lib/minpentai/learn-text.ts, lessons.goal). */
 const MINPENTAI_LESSON_1 = 'Keep your towers. Destroy theirs.';
 /** The owner's exact sentences (2026-10-20, before posting the tutorial link), and where each must appear. */
-const OWNER_BROADCAST = "The full game, as the book describes it, has four players. What you'll play here is a simpler two-player version.";
+/** Removed from every Learn screen (owner, 2026-11-03); checked to appear nowhere. */
+const REMOVED_BROADCAST = 'as the book describes it, has four players';
 const OWNER_TEACH = "A ring marks each tower lost, square broken and crash, even in the dark. Shown here to teach. In a real match, you'll only see the hits your towers light.";
 const OWNER_AMBER = "Shown here to teach. In a real match, you'll only see outlines where they start.";
 const OWNER_CELLS = 'In the book, pieces are made of cells. Here you play with whole squares.';
@@ -1538,7 +1540,21 @@ try {
       if (!(await page.locator('.shell-main a[href="/about"]').count())) fail(`${p} (${scheme}): no link back to About`);
     }
     // The remix challenge (2026-10-31): the floors, the draft line, both characters, the deadline built from the config,
-    // the rules, and no sideways scroll at phone width.
+    // the rules, and no sideways scroll at phone width. While it is admin-only (CHALLENGE.public off; owner, 2026-11-04),
+    // signed out it is the usual "not found": status 404, nothing of the challenge on screen or in the HTML, no menu item.
+    if (!CHALLENGE.public) {
+      const res = await page.goto(BASE + '/challenge', { waitUntil: 'networkidle' });
+      lastOpened = '/challenge';
+      if (res?.status() !== 404) fail(`/challenge (${scheme}): answers ${res?.status()} signed out, not 404 (CHALLENGE.public is off)`);
+      const html = (await res?.text()) ?? '';
+      const shown = (await page.locator('body').textContent()) ?? '';
+      for (const [what, t] of [['HTML', html], ['screen', shown]] as const) {
+        const m = /Remix the cast|remix challenge/i.exec(t);
+        if (m) fail(`/challenge (${scheme}): its ${what} names the challenge ("${m[0]}") signed out`);
+      }
+      if (await page.locator('.ch-page').count()) fail(`/challenge (${scheme}): the challenge page is shown signed out`);
+      if (await page.locator('a[href="/challenge"]').count()) fail(`/challenge (${scheme}): a link to /challenge is on the page signed out`);
+    } else {
     await open(page, '/challenge');
     await checkFloors(page, '/challenge', scheme);
     {
@@ -1553,6 +1569,7 @@ try {
       if (!/aren’t eligible for rewards/.test(text)) fail(`/challenge (${scheme}): it doesn't say admins aren't eligible for rewards`);
       const wide = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1);
       if (wide) fail(`/challenge (${scheme}): scrolls sideways`);
+    }
     }
     await checkAssistant(page, scheme);
     await checkLiveScreens(page, scheme);
@@ -1803,8 +1820,8 @@ try {
         // The owner's sentences (2026-10-20): the broadcast's caption on every watch screen, the cells line on Under
         // the hood (CELLS stays on the lessons' boards), "Shown here to teach…" on the practice match's setup text.
         const shown = async (sel: string) => (await page.locator(sel).isVisible().catch(() => false)) ? ((await page.locator(sel).textContent()) ?? '').trim() : '';
-        if (q.startsWith('watch=') && (await shown('.ml-broadcast-note')) !== OWNER_BROADCAST) fail(`/minpentai?${q} (${scheme}): the broadcast's caption is not the owner's sentence`);
-        if (!q.startsWith('watch=') && (await page.locator('.ml-broadcast-note').count())) fail(`/minpentai?${q} (${scheme}): the broadcast's caption shows off the broadcast`);
+        // The broadcast's caption was removed from every Learn screen (owner, 2026-11-03): its sentence appears nowhere.
+        if (((await page.locator('body').textContent()) ?? '').includes(REMOVED_BROADCAST)) fail(`/minpentai?${q} (${scheme}): the removed broadcast sentence ("…${REMOVED_BROADCAST}…") still shows`);
         if (q === MINPENTAI_HOOD && !(await shown('.ml-text')).startsWith(OWNER_CELLS)) fail(`/minpentai?${q} (${scheme}): Under the hood does not open with the owner's cells sentence`);
         if (q === 'lesson=2' && !(await page.locator('.ml-cells').isVisible())) fail(`/minpentai?${q} (${scheme}): the CELLS button is missing`);
         if (q === 'mode=practice') {
@@ -1913,12 +1930,11 @@ try {
         if ((await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)) > 1) fail(`${at}: scrolls sideways`);
         await shot(page, `learn-desktop-${width}-${name}`, scheme);
       }
-      // The broadcast's caption (owner, 2026-10-20) is in view in the desktop layout's text column.
+      // Watch 1's text is in view in the desktop layout's text column (it held the broadcast's caption, removed 2026-11-03).
       {
         await open(page, '/minpentai?watch=1');
-        const cap = await page.locator('.ml-broadcast-note').boundingBox();
-        const capText = ((await page.locator('.ml-broadcast-note').textContent().catch(() => '')) ?? '').trim();
-        if (!cap || cap.y + cap.height > 900 + 1 || capText !== OWNER_BROADCAST) fail(`/minpentai?watch=1 @${width} (${scheme}): the broadcast's caption is not in view`);
+        const text = await page.locator('.ml-text').boundingBox();
+        if (!text || text.y + text.height > 900 + 1) fail(`/minpentai?watch=1 @${width} (${scheme}): the watch text is not in view`);
       }
       await open(page, '/chapter/1');
       const bodyShown = await page.locator('.rail-body').isVisible();

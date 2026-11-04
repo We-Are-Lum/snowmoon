@@ -405,8 +405,46 @@ export const CONTACT_EMAIL = 'snowmoon@wearelum.xyz';
  */
 export const CHALLENGE = {
   id: 'remix-2026-11',
+  /**
+   * The owner's switch (owner, 2026-11-04: "/challenge is admin-only for now"). While false:
+   * - /challenge, /api/challenge/* and every way into them (the menu item, the home row, the challenge share text, and
+   *   on sheet pages the Entry badge, "Mark as my entry", the challenge lines and "Posted on") are for admins only
+   *   (ADMINS); everyone else gets "not found", as agent pages do while AGENTS.public is off;
+   * - nothing the dates would switch on opens by itself: entries (eligibility recorded at publish, marking), open
+   *   sheet-making (openSheets) and the challenge's free image cap (dailySpendCapUsd) all stay off, whatever the clock
+   *   says. `dates` stay as they are, for when the owner opens it with a new open date.
+   * Only the owner turns it on. check:principles P6u proves it: with this off and the clock past `dates.opens`, entries,
+   * open sheets and the $15 cap are off and /challenge answers 404 to a non-admin.
+   */
+  public: false as boolean,
   /** The characters, by their file in content/snowmoon/designs/characters, most named in the book first (owner, 2026-11-04; content/snowmoon/characters-by-mentions.json, checked by test:character-order and P5h). */
   characters: ['zei', 'gladias', 'bai', 'seila', 'deluin', 'mu'] as readonly string[],
+  /**
+   * Each character's bases (owner, 2026-11-03): up to CHALLENGE.maxBases published sheets to start from, in the same
+   * three styles for every character, so each set reads as one cast. Each entry is a design's id: its element id (any
+   * version of it) or one version's id (the id in /references/designs/<id>). Designs have no slugs. Empty until the
+   * owner picks. An entry is a fork of any base, or of a remix of one (src/lib/challenge/rules.ts, remixOfBase); while
+   * a character's list is empty, a fork of any of its sheets counts, as before, so nothing breaks before the picks.
+   */
+  bases: { zei: [], bai: [], gladias: [], seila: [], deluin: [], mu: [] } as Record<string, readonly string[]>,
+  maxBases: 3,
+  /**
+   * The bases' fixed style order (owner, 2026-11-04): within a character its bases are listed in this order, the same
+   * for every character, so the casts line up. Each entry is a published style's name, as a sheet's views record it
+   * (body.style.title). A base whose style isn't listed comes after, newest first. Empty until the owner picks the
+   * styles; while empty, the bases are listed newest first. This is the only challenge list not in time order (P5g
+   * allows it for "Bases to start from" only; entries and every other list stay newest first).
+   */
+  baseStyles: [] as readonly string[],
+  /**
+   * Bases and references may be made by several models, closed ones included, each labelled with its maker (owner,
+   * 2026-11-04). A base whose pictures name a closed model is refused (src/lib/challenge/bases.ts) until this is true,
+   * and it stays false until the owner rereads the Terms and Privacy lines that name the providers (OpenAI and Google;
+   * docs/legal/closed-model-bases-draft.md, branch closed-model-bases). check:principles P6s fails if it is true while
+   * the Privacy page doesn't name OpenAI and Google for it. Remixers keep the open models: the remix and fork form's
+   * model choice is unchanged.
+   */
+  closedBasesAllowed: false as boolean,
   /**
    * A character gets a final version, a credit test and a token only if at least this many different eligible people
    * enter it (owner, 2026-10-31). /challenge shows each character's count (a count, never a ranking).
@@ -603,12 +641,14 @@ export const IMAGES = {
 /** Minpentai Play's limits and retention (owner, 2026-10-09). Every /api/minpentai/* request counts. */
 /**
  * The site-wide free image spend cap for a moment (owner, 2026-10-31): CHALLENGE.dailySpendCapUsd from the entry
- * window's open (included) to its close (excluded), IMAGES.dailySpendCapUsd ($2) at every other time. It reverts by
+ * window's open (included) to its close (excluded), once the owner has opened the challenge (CHALLENGE.public; owner,
+ * 2026-11-04), IMAGES.dailySpendCapUsd ($2) at every other time. It reverts by
  * itself, with no deploy. The cap is per UTC day; the day's spend counted so far is compared with the cap now.
  */
 export function imagesDailySpendCapUsd(now: Date = new Date()): number {
   const t = now.getTime();
-  return t >= Date.parse(CHALLENGE.dates.opens) && t < Date.parse(CHALLENGE.dates.closes) ? CHALLENGE.dailySpendCapUsd : IMAGES.dailySpendCapUsd;
+  // Only once the owner has opened the challenge (CHALLENGE.public): the dates alone never raise the cap.
+  return CHALLENGE.public && t >= Date.parse(CHALLENGE.dates.opens) && t < Date.parse(CHALLENGE.dates.closes) ? CHALLENGE.dailySpendCapUsd : IMAGES.dailySpendCapUsd;
 }
 
 export const MINPENTAI_PLAY = {
