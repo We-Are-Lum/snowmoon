@@ -34,7 +34,7 @@ import { BOOK_TAG, NARRATION_MAX_WORDS, PERSON_TAG, parseBeats } from '../src/li
 import { MENTIONS_FILE, byMentionsThenName, mentionsFile } from './lib/character-mentions';
 import { GLOSSARY_FILE, loadBlocks, verifyGlossary, type Glossary } from './lib/glossary';
 import { p4aProblems } from './lib/p4a';
-import { CHALLENGE_FILES as P5G_FILES, p5gProblems } from './lib/p5g';
+import { CHALLENGE_FILES as P5G_FILES, NOT_AN_ORDER, p5gProblems } from './lib/p5g';
 import { MODAL_VC_FILE, MODAL_VC_PLANTS, modalVcRun, modalVcStatic } from './lib/modal-vc';
 import { requireTarget } from './lib/target';
 
