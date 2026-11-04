@@ -1,10 +1,11 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import { useCallback, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { ViewBoard } from './view-board';
 import { PlaybackControls, usePlayback } from './playback';
 import { use3D } from './use-3d';
+import { useReplays } from './use-replays';
 import type { turnFrames } from '~/lib/minpentai/agent-play/solo';
 
 const Board3D = dynamic(() => import('./board-3d').then((m) => m.Board3D), { ssr: false });
@@ -14,7 +15,7 @@ export interface PastTurn { turn: number; step: number; line: string; kills: num
 
 /**
  * Past turns, newest first, one line each (owner, 2026-11-03): the turn, what you placed, and towers destroyed. A tap
- * opens its summary and Watch, in 2D or 3D (owner, 2026-11-03), from the frames fetched then: the same frames the page
+ * opens its summary and Watch, in 2D or 3D (owner, 2026-11-03; in 3D with its instant replays, 2026-11-04), from the frames fetched then: the same frames the page
  * shows, the side's view, or the whole board once the match is over. The five newest show; "Show earlier turns" for the
  * rest.
  */
@@ -64,21 +65,34 @@ export function PastTurns({ matchId, secret, width, height, whole, items }: { ma
 /** A past turn's summary, and its action played on request, in 2D or 3D, with the same controls as at the top. */
 function Watch({ turn, frames, width, height, whole, summary }: { turn: number; frames: Frame[]; width: number; height: number; whole: boolean; summary: string[] }) {
   const d3 = use3D(), [view, setView] = useState<'2d' | '3d' | null>(null), [note, setNote] = useState<string | null>(null);
-  const done = useCallback(() => setView(null), []);
+  // In 3D, played to its end, then its instant replays (skippable), as on the live page.
+  const r = useReplays(frames, { whole, ended: false, size: [width, height], setting: d3.replays, onFinish: () => setView(null) });
+  const viewRef = useRef(view);
+  viewRef.current = view;
+  const done = useCallback((how: 'end' | 'skip') => { if (how === 'end' && viewRef.current === '3d' && r.begin()) return; setView(null); }, [r.begin]);
   const pb = usePlayback(frames, done, false);
-  const start = (v: '2d' | '3d') => { setView(v); pb.restart(); };
+  const start = (v: '2d' | '3d') => { r.cancel(); setView(v); pb.restart(); };
   const f = view ? pb.f : null;
-  const off3d = (why: string) => { d3.markSlow(); setNote(why); setView((v) => (v === '3d' ? '2d' : v)); };
+  const off3d = (why: string) => { r.cancel(); d3.markSlow(); setNote(why); setView((v) => (v === '3d' ? '2d' : v)); };
+  const v3 = r.frame ? r.frame : f ? { board: f.board, prev: pb.prev?.board ?? null, seen: whole ? null : (f.seen as [number, number][]), stepMs: pb.stepMs } : null;
   return (
     <div className="mb-replay">
-      {f && view === '3d' && d3.on ? (
-        <Board3D board={f.board} prev={pb.prev?.board ?? null} seen={whole ? null : (f.seen as [number, number][])} stepMs={pb.stepMs} width={width} height={height}
-          onSlow={() => off3d('3D couldn’t keep up on this device, so this plays in 2D.')} onFail={() => off3d('3D didn’t start here, so this plays in 2D.')} />
+      {v3 && view === '3d' && d3.on ? (
+        <div className="mb-board3d-wrap">
+          <Board3D {...v3} width={width} height={height} focus={r.focus}
+            onSlow={() => off3d('3D couldn’t keep up on this device, so this plays in 2D.')} onFail={() => off3d('3D didn’t start here, so this plays in 2D.')} />
+          {r.on ? <button type="button" className="mb-instant" onClick={r.end} aria-label="Skip the instant replay"><span>Instant replay · tap to skip</span></button> : null}
+        </div>
       ) : f ? (
         <ViewBoard board={f.board} width={width} height={height} seen={whole ? null : (f.seen as [number, number][])} label={whole ? 'The whole board at this step' : 'Your side’s view at this step'} />
       ) : null}
       <div className="mb-replay-controls">
-        {f ? <PlaybackControls p={pb} whole={whole} label={`Turn ${turn}${view === '3d' ? ', 3D' : ''}`} /> : (
+        {r.on ? (
+          <>
+            <span className="mb-note">{`Instant replay${r.count > 1 ? ` ${r.k + 1} of ${r.count}` : ''}`}</span>
+            <button type="button" onClick={r.end}>Skip</button>
+          </>
+        ) : f ? <PlaybackControls p={pb} whole={whole} label={`Turn ${turn}${view === '3d' ? ', 3D' : ''}`} /> : (
           <>
             <span className="mb-note">Watch turn {turn}</span>
             <button type="button" aria-label={`Watch turn ${turn} in 2D`} onClick={() => start('2d')}>2D</button>

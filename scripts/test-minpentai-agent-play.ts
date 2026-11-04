@@ -480,16 +480,24 @@ playOut('play', 202);
   const top = src('live-top.tsx'), past = src('past-turns.tsx'), b3 = src('board-3d.tsx'), sc = src('replay-scene.ts'), ev = src('replay-events.ts'), kit = readFileSync('src/app/minpentai/scene-kit.ts', 'utf8');
   // The props: on the live page, the frame playing (its board, the frame before's board, the squares seen), or when
   // nothing plays the board as it stands from the same view (the page's own view and sight, or the last whole frame).
-  ok(/<Board3D \{\.\.\.v3\} width=\{p\.width\} height=\{p\.height\} focus=\{focus\} big=\{beside\}\s/.test(top) && (top.match(/<Board3D/g) ?? []).length === 1, 'the live page gives the 3D view v3, the size, the replay\'s focus and the piece size, nothing else');
-  ok(top.includes(`  const v3 = rep && m && rf ? { board: rf.board, prev: rprev?.board ?? null, seen: whole ? null : (rf.seen as [number, number][]), stepMs: m.stepMs }
+  const ur = src('use-replays.ts');
+  ok(/<Board3D \{\.\.\.v3\} width=\{p\.width\} height=\{p\.height\} focus=\{r\.focus\} big=\{beside\}\s/.test(top) && (top.match(/<Board3D/g) ?? []).length === 1, 'the live page gives the 3D view v3, the size, the replay\'s focus and the piece size, nothing else');
+  ok(top.includes(`  const v3 = r.frame ? r.frame
     : play === '3d' && f ? { board: f.board, prev: pb.prev?.board ?? null, seen: whole ? null : (f.seen as [number, number][]), stepMs: pb.stepMs }
-    : { board: idle.board, prev: null, seen: idle.seen, stepMs: 0 };`) && top.includes('const m = rep ? rep.list[rep.k] : null, rf = rep ? frames[rep.j] : null, rprev = rep && rep.j > 0 ? frames[rep.j - 1] : null;'), 'v3 is a frame of the page\'s (an instant replay\'s, or the one playing), or the board as it stands');
-  ok(top.includes('const focus = m ? { at: m.at, mode: m.mode, ms: (m.to - m.from + 1) * m.stepMs + m.holdMs } : null;') && top.includes("const list = instantReplays(c.frames.map((x) => ({ board: x.board, seen: c.whole ? null : (x.seen as [number, number][]) })), c.size,") && /now\.current = \{ play, frames, whole,/.test(top), 'the replay\'s focus is a moment instantReplays found in the same frames');
-  ok(top.includes("const idle = whole && last ? { board: last.board, seen: null } : { board: p.current.board, seen: p.current.seen };") && /const f = play \? pb\.f : null;/.test(top) && /const pb = usePlayback\(frames, done, false\)/.test(top) && /const frames = p\.latest\?\.frames \?\? \[\]/.test(top), 'which come from the page\'s frames, its view and its sight');
-  ok(/<Board3D board=\{f\.board\} prev=\{pb\.prev\?\.board \?\? null\} seen=\{whole \? null : \(f\.seen as \[number, number\]\[\]\)\} stepMs=\{pb\.stepMs\} width=\{width\} height=\{height\}\s/.test(past) && (past.match(/<Board3D/g) ?? []).length === 1, 'a past turn gives the 3D view its frame, the frame before and the squares seen, nothing else');
+    : { board: idle.board, prev: null, seen: idle.seen, stepMs: 0 };`), 'v3 is an instant replay\'s frame, the frame playing, or the board as it stands');
+  ok(top.includes("const idle = whole && last ? { board: last.board, seen: null } : { board: p.current.board, seen: p.current.seen };") && /const f = play \? pb\.f : null;/.test(top) && /const pb = usePlayback\(frames, done, false\)/.test(top) && /const frames = p\.latest\?\.frames \?\? \[\]/.test(top) && /const r = useReplays\(frames, \{/.test(top), 'which come from the page\'s frames, its view and its sight');
+  // The replays' frame and focus: a frame of the same frames, and a moment instantReplays found in them.
+  ok(ur.includes('const m = rep ? rep.list[rep.k] : null, rf = rep ? frames[rep.j] : null, rprev = rep && rep.j > 0 ? frames[rep.j - 1] : null;')
+    && ur.includes("const frame = m && rf ? { board: rf.board, prev: rprev?.board ?? null, seen: o.whole ? null : (rf.seen as [number, number][]), stepMs: m.stepMs } : null;")
+    && ur.includes('const focus = m ? { at: m.at, mode: m.mode, ms: (m.to - m.from + 1) * m.stepMs + m.holdMs } : null;')
+    && ur.includes("const list = instantReplays(frames.map((x) => ({ board: x.board, seen: c.whole ? null : (x.seen as [number, number][]) })), c.size,")
+    && /setRep\(\{ list, k: 0, j: list\[0\]\.from \}\)/.test(ur), 'an instant replay shows the same frames, the camera on a moment instantReplays found in them');
+  ok(/<Board3D \{\.\.\.v3\} width=\{width\} height=\{height\} focus=\{r\.focus\}\s/.test(past) && (past.match(/<Board3D/g) ?? []).length === 1
+    && past.includes("const v3 = r.frame ? r.frame : f ? { board: f.board, prev: pb.prev?.board ?? null, seen: whole ? null : (f.seen as [number, number][]), stepMs: pb.stepMs } : null;")
+    && /const r = useReplays\(frames, \{ whole, ended: false,/.test(past), 'a past turn gives the 3D view its frame (or its replay\'s), the size and the replay\'s focus, nothing else');
   // The 3D files read nothing from the site but types.
   const siteImports = (t: string) => [...t.matchAll(/^import\s+(type\s+)?[^;]*?from\s+'([^']+)'/gm)].filter(([, ty, from]) => !ty && from.startsWith('~/'));
-  ok([b3, sc, ev, kit].every((t) => !siteImports(t).length), 'the 3D files import nothing from the site but types');
+  ok([b3, sc, ev, kit, ur].every((t) => !siteImports(t).length), 'the 3D files import nothing from the site but types');
   // Every effect (flashes, debris, the camera's shake) is fired in one place, from replay-events' answer for the frames
   // shown; the camera's path reads only the clock and the board's size.
   const fireBody = sc.slice(sc.indexOf('  function fire(ev: ReplayEvent[])'), sc.indexOf('\n  }\n', sc.indexOf('  function fire(ev: ReplayEvent[])')));
