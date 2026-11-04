@@ -17,6 +17,64 @@ reread unlocks, with the most unblocking first. Each item gives:
 Every "before" was checked against main tonight. Where a branch's text no longer matches main, it is marked
 **STALE**.
 
+## Owner's answers, 2026-11-04
+
+The owner's answers to this pack, word for word, each under its item. Items 3.5 and 6.1 are superseded by the owner's
+reread below.
+
+| Item | The owner's answer |
+|---|---|
+| 1 | "1.1 keep; 1.2 as recommended." |
+| 2 | "2.1 no; 2.2 delete." |
+| 3 | "3.4 and 3.5 as recommended." 3.5: superseded by the owner's reread, 2026-11-04. |
+| 4 | "4.6 move onto the shared store; 4.7 as recommended." |
+| 5 | "5.3 re-check the live Midjourney terms before anything made from the reference is published; 5.4 yes; 5.6 merge closed-model-bases now (already reread), with the usual checks." |
+| 6 | "6.1 not own-words-v5 for everyone: a separate consent shown only when someone picks a closed model (the first-time notice is that consent), so people who never use closed models aren't asked again. Adjust P6j to match." Superseded by the owner's reread, 2026-11-04. "6.2 that's enough, since Terms already require 18+. 6.3 add Google's cache. 6.4 one description in both. 6.5 re-check." |
+| 7 | "7.1 yes; 7.2 Farcaster-only for 12 Nov; 7.4 fix the floor before 12 Nov." |
+| 8 | "8.1 the first; 8.2 the second; 8.3 "Fund this project"; 8.4 as recommended." |
+| 9 | "9.1–9.3 as recommended; 9.4 yes, the post must be the submitter's own." |
+| 10 | "10.1 as recommended; 10.3 yes; 10.4 365 days." |
+| 11 | "11.1 and 11.2 as recommended." |
+| 12 | "12.1 adopt P9 and fix the floor first; 12.2 update CLAUDE.md to nine principles." |
+
+**The 3.5 / 6.1 conflict is resolved.** 3.5's recommendation folded the Lens and Bluesky lines into own-words-v5;
+the 6.1 answer said no v5 for everyone. The owner's reread below replaces both: one new version, own-words-v5, for
+everyone, carrying the closed-model sentence and the Lens and Bluesky lines.
+
+## Owner's reread, 2026-11-04 (reviewed by the coordinator, approved by the owner)
+
+The owner's words, verbatim:
+
+> The reread pack: the coordinator has reviewed every line against the code and the principles, and I accept that
+> review. Record it as my reread, noted "reviewed by the coordinator, approved by the owner", with these changes:
+>
+> 1. Approved as drafted: item 1; item 2 (2.1 no, 2.2 delete); item 7 (7.1 yes, 7.2 Farcaster-only, the floor fixed
+>    first); item 8 (8.1 the first, 8.2 the second, 8.3 "Fund this project"); item 9 (9.1–9.3 as recommended, 9.4 the
+>    post must be the submitter's own); item 10 (10.1 yes, 10.3 yes, 10.4 365 days); item 11; item 12 (adopt P9;
+>    CLAUDE.md says nine principles); item 13 (all 21 open W items OK).
+> 2. Item 3.3, Terms §4: no numbers for the Bluesky rule in the Terms. Say "a Bluesky account that passes the site's
+>    check (Privacy, section 7)". Privacy keeps the details.
+> 3. Bluesky check (item 4): make the age rule rolling, not a fixed date: an account at least 30 days old, with at
+>    least 5 posts in the last 30 days. A fixed 6 Nov cutoff would shut out every new Bluesky user for good. Update
+>    4.1, 4.2 and the code. Otherwise the combined 4.1 as recommended; 4.6 move it onto the shared store.
+> 4. Item 3.4: add the Lens §4 item, with the same early-removal sentence as Farcaster's.
+> 5. Consent (6.1 and 3.5): one new version, own-words-v5, for everyone, carrying both the closed-model sentence and
+>    the Lens and Bluesky lines. The screen needs a new version for sign-in anyway. This replaces my earlier answer.
+> 6. OpenAI (6.4): one description everywhere: "may keep them for up to 30 days to check for abuse, and longer if a
+>    picture is flagged for review or the law requires it". Google (6.3): add its in-memory cache of up to 24 hours.
+>    6.2: the device-only 18+ confirmation is enough.
+> 7. Midjourney (5.1, 5.2): the plan changed, so "one reference picture" is no longer true. Redraft both: some
+>    pictures the owner made with Midjourney outside the site are brought in with the recipe the owner reports, and
+>    they and what's made from them are offered under section 3, as far as anyone holds rights in them. Drop the
+>    "labels it 'Brought in'" detail. 5.3: re-check the live terms first. 5.4: yes.
+> 8. Terms §8 and About's "Where it runs": merge the closed-model sentences into one in each, covering OpenAI, Google
+>    and Midjourney, for the project's own pictures and remixers' choices together. Same facts, fewer words.
+> 9. Overlap C: use "words that 'Ask for help' suggested to you".
+>
+> Send me the redrafted lines from points 2, 3, 6, 7 and 8 before merging the releases that carry them.
+> From now on, draft the shortest true sentence, and keep implementation details out of legal texts (internal
+> labels, gateway accounts, thresholds that may change). Those belong on the recipe or the page.
+
 ## How to answer
 
 Reply by item number, for example "1 reread", "3 reread with 3.2 = B", "13: W44 ok, W53 change to …".
