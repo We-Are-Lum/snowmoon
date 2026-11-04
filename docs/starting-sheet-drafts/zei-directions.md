@@ -12,8 +12,8 @@ every call on the worst case (worst reached $0.9680). Nothing was left out.
 
 <img src="directions/reference-small.jpg" width="640" alt="The owner's reference picture of Zei and Bai, made with Midjourney">
 
-- **Made outside the site with Midjourney, a closed model by Midjourney, on a paid plan** (owner, 2026-11-04; which tier
-  not given). The site's label: **Brought in**. Its prompt: not given; the owner will add it if he has it.
+- **Made outside the site with Midjourney, a closed model by Midjourney, on a paid plan, by a company under $1M a year**
+  (owner, 2026-11-04). The site's label: **Brought in**. Its prompt and recipe: below, from the owner's recipe card.
 - Original: 2576 × 1438, sha256 `b955b192ae0d6b7474bef82fb795996146c75fe3f205c61db7fd8e6375421e4f`. Committed here as a
   small copy (1288 wide, sha256 `ec1781bc28d52f57d94606bc9aa57299d6cdbcfc1b94431c4ea7f769c020b1cc`).
 - Crops (no model; each resized to 1024 high; the crop is the picture sent as the reference):
@@ -22,6 +22,67 @@ every call on the worst case (worst reached $0.9680). Nothing was left out.
 |---|---|---|
 | <img src="directions/reference-crop-zei.jpg" width="150" alt="zei crop"><br>Zei | 60, 0, 1400, 1438 | `7753b06ecaaafb01aa963cf90b07b819029e98ff7aa662b3f0d676769aec2245` |
 | <img src="directions/reference-crop-bai.jpg" width="150" alt="bai crop"><br>Bai | 1460, 0, 1116, 1438 | `a3bd0d92d7b78fd7e0b7557b5d7e982e0a8d5c0ca459e6738a16083d88009b69` |
+
+### The reference's own recipe (the owner's recipe card, verbatim: [directions/reference-recipe-card-L06.txt](directions/reference-recipe-card-L06.txt))
+
+- Midjourney job `87d8f10b-cdec-47b0-a40f-42e7d2a0e8d0`, grid cell 3, seed 2201; Midjourney v7, draft mode. No image
+  references (no style, character or image prompts). The character wording came from the Fifteen Days v2 scene bible.
+- The prompt as submitted (the card's words): "flat woodblock print illustration, flattened space, bold carved outlines,
+  pattern instead of depth, limited ink colours, medium two-shot at a railing overlooking a vast game hall far below, the
+  slim young man with spiky black hair with one blue streak, dark brown eyes and an orange cropped zip jacket over a black
+  top on the left leaning on the railing watching admiringly, the thin wiry young woman with warm brown skin, shaved
+  sides, a tall magenta ponytail, dangly geometric earrings, a lime-green vest and tattooed arms on the right bent over a
+  small gadget not looking up, faces simple and readable, closed-mouth expressions, no text --ar 16:9 --v 7.0 --s 250
+  --chaos 5 --draft --seed 2201 --no text, letters, numbers, logos, teeth, photograph, 3d render, gradients, shading".
+  The canonical form and every parameter are in the ledger (`brought_in.midjourney`).
+- The prompt says "flat woodblock print"; the owner calls the look **Animated series**, and the style text below
+  describes what the picture shows, in the agent's words.
+- Re-running it: "expect a close sibling of the original grid, not a guaranteed pixel-identical cell" (the card).
+- **A mismatch, recorded:** the card's saved copy is `FAV_bai_zei_flatcel.jpg`, 1206 × 674, sha256
+  `0b394efb30fefcd0f02b84ac127fa6ba07b657bbd203818ddf4d0239f7bc9c86`. The file the owner uploaded here, used for the crops,
+  is 2576 × 1438, sha256 `b955b192ae0d6b7474bef82fb795996146c75fe3f205c61db7fd8e6375421e4f`. It is not the saved copy,
+  though the card says "Nothing paid or upscaled". **Question for the owner: is it an upscale, or another export?**
+- The card's later uses (as a style reference for Deluin's sheets and six profile-picture samples) are not part of this
+  job; noted as context only.
+
+### Midjourney's terms (read 2026-11-04)
+
+The official page (docs.midjourney.com/docs/terms-of-service, and its help-centre copy) refused the fetch (HTTP 403).
+The quotes below are from a dated third-party copy, **to be re-checked on the live page before anything is published**:
+TOS Tracker, <https://tostracker.app/document/midjourney>, captured 2026-07-03, of the terms whose body says
+"Effective Date: May 27, 2026" (the job ran 2026-10-22, under them if they haven't changed since).
+
+- **Ownership:** "You own all Assets You create with the Services to the fullest extent possible under applicable law."
+  Subject to "any obligations imposed by this Agreement and the rights of any third-parties."
+- **Companies:** "If you are a company or any employee of a company with more than $1,000,000 USD a year in revenue, you
+  must be subscribed to a "Pro" or "Mega" plan to own Your Assets."
+- **Free or trial users:** this version draws no free-versus-paid distinction and names no Creative Commons licence. The
+  CC BY-NC 4.0 "Asset License" for non-paying users is in earlier versions (as several secondary sources quote them), not
+  in this copy. **Correction to the brief's recollection:** not in the current text.
+- **Downgrades:** "Your ownership of the Assets you created persists even if in subsequent months You downgrade or cancel
+  Your membership."
+- **Midjourney's licence to itself:** "a perpetual, worldwide, non-exclusive, sublicensable no-charge, royalty-free,
+  irrevocable copyright license" to the prompts and Assets. And: "By default, Your Content is publicly viewable and
+  remixable." (Not stealth: draft mode on a standard plan is public on Midjourney.)
+- **Restrictions on the user:** "You may not access or use the Services for purposes of developing or offering
+  competitive products or services." "You may not use automated tools to access, interact with, or generate Assets
+  through the Services." "You may not reverse engineer the Services or the Assets." No clause on training models with
+  outputs.
+- **Redistribution:** "Do not distribute or publicly repost the creations of others without their permission." (About
+  others' work, not one's own.)
+- **NFTs, minting, blockchain:** nothing in this copy.
+
+**The owner's answers (2026-11-04):** made on a **paid plan**; Lum LLC's revenue is **under $1M a year**, so the Pro or
+Mega requirement doesn't apply.
+
+**Verdict:** on this copy of the terms, **the owner owns the picture** "to the fullest extent possible under applicable
+law", and nothing in them stops him publishing it, or what is made from it, under GPL-3.0. Its restrictions (no
+competing services, no automated tools, no reverse engineering) bind him as Midjourney's user, not the people who receive
+the picture under the GPL, so no further restriction passes to them (GPL-3.0 §10). Two limits: Midjourney keeps its own
+licence and the picture is visible on Midjourney; and a picture made by a model may have no copyright at all, so the
+GPL grants rights only as far as anyone holds them. **Before publishing: re-read the live terms** (the fetch was refused).
+Nothing is sent to Midjourney by this site, so no Privacy line; the Terms §8 and About drafts naming Midjourney are on
+branch `closed-model-bases` (`docs/legal/midjourney-reference-draft.md`), for the owner's reread.
 
 ## Direction 1: Animated series (fixed; from the owner's reference)
 

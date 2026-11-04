@@ -70,7 +70,7 @@
     "references": [
      {
       "sha256": "7753b06ecaaafb01aa963cf90b07b819029e98ff7aa662b3f0d676769aec2245",
-      "what": "Brought in: a crop (box {\"left\":60,\"top\":0,\"width\":1400,\"height\":1438}) of the owner's picture made outside the site with Midjourney, a closed model by Midjourney, on a paid plan (original sha256 b955b192ae0d6b7474bef82fb795996146c75fe3f205c61db7fd8e6375421e4f); its prompt: not given yet"
+      "what": "Brought in: a crop (box {\"left\":60,\"top\":0,\"width\":1400,\"height\":1438}) of the owner's picture made outside the site with Midjourney, a closed model by Midjourney, on a paid plan (original sha256 b955b192ae0d6b7474bef82fb795996146c75fe3f205c61db7fd8e6375421e4f); job 87d8f10b-cdec-47b0-a40f-42e7d2a0e8d0, grid cell 3, seed 2201, Midjourney v7 draft; its prompt and parameters in the ledger's brought_in.midjourney"
      }
     ],
     "style": {
@@ -275,7 +275,7 @@
     "references": [
      {
       "sha256": "7753b06ecaaafb01aa963cf90b07b819029e98ff7aa662b3f0d676769aec2245",
-      "what": "Brought in: a crop (box {\"left\":60,\"top\":0,\"width\":1400,\"height\":1438}) of the owner's picture made outside the site with Midjourney, a closed model by Midjourney, on a paid plan (original sha256 b955b192ae0d6b7474bef82fb795996146c75fe3f205c61db7fd8e6375421e4f); its prompt: not given yet"
+      "what": "Brought in: a crop (box {\"left\":60,\"top\":0,\"width\":1400,\"height\":1438}) of the owner's picture made outside the site with Midjourney, a closed model by Midjourney, on a paid plan (original sha256 b955b192ae0d6b7474bef82fb795996146c75fe3f205c61db7fd8e6375421e4f); job 87d8f10b-cdec-47b0-a40f-42e7d2a0e8d0, grid cell 3, seed 2201, Midjourney v7 draft; its prompt and parameters in the ledger's brought_in.midjourney"
      }
     ],
     "style": {
@@ -436,7 +436,7 @@
     "references": [
      {
       "sha256": "a3bd0d92d7b78fd7e0b7557b5d7e982e0a8d5c0ca459e6738a16083d88009b69",
-      "what": "Brought in: a crop (box {\"left\":1460,\"top\":0,\"width\":1116,\"height\":1438}) of the owner's picture made outside the site with Midjourney, a closed model by Midjourney, on a paid plan (original sha256 b955b192ae0d6b7474bef82fb795996146c75fe3f205c61db7fd8e6375421e4f); its prompt: not given yet"
+      "what": "Brought in: a crop (box {\"left\":1460,\"top\":0,\"width\":1116,\"height\":1438}) of the owner's picture made outside the site with Midjourney, a closed model by Midjourney, on a paid plan (original sha256 b955b192ae0d6b7474bef82fb795996146c75fe3f205c61db7fd8e6375421e4f); job 87d8f10b-cdec-47b0-a40f-42e7d2a0e8d0, grid cell 3, seed 2201, Midjourney v7 draft; its prompt and parameters in the ledger's brought_in.midjourney"
      }
     ],
     "style": {
@@ -641,7 +641,7 @@
     "references": [
      {
       "sha256": "a3bd0d92d7b78fd7e0b7557b5d7e982e0a8d5c0ca459e6738a16083d88009b69",
-      "what": "Brought in: a crop (box {\"left\":1460,\"top\":0,\"width\":1116,\"height\":1438}) of the owner's picture made outside the site with Midjourney, a closed model by Midjourney, on a paid plan (original sha256 b955b192ae0d6b7474bef82fb795996146c75fe3f205c61db7fd8e6375421e4f); its prompt: not given yet"
+      "what": "Brought in: a crop (box {\"left\":1460,\"top\":0,\"width\":1116,\"height\":1438}) of the owner's picture made outside the site with Midjourney, a closed model by Midjourney, on a paid plan (original sha256 b955b192ae0d6b7474bef82fb795996146c75fe3f205c61db7fd8e6375421e4f); job 87d8f10b-cdec-47b0-a40f-42e7d2a0e8d0, grid cell 3, seed 2201, Midjourney v7 draft; its prompt and parameters in the ledger's brought_in.midjourney"
      }
     ],
     "style": {
@@ -2207,8 +2207,8 @@
    "width": 2576,
    "height": 1438
   },
-  "prompt": null,
-  "prompt_note": "The owner will add its prompt if he has it.",
+  "prompt": "flat woodblock print illustration, flattened space, bold carved outlines, pattern instead of depth, limited ink colours, medium two-shot at a railing overlooking a vast game hall far below, the slim young man with spiky black hair with one blue streak, dark brown eyes and an orange cropped zip jacket over a black top on the left leaning on the railing watching admiringly, the thin wiry young woman with warm brown skin, shaved sides, a tall magenta ponytail, dangly geometric earrings, a lime-green vest and tattooed arms on the right bent over a small gadget not looking up, faces simple and readable, closed-mouth expressions, no text --ar 16:9 --v 7.0 --s 250 --chaos 5 --draft --seed 2201 --no text, letters, numbers, logos, teeth, photograph, 3d render, gradients, shading",
+  "prompt_note": "The prompt as submitted, from the owner's recipe card; it says \"flat woodblock print illustration\"; the owner calls the look \"Animated series\".",
   "small_copy": {
    "file": "directions/reference-small.jpg",
    "sha256": "ec1781bc28d52f57d94606bc9aa57299d6cdbcfc1b94431c4ea7f769c020b1cc",
@@ -2238,7 +2238,38 @@
     "note": "cropped from the original at this box, resized to 1024 high, JPEG; no model; this is the picture sent as the reference"
    }
   },
-  "plan": "paid (owner, 2026-11-04); which tier (Basic, Standard, Pro or Mega) not given",
-  "annotated": "2026-11-04: plan added after the run, from the owner; nothing remade"
+  "plan": "paid (owner, 2026-11-04); Lum LLC under $1M a year in revenue (owner, 2026-11-04), so the Pro or Mega rule does not apply",
+  "annotated": "2026-11-04: plan added after the run, from the owner; nothing remade",
+  "midjourney": {
+   "card": "directions/reference-recipe-card-L06.txt (the owner's recipe card, verbatim, 2026-11-04)",
+   "job_id": "87d8f10b-cdec-47b0-a40f-42e7d2a0e8d0",
+   "job_page": "https://www.midjourney.com/jobs/87d8f10b-cdec-47b0-a40f-42e7d2a0e8d0",
+   "grid_cell": 3,
+   "seed": 2201,
+   "model": "Midjourney v7 (--v 7.0)",
+   "mode": "draft (--draft)",
+   "prompt_submitted": "flat woodblock print illustration, flattened space, bold carved outlines, pattern instead of depth, limited ink colours, medium two-shot at a railing overlooking a vast game hall far below, the slim young man with spiky black hair with one blue streak, dark brown eyes and an orange cropped zip jacket over a black top on the left leaning on the railing watching admiringly, the thin wiry young woman with warm brown skin, shaved sides, a tall magenta ponytail, dangly geometric earrings, a lime-green vest and tattooed arms on the right bent over a small gadget not looking up, faces simple and readable, closed-mouth expressions, no text --ar 16:9 --v 7.0 --s 250 --chaos 5 --draft --seed 2201 --no text, letters, numbers, logos, teeth, photograph, 3d render, gradients, shading",
+   "prompt_canonical": "flat woodblock print illustration, flattened space, bold carved outlines, pattern instead of depth, limited ink colours, medium two-shot at a railing overlooking a vast game hall far below, the slim young man with spiky black hair with one blue streak, dark brown eyes and an orange cropped zip jacket over a black top on the left leaning on the railing watching admiringly, the thin wiry young woman with warm brown skin, shaved sides, a tall magenta ponytail, dangly geometric earrings, a lime-green vest and tattooed arms on the right bent over a small gadget not looking up, faces simple and readable, closed-mouth expressions, no text --no text, letters, numbers, logos, teeth, photograph, 3d render, gradients, shading --chaos 5 --ar 16:9 --seed 2201 --v 7 --stylize 250",
+   "parameters": {
+    "--ar": "16:9",
+    "--v": "7.0",
+    "--s": "250",
+    "--chaos": "5",
+    "--seed": "2201",
+    "--draft": true,
+    "--no": "text, letters, numbers, logos, teeth, photograph, 3d render, gradients, shading"
+   },
+   "image_references": "none (no --sref, --oref, --iw, image-prompt URLs, --p or moodboard)",
+   "character_wording_from": "the Fifteen Days v2 scene bible's descriptions of Zei and Bai",
+   "rerun_limit": "Paste the submitted prompt (with --seed 2201) into Midjourney V7 draft mode: expect a close sibling of the original grid, not a guaranteed pixel-identical cell.",
+   "card_saved_copy": {
+    "file": "FAV_bai_zei_flatcel.jpg",
+    "width": 1206,
+    "height": 674,
+    "sha256": "0b394efb30fefcd0f02b84ac127fa6ba07b657bbd203818ddf4d0239f7bc9c86"
+   },
+   "mismatch": "The file used here (uploaded by the owner, 2576 x 1438, sha256 b955b192ae0d6b7474bef82fb795996146c75fe3f205c61db7fd8e6375421e4f) is not the card's saved copy (1206 x 674, sha256 0b394efb\u2026c9c86), though the card says nothing was paid or upscaled. It is used because it is what we have; the crop boxes are on it. The owner is asked whether it is an upscale or another export.",
+   "later_uses_context_only": "The card lists later uses (as --sref for Deluin sheets E1, F1, F2 and six PFP samples S1\u2013S6); not part of this job."
+  }
  }
 }

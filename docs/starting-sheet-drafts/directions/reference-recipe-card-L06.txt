@@ -1,0 +1,60 @@
+RECIPE CARD — L06 (Zei & Bai at the railing, flat-cel overlook two-shot)
+(as given by the owner, 2026-11-04, verbatim)
+
+WHAT IT IS
+The user's favorite frame of Bai and Zei; the style anchor for all later
+Snowmoon character and PFP work. Round 1 style test S2-A1 ("Woodblock"
+overlook), run 2026-10-22. Composition: shot 5-b1-1 (overlook MASTER) of
+the scene "Fifteen Days" version 2 — described in words only.
+
+JOB
+Job ID:      87d8f10b-cdec-47b0-a40f-42e7d2a0e8d0
+Job page:    https://www.midjourney.com/jobs/87d8f10b-cdec-47b0-a40f-42e7d2a0e8d0
+Winning cell: grid index 3 (bottom-right) — picked by the user; only
+             index 0 was downloaded during Round 1, which is why the
+             recipe looked missing until the history hunt on 2026-11-03.
+Seed:        2201 (preset in the prompt before the run; confirmed on
+             the job page)
+
+MODEL AND MODE
+Midjourney --v 7.0, draft mode (--draft). Nothing paid or upscaled.
+
+PROMPT — EXACTLY AS SUBMITTED (run sheet, with preset seed added)
+flat woodblock print illustration, flattened space, bold carved outlines, pattern instead of depth, limited ink colours, medium two-shot at a railing overlooking a vast game hall far below, the slim young man with spiky black hair with one blue streak, dark brown eyes and an orange cropped zip jacket over a black top on the left leaning on the railing watching admiringly, the thin wiry young woman with warm brown skin, shaved sides, a tall magenta ponytail, dangly geometric earrings, a lime-green vest and tattooed arms on the right bent over a small gadget not looking up, faces simple and readable, closed-mouth expressions, no text --ar 16:9 --v 7.0 --s 250 --chaos 5 --draft --seed 2201 --no text, letters, numbers, logos, teeth, photograph, 3d render, gradients, shading
+
+PROMPT — AS THE JOB PAGE DISPLAYS IT (canonical form)
+flat woodblock print illustration, flattened space, bold carved outlines, pattern instead of depth, limited ink colours, medium two-shot at a railing overlooking a vast game hall far below, the slim young man with spiky black hair with one blue streak, dark brown eyes and an orange cropped zip jacket over a black top on the left leaning on the railing watching admiringly, the thin wiry young woman with warm brown skin, shaved sides, a tall magenta ponytail, dangly geometric earrings, a lime-green vest and tattooed arms on the right bent over a small gadget not looking up, faces simple and readable, closed-mouth expressions, no text --no text, letters, numbers, logos, teeth, photograph, 3d render, gradients, shading --chaos 5 --ar 16:9 --seed 2201 --v 7 --stylize 250
+
+PARAMETERS
+--ar 16:9        aspect ratio
+--v 7.0          model version (job page shows --v 7)
+--s 250          stylize (job page shows --stylize 250)
+--chaos 5
+--seed 2201
+--draft          draft mode (not shown in the job page's canonical form)
+--no text, letters, numbers, logos, teeth, photograph, 3d render, gradients, shading
+
+REFERENCE IMAGES USED BY THIS JOB
+None. No --sref (style reference), no --oref (character/omni reference),
+no --iw (image weight), no image-prompt URLs, no --p personalization
+code, no moodboard. Style, characters and composition all come from the
+prompt text alone. The character wordings are the "Fifteen Days" v2
+scene-bible descriptions of Zei and Bai.
+
+THE SAVED FRAME
+User's saved copy: FAV_bai_zei_flatcel.jpg, 1206x674 JPG
+sha256: 0b394efb30fefcd0f02b84ac127fa6ba07b657bbd203818ddf4d0239f7bc9c86
+(For contrast: the Round 1 download of cell 0 of the same job is a
+1456x816 PNG, sha256 521bc6f69b5f7b110ff9d5238d475e8a6f3901b5e1a38b2bec41abee42b02fad)
+
+HOW THIS FRAME WAS USED AFTERWARDS (as a reference — not in its own recipe)
+Uploaded back to Midjourney as a style reference:
+https://s.mj.run/YwM8K-xTQo0
+Used as --sref https://s.mj.run/YwM8K-xTQo0 --sw 250 in: Deluin E1 sheet
+(seed 5333), Deluin F1 sandy (5341) and F2 copper (5342) sheets, and the
+six baseline PFP samples S1–S6 (seeds 6011–6016).
+
+RE-RUNNING IT
+Paste the submitted prompt (with --seed 2201) into Midjourney V7 draft
+mode. Honest limit, as on every recipe card: expect a close sibling of
+the original grid, not a guaranteed pixel-identical cell.
