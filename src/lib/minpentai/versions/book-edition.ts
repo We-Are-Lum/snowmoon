@@ -55,19 +55,6 @@ export const BOOK_4_DRAFT: VersionRules = {
   rocksAt: ROCKS,
 };
 
-/**
- * DRAFT, Rocks and Mirrors book-5 (2026-11-04, proposed after the book-4 playtest, in which an AI's symbol gliders down
- * open rows destroyed 2 to 4 towers by step 12 at every level; not approved). book-4, plus:
- * - towers start walled: each starting tower starts with a square of its side on every open square beside it (after
- *   c4-b113: "The gliders hit the wall that Dza had set up around his home base in the northeast corner").
- * A draft for measuring (scripts/minpentai-rush.ts, scripts/minpentai-book4-balance.ts), started only by name. Never the default.
- */
-export const BOOK_5_DRAFT: VersionRules = {
-  set: { ...BOOK_4_DRAFT.set, startWalls: 1 },
-  drawn: [],
-  rocksAt: ROCKS,
-};
-
 export interface BookPieceText {
   id: 'm' | 'e' | 'w' | 'f';
   name: string;

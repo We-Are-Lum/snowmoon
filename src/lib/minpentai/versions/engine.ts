@@ -121,7 +121,7 @@ export function engine(L: Layout) {
       L.towers.C.forEach((k) => (w.tw[k] = 'C'));
       L.towers.A.forEach((k) => (w.tw[k] = 'A'));
       if (s.ore) { const ore: Record<number, number> = {}; L.rocks.forEach((k) => (ore[k] = s.ore!)); w.ore = ore; }
-      // book-5 draft option: each starting tower starts with a square of its side on each open square beside it.
+      // startWalls (measured 2026-11-04 as a book-5 draft, not adopted; off unless set): each starting tower starts with a square of its side on each open square beside it.
       if (s.startWalls) for (const o of ['C', 'A'] as const) for (const k of L.towers[o]) {
         const [x, y] = XY(k);
         for (const [dx, dy] of D4) if (inb(x + dx, y + dy) && !w.rock[K(x + dx, y + dy)] && !w.tw[K(x + dx, y + dy)]) w.sq[K(x + dx, y + dy)] = { o, hp: s.squareHits };

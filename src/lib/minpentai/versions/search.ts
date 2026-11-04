@@ -129,7 +129,11 @@ export interface Computer {
    *   and a new tower is tried together with the squares that close its lanes;
    * - checks every new tower: its own engine runs, on its belief with its placements, every single glider the enemy
    *   could launch there this turn; a new tower one of them destroys gets a square where that glider comes in, or,
-   *   when none can be placed, isn't placed (its points go to guarding the rest).
+   *   when none can be placed, isn't placed (its points go to guarding the rest);
+   * - attacks (tuned 2026-11-04, owner: "a computer that only defends is the passive opponent from my first
+   *   playtest"): each turn it also tries, first, an attack line (attackLines) at one enemy tower it sees or last saw,
+   *   the line drawn from its own numbers; the search keeps it only if it scores best. A tower with its squares, or an
+   *   attack line, counts as one piece against a level's piece limit.
    */
   guard?: boolean;
 }
@@ -183,6 +187,16 @@ export function searchPlan(m: TurnInput & { level: number; preset?: Preset; conf
   let pool: Placement<AnyPiece>[][] = singles.filter((_, i) => i % L.sample === 0).map((p) => [p]);
   pool.push(...groups(e, base, s, o, m.snap, m.points, singles, m.comp?.formingSymbols ? s.every * 2 : 0));
   if (G) pool.push(...guardedTowers(e, base, s, o, m.snap, m.points, singles, lanes, withOurs));
+  if (G) {
+    // Attack: one line a turn, drawn from its own numbers among the lines at enemy towers it sees or last saw (the
+    // same line every turn ran head on into the other side's attack down the same row, turn after turn), tried first.
+    const ls = attackLines(e, base, s, o, m.snap, m.points, singles, per);
+    for (let i = ls.length - 1; i > 0; i--) { const j = Math.floor(m.rng() * (i + 1)); [ls[i], ls[j]] = [ls[j], ls[i]]; }
+    if (ls.length) {
+      const [p] = ls[Math.floor(m.rng() * ls.length)];
+      pool.unshift(...ls.filter(([q]) => (p.dy === 0 ? q.dy === 0 && q.y === p.y : q.dx === 0 && q.x === p.x)));
+    }
+  }
 
   const chosen: Placement<AnyPiece>[] = [];
   let points = m.points, first = true;
@@ -212,9 +226,10 @@ export function searchPlan(m: TurnInput & { level: number; preset?: Preset; conf
     }
   }
   const bookPieces = chosen.length; // the book piece and the walls, if any, don't count against a level's piece limit
+  let picks = 0; // guard: picks that place anything but squares (a tower with its squares, or an attack line, is one piece)
   for (;;) {
-    // A guarding computer counts a tower with its squares as one piece.
-    if (L.pieces !== undefined && (G ? chosen.slice(bookPieces).filter((p) => p.t !== 's').length : chosen.length - bookPieces) >= L.pieces) break;
+    // A guarding computer counts a tower with its squares, or an attack line, as one piece.
+    if (L.pieces !== undefined && (G ? picks : chosen.length - bookPieces) >= L.pieces) break;
     const options: { ps: Placement<AnyPiece>[]; v: number }[] = [];
     for (const ps of pool) {
       if (steps + per > L.steps) break;
@@ -230,6 +245,7 @@ export function searchPlan(m: TurnInput & { level: number; preset?: Preset; conf
     // Nothing helps. (spendTies: points it would lose are spent on a placement that does no harm.)
     if (pick === options[0] && (pick.v < current || (pick.v === current && !(m.comp?.spendTies && points - costOf(pick.ps) >= 0 && points > s.carryOver)))) break;
     chosen.push(...pick.ps);
+    if (pick.ps.some((p) => p.t !== 's')) picks++;
     current = pick.v;
     points -= costOf(pick.ps);
     pool = pool.filter((ps) => ps !== pick.ps);
@@ -247,6 +263,37 @@ export function searchPlan(m: TurnInput & { level: number; preset?: Preset; conf
 }
 
 const D4: [number, number][] = [[-1, 0], [0, -1], [0, 1], [1, 0]];
+
+/**
+ * Guard, attack: three gliders one behind another down a line at an enemy tower it sees or last saw: two plain gliders
+ * (a square takes two hits, the first turning the glider back, and a plain glider passes through its own side's; a
+ * symbol glider only lodges against a square), then a symbol glider for the tower. From the nearest launch squares on
+ * each line, within a turn's flight; none for a line with more than two things it knows of in the way.
+ */
+function attackLines(e: Engine, base: World, s: Settings, o: Side, snap: number[], points: number, singles: Placement<AnyPiece>[], per: number): Placement<AnyPiece>[][] {
+  const them = other(o), out: Placement<AnyPiece>[][] = [];
+  const at = new Map(singles.map((p) => [`${p.t},${p.x},${p.y},${p.dx},${p.dy}`, p]));
+  const get = (t: AnyPiece, x: number, y: number, dx: number, dy: number) => at.get(`${t},${x},${y},${dx},${dy}`);
+  for (const k of e.towers(base, them)) {
+    const [tx, ty] = e.XY(k);
+    for (const [dx, dy] of D4) {
+      let layers = 0;
+      for (let d = 1; d + 2 <= per; d++) {
+        const x = tx - d * dx, y = ty - d * dy;
+        if (!e.inb(x, y)) break;
+        const q = e.K(x, y);
+        if (base.rock[q] || base.tw[q] || base.mir?.[q] || base.fa?.[q] || (base.sq[q] && base.sq[q].o === o)) break;
+        if (base.sq[q] || base.sd?.[q]) { layers++; continue; }
+        const g1 = get('g', x, y, dx, dy);
+        if (!g1) continue;
+        const t = [g1, get('g', x - dx, y - dy, dx, dy), get('e', x - 2 * dx, y - 2 * dy, dx, dy)];
+        if (t.every(Boolean) && t.length >= layers + 1 && !e.refuse(base, s, o, snap, points, t as Placement<AnyPiece>[])) out.push(t as Placement<AnyPiece>[]);
+        break;
+      }
+    }
+  }
+  return out;
+}
 
 /**
  * Guard, walls first: squares that close lanes into its towers (lanes()), one at a time, each the legal square that

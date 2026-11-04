@@ -18,7 +18,7 @@ import { drawRules, engine, layout, other, rng, verdict, type AnyPiece, type Eng
 import type { Settings } from '../versions/schema';
 import { SOLO_V3, type VersionRules } from '../versions/solo-v1';
 import { TurnWatch } from './summary';
-import { BOOK_3_DRAFT, BOOK_4_DRAFT, BOOK_5_DRAFT, BOOK_EDITION } from '../versions/book-edition';
+import { BOOK_3_DRAFT, BOOK_4_DRAFT, BOOK_EDITION } from '../versions/book-edition';
 import { PRESETS, TOP_LEVEL, searchPlan, type BookPlay, type Computer, type Preset } from '../versions/search';
 import { appUrl } from '../../config';
 import { PIECES_PAGE, rulesText } from './rules-text';
@@ -29,19 +29,20 @@ import { converging, laneWarnings } from './help';
  * the same after the rules change): play-3 is Play's ruleset 3 (versions/solo-v1.ts), book-1 the book edition as it
  * is today. A rule change adds a new id; an id never changes meaning.
  */
-export const RULESETS = { 'book-1': BOOK_EDITION, 'book-2': BOOK_EDITION, 'book-3': BOOK_3_DRAFT, 'book-4': BOOK_4_DRAFT, 'book-5': BOOK_5_DRAFT, 'play-3': SOLO_V3 } as const satisfies Record<string, VersionRules>;
+export const RULESETS = { 'book-1': BOOK_EDITION, 'book-2': BOOK_EDITION, 'book-3': BOOK_3_DRAFT, 'book-4': BOOK_4_DRAFT, 'play-3': SOLO_V3 } as const satisfies Record<string, VersionRules>;
 /**
  * How the site computer plays under each ruleset. book-2 (owner, 2026-11-01: "a new computer means a new ruleset") is
  * book-1's rules with a computer that uses all four book pieces (search.ts BookPlay); book-1 matches keep replaying with
  * the computer they were played against.
  */
-export const COMPUTERS: Record<RulesetName, { book?: BookPlay; comp?: Computer }> = { 'book-1': {}, 'book-2': { book: { variety: 0, kinds: ['f', 'w', 'm', 'e'], from: 2 } }, 'book-3': {}, 'book-4': { comp: { formingSymbols: true, seedScore: 0, spendTies: true } }, 'book-5': { comp: { formingSymbols: true, seedScore: 0, spendTies: true, guard: true } }, 'play-3': {} };
+export const COMPUTERS: Record<RulesetName, { book?: BookPlay; comp?: Computer }> = { 'book-1': {}, 'book-2': { book: { variety: 0, kinds: ['f', 'w', 'm', 'e'], from: 2 } }, 'book-3': {}, 'book-4': { comp: { formingSymbols: true, seedScore: 0, spendTies: true } }, 'play-3': {} };
 /**
  * A computer revised within a ruleset (owner, 2026-11-04, after the book-4 playtest: "make the computer play properly at
  * every level"): a new match records the revision it is played against (SoloMatch.computer), and a match without one,
  * every match started before, keeps replaying with the ruleset's first computer (COMPUTERS). Revision 2 guards its
  * towers (search.ts Computer.guard): squares in the lanes a glider could come down, at setup and for every new tower,
- * and no tower where a single enemy glider would destroy it at once.
+ * and no tower where a single enemy glider would destroy it at once; and each turn it tries an attack line at one enemy
+ * tower it sees or last saw (tuned 2026-11-04: "a computer that only defends is the passive opponent from my first playtest").
  */
 export const REVISIONS: Partial<Record<RulesetName, { computer: number; book?: BookPlay; comp?: Computer }>> = {
   'book-4': { computer: 2, comp: { formingSymbols: true, seedScore: 0, spendTies: true, guard: true } },
@@ -58,7 +59,7 @@ export const computerOf = (m: Pick<SoloMatch, 'ruleset' | 'computer'>): { book?:
  * plain search, unforced: under book-3's rules it chooses the pieces on its own (or doesn't), which is what the draft
  * is for.
  */
-export const DRAFTS: readonly RulesetName[] = ['book-3', 'book-4', 'book-5'];
+export const DRAFTS: readonly RulesetName[] = ['book-3', 'book-4'];
 export type RulesetName = keyof typeof RULESETS;
 /** What a new match under each family is played under now. */
 export const CURRENT: Record<'book' | 'play', RulesetName> = { book: 'book-2', play: 'play-3' };
