@@ -425,7 +425,7 @@ export class PlayController {
       const w = m.w; v.bd = board({ w, e: m.e, fog: 'C', R: m.s.sight, zone: new Set([...m.e.lit(w, 'C', m.s.reach)].filter((k) => m.e.empty(w, k))), ls: m.lsC, ...P });
       v.strip = `SETUP · CYAN ${m.e.towers(w, 'C').length} · AMBER 0 SEEN`;
       v.hasBack = true; v.hPad = '0'; v.hBack = m.mode === 'ladder' ? go({ scr: 'ladder' }) : go({ scr: 'home', tab: 'play' });
-      v.stDesc = m.mode === 'practice' ? (usesSearch(m.ver) ? `${RUNGS[1]!.d} It sees only what its towers light. Nothing is saved.` : 'A simple rival. It fires gliders at towers it has seen and never defends. Nothing is saved.') : ladderOf(m.ver).R[m.rung!]!.d + ' It sees only what its towers light.';
+      v.stDesc = m.mode === 'practice' ? (usesSearch(m.ver) ? `${RUNGS[1]!.d} It sees only what its towers light. Nothing is saved.` : 'A simple rival. It fires gliders at towers it has seen and never defends. Nothing is saved.') : ladderOf(m.ver).R[m.rung!]!.d + ' It sees what its towers light, like you, and always knows whether its own squares still stand.';
       const rec = prog.rec[m.rung!] || { tries: 0 };
       v.stNote = m.mode === 'practice' ? 'The dimmed towers on the right are where Amber starts. Starts are mirrored, so you know them.' : ruleNote(m.rule, m.rung!, m.s.directions === 8) + (rec.tries ? `Tries so far: ${rec.tries}.` : 'Win once to open the next rung.');
     }

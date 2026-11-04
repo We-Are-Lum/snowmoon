@@ -98,7 +98,11 @@ export interface PlanInput {
   ruleset?: RulesetId;
 }
 
-/** The computer player (Amber): sees only what its towers light (rules page §8). */
+/**
+ * The computer player (Amber): sees what its towers light plus where it last saw Cyan's towers, and always knows its own
+ * squares as they are, even out of sight (rules page §8). Given the fog view instead, 1 decision in 2,396 differs
+ * (test-minpentai-players' equivalence check, branch minpentai-botplan-fog); that change waits for the next revision.
+ */
 export function botPlan(m: PlanInput): Placement[] {
   const s = { ...settingsFor(RULESETS[m.ruleset ?? 1], m.rule), sight: m.R, reach: m.R, every: m.every, costGlider: m.cost };
   return E.botPlan({ w: m.w, s, lvl: m.lvl, rng: m.rng, budget: BASE.points, snap: m.snap, lsA: m.lsA, diag: m.rule === 'diag' });

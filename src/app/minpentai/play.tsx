@@ -202,7 +202,7 @@ export function Play({ start, onLearn }: { start: 'home' | 'free' | 'ladder' | '
                     </li>
                   ))}
                 </ol>
-                <p className="mp-label mp-note">Every rung plays by the same rules and sees only what its towers light. They differ in how they plan, never in what they know.</p>
+                <p className="mp-label mp-note">Every rung plays by the same rules and sees what its towers light, like you, plus where it last saw your towers. One difference: it always knows whether its own squares still stand, even out of sight. The rungs differ in how they plan.</p>
                 <LadderHistory prog={ctl.state.prog} />
               </div>
               <div className="mp-foot"><button className="mp-btn primary" onClick={v.playRung}>{v.playRungLabel}</button></div>
