@@ -16,7 +16,7 @@ const chainWords = () => {
 export const SUPPORT_WORDING = {
   // The owner's words of 2026-11-04: menu label "Fund", page title "Fund this project".
   title: 'Fund this project',
-  /** The footer and About link: the page's title (draft: the owner named only the menu label and the title). */
+  /** The footer and About link: the page's title (owner, 2026-11-04, reread pack 8.3: "Fund this project"). */
   link: 'Fund this project',
   /** The menu item, in the menu's first section under "Remix the cast" (owner, 2026-11-04). */
   menu: 'Fund',

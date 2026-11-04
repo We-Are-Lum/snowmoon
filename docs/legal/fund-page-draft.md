@@ -36,8 +36,8 @@ Today (reread 2026-10-31):
 
 Proposed (in `src/lib/legal.ts` on this branch):
 
-> **6c. Fund.** You can send money to the address on the Fund page (a Splits Teams account on Ethereum or Base) to
-> fund the We Are Lum team, who make the Service. It's a gift: it buys nothing on the Service, isn't an investment,
+> **6c. Fund.** You can send money to the address on the Fund page (a Splits Teams account, on the networks the Fund
+> page names) to fund the We Are Lum team, who make the Service. It's a gift: it buys nothing on the Service, isn't an investment,
 > can't be refunded and isn't tax-deductible (Lum LLC is not a charity). Send it only on the networks the page names;
 > money sent on any other network may be lost. The account is a smart account the team controls, not a split: nothing
 > divides what it receives automatically. Everything it receives and sends is public on each network.
@@ -65,6 +65,17 @@ For the reread:
    "(a Splits Teams account, on the networks the Fund page names)".
 3. **"isn't tax-deductible (Lum LLC is not a charity)"**: unchanged.
 
+## The owner's choices, 2026-11-04 (reread pack, item 8)
+
+- **8.1** "the first": "to fund the We Are Lum team".
+- **8.2** "the second": "(a Splits Teams account, on the networks the Fund page names)". It's in `legal.ts` above.
+- **8.3** The footer reads "Fund this project".
+- **8.4** "as recommended": no change. "Fund" stays under "Remix the cast"; non-admins don't see that item while the
+  challenge is admin-only.
+
+These choose the words. The owner's "reread" of §6c comes separately; `LEGAL.ownerReread.terms` stays as it is until
+then.
+
 ## The page's words
 
 In `src/lib/support-wording.ts`. Only the first three are new.
@@ -73,7 +84,7 @@ In `src/lib/support-wording.ts`. Only the first three are new.
 | --- | --- | --- |
 | Menu (first section, under "Remix the cast") | (not in the menu) | **Fund** |
 | Page title | Support the We Are Lum team | **Fund this project** |
-| Footer and About link | Support the We Are Lum team | **Fund this project** (the page's title; the owner named only the menu label and the title, so say if the footer should read "Fund") |
+| Footer and About link | Support the We Are Lum team | **Fund this project** (the owner's choice, 2026-11-04, item 8.3) |
 | The line | We make snowmoon.party. Send ETH or USDC on Ethereum mainnet or Base to this address, or send below. | Unchanged while both chains are ready. It names only ready chains: with only Base ready it reads "… on Base to this address, or send below." |
 | The warning | Other networks: funds may be lost. | Unchanged |
 | Network choice | Base · Ethereum | Only the ready chains (both today) |
