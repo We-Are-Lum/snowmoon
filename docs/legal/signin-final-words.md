@@ -92,9 +92,10 @@ item, retention for 24 hours) are `bluesky-check`'s, in `docs/legal/bluesky-chec
 
 > To make an image, your prompt is sent to Groq to be checked (through Vercel AI Gateway when Groq is busy) and to fal.ai to make it, and your Farcaster ID to Neynar to check your account's score. In Remix, every frame you make is saved and public at its link as soon as it is made, with your words. Elsewhere, drafts you don’t publish stay on your device.
 
-**After** (two new sentences after the first):
+**After** (the Lens and Bluesky sentence after the first, then remix-model-choice's closed-model sentence, copied word
+for word from its `docs/legal/remix-model-choice-draft.md` at e84b7412, "Consent v5: closed-model sentence"):
 
-> To make an image, your prompt is sent to Groq to be checked (through Vercel AI Gateway when Groq is busy) and to fal.ai to make it, and your Farcaster ID to Neynar to check your account's score. With a Lens account, its address goes to Lens instead, to check its Lens score; with a Bluesky account, its identifier goes to Bluesky, to check its age and recent posts. [the closed-model sentence from remix-model-choice] In Remix, every frame you make is saved and public at its link as soon as it is made, with your words. Elsewhere, drafts you don’t publish stay on your device.
+> To make an image, your prompt is sent to Groq to be checked (through Vercel AI Gateway when Groq is busy) and to fal.ai to make it, and your Farcaster ID to Neynar to check your account's score. With a Lens account, its address goes to Lens instead, to check its Lens score; with a Bluesky account, its identifier goes to Bluesky, to check its age and recent posts. If you choose a closed model for a character sheet, your prompt, and the front view the model made, go through Vercel AI Gateway to its maker instead of fal.ai: OpenAI, which may keep them for up to 30 days to check for abuse, and longer if a picture is flagged for review or the law requires it, or Google, which keeps no copy, except in memory for up to 24 hours. In Remix, every frame you make is saved and public at its link as soon as it is made, with your words. Elsewhere, drafts you don’t publish stay on your device.
 
 **When it can ship:** only in a release that has Lens and Bluesky sign-in, the Bluesky check (`bluesky-check`) and
 model choice (`remix-model-choice`, switch on). Its closed-model sentence is true only once model choice is live.
