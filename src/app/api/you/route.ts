@@ -6,7 +6,7 @@ import { activeSocialLink, linkedToMe, relinkWait, socialAccount } from '~/lib/s
 import { readSocialSession, type SocialSession } from '~/lib/social/session';
 import { IMAGES, REMIX, WALLET_LINKS } from '~/lib/config';
 import { db } from '~/lib/db';
-import { configLink, isPayTo, linkOf, walletLinksOf } from '~/lib/wallet/links';
+import { configLink, isPayTo, keptLookup, linkedFidFor, linkOf, walletLinksOf } from '~/lib/wallet/links';
 import { linkedTo } from '~/lib/wallet/credit';
 import { shortAddress } from '~/lib/wallet/session';
 import { priceUsd } from '~/lib/wallet/credits';
@@ -71,11 +71,20 @@ export async function GET(request: Request) {
   );
 }
 
-/** The wallet's link for the You page, and whether the offer applies (only once the table is there). */
+/**
+ * The wallet's link for the You page, and whether the offer applies (only once the table is there). The automatic
+ * link is tried here too (linkedFidFor, at most one Neynar lookup a day), so a wallet signed in beside a Farcaster
+ * account is linked like one signed in alone (2026-11-04). `found`: how many Farcaster accounts the last lookup found
+ * for an unlinked wallet (null: not looked up), so the page can say plainly why it isn't linked.
+ */
 async function linkView(account: number, address: string, fid: number | null) {
-  const { link, table } = await linkOf(db(), account, address);
+  const sql = db();
+  if (sql) await linkedFidFor(sql, account, address);
+  const { link, table } = await linkOf(sql, account, address);
   const name = link ? (await whoIs(link.fid)).name : null;
+  const kept = !link && sql && table ? await keptLookup(sql, account) : null;
   return {
+    found: kept ? kept.length : null,
     wallet: { address, short: shortAddress(address) },
     linked: link ? { fid: link.fid, how: shownHow(link.how, address, link.fid), at: link.linkedAt, name } : null,
     // Unlink works on the table's links only; a LINKED_WALLETS one is the owner's to remove.
