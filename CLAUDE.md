@@ -34,6 +34,15 @@ snowmoon.party is an independent, open adaptation of *Snowmoon* by Vitalik Buter
 - Give the owner the SQL in one block: dry run, migration, read-back. Never ask for or paste secrets in chat.
 - Production checks by an agent are **read-only**: a read-only transaction as `studio_writer` (`begin read only; … rollback;`).
 
+## Secrets and keys
+
+- **Agents never pull or read production secrets:** no `vercel env pull` for production (or preview), no `vercel env
+  ls --decrypt`, and no copying a production key from anywhere. If a key an agent needs isn't in `.env.local`, it stops
+  and tells the owner (owner, 2026-11-04, after an agent pulled production settings to find the Neynar key).
+- **Never use another service's demo or docs key** (e.g. Neynar's public docs key) in place of the site's own: what it
+  sends goes out under someone else's account and terms. Stop and tell the owner instead (owner, 2026-11-04).
+- Never print a key, put one in chat, or commit one; keys live in git-ignored env files.
+
 ## Checks
 
 - **`npm run check:principles -- --url=<target>`** must pass for anything touching published assets, models, routes, schema, pages or scoring. P6d (no service-role key in the Vercel project) is an accepted open item; everything else must pass. `docs/principles.md` holds the eight principles. If a change would conflict with one, raise it with the owner before resolving it.

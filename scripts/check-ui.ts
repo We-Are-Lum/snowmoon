@@ -76,7 +76,7 @@ import { execFileSync, spawn } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import { createServer } from 'node:net';
 import path from 'node:path';
-import { chromium, type Browser, type Page } from 'playwright-core';
+import { chromium, type Browser, type Page, type Route } from 'playwright-core';
 import QRCode from 'qrcode';
 import { BOOK_MENTIONS } from '../src/lib/character-order';
 import { CHALLENGE, SUPPORT } from '../src/lib/config';
@@ -380,6 +380,24 @@ async function checkAccountWallet(page: Page, within: string, where: string) {
   const left = await page.evaluate(() => localStorage.getItem('snowmoon.wallet'));
   if (left) fail(`${where}: Sign out leaves the wallet session in storage`);
   await checkAccountSignedOut(page, within, `${where} (after Sign out)`);
+}
+
+/**
+ * A wallet linked to a Farcaster account (2026-11-04): the menu shows the account's @name, not the address. A fixture:
+ * the balance route is answered here for the planted token as the server answers a linked wallet. Then Sign out.
+ */
+async function checkAccountLinkedWallet(page: Page, within: string, where: string) {
+  const planted = `Bearer x.${btoa(JSON.stringify({ sub: 'w', exp: 4102444800 })).replace(/=+$/, '')}.y`;
+  const balance = (r: Route) =>
+    r.request().headers().authorization === planted ? r.fulfill({ json: { address: WALLET_ADDRESS, linked: { fid: 6786, name: '@fixture-linked' } } }) : r.fallback();
+  await page.route('**/api/wallet/balance', balance);
+  await plantWalletSession(page);
+  await open(page, '/chapter/1');
+  const acct = page.locator(accountIn(within));
+  await acct.locator('.menu-account-name', { hasText: '@fixture-linked' }).waitFor({ timeout: 10000 }).catch(() => fail(`${where}: a linked wallet does not show its Farcaster name`));
+  if (!(await page.evaluate(() => localStorage.getItem('snowmoon.wallet')))) fail(`${where}: the linked wallet's session ended on load`);
+  await page.unroute('**/api/wallet/balance', balance);
+  await acct.locator('button', { hasText: 'Sign out' }).click();
 }
 
 /** The footer line inside `within`: the starter's words exactly, shown, with its three links. */
@@ -1422,10 +1440,12 @@ if (/^http:\/\/(localhost|127\.0\.0\.1)(:|\/|$)/.test(BASE)) {
 }
 const browser = await chromium.launch({ channel: 'chrome' });
 // A protected Vercel preview: under VERCEL_OIDC_TOKEN, every request to the preview's own origin carries it (never to
-// any other origin a page loads), in every browser context and in this script's own fetches. Never printed.
+// any other origin a page loads), in every browser context and in this script's own fetches. Never printed. Only this
+// project's preview hosts get it (owner, 2026-11-03), never any other vercel.app address.
+const PREVIEW_HOST = /^snowmoon-[a-z0-9-]+-nates-projects-d1780cff\.vercel\.app$/;
 {
-  const token = process.env.VERCEL_OIDC_TOKEN, origin = new URL(BASE).origin;
-  if (token && /\.vercel\.app$/.test(new URL(BASE).hostname)) {
+  const token = process.env.VERCEL_OIDC_TOKEN, url = new URL(BASE), origin = url.origin;
+  if (token && url.protocol === 'https:' && PREVIEW_HOST.test(url.hostname)) {
     const header = { 'x-vercel-trusted-oidc-idp-token': token };
     const guard = async (ctx: Awaited<ReturnType<Browser['newContext']>>) => {
       await ctx.route((u) => u.origin === origin, (route) => route.continue({ headers: { ...route.request().headers(), ...header } }));
@@ -1998,6 +2018,7 @@ try {
         await open(page, '/chapter/1');
         await shot(page, `desktop-${width}-account-wallet`, scheme);
         await checkAccountWallet(page, '.rail', `@${width} rail`);
+        await checkAccountLinkedWallet(page, '.rail', `@${width} rail (linked wallet)`);
         // Listen view.
         await open(page, '/chapter/1?view=listen');
         await page.waitForSelector('.listen-pane .listen-progress');
