@@ -35,12 +35,12 @@ record; what is in `legal.ts` now is listed here.
 
 - **The rule is rolling:** at least 30 days old and at least 5 posts in the last 30 days, judged when we check
   (`SOCIAL_SIGN_IN.bluesky.check.minAgeDays`, rule key `age30d+5posts30d`). The fixed 6 November cut-off is gone.
-- **4.1, Privacy §7 (REDRAFTED, needs the owner's OK).** The combined line, with the rolling rule and the early re-check.
+- **4.1, Privacy §7 (REDRAFTED; owner, 2026-11-04 14:15: "linked to a Farcaster or Lens account", matching the code).** The combined line, with the rolling rule and the early re-check.
   Before (pack's recommended combined line): "… We keep only whether your account passed (made before 6 November 2026,
   with at least 5 posts in the last 30 days) and when, for up to 90 days (a day if it didn't pass); never the dates or
   posts we read. Bluesky is never asked about you when someone views a page." After:
 
-  > If you sign in with Bluesky and your Bluesky account isn't linked to a Farcaster account: when you make an image or a frame, or publish a remix during the remix challenge, and your account has no current check, our server sends your Bluesky account's identifier (its DID, not your handle) to Bluesky's public AppView (public.api.bsky.app), to read when your account was made and its latest posts. This check decides whether you can make images and frames for free and whether a remix can count as an entry. We keep only whether your account passed (at least 30 days old, with at least 5 posts in the last 30 days, when we check) and when, for up to 90 days (a day if it didn't pass); never the dates or posts we read. We check again sooner if your account is reported or one of your pictures is hidden by a moderator. Bluesky is never asked about you when someone views a page.
+  > If you sign in with Bluesky and your Bluesky account isn't linked to a Farcaster or Lens account: when you make an image or a frame, or publish a remix during the remix challenge, and your account has no current check, our server sends your Bluesky account's identifier (its DID, not your handle) to Bluesky's public AppView (public.api.bsky.app), to read when your account was made and its latest posts. This check decides whether you can make images and frames for free and whether a remix can count as an entry. We keep only whether your account passed (at least 30 days old, with at least 5 posts in the last 30 days, when we check) and when, for up to 90 days (a day if it didn't pass); never the dates or posts we read. We check again sooner if your account is reported or one of your pictures is hidden by a moderator. Bluesky is never asked about you when someone views a page.
 
 - **4.2, Privacy §4 (REDRAFTED, needs the owner's OK).** No numbers outside §7 (the owner's new rule), plus the
   Farcaster item's own early-removal sentence. Before (check-decisions' draft): "Whether your Bluesky account passed the
@@ -63,7 +63,7 @@ record; what is in `legal.ts` now is listed here.
 ## 1. Privacy §7 (Outside services and what they receive): a new item, after the Neynar item
 
 **Proposed (new):**
-> If you sign in with Bluesky and your Bluesky account isn't linked to a Farcaster account: when you first make an image or a frame on a given day, and when you publish a remix during the remix challenge, our server sends your Bluesky account's identifier (its DID, not your handle) to Bluesky's public AppView (public.api.bsky.app), to read when your account was made and its latest posts. This check decides whether you can make images and frames for free and whether a remix can count as an entry. We keep only whether your account passed and when, for up to 90 days; never the dates or posts we read. Bluesky is never asked about you when someone views a page.
+> If you sign in with Bluesky and your Bluesky account isn't linked to a Farcaster or Lens account: when you first make an image or a frame on a given day, and when you publish a remix during the remix challenge, our server sends your Bluesky account's identifier (its DID, not your handle) to Bluesky's public AppView (public.api.bsky.app), to read when your account was made and its latest posts. This check decides whether you can make images and frames for free and whether a remix can count as an entry. We keep only whether your account passed and when, for up to 90 days; never the dates or posts we read. Bluesky is never asked about you when someone views a page.
 
 What it describes: `blueskyFacts` sends `GET /xrpc/app.bsky.actor.getProfile?actor=<DID>` and
 `GET /xrpc/app.bsky.feed.getAuthorFeed?actor=<DID>&limit=50&filter=posts_with_replies`, from our server only (never the
