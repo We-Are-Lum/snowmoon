@@ -7,6 +7,8 @@
  * 2026-10-19). Where the book gives neither for a character, `pronoun` is null and the coach uses the name or "they";
  * it doesn't guess.
  */
+import { inBookOrder } from '../character-order';
+
 export type Pronoun = 'he' | 'she';
 
 export interface CastMember {
@@ -49,10 +51,11 @@ export const CAST: CastMember[] = [
 
 /**
  * For the coach's system prompt ({{CAST}} in config/prompts/make-coach.md): only characters who have appeared by the
- * person's last chapter, so the list names no one from later on. The pronoun check still knows everyone.
+ * person's last chapter, so the list names no one from later on, most named in the book first (owner, 2026-11-04;
+ * src/lib/character-order.ts). The pronoun check still knows everyone.
  */
 export function castText(limit: number): string {
-  const cast = CAST.filter((c) => c.first <= limit);
+  const cast = inBookOrder(CAST.filter((c) => c.first <= limit), (c) => c.slug);
   const known = cast.filter((c) => c.pronoun).map((c) => `${c.name}: ${c.pronoun}`);
   const none = cast.filter((c) => !c.pronoun).map((c) => c.name);
   return `${known.join('; ')}.${none.length ? ` The book gives no pronoun for ${none.join(', ')}: use the name or "they".` : ''} For anyone not listed, use their name.`;

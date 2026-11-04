@@ -20,6 +20,8 @@
  * - The server never fetches the pasted address: every request goes to an API host, and a request elsewhere is refused.
  * - A post that doesn't link to the version's page is refused.
  * - "Posted on" holds no image, avatar, embed or script.
+ * - The three bases (owner, 2026-11-03): a fork of each base counts, a fork of an entry counts, a sheet from scratch
+ *   and a fork of a sheet that isn't a base don't; nothing breaks while the bases are empty (as before).
  * - The migration (0033, applied 2026-11-01): RLS, privileges, no score; marks and posts work; without the tables, nothing breaks.
  */
 import path from 'node:path';
@@ -43,6 +45,54 @@ function walk(dir: string): string[] {
 
 const R = await import('../src/lib/challenge/rules');
 const L = await import('../src/lib/challenge/post-links');
+
+// --- The owner's switch (owner, 2026-11-04: "/challenge is admin-only for now"; nothing opens by date alone) ------
+// With CHALLENGE.public off (as committed) and the clock inside the window, nothing the dates used to switch on is on:
+// entries, open sheets, the $15 cap, the challenge share text; and only admins may see the challenge.
+{
+  const C = await import('../src/lib/config');
+  const O = await import('../src/lib/challenge/open-sheets');
+  const { PRIVACY } = await import('../src/lib/legal');
+  const V = await import('../src/lib/challenge/visibility');
+  const inside = new Date(Date.parse(CHALLENGE.dates.opens) + 3600_000);
+  check('switch: CHALLENGE.public is off as committed (the owner opens it)', CHALLENGE.public === false);
+  check('switch: the dates are kept (opens Fri 6 Nov, 09:00 Pacific)', CHALLENGE.dates.opens === '2026-11-06T17:00:00Z');
+  check('switch off, inside the window: the free cap stays $2, not $15', C.imagesDailySpendCapUsd(inside) === IMAGES.dailySpendCapUsd && IMAGES.dailySpendCapUsd === 2);
+  check('switch off, inside the window: sheets stay invited-only (Privacy describes the challenge)', O.privacyDescribesChallenge(PRIVACY) && !O.challengeSheetsOpen(inside, PRIVACY));
+  check('switch off, inside the window: entries are not taken', !R.entriesOpen(inside) && !R.challengeOpenNow(inside));
+  check('switch off: only admins may see the challenge', !V.challengeVisibleTo(null) && !V.challengeVisibleTo(501) && !V.challengeVisibleTo(6852) && ADMINS.every((a) => V.challengeVisibleTo(a)));
+  check('switch on, inside the window: the same functions open (so the switch is what holds them)', R.challengeOpenNow(inside, true) && R.entriesOpen(inside, true) && O.challengeSheetsOpen(inside, PRIVACY, true) && V.challengeVisibleTo(501, true));
+  proof('a cap that rises by date alone is caught', ((t: Date) => (t.getTime() >= Date.parse(CHALLENGE.dates.opens) && t.getTime() < Date.parse(CHALLENGE.dates.closes) ? 15 : 2))(inside) !== C.imagesDailySpendCapUsd(inside));
+  proof('sheets that open by date alone are caught', ((t: Date) => CHALLENGE.openSheets && R.phase(t) === 'open' && O.privacyDescribesChallenge(PRIVACY))(inside) !== O.challengeSheetsOpen(inside, PRIVACY));
+  proof('entries that open by date alone are caught', ((t: Date) => CHALLENGE.entries && R.phase(t) === 'open')(inside) !== R.entriesOpen(inside));
+  // Every way in: the page and the APIs answer 404 to everyone but an admin; the menu, the home row, the sheet page's
+  // lines, "Posted on" and the share text wait for the switch.
+  const gated: [string, RegExp][] = [
+    ['src/app/challenge/page.tsx', /if \(!CHALLENGE\.public\) notFound\(\);/],
+    ['src/app/challenge/page.tsx', /if \(!CHALLENGE\.public\) return \{ robots: \{ index: false, follow: false \} \};/],
+    ['src/app/api/challenge/mark/route.ts', /if \(!challengeVisibleTo\(fid\)\) return NextResponse\.json\(\{ error: 'Not found' \}, \{ status: 404 \}\);/],
+    ['src/app/api/challenge/view/route.ts', /if \(!challengeVisibleTo\(fid\)\) return NextResponse\.json\(\{ error: 'Not found' \}, \{ status: 404 \}\);/],
+    ['src/app/api/challenge/standing/route.ts', /if \(!challengeVisibleTo\(fid\)\) return NextResponse\.json\(\{ error: 'Not found' \}, \{ status: 404 \}\);/],
+    ['src/app/page.tsx', /\.\.\.\(CHALLENGE\.public \? \[\{ href: '\/challenge'/],
+    ['src/components/app-shell.tsx', /navItems\(last, adaptations, CHALLENGE\.public \|\| \(auth\.kind === 'signed-in' && isAdmin\(auth\.fid\)\)\)/],
+    ['src/app/references/designs/[id]/page.tsx', /const ch = CHALLENGE\.public \? await sheetChallenge\(/],
+    ['src/app/references/designs/[id]/page.tsx', /posts=\{CHALLENGE\.public && CHALLENGE\.posts\}/],
+    ['src/app/references/designs/[id]/page.tsx', /isChallengeCharacter\(d\.entity\) && challengeOpenNow\(\) \? CW\.shareTextOpen\(what\)/],
+  ];
+  const ungated = gated.filter(([f, re]) => !re.test(read(f))).map(([f]) => f);
+  check('switch: every way in is gated (page, APIs, menu, home row, sheet lines, "Posted on", share text)', ungated.length === 0, ungated.join());
+  const posts = read('src/app/api/challenge/posts/route.ts');
+  check('switch: /api/challenge/posts answers 404 to non-admins for GET, POST and DELETE', (posts.match(/const no404 = hidden\(person\);\s*if \(no404\) return no404;/g) ?? []).length === 3 && /challengeVisibleTo\(person\) \? null : NextResponse\.json\(\{ error: 'Not found' \}, \{ status: 404 \}\)/.test(posts));
+  proof('a page that shows the challenge to everyone is caught', !gated[0][1].test(read('src/app/challenge/page.tsx').replace('if (!CHALLENGE.public) notFound();', '')));
+  const { navItems } = await import('../src/lib/nav');
+  check('switch: the menu has no challenge item unless told to show it', !navItems(1, 0).some((i) => i.href === '/challenge') && navItems(1, 0, true).some((i) => i.href === '/challenge'));
+  // Scripts everyone is served carry no challenge words: the share buttons, "Posted on", the mark button, the fork form.
+  const clientFiles = ['src/components/challenge-share.tsx', 'src/components/posted-on.tsx', 'src/components/challenge-mark.tsx', 'src/components/design-form.tsx', 'src/components/challenge-admin.tsx', 'src/components/challenge-admin-sheet.tsx', 'src/components/challenge-body.tsx', 'src/components/challenge-lines.tsx'];
+  const wordy = clientFiles.filter((f) => /challenge\/wording'/.test(read(f)));
+  check('switch: no script served to everyone imports the challenge\'s words', wordy.length === 0, wordy.join());
+}
+// The tests below are the challenge once the owner has opened it.
+(CHALLENGE as { public: boolean }).public = true;
 
 // --- Eligibility -------------------------------------------------------------------------------------------------
 const lists = { admins: [6786, 193912], invited: [6786, 6852], min: 0.7 };
@@ -140,6 +190,75 @@ proof('two entries for one person and character are caught', (() => {
   const planted = [...chosen, { ...chosen[0], versionId: 'dup' }];
   return new Set(planted.map((c) => R.markKey(c.person, c.character))).size !== planted.length;
 })());
+
+// --- The three bases (owner, 2026-11-03) --------------------------------------------------------------------------
+{
+  const B1 = '11111111-1111-4111-8111-111111111111', B2 = '22222222-2222-4222-8222-222222222222', B3 = '33333333-3333-4333-8333-333333333333';
+  const bases = { zei: [B1, B2, B3], bai: [] as string[] };
+  const step = (elementId: string, versionId = `${elementId.slice(0, 8)}-0000-4000-8000-000000000000`) => ({ elementId, versionId });
+  check('the committed bases: a list for each of the six characters, each empty or up to three design ids', R.basesProblems().length === 0 && CHALLENGE.characters.every((c) => Array.isArray(CHALLENGE.bases[c]) && CHALLENGE.bases[c].length <= 3), R.basesProblems().join('; '));
+  check('a fork of each base counts (by its element id)', [B1, B2, B3].every((b) => R.remixOfBase('zei', [step(b)], bases)));
+  check('a fork of a base counts when the base is named by one version\'s id', R.remixOfBase('zei', [{ elementId: 'aaaaaaaa-0000-4000-8000-000000000000', versionId: B2 }], { zei: [B2] }));
+  check('a fork of an entry (a remix of a base) counts', R.remixOfBase('zei', [step('eeeeeeee-0000-4000-8000-00000000000e'), step(B3)], bases));
+  check('a fork of a remix of a remix of a base counts', R.remixOfBase('zei', [step('eeeeeeee-0000-4000-8000-00000000000e'), step('dddddddd-0000-4000-8000-00000000000d'), step(B1)], bases));
+  check('a new sheet made from scratch does not count', !R.remixOfBase('zei', [], bases));
+  check('a fork of a sheet that is not a base does not count, once the bases are picked', !R.remixOfBase('zei', [step('99999999-9999-4999-8999-999999999999')], bases));
+  check('a base of another character does not make a fork count', !R.remixOfBase('bai', [step('99999999-9999-4999-8999-999999999999')], { zei: [B1], bai: ['44444444-4444-4444-8444-444444444444'] }) && !R.remixOfBase('bai', [step(B1)], { zei: [B1], bai: ['44444444-4444-4444-8444-444444444444'] }));
+  check('while a character\'s bases are empty, any fork counts (as before) and a sheet from scratch still does not', R.remixOfBase('bai', [step('99999999-9999-4999-8999-999999999999')], bases) && !R.remixOfBase('bai', [], bases));
+  check('at most three bases are used', R.basesOf('zei', { zei: [B1, B2, B3, '44444444-4444-4444-8444-444444444444'] }).length === 3);
+  proof('a fourth base is caught', R.basesProblems({ ...Object.fromEntries(CHALLENGE.characters.map((c) => [c, []])), zei: [B1, B2, B3, '44444444-4444-4444-8444-444444444444'] }).length === 1);
+  proof('a base that is not a design id (a slug) is caught', R.basesProblems({ ...Object.fromEntries(CHALLENGE.characters.map((c) => [c, []])), zei: ['zei-starting-point'] }).length === 1);
+  proof('a missing character list is caught', R.basesProblems({ zei: [] }).length === 5);
+  const otherLine = [step('99999999-9999-4999-8999-999999999999')];
+  const anyFork = (line: { elementId: string; versionId: string }[]) => line.length > 0; // the rule before the bases
+  proof('the old rule (any fork), used once the bases are picked, is caught', anyFork(otherLine) !== R.remixOfBase('zei', otherLine, bases));
+}
+
+// --- Bases by closed models, the bases' style order, and P5g's one exception (owner, 2026-11-04) --------------------
+{
+  const BA = await import('../src/lib/challenge/bases');
+  const { p5gProblems, CHALLENGE_FILES } = await import('./lib/p5g');
+  const recipe = (model: string) => ({ prompt: 'p', model, endpoint: 'e', host: 'h', settings: {}, seed: 1, request_id: 'r', cost_usd: 0.05, made_at: '2026-11-04T00:00:00.000Z', width: 576, height: 768, checks: { prompt: { model: IMAGES.guardModel, verdict: 'ok' as const }, host_safety_checker: 'not run' as const }, assist: null });
+  const body = (...models: string[]) => ({ samples: [], views: Object.fromEntries(models.map((m, i) => [(['front', 'side', 'back'] as const)[i], { url: 'u', sha256: 'a'.repeat(64), recipe: recipe(m) }])) });
+  check('committed: closed-model bases are not allowed yet (CHALLENGE.closedBasesAllowed false, until the owner\'s reread)', CHALLENGE.closedBasesAllowed === false);
+  check('committed: the bases\' style order is empty until the owner picks the styles', Array.isArray(CHALLENGE.baseStyles) && CHALLENGE.baseStyles.length === 0);
+  check('a base made by open models is never refused', BA.closedBaseRefusal(body('flux2-klein-4b-edit', 'flux2-klein-4b-edit'), false) === null && BA.closedBaseRefusal(body('z-image-turbo'), true) === null);
+  const gpt = BA.closedBaseRefusal(body('gpt-image-2.5-sunburst'), false) ?? '';
+  check('a base whose front was made by a closed model is refused while closedBasesAllowed is false, naming the model and its maker', gpt.includes('GPT Image 2.5 Sunburst, a closed model by OpenAI') && gpt.includes('CHALLENGE.closedBasesAllowed'), gpt);
+  check('a closed model in a side view alone is enough to refuse it', BA.closedBaseRefusal(body('flux2-klein-4b-edit', 'gemini-3.1-flash-image'), false)?.includes('Gemini 3.1 Flash Image, a closed model by Google') === true);
+  check('once closedBasesAllowed is true, a closed-model base (OpenAI, Google) is accepted', BA.closedBaseRefusal(body('gpt-image-2.5-sunburst'), true) === null && BA.closedBaseRefusal(body('gemini-3.1-flash-image'), true) === null);
+  check('a model not on config/models.json is refused even when closed bases are allowed', /not on the model list/.test(BA.closedBaseRefusal(body('some-new-model'), true) ?? ''));
+  proof('a closed-model base let through before the reread is caught', BA.closedBaseRefusal(body('gpt-image-2.5-sunburst'), false) !== null && BA.closedBaseRefusal(body('gpt-image-2.5-sunburst'), true) === null);
+  const B1 = '11111111-1111-4111-8111-111111111111', B2 = '22222222-2222-4222-8222-222222222222';
+  const step = (elementId: string) => ({ elementId, versionId: `${elementId.slice(0, 8)}-0000-4000-8000-000000000000` });
+  check('a fork of a refused base does not count, and the character\'s bases stay picked (a fork of any sheet does not count instead)', !R.remixOfBase('zei', [step(B2)], { zei: [B1, B2] }, new Set([B2])) && R.remixOfBase('zei', [step(B1)], { zei: [B1, B2] }, new Set([B2])) && !R.remixOfBase('zei', [step('99999999-9999-4999-8999-999999999999')], { zei: [B2] }, new Set([B2])));
+  // The style order.
+  const saved = CHALLENGE.baseStyles;
+  CHALLENGE.baseStyles = ['Bolder', 'Printed', 'Mood'];
+  const sheets = (styles: (string | null)[]) => styles.map((style, i) => ({ style, createdAt: new Date(Date.UTC(2026, 10, 1, i)).toISOString(), versionId: `${style}-${i}` }));
+  const zeiOrder = sheets(['Mood', 'Bolder', null, 'Printed']).sort(R.newestFirst).sort(R.baseStyleOrder).map((x) => x.style);
+  const baiOrder = sheets(['Printed', 'Mood', 'Bolder']).sort(R.newestFirst).sort(R.baseStyleOrder).map((x) => x.style);
+  check('the bases follow CHALLENGE.baseStyles, the same order for every character (an unlisted style after)', zeiOrder.join() === 'Bolder,Printed,Mood,' && baiOrder.join() === 'Bolder,Printed,Mood', `${zeiOrder.join()} / ${baiOrder.join()}`);
+  check('the style order ignores case', R.baseStyleOrder({ style: 'bolder' }, { style: 'Mood' }) < 0);
+  const ties = sheets(['Mood', 'Mood']).sort(R.newestFirst).sort(R.baseStyleOrder).map((x) => x.versionId);
+  check('two bases of one style stay newest first', ties.join() === 'Mood-1,Mood-0', ties.join());
+  CHALLENGE.baseStyles = [];
+  check('with no styles set, the order is newest first', sheets(['Mood', 'Bolder']).sort(R.newestFirst).sort(R.baseStyleOrder).map((x) => x.versionId).join() === 'Bolder-1,Mood-0');
+  CHALLENGE.baseStyles = saved;
+  // P5g: the committed code passes, and the exception reaches only "Bases to start from".
+  const files = walk('src').filter((f) => CHALLENGE_FILES.test(f)).map((f) => ({ file: f, text: read(f) }));
+  const p5g = p5gProblems(files);
+  check('P5g passes on the committed challenge code, with "Bases to start from" in style order', p5g.length === 0, p5g.join('; '));
+  check('"Bases to start from" really is ordered by style (startingSheets sorts by baseStyleOrder)', /sort\(newestFirst\)\.sort\(baseStyleOrder\)/.test(read('src/lib/challenge/entries.ts')));
+  const plantIn = (file: string, f: (t: string) => string) => files.map((x) => (x.file === file ? { ...x, text: f(x.text) } : x));
+  proof('P5g: an entries list ordered by style fails (standing)', p5gProblems(plantIn('src/lib/challenge/entries.ts', (t) => t.replace('const entries = chooseEntries(', 'const entries = [...chooseEntries(').replace(', marks, () => true);\n  const byAdmins', ', marks, () => true)].sort(baseStyleOrder);\n  const byAdmins'))).some((p) => /orders by style outside/.test(p)));
+  proof('P5g: an entries list ordered by style fails (a new top-level list in entries.ts)', p5gProblems(plantIn('src/lib/challenge/entries.ts', (t) => t.replace('export async function standing(', 'export const planted = (e: { style: string | null }[]) => e.sort(baseStyleOrder);\nexport async function standing('))).length === 1);
+  proof('P5g: the challenge page re-sorting by style fails', p5gProblems(plantIn('src/app/challenge/page.tsx', (t) => `${t}\nexport const planted = (e: { style: string | null }[]) => e.sort(baseStyleOrder);`)).length === 1);
+  proof('P5g: "Posted on" ordered by style fails', p5gProblems([...files, { file: 'src/components/posted-on.tsx', text: 'export const p = (x) => x.sort(baseStyleOrder);' }]).length >= 1);
+  proof('P5g: a style order that reads something else (likes) fails', p5gProblems(plantIn('src/lib/challenge/rules.ts', (t) => t.replace('return at(a.style) - at(b.style);', 'return at(a.style) - at(b.style) || b.likes - a.likes;'))).length === 1);
+  proof('P5g: a style order that reads another setting fails', p5gProblems(plantIn('src/lib/challenge/rules.ts', (t) => t.replace('return at(a.style) - at(b.style);', 'return at(a.style) - at(b.style) || CHALLENGE.minEntrants;'))).length === 1);
+  proof('P5g: entries ordered by built-on counts still fail', p5gProblems([...files, { file: 'src/lib/challenge/planted.ts', text: 'export const top = (e) => e.sort((a, b) => b.builtOn - a.builtOn);' }]).length === 1);
+}
 
 // --- The post address: the host allow-list ----------------------------------------------------------------------
 const good: [string, string][] = [
@@ -320,7 +439,7 @@ function copyProblems(t: string): string[] {
   return p;
 }
 check('the rules copy: the owner\'s mint sentence, forks only, three entrants, a bounty per character on mainnet, no promises, no wallet path', copyProblems(copy).length === 0, copyProblems(copy).join('; '));
-check('the rules name the six characters in the owner\'s order', W.intro().includes('Zei, Bai, Gladias, Seila, Deluin or Mu'));
+check('the rules name the six characters most named in the book first (owner, 2026-11-04)', W.intro().includes('Zei, Gladias, Bai, Seila, Deluin or Mu'));
 proof('a promised mint is caught', copyProblems(copy.replace(MINT_PLAN, 'Each version is then minted as an open edition in Snowmoon WIP.')).length > 0);
 proof('a reward pot is caught', copyProblems(`${copy} Plus an extra reward pot.`).length > 0);
 proof('a wallet path back in the rules is caught', copyProblems(`${copy} Or a wallet linked to one.`).length > 0);
@@ -482,7 +601,7 @@ check('entries: not a new sheet made from scratch (forks only)', !ids.includes(f
 check('entries: not an admin; the admin is listed apart', !ids.includes(fAdmin.versionId) && st.byAdmins.some((v) => v.versionId === fAdmin.versionId));
 check('entries: not the starting sheets made before the window', !ids.includes(baiStart.versionId) && !ids.includes(zeiStart.versionId));
 check('entries: one per person per character', ids.length === 3, ids.join());
-check('entrants per character: Bai 2 (500, 6852), Zei 1 (6852), others 0, in CHALLENGE order', [...st.entrants].map(([c, n]) => `${c}:${n}`).join() === 'zei:1,bai:2,gladias:0,seila:0,deluin:0,mu:0', [...st.entrants].map(([c, n]) => `${c}:${n}`).join());
+check('entrants per character: Bai 2 (500, 6852), Zei 1 (6852), others 0, in CHALLENGE order', [...st.entrants].map(([c, n]) => `${c}:${n}`).join() === 'zei:1,gladias:0,bai:2,seila:0,deluin:0,mu:0', [...st.entrants].map(([c, n]) => `${c}:${n}`).join());
 check('three entrants are needed (CHALLENGE.minEntrants)', CHALLENGE.minEntrants === 3 && !R.enoughEntrants(2) && R.enoughEntrants(3));
 proof('a count that adds one person twice is caught', R.entrantCounts([{ person: 1, character: 'bai' }, { person: 1, character: 'bai' }]).get('bai') === 1);
 check('the version page: Entry on the entry, the admin line on the admin\'s', (await E.versionStanding(S, f500b.versionId))?.kind === 'entry' && (await E.versionStanding(S, fAdmin.versionId))?.kind === 'admin' && (await E.versionStanding(S, f501.versionId)) === null);
@@ -518,6 +637,105 @@ check('marking after the window closes is refused', !(await E.markEntry(S, 500, 
   proof('h a refusal before the open that says "closed" is caught', ((w: string) => /^Entries open /.test(w))(E.MARK_WORDING.closed) === false);
 }
 check('the sheets to start from are those made before the window', (await E.startingSheets(S, 'bai')).map((s) => s.versionId).join() === baiStart.versionId);
+
+// The three bases in the database: forks of each base count, a fork of an entry counts, a sheet from scratch and a
+// fork of a sheet that isn't a base don't; the list to start from is the bases, in order. Then everything made here is
+// hidden and the bases emptied again, so the checks below see what they saw before.
+{
+  const made: string[] = [];
+  const mk = async (m: Parameters<typeof DS.makeDesign>[1]) => { const o = await publish(m); made.push(o.elementId); return o; };
+  const b1 = await mk({ fid: 6786, mode: 'create', kind: 'character', character: bai, body: sheet('Bai, base one', 21) });
+  const b2 = await mk({ fid: 6786, mode: 'create', kind: 'character', character: bai, body: sheet('Bai, base two', 22) });
+  const b3 = await mk({ fid: 6786, mode: 'create', kind: 'character', character: bai, body: sheet('Bai, base three', 23) });
+  const b2v2 = await DS.makeDesign(S, { fid: 6786, mode: 'version', kind: 'character', fromVersionId: b2.versionId, body: sheet('Bai, base two, v2', 24) });
+  CHALLENGE.bases.bai = [b1.elementId, b2.elementId, b3.versionId];
+  await sql`insert into studio.image_scores (fid, score) values (510, 0.9), (511, 0.9), (512, 0.9), (513, 0.9), (514, 0.9), (515, 0.9), (516, 0.9)`;
+  const calls0 = calls.length;
+  const g1 = await mk({ fid: 510, mode: 'fork', kind: 'character', fromVersionId: b1.versionId, body: sheet('Bai from base one', 25) });
+  const g2 = await mk({ fid: 511, mode: 'fork', kind: 'character', fromVersionId: b2v2.versionId, body: sheet('Bai from base two, v2', 26) });
+  const g3 = await mk({ fid: 512, mode: 'fork', kind: 'character', fromVersionId: b3.versionId, body: sheet('Bai from base three', 27) });
+  const gE = await mk({ fid: 513, mode: 'fork', kind: 'character', fromVersionId: g1.versionId, body: sheet('Bai from an entry', 28) });
+  const gEE = await mk({ fid: 516, mode: 'fork', kind: 'character', fromVersionId: gE.versionId, body: sheet('Bai from a remix of an entry', 29) });
+  const gScratch = await mk({ fid: 514, mode: 'create', kind: 'character', character: bai, body: sheet('Bai from scratch', 30) });
+  const gOther = await mk({ fid: 515, mode: 'fork', kind: 'character', fromVersionId: baiStart.versionId, body: sheet('Bai from a sheet that is not a base', 31) });
+  check('bases: publishing asked no one anything (the scores were known)', calls.length === calls0, calls.slice(calls0).join(' '));
+  const st5 = await E.standing(S);
+  const ids5 = st5.entries.map((e) => e.versionId);
+  check('bases: a fork of each of the three bases counts (element id; a later version of a base; a version id)', [g1, g2, g3].every((g) => ids5.includes(g.versionId)));
+  check('bases: a fork of an entry counts, and a fork of that', ids5.includes(gE.versionId) && ids5.includes(gEE.versionId));
+  check('bases: a new sheet made from scratch still does not count', !ids5.includes(gScratch.versionId));
+  check('bases: a fork of a sheet that is not one of the bases does not count', !ids5.includes(gOther.versionId) && !ids5.includes(f500a.versionId) && !ids5.includes(f500b.versionId));
+  check('bases: nothing is stored for a version that does not count', !(await sql`select 1 from studio.challenge_eligibility where version_id in ${sql([gScratch.versionId, gOther.versionId])}`).length);
+  check('bases: Bai\'s entrants are the five who started from a base or a remix of one (6852 forked an entry that is no longer from a base)', st5.entrants.get('bai') === 5, String(st5.entrants.get('bai')));
+  check('bases: Zei, with no bases yet, counts as before', st5.entrants.get('zei') === 1);
+  const starts = await E.startingSheets(S, 'bai');
+  check('bases: the list to start from is the three bases, newest first, the element-id base at its newest version', starts.map((x) => x.versionId).join() === [b2v2.versionId, b3.versionId, b1.versionId].join(), starts.map((x) => x.versionId).join());
+  CHALLENGE.bases.bai = [b1.elementId, zeiStart.elementId, '00000000-0000-4000-8000-000000000000'];
+  check('bases: an id that is another character\'s sheet, or no sheet, is left out of the list', (await E.startingSheets(S, 'bai')).map((x) => x.versionId).join() === b1.versionId);
+  CHALLENGE.bases.bai = [];
+  check('bases: empty again, the list is the sheets made before the window, as before', (await E.startingSheets(S, 'bai')).map((x) => x.versionId).join() === baiStart.versionId);
+  await sql`update studio.elements set status = 'hidden' where id in ${sql(made)}`;
+  await sql`delete from studio.challenge_eligibility where version_id in (select v.id from studio.element_versions v where v.element_id in ${sql(made)})`;
+  const st6 = await E.standing(S);
+  check('bases: with the bases empty and the test sheets hidden, the entries are as before', st6.entries.map((e) => e.versionId).sort().join() === st2.entries.map((e) => e.versionId).sort().join());
+}
+
+// Closed-model bases, the bases' style order and an admin's remix, in the database (owner, 2026-11-04). Everything made
+// here is hidden and the settings put back afterwards, so the checks below see what they saw before.
+{
+  const made: string[] = [];
+  const mk = async (m: Parameters<typeof DS.makeDesign>[1]) => { const o = await publish(m); made.push(o.elementId); return o; };
+  const styled = (text: string, n: number, title: string) => ({ ...sheet(text, n), style: { version_id: '00000000-0000-4000-8000-0000000000aa', title } });
+  const closedPic = (n: number) => ({ ...pic(n), recipe: { ...pic(n).recipe, model: 'gpt-image-2.5-sunburst', endpoint: 'openai/gpt-image-2.5-sunburst', host: 'Vercel AI Gateway', checks: { prompt: { model: IMAGES.guardModel, verdict: 'ok' as const }, host_safety_checker: 'not run' as const } } });
+  const bA = await mk({ fid: 6786, mode: 'create', kind: 'character', character: bai, body: styled('Bai, Printed', 41, 'Printed') });
+  const bB = await mk({ fid: 6786, mode: 'create', kind: 'character', character: bai, body: styled('Bai, Bolder', 42, 'Bolder') });
+  const bC = await mk({ fid: 6786, mode: 'create', kind: 'character', character: bai, body: styled('Bai, Mood', 43, 'Mood') });
+  const bX = await mk({ fid: 6786, mode: 'create', kind: 'character', character: bai, body: { ...styled('Bai, closed concept', 44, 'Bolder'), views: { front: closedPic(44) } } });
+  const zA = await mk({ fid: 6786, mode: 'create', kind: 'character', character: zeiC, body: styled('Zei, Mood', 45, 'Mood') });
+  const zB = await mk({ fid: 6786, mode: 'create', kind: 'character', character: zeiC, body: styled('Zei, Printed', 46, 'Printed') });
+  const zC = await mk({ fid: 6786, mode: 'create', kind: 'character', character: zeiC, body: styled('Zei, Bolder', 47, 'Bolder') });
+  const [xr] = await sql`select body from studio.element_versions where id = ${bX.versionId}`;
+  check('closed bases: the publish path accepts a sheet whose recipe names a closed model, as recorded', (xr?.body as { views: { front: { recipe: { model: string } } } })?.views.front.recipe.model === 'gpt-image-2.5-sunburst');
+  CHALLENGE.bases.bai = [bA.elementId, bB.elementId, bC.elementId];
+  CHALLENGE.bases.zei = [zA.elementId, zB.elementId, zC.elementId];
+  const order = async (c: string) => (await E.startingSheets(S, c)).map((x) => x.style).join();
+  check('style order: with CHALLENGE.baseStyles empty, the bases are newest first', (await order('bai')) === 'Mood,Bolder,Printed' && (await order('zei')) === 'Bolder,Printed,Mood', `${await order('bai')} / ${await order('zei')}`);
+  CHALLENGE.baseStyles = ['Bolder', 'Printed', 'Mood'];
+  check('style order: each character\'s bases follow CHALLENGE.baseStyles, the same for both, so the casts line up', (await order('bai')) === 'Bolder,Printed,Mood' && (await order('zei')) === 'Bolder,Printed,Mood', `${await order('bai')} / ${await order('zei')}`);
+  await sql`insert into studio.image_scores (fid, score) values (520, 0.9), (521, 0.9), (522, 0.9), (523, 0.9)`;
+  const eOld = await mk({ fid: 520, mode: 'fork', kind: 'character', fromVersionId: bB.versionId, body: styled('Bai from Bolder', 48, 'Mood') });
+  await new Promise((r) => setTimeout(r, 15));
+  const eNew = await mk({ fid: 521, mode: 'fork', kind: 'character', fromVersionId: bC.versionId, body: styled('Bai from Mood', 49, 'Bolder') });
+  const ent = (await E.standing(S)).entries;
+  check('style order: the entries stay newest first, whatever their style', ent.findIndex((e) => e.versionId === eNew.versionId) < ent.findIndex((e) => e.versionId === eOld.versionId) && ent.findIndex((e) => e.versionId === eOld.versionId) >= 0);
+  // An admin's remix of a base isn't an entry, but it is "someone else's remix": a fork of it counts.
+  const adm = await mk({ fid: 6786, mode: 'fork', kind: 'character', fromVersionId: bA.versionId, body: styled('Bai, the admin\'s remix', 50, 'Printed') });
+  const fromAdm = await mk({ fid: 522, mode: 'fork', kind: 'character', fromVersionId: adm.versionId, body: styled('Bai from the admin\'s remix', 51, 'Printed') });
+  const st7 = await E.standing(S);
+  check('an admin\'s remix of a base is not an entry (shown as the admin\'s)', !st7.entries.some((e) => e.versionId === adm.versionId) && st7.byAdmins.some((e) => e.versionId === adm.versionId));
+  check('a fork of an admin\'s remix of a base counts (someone else\'s remix need not be an entry)', st7.entries.some((e) => e.versionId === fromAdm.versionId));
+  // A closed-model base, before and after CHALLENGE.closedBasesAllowed.
+  CHALLENGE.bases.bai = [bA.elementId, bB.elementId, bX.elementId];
+  const starts = async () => (await E.startingSheets(S, 'bai')).map((x) => x.versionId);
+  check('closed bases: while not allowed, a closed-model base is left out of "Bases to start from"', !(await starts()).includes(bX.versionId) && (await starts()).length === 2);
+  const fX = await mk({ fid: 523, mode: 'fork', kind: 'character', fromVersionId: bX.versionId, body: styled('Bai from the closed concept', 52, 'Bolder') });
+  check('closed bases: while not allowed, a fork of a closed-model base is not an entry, and nothing is stored for it', !(await E.standing(S)).entries.some((e) => e.versionId === fX.versionId) && !(await sql`select 1 from studio.challenge_eligibility where version_id = ${fX.versionId}`).length);
+  CHALLENGE.closedBasesAllowed = true;
+  check('closed bases: once allowed, the closed-model base is listed, in its style\'s place (Bolder, newest first within it)', (await starts()).join() === [bX.versionId, bB.versionId, bA.versionId].join(), (await starts()).join());
+  const BA = await import('../src/lib/challenge/bases');
+  check('closed bases: once allowed, none is refused', (await BA.refusedBases(S as never)).size === 0);
+  CHALLENGE.closedBasesAllowed = false;
+  check('closed bases: the refusal names the base by its id and says why', ((await BA.refusedBases(S as never)).get(bX.elementId) ?? '').includes('a closed model by OpenAI'));
+  CHALLENGE.bases.bai = [bA.elementId, bX.versionId];
+  check('closed bases: a base named by its version id is refused the same way', (await BA.refusedBases(S as never)).has(bX.versionId) && !(await starts()).includes(bX.versionId));
+  CHALLENGE.bases.bai = [];
+  CHALLENGE.bases.zei = [];
+  CHALLENGE.baseStyles = [];
+  await sql`update studio.elements set status = 'hidden' where id in ${sql(made)}`;
+  await sql`delete from studio.challenge_eligibility where version_id in (select v.id from studio.element_versions v where v.element_id in ${sql(made)})`;
+  const st8 = await E.standing(S);
+  check('closed bases: afterwards, with the settings put back, the entries are as before', st8.entries.map((e) => e.versionId).sort().join() === st2.entries.map((e) => e.versionId).sort().join());
+}
 
 globalThis.fetch = realFetch;
 
@@ -599,14 +817,15 @@ check('as committed, CHALLENGE.entries, posts and openSheets are on (owner\'s re
   proof('R3 a status cap read straight from IMAGES (never $15) is caught', !capInStatus(status.replace('dailySpendCapUsd: imagesDailySpendCapUsd()', 'dailySpendCapUsd: IMAGES.dailySpendCapUsd')));
   // R4: an untitled entry's row read "Bai: Bai".
   const CW = (await import('../src/lib/challenge/wording')).CHALLENGE_WORDING;
-  const chPage = read('src/app/challenge/page.tsx');
+  const chPage = read('src/lib/challenge/view.ts');
   check('R4 an untitled entry\'s row is the character alone; a titled one adds its name', CW.entryLabel('Bai', '') === 'Bai' && CW.entryLabel('Bai', '  ') === 'Bai' && CW.entryLabel('Bai', 'Rain coat') === 'Bai: Rain coat');
   check('R4 /challenge builds both lists\' rows with entryLabel', (chPage.match(/W\.entryLabel\(/g) ?? []).length === 2 && !/\|\| nameOf\(/.test(chPage));
-  proof('R4 a row that repeats the name is caught', /\|\| nameOf\(/.test(chPage.replace('{W.entryLabel(nameOf(e.character), e.title)}', '{nameOf(e.character)}: {e.title || nameOf(e.character)}')));
+  proof('R4 a row that repeats the name is caught', /\|\| nameOf\(/.test(chPage.replace('W.entryLabel(nameOf(e.character), e.title)', '`${nameOf(e.character)}: ${e.title || nameOf(e.character)}`')));
   // R5: a newcomer on a starting sheet had no way to /challenge (only an entry's badge linked there).
-  const invite = (src: string) => /\{challengeOpen && !standing && \(\s*<p className="dz-meta ch-standing ch-invite">\s*\{CW\.sheetInvite\(callName\)\} <Link href="\/challenge">/.test(src);
-  check('R5 a challenge character\'s sheet links to /challenge while the window is open', invite(read('src/app/references/designs/[id]/page.tsx')) && /remix this sheet/.test(CW.sheetInvite('Zei')) && CW.sheetInvite('Zei').startsWith('Zei '));
-  proof('R5 a sheet page without the link is caught', !invite(read('src/app/references/designs/[id]/page.tsx').replace('{CW.sheetInvite(callName)} <Link href="/challenge">', '{CW.sheetInvite(callName)} <Link href="/references">')));
+  const lines = read('src/lib/challenge/sheet-lines.ts');
+  const invite = (src: string) => /if \(invite && !standing\) lines\.push\(line\(\{ text: CW\.sheetInvite\(callName\), link: toChallenge \}\)\);/.test(src) && /const toChallenge = \{ href: '\/challenge'/.test(src);
+  check('R5 a challenge character\'s sheet links to /challenge while the window is open', invite(lines) && /remix this sheet/.test(CW.sheetInvite('Zei')) && CW.sheetInvite('Zei').startsWith('Zei '));
+  proof('R5 a sheet page without the link is caught', !invite(lines.replace("href: '/challenge'", "href: '/references'")));
   // R6: after "Mark as my entry" said "Marked as your entry.", the button stayed.
   const markSrc = read('src/components/challenge-mark.tsx');
   const hides = (src: string) => /if \(r\?\.ok\) setDone\(true\);/.test(src) && /\{!done && \(\s*<button/.test(src);
@@ -623,10 +842,10 @@ check('as committed, CHALLENGE.entries, posts and openSheets are on (owner\'s re
   check('R8 a fork or new version starts with its source\'s style chosen (when still published)', preselect(form, newPage));
   proof('R8 a form that starts with no style is caught', !preselect(form.replace('useState<string | null>(() => (p.source?.style', 'useState<string | null>(() => (null && p.source?.style'), newPage));
   // R9: after the close, a candidate's page still offered "Mark as my entry", which then said "Entries are closed."
-  const vp = read('src/app/references/designs/[id]/page.tsx');
-  const closedNoButton = (src: string) => /standing\?\.kind === 'candidate' &&[\s\S]{0,200}\(phase\(\) === 'open' \?[\s\S]{0,300}<ChallengeMark[\s\S]{0,120}\) : \(\s*<p className="dz-meta ch-standing dz-muted">\{CW\.candidateClosedNote\(callName\)\}<\/p>/.test(src);
+  const vp = lines;
+  const closedNoButton = (src: string) => /standing\?\.kind === 'candidate'\)\s*lines\.push\(challengeOpenNow\(now, pub\) \? line\(\{ text: CW\.candidateNote, muted: true, mark: \{ mark: CW\.mark, marked: CW\.marked \} \}\) : line\(\{ text: CW\.candidateClosedNote\(callName\), muted: true \}\)\);/.test(src);
   check('R9 after the close a candidate shows the closed note and no mark button', closedNoButton(vp) && /Entries are closed/.test(CW.candidateClosedNote('Bai')) && /Bai/.test(CW.candidateClosedNote('Bai')));
-  proof('R9 a mark button offered after the close is caught', !closedNoButton(vp.replace("(phase() === 'open' ?", '(true ?').replace(/\(phase\(\) === 'open' \?/, '(true ?')) || !closedNoButton(vp.replace('{CW.candidateClosedNote(callName)}', '<ChallengeMark versionId={d.shown.versionId} byFid={d.byFid} />')));
+  proof('R9 a mark button offered after the close is caught', !closedNoButton(vp.replace('challengeOpenNow(now, pub) ?', 'true ?')) && !closedNoButton(vp.replace('line({ text: CW.candidateClosedNote(callName), muted: true })', 'line({ text: CW.candidateClosedNote(callName), muted: true, mark: { mark: CW.mark, marked: CW.marked } })')));
 }
 
 // --- Launch fixes (owner, 2026-11-03) -----------------------------------------------------------------------------
@@ -635,7 +854,7 @@ check('as committed, CHALLENGE.entries, posts and openSheets are on (owner\'s re
   const IW = (await import('../src/lib/images/wording')).IMAGE_WORDING.designs;
   const { navItems } = await import('../src/lib/nav');
   // b. /challenge from the menu and the home page.
-  check('b the menu links to /challenge, after the owner\'s order', navItems(1, 0).some((i) => i.href === '/challenge' && i.label === CW.title) && navItems(1, 0).at(-1)?.key === 'challenge');
+  check('b the menu links to /challenge, after the owner\'s order', navItems(1, 0, true).some((i) => i.href === '/challenge' && i.label === CW.title) && navItems(1, 0, true).at(-1)?.key === 'challenge');
   const home = read('src/app/page.tsx');
   const homeRow = (src: string) => /\{ href: '\/challenge', name: CW\.title, what: CW\.homeLine\(\), meta: '→', draft: true \}/.test(src) && /\{r\.draft && <span className="as-draft ic-draftline">\{CW\.draftShort\}<\/span>\}/.test(src);
   check('b the home page links to /challenge, its new line marked Draft wording', homeRow(home) && /remix/.test(CW.homeLine()) && CW.draftShort === 'Draft wording');
@@ -643,12 +862,12 @@ check('as committed, CHALLENGE.entries, posts and openSheets are on (owner\'s re
   // c. Below 0.7: said up front, in the owner's words; the refusal beside Generate, scrolled into view; no new lookup.
   const owner = 'Entering needs a Farcaster account with a Neynar score of 0.7 or more; we check when you press Generate.';
   check('c the up-front line is the owner\'s words exactly', CW.whoCanEnter() === owner, CW.whoCanEnter());
-  const chPage = read('src/app/challenge/page.tsx');
-  check('c /challenge says it up front, under the deadline', /<\/p>\s*\{\/\*[^*]*\*\/\}\s*\{now !== 'closed' && <p className="ch-who">\{W\.whoCanEnter\(\)\}<\/p>\}\s*<section className="ch-rules">/.test(chPage));
+  const chBody = read('src/components/challenge-body.tsx');
+  check('c /challenge says it up front, under the deadline', /<\/p>\s*\{\/\*[^*]*\*\/\}\s*\{v\.who && <p className="ch-who">\{v\.who\}<\/p>\}\s*<section className="ch-rules">/.test(chBody) && /who: ph !== 'closed' \? W\.whoCanEnter\(\) : null,/.test(read('src/lib/challenge/view.ts')));
   const form = read('src/components/design-form.tsx');
-  const beforeConsent = (src: string) => /<div className="ic-gate">\s*\{p\.challengeOpen && !status\.invited && <p className="ch-who">\{CW\.whoCanEnter\(\)\}<\/p>\}\s*<p>\{W\.form\.consentFirst\}<\/p>/.test(src);
-  check('c a challenge fork form says it before the consent screen', beforeConsent(form));
-  proof('c a consent gate without the line is caught', !beforeConsent(form.replace('{p.challengeOpen && !status.invited && <p className="ch-who">{CW.whoCanEnter()}</p>}\n          <p>{W.form.consentFirst}</p>', '<p>{W.form.consentFirst}</p>')));
+  const beforeConsent = (src: string) => /<div className="ic-gate">\s*\{p\.challengeOpen && !status\.invited && p\.whoCanEnter && <p className="ch-who">\{p\.whoCanEnter\}<\/p>\}\s*<p>\{W\.form\.consentFirst\}<\/p>/.test(src);
+  check('c a challenge fork form says it before the consent screen', beforeConsent(form) && /whoCanEnter=\{challengeOpen \? CW\.whoCanEnter\(\) : undefined\}/.test(read('src/app/references/designs/new/page.tsx')));
+  proof('c a consent gate without the line is caught', !beforeConsent(form.replace('{p.challengeOpen && !status.invited && p.whoCanEnter && <p className="ch-who">{p.whoCanEnter}</p>}\n          <p>{W.form.consentFirst}</p>', '<p>{W.form.consentFirst}</p>')));
   const beside = (src: string) => /pictureFor\(k, i, views\[k\], p\.viewLines\[k\]\)\)\}\s*<\/ul>\s*\{note && \(\s*<p ref=\{noteRef\} className="ic-error dz-make-note" role="status">/.test(src) && /if \(note\) noteRef\.current\?\.scrollIntoView\(/.test(src) && (src.match(/\{note\}/g) ?? []).length === 1;
   check('c a refusal at Generate shows right under the Generate buttons, once, and is scrolled into view', beside(form));
   proof('c the refusal back under the rules is caught', !beside(form.replace('if (note) noteRef.current?.scrollIntoView(', 'if (note) void (')));
@@ -663,16 +882,16 @@ check('as committed, CHALLENGE.entries, posts and openSheets are on (owner\'s re
   check('e2 the entry line is the owner\'s words', CW.publishedEntry('Bai') === 'This is your entry for Bai.');
   const route = read('src/app/api/designs/route.ts');
   check('e2 the publish route answers with the standing at publish', /const st = await publishStanding\(sql, out\.versionId\);/.test(route) && /page: `\/references\/designs\/\$\{out\.versionId\}`, challenge \}/.test(route));
-  check('e2 the confirmation shows it', /\{entry\?\.kind === 'entry' && `\$\{CW\.publishedEntry\(entry\.name\)\} `\}/.test(form));
+  check('e2 the confirmation shows it', /\{entry\?\.kind === 'entry' && `\$\{entry\.text\} `\}/.test(form) && /text: st\.kind === 'entry' \? CW\.publishedEntry\(name\) : CW\.publishedUnchecked\(name\)/.test(route));
   const share = read('src/components/challenge-share.tsx');
   const vp = read('src/app/references/designs/[id]/page.tsx');
-  const shareSwitch = (s1: string, v1: string) => /const text = inChallenge \? W\.shareTextOpen\(what\) : W\.shareText\(what\);/.test(s1) && /inChallenge=\{d\.kind === 'character' && isChallengeCharacter\(d\.entity\) && phase\(\) === 'open'\}/.test(v1);
+  const shareSwitch = (s1: string, v1: string) => /export function ChallengeShare\(\{ versionId, text, posts \}/.test(s1) && /const shareText = d\.kind === 'character' && isChallengeCharacter\(d\.entity\) && challengeOpenNow\(\) \? CW\.shareTextOpen\(what\) : CW\.shareText\(what\);/.test(v1) && /text=\{shareText\}/.test(v1);
   check('e3 in the window, a challenge sheet\'s share text mentions the challenge; outside it, as before', shareSwitch(share, vp) && /remix challenge/.test(CW.shareTextOpen('Bai: x')) && CW.shareTextOpen('Bai: x').startsWith('Bai: x, made on Snowmoon Party') && CW.shareText('Bai: x') === 'Bai: x, made on Snowmoon Party' && CW.shareTextOpen('x').includes(R.dateText('closes', { time: true })));
-  proof('e3 a share text that ignores the window is caught', !shareSwitch(share, vp.replace("phase() === 'open'}", "true}")));
+  proof('e3 a share text that ignores the window is caught', !shareSwitch(share, vp.replace('challengeOpenNow() ?', 'true ?')));
   // h. Before the open, from CHALLENGE.dates.
   check('h "Entries open Fri 6 Nov, 09:00 PT", built from CHALLENGE.dates', E.MARK_WORDING.opens() === 'Entries open Fri 6 Nov, 09:00 PT.' && R.shortDateText('opens', { ...CHALLENGE.dates, opens: '2026-11-13T17:00:00Z' }) === 'Fri 13 Nov, 09:00 PT', E.MARK_WORDING.opens());
   // i. Neynar down: published, and told on the spot.
-  check('i the unchecked line says it won\'t count, and why', /won’t count/.test(CW.publishedUnchecked('Zei')) && /Neynar/.test(CW.publishedUnchecked('Zei')) && /\{entry\?\.kind === 'unchecked' && \(\s*<p className="ic-error ch-unchecked" role="status">\s*\{CW\.publishedUnchecked\(entry\.name\)\}/.test(form));
+  check('i the unchecked line says it won\'t count, and why', /won’t count/.test(CW.publishedUnchecked('Zei')) && /Neynar/.test(CW.publishedUnchecked('Zei')) && /\{entry\?\.kind === 'unchecked' && \(\s*<p className="ic-error ch-unchecked" role="status">\s*\{entry\.text\}/.test(form));
   check('i the confirmation\'s new lines carry a Draft wording line', /\{entry && <p className="as-draft ic-draftline">\{IMAGE_WORDING\.draftLine\}<\/p>\}/.test(form));
 }
 

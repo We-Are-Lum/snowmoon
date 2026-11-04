@@ -7,8 +7,8 @@ import { IMAGES, LINKED_WALLETS, WALLET_LINKS } from '../config';
  * in with Farcaster to associate the account with this wallet. If we can't just use neynar to find out if the wallet
  * is already associated."). A linked wallet's sign-in is that FID everywhere getPerson is used.
  *
- * Kept in studio.wallet_links (migration 0026_wallet_links.sql): a row per link, 'verified' (the FID verified the
- * address on Farcaster) or 'signed' (both sign-ins, same session, confirmed). Ending a link sets unlinked_at and
+ * Kept in studio.wallet_links (migration 0026_wallet_links.sql): a row per link, 'verified' (Farcaster says the
+ * address is the FID's: a verified address, or since 2026-11-04 its custody address) or 'signed' (both sign-ins, same session, confirmed). Ending a link sets unlinked_at and
  * ended_by: 'person' (unlinked on the You page) or 'unverified' (owner, 2026-10-22: "a linked wallet is looked up
  * again at most once a day, and an automatic ('verified') link ends if that FID no longer verifies the address. A
  * link I made by tapping isn't affected."). At most one active link per wallet.
@@ -173,21 +173,60 @@ export async function walletLinksOf(sql: Sql | null, fid: number): Promise<{ acc
   }
 }
 
-// --- The automatic link: Neynar's user by verified address (WALLET_LINKS.lookUp) --------------------------------
+// --- The automatic link: Neynar's user by address (WALLET_LINKS.lookUp) -----------------------------------------
 
 /**
  * Where the lookup goes (docs.neynar.com, "Fetch bulk users by Eth or Sol address": GET
- * /v2/farcaster/user/bulk-by-address/?addresses=…&address_types=verified_address, x-api-key; the answer groups users
- * by address; no user is a 404). Neynar receives the address and nothing else. Mutable only for the tests.
+ * /v2/farcaster/user/bulk-by-address/?addresses=…&address_types=custody_address,verified_address, x-api-key; the
+ * answer groups users by address; no user is a 404). Neynar receives the address and nothing else. Mutable only for
+ * the tests.
+ *
+ * Both kinds count (owner, 2026-11-04: "a wallet that is verified by, or is the custody address of, exactly one
+ * Farcaster account gets linked"). Until then only verified_address was asked, so a wallet that is an account's
+ * custody address (the one that owns the FID) was never found: Neynar answers 404 for it with verified_address alone
+ * (checked 2026-11-03 on FID 6786's custody address).
  */
-export const NEYNAR_BY_ADDRESS = { url: 'https://api.neynar.com/v2/farcaster/user/bulk-by-address/', timeoutMs: 4000 };
+export const NEYNAR_BY_ADDRESS = { url: 'https://api.neynar.com/v2/farcaster/user/bulk-by-address/', types: 'custody_address,verified_address', timeoutMs: 4000 };
 
 export type Lookup = { ok: true; fids: number[]; fromCache: boolean } | { ok: false; why: string };
 
+type NeynarUser = { fid?: unknown; custody_address?: unknown; verified_addresses?: { eth_addresses?: unknown } };
+
+/**
+ * The FIDs in Neynar's answer for which this address is the custody address or a verified one. Only users whose own
+ * record has the address count (Neynar's grouping alone is not trusted), compared in lower case: wallets sign in with
+ * the checksummed (mixed-case) form, Neynar answers in lower case. Sorted, each FID once.
+ */
+export function fidsIn(body: unknown, address: string): number[] {
+  const a = address.toLowerCase();
+  const users = Object.entries((body ?? {}) as Record<string, unknown>).find(([k]) => k.toLowerCase() === a)?.[1];
+  const found = (Array.isArray(users) ? (users as NeynarUser[]) : []).filter((u) => {
+    if (!(Number.isInteger(Number(u?.fid)) && Number(u.fid) > 0)) return false;
+    const custody = typeof u?.custody_address === 'string' && u.custody_address.toLowerCase() === a;
+    const eth = u?.verified_addresses?.eth_addresses;
+    const verified = Array.isArray(eth) && eth.some((x) => String(x).toLowerCase() === a);
+    return custody || verified;
+  });
+  return [...new Set(found.map((u) => Number(u.fid)))].sort((x, y) => x - y);
+}
+
+/** The FID a lookup links to: exactly one account; none, or two or more, link nothing. */
+export const soleFid = (fids: number[]): number | null => (fids.length === 1 ? fids[0] : null);
+
 const FRESH = () => `now() - make_interval(hours => ${Number(WALLET_LINKS.lookupCacheHours)})`;
 
-/** The FIDs that verified this address, from the cache or Neynar. Never throws; a failed lookup is never kept. */
-export async function verifiedFids(sql: Sql, account: number, address: string): Promise<Lookup> {
+/** The kept answer for a wallet (the FIDs found), or null when there is none fresh. Never throws. */
+export async function keptLookup(sql: Sql, account: number): Promise<number[] | null> {
+  try {
+    const [kept] = await sql`select fids from studio.wallet_fid_lookups where account_id = ${account} and fetched_at > ${sql.unsafe(FRESH())}`;
+    return kept ? (kept.fids as (string | number)[]).map(Number) : null;
+  } catch {
+    return null;
+  }
+}
+
+/** The FIDs whose custody or verified address this is, from the cache or Neynar. Never throws; a failed lookup is never kept. */
+export async function farcasterFids(sql: Sql, account: number, address: string): Promise<Lookup> {
   if (!WALLET_LINKS.lookUp) return { ok: false, why: 'off' };
   if (isPayTo(address)) return { ok: false, why: 'payment address' };
   const a = address.toLowerCase();
@@ -203,23 +242,14 @@ export async function verifiedFids(sql: Sql, account: number, address: string): 
   if (!key) return { ok: false, why: 'no NEYNAR_API_KEY' };
   let fids: number[];
   try {
-    const res = await fetch(`${NEYNAR_BY_ADDRESS.url}?addresses=${a}&address_types=verified_address`, {
+    const res = await fetch(`${NEYNAR_BY_ADDRESS.url}?addresses=${a}&address_types=${NEYNAR_BY_ADDRESS.types}`, {
       headers: { 'x-api-key': key },
       signal: AbortSignal.timeout(NEYNAR_BY_ADDRESS.timeoutMs),
       redirect: 'error',
     });
     if (res.status === 404) fids = [];
     else if (!res.ok) return { ok: false, why: `HTTP ${res.status}` };
-    else {
-      const body = (await res.json()) as Record<string, unknown>;
-      const users = Object.entries(body ?? {}).find(([k]) => k.toLowerCase() === a)?.[1];
-      // Counted only if the user's own verified addresses include this one (a custody address is not a verification).
-      const found = (Array.isArray(users) ? users : []).filter((u: { fid?: unknown; verified_addresses?: { eth_addresses?: unknown } }) => {
-        const eth = u?.verified_addresses?.eth_addresses;
-        return Number.isInteger(Number(u?.fid)) && Number(u.fid) > 0 && Array.isArray(eth) && eth.some((x) => String(x).toLowerCase() === a);
-      });
-      fids = [...new Set(found.map((u: { fid?: unknown }) => Number(u.fid)))].sort((x, y) => x - y);
-    }
+    else fids = fidsIn(await res.json(), a);
   } catch (e) {
     return { ok: false, why: (e as Error).name };
   }
@@ -237,10 +267,10 @@ export type AutoLink = { linked: number | null; why: string };
 /**
  * On a wallet's signed-in request (getPerson, lazily; not in the sign-in route, whose P4a exemption says it writes
  * only the account row). The lookup's answer is kept a day, so Neynar is asked at most once a day per wallet.
- * - No active link, and the person never unlinked it: if exactly one Farcaster account has verified the address,
- *   link it ('verified'). Two or more: no link.
- * - An active 'verified' link: if its FID no longer verifies the address, the link ends ('unverified'); then, as
- *   above, a single other FID that verifies it is linked instead.
+ * - No active link, and the person never unlinked it: if exactly one Farcaster account has the address as its
+ *   custody address or a verified address, link it ('verified', which covers both). None, or two or more: no link.
+ * - An active 'verified' link: if its FID no longer has the address (custody or verified), the link ends
+ *   ('unverified'); then, as above, a single other FID that has it is linked instead.
  * - An active 'signed' link, or a wallet the person unlinked: nothing is looked up.
  * Never throws. Neynar (or the database) down: an active link is kept, and a wallet without one signs in as itself.
  */
@@ -254,7 +284,7 @@ export async function autoLink(sql: Sql, account: number, address: string): Prom
     if (!r.table) return { linked: null, why: 'not-yet' };
     if (r.active && r.active.how !== 'verified') return { linked: r.active.fid, why: 'signed' };
     if (!r.active && r.personUnlinked) return { linked: null, why: 'unlinked before' };
-    const found = await verifiedFids(sql, account, address);
+    const found = await farcasterFids(sql, account, address);
     if (!found.ok) return { ...keep, why: found.why };
     if (r.active) {
       if (found.fids.includes(r.active.fid)) return { linked: r.active.fid, why: 'still verified' };
@@ -262,8 +292,9 @@ export async function autoLink(sql: Sql, account: number, address: string): Prom
         where id = ${r.active.id!} and unlinked_at is null and how = 'verified'`;
       keep.linked = null;
     }
-    if (found.fids.length !== 1) return { linked: null, why: r.active ? 'no longer verified' : found.fids.length ? 'more than one account' : 'no account' };
-    const l = await link(sql, account, address, found.fids[0], 'verified');
+    const sole = soleFid(found.fids);
+    if (sole === null) return { linked: null, why: r.active ? 'no longer verified' : found.fids.length ? 'more than one account' : 'no account' };
+    const l = await link(sql, account, address, sole, 'verified');
     return l.ok ? { linked: l.fid, why: 'verified' } : { linked: null, why: l.why };
   } catch (e) {
     console.error('wallet links: automatic link failed', (e as { code?: string }).code ?? (e as Error).name);
