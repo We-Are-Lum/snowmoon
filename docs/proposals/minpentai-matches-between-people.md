@@ -153,7 +153,7 @@ Sign in with Farcaster, Lens or Bluesky, and pass that network's reputation bar.
 - **Confirmed: the computer plays like a real player,** from its own fogged view.
   - It plans from `engine.fog` of its side, plus where it last saw your towers (`solo.ts computerPlan`; the search builds its belief from that view, `search.ts belief`). It never reads the real board.
   - Its moves follow from the board and a random value committed before the match, so anyone can recompute them from the record.
-  - Correction to v2: Play's old computer levels (`botPlan`: Practice and the old rungs) aren't used here either. They're handed the whole board, but plan only from what their towers light (see "Play's computer and the fog", below).
+  - Correction to v2: Play's old computer levels (`botPlan`: Practice and the old rungs) aren't used here either. Since the owner's decision of 2026-11-03 (option 3, below), every computer plans from its own fog view only.
 - **Ruleset and level:** you choose the ruleset (the official ones of the season), and a level from 1 to 3.
   - **You move up** by winning 3 of your last 5 official matches at a level, which unlocks the next.
   - You can always play a lower level.
@@ -201,6 +201,8 @@ Sign in with Farcaster, Lens or Bluesky, and pass that network's reputation bar.
 3. **Fog it fully now.** The cleanest code, but rare old records stop replaying exactly.
 
 **Recommended: 1 now, and 2 the next time Play or the snap gets a new ruleset.** Play's current ladder (ruleset 3) already uses the search computer, which plans from the fog view.
+
+**Decided: option 3 (owner, 2026-11-03).** Nobody has really played yet, so every computer plans from its own fog view now, `botPlan` and the search computer, at every level and in every ruleset (PR #111). An old link or saved match that no longer replays shows a short note and "Start a new match", never an error. §8's original wording, "They see only what their own towers light", is true again.
 
 ### Official matches between people
 - **Each person has** a win/loss record tied to their social login (linked accounts share it), and a **Glicko-2 rating per season.**
@@ -304,54 +306,82 @@ Sign in with Farcaster, Lens or Bluesky, and pass that network's reputation bar.
 - An official result means **both sides played with the same in-platform AI for every move, under the same rules and clock.** It doesn't mean no other help.
 - Proposed page wording: "Official matches are played with the site's AI, the same for both players. We can't see or stop help from outside the site, so a result says who won with the site's AI, not who played alone."
 
-## The 3D replay (build once #100 merges)
+## The 3D action (built: PR #107)
 
-**Why:** so taking a turn feels exciting. A 3D version of each turn's replay sits beside the 2D one, synced to the same play, pause and step controls. The dark is a cloud over the board.
+**"2D is for thinking; 3D is for the action"** (owner, 2026-11-03). One engine, two views. Placing stays in 2D or through the AI.
 
-**Fog: built only from the 2D replay's frames.**
-- The 3D view receives exactly the frames the 2D replay gets (`turnFrames`): each frame's board in that side's fog view, plus the squares it sees. Nothing else.
-- The page never receives a hidden piece.
-- The cloud is drawn over the squares out of sight. It covers nothing, because nothing hidden was sent.
-- **Test:** the 3D component's props equal the 2D component's, the same object, and no other match data reaches it.
+**Layout.**
+- **The 2D board is always the board you plan on**, on every screen size: this turn, with the AI's draft on it.
+- **Desktop** (1100px and wider): the 3D view stays beside the 2D board the whole time, never appearing and disappearing. When a turn plays, its action plays there.
+- **Phones:** no 2D/3D toggle. A setting, **"Animate action in 3D"** (on by default, remembered on the device). On, a turn's action plays in 3D in the board's place, then the 2D board returns. Off, the action plays in 2D.
+- **Watch again**, in 2D or in 3D, for the turn just played and for any past turn, on every screen size.
+- **Skip and 2x** on every playback.
+- **2D only** without WebGL or with reduced motion. Where 3D can't hold the frame target, the action plays in 2D with a note ("3D couldn't keep up on this device…"), for the rest of the visit.
 
-**Layout and fallbacks.**
-- Wide screens: 2D and 3D side by side.
-- **Phones: 3D by default where it holds the frame target, 2D otherwise** (owner, 2026-11-03: most play is on phones, and the 3D is the point).
-  - On a phone's first replay, the page measures frame times over the first two seconds of 3D. If they hold the target (a median of 50 frames a second or better), 3D stays. If not, it switches to 2D and says: "Switched to 2D to keep it smooth. Tap 3D to try again."
-  - A 2D/3D toggle is always there.
-  - **The person's choice is remembered** on that device (localStorage). A choice they made always wins over the automatic one.
-- **2D only** when WebGL is missing or the person has asked for reduced motion (`prefers-reduced-motion`), and on any error in the 3D view.
-- **Loaded only when a replay opens:** the 3D code is a separate chunk (`next/dynamic`), fetched when the replay is on screen.
+**Instant replays** (owner, 2026-11-04). When something happens in your sight, it's replayed right after the turn's action, zoomed in and slower, the camera moving around it. Tiered by drama:
 
-**Look: this edition's own abstract pieces.** No outside styles named.
-
-| Piece | Shape |
+| What happened, in your sight | Replay |
 |---|---|
-| Board | low slate tiles |
-| Rocks | faceted grey stones |
-| Towers | hexagonal columns with a glowing ring in the side's colour |
-| Squares | low blocks that crack as they lose hits |
-| Gliders | small darts that glide between squares over each step |
-| Symbol gliders | darts carrying a small orb |
-| Mirrors | thin angled slabs |
-| Factories | squat cubes with a mouth facing where they fire |
-| Moving walls | three linked bars |
+| A square chipped | none; a sharper hit (a hard white spark, chips flying, a small shake) |
+| A square, mirror, factory or resting symbol glider broken | a quick close-up, about 1 s |
+| A symbol formed | a short orbit, about 2 s |
+| A tower destroyed, yours or theirs | slow motion, the camera sweeping in, about 3 s |
+| The match won or lost | the final tower falls in slow motion, then the camera pulls back over the whole board, about 6 s |
 
-- **Hits:** a short burst of light where something breaks, shown only where the frame shows it.
-- **The cloud:** soft, slowly drifting fog columns over unseen squares. It thins where a square comes into sight, and closes where one leaves.
-- **Camera:** a fixed three-quarter view from your side, with a slow drift; no free camera on phones.
+- At most the two biggest moments a turn, in the order they happened. Tap the view to skip.
+- A setting, **"Instant replays: all / big moments / off"** (all by default, remembered). Big moments: towers and the end.
+- Replays follow a 3D action that plays to its end (not one skipped). Past turns' Watch has no replays.
+- Not built: a book-4 kill reported in the dark could show a burst under the cloud at the reported square. Left out (the safer choice): the frames don't carry kill reports, and the page would need one more input.
+- Moving walls broken don't get a replay yet: their squares move each step, so a broken one can't be told from a moved one from the frames alone.
+
+**Fog: only the side's fog frames.**
+- The 3D view receives exactly the frames the 2D board gets (`turnFrames`): each frame's board in that side's fog view, plus the squares it sees. When nothing plays, the board as it stands from the same view.
+- **Every effect comes from `replay-events.ts`**, a pure function of the frame before, this frame and its sight. It fires only on squares in sight. A glider whose next square is out of sight just fades into the cloud, whatever happened to it there.
+- **Instant replays** are moments that function found, so they are only ever of things in sight. The replay's camera is set only from those moments.
+- **The camera** follows the action gently during playback: it leans toward the middle of this step's events in sight, and nothing else.
+- **Tests** (`test:minpentai-agent-play`):
+  - the 3D props are the 2D frames;
+  - effects and the shake are fired only from replay-events;
+  - every effect and every replay is on a square in sight, on real frames;
+  - pieces gone out of sight make no effect and no replay;
+  - the end's replay only once the whole board shows.
+
+  Planted violations fail.
+
+**Look: like the tutorial's 3D broadcast**, from shared parts (`scene-kit.ts`, used by both):
+- a dark stage in fog, filmic tone mapping, a cool sky light and one sun with soft shadows, a dark field with a faint grid and a lit edge;
+- glow: one soft additive sprite for lights, gliders and flashes; flashes that swell and fade; debris that tumbles, falls and settles;
+- a camera that eases toward where it should be, sways slowly, and shakes smoothly on a tower's fall.
+
+| Piece | Shape (this edition's own) |
+|---|---|
+| Rocks | grey blocks |
+| Towers | a metal column under a floating, turning emblem in the side's colour, with a glow and a ring at its foot |
+| Gliders | a chevron of small glowing cubes; a bright core for symbol gliders |
+| Squares | low blocks, lower once hit |
+| Mirrors | thin angled slabs |
+| Factories | squat blocks |
+| Moving walls | bars |
+| The cloud | soft puffs over unseen squares, drifting a little around each square and breathing |
+
+Pieces are drawn 1.3× larger on desktop, where the 3D view sits beside the 2D board.
+
+**Motion.** Gliders move at a steady speed through each step (linear, no easing in and out of squares). A step that follows the last one starts exactly when it ends, so the page's timer drifting against the display doesn't show. Bounces turn at once.
 
 **Smooth on a mid-range phone.**
-- Instanced meshes: one draw call per piece kind, at most 24 × 14 tiles.
-- The device pixel ratio capped at 1.5, no real-time shadows, and the cloud a single instanced billboard layer with a noise texture.
-- Animation interpolates between the engine's frames, so pieces move smoothly without inventing positions.
-- **Target:** 60 frames a second on a mid-range phone, checked with Chrome's 4× CPU throttle on a phone-sized screen. The recording before the merge shows it.
-- three.js is already a dependency, so nothing new is added.
+- Instanced meshes, one per kind of piece. Shaders compiled before the first frame, so the first flash doesn't stall.
+- Two quality levels. High: shadows, pixel ratio up to 1.5. Low: no shadows, pixel ratio 1, a third of the debris. After 1.5 s under 50 frames a second, it drops to low. After 1.5 s more still under, the action plays in 2D.
+- **Measured** (`scripts/measure-minpentai-3d-frames.ts`, headless Chrome on the Mac's GPU):
+  - Phone: 390 × 844 at 3×, the CPU slowed 4×.
+  - Desktop: 1440 × 900 at 2×.
 
-**After the match ends:** the whole board in 3D for any turn, with no cloud, from the same whole-board frames as the 2D replay.
+  Both: a median frame of 16.7 ms, 99th percentile 16.8 ms, at most 0.3% of frames over 20 ms. The scene's own work is 1–2 ms a frame. That's a guide, not a phone's numbers.
+- **Recordings** are filmed frame by frame on a stepped clock and encoded at 60 fps (`scripts/record-minpentai-replay-3d.ts`), so they show the motion as it is.
+
+**After the match ends:** the whole board in 3D, with no cloud, from the same whole-board frames as the 2D board.
 
 **Later (design only): a short clip to share.**
-- After the end only, rendered from the whole-board frames to a canvas and recorded (`MediaRecorder`, a few seconds of webm/mp4).
+- After the end only, rendered from the whole-board frames: the stepped-clock recorder is the starting point.
 - The person chooses the turn and shares the file.
 - Never during a match, so a clip can't leak a side's view.
 
