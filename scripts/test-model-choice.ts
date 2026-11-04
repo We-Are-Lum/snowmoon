@@ -12,7 +12,8 @@
  *      on an in-memory Postgres with every migration, NEXT_remix_model_choice.sql included;
  *  M5  the recipe lines: the closed label, the closed safety line and the can't-be-re-run line; open lines unchanged;
  *  M6  the safety line is the agreed wording, word for word;
- *  M7  the switch can't be on without Privacy (P6t) and each maker's notice, its consent (not the consent screen);
+ *  M7  the switch can't be on without Privacy (P6t) and the consent screen (own-words-v5) saying what each maker
+ *      receives and keeps; the notices, §7 and consent carry one description per maker (CLOSED_PROVIDERS.retentionWords);
  *  M8  a closed call sends only the prompt and pictures, asks no prompt training of both makers and zero retention of
  *      Vertex only (as the gateway offers them), pins the provider, and reads a recorded answer's picture and cost;
  *  M9  the closed models' notice shows once per maker, not per model;
@@ -29,7 +30,7 @@ import { PGLiteSocketServer } from '@electric-sql/pglite-socket';
 import postgres from 'postgres';
 import sharp from 'sharp';
 import { CHALLENGE, CLOSED_IMAGES, CLOSED_PROVIDERS, IMAGES, imagesDailySpendCapUsd } from '../src/lib/config';
-import { MODEL_NOTICES as NOTICES, PRIVACY } from '../src/lib/legal';
+import { MODEL_NOTICES, PRIVACY } from '../src/lib/legal';
 const IMAGE_WORDING_OPEN = 'The site’s open models (the default)';
 import { DEFAULT_SHEET_MODEL, SHEET_MODELS, oneChoice, sheetModel, sheetModelProblems, sheetModelsOffered, type SheetModel } from '../src/lib/images/sheet-models';
 import { modelChoicesFor } from '../src/lib/images/model-choice-view';
@@ -252,27 +253,29 @@ proven(
 );
 
 // --- M7: the switch can't be on without Privacy ------------------------------------------------------------------
+const consent = JSON.parse(read('config/consent.json'));
+const w = consent.versions[consent.current];
 const today: P6tInput = {
   on: IMAGES.designs.modelChoice,
   providers: [...new Set(sheetModelsOffered(true).filter((m) => !m.open).map((m) => m.provider.name))],
   retention: Object.fromEntries(Object.entries(CLOSED_PROVIDERS).map(([k, v]) => [k, v.retentionWords as string])),
   s4: (PRIVACY.sections.find((s) => s.n === 4)?.body ?? []).flat().join(' '),
   s7: (PRIVACY.sections.find((s) => s.n === 7)?.body ?? []).flat() as string[],
-  notices: Object.fromEntries(Object.entries(NOTICES).map(([k, n]) => [k, [n.label, n.title, ...n.text].join('\n')])),
+  consent: [w.line, w.title, ...w.text].join('\n'),
 };
-// The draft's words (docs/legal/remix-model-choice-draft.md), as they would be in legal.ts.
+// The draft's words (docs/legal/remix-model-choice-draft.md), as they would be in legal.ts and consent.json.
 const draft = read('docs/legal/remix-model-choice-draft.md');
 const quoted = (label: string) => (draft.split(`<!-- ${label} -->`)[1] ?? '').split('<!-- end -->')[0].replace(/^\s*>\s?/gm, '').replace(/\s+/g, ' ').trim();
-const withDraft: P6tInput = { ...today, on: true, s4: `${today.s4} ${quoted('privacy-4')}`, s7: [...today.s7, quoted('privacy-7')] };
+const withDraft: P6tInput = { ...today, on: true, s4: `${today.s4} ${quoted('privacy-4')}`, s7: [...today.s7, quoted('privacy-7')], consent: `${today.consent}\n${quoted('consent')}` };
 proven(
-  'M7 the switch can\'t be on without Privacy §4, §7 (with each maker\'s retention) and each maker\'s notice, its consent (P6t)',
+  'M7 the switch can\'t be on without Privacy §4, §7 (with each maker\'s retention) and the consent screen naming each provider (P6t)',
   () => [
     ...p6tProblems(today),
     ...p6tProblems(withDraft),
-    ...need(quoted('privacy-7').length > 0 && quoted('privacy-4').length > 0, 'the draft\'s quoted lines are missing'),
-    // The consent screen is no longer asked to name the makers (owner, 2026-11-04, choice 6.1).
-    ...need(!quoted('consent'), 'the draft still quotes a consent line (own-words-v5 was dropped)'),
+    ...need(quoted('privacy-7').length > 0 && quoted('consent').length > 0, 'the draft\'s quoted lines are missing'),
     ...need(today.providers.includes('OpenAI') && today.providers.includes('Google'), `offered makers: ${today.providers.join(', ')}`),
+    // One description per maker everywhere (owner, 2026-11-04, 6.3 and 6.4): each notice says it, word for word.
+    ...today.providers.flatMap((n) => need((MODEL_NOTICES[n as keyof typeof MODEL_NOTICES]?.text ?? []).join(' ').includes(today.retention[n]), `${n}'s notice doesn't give its description ("${today.retention[n]}")`)),
   ],
   // Planted: the switch on with every line in place but OpenAI's retention ("up to 30 days") left out of §7.
   () => p6tProblems({ ...withDraft, s7: withDraft.s7.map((u) => u.replace(/up to 30 days/g, 'a while')) }),

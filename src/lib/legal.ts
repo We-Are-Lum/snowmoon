@@ -197,7 +197,7 @@ export const PRIVACY: LegalDoc = {
           'Supabase holds our database.',
           'Groq, and Vercel AI Gateway when Groq is busy, receive assistant questions, and the prompts for images you make, which are checked against the published rules.',
           'fal.ai receives the prompt for an image you make, and any pictures sent with it (in Remix: a depth picture of the camera you set, and the shot\'s place and cast pictures), and makes the image. It is asked to keep no copy. For a video test you approve, fal.ai receives the shot\'s frame (already public on the site), your note and the acting notes for that shot (yours, and any your agent filed for you), and makes a short video with the open LongCat-Video model. It is asked to keep no copy of the request. It returns the video at a link on its own storage; we copy it at once and keep it privately, for you. fal.ai keeps the video it made on its storage, at an unlisted link it gives only to us but that anyone holding it could open, for as long as fal.ai\'s settings keep it; we don\'t set a time yet.',
-          'If you choose a closed model when you remix a character\'s sheet, its maker receives, through Vercel AI Gateway, the prompt for each view and, for the side and back, the front view it made. It receives nothing else about you, and your browser never contacts it. OpenAI (for GPT Image 2.5 Sunburst) may keep them for up to 30 days to check for abuse, and longer if its checks flag a picture for review; it does not train its models on them. Google (for Gemini 3.1 Flash Image) is set to keep no copy, through the gateway\'s zero-retention agreement with Google Vertex AI, and does not train its models on them. The gateway itself keeps no copy.',
+          'If you choose a closed model when you remix a character\'s sheet, its maker, OpenAI or Google, receives through Vercel AI Gateway your prompt for each view and, for the side and back, the front view it made. It receives nothing else about you, and may not train on them. OpenAI may keep them for up to 30 days to check for abuse, and longer if a picture is flagged for review or the law requires it. Google keeps no copy, except in memory for up to 24 hours. The gateway keeps no copy.',
           'Farcaster\'s sign-in services confirm who you are when you sign in. They learn your Farcaster ID and that you signed in here, not what you read or ask. Farcaster\'s public API receives a Farcaster ID when we look up the username to show with published work, and in Minpentai\'s lobby and matches, and a username when a page is opened at /@name.',
           'Neynar receives your Farcaster ID when you first make an image on a given day, to look up its account score, which decides whether you can make images. We keep the score for a day. During the remix challenge, that check also decides, once, when you publish a remix of a challenge character, whether it can count as an entry. Neynar is never asked about you when someone views a page. When someone adds a Farcaster post to a version\'s page, Neynar receives that post\'s address or id, to read it. When you sign in with a wallet, Neynar also receives the wallet\'s address, to find the Farcaster account whose custody address it is or that has verified it; if exactly one account has it, your wallet is linked to that account (section 4). We keep the answer for a day. A linked wallet is looked up again at most once a day, and its link ends if that account no longer has it; a wallet you unlinked isn\'t looked up again. When you play Minpentai inside a Farcaster cast, your Farcaster app signs each tap, and we ask Neynar\'s Farcaster hub which signing keys your Farcaster ID has, to check the signature: Neynar receives your Farcaster ID, and we keep its answer in memory for five minutes.',
           'Bluesky and Lens receive the details of a post someone adds to a version\'s page (Bluesky: its writer\'s handle or account id and the post\'s id; Lens: the post\'s id), so our server can read the post and check it links there. They receive nothing about you or the person who added it, and your browser never contacts them for this.',
@@ -230,16 +230,16 @@ export const MODEL_NOTICES = {
     text: [
       'GPT Image 2.5 Sunburst is made by OpenAI. Its weights aren\'t published, so its recipe can\'t be re-run exactly.',
       'OpenAI receives your prompt for each view and, for the side and back, the front view it made, through Vercel AI Gateway. Nothing else about you.',
-      'OpenAI may keep them for up to 30 days to check for abuse, and longer if its checks flag a picture for review. It doesn\'t train its models on them. The gateway keeps no copy.',
+      'OpenAI may keep them for up to 30 days to check for abuse, and longer if a picture is flagged for review or the law requires it. It doesn\'t train its models on them. The gateway keeps no copy.',
     ],
   },
   Google: {
-    label: 'Google keeps no copy',
+    label: 'Google keeps no copy past 24 hours',
     title: 'A closed model by Google',
     text: [
       'Gemini 3.1 Flash Image is made by Google. Its weights aren\'t published, so its recipe can\'t be re-run exactly.',
       'Google receives your prompt for each view and, for the side and back, the front view it made, through Vercel AI Gateway. Nothing else about you.',
-      'Google is set to keep no copy, through the gateway\'s zero-retention agreement with Google Vertex AI, and doesn\'t train its models on them. The gateway keeps no copy.',
+      'Google keeps no copy, except in memory for up to 24 hours, and doesn\'t train its models on them. The gateway keeps no copy.',
     ],
   },
 } as const;

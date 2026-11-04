@@ -671,15 +671,15 @@ export const CLOSED_IMAGES = {
  * without zero retention are allowed, with a notice). The notice's words are in src/lib/legal.ts (MODEL_NOTICES);
  * `noticeVersion` goes up whenever they, or the maker's terms they describe, change, and a device that asked not to be
  * reminded sees the notice again. `noticeWords` is the first 12 hex of the sha256 of those words, so a change of words
- * without a new version fails scripts/test-model-choice.ts. `retentionWords` must appear in Privacy §7's item for the
- * maker (check:principles P6t). `gateway`: what each call asks of Vercel AI Gateway, as the gateway offers it for that
+ * without a new version fails scripts/test-model-choice.ts. `retentionWords` (one description everywhere, owner 2026-11-04) must appear in Privacy §7's item, the notice and the consent screen for the
+ * maker (check:principles P6t, P6j). `gateway`: what each call asks of Vercel AI Gateway, as the gateway offers it for that
  * model (https://ai-gateway.vercel.sh/v1/models/<model>/endpoints, read 2026-11-04): OpenAI's gpt-image-2.5-sunburst
  * has has_zdr false and has_no_training true; Google Vertex AI's gemini-3.1-flash-image has has_zdr true and
  * has_no_training true. The owner's batch calls (bases and styles) keep zero retention whatever this says.
  */
 export const CLOSED_PROVIDERS = {
-  OpenAI: { noticeVersion: 1, noticeWords: 'b5f2b41e408e', retentionWords: 'up to 30 days', gateway: { disallowPromptTraining: true } },
-  Google: { noticeVersion: 1, noticeWords: '89bdf7c04cf4', retentionWords: 'keep no copy', gateway: { zeroDataRetention: true, disallowPromptTraining: true } },
+  OpenAI: { noticeVersion: 2, noticeWords: '76b4d81c5fbf', retentionWords: 'for up to 30 days to check for abuse, and longer if a picture is flagged for review or the law requires it', gateway: { disallowPromptTraining: true } },
+  Google: { noticeVersion: 2, noticeWords: '2a0dff0194fd', retentionWords: 'no copy, except in memory for up to 24 hours', gateway: { zeroDataRetention: true, disallowPromptTraining: true } },
 } as const satisfies Record<string, { noticeVersion: number; noticeWords: string; retentionWords: string; gateway: { zeroDataRetention?: boolean; disallowPromptTraining: boolean } }>;
 export type ClosedProvider = keyof typeof CLOSED_PROVIDERS;
 

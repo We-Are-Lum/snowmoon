@@ -119,8 +119,8 @@ export default async function About() {
       <p>
         Vercel hosts the site and sees your IP address and browser details, as any web host does. Cloudflare stores and serves
         the pictures and audio. Supabase holds the database. If you choose a closed model when you remix a character&apos;s
-        sheet, its maker (OpenAI or Google) receives the prompt and the front view through Vercel AI Gateway, and nothing about
-        you; OpenAI may keep them for up to 30 days, Google is set to keep no copy, and neither trains on them. A report or share link opens GitHub, Farcaster, X, Bluesky or
+        sheet, its maker, OpenAI or Google, receives your prompt and the front view through Vercel AI Gateway, and nothing about
+        you, and neither may train on them (OpenAI may keep them for up to 30 days to check for abuse, and longer if a picture is flagged for review or the law requires it; Google keeps no copy, except in memory for up to 24 hours). A report or share link opens GitHub, Farcaster, X, Bluesky or
         Lens, where what you post is public. When an image is reported, ntfy delivers us a short alert that carries no content
         and nothing about you. When someone adds a post to a version's page, our server asks Bluesky or Lens for that post,
         sending only its details, to check that it links there; it sends nothing about you, and your browser never contacts

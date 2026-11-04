@@ -1,22 +1,41 @@
-# Model choice for remixers: Privacy, Terms, About lines and the closed models' notice, which is their consent (DRAFT v3, not reread)
+# Model choice for remixers: consent v5's closed-model sentence, Privacy, Terms, About and the closed models' notice (DRAFT v4, not reread)
 
 Drafted by the coding agent (Claude, a closed model by Anthropic), 2026-11-04, on branch `remix-model-choice`. **v2**
 folds in the owner's decisions of 2026-11-04: closed models without zero retention are allowed, with a notice; Gemini is
-allowed for remixers; a one-time "I'm 18 or older" on the same screen as the first notice. **v3** folds in the owner's
-answers to the reread pack of 2026-11-04 (items 5.3, 5.4, 6.1 to 6.5): the notice is the closed models' consent, and
-own-words-v5 is dropped; Google's own 24-hour in-memory cache is named; OpenAI's retention has one description; the live
-pages were re-checked (below). **Not reread by the owner.** The Privacy §3, §4 and §7 lines and the notices are in
-`src/lib/legal.ts` on this branch, pending the reread (so P6k is red until then); `config/consent.json` is not changed,
-and won't be. Not legal advice. It builds
-on `closed-model-bases` ([`docs/proposals/closed-model-bases.md`](../proposals/closed-model-bases.md)) and
+allowed for remixers; a one-time "I'm 18 or older" on the same screen as the first notice. **v4** folds in the owner's
+decisions after the 11:20 restart (2026-11-04; the coordinator's review of the reread pack, "reviewed by the coordinator,
+approved by the owner"): **6.1 reversed**, one new consent version, own-words-v5, for everyone, carrying the
+closed-model sentence below (built on `signin-lens-bluesky` with the Lens and Bluesky lines); the notice stays a notice;
+**6.3** Google's in-memory cache everywhere Google is described; **6.4** one OpenAI description everywhere, in the owner's
+words; **5.1, 5.2** the Midjourney lines redrafted; **8** Terms §8 and About each get one sentence; and the owner's
+standing rule: the shortest true sentence, with no implementation details (internal labels, gateway accounts, thresholds)
+in legal texts. **Not reread by the owner.** Not legal advice. It builds on `closed-model-bases`
+([`docs/proposals/closed-model-bases.md`](../proposals/closed-model-bases.md)) and
 [`age-terms-closed-models.md`](age-terms-closed-models.md).
 
 Legal texts describe today (owner, 2026-10-18): these lines go live in the same release that turns
 `IMAGES.designs.modelChoice` on, never ahead of it. `check:principles` P6t fails while the switch is on and Privacy §4,
-§7 (each maker with its retention, `CLOSED_PROVIDERS[maker].retentionWords`) or a maker's notice lack them. P6j compares
-each maker's notice with what that maker receives (owner, 2026-11-04, choice 6.1).
+§7 or the consent screen lack them; P6j checks that the consent screen says what each maker receives and keeps.
+
+The two descriptions, word for word, used everywhere each maker is described (`CLOSED_PROVIDERS[maker].retentionWords`):
+
+- **OpenAI** (the owner's own words, 6.4): "may keep them for up to 30 days to check for abuse, and longer if a picture is flagged for review or the law requires it".
+- **Google** (6.3): "keeps no copy, except in memory for up to 24 hours".
 
 "Before" is main's `src/lib/legal.ts` and `config/consent.json` (`own-words-v4`) at `d42b7d8`.
+
+## Consent v5: closed-model sentence
+
+For `own-words-v5` (built by another agent on `signin-lens-bluesky`), added to the last paragraph after "… to check your
+account's score." Copy it word for word:
+
+<!-- consent -->
+> If you choose a closed model for a character sheet, your prompt, and the front view the model made, go through Vercel AI Gateway to its maker instead of fal.ai: OpenAI, which may keep them for up to 30 days to check for abuse, and longer if a picture is flagged for review or the law requires it, or Google, which keeps no copy, except in memory for up to 24 hours.
+<!-- end -->
+
+It may ship only in the release that turns model choice on (legal texts describe today). So v5 with this sentence and
+model choice go out together; a v5 that ships earlier must leave it out, and model choice would then need a v6.
+P6j (with the switch on) checks that it names each maker with "prompt", "front view" and its description.
 
 ## What the code does, which the words must match
 
@@ -40,11 +59,9 @@ each maker's notice with what that maker receives (owner, 2026-11-04, choice 6.1
   words, so changed words without a new version fail `test:model-choice`). The first notice a device sees also asks "I'm
   18 or older"; until it is ticked, neither button works and no closed model can be picked. Both answers are kept on the
   device only (`snowmoon.model-notice.<maker>`, `snowmoon.adult-confirmed`); nothing is sent.
-- **The notice is the consent** (owner, 2026-11-04, choice 6.1). It shows only when someone picks a closed model, so
-  people who never pick one are never asked again; the consent screen (`own-words-v4`) stays as it is and describes the
-  open models' route. The answer stays on the device (decided). P6j reads the notice's words, not a record of the
-  answer, so it needs no server record. Honestly: the server can't check that a notice was answered before a closed
-  call, as with the 18+ box; the form makes no closed call before it (M14).
+- **The notice is a notice** (owner, 2026-11-04, after the restart; 6.1 reversed). The consent is own-words-v5, for
+  everyone (above). The notice still shows the first time a device picks a maker's model, with the device-only 18+
+  confirmation (6.2: enough). Its answers stay on the device.
 - **The label** beside each closed model in the picker, always, whether or not its notice was answered.
 - Counts and caps as v1: 6 closed pictures a person a day apart from the open 10; closed spend under its own $5 cap
   inside the free cap. Same prompt check; the recipe's closed safety line.
@@ -90,7 +107,7 @@ the page):
 - Re-read 2026-11-04 for choice 6.3: "Implicit caching stores Customer Data (inputs, outputs, and derived data) in
   memory." and "It's deleted no later than 24 hours after it's written." Turning caching off for a project "disables
   both in-memory caching and durable caching, and no cached data is retained" (that project is Vercel's; we can't set it).
-  **The owner chose (2026-11-04, 6.3) to name this cache** in the notice, the §7 item, About and the picker label.
+  **The owner chose (2026-11-04, 6.3) to name this cache** everywhere Google is described.
 - Not named (an open question): "Google may log prompts to detect potential abuse", with no period stated, for customers
   under the Google Cloud Platform Terms of Service.
 
@@ -99,51 +116,34 @@ sensitive data."
 
 ## The notices (`MODEL_NOTICES`, `ADULT_CONFIRM`, `NOTICE_BUTTONS` in `src/lib/legal.ts`), word for word
 
-**Before:** none.
+Only each notice's last paragraph changes (notice version 2 for both). The first two paragraphs are the reread pack's 6a.
 
-**Before:** v1 (the reread pack, 6a). **After, OpenAI** (notice version 2):
+**OpenAI. Before** (v1): "OpenAI may keep them for up to 30 days to check for abuse, and longer if its checks flag a
+picture for review. It doesn't train its models on them. The gateway keeps no copy."
 
-> **A closed model by OpenAI**
->
-> GPT Image 2.5 Sunburst is made by OpenAI. Its weights aren't published, so its recipe can't be re-run exactly.
->
-> OpenAI receives your prompt for each view and, for the side and back, the front view it made, through Vercel AI
-> Gateway. Nothing else about you.
->
-> OpenAI may keep them for up to 30 days to watch for abuse, and longer if its checks flag a picture for review or
-> where the law requires it. It doesn't train its models on them. The gateway keeps no copy.
+**After** (v2):
 
-(v1's last paragraph: "OpenAI may keep them for up to 30 days to check for abuse, and longer if its checks flag a picture
-for review. It doesn't train its models on them. The gateway keeps no copy.")
+> OpenAI may keep them for up to 30 days to check for abuse, and longer if a picture is flagged for review or the law requires it. It doesn't train its models on them. The gateway keeps no copy.
 
-**After, Google** (notice version 2):
+**Google. Before** (v1): "Google is set to keep no copy, through the gateway's zero-retention agreement with Google
+Vertex AI, and doesn't train its models on them. The gateway keeps no copy."
 
-> **A closed model by Google**
->
-> Gemini 3.1 Flash Image is made by Google. Its weights aren't published, so its recipe can't be re-run exactly.
->
-> Google receives your prompt for each view and, for the side and back, the front view it made, through Vercel AI
-> Gateway. Nothing else about you.
->
-> Google is set to keep no copy, through the gateway's zero-retention agreement with Google Vertex AI. Google's own
-> page says it may hold them in memory for up to 24 hours, to answer faster. It doesn't train its models on them. The
-> gateway keeps no copy.
+**After** (v2; the zero-retention agreement is an implementation detail and moves to the recipe):
 
-(v1's last paragraph: "Google is set to keep no copy, through the gateway's zero-retention agreement with Google Vertex
-AI, and doesn't train its models on them. The gateway keeps no copy.")
+> Google keeps no copy, except in memory for up to 24 hours, and doesn't train its models on them. The gateway keeps no copy.
 
-**With the first notice a device sees** (either maker), below the text:
+**With the first notice a device sees** (unchanged):
 
 > Closed models are for people 18 or older, as signing in here is (Terms, section 4).
 >
 > ☐ I'm 18 or older
 
-**Buttons:** "OK" · "Don't remind me again". Both stay disabled until the box is ticked, the first time.
+**Buttons** (unchanged): "OK" · "Don't remind me again". Both stay disabled until the box is ticked, the first time.
 
 ## The labels beside each closed model in the picker, word for word
 
 - GPT Image 2.5 Sunburst: "OpenAI keeps prompts up to 30 days" (unchanged)
-- Gemini 3.1 Flash Image: before "Google keeps no copy"; after **"Google keeps no copy, past a 24-hour cache"**
+- Gemini 3.1 Flash Image: before "Google keeps no copy"; after **"Google keeps no copy past 24 hours"**
 
 ## The 18+ confirmation and the notice: one screen
 
@@ -199,91 +199,60 @@ are 18 or older, can Generate, no minor should reach OpenAI; the box adds a remi
 
 ## Privacy §7 (Outside services and what they receive): one new list item, after the fal.ai item
 
-**Before:** (no item; §7 names neither OpenAI nor Google.)
+**Before:** none. (The reread pack's 6f drafted it; v4 replaces that draft.)
 
 **After:**
 
 <!-- privacy-7 -->
-> If you choose a closed model when you remix a character's sheet, its maker receives, through Vercel AI Gateway, the
-> prompt for each view and, for the side and back, the front view it made. It receives nothing else about you, and
-> your browser never contacts it. OpenAI (for GPT Image 2.5 Sunburst) may keep them for up to 30 days to watch for
-> abuse, and longer if its checks flag a picture for review or where the law requires it; it does not train its models
-> on them. Google (for Gemini 3.1 Flash Image) is set to keep no copy, through the gateway's zero-retention agreement
-> with Google Vertex AI, though Google's own page says it may hold them in memory for up to 24 hours, to answer faster;
-> it does not train its models on them. The gateway itself keeps no copy.
+> If you choose a closed model when you remix a character's sheet, its maker, OpenAI or Google, receives through Vercel AI Gateway your prompt for each view and, for the side and back, the front view it made. It receives nothing else about you, and may not train on them. OpenAI may keep them for up to 30 days to check for abuse, and longer if a picture is flagged for review or the law requires it. Google keeps no copy, except in memory for up to 24 hours. The gateway keeps no copy.
 <!-- end -->
 
-(v2, the reread pack's 6f: "… OpenAI (for GPT Image 2.5 Sunburst) may keep them for up to 30 days to check for abuse,
-and longer if its checks flag a picture for review; it does not train its models on them. Google (for Gemini 3.1 Flash
-Image) is set to keep no copy, through the gateway's zero-retention agreement with Google Vertex AI, and does not train
-its models on them. …")
+(6f, before: "… It receives nothing else about you, and your browser never contacts it. OpenAI (for GPT Image 2.5
+Sunburst) may keep them for up to 30 days to check for abuse, and longer if its checks flag a picture for review; it
+does not train its models on them. Google (for Gemini 3.1 Flash Image) is set to keep no copy, through the gateway's
+zero-retention agreement with Google Vertex AI, and does not train its models on them. The gateway itself keeps no copy.")
 
-### The bases item (closed-model-bases, reread 2026-11-04): one sentence reopened (choice 6.4)
+The bases item on `closed-model-bases` is redrafted to the same two descriptions there
+(`docs/legal/closed-model-bases-draft.md`, "Redraft v2"). The two stay separate items: theirs is the project's own
+pictures, this one a remixer's.
 
-One description of OpenAI's retention, in both §7 items and the notice. **This reopens the bases item's reread for this
-one sentence.**
+## Terms §8 and About: one sentence each, by release (owner, 2026-11-04, choice 8)
 
-**Before:**
+Each replaces every closed-model sentence: `closed-model-bases`' two Terms §8 sentences and its About sentence, the
+Midjourney drafts (5.1, 5.2) and this branch's 6h and 6i. Legal texts describe today, so each release carries the
+version that is true on its day. "Release" here means what is live, not a branch name alone.
 
-> OpenAI may keep our prompts, reference pictures and the pictures it makes for up to 30 days to watch for abuse, and
-> longer only where the law requires it or to protect its services or others from harm.
+**Terms §8.** Before: main's §8 ends "… is not advice of any kind." (`closed-model-bases` adds two sentences, reread
+2026-11-04: "Some of the project's own pictures, among them some of the remix challenge's bases, styles and references,
+are made with closed models by OpenAI and Google, named with their maker on each picture's recipe. Their makers' terms
+let us publish them and bind us, not you: we offer these pictures under the licence in section 3, as far as anyone holds
+rights in them, since a picture made wholly by a model may have no copyright at all.")
 
-**After:**
+- **T1, closed-model-bases alone** (no Midjourney picture published, no model choice):
+  > Some of the project's own pictures are made with closed models by OpenAI and Google, named with their maker on each picture's recipe; they are offered under the licence in section 3, as far as anyone holds rights in them, and their makers' terms bind us, not you.
+- **T2, plus the Midjourney pictures** (the day the first one is published):
+  > Some of the project's own pictures are made with closed models by OpenAI and Google, and some the owner made with Midjourney outside the Service are brought in with the recipe the owner reports; each recipe names the model and its maker, and these pictures, and what is made from them, are offered under the licence in section 3, as far as anyone holds rights in them; their makers' terms bind us, not you.
+- **T3, plus model choice** (this branch, switch on):
+  > Some pictures are made with closed models by OpenAI and Google, by the project or by a remixer who chooses one, and some the owner made with Midjourney outside the Service are brought in with the recipe the owner reports; each recipe names the model and its maker, and these pictures, and what is made from them, are offered under the licence in section 3, as far as anyone holds rights in them; their makers' terms bind us, not you.
+- (T3 without Midjourney: drop ", and some the owner made … the owner reports".)
 
-> OpenAI may keep our prompts, reference pictures and the pictures it makes for up to 30 days to watch for abuse, and
-> longer if its checks flag a picture for review or where the law requires it.
+**About, "Where it runs", after "Supabase holds the database."** Before (`closed-model-bases`): "Some of the project's
+own pictures (the remix challenge's bases, styles and references) are made with closed models by OpenAI and Google,
+through Vercel AI Gateway: they receive the prompt and the reference pictures, nothing about you." This branch's 6i
+before: "If you choose a closed model when you remix a character's sheet, its maker (OpenAI or Google) receives the
+prompt and the front view through Vercel AI Gateway, and nothing about you; OpenAI may keep them for up to 30 days,
+Google is set to keep no copy, and neither trains on them."
 
-Note: OpenAI's page also allows longer retention where "reasonably necessary to protect our services"; the one
-description (the pack's suggestion) leaves that case out. The owner may want it back in all three.
+- **A1, closed-model-bases alone:**
+  > OpenAI and Google receive, through Vercel AI Gateway, the prompts and pictures for some of the project's own pictures, and nothing about you, and neither may train on them (OpenAI may keep them for up to 30 days to check for abuse, and longer if a picture is flagged for review or the law requires it; Google keeps no copy, except in memory for up to 24 hours).
+- **A2, plus the Midjourney pictures:**
+  > OpenAI and Google receive, through Vercel AI Gateway, the prompts and pictures for some of the project's own pictures, and nothing about you, and neither may train on them (OpenAI may keep them for up to 30 days to check for abuse, and longer if a picture is flagged for review or the law requires it; Google keeps no copy, except in memory for up to 24 hours); the site sends nothing to Midjourney, which the owner used outside the site for some pictures.
+- **A3, plus model choice:**
+  > OpenAI and Google receive, through Vercel AI Gateway, the prompts and pictures for some of the project's own pictures and for a sheet a remixer makes with one of their closed models, and nothing about you, and neither may train on them (OpenAI may keep them for up to 30 days to check for abuse, and longer if a picture is flagged for review or the law requires it; Google keeps no copy, except in memory for up to 24 hours); the site sends nothing to Midjourney, which the owner used outside the site for some pictures.
+- **This branch alone** (in `src/app/about/page.tsx` now, since main has no bases sentence):
+  > If you choose a closed model when you remix a character's sheet, its maker, OpenAI or Google, receives your prompt and the front view through Vercel AI Gateway, and nothing about you, and neither may train on them (OpenAI may keep them for up to 30 days to check for abuse, and longer if a picture is flagged for review or the law requires it; Google keeps no copy, except in memory for up to 24 hours).
 
-If `closed-model-bases`' own §7 item (the project's bases) ships too, the two stay separate items: theirs is about the
-project's own pictures, this one about a remixer's.
-
-## Consent: the notice, not a new consent version (owner, 2026-11-04, choice 6.1)
-
-v2 drafted `own-words-v5`, a new consent version everyone would agree to again. **Dropped.** The owner chose a separate
-consent, shown only when someone picks a closed model: the first notice per maker (with the 18+ box, the first time a
-device sees one) is that consent. People who never use closed models aren't asked again. `config/consent.json` stays at
-`own-words-v4`, which describes the open models' route (Groq, Vercel AI Gateway, fal.ai, Neynar); P6j checks it names
-exactly those, and checks each maker's notice against what that maker receives.
-
-## Terms §8 (AI-made material): one sentence added at the end
-
-**Before:**
-
-> The narration, many pictures (every frame made in Remix among them) and the assistant's answers are produced by AI
-> models and are labelled as such. They can be wrong. The assistant's commentary is not the book and is not advice of
-> any kind.
-
-**After** (with `closed-model-bases`' two sentences, if they ship; otherwise this one alone, then theirs' second):
-
-> … The assistant's commentary is not the book and is not advice of any kind. When you remix a character's sheet you may
-> choose a closed model for its views, named with its maker on the form and in each view's record; its maker's terms let
-> us publish those pictures, and bind us, not you: they are offered under the licence in section 3, as far as anyone
-> holds rights in them, and a closed model's recipe can't be re-run exactly.
-
-Why "bind us, not you": the providers' restrictions (no competing models, no passing machine work off as human) bind
-the project; GPL-3.0 §10 forbids adding restrictions for licensees (`closed-model-bases`, "Recommendation").
-
-## About, "Where it runs": one sentence added
-
-P6h needs About to name the services Privacy names; `SERVICES` now has OpenAI and Google.
-
-**Before (first sentences):**
-
-> Vercel hosts the site and sees your IP address and browser details, as any web host does. Cloudflare stores and serves
-> the pictures and audio. Supabase holds the database. …
-
-**After:**
-
-> … Supabase holds the database. If you choose a closed model when you remix a character's sheet, its maker (OpenAI or
-> Google) receives the prompt and the front view through Vercel AI Gateway, and nothing about you; OpenAI may keep them
-> for up to 30 days, Google is set to keep no copy past a 24-hour cache in memory, and neither trains on them. …
-
-(v2: "… OpenAI may keep them for up to 30 days, Google is set to keep no copy, and neither trains on them.")
-
-(In `src/app/about/page.tsx` on the branch, since Privacy §7 now names OpenAI and Google and P6h compares the two; it ships with them.)
-The assistant's notice (P6i) doesn't change: no assistant question goes to OpenAI or Google.
+P6h: About names OpenAI and Google, as Privacy does; if it names Midjourney, it must say the site sends nothing to it.
 
 ## Terms check per model: GPL-3.0 and minting
 
@@ -322,36 +291,38 @@ The publish adds one more prompt check (the sheet's name), ~$0.0001, for every m
 36 GPT remixes (or 24 Gemini); at 6 closed pictures a person, two remixes each, so 18 people a day (12 with Gemini).
 The GPT front is estimated, not measured (the bases made every front from a reference picture).
 
-## Midjourney's live terms, re-checked 2026-11-04 (choice 5.3)
+## Midjourney (5.1 to 5.4)
 
-The reference picture's recipe (branch challenge-styles) quotes Midjourney's terms from a dated third-party copy (TOS
-Tracker, captured 2026-07-03). Re-checked on the live pages by the fetch tool, 2026-11-04:
+**5.3, the live terms, re-checked 2026-11-04 by the fetch tool:** before the restart (about 11:00 PT) the three pages
+below all **refused** (HTTP 403); after it (about 11:45 PT) <https://docs.midjourney.com/hc/en-us/articles/32083055291277-Terms-of-Service>
+**refused** again (HTTP 403). Also tried before: <https://www.midjourney.com/terms-of-service>,
+<https://docs.midjourney.com/docs/terms-of-service>. So the quotes (TOS Tracker copy, captured 2026-07-03) are still
+unconfirmed on the live page. Nothing made from Midjourney pictures is published until the owner (or a browser the
+owner opens) reads the live page and it matches.
 
-- <https://docs.midjourney.com/hc/en-us/articles/32083055291277-Terms-of-Service>: **refused** (HTTP 403).
-- <https://www.midjourney.com/terms-of-service>: **refused** (HTTP 403).
-- <https://docs.midjourney.com/docs/terms-of-service>: **refused** (HTTP 403).
+**5.1, 5.2:** the plan changed, so "one reference picture" is no longer true. The new lines are T2/T3 and A2/A3 above
+(some pictures the owner made with Midjourney outside the site, brought in with the recipe the owner reports, offered
+with what is made from them under section 3, as far as anyone holds rights in them; no "Brought in" label in the legal
+text). No Privacy line: nothing is sent to Midjourney.
 
-So the quotes are still unconfirmed on the live page. **Nothing made from the Midjourney reference is published** until
-the owner (or a browser the owner opens) reads the live page and it matches.
-
-`check:principles` (choice 5.4): Midjourney is a maker named for provenance (`PROVENANCE_ONLY`), not a service in
-`SERVICES`, so P6g and P6h ask for no Privacy line; P6h checks that About, if it names Midjourney, says the site sends
+**5.4 (yes):** in `check:principles`, Midjourney is a maker named for provenance (`PROVENANCE_ONLY`), not a service in
+`SERVICES`; P6g and P6h ask for no Privacy line, and P6h checks that About, if it names Midjourney, says the site sends
 nothing to it.
 
 ## Decisions owed (the owner's)
 
-1. Reread the notices (v2), the Google label, the 18+ line and Privacy §3, §4 and §7 (in `legal.ts` on the branch),
-   the bases item's reopened OpenAI sentence, and the About line; they ship in the release that turns the switch on.
-2. Whether "reasonably necessary to protect our services" (OpenAI's own words) goes back into the one description.
-3. Google's abuse logging (no period stated): name it, or not.
-4. The bases item's Google sentence ("Google, on its Vertex AI, keeps no copy.") has the same 24-hour cache gap; it was
-   not reopened.
-5. OpenAI's Terms of Use and Usage Policies, and Midjourney's terms, still refuse the fetch: read them in a browser.
-6. Content credentials: publish the original PNG with its C2PA manifest beside the JPEG (proposed), or only record it (built).
-7. Closed models for wallet (prepaid) accounts: refused for now.
-8. Whether a closed-model remix can be a challenge entry and be minted.
-9. The form's other wording and the recipe's "can't be re-run exactly" line (`IMAGE_WORDING.designs.models`, recipe-lines.ts).
-10. Whether to add Qwen-Image-Edit-2511 after a three-view test.
+1. Reread every line above (consent v5's sentence, the notices' last paragraphs, the Google label, Privacy §3, §4, §7,
+   Terms §8 and About), before merge. None has a reread key.
+2. OpenAI's page also allows longer retention where "reasonably necessary to protect our services"; the owner's
+   description leaves it out. Keep it out?
+3. Google's abuse logging (no period stated on its page): name it, or not.
+4. OpenAI's Terms of Use and Usage Policies, and Midjourney's terms, still refuse the fetch: read them in a browser.
+5. Content credentials: publish the original PNG with its C2PA manifest beside the JPEG (proposed), or only record it (built).
+6. Closed models for wallet (prepaid) accounts: refused for now.
+7. Whether a closed-model remix can be a challenge entry and be minted.
+8. The form's other wording and the recipe's "can't be re-run exactly" line (`IMAGE_WORDING.designs.models`, recipe-lines.ts).
+9. Whether to add Qwen-Image-Edit-2511 after a three-view test.
 
-Decided 2026-11-04 (reread pack answers): 6.1 the notice is the consent, no own-words-v5; 6.2 the device-only 18+ box is
-enough; 6.3 name Google's cache; 6.4 one OpenAI description; 5.4 Midjourney is provenance-only in the checks.
+Decided 2026-11-04 after the restart: 6.1 one consent version, own-words-v5, for everyone (the notice is only a notice);
+6.2 the device-only 18+ box is enough; 6.3 name Google's cache everywhere; 6.4 the owner's one OpenAI description;
+5.1, 5.2 redrafted; 5.4 yes; 8 one sentence each in Terms §8 and About.

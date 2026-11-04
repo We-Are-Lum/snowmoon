@@ -39,7 +39,7 @@ import { MODAL_VC_FILE, MODAL_VC_PLANTS, modalVcRun, modalVcStatic } from './lib
 import { requireTarget } from './lib/target';
 import { DEFAULT_SHEET_MODEL, SHEET_MODELS, sheetModelProblems, sheetModelsOffered } from '../src/lib/images/sheet-models';
 import { modelChoicesFor } from '../src/lib/images/model-choice-view';
-import { closedNoticeProblems, p6tProblems } from './lib/p6t';
+import { consentClosedProblems, p6tProblems } from './lib/p6t';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const arg = (name: string) => process.argv.slice(2).find((a) => a.startsWith(`--${name}=`))?.split('=').slice(1).join('=');
@@ -1646,19 +1646,17 @@ const SERVICES: [string, RegExp][] = [
   ['Google', /\bGoogle\b(?! Fonts)/g],
   ['Spotify', /\bSpotify\b/g],
 ];
-/** Makers named for provenance only: a picture's recipe or About says it was made with them, outside the site, and
- *  nothing is sent to them. They are not services, so P6g and P6h never ask the Privacy page to name them (owner,
- *  2026-11-04, choice 5.4: Midjourney, for the owner's reference picture, "Brought in"). P6h does check that About
- *  says nothing is sent to one it names. */
+/** Makers named for provenance only: some pictures the owner made with them outside the site are brought in with the
+ *  recipe the owner reports, and nothing is sent to them. They are not services, so P6g and P6h never ask the Privacy
+ *  page to name them (owner, 2026-11-04, choice 5.4: Midjourney). P6h does check that About, if it names one, says the
+ *  site sends nothing to it. */
 const PROVENANCE_ONLY = ['Midjourney'];
 /** At Generate, the image prompt goes to Groq (the check; through Vercel AI Gateway when Groq is busy) and
  *  fal.ai (the image), the FID to Neynar (the gate). The gateway is named on the consent screen too (owner, 2026-10-10). */
-const AT_GENERATE_OPEN = ['Groq', 'Vercel AI Gateway', 'fal.ai', 'Neynar'];
-/** Each closed model's maker, as a remixer can pick it once model choice is on. Its own notice is its consent (owner,
- *  2026-11-04, choice 6.1): the consent screen doesn't name it, and people who never pick one aren't asked again. */
+/** Each closed model's maker, as a remixer can pick it once model choice is on. */
 const CLOSED_MAKERS = [...new Set(sheetModelsOffered(true).filter((m) => !m.open).map((m) => m.provider.name))];
 const AT_GENERATE = [
-  ...AT_GENERATE_OPEN,
+  'Groq', 'Vercel AI Gateway', 'fal.ai', 'Neynar',
   // With model choice on (IMAGES.designs.modelChoice), each offered closed model's maker receives the prompt too.
   ...(IMAGES.designs.modelChoice ? CLOSED_MAKERS : []),
 ];
@@ -1676,7 +1674,8 @@ interface Named {
   about: string;
   notice: string;
   consent: string;
-  /** The closed models' notices (src/lib/legal.ts MODEL_NOTICES), by maker: label, title and text. */
+  /** The closed models' notices (src/lib/legal.ts MODEL_NOTICES), by maker: label, title and text. A notice, not the
+   *  consent (owner, 2026-11-04: own-words-v5 carries the closed-model sentence). */
   modelNotices: Record<string, string>;
 }
 let namedCache: Named | null = null;
@@ -1761,26 +1760,22 @@ add({
 add({
   id: 'P6j',
   principle: 6,
-  name: 'the image consent screen (config/consent.json, current) names exactly the services that receive the prompt or the FID at Generate with the open models; each closed model\'s notice, its consent, names exactly what its maker receives',
+  name: 'the image consent screen (config/consent.json, current) names exactly the services that receive the prompt or the FID at Generate; with model choice on, it says what each closed model\'s maker receives and keeps',
   load: loadNamed,
   run: (c: Named) => {
-    const got = named(c.consent), want = new Set(AT_GENERATE_OPEN);
+    const got = named(c.consent), want = new Set(AT_GENERATE);
     return [
       ...diff(want, got).map((s) => `the consent screen does not name ${s}, which receives the prompt or the Farcaster ID at Generate`),
-      ...diff(got, want).map((s) => `the consent screen names ${s}, which receives nothing at Generate with the open models (a closed model's maker is named in its own notice, owner 2026-11-04)`),
-      // For closed models the notice is the consent (owner, 2026-11-04, choice 6.1): it is compared with what the maker receives.
-      ...closedNoticeProblems({
-        makers: CLOSED_MAKERS,
-        notices: c.modelNotices,
-        named: (t) => [...named(t)],
-        retention: Object.fromEntries(Object.entries(CLOSED_PROVIDERS).map(([k, v]) => [k, v.retentionWords as string])),
-      }),
+      ...diff(got, want).map((s) => `the consent screen names ${s}, which receives nothing at Generate`),
+      // With model choice on, the consent screen (own-words-v5, for everyone; owner, 2026-11-04) says what each closed
+      // model's maker receives and keeps. The closed models' notice is only a notice.
+      ...(IMAGES.designs.modelChoice
+        ? consentClosedProblems(c.consent, CLOSED_MAKERS, Object.fromEntries(Object.entries(CLOSED_PROVIDERS).map(([k, v]) => [k, v.retentionWords as string])))
+        : []),
     ];
   },
   plant: (c: Named) => {
     c.consent = c.consent.replace(/, and your Farcaster ID to Neynar[^.]*/, '');
-    // And a notice that no longer names the gateway its maker receives the prompt through.
-    c.modelNotices = { ...c.modelNotices, OpenAI: (c.modelNotices.OpenAI ?? '').replace(/Vercel AI Gateway/g, 'a gateway') };
   },
 });
 
@@ -1948,21 +1943,23 @@ add({
 
 // P6t (branch remix-model-choice, 2026-11-04): model choice (IMAGES.designs.modelChoice) sends a remixer's prompt and
 // front view to each offered closed model's maker through Vercel AI Gateway. The switch may be on only while Privacy
-// names each of them there, with what it receives and how it is kept, and each maker has its notice, which is its consent
-// (owner, 2026-11-04, choice 6.1; legal texts describe today). P6t was free on main and on deep-funding, social-read (P6p), sheet-help, find-a-moment (P6v, P6w) and
+// names each of them there, with what it receives and how it is kept, and the consent screen (own-words-v5, for
+// everyone; owner, 2026-11-04, choice 6.1 reversed) says what each receives and keeps (legal texts describe today). P6t was free on main and on deep-funding, social-read (P6p), sheet-help, find-a-moment (P6v, P6w) and
 // challenge-three-bases (P6s, its closed-model bases) when picked; P6r is taken on three of them.
 add({
   id: 'P6t',
   principle: 6,
-  name: 'model choice is on only while Privacy §4 and §7 (with each maker\'s retention) name each offered closed model\'s maker, through Vercel AI Gateway, and each has its notice',
+  name: 'model choice is on only while Privacy §4 and §7 (with each maker\'s retention) and the consent screen name each offered closed model\'s maker, through Vercel AI Gateway',
   load: async () => {
+    const c = json('config/consent.json');
+    const w = c.versions[c.current];
     return {
       on: IMAGES.designs.modelChoice as boolean,
       providers: [...new Set(sheetModelsOffered(true).filter((m) => !m.open).map((m) => m.provider.name))] as string[],
       retention: Object.fromEntries(Object.entries(CLOSED_PROVIDERS).map(([k, v]) => [k, v.retentionWords as string])),
       s4: (PRIVACY.sections.find((s) => s.n === 4)?.body ?? []).flat().join(' '),
       s7: (PRIVACY.sections.find((s) => s.n === 7)?.body ?? []).flat() as string[],
-      notices: Object.fromEntries(Object.entries(MODEL_NOTICES).map(([k, n]) => [k, [n.label, n.title, ...n.text].join('\n')])),
+      consent: [w.line, w.title, ...w.text].join('\n'),
     };
   },
   run: (c) => p6tProblems(c),
@@ -1971,7 +1968,7 @@ add({
     c.providers = ['OpenAI'];
     // Privacy §7 names OpenAI, but not how long it may keep them.
     c.s7 = ['OpenAI receives, through Vercel AI Gateway, the prompt for each view. It may keep them, and does not train on them.'];
-    c.notices = {};
+    c.consent = 'Your prompt goes to fal.ai.';
     c.s4 = 'Character sheets you publish.';
   },
 });

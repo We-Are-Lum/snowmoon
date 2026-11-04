@@ -426,9 +426,9 @@ only, through `studio.rating_totals`, `studio.like_totals` and
   vocabulary is the services the Privacy page names: Vercel, Vercel AI Gateway,
   Cloudflare, Supabase, Groq, fal.ai, Farcaster (its services, not a Farcaster
   ID or name), Neynar, GitHub, ntfy, OpenAI, Google, Spotify. The pages are read as served.
-  A maker named only for provenance (Midjourney: the owner's reference picture, made outside
-  the site and "Brought in") receives nothing and is not a service, so no Privacy line is
-  asked for it (owner, 2026-11-04, choice 5.4).
+  A maker named only for provenance (Midjourney: some pictures the owner made with it outside
+  the site, brought in with the recipe the owner reports) receives nothing and is not a
+  service, so no Privacy line is asked for it (owner, 2026-11-04, choice 5.4).
   - `P6g`: the Privacy page names every service that About, the notice, the
     consent screen or a closed model's notice names, and those that receive
     something at Generate.
@@ -437,15 +437,12 @@ only, through `studio.rating_totals`, `studio.like_totals` and
   - `P6i`: the notice names exactly the services the Privacy page says receive
     assistant questions (section 5, and section 7's "receive assistant questions").
   - `P6j`: the consent screen names exactly the services that receive the image
-    prompt or the Farcaster ID at Generate with the open models: Groq, Vercel AI
-    Gateway, fal.ai and Neynar. For a closed model, its maker's notice is the
-    consent (owner, 2026-11-04, choice 6.1: shown only when someone picks a
-    closed model, with the 18+ box the first time; people who never pick one
-    aren't asked again). So P6j compares each maker's notice with what that
-    maker receives: it names exactly the maker and Vercel AI Gateway, says it
-    receives the prompt and the front view, and gives the maker's retention
-    words. The notice's answer stays on the device; P6j reads the words, not a
-    record, so it needs no server record.
+    prompt or the Farcaster ID at Generate: Groq, Vercel AI Gateway, fal.ai and
+    Neynar, and, with model choice on, each closed model's maker. With model
+    choice on, its text (own-words-v5, one consent version for everyone: owner,
+    2026-11-04) also says what each maker receives (the prompt and the front
+    view) and gives its one description (`CLOSED_PROVIDERS[maker].retentionWords`).
+    The closed models' notice is a notice, not the consent.
 - `P6k`, `P6l`: the Privacy and Terms pages' words are words the owner (FID 6786)
   has reread (`LEGAL.ownerReread` in `src/lib/legal.ts`), the notice's `P6f`
   rule: any change to the words fails until the owner rereads them; it is set
@@ -469,8 +466,7 @@ only, through `studio.rating_totals`, `studio.like_totals` and
 - `P6t` (branch remix-model-choice, 2026-11-04, DRAFT): model choice for remixers (`IMAGES.designs.modelChoice`) is on
   only while Privacy §7 says each offered closed model's maker receives the prompt and pictures through Vercel AI
   Gateway, how they are kept and that they may not be trained on, Privacy §4 says a sheet's views may be made with a
-  closed model, and each maker has its notice, which is its consent (owner, 2026-11-04, choice 6.1; not the
-  consent screen) (docs/legal/remix-model-choice-draft.md). OpenAI and Google
+  closed model, and the consent screen (own-words-v5) says what each maker receives and keeps (docs/legal/remix-model-choice-draft.md). OpenAI and Google
   are in the outside-services vocabulary of P6g to P6j. The id was free on main and on deep-funding, social-read,
   sheet-help, find-a-moment (P6v, P6w) and challenge-three-bases (P6s).
 - `P6n`: image making is open beyond the invited list (the gate looks up a
