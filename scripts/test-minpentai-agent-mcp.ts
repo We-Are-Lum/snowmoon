@@ -15,7 +15,7 @@
 import { createHash } from 'node:crypto';
 import { startStage, connect, mcp, tool } from './lib/agents-harness';
 import { AGENTS } from '../src/lib/config';
-import { QUIET_MS } from '../src/lib/minpentai/agent-play/solo';
+import { QUIET_MS, fromRows } from '../src/lib/minpentai/agent-play/solo';
 
 process.env.MINPENTAI_PLAY_TEST = '1';
 // Play is opened to A and B only (as production opens it to the owner only); C is someone it isn't open to.
@@ -30,7 +30,7 @@ const check = (label: string, ok: boolean, detail = '') => {
 process.env.MINPENTAI_PLAY_TEST_PEOPLE = '-3,-4';
 const S = await startStage();
 const { BASE, people } = S;
-type View = { turn: number; phase: string; step: number; can_place: [number, number][]; board: { towers: { x: number; y: number; side: string }[]; squares: { side: string; x: number; y: number }[]; gliders: { side: string; x: number; y: number }[] }; opponent_commitment: string | null; end: { win: string } | null };
+type View = { turn: number; phase: string; step: number; can_place: string[]; board: { towers: { x: number; y: number; side: string }[]; squares: { side: string; x: number; y: number }[]; gliders: { side: string; x: number; y: number }[] }; opponent_commitment: string | null; end: { win: string } | null };
 
 try {
   // Scopes: "play" only when asked for, and only then are the tools listed.
@@ -102,7 +102,7 @@ try {
       check('M12 a wrong secret opens nothing', bad.status === 404);
     }
     // The scripted agent: two plans, compared in the sandbox against a guess, then the better one sent.
-    const east = [...v.can_place].sort((p, q) => q[0] - p[0] || p[1] - q[1]);
+    const east = [...fromRows(v.can_place)].sort((p, q) => q[0] - p[0] || p[1] - q[1]);
     const plans = { tower: east.length ? [{ piece: 'tower', x: east[0][0], y: east[0][1] }] : [], glider: east.length ? [{ piece: 'glider', x: east[0][0], y: east[0][1], dir: 'E' }] : [] };
     const sim = await tool(BASE, a.access_token, 'minpentai_simulate', { match_id: id, scenarios: Object.entries(plans).map(([name, placements]) => ({ name, placements })) });
     if (sim.ok) simulated++;
@@ -120,6 +120,8 @@ try {
       opened = Date.now(); // a final submit opens the next turn a few ms before it answers: timed from its answer
       if (!sub.ok) { check(`M15 turn ${v.turn} accepted`, false, sub.error ?? ''); break; }
       if (turns === 0) check('M15 orders accepted with a commitment', /^[0-9a-f]{64}$/.test(String(sub.out.commitment)));
+      // Small replies (owner, 2026-11-04): accepted, commitment, points left, and how the turn resolved; no view echo.
+      if (turns === 0) check('M15b submit_orders answers in a few fields, not the view', Object.keys(sub.out as object).every((k) => ['accepted', 'commitment', 'points_left', 'resolved'].includes(k)) && JSON.stringify(sub.out).length < 600, JSON.stringify(sub.out).slice(0, 200));
     }
     turns++;
     if (turns > 30) break;
@@ -152,7 +154,7 @@ try {
   {
     const st2 = await tool(BASE, a.access_token, 'minpentai_start_solo', { ruleset: 'book', level: 1 });
     const id2 = st2.out.match_id as string, live2 = st2.out.live_url as string;
-    const v0 = st2.out.view as unknown as View, cell = v0.can_place[0];
+    const v0 = st2.out.view as unknown as View, cell = fromRows(v0.can_place)[0];
     const draft = await tool(BASE, a.access_token, 'minpentai_submit_orders', { match_id: id2, turn: 0, placements: [{ piece: 'tower', x: cell[0], y: cell[1] }], source: 'agent', final: false });
     check('M35 the AI drafts without final', draft.ok, draft.error ?? '');
     const page0 = await (await fetch(live2)).text();

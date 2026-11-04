@@ -17,6 +17,7 @@ import { execFileSync } from 'node:child_process';
 import { mkdirSync, rmSync, unlinkSync } from 'node:fs';
 import path from 'node:path';
 import { chromium, type Locator, type Page } from 'playwright-core';
+import { fromRows } from '../src/lib/minpentai/agent-play/solo';
 
 process.env.MINPENTAI_PLAY_TEST = '1';
 process.env.MINPENTAI_DRAFTS_TEST_PEOPLE = '-3';
@@ -30,11 +31,11 @@ const { BASE, people } = S;
 const browser = await chromium.launch({ channel: 'chrome', args: ['--enable-gpu', '--ignore-gpu-blocklist', '--use-angle=metal'] });
 try {
   const a = await connect(BASE, people.A.token, 'Claude', 'read play');
-  type V = { turn: number; phase: string; can_place: [number, number][] };
+  type V = { turn: number; phase: string; can_place: string[] };
   const draft = async (id: string, t: number, passive = false) => {
     const v = (await tool(BASE, a.access_token, 'minpentai_get_view', { match_id: id })).out as unknown as V;
     if (v.phase === 'over') return -1;
-    const east = [...v.can_place].sort((p, q) => q[0] - p[0] || p[1] - q[1]);
+    const east = [...fromRows(v.can_place)].sort((p, q) => q[0] - p[0] || p[1] - q[1]);
     // Towers at setup; then gliders east from rows that change each turn, so they reach the enemy's side.
     const placements = passive ? [] : v.turn === 0 ? east.slice(0, 2).map(([x, y]) => ({ piece: 'tower', x, y })) : east.filter((_, i) => (i + t) % 3 === 0).slice(0, 2).map(([x, y]) => ({ piece: 'glider', x, y, dir: 'E' }));
     const d = await tool(BASE, a.access_token, 'minpentai_submit_orders', { match_id: id, turn: v.turn, placements, source: 'agent', final: false });
