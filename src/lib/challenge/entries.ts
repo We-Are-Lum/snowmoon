@@ -4,6 +4,7 @@ import { remixLines } from './lineage';
 import { refusedBases } from './bases';
 import { baseStyleOrder, basesOf, remixOfBase } from './rules';
 import { CHALLENGE, WORK_ID } from '../config';
+import { challengeVisibleTo } from './visibility';
 import { bookCharacter } from '../images/designs';
 import { isSocialPerson } from '../people';
 import { chooseEntries, entrantCounts, fromDecision, type Decision, inWindow, markKey, newestFirst, phase, shortDateText, type Candidate, type Eligibility } from './rules';
@@ -152,7 +153,8 @@ export async function versionStanding(sql: Sql, versionId: string): Promise<Vers
  * and the lists only. Never throws: a confirmation without the line is better than a publish that seems to fail.
  */
 export async function publishStanding(sql: Sql, versionId: string): Promise<{ kind: 'entry' | 'unchecked'; character: string } | null> {
-  if (!CHALLENGE.entries) return null;
+  // Nothing is said at publish until the owner opens the challenge (CHALLENGE.public; owner, 2026-11-04).
+  if (!CHALLENGE.entries || !CHALLENGE.public) return null;
   try {
     const s = await versionStanding(sql, versionId);
     if (s?.kind === 'entry') return s;
@@ -180,6 +182,9 @@ export const MARK_WORDING = {
 /** Mark one of your own versions in the window as your entry for its character (the latest mark counts). */
 export async function markEntry(sql: Sql, fid: number, versionId: string, now = new Date()): Promise<MarkResult> {
   if (!CHALLENGE.entries) return { ok: false, why: MARK_WORDING.off, status: 503 };
+  // Until the owner opens the challenge (CHALLENGE.public; owner, 2026-11-04), only admins may mark, to test it; an
+  // admin's version is never an entry (admins aren't eligible), so their marks change no one's standing.
+  if (!challengeVisibleTo(fid)) return { ok: false, why: MARK_WORDING.off, status: 503 };
   if (phase(now) === 'before') return { ok: false, why: MARK_WORDING.opens(), status: 409 };
   if (!inWindow(now)) return { ok: false, why: MARK_WORDING.closed, status: 409 };
   const v = (await windowVersions(sql)).find((x) => x.versionId === versionId && x.forked);

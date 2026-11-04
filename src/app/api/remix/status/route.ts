@@ -58,8 +58,9 @@ export async function GET(request: Request) {
     const mine = frames.map((f) => ({ id: f.id, url: f.imageUrl, words: f.ownWords, hidden: f.hidden, hiddenRole: f.hiddenRole, at: f.createdAt, page: `/remix/${f.id}` }));
     if (isSocialPerson(person)) {
       // A Lens or Bluesky account (not linked to a Farcaster account): free only as src/lib/social/free.ts decides; no balance.
-      const d = await freeFor(sql, person);
-      return NextResponse.json({ ...base, signedIn: true, perDay: perDay(person), eligible: d.free, refusal: d.free ? undefined : d.error, consented, left, frames: mine, maintainer: false }, { headers: noStore });
+      // Never asks Lens here (variant B: only Generate does); with no decision yet, eligible is null until Generate.
+      const d = await freeFor(sql, person, { lookUp: false });
+      return NextResponse.json({ ...base, signedIn: true, perDay: perDay(person), eligible: d ? d.free : null, refusal: d && !d.free ? d.error : undefined, consented, left, frames: mine, maintainer: false }, { headers: noStore });
     }
     if (person < 0) {
       const open = prepaidOpen() && openToEveryone().open;

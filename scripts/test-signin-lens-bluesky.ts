@@ -137,7 +137,9 @@ const lensWorld = {
   /** What the next ID token says, for the refusal cases. */
   tamper: null as null | ((claims: Record<string, unknown>) => { claims: Record<string, unknown>; key?: typeof lensKey }),
   jwks: [jwkOf(lensKey)] as object[],
-  score: new Map<string, number>([[LENS_ACCOUNT.toLowerCase(), 9990]]),
+  score: new Map<string, number>([[LENS_ACCOUNT.toLowerCase(), 9990], [OTHER_ACCOUNT, 437]]),
+  /** How many times Lens's API was asked for a score (the C rules). */
+  scoreAsks: 0,
   down: false,
   seen: [] as string[],
 };
@@ -180,6 +182,7 @@ lens.LENS_HTTP.fetch = (async (input: RequestInfo | URL, init?: RequestInit) => 
   }
   if (query.includes('username { value }')) return json({ data: { account: { username: variables.a.toLowerCase() === LENS_ACCOUNT.toLowerCase() ? { value: 'lens/stani' } : null } } });
   if (query.includes('score')) {
+    lensWorld.scoreAsks++;
     const s = lensWorld.score.get(String(variables.a).toLowerCase());
     return json({ data: { account: s === undefined ? null : { score: s } } });
   }
@@ -528,6 +531,8 @@ add({
     out.unlink = await accounts.unlinkSocial(S, bs.account);
     out.after = await getPerson(bearer(b.body.token));
     out.afterFree = (await freeFor(S, out.after as number)).free;
+    // 31 days later (the 30-day wait, K1): it may be linked to a different account.
+    await asOwner(`update studio.social_links set linked_at = linked_at - interval '31 days', unlinked_at = unlinked_at - interval '31 days' where account_id = ${bs.account}`);
     // Linked to the Lens account, through the route: the Bluesky sign-in in X-Social-Session, the Lens one as bearer.
     const route = await call('../src/app/api/social-link/route', 'POST', `${ORIGIN}/api/social-link`, { lens: true }, { 'x-social-session': b.body.token, authorization: `Bearer ${l.body.token}` });
     out.route = route.status;
@@ -608,6 +613,272 @@ add({
   run: (c) => (c.wallet && !c.social && c.funded === 'prepaid' && c.remixFunded === 'prepaid' && c.reserve === 'balance' ? [] : [`a wallet account: ${JSON.stringify(c)}`]),
   plant: (c) => {
     c.funded = 'free';
+  },
+});
+
+// ==================================================================================================================
+// Lens's check on the shared decision store (owner, 2026-11-04: variant B; "store the decision, not the score").
+// ==================================================================================================================
+const lensPerson = async (signer: typeof owner, account = LENS_ACCOUNT) => (await getPerson(bearer((await lensSignIn(signer, signer, account)).body.token)))!;
+const asks = async (f: () => Promise<unknown>) => {
+  const before = lensWorld.scoreAsks;
+  await f();
+  return lensWorld.scoreAsks - before;
+};
+/** As the database's owner (the one PGlite session is studio_writer otherwise): to age rows, as time passing would. */
+const asOwner = (q: string) => pg.exec(`reset role; ${q}; set role studio_writer;`);
+const forgetDecisions = () => asOwner(`delete from studio.check_decisions where network = 'lens'`);
+
+add({
+  id: 'C1',
+  name: 'Lens check: no score kept (not in the store, any table, the status or a refusal)',
+  load: async () => {
+    await forgetDecisions();
+    lensCfg.minScore = 1000;
+    const pass = await lensPerson(owner);
+    const fail = await lensPerson(stranger, OTHER_ACCOUNT);
+    await mayGenerate(S, pass);
+    const refusal = await mayGenerate(S, fail);
+    const tables = (await pg.query<{ t: string }>(`select tablename as t from pg_tables where schemaname = 'studio'`)).rows.map((r) => r.t);
+    let dump = '';
+    for (const t of tables) dump += JSON.stringify((await pg.query(`select * from studio.${t}`)).rows);
+    const store = (await pg.query(`select * from studio.check_decisions where network = 'lens'`)).rows as Record<string, unknown>[];
+    const st = await call('../src/app/api/images/status/route', 'GET', `${ORIGIN}/api/images/status?chapter=1&start=1`, undefined, { authorization: `Bearer ${(await lensSignIn(stranger, stranger, OTHER_ACCOUNT)).body.token}` });
+    return { dump, columns: Object.keys(store[0] ?? {}), rows: store.length, refusal: refusal.ok ? '' : refusal.error, status: JSON.stringify(st.body) };
+  },
+  run: (c) => {
+    const p: Problems = [];
+    for (const score of ['9990', '437']) {
+      if (c.dump.includes(score)) p.push(`a score (${score}) is stored in the database`);
+      if (c.refusal.includes(score) || c.status.includes(score)) p.push(`a score (${score}) is sent to the page`);
+    }
+    if (c.rows !== 2) p.push(`${c.rows} Lens decisions stored, not 2`);
+    if (c.columns.some((k: string) => /score|value/.test(k))) p.push(`the store has a score column: ${c.columns.join(', ')}`);
+    if (!/1,000/.test(c.refusal)) p.push(`the refusal doesn't name the threshold: ${c.refusal}`);
+    return p;
+  },
+  plant: (c) => {
+    c.dump += '{"score":9990}';
+  },
+});
+
+add({
+  id: 'C2',
+  name: 'Lens check: a pass is reused without asking Lens; the maker opening never asks Lens',
+  load: async () => {
+    await forgetDecisions();
+    lensCfg.minScore = 1000;
+    const person = await lensPerson(owner);
+    const token = (await lensSignIn(owner)).body.token;
+    const statusAsks = await asks(() => call('../src/app/api/images/status/route', 'GET', `${ORIGIN}/api/images/status?chapter=1&start=1`, undefined, { authorization: `Bearer ${token}` }));
+    const remixStatusAsks = await asks(() => call('../src/app/api/remix/status/route', 'GET', `${ORIGIN}/api/remix/status?version=1&shot=x`, undefined, { authorization: `Bearer ${token}` }));
+    const leftAsks = await asks(() => imageLimits.generationsLeft(S, person));
+    const status = await call('../src/app/api/images/status/route', 'GET', `${ORIGIN}/api/images/status?chapter=1&start=1`, undefined, { authorization: `Bearer ${token}` });
+    const first = await asks(() => mayGenerate(S, person));
+    const second = await asks(() => mayGenerate(S, person));
+    const counted = await asks(() => imageLimits.reserve(S, person));
+    const statusAfter = await call('../src/app/api/images/status/route', 'GET', `${ORIGIN}/api/images/status?chapter=1&start=1`, undefined, { authorization: `Bearer ${token}` });
+    return { statusAsks, remixStatusAsks, leftAsks, eligibleBefore: 'eligible' in status.body ? status.body.eligible : 'missing', first, second, counted, eligibleAfter: statusAfter.body.eligible };
+  },
+  run: (c) => {
+    const p: Problems = [];
+    if (c.statusAsks || c.remixStatusAsks || c.leftAsks) p.push(`opening the maker asked Lens (${c.statusAsks} images, ${c.remixStatusAsks} Remix, ${c.leftAsks} count)`);
+    if (c.eligibleBefore !== null) p.push(`before any Generate, the status said eligible ${c.eligibleBefore} (want null: decided at Generate)`);
+    if (c.first !== 1) p.push(`the first Generate asked Lens ${c.first} times, not once`);
+    if (c.second !== 0 || c.counted !== 0) p.push(`a current pass was looked up again (${c.second} at Generate, ${c.counted} when counted)`);
+    if (c.eligibleAfter !== true) p.push(`after the pass, the status said eligible ${c.eligibleAfter}`);
+    return p;
+  },
+  plant: (c) => {
+    c.second = 1;
+  },
+});
+
+add({
+  id: 'C3',
+  name: 'Lens check: a fail is not asked again before 24 hours; after them it is',
+  load: async () => {
+    await forgetDecisions();
+    lensCfg.minScore = 1000;
+    const person = await lensPerson(stranger, OTHER_ACCOUNT);
+    const first = await asks(() => mayGenerate(S, person));
+    const again = await asks(() => mayGenerate(S, person));
+    await asOwner(`update studio.check_decisions set decided_at = now() - interval '23 hours' where network = 'lens'`);
+    const at23 = await asks(() => mayGenerate(S, person));
+    const g23 = await mayGenerate(S, person);
+    await asOwner(`update studio.check_decisions set decided_at = now() - interval '25 hours' where network = 'lens'`);
+    const at25 = await asks(() => mayGenerate(S, person));
+    return { first, again, at23, refused23: g23.ok ? 'ok' : g23.reason, at25 };
+  },
+  run: (c) => {
+    const p: Problems = [];
+    if (c.first !== 1) p.push(`the first Generate asked ${c.first} times`);
+    if (c.again !== 0 || c.at23 !== 0) p.push(`a fail was asked again before 24 hours (${c.again} at once, ${c.at23} at 23 hours)`);
+    if (c.refused23 !== 'lens-score') p.push(`at 23 hours the gate said ${c.refused23}`);
+    if (c.at25 !== 1) p.push(`after 25 hours the fail wasn't asked again (${c.at25})`);
+    return p;
+  },
+  plant: (c) => {
+    c.at23 = 1;
+  },
+});
+
+add({
+  id: 'C4',
+  name: 'Lens check: a new threshold asks again; a report withdraws a pass',
+  load: async () => {
+    await forgetDecisions();
+    lensCfg.minScore = 1000;
+    const person = await lensPerson(owner);
+    await mayGenerate(S, person);
+    lensCfg.minScore = 2000;
+    const newRule = await asks(() => mayGenerate(S, person));
+    const rules = (await pg.query<{ threshold: string }>(`select threshold from studio.check_decisions where network = 'lens' order by threshold`)).rows.map((r) => r.threshold);
+    lensCfg.minScore = 1000;
+    const back = await asks(() => mayGenerate(S, person));
+    const { recheckMaker } = await import('../src/lib/checks/decisions');
+    await recheckMaker(S as never, person);
+    const afterReport = await asks(() => mayGenerate(S, person));
+    return { newRule, rules, back, afterReport };
+  },
+  run: (c) => {
+    const p: Problems = [];
+    if (c.newRule !== 1) p.push(`a new threshold didn't ask Lens again (${c.newRule})`);
+    if (!c.rules.includes('lens-score>=2000')) p.push(`the decision isn't stored with its threshold: ${c.rules.join(', ')}`);
+    if (c.back !== 0) p.push(`back at 1,000, a current pass under that rule was asked again (${c.back})`);
+    if (c.afterReport !== 1) p.push(`after a report, the pass wasn't withdrawn (${c.afterReport} asks)`);
+    return p;
+  },
+  plant: (c) => {
+    c.newRule = 0;
+  },
+});
+
+// ==================================================================================================================
+// Linking: the 30-day wait, the other side's unlink, the You page's panel data (owner, 2026-11-04, 3a).
+// ==================================================================================================================
+add({
+  id: 'K1',
+  name: 'Links: after an unlink, a different account only after 30 days; the same one at once',
+  load: async () => {
+    const b = await blueskyFinish(await blueskyStart());
+    const bs = session.readSocialSession(b.body.token)!;
+    const me = { id: bs.account, kind: 'bluesky' as const };
+    await asOwner(`update studio.social_links set unlinked_at = now() - interval '400 days', linked_at = now() - interval '401 days' where account_id = ${bs.account}`);
+    await accounts.unlinkSocial(S, bs.account);
+    const out: Record<string, unknown> = {};
+    out.first = (await accounts.linkSocial(S, me, { fid: 6786 })).ok;
+    out.unlink = await accounts.unlinkSocial(S, bs.account);
+    const other = await accounts.linkSocial(S, me, { fid: 1234 });
+    out.other = other.ok ? 'linked' : other.why;
+    out.until = other.ok ? null : 'until' in other ? other.until : null;
+    const route = await call('../src/app/api/social-link/route', 'POST', `${ORIGIN}/api/social-link`, { lens: true }, { 'x-social-session': b.body.token, authorization: `Bearer ${(await lensSignIn(owner)).body.token}` });
+    out.route = `${route.status} ${route.body.reason}`;
+    out.same = (await accounts.linkSocial(S, me, { fid: 6786 })).ok;
+    await accounts.unlinkSocial(S, bs.account);
+    await asOwner(`update studio.social_links set linked_at = linked_at - interval '29 days', unlinked_at = unlinked_at - interval '29 days' where account_id = ${bs.account}`);
+    const at29 = await accounts.linkSocial(S, me, { fid: 1234 });
+    out.at29 = at29.ok ? 'linked' : at29.why;
+    await asOwner(`update studio.social_links set linked_at = linked_at - interval '2 days', unlinked_at = unlinked_at - interval '2 days' where account_id = ${bs.account}`);
+    const at31 = await accounts.linkSocial(S, me, { fid: 1234 });
+    out.at31 = at31.ok ? 'linked' : at31.why;
+    await accounts.unlinkSocial(S, bs.account);
+    return out;
+  },
+  run: (c) => {
+    const p: Problems = [];
+    if (c.first !== true || c.unlink !== 'done') p.push(`the first link and unlink: ${c.first} ${c.unlink}`);
+    if (c.other !== 'wait') p.push(`linked to a different FID at once after unlinking (${c.other})`);
+    const days = c.until ? (Date.parse(c.until as string) - Date.now()) / 86_400_000 : 0;
+    if (days < 29.9 || days > 30.1) p.push(`the wait ends in ${days.toFixed(2)} days, not 30`);
+    if (c.route !== '409 wait') p.push(`the route linked it to a Lens account during the wait (${c.route})`);
+    if (c.same !== true) p.push('relinking to the same account was refused');
+    if (c.at29 !== 'wait') p.push(`linked elsewhere 29 days after the unlink (${c.at29})`);
+    if (c.at31 !== 'linked') p.push(`still refused 31 days after the unlink (${c.at31})`);
+    return p;
+  },
+  plant: (c) => {
+    c.other = 'linked';
+  },
+});
+
+add({
+  id: 'K2',
+  name: 'Links: the other side unlinks only its own link; the You page shows the link, the offer and the wait',
+  load: async () => {
+    const b = await blueskyFinish(await blueskyStart());
+    const bs = session.readSocialSession(b.body.token)!;
+    await accounts.unlinkSocial(S, bs.account);
+    await asOwner(`update studio.social_links set linked_at = linked_at - interval '60 days', unlinked_at = unlinked_at - interval '60 days' where account_id = ${bs.account}`);
+    const l = await lensSignIn(owner);
+    const ls = session.readSocialSession(l.body.token)!;
+    const out: Record<string, unknown> = {};
+    const lensBearer = { authorization: `Bearer ${l.body.token}` };
+    const offer = await call('../src/app/api/you/route', 'GET', `${ORIGIN}/api/you`, undefined, { ...lensBearer, 'x-social-session': b.body.token });
+    out.offer = offer.body.social?.here?.offer ?? null;
+    out.link = (await call('../src/app/api/social-link/route', 'POST', `${ORIGIN}/api/social-link`, { lens: true }, { ...lensBearer, 'x-social-session': b.body.token })).status;
+    const shown = await call('../src/app/api/you/route', 'GET', `${ORIGIN}/api/you`, undefined, lensBearer);
+    out.listed = (shown.body.social?.linked ?? []).map((r: { account: number }) => r.account);
+    out.notMine = await accounts.unlinkFrom(S, { fid: 999 }, bs.account);
+    out.otherLens = await accounts.unlinkFrom(S, { lensAccount: ls.account + 1000 }, bs.account);
+    const del = await call('../src/app/api/social-link/route', 'DELETE', `${ORIGIN}/api/social-link`, { account: bs.account }, lensBearer);
+    out.del = del.status;
+    out.after = await getPerson(bearer(b.body.token));
+    const waiting = await call('../src/app/api/you/route', 'GET', `${ORIGIN}/api/you`, undefined, { authorization: `Bearer ${b.body.token}` });
+    out.here = waiting.body.social?.here ?? null;
+    const lensOffer = await call('../src/app/api/you/route', 'GET', `${ORIGIN}/api/you`, undefined, { ...lensBearer, 'x-social-session': b.body.token });
+    out.waitOther = lensOffer.body.social?.here?.waitUntil ?? null;
+    out.bsAccount = bs.account;
+    return out;
+  },
+  run: (c) => {
+    const p: Problems = [];
+    if (!(c.offer && (c.offer as { lens?: boolean }).lens === true)) p.push(`signed in with Lens and Bluesky, no offer to link them: ${JSON.stringify(c.offer)}`);
+    if (c.link !== 200) p.push(`the link through the route: ${c.link}`);
+    if (!(c.listed as number[]).includes(c.bsAccount as number)) p.push(`the Lens account's page doesn't list its linked Bluesky account: ${JSON.stringify(c.listed)}`);
+    if (c.notMine !== 'none' || c.otherLens !== 'none') p.push(`another account ended this link (${c.notMine}, ${c.otherLens})`);
+    if (c.del !== 200 || !people.isSocialPerson(c.after as number) || c.after !== people.socialPerson(c.bsAccount as number)) p.push(`the Lens side's unlink: ${c.del}, person after ${c.after}`);
+    const h = c.here as { linked: unknown; offer: unknown } | null;
+    if (!h || h.linked !== null || h.offer !== null) p.push(`signed in with Bluesky alone after the unlink: ${JSON.stringify(h)}`);
+    if (c.waitOther !== null) p.push(`relinking to the same Lens account shows a wait: ${c.waitOther}`);
+    return p;
+  },
+  plant: (c) => {
+    c.notMine = 'done';
+  },
+});
+
+// ==================================================================================================================
+// P4a: the four Lens and Bluesky sign-in exemptions (owner's yes, 2026-11-04, item 14), checked, not only named.
+// ==================================================================================================================
+add({
+  id: 'P1',
+  name: 'P4a: the four sign-in routes pass; a route or module that could write more fails',
+  load: async () => {
+    const { p4aProblems, P4A_SOCIAL_SIGN_IN } = await import('./lib/p4a');
+    const readReal = (rel: string) => readFileSync(path.join(ROOT, rel), 'utf8');
+    const readWith = (over: Record<string, string>) => (rel: string) => over[rel] ?? readReal(rel);
+    const four = [...P4A_SOCIAL_SIGN_IN].map((f) => ({ file: f, src: readReal(f) }));
+    const verify = four.find((r) => r.file.endsWith('lens/verify/route.ts'))!;
+    const start = four.find((r) => r.file.endsWith('bluesky/start/route.ts'))!;
+    const plants: Record<string, string[]> = {
+      dbInRoute: p4aProblems([{ ...verify, src: verify.src.replace("import { NextResponse } from 'next/server';", "import { NextResponse } from 'next/server';\nimport { db } from '~/lib/db';") + '\nexport async function PUT() { await db()!`update studio.elements set status = \'published\'`; }\n' }], readReal),
+      noSwitch: p4aProblems([{ ...start, src: start.src.replace("if (!signInOpen('bluesky')) return new NextResponse('Not found', { status: 404 });", '') }], readReal),
+      moduleWrites: p4aProblems([verify], readWith({ 'src/lib/social/lens.ts': readReal('src/lib/social/lens.ts') + "\nimport { db } from '../db';\nexport async function x() { await db()!`insert into studio.image_asks (fid) values (1)`; }\n" })),
+      accountsWrites: p4aProblems([verify], readWith({ 'src/lib/social/accounts.ts': readReal('src/lib/social/accounts.ts').replace('returning id::int as id`;\n  return r.id;', "returning id::int as id`;\n  await sql`insert into studio.social_links (account_id, fid) values (${r.id}, 1)`;\n  return r.id;") })),
+      signInTakesMore: p4aProblems([verify], readWith({ 'src/lib/social/sign-in.ts': readReal('src/lib/social/sign-in.ts').replace("import { socialAccountFor } from './accounts';", "import { linkSocial, socialAccountFor } from './accounts';") })),
+      unexempt: p4aProblems([{ file: 'src/app/api/auth/lens/other/route.ts', src: verify.src }], readReal),
+    };
+    return { real: p4aProblems(four, readReal), plants };
+  },
+  run: (c) => {
+    const p: Problems = [];
+    if (c.real.length) p.push(`the real routes: ${c.real.join('; ')}`);
+    for (const [k, v] of Object.entries(c.plants as Record<string, string[]>)) if (!v.length) p.push(`planted ${k} passed P4a`);
+    return p;
+  },
+  plant: (c) => {
+    c.plants.dbInRoute = [];
   },
 });
 

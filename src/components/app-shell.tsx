@@ -8,6 +8,8 @@ import { sdk } from '@farcaster/miniapp-sdk';
 import { inMiniApp, signOut, signOutSocial, signOutWallet, useAuth, useSocialSession, useWalletAlongside, useWalletSession, type AuthState } from '~/lib/client-auth';
 import { lastChapter, openedChapters } from '~/lib/chat/device';
 import { COMING, navItems, type NavItem } from '~/lib/nav';
+import { CHALLENGE } from '~/lib/config';
+import { isAdmin } from '~/lib/admins';
 import type { Intro } from '~/lib/intro';
 import { Assistant } from './assistant';
 import { ReplayIntro } from './first-visit';
@@ -87,7 +89,8 @@ export function AppShell({ chapters, adaptations, intro, children }: { chapters:
     }
   };
   const current = Number(path.match(/^\/chapter\/(\d+)/)?.[1] ?? 0);
-  const items = navItems(last, adaptations);
+  // The remix challenge's item: for everyone once the owner opens it (CHALLENGE.public), for admins before.
+  const items = navItems(last, adaptations, CHALLENGE.public || (auth.kind === 'signed-in' && isAdmin(auth.fid)));
   const onMp = path === '/minpentai' || path.startsWith('/minpentai/');
   const showPanel = (onMp ? mpPanel : panel) && !path.startsWith('/assistant');
   const openPanel = () => (onMp ? setMpPanel(true) : (setPanel(true), remember('snowmoon.panel', null)));
@@ -312,9 +315,10 @@ const YOU_TITLE = 'You: your account, wallet and work';
 function MenuAccount({ auth, where = 'menu' }: { auth: AuthState; where?: 'menu' | 'rail' }) {
   const at = where === 'rail' ? ' rail-account' : '';
   const wallet = useWalletSession();
+  // A wallet linked to a Farcaster account is signed in as that account: its name, not the address (2026-11-04).
   // A Lens or Bluesky sign-in (branch signin-lens-bluesky), when there is no Farcaster or wallet one.
   const social = useSocialSession();
-  const name = auth.kind === 'signed-in' ? (auth.username ? `@${auth.username}` : `FID ${auth.fid}`) : wallet ? wallet.short : social ? social.name : null;
+  const name = auth.kind === 'signed-in' ? (auth.username ? `@${auth.username}` : `FID ${auth.fid}`) : wallet ? (wallet.linked?.name ?? wallet.short) : social ? social.name : null;
   if (auth.kind === 'loading') return <div className={`menu-account${at}`} aria-busy="true" />;
   if (name === null)
     return (
@@ -324,7 +328,7 @@ function MenuAccount({ auth, where = 'menu' }: { auth: AuthState; where?: 'menu'
       </div>
     );
   const out = auth.kind === 'signed-in' ? (auth.via === 'website' ? signOut : null) : wallet ? signOutWallet : signOutSocial;
-  const letter = auth.kind === 'signed-in' ? (auth.username?.[0] ?? '#') : wallet ? (wallet.address[2] ?? '0') : (social?.name.replace(/^lens\//, '')[0] ?? '#');
+  const letter = auth.kind === 'signed-in' ? (auth.username?.[0] ?? '#') : wallet?.linked ? (wallet.linked.name.replace(/^@/, '')[0] ?? '#') : wallet ? (wallet.address[2] ?? '0') : (social?.name.replace(/^lens\//, '')[0] ?? '#');
   return (
     <div className={`menu-account${at}`}>
       <p className="menu-account-row">

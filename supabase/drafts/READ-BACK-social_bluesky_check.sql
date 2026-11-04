@@ -7,7 +7,7 @@
 select n, what, ok from (values
   (1, 'there is no studio.bluesky_checks: Bluesky decisions go to the shared store, studio.check_decisions',
     to_regclass('studio.bluesky_checks') is null and to_regclass('studio.check_decisions') is not null),
-  (2, 'check_decisions takes a Bluesky account (its DID) under the rule ''made-before-2026-11-06+5posts30d''',
+  (2, 'check_decisions takes a Bluesky account (its DID) under the rule ''age30d+5posts30d''',
     coalesce((select pg_get_constraintdef(oid) from pg_constraint where conrelid = to_regclass('studio.check_decisions') and conname = 'check_decisions_account_shape'), '') like '%bluesky%did:%'),
   (3, 'challenge_eligibility.account: text, not null, default ''farcaster''',
     exists (select 1 from information_schema.columns where table_schema = 'studio' and table_name = 'challenge_eligibility' and column_name = 'account'
@@ -40,7 +40,7 @@ select n, what, ok from (values
 do $$
 declare
   did constant text := 'did:plc:readbackbskycheckaaa2345';
-  rule constant text := 'made-before-2026-11-06+5posts30d';
+  rule constant text := 'age30d+5posts30d';
   sky bigint;
   person bigint;
   v1 uuid;

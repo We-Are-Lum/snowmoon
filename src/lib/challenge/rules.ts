@@ -33,6 +33,20 @@ export function phase(now: Date = new Date(), dates: { opens: string; closes: st
 }
 
 /**
+ * Whether the challenge is open now (owner, 2026-11-04: "nothing opens by date alone"): the owner's switch
+ * (CHALLENGE.public) and inside the window. Everything the dates used to switch on by themselves reads this: entries
+ * (eligibility at publish, marking), open sheet-making and the challenge share text. The cap reads the same switch
+ * (imagesDailySpendCapUsd in src/lib/config.ts).
+ */
+export function challengeOpenNow(now: Date = new Date(), pub: boolean = CHALLENGE.public, dates: { opens: string; closes: string } = CHALLENGE.dates): boolean {
+  return pub && phase(now, dates) === 'open';
+}
+
+/** Entries are taken now: CHALLENGE.entries, and the challenge open (challengeOpenNow). */
+export const entriesOpen = (now: Date = new Date(), pub: boolean = CHALLENGE.public) => CHALLENGE.entries && challengeOpenNow(now, pub);
+
+
+/**
  * A date of the challenge as people read it, in Pacific time, built from CHALLENGE.dates only. A closing instant
  * (closes, mintCloses) is shown as its last minute: "Sunday 22 November, 23:59 Pacific".
  */

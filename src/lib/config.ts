@@ -190,8 +190,9 @@ export const WALLET_LINKS = {
    */
   offer: true as boolean,
   /**
-   * The automatic link ('verified'), on a wallet's signed-in request: its address is sent to Neynar (user by verified
-   * address), and a wallet that exactly one Farcaster account has verified is linked to it. A linked wallet is looked
+   * The automatic link ('verified'), on a wallet's signed-in request: its address is sent to Neynar (user by custody
+   * or verified address, since 2026-11-04), and a wallet that is the custody address of, or verified by, exactly one
+   * Farcaster account is linked to it. A linked wallet is looked
    * up again at most once a day, and a verified link ends if that FID no longer verifies the address; a tapped link
    * isn't affected; a wallet the person unlinked isn't looked up again (owner, 2026-10-22). ON, in the same deploy
    * as the Privacy line that says so (section 7, reread by the owner on 2026-10-22) and migration 0026, which the
@@ -405,6 +406,11 @@ export const signInOpen = (id: SignInMethod): boolean => SIGN_IN_METHODS.some((m
 export const SOCIAL_SIGN_IN = {
   /** A Lens or Bluesky sign-in lasts this long (like a wallet's). */
   sessionHours: 24,
+  /**
+   * Owner, 2026-11-04 (3a, with the 30-day sentence): "An account you unlink can be linked to a different account
+   * only after 30 days." Linking it again to the same account is allowed at any time (src/lib/social/accounts.ts).
+   */
+  relinkWaitDays: 30,
   lens: {
     api: 'https://api.lens.xyz/graphql',
     jwks: 'https://api.lens.xyz/.well-known/jwks.json',
@@ -417,13 +423,18 @@ export const SOCIAL_SIGN_IN = {
     app: '0x8A5Cc31180c37078e1EbA2A23c861Acf351a97cE' as `0x${string}`,
     /**
      * THE ONE PLACE the Lens score threshold lives (Lens's "Account Score", lens.xyz/docs/protocol/accounts/fetch;
-     * 0 to about 10000 in the sample in docs/branch-reports/signin-lens-bluesky.md). Null: a Lens account gets no
-     * free generations until the owner sets a number here. A Lens account with a score of at least this number gets
-     * the same free daily count as a Farcaster account.
+     * 0 to about 10000 in the sample in docs/branch-reports/signin-lens-bluesky.md). Owner, 2026-11-04: "1,000 to
+     * start". A Lens account (not linked) whose score is at least this gets the same free daily count as a Farcaster
+     * account. Null would turn Lens's free counts off.
      */
-    minScore: null as number | null,
-    /** How long a looked-up score is kept in memory, per server. */
-    scoreCacheMinutes: 60,
+    minScore: 1000 as number | null,
+    /*
+     * Owner, 2026-11-04 (variant B, and "store the decision, not the score"): the score is looked up only at Generate,
+     * the same moment as Neynar's, and only when there is no current decision. Only the decision is kept (passed or
+     * not, when, and the rule 'lens-score>=<minScore>'), in the shared store (src/lib/checks/decisions.ts, network
+     * 'lens', keyed by the Lens address; CHECKS.passDays and CHECKS.failHours). The score is never stored, logged or
+     * sent to the page (src/lib/social/lens-check.ts).
+     */
     timeoutMs: 5000,
   },
   bluesky: {
@@ -441,7 +452,9 @@ export const SOCIAL_SIGN_IN = {
      * the free daily counts, and can remix and enter the remix challenge, only if it passes, the same way a Farcaster
      * account passes Neynar's score (src/lib/social/bluesky-check.ts). Two signals, from Bluesky's public AppView
      * (app.bsky.actor.getProfile and app.bsky.feed.getAuthorFeed; no key), asked with the account's DID only:
-     * 1. the account was made before `createdBefore` (6 Nov 2026, 00:00 Pacific), so new accounts can't be made for it;
+     * 1. the account is at least `minAgeDays` days old when it is checked, so new accounts can't be made for it (a
+     *    rolling rule, owner, 2026-11-04: it replaced a fixed cut-off of 6 Nov 2026, which would have shut out every
+     *    Bluesky account made after it for good);
      * 2. it posted at least `minRecentPosts` times (its own posts and replies, not reposts) in the last `recentDays`
      *    days, by Bluesky's own clock (each post's indexedAt) as well as the post's, so old idle accounts can't
      *    drain the daily cap.
@@ -455,7 +468,7 @@ export const SOCIAL_SIGN_IN = {
     check: {
       on: false as boolean,
       appView: 'https://public.api.bsky.app',
-      createdBefore: '2026-11-06T08:00:00Z',
+      minAgeDays: 30,
       recentDays: 30,
       minRecentPosts: 5,
       /** How many of the newest feed items are read (one request); enough to find minRecentPosts among reposts. */
@@ -514,8 +527,20 @@ export const CONTACT_EMAIL = 'snowmoon@wearelum.xyz';
  */
 export const CHALLENGE = {
   id: 'remix-2026-11',
-  /** The characters, by their file in content/snowmoon/designs/characters, in the owner's order (owner, 2026-10-31). */
-  characters: ['zei', 'bai', 'gladias', 'seila', 'deluin', 'mu'] as readonly string[],
+  /**
+   * The owner's switch (owner, 2026-11-04: "/challenge is admin-only for now"). While false:
+   * - /challenge, /api/challenge/* and every way into them (the menu item, the home row, the challenge share text, and
+   *   on sheet pages the Entry badge, "Mark as my entry", the challenge lines and "Posted on") are for admins only
+   *   (ADMINS); everyone else gets "not found", as agent pages do while AGENTS.public is off;
+   * - nothing the dates would switch on opens by itself: entries (eligibility recorded at publish, marking), open
+   *   sheet-making (openSheets) and the challenge's free image cap (dailySpendCapUsd) all stay off, whatever the clock
+   *   says. `dates` stay as they are, for when the owner opens it with a new open date.
+   * Only the owner turns it on. check:principles P6u proves it: with this off and the clock past `dates.opens`, entries,
+   * open sheets and the $15 cap are off and /challenge answers 404 to a non-admin.
+   */
+  public: false as boolean,
+  /** The characters, by their file in content/snowmoon/designs/characters, most named in the book first (owner, 2026-11-04; content/snowmoon/characters-by-mentions.json, checked by test:character-order and P5h). */
+  characters: ['zei', 'gladias', 'bai', 'seila', 'deluin', 'mu'] as readonly string[],
   /**
    * Each character's bases (owner, 2026-11-03): up to CHALLENGE.maxBases published sheets to start from, in the same
    * three styles for every character, so each set reads as one cast. Each entry is a design's id: its element id (any
@@ -756,12 +781,14 @@ export const IMAGES = {
 /** Minpentai Play's limits and retention (owner, 2026-10-09). Every /api/minpentai/* request counts. */
 /**
  * The site-wide free image spend cap for a moment (owner, 2026-10-31): CHALLENGE.dailySpendCapUsd from the entry
- * window's open (included) to its close (excluded), IMAGES.dailySpendCapUsd ($2) at every other time. It reverts by
+ * window's open (included) to its close (excluded), once the owner has opened the challenge (CHALLENGE.public; owner,
+ * 2026-11-04), IMAGES.dailySpendCapUsd ($2) at every other time. It reverts by
  * itself, with no deploy. The cap is per UTC day; the day's spend counted so far is compared with the cap now.
  */
 export function imagesDailySpendCapUsd(now: Date = new Date()): number {
   const t = now.getTime();
-  return t >= Date.parse(CHALLENGE.dates.opens) && t < Date.parse(CHALLENGE.dates.closes) ? CHALLENGE.dailySpendCapUsd : IMAGES.dailySpendCapUsd;
+  // Only once the owner has opened the challenge (CHALLENGE.public): the dates alone never raise the cap.
+  return CHALLENGE.public && t >= Date.parse(CHALLENGE.dates.opens) && t < Date.parse(CHALLENGE.dates.closes) ? CHALLENGE.dailySpendCapUsd : IMAGES.dailySpendCapUsd;
 }
 
 export const MINPENTAI_PLAY = {

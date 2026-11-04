@@ -1,5 +1,6 @@
 import { CHALLENGE } from '../config';
 import { dateText, windowText } from './rules';
+import { SHARE_WORDING } from './share-wording';
 
 /**
  * The remix challenge's words. DRAFT wording: the rules are the plan's draft copy (docs/proposals/remix-challenge-plan.md,
@@ -8,7 +9,7 @@ import { dateText, windowText } from './rules';
  * model by Anthropic) for the owner's review.
  */
 const d = (k: Parameters<typeof dateText>[0], time = false) => dateText(k, { time });
-/** The characters' call names, in the owner's order, from CHALLENGE.characters (their files' slugs). */
+/** The characters' call names, most named in the book first, from CHALLENGE.characters (their files' slugs). */
 const callNames = () => CHALLENGE.characters.map((s) => s.charAt(0).toUpperCase() + s.slice(1));
 const listed = (xs: string[], last = 'or') => (xs.length < 2 ? xs.join('') : `${xs.slice(0, -1).join(', ')} ${last} ${xs[xs.length - 1]}`);
 const numberWord = (n: number) => ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'][n] ?? String(n);
@@ -78,10 +79,8 @@ export const CHALLENGE_WORDING = {
   adminNote: 'Made by an admin during the remix challenge: admins aren’t eligible for rewards.',
   mark: 'Mark as my entry',
   marked: 'Marked as your entry.',
-  // Share and "Posted on".
-  shareHead: 'Share this version',
-  shareOn: (network: string) => `Post on ${network}`,
-  shareText: (what: string) => `${what}, made on Snowmoon Party`,
+  // Share and "Posted on": the words that don't name the challenge are in ./share-wording.ts.
+  ...SHARE_WORDING,
   /** While entries are open, on a challenge character's sheet (owner, 2026-11-03: the share text mentions the challenge). Draft wording. */
   shareTextOpen: (what: string) => `${what}, made on Snowmoon Party. Remix the cast: the remix challenge is open until ${d('closes', true)}.`,
   /** The publish confirmation of a version that is its maker's entry (owner, 2026-11-03: these words). */
@@ -92,16 +91,6 @@ export const CHALLENGE_WORDING = {
    */
   publishedUnchecked: (name: string) =>
     `This version won’t count as your entry for ${name}: Neynar, which scores Farcaster accounts, didn’t answer when you published, so the site couldn’t check your account. Publish another version later to enter; an earlier entry for ${name}, if you have one, still counts.`,
-  guidance: 'If you’re remixing someone’s post, quote or reply to it on the same network. Always include your version’s link.',
-  addHead: 'Add where you posted it',
-  addLabel: 'Your post’s address (Farcaster, Bluesky or Lens)',
-  addButton: 'Add',
-  added: 'Added.',
-  already: 'Already listed.',
-  postedOnHead: 'Posted on',
-  postedOnNote: 'Posts that link to this page, newest first, as their writers or the people who added them listed them. Shown as links only.',
-  seeIt: (network: string) => `See it on ${network}`,
-  remove: 'Remove',
 };
 
 export const CHALLENGE_CHARACTERS = CHALLENGE.characters;

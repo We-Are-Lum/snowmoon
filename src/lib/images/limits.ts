@@ -33,7 +33,8 @@ export function perDay(fid: number): number {
 
 /** For a wallet account: how many text-to-image Generates its balance pays for. */
 export async function generationsLeft(sql: Sql, fid: number): Promise<number> {
-  if (isSocialPerson(fid) && !(await freeFor(sql, fid)).free) return 0;
+  // Never asks Lens (the count is shown when the maker opens); a decision already made counts, none yet shows the count.
+  if (isSocialPerson(fid) && (await freeFor(sql, fid, { lookUp: false }))?.free === false) return 0;
   if (isWalletPerson(fid)) return paysFor(await balanceUsd(sql, -fid), priceUsd(IMAGES.reserveUsd));
   const [r] = await sql`select count(*)::int as n from studio.image_asks where fid = ${fid} and at >= date_trunc('day', now() at time zone 'utc') at time zone 'utc'`;
   return Math.max(0, perDay(fid) - (r?.n ?? 0));

@@ -6,7 +6,8 @@
  *   npm run test:bluesky-check
  *
  * Each rule is also run on a planted violation, which it must catch:
- * - K1 a new account (made on or after 6 Nov 2026) is refused, and one with no date;
+ * - K1 a new account (less than 30 days old when checked: a rolling rule, owner, 2026-11-04) is refused, and one with
+ *   no date; the same account passes once it is 30 days old;
  * - K2 an idle old account (fewer than 5 posts in 30 days) is refused; reposts, other people's posts and posts whose
  *   dates Bluesky's clock doesn't confirm don't count; an old active account passes;
  * - K3 the raw numbers are never stored: the shared store (studio.check_decisions, network 'bluesky') holds only
@@ -56,23 +57,34 @@ const accounts = await import('../src/lib/social/accounts');
 const people = await import('../src/lib/people');
 const { freeFor } = await import('../src/lib/social/free');
 const R = await import('../src/lib/challenge/rules');
-const cfg = SOCIAL_SIGN_IN.bluesky.check as { on: boolean; createdBefore: string; recentDays: number; minRecentPosts: number };
+const cfg = SOCIAL_SIGN_IN.bluesky.check as { on: boolean; minAgeDays: number; recentDays: number; minRecentPosts: number };
 
 const NOW = new Date();
 const day = 86_400_000;
 const ago = (days: number) => new Date(NOW.getTime() - days * day).toISOString();
 const post = (days: number, indexedDays = days) => ({ createdAt: ago(days), indexedAt: ago(indexedDays) });
-const RULES = { createdBefore: cfg.createdBefore, recentDays: cfg.recentDays, minRecentPosts: cfg.minRecentPosts };
+const RULES = { minAgeDays: cfg.minAgeDays, recentDays: cfg.recentDays, minRecentPosts: cfg.minRecentPosts };
 
 // --- K1 a new account is refused ---------------------------------------------------------------------------------
 {
   const active = Array.from({ length: 8 }, (_, i) => post(i + 1));
-  const decideNew = (rules = RULES) => B.decideBluesky({ createdAt: '2026-11-07T10:00:00Z', posts: active }, NOW, rules);
-  check('K1 an account made after 6 Nov 2026 (Pacific) is refused as new', decideNew() === 'new');
-  check('K1 one made at 00:00 Pacific on 6 Nov is new; one a minute before is not', B.decideBluesky({ createdAt: '2026-11-06T08:00:00Z', posts: active }, NOW) === 'new' && B.decideBluesky({ createdAt: '2026-11-06T07:59:00Z', posts: active }, NOW) === 'passed');
+  const decideNew = (rules = RULES) => B.decideBluesky({ createdAt: ago(10), posts: active }, NOW, rules);
+  check('K1 an account 10 days old is refused as new', decideNew() === 'new');
+  const edge = new Date(NOW.getTime() - 30 * day);
+  check('K1 one exactly 30 days old passes; one a minute younger is new', B.decideBluesky({ createdAt: edge.toISOString(), posts: active }, NOW) === 'passed' && B.decideBluesky({ createdAt: new Date(edge.getTime() + 60_000).toISOString(), posts: active }, NOW) === 'new');
+  check('K1 the rule rolls: the same account, new today, passes 30 days later (judged at check time)', (() => {
+    const made = ago(5);
+    const later = new Date(NOW.getTime() + 26 * day);
+    const laterPosts = Array.from({ length: 8 }, (_, i) => ({ createdAt: new Date(later.getTime() - (i + 1) * day).toISOString(), indexedAt: new Date(later.getTime() - (i + 1) * day).toISOString() }));
+    return B.decideBluesky({ createdAt: made, posts: active }, NOW) === 'new' && B.decideBluesky({ createdAt: made, posts: laterPosts }, later) === 'passed';
+  })());
+  const feb = new Date('2027-02-01T00:00:00Z');
+  const febPosts = Array.from({ length: 6 }, (_, i) => ({ createdAt: new Date(feb.getTime() - (i + 1) * day).toISOString(), indexedAt: new Date(feb.getTime() - (i + 1) * day).toISOString() }));
+  check('K1 an account made after 6 Nov 2026 is not shut out for good (no fixed cut-off)', B.decideBluesky({ createdAt: '2026-12-01T00:00:00Z', posts: febPosts }, feb, RULES) === 'passed');
   check('K1 an account with no creation date is treated as new', B.decideBluesky({ createdAt: null, posts: active }, NOW) === 'new' && B.decideBluesky({ createdAt: 'not a date', posts: active }, NOW) === 'new');
-  check('K1 the cut-off is 6 Nov 2026, 00:00 Pacific', cfg.createdBefore === '2026-11-06T08:00:00Z');
-  proof('K1 a rule with no cut-off would let the new account through', decideNew({ ...RULES, createdBefore: '2099-01-01T00:00:00Z' }) !== 'new');
+  check('K1 an account dated in the future is new', B.decideBluesky({ createdAt: ago(-3), posts: active }, NOW) === 'new');
+  check('K1 the age is 30 days', cfg.minAgeDays === 30 && !('createdBefore' in cfg));
+  proof('K1 a rule with no minimum age would let the new account through', decideNew({ ...RULES, minAgeDays: 0 }) !== 'new');
 }
 
 // --- K2 an idle old account is refused ---------------------------------------------------------------------------
@@ -100,7 +112,7 @@ const feedItem = (did: string, days: number, repost = false) => ({
 const world: Record<string, { profile: object; feed: object[] }> = {
   [DID_OLD]: { profile: { did: DID_OLD, handle: 'old.bsky.social', createdAt: '2023-04-02T10:00:00.000Z', followersCount: 120, followsCount: 80, postsCount: 900 }, feed: [1, 2, 4, 7, 12, 25].map((d) => feedItem(DID_OLD, d)) },
   [DID_IDLE]: { profile: { did: DID_IDLE, handle: 'idle.bsky.social', createdAt: '2023-04-02T10:00:00.000Z', followersCount: 4000, followsCount: 10, postsCount: 2 }, feed: [feedItem(DID_IDLE, 1, true), feedItem(DID_IDLE, 2, true), feedItem(DID_IDLE, 3, true), feedItem(DID_IDLE, 4, true), feedItem(DID_IDLE, 5, true), feedItem(DID_IDLE, 400)] },
-  [DID_NEW]: { profile: { did: DID_NEW, handle: 'new.bsky.social', createdAt: '2026-11-08T10:00:00.000Z', followersCount: 0, followsCount: 0, postsCount: 30 }, feed: [1, 1, 1, 1, 1, 1].map((d) => feedItem(DID_NEW, d)) },
+  [DID_NEW]: { profile: { did: DID_NEW, handle: 'new.bsky.social', createdAt: ago(8), followersCount: 0, followsCount: 0, postsCount: 30 }, feed: [1, 1, 1, 1, 1, 1].map((d) => feedItem(DID_NEW, d)) },
 };
 const asked: string[] = [];
 at.ATPROTO_HTTP.fetch = (async (input: RequestInfo | URL) => {
@@ -146,7 +158,7 @@ const realFacts = (did: string) => B.blueskyFacts(did);
     await sql`update studio.check_decisions set decided_at = now() - make_interval(hours => ${hours}) where network = 'bluesky' and account = ${did}`;
     await sql`set role studio_writer`;
   };
-  check('K3 the rule is stored as the owner named it', B.thresholdKey() === 'made-before-2026-11-06+5posts30d', B.thresholdKey());
+  check('K3 the rule is stored as the owner named it', B.thresholdKey() === 'age30d+5posts30d', B.thresholdKey());
   let calls = 0;
   const counting = (did: string) => (calls++, realFacts(did));
   const a = await B.blueskyDecision(S, old, counting, NOW);
@@ -178,7 +190,7 @@ const realFacts = (did: string) => B.blueskyFacts(did);
   await B.blueskyDecision(S, old, counting, NOW);
   check('K4 back on the old rule, its current pass is used again (no lookup)', calls === 3, `calls ${calls}`);
   const kept = (await sql<{ threshold: string }[]>`select threshold from studio.check_decisions where network = 'bluesky' and account = ${DID_OLD} order by threshold`).map((r) => r.threshold);
-  check('K3 the rule used is kept with each decision', kept.join() === 'made-before-2026-11-06+4posts30d,made-before-2026-11-06+5posts30d', kept.join());
+  check('K3 the rule used is kept with each decision', kept.join() === 'age30d+4posts30d,age30d+5posts30d', kept.join());
   await sql`reset role`;
   await sql`delete from studio.check_decisions where network = 'bluesky'`;
   await sql`set role studio_writer`;
@@ -196,7 +208,7 @@ const realFacts = (did: string) => B.blueskyFacts(did);
   const cols = (await sql<{ column_name: string }[]>`select column_name from information_schema.columns where table_schema = 'studio' and table_name = 'check_decisions' order by 1`).map((r) => r.column_name);
   const rows = await sql`select * from studio.check_decisions where network = 'bluesky'`;
   check('K3 Bluesky decisions are stored (one per account under the rule)', rows.length === 2, JSON.stringify(rows));
-  const RAW = ['2023-04-02', '2026-11-08', '900', '4000', '120', 'old.bsky.social', 'words never read'];
+  const RAW = ['2023-04-02', ago(8).slice(0, 10), '900', '4000', '120', 'old.bsky.social', 'words never read'];
   const rawIn = (cs: string[], rs: unknown[]) => cs.join() !== 'account,decided_at,network,passed,threshold' || rs.some((r) => RAW.some((x) => JSON.stringify(r).includes(x)));
   check('K3 check_decisions has only network, account, threshold, passed and decided_at, and no raw numbers', !rawIn(cols, rows), `${cols.join()} ${JSON.stringify(rows)}`);
   // Nothing else in the database holds the facts either (every studio table, every row).
@@ -223,20 +235,37 @@ const realFacts = (did: string) => B.blueskyFacts(did);
   await sql`reset role`;
   await sql`delete from studio.check_decisions where network = 'bluesky'`;
   await sql`set role studio_writer`;
-  const p = await freeFor(S as never, person(old), undefined, realFacts);
-  const n = await freeFor(S as never, person(fresh), undefined, realFacts);
-  const i = await freeFor(S as never, person(idle), undefined, realFacts);
-  const d = await freeFor(S as never, person(down), undefined, realFacts);
+  const p = await freeFor(S as never, person(old), { bluesky: realFacts });
+  const n = await freeFor(S as never, person(fresh), { bluesky: realFacts });
+  const i = await freeFor(S as never, person(idle), { bluesky: realFacts });
+  const d = await freeFor(S as never, person(down), { bluesky: realFacts });
   check('K6 on: an old active Bluesky account gets the free counts', p.free === true);
-  check('K6 on: a new account is refused, saying why', !n.free && n.reason === 'bluesky-new' && /6 November 2026/.test(n.error), JSON.stringify(n));
+  check('K6 on: a new account is refused, saying why', !n.free && n.reason === 'bluesky-new' && /at least 30 days old/.test(n.error), JSON.stringify(n));
   check('K6 on: an idle old account is refused, saying why', !i.free && i.reason === 'bluesky-idle' && /5 times in the last 30 days/.test(i.error), JSON.stringify(i));
   check('K6 on: Bluesky unreachable is refused as unreachable', !d.free && d.reason === 'bluesky-unreachable');
-  const again = await freeFor(S as never, person(idle), undefined, realFacts);
-  check('K6 on: a stored fail is refused without asking again, naming both rules', !again.free && again.reason === 'bluesky-failed' && /6 November 2026/.test(again.error) && /5 times in the last 30 days/.test(again.error), JSON.stringify(again));
+  const again = await freeFor(S as never, person(idle), { bluesky: realFacts });
+  check('K6 on: a stored fail is refused without asking again, naming both rules', !again.free && again.reason === 'bluesky-failed' && /at least 30 days old/.test(again.error) && /5 times in the last 30 days/.test(again.error), JSON.stringify(again));
   const { mayGenerate } = await import('../src/lib/images/gate');
   const g = await mayGenerate(S as never, person(down));
   check('K6 the Generate gate answers 503 when Bluesky can\'t be reached, 403 for new', !g.ok && g.status === 503 && !(await mayGenerate(S as never, person(fresh))).ok);
-  proof('K6 a gate that ignored the decision would let the idle account through', (await freeFor(S as never, person(idle), undefined, realFacts)).free === false);
+  proof('K6 a gate that ignored the decision would let the idle account through', (await freeFor(S as never, person(idle), { bluesky: realFacts })).free === false);
+  // lookUp: false (the maker opening, the count shown) never asks Bluesky: a stored decision, or null.
+  const before = asked.length;
+  const kp = await freeFor(S as never, person(old), { lookUp: false });
+  const ki = await freeFor(S as never, person(idle), { lookUp: false });
+  const kd = await freeFor(S as never, person(down), { lookUp: false });
+  check('K6 lookUp false: a stored pass is free, a stored fail is refused, no decision is null, Bluesky not asked', kp?.free === true && ki?.free === false && kd === null && asked.length === before, JSON.stringify({ kp, ki, kd, asked: asked.length - before }));
+  // 4.6: a report or a moderator's hide withdraws a Bluesky pass early, as for Farcaster and Lens.
+  const { recheckMaker } = await import('../src/lib/checks/decisions');
+  const passBefore = await B.keptBlueskyDecision(S as never, DID_OLD);
+  await recheckMaker(S as never, person(old));
+  const passAfter = await B.keptBlueskyDecision(S as never, DID_OLD);
+  const failAfter = await B.keptBlueskyDecision(S as never, DID_IDLE);
+  await recheckMaker(S as never, person(idle));
+  check('K6 a report or a moderator hide withdraws a Bluesky pass early (a fail stays)', passBefore === 'passed' && passAfter === null && failAfter === 'failed' && (await B.keptBlueskyDecision(S as never, DID_IDLE)) === 'failed', JSON.stringify({ passBefore, passAfter, failAfter }));
+  const asked2 = asked.length;
+  const re = await freeFor(S as never, person(old), { bluesky: realFacts });
+  check('K6 after the early withdrawal, the next Generate asks Bluesky again', re.free === true && asked.length > asked2, JSON.stringify({ re, asked: asked.length - asked2 }));
 }
 
 // --- K7 the remix challenge -----------------------------------------------------------------------------------------

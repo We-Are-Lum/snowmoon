@@ -1,5 +1,6 @@
 import 'server-only';
 import type postgres from 'postgres';
+import { SOCIAL_SIGN_IN } from '../config';
 import { socialPerson } from '../people';
 import { subjectOk, type SocialKind, type SocialSession } from './session';
 
@@ -88,20 +89,45 @@ export async function personForSocial(sql: Sql | null, s: Pick<SocialSession, 'a
   }
 }
 
-export type SocialLinkResult = { ok: true; created: boolean } | { ok: false; why: 'not-yet' | 'linked-elsewhere' | 'lens-to-lens' | 'bad-target' };
+export type SocialLinkResult =
+  | { ok: true; created: boolean }
+  | { ok: false; why: 'not-yet' | 'linked-elsewhere' | 'lens-to-lens' | 'bad-target' }
+  /** The 30-day wait (owner, 2026-11-04): unlinked on `unlinkedAt`, it can be linked to a different account from `until`. */
+  | { ok: false; why: 'wait'; unlinkedAt: string; until: string };
+
+const sameTarget = (a: SocialLinkTarget, b: SocialLinkTarget) =>
+  'fid' in a && 'fid' in b ? a.fid === b.fid : 'lensAccount' in a && 'lensAccount' in b && a.lensAccount === b.lensAccount;
+
+/**
+ * The 30-day wait (owner, 2026-11-04: "An account you unlink can be linked to a different account only after 30
+ * days."): the account's latest ended link, if it ended less than SOCIAL_SIGN_IN.relinkWaitDays ago; null otherwise.
+ * Linking again to the account it was linked to is allowed at any time. Decided by the database's clock.
+ */
+export async function relinkWait(sql: Sql, account: number): Promise<{ target: SocialLinkTarget; unlinkedAt: string; until: string } | null> {
+  const [r] = await sql`select fid::int as fid, lens_account_id::int as lens, unlinked_at,
+      unlinked_at + make_interval(days => ${SOCIAL_SIGN_IN.relinkWaitDays}::int) as until
+    from studio.social_links
+    where account_id = ${account} and unlinked_at is not null
+      and unlinked_at > now() - make_interval(days => ${SOCIAL_SIGN_IN.relinkWaitDays}::int)
+    order by unlinked_at desc limit 1`;
+  if (!r) return null;
+  return { target: r.fid ? { fid: r.fid } : { lensAccount: r.lens }, unlinkedAt: new Date(r.unlinked_at).toISOString(), until: new Date(r.until).toISOString() };
+}
 
 /**
  * Link, with both proofs already checked by the caller (src/app/api/social-link): the account's own sign-in, and the
  * Farcaster sign-in (fid) or the Lens sign-in (lensAccount) it is linked to. Only a Bluesky account links to a Lens
- * account. Linking again to the same target changes nothing; a different target needs an unlink first.
+ * account. Linking again to the same target changes nothing; a different target needs an unlink first, and then the
+ * 30-day wait (relinkWait).
  */
 export async function linkSocial(sql: Sql, account: { id: number; kind: SocialKind }, target: SocialLinkTarget): Promise<SocialLinkResult> {
   if ('fid' in target ? !Number.isInteger(target.fid) || target.fid <= 0 : !Number.isInteger(target.lensAccount) || target.lensAccount <= 0) return { ok: false, why: 'bad-target' };
   if ('lensAccount' in target && account.kind !== 'bluesky') return { ok: false, why: 'lens-to-lens' };
   try {
     const now = await activeSocialLink(sql, account.id);
-    const sameTarget = (a: SocialLinkTarget) => ('fid' in a && 'fid' in target ? a.fid === target.fid : 'lensAccount' in a && 'lensAccount' in target && a.lensAccount === target.lensAccount);
-    if (now) return sameTarget(now.target) ? { ok: true, created: false } : { ok: false, why: 'linked-elsewhere' };
+    if (now) return sameTarget(now.target, target) ? { ok: true, created: false } : { ok: false, why: 'linked-elsewhere' };
+    const wait = await relinkWait(sql, account.id);
+    if (wait && !sameTarget(wait.target, target)) return { ok: false, why: 'wait', unlinkedAt: wait.unlinkedAt, until: wait.until };
     if ('fid' in target) await sql`insert into studio.social_links (account_id, fid) values (${account.id}, ${target.fid})`;
     else {
       const [lens] = await sql`select kind from studio.social_accounts where id = ${target.lensAccount}`;
@@ -112,6 +138,41 @@ export async function linkSocial(sql: Sql, account: { id: number; kind: SocialKi
   } catch (e) {
     if ((e as { code?: string }).code === '23505') return { ok: false, why: 'linked-elsewhere' };
     if (missing(e)) return { ok: false, why: 'not-yet' };
+    throw e;
+  }
+}
+
+/**
+ * The accounts linked to this Farcaster ID, or (Bluesky) to this Lens account: for the You page, each with Unlink.
+ * Empty while the table isn't there.
+ */
+export async function linkedToMe(sql: Sql, me: SocialLinkTarget): Promise<{ account: number; kind: SocialKind; handle: string | null; linkedAt: string }[]> {
+  try {
+    const rows = 'fid' in me
+      ? await sql`select a.id::int as account, a.kind, a.handle, l.linked_at from studio.social_links l join studio.social_accounts a on a.id = l.account_id
+          where l.fid = ${me.fid} and l.unlinked_at is null order by l.linked_at`
+      : await sql`select a.id::int as account, a.kind, a.handle, l.linked_at from studio.social_links l join studio.social_accounts a on a.id = l.account_id
+          where l.lens_account_id = ${me.lensAccount} and l.unlinked_at is null order by l.linked_at`;
+    return rows.map((r) => ({ account: r.account, kind: r.kind as SocialKind, handle: r.handle ?? null, linkedAt: new Date(r.linked_at).toISOString() }));
+  } catch (e) {
+    if (missing(e)) return [];
+    throw e;
+  }
+}
+
+/**
+ * Unlink, by the person on the other side: the Farcaster ID (or Lens account) the account is linked to may end the
+ * link without the account's own sign-in (so a lost Lens wallet or Bluesky login can still be removed). Only a link to
+ * `me` ends; any other account's link is left alone.
+ */
+export async function unlinkFrom(sql: Sql, me: SocialLinkTarget, account: number): Promise<'done' | 'none' | 'not-yet'> {
+  try {
+    const rows = 'fid' in me
+      ? await sql`update studio.social_links set unlinked_at = now(), ended_by = 'person' where account_id = ${account} and fid = ${me.fid} and unlinked_at is null returning id`
+      : await sql`update studio.social_links set unlinked_at = now(), ended_by = 'person' where account_id = ${account} and lens_account_id = ${me.lensAccount} and unlinked_at is null returning id`;
+    return rows.length > 0 ? 'done' : 'none';
+  } catch (e) {
+    if (missing(e)) return 'not-yet';
     throw e;
   }
 }

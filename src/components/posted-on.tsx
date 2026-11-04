@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { authFetch, useAuth, useWalletSession } from '~/lib/client-auth';
-import { CHALLENGE_WORDING as W } from '~/lib/challenge/wording';
+import { SHARE_WORDING as W } from '~/lib/challenge/share-wording';
 
 const NETWORK_NAME = { farcaster: 'Farcaster', bluesky: 'Bluesky', lens: 'Lens' } as const;
 export interface PostedOnItem {

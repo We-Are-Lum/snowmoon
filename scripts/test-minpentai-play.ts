@@ -33,7 +33,7 @@ import { PlayController, ruleNote, type Env, type PlayView } from '../src/lib/mi
 import type { Cell } from '../src/lib/minpentai/play-game/board';
 import { look } from '../src/app/minpentai/play-board';
 import { drawPiece } from '../src/app/minpentai/learn-draw';
-import { LADDER, PLAY } from '../src/lib/minpentai/versions/solo-v1';
+import { LADDER, PLAY, RULESETS, SOLO_V1_ENGINE, settingsFor } from '../src/lib/minpentai/versions/solo-v1';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const html = readFileSync(path.join(ROOT, 'docs/design/minpentai-play-prototype.dc.html'), 'utf8');
@@ -173,7 +173,8 @@ function port() {
     const a = D.clone(JSON.parse(JSON.stringify(w))), b = G.clone(w);
     for (let s = 0; s < 40; s++) { D.step(a); G.step(b); eq(a, b, `step() on random board ${n}, step ${s + 1}`); }
   }
-  // Planning, every level, every rule, random fogged positions.
+  // Planning, every level, every rule, random fogged positions. Design's botPlan read the whole board; since 2026-11-03
+  // (owner: option 3) the computer plans from Amber's view only (engine fog), so Design's is given that view here.
   for (let n = 0; n < 240; n++) {
     const rule = G.RULE_IDS[n % 4], lvl = n % 6;
     const w = G.world();
@@ -185,7 +186,8 @@ function port() {
     }
     w.step = (n * 12) % 84;
     const mk = (rand: () => number) => ({ w, lvl, rule, R: rule === 'sight2' ? 2 : 3, every: rule === 'every8' ? 8 : 12, cost: rule === 'cost3' ? 3 : 4, rng: rand, snap: { C: G.towers(w, 'C'), A: G.towers(w, 'A') }, lsA: { [G.K(1, 2)]: 0, [G.K(1, 7)]: 0 } as Record<number, number> });
-    const a = D.botPlan({ ...mk(D.rng(n)), w: JSON.parse(JSON.stringify(w)) });
+    const R = rule === 'sight2' ? 2 : 3, view = SOLO_V1_ENGINE.fog(w, { ...settingsFor(RULESETS[1], rule), sight: R, reach: R }, 'A');
+    const a = D.botPlan({ ...mk(D.rng(n)), w: JSON.parse(JSON.stringify(view)) });
     const b = G.botPlan({ ...mk(G.rng(n)), w: G.clone(w) });
     eq(a, b, `botPlan level ${lvl}, rule ${rule}, position ${n}`);
   }

@@ -11,7 +11,7 @@
 --
 -- What it changes (none of it publicly readable):
 -- 1. No table of its own (owner, 2026-11-04: ONE shared decision store). The Bluesky check keeps its decision in
---    studio.check_decisions: network 'bluesky', account = the DID, threshold 'made-before-2026-11-06+5posts30d',
+--    studio.check_decisions: network 'bluesky', account = the DID, threshold 'age30d+5posts30d',
 --    passed or not, and when. Never the account's creation date, its posts or any count.
 -- 2. studio.challenge_eligibility: a version made by a Bluesky account (person number at or below -1,000,000,000,
 --    src/lib/people.ts) can now have a decision, and a new column `account` says whose check made it ('farcaster':

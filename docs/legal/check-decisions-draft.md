@@ -98,6 +98,18 @@ And in §4:
 > in the last 30 days), and when that was decided; never its age or its post count. A pass is kept for 90 days and a
 > fail for a day.
 
+## The owner's answers (2026-11-04, reread pack items 2.1 and 2.2)
+
+- **2.1 no:** a maker hiding their own picture doesn't withdraw their pass. The code matches: `CHECKS.recheckOnOwnHide`
+  is false, and only the report, moderator, admin and rule hides call `recheckMaker`.
+- **2.2 delete:** the migration deletes every kept score (`delete from studio.image_scores`) and revokes insert and
+  update on it. The code matches.
+- After main's merge (wallet-fid-link, Privacy 1wgu7z), §7's Neynar item is this branch's first two sentences, then
+  main's words from "Neynar is never asked" on (reread pack, Overlap B). Main's wallet sentences win.
+
+- **Reread:** item 2 approved as drafted ("reviewed by the coordinator, approved by the owner", 2026-11-04). Recorded
+  as Privacy `1rsayc0`. The About line is part of the same approval. Merging still needs the migration applied.
+
 ## Decisions owed
 
 1. Reread the §7 and §4 lines above ("reread"), or change them.

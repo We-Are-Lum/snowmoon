@@ -19,7 +19,7 @@ const EVENT = 'snowmoon:signin';
  * of Farcaster. A Farcaster sign-in, when there is one, wins.
  */
 const WALLET_KEY = 'snowmoon.wallet';
-const WALLET_ROUTES = ['/api/images/status', '/api/images/generate', '/api/images/publish', '/api/consent', '/api/wallet/', '/api/remix/', '/api/you', '/api/scenes/', '/api/make/', '/api/oauth/approve', '/api/agents', '/api/direction', '/api/drafts', '/api/notes', '/api/requests', '/api/designs/picks', '/api/chat/status', '/api/chat/ask'];
+const WALLET_ROUTES = ['/api/images/status', '/api/images/generate', '/api/images/publish', '/api/consent', '/api/wallet/', '/api/remix/', '/api/you', '/api/scenes/', '/api/make/', '/api/oauth/approve', '/api/agents', '/api/direction', '/api/drafts', '/api/notes', '/api/requests', '/api/designs/picks', '/api/chat/status', '/api/chat/ask', '/api/minpentai/m/'];
 /**
  * Routes matched exactly rather than by prefix: hiding one's own picture (the You page, owner 2026-10-18).
  * Not every /api/images/<id>/… route: like and report take a Farcaster sign-in only, and a wallet
@@ -95,6 +95,11 @@ export interface WalletSessionState {
   /** 0x1234…abcd, the byline. */
   short: string;
   exp: number;
+  /**
+   * The Farcaster account this wallet signs in as (src/lib/wallet/links.ts), as the server last said (2026-11-04:
+   * the menu kept showing the address of a wallet the server had linked). Null: not linked. Absent: not asked yet.
+   */
+  linked?: { fid: number; name: string } | null;
 }
 
 function readWallet(): WalletSessionState | null {
@@ -117,6 +122,36 @@ export function saveWalletSession(token: string, address: string) {
   window.dispatchEvent(new Event(EVENT));
 }
 
+/**
+ * Ask the server who this wallet signs in as (the balance route, which also makes the automatic link), and keep the
+ * answer with the session. Once per page load at most; right after a sign-in, and for a session kept from before
+ * the menu showed links. Failures (a 401 included) leave the session as it was: it is never signed out from here.
+ */
+let linkAsked: Promise<void> | null = null;
+export function refreshWalletLink(force = false): Promise<void> {
+  if (linkAsked && !force) return linkAsked;
+  linkAsked = (async () => {
+    const w = readWallet();
+    if (!w) return;
+    // A plain fetch, not walletFetch: this question never ends the session. A 401 or any failure here leaves the
+    // session as it is, and the menu shows the address (2026-11-04, check:ui: the 401 signed a valid session out).
+    const res = await fetch('/api/wallet/balance', { headers: { Authorization: `Bearer ${w.token}` } }).catch(() => null);
+    if (!res?.ok) return;
+    const b = (await res.json().catch(() => null)) as { address?: string; linked?: { fid: number; name: string } | null } | null;
+    const now = readWallet();
+    if (!b || !now || now.token !== w.token || b.address?.toLowerCase() !== now.address) return;
+    const linked = b.linked && Number.isInteger(b.linked.fid) && typeof b.linked.name === 'string' ? { fid: b.linked.fid, name: b.linked.name } : null;
+    if (now.linked !== undefined && now.linked?.fid === linked?.fid && now.linked?.name === linked?.name) return;
+    try {
+      localStorage.setItem(WALLET_KEY, JSON.stringify({ ...now, linked }));
+    } catch {
+      return;
+    }
+    window.dispatchEvent(new Event(EVENT));
+  })();
+  return linkAsked;
+}
+
 export function signOutWallet() {
   try {
     localStorage.removeItem(WALLET_KEY);
@@ -134,6 +169,8 @@ export function useWalletSession(): WalletSessionState | null {
     const check = async () => {
       const w = (await inMiniApp()) || readSession() ? null : readWallet();
       if (alive) setState(w);
+      // A session that hasn't asked yet (one kept from before 2026-11-04) asks once.
+      if (w && w.linked === undefined) void refreshWalletLink();
     };
     void check();
     const again = () => void check();
@@ -208,6 +245,59 @@ export function signOutSocial() {
     /* nothing stored */
   }
   window.dispatchEvent(new Event(EVENT));
+}
+
+/**
+ * The Lens or Bluesky session kept on this device, whatever else is signed in: the You page sends it beside a Farcaster
+ * sign-in (X-Social-Session) to offer and make a link (owner, 2026-11-04, 3a).
+ */
+export const socialOnDevice = (): SocialSessionState | null => readSocial();
+
+/**
+ * A second Lens or Bluesky sign-in, kept only to link it (a Bluesky account to the Lens account signed in): it never
+ * signs anyone in, and is dropped once the link is made or refused.
+ */
+const SOCIAL_LINK_KEY = 'snowmoon.social.link';
+export function saveSocialLinkSession(token: string, kind: 'lens' | 'bluesky', handle: string | null) {
+  const payload = JSON.parse(atob(token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/'))) as { exp: number };
+  try {
+    localStorage.setItem(SOCIAL_LINK_KEY, JSON.stringify({ token, kind, name: handle ?? (kind === 'lens' ? 'a Lens account' : 'a Bluesky account'), exp: payload.exp }));
+  } catch {
+    /* storage blocked */
+  }
+  window.dispatchEvent(new Event(EVENT));
+}
+export function socialLinkSession(): SocialSessionState | null {
+  try {
+    const s = JSON.parse(localStorage.getItem(SOCIAL_LINK_KEY) ?? 'null') as SocialSessionState | null;
+    return s && s.exp * 1000 > Date.now() + 120_000 ? s : null;
+  } catch {
+    return null;
+  }
+}
+export function dropSocialLinkSession() {
+  try {
+    localStorage.removeItem(SOCIAL_LINK_KEY);
+  } catch {
+    /* nothing stored */
+  }
+  window.dispatchEvent(new Event(EVENT));
+}
+
+/** Both Lens/Bluesky slots on this device, re-read whenever a sign-in changes (the You page's link panel). */
+export function useSocialDevice(): { main: SocialSessionState | null; link: SocialSessionState | null } {
+  const [state, setState] = useState<{ main: SocialSessionState | null; link: SocialSessionState | null }>({ main: null, link: null });
+  useEffect(() => {
+    const check = () => setState({ main: readSocial(), link: socialLinkSession() });
+    check();
+    window.addEventListener(EVENT, check);
+    window.addEventListener('storage', check);
+    return () => {
+      window.removeEventListener(EVENT, check);
+      window.removeEventListener('storage', check);
+    };
+  }, []);
+  return state;
 }
 
 /** The Lens or Bluesky session, when it is the one in use (no Farcaster or wallet sign-in here); else null. */

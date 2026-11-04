@@ -9,14 +9,15 @@ What they describe (owner, 2026-11-04): a Bluesky account that isn't linked to a
 images and frames, and can remix and enter the remix challenge, only if it passes the Bluesky check, Bluesky's
 counterpart of Neynar's score:
 
-1. the account was made before 6 November 2026 (00:00 Pacific), and
+1. the account is at least 30 days old when it is checked (a rolling rule; owner, 2026-11-04, replacing the fixed
+   6 November 2026 cut-off, which would have shut out every newer account for good), and
 2. it posted at least 5 times (its own posts and replies, not reposts) in the last 30 days.
 
 Asked of Bluesky's public AppView (`public.api.bsky.app`, `app.bsky.actor.getProfile` and
 `app.bsky.feed.getAuthorFeed`), with the account's DID only and no key. Decided at Generate and at publish, the same
 way as Neynar's score today. Only whether the account passed, when, and the rule used are kept, in the shared decision
 store `studio.check_decisions` (branch check-decisions; network 'bluesky', account = the DID, threshold
-'made-before-2026-11-06+5posts30d'; a pass for 90 days, a fail re-asked after 24 hours). Why a fail failed is not kept:
+'age30d+5posts30d'; a pass for 90 days, a fail re-asked after 24 hours). Why a fail failed is not kept:
 a stored fail is refused with a wording that names both rules. There is no `studio.bluesky_checks` (owner, 2026-11-04:
 one shared store). The remix challenge keeps its per-version decision as it does for Neynar
 (`studio.challenge_eligibility`, now with `account` = 'bluesky'). Code: `src/lib/social/bluesky-check.ts`,
@@ -26,6 +27,38 @@ one shared store). The remix challenge keeps its per-version decision as it does
 **Owner's decisions (2026-11-04):** the check is approved as planned (made before 6 November 2026, and 5 posts in the
 last 30 days); later the same day, "store the decision, not the numbers": a pass kept 90 days, a fail re-asked after 24 hours. The remix challenge is admin-only on Friday (another branch gates
 it), so the check isn't needed then: it ships with Bluesky sign-in on 12 November, in the same release as these lines.
+
+## The owner's answers after the restart (2026-11-04; reread pack items 4.1 to 4.7)
+
+"Reviewed by the coordinator, approved by the owner." The sections below this one are the earlier drafts, kept for the
+record; what is in `legal.ts` now is listed here.
+
+- **The rule is rolling:** at least 30 days old and at least 5 posts in the last 30 days, judged when we check
+  (`SOCIAL_SIGN_IN.bluesky.check.minAgeDays`, rule key `age30d+5posts30d`). The fixed 6 November cut-off is gone.
+- **4.1, Privacy §7 (REDRAFTED, needs the owner's OK).** The combined line, with the rolling rule and the early re-check.
+  Before (pack's recommended combined line): "… We keep only whether your account passed (made before 6 November 2026,
+  with at least 5 posts in the last 30 days) and when, for up to 90 days (a day if it didn't pass); never the dates or
+  posts we read. Bluesky is never asked about you when someone views a page." After:
+
+  > If you sign in with Bluesky and your Bluesky account isn't linked to a Farcaster account: when you make an image or a frame, or publish a remix during the remix challenge, and your account has no current check, our server sends your Bluesky account's identifier (its DID, not your handle) to Bluesky's public AppView (public.api.bsky.app), to read when your account was made and its latest posts. This check decides whether you can make images and frames for free and whether a remix can count as an entry. We keep only whether your account passed (at least 30 days old, with at least 5 posts in the last 30 days, when we check) and when, for up to 90 days (a day if it didn't pass); never the dates or posts we read. We check again sooner if your account is reported or one of your pictures is hidden by a moderator. Bluesky is never asked about you when someone views a page.
+
+- **4.2, Privacy §4 (REDRAFTED, needs the owner's OK).** No numbers outside §7 (the owner's new rule), plus the
+  Farcaster item's own early-removal sentence. Before (check-decisions' draft): "Whether your Bluesky account passed the
+  check for making images (made before 6 November 2026, with at least 5 posts in the last 30 days), and when that was
+  decided; never its age or its post count. A pass is kept for 90 days and a fail for a day." After:
+
+  > Whether your Bluesky account passed the check for making images (section 7), and when that was decided; never its age or its post count. A pass is kept for 90 days and a fail for a day. A pass is removed sooner if your account is reported or one of your pictures is hidden by a moderator.
+
+- **4.3 to 4.5:** in `legal.ts` as drafted (sections 2 and 3 below). Terms is recorded as reread; Privacy is not, until
+  the owner OKs 4.1 and 4.2.
+- **4.6:** the check is on the shared store, and a report or a moderator's hide now withdraws a Bluesky pass early
+  (`recheckMaker`, `src/lib/checks/decisions.ts`; test K6).
+- **4.7:** `src/lib/challenge/wording.ts` ("whoCanEnter") and `src/lib/images/wording.ts` change only in the release
+  that turns Bluesky on. Not changed here.
+- **Free remixes (remix-submit's `studio.sheet_remix_asks`):** not used by this branch's code. On remix-submit,
+  `countsRemixes` needs `fid > 0`, and `reserve` sends every negative number to the prepaid path. At the merge of the
+  two branches, `countsRemixes` must also take a Bluesky person that passes (`isSocialPerson`), and `reserve` must use
+  `isWalletPerson` (as here) instead of `fid < 0`. Not built here: both are remix-submit's files.
 
 ## 1. Privacy §7 (Outside services and what they receive): a new item, after the Neynar item
 
@@ -91,7 +124,7 @@ Bluesky check's own lines (sections 1 to 3 above) and takes §4 from signin-lens
 `src/lib/challenge/wording.ts` (`whoCanEnter`, the rules) and `src/lib/images/wording.ts` say "a Farcaster account that
 passes the site's check". They stay as they are while Bluesky sign-in is off; they change in the release that turns it
 on. The refusals a Bluesky account sees (`BLUESKY_CHECK_WORDING` in `src/lib/social/bluesky-check.ts`) are DRAFT too:
-> Free images and frames are open to Bluesky accounts made before 6 November 2026, to keep out accounts made to use them. Link a Farcaster account, or sign in with a wallet to pay.
+> Free images and frames are open to Bluesky accounts at least 30 days old, to keep out accounts made to use them. Link a Farcaster account, or sign in with a wallet to pay.
 
 > Free images and frames are open to Bluesky accounts that posted at least 5 times in the last 30 days, to keep out unused accounts. Link a Farcaster account, or sign in with a wallet to pay.
 
