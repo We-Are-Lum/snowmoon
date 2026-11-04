@@ -85,7 +85,10 @@ export function Play({ start, onLearn }: { start: 'home' | 'free' | 'ladder' | '
       const q = new URLSearchParams(window.location.search);
       const g = decMatch(q.get('match') ?? ''), lvl = Number(q.get('level') ?? 0), rule = q.get('rule') ?? '';
       const picked = (RULE_IDS as string[]).includes(rule) ? (rule as RuleId) : null, rsText = q.get('rs');
-      if (!g || !Number.isInteger(lvl) || lvl < 0 || lvl > (rsText === '3' ? 6 : 5) || (rule && !picked) || (rsText !== null && rsText !== '2' && rsText !== '3') || !ctl.continueMatch(g.seed, g.turns, lvl, picked ? (drawn) => settings(drawn, null, picked) : undefined, rulesetId(rsText))) ctl.say('That match link could not be read, so here is Play.');
+      if (!g || !Number.isInteger(lvl) || lvl < 0 || lvl > (rsText === '3' ? 6 : 5) || (rule && !picked) || (rsText !== null && rsText !== '2' && rsText !== '3')) ctl.say('That match link could not be read, so here is Play.');
+      // A link that reads but no longer replays (made before the computer planned from its fog view only): a note and
+      // "Start a new match", never an error.
+      else if (!ctl.continueMatch(g.seed, g.turns, lvl, picked ? (drawn) => settings(drawn, null, picked) : undefined, rulesetId(rsText))) ctl.staleMatch();
     }
     ctl.mount(window.location.hash);
     const onK = (e: KeyboardEvent) => { if (e.key === 'Escape') ctl.escape(); };
@@ -369,7 +372,7 @@ export function Play({ start, onLearn }: { start: 'home' | 'free' | 'ladder' | '
       {v.sheetOn && (
         <>
           <div className="mp-scrim" onClick={v.closeSheet} />
-          <div className="mp-sheet" role="dialog" aria-modal="true" aria-label={v.shMenu ? 'Match menu' : v.shResign ? 'Resign' : v.shLeave ? 'Leave' : 'Board options'}>
+          <div className="mp-sheet" role="dialog" aria-modal="true" aria-label={v.shMenu ? 'Match menu' : v.shResign ? 'Resign' : v.shLeave ? 'Leave' : v.shStale ? 'This match can\'t be carried on' : 'Board options'}>
             {v.shMenu && (
               <>
                 <div className="mp-menu">
@@ -394,6 +397,14 @@ export function Play({ start, onLearn }: { start: 'home' | 'free' | 'ladder' | '
                 <p className="mp-text">{v.leaveText}</p>
                 <button className="mp-btn warn" onClick={v.leave}>LEAVE</button>
                 <button className="mp-btn" onClick={v.closeSheet}>STAY</button>
+              </>
+            )}
+            {v.shStale && (
+              <>
+                <p className="mp-sheet-title">This match can&apos;t be carried on</p>
+                <p className="mp-text">{v.staleText}</p>
+                <button className="mp-btn primary" onClick={v.startNew}>START A NEW MATCH</button>
+                <button className="mp-btn" onClick={v.closeSheet}>CLOSE</button>
               </>
             )}
             {v.shOpts && (
