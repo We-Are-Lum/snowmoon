@@ -678,7 +678,7 @@ export const CLOSED_IMAGES = {
  * has_no_training true. The owner's batch calls (bases and styles) keep zero retention whatever this says.
  */
 export const CLOSED_PROVIDERS = {
-  OpenAI: { noticeVersion: 2, noticeWords: '76b4d81c5fbf', retentionWords: 'for up to 30 days to check for abuse, and longer if a picture is flagged for review or the law requires it', gateway: { disallowPromptTraining: true } },
+  OpenAI: { noticeVersion: 2, noticeWords: '804666e058e7', retentionWords: 'for up to 30 days to check for abuse, and longer if needed to deal with abuse or required by law', gateway: { disallowPromptTraining: true } },
   Google: { noticeVersion: 2, noticeWords: '2a0dff0194fd', retentionWords: 'no copy, except in memory for up to 24 hours', gateway: { zeroDataRetention: true, disallowPromptTraining: true } },
 } as const satisfies Record<string, { noticeVersion: number; noticeWords: string; retentionWords: string; gateway: { zeroDataRetention?: boolean; disallowPromptTraining: boolean } }>;
 export type ClosedProvider = keyof typeof CLOSED_PROVIDERS;
