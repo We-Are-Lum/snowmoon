@@ -471,4 +471,17 @@ playOut('play', 202);
   ok(whole.length === s.every + 1 && whole.every((f) => f.seen === null) && whole.some((f) => f.board.towers.some((q) => q.side === 'theirs')), 'after the end, the replay shows the whole board');
 }
 
+// ---------- The 3D replay (2026-11-03): built from the same fog frames as the 2D board, nothing more ----------
+{
+  const { readFileSync } = await import('node:fs');
+  const dir = 'src/app/minpentai/m/[id]/';
+  const top = readFileSync(dir + 'live-top.tsx', 'utf8'), b3 = readFileSync(dir + 'board-3d.tsx', 'utf8'), sc = readFileSync(dir + 'replay-scene.ts', 'utf8');
+  const tag = top.match(/<Board3D[\s\S]*?\/>/)?.[0] ?? '';
+  const data = [...tag.matchAll(/(\w+)=\{([^}]*(?:\}[^}=]*)?)\}/g)].filter(([, k]) => !/^on[A-Z]/.test(k)).map(([, k, v]) => `${k}=${v.trim()}`);
+  ok(isDeepStrictEqual(data, ['board=f.board', 'prev=prevFrame?.board ?? null', 'seen=p.latest!.whole ? null : (f.seen as [number, number][])', 'width=p.width', 'height=p.height', 'stepMs=450']), `the 3D board is given the frame's board, the frame before's board, the squares seen and the size, nothing else (${data.join('; ')})`);
+  ok(/const prevFrame = [^;]*p\.latest!?\.frames\[/.test(top), 'the frame before is one of the same frames');
+  const serverImports = (src: string) => [...src.matchAll(/^import\s+(type\s+)?[^;]*?from\s+'([^']+)'/gm)].filter(([, t, from]) => !t && from.startsWith('~/'));
+  ok(!serverImports(b3).length && !serverImports(sc).length, 'the 3D files import nothing from the site but types');
+}
+
 console.log(`minpentai agent play: ${checks} checks passed`);

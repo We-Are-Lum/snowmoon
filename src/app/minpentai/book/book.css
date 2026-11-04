@@ -69,3 +69,11 @@
 .mb-past-body { padding: 0 0 12px; }
 .mb-live-foot { margin-top: 18px; }
 .mb-live-links { margin: 8px 0; }
+
+/* The 3D replay (owner, 2026-11-03): beside the 2D board on wide screens, in its place on a phone. */
+.mb-boards-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; align-items: start; }
+.mb-board3d { width: 100%; background: #060608; overflow: hidden; }
+.mb-top-board:has(.mb-boards-2) { max-width: calc((100vh - 170px) * var(--ar, 1.3) * 2); }
+.mb-viewtoggle [role="group"] { display: inline-flex; gap: 4px; }
+.mb-viewtoggle button { min-height: 36px; padding: 0.3rem 0.6rem; }
+.mb-viewtoggle button[aria-pressed="true"] { background: #46D7E8; color: #0E0F13; border-color: #46D7E8; }

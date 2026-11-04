@@ -49,7 +49,7 @@ export async function liveLayoutCheck(browser: Browser, fail: Fail, opts: { reco
         localStorage.setItem('snowmoon.wallet', JSON.stringify({ token, address: address.toLowerCase(), short: address.slice(0, 6), exp }));
       }, [S.people.A.token, S.people.A.address] as const);
       const page = await ctx.newPage();
-      const top: [string, string][] = [['the board', '.mb-top-board .mb-board'], ['the replay controls', '.mb-top-controls'], ['the Take turn button', '.mb-take-button']];
+      const top: [string, string][] = [['the board', '.mb-top-board .mb-board, .mb-top-board .mb-board3d'], ['the replay controls', '.mb-top-controls'], ['the Take turn button', '.mb-take-button']];
       for (let turn = 0; turn < 3; turn++) {
         await draft();
         if (turn === 0) await page.goto(live, { waitUntil: 'networkidle' });

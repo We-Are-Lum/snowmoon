@@ -1,9 +1,34 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import { useEffect, useRef, useState } from 'react';
 import { ViewBoard, type Ghost } from './view-board';
 import { TakeTurn } from './take-turn';
 import type { boardOut, turnFrames } from '~/lib/minpentai/agent-play/solo';
+
+// The 3D replay's code (and three.js) loads only when a replay opens: this component mounts only then.
+const Board3D = dynamic(() => import('./board-3d').then((m) => m.Board3D), { ssr: false });
+const VIEW_KEY = 'snowmoon.replay.view';
+/**
+ * Whether 3D is offered (owner, 2026-11-03): only with WebGL, and never when the person has asked for reduced motion.
+ * Wide screens show 2D and 3D side by side; phones show one, 3D by default where it holds the frame rate, and remember
+ * the person's choice.
+ */
+function use3D() {
+  const [can, setCan] = useState(false), [wide, setWide] = useState(false), [view, setView] = useState<'2d' | '3d'>('3d'), [chosen, setChosen] = useState(false);
+  useEffect(() => {
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let gl = false;
+    try { const c = document.createElement('canvas'); gl = !!(c.getContext('webgl2') || c.getContext('webgl')); } catch { gl = false; }
+    setCan(gl && !reduce);
+    const mq = window.matchMedia('(min-width: 1100px)'), onWide = () => setWide(mq.matches);
+    onWide(); mq.addEventListener('change', onWide);
+    try { const v = localStorage.getItem(VIEW_KEY); if (v === '2d' || v === '3d') { setView(v); setChosen(true); } } catch { /* storage blocked */ }
+    return () => mq.removeEventListener('change', onWide);
+  }, []);
+  const choose = (v: '2d' | '3d') => { setView(v); setChosen(true); try { localStorage.setItem(VIEW_KEY, v); } catch { /* storage blocked */ } };
+  return { can, wide, view, chosen, choose, setView };
+}
 
 type Board = ReturnType<typeof boardOut>;
 type Frame = ReturnType<typeof turnFrames>[number];
@@ -54,6 +79,10 @@ export function LiveTop(p: {
 
   const replaying = mode === 'replay' && p.latest && n;
   const f = replaying ? p.latest!.frames[Math.min(i, n - 1)] : null;
+  const prevFrame = replaying && i > 0 ? p.latest!.frames[Math.min(i, n - 1) - 1] : null;
+  const d3 = use3D(), [d3note, setD3note] = useState<string | null>(null);
+  // 3D only for a replay; on a wide screen beside the 2D board, on a phone in its place.
+  const show3d = !!f && d3.can && d3.view === '3d', side3d = show3d && d3.wide;
   const summary = p.summary ?? [];
   const warns = p.draft?.warnings ?? [];
   return (
@@ -61,7 +90,16 @@ export function LiveTop(p: {
       <div className="mb-top-board" style={{ ['--ar' as string]: p.width / p.height }}>
         <p className="mb-top-status">{p.status}{p.tally ? ` · ${p.tally}` : ''}</p>
         {f ? (
-          <ViewBoard board={f.board} width={p.width} height={p.height} seen={p.latest!.whole ? null : (f.seen as [number, number][])} label={p.latest!.whole ? 'The whole board at this step' : 'Your side’s view at this step'} />
+          <div className={side3d ? 'mb-boards mb-boards-2' : 'mb-boards'}>
+            {!show3d || side3d ? <ViewBoard board={f.board} width={p.width} height={p.height} seen={p.latest!.whole ? null : (f.seen as [number, number][])} label={p.latest!.whole ? 'The whole board at this step' : 'Your side’s view at this step'} /> : null}
+            {show3d ? (
+              <Board3D
+                board={f.board} prev={prevFrame?.board ?? null} seen={p.latest!.whole ? null : (f.seen as [number, number][])} width={p.width} height={p.height} stepMs={450}
+                onFps={(fps) => { if (!d3.wide && !d3.chosen && fps < 50) { d3.setView('2d'); setD3note('Switched to 2D to keep it smooth. Tap 3D to try again.'); } }}
+                onFail={() => { d3.setView('2d'); setD3note('3D didn’t start here, so this is 2D.'); }}
+              />
+            ) : null}
+          </div>
         ) : (
           <ViewBoard board={p.current.board} width={p.width} height={p.height} canPlace={p.current.canPlace} lastSeen={p.current.lastSeen} marks={p.current.marks} ghosts={p.draft?.placements ?? []} />
         )}
@@ -81,8 +119,16 @@ export function LiveTop(p: {
             </>
           ) : <span className="mb-note">No turn played yet.</span>}
           {/* Room for the 2D/3D toggle (the 3D replay, to come). */}
-          <span className="mb-viewtoggle" aria-hidden="true" />
+          <span className="mb-viewtoggle">
+            {d3.can ? (
+              <span role="group" aria-label="Replay view">
+                <button type="button" aria-pressed={d3.view === '2d'} onClick={() => { d3.choose('2d'); setD3note(null); }}>2D</button>
+                <button type="button" aria-pressed={d3.view === '3d'} onClick={() => { d3.choose('3d'); setD3note(null); }}>3D</button>
+              </span>
+            ) : null}
+          </span>
         </div>
+        {d3note ? <p className="mb-note" role="status">{d3note}</p> : null}
       </div>
       <div className="mb-top-side">
         {p.draft ? (
