@@ -80,7 +80,7 @@ export async function GET(request: Request) {
   if (!sql) return NextResponse.json({ ...base, signedIn: true, fid, invited, eligible: invited ? true : null }, { headers: { 'Cache-Control': 'no-store' } });
   try {
     const [consented, left, publishes, kept, picks] = await Promise.all([
-      hasConsented(fid), generationsLeft(sql, fid), publishesLeft(sql, fid), invited || fid < 0 ? Promise.resolve(null) : keptDecision(sql, fid, IMAGES.neynarMinScore), myPicks(sql, fid),
+      hasConsented(fid), generationsLeft(sql, fid), publishesLeft(sql, fid), invited || fid < 0 ? Promise.resolve(null) : keptDecision(sql, fid, IMAGES.neynarMinScore).catch(() => null), myPicks(sql, fid),
     ]);
     if (isSocialPerson(fid)) {
       // A Lens or Bluesky account (not linked to a Farcaster account): free only as src/lib/social/free.ts decides; no balance.
