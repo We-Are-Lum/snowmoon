@@ -126,5 +126,69 @@
       "when": "2026-11-04",
       "why": "owner: its text asks for cyan and magenta, and that's all it gives. Its four drafts stay in neon-night-samples.md, unpublished."
     }
-  ]
+  ],
+  "directions_picked": {
+    "when": "2026-11-04",
+    "by": "owner",
+    "about": "The owner's picks from the contact sheets: three bases per character, the same three directions for all six. Not a plan A/B row: its models are closed and its Animated series base comes from Midjourney for four characters. Fronts and descriptors in directions/plan.json; status in zei-directions.md.",
+    "bases": [
+      {
+        "direction": "Animated series",
+        "model": "gpt-image-2.5-sunburst",
+        "note": "Zei and Bai: their MJ·GPT fronts (GPT Image 2.5 Sunburst). Gladias, Seila, Deluin, Mu: their Animated series fronts, made by Gemini 3.1 Flash Image (the ledger's recipes)"
+      },
+      {
+        "direction": "Grounded",
+        "model": "gemini-3.1-flash-image",
+        "status": "dropped (owner, 2026-11-04)"
+      },
+      {
+        "direction": "Bold",
+        "model": "gemini-3.1-flash-image",
+        "status": "dropped (owner, 2026-11-04)"
+      }
+    ],
+    "out": "every GPT grounded and bold front; Zei direction A (grounded) on both models (owner, 2026-11-04). Files kept.",
+    "cap": "raised to $1.75 by the owner, 2026-11-04 (was $1)",
+    "status": "superseded (owner, 2026-11-04, after the restart) by bases_picked"
+  },
+  "bases_picked": {
+    "when": "2026-11-04",
+    "by": "owner",
+    "about": "One base per character, all in Animated series. Side and back views from each front, with the model that made the front. Not a plan A/B row: closed models; recorded, not priced. Files and recipes: directions/plan.json bases_2026_11_04 and directions/ledger.json.",
+    "bases": [
+      {
+        "character": "zei",
+        "direction": "Animated series",
+        "model": "gpt-image-2.5-sunburst"
+      },
+      {
+        "character": "bai",
+        "direction": "Animated series",
+        "model": "gpt-image-2.5-sunburst"
+      },
+      {
+        "character": "gladias",
+        "direction": "Animated series",
+        "model": "gemini-3.1-flash-image"
+      },
+      {
+        "character": "seila",
+        "direction": "Animated series",
+        "model": "gemini-3.1-flash-image"
+      },
+      {
+        "character": "deluin",
+        "direction": "Animated series",
+        "model": "gemini-3.1-flash-image"
+      },
+      {
+        "character": "mu",
+        "direction": "Animated series",
+        "model": "gemini-3.1-flash-image"
+      }
+    ],
+    "dropped": "Grounded and Bold, every front on both models (owner, 2026-11-04)",
+    "cap": "$1.75 (raised by the owner, 2026-11-04)"
+  }
 }

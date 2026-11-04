@@ -8,6 +8,72 @@ coding agent, for the owner to edit or rewrite.** They are picture descriptors, 
 **Spent: $0.72238** (12 fronts and 12 prompt checks), against a $1 cap checked before
 every call on the worst case (worst reached $0.9680). Nothing was left out.
 
+## The plan changed: one base per character (owner, 2026-11-04, after the restart)
+
+This replaces the three-directions picks below.
+
+- **One base per character, all in Animated series.** Zei and Bai: their **MJ·GPT** fronts. Gladias, Seila, Deluin
+  and Mu: their **Animated series** fronts, as they are (no Midjourney pass on the base).
+- **Who made the fronts (checked in the ledger's recipes):** Zei's and Bai's by **GPT Image 2.5 Sunburst** (OpenAI),
+  edited from crops of the owner's Midjourney reference. Gladias's, Seila's, Deluin's and Mu's by **Gemini 3.1 Flash
+  Image** (Google, Vertex, ZDR), from text. The earlier note "(a) made with GPT Image 2.5" was right only for Zei and
+  Bai.
+- **Side and back views:** made from each front with the model that made it. Sheet:
+  [views-contact-sheet.md](views-contact-sheet.md).
+- **Dropped (owner, 2026-11-04):** every Grounded and Bold front, on both models, including Zei · B · Gemini (picked
+  earlier the same day) and the ten Gemini fronts of the stopped run. Committed files are kept; nothing is deleted.
+- **The stopped run (before the restart, 11:20 PT):** Grounded and Bold on Gemini for Bai, Gladias, Seila, Deluin and
+  Mu, 10 fronts and 10 prompt checks, **$0.67168** ($0.67080 pictures, $0.00088 checks). Their recipes and sha256s
+  stay in [`directions/ledger.json`](directions/ledger.json). The ten files are dropped and left out of commits.
+- **The owner's first remixes:** made by the owner in Midjourney from the bases, with self-reported recipes. See
+  [challenge-first-remixes.md](https://github.com/We-Are-Lum/snowmoon/blob/challenge-landing/docs/proposals/challenge-first-remixes.md) (branch challenge-landing). Nothing is published yet.
+- **Cap:** $1.75 (raised by the owner, 2026-11-04). Spent **$1.72357**: see the views sheet for the breakdown.
+
+## The owner's earlier picks (2026-11-04; superseded the same day, see above)
+
+- **Three bases per character, the same three directions for all six:**
+  **(a) Animated series**, the Midjourney-reference look, made with GPT Image 2.5 Sunburst. Zei and Bai: their
+  **MJ·GPT** fronts (more relaxed, less stiff than Gemini's). **(b) Grounded**, made with Gemini. **(c) Bold**, made
+  with Gemini.
+- **Gladias, Seila, Deluin and Mu in Animated series:** OK as starting points, not the look yet. The owner takes them to
+  his Muse agent for a Midjourney pass. See "Waiting: the Midjourney pass's recipe" below.
+- **Out (owner, 2026-11-04):** every GPT grounded and bold front (too real), and Zei direction A (grounded) on both
+  models (too modern on Gemini, too real on GPT). The files are kept, marked out.
+- **Not picked:** Zei's and Bai's MJ·Gemini fronts (the owner chose MJ·GPT).
+- **Next (made, then dropped (owner, 2026-11-04)):** grounded and bold on Gemini for Bai, Gladias, Seila, Deluin and
+  Mu: 10 fronts, $0.67168. Left out of commits; recipes in the ledger.
+- **Cap:** $1, **raised to $1.75 by the owner, 2026-11-04**. Spent: **$1.39406** (22 fronts, 22 prompt checks).
+
+| Front | Status (owner, 2026-11-04) |
+|---|---|
+| Zei · MJ · GPT, Bai · MJ · GPT | **picked**: base (a) |
+| Zei · MJ · Gemini, Bai · MJ · Gemini | not picked |
+| Gladias, Seila, Deluin, Mu · AS (Gemini) | starting point only; Midjourney pass to come |
+| Zei · A (grounded) · Gemini | **out (owner, 2026-11-04)**: too modern |
+| Zei · A (grounded) · GPT | **out (owner, 2026-11-04)**: too real |
+| Zei · B (bold) · Gemini | **dropped (owner, 2026-11-04)**; picked earlier as base (c) |
+| Zei · B (bold) · GPT | **out (owner, 2026-11-04)**: too real |
+
+## Superseded: the Midjourney pass's recipe (Gladias, Seila, Deluin, Mu)
+
+**Superseded (owner, 2026-11-04):** the four Animated series fronts are the bases as they are. The owner's
+Midjourney work is now the first remixes, recorded with [challenge-first-remixes.md](https://github.com/We-Are-Lum/snowmoon/blob/challenge-landing/docs/proposals/challenge-first-remixes.md) (branch challenge-landing).
+
+**Nothing from this pass is published until every field below is filled from what the owner sends with the pictures.**
+The same fields sit, empty, in [`directions/plan.json`](directions/plan.json) (`midjourney_pass_needed`).
+
+| Field | Gladias | Seila | Deluin | Mu |
+|---|---|---|---|---|
+| Prompt, as submitted (word for word) | needed | needed | needed | needed |
+| Settings (every parameter: --ar, --s, --chaos, --seed, --no, --draft, …) | needed | needed | needed | needed |
+| Midjourney version | needed | needed | needed | needed |
+| Job id (and grid cell) | needed | needed | needed | needed |
+| Image references used (the Gemini starting point? --sref, --oref, moodboard) | needed | needed | needed | needed |
+| Plan (paid?) and the file's sha256 | needed | needed | needed | needed |
+
+Label: **Brought in** (made outside the site with Midjourney, a closed model by Midjourney). If the Gemini starting
+point is sent to Midjourney as a reference, its recipe links to that front's ledger row.
+
 ## The owner's reference picture (Brought in)
 
 <img src="directions/reference-small.jpg" width="640" alt="The owner's reference picture of Zei and Bai, made with Midjourney">
@@ -109,17 +175,25 @@ on Vertex with zero retention, so their recipes name Google only).
 <tr><td align="center" valign="top"><img src="directions/gladias-animated-gemini.jpg" width="170" alt="Gladias · Gemini, AI-generated draft"><br><b>Gladias · Gemini</b><br><sub>Gemini 3.1 Flash Image, a closed model by Google (Vertex, zero retention)<br>$0.067108</sub></td><td align="center" valign="top"><img src="directions/seila-animated-gemini.jpg" width="170" alt="Seila · Gemini, AI-generated draft"><br><b>Seila · Gemini</b><br><sub>Gemini 3.1 Flash Image, a closed model by Google (Vertex, zero retention)<br>$0.067100</sub></td><td align="center" valign="top"><img src="directions/deluin-animated-gemini.jpg" width="170" alt="Deluin · Gemini, AI-generated draft"><br><b>Deluin · Gemini</b><br><sub>Gemini 3.1 Flash Image, a closed model by Google (Vertex, zero retention)<br>$0.067092</sub></td><td align="center" valign="top"><img src="directions/mu-animated-gemini.jpg" width="170" alt="Mu · Gemini, AI-generated draft"><br><b>Mu · Gemini</b><br><sub>Gemini 3.1 Flash Image, a closed model by Google (Vertex, zero retention)<br>$0.067092</sub></td></tr>
 </table>
 
-## Direction 2: Grounded, a real teenager in a working city (Zei)
+## Direction 2: Grounded, a real teenager in a working city (Zei): dropped (owner, 2026-11-04)
+
+**Dropped (owner, 2026-11-04):** the whole direction, on both models. Kept here as a record only.
 
 > a young man of eighteen from a busy working city, slim and of medium height, light golden-tan skin, short untidy black hair, alert dark eyes, wearing a faded olive work jacket with patched elbows over a plain grey hooded top, a canvas bag strap across his chest, dark straight-leg work trousers worn at one knee, scuffed brown boots, a thin black band around his throat, a simple wristwatch, and a soft support sleeve on his left forearm
 
 <table><tr><td align="center" valign="top"><img src="directions/zei-grounded-gemini.jpg" width="170" alt="Zei grounded · Gemini, AI-generated draft"><br><b>Zei grounded · Gemini</b><br><sub>Gemini 3.1 Flash Image, a closed model by Google (Vertex, zero retention)<br>$0.067078</sub></td><td align="center" valign="top"><img src="directions/zei-grounded-gpt.jpg" width="170" alt="Zei grounded · GPT, AI-generated draft"><br><b>Zei grounded · GPT</b><br><sub>GPT Image 2.5 Sunburst, a closed model by OpenAI (no training; kept up to 30 days)<br>$0.041970</sub></td></tr></table>
 
-## Direction 3: Bold reimagining, the champion (Zei)
+Zei's grounded fronts: both **out (owner, 2026-11-04)**. Gemini's is too modern, GPT's too real.
+
+## Direction 3: Bold reimagining, the champion (Zei): dropped (owner, 2026-11-04)
+
+**Dropped (owner, 2026-11-04):** the whole direction, on both models. Kept here as a record only.
 
 > a young man of eighteen as a bold stylised game champion, tall and lanky with long limbs and a sharp angular silhouette, light golden-tan skin, a sharp asymmetric fringe of black hair bleached white at the tips, wearing a long sleeveless high-collared coat in deep crimson with a bold black pattern of grid squares, over a fitted white tunic, loose black trousers tucked into tall wrapped boots, one long fingerless glove on his left arm, a thin gold band around his throat, and round display glasses on a long coiled cable hanging around his neck
 
 <table><tr><td align="center" valign="top"><img src="directions/zei-bold-gemini.jpg" width="170" alt="Zei bold · Gemini, AI-generated draft"><br><b>Zei bold · Gemini</b><br><sub>Gemini 3.1 Flash Image, a closed model by Google (Vertex, zero retention)<br>$0.067087</sub></td><td align="center" valign="top"><img src="directions/zei-bold-gpt.jpg" width="170" alt="Zei bold · GPT, AI-generated draft"><br><b>Zei bold · GPT</b><br><sub>GPT Image 2.5 Sunburst, a closed model by OpenAI (no training; kept up to 30 days)<br>$0.042070</sub></td></tr></table>
+
+Zei bold · Gemini: **dropped (owner, 2026-11-04)** (picked earlier as base (c)). Zei bold · GPT: **out (owner, 2026-11-04)**, too real.
 
 Directions 2 and 3 share a neutral rendering line, so they differ in design, not finish: "Clean full-colour character design illustration, even soft light, clear readable face and hands."
 Every front's prompt: the stance line ("…standing in a relaxed three-quarter stance with some personality, plain light

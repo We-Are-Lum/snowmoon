@@ -10,6 +10,31 @@ is AI-made and keeps that label wherever it is used.
 Plan file: [`styles-plan.json`](styles-plan.json). Every number below comes from
 `npm run seed:designs -- --bases-plan`, which reads that file and calls nothing (no model, database or network).
 
+## One base per character, 2026-11-04 after the restart (recorded; supersedes the picks below)
+
+- **One base per character, all in Animated series.** Zei and Bai: their MJ·GPT fronts (GPT Image 2.5 Sunburst).
+  Gladias, Seila, Deluin and Mu: their Animated series fronts (Gemini 3.1 Flash Image, per the ledger's recipes).
+- **Side and back views** from each front, with the model that made it: [views-contact-sheet.md](views-contact-sheet.md).
+- **Dropped (owner, 2026-11-04):** Grounded and Bold, every front on both models, and the ten Gemini fronts of the
+  stopped run ($0.67168, recipes kept in the ledger, files left out of commits).
+- **The owner's first remixes** come from Midjourney, self-reported: [challenge-first-remixes.md](https://github.com/We-Are-Lum/snowmoon/blob/challenge-landing/docs/proposals/challenge-first-remixes.md) (branch challenge-landing).
+- Recorded in [zei-directions.md](zei-directions.md), [`directions/plan.json`](directions/plan.json)
+  (`bases_2026_11_04`) and [`styles-plan.json`](styles-plan.json) (`bases_picked`, read by `bases-plan.ts`).
+- **Cap $1.75** (raised by the owner, 2026-11-04). Spent $1.72357.
+
+## The owner's picks from the contact sheets, 2026-11-04 (superseded the same day; Grounded and Bold dropped)
+
+- **Three bases per character, the same three directions for all six:** (a) **Animated series** by GPT Image 2.5
+  Sunburst (Zei and Bai: their MJ·GPT fronts); (b) **Grounded** by Gemini; (c) **Bold** by Gemini. Recorded in
+  [zei-directions.md](zei-directions.md), [`directions/plan.json`](directions/plan.json) (`picks_2026_11_04`, a
+  status on every front) and [`styles-plan.json`](styles-plan.json) (`directions_picked`, read by `bases-plan.ts`).
+- **Gladias, Seila, Deluin and Mu in Animated series:** starting points only; the owner takes them to his Muse agent
+  for a Midjourney pass. Their recipe (prompt, settings, Midjourney version, job id) must be recorded before anything
+  is published: placeholder in zei-directions.md and `midjourney_pass_needed` in plan.json.
+- **Out (owner, 2026-11-04):** every GPT grounded and bold front; Zei direction A on both models. Files kept.
+- **Made, then dropped (owner, 2026-11-04):** grounded and bold on Gemini for the other five, 10 fronts.
+- **Cap raised to $1.75 by the owner, 2026-11-04** (was $1). Spent $1.39406.
+
 ## Owner's decisions, 2026-11-04, latest (recorded)
 
 - **Rethink: three design directions, not three finishes.** Every Zei front so far was the same design with a different

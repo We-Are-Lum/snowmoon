@@ -53,8 +53,8 @@
         "height": 674,
         "sha256": "0b394efb30fefcd0f02b84ac127fa6ba07b657bbd203818ddf4d0239f7bc9c86"
       },
-      "mismatch": "The file used here (uploaded by the owner, 2576 x 1438, sha256 b955b192ae0d6b7474bef82fb795996146c75fe3f205c61db7fd8e6375421e4f) is not the card's saved copy (1206 x 674, sha256 0b394efb\u2026c9c86), though the card says nothing was paid or upscaled. It is used because it is what we have; the crop boxes are on it. The owner is asked whether it is an upscale or another export.",
-      "later_uses_context_only": "The card lists later uses (as --sref for Deluin sheets E1, F1, F2 and six PFP samples S1\u2013S6); not part of this job."
+      "mismatch": "The file used here (uploaded by the owner, 2576 x 1438, sha256 b955b192ae0d6b7474bef82fb795996146c75fe3f205c61db7fd8e6375421e4f) is not the card's saved copy (1206 x 674, sha256 0b394efb…c9c86), though the card says nothing was paid or upscaled. It is used because it is what we have; the crop boxes are on it. The owner is asked whether it is an upscale or another export.",
+      "later_uses_context_only": "The card lists later uses (as --sref for Deluin sheets E1, F1, F2 and six PFP samples S1–S6); not part of this job."
     },
     "file_used": "an enlarged copy of unknown origin: the card's own file (FAV_bai_zei_flatcel.jpg, 1206 x 674, sha256 0b394efb30fefcd0f02b84ac127fa6ba07b657bbd203818ddf4d0239f7bc9c86) was searched for on 2026-11-04 (Spotlight, ~/Downloads, ~/Pictures, ~/Desktop, ~/Documents, ~/snowmoon*, the owner's Drive) and not found, so the owner's upload (2576 x 1438) is used; the crop boxes are on it"
   },
@@ -84,69 +84,274 @@
     "zei/animated": "a young man of eighteen, slim, light golden-tan skin, tall spiky black hair swept up and back with a broad teal-blue streak and close-cut sides, warm brown eyes under strong dark eyebrows, a confident half-smile, wearing a loose orange zip jacket with the sleeves pushed up over a plain black crew-neck top, a chunky dark wrist display with a glowing teal face, a thin dark band around his throat, dark straight trousers and white sneakers",
     "bai/animated": "a young woman of about eighteen, slim and wiry, dark brown skin, a long sleek magenta ponytail pulled high with the sides of her head shaved close, dark eyes with a sly sideways look and a small confident smile, long amber drop earrings, a sleeveless yellow-green vest open over a dark grey tank top, both arms covered in fine brown line tattoos from shoulder to wrist, a dark bracelet, a hand device held in one hand, dark trousers and boots",
     "zei/grounded": "a young man of eighteen from a busy working city, slim and of medium height, light golden-tan skin, short untidy black hair, alert dark eyes, wearing a faded olive work jacket with patched elbows over a plain grey hooded top, a canvas bag strap across his chest, dark straight-leg work trousers worn at one knee, scuffed brown boots, a thin black band around his throat, a simple wristwatch, and a soft support sleeve on his left forearm",
-    "zei/bold": "a young man of eighteen as a bold stylised game champion, tall and lanky with long limbs and a sharp angular silhouette, light golden-tan skin, a sharp asymmetric fringe of black hair bleached white at the tips, wearing a long sleeveless high-collared coat in deep crimson with a bold black pattern of grid squares, over a fitted white tunic, loose black trousers tucked into tall wrapped boots, one long fingerless glove on his left arm, a thin gold band around his throat, and round display glasses on a long coiled cable hanging around his neck"
+    "zei/bold": "a young man of eighteen as a bold stylised game champion, tall and lanky with long limbs and a sharp angular silhouette, light golden-tan skin, a sharp asymmetric fringe of black hair bleached white at the tips, wearing a long sleeveless high-collared coat in deep crimson with a bold black pattern of grid squares, over a fitted white tunic, loose black trousers tucked into tall wrapped boots, one long fingerless glove on his left arm, a thin gold band around his throat, and round display glasses on a long coiled cable hanging around his neck",
+    "bai/grounded": "a young woman of about eighteen from a busy working city who has worked side jobs since school, slim and wiry, dark brown skin, thick black hair tied back in a practical high ponytail, a quick sly grin, wearing a sun-faded mustard canvas work smock with rolled sleeves and a patched pocket over a dark grey wrap top, a cloth shopping bag over one shoulder, loose dark brown trousers tied at the ankle, worn flat work boots, and a small scuffed hand device clipped at her hip",
+    "bai/bold": "a young woman of about eighteen as a bold stylised game challenger, tall with a sharp angular silhouette and a wide confident stance, dark brown skin, a towering magenta ponytail bound with gold rings, a wide sly grin, wearing a short sculpted lime-green jacket with exaggerated pointed shoulders and a bold pattern of black triangles, over a fitted black bodysuit, wide black trousers gathered into tall lime boots, and a silver medallion on a cord around her neck",
+    "gladias/grounded": "a man of thirty-nine from a quiet green city, slim and of medium height, light olive skin, short wavy chestnut-brown hair going grey at the temples, a short untidy beard, calm hazel eyes, wearing a plain undyed linen overshirt with rolled sleeves under a moss-green knitted wool vest, loose grey cloth trousers, worn brown walking shoes with mud on the soles, a canvas satchel, and a thin silver band around his throat",
+    "gladias/bold": "a man of thirty-nine as a bold stylised keeper of a secret order, tall with a long narrow silhouette, light olive skin, chestnut hair swept straight back, a short sharp beard, hazel eyes, wearing a long flowing deep green robe with its hood down and its face cover open, lined in bright gold, with a bold pattern of interlocking circles along the hem, over a fitted cream high-collared tunic, a wide ochre sash, tall platform boots that raise his height, and a thin silver band around his throat",
+    "seila/grounded": "a woman in her late thirties from a quiet green city, travelling as a writer, tall and slender, deep brown skin, black hair in shoulder-length braids tied loosely back, alert dark eyes behind small round gold-rimmed glasses, wearing a plain rust-coloured linen travel coat over an oatmeal knitted top, loose olive cloth trousers, soft tan walking shoes, a worn leather shoulder bag with a notebook tucked in it, a tea flask in one hand, and a thin band around her throat",
+    "seila/bold": "a woman in her late thirties as a bold stylised writer and observer, very tall and slender with a sweeping silhouette, deep brown skin, black braids piled high in a crown, sharp dark eyes behind large round gold glasses, wearing a long dramatic rust-orange cape-coat with a towering collar and a bold pattern of thin black and gold stripes, over a fitted oatmeal tunic, wide olive trousers, pointed tan boots, a slim stylus held like a quill, and a thin gold band around her throat",
+    "deluin/grounded": "a young man of about eighteen from a cold northern town, tall and long-limbed, fair skin in warm natural tones, wavy shoulder-length light-brown hair, grey-green eyes and a serious, earnest face, wearing a thick hand-knitted cream wool sweater with a light hood worn down, a plain leather belt, dark green wool trousers, sturdy brown leather boots, and a travel bag over one shoulder, with no zips, pockets or logos",
+    "deluin/bold": "a young man of about eighteen as a bold stylised game player from the snowy north, very tall and long-limbed with a lean angular silhouette, fair skin, long wavy light-brown hair blown back, grey-green eyes and a stern earnest face, wearing a huge oversized cream cable-knit sweater-cloak with a deep hood worn down, a bold band of white diamonds on deep green across the chest, long knitted sleeves, slim dark green trousers, tall wrapped brown boots, and a long knitted scarf trailing behind",
+    "mu/grounded": "a woman in her early sixties from a busy working city, small and wiry, medium brown skin, short silver hair cut close and practical, keen eyes behind thin red-framed glasses, laugh lines, wearing a padded white and grey work jacket with patched pockets over a dark knitted top, sturdy charcoal cloth trousers, worn black boots, a small cup of tea in one hand, and a slim wrist device",
+    "mu/bold": "a woman in her early sixties as a bold stylised field commander, small and wiry with a sharp upright stance and a wide heavy-shouldered silhouette, medium brown skin, a sharp silver crest of hair, keen eyes behind angular red glasses, wearing a long white and grey greatcoat with huge squared shoulders and a bold black-and-yellow chevron band across the chest, over a fitted cobalt-blue tunic, slim black trousers tucked into tall grey boots, and long grey gloves"
   },
   "fronts": [
     {
       "key": "zei/animated",
       "model": "gemini-3.1-flash-image",
-      "from": "crop:zei"
+      "from": "crop:zei",
+      "status": "not picked (the owner chose MJ·GPT, 2026-11-04)"
     },
     {
       "key": "zei/animated",
       "model": "gpt-image-2.5-sunburst",
-      "from": "crop:zei"
+      "from": "crop:zei",
+      "status": "base (owner, 2026-11-04): this character's one base"
     },
     {
       "key": "bai/animated",
       "model": "gemini-3.1-flash-image",
-      "from": "crop:bai"
+      "from": "crop:bai",
+      "status": "not picked (the owner chose MJ·GPT, 2026-11-04)"
     },
     {
       "key": "bai/animated",
       "model": "gpt-image-2.5-sunburst",
-      "from": "crop:bai"
+      "from": "crop:bai",
+      "status": "base (owner, 2026-11-04): this character's one base"
     },
     {
       "key": "gladias/animated",
       "model": "gemini-3.1-flash-image",
-      "from": "text"
+      "from": "text",
+      "status": "base (owner, 2026-11-04): this character's one base, as it is (made by Gemini 3.1 Flash Image)"
     },
     {
       "key": "seila/animated",
       "model": "gemini-3.1-flash-image",
-      "from": "text"
+      "from": "text",
+      "status": "base (owner, 2026-11-04): this character's one base, as it is (made by Gemini 3.1 Flash Image)"
     },
     {
       "key": "deluin/animated",
       "model": "gemini-3.1-flash-image",
-      "from": "text"
+      "from": "text",
+      "status": "base (owner, 2026-11-04): this character's one base, as it is (made by Gemini 3.1 Flash Image)"
     },
     {
       "key": "mu/animated",
       "model": "gemini-3.1-flash-image",
-      "from": "text"
+      "from": "text",
+      "status": "base (owner, 2026-11-04): this character's one base, as it is (made by Gemini 3.1 Flash Image)"
     },
     {
       "key": "zei/grounded",
       "model": "gemini-3.1-flash-image",
-      "from": "text"
+      "from": "text",
+      "status": "dropped (owner, 2026-11-04): one base per character, all in Animated series; every Grounded and Bold front is dropped"
     },
     {
       "key": "zei/grounded",
       "model": "gpt-image-2.5-sunburst",
-      "from": "text"
+      "from": "text",
+      "status": "dropped (owner, 2026-11-04): one base per character, all in Animated series; every Grounded and Bold front is dropped"
     },
     {
       "key": "zei/bold",
       "model": "gemini-3.1-flash-image",
-      "from": "text"
+      "from": "text",
+      "status": "dropped (owner, 2026-11-04): one base per character, all in Animated series; every Grounded and Bold front is dropped; picked earlier as Zei's base (c)"
     },
     {
       "key": "zei/bold",
       "model": "gpt-image-2.5-sunburst",
-      "from": "text"
+      "from": "text",
+      "status": "dropped (owner, 2026-11-04): one base per character, all in Animated series; every Grounded and Bold front is dropped"
     }
   ],
-  "others_from": "content/snowmoon/designs/characters/<slug>.json, descriptor, word for word"
+  "others_from": "content/snowmoon/designs/characters/<slug>.json, descriptor, word for word",
+  "fronts_next": [
+    {
+      "key": "bai/grounded",
+      "model": "gemini-3.1-flash-image",
+      "from": "text",
+      "status": "dropped (owner, 2026-11-04): one base per character, all in Animated series; every Grounded and Bold front is dropped; made by the stopped run before the restart, files left out of commits, recipes in the ledger"
+    },
+    {
+      "key": "bai/bold",
+      "model": "gemini-3.1-flash-image",
+      "from": "text",
+      "status": "dropped (owner, 2026-11-04): one base per character, all in Animated series; every Grounded and Bold front is dropped; made by the stopped run before the restart, files left out of commits, recipes in the ledger"
+    },
+    {
+      "key": "gladias/grounded",
+      "model": "gemini-3.1-flash-image",
+      "from": "text",
+      "status": "dropped (owner, 2026-11-04): one base per character, all in Animated series; every Grounded and Bold front is dropped; made by the stopped run before the restart, files left out of commits, recipes in the ledger"
+    },
+    {
+      "key": "gladias/bold",
+      "model": "gemini-3.1-flash-image",
+      "from": "text",
+      "status": "dropped (owner, 2026-11-04): one base per character, all in Animated series; every Grounded and Bold front is dropped; made by the stopped run before the restart, files left out of commits, recipes in the ledger"
+    },
+    {
+      "key": "seila/grounded",
+      "model": "gemini-3.1-flash-image",
+      "from": "text",
+      "status": "dropped (owner, 2026-11-04): one base per character, all in Animated series; every Grounded and Bold front is dropped; made by the stopped run before the restart, files left out of commits, recipes in the ledger"
+    },
+    {
+      "key": "seila/bold",
+      "model": "gemini-3.1-flash-image",
+      "from": "text",
+      "status": "dropped (owner, 2026-11-04): one base per character, all in Animated series; every Grounded and Bold front is dropped; made by the stopped run before the restart, files left out of commits, recipes in the ledger"
+    },
+    {
+      "key": "deluin/grounded",
+      "model": "gemini-3.1-flash-image",
+      "from": "text",
+      "status": "dropped (owner, 2026-11-04): one base per character, all in Animated series; every Grounded and Bold front is dropped; made by the stopped run before the restart, files left out of commits, recipes in the ledger"
+    },
+    {
+      "key": "deluin/bold",
+      "model": "gemini-3.1-flash-image",
+      "from": "text",
+      "status": "dropped (owner, 2026-11-04): one base per character, all in Animated series; every Grounded and Bold front is dropped; made by the stopped run before the restart, files left out of commits, recipes in the ledger"
+    },
+    {
+      "key": "mu/grounded",
+      "model": "gemini-3.1-flash-image",
+      "from": "text",
+      "status": "dropped (owner, 2026-11-04): one base per character, all in Animated series; every Grounded and Bold front is dropped; made by the stopped run before the restart, files left out of commits, recipes in the ledger"
+    },
+    {
+      "key": "mu/bold",
+      "model": "gemini-3.1-flash-image",
+      "from": "text",
+      "status": "dropped (owner, 2026-11-04): one base per character, all in Animated series; every Grounded and Bold front is dropped; made by the stopped run before the restart, files left out of commits, recipes in the ledger"
+    }
+  ],
+  "picks_2026_11_04": {
+    "bases": "three per character, the same three directions for all six, in this order",
+    "a": "Animated series, the Midjourney-reference look, made with GPT Image 2.5 Sunburst; Zei and Bai: their MJ·GPT fronts. Gladias, Seila, Deluin and Mu: their Animated fronts are starting points only; the owner takes them to his Muse agent for a Midjourney pass, and the result's recipe must be recorded (see midjourney_pass_needed) before anything is published",
+    "b": "Grounded, made with Gemini 3.1 Flash Image",
+    "c": "Bold, made with Gemini 3.1 Flash Image",
+    "out": "every GPT grounded and bold front; Zei direction A (grounded) on both models. Files kept, marked out (owner, 2026-11-04)",
+    "next": "grounded and bold fronts on Gemini for Bai, Gladias, Seila, Deluin and Mu (fronts_next). No side or back views.",
+    "open": "Zei has no grounded front now (both out); a new Zei grounded needs the owner's say",
+    "cap": "$1 cap raised to $1.75 by the owner, 2026-11-04",
+    "superseded": "Superseded the same day by bases_2026_11_04 (owner, after the restart). Its note that (a) is made with GPT Image 2.5 was right only for Zei and Bai."
+  },
+  "midjourney_pass_needed": {
+    "status": "superseded (owner, 2026-11-04): the four Animated series fronts are the bases as they are; the owner's Midjourney work is now the first remixes (docs/proposals/challenge-first-remixes.md on branch challenge-landing)",
+    "was": {
+      "gladias": {
+        "prompt": null,
+        "settings": null,
+        "midjourney_version": null,
+        "job_id": null,
+        "grid_cell": null,
+        "seed": null,
+        "image_references": null,
+        "plan": null,
+        "file_sha256": null,
+        "status": "waiting for the owner's pictures and their recipe; nothing is published until every field is filled"
+      },
+      "seila": {
+        "prompt": null,
+        "settings": null,
+        "midjourney_version": null,
+        "job_id": null,
+        "grid_cell": null,
+        "seed": null,
+        "image_references": null,
+        "plan": null,
+        "file_sha256": null,
+        "status": "waiting for the owner's pictures and their recipe; nothing is published until every field is filled"
+      },
+      "deluin": {
+        "prompt": null,
+        "settings": null,
+        "midjourney_version": null,
+        "job_id": null,
+        "grid_cell": null,
+        "seed": null,
+        "image_references": null,
+        "plan": null,
+        "file_sha256": null,
+        "status": "waiting for the owner's pictures and their recipe; nothing is published until every field is filled"
+      },
+      "mu": {
+        "prompt": null,
+        "settings": null,
+        "midjourney_version": null,
+        "job_id": null,
+        "grid_cell": null,
+        "seed": null,
+        "image_references": null,
+        "plan": null,
+        "file_sha256": null,
+        "status": "waiting for the owner's pictures and their recipe; nothing is published until every field is filled"
+      }
+    }
+  },
+  "bases_2026_11_04": {
+    "by": "owner",
+    "when": "2026-11-04, after the restart",
+    "rule": "one base per character, all in Animated series; side and back views made from each front with the model that made the front",
+    "bases": {
+      "zei": {
+        "front": "directions/zei-animated-gpt.jpg",
+        "model": "gpt-image-2.5-sunburst",
+        "views": {
+          "side": "directions/zei-animated-side-gpt.jpg",
+          "back": "directions/zei-animated-back-gpt.jpg"
+        }
+      },
+      "bai": {
+        "front": "directions/bai-animated-gpt.jpg",
+        "model": "gpt-image-2.5-sunburst",
+        "views": {
+          "side": "directions/bai-animated-side-gpt.jpg",
+          "back": "directions/bai-animated-back-gpt.jpg"
+        }
+      },
+      "gladias": {
+        "front": "directions/gladias-animated-gemini.jpg",
+        "model": "gemini-3.1-flash-image",
+        "views": {
+          "side": "directions/gladias-animated-side-gemini.jpg",
+          "back": "directions/gladias-animated-back-gemini.jpg"
+        }
+      },
+      "seila": {
+        "front": "directions/seila-animated-gemini.jpg",
+        "model": "gemini-3.1-flash-image",
+        "views": {
+          "side": "directions/seila-animated-side-gemini.jpg",
+          "back": "directions/seila-animated-back-gemini.jpg"
+        }
+      },
+      "deluin": {
+        "front": "directions/deluin-animated-gemini.jpg",
+        "model": "gemini-3.1-flash-image",
+        "views": {
+          "side": "directions/deluin-animated-side-gemini.jpg",
+          "back": "directions/deluin-animated-back-gemini.jpg"
+        }
+      },
+      "mu": {
+        "front": "directions/mu-animated-gemini.jpg",
+        "model": "gemini-3.1-flash-image",
+        "views": {
+          "side": "directions/mu-animated-side-gemini.jpg",
+          "back": "directions/mu-animated-back-gemini.jpg"
+        }
+      }
+    },
+    "dropped": "every Grounded and Bold front, both models (owner, 2026-11-04)",
+    "views_script": "scripts/cast-views.ts"
+  }
 }

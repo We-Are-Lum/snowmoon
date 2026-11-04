@@ -24,6 +24,10 @@ export interface PlanFile {
   style_test: { style: string; model: ModelId; what: string }[];
   plans: Record<string, { about: string; bases: { style: string; model: ModelId }[] }>;
   retake_share: number;
+  /** The owner's picks from the contact sheets (2026-11-04): three directions for every character. Recorded, not priced. */
+  directions_picked?: { when: string; by: string; about: string; status?: string; bases: { direction: string; model: ModelId; note?: string; status?: string }[]; out: string; cap: string };
+  /** The owner's bases after the restart (2026-11-04): one per character, all in Animated series; Grounded and Bold dropped. Recorded, not priced. */
+  bases_picked?: { when: string; by: string; about: string; bases: { character: string; direction: string; model: ModelId }[]; dropped: string; cap: string };
 }
 
 const MP = (w: number, h: number) => (w * h) / 1e6;
