@@ -46,6 +46,54 @@ function walk(dir: string): string[] {
 const R = await import('../src/lib/challenge/rules');
 const L = await import('../src/lib/challenge/post-links');
 
+// --- The owner's switch (owner, 2026-11-04: "/challenge is admin-only for now"; nothing opens by date alone) ------
+// With CHALLENGE.public off (as committed) and the clock inside the window, nothing the dates used to switch on is on:
+// entries, open sheets, the $15 cap, the challenge share text; and only admins may see the challenge.
+{
+  const C = await import('../src/lib/config');
+  const O = await import('../src/lib/challenge/open-sheets');
+  const { PRIVACY } = await import('../src/lib/legal');
+  const V = await import('../src/lib/challenge/visibility');
+  const inside = new Date(Date.parse(CHALLENGE.dates.opens) + 3600_000);
+  check('switch: CHALLENGE.public is off as committed (the owner opens it)', CHALLENGE.public === false);
+  check('switch: the dates are kept (opens Fri 6 Nov, 09:00 Pacific)', CHALLENGE.dates.opens === '2026-11-06T17:00:00Z');
+  check('switch off, inside the window: the free cap stays $2, not $15', C.imagesDailySpendCapUsd(inside) === IMAGES.dailySpendCapUsd && IMAGES.dailySpendCapUsd === 2);
+  check('switch off, inside the window: sheets stay invited-only (Privacy describes the challenge)', O.privacyDescribesChallenge(PRIVACY) && !O.challengeSheetsOpen(inside, PRIVACY));
+  check('switch off, inside the window: entries are not taken', !R.entriesOpen(inside) && !R.challengeOpenNow(inside));
+  check('switch off: only admins may see the challenge', !V.challengeVisibleTo(null) && !V.challengeVisibleTo(501) && !V.challengeVisibleTo(6852) && ADMINS.every((a) => V.challengeVisibleTo(a)));
+  check('switch on, inside the window: the same functions open (so the switch is what holds them)', R.challengeOpenNow(inside, true) && R.entriesOpen(inside, true) && O.challengeSheetsOpen(inside, PRIVACY, true) && V.challengeVisibleTo(501, true));
+  proof('a cap that rises by date alone is caught', ((t: Date) => (t.getTime() >= Date.parse(CHALLENGE.dates.opens) && t.getTime() < Date.parse(CHALLENGE.dates.closes) ? 15 : 2))(inside) !== C.imagesDailySpendCapUsd(inside));
+  proof('sheets that open by date alone are caught', ((t: Date) => CHALLENGE.openSheets && R.phase(t) === 'open' && O.privacyDescribesChallenge(PRIVACY))(inside) !== O.challengeSheetsOpen(inside, PRIVACY));
+  proof('entries that open by date alone are caught', ((t: Date) => CHALLENGE.entries && R.phase(t) === 'open')(inside) !== R.entriesOpen(inside));
+  // Every way in: the page and the APIs answer 404 to everyone but an admin; the menu, the home row, the sheet page's
+  // lines, "Posted on" and the share text wait for the switch.
+  const gated: [string, RegExp][] = [
+    ['src/app/challenge/page.tsx', /if \(!CHALLENGE\.public\) notFound\(\);/],
+    ['src/app/challenge/page.tsx', /if \(!CHALLENGE\.public\) return \{ robots: \{ index: false, follow: false \} \};/],
+    ['src/app/api/challenge/mark/route.ts', /if \(!challengeVisibleTo\(fid\)\) return NextResponse\.json\(\{ error: 'Not found' \}, \{ status: 404 \}\);/],
+    ['src/app/api/challenge/view/route.ts', /if \(!challengeVisibleTo\(fid\)\) return NextResponse\.json\(\{ error: 'Not found' \}, \{ status: 404 \}\);/],
+    ['src/app/api/challenge/standing/route.ts', /if \(!challengeVisibleTo\(fid\)\) return NextResponse\.json\(\{ error: 'Not found' \}, \{ status: 404 \}\);/],
+    ['src/app/page.tsx', /\.\.\.\(CHALLENGE\.public \? \[\{ href: '\/challenge'/],
+    ['src/components/app-shell.tsx', /navItems\(last, adaptations, CHALLENGE\.public \|\| \(auth\.kind === 'signed-in' && isAdmin\(auth\.fid\)\)\)/],
+    ['src/app/references/designs/[id]/page.tsx', /const ch = CHALLENGE\.public \? await sheetChallenge\(/],
+    ['src/app/references/designs/[id]/page.tsx', /posts=\{CHALLENGE\.public && CHALLENGE\.posts\}/],
+    ['src/app/references/designs/[id]/page.tsx', /isChallengeCharacter\(d\.entity\) && challengeOpenNow\(\) \? CW\.shareTextOpen\(what\)/],
+  ];
+  const ungated = gated.filter(([f, re]) => !re.test(read(f))).map(([f]) => f);
+  check('switch: every way in is gated (page, APIs, menu, home row, sheet lines, "Posted on", share text)', ungated.length === 0, ungated.join());
+  const posts = read('src/app/api/challenge/posts/route.ts');
+  check('switch: /api/challenge/posts answers 404 to non-admins for GET, POST and DELETE', (posts.match(/const no404 = hidden\(person\);\s*if \(no404\) return no404;/g) ?? []).length === 3 && /challengeVisibleTo\(person\) \? null : NextResponse\.json\(\{ error: 'Not found' \}, \{ status: 404 \}\)/.test(posts));
+  proof('a page that shows the challenge to everyone is caught', !gated[0][1].test(read('src/app/challenge/page.tsx').replace('if (!CHALLENGE.public) notFound();', '')));
+  const { navItems } = await import('../src/lib/nav');
+  check('switch: the menu has no challenge item unless told to show it', !navItems(1, 0).some((i) => i.href === '/challenge') && navItems(1, 0, true).some((i) => i.href === '/challenge'));
+  // Scripts everyone is served carry no challenge words: the share buttons, "Posted on", the mark button, the fork form.
+  const clientFiles = ['src/components/challenge-share.tsx', 'src/components/posted-on.tsx', 'src/components/challenge-mark.tsx', 'src/components/design-form.tsx', 'src/components/challenge-admin.tsx', 'src/components/challenge-admin-sheet.tsx', 'src/components/challenge-body.tsx', 'src/components/challenge-lines.tsx'];
+  const wordy = clientFiles.filter((f) => /challenge\/wording'/.test(read(f)));
+  check('switch: no script served to everyone imports the challenge\'s words', wordy.length === 0, wordy.join());
+}
+// The tests below are the challenge once the owner has opened it.
+(CHALLENGE as { public: boolean }).public = true;
+
 // --- Eligibility -------------------------------------------------------------------------------------------------
 const lists = { admins: [6786, 193912], invited: [6786, 6852], min: 0.7 };
 const el = (maker: number, score: number | null) => R.eligibility({ maker, score }, lists);
@@ -769,14 +817,15 @@ check('as committed, CHALLENGE.entries, posts and openSheets are on (owner\'s re
   proof('R3 a status cap read straight from IMAGES (never $15) is caught', !capInStatus(status.replace('dailySpendCapUsd: imagesDailySpendCapUsd()', 'dailySpendCapUsd: IMAGES.dailySpendCapUsd')));
   // R4: an untitled entry's row read "Bai: Bai".
   const CW = (await import('../src/lib/challenge/wording')).CHALLENGE_WORDING;
-  const chPage = read('src/app/challenge/page.tsx');
+  const chPage = read('src/lib/challenge/view.ts');
   check('R4 an untitled entry\'s row is the character alone; a titled one adds its name', CW.entryLabel('Bai', '') === 'Bai' && CW.entryLabel('Bai', '  ') === 'Bai' && CW.entryLabel('Bai', 'Rain coat') === 'Bai: Rain coat');
   check('R4 /challenge builds both lists\' rows with entryLabel', (chPage.match(/W\.entryLabel\(/g) ?? []).length === 2 && !/\|\| nameOf\(/.test(chPage));
-  proof('R4 a row that repeats the name is caught', /\|\| nameOf\(/.test(chPage.replace('{W.entryLabel(nameOf(e.character), e.title)}', '{nameOf(e.character)}: {e.title || nameOf(e.character)}')));
+  proof('R4 a row that repeats the name is caught', /\|\| nameOf\(/.test(chPage.replace('W.entryLabel(nameOf(e.character), e.title)', '`${nameOf(e.character)}: ${e.title || nameOf(e.character)}`')));
   // R5: a newcomer on a starting sheet had no way to /challenge (only an entry's badge linked there).
-  const invite = (src: string) => /\{challengeOpen && !standing && \(\s*<p className="dz-meta ch-standing ch-invite">\s*\{CW\.sheetInvite\(callName\)\} <Link href="\/challenge">/.test(src);
-  check('R5 a challenge character\'s sheet links to /challenge while the window is open', invite(read('src/app/references/designs/[id]/page.tsx')) && /remix this sheet/.test(CW.sheetInvite('Zei')) && CW.sheetInvite('Zei').startsWith('Zei '));
-  proof('R5 a sheet page without the link is caught', !invite(read('src/app/references/designs/[id]/page.tsx').replace('{CW.sheetInvite(callName)} <Link href="/challenge">', '{CW.sheetInvite(callName)} <Link href="/references">')));
+  const lines = read('src/lib/challenge/sheet-lines.ts');
+  const invite = (src: string) => /if \(invite && !standing\) lines\.push\(line\(\{ text: CW\.sheetInvite\(callName\), link: toChallenge \}\)\);/.test(src) && /const toChallenge = \{ href: '\/challenge'/.test(src);
+  check('R5 a challenge character\'s sheet links to /challenge while the window is open', invite(lines) && /remix this sheet/.test(CW.sheetInvite('Zei')) && CW.sheetInvite('Zei').startsWith('Zei '));
+  proof('R5 a sheet page without the link is caught', !invite(lines.replace("href: '/challenge'", "href: '/references'")));
   // R6: after "Mark as my entry" said "Marked as your entry.", the button stayed.
   const markSrc = read('src/components/challenge-mark.tsx');
   const hides = (src: string) => /if \(r\?\.ok\) setDone\(true\);/.test(src) && /\{!done && \(\s*<button/.test(src);
@@ -793,10 +842,10 @@ check('as committed, CHALLENGE.entries, posts and openSheets are on (owner\'s re
   check('R8 a fork or new version starts with its source\'s style chosen (when still published)', preselect(form, newPage));
   proof('R8 a form that starts with no style is caught', !preselect(form.replace('useState<string | null>(() => (p.source?.style', 'useState<string | null>(() => (null && p.source?.style'), newPage));
   // R9: after the close, a candidate's page still offered "Mark as my entry", which then said "Entries are closed."
-  const vp = read('src/app/references/designs/[id]/page.tsx');
-  const closedNoButton = (src: string) => /standing\?\.kind === 'candidate' &&[\s\S]{0,200}\(phase\(\) === 'open' \?[\s\S]{0,300}<ChallengeMark[\s\S]{0,120}\) : \(\s*<p className="dz-meta ch-standing dz-muted">\{CW\.candidateClosedNote\(callName\)\}<\/p>/.test(src);
+  const vp = lines;
+  const closedNoButton = (src: string) => /standing\?\.kind === 'candidate'\)\s*lines\.push\(challengeOpenNow\(now, pub\) \? line\(\{ text: CW\.candidateNote, muted: true, mark: \{ mark: CW\.mark, marked: CW\.marked \} \}\) : line\(\{ text: CW\.candidateClosedNote\(callName\), muted: true \}\)\);/.test(src);
   check('R9 after the close a candidate shows the closed note and no mark button', closedNoButton(vp) && /Entries are closed/.test(CW.candidateClosedNote('Bai')) && /Bai/.test(CW.candidateClosedNote('Bai')));
-  proof('R9 a mark button offered after the close is caught', !closedNoButton(vp.replace("(phase() === 'open' ?", '(true ?').replace(/\(phase\(\) === 'open' \?/, '(true ?')) || !closedNoButton(vp.replace('{CW.candidateClosedNote(callName)}', '<ChallengeMark versionId={d.shown.versionId} byFid={d.byFid} />')));
+  proof('R9 a mark button offered after the close is caught', !closedNoButton(vp.replace('challengeOpenNow(now, pub) ?', 'true ?')) && !closedNoButton(vp.replace('line({ text: CW.candidateClosedNote(callName), muted: true })', 'line({ text: CW.candidateClosedNote(callName), muted: true, mark: { mark: CW.mark, marked: CW.marked } })')));
 }
 
 // --- Launch fixes (owner, 2026-11-03) -----------------------------------------------------------------------------
@@ -805,7 +854,7 @@ check('as committed, CHALLENGE.entries, posts and openSheets are on (owner\'s re
   const IW = (await import('../src/lib/images/wording')).IMAGE_WORDING.designs;
   const { navItems } = await import('../src/lib/nav');
   // b. /challenge from the menu and the home page.
-  check('b the menu links to /challenge, after the owner\'s order', navItems(1, 0).some((i) => i.href === '/challenge' && i.label === CW.title) && navItems(1, 0).at(-1)?.key === 'challenge');
+  check('b the menu links to /challenge, after the owner\'s order', navItems(1, 0, true).some((i) => i.href === '/challenge' && i.label === CW.title) && navItems(1, 0, true).at(-1)?.key === 'challenge');
   const home = read('src/app/page.tsx');
   const homeRow = (src: string) => /\{ href: '\/challenge', name: CW\.title, what: CW\.homeLine\(\), meta: '→', draft: true \}/.test(src) && /\{r\.draft && <span className="as-draft ic-draftline">\{CW\.draftShort\}<\/span>\}/.test(src);
   check('b the home page links to /challenge, its new line marked Draft wording', homeRow(home) && /remix/.test(CW.homeLine()) && CW.draftShort === 'Draft wording');
@@ -813,12 +862,12 @@ check('as committed, CHALLENGE.entries, posts and openSheets are on (owner\'s re
   // c. Below 0.7: said up front, in the owner's words; the refusal beside Generate, scrolled into view; no new lookup.
   const owner = 'Entering needs a Farcaster account with a Neynar score of 0.7 or more; we check when you press Generate.';
   check('c the up-front line is the owner\'s words exactly', CW.whoCanEnter() === owner, CW.whoCanEnter());
-  const chPage = read('src/app/challenge/page.tsx');
-  check('c /challenge says it up front, under the deadline', /<\/p>\s*\{\/\*[^*]*\*\/\}\s*\{now !== 'closed' && <p className="ch-who">\{W\.whoCanEnter\(\)\}<\/p>\}\s*<section className="ch-rules">/.test(chPage));
+  const chBody = read('src/components/challenge-body.tsx');
+  check('c /challenge says it up front, under the deadline', /<\/p>\s*\{\/\*[^*]*\*\/\}\s*\{v\.who && <p className="ch-who">\{v\.who\}<\/p>\}\s*<section className="ch-rules">/.test(chBody) && /who: ph !== 'closed' \? W\.whoCanEnter\(\) : null,/.test(read('src/lib/challenge/view.ts')));
   const form = read('src/components/design-form.tsx');
-  const beforeConsent = (src: string) => /<div className="ic-gate">\s*\{p\.challengeOpen && !status\.invited && <p className="ch-who">\{CW\.whoCanEnter\(\)\}<\/p>\}\s*<p>\{W\.form\.consentFirst\}<\/p>/.test(src);
-  check('c a challenge fork form says it before the consent screen', beforeConsent(form));
-  proof('c a consent gate without the line is caught', !beforeConsent(form.replace('{p.challengeOpen && !status.invited && <p className="ch-who">{CW.whoCanEnter()}</p>}\n          <p>{W.form.consentFirst}</p>', '<p>{W.form.consentFirst}</p>')));
+  const beforeConsent = (src: string) => /<div className="ic-gate">\s*\{p\.challengeOpen && !status\.invited && p\.whoCanEnter && <p className="ch-who">\{p\.whoCanEnter\}<\/p>\}\s*<p>\{W\.form\.consentFirst\}<\/p>/.test(src);
+  check('c a challenge fork form says it before the consent screen', beforeConsent(form) && /whoCanEnter=\{challengeOpen \? CW\.whoCanEnter\(\) : undefined\}/.test(read('src/app/references/designs/new/page.tsx')));
+  proof('c a consent gate without the line is caught', !beforeConsent(form.replace('{p.challengeOpen && !status.invited && p.whoCanEnter && <p className="ch-who">{p.whoCanEnter}</p>}\n          <p>{W.form.consentFirst}</p>', '<p>{W.form.consentFirst}</p>')));
   const beside = (src: string) => /pictureFor\(k, i, views\[k\], p\.viewLines\[k\]\)\)\}\s*<\/ul>\s*\{note && \(\s*<p ref=\{noteRef\} className="ic-error dz-make-note" role="status">/.test(src) && /if \(note\) noteRef\.current\?\.scrollIntoView\(/.test(src) && (src.match(/\{note\}/g) ?? []).length === 1;
   check('c a refusal at Generate shows right under the Generate buttons, once, and is scrolled into view', beside(form));
   proof('c the refusal back under the rules is caught', !beside(form.replace('if (note) noteRef.current?.scrollIntoView(', 'if (note) void (')));
@@ -833,16 +882,16 @@ check('as committed, CHALLENGE.entries, posts and openSheets are on (owner\'s re
   check('e2 the entry line is the owner\'s words', CW.publishedEntry('Bai') === 'This is your entry for Bai.');
   const route = read('src/app/api/designs/route.ts');
   check('e2 the publish route answers with the standing at publish', /const st = await publishStanding\(sql, out\.versionId\);/.test(route) && /page: `\/references\/designs\/\$\{out\.versionId\}`, challenge \}/.test(route));
-  check('e2 the confirmation shows it', /\{entry\?\.kind === 'entry' && `\$\{CW\.publishedEntry\(entry\.name\)\} `\}/.test(form));
+  check('e2 the confirmation shows it', /\{entry\?\.kind === 'entry' && `\$\{entry\.text\} `\}/.test(form) && /text: st\.kind === 'entry' \? CW\.publishedEntry\(name\) : CW\.publishedUnchecked\(name\)/.test(route));
   const share = read('src/components/challenge-share.tsx');
   const vp = read('src/app/references/designs/[id]/page.tsx');
-  const shareSwitch = (s1: string, v1: string) => /const text = inChallenge \? W\.shareTextOpen\(what\) : W\.shareText\(what\);/.test(s1) && /inChallenge=\{d\.kind === 'character' && isChallengeCharacter\(d\.entity\) && phase\(\) === 'open'\}/.test(v1);
+  const shareSwitch = (s1: string, v1: string) => /export function ChallengeShare\(\{ versionId, text, posts \}/.test(s1) && /const shareText = d\.kind === 'character' && isChallengeCharacter\(d\.entity\) && challengeOpenNow\(\) \? CW\.shareTextOpen\(what\) : CW\.shareText\(what\);/.test(v1) && /text=\{shareText\}/.test(v1);
   check('e3 in the window, a challenge sheet\'s share text mentions the challenge; outside it, as before', shareSwitch(share, vp) && /remix challenge/.test(CW.shareTextOpen('Bai: x')) && CW.shareTextOpen('Bai: x').startsWith('Bai: x, made on Snowmoon Party') && CW.shareText('Bai: x') === 'Bai: x, made on Snowmoon Party' && CW.shareTextOpen('x').includes(R.dateText('closes', { time: true })));
-  proof('e3 a share text that ignores the window is caught', !shareSwitch(share, vp.replace("phase() === 'open'}", "true}")));
+  proof('e3 a share text that ignores the window is caught', !shareSwitch(share, vp.replace('challengeOpenNow() ?', 'true ?')));
   // h. Before the open, from CHALLENGE.dates.
   check('h "Entries open Fri 6 Nov, 09:00 PT", built from CHALLENGE.dates', E.MARK_WORDING.opens() === 'Entries open Fri 6 Nov, 09:00 PT.' && R.shortDateText('opens', { ...CHALLENGE.dates, opens: '2026-11-13T17:00:00Z' }) === 'Fri 13 Nov, 09:00 PT', E.MARK_WORDING.opens());
   // i. Neynar down: published, and told on the spot.
-  check('i the unchecked line says it won\'t count, and why', /won’t count/.test(CW.publishedUnchecked('Zei')) && /Neynar/.test(CW.publishedUnchecked('Zei')) && /\{entry\?\.kind === 'unchecked' && \(\s*<p className="ic-error ch-unchecked" role="status">\s*\{CW\.publishedUnchecked\(entry\.name\)\}/.test(form));
+  check('i the unchecked line says it won\'t count, and why', /won’t count/.test(CW.publishedUnchecked('Zei')) && /Neynar/.test(CW.publishedUnchecked('Zei')) && /\{entry\?\.kind === 'unchecked' && \(\s*<p className="ic-error ch-unchecked" role="status">\s*\{entry\.text\}/.test(form));
   check('i the confirmation\'s new lines carry a Draft wording line', /\{entry && <p className="as-draft ic-draftline">\{IMAGE_WORDING\.draftLine\}<\/p>\}/.test(form));
 }
 

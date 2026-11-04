@@ -7,7 +7,7 @@ import { PRIVACY } from '../legal';
 import { privacyDescribesChallenge } from './open-sheets';
 import { refusedBases } from './bases';
 import { remixLines } from './lineage';
-import { eligibility, inWindow, needsScore, remixOfBase } from './rules';
+import { eligibility, entriesOpen, inWindow, needsScore, remixOfBase } from './rules';
 
 /**
  * The remix challenge's eligibility, decided once, when a version is published (owner, 2026-10-31: "checked once at
@@ -28,6 +28,8 @@ export async function recordEligibility(sql: Sql, versionId: string, fid: number
   try {
     if (!privacyDescribesChallenge(privacy)) return 'not-stored';
     if (!inWindow(now)) return 'not-a-candidate';
+    // Nothing is recorded, and Neynar is not asked, until the owner opens the challenge (CHALLENGE.public; 2026-11-04).
+    if (!entriesOpen(now)) return 'not-a-candidate';
     const names = CHALLENGE.characters.map((s) => bookCharacter(s)?.name).filter((n): n is string => Boolean(n));
     const [v] = await sql`
       select e.created_by_fid, e.id as element_id, en.name

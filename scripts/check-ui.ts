@@ -66,7 +66,8 @@
  *   shown, the finding with its fix line, the note box with the publication line, pre-filled with the fix line labelled
  *   "Drafted by the image check (Argon finding, gpt-oss-120b fix line)" and marked when edited; anyone else sees only the owner line.
  * - The remix challenge (/challenge, 2026-10-31): the floors, light and dark, the "Draft wording" line, its six characters in order, the
- *   deadline in Pacific time, the rules, admins not eligible for rewards, no sideways scroll.
+ *   deadline in Pacific time, the rules, admins not eligible for rewards, no sideways scroll. While it is admin-only
+ *   (CHALLENGE.public off; owner, 2026-11-04): signed out, status 404 with nothing of the challenge in the HTML or on screen.
  * - The footer line (owner's legal starter, 2026-10-09) reads exactly as written, with Terms, Privacy
  *   and Source linked, at the foot of About, in the menu sheet and at the bottom of the rail; not on a
  *   phone's reading screen. /terms and /privacy meet the floors.
@@ -77,7 +78,7 @@ import { createServer } from 'node:net';
 import path from 'node:path';
 import { chromium, type Browser, type Page } from 'playwright-core';
 import QRCode from 'qrcode';
-import { SUPPORT } from '../src/lib/config';
+import { CHALLENGE, SUPPORT } from '../src/lib/config';
 import { requireTarget } from './lib/target';
 
 const arg = (name: string) => process.argv.slice(2).find((a) => a.startsWith(`--${name}=`))?.split('=').slice(1).join('=');
@@ -1531,7 +1532,21 @@ try {
       if (!(await page.locator('.shell-main a[href="/about"]').count())) fail(`${p} (${scheme}): no link back to About`);
     }
     // The remix challenge (2026-10-31): the floors, the draft line, both characters, the deadline built from the config,
-    // the rules, and no sideways scroll at phone width.
+    // the rules, and no sideways scroll at phone width. While it is admin-only (CHALLENGE.public off; owner, 2026-11-04),
+    // signed out it is the usual "not found": status 404, nothing of the challenge on screen or in the HTML, no menu item.
+    if (!CHALLENGE.public) {
+      const res = await page.goto(BASE + '/challenge', { waitUntil: 'networkidle' });
+      lastOpened = '/challenge';
+      if (res?.status() !== 404) fail(`/challenge (${scheme}): answers ${res?.status()} signed out, not 404 (CHALLENGE.public is off)`);
+      const html = (await res?.text()) ?? '';
+      const shown = (await page.locator('body').textContent()) ?? '';
+      for (const [what, t] of [['HTML', html], ['screen', shown]] as const) {
+        const m = /Remix the cast|remix challenge/i.exec(t);
+        if (m) fail(`/challenge (${scheme}): its ${what} names the challenge ("${m[0]}") signed out`);
+      }
+      if (await page.locator('.ch-page').count()) fail(`/challenge (${scheme}): the challenge page is shown signed out`);
+      if (await page.locator('a[href="/challenge"]').count()) fail(`/challenge (${scheme}): a link to /challenge is on the page signed out`);
+    } else {
     await open(page, '/challenge');
     await checkFloors(page, '/challenge', scheme);
     {
@@ -1546,6 +1561,7 @@ try {
       if (!/aren’t eligible for rewards/.test(text)) fail(`/challenge (${scheme}): it doesn't say admins aren't eligible for rewards`);
       const wide = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1);
       if (wide) fail(`/challenge (${scheme}): scrolls sideways`);
+    }
     }
     await checkAssistant(page, scheme);
     await checkLiveScreens(page, scheme);
