@@ -20,7 +20,7 @@ Before (reread 2026-11-04):
 
 After:
 
-> OpenAI and Google receive, through Vercel AI Gateway, the prompt and the reference pictures for some of the pictures the project makes itself, such as the remix challenge's bases, styles and references. They receive nothing about you, and may not train on them. OpenAI may keep them for up to 30 days to check for abuse, and longer if needed to deal with abuse or required by law. Google keeps no copy, except in memory for up to 24 hours. Each picture's recipe names the model and its maker.
+> OpenAI and Google receive, through Vercel AI Gateway, the prompt and the reference pictures for some of the pictures the project makes itself, such as the remix challenge's bases, styles and references. They receive nothing about you, and may not train on them. OpenAI may keep them for up to 30 days to check for abuse, and longer if needed to deal with abuse or required by law. Google keeps no copy, except in memory for up to 24 hours, and may keep logs to check for abuse, for up to 90 days. Each picture's recipe names the model and its maker.
 
 **Terms §8.** Before (reread 2026-11-04), two sentences after main's last:
 
@@ -36,7 +36,7 @@ After (T1, this branch alone):
 
 After (A1, this branch alone):
 
-> OpenAI and Google receive, through Vercel AI Gateway, the prompts and pictures for some of the project's own pictures, and nothing about you, and neither may train on them (OpenAI may keep them for up to 30 days to check for abuse, and longer if needed to deal with abuse or required by law; Google keeps no copy, except in memory for up to 24 hours).
+> OpenAI and Google receive, through Vercel AI Gateway, the prompts and pictures for some of the project's own pictures, and nothing about you, and neither may train on them (OpenAI may keep them for up to 30 days to check for abuse, and longer if needed to deal with abuse or required by law; Google keeps no copy, except in memory for up to 24 hours, and may keep logs to check for abuse, for up to 90 days).
 
 **Which release carries which version.** T1 and A1 are true with this branch alone. The day the first picture the owner
 made with Midjourney is published, T2 and A2 replace them; when model choice for remixers is on, T3 and A3. All are in

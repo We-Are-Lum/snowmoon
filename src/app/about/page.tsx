@@ -120,7 +120,7 @@ export default async function About() {
         Vercel hosts the site and sees your IP address and browser details, as any web host does. Cloudflare stores and serves
         the pictures and audio. Supabase holds the database. OpenAI and Google receive, through Vercel AI Gateway, the prompts and
         pictures for some of the project's own pictures, and nothing about you, and neither may train on them (OpenAI
-        may keep them for up to 30 days to check for abuse, and longer if needed to deal with abuse or required by law; Google keeps no copy, except in memory for up to 24 hours). A report or share link opens GitHub, Farcaster, X, Bluesky or
+        may keep them for up to 30 days to check for abuse, and longer if needed to deal with abuse or required by law; Google keeps no copy, except in memory for up to 24 hours, and may keep logs to check for abuse, for up to 90 days). A report or share link opens GitHub, Farcaster, X, Bluesky or
         Lens, where what you post is public. When an image is reported, ntfy delivers us a short alert that carries no content
         and nothing about you. When someone adds a post to a version's page, our server asks Bluesky or Lens for that post,
         sending only its details, to check that it links there; it sends nothing about you, and your browser never contacts
