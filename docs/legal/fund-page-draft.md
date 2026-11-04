@@ -1,9 +1,9 @@
-# Fund page: the Terms line and the page's words (DRAFT, for the owner's reread)
+# Fund page: the Terms line and the page's words
 
-Written by the coding agent (Claude, a closed model by Anthropic), 2026-11-04, on branch `fund-page`. DRAFT until the
-owner rereads it. The Terms line below is already in `src/lib/legal.ts` on this branch, so the Terms page shows "Draft
-wording" until the owner says "reread" (P6k). It ships in the same merge as the page (owner, 2026-10-18: legal texts
-describe today).
+Written by the coding agent (Claude, a closed model by Anthropic), 2026-11-04, on branch `fund-page`. Reviewed by the
+coordinator, approved by the owner, 2026-11-04 (reread pack, item 8, "approved as drafted"). The Terms line below is in
+`src/lib/legal.ts` on this branch, with `LEGAL.ownerReread.terms` at its words (mebnsy). It ships in the same merge as
+the page (owner, 2026-10-18: legal texts describe today).
 
 ## What changes
 
@@ -73,8 +73,9 @@ For the reread:
 - **8.4** "as recommended": no change. "Fund" stays under "Remix the cast"; non-admins don't see that item while the
   challenge is admin-only.
 
-These choose the words. The owner's "reread" of §6c comes separately; `LEGAL.ownerReread.terms` stays as it is until
-then.
+The owner's reread, 2026-11-04: item 8 approved as drafted (8.1 the first, 8.2 the second, 8.3 "Fund this project").
+Noted "reviewed by the coordinator, approved by the owner, 2026-11-04". `LEGAL.ownerReread.terms` is mebnsy (before:
+15lsr9u).
 
 ## The page's words
 
