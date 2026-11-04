@@ -98,7 +98,8 @@ export interface PlanInput {
   ruleset?: RulesetId;
 }
 
-/** The computer player (Amber): sees only what its towers light (rules page §8). */
+/** The computer player (Amber): sees only what its towers light (rules page §8). The engine's botPlan plans from Amber's
+ * fog view of the board it is given, never the board itself (owner, 2026-11-03), so the snap's real board is safe here. */
 export function botPlan(m: PlanInput): Placement[] {
   const s = { ...settingsFor(RULESETS[m.ruleset ?? 1], m.rule), sight: m.R, reach: m.R, every: m.every, costGlider: m.cost };
   return E.botPlan({ w: m.w, s, lvl: m.lvl, rng: m.rng, budget: BASE.points, snap: m.snap, lsA: m.lsA, diag: m.rule === 'diag' });

@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { ILLUSTRATION_CHECK, IMAGES } from '~/lib/config';
-import { authFetch, signOut, signOutWallet, useAuth, useWalletAlongside, walletFetch } from '~/lib/client-auth';
+import { authFetch, refreshWalletLink, signOut, signOutWallet, useAuth, useWalletAlongside, walletFetch } from '~/lib/client-auth';
 import { frameView, labelFor, pictureView, posterAlt, posterView } from '~/lib/scene-posters';
 import type { BoardItem, FrameItem, OwnWork, PictureItem, SceneItem, Who } from '~/lib/you';
 import { AiLabel } from './recipe-sheet';
@@ -81,7 +81,10 @@ const W = {
   linkYes: 'Link them',
   linkNo: 'Not now',
   linked: (wallet: string, to: string) => `${wallet} is linked to ${to}: signing in with it signs you in as ${to}.`,
-  linkedHow: { verified: 'Linked because that account verified this address on Farcaster.', signed: 'Linked by you, signed in with both.', maintainer: 'Linked by the maintainer, checked on Farcaster.' },
+  /** Why a wallet isn't linked automatically, from the last lookup (2026-11-04, owner: "says so plainly"). DRAFT wording (coding agent). */
+  foundNone: 'Not linked automatically: no Farcaster account has this wallet as its custody address or as a verified address.',
+  foundMany: (n: number) => `Not linked automatically: ${n} Farcaster accounts list this wallet, so it isn’t linked to any of them on its own. You can link it to yours below.`,
+  linkedHow: { verified: 'Linked because Farcaster lists this address as that account’s (its custody address or a verified address).', signed: 'Linked by you, signed in with both.', maintainer: 'Linked by the maintainer, checked on Farcaster.' },
   /** Signed in with Farcaster: a wallet linked to this account (owner, 2026-10-22: "Either side can unlink"). */
   linkedWallet: (wallet: string) => `${wallet} is linked to this account: signing in with it signs you in here.`,
   linkedEarlier: (to: string) => `What you made with this wallet shows under ${to}, and is listed with your work below.`,
@@ -114,6 +117,8 @@ interface LinkView {
   linked: { fid: number; how: LinkHow; at: string | null; name: string } | null;
   canUnlink: boolean;
   offer: boolean;
+  /** For an unlinked wallet: how many Farcaster accounts the last lookup found (null: not looked up). */
+  found: number | null;
   /** The FID signed in with Farcaster on this device, if any: who the offer links to. */
   to: number | null;
 }
@@ -308,6 +313,8 @@ function LinkPanel({ view, to, reload }: { view: LinkView; to: Who | null; reloa
     setAsking(false);
     if (!r?.ok) return setNote(out?.error ?? W.couldNot);
     setNote(null);
+    // The menu's name follows the link (2026-11-04).
+    void refreshWalletLink(true);
     reload();
   };
   const linkNow = async () => {
@@ -357,10 +364,12 @@ function LinkPanel({ view, to, reload }: { view: LinkView; to: Who | null; reloa
       </div>
     );
   }
-  if (!view.offer || later) return null;
+  const why = view.found === 0 ? W.foundNone : view.found !== null && view.found > 1 ? W.foundMany(view.found) : null;
+  if (!view.offer || later) return why ? <p className="you-note" data-link-found={view.found ?? ''}>{why}</p> : null;
   return (
     <div className="you-link" aria-label={W.linkTitle}>
       <h3 className="label">{W.linkTitle}</h3>
+      {why && <p className="you-note" data-link-found={view.found ?? ''}>{why}</p>}
       {view.to === null || !to ? (
         <>
           <p className="you-note">{W.linkOffer}</p>

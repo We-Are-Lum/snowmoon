@@ -6,14 +6,19 @@ Branch `privacy-furthest-chapter`, 2026-11-04. The owner's request (2026-11-04):
 assistant already sends the furthest chapter as a number. Fix it on main now, separately. Draft one clause for my OK
 saying it's sent as a number with questions and searches, so that answers stay within it, and that it isn't kept."
 
-The change is already made in `src/lib/legal.ts` on this branch. `LEGAL.ownerReread.privacy` stays at the words before
-(`1frr16h`, reread 2026-11-01) until the owner says "reread"; the new words' key is `1ruixoi`. Until then
-check:principles' P6k fails on this branch, as it should. On the reread: set `ownerReread.privacy` to
-`{ words: '1ruixoi', on: <day>, by: 'FID 6786' }` and `LEGAL.effective` to the merge day.
+The change is already made in `src/lib/legal.ts` on this branch. Main (wallet-fid-link, reread 2026-11-04) was merged
+in on 2026-11-04; main's words win everywhere else. `LEGAL.ownerReread.privacy` stays at main's words (`1wgu7z`, reread
+2026-11-04) until the owner says "reread". The new words' key, for the clause as drafted on top of main, is **`129tv6s`**
+(Terms unchanged at `15lsr9u`). The earlier key `1ruixoi` was computed on the words before wallet-fid-link and is stale.
+Until the reread, check:principles' P6k fails on this branch, as it should. On the reread: set `ownerReread.privacy` to
+`{ words: '129tv6s', on: <day>, by: 'FID 6786' }` and `LEGAL.effective` to the merge day. If main's Privacy words change
+again before then, the key has to be recomputed.
+
+The owner's answer on the parenthesis (2026-11-04, reread pack item 1.1): keep it.
 
 ## Privacy §3 (Kept on your device only): one clause added
 
-Before (word for word, main at 233f5e0):
+Before (word for word, main at 70d36ef; §3 is unchanged since 233f5e0):
 > Your browser stores a few things so the site works: whether you have seen the introduction, your light or dark
 > setting, where you stopped listening, the furthest chapter you have opened, your questions to the assistant and its
 > answers, drafts of images you make until you publish them, a few other settings of yours, and, on the website, your
@@ -33,7 +38,7 @@ The clause on its own:
 
 Why the parenthesis: the number sent is the conversation's chapter limit. It starts at the furthest chapter opened
 (or the chapter a conversation is started from, if later), and the reader can pick any chapter 1–32 for it. Without the
-parenthesis the clause is true for the default but not when a reader picks another chapter. The owner may drop it.
+parenthesis the clause is true for the default but not when a reader picks another chapter. The owner chose to keep it.
 
 The heading "Kept on your device only." is unchanged; the clause names the one exception.
 
