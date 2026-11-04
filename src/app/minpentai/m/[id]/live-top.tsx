@@ -2,6 +2,7 @@
 
 import dynamic from 'next/dynamic';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { instantReplays, type Moment } from './replay-events';
 import { ViewBoard, type Ghost } from './view-board';
 import { TakeTurn } from './take-turn';
 import { PlaybackControls, usePlayback } from './playback';
@@ -36,9 +37,32 @@ export function LiveTop(p: {
   const frames = p.latest?.frames ?? [], whole = !!p.latest?.whole;
   // The action playing now, and where: '3d' in the 3D view, '2d' in the 2D board's place.
   const [play, setPlay] = useState<'2d' | '3d' | null>(null);
-  const done = useCallback(() => setPlay(null), []);
+  // Instant replays (owner, 2026-11-04): after a turn's action has played in 3D to its end, its moments in sight
+  // (replay-events.ts instantReplays, from the same frames), each a few frames around it, slower, the camera on it.
+  const [rep, setRep] = useState<{ list: Moment[]; k: number; j: number } | null>(null);
+  const now = useRef({ play, frames, whole, replays: d3.replays, size: [p.width, p.height] as [number, number] });
+  now.current = { play, frames, whole, replays: d3.replays, size: [p.width, p.height] };
+  const done = useCallback((how: 'end' | 'skip') => {
+    const c = now.current;
+    if (how === 'end' && c.play === '3d' && c.replays !== 'off') {
+      const list = instantReplays(c.frames.map((x) => ({ board: x.board, seen: c.whole ? null : (x.seen as [number, number][]) })), c.size, { ended: c.whole, only: c.replays === 'big' ? 'big' : undefined });
+      if (list.length) { setRep({ list, k: 0, j: list[0].from }); return; }
+    }
+    setPlay(null);
+  }, []);
   const pb = usePlayback(frames, done, false);
-  const start = (view: '2d' | '3d') => { setPlay(view); pb.restart(); };
+  const endReplays = () => { setRep(null); setPlay(null); };
+  useEffect(() => {
+    if (!rep) return;
+    const m = rep.list[rep.k];
+    const t = window.setTimeout(() => {
+      if (rep.j < m.to) setRep({ ...rep, j: rep.j + 1 });
+      else if (rep.k + 1 < rep.list.length) setRep({ list: rep.list, k: rep.k + 1, j: rep.list[rep.k + 1].from });
+      else endReplays();
+    }, rep.j < m.to ? m.stepMs : m.stepMs + m.holdMs);
+    return () => window.clearTimeout(t);
+  }, [rep]);
+  const start = (view: '2d' | '3d') => { setRep(null); setPlay(view); pb.restart(); };
   const [more, setMore] = useState(false), [moreWarn, setMoreWarn] = useState(false);
   // A new turn arrived (this page took it, or the AI did while it was open): play its action.
   const seenTurn = useRef(p.latest?.turn ?? -1);
@@ -55,7 +79,11 @@ export function LiveTop(p: {
   // When nothing plays: the 2D board is this turn's plan (or the whole board once it's over); the 3D view shows the board
   // as it stands, from the same view.
   const idle = whole && last ? { board: last.board, seen: null } : { board: p.current.board, seen: p.current.seen };
-  const v3 = play === '3d' && f ? { board: f.board, prev: pb.prev?.board ?? null, seen: whole ? null : (f.seen as [number, number][]), stepMs: pb.stepMs } : { board: idle.board, prev: null, seen: idle.seen, stepMs: 0 };
+  const m = rep ? rep.list[rep.k] : null, rf = rep ? frames[rep.j] : null, rprev = rep && rep.j > 0 ? frames[rep.j - 1] : null;
+  const v3 = rep && m && rf ? { board: rf.board, prev: rprev?.board ?? null, seen: whole ? null : (rf.seen as [number, number][]), stepMs: m.stepMs }
+    : play === '3d' && f ? { board: f.board, prev: pb.prev?.board ?? null, seen: whole ? null : (f.seen as [number, number][]), stepMs: pb.stepMs }
+    : { board: idle.board, prev: null, seen: idle.seen, stepMs: 0 };
+  const focus = m ? { at: m.at, mode: m.mode, ms: (m.to - m.from + 1) * m.stepMs + m.holdMs } : null;
   const beside = d3.on && d3.wide;
   const show3d = beside || (play === '3d' && d3.on);
   const summary = p.summary ?? [];
@@ -75,14 +103,22 @@ export function LiveTop(p: {
             )
           ) : null}
           {show3d ? (
-            <Board3D {...v3} width={p.width} height={p.height}
-              onSlow={() => off3d('3D couldn’t keep up on this device, so the action plays in 2D.')}
-              onFail={() => off3d('3D didn’t start here, so the action plays in 2D.')}
-            />
+            <div className="mb-board3d-wrap">
+              <Board3D {...v3} width={p.width} height={p.height} focus={focus} big={beside}
+                onSlow={() => { setRep(null); off3d('3D couldn’t keep up on this device, so the action plays in 2D.'); }}
+                onFail={() => { setRep(null); off3d('3D didn’t start here, so the action plays in 2D.'); }}
+              />
+              {rep ? <button type="button" className="mb-instant" onClick={endReplays} aria-label="Skip the instant replay"><span>Instant replay · tap to skip</span></button> : null}
+            </div>
           ) : null}
         </div>
         <div className="mb-replay-controls mb-top-controls">
-          {play && f ? <PlaybackControls p={pb} whole={whole} label={`Turn ${p.latest!.turn}${play === '3d' ? ', 3D' : ''}`} />
+          {rep ? (
+            <>
+              <span className="mb-note">{`Instant replay${rep.list.length > 1 ? ` ${rep.k + 1} of ${rep.list.length}` : ''}`}</span>
+              <button type="button" onClick={endReplays}>Skip</button>
+            </>
+          ) : play && f ? <PlaybackControls p={pb} whole={whole} label={`Turn ${p.latest!.turn}${play === '3d' ? ', 3D' : ''}`} />
             : p.latest ? (
               <>
                 <span className="mb-note">Watch turn {p.latest.turn} again</span>
@@ -92,6 +128,9 @@ export function LiveTop(p: {
             ) : <span className="mb-note">No turn played yet.</span>}
           {d3.can && !d3.wide ? (
             <label className="mb-animate"><input type="checkbox" checked={d3.animate} onChange={(e) => d3.setAnimate(e.target.checked)} /> Animate action in 3D</label>
+          ) : null}
+          {d3.on ? (
+            <label className="mb-animate">Instant replays <select value={d3.replays} onChange={(e) => d3.setReplays(e.target.value as 'all' | 'big' | 'off')}><option value="all">all</option><option value="big">big moments</option><option value="off">off</option></select></label>
           ) : null}
         </div>
         {note ? <p className="mb-note" role="status">{note}</p> : null}

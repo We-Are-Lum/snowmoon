@@ -78,7 +78,7 @@ export async function liveLayoutCheck(browser: Browser, fail: Fail, opts: { reco
         await besideCheck(page, size.name, `${at}, while its action plays`, fail);
         await page.waitForTimeout(3500);
         await opts.shots?.(page, `live-${size.name}-turn${turn}-replay`);
-        await page.getByRole('button', { name: /^Watch turn \d+ again in 2D/ }).waitFor({ timeout: 20_000 }); // finished: back to this turn
+        await page.getByRole('button', { name: /^Watch turn \d+ again in 2D/ }).waitFor({ timeout: 45_000 }); // finished: back to this turn
         await inView(page, `${at}, after its replay`, fail, top.filter(([n]) => n !== 'the Take turn button'));
         await besideCheck(page, size.name, `${at}, after its action`, fail);
       }

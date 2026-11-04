@@ -11,7 +11,7 @@ export const STEP_MS = 450;
  * every playback): play, pause, a step at a time, 2x, Skip. When it reaches the end by itself, or on Skip, `onDone` a
  * moment later (Skip: at once).
  */
-export function usePlayback(frames: Frame[], onDone: () => void, autoStart = true) {
+export function usePlayback(frames: Frame[], onDone: (how: 'end' | 'skip') => void, autoStart = true) {
   const n = frames.length;
   const [i, setI] = useState(0), [playing, setPlaying] = useState(autoStart), [fast, setFast] = useState(false), [done, setDone] = useState(false);
   const stepMs = fast ? STEP_MS / 2 : STEP_MS;
@@ -26,7 +26,7 @@ export function usePlayback(frames: Frame[], onDone: () => void, autoStart = tru
   }, [i, n, playing]);
   useEffect(() => {
     if (!done) return;
-    const t = window.setTimeout(onDone, 1200);
+    const t = window.setTimeout(() => onDone('end'), 1200);
     return () => window.clearTimeout(t);
   }, [done, onDone]);
   const f = n ? frames[Math.min(i, n - 1)] : null, prev = n && i > 0 ? frames[Math.min(i, n - 1) - 1] : null;
@@ -36,7 +36,7 @@ export function usePlayback(frames: Frame[], onDone: () => void, autoStart = tru
     back: () => { setDone(false); setPlaying(false); setI((k) => Math.max(0, k - 1)); },
     forward: () => { setDone(false); setPlaying(false); setI((k) => Math.min(n - 1, k + 1)); },
     setFast,
-    skip: () => { setPlaying(false); setDone(false); setI(n - 1); onDone(); },
+    skip: () => { setPlaying(false); setDone(false); setI(n - 1); onDone('skip'); },
     /** From the first frame, playing. */
     restart: () => { setDone(false); setI(0); setPlaying(true); },
   };

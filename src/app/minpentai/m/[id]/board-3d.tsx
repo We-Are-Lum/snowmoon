@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import type { ReplayScene } from './replay-scene';
+import type { Moment } from './replay-events';
 import type { boardOut } from '~/lib/minpentai/agent-play/solo';
 
 type Board = ReturnType<typeof boardOut>;
@@ -14,8 +15,12 @@ export const FPS_TARGET = 50;
  * It holds the frame target by stepping down: after 1.5 s below it, the low quality level (no shadows, pixel ratio 1,
  * fewer bits of debris); after another 1.5 s still below it, `onSlow`, and the page plays the action in 2D.
  */
-export function Board3D({ board, seen, prev, width, height, stepMs, onSlow, onFail }: {
+export function Board3D({ board, seen, prev, width, height, stepMs, focus = null, big = false, onSlow, onFail }: {
   board: Board; seen: [number, number][] | null; prev: Board | null; width: number; height: number; stepMs: number;
+  /** An instant replay's camera, on a square replay-events found in sight. */
+  focus?: { at: [number, number]; mode: Moment['mode']; ms: number } | null;
+  /** Larger pieces (a wide screen, where the board is small beside the 2D one). */
+  big?: boolean;
   onSlow?: () => void; onFail?: () => void;
 }) {
   const el = useRef<HTMLDivElement>(null), scene = useRef<ReplayScene | null>(null), latest = useRef({ board, seen, prev, stepMs });
@@ -38,7 +43,7 @@ export function Board3D({ board, seen, prev, width, height, stepMs, onSlow, onFa
     void Promise.all([import('three'), import('./replay-scene')]).then(([THREE, m]) => {
       if (!alive || !el.current) return;
       try {
-        scene.current = m.buildReplayScene(THREE, el.current, width, height);
+        scene.current = m.buildReplayScene(THREE, el.current, width, height, 'high', big ? 1.3 : 1);
         const l = latest.current;
         scene.current.show(l.board, l.seen, l.prev, l.stepMs);
         timer = window.setTimeout(check, 500);
@@ -46,7 +51,10 @@ export function Board3D({ board, seen, prev, width, height, stepMs, onSlow, onFa
     }, () => cb.current.onFail?.());
     return () => { alive = false; window.clearTimeout(timer); scene.current?.dispose(); scene.current = null; };
     // Built once per board size; frames are shown below.
-  }, [width, height]);
+  }, [width, height, big]);
   useEffect(() => { scene.current?.show(board, seen, prev, stepMs); }, [board, seen, prev, stepMs]);
+  const fk = focus ? `${focus.at}|${focus.mode}|${focus.ms}` : '';
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => { scene.current?.focus(focus); }, [fk]);
   return <div ref={el} className="mb-board3d" style={{ aspectRatio: `${width} / ${height}` }} role="img" aria-label={seen ? 'The action in 3D, from your side: the cloud covers what you can’t see' : 'The whole board in 3D'} />;
 }

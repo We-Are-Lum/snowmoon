@@ -25,7 +25,9 @@ export type ReplayEvent =
   /** A piece gone from a square in sight. */
   | { kind: 'destroyed'; piece: 'tower' | 'square' | 'mirror' | 'factory' | 'rock' | 'resting'; side: Side | null; at: [number, number] }
   /** A piece in sight that lost hits. */
-  | { kind: 'hit'; piece: 'square' | 'mirror' | 'factory'; side: Side; at: [number, number] };
+  | { kind: 'hit'; piece: 'square' | 'mirror' | 'factory'; side: Side; at: [number, number] }
+  /** A symbol formed in sight: a forming tower appeared there. */
+  | { kind: 'formed'; side: Side; at: [number, number] };
 
 const key = (x: number, y: number) => `${x},${y}`;
 
@@ -67,8 +69,52 @@ export function replayEvents(prev: Board | null, cur: Board, seen: [number, numb
   gone('factory', prev.factories, cur.factories, (p) => p.side as Side);
   gone('resting', prev.resting_symbol_gliders, cur.resting_symbol_gliders, (p) => p.side as Side);
   gone('rock', prev.rocks, cur.rocks, () => null);
+  // A symbol forming: a tower marked forming that wasn't there a step before, on a square in sight.
+  const had = new Set(prev.towers.map((t) => key(t.x, t.y)));
+  for (const t of cur.towers) if (t.forming && !had.has(key(t.x, t.y)) && inSight(t.x, t.y)) out.push({ kind: 'formed', side: t.side as Side, at: [t.x, t.y] });
   hits('square', prev.squares, cur.squares);
   hits('mirror', prev.mirrors, cur.mirrors);
   hits('factory', prev.factories, cur.factories);
   return out;
+}
+
+/**
+ * Instant replays (owner, 2026-11-04): the moments of a turn worth seeing again, from the same frames and so only what
+ * the side saw. Tiered by drama: 1 a square, mirror, factory or resting symbol broken (a quick close-up); 2 a symbol
+ * formed (a short orbit); 3 a tower destroyed, either side's (slow motion, the camera sweeping in); 4 the match's end,
+ * the final tower falling (the slowest, then the camera pulls back over the whole board). A square only chipped gets
+ * no replay. At most the two biggest, in the order they happened. Each replays a few frames around its own, slower.
+ */
+export interface Moment { tier: 1 | 2 | 3 | 4; frame: number; at: [number, number]; side: Side | null; from: number; to: number; stepMs: number; holdMs: number; mode: 'close' | 'orbit' | 'sweep' | 'final' }
+const SHAPE: Record<Moment['tier'], { before: number; after: number; stepMs: number; holdMs: number; mode: Moment['mode'] }> = {
+  1: { before: 1, after: 0, stepMs: 500, holdMs: 100, mode: 'close' },
+  2: { before: 2, after: 1, stepMs: 500, holdMs: 200, mode: 'orbit' },
+  3: { before: 3, after: 1, stepMs: 560, holdMs: 400, mode: 'sweep' },
+  4: { before: 3, after: 0, stepMs: 900, holdMs: 2200, mode: 'final' },
+};
+export function instantReplays(frames: { board: Board; seen: [number, number][] | null }[], size: [number, number], o: { ended?: boolean; only?: 'big' } = {}): Moment[] {
+  const found: Omit<Moment, 'from' | 'to' | 'stepMs' | 'holdMs' | 'mode'>[] = [];
+  for (let i = 1; i < frames.length; i++) {
+    for (const e of replayEvents(frames[i - 1].board, frames[i].board, frames[i].seen, size)) {
+      if (e.kind === 'destroyed' && e.piece === 'tower') found.push({ tier: 3, frame: i, at: e.at, side: e.side });
+      else if (e.kind === 'destroyed' && e.piece !== 'rock') found.push({ tier: 1, frame: i, at: e.at, side: e.side });
+      else if (e.kind === 'formed') found.push({ tier: 2, frame: i, at: e.at, side: e.side });
+    }
+  }
+  // The end: once the match is over and a side has no tower left, its last tower to fall is the final moment.
+  const last = frames.at(-1)?.board;
+  if (o.ended && last) {
+    const lost = (['mine', 'theirs'] as const).filter((sd) => !last.towers.some((t) => t.side === sd));
+    const fin = [...found].reverse().find((m) => m.tier === 3 && m.side !== null && lost.includes(m.side));
+    if (fin) fin.tier = 4;
+  }
+  const picked = found.filter((m) => o.only !== 'big' || m.tier >= 3).sort((a, b) => b.tier - a.tier || a.frame - b.frame).slice(0, 2).sort((a, b) => a.frame - b.frame);
+  return picked.map((m) => { const sh = SHAPE[m.tier]; return { ...m, from: Math.max(0, m.frame - sh.before), to: Math.min(frames.length - 1, m.frame + sh.after), stepMs: sh.stepMs, holdMs: sh.holdMs, mode: sh.mode }; });
+}
+
+/** Where the camera follows during playback: the middle of this step's events in sight (none: the board's middle). */
+export function actionCentre(ev: ReplayEvent[]): [number, number] | null {
+  const pts = ev.flatMap((e) => (e.kind === 'glide' ? [e.to] : e.kind === 'leave' ? [] : [e.at]));
+  if (!pts.length) return null;
+  return [pts.reduce((a, p) => a + p[0], 0) / pts.length, pts.reduce((a, p) => a + p[1], 0) / pts.length];
 }

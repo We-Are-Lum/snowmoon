@@ -91,6 +91,8 @@ export function makeFlashes(T: T3, scene: THREE_NS.Scene, tex: THREE_NS.Texture,
       }
     },
     clear() { for (const f of pool) f.s.visible = false; },
+    /** Shown for `compile` (so their material is compiled before the first flash), then hidden again. */
+    prewarm(compile: () => void) { for (const f of pool) { f.s.visible = true; f.s.material.opacity = 0; } compile(); for (const f of pool) f.s.visible = false; },
   };
 }
 
@@ -133,14 +135,15 @@ export function makeDebris(T: T3, scene: THREE_NS.Scene, n: number, shadows: boo
 /** A camera that eases toward a position and a point to look at (the broadcast's camera: ease, never jump mid-shot). */
 export function easeCamera(T: T3, camera: THREE_NS.PerspectiveCamera) {
   const pos = camera.position.clone(), look = new T.Vector3(), want = { pos: new T.Vector3(), look: new T.Vector3() };
-  let started = false;
+  let started = false, clock = 0;
   return {
     aim(p: [number, number, number], l: [number, number, number]) { want.pos.set(...p); want.look.set(...l); if (!started) { pos.copy(want.pos); look.copy(want.look); started = true; } },
-    update(dt: number, shake = 0) {
-      const k = 1 - Math.exp(-dt * 2.2);
+    /** `rate`: how quickly it closes on where it should be (per second). The shake is smooth, not a random jitter. */
+    update(dt: number, shake = 0, rate = 2.2) {
+      const k = 1 - Math.exp(-dt * rate);
       pos.lerp(want.pos, k); look.lerp(want.look, k);
       camera.position.copy(pos);
-      if (shake > 0) camera.position.add(new T.Vector3((Math.random() - .5) * shake, (Math.random() - .5) * shake, (Math.random() - .5) * shake));
+      if (shake > 0) { clock += dt; camera.position.x += Math.sin(clock * 37) * shake; camera.position.y += Math.sin(clock * 41 + 1) * shake * .6; camera.position.z += Math.sin(clock * 29 + 2) * shake; }
       camera.lookAt(look);
     },
   };

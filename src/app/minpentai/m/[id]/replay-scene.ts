@@ -17,7 +17,7 @@
 import type * as THREE_NS from 'three';
 import type { boardOut } from '~/lib/minpentai/agent-play/solo';
 import { easeCamera, fpsMeter, glowTexture, makeDebris, makeFlashes, makeRenderer, makeStage, type Quality } from '../../scene-kit';
-import { dirOf, replayEvents, type ReplayEvent } from './replay-events';
+import { actionCentre, dirOf, replayEvents, type Moment, type ReplayEvent } from './replay-events';
 
 type T3 = typeof THREE_NS;
 type Board = ReturnType<typeof boardOut>;
@@ -25,6 +25,8 @@ export interface ReplayScene {
   /** Show a frame. `prev`, when given, is the frame before it: the action between them plays over `stepMs`. */
   show(board: Board, seen: [number, number][] | null, prev: Board | null, stepMs: number): void;
   setQuality(q: Quality): void;
+  /** An instant replay's camera: close on a square in sight (replay-events' moments), or null for the usual view. */
+  focus(f: { at: [number, number]; mode: Moment['mode']; ms: number } | null): void;
   /** Median frames a second since the last reset (0 until there are enough frames), and the seconds measured. */
   fps(): { fps: number; seconds: number };
   resetFps(): void;
@@ -38,7 +40,8 @@ const CHEVRON: [number, number][] = [[.24, 0], [.06, -.16], [.06, .16], [-.12, -
 /** A tower's emblem: a small plus of cubes. */
 const EMBLEM: [number, number, number][] = [[0, 0, 0], [1, 0, 0], [-1, 0, 0], [0, 0, 1], [0, 0, -1], [0, 1, 0]];
 
-export function buildReplayScene(T: T3, el: HTMLElement, W: number, H: number, quality: Quality = 'high'): ReplayScene {
+export function buildReplayScene(T: T3, el: HTMLElement, W: number, H: number, quality: Quality = 'high', pieceScale = 1): ReplayScene {
+  const P = pieceScale;
   const size = () => [Math.max(1, el.clientWidth), Math.max(1, el.clientHeight)] as const;
   let q = quality;
   const renderer = makeRenderer(T, el, ...size(), { quality: q, maxRatio: q === 'high' ? 1.5 : 1 });
@@ -111,7 +114,8 @@ export function buildReplayScene(T: T3, el: HTMLElement, W: number, H: number, q
 
   type Glider = { side: string; from: [number, number]; to: [number, number]; dir: string; symbol?: boolean; fade: 'in' | 'out' | null };
   let state: { board: Board; gliders: Glider[]; at: number; stepMs: number } | null = null;
-  let shake = 0;
+  let shake = 0, centre: [number, number] | null = null;
+  let focusOn: { at: [number, number]; mode: Moment['mode']; ms: number; since: number } | null = null;
 
   function show(board: Board, seen: [number, number][] | null, prev: Board | null, stepMs: number) {
     const ev = replayEvents(prev, board, seen, [W, H]);
@@ -137,7 +141,12 @@ export function buildReplayScene(T: T3, el: HTMLElement, W: number, H: number, q
       else if (e.kind === 'leave') { const [dx, dy] = dirOf(e.dir); gliders.push({ side: e.side, from: e.at, to: [e.at[0] + dx, e.at[1] + dy], dir: e.dir, fade: 'out' }); }
     }
     for (const g of board.gliders) if (!ev.some((e) => e.kind === 'glide' && e.to[0] === g.x && e.to[1] === g.y && e.side === g.side)) gliders.push({ side: g.side, from: [g.x, g.y], to: [g.x, g.y], dir: g.dir, symbol: g.symbol, fade: prev ? 'in' : null });
-    state = { board, gliders, at: performance.now(), stepMs, };
+    // Steady motion: a step that follows the last one starts when the last one ends (the page's timer drifts a few
+    // milliseconds against the display; this keeps the gliders' speed even), unless it's far off (a pause, a skip).
+    const now = performance.now(), end = state && prev ? state.at + state.stepMs : -1;
+    const at = end > 0 && Math.abs(now - end) < stepMs * .5 ? end : now;
+    state = { board, gliders, at, stepMs };
+    centre = actionCentre(ev);
     // Effects, each on a square in sight (replay-events fires no other).
     fire(ev);
   }
@@ -151,8 +160,13 @@ export function buildReplayScene(T: T3, el: HTMLElement, W: number, H: number, q
         debris.burst(X(x), Z(y), e.piece === 'rock' ? '#6A6C76' : sideCol(e.side), Math.round((big ? 46 : e.piece === 'rock' ? 22 : 16) * many), big ? 1.2 : .8);
         if (big) shake = Math.max(shake, .22);
       } else if (e.kind === 'hit') {
-        flashes.fire(X(e.at[0]), .6, Z(e.at[1]), '#FFF4D6', 1.6, .4);
-        debris.burst(X(e.at[0]), Z(e.at[1]), sideCol(e.side), Math.round(6 * many), .6);
+        // A chip: a hard white spark, a coloured glow behind it, a few chips flying.
+        flashes.fire(X(e.at[0]), .7, Z(e.at[1]), '#FFFFFF', 2.4, .22);
+        flashes.fire(X(e.at[0]), .5, Z(e.at[1]), sideCol(e.side), 1.8, .5);
+        debris.burst(X(e.at[0]), Z(e.at[1]), sideCol(e.side), Math.round(12 * many), .9);
+        shake = Math.max(shake, .05);
+      } else if (e.kind === 'formed') {
+        flashes.fire(X(e.at[0]), 1.2, Z(e.at[1]), sideCol(e.side), 3, .8);
       } else if (e.kind === 'stopped') {
         flashes.fire(X(e.at[0]), .5, Z(e.at[1]), sideCol(e.side), 1.4, .35);
         debris.burst(X(e.at[0]), Z(e.at[1]), sideCol(e.side), Math.round(5 * many), .5);
@@ -165,26 +179,45 @@ export function buildReplayScene(T: T3, el: HTMLElement, W: number, H: number, q
   let raf = 0, last = 0;
   const frame = (now: number) => {
     raf = requestAnimationFrame(frame);
+    const t0 = performance.now();
     const dt = last ? Math.min(.1, (now - last) / 1000) : 0;
     last = now;
     meter.tick(dt);
     const t = now / 1000;
     // Far enough to frame the whole board at any width (the fov is vertical, so a narrow frame needs more distance).
     const fit = Math.max(H, W / camera.aspect) / 2 / Math.tan((camera.fov * Math.PI) / 360);
-    const a = -.34 + Math.sin(t * .09) * .07, d = fit * (1.27 + Math.sin(t * .13) * .03);
-    cam.aim([Math.sin(a) * d * .66, d * .75, Math.cos(a) * d * .66], [0, 0, -H * .04]);
+    if (focusOn) {
+      // An instant replay: around a square in sight. close: a quick close-up; orbit: once around a little; sweep: in
+      // from the usual view; final: in close, then back over the whole board.
+      const u = Math.min(1, (now - focusOn.since) / focusOn.ms), fx = X(focusOn.at[0]), fz = Z(focusOn.at[1]);
+      const sm = (x: number) => x * x * (3 - 2 * x);
+      let a = -.34, r = 4.2, h = 3.2, lookY = .5, wide = 0;
+      if (focusOn.mode === 'close') { r = 4.4 - .8 * sm(u); h = 2.6 - .4 * sm(u); a = -.3 + .25 * u; }
+      else if (focusOn.mode === 'orbit') { r = 4.6; h = 3; a = -.6 + 1.6 * sm(u); }
+      else if (focusOn.mode === 'sweep') { const v = sm(Math.min(1, u * 1.4)); r = 9 - 5.6 * v; h = 7.5 - 5.3 * v; a = -1 + 1.2 * sm(u); }
+      else { const inT = Math.min(1, u / .55), out = Math.max(0, (u - .62) / .38); r = 6 - 2.8 * sm(inT); h = 4.5 - 2.6 * sm(inT); a = -.8 + .6 * u; wide = sm(out); lookY = .4; }
+      const near: [number, number, number] = [fx + Math.sin(a) * r, h, fz + Math.cos(a) * r], far: [number, number, number] = [0, fit * 1.45, fit * .55];
+      cam.aim(near.map((v, i) => v + (far[i] - v) * wide) as [number, number, number], [fx * (1 - wide), lookY * (1 - wide), fz * (1 - wide)]);
+      cam.update(dt, shake, 5);
+    } else {
+      // The usual view, swaying slowly; during playback it leans gently toward this step's action in sight.
+      const a = -.34 + Math.sin(t * .09) * .07, d = fit * (1.27 + Math.sin(t * .13) * .03);
+      const [cx, cz] = centre ? [X(centre[0]) * .22, Z(centre[1]) * .22] : [0, 0];
+      cam.aim([cx + Math.sin(a) * d * .66, d * .75, cz + Math.cos(a) * d * .66], [cx, 0, cz - H * .04]);
+      cam.update(dt, shake);
+    }
     shake = Math.max(0, shake - dt * .6);
-    cam.update(dt, shake);
     if (state) {
-      const k = state.stepMs > 0 ? Math.min(1, (now - state.at) / (state.stepMs * .92)) : 1, e = k * k * (3 - 2 * k);
+      // Linear through the step: a glider crosses each square at a steady speed; a bounce turns at once.
+      const e = state.stepMs > 0 ? Math.min(1, Math.max(0, (now - state.at) / state.stepMs)) : 1;
       let n = 0, gn = 0;
       const glowAt = (x: number, y: number, z: number, col: string, s: number) => { if (gn >= GMAX) return; C.set(col).multiplyScalar(s); gpos.set([x, y, z], gn * 3); gcol.set([C.r, C.g, C.b], gn * 3); gn++; };
       for (const g of state.gliders) {
         const [dx, dy] = dirOf(g.dir), len = Math.hypot(dx, dy) || 1, fx = dx / len, fz = dy / len;
         const gx = X(g.from[0] + (g.to[0] - g.from[0]) * e), gz = Z(g.from[1] + (g.to[1] - g.from[1]) * e);
         const vis = g.fade === 'in' ? e : g.fade === 'out' ? 1 - e : 1, y = .42 + Math.sin(t * 6 + g.from[0] * 1.3 + g.from[1]) * .05;
-        const col = sideCol(g.side), sz = .16 * Math.max(.001, vis);
-        for (const [f, s] of CHEVRON) place(cubes, n++, gx + fx * f - fz * s, y, gz + fz * f + fx * s, sz, sz, sz, col);
+        const col = sideCol(g.side), sz = .16 * P * Math.max(.001, vis);
+        for (const [f, s] of CHEVRON) place(cubes, n++, gx + (fx * f - fz * s) * P, y, gz + (fz * f + fx * s) * P, sz, sz, sz, col);
         glowAt(gx, y, gz, col, (g.symbol ? 1.3 : 1) * vis);
         if (g.symbol) glowAt(gx, y + .1, gz, '#FFFFFF', .8 * vis);
       }
@@ -192,11 +225,11 @@ export function buildReplayScene(T: T3, el: HTMLElement, W: number, H: number, q
       // Towers: the column, and the emblem floating and turning over it.
       let c = 0, m = 0;
       for (const tw of state.board.towers) {
-        const x = X(tw.x), z = Z(tw.y), col = sideCol(tw.side), h = tw.forming ? .6 : 1, ey = .65 + 1.3 * h + Math.sin(t * 1.6 + tw.x) * .06, ry = t * .8 + tw.y;
-        place(columns, c++, x, .65 * h, z, 1, h, 1);
+        const x = X(tw.x), z = Z(tw.y), col = sideCol(tw.side), h = (tw.forming ? .6 : 1) * P, ey = .65 + 1.3 * h + Math.sin(t * 1.6 + tw.x) * .06, ry = t * .8 + tw.y;
+        place(columns, c++, x, .65 * h, z, P, h, P);
         for (const [a, b, u] of EMBLEM) {
           const ca = Math.cos(ry), sa = Math.sin(ry);
-          place(emblems, m++, x + (a * ca - u * sa) * .21, ey + b * .21, z + (a * sa + u * ca) * .21, .19, .19, .19, col, ry);
+          place(emblems, m++, x + (a * ca - u * sa) * .21 * P, ey + b * .21 * P, z + (a * sa + u * ca) * .21 * P, .19 * P, .19 * P, .19 * P, col, ry);
         }
         glowAt(x, ey, z, col, 1.6);
       }
@@ -218,7 +251,13 @@ export function buildReplayScene(T: T3, el: HTMLElement, W: number, H: number, q
     flashes.update(dt);
     debris.update(dt);
     renderer.render(scene, camera);
+    // The scene's own time per frame, for scripts/measure-minpentai-3d-frames.ts (only when it asks).
+    const w = window as unknown as { __sceneMs?: number[]; __frames?: number[] };
+    w.__sceneMs?.push(performance.now() - t0);
+    if (dt) w.__frames?.push(dt * 1000);
   };
+  // Compile every material now, flashes included, so the first hit or burst doesn't stall a frame.
+  flashes.prewarm(() => renderer.compile(scene, camera));
   raf = requestAnimationFrame(frame);
   const ro = new ResizeObserver(() => { const [w, h] = size(); renderer.setSize(w, h); camera.aspect = w / h; camera.updateProjectionMatrix(); });
   ro.observe(el);
@@ -226,6 +265,7 @@ export function buildReplayScene(T: T3, el: HTMLElement, W: number, H: number, q
   return {
     show,
     setQuality: setQ,
+    focus(f) { focusOn = f ? { ...f, since: performance.now() } : null; },
     fps: () => ({ fps: meter.fps(), seconds: meter.seconds() }),
     resetFps: () => meter.reset(),
     dispose() {

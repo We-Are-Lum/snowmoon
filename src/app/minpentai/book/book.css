@@ -78,3 +78,7 @@
 .mb-speed[aria-pressed="true"] { background: #46D7E8; color: #0E0F13; border-color: #46D7E8; }
 .mb-animate { display: inline-flex; align-items: center; gap: 6px; font-size: 0.85rem; min-height: 36px; }
 .mb-animate input { width: 18px; height: 18px; }
+.mb-board3d-wrap { position: relative; }
+.mb-instant { position: absolute; inset: 0; width: 100%; height: 100%; background: transparent; border: 0; padding: 8px; display: flex; align-items: flex-start; justify-content: flex-start; cursor: pointer; }
+.mb-instant span { font-family: var(--label, monospace); font-size: 12px; letter-spacing: .06em; color: #F2F2F5; background: rgba(5, 5, 7, .7); border: 1px solid #46D7E8; padding: 3px 8px; }
+.mb-animate select { min-height: 32px; }
