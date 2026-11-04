@@ -1766,7 +1766,9 @@ add({
     return problems;
   },
   plant: (c) => {
+    // Bluesky on, with §4's Bluesky line gone (now that the lines are in, turning it on alone would pass).
     c.on = [...c.on, 'bluesky'];
+    c.s4 = c.s4.replace(/\bBluesky account\b/g, 'account');
   },
 });
 
