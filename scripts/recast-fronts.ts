@@ -53,7 +53,7 @@ const RECASTS: { char: string; front: string; was: string; options: { id: string
     front: 'directions/gladias-animated-gemini.jpg',
     was: 'light olive skin, short wavy chestnut-brown hair, a neatly trimmed short beard and hazel eyes',
     options: [
-      { id: 'a', now: 'deep umber skin, short close-cropped black hair, a neatly trimmed short beard and dark brown eyes' },
+      { id: 'a', now: 'deep brown skin, short curly black hair, a neatly trimmed short beard and dark brown eyes' }, // owner, 2026-11-04: not deep umber and close-cropped, too close to Mov,
       { id: 'b', now: 'warm medium-brown skin, short straight black hair with a few grey strands, a neatly trimmed short beard and dark eyes' },
     ],
   },
