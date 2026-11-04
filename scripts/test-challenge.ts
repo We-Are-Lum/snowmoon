@@ -47,23 +47,22 @@ const R = await import('../src/lib/challenge/rules');
 const L = await import('../src/lib/challenge/post-links');
 
 // --- Eligibility -------------------------------------------------------------------------------------------------
-const lists = { admins: [6786, 193912], invited: [6786, 6852], min: 0.7 };
-const el = (maker: number, score: number | null) => R.eligibility({ maker, score }, lists);
-check('an invited FID is eligible without a score', el(6852, null).eligible && el(6852, null).why === 'invited');
-check('a score at the threshold (0.7) passes', el(500, 0.7).eligible && el(500, 0.7).why === 'passed');
-check('a score above the threshold is eligible', el(500, 0.93).eligible);
-check('refused: a score just below the threshold (0.699)', !el(500, 0.699).eligible && el(500, 0.699).why === 'below');
-check('refused: no score (Neynar did not answer at publish)', !el(500, null).eligible && el(500, null).why === 'unchecked');
-check('refused: a wallet account, even with a high score (wallets can’t make sheets yet; owner, 2026-10-31)', !el(-7, 0.99).eligible && el(-7, 0.99).why === 'not-a-farcaster-account');
-check('refused: an admin, even invited (6786)', !el(6786, 1).eligible && el(6786, 1).why === 'admin');
-check('refused: an admin with a high score (193912)', !el(193912, 0.99).eligible && el(193912, 0.99).why === 'admin');
-check('the real lists: every admin is refused', ADMINS.every((a) => R.eligibility({ maker: a, score: 1 }).why === 'admin'));
-check('the challenge\'s own threshold, fixed at 0.7 (CHALLENGE.neynarMinScore), is the one applied', CHALLENGE.neynarMinScore === 0.7 && R.eligibility({ maker: 999999, score: 0.7 }).eligible && !R.eligibility({ maker: 999999, score: 0.699 }).eligible);
+const lists = { admins: [6786, 193912], invited: [6786, 6852] };
+const el = (maker: number, passed: boolean | null) => R.eligibility({ maker, passed }, lists);
+check('an invited FID is eligible without a check', el(6852, null).eligible && el(6852, null).why === 'invited');
+check('a passed check is eligible', el(500, true).eligible && el(500, true).why === 'passed');
+check('refused: a check below the threshold', !el(500, false).eligible && el(500, false).why === 'below');
+check('refused: no decision (Neynar did not answer at publish)', !el(500, null).eligible && el(500, null).why === 'unchecked');
+check('refused: a wallet account, even passed (wallets can’t make sheets yet; owner, 2026-10-31)', !el(-7, true).eligible && el(-7, true).why === 'not-a-farcaster-account');
+check('refused: an admin, even invited (6786)', !el(6786, true).eligible && el(6786, true).why === 'admin');
+check('refused: an admin who passed (193912)', !el(193912, true).eligible && el(193912, true).why === 'admin');
+check('the real lists: every admin is refused', ADMINS.every((a) => R.eligibility({ maker: a, passed: true }).why === 'admin'));
+check('the challenge\'s own threshold, fixed at 0.7 (CHALLENGE.neynarMinScore), is the one the publish check asks under', CHALLENGE.neynarMinScore === 0.7 && /checkNeynar\(sql, fid, CHALLENGE_LISTS\.min\)/.test(read('src/lib/challenge/record.ts')));
 check('the challenge threshold does not follow IMAGES.neynarMinScore', /min: CHALLENGE\.neynarMinScore/.test(read('src/lib/challenge/who.ts')) && !/IMAGES\.neynarMinScore/.test(read('src/lib/challenge/who.ts')));
 proof('a threshold read from IMAGES (which may change) is caught', /IMAGES\.neynarMinScore/.test(read('src/lib/challenge/who.ts').replace('CHALLENGE.neynarMinScore', 'IMAGES.neynarMinScore')));
 check('a stored decision is read back with the lists applied again (an admin never, invited always, else as decided)', R.fromDecision(193912, 'passed').why === 'admin' && R.fromDecision(6852, null).eligible && R.fromDecision(500, 'passed').eligible && !R.fromDecision(500, 'below').eligible && !R.fromDecision(500, null).eligible);
-proof('an admin let through is caught', R.eligibility({ maker: 77, score: 1 }, { ...lists, admins: [77] }).why === 'admin' && R.eligibility({ maker: 77, score: 1 }, { ...lists, admins: [] }).eligible);
-proof('a wallet path let back in is caught', R.eligibility({ maker: -7, score: 0.99 }, lists).eligible === false && el(-7, 0.99).why !== 'passed');
+proof('an admin let through is caught', R.eligibility({ maker: 77, passed: true }, { ...lists, admins: [77] }).why === 'admin' && R.eligibility({ maker: 77, passed: true }, { ...lists, admins: [] }).eligible);
+proof('a wallet path let back in is caught', R.eligibility({ maker: -7, passed: true }, lists).eligible === false && el(-7, true).why !== 'passed');
 
 // --- The window, in Pacific time ---------------------------------------------------------------------------------
 const D0 = CHALLENGE.dates;
@@ -493,7 +492,8 @@ await new Promise((r) => setTimeout(r, 20));
 CHALLENGE.dates.opens = new Date().toISOString();
 CHALLENGE.dates.closes = new Date(Date.now() + 3_600_000).toISOString();
 CHALLENGE.entries = true;
-await sql`insert into studio.image_scores (fid, score) values (500, 0.81), (501, 0.42)`;
+// Stored check decisions (owner, 2026-11-04): 500 passed, 501 did not; no score is kept anywhere.
+await sql`insert into studio.check_decisions (network, account, threshold, passed) values ('farcaster', '500', 'neynar-score>=0.7', true), ('farcaster', '501', 'neynar-score>=0.7', false)`;
 const Rec = await import('../src/lib/challenge/record');
 // Every outside call is recorded (and answered "unavailable"): publishing may ask Neynar once; viewing never may.
 const realFetch = globalThis.fetch;
@@ -520,13 +520,13 @@ const f6852 = await publish({ fid: 6852, mode: 'fork', kind: 'character', fromVe
 const fOfEntry = await publish({ fid: 6852, mode: 'fork', kind: 'character', fromVersionId: f500a.versionId, body: sheet('Bai, from an entry', 8) });
 const f502 = await publish({ fid: 502, mode: 'fork', kind: 'character', fromVersionId: zeiStart.versionId, body: sheet('Zei, Neynar down', 9) });
 const fScratch = await publish({ fid: 503, mode: 'create', kind: 'character', character: zeiC, body: sheet('Zei from scratch', 10) });
-check('publishing asked Neynar only for the one maker it had no score for (502), once', calls.length === 1 && calls[0].includes('api.neynar.com') && calls[0].includes('502'), calls.join(' '));
+check('publishing asked Neynar only for the one maker it had no stored decision for (502), once', calls.length === 1 && calls[0].includes('api.neynar.com') && calls[0].includes('502'), calls.join(' '));
 const stored = await sql<{ version_id: string; decision: string; eligible: boolean }[]>`select version_id, decision, eligible from studio.challenge_eligibility`;
 const cols = await sql<{ column_name: string }[]>`select column_name from information_schema.columns where table_schema = 'studio' and table_name = 'challenge_eligibility'`;
 check('the stored decision keeps no score (owner, 2026-11-01)', !cols.some((c) => /score/.test(c.column_name)), cols.map((c) => c.column_name).join());
 const dec = (v: string) => stored.find((r) => r.version_id === v);
-check('stored at publish: passed (0.81 ≥ 0.7), eligible, the score not kept', dec(f500a.versionId)?.decision === 'passed' && dec(f500a.versionId)?.eligible === true);
-check('stored at publish: below (0.42), not eligible', dec(f501.versionId)?.decision === 'below' && dec(f501.versionId)?.eligible === false);
+check('stored at publish: passed (from the stored check decision), eligible', dec(f500a.versionId)?.decision === 'passed' && dec(f500a.versionId)?.eligible === true);
+check('stored at publish: below (from the stored check decision), not eligible', dec(f501.versionId)?.decision === 'below' && dec(f501.versionId)?.eligible === false);
 check('stored at publish: an admin', dec(fAdmin.versionId)?.decision === 'admin' && dec(fAdmin.versionId)?.eligible === false);
 check('stored at publish: invited, no score asked', dec(f6852.versionId)?.decision === 'invited');
 check('stored at publish: Neynar down means unchecked (not eligible)', dec(f502.versionId)?.decision === 'unchecked' && dec(f502.versionId)?.eligible === false);
@@ -569,13 +569,13 @@ await E.startingSheets(S, 'bai');
 check('viewing pages (the challenge, version pages, starting sheets) made no outside call at all', calls.length === 0, calls.join(' '));
 {
   const Ny = await import('../src/lib/images/neynar');
-  await Ny.lookUp(S, 777);
+  await Ny.checkNeynar(S, 777, 0.7);
   proof('a Neynar lookup during a page view would be caught', calls.some((u) => u.includes('api.neynar.com')));
   calls.length = 0;
   const pageCode = ['src/lib/challenge/entries.ts', 'src/app/challenge/page.tsx', 'src/app/references/designs/[id]/page.tsx'].map((f) => ({ f, t: read(f) }));
-  const asks = (t: string) => /from '[^']*(images\/neynar|challenge\/record)'|\blookUp\(|recordEligibility\(/.test(t);
+  const asks = (t: string) => /from '[^']*(images\/neynar|challenge\/record|checks\/decisions)'|\bcheckNeynar\(|\bdecide\(|recordEligibility\(/.test(t);
   check('no page-side code imports the Neynar lookup or the publish-time recorder', pageCode.every((x) => !asks(x.t)), pageCode.filter((x) => asks(x.t)).map((x) => x.f).join());
-  proof('a page that imports the lookup is caught', asks("import { lookUp } from '../images/neynar';"));
+  proof('a page that imports the lookup is caught', asks("import { checkNeynar } from '../images/neynar';"));
 }
 check('marking: only your own version', !(await E.markEntry(S, 501, f500a.versionId)).ok);
 check('marking: your earlier version', (await E.markEntry(S, 500, f500a.versionId)).ok);
@@ -601,7 +601,7 @@ check('the sheets to start from are those made before the window', (await E.star
   const b3 = await mk({ fid: 6786, mode: 'create', kind: 'character', character: bai, body: sheet('Bai, base three', 23) });
   const b2v2 = await DS.makeDesign(S, { fid: 6786, mode: 'version', kind: 'character', fromVersionId: b2.versionId, body: sheet('Bai, base two, v2', 24) });
   CHALLENGE.bases.bai = [b1.elementId, b2.elementId, b3.versionId];
-  await sql`insert into studio.image_scores (fid, score) values (510, 0.9), (511, 0.9), (512, 0.9), (513, 0.9), (514, 0.9), (515, 0.9), (516, 0.9)`;
+  await sql`insert into studio.check_decisions (network, account, threshold, passed) select 'farcaster', f::text, 'neynar-score>=0.7', true from generate_series(510, 516) f on conflict do nothing`;
   const calls0 = calls.length;
   const g1 = await mk({ fid: 510, mode: 'fork', kind: 'character', fromVersionId: b1.versionId, body: sheet('Bai from base one', 25) });
   const g2 = await mk({ fid: 511, mode: 'fork', kind: 'character', fromVersionId: b2v2.versionId, body: sheet('Bai from base two, v2', 26) });
@@ -632,6 +632,50 @@ check('the sheets to start from are those made before the window', (await E.star
   check('bases: with the bases empty and the test sheets hidden, the entries are as before', st6.entries.map((e) => e.versionId).sort().join() === st2.entries.map((e) => e.versionId).sort().join());
 }
 
+// Publish uses the stored check decision (owner, 2026-11-04): a current pass (up to 90 days old) is used with no
+// lookup; once withdrawn (a report or hide), or after 90 days, publishing asks Neynar again. Everything made here is
+// hidden and its decisions deleted afterwards, so the checks below see what they saw before.
+{
+  const CD = await import('../src/lib/checks/decisions');
+  const made: string[] = [];
+  const mk = async (fid: number, n: number) => { const o = await publish({ fid, mode: 'fork', kind: 'character', fromVersionId: zeiStart.versionId, body: sheet(`Zei, check ${n}`, 60 + n) }); made.push(o.elementId); return o; };
+  const decisionOf = async (v: string) => (await sql`select decision from studio.challenge_eligibility where version_id = ${v}`)[0]?.decision;
+  await sql`insert into studio.check_decisions (network, account, threshold, passed, decided_at) values ('farcaster', '530', 'neynar-score>=0.7', true, now() - interval '89 days 23 hours')`;
+  calls.length = 0;
+  const p1 = await mk(530, 1);
+  check('publish: a pass 89 days 23 hours old is used, with no Neynar lookup', calls.length === 0 && (await decisionOf(p1.versionId)) === 'passed', `${calls.length} ${await decisionOf(p1.versionId)}`);
+  await CD.markForRecheck(S, 'farcaster', 530);
+  calls.length = 0;
+  const p2 = await mk(530, 2);
+  check('publish: after a report or hide withdrew the pass, Neynar is asked again (here it is down: unchecked)', calls.length === 1 && calls[0].includes('fids=530') && (await decisionOf(p2.versionId)) === 'unchecked', `${calls.join(' ')} ${await decisionOf(p2.versionId)}`);
+  await sql`insert into studio.check_decisions (network, account, threshold, passed, decided_at) values ('farcaster', '531', 'neynar-score>=0.7', true, now() - interval '90 days 1 minute')`;
+  calls.length = 0;
+  await mk(531, 3);
+  check('publish: a pass older than 90 days is not used; Neynar is asked', calls.length === 1 && calls[0].includes('fids=531'), calls.join(' '));
+  await sql`insert into studio.check_decisions (network, account, threshold, passed) values ('farcaster', '532', 'neynar-score>=0.5', true)`;
+  calls.length = 0;
+  await mk(532, 4);
+  check('publish: a pass under another threshold is not used; Neynar is asked', calls.length === 1 && calls[0].includes('fids=532'), calls.join(' '));
+  await sql`insert into studio.check_decisions (network, account, threshold, passed, decided_at) values ('farcaster', '533', 'neynar-score>=0.7', false, now() - interval '23 hours')`;
+  calls.length = 0;
+  const p5 = await mk(533, 5);
+  check('publish: a fail under 24 hours old is used (below), with no lookup', calls.length === 0 && (await decisionOf(p5.versionId)) === 'below');
+  {
+    // Planted: a recorder that asks Neynar itself instead of the stored decision.
+    const rec = read('src/lib/challenge/record.ts');
+    const uses = (t: string) => /await checkNeynar\(sql, fid, CHALLENGE_LISTS\.min\)/.test(t) && !/fetch\(|NEYNAR\.url/.test(t);
+    check('the recorder asks only through the stored-decision check', uses(rec));
+    proof('a recorder that fetches Neynar itself is caught', !uses(rec.replace('await checkNeynar(sql, fid, CHALLENGE_LISTS.min)', 'await fetch(NEYNAR.url)')));
+    const ny = read('src/lib/images/neynar.ts');
+    const first = (t: string) => t.indexOf('await keptDecision(sql, fid, min)') > 0 && t.indexOf('await keptDecision(sql, fid, min)') < t.indexOf('await askNeynar(fid)');
+    check('the check reads the stored decision before it asks Neynar', first(ny));
+    proof('a check that asks Neynar first is caught', !first(ny.replace('const kept = await keptDecision(sql, fid, min);', 'const kept = null as null | { passed: boolean; decidedAt: Date };')));
+  }
+  await sql`update studio.elements set status = 'hidden' where id in ${sql(made)}`;
+  await sql`delete from studio.challenge_eligibility where version_id in (select v.id from studio.element_versions v where v.element_id in ${sql(made)})`;
+  await sql`delete from studio.check_decisions where account in ('530', '531', '532', '533')`;
+}
+
 // Closed-model bases, the bases' style order and an admin's remix, in the database (owner, 2026-11-04). Everything made
 // here is hidden and the settings put back afterwards, so the checks below see what they saw before.
 {
@@ -654,7 +698,7 @@ check('the sheets to start from are those made before the window', (await E.star
   check('style order: with CHALLENGE.baseStyles empty, the bases are newest first', (await order('bai')) === 'Mood,Bolder,Printed' && (await order('zei')) === 'Bolder,Printed,Mood', `${await order('bai')} / ${await order('zei')}`);
   CHALLENGE.baseStyles = ['Bolder', 'Printed', 'Mood'];
   check('style order: each character\'s bases follow CHALLENGE.baseStyles, the same for both, so the casts line up', (await order('bai')) === 'Bolder,Printed,Mood' && (await order('zei')) === 'Bolder,Printed,Mood', `${await order('bai')} / ${await order('zei')}`);
-  await sql`insert into studio.image_scores (fid, score) values (520, 0.9), (521, 0.9), (522, 0.9), (523, 0.9)`;
+  await sql`insert into studio.check_decisions (network, account, threshold, passed) select 'farcaster', f::text, 'neynar-score>=0.7', true from generate_series(520, 523) f on conflict do nothing`;
   const eOld = await mk({ fid: 520, mode: 'fork', kind: 'character', fromVersionId: bB.versionId, body: styled('Bai from Bolder', 48, 'Mood') });
   await new Promise((r) => setTimeout(r, 15));
   const eNew = await mk({ fid: 521, mode: 'fork', kind: 'character', fromVersionId: bC.versionId, body: styled('Bai from Mood', 49, 'Bolder') });
@@ -822,7 +866,7 @@ check('as committed, CHALLENGE.entries, posts and openSheets are on (owner\'s re
   const beside = (src: string) => /pictureFor\(k, i, views\[k\], p\.viewLines\[k\]\)\)\}\s*<\/ul>\s*\{note && \(\s*<p ref=\{noteRef\} className="ic-error dz-make-note" role="status">/.test(src) && /if \(note\) noteRef\.current\?\.scrollIntoView\(/.test(src) && (src.match(/\{note\}/g) ?? []).length === 1;
   check('c a refusal at Generate shows right under the Generate buttons, once, and is scrolled into view', beside(form));
   proof('c the refusal back under the rules is caught', !beside(form.replace('if (note) noteRef.current?.scrollIntoView(', 'if (note) void (')));
-  const lookups = walk('src').filter((f) => /\blookUp\(/.test(read(f))).sort();
+  const lookups = walk('src').filter((f) => /\bcheckNeynar\(/.test(read(f))).sort();
   check('c no new Neynar lookup: only the Generate gate and the publish recorder call it (and its own file)', lookups.join() === ['src/lib/challenge/record.ts', 'src/lib/images/gate.ts', 'src/lib/images/neynar.ts'].join(), lookups.join());
   // d. The rule says an account below the check can't remix.
   const rules = CW.rules().join(' ');

@@ -39,7 +39,7 @@ export const FREE_WORDING = {
 
 export type FreeDecision =
   | { free: true }
-  | { free: false; reason: 'link-needed' | 'lens-not-open' | 'lens-score' | 'lens-unreachable' | 'bluesky-new' | 'bluesky-idle' | 'bluesky-unreachable'; error: string };
+  | { free: false; reason: 'link-needed' | 'lens-not-open' | 'lens-score' | 'lens-unreachable' | 'bluesky-new' | 'bluesky-idle' | 'bluesky-failed' | 'bluesky-unreachable'; error: string };
 
 /**
  * Whether a person may use the free daily counts. Farcaster accounts: yes (the Neynar gate is separate). Wallet
@@ -55,11 +55,12 @@ export async function freeFor(
   if (!isSocialPerson(person)) return { free: false, reason: 'link-needed', error: FREE_WORDING.linkNeeded };
   const row = sql ? await socialAccount(sql, socialAccountOf(person)).catch(() => null) : null;
   if (row?.kind === 'bluesky' && SOCIAL_SIGN_IN.bluesky.check.on && sql) {
-    // The Bluesky check, decided at Generate as Neynar's score is (only the decision is kept, a day).
+    // The Bluesky check, decided at Generate as Neynar's score is (only the decision is kept: a pass 90 days, a fail a day).
     const d = await blueskyDecision(sql, row, bluesky);
     if (!d.ok) return { free: false, reason: 'bluesky-unreachable', error: BLUESKY_CHECK_WORDING.unreachable };
     if (d.decision === 'new') return { free: false, reason: 'bluesky-new', error: BLUESKY_CHECK_WORDING.new() };
     if (d.decision === 'idle') return { free: false, reason: 'bluesky-idle', error: BLUESKY_CHECK_WORDING.idle() };
+    if (d.decision === 'failed') return { free: false, reason: 'bluesky-failed', error: BLUESKY_CHECK_WORDING.failed() };
     return { free: true };
   }
   if (!row || row.kind !== 'lens') return { free: false, reason: 'link-needed', error: FREE_WORDING.linkNeeded };

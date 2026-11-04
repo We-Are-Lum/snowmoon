@@ -78,6 +78,7 @@
     "check:modal-vc": "tsx scripts/check-modal-vc.ts",
     "test:illustration-review": "tsx --conditions=react-server scripts/test-illustration-review.ts",
     "test:challenge": "tsx --conditions=react-server scripts/test-challenge.ts",
+    "test:check-decisions": "tsx --conditions=react-server scripts/test-check-decisions.ts",
     "test:check-targets": "tsx scripts/test-check-targets.ts",
     "check:minpentai-agent-live": "tsx --conditions=react-server --env-file-if-exists=.env.local scripts/check-minpentai-agent-live.ts"
   },

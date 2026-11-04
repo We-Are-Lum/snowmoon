@@ -7,6 +7,8 @@ import { tryAgain } from '~/lib/try-again';
 import { alertReports } from '~/lib/images/alert';
 import { workOf } from '~/lib/images/designs';
 import { moveToPrivate, restorePublic } from '~/lib/images/store';
+import { recheckMaker } from '~/lib/checks/decisions';
+import { CHECKS } from '~/lib/config';
 
 type Ctx = { params: Promise<{ id: string }> };
 
@@ -39,6 +41,8 @@ export async function POST(request: Request, { params }: Ctx) {
       });
       for (const sha of el.files) await moveToPrivate(sha);
       await sql`insert into studio.removal_log ${sql({ element_id: el.elementId, step: 'moved_private', by_fid: fid, role: 'author' })}`;
+      // A maker's own hide withdraws their pass only if the owner turns it on (CHECKS.recheckOnOwnHide).
+      if (CHECKS.recheckOnOwnHide) await recheckMaker(sql, el.byFid);
     } else {
       if (el.status !== 'hidden') return NextResponse.json({ hidden: false });
       const [last] = await sql`select role from studio.removal_log where element_id = ${el.elementId} and step in ('hidden', 'unhidden') order by at desc limit 1`;

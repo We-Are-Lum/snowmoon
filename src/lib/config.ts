@@ -445,9 +445,10 @@ export const SOCIAL_SIGN_IN = {
      * 2. it posted at least `minRecentPosts` times (its own posts and replies, not reposts) in the last `recentDays`
      *    days, by Bluesky's own clock (each post's indexedAt) as well as the post's, so old idle accounts can't
      *    drain the daily cap.
-     * Only the decision ('passed', 'new' or 'idle'), when it was made and the threshold used are kept
-     * (studio.bluesky_checks; owner, 2026-11-04: store the decision, not the numbers): a pass for `passDays`, a fail
-     * asked again no sooner than `failHours` later, or at once if the threshold changes. Never the dates or counts. If Bluesky can't be reached, refused, as for
+     * Only whether it passed, when, and the rule used are kept, in the shared decision store (studio.check_decisions,
+     * network 'bluesky', the DID; owner, 2026-11-04: one store, the decision, not the numbers): a pass for
+     * CHECKS.passDays, a fail asked again no sooner than CHECKS.failHours later, or at once if the rule changes. Never
+     * the dates or counts. If Bluesky can't be reached, refused, as for
      * Neynar. Off (`on: false`) until the owner's reread of its Privacy and Terms lines, and only matters once Bluesky
      * sign-in is on.
      */
@@ -459,9 +460,6 @@ export const SOCIAL_SIGN_IN = {
       minRecentPosts: 5,
       /** How many of the newest feed items are read (one request); enough to find minRecentPosts among reposts. */
       feedLimit: 50,
-      /** A pass lasts this long; a fail is asked again no sooner than failHours later (owner, 2026-11-04). */
-      passDays: 90,
-      failHours: 24,
     },
   },
 } as const;
@@ -598,6 +596,25 @@ export const CHALLENGE = {
 };
 
 /**
+ * Sign-in checks (owner, 2026-11-04: "look each account up as rarely as possible"): the Neynar score today, the Lens
+ * score (branch signin-lens-bluesky) and the Bluesky check (branch bluesky-check) later. Only the decision is stored
+ * (studio.check_decisions; src/lib/checks/decisions.ts): passed or not, when, and the rule it was decided under. Never
+ * the score or the numbers behind it.
+ */
+export const CHECKS = {
+  /** A pass is used for this many days without asking again. */
+  passDays: 90,
+  /** A fail is asked again no sooner than this many hours after it was decided. */
+  failHours: 24,
+  /**
+   * Hides that withdraw the maker's pass early (they are asked again at their next Generate or publish): a moderator's,
+   * an admin's or a rule's (three reporters, or one "minor" report). Every report does too. A maker hiding their own
+   * picture does not, while this is false (the owner's call; see docs/legal/check-decisions-draft.md).
+   */
+  recheckOnOwnHide: false as boolean,
+};
+
+/**
  * Readers add an image to a passage: slice 1, labelled "Trial" (docs/proposals/add-an-image.md;
  * the owner's decisions of 2026-10-08, all as recommended except 11, 12, 18, 20 and 24).
  * Each number below is one of those decisions.
@@ -608,16 +625,15 @@ export const IMAGES = {
   label: 'Trial',
   /**
    * Who may generate (decision 11, owner 2026-10-09): any signed-in Farcaster account whose Neynar
-   * user score is at least neynarMinScore, looked up at Generate with only the FID (NEYNAR_API_KEY)
-   * and kept a day per FID (studio.image_scores, migration 0010). If Neynar can't be reached, no one
-   * outside the invited list may generate. Invited FIDs skip the lookup.
+   * user score is at least neynarMinScore, looked up at Generate with only the FID (NEYNAR_API_KEY).
+   * Only the decision is kept (passed or not, when, and under which threshold; studio.check_decisions,
+   * CHECKS below), never the score. If Neynar can't be reached, no one outside the invited list may
+   * generate. Invited FIDs skip the lookup.
    */
   // 6852 is @luisotravez (owner, 2026-10-15).
   invited: [6786, 6852] as readonly number[],
   /** The one place the threshold lives. */
   neynarMinScore: 0.7,
-  /** How long a looked-up Neynar user value is kept before it is asked again. */
-  scoreCacheHours: 24,
   /** Report alerts (ntfy, SNOWMOON_ALERT_URL): at most one per this many minutes, across every server. */
   alertEveryMinutes: 60,
   /** One model, settings fixed (decisions 3 and 6). On the allowlist in config/models.json. */

@@ -14,8 +14,11 @@ counterpart of Neynar's score:
 
 Asked of Bluesky's public AppView (`public.api.bsky.app`, `app.bsky.actor.getProfile` and
 `app.bsky.feed.getAuthorFeed`), with the account's DID only and no key. Decided at Generate and at publish, the same
-way as Neynar's score today. Only the decision ('passed', 'new', 'idle'), its time and the threshold used are kept, in
-`studio.bluesky_checks` (a pass for 90 days, a fail re-asked after 24 hours); the remix challenge keeps its per-version decision as it does for Neynar
+way as Neynar's score today. Only whether the account passed, when, and the rule used are kept, in the shared decision
+store `studio.check_decisions` (branch check-decisions; network 'bluesky', account = the DID, threshold
+'made-before-2026-11-06+5posts30d'; a pass for 90 days, a fail re-asked after 24 hours). Why a fail failed is not kept:
+a stored fail is refused with a wording that names both rules. There is no `studio.bluesky_checks` (owner, 2026-11-04:
+one shared store). The remix challenge keeps its per-version decision as it does for Neynar
 (`studio.challenge_eligibility`, now with `account` = 'bluesky'). Code: `src/lib/social/bluesky-check.ts`,
 `src/lib/social/free.ts`, `src/lib/challenge/record.ts`; migration `NEXT_social_bluesky_check.sql`. The check is off
 (`SOCIAL_SIGN_IN.bluesky.check.on = false`), and it only matters once Bluesky sign-in is on.
@@ -32,10 +35,16 @@ it), so the check isn't needed then: it ships with Bluesky sign-in on 12 Novembe
 What it describes: `blueskyFacts` sends `GET /xrpc/app.bsky.actor.getProfile?actor=<DID>` and
 `GET /xrpc/app.bsky.feed.getAuthorFeed?actor=<DID>&limit=50&filter=posts_with_replies`, from our server only (never the
 browser), and nothing else about the person. "For up to 90 days" (owner, 2026-11-04: store the decision, not the
-numbers; the words are check-decisions' draft): a pass is kept 90 days (`passDays`); a fail is kept with its time and
-asked again no sooner than 24 hours later (`failHours`), or at once if the threshold changes; the threshold used is
-kept with it (`thresholdKey`, the rules, never a number of the account's). Re-asking early when the account is reported
-or one of its pictures is hidden comes with branch check-decisions' shared store, which this check moves onto.
+numbers; the words are check-decisions' draft): a pass is kept 90 days (`CHECKS.passDays`); a fail is kept with its
+time and asked again no sooner than 24 hours later (`CHECKS.failHours`), or at once if the rule changes; the rule used
+is kept with it (`thresholdKey`, never a number of the account's), in `studio.check_decisions`. Re-asking early when a
+Bluesky account is reported or one of its pictures is hidden is not wired yet (`recheckMaker` withdraws Farcaster
+passes only), so the line does not claim it.
+
+**For the owner's reread (agent's note, 2026-11-04):** with a pass kept 90 days, "when you first make an image or a
+frame on a given day" overstates how often Bluesky is asked: it is asked when you make an image or a frame (or publish
+a challenge remix) and your account has no current check. Check-decisions' Neynar line already says it that way ("and
+your account has no current check"); this line may want the same words. Not changed here: the words are yours.
 
 ## 2. Privacy §4 (Kept by us when you sign in): the remix challenge's items, two phrases
 

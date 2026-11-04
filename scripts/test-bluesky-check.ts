@@ -9,15 +9,17 @@
  * - K1 a new account (made on or after 6 Nov 2026) is refused, and one with no date;
  * - K2 an idle old account (fewer than 5 posts in 30 days) is refused; reposts, other people's posts and posts whose
  *   dates Bluesky's clock doesn't confirm don't count; an old active account passes;
- * - K3 the raw numbers are never stored: bluesky_checks holds only the decision and its time;
- * - K4 decided once a day, as Neynar's score is: a fresh decision is reused, an old one asked again; a failed lookup
- *   is never stored;
+ * - K3 the raw numbers are never stored: the shared store (studio.check_decisions, network 'bluesky') holds only
+ *   the DID, the rule, whether it passed and when; there is no studio.bluesky_checks;
+ * - K4 a pass is reused for 90 days and a fail for 24 hours (CHECKS), a changed rule asks again, a stored fail reads
+ *   back as 'failed' (its reason isn't kept); a failed lookup is never stored;
  * - K5 the AppView receives the DID only, at public.api.bsky.app, through getProfile and getAuthorFeed;
  * - K6 free generations (the Generate gate): off as before while the switch is off; on, passed is free, new and idle
  *   are refused with their reason, unreachable is a 503;
  * - K7 the remix challenge: a Bluesky account's decision counts as a Farcaster account's Neynar decision; a wallet
  *   account still never counts; its row is kept with account 'bluesky';
- * - K8 the migration: the dry run keeps nothing, the read-back's select is all true and its do block passes.
+ * - K8 the migration: the dry run keeps nothing, the read-back's select is all true and its do block passes, it is
+ *   safe to run twice, and it makes no table of its own.
  */
 import path from 'node:path';
 import { readdirSync, readFileSync } from 'node:fs';
@@ -47,14 +49,14 @@ const { db } = await import('../src/lib/db');
 const sql = db()!;
 await sql`set role studio_writer`;
 
-const { SOCIAL_SIGN_IN } = await import('../src/lib/config');
+const { SOCIAL_SIGN_IN, CHECKS } = await import('../src/lib/config');
 const B = await import('../src/lib/social/bluesky-check');
 const at = await import('../src/lib/social/atproto');
 const accounts = await import('../src/lib/social/accounts');
 const people = await import('../src/lib/people');
 const { freeFor } = await import('../src/lib/social/free');
 const R = await import('../src/lib/challenge/rules');
-const cfg = SOCIAL_SIGN_IN.bluesky.check as { on: boolean; createdBefore: string; recentDays: number; minRecentPosts: number; passDays: number; failHours: number };
+const cfg = SOCIAL_SIGN_IN.bluesky.check as { on: boolean; createdBefore: string; recentDays: number; minRecentPosts: number };
 
 const NOW = new Date();
 const day = 86_400_000;
@@ -136,55 +138,67 @@ const realFacts = (did: string) => B.blueskyFacts(did);
   check('K5 only a DID is looked up', refused);
 }
 
-// --- K4 + K3 decided once a day; only the decision kept ------------------------------------------------------------
+// --- K4 + K3 decided rarely, in the shared store; only the decision kept --------------------------------------------
 {
+  /** Ages the account's stored decision (as postgres): the store's own clock decides what is current. */
+  const age = async (did: string, hours: number) => {
+    await sql`reset role`;
+    await sql`update studio.check_decisions set decided_at = now() - make_interval(hours => ${hours}) where network = 'bluesky' and account = ${did}`;
+    await sql`set role studio_writer`;
+  };
+  check('K3 the rule is stored as the owner named it', B.thresholdKey() === 'made-before-2026-11-06+5posts30d', B.thresholdKey());
   let calls = 0;
   const counting = (did: string) => (calls++, realFacts(did));
   const a = await B.blueskyDecision(S, old, counting, NOW);
-  const b = await B.blueskyDecision(S, old, counting, new Date(NOW.getTime() + 3_600_000));
-  check('K4 an old active account passes, and its decision is reused within the day (one lookup)', a.ok && a.decision === 'passed' && b.ok && b.decision === 'passed' && calls === 1, `calls ${calls}`);
-  const at = (h: number) => new Date(NOW.getTime() + h * 3_600_000);
-  await B.blueskyDecision(S, old, counting, at((cfg.passDays - 1) * 24));
+  const b = await B.blueskyDecision(S, old, counting, NOW);
+  check('K4 an old active account passes, and its decision is reused (one lookup)', a.ok && a.decision === 'passed' && b.ok && b.decision === 'passed' && calls === 1, `calls ${calls}`);
+  await age(DID_OLD, (CHECKS.passDays - 1) * 24);
+  await B.blueskyDecision(S, old, counting, NOW);
   check('K4 a pass lasts 90 days (owner, 2026-11-04): reused at 89 days', calls === 1, `calls ${calls}`);
-  const c = await B.blueskyDecision(S, old, counting, at((cfg.passDays + 1) * 24));
+  await age(DID_OLD, (CHECKS.passDays + 1) * 24);
+  const c = await B.blueskyDecision(S, old, counting, NOW);
   check('K4 a pass older than 90 days is asked again', c.ok && calls === 2);
-  // A fail: reused within 24 hours, asked again after.
+  // A fail: reused within 24 hours (read back as 'failed': its reason isn't kept), asked again after.
   let idleCalls = 0;
   const countIdle = (did: string) => (idleCalls++, realFacts(did));
-  const T0 = at((cfg.passDays + 2) * 24);
-  const plus = (h: number) => new Date(T0.getTime() + h * 3_600_000);
-  await B.blueskyDecision(S, idle, countIdle, T0);
-  await B.blueskyDecision(S, idle, countIdle, plus(cfg.failHours - 1));
+  const i1 = await B.blueskyDecision(S, idle, countIdle, NOW);
+  await age(DID_IDLE, CHECKS.failHours - 1);
+  const i2 = await B.blueskyDecision(S, idle, countIdle, NOW);
   check('K4 a fail is not asked again within 24 hours', idleCalls === 1, `calls ${idleCalls}`);
-  await B.blueskyDecision(S, idle, countIdle, plus(cfg.failHours + 1));
+  check('K4 a fresh fail says why (idle); the stored one reads back as failed', i1.ok && i1.decision === 'idle' && i2.ok && i2.decision === 'failed', JSON.stringify([i1, i2]));
+  await age(DID_IDLE, CHECKS.failHours + 1);
+  await B.blueskyDecision(S, idle, countIdle, NOW);
   check('K4 a fail is asked again after 24 hours', idleCalls === 2, `calls ${idleCalls}`);
-  // A changed threshold asks again at once, even for a fresh pass.
+  // A changed rule asks again at once, even for a fresh pass.
   const was = cfg.minRecentPosts;
   cfg.minRecentPosts = 4;
-  await B.blueskyDecision(S, old, counting, at((cfg.passDays + 1) * 24 + 1));
-  check('K4 a changed threshold asks again at once', calls === 3, `calls ${calls}`);
+  await B.blueskyDecision(S, old, counting, NOW);
+  check('K4 a changed rule asks again at once', calls === 3, `calls ${calls}`);
   cfg.minRecentPosts = was;
-  await B.blueskyDecision(S, old, counting, at((cfg.passDays + 1) * 24 + 2));
-  const [{ threshold }] = await sql<{ threshold: string }[]>`select threshold from studio.bluesky_checks where account_id = ${old.id}`;
-  check('K3 the threshold used is kept with the decision', threshold === B.thresholdKey(), threshold);
-  // The checks above ran days ahead; start the rest from today's clock.
+  await B.blueskyDecision(S, old, counting, NOW);
+  check('K4 back on the old rule, its current pass is used again (no lookup)', calls === 3, `calls ${calls}`);
+  const kept = (await sql<{ threshold: string }[]>`select threshold from studio.check_decisions where network = 'bluesky' and account = ${DID_OLD} order by threshold`).map((r) => r.threshold);
+  check('K3 the rule used is kept with each decision', kept.join() === 'made-before-2026-11-06+4posts30d,made-before-2026-11-06+5posts30d', kept.join());
   await sql`reset role`;
-  await sql`delete from studio.bluesky_checks where account_id in ${sql([old.id, idle.id])}`;
+  await sql`delete from studio.check_decisions where network = 'bluesky'`;
   await sql`set role studio_writer`;
   const n = await B.blueskyDecision(S, fresh, realFacts, NOW);
   const i = await B.blueskyDecision(S, idle, realFacts, NOW);
   check('K1 the new account is refused through the AppView', n.ok && n.decision === 'new');
   check('K2 the idle old account (followers but only reposts) is refused through the AppView', i.ok && i.decision === 'idle');
   const d = await B.blueskyDecision(S, down, realFacts, NOW);
-  const [{ n: downRows }] = await sql<{ n: number }[]>`select count(*)::int as n from studio.bluesky_checks where account_id = ${down.id}`;
+  const [{ n: downRows }] = await sql<{ n: number }[]>`select count(*)::int as n from studio.check_decisions where account = ${DID_DOWN}`;
   check('K4 Bluesky unreachable: no decision, nothing stored', !d.ok && downRows === 0);
 
-  // K3: the table and its rows hold the decision and its time only.
-  const cols = (await sql<{ column_name: string }[]>`select column_name from information_schema.columns where table_schema = 'studio' and table_name = 'bluesky_checks' order by 1`).map((r) => r.column_name);
-  const rows = await sql`select * from studio.bluesky_checks`;
+  // K3: the store and its rows hold the decision and its time only; there is no table of the Bluesky check's own.
+  const [{ own }] = await sql<{ own: string | null }[]>`select to_regclass('studio.bluesky_checks')::text as own`;
+  check('K3 there is no studio.bluesky_checks: one shared store (owner, 2026-11-04)', own === null, String(own));
+  const cols = (await sql<{ column_name: string }[]>`select column_name from information_schema.columns where table_schema = 'studio' and table_name = 'check_decisions' order by 1`).map((r) => r.column_name);
+  const rows = await sql`select * from studio.check_decisions where network = 'bluesky'`;
+  check('K3 Bluesky decisions are stored (one per account under the rule)', rows.length === 2, JSON.stringify(rows));
   const RAW = ['2023-04-02', '2026-11-08', '900', '4000', '120', 'old.bsky.social', 'words never read'];
-  const rawIn = (cs: string[], rs: unknown[]) => cs.join() !== 'account_id,checked_at,decision,threshold' || rs.some((r) => RAW.some((x) => JSON.stringify(r).includes(x)));
-  check('K3 bluesky_checks has only account_id, decision, checked_at and threshold', !rawIn(cols, rows), `${cols.join()} ${JSON.stringify(rows)}`);
+  const rawIn = (cs: string[], rs: unknown[]) => cs.join() !== 'account,decided_at,network,passed,threshold' || rs.some((r) => RAW.some((x) => JSON.stringify(r).includes(x)));
+  check('K3 check_decisions has only network, account, threshold, passed and decided_at, and no raw numbers', !rawIn(cols, rows), `${cols.join()} ${JSON.stringify(rows)}`);
   // Nothing else in the database holds the facts either (every studio table, every row).
   const tables = (await sql<{ t: string }[]>`select table_name as t from information_schema.tables where table_schema = 'studio' and table_type = 'BASE TABLE'`).map((r) => r.t);
   await sql`reset role`;
@@ -196,7 +210,7 @@ const realFacts = (did: string) => B.blueskyFacts(did);
   await sql`set role studio_writer`;
   check('K3 no studio table holds an account\'s dates, counts or post words', leaks.length === 0, leaks.join(', '));
   proof('K3 a table with a posts column would be caught', rawIn([...cols, 'recent_posts'].sort(), rows));
-  proof('K3 a row holding the creation date would be caught', rawIn(cols, [{ decision: 'passed', created: '2023-04-02T10:00:00.000Z' }]));
+  proof('K3 a row holding the creation date would be caught', rawIn(cols, [{ passed: true, created: '2023-04-02T10:00:00.000Z' }]));
 }
 
 // --- K6 free generations ------------------------------------------------------------------------------------------
@@ -206,6 +220,9 @@ const realFacts = (did: string) => B.blueskyFacts(did);
   const off = await freeFor(S as never, person(old));
   check('K6 while the check is off, a Bluesky account gets none (as before)', !off.free && off.reason === 'link-needed');
   cfg.on = true;
+  await sql`reset role`;
+  await sql`delete from studio.check_decisions where network = 'bluesky'`;
+  await sql`set role studio_writer`;
   const p = await freeFor(S as never, person(old), undefined, realFacts);
   const n = await freeFor(S as never, person(fresh), undefined, realFacts);
   const i = await freeFor(S as never, person(idle), undefined, realFacts);
@@ -214,6 +231,8 @@ const realFacts = (did: string) => B.blueskyFacts(did);
   check('K6 on: a new account is refused, saying why', !n.free && n.reason === 'bluesky-new' && /6 November 2026/.test(n.error), JSON.stringify(n));
   check('K6 on: an idle old account is refused, saying why', !i.free && i.reason === 'bluesky-idle' && /5 times in the last 30 days/.test(i.error), JSON.stringify(i));
   check('K6 on: Bluesky unreachable is refused as unreachable', !d.free && d.reason === 'bluesky-unreachable');
+  const again = await freeFor(S as never, person(idle), undefined, realFacts);
+  check('K6 on: a stored fail is refused without asking again, naming both rules', !again.free && again.reason === 'bluesky-failed' && /6 November 2026/.test(again.error) && /5 times in the last 30 days/.test(again.error), JSON.stringify(again));
   const { mayGenerate } = await import('../src/lib/images/gate');
   const g = await mayGenerate(S as never, person(down));
   check('K6 the Generate gate answers 503 when Bluesky can\'t be reached, 403 for new', !g.ok && g.status === 503 && !(await mayGenerate(S as never, person(fresh))).ok);
@@ -223,15 +242,15 @@ const realFacts = (did: string) => B.blueskyFacts(did);
 // --- K7 the remix challenge -----------------------------------------------------------------------------------------
 {
   const sky = people.socialPerson(old.id);
-  const e1 = R.eligibility({ maker: sky, score: null, bluesky: 'passed' });
-  const e2 = R.eligibility({ maker: sky, score: null, bluesky: 'idle' });
-  const e3 = R.eligibility({ maker: sky, score: null, bluesky: 'new' });
-  const e4 = R.eligibility({ maker: sky, score: null, bluesky: null });
+  const e1 = R.eligibility({ maker: sky, passed: null, bluesky: 'passed' });
+  const e2 = R.eligibility({ maker: sky, passed: null, bluesky: 'idle' });
+  const e3 = R.eligibility({ maker: sky, passed: null, bluesky: 'failed' });
+  const e4 = R.eligibility({ maker: sky, passed: null, bluesky: null });
   check('K7 a Bluesky account that passed counts, as a Farcaster account that passed Neynar does', e1.eligible && e1.why === 'passed' && e1.person === sky);
-  check('K7 idle and new are "below"; unreachable is "unchecked"', !e2.eligible && e2.why === 'below' && !e3.eligible && e3.why === 'below' && !e4.eligible && e4.why === 'unchecked');
+  check('K7 idle and a stored fail are "below"; unreachable is "unchecked"', !e2.eligible && e2.why === 'below' && !e3.eligible && e3.why === 'below' && !e4.eligible && e4.why === 'unchecked');
   check('K7 read back: a Bluesky account\'s stored decision stands', R.fromDecision(sky, 'passed').eligible && !R.fromDecision(sky, 'below').eligible);
-  check('K7 a wallet account still never counts', R.eligibility({ maker: -5, score: 0.9 }).why === 'not-a-farcaster-account' && R.fromDecision(-5, 'passed').why === 'not-a-farcaster-account');
-  check('K7 a Bluesky account without a check (a Lens account, or the check off) never counts', R.eligibility({ maker: sky, score: 0.9 }).why === 'not-a-farcaster-account');
+  check('K7 a wallet account still never counts', R.eligibility({ maker: -5, passed: true }).why === 'not-a-farcaster-account' && R.fromDecision(-5, 'passed').why === 'not-a-farcaster-account');
+  check('K7 a Bluesky account without a check (a Lens account, or the check off) never counts', R.eligibility({ maker: sky, passed: true }).why === 'not-a-farcaster-account');
   // The row: kept with account 'bluesky'; a wallet's number refused.
   await sql`reset role`;
   const [el] = await sql`insert into studio.elements (work_id, element_type, created_by_fid) values ('snowmoon', 'text', ${sky}) returning id`;
@@ -251,6 +270,7 @@ const realFacts = (did: string) => B.blueskyFacts(did);
 // --- K8 the migration -----------------------------------------------------------------------------------------------
 {
   const file = readFileSync(path.join(ROOT, 'supabase/migrations/NEXT_social_bluesky_check.sql'), 'utf8');
+  const readBack = readFileSync(path.join(ROOT, 'supabase/drafts/READ-BACK-social_bluesky_check.sql'), 'utf8');
   const block = (s: string, from: string, to?: string) => s.slice(s.indexOf(from), to ? s.indexOf(to, s.indexOf(from)) : undefined);
   const a = block(file, '-- A. DRY RUN', '-- B. THE MIGRATION');
   const b = block(file, '-- B. THE MIGRATION', '-- C. READ-BACK');
@@ -258,33 +278,30 @@ const realFacts = (did: string) => B.blueskyFacts(did);
   const f = new PGlite();
   await f.exec(`create role anon nologin; create role authenticated nologin; create role service_role nologin bypassrls;`).catch(() => {});
   for (const m of migrations.filter((m) => m !== 'NEXT_social_bluesky_check.sql')) await f.exec(readFileSync(path.join(ROOT, 'supabase/migrations', m), 'utf8'));
-  // A realistic version for the read-back's challenge row.
+  // Two realistic versions for the read-back's entry decisions and mark.
   await f.exec(`insert into studio.works values ('snowmoon','Snowmoon','GPL-3.0','x') on conflict do nothing;
     insert into studio.elements (id, work_id, element_type, created_by_fid) values ('71111111-1111-4111-8111-111111111111','snowmoon','text',6786);
-    insert into studio.element_versions (element_id, version_no, body) values ('71111111-1111-4111-8111-111111111111', 1, '{}');`);
+    insert into studio.element_versions (element_id, version_no, body) values ('71111111-1111-4111-8111-111111111111', 1, '{}'), ('71111111-1111-4111-8111-111111111111', 2, '{}');`);
   await f.exec(a);
-  const afterDry = (await f.query<{ n: number }>(`select count(*)::int as n from pg_tables where schemaname = 'studio' and tablename = 'bluesky_checks'`)).rows[0].n;
+  const afterDry = (await f.query<{ n: number }>(`select count(*)::int as n from information_schema.columns where table_schema = 'studio' and table_name = 'challenge_eligibility' and column_name = 'account'`)).rows[0].n;
   await f.exec(b);
-  const results = await f.exec(block(file, '-- C. READ-BACK'));
-  const oks = results.flatMap((r) => r.rows as { what?: string; ok?: boolean }[]).filter((r) => 'ok' in r);
-  const kept = (await f.query<{ n: number }>(`select (select count(*) from studio.bluesky_checks) + (select count(*) from studio.challenge_eligibility) + (select count(*) from studio.social_accounts) as n`)).rows[0].n;
+  const run = async () => {
+    const results = await f.exec(readBack);
+    return results.flatMap((r) => r.rows as { what?: string; ok?: boolean }[]).filter((r) => 'ok' in r);
+  };
+  const oks = await run();
+  const kept = (await f.query<{ n: number }>(`select (select count(*) from studio.check_decisions) + (select count(*) from studio.challenge_eligibility) + (select count(*) from studio.challenge_marks) + (select count(*) from studio.social_accounts) as n`)).rows[0].n;
   check('K8 the dry run is the migration, ends in rollback and keeps nothing', body(a) === body(b) && /rollback;\s*$/.test(a.trim() + '\n') && afterDry === 0);
-  check('K8 the read-back select: every row true', oks.length === 8 && oks.every((r) => r.ok === true), JSON.stringify(oks));
+  check('K8 the read-back select: every row true', oks.length === 11 && oks.every((r) => r.ok === true), JSON.stringify(oks));
   check('K8 the read-back do block passes and keeps nothing', Number(kept) === 0, `kept ${kept}`);
-  // Anon and authenticated read nothing.
-  await f.exec(`insert into studio.social_accounts (kind, subject) values ('bluesky', 'did:plc:anonreadaaaaaaaaaaaaaaaa'); insert into studio.bluesky_checks (account_id, decision, threshold) select id, 'passed', 'made<2026-11-06T08:00:00Z;posts>=5/30d' from studio.social_accounts`);
-  const leaks: string[] = [];
-  for (const role of ['anon', 'authenticated']) {
-    await f.exec(`set role ${role}`);
-    try {
-      const r = await f.query<{ n: number }>(`select count(*)::int as n from studio.bluesky_checks`);
-      if (r.rows[0].n > 0) leaks.push(role);
-    } catch {
-      /* permission denied: private */
-    }
-    await f.exec('reset role');
-  }
-  check('K8 anon and authenticated read nothing of bluesky_checks', leaks.length === 0, leaks.join());
+  check('K8 the migration makes no table of its own', !/create table/i.test(file) && (await f.query<{ t: string | null }>(`select to_regclass('studio.bluesky_checks')::text as t`)).rows[0].t === null);
+  await f.exec(b);
+  const twice = await run();
+  check('K8 safe to run twice: run again, the read-back is still all true', twice.length === 11 && twice.every((r) => r.ok === true), JSON.stringify(twice));
+  // Planted: a wallet's number accepted again (0033's fid check) is caught by the do block.
+  await f.exec(`alter table studio.challenge_eligibility drop constraint challenge_eligibility_fid_check`);
+  const caught = await run().then(() => false, (e: Error) => /READ-BACK FAILED/.test(e.message));
+  proof('K8 a dropped fid check is caught by the read-back', caught);
   await f.close();
 }
 
