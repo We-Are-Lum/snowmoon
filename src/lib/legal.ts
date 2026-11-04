@@ -125,12 +125,16 @@ export const LEGAL: {
     // 'no longer verifies it'" (branch wallet-fid-link; docs/legal/wallet-fid-link-draft.md): §4's link reason and §7's
     // Neynar wallet sentences add the custody address (the address that owns a Farcaster account) beside a verified one.
     // The words before were 1frr16h.
+    // 2026-11-04, the reread pack, item 2, approved as drafted ("reviewed by the coordinator, approved by the owner";
+    // branch check-decisions; docs/legal/check-decisions-draft.md): §7's Neynar item keeps only the decision and when
+    // (90 days a pass, a day a fail; sooner after a report or a moderator's hide, or a new threshold), and §4 adds the
+    // decision as an item. The words before were 1wgu7z.
     // 2026-11-04, the reread pack ("reviewed by the coordinator, approved by the owner"): check-decisions (item 2, as
     // drafted: §7's Neynar item keeps only the decision and when; §4 adds the decision as an item) and Lens and Bluesky
     // sign-in (item 3: §7's Lens line and §4's 30-day sentence as drafted; §4's Lens check item from check-decisions,
     // with the Farcaster item's own sentence "A pass is removed sooner if your account is reported or one of your
     // pictures is hidden by a moderator.", 3.4). The earlier sign-in items 5–11 were approved as drafted
-    // (docs/legal/signin-reread-list.md). The words before were 1wgu7z. LEGAL.effective becomes the merge day.
+    // (docs/legal/signin-reread-list.md). The words before were 1rsayc0 (check-decisions alone). LEGAL.effective becomes the merge day.
     privacy: { words: 'iqpiw8', on: '2026-11-04', by: 'FID 6786' },
   },
 };

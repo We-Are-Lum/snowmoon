@@ -107,7 +107,8 @@ And in §4:
 - After main's merge (wallet-fid-link, Privacy 1wgu7z), §7's Neynar item is this branch's first two sentences, then
   main's words from "Neynar is never asked" on (reread pack, Overlap B). Main's wallet sentences win.
 
-The reread of the §7, §4 and About lines is still owed (item 1 below).
+- **Reread:** item 2 approved as drafted ("reviewed by the coordinator, approved by the owner", 2026-11-04). Recorded
+  as Privacy `1rsayc0`. The About line is part of the same approval. Merging still needs the migration applied.
 
 ## Decisions owed
 
