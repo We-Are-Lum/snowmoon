@@ -84,6 +84,7 @@ endpoint is only "To control access, sponsorship, or enable app verification". O
 what (the Lens score check), after sign-in.
 
 The answer (`CreateAppResult`) is one of:
+
 - `CreateAppResponse { hash }`: Lens sent the transaction itself (sponsored). You pay nothing; wait for it
   (`waitForTransaction`), then `fetchApp({ txHash })` gives the App's address.
 - `SelfFundedTransactionRequest { raw }`: you send `raw` from your wallet (step 4).
@@ -124,7 +125,7 @@ GHO is about one US dollar, so the cost is well under one cent. **Have 0.01 GHO 
 ## 5. What changes afterwards
 
 - `src/lib/config.ts`: `SOCIAL_SIGN_IN.lens.app` becomes the new App's address (and its comment says it is ours,
-  registered on <date>, tx <hash>). Nothing else: the challenge, the ID token's audience check (`aud` must be our App)
+  registered on its date, with its transaction hash). Nothing else: the challenge, the ID token's audience check (`aud` must be our App)
   and `test:signin-lens-bluesky` all read that one value.
 - Before Lens goes on: one real sign-in on a preview with your Lens account, checking the token's `aud` is the new
   App.
