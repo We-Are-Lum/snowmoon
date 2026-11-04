@@ -190,8 +190,9 @@ export const WALLET_LINKS = {
    */
   offer: true as boolean,
   /**
-   * The automatic link ('verified'), on a wallet's signed-in request: its address is sent to Neynar (user by verified
-   * address), and a wallet that exactly one Farcaster account has verified is linked to it. A linked wallet is looked
+   * The automatic link ('verified'), on a wallet's signed-in request: its address is sent to Neynar (user by custody
+   * or verified address, since 2026-11-04), and a wallet that is the custody address of, or verified by, exactly one
+   * Farcaster account is linked to it. A linked wallet is looked
    * up again at most once a day, and a verified link ends if that FID no longer verifies the address; a tapped link
    * isn't affected; a wallet the person unlinked isn't looked up again (owner, 2026-10-22). ON, in the same deploy
    * as the Privacy line that says so (section 7, reread by the owner on 2026-10-22) and migration 0026, which the

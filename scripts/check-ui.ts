@@ -76,7 +76,7 @@ import { execFileSync, spawn } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import { createServer } from 'node:net';
 import path from 'node:path';
-import { chromium, type Browser, type Page } from 'playwright-core';
+import { chromium, type Browser, type Page, type Route } from 'playwright-core';
 import QRCode from 'qrcode';
 import { BOOK_MENTIONS } from '../src/lib/character-order';
 import { CHALLENGE, SUPPORT } from '../src/lib/config';
@@ -380,6 +380,24 @@ async function checkAccountWallet(page: Page, within: string, where: string) {
   const left = await page.evaluate(() => localStorage.getItem('snowmoon.wallet'));
   if (left) fail(`${where}: Sign out leaves the wallet session in storage`);
   await checkAccountSignedOut(page, within, `${where} (after Sign out)`);
+}
+
+/**
+ * A wallet linked to a Farcaster account (2026-11-04): the menu shows the account's @name, not the address. A fixture:
+ * the balance route is answered here for the planted token as the server answers a linked wallet. Then Sign out.
+ */
+async function checkAccountLinkedWallet(page: Page, within: string, where: string) {
+  const planted = `Bearer x.${btoa(JSON.stringify({ sub: 'w', exp: 4102444800 })).replace(/=+$/, '')}.y`;
+  const balance = (r: Route) =>
+    r.request().headers().authorization === planted ? r.fulfill({ json: { address: WALLET_ADDRESS, linked: { fid: 6786, name: '@fixture-linked' } } }) : r.fallback();
+  await page.route('**/api/wallet/balance', balance);
+  await plantWalletSession(page);
+  await open(page, '/chapter/1');
+  const acct = page.locator(accountIn(within));
+  await acct.locator('.menu-account-name', { hasText: '@fixture-linked' }).waitFor({ timeout: 10000 }).catch(() => fail(`${where}: a linked wallet does not show its Farcaster name`));
+  if (!(await page.evaluate(() => localStorage.getItem('snowmoon.wallet')))) fail(`${where}: the linked wallet's session ended on load`);
+  await page.unroute('**/api/wallet/balance', balance);
+  await acct.locator('button', { hasText: 'Sign out' }).click();
 }
 
 /** The footer line inside `within`: the starter's words exactly, shown, with its three links. */
@@ -1998,6 +2016,7 @@ try {
         await open(page, '/chapter/1');
         await shot(page, `desktop-${width}-account-wallet`, scheme);
         await checkAccountWallet(page, '.rail', `@${width} rail`);
+        await checkAccountLinkedWallet(page, '.rail', `@${width} rail (linked wallet)`);
         // Listen view.
         await open(page, '/chapter/1?view=listen');
         await page.waitForSelector('.listen-pane .listen-progress');
