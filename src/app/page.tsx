@@ -15,6 +15,7 @@ import { HomeMomentCard } from '~/components/home-moment';
 import { HomeFeed, type HomeFeedItem } from '~/components/home-feed';
 import { HomeMinpentai } from '~/components/home-minpentai';
 import { SceneCard } from '~/components/scene-card';
+import { CHALLENGE } from '~/lib/config';
 import { CHALLENGE_WORDING as CW } from '~/lib/challenge/wording';
 import '../styles/home.css';
 
@@ -67,7 +68,8 @@ export default async function Home() {
     { href: '/assistant', name: 'Assistant', what: 'Ask about the book, privately', meta: '→' },
     // The remix challenge (owner, 2026-11-03: a /challenge link on the home page), last, as in the menu. Its line is
     // new wording, drafted by the coding agent: marked "Draft wording" until the owner approves it.
-    { href: '/challenge', name: CW.title, what: CW.homeLine(), meta: '→', draft: true },
+    // Only once the owner opens the challenge (CHALLENGE.public; owner, 2026-11-04: admin-only for now).
+    ...(CHALLENGE.public ? [{ href: '/challenge', name: CW.title, what: CW.homeLine(), meta: '→', draft: true }] : []),
   ];
   const row = (r: (typeof book)[number] & { draft?: boolean }) => (
     <li key={r.name}>

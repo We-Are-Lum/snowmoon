@@ -28,7 +28,7 @@ export function ViewBoard({ board, width, height, canPlace = [], lastSeen = [], 
       {ghosts.map((p, i) => {
         const { cx, cy } = at(p.x, p.y), [dx, dy] = DIR[p.dir ?? ''] ?? [0, 0];
         return (
-          <g key={`d${i}`} opacity={0.55}>
+          <g key={`d${i}`} className="mb-ghost" opacity={0.55}>
             <rect x={p.x * Z + 2} y={p.y * Z + 2} width={Z - 4} height={Z - 4} rx={4} fill="none" stroke={CYAN} strokeWidth={1.5} strokeDasharray="3 2" />
             {p.piece === 'tower' ? <circle cx={cx} cy={cy} r={7} fill="none" stroke={CYAN} strokeWidth={2.5} /> : null}
             {p.piece === 'square' ? <rect x={p.x * Z + 6} y={p.y * Z + 6} width={Z - 12} height={Z - 12} fill={CYAN} /> : null}

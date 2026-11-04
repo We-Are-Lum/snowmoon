@@ -24,13 +24,16 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { DEFAULT_TEMPLATES } from '../src/templates';
 import { LiveScreen } from '../src/components/live-screen';
-import { AGENTS, CHALLENGE, CHAT, IMAGES, REPO_URL } from '../src/lib/config';
+import { AGENTS, CHALLENGE, CHAT, IMAGES, REPO_URL, imagesDailySpendCapUsd } from '../src/lib/config';
+import { challengeOpenNow, entriesOpen } from '../src/lib/challenge/rules';
+import { challengeVisibleTo } from '../src/lib/challenge/visibility';
 import { NOTICE_REVIEW, currentNoticeItems, noticeKey } from '../src/lib/chat/notice';
 import { LEGAL, PRIVACY, TERMS, legalKey } from '../src/lib/legal';
 import { LEARN_TEXT } from '../src/lib/minpentai/learn-text';
 import { BOOK_TAG, NARRATION_MAX_WORDS, PERSON_TAG, parseBeats } from '../src/lib/script-beats';
 import { GLOSSARY_FILE, loadBlocks, verifyGlossary, type Glossary } from './lib/glossary';
 import { p4aProblems } from './lib/p4a';
+import { CHALLENGE_FILES as P5G_FILES, p5gProblems } from './lib/p5g';
 import { MODAL_VC_FILE, MODAL_VC_PLANTS, modalVcRun, modalVcStatic } from './lib/modal-vc';
 import { requireTarget } from './lib/target';
 
@@ -1241,27 +1244,18 @@ add({
   },
 });
 // The remix challenge (owner, 2026-10-31: "No ordering by engagement or payment"): entries, sheets to start from and
-// "Posted on" are in time order and nothing else. In the challenge's code, every .sort() is newestFirst, and no SQL
-// order reads likes, built-on counts, scores, costs or payments.
-const CHALLENGE_FILES = /^src\/lib\/challenge\/|^src\/app\/challenge\/|^src\/app\/api\/challenge\/|^src\/components\/(challenge-[a-z-]+|posted-on|post-link-field)\.tsx$/;
-const NOT_AN_ORDER = /\b(likes?|like_?count|likeCount|built_?on|builtOn|score|repost|recast|repl(y|ies)|followers?|cost|amount|usd|payment|paid|sponsor|donation)\b/i;
+// "Posted on" are in time order and nothing else (scripts/lib/p5g.ts). One narrow exception (owner, 2026-11-04): "Bases
+// to start from" may follow the bases' fixed style order (CHALLENGE.baseStyles), there only; entries stay time order.
 add({
   id: 'P5g',
   principle: 5,
-  name: 'the remix challenge orders entries, sheets and "Posted on" by time only (never by likes, built-on, scores or payments)',
-  load: async () => walk('src', /\.tsx?$/).filter((f) => CHALLENGE_FILES.test(f)).map((f) => ({ file: f, text: read(f) })),
-  run: (files) => {
-    const problems: string[] = [];
-    if (!files.some((f: { file: string }) => f.file === 'src/lib/challenge/rules.ts')) problems.push('src/lib/challenge/rules.ts: missing');
-    for (const { file, text } of files as { file: string; text: string }[]) {
-      const code = text.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:])\/\/.*$/gm, '$1');
-      for (const m of code.matchAll(/\.sort\(([^)]*)\)/g)) if (m[1].trim() !== 'newestFirst') problems.push(`${file}: sorts by something other than newestFirst: ${m[0].slice(0, 80)}`);
-      for (const m of code.matchAll(/order by([^`;]{0,160})/gi)) if (NOT_AN_ORDER.test(m[1])) problems.push(`${file}: orders by "${m[1].trim().slice(0, 60)}"`);
-    }
-    return problems;
-  },
+  name: 'the remix challenge orders entries, sheets and "Posted on" by time only (never by likes, built-on, scores or payments); only "Bases to start from" may follow the bases\' fixed style order',
+  load: async () => walk('src', /\.tsx?$/).filter((f) => P5G_FILES.test(f)).map((f) => ({ file: f, text: read(f) })),
+  run: (files) => p5gProblems(files),
   plant: (files) => {
-    files.push({ file: 'src/lib/challenge/planted.ts', text: 'export const top = (e) => e.sort((a, b) => b.builtOn - a.builtOn);' });
+    // An entries list ordered by style: the bases' exception must not reach it.
+    const i = files.findIndex((f: { file: string }) => f.file === 'src/lib/challenge/entries.ts');
+    files[i] = { ...files[i], text: files[i].text.replace(/export async function standing\(/, 'export const planted = (entries) => entries.sort(baseStyleOrder);\nexport async function standing(') };
   },
 });
 // A hide on a seeded image reaches everywhere it shows (owner, 2026-10-30: "home, About, quote cards, the player,
@@ -1764,6 +1758,81 @@ add({
     c.s4 = 'Quote cards you save, and your likes.';
     c.s7 = 'Neynar receives your Farcaster ID.';
     c.openSheets = 'export const challengeSheetsOpen = () => CHALLENGE.openSheets;';
+  },
+});
+
+// P6u: the remix challenge is admin-only until the owner opens it (owner, 2026-11-04: "/challenge is admin-only for
+// now"; nothing opens by date alone). While CHALLENGE.public is off, with the clock past the open date (dates.opens):
+// entries are not taken (no eligibility stored at publish, so Neynar isn't asked; no marking), sheets stay
+// invited-only, the free image cap stays IMAGES.dailySpendCapUsd (not the $15), only admins may see the challenge, and
+// the target answers /challenge with 404 to a signed-out visitor, with neither it nor the home page naming the
+// challenge. Once the owner turns CHALLENGE.public on, this check has nothing to hold.
+add({
+  id: 'P6u',
+  principle: 6,
+  name: 'while CHALLENGE.public is off, the dates open nothing (entries, open sheets, the $15 cap) and /challenge answers 404 to a non-admin',
+  load: async () => {
+    const at = new Date(Date.parse(CHALLENGE.dates.opens) + 3600_000);
+    const r = await fetch(`${BASE}/challenge`, { headers: { 'cache-control': 'no-cache' }, redirect: 'manual' }).catch(() => null);
+    return {
+      pub: CHALLENGE.public as boolean,
+      at: at.toISOString(),
+      cap: imagesDailySpendCapUsd(at),
+      entries: entriesOpen(at),
+      open: challengeOpenNow(at),
+      // Signed out, a stand-in FID and an invited one who isn't an admin (6852).
+      visibleToNonAdmin: [null, 501, ...IMAGES.invited.filter((f) => !challengeVisibleTo(f, false))].some((f) => challengeVisibleTo(f)),
+      sheets: read('src/lib/challenge/open-sheets.ts'),
+      record: read('src/lib/challenge/record.ts'),
+      status: r?.status ?? 0,
+      html: r ? await r.text() : '',
+      home: await page('/'),
+    };
+  },
+  run: (c) => {
+    if (c.pub) return [];
+    const problems: string[] = [];
+    if (c.cap !== IMAGES.dailySpendCapUsd) problems.push(`the free image cap at ${c.at} is $${c.cap}, not IMAGES.dailySpendCapUsd ($${IMAGES.dailySpendCapUsd}): it rose by date alone (imagesDailySpendCapUsd in src/lib/config.ts must read CHALLENGE.public)`);
+    if (c.entries || c.open) problems.push(`entries are open at ${c.at} with CHALLENGE.public off (entriesOpen / challengeOpenNow in src/lib/challenge/rules.ts must read CHALLENGE.public)`);
+    if (!/export const challengeSheetsOpen = \([^\n]*pub: boolean = CHALLENGE\.public\) => pub && CHALLENGE\.openSheets && phase\(now\) === 'open'/.test(c.sheets)) problems.push('src/lib/challenge/open-sheets.ts: open sheet-making does not wait for CHALLENGE.public');
+    if (!/if \(!entriesOpen\(now\)\) return 'not-a-candidate';/.test(c.record)) problems.push('src/lib/challenge/record.ts: eligibility is recorded (and Neynar asked) without CHALLENGE.public');
+    if (c.visibleToNonAdmin) problems.push('challengeVisibleTo lets a non-admin see the challenge while CHALLENGE.public is off');
+    if (c.status !== 404) problems.push(`${BASE}/challenge answers ${c.status} to a signed-out visitor, not 404`);
+    // The whole HTML, its inline page data included; a link to /challenge in the markup itself.
+    for (const [where, html] of [['/challenge', c.html], ['/', c.home]] as const) {
+      const m = /Remix the cast|remix challenge/i.exec(String(html)) ?? /href="\/challenge"/.exec(String(html).replace(/<script[\s\S]*?<\/script>/gi, ''));
+      if (m) problems.push(`${BASE}${where}: its HTML names the challenge ("${m[0]}")`);
+    }
+    return problems;
+  },
+  plant: (c) => {
+    c.cap = CHALLENGE.dailySpendCapUsd;
+    c.entries = true;
+    c.sheets = 'export const challengeSheetsOpen = (now = new Date()) => CHALLENGE.openSheets && phase(now) === \'open\';';
+    c.status = 200;
+  },
+});
+
+// P6s: bases made by closed models (owner, 2026-11-04). Bases and references may be made by several models, closed
+// ones included; a closed-model base is refused until CHALLENGE.closedBasesAllowed (src/lib/challenge/bases.ts), and
+// that may be true only once the Privacy page names the providers that receive the base's prompt and pictures, OpenAI
+// and Google, for the bases (docs/legal/closed-model-bases-draft.md, branch closed-model-bases). Legal texts describe today.
+const CLOSED_BASE_PROVIDERS = ['OpenAI', 'Google'] as const;
+add({
+  id: 'P6s',
+  principle: 6,
+  name: 'closed-model bases (CHALLENGE.closedBasesAllowed) are allowed only while the Privacy page names OpenAI and Google for the bases and references',
+  load: async () => ({ allowed: CHALLENGE.closedBasesAllowed as boolean, units: PRIVACY.sections.flatMap((sec) => sec.body.map((u) => (Array.isArray(u) ? u.join(' ') : u))) }),
+  run: (c) => {
+    if (!c.allowed) return [];
+    const forBases = c.units.filter((u: string) => /\b(bases?|references?|starting sheets?)\b/i.test(u));
+    return CLOSED_BASE_PROVIDERS.filter((n) => !forBases.some((u: string) => new RegExp(`\\b${n}\\b`).test(u))).map(
+      (n) => `CHALLENGE.closedBasesAllowed (src/lib/config.ts) is true, but no Privacy paragraph names ${n} for the challenge's bases and references; reread docs/legal/closed-model-bases-draft.md with the owner first, or keep it false`,
+    );
+  },
+  plant: (c) => {
+    c.allowed = true;
+    c.units = c.units.map((u: string) => u.replace(/\bOpenAI\b/g, 'a model maker'));
   },
 });
 

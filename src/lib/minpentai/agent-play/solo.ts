@@ -513,6 +513,35 @@ export function planComputer(m: SoloMatch, now: string): boolean {
   return true;
 }
 
+/** A side's turn summary watcher (summary.ts), with the turn's opening lines (taken on the live page). */
+function watchTurn(e: Engine, s: Settings, me: Side, w: World, kills: Kills, o: Pick<Orders, 'placements' | 'via' | 'drafted_by' | 'clock'>) {
+  const watch = new TurnWatch(e, s, me, w, kills, o.placements);
+  if (o.via === 'page') watch.say(`Your person took this turn on the live page, approving the orders ${o.drafted_by === 'agent' ? 'you (their AI) drafted' : 'drafted before'}.`);
+  if (o.clock) watch.say('The turn\'s clock ran out, so the site computer played it for your side under your standing order.');
+  return watch;
+}
+
+/**
+ * Every turn's summary for a side, rebuilt from the record (the same watcher, the same frames the turn ran through):
+ * the live page's past turns (owner, 2026-11-03). Index = turn. Also the towers that side's gliders destroyed in it,
+ * where the ruleset reports kills (otherwise only those destroyed in its sight).
+ */
+export function turnSummaries(m: SoloMatch, me: Side = PERSON): { turn: number; lines: string[]; kills: number }[] {
+  const { s, e } = rulesOf(m);
+  const w = e.world(s), kills: Kills = { C: 0, A: 0, ...(s.killReports ? { log: [] } : {}) };
+  const out: { turn: number; lines: string[]; kills: number }[] = [];
+  for (const h of m.history) {
+    e.apply(w, s, { C: h.C.placements, A: h.A.placements });
+    const watch = watchTurn(e, s, me, w, kills, h[me]);
+    const before = kills[me], from = w.step;
+    do { e.step(w, s, kills); watch.look(w); if (verdict(e, w, s, kills)) break; } while (w.step - from < s.every);
+    const lines = watch.done();
+    out.push({ turn: h.turn, lines, kills: s.killReports ? kills[me] - before : lines.filter((l) => /^The enemy tower at .* was destroyed/.test(l)).length });
+    if (verdict(e, w, s, kills)) break;
+  }
+  return out;
+}
+
 /** Both sides' orders revealed and applied together; the engine runs to the next turn to act (or the end). */
 function resolve(m: SoloMatch, now: string) {
   const { s, e } = rulesOf(m);
@@ -523,15 +552,9 @@ function resolve(m: SoloMatch, now: string) {
   e.apply(m.w, s, { C: C.placements, A: A.placements });
   e.updSeen(m.w, s, m.ls, m.kills);
   // The person's turn summary, from their side's view at each step (summary.ts).
-  const watch = new TurnWatch(e, s, PERSON, m.w, m.kills, C.placements);
+  const watch = watchTurn(e, s, PERSON, m.w, m.kills, C);
   // Between people, Amber gets her own summary, from her own view.
-  const watchA = m.versus ? new TurnWatch(e, s, 'A', m.w, m.kills, A.placements) : null;
-  const pageLine = (o: Orders) => `Your person took this turn on the live page, approving the orders ${o.drafted_by === 'agent' ? 'you (their AI) drafted' : 'drafted before'}.`;
-  const clockLine = 'The turn\'s clock ran out, so the site computer played it for your side under your standing order.';
-  if (C.via === 'page') watch.say(pageLine(C));
-  if (C.clock) watch.say(clockLine);
-  if (watchA && A.via === 'page') watchA.say(pageLine(A));
-  if (watchA && A.clock) watchA.say(clockLine);
+  const watchA = m.versus ? watchTurn(e, s, 'A', m.w, m.kills, A) : null;
   const from = m.w.step, turn = m.turn;
   const note = () => { m.summary = { turn, from, lines: watch.done() }; if (watchA) m.versus!.summaryA = { turn, from, lines: watchA.done() }; };
   do {

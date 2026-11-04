@@ -21,7 +21,7 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { isDeepStrictEqual } from 'node:util';
 import { verdict, type AnyPiece, type Kills, type Placement } from '../src/lib/minpentai/versions/engine';
-import { joinPractice, linkSide, newPractice, runClock, sideOf, CURRENT, DRAFTS, RULESETS, draftInfo, takeTurnOnPage, turnFrames, autopilot, checkComputer, planComputer, ordersText, linkOpens, newSolo, parseOrders, recordOf, replay, resign, rulesFor, rulesOf, setStanding, simulate, SoloError, submit, symbolLaunches, viewFor, type RulesetName, type SoloMatch } from '../src/lib/minpentai/agent-play/solo';
+import { joinPractice, linkSide, newPractice, runClock, sideOf, CURRENT, DRAFTS, RULESETS, draftInfo, takeTurnOnPage, turnFrames, turnSummaries, autopilot, checkComputer, planComputer, ordersText, linkOpens, newSolo, parseOrders, recordOf, replay, resign, rulesFor, rulesOf, setStanding, simulate, SoloError, submit, symbolLaunches, viewFor, type RulesetName, type SoloMatch } from '../src/lib/minpentai/agent-play/solo';
 
 let checks = 0;
 const ok = (cond: unknown, what: string) => { checks++; assert.ok(cond, what); };
@@ -441,6 +441,13 @@ playOut('play', 202);
   const v = viewFor(m) as Record<string, any>;
   ok(v.my_turns[0].taken_on_the_live_page === true && v.my_turns[0].drafted_by === 'agent' && /took this turn on the live page/.test(v.last_turn_summary.lines[0]), 'get_view tells the AI, and the summary says so first');
   ok(checkComputer(json(m)).length === 0, 'the computer still replays');
+  // Past turns' summaries, rebuilt from the record, are the ones each turn showed when it was played.
+  {
+    const mm = mk('tpage0000002', 'book-4', 102), shown: string[][] = [];
+    while (!mm.end && mm.turn < 6) { submit(mm, { turn: mm.turn, placements: parseOrders(scripted(mm), rulesOf(mm).s), source: 'agent', final: false, now: now() }); takeTurnOnPage(mm, { turn: mm.turn, now: now() }); shown.push(mm.summary!.lines); }
+    const rebuilt = turnSummaries(mm);
+    ok(rebuilt.length === shown.length && rebuilt.every((x, i) => isDeepStrictEqual(x.lines, shown[i])), 'every past turn\'s summary, rebuilt from the record, is the one shown when it was played');
+  }
   // Frames: one as the placements appear, then one a step; each only what Cyan sees.
   while (!m.end && m.turn < 4) submit(m, { turn: m.turn, placements: parseOrders(scripted(m), rulesOf(m).s), source: 'agent', final: true, now: now() });
   const { e, s } = rulesOf(m);

@@ -26,7 +26,7 @@ export function TakeTurn({ id, turn }: { id: string; turn: number }) {
   return (
     <div className="mb-take">
       <button type="button" className="mb-take-button" onClick={go} disabled={busy}>{busy ? 'Taking your turn…' : 'Take turn'}</button>
-      <span className="mb-note"> Approves these orders as yours; then the turn plays out.</span>
+      <span className="mb-note"> as yours; the turn then plays here.</span>
       {err ? <p className="mb-error" role="alert">{err}</p> : null}
     </div>
   );
