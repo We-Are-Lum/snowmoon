@@ -417,8 +417,8 @@ export const CHALLENGE = {
    * open sheets and the $15 cap are off and /challenge answers 404 to a non-admin.
    */
   public: false as boolean,
-  /** The characters, by their file in content/snowmoon/designs/characters, in the owner's order (owner, 2026-10-31). */
-  characters: ['zei', 'bai', 'gladias', 'seila', 'deluin', 'mu'] as readonly string[],
+  /** The characters, by their file in content/snowmoon/designs/characters, most named in the book first (owner, 2026-11-04; content/snowmoon/characters-by-mentions.json, checked by test:character-order and P5h). */
+  characters: ['zei', 'gladias', 'bai', 'seila', 'deluin', 'mu'] as readonly string[],
   /**
    * Each character's bases (owner, 2026-11-03): up to CHALLENGE.maxBases published sheets to start from, in the same
    * three styles for every character, so each set reads as one cast. Each entry is a design's id: its element id (any

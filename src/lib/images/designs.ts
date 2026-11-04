@@ -3,6 +3,7 @@ import { readdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import type postgres from 'postgres';
 import { WORK_ID } from '../config';
+import { inBookOrder } from '../character-order';
 import type { DesignBody, DesignPicture } from '../element-body';
 import { IMAGE_WORDING } from './wording';
 
@@ -200,15 +201,16 @@ let characters: BookCharacter[] | null = null;
 export function bookCharacters(): BookCharacter[] {
   if (characters) return characters;
   const dir = path.join(process.cwd(), 'content/snowmoon/designs/characters');
-  characters = readdirSync(dir)
+  const all = readdirSync(dir)
     .filter((f) => f.endsWith('.json'))
     .map((f) => JSON.parse(readFileSync(path.join(dir, f), 'utf8')) as { slug: string; name: string; setting?: string; facts?: { chapter: number; idx: number; quote: string }[]; first_appearance?: { chapter: number; idx: number } })
     .map((c) => {
       const quotes = (c.facts ?? []).map((q) => ({ chapter: q.chapter, idx: q.idx, quote: q.quote })).sort((a, b) => a.chapter - b.chapter || a.idx - b.idx);
       // Where the book first names them (scripts/first-appearances.ts, decision 19); the earliest fact only as a fallback.
       return { slug: c.slug, name: c.name, setting: c.setting ?? null, firstChapter: c.first_appearance?.chapter ?? quotes[0]?.chapter ?? 1, quotes };
-    })
-    .sort((a, b) => a.firstChapter - b.firstChapter || a.name.localeCompare(b.name));
+    });
+  // In the book's order: most named first (owner, 2026-11-04; src/lib/character-order.ts).
+  characters = inBookOrder(all, (c) => c.slug);
   return characters;
 }
 
@@ -417,7 +419,7 @@ export async function clearPick(sql: Sql, fid: number, entityId: string): Promis
  */
 export function composerPicks(picks: MyPick[]): { styles: MyPick[]; characters: MyPick[]; places: MyPick[] } {
   const live = picks.filter((p) => p.available);
-  return { styles: live.filter((p) => p.kind === 'style'), characters: live.filter((p) => p.kind === 'character'), places: live.filter((p) => p.kind === 'location') };
+  return { styles: live.filter((p) => p.kind === 'style'), characters: inBookOrder(live.filter((p) => p.kind === 'character'), (p) => p.entity), places: live.filter((p) => p.kind === 'location') };
 }
 
 // ---------------------------------------------------------------------------------------------

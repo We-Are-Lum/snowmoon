@@ -9,7 +9,7 @@ import { SHARE_WORDING } from './share-wording';
  * model by Anthropic) for the owner's review.
  */
 const d = (k: Parameters<typeof dateText>[0], time = false) => dateText(k, { time });
-/** The characters' call names, in the owner's order, from CHALLENGE.characters (their files' slugs). */
+/** The characters' call names, most named in the book first, from CHALLENGE.characters (their files' slugs). */
 const callNames = () => CHALLENGE.characters.map((s) => s.charAt(0).toUpperCase() + s.slice(1));
 const listed = (xs: string[], last = 'or') => (xs.length < 2 ? xs.join('') : `${xs.slice(0, -1).join(', ')} ${last} ${xs[xs.length - 1]}`);
 const numberWord = (n: number) => ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'][n] ?? String(n);
