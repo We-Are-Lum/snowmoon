@@ -24,7 +24,7 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { DEFAULT_TEMPLATES } from '../src/templates';
 import { LiveScreen } from '../src/components/live-screen';
-import { AGENTS, CHALLENGE, CHAT, IMAGES, REPO_URL, imagesDailySpendCapUsd } from '../src/lib/config';
+import { AGENTS, CHALLENGE, CHAT, CLOSED_PROVIDERS, IMAGES, REPO_URL, imagesDailySpendCapUsd } from '../src/lib/config';
 import { challengeOpenNow, entriesOpen } from '../src/lib/challenge/rules';
 import { challengeVisibleTo } from '../src/lib/challenge/visibility';
 import { NOTICE_REVIEW, currentNoticeItems, noticeKey } from '../src/lib/chat/notice';
@@ -1926,13 +1926,14 @@ add({
 add({
   id: 'P6t',
   principle: 6,
-  name: 'model choice is on only while Privacy §4 and §7 and the consent screen name each offered closed model\'s maker, through Vercel AI Gateway',
+  name: 'model choice is on only while Privacy §4 and §7 (with each maker\'s retention) and the consent screen name each offered closed model\'s maker, through Vercel AI Gateway',
   load: async () => {
     const c = json('config/consent.json');
     const w = c.versions[c.current];
     return {
       on: IMAGES.designs.modelChoice as boolean,
       providers: [...new Set(sheetModelsOffered(true).filter((m) => !m.open).map((m) => m.provider.name))] as string[],
+      retention: Object.fromEntries(Object.entries(CLOSED_PROVIDERS).map(([k, v]) => [k, v.retentionWords as string])),
       s4: (PRIVACY.sections.find((s) => s.n === 4)?.body ?? []).flat().join(' '),
       s7: (PRIVACY.sections.find((s) => s.n === 7)?.body ?? []).flat() as string[],
       consent: [w.line, w.title, ...w.text].join('\n'),
@@ -1942,7 +1943,8 @@ add({
   plant: (c) => {
     c.on = true;
     c.providers = ['OpenAI'];
-    c.s7 = ['Vercel hosts the site.'];
+    // Privacy §7 names OpenAI, but not how long it may keep them.
+    c.s7 = ['OpenAI receives, through Vercel AI Gateway, the prompt for each view. It may keep them, and does not train on them.'];
     c.consent = 'Your prompt goes to fal.ai.';
     c.s4 = 'Character sheets you publish.';
   },

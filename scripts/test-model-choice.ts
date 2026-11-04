@@ -13,8 +13,14 @@
  *  M5  the recipe lines: the closed label, the closed safety line and the can't-be-re-run line; open lines unchanged;
  *  M6  the safety line is the agreed wording, word for word;
  *  M7  the switch can't be on without Privacy (P6t) and the consent screen naming each provider;
- *  M8  a closed call sends only the prompt and pictures, with zero data retention, no prompt training and a pinned
- *      provider, and reads a recorded answer's picture and cost.
+ *  M8  a closed call sends only the prompt and pictures, asks no prompt training of both makers and zero retention of
+ *      Vertex only (as the gateway offers them), pins the provider, and reads a recorded answer's picture and cost;
+ *  M9  the closed models' notice shows once per maker, not per model;
+ *  M10 a new notice version shows it again, and a notice's words can't change without a new version;
+ *  M11 "Don't remind me again" and the 18+ answer stay on the device: no request, no request body or route reads them;
+ *  M12 the picker shows each closed model's retention label always, with the open default first (rendered);
+ *  M13 the 18+ confirmation is shown with the first notice, and both buttons wait for it (rendered);
+ *  M14 no closed-model pick goes through before 18+ is confirmed on that device.
  */
 import path from 'node:path';
 import { readdirSync, readFileSync } from 'node:fs';
@@ -22,8 +28,9 @@ import { PGlite } from '@electric-sql/pglite';
 import { PGLiteSocketServer } from '@electric-sql/pglite-socket';
 import postgres from 'postgres';
 import sharp from 'sharp';
-import { CHALLENGE, CLOSED_IMAGES, IMAGES, imagesDailySpendCapUsd } from '../src/lib/config';
+import { CHALLENGE, CLOSED_IMAGES, CLOSED_PROVIDERS, IMAGES, imagesDailySpendCapUsd } from '../src/lib/config';
 import { PRIVACY } from '../src/lib/legal';
+const IMAGE_WORDING_OPEN = 'The site’s open models (the default)';
 import { DEFAULT_SHEET_MODEL, SHEET_MODELS, oneChoice, sheetModel, sheetModelProblems, sheetModelsOffered, type SheetModel } from '../src/lib/images/sheet-models';
 import { modelChoicesFor } from '../src/lib/images/model-choice-view';
 import { closedChecksLine, checksLine, howMade, modelTerms, RERUN_LINE } from '../src/lib/images/recipe-lines';
@@ -155,6 +162,9 @@ proven(
   // In the challenge window (the free cap $15, the closed cap $5), as on 12 Nov: the window moved to now, for this test only.
   const dates = CHALLENGE.dates as { opens: string; closes: string };
   const saved = { ...dates };
+  const pub = CHALLENGE as { public: boolean };
+  const wasPublic = pub.public;
+  pub.public = true; // the owner opens the challenge (CHALLENGE.public), for this test only
   dates.opens = new Date(Date.now() - 3600_000).toISOString();
   dates.closes = new Date(Date.now() + 86400_000).toISOString();
   const cap = closedCapUsd();
@@ -193,6 +203,7 @@ proven(
     () => need(Math.min(50, 15) === 50, 'a closed cap of $50 would sit above the $15 free cap'),
   );
 
+  pub.public = wasPublic;
   // A wallet account can't use a closed model (for now); and with the switch off, no closed picture is reserved at all.
   await su('delete from studio.image_costs');
   const rw = await reserve(S, -5, closedSpend(GPT));
@@ -246,6 +257,7 @@ const w = consent.versions[consent.current];
 const today: P6tInput = {
   on: IMAGES.designs.modelChoice,
   providers: [...new Set(sheetModelsOffered(true).filter((m) => !m.open).map((m) => m.provider.name))],
+  retention: Object.fromEntries(Object.entries(CLOSED_PROVIDERS).map(([k, v]) => [k, v.retentionWords as string])),
   s4: (PRIVACY.sections.find((s) => s.n === 4)?.body ?? []).flat().join(' '),
   s7: (PRIVACY.sections.find((s) => s.n === 7)?.body ?? []).flat() as string[],
   consent: [w.line, w.title, ...w.text].join('\n'),
@@ -255,9 +267,15 @@ const draft = read('docs/legal/remix-model-choice-draft.md');
 const quoted = (label: string) => (draft.split(`<!-- ${label} -->`)[1] ?? '').split('<!-- end -->')[0].replace(/^\s*>\s?/gm, '').replace(/\s+/g, ' ').trim();
 const withDraft: P6tInput = { ...today, on: true, s4: `${today.s4} ${quoted('privacy-4')}`, s7: [...today.s7, quoted('privacy-7')], consent: `${today.consent}\n${quoted('consent')}` };
 proven(
-  'M7 the switch can\'t be on without Privacy §4, §7 and the consent screen naming each provider (P6t)',
-  () => [...p6tProblems(today), ...p6tProblems(withDraft), ...need(quoted('privacy-7').length > 0 && quoted('consent').length > 0, 'the draft\'s quoted lines are missing')],
-  () => p6tProblems({ ...today, on: true }),
+  'M7 the switch can\'t be on without Privacy §4, §7 (with each maker\'s retention) and the consent screen naming each provider (P6t)',
+  () => [
+    ...p6tProblems(today),
+    ...p6tProblems(withDraft),
+    ...need(quoted('privacy-7').length > 0 && quoted('consent').length > 0, 'the draft\'s quoted lines are missing'),
+    ...need(today.providers.includes('OpenAI') && today.providers.includes('Google'), `offered makers: ${today.providers.join(', ')}`),
+  ],
+  // Planted: the switch on with every line in place but OpenAI's retention ("up to 30 days") left out of §7.
+  () => p6tProblems({ ...withDraft, s7: withDraft.s7.map((u) => u.replace(/up to 30 days/g, 'a while')) }),
 );
 
 // --- M8: a closed call, on stand-ins -----------------------------------------------------------------------------
@@ -265,11 +283,13 @@ proven(
   const { closedRequest, parseClosed, hasC2pa, toView } = await import('../src/lib/images/closed');
   const png = await sharp({ create: { width: 1024, height: 1536, channels: 3, background: { r: 20, g: 30, b: 40 } } }).png().toBuffer();
   const front = await sharp({ create: { width: 576, height: 768, channels: 3, background: { r: 1, g: 2, b: 3 } } }).jpeg().toBuffer();
-  const callProblems = (r: ReturnType<typeof closedRequest>, provider: string) => {
+  // What the gateway offers per model (has_zdr, has_no_training): no prompt training for both; zero retention for Vertex only.
+  const callProblems = (r: ReturnType<typeof closedRequest>, provider: string, zdr = provider === 'vertex') => {
     const s = JSON.stringify(r.body).replace(/data:image\/[a-z]+;base64,[A-Za-z0-9+/=]+/g, 'data:…');
     const g = (r.body.providerOptions as { gateway?: Record<string, unknown> } | undefined)?.gateway ?? {};
     return [
-      ...need(g.zeroDataRetention === true && g.disallowPromptTraining === true, 'zero data retention or no prompt training not asked'),
+      ...need(g.disallowPromptTraining === true, 'no prompt training not asked'),
+      ...need(zdr ? g.zeroDataRetention === true : g.zeroDataRetention === undefined, zdr ? 'zero data retention not asked of Vertex' : 'zero data retention asked where the gateway offers none (the call would fail)'),
       ...need(JSON.stringify(g.only) === JSON.stringify([provider]), `provider not pinned to ${provider}`),
       ...need(!/"user":|"fid"|6786|ip_address|"safety_identifier"/i.test(s), 'something about the person is sent'),
     ];
@@ -293,7 +313,123 @@ proven(
   real.push(...need(refused, 'a refusal by the provider is not an error'));
   const planted = { ...closedRequest(GPT, 'front', 'p', null) };
   planted.body = { ...planted.body, user: 'fid:6786', providerOptions: { gateway: { disallowPromptTraining: true } } };
-  proven('M8 a closed call sends only the prompt and pictures, asks for no retention and no training, pins the provider; recorded answers read', () => real, () => callProblems(planted, 'openai'));
+  proven('M8 a closed call sends only the prompt and pictures, asks what the gateway offers (no training; zero retention on Vertex), pins the provider; recorded answers read', () => real, () => callProblems(planted, 'openai'));
+}
+
+// --- M9 to M14: the closed models' notice, the label and the 18+ box (src/lib/images/model-notice.ts) -------------------
+{
+  const { noticeFor, answerNotice, mayPick, NOTICE_KEY, ADULT_KEY, noticeWordsText } = await import('../src/lib/images/model-notice');
+  const { createHash } = await import('node:crypto');
+  const { execFileSync } = await import('node:child_process');
+  // Rendered in a child process without --conditions=react-server (scripts/lib/model-choice-render.tsx).
+  const R = JSON.parse(execFileSync(path.join(ROOT, 'node_modules/.bin/tsx'), [path.join(ROOT, 'scripts/lib/model-choice-render.tsx')], { cwd: ROOT, encoding: 'utf8' })) as {
+    choices: { open: boolean; maker: string | null; name: string }[]; picker: string; pickerNoLabels: string; noticeFirst: string; noticeLater: string;
+  };
+  const { MODEL_NOTICES, ADULT_CONFIRM } = await import('../src/lib/legal');
+  const memStore = (init: Record<string, string> = {}) => {
+    const m = new Map(Object.entries(init));
+    return { get: (k: string) => m.get(k) ?? null, set: (k: string, v: string) => void m.set(k, v), m };
+  };
+  // Every network door counted while the notice logic runs: none may open.
+  let requests = 0;
+  const g = globalThis as unknown as { fetch: typeof fetch; XMLHttpRequest?: unknown };
+  const realFetch = g.fetch;
+  g.fetch = (async () => {
+    requests++;
+    return new Response('{}');
+  }) as typeof fetch;
+
+  // M9: once per maker. Two picks of models by one maker, then the first again: one notice.
+  const shows = (keyOf: (maker: string, model: string) => string) => {
+    const st = memStore({ [ADULT_KEY]: '1' });
+    const seen = new Set<string>();
+    let n = 0;
+    for (const [maker, model] of [['OpenAI', 'gpt-image-2.5-sunburst'], ['OpenAI', 'gpt-image-stand-in'], ['OpenAI', 'gpt-image-2.5-sunburst'], ['Google', 'gemini-3.1-flash-image']]) {
+      const k = keyOf(maker, model);
+      if (noticeFor(k, st, seen).show) {
+        n++;
+        answerNotice(k, 'ok', false, st, seen);
+      }
+    }
+    return need(n === 2, `${n} notices for two makers`);
+  };
+  proven('M9 the notice shows once per maker (provider), not per model', () => shows((maker) => maker), () => shows((_maker, model) => model));
+
+  // M10: "Don't remind me again" holds until the maker's notice version goes up; and the words match that version.
+  const vProblems = (bump: number) => {
+    const st = memStore({ [ADULT_KEY]: '1' });
+    const seen = new Set<string>();
+    answerNotice('OpenAI', 'never', false, st, seen);
+    const p = need(!noticeFor('OpenAI', st, new Set()).show, 'shown again after "Don\'t remind me again", same version');
+    const prov = CLOSED_PROVIDERS.OpenAI as { noticeVersion: number };
+    const was = prov.noticeVersion;
+    prov.noticeVersion = was + bump;
+    p.push(...need(noticeFor('OpenAI', st, new Set()).show, 'not shown again after the version went up'));
+    prov.noticeVersion = was;
+    return p;
+  };
+  const sha12 = (t: string) => createHash('sha256').update(t).digest('hex').slice(0, 12);
+  const wordsMatch = (text: (p: string) => string) => Object.entries(CLOSED_PROVIDERS).flatMap(([p, v]) => need(sha12(text(p)) === v.noticeWords, `${p}'s notice words changed without a new noticeVersion (now ${sha12(text(p))})`));
+  proven(
+    'M10 a new notice version shows it again; its words are the ones that version covers',
+    () => [...vProblems(1), ...wordsMatch(noticeWordsText)],
+    () => [...vProblems(0), ...wordsMatch((p) => `${noticeWordsText(p)} (changed)`)],
+  );
+
+  // M11: answers stay on the device. Nothing is requested, and no request body or route reads them.
+  const sentProblems = (body: string) => {
+    const before = requests;
+    const st = memStore();
+    answerNotice('Google', 'never', true, st, new Set());
+    return [
+      ...need(requests === before, `${requests - before} requests while answering the notice`),
+      ...need(st.m.get(ADULT_KEY) === '1' && st.m.get(NOTICE_KEY('Google')) === String(CLOSED_PROVIDERS.Google.noticeVersion), 'the answers were not kept on the device'),
+      ...need(!/adult|model-notice|NOTICE_KEY|ADULT_KEY/.test(body), 'a request body carries the notice answers'),
+    ];
+  };
+  const noticeSrc = read('src/lib/images/model-notice.ts') + read('src/components/model-picker.tsx');
+  const bodies = [...formSrc.matchAll(/body: JSON\.stringify\(([\s\S]*?)\),\n/g)].map((m) => m[1]).join('\n');
+  const routes = sampleSrc + routeSrc;
+  proven(
+    'M11 "Don\'t remind me again" and the 18+ answer are kept on the device only: no request, and no code that could send them',
+    () => [...sentProblems(bodies + routes), ...need(!/\bfetch\(|authFetch|sendBeacon|XMLHttpRequest|WebSocket/.test(noticeSrc), 'the notice code can make a request')],
+    () => sentProblems(`${bodies} { adult: store.get(ADULT_KEY) }`),
+  );
+
+  // M12: the label beside each closed model, always; and the open default listed first (rendered).
+  const labelProblems = (html: string) => {
+    const p: string[] = [];
+    for (const m of R.choices.filter((c) => !c.open)) p.push(...need(html.includes(MODEL_NOTICES[m.maker as keyof typeof MODEL_NOTICES].label), `no retention label for ${m.name}`));
+    const first = html.indexOf('<li>'), open = html.indexOf(IMAGE_WORDING_OPEN);
+    p.push(...need(first >= 0 && open > first && open < html.indexOf('<li>', first + 1), 'the first row is not the open default'));
+    return p;
+  };
+  proven('M12 the picker shows each closed model\'s retention label always, with the open default first', () => [...labelProblems(R.picker), ...need(R.choices.some((c) => c.maker === 'OpenAI') && R.choices.some((c) => c.maker === 'Google'), 'both closed makers offered')], () => labelProblems(R.pickerNoLabels));
+
+  // M13: the 18+ box shows with the first notice a device sees, and both buttons wait for it.
+  const firstNotice = (store: ReturnType<typeof memStore>) => {
+    const n = noticeFor('OpenAI', store, new Set());
+    const html = n.askAdult ? R.noticeFirst : R.noticeLater;
+    return [...need(n.show && n.askAdult, 'the first notice does not ask 18+'), ...need(html.includes(ADULT_CONFIRM.box.replace(/'/g, '&#x27;')) && (html.match(/disabled=""/g) ?? []).length === 2, 'the box is missing, or a button works without it')];
+  };
+  proven('M13 the 18+ confirmation is shown with the first closed-model notice', () => firstNotice(memStore()), () => firstNotice(memStore({ [ADULT_KEY]: '1' })));
+
+  // M14: no closed pick before the box is ticked on this device, even if the notice was dismissed before.
+  const gate = (answer: typeof answerNotice) => {
+    const st = memStore({ [NOTICE_KEY('OpenAI')]: String(CLOSED_PROVIDERS.OpenAI.noticeVersion) });
+    const seen = new Set<string>();
+    const p = need(!mayPick('OpenAI', st, seen), 'a closed model can be picked before 18+ is confirmed');
+    answer('OpenAI', 'ok', false, st, seen);
+    p.push(...need(!mayPick('OpenAI', st, seen) && st.m.get(ADULT_KEY) !== '1', 'answering without the box let the pick through'));
+    answer('OpenAI', 'ok', true, st, seen);
+    p.push(...need(mayPick('OpenAI', st, seen), 'ticked and answered, still not allowed'));
+    p.push(...need(/disabled=\{[^}]*!modelReady\}/.test(formSrc) && /if \(!answerNotice\(/.test(formSrc), 'the form does not hold Generate until the notice is answered'));
+    return p;
+  };
+  // Planted: an answer that skips the 18+ box.
+  const skipping: typeof answerNotice = (pr, b, _t, st, seen) => answerNotice(pr, b, true, st, seen);
+  proven('M14 no closed-model pick goes through before 18+ is confirmed on that device', () => gate(answerNotice), () => gate(skipping));
+  g.fetch = realFetch;
 }
 
 console.log(`\n${passed} passed, ${failed.length} failed`);

@@ -16,6 +16,15 @@ no visitor uses Gemini). This note is about **model choice for remixers**, where
 the website and the picture is made by a closed model (`IMAGES.designs.modelChoice`, off; Gemini also behind
 `CLOSED_IMAGES.geminiAgeReadingAccepted`, false).
 
+
+> **Decided by the owner, 2026-11-04.** Gemini is allowed for remixers (`CLOSED_IMAGES.geminiAgeReadingAccepted: true`).
+> His reason: the Terms already require 18+ to sign in (§4), and only signed-in people can generate. With it, one 18+
+> confirmation, on the same screen as the first closed-model notice and remembered on the device only (no server
+> storage, no migration; Privacy §3 lists it). That is a reminder of the Terms' rule at the point of use, not a
+> verification: the server can't check it. Whether it meets OpenAI's minors clause (§3.3(c) below) is left to the
+> owner's reading. Options (b) and (c) below, and the stored confirmation, are not built. See
+> `remix-model-choice-draft.md` v2.
+
 ## 1. Our Terms, "Who can use it" (§4), word for word
 
 `src/lib/legal.ts` on `origin/main` and on this branch (the same words), live at <https://snowmoon.party/terms>, read
