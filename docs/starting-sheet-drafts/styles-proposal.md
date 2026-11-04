@@ -10,6 +10,20 @@ is AI-made and keeps that label wherever it is used.
 Plan file: [`styles-plan.json`](styles-plan.json). Every number below comes from
 `npm run seed:designs -- --bases-plan`, which reads that file and calls nothing (no model, database or network).
 
+## Owner's decisions, 2026-11-04, latest (recorded)
+
+- **Rethink: three design directions, not three finishes.** Every Zei front so far was the same design with a different
+  finish, because each was edited from the original sheet. The directions are in
+  [zei-directions.md](zei-directions.md): **1. Animated series** (fixed, from the owner's own reference picture, made with
+  Midjourney on a paid plan, "Brought in"), **2. Grounded**, **3. Bold reimagining**, each made from text (or, for
+  Animated series, from a crop of the reference) with Gemini and with GPT. $0.72238 spent of a $1 cap. Once the owner
+  picks, the other characters get the same three, then side and back views.
+- **Neon night is dropped from the group for now** (owner: its text asks for cyan and magenta, and that's all it gives).
+  Its four drafts stay unpublished.
+- **The 12 closed drafts of 2026-11-03 are never published.** The seed script refuses them by sha256
+  (`NEVER_PUBLISH` in `src/lib/challenge/bases.ts`). Any closed picture that is published is made fresh under the new
+  settings.
+
 ## Owner's decisions, 2026-11-04 (recorded)
 
 - **Style test approved, capped at $0.35, drafts only.** Done: [styles-test.md](styles-test.md), **$0.08879 spent**.
@@ -60,7 +74,7 @@ original drawing.
 So **none of today's styles gives a painted look or a 3D look**, and three bases "clearly different from each other"
 need new styles with stronger texts, and a small style test first to see whether each model really follows them.
 
-## The group: eight styles to choose from
+## The group: styles to choose from (seven since Neon night was dropped; Animated series proposed in zei-directions.md)
 
 Five exist; three are new. Two of the new ones (Gouache, Neon night) are made with a closed model by Google and labelled so. `core` ("warm light") stays
 published on the site but is left out of the group: it is Bolder with warm light, and in the drafts it turned Deluin's
@@ -75,7 +89,7 @@ tunic yellow.
 | 5 | **Quiet** | muted, empty space | Z-Image Turbo, open weights | 4, [published](https://pictures.snowmoon.party/images/readers/794beb09bbdb5eedcde517084f7a7e31.jpg). Front: [Zei](bases/zei-front-quiet-edit.jpg), [Bai](bases/bai-front-quiet-edit.jpg) | Muted tones and plain backgrounds, the focus on faces and posture. (Its Zei draft lost the jacket's front.) |
 | 6 | **Miniature** (new) | a photographed 3D model | Z-Image Turbo, open weights | 4 to make; test front: [Zei](styles-test/zei-front-miniature-open.jpg) | The only 3D, photographic look: a painted figurine under studio light. |
 | 7 | **Gouache** (new) | painted, no outlines | **Gemini 3.1 Flash Image, a closed model by Google** | 4 to make; test front: [Zei](styles-test/zei-front-gouache-gemini.jpg) (and [by the open model](styles-test/zei-front-gouache-open.jpg), which doesn't paint) | The only one with no ink outlines: opaque paint and paper grain. |
-| 8 | **Neon night** (new) | night light, glow, reflections | **Gemini 3.1 Flash Image, a closed model by Google** (owner, 2026-11-04) | 4 made as drafts: [neon-night-samples.md](neon-night-samples.md) | The only night palette: lit by glowing panels, wet reflections, rim light. |
+| ~~8~~ | ~~**Neon night**~~ (dropped 2026-11-04) | night light, glow, reflections | Gemini 3.1 Flash Image, a closed model by Google | 4 drafts, unpublished: [neon-night-samples.md](neon-night-samples.md) | The only night palette: lit by glowing panels, wet reflections, rim light. |
 
 The new texts, each under the site's 600 characters, naming no artist, studio or film:
 

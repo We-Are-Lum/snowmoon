@@ -58,15 +58,6 @@
       "samples": 4,
       "samples_made": false,
       "text": "Painted illustration in opaque gouache on textured paper: visible flat brush strokes and dry-brush edges, soft shapes with no ink outlines, a limited warm palette with a few saturated accents, gentle daylight, the paper's grain showing through, clear readable faces and hands."
-    },
-    {
-      "name": "Neon night",
-      "status": "4 drafts made (Google)",
-      "kind": "night light, glow and reflections",
-      "model": "gemini-3.1-flash-image",
-      "samples": 4,
-      "samples_made": true,
-      "text": "Painted digital illustration at night: deep blue and violet shadows, light from glowing coloured panels in cyan and magenta, glossy wet reflections, strong rim light on figures, high contrast, crisp edges on figures and a soft glow around lights, clear readable faces and hands."
     }
   ],
   "style_test": [
@@ -89,11 +80,6 @@
       "style": "Gouache",
       "model": "flux2-klein-4b-edit",
       "what": "Zei front from the original sheet (does the open model paint? decides the fallback)"
-    },
-    {
-      "style": "Neon night",
-      "model": "gemini-3.1-flash-image",
-      "what": "not made: replaced by the four samples (neon-night-samples.md)"
     }
   ],
   "plans": {
@@ -133,5 +119,12 @@
     }
   },
   "retake_share": 0.5,
-  "style_test_results": "styles-test.md and styles-test/ledger.json (2026-11-03): three fronts made for $0.08879; the two GPT Image 2.5 Sunburst rows refused before any call (no ZDR on the gateway's OpenAI endpoint)."
+  "style_test_results": "styles-test.md and styles-test/ledger.json (2026-11-03): three fronts made for $0.08879; the two GPT Image 2.5 Sunburst rows refused before any call (no ZDR on the gateway's OpenAI endpoint).",
+  "dropped": [
+    {
+      "name": "Neon night",
+      "when": "2026-11-04",
+      "why": "owner: its text asks for cyan and magenta, and that's all it gives. Its four drafts stay in neon-night-samples.md, unpublished."
+    }
+  ]
 }

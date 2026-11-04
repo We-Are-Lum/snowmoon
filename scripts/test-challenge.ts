@@ -187,7 +187,16 @@ proof('two entries for one person and character are caught', (() => {
   check('a style with one closed-model sample is refused while closedBasesAllowed is false, naming the model and its maker', (BA.closedStyleRefusal(style('z-image-turbo', 'gemini-3.1-flash-image'), false) ?? '').includes('Gemini 3.1 Flash Image, a closed model by Google'));
   check('once closedBasesAllowed is true, a closed-model style is accepted; an unlisted model still is not', BA.closedStyleRefusal(style('gemini-3.1-flash-image'), true) === null && /not on the model list/.test(BA.closedStyleRefusal(style('some-new-model'), true) ?? ''));
   proof('a closed-model style published before the reread is caught', BA.closedStyleRefusal(style('gpt-image-2.5-sunburst'), false) !== null);
+  // The 12 closed drafts of 2026-11-03: never published (owner, 2026-11-04).
+  check('NEVER_PUBLISH holds the 12 drafts, each by its JPEG and its original PNG (24 sha256s)', BA.NEVER_PUBLISH.size === 24);
+  const draftJpeg = '5326c6f92812ede7d9390081c912ad02e1dab7c78ecc4ca4a2a6a22a841dfd7c'; // bases/zei-front-closed-gpt.jpg
+  const draftPng = 'aa17a0891b8116a6a9bc20eaed724cebf45318d6ba5113e33ea79f495253a2f3'; // bases/zei-front-closed-gemini.jpg's PNG
+  const pic = (sha: string, orig?: string) => ({ url: 'u', sha256: sha, recipe: { ...recipe('flux2-klein-4b-edit'), settings: orig ? { converted: { sha256: orig } } : {} } });
+  proof('violation: one of the drafts as a sheet\'s side view is refused', (BA.neverPublishRefusal({ samples: [], views: { front: pic('b'.repeat(64)), side: pic(draftJpeg) } }) ?? '').includes(draftJpeg));
+  proof('violation: a re-encoded draft, named by its original PNG in the recipe, is refused', BA.neverPublishRefusal({ samples: [pic('c'.repeat(64), draftPng)], views: {} }) !== null);
+  check('a fresh picture is not refused', BA.neverPublishRefusal({ samples: [pic('d'.repeat(64))], views: { front: pic('e'.repeat(64)) } }) === null);
   const seedSrc = read('scripts/seed-designs.ts');
+  check('the seed script\'s publish path calls neverPublishRefusal before it uploads or writes', seedSrc.includes('neverPublishRefusal(') && seedSrc.indexOf('neverPublishRefusal(') < seedSrc.indexOf('samples.map(put)') && seedSrc.indexOf('neverPublishRefusal(') < seedSrc.indexOf('urls[p.slot] = await put(p)'));
   check('the seed script\'s publish path calls closedStyleRefusal before it writes a style', seedSrc.includes('closedStyleRefusal(') && seedSrc.lastIndexOf('closedStyleRefusal(') < seedSrc.indexOf("kind: 'style', styleName"));
   const B1 = '11111111-1111-4111-8111-111111111111', B2 = '22222222-2222-4222-8222-222222222222';
   const step = (elementId: string) => ({ elementId, versionId: `${elementId.slice(0, 8)}-0000-4000-8000-000000000000` });

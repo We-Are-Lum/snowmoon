@@ -73,6 +73,7 @@ export async function retentionRefusal(model: ClosedImageModel, f: Fetch = fetch
   return (await retentionCheck(model, f)).refusal;
 }
 
+/** GPT Image 2.5 Sunburst from text alone: the reserve stays $0.08 (the drafts' edits, with a picture in, cost $0.0467). */
 /**
  * Worst case for a Gemini picture made from text alone (a style sample): the gateway's list price, $0.067 per 1K image,
  * plus its input tokens at $0.50 per million (a 600-character prompt is a few hundred) and a margin: $0.075. With a
@@ -88,7 +89,12 @@ export function closedImageRequest(model: ClosedImageModel, prompt: string, ref:
   const m = CLOSED_IMAGE_MODELS[model];
   const gateway = gatewayOptions(model);
   if (!ref) {
-    if (model !== 'gemini-3.1-flash-image') throw new Error(`${model}: text-only pictures are made with Gemini only here`);
+    if (model === 'gpt-image-2.5-sunburst') {
+      const settings = { size: aspect === '16:9' ? '1536x1024' : '1024x1536', quality: 'high', n: 1, output_format: 'png' };
+      const body = { model: m.slug, prompt, ...settings, providerOptions: { gateway } };
+      assertGatewayOptions(model, body);
+      return { url: `${GATEWAY}/images/generations`, body, settings: { ...settings, gateway } };
+    }
     const settings = { modalities: ['text', 'image'], aspect_ratio: aspect };
     const body = { model: m.slug, modalities: settings.modalities, messages: [{ role: 'user', content: [{ type: 'text', text: prompt }] }],
       providerOptions: { gateway, google: { imageConfig: { aspectRatio: aspect } } } };

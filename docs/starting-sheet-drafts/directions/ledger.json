@@ -1,0 +1,2244 @@
+{
+ "cap_usd": 1,
+ "calls": [
+  {
+   "char": "zei",
+   "direction": "animated",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "from": "crop:zei",
+   "kind": "prompt-check",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 0.000147825,
+   "worstUsd": 0.0015,
+   "at": "2026-11-04T07:38:26.211Z"
+  },
+  {
+   "char": "zei",
+   "direction": "animated",
+   "model": "gemini-3.1-flash-image",
+   "from": "crop:zei",
+   "kind": "image",
+   "file": "directions/zei-animated-gemini.jpg",
+   "sha256": "d036d754861213f8d4f313f69a0bfd49cb9dee0796aa970234af0e689f02ad1d",
+   "closed_model": true,
+   "maker": "Google",
+   "costUsd": 0.0676675,
+   "worstUsd": 0.09,
+   "recipe": {
+    "prompt": "The same person as in the reference picture, full body from head to shoes, standing in a relaxed three-quarter stance with some personality, plain light grey background. Keep the face, hair, skin and clothes the same.\n\nAnimated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands.\n\na young man of eighteen, slim, light golden-tan skin, tall spiky black hair swept up and back with a broad teal-blue streak and close-cut sides, warm brown eyes under strong dark eyebrows, a confident half-smile, wearing a loose orange zip jacket with the sleeves pushed up over a plain black crew-neck top, a chunky dark wrist display with a glowing teal face, a thin dark band around his throat, dark straight trousers and white sneakers\n\nNo text, no lettering, no signs with words.",
+    "model": "gemini-3.1-flash-image",
+    "endpoint": "google/gemini-3.1-flash-image",
+    "host": "Vercel AI Gateway",
+    "settings": {
+     "modalities": [
+      "text",
+      "image"
+     ],
+     "aspect_ratio": "3:4",
+     "gateway": {
+      "only": [
+       "vertex"
+      ],
+      "zeroDataRetention": true,
+      "disallowPromptTraining": true
+     },
+     "retention": {
+      "provider": "vertex",
+      "zero_data_retention": true,
+      "no_training": true,
+      "endpoint_list_read_at": "2026-11-04T07:38:26.245Z"
+     },
+     "converted": {
+      "from": "image/png",
+      "sha256": "c3cc5628dfa7689567dc2b23c580fb2b9b140986db593860088e666e3f4da372",
+      "to": "jpeg",
+      "resized_to": {
+       "width": 576,
+       "height": 768
+      },
+      "fit": "contain, padded with the picture's own corner colour"
+     }
+    },
+    "seed": null,
+    "request_id": "gen_01M6JQXD0WHKQN6FJB0M171SKG",
+    "cost_usd": 0.0677,
+    "made_at": "2026-11-04T07:38:26.212Z",
+    "width": 576,
+    "height": 768,
+    "references": [
+     {
+      "sha256": "7753b06ecaaafb01aa963cf90b07b819029e98ff7aa662b3f0d676769aec2245",
+      "what": "Brought in: a crop (box {\"left\":60,\"top\":0,\"width\":1400,\"height\":1438}) of the owner's picture made outside the site with Midjourney, a closed model by Midjourney, on a paid plan (original sha256 b955b192ae0d6b7474bef82fb795996146c75fe3f205c61db7fd8e6375421e4f); its prompt: not given yet"
+     }
+    ],
+    "style": {
+     "version_id": "unpublished: docs/starting-sheet-drafts/directions/plan.json",
+     "title": "Animated series",
+     "text": "Animated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands."
+    },
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "not run"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line",
+      "style text",
+      "character descriptor"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    }
+   },
+   "response_meta": {
+    "id": "gen_01M6JQXD0WHKQN6FJB0M171SKG",
+    "model": "google/gemini-3.1-flash-image",
+    "usage": {
+     "prompt_tokens": 1335,
+     "completion_tokens": 1120,
+     "total_tokens": 2455,
+     "cost": 0.0676675,
+     "is_byok": false,
+     "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0
+     },
+     "cost_details": {
+      "upstream_inference_cost": null,
+      "upstream_inference_prompt_cost": 0,
+      "upstream_inference_completions_cost": 0
+     },
+     "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "image_tokens": 0
+     },
+     "cache_creation_input_tokens": 0,
+     "market_cost": 0.0676675,
+     "gateway_cost": 0.0676675
+    },
+    "provider_metadata": {
+     "vertex": {
+      "promptFeedback": null,
+      "groundingMetadata": null,
+      "urlContextMetadata": null,
+      "safetyRatings": null,
+      "usageMetadata": {
+       "promptTokenCount": 1335,
+       "candidatesTokenCount": 1120,
+       "totalTokenCount": 2455,
+       "trafficType": "ON_DEMAND",
+       "promptTokensDetails": [
+        {
+         "modality": "TEXT",
+         "tokenCount": 215
+        },
+        {
+         "modality": "IMAGE",
+         "tokenCount": 1120
+        }
+       ],
+       "candidatesTokensDetails": [
+        {
+         "modality": "IMAGE",
+         "tokenCount": 1120
+        }
+       ]
+      },
+      "finishMessage": null,
+      "serviceTier": null
+     },
+     "gateway": {
+      "routing": {
+       "originalModelId": "google/gemini-3.1-flash-image",
+       "resolvedProvider": "vertex",
+       "fallbacksAvailable": [],
+       "planningReasoning": "Provider set restricted to: vertex. System credentials planned for: vertex. ZDR requested: all 1 attempts support ZDR. Execution order: vertex(system). Disallow prompt training requested: all 1 attempts disallow prompt training",
+       "canonicalSlug": "google/gemini-3.1-flash-image",
+       "finalProvider": "vertex",
+       "modelAttemptCount": 1,
+       "modelAttempts": [
+        {
+         "canonicalSlug": "google/gemini-3.1-flash-image",
+         "success": true,
+         "providerAttemptCount": 1,
+         "providerAttempts": [
+          {
+           "provider": "vertex",
+           "credentialType": "system",
+           "success": true,
+           "startTime": 1793777906750,
+           "endTime": 1793777914470,
+           "statusCode": 200,
+           "providerResponseId": "8uDqatPONpLq_dQP_oGewAc"
+          }
+         ]
+        }
+       ],
+       "totalProviderAttemptCount": 1,
+       "affinity": {
+        "outcome": "skipped_below_min_prefix"
+       },
+       "clientSessionId": "d7cbaa65aacc6c24829e042fef89f19c",
+       "clientSessionIdSource": "fingerprint"
+      },
+      "cost": "0.0676675",
+      "marketCost": "0.0676675",
+      "surchargeCost": "0",
+      "gatewayCost": "0.0676675",
+      "inferenceCost": "0.0676675",
+      "inputInferenceCost": "0.0006675",
+      "outputInferenceCost": "0.067",
+      "enabledZeroDataRetention": true,
+      "enabledDisallowPromptTraining": true,
+      "generationId": "gen_01M6JQXD0WHKQN6FJB0M171SKG"
+     }
+    }
+   },
+   "at": "2026-11-04T07:38:26.212Z"
+  },
+  {
+   "char": "zei",
+   "direction": "animated",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "from": "crop:zei",
+   "kind": "prompt-check",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 0.000133425,
+   "worstUsd": 0.0015,
+   "at": "2026-11-04T07:38:37.518Z"
+  },
+  {
+   "char": "zei",
+   "direction": "animated",
+   "model": "gpt-image-2.5-sunburst",
+   "from": "crop:zei",
+   "kind": "image",
+   "file": "directions/zei-animated-gpt.jpg",
+   "sha256": "131f235227a54b06f6f11253f37a09b5001bf5f72326a6c9949a21800990dc7c",
+   "closed_model": true,
+   "maker": "OpenAI",
+   "costUsd": 0.050477,
+   "worstUsd": 0.08,
+   "recipe": {
+    "prompt": "The same person as in the reference picture, full body from head to shoes, standing in a relaxed three-quarter stance with some personality, plain light grey background. Keep the face, hair, skin and clothes the same.\n\nAnimated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands.\n\na young man of eighteen, slim, light golden-tan skin, tall spiky black hair swept up and back with a broad teal-blue streak and close-cut sides, warm brown eyes under strong dark eyebrows, a confident half-smile, wearing a loose orange zip jacket with the sleeves pushed up over a plain black crew-neck top, a chunky dark wrist display with a glowing teal face, a thin dark band around his throat, dark straight trousers and white sneakers\n\nNo text, no lettering, no signs with words.",
+    "model": "gpt-image-2.5-sunburst",
+    "endpoint": "openai/gpt-image-2.5-sunburst",
+    "host": "Vercel AI Gateway",
+    "settings": {
+     "size": "1024x1536",
+     "quality": "high",
+     "n": 1,
+     "output_format": "png",
+     "gateway": {
+      "only": [
+       "openai"
+      ],
+      "disallowPromptTraining": true
+     },
+     "retention": {
+      "provider": "openai",
+      "zero_data_retention": false,
+      "no_training": true,
+      "endpoint_list_read_at": "2026-11-04T07:38:37.803Z",
+      "kept": {
+       "quote": "By default, abuse monitoring logs are generated for all API feature usage and retained for up to 30 days, unless longer retention is required by law, or is reasonably necessary to protect our services or any third party from harm.",
+       "images_row": "/v1/images/edits: abuse monitoring retention 30 days, application state retention none",
+       "source": "https://developers.openai.com/api/docs/guides/your-data",
+       "read": "2026-11-03"
+      }
+     },
+     "converted": {
+      "from": "image/png",
+      "sha256": "073a7f7e5b1afe3d895e7a53d0eaa0fc198462df2ad9223cc9e14db857bf8b6b",
+      "to": "jpeg",
+      "resized_to": {
+       "width": 576,
+       "height": 768
+      },
+      "fit": "contain, padded with the picture's own corner colour"
+     }
+    },
+    "seed": null,
+    "request_id": "gen_01M6JQXR950M4QXVXW8MVZKEGE",
+    "cost_usd": 0.0505,
+    "made_at": "2026-11-04T07:38:37.518Z",
+    "width": 576,
+    "height": 768,
+    "references": [
+     {
+      "sha256": "7753b06ecaaafb01aa963cf90b07b819029e98ff7aa662b3f0d676769aec2245",
+      "what": "Brought in: a crop (box {\"left\":60,\"top\":0,\"width\":1400,\"height\":1438}) of the owner's picture made outside the site with Midjourney, a closed model by Midjourney, on a paid plan (original sha256 b955b192ae0d6b7474bef82fb795996146c75fe3f205c61db7fd8e6375421e4f); its prompt: not given yet"
+     }
+    ],
+    "style": {
+     "version_id": "unpublished: docs/starting-sheet-drafts/directions/plan.json",
+     "title": "Animated series",
+     "text": "Animated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands."
+    },
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "not run"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line",
+      "style text",
+      "character descriptor"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    }
+   },
+   "response_meta": {
+    "created": 1793777943,
+    "usage": {
+     "total_tokens": 2621,
+     "input_tokens": 1249,
+     "output_tokens": 1372,
+     "input_tokens_details": {
+      "text_tokens": 225,
+      "image_tokens": 1024
+     }
+    },
+    "providerMetadata": {
+     "openai": {
+      "images": [
+       {
+        "imageTokens": 1024,
+        "textTokens": 225,
+        "created": 1793777943,
+        "size": "1024x1536",
+        "quality": "high",
+        "background": "opaque",
+        "outputFormat": "png"
+       }
+      ]
+     },
+     "gateway": {
+      "routing": {
+       "originalModelId": "openai/gpt-image-2.5-sunburst",
+       "resolvedProvider": "openai",
+       "fallbacksAvailable": [],
+       "planningReasoning": "Provider set restricted to: openai. System credentials planned for: openai. Disallow prompt training requested: all 1 attempts disallow prompt training",
+       "canonicalSlug": "openai/gpt-image-2.5-sunburst",
+       "finalProvider": "openai",
+       "modelAttemptCount": 1,
+       "modelAttempts": [
+        {
+         "canonicalSlug": "openai/gpt-image-2.5-sunburst",
+         "success": true,
+         "providerAttemptCount": 1,
+         "providerAttempts": [
+          {
+           "provider": "openai",
+           "credentialType": "system",
+           "success": true,
+           "startTime": 1793777918277,
+           "endTime": 1793777943429,
+           "statusCode": 200
+          }
+         ]
+        }
+       ],
+       "totalProviderAttemptCount": 1
+      },
+      "cost": "0.050477",
+      "marketCost": "0.050477",
+      "surchargeCost": "0",
+      "gatewayCost": "0.050477",
+      "inferenceCost": "0.050477",
+      "inputInferenceCost": "0",
+      "outputInferenceCost": "0.050477",
+      "enabledDisallowPromptTraining": true,
+      "generationId": "gen_01M6JQXR950M4QXVXW8MVZKEGE"
+     }
+    }
+   },
+   "at": "2026-11-04T07:38:37.518Z"
+  },
+  {
+   "char": "bai",
+   "direction": "animated",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "from": "crop:bai",
+   "kind": "prompt-check",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 0.00011025,
+   "worstUsd": 0.0015,
+   "at": "2026-11-04T07:39:11.933Z"
+  },
+  {
+   "char": "bai",
+   "direction": "animated",
+   "model": "gemini-3.1-flash-image",
+   "from": "crop:bai",
+   "kind": "image",
+   "file": "directions/bai-animated-gemini.jpg",
+   "sha256": "116c5a1b7d291eb9532b90de91d9813fb93d608beb9e95211a60bbcccaa0fe90",
+   "closed_model": true,
+   "maker": "Google",
+   "costUsd": 0.0676665,
+   "worstUsd": 0.09,
+   "recipe": {
+    "prompt": "The same person as in the reference picture, full body from head to shoes, standing in a relaxed three-quarter stance with some personality, plain light grey background. Keep the face, hair, skin and clothes the same.\n\nAnimated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands.\n\na young woman of about eighteen, slim and wiry, dark brown skin, a long sleek magenta ponytail pulled high with the sides of her head shaved close, dark eyes with a sly sideways look and a small confident smile, long amber drop earrings, a sleeveless yellow-green vest open over a dark grey tank top, both arms covered in fine brown line tattoos from shoulder to wrist, a dark bracelet, a hand device held in one hand, dark trousers and boots\n\nNo text, no lettering, no signs with words.",
+    "model": "gemini-3.1-flash-image",
+    "endpoint": "google/gemini-3.1-flash-image",
+    "host": "Vercel AI Gateway",
+    "settings": {
+     "modalities": [
+      "text",
+      "image"
+     ],
+     "aspect_ratio": "3:4",
+     "gateway": {
+      "only": [
+       "vertex"
+      ],
+      "zeroDataRetention": true,
+      "disallowPromptTraining": true
+     },
+     "retention": {
+      "provider": "vertex",
+      "zero_data_retention": true,
+      "no_training": true,
+      "endpoint_list_read_at": "2026-11-04T07:39:12.044Z"
+     },
+     "converted": {
+      "from": "image/png",
+      "sha256": "7b32d824178b4f94094dce2b254d43ab0bb7ee1a34413b166781466dc037ab3e",
+      "to": "jpeg",
+      "resized_to": {
+       "width": 576,
+       "height": 768
+      },
+      "fit": "contain, padded with the picture's own corner colour"
+     }
+    },
+    "seed": null,
+    "request_id": "gen_01M6JQYSKGQP3CAKM4V3DPNTZH",
+    "cost_usd": 0.0677,
+    "made_at": "2026-11-04T07:39:11.933Z",
+    "width": 576,
+    "height": 768,
+    "references": [
+     {
+      "sha256": "a3bd0d92d7b78fd7e0b7557b5d7e982e0a8d5c0ca459e6738a16083d88009b69",
+      "what": "Brought in: a crop (box {\"left\":1460,\"top\":0,\"width\":1116,\"height\":1438}) of the owner's picture made outside the site with Midjourney, a closed model by Midjourney, on a paid plan (original sha256 b955b192ae0d6b7474bef82fb795996146c75fe3f205c61db7fd8e6375421e4f); its prompt: not given yet"
+     }
+    ],
+    "style": {
+     "version_id": "unpublished: docs/starting-sheet-drafts/directions/plan.json",
+     "title": "Animated series",
+     "text": "Animated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands."
+    },
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "not run"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line",
+      "style text",
+      "character descriptor"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    }
+   },
+   "response_meta": {
+    "id": "gen_01M6JQYSKGQP3CAKM4V3DPNTZH",
+    "model": "google/gemini-3.1-flash-image",
+    "usage": {
+     "prompt_tokens": 1333,
+     "completion_tokens": 1120,
+     "total_tokens": 2453,
+     "cost": 0.0676665,
+     "is_byok": false,
+     "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0
+     },
+     "cost_details": {
+      "upstream_inference_cost": null,
+      "upstream_inference_prompt_cost": 0,
+      "upstream_inference_completions_cost": 0
+     },
+     "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "image_tokens": 0
+     },
+     "cache_creation_input_tokens": 0,
+     "market_cost": 0.0676665,
+     "gateway_cost": 0.0676665
+    },
+    "provider_metadata": {
+     "vertex": {
+      "promptFeedback": null,
+      "groundingMetadata": null,
+      "urlContextMetadata": null,
+      "safetyRatings": null,
+      "usageMetadata": {
+       "promptTokenCount": 1333,
+       "candidatesTokenCount": 1120,
+       "totalTokenCount": 2453,
+       "trafficType": "ON_DEMAND",
+       "promptTokensDetails": [
+        {
+         "modality": "TEXT",
+         "tokenCount": 213
+        },
+        {
+         "modality": "IMAGE",
+         "tokenCount": 1120
+        }
+       ],
+       "candidatesTokensDetails": [
+        {
+         "modality": "IMAGE",
+         "tokenCount": 1120
+        }
+       ]
+      },
+      "finishMessage": null,
+      "serviceTier": null
+     },
+     "gateway": {
+      "routing": {
+       "originalModelId": "google/gemini-3.1-flash-image",
+       "resolvedProvider": "vertex",
+       "fallbacksAvailable": [],
+       "planningReasoning": "Provider set restricted to: vertex. System credentials planned for: vertex. ZDR requested: all 1 attempts support ZDR. Execution order: vertex(system). Disallow prompt training requested: all 1 attempts disallow prompt training",
+       "canonicalSlug": "google/gemini-3.1-flash-image",
+       "finalProvider": "vertex",
+       "modelAttemptCount": 1,
+       "modelAttempts": [
+        {
+         "canonicalSlug": "google/gemini-3.1-flash-image",
+         "success": true,
+         "providerAttemptCount": 1,
+         "providerAttempts": [
+          {
+           "provider": "vertex",
+           "credentialType": "system",
+           "success": true,
+           "startTime": 1793777952392,
+           "endTime": 1793777961071,
+           "statusCode": 200,
+           "providerResponseId": "IOHqatP0HpOYyOgPu5vxyAs"
+          }
+         ]
+        }
+       ],
+       "totalProviderAttemptCount": 1,
+       "affinity": {
+        "outcome": "skipped_below_min_prefix"
+       },
+       "clientSessionId": "6a2547f025bcda20e25e7a9b0f6540ce",
+       "clientSessionIdSource": "fingerprint"
+      },
+      "cost": "0.0676665",
+      "marketCost": "0.0676665",
+      "surchargeCost": "0",
+      "gatewayCost": "0.0676665",
+      "inferenceCost": "0.0676665",
+      "inputInferenceCost": "0.0006665",
+      "outputInferenceCost": "0.067",
+      "enabledZeroDataRetention": true,
+      "enabledDisallowPromptTraining": true,
+      "generationId": "gen_01M6JQYSKGQP3CAKM4V3DPNTZH"
+     }
+    }
+   },
+   "at": "2026-11-04T07:39:11.933Z"
+  },
+  {
+   "char": "bai",
+   "direction": "animated",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "from": "crop:bai",
+   "kind": "prompt-check",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 0.00013215,
+   "worstUsd": 0.0015,
+   "at": "2026-11-04T07:39:23.211Z"
+  },
+  {
+   "char": "bai",
+   "direction": "animated",
+   "model": "gpt-image-2.5-sunburst",
+   "from": "crop:bai",
+   "kind": "image",
+   "file": "directions/bai-animated-gpt.jpg",
+   "sha256": "887d94d0570101bd1aadaf8f37330e72414702192ab312289ffe032dc323be72",
+   "closed_model": true,
+   "maker": "OpenAI",
+   "costUsd": 0.0487,
+   "worstUsd": 0.08,
+   "recipe": {
+    "prompt": "The same person as in the reference picture, full body from head to shoes, standing in a relaxed three-quarter stance with some personality, plain light grey background. Keep the face, hair, skin and clothes the same.\n\nAnimated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands.\n\na young woman of about eighteen, slim and wiry, dark brown skin, a long sleek magenta ponytail pulled high with the sides of her head shaved close, dark eyes with a sly sideways look and a small confident smile, long amber drop earrings, a sleeveless yellow-green vest open over a dark grey tank top, both arms covered in fine brown line tattoos from shoulder to wrist, a dark bracelet, a hand device held in one hand, dark trousers and boots\n\nNo text, no lettering, no signs with words.",
+    "model": "gpt-image-2.5-sunburst",
+    "endpoint": "openai/gpt-image-2.5-sunburst",
+    "host": "Vercel AI Gateway",
+    "settings": {
+     "size": "1024x1536",
+     "quality": "high",
+     "n": 1,
+     "output_format": "png",
+     "gateway": {
+      "only": [
+       "openai"
+      ],
+      "disallowPromptTraining": true
+     },
+     "retention": {
+      "provider": "openai",
+      "zero_data_retention": false,
+      "no_training": true,
+      "endpoint_list_read_at": "2026-11-04T07:39:23.248Z",
+      "kept": {
+       "quote": "By default, abuse monitoring logs are generated for all API feature usage and retained for up to 30 days, unless longer retention is required by law, or is reasonably necessary to protect our services or any third party from harm.",
+       "images_row": "/v1/images/edits: abuse monitoring retention 30 days, application state retention none",
+       "source": "https://developers.openai.com/api/docs/guides/your-data",
+       "read": "2026-11-03"
+      }
+     },
+     "converted": {
+      "from": "image/png",
+      "sha256": "a6e85991944e4ba70f46fbe55d5593f9d1832b4073a4d45c96d5386de33395c6",
+      "to": "jpeg",
+      "resized_to": {
+       "width": 576,
+       "height": 768
+      },
+      "fit": "contain, padded with the picture's own corner colour"
+     }
+    },
+    "seed": null,
+    "request_id": "gen_01M6JQZ4HVXHPXH6XGG89G8D5R",
+    "cost_usd": 0.0487,
+    "made_at": "2026-11-04T07:39:23.211Z",
+    "width": 576,
+    "height": 768,
+    "references": [
+     {
+      "sha256": "a3bd0d92d7b78fd7e0b7557b5d7e982e0a8d5c0ca459e6738a16083d88009b69",
+      "what": "Brought in: a crop (box {\"left\":1460,\"top\":0,\"width\":1116,\"height\":1438}) of the owner's picture made outside the site with Midjourney, a closed model by Midjourney, on a paid plan (original sha256 b955b192ae0d6b7474bef82fb795996146c75fe3f205c61db7fd8e6375421e4f); its prompt: not given yet"
+     }
+    ],
+    "style": {
+     "version_id": "unpublished: docs/starting-sheet-drafts/directions/plan.json",
+     "title": "Animated series",
+     "text": "Animated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands."
+    },
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "not run"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line",
+      "style text",
+      "character descriptor"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    }
+   },
+   "response_meta": {
+    "created": 1793777996,
+    "usage": {
+     "total_tokens": 2400,
+     "input_tokens": 1028,
+     "output_tokens": 1372,
+     "input_tokens_details": {
+      "text_tokens": 228,
+      "image_tokens": 800
+     }
+    },
+    "providerMetadata": {
+     "openai": {
+      "images": [
+       {
+        "imageTokens": 800,
+        "textTokens": 228,
+        "created": 1793777996,
+        "size": "1024x1536",
+        "quality": "high",
+        "background": "opaque",
+        "outputFormat": "png"
+       }
+      ]
+     },
+     "gateway": {
+      "routing": {
+       "originalModelId": "openai/gpt-image-2.5-sunburst",
+       "resolvedProvider": "openai",
+       "fallbacksAvailable": [],
+       "planningReasoning": "Provider set restricted to: openai. System credentials planned for: openai. Disallow prompt training requested: all 1 attempts disallow prompt training",
+       "canonicalSlug": "openai/gpt-image-2.5-sunburst",
+       "finalProvider": "openai",
+       "modelAttemptCount": 1,
+       "modelAttempts": [
+        {
+         "canonicalSlug": "openai/gpt-image-2.5-sunburst",
+         "success": true,
+         "providerAttemptCount": 1,
+         "providerAttempts": [
+          {
+           "provider": "openai",
+           "credentialType": "system",
+           "success": true,
+           "startTime": 1793777963627,
+           "endTime": 1793777996247,
+           "statusCode": 200
+          }
+         ]
+        }
+       ],
+       "totalProviderAttemptCount": 1
+      },
+      "cost": "0.0487",
+      "marketCost": "0.0487",
+      "surchargeCost": "0",
+      "gatewayCost": "0.0487",
+      "inferenceCost": "0.0487",
+      "inputInferenceCost": "0",
+      "outputInferenceCost": "0.0487",
+      "enabledDisallowPromptTraining": true,
+      "generationId": "gen_01M6JQZ4HVXHPXH6XGG89G8D5R"
+     }
+    }
+   },
+   "at": "2026-11-04T07:39:23.211Z"
+  },
+  {
+   "char": "gladias",
+   "direction": "animated",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "from": "text",
+   "kind": "prompt-check",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 7.4175e-05,
+   "worstUsd": 0.0015,
+   "at": "2026-11-04T07:39:59.622Z"
+  },
+  {
+   "char": "gladias",
+   "direction": "animated",
+   "model": "gemini-3.1-flash-image",
+   "from": "text",
+   "kind": "image",
+   "file": "directions/gladias-animated-gemini.jpg",
+   "sha256": "aff6f24f59e5a2147f25cad9492499c1cff3770b66dd3a0973f76e84db7d9fbd",
+   "closed_model": true,
+   "maker": "Google",
+   "costUsd": 0.067108,
+   "worstUsd": 0.075,
+   "recipe": {
+    "prompt": "Character reference picture: one person, full body from head to shoes, standing in a relaxed three-quarter stance with some personality, plain light grey background.\n\nAnimated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands.\n\na man of about forty, slim and of medium height, light olive skin, short wavy chestnut-brown hair, a neatly trimmed short beard and hazel eyes, wearing a long sleeveless moss-green woven tabard with a sculpted standing collar that rises to his jaw, over a fitted cream long-sleeved bodysuit with seamless panels, a wide ochre cloth sash at the waist, slim tapered charcoal leggings, smooth seamless grey boots with thick soft soles, a thin silver band around his throat, a small earpiece and a slim pale ceramic wrist device\n\nNo text, no lettering, no signs with words.",
+    "model": "gemini-3.1-flash-image",
+    "endpoint": "google/gemini-3.1-flash-image",
+    "host": "Vercel AI Gateway",
+    "settings": {
+     "modalities": [
+      "text",
+      "image"
+     ],
+     "aspect_ratio": "3:4",
+     "gateway": {
+      "only": [
+       "vertex"
+      ],
+      "zeroDataRetention": true,
+      "disallowPromptTraining": true
+     },
+     "retention": {
+      "provider": "vertex",
+      "zero_data_retention": true,
+      "no_training": true,
+      "endpoint_list_read_at": "2026-11-04T07:39:59.655Z"
+     },
+     "converted": {
+      "from": "image/png",
+      "sha256": "32d98539b18f304e392cfb8cf562bf1cc2eaec8e826083dff5e3232d5da32896",
+      "to": "jpeg",
+      "resized_to": {
+       "width": 576,
+       "height": 768
+      },
+      "fit": "contain, padded with the picture's own corner colour"
+     }
+    },
+    "seed": null,
+    "request_id": "gen_01M6JR07VNPTJM4BG3AFETGTHE",
+    "cost_usd": 0.0671,
+    "made_at": "2026-11-04T07:39:59.622Z",
+    "width": 576,
+    "height": 768,
+    "style": {
+     "version_id": "unpublished: docs/starting-sheet-drafts/directions/plan.json",
+     "title": "Animated series",
+     "text": "Animated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands."
+    },
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "not run"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line",
+      "style text",
+      "character descriptor"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    }
+   },
+   "response_meta": {
+    "id": "gen_01M6JR07VNPTJM4BG3AFETGTHE",
+    "model": "google/gemini-3.1-flash-image",
+    "usage": {
+     "prompt_tokens": 216,
+     "completion_tokens": 1120,
+     "total_tokens": 1336,
+     "cost": 0.067108,
+     "is_byok": false,
+     "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0
+     },
+     "cost_details": {
+      "upstream_inference_cost": null,
+      "upstream_inference_prompt_cost": 0,
+      "upstream_inference_completions_cost": 0
+     },
+     "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "image_tokens": 0
+     },
+     "cache_creation_input_tokens": 0,
+     "market_cost": 0.067108,
+     "gateway_cost": 0.067108
+    },
+    "provider_metadata": {
+     "vertex": {
+      "promptFeedback": null,
+      "groundingMetadata": null,
+      "urlContextMetadata": null,
+      "safetyRatings": null,
+      "usageMetadata": {
+       "promptTokenCount": 216,
+       "candidatesTokenCount": 1120,
+       "totalTokenCount": 1336,
+       "trafficType": "ON_DEMAND",
+       "promptTokensDetails": [
+        {
+         "modality": "TEXT",
+         "tokenCount": 216
+        }
+       ],
+       "candidatesTokensDetails": [
+        {
+         "modality": "IMAGE",
+         "tokenCount": 1120
+        }
+       ]
+      },
+      "finishMessage": null,
+      "serviceTier": null
+     },
+     "gateway": {
+      "routing": {
+       "originalModelId": "google/gemini-3.1-flash-image",
+       "resolvedProvider": "vertex",
+       "fallbacksAvailable": [],
+       "planningReasoning": "Provider set restricted to: vertex. System credentials planned for: vertex. ZDR requested: all 1 attempts support ZDR. Execution order: vertex(system). Disallow prompt training requested: all 1 attempts disallow prompt training",
+       "canonicalSlug": "google/gemini-3.1-flash-image",
+       "finalProvider": "vertex",
+       "modelAttemptCount": 1,
+       "modelAttempts": [
+        {
+         "canonicalSlug": "google/gemini-3.1-flash-image",
+         "success": true,
+         "providerAttemptCount": 1,
+         "providerAttempts": [
+          {
+           "provider": "vertex",
+           "credentialType": "system",
+           "success": true,
+           "startTime": 1793777999759,
+           "endTime": 1793778007219,
+           "statusCode": 200,
+           "providerResponseId": "T-HqauPtN7HU0vcPnZ-N6Ao"
+          }
+         ]
+        }
+       ],
+       "totalProviderAttemptCount": 1,
+       "affinity": {
+        "outcome": "skipped_below_min_prefix"
+       },
+       "clientSessionId": "6f9910705f1a272ab074dc882cf990e7",
+       "clientSessionIdSource": "fingerprint"
+      },
+      "cost": "0.067108",
+      "marketCost": "0.067108",
+      "surchargeCost": "0",
+      "gatewayCost": "0.067108",
+      "inferenceCost": "0.067108",
+      "inputInferenceCost": "0.000108",
+      "outputInferenceCost": "0.067",
+      "enabledZeroDataRetention": true,
+      "enabledDisallowPromptTraining": true,
+      "generationId": "gen_01M6JR07VNPTJM4BG3AFETGTHE"
+     }
+    }
+   },
+   "at": "2026-11-04T07:39:59.622Z"
+  },
+  {
+   "char": "seila",
+   "direction": "animated",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "from": "text",
+   "kind": "prompt-check",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 6.3525e-05,
+   "worstUsd": 0.0015,
+   "at": "2026-11-04T07:40:08.756Z"
+  },
+  {
+   "char": "seila",
+   "direction": "animated",
+   "model": "gemini-3.1-flash-image",
+   "from": "text",
+   "kind": "image",
+   "file": "directions/seila-animated-gemini.jpg",
+   "sha256": "3ef4825ca8f49aabf05ddcdaa8119e9b229f523a3dfc1dc2af0238cbc95a4d13",
+   "closed_model": true,
+   "maker": "Google",
+   "costUsd": 0.0671005,
+   "worstUsd": 0.075,
+   "recipe": {
+    "prompt": "Character reference picture: one person, full body from head to shoes, standing in a relaxed three-quarter stance with some personality, plain light grey background.\n\nAnimated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands.\n\na woman in her late thirties, tall and slender, deep brown skin, black hair in shoulder-length braids gathered loosely back, alert dark eyes behind small round gold-rimmed glasses, wearing a long rust-orange woven coat-dress with a sculpted high funnel collar, an asymmetric closure of three bronze clasps running from shoulder to hip and a split hem, over an oatmeal seamless bodysuit, olive gathered trousers, soft tan seamless ankle boots and a thin band around her throat\n\nNo text, no lettering, no signs with words.",
+    "model": "gemini-3.1-flash-image",
+    "endpoint": "google/gemini-3.1-flash-image",
+    "host": "Vercel AI Gateway",
+    "settings": {
+     "modalities": [
+      "text",
+      "image"
+     ],
+     "aspect_ratio": "3:4",
+     "gateway": {
+      "only": [
+       "vertex"
+      ],
+      "zeroDataRetention": true,
+      "disallowPromptTraining": true
+     },
+     "retention": {
+      "provider": "vertex",
+      "zero_data_retention": true,
+      "no_training": true,
+      "endpoint_list_read_at": "2026-11-04T07:40:08.970Z"
+     },
+     "converted": {
+      "from": "image/png",
+      "sha256": "4ca1792b56b994b0f9f5fd9f998a35b8eaa7b3bd39b1a136ff3ebf56ece022ac",
+      "to": "jpeg",
+      "resized_to": {
+       "width": 576,
+       "height": 768
+      },
+      "fit": "contain, padded with the picture's own corner colour"
+     }
+    },
+    "seed": null,
+    "request_id": "gen_01M6JR0GZHGVNX8W485T97ZXDK",
+    "cost_usd": 0.0671,
+    "made_at": "2026-11-04T07:40:08.756Z",
+    "width": 576,
+    "height": 768,
+    "style": {
+     "version_id": "unpublished: docs/starting-sheet-drafts/directions/plan.json",
+     "title": "Animated series",
+     "text": "Animated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands."
+    },
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "not run"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line",
+      "style text",
+      "character descriptor"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    }
+   },
+   "response_meta": {
+    "id": "gen_01M6JR0GZHGVNX8W485T97ZXDK",
+    "model": "google/gemini-3.1-flash-image",
+    "usage": {
+     "prompt_tokens": 201,
+     "completion_tokens": 1120,
+     "total_tokens": 1321,
+     "cost": 0.0671005,
+     "is_byok": false,
+     "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0
+     },
+     "cost_details": {
+      "upstream_inference_cost": null,
+      "upstream_inference_prompt_cost": 0,
+      "upstream_inference_completions_cost": 0
+     },
+     "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "image_tokens": 0
+     },
+     "cache_creation_input_tokens": 0,
+     "market_cost": 0.0671005,
+     "gateway_cost": 0.0671005
+    },
+    "provider_metadata": {
+     "vertex": {
+      "promptFeedback": null,
+      "groundingMetadata": null,
+      "urlContextMetadata": null,
+      "safetyRatings": null,
+      "usageMetadata": {
+       "promptTokenCount": 201,
+       "candidatesTokenCount": 1120,
+       "totalTokenCount": 1321,
+       "trafficType": "ON_DEMAND",
+       "promptTokensDetails": [
+        {
+         "modality": "TEXT",
+         "tokenCount": 201
+        }
+       ],
+       "candidatesTokensDetails": [
+        {
+         "modality": "IMAGE",
+         "tokenCount": 1120
+        }
+       ]
+      },
+      "finishMessage": null,
+      "serviceTier": null
+     },
+     "gateway": {
+      "routing": {
+       "originalModelId": "google/gemini-3.1-flash-image",
+       "resolvedProvider": "vertex",
+       "fallbacksAvailable": [],
+       "planningReasoning": "Provider set restricted to: vertex. System credentials planned for: vertex. ZDR requested: all 1 attempts support ZDR. Execution order: vertex(system). Disallow prompt training requested: all 1 attempts disallow prompt training",
+       "canonicalSlug": "google/gemini-3.1-flash-image",
+       "finalProvider": "vertex",
+       "modelAttemptCount": 1,
+       "modelAttempts": [
+        {
+         "canonicalSlug": "google/gemini-3.1-flash-image",
+         "success": true,
+         "providerAttemptCount": 1,
+         "providerAttempts": [
+          {
+           "provider": "vertex",
+           "credentialType": "system",
+           "success": true,
+           "startTime": 1793778009103,
+           "endTime": 1793778016556,
+           "statusCode": 200,
+           "providerResponseId": "WeHqaqSmEf_AptQPjdSBgQQ"
+          }
+         ]
+        }
+       ],
+       "totalProviderAttemptCount": 1,
+       "affinity": {
+        "outcome": "skipped_below_min_prefix"
+       },
+       "clientSessionId": "912686b3e07c07eb7084dd9df06c0ae7",
+       "clientSessionIdSource": "fingerprint"
+      },
+      "cost": "0.0671005",
+      "marketCost": "0.0671005",
+      "surchargeCost": "0",
+      "gatewayCost": "0.0671005",
+      "inferenceCost": "0.0671005",
+      "inputInferenceCost": "0.0001005",
+      "outputInferenceCost": "0.067",
+      "enabledZeroDataRetention": true,
+      "enabledDisallowPromptTraining": true,
+      "generationId": "gen_01M6JR0GZHGVNX8W485T97ZXDK"
+     }
+    }
+   },
+   "at": "2026-11-04T07:40:08.756Z"
+  },
+  {
+   "char": "deluin",
+   "direction": "animated",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "from": "text",
+   "kind": "prompt-check",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 9.075e-05,
+   "worstUsd": 0.0015,
+   "at": "2026-11-04T07:40:18.249Z"
+  },
+  {
+   "char": "deluin",
+   "direction": "animated",
+   "model": "gemini-3.1-flash-image",
+   "from": "text",
+   "kind": "image",
+   "file": "directions/deluin-animated-gemini.jpg",
+   "sha256": "ed9362662479c88e3ed88abd983031679fa2fb24f89d4fb69d0b1f247c5fe453",
+   "closed_model": true,
+   "maker": "Google",
+   "costUsd": 0.067092,
+   "worstUsd": 0.075,
+   "recipe": {
+    "prompt": "Character reference picture: one person, full body from head to shoes, standing in a relaxed three-quarter stance with some personality, plain light grey background.\n\nAnimated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands.\n\na young man of about eighteen, tall and long-limbed, pale skin, wavy shoulder-length light-brown hair, grey-green eyes and a calm, slightly serious face, wearing a thick cream cable-knit sweater cut as a long asymmetric tunic with a high folded collar and a light grey hood, dark green slim segmented trousers, a narrow dark sash and sturdy brown seamless boots\n\nNo text, no lettering, no signs with words.",
+    "model": "gemini-3.1-flash-image",
+    "endpoint": "google/gemini-3.1-flash-image",
+    "host": "Vercel AI Gateway",
+    "settings": {
+     "modalities": [
+      "text",
+      "image"
+     ],
+     "aspect_ratio": "3:4",
+     "gateway": {
+      "only": [
+       "vertex"
+      ],
+      "zeroDataRetention": true,
+      "disallowPromptTraining": true
+     },
+     "retention": {
+      "provider": "vertex",
+      "zero_data_retention": true,
+      "no_training": true,
+      "endpoint_list_read_at": "2026-11-04T07:40:20.760Z"
+     },
+     "converted": {
+      "from": "image/png",
+      "sha256": "f2331fbff10383a193f58eef581f44b0d04e106e0ddfb2ae12bfd91fd7c36c33",
+      "to": "jpeg",
+      "resized_to": {
+       "width": 576,
+       "height": 768
+      },
+      "fit": "contain, padded with the picture's own corner colour"
+     }
+    },
+    "seed": null,
+    "request_id": "gen_01M6JR0WFBCEDXTGE0ETVQ6KH3",
+    "cost_usd": 0.0671,
+    "made_at": "2026-11-04T07:40:18.249Z",
+    "width": 576,
+    "height": 768,
+    "style": {
+     "version_id": "unpublished: docs/starting-sheet-drafts/directions/plan.json",
+     "title": "Animated series",
+     "text": "Animated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands."
+    },
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "not run"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line",
+      "style text",
+      "character descriptor"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    }
+   },
+   "response_meta": {
+    "id": "gen_01M6JR0WFBCEDXTGE0ETVQ6KH3",
+    "model": "google/gemini-3.1-flash-image",
+    "usage": {
+     "prompt_tokens": 184,
+     "completion_tokens": 1120,
+     "total_tokens": 1304,
+     "cost": 0.067092,
+     "is_byok": false,
+     "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0
+     },
+     "cost_details": {
+      "upstream_inference_cost": null,
+      "upstream_inference_prompt_cost": 0,
+      "upstream_inference_completions_cost": 0
+     },
+     "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "image_tokens": 0
+     },
+     "cache_creation_input_tokens": 0,
+     "market_cost": 0.067092,
+     "gateway_cost": 0.067092
+    },
+    "provider_metadata": {
+     "vertex": {
+      "promptFeedback": null,
+      "groundingMetadata": null,
+      "urlContextMetadata": null,
+      "safetyRatings": null,
+      "usageMetadata": {
+       "promptTokenCount": 184,
+       "candidatesTokenCount": 1120,
+       "totalTokenCount": 1304,
+       "trafficType": "ON_DEMAND",
+       "promptTokensDetails": [
+        {
+         "modality": "TEXT",
+         "tokenCount": 184
+        }
+       ],
+       "candidatesTokensDetails": [
+        {
+         "modality": "IMAGE",
+         "tokenCount": 1120
+        }
+       ]
+      },
+      "finishMessage": null,
+      "serviceTier": null
+     },
+     "gateway": {
+      "routing": {
+       "originalModelId": "google/gemini-3.1-flash-image",
+       "resolvedProvider": "vertex",
+       "fallbacksAvailable": [],
+       "planningReasoning": "Provider set restricted to: vertex. System credentials planned for: vertex. ZDR requested: all 1 attempts support ZDR. Execution order: vertex(system). Disallow prompt training requested: all 1 attempts disallow prompt training",
+       "canonicalSlug": "google/gemini-3.1-flash-image",
+       "finalProvider": "vertex",
+       "modelAttemptCount": 1,
+       "modelAttempts": [
+        {
+         "canonicalSlug": "google/gemini-3.1-flash-image",
+         "success": true,
+         "providerAttemptCount": 1,
+         "providerAttempts": [
+          {
+           "provider": "vertex",
+           "credentialType": "system",
+           "success": true,
+           "startTime": 1793778020882,
+           "endTime": 1793778027229,
+           "statusCode": 200,
+           "providerResponseId": "ZeHqavooh_3x4Q_B4rjBAg"
+          }
+         ]
+        }
+       ],
+       "totalProviderAttemptCount": 1,
+       "affinity": {
+        "outcome": "skipped_below_min_prefix"
+       },
+       "clientSessionId": "3dd8375a0f3da65cdafaa9289a1cb7b1",
+       "clientSessionIdSource": "fingerprint"
+      },
+      "cost": "0.067092",
+      "marketCost": "0.067092",
+      "surchargeCost": "0",
+      "gatewayCost": "0.067092",
+      "inferenceCost": "0.067092",
+      "inputInferenceCost": "0.000092",
+      "outputInferenceCost": "0.067",
+      "enabledZeroDataRetention": true,
+      "enabledDisallowPromptTraining": true,
+      "generationId": "gen_01M6JR0WFBCEDXTGE0ETVQ6KH3"
+     }
+    }
+   },
+   "at": "2026-11-04T07:40:18.249Z"
+  },
+  {
+   "char": "mu",
+   "direction": "animated",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "from": "text",
+   "kind": "prompt-check",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 0.00010155,
+   "worstUsd": 0.0015,
+   "at": "2026-11-04T07:40:29.666Z"
+  },
+  {
+   "char": "mu",
+   "direction": "animated",
+   "model": "gemini-3.1-flash-image",
+   "from": "text",
+   "kind": "image",
+   "file": "directions/mu-animated-gemini.jpg",
+   "sha256": "3e6ae696865441d24aa1dde262dac043964ab8c9633d19174eb7074091087fb5",
+   "closed_model": true,
+   "maker": "Google",
+   "costUsd": 0.0670925,
+   "worstUsd": 0.075,
+   "recipe": {
+    "prompt": "Character reference picture: one person, full body from head to shoes, standing in a relaxed three-quarter stance with some personality, plain light grey background.\n\nAnimated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands.\n\na woman in her early sixties, small and wiry, medium brown skin, short silver hair in a sharp asymmetric cut, keen eyes behind thin red-framed glasses, wearing a charcoal asymmetric commander's tabard with one sculpted shoulder panel and bright yellow piping, over a cobalt-blue seamless long-sleeved bodysuit, slim black segmented trousers, soft grey seamless boots and a slim wrist device\n\nNo text, no lettering, no signs with words.",
+    "model": "gemini-3.1-flash-image",
+    "endpoint": "google/gemini-3.1-flash-image",
+    "host": "Vercel AI Gateway",
+    "settings": {
+     "modalities": [
+      "text",
+      "image"
+     ],
+     "aspect_ratio": "3:4",
+     "gateway": {
+      "only": [
+       "vertex"
+      ],
+      "zeroDataRetention": true,
+      "disallowPromptTraining": true
+     },
+     "retention": {
+      "provider": "vertex",
+      "zero_data_retention": true,
+      "no_training": true,
+      "endpoint_list_read_at": "2026-11-04T07:40:29.708Z"
+     },
+     "converted": {
+      "from": "image/png",
+      "sha256": "66210e75aa5e83ce7f063c33bf850300b0f39c2f40d87d1875ca340555fab248",
+      "to": "jpeg",
+      "resized_to": {
+       "width": 576,
+       "height": 768
+      },
+      "fit": "contain, padded with the picture's own corner colour"
+     }
+    },
+    "seed": null,
+    "request_id": "gen_01M6JR156R688EX67VFHQXZBBN",
+    "cost_usd": 0.0671,
+    "made_at": "2026-11-04T07:40:29.666Z",
+    "width": 576,
+    "height": 768,
+    "style": {
+     "version_id": "unpublished: docs/starting-sheet-drafts/directions/plan.json",
+     "title": "Animated series",
+     "text": "Animated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands."
+    },
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "not run"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line",
+      "style text",
+      "character descriptor"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    }
+   },
+   "response_meta": {
+    "id": "gen_01M6JR156R688EX67VFHQXZBBN",
+    "model": "google/gemini-3.1-flash-image",
+    "usage": {
+     "prompt_tokens": 185,
+     "completion_tokens": 1120,
+     "total_tokens": 1305,
+     "cost": 0.0670925,
+     "is_byok": false,
+     "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0
+     },
+     "cost_details": {
+      "upstream_inference_cost": null,
+      "upstream_inference_prompt_cost": 0,
+      "upstream_inference_completions_cost": 0
+     },
+     "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "image_tokens": 0
+     },
+     "cache_creation_input_tokens": 0,
+     "market_cost": 0.0670925,
+     "gateway_cost": 0.0670925
+    },
+    "provider_metadata": {
+     "vertex": {
+      "promptFeedback": null,
+      "groundingMetadata": null,
+      "urlContextMetadata": null,
+      "safetyRatings": null,
+      "usageMetadata": {
+       "promptTokenCount": 185,
+       "candidatesTokenCount": 1120,
+       "totalTokenCount": 1305,
+       "trafficType": "ON_DEMAND",
+       "promptTokensDetails": [
+        {
+         "modality": "TEXT",
+         "tokenCount": 185
+        }
+       ],
+       "candidatesTokensDetails": [
+        {
+         "modality": "IMAGE",
+         "tokenCount": 1120
+        }
+       ]
+      },
+      "finishMessage": null,
+      "serviceTier": null
+     },
+     "gateway": {
+      "routing": {
+       "originalModelId": "google/gemini-3.1-flash-image",
+       "resolvedProvider": "vertex",
+       "fallbacksAvailable": [],
+       "planningReasoning": "Provider set restricted to: vertex. System credentials planned for: vertex. ZDR requested: all 1 attempts support ZDR. Execution order: vertex(system). Disallow prompt training requested: all 1 attempts disallow prompt training",
+       "canonicalSlug": "google/gemini-3.1-flash-image",
+       "finalProvider": "vertex",
+       "modelAttemptCount": 1,
+       "modelAttempts": [
+        {
+         "canonicalSlug": "google/gemini-3.1-flash-image",
+         "success": true,
+         "providerAttemptCount": 1,
+         "providerAttempts": [
+          {
+           "provider": "vertex",
+           "credentialType": "system",
+           "success": true,
+           "startTime": 1793778029805,
+           "endTime": 1793778037519,
+           "statusCode": 200,
+           "providerResponseId": "beHqarGyOIKjw8cPurzLgAw"
+          }
+         ]
+        }
+       ],
+       "totalProviderAttemptCount": 1,
+       "affinity": {
+        "outcome": "skipped_below_min_prefix"
+       },
+       "clientSessionId": "d2f2f05e1cf7cf017c2ec95e8e0126ed",
+       "clientSessionIdSource": "fingerprint"
+      },
+      "cost": "0.0670925",
+      "marketCost": "0.0670925",
+      "surchargeCost": "0",
+      "gatewayCost": "0.0670925",
+      "inferenceCost": "0.0670925",
+      "inputInferenceCost": "0.0000925",
+      "outputInferenceCost": "0.067",
+      "enabledZeroDataRetention": true,
+      "enabledDisallowPromptTraining": true,
+      "generationId": "gen_01M6JR156R688EX67VFHQXZBBN"
+     }
+    }
+   },
+   "at": "2026-11-04T07:40:29.666Z"
+  },
+  {
+   "char": "zei",
+   "direction": "grounded",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "from": "text",
+   "kind": "prompt-check",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 0.00013005,
+   "worstUsd": 0.0015,
+   "at": "2026-11-04T07:40:40.676Z"
+  },
+  {
+   "char": "zei",
+   "direction": "grounded",
+   "model": "gemini-3.1-flash-image",
+   "from": "text",
+   "kind": "image",
+   "file": "directions/zei-grounded-gemini.jpg",
+   "sha256": "ed55d2e418a78392b6e79bb9b10b992986cb805a097387cd792843911dd6fd50",
+   "closed_model": true,
+   "maker": "Google",
+   "costUsd": 0.0670785,
+   "worstUsd": 0.075,
+   "recipe": {
+    "prompt": "Character reference picture: one person, full body from head to shoes, standing in a relaxed three-quarter stance with some personality, plain light grey background.\n\nClean full-colour character design illustration, even soft light, clear readable face and hands.\n\na young man of eighteen from a busy working city, slim and of medium height, light golden-tan skin, short untidy black hair, alert dark eyes, wearing a faded olive work jacket with patched elbows over a plain grey hooded top, a canvas bag strap across his chest, dark straight-leg work trousers worn at one knee, scuffed brown boots, a thin black band around his throat, a simple wristwatch, and a soft support sleeve on his left forearm\n\nNo text, no lettering, no signs with words.",
+    "model": "gemini-3.1-flash-image",
+    "endpoint": "google/gemini-3.1-flash-image",
+    "host": "Vercel AI Gateway",
+    "settings": {
+     "modalities": [
+      "text",
+      "image"
+     ],
+     "aspect_ratio": "3:4",
+     "gateway": {
+      "only": [
+       "vertex"
+      ],
+      "zeroDataRetention": true,
+      "disallowPromptTraining": true
+     },
+     "retention": {
+      "provider": "vertex",
+      "zero_data_retention": true,
+      "no_training": true,
+      "endpoint_list_read_at": "2026-11-04T07:40:40.757Z"
+     },
+     "converted": {
+      "from": "image/png",
+      "sha256": "d033fdfce690d200fbd3eca29adee95ceb306b9cab86385d7408cfc57e6e1617",
+      "to": "jpeg",
+      "resized_to": {
+       "width": 576,
+       "height": 768
+      },
+      "fit": "contain, padded with the picture's own corner colour"
+     }
+    },
+    "seed": null,
+    "request_id": "gen_01M6JR1G0FRMR4R0CZ476HXKKP",
+    "cost_usd": 0.0671,
+    "made_at": "2026-11-04T07:40:40.716Z",
+    "width": 576,
+    "height": 768,
+    "style": {
+     "version_id": "unpublished: docs/starting-sheet-drafts/directions/plan.json",
+     "title": "Neutral",
+     "text": "Clean full-colour character design illustration, even soft light, clear readable face and hands."
+    },
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "not run"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line",
+      "style text",
+      "character descriptor"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    }
+   },
+   "response_meta": {
+    "id": "gen_01M6JR1G0FRMR4R0CZ476HXKKP",
+    "model": "google/gemini-3.1-flash-image",
+    "usage": {
+     "prompt_tokens": 157,
+     "completion_tokens": 1120,
+     "total_tokens": 1277,
+     "cost": 0.0670785,
+     "is_byok": false,
+     "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0
+     },
+     "cost_details": {
+      "upstream_inference_cost": null,
+      "upstream_inference_prompt_cost": 0,
+      "upstream_inference_completions_cost": 0
+     },
+     "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "image_tokens": 0
+     },
+     "cache_creation_input_tokens": 0,
+     "market_cost": 0.0670785,
+     "gateway_cost": 0.0670785
+    },
+    "provider_metadata": {
+     "vertex": {
+      "promptFeedback": null,
+      "groundingMetadata": null,
+      "urlContextMetadata": null,
+      "safetyRatings": null,
+      "usageMetadata": {
+       "promptTokenCount": 157,
+       "candidatesTokenCount": 1120,
+       "totalTokenCount": 1277,
+       "trafficType": "ON_DEMAND",
+       "promptTokensDetails": [
+        {
+         "modality": "TEXT",
+         "tokenCount": 157
+        }
+       ],
+       "candidatesTokensDetails": [
+        {
+         "modality": "IMAGE",
+         "tokenCount": 1120
+        }
+       ]
+      },
+      "finishMessage": null,
+      "serviceTier": null
+     },
+     "gateway": {
+      "routing": {
+       "originalModelId": "google/gemini-3.1-flash-image",
+       "resolvedProvider": "vertex",
+       "fallbacksAvailable": [],
+       "planningReasoning": "Provider set restricted to: vertex. System credentials planned for: vertex. ZDR requested: all 1 attempts support ZDR. Execution order: vertex(system). Disallow prompt training requested: all 1 attempts disallow prompt training",
+       "canonicalSlug": "google/gemini-3.1-flash-image",
+       "finalProvider": "vertex",
+       "modelAttemptCount": 1,
+       "modelAttempts": [
+        {
+         "canonicalSlug": "google/gemini-3.1-flash-image",
+         "success": true,
+         "providerAttemptCount": 1,
+         "providerAttempts": [
+          {
+           "provider": "vertex",
+           "credentialType": "system",
+           "success": true,
+           "startTime": 1793778040883,
+           "endTime": 1793778049203,
+           "statusCode": 200,
+           "providerResponseId": "eOHqavWGOeaI4OUPv__00Q8"
+          }
+         ]
+        }
+       ],
+       "totalProviderAttemptCount": 1,
+       "affinity": {
+        "outcome": "skipped_below_min_prefix"
+       },
+       "clientSessionId": "8c7b4ccc0ba8a4330325a6052b1cdc56",
+       "clientSessionIdSource": "fingerprint"
+      },
+      "cost": "0.0670785",
+      "marketCost": "0.0670785",
+      "surchargeCost": "0",
+      "gatewayCost": "0.0670785",
+      "inferenceCost": "0.0670785",
+      "inputInferenceCost": "0.0000785",
+      "outputInferenceCost": "0.067",
+      "enabledZeroDataRetention": true,
+      "enabledDisallowPromptTraining": true,
+      "generationId": "gen_01M6JR1G0FRMR4R0CZ476HXKKP"
+     }
+    }
+   },
+   "at": "2026-11-04T07:40:40.716Z"
+  },
+  {
+   "char": "zei",
+   "direction": "grounded",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "from": "text",
+   "kind": "prompt-check",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 7.365e-05,
+   "worstUsd": 0.0015,
+   "at": "2026-11-04T07:40:50.750Z"
+  },
+  {
+   "char": "zei",
+   "direction": "grounded",
+   "model": "gpt-image-2.5-sunburst",
+   "from": "text",
+   "kind": "image",
+   "file": "directions/zei-grounded-gpt.jpg",
+   "sha256": "373055b48de6f27e6a83f73d30c488f17e254c2b4c5749596e7e5cb75649bbf5",
+   "closed_model": true,
+   "maker": "OpenAI",
+   "costUsd": 0.04197,
+   "worstUsd": 0.08,
+   "recipe": {
+    "prompt": "Character reference picture: one person, full body from head to shoes, standing in a relaxed three-quarter stance with some personality, plain light grey background.\n\nClean full-colour character design illustration, even soft light, clear readable face and hands.\n\na young man of eighteen from a busy working city, slim and of medium height, light golden-tan skin, short untidy black hair, alert dark eyes, wearing a faded olive work jacket with patched elbows over a plain grey hooded top, a canvas bag strap across his chest, dark straight-leg work trousers worn at one knee, scuffed brown boots, a thin black band around his throat, a simple wristwatch, and a soft support sleeve on his left forearm\n\nNo text, no lettering, no signs with words.",
+    "model": "gpt-image-2.5-sunburst",
+    "endpoint": "openai/gpt-image-2.5-sunburst",
+    "host": "Vercel AI Gateway",
+    "settings": {
+     "size": "1024x1536",
+     "quality": "high",
+     "n": 1,
+     "output_format": "png",
+     "gateway": {
+      "only": [
+       "openai"
+      ],
+      "disallowPromptTraining": true
+     },
+     "retention": {
+      "provider": "openai",
+      "zero_data_retention": false,
+      "no_training": true,
+      "endpoint_list_read_at": "2026-11-04T07:40:50.854Z",
+      "kept": {
+       "quote": "By default, abuse monitoring logs are generated for all API feature usage and retained for up to 30 days, unless longer retention is required by law, or is reasonably necessary to protect our services or any third party from harm.",
+       "images_row": "/v1/images/edits: abuse monitoring retention 30 days, application state retention none",
+       "source": "https://developers.openai.com/api/docs/guides/your-data",
+       "read": "2026-11-03"
+      }
+     },
+     "converted": {
+      "from": "image/png",
+      "sha256": "ce036cba81a4dda79caf70585bf60545c748ba36be7da514a392be16ae49ce83",
+      "to": "jpeg",
+      "resized_to": {
+       "width": 576,
+       "height": 768
+      },
+      "fit": "contain, padded with the picture's own corner colour"
+     }
+    },
+    "seed": null,
+    "request_id": "gen_01M6JR1SXD7TSP1X1YBEE90GVG",
+    "cost_usd": 0.042,
+    "made_at": "2026-11-04T07:40:50.751Z",
+    "width": 576,
+    "height": 768,
+    "style": {
+     "version_id": "unpublished: docs/starting-sheet-drafts/directions/plan.json",
+     "title": "Neutral",
+     "text": "Clean full-colour character design illustration, even soft light, clear readable face and hands."
+    },
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "not run"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line",
+      "style text",
+      "character descriptor"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    }
+   },
+   "response_meta": {
+    "created": 1793778079,
+    "usage": {
+     "total_tokens": 1534,
+     "input_tokens": 162,
+     "output_tokens": 1372,
+     "input_tokens_details": {
+      "text_tokens": 162,
+      "image_tokens": 0
+     }
+    },
+    "providerMetadata": {
+     "openai": {
+      "images": [
+       {
+        "imageTokens": 0,
+        "textTokens": 162,
+        "created": 1793778079,
+        "size": "1024x1536",
+        "quality": "high",
+        "background": "opaque",
+        "outputFormat": "png"
+       }
+      ]
+     },
+     "gateway": {
+      "routing": {
+       "originalModelId": "openai/gpt-image-2.5-sunburst",
+       "resolvedProvider": "openai",
+       "fallbacksAvailable": [],
+       "planningReasoning": "Provider set restricted to: openai. System credentials planned for: openai. Disallow prompt training requested: all 1 attempts disallow prompt training",
+       "canonicalSlug": "openai/gpt-image-2.5-sunburst",
+       "finalProvider": "openai",
+       "modelAttemptCount": 1,
+       "modelAttempts": [
+        {
+         "canonicalSlug": "openai/gpt-image-2.5-sunburst",
+         "success": true,
+         "providerAttemptCount": 1,
+         "providerAttempts": [
+          {
+           "provider": "openai",
+           "credentialType": "system",
+           "success": true,
+           "startTime": 1793778051025,
+           "endTime": 1793778079248,
+           "statusCode": 200
+          }
+         ]
+        }
+       ],
+       "totalProviderAttemptCount": 1
+      },
+      "cost": "0.04197",
+      "marketCost": "0.04197",
+      "surchargeCost": "0",
+      "gatewayCost": "0.04197",
+      "inferenceCost": "0.04197",
+      "inputInferenceCost": "0",
+      "outputInferenceCost": "0.04197",
+      "enabledDisallowPromptTraining": true,
+      "generationId": "gen_01M6JR1SXD7TSP1X1YBEE90GVG"
+     }
+    }
+   },
+   "at": "2026-11-04T07:40:50.751Z"
+  },
+  {
+   "char": "zei",
+   "direction": "bold",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "from": "text",
+   "kind": "prompt-check",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 0.00011475,
+   "worstUsd": 0.0015,
+   "at": "2026-11-04T07:41:22.853Z"
+  },
+  {
+   "char": "zei",
+   "direction": "bold",
+   "model": "gemini-3.1-flash-image",
+   "from": "text",
+   "kind": "image",
+   "file": "directions/zei-bold-gemini.jpg",
+   "sha256": "85c7f4753ad2b2900c78ac25f78e57b3a65fca74a7e540e590fcb141ee2205f3",
+   "closed_model": true,
+   "maker": "Google",
+   "costUsd": 0.0670875,
+   "worstUsd": 0.075,
+   "recipe": {
+    "prompt": "Character reference picture: one person, full body from head to shoes, standing in a relaxed three-quarter stance with some personality, plain light grey background.\n\nClean full-colour character design illustration, even soft light, clear readable face and hands.\n\na young man of eighteen as a bold stylised game champion, tall and lanky with long limbs and a sharp angular silhouette, light golden-tan skin, a sharp asymmetric fringe of black hair bleached white at the tips, wearing a long sleeveless high-collared coat in deep crimson with a bold black pattern of grid squares, over a fitted white tunic, loose black trousers tucked into tall wrapped boots, one long fingerless glove on his left arm, a thin gold band around his throat, and round display glasses on a long coiled cable hanging around his neck\n\nNo text, no lettering, no signs with words.",
+    "model": "gemini-3.1-flash-image",
+    "endpoint": "google/gemini-3.1-flash-image",
+    "host": "Vercel AI Gateway",
+    "settings": {
+     "modalities": [
+      "text",
+      "image"
+     ],
+     "aspect_ratio": "3:4",
+     "gateway": {
+      "only": [
+       "vertex"
+      ],
+      "zeroDataRetention": true,
+      "disallowPromptTraining": true
+     },
+     "retention": {
+      "provider": "vertex",
+      "zero_data_retention": true,
+      "no_training": true,
+      "endpoint_list_read_at": "2026-11-04T07:41:22.894Z"
+     },
+     "converted": {
+      "from": "image/png",
+      "sha256": "952cb09ea8a1f75f499fa482f776db352816ae6987fdc019d6ad906755392c64",
+      "to": "jpeg",
+      "resized_to": {
+       "width": 576,
+       "height": 768
+      },
+      "fit": "contain, padded with the picture's own corner colour"
+     }
+    },
+    "seed": null,
+    "request_id": "gen_01M6JR2S5TVH0X1P4SS7D56YQP",
+    "cost_usd": 0.0671,
+    "made_at": "2026-11-04T07:41:22.853Z",
+    "width": 576,
+    "height": 768,
+    "style": {
+     "version_id": "unpublished: docs/starting-sheet-drafts/directions/plan.json",
+     "title": "Neutral",
+     "text": "Clean full-colour character design illustration, even soft light, clear readable face and hands."
+    },
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "not run"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line",
+      "style text",
+      "character descriptor"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    }
+   },
+   "response_meta": {
+    "id": "gen_01M6JR2S5TVH0X1P4SS7D56YQP",
+    "model": "google/gemini-3.1-flash-image",
+    "usage": {
+     "prompt_tokens": 175,
+     "completion_tokens": 1120,
+     "total_tokens": 1295,
+     "cost": 0.0670875,
+     "is_byok": false,
+     "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0
+     },
+     "cost_details": {
+      "upstream_inference_cost": null,
+      "upstream_inference_prompt_cost": 0,
+      "upstream_inference_completions_cost": 0
+     },
+     "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "image_tokens": 0
+     },
+     "cache_creation_input_tokens": 0,
+     "market_cost": 0.0670875,
+     "gateway_cost": 0.0670875
+    },
+    "provider_metadata": {
+     "vertex": {
+      "promptFeedback": null,
+      "groundingMetadata": null,
+      "urlContextMetadata": null,
+      "safetyRatings": null,
+      "usageMetadata": {
+       "promptTokenCount": 175,
+       "candidatesTokenCount": 1120,
+       "totalTokenCount": 1295,
+       "trafficType": "ON_DEMAND",
+       "promptTokensDetails": [
+        {
+         "modality": "TEXT",
+         "tokenCount": 175
+        }
+       ],
+       "candidatesTokensDetails": [
+        {
+         "modality": "IMAGE",
+         "tokenCount": 1120
+        }
+       ]
+      },
+      "finishMessage": null,
+      "serviceTier": null
+     },
+     "gateway": {
+      "routing": {
+       "originalModelId": "google/gemini-3.1-flash-image",
+       "resolvedProvider": "vertex",
+       "fallbacksAvailable": [],
+       "planningReasoning": "Provider set restricted to: vertex. System credentials planned for: vertex. ZDR requested: all 1 attempts support ZDR. Execution order: vertex(system). Disallow prompt training requested: all 1 attempts disallow prompt training",
+       "canonicalSlug": "google/gemini-3.1-flash-image",
+       "finalProvider": "vertex",
+       "modelAttemptCount": 1,
+       "modelAttempts": [
+        {
+         "canonicalSlug": "google/gemini-3.1-flash-image",
+         "success": true,
+         "providerAttemptCount": 1,
+         "providerAttempts": [
+          {
+           "provider": "vertex",
+           "credentialType": "system",
+           "success": true,
+           "startTime": 1793778083026,
+           "endTime": 1793778090973,
+           "statusCode": 200,
+           "providerResponseId": "o-HqaoOCB5Lq_dQP_oGewAc"
+          }
+         ]
+        }
+       ],
+       "totalProviderAttemptCount": 1,
+       "affinity": {
+        "outcome": "skipped_below_min_prefix"
+       },
+       "clientSessionId": "4bd7493002269619f68611fecafba1d2",
+       "clientSessionIdSource": "fingerprint"
+      },
+      "cost": "0.0670875",
+      "marketCost": "0.0670875",
+      "surchargeCost": "0",
+      "gatewayCost": "0.0670875",
+      "inferenceCost": "0.0670875",
+      "inputInferenceCost": "0.0000875",
+      "outputInferenceCost": "0.067",
+      "enabledZeroDataRetention": true,
+      "enabledDisallowPromptTraining": true,
+      "generationId": "gen_01M6JR2S5TVH0X1P4SS7D56YQP"
+     }
+    }
+   },
+   "at": "2026-11-04T07:41:22.853Z"
+  },
+  {
+   "char": "zei",
+   "direction": "bold",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "from": "text",
+   "kind": "prompt-check",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 9.855e-05,
+   "worstUsd": 0.0015,
+   "at": "2026-11-04T07:41:32.525Z"
+  },
+  {
+   "char": "zei",
+   "direction": "bold",
+   "model": "gpt-image-2.5-sunburst",
+   "from": "text",
+   "kind": "image",
+   "file": "directions/zei-bold-gpt.jpg",
+   "sha256": "be10dcc1d25e9574e456f581a1a72eb113623ac578480c0b334f756b54f13bfd",
+   "closed_model": true,
+   "maker": "OpenAI",
+   "costUsd": 0.04207,
+   "worstUsd": 0.08,
+   "recipe": {
+    "prompt": "Character reference picture: one person, full body from head to shoes, standing in a relaxed three-quarter stance with some personality, plain light grey background.\n\nClean full-colour character design illustration, even soft light, clear readable face and hands.\n\na young man of eighteen as a bold stylised game champion, tall and lanky with long limbs and a sharp angular silhouette, light golden-tan skin, a sharp asymmetric fringe of black hair bleached white at the tips, wearing a long sleeveless high-collared coat in deep crimson with a bold black pattern of grid squares, over a fitted white tunic, loose black trousers tucked into tall wrapped boots, one long fingerless glove on his left arm, a thin gold band around his throat, and round display glasses on a long coiled cable hanging around his neck\n\nNo text, no lettering, no signs with words.",
+    "model": "gpt-image-2.5-sunburst",
+    "endpoint": "openai/gpt-image-2.5-sunburst",
+    "host": "Vercel AI Gateway",
+    "settings": {
+     "size": "1024x1536",
+     "quality": "high",
+     "n": 1,
+     "output_format": "png",
+     "gateway": {
+      "only": [
+       "openai"
+      ],
+      "disallowPromptTraining": true
+     },
+     "retention": {
+      "provider": "openai",
+      "zero_data_retention": false,
+      "no_training": true,
+      "endpoint_list_read_at": "2026-11-04T07:41:32.559Z",
+      "kept": {
+       "quote": "By default, abuse monitoring logs are generated for all API feature usage and retained for up to 30 days, unless longer retention is required by law, or is reasonably necessary to protect our services or any third party from harm.",
+       "images_row": "/v1/images/edits: abuse monitoring retention 30 days, application state retention none",
+       "source": "https://developers.openai.com/api/docs/guides/your-data",
+       "read": "2026-11-03"
+      }
+     },
+     "converted": {
+      "from": "image/png",
+      "sha256": "93d683cea4fc5400ccbce08eeb3dccb3dd4d0e84be8fa4228dfdceef46d93137",
+      "to": "jpeg",
+      "resized_to": {
+       "width": 576,
+       "height": 768
+      },
+      "fit": "contain, padded with the picture's own corner colour"
+     }
+    },
+    "seed": null,
+    "request_id": "gen_01M6JR32TEJF6AVTXCAR41GQ0B",
+    "cost_usd": 0.0421,
+    "made_at": "2026-11-04T07:41:32.525Z",
+    "width": 576,
+    "height": 768,
+    "style": {
+     "version_id": "unpublished: docs/starting-sheet-drafts/directions/plan.json",
+     "title": "Neutral",
+     "text": "Clean full-colour character design illustration, even soft light, clear readable face and hands."
+    },
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "not run"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line",
+      "style text",
+      "character descriptor"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    }
+   },
+   "response_meta": {
+    "created": 1793778121,
+    "usage": {
+     "total_tokens": 1554,
+     "input_tokens": 182,
+     "output_tokens": 1372,
+     "input_tokens_details": {
+      "text_tokens": 182,
+      "image_tokens": 0
+     }
+    },
+    "providerMetadata": {
+     "openai": {
+      "images": [
+       {
+        "imageTokens": 0,
+        "textTokens": 182,
+        "created": 1793778121,
+        "size": "1024x1536",
+        "quality": "high",
+        "background": "opaque",
+        "outputFormat": "png"
+       }
+      ]
+     },
+     "gateway": {
+      "routing": {
+       "originalModelId": "openai/gpt-image-2.5-sunburst",
+       "resolvedProvider": "openai",
+       "fallbacksAvailable": [],
+       "planningReasoning": "Provider set restricted to: openai. System credentials planned for: openai. Disallow prompt training requested: all 1 attempts disallow prompt training",
+       "canonicalSlug": "openai/gpt-image-2.5-sunburst",
+       "finalProvider": "openai",
+       "modelAttemptCount": 1,
+       "modelAttempts": [
+        {
+         "canonicalSlug": "openai/gpt-image-2.5-sunburst",
+         "success": true,
+         "providerAttemptCount": 1,
+         "providerAttempts": [
+          {
+           "provider": "openai",
+           "credentialType": "system",
+           "success": true,
+           "startTime": 1793778092936,
+           "endTime": 1793778121580,
+           "statusCode": 200
+          }
+         ]
+        }
+       ],
+       "totalProviderAttemptCount": 1
+      },
+      "cost": "0.04207",
+      "marketCost": "0.04207",
+      "surchargeCost": "0",
+      "gatewayCost": "0.04207",
+      "inferenceCost": "0.04207",
+      "inputInferenceCost": "0",
+      "outputInferenceCost": "0.04207",
+      "enabledDisallowPromptTraining": true,
+      "generationId": "gen_01M6JR32TEJF6AVTXCAR41GQ0B"
+     }
+    }
+   },
+   "at": "2026-11-04T07:41:32.525Z"
+  }
+ ],
+ "brought_in": {
+  "what": "the owner's own reference picture, made outside the site",
+  "label": "Brought in",
+  "made_by": "Midjourney, a closed model by Midjourney",
+  "original": {
+   "sha256": "b955b192ae0d6b7474bef82fb795996146c75fe3f205c61db7fd8e6375421e4f",
+   "width": 2576,
+   "height": 1438
+  },
+  "prompt": null,
+  "prompt_note": "The owner will add its prompt if he has it.",
+  "small_copy": {
+   "file": "directions/reference-small.jpg",
+   "sha256": "ec1781bc28d52f57d94606bc9aa57299d6cdbcfc1b94431c4ea7f769c020b1cc",
+   "note": "resized to 1288 wide, JPEG; no model"
+  },
+  "crops": {
+   "zei": {
+    "file": "directions/reference-crop-zei.jpg",
+    "box": {
+     "left": 60,
+     "top": 0,
+     "width": 1400,
+     "height": 1438
+    },
+    "sha256": "7753b06ecaaafb01aa963cf90b07b819029e98ff7aa662b3f0d676769aec2245",
+    "note": "cropped from the original at this box, resized to 1024 high, JPEG; no model; this is the picture sent as the reference"
+   },
+   "bai": {
+    "file": "directions/reference-crop-bai.jpg",
+    "box": {
+     "left": 1460,
+     "top": 0,
+     "width": 1116,
+     "height": 1438
+    },
+    "sha256": "a3bd0d92d7b78fd7e0b7557b5d7e982e0a8d5c0ca459e6738a16083d88009b69",
+    "note": "cropped from the original at this box, resized to 1024 high, JPEG; no model; this is the picture sent as the reference"
+   }
+  },
+  "plan": "paid (owner, 2026-11-04); which tier (Basic, Standard, Pro or Mega) not given",
+  "annotated": "2026-11-04: plan added after the run, from the owner; nothing remade"
+ }
+}

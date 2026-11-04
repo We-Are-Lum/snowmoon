@@ -82,7 +82,7 @@ check('--bases-plan exits 0 with no database and no model keys', bp.status === 0
 check('--bases-plan: plan A lists three bases per character in one fixed order', (bp.stdout.match(/^ {2}[a-z]+ +1\. Gouache.*2\. Printed +3\. Miniature$/gm) ?? []).length === 6 && /CHALLENGE\.baseStyles = \["Gouache", "Printed", "Miniature"\]/.test(bp.stdout));
 check('--bases-plan: closedBaseRefusal refuses plan A\'s six closed-model bases while closedBasesAllowed is false', /6 of 18 bases are refused by closedBaseRefusal/.test(bp.stdout) && (bp.stdout.match(/\[REFUSED while closedBasesAllowed is false\]/g) ?? []).length === 6);
 check('--bases-plan: plan B (the open fallback) refuses none', /CHALLENGE\.baseStyles = \["Mood", "Printed", "Miniature"\]/.test(bp.stdout) && /refuses none: every view is by an open model/.test(bp.stdout));
-check('--bases-plan: the closed styles\' samples wait for the reread', (bp.stdout.match(/PUBLISH WAITS: samples made with (Gemini 3\.1 Flash Image, a closed model by Google|GPT Image 2\.5 Sunburst, a closed model by OpenAI)/g) ?? []).length === 2);
+check('--bases-plan: the closed styles\' samples wait for the reread', (bp.stdout.match(/PUBLISH WAITS: samples made with (Gemini 3\.1 Flash Image, a closed model by Google|GPT Image 2\.5 Sunburst, a closed model by OpenAI)/g) ?? []).length === 1);
 const bpApply = await exec(['--bases-plan', '--apply', '--style-only', '--confirm-owner-go'], bare);
 check('--bases-plan with --apply refuses', bpApply.status === 2 && /never writes/.test(bpApply.stderr));
 

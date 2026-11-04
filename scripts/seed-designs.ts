@@ -473,11 +473,24 @@ const put = async (p: Pic): Promise<string> => {
   return putPublic(p.sha256, p.bytes, 'image/jpeg');
 };
 say();
+// Before anything is uploaded or written (owner, 2026-11-04): the 12 closed drafts of 2026-11-03 are never published, and
+// closed-model sheets and styles wait for CHALLENGE.closedBasesAllowed.
+{
+  const { closedBaseRefusal, closedStyleRefusal, neverPublishRefusal } = await import('../src/lib/challenge/bases');
+  const asPics = (ps: Pic[]) => ps.map((p) => ({ url: '', sha256: p.sha256, recipe: p.recipe }));
+  const refusals: string[] = [];
+  if (!before.style) {
+    const w = neverPublishRefusal({ samples: asPics(samples), views: {} }) ?? closedStyleRefusal({ samples: asPics(samples) });
+    if (w) refusals.push(`the style: ${w}`);
+  }
+  for (const s of sheetPlans) {
+    const views = Object.fromEntries(s.pics.map((p) => [p.slot, { url: '', sha256: p.sha256, recipe: p.recipe }]));
+    const w = neverPublishRefusal({ samples: [], views }) ?? closedBaseRefusal({ samples: [], views });
+    if (w) refusals.push(`${s.name}: ${w}`);
+  }
+  if (refusals.length) { for (const r of refusals) say(`Refusing --apply: ${r}.`); say('Nothing done.'); await finish(6); }
+}
 if (!before.style) {
-  // Closed styles' samples are gated like bases (owner, 2026-11-04): refused before anything is uploaded or written.
-  const { closedStyleRefusal } = await import('../src/lib/challenge/bases');
-  const styleWhy = closedStyleRefusal({ samples: samples.map((p) => ({ url: '', sha256: p.sha256, recipe: p.recipe })) });
-  if (styleWhy) { say(`Refusing --apply: the style's ${styleWhy}. Nothing done.`); await finish(6); }
   const urls = await Promise.all(samples.map(put));
   const out = await makeDesign(sql as unknown as Sql, { fid: MAINTAINER_FID, mode: 'create', kind: 'style', styleName: style.name, body: styleBody(samples.map((p, i) => ({ url: urls[i], sha256: p.sha256, recipe: p.recipe }))) });
   styleVersionId = out.versionId;

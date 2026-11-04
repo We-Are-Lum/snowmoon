@@ -1,0 +1,120 @@
+{
+  "about": "Three design directions (owner, 2026-11-04): different takes on the character, not three finishes. Drafted by the coding agent (Claude, a closed model by Anthropic), for the owner to edit or rewrite. Picture descriptors, never story lines. Read by scripts/zei-directions.ts.",
+  "reference": {
+    "file": "/Users/nathan/.claude/uploads/b065ecb5-ae9b-5616-b62f-ffe127e10e19/213d1f9b-image.jpg",
+    "sha256": "b955b192ae0d6b7474bef82fb795996146c75fe3f205c61db7fd8e6375421e4f",
+    "width": 2576,
+    "height": 1438,
+    "made_by": "Midjourney, a closed model by Midjourney",
+    "label": "Brought in",
+    "made_outside_the_site": true,
+    "prompt": null,
+    "prompt_note": "The owner will add its prompt if he has it.",
+    "crops": {
+      "zei": {
+        "left": 60,
+        "top": 0,
+        "width": 1400,
+        "height": 1438
+      },
+      "bai": {
+        "left": 1460,
+        "top": 0,
+        "width": 1116,
+        "height": 1438
+      }
+    },
+    "plan": "paid (owner, 2026-11-04); which tier (Basic, Standard, Pro or Mega) not given"
+  },
+  "styles": {
+    "Animated series": "Animated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands.",
+    "Neutral": "Clean full-colour character design illustration, even soft light, clear readable face and hands."
+  },
+  "directions": [
+    {
+      "id": "animated",
+      "name": "1. Animated series (from the owner's reference)",
+      "style": "Animated series",
+      "fixed": true
+    },
+    {
+      "id": "grounded",
+      "name": "2. Grounded: a real teenager in a working city",
+      "style": "Neutral"
+    },
+    {
+      "id": "bold",
+      "name": "3. Bold reimagining: the champion",
+      "style": "Neutral"
+    }
+  ],
+  "descriptors": {
+    "zei/animated": "a young man of eighteen, slim, light golden-tan skin, tall spiky black hair swept up and back with a broad teal-blue streak and close-cut sides, warm brown eyes under strong dark eyebrows, a confident half-smile, wearing a loose orange zip jacket with the sleeves pushed up over a plain black crew-neck top, a chunky dark wrist display with a glowing teal face, a thin dark band around his throat, dark straight trousers and white sneakers",
+    "bai/animated": "a young woman of about eighteen, slim and wiry, dark brown skin, a long sleek magenta ponytail pulled high with the sides of her head shaved close, dark eyes with a sly sideways look and a small confident smile, long amber drop earrings, a sleeveless yellow-green vest open over a dark grey tank top, both arms covered in fine brown line tattoos from shoulder to wrist, a dark bracelet, a hand device held in one hand, dark trousers and boots",
+    "zei/grounded": "a young man of eighteen from a busy working city, slim and of medium height, light golden-tan skin, short untidy black hair, alert dark eyes, wearing a faded olive work jacket with patched elbows over a plain grey hooded top, a canvas bag strap across his chest, dark straight-leg work trousers worn at one knee, scuffed brown boots, a thin black band around his throat, a simple wristwatch, and a soft support sleeve on his left forearm",
+    "zei/bold": "a young man of eighteen as a bold stylised game champion, tall and lanky with long limbs and a sharp angular silhouette, light golden-tan skin, a sharp asymmetric fringe of black hair bleached white at the tips, wearing a long sleeveless high-collared coat in deep crimson with a bold black pattern of grid squares, over a fitted white tunic, loose black trousers tucked into tall wrapped boots, one long fingerless glove on his left arm, a thin gold band around his throat, and round display glasses on a long coiled cable hanging around his neck"
+  },
+  "fronts": [
+    {
+      "key": "zei/animated",
+      "model": "gemini-3.1-flash-image",
+      "from": "crop:zei"
+    },
+    {
+      "key": "zei/animated",
+      "model": "gpt-image-2.5-sunburst",
+      "from": "crop:zei"
+    },
+    {
+      "key": "bai/animated",
+      "model": "gemini-3.1-flash-image",
+      "from": "crop:bai"
+    },
+    {
+      "key": "bai/animated",
+      "model": "gpt-image-2.5-sunburst",
+      "from": "crop:bai"
+    },
+    {
+      "key": "gladias/animated",
+      "model": "gemini-3.1-flash-image",
+      "from": "text"
+    },
+    {
+      "key": "seila/animated",
+      "model": "gemini-3.1-flash-image",
+      "from": "text"
+    },
+    {
+      "key": "deluin/animated",
+      "model": "gemini-3.1-flash-image",
+      "from": "text"
+    },
+    {
+      "key": "mu/animated",
+      "model": "gemini-3.1-flash-image",
+      "from": "text"
+    },
+    {
+      "key": "zei/grounded",
+      "model": "gemini-3.1-flash-image",
+      "from": "text"
+    },
+    {
+      "key": "zei/grounded",
+      "model": "gpt-image-2.5-sunburst",
+      "from": "text"
+    },
+    {
+      "key": "zei/bold",
+      "model": "gemini-3.1-flash-image",
+      "from": "text"
+    },
+    {
+      "key": "zei/bold",
+      "model": "gpt-image-2.5-sunburst",
+      "from": "text"
+    }
+  ],
+  "others_from": "content/snowmoon/designs/characters/<slug>.json, descriptor, word for word"
+}

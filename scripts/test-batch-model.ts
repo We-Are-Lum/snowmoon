@@ -40,7 +40,8 @@ const gptReply = { data: [{ b64_json: Buffer.from('img').toString('base64') }], 
   const r = B.closedImageRequest('gemini-3.1-flash-image', 'a sample', null, '16:9');
   const b = r.body as any;
   check('a text-only Gemini sample: no picture sent, 16:9, the same gateway options', b.messages[0].content.length === 1 && b.messages[0].content[0].type === 'text' && b.providerOptions.google.imageConfig.aspectRatio === '16:9' && b.providerOptions.gateway.zeroDataRetention === true && b.providerOptions.gateway.only[0] === 'vertex');
-  check('a text-only GPT picture is refused (not built)', throws(() => B.closedImageRequest('gpt-image-2.5-sunburst', 'p', null), /Gemini only/));
+  const t = B.closedImageRequest('gpt-image-2.5-sunburst', 'p', null);
+  check('a text-only GPT picture: the generations endpoint, portrait, training off and pinned, no picture sent', t.url.endsWith('/images/generations') && (t.body as any).size === '1024x1536' && !(t.body as any).images && (t.body as any).providerOptions.gateway.disallowPromptTraining === true && (t.body as any).providerOptions.gateway.only[0] === 'openai');
 }
 // Planted violations, one per rule: each body is caught before it is sent.
 check('violation: Google on Vertex without zeroDataRetention is refused', throws(() => B.assertGatewayOptions('gemini-3.1-flash-image', { providerOptions: { gateway: { only: ['vertex'], disallowPromptTraining: true } } }), /zeroDataRetention/));

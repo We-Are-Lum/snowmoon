@@ -1,5 +1,10 @@
 # Three bases per character: fronts for the owner's pick (DRAFT)
 
+> **NEVER PUBLISH the twelve closed-model pictures on this page** (the six "closed: GPT Image 2.5 Sunburst" and six
+> "closed: Gemini 3.1 Flash Image" fronts; owner, 2026-11-04). They were made before the retention settings and their
+> recipes don't record what was kept. The seed script refuses them by sha256 (`NEVER_PUBLISH`, src/lib/challenge/bases.ts).
+> Any closed picture that is published is made fresh.
+
 Drafted by the coding agent (Claude, a closed model by Anthropic), 2026-11-03, on branch `starting-sheet-drafts`. **Drafts only:** nothing published, nothing written to the database, nothing uploaded to the site's storage. Every picture is AI-made and keeps that label wherever it is used.
 
 **Reply with picks like "Bolder, Printed, Mood"** (the three styles every character gets), or per picture with its label, e.g. **"Zei · Printed"** or **"Bai · closed: Gemini 3.1 Flash Image"**, and **"Zei side · seed C"**. Only fronts for now: no side or back views in the new styles until the styles are picked.

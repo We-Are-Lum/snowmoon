@@ -42,6 +42,50 @@ export function closedBaseRefusal(body: Pick<DesignBody, 'samples' | 'views'>, a
 }
 
 /**
+ * Never published (owner, 2026-11-04): the 12 closed-model drafts in (docs/starting-sheet-drafts/bases.md, six
+ * by GPT Image 2.5 Sunburst, six by Gemini 3.1 Flash Image). They were made before the retention settings and their recipes
+ * don't record what was kept. Any closed picture that is published is made fresh. Each by its JPEG's sha256 and its
+ * original PNG's.
+ */
+export const NEVER_PUBLISH: ReadonlySet<string> = new Set([
+  '5326c6f92812ede7d9390081c912ad02e1dab7c78ecc4ca4a2a6a22a841dfd7c', // zei-front-closed-gpt.jpg (JPEG)
+  '1a235785adfbc1e234b177691105e9b56018e129e2df71f9b7616ae9106c9693', // zei-front-closed-gpt.jpg (its original PNG)
+  '7dc7aa1cae4afd268355f3616fcb28a076272b5a1bcbdae4119209797286abcb', // zei-front-closed-gemini.jpg (JPEG)
+  'aa17a0891b8116a6a9bc20eaed724cebf45318d6ba5113e33ea79f495253a2f3', // zei-front-closed-gemini.jpg (its original PNG)
+  '7389023180272730bbb222edcd80ff0e7bc4a4ea2ed19424c1b2b9603387f292', // bai-front-closed-gpt.jpg (JPEG)
+  '84845c258d9da0c2fa2a22022f5aea13b15c0d23e09ef9ff76201ccaef9ab7f3', // bai-front-closed-gpt.jpg (its original PNG)
+  'b31125e19632188b22b50fe066385bb2b600511ff70d4be80d019773f09c6f2e', // gladias-front-closed-gpt.jpg (JPEG)
+  '2001370b67d55d8ef1720a5dd8eba5b13dec05e3fe1e0a63d6884c14574b45da', // gladias-front-closed-gpt.jpg (its original PNG)
+  '13131b6ce1290e8c92ea938713cdfa8e2792fb6b80712ed87188ef58e485e712', // seila-front-closed-gpt.jpg (JPEG)
+  '5adf331d6b64bc0921a1fb2a50053b011229c3aa947e483e760a41c1090d0301', // seila-front-closed-gpt.jpg (its original PNG)
+  '2e71f7a4a14502579d31885d36018a7c7341f99aaf3add3fb443b9be5f45daa4', // deluin-front-closed-gpt.jpg (JPEG)
+  '394ae7ab5a90f3b2c04b3a1feff712bda73bb68eaec29d52d75379f3010971de', // deluin-front-closed-gpt.jpg (its original PNG)
+  'f775bda841d47148d812d2948f27285f0cf9e003efbfd87e5246970e8b0dcd33', // mu-front-closed-gpt.jpg (JPEG)
+  '8ac20fdab9ec4f0b1ec92874055c40e1d8ac8987d168550e7971d079b6d30362', // mu-front-closed-gpt.jpg (its original PNG)
+  '47a8b97f148da336c59ec0346350d21276efad14f1c25dd625136786c6858771', // bai-front-closed-gemini.jpg (JPEG)
+  '5d6336e92082ee5ad0c3b24c8a2127588b5b5ecaa5d6122c42a429015d823b7d', // bai-front-closed-gemini.jpg (its original PNG)
+  '00ff20dc61f7507183d567899efd2230c99543c41c7bdbf267a9abc796238cac', // gladias-front-closed-gemini.jpg (JPEG)
+  '5f1b42785bcff19805a6fa3667a674f890a4a02de58337e9cd645d3eb173c712', // gladias-front-closed-gemini.jpg (its original PNG)
+  '2eb6faaae99ed909c0b9d0434a8ff89c2dc349f64c3bb3dd7fb04e76897afce4', // seila-front-closed-gemini.jpg (JPEG)
+  '0f17e4c2404117bc926b3874fb9bbbed9ab405c5e2e17d329e2e1714201f8739', // seila-front-closed-gemini.jpg (its original PNG)
+  '0bc5c4c180b75a0be6b1b53e7ce50ee7d5cb49a934f85cb2f485036b35b89f66', // deluin-front-closed-gemini.jpg (JPEG)
+  '8025ea7ff48c717a2670f70068ab14d34a0118c7dbe5935e9ea92f4a46dffe0a', // deluin-front-closed-gemini.jpg (its original PNG)
+  '65ac87f48924d56136d46a89a109ecf8b77fb95157faedc6a4db65d0ebd46e56', // mu-front-closed-gemini.jpg (JPEG)
+  'a1f47383f501dde62d8dc8b884b282c1de65adad627d6871a83dffb669ccdabb', // mu-front-closed-gemini.jpg (its original PNG)
+]);
+
+/** Why a design's pictures can't be published, if any is on NEVER_PUBLISH (its sha256, or the original's in its recipe). */
+export function neverPublishRefusal(body: Pick<DesignBody, 'samples' | 'views'>): string | null {
+  const pics: DesignPicture[] = [...(body.samples ?? []), ...(['front', 'side', 'back'] as const).flatMap((k) => (body.views?.[k] ? [body.views[k]!] : []))];
+  for (const p of pics) {
+    const orig = (p.recipe?.settings as { converted?: { sha256?: string } } | undefined)?.converted?.sha256;
+    const hit = [p.sha256, orig].find((s) => s && NEVER_PUBLISH.has(s));
+    if (hit) return `a picture (sha256 ${hit}) is one of the 12 closed drafts in docs/starting-sheet-drafts/bases.md, which are never published (the owner's decision)`;
+  }
+  return null;
+}
+
+/**
  * Why a style can't be published yet, or null when it can (owner, 2026-11-04: closed styles' samples are gated like
  * bases). A style whose samples name a closed model waits for the same switch, CHALLENGE.closedBasesAllowed, which waits
  * for the owner's reread of the lines naming the providers ("the remix challenge's bases, styles and references"). For
