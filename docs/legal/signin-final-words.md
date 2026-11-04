@@ -8,26 +8,34 @@ first part of 9, 10 and 11). These three lines are new words, so they need your 
 reread record stays at the old words**, the pages show their "Draft wording" line on a preview, and
 check:principles P6k and P6l fail on this branch, as they should.
 
-Say "OK" (or give changes) for each of 1–3. With all three OK as written, the record becomes privacy `1p8b2dj`,
-terms `f2hfa7`, dated the day you say so, and `LEGAL.effective` becomes the merge day.
+Say "OK" (or give changes) for each of 1–3. With all three OK as written, and check-decisions' own Privacy lines
+(`docs/legal/check-decisions-draft.md`, merged into this branch, also pending your reread), the record becomes
+privacy `qdj3pt`, terms `f2hfa7`, dated the day you say so, and `LEGAL.effective` becomes the merge day.
 
 ## 1. Privacy §7, the Lens item (item 9, its second part)
 
 Why it changed: variant B now looks the score up at Generate (as Neynar's), not when the image or frame maker opens;
 and your rule of 2026-11-04, "store the decision, not the score". The wording of the kept part is check-decisions'
-("we keep only whether your account passed and when, for up to 90 days").
+own, word for word from its Neynar line ("We don't keep the score: we keep only whether your account passed and
+when, for up to 90 days (a day if it didn't pass), and we check again sooner if …").
 
 **Before** (as drafted in the reread list, with variant B):
 > When you open the image or frame maker, or make an image or a frame, without a linked Farcaster account, Lens's API also receives your Lens account's address, to look up its Lens score, which decides whether you get free images and frames. We keep the score in memory for up to an hour.
 
 **After:**
-> When you make an image or a frame without a linked Farcaster account, and we have no current decision for your Lens account, Lens's API also receives your Lens account's address, to look up its Lens score, which decides whether you get free images and frames. We keep only whether your account passed and when, for up to 90 days, never the score. Lens is never asked about you when someone views a page or when you open the image or frame maker.
+> When you make an image or a frame without a linked Farcaster account, and we have no current decision for your Lens account, Lens's API also receives your Lens account's address, to look up its Lens score, which decides whether you get free images and frames. We don't keep the score: we keep only whether your account passed and when, for up to 90 days (a day if it didn't pass), and we check again sooner if your account is reported, one of your pictures is hidden by a moderator, or the score needed changes. Lens is never asked about you when someone views a page or when you open the image or frame maker.
 
 What the code does (`src/lib/social/lens-check.ts`): a pass is reused for 90 days and a fail for 24 hours with no
 call to Lens; a report, a hidden picture or a new threshold makes the next Generate ask again. The stored row is the
 network ('lens'), the Lens address, the rule ('lens-score>=1000'), passed or not, and when
-(`studio.check_decisions`, from `check-decisions`). Note: a fail is kept only 24 hours; "up to 90 days" is the
-longest anything is kept.
+(`studio.check_decisions`, from `check-decisions`).
+
+**A related suggestion, not in `legal.ts`:** check-decisions adds a Privacy §4 item that names only the Farcaster
+check ("Whether your Farcaster account passed the check for making images (its Neynar score against the score
+needed), when that was decided, and the score needed then; never the score itself. …"). The same row is kept for a
+Lens account. If you agree, that item could read "Whether your Farcaster account, or your Lens account, passed the
+check for making images (its Neynar score, or its Lens score, against the score needed), …". It is check-decisions'
+line, so it's your call there; until then §7's Lens item says what is kept.
 
 ## 2. Privacy §4, the link item (item 7): the 30-day sentence added
 
