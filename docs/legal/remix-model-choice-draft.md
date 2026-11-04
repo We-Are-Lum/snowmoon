@@ -84,7 +84,7 @@ the page):
 
 **OpenAI's live policy pages, re-checked 2026-11-04 (choice 6.5), by the fetch tool:**
 - <https://openai.com/policies/services-agreement/>: **refused** (HTTP 403).
-- <https://openai.com/policies/terms-of-use/>: **refused** (HTTP 403).
+- <https://openai.com/policies/terms-of-use/>: **refused** (HTTP 403), and again after the restart (about 11:40 PT).
 - <https://openai.com/policies/usage-policies/>: **refused** (HTTP 403).
 - <https://cdn.openai.com/osa/openai-services-agreement.pdf> (the agreement as a PDF, served by OpenAI): **read**. Footer
   "OpenAI Services Agreement ONLINE v.010126". §4.1, word for word: "As between Customer and OpenAI, to the extent
@@ -294,7 +294,7 @@ The GPT front is estimated, not measured (the bases made every front from a refe
 ## Midjourney (5.1 to 5.4)
 
 **5.3, the live terms, re-checked 2026-11-04 by the fetch tool:** before the restart (about 11:00 PT) the three pages
-below all **refused** (HTTP 403); after it (about 11:45 PT) <https://docs.midjourney.com/hc/en-us/articles/32083055291277-Terms-of-Service>
+below all **refused** (HTTP 403); after it (about 11:40 PT) <https://docs.midjourney.com/hc/en-us/articles/32083055291277-Terms-of-Service>
 **refused** again (HTTP 403). Also tried before: <https://www.midjourney.com/terms-of-service>,
 <https://docs.midjourney.com/docs/terms-of-service>. So the quotes (TOS Tracker copy, captured 2026-07-03) are still
 unconfirmed on the live page. Nothing made from Midjourney pictures is published until the owner (or a browser the
