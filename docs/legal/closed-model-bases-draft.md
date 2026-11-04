@@ -18,9 +18,10 @@ Legal texts describe today (owner, 2026-10-18): these lines go into `src/lib/leg
   picture's settings (size, quality or aspect ratio, format), and the gateway option `disallowPromptTraining`. No user
   field, Farcaster ID, wallet or site request is in it.
 - **Since 2026-11-04** every new closed call goes through `scripts/lib/batch-model.ts` (branch `challenge-styles`):
-  `zeroDataRetention: true`, `disallowPromptTraining: true`, the provider pinned (Google to `vertex`, OpenAI to
-  `openai`), and refused before sending unless the gateway lists that provider with both. GPT Image 2.5 Sunburst is
-  refused (no ZDR endpoint on the gateway, read 2026-11-03).
+  `disallowPromptTraining: true` and the provider pinned (Google to `vertex`, OpenAI to `openai`) on every call;
+  `zeroDataRetention: true` required for Google on Vertex (owner, 2026-11-04, second decision of the day). OpenAI is
+  called without ZDR (the gateway lists no ZDR endpoint for GPT Image 2.5 Sunburst, read 2026-11-03), only after the
+  gateway's endpoint list shows no training, and each picture's recipe records what OpenAI keeps (quoted below).
 - The gateway calls OpenAI (GPT Image 2.5 Sunburst) or Google (Gemini 3.1 Flash Image, served by Vertex AI) from its
   own accounts: the ledger reports `"credentialType": "system"` on every call.
 - Whether Vercel adds anything of its own when it calls them (an identifier of our team, request metadata) is not
@@ -33,46 +34,53 @@ Legal texts describe today (owner, 2026-10-18): these lines go into `src/lib/leg
 
 **Before:** (no item; §7 names neither OpenAI nor Google.)
 
-**After, variant B (recommended; owner, 2026-11-04: every new closed call sets zero data retention):**
-
-> Google, through Vercel AI Gateway, receives the prompt and the reference pictures for some of the pictures the
-> project makes itself: the remix challenge's bases, styles and references. It receives nothing about you, and your
-> browser never contacts it. We send the gateway only the prompt, the pictures and the picture's settings, and it passes
-> them on from its own account with Google, on Google's Vertex AI, set so that Google may not train on them and, under
-> the gateway's zero-data-retention terms, keeps no copy. Each picture's recipe names the model and its maker.
-
-Why B, and why Google alone (as of 2026-11-04):
-- Every new closed call goes through `scripts/lib/batch-model.ts` (branch `challenge-styles`) with
-  `zeroDataRetention: true`, `disallowPromptTraining: true` and `only: ['vertex']`; the gateway's answer to the style
-  test's Gemini call says `"enabledZeroDataRetention": true, "enabledDisallowPromptTraining": true` and "Provider set
-  restricted to: vertex".
-- **OpenAI can't be called under that rule:** the gateway lists GPT Image 2.5 Sunburst only on OpenAI, with
-  `has_zdr: false`, so the batch path refuses it and sends nothing. No OpenAI picture can be a new base, style or
-  reference, so the line doesn't name OpenAI.
-- B is accurate only if every closed picture the challenge publishes was made through that path. **The 2026-11-03
-  closed drafts (bases.md: six GPT, six Gemini) were made without ZDR and must not be published** under this line.
-- **P6s** (scripts/check-principles.ts on main) fails while Privacy doesn't name *OpenAI and Google*. With this line it
-  would need to require only Google, or the makers of the published closed pictures. That is a check change for the
-  owner to approve, in the same merge.
-
-**Variant A (only if an OpenAI picture, made without ZDR, is ever published):**
+**After (recommended; owner, 2026-11-04: OpenAI allowed without zero retention, Google on Vertex with it):**
 
 > OpenAI and Google, through Vercel AI Gateway, receive the prompt and the reference pictures for some of the pictures
 > the project makes itself: the remix challenge's bases, styles and references. They receive nothing about you, and
 > your browser never contacts them. We send the gateway only the prompt, the pictures and the picture's settings, and it
-> passes them on from its own accounts with OpenAI and Google, set so that neither may train on them. Each picture's
-> recipe names the model and its maker.
+> passes them on from its own accounts with OpenAI and Google, set so that neither may train on them. Google, on its
+> Vertex AI, keeps no copy. OpenAI may keep our prompts, reference pictures and the pictures it makes for up to 30 days
+> to watch for abuse, and longer only where the law requires it or to protect its services or others from harm. Each
+> picture's recipe names the model and its maker.
+
+**The source for "up to 30 days", verified:** OpenAI, "Your data" (API data controls),
+<https://developers.openai.com/api/docs/guides/your-data> (platform.openai.com/docs/guides/your-data redirects there),
+read live on **2026-11-03** (the machine's date); the page shows no last-updated date:
+
+> "By default, abuse monitoring logs are generated for all API feature usage and retained for up to 30 days, unless
+> longer retention is required by law, or is reasonably necessary to protect our services or any third party from
+> harm."
+
+Its endpoint table gives `/v1/images/edits` (the endpoint the GPT bases use): abuse monitoring retention "30 days",
+application state retention "None". And: "As of March 1, 2023, data sent to the OpenAI API is not used to train or
+improve OpenAI models (unless you explicitly opt in to share data with us)."
+
+**Flag: the figure is "up to 30 days" with two exceptions**, longer retention required by law, or reasonably necessary
+to protect OpenAI's services or third parties. The drafted line says so ("longer only where…") rather than a flat
+30 days. The same page lists `gpt-image-2.5-sunburst` as Zero Data Retention compatible for OpenAI customers with a ZDR
+agreement; through the gateway it has none (`has_zdr: false`), so the default above applies.
+
+**"Google, on its Vertex AI, keeps no copy"** rests on the gateway's ZDR terms for Vertex and on each call's answer
+(`"enabledZeroDataRetention": true`, provider restricted to `vertex`). It is true only of pictures made through
+`batch-model.ts`. **The six Gemini drafts of 2026-11-03 (bases.md) were made without ZDR:** if one is published, this
+sentence must change, and its recipe must first record what was kept.
 
 **Optional, the owner's choice:** Fifteen Days version 2's pictures were made by GPT Image 2.5 Sunburst through the
-gateway (without ZDR) and are already live, and §7 doesn't say so today. To cover them, add a sentence after B's first:
+gateway (without ZDR) and are already live, and §7 doesn't say so today. To cover them, add a sentence after the first:
 "OpenAI, through the same gateway, received the prompts and reference pictures for the pictures of Fifteen Days' second
 version, set so that it may not train on them."
+(Not checked: whether Fifteen Days' GPT calls set the no-training option; read their recipes before using this.)
 
 Notes:
-- **Decision recorded (owner, 2026-11-04): Google's under-18 clause is fine for bases he makes** (Cloud Service Specific
-  Terms §20(d); the proposal's Google section). Gemini is used only in a batch job the owner runs, never by a visitor, so
-  these lines need no age wording. This is not the reread: the lines above still need the owner's reread before any
-  closed base is published and `CHALLENGE.closedBasesAllowed` turns on.
+- **Google's under-18 clause: decided (owner, 2026-11-04).** Gemini is allowed, for bases and for remixers. The owner's
+  reason: the Terms already require people to be 18 or older to sign in (Terms §4: "To sign in you must be at least 18
+  years old."), and only signed-in people can generate. These lines need no age wording. A remixer-facing Gemini option
+  is not built; when it is, it needs its own lines (§4, §7 and the consent screen) in its own release. This is not the
+  reread: the lines above still need the owner's reread before any closed base or style is published and
+  `CHALLENGE.closedBasesAllowed` turns on.
+- **P6s** (scripts/check-principles.ts on main) requires Privacy to name OpenAI and Google: these lines name both, so it
+  passes unchanged once they are in `src/lib/legal.ts`.
 - **Styles (owner, 2026-11-04):** the lines now say "the remix challenge's bases, styles and references" (a closed
   style's samples are neither bases nor references). In code, `closedStyleRefusal` gates closed styles like bases.
 - "the project makes itself" matches Terms §7 ("the images the project made itself, its starting points").
@@ -95,13 +103,11 @@ Notes:
 > The narration, many pictures (every frame made in Remix among them) and the assistant's answers are produced by AI
 > models and are labelled as such. They can be wrong. The assistant's commentary is not the book and is not advice of
 > any kind. Some of the project's own pictures, among them some of the remix challenge's bases, styles and references,
-> are made with a closed model by Google, named with its maker on each picture's recipe. Its maker's terms let us
+> are made with closed models by OpenAI and Google, named with their maker on each picture's recipe. Their makers' terms let us
 > publish them and bind us, not you: we offer these pictures under the licence in section 3, as far as anyone holds
 > rights in them, since a picture made wholly by a model may have no copyright at all.
 
-(With variant A, "a closed model by Google, named with its maker" reads "closed models by OpenAI and Google, named with
-their maker". With the optional Fifteen Days sentence, add after "references": "and, by OpenAI, the pictures of
-Fifteen Days' second version".) With variant A, "Its maker's terms" reads "Their makers' terms".
+(With the optional Fifteen Days sentence, add after "references": "and the pictures of Fifteen Days' second version".)
 
 **Why §8, not §3 or 6e:**
 
@@ -133,10 +139,8 @@ vocabulary, after which this line is required.
 **After (a sentence after "Supabase holds the database."):**
 
 > … Supabase holds the database. Some of the project's own pictures (the remix challenge's bases, styles and
-> references) are made with a closed model by Google, through Vercel AI Gateway: Google receives the prompt and the
-> reference pictures, nothing about you. …
-
-(With variant A: "closed models by OpenAI and Google … they receive".)
+> references) are made with closed models by OpenAI and Google, through Vercel AI Gateway: they receive the prompt and
+> the reference pictures, nothing about you. …
 
 The assistant's notice (P6i) and the image consent screen (P6j) don't change: neither OpenAI nor Google receives an
 assistant question, or anything at Generate.
