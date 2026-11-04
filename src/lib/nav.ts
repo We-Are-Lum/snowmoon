@@ -16,7 +16,8 @@ export interface NavItem {
 import { ADAPTATIONS, FUND } from './config';
 import { SUPPORT_WORDING } from './support-wording';
 
-export function navItems(last: number, adaptations: number): NavItem[] {
+/** `challenge`: show the remix challenge's item (CHALLENGE.public, or an admin signed in; owner, 2026-11-04: admin-only for now). */
+export function navItems(last: number, adaptations: number, challenge = false): NavItem[] {
   // The order (owner, 2026-10-29, the next-version plan): Adaptations first, then the Book, References (once
   // Pictures), Minpentai and the Assistant. Read stays one tap away on the home page and in the reader.
   const items: NavItem[] = [
@@ -50,8 +51,8 @@ export function navItems(last: number, adaptations: number): NavItem[] {
     // Fund (owner, 2026-11-04): in the menu's first section, under "Remix the cast"; the footer link stays.
     ...(FUND.linked ? [{ key: 'fund', label: SUPPORT_WORDING.menu, href: '/fund' }] : []),
   ];
-  // Adaptations are out of view for now (ADAPTATIONS.visible).
-  return ADAPTATIONS.visible ? items : items.filter((i) => i.key !== 'adaptations');
+  // Adaptations are out of view for now (ADAPTATIONS.visible); the challenge until the owner opens it, but to admins.
+  return items.filter((i) => (i.key !== 'adaptations' || ADAPTATIONS.visible) && (i.key !== 'challenge' || challenge));
 }
 /** Destinations shown as coming, as text, not links. None now: References (once Pictures) is open as a trial. */
 export const COMING: { label: string; meta: string }[] = [];

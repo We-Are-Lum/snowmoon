@@ -16,8 +16,9 @@ import assert from 'node:assert/strict';
 import { validateSnapResponse } from '@farcaster/snap';
 import { K, XY, lit, towers, type Placement } from '../src/lib/minpentai/play-game/game';
 import { PlayController, type Env } from '../src/lib/minpentai/play-game/controller';
-import { play } from '../src/lib/minpentai/snap/match';
-import { act, intro, newMatch, AIM, AIM_TEXT, LEVELS, ROCK, SEEN, SEEN_BG, type Here, type SnapPage } from '../src/lib/minpentai/snap/pages';
+import { play, Unplayable } from '../src/lib/minpentai/snap/match';
+import { act, intro, newMatch, AIM, AIM_TEXT, LEVELS, ROCK, SEEN, SEEN_BG, STALE_NOTE, type Here, type SnapPage } from '../src/lib/minpentai/snap/pages';
+import { oldSnapMatch } from './lib/minpentai-old-computer';
 import { sightOf } from '../src/lib/minpentai/play-server/view';
 import { parse, serialize, sign, verified, type P, type SnapState } from '../src/lib/minpentai/snap/state';
 import { runGif } from '../src/lib/minpentai/snap/run';
@@ -723,6 +724,54 @@ async function main() {
       assert.equal(JSON.stringify(c.m!.w), JSON.stringify(play({ ...st, rs }).w), `Play continues a ruleset ${rs} match as the snap plays it`);
       assert.equal(c.m!.s.maxSteps, maxStepsOf(rs));
     }
+  });
+
+  // 8. Old links (owner, 2026-11-03: option 3, every computer plans from its own fog view; old matches may not replay).
+  check('an old snap match the old computer played (whole board) that no longer replays: a note and "Start a new match", never an error', () => {
+    // Seed 2 at Builder (3): the old computer's moves differ once it plans from its view, and the person's turn 6 is then
+    // out of reach. The same turns replayed by the old computer itself end where it said, so they are a genuine old match.
+    const old = oldSnapMatch(2, 3);
+    const st: SnapState = { ...newMatch(41, '', 3), seed: 2, rs: 1, turns: old.turns.slice(0, 7) };
+    assert.throws(() => play(st), (e: unknown) => e instanceof Unplayable && /turn 6/.test((e as Error).message), 'it no longer replays');
+    for (const a of ['next', 'tap', 'end', 'undo', 'resign-yes']) {
+      const r = act(H, a, { ...st, turns: [...st.turns] }, 41, { cell: '2,3' }, { ver: '' });
+      valid(r.page, `stale page (${a})`);
+      assert.equal(r.page.ui.elements.title.props!.content, 'This match can\'t be carried on', a);
+      assert.equal(r.page.ui.elements.body.props!.content, STALE_NOTE);
+      assert.equal(r.keep, 'drop', 'the kept match is dropped');
+      const again = r.page.ui.elements.again;
+      assert.equal(again.props!.label, 'Start a new match');
+      const t = new URL((again.on!.press as { params: { target: string } }).params.target);
+      assert.equal(t.searchParams.get('a'), 'again');
+      // Pressing it starts a new match at the same level.
+      const n = act(H, 'again', parse(t.searchParams.get('s')!), 41, {}, { ver: '' });
+      valid(n.page, 'the new match');
+      const ns = tapState(n.page);
+      assert.ok(ns.turns.length === 0 && ns.lvl === 3 && ns.seed !== 2, 'a new match, same level');
+    }
+    // Kept for Resume: the note, and a new match.
+    const res = act(H, 'resume', null, 41, {}, { ver: '', saved: { seed: 2, lvl: 3, ver: '', rule: '', turns: st.turns, rs: 1 } });
+    valid(res.page, 'resume of a stale match');
+    assert.ok(String(res.page.ui.elements.status.props!.content).startsWith(STALE_NOTE), 'resume says why');
+    assert.equal(tapState(res.page).turns.length, 0, 'and starts a new match');
+    // The whole old match, carried on in Play (?match=): Play shows the note and "Start a new match".
+    const env: Env = { now: () => 5, setInterval: () => 0, clearInterval: () => {}, setTimeout: () => 0, clearTimeout: () => {}, copy: () => {}, href: () => '' };
+    const c = new PlayController(env);
+    assert.equal(c.continueMatch(2, old.turns, 3), false, 'Play refuses it');
+    c.staleMatch();
+    const v = c.view();
+    assert.ok(v.sheetOn && v.shStale && v.staleText.includes('sees only what its towers light'), 'Play shows the note');
+    v.startNew();
+    assert.equal(c.state.scr, 'start', '"Start a new match" opens a new practice match');
+    assert.ok(c.m && c.m.mode === 'practice' && c.m.hist.length === 1, 'a fresh practice match');
+  });
+  check('a link whose match ends with turns left over no longer fits: Play refuses it rather than showing a different match', () => {
+    const st = { ...newMatch(42, '', 2), seed: 77, rs: 1 as const };
+    while (!play(st).over) st.turns.push(plan(play(st), 'gliders'));
+    const env: Env = { now: () => 5, setInterval: () => 0, clearInterval: () => {}, setTimeout: () => 0, clearTimeout: () => {}, copy: () => {}, href: () => '' };
+    assert.ok(new PlayController(env).continueMatch(st.seed, st.turns, st.lvl), 'the match as played carries on');
+    assert.equal(new PlayController(env).continueMatch(st.seed, [...st.turns, []], st.lvl), false, 'one turn more than the match had: refused');
+    assert.throws(() => play({ ...st, turns: [...st.turns, []] }), Unplayable, 'the snap refuses it too');
   });
 
   await Promise.all(pending);

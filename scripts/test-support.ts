@@ -145,8 +145,12 @@ check('S9 the ETH price: Chainlink on Base, none when stale, zero or unreadable'
   if (FUND.chains.ethereum !== /Ethereum/.test(SUPPORT_WORDING.line)) problems.push('the line names Ethereum exactly when it is ready: not so');
   if (!/if \(!FUND\.chains\[g\.network\.key\]\) throw new WalletError\('wrong-network'\);\n  const \{ p, wallet, account \} = await connect\(\);/.test(giveCode)) problems.push('give() does not refuse a chain that is not ready before asking the wallet');
   if (!/\{ source: '\/support', destination: '\/fund', permanent: true \}/.test(nextConfig)) problems.push('/support does not redirect to /fund');
-  const keys = navItems(30, 0).map((i) => i.key);
+  // Admins see "Remix the cast" while the challenge is admin-only (navItems' third argument); Fund is right under it.
+  // Everyone else doesn't see that item, and Fund is the first section's last item (owner, 2026-11-04, item 8.4).
+  const keys = navItems(30, 0, true).map((i) => i.key);
   if (FUND.linked && keys[keys.indexOf('challenge') + 1] !== 'fund') problems.push(`the menu's Fund is not right under Remix the cast: ${keys.join(',')}`);
+  const keysHidden = navItems(30, 0, false).map((i) => i.key);
+  if (FUND.linked && (keysHidden.includes('challenge') || keysHidden[keysHidden.length - 1] !== 'fund')) problems.push(`without the challenge item, Fund is not the menu's last item: ${keysHidden.join(',')}`);
   if (navItems(30, 0).find((i) => i.key === 'fund')?.label !== 'Fund' && FUND.linked) problems.push('the menu label is not "Fund"');
   if (SUPPORT_WORDING.title !== 'Fund this project') problems.push('the title is not "Fund this project"');
   if (IMAGES.prepaid.payTo?.toLowerCase() === FUND.address.toLowerCase()) problems.push('prepaid generations pay to the Fund address');

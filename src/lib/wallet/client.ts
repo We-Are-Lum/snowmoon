@@ -3,7 +3,7 @@
 import { createPublicClient, createWalletClient, custom, parseAbi, parseUnits, type EIP1193Provider } from 'viem';
 import { base, ethereum } from './base-chain';
 import { createSiweMessage } from 'viem/siwe';
-import { authFetch, saveWalletSession } from '../client-auth';
+import { authFetch, refreshWalletLink, saveWalletSession } from '../client-auth';
 import { IMAGES, FUND, type FundNetwork } from '../config';
 import { IMAGE_WORDING } from '../images/wording';
 import { forgetsPending } from './pending';
@@ -50,6 +50,8 @@ export async function signInWithWallet(): Promise<string> {
   const out = (await res?.json().catch(() => ({}))) as { token?: string; address?: string; error?: string };
   if (!res?.ok || !out.token || !out.address) throw new WalletError('server', out.error);
   saveWalletSession(out.token, out.address);
+  // Who the wallet signs in as (a linked Farcaster account), for the menu; the server links it now if it can.
+  await refreshWalletLink(true);
   return out.address;
 }
 
