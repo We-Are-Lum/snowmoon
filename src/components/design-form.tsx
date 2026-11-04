@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { authFetch, useAuth, webNameProof } from '~/lib/client-auth';
 import { VIEW_NAMES, wordDiff, type ViewSlot } from '~/lib/images/design-rules';
 import { IMAGE_WORDING } from '~/lib/images/wording';
-import { CHALLENGE_WORDING as CW } from '~/lib/challenge/wording';
 import { ConsentScreen, PublishedTextField, PublishFlow } from './publish-words';
 import { SignInButton } from './sign-in';
 import { BookQuotes } from './design-book';
@@ -51,6 +50,8 @@ type Props = {
   suffix: string;
   /** The remix challenge opens this fork or version to everyone who passes the Generate gate (CHALLENGE.openSheets; the server checks again). */
   challengeOpen?: boolean;
+  /** Who can enter, the challenge's words, given by the server only while it opens this form (challengeOpen). */
+  whoCanEnter?: string;
 };
 
 export function DesignForm(p: Props) {
@@ -66,7 +67,7 @@ export function DesignForm(p: Props) {
   const [consent, setConsent] = useState<Wording | null>(null);
   const [published, setPublished] = useState<string | null>(null);
   /** What the publish said about the remix challenge: this version can be submitted as an entry, or Neynar didn't answer so it can't. */
-  const [entry, setEntry] = useState<{ kind: 'candidate' | 'unchecked'; name: string } | null>(null);
+  const [entry, setEntry] = useState<{ kind: 'candidate' | 'unchecked'; text: string } | null>(null);
   // A refusal at Generate (a score below the check, the day's limit…) shows beside the Generate buttons and is
   // scrolled into view (launch rehearsal, 2026-11-02: it appeared 174px below the screen at 390px wide).
   const noteRef = useRef<HTMLParagraphElement>(null);
@@ -170,7 +171,7 @@ export function DesignForm(p: Props) {
         nameProof: webNameProof(),
       }),
     });
-    const out = (await res.json().catch(() => ({}))) as { page?: string; error?: string; challenge?: { kind: 'candidate' | 'unchecked'; name: string } | null };
+    const out = (await res.json().catch(() => ({}))) as { page?: string; error?: string; challenge?: { kind: 'candidate' | 'unchecked'; text: string } | null };
     if (!res.ok || !out.page) throw new Error(out.error ?? 'Could not publish');
     setEntry(out.challenge?.kind === 'candidate' || out.challenge?.kind === 'unchecked' ? out.challenge : null);
     setPublished(out.page);
@@ -259,12 +260,12 @@ export function DesignForm(p: Props) {
     return (
       <>
         <p className="ic-done">
-          {W.form.published} {entry?.kind === 'candidate' && `${CW.publishedCandidate(entry.name)} `}
+          {W.form.published} {entry?.kind === 'candidate' && `${entry.text} `}
           <Link href={published}>{W.form.see}</Link>
         </p>
         {entry?.kind === 'unchecked' && (
           <p className="ic-error ch-unchecked" role="status">
-            {CW.publishedUnchecked(entry.name)}
+            {entry.text}
           </p>
         )}
         {entry && <p className="as-draft ic-draftline">{IMAGE_WORDING.draftLine}</p>}
@@ -296,7 +297,7 @@ export function DesignForm(p: Props) {
         <p className="ic-gate">{W.form.notReady}</p>
       ) : !status.consented ? (
         <div className="ic-gate">
-          {p.challengeOpen && !status.invited && <p className="ch-who">{CW.whoCanEnter()}</p>}
+          {p.challengeOpen && !status.invited && p.whoCanEnter && <p className="ch-who">{p.whoCanEnter}</p>}
           <p>{W.form.consentFirst}</p>
           <button type="button" className="ic-primary" onClick={startConsent}>
             {W.form.readAndAgree}
@@ -352,7 +353,7 @@ export function DesignForm(p: Props) {
                 {note}
               </p>
             )}
-            {p.challengeOpen && !status.invited && <p className="dz-note ch-who">{CW.whoCanEnter()}</p>}
+            {p.challengeOpen && !status.invited && p.whoCanEnter && <p className="dz-note ch-who">{p.whoCanEnter}</p>}
             {!style && (
               <ul className="dz-view-lines">
                 {(['front', 'side', 'back'] as const).map((k) => (

@@ -15,9 +15,23 @@ import { IMAGES } from '../config';
  *   which passes its chosen model's `open` here. Today every remix is on the open default, so 1.
  */
 
-/** Whether this person's sheet views count as remixes (else as pictures, as before). */
+/**
+ * Person numbers: an FID is above zero; a wallet account is -1 to -999,999,999; a Lens or Bluesky account is at or
+ * below -1,000,000,000 (studio.sheet_remix_asks takes FIDs and these, never a wallet's). The same ranges as
+ * bluesky-check's src/lib/people.ts (isWalletPerson, isSocialPerson): when the branches meet, use those and drop these.
+ */
+export const SOCIAL_PERSON_BASE = 1_000_000_000;
+export const isWalletNumber = (person: number) => person < 0 && person > -SOCIAL_PERSON_BASE;
+export const isSocialNumber = (person: number) => person <= -SOCIAL_PERSON_BASE;
+
+/**
+ * Whether this person's sheet views count as remixes (else as pictures, as before): an FID, or a Lens or Bluesky
+ * account (owner, 2026-11-04: a Bluesky account that passes its check gets free remixes). Whether a Lens or Bluesky
+ * account passed is decided before this, by bluesky-check's gate at the top of reserve() (freeFor); nothing on this
+ * branch signs one in. Never a wallet account: it pays per picture.
+ */
 export const countsRemixes = (fid: number, lists: { perDayFor: Readonly<Record<number, number>>; invited: readonly number[] } = IMAGES): boolean =>
-  fid > 0 && lists.perDayFor[fid] === undefined && !lists.invited.includes(fid);
+  (fid > 0 || isSocialNumber(fid)) && lists.perDayFor[fid] === undefined && !lists.invited.includes(fid);
 
 /** How many of the day's remixes one remix uses: 1 on an open model, 3 on a closed one (remix-model-choice's hook). */
 export const remixUnits = (model: { open: boolean }): number => (model.open ? 1 : IMAGES.designs.closedRemixUnits);

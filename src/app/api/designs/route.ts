@@ -14,6 +14,7 @@ import { mayGenerate } from '~/lib/images/gate';
 import { openForChallenge } from '~/lib/challenge/open-sheets';
 import { recordEligibility } from '~/lib/challenge/record';
 import { publishStanding } from '~/lib/challenge/entries';
+import { CHALLENGE_WORDING as CW } from '~/lib/challenge/wording';
 import { checkWords } from '~/lib/images/paid';
 import { IMAGE_WORDING } from '~/lib/images/wording';
 import { putPublic, storageReady } from '~/lib/images/store';
@@ -154,7 +155,7 @@ export async function POST(request: Request) {
   try {
     const out = await makeDesign(sql, { fid, mode, kind, styleName: mode === 'create' && kind === 'style' ? title : undefined, character: character ?? undefined, place: place ?? undefined, fromVersionId: typeof body.from === 'string' ? body.from : undefined, body: design });
     // The remix challenge: whether this version can be an entry is decided now, once, and stored (never on page view).
-    let challenge: { kind: 'candidate' | 'unchecked'; name: string } | null = null;
+    let challenge: { kind: 'candidate' | 'unchecked'; text: string } | null = null;
     if (kind === 'character' && mode !== 'create') {
       await recordEligibility(sql, out.versionId, fid);
       // Its count and entries list change now, as after a mark (launch rehearsal, 2026-11-02: /challenge lagged up to a minute).
@@ -162,7 +163,9 @@ export async function POST(request: Request) {
       // The confirmation says it can be submitted as an entry, or that it can't because Neynar didn't answer (owner, 2026-11-03; Submit, 2026-11-04).
       const st = await publishStanding(sql, out.versionId);
       const full = st ? (bookCharacter(st.character)?.name ?? st.character) : '';
-      if (st) challenge = { kind: st.kind, name: full.split(' ').find((w) => !/^(Lord|General|Senator)$/.test(w)) ?? full };
+      const name = full.split(' ').find((w) => !/^(Lord|General|Senator)$/.test(w)) ?? full;
+      // The words are written here, so the form's script carries none of the challenge's (owner, 2026-11-04).
+      if (st) challenge = { kind: st.kind, text: st.kind === 'candidate' ? CW.publishedCandidate(name) : CW.publishedUnchecked(name) };
     }
     revalidatePath('/references/designs');
     return NextResponse.json({ versionId: out.versionId, page: `/references/designs/${out.versionId}`, challenge });

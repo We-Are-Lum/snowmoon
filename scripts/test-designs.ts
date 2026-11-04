@@ -344,7 +344,8 @@ check('My picks and the composer show no built-on number', !/builtOn|built on/i.
   check('scenes.json is what npm run designs:scenes derives', read('content/snowmoon/designs/scenes.json') === JSON.stringify(buildScenes(), null, 1) + '\n');
   const names = (c: number, a: number, b: number) => SH.inPassage(c, a, b).characters.map((x) => x.slug);
   check('in this passage: a character by their name', names(1, 2, 5).includes('gladias'));
-  check('in this passage: by a word of the name (Zei Leimin as "Zei"), in the order first named', names(5, 1, 8).join(',') === 'zei,min,bai', names(5, 1, 8).join(','));
+  // Most named in the book first, like every character list (owner, 2026-11-04); it was the order first named.
+  check('in this passage: by a word of the name (Zei Leimin as "Zei"), most named in the book first', names(5, 1, 8).join(',') === 'zei,bai,min', names(5, 1, 8).join(','));
   check('in this passage: titles left out, the rest a call name (General Lektor as "Lektor")', SH.namesFor({ name: 'General Lektor' }).includes('Lektor') && !SH.namesFor({ name: 'General Lektor' }).includes('General'));
   check('in this passage: an alias counts', SH.namedAs('Then Gem waved.', SH.namesFor({ name: 'Gemma Ro', aliases: ['Gem'] })) === 'Gem');
   check('in this passage: name_exclusions are not them ("Hun Min street" is not Min)', SH.namedAs('They walked down Hun Min street.', ['Min'], ['Hun Min']) === null && SH.namedAs('Min laughed.', ['Min'], ['Hun Min']) === 'Min');

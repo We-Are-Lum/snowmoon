@@ -9,7 +9,7 @@
 import { randomInt } from 'node:crypto';
 import { D4, D8, K, RULES, W, XY, inb, lit, type RuleId } from '../play-game/game';
 import { PLAY_RULESET, maxStepsOf } from '../versions/solo-v1';
-import { play, refusal, type Played } from './match';
+import { Unplayable, play, refusal, type Played } from './match';
 import { LABELS } from '../../labels';
 import { CHALLENGE_PATH, LEVELS, RULE_SHORT, challengeLine, challengeText, decResult, encChallenge, encResult, outcome, type Challenge } from './challenge';
 import { encMatch } from './moves';
@@ -266,6 +266,23 @@ export function runPage(h: Here, st: SnapState, p: Played): SnapPage {
   });
 }
 
+/** What the snap says of a match that no longer replays (model-drafted; owner's decision 2026-11-03, option 3). */
+export const STALE_NOTE = 'This match was saved before the computer changed how it plans: it now sees only what its towers light. The saved moves no longer fit, so it can\'t be carried on.';
+
+/**
+ * A match from a link or a kept match that no longer replays (made before the computer planned from its fog view only):
+ * a short note and "Start a new match" (the same level, rule and version), never an error.
+ */
+export function stalePage(h: Here, st: SnapState): SnapPage {
+  return page({
+    page: { type: 'stack', props: {}, children: ['title', 'body', 'acts'] },
+    title: text('This match can\'t be carried on', { weight: 'bold' }),
+    body: text(STALE_NOTE, { size: 'sm' }),
+    acts: { type: 'stack', props: { direction: 'horizontal' }, children: ['again'] },
+    again: button('Start a new match', submit(h, 'again', st), true),
+  });
+}
+
 export function resignPage(h: Here, st: SnapState): SnapPage {
   return page({
     page: { type: 'stack', props: {}, children: ['title', 'body', 'acts'] },
@@ -369,10 +386,20 @@ export function act(
     if (q.saved) {
       const r = resumed(fid, q.saved);
       r.taps = 1;
+      let stale = false;
       try {
         const p = play(r);
         if (!p.over) return { page: actPage(h, r, p, `Resumed at turn ${r.turns.length + 1}, step ${p.w.step}.`), keep: null };
-      } catch { /* a kept match that no longer replays: start afresh */ }
+      } catch (e) {
+        // A kept match that no longer replays: say so, and start afresh.
+        if (!(e instanceof Unplayable)) throw e;
+        stale = true;
+      }
+      if (stale) {
+        const n = newMatch(fid, q.ver, levelOf(inputs.lvl), ruleOf(inputs.rule));
+        n.taps = 1;
+        return { page: actPage(h, n, play(n), `${STALE_NOTE} Here is a new one.`), keep: kept(n) };
+      }
     }
     const n = newMatch(fid, q.ver, levelOf(inputs.lvl), ruleOf(inputs.rule));
     n.taps = 1;
@@ -386,6 +413,17 @@ export function act(
     n.taps = 1;
     return { page: actPage(h, n, play(n), null), keep: kept(n) };
   }
+  try {
+    return onMatch(h, a, st, inputs);
+  } catch (e) {
+    // The match in the link no longer replays (made before the computer planned from its fog view only).
+    if (e instanceof Unplayable) return { page: stalePage(h, st), keep: 'drop' };
+    throw e;
+  }
+}
+
+/** A button on a match in progress (the link's match, verified and the sender's). */
+function onMatch(h: Here, a: string, st: SnapState, inputs: Record<string, unknown>): { page: SnapPage; keep: Keep } {
   st.taps++;
   const tool = toolOf(inputs.piece);
   if (tool && tool !== st.tool) { st.tool = tool; st.taps++; }

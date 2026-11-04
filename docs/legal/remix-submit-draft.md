@@ -1,10 +1,10 @@
-# Remix submit: Terms and Privacy lines, the rules and the minimum (DRAFT, pending the owner's reread)
+# Remix submit: Terms and Privacy lines, the rules and the minimum (reread 2026-11-04)
 
-Drafted by the coding agent (Claude Opus 5.5, a closed model by Anthropic) on 2026-11-04, on branch `remix-submit`, for
-the owner's reread. **DRAFT: not reread.** The "after" words are applied in `src/lib/legal.ts` on the branch, marked
-pending there: `LEGAL.ownerReread` still holds the reread keys (Terms `15lsr9u`, Privacy
-`1frr16h`), so the pages show "Draft wording" and check:principles P6k and P6l fail until the owner
-says "reread" and the new keys are set (Terms `1jj0onr`, Privacy `mvnybk`).
+Drafted by the coding agent (Claude Opus 5.5, a closed model by Anthropic) on 2026-11-04, on branch `remix-submit`.
+**Reread:** reread pack item 9, reviewed by the coordinator, approved by the owner on 2026-11-04 as the reread: 9.1–9.3
+as recommended; 9.4, the post must be the submitter's own. `LEGAL.ownerReread` is set to these words (Terms
+`1l0ppvm`, Privacy `j7y15c`; before, `15lsr9u` and `1wgu7z`). Answer 9.4 added three words: Terms §6e "their own
+post", Privacy §4 "your own post". If any word below changes, the keys must be computed and reread again.
 
 Legal texts describe today (owner, 2026-10-18): these lines ship in the same merge as Submit, the cap of three and the
 free-remix count, never ahead of them. "Before" is main's `src/lib/legal.ts` word for word (at 233f5e0); "after" is the
@@ -12,9 +12,12 @@ branch's.
 
 What they describe (owner, 2026-11-04, items 5 and 7):
 
-- A remix becomes an entry only when its maker presses Submit on its page, with a link to a post about it on
+- A remix becomes an entry only when its maker presses Submit on its page, with a link to their own post about it on
   Farcaster, Bluesky or Lens. The post is read from its network's own API and must link to the version's page, as "Add
   where you posted it" checks it; it is then listed on the page as a post the maker added.
+- The post must be the submitter's own (owner, 2026-11-04, answer 9.4). Farcaster: the cast's author FID must be the
+  submitter's. Bluesky: the post's DID must be one the site knows is the submitter's; nothing links a Bluesky account
+  to a person yet, so a Bluesky post is refused for now. Lens: not checked (see the end).
 - Up to three submissions per person across all characters, any mix (three of one character included), checked on the
   server under a per-person lock. Each version once.
 - Withdrawing (proposed, built): until entries close, a maker can withdraw a submission, which deletes it and frees the
@@ -36,11 +39,11 @@ Before:
 
 After:
 
-> The challenge page sets out its dates, the characters, and what happens after. During the challenge, anyone signed in with a Farcaster account that passes the site's check may remix its characters' sheets; making other sheets and styles stays by invitation. Entering is free and needs no purchase, and minting isn't needed for anything. A version counts as an entry only once its maker submits it on the Service, with a link to a post about it on Farcaster, Bluesky or Lens that links to its page, and only if it is a remix (not a sheet made from scratch) made on the Service during the challenge by an account we invited or one that passed the site's check when the version was published. Each person can submit up to three entries, for one character or several, and can withdraw one until entries close. A character needs entries from at least three different people to get a final version; several entries by one person count once. Admins can make versions but aren't eligible for rewards. When entries close, a record of every entry is published to IPFS and referenced on Ethereum, where it can't be removed: a fingerprint of its pictures and recipe (not the pictures or words themselves), its maker's Farcaster ID, when it was published and what it was built on; hiding a version later removes it from the Service, but not its fingerprint from that record. Anything that follows the challenge, including any mint, is a plan, not a promise, and is decided as the challenge page says. We may change or end the challenge, and the page will say so.
+> The challenge page sets out its dates, the characters, and what happens after. During the challenge, anyone signed in with a Farcaster account that passes the site's check may remix its characters' sheets; making other sheets and styles stays by invitation. Entering is free and needs no purchase, and minting isn't needed for anything. A version counts as an entry only once its maker submits it on the Service, with a link to their own post about it on Farcaster, Bluesky or Lens that links to its page, and only if it is a remix (not a sheet made from scratch) made on the Service during the challenge by an account we invited or one that passed the site's check when the version was published. Each person can submit up to three entries, for one character or several, and can withdraw one until entries close. A character needs entries from at least three different people to get a final version; several entries by one person count once. Admins can make versions but aren't eligible for rewards. When entries close, a record of every entry is published to IPFS and referenced on Ethereum, where it can't be removed: a fingerprint of its pictures and recipe (not the pictures or words themselves), its maker's Farcaster ID, when it was published and what it was built on; hiding a version later removes it from the Service, but not its fingerprint from that record. Anything that follows the challenge, including any mint, is a plan, not a promise, and is decided as the challenge page says. We may change or end the challenge, and the page will say so.
 
 The change, in short: "A version counts as an entry if it is a remix …" becomes "A version counts as an entry only
-once its maker submits it on the Service, with a link to a post about it on Farcaster, Bluesky or Lens that links to
-its page, and only if it is a remix …"; "One entry per person per character: your latest version counts unless you
+once its maker submits it on the Service, with a link to their own post about it on Farcaster, Bluesky or Lens that
+links to its page, and only if it is a remix …"; "One entry per person per character: your latest version counts unless you
 mark another." becomes "Each person can submit up to three entries, for one character or several, and can withdraw one
 until entries close."; and the minimum is added: "A character needs entries from at least three different people to
 get a final version; several entries by one person count once."
@@ -53,7 +56,7 @@ Before:
 
 After:
 
-> If you take part in the remix challenge: for each version of a challenge character you publish, whether it can count as an entry and why (you were invited, you are an admin, or whether your account passed the site's check), decided once, when you publish it, and kept with the time it was decided; and each version you submit as an entry (up to three), with its character and when you submitted it. Submitting needs the link to your post about it, which is kept and listed on the version's page like any post you add (below). If you withdraw a submission, it is deleted; the post stays listed until you remove it. Whether a version is an entry is shown on its page and on the challenge page, with how many people have submitted for each character.
+> If you take part in the remix challenge: for each version of a challenge character you publish, whether it can count as an entry and why (you were invited, you are an admin, or whether your account passed the site's check), decided once, when you publish it, and kept with the time it was decided; and each version you submit as an entry (up to three), with its character and when you submitted it. Submitting needs the link to your own post about it, which is kept and listed on the version's page like any post you add (below). If you withdraw a submission, it is deleted; the post stays listed until you remove it. Whether a version is an entry is shown on its page and on the challenge page, with how many people have submitted for each character.
 
 ## Privacy §4: the daily-limits item (free remixes)
 
@@ -91,7 +94,7 @@ Before (main):
 
 After:
 
-> A remix becomes an entry only when you press Submit on its page, with a link to your post about it on Farcaster,
+> A remix becomes an entry only when you press Submit on its page, with a link to your own post about it on Farcaster,
 > Bluesky or Lens. You can submit up to three, for one character or several. Until entries close you can withdraw
 > one, which frees its place.
 
@@ -126,25 +129,36 @@ After:
 - After the close. Before: "Made during the remix challenge. Entries are closed: its maker's entry for Bai is another
   version." After: "Made during the remix challenge. Entries are closed: it wasn't submitted as an entry for Bai."
 - New, Submit on the version page (its maker only): "Submit as an entry"; "A remix becomes an entry only when you
-  submit it, with the link to your post about it on Farcaster, Bluesky or Lens; the post must link to this page. You
-  can submit up to three, for one character or several."; the box "Your post's address (Farcaster, Bluesky or Lens)";
+  submit it, with the link to your post about it on Farcaster, Bluesky or Lens; the post must be yours and link to this
+  page. You can submit up to three, for one character or several."; the box "Your post's address (Farcaster, Bluesky or Lens)";
   "Submit"; "Submitted: this is now one of your entries."; "2 of 3 submissions left"; "Withdraw"; "Until entries close,
   withdrawing frees its place."; "Withdrawn: it is no longer an entry."
 - Refusals: "You've submitted 3, the most anyone can. Withdraw one to submit another."; "You've already submitted this
   version."; "Add the link to a post about it on Farcaster, Bluesky or Lens first."; "This version can't be entered:
-  your account didn't pass the site's check when you published it."; "Withdrawing isn't available yet."
+  your account didn't pass the site's check when you published it."; "Withdrawing isn't available yet."; (answer 9.4)
+  "That post isn't from your account. Submit a post you wrote."; "We can't tell yet that this Bluesky post is yours.
+  Submit a post from your Farcaster account instead."
 - Free remixes: "You've made today's 3 remixes. More tomorrow (00:00 UTC)."; "This remix has used its 6 pictures. Press
   Remix to start a new one."
 
 ---
 
-## For the owner to decide with the reread
+## The owner's answers (2026-11-04) and what is still open
 
-1. The publish line replaces your own words of 2026-11-03 ("This is your entry for …"), since publishing no longer
-   enters. Keep the draft, or give the words.
-2. Privacy §6: the sentence above is outside your list; keep it, or say how you want it.
-3. A post that is removed after Submit (by its adder or a moderator): the entry stays (the post was checked at Submit).
-   Say if a submission should stop counting when its post goes.
-4. The post's writer isn't checked against the submitter (as "Add where you posted it" doesn't check it). Say if Submit
-   should require your own post.
-5. `LEGAL.effective` stays 2026-11-01 on the branch; set it to the day these go live at merge.
+1. Answered (9.1 = the draft): the publish line replaces your own words of 2026-11-03.
+2. Answered (9.2 = keep it): the Privacy §6 sentence.
+3. Answered (9.3 = it stays): a post removed after Submit leaves the entry.
+4. Answered (9.4 = yes): Submit requires your own post. Built for Farcaster (author FID) and Bluesky (DID;
+   refused until a Bluesky account can be linked to a person, on signin-lens-bluesky or bluesky-check). Lens is not
+   checked: its API names the post's author account and that account's owner address, so a check is possible once
+   the site knows the submitter's Lens account (signin-lens-bluesky) or by matching the owner address to a wallet
+   linked to the submitter's FID (main's wallet links). Say which, or leave Lens unchecked. "Add where you posted it"
+   still takes anyone's post (it lists posts; it doesn't enter them).
+5. `LEGAL.effective` is main's 2026-11-04 on the branch; set it to the day these go live at merge.
+6. Open: Terms §6e and the rules name Bluesky, but until a Bluesky account can be linked to a person, every Bluesky
+   post is refused at Submit ("We can't tell yet that this Bluesky post is yours. …"). Either that link merges first
+   (bluesky-check or signin-lens-bluesky), or "Bluesky" comes out of §6e and the rules until it does.
+7. The refusal lines for 9.4 are user-facing, not legal (draft wording): "That post isn't from your account. Submit a
+   post you wrote." and "We can't tell yet that this Bluesky post is yours. Submit a post from your Farcaster account
+   instead."
+

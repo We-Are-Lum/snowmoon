@@ -66,7 +66,8 @@
  *   shown, the finding with its fix line, the note box with the publication line, pre-filled with the fix line labelled
  *   "Drafted by the image check (Argon finding, gpt-oss-120b fix line)" and marked when edited; anyone else sees only the owner line.
  * - The remix challenge (/challenge, 2026-10-31): the floors, light and dark, the "Draft wording" line, its six characters in order, the
- *   deadline in Pacific time, the rules, admins not eligible for rewards, no sideways scroll.
+ *   deadline in Pacific time, the rules, admins not eligible for rewards, no sideways scroll. While it is admin-only
+ *   (CHALLENGE.public off; owner, 2026-11-04): signed out, status 404 with nothing of the challenge in the HTML or on screen.
  * - The footer line (owner's legal starter, 2026-10-09) reads exactly as written, with Terms, Privacy
  *   and Source linked, at the foot of About, in the menu sheet and at the bottom of the rail; not on a
  *   phone's reading screen. /terms and /privacy meet the floors.
@@ -75,9 +76,10 @@ import { execFileSync, spawn } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import { createServer } from 'node:net';
 import path from 'node:path';
-import { chromium, type Browser, type Page } from 'playwright-core';
+import { chromium, type Browser, type Page, type Route } from 'playwright-core';
 import QRCode from 'qrcode';
-import { SUPPORT } from '../src/lib/config';
+import { BOOK_MENTIONS } from '../src/lib/character-order';
+import { CHALLENGE, SUPPORT } from '../src/lib/config';
 import { requireTarget } from './lib/target';
 
 const arg = (name: string) => process.argv.slice(2).find((a) => a.startsWith(`--${name}=`))?.split('=').slice(1).join('=');
@@ -101,7 +103,8 @@ const MINPENTAI_HOOD = 'lesson=8';
 /** Lesson 1's title (src/lib/minpentai/learn-text.ts, lessons.goal). */
 const MINPENTAI_LESSON_1 = 'Keep your towers. Destroy theirs.';
 /** The owner's exact sentences (2026-10-20, before posting the tutorial link), and where each must appear. */
-const OWNER_BROADCAST = "The full game, as the book describes it, has four players. What you'll play here is a simpler two-player version.";
+/** Removed from every Learn screen (owner, 2026-11-03); checked to appear nowhere. */
+const REMOVED_BROADCAST = 'as the book describes it, has four players';
 const OWNER_TEACH = "A ring marks each tower lost, square broken and crash, even in the dark. Shown here to teach. In a real match, you'll only see the hits your towers light.";
 const OWNER_AMBER = "Shown here to teach. In a real match, you'll only see outlines where they start.";
 const OWNER_CELLS = 'In the book, pieces are made of cells. Here you play with whole squares.';
@@ -377,6 +380,24 @@ async function checkAccountWallet(page: Page, within: string, where: string) {
   const left = await page.evaluate(() => localStorage.getItem('snowmoon.wallet'));
   if (left) fail(`${where}: Sign out leaves the wallet session in storage`);
   await checkAccountSignedOut(page, within, `${where} (after Sign out)`);
+}
+
+/**
+ * A wallet linked to a Farcaster account (2026-11-04): the menu shows the account's @name, not the address. A fixture:
+ * the balance route is answered here for the planted token as the server answers a linked wallet. Then Sign out.
+ */
+async function checkAccountLinkedWallet(page: Page, within: string, where: string) {
+  const planted = `Bearer x.${btoa(JSON.stringify({ sub: 'w', exp: 4102444800 })).replace(/=+$/, '')}.y`;
+  const balance = (r: Route) =>
+    r.request().headers().authorization === planted ? r.fulfill({ json: { address: WALLET_ADDRESS, linked: { fid: 6786, name: '@fixture-linked' } } }) : r.fallback();
+  await page.route('**/api/wallet/balance', balance);
+  await plantWalletSession(page);
+  await open(page, '/chapter/1');
+  const acct = page.locator(accountIn(within));
+  await acct.locator('.menu-account-name', { hasText: '@fixture-linked' }).waitFor({ timeout: 10000 }).catch(() => fail(`${where}: a linked wallet does not show its Farcaster name`));
+  if (!(await page.evaluate(() => localStorage.getItem('snowmoon.wallet')))) fail(`${where}: the linked wallet's session ended on load`);
+  await page.unroute('**/api/wallet/balance', balance);
+  await acct.locator('button', { hasText: 'Sign out' }).click();
 }
 
 /** The footer line inside `within`: the starter's words exactly, shown, with its three links. */
@@ -797,6 +818,13 @@ async function checkReferenceGlossary(page: Page, scheme: string) {
   }
   if (!(await page.locator('button.info-label[data-label="about"]').count())) fail(`${where}: no ⓘ for the page's explanation`);
   if (!/AI-generated, not by the author/.test(await page.locator('main').innerText())) fail(`${where}: the AI declaration isn't in view`);
+  // The characters first, most named in the book first (owner, 2026-11-04), then the other words.
+  {
+    const terms = await cards.evaluateAll((els) => els.map((e) => e.getAttribute('data-term') ?? ''));
+    const rank = new Map(BOOK_MENTIONS.map((c, i) => [c.slug, i]));
+    const ranks = terms.map((t) => rank.get(t) ?? Infinity);
+    if (ranks.some((r, i) => i > 0 && r < ranks[i - 1])) fail(`${where}: the characters aren't first, most named first: ${terms.join(', ')}`);
+  }
   await checkFloors(page, '/references/glossary @390', scheme);
   await shot(page, 'phone-390-references-glossary', scheme);
   await page.evaluate(() => localStorage.removeItem('snowmoon.opened'));
@@ -1411,6 +1439,25 @@ if (/^http:\/\/(localhost|127\.0\.0\.1)(:|\/|$)/.test(BASE)) {
   }
 }
 const browser = await chromium.launch({ channel: 'chrome' });
+// A protected Vercel preview: under VERCEL_OIDC_TOKEN, every request to the preview's own origin carries it (never to
+// any other origin a page loads), in every browser context and in this script's own fetches. Never printed. Only this
+// project's preview hosts get it (owner, 2026-11-03), never any other vercel.app address.
+const PREVIEW_HOST = /^snowmoon-[a-z0-9-]+-nates-projects-d1780cff\.vercel\.app$/;
+{
+  const token = process.env.VERCEL_OIDC_TOKEN, url = new URL(BASE), origin = url.origin;
+  if (token && url.protocol === 'https:' && PREVIEW_HOST.test(url.hostname)) {
+    const header = { 'x-vercel-trusted-oidc-idp-token': token };
+    const guard = async (ctx: Awaited<ReturnType<Browser['newContext']>>) => {
+      await ctx.route((u) => u.origin === origin, (route) => route.continue({ headers: { ...route.request().headers(), ...header } }));
+      return ctx;
+    };
+    const newContext = browser.newContext.bind(browser);
+    browser.newContext = async (o) => guard(await newContext(o));
+    browser.newPage = async (o) => (await browser.newContext(o)).newPage();
+    const plain = globalThis.fetch;
+    globalThis.fetch = (u, init = {}) => (new URL(String(u instanceof Request ? u.url : u)).origin === origin ? plain(u, { ...init, headers: { ...(init.headers as Record<string, string> | undefined), ...header } }) : plain(u, init));
+  }
+}
 try {
   await checkAiLabels();
   await checkMarkdownPages();
@@ -1530,21 +1577,36 @@ try {
       if (!(await page.locator('.shell-main a[href="/about"]').count())) fail(`${p} (${scheme}): no link back to About`);
     }
     // The remix challenge (2026-10-31): the floors, the draft line, both characters, the deadline built from the config,
-    // the rules, and no sideways scroll at phone width.
+    // the rules, and no sideways scroll at phone width. While it is admin-only (CHALLENGE.public off; owner, 2026-11-04),
+    // signed out it is the usual "not found": status 404, nothing of the challenge on screen or in the HTML, no menu item.
+    if (!CHALLENGE.public) {
+      const res = await page.goto(BASE + '/challenge', { waitUntil: 'networkidle' });
+      lastOpened = '/challenge';
+      if (res?.status() !== 404) fail(`/challenge (${scheme}): answers ${res?.status()} signed out, not 404 (CHALLENGE.public is off)`);
+      const html = (await res?.text()) ?? '';
+      const shown = (await page.locator('body').textContent()) ?? '';
+      for (const [what, t] of [['HTML', html], ['screen', shown]] as const) {
+        const m = /Remix the cast|remix challenge/i.exec(t);
+        if (m) fail(`/challenge (${scheme}): its ${what} names the challenge ("${m[0]}") signed out`);
+      }
+      if (await page.locator('.ch-page').count()) fail(`/challenge (${scheme}): the challenge page is shown signed out`);
+      if (await page.locator('a[href="/challenge"]').count()) fail(`/challenge (${scheme}): a link to /challenge is on the page signed out`);
+    } else {
     await open(page, '/challenge');
     await checkFloors(page, '/challenge', scheme);
     {
       const text = (await page.locator('.ch-page').textContent()) ?? '';
       if (!/Draft wording/.test(text)) fail(`/challenge (${scheme}): no "Draft wording" line`);
-      // The characters, in CHALLENGE's order (owner, 2026-10-31): Zei, Bai, Gladias, Seila, Deluin, Mu.
+      // The characters, most named in the book first (owner, 2026-11-04; content/snowmoon/characters-by-mentions.json).
       const heads = (await page.locator('.ch-character h2').allTextContents()).map((h) => h.split(' ')[0]);
-      if (heads.join() !== 'Zei,Bai,Gladias,Seila,Deluin,Mu') fail(`/challenge (${scheme}): the characters read ${heads.join(', ')}`);
+      if (heads.join() !== 'Zei,Gladias,Bai,Seila,Deluin,Mu') fail(`/challenge (${scheme}): the characters read ${heads.join(', ')}`);
       if (!/A new sheet made from scratch isn’t an entry/.test(text)) fail(`/challenge (${scheme}): it doesn't say only remixes count`);
       if (!/Entries (open|close|closed) .*Pacific/.test(text)) fail(`/challenge (${scheme}): no deadline in Pacific time`);
       if (!/One entry per person per character/.test(text)) fail(`/challenge (${scheme}): the rules are missing`);
       if (!/aren’t eligible for rewards/.test(text)) fail(`/challenge (${scheme}): it doesn't say admins aren't eligible for rewards`);
       const wide = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1);
       if (wide) fail(`/challenge (${scheme}): scrolls sideways`);
+    }
     }
     await checkAssistant(page, scheme);
     await checkLiveScreens(page, scheme);
@@ -1571,6 +1633,11 @@ try {
       if (p.startsWith('/references/designs?') && !(await page.getByText('Nothing here is official.', { exact: false }).count())) fail(`${p}: no "Nothing here is official"`);
       // Sheets as text (2026-10-10): the places tab is live; a sheet's book words say Book ⓘ, its shorthand Invented ⓘ.
       if (p === '/references/designs?tab=places' && (await page.locator('.dz-rows a[href^="/references/designs/place/"]').count()) < 1) fail(`${p} (${scheme}): no places listed`);
+      // The Characters tab: every character, most named in the book first (owner, 2026-11-04).
+      if (p === '/references/designs?tab=characters') {
+        const rows = await page.locator('.dz-rows a[href^="/references/designs/character/"]').evaluateAll((els) => els.map((e) => (e.getAttribute('href') ?? '').split('/').pop()));
+        if (rows.join() !== BOOK_MENTIONS.map((c) => c.slug).join()) fail(`${p} (${scheme}): the characters aren't most named first: ${rows.join(', ')}`);
+      }
       if (p.includes('/character/') || p.includes('/place/')) {
         await page.waitForSelector('.dz-book');
         for (const [scope, kind, word] of [['.dz-book', 'book', 'Book'], ['.dz-shorthand', 'invented', 'Invented']] as const) {
@@ -1790,8 +1857,8 @@ try {
         // The owner's sentences (2026-10-20): the broadcast's caption on every watch screen, the cells line on Under
         // the hood (CELLS stays on the lessons' boards), "Shown here to teach…" on the practice match's setup text.
         const shown = async (sel: string) => (await page.locator(sel).isVisible().catch(() => false)) ? ((await page.locator(sel).textContent()) ?? '').trim() : '';
-        if (q.startsWith('watch=') && (await shown('.ml-broadcast-note')) !== OWNER_BROADCAST) fail(`/minpentai?${q} (${scheme}): the broadcast's caption is not the owner's sentence`);
-        if (!q.startsWith('watch=') && (await page.locator('.ml-broadcast-note').count())) fail(`/minpentai?${q} (${scheme}): the broadcast's caption shows off the broadcast`);
+        // The broadcast's caption was removed from every Learn screen (owner, 2026-11-03): its sentence appears nowhere.
+        if (((await page.locator('body').textContent()) ?? '').includes(REMOVED_BROADCAST)) fail(`/minpentai?${q} (${scheme}): the removed broadcast sentence ("…${REMOVED_BROADCAST}…") still shows`);
         if (q === MINPENTAI_HOOD && !(await shown('.ml-text')).startsWith(OWNER_CELLS)) fail(`/minpentai?${q} (${scheme}): Under the hood does not open with the owner's cells sentence`);
         if (q === 'lesson=2' && !(await page.locator('.ml-cells').isVisible())) fail(`/minpentai?${q} (${scheme}): the CELLS button is missing`);
         if (q === 'mode=practice') {
@@ -1900,12 +1967,11 @@ try {
         if ((await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)) > 1) fail(`${at}: scrolls sideways`);
         await shot(page, `learn-desktop-${width}-${name}`, scheme);
       }
-      // The broadcast's caption (owner, 2026-10-20) is in view in the desktop layout's text column.
+      // Watch 1's text is in view in the desktop layout's text column (it held the broadcast's caption, removed 2026-11-03).
       {
         await open(page, '/minpentai?watch=1');
-        const cap = await page.locator('.ml-broadcast-note').boundingBox();
-        const capText = ((await page.locator('.ml-broadcast-note').textContent().catch(() => '')) ?? '').trim();
-        if (!cap || cap.y + cap.height > 900 + 1 || capText !== OWNER_BROADCAST) fail(`/minpentai?watch=1 @${width} (${scheme}): the broadcast's caption is not in view`);
+        const text = await page.locator('.ml-text').boundingBox();
+        if (!text || text.y + text.height > 900 + 1) fail(`/minpentai?watch=1 @${width} (${scheme}): the watch text is not in view`);
       }
       await open(page, '/chapter/1');
       const bodyShown = await page.locator('.rail-body').isVisible();
@@ -1952,6 +2018,7 @@ try {
         await open(page, '/chapter/1');
         await shot(page, `desktop-${width}-account-wallet`, scheme);
         await checkAccountWallet(page, '.rail', `@${width} rail`);
+        await checkAccountLinkedWallet(page, '.rail', `@${width} rail (linked wallet)`);
         // Listen view.
         await open(page, '/chapter/1?view=listen');
         await page.waitForSelector('.listen-pane .listen-progress');
@@ -2079,6 +2146,22 @@ try {
     await checkPlayFullScreen(frame, '@424×695', 695);
     await frame.close();
   }
+  // The live match page's layout (owner, 2026-11-03): at 390 × 844 and on a desktop, the board, Take turn and the
+  // replay's controls in view without scrolling, before and after taking a turn. It needs a match, a signed-in player and
+  // an AI, so it runs on its own local stage from this checkout's build (scripts/lib/live-layout.ts).
+  {
+    const { existsSync } = await import('node:fs');
+    if (!existsSync('.next/BUILD_ID')) fail('live page layout: no local build of this checkout; run next build first');
+    else {
+      lastOpened = '/minpentai/m/… (local stage)';
+      // Its own process, in server mode: the stage runs the agent-play code, which only loads there.
+      const { spawnSync } = await import('node:child_process');
+      const run = spawnSync('npx', ['tsx', '--conditions=react-server', 'scripts/check-live-layout.ts'], { encoding: 'utf8', timeout: 900_000 });
+      const line = (run.stdout ?? '').split('\n').find((l) => l.startsWith('LIVE_LAYOUT '));
+      if (!line) fail(`live page layout: the check didn't finish (${(run.stderr ?? '').split('\n').filter(Boolean).slice(-1)[0] ?? run.status})`);
+      else for (const f of JSON.parse(line.slice('LIVE_LAYOUT '.length)) as string[]) fail(f);
+    }
+  }
 } catch (e) {
   // A step that throws (a timeout, a missing element) ends the check: say it on one last line, naming the last page
   // opened and the first line of the error, so a short log still shows what broke (2026-10-29: a bare TimeoutError
@@ -2097,4 +2180,4 @@ if (failures.length) {
   console.error(`\nUI CHECK FAILED (${failures.length}):\n- ` + failures.join('\n- '));
   process.exit(1);
 }
-console.log(`ui check passed: ${BASE}, ${38 + MINPENTAI_LESSONS + 4} pages, Make an image (browse, the 8-block cap, search, deep links, its links from the feed, an image's page and the assistant), the chapter sheet, the glossary's covers and back link, and 8 assistant states × light and dark; 10 pages and Learn's desktop layout (watch, lesson, practice) at 1024, 1440 and 2000; AI labels on 9 screens at 390 and 1440`);
+console.log(`ui check passed: ${BASE}, ${38 + MINPENTAI_LESSONS + 4} pages, Make an image (browse, the 8-block cap, search, deep links, its links from the feed, an image's page and the assistant), the chapter sheet, the glossary's covers and back link, and 8 assistant states × light and dark; 10 pages and Learn's desktop layout (watch, lesson, practice) at 1024, 1440 and 2000; AI labels on 9 screens at 390 and 1440; the live match page's layout at 390 × 844 and 1440 × 900, before and after taking a turn (local stage)`);

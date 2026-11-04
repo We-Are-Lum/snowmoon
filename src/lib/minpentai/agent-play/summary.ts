@@ -26,6 +26,8 @@ export class TurnWatch {
   private squares: Record<number, number>;
   private towers: Set<number>;
   private kills0: number;
+  /** Its gliders already in flight when the turn began: named "sent earlier", not by where this turn first saw them. */
+  private earlier = new Set<number>();
 
   constructor(private e: Engine, private s: Settings, private me: Side, w: World, private kills: Kills, placed: Placement<AnyPiece>[]) {
     // What was placed this turn, by kind (and direction, for what flies).
@@ -39,8 +41,13 @@ export class TurnWatch {
     this.squares = Object.fromEntries(Object.entries(w.sq).filter(([, q]) => q.o === me).map(([k, q]) => [k, q.hp]));
     this.towers = new Set(e.towers(w, me));
     this.kills0 = logOf(kills)?.length ?? 0;
+    const placedAt = new Set(placed.map((p) => e.K(p.x, p.y)));
+    for (const g of w.gl) if (g.o === me && !placedAt.has(e.K(g.x, g.y))) this.earlier.add(g.id);
     this.look(w, true);
   }
+
+  /** A line said first (e.g. that the person took the turn on the live page). */
+  say(line: string) { this.lines.unshift(line); }
 
   /** Call after the placements are applied and after every step. */
   look(w: World, first = false) {
@@ -52,18 +59,20 @@ export class TurnWatch {
       alive.add(g.id);
       const inSight = see.has(e.K(g.x, g.y)), was = this.mine.get(g.id);
       // Its first turn-around in sight (off an edge, a rock, a square, a tower of its own, a mirror…), said once.
-      if (inSight && was?.visible && !was.bounced && (g.dx !== was.dx || g.dy !== was.dy)) { was.bounced = true; this.lines.push(`Your ${g.seed ? 'symbol glider' : 'glider'} from ${was.from} turned at ${at(g.x, g.y)} at step ${step}, now heading ${dir(g.dx, g.dy)}.`); }
-      if (inSight) this.mine.set(g.id, { x: g.x, y: g.y, dx: g.dx, dy: g.dy, step, seed: !!g.seed, visible: true, from: was?.from ?? at(g.x, g.y), bounced: was?.bounced });
-      else if (was?.visible) { was.visible = false; this.lines.push(`Your ${was.seed ? 'symbol glider' : 'glider'} from ${was.from} left your sight at ${at(was.x, was.y)}, heading ${dir(was.dx, was.dy)}, at step ${was.step}.`); }
+      if (inSight && was?.visible && !was.bounced && (g.dx !== was.dx || g.dy !== was.dy)) { was.bounced = true; this.lines.push(`Your ${g.seed ? 'symbol glider' : 'glider'} ${was.from ? `from ${was.from}` : '(sent earlier)'} turned at ${at(g.x, g.y)} at step ${step}, now heading ${dir(g.dx, g.dy)}.`); }
+      if (inSight) this.mine.set(g.id, { x: g.x, y: g.y, dx: g.dx, dy: g.dy, step, seed: !!g.seed, visible: true, from: was?.from ?? (this.earlier.has(g.id) ? '' : at(g.x, g.y)), bounced: was?.bounced });
+      else if (was?.visible) { was.visible = false; this.lines.push(`Your ${was.seed ? 'symbol glider' : 'glider'} ${was.from ? `from ${was.from}` : '(sent earlier)'} left your sight at ${at(was.x, was.y)}, heading ${dir(was.dx, was.dy)}, at step ${was.step}.`); }
     }
     if (!first) for (const [id, g] of this.mine) if (!alive.has(id) && g.visible) {
       g.visible = false;
       // Gone between two steps. Said to be stopped only where its next square is in sight; otherwise it may just have
       // flown out of sight, and saying it stopped would tell of something hidden there.
       const nx = g.x + g.dx, ny = g.y + g.dy, nextSeen = !e.inb(nx, ny) || see.has(e.K(nx, ny));
-      if (g.seed && v.sd?.[e.K(g.x, g.y)]) this.lines.push(`Your symbol glider from ${g.from} came to rest at ${at(g.x, g.y)} at step ${step}.`);
-      else if (nextSeen) this.lines.push(`Your ${g.seed ? 'symbol glider' : 'glider'} from ${g.from} was stopped near ${at(g.x, g.y)} at step ${step}.`);
-      else this.lines.push(`Your ${g.seed ? 'symbol glider' : 'glider'} from ${g.from} left your sight at ${at(g.x, g.y)}, heading ${dir(g.dx, g.dy)}, at step ${g.step}.`);
+      const joined = g.seed && Object.entries(w.fs ?? {}).some(([k, f]) => f.o === me && step - f.at <= 1 && Math.abs(e.XY(+k)[0] - g.x) <= 2 && Math.abs(e.XY(+k)[1] - g.y) <= 2);
+      if (joined) this.lines.push(`Your symbol glider ${g.from ? `from ${g.from}` : '(sent earlier)'} came to rest by ${at(g.x, g.y)} at step ${step} and joined a symbol.`);
+      else if (g.seed && v.sd?.[e.K(g.x, g.y)]) this.lines.push(`Your symbol glider ${g.from ? `from ${g.from}` : '(sent earlier)'} came to rest at ${at(g.x, g.y)} at step ${step}.`);
+      else if (nextSeen) this.lines.push(`Your ${g.seed ? 'symbol glider' : 'glider'} ${g.from ? `from ${g.from}` : '(sent earlier)'} was stopped near ${at(g.x, g.y)} at step ${step}.`);
+      else this.lines.push(`Your ${g.seed ? 'symbol glider' : 'glider'} ${g.from ? `from ${g.from}` : '(sent earlier)'} left your sight at ${at(g.x, g.y)}, heading ${dir(g.dx, g.dy)}, at step ${g.step}.`);
     }
     // Its own squares and towers (it always sees its towers; squares where it sees them).
     for (const k of Object.keys(this.squares).map(Number)) {

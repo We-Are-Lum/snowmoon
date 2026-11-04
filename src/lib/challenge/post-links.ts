@@ -139,6 +139,32 @@ export interface Post {
   url: string;
   /** Every link the post carries (its embeds, link cards and the addresses in its text). Not stored. */
   links: string[];
+  /**
+   * Who wrote it, as its network names the account: a cast's author FID, a Bluesky post's DID (from its at:// URI).
+   * Null for Lens (the query reads the author's handle only). Used by Submit to check the post is the submitter's own
+   * (owner, 2026-11-04, answer 9.4); not stored.
+   */
+  writer: { fid: number } | { did: string } | null;
+}
+
+/**
+ * Submit's check that the post is the submitter's own (owner, 2026-11-04, answer 9.4: "a Submit's post must be the
+ * submitter's own"), where the writer is known:
+ * - Farcaster: the cast's author FID must be the submitter's FID.
+ * - Bluesky: the post's DID must be one the site knows is the submitter's (`blueskyDids`). Nothing on this branch links
+ *   a Bluesky account to a person yet (branches signin-lens-bluesky and bluesky-check will), so until then a Bluesky
+ *   post is 'unknown' and refused.
+ * - Lens: not checked (the writer's account isn't read). 'ok'.
+ */
+export type WriterCheck = 'ok' | 'not-yours' | 'unknown';
+export function writerCheck(post: Pick<Post, 'network' | 'writer'>, submitter: { fid: number; blueskyDids: readonly string[] }): WriterCheck {
+  if (post.network === 'farcaster') return post.writer && 'fid' in post.writer && submitter.fid > 0 && post.writer.fid === submitter.fid ? 'ok' : 'not-yours';
+  if (post.network === 'bluesky') {
+    const did = post.writer && 'did' in post.writer ? post.writer.did : null;
+    if (did && submitter.blueskyDids.includes(did)) return 'ok';
+    return submitter.blueskyDids.length > 0 ? 'not-yours' : 'unknown';
+  }
+  return 'ok';
 }
 
 const isoOrNull = (v: unknown): string | null => {
@@ -148,16 +174,17 @@ const isoOrNull = (v: unknown): string | null => {
 };
 const textLinks = (t: unknown): string[] => (typeof t === 'string' ? (t.match(/(?:https?:\/\/)?(?:www\.)?snowmoon\.party\/[^\s<>"')\]]*/gi) ?? []) : []);
 
-/** Neynar's GET /v2/farcaster/cast answer: { cast: { hash, author: { username }, text, timestamp, embeds: [{ url }] } }. */
+/** Neynar's GET /v2/farcaster/cast answer: { cast: { hash, author: { fid, username }, text, timestamp, embeds: [{ url }] } }. */
 export function parseNeynarCast(body: unknown): Post | null {
   const c = (body as { cast?: Record<string, unknown> } | null)?.cast;
   if (!c) return null;
   const hash = typeof c.hash === 'string' && FULL_HASH.test(c.hash) ? c.hash.toLowerCase() : null;
   const username = (c.author as { username?: unknown } | undefined)?.username;
+  const fid = (c.author as { fid?: unknown } | undefined)?.fid;
   const at = isoOrNull(c.timestamp);
   if (!hash || typeof username !== 'string' || !USERNAME.test(username) || !at) return null;
   const embeds = Array.isArray(c.embeds) ? (c.embeds as { url?: unknown }[]).map((e) => e?.url).filter((x): x is string => typeof x === 'string') : [];
-  return { network: 'farcaster', id: hash, handle: username.toLowerCase(), at, url: `https://farcaster.xyz/${username.toLowerCase()}/${hash.slice(0, 10)}`, links: [...embeds, ...textLinks(c.text)] };
+  return { network: 'farcaster', id: hash, handle: username.toLowerCase(), at, url: `https://farcaster.xyz/${username.toLowerCase()}/${hash.slice(0, 10)}`, links: [...embeds, ...textLinks(c.text)], writer: typeof fid === 'number' && Number.isInteger(fid) && fid > 0 ? { fid } : null };
 }
 
 /** Bluesky's resolveHandle answer: { did }. */
@@ -196,7 +223,7 @@ export function parseBskyPosts(body: unknown, rkey: string): Post | null | 'labe
   const embed = record.embed as { external?: { uri?: unknown }; media?: { external?: { uri?: unknown } } } | undefined;
   for (const u of [embed?.external?.uri, embed?.media?.external?.uri]) if (typeof u === 'string') links.push(u);
   links.push(...textLinks(record.text));
-  return { network: 'bluesky', id: uri, handle, at, url: `https://bsky.app/profile/${m[1]}/post/${m[2]}`, links };
+  return { network: 'bluesky', id: uri, handle, at, url: `https://bsky.app/profile/${m[1]}/post/${m[2]}`, links, writer: { did: m[1] } };
 }
 
 /** Lens's post query answer: { data: { post: { __typename: 'Post', id, slug, timestamp, author, metadata } } }. A repost is refused. */
@@ -210,7 +237,7 @@ export function parseLensPost(body: unknown, slug: string): Post | null {
   if (!id || s !== slug || typeof handle !== 'string' || !USERNAME.test(handle) || !at) return null;
   const meta = (p.metadata ?? {}) as { content?: unknown; sharingLink?: unknown };
   const links = [...textLinks(meta.content), ...(typeof meta.sharingLink === 'string' ? [meta.sharingLink] : [])];
-  return { network: 'lens', id, handle: handle.toLowerCase(), at, url: `https://hey.xyz/posts/${s}`, links };
+  return { network: 'lens', id, handle: handle.toLowerCase(), at, url: `https://hey.xyz/posts/${s}`, links, writer: null };
 }
 
 /** The path of a version's page. */

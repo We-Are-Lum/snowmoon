@@ -4,6 +4,7 @@ import { remixLines } from './lineage';
 import { refusedBases } from './bases';
 import { baseStyleOrder, basesOf, remixOfBase } from './rules';
 import { CHALLENGE, WORK_ID } from '../config';
+import { challengeVisibleTo } from './visibility';
 import { bookCharacter } from '../images/designs';
 import { chooseEntries, distinctSubmissions, entrantCounts, fromDecision, type Decision, inWindow, newestFirst, phase, shortDateText, submitRefusal, type Candidate, type Eligibility, type Submission } from './rules';
 import type { Post } from './post-links';
@@ -152,7 +153,8 @@ export async function versionStanding(sql: Sql, versionId: string): Promise<Vers
  * than a publish that seems to fail.
  */
 export async function publishStanding(sql: Sql, versionId: string): Promise<{ kind: 'candidate' | 'unchecked'; character: string } | null> {
-  if (!CHALLENGE.entries) return null;
+  // Nothing is said at publish until the owner opens the challenge (CHALLENGE.public; owner, 2026-11-04).
+  if (!CHALLENGE.entries || !CHALLENGE.public) return null;
   try {
     const s = await versionStanding(sql, versionId);
     if (s?.kind === 'candidate' || s?.kind === 'entry') return { kind: 'candidate', character: s.character };
@@ -176,6 +178,10 @@ export const SUBMIT_WORDING = {
   notYours: 'You can submit only your own remix, made during the challenge.',
   notEligible: 'This version can’t be entered: your account didn’t pass the site’s check when you published it.',
   needsPost: 'Add the link to a post about it on Farcaster, Bluesky or Lens first.',
+  /** Draft wording (owner, 2026-11-04, answer 9.4: the post must be the submitter's own). */
+  notYourPost: 'That post isn’t from your account. Submit a post you wrote.',
+  /** Draft wording: a Bluesky post, while no Bluesky account can be linked to a person (see writerCheck). */
+  blueskyUnknown: 'We can’t tell yet that this Bluesky post is yours. Submit a post from your Farcaster account instead.',
   already: 'You’ve already submitted this version.',
   full: () => `You’ve submitted ${CHALLENGE.submissionsPerPerson}, the most anyone can. Withdraw one to submit another.`,
   notYet: 'Submitting isn’t available yet.',
@@ -192,6 +198,9 @@ export const SUBMIT_WORDING = {
  */
 export async function submitEntry(sql: Sql, fid: number, versionId: string, post: Post | null, now = new Date()): Promise<SubmitResult> {
   if (!CHALLENGE.entries || !CHALLENGE.posts) return { ok: false, why: SUBMIT_WORDING.off, status: 503 };
+  // Until the owner opens the challenge (CHALLENGE.public; owner, 2026-11-04), only admins may submit, to test it; an
+  // admin's version is never eligible, so it is refused below and changes no one's standing.
+  if (!challengeVisibleTo(fid)) return { ok: false, why: SUBMIT_WORDING.off, status: 503 };
   if (phase(now) === 'before') return { ok: false, why: SUBMIT_WORDING.opens(), status: 409 };
   if (!inWindow(now)) return { ok: false, why: SUBMIT_WORDING.closed, status: 409 };
   const v = (await windowVersions(sql)).find((x) => x.versionId === versionId && x.forked);
