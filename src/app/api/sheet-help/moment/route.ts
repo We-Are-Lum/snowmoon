@@ -16,8 +16,9 @@ import { findMoment, validateMoment, MomentError } from '~/lib/sheet-help/find-m
  */
 export async function POST(request: Request) {
   if (!findMomentLive()) return NextResponse.json({ error: 'Not found' }, { status: 404 });
+  // Farcaster only (owner, 2026-11-04): getFid reads a Quick Auth token, never a wallet, Lens or Bluesky sign-in.
   const fid = await getFid(request);
-  if (fid === null) return NextResponse.json({ error: 'Sign in with Farcaster to ask for help' }, { status: 401 });
+  if (fid === null || !Number.isInteger(fid) || fid <= 0) return NextResponse.json({ error: 'Sign in with Farcaster to ask for help' }, { status: 401 });
   const sql = db();
   const token = gatewayToken(request);
   if (!sql || (!token && !directKey()) || !servingAllowed()) return NextResponse.json({ error: 'Help is not available on this deployment' }, { status: 503 });

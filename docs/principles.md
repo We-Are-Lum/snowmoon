@@ -1,8 +1,8 @@
 # Principles
 
-Eight principles this edition holds itself to. Each one is **our inference from
-public writing**, mostly the author's. (A ninth, on spoilers, is drafted below for
-the owner's OK: it is the owner's own rule, not inferred from the author.) None is a statement by the author about
+Nine principles this edition holds itself to. The first eight are **our inference from
+public writing**, mostly the author's. The ninth, on spoilers, is the owner's own rule
+for this edition, not inferred from the author (adopted 2026-11-04). None is a statement by the author about
 this project, and none implies the author endorses it. The project is
 independent and not affiliated with him.
 
@@ -221,7 +221,7 @@ in 25 words or fewer and records `written_by { fid, date }`.
 - `P2l` (same branch): "Find a moment"'s model words, the "why", never sit where they could be taken for the book's:
   rendered outside the quote (`<q>`), with the AI label, no quote marks, and no run of 5 words shared with any passage it
   was sent. The proof plants a why copying six words of c4-b70 and a render that puts the why inside `<q>`.
-- Spoilers ("Find a moment" within the furthest chapter) moved to draft principle 9 as `P9a`.
+- Spoilers ("Find a moment" within the furthest chapter) moved to principle 9 as `P9a`.
 - `P2g`: on every chapter page as served, each screen redrawn from a template
   (`data-source="template"`) carries one ⓘ label named "Redrawn": the ⓘ shown,
   the word and the declaration served with it as its accessible name, and a
@@ -636,10 +636,11 @@ once the owner picks a version.)
 
 ## 9. Nothing past where a reader has read is shown, or sent to a model on their behalf, unless they choose it each time.
 
-**DRAFT, for the owner's OK.** Drafted by the coding agent (Claude, a closed model by Anthropic), 2026-11-04, on
-branch `find-a-moment`, at the owner's request (2026-11-04: "the spoiler check becomes its own principle, applied
-site-wide"). Unlike principles 1 to 8, this one is the owner's own rule for this edition, not inferred from the
-author's writing. Nothing here is built except P9a.
+Adopted by the owner on 2026-11-04 (reread pack item 12.1: "adopt principle 9"). Drafted by the coding agent (Claude,
+a closed model by Anthropic) on branch `find-a-moment`, at the owner's request (2026-11-04: "the spoiler check becomes
+its own principle, applied site-wide"). Unlike principles 1 to 8, this one is the owner's own rule for this edition,
+not inferred from the author's writing. P9a and P9d are built. P9b, P9c, P9e and P9f are owed (owner, 2026-11-04:
+"don't fix it yet"); `check:principles` lists them as owed, with their state, and does not count them as passing.
 
 **The principle.** Every surface that draws on the book keeps to the furthest chapter opened on the reader's own
 device. Anything past it is left out or covered, and the surface says that something is held back, until the reader
@@ -670,21 +671,24 @@ device. The server learns it only as the number a request carries for its own li
   opens and is never stored. The limit is clamped to 1–32, with no floor at the character's first chapter. The proof
   plants a c30 passage at limit 5 and a limit raised to the first chapter. `test:find-moment` (M3, M6) runs the whole
   flow.
-- `P9b` (proposed): the assistant's server refuses a limit outside 1–32 and any attached block, citation or glossary
+- `P9b` (owed; fails today): the assistant's server refuses a limit outside 1–32 and any attached block, citation or glossary
   word past it. A new thread opened from a link (`/assistant?block=…` or `?chapter=…`) never starts past `readTo()`
   unless the reader chooses. Today the first part holds and the second does not (below). *Planted:* a thread opened
   with `?chapter=20` on a device that has read to 3.
-- `P9c` (proposed): a sheet's "What the book says" (`BookQuotes`) shows only quotes up to the limit, and the served
+- `P9c` (owed; fails today): a sheet's "What the book says" (`BookQuotes`) shows only quotes up to the limit, and the served
   page carries no later quote, neither in its HTML text nor in its page data. Later quotes are counted, not quoted
   ("N more in later chapters"), as "Where it appears" already does for places. *Planted:* a chapter 24 fact in the
   served page data for a reader at 4.
-- `P9d` (proposed): "Ask for help" (the prompt suggestions) never sends the model facts or passages past the limit, and
-  has no floor at the character's first chapter. *Planted:* `validateHelp` raising a limit of 2 to Bai's chapter 4.
-  Today this fails (below).
-- `P9e` (proposed): lists and pickers that name the book's characters and places (the sheets index, "Find a moment"'s
+- `P9d` (built, 2026-11-04): "Ask for help" (the prompt suggestions) takes as its limit the number the device sends,
+  which is its furthest chapter opened (`max(openedChapters())`), or later chapters the reader chose for that one
+  thread. There are no floors: `validateHelp` never raises it to the character's first chapter, and refuses a request
+  without a whole number 1–32 rather than assume one. The facts and the book search sent to the model stay within it.
+  *Planted:* `validateHelp` raising a limit of 2 to Bai's chapter 4, and the device sending the character's first
+  chapter. `test:sheet-help` (H9) runs the whole flow for a reader at chapter 2.
+- `P9e` (owed; fails today): lists and pickers that name the book's characters and places (the sheets index, "Find a moment"'s
   character picker) cover a name first met past the limit, with its chapter and the choice to show it. *Planted:*
   Lektor (chapter 28) listed by name to a reader at 4. Today this fails (below).
-- `P9f` (proposed, when "Set in the book" ships after 22 Nov): a version's moment is covered in the served HTML and
+- `P9f` (owed; proposed, when "Set in the book" ships after 22 Nov): a version's moment is covered in the served HTML and
   shown only after hydration on a device that has reached its chapter, or after "Show anyway" for that view
   (`docs/proposals/remix-moments.md` 3.2, its `SPb`). *Planted:* the quote in the server HTML.
 - Already following it, checked elsewhere: the glossary's covers (`check:ui`), the Pictures feed's covers, the
@@ -700,16 +704,20 @@ device. The server learns it only as the number a request carries for its own li
 | The assistant | `src/components/assistant.tsx` starts a thread at `readTo()`; `validate` in `src/lib/chat/ask.ts` refuses a limit outside 1–32 and attached blocks past it; `retrieve()`, `blocksById()` (citations), `glossaryWords()` and the support check all take the limit; later matches give only a `heldBack` flag, never text | **Mostly.** A thread opened from a link (`?block=c20-b5` or `?chapter=20`) starts at `max(readTo(), that chapter)`, so a link can raise the limit past what the device has opened without the reader choosing it. A thread's chosen limit is also remembered with the thread on the device, so a later visit to that thread keeps it. The model may know the book from its training; answers must cite passages within the limit and pass the support check, which keeps this narrow but does not rule it out. |
 | Sheet facts ("What the book says") | `BookQuotes` (`src/components/design-book.tsx`) shows `quotes.filter(q => q.chapter <= furthest)`, nothing until the device is read | **On screen: yes.** But every quote is passed to the client component, so later chapters' quotes are in the page's data (readable in the page source). No count of later quotes is shown. |
 | A sheet's shorthand | `Shorthand` (`src/components/design-sheets.tsx`), the descriptor in `content/snowmoon/designs/characters/*.json`, labelled "Invented" | **Not checked.** It is shown to everyone. It was drafted by the coding agent from facts that include later chapters (e.g. Gladias's sheet has facts from chapter 24). It describes looks, not events. |
-| "Ask for help" (prompt suggestions) | `validateHelp` (`src/lib/sheet-help/help.ts`) sets `upTo = max(firstChapter, …)`; facts and search use that | **No.** It floors the limit at the character's first chapter, so a reader before that chapter has later facts and passages sent to the model. A fact the model cites is shown as a quote, with the book's words from the database, so a reader at chapter 2 can be shown a chapter 4 quote. It applies only beside the challenge characters' sheets, and only while "Ask for help" is live (it is off today). |
+| "Ask for help" (prompt suggestions) | `src/components/sheet-help.tsx` sends `upTo: max(openedChapters())`; `validateHelp` (`src/lib/sheet-help/help.ts`) takes it as sent (a whole number 1–32, or the request is refused), with no floor; facts and search use that | **Yes** (P9d, fixed 2026-11-04). A reader before the character's first chapter sends the model none of its facts. Until 2026-11-04 it floored the limit at the character's first chapter. |
 | The sheets index | `src/app/references/designs/page.tsx` passes every character and place with its `firstChapter` to `design-index.tsx` | **No.** Names of characters and places first met past the limit are listed uncovered. |
 
-Not fixed here (owner, 2026-11-04: "don't fix it yet").
+Owed, not fixed here (owner, 2026-11-04: "don't fix it yet"): P9b's link case, P9c's page data, P9e's names, and P9f
+when "Set in the book" ships. "Ask for help"'s floor (P9d) was fixed before 12 Nov at the owner's choice (pack 7.4).
 
 ---
 
 ## Summary of current failures
 
 None. All automated checks pass on production (Oct 5, 2026).
+
+Owed under principle 9 (adopted 2026-11-04; owner: "don't fix it yet"): P9b, P9c and P9e fail today, and P9f is
+proposed until "Set in the book" ships. `check:principles` lists them as owed, not as passing.
 
 0005 is applied, and `scripts/backfill-recipe-assist.ts --write` recorded
 `assist` for all 4,237 narration recipes in the database (Oct 5, 2026);

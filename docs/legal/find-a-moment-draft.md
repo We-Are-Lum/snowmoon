@@ -1,4 +1,8 @@
-# "Find a moment" in "Ask for help": its Privacy §5 words (DRAFT, for the owner's reread)
+# "Find a moment" in "Ask for help": its Privacy §5 words, and the widened §3 clause (reread 2026-11-04)
+
+**Reread record: reviewed by the coordinator, approved by the owner, 2026-11-04** (reread pack items 1.2, 7 and 12,
+approved as drafted). The words below are the drafts as approved; none was redrafted. They still go into
+`src/lib/legal.ts` only in the release that turns "Ask for help" and "Find a moment" on (legal texts describe today).
 
 **DRAFT, v2 (2026-11-04).** v2 takes the owner's own words for the sentence (2026-11-04), replacing the agent's
 v1 draft; it still goes with "Ask for help"'s reread. Drafted by the coding agent (Claude, a closed model by Anthropic), 2026-11-04, on branch `find-a-moment`
@@ -34,6 +38,22 @@ Every "before" is main's `src/lib/legal.ts` at `26bf405`, word for word (unchang
 
 > 'Find a moment' sends what you describe, the character you choose and the furthest chapter you've opened (or that you chose to include later chapters), with the passages book search found, the same way. Each search counts as one of those messages, and we keep nothing else about it.
 
+## Privacy §3 (Kept on your device only): the clause widened (reread pack 1.2, approved as recommended)
+
+The owner's answer (2026-11-04, pack 1.2): when "Ask for help" and "Find a moment" ship, widen the clause from
+`privacy-furthest-chapter` (pack item 1, which ships first). These are the pack's words as recommended, not redrafted.
+
+**Before** (`privacy-furthest-chapter`'s §3 sentence, approved 2026-11-04, key `129tv6s` on that branch):
+
+> These stay on your device, except that the assistant sends the furthest chapter, as a number (or another chapter you choose for a conversation), with each question and its search of the book, so that answers stay within it; it isn't kept.
+
+**After:**
+
+> These stay on your device, except that the assistant, and 'Ask for help' and 'Find a moment' on a character sheet, send the furthest chapter, as a number (or another chapter you choose for a conversation), with each question and its search of the book, so that answers stay within it; it isn't kept.
+
+It goes into `legal.ts` with §5's lines, after `privacy-furthest-chapter` has merged. If Overlap A's other §3 phrases
+(items 3 and 6) merge first, only this clause changes.
+
 ## Why each part is there
 
 - **"what you describe, the character you choose"**: the mood box and the character picker (`validateMoment`,
@@ -59,6 +79,4 @@ passages book search found", "counts as one of those messages" and "we keep noth
 - **§6 (What you publish) and Terms 6e:** nothing is published or attached ("Set in the book" waits until after
   22 Nov, owner 2026-11-04, with its own §4, §6 and 6e lines; `docs/proposals/remix-moments.md` §5).
 - **§7 (outside services):** no new service; sheet-help's suggested §7 wording ("'Ask for help' messages") covers it.
-- **§3 (kept on your device):** handled separately, on main, by another change (owner, 2026-11-04). Not touched here;
-  the proposal's open question 7 is closed for this branch.
 - **The consent screen:** unchanged. Nothing the person writes is published.

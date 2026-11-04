@@ -211,4 +211,4 @@ Keys go in `.env.local` (gitignored); `.env.example` lists the names. Never comm
 - Your scene is GPL-3.0, like the book. Link the book and this repository, and publish your
   scene's source (script, timeline, recipes, the stems you can share) so others can build on it.
 
-`docs/principles.md` has the eight principles behind these rules and the checks that enforce them.
+`docs/principles.md` has the nine principles behind these rules and the checks that enforce them.

@@ -103,6 +103,8 @@ const fill = (s: string, name: string, pronoun: string, limit: number) =>
 
 export async function findMoment(deps: MomentDeps, input: MomentInput): Promise<MomentResult> {
   const { sql, fid } = deps;
+  // Farcaster accounts only, like "Ask for help" (owner, 2026-11-04): Privacy §5 says "Under your Farcaster ID".
+  if (!Number.isInteger(fid) || fid <= 0) throw new MomentError('Sign in with Farcaster to ask for help', 401);
   const M = SHEET_HELP.moment;
   const limit = input.pastLimit ? LAST_CHAPTER : input.upTo;
   // Never a floor at the character's first chapter: that would serve passages the person hasn't read.

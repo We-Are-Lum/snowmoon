@@ -17,7 +17,7 @@
  *  M5 more than 5 picks: only 5 shown; fewer than 3: one retry with a reminder, then filled "From search" (no why).
  *  M6 the opt-in ("include later chapters") off by default, on only when sent as true, off each time the panel opens.
  *  M7 the caps shared with "Ask for help": a search is one of its 20 messages a day and counts against its $1 a day;
- *     no count, table or migration of its own.
+ *     no count, table or migration of its own. Farcaster accounts only, like "Ask for help".
  *  M8 the switch: SHEET_HELP.findMoment off; even on, it waits for "Ask for help" to be live and Privacy §5 to describe
  *     it; the route answers 404 first; the form offers the tab only while live.
  *  M9 what is shown: the quote in <q>, its chapter, the why outside it with the AI label; "Make an image here" and
@@ -327,7 +327,7 @@ try {
     const o2 = await FM.findMoment(deps(904, r2.complete), input());
     check('M7 the 21st (a search) is refused with "Ask for help"’s limit, before any model call', o2.state === 'limit' && o2.perDay === 20 && r2.calls.length === 0);
     const hr = { complete: recorded(['PART: grey\nCHANGE: storm-blue\nWHY: blue.'], ['OK']).complete };
-    const ho = await H.sheetHelp({ sql: S, fid: 904, complete: hr.complete, systemPrompt: prompt('sheet-help.md'), guardPolicy: prompt('sheet-help-guard.md'), reminder: prompt('sheet-help-reminder.md'), from: '00000000-0000-0000-0000-0000000000a1', retrieve: async () => ({ passages: [], heldBack: false }), facts: [], who: { name: 'Bai', firstChapter: 4 } }, H.validateHelp({ message: 'x', draft: 'a grey coat, short hair', recipe: '', upTo: 5 }, 'bai', 4));
+    const ho = await H.sheetHelp({ sql: S, fid: 904, complete: hr.complete, systemPrompt: prompt('sheet-help.md'), guardPolicy: prompt('sheet-help-guard.md'), reminder: prompt('sheet-help-reminder.md'), from: '00000000-0000-0000-0000-0000000000a1', retrieve: async () => ({ passages: [], heldBack: false }), facts: [], who: { name: 'Bai', firstChapter: 4 } }, H.validateHelp({ message: 'x', draft: 'a grey coat, short hair', recipe: '', upTo: 5 }, 'bai'));
     check('M7 … and so is an "Ask for help" message after it (one count)', ho.state === 'limit');
     const saved = SHEET_HELP.perDay;
     SHEET_HELP.perDay = 1000;
@@ -339,6 +339,10 @@ try {
     await FM.findMoment(deps(905, recorded([TERMS, FX.GOOD_PICKS.join('\n')], ['OK']).complete), input());
     const costs = await sql`select kind, model, calls, cost_usd::float8 as usd from studio.sheet_help_costs order by kind`;
     check('M7 its calls land in "Ask for help"’s daily cost totals (answer and guard), with no person', before === 0 && costs.length === 2 && costs.find((c) => c.kind === 'answer')!.calls === 2 && costs.find((c) => c.kind === 'guard')!.calls === 1, costs);
+    const rw = recorded([TERMS, FX.GOOD_PICKS.join('\n')], ['OK']);
+    const w = await FM.findMoment(deps(-7, rw.complete), input()).then(() => 'answered', (e) => (e instanceof FM.MomentError && e.status === 401 ? 'refused' : String(e)));
+    check('M7 Farcaster only: a wallet account (a negative number) is refused before any reserve or model call', w === 'refused' && rw.calls.length === 0, w);
+    check('M7 … and the route reads a Farcaster sign-in only, refusing anything but a positive FID', /const fid = await getFid\(request\);\n\s*if \(fid === null \|\| !Number\.isInteger\(fid\) \|\| fid <= 0\) return/.test(read('src/app/api/sheet-help/moment/route.ts')) && !/getPerson|getWallet/.test(read('src/app/api/sheet-help/moment/route.ts')));
     const worst = FM.momentWorstUsd();
     check('M7 the worst case of a search (search terms, two picks, four guard calls) is reserved, about $0.007', worst > 0.005 && worst < 0.01 && Math.abs(worst - 0.0073) < 0.0005, worst);
     await resetDb();

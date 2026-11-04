@@ -7,6 +7,9 @@
  *   npm run check:principles -- --url=http://localhost:3000
  *   npm run check:principles -- --only=P6          one principle
  *
+ * Owed checks (principle 9's P9b, P9c, P9e, P9f; owner 2026-11-04) are not built: they are listed after the run as
+ * owed, never counted as passing, and don't change the exit code.
+ *
  * Exit 1 if any check fails or any proof does not fail. Database checks use an
  * in-memory Postgres (PGlite) with the migrations, plus the live database
  * (read-only) when STUDIO_DATABASE_URL is set. Page checks fetch the deployed
@@ -845,7 +848,7 @@ add({
     c.ui = c.ui.replace('<q>{m.quote}</q>', '<q>{m.quote} {m.why}</q>');
   },
 });
-// P9a (draft principle 9, nothing past where you've read; DRAFT, for the owner's OK, 2026-11-04): "Find a moment"
+// P9a (principle 9, nothing past where you've read; adopted by the owner 2026-11-04): "Find a moment"
 // keeps within the furthest chapter opened. Was SPa under principle 2 until the owner made spoilers their own principle.
 add({
   id: 'P9a',
@@ -881,6 +884,47 @@ add({
     const later = c.passages.get('c30-b6');
     c.shown.push({ id: later!.id, chapter: 30, idx: 6, quote: 'Fin responded almost immediately.', why: null, from: 'pick', pastRead: true });
     c.noFloor = 4;
+  },
+});
+
+// P9d (principle 9, adopted 2026-11-04; owner, reread pack 7.4 and 12.1: "fix the floor before 12 Nov"): "Ask for
+// help" takes as its limit the number the device sends, its furthest chapter opened (max(openedChapters())) or later
+// chapters chosen for that thread. No floors: never the character's first chapter, never a default.
+add({
+  id: 'P9d',
+  principle: 9,
+  name: '"Ask for help" keeps to the furthest chapter the device has opened, with no floor at the character\'s first chapter',
+  load: async () => {
+    const { validateHelp } = await import('../src/lib/sheet-help/help');
+    const at = (upTo: unknown) => {
+      try {
+        return validateHelp({ message: 'x', draft: 'a grey coat', upTo }, 'bai').upTo;
+      } catch {
+        return null;
+      }
+    };
+    return {
+      // Bai first appears in chapter 4: a reader at 1–3 must keep 1–3.
+      before: [1, 2, 3].map(at),
+      later: at(24),
+      missing: [undefined, null, '5', 0, 33, 2.5].map(at),
+      help: read('src/lib/sheet-help/help.ts'),
+      ui: read('src/components/sheet-help.tsx'),
+    };
+  },
+  run: (c) => {
+    const problems: string[] = [];
+    if (JSON.stringify(c.before) !== '[1,2,3]') problems.push(`validateHelp raised the limit for a reader before Bai's first chapter (4): ${JSON.stringify(c.before)} for 1, 2, 3`);
+    if (c.later !== 24) problems.push(`a later chapter chosen for the thread (24) was not kept (got ${c.later})`);
+    if (c.missing.some((v: unknown) => v !== null)) problems.push(`a request without a whole-number limit 1–32 got a default instead of a refusal: ${JSON.stringify(c.missing)}`);
+    if (!/upTo: Math\.max\(1, \.\.\.openedChapters\(\)\)/.test(c.ui) || /firstChapter/.test(c.ui)) problems.push('src/components/sheet-help.tsx: the device does not send its furthest chapter opened, or floors it');
+    if (!/const facts = deps\.facts\.filter\(\(f\) => f\.chapter <= limit\);/.test(c.help)) problems.push('src/lib/sheet-help/help.ts: the character\'s facts are not cut at the limit');
+    if (!/await search\(sql, [^\n]*, limit\)/.test(c.help)) problems.push('src/lib/sheet-help/help.ts: the book search is not given the limit');
+    return problems;
+  },
+  plant: (c) => {
+    c.before = c.before.map((n) => Math.max(4, n ?? 0));
+    c.ui = c.ui.replace('upTo: Math.max(1, ...openedChapters())', 'upTo: Math.max(p.firstChapter, ...openedChapters())');
   },
 });
 
@@ -2460,6 +2504,19 @@ add({
 
 // ---------------------------------------------------------------------------
 
+/**
+ * Principle 9's owed checks (owner, 2026-11-04: "don't fix it yet"). They are not built, so they never run and are
+ * never counted as passing; they are listed after the run with their state from docs/principles.md §9. When one is
+ * built, it moves into `checks` above and out of this list.
+ */
+const OWED: { id: string; principle: number; state: 'failing' | 'proposed'; what: string }[] = [
+  { id: 'P9b', principle: 9, state: 'failing', what: 'the assistant: a thread opened from a link (?block= or ?chapter=) starts past readTo() without the reader choosing it' },
+  { id: 'P9c', principle: 9, state: 'failing', what: 'a sheet\'s "What the book says": later chapters\' quotes are in the served page data' },
+  { id: 'P9e', principle: 9, state: 'failing', what: 'the sheets index and "Find a moment"\'s character picker list names first met past the limit, uncovered' },
+  { id: 'P9f', principle: 9, state: 'proposed', what: '"Set in the book" (after 22 Nov): a version\'s moment covered in the served HTML' },
+];
+const owedSelected = OWED.filter((o) => !ONLY || o.id.startsWith(ONLY));
+
 const selected =checks.filter((c) => !ONLY || c.id.startsWith(ONLY));
 let failed = 0;
 let unproven = 0;
@@ -2499,6 +2556,10 @@ for (const c of selected) {
 const passed = selected.length - failed - notRun.length;
 console.log(`\n${passed} pass, ${failed} fail, ${notRun.length} not run, of ${selected.length}; ${selected.length - unproven} of ${selected.length} proven to fail on a planted violation`);
 for (const n of notRun) console.log(`  not run: ${n.id} (${n.why})`);
+if (owedSelected.length) {
+  console.log(`\n${owedSelected.length} owed, not built (owner, 2026-11-04: "don't fix it yet"; docs/principles.md §9); not counted as passing:`);
+  for (const o of owedSelected) console.log(`  OWED ${o.id} (${o.state === 'failing' ? 'fails today' : 'proposed'}): ${o.what}`);
+}
 if (!failed && !unproven && notRun.length) console.log(`NOT A FULL PASS: ${notRun.length} check(s) did not run here.`);
 // 0 only when every check ran and passed; 1 on a failure; 2 when nothing failed but some did not run.
 process.exit(failed || unproven ? 1 : notRun.length ? 2 : 0);
