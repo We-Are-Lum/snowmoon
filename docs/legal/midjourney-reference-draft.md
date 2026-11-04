@@ -1,4 +1,4 @@
-# Pictures made with Midjourney: the label and Terms §8 (DRAFT, version 2 of 2026-11-04, not reread)
+# Pictures made with Midjourney: the label and Terms §8 (version 2 of 2026-11-04, approved)
 
 Drafted by the coding agent (Claude, a closed model by Anthropic), 2026-11-04, on branch `closed-model-bases`, for the
 owner's direction of 2026-11-04: his own picture of Zei and Bai, made outside the Service with Midjourney, is the
@@ -49,6 +49,10 @@ after it. The quotes above are still from the dated copy. Nothing made from thes
 reads the live page in a browser and it matches.
 
 ## Version 2 (owner, 2026-11-04, after reading Midjourney's live terms): the label and Terms §8 only
+
+**Approved (2026-11-04):** the label and the Terms §8 sentence (T2) below, as drafted, reviewed by the coordinator,
+approved by the owner. About stays unchanged (A1). T2 goes into `src/lib/legal.ts` only in the release that publishes
+the first such picture, with `LEGAL.ownerReread.terms` set to that page's new key and this approval recorded beside it.
 
 **5.3, answered.** The owner read Midjourney's Terms of Service live in a browser on 2026-11-04: the version effective
 27 May 2026, the same version as the dated copy quoted above. The owner's Midjourney pictures may be published as bases

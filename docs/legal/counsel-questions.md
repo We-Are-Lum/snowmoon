@@ -12,3 +12,9 @@ wants a lawyer or adviser to answer; none is answered here, and nothing here is 
    owner's contest winnings, in ETH on Base, plus mint proceeds); see a tax adviser before December.
 3. **Bringing in other people's images** (docs/next-version.md, Plan B): the scanner, NCMEC reporting and what counsel
    must confirm first.
+4. **"No purchase necessary"** (owner, 2026-11-04). The challenge pays prizes. Remixing is free (three a day) and paid
+   remixes sit beside free ones, from a prepaid balance with no daily cap; payment never makes an entry, and entering is
+   one submission per person per Pacific day, free. Does a prize challenge set up this way need anything more, such as
+   "no purchase necessary" wording, or rules about equal chances for those who don't pay?
+5. **Who can be paid a prize** (owner, 2026-11-04). The minimum age for a winner (signing in already needs 18+), and the
+   countries we can't pay in ETH (on Base) because of sanctions: what we must check before paying, and how.
