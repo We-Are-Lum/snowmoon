@@ -40,7 +40,7 @@ Midjourney and brought in; the site sends nothing to Midjourney."
 
 **After** (A2, replacing About's whole closed-model sentence the same day):
 
-> OpenAI and Google receive, through Vercel AI Gateway, the prompts and pictures for some of the project's own pictures, and nothing about you, and neither may train on them (OpenAI may keep them for up to 30 days to check for abuse, and longer if a picture is flagged for review or the law requires it; Google keeps no copy, except in memory for up to 24 hours); the site sends nothing to Midjourney, which the owner used outside the site for some pictures.
+> OpenAI and Google receive, through Vercel AI Gateway, the prompts and pictures for some of the project's own pictures, and nothing about you, and neither may train on them (OpenAI may keep them for up to 30 days to check for abuse, and longer if needed to deal with abuse or required by law; Google keeps no copy, except in memory for up to 24 hours); the site sends nothing to Midjourney, which the owner used outside the site for some pictures.
 
 **5.3, Midjourney's live terms:** the fetch tool was refused (HTTP 403) at
 <https://docs.midjourney.com/hc/en-us/articles/32083055291277-Terms-of-Service> on 2026-11-04, before the restart
