@@ -23,7 +23,8 @@ import { PlayController, type Env } from '../src/lib/minpentai/play-game/control
 import { H, K, W, apply, botPlan, clone, lit, rng, step, towers, updLS, world, type Placement, type Side, type World } from '../src/lib/minpentai/play-game/game';
 import { PlayerError, fogView, playMatch, rung, tally, turnKey, turned, type Player } from '../src/lib/minpentai/play-game/players';
 import first from './minpentai-players/first-player';
-import { PLAY } from '../src/lib/minpentai/versions/solo-v1';
+import { PLAY, RULESETS as VRULESETS } from '../src/lib/minpentai/versions/solo-v1';
+import { drawRules, engine, layout, rng as vrng, verdict } from '../src/lib/minpentai/versions/engine';
 
 let pass = 0;
 const failures: string[] = [];
@@ -147,6 +148,47 @@ check('npm run minpentai:vs-rungs runs the example (--n 2), a rung and the round
   if (!run('rung:2', '--n', '1').includes('5 Planner')) return 'rung:2 printed no table';
   if (!/^5 Planner .*—/m.test(run('--round-robin', '--n', '1'))) return '--round-robin printed no table';
   try { run('rung:9'); return 'rung:9 was accepted'; } catch { /* refused, as it should be */ }
+});
+
+// The computer on its fog view (owner, 2026-11-03: harden Play's computer by passing botPlan the fog view directly). At
+// every decision of many Play matches (rulesets 1 and 2, every drawn rule, levels 0-5 against each other, both seats),
+// botPlan plans the same on the engine's fog view of its side (engine.fog, what agents and Play's ruleset 3 get) as on
+// the whole board: so passing it the view changes no move, and it never used what its towers don't light.
+check('the computer (botPlan) plans the same on its fog view as on the whole board, at every decision of Play matches (rulesets 1 and 2, levels 0-5, both seats)', () => {
+  let decisions = 0;
+  for (const rs of [1, 2] as const) for (let seed = 1; seed <= 16; seed++) for (const [lc, la] of [[0, 5], [1, 4], [2, 3], [3, 2], [4, 1], [5, 0]] as const) {
+    const v = VRULESETS[rs], r = vrng(seed), { s1, s2 } = drawRules(v, r), L = layout(v, s1), e = engine(L);
+    let s = s1;
+    const w = e.world(s), ls: Record<Side, Record<number, number>> = { C: {}, A: {} }, kills = { C: 0, A: 0 }, saved = { C: 0, A: 0 };
+    L.towers.A.forEach((k) => (ls.C[k] = 0));
+    L.towers.C.forEach((k) => (ls.A[k] = 0));
+    for (let turn = 0; turn < 40; turn++) {
+      if (s2 && s === s1 && w.step >= s1.switchAt) s = s2;
+      const snap = { C: e.towers(w, 'C'), A: e.towers(w, 'A') }, base = w.step === 0 ? s.setupPoints : s.points, diag = s.directions === 8;
+      const rk = (k: number) => e.W * e.H - 1 - k, seedOf = (o: number) => seed * 100_003 + turn * 101 + o;
+      const plan = (o: Side, view: boolean) => o === 'A'
+        ? e.botPlan({ w: view ? e.fog(w, s, 'A') : w, s, lvl: la, rng: vrng(seedOf(1)), budget: base + saved.A, snap, lsA: ls.A, diag })
+        : e.botPlan({ w: e.turned(view ? e.fog(w, s, 'C') : w), s, lvl: lc, rng: vrng(seedOf(2)), budget: base + saved.C, snap: { C: snap.A.map(rk), A: snap.C.map(rk) }, lsA: e.turnedKeys(ls.C), diag }).map(e.unturn);
+      const a = plan('A', false), c = plan('C', false);
+      for (const [o, whole] of [['A', a], ['C', c]] as const) {
+        decisions++;
+        const viewed = plan(o, true);
+        if (JSON.stringify(viewed) !== JSON.stringify(whole)) return `ruleset ${rs}, seed ${seed}, levels ${lc}/${la}, ${o === 'A' ? 'Amber' : 'Cyan'} at step ${w.step}: ${JSON.stringify(whole)} on the whole board, ${JSON.stringify(viewed)} on its view`;
+      }
+      const refusedA = e.refuse(w, s, 'A', snap.A, base + saved.A, a), refusedC = e.refuse(w, s, 'C', snap.C, base + saved.C, c);
+      const pa = refusedA ? [] : a, pc = refusedC ? [] : c;
+      saved.A = Math.min(s.carryOver, base + saved.A - pa.reduce((t, p) => t + e.cost(s, p.t), 0));
+      saved.C = Math.min(s.carryOver, base + saved.C - pc.reduce((t, p) => t + e.cost(s, p.t), 0));
+      e.apply(w, s, { C: pc, A: pa });
+      e.updLS(w, s.sight, ls);
+      const from = w.step;
+      let over = false;
+      do { e.step(w, s, kills); e.updLS(w, s.sight, ls); if (verdict(e, w, s, kills)) { over = true; break; } } while (w.step - from < s.every);
+      if (over) break;
+    }
+  }
+  if (decisions < 2000) return `only ${decisions} decisions checked`;
+  console.log(`  (${decisions} decisions)`);
 });
 
 if (failures.length) {
