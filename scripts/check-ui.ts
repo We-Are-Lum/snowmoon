@@ -101,7 +101,8 @@ const MINPENTAI_HOOD = 'lesson=8';
 /** Lesson 1's title (src/lib/minpentai/learn-text.ts, lessons.goal). */
 const MINPENTAI_LESSON_1 = 'Keep your towers. Destroy theirs.';
 /** The owner's exact sentences (2026-10-20, before posting the tutorial link), and where each must appear. */
-const OWNER_BROADCAST = "The full game, as the book describes it, has four players. What you'll play here is a simpler two-player version.";
+/** Removed from every Learn screen (owner, 2026-11-03); checked to appear nowhere. */
+const REMOVED_BROADCAST = 'as the book describes it, has four players';
 const OWNER_TEACH = "A ring marks each tower lost, square broken and crash, even in the dark. Shown here to teach. In a real match, you'll only see the hits your towers light.";
 const OWNER_AMBER = "Shown here to teach. In a real match, you'll only see outlines where they start.";
 const OWNER_CELLS = 'In the book, pieces are made of cells. Here you play with whole squares.';
@@ -1790,8 +1791,8 @@ try {
         // The owner's sentences (2026-10-20): the broadcast's caption on every watch screen, the cells line on Under
         // the hood (CELLS stays on the lessons' boards), "Shown here to teach…" on the practice match's setup text.
         const shown = async (sel: string) => (await page.locator(sel).isVisible().catch(() => false)) ? ((await page.locator(sel).textContent()) ?? '').trim() : '';
-        if (q.startsWith('watch=') && (await shown('.ml-broadcast-note')) !== OWNER_BROADCAST) fail(`/minpentai?${q} (${scheme}): the broadcast's caption is not the owner's sentence`);
-        if (!q.startsWith('watch=') && (await page.locator('.ml-broadcast-note').count())) fail(`/minpentai?${q} (${scheme}): the broadcast's caption shows off the broadcast`);
+        // The broadcast's caption was removed from every Learn screen (owner, 2026-11-03): its sentence appears nowhere.
+        if (((await page.locator('body').textContent()) ?? '').includes(REMOVED_BROADCAST)) fail(`/minpentai?${q} (${scheme}): the removed broadcast sentence ("…${REMOVED_BROADCAST}…") still shows`);
         if (q === MINPENTAI_HOOD && !(await shown('.ml-text')).startsWith(OWNER_CELLS)) fail(`/minpentai?${q} (${scheme}): Under the hood does not open with the owner's cells sentence`);
         if (q === 'lesson=2' && !(await page.locator('.ml-cells').isVisible())) fail(`/minpentai?${q} (${scheme}): the CELLS button is missing`);
         if (q === 'mode=practice') {
@@ -1900,12 +1901,11 @@ try {
         if ((await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)) > 1) fail(`${at}: scrolls sideways`);
         await shot(page, `learn-desktop-${width}-${name}`, scheme);
       }
-      // The broadcast's caption (owner, 2026-10-20) is in view in the desktop layout's text column.
+      // Watch 1's text is in view in the desktop layout's text column (it held the broadcast's caption, removed 2026-11-03).
       {
         await open(page, '/minpentai?watch=1');
-        const cap = await page.locator('.ml-broadcast-note').boundingBox();
-        const capText = ((await page.locator('.ml-broadcast-note').textContent().catch(() => '')) ?? '').trim();
-        if (!cap || cap.y + cap.height > 900 + 1 || capText !== OWNER_BROADCAST) fail(`/minpentai?watch=1 @${width} (${scheme}): the broadcast's caption is not in view`);
+        const text = await page.locator('.ml-text').boundingBox();
+        if (!text || text.y + text.height > 900 + 1) fail(`/minpentai?watch=1 @${width} (${scheme}): the watch text is not in view`);
       }
       await open(page, '/chapter/1');
       const bodyShown = await page.locator('.rail-body').isVisible();
