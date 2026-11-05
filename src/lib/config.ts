@@ -496,6 +496,11 @@ export const CHALLENGE = {
   entries: true as boolean,
   posts: true as boolean,
   /**
+   * Likes on a remix page (owner, 2026-11-04): planned for 12 November, off until then. While off, the landing's like
+   * slot (src/components/challenge-like.tsx) renders nothing and nothing is stored or counted.
+   */
+  likes: false as boolean,
+  /**
    * On (owner, 2026-10-31), but it takes effect only inside the entry window, computed from `dates`
    * (src/lib/challenge/open-sheets.ts), and only once Privacy describes the challenge (the owner's reread). Before the
    * open and after the close, sheets are invited-only again with no deploy.

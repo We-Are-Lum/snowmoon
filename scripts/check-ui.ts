@@ -68,6 +68,12 @@
  * - The remix challenge (/challenge, 2026-10-31): the floors, light and dark, the "Draft wording" line, its six characters in order, the
  *   deadline in Pacific time, the rules, admins not eligible for rewards, no sideways scroll. While it is admin-only
  *   (CHALLENGE.public off; owner, 2026-11-04): signed out, status 404 with nothing of the challenge in the HTML or on screen.
+ * - A remix page as a landing page (owner, 2026-11-04), on this checkout's build and the fixture database, at 390 (light,
+ *   dark) and 1440: at the top, the front view big, the maker, the AI label, a big Remix button to that version's remix
+ *   form (or, outside the entry window, the line in its place), signed out the line on the challenge and its dates
+ *   linking /challenge (gone signed in), the like slot empty while likes are off, no sideways scroll; a hidden remix
+ *   and a draft answer 404 with no picture. While the challenge is admin-only (CHALLENGE.public off): no landing, no
+ *   Remix button and no challenge words on the page at all, signed out.
  * - The footer line (owner's legal starter, 2026-10-09) reads exactly as written, with Terms, Privacy
  *   and Source linked, at the foot of About, in the menu sheet and at the bottom of the rail; not on a
  *   phone's reading screen. /terms and /privacy meet the floors.
@@ -1438,6 +1444,100 @@ if (/^http:\/\/(localhost|127\.0\.0\.1)(:|\/|$)/.test(BASE)) {
     process.exit(1);
   }
 }
+// ---------------------------------------------------------------------------
+// A remix page as a landing page (owner, 2026-11-04), on this checkout's build and the fixture database.
+// ---------------------------------------------------------------------------
+async function checkRemixLanding() {
+  const { startReaderImagesDb, FIXTURE_DESIGNS: D } = await import('./fixtures/reader-images-db');
+  const data = await startReaderImagesDb(await freePort(), { designs: true });
+  const port = await freePort();
+  const server = spawn(process.execPath, [path.join('node_modules', 'next', 'dist', 'bin', 'next'), 'start', '-p', String(port)], { env: { ...process.env, STUDIO_DATABASE_URL: data.url }, stdio: 'ignore' });
+  const LOCAL = `http://localhost:${port}`;
+  const remix = `/references/designs/${D.remix.version}`;
+  try {
+    for (let i = 0; !(await fetch(LOCAL).then((r) => r.ok, () => false)); i++) {
+      if (i > 120) throw new Error('the local build did not start (run next build first)');
+      await new Promise((r) => setTimeout(r, 500));
+    }
+    const head = execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim();
+    const built = ((await (await fetch(`${LOCAL}/api/version`)).json()) as { commit?: string }).commit ?? 'unknown';
+    if (built !== head) return fail(`remix landing: the local build is from ${built.slice(0, 7)}, but this checkout is at ${head.slice(0, 7)}; run next build first`);
+    for (const [w, h, touch, scheme] of [[390, 844, true, 'light'], [390, 844, true, 'dark'], [1440, 900, false, 'light']] as const) {
+      const tag = `${remix} @${w} ${scheme}`;
+      const page = await newPage({ viewport: { width: w, height: h }, colorScheme: scheme, hasTouch: touch });
+      await page.goto(LOCAL + remix, { waitUntil: 'networkidle' });
+      if (INJECT) await page.addStyleTag({ content: INJECT });
+      await page.evaluate(() => document.fonts.ready);
+      await checkFloors(page, `${tag} (signed out)`, scheme);
+      // While the challenge is admin-only (CHALLENGE.public off; owner, 2026-11-04): no landing, no Remix button and no
+      // challenge line, in the page as served or on screen ("Remixing opens …" would name a date that isn't set).
+      if (!CHALLENGE.public) {
+        const html = await page.content();
+        if (await page.locator('.rl-landing, a.rl-remix, .rl-arrival').count()) fail(`${tag}: the landing shows while the challenge is admin-only`);
+        for (const words of ['Remixing opens', 'Entries closed', 'remix challenge', 'How the challenge works', 'REMIX THE CAST']) if (html.includes(words)) fail(`${tag}: the page says "${words}" while the challenge is admin-only`);
+        if (SHOTS) await page.screenshot({ path: path.join(SHOTS, `remix-landing-${w}-${scheme}-admin-only.png`), fullPage: w === 390 });
+        await page.close();
+        continue;
+      }
+      const r = await page.evaluate(() => {
+        const q = (s: string) => document.querySelector(s) as HTMLElement | null;
+        const pic = q('.rl-landing .rl-picture')?.getBoundingClientRect();
+        const btn = q('.rl-landing a.rl-remix');
+        return {
+          landing: !!q('.rl-landing'),
+          first: !!q('.dz-main > .rl-landing:first-child'),
+          pic: pic ? { w: pic.width, h: pic.height, top: pic.top } : null,
+          maker: q('.rl-landing .rl-maker')?.innerText ?? '',
+          ai: !!q('.rl-landing .rl-caption .ai-tag'),
+          remix: btn ? { href: btn.getAttribute('href'), h: btn.getBoundingClientRect().height, w: btn.getBoundingClientRect().width } : null,
+          line: q('.rl-landing .rl-closed')?.innerText ?? '',
+          arrival: q('.rl-landing .rl-arrival')?.innerText ?? '',
+          arrivalLink: q('.rl-landing .rl-arrival a')?.getAttribute('href') ?? null,
+          like: document.querySelectorAll('.rl-landing [class*="like"]').length,
+          wide: document.documentElement.scrollWidth > innerWidth + 1,
+        };
+      });
+      if (!r.landing || !r.first) fail(`${tag}: the landing is not at the top of the page`);
+      if (!r.pic || r.pic.w < Math.min(w - 60, 320)) fail(`${tag}: the picture is not big (${r.pic ? Math.round(r.pic.w) : 0}px wide)`);
+      if (r.maker !== 'A remix by @remixer'.toUpperCase() && r.maker !== 'A remix by @remixer') fail(`${tag}: the maker reads "${r.maker}"`);
+      if (!r.ai) fail(`${tag}: the picture has no AI label`);
+      // The big button while entries are open; before and after, the line in its place (the window comes from CHALLENGE.dates).
+      if (r.remix) {
+        if (r.remix.href !== `/references/designs/new?from=${D.remix.version}`) fail(`${tag}: Remix opens ${r.remix.href}, not this version's remix form`);
+        if (r.remix.h < 52 || r.remix.w < Math.min(w - 60, 280)) fail(`${tag}: the Remix button is not big (${Math.round(r.remix.w)}×${Math.round(r.remix.h)})`);
+      } else if (!/^(Remixing opens|Entries closed) .+Pacific/.test(r.line)) fail(`${tag}: neither a Remix button nor the line in its place ("${r.line}")`);
+      if (!/remix challenge/.test(r.arrival) || !/\d{1,2} (to \d{1,2} )?[A-Z][a-z]+/.test(r.arrival) || r.arrivalLink !== '/challenge') fail(`${tag}: signed out, no line on what this is, its dates and how to remix, linking /challenge ("${r.arrival}")`);
+      if (r.like) fail(`${tag}: the like slot renders something while likes are off`);
+      if (r.wide) fail(`${tag}: scrolls sideways`);
+      if (SHOTS) await page.screenshot({ path: path.join(SHOTS, `remix-landing-${w}-${scheme}.png`), fullPage: w === 390 });
+      // Signed in (a planted session, nothing signed): the arrival line goes.
+      if (w === 390 && scheme === 'light') {
+        const exp = Math.floor(Date.now() / 1000) + 86400;
+        const token = `a.${Buffer.from(JSON.stringify({ sub: 4242, exp })).toString('base64url')}.c`;
+        await page.evaluate((v) => localStorage.setItem('snowmoon.signin', v), JSON.stringify({ token, fid: 4242, username: 'remixer', nameProof: null, exp }));
+        await page.route('**/api/**', (rt) => rt.fulfill({ json: {} }));
+        await page.goto(LOCAL + remix, { waitUntil: 'networkidle' });
+        await page.waitForTimeout(500);
+        if (await page.locator('.rl-arrival').count()) fail(`${remix}: the arrival line still shows when signed in`);
+        await checkFloors(page, `${remix} @390 (signed in)`, 'light');
+        if (SHOTS) await page.screenshot({ path: path.join(SHOTS, 'remix-landing-390-signed-in.png') });
+      }
+      await page.close();
+    }
+    // A hidden remix and a draft: 404, no landing, no picture of theirs.
+    for (const v of [D.hidden.version, D.draft.version]) {
+      const page = await newPage({ viewport: { width: 390, height: 844 }, hasTouch: true });
+      const res = await page.goto(`${LOCAL}/references/designs/${v}`, { waitUntil: 'networkidle' });
+      if (res?.status() !== 404) fail(`/references/designs/${v}: a hidden or unpublished version answers ${res?.status()}`);
+      if (await page.locator('.rl-landing, img[src*="toy-drone"]').count()) fail(`/references/designs/${v}: a hidden or unpublished version shows its picture`);
+      await page.close();
+    }
+  } finally {
+    server.kill();
+    await data.stop();
+  }
+}
+
 const browser = await chromium.launch({ channel: 'chrome' });
 // A protected Vercel preview: under VERCEL_OIDC_TOKEN, every request to the preview's own origin carries it (never to
 // any other origin a page loads), in every browser context and in this script's own fetches. Never printed. Only this
@@ -1460,6 +1560,7 @@ const PREVIEW_HOST = /^snowmoon-[a-z0-9-]+-nates-projects-d1780cff\.vercel\.app$
 }
 try {
   await checkAiLabels();
+  await checkRemixLanding();
   await checkMarkdownPages();
   // First-visit intro (config/intro.json): once, home page only, Skip on every
   // card, remembered on the device without cookies; deep links go straight in.
