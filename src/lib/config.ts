@@ -447,6 +447,11 @@ export const SOCIAL_SIGN_IN = {
     /** The client metadata document on the site; its URL is the client_id. */
     metadataPath: '/oauth/bluesky/client-metadata.json',
     plcDirectory: 'https://plc.directory',
+    /**
+     * Where "Sign in with Bluesky" starts when no handle is typed (2026-11-05): Bluesky's entryway authorization server.
+     * The finish still checks the account through its own DID document and PDS (src/lib/social/atproto.ts).
+     */
+    entryway: 'https://bsky.social',
     /** A sign-in started must finish within this. */
     startMinutes: 10,
     timeoutMs: 5000,

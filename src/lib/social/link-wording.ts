@@ -29,6 +29,8 @@ export const LINK_WORDING = {
   unlinkNo: 'Keep it',
   wait: (until: string) => `This account was unlinked less than ${SOCIAL_SIGN_IN.relinkWaitDays} days ago. It can be linked to a different account from ${day(until)}, or to the one it was linked to at any time.`,
   linkedElsewhere: 'This account is already linked. Unlink it first.',
+  /** One Farcaster, one Lens and one Bluesky account per person (A6). DRAFT wording (coding agent, 2026-11-05). */
+  sameNetwork: (kind: 'lens' | 'bluesky') => `This account already has a ${kindName(kind)} account linked. Unlink it first to link another.`,
   notYet: 'Linking isn’t available yet.',
   notLinked: 'This account isn’t linked.',
   cannot: 'These two can’t be linked.',

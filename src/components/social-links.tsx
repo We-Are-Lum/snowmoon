@@ -170,7 +170,7 @@ export function SocialLinks({
       )}
       {farcaster && h && !h.linked && (
         <div className="you-actions">
-          <button type="button" className="ed-small" onClick={() => signOutSocial()}>
+          <button type="button" className="ic-secondary" onClick={() => signOutSocial()}>
             {L.forget(h.name)}
           </button>
         </div>

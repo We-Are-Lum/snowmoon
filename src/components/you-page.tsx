@@ -34,17 +34,24 @@ const W = {
   kindFarcaster: 'Farcaster',
   kindWallet: 'Wallet',
   kindBasename: 'Wallet · Basename',
+  // The account's own network (2026-11-05, the owner's localhost sign-ins). DRAFT wording (coding agent).
+  kindLens: 'Lens',
+  kindBluesky: 'Bluesky',
   fid: 'Farcaster ID',
   basename: 'Basename',
   address: 'Wallet address',
   profile: 'Your public page',
   profileNote: 'Anyone can open it. It shows the scenes, remix frames and storyboards you have published here, and nothing you have hidden.',
   noProfile: 'Your public page needs a Farcaster name.',
+  /** A Lens or Bluesky account has no /@ page (2026-11-05). DRAFT wording (coding agent). */
+  socialProfile: (kind: 'Lens' | 'Bluesky') => `Public pages come with a Farcaster account. Link this ${kind} account to yours, and what you make while it is linked shows on your Farcaster page.`,
   signOutFarcaster: 'Sign out',
   signOutWallet: 'Sign out of this wallet',
   bothWork: 'Signed in with Farcaster and a wallet on this device: the work of both accounts is listed together; each piece is hidden by its own account.',
   inApp: 'Signed in through your Farcaster app.',
   wallet: 'Wallet',
+  /** Signed in with Lens or Bluesky (2026-11-05): no balance in this release; a wallet sign-in pays. DRAFT wording (coding agent). */
+  socialWallet: (kind: 'Lens' | 'Bluesky') => `A ${kind} account has no balance here. To prepay for images and Remix frames, sign in with a wallet; while it is signed in, you make them as the wallet’s account.`,
   framePrice: (usd: string) => `Up to $${usd} a Remix frame: the estimated cost plus ${Math.round(IMAGES.prepaid.markup * 100)}%. A frame with fewer pictures sent costs less.`,
   farcasterWallet:
     'A Farcaster account has no balance here: References and Remix use your free daily count. Sign in with a wallet too to see its balance, add funds or add a payment. While Farcaster is signed in, Pictures and Remix still make things as your Farcaster account.',
@@ -97,6 +104,8 @@ const W = {
   unlinkYes: 'Unlink',
   unlinkNo: 'Keep it',
   viaWallet: 'Signed in with your linked wallet.',
+  /** Signed in with a Lens or Bluesky account linked to this Farcaster account (2026-11-05). DRAFT wording (coding agent). */
+  viaSocial: (kind: 'Lens' | 'Bluesky') => `Signed in with your linked ${kind} account.`,
 } as const;
 
 interface Side {
@@ -130,6 +139,11 @@ interface LinkView {
 type Fetcher = (url: string, init?: RequestInit) => Promise<Response>;
 /** Whose a listed item is, and which session acts for it (Hide goes with that account's own token). */
 type Mine<T> = T & { by: Who; fetcher: Fetcher | null };
+
+/** The network's name as shown, for a Lens or Bluesky account. */
+const networkOf = (kind: 'lens' | 'bluesky') => (kind === 'lens' ? W.kindLens : W.kindBluesky);
+/** The label beside the account's name: its own network (2026-11-05). */
+const kindLabel = (who: Who) => (who.kind === 'wallet' ? (who.basename ? W.kindBasename : W.kindWallet) : who.kind === 'farcaster' ? W.kindFarcaster : networkOf(who.kind));
 
 const dollars = (usd: number) => (usd >= 1 ? usd.toFixed(2) : usd.toFixed(4).replace(/0+$/, '').replace(/\.$/, ''));
 const day = (iso: string) => iso.slice(0, 10);
@@ -216,7 +230,8 @@ export function YouPage() {
         <AccountRows
           who={who}
           signOut={auth.kind === 'signed-in' && auth.via === 'farcaster-app' ? null : auth.kind === 'signed-in' ? signOut : wallet ? signOutWallet : signOutSocial}
-          viaWallet={auth.kind !== 'signed-in' && who.kind === 'farcaster'}
+          viaWallet={auth.kind !== 'signed-in' && who.kind === 'farcaster' && wallet !== null}
+          viaSocial={auth.kind !== 'signed-in' && who.kind === 'farcaster' && wallet === null && social ? social.kind : null}
         />
         {data.wallet && <AccountRows who={data.wallet.who} signOut={signOutWallet} />}
         {data.link && <LinkPanel view={data.link} to={who.kind === 'farcaster' ? who : null} reload={load} />}
@@ -246,8 +261,8 @@ export function YouPage() {
           </>
         ) : (
           <>
-            <p className="you-note">{W.farcasterWallet}</p>
-            {auth.kind === 'signed-in' && auth.via === 'website' && <WalletSignInButton />}
+            <p className="you-note">{who.kind === 'lens' || who.kind === 'bluesky' ? W.socialWallet(networkOf(who.kind)) : W.farcasterWallet}</p>
+            {((auth.kind === 'signed-in' && auth.via === 'website') || (auth.kind === 'signed-out' && !auth.inApp && social !== null)) && <WalletSignInButton />}
           </>
         )}
       </section>
@@ -268,15 +283,16 @@ export function YouPage() {
 }
 
 /** One signed-in account's rows: its name (name order: Farcaster, Basename, address), its ids, its public page, and Sign out. */
-function AccountRows({ who, signOut: out, viaWallet = false }: { who: Who; signOut: (() => void) | null; viaWallet?: boolean }) {
+function AccountRows({ who, signOut: out, viaWallet = false, viaSocial = null }: { who: Who; signOut: (() => void) | null; viaWallet?: boolean; viaSocial?: 'lens' | 'bluesky' | null }) {
   return (
     <div className="you-account" data-kind={who.kind}>
       <p className="you-name">
         {who.name}
-        <span className="label you-kind">{who.kind === 'wallet' ? (who.basename ? W.kindBasename : W.kindWallet) : W.kindFarcaster}</span>
+        <span className="label you-kind">{kindLabel(who)}</span>
       </p>
+      {/* Only the rows that apply to this account (2026-11-05): a Lens or Bluesky account has no FID or address here. */}
       <dl className="you-facts">
-        {who.kind === 'farcaster' ? (
+        {who.kind === 'farcaster' && (
           <>
             {who.username && who.name !== `@${who.username}` && (
               <div>
@@ -284,12 +300,15 @@ function AccountRows({ who, signOut: out, viaWallet = false }: { who: Who; signO
                 <dd>@{who.username}</dd>
               </div>
             )}
-            <div>
-              <dt className="label">{W.fid}</dt>
-              <dd>{who.fid}</dd>
-            </div>
+            {who.fid !== undefined && (
+              <div>
+                <dt className="label">{W.fid}</dt>
+                <dd>{who.fid}</dd>
+              </div>
+            )}
           </>
-        ) : (
+        )}
+        {who.kind === 'wallet' && (
           <>
             {who.basename && who.name !== who.basename && (
               <div>
@@ -297,18 +316,21 @@ function AccountRows({ who, signOut: out, viaWallet = false }: { who: Who; signO
                 <dd>{who.basename}</dd>
               </div>
             )}
-            <div>
-              <dt className="label">{W.address}</dt>
-              <dd className="you-addr">{who.address}</dd>
-            </div>
+            {who.address && (
+              <div>
+                <dt className="label">{W.address}</dt>
+                <dd className="you-addr">{who.address}</dd>
+              </div>
+            )}
           </>
         )}
         <div>
           <dt className="label">{W.profile}</dt>
-          <dd>{who.handle ? <Link href={`/@${who.handle}`}>{`/@${who.handle}`}</Link> : W.noProfile}</dd>
+          <dd>{who.handle ? <Link href={`/@${who.handle}`}>{`/@${who.handle}`}</Link> : who.kind === 'lens' || who.kind === 'bluesky' ? W.socialProfile(networkOf(who.kind)) : W.noProfile}</dd>
         </div>
       </dl>
       {who.handle && <p className="you-note">{W.profileNote}</p>}
+      {viaSocial && <p className="you-note">{W.viaSocial(networkOf(viaSocial))}</p>}
       {viaWallet ? (
         <p className="you-note">{W.viaWallet}</p>
       ) : out ? (

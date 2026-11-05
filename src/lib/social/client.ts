@@ -73,9 +73,34 @@ const PENDING = 'snowmoon.bluesky.pending';
 /** Set when the Bluesky sign-in is only to link it to the Lens account signed in (the You page). */
 const FOR_LINK = 'snowmoon.bluesky.for-link';
 
-/** Start a Bluesky sign-in: the browser leaves for the person's Bluesky authorization server. */
-export async function startBlueskySignIn(handle: string, opts: { forLink?: boolean } = {}): Promise<void> {
-  const res = await fetch('/api/auth/bluesky/start', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ handle }) }).catch(() => null);
+/**
+ * The Bluesky handle you last signed in with, on this device, to fill in the handle box next time (2026-11-05; Privacy
+ * §3: "the Bluesky handle you last signed in with, to fill it in next time"). Never required; any storage error is
+ * nothing remembered.
+ */
+const LAST_HANDLE = 'snowmoon.bluesky.last-handle';
+export function lastBlueskyHandle(): string {
+  try {
+    const h = localStorage.getItem(LAST_HANDLE);
+    return h && h.length <= 253 ? h : '';
+  } catch {
+    return '';
+  }
+}
+function rememberBlueskyHandle(handle: string) {
+  try {
+    localStorage.setItem(LAST_HANDLE, handle);
+  } catch {
+    /* storage blocked: nothing remembered */
+  }
+}
+
+/**
+ * Start a Bluesky sign-in: the browser leaves for the person's Bluesky authorization server. With no handle (null), it
+ * starts at Bluesky's own sign-in page (bsky.social), which asks which account.
+ */
+export async function startBlueskySignIn(handle: string | null, opts: { forLink?: boolean } = {}): Promise<void> {
+  const res = await fetch('/api/auth/bluesky/start', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(handle === null ? { entryway: true } : { handle }) }).catch(() => null);
   const out = (await res?.json().catch(() => ({}))) as { url?: string; sealed?: string; error?: string };
   if (!res?.ok || !out.url || !out.sealed) throw new SocialError(out.error ?? SOCIAL_WORDING.server);
   try {
@@ -110,5 +135,7 @@ export async function finishBlueskySignIn(params: URLSearchParams): Promise<stri
   const out = (await res?.json().catch(() => ({}))) as { token?: string; handle?: string | null; error?: string };
   if (!res?.ok || !out.token) throw new SocialError(out.error ?? SOCIAL_WORDING.server);
   (forLink ? saveSocialLinkSession : saveSocialSession)(out.token, 'bluesky', out.handle ?? null);
+  // Only a handle that resolved back to the account (the server's check) is remembered.
+  if (out.handle) rememberBlueskyHandle(out.handle);
   return out.handle ?? null;
 }
