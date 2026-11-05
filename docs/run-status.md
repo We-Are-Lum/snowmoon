@@ -100,6 +100,22 @@ and the dress run wait for the lock.
 **5. Lens page** (branch `signin-lens-bluesky`, 82a07763): whole-project typecheck passes; `/admin/lens-app` loads
 on localhost (HTTP 200) with the metadata link and "Sign in with my wallet". The server was stopped afterwards.
 
+## After the owner's answers (evening, 2026-11-04)
+
+- **Admins see /challenge/rules and /challenge/remixes** while private, like /challenge (challenge-landing 5f41aab8,
+  merged into contest). Tests pass; not looked at in a browser.
+- **Contest's approved legal lines** are in legal.ts (contest a4e0c00d): Terms §6e your sentence exactly, Privacy §4 as
+  drafted; reread keys set with your approval recorded; P6k and P6l pass.
+- **Test sign-in off contest** (contest 6f4901bd): your rehearsal uses your real Farcaster sign-in. The dress-run
+  stand-ins live only on `contest-rehearsal` (bc4e5287), which must never merge (a check there always fails).
+  contest: typecheck and build pass; tests challenge 510, rehearsal 36, daily-sql 26; check:principles 62/64 (only
+  P6a, P6d).
+- **SQL pack item 4** is now NEXT_challenge_daily (sql-pack 51272b02); test:sql-pack 149 passed, 0 failed.
+- **Deluin b** in your words: front and views, $0.20276; his files moved to b. A green shoulder bag appeared (see the
+  recast sheet).
+- **Lens page**: the empty-list bug fixed (f442aeaf).
+- Running: lane B, the paying-per-person browser side.
+
 ## Blocked
 
 Nothing blocked. Not checked: your own Farcaster sign-in on 127.0.0.1 and a real cast through Neynar (they need
