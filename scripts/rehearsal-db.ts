@@ -76,6 +76,7 @@ for (const f of [...numbered, ...REHEARSAL_NEXT]) {
 
 // The seeded bases (stand-ins), once.
 const characters = ['zei', 'gladias', 'bai', 'seila', 'deluin', 'mu'];
+const descriptorOf = (slug: string) => (JSON.parse(readFileSync(path.join(ROOT, 'content/snowmoon/designs/characters', `${slug}.json`), 'utf8')) as { descriptor: string }).descriptor;
 const nameOf = (slug: string) => (JSON.parse(readFileSync(path.join(ROOT, 'content/snowmoon/designs/characters', `${slug}.json`), 'utf8')) as { name: string }).name;
 const fromStyles = (rel: string): Buffer => {
   for (const ref of ['origin/challenge-styles', 'challenge-styles']) {
@@ -125,7 +126,8 @@ if (!seeded) {
       const st = call.recipe.style as { version_id: string; title: string };
       const body = {
         title: `${name.split(' ')[0]}, rehearsal stand-in (${st.title})`,
-        text: `A rehearsal stand-in for ${name.split(' ')[0]}'s base: a draft from branch challenge-styles, not published on the site.`,
+        // The character's own description (content/snowmoon/designs/characters), as a remix's views are made from it.
+        text: descriptorOf(c),
         samples: [],
         views: { front: { url: `http://127.0.0.1:3000/api/rehearsal/file/${key}`, sha256: call.sha256, recipe: call.recipe } },
         by_name: 'naaate',

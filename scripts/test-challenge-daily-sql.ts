@@ -85,7 +85,7 @@ check('challenge_marks has withdrawn_at', cols.includes('withdrawn_at'));
 async function runReadBack(): Promise<string> {
   const notes: string[] = [];
   try {
-    await pg.query(doBlock, [], { onNotice: (n) => notes.push(n.message) } as never);
+    await pg.query(doBlock, [], { onNotice: (n: { message: string }) => notes.push(n.message) } as never);
     return notes.includes('read-back passed') ? 'passed' : `no notice (${notes.join('; ')})`;
   } catch (e) {
     return (e as Error).message;
@@ -121,7 +121,7 @@ const other = await asWriter(() => pg.query(`update studio.challenge_marks set v
 check('studio_writer: changing another column is refused', other instanceof Error && /permission denied/.test(other.message), other instanceof Error ? other.message : 'allowed');
 const del = await asWriter(() => pg.query(`delete from studio.challenge_marks where id = $1`, [id]));
 check('studio_writer: deleting a submission is refused', del instanceof Error && /permission denied/.test(del.message), del instanceof Error ? del.message : 'allowed');
-const early = await pg.query(`insert into studio.challenge_marks (challenge, fid, character, version_id) values ('remix-2026-11', 2147483602, 'bai', $1) returning id`, [V]);
+const early = await pg.query<{ id: number }>(`insert into studio.challenge_marks (challenge, fid, character, version_id) values ('remix-2026-11', 2147483602, 'bai', $1) returning id`, [V]);
 const bad = await asWriter(() => pg.query(`update studio.challenge_marks set withdrawn_at = marked_at - interval '1 minute' where id = $1`, [early.rows[0].id as number]));
 check('a withdrawal before the submission is refused', bad instanceof Error && /check constraint/.test(bad.message), bad instanceof Error ? bad.message : 'allowed');
 for (const role of ['anon', 'authenticated']) {
