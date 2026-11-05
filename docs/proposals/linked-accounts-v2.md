@@ -24,10 +24,23 @@ release (`signin-lens-bluesky` in `bluesky-check`; migration `NEXT_signin_lens_b
 5. The linking incentive, corrected: during the challenge window only, each extra linked account that passes its own
    check adds 1 free challenge remix a day, up to 5. Everything else is unchanged.
 
+## The ownership rule (owner, 2026-11-05)
+
+**Work, challenge entries, balances and check results belong to an account, never to a person.** A person is only a
+view over the accounts linked now: one sign-in, one chosen name, combined limits. The person id groups accounts and
+nothing else. No row is owned by, moved to or keyed by the person.
+- **Unlinking an account takes its own work, entries and balance with it,** and its byline goes back to its own name.
+- **The one exception:** in the sign-in release (before v2), a linked Lens, Bluesky or wallet sign-in signs in as the
+  Farcaster account, so work made that way is recorded under, and stays with, the Farcaster account. The planned
+  Privacy §6 clause covers it (section 8: "…except what it made while linked before you could choose your name, which
+  stays with the account it signed in as").
+- **Combined limits** are computed over the accounts' own rows. The limit is the person's; the count is the sum of the
+  linked accounts' rows (which accounts count on the day of an unlink is open question 8).
+
 ## 1. The model
 
-- **A person** is a row in `studio.people` (v1). Its id is private: never shown, never in a URL or a public record.
-  It belongs to no network.
+- **A person** is a row in `studio.people` (v1). It is only a group of accounts. Its id is private: never shown,
+  never in a URL or a public record. It belongs to no network, and it owns nothing.
 - **An account** is what signs in: a Farcaster ID, a wallet, a Lens account or a Bluesky account. It is named by
   today's person number (`src/lib/people.ts`: FID > 0; wallet −id; Lens/Bluesky −(10⁹ + id)). **Today's person numbers
   stay as they are and become account numbers.** No row is renumbered or rewritten.
@@ -39,15 +52,22 @@ release (`signin-lens-bluesky` in `bluesky-check`; migration `NEXT_signin_lens_b
   needed (`how = 'first'`). The sign-in release's `social_links` carry over unchanged once that release refuses a second
   account of one network per person. That fix is in the release-fix lane (the urgent answer of 2026-11-05).
 - **Sign-in gives the whole account.** Every route resolves `{ account, person }`. The account is the one that signed
-  in; the person is whoever it belongs to now. Permissions, limits, balances and pages are read per person.
+  in; the person is whoever it belongs to now. Limits, the name and pages are computed over the person's accounts
+  now. What each row is, and whose it is, stays the account's.
 
 ### Writes record the real account (change from v1)
 
 v1 kept one "acting number" per person (the first of Farcaster, Lens, Bluesky), so routes wrote the Farcaster ID even
 for a Bluesky sign-in. v2 writes **the account that actually signed in** into the existing columns (`created_by_fid`,
-`image_asks.fid`, `remix_asks`, `challenge_marks.fid` and the rest). With `person_id` where v1 added it, that makes
-"its work goes back on unlink" exactly true from v2 on. No new columns are needed for this: those columns already hold
-account numbers.
+`image_asks.fid`, `remix_asks`, `challenge_marks.fid` and the rest). That makes "its work goes back on unlink" exactly
+true from v2 on. No new columns are needed: those columns already hold account numbers.
+
+**Drop v1's `person_id` columns.** v1's unapplied `NEXT_linked_accounts` adds `person_id` to `image_asks`,
+`remix_asks`, `challenge_eligibility` and `challenge_marks`. That stamps rows with a person, and its countScope counts
+"rows with the person's id". After an unlink, that would leave an account's rows counted for, or shown with, the
+person it left, which breaks the ownership rule. v2 removes those four columns from v1 before it is applied, and
+counts from the account columns plus `person_accounts` history only. The test in section 6a has a planted fault for
+exactly this.
 
 **The release window.** Between the sign-in release and v2, a linked Lens/Bluesky sign-in (and, since 0026, a linked
 wallet) acts as the Farcaster ID. That follows Terms §4: "while it is linked, signing in with it is signing in as that
@@ -56,19 +76,19 @@ stays with the Farcaster account, including after an unlink. Privacy §6 says so
 
 ### Table by table: what "the whole account" means
 
-| Today, keyed by person number | v2 |
-|---|---|
-| `image_asks`, `remix_asks`, `sheet_remix_asks` (daily counts) | Count per person: rows with the person's id, plus rows of any account the person has now (v1 countScope). The limit is the person's, not a sum of the accounts' limits. |
-| `check_decisions` (per network and account, 0034) | Unchanged. The person passes if any member has a current stored pass (section 4). |
-| `wallet_accounts` balances, person balances (`person-balance`) | Recorded per account, as approved. Nothing is moved or pooled. The person sees each balance and spends from them (section 4). |
-| `chat_calls` (assistant limit) | Counted per person (see `assistant-any-account.md`). |
-| `challenge_eligibility`, `challenge_marks` | `fid` stays the account that published or submitted. The IPFS record names it by its public id (approved). One-a-day, "three different people" and shares are per person. |
-| `elements`, `recipes`, `remix_frames`, `storyboards`, designs (`created_by_fid`, `by_name`) | The real account. The byline is drawn when the page is rendered, from account to person to chosen name. The stored `by_name` stays only as a fallback. |
-| `agents`, agent keys, `AGENTS.people` allowlist | 3 agents per person across all accounts. A key acts for the person. The allowlist matches if any member is on it. |
-| `likes`, `take_likes`, `ratings`, `picks` | Kept per account. Counts shown publicly count distinct people, so one person's two accounts never like twice. |
-| `contributor_consents` | Recorded with the account that gave it. Consent at the current words by any member covers the person. |
-| `mp_*` (Minpentai), `notes`, `suggestions`, `version_posts` | Per account. Listed together on the person's You page. |
-| Admins and moderators (`ADMINS`, FIDs) | If any member is an admin, the person is an admin. This only ever makes versions ineligible; it grants nothing new beyond the admin's own accounts. |
+| Today (keyed by account number) | v2: owned by | v2: the person's view |
+|---|---|---|
+| `image_asks`, `remix_asks`, `sheet_remix_asks` (daily counts) | The account that made the request | The used count is the sum over the person's linked accounts' rows; the limit is one person's limit, not a sum of limits. |
+| `check_decisions` (per network and account, 0034) | The account (unchanged) | The person passes while any linked account has a current pass. An unlinked account's pass stops counting for the person at once. |
+| `wallet_accounts` balances, person balances (`person-balance`) | The account the payment was credited to | The You page shows each linked account's balance. Spending another linked account's balance is the owner's call (open question 2). Every debit and credit-back is recorded against the account whose balance it touched. |
+| `chat_calls` (assistant limit) | The account that asked | The count is summed over linked accounts, as for images (see `assistant-any-account.md`). |
+| `challenge_eligibility`, `challenge_marks` | The account that published or submitted (`fid`; the IPFS record names it) | One-a-day is counted over the linked accounts. "Three different people" and the equal share group accounts by their links at close. An entry never moves; after an unlink it shows with its own account. |
+| `elements`, `recipes`, `remix_frames`, `storyboards`, designs (`created_by_fid`, `by_name`) | The account that made it (the real account from v2; the Farcaster account for sign-in-release work) | The byline is drawn at render: account, then its person now, then that person's chosen name. Unlinked, it shows the account's own name. The stored `by_name` is a fallback only. |
+| `agents`, agent keys | The account that made them | 3 agents counted over the linked accounts. A key made by one account acts for that account's person while it is linked. Unlinked, the agent and key go with their account. |
+| `AGENTS.people` allowlist, `ADMINS` | The listed accounts | Allowed while any linked account is listed. An admin account makes the person's versions ineligible while linked. Neither carries over after an unlink. |
+| `likes`, `take_likes`, `ratings`, `picks` | The account | Public totals count distinct people among the accounts linked now, so two linked accounts never like twice. |
+| `contributor_consents` | The account that gave it | Any linked account's consent at the current words covers the person while linked. An unlinked account keeps only its own. |
+| `mp_*` (Minpentai), `notes`, `suggestions`, `version_posts` | The account | Listed together on the You page while linked. |
 
 ## 2. The chosen name and icons
 
@@ -97,10 +117,10 @@ person in the last 30 days. A wallet with history joins only by signing in with 
 
 **Joining two people (both with history).** v1 refused this ("two people never merge"). v2 allows it, because the
 person signed in with both. The two persons become one: the older id survives, and the other's accounts are ended
-and re-added under it (`how = 'joined'`, one shared timestamp). The join is refused, with the reason, if the result
-would break A6 (two of one network, or more than 3 wallets), if an account is inside its 30-day wait for a different
-person (A2), or if it would exceed A5 (2 moves in 365 days). The other person's `people` row is kept, never deleted:
-rows that carry its `person_id` resolve through their accounts.
+and re-added under it (`how = 'joined'`, one shared timestamp). Nothing else moves: no row changes owner, because rows
+belong to accounts. The join is refused, with the reason, if the result would break A6 (two of one network, or more
+than 3 wallets), if an account is inside its 30-day wait for a different person (A2), or if it would exceed A5 (2
+moves in 365 days). The other person's `people` row is kept, never deleted.
 
 - **Daily counts:** today's counts add up. After the join, today's used count is the sum of both sides' rows, and the
   limit is the one person's limit. A join only ever leaves less, never more. If the sum is already over, there's
@@ -110,11 +130,10 @@ rows that carry its `person_id` resolve through their accounts.
   invited, Farcaster, Lens, Bluesky) asks a service only when no member has a current decision, and stops at the first
   pass.
 - **Balances:** they stay per account, as approved. No money moves between them, and a join never adds, pools or
-  converts a balance. With "the whole account", the person can spend from any member's balance: the signed-in
-  account's first, then the others in the order they joined. A wallet balance stays the wallet's (open question 2).
-  An unlinked account takes its balance with it.
-- **Challenge entries made before linking:** they stay as they are, entries and eligibility included (decided once,
-  A4). From the join on, the two sides are one person. One submission a day means one for the person: if both sides
+  converts a balance. Whether the person may *spend* another linked account's balance, as part of the view, is the
+  owner's call (open question 2). An unlinked account takes whatever is left of its balance with it.
+- **Challenge entries made before linking:** they stay with the accounts that made them, entries and eligibility
+  included (decided once, A4). From the join on, the two sides count as one person. One submission a day means one for the person: if both sides
   have already submitted today, both stand, and the next is tomorrow (Pacific). "At least three different people" and
   the equal share count the person once, worked out at close. A join is allowed during the challenge, because it can
   only lower counts. A7 still stops an account with a submission from *leaving* until payout.
@@ -128,19 +147,20 @@ account"). A reserve (Generate, ask, submit) takes the same person lock, so a li
 inserting.
 
 **Abuse: linking never raises a cap,** with one deliberate, bounded exception (section 5).
-- Free counts, assistant questions, agents, submissions and shares are per person. Joining sums the used counts and
-  keeps one limit.
+- Free counts, assistant questions, agents, submissions and shares are limited per person, counted over the accounts'
+  own rows. Joining sums the used counts and keeps one limit.
 - Rotating an account to a fresh person is blocked by A2 (30 days, with no free counts or passes on its own during
-  the wait) and A5 (2 moves a year). Counts follow both the person's rows and the account's rows (A3), so leaving
-  doesn't reset either side.
+  the wait) and A5 (2 moves a year). A leaving account takes its rows with it, so its own count never resets. For the
+  person it left, see open question 8.
 - A4: within one challenge, an account that passed for one person never passes for, or adds a bonus to, another.
 
 ## 4. Passing the check, and spending
 
 - **Free counts** need a current pass by any member, as above.
-- **Paid** (person balance): any member can pay, as approved. Paying never makes an entry (P7).
-- **The order money is spent in:** the person's free count first, then balances (signed-in account first). The
-  site-wide prepaid daily cap stays.
+- **Paid:** the signed-in account pays from its own balance, as approved. Spending another linked account's balance
+  is the owner's call (open question 2). Paying never makes an entry (P7).
+- **The order money is spent in:** the person's free count first, then the balance. The site-wide prepaid daily cap
+  stays.
 
 ## 5. The challenge bonus (owner, corrected 2026-11-05)
 
@@ -162,8 +182,8 @@ count. With A6 (one account per network), `passing` is at most 3, so 5 is also t
   so it adds no bonus anywhere. The challenge window (about 17 days) is shorter than the wait.
 - **One account linked to two people:** impossible at once (A1). In sequence it is blocked by A2, A5 and A4 (in one
   challenge, an account that counted for one person never counts for another).
-- **Unlinking mid-day:** the bonus drops from the next count. Remixes already made aren't taken back. The person's own
-  rows still count toward their used total (A3).
+- **Unlinking mid-day:** the bonus drops from the next count. Remixes already made aren't taken back. The leaving
+  account's rows go with it (open question 8 covers the rest of that day for the person it left).
 - **Several accounts of one network:** A6 refuses them. This is why the release fix matters.
 - **Buying a bonus:** impossible. A payment never creates a pass, and the bonus counts only passes.
 
@@ -183,13 +203,60 @@ Lens person):
 - On the You page, any member can be unlinked except the person's last account. The account being removed doesn't
   have to sign in (so a lost wallet can be removed). A7: an account with a submission or an eligible version in an
   unpaid challenge can't leave until payout.
-- The account becomes a person of its own. Its work (rows recorded with it, which from v2 means everything it made)
-  shows under its own name again. Work recorded under another account stays there (the release window, section 1).
+- The account becomes a person of its own. It takes its work, entries, balance, agents, consents and check results,
+  because they were always its own, and its byline goes back to its own name. The one exception is sign-in-release
+  work recorded under the Farcaster account, which stays there (the ownership rule).
 - **30 days:** it can join a *different* person only after 30 days, with no free counts, passes or bonus on its own
   in that time. Rejoining the same person is allowed at any time and ends the wait (A2, approved).
-- Its balance, consents and check decisions go with it. Today's used counts stay counted on both sides (A3).
+- Its own used counts go with it and keep counting for it. For the person it left, today's count is open
+  question 8.
 - If it was the shown name, the default rule picks the next one. If it was listed on the person page, the listing
   ends.
+
+## 6a. Test: a chain of links and unlinks (to be built with the feature, in `test:linked-accounts`)
+
+Dates are 2026–2027, at noon Pacific. The challenge is `remix-2026-11`: entries 6–22 Nov. A7 (the challenge freeze)
+holds until payout; the test lifts it on 10 Dec by emptying `frozenChallenges`. A2 is 30 days to join a *different*
+person; joining the same person again is never a move and has no wait. A5 is at most 2 moves in 365 days; a move is
+joining a different person, and an account's first person of its own isn't one. Each step is allowed as dated.
+
+| Date | Step | Rules checked | Result |
+|---|---|---|---|
+| 6 Nov | Farcaster **A** signs in (person P). A has a Neynar pass, a $2.00 balance, publishes a remix and submits it as an entry. | — | allowed |
+| 7 Nov | Lens **B** links to P (both sign-ins). B has its own Lens pass and $1.00. Signed in as B, B publishes a remix and submits it (P's one entry for 7 Nov). | A6 (one Lens), A5: B's move 1 | allowed |
+| 11 Dec | B unlinks from P. | A7 lifted on 10 Dec | allowed; B's wait (A2) runs to 10 Jan |
+| 12 Dec | A new Lens **C** links to P. | A6 (B is gone), C's move 1 | allowed |
+| 13 Dec | A unlinks from P (P keeps C). | not the last account | allowed; A's wait runs to 12 Jan |
+| 14 Dec | A new Farcaster **D** links to P. | A6 (A is gone), D's move 1 | allowed |
+
+**Assertions after 14 Dec** (P = {C, D}):
+- **Work:** nothing A or B made appears on P's page or You page, or under C's or D's name. A's work shows under A's
+  Farcaster name; B's under B's Lens name. This includes B's 7 Nov remix, made while linked.
+- **Entries:** A's and B's marks keep `fid` = A and B; P's You page and challenge lists show none of them. The close-time
+  grouping (A and B as one person on 22 Nov) is history and is not recomputed.
+- **Balance:** A still has $2.00 minus A's own debits, and B $1.00 minus B's. P can see or spend only C's and D's.
+  Every debit row's account is the account whose balance paid.
+- **Check results:** A's Neynar pass and B's Lens pass don't make P pass. P passes only on C's or D's own decisions.
+- **Bylines:** drawn at render. A, B, C and D each show their own name unless their current person chose another of
+  its accounts.
+- **Waits:** A on its own gets no free images or remixes until 12 Jan, B none until 10 Jan (A2's "no free counts while
+  waiting", unchanged). From those dates on, they get their own counts.
+- **Release-window fixture:** a row made before v2 by B's sign-in, recorded under A (signed in as A), stays A's after
+  every step and never shows under C or D.
+
+**Planted refusals** (each must be refused with its reason; the test fails if any is accepted):
+1. C links on 10 Dec, while B is still linked: refused (A6, a second Lens).
+2. B unlinks on 20 Nov: refused (A7, B has an entry in an unpaid challenge).
+3. D links on 12 Dec, while A is still linked: refused (A6, a second Farcaster).
+4. B joins another person Q (Farcaster E) on 20 Dec: refused (A2, wait until 10 Jan). On 11 Jan: allowed (B's move 2).
+5. B leaves Q on 1 Feb and joins person R on 5 Mar (after its wait ends on 3 Mar): refused (A5; it would be B's third
+   move since 7 Nov 2026). On 8 Nov 2027, the 7 Nov 2026 move has left the window: allowed.
+6. B rejoins P on 20 Dec: not a move and no wait, but refused (A6, C is P's Lens). Variant without C (C never linked):
+   B rejoins P on 20 Dec, allowed, and B's moves stay 1.
+7. A rejoins P on 20 Dec: refused (A6, D is P's Farcaster).
+8. A asks for a free remix on 20 Dec: refused (A2 wait). On 13 Jan: allowed.
+9. **Ownership faults** (each makes the test fail): a resolver that draws bylines from a person stamped on the row;
+   counting by a row's `person_id`; a debit from A's balance while signed in as D after 13 Dec; C counting A's pass.
 
 ## 7. Public person pages
 
@@ -287,6 +354,9 @@ release). Nothing reads the new pieces until `LINKED_ACCOUNTS.enabled` is on.
 3. `person_accounts.how` allows `'joined'` (drop the check and add a wider one, a superset, so existing rows pass).
    `studio.person_joins (into_person, from_person, at)` is the audit of joins: insert-only.
 4. No column is renamed. No `created_by_fid` is rewritten. v2 code writes the real account into the existing columns.
+   v1's unapplied `NEXT_linked_accounts` is edited before it's applied: its `person_id` columns on `image_asks`,
+   `remix_asks`, `challenge_eligibility` and `challenge_marks` are removed (the ownership rule). `via`/`via_account`
+   on eligibility stay, because they name an account.
 5. Read-back: insert and delete a realistic person, profile, listing and join, and check that a non-member display
    account is refused (CLAUDE.md).
 6. Release-fix dependency: the sign-in release's same-network refusal must be live before v1's backfill runs, or the
@@ -295,7 +365,7 @@ release). Nothing reads the new pieces until `LINKED_ACCOUNTS.enabled` is on.
 ## 10. Build order
 
 0. The sign-in release's same-network refusal (release-fix lane).
-1. v1 (`linked-accounts`) brought onto main's current state. Its acting-number rule replaced by "write the real
+1. v1 (`linked-accounts`) brought onto main's current state, without its `person_id` row columns. Its acting-number rule replaced by "write the real
    account". Bylines drawn at render.
 2. The chosen name, icons, You page choice; defaults set so no byline changes on day one.
 3. Joining two persons with history, with the race locks and refusals; `test:linked-accounts` gains planted joins
@@ -309,9 +379,13 @@ release). Nothing reads the new pieces until `LINKED_ACCOUNTS.enabled` is on.
 ## 11. Open questions
 
 1. ~~Privacy §6: option A or B?~~ Answered (owner, 2026-11-05): option A, with the release named by what it does (section 8).
-2. Wallet balances under "the whole account": may a Farcaster/Lens/Bluesky sign-in spend a linked wallet's own
-   balance? person-balance says a linked wallet's balance "isn't spent while linked". v2's "whole account" suggests
-   yes. Recommend yes, signed-in account's balance first.
+2. **Spending a linked account's balance (the owner's call).** Balances stay per account in every case. The question is
+   only whether, while linked, the person may *spend* another linked account's balance as part of the view.
+   (a) No: each sign-in spends only its own balance. This is the strictest fit with "per account", and matches
+   person-balance's approved "a linked wallet's balance isn't spent while linked". (b) Yes, as a view: the signed-in
+   account's balance first, then the others. Each debit is recorded against the account it came from, and spending
+   stops at unlink. I lean (a) for the first release. It is simpler to explain and keeps the approved person-balance
+   lines unchanged. (b) can follow later with its own Terms §6a line.
 3. Should changing the shown name have a cooldown (for example once a day) against confusion? Recommend none for now.
 4. Adaptation URLs when the chosen name moves off Farcaster: new canonical URLs with the old ones kept working
    (recommended), or keep `/@fname` URLs forever?
@@ -319,7 +393,14 @@ release). Nothing reads the new pieces until `LINKED_ACCOUNTS.enabled` is on.
 6. The bonus counts "beyond the first": should a person whose only passing account is, say, Bluesky, plus a
    non-passing Farcaster account, get 3 (as drafted) or nothing extra? As drafted they get 3, because the bonus needs a
    second passing account.
-7. Consent screen: once per person at the current words (drafted), or once per account?
+7. Consent screen: any linked account's consent covering the person (drafted), or once per account?
+8. **Combined limits on the day of an unlink (raised by the ownership rule).** If the person's count is over
+   "currently linked accounts" only, then linking a throwaway account, using the person's pass to make remixes with
+   it, and unlinking it resets the person's count that day. The person's own pass grants the free count, so the
+   throwaway needs no pass of its own. A8 (10 link attempts a day) bounds this to about 10× a day, and A5 doesn't
+   apply (each throwaway moves once). Proposal, still per account: count the rows of every account that was linked to
+   the person at any time during the counting day (from `person_accounts` history), so an unlink never frees a count
+   until the next day. This changes no ownership; it only decides which accounts' rows are summed.
 
 ## Principles
 
