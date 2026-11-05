@@ -25,12 +25,13 @@ export const CHALLENGE_WORDING = {
    * Who can enter, said up front: on /challenge and before the consent screen of a challenge fork (owner, 2026-11-03,
    * these exact words). The score is the one already looked up at Generate: no new Neynar lookup.
    */
-  whoCanEnter: () => `Entering needs a Farcaster account with a Neynar score of ${CHALLENGE.neynarMinScore} or more; we check when you press Generate.`,
+  // Draft wording (owner, 2026-11-05 evening): Farcaster, Lens and Bluesky, as the Submit line and the sign-in release say.
+  whoCanEnter: () => `Entering needs a Farcaster, Lens or Bluesky account that passes the site’s check; we check when you press ${CHALLENGE.pictureEntries ? 'Make it' : 'Generate'}.`,
   intro: () =>
     `From ${windowText()}, make your own version of ${listed(callNames())} on snowmoon.party: start from a published sheet, or from someone else’s remix, change it, and publish. Your version gets its own page, credited back to what you built on.`,
   nextHead: 'What happens next.',
-  next: () =>
-    `At the call on ${d('results')}, Nate shows the versions he’s taking into Episode 1, built from your remixes and credited to you. AI models and a small jury divide the credit for each one among everything it was built on, and we publish how every model did it. We plan to mint each final version as an open edition, with what it raises split among everyone it was built on, including the We Are Lum team. Details come with the mint page.`,
+  // Draft wording (owner, 2026-11-05 evening): no prize for now, and nothing promised about what follows.
+  next: () => 'There is no prize for now. How the final version is chosen, and any prize, are added to the rules before entries close.',
   rulesHead: 'The rules.',
   rules: () => [
     'Make your remix on snowmoon.party with the site’s tools. Every recipe is published.',
@@ -42,18 +43,16 @@ export const CHALLENGE_WORDING = {
     // Draft wording (owner, 2026-11-04: Submit and the post link; branch contest, 2026-11-04: one a day, no total cap).
     'A remix becomes an entry only when you press Submit on its page, with a link to your own post about it on Farcaster, Bluesky or Lens. You can submit one remix a day (Pacific time), for any character, as many days as you like. Until entries close you can withdraw a submission; that day’s submission isn’t given back.',
     // Draft wording (owner, 2026-11-03: make it clear an account below the check can't remix; launch rehearsal item 3).
-    `To remix at all, sign in with a Farcaster account that passes the site’s check. An account below it can’t make the pictures, so it can’t remix or enter. It’s checked when you press ${CHALLENGE.pictureEntries ? 'Make it' : 'Generate'}, and again when you publish.`,
-    // Draft wording (owner, 2026-11-04: the minimum is people who submitted, not submissions).
-    `Each character needs at least ${numberWord(CHALLENGE.minEntrants)} different people who submitted an entry for it; several entries by one person count once. A character with fewer gets no final version, credit test or mint.`,
+    `To remix at all, sign in with a Farcaster, Lens or Bluesky account that passes the site’s check. An account below it can’t make the pictures, so it can’t remix or enter. It’s checked when you press ${CHALLENGE.pictureEntries ? 'Make it' : 'Generate'}, and again when you publish.`,
     // Draft wording (owner, 2026-11-04: free remixes count remixes, not pictures).
     CHALLENGE.pictureEntries
       ? `Remixing is free: ${numberWord(IMAGES.generationsPerDay)} pictures a day.`
       : `Remixing is free: ${numberWord(IMAGES.designs.remixesPerDay)} remixes a day. A remix is one sheet’s three views; if one of them fails, make it again inside the same remix without using another.`,
-    'Entering is free. Minting isn’t needed for anything.',
+    'Entering is free. There is no prize for now.',
     'Post your version anywhere with its link. If you’re remixing someone’s post, quote or reply to it.',
-    `An account passes the site’s check with a Neynar score of at least ${CHALLENGE.neynarMinScore}, fixed for the whole challenge.`,
+    `A Farcaster account passes the site’s check with a Neynar score of at least ${CHALLENGE.neynarMinScore}, fixed for the whole challenge; Lens and Bluesky accounts pass their own checks, the same ones that let them make pictures.`,
   ],
-  adminsLine: 'Admins (the site’s owner and @garance) can make versions too, but aren’t eligible for rewards.',
+  adminsLine: 'Admins (the site’s owner and @garance) can make pictures too, but theirs aren’t entries.',
   notAffiliated: 'An independent adaptation of Snowmoon by Vitalik Buterin (GPL-3.0), not affiliated with him.',
   deadline: () => `Entries close ${d('closes', true)}.`,
   opensOn: () => `Entries open ${d('opens', true)}.`,
@@ -68,8 +67,7 @@ export const CHALLENGE_WORDING = {
   entriesNone: 'No entries yet.',
   entriesOff: 'Entries will be listed here once the challenge starts.',
   entrants: (n: number) => `${n} ${n === 1 ? 'person has' : 'people have'} entered`,
-  entrantsNeeded: (n: number) => (n >= CHALLENGE.minEntrants ? 'enough for a final version' : `${CHALLENGE.minEntrants - n} more needed for a final version`),
-  adminsHead: 'Made by admins (not eligible for rewards)',
+  adminsHead: 'Made by admins (not entries)',
   badge: 'Entry',
   /** An entry's row: the character, then the sheet's name when it has one (launch rehearsal, 2026-11-02: an untitled sheet read "Bai: Bai"). */
   entryLabel: (name: string, title: string) => (title.trim() ? `${name}: ${title.trim()}` : name),
@@ -81,7 +79,7 @@ export const CHALLENGE_WORDING = {
   candidateNote: (name: string) => `Made during the remix challenge. It isn’t an entry for ${name} unless its maker submits it.`,
   /** A candidate's note once entries are closed: Submit is refused then (launch rehearsal, 2026-11-02). Draft wording. */
   candidateClosedNote: (name: string) => `Made during the remix challenge. Entries are closed: it wasn’t submitted as an entry for ${name}.`,
-  adminNote: 'Made by an admin during the remix challenge: admins aren’t eligible for rewards.',
+  adminNote: 'Made by an admin during the remix challenge: admins’ pictures and versions aren’t entries.',
   // Submit (owner, 2026-11-04). Draft wording.
   submitHead: 'Submit as an entry',
   submitNote: () => 'A remix becomes an entry only when you submit it, with the link to your post about it on Farcaster, Bluesky or Lens; the post must be yours and link to this page. You can submit one remix a day (Pacific time).',

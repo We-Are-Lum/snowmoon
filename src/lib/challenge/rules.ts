@@ -51,11 +51,11 @@ export const entriesOpen = (now: Date = new Date(), pub: boolean = CHALLENGE.pub
 
 /**
  * A date of the challenge as people read it, in Pacific time, built from CHALLENGE.dates only. A closing instant
- * (closes, mintCloses) is shown as its last minute: "Sunday 22 November, 23:59 Pacific".
+ * (closes) is shown as its last minute: "Sunday 22 November, 23:59 Pacific".
  */
 export function dateText(key: DateKey, opts: { time?: boolean } = {}, dates: Record<DateKey, string> = CHALLENGE.dates): string {
   // A window that ends at midnight is shown as its last minute; one that ends at a call (09:00) as that time.
-  const closing = (key === 'closes' || key === 'mintCloses' || key === 'shortlistCloses') && pacificWallTime(dates[key]).endsWith(' 00:00');
+  const closing = key === 'closes' && pacificWallTime(dates[key]).endsWith(' 00:00');
   const at = new Date(ms(dates[key]) - (closing ? 60_000 : 0));
   const parts = new Intl.DateTimeFormat('en-GB', { timeZone: CHALLENGE.timeZone, weekday: 'long', day: 'numeric', month: 'long' }).formatToParts(at);
   const get = (t: string) => parts.find((p) => p.type === t)?.value ?? '';
@@ -70,7 +70,7 @@ export function dateText(key: DateKey, opts: { time?: boolean } = {}, dates: Rec
  * open Fri 6 Nov, 09:00 PT"), built from CHALLENGE.dates only. A closing instant at midnight is shown as its last minute.
  */
 export function shortDateText(key: DateKey, dates: Record<DateKey, string> = CHALLENGE.dates): string {
-  const closing = (key === 'closes' || key === 'mintCloses' || key === 'shortlistCloses') && pacificWallTime(dates[key]).endsWith(' 00:00');
+  const closing = key === 'closes' && pacificWallTime(dates[key]).endsWith(' 00:00');
   const at = new Date(ms(dates[key]) - (closing ? 60_000 : 0));
   const parts = new Intl.DateTimeFormat('en-GB', { timeZone: CHALLENGE.timeZone, weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).formatToParts(at);
   const get = (t: string) => parts.find((p) => p.type === t)?.value ?? '';

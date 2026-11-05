@@ -132,3 +132,22 @@ export async function sourceOf(sql: Sql, versionId: string): Promise<Source | nu
   const [v] = await sql<{ asset_sha256: string }[]>`select asset_sha256 from studio.element_versions where id = ${versionId}`;
   return { kind: 'picture', versionId: p.versionId, character: p.character, url: p.thumb, sha256: v.asset_sha256, width: IMAGES.size.width, height: IMAGES.size.height, moment: p.moment, by: p.byName, byFid: p.byFid };
 }
+
+/**
+ * A character's current default look (owner, answer 10): the front view of its first base (CHALLENGE.bases, in the
+ * order the owner listed them: the current default look first), or before the bases are picked its newest published
+ * sheet. For the other characters in a moment, sent as reference pictures. Null when there is none.
+ */
+export async function defaultLook(sql: Sql, character: string): Promise<Extract<Source, { kind: 'sheet' }> | null> {
+  const name = bookCharacter(character)?.name;
+  if (!name) return null;
+  const first = basesOf(character)[0] ?? null;
+  const rows = await sql`
+    select v.id from studio.element_versions v join studio.elements e on e.id = v.element_id join studio.entities en on en.id = e.entity_id
+    where e.element_type = 'design' and e.status = 'published' and e.work_id = ${WORK_ID} and en.kind = 'character' and en.name = ${name}
+      ${first ? sql`and (v.id::text = ${first} or e.id::text = ${first})` : sql``}
+    order by v.created_at desc limit 1`;
+  if (!rows[0]) return null;
+  const s = await sourceOf(sql, String(rows[0].id));
+  return s?.kind === 'sheet' ? s : null;
+}

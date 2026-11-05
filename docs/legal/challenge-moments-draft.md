@@ -21,15 +21,20 @@ Every "Before" is quoted word for word from `src/lib/legal.ts` on this branch (T
 
 | # | Before | After |
 |---|---|---|
-| T1 | During the challenge, anyone signed in with a Farcaster account or a Bluesky account that passes the site's check for it may remix its characters' sheets; making other sheets and styles stays by invitation. | During the challenge, anyone signed in with a Farcaster account or a Bluesky account that passes the site's check for it may remix pictures of its characters; making sheets and styles stays by invitation. |
+| T1 | During the challenge, anyone signed in with a Farcaster account or a Bluesky account that passes the site's check for it may remix its characters' sheets; making other sheets and styles stays by invitation. | During the challenge, anyone signed in with a Farcaster, Lens or Bluesky account that passes the site's check for it may remix pictures of its characters; making sheets and styles stays by invitation. |
 | T2 | A version counts as an entry only once its maker submits it on the Service, with a link to their own post about it on Farcaster, Bluesky or Lens that links to its page, and only if it is a remix (not a sheet made from scratch) made on the Service during the challenge by an account we invited or one that passed the site's check when the version was published. | A picture counts as an entry only once its maker submits it on the Service, with a link to their own post about it on Farcaster, Bluesky or Lens that links to its page, and only if it is a picture of a challenge character at one of the challenge's moments, remixed from one of its pictures on the challenge page (not made from scratch), made on the Service during the challenge by an account we invited or one that passed the site's check when it was published. |
-| T3 | Admins can make versions but aren't eligible for rewards. | Admins can make pictures but aren't eligible for rewards. |
+| T3 | Admins can make versions but aren't eligible for rewards. | Admins can make pictures, but theirs aren't entries. |
 | T4 | …a fingerprint of its pictures and recipe (not the pictures or words themselves)… hiding a version later removes it from the Service, but not its fingerprint from that record. | …a fingerprint of its picture and recipe (not the picture or words themselves)… hiding a picture later removes it from the Service, but not its fingerprint from that record. |
-| — | A character needs entries from at least three different people to get a final version; several entries by one person count once. | unchanged (option A keeps "final version") |
+| T5 | A character needs entries from at least three different people to get a final version; several entries by one person count once. | *(removed: nothing is promised about a final version yet)* |
+| T7 | Entering is free and needs no purchase, and minting isn't needed for anything. | Entering is free and needs no purchase. |
+| T6 | Anything that follows the challenge, including any mint, is a plan, not a promise, and is decided as the challenge page says. | There is no prize for now. How the final version is chosen, and any prize, are added to the challenge's rules before entries close. |
 
-Note on T1: the Bluesky clause says "a Farcaster account or a Bluesky account"; Lens accounts can submit (Privacy §4
-and the site's Submit line say "Farcaster, Lens or Bluesky"). Whether T1 should name Lens is a question for the
-coordinator (it is true today for sheets too, so it is not this release's change).
+T1 names Lens (owner, 2026-11-05 evening, via the accounts session: who can enter matches the Submit line, "Sign in
+with Farcaster, Lens or Bluesky to enter."). No thresholds in the legal lines. T5 and T6 follow the owner's launch goal
+(2026-11-05 evening: "There is no prize for now."; nothing promised about a final version, mint, prize, rewards,
+deep funding or payout). Open for the coordinator: the IPFS record sentence ("When entries close, a record of every
+entry is published to IPFS and referenced on Ethereum …") is kept, with T4's one-word change; if the record isn't
+planned for this launch, it should go too.
 
 ## Privacy §4
 
@@ -61,6 +66,21 @@ sentence: Submit option B needs none (option A, "Find my post", would, and is no
 ## Consent screen
 
 Unchanged. The person's words go into an image prompt exactly as on "Make an image", under the same consent.
+
+## Launch rules on the site (owner, 2026-11-05 evening; in code as Draft wording, `src/lib/challenge/wording.ts`)
+
+| Where | Before | After |
+|---|---|---|
+| Dates (`CHALLENGE.dates`) | opens Tue 1 Dec 09:00 PT (this branch, earlier); shortlist, results and mint dates | opens Fri 6 Nov 09:00 PT (in practice when the owner turns `CHALLENGE.public` on); closes after Sun 22 Nov 23:59 PT (`2026-11-23T08:00:00Z`, the first instant that no longer counts, the contest's convention); no shortlist, results or mint dates |
+| What happens next (`next`) | At the call on Friday 4 December, 09:00 Pacific, Nate shows the versions he's taking into Episode 1, built from your remixes and credited to you. AI models and a small jury divide the credit for each one among everything it was built on, and we publish how every model did it. We plan to mint each final version as an open edition, with what it raises split among everyone it was built on, including the We Are Lum team. Details come with the mint page. | There is no prize for now. How the final version is chosen, and any prize, are added to the rules before entries close. |
+| Rules: entering | Entering is free. Minting isn't needed for anything. | Entering is free. There is no prize for now. |
+| Rules: minimum | Each character needs at least three different people who submitted an entry for it; several entries by one person count once. A character with fewer gets no final version, credit test or mint. | *(removed)* |
+| Rules: who | To remix at all, sign in with a Farcaster account that passes the site's check. … | To remix at all, sign in with a Farcaster, Lens or Bluesky account that passes the site's check. … |
+| Rules: the check | An account passes the site's check with a Neynar score of at least 0.7, fixed for the whole challenge. | A Farcaster account passes the site's check with a Neynar score of at least 0.7, fixed for the whole challenge; Lens and Bluesky accounts pass their own checks, the same ones that let them make pictures. |
+| Who can enter (`whoCanEnter`) | Entering needs a Farcaster account with a Neynar score of 0.7 or more; we check when you press Generate. | Entering needs a Farcaster, Lens or Bluesky account that passes the site's check; we check when you press Generate (Make it, with pictures as entries). |
+| Admins line | Admins (the site's owner and @garance) can make versions too, but aren't eligible for rewards. | Admins (the site's owner and @garance) can make pictures too, but theirs aren't entries. |
+| Admins head / note | Made by admins (not eligible for rewards) / Made by an admin during the remix challenge: admins aren't eligible for rewards. | Made by admins (not entries) / Made by an admin during the remix challenge: admins' pictures and versions aren't entries. |
+| Counts on the rules page | "2 people have entered · 1 more needed for a final version" | "2 people have entered" |
 
 ## Site lines (all "Draft wording" until approved)
 

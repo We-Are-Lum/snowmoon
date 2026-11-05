@@ -640,22 +640,15 @@ export const CHALLENGE = {
    */
   dates: {
     /**
-     * Entries open Tue 1 Dec 2026, 09:00 Pacific (owner, 2026-11-05, answer 11: "plan for Tue 1 Dec", decided finally
-     * after rehearsal 2; CHALLENGE.public stays off, so nothing opens by date alone). Every later date below moved by
-     * the same 25 days as the open (from Fri 6 Nov), as a placeholder until the owner sets them (branch
-     * challenge-moments): the close, the shortlist, the results and the mint keep their distance from the open.
+     * Entries open Fri 6 Nov 2026, 09:00 Pacific (owner, 2026-11-05 evening: live for friends on Fri 6 Nov afternoon;
+     * this supersedes "plan for Tue 1 Dec"). Nothing opens by date alone: /challenge stays hidden until the owner turns
+     * CHALLENGE.public on, so in practice entries open when he does.
      */
-    opens: '2026-12-01T17:00:00Z',
-    /** Entries close after Thu 17 Dec 2026, 23:59 Pacific: this is 00:00 Pacific on 18 Dec, the first instant that no longer counts. */
-    closes: '2026-12-18T08:00:00Z',
-    /** The shortlist vote and jurors: Sat 26 Dec 2026, 00:00 Pacific, to the end of Mon 28 Dec 2026 (23:59 Pacific). Not built; undefined in the plan. */
-    shortlistOpens: '2026-12-26T08:00:00Z',
-    shortlistCloses: '2026-12-29T08:00:00Z',
-    /** Results: Tue 29 Dec 2026, 09:00 Pacific. */
-    results: '2026-12-29T17:00:00Z',
-    /** The mint opens Sat 2 Jan 2027, 09:00 Pacific, and closes Wed 13 Jan 2027, 09:00 Pacific. */
-    mintOpens: '2027-01-02T17:00:00Z',
-    mintCloses: '2027-01-13T17:00:00Z',
+    opens: '2026-11-06T17:00:00Z',
+    /** Entries close after Sun 22 Nov 2026, 23:59 Pacific: this is 00:00 Pacific on 23 Nov, the first instant that no longer counts. */
+    closes: '2026-11-23T08:00:00Z',
+    // No shortlist, results or mint dates (owner, 2026-11-05 evening): how the final version is chosen, and any prize,
+    // are added to the rules before entries close. No page shows a date for them.
   },
   /** The time zone every date is shown in. */
   timeZone: 'America/Los_Angeles',

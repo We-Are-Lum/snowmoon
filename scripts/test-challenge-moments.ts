@@ -190,10 +190,10 @@ const momentQuotes = (ms: typeof MOMENTS) => ms.flatMap((m) => m.quotes.map((q) 
   const M = await import('../src/lib/challenge/make');
   const m = MOMENTS.find((x) => x.id === 'c7-b49-toast')!;
   const others = M.othersIn(m, 'bai');
-  const prompt = M.momentPrompt({ words: 'make her grin', name: 'Bai', scene: m.scene, others: (others?.added ?? []).map((a) => a.text) });
-  check('the prompt: the person\'s words first, the reference kept, the scene line, the others\' default looks, no lettering', prompt.startsWith('make her grin\n\nThe person in the reference picture is Bai') && prompt.includes(m.scene) && others!.added.map((a) => a.slug).join() === 'zei,mu' && prompt.endsWith('No text, no lettering, no signs with words.'));
+  const prompt = M.momentPrompt({ words: 'make her grin', name: 'Bai', scene: m.scene, others: ['Zei', 'Mu'] });
+  check('the prompt: the person\'s words first, Bai as reference image 1 in front, the others as images 2 and 3 behind, the scene line, no lettering', prompt.startsWith('make her grin\n\nBai is the person in reference image 1, the main figure') && prompt.includes('Zei is the person in reference image 2, behind Bai') && prompt.includes('Mu is the person in reference image 3') && prompt.includes(m.scene) && others.join() === 'zei,mu' && prompt.endsWith('No text, no lettering, no signs with words.'));
   check('the prompt never carries the moment\'s quote (shown, not sent)', !m.quotes.some((q) => prompt.includes(q.text)));
-  check('multi-character: it counts for the character remixed; the others come from their current default looks (answer 10)', others!.characters[0] === 'bai' && others!.added.every((a) => a.text.includes(':')));
+  check('multi-character: it counts for the character remixed; at most two others, each by their current default look (answer 10)', MOMENTS.every((x) => M.othersIn(x, x.characters[0]).length <= 2) && /defaultLook\(sql, slug\)/.test(read('src/app/api/challenge/make/route.ts')));
   check('a request needs a version, one of the fifteen moments and words', !M.readMake({}).ok && !M.readMake({ from: randomUUID(), moment: 'c99-b1-x', words: 'a' }).ok && !M.readMake({ from: randomUUID(), moment: m.id, words: '  ' }).ok && M.readMake({ from: randomUUID(), moment: m.id, words: 'a' }).ok);
   proof('a moment outside the list is refused', !M.readMake({ from: randomUUID(), moment: 'c30-b47-dog', words: 'x' }).ok);
 }

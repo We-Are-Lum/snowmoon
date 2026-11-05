@@ -70,7 +70,7 @@ export async function rulesView(sql: Sql | null, now: Date = new Date()): Promis
     rulesHead: W.rulesHead,
     rules: [...W.rules(), W.adminsLine],
     notAffiliated: W.notAffiliated,
-    counts: CHALLENGE.entries ? { head: L.countsHead, rows: chars.map((c) => ({ slug: c.slug, name: callName(c.name), text: `${W.entrants(st.entrants.get(c.slug) ?? 0)} · ${W.entrantsNeeded(st.entrants.get(c.slug) ?? 0)}` })) } : null,
+    counts: CHALLENGE.entries ? { head: L.countsHead, rows: chars.map((c) => ({ slug: c.slug, name: callName(c.name), text: W.entrants(st.entrants.get(c.slug) ?? 0) })) } : null,
     entriesHead: W.entriesHead,
     entriesOff: CHALLENGE.entries ? null : W.entriesOff,
     entriesNote: CHALLENGE.entries && st.entries.length ? W.entriesOrder : null,

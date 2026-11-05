@@ -13,7 +13,7 @@ import { signTicket, type TicketDesign } from '~/lib/images/ticket';
 import { bookCharacter } from '~/lib/images/designs';
 import { designByline } from '~/lib/images/byline';
 import { makeView, momentPrompt, othersIn, readMake } from '~/lib/challenge/make';
-import { sourceOf } from '~/lib/challenge/pictures';
+import { defaultLook, sourceOf } from '~/lib/challenge/pictures';
 import { spoilerExceptionOn } from '~/lib/challenge/spoilers';
 import { challengeVisibleTo } from '~/lib/challenge/visibility';
 
@@ -25,8 +25,8 @@ import { challengeVisibleTo } from '~/lib/challenge/visibility';
  *
  * POST { from, moment, words }: one draft picture through the site's own image pipeline, exactly as "Make an image"
  * makes one: signed in, consent, the Generate gate (the site's check), the daily count and spend caps, the prompt
- * check, the host's safety checker. The model is the edit model, with the tapped picture as its reference; the prompt
- * is src/lib/challenge/make.ts's momentPrompt; the picture is anchored to the moment's passage. Nothing about the draft
+ * check, the host's safety checker. The model is the edit model, with the tapped picture as reference image 1 and the
+ * other challenge characters' current default looks after it; the prompt is src/lib/challenge/make.ts's momentPrompt; the picture is anchored to the moment's passage. Nothing about the draft
  * is kept here: the picture and its signed record go back to the device, and Publish (/api/images/publish) writes it.
  */
 const no = (error: string, status: number, extra: Record<string, unknown> = {}) => NextResponse.json({ error, ...extra }, { status });
@@ -44,7 +44,7 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   const fid = await getPerson(request);
-  if (fid === null) return no('Sign in to make it', 401);
+  if (fid === null) return NextResponse.json({ error: 'Sign in to make it' }, { status: 401 });
   if (!challengeVisibleTo(fid) || !spoilerExceptionOn()) return hidden();
   if (!IMAGES.enabled) return no('Making images is switched off for now', 503);
   const sql = db();
@@ -63,32 +63,40 @@ export async function POST(request: Request) {
   const gate = await mayGenerate(sql, fid);
   if (!gate.ok) return no(gate.error, gate.status, { reason: gate.reason });
 
-  const name = (bookCharacter(src.character)?.name ?? src.character).split(' ')[0];
-  const sheets = othersIn(r.moment, src.character);
-  const prompt = momentPrompt({ words: r.words, name, scene: r.moment.scene, others: (sheets?.added ?? []).map((a) => a.text) });
-  const bytes = await referencePicture(src.url, src.sha256);
-  if (!bytes) return no('The picture could not be read. Try again in a moment.', 503);
-  const pictures = [{ bytes, contentType: 'image/jpeg', width: src.width, height: src.height }];
+  const callName = (slug: string) => (bookCharacter(slug)?.name ?? slug).split(' ')[0];
+  const name = callName(src.character);
+  // The other challenge characters in the moment, each by their current default look (their first base's front view).
+  const others = (await Promise.all(othersIn(r.moment, src.character).map(async (slug) => ({ slug, look: await defaultLook(sql, slug) })))).filter((o): o is { slug: string; look: NonNullable<typeof o.look> } => o.look !== null);
+  const prompt = momentPrompt({ words: r.words, name, scene: r.moment.scene, others: others.map((o) => callName(o.slug)) });
+  const looks = [src, ...others.map((o) => o.look)];
+  const pictures: { bytes: Buffer; contentType: string; width: number; height: number }[] = [];
+  for (const l of looks) {
+    const bytes = await referencePicture(l.url, l.sha256);
+    if (!bytes) return no('The picture could not be read. Try again in a moment.', 503);
+    pictures.push({ bytes, contentType: 'image/jpeg', width: l.width, height: l.height });
+  }
 
   // Counted from here, whatever happens next (blocked attempts count), as every picture is.
   const paid = await paidPicture(sql, fid, request, {
     checkText: prompt,
-    spend: { model: IMAGES.editModel, reserveUsd: generateReserveUsd(1) },
+    spend: { model: IMAGES.editModel, reserveUsd: generateReserveUsd(pictures.length) },
     make: () => makeEdit(prompt, pictures),
   });
   if (!paid.ok) return no(paid.error, paid.status, paid.extra);
   const made = paid.made;
   const sha256 = createHash('sha256').update(made.bytes).digest('hex');
-  // Started from a base sheet: published as a 'uses' link (through `designs`, with the sheet's text, not sent).
-  const designs: TicketDesign[] = src.kind === 'sheet' ? [{ versionId: src.versionId, kind: 'character', entity: bookCharacter(src.character)?.name ?? name, title: src.title, by: designByline(src.by, src.byFid), versionNo: src.versionNo, text: '', assist: null }] : [];
+  // Started from a base sheet: published as a 'uses' link (through `designs`, with no text added). The others' looks
+  // are 'uses' links too, so the recipe credits every picture sent.
+  const asDesign = (l: (typeof looks)[number] & { kind: 'sheet' }): TicketDesign => ({ versionId: l.versionId, kind: 'character', entity: bookCharacter(l.character)?.name ?? l.character, title: l.title, by: designByline(l.by, l.byFid), versionNo: l.versionNo, text: '', assist: null });
+  const designs: TicketDesign[] = looks.filter((l): l is (typeof looks)[number] & { kind: 'sheet' } => l.kind === 'sheet').map(asDesign);
   const ticket = signTicket({
     v: 1, fid, chapter: r.moment.chapter, start: r.moment.start, end: r.moment.end, userPrompt: r.words, style: null, prompt,
     model: IMAGES.editModel.id, endpoint: IMAGES.editModel.endpoint, host: IMAGES.editModel.host, settings: made.settings,
     seed: made.seed, requestId: made.requestId, sha256, width: IMAGES.size.width, height: IMAGES.size.height,
     costUsd: made.costUsd, guard: { model: IMAGES.guardModel, verdict: 'ok' }, at: new Date().toISOString(),
     ...(designs.length ? { designs } : {}),
-    references: [{ url: src.url, sha256: src.sha256 }],
-    ...(sheets ? { sheets } : {}),
+    references: looks.map((l) => ({ url: l.url, sha256: l.sha256 })),
+    sheets: { characters: [src.character, ...others.map((o) => o.slug)], place: null, added: [] },
     challenge: { character: src.character, moment: r.moment.id, scene: r.moment.scene, from: src.versionId, fromKind: src.kind },
   });
   return NextResponse.json(

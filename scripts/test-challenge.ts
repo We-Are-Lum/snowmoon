@@ -62,7 +62,7 @@ const L = await import('../src/lib/challenge/post-links');
   const V = await import('../src/lib/challenge/visibility');
   const inside = new Date(Date.parse(CHALLENGE.dates.opens) + 3600_000);
   check('switch: CHALLENGE.public is off as committed (the owner opens it)', CHALLENGE.public === false);
-  check('switch: the dates are kept (opens Tue 1 Dec, 09:00 Pacific; owner, 2026-11-05)', CHALLENGE.dates.opens === '2026-12-01T17:00:00Z');
+  check('switch: the dates are kept (opens Fri 6 Nov, 09:00 Pacific; owner, 2026-11-05 evening)', CHALLENGE.dates.opens === '2026-11-06T17:00:00Z');
   check('switch off, inside the window: the free cap stays $2, not $15', C.imagesDailySpendCapUsd(inside) === IMAGES.dailySpendCapUsd && IMAGES.dailySpendCapUsd === 2);
   check('switch off, inside the window: sheets stay invited-only (Privacy describes the challenge)', O.privacyDescribesChallenge(PRIVACY) && !O.challengeSheetsOpen(inside, PRIVACY));
   check('switch off, inside the window: entries are not taken', !R.entriesOpen(inside) && !R.challengeOpenNow(inside));
@@ -132,23 +132,16 @@ proof('a wallet path let back in is caught', R.eligibility({ maker: -7, passed: 
 
 // --- The window, in Pacific time ---------------------------------------------------------------------------------
 const D0 = CHALLENGE.dates;
-check('opens Tue 1 Dec 2026, 09:00 Pacific (owner, 2026-11-05, answer 11)', R.pacificWallTime(D0.opens) === '2026-12-01 09:00', R.pacificWallTime(D0.opens));
-check('the last minute is Thu 17 Dec 2026, 23:59 Pacific (moved with the open)', R.pacificWallTime(new Date(Date.parse(D0.closes) - 60_000).toISOString()) === '2026-12-17 23:59');
-check('results: Tue 29 Dec 2026, 09:00 Pacific (moved with the open)', R.pacificWallTime(D0.results) === '2026-12-29 09:00');
-check('the shortlist vote and jurors: Sat 26 Dec 2026, 00:00 Pacific (moved with the open)', R.pacificWallTime(D0.shortlistOpens) === '2026-12-26 00:00');
-check('… to the end of Mon 28 Dec 2026 (its last minute 23:59 Pacific)', R.pacificWallTime(new Date(Date.parse(D0.shortlistCloses) - 60_000).toISOString()) === '2026-12-28 23:59');
-check('the mint opens Sat 2 Jan 2027, 09:00 Pacific (moved with the open)', R.pacificWallTime(D0.mintOpens) === '2027-01-02 09:00');
-check('the mint closes Wed 13 Jan 2027, 09:00 Pacific (moved with the open)', R.pacificWallTime(D0.mintCloses) === '2027-01-13 09:00');
-check('the mint close is shown as the call time, not a minute earlier', R.dateText('mintCloses', { time: true }) === 'Wednesday 13 January, 09:00 Pacific', R.dateText('mintCloses', { time: true }));
-check('the phases come in order', [D0.opens, D0.closes, D0.shortlistOpens, D0.shortlistCloses, D0.results, D0.mintOpens, D0.mintCloses].every((x, i, a) => i === 0 || Date.parse(a[i - 1]) <= Date.parse(x)));
+check('opens Fri 6 Nov 2026, 09:00 Pacific', R.pacificWallTime(D0.opens) === '2026-11-06 09:00', R.pacificWallTime(D0.opens));
+check('the last minute is Sun 22 Nov 2026, 23:59 Pacific', R.pacificWallTime(new Date(Date.parse(D0.closes) - 60_000).toISOString()) === '2026-11-22 23:59');
 const at = (iso: string, deltaMs: number) => new Date(Date.parse(iso) + deltaMs);
 check('the opening instant is in', R.inWindow(at(D0.opens, 0)));
 check('a millisecond before opening is out', !R.inWindow(at(D0.opens, -1)));
 check('23:59:59.999 Pacific on the last day is in', R.inWindow(at(D0.closes, -1)));
 check('midnight Pacific after the last day is out', !R.inWindow(at(D0.closes, 0)));
-check('the window crosses no clock change (PST throughout): 23:59 Pacific is 07:59 UTC the next day', new Date(Date.parse(D0.closes) - 60_000).toISOString() === '2026-12-18T07:59:00.000Z');
-check('dateText builds the deadline from the config', R.dateText('closes', { time: true }) === 'Thursday 17 December, 23:59 Pacific', R.dateText('closes', { time: true }));
-check('windowText spans the window', R.windowText() === '1 to 17 December', R.windowText());
+check('the window crosses no clock change (PST throughout): 23:59 Pacific is 07:59 UTC the next day', new Date(Date.parse(D0.closes) - 60_000).toISOString() === '2026-11-23T07:59:00.000Z');
+check('dateText builds the deadline from the config', R.dateText('closes', { time: true }) === 'Sunday 22 November, 23:59 Pacific', R.dateText('closes', { time: true }));
+check('windowText spans the window', R.windowText() === '6 to 22 November', R.windowText());
 // The free spend cap: $15 inside the window, $2 outside, by itself (owner, 2026-10-31).
 {
   const C = await import('../src/lib/config');
@@ -629,23 +622,26 @@ check('the guidance line is shown', share.includes('If you’re remixing someone
 // --- The rules copy (owner's decisions, 2026-10-31) -------------------------------------------------------------
 const W = (await import('../src/lib/challenge/wording')).CHALLENGE_WORDING;
 const copy = [W.intro(), W.next(), ...W.rules(), W.adminsLine].join(' ');
-const MINT_PLAN = 'We plan to mint each final version as an open edition, with what it raises split among everyone it was built on, including the We Are Lum team. Details come with the mint page.';
-const PROMISES = /\b(will be minted|is then minted|minted as|reward pot|extra reward|split on|token for you|you will (get|receive)|guaranteed?|\$\s?\d|\d+\s?(ETH|USDC|dollars))\b|\bwallet\b/i;
+// Owner, 2026-11-05 evening: no prize for now; how the final version is chosen, and any prize, come later.
+const NO_PRIZE = 'There is no prize for now.';
+const LATER = 'How the final version is chosen, and any prize, are added to the rules before entries close.';
+const MINT_PLAN = NO_PRIZE;
+const PROMISES = /\b(mint(ed|s|ing)?|rewards?|reward pot|credit test|deep fund\w*|payouts?|split on|token for you|you will (get|receive)|guaranteed?|\$\s?\d|\d+\s?(ETH|USDC|dollars))\b|\bwallet\b/i;
 const NO_BOUNTY = /\bbount(y|ies)\b|\bpoidh\b/i;
 function copyProblems(t: string): string[] {
   const p: string[] = [];
-  if (!t.includes(MINT_PLAN)) p.push('the mint is not said as the owner\'s plan sentence');
+  if (!t.includes(NO_PRIZE) || !t.includes(LATER)) p.push('the rules don\'t say there is no prize for now, and that how the final version is chosen comes before entries close');
   const m = t.match(PROMISES);
   if (m) p.push(`promises or a wallet path: "${m[0]}"`);
-  if (!/A new sheet made from scratch isn’t an entry/.test(t)) p.push('it does not say only remixes (forks) count');
-  if (!new RegExp(`at least ${['zero', 'one', 'two', 'three', 'four', 'five'][CHALLENGE.minEntrants] ?? CHALLENGE.minEntrants} different people`).test(t)) p.push('the minimum number of entrants is missing or not the config\'s');
+  if (!/(A new sheet|A picture) made from scratch isn’t an entry/.test(t)) p.push('it does not say only remixes count');
   // No bounties at all (owner, 2026-11-04): no bounty, no poidh, anywhere in the challenge's words.
   if (NO_BOUNTY.test(t)) p.push(`a bounty is back: "${t.match(NO_BOUNTY)![0]}"`);
   return p;
 }
-check('the rules copy: the owner\'s mint sentence, forks only, three entrants, no bounty, no promises, no wallet path', copyProblems(copy).length === 0, copyProblems(copy).join('; '));
+check('the rules copy: no prize for now, the final version and any prize decided before entries close, remixes only, no bounty, no promises (mint, rewards, payouts), no wallet path', copyProblems(copy).length === 0, copyProblems(copy).join('; '));
 check('the rules name the six characters most named in the book first (owner, 2026-11-04)', W.intro().includes('Zei, Gladias, Bai, Seila, Deluin or Mu'));
-proof('a promised mint is caught', copyProblems(copy.replace(MINT_PLAN, 'Each version is then minted as an open edition in Snowmoon WIP.')).length > 0);
+proof('a promised mint is caught', copyProblems(`${copy} Each version is then minted as an open edition in Snowmoon WIP.`).length > 0);
+proof('rules without "no prize for now" are caught', copyProblems(copy.replaceAll(NO_PRIZE, '')).length > 0);
 proof('a reward pot is caught', copyProblems(`${copy} Plus an extra reward pot.`).length > 0);
 proof('a wallet path back in the rules is caught', copyProblems(`${copy} Or a wallet linked to one.`).length > 0);
 proof('a bounty back in the rules (the old per-character rule) is caught', copyProblems(`${copy} There is one poidh bounty for each character.`).length > 0);
@@ -1359,8 +1355,9 @@ check('as committed, CHALLENGE.entries, posts and openSheets are on (owner\'s re
   check('b the home page links to /challenge, its new line marked Draft wording', homeRow(home) && /remix/.test(CW.homeLine()) && CW.draftShort === 'Draft wording');
   proof('b a home page without the row is caught', !homeRow(home.replace("href: '/challenge'", "href: '/references'")));
   // c. Below 0.7: said up front, in the owner's words; the refusal beside Generate, scrolled into view; no new lookup.
-  const owner = 'Entering needs a Farcaster account with a Neynar score of 0.7 or more; we check when you press Generate.';
-  check('c the up-front line is the owner\'s words exactly', CW.whoCanEnter() === owner, CW.whoCanEnter());
+  // Widened to Lens and Bluesky (owner, 2026-11-05 evening, via the accounts session; DRAFT wording, no threshold).
+  const owner = 'Entering needs a Farcaster, Lens or Bluesky account that passes the site’s check; we check when you press Generate.';
+  check('c the up-front line says who can enter (Farcaster, Lens or Bluesky)', CW.whoCanEnter() === owner, CW.whoCanEnter());
   // With the short /challenge (owner, 2026-11-04), it sits at the top of the rules page, under the deadline.
   const chBody = read('src/components/challenge-rules-body.tsx');
   check('c /challenge/rules says it up front, under the deadline', /<\/p>\s*\{\/\*[^*]*\*\/\}\s*\{v\.who && <p className="ch-who">\{v\.who\}<\/p>\}\s*<p className="ch-intro">/.test(chBody) && /who: ph !== 'closed' \? W\.whoCanEnter\(\) : null,/.test(read('src/lib/challenge/rules-view.ts')));
@@ -1390,7 +1387,7 @@ check('as committed, CHALLENGE.entries, posts and openSheets are on (owner\'s re
   check('e3 in the window, a challenge sheet\'s share text mentions the challenge; outside it, as before', shareSwitch(share, vp) && /remix challenge/.test(CW.shareTextOpen('Bai: x')) && CW.shareTextOpen('Bai: x').startsWith('Bai: x, made on Snowmoon Party') && CW.shareText('Bai: x') === 'Bai: x, made on Snowmoon Party' && CW.shareTextOpen('x').includes(R.dateText('closes', { time: true })));
   proof('e3 a share text that ignores the window is caught', !shareSwitch(share, vp.replace('challengeOpenNow() ?', 'true ?')));
   // h. Before the open, from CHALLENGE.dates.
-  check('h "Entries open Tue 1 Dec, 09:00 PT", built from CHALLENGE.dates', E.SUBMIT_WORDING.opens() === 'Entries open Tue 1 Dec, 09:00 PT.' && R.shortDateText('opens', { ...CHALLENGE.dates, opens: '2026-11-13T17:00:00Z' }) === 'Fri 13 Nov, 09:00 PT', E.SUBMIT_WORDING.opens());
+  check('h "Entries open Fri 6 Nov, 09:00 PT", built from CHALLENGE.dates', E.SUBMIT_WORDING.opens() === 'Entries open Fri 6 Nov, 09:00 PT.' && R.shortDateText('opens', { ...CHALLENGE.dates, opens: '2026-11-13T17:00:00Z' }) === 'Fri 13 Nov, 09:00 PT', E.SUBMIT_WORDING.opens());
   // i. Neynar down: published, and told on the spot.
   check('i the unchecked line says it won\'t count, and why', /won’t count/.test(CW.publishedUnchecked('Zei')) && /Neynar/.test(CW.publishedUnchecked('Zei')) && /\{entry\?\.kind === 'unchecked' && \(\s*<p className="ic-error ch-unchecked" role="status">\s*\{entry\.text\}/.test(form));
   check('i the confirmation\'s new lines carry a Draft wording line', /\{entry && <p className="as-draft ic-draftline">\{IMAGE_WORDING\.draftLine\}<\/p>\}/.test(form));

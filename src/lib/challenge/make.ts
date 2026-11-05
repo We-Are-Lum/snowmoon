@@ -1,8 +1,6 @@
 import 'server-only';
 import { IMAGES } from '../config';
 import { bookCharacter } from '../images/designs';
-import { shorthandLine, sheetCharacter } from '../images/sheets';
-import type { TicketSheets } from '../images/ticket';
 import { chapterChip, momentById, MOMENTS, readerHref, type Moment } from './moments';
 import { MAKE_WORDING as M } from './make-wording';
 import type { Source } from './pictures';
@@ -11,26 +9,28 @@ import type { Source } from './pictures';
  * The remix screen's server half (branch challenge-moments, 2026-11-05; docs/proposals/challenge-moments.md §1.3 S2):
  * what the model receives for a challenge picture, and the screen's data.
  *
- * The prompt, exactly as sent and recorded (P1): the person's words first; then that the person in the reference picture
- * is the character remixed, kept as they are; then the moment's scene line (this edition's, drafted by the coding agent;
- * the moment's quote is shown, never sent); then, for each other challenge character in the moment, the project's
- * shorthand for their current default look (owner, answer 10: "other characters are drawn from their current default
- * looks"); then the site's no-lettering line. The reference picture is the one tapped (a base sheet's front view, or a
- * challenge picture), sent to the edit model.
+ * The prompt, exactly as sent and recorded (P1): the person's words first; then that the remixed character is the
+ * person in reference image 1, the main figure, kept as they are; then, for each other challenge character in the
+ * moment, that they are the person in the next reference image, behind (owner, answer 10: "other characters are drawn
+ * from their current default looks": their first base's front view); then the moment's scene line (this edition's,
+ * drafted by the coding agent; the moment's quote is shown, never sent); then the site's no-lettering line.
+ *
+ * Why reference pictures for the others, not their looks as text (test pictures of 2026-11-05, $0.07, scratchpad
+ * ledger): with the others' looks written out, the model drew them and dropped or blended the person in the reference
+ * picture; with each person as their own reference image, the remixed character stayed the main figure.
  */
 export function momentPrompt(p: { words: string; name: string; scene: string; others: string[] }): string {
-  return [p.words.trim(), `The person in the reference picture is ${p.name}: keep their face, hair and clothes as they are.`, p.scene, ...p.others, IMAGES.suffix].filter(Boolean).join('\n\n');
+  return [
+    p.words.trim(),
+    `${p.name} is the person in reference image 1, the main figure, in the foreground: keep their face, hair and clothes exactly as in reference image 1.`,
+    ...p.others.map((n, i) => `${n} is the person in reference image ${i + 2}, behind ${p.name} and smaller: keep their face, hair and clothes as in that image.`),
+    `The setting: ${p.scene}`,
+    IMAGES.suffix,
+  ].join('\n\n');
 }
 
-/** The other challenge characters in the moment, as the project's shorthand (their current default look), for the recipe. */
-export function othersIn(m: Moment, character: string): TicketSheets | null {
-  const added = m.characters
-    .filter((c) => c !== character)
-    .map((slug) => sheetCharacter(slug))
-    .filter((c): c is NonNullable<typeof c> => c !== null)
-    .map((c) => ({ kind: 'character' as const, slug: c.slug, name: c.name, text: shorthandLine(c) }));
-  return { characters: [character, ...added.map((a) => a.slug)], place: null, added };
-}
+/** The other challenge characters in the moment (slugs), at most two (the edit model takes three pictures in all). */
+export const othersIn = (m: Moment, character: string): string[] => m.characters.filter((c) => c !== character).slice(0, IMAGES.maxReferences - 1);
 
 /** What the request may hold: a version to start from, a moment of the fifteen, and the person's words. */
 export function readMake(body: unknown): { ok: true; from: string; moment: Moment; words: string } | { ok: false; error: string } {
