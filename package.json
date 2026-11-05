@@ -77,6 +77,7 @@
     "test:illustration-review": "tsx --conditions=react-server scripts/test-illustration-review.ts",
     "test:challenge": "tsx --conditions=react-server scripts/test-challenge.ts",
     "test:sql-pack": "tsx scripts/test-sql-pack.ts",
+    "test:check-decisions": "tsx --conditions=react-server scripts/test-check-decisions.ts",
     "characters:mentions": "tsx scripts/characters-by-mentions.ts",
     "test:character-order": "tsx --conditions=react-server scripts/test-character-order.ts",
     "test:check-targets": "tsx scripts/test-check-targets.ts",
