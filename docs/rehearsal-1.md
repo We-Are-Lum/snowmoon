@@ -39,7 +39,8 @@ cd /Users/nathan/snowmoon-contest
 npm run rehearsal
 ```
 
-It builds, then says `starting at http://127.0.0.1:3000`. Open **http://127.0.0.1:3000/challenge** in your browser.
+It builds (a few minutes), starts, waits about a minute while it gets the challenge pages ready, then says
+`rehearsal: ready. Open http://127.0.0.1:3000/challenge`. Open that in your browser.
 
 ## What to expect
 
@@ -96,6 +97,18 @@ Then start as above.
 - `the rehearsal database isn't answering`: start `npm run rehearsal:db` first.
 - `something is already using port 3000`: stop the other server.
 - Submit says it can't read the post: Neynar didn't answer, or the cast isn't public yet; try again in a minute.
+
+## The agent's dress run (2026-11-04)
+
+Before handing this over, the coding agent ran the same server with two test persons (Farcaster IDs no real account
+has) and stand-in casts read from a file, not Farcaster: `npx tsx scripts/rehearsal-dress.ts`. 22 of 22 steps
+passed: /challenge open signed out with Deluin's three bases; the words screen; a remix of Deluin's base (front, side,
+back, made for real); publish ("press Submit"); someone else's cast and a cast without the link refused; Submit;
+listed on "Every entry" and under Deluin, not Zei; "See the conversation on Farcaster", no counts; withdraw; a second
+submission the same day refused; the database the rehearsal's, the R2 keys blank, the pictures in the rehearsal
+store. Pictures cost $0.0264 a run (two full runs, $0.053 in all). The database was then reset, so you start fresh.
+Not covered by it: your own Farcaster sign-in and a real cast (they need you), and `npm run rehearsal` itself (the
+dress run starts the server with the same settings from its own script).
 
 ## What wasn't rehearsed here
 
