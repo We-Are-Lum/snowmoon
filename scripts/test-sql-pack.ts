@@ -44,11 +44,11 @@ const check = (label: string, ok: boolean, detail = '') => {
 const doc = readFileSync(DOC, 'utf8');
 const blocks = new Map<string, string>();
 for (const m of doc.matchAll(/^### (\d[A-D])\. [^\n]*\n[\s\S]*?```sql\n([\s\S]*?)\n```/gm)) blocks.set(m[1], m[2]);
-const ORDER = ['1', '2', '3', '4', '5'] as const;
+const ORDER = ['1', '2', '3', '4', '5', '6'] as const;
 type K = (typeof ORDER)[number];
 /** Item 1 is applied (0034); the rest in apply order: the sign-in release (2, then 5), then 3 and 4 (owner, 2026-11-05). */
 const APPLIED: K[] = ['1'];
-const APPLY_ORDER: K[] = ['2', '5', '3', '4'];
+const APPLY_ORDER: K[] = ['2', '5', '3', '4', '6'];
 const SOURCE: Record<K, { branch: string; file: string; name: string; twiceSafe: boolean }> = {
   // Applied by the owner as 0034 (2026-11-04); merged to main in #115.
   '1': { branch: 'main', file: 'supabase/migrations/0034_check_decisions.sql', name: '0034_check_decisions', twiceSafe: true },
@@ -57,13 +57,15 @@ const SOURCE: Record<K, { branch: string; file: string; name: string; twiceSafe:
   // Item 4 (2026-11-04): NEXT_challenge_daily (branch contest) replaces remix-submit's NEXT_challenge_submit.
   '4': { branch: 'contest', file: 'supabase/migrations/NEXT_challenge_daily.sql', name: 'NEXT_challenge_daily', twiceSafe: true },
   '5': { branch: 'bluesky-check', file: 'supabase/migrations/NEXT_social_bluesky_check.sql', name: 'NEXT_social_bluesky_check', twiceSafe: true },
+  // Item 6 (2026-11-05, overnight item 4): a Lens account's challenge decision (branch contest).
+  '6': { branch: 'contest', file: 'supabase/migrations/NEXT_social_lens_challenge.sql', name: 'NEXT_social_lens_challenge', twiceSafe: true },
 };
 const get = (id: string) => {
   const b = blocks.get(id);
   if (!b) throw new Error(`the doc has no block ${id}`);
   return b;
 };
-check('the doc has 20 blocks, 1A to 5D, in order', [...blocks.keys()].join() === ORDER.flatMap((k) => ['A', 'B', 'C', 'D'].map((x) => k + x)).join(), [...blocks.keys()].join());
+check('the doc has 24 blocks, 1A to 6D, in order', [...blocks.keys()].join() === ORDER.flatMap((k) => ['A', 'B', 'C', 'D'].map((x) => k + x)).join(), [...blocks.keys()].join());
 
 // Read-backs use made-up accounts, never real people's (2026-11-05): none of these real ones may appear in a C or D.
 const REAL = ['0xad2c0beade60fb9f7ec5c87bde8e4c126145f6e7', 'did:plc:z72i7hdynmk6r22z27h6tvur', 'bsky.app\'', '6786', '193912', 'lens/stani'];
@@ -203,6 +205,11 @@ const PLANTS: Record<K, [string, string][]> = {
     ['constraint dropped: the character check', `alter table studio.challenge_marks drop constraint challenge_marks_character_check;`],
     ['public access: anon may read the marks', `grant select on studio.challenge_marks to anon;`],
   ],
+  '6': [
+    ['the old account check back (no lens)', `alter table studio.challenge_eligibility drop constraint challenge_eligibility_account_check; alter table studio.challenge_eligibility add constraint challenge_eligibility_account_check check (account in ('farcaster', 'bluesky'));`],
+    ['account check dropped (anything accepted)', `alter table studio.challenge_eligibility drop constraint challenge_eligibility_account_check;`],
+    ['public access: anon may read challenge_eligibility', `grant select on studio.challenge_eligibility to anon;`],
+  ],
   '5': [
     ['constraint dropped: account must match the number', `alter table studio.challenge_eligibility drop constraint challenge_eligibility_account_matches;`],
     ['wrong column type: account as varchar(20)', `alter table studio.challenge_eligibility alter column account type varchar(20);`],
@@ -236,7 +243,7 @@ for (const k of [...APPLIED, ...APPLY_ORDER]) {
   const file = gitShow(src.branch, src.file);
   if (file === null) log.push(`skip ${k} B against origin/${src.branch}: git show unavailable`);
   else {
-    const from = k === '2' || k === '5' ? file.slice(file.indexOf('-- B. THE MIGRATION')) : k === '4' ? file.slice(file.indexOf('-- 2. The migration.')) : file;
+    const from = k === '2' || k === '5' || k === '6' ? file.slice(file.indexOf('-- B. THE MIGRATION')) : k === '4' ? file.slice(file.indexOf('-- 2. The migration.')) : file;
     const m = /^begin;$[\s\S]*?^commit;$/m.exec(from);
     const migration = m ? m[0] : '';
     check(`${k} B is origin/${src.branch}'s ${src.name}, word for word`, migration.trim() === B.trim());
@@ -308,8 +315,8 @@ for (const k of [...APPLIED, ...APPLY_ORDER]) {
   const done = await snapshot();
   // Every read-back (a) of 1..5 is still all true with all five applied (4 and 5 both change challenge_marks; 5 ran
   // before 3 and 4, in the sign-in release).
-  for (const k of ORDER) check(`after all five: ${k}C still all true`, allTrue(await readBackA(k)), falseRows(await readBackA(k)).join('; '));
-  for (const k of ORDER) check(`after all five: ${k}D still passes`, (await readBackB(k)) === null);
+  for (const k of ORDER) check(`after all six: ${k}C still all true`, allTrue(await readBackA(k)), falseRows(await readBackA(k)).join('; '));
+  for (const k of ORDER) check(`after all six: ${k}D still passes`, (await readBackB(k)) === null);
 
   // Re-running 0033 after 4 removes 4's column grant; running 4B again restores it. 0033 doesn't undo 5.
   await pg.exec(readFileSync(path.join(ROOT, 'supabase/migrations/0033_remix_challenge.sql'), 'utf8'));
