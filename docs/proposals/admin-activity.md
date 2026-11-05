@@ -294,10 +294,16 @@ As designed above, with these specifics:
 - `npm run test:admin-activity`: PGlite with every migration, run as `studio_writer`; gate, read-only refusal,
   optional tables added mid-test, Pacific/UTC days, totals, public rows only, a scan for private values, and the P5b
   and P6aa planted faults.
-- The public lists use their own queries inside the read-only transaction (not `listDesigns` or `publicCatalogue`,
-  which use their own connection or call Farcaster), with the site's byline helpers (`byline`, `designByline`).
-- check:principles on a local build (production settings set aside, so no production read): 56 pass, 2 fail (P6a,
-  which fails on every localhost run because media.snowmoon.party isn't the target's domain; P6d, the accepted open
-  item), 6 not run (they need the database), 64 of 64 proven. P5b, P6aa and P1f pass.
-- Not built: the Privacy line (a draft for the owner); scene bylines show the stored name and skip the linked-wallet
-  credit that scene pages apply (an admin-only view, so a wallet-linked scene may show its address here).
+- The public lists' rows are read inside the read-only transaction; their bylines are finished after it by the public
+  pages' own functions (owner, 2026-11-05): the linked-wallet credit then `byline` (images), the credit then
+  `frameByline` (frames, shared with the frame page), `sceneHandleFor` (scene versions and their fixed links), and
+  `designByline` (sheets, entries, bases). They read what those pages read.
+- Owner's approvals (2026-11-05, coordinator-reviewed): the P5b exception, the narrowed "publishes" test and P6aa
+  (docs/principles.md), and Privacy §4's line, now in `src/lib/legal.ts` with `LEGAL.ownerReread.privacy` gorslr.
+- Every section shows, with "Nothing kept here yet." when empty; empty lists say "None yet."
+- check:principles on a local build, checks reading the local rehearsal database (production settings set aside): 58
+  pass, 3 fail, 3 not run, 64 of 64 proven. Fails: P6a (every localhost run: media.snowmoon.party isn't the target's
+  domain), P6d (accepted open item), P1c (the rehearsal database's three seeded stand-in styles, Mood, Quiet and warm
+  light, have no recipe: rehearsal seed data, not this branch). Not run: P1e, P3d, P6c (they need the Supabase public
+  API, which only production has). P1g and P5c ran but the rehearsal has no reader images. P5b, P6aa, P1f pass.
+- Looked at against the rehearsal database (light, dark, phone, one person): screenshots kept outside the repository.
