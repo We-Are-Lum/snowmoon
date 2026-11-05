@@ -28,7 +28,7 @@ import { CLOSED_IMAGE_MODELS, closedImage, retentionRefusal, type ClosedImageMod
 const ROOT = path.resolve(import.meta.dirname, '..');
 const DIR = path.join(ROOT, 'docs/starting-sheet-drafts/directions');
 const LEDGER = path.join(DIR, 'ledger.json');
-const CAP = 2.3; // raised to $1.75 by the owner, 2026-11-04 (was $1); +$0.55 for Seila's, Deluin's and Mu's views (owner, 2026-11-04)
+const CAP = 2.83; // raised to $1.75 by the owner, 2026-11-04 (was $1); +$0.55 for Seila's, Deluin's and Mu's views; +$0.53 for the recast bases' views (owner, 2026-11-04; with the recast cap's +$0.07, the $0.60 raise)
 const GUARD_WORST = 0.0015;
 const DRY = process.argv.includes('--dry');
 const sha = (b: Buffer) => createHash('sha256').update(b).digest('hex');
@@ -38,13 +38,21 @@ if (!process.env.AI_GATEWAY_API_KEY) throw new Error('no gateway key');
 const fakeRequest = new Request('http://localhost/local-script');
 
 /** The six bases, in the owner's order. */
-const BASES: { char: string; front: string }[] = [
+const BASES: { char: string; front: string; name?: string; descriptor?: { was: string; now: string; why: string } }[] = [
   { char: 'zei', front: 'directions/zei-animated-gpt.jpg' },
   { char: 'bai', front: 'directions/bai-animated-gpt.jpg' },
   { char: 'gladias', front: 'directions/gladias-animated-gemini.jpg' },
   { char: 'seila', front: 'directions/seila-animated-gemini.jpg' },
   { char: 'deluin', front: 'directions/deluin-animated-gemini.jpg' },
   { char: 'mu', front: 'directions/mu-animated-gemini.jpg' },
+  // The recast bases (owner, 2026-11-04): every look of Deluin and Gladias is a challenge base. Deluin b waits for its words.
+  { char: 'deluin', front: 'directions/deluin-recast-a-gemini.jpg', name: 'deluin-recast-a' },
+  { char: 'gladias', front: 'directions/gladias-recast-a-gemini.jpg', name: 'gladias-recast-a' },
+  {
+    char: 'gladias', front: 'directions/gladias-recast-b-gemini.jpg', name: 'gladias-recast-b',
+    // The owner changed b's words to match its picture (2026-11-04); the front's recipe keeps the words it was made from.
+    descriptor: { was: 'warm medium-brown skin, short straight black hair with a few grey strands, a neatly trimmed short beard and dark eyes', now: 'warm light-brown skin, short straight black hair greying at the temples, a neatly trimmed short beard and dark eyes', why: 'owner, 2026-11-04: words changed to match the picture' },
+  },
 ];
 
 type Row = Record<string, unknown> & { costUsd: number; worstUsd: number };
@@ -52,8 +60,8 @@ const ledger = JSON.parse(readFileSync(LEDGER, 'utf8')) as { calls: Row[] } & Re
 const save = () => writeFileSync(LEDGER, JSON.stringify(ledger, null, 1));
 // The recast tests (scripts/recast-fronts.ts) have their own $0.30 cap and don't count here.
 const spent = () => ledger.calls.filter((c) => c.recast !== true).reduce((n, c) => n + c.costUsd, 0);
-/** Held until the owner picks Deluin's recast (owner, 2026-11-04). */
-const HELD = new Set(['deluin']);
+/** None held now (Deluin's current look and option a are bases; Deluin b waits for its words and isn't listed). */
+const HELD = new Set<string>();
 const gate = (what: string, worst: number) => {
   const after = spent() + worst;
   if (after > CAP + 1e-9) {
@@ -80,15 +88,17 @@ for (const b of BASES) {
   if (sha(frontBytes) !== frontRow.sha256) throw new Error(`${b.front} changed since it was made`);
   const parts = frontRow.recipe.prompt.split('\n\n');
   if (parts.length !== 4 || parts[3] !== IMAGES.suffix) throw new Error(`${b.front}: unexpected prompt shape`);
-  const [, style, descriptor] = parts;
+  const [, style, madeWith] = parts;
+  if (b.descriptor && madeWith.split(b.descriptor.was).length !== 2) throw new Error(`${b.front}: the words to replace aren't in its descriptor once`);
+  const descriptor = b.descriptor ? madeWith.replace(b.descriptor.was, b.descriptor.now) : madeWith;
   const model = frontRow.model;
   const m = CLOSED_IMAGE_MODELS[model];
   const short = model === 'gemini-3.1-flash-image' ? 'gemini' : 'gpt';
   for (const slot of ['side', 'back'] as const) {
-    const file = `${b.char}-animated-${slot}-${short}.jpg`;
+    const file = `${b.name ?? `${b.char}-animated`}-${slot}-${short}.jpg`;
     if (existsSync(path.join(DIR, file))) { console.log('exists', file); continue; }
     const prompt = viewPrompt(VIEW_LINES[slot], style, descriptor);
-    const tag = { char: b.char, direction: 'animated', view: slot, model, from: `front:${b.front}` };
+    const tag = { char: b.char, direction: 'animated', view: slot, model, from: `front:${b.front}`, ...(b.name ? { base: b.name } : {}), ...(b.descriptor ? { descriptor_changed: b.descriptor } : {}) };
     if (DRY) { console.log(`${file}: ${model}, worst $${m.worstUsd} + check $${GUARD_WORST}`); continue; }
     if (blockedName(prompt)) { console.log('BLOCKED NAME', file); continue; }
     let ok = false;
