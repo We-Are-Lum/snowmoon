@@ -48,8 +48,9 @@ const BASES: { char: string; front: string; name?: string; descriptor?: { was: s
   // The recast bases (owner, 2026-11-04): every look of Deluin and Gladias is a challenge base. Deluin b waits for its words.
   { char: 'deluin', front: 'directions/deluin-recast-a-gemini.jpg', name: 'deluin-recast-a' },
   { char: 'gladias', front: 'directions/gladias-recast-a-gemini.jpg', name: 'gladias-recast-a' },
-  // Deluin b in the owner's words of 2026-11-04 ("warm tan skin, …"); the third try at b.
-  { char: 'deluin', front: 'directions/deluin-recast-b3-gemini.jpg', name: 'deluin-recast-b' },
+  // Deluin b in the owner's words of 2026-11-04 ("warm tan skin, …"), remade without the green shoulder bag (owner,
+  // 2026-11-05): b4, whose side and back views were made with it (scripts/deluin-b4.ts). b3 and its views are replaced.
+  { char: 'deluin', front: 'directions/deluin-recast-b4-gemini.jpg', name: 'deluin-recast-b4' },
   {
     char: 'gladias', front: 'directions/gladias-recast-b-gemini.jpg', name: 'gladias-recast-b',
     // The owner changed b's words to match its picture (2026-11-04); the front's recipe keeps the words it was made from.
@@ -88,6 +89,9 @@ for (const b of BASES) {
   if (!frontRow) throw new Error(`no recipe for ${b.front}`);
   const frontBytes = readFileSync(path.join(DIR, '..', b.front));
   if (sha(frontBytes) !== frontRow.sha256) throw new Error(`${b.front} changed since it was made`);
+  // A base whose side and back views are already made (e.g. Deluin b4, made with its front) is left as it is.
+  const made = (['side', 'back'] as const).map((slot) => `${b.name ?? `${b.char}-animated`}-${slot}-${frontRow.model === 'gemini-3.1-flash-image' ? 'gemini' : 'gpt'}.jpg`);
+  if (made.every((f) => existsSync(path.join(DIR, f)))) { console.log('views made', made.join(', ')); continue; }
   const parts = frontRow.recipe.prompt.split('\n\n');
   if (parts.length !== 4 || parts[3] !== IMAGES.suffix) throw new Error(`${b.front}: unexpected prompt shape`);
   const [, style, madeWith] = parts;
