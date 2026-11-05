@@ -520,6 +520,11 @@ add({
   id: 'F1',
   name: 'Free generations: a Bluesky-only account gets none anywhere, and has no balance',
   load: async () => {
+    // With the Bluesky check off (its own rules are test:bluesky-check's): since the sign-in release turns it on
+    // (2026-11-05), F1 turns it off here to prove the "none without the check" path.
+    const chk = (SOCIAL_SIGN_IN.bluesky as unknown as { check?: { on: boolean } }).check;
+    const was = chk?.on;
+    if (chk) chk.on = false;
     const r = await blueskyFinish(await blueskyStart());
     const person = (await getPerson(bearer(r.body.token)))!;
     const gate = await mayGenerate(S, person);
@@ -534,6 +539,7 @@ add({
       left: await imageLimits.generationsLeft(S, person),
       remixLeft: await remixLimits.generationsLeft(S, person, 0.01),
       funded: imageLimits.fundedBy(person),
+      ...(chk ? ((chk.on = was!), {}) : {}),
     };
   },
   run: (c) => {

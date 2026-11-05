@@ -469,7 +469,8 @@ export const SOCIAL_SIGN_IN = {
      * sign-in is on.
      */
     check: {
-      on: false as boolean,
+      // On for the sign-in release (owner, 2026-11-05, after the reread of its Privacy lines L12 and L16).
+      on: true as boolean,
       appView: 'https://public.api.bsky.app',
       minAgeDays: 30,
       recentDays: 30,

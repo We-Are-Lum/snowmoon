@@ -149,12 +149,11 @@ export const LEGAL: {
     // 2026-11-05, merging main's privacy-furthest-chapter (bv4cvf) with this branch's sign-in words (iqpiw8): both sets of
     // lines were approved word for word, and §3 holds both unchanged (main's furthest-chapter clause, this branch's
     // sign-in phrases), so the combined words are recorded as approved. The words before were iqpiw8 (this branch) and bv4cvf (main).
-    // PENDING the owner's reread (branch bluesky-check, 2026-11-04): Privacy §7's Bluesky check item (4.1, the combined
-    // line, redrafted for the rolling rule: 30 days old and 5 posts in the last 30 days, judged when we check) and §4's
-    // Bluesky check item (4.2, redrafted with no numbers, plus the Farcaster item's early-removal sentence). §4's
-    // challenge items (4.3, 4.4) are approved as drafted. Until the owner OKs 4.1 and 4.2, this record is of the
-    // words before them (m0e1f7 since main's privacy-furthest-chapter merged in, 2026-11-05; iqpiw8 before), so P6l fails on this branch, as it should.
-    privacy: { words: 'm0e1f7', on: '2026-11-04', by: 'FID 6786' },
+    // 2026-11-05, the sign-in release's reread ("reviewed by the coordinator, approved by the owner"; branch bluesky-check;
+    // docs/legal/signin-release-2026-11-05.md): Privacy §4's Bluesky check item (L12, reread pack 4.2) and §7's Bluesky
+    // check item (L16, 4.1), approved as drafted; §4's challenge phrases (4.3, 4.4) were approved as drafted on
+    // 2026-11-04. The words before were m0e1f7 (the approved words without L12 and L16).
+    privacy: { words: '1tllgm9', on: '2026-11-05', by: 'FID 6786' },
   },
 };
 
