@@ -103,7 +103,7 @@ if (path.basename(process.argv[1] ?? '') === 'rehearsal.ts') {
   const next = path.join(ROOT, 'node_modules', 'next', 'dist', 'bin', 'next');
   if (!process.argv.includes('--no-build') || !existsSync(MARK)) {
     console.log('rehearsal: building the app for the rehearsal (a few minutes)…');
-    const b = spawnSync(process.execPath, [next, 'build'], { cwd: ROOT, env: { ...env, NODE_OPTIONS: '--max-old-space-size=3072' } as NodeJS.ProcessEnv, stdio: 'inherit' });
+    const b = spawnSync(process.execPath, [next, 'build'], { cwd: ROOT, env: { ...env, NODE_OPTIONS: '--max-old-space-size=3072' } as unknown as NodeJS.ProcessEnv, stdio: 'inherit' });
     if (b.status !== 0) {
       console.error('rehearsal: the build failed.');
       process.exit(1);
@@ -111,7 +111,7 @@ if (path.basename(process.argv[1] ?? '') === 'rehearsal.ts') {
     writeFileSync(MARK, `rehearsal build, ${new Date().toISOString()}\n`);
   }
   console.log(`rehearsal: starting at ${REHEARSAL_ORIGIN} (Ctrl-C stops it).`);
-  const app = spawn(process.execPath, [next, 'start', '-H', '127.0.0.1', '-p', '3000'], { cwd: ROOT, env: env as NodeJS.ProcessEnv, stdio: 'inherit' });
+  const app = spawn(process.execPath, [next, 'start', '-H', '127.0.0.1', '-p', '3000'], { cwd: ROOT, env: env as unknown as NodeJS.ProcessEnv, stdio: 'inherit' });
   const stop = () => app.kill('SIGTERM');
   process.on('SIGINT', stop);
   process.on('SIGTERM', stop);
