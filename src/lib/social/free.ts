@@ -4,6 +4,7 @@ import { SOCIAL_SIGN_IN } from '../config';
 import { isSocialPerson, socialAccountOf } from '../people';
 import { socialAccount } from './accounts';
 import { lensDecision } from './lens-check';
+import { BLUESKY_CHECK_WORDING, blueskyDecision, keptBlueskyDecision, type BlueskyFacts } from './bluesky-check';
 
 /**
  * Free generations for Lens and Bluesky sign-ins (owner's item 5, 2026-10-31: "Free generations come only by linking a
@@ -15,8 +16,10 @@ import { lensDecision } from './lens-check';
  * - a Bluesky account linked to a Lens account signs in as that Lens account (or its FID), and gets what it gets;
  * - a Lens account (not linked) gets the free counts only when its Lens score is at least SOCIAL_SIGN_IN.lens.minScore
  *   (1,000; owner, 2026-11-04), decided at Generate and kept only as a decision (src/lib/social/lens-check.ts);
- * - a Bluesky account that isn't linked gets none, ever. It has no balance either (only a wallet account has one): to
- *   pay, it signs in with a wallet.
+ * - a Bluesky account that isn't linked gets them only if it passes the Bluesky check (owner, 2026-11-04; Bluesky's
+ *   counterpart of Neynar's score: src/lib/social/bluesky-check.ts) while SOCIAL_SIGN_IN.bluesky.check is on; while
+ *   it is off, none, as before. It has no balance either (only a wallet account has one): to pay, it signs in with a
+ *   wallet.
  * Checked at the gate (src/lib/images/gate.ts) and again when a Generate is counted (images and Remix limits), so no
  * route that skips the gate (an agent's approved frame) can hand a Bluesky-only account a free generation.
  *
@@ -35,7 +38,9 @@ export const FREE_WORDING = {
   lensUnreachable: 'We can’t check your Lens account right now (the Lens API can’t be reached). Try again later.',
 } as const;
 
-export type FreeDecision = { free: true } | { free: false; reason: 'link-needed' | 'lens-not-open' | 'lens-score' | 'lens-unreachable'; error: string };
+export type FreeDecision =
+  | { free: true }
+  | { free: false; reason: 'link-needed' | 'lens-not-open' | 'lens-score' | 'lens-unreachable' | 'bluesky-new' | 'bluesky-idle' | 'bluesky-failed' | 'bluesky-unreachable'; error: string };
 
 /**
  * Whether a person may use the free daily counts. Farcaster accounts: yes (the Neynar gate is separate). Wallet
@@ -44,16 +49,31 @@ export type FreeDecision = { free: true } | { free: false; reason: 'link-needed'
  * never asks Lens, and gives null when there is no decision yet: it is made at Generate. `score` is replaced only by
  * the tests.
  */
-export async function freeFor(sql: Sql | null, person: number, opts?: { lookUp?: true; score?: (account: string) => Promise<number | null> }): Promise<FreeDecision>;
+export async function freeFor(sql: Sql | null, person: number, opts?: { lookUp?: true; score?: (account: string) => Promise<number | null>; bluesky?: (did: string) => Promise<BlueskyFacts> }): Promise<FreeDecision>;
 export async function freeFor(sql: Sql | null, person: number, opts: { lookUp: false }): Promise<FreeDecision | null>;
 export async function freeFor(
   sql: Sql | null,
   person: number,
-  opts: { lookUp?: boolean; score?: (account: string) => Promise<number | null> } = {},
+  opts: { lookUp?: boolean; score?: (account: string) => Promise<number | null>; bluesky?: (did: string) => Promise<BlueskyFacts> } = {},
 ): Promise<FreeDecision | null> {
   if (person > 0) return { free: true };
   if (!isSocialPerson(person)) return { free: false, reason: 'link-needed', error: FREE_WORDING.linkNeeded };
   const row = sql ? await socialAccount(sql, socialAccountOf(person)).catch(() => null) : null;
+  if (sql && row?.kind === 'bluesky' && SOCIAL_SIGN_IN.bluesky.check.on) {
+    // The Bluesky check, decided at Generate as Neynar's score is (only the decision is kept: a pass 90 days, a fail a
+    // day). `lookUp: false` (the maker opening, the count shown) never asks Bluesky: null until a decision is made.
+    if (opts.lookUp === false) {
+      const kept = await keptBlueskyDecision(sql, row.subject).catch(() => null);
+      if (kept === null) return null;
+      return kept === 'passed' ? { free: true } : { free: false, reason: 'bluesky-failed', error: BLUESKY_CHECK_WORDING.failed() };
+    }
+    const d = await blueskyDecision(sql, row, opts.bluesky);
+    if (!d.ok) return { free: false, reason: 'bluesky-unreachable', error: BLUESKY_CHECK_WORDING.unreachable };
+    if (d.decision === 'new') return { free: false, reason: 'bluesky-new', error: BLUESKY_CHECK_WORDING.new() };
+    if (d.decision === 'idle') return { free: false, reason: 'bluesky-idle', error: BLUESKY_CHECK_WORDING.idle() };
+    if (d.decision === 'failed') return { free: false, reason: 'bluesky-failed', error: BLUESKY_CHECK_WORDING.failed() };
+    return { free: true };
+  }
   if (!sql || !row || row.kind !== 'lens') return { free: false, reason: 'link-needed', error: FREE_WORDING.linkNeeded };
   const min = SOCIAL_SIGN_IN.lens.minScore;
   if (min === null) return { free: false, reason: 'lens-not-open', error: FREE_WORDING.lensNotOpen };

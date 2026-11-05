@@ -450,6 +450,33 @@ export const SOCIAL_SIGN_IN = {
     /** A sign-in started must finish within this. */
     startMinutes: 10,
     timeoutMs: 5000,
+    /**
+     * The Bluesky check (owner, 2026-11-04): a Bluesky account that isn't linked to a Farcaster or Lens account gets
+     * the free daily counts, and can remix and enter the remix challenge, only if it passes, the same way a Farcaster
+     * account passes Neynar's score (src/lib/social/bluesky-check.ts). Two signals, from Bluesky's public AppView
+     * (app.bsky.actor.getProfile and app.bsky.feed.getAuthorFeed; no key), asked with the account's DID only:
+     * 1. the account is at least `minAgeDays` days old when it is checked, so new accounts can't be made for it (a
+     *    rolling rule, owner, 2026-11-04: it replaced a fixed cut-off of 6 Nov 2026, which would have shut out every
+     *    Bluesky account made after it for good);
+     * 2. it posted at least `minRecentPosts` times (its own posts and replies, not reposts) in the last `recentDays`
+     *    days, by Bluesky's own clock (each post's indexedAt) as well as the post's, so old idle accounts can't
+     *    drain the daily cap.
+     * Only whether it passed, when, and the rule used are kept, in the shared decision store (studio.check_decisions,
+     * network 'bluesky', the DID; owner, 2026-11-04: one store, the decision, not the numbers): a pass for
+     * CHECKS.passDays, a fail asked again no sooner than CHECKS.failHours later, or at once if the rule changes. Never
+     * the dates or counts. If Bluesky can't be reached, refused, as for
+     * Neynar. Off (`on: false`) until the owner's reread of its Privacy and Terms lines, and only matters once Bluesky
+     * sign-in is on.
+     */
+    check: {
+      on: false as boolean,
+      appView: 'https://public.api.bsky.app',
+      minAgeDays: 30,
+      recentDays: 30,
+      minRecentPosts: 5,
+      /** How many of the newest feed items are read (one request); enough to find minRecentPosts among reposts. */
+      feedLimit: 50,
+    },
   },
 } as const;
 

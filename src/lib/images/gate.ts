@@ -40,7 +40,7 @@ export const GATE_WORDING = {
     `Image making is open to Farcaster accounts with a Neynar score of ${IMAGES.neynarMinScore} or more, to keep out spam accounts. Yours was below that when we last checked; we can check again in about ${Math.max(1, Math.ceil((recheck.getTime() - now.getTime()) / 3_600_000))} ${Math.max(1, Math.ceil((recheck.getTime() - now.getTime()) / 3_600_000)) === 1 ? 'hour' : 'hours'}. Reading, listening, saving cards and everything else still work.`,
 } as const;
 
-export type Gate = { ok: true } | { ok: false; status: 403 | 503; error: string; reason: 'not-open' | 'unreachable' | 'score' | 'prepaid-closed' | 'link-needed' | 'lens-not-open' | 'lens-score' | 'lens-unreachable' };
+export type Gate = { ok: true } | { ok: false; status: 403 | 503; error: string; reason: 'not-open' | 'unreachable' | 'score' | 'prepaid-closed' | 'link-needed' | 'lens-not-open' | 'lens-score' | 'lens-unreachable' | 'bluesky-new' | 'bluesky-idle' | 'bluesky-failed' | 'bluesky-unreachable' };
 
 /** The owner's launch order: both legal pages built, and the alert set. Names only in the log. */
 export function openToEveryone(): { open: boolean; missing: string[] } {
@@ -60,7 +60,7 @@ export async function mayGenerate(sql: Sql, fid: number): Promise<Gate> {
   }
   if (isSocialPerson(fid)) {
     const d = await freeFor(sql, fid);
-    return d.free ? { ok: true } : { ok: false, status: d.reason === 'lens-unreachable' ? 503 : 403, error: d.error, reason: d.reason };
+    return d.free ? { ok: true } : { ok: false, status: d.reason === 'lens-unreachable' || d.reason === 'bluesky-unreachable' ? 503 : 403, error: d.error, reason: d.reason };
   }
   if (fid < 0) return prepaidOpen() ? { ok: true } : { ok: false, status: 503, error: IMAGE_WORDING.prepaid.notOpen, reason: 'prepaid-closed' };
   const r = await checkNeynar(sql, fid, IMAGES.neynarMinScore);

@@ -1,6 +1,7 @@
 import { CHALLENGE } from '../config';
 import { pacificDay } from './rehearsal-switch';
 import { CHALLENGE_LISTS } from './who';
+import { isSocialPerson } from '../people';
 
 /**
  * The remix challenge's rules, as pure functions (no network, no database), so scripts/test-challenge.ts can prove
@@ -109,7 +110,14 @@ export type Eligibility =
  * FID is never eligible. To restore the wallet path later, resolve a wallet maker to the FID it is linked to before
  * calling this (src/lib/wallet/credit.ts, linkedTo) and pass that FID as `maker`.
  */
-export function eligibility(p: { maker: number; passed: boolean | null }, lists: { admins: readonly number[]; invited: readonly number[] } = CHALLENGE_LISTS): Eligibility {
+export function eligibility(p: { maker: number; passed: boolean | null; bluesky?: 'passed' | 'new' | 'idle' | 'failed' | null }, lists: { admins: readonly number[]; invited: readonly number[] } = CHALLENGE_LISTS): Eligibility {
+  // A Bluesky account (owner, 2026-11-04): its Bluesky check counts as Neynar's check does. `bluesky` is the decision
+  // made at publish, or the current stored one (null: Bluesky didn't answer); absent for any other kind of account,
+  // which never counts.
+  if (isSocialPerson(p.maker) && p.bluesky !== undefined) {
+    if (p.bluesky === null) return { eligible: false, person: p.maker, why: 'unchecked' };
+    return p.bluesky === 'passed' ? { eligible: true, person: p.maker, why: 'passed' } : { eligible: false, person: p.maker, why: 'below' };
+  }
   if (!(p.maker > 0)) return { eligible: false, person: null, why: 'not-a-farcaster-account' };
   const person = p.maker;
   if (lists.admins.includes(person)) return { eligible: false, person, why: 'admin' };
@@ -125,6 +133,8 @@ export type Decision = 'admin' | 'invited' | 'passed' | 'below' | 'unchecked';
  * always is); otherwise the decision made at publish stands. No score is involved.
  */
 export function fromDecision(maker: number, decision: Decision | null, lists: { admins: readonly number[]; invited: readonly number[] } = CHALLENGE_LISTS): Eligibility {
+  // A Bluesky account's stored decision stands as a Farcaster account's does (its Bluesky check, at publish).
+  if (isSocialPerson(maker)) return decision === 'passed' ? { eligible: true, person: maker, why: 'passed' } : { eligible: false, person: maker, why: decision === 'below' ? 'below' : 'unchecked' };
   if (!(maker > 0)) return { eligible: false, person: null, why: 'not-a-farcaster-account' };
   if (lists.admins.includes(maker)) return { eligible: false, person: maker, why: 'admin' };
   if (lists.invited.includes(maker)) return { eligible: true, person: maker, why: 'invited' };

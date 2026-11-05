@@ -1,6 +1,6 @@
 import 'server-only';
 import type postgres from 'postgres';
-import { CHALLENGE, WORK_ID } from '../config';
+import { CHALLENGE, SOCIAL_SIGN_IN, WORK_ID } from '../config';
 import { checkNeynar } from '../images/neynar';
 import { CHALLENGE_LISTS } from './who';
 import { bookCharacter } from '../images/designs';
@@ -9,6 +9,9 @@ import { privacyDescribesChallenge } from './open-sheets';
 import { refusedBases } from './bases';
 import { remixLines } from './lineage';
 import { eligibility, entriesOpen, inWindow, needsScore, remixOfBase } from './rules';
+import { isSocialPerson, socialAccountOf } from '../people';
+import { socialAccount } from '../social/accounts';
+import { blueskyDecision, type BlueskyFacts } from '../social/bluesky-check';
 
 /**
  * The remix challenge's eligibility, decided once, when a version is published (owner, 2026-10-31: "checked once at
@@ -27,7 +30,7 @@ import { eligibility, entriesOpen, inWindow, needsScore, remixOfBase } from './r
  */
 type Sql = postgres.Sql;
 
-export async function recordEligibility(sql: Sql, versionId: string, fid: number, now = new Date(), privacy = PRIVACY): Promise<'stored' | 'not-a-candidate' | 'not-stored'> {
+export async function recordEligibility(sql: Sql, versionId: string, fid: number, now = new Date(), privacy = PRIVACY, bluesky?: (did: string) => Promise<BlueskyFacts>): Promise<'stored' | 'not-a-candidate' | 'not-stored'> {
   try {
     if (!privacyDescribesChallenge(privacy)) return 'not-stored';
     if (!inWindow(now)) return 'not-a-candidate';
@@ -48,6 +51,16 @@ export async function recordEligibility(sql: Sql, versionId: string, fid: number
     if (fid > 0 && needsScore(fid)) {
       const r = await checkNeynar(sql, fid, CHALLENGE_LISTS.min);
       passed = r.ok ? r.passed : null;
+    }
+    // A Bluesky account (owner, 2026-11-04): its Bluesky check, from the shared decision store (studio.check_decisions)
+    // while a decision is current, or asked now; only the decision is kept. Lens accounts wait for 12 November.
+    if (isSocialPerson(fid)) {
+      const account = await socialAccount(sql, socialAccountOf(fid));
+      if (account?.kind !== 'bluesky' || !SOCIAL_SIGN_IN.bluesky.check.on) return 'not-a-candidate';
+      const d = await blueskyDecision(sql, account, bluesky, now);
+      const e = eligibility({ maker: fid, passed: null, bluesky: d.ok ? d.decision : null });
+      await sql`insert into studio.challenge_eligibility ${sql({ version_id: versionId, challenge: CHALLENGE.id, fid, decision: e.why, eligible: e.eligible, account: 'bluesky' })} on conflict (version_id) do nothing`;
+      return 'stored';
     }
     const e = eligibility({ maker: fid, passed });
     if (e.why === 'not-a-farcaster-account') return 'not-a-candidate';
