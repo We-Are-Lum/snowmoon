@@ -49,7 +49,9 @@ if (await listening(3000)) throw new Error('port 3000 is in use');
 const local = parseEnv(readFileSync(path.join(ROOT, '.env.local'), 'utf8'));
 const { env, refused } = rehearsalEnv(process.env, local, { IMAGES_TICKET_SECRET: randomBytes(32).toString('hex'), NEYNAR_API_KEY: 'dress-run-placeholder-not-a-key' });
 if (refused) throw new Error(refused);
-Object.assign(env, { REHEARSAL_TEST_SIGNIN: 'on', REHEARSAL_TEST_POSTS: POSTS });
+// The test persons aren't invited, so image making must be open to everyone on this server: the Terms and Privacy
+// pages are up, and reports go to an address on this machine that answers nothing (no report is made here).
+Object.assign(env, { REHEARSAL_TEST_SIGNIN: 'on', REHEARSAL_TEST_POSTS: POSTS, APP_LEGAL_PAGES: 'terms+privacy', SNOWMOON_ALERT_URL: 'http://127.0.0.1:9/dress-run-no-alerts' });
 writeFileSync(POSTS, '{}');
 
 const store = () => (existsSync(path.join(HOME, 'store/public/images/readers')) ? readdirSync(path.join(HOME, 'store/public/images/readers')).length : 0);
@@ -82,6 +84,9 @@ try {
     if (i > 90) throw new Error('the server did not start');
     await new Promise((r) => setTimeout(r, 1000));
   }
+  // The cached pages were built without a database: one visit each starts a fresh render from the rehearsal's.
+  for (const p of ['/challenge', '/challenge/rules']) await fetch(REHEARSAL_ORIGIN + p).catch(() => null);
+  await new Promise((r) => setTimeout(r, 6000));
   const as = (fid: number) => ({ authorization: `Bearer rehearsal-test-${fid}`, 'content-type': 'application/json' });
   const get = (p: string, fid?: number) => fetch(REHEARSAL_ORIGIN + p, { headers: fid ? as(fid) : {} });
   const post = (p: string, body: unknown, fid: number, method = 'POST') => fetch(REHEARSAL_ORIGIN + p, { method, headers: as(fid), body: JSON.stringify(body) });

@@ -119,4 +119,13 @@ if (path.basename(process.argv[1] ?? '') === 'rehearsal.ts') {
   process.on('SIGINT', stop);
   process.on('SIGTERM', stop);
   app.on('exit', (code) => process.exit(code ?? 0));
+  // The cached pages were built without a database: one visit each, once it is up, renders them from the rehearsal's.
+  for (let i = 0; i < 120; i++) {
+    if (await fetch(REHEARSAL_ORIGIN).then((r) => r.ok, () => false)) {
+      for (const p of ['/challenge', '/challenge/rules']) await fetch(REHEARSAL_ORIGIN + p).catch(() => null);
+      console.log(`rehearsal: ready. Open ${REHEARSAL_ORIGIN}/challenge`);
+      break;
+    }
+    await new Promise((r) => setTimeout(r, 1000));
+  }
 }
