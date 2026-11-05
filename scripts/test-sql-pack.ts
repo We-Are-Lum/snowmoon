@@ -4,8 +4,10 @@
  *
  *   npm run test:sql-pack
  *
- * On a fresh database with main's migrations, 0001..0033 (supabase/migrations on this branch), for each migration in
- * apply order:
+ * On a fresh database with main's migrations, 0001..0034 (supabase/migrations on this branch; item 1 is applied as
+ * 0034_check_decisions, 2026-11-04, so it is checked as a record: its B is 0034 word for word, its C and D hold on the
+ * base, its plants are caught), for each pending migration in apply order (2026-11-05: the sign-in release's 2 and 5
+ * first, then 3 and 4 in their own releases):
  * - its blocks have the shape the owner was promised (A is B ending in rollback; C is one select; D is one do block,
  *   with no `set role` and no temporary table, raising "READ-BACK FAILED");
  * - B is the branch's migration, word for word (read with `git show origin/<branch>:…`, when git can);
@@ -44,8 +46,12 @@ const blocks = new Map<string, string>();
 for (const m of doc.matchAll(/^### (\d[A-D])\. [^\n]*\n[\s\S]*?```sql\n([\s\S]*?)\n```/gm)) blocks.set(m[1], m[2]);
 const ORDER = ['1', '2', '3', '4', '5'] as const;
 type K = (typeof ORDER)[number];
+/** Item 1 is applied (0034); the rest in apply order: the sign-in release (2, then 5), then 3 and 4 (owner, 2026-11-05). */
+const APPLIED: K[] = ['1'];
+const APPLY_ORDER: K[] = ['2', '5', '3', '4'];
 const SOURCE: Record<K, { branch: string; file: string; name: string; twiceSafe: boolean }> = {
-  '1': { branch: 'check-decisions', file: 'supabase/migrations/NEXT_check_decisions.sql', name: 'NEXT_check_decisions', twiceSafe: true },
+  // Applied by the owner as 0034 (2026-11-04); merged to main in #115.
+  '1': { branch: 'main', file: 'supabase/migrations/0034_check_decisions.sql', name: '0034_check_decisions', twiceSafe: true },
   '2': { branch: 'signin-lens-bluesky', file: 'supabase/migrations/NEXT_signin_lens_bluesky.sql', name: 'NEXT_signin_lens_bluesky', twiceSafe: false },
   '3': { branch: 'remix-submit', file: 'supabase/migrations/NEXT_remix_count.sql', name: 'NEXT_remix_count', twiceSafe: true },
   // Item 4 (2026-11-04): NEXT_challenge_daily (branch contest) replaces remix-submit's NEXT_challenge_submit.
@@ -59,6 +65,10 @@ const get = (id: string) => {
 };
 check('the doc has 20 blocks, 1A to 5D, in order', [...blocks.keys()].join() === ORDER.flatMap((k) => ['A', 'B', 'C', 'D'].map((x) => k + x)).join(), [...blocks.keys()].join());
 
+// Read-backs use made-up accounts, never real people's (2026-11-05): none of these real ones may appear in a C or D.
+const REAL = ['0xad2c0beade60fb9f7ec5c87bde8e4c126145f6e7', 'did:plc:z72i7hdynmk6r22z27h6tvur', 'bsky.app\'', '6786', '193912', 'lens/stani'];
+for (const k of ORDER) for (const x of ['C', 'D']) check(`${k}${x} uses only made-up accounts (no real address, DID, handle or FID)`, !REAL.some((r) => get(`${k}${x}`).includes(r)), REAL.filter((r) => get(`${k}${x}`).includes(r)).join());
+
 const stripComments = (s: string) => s.replace(/--[^\n]*/g, '').trim();
 const body = (s: string, end: 'commit;' | 'rollback;') => {
   const t = stripComments(s);
@@ -66,11 +76,11 @@ const body = (s: string, end: 'commit;' | 'rollback;') => {
 };
 
 // ---------------------------------------------------------------------------------------------------------------------
-// The database: 0001..0033, as main has them, and a little realistic data.
+// The database: 0001..0034, as main has them, and a little realistic data.
 // ---------------------------------------------------------------------------------------------------------------------
 const numbered = readdirSync(path.join(ROOT, 'supabase/migrations')).filter((f) => /^\d{4}_.*\.sql$/.test(f)).sort();
-// Main's migrations end at 0033 (0016 and 0017 were never files here: 0017 is in supabase/drafts).
-check('main has its numbered migrations up to 0033 and nothing unnumbered', numbered.length === 31 && numbered.at(-1)!.startsWith('0033_') && !readdirSync(path.join(ROOT, 'supabase/migrations')).some((f) => f.startsWith('NEXT_')), `${numbered.length} files, last ${numbered.at(-1)}`);
+// Main's migrations end at 0034 (0016 and 0017 were never files here: 0017 is in supabase/drafts).
+check('main has its numbered migrations up to 0034 and nothing unnumbered', numbered.length === 32 && numbered.at(-1)!.startsWith('0034_') && !readdirSync(path.join(ROOT, 'supabase/migrations')).some((f) => f.startsWith('NEXT_')), `${numbered.length} files, last ${numbered.at(-1)}`);
 const pg = new PGlite();
 await pg.exec(`create role anon nologin; create role authenticated nologin; create role service_role nologin bypassrls;`);
 for (const f of numbered) await pg.exec(readFileSync(path.join(ROOT, 'supabase/migrations', f), 'utf8'));
@@ -78,7 +88,6 @@ await pg.exec(`
   insert into studio.works values ('snowmoon','Snowmoon','GPL-3.0','x') on conflict do nothing;
   insert into studio.elements (id, work_id, element_type, created_by_fid) values ('71111111-1111-4111-8111-111111111111','snowmoon','text',6786);
   insert into studio.element_versions (element_id, version_no, body) values ('71111111-1111-4111-8111-111111111111', 1, '{}'), ('71111111-1111-4111-8111-111111111111', 2, '{}');
-  insert into studio.image_scores (fid, score) values (6786, 0.91);
   insert into studio.challenge_eligibility (version_id, challenge, fid, decision, eligible)
     select id, 'remix-2026-11', 6786, 'invited', true from studio.element_versions where version_no = 1;`);
 // A third version, so that 5D still finds two without a decision after the one above.
@@ -211,7 +220,7 @@ const gitShow = (branch: string, file: string) => {
   }
 };
 
-for (const k of ORDER) {
+for (const k of [...APPLIED, ...APPLY_ORDER]) {
   const src = SOURCE[k];
   const A = get(`${k}A`);
   const B = get(`${k}B`);
@@ -233,6 +242,17 @@ for (const k of ORDER) {
     check(`${k} B is origin/${src.branch}'s ${src.name}, word for word`, migration.trim() === B.trim());
   }
 
+  if (APPLIED.includes(k)) {
+    // Applied already (0034 in the base): its read-backs hold on it, and its plants are still caught.
+    const a = await readBackA(k);
+    check(`${k} (applied as ${src.name}) C (read-back a) is all true on the base (${a.rows.length} rows), read only`, allTrue(a), falseRows(a).join('; '));
+    const before = await snapshot();
+    check(`${k} (applied) D (read-back b) passes on the base`, (await readBackB(k)) === null);
+    check(`${k} (applied) D (read-back b) leaves nothing`, (await snapshot()) === before);
+    for (const [label, sql] of PLANTS[k]) await plant(k, label, sql);
+    continue;
+  }
+
   // A: the dry run leaves nothing.
   const s0 = await snapshot();
   let err: string | null = null;
@@ -245,10 +265,6 @@ for (const k of ORDER) {
   err = null;
   await pg.exec(B).catch((e: Error) => (err = e.message));
   check(`${k} B (migration) applies`, err === null, err ?? '');
-  if (k === '1') {
-    const n = (await pg.query<{ n: number }>(`select count(*)::int as n from studio.image_scores`)).rows[0].n;
-    check('1 A kept the planted score; B deleted it', s1.includes('0.91') && n === 0);
-  }
 
   // C: all true, in a read-only transaction.
   const a = await readBackA(k);
@@ -277,6 +293,12 @@ for (const k of ORDER) {
 
   // Planted faults.
   for (const [label, sql] of PLANTS[k]) await plant(k, label, sql);
+
+  if (k === '5') {
+    // The sign-in release (owner, 2026-11-05): 2 then 5 on top of 0034, before 3 and 4 exist.
+    for (const j of ['1', '2', '5'] as K[]) check(`the sign-in release (0034, 2, 5; no 3 or 4): ${j}C all true`, allTrue(await readBackA(j)), falseRows(await readBackA(j)).join('; '));
+    for (const j of ['1', '2', '5'] as K[]) check(`the sign-in release (0034, 2, 5; no 3 or 4): ${j}D passes`, (await readBackB(j)) === null);
+  }
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -284,7 +306,8 @@ for (const k of ORDER) {
 // ---------------------------------------------------------------------------------------------------------------------
 {
   const done = await snapshot();
-  // Every read-back (a) of 1..5 is still all true with all five applied (4 and 5 both change challenge_marks).
+  // Every read-back (a) of 1..5 is still all true with all five applied (4 and 5 both change challenge_marks; 5 ran
+  // before 3 and 4, in the sign-in release).
   for (const k of ORDER) check(`after all five: ${k}C still all true`, allTrue(await readBackA(k)), falseRows(await readBackA(k)).join('; '));
   for (const k of ORDER) check(`after all five: ${k}D still passes`, (await readBackB(k)) === null);
 
@@ -325,6 +348,42 @@ for (const k of ORDER) {
 }
 
 await pg.close();
+
+// ---------------------------------------------------------------------------------------------------------------------
+// 5's dependencies (2026-11-05): what 5 needs of 0033, 0034 (item 1) and 2, shown on a second database.
+// ---------------------------------------------------------------------------------------------------------------------
+{
+  const dep = new PGlite();
+  await dep.exec(`create role anon nologin; create role authenticated nologin; create role service_role nologin bypassrls;`);
+  const upTo = (n: string) => numbered.filter((f) => f.slice(0, 4) <= n);
+  for (const f of upTo('0032')) await dep.exec(readFileSync(path.join(ROOT, 'supabase/migrations', f), 'utf8'));
+  const tryExec = async (sql: string) => dep.exec(sql).then(() => null, async (e: Error) => (await dep.exec('rollback;').catch(() => {}), e.message));
+  check('5 needs 0033: on 0001..0032, 5B stops with an error', (await tryExec(get('5B'))) !== null);
+  await dep.exec(readFileSync(path.join(ROOT, 'supabase/migrations/0033_remix_challenge.sql'), 'utf8'));
+  // 0033 without 0034: 5B applies (its SQL touches only 0033's tables), but 5C can't hold (no store).
+  check('5B itself needs only 0033: it applies on 0001..0033', (await tryExec(get('5B'))) === null);
+  const rowsFalse = async () => {
+    try {
+      return (await dep.query<{ n: number; ok: boolean | null }>(get('5C'))).rows.filter((r) => r.ok !== true).map((r) => r.n);
+    } catch (e) {
+      return [`error ${(e as Error).message}`];
+    }
+  };
+  const f1 = await rowsFalse();
+  // Its row 11 names studio.check_decisions, so without 0034 the select stops with an error naming it.
+  check('without 0034, 5C shows it (stops with an error naming check_decisions)', f1.length === 1 && /check_decisions/.test(String(f1[0])), f1.join());
+  await dep.exec(readFileSync(path.join(ROOT, 'supabase/migrations/0034_check_decisions.sql'), 'utf8'));
+  await dep.exec(`insert into studio.works values ('snowmoon','Snowmoon','GPL-3.0','x') on conflict do nothing;
+    insert into studio.elements (id, work_id, element_type, created_by_fid) values ('71111111-1111-4111-8111-111111111111','snowmoon','text',2147483646);
+    insert into studio.element_versions (element_id, version_no, body) values ('71111111-1111-4111-8111-111111111111', 1, '{}'), ('71111111-1111-4111-8111-111111111111', 2, '{}');`);
+  const f2 = await rowsFalse();
+  check('with 0034, 5C is all true', f2.length === 0, f2.join());
+  const d1 = await tryExec(get('5D'));
+  check('without 2 (social_accounts), 5D cannot run: 5 still needs 2 first', d1 !== null && /social_accounts/.test(d1), d1 ?? 'it passed');
+  await dep.exec(get('2B'));
+  check('with 2, 5D passes', (await tryExec(get('5D'))) === null);
+  await dep.close();
+}
 for (const l of log) console.log(l);
 console.log(`\ntest:sql-pack: ${passed} passed, ${failures.length} failed`);
 if (failures.length) {
