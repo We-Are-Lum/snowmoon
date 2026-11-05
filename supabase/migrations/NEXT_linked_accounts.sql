@@ -30,7 +30,7 @@
 -- - no new column is on a table anon can read: the public tables' owners are in the private studio.row_owners.
 --
 -- What it adds (none of it publicly readable):
--- 1. studio.people: one row per Snowmoon account, with its stable public_id (8 letters and digits, never changed).
+-- 1. studio.people: one row per Snowmoon account, with its stable public_id (8 characters, no look-alikes, never changed).
 -- 2. studio.person_accounts: one row each time a sign-in is a way into a Snowmoon account; ended once, with who did it
 --    (ended_by 'self', 'main', 'joined'; ended_via, the sign-in). A1, A6 (index and trigger), and A2 (a trigger: a
 --    sign-in unlinked less than 30 days ago can't join another Snowmoon account or start one; it may rejoin its own).
@@ -52,13 +52,14 @@ begin;
 
 -- ---------------------------------------------------------------------------
 -- 1. Snowmoon accounts (studio.people). The id is private: never shown, never in a URL or a public record. public_id
---    is the stable page address (snowmoon.party/u/<public_id>): random, 8 lowercase letters and digits, unique, and
---    never changed or reused (studio_writer can't update or delete a row here).
+--    is the stable page address (snowmoon.party/u/<public_id>): random, 8 characters from 31 with no look-alikes
+--    (lowercase letters and digits without 0, o, 1, l and i: abcdefghjkmnpqrstuvwxyz23456789; owner, 2026-11-05),
+--    unique, and never changed or reused (studio_writer can't update or delete a row here).
 -- ---------------------------------------------------------------------------
 
 create function studio.new_public_id() returns text
 language sql volatile set search_path = pg_catalog, pg_temp as $fn$
-  select string_agg(substr('abcdefghijklmnopqrstuvwxyz0123456789', (get_byte(uuid_send(gen_random_uuid()), i) % 36) + 1, 1), '' order by i)
+  select string_agg(substr('abcdefghjkmnpqrstuvwxyz23456789', (get_byte(uuid_send(gen_random_uuid()), i) % 31) + 1, 1), '' order by i)
   from generate_series(0, 7) as i
 $fn$;
 revoke all on function studio.new_public_id() from public;
@@ -66,7 +67,7 @@ grant execute on function studio.new_public_id() to studio_writer;
 
 create table studio.people (
   id bigint generated always as identity primary key,
-  public_id text not null default studio.new_public_id() constraint people_public_id_format check (public_id ~ '^[a-z0-9]{8}$'),
+  public_id text not null default studio.new_public_id() constraint people_public_id_format check (public_id ~ '^[a-hjkmnp-z2-9]{8}$'),
   created_at timestamptz not null default now(),
   constraint people_public_id_unique unique (public_id)
 );
@@ -707,13 +708,14 @@ begin;
 
 -- ---------------------------------------------------------------------------
 -- 1. Snowmoon accounts (studio.people). The id is private: never shown, never in a URL or a public record. public_id
---    is the stable page address (snowmoon.party/u/<public_id>): random, 8 lowercase letters and digits, unique, and
---    never changed or reused (studio_writer can't update or delete a row here).
+--    is the stable page address (snowmoon.party/u/<public_id>): random, 8 characters from 31 with no look-alikes
+--    (lowercase letters and digits without 0, o, 1, l and i: abcdefghjkmnpqrstuvwxyz23456789; owner, 2026-11-05),
+--    unique, and never changed or reused (studio_writer can't update or delete a row here).
 -- ---------------------------------------------------------------------------
 
 create function studio.new_public_id() returns text
 language sql volatile set search_path = pg_catalog, pg_temp as $fn$
-  select string_agg(substr('abcdefghijklmnopqrstuvwxyz0123456789', (get_byte(uuid_send(gen_random_uuid()), i) % 36) + 1, 1), '' order by i)
+  select string_agg(substr('abcdefghjkmnpqrstuvwxyz23456789', (get_byte(uuid_send(gen_random_uuid()), i) % 31) + 1, 1), '' order by i)
   from generate_series(0, 7) as i
 $fn$;
 revoke all on function studio.new_public_id() from public;
@@ -721,7 +723,7 @@ grant execute on function studio.new_public_id() to studio_writer;
 
 create table studio.people (
   id bigint generated always as identity primary key,
-  public_id text not null default studio.new_public_id() constraint people_public_id_format check (public_id ~ '^[a-z0-9]{8}$'),
+  public_id text not null default studio.new_public_id() constraint people_public_id_format check (public_id ~ '^[a-hjkmnp-z2-9]{8}$'),
   created_at timestamptz not null default now(),
   constraint people_public_id_unique unique (public_id)
 );
@@ -1368,8 +1370,9 @@ commit;
 select what, ok from (values
   ('the sign-in release (0035) was applied first (social_links), so Lens and Bluesky links were copied', to_regclass('studio.social_links') is not null),
   ('the ten new tables exist, row-level security on', (select count(*) = 10 and bool_and(relrowsecurity) from pg_class where relnamespace = 'studio'::regnamespace and relkind = 'r' and relname in ('people', 'person_accounts', 'person_link_attempts', 'person_mains', 'person_names', 'main_requests', 'person_joins', 'prize_claims', 'person_notices', 'row_owners'))),
-  ('stable address: public_id is unique, 8 letters and digits, with a default', exists (select 1 from pg_constraint where conname = 'people_public_id_unique' and contype = 'u') and exists (select 1 from pg_constraint where conname = 'people_public_id_format') and exists (select 1 from information_schema.columns where table_schema = 'studio' and table_name = 'people' and column_name = 'public_id' and column_default like '%new_public_id%')),
-  ('every Snowmoon account has a well-formed, distinct public_id', not exists (select 1 from studio.people where public_id !~ '^[a-z0-9]{8}$') and (select count(distinct public_id) = count(*) from studio.people)),
+  ('stable address: public_id is unique, 8 characters without look-alikes (no 0, o, 1, l, i), with a default', exists (select 1 from pg_constraint where conname = 'people_public_id_unique' and contype = 'u') and exists (select 1 from pg_constraint where conname = 'people_public_id_format') and exists (select 1 from information_schema.columns where table_schema = 'studio' and table_name = 'people' and column_name = 'public_id' and column_default like '%new_public_id%')),
+  ('the generator makes only ids without look-alikes (200 samples)', (select bool_and(studio.new_public_id() ~ '^[a-hjkmnp-z2-9]{8}$') from generate_series(1, 200))),
+  ('every Snowmoon account has a well-formed, distinct public_id', not exists (select 1 from studio.people where public_id !~ '^[a-hjkmnp-z2-9]{8}$') and (select count(distinct public_id) = count(*) from studio.people)),
   ('A1: one active row per sign-in (unique, partial)', exists (select 1 from pg_indexes where schemaname = 'studio' and indexname = 'person_accounts_one_active' and indexdef ilike 'create unique index%(account) where (unlinked_at is null)')),
   ('A6: one Farcaster, Lens and Bluesky account per Snowmoon account (unique, partial)', exists (select 1 from pg_indexes where schemaname = 'studio' and indexname = 'person_accounts_one_of_kind' and indexdef ilike 'create unique index%(person_id, kind)%unlinked_at is null%wallet%')),
   ('A6: the 3-wallet trigger is on', exists (select 1 from pg_trigger where tgname = 'person_accounts_wallets' and tgrelid = 'studio.person_accounts'::regclass and tgenabled = 'O')),
@@ -1419,9 +1422,14 @@ begin
   insert into studio.wallet_accounts (address) values ('0x99000000000000000000000000000000000000a3') returning id into w3;
   insert into studio.wallet_accounts (address) values ('0x99000000000000000000000000000000000000a4') returning id into w4;
   insert into studio.people default values returning id into p;
-  if (select public_id from studio.people where id = p) !~ '^[a-z0-9]{8}$' then
+  if (select public_id from studio.people where id = p) !~ '^[a-hjkmnp-z2-9]{8}$' then
     raise exception 'READ-BACK FAILED: a new Snowmoon account got no stable address';
   end if;
+  begin
+    insert into studio.people (public_id) values ('abcd0o1l');
+    raise exception 'READ-BACK FAILED: a stable address with look-alikes (0, o, 1, l) went in';
+  exception when check_violation then null;
+  end;
   insert into studio.person_accounts (person_id, kind, account, how, linked_at) values (p, 'farcaster', 990001, 'first', t0);
   insert into studio.person_mains (person_id, account, how, at) values (p, 990001, 'first', t0);
   insert into studio.person_names (person_id, account, at) values (p, 990001, t0);

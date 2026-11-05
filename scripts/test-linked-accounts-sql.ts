@@ -235,7 +235,7 @@ if (err) { console.log(failures.join('\n')); process.exit(1); }
   check('backfill: the FID\'s account sees the wallet notice for its one linked wallet', notices === 1, String(notices));
   check('backfill: an account without a wallet linked at migration has no notice', (await pg.query<{ n: number }>(`select count(*)::int as n from studio.person_notices where person_id = ${f9}`)).rows[0].n === 0);
   const ids = (await pg.query<{ id: string }>(`select public_id as id from studio.people`)).rows.map((r) => r.id);
-  check('backfill: every Snowmoon account has a distinct 8-character public id', ids.every((x) => /^[a-z0-9]{8}$/.test(x)) && new Set(ids).size === ids.length);
+  check('backfill: every Snowmoon account has a distinct 8-character public id with no look-alikes (0, o, 1, l, i)', ids.every((x) => /^[a-hjkmnp-z2-9]{8}$/.test(x)) && new Set(ids).size === ids.length);
 }
 const a = await readA();
 check(`(a) is all true (${a.rows.length} rows), read only`, allTrue(a), falseRows(a).join('; '));
@@ -365,6 +365,8 @@ const PLANTS: [string, string][] = [
   ['a join through a non-main (join trigger dropped)', `drop trigger person_joins_check on studio.person_joins;`],
   ['a prize claimed by a non-main (claim trigger dropped)', `drop trigger prize_claims_check on studio.prize_claims;`],
   ['the stable address not unique', `alter table studio.people drop constraint people_public_id_unique;`],
+  ['the stable address allows look-alikes (check back to any letter or digit)', `alter table studio.people drop constraint people_public_id_format; alter table studio.people add constraint people_public_id_format check (public_id ~ '^[a-z0-9]{8}$');`],
+  ['the generator uses look-alikes (all 36 letters and digits)', `create or replace function studio.new_public_id() returns text language sql volatile set search_path = pg_catalog, pg_temp as $fn$ select string_agg(substr('abcdefghijklmnopqrstuvwxyz0123456789', (get_byte(uuid_send(gen_random_uuid()), i) % 36) + 1, 1), '' order by i) from generate_series(0, 7) as i $fn$;`],
   ['the stable address without its default', `alter table studio.people alter column public_id drop default;`],
   ['the kind check gone (a wallet number as a Farcaster account)', `alter table studio.person_accounts drop constraint person_accounts_kind_range;`],
   ['missing grant: studio_writer loses insert on person_accounts', `revoke insert on studio.person_accounts from studio_writer;`],
