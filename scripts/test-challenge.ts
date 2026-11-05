@@ -201,7 +201,7 @@ proof('two entries for one person and character are caught', (() => {
   check('committed: three bases for Deluin and Gladias, one for the rest, three at most (owner, 2026-11-04)', committedMax === 3 && CHALLENGE.characters.map((c) => `${c}:${R.baseCountOf(c)}`).join() === 'zei:1,gladias:3,bai:1,seila:1,deluin:3,mu:1', CHALLENGE.characters.map((c) => `${c}:${R.baseCountOf(c)}`).join());
   check('committed: at most one base is used for Zei, three for Deluin', R.basesOf('zei', { zei: ['11111111-1111-4111-8111-111111111111', '22222222-2222-4222-8222-222222222222'] }).length === 1 && R.basesOf('deluin', { deluin: ['11111111-1111-4111-8111-111111111111', '22222222-2222-4222-8222-222222222222', '33333333-3333-4333-8333-333333333333', '44444444-4444-4444-8444-444444444444'] }).length === 3);
   proof('a second base for a one-base character is caught', R.basesProblems({ ...Object.fromEntries(CHALLENGE.characters.map((c) => [c, []])), mu: ['11111111-1111-4111-8111-111111111111', '22222222-2222-4222-8222-222222222222'] }).length === 1);
-  check('no look is called canonical or official (the word is "current default")', !/\b(canonical|official) (look|base)/i.test(read('src/lib/config.ts')) && !/canonical/i.test(read('src/lib/challenge/landing-wording.ts')));
+  check('no look is called canonical or official (the word is "current default")', !/\b(canonical|official)\b/i.test(read('src/lib/config.ts')) && !/\b(canonical|official)\b/i.test(read('src/lib/challenge/landing-wording.ts')));
   // The rule itself works for any number; the checks below exercise it with three.
   CHALLENGE.maxBases = 3;
   const countsWere = { ...CHALLENGE.baseCount }; // the rule with three bases for any character
