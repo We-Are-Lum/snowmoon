@@ -417,15 +417,12 @@ export const SOCIAL_SIGN_IN = {
     issuer: 'https://api.lens.xyz',
     /**
      * The Lens App the sign-in is for (the challenge's `app`, the ID token's `aud`): this site's own App on Lens Chain,
-     * registered by the owner at /admin/lens-app (docs/lens-app-registration.md). EMPTY until the owner sends its
-     * address (owner, 2026-11-05: "with the Lens App address set and verified"); while it is empty, Lens sign-in
-     * refuses (the challenge answers 503 and no ID token is accepted), even locally. Before setting it, run
-     * `npm run verify:lens-app -- --address=<App> --tx=<its creating transaction> --owner=<the owner's wallet>`
-     * (read-only: code on Lens Chain, made through the LensFactory in that transaction, owned by that wallet, metadata
-     * lens://a0001df5…99d4 with sha256 bddb0e3e…9d26). It was Lens's own Test App
-     * (0x8A5Cc31180c37078e1EbA2A23c861Acf351a97cE), which the tests still use as their stand-in.
+     * "Snowmoon Party", registered by the owner at /admin/lens-app on 2026-11-05 (UTC) and verified read-only
+     * (docs/lens-app-registration.md, "Verified"; `npm run verify:lens-app`). Lens sign-in still opens only with the
+     * sign-in release (SIGN_IN_METHODS). If this is ever emptied, Lens sign-in refuses (the challenge answers 503 and
+     * no ID token is accepted). The tests stand in Lens's own Test App (0x8A5Cc31180c37078e1EbA2A23c861Acf351a97cE).
      */
-    app: '' as '' | `0x${string}`,
+    app: '0x3CD3dF83e3F74e855d7c4104a8ed9EBa23FaaE47' as '' | `0x${string}`, // ours, registered 2026-11-05 UTC, tx 0x7001522f7cad6c9ebd58204998e62af93cdd62ff627b05a2584ca58ae524e576
     /**
      * THE ONE PLACE the Lens score threshold lives (Lens's "Account Score", lens.xyz/docs/protocol/accounts/fetch;
      * 0 to about 10000 in the sample in docs/branch-reports/signin-lens-bluesky.md). Owner, 2026-11-04: "1,000 to

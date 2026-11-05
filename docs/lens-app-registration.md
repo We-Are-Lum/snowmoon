@@ -14,6 +14,38 @@ Today the site signs Lens users in to Lens's own **Test App** (`0x8A5Cc31180c370
 App puts "Snowmoon Party" on the sign-in and in every Lens ID token's `aud`. It also publishes onchain that this site
 uses Lens. It changes no legal words.
 
+## Verified (2026-11-05)
+
+**Registered** by the owner at `/admin/lens-app`. **App:** `0x3CD3dF83e3F74e855d7c4104a8ed9EBa23FaaE47`, now in
+`SOCIAL_SIGN_IN.lens.app` (it goes live only with the sign-in release, when Lens is turned on in `SIGN_IN_METHODS`).
+
+**Transaction:** `0x7001522f7cad6c9ebd58204998e62af93cdd62ff627b05a2584ca58ae524e576`, Lens Chain (chain id 232),
+block 6,462,496 (2026-11-05 06:56:12 UTC), status success, type 0x71, to the LensFactory
+`0x1fa75d26819ac733bf7b1c1b36c3f8aef32d2cc0`, value 0. Sent by `0xb9646756556c0b80a7f0a5ac9dc8693f3264e348`, Lens's
+sponsored sender: Lens paid the gas (498,183 gas at 2.771 gwei, about 0.0014 GHO); the owner paid nothing.
+
+Two read-only checks, both passed:
+
+1. **The coordinator, 2026-11-05** (Lens Chain RPC and Lens's API): the App has 10,656 bytes of code; owner
+   `0xC1aeBd6f0D37611d744B0ECD0865984fbCb4B4c4`; the global graph (`0x433025d9…513F`), feed (`0xcB5E109F…3580`) and
+   namespace (`0x1aA55B90…4615`), the same as Lens's Test App; verification off; no sponsorship, treasury, admins
+   (`adminsFor`) or signers (`getSigners()`, `appSigners`); created 2026-11-05T06:56:12Z; metadata "Snowmoon Party",
+   developer "Lum LLC", url, terms and privacy on snowmoon.party; `getMetadataURI()` is
+   `lens://a0001df5cbdfdde5837b0896b0a4006eff7f614ff37dc240677b2508005499d4`.
+2. **`npm run verify:lens-app`** (`scripts/verify-lens-app.ts`, read-only, no key):
+
+   ```
+   npm run verify:lens-app -- --address=0x3CD3dF83e3F74e855d7c4104a8ed9EBa23FaaE47 --tx=0x7001522f7cad6c9ebd58204998e62af93cdd62ff627b05a2584ca58ae524e576 --owner=0xC1aeBd6f0D37611d744B0ECD0865984fbCb4B4c4
+   ```
+
+   V1 chain 232; V2 code at the address; V3 the transaction succeeded, went to the LensFactory, and the AppFactory's
+   App-deployed event in it names this address (the only App ever deployed with our metadata URI, searched from
+   block 6,291,456); V4 the App's access control `owner()` is the owner's wallet, and the sender is Lens's sponsor;
+   V5 `getMetadataURI()` and the deploy event both give the uploaded URI; V6 Grove's bytes and
+   `docs/lens-app-metadata.json` both hash to sha256 `bddb0e3e35ade9e28b884e7003f2663942ecf996196f809bf2ec2707f96e9d26`.
+   Result: **Verified**. `--self-test` plants four wrong inputs (Lens's Test App with this transaction, an address
+   with no code, this App with a wrong owner, a non-address): each is refused.
+
 ## In one look
 
 | | |
