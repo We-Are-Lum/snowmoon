@@ -10,7 +10,8 @@ import { CHALLENGE_LISTS } from './who';
  *   same character), one of its versions made inside the window, by an eligible person.
  * - Who is eligible: the maker (a Farcaster ID; wallets can't make sheets yet) is on IMAGES.invited, or has a
  *   Neynar score of at least IMAGES.neynarMinScore. Admins (the config's admin list) can make versions but are never eligible.
- * - One entry per person per character: their latest version in the window, unless they marked another.
+ * - Entries (owner, 2026-11-04): a remix becomes an entry only when its maker presses Submit, with a link to a post
+ *   about it; up to CHALLENGE.submissionsPerPerson per person, across all characters, any mix.
  *
  * Every date shown anywhere comes from dateText() over CHALLENGE.dates; nothing writes a date itself (owner,
  * 2026-10-31; scripts/test-challenge.ts fails on a page or wording file that does).
@@ -133,7 +134,7 @@ export function fromDecision(maker: number, decision: Decision | null, lists: { 
 export const needsScore = (fid: number) => !CHALLENGE_LISTS.admins.includes(fid) && !CHALLENGE_LISTS.invited.includes(fid);
 
 // ---------------------------------------------------------------------------------------------
-// Entries: one per person per character
+// Entries: what a person submits (owner, 2026-11-04)
 // ---------------------------------------------------------------------------------------------
 export interface Candidate {
   versionId: string;
@@ -154,37 +155,71 @@ export interface Candidate {
 export const isCandidate = (c: Pick<Candidate, 'createdAt' | 'forked' | 'character'>, dates: { opens: string; closes: string } = CHALLENGE.dates) =>
   c.forked && CHALLENGE.characters.includes(c.character) && inWindow(c.createdAt, dates);
 
-export const markKey = (person: number, character: string) => `${person} ${character}`;
+/**
+ * A submission (owner, 2026-11-04: "a remix becomes an entry only when its maker presses Submit"): one row of
+ * studio.challenge_marks, written by Submit after the post link was read and checked (src/lib/challenge/entries.ts,
+ * submitEntry). `person` is the maker's FID, so whatever is shared per person (the 20% equal share) can be counted
+ * per person, not per submission (equalSharePeople below).
+ */
+export interface Submission {
+  versionId: string;
+  person: number;
+  character: string;
+  at: string;
+}
 
 /** Newest first (the only order entries are ever shown in), then by id so the order never changes between views. */
 export const newestFirst = (a: { createdAt: string; versionId: string }, b: { createdAt: string; versionId: string }) =>
   a.createdAt < b.createdAt ? 1 : a.createdAt > b.createdAt ? -1 : a.versionId < b.versionId ? -1 : a.versionId > b.versionId ? 1 : 0;
 
-/**
- * The entries: for each person and character, the version they marked if it is still one of their candidates, else
- * their latest. `eligible` says whose count. Returned newest first.
- */
-export function chooseEntries<C extends Candidate>(candidates: C[], marks: ReadonlyMap<string, string>, eligible: (person: number) => boolean): C[] {
-  const groups = new Map<string, C[]>();
-  for (const c of candidates) {
-    if (!isCandidate(c) || !eligible(c.person)) continue;
-    const k = markKey(c.person, c.character);
-    groups.set(k, [...(groups.get(k) ?? []), c]);
+/** One submission per person per version (a second row for the same version, if one were ever written, is the same entry). */
+export function distinctSubmissions(subs: readonly Submission[]): Submission[] {
+  // The earliest row for each, kept in the order given (no re-sorting: P5g allows only newestFirst on challenge lists).
+  const seen = new Map<string, Submission>();
+  for (const s of subs) {
+    const k = `${s.person} ${s.versionId}`;
+    const had = seen.get(k);
+    if (!had || s.at < had.at) seen.set(k, s);
   }
-  const out: C[] = [];
-  for (const [k, list] of groups) {
-    const marked = marks.get(k);
-    out.push(list.find((c) => c.versionId === marked) ?? [...list].sort(newestFirst)[0]);
-  }
-  return out.sort(newestFirst);
+  return [...seen.values()];
 }
 
-/** For each character, how many different people have an entry (a count shown as is, never a ranking). */
+export type SubmitRefusal = 'already' | 'full';
+/**
+ * Whether this person may submit this version, given what they have submitted: up to CHALLENGE.submissionsPerPerson
+ * across all characters, any mix (three of one character included), each version once. Pure: the server runs it
+ * under a lock (submitEntry), so two Submits at once can't pass the cap.
+ */
+export function submitRefusal(p: { person: number; versionId: string }, theirs: readonly Submission[], limit: number = CHALLENGE.submissionsPerPerson): SubmitRefusal | null {
+  const mine = distinctSubmissions(theirs).filter((s) => s.person === p.person);
+  if (mine.some((s) => s.versionId === p.versionId)) return 'already';
+  return mine.length >= limit ? 'full' : null;
+}
+
+/**
+ * The entries: the candidates their makers submitted (a submission of someone else's version is ignored), by eligible
+ * people. Returned newest first. A person may have up to three entries, for one character or several.
+ */
+export function chooseEntries<C extends Candidate>(candidates: C[], submissions: readonly Submission[], eligible: (person: number) => boolean): C[] {
+  const submitted = new Set(distinctSubmissions(submissions).map((s) => `${s.person} ${s.versionId}`));
+  return candidates.filter((c) => isCandidate(c) && eligible(c.person) && submitted.has(`${c.person} ${c.versionId}`)).sort(newestFirst);
+}
+
+/**
+ * The people an equal share is split among (owner, 2026-11-04: "per person, not per submission"): each eligible
+ * person with at least one entry, once, however many entries they have, in the entries' own order.
+ */
+export const equalSharePeople = (entries: Pick<Candidate, 'person'>[]): number[] => [...new Set(entries.map((e) => e.person))];
+
+/** For each character, how many different people submitted an entry for it (a count shown as is, never a ranking). */
 export function entrantCounts(entries: Pick<Candidate, 'person' | 'character'>[], characters: readonly string[] = CHALLENGE.characters): Map<string, number> {
   return new Map(characters.map((c) => [c, new Set(entries.filter((e) => e.character === c).map((e) => e.person)).size]));
 }
 
-/** Whether a character has enough entrants for a final version, a credit test and a token (CHALLENGE.minEntrants). */
+/**
+ * Whether a character has enough entrants for a final version, a credit test and a token (CHALLENGE.minEntrants):
+ * different people who submitted for it, so three submissions by one person count once (entrantCounts).
+ */
 export const enoughEntrants = (count: number, min: number = CHALLENGE.minEntrants) => count >= min;
 
 // ---------------------------------------------------------------------------------------------

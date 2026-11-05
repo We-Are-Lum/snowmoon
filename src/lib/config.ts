@@ -393,10 +393,10 @@ export const CONTACT_EMAIL = 'snowmoon@wearelum.xyz';
  *
  * Switches (docs/legal/remix-challenge-draft.md; legal texts describe today; P6q checks it):
  * - `entries` (on since the owner's reread of 2026-11-01): entries listed on /challenge with each character's count of entrants, the
- *   "Entry" badge on version pages, and "Mark as my entry" (studio.challenge_marks). Eligibility is decided once, when
- *   a version is published, and stored (studio.challenge_eligibility; src/lib/challenge/record.ts); pages only read it
- *   and never ask Neynar (owner, 2026-10-31). Without the tables, only invited makers count and marking says "not
- *   available yet".
+ *   "Entry" badge on version pages, and Submit (owner, 2026-11-04; one row of studio.challenge_marks per submission,
+ *   with a post link). Eligibility is decided once, when a version is published, and stored
+ *   (studio.challenge_eligibility; src/lib/challenge/record.ts); pages only read it and never ask Neynar (owner,
+ *   2026-10-31). Without the tables, only invited makers count and Submit says "not available yet".
  * - `posts` (on since the owner's reread of 2026-11-01): "Add where you posted it" and "Posted on" (studio.version_posts). The
  *   server reads the pasted address, checks its host, and asks that network's own API (Neynar, Bluesky's public
  *   AppView, Lens's API); it never fetches the pasted address.
@@ -451,6 +451,15 @@ export const CHALLENGE = {
    * enter it (owner, 2026-10-31). /challenge shows each character's count (a count, never a ranking).
    */
   minEntrants: 3,
+  /**
+   * Submit (owner, 2026-11-04): a remix becomes an entry only when its maker presses Submit on its page, with a link
+   * to a post about it on Farcaster, Bluesky or Lens (checked as "Add where you posted it" checks it). At most this
+   * many submissions per person across all characters, any mix (three of one character included); checked on the
+   * server under a lock. minEntrants counts the different people who submitted for a character. A submission can be
+   * withdrawn until entries close, which frees its slot (needs NEXT_challenge_submit.sql; until then withdrawing
+   * answers "not available yet").
+   */
+  submissionsPerPerson: 3,
   /**
    * The Neynar score an entrant's account must have when a version is published (owner, 2026-11-01). Fixed for the whole
    * challenge, whatever IMAGES.neynarMinScore becomes; only the decision (passed or below) is kept, never the score.
@@ -652,6 +661,19 @@ export const IMAGES = {
     samplesMax: 4,
     /** A sheet needs its front view; side and back are optional. */
     publishesPerDay: 3,
+    /**
+     * Free remixes (owner, 2026-11-04): for an account that passes the check (not an admin, not invited), a sheet's
+     * views count as remixes, not pictures. A remix is one sheet's three views, started by its first view; each remix
+     * allows `picturesPerRemix` pictures in all (its three views and three more tries, so a view that fails or is
+     * dropped is made again inside the same remix), and `remixesPerDay` remixes start per UTC day. A remix on a closed
+     * model counts `closedRemixUnits` (the hook for branch remix-model-choice: src/lib/images/remixes.ts, remixUnits).
+     * Admins (IMAGES.perDayFor) and invited makers keep counting pictures, as before. The site-wide spend cap is
+     * unchanged. Counted in studio.sheet_remix_asks (NEXT_remix_count.sql); until it is applied, views count as
+     * pictures, as before.
+     */
+    remixesPerDay: 3,
+    picturesPerRemix: 6,
+    closedRemixUnits: 3,
     /** At most this many picked characters' sheets are added to one image. */
     maxCharacters: 3,
   },

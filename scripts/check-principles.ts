@@ -1387,7 +1387,7 @@ add({
     seen.push({ page: '/chapter/1', host: 'fonts.googleapis.com', url: 'https://fonts.googleapis.com/css2?family=Inter', type: 'stylesheet' });
   },
 });
-const PRIVATE_FID_TABLES = ['ratings', 'likes', 'take_likes', 'picks', 'contributor_consents', 'image_asks', 'removal_log', 'image_scores', 'wallet_links', 'challenge_marks', 'version_posts', 'challenge_eligibility', 'check_decisions'];
+const PRIVATE_FID_TABLES = ['ratings', 'likes', 'take_likes', 'picks', 'contributor_consents', 'image_asks', 'removal_log', 'image_scores', 'wallet_links', 'challenge_marks', 'version_posts', 'challenge_eligibility', 'check_decisions', 'sheet_remix_asks'];
 /** How each private table names the person: a FID, except check_decisions (the account, as text). */
 const personIs42 = (t: string) => (t === 'check_decisions' ? `account = '42'` : 'fid = 42');
 add({
@@ -1423,6 +1423,10 @@ add({
       -- Check decisions (NEXT_check_decisions): FID 42 passed.
       do $$ begin if to_regclass('studio.check_decisions') is not null then
         insert into studio.check_decisions (network, account, threshold, passed) values ('farcaster', '42', 'neynar-score>=0.7', true);
+      end if; end $$;
+      -- Free remixes (NEXT_remix_count.sql, branch remix-submit): one view of a remix, by FID 42.
+      do $$ begin if to_regclass('studio.sheet_remix_asks') is not null then
+        insert into studio.sheet_remix_asks (remix, fid, units, slot) values ('00000000-0000-4000-8000-0000000000a1', 42, 1, 'front');
       end if; end $$;`);
     const problems: string[] = [];
     for (const role of ['anon', 'authenticated']) {
@@ -1887,6 +1891,39 @@ add({
     c.entries = true;
     c.sheets = 'export const challengeSheetsOpen = (now = new Date()) => CHALLENGE.openSheets && phase(now) === \'open\';';
     c.status = 200;
+  },
+});
+
+// P6v: Submit (branch remix-submit, owner 2026-11-04). A remix becomes an entry only when its maker presses Submit,
+// which keeps the submission and the post link (studio.challenge_marks, studio.version_posts). Legal texts describe
+// today: while entries are on, Privacy §4 must say what Submit keeps, and the code must keep marks only through Submit
+// (no "latest version counts" path left). P6v was free on main and every remote branch (2026-11-04); it was P6u until main took P6u for admin-only.
+add({
+  id: 'P6v',
+  principle: 6,
+  name: 'Submit: while entries are on, Privacy §4 says what Submit keeps (the submission and the link to your own post); only Submit writes a submission, and it checks the post is the submitter\'s',
+  load: async () => ({
+    entries: CHALLENGE.entries as boolean,
+    s4: (PRIVACY.sections.find((s) => s.n === 4)?.body ?? []).flat().join(' '),
+    writers: walk('src', /\.tsx?$/).filter((f) => /insert into studio\.challenge_marks/.test(read(f))),
+    route: read('src/app/api/challenge/submit/route.ts'),
+  }),
+  run: (c) => {
+    const problems: string[] = [];
+    if (c.entries && !/you submit as an entry/i.test(c.s4)) problems.push('CHALLENGE.entries is on, but Privacy §4 does not say what Submit keeps (docs/legal/remix-submit-draft.md)');
+    if (c.entries && !/link to your own post/i.test(c.s4)) problems.push('CHALLENGE.entries is on, but Privacy §4 does not say Submit keeps the link to your own post');
+    if (c.entries && !/checks with its network that you wrote it/i.test(c.s4)) problems.push('CHALLENGE.entries is on, but Privacy §4 does not say Submit checks that you wrote the post');
+    // Answer 9.4 (owner, 2026-11-04): the post must be the submitter's own. The route checks it; §4 says "your own post".
+    if (!/const mine = writerCheck\(got\.post, \{ fid, blueskyDids: [^}]*\}\);\s*if \(mine === 'not-yours'\) return no\(SUBMIT_WORDING\.notYourPost, 403\);\s*if \(mine === 'unknown'\) return no\(SUBMIT_WORDING\.blueskyUnknown, 403\);/.test(c.route))
+      problems.push('src/app/api/challenge/submit/route.ts: Submit does not check that the post is the submitter\'s own (writerCheck)');
+    if (c.writers.join() !== 'src/lib/challenge/entries.ts') problems.push(`submissions are written outside Submit (src/lib/challenge/entries.ts, submitEntry): ${c.writers.join(', ') || 'nowhere'}`);
+    return problems;
+  },
+  plant: (c) => {
+    c.entries = true;
+    c.s4 = 'If you take part in the remix challenge: which of your versions you mark as your entry for each character, and when.';
+    c.writers = ['src/lib/challenge/entries.ts', 'src/app/api/challenge/mark/route.ts'];
+    c.route = c.route.replace('const mine = writerCheck(', 'const mine = (() => \'ok\')(');
   },
 });
 

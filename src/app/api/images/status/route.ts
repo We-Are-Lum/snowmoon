@@ -4,7 +4,7 @@ import { getPerson } from '~/lib/auth';
 import { db } from '~/lib/db';
 import { IMAGES, imagesDailySpendCapUsd } from '~/lib/config';
 import { hasConsented } from '~/lib/consent';
-import { generationsLeft, perDay, publishesLeft } from '~/lib/images/limits';
+import { generationsLeft, perDay, publishesLeft, remixesLeftToday } from '~/lib/images/limits';
 import { RULES, styleText } from '~/lib/images/rules';
 import { loadChapter } from '~/lib/book';
 import { blockFacts } from '~/lib/reading';
@@ -77,9 +77,11 @@ export async function GET(request: Request) {
   const invited = IMAGES.invited.includes(fid);
   if (!sql) return NextResponse.json({ ...base, signedIn: true, fid, invited, eligible: invited ? true : null }, { headers: { 'Cache-Control': 'no-store' } });
   try {
-    const [consented, left, publishes, kept, picks] = await Promise.all([
-      hasConsented(fid), generationsLeft(sql, fid), publishesLeft(sql, fid), invited || fid < 0 ? Promise.resolve(null) : keptDecision(sql, fid, IMAGES.neynarMinScore).catch(() => null), myPicks(sql, fid),
+    const [consented, left, publishes, kept, picks, remixesLeft] = await Promise.all([
+      hasConsented(fid), generationsLeft(sql, fid), publishesLeft(sql, fid), invited || fid < 0 ? Promise.resolve(null) : keptDecision(sql, fid, IMAGES.neynarMinScore).catch(() => null), myPicks(sql, fid), remixesLeftToday(sql, fid),
     ]);
+    // Free remixes (owner, 2026-11-04): for someone who counts remixes, how many are left today (null: views count as pictures).
+    const remixes = remixesLeft === null ? null : { left: remixesLeft, perDay: IMAGES.designs.remixesPerDay, picturesPerRemix: IMAGES.designs.picturesPerRemix };
     if (fid < 0) {
       // A wallet account: no daily count and no Neynar score; its balance pays (owner, 2026-10-13).
       const open = prepaidOpen() && openToEveryone().open;
@@ -93,7 +95,7 @@ export async function GET(request: Request) {
     // The kept decision only (no score is kept, and none is asked for on a page load).
     const eligible = invited ? true : kept === null ? null : kept.passed;
     const refusal = kept !== null && !kept.passed ? refusalFor({ score: null, decidedAt: kept.decidedAt }) : undefined;
-    return NextResponse.json({ ...base, perDay: perDay(fid), signedIn: true, fid, invited, eligible, refusal, consented, left, publishesLeft: publishes, picks: offer(picks) }, { headers: { 'Cache-Control': 'no-store' } });
+    return NextResponse.json({ ...base, perDay: perDay(fid), signedIn: true, fid, invited, eligible, refusal, consented, left, remixes, publishesLeft: publishes, picks: offer(picks) }, { headers: { 'Cache-Control': 'no-store' } });
   } catch (e) {
     console.error('images status failed', (e as { code?: string }).code ?? (e as Error).name);
     return NextResponse.json({ ...base, ready: false, signedIn: true, fid, invited, eligible: invited ? true : null }, { headers: { 'Cache-Control': 'no-store' } });

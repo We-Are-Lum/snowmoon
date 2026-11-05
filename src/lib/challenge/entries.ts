@@ -6,15 +6,19 @@ import { baseStyleOrder, basesOf, remixOfBase } from './rules';
 import { CHALLENGE, WORK_ID } from '../config';
 import { challengeVisibleTo } from './visibility';
 import { bookCharacter } from '../images/designs';
-import { chooseEntries, entrantCounts, fromDecision, type Decision, inWindow, markKey, newestFirst, phase, shortDateText, type Candidate, type Eligibility } from './rules';
+import { chooseEntries, distinctSubmissions, entrantCounts, fromDecision, type Decision, inWindow, newestFirst, phase, shortDateText, submitRefusal, type Candidate, type Eligibility, type Submission } from './rules';
+import type { Post } from './post-links';
 
 /**
- * The remix challenge's entries (owner, 2026-10-31), the server half, for pages. Reads published sheets, the private
- * marks (studio.challenge_marks) and the eligibility decided once at publish (studio.challenge_eligibility, written by
- * src/lib/challenge/record.ts; both 0033_remix_challenge.sql). It never asks Neynar or anyone else anything: viewing a
- * page makes no outside call (owner, 2026-10-31; scripts/test-challenge.ts proves it). Without the eligibility table,
- * only invited makers count (decided from the lists alone); without the marks table everyone's latest version counts
- * and marking answers "not available yet" (as src/lib/picks.ts does without its table).
+ * The remix challenge's entries (owner, 2026-10-31; Submit, 2026-11-04), the server half. Reads published sheets, the
+ * private submissions (studio.challenge_marks: one row per Submit, its maker's FID, the character and the version) and
+ * the eligibility decided once at publish (studio.challenge_eligibility, written by src/lib/challenge/record.ts; both
+ * 0033_remix_challenge.sql). A remix becomes an entry only when its maker presses Submit, with a link to a post about
+ * it (read and listed as "Add where you posted it" does: src/lib/challenge/posts.ts); up to
+ * CHALLENGE.submissionsPerPerson per person, checked under a lock. Viewing a page never asks Neynar or anyone else
+ * anything (owner, 2026-10-31; scripts/test-challenge.ts proves it). Without the eligibility table, only invited makers
+ * count (decided from the lists alone); without the marks table nothing is an entry and Submit answers "not available
+ * yet" (as src/lib/picks.ts does without its table).
  */
 type Sql = postgres.Sql;
 
@@ -66,20 +70,18 @@ export async function windowVersions(sql: Sql): Promise<ChallengeVersion[]> {
 let missingUntil = 0;
 const missing = (e: unknown) => (e as { code?: string }).code === '42P01';
 
-/** Each person's mark per character (the latest row counts). Empty without the table. */
-export async function readMarks(sql: Sql): Promise<Map<string, string>> {
-  const out = new Map<string, string>();
-  if (Date.now() < missingUntil) return out;
+/** Every submission (one row per Submit; a withdrawn one is gone). Empty without the table. */
+export async function readSubmissions(sql: Sql): Promise<Submission[]> {
+  if (Date.now() < missingUntil) return [];
   try {
-    const rows = await sql<{ fid: string; character: string; version_id: string }[]>`
-      select distinct on (fid, character) fid, character, version_id from studio.challenge_marks
-      where challenge = ${CHALLENGE.id} order by fid, character, marked_at desc, id desc`;
-    for (const r of rows) out.set(markKey(Number(r.fid), r.character), String(r.version_id));
+    const rows = await sql<{ fid: string; character: string; version_id: string; marked_at: Date }[]>`
+      select fid, character, version_id, marked_at from studio.challenge_marks where challenge = ${CHALLENGE.id} order by marked_at, id`;
+    return distinctSubmissions(rows.map((r) => ({ person: Number(r.fid), character: r.character, versionId: String(r.version_id), at: new Date(r.marked_at).toISOString() })));
   } catch (e) {
     if (missing(e)) missingUntil = Date.now() + 60_000;
-    else console.error('challenge: marks not read', (e as { code?: string }).code ?? (e as Error).name);
+    else console.error('challenge: submissions not read', (e as { code?: string }).code ?? (e as Error).name);
+    return [];
   }
-  return out;
 }
 
 let eligibilityMissingUntil = 0;
@@ -110,17 +112,17 @@ export interface Standing {
   entries: ChallengeVersion[];
   /** Versions admins made in the window: shown plainly as not eligible for rewards. */
   byAdmins: ChallengeVersion[];
-  /** Per character, how many different eligible people have entered it (a count, not a ranking). */
+  /** Per character, how many different eligible people submitted an entry for it (a count, not a ranking). */
   entrants: Map<string, number>;
 }
 
-/** The entries so far, and the admins' versions, each newest first. Nothing while CHALLENGE.entries is off. */
+/** The entries so far (submitted), and the admins' versions, each newest first. Nothing while CHALLENGE.entries is off. */
 export async function standing(sql: Sql): Promise<Standing> {
   if (!CHALLENGE.entries) return { entries: [], byAdmins: [], entrants: entrantCounts([]) };
   const versions = (await windowVersions(sql)).filter((v) => v.forked);
+  const submissions = await readSubmissions(sql);
   const elig = await eligibilityOf(sql, versions);
-  const marks = await readMarks(sql);
-  const entries = chooseEntries(versions.filter((v) => elig.get(v.versionId)?.eligible === true), marks, () => true);
+  const entries = chooseEntries(versions.filter((v) => elig.get(v.versionId)?.eligible === true), submissions, () => true);
   const byAdmins = versions.filter((v) => elig.get(v.versionId)?.why === 'admin');
   return { entries, byAdmins, entrants: entrantCounts(entries) };
 }
@@ -128,35 +130,34 @@ export async function standing(sql: Sql): Promise<Standing> {
 export type VersionStanding = { kind: 'entry'; character: string } | { kind: 'admin' } | { kind: 'candidate'; character: string } | null;
 
 /**
- * What a version page shows: "Entry" when it is its maker's entry for the character; the admin line for an admin's
- * version in the window; otherwise nothing (a person's eligibility is never shown).
+ * What a version page shows: "Entry" once its maker submitted it; for an eligible remix not submitted yet,
+ * 'candidate' (its maker sees Submit); the admin line for an admin's version in the window; otherwise nothing (a
+ * person's eligibility is never shown).
  */
 export async function versionStanding(sql: Sql, versionId: string): Promise<VersionStanding> {
   if (!CHALLENGE.entries) return null;
-  const all = (await windowVersions(sql)).filter((v) => v.forked);
-  const v = all.find((x) => x.versionId === versionId);
+  const v = (await windowVersions(sql)).find((x) => x.versionId === versionId && x.forked);
   if (!v) return null;
-  const mine = all.filter((x) => x.person === v.person && x.maker === v.maker && x.character === v.character);
-  const elig = await eligibilityOf(sql, mine);
-  const e = elig.get(v.versionId);
+  const e = (await eligibilityOf(sql, [v])).get(v.versionId);
   if (e?.why === 'admin') return { kind: 'admin' };
   if (!e?.eligible) return null;
-  const chosen = chooseEntries(mine.filter((x) => elig.get(x.versionId)?.eligible === true), await readMarks(sql), () => true)[0];
-  return chosen?.versionId === versionId ? { kind: 'entry', character: v.character } : { kind: 'candidate', character: v.character };
+  const entered = chooseEntries([v], await readSubmissions(sql), () => true).length > 0;
+  return { kind: entered ? 'entry' : 'candidate', character: v.character };
 }
 
 /**
- * What the publish confirmation says about the remix challenge (owner, 2026-11-03), read right after the decision is
- * stored (src/lib/challenge/record.ts): 'entry' when the new version is its maker's entry for the character, 'unchecked'
- * when Neynar didn't answer at publish, so it doesn't count. Otherwise nothing. No outside call: the stored decision
- * and the lists only. Never throws: a confirmation without the line is better than a publish that seems to fail.
+ * What the publish confirmation says about the remix challenge (owner, 2026-11-03; Submit, 2026-11-04), read right
+ * after the decision is stored (src/lib/challenge/record.ts): 'candidate' when the new version can be entered (its
+ * maker presses Submit on its page), 'unchecked' when Neynar didn't answer at publish, so it can't. Otherwise nothing.
+ * No outside call: the stored decision and the lists only. Never throws: a confirmation without the line is better
+ * than a publish that seems to fail.
  */
-export async function publishStanding(sql: Sql, versionId: string): Promise<{ kind: 'entry' | 'unchecked'; character: string } | null> {
+export async function publishStanding(sql: Sql, versionId: string): Promise<{ kind: 'candidate' | 'unchecked'; character: string } | null> {
   // Nothing is said at publish until the owner opens the challenge (CHALLENGE.public; owner, 2026-11-04).
   if (!CHALLENGE.entries || !CHALLENGE.public) return null;
   try {
     const s = await versionStanding(sql, versionId);
-    if (s?.kind === 'entry') return s;
+    if (s?.kind === 'candidate' || s?.kind === 'entry') return { kind: 'candidate', character: s.character };
     if (s) return null;
     const [r] = await sql<{ decision: string }[]>`select decision from studio.challenge_eligibility where version_id = ${versionId} and challenge = ${CHALLENGE.id}`;
     if (r?.decision !== 'unchecked') return null;
@@ -168,33 +169,91 @@ export async function publishStanding(sql: Sql, versionId: string): Promise<{ ki
   }
 }
 
-export type MarkResult = { ok: true } | { ok: false; why: string; status: number };
-export const MARK_WORDING = {
+export type SubmitResult = { ok: true; left: number } | { ok: false; why: string; status: number };
+export const SUBMIT_WORDING = {
   off: 'Entries aren’t open yet.',
   /** Before the window (owner, 2026-11-03: not "Entries are closed"), its date built from CHALLENGE.dates. */
   opens: () => `Entries open ${shortDateText('opens')}.`,
   closed: 'Entries are closed.',
-  notYours: 'You can mark only your own version, made during the challenge.',
-  notYet: 'Marking another version isn’t available yet. Your latest version counts.',
+  notYours: 'You can submit only your own remix, made during the challenge.',
+  notEligible: 'This version can’t be entered: your account didn’t pass the site’s check when you published it.',
+  needsPost: 'Add the link to a post about it on Farcaster, Bluesky or Lens first.',
+  /** Draft wording (owner, 2026-11-04, answer 9.4: the post must be the submitter's own). */
+  notYourPost: 'That post isn’t from your account. Submit a post you wrote.',
+  /** Draft wording: a Bluesky post, while no Bluesky account can be linked to a person (see writerCheck). */
+  blueskyUnknown: 'We can’t tell yet that this Bluesky post is yours. Submit a post from your Farcaster account instead.',
+  already: 'You’ve already submitted this version.',
+  full: () => `You’ve submitted ${CHALLENGE.submissionsPerPerson}, the most anyone can. Withdraw one to submit another.`,
+  notYet: 'Submitting isn’t available yet.',
+  withdrawNotYours: 'You can withdraw only your own submission.',
+  withdrawNotYet: 'Withdrawing isn’t available yet.',
 };
 
-/** Mark one of your own versions in the window as your entry for its character (the latest mark counts). */
-export async function markEntry(sql: Sql, fid: number, versionId: string, now = new Date()): Promise<MarkResult> {
-  if (!CHALLENGE.entries) return { ok: false, why: MARK_WORDING.off, status: 503 };
-  // Until the owner opens the challenge (CHALLENGE.public; owner, 2026-11-04), only admins may mark, to test it; an
-  // admin's version is never an entry (admins aren't eligible), so their marks change no one's standing.
-  if (!challengeVisibleTo(fid)) return { ok: false, why: MARK_WORDING.off, status: 503 };
-  if (phase(now) === 'before') return { ok: false, why: MARK_WORDING.opens(), status: 409 };
-  if (!inWindow(now)) return { ok: false, why: MARK_WORDING.closed, status: 409 };
+/**
+ * Submit (owner, 2026-11-04): the maker's own remix, made in the window, eligible as stored at publish, with a post
+ * that links to its page (the caller reads and checks it first: src/lib/challenge/posts.ts, verifiedPost). Under one
+ * lock per person: the cap (CHALLENGE.submissionsPerPerson, across all characters) and "each version once", then the
+ * post is listed on the version's page (as "Add where you posted it" lists it) and the submission written, in one
+ * transaction. Returns how many more this person may submit.
+ */
+export async function submitEntry(sql: Sql, fid: number, versionId: string, post: Post | null, now = new Date()): Promise<SubmitResult> {
+  if (!CHALLENGE.entries || !CHALLENGE.posts) return { ok: false, why: SUBMIT_WORDING.off, status: 503 };
+  // Until the owner opens the challenge (CHALLENGE.public; owner, 2026-11-04), only admins may submit, to test it; an
+  // admin's version is never eligible, so it is refused below and changes no one's standing.
+  if (!challengeVisibleTo(fid)) return { ok: false, why: SUBMIT_WORDING.off, status: 503 };
+  if (phase(now) === 'before') return { ok: false, why: SUBMIT_WORDING.opens(), status: 409 };
+  if (!inWindow(now)) return { ok: false, why: SUBMIT_WORDING.closed, status: 409 };
   const v = (await windowVersions(sql)).find((x) => x.versionId === versionId && x.forked);
-  if (!v || v.person !== fid) return { ok: false, why: MARK_WORDING.notYours, status: 403 };
+  if (!v || v.person !== fid) return { ok: false, why: SUBMIT_WORDING.notYours, status: 403 };
+  if ((await eligibilityOf(sql, [v])).get(v.versionId)?.eligible !== true) return { ok: false, why: SUBMIT_WORDING.notEligible, status: 403 };
+  if (!post) return { ok: false, why: SUBMIT_WORDING.needsPost, status: 400 };
   try {
-    await sql`insert into studio.challenge_marks ${sql({ challenge: CHALLENGE.id, fid, character: v.character, version_id: versionId })}`;
-    return { ok: true };
+    return await sql.begin(async (tx) => {
+      await tx`select pg_advisory_xact_lock(hashtext('snowmoon.challenge.submit'), ${fid}::int)`;
+      const theirs = await tx<{ version_id: string; marked_at: Date; character: string }[]>`
+        select version_id, marked_at, character from studio.challenge_marks where challenge = ${CHALLENGE.id} and fid = ${fid}`;
+      const subs = theirs.map((r) => ({ person: fid, versionId: String(r.version_id), character: r.character, at: new Date(r.marked_at).toISOString() }));
+      const refusal = submitRefusal({ person: fid, versionId }, subs);
+      if (refusal === 'already') return { ok: false as const, why: SUBMIT_WORDING.already, status: 409 };
+      if (refusal === 'full') return { ok: false as const, why: SUBMIT_WORDING.full(), status: 409 };
+      await tx`insert into studio.version_posts ${tx({ version_id: versionId, network: post.network, post_id: post.id, handle: post.handle, posted_at: post.at, url: post.url, fid })}
+        on conflict (version_id, network, post_id) do nothing`;
+      await tx`insert into studio.challenge_marks ${tx({ challenge: CHALLENGE.id, fid, character: v.character, version_id: versionId })}`;
+      return { ok: true as const, left: CHALLENGE.submissionsPerPerson - distinctSubmissions(subs).length - 1 };
+    });
   } catch (e) {
-    if (missing(e)) return { ok: false, why: MARK_WORDING.notYet, status: 503 };
+    if (missing(e)) return { ok: false, why: SUBMIT_WORDING.notYet, status: 503 };
     throw e;
   }
+}
+
+/**
+ * Withdraw a submission (proposed to the owner, 2026-11-04): its maker may, until entries close; it frees the slot,
+ * and the post stays listed. Needs studio_writer's delete on studio.challenge_marks (NEXT_challenge_submit.sql);
+ * without it, "not available yet".
+ */
+export async function withdrawEntry(sql: Sql, fid: number, versionId: string, now = new Date()): Promise<SubmitResult> {
+  if (!CHALLENGE.entries) return { ok: false, why: SUBMIT_WORDING.off, status: 503 };
+  if (!inWindow(now)) return { ok: false, why: SUBMIT_WORDING.closed, status: 409 };
+  try {
+    return await sql.begin(async (tx) => {
+      await tx`select pg_advisory_xact_lock(hashtext('snowmoon.challenge.submit'), ${fid}::int)`;
+      const gone = await tx`delete from studio.challenge_marks where challenge = ${CHALLENGE.id} and fid = ${fid} and version_id = ${versionId} returning id`;
+      if (!gone.length) return { ok: false as const, why: SUBMIT_WORDING.withdrawNotYours, status: 404 };
+      const [n] = await tx<{ n: number }[]>`select count(distinct version_id)::int as n from studio.challenge_marks where challenge = ${CHALLENGE.id} and fid = ${fid}`;
+      return { ok: true as const, left: CHALLENGE.submissionsPerPerson - Number(n?.n ?? 0) };
+    });
+  } catch (e) {
+    const code = (e as { code?: string }).code;
+    if (missing(e) || code === '42501') return { ok: false, why: SUBMIT_WORDING.withdrawNotYet, status: 503 };
+    throw e;
+  }
+}
+
+/** How many more this person may submit, and which versions they submitted (for their own pages only). */
+export async function mySubmissions(sql: Sql, fid: number): Promise<{ left: number; versions: string[] }> {
+  const mine = (await readSubmissions(sql)).filter((s) => s.person === fid);
+  return { left: Math.max(0, CHALLENGE.submissionsPerPerson - mine.length), versions: mine.map((s) => s.versionId) };
 }
 
 /** `style`: the published style the sheet's views were made in (body.style.title), for the bases' style order. */

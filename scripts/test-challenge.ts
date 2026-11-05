@@ -11,8 +11,13 @@
  *   threshold; refused: below it, no score, a wallet account, admins. The spend cap ($15 in the window, $2 outside),
  *   sheets opening only in the window and once Privacy says so, the rules copy (forks only, three entrants, a bounty per character,
  *   the mint as a plan), and the count of distinct entrants per character.
- * - One entry per person per character: the latest in the window, or the one marked; a mark of something else is
- *   ignored; a wallet and its FID are one person.
+ * - Submit (owner, 2026-11-04): a remix is an entry only once its maker submits it, with a post link (checked as "Add
+ *   where you posted it" checks it); up to three per person across all characters, the 4th refused under a lock;
+ *   withdraw until entries close frees a slot (NEXT_challenge_submit.sql); the minimum is three different people who
+ *   submitted (three by one person count once); the equal share is per person.
+ * - Free remixes (owner, 2026-11-04): three a day for an account that passes the check, counted as remixes (a sheet's
+ *   three views, up to six pictures, so a failed view is made again inside it), not pictures; a closed remix counts
+ *   three; admins and invited makers keep counting pictures (NEXT_remix_count.sql; without it, as before).
  * - The window's edges, in Pacific time, from CHALLENGE.dates; every date shown is built from it, and no page or
  *   wording file writes a date itself.
  * - The post address: the exact host allow-list; look-alike hosts, sub-domains, IPs, other schemes, ports and user
@@ -22,7 +27,8 @@
  * - "Posted on" holds no image, avatar, embed or script.
  * - The three bases (owner, 2026-11-03): a fork of each base counts, a fork of an entry counts, a sheet from scratch
  *   and a fork of a sheet that isn't a base don't; nothing breaks while the bases are empty (as before).
- * - The migration (0033, applied 2026-11-01): RLS, privileges, no score; marks and posts work; without the tables, nothing breaks.
+ * - The migration (0033, applied 2026-11-01, with NEXT_challenge_submit): RLS, privileges, no score; submissions and
+ *   posts work; without the tables, nothing breaks.
  */
 import path from 'node:path';
 import { readdirSync, readFileSync } from 'node:fs';
@@ -70,7 +76,7 @@ const L = await import('../src/lib/challenge/post-links');
   const gated: [string, RegExp][] = [
     ['src/app/challenge/page.tsx', /if \(!CHALLENGE\.public\) notFound\(\);/],
     ['src/app/challenge/page.tsx', /if \(!CHALLENGE\.public\) return \{ robots: \{ index: false, follow: false \} \};/],
-    ['src/app/api/challenge/mark/route.ts', /if \(!challengeVisibleTo\(fid\)\) return NextResponse\.json\(\{ error: 'Not found' \}, \{ status: 404 \}\);/],
+    ['src/app/api/challenge/submit/route.ts', /const hidden = \(fid: number \| null\) => \(challengeVisibleTo\(fid\) \? null : NextResponse\.json\(\{ error: 'Not found' \}, \{ status: 404 \}\)\);/],
     ['src/app/api/challenge/view/route.ts', /if \(!challengeVisibleTo\(fid\)\) return NextResponse\.json\(\{ error: 'Not found' \}, \{ status: 404 \}\);/],
     ['src/app/api/challenge/standing/route.ts', /if \(!challengeVisibleTo\(fid\)\) return NextResponse\.json\(\{ error: 'Not found' \}, \{ status: 404 \}\);/],
     ['src/app/page.tsx', /\.\.\.\(CHALLENGE\.public \? \[\{ href: '\/challenge'/],
@@ -82,12 +88,15 @@ const L = await import('../src/lib/challenge/post-links');
   const ungated = gated.filter(([f, re]) => !re.test(read(f))).map(([f]) => f);
   check('switch: every way in is gated (page, APIs, menu, home row, sheet lines, "Posted on", share text)', ungated.length === 0, ungated.join());
   const posts = read('src/app/api/challenge/posts/route.ts');
+  const submitRoute = read('src/app/api/challenge/submit/route.ts');
+  check('switch: /api/challenge/submit answers 404 to non-admins for GET, POST and DELETE', (submitRoute.match(/const no404 = hidden\(fid\);\s*if \(no404\) return no404;/g) ?? []).length === 3);
+  proof('a Submit route that lets a non-admin in is caught', (submitRoute.replace(/const no404 = hidden\(fid\);\s*if \(no404\) return no404;/, '').match(/const no404 = hidden\(fid\);\s*if \(no404\) return no404;/g) ?? []).length !== 3);
   check('switch: /api/challenge/posts answers 404 to non-admins for GET, POST and DELETE', (posts.match(/const no404 = hidden\(person\);\s*if \(no404\) return no404;/g) ?? []).length === 3 && /challengeVisibleTo\(person\) \? null : NextResponse\.json\(\{ error: 'Not found' \}, \{ status: 404 \}\)/.test(posts));
   proof('a page that shows the challenge to everyone is caught', !gated[0][1].test(read('src/app/challenge/page.tsx').replace('if (!CHALLENGE.public) notFound();', '')));
   const { navItems } = await import('../src/lib/nav');
   check('switch: the menu has no challenge item unless told to show it', !navItems(1, 0).some((i) => i.href === '/challenge') && navItems(1, 0, true).some((i) => i.href === '/challenge'));
-  // Scripts everyone is served carry no challenge words: the share buttons, "Posted on", the mark button, the fork form.
-  const clientFiles = ['src/components/challenge-share.tsx', 'src/components/posted-on.tsx', 'src/components/challenge-mark.tsx', 'src/components/design-form.tsx', 'src/components/challenge-admin.tsx', 'src/components/challenge-admin-sheet.tsx', 'src/components/challenge-body.tsx', 'src/components/challenge-lines.tsx'];
+  // Scripts everyone is served carry no challenge words: the share buttons, "Posted on", Submit, the fork form.
+  const clientFiles = ['src/components/challenge-share.tsx', 'src/components/posted-on.tsx', 'src/components/challenge-submit.tsx', 'src/components/design-form.tsx', 'src/components/challenge-admin.tsx', 'src/components/challenge-admin-sheet.tsx', 'src/components/challenge-body.tsx', 'src/components/challenge-lines.tsx'];
   const wordy = clientFiles.filter((f) => /challenge\/wording'/.test(read(f)));
   check('switch: no script served to everyone imports the challenge\'s words', wordy.length === 0, wordy.join());
 }
@@ -141,7 +150,8 @@ check('windowText spans the window', R.windowText() === '6 to 22 November', R.wi
   check('spend cap: $2 today (before the launch)', C.imagesDailySpendCapUsd(new Date('2026-10-31T20:00:00Z')) === 2);
   check('the base caps are unchanged ($2 outside; IMAGES.invited unchanged)', IMAGES.dailySpendCapUsd === 2 && CHALLENGE.dailySpendCapUsd === 15 && IMAGES.invited.join() === '6786,6852');
   const limits = read('src/lib/images/limits.ts');
-  check('the spend check reads the cap through imagesDailySpendCapUsd()', (limits.match(/imagesDailySpendCapUsd\(\)/g) ?? []).length === 2 && !/IMAGES\.dailySpendCapUsd/.test(limits));
+  // Three reads: a picture's, a remix's view (owner, 2026-11-04: the cap unchanged for remixes) and the words check's.
+  check('the spend check reads the cap through imagesDailySpendCapUsd()', (limits.match(/imagesDailySpendCapUsd\(\)/g) ?? []).length === 3 && !/IMAGES\.dailySpendCapUsd/.test(limits));
   proof('a cap read straight from IMAGES (never $15) is caught', /IMAGES\.dailySpendCapUsd/.test(limits.replace('imagesDailySpendCapUsd()', 'IMAGES.dailySpendCapUsd')));
   proof('a cap that stays at $15 after the close is caught', ((t: Date) => (t.getTime() >= Date.parse(D0.opens) ? 15 : 2))(at(D0.closes, 0)) !== C.imagesDailySpendCapUsd(at(D0.closes, 0)));
 }
@@ -168,27 +178,90 @@ proof('a date written into the rules is caught', hardCodedDates([{ file: 'src/li
 proof('a weekday-and-date line is caught', hardCodedDates([{ file: 'src/app/challenge/page.tsx', text: '<p>On Friday 20 November we show them</p>' }]).length === 1);
 proof('an ISO date in a component is caught', hardCodedDates([{ file: 'src/components/challenge-share.tsx', text: "const until = '2026-11-17';" }]).length === 1);
 
-// --- One entry per person per character -------------------------------------------------------------------------
+// --- Submit (owner, 2026-11-04): an entry only when its maker submits it; three per person; three people per character ---
 const inW = (min: number) => at(D0.opens, min * 60_000).toISOString();
 const cand = (versionId: string, person: number, character: string, minutes: number, forked = true) => ({ versionId, elementId: `e-${versionId}`, character, person, createdAt: inW(minutes), forked });
+const sub = (versionId: string, person: number, character: string, minutes = 0) => ({ versionId, person, character, at: inW(minutes) });
 const cs = [cand('a1', 500, 'bai', 10), cand('a2', 500, 'bai', 20), cand('a3', 500, 'zei', 5), cand('b1', 501, 'bai', 15), cand('c1', 502, 'bai', 30), cand('o1', 503, 'bai', -1), cand('n1', 504, 'bai', 40, false)];
 const ok = (p: number) => p !== 502;
-const chosen = R.chooseEntries(cs, new Map(), ok);
-check('one entry per person per character', chosen.map((c) => c.versionId).sort().join() === 'a2,a3,b1', chosen.map((c) => c.versionId).join());
-check('the latest version counts by default', chosen.find((c) => c.person === 500 && c.character === 'bai')?.versionId === 'a2');
-check('entries are newest first', chosen.map((c) => c.versionId).join() === 'a2,b1,a3');
-const marked = R.chooseEntries(cs, new Map([[R.markKey(500, 'bai'), 'a1']]), ok);
-check('a marked version counts instead of the latest', marked.find((c) => c.person === 500 && c.character === 'bai')?.versionId === 'a1');
-const badMark = R.chooseEntries(cs, new Map([[R.markKey(500, 'bai'), 'b1']]), ok);
-check("a mark of someone else's version is ignored (the latest counts)", badMark.find((c) => c.person === 500 && c.character === 'bai')?.versionId === 'a2');
-check('versions made before the window are not entries', !chosen.some((c) => c.versionId === 'o1'));
-check('a new sheet that is not a fork is not an entry', !chosen.some((c) => c.versionId === 'n1'));
-check('an ineligible person has no entry', !chosen.some((c) => c.person === 502));
-check('a wallet and its linked FID are one person', R.chooseEntries([cand('w1', 600, 'zei', 1), cand('w2', 600, 'zei', 2)], new Map(), () => true).length === 1);
-proof('two entries for one person and character are caught', (() => {
-  const planted = [...chosen, { ...chosen[0], versionId: 'dup' }];
-  return new Set(planted.map((c) => R.markKey(c.person, c.character))).size !== planted.length;
-})());
+check('S1 nothing is an entry until its maker submits it (publishing alone is not entering)', R.chooseEntries(cs, [], ok).length === 0);
+const subs = [sub('a1', 500, 'bai'), sub('a2', 500, 'bai'), sub('b1', 501, 'bai'), sub('c1', 502, 'bai'), sub('o1', 503, 'bai'), sub('n1', 504, 'bai')];
+const chosen = R.chooseEntries(cs, subs, ok);
+check('S1 a submitted remix is an entry; two of one character by one person are both entries', chosen.map((c) => c.versionId).sort().join() === 'a1,a2,b1', chosen.map((c) => c.versionId).join());
+check('S1 an unsubmitted version is not an entry', !chosen.some((c) => c.versionId === 'a3'));
+check('S1 entries are newest first', chosen.map((c) => c.versionId).join() === 'a2,b1,a1');
+check("S1 a submission of someone else's version is ignored", R.chooseEntries(cs, [sub('b1', 500, 'bai')], ok).length === 0);
+check('S1 versions made before the window are not entries, even submitted', !chosen.some((c) => c.versionId === 'o1'));
+check('S1 a new sheet that is not a fork is not an entry, even submitted', !chosen.some((c) => c.versionId === 'n1'));
+check('S1 an ineligible person has no entry, even submitted', !chosen.some((c) => c.person === 502));
+proof('S1 an entry chosen without a submission (the old "latest counts") is caught', ((list: typeof cs) => list.filter((c) => R.isCandidate(c) && ok(c.person)))(cs).length !== R.chooseEntries(cs, [], ok).length);
+// The cap: three per person, across all characters, any mix (three of one character included); each version once.
+const three = [sub('x1', 700, 'bai'), sub('x2', 700, 'zei'), sub('x3', 700, 'mu')];
+check('S2 up to three submissions per person: the third is allowed', R.submitRefusal({ person: 700, versionId: 'x3' }, three.slice(0, 2)) === null);
+check('S2 the 4th submission is refused (any mix of characters)', R.submitRefusal({ person: 700, versionId: 'x4' }, three) === 'full');
+check('S2 three of one character are allowed, and a 4th of it refused', R.submitRefusal({ person: 701, versionId: 'y3' }, [sub('y1', 701, 'bai'), sub('y2', 701, 'bai')]) === null && R.submitRefusal({ person: 701, versionId: 'y4' }, [sub('y1', 701, 'bai'), sub('y2', 701, 'bai'), sub('y3', 701, 'bai')]) === 'full');
+check('S2 a version is submitted once', R.submitRefusal({ person: 700, versionId: 'x1' }, three.slice(0, 1)) === 'already');
+check('S2 other people\'s submissions don\'t use your slots', R.submitRefusal({ person: 702, versionId: 'z1' }, three) === null);
+check('S2 the cap is the config\'s, three (owner, 2026-11-04)', CHALLENGE.submissionsPerPerson === 3);
+proof('S2 a planted cap of four is caught', R.submitRefusal({ person: 700, versionId: 'x4' }, three, 4) !== R.submitRefusal({ person: 700, versionId: 'x4' }, three));
+proof('S2 a planted 4th submission is caught by the cap', ((planted: typeof three) => R.submitRefusal({ person: 700, versionId: 'x5' }, planted) === 'full')([...three, sub('x4', 700, 'gladias')]));
+// The minimum: three different people who submitted for a character; three submissions by one person count once.
+const one = R.chooseEntries([cand('p1', 800, 'seila', 1), cand('p2', 800, 'seila', 2), cand('p3', 800, 'seila', 3)], [sub('p1', 800, 'seila'), sub('p2', 800, 'seila'), sub('p3', 800, 'seila')], () => true);
+check('S3 three submissions by one person are three entries but one entrant, not enough', one.length === 3 && R.entrantCounts(one).get('seila') === 1 && !R.enoughEntrants(R.entrantCounts(one).get('seila')!));
+const people = R.chooseEntries([cand('q1', 810, 'seila', 1), cand('q2', 811, 'seila', 2), cand('q3', 812, 'seila', 3)], [sub('q1', 810, 'seila'), sub('q2', 811, 'seila'), sub('q3', 812, 'seila')], () => true);
+check('S3 three different people who submitted are enough', R.entrantCounts(people).get('seila') === 3 && R.enoughEntrants(3));
+check('S3 two people and an extra entry by one of them are not enough', !R.enoughEntrants(R.entrantCounts([...people.slice(0, 2), { ...people[0], versionId: 'q1b' }]).get('seila')!));
+proof('S3 a minimum counted in submissions (3 by one person passing) is caught', R.enoughEntrants(one.length) !== R.enoughEntrants(R.entrantCounts(one).get('seila')!));
+// The equal share is per person, not per submission (owner, 2026-11-04): the data says who, once each.
+check('S4 the equal share\'s people: each entrant once, however many entries', [...R.equalSharePeople([...one, ...people])].sort().join() === '800,810,811,812');
+proof('S4 a share counted per submission is caught', [...one, ...people].length !== R.equalSharePeople([...one, ...people]).length);
+
+// --- Free remixes (owner, 2026-11-04): count remixes, not pictures; a closed remix counts three -----------------------
+{
+  const X = await import('../src/lib/images/remixes');
+  const lim = { perDay: 3, perRemix: 6 };
+  check('F1 the config: 3 remixes a day, 6 pictures a remix, a closed remix counts 3', IMAGES.designs.remixesPerDay === 3 && IMAGES.designs.picturesPerRemix === 6 && IMAGES.designs.closedRemixUnits === 3);
+  check('F1 an open remix uses one, a closed remix three (the hook for remix-model-choice)', X.remixUnits({ open: true }) === 1 && X.remixUnits({ open: false }) === 3);
+  check('F1 who counts remixes: a passing account, not an admin (perDayFor) or an invited maker, not a wallet', X.countsRemixes(999001) && !X.countsRemixes(ADMINS[0]) && !X.countsRemixes(6852) && !X.countsRemixes(-4));
+  // A Bluesky (or Lens) account's number, at or below -1,000,000,000 (owner, 2026-11-04): it counts remixes and is not a wallet.
+  check('F1b a Bluesky account counts remixes; a wallet never does', X.countsRemixes(-1_000_000_001) && X.countsRemixes(-1_000_000_000) && !X.countsRemixes(-999_999_999) && !X.countsRemixes(0));
+  check('F1b only a wallet number is a wallet', X.isWalletNumber(-4) && X.isWalletNumber(-999_999_999) && !X.isWalletNumber(-1_000_000_000) && !X.isWalletNumber(-1_000_000_001) && !X.isWalletNumber(5));
+  {
+    const Lm0 = await import('../src/lib/images/limits');
+    check('F1b a Bluesky account is not prepaid; a wallet is', Lm0.fundedBy(-1_000_000_001) === 'free' && Lm0.fundedBy(-4) === 'prepaid' && Lm0.fundedBy(500) === 'free');
+    const lim0 = read('src/lib/images/limits.ts');
+    const walletOnly = (src: string) => /if \(isWalletNumber\(fid\)\) \{\s*const t = tx as unknown as Sql;/.test(src) && !/if \(fid < 0\)/.test(src);
+    check('F1b reserve sends only a wallet number to the prepaid path', walletOnly(lim0));
+    proof('F1b a reserve that sends every number below zero to the prepaid path is caught', !walletOnly(lim0.replace('if (isWalletNumber(fid)) {', 'if (fid < 0) {')));
+  }
+  check('F1 admins keep their own picture limit (IMAGES.perDayFor)', ADMINS.every((a) => IMAGES.perDayFor[a] === 300 && !X.countsRemixes(a)));
+  check('F2 three open remixes start; the 4th is refused', [0, 1, 2].every((used) => X.remixRefusal({ starts: true, units: 1, used, tries: 0 }, lim) === null) && X.remixRefusal({ starts: true, units: 1, used: 3, tries: 0 }, lim) === 'remix-limit');
+  check('F2 a closed remix counts three: alone it fits, after one open remix it is refused', X.remixRefusal({ starts: true, units: 3, used: 0, tries: 0 }, lim) === null && X.remixRefusal({ starts: true, units: 3, used: 1, tries: 0 }, lim) === 'remix-limit');
+  check('F2 after a closed remix, no open one starts the same day', X.remixRefusal({ starts: true, units: 1, used: 3, tries: 0 }, lim) === 'remix-limit');
+  check('F3 a remix\'s other views, and a view made again after a failure, use no other remix, up to 6 pictures', [1, 2, 3, 4, 5].every((tries) => X.remixRefusal({ starts: false, units: 1, used: 3, tries }, lim) === null) && X.remixRefusal({ starts: false, units: 1, used: 3, tries: 6 }, lim) === 'remix-used');
+  check('F3 a remix never started can\'t be continued', X.remixRefusal({ starts: false, units: 1, used: 0, tries: 0 }, lim) === 'remix-used');
+  const rows = [
+    { remix: 'r1', units: 1, at: '2026-11-07T01:00:00Z' }, { remix: 'r1', units: 1, at: '2026-11-07T01:01:00Z' }, { remix: 'r1', units: 1, at: '2026-11-07T01:02:00Z' },
+    { remix: 'r2', units: 3, at: '2026-11-07T02:00:00Z' }, { remix: 'r0', units: 1, at: '2026-11-06T23:00:00Z' }, { remix: 'r0', units: 1, at: '2026-11-07T00:10:00Z' },
+  ];
+  check('F4 remixes are counted, not pictures: three views of one remix count once; a closed one three; yesterday\'s remix not today', X.remixesUsed(rows, new Date('2026-11-07T00:00:00Z')) === 4);
+  proof('F4 a count of pictures (not remixes) is caught', rows.filter((r) => Date.parse(r.at) >= Date.parse('2026-11-07T00:00:00Z')).length !== X.remixesUsed(rows, new Date('2026-11-07T00:00:00Z')));
+  proof('F2 a planted 4th remix is caught', X.remixRefusal({ starts: true, units: 1, used: X.remixesUsed([...rows.slice(0, 3), { remix: 'r3', units: 1, at: '2026-11-07T03:00:00Z' }, { remix: 'r4', units: 1, at: '2026-11-07T03:30:00Z' }], new Date('2026-11-07T00:00:00Z')), tries: 0 }, lim) === 'remix-limit');
+  proof('F2 a closed remix counted as one is caught', X.remixRefusal({ starts: true, units: 1, used: 1, tries: 0 }, lim) !== X.remixRefusal({ starts: true, units: X.remixUnits({ open: false }), used: 1, tries: 0 }, lim));
+  // The sample route passes the model's openness to remixUnits, and every view of a sheet goes through the remix path.
+  const route = read('src/app/api/designs/sample/route.ts');
+  const hooked = (src: string) => /const units = remixUnits\(\{ open: [^}]+\}\);/.test(src) && /if \(slot !== 'sample' && countsRemixes\(fid\)\)/.test(src) && /spend: remix \? \{ \.\.\.spend, remix \}/.test(src);
+  check('F5 the sample route counts a sheet\'s views as remixes through remixUnits (the model-choice hook)', hooked(route));
+  proof('F5 a route that skips the remix count is caught', !hooked(route.replace('spend: remix ? { ...spend, remix }', 'spend: edit ? spend')));
+  const lim2 = read('src/lib/images/limits.ts');
+  const underLock = (src: string) => /pg_advisory_xact_lock\(hashtext\('snowmoon\.images\.fid'\), \$\{fid\}::int\)[\s\S]*if \(spend\.remix && countsRemixes\(fid\) && \(await remixTable\(t\)\)\)/.test(src);
+  check('F5 the remix count is checked under the person\'s lock, with the spend cap', underLock(lim2) && /imagesDailySpendCapUsd\(\)\) return \{ ok: false as const, refusal: 'spend' as const \};\s*await tx`insert into studio\.sheet_remix_asks/.test(lim2));
+  proof('F5 a remix count outside the lock is caught', !underLock(lim2.replace("hashtext('snowmoon.images.fid')", "hashtext('elsewhere')")));
+  // What happens when a remix's views partly fail: the failed answer carries the remix, so making it again stays inside it.
+  const keeps = (src: string) => src.includes("if (!paid.ok) return no(paid.error, paid.status, { ...paid.extra, ...(remixTicket && !String(paid.extra.reason ?? '').startsWith('remix') ? { remix: remixTicket } : {}) });");
+  check('F6 a view that fails answers with its remix, so it is made again inside the same remix', keeps(route));
+  proof('F6 a failure that drops the remix is caught', !keeps(route.replace('...(remixTicket && ', '...(false && ')) || !keeps(route.replace(/if \(!paid\.ok\) return no\(paid\.error, paid\.status, \{[^\n]*\n/, 'if (!paid.ok) return no(paid.error, paid.status, paid.extra);\n')));
+}
 
 // --- The three bases (owner, 2026-11-03) --------------------------------------------------------------------------
 {
@@ -250,7 +323,7 @@ proof('two entries for one person and character are caught', (() => {
   check('P5g passes on the committed challenge code, with "Bases to start from" in style order', p5g.length === 0, p5g.join('; '));
   check('"Bases to start from" really is ordered by style (startingSheets sorts by baseStyleOrder)', /sort\(newestFirst\)\.sort\(baseStyleOrder\)/.test(read('src/lib/challenge/entries.ts')));
   const plantIn = (file: string, f: (t: string) => string) => files.map((x) => (x.file === file ? { ...x, text: f(x.text) } : x));
-  proof('P5g: an entries list ordered by style fails (standing)', p5gProblems(plantIn('src/lib/challenge/entries.ts', (t) => t.replace('const entries = chooseEntries(', 'const entries = [...chooseEntries(').replace(', marks, () => true);\n  const byAdmins', ', marks, () => true)].sort(baseStyleOrder);\n  const byAdmins'))).some((p) => /orders by style outside/.test(p)));
+  proof('P5g: an entries list ordered by style fails (standing)', p5gProblems(plantIn('src/lib/challenge/entries.ts', (t) => t.replace('const entries = chooseEntries(', 'const entries = [...chooseEntries(').replace(', submissions, () => true);\n  const byAdmins', ', submissions, () => true)].sort(baseStyleOrder);\n  const byAdmins'))).some((p) => /orders by style outside/.test(p)));
   proof('P5g: an entries list ordered by style fails (a new top-level list in entries.ts)', p5gProblems(plantIn('src/lib/challenge/entries.ts', (t) => t.replace('export async function standing(', 'export const planted = (e: { style: string | null }[]) => e.sort(baseStyleOrder);\nexport async function standing('))).length === 1);
   proof('P5g: the challenge page re-sorting by style fails', p5gProblems(plantIn('src/app/challenge/page.tsx', (t) => `${t}\nexport const planted = (e: { style: string | null }[]) => e.sort(baseStyleOrder);`)).length === 1);
   proof('P5g: "Posted on" ordered by style fails', p5gProblems([...files, { file: 'src/components/posted-on.tsx', text: 'export const p = (x) => x.sort(baseStyleOrder);' }]).length >= 1);
@@ -336,7 +409,7 @@ function standIn(link: string) {
     const u = new URL(url);
     if (u.hostname === 'api.neynar.com') {
       if ((init?.headers as Record<string, string>)?.['x-api-key'] !== 'test-key-not-real') return json({}, 401);
-      return json({ cast: { hash: `0x0a1b2c3d${'e'.repeat(32)}`, author: { username: 'naaate', pfp_url: 'https://imagedelivery.net/avatar.png', display_name: 'Nate' }, text: `my Bai ${link}`, timestamp: '2026-11-07T10:00:00Z', embeds: [{ url: link }], reactions: { likes_count: 9 } } });
+      return json({ cast: { hash: `0x0a1b2c3d${'e'.repeat(32)}`, author: { fid: 500, username: 'naaate', pfp_url: 'https://imagedelivery.net/avatar.png', display_name: 'Nate' }, text: `my Bai ${link}`, timestamp: '2026-11-07T10:00:00Z', embeds: [{ url: link }], reactions: { likes_count: 9 } } });
     }
     if (u.pathname.endsWith('resolveHandle')) return json({ did: DID });
     if (u.pathname.endsWith('getPosts')) return json({ posts: [{ uri: `at://${DID}/app.bsky.feed.post/3mz6hon3w6c2h`, author: { handle: 'someone.bsky.social', avatar: 'https://cdn.bsky.app/avatar.jpg', labels: [] }, record: { text: `Zei! ${link}`, createdAt: '2026-11-08T10:00:00Z', facets: [{ features: [{ $type: 'app.bsky.richtext.facet#link', uri: link }] }] }, indexedAt: '2026-11-08T10:00:01Z', labels: [], likeCount: 3 }] });
@@ -354,7 +427,7 @@ for (const addr of pasted) {
   check(`${addr}: every request went to an API host`, s.asked.length > 0 && s.asked.every((u) => (L.API_HOSTS as readonly string[]).includes(new URL(u).hostname)), s.asked.join(' '));
   check(`${addr}: the pasted address was never requested`, s.asked.every((u) => u !== addr && new URL(u).hostname !== new URL(addr).hostname), s.asked.join(' '));
   if (got?.ok) {
-    check(`${addr}: the kept post has no avatar, name, picture, counts or words`, Object.keys(got.post).sort().join() === 'at,handle,id,links,network,url' && !/avatar|pfp|imagedelivery|likes/.test(JSON.stringify({ ...got.post, links: [] })));
+    check(`${addr}: the kept post has no avatar, name, picture, counts or words`, Object.keys(got.post).sort().join() === 'at,handle,id,links,network,url,writer' && !/avatar|pfp|imagedelivery|likes/.test(JSON.stringify({ ...got.post, links: [] })));
     check(`${addr}: the address shown is rebuilt on the network's own host`, ['farcaster.xyz', 'bsky.app', 'hey.xyz'].includes(new URL(got.post.url).hostname));
   }
 }
@@ -398,6 +471,34 @@ proof('a matcher that only checks the path would take the look-alike host', `htt
 {
   const labelled = { posts: [{ uri: `at://${DID}/app.bsky.feed.post/3mz6hon3w6c2h`, author: { handle: 'someone.bsky.social', labels: [{ val: '!no-unauthenticated' }] }, record: { text: page, createdAt: '2026-11-08T10:00:00Z' }, indexedAt: '2026-11-08T10:00:01Z', labels: [] }] };
   check('a Bluesky post whose author asked not to be shown off Bluesky is refused', L.parseBskyPosts(labelled, '3mz6hon3w6c2h') === 'labelled');
+}
+
+// --- Submit: the post must be the submitter's own (owner, 2026-11-04, answer 9.4) -------------------------------
+{
+  const read3 = async (addr: string) => {
+    const r = L.readPostAddress(addr);
+    const got = r.ok ? await P.verifiedPost(r.ref, VERSION, standIn(page).f) : null;
+    return got?.ok ? got.post : null;
+  };
+  const [fc, sky, lens] = [await read3(pasted[0]), await read3(pasted[1]), await read3(pasted[2])];
+  check('9.4 a cast\'s writer is its author FID, from Neynar', JSON.stringify(fc?.writer) === '{"fid":500}');
+  check('9.4 a Bluesky post\'s writer is the DID in its at:// address', JSON.stringify(sky?.writer) === JSON.stringify({ did: DID }));
+  check('9.4 a Lens post\'s writer is not read (null)', lens !== null && lens.writer === null);
+  const me = (fid: number, blueskyDids: string[] = []) => ({ fid, blueskyDids });
+  check('9.4 Farcaster: your own cast is accepted', L.writerCheck(fc!, me(500)) === 'ok');
+  check('9.4 Farcaster: someone else\'s cast is refused', L.writerCheck(fc!, me(501)) === 'not-yours');
+  check('9.4 Farcaster: a cast whose author Neynar didn\'t name is refused', L.writerCheck({ network: 'farcaster', writer: null }, me(500)) === 'not-yours');
+  check('9.4 Farcaster: a wallet account (below zero) never matches', L.writerCheck({ network: 'farcaster', writer: { fid: -500 } }, me(-500)) === 'not-yours');
+  check('9.4 Bluesky: refused while no Bluesky account is known to be yours (as on this branch)', L.writerCheck(sky!, me(500)) === 'unknown');
+  check('9.4 Bluesky: your known DID is accepted, another\'s refused', L.writerCheck(sky!, me(500, [DID])) === 'ok' && L.writerCheck(sky!, me(500, ['did:plc:zzzzzzzzzzzzzzzzzzzzzzzz'])) === 'not-yours');
+  check('9.4 Lens: not checked', L.writerCheck(lens!, me(501)) === 'ok');
+  proof('9.4 a check that only compares handles would take someone else\'s cast', fc!.handle === 'naaate' && L.writerCheck(fc!, me(501)) !== 'ok');
+  const SW = (await import('../src/lib/challenge/entries')).SUBMIT_WORDING;
+  check('9.4 the refusals are short and say what to do', SW.notYourPost === 'That post isn’t from your account. Submit a post you wrote.' && /Farcaster/.test(SW.blueskyUnknown));
+  const route = read('src/app/api/challenge/submit/route.ts');
+  const checked = (src: string) => /if \(!got\.ok\) return no\(got\.why, got\.status\);[\s\S]{0,400}const mine = writerCheck\(got\.post, \{ fid, blueskyDids: \[\] \}\);\s*if \(mine === 'not-yours'\) return no\(SUBMIT_WORDING\.notYourPost, 403\);\s*if \(mine === 'unknown'\) return no\(SUBMIT_WORDING\.blueskyUnknown, 403\);\s*const r = await submitEntry\(/.test(src);
+  check('9.4 the Submit route checks the writer before it keeps anything', checked(route));
+  proof('9.4 a route that skips the check is caught', !checked(route.replace("if (mine === 'not-yours') return no(SUBMIT_WORDING.notYourPost, 403);", '')));
 }
 
 // --- "Posted on": text and a link only -------------------------------------------------------------------------
@@ -474,19 +575,23 @@ await db.exec(`create role anon nologin; create role authenticated nologin; crea
 for (const f of readdirSync(path.join(ROOT, 'supabase/migrations')).filter((f) => f.endsWith('.sql')).sort()) await db.exec(read(`supabase/migrations/${f}`));
 await db.exec(`insert into studio.works values ('snowmoon','Snowmoon','GPL-3.0','x') on conflict do nothing`);
 await db.exec(read('supabase/migrations/0033_remix_challenge.sql'));
-check('the migration is safe to run twice', true);
+// 0033 run again revokes delete on marks; NEXT_challenge_submit (withdraw) runs after it, as it would on production.
+await db.exec(read('supabase/migrations/NEXT_challenge_submit.sql'));
+await db.exec(read('supabase/migrations/NEXT_challenge_submit.sql'));
+check('the migrations are safe to run twice (0033, NEXT_challenge_submit)', true);
 // What the owner's read-back (a) checked on production (2026-11-01, 17 of 17 true), here on PGlite: RLS on, the
 // privileges as written, no public access, only studio_writer's policies, and no score column.
 const PRIVS = `select c.what, c.ok from (
   select 'rls on all three' as what, (select bool_and(relrowsecurity) from pg_class where oid in ('studio.challenge_marks'::regclass, 'studio.version_posts'::regclass, 'studio.challenge_eligibility'::regclass)) as ok
-  union all select 'marks and eligibility: select and insert only', bool_and(has_table_privilege('studio_writer', t::regclass, 'SELECT') and has_table_privilege('studio_writer', t::regclass, 'INSERT') and not has_table_privilege('studio_writer', t::regclass, 'UPDATE') and not has_table_privilege('studio_writer', t::regclass, 'DELETE')) from unnest(array['studio.challenge_marks', 'studio.challenge_eligibility']) t
+  union all select 'marks and eligibility: select and insert, no update', bool_and(has_table_privilege('studio_writer', t::regclass, 'SELECT') and has_table_privilege('studio_writer', t::regclass, 'INSERT') and not has_table_privilege('studio_writer', t::regclass, 'UPDATE')) from unnest(array['studio.challenge_marks', 'studio.challenge_eligibility']) t
+  union all select 'eligibility: no delete; marks: delete only with NEXT_challenge_submit (withdraw)', not has_table_privilege('studio_writer', 'studio.challenge_eligibility', 'DELETE') and has_table_privilege('studio_writer', 'studio.challenge_marks', 'DELETE') = exists (select 1 from pg_policies where schemaname = 'studio' and tablename = 'challenge_marks' and policyname = 'writer_delete')
   union all select 'posts: select, insert, delete, no update', has_table_privilege('studio_writer', 'studio.version_posts', 'DELETE') and not has_table_privilege('studio_writer', 'studio.version_posts', 'UPDATE')
   union all select 'no public access', not exists (select 1 from unnest(array['anon', 'authenticated']) r, unnest(array['studio.challenge_marks', 'studio.version_posts', 'studio.challenge_eligibility']) t, unnest(array['SELECT', 'INSERT', 'UPDATE', 'DELETE']) p where has_table_privilege(r, t::regclass, p))
   union all select 'only studio_writer policies', not exists (select 1 from pg_policies where schemaname = 'studio' and tablename in ('challenge_marks', 'version_posts', 'challenge_eligibility') and roles <> '{studio_writer}'::name[])
   union all select 'no score column', not exists (select 1 from information_schema.columns where table_schema = 'studio' and table_name = 'challenge_eligibility' and column_name = 'score')
 ) c`;
 const privs = await db.query<{ what: string; ok: boolean }>(PRIVS);
-check('0033: RLS, privileges, no public access, no score column (as the owner read back)', privs.rows.length === 6 && privs.rows.every((r) => r.ok === true), JSON.stringify(privs.rows.filter((r) => !r.ok)));
+check('0033 (with NEXT_challenge_submit): RLS, privileges, no public access, no score column (as the owner read back)', privs.rows.length === 7 && privs.rows.every((r) => r.ok === true), JSON.stringify(privs.rows.filter((r) => !r.ok)));
 {
   await db.exec(`grant update on studio.challenge_marks to studio_writer`);
   const r2 = await db.query<{ ok: boolean }>(PRIVS);
@@ -590,9 +695,24 @@ check('a sheet made from scratch gets no decision (not an entry)', !dec(fScratch
   proof('a recorder that ignores the Privacy words would store it', (await Rec.recordEligibility(S, extra.versionId, 504, new Date(), privacySaid)) === 'stored');
 }
 calls.length = 0;
+// Submit (owner, 2026-11-04): a stand-in post that links to the version's page (the route reads and checks the real one).
+const spost = (versionId: string, n: number) => ({ network: 'lens' as const, id: `s${n}`, handle: 'someone', at: new Date().toISOString(), url: `https://hey.xyz/posts/s${n}`, links: [`https://snowmoon.party/references/designs/${versionId}`], writer: null });
+let sn = 0;
+const submit = (fid: number, v: string, now?: Date) => E.submitEntry(S, fid, v, spost(v, ++sn), now);
+const st0 = await E.standing(S);
+check('S5 in the database: publishing alone makes no entry', st0.entries.length === 0 && [...st0.entrants.values()].every((n) => n === 0));
+check('S5 Submit needs the post link', ((r) => !r.ok && r.why === E.SUBMIT_WORDING.needsPost)(await E.submitEntry(S, 500, f500b.versionId, null)));
+proof('S5 a Submit without a post that went through would be caught', (await E.standing(S)).entries.length === 0);
+check('S5 Submit: only your own version', ((r) => !r.ok && r.why === E.SUBMIT_WORDING.notYours)(await submit(501, f500a.versionId)));
+check('S5 Submit: not a version below the check', ((r) => !r.ok && r.why === E.SUBMIT_WORDING.notEligible)(await submit(501, f501.versionId)));
+check('S5 Submit: not an admin\'s version', !(await submit(193912, fAdmin.versionId)).ok);
+check('S5 Submit: not a sheet made from scratch', !(await submit(503, fScratch.versionId)).ok);
+check('S5 Submit: your remix, with its post', (await submit(500, f500b.versionId)).ok && (await submit(6852, f6852.versionId)).ok && (await submit(6852, fOfEntry.versionId)).ok);
+check('S5 the post is listed on the version\'s page, as a post its maker added', (await P.postsFor(S, f500b.versionId)).some((x) => x.addedBy === 500));
+check('S5 Submit: the same version twice is refused', ((r) => !r.ok && r.why === E.SUBMIT_WORDING.already)(await submit(500, f500b.versionId)));
 const st = await E.standing(S);
 const ids = st.entries.map((e) => e.versionId);
-check('entries: the latest of a person with a passing score', ids.includes(f500b.versionId) && !ids.includes(f500a.versionId));
+check('entries: the submitted remix of a person with a passing score', ids.includes(f500b.versionId) && !ids.includes(f500a.versionId));
 check('entries: a fork of another entry counts', ids.includes(fOfEntry.versionId));
 check('entries: an invited person', ids.includes(f6852.versionId));
 check('entries: not a score below the threshold', !ids.includes(f501.versionId));
@@ -600,18 +720,52 @@ check('entries: not a version whose maker could not be checked', !ids.includes(f
 check('entries: not a new sheet made from scratch (forks only)', !ids.includes(fScratch.versionId));
 check('entries: not an admin; the admin is listed apart', !ids.includes(fAdmin.versionId) && st.byAdmins.some((v) => v.versionId === fAdmin.versionId));
 check('entries: not the starting sheets made before the window', !ids.includes(baiStart.versionId) && !ids.includes(zeiStart.versionId));
-check('entries: one per person per character', ids.length === 3, ids.join());
+check('entries: what was submitted, three', ids.length === 3, ids.join());
 check('entrants per character: Bai 2 (500, 6852), Zei 1 (6852), others 0, in CHALLENGE order', [...st.entrants].map(([c, n]) => `${c}:${n}`).join() === 'zei:1,gladias:0,bai:2,seila:0,deluin:0,mu:0', [...st.entrants].map(([c, n]) => `${c}:${n}`).join());
 check('three entrants are needed (CHALLENGE.minEntrants)', CHALLENGE.minEntrants === 3 && !R.enoughEntrants(2) && R.enoughEntrants(3));
 proof('a count that adds one person twice is caught', R.entrantCounts([{ person: 1, character: 'bai' }, { person: 1, character: 'bai' }]).get('bai') === 1);
-check('the version page: Entry on the entry, the admin line on the admin\'s', (await E.versionStanding(S, f500b.versionId))?.kind === 'entry' && (await E.versionStanding(S, fAdmin.versionId))?.kind === 'admin' && (await E.versionStanding(S, f501.versionId)) === null);
-// The publish confirmation (owner, 2026-11-03): an entry says so; Neynar down says it won't count; otherwise nothing.
+check('the version page: Entry once submitted, Submit offered on an unsubmitted remix, the admin line on the admin\'s', (await E.versionStanding(S, f500b.versionId))?.kind === 'entry' && (await E.versionStanding(S, f500a.versionId))?.kind === 'candidate' && (await E.versionStanding(S, fAdmin.versionId))?.kind === 'admin' && (await E.versionStanding(S, f501.versionId)) === null);
+// The cap in the database: a 4th submission refused; three of one character allowed; Bai's count is people, not submissions.
 {
-  const e = await E.publishStanding(S, f500b.versionId);
+  const f500c = await publish({ fid: 500, mode: 'version', kind: 'character', fromVersionId: f500b.versionId, body: sheet('Bai, older, scar, coat', 12) });
+  const f500d = await publish({ fid: 500, mode: 'version', kind: 'character', fromVersionId: f500c.versionId, body: sheet('Bai, older, scar, hat', 13) });
+  check('S6 three of one character by one person: the 2nd and 3rd are allowed', (await submit(500, f500a.versionId)).ok && (await submit(500, f500c.versionId)).ok);
+  const fourth = await submit(500, f500d.versionId);
+  check('S6 the 4th submission is refused in the database, saying why', !fourth.ok && fourth.why === E.SUBMIT_WORDING.full());
+  const [n4] = await sql<{ n: number }[]>`select count(*)::int as n from studio.challenge_marks where fid = 500`;
+  check('S6 and nothing was written for it', n4.n === 3, String(n4.n));
+  const st6 = await E.standing(S);
+  check('S6 three entries by one person count once for the minimum: Bai has 2 entrants', st6.entrants.get('bai') === 2 && st6.entries.filter((e) => e.person === 500).length === 3, String(st6.entrants.get('bai')));
+  check('S6 the equal share is per person: 500 and 6852, once each', [...R.equalSharePeople(st6.entries)].sort().join() === '500,6852');
+  // Two Submits at once can't pass the cap: the code takes a per-person lock before counting.
+  const ent = read('src/lib/challenge/entries.ts');
+  const locked = (src: string) => /pg_advisory_xact_lock\(hashtext\('snowmoon\.challenge\.submit'\), \$\{fid\}::int\)`;\s*const theirs = await tx/.test(src);
+  check('S6 the cap is checked under a per-person lock, in the same transaction as the insert', locked(ent));
+  proof('S6 a cap checked without the lock is caught', !locked(ent.replace("hashtext('snowmoon.challenge.submit')", "hashtext('elsewhere')")));
+  // Withdraw (NEXT_challenge_submit.sql, loaded here like every migration): until entries close; it frees the slot.
+  check('S7 withdraw: only your own', !(await E.withdrawEntry(S, 501, f500a.versionId)).ok);
+  check('S7 withdraw frees a slot: then the 4th submits', (await E.withdrawEntry(S, 500, f500a.versionId)).ok && (await submit(500, f500d.versionId)).ok);
+  check('S7 the withdrawn one is no longer an entry; its post stays listed', (await E.versionStanding(S, f500a.versionId))?.kind === 'candidate' && (await P.postsFor(S, f500a.versionId)).length === 1);
+  check('S7 withdrawing after the close is refused', !(await E.withdrawEntry(S, 500, f500d.versionId, new Date(Date.parse(CHALLENGE.dates.closes)))).ok);
+  await sql`revoke delete on studio.challenge_marks from studio_writer`;
+  await sql`set role studio_writer`;
+  const noGrant = await E.withdrawEntry(S, 500, f500d.versionId);
+  // PGlite is one session behind its socket: the role stays until reset.
+  await sql`reset role`;
+  await reconnect();
+  await sql`grant delete on studio.challenge_marks to studio_writer`;
+  check('S7 before NEXT_challenge_submit.sql is applied, withdrawing says "not available yet" (Submit still works)', !noGrant.ok && noGrant.why === E.SUBMIT_WORDING.withdrawNotYet, JSON.stringify(noGrant));
+  // Put 500's entries back as the checks below expect them: f500b only.
+  await E.withdrawEntry(S, 500, f500c.versionId);
+  await E.withdrawEntry(S, 500, f500d.versionId);
+}
+// The publish confirmation (owner, 2026-11-03; Submit, 2026-11-04): a remix that can be entered says to submit it; Neynar down says it can't.
+{
+  const e = await E.publishStanding(S, f500a.versionId);
   const u = await E.publishStanding(S, f502.versionId);
-  check('e2 at publish, the maker\'s entry is told "This is your entry for …"', e?.kind === 'entry' && e.character === 'bai', JSON.stringify(e));
+  check('e2 at publish, a remix that can be entered is told to submit it', e?.kind === 'candidate' && e.character === 'bai', JSON.stringify(e));
   check('i at publish, a version Neynar couldn\'t check is told it won\'t count', u?.kind === 'unchecked' && u.character === 'zei', JSON.stringify(u));
-  check('at publish, a score below the check, an admin\'s, an earlier version and a new sheet get no line', (await E.publishStanding(S, f501.versionId)) === null && (await E.publishStanding(S, fAdmin.versionId)) === null && (await E.publishStanding(S, f500a.versionId)) === null && (await E.publishStanding(S, fScratch.versionId)) === null);
+  check('at publish, a score below the check, an admin\'s and a new sheet get no line', (await E.publishStanding(S, f501.versionId)) === null && (await E.publishStanding(S, fAdmin.versionId)) === null && (await E.publishStanding(S, fScratch.versionId)) === null);
 }
 await E.startingSheets(S, 'bai');
 check('viewing pages (the challenge, version pages, starting sheets) made no outside call at all', calls.length === 0, calls.join(' '));
@@ -625,16 +779,20 @@ check('viewing pages (the challenge, version pages, starting sheets) made no out
   check('no page-side code imports the Neynar lookup or the publish-time recorder', pageCode.every((x) => !asks(x.t)), pageCode.filter((x) => asks(x.t)).map((x) => x.f).join());
   proof('a page that imports the lookup is caught', asks("import { checkNeynar } from '../images/neynar';"));
 }
-check('marking: only your own version', !(await E.markEntry(S, 501, f500a.versionId)).ok);
-check('marking: your earlier version', (await E.markEntry(S, 500, f500a.versionId)).ok);
 const st2 = await E.standing(S);
-check('a marked version counts instead of the latest', st2.entries.some((e) => e.versionId === f500a.versionId) && !st2.entries.some((e) => e.versionId === f500b.versionId));
-check('marking after the window closes is refused', !(await E.markEntry(S, 500, f500b.versionId, new Date(Date.parse(CHALLENGE.dates.closes)))).ok);
+check('Submit after the window closes is refused', !(await submit(500, f500a.versionId, new Date(Date.parse(CHALLENGE.dates.closes)))).ok);
 {
-  const early = await E.markEntry(S, 500, f500b.versionId, new Date(Date.parse(CHALLENGE.dates.opens) - 1));
-  const late = await E.markEntry(S, 500, f500b.versionId, new Date(Date.parse(CHALLENGE.dates.closes)));
-  check('h marking before the open says when entries open, not "Entries are closed"', !early.ok && early.why === E.MARK_WORDING.opens() && /^Entries open /.test(early.why) && !late.ok && late.why === E.MARK_WORDING.closed, JSON.stringify(early));
-  proof('h a refusal before the open that says "closed" is caught', ((w: string) => /^Entries open /.test(w))(E.MARK_WORDING.closed) === false);
+  const early = await submit(500, f500a.versionId, new Date(Date.parse(CHALLENGE.dates.opens) - 1));
+  const late = await submit(500, f500a.versionId, new Date(Date.parse(CHALLENGE.dates.closes)));
+  check('h Submit before the open says when entries open, not "Entries are closed"', !early.ok && early.why === E.SUBMIT_WORDING.opens() && /^Entries open /.test(early.why) && !late.ok && late.why === E.SUBMIT_WORDING.closed, JSON.stringify(early));
+  proof('h a refusal before the open that says "closed" is caught', ((w: string) => /^Entries open /.test(w))(E.SUBMIT_WORDING.closed) === false);
+}
+// The submit route needs a post address, read and checked as "Add where you posted it" does, before Submit.
+{
+  const route = read('src/app/api/challenge/submit/route.ts');
+  const needs = (src: string) => /if \(body\.url === undefined && body\.castHash === undefined\) return no\(SUBMIT_WORDING\.needsPost, 400\);/.test(src) && /const got = await verifiedPost\(read\.ref, versionId\);\s*if \(!got\.ok\) return no\(got\.why, got\.status\);[\s\S]*?const r = await submitEntry\(sql, fid, versionId, got\.post\);/.test(src);
+  check('S8 the submit route requires the post link and checks it links to the version (verifiedPost) before Submit', needs(route));
+  proof('S8 a route that submits without checking the post is caught', !needs(route.replace('const got = await verifiedPost(read.ref, versionId);', 'const got = { ok: true as const, post: null as never };')));
 }
 check('the sheets to start from are those made before the window', (await E.startingSheets(S, 'bai')).map((s) => s.versionId).join() === baiStart.versionId);
 
@@ -643,7 +801,9 @@ check('the sheets to start from are those made before the window', (await E.star
 // hidden and the bases emptied again, so the checks below see what they saw before.
 {
   const made: string[] = [];
-  const mk = async (m: Parameters<typeof DS.makeDesign>[1]) => { const o = await publish(m); made.push(o.elementId); return o; };
+  // Each remix is submitted by its maker right after publishing (owner, 2026-11-04: only Submit makes an entry); a
+  // version that can't be entered is refused, as on the site.
+  const mk = async (m: Parameters<typeof DS.makeDesign>[1]) => { const o = await publish(m); made.push(o.elementId); if (m.mode === 'fork') await submit(m.fid, o.versionId); return o; };
   const b1 = await mk({ fid: 6786, mode: 'create', kind: 'character', character: bai, body: sheet('Bai, base one', 21) });
   const b2 = await mk({ fid: 6786, mode: 'create', kind: 'character', character: bai, body: sheet('Bai, base two', 22) });
   const b3 = await mk({ fid: 6786, mode: 'create', kind: 'character', character: bai, body: sheet('Bai, base three', 23) });
@@ -728,7 +888,9 @@ check('the sheets to start from are those made before the window', (await E.star
 // here is hidden and the settings put back afterwards, so the checks below see what they saw before.
 {
   const made: string[] = [];
-  const mk = async (m: Parameters<typeof DS.makeDesign>[1]) => { const o = await publish(m); made.push(o.elementId); return o; };
+  // Each remix is submitted by its maker right after publishing (owner, 2026-11-04: only Submit makes an entry); a
+  // version that can't be entered is refused, as on the site.
+  const mk = async (m: Parameters<typeof DS.makeDesign>[1]) => { const o = await publish(m); made.push(o.elementId); if (m.mode === 'fork') await submit(m.fid, o.versionId); return o; };
   const styled = (text: string, n: number, title: string) => ({ ...sheet(text, n), style: { version_id: '00000000-0000-4000-8000-0000000000aa', title } });
   const closedPic = (n: number) => ({ ...pic(n), recipe: { ...pic(n).recipe, model: 'gpt-image-2.5-sunburst', endpoint: 'openai/gpt-image-2.5-sunburst', host: 'Vercel AI Gateway', checks: { prompt: { model: IMAGES.guardModel, verdict: 'ok' as const }, host_safety_checker: 'not run' as const } } });
   const bA = await mk({ fid: 6786, mode: 'create', kind: 'character', character: bai, body: styled('Bai, Printed', 41, 'Printed') });
@@ -785,13 +947,13 @@ globalThis.fetch = realFetch;
 
 // "Posted on" in the database.
 CHALLENGE.posts = true;
-const post = (id: string, at: string, network: 'farcaster' | 'lens' = 'lens') => ({ network, id, handle: 'someone', at, url: network === 'lens' ? `https://hey.xyz/posts/${id}` : `https://farcaster.xyz/someone/0x0a1b2c3d`, links: [] });
+const post = (id: string, at: string, network: 'farcaster' | 'lens' = 'lens') => ({ network, id, handle: 'someone', at, url: network === 'lens' ? `https://hey.xyz/posts/${id}` : `https://farcaster.xyz/someone/0x0a1b2c3d`, links: [], writer: null });
 check('a post is kept', (await P.addPost(S, { versionId: f500b.versionId, person: 500, post: post('aaa', '2026-11-07T10:00:00Z') })).ok);
 const again = await P.addPost(S, { versionId: f500b.versionId, person: 501, post: post('aaa', '2026-11-07T10:00:00Z') });
 check('the same post is kept once per version', again.ok && !again.added);
 await P.addPost(S, { versionId: f500b.versionId, person: -3, post: post('bbb', '2026-11-09T10:00:00Z') });
 const listed = await P.postsFor(S, f500b.versionId);
-check('posts are listed newest first', listed.map((p) => p.url.split('/').pop()).join() === 'bbb,aaa');
+check('posts are listed newest first', listed.map((p) => p.url.split('/').pop()).slice(0, 2).join() === 'bbb,aaa', listed.map((p) => p.url).join());
 check('only the person who added it can remove it', !(await P.removeOwnPost(S, listed[0].id, 500)) && (await P.removeOwnPost(S, listed[0].id, -3)));
 let wrongHost = '';
 try {
@@ -806,21 +968,99 @@ CHALLENGE.postsPerPersonPerDay = 1;
 check('a daily limit per person', !(await P.addPost(S, { versionId: f500b.versionId, person: 500, post: post('ccc', '2026-11-10T10:00:00Z') })).ok);
 CHALLENGE.postsPerPersonPerDay = keepLimit;
 
+// Free remixes in the database (NEXT_remix_count.sql, loaded here like every migration): reserve() counts remixes, not
+// pictures, under the person's lock; a closed remix counts three; admins and invited makers keep counting pictures.
+{
+  const Lm = await import('../src/lib/images/limits');
+  const spend = (id: string, starts: boolean, units = 1, slot: 'front' | 'side' | 'back' = 'front') => ({ model: IMAGES.editModel, reserveUsd: IMAGES.editReserveUsd(1), remix: { id, units, starts, slot } });
+  const rid = (n: number) => `00000000-0000-4000-8000-${String(n).padStart(12, '0')}`;
+  const fid = 900001;
+  const r1 = await Lm.reserve(S, fid, spend(rid(1), true));
+  const r1s = await Lm.reserve(S, fid, spend(rid(1), false, 1, 'side'));
+  const r1b = await Lm.reserve(S, fid, spend(rid(1), false, 1, 'back'));
+  check('F7 a remix\'s three views use one remix (2 left)', r1.ok && r1.left === 2 && r1s.ok && r1s.left === 2 && r1b.ok && r1b.left === 2, JSON.stringify([r1, r1s, r1b]));
+  const again = await Lm.reserve(S, fid, spend(rid(1), false, 1, 'side'));
+  check('F7 a view made again (after a failure) stays inside the remix: still 2 left', again.ok && again.left === 2);
+  check('F7 2nd and 3rd remixes start; the 4th is refused', (await Lm.reserve(S, fid, spend(rid(2), true))).ok && (await Lm.reserve(S, fid, spend(rid(3), true))).ok && ((r) => !r.ok && r.refusal === 'remix-limit')(await Lm.reserve(S, fid, spend(rid(4), true))));
+  check('F7 with none left to start, the remix being made can still be finished', (await Lm.reserve(S, fid, spend(rid(3), false, 1, 'side'))).ok);
+  await Lm.reserve(S, fid, spend(rid(1), false, 1, 'back'));
+  await Lm.reserve(S, fid, spend(rid(1), false, 1, 'front'));
+  check('F7 a remix allows six pictures; the 7th is refused', ((r) => !r.ok && r.refusal === 'remix-used')(await Lm.reserve(S, fid, spend(rid(1), false, 1, 'side'))));
+  {
+    // A planted cap of four in the database: the 4th then passes, so F7's check would fail.
+    const D = IMAGES.designs as { remixesPerDay: number };
+    D.remixesPerDay = 4;
+    const planted = await Lm.reserve(S, fid, spend(rid(5), true));
+    D.remixesPerDay = 3;
+    proof('F7 a planted 4th remix in the database is caught', planted.ok);
+  }
+  const [pics] = await sql<{ n: number }[]>`select count(*)::int as n from studio.image_asks where fid = ${fid}`;
+  check('F7 a remixer\'s views are not counted as pictures (the 10 a day stay for passage images)', pics.n === 0 && (await Lm.generationsLeft(S, fid)) === IMAGES.generationsPerDay);
+  check('F7 the form is told how many remixes are left', (await Lm.remixesLeftToday(S, fid)) === 0 && (await Lm.remixesLeftToday(S, 900002)) === 3);
+  const closed = await Lm.reserve(S, 900002, spend(rid(10), true, 3));
+  check('F8 a closed remix counts three: it starts, then no other starts that day', closed.ok && closed.left === 0 && ((r) => !r.ok && r.refusal === 'remix-limit')(await Lm.reserve(S, 900002, spend(rid(11), true))));
+  check('F8 a closed remix after an open one is refused', (await Lm.reserve(S, 900003, spend(rid(12), true))).ok && ((r) => !r.ok && r.refusal === 'remix-limit')(await Lm.reserve(S, 900003, spend(rid(13), true, 3))));
+  const adm = await Lm.reserve(S, ADMINS[0], spend(rid(20), true));
+  const [admPics] = await sql<{ n: number }[]>`select count(*)::int as n from studio.image_asks where fid = ${ADMINS[0]}`;
+  const [admRemix] = await sql<{ n: number }[]>`select count(*)::int as n from studio.sheet_remix_asks where fid = ${ADMINS[0]}`;
+  check('F9 an admin keeps their own picture limit: their views count as pictures, not remixes', adm.ok && admPics.n === 1 && admRemix.n === 0 && (await Lm.remixesLeftToday(S, ADMINS[0])) === null);
+  // A Bluesky account's remix (its number at or below -1,000,000,000) is counted as a remix, not charged as a wallet.
+  const sky = -1_000_000_007;
+  const skyR = await Lm.reserve(S, sky, spend(rid(22), true));
+  const [skyRemix] = await sql<{ n: number }[]>`select count(*)::int as n from studio.sheet_remix_asks where fid = ${sky}`;
+  check('F9b a Bluesky account\'s remix view counts as a remix (2 left), not a wallet\'s balance', skyR.ok && skyR.left === 2 && skyRemix.n === 1 && (await Lm.remixesLeftToday(S, sky)) === 2, JSON.stringify(skyR));
+  const wal = await Lm.reserve(S, -4242, spend(rid(23), true));
+  check('F9b a wallet account\'s view still goes to its balance (none here: refused)', !wal.ok && wal.refusal === 'balance', JSON.stringify(wal));
+  const inv = await Lm.reserve(S, 6852, spend(rid(21), true));
+  check('F9 an invited maker keeps counting pictures', inv.ok && (await Lm.remixesLeftToday(S, 6852)) === null && ((await sql`select 1 from studio.sheet_remix_asks where fid = 6852`).length === 0));
+  const [costs] = await sql<{ usd: number }[]>`select coalesce(sum(cost_usd), 0)::float8 as usd from studio.image_costs where kind = 'reserved' and funded = 'free'`;
+  check('F9 every remix view still reserves its worst case against the site-wide spend cap', costs.usd > 0);
+  const remixCols = await sql<{ column_name: string }[]>`select column_name from information_schema.columns where table_schema = 'studio' and table_name = 'sheet_remix_asks' order by ordinal_position`;
+  check('F9 the remix table keeps no prompt, picture or cost', remixCols.map((c) => c.column_name).join() === 'id,remix,fid,units,slot,at', remixCols.map((c) => c.column_name).join());
+  let badUnits = '';
+  try {
+    await sql`insert into studio.sheet_remix_asks (remix, fid, units, slot) values (${rid(30)}, 900009, 2, 'front')`;
+  } catch (e) {
+    badUnits = (e as { code?: string }).code ?? 'error';
+  }
+  await reconnect();
+  check('F9 the table refuses units other than 1 or 3', badUnits === '23514', badUnits);
+  // Who (owner, 2026-11-04): an FID or a Bluesky account (at or below -1,000,000,000), never a wallet's number.
+  const fidCode = async (fid: number) => {
+    try {
+      await sql`insert into studio.sheet_remix_asks (remix, fid, units, slot) values (${rid(31)}, ${fid}, 1, 'front')`;
+      return 'ok';
+    } catch (e) {
+      await reconnect();
+      return (e as { code?: string }).code ?? 'error';
+    }
+  };
+  const fidCodes = [await fidCode(900010), await fidCode(-1_000_000_001), await fidCode(-1_000_000_000), await fidCode(-500), await fidCode(-999_999_999), await fidCode(0)];
+  check('F9 the remix table takes an FID and a Bluesky account, and refuses a wallet\'s number and zero', fidCodes.join() === 'ok,ok,ok,23514,23514,23514', fidCodes.join());
+  await sql`delete from studio.sheet_remix_asks where remix = ${rid(31)}`;
+  // Without the table (before NEXT_remix_count.sql is applied), views count as pictures, as before.
+  await sql`alter table studio.sheet_remix_asks rename to sheet_remix_asks_away`;
+  const before = await Lm.reserve(S, 900004, spend(rid(40), true));
+  const [p4] = await sql<{ n: number }[]>`select count(*)::int as n from studio.image_asks where fid = 900004`;
+  check('F10 without the table, a view counts as a picture, as before', before.ok && p4.n === 1 && (await Lm.remixesLeftToday(S, 900004)) === null);
+  await sql`alter table studio.sheet_remix_asks_away rename to sheet_remix_asks`;
+}
+
 // Without the tables (before the owner applies the migration): nothing breaks.
+await sql`drop table studio.challenge_eligibility`;
+await reconnect();
+const st4 = await E.standing(S);
+await reconnect();
+check('without the eligibility table, only invited makers\' submissions count (no score is ever looked up on a page)', st4.entries.length === 2 && st4.entries.every((e) => e.person === 6852), st4.entries.map((e) => `${e.person}:${e.title}`).join());
 await sql`drop table studio.challenge_marks`;
 await sql`drop table studio.version_posts`;
 await reconnect();
 const st3 = await E.standing(S);
 await reconnect();
-check('without the marks table, everyone\'s latest version counts', st3.entries.some((e) => e.versionId === f500b.versionId) && st3.entries.length === 3);
-await sql`drop table studio.challenge_eligibility`;
+check('without the marks table, nothing is an entry', st3.entries.length === 0);
+const nm = await submit(6852, f6852.versionId);
 await reconnect();
-const st4 = await E.standing(S);
-await reconnect();
-check('without the eligibility table, only invited makers count (no score is ever looked up on a page)', st4.entries.length === 2 && st4.entries.every((e) => e.person === 6852), st4.entries.map((e) => e.person).join());
-const nm = await E.markEntry(S, 500, f500a.versionId);
-await reconnect();
-check('without the marks table, marking says "not available yet"', !nm.ok && nm.why === E.MARK_WORDING.notYet);
+check('without the marks table, Submit says "not available yet"', !nm.ok && nm.why === E.SUBMIT_WORDING.notYet, JSON.stringify(nm));
 check('without the posts table, nothing is listed', (await P.postsFor(S, f500b.versionId)).length === 0);
 await reconnect();
 // A stand-in database without the table (PGlite's socket server can stall a connection after a run of failed
@@ -870,26 +1110,29 @@ check('as committed, CHALLENGE.entries, posts and openSheets are on (owner\'s re
   const invite = (src: string) => /if \(invite && !standing\) lines\.push\(line\(\{ text: CW\.sheetInvite\(callName\), link: toChallenge \}\)\);/.test(src) && /const toChallenge = \{ href: '\/challenge'/.test(src);
   check('R5 a challenge character\'s sheet links to /challenge while the window is open', invite(lines) && /remix this sheet/.test(CW.sheetInvite('Zei')) && CW.sheetInvite('Zei').startsWith('Zei '));
   proof('R5 a sheet page without the link is caught', !invite(lines.replace("href: '/challenge'", "href: '/references'")));
-  // R6: after "Mark as my entry" said "Marked as your entry.", the button stayed.
-  const markSrc = read('src/components/challenge-mark.tsx');
-  const hides = (src: string) => /if \(r\?\.ok\) setDone\(true\);/.test(src) && /\{!done && \(\s*<button/.test(src);
-  check('R6 once marked, "Mark as my entry" goes', hides(markSrc));
-  proof('R6 a button that stays after marking is caught', !hides(markSrc.replace('{!done && (', '{(')));
+  // R6: after "Mark as my entry" said "Marked as your entry.", the button stayed. Submit (2026-11-04): once submitted,
+  // the Submit form goes and Withdraw shows instead.
+  const markSrc = read('src/components/challenge-submit.tsx');
+  const hides = (src: string) => /setDone\(method === 'POST'\);/.test(src) && /\{done \? \(\s*<p className="ch-mark">\s*<button type="button" className="ic-secondary" onClick=\{\(\) => send\('DELETE'\)\}/.test(src);
+  check('R6 once submitted, the Submit form goes (Withdraw instead)', hides(markSrc));
+  proof('R6 a Submit form that stays after submitting is caught', !hides(markSrc.replace("setDone(method === 'POST');", 'setDone(false);')));
   // R7: publishing a fork or version didn't refresh /challenge (marking did).
   const designsRoute = read('src/app/api/designs/route.ts');
   const refreshes = (src: string) => /await recordEligibility\(sql, out\.versionId, fid\);\s*\/\/[^\n]*\n\s*revalidatePath\('\/challenge'\);/.test(src);
-  check('R7 publishing a challenge character\'s fork or version refreshes /challenge', refreshes(designsRoute) && /revalidatePath\('\/challenge'\)/.test(read('src/app/api/challenge/mark/route.ts')));
+  check('R7 publishing a challenge character\'s fork or version refreshes /challenge, as Submit and Withdraw do', refreshes(designsRoute) && (read('src/app/api/challenge/submit/route.ts').match(/revalidatePath\('\/challenge'\)/g) ?? []).length === 2);
   proof('R7 a publish that leaves /challenge stale is caught', !refreshes(designsRoute.replace("revalidatePath('/challenge');", '')));
   // R8: a fork's form chose no style, so every forker met "Choose a style first." with one style on offer.
   const newPage = read('src/app/references/designs/new/page.tsx');
-  const preselect = (f: string, n: string) => /useState<string \| null>\(\(\) => \(p\.source\?\.style && p\.styles\.some\(\(s\) => s\.versionId === p\.source!\.style\) \? p\.source\.style : null\)\)/.test(f) && /style: src\.shown\.body\.style\?\.version_id \?\? null,/.test(n);
-  check('R8 a fork or new version starts with its source\'s style chosen (when still published)', preselect(form, newPage));
-  proof('R8 a form that starts with no style is caught', !preselect(form.replace('useState<string | null>(() => (p.source?.style', 'useState<string | null>(() => (null && p.source?.style'), newPage));
+  // Item 4 (owner, 2026-11-04): through remixDefaults, which keeps the source's style while it is still published.
+  const RD = await import('../src/lib/images/remix-defaults');
+  const preselect = (f: string, n: string) => /useState<string \| null>\(\(\) => remixDefaults\(p\.source \? \{ style: p\.source\.style \} : null, p\.styles\.map\(\(s\) => s\.versionId\)\)\.style\)/.test(f) && /style: src\.shown\.body\.style\?\.version_id \?\? null,/.test(n);
+  check('R8 a fork or new version starts with its source\'s style chosen (when still published)', preselect(form, newPage) && RD.remixDefaults({ style: 'a' }, ['a', 'b']).style === 'a' && RD.remixDefaults({ style: 'gone' }, ['a', 'b']).style === null);
+  proof('R8 a form that starts with no style is caught', !preselect(form.replace('remixDefaults(p.source ? { style: p.source.style } : null', 'remixDefaults(null'), newPage));
   // R9: after the close, a candidate's page still offered "Mark as my entry", which then said "Entries are closed."
   const vp = lines;
-  const closedNoButton = (src: string) => /standing\?\.kind === 'candidate'\)\s*lines\.push\(challengeOpenNow\(now, pub\) \? line\(\{ text: CW\.candidateNote, muted: true, mark: \{ mark: CW\.mark, marked: CW\.marked \} \}\) : line\(\{ text: CW\.candidateClosedNote\(callName\), muted: true \}\)\);/.test(src);
-  check('R9 after the close a candidate shows the closed note and no mark button', closedNoButton(vp) && /Entries are closed/.test(CW.candidateClosedNote('Bai')) && /Bai/.test(CW.candidateClosedNote('Bai')));
-  proof('R9 a mark button offered after the close is caught', !closedNoButton(vp.replace('challengeOpenNow(now, pub) ?', 'true ?')) && !closedNoButton(vp.replace('line({ text: CW.candidateClosedNote(callName), muted: true })', 'line({ text: CW.candidateClosedNote(callName), muted: true, mark: { mark: CW.mark, marked: CW.marked } })')));
+  const closedNoButton = (src: string) => /standing\?\.kind === 'candidate'\)\s*lines\.push\(open \? line\(\{ text: CW\.candidateNote\(callName\), muted: true, submit: submitWords\(false\) \}\) : line\(\{ text: CW\.candidateClosedNote\(callName\), muted: true \}\)\);/.test(src) && /const open = challengeOpenNow\(now, pub\);/.test(src);
+  check('R9 after the close a candidate shows the closed note and no Submit', closedNoButton(vp) && /Entries are closed/.test(CW.candidateClosedNote('Bai')) && /Bai/.test(CW.candidateClosedNote('Bai')));
+  proof('R9 a Submit offered after the close is caught', !closedNoButton(vp.replace('const open = challengeOpenNow(now, pub);', 'const open = true;')) && !closedNoButton(vp.replace('line({ text: CW.candidateClosedNote(callName), muted: true })', 'line({ text: CW.candidateClosedNote(callName), muted: true, submit: submitWords(false) })')));
 }
 
 // --- Launch fixes (owner, 2026-11-03) -----------------------------------------------------------------------------
@@ -923,20 +1166,46 @@ check('as committed, CHALLENGE.entries, posts and openSheets are on (owner\'s re
   // e. Remix, not Fork; the entry line at publish; the share text in the window.
   check('e1 the button and the form\'s title say "Remix" (one wording, every style and sheet)', IW.page.fork === 'Remix' && IW.form.fork === 'Remix' && /\{W\.page\.fork\}/.test(read('src/components/design-bar.tsx')) && /W\.form\.fork/.test(read('src/app/references/designs/new/page.tsx')));
   check('e1 no "Fork" left in what people read', !walk('src').some((f) => /'[^']*\bFork\b[^']*'/.test(stripComments(read(f)))));
-  check('e2 the entry line is the owner\'s words', CW.publishedEntry('Bai') === 'This is your entry for Bai.');
+  // Submit (owner, 2026-11-04) replaces the owner's 2026-11-03 line "This is your entry for Bai." (a draft, for the owner).
+  check('e2 the publish line says to submit it', CW.publishedCandidate('Bai') === 'To enter it for Bai, press Submit on its page, with the link to your post about it.');
   const route = read('src/app/api/designs/route.ts');
   check('e2 the publish route answers with the standing at publish', /const st = await publishStanding\(sql, out\.versionId\);/.test(route) && /page: `\/references\/designs\/\$\{out\.versionId\}`, challenge \}/.test(route));
-  check('e2 the confirmation shows it', /\{entry\?\.kind === 'entry' && `\$\{entry\.text\} `\}/.test(form) && /text: st\.kind === 'entry' \? CW\.publishedEntry\(name\) : CW\.publishedUnchecked\(name\)/.test(route));
+  check('e2 the confirmation shows it', /\{entry\?\.kind === 'candidate' && `\$\{entry\.text\} `\}/.test(form) && /text: st\.kind === 'candidate' \? CW\.publishedCandidate\(name\) : CW\.publishedUnchecked\(name\)/.test(route));
   const share = read('src/components/challenge-share.tsx');
   const vp = read('src/app/references/designs/[id]/page.tsx');
   const shareSwitch = (s1: string, v1: string) => /export function ChallengeShare\(\{ versionId, text, posts \}/.test(s1) && /const shareText = d\.kind === 'character' && isChallengeCharacter\(d\.entity\) && challengeOpenNow\(\) \? CW\.shareTextOpen\(what\) : CW\.shareText\(what\);/.test(v1) && /text=\{shareText\}/.test(v1);
   check('e3 in the window, a challenge sheet\'s share text mentions the challenge; outside it, as before', shareSwitch(share, vp) && /remix challenge/.test(CW.shareTextOpen('Bai: x')) && CW.shareTextOpen('Bai: x').startsWith('Bai: x, made on Snowmoon Party') && CW.shareText('Bai: x') === 'Bai: x, made on Snowmoon Party' && CW.shareTextOpen('x').includes(R.dateText('closes', { time: true })));
   proof('e3 a share text that ignores the window is caught', !shareSwitch(share, vp.replace('challengeOpenNow() ?', 'true ?')));
   // h. Before the open, from CHALLENGE.dates.
-  check('h "Entries open Fri 6 Nov, 09:00 PT", built from CHALLENGE.dates', E.MARK_WORDING.opens() === 'Entries open Fri 6 Nov, 09:00 PT.' && R.shortDateText('opens', { ...CHALLENGE.dates, opens: '2026-11-13T17:00:00Z' }) === 'Fri 13 Nov, 09:00 PT', E.MARK_WORDING.opens());
+  check('h "Entries open Fri 6 Nov, 09:00 PT", built from CHALLENGE.dates', E.SUBMIT_WORDING.opens() === 'Entries open Fri 6 Nov, 09:00 PT.' && R.shortDateText('opens', { ...CHALLENGE.dates, opens: '2026-11-13T17:00:00Z' }) === 'Fri 13 Nov, 09:00 PT', E.SUBMIT_WORDING.opens());
   // i. Neynar down: published, and told on the spot.
   check('i the unchecked line says it won\'t count, and why', /won’t count/.test(CW.publishedUnchecked('Zei')) && /Neynar/.test(CW.publishedUnchecked('Zei')) && /\{entry\?\.kind === 'unchecked' && \(\s*<p className="ic-error ch-unchecked" role="status">\s*\{entry\.text\}/.test(form));
   check('i the confirmation\'s new lines carry a Draft wording line', /\{entry && <p className="as-draft ic-draftline">\{IMAGE_WORDING\.draftLine\}<\/p>\}/.test(form));
+}
+
+// --- Remix defaults (owner, 2026-11-04, item 4) --------------------------------------------------------------------
+{
+  const RD = await import('../src/lib/images/remix-defaults');
+  const src = { style: 's1', front: { url: 'https://pictures.example/f.jpg', sha256: 'a'.repeat(64) }, model: 'gpt-image-2.5-sunburst', moment: 'c9-b14' };
+  const d = RD.remixDefaults(src, ['s1', 's2'], 's2');
+  check('D1 a remix starts with the source\'s style, its front view as the reference picture, the open model and no moment', d.style === 's1' && d.reference?.sha256 === src.front.sha256 && d.model === RD.OPEN_DEFAULT_MODEL && d.moment === null, JSON.stringify(d));
+  check('D1 a source style no longer published falls back to your own pick, then none', RD.remixDefaults({ ...src, style: 'gone' }, ['s1', 's2'], 's2').style === 's2' && RD.remixDefaults({ ...src, style: 'gone' }, ['s1'], null).style === null);
+  check('D2 the model hook: open while model choice is off; the source\'s once it is on and offered', RD.modelFor(src, ['gpt-image-2.5-sunburst'], false) === 'open' && RD.modelFor(src, ['gpt-image-2.5-sunburst'], true) === 'gpt-image-2.5-sunburst' && RD.modelFor(src, [], true) === 'open');
+  check('D2 model choice is still off (branch remix-model-choice), so nothing new is offered', !('modelChoice' in IMAGES.designs) || (IMAGES.designs as { modelChoice?: boolean }).modelChoice === false);
+  check('D3 the moment hook shows nothing until moments ship', RD.momentFor(src) === null && RD.momentFor(src, true) === 'c9-b14');
+  proof('D1 a remix that starts on the source\'s closed model while choice is off is caught', RD.modelFor(src, ['gpt-image-2.5-sunburst'], true) !== RD.remixDefaults(src, ['s1']).model);
+  const sample = read('src/app/api/designs/sample/route.ts');
+  const fromSource = (t: string) => /if \(slot === 'front' && typeof body\.source === 'string'\)/.test(t) && /const bytes = await referencePicture\(f\.url, f\.sha256\);/.test(t) && /const ref = front \?\? \(source \? \{ bytes: source\.bytes, sha256: source\.sha256 \} : null\);/.test(t) && /\.\.\.\(ref \? \{ references: \[\{ sha256: ref\.sha256 \}\] \} : \{\}\),/.test(t);
+  check('D4 a remix\'s front view is made from the source\'s front view, sent as a reference picture and recorded', fromSource(sample));
+  proof('D4 a front that ignores the source is caught', !fromSource(sample.replace('const ref = front ?? (source ? { bytes: source.bytes, sha256: source.sha256 } : null);', 'const ref = front;')));
+  const pub = read('src/app/api/designs/route.ts');
+  const enforced = (t: string) => /if \(srcFront && views\.front && !\(views\.front\.t\.source\?\.sha256 === srcFront\.sha256 && views\.front\.t\.references\?\.some\(\(r\) => r\.sha256 === srcFront\.sha256\)\)\)/.test(t);
+  check('D4 publishing a remix refuses a front view not made from the source', enforced(pub));
+  proof('D4 a publish route that skips the check is caught', !enforced(pub.replace('if (srcFront && views.front &&', 'if (false && srcFront && views.front &&')));
+  const form = read('src/components/design-form.tsx');
+  const minimal = (t: string) => /<details className="dz-section dz-options">[\s\S]{0,400}\{nameField\}\s*\{stylePicker\}\s*<\/details>/.test(t) && /onClick=\{remixAll\}/.test(t) && /\.\.\.\(remixing && slot === 'front' \? \{ source: p\.source!\.versionId \} : \{\}\)/.test(t);
+  check('D5 the least is typing and pressing Remix: one Remix button; the style and name preselected under Options', minimal(form));
+  proof('D5 a form with the options spread out again is caught', !minimal(form.replace('{nameField}\n                {stylePicker}\n              </details>', '</details>')));
 }
 
 console.log(`test:challenge: ${passed} passed, ${failures.length} failed`);
