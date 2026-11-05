@@ -48,7 +48,8 @@ const SOURCE: Record<K, { branch: string; file: string; name: string; twiceSafe:
   '1': { branch: 'check-decisions', file: 'supabase/migrations/NEXT_check_decisions.sql', name: 'NEXT_check_decisions', twiceSafe: true },
   '2': { branch: 'signin-lens-bluesky', file: 'supabase/migrations/NEXT_signin_lens_bluesky.sql', name: 'NEXT_signin_lens_bluesky', twiceSafe: false },
   '3': { branch: 'remix-submit', file: 'supabase/migrations/NEXT_remix_count.sql', name: 'NEXT_remix_count', twiceSafe: true },
-  '4': { branch: 'remix-submit', file: 'supabase/migrations/NEXT_challenge_submit.sql', name: 'NEXT_challenge_submit', twiceSafe: true },
+  // Item 4 (2026-11-04): NEXT_challenge_daily (branch contest) replaces remix-submit's NEXT_challenge_submit.
+  '4': { branch: 'contest', file: 'supabase/migrations/NEXT_challenge_daily.sql', name: 'NEXT_challenge_daily', twiceSafe: true },
   '5': { branch: 'bluesky-check', file: 'supabase/migrations/NEXT_social_bluesky_check.sql', name: 'NEXT_social_bluesky_check', twiceSafe: true },
 };
 const get = (id: string) => {
@@ -185,8 +186,11 @@ const PLANTS: Record<K, [string, string][]> = {
     ['fid check dropped', `alter table studio.sheet_remix_asks drop constraint sheet_remix_asks_fid_check;`],
   ],
   '4': [
-    ['missing policy: writer_delete dropped', `drop policy writer_delete on studio.challenge_marks;`],
-    ['missing grant: 0033 re-run, which revokes delete', stripComments(readFileSync(path.join(ROOT, 'supabase/migrations/0033_remix_challenge.sql'), 'utf8')).replace(/^begin;/, '').replace(/commit;$/, '')],
+    ['missing policy: writer_withdraw dropped', `drop policy writer_withdraw on studio.challenge_marks;`],
+    ['missing grant: 0033 re-run, which takes the column grant', stripComments(readFileSync(path.join(ROOT, 'supabase/migrations/0033_remix_challenge.sql'), 'utf8')).replace(/^begin;/, '').replace(/commit;$/, '')],
+    ['extra grant: delete', `grant delete on studio.challenge_marks to studio_writer;`],
+    ['extra grant: update of the whole row', `grant update on studio.challenge_marks to studio_writer;`],
+    ['constraint dropped: withdrawn before submitted', `alter table studio.challenge_marks drop constraint challenge_marks_withdrawn_after_marked;`],
     ['constraint dropped: the character check', `alter table studio.challenge_marks drop constraint challenge_marks_character_check;`],
     ['public access: anon may read the marks', `grant select on studio.challenge_marks to anon;`],
   ],
@@ -223,7 +227,7 @@ for (const k of ORDER) {
   const file = gitShow(src.branch, src.file);
   if (file === null) log.push(`skip ${k} B against origin/${src.branch}: git show unavailable`);
   else {
-    const from = k === '2' || k === '5' ? file.slice(file.indexOf('-- B. THE MIGRATION')) : file;
+    const from = k === '2' || k === '5' ? file.slice(file.indexOf('-- B. THE MIGRATION')) : k === '4' ? file.slice(file.indexOf('-- 2. The migration.')) : file;
     const m = /^begin;$[\s\S]*?^commit;$/m.exec(from);
     const migration = m ? m[0] : '';
     check(`${k} B is origin/${src.branch}'s ${src.name}, word for word`, migration.trim() === B.trim());
@@ -284,10 +288,10 @@ for (const k of ORDER) {
   for (const k of ORDER) check(`after all five: ${k}C still all true`, allTrue(await readBackA(k)), falseRows(await readBackA(k)).join('; '));
   for (const k of ORDER) check(`after all five: ${k}D still passes`, (await readBackB(k)) === null);
 
-  // Re-running 0033 after 4 removes 4's delete grant; running 4B again restores it. 0033 doesn't undo 5.
+  // Re-running 0033 after 4 removes 4's column grant; running 4B again restores it. 0033 doesn't undo 5.
   await pg.exec(readFileSync(path.join(ROOT, 'supabase/migrations/0033_remix_challenge.sql'), 'utf8'));
   const r4 = await readBackA('4');
-  check('conflict: re-running 0033 after 4 turns Withdraw off (4C row 1 false)', falseRows(r4).length === 1 && /select, insert and delete/.test(falseRows(r4)[0]), falseRows(r4).join('; '));
+  check('conflict: re-running 0033 after 4 turns Withdraw off (4C row 2 false)', falseRows(r4).length === 1 && /update of withdrawn_at only/.test(falseRows(r4)[0]), falseRows(r4).join('; '));
   check('conflict: re-running 0033 does not undo 5 (5C all true)', allTrue(await readBackA('5')));
   await pg.exec(get('4B'));
   check('conflict: running 4B again restores it (4C all true)', allTrue(await readBackA('4')));
