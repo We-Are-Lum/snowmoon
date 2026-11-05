@@ -33,14 +33,12 @@ const EXPECTED = { to: '0x1fa75D26819Ac733bf7B1C1B36C3F8aEF32d2Cc0', value: 0n, 
 /** createApp's arguments (docs/lens-app-registration.md, step 3). */
 const CREATE_APP = {
   metadataUri: METADATA.uri,
-  admins: [],
+  // admins, feeds, groups and signers are left out, not sent as []: Lens refuses an empty list ("Failed to parse
+  // [EvmAddress!]: the value length is 0", owner's run, 2026-11-04). Left out, each is none.
   graph: { globalGraph: true },
   defaultFeed: { globalFeed: true },
-  feeds: [],
   namespace: { globalNamespace: true },
-  groups: [],
   verification: false,
-  signers: [],
 };
 
 type Raw = { type: number; to: string; from: string; nonce: number; gasLimit: number; maxPriorityFeePerGas: string; maxFeePerGas: string; data: `0x${string}`; value: string; chainId: number };
