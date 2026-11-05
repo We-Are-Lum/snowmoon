@@ -1,5 +1,10 @@
 # Sign-in release, legal and consent lines (DRAFT)
 
+**2026-11-05: the owner's reread is done** ("reviewed by the coordinator, approved by the owner"): L12, L16, C1 and
+C2 approved as drafted, and A1 and A2 used, word for word. Recorded: Privacy `1tllgm9` (bluesky-check), Terms `erie8c`,
+consent own-words-v5 noted as approved in `config/consent.json`. Switch commit: Lens and Bluesky sign-in on, the
+Bluesky check on, `LEGAL.effective` 2026-11-05 (it must be the merge day).
+
 **DRAFT**, written by a coding agent (Claude, a closed model made by Anthropic), 2026-11-05, for the coordinator first
 and then the owner. Branch `signin-lens-bluesky`; the release itself is `bluesky-check`, which carries
 `signin-lens-bluesky` and `origin/main` (943fc604, with check-decisions #115 and privacy-furthest-chapter #116).
@@ -20,14 +25,12 @@ choice and closed models (remix-model-choice), closed-model bases, person-balanc
 - **16 Terms and Privacy lines change** (L1–L16 below), **plus consent paragraphs 5 and 6** (C1, C2).
 - **Approved word for word already:** L1–L11, L13–L15 (14 lines). They are in `src/lib/legal.ts` exactly as approved;
   Privacy §3 (L4) joins two approved texts without a new word.
-- **Need the owner's reread:** L12 (Privacy §4, the Bluesky check item, 4.2), L16 (Privacy §7, the Bluesky check item,
-  4.1), C1 and C2 (consent own-words-v5). Optional: A1 and A2 (About), new drafts.
-- **Words keys:** Terms `erie8c` (recorded as reread). Privacy is `1tllgm9` with L12 and L16; the record stays at
-  `m0e1f7` (the approved words without them) until the owner says "reread", so check:principles P6l fails on
-  `bluesky-check` until then, as it should.
+- **Reread 2026-11-05 and approved as drafted:** L12 (Privacy §4, the Bluesky check item, 4.2), L16 (Privacy §7, the
+  Bluesky check item, 4.1), C1 and C2 (consent own-words-v5), and A1 and A2 (About).
+- **Words keys:** Terms `erie8c`, Privacy `1tllgm9` (with L12 and L16), both recorded as reread.
 - **Consent for this release:** `own-words-v5`, Lens and Bluesky only (below). Its closed-model sentence moved out.
 - **Migrations:** SQL pack items 2 and 5 (branch `sql-pack`, `docs/legal/sql-pack-2026-11-04.md`, blocks 2A–2D and
-  5A–5D), apply 2 then 5. test:sql-pack: 164 passed, 0 failed, with 0034 as applied.
+  5A–5D), apply 2 then 5. test:sql-pack: 187 passed, 0 failed, with 0034 as applied (sql-pack 21fe5a18).
 
 ## The consent version for this release: own-words-v5
 
@@ -188,7 +191,7 @@ reread pack 3.4 (check-decisions' Lens item with the Farcaster item's early-remo
 
 > Whether your Lens account passed the check for making images (its Lens score against the score needed), when that was decided, and the score needed then; never the score itself. A pass is kept for 90 days and a fail for a day. A pass is removed sooner if your account is reported or one of your pictures is hidden by a moderator.
 
-### L12. Privacy §4 item 17 — **NEEDS REREAD**
+### L12. Privacy §4 item 17 — **Approved 2026-11-05**
 
 reread pack 4.2, REDRAFTED for the no-numbers rule (owner's OK still owed).
 
@@ -236,7 +239,7 @@ items 5–11, as drafted.
 
 > If you sign in with Bluesky: our server looks up your handle (in its domain's DNS, or at the handle's own web address), your account's public record (at plc.directory, run by Bluesky, or at your own domain), and your Bluesky server (your PDS) and the sign-in server it names, which may be Bluesky's or another provider's. You approve the sign-in on that sign-in server, under its own terms, and it learns that you signed in here. We ask it only to confirm who you are, not to read or post anything for you.
 
-### L16. Privacy §7 item 10 — **NEEDS REREAD**
+### L16. Privacy §7 item 10 — **Approved 2026-11-05**
 
 reread pack 4.1, REDRAFTED for the rolling rule and 'Farcaster or Lens' (owner's OK still owed); keeps the numbers, as the owner allowed for §7.
 
@@ -248,7 +251,7 @@ reread pack 4.1, REDRAFTED for the rolling rule and 'Farcaster or Lens' (owner's
 
 > If you sign in with Bluesky and your Bluesky account isn't linked to a Farcaster or Lens account: when you make an image or a frame, or publish a remix during the remix challenge, and your account has no current check, our server sends your Bluesky account's identifier (its DID, not your handle) to Bluesky's public AppView (public.api.bsky.app), to read when your account was made and its latest posts. This check decides whether you can make images and frames for free and whether a remix can count as an entry. We keep only whether your account passed (at least 30 days old, with at least 5 posts in the last 30 days, when we check) and when, for up to 90 days (a day if it didn't pass); never the dates or posts we read. We check again sooner if your account is reported or one of your pictures is hidden by a moderator. Bluesky is never asked about you when someone views a page.
 
-### C1. Consent own-words-v5, paragraph 5 — **NEEDS REREAD**
+### C1. Consent own-words-v5, paragraph 5 — **Approved 2026-11-05**
 
 New version for everyone (reread pack 3.5/6.1). Title, line and paragraphs 1–4 are v4's, word for word.
 
@@ -260,7 +263,7 @@ New version for everyone (reread pack 3.5/6.1). Title, line and paragraphs 1–4
 
 > It is shown with your name: your Farcaster name; for a wallet account, its address shortened; for a Lens account, its Lens username; for a Bluesky account, its handle.
 
-### C2. Consent own-words-v5, paragraph 6 — **NEEDS REREAD**
+### C2. Consent own-words-v5, paragraph 6 — **Approved 2026-11-05**
 
 **Before** (v4, live):
 
@@ -270,9 +273,9 @@ New version for everyone (reread pack 3.5/6.1). Title, line and paragraphs 1–4
 
 > To make an image, your prompt is sent to Groq to be checked (through Vercel AI Gateway when Groq is busy) and to fal.ai to make it, and your Farcaster ID to Neynar to check your account's score. With a Lens account, its address goes to Lens instead, to check its Lens score; with a Bluesky account, its identifier goes to Bluesky, to check its age and recent posts. In Remix, every frame you make is saved and public at its link as soon as it is made, with your words. Elsewhere, drafts you don’t publish stay on your device.
 
-## About (optional, new drafts; need the owner's reread if used)
+## About (approved 2026-11-05 and used: `src/app/about/page.tsx`)
 
-This release changes no About line in code. Two About sentences become incomplete once Lens and Bluesky sign-in are
+Approved and in code (signin-lens-bluesky 550460c9). Two About sentences become incomplete once Lens and Bluesky sign-in are
 on; they are not legal texts, but the owner may want them in the same release. Shortest true sentence, checked against
 the code (cards and likes take only a Farcaster sign-in, `getFid`; the assistant takes a Farcaster account or one
 linked to it, `getPerson` with `fid > 0`; images take any sign-in that passes its check).
@@ -308,7 +311,7 @@ linked to it, `getPerson` with `fid > 0`; images take any sign-in that passes it
 
 ## The migrations
 
-SQL pack items 2 and 5, as copy blocks: branch `sql-pack` (4dd9631b), `docs/legal/sql-pack-2026-11-04.md`,
+SQL pack items 2 and 5, as copy blocks: branch `sql-pack` (21fe5a18), `docs/legal/sql-pack-2026-11-04.md`,
 sections "2. NEXT_signin_lens_bluesky" (2A–2D) and "5. NEXT_social_bluesky_check" (5A–5D). Paste only those, in that
 order, as `postgres` in the Supabase SQL Editor. Item 1 is applied (0034); 3 and 4 wait for their own releases.
 
@@ -316,11 +319,12 @@ order, as `postgres` in the Supabase SQL Editor. Item 1 is applied (0034); 3 and
   `0x…c0de02`, `did:plc:readbacksigninaaaaaa2345`, FID 2147483646), and so does the branch's own file since 990b2783.
 - **5's dependencies (tested):** 5B's SQL needs only 0033; its read-backs need 0034 (5C errors without it) and 2 (5D
   needs `social_accounts`). So 2 first, then 5.
-- **Tested on PGlite, 2026-11-05:** `npm run test:sql-pack` 164 passed, 0 failed, on 0001–0034. 2: A leaves nothing,
+- **Tested on PGlite, 2026-11-05:** `npm run test:sql-pack` 187 passed, 0 failed, on 0001–0034 (with contest's item 6 after 3 and 4). 2: A leaves nothing,
   B applies, C 12/12, D passes, B twice stops and changes nothing; 5: A leaves nothing, B applies, C 11/11, D passes,
   B twice safe. Planted faults caught: 5 for item 2, 6 for item 5 (including an old rule label). The release alone
   (0034, 2, 5, with no 3 or 4) has 1C, 2C, 5C all true and 1D, 2D, 5D passing. No C or D block contains a real
-  account (checked).
+  account (checked). 5D refuses a made-up account kind (`'x'`) rather than `'lens'`, so it still holds once contest's
+  item 6 lets Lens decisions in.
 - Likely numbers at merge: 2 → 0035, 5 → 0036 (checked again against `origin/main` and production then).
 
 ## What's left before it can ship
@@ -336,17 +340,22 @@ Who does each: **O** the owner, **C** the coordinator, **A** an agent.
   `age30d+5posts30d`), not "made before 6 Nov" (A, checked).
 - [x] **person-balance stays out** (A, checked: neither branch contains it; nor remix-submit, remix-model-choice,
   closed-model-bases).
-- [ ] **Coordinator review** of L12, L16, C1, C2 (and A1, A2 if wanted) (C).
-- [ ] **The owner's reread** of the same (O, phone). Then A records it: `LEGAL.ownerReread.privacy` to the new key,
-  dated that day.
-- [ ] **Switches, in the release commit** (A, after the reread): `SIGN_IN_METHODS` lens and bluesky `on: true`,
-  `SOCIAL_SIGN_IN.bluesky.check.on: true`, `LEGAL.effective` = the merge day.
+- [x] **Coordinator review** of L12, L16, C1, C2, A1, A2 (C, 2026-11-05).
+- [x] **The owner's reread** of the same (O, 2026-11-05), recorded: `LEGAL.ownerReread.privacy` 1tllgm9, 2026-11-05
+  (bluesky-check 435c1bf4); v5 noted approved (550460c9).
+- [x] **Switches** (A, 2026-11-05): `SIGN_IN_METHODS` lens and bluesky `on: true` (550460c9),
+  `SOCIAL_SIGN_IN.bluesky.check.on: true` (435c1bf4), `LEGAL.effective` = 2026-11-05, **which must be the merge day**
+  (the owner plans to merge tonight; if not, change it first).
 - [ ] **The two migrations applied** (O, Supabase SQL Editor, laptop): SQL pack 2A–2D, then 5A–5D. Needed before the
   localhost sign-ins too, because localhost uses the production database (as `studio_writer`).
 - [ ] **One real Lens and one real Bluesky sign-in by the owner on localhost** (O, laptop; steps below).
-- [ ] **The checks on a local build, under the heavy lock** (A): tsc, test:signin-lens-bluesky, test:bluesky-check,
-  test:check-decisions, test:images-gate, test:wallet, check:principles, check:ui, check:miniapp. Run again after the
-  switch commit.
+- [x] **The checks on a local build, under the heavy lock** (A, 2026-11-04 23:32–23:50 PT, `bluesky-check` at
+  414e493e, http://127.0.0.1:3210): tsc 0 errors on both branches; test:signin-lens-bluesky 21/21,
+  test:bluesky-check 64/64, test:check-decisions 44/44, test:images-gate 130, test:wallet 193; check:ui passed (59
+  pages); check:miniapp passed; check:principles 60 of 63, the three fails expected: P6d (accepted open item), P6k
+  (Privacy awaits the reread of L12 and L16) and P6a (only on a local target: the site's own media.snowmoon.party and
+  pictures.snowmoon.party count as third-party when the target is 127.0.0.1).
+- [ ] **The checks again after the switch commit** (A).
 - [ ] **PR from `bluesky-check`** (one PR; it carries signin-lens-bluesky), the owner's OK, merge commit, deploy,
   live checks (check:shipped, check:principles, check:ui, check:miniapp; check:snap-live only if `next.config.ts` or
   middleware changed; this branch changes `next.config.ts`, so run it).

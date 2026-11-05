@@ -376,8 +376,9 @@ export const MODERATOR_FIDS: readonly number[] = [...ADMINS];
 export const SIGN_IN_METHODS = [
   { id: 'farcaster', on: true },
   { id: 'wallet', on: true },
-  { id: 'lens', on: false },
-  { id: 'bluesky', on: false },
+  // On for the sign-in release (owner, 2026-11-05, after the reread: "reviewed by the coordinator, approved by the owner").
+  { id: 'lens', on: true },
+  { id: 'bluesky', on: true },
 ] as const satisfies readonly { id: string; on: boolean }[];
 export type SignInMethod = (typeof SIGN_IN_METHODS)[number]['id'];
 /** The local-only test of four entries (see SIGN_IN_METHODS). */
@@ -469,7 +470,8 @@ export const SOCIAL_SIGN_IN = {
      * sign-in is on.
      */
     check: {
-      on: false as boolean,
+      // On for the sign-in release (owner, 2026-11-05, after the reread of its Privacy lines L12 and L16).
+      on: true as boolean,
       appView: 'https://public.api.bsky.app',
       minAgeDays: 30,
       recentDays: 30,

@@ -43,8 +43,9 @@ export const LEGAL: {
     privacy: { words: string; on: string; by: 'FID 6786' } | null;
   };
 } = {
-  // MERGE DAY: set to the day signin-lens-bluesky merges (the day the Lens and Bluesky lines go live).
-  effective: '2026-11-04',
+  // MERGE DAY: the day the sign-in release (bluesky-check, carrying signin-lens-bluesky) merges and its Lens and Bluesky
+  // lines go live. Set to 2026-11-05 because the owner plans to merge tonight; if the merge moves, this moves with it.
+  effective: '2026-11-05',
   // The owner said "Reread" on 2026-10-10 (words 3iuvyo, 1r2aajz), and on 2026-10-18 of the drafted
   // changes ("I've read the drafted Terms and Privacy changes and approve them: this is my 'reread'"),
   // covering both pages at these words.
@@ -170,16 +171,12 @@ export const LEGAL: {
     // lines were approved word for word, and §3 holds both unchanged (main's furthest-chapter clause, this branch's
     // sign-in phrases), so the combined words are recorded as approved. The words before were iqpiw8 (this branch) and bv4cvf (main).
     // 2026-11-05, merging signin-lens-bluesky (m0e1f7) into contest (1x81p6y): both sets of lines were approved word for
-    // word; §6 holds contest's text with the sign-in byline, so the combined words are recorded as approved.
-    // PENDING the owner's reread (branch bluesky-check, 2026-11-04): Privacy §7's Bluesky check item (4.1, the combined
-    // line, redrafted for the rolling rule: 30 days old and 5 posts in the last 30 days, judged when we check) and §4's
-    // Bluesky check item (4.2, redrafted with no numbers, plus the Farcaster item's early-removal sentence). §4's
-    // challenge items (4.3, 4.4) are approved as drafted. Until the owner OKs 4.1 and 4.2, this record is of the
-    // words before them (on contest: oz9gq1, contest's approved words with the sign-in lines; the 4.3 and 4.4 phrases are approved too, but the record waits for 4.1 and 4.2), so P6l fails on this branch, as it should.
-    // PENDING the owner's reread too (overnight run 2026-11-05, item 4): §4's Submit clause names Lens, now that Submit
-    // checks a Lens post's author: "for a Farcaster, Bluesky or Lens post, the site checks with its network that you wrote it"
-    // (was "for a Farcaster or Bluesky post").
-    privacy: { words: 'oz9gq1', on: '2026-11-04', by: 'FID 6786' },
+    // word; §6 holds contest's text with the sign-in byline, so the combined words are recorded as approved (oz9gq1).
+    // 2026-11-05 ("reviewed by the coordinator, approved by the owner"): the sign-in release's Privacy §4 and §7 Bluesky
+    // check items (L12, L16; bluesky-check 1tllgm9), and on contest §4's Submit clause naming Lens, approved as drafted:
+    // "for a Farcaster, Bluesky or Lens post, the site checks with its network that you wrote it" (was "for a Farcaster
+    // or Bluesky post"). The words before were oz9gq1 (contest) and 1tllgm9 (bluesky-check).
+    privacy: { words: '12o4xqb', on: '2026-11-05', by: 'FID 6786' },
   },
 };
 

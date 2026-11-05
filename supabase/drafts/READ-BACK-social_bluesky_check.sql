@@ -85,7 +85,7 @@ begin
   exception when check_violation then refused := true; end;
   if not refused then raise exception 'READ-BACK FAILED: a Bluesky account''s number was accepted as a Farcaster account'; end if;
   refused := false;
-  begin insert into studio.challenge_eligibility (version_id, challenge, fid, decision, eligible, account) values (v1, 'remix-2026-11', person, 'passed', true, 'lens');
+  begin insert into studio.challenge_eligibility (version_id, challenge, fid, decision, eligible, account) values (v1, 'remix-2026-11', person, 'passed', true, 'x');
   exception when check_violation then refused := true; end;
   if not refused then raise exception 'READ-BACK FAILED: an account kind other than farcaster or bluesky was accepted'; end if;
   refused := false;

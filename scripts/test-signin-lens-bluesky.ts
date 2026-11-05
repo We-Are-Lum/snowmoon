@@ -31,7 +31,7 @@
  *  F4 Wallet accounts are unchanged: they pay from the balance, never the free count.
  *  M1 The migration: dry run, migration and read-back in one file run in order; the drafts are the same blocks; nothing
  *     is readable by anon or authenticated; a realistic row can be added and deleted.
- *  S1 Off: with Lens and Bluesky off (SIGN_IN_METHODS, no local test), every Lens and Bluesky route answers 404.
+ *  S1 Off: with Lens and Bluesky switched off (SIGN_IN_METHODS, no local test), every Lens and Bluesky route answers 404.
  */
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
@@ -43,6 +43,9 @@ const ROOT = path.resolve(import.meta.dirname, '..');
 // --- S1 runs in a child process with nothing turned on ---------------------------------------------------------
 if (process.argv.includes('--off')) {
   delete process.env.NEXT_PUBLIC_SIGN_IN_ALL_FOUR;
+  // The switches are on since the sign-in release (2026-11-05); "off" is tested by turning them off here, as a
+  // deployment with them off would have them.
+  for (const m of (await import('../src/lib/config')).SIGN_IN_METHODS as unknown as { id: string; on: boolean }[]) if (m.id === 'lens' || m.id === 'bluesky') m.on = false;
   process.env.IMAGES_TICKET_SECRET = 'x'.repeat(48);
   const out: Record<string, number> = {};
   const post = (u: string) => new Request(`http://127.0.0.1:3000${u}`, { method: 'POST', body: '{}', headers: { 'content-type': 'application/json' } });
@@ -517,6 +520,11 @@ add({
   id: 'F1',
   name: 'Free generations: a Bluesky-only account gets none anywhere, and has no balance',
   load: async () => {
+    // With the Bluesky check off (its own rules are test:bluesky-check's): since the sign-in release turns it on
+    // (2026-11-05), F1 turns it off here to prove the "none without the check" path.
+    const chk = (SOCIAL_SIGN_IN.bluesky as unknown as { check?: { on: boolean } }).check;
+    const was = chk?.on;
+    if (chk) chk.on = false;
     const r = await blueskyFinish(await blueskyStart());
     const person = (await getPerson(bearer(r.body.token)))!;
     const gate = await mayGenerate(S, person);
@@ -531,6 +539,7 @@ add({
       left: await imageLimits.generationsLeft(S, person),
       remixLeft: await remixLimits.generationsLeft(S, person, 0.01),
       funded: imageLimits.fundedBy(person),
+      ...(chk ? ((chk.on = was!), {}) : {}),
     };
   },
   run: (c) => {

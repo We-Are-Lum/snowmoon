@@ -38,7 +38,7 @@ export interface SubmitWords {
   withdrawn: string;
   /** How many more today, for n = 0 … CHALLENGE.submissionsPerDay. */
   left: string[];
-  /** "Post it first": the head, the note, a label per network, and the post's words (DRAFT wording). */
+  /** "Post it first": the head, the note, a label per network, and the post's words (approved 2026-11-05). */
   postHead: string;
   postNote: string;
   postOn: { farcaster: string; bluesky: string; lens: string };
