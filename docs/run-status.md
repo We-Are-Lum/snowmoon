@@ -6,7 +6,7 @@ merged, applied to production or published during this run; legal lines go to th
 | # | Item | State |
 |---|------|-------|
 | 1 | Recast redo and views; Midjourney first remixes; contact sheet | done (Deluin b needs your words) |
-| 2 | Owed checks on changed branches (M22: the Minpentai session runs it) | waiting for the build lock |
+| 2 | Owed checks on changed branches (M22: the Minpentai session runs it) | 3 of 12 done; rest queued on the lock |
 | 3 | Lane A: challenge-landing task; contest branch; rehearsal; dress run | running (after item 2) |
 | 4 | Lane B: paying per person (design, migration copy blocks, draft lines) | done (branch person-balance; whole-project typecheck owed) |
 | 5 | Lens page: typecheck, running on localhost | waiting |
@@ -46,6 +46,18 @@ check) at a time across both sessions, by a shared lock. M22 is run by the Minpe
 - Terms and Privacy drafts: docs/legal/person-balance-draft.md (Drive: "Snowmoon: Paying per person, Terms and Privacy
   lines (DRAFT)"), reviewed by the coordinator for the shortest-true rule; for the owner's reread.
 
+**2. Checks so far (17:12):** privacy-furthest-chapter, fund-page, check-decisions: check:principles shows only the
+expected P6a (localhost) and P6d (accepted). fund-page also fails P7c because ethereum-rpc.publicnode.com doesn't
+answer from this machine (curl times out; a network problem, not code). Light tests pass on check-decisions (44),
+remix-model-choice (17), signin-lens-bluesky (20/20), signin-reread-list (13/13), bluesky-check (64), sheet-help (127),
+find-a-moment (93).
+
+**3. Lane A so far:** challenge-landing has main merged in (365 challenge tests pass). Branch `contest`: merges done;
+rehearsal switch, local rehearsal database (starts and seeds), one submission per Pacific day (migration
+NEXT_challenge_daily.sql, which replaces the SQL pack's NEXT_challenge_submit.sql); tests pass (challenge 510,
+rehearsal 38, daily-sql 25). Your two values are in .env.rehearsal.local (checked by count only). Typecheck, checks
+and the dress run wait for the lock.
+
 ## Blocked
 
 ## Needs the owner
@@ -59,4 +71,7 @@ check) at a time across both sessions, by a shared lock. M22 is run by the Minpe
   pay (Lens and Bluesky can in the draft; Farcaster still passes Neynar first)? Should the signed statement name the
   account in words? Is 24 hours the right claim window? Remix frames aren't wired yet. A merge conflict with
   remix-submit in one file. principles.md's prepaid exception needs an update when it ships. The browser side is next.
+- **Withdraw on the contest branch keeps the row** (marked withdrawn, so that day's submission isn't given back), so
+  the approved Privacy §4 sentence "If you withdraw a submission, it is deleted" would be false there. Before/after
+  drafts: docs/legal/contest-draft.md on `contest`, for your reread.
 - **The three-looks proposal** for Zei, Bai, Seila and Mu, and a cap if you want them made.
