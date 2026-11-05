@@ -66,6 +66,12 @@ const momentQuotes = (ms: typeof MOMENTS) => ms.flatMap((m) => m.quotes.map((q) 
   proof('a passage quoted at the wrong block fails', quoteProblems(cardQuotes(wrongBlock), blocks).length > 0);
 }
 
+check('config: a current default look per challenge character, each a design id or not set yet', CHALLENGE.characters.every((c) => c in CHALLENGE.defaultLooks && (CHALLENGE.defaultLooks[c] === null || /^[0-9a-f-]{36}$/i.test(CHALLENGE.defaultLooks[c]!))) && Object.keys(CHALLENGE.defaultLooks).every((k) => CHALLENGE.characters.includes(k)));
+{
+  const { REHEARSAL_DEFAULT_LOOKS, REHEARSAL_BASE_IDS } = await import('../src/lib/challenge/rehearsal-switch');
+  check('rehearsal: Deluin\'s and Gladias\' default looks are their look b (the third stand-in base)', REHEARSAL_DEFAULT_LOOKS.deluin === REHEARSAL_BASE_IDS.deluin[2] && REHEARSAL_DEFAULT_LOOKS.gladias === REHEARSAL_BASE_IDS.gladias[2]);
+}
+
 // --- The moments (owner, 2026-11-05, answer 4: all fifteen, no reserves) --------------------------------------------
 {
   check('moments: fifteen at launch', MOMENTS.length === 15, String(MOMENTS.length));
@@ -308,6 +314,24 @@ const momentQuotes = (ms: typeof MOMENTS) => ms.flatMap((m) => m.quotes.map((q) 
   const V = await import('../src/lib/challenge/picture-view');
   const pv = await V.pictureView(S, second.versionId);
   check('a picture\'s page: its character and moment with its chapter, and Submit for its maker with the post text naming the moment', pv?.title === 'Bai · The championship final (Ch 7)' && pv.submit?.postText === 'Bai at The championship final, my remix for the Snowmoon Party remix challenge' && pv.w.signInLine === 'Sign in with Farcaster, Lens or Bluesky to enter.');
+  // The feed (/challenge/remixes) with pictures as the entries: the challenge pictures, newest first, by character,
+  // each linking to its page, with the viewer's own Newest / Shuffled order and no count.
+  const RV = await import('../src/lib/challenge/remixes-view');
+  const feed = await RV.remixesView(S, { character: null, before: null });
+  const pics = await P.challengePictures(S);
+  check('feed: every challenge picture, newest first, each linking to its page, with the moment as its title', feed.cards.map((c) => c.versionId).join() === pics.map((p) => p.versionId).join() && feed.cards.every((c) => c.href === `/challenge/p/${c.versionId}`) && feed.cards.some((c) => c.title === 'The quarterfinal') && feed.order !== null);
+  const zeiFeed = await RV.remixesView(S, { character: 'zei', before: null });
+  check('feed: the character filter shows that character\'s pictures only', zeiFeed.cards.length === 0 && (await RV.remixesView(S, { character: 'bai', before: null })).cards.every((c) => c.character === 'bai'));
+  check('feed: no sheet remix in it while pictures are the entries', !feed.cards.some((c) => c.versionId === fork.versionId));
+  // Current default looks (owner, answer 10): the config's sheet for the other characters in a moment; else the first base.
+  const zeiB = await DS.makeDesign(S as never, { fid: 6786, mode: 'create', kind: 'character', character: DS.bookCharacter('zei')!, body: sheet('Zei, look b', 30) });
+  CHALLENGE.bases = { ...CHALLENGE.bases, zei: [zeiBase.versionId, zeiB.versionId] };
+  check('default look: without a setting, the first base', (await P.defaultLook(S, 'zei', { zei: null }))?.versionId === zeiBase.versionId);
+  check('default look: the sheet the config names (look b), not the first base', (await P.defaultLook(S, 'zei', { zei: zeiB.versionId }))?.versionId === zeiB.versionId);
+  const zeiFront = await DS.makeDesign(S as never, { fid: 6786, mode: 'create', kind: 'character', character: DS.bookCharacter('zei')!, body: sheet('Zei, current front (not a base)', 31) });
+  check('default look: a current front that isn\'t one of the bases can be named (Bai\'s Garance front)', (await P.defaultLook(S, 'zei', { zei: zeiFront.versionId }))?.versionId === zeiFront.versionId);
+  proof('default look: an id that is another character\'s sheet is not used', (await P.defaultLook(S, 'zei', { zei: base.versionId }))?.versionId !== base.versionId);
+  check('the hub still shuffles every base: the default look sets no order there', /setBases\(c\.bases\.length > 1 \? shuffleFresh\(c\.bases\) : c\.bases\)/.test(read('src/components/challenge-card.tsx')) && !/defaultLook/.test(read('src/lib/challenge/view.ts')));
   // The make API (GET): the screen's data for a base; 404 for anything else. POST without a sign-in: 401 (P4a). The app's
   // own connection (db()) is a second one, and PGlite's socket server takes one at a time: this test's closes first.
   await sql.end();

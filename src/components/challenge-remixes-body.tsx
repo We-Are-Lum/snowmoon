@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import type { RemixesView } from '~/lib/challenge/remixes-view';
 import { RemixCardView } from './challenge-remix-card';
+import { ChallengeEntriesList } from './challenge-entries-list';
 
 /**
  * /challenge/remixes ("See all"), drawn from its data (src/lib/challenge/remixes-view.ts), which carries every word.
@@ -24,7 +25,9 @@ export function ChallengeRemixesBody({ v }: { v: RemixesView }) {
         ))}
       </nav>
       <p className="dz-note">{v.note}</p>
-      {v.cards.length ? (
+      {v.cards.length && v.order ? (
+        <ChallengeEntriesList all={v.cards} w={{ newest: v.order.newest, shuffled: v.order.shuffled, orderLabel: v.order.label, cards: v.cardWords }} />
+      ) : v.cards.length ? (
         <ul className="ch-cards ch-feed" role="list">
           {v.cards.map((r) => (
             <RemixCardView key={r.versionId} r={r} w={v.cardWords[r.character] ?? { name: r.character, untitled: r.character, alt: '' }} />

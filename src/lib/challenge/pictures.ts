@@ -108,7 +108,7 @@ export type Source =
   | { kind: 'sheet'; versionId: string; character: string; url: string; sha256: string; width: number; height: number; text: string; title: string; by: string | null; byFid: number; versionNo: number; moment: null }
   | { kind: 'picture'; versionId: string; character: string; url: string; sha256: string; width: number; height: number; moment: string; by: string | null; byFid: number };
 
-export async function sourceOf(sql: Sql, versionId: string): Promise<Source | null> {
+export async function sourceOf(sql: Sql, versionId: string, opts: { anySheet?: boolean } = {}): Promise<Source | null> {
   if (!/^[0-9a-f-]{36}$/i.test(versionId)) return null;
   const [d] = await sql`
     select v.id, v.body, v.version_no, e.created_by_fid, en.name from studio.element_versions v
@@ -121,7 +121,7 @@ export async function sourceOf(sql: Sql, versionId: string): Promise<Source | nu
     if (!character || !f) return null;
     // Once the character's bases are picked, only a base is a sheet to start from (by its element or version id).
     const picked = basesOf(character);
-    if (picked.length) {
+    if (picked.length && !opts.anySheet) {
       const [e] = await sql<{ element_id: string }[]>`select element_id::text from studio.element_versions where id = ${versionId}`;
       if (!picked.includes(String(d.id).toLowerCase()) && !picked.includes(String(e?.element_id ?? '').toLowerCase())) return null;
     }
@@ -134,20 +134,23 @@ export async function sourceOf(sql: Sql, versionId: string): Promise<Source | nu
 }
 
 /**
- * A character's current default look (owner, answer 10): the front view of its first base (CHALLENGE.bases, in the
- * order the owner listed them: the current default look first), or before the bases are picked its newest published
- * sheet. For the other characters in a moment, sent as reference pictures. Null when there is none.
+ * A character's current default look (owner, answer 10, and the accounts session, 2026-11-05: "drawn from their CURRENT
+ * DEFAULT LOOKS"): the published sheet CHALLENGE.defaultLooks names for the character (an element id, at its newest
+ * version, or a version id); without one, its first base; before the bases are picked, its newest published sheet. Only
+ * for the site's own pictures: the other characters in a moment, sent as reference pictures. The hub still shows a
+ * character's bases in a fresh random order (P5g); this names no base as the default there. Null when there is none.
  */
-export async function defaultLook(sql: Sql, character: string): Promise<Extract<Source, { kind: 'sheet' }> | null> {
+export async function defaultLook(sql: Sql, character: string, looks: Record<string, string | null> = CHALLENGE.defaultLooks): Promise<Extract<Source, { kind: 'sheet' }> | null> {
   const name = bookCharacter(character)?.name;
   if (!name) return null;
-  const first = basesOf(character)[0] ?? null;
+  const set = looks[character] ?? null;
+  const want = set && /^[0-9a-f-]{36}$/i.test(set) ? set.toLowerCase() : (basesOf(character)[0] ?? null);
   const rows = await sql`
     select v.id from studio.element_versions v join studio.elements e on e.id = v.element_id join studio.entities en on en.id = e.entity_id
     where e.element_type = 'design' and e.status = 'published' and e.work_id = ${WORK_ID} and en.kind = 'character' and en.name = ${name}
-      ${first ? sql`and (v.id::text = ${first} or e.id::text = ${first})` : sql``}
-    order by v.created_at desc limit 1`;
+      ${want ? sql`and (v.id::text = ${want} or e.id::text = ${want})` : sql``}
+    order by (v.id::text = ${want ?? ''}) desc, v.version_no desc, v.created_at desc limit 1`;
   if (!rows[0]) return null;
-  const s = await sourceOf(sql, String(rows[0].id));
+  const s = await sourceOf(sql, String(rows[0].id), { anySheet: true });
   return s?.kind === 'sheet' ? s : null;
 }

@@ -33,8 +33,7 @@ T1 names Lens (owner, 2026-11-05 evening, via the accounts session: who can ente
 with Farcaster, Lens or Bluesky to enter."). No thresholds in the legal lines. T5 and T6 follow the owner's launch goal
 (2026-11-05 evening: "There is no prize for now."; nothing promised about a final version, mint, prize, rewards,
 deep funding or payout). Open for the coordinator: the IPFS record sentence ("When entries close, a record of every
-entry is published to IPFS and referenced on Ethereum …") is kept, with T4's one-word change; if the record isn't
-planned for this launch, it should go too.
+entry is published to IPFS and referenced on Ethereum …"): see "The IPFS record" below.
 
 ## Privacy §4
 
@@ -47,6 +46,25 @@ planned for this launch, it should go too.
 | P5 | Whether a version is an entry is shown on its page and on the challenge page, with how many people have submitted for each character. | Whether a picture is an entry is shown on its page and on the challenge page, with how many people have submitted for each character. |
 
 The IPFS record sentence of §4 (if it carries "a fingerprint of its pictures and recipe") changes as T4 does.
+
+## The IPFS record (Terms §6e and Privacy §4)
+
+Checked on this branch, 2026-11-05: **nothing writes the record yet.** No code or script in the repository publishes
+anything to IPFS or Ethereum; the only mention is the legal text itself. Legal texts describe today, so the draft is
+to remove it (option R). If the owner wants to keep it as a promise for the close, option K says it for Lens too and
+says exactly what hiding does. The owner decides.
+
+| # | Before (word for word) | Option R: remove (recommended while nothing writes it) | Option K: keep, fixed |
+|---|---|---|---|
+| T-IPFS (Terms §6e) | When entries close, a record of every entry is published to IPFS and referenced on Ethereum, where it can't be removed: a fingerprint of its pictures and recipe (not the pictures or words themselves), its maker's Farcaster ID (or, for a Bluesky account, its DID), when it was published and what it was built on; hiding a version later removes it from the Service, but not its fingerprint from that record. | *(sentence removed)* | When entries close, a record of every entry is published to IPFS and referenced on Ethereum, where it can't be removed: a fingerprint of its picture and recipe (not the picture or words themselves), the public id of the account it was entered from (a Farcaster ID, a Lens address or a Bluesky DID), when it was published and what it was built on. Hiding an entry's picture later takes the picture and its page off the Service and ends it as an entry, but its fingerprint stays in the record. |
+| P-IPFS (Privacy §4) | When entries close, a record of every entry is published to IPFS and referenced on Ethereum, where it can't be removed: a fingerprint of its pictures and recipe (not the pictures or words themselves), its maker's Farcaster ID (or, for a Bluesky account, its DID), when it was published and what it was built on. Hiding a version later removes it from this site, but not its fingerprint from that record. | *(item removed)* | When entries close, a record of every entry is published to IPFS and referenced on Ethereum, where it can't be removed: a fingerprint of its picture and recipe (not the picture or words themselves), the public id of the account it was entered from (a Farcaster ID, a Lens address or a Bluesky DID), when it was published and what it was built on. Hiding a challenge picture takes the picture and its page off this site and ends it as an entry; if it was in the record, its fingerprint stays there. |
+
+What hiding a challenge picture does today (checked in code): the picture's element is marked hidden, its file leaves
+the public bucket (P5c), and it is no longer listed on /challenge, in "Every entry" or the feed, and is no longer an
+entry (the entry lists read published pictures only). Its submission row stays on record as it does for a withdrawn one.
+
+With option R, T4 and the "fingerprint" rows above fall away. Keys: lane B's provisional keys (Terms qkqyr4, Privacy
+1gnotiz) will change once the owner's reread picks R or K.
 
 ## Privacy §6
 

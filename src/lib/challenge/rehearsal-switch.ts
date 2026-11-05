@@ -80,3 +80,16 @@ export const REHEARSAL_BASE_IDS: Record<string, readonly string[]> = {
   deluin: [rid(5, 1), rid(5, 2), rid(5, 3)],
   mu: [rid(6, 1)],
 };
+
+/**
+ * The rehearsal's current default looks (branch challenge-moments): Deluin's and Gladias' look b (their third stand-in
+ * base, recast b), and the one stand-in base of each of the others. Rehearsal stand-ins only.
+ */
+export const REHEARSAL_DEFAULT_LOOKS: Record<string, string | null> = {
+  zei: rid(1, 1),
+  gladias: rid(2, 3),
+  bai: rid(3, 1),
+  seila: rid(4, 1),
+  deluin: rid(5, 3),
+  mu: rid(6, 1),
+};

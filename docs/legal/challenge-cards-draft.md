@@ -4,7 +4,9 @@ Drafted by a coding agent (Claude, a closed model by Anthropic), 2026-11-05, on 
 
 How to approve: say "cards approved" (with any changes) and "scene lines approved"; the agent then sets `CHALLENGE.cardsApproved` and `CHALLENGE.sceneLinesApproved` to true. `check:principles` P2m refuses `CHALLENGE.public` on until both are true.
 
-Marks on the page: the one line and the description carry "This edition’s summary"; every picture’s ⓘ says "Look invented by this edition: the book doesn’t describe it."; the second layer opens with "May spoil later chapters." First-layer facts cite chapters 1–14 only (P9g).
+Marks on the page: the one line and the description carry "This edition’s summary"; every picture’s ⓘ says "Look invented by this edition: the book doesn’t describe it."; the second layer opens with "May spoil later chapters." First-layer facts cite chapters 1–14 only (P9g). **That cutoff is the agent's rule, for the owner to confirm** (the owner's answer asked for a first layer "without major twists"; chapters 1–14 is the agent's reading of it).
+
+Other characters in a moment are drawn from their current default looks (`CHALLENGE.defaultLooks`: Deluin's and Gladias' look b; the current fronts of Zei, Bai, Seila and Mu, Bai's from Garance's edit). They are unset until those sheets are published, and each character's first base stands in until then.
 
 ## Zei
 

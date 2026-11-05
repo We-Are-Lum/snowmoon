@@ -1,4 +1,4 @@
-import { REHEARSAL_BASE_IDS, rehearsalChallenge, rehearsalOn, rehearsalOnInBrowser } from './challenge/rehearsal-switch';
+import { REHEARSAL_BASE_IDS, REHEARSAL_DEFAULT_LOOKS, rehearsalChallenge, rehearsalOn, rehearsalOnInBrowser } from './challenge/rehearsal-switch';
 /**
  * One source of truth for constants (Build Brief rule 7).
  * Caps, thresholds, moderator FIDs, and model names live here as they are added.
@@ -583,6 +583,16 @@ export const CHALLENGE = {
    * before the picks.
    */
   bases: { zei: [], bai: [], gladias: [], seila: [], deluin: [], mu: [] } as Record<string, readonly string[]>,
+  /**
+   * Each character's current default look (owner, 2026-11-05, answer 10; the accounts session's note of that evening):
+   * a published sheet's element id (at its newest version) or version id. Used only for the site's own pictures: the
+   * other challenge characters in a moment are drawn from it, as reference pictures (src/lib/challenge/pictures.ts,
+   * defaultLook). Deluin and Gladias: their look b; Zei, Bai, Seila and Mu: their current front (Bai's is the front made
+   * from Garance's edit, challenge-styles bai-animated-gpt-garance.jpg). Null until that sheet is published here: then
+   * the character's first base stands in. /challenge still shows the bases in a fresh random order (P5g); this sets no
+   * base above the others there.
+   */
+  defaultLooks: { zei: null, gladias: null, bai: null, seila: null, deluin: null, mu: null } as Record<string, string | null>,
   /** How many bases each character has (owner, 2026-11-04): three for Deluin and Gladias, one for the rest for now. */
   baseCount: { zei: 1, gladias: 3, bai: 1, seila: 1, deluin: 3, mu: 1 } as Record<string, number>,
   /** The most bases any character may have. */
@@ -698,6 +708,7 @@ if (REHEARSAL.on) {
   CHALLENGE.public = true;
   // The rehearsal database's stand-in bases (scripts/rehearsal-db.ts), never the real ones.
   CHALLENGE.bases = REHEARSAL_BASE_IDS;
+  CHALLENGE.defaultLooks = REHEARSAL_DEFAULT_LOOKS;
   // Entries as pictures, on this machine only, for rehearsal 2 (branch challenge-moments): the legal lines that describe
   // them are drafts (docs/legal/challenge-moments-draft.md), so production keeps it off (P6ac, P6w).
   CHALLENGE.pictureEntries = true;
