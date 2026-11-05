@@ -1538,6 +1538,18 @@ add({
 // Keys that bypass row-level security, or connect as the database owner, must
 // not sit on the Vercel project at all (owner decision, Oct 5, 2026).
 const FORBIDDEN_VARS = /^(SUPABASE_SERVICE_ROLE_KEY|SUPABASE_SECRET_KEY|SUPABASE_JWT_SECRET|POSTGRES_[A-Z0-9_]*)$/;
+// Branch contest-rehearsal is for the agents' dress runs only and must never merge to main (owner, 2026-11-04): its
+// marker file makes this check fail, so a pull request from it can't pass check:principles.
+add({
+  id: 'P6z',
+  principle: 6,
+  name: 'not the rehearsal-only branch (contest-rehearsal, with the dress run\'s test sign-in, must never merge to main)',
+  load: async () => ({ marker: existsSync(path.join(ROOT, 'REHEARSAL_ONLY_BRANCH.md')) }),
+  run: (c) => (c.marker ? ['REHEARSAL_ONLY_BRANCH.md is here: this is branch contest-rehearsal, which must never merge to main'] : []),
+  plant: (c) => {
+    c.marker = true;
+  },
+});
 // The rehearsal switch (branch contest, 2026-11-04): CHALLENGE_REHEARSAL=on runs the challenge as if opened, with admins
 // eligible and test stand-ins, on this machine only. Production must ignore it, and so must any Vercel deployment and
 // any database that isn't on this machine; the config must read it only through rehearsalOn, and the target must not

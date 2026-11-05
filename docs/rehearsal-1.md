@@ -1,5 +1,8 @@
 # Rehearsal 1: the remix challenge, Farcaster only (DRAFT)
 
+> **This copy is on branch `contest-rehearsal`, which must never merge to main** (see `REHEARSAL_ONLY_BRANCH.md`). It
+> carries the agents' dress-run stand-ins. The owner's rehearsal runs from branch `contest`.
+
 Written by the coding agent (Claude, a closed model by Anthropic), 2026-11-04, on branch `contest`. DRAFT until the
 owner approves it.
 
