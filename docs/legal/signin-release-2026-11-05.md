@@ -398,9 +398,9 @@ Before: the two migrations applied (above). Bluesky works only at **http://127.0
    ```
    mkdir ~/.snowmoon-heavy.lock
    ```
-6. Start the site with all four sign-ins shown (local only), keeping a copy of its output:
+6. Start the site, keeping a copy of its output (Lens and Bluesky are on in the config now, so no extra flag):
    ```
-   NEXT_PUBLIC_SIGN_IN_ALL_FOUR=1 npm run dev -- -H 127.0.0.1 -p 3000 2>&1 | tee /tmp/snowmoon-dev.log
+   npm run dev -- -H 127.0.0.1 -p 3000 2>&1 | tee /tmp/snowmoon-dev.log
    ```
 7. In your browser open **http://127.0.0.1:3000/you** and choose **Sign in with Lens**; sign with the wallet that
    owns your Lens account.
