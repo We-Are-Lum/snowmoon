@@ -125,7 +125,7 @@ Builds on: rules A1–A8 (`docs/proposals/linked-accounts.md` on `signin-reread-
 - Any other sign-in can ask for a new main sign-in: itself or another linked sign-in. Only one request is pending at a
   time.
 - The request takes effect **30 days** after it was made, at the same time of day, unless cancelled.
-- **Only the main sign-in can cancel it** (owner). Unlinking the requester also ends it, and only the main can do that.
+- **Only the main sign-in can cancel it** (owner). Unlinking the requester (by the main, or by the requester itself) also ends it.
 - **Meanwhile:**
   - A banner shows on the You page for every sign-in of the account: "Someone using @bea asked to become your main
     sign-in on 7 Nov. It takes effect on 7 Dec unless your main sign-in cancels it."
@@ -133,8 +133,8 @@ Builds on: rules A1–A8 (`docs/proposals/linked-accounts.md` on `signin-reread-
 - **Mini-app notification:** where the Snowmoon account has a Farcaster sign-in and that Farcaster account has added
   the Snowmoon mini app with notifications on, one notification is sent when the request is made, and one when it is
   cancelled or takes effect.
-  - The text is: "A request to change your Snowmoon account's main sign-in was made. If it wasn't you, cancel it
-    before 7 Dec." It carries no handle.
+  - The text is: "A request to change your Snowmoon account's main sign-in was made. If it wasn't you, your main
+    sign-in can cancel it before 7 Dec." It carries no handle.
   - It goes through the Farcaster app's notification address, which that app gave with the token.
   - We keep the token with the Farcaster ID until notifications are turned off or the mini app is removed.
   - Privacy doesn't cover this today, so lines are drafted in section 8.
@@ -473,7 +473,7 @@ social account or wallet (needs your main sign-in)"; "Ask to become the main sig
 single-sign-in nudge and the existing-wallet notice (sections 1 and 2). Refusals:
 - "Only your main sign-in can do that. Sign in with lens/bea to continue."
 - "Your Snowmoon account already has a Lens account."
-- "lens/bea was unlinked on 11 Dec. It can join another Snowmoon account from 10 Jan."
+- "lens/bea was unlinked on 11 Dec. It can join another Snowmoon account, or start one, from 10 Jan."
 - "This account has moved between Snowmoon accounts twice this year. It can move again from 8 Nov 2027."
 - "This sign-in left a Snowmoon account on 11 Dec. It can join another or start a new one from 10 Jan."
 - "To submit, sign in with one of your social accounts (Farcaster, Lens or Bluesky): your entry links to your own post
@@ -552,7 +552,7 @@ Still open:
   the main sign-in.
 - **5 (nothing canon):** pass. No manual merges or recoveries. Lists are newest first.
 - **6 (privacy; texts describe today):** concern. Every line is a draft. The approved §6 is superseded and needs a
-  new approval. Open question 1 changes a live promise for existing wallet links. Like totals count each Snowmoon
+  new approval. Existing wallet links change meaning (accepted by the owner, with a notice). Like totals count each Snowmoon
   account once.
 - **7 (payments never enter scoring or ordering):** pass. One balance moves no money between people. Paying never
   creates a pass, a bonus or an entry.
