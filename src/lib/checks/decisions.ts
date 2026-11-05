@@ -9,7 +9,7 @@ import { socialAccount } from '../social/accounts';
  * decision, not the score"). One store for every network: the Neynar score (wired today, src/lib/images/neynar.ts),
  * the Lens score (branch signin-lens-bluesky) and the Bluesky check (branch bluesky-check).
  *
- * What is kept, in studio.check_decisions (migration NEXT_check_decisions): the network, the account (a FID in digits,
+ * What is kept, in studio.check_decisions (migration 0034_check_decisions): the network, the account (a FID in digits,
  * a Lens address, a DID), the rule it was checked against (`threshold`, text: 'neynar-score>=0.7',
  * 'lens-score>=1000', 'made-before-2026-11-06+5posts30d'), whether it passed, and when. Never a score, an age, a count.
  *
