@@ -6,7 +6,7 @@ beyond the two named, no migrations on production, nothing published. Spending t
 | # | Item | Lane | State |
 |---|------|------|-------|
 | — | Merge check-decisions, then privacy-furthest-chapter | coordinator | done: #115 (9d2e24d, migration 0034) and #116 (943fc60); live checks pass (P6d only); /challenge 404; live Privacy shows both |
-| — | check:ui on main after both merges | coordinator | running (heavy lock) |
+| — | check:ui on main after both merges | coordinator | done: passed, 59 pages (local build of 943fc60) |
 | 1 | Verify the Lens App on Lens's side, set SOCIAL_SIGN_IN.lens.app | A | verified (below); config being set |
 | 2 | Split the sign-in release from model choice | A | in progress |
 | 3 | Sign-in release ready to merge (main in, checks, legal before/after, SQL items 2 and 5, morning checklist) | A | in progress |
