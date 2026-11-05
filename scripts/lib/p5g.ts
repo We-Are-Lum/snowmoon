@@ -93,7 +93,7 @@ export function p5gProblems(files: { file: string; text: string }[]): string[] {
  * else. Reads the card, the random selection, the feed page and the remixes' server code (comments aside). A viewer's
  * "most remixed" sort may come back after entries close, by the owner's decision then.
  */
-export const P5I_FILES = ['src/components/challenge-remix-card.tsx', 'src/components/challenge-remix-pick.tsx', 'src/app/challenge/remixes/page.tsx', 'src/lib/challenge/remixes.ts'];
+export const P5I_FILES = ['src/components/challenge-remix-card.tsx', 'src/components/challenge-remix-pick.tsx', 'src/app/challenge/remixes/page.tsx', 'src/lib/challenge/remixes.ts', 'src/lib/challenge/remixes-view.ts', 'src/components/challenge-remixes-body.tsx'];
 const A_COUNT = /\bcount\s*\(|\b(likes?|like_?count|likeCount|built_?on|builtOn|remix_?count|remixCount|remixes_?count|versions|score|popular\w*|most[ _-]?remixed|mostRemixed|trending)\b/i;
 export function p5iProblems(files: { file: string; text: string }[]): string[] {
   const problems: string[] = [];
