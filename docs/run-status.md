@@ -42,7 +42,23 @@ beyond the two named, no migrations on production, nothing published. Spending t
 
 ---
 
-# Run status: hour run of 2026-11-05 (from about 11:05 PT)
+# Run status: overnight run of 2026-11-05 → 6 Nov (launch for friends Fri afternoon)
+
+The accounts session (snowmoon-9c). Pushed after each item. No secrets. Tonight: no merges except #119 (done) and the admin
+dashboard on the owner's word, no production migrations, nothing published, at most $2 on test images. Legal lines go to the
+coordinator first.
+
+| # | Item | State |
+|---|------|-------|
+| 0 | #119 assistant step 1 merged (41b37c8b), live since 15:10 PT | live checks queued |
+| 0 | Admin dashboard: label fixed, main merged, combined Privacy key kwoekw (bde853d5) | pre-merge checks queued, then merge |
+| A | Launch slice on challenge-moments (cards, moments remix, back fixes, share-first, Submit paste, own-post checks, rules lines) | running |
+| B | Morning release doc (PRs in order, migrations re-tested, lines to reread, 20-min production test) | running (branch launch-2026-11-06) |
+
+---
+
+# Earlier: hour run of 2026-11-05
+
 
 The accounts session (snowmoon-9c). Pushed after each item. No secrets here. While the owner is away: no merges except
 the You page wording (the owner's word for that one merge), no migrations on production, nothing published, no image
