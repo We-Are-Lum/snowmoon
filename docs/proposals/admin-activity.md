@@ -147,10 +147,11 @@ the pick code.
 
 ## 8. Per person
 
-Only the public: a search box takes a name or handle and resolves it with `resolveHandle` (`src/lib/adaptation-pages.ts`),
-then lists that person's published sheets, images, scene versions and frames (the lists of section 5, filtered by
-maker) and their challenge entries (from `standing`). No private count, no sign-in time, no balance, no eligibility, no
-reports made or received.
+Only the public: an admin picks a person from a byline in the lists ("only theirs"; no text box, so nothing typed is
+sent, P1f). The name is resolved in the transaction (a Farcaster name the site has seen in `account_names`, a wallet's
+address, or a Lens/Bluesky handle), and the answer then holds that person's published sheets, remixes, images, scene
+versions and frames, and their challenge entries, and no counts at all: no private count, no sign-in time, no balance,
+no eligibility, no reports made or received.
 
 ---
 
@@ -293,5 +294,10 @@ As designed above, with these specifics:
 - `npm run test:admin-activity`: PGlite with every migration, run as `studio_writer`; gate, read-only refusal,
   optional tables added mid-test, Pacific/UTC days, totals, public rows only, a scan for private values, and the P5b
   and P6aa planted faults.
+- The public lists use their own queries inside the read-only transaction (not `listDesigns` or `publicCatalogue`,
+  which use their own connection or call Farcaster), with the site's byline helpers (`byline`, `designByline`).
+- check:principles on a local build (production settings set aside, so no production read): 56 pass, 2 fail (P6a,
+  which fails on every localhost run because media.snowmoon.party isn't the target's domain; P6d, the accepted open
+  item), 6 not run (they need the database), 64 of 64 proven. P5b, P6aa and P1f pass.
 - Not built: the Privacy line (a draft for the owner); scene bylines show the stored name and skip the linked-wallet
   credit that scene pages apply (an admin-only view, so a wallet-linked scene may show its address here).
