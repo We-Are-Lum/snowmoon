@@ -94,7 +94,19 @@ if (!seeded) {
   // The day before the rehearsal opens (it opens at the start of today, Pacific): "made before the window".
   const made = new Date(Date.now() - 36 * 3600_000).toISOString();
   const styles = ['core', 'mood', 'quiet'];
-  const title = { core: 'Core', mood: 'Mood', quiet: 'Quiet' } as Record<string, string>;
+  // The styles the drafts were made in, published here as they are recorded in each draft's recipe (the remix form
+  // needs a published style for the views).
+  const styleOf = new Map<string, { version_id: string; title: string; text: string }>();
+  for (const x of ledger.calls) {
+    const st = x.kind === 'image' && x.file && /-(core|mood|quiet)-edit\.jpg$/.test(x.file) ? (x.recipe?.style as { version_id: string; title: string; text: string } | undefined) : undefined;
+    if (st && !styleOf.has(st.version_id)) styleOf.set(st.version_id, st);
+  }
+  for (const [k, st] of [...styleOf.values()].entries()) {
+    const entity = `00000000-0000-4000-8000-0000000005${String(10 + k)}`;
+    await db.query(`insert into studio.entities (id, work_id, kind, name) values ($1,'snowmoon','style',$2) on conflict do nothing`, [entity, st.title]);
+    await db.query(`insert into studio.elements (id, work_id, element_type, created_by_fid, entity_id, status, created_at) values ($1,'snowmoon','design',6786,$2,'published',$3)`, [st.version_id.replace(/^.{8}/, '0000e1e5'), entity, made]);
+    await db.query(`insert into studio.element_versions (id, element_id, version_no, body, created_at) values ($1,$2,1,$3,$4)`, [st.version_id, st.version_id.replace(/^.{8}/, '0000e1e5'), JSON.stringify({ title: st.title, text: st.text, samples: [], views: {}, by_name: 'naaate', by_name_source: 'relay', assist: null }), made]);
+  }
   for (const [ci, c] of characters.entries()) {
     const ids = REHEARSAL_BASE_IDS[c];
     const name = nameOf(c);
@@ -110,8 +122,9 @@ if (!seeded) {
       mkdirSync(path.join(STORE, 'public', path.dirname(key)), { recursive: true });
       writeFileSync(path.join(STORE, 'public', key), bytes);
       const element = versionId.replace(/^.{8}/, '0000e1e0');
+      const st = call.recipe.style as { version_id: string; title: string };
       const body = {
-        title: `${name.split(' ')[0]}, rehearsal stand-in (${title[styles[i]]})`,
+        title: `${name.split(' ')[0]}, rehearsal stand-in (${st.title})`,
         text: `A rehearsal stand-in for ${name.split(' ')[0]}'s base: a draft from branch challenge-styles, not published on the site.`,
         samples: [],
         views: { front: { url: `http://127.0.0.1:3000/api/rehearsal/file/${key}`, sha256: call.sha256, recipe: call.recipe } },
@@ -119,7 +132,7 @@ if (!seeded) {
         by_name_source: 'relay',
         assist: null,
         role: null,
-        style: { title: title[styles[i]] },
+        style: { version_id: st.version_id, title: st.title },
       };
       await db.query(`insert into studio.elements (id, work_id, element_type, created_by_fid, entity_id, status, created_at) values ($1,'snowmoon','design',6786,$2,'published',$3)`, [element, entity, made]);
       await db.query(`insert into studio.element_versions (id, element_id, version_no, body, created_at) values ($1,$2,1,$3,$4)`, [versionId, element, JSON.stringify(body), made]);
