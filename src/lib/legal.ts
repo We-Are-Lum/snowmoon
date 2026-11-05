@@ -43,8 +43,9 @@ export const LEGAL: {
     privacy: { words: string; on: string; by: 'FID 6786' } | null;
   };
 } = {
-  // MERGE DAY: set to the day signin-lens-bluesky merges (the day the Lens and Bluesky lines go live).
-  effective: '2026-11-04',
+  // MERGE DAY: the day the sign-in release (bluesky-check, carrying signin-lens-bluesky) merges and its Lens and Bluesky
+  // lines go live. Set to 2026-11-05 because the owner plans to merge tonight; if the merge moves, this moves with it.
+  effective: '2026-11-05',
   // The owner said "Reread" on 2026-10-10 (words 3iuvyo, 1r2aajz), and on 2026-10-18 of the drafted
   // changes ("I've read the drafted Terms and Privacy changes and approve them: this is my 'reread'"),
   // covering both pages at these words.
