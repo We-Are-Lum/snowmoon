@@ -75,6 +75,14 @@ random order on each visit (P5g extended, with planted faults); "current default
 "canonical"/"official" in the config). Typecheck passes; challenge tests 365/365; check:principles 58 pass, only P6a
 and P6d failing.
 
+**3b. Branch `contest` (done):** merges check-decisions, remix-submit, remix-landing, challenge-landing (merge commits).
+Rehearsal switch (on only off Vercel and with a local database; a new check, P6w, proves production, previews and the
+production pooler turn it off); local rehearsal database (PGlite on 127.0.0.1, its own data folder; nothing goes to
+R2); `npm run rehearsal` at http://127.0.0.1:3000, refusing any database but the local one; one submission per Pacific
+day (withdraw keeps the row); Submit's post check; /challenge/entries (newest first, character filter, your own
+shuffle; "See the conversation on …" links; counts off). Typecheck and build pass; tests: challenge 510, rehearsal 38,
+daily-sql 25; check:principles 61/64 (P6a, P6d, and P6k: the merged Privacy text waits for your reread).
+
 **3. Lane A so far:** challenge-landing has main merged in (365 challenge tests pass). Branch `contest`: merges done;
 rehearsal switch, local rehearsal database (starts and seeds), one submission per Pacific day (migration
 NEXT_challenge_daily.sql, which replaces the SQL pack's NEXT_challenge_submit.sql); tests pass (challenge 510,
@@ -109,6 +117,9 @@ on localhost (HTTP 200) with the metadata link and "Sign in with my wallet". The
 - **Withdraw on the contest branch keeps the row** (marked withdrawn, so that day's submission isn't given back), so
   the approved Privacy §4 sentence "If you withdraw a submission, it is deleted" would be false there. Before/after
   drafts: docs/legal/contest-draft.md on `contest`, for your reread.
+- **Test sign-in on `contest`:** for the dress run, lane A added a sign-in for two made-up test FIDs and a local file
+  of fake casts, both gated by the rehearsal switch. It must never reach main: before contest merges, remove it or
+  prove it can't run there (P6w covers the switch).
 - **Admins and the challenge sub-pages:** while the challenge is private, /challenge/rules and /challenge/remixes now
   answer "not found" to everyone, admins included (only /challenge itself shows admins the landing). Say if admins
   should see those two pages too.
