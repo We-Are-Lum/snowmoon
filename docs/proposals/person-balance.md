@@ -20,10 +20,11 @@ A Farcaster, Lens or Bluesky session doesn't prove control of any wallet. Today'
 wallet's own sign-in proves the address, and `readPayment` checks that the payment came from it. For a person, the
 page first gets the wallet to sign a statement naming that person. The steps:
 
-1. **Intent (one signature).** The page gets a nonce from us (today's ten-minute signed nonce,
-   `src/lib/wallet/session.ts`). It builds a Sign-In with Ethereum message (EIP-4361) for snowmoon.party on Base,
-   with the nonce, the wallet's address, the statement "Add payments from this wallet to the prepaid balance of
-   <name> on snowmoon.party", and the request id `person:<person number>`. The wallet signs it.
+1. **Intent (one signature).** The page asks us for the message to sign (`GET /api/balance/intent?address=…`): a
+   Sign-In with Ethereum message (EIP-4361) for snowmoon.party on Base, with a fresh nonce (today's ten-minute signed
+   nonce, `src/lib/wallet/session.ts`), the wallet's address, the statement "Add payments from this wallet to a
+   prepaid balance on Snowmoon. Payments are final." (DRAFT wording), and the request id `person:<person number>`.
+   The wallet signs it.
 2. **The server checks it** (`POST /api/balance/intent`): the session's person is a Farcaster, Lens or Bluesky
    person (wallet accounts keep today's claim); the message is ours (domain, Base, our nonce, still current); the
    request id names *this session's* person; and the signature is the address's (an ordinary wallet's is checked
@@ -41,7 +42,7 @@ page first gets the wallet to sign a statement naming that person. The steps:
    - the transaction hasn't been credited anywhere: not to a person, and not to a wallet account.
 
 **Why no one can claim someone else's transaction.** To credit a transaction from address A to person P, there
-must be an intent binding A to P, which needs A's signature over a message naming P. An attacker who knows a
+must be an intent binding A to P, which needs A's signature over a message naming P (in its request id; the wallet shows it). An attacker who knows a
 transaction hash but not A's key can't make one. A leaked intent id is useless: the claim also needs P's session.
 A message signed for P can't be replayed for Q: the request id names P, and the server compares it with the session.
 
@@ -96,6 +97,10 @@ Drafts: `docs/legal/person-balance-draft.md`. They ship only in the release that
 spending changes. Turning it on needs, in one deploy: the migration applied (`NEXT_person_balance.sql`), the
 Terms/Privacy lines reread by the owner, and the browser side (the sign-to-pay step and the claim), which isn't built.
 
+Built on this branch (off): `src/lib/balance/person.ts` (statement, intent, claim, balance, debit, credit-back),
+`/api/balance/intent` and `/api/balance/claim`, and Pictures' `reserve` and `paidPicture` paying from a person balance
+when the free path refuses. Tests: `npm run test:person-balance` (the migration) and `npm run test:person-balance-code`.
+
 ## Out of scope
 
 - The browser side (the wallet panel for a person: sign, send, claim, show the balance). Not built.
@@ -109,6 +114,6 @@ Terms/Privacy lines reread by the owner, and the browser side (the sign-to-pay s
 ## Merging with other branches
 
 - `remix-submit` (the contest's remix count) changes `src/lib/images/limits.ts` too. The hook here is one call where
-  the free path refuses (`limit`, `no-free`); it moves to wherever that branch refuses a fourth remix.
+  the free path refuses (`limit`, `spend`, `no-free`); it moves to wherever that branch refuses a fourth remix.
 - The migration is additive and needs only 0011 (wallet payments). It is tested after main's migrations and the
   2026-11-04 SQL pack (`npm run test:person-balance`).

@@ -5,6 +5,7 @@ import { balanceUsd, debit, priceUsd } from '../wallet/credits';
 import { paysFor } from './price';
 import { isSocialPerson, isWalletPerson } from '../people';
 import { freeFor } from '../social/free';
+import { payFromPersonBalance, personBalanceOn } from '../balance/person';
 
 /**
  * Caps for readers' images (decision 10). A Generate is counted under the person's FID in
@@ -57,9 +58,15 @@ const DEFAULT_SPEND: Spend = { model: IMAGES.model, reserveUsd: IMAGES.reserveUs
  * Counts this Generate and reserves its worst case, or says which cap it would pass. A style's
  * sample and a sheet's view are Generates too (step 4): the same count, the same caps.
  */
-export async function reserve(sql: Sql, fid: number, spend: Spend = DEFAULT_SPEND): Promise<{ ok: true; left: number; debitId?: number } | { ok: false; refusal: Refusal }> {
-  // A Lens or Bluesky account without free generations (src/lib/social/free.ts) gets none, whichever route asks.
-  if (isSocialPerson(fid) && !(await freeFor(sql, fid)).free) return { ok: false, refusal: 'no-free' };
+export async function reserve(
+  sql: Sql,
+  fid: number,
+  spend: Spend = DEFAULT_SPEND,
+): Promise<{ ok: true; left: number; debitId?: number; personDebitId?: number; funded?: Funded } | { ok: false; refusal: Refusal }> {
+  // A Lens or Bluesky account without free generations (src/lib/social/free.ts) gets none, whichever route asks; with
+  // PERSON_BALANCE on, it may still pay from its own balance (below).
+  const noFree = isSocialPerson(fid) && !(await freeFor(sql, fid)).free;
+  if (noFree && !personBalanceOn()) return { ok: false, refusal: 'no-free' };
   return sql.begin(async (tx) => {
     await tx`select pg_advisory_xact_lock(hashtext('snowmoon.images.spend'))`;
     await tx`select pg_advisory_xact_lock(hashtext('snowmoon.images.fid'), ${fid}::int)`;
@@ -74,10 +81,24 @@ export async function reserve(sql: Sql, fid: number, spend: Spend = DEFAULT_SPEN
       await addCost(t, 'prepaid', 'reserved', spend.model.id, '', '', 1, spend.reserveUsd);
       return { ok: true as const, left: paysFor(balance - price, priceUsd(IMAGES.reserveUsd)), debitId };
     }
-    const left = await generationsLeft(tx as unknown as Sql, fid);
-    if (left <= 0) return { ok: false as const, refusal: 'limit' as const };
+    const t = tx as unknown as Sql;
+    // Free first; when the free path refuses, a Farcaster, Lens or Bluesky person pays from its own balance if it
+    // covers the price (PERSON_BALANCE, off; src/lib/balance/person.ts). No per-person cap on paid Generates.
+    const orPay = async (refusal: 'limit' | 'spend' | 'no-free') => {
+      const paid = await payFromPersonBalance(t, fid, spend.reserveUsd, async () => {
+        const [p] = await tx`select coalesce(sum(cost_usd), 0)::float8 as usd from studio.image_costs where day = ${tx.unsafe(TODAY)} and funded = 'prepaid'`;
+        return p.usd;
+      });
+      if (!paid) return { ok: false as const, refusal };
+      if (!paid.ok) return paid;
+      await addCost(t, 'prepaid', 'reserved', spend.model.id, '', '', 1, spend.reserveUsd);
+      return { ok: true as const, left: paysFor(paid.balanceAfter, priceUsd(IMAGES.reserveUsd)), personDebitId: paid.debitId, funded: 'prepaid' as const };
+    };
+    if (noFree) return orPay('no-free');
+    const left = await generationsLeft(t, fid);
+    if (left <= 0) return orPay('limit');
     const [today] = await tx`select coalesce(sum(cost_usd), 0)::float8 as usd from studio.image_costs where day = ${tx.unsafe(TODAY)} and funded = 'free'`;
-    if (today.usd + spend.reserveUsd > imagesDailySpendCapUsd()) return { ok: false as const, refusal: 'spend' as const };
+    if (today.usd + spend.reserveUsd > imagesDailySpendCapUsd()) return orPay('spend');
     await tx`insert into studio.image_asks (fid) values (${fid})`;
     await addCost(tx as unknown as Sql, 'free', 'reserved', spend.model.id, '', '', 1, spend.reserveUsd);
     return { ok: true as const, left: left - 1 };

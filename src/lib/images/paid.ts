@@ -7,7 +7,8 @@ import { fundedBy, perDay, recordGuard, reserve, settle, wordsCheckFits, type Sp
 import { blockedName } from './rules';
 import { FREE_WORDING } from '../social/free';
 import { IMAGE_WORDING } from './wording';
-import { creditBack } from '../wallet/credits';
+import { creditBack as walletCreditBack, type CreditReason } from '../wallet/credits';
+import { personCreditBack } from '../balance/person';
 
 /**
  * Every paid picture goes through here, in this order (docs/proposals/add-an-image.md, section 5;
@@ -50,9 +51,12 @@ export async function paidPicture(
   job: { checkText: string; spend?: Spend; make: () => Promise<Made>; /** The prompt check's token budget (a sheet's views: IMAGES.designs.guardMaxTokens). */ guardMaxTokens?: number },
 ): Promise<Paid> {
   const spend = job.spend;
-  const funded = fundedBy(fid);
   const r = await reserve(sql, fid, spend);
   if (!r.ok) return { ok: false, status: 429, error: say(r.refusal, fid), extra: { reason: r.refusal } };
+  // Paid from a person balance (PERSON_BALANCE, off) when the free path refused: its costs count as prepaid.
+  const funded = r.funded ?? fundedBy(fid);
+  const creditBack = (_: Sql, debitId: number | undefined, reason: CreditReason) =>
+    r.personDebitId ? personCreditBack(sql, r.personDebitId, reason) : walletCreditBack(sql, debitId, reason);
   const name = blockedName(job.checkText);
   if (name) {
     await settle(sql, {}, spend, funded);

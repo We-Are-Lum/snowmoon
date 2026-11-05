@@ -182,6 +182,22 @@ export const LINKED_WALLETS: Readonly<Record<string, number>> = {
  * after, it is read only for a wallet the table has never had a link for. src/lib/wallet/links.ts. The Privacy and
  * Terms lines that describe all of this were reread by the owner on 2026-10-22 (src/lib/legal.ts).
  */
+/**
+ * Paying per person (owner, 2026-11-04; DRAFT, docs/proposals/person-balance.md, migration NEXT_person_balance): a
+ * prepaid balance for a Farcaster, Lens or Bluesky sign-in, paid from a browser wallet that signs a statement naming
+ * the signed-in person (src/lib/balance/person.ts). Free generations are used first; then the balance, at the
+ * wallets' price, under the same site-wide prepaid daily cap and no per-person cap. Wallet accounts keep their own
+ * balance (IMAGES.prepaid). OFF: turning it on needs the migration applied, the Terms and Privacy lines reread
+ * (docs/legal/person-balance-draft.md) and the browser side, in one deploy.
+ */
+export const PERSON_BALANCE = {
+  enabled: false as boolean,
+  /** A payment counts for an intent only if its block is at most this long before the intent (clocks differ)… */
+  earlyMinutes: 10,
+  /** …and at most this long after it. */
+  intentHours: 24,
+};
+
 export const WALLET_LINKS = {
   /**
    * The offer: a wallet person signs in with Farcaster in the same session, sees who it will link to, and confirms
