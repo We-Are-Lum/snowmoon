@@ -24,7 +24,7 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { DEFAULT_TEMPLATES } from '../src/templates';
 import { LiveScreen } from '../src/components/live-screen';
-import { AGENTS, CHALLENGE, CHAT, IMAGES, REPO_URL, SIGN_IN_METHODS, SOCIAL_SIGN_IN, imagesDailySpendCapUsd } from '../src/lib/config';
+import { AGENTS, ASSISTANT, CHALLENGE, CHAT, IMAGES, REPO_URL, SIGN_IN_METHODS, SOCIAL_SIGN_IN, imagesDailySpendCapUsd } from '../src/lib/config';
 import { challengeOpenNow, entriesOpen } from '../src/lib/challenge/rules';
 import { challengeVisibleTo } from '../src/lib/challenge/visibility';
 import { NOTICE_REVIEW, currentNoticeItems, noticeKey } from '../src/lib/chat/notice';
@@ -1914,6 +1914,41 @@ add({
   plant: (c) => {
     c.on = true;
     c.s7 = c.s7.replace(/public\.api\.bsky\.app/g, 'the AppView');
+  },
+});
+
+// P6ab (branch assistant-any-account, owner 2026-11-05): the assistant's one rule (ASSISTANT.anyAccount: everyone who
+// asks passes their own network's check; Lens and Bluesky accounts ask under their own number) is on only once the
+// owner's reread words say so (docs/legal/assistant-any-account-step1.md): Privacy §5 no longer counts questions only
+// under a Farcaster ID; §7 says Neynar, Lens and Bluesky are asked when someone asks the assistant; the notice no longer
+// says "under your Farcaster ID". Legal texts describe today (pattern of P6p).
+add({
+  id: 'P6ab',
+  principle: 6,
+  name: 'the assistant opens to Lens and Bluesky (and checks Neynar) only when Privacy §5, §7 and the notice say so',
+  load: async () => ({
+    on: ASSISTANT.anyAccount as boolean,
+    s5: (PRIVACY.sections.find((s) => s.n === 5)?.body ?? []).flat().join(' '),
+    s7: (PRIVACY.sections.find((s) => s.n === 7)?.body ?? []).flat().join(' '),
+    notice: currentNoticeItems().flat().join(' '),
+  }),
+  run: (c) => {
+    if (!c.on) return [];
+    const problems: string[] = [];
+    const sentences = c.s7.split(/(?<=[.!?])\s+(?=[A-Z])/);
+    const says = (what: RegExp) => sentences.some((x) => what.test(x) && /\bassistant\b/.test(x));
+    const why = "the owner's reread of docs/legal/assistant-any-account-step1.md first";
+    if (/Under your Farcaster ID/i.test(c.s5)) problems.push(`ASSISTANT.anyAccount is on, but Privacy §5 still counts questions under your Farcaster ID only: ${why}`);
+    if (!says(/\bNeynar receives your Farcaster ID\b/)) problems.push(`ASSISTANT.anyAccount is on (Farcaster accounts pass Neynar to ask), but Privacy §7's Neynar sentence doesn't name the assistant: ${why}`);
+    if (!says(/\bLens score\b/)) problems.push(`ASSISTANT.anyAccount is on, but Privacy §7's Lens score sentence doesn't name the assistant: ${why}`);
+    if (!says(/public\.api\.bsky\.app/)) problems.push(`ASSISTANT.anyAccount is on, but Privacy §7's Bluesky check sentence doesn't name the assistant: ${why}`);
+    if (/\bFarcaster ID\b/.test(c.notice)) problems.push(`ASSISTANT.anyAccount is on, but the assistant's notice still says questions are recorded under your Farcaster ID: ${why}`);
+    return problems;
+  },
+  plant: (c) => {
+    // The switch on with today's words (all of which name only the Farcaster ID, or images only).
+    c.on = true;
+    c.s5 = c.s5 + ' Under your Farcaster ID we record only how many questions you ask.';
   },
 });
 

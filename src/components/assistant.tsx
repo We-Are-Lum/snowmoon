@@ -9,7 +9,8 @@ import { SignInChoices } from './sign-in-choices';
 import { MakeImageLink } from './make-image-link';
 import { IMAGE_WORDING } from '~/lib/images/wording';
 import { PrivateTextField } from './private-text-field';
-import { CHAT } from '~/lib/config';
+import { ASSISTANT, CHAT } from '~/lib/config';
+import { ASK_WORDING, type AccountKind } from '~/lib/chat/who-can-ask';
 import { OWNER_WORDING } from '~/lib/wording';
 import type { AskResult, Quote } from '~/lib/chat/ask';
 import type { GlossaryLink } from '~/lib/chat/glossary';
@@ -29,6 +30,8 @@ import {
 type Status =
   | { kind: 'loading' }
   | { kind: 'signed-out'; inApp: boolean }
+  /** Signed in, but this account can't ask (src/lib/chat/gate.ts): a wallet, a Lens or Bluesky account, or a failed check. */
+  | { kind: 'refused'; inApp: boolean; error: string; account: AccountKind | null }
   | { kind: 'ready'; available: boolean; reason?: string; model: string; host: string | null; provider: string | null; route: string; perDay: number; left: number };
 
 const authedFetch = authFetch;
@@ -367,7 +370,11 @@ function ThreadView({ id, status, refresh }: { id: string; status: Extract<Statu
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ question: question.trim(), limit: th.limit, attached: th.messages.filter((m) => m.role === 'user').length === 1 ? th.attached : [], history }),
         });
-        if (res.status === 503) result = { state: 'unavailable' };
+        // A 503 with a reason is the gate's "can't check your account right now", not the assistant being away.
+        if (res.status === 503) {
+          const b = (await res.json().catch(() => ({}))) as { error?: string; reason?: string };
+          result = b.reason && b.error ? { state: 'error', error: b.error } : { state: 'unavailable' };
+        }
         else if (!res.ok) result = { state: 'error', error: ((await res.json().catch(() => ({}))) as { error?: string }).error ?? 'Something went wrong.' };
         else result = (await res.json()) as AskResult;
       } catch {
@@ -468,7 +475,7 @@ function ThreadView({ id, status, refresh }: { id: string; status: Extract<Statu
 function PrivacyNote() {
   const [asked, setAsked] = useState(false);
   useEffect(() => setAsked(loadThreads().length > 0), []);
-  const words = `Your questions are saved only on this device. They are sent to ${CHAT.providerName} to be answered${CHAT.gatewayFallback ? ` (through ${CHAT.host} when ${CHAT.providerName} is busy)` : ''} and are never published. The daily limit is counted per Farcaster account.`;
+  const words = `Your questions are saved only on this device. They are sent to ${CHAT.providerName} to be answered${CHAT.gatewayFallback ? ` (through ${CHAT.host} when ${CHAT.providerName} is busy)` : ''} and are never published. ${ASSISTANT.anyAccount ? 'The daily limit is counted per account.' : 'The daily limit is counted per Farcaster account.'}`;
   return asked ? (
     <p className="as-body">
       Saved only on this device. <InfoLabel word="About" kind="about" declaration="Where your questions go" title="Your questions" body={[words]} />
@@ -485,17 +492,47 @@ function SignedOut({ inApp: _inApp }: { inApp: boolean }) {
       <p className="as-label">Sign in to ask questions</p>
       <h1>Your questions need a name to be counted under</h1>
       <p className="as-body">Help with reading the book. It comments; it never writes for you.</p>
-      {/* Why Farcaster only, plainly, also when signed in with Lens, Bluesky or a wallet (2026-11-05). DRAFT wording
-          (coding agent), not the owner's: questions are counted per Farcaster account (src/app/api/chat/ask/route.ts). */}
-      <p className="as-body" data-wording="draft">Asking questions needs a Farcaster account.</p>
+      {/* Which accounts can ask (2026-11-05). DRAFT wording (coding agent), not the owner's: src/lib/chat/who-can-ask.ts. */}
+      <p className="as-body" data-wording="draft">{ASK_WORDING.who()}</p>
       {/* Owner, 2026-10-29: in view until the reader's first question (one saved on this device), then behind ⓘ. Same words. */}
       <PrivacyNote />
-      {/* The same sign-in list as everywhere (owner, 2026-10-30). Farcaster only here: questions are counted per Farcaster
-          account, and a wallet not linked to one is refused (src/app/api/chat/ask/route.ts). */}
+      {/* The same sign-in list as everywhere (owner, 2026-10-30), with only the ways that can ask: Farcaster, and Lens and
+          Bluesky once ASSISTANT.anyAccount is on. A wallet not linked to a Farcaster account can't ask (src/lib/chat/gate.ts). */}
       <div className="as-signin">
-        <SignInChoices wallet={false} />
+        <AskSignIn inApp={_inApp} />
       </div>
       {/* The two outside services are named in the sign-in step itself and on About. */}
+      <Link className="as-quiet-link" href="/chapter/1">
+        Keep reading without it
+      </Link>
+    </section>
+  );
+}
+
+/** The ways to sign in that can ask: Farcaster; Lens and Bluesky too once ASSISTANT.anyAccount is on (website only). */
+function AskSignIn({ inApp }: { inApp: boolean }) {
+  return ASSISTANT.anyAccount ? <SignInChoices wallet={!inApp} only={['farcaster', 'lens', 'bluesky']} note={false} /> : <SignInChoices wallet={false} />;
+}
+
+/**
+ * Signed in, but this account can't ask (2026-11-05): no "Sign in" heading, since the person is signed in. It says why
+ * (the gate's words) and what would let them ask. DRAFT wording (coding agent): src/lib/chat/who-can-ask.ts.
+ */
+function Refused({ error, account, inApp }: { error: string; account: AccountKind | null; inApp: boolean }) {
+  return (
+    <section className="as-refused" data-wording="draft" data-account={account ?? ''}>
+      <p className="as-body">Help with reading the book. It comments; it never writes for you.</p>
+      <p className="as-body as-refusal" role="status">{error}</p>
+      {account === 'wallet' && (
+        <div className="as-signin">
+          <AskSignIn inApp={inApp} />
+        </div>
+      )}
+      {(account === 'lens' || account === 'bluesky') && (
+        <Link className="as-quiet-link" href="/you">
+          Link accounts on your You page
+        </Link>
+      )}
       <Link className="as-quiet-link" href="/chapter/1">
         Keep reading without it
       </Link>
@@ -515,8 +552,13 @@ export function Assistant({ embedded = false }: { embedded?: boolean } = {}) {
 
   const refresh = useCallback(async () => {
     const res = await authedFetch('/api/chat/status').catch(() => null);
-    // 403: a wallet not linked to a Farcaster account (its wallet session stays).
-    if (!res || res.status === 401 || res.status === 403) {
+    // 403: signed in, but this account can't ask (src/lib/chat/gate.ts); its session stays.
+    if (res?.status === 403) {
+      const b = (await res.json().catch(() => ({}))) as { error?: string; account?: AccountKind };
+      const inApp = await inMiniApp();
+      return setStatus({ kind: 'refused', inApp, error: b.account && b.error ? b.error : ASK_WORDING.who(), account: b.account ?? null });
+    }
+    if (!res || res.status === 401) {
       const inApp = await inMiniApp();
       return setStatus({ kind: 'signed-out', inApp });
     }
@@ -563,6 +605,7 @@ export function Assistant({ embedded = false }: { embedded?: boolean } = {}) {
   const body = useMemo(() => {
     if (status.kind === 'loading') return <p className="as-label">…</p>;
     if (status.kind === 'signed-out') return <SignedOut inApp={status.inApp} />;
+    if (status.kind === 'refused') return <Refused error={status.error} account={status.account} inApp={status.inApp} />;
     if (!status.available)
       return (
         <p className="as-empty" data-wording={OWNER_WORDING.by}>
