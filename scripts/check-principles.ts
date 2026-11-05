@@ -24,7 +24,7 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { DEFAULT_TEMPLATES } from '../src/templates';
 import { LiveScreen } from '../src/components/live-screen';
-import { AGENTS, CHALLENGE, CHAT, IMAGES, REPO_URL, imagesDailySpendCapUsd } from '../src/lib/config';
+import { AGENTS, CHALLENGE, CHAT, IMAGES, REPO_URL, SIGN_IN_METHODS, imagesDailySpendCapUsd } from '../src/lib/config';
 import { challengeOpenNow, entriesOpen } from '../src/lib/challenge/rules';
 import { challengeVisibleTo } from '../src/lib/challenge/visibility';
 import { rehearsalOn } from '../src/lib/challenge/rehearsal-switch';
@@ -373,6 +373,14 @@ add({
         for (const [what, re] of [['kept with the link', /kept with the link/], ['never published', /Never published by us/], ['described to screen readers', /aria-describedby/]] as const)
           if (!re.test(text)) problems.push(`${file}: the agent address box must say it is ${what}`);
         if (/fetch\(|supabase|\/api\//.test(text)) problems.push(`${file}: the agent address box must not send its text anywhere itself`);
+        continue;
+      }
+      if (file.endsWith('components/handle-field.tsx')) {
+        // The Bluesky handle at sign-in (branch signin-lens-bluesky): sent to our server to start the sign-in, never published.
+        for (const [what, re] of [['sent to us to sign you in', /Sent to us to find your Bluesky server and sign you in/], ['never published', /Never published by us/], ['described to screen readers', /aria-describedby/]] as const)
+          if (!re.test(text)) problems.push(`${file}: the handle box must say it is ${what}`);
+        if (/fetch\(|supabase|\/api\//.test(text)) problems.push(`${file}: the handle box must not send its text anywhere itself`);
+        if (/<textarea\b/.test(text)) problems.push(`${file}: the handle box must be a single-line input`);
         continue;
       }
       if (file.endsWith('components/post-link-field.tsx')) {
@@ -1404,7 +1412,7 @@ add({
     seen.push({ page: '/chapter/1', host: 'fonts.googleapis.com', url: 'https://fonts.googleapis.com/css2?family=Inter', type: 'stylesheet' });
   },
 });
-const PRIVATE_FID_TABLES = ['ratings', 'likes', 'take_likes', 'picks', 'contributor_consents', 'image_asks', 'removal_log', 'image_scores', 'wallet_links', 'challenge_marks', 'version_posts', 'challenge_eligibility', 'check_decisions', 'sheet_remix_asks'];
+const PRIVATE_FID_TABLES = ['ratings', 'likes', 'take_likes', 'picks', 'contributor_consents', 'image_asks', 'removal_log', 'image_scores', 'wallet_links', 'challenge_marks', 'version_posts', 'challenge_eligibility', 'check_decisions', 'sheet_remix_asks', 'social_links'];
 /** How each private table names the person: a FID, except check_decisions (the account, as text). */
 const personIs42 = (t: string) => (t === 'check_decisions' ? `account = '42'` : 'fid = 42');
 add({
@@ -1431,13 +1439,15 @@ add({
       insert into studio.removal_log (element_id, step, by_fid, role, reason) values ('00000000-0000-0000-0000-0000000000b1','reported',42,'reader','spam');
       insert into studio.wallet_accounts (address) values ('0x${'4'.repeat(40)}');
       insert into studio.wallet_links (account_id, fid, how) select id, 42, 'signed' from studio.wallet_accounts where address = '0x${'4'.repeat(40)}';
+      insert into studio.social_accounts (kind, subject, handle) values ('bluesky', 'did:plc:${'a'.repeat(24)}', 'someone.bsky.social');
+      insert into studio.social_links (account_id, fid) select id, 42 from studio.social_accounts where subject = 'did:plc:${'a'.repeat(24)}';
       -- The remix challenge (0033_remix_challenge.sql): a mark, a listed post and an eligibility decision, by FID 42.
       do $$ begin if to_regclass('studio.challenge_marks') is not null then
         insert into studio.challenge_marks (challenge, fid, character, version_id) values ('remix-2026-11', 42, 'bai', '00000000-0000-0000-0000-0000000000f1');
         insert into studio.version_posts (version_id, network, post_id, handle, posted_at, url, fid) values ('00000000-0000-0000-0000-0000000000f1', 'lens', '1', 'someone', now(), 'https://hey.xyz/posts/abc', 42);
         insert into studio.challenge_eligibility (version_id, challenge, fid, decision, eligible) values ('00000000-0000-0000-0000-0000000000f1', 'remix-2026-11', 42, 'passed', true);
       end if; end $$;
-      -- Check decisions (NEXT_check_decisions): FID 42 passed.
+      -- Check decisions (0034_check_decisions): FID 42 passed.
       do $$ begin if to_regclass('studio.check_decisions') is not null then
         insert into studio.check_decisions (network, account, threshold, passed) values ('farcaster', '42', 'neynar-score>=0.7', true);
       end if; end $$;
@@ -1608,7 +1618,7 @@ add({
         and (has_table_privilege('studio_writer', format('studio.%I', c.table_name), 'INSERT') or has_table_privilege('studio_writer', format('studio.%I', c.table_name), 'UPDATE'))`);
     for (const r of writable.rows) problems.push(`studio.${r.t}.${r.c}: the site (studio_writer) can store a score`);
     const store = await db.query<{ c: string; d: string }>(`select column_name as c, data_type as d from information_schema.columns where table_schema = 'studio' and table_name = 'check_decisions'`);
-    if (store.rows.length === 0) problems.push('studio.check_decisions is missing (NEXT_check_decisions)');
+    if (store.rows.length === 0) problems.push('studio.check_decisions is missing (0034_check_decisions)');
     for (const r of store.rows) if (/numeric|real|double|integer|bigint|smallint|json/.test(r.d)) problems.push(`studio.check_decisions.${r.c} (${r.d}) can hold a number`);
     await db.close();
     for (const { f, t } of code as { f: string; t: string }[]) {
@@ -1872,6 +1882,42 @@ add({
       : [],
   plant: (c) => {
     c.public = true;
+  },
+});
+
+// P6p (branch signin-lens-bluesky): a way to sign in is shown only when Privacy names the outside service it goes
+// through (§7) and what we keep for it (§4): Lens (the Lens API) and Bluesky (the person's Bluesky server). Turning one on
+// in SIGN_IN_METHODS before the owner has reread those lines (docs/legal/signin-lens-bluesky-draft.md) fails here.
+add({
+  id: 'P6p',
+  principle: 6,
+  name: 'Lens and Bluesky sign-in are on only when Privacy §4 and §7 describe them',
+  load: async () => ({
+    on: SIGN_IN_METHODS.filter((m) => m.on).map((m) => m.id as string),
+    s4: (PRIVACY.sections.find((s) => s.n === 4)?.body ?? []).flat().join(' '),
+    s7: (PRIVACY.sections.find((s) => s.n === 7)?.body ?? []).flat().join(' '),
+  }),
+  run: (c) => {
+    const problems: string[] = [];
+    const need: Record<string, [string, RegExp, RegExp]> = {
+      // Since the remix challenge (main, 2026-10-31) Privacy §7 already names Bluesky and Lens (they receive a post's
+      // details) and "our server" in the same sentence, so the patterns name the sign-in lines themselves: "Lens
+      // account" / "Bluesky account" in §4, Lens's API (api.lens.xyz) and the Bluesky server, "your PDS", in §7.
+      lens: ['Lens', /\bLens account\b/, /\bLens(?:'s|’s)? API\b|\bapi\.lens\.xyz\b/],
+      bluesky: ['Bluesky', /\bBluesky account\b/, /\bBluesky\b[^.]*\bPDS\b/],
+    };
+    for (const id of c.on) {
+      const n = need[id];
+      if (!n) continue;
+      if (!n[1].test(c.s4)) problems.push(`${n[0]} sign-in is on (SIGN_IN_METHODS), but Privacy §4 doesn't say what is kept for a ${n[0]} account: the owner's reread of docs/legal/signin-lens-bluesky-draft.md first`);
+      if (!n[2].test(c.s7)) problems.push(`${n[0]} sign-in is on (SIGN_IN_METHODS), but Privacy §7 doesn't name the outside service it goes through: the owner's reread of docs/legal/signin-lens-bluesky-draft.md first`);
+    }
+    return problems;
+  },
+  plant: (c) => {
+    // Bluesky on, with §4's Bluesky line gone (now that the lines are in, turning it on alone would pass).
+    c.on = [...c.on, 'bluesky'];
+    c.s4 = c.s4.replace(/\bBluesky account\b/g, 'account');
   },
 });
 

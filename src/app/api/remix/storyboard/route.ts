@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { socialByline } from '~/lib/social/byline';
 import { getPerson, getWallet } from '~/lib/auth';
 import { db } from '~/lib/db';
 import { hasConsented } from '~/lib/consent';
@@ -29,7 +30,7 @@ export async function POST(request: Request) {
   const c = await checkBoard(sql, person, adaptation, version, body);
   if (!c.ok) return NextResponse.json({ error: c.error }, { status: 400 });
   const wallet = person < 0 ? getWallet(request) : null;
-  const by = wallet ? { name: shortAddress(wallet.address) } : await bylineName(person, body.nameProof);
+  const by = wallet ? { name: shortAddress(wallet.address) } : (socialByline(request, person) ?? (await bylineName(person, body.nameProof)));
   const b = await saveBoard(sql, { adaptation, version, person, title: c.title, items: c.items, takes: c.takes, byName: by.name });
   return NextResponse.json({ id: b.id, page: `/storyboard/${b.id}` }, { headers: { 'Cache-Control': 'no-store' } });
 }

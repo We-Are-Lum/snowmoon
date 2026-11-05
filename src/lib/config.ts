@@ -232,6 +232,12 @@ export const AGENTS = {
     // The production test account for agent play (wallet 0xE869…f973, account -23) was here from 2026-11-01 until the
     // leak fix passed in production; removed at the owner's word, 2026-11-01.
     wallets: [] as readonly string[],
+    /**
+     * Lens and Bluesky accounts whose sign-in gets in (signin-lens-bluesky): 'lens:<account address, lowercase>' or
+     * 'bluesky:<DID>'. Empty: the owner names them. A Lens or Bluesky account linked to a Farcaster account in the
+     * list gets in as that account.
+     */
+    social: [] as readonly string[],
   },
   /** Public pages (agents.md, /p): off while agents are for the owner only. Kept work stays private on /you. */
   public: false,
@@ -356,6 +362,96 @@ export const ILLUSTRATION_CHECK = {
 
 /** Moderation only: these FIDs may hide content or dismiss a report. They never promote or rank anything. Owner, 2026-10-08 (decision 20). Every admin is one; a moderator who isn't an admin would be added here. */
 export const MODERATOR_FIDS: readonly number[] = [...ADMINS];
+
+/**
+ * The ways to sign in, in the order they are shown (owner, 2026-10-30: Farcaster and a wallet as equals, with room for
+ * Lens and Bluesky, Bluesky right after Lens; X has no sign-in for now). Only entries that are `on` are shown: the site
+ * describes what works today, so there are no "coming soon" buttons. Lens and Bluesky don't exist yet. Turning one on
+ * also needs its sign-in built (src/components/sign-in-choices.tsx) and the legal texts that name its services.
+ * The labels and the one line under each are in src/lib/sign-in-text.ts.
+ *
+ * Local test only: NEXT_PUBLIC_SIGN_IN_ALL_FOUR=1 shows all four, to check that the layout holds them. The build
+ * refuses it on Vercel (next.config.ts), so it never reaches the site.
+ */
+export const SIGN_IN_METHODS = [
+  { id: 'farcaster', on: true },
+  { id: 'wallet', on: true },
+  { id: 'lens', on: false },
+  { id: 'bluesky', on: false },
+] as const satisfies readonly { id: string; on: boolean }[];
+export type SignInMethod = (typeof SIGN_IN_METHODS)[number]['id'];
+/** The local-only test of four entries (see SIGN_IN_METHODS). */
+export const SIGN_IN_ALL_FOUR = process.env.NEXT_PUBLIC_SIGN_IN_ALL_FOUR === '1' && !process.env.NEXT_PUBLIC_VERCEL_ENV;
+
+/**
+ * Whether a way to sign in is open on this deployment: its SIGN_IN_METHODS entry is on, or the local-only test
+ * (SIGN_IN_ALL_FOUR, refused on Vercel) is. The Lens and Bluesky routes answer 404 while it is false, so nothing
+ * about a Lens or Bluesky account reaches us before the Privacy and Terms lines that describe it are live
+ * (docs/legal/signin-lens-bluesky-draft.md; the owner's "reread" turns them on, in the same release).
+ */
+export const signInOpen = (id: SignInMethod): boolean => SIGN_IN_METHODS.some((m) => m.id === id && m.on) || SIGN_IN_ALL_FOUR;
+
+/**
+ * Lens and Bluesky sign-in (branch signin-lens-bluesky, owner's item 5 of 2026-10-31). Off until the owner turns them
+ * on in SIGN_IN_METHODS after rereading the legal drafts.
+ *
+ * Lens: Lens's own authentication (lens.xyz/docs/protocol/authentication): our server asks the Lens API for a
+ * challenge for the account and the wallet that owns or manages it, the wallet signs it in the browser, and Lens
+ * answers with an ID token (RS256, checked against Lens's JWKS) naming the account. We keep none of Lens's tokens.
+ *
+ * Bluesky: AT Protocol OAuth (atproto.com/specs/oauth) as a public client with PKCE, PAR and DPoP. Locally a loopback
+ * client (client_id http://localhost?…, redirect to 127.0.0.1); on the site the client metadata JSON served at
+ * `bluesky.metadataPath`. Scope 'atproto' only: it proves the DID and nothing more. The tokens are used once, to learn
+ * the DID, and never kept.
+ */
+export const SOCIAL_SIGN_IN = {
+  /** A Lens or Bluesky sign-in lasts this long (like a wallet's). */
+  sessionHours: 24,
+  /**
+   * Owner, 2026-11-04 (3a, with the 30-day sentence): "An account you unlink can be linked to a different account
+   * only after 30 days." Linking it again to the same account is allowed at any time (src/lib/social/accounts.ts).
+   */
+  relinkWaitDays: 30,
+  lens: {
+    api: 'https://api.lens.xyz/graphql',
+    jwks: 'https://api.lens.xyz/.well-known/jwks.json',
+    issuer: 'https://api.lens.xyz',
+    /**
+     * The Lens App the sign-in is for (the challenge's `app`, the ID token's `aud`): this site's own App on Lens Chain,
+     * "Snowmoon Party", registered by the owner at /admin/lens-app on 2026-11-05 (UTC) and verified read-only
+     * (docs/lens-app-registration.md, "Verified"; `npm run verify:lens-app`). Lens sign-in still opens only with the
+     * sign-in release (SIGN_IN_METHODS). If this is ever emptied, Lens sign-in refuses (the challenge answers 503 and
+     * no ID token is accepted). The tests stand in Lens's own Test App (0x8A5Cc31180c37078e1EbA2A23c861Acf351a97cE).
+     */
+    app: '0x3CD3dF83e3F74e855d7c4104a8ed9EBa23FaaE47' as '' | `0x${string}`, // ours, registered 2026-11-05 UTC, tx 0x7001522f7cad6c9ebd58204998e62af93cdd62ff627b05a2584ca58ae524e576
+    /**
+     * THE ONE PLACE the Lens score threshold lives (Lens's "Account Score", lens.xyz/docs/protocol/accounts/fetch;
+     * 0 to about 10000 in the sample in docs/branch-reports/signin-lens-bluesky.md). Owner, 2026-11-04: "1,000 to
+     * start". A Lens account (not linked) whose score is at least this gets the same free daily count as a Farcaster
+     * account. Null would turn Lens's free counts off.
+     */
+    minScore: 1000 as number | null,
+    /*
+     * Owner, 2026-11-04 (variant B, and "store the decision, not the score"): the score is looked up only at Generate,
+     * the same moment as Neynar's, and only when there is no current decision. Only the decision is kept (passed or
+     * not, when, and the rule 'lens-score>=<minScore>'), in the shared store (src/lib/checks/decisions.ts, network
+     * 'lens', keyed by the Lens address; CHECKS.passDays and CHECKS.failHours). The score is never stored, logged or
+     * sent to the page (src/lib/social/lens-check.ts).
+     */
+    timeoutMs: 5000,
+  },
+  bluesky: {
+    scope: 'atproto',
+    /** Where the browser comes back to (a page, which finishes the sign-in with what it kept in this tab). */
+    redirectPath: '/sign-in/bluesky',
+    /** The client metadata document on the site; its URL is the client_id. */
+    metadataPath: '/oauth/bluesky/client-metadata.json',
+    plcDirectory: 'https://plc.directory',
+    /** A sign-in started must finish within this. */
+    startMinutes: 10,
+    timeoutMs: 5000,
+  },
+} as const;
 
 /**
  * "Support this site" (owner, 2026-10-30): the one place the support address lives. Every page, QR code and wallet send

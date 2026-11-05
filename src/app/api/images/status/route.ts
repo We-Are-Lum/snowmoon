@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
 import { isAdmin } from '~/lib/admins';
+import { isSocialPerson } from '~/lib/people';
+import { freeFor } from '~/lib/social/free';
 import { getPerson } from '~/lib/auth';
 import { db } from '~/lib/db';
 import { IMAGES, imagesDailySpendCapUsd } from '~/lib/config';
@@ -82,6 +84,15 @@ export async function GET(request: Request) {
     ]);
     // Free remixes (owner, 2026-11-04): for someone who counts remixes, how many are left today (null: views count as pictures).
     const remixes = remixesLeft === null ? null : { left: remixesLeft, perDay: IMAGES.designs.remixesPerDay, picturesPerRemix: IMAGES.designs.picturesPerRemix };
+    if (isSocialPerson(fid)) {
+      // A Lens or Bluesky account (not linked to a Farcaster account): free only as src/lib/social/free.ts decides; no balance.
+      // Never asks Lens here (variant B: only Generate does); with no decision yet, eligible is null until Generate.
+      const d = await freeFor(sql, fid, { lookUp: false });
+      return NextResponse.json(
+        { ...base, signedIn: true, fid, invited: false, eligible: d ? d.free : null, refusal: d && !d.free ? d.error : undefined, consented, left, remixes, publishesLeft: publishes, picks: offer(picks) },
+        { headers: { 'Cache-Control': 'no-store' } },
+      );
+    }
     if (fid < 0) {
       // A wallet account: no daily count and no Neynar score; its balance pays (owner, 2026-10-13).
       const open = prepaidOpen() && openToEveryone().open;

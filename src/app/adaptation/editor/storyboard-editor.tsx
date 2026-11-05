@@ -4,8 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { authFetch, useAuth, useWalletSession, webNameProof } from '~/lib/client-auth';
 import { ConsentScreen, PublishedTextField } from '~/components/publish-words';
-import { SignInButton } from '~/components/sign-in';
-import { WalletSignInButton } from '~/components/wallet';
+import { SignInChoices } from '~/components/sign-in-choices';
 import { StoryboardPlayer } from '../../storyboard/player';
 import { buildSlides, type BoardData } from '../../storyboard/slides';
 import { DRAFT_EVENT, clearDraft, readDraft, writeDraft, type Draft } from './storyboard-draft';
@@ -216,8 +215,7 @@ export function StoryboardEditor({ dataUrl, scenePath, aiLabel, mixUrl }: { data
               ) : (
                 <div className="ed-row">
                   <p className="ed-help">Sign in to save it and share it.</p>
-                  <SignInButton className="ed-small" />
-                  {auth.kind === 'signed-out' && !auth.inApp && <WalletSignInButton className="ed-small" />}
+                  <SignInChoices size="small" wallet={auth.kind === 'signed-out' && !auth.inApp} />
                 </div>
               )}
               {note && (

@@ -4,6 +4,8 @@ import { IMAGES, imagesDailySpendCapUsd } from '../config';
 import { balanceUsd, debit, priceUsd } from '../wallet/credits';
 import { paysFor } from './price';
 import { countsRemixes, isWalletNumber, remixesLeft, remixRefusal, type RemixRefusal } from './remixes';
+import { isSocialPerson } from '../people';
+import { freeFor } from '../social/free';
 
 /**
  * Caps for readers' images (decision 10). A Generate is counted under the person's FID in
@@ -20,9 +22,9 @@ import { countsRemixes, isWalletNumber, remixesLeft, remixRefusal, type RemixRef
 type Sql = postgres.Sql;
 const TODAY = `(now() at time zone 'utc')::date`;
 
-export type Refusal = 'limit' | 'spend' | 'balance' | 'prepaid-spend' | RemixRefusal;
+export type Refusal = 'limit' | 'spend' | 'balance' | 'prepaid-spend' | 'no-free' | RemixRefusal;
 export type Funded = 'free' | 'prepaid';
-/** Only a wallet account pays from a balance (not a Lens or Bluesky account, whose numbers are also below zero). */
+/** Only a wallet account pays from a balance (not a Lens or Bluesky account, whose numbers are also below zero); Lens and Bluesky accounts use the free count when freeFor allows. */
 export const fundedBy = (fid: number): Funded => (isWalletNumber(fid) ? 'prepaid' : 'free');
 
 /** This person's daily Generate count: IMAGES.perDayFor if they are on it, else IMAGES.generationsPerDay. */
@@ -32,6 +34,8 @@ export function perDay(fid: number): number {
 
 /** For a wallet account: how many text-to-image Generates its balance pays for. */
 export async function generationsLeft(sql: Sql, fid: number): Promise<number> {
+  // Never asks Lens (the count is shown when the maker opens); a decision already made counts, none yet shows the count.
+  if (isSocialPerson(fid) && (await freeFor(sql, fid, { lookUp: false }))?.free === false) return 0;
   if (isWalletNumber(fid)) return paysFor(await balanceUsd(sql, -fid), priceUsd(IMAGES.reserveUsd));
   const [r] = await sql`select count(*)::int as n from studio.image_asks where fid = ${fid} and at >= date_trunc('day', now() at time zone 'utc') at time zone 'utc'`;
   return Math.max(0, perDay(fid) - (r?.n ?? 0));
@@ -87,6 +91,8 @@ const DEFAULT_SPEND: Spend = { model: IMAGES.model, reserveUsd: IMAGES.reserveUs
  * sample and a sheet's view are Generates too (step 4): the same count, the same caps.
  */
 export async function reserve(sql: Sql, fid: number, spend: Spend = DEFAULT_SPEND): Promise<{ ok: true; left: number; debitId?: number } | { ok: false; refusal: Refusal }> {
+  // A Lens or Bluesky account without free generations (src/lib/social/free.ts) gets none, whichever route asks.
+  if (isSocialPerson(fid) && !(await freeFor(sql, fid)).free) return { ok: false, refusal: 'no-free' };
   return sql.begin(async (tx) => {
     await tx`select pg_advisory_xact_lock(hashtext('snowmoon.images.spend'))`;
     await tx`select pg_advisory_xact_lock(hashtext('snowmoon.images.fid'), ${fid}::int)`;

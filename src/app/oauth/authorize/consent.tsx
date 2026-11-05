@@ -1,10 +1,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { authFetch, useAuth, useWalletSession } from '~/lib/client-auth';
+import { authFetch, useAuth, useSocialSession, useWalletSession } from '~/lib/client-auth';
 import { AGENT_WORDING } from '~/lib/agents/wording';
-import { SignInButton } from '~/components/sign-in';
-import { WalletSignInButton } from '~/components/wallet';
+import { SignInChoices } from '~/components/sign-in-choices';
 
 const W = AGENT_WORDING.authorize;
 
@@ -13,7 +12,8 @@ export function AuthorizeConsent({ query, client, scopes, backHost, play = null 
   // Agent play's line, only for a person it is open to (the server leaves the scope out for anyone else).
   const shown = play && auth.kind === 'signed-in' && play.people.includes(auth.fid) ? [...scopes, play.text] : scopes;
   const wallet = useWalletSession();
-  const signedIn = auth.kind === 'signed-in' || wallet !== null;
+  const social = useSocialSession();
+  const signedIn = auth.kind === 'signed-in' || wallet !== null || social !== null;
   const [handle, setHandle] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -40,8 +40,7 @@ export function AuthorizeConsent({ query, client, scopes, backHost, play = null 
         <>
           <p>{W.signIn}</p>
           <div className="you-sign-in">
-            <SignInButton className="ic-secondary" />
-            {auth.kind === 'signed-out' && !auth.inApp && <WalletSignInButton />}
+            <SignInChoices wallet={auth.kind === 'signed-out' && !auth.inApp} />
           </div>
         </>
       ) : (
