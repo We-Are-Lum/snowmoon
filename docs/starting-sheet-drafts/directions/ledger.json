@@ -9997,6 +9997,1698 @@
     }
    },
    "at": "2026-11-05T16:26:49.703Z"
+  },
+  {
+   "char": "zei",
+   "direction": "animated",
+   "looks3": true,
+   "option": "a",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "from": "text",
+   "changed": {
+    "was": "light golden-tan skin, tall spiky black hair swept up and back with a broad teal-blue streak and close-cut sides, warm brown eyes",
+    "now": "deep brown skin, short black twists with one electric-blue streak, quick dark eyes"
+   },
+   "based_on": "directions/zei-animated-gpt.jpg",
+   "kind": "prompt-check",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 0.00010395,
+   "worstUsd": 0.0015,
+   "at": "2026-11-05T21:10:38.753Z"
+  },
+  {
+   "char": "zei",
+   "direction": "animated",
+   "looks3": true,
+   "option": "a",
+   "model": "gemini-3.1-flash-image",
+   "from": "text",
+   "changed": {
+    "was": "light golden-tan skin, tall spiky black hair swept up and back with a broad teal-blue streak and close-cut sides, warm brown eyes",
+    "now": "deep brown skin, short black twists with one electric-blue streak, quick dark eyes"
+   },
+   "based_on": "directions/zei-animated-gpt.jpg",
+   "kind": "image",
+   "file": "directions/zei-look-a-gemini.jpg",
+   "sha256": "8d7ffae44f13b3fb73ea31013aee9d9f43070ebd23b6c1390e1a7c905af97faa",
+   "closed_model": true,
+   "maker": "Google",
+   "costUsd": 0.0671005,
+   "worstUsd": 0.09,
+   "recipe": {
+    "prompt": "The same person as in the reference picture, full body from head to shoes, standing in a relaxed three-quarter stance with some personality, plain light grey background. Keep the face, hair, skin and clothes the same.\n\nAnimated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands.\n\na young man of eighteen, slim, deep brown skin, short black twists with one electric-blue streak, quick dark eyes under strong dark eyebrows, a confident half-smile, wearing a loose orange zip jacket with the sleeves pushed up over a plain black crew-neck top, a chunky dark wrist display with a glowing teal face, a thin dark band around his throat, dark straight trousers and white sneakers\n\nNo text, no lettering, no signs with words.",
+    "model": "gemini-3.1-flash-image",
+    "endpoint": "google/gemini-3.1-flash-image",
+    "host": "Vercel AI Gateway",
+    "settings": {
+     "modalities": [
+      "text",
+      "image"
+     ],
+     "aspect_ratio": "3:4",
+     "gateway": {
+      "only": [
+       "vertex"
+      ],
+      "zeroDataRetention": true,
+      "disallowPromptTraining": true
+     },
+     "retention": {
+      "provider": "vertex",
+      "zero_data_retention": true,
+      "no_training": true,
+      "endpoint_list_read_at": "2026-11-05T21:10:38.798Z"
+     },
+     "converted": {
+      "from": "image/png",
+      "sha256": "fb0ce2a37c1d5fa231b11197241d193ad91af461a0cd243a35faf899c549b69c",
+      "to": "jpeg",
+      "resized_to": {
+       "width": 576,
+       "height": 768
+      },
+      "fit": "contain, padded with the picture's own corner colour"
+     }
+    },
+    "seed": null,
+    "request_id": "gen_01M6PRSA1Y1PMG3ZZAHHTQJZPV",
+    "cost_usd": 0.0671,
+    "made_at": "2026-11-05T21:10:38.757Z",
+    "width": 576,
+    "height": 768,
+    "style": {
+     "version_id": "unpublished: docs/starting-sheet-drafts/directions/plan.json",
+     "title": "Animated series",
+     "text": "Animated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands."
+    },
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "not run"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line",
+      "style text",
+      "character descriptor"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    },
+    "looks3": {
+     "owner_decision": "2026-11-05: three looks for Zei, Bai, Seila and Mu, approved as proposed; only skin tone, hair and eyes change",
+     "was": "light golden-tan skin, tall spiky black hair swept up and back with a broad teal-blue streak and close-cut sides, warm brown eyes",
+     "now": "deep brown skin, short black twists with one electric-blue streak, quick dark eyes",
+     "current_front_made_with": "gpt-image-2.5-sunburst"
+    }
+   },
+   "response_meta": {
+    "id": "gen_01M6PRSA1Y1PMG3ZZAHHTQJZPV",
+    "model": "google/gemini-3.1-flash-image",
+    "usage": {
+     "prompt_tokens": 201,
+     "completion_tokens": 1120,
+     "total_tokens": 1321,
+     "cost": 0.0671005,
+     "is_byok": false,
+     "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0
+     },
+     "cost_details": {
+      "upstream_inference_cost": null,
+      "upstream_inference_prompt_cost": 0,
+      "upstream_inference_completions_cost": 0
+     },
+     "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "image_tokens": 0
+     },
+     "cache_creation_input_tokens": 0,
+     "market_cost": 0.0671005,
+     "gateway_cost": 0.0671005
+    },
+    "provider_metadata": {
+     "vertex": {
+      "promptFeedback": null,
+      "groundingMetadata": null,
+      "urlContextMetadata": null,
+      "safetyRatings": null,
+      "usageMetadata": {
+       "promptTokenCount": 201,
+       "candidatesTokenCount": 1120,
+       "totalTokenCount": 1321,
+       "trafficType": "ON_DEMAND",
+       "promptTokensDetails": [
+        {
+         "modality": "TEXT",
+         "tokenCount": 201
+        }
+       ],
+       "candidatesTokensDetails": [
+        {
+         "modality": "IMAGE",
+         "tokenCount": 1120
+        }
+       ]
+      },
+      "finishMessage": null,
+      "serviceTier": null
+     },
+     "gateway": {
+      "routing": {
+       "originalModelId": "google/gemini-3.1-flash-image",
+       "resolvedProvider": "vertex",
+       "fallbacksAvailable": [],
+       "planningReasoning": "Provider set restricted to: vertex. System credentials planned for: vertex. ZDR requested: all 1 attempts support ZDR. Execution order: vertex(system). Disallow prompt training requested: all 1 attempts disallow prompt training",
+       "canonicalSlug": "google/gemini-3.1-flash-image",
+       "finalProvider": "vertex",
+       "modelAttemptCount": 1,
+       "modelAttempts": [
+        {
+         "canonicalSlug": "google/gemini-3.1-flash-image",
+         "success": true,
+         "providerAttemptCount": 1,
+         "providerAttempts": [
+          {
+           "provider": "vertex",
+           "credentialType": "system",
+           "success": true,
+           "startTime": 1793913038945,
+           "endTime": 1793913045828,
+           "statusCode": 200,
+           "providerResponseId": "z_DsarXKBtjF-7UP2eu24A4"
+          }
+         ]
+        }
+       ],
+       "totalProviderAttemptCount": 1,
+       "affinity": {
+        "outcome": "skipped_below_min_prefix"
+       },
+       "clientSessionId": "49beb24cdfe2efb5add5d7720fa223c4",
+       "clientSessionIdSource": "fingerprint"
+      },
+      "cost": "0.0671005",
+      "marketCost": "0.0671005",
+      "surchargeCost": "0",
+      "gatewayCost": "0.0671005",
+      "inferenceCost": "0.0671005",
+      "inputInferenceCost": "0.0001005",
+      "outputInferenceCost": "0.067",
+      "enabledZeroDataRetention": true,
+      "enabledDisallowPromptTraining": true,
+      "generationId": "gen_01M6PRSA1Y1PMG3ZZAHHTQJZPV"
+     }
+    }
+   },
+   "at": "2026-11-05T21:10:38.757Z"
+  },
+  {
+   "char": "zei",
+   "direction": "animated",
+   "looks3": true,
+   "option": "b",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "from": "text",
+   "changed": {
+    "was": "light golden-tan skin, tall spiky black hair swept up and back with a broad teal-blue streak and close-cut sides, warm brown eyes",
+    "now": "fair skin, spiky ash-brown hair with one electric-blue streak, quick grey eyes"
+   },
+   "based_on": "directions/zei-animated-gpt.jpg",
+   "kind": "prompt-check",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 0.0001314,
+   "worstUsd": 0.0015,
+   "at": "2026-11-05T21:10:47.136Z"
+  },
+  {
+   "char": "zei",
+   "direction": "animated",
+   "looks3": true,
+   "option": "b",
+   "model": "gemini-3.1-flash-image",
+   "from": "text",
+   "changed": {
+    "was": "light golden-tan skin, tall spiky black hair swept up and back with a broad teal-blue streak and close-cut sides, warm brown eyes",
+    "now": "fair skin, spiky ash-brown hair with one electric-blue streak, quick grey eyes"
+   },
+   "based_on": "directions/zei-animated-gpt.jpg",
+   "kind": "image",
+   "file": "directions/zei-look-b-gemini.jpg",
+   "sha256": "2f821e20b54899661994c34d92cce3b582212db5d602b8ea8c59d2aa64687e79",
+   "closed_model": true,
+   "maker": "Google",
+   "costUsd": 0.0671015,
+   "worstUsd": 0.09,
+   "recipe": {
+    "prompt": "The same person as in the reference picture, full body from head to shoes, standing in a relaxed three-quarter stance with some personality, plain light grey background. Keep the face, hair, skin and clothes the same.\n\nAnimated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands.\n\na young man of eighteen, slim, fair skin, spiky ash-brown hair with one electric-blue streak, quick grey eyes under strong dark eyebrows, a confident half-smile, wearing a loose orange zip jacket with the sleeves pushed up over a plain black crew-neck top, a chunky dark wrist display with a glowing teal face, a thin dark band around his throat, dark straight trousers and white sneakers\n\nNo text, no lettering, no signs with words.",
+    "model": "gemini-3.1-flash-image",
+    "endpoint": "google/gemini-3.1-flash-image",
+    "host": "Vercel AI Gateway",
+    "settings": {
+     "modalities": [
+      "text",
+      "image"
+     ],
+     "aspect_ratio": "3:4",
+     "gateway": {
+      "only": [
+       "vertex"
+      ],
+      "zeroDataRetention": true,
+      "disallowPromptTraining": true
+     },
+     "retention": {
+      "provider": "vertex",
+      "zero_data_retention": true,
+      "no_training": true,
+      "endpoint_list_read_at": "2026-11-05T21:10:47.167Z"
+     },
+     "converted": {
+      "from": "image/png",
+      "sha256": "49b2a97fa97925b1dca082f889fe91755264e1aaab5a204a4e5df8ef947d4db0",
+      "to": "jpeg",
+      "resized_to": {
+       "width": 576,
+       "height": 768
+      },
+      "fit": "contain, padded with the picture's own corner colour"
+     }
+    },
+    "seed": null,
+    "request_id": "gen_01M6PRSJ7K4AREN9WKKNFKZ8RY",
+    "cost_usd": 0.0671,
+    "made_at": "2026-11-05T21:10:47.138Z",
+    "width": 576,
+    "height": 768,
+    "style": {
+     "version_id": "unpublished: docs/starting-sheet-drafts/directions/plan.json",
+     "title": "Animated series",
+     "text": "Animated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands."
+    },
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "not run"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line",
+      "style text",
+      "character descriptor"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    },
+    "looks3": {
+     "owner_decision": "2026-11-05: three looks for Zei, Bai, Seila and Mu, approved as proposed; only skin tone, hair and eyes change",
+     "was": "light golden-tan skin, tall spiky black hair swept up and back with a broad teal-blue streak and close-cut sides, warm brown eyes",
+     "now": "fair skin, spiky ash-brown hair with one electric-blue streak, quick grey eyes",
+     "current_front_made_with": "gpt-image-2.5-sunburst"
+    }
+   },
+   "response_meta": {
+    "id": "gen_01M6PRSJ7K4AREN9WKKNFKZ8RY",
+    "model": "google/gemini-3.1-flash-image",
+    "usage": {
+     "prompt_tokens": 203,
+     "completion_tokens": 1120,
+     "total_tokens": 1323,
+     "cost": 0.0671015,
+     "is_byok": false,
+     "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0
+     },
+     "cost_details": {
+      "upstream_inference_cost": null,
+      "upstream_inference_prompt_cost": 0,
+      "upstream_inference_completions_cost": 0
+     },
+     "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "image_tokens": 0
+     },
+     "cache_creation_input_tokens": 0,
+     "market_cost": 0.0671015,
+     "gateway_cost": 0.0671015
+    },
+    "provider_metadata": {
+     "vertex": {
+      "promptFeedback": null,
+      "groundingMetadata": null,
+      "urlContextMetadata": null,
+      "safetyRatings": null,
+      "usageMetadata": {
+       "promptTokenCount": 203,
+       "candidatesTokenCount": 1120,
+       "totalTokenCount": 1323,
+       "trafficType": "ON_DEMAND",
+       "promptTokensDetails": [
+        {
+         "modality": "TEXT",
+         "tokenCount": 203
+        }
+       ],
+       "candidatesTokensDetails": [
+        {
+         "modality": "IMAGE",
+         "tokenCount": 1120
+        }
+       ]
+      },
+      "finishMessage": null,
+      "serviceTier": null
+     },
+     "gateway": {
+      "routing": {
+       "originalModelId": "google/gemini-3.1-flash-image",
+       "resolvedProvider": "vertex",
+       "fallbacksAvailable": [],
+       "planningReasoning": "Provider set restricted to: vertex. System credentials planned for: vertex. ZDR requested: all 1 attempts support ZDR. Execution order: vertex(system). Disallow prompt training requested: all 1 attempts disallow prompt training",
+       "canonicalSlug": "google/gemini-3.1-flash-image",
+       "finalProvider": "vertex",
+       "modelAttemptCount": 1,
+       "modelAttempts": [
+        {
+         "canonicalSlug": "google/gemini-3.1-flash-image",
+         "success": true,
+         "providerAttemptCount": 1,
+         "providerAttempts": [
+          {
+           "provider": "vertex",
+           "credentialType": "system",
+           "success": true,
+           "startTime": 1793913047315,
+           "endTime": 1793913055356,
+           "statusCode": 200,
+           "providerResponseId": "1_DsasOhG9aiw8cPxO_U2QI"
+          }
+         ]
+        }
+       ],
+       "totalProviderAttemptCount": 1,
+       "affinity": {
+        "outcome": "skipped_below_min_prefix"
+       },
+       "clientSessionId": "0db55d941e4329b9651466b3b8738aa9",
+       "clientSessionIdSource": "fingerprint"
+      },
+      "cost": "0.0671015",
+      "marketCost": "0.0671015",
+      "surchargeCost": "0",
+      "gatewayCost": "0.0671015",
+      "inferenceCost": "0.0671015",
+      "inputInferenceCost": "0.0001015",
+      "outputInferenceCost": "0.067",
+      "enabledZeroDataRetention": true,
+      "enabledDisallowPromptTraining": true,
+      "generationId": "gen_01M6PRSJ7K4AREN9WKKNFKZ8RY"
+     }
+    }
+   },
+   "at": "2026-11-05T21:10:47.138Z"
+  },
+  {
+   "char": "bai",
+   "direction": "animated",
+   "looks3": true,
+   "option": "a",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "from": "text",
+   "changed": {
+    "was": "dark brown skin, a long sleek magenta ponytail pulled high with the sides of her head shaved close, dark eyes",
+    "now": "light olive skin, long straight black hair in a high ponytail dyed magenta at the ends, dark eyes"
+   },
+   "based_on": "directions/bai-animated-gpt.jpg",
+   "kind": "prompt-check",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 0.0001896,
+   "worstUsd": 0.0015,
+   "at": "2026-11-05T21:10:57.001Z"
+  },
+  {
+   "char": "bai",
+   "direction": "animated",
+   "looks3": true,
+   "option": "a",
+   "model": "gemini-3.1-flash-image",
+   "from": "text",
+   "changed": {
+    "was": "dark brown skin, a long sleek magenta ponytail pulled high with the sides of her head shaved close, dark eyes",
+    "now": "light olive skin, long straight black hair in a high ponytail dyed magenta at the ends, dark eyes"
+   },
+   "based_on": "directions/bai-animated-gpt.jpg",
+   "kind": "image",
+   "file": "directions/bai-look-a-gemini.jpg",
+   "sha256": "b130d7716a507de2d61ac5267eab150adb8b8ef44a0f52a574198c08dbe584af",
+   "closed_model": true,
+   "maker": "Google",
+   "costUsd": 0.0671055,
+   "worstUsd": 0.09,
+   "recipe": {
+    "prompt": "The same person as in the reference picture, full body from head to shoes, standing in a relaxed three-quarter stance with some personality, plain light grey background. Keep the face, hair, skin and clothes the same.\n\nAnimated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands.\n\na young woman of about eighteen, slim and wiry, light olive skin, long straight black hair in a high ponytail dyed magenta at the ends, dark eyes with a sly sideways look and a small confident smile, long amber drop earrings, a sleeveless yellow-green vest open over a dark grey tank top, both arms covered in fine brown line tattoos from shoulder to wrist, a dark bracelet, a hand device held in one hand, dark trousers and boots\n\nNo text, no lettering, no signs with words.",
+    "model": "gemini-3.1-flash-image",
+    "endpoint": "google/gemini-3.1-flash-image",
+    "host": "Vercel AI Gateway",
+    "settings": {
+     "modalities": [
+      "text",
+      "image"
+     ],
+     "aspect_ratio": "3:4",
+     "gateway": {
+      "only": [
+       "vertex"
+      ],
+      "zeroDataRetention": true,
+      "disallowPromptTraining": true
+     },
+     "retention": {
+      "provider": "vertex",
+      "zero_data_retention": true,
+      "no_training": true,
+      "endpoint_list_read_at": "2026-11-05T21:10:57.035Z"
+     },
+     "converted": {
+      "from": "image/png",
+      "sha256": "74b8eb84ba80a0a8e0496bae9f3ac03581144d32965c459ffb803efa6b5357b7",
+      "to": "jpeg",
+      "resized_to": {
+       "width": 576,
+       "height": 768
+      },
+      "fit": "contain, padded with the picture's own corner colour"
+     }
+    },
+    "seed": null,
+    "request_id": "gen_01M6PRSZM9XFNES0PYK3G9AKBT",
+    "cost_usd": 0.0671,
+    "made_at": "2026-11-05T21:10:57.005Z",
+    "width": 576,
+    "height": 768,
+    "style": {
+     "version_id": "unpublished: docs/starting-sheet-drafts/directions/plan.json",
+     "title": "Animated series",
+     "text": "Animated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands."
+    },
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "not run"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line",
+      "style text",
+      "character descriptor"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    },
+    "looks3": {
+     "owner_decision": "2026-11-05: three looks for Zei, Bai, Seila and Mu, approved as proposed; only skin tone, hair and eyes change",
+     "was": "dark brown skin, a long sleek magenta ponytail pulled high with the sides of her head shaved close, dark eyes",
+     "now": "light olive skin, long straight black hair in a high ponytail dyed magenta at the ends, dark eyes",
+     "current_front_made_with": "gpt-image-2.5-sunburst"
+    }
+   },
+   "response_meta": {
+    "id": "gen_01M6PRSZM9XFNES0PYK3G9AKBT",
+    "model": "google/gemini-3.1-flash-image",
+    "usage": {
+     "prompt_tokens": 211,
+     "completion_tokens": 1120,
+     "total_tokens": 1331,
+     "cost": 0.0671055,
+     "is_byok": false,
+     "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0
+     },
+     "cost_details": {
+      "upstream_inference_cost": null,
+      "upstream_inference_prompt_cost": 0,
+      "upstream_inference_completions_cost": 0
+     },
+     "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "image_tokens": 0
+     },
+     "cache_creation_input_tokens": 0,
+     "market_cost": 0.0671055,
+     "gateway_cost": 0.0671055
+    },
+    "provider_metadata": {
+     "vertex": {
+      "promptFeedback": null,
+      "groundingMetadata": null,
+      "urlContextMetadata": null,
+      "safetyRatings": null,
+      "usageMetadata": {
+       "promptTokenCount": 211,
+       "candidatesTokenCount": 1120,
+       "totalTokenCount": 1331,
+       "trafficType": "ON_DEMAND",
+       "promptTokensDetails": [
+        {
+         "modality": "TEXT",
+         "tokenCount": 211
+        }
+       ],
+       "candidatesTokensDetails": [
+        {
+         "modality": "IMAGE",
+         "tokenCount": 1120
+        }
+       ]
+      },
+      "finishMessage": null,
+      "serviceTier": null
+     },
+     "gateway": {
+      "routing": {
+       "originalModelId": "google/gemini-3.1-flash-image",
+       "resolvedProvider": "vertex",
+       "fallbacksAvailable": [],
+       "planningReasoning": "Provider set restricted to: vertex. System credentials planned for: vertex. ZDR requested: all 1 attempts support ZDR. Execution order: vertex(system). Disallow prompt training requested: all 1 attempts disallow prompt training",
+       "canonicalSlug": "google/gemini-3.1-flash-image",
+       "finalProvider": "vertex",
+       "modelAttemptCount": 1,
+       "modelAttempts": [
+        {
+         "canonicalSlug": "google/gemini-3.1-flash-image",
+         "success": true,
+         "providerAttemptCount": 1,
+         "providerAttempts": [
+          {
+           "provider": "vertex",
+           "credentialType": "system",
+           "success": true,
+           "startTime": 1793913061690,
+           "endTime": 1793913068594,
+           "statusCode": 200,
+           "providerResponseId": "5fDsaovtNtjF-7UP2eu24A4"
+          }
+         ]
+        }
+       ],
+       "totalProviderAttemptCount": 1,
+       "affinity": {
+        "outcome": "skipped_below_min_prefix"
+       },
+       "clientSessionId": "9bb9026fae721d574e0193a7aee589bb",
+       "clientSessionIdSource": "fingerprint"
+      },
+      "cost": "0.0671055",
+      "marketCost": "0.0671055",
+      "surchargeCost": "0",
+      "gatewayCost": "0.0671055",
+      "inferenceCost": "0.0671055",
+      "inputInferenceCost": "0.0001055",
+      "outputInferenceCost": "0.067",
+      "enabledZeroDataRetention": true,
+      "enabledDisallowPromptTraining": true,
+      "generationId": "gen_01M6PRSZM9XFNES0PYK3G9AKBT"
+     }
+    }
+   },
+   "at": "2026-11-05T21:10:57.005Z"
+  },
+  {
+   "char": "bai",
+   "direction": "animated",
+   "looks3": true,
+   "option": "b",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "from": "text",
+   "changed": {
+    "was": "dark brown skin, a long sleek magenta ponytail pulled high with the sides of her head shaved close, dark eyes",
+    "now": "fair freckled skin, a high ponytail of loose auburn curls dyed magenta at the ends, hazel eyes"
+   },
+   "based_on": "directions/bai-animated-gpt.jpg",
+   "kind": "prompt-check",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 0.000133125,
+   "worstUsd": 0.0015,
+   "at": "2026-11-05T21:11:09.986Z"
+  },
+  {
+   "char": "bai",
+   "direction": "animated",
+   "looks3": true,
+   "option": "b",
+   "model": "gemini-3.1-flash-image",
+   "from": "text",
+   "changed": {
+    "was": "dark brown skin, a long sleek magenta ponytail pulled high with the sides of her head shaved close, dark eyes",
+    "now": "fair freckled skin, a high ponytail of loose auburn curls dyed magenta at the ends, hazel eyes"
+   },
+   "based_on": "directions/bai-animated-gpt.jpg",
+   "kind": "image",
+   "file": "directions/bai-look-b-gemini.jpg",
+   "sha256": "f0bfb1d80915a8c622492a193be2285528889f64b17b704d1c0b38dadc11bf35",
+   "closed_model": true,
+   "maker": "Google",
+   "costUsd": 0.067106,
+   "worstUsd": 0.09,
+   "recipe": {
+    "prompt": "The same person as in the reference picture, full body from head to shoes, standing in a relaxed three-quarter stance with some personality, plain light grey background. Keep the face, hair, skin and clothes the same.\n\nAnimated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands.\n\na young woman of about eighteen, slim and wiry, fair freckled skin, a high ponytail of loose auburn curls dyed magenta at the ends, hazel eyes with a sly sideways look and a small confident smile, long amber drop earrings, a sleeveless yellow-green vest open over a dark grey tank top, both arms covered in fine brown line tattoos from shoulder to wrist, a dark bracelet, a hand device held in one hand, dark trousers and boots\n\nNo text, no lettering, no signs with words.",
+    "model": "gemini-3.1-flash-image",
+    "endpoint": "google/gemini-3.1-flash-image",
+    "host": "Vercel AI Gateway",
+    "settings": {
+     "modalities": [
+      "text",
+      "image"
+     ],
+     "aspect_ratio": "3:4",
+     "gateway": {
+      "only": [
+       "vertex"
+      ],
+      "zeroDataRetention": true,
+      "disallowPromptTraining": true
+     },
+     "retention": {
+      "provider": "vertex",
+      "zero_data_retention": true,
+      "no_training": true,
+      "endpoint_list_read_at": "2026-11-05T21:11:10.024Z"
+     },
+     "converted": {
+      "from": "image/png",
+      "sha256": "e5d62352caa0a640fbb5f11dd804d97cf78aa5d5b8d5afd845c16eff17e95f00",
+      "to": "jpeg",
+      "resized_to": {
+       "width": 576,
+       "height": 768
+      },
+      "fit": "contain, padded with the picture's own corner colour"
+     }
+    },
+    "seed": null,
+    "request_id": "gen_01M6PRT8J6H5XWDJMHJYMZ2JN0",
+    "cost_usd": 0.0671,
+    "made_at": "2026-11-05T21:11:09.990Z",
+    "width": 576,
+    "height": 768,
+    "style": {
+     "version_id": "unpublished: docs/starting-sheet-drafts/directions/plan.json",
+     "title": "Animated series",
+     "text": "Animated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands."
+    },
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "not run"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line",
+      "style text",
+      "character descriptor"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    },
+    "looks3": {
+     "owner_decision": "2026-11-05: three looks for Zei, Bai, Seila and Mu, approved as proposed; only skin tone, hair and eyes change",
+     "was": "dark brown skin, a long sleek magenta ponytail pulled high with the sides of her head shaved close, dark eyes",
+     "now": "fair freckled skin, a high ponytail of loose auburn curls dyed magenta at the ends, hazel eyes",
+     "current_front_made_with": "gpt-image-2.5-sunburst"
+    }
+   },
+   "response_meta": {
+    "id": "gen_01M6PRT8J6H5XWDJMHJYMZ2JN0",
+    "model": "google/gemini-3.1-flash-image",
+    "usage": {
+     "prompt_tokens": 212,
+     "completion_tokens": 1120,
+     "total_tokens": 1332,
+     "cost": 0.067106,
+     "is_byok": false,
+     "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0
+     },
+     "cost_details": {
+      "upstream_inference_cost": null,
+      "upstream_inference_prompt_cost": 0,
+      "upstream_inference_completions_cost": 0
+     },
+     "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "image_tokens": 0
+     },
+     "cache_creation_input_tokens": 0,
+     "market_cost": 0.067106,
+     "gateway_cost": 0.067106
+    },
+    "provider_metadata": {
+     "vertex": {
+      "promptFeedback": null,
+      "groundingMetadata": null,
+      "urlContextMetadata": null,
+      "safetyRatings": null,
+      "usageMetadata": {
+       "promptTokenCount": 212,
+       "candidatesTokenCount": 1120,
+       "totalTokenCount": 1332,
+       "trafficType": "ON_DEMAND",
+       "promptTokensDetails": [
+        {
+         "modality": "TEXT",
+         "tokenCount": 212
+        }
+       ],
+       "candidatesTokensDetails": [
+        {
+         "modality": "IMAGE",
+         "tokenCount": 1120
+        }
+       ]
+      },
+      "finishMessage": null,
+      "serviceTier": null
+     },
+     "gateway": {
+      "routing": {
+       "originalModelId": "google/gemini-3.1-flash-image",
+       "resolvedProvider": "vertex",
+       "fallbacksAvailable": [],
+       "planningReasoning": "Provider set restricted to: vertex. System credentials planned for: vertex. ZDR requested: all 1 attempts support ZDR. Execution order: vertex(system). Disallow prompt training requested: all 1 attempts disallow prompt training",
+       "canonicalSlug": "google/gemini-3.1-flash-image",
+       "finalProvider": "vertex",
+       "modelAttemptCount": 1,
+       "modelAttempts": [
+        {
+         "canonicalSlug": "google/gemini-3.1-flash-image",
+         "success": true,
+         "providerAttemptCount": 1,
+         "providerAttempts": [
+          {
+           "provider": "vertex",
+           "credentialType": "system",
+           "success": true,
+           "startTime": 1793913070180,
+           "endTime": 1793913078106,
+           "statusCode": 200,
+           "providerResponseId": "7vDsaunZEpDS8eEPtqHJ6QQ"
+          }
+         ]
+        }
+       ],
+       "totalProviderAttemptCount": 1,
+       "affinity": {
+        "outcome": "skipped_below_min_prefix"
+       },
+       "clientSessionId": "8db0138ae403564977eec803dcb57300",
+       "clientSessionIdSource": "fingerprint"
+      },
+      "cost": "0.067106",
+      "marketCost": "0.067106",
+      "surchargeCost": "0",
+      "gatewayCost": "0.067106",
+      "inferenceCost": "0.067106",
+      "inputInferenceCost": "0.000106",
+      "outputInferenceCost": "0.067",
+      "enabledZeroDataRetention": true,
+      "enabledDisallowPromptTraining": true,
+      "generationId": "gen_01M6PRT8J6H5XWDJMHJYMZ2JN0"
+     }
+    }
+   },
+   "at": "2026-11-05T21:11:09.990Z"
+  },
+  {
+   "char": "seila",
+   "direction": "animated",
+   "looks3": true,
+   "option": "a",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "from": "text",
+   "changed": {
+    "was": "deep brown skin, black hair in shoulder-length braids gathered loosely back, alert dark eyes",
+    "now": "light tan skin, shoulder-length wavy black hair gathered loosely back, alert dark eyes"
+   },
+   "based_on": "directions/seila-animated-gemini.jpg",
+   "kind": "prompt-check",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 0.00008355,
+   "worstUsd": 0.0015,
+   "at": "2026-11-05T21:11:19.577Z"
+  },
+  {
+   "char": "seila",
+   "direction": "animated",
+   "looks3": true,
+   "option": "a",
+   "model": "gemini-3.1-flash-image",
+   "from": "text",
+   "changed": {
+    "was": "deep brown skin, black hair in shoulder-length braids gathered loosely back, alert dark eyes",
+    "now": "light tan skin, shoulder-length wavy black hair gathered loosely back, alert dark eyes"
+   },
+   "based_on": "directions/seila-animated-gemini.jpg",
+   "kind": "image",
+   "file": "directions/seila-look-a-gemini.jpg",
+   "sha256": "4891cc2fae0d205d1a51325d2503e1b478adf503aaea488a21309742678a93a1",
+   "closed_model": true,
+   "maker": "Google",
+   "costUsd": 0.067211,
+   "worstUsd": 0.09,
+   "recipe": {
+    "prompt": "Character reference picture: one person, full body from head to shoes, standing in a relaxed three-quarter stance with some personality, plain light grey background.\n\nAnimated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands.\n\na woman in her late thirties, tall and slender, light tan skin, shoulder-length wavy black hair gathered loosely back, alert dark eyes behind small round gold-rimmed glasses, wearing a long rust-orange woven coat-dress with a sculpted high funnel collar, an asymmetric closure of three bronze clasps running from shoulder to hip and a split hem, over an oatmeal seamless bodysuit, olive gathered trousers, soft tan seamless ankle boots and a thin band around her throat\n\nNo text, no lettering, no signs with words.",
+    "model": "gemini-3.1-flash-image",
+    "endpoint": "google/gemini-3.1-flash-image",
+    "host": "Vercel AI Gateway",
+    "settings": {
+     "modalities": [
+      "text",
+      "image"
+     ],
+     "aspect_ratio": "3:4",
+     "gateway": {
+      "only": [
+       "vertex"
+      ],
+      "zeroDataRetention": true,
+      "disallowPromptTraining": true
+     },
+     "retention": {
+      "provider": "vertex",
+      "zero_data_retention": true,
+      "no_training": true,
+      "endpoint_list_read_at": "2026-11-05T21:11:19.732Z"
+     },
+     "converted": {
+      "from": "image/png",
+      "sha256": "5ca2fbfa1b2d358905d02d444e13b68d09ebad7189ef7fd0b2a15e0dd23e42e3",
+      "to": "jpeg",
+      "resized_to": {
+       "width": 576,
+       "height": 768
+      },
+      "fit": "contain, padded with the picture's own corner colour"
+     }
+    },
+    "seed": null,
+    "request_id": "gen_01M6PRTJ1NN4ACXQ17P95YSAMG",
+    "cost_usd": 0.0672,
+    "made_at": "2026-11-05T21:11:19.582Z",
+    "width": 576,
+    "height": 768,
+    "style": {
+     "version_id": "unpublished: docs/starting-sheet-drafts/directions/plan.json",
+     "title": "Animated series",
+     "text": "Animated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands."
+    },
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "not run"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line",
+      "style text",
+      "character descriptor"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    },
+    "looks3": {
+     "owner_decision": "2026-11-05: three looks for Zei, Bai, Seila and Mu, approved as proposed; only skin tone, hair and eyes change",
+     "was": "deep brown skin, black hair in shoulder-length braids gathered loosely back, alert dark eyes",
+     "now": "light tan skin, shoulder-length wavy black hair gathered loosely back, alert dark eyes",
+     "current_front_made_with": "gemini-3.1-flash-image"
+    }
+   },
+   "response_meta": {
+    "id": "gen_01M6PRTJ1NN4ACXQ17P95YSAMG",
+    "model": "google/gemini-3.1-flash-image",
+    "usage": {
+     "prompt_tokens": 200,
+     "completion_tokens": 1157,
+     "total_tokens": 1357,
+     "cost": 0.067211,
+     "is_byok": false,
+     "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0
+     },
+     "cost_details": {
+      "upstream_inference_cost": null,
+      "upstream_inference_prompt_cost": 0,
+      "upstream_inference_completions_cost": 0
+     },
+     "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "image_tokens": 0
+     },
+     "cache_creation_input_tokens": 0,
+     "market_cost": 0.067211,
+     "gateway_cost": 0.067211
+    },
+    "provider_metadata": {
+     "vertex": {
+      "promptFeedback": null,
+      "groundingMetadata": null,
+      "urlContextMetadata": null,
+      "safetyRatings": null,
+      "usageMetadata": {
+       "promptTokenCount": 200,
+       "candidatesTokenCount": 1157,
+       "totalTokenCount": 1357,
+       "trafficType": "ON_DEMAND",
+       "promptTokensDetails": [
+        {
+         "modality": "TEXT",
+         "tokenCount": 200
+        }
+       ],
+       "candidatesTokensDetails": [
+        {
+         "modality": "IMAGE",
+         "tokenCount": 1120
+        },
+        {
+         "modality": "TEXT",
+         "tokenCount": 37
+        }
+       ]
+      },
+      "finishMessage": null,
+      "serviceTier": null
+     },
+     "gateway": {
+      "routing": {
+       "originalModelId": "google/gemini-3.1-flash-image",
+       "resolvedProvider": "vertex",
+       "fallbacksAvailable": [],
+       "planningReasoning": "Provider set restricted to: vertex. System credentials planned for: vertex. ZDR requested: all 1 attempts support ZDR. Execution order: vertex(system). Disallow prompt training requested: all 1 attempts disallow prompt training",
+       "canonicalSlug": "google/gemini-3.1-flash-image",
+       "finalProvider": "vertex",
+       "modelAttemptCount": 1,
+       "modelAttempts": [
+        {
+         "canonicalSlug": "google/gemini-3.1-flash-image",
+         "success": true,
+         "providerAttemptCount": 1,
+         "providerAttempts": [
+          {
+           "provider": "vertex",
+           "credentialType": "system",
+           "success": true,
+           "startTime": 1793913079930,
+           "endTime": 1793913089026,
+           "statusCode": 200,
+           "providerResponseId": "9_DsaqOEPZ2lw8cPtPjjwAw"
+          }
+         ]
+        }
+       ],
+       "totalProviderAttemptCount": 1,
+       "affinity": {
+        "outcome": "skipped_below_min_prefix"
+       },
+       "clientSessionId": "e443686b90f276ae98800cb396b6d23d",
+       "clientSessionIdSource": "fingerprint"
+      },
+      "cost": "0.067211",
+      "marketCost": "0.067211",
+      "surchargeCost": "0",
+      "gatewayCost": "0.067211",
+      "inferenceCost": "0.067211",
+      "inputInferenceCost": "0.0001",
+      "outputInferenceCost": "0.067111",
+      "enabledZeroDataRetention": true,
+      "enabledDisallowPromptTraining": true,
+      "generationId": "gen_01M6PRTJ1NN4ACXQ17P95YSAMG"
+     }
+    }
+   },
+   "at": "2026-11-05T21:11:19.582Z"
+  },
+  {
+   "char": "seila",
+   "direction": "animated",
+   "looks3": true,
+   "option": "b",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "from": "text",
+   "changed": {
+    "was": "deep brown skin, black hair in shoulder-length braids gathered loosely back, alert dark eyes",
+    "now": "fair skin, shoulder-length auburn hair in a loose braid, alert green eyes"
+   },
+   "based_on": "directions/seila-animated-gemini.jpg",
+   "kind": "prompt-check",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 0.000090075,
+   "worstUsd": 0.0015,
+   "at": "2026-11-05T21:11:30.997Z"
+  },
+  {
+   "char": "seila",
+   "direction": "animated",
+   "looks3": true,
+   "option": "b",
+   "model": "gemini-3.1-flash-image",
+   "from": "text",
+   "changed": {
+    "was": "deep brown skin, black hair in shoulder-length braids gathered loosely back, alert dark eyes",
+    "now": "fair skin, shoulder-length auburn hair in a loose braid, alert green eyes"
+   },
+   "based_on": "directions/seila-animated-gemini.jpg",
+   "kind": "image",
+   "file": "directions/seila-look-b-gemini.jpg",
+   "sha256": "61036bb4c786bc64c16b06bb04202c09e8421b5ab988e4bedf3286f5731c1d2d",
+   "closed_model": true,
+   "maker": "Google",
+   "costUsd": 0.0671,
+   "worstUsd": 0.09,
+   "recipe": {
+    "prompt": "Character reference picture: one person, full body from head to shoes, standing in a relaxed three-quarter stance with some personality, plain light grey background.\n\nAnimated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands.\n\na woman in her late thirties, tall and slender, fair skin, shoulder-length auburn hair in a loose braid, alert green eyes behind small round gold-rimmed glasses, wearing a long rust-orange woven coat-dress with a sculpted high funnel collar, an asymmetric closure of three bronze clasps running from shoulder to hip and a split hem, over an oatmeal seamless bodysuit, olive gathered trousers, soft tan seamless ankle boots and a thin band around her throat\n\nNo text, no lettering, no signs with words.",
+    "model": "gemini-3.1-flash-image",
+    "endpoint": "google/gemini-3.1-flash-image",
+    "host": "Vercel AI Gateway",
+    "settings": {
+     "modalities": [
+      "text",
+      "image"
+     ],
+     "aspect_ratio": "3:4",
+     "gateway": {
+      "only": [
+       "vertex"
+      ],
+      "zeroDataRetention": true,
+      "disallowPromptTraining": true
+     },
+     "retention": {
+      "provider": "vertex",
+      "zero_data_retention": true,
+      "no_training": true,
+      "endpoint_list_read_at": "2026-11-05T21:11:31.056Z"
+     },
+     "converted": {
+      "from": "image/png",
+      "sha256": "03f7e1ad69917ea79867c32681ef1bf18f45c3332ed93564c257a4e8cbebc8c9",
+      "to": "jpeg",
+      "resized_to": {
+       "width": 576,
+       "height": 768
+      },
+      "fit": "contain, padded with the picture's own corner colour"
+     }
+    },
+    "seed": null,
+    "request_id": "gen_01M6PRTY0DQYEKNA9QR1WFS09Q",
+    "cost_usd": 0.0671,
+    "made_at": "2026-11-05T21:11:31.002Z",
+    "width": 576,
+    "height": 768,
+    "style": {
+     "version_id": "unpublished: docs/starting-sheet-drafts/directions/plan.json",
+     "title": "Animated series",
+     "text": "Animated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands."
+    },
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "not run"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line",
+      "style text",
+      "character descriptor"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    },
+    "looks3": {
+     "owner_decision": "2026-11-05: three looks for Zei, Bai, Seila and Mu, approved as proposed; only skin tone, hair and eyes change",
+     "was": "deep brown skin, black hair in shoulder-length braids gathered loosely back, alert dark eyes",
+     "now": "fair skin, shoulder-length auburn hair in a loose braid, alert green eyes",
+     "current_front_made_with": "gemini-3.1-flash-image"
+    }
+   },
+   "response_meta": {
+    "id": "gen_01M6PRTY0DQYEKNA9QR1WFS09Q",
+    "model": "google/gemini-3.1-flash-image",
+    "usage": {
+     "prompt_tokens": 200,
+     "completion_tokens": 1120,
+     "total_tokens": 1320,
+     "cost": 0.0671,
+     "is_byok": false,
+     "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0
+     },
+     "cost_details": {
+      "upstream_inference_cost": null,
+      "upstream_inference_prompt_cost": 0,
+      "upstream_inference_completions_cost": 0
+     },
+     "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "image_tokens": 0
+     },
+     "cache_creation_input_tokens": 0,
+     "market_cost": 0.0671,
+     "gateway_cost": 0.0671
+    },
+    "provider_metadata": {
+     "vertex": {
+      "promptFeedback": null,
+      "groundingMetadata": null,
+      "urlContextMetadata": null,
+      "safetyRatings": null,
+      "usageMetadata": {
+       "promptTokenCount": 200,
+       "candidatesTokenCount": 1120,
+       "totalTokenCount": 1320,
+       "trafficType": "ON_DEMAND",
+       "promptTokensDetails": [
+        {
+         "modality": "TEXT",
+         "tokenCount": 200
+        }
+       ],
+       "candidatesTokensDetails": [
+        {
+         "modality": "IMAGE",
+         "tokenCount": 1120
+        }
+       ]
+      },
+      "finishMessage": null,
+      "serviceTier": null
+     },
+     "gateway": {
+      "routing": {
+       "originalModelId": "google/gemini-3.1-flash-image",
+       "resolvedProvider": "vertex",
+       "fallbacksAvailable": [],
+       "planningReasoning": "Provider set restricted to: vertex. System credentials planned for: vertex. ZDR requested: all 1 attempts support ZDR. Execution order: vertex(system). Disallow prompt training requested: all 1 attempts disallow prompt training",
+       "canonicalSlug": "google/gemini-3.1-flash-image",
+       "finalProvider": "vertex",
+       "modelAttemptCount": 1,
+       "modelAttempts": [
+        {
+         "canonicalSlug": "google/gemini-3.1-flash-image",
+         "success": true,
+         "providerAttemptCount": 1,
+         "providerAttempts": [
+          {
+           "provider": "vertex",
+           "credentialType": "system",
+           "success": true,
+           "startTime": 1793913092470,
+           "endTime": 1793913099245,
+           "statusCode": 200,
+           "providerResponseId": "BPHsaunMJPiyw8cPzISbmQI"
+          }
+         ]
+        }
+       ],
+       "totalProviderAttemptCount": 1,
+       "affinity": {
+        "outcome": "skipped_below_min_prefix"
+       },
+       "clientSessionId": "7ed9a51f0f2d38757d19961d70eda588",
+       "clientSessionIdSource": "fingerprint"
+      },
+      "cost": "0.0671",
+      "marketCost": "0.0671",
+      "surchargeCost": "0",
+      "gatewayCost": "0.0671",
+      "inferenceCost": "0.0671",
+      "inputInferenceCost": "0.0001",
+      "outputInferenceCost": "0.067",
+      "enabledZeroDataRetention": true,
+      "enabledDisallowPromptTraining": true,
+      "generationId": "gen_01M6PRTY0DQYEKNA9QR1WFS09Q"
+     }
+    }
+   },
+   "at": "2026-11-05T21:11:31.002Z"
+  },
+  {
+   "char": "mu",
+   "direction": "animated",
+   "looks3": true,
+   "option": "a",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "from": "text",
+   "changed": {
+    "was": "medium brown skin, short silver hair in a sharp asymmetric cut, keen eyes",
+    "now": "pale skin, short silver hair in a sharp asymmetric cut, keen grey eyes"
+   },
+   "based_on": "directions/mu-animated-gemini.jpg",
+   "kind": "prompt-check",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 0.00008655,
+   "worstUsd": 0.0015,
+   "at": "2026-11-05T21:11:41.083Z"
+  },
+  {
+   "char": "mu",
+   "direction": "animated",
+   "looks3": true,
+   "option": "a",
+   "model": "gemini-3.1-flash-image",
+   "from": "text",
+   "changed": {
+    "was": "medium brown skin, short silver hair in a sharp asymmetric cut, keen eyes",
+    "now": "pale skin, short silver hair in a sharp asymmetric cut, keen grey eyes"
+   },
+   "based_on": "directions/mu-animated-gemini.jpg",
+   "kind": "image",
+   "file": "directions/mu-look-a-gemini.jpg",
+   "sha256": "33856131281db9202fa736025eda91a578823b3e0fe1250e350f8b5bdd1b92fb",
+   "closed_model": true,
+   "maker": "Google",
+   "costUsd": 0.0670925,
+   "worstUsd": 0.09,
+   "recipe": {
+    "prompt": "Character reference picture: one person, full body from head to shoes, standing in a relaxed three-quarter stance with some personality, plain light grey background.\n\nAnimated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands.\n\na woman in her early sixties, small and wiry, pale skin, short silver hair in a sharp asymmetric cut, keen grey eyes behind thin red-framed glasses, wearing a charcoal asymmetric commander's tabard with one sculpted shoulder panel and bright yellow piping, over a cobalt-blue seamless long-sleeved bodysuit, slim black segmented trousers, soft grey seamless boots and a slim wrist device\n\nNo text, no lettering, no signs with words.",
+    "model": "gemini-3.1-flash-image",
+    "endpoint": "google/gemini-3.1-flash-image",
+    "host": "Vercel AI Gateway",
+    "settings": {
+     "modalities": [
+      "text",
+      "image"
+     ],
+     "aspect_ratio": "3:4",
+     "gateway": {
+      "only": [
+       "vertex"
+      ],
+      "zeroDataRetention": true,
+      "disallowPromptTraining": true
+     },
+     "retention": {
+      "provider": "vertex",
+      "zero_data_retention": true,
+      "no_training": true,
+      "endpoint_list_read_at": "2026-11-05T21:11:41.231Z"
+     },
+     "converted": {
+      "from": "image/png",
+      "sha256": "fe0b754db6770fd0149af2f0c3a227fb0bb1cc37971a7df359c478b6a34ff89a",
+      "to": "jpeg",
+      "resized_to": {
+       "width": 576,
+       "height": 768
+      },
+      "fit": "contain, padded with the picture's own corner colour"
+     }
+    },
+    "seed": null,
+    "request_id": "gen_01M6PRV7248PW9530BX1HX4V9G",
+    "cost_usd": 0.0671,
+    "made_at": "2026-11-05T21:11:41.084Z",
+    "width": 576,
+    "height": 768,
+    "style": {
+     "version_id": "unpublished: docs/starting-sheet-drafts/directions/plan.json",
+     "title": "Animated series",
+     "text": "Animated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands."
+    },
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "not run"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line",
+      "style text",
+      "character descriptor"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    },
+    "looks3": {
+     "owner_decision": "2026-11-05: three looks for Zei, Bai, Seila and Mu, approved as proposed; only skin tone, hair and eyes change",
+     "was": "medium brown skin, short silver hair in a sharp asymmetric cut, keen eyes",
+     "now": "pale skin, short silver hair in a sharp asymmetric cut, keen grey eyes",
+     "current_front_made_with": "gemini-3.1-flash-image"
+    }
+   },
+   "response_meta": {
+    "id": "gen_01M6PRV7248PW9530BX1HX4V9G",
+    "model": "google/gemini-3.1-flash-image",
+    "usage": {
+     "prompt_tokens": 185,
+     "completion_tokens": 1120,
+     "total_tokens": 1305,
+     "cost": 0.0670925,
+     "is_byok": false,
+     "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0
+     },
+     "cost_details": {
+      "upstream_inference_cost": null,
+      "upstream_inference_prompt_cost": 0,
+      "upstream_inference_completions_cost": 0
+     },
+     "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "image_tokens": 0
+     },
+     "cache_creation_input_tokens": 0,
+     "market_cost": 0.0670925,
+     "gateway_cost": 0.0670925
+    },
+    "provider_metadata": {
+     "vertex": {
+      "promptFeedback": null,
+      "groundingMetadata": null,
+      "urlContextMetadata": null,
+      "safetyRatings": null,
+      "usageMetadata": {
+       "promptTokenCount": 185,
+       "candidatesTokenCount": 1120,
+       "totalTokenCount": 1305,
+       "trafficType": "ON_DEMAND",
+       "promptTokensDetails": [
+        {
+         "modality": "TEXT",
+         "tokenCount": 185
+        }
+       ],
+       "candidatesTokensDetails": [
+        {
+         "modality": "IMAGE",
+         "tokenCount": 1120
+        }
+       ]
+      },
+      "finishMessage": null,
+      "serviceTier": null
+     },
+     "gateway": {
+      "routing": {
+       "originalModelId": "google/gemini-3.1-flash-image",
+       "resolvedProvider": "vertex",
+       "fallbacksAvailable": [],
+       "planningReasoning": "Provider set restricted to: vertex. System credentials planned for: vertex. ZDR requested: all 1 attempts support ZDR. Execution order: vertex(system). Disallow prompt training requested: all 1 attempts disallow prompt training",
+       "canonicalSlug": "google/gemini-3.1-flash-image",
+       "finalProvider": "vertex",
+       "modelAttemptCount": 1,
+       "modelAttempts": [
+        {
+         "canonicalSlug": "google/gemini-3.1-flash-image",
+         "success": true,
+         "providerAttemptCount": 1,
+         "providerAttempts": [
+          {
+           "provider": "vertex",
+           "credentialType": "system",
+           "success": true,
+           "startTime": 1793913101431,
+           "endTime": 1793913111454,
+           "statusCode": 200,
+           "providerResponseId": "DfHsapr6Hqynw8cPs_qc0QQ"
+          }
+         ]
+        }
+       ],
+       "totalProviderAttemptCount": 1,
+       "affinity": {
+        "outcome": "skipped_below_min_prefix"
+       },
+       "clientSessionId": "c418fb4ae65881408f423ebe7b70ab5a",
+       "clientSessionIdSource": "fingerprint"
+      },
+      "cost": "0.0670925",
+      "marketCost": "0.0670925",
+      "surchargeCost": "0",
+      "gatewayCost": "0.0670925",
+      "inferenceCost": "0.0670925",
+      "inputInferenceCost": "0.0000925",
+      "outputInferenceCost": "0.067",
+      "enabledZeroDataRetention": true,
+      "enabledDisallowPromptTraining": true,
+      "generationId": "gen_01M6PRV7248PW9530BX1HX4V9G"
+     }
+    }
+   },
+   "at": "2026-11-05T21:11:41.084Z"
+  },
+  {
+   "char": "mu",
+   "direction": "animated",
+   "looks3": true,
+   "option": "b",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "from": "text",
+   "changed": {
+    "was": "medium brown skin, short silver hair in a sharp asymmetric cut, keen eyes",
+    "now": "deep brown skin, short silver coils in a sharp asymmetric cut, keen dark eyes"
+   },
+   "based_on": "directions/mu-animated-gemini.jpg",
+   "kind": "prompt-check",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 0.000069525,
+   "worstUsd": 0.0015,
+   "at": "2026-11-05T21:11:52.740Z"
+  },
+  {
+   "char": "mu",
+   "direction": "animated",
+   "looks3": true,
+   "option": "b",
+   "model": "gemini-3.1-flash-image",
+   "from": "text",
+   "changed": {
+    "was": "medium brown skin, short silver hair in a sharp asymmetric cut, keen eyes",
+    "now": "deep brown skin, short silver coils in a sharp asymmetric cut, keen dark eyes"
+   },
+   "based_on": "directions/mu-animated-gemini.jpg",
+   "kind": "image",
+   "file": "directions/mu-look-b-gemini.jpg",
+   "sha256": "3960eda6c76f470d78b8062a0be6abdc371fd3920779395cab23eeed61d0c7e5",
+   "closed_model": true,
+   "maker": "Google",
+   "costUsd": 0.067093,
+   "worstUsd": 0.09,
+   "recipe": {
+    "prompt": "Character reference picture: one person, full body from head to shoes, standing in a relaxed three-quarter stance with some personality, plain light grey background.\n\nAnimated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands.\n\na woman in her early sixties, small and wiry, deep brown skin, short silver coils in a sharp asymmetric cut, keen dark eyes behind thin red-framed glasses, wearing a charcoal asymmetric commander's tabard with one sculpted shoulder panel and bright yellow piping, over a cobalt-blue seamless long-sleeved bodysuit, slim black segmented trousers, soft grey seamless boots and a slim wrist device\n\nNo text, no lettering, no signs with words.",
+    "model": "gemini-3.1-flash-image",
+    "endpoint": "google/gemini-3.1-flash-image",
+    "host": "Vercel AI Gateway",
+    "settings": {
+     "modalities": [
+      "text",
+      "image"
+     ],
+     "aspect_ratio": "3:4",
+     "gateway": {
+      "only": [
+       "vertex"
+      ],
+      "zeroDataRetention": true,
+      "disallowPromptTraining": true
+     },
+     "retention": {
+      "provider": "vertex",
+      "zero_data_retention": true,
+      "no_training": true,
+      "endpoint_list_read_at": "2026-11-05T21:11:52.795Z"
+     },
+     "converted": {
+      "from": "image/png",
+      "sha256": "b48fe803ebcfd55c3cfc5495a53c2f4f07393938ebb291d92a323910ed7cdd02",
+      "to": "jpeg",
+      "resized_to": {
+       "width": 576,
+       "height": 768
+      },
+      "fit": "contain, padded with the picture's own corner colour"
+     }
+    },
+    "seed": null,
+    "request_id": "gen_01M6PRVJAM0Y95NM37935M4KWR",
+    "cost_usd": 0.0671,
+    "made_at": "2026-11-05T21:11:52.747Z",
+    "width": 576,
+    "height": 768,
+    "style": {
+     "version_id": "unpublished: docs/starting-sheet-drafts/directions/plan.json",
+     "title": "Animated series",
+     "text": "Animated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands."
+    },
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "not run"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line",
+      "style text",
+      "character descriptor"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    },
+    "looks3": {
+     "owner_decision": "2026-11-05: three looks for Zei, Bai, Seila and Mu, approved as proposed; only skin tone, hair and eyes change",
+     "was": "medium brown skin, short silver hair in a sharp asymmetric cut, keen eyes",
+     "now": "deep brown skin, short silver coils in a sharp asymmetric cut, keen dark eyes",
+     "current_front_made_with": "gemini-3.1-flash-image"
+    }
+   },
+   "response_meta": {
+    "id": "gen_01M6PRVJAM0Y95NM37935M4KWR",
+    "model": "google/gemini-3.1-flash-image",
+    "usage": {
+     "prompt_tokens": 186,
+     "completion_tokens": 1120,
+     "total_tokens": 1306,
+     "cost": 0.067093,
+     "is_byok": false,
+     "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0
+     },
+     "cost_details": {
+      "upstream_inference_cost": null,
+      "upstream_inference_prompt_cost": 0,
+      "upstream_inference_completions_cost": 0
+     },
+     "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "image_tokens": 0
+     },
+     "cache_creation_input_tokens": 0,
+     "market_cost": 0.067093,
+     "gateway_cost": 0.067093
+    },
+    "provider_metadata": {
+     "vertex": {
+      "promptFeedback": null,
+      "groundingMetadata": null,
+      "urlContextMetadata": null,
+      "safetyRatings": null,
+      "usageMetadata": {
+       "promptTokenCount": 186,
+       "candidatesTokenCount": 1120,
+       "totalTokenCount": 1306,
+       "trafficType": "ON_DEMAND",
+       "promptTokensDetails": [
+        {
+         "modality": "TEXT",
+         "tokenCount": 186
+        }
+       ],
+       "candidatesTokensDetails": [
+        {
+         "modality": "IMAGE",
+         "tokenCount": 1120
+        }
+       ]
+      },
+      "finishMessage": null,
+      "serviceTier": null
+     },
+     "gateway": {
+      "routing": {
+       "originalModelId": "google/gemini-3.1-flash-image",
+       "resolvedProvider": "vertex",
+       "fallbacksAvailable": [],
+       "planningReasoning": "Provider set restricted to: vertex. System credentials planned for: vertex. ZDR requested: all 1 attempts support ZDR. Execution order: vertex(system). Disallow prompt training requested: all 1 attempts disallow prompt training",
+       "canonicalSlug": "google/gemini-3.1-flash-image",
+       "finalProvider": "vertex",
+       "modelAttemptCount": 1,
+       "modelAttempts": [
+        {
+         "canonicalSlug": "google/gemini-3.1-flash-image",
+         "success": true,
+         "providerAttemptCount": 1,
+         "providerAttempts": [
+          {
+           "provider": "vertex",
+           "credentialType": "system",
+           "success": true,
+           "startTime": 1793913112946,
+           "endTime": 1793913123582,
+           "statusCode": 200,
+           "providerResponseId": "GfHsaruMAZv58eEPl_HDoQ0"
+          }
+         ]
+        }
+       ],
+       "totalProviderAttemptCount": 1,
+       "affinity": {
+        "outcome": "skipped_below_min_prefix"
+       },
+       "clientSessionId": "c22ebef83b88d6e16d79afe887e12c77",
+       "clientSessionIdSource": "fingerprint"
+      },
+      "cost": "0.067093",
+      "marketCost": "0.067093",
+      "surchargeCost": "0",
+      "gatewayCost": "0.067093",
+      "inferenceCost": "0.067093",
+      "inputInferenceCost": "0.000093",
+      "outputInferenceCost": "0.067",
+      "enabledZeroDataRetention": true,
+      "enabledDisallowPromptTraining": true,
+      "generationId": "gen_01M6PRVJAM0Y95NM37935M4KWR"
+     }
+    }
+   },
+   "at": "2026-11-05T21:11:52.747Z"
   }
  ],
  "brought_in": {
