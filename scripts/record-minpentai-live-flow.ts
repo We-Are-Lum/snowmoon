@@ -11,6 +11,7 @@
 import { mkdirSync, readdirSync, renameSync } from 'node:fs';
 import path from 'node:path';
 import { chromium } from 'playwright-core';
+import { fromRows } from '../src/lib/minpentai/agent-play/solo';
 
 process.env.MINPENTAI_PLAY_TEST = '1';
 // The harness's person A is -3 in its fresh database (test-minpentai-agent-mcp.ts M29); the server it starts inherits this.
@@ -38,12 +39,12 @@ try {
   }, [people.A.token, people.A.address] as const);
   const page = await ctx.newPage();
 
-  type V = { turn: number; phase: string; can_place: [number, number][] };
+  type V = { turn: number; phase: string; can_place: string[] };
   for (let t = 0; t < 5; t++) {
     const v = (await tool(BASE, a.access_token, 'minpentai_get_view', { match_id: id })).out as unknown as V;
     if (v.phase === 'over') break;
     // The scripted AI: towers at setup, then three symbol gliders from the helper, then gliders east.
-    const east = [...v.can_place].sort((p, q) => q[0] - p[0] || p[1] - q[1]);
+    const east = [...fromRows(v.can_place)].sort((p, q) => q[0] - p[0] || p[1] - q[1]);
     let placements: Record<string, unknown>[] = [];
     if (t === 0) placements = east.slice(0, 2).map(([x, y]) => ({ piece: 'tower', x, y }));
     else if (t === 1) {

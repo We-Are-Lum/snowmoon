@@ -6,6 +6,7 @@
  * recording does. Used by check:ui and scripts/record-minpentai-live-flow.ts.
  */
 import type { Browser, Page } from 'playwright-core';
+import { fromRows } from '../../src/lib/minpentai/agent-play/solo';
 
 type Fail = (msg: string) => void;
 const SIZES = [{ name: 'phone', width: 390, height: 844 }, { name: 'desktop', width: 1440, height: 900 }] as const;
@@ -49,8 +50,8 @@ export async function liveLayoutCheck(browser: Browser, fail: Fail, opts: { reco
       if (!st.ok) { fail(`live page layout: couldn't start a match (${st.error})`); return; }
       const id = st.out.match_id as string, live = st.out.live_url as string;
       const draft = async () => {
-        const v = (await tool(S.BASE, a.access_token, 'minpentai_get_view', { match_id: id })).out as { turn: number; can_place: [number, number][] };
-        const east = [...v.can_place].sort((p, q) => q[0] - p[0] || p[1] - q[1]);
+        const v = (await tool(S.BASE, a.access_token, 'minpentai_get_view', { match_id: id })).out as { turn: number; can_place: string[] };
+        const east = [...fromRows(v.can_place)].sort((p, q) => q[0] - p[0] || p[1] - q[1]);
         const placements = v.turn === 0 ? east.slice(0, 2).map(([x, y]) => ({ piece: 'tower', x, y })) : east.slice(0, 2).map(([x, y]) => ({ piece: 'glider', x, y, dir: 'E' }));
         await tool(S.BASE, a.access_token, 'minpentai_submit_orders', { match_id: id, turn: v.turn, placements, source: 'agent', final: false });
       };

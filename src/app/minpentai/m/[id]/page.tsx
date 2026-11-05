@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import { playFor } from '~/lib/agents/core';
-import { draftInfo, linkOpens, sightOf, turnFrames, turnSummaries, viewFor } from '~/lib/minpentai/agent-play/solo';
+import { canPlaceList, draftInfo, endText, linkOpens, sightOf, stillStanding, turnFrames, turnSummaries, viewFor } from '~/lib/minpentai/agent-play/solo';
 import { load } from '~/lib/minpentai/agent-play/store';
 import { settle } from '~/lib/minpentai/agent-play/quiet';
 import { MinpentaiTags } from '../../mp-tags';
@@ -16,12 +16,14 @@ const WHO: Record<string, string> = { person: 'you', agent: 'your AI', 'site-com
 const PRESET: Record<string, string> = { balanced: 'balanced', defend: 'defend', attack: 'attack', expand: 'expand' };
 const cap = (t: string) => t.charAt(0).toUpperCase() + t.slice(1);
 type Move = { piece: string; x: number; y: number; dir?: string; slant?: string };
-/** A turn's placements in a few words: "tower, 2 gliders E". */
+/** A turn's placements in a few words: "tower, 2 gliders E, 5 symbol gliders E". */
 const brief = (ps: Move[]) => {
   if (!ps.length) return 'nothing placed';
   const n = new Map<string, number>();
-  for (const p of ps) { const k = `${p.piece.replace(/_/g, ' ')}${p.dir ? ` ${p.dir}` : ''}`; n.set(k, (n.get(k) ?? 0) + 1); }
-  return [...n].map(([k, c]) => (c > 1 ? `${c} ${k.replace(/^(\S+)/, '$1s')}` : k)).join(', ');
+  for (const p of ps) { const k = `${p.piece}|${p.dir ?? ''}`; n.set(k, (n.get(k) ?? 0) + 1); }
+  // The plural on the piece's last word (owner, 2026-11-04: it read "5 symbols glider E").
+  const many = (name: string) => (/y$/.test(name) ? name.replace(/y$/, 'ies') : `${name}s`);
+  return [...n].map(([k, c]) => { const [piece, dir] = k.split('|'), name = piece.replace(/_/g, ' '); return `${c > 1 ? `${c} ${many(name)}` : name}${dir ? ` ${dir}` : ''}`; }).join(', ');
 };
 
 /**
@@ -44,13 +46,15 @@ export default async function LiveLink({ params, searchParams }: { params: Promi
   const latestTurn = m.history.at(-1)?.turn;
   const sums = turnSummaries(m);
   const last = v.my_turns.at(-1);
+  // The end says why (owner, 2026-11-04): "Over: you won on towers, 5 to 1, at step 144."
   const status = end
-    ? `Over at step ${end.step}: ${end.win === 'C' ? 'you won' : end.win === 'A' ? 'the site computer won' : 'a draw'}${end.how === 'resigned' ? ' (resigned)' : ''}.`
+    ? `Over: ${endText(m)}.`
     : `Turn ${v.turn}${v.phase === 'setup' ? ' (setup)' : ''} · step ${v.step}/${v.max_steps} · you (Cyan) v the site computer, level ${v.opponent.level}`;
   const tally = 'towers_destroyed' in v && v.towers_destroyed ? `destroyed ${v.towers_destroyed.by_you}–${v.towers_destroyed.by_opponent}` : null;
   const past = v.my_turns.filter((t) => t.turn !== latestTurn).reverse().map((t) => ({
-    turn: t.turn, step: t.step, line: brief(t.placements as Move[]), kills: sums.find((x) => x.turn === t.turn)?.kills ?? 0,
-    who: `${WHO[t.source] ?? t.source}${'taken_on_the_live_page' in t && t.taken_on_the_live_page ? `, on this page (drafted by ${WHO[t.drafted_by ?? ''] ?? t.drafted_by})` : ''}`,
+    turn: t.turn, step: t.step, line: brief(t.placements as Move[]), kills: sums.find((x) => x.turn === t.turn)?.kills ?? 0, lost: sums.find((x) => x.turn === t.turn)?.lost ?? 0,
+    // A turn the person approved on this page reads as theirs, drafted by whom (owner, 2026-11-04: not "you placed").
+    who: 'taken_on_the_live_page' in t && t.taken_on_the_live_page ? `you on this page, approving ${t.drafted_by === 'agent' ? 'your AI’s draft' : 'a draft'}` : (WHO[t.source] ?? t.source),
     summary: sums.find((x) => x.turn === t.turn)?.lines ?? [],
   }));
   return (
@@ -59,11 +63,13 @@ export default async function LiveLink({ params, searchParams }: { params: Promi
         <h1 className="mb-live-title">{book ? 'Rocks and Mirrors' : 'Minpentai'}: your side</h1>
         <LiveTop
           matchId={m.id} width={v.board_size.width} height={v.board_size.height} status={status} tally={tally}
-          current={{ board: v.board, seen: sightOf(m), canPlace: v.can_place, lastSeen: v.last_seen_enemy_towers, marks: last ? last.placements : [] }}
+          current={{ board: v.board, seen: sightOf(m), canPlace: canPlaceList(m), lastSeen: v.last_seen_enemy_towers, marks: last ? last.placements : [] }}
           draft={draft && !draft.final ? { placements: draft.placements, cost: draft.cost, points: draft.points, warnings: draft.warnings, note: draft.note, who: cap(WHO[draft.source] ?? draft.source) } : null}
           canTake={!end} turn={v.turn} points={v.points}
           latest={latestTurn !== undefined ? { turn: latestTurn, frames: turnFrames(m, latestTurn, !!end), whole: !!end } : null}
           summary={v.last_turn_summary?.lines ?? null}
+          big={sums.find((x) => x.turn === latestTurn)?.big ?? []}
+          still={(m.kills.C > 0 || sums.some((x) => x.kills > 0)) ? stillStanding(m) : null}
         />
         <PastTurns matchId={m.id} secret={k ?? ''} width={v.board_size.width} height={v.board_size.height} whole={!!end} items={past} />
         <footer className="mb-live-foot">

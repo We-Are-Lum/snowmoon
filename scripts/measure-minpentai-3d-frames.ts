@@ -10,6 +10,7 @@
  * Local only. Headless Chrome on this Mac with its GPU (Metal): a guide to where time goes, not a phone's numbers.
  */
 import { chromium } from 'playwright-core';
+import { fromRows } from '../src/lib/minpentai/agent-play/solo';
 
 process.env.MINPENTAI_PLAY_TEST = '1';
 process.env.MINPENTAI_DRAFTS_TEST_PEOPLE = '-3';
@@ -39,8 +40,8 @@ try {
     await cdp.send('Emulation.setCPUThrottlingRate', { rate: size.cpu });
     const results: Record<string, ReturnType<typeof stats>> = {};
     for (let t = 0; t < 3; t++) {
-      const v = (await tool(S.BASE, a.access_token, 'minpentai_get_view', { match_id: id })).out as { turn: number; can_place: [number, number][] };
-      const east = [...v.can_place].sort((p, q) => q[0] - p[0] || p[1] - q[1]);
+      const v = (await tool(S.BASE, a.access_token, 'minpentai_get_view', { match_id: id })).out as { turn: number; can_place: string[] };
+      const east = [...fromRows(v.can_place)].sort((p, q) => q[0] - p[0] || p[1] - q[1]);
       const placements = v.turn === 0 ? east.slice(0, 2).map(([x, y]) => ({ piece: 'tower', x, y })) : east.filter((_, i) => i % 3 === 0).slice(0, 2).map(([x, y]) => ({ piece: 'glider', x, y, dir: 'E' }));
       await tool(S.BASE, a.access_token, 'minpentai_submit_orders', { match_id: id, turn: v.turn, placements, source: 'agent', final: false });
       if (t === 0) await page.goto(live, { waitUntil: 'networkidle' });

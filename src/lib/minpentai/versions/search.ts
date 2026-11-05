@@ -16,6 +16,7 @@
 import { drawRules, engine, layout, other, rng, verdict, type AnyPiece, type Engine, type Kills, type Placement, type Side, type World } from './engine';
 import type { Settings } from './schema';
 import type { VersionRules } from './solo-v1';
+import { withOwnSeen, type OwnSeen } from './own-seen';
 
 export interface SearchLevel {
   /** Steps simulated past the next turn to act. */
@@ -88,15 +89,18 @@ export interface TurnInput {
   snap: number[];
   points: number;
   rng: () => number;
+  /** Its own pieces out of sight as it last saw them (own-seen.ts; owner, 2026-11-04). Absent: none, as before. */
+  ownSeen?: OwnSeen;
 }
 export interface Plan { placements: Placement<AnyPiece>[]; steps?: number; sims?: number }
 export type Planner = (m: TurnInput) => Plan;
 
 /** The board as this side believes it is: its view, plus enemy towers where it last saw them. */
-export function belief(m: Pick<TurnInput, 'view' | 'lastSeen' | 'o' | 'e'>): World {
+export function belief(m: Pick<TurnInput, 'view' | 'lastSeen' | 'o' | 'e' | 'ownSeen'>): World {
   const b = m.e.clone(m.view);
   for (const k in m.lastSeen) if (!b.tw[+k] && m.e.empty(b, +k)) b.tw[+k] = other(m.o);
-  return b;
+  // Its own pieces out of sight, where it last saw them (never their live state).
+  return withOwnSeen(m.e, b, m.o, m.ownSeen);
 }
 
 /** A turn for side m.o at the given level. */

@@ -11,7 +11,7 @@ import type { turnFrames } from '~/lib/minpentai/agent-play/solo';
 const Board3D = dynamic(() => import('./board-3d').then((m) => m.Board3D), { ssr: false });
 
 type Frame = ReturnType<typeof turnFrames>[number];
-export interface PastTurn { turn: number; step: number; line: string; kills: number; who: string; summary: string[] }
+export interface PastTurn { turn: number; step: number; line: string; kills: number; lost: number; who: string; summary: string[] }
 
 /**
  * Past turns, newest first, one line each (owner, 2026-11-03): the turn, what you placed, and towers destroyed. A tap
@@ -45,7 +45,7 @@ export function PastTurns({ matchId, secret, width, height, whole, items }: { ma
               <button type="button" className="mb-past-row" aria-expanded={open === x.turn} onClick={() => toggle(x.turn)}>
                 <span className="mb-past-turn">Turn {x.turn}</span>
                 <span className="mb-past-line">{x.line}</span>
-                <span className="mb-past-kills">{x.kills ? `${x.kills} destroyed` : ''}</span>
+                <span className="mb-past-kills">{[x.kills ? `${x.kills} destroyed` : '', x.lost ? `lost ${x.lost}` : ''].filter(Boolean).join(' · ')}</span>
               </button>
               {open === x.turn ? (
                 <div className="mb-past-body">
