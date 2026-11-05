@@ -27,7 +27,7 @@ import { LiveScreen } from '../src/components/live-screen';
 import { AGENTS, CHALLENGE, CHAT, IMAGES, REPO_URL, imagesDailySpendCapUsd } from '../src/lib/config';
 import { challengeOpenNow, entriesOpen } from '../src/lib/challenge/rules';
 import { challengeVisibleTo } from '../src/lib/challenge/visibility';
-import { rehearsalOn, rehearsalTestFid, rehearsalTestPostsFile } from '../src/lib/challenge/rehearsal-switch';
+import { rehearsalOn } from '../src/lib/challenge/rehearsal-switch';
 import { NOTICE_REVIEW, currentNoticeItems, noticeKey } from '../src/lib/chat/notice';
 import { LEGAL, PRIVACY, TERMS, legalKey } from '../src/lib/legal';
 import { LEARN_TEXT } from '../src/lib/minpentai/learn-text';
@@ -1545,10 +1545,10 @@ const FORBIDDEN_VARS = /^(SUPABASE_SERVICE_ROLE_KEY|SUPABASE_SECRET_KEY|SUPABASE
 add({
   id: 'P6w',
   principle: 6,
-  name: 'the rehearsal switch (CHALLENGE_REHEARSAL=on) is ignored on production, on any Vercel deployment and with a database elsewhere, and so are its test sign-in and stand-in posts',
+  name: 'the rehearsal switch (CHALLENGE_REHEARSAL=on) is ignored on production, on any Vercel deployment and with a database elsewhere, and the site has no test sign-in',
   load: async () => {
     const local = 'postgres://postgres@127.0.0.1:54329/postgres';
-    const on = { CHALLENGE_REHEARSAL: 'on', STUDIO_DATABASE_URL: local, REHEARSAL_TEST_SIGNIN: 'on', REHEARSAL_TEST_POSTS: '/tmp/x.json' };
+    const on = { CHALLENGE_REHEARSAL: 'on', STUDIO_DATABASE_URL: local };
     const cases: [string, Record<string, string>][] = [
       ['VERCEL_ENV=production', { ...on, VERCEL_ENV: 'production' }],
       ['VERCEL_ENV=production without VERCEL', { ...on, VERCEL_ENV: 'production', VERCEL: '' }],
@@ -1563,6 +1563,7 @@ add({
       cases,
       local: on,
       config: read('src/lib/config.ts'),
+      auth: read('src/lib/auth.ts'),
       file: await fetch(`${BASE}/api/rehearsal/file/images/readers/${'0'.repeat(32)}.jpg`, { redirect: 'manual' }).then((r) => r.status, () => 0),
     };
   },
@@ -1570,15 +1571,15 @@ add({
     const problems: string[] = [];
     // The plant: a switch that reads only CHALLENGE_REHEARSAL, ignoring VERCEL_ENV and the database.
     const on = c.fn === 'planted' ? (env: Record<string, string | undefined>) => env.CHALLENGE_REHEARSAL === 'on' : rehearsalOn;
-    const fn = { rehearsalOn: on, rehearsalTestFid, rehearsalTestPostsFile };
+    const fn = { rehearsalOn: on };
     for (const [what, env] of c.cases) {
       if (fn.rehearsalOn(env)) problems.push(`the rehearsal switch is on with ${what}`);
-      if (fn.rehearsalTestFid('rehearsal-test-2147483601', env) !== null) problems.push(`the rehearsal's test sign-in works with ${what}`);
-      if (fn.rehearsalTestPostsFile(env) !== null) problems.push(`the rehearsal's stand-in posts are read with ${what}`);
     }
     // It must still work where it is meant to (else this check proves nothing about the cases above).
     if (!fn.rehearsalOn(c.local)) problems.push('the rehearsal switch is off on this machine with a local database: the check above proves nothing');
     if (!/typeof window === 'undefined'\s*\? rehearsalOn\(process\.env\)/.test(c.config) || /process\.env\.CHALLENGE_REHEARSAL\b/.test(c.config.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/.*$/gm, ''))) problems.push('src/lib/config.ts reads CHALLENGE_REHEARSAL other than through rehearsalOn');
+    // The dress run's test sign-in lives only on branch contest-rehearsal, which never merges (owner, 2026-11-04).
+    if (/rehearsal-test-|rehearsalTestFid|REHEARSAL_TEST_SIGNIN/.test(c.auth)) problems.push('src/lib/auth.ts has the dress run\'s test sign-in: it belongs only on branch contest-rehearsal');
     if (c.file !== 404) problems.push(`${BASE}/api/rehearsal/file answers ${c.file}, not 404: the target is running the rehearsal`);
     return problems;
   },

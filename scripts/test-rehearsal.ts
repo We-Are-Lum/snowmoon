@@ -4,7 +4,7 @@
  *
  *   npm run test:rehearsal
  */
-import { rehearsalChallenge, rehearsalOn, rehearsalOnInBrowser, rehearsalTestFid, rehearsalTestPostsFile, pacificDay, pacificDayStart, REHEARSAL_BASE_IDS, LOCAL_DB_URL } from '../src/lib/challenge/rehearsal-switch';
+import { rehearsalChallenge, rehearsalOn, rehearsalOnInBrowser, pacificDay, pacificDayStart, REHEARSAL_BASE_IDS, LOCAL_DB_URL } from '../src/lib/challenge/rehearsal-switch';
 import { rehearsalEnv, parseEnv } from './rehearsal';
 import { rehearsalDbUrl } from './lib/rehearsal';
 import { CHALLENGE } from '../src/lib/config';
@@ -45,12 +45,10 @@ check('Pacific days: 23:59 and 00:00 are two days; a DST morning starts at 07:00
 check('this process has no switch on (the tests run as production would read it)', !rehearsalOn(process.env) && CHALLENGE.id === 'remix-2026-11');
 check('the stand-in bases: one per character, three for Deluin and Gladias, as CHALLENGE.baseCount', CHALLENGE.characters.every((c) => REHEARSAL_BASE_IDS[c]?.length === CHALLENGE.baseCount[c]));
 
-// The dress run's stand-ins.
-const test = { ...on, REHEARSAL_TEST_SIGNIN: 'on', REHEARSAL_TEST_POSTS: '/tmp/posts.json' };
-check('test sign-in: only rehearsal-test-<a test FID>, only with the switch on and REHEARSAL_TEST_SIGNIN=on', rehearsalTestFid('rehearsal-test-2147483601', test) === 2147483601 && rehearsalTestFid('rehearsal-test-6786000000', test) === null && rehearsalTestFid('rehearsal-test-2147483601', on) === null && rehearsalTestFid('rehearsal-test-2147483601', { ...test, VERCEL_ENV: 'production' }) === null);
-check('stand-in posts: only with the switch on', rehearsalTestPostsFile(test) === '/tmp/posts.json' && rehearsalTestPostsFile({ ...test, VERCEL: '1' }) === null && rehearsalTestPostsFile({ REHEARSAL_TEST_POSTS: '/tmp/x' }) === null);
+// The dress run's stand-ins are not on this branch (they live on contest-rehearsal, which never merges).
 const auth = readFileSync('src/lib/auth.ts', 'utf8');
-check('getFid reads the test sign-in only through rehearsalTestFid, with process.env', /const test = rehearsalTestFid\(token, process\.env\);\s*if \(test !== null\) return test;/.test(auth));
+const posts = readFileSync('src/lib/challenge/posts.ts', 'utf8');
+check('no test sign-in and no stand-in casts on this branch: the real Farcaster sign-in and Neynar only', !/rehearsal-test-|rehearsalTest|REHEARSAL_TEST/.test(auth + posts + readFileSync('src/lib/challenge/rehearsal-switch.ts', 'utf8')));
 
 // The start script: the database must be the rehearsal's.
 const base = { PATH: '/usr/bin' };

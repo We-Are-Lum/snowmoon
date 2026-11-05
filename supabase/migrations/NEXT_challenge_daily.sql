@@ -50,30 +50,41 @@ revoke update, delete, truncate on studio.challenge_marks from studio_writer;
 grant update (withdrawn_at) on studio.challenge_marks to studio_writer;
 commit;
 
--- 3. The read-back (after commit), as postgres. Expect "NOTICE: read-back passed" and no row left behind.
--- It submits as studio_writer would (the test FID 2147483646 fits fid's type and no real account has it), on the newest
--- published version, withdraws it as Withdraw does, checks the day's count still sees it, that a second withdraw
--- changes nothing, that the writer can't change another column or delete, then deletes the row as postgres.
+-- 3. The read-back (after commit), as postgres. Two parts: (a) one read-only select, every row's ok true; (b) a do block
+-- that ends with the notice "READ-BACK PASSED" (or stops with "READ-BACK FAILED: …"), leaving no row behind.
+-- (a)
+-- select n, what, ok from (
+--   select 1 as n, 'studio_writer: select and insert on challenge_marks' as what, has_table_privilege('studio_writer', 'studio.challenge_marks', 'SELECT') and has_table_privilege('studio_writer', 'studio.challenge_marks', 'INSERT') as ok
+--   union all select 2, 'studio_writer: update of withdrawn_at only', has_column_privilege('studio_writer', 'studio.challenge_marks', 'withdrawn_at', 'UPDATE') and not has_table_privilege('studio_writer', 'studio.challenge_marks', 'UPDATE') and not has_column_privilege('studio_writer', 'studio.challenge_marks', 'version_id', 'UPDATE') and not has_column_privilege('studio_writer', 'studio.challenge_marks', 'marked_at', 'UPDATE')
+--   union all select 3, 'studio_writer: no delete or truncate', not (has_table_privilege('studio_writer', 'studio.challenge_marks', 'DELETE') or has_table_privilege('studio_writer', 'studio.challenge_marks', 'TRUNCATE'))
+--   union all select 4, 'the withdraw policy, for studio_writer only', exists (select 1 from pg_policies where schemaname = 'studio' and tablename = 'challenge_marks' and policyname = 'writer_withdraw' and cmd = 'UPDATE' and roles = '{studio_writer}')
+--   union all select 5, 'challenge_marks'' three policies (read, insert, withdraw) are studio_writer''s only', (select count(*) from pg_policies where schemaname = 'studio' and tablename = 'challenge_marks' and roles = '{studio_writer}' and (policyname, cmd) in (('writer_read', 'SELECT'), ('writer_insert', 'INSERT'), ('writer_withdraw', 'UPDATE'))) = 3 and (select count(*) from pg_policies where schemaname = 'studio' and tablename = 'challenge_marks') = 3
+--   union all select 6, 'withdrawn_at: a time, never before marked_at', exists (select 1 from information_schema.columns where table_schema = 'studio' and table_name = 'challenge_marks' and column_name = 'withdrawn_at' and data_type = 'timestamp with time zone' and is_nullable = 'YES') and exists (select 1 from pg_constraint where conrelid = 'studio.challenge_marks'::regclass and conname = 'challenge_marks_withdrawn_after_marked')
+--   union all select 7, 'the index for the day''s count', exists (select 1 from pg_indexes where schemaname = 'studio' and tablename = 'challenge_marks' and indexname = 'challenge_marks_day')
+--   union all select 8, 'row level security is still on', coalesce((select relrowsecurity from pg_class where oid = to_regclass('studio.challenge_marks')), false)
+--   union all select 9, 'anon and authenticated have nothing', not exists (select 1 from unnest(array['anon', 'authenticated']) r, unnest(array['SELECT', 'INSERT', 'UPDATE', 'DELETE']) p where has_table_privilege(r, 'studio.challenge_marks', p))
+-- ) t order by n;
+-- (b) A realistic submission (the test FID 2147483646 fits fid's type and no real account has it), on the newest
+-- version, withdrawn as Withdraw does; the day's count still sees it; bad rows refused; then deleted.
 -- do $$
--- declare v uuid; m bigint; n int; denied boolean;
+-- declare v uuid; m bigint; n int; refused boolean;
 -- begin
 --   select id into v from studio.element_versions order by created_at desc limit 1;
---   if v is null then raise exception 'READ-BACK FAILED: no version to submit'; end if;
---   if not has_column_privilege('studio_writer', 'studio.challenge_marks', 'withdrawn_at', 'UPDATE') then raise exception 'READ-BACK FAILED: studio_writer cannot withdraw'; end if;
---   if has_column_privilege('studio_writer', 'studio.challenge_marks', 'version_id', 'UPDATE') or has_table_privilege('studio_writer', 'studio.challenge_marks', 'DELETE') then raise exception 'READ-BACK FAILED: studio_writer can change or delete a submission'; end if;
---   if has_table_privilege('anon', 'studio.challenge_marks', 'SELECT') or has_table_privilege('authenticated', 'studio.challenge_marks', 'SELECT') then raise exception 'READ-BACK FAILED: public access'; end if;
+--   if v is null then raise exception 'READ-BACK FAILED: needs one existing version to test on'; end if;
 --   insert into studio.challenge_marks (challenge, fid, character, version_id) values ('remix-2026-11', 2147483646, 'bai', v) returning id into m;
 --   update studio.challenge_marks set withdrawn_at = now() where id = m and withdrawn_at is null;
 --   select count(*) into n from studio.challenge_marks where challenge = 'remix-2026-11' and fid = 2147483646
 --     and (marked_at at time zone 'America/Los_Angeles')::date = (now() at time zone 'America/Los_Angeles')::date;
 --   if n <> 1 or not exists (select 1 from studio.challenge_marks where id = m and withdrawn_at is not null) then raise exception 'READ-BACK FAILED: the withdrawn submission is not on record for the day'; end if;
---   begin
---     update studio.challenge_marks set withdrawn_at = marked_at - interval '1 day' where id = m;
---     denied := false;
---   exception when check_violation then denied := true;
---   end;
---   if not denied then raise exception 'READ-BACK FAILED: a withdrawal before the submission was accepted'; end if;
+--   refused := false;
+--   begin update studio.challenge_marks set withdrawn_at = marked_at - interval '1 day' where id = m;
+--   exception when check_violation then refused := true; end;
+--   if not refused then raise exception 'READ-BACK FAILED: a withdrawal before the submission was accepted'; end if;
+--   refused := false;
+--   begin insert into studio.challenge_marks (challenge, fid, character, version_id) values ('remix-2026-11', 2147483646, 'Bai!', v);
+--   exception when check_violation then refused := true; end;
+--   if not refused then raise exception 'READ-BACK FAILED: a character that is not a slug was accepted'; end if;
 --   delete from studio.challenge_marks where id = m;
---   if exists (select 1 from studio.challenge_marks where fid = 2147483646) then raise exception 'READ-BACK FAILED: the test row is still there'; end if;
---   raise notice 'read-back passed';
+--   if exists (select 1 from studio.challenge_marks where fid = 2147483646) then raise exception 'READ-BACK FAILED: test rows left behind'; end if;
+--   raise notice 'READ-BACK PASSED';
 -- end $$;

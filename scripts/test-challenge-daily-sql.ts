@@ -44,8 +44,9 @@ const dry = stripComments(part(1));
 const mig = stripComments(part(2));
 const readBack = part(3).split('\n').filter((l) => l.startsWith('-- ')).map((l) => l.slice(3)).join('\n');
 const doBlock = readBack.slice(readBack.indexOf('do $$'));
+const selectA = readBack.slice(readBack.indexOf('select n, what, ok'), readBack.indexOf(') t order by n;') + ') t order by n;'.length);
 check('the file says who runs it (postgres, in the Supabase SQL Editor)', /MUST RUN AS postgres/.test(text) && /Supabase SQL Editor/.test(text));
-check('three parts in order: the dry run ends in rollback, the migration in commit, then a read-back do block', dry.startsWith('begin;') && dry.endsWith('rollback;') && mig.startsWith('begin;') && mig.endsWith('commit;') && doBlock.startsWith('do $$') && /raise notice 'read-back passed'/.test(doBlock));
+check('three parts in order: the dry run ends in rollback, the migration in commit, then a read-back do block', dry.startsWith('begin;') && dry.endsWith('rollback;') && mig.startsWith('begin;') && mig.endsWith('commit;') && doBlock.startsWith('do $$') && /raise notice 'READ-BACK PASSED'/.test(doBlock));
 check('the dry run is the migration word for word', dry.slice(0, -'rollback;'.length) === mig.slice(0, -'commit;'.length));
 check('the read-back inserts and deletes a realistic row', /insert into studio\.challenge_marks/.test(doBlock) && /delete from studio\.challenge_marks/.test(doBlock));
 
@@ -86,7 +87,7 @@ async function runReadBack(): Promise<string> {
   const notes: string[] = [];
   try {
     await pg.query(doBlock, [], { onNotice: (n: { message: string }) => notes.push(n.message) } as never);
-    return notes.includes('read-back passed') ? 'passed' : `no notice (${notes.join('; ')})`;
+    return notes.includes('READ-BACK PASSED') ? 'passed' : `no notice (${notes.join('; ')})`;
   } catch (e) {
     return (e as Error).message;
   }
@@ -94,6 +95,8 @@ async function runReadBack(): Promise<string> {
 const rowsBefore = JSON.stringify((await pg.query(`select * from studio.challenge_marks order by id`)).rows);
 const rb = await runReadBack();
 check('the read-back passes', rb === 'passed', rb);
+const aRows = (await pg.query<{ n: number; ok: boolean }>(selectA)).rows;
+check('read-back (a): nine rows, all true', aRows.length === 9 && aRows.every((r) => r.ok === true), JSON.stringify(aRows.filter((r) => !r.ok)));
 check('the read-back leaves every row as it was', JSON.stringify((await pg.query(`select * from studio.challenge_marks order by id`)).rows) === rowsBefore);
 
 // As studio_writer: the app's own role.
@@ -145,8 +148,9 @@ async function planted(label: string, sql: string) {
   await pg.exec('begin');
   await pg.exec(sql);
   const r = await runReadBack();
+  const a = await pg.query<{ ok: boolean }>(selectA).then((x) => x.rows.some((row) => row.ok !== true), () => true);
   await pg.exec('rollback');
-  proof(`${label} is caught by the read-back`, r !== 'passed' && /READ-BACK FAILED/.test(r));
+  proof(`${label} is caught by the read-back`, (r !== 'passed' && /READ-BACK FAILED/.test(r)) || a);
 }
 await planted('a missing column grant (studio_writer can\'t withdraw)', `revoke update (withdrawn_at) on studio.challenge_marks from studio_writer`);
 await planted('a delete grant', `grant delete on studio.challenge_marks to studio_writer`);

@@ -101,7 +101,9 @@ Then start as above.
 ## The agent's dress run (2026-11-04)
 
 Before handing this over, the coding agent ran the same server with two test persons (Farcaster IDs no real account
-has) and stand-in casts read from a file, not Farcaster: `npx tsx scripts/rehearsal-dress.ts`. 22 of 22 steps
+has) and stand-in casts read from a file, not Farcaster (`npx tsx scripts/rehearsal-dress.ts`; those stand-ins and the
+script now live only on branch `contest-rehearsal`, which never merges to main: this branch has the real Farcaster
+sign-in only). 22 of 22 steps
 passed: /challenge open signed out with Deluin's three bases; the words screen; a remix of Deluin's base (front, side,
 back, made for real); publish ("press Submit"); someone else's cast and a cast without the link refused; Submit;
 listed on "Every entry" and under Deluin, not Zei; "See the conversation on Farcaster", no counts; withdraw; a second

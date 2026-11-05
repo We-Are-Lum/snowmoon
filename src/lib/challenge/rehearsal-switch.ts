@@ -68,25 +68,6 @@ export function rehearsalChallenge<D extends Record<string, string>>(dates: D & 
 }
 
 /**
- * The dress run's stand-ins (branch contest, 2026-11-04), for an agent's test run of the rehearsal, never the owner's
- * own: with the switch on and REHEARSAL_TEST_SIGNIN=on, a bearer token `rehearsal-test-<fid>` signs in as one of the
- * test persons below (FIDs no real Farcaster account has); with REHEARSAL_TEST_POSTS set to a JSON file, Farcaster
- * casts are read from that file instead of Neynar. No new account on any network, no real post. Off whenever the
- * switch is off (so never on Vercel, never with a database elsewhere).
- */
-export const REHEARSAL_TEST_FIDS = [2147483601, 2147483602] as const;
-export function rehearsalTestFid(token: string, env: RehearsalEnv): number | null {
-  if (!rehearsalOn(env) || env.REHEARSAL_TEST_SIGNIN !== 'on') return null;
-  const m = /^rehearsal-test-(\d{10})$/.exec(token);
-  const fid = m ? Number(m[1]) : NaN;
-  return (REHEARSAL_TEST_FIDS as readonly number[]).includes(fid) ? fid : null;
-}
-/** The file of stand-in casts, or null: only with the switch on. */
-export function rehearsalTestPostsFile(env: RehearsalEnv): string | null {
-  return rehearsalOn(env) && env.REHEARSAL_TEST_POSTS ? env.REHEARSAL_TEST_POSTS : null;
-}
-
-/**
  * The rehearsal database's stand-in bases (scripts/rehearsal-db.ts seeds them), by version id: one per character,
  * three for Deluin and Gladias, as CHALLENGE.baseCount has it. Under the switch they are the challenge's bases.
  */
