@@ -54,7 +54,7 @@ spending. Legal and consent lines go to the coordinator first.
 | 1 | You page wording (+ 0035/0036 header fix): ship alone after check:ui passes | live as #118 (947154ec); live checks pass: shipped, principles (only P6d, the accepted item), ui (59 pages), miniapp |
 | a | Assistant step 1 (switch off, tests, drafted lines, chat_calls migration if needed) | done: assistant-any-account b947a665; switch ASSISTANT.anyAccount off; no chat_calls migration needed; test:chat-gate 70, test:chat 95, chat-route 10; typecheck 0; check:ui pass; check:principles only P6d/P6a(local); drafts: docs/legal/assistant-any-account-step1.md (Drive) |
 | b | Linked accounts v2 build on linked-accounts (switch off, chain + takeover tests) | first build: linked-accounts c526119d; migration copy blocks docs/legal/linked-accounts-sql-for-owner.md, test 161 (43 plants); v2 tests 120 (T1 chain, T2 takeover, T3, T7, T10; 11 plants); whole-project typecheck owed; v1 test fails by design until v1 code is replaced |
-| c | Admin dashboard build on admin-activity | running |
+| c | Admin dashboard build on admin-activity | built: admin-activity 8b8f3ce6; test:admin-activity 50; typecheck 0; check:principles 56 pass, 2 fail (P6a local, P6d), 6 not run (no database: .env.local moved aside so nothing touched production); P5b exception + P6aa; Drive v2 |
 
 Contest session (snowmoon-d3) has its items: contest's owed checks, the Deluin b4 pointer, fund-page's P7c.
 
@@ -73,6 +73,18 @@ merged, applied to production or published during this run; legal lines go to th
 | 3 | Lane A: challenge-landing task; contest branch; rehearsal; dress run | done; rehearsal 1 ready for you |
 | 4 | Lane B: paying per person (design, migration copy blocks, draft lines) | done (branch person-balance; whole-project typecheck owed) |
 | 5 | Lens page: typecheck, running on localhost | done (ready for you to sign) |
+
+## Needs the owner (hour run)
+
+- Linked accounts v2: the branch's legal.ts was reset to main's words in the main merge (v1 lines and the approved
+  person-balance lines dropped there; they return with their own releases): OK? Retire or rewrite v1's linking code and
+  its test? Only sign-in unlinking itself: allowed. Stable id: 8 letters and digits.
+- Assistant step 1: drafted lines (Drive "Snowmoon: Assistant for any account, step 1, legal and notice lines (DRAFT)");
+  invited FIDs/admins skip Neynar as for images, keep?; optional "or the assistant" in §7 Lens; name Lens in refusals?
+  The notice's review fingerprint (P6e) was re-recorded by the agent (words unchanged).
+- Admin dashboard: the P5b exception text and P6aa (docs/principles.md, DRAFT); P5b's "publishes" test was narrowed to
+  writes only (a read filtering on published no longer counts); Privacy line "Our admins can see what we keep, to run the
+  site." for the release.
 
 ## How the run shares the Mac
 
