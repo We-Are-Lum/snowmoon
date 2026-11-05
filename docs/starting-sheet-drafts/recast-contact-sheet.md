@@ -29,12 +29,23 @@ and back views; Gladias's side and back views again (the current ones are of the
 Nothing is canonical (owner): all three looks of Deluin and of Gladias are challenge bases, shown in a random order on
 each visit. Look b is the **current default** for the site's own pictures until the challenge or the owner changes it.
 
-- **Deluin b**, in the owner's words "warm tan skin, straight shoulder-length black hair, dark brown eyes" (the third
-  try; "golden" came out yellow twice). Skin, hair and eyes match the words. The model added a **green shoulder bag**
-  that isn't in his clothes; it shows in the front and back views but not the side one. Say if you want the front
-  made again without it (about $0.07 plus $0.14 for the views).
+- **Deluin b, without the bag** (owner, 2026-11-05: "remake Deluin b without the green shoulder bag"): the same words
+  ("warm tan skin, straight shoulder-length black hair, dark brown eyes"), the same clothes and the same model and
+  settings as b3 (Gemini 3.1 Flash Image, a closed model by Google, Vertex, zero retention), with one negative added: "No
+  bag, no shoulder strap, nothing carried." First try, no retry needed. **This is Deluin b now.**
 
-<table><tr><td><img src="directions/deluin-recast-b3-gemini.jpg" width="200" alt="Deluin b, front, AI-generated draft"></td><td><img src="directions/deluin-recast-b-side-gemini.jpg" width="200" alt="Deluin b, side, AI-generated draft"></td><td><img src="directions/deluin-recast-b-back-gemini.jpg" width="200" alt="Deluin b, back, AI-generated draft"></td></tr></table>
+<table><tr><td align="center" valign="top"><img src="directions/deluin-recast-b4-gemini.jpg" width="200" alt="Deluin b, front, no bag, AI-generated draft"><br><b>Front</b><br><sub>$0.06710 · sha256 <code>2b45d17da426df0304fc84ded0f3f0c464472c55c96aa517735f9837368432d4</code></sub></td><td align="center" valign="top"><img src="directions/deluin-recast-b4-side-gemini.jpg" width="200" alt="Deluin b, side, no bag, AI-generated draft"><br><b>Side</b><br><sub>$0.06766 · sha256 <code>8f1c6d951e20a384adbb3ce76684820c20cf4ecb93c6863db821c3a8ad5e1a97</code></sub></td><td align="center" valign="top"><img src="directions/deluin-recast-b4-back-gemini.jpg" width="200" alt="Deluin b, back, no bag, AI-generated draft"><br><b>Back</b><br><sub>$0.06766 · sha256 <code>15849b6dc6ac7f7225b76ef17b3587f8570f85429584a5b1f9ba358b8c060d0f</code></sub></td></tr></table>
+
+  Check: no bag or strap in any of the three; the skin a warm tan in all three; the clothes as the sheet says (cream
+  cable-knit long asymmetric tunic, high folded collar, light grey hood, dark green slim segmented trousers, a narrow dark
+  sash, brown boots). The sash reads as a thin dark-brown belt; the side view is closer to three-quarter than a true
+  profile. Cost $0.20267 (three pictures, three prompt checks) of a $0.25 cap. Script `scripts/deluin-b4.ts`; recipes
+  in `directions/ledger.json` (task `deluin-b-no-bag`).
+
+- ~~Deluin b3~~ (**replaced** by the pictures above: the model added a green shoulder bag that isn't in his clothes; it
+  showed in the front and back views). Kept as drafts, unpublished:
+
+<table><tr><td><img src="directions/deluin-recast-b3-gemini.jpg" width="120" alt="Deluin b3, front, replaced, AI-generated draft"></td><td><img src="directions/deluin-recast-b-side-gemini.jpg" width="120" alt="Deluin b3, side, replaced, AI-generated draft"></td><td><img src="directions/deluin-recast-b-back-gemini.jpg" width="120" alt="Deluin b3, back, replaced, AI-generated draft"></td></tr></table>
 
 - **Gladias b** in the owner's corrected words: "warm light-brown skin, short straight black hair greying at the
   temples, a neatly trimmed short beard and dark eyes"; views on the views sheet.
