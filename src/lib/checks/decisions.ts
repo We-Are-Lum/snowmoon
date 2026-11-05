@@ -3,6 +3,7 @@ import type postgres from 'postgres';
 import { CHECKS } from '../config';
 import { isSocialPerson, socialAccountOf } from '../people';
 import { socialAccount } from '../social/accounts';
+import { checkAccounts, linkedOn, readPersonOf } from '../linked/accounts';
 
 /**
  * Stored decisions for sign-in checks (owner, 2026-11-04: "look each account up as rarely as possible"; "store the
@@ -109,10 +110,10 @@ export async function markForRecheck(sql: Sql, network: Network, account: string
 }
 
 /**
- * Linked accounts (the hook for later; owner, 2026-11-04): a person passes while ANY of their linked accounts has a
- * current pass under its network's rule. Pass every account linked to the person (a FID, a Lens address, a DID), each
- * with today's rule for its network. No lookup happens here; an account with no current decision is just not a pass.
- * Today nothing links accounts across networks, so callers pass one account.
+ * Linked accounts (owner, 2026-11-04): a person passes while ANY of their linked accounts has a current pass under its
+ * network's rule. Pass every account linked to the person (a FID, a Lens address, a DID), each with today's rule for its
+ * network (src/lib/linked/accounts.ts, checkAccounts, behind LINKED_ACCOUNTS). No lookup happens here; an account with
+ * no current decision is just not a pass.
  */
 export async function anyCurrentPass(sql: Sql, accounts: readonly Account[]): Promise<boolean> {
   for (const a of accounts) {
@@ -133,5 +134,14 @@ export async function recheckMaker(sql: Sql, maker: number): Promise<void> {
   if (isSocialPerson(maker)) {
     const row = await socialAccount(sql, socialAccountOf(maker)).catch(() => null);
     if (row?.kind === 'lens') await markForRecheck(sql, 'lens', row.subject);
+  }
+  // Linked accounts (LINKED_ACCOUNTS, off): every account of the maker's person is checked again too.
+  if (linkedOn()) {
+    try {
+      const p = await readPersonOf(sql, maker);
+      for (const a of p ? await checkAccounts(sql, p.members) : []) await markForRecheck(sql, a.network, a.account);
+    } catch (e) {
+      logged('linked recheck not marked', e);
+    }
   }
 }

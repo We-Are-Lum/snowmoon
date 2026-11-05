@@ -7,8 +7,10 @@ import { recheckAt } from '../checks/decisions';
 import { prepaidOpen, priceUsd } from '../wallet/credits';
 import { holdsPersonBalance, personBalanceOn, personBalanceUsd } from '../balance/person';
 import { IMAGE_WORDING } from './wording';
-import { isSocialPerson } from '../people';
+import { isSocialPerson, isWalletPerson } from '../people';
 import { freeFor } from '../social/free';
+import { kindOf, linkedOn, missingNetworks, personPasses, personWaitUntil, readPersonOf } from '../linked/accounts';
+import { LINKED_WORDING } from '../linked/wording';
 
 /**
  * Who may press Generate (decision 11, owner 2026-10-09), decided before anything is counted or
@@ -41,7 +43,18 @@ export const GATE_WORDING = {
     `Image making is open to Farcaster accounts with a Neynar score of ${IMAGES.neynarMinScore} or more, to keep out spam accounts. Yours was below that when we last checked; we can check again in about ${Math.max(1, Math.ceil((recheck.getTime() - now.getTime()) / 3_600_000))} ${Math.max(1, Math.ceil((recheck.getTime() - now.getTime()) / 3_600_000)) === 1 ? 'hour' : 'hours'}. Reading, listening, saving cards and everything else still work.`,
 } as const;
 
-export type Gate = { ok: true; paidOnly?: boolean } | { ok: false; status: 403 | 503; error: string; reason: 'not-open' | 'unreachable' | 'score' | 'prepaid-closed' | 'link-needed' | 'lens-not-open' | 'lens-score' | 'lens-unreachable' };
+export type Gate =
+  | { ok: true; paidOnly?: boolean }
+  | {
+      ok: false;
+      status: 403 | 503;
+      error: string;
+      reason: 'not-open' | 'unreachable' | 'score' | 'prepaid-closed' | 'link-needed' | 'lens-not-open' | 'lens-score' | 'lens-unreachable' | 'wait';
+      /** Linked accounts (on): the per-network detail, shown under "Why?" (owner, 2026-11-04, 10.1). */
+      why?: string;
+      /** Linked accounts (on): the networks the person could still link, for "Link another account". */
+      canLink?: ('farcaster' | 'lens' | 'bluesky')[];
+    };
 
 /** The owner's launch order: both legal pages built, and the alert set. Names only in the log. */
 export function openToEveryone(): { open: boolean; missing: string[] } {
@@ -65,7 +78,26 @@ export async function mayGenerate(sql: Sql, fid: number, orPay?: { reserveUsd: n
   return balance >= priceUsd(orPay.reserveUsd) ? { ok: true, paidOnly: true } : g;
 }
 
+/**
+ * Linked accounts (LINKED_ACCOUNTS, off; src/lib/linked/accounts.ts): a person passes if any linked account has a
+ * current pass; while one of their accounts is in its 30-day wait, free generations are refused; and a refusal by a
+ * check offers the next step (the approved words of 2026-11-04): link a network not linked yet, or prepay.
+ */
 async function freeGate(sql: Sql, fid: number): Promise<Gate> {
+  const g = await accountGate(sql, fid);
+  // A wallet pays (no free count to withhold); the launch order and closed prepaid stand as they are.
+  if (!linkedOn() || isWalletPerson(fid) || (!g.ok && (g.reason === 'not-open' || g.reason === 'prepaid-closed'))) return g;
+  const until = await personWaitUntil(sql, fid);
+  if (until) return { ok: false, status: 403, error: LINKED_WORDING.wait(until.toISOString()), reason: 'wait' };
+  if (g.ok) return g;
+  if (await personPasses(sql, fid)) return { ok: true };
+  if (g.reason === 'unreachable' || g.reason === 'lens-unreachable') return g;
+  const members = (await readPersonOf(sql, fid))?.members ?? [{ kind: (await kindOf(sql, fid)) ?? 'farcaster', account: fid }];
+  const canLink = missingNetworks(members);
+  return { ...g, error: LINKED_WORDING.refusal(canLink).join(' '), why: g.error, canLink };
+}
+
+async function accountGate(sql: Sql, fid: number): Promise<Gate> {
   // Invited FIDs and admins (admin caps, owner 2026-10-29) skip the score.
   if (IMAGES.invited.includes(fid) || isAdmin(fid)) return { ok: true };
   const launch = openToEveryone();

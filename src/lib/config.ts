@@ -202,6 +202,34 @@ export const PERSON_BALANCE = {
   intentHours: 24,
 };
 
+/**
+ * Linked accounts (owner, 2026-11-04 and 2026-11-05; docs/proposals/linked-accounts.md; migration
+ * NEXT_linked_accounts; src/lib/linked/accounts.ts). DRAFT, OFF. One person can hold one Farcaster account, one Lens
+ * account, one Bluesky account and up to 3 wallets, each linked by signing in with it in the same request as the
+ * person's own sign-in. Caps and free remixes count per person; a person passes the check if any linked account has a
+ * current pass. Off: nothing reads studio.people or studio.person_accounts, and sign-in, counts and checks are as
+ * before. Turn on only in the release whose Terms and Privacy say so (docs/legal/linked-accounts-draft.md), after the
+ * migration is applied.
+ */
+export const LINKED_ACCOUNTS = {
+  enabled: false as boolean,
+  /** A2: an account that leaves a person can join a different person only after this many days (owner, 2026-11-04). */
+  relinkWaitDays: 30,
+  /** A5: at most this many moves to a different person… */
+  maxMoves: 2,
+  /** …in this many days (owner, 2026-11-04, reread pack 10.4: 365, was 90). */
+  movesWindowDays: 365,
+  /** A6: wallets per person (owner, 2026-11-04). One Farcaster, one Lens and one Bluesky account, always. */
+  maxWallets: 3,
+  /** A8: link attempts a day per person. */
+  linkAttemptsPerDay: 10,
+  /**
+   * A7: challenges whose payout hasn't happened yet. From an account's first submission (or eligible version) in one of
+   * these until the owner removes it here after the payout, the account can't leave its person.
+   */
+  frozenChallenges: ['remix-2026-11'] as readonly string[],
+};
+
 export const WALLET_LINKS = {
   /**
    * The offer: a wallet person signs in with Farcaster in the same session, sees who it will link to, and confirms

@@ -6,6 +6,7 @@ import { paysFor } from './price';
 import { isSocialPerson, isWalletPerson } from '../people';
 import { freeFor } from '../social/free';
 import { payFromPersonBalance, personBalanceOn } from '../balance/person';
+import { countOne, countToday, linkedFree, linkedOn } from '../linked/accounts';
 
 /**
  * Caps for readers' images (decision 10). A Generate is counted under the person's FID in
@@ -35,8 +36,13 @@ export function perDay(fid: number): number {
 /** For a wallet account: how many text-to-image Generates its balance pays for. */
 export async function generationsLeft(sql: Sql, fid: number): Promise<number> {
   // Never asks Lens (the count is shown when the maker opens); a decision already made counts, none yet shows the count.
-  if (isSocialPerson(fid) && (await freeFor(sql, fid, { lookUp: false }))?.free === false) return 0;
+  // Linked accounts (LINKED_ACCOUNTS, off): none while an account of the person is in its 30-day wait; a linked pass
+  // gives the free count; the count covers the person (src/lib/linked/accounts.ts).
+  const linked = await linkedFree(sql, fid);
+  if (linked === 'none') return 0;
+  if (linked !== 'free' && isSocialPerson(fid) && (await freeFor(sql, fid, { lookUp: false }))?.free === false) return 0;
   if (isWalletPerson(fid)) return paysFor(await balanceUsd(sql, -fid), priceUsd(IMAGES.reserveUsd));
+  if (linkedOn()) return Math.max(0, perDay(fid) - (await countToday(sql, 'image_asks', fid)));
   const [r] = await sql`select count(*)::int as n from studio.image_asks where fid = ${fid} and at >= date_trunc('day', now() at time zone 'utc') at time zone 'utc'`;
   return Math.max(0, perDay(fid) - (r?.n ?? 0));
 }
@@ -71,7 +77,8 @@ export async function reserve(
   const paidOnly = Boolean(opts.paidOnly && personBalanceOn());
   // A Lens or Bluesky account without free generations (src/lib/social/free.ts) gets none, whichever route asks; with
   // PERSON_BALANCE on, it may still pay from its own balance (below).
-  const noFree = paidOnly || (isSocialPerson(fid) && !(await freeFor(sql, fid)).free);
+  const linked = await linkedFree(sql, fid);
+  const noFree = paidOnly || linked === 'none' || (linked !== 'free' && isSocialPerson(fid) && !(await freeFor(sql, fid)).free);
   if (noFree && !personBalanceOn()) return { ok: false, refusal: 'no-free' };
   return sql.begin(async (tx) => {
     await tx`select pg_advisory_xact_lock(hashtext('snowmoon.images.spend'))`;
@@ -108,7 +115,7 @@ export async function reserve(
     if (left <= 0) return orPay('limit');
     const [today] = await tx`select coalesce(sum(cost_usd), 0)::float8 as usd from studio.image_costs where day = ${tx.unsafe(TODAY)} and funded = 'free'`;
     if (today.usd + spend.reserveUsd > imagesDailySpendCapUsd()) return orPay('spend');
-    await tx`insert into studio.image_asks (fid) values (${fid})`;
+    await countOne(tx as unknown as Sql, 'image_asks', fid);
     await addCost(tx as unknown as Sql, 'free', 'reserved', spend.model.id, '', '', 1, spend.reserveUsd);
     return { ok: true as const, left: left - 1 };
   });

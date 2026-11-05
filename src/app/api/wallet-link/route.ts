@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getFid, getWallet } from '~/lib/auth';
 import { WALLET_LINKS } from '~/lib/config';
+import { LINKED_ACCOUNTS } from '~/lib/config';
 import { db } from '~/lib/db';
 import { link, unlink, unlinkFromFid } from '~/lib/wallet/links';
 import { readSession } from '~/lib/wallet/session';
@@ -26,6 +27,8 @@ const noStore = { 'Cache-Control': 'no-store' };
 const no = (error: string, status: number, reason?: string) => NextResponse.json({ error, reason }, { status, headers: noStore });
 
 export async function POST(request: Request) {
+  // Linked accounts (LINKED_ACCOUNTS, on): links live in studio.person_accounts, made at /api/linked-accounts only.
+  if (LINKED_ACCOUNTS.enabled) return NextResponse.json({ error: 'Link and unlink accounts on your You page.', reason: 'linked-accounts' }, { status: 410, headers: { 'Cache-Control': 'no-store' } });
   if (!WALLET_LINKS.offer) return no('Not found', 404);
   const fid = await getFid(request);
   if (fid === null) return NextResponse.json({ error: 'Sign in with Farcaster first' }, { status: 401, headers: noStore });
@@ -45,6 +48,8 @@ export async function POST(request: Request) {
 }
 
 export async function DELETE(request: Request) {
+  // Linked accounts (LINKED_ACCOUNTS, on): links live in studio.person_accounts, made at /api/linked-accounts only.
+  if (LINKED_ACCOUNTS.enabled) return NextResponse.json({ error: 'Link and unlink accounts on your You page.', reason: 'linked-accounts' }, { status: 410, headers: { 'Cache-Control': 'no-store' } });
   // From the Farcaster side: the linked FID names the wallet.
   const fid = await getFid(request);
   const body = (await request.json().catch(() => ({}))) as { wallet?: unknown };

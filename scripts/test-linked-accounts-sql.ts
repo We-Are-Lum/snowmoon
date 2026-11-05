@@ -304,7 +304,7 @@ const PLANTS: [string, string][] = [
   ['row-level security off on people', `alter table studio.people disable row level security;`],
   ['the via pair check dropped (a kind of account without the account)', `alter table studio.challenge_eligibility drop constraint challenge_eligibility_via_pair;`],
   ['the backfill lost the active wallet link', `update studio.person_accounts set unlinked_at = now(), ended_by = 'person' where account = (select -account_id from studio.wallet_links where unlinked_at is null order by id limit 1) and unlinked_at is null;`],
-  ['a person left without any active account', `insert into studio.people default values;`],
+  ['an empty person (no account ever)', `insert into studio.people default values;`],
   ['wrong column type: image_asks.person_id as text', `alter table studio.image_asks drop column person_id; alter table studio.image_asks add column person_id text;`],
   ['person_id missing on remix_asks', `alter table studio.remix_asks drop column person_id;`],
   ['the kind check lets a wallet number in as a Bluesky account', `alter table studio.person_accounts drop constraint person_accounts_kind_range; alter table studio.person_accounts add constraint person_accounts_kind_range check ((kind = 'farcaster' and account > 0) or (kind in ('wallet', 'lens', 'bluesky') and account < 0));`],

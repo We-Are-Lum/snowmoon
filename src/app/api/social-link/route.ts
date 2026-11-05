@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getFid, getSocial } from '~/lib/auth';
 import { signInOpen } from '~/lib/config';
+import { LINKED_ACCOUNTS } from '~/lib/config';
 import { db } from '~/lib/db';
 import { linkSocial, unlinkFrom, unlinkSocial, type SocialLinkTarget } from '~/lib/social/accounts';
 import { LINK_WORDING } from '~/lib/social/link-wording';
@@ -26,6 +27,8 @@ const no = (error: string, status: number, reason?: string) => NextResponse.json
 const open = () => signInOpen('lens') || signInOpen('bluesky');
 
 export async function POST(request: Request) {
+  // Linked accounts (LINKED_ACCOUNTS, on): links live in studio.person_accounts, made at /api/linked-accounts only.
+  if (LINKED_ACCOUNTS.enabled) return NextResponse.json({ error: 'Link and unlink accounts on your You page.', reason: 'linked-accounts' }, { status: 410, headers: { 'Cache-Control': 'no-store' } });
   if (!open()) return new NextResponse('Not found', { status: 404 });
   const me = readSocialSession(request.headers.get('x-social-session'));
   if (!me) return NextResponse.json({ error: 'Sign in with Lens or Bluesky first' }, { status: 401, headers: noStore });
@@ -53,6 +56,8 @@ export async function POST(request: Request) {
 }
 
 export async function DELETE(request: Request) {
+  // Linked accounts (LINKED_ACCOUNTS, on): links live in studio.person_accounts, made at /api/linked-accounts only.
+  if (LINKED_ACCOUNTS.enabled) return NextResponse.json({ error: 'Link and unlink accounts on your You page.', reason: 'linked-accounts' }, { status: 410, headers: { 'Cache-Control': 'no-store' } });
   if (!open()) return new NextResponse('Not found', { status: 404 });
   const body = (await request.json().catch(() => ({}))) as { account?: unknown };
   if (body.account !== undefined) {

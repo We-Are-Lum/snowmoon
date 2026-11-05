@@ -5,6 +5,8 @@ import { db } from './db';
 import { configLink, linkedFidFor } from './wallet/links';
 import { readSocialSession, type SocialSession } from './social/session';
 import { personForSocial } from './social/accounts';
+import { socialPerson } from './people';
+import { actingFor, link, linkedOn, readPersonOf } from './linked/accounts';
 
 /**
  * Sign In with Farcaster via Quick Auth, as a bearer token.
@@ -48,6 +50,7 @@ export function getWallet(request: Request): WalletSession | null {
  * LINKED_WALLETS while that table isn't there (src/lib/wallet/links.ts). The payment address is never linked.
  */
 export async function getPerson(request: Request): Promise<number | null> {
+  if (linkedOn()) return getLinkedPerson(request);
   const fid = await getFid(request);
   if (fid !== null) return fid;
   const w = getWallet(request);
@@ -66,3 +69,40 @@ export function getSocial(request: Request): SocialSession | null {
 
 /** The FID LINKED_WALLETS (config) links an address to, or null; the table may say otherwise (linkedFidFor). */
 export const linkedFid = (address: string): number | null => configLink(address);
+
+/**
+ * The account this request is signed in with, as a person number (a FID, minus a wallet account, or a Lens or Bluesky
+ * account's number), without following any link. Null if none.
+ */
+export async function signedInAccount(request: Request): Promise<{ account: number; kind: 'farcaster' | 'wallet' | 'lens' | 'bluesky'; address?: string } | null> {
+  const fid = await getFid(request);
+  if (fid !== null) return { account: fid, kind: 'farcaster' };
+  const w = getWallet(request);
+  if (w) return { account: -w.account, kind: 'wallet', address: w.address };
+  const s = getSocial(request);
+  return s ? { account: socialPerson(s.account), kind: s.kind } : null;
+}
+
+/**
+ * getPerson while linked accounts are on (LINKED_ACCOUNTS; src/lib/linked/accounts.ts): the signed-in account's
+ * person's acting number (its Farcaster account, else Lens, else Bluesky, else this wallet). A wallet the app has never
+ * seen gets today's automatic link once ('verified', only if it is alone; src/lib/wallet/links.ts finds the FID);
+ * after that, studio.person_accounts alone decides, so an unlinked wallet is never linked again by itself.
+ */
+async function getLinkedPerson(request: Request): Promise<number | null> {
+  const me = await signedInAccount(request);
+  if (!me) return null;
+  const sql = db();
+  if (me.kind === 'wallet' && sql) {
+    try {
+      const known = (await readPersonOf(sql, me.account)) ?? (await sql`select 1 from studio.person_accounts where account = ${me.account} limit 1`)[0];
+      if (!known) {
+        const fid = await linkedFidFor(sql, -me.account, me.address!);
+        if (fid !== null) await link(sql, { account: fid, kind: 'farcaster' }, { account: me.account, kind: 'wallet', address: me.address }, 'verified');
+      }
+    } catch (e) {
+      console.error('linked accounts: automatic wallet link failed', (e as { code?: string }).code ?? (e as Error).name);
+    }
+  }
+  return actingFor(sql, me.account);
+}

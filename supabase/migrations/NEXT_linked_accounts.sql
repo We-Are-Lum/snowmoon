@@ -524,7 +524,7 @@ select what, ok from (values
   ('the backfill: every active wallet link is an active row under its FID''s person (or its own, past 3)', not exists (select 1 from studio.wallet_links l where l.unlinked_at is null and not exists (select 1 from studio.person_accounts a where a.account = -l.account_id and a.unlinked_at is null))),
   ('the backfill: every account has at most one active row, and every person''s rows fit A6', not exists (select 1 from studio.person_accounts where unlinked_at is null and kind = 'wallet' group by person_id having count(*) > 3)),
   ('the backfill: every ended wallet link is copied', (select count(*) from studio.wallet_links where unlinked_at is not null) <= (select count(*) from studio.person_accounts where kind = 'wallet' and unlinked_at is not null)),
-  ('the backfill: every person has an active account', not exists (select 1 from studio.people p where not exists (select 1 from studio.person_accounts a where a.person_id = p.id and a.unlinked_at is null))),
+  ('every person has had an account (no empty person made)', not exists (select 1 from studio.people p where not exists (select 1 from studio.person_accounts a where a.person_id = p.id))),
   ('the challenge record''s public tables are untouched: no person_id anywhere anon can read', not exists (select 1 from information_schema.columns c where c.table_schema = 'studio' and c.column_name = 'person_id' and has_table_privilege('anon', 'studio.' || c.table_name, 'select')))
 ) as t(what, ok);
 

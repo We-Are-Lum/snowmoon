@@ -9,6 +9,7 @@ import { privacyDescribesChallenge } from './open-sheets';
 import { refusedBases } from './bases';
 import { remixLines } from './lineage';
 import { eligibility, entriesOpen, inWindow, needsScore, remixOfBase } from './rules';
+import { challengePass, linkedOn } from '../linked/accounts';
 
 /**
  * The remix challenge's eligibility, decided once, when a version is published (owner, 2026-10-31: "checked once at
@@ -49,10 +50,16 @@ export async function recordEligibility(sql: Sql, versionId: string, fid: number
       const r = await checkNeynar(sql, fid, CHALLENGE_LISTS.min);
       passed = r.ok ? r.passed : null;
     }
+    // Linked accounts (LINKED_ACCOUNTS, off): the person passes if any linked account has a current pass, never through
+    // an account that already passed for someone else in this challenge (A4); kept with which kind of account passed.
+    const linked = linkedOn() && fid > 0 && needsScore(fid) ? await challengePass(sql, fid, CHALLENGE.id, CHALLENGE_LISTS.min) : null;
+    if (linked) passed = linked.passed ? true : passed === null ? null : false;
     const e = eligibility({ maker: fid, passed });
     if (e.why === 'not-a-farcaster-account') return 'not-a-candidate';
     const decision = e.why;
-    await sql`insert into studio.challenge_eligibility ${sql({ version_id: versionId, challenge: CHALLENGE.id, fid, decision, eligible: e.eligible })} on conflict (version_id) do nothing`;
+    const row = { version_id: versionId, challenge: CHALLENGE.id, fid, decision, eligible: e.eligible };
+    if (linked) await sql`insert into studio.challenge_eligibility ${sql({ ...row, person_id: linked.personId, via: linked.passed ? linked.via : null, via_account: linked.passed ? linked.viaAccount : null })} on conflict (version_id) do nothing`;
+    else await sql`insert into studio.challenge_eligibility ${sql(row)} on conflict (version_id) do nothing`;
     return 'stored';
   } catch (e) {
     console.error('challenge: eligibility not stored', (e as { code?: string }).code ?? (e as Error).name);

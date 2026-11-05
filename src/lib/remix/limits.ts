@@ -4,6 +4,7 @@ import { IMAGES, REMIX, remixFreeOn } from '../config';
 import { balanceUsd, debit, priceUsd } from '../wallet/credits';
 import { perDay as picturesPerDay } from '../images/limits';
 import { isSocialPerson, isWalletPerson } from '../people';
+import { countOne, countToday, linkedFree, linkedOn } from '../linked/accounts';
 import { freeFor } from '../social/free';
 import { payFromPersonBalance, personBalanceOn } from '../balance/person';
 
@@ -33,8 +34,11 @@ export interface Spend {
 
 export async function generationsLeft(sql: Sql, person: number, reserveUsd: number): Promise<number> {
   // Never asks Lens (the count is shown when the maker opens); a decision already made counts, none yet shows the count.
-  if (isSocialPerson(person) && (await freeFor(sql, person, { lookUp: false }))?.free === false) return 0;
+  const linked = await linkedFree(sql, person);
+  if (linked === 'none') return 0;
+  if (linked !== 'free' && isSocialPerson(person) && (await freeFor(sql, person, { lookUp: false }))?.free === false) return 0;
   if (isWalletPerson(person)) return Math.floor((await balanceUsd(sql, -person)) / priceUsd(reserveUsd));
+  if (linkedOn()) return Math.max(0, perDay(person) - (await countToday(sql, 'remix_asks', person)));
   const [r] = await sql`select count(*)::int as n from studio.remix_asks where person = ${person} and at >= date_trunc('day', now() at time zone 'utc') at time zone 'utc'`;
   return Math.max(0, perDay(person) - (r?.n ?? 0));
 }
@@ -59,7 +63,8 @@ export async function reserve(
   const mayPay = Boolean(opts.personBalance && personBalanceOn());
   const paidOnly = mayPay && Boolean(opts.paidOnly);
   // A Lens or Bluesky account without free generations (src/lib/social/free.ts) gets none, whichever route asks.
-  const noFree = paidOnly || (isSocialPerson(person) && !(await freeFor(sql, person)).free);
+  const linked = await linkedFree(sql, person);
+  const noFree = paidOnly || linked === 'none' || (linked !== 'free' && isSocialPerson(person) && !(await freeFor(sql, person)).free);
   if (noFree && !mayPay) return { ok: false, refusal: 'no-free' };
   return sql.begin(async (tx) => {
     await tx`select pg_advisory_xact_lock(hashtext('snowmoon.remix.spend'))`;
@@ -93,7 +98,7 @@ export async function reserve(
     const left = await generationsLeft(t, person, spend.reserveUsd);
     if (left <= 0) return orPay('limit');
     if ((await freeSpendToday(t)) + spend.reserveUsd > REMIX.dailyFreeCapUsd) return orPay('spend');
-    await tx`insert into studio.remix_asks (person) values (${person})`;
+    await countOne(t, 'remix_asks', person);
     await addCost(t, 'free', 'reserved', spend.model.id, '', '', 1, spend.reserveUsd);
     return { ok: true as const, left: left - 1 };
   });

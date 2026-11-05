@@ -119,7 +119,9 @@ const identity = await sql`select table_name, column_name from information_schem
   and (is_identity = 'YES' or column_default like 'nextval%')`;
 check('no row numbers on image_costs or image_asks', identity.length === 0, JSON.stringify(identity));
 const askCols = (await cols('image_asks')).map((c) => String(c.column_name)).sort().join(',');
-check('image_asks holds only the FID and the time', askCols === 'at,fid', askCols);
+// Linked accounts (NEXT_linked_accounts) add the private person id, so a person's count stays theirs (A3): still no
+// prompt, cost or row number.
+check('image_asks holds only the FID, the time (and, with linked accounts, the private person id)', askCols === 'at,fid' || askCols === 'at,fid,person_id', askCols);
 
 // The caps.
 for (let i = 0; i < IMAGES.generationsPerDay - 1; i++) {
