@@ -1558,7 +1558,8 @@ add({
       ['the production pooler as the database', { ...on, STUDIO_DATABASE_URL: 'postgres://studio_writer.x:y@aws-0-us-west-1.pooler.supabase.com:6543/postgres' }],
     ];
     return {
-      fn: { rehearsalOn, rehearsalTestFid, rehearsalTestPostsFile },
+      // Which switch to run: the real one, or the plant's (functions can't be in the loaded data, which is cloned).
+      fn: 'real' as 'real' | 'planted',
       cases,
       local: on,
       config: read('src/lib/config.ts'),
@@ -1567,20 +1568,22 @@ add({
   },
   run: (c) => {
     const problems: string[] = [];
+    // The plant: a switch that reads only CHALLENGE_REHEARSAL, ignoring VERCEL_ENV and the database.
+    const on = c.fn === 'planted' ? (env: Record<string, string | undefined>) => env.CHALLENGE_REHEARSAL === 'on' : rehearsalOn;
+    const fn = { rehearsalOn: on, rehearsalTestFid, rehearsalTestPostsFile };
     for (const [what, env] of c.cases) {
-      if (c.fn.rehearsalOn(env)) problems.push(`the rehearsal switch is on with ${what}`);
-      if (c.fn.rehearsalTestFid('rehearsal-test-2147483601', env) !== null) problems.push(`the rehearsal's test sign-in works with ${what}`);
-      if (c.fn.rehearsalTestPostsFile(env) !== null) problems.push(`the rehearsal's stand-in posts are read with ${what}`);
+      if (fn.rehearsalOn(env)) problems.push(`the rehearsal switch is on with ${what}`);
+      if (fn.rehearsalTestFid('rehearsal-test-2147483601', env) !== null) problems.push(`the rehearsal's test sign-in works with ${what}`);
+      if (fn.rehearsalTestPostsFile(env) !== null) problems.push(`the rehearsal's stand-in posts are read with ${what}`);
     }
     // It must still work where it is meant to (else this check proves nothing about the cases above).
-    if (!c.fn.rehearsalOn(c.local)) problems.push('the rehearsal switch is off on this machine with a local database: the check above proves nothing');
-    if (!/typeof window === 'undefined'\s*\? rehearsalOn\(process\.env\)/.test(c.config) || /CHALLENGE_REHEARSAL/.test(c.config.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/.*$/gm, ''))) problems.push('src/lib/config.ts reads CHALLENGE_REHEARSAL other than through rehearsalOn');
+    if (!fn.rehearsalOn(c.local)) problems.push('the rehearsal switch is off on this machine with a local database: the check above proves nothing');
+    if (!/typeof window === 'undefined'\s*\? rehearsalOn\(process\.env\)/.test(c.config) || /process\.env\.CHALLENGE_REHEARSAL\b/.test(c.config.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/.*$/gm, ''))) problems.push('src/lib/config.ts reads CHALLENGE_REHEARSAL other than through rehearsalOn');
     if (c.file !== 404) problems.push(`${BASE}/api/rehearsal/file answers ${c.file}, not 404: the target is running the rehearsal`);
     return problems;
   },
   plant: (c) => {
-    // A switch that reads only CHALLENGE_REHEARSAL, ignoring VERCEL_ENV.
-    c.fn = { ...c.fn, rehearsalOn: (env: Record<string, string | undefined>) => env.CHALLENGE_REHEARSAL === 'on' };
+    c.fn = 'planted';
   },
 });
 // Sign-in checks keep the decision, never the score (owner, 2026-11-04): no table the site can write holds a score
