@@ -121,10 +121,10 @@ try {
       const at = f.mark();
       // Placing nothing from here, so the computer can take the last tower: the match ends on a tower, not the clock.
       if (!(await f.turn(t, true, true))) break;
-      if (await page.getByText(/^Over at step/).isVisible()) break;
+      if (await page.getByText(/^Over[: ]/).isVisible()) break;
       f.cut(at);
     }
-    await f.until(page.getByText(/^Over at step/), 30_000);
+    await f.until(page.getByText(/^Over[: ]/), 30_000);
     await f.shoot(1200);
     console.log(`  desktop: the match ended after ${t} turns`);
   });
