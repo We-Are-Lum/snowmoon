@@ -9,13 +9,13 @@ import '../styles/admin-activity.css';
 /**
  * /admin/activity for a signed-in admin (owner, 2026-11-05). Everyone else, and everyone until their sign-in is known,
  * sees `fallback` (the site's usual "not found"). The admin's browser asks GET /api/admin/activity, which answers admins
- * only (404 to everyone else), and draws what it returns: its titles and labels come from that answer.
+ * only (404 to everyone else), and draws what it returns: its titles and labels come from that answer. One person's
+ * public work is chosen from a byline ("only theirs"), never typed.
  */
 export function AdminActivity({ fallback }: { fallback: React.ReactNode }) {
   const auth = useAuth();
   const admin = auth.kind === 'signed-in' && isAdmin(auth.fid);
   const [days, setDays] = useState(30);
-  const [who, setWho] = useState('');
   const [asked, setAsked] = useState('');
   const [view, setView] = useState<ActivityView | null>(null);
   useEffect(() => {
@@ -32,14 +32,12 @@ export function AdminActivity({ fallback }: { fallback: React.ReactNode }) {
     <main className="aa">
       <p className="aa-kicker">Admin</p>
       <h1>Activity</h1>
-      <form className="aa-controls" onSubmit={(e) => (e.preventDefault(), setAsked(who.trim()))}>
+      <div className="aa-controls">
         {[7, 30, 90].map((d) => (
           <button key={d} type="button" aria-pressed={days === d} onClick={() => setDays(d)}>{d} days</button>
         ))}
-        <input value={who} onChange={(e) => setWho(e.target.value)} placeholder="@name, 0x… or handle" aria-label="One person's public work" />
-        <button type="submit">Show</button>
-        {view.who && <button type="button" onClick={() => (setWho(''), setAsked(''))}>Everyone</button>}
-      </form>
+        {view.who && <button type="button" onClick={() => setAsked('')}>Everyone ({view.who})</button>}
+      </div>
       {asked && !view.who && <p className="aa-note">No one found for {asked}.</p>}
       {!view.who && view.sections.map((s) => { const shown = s.days === 'UTC' ? view.dayListUtc : view.dayList; return (
         <section key={s.id} className="aa-section">
@@ -71,6 +69,8 @@ export function AdminActivity({ fallback }: { fallback: React.ReactNode }) {
             {l.rows.map((r, i) => (
               <li key={i}>
                 {r.href ? <a href={r.href}>{r.title}</a> : r.title} <span className="aa-note">{r.by} · {r.at.slice(0, 10)}{r.note ? ` · ${r.note}` : ''}</span>
+                {/* One person's public work: by their public @name (no text box: nothing typed is sent). */}
+                {!view.who && r.by.startsWith('@') && <button type="button" className="aa-only" onClick={() => setAsked(r.by)}>only theirs</button>}
               </li>
             ))}
           </ul>

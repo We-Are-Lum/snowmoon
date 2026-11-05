@@ -14,3 +14,4 @@
 .aa th, .aa td { padding: 4px 8px; border-bottom: 1px solid var(--rule); text-align: right; white-space: nowrap; }
 .aa tbody th { text-align: left; font-weight: 400; color: var(--ink); white-space: normal; min-width: 220px; position: sticky; left: 0; background: var(--paper, Canvas); }
 .aa-list { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 4px; font-size: 15px; }
+.aa-only { font: inherit; font-size: 12px; margin-left: 6px; padding: 1px 6px; border: 1px solid var(--rule); background: transparent; color: var(--body); border-radius: 4px; }
