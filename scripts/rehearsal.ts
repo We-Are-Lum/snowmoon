@@ -6,6 +6,9 @@
  *   npm run rehearsal        then this: builds the app for the rehearsal and starts it (Ctrl-C stops it)
  *   npm run rehearsal -- --no-build   start the last rehearsal build again without building
  *
+ * The build itself runs with no database at all (STUDIO_DATABASE_URL empty: the rehearsal database takes one
+ * connection at a time, and the build's workers would each open one); pages read the rehearsal database once served.
+ *
  * The app's settings are .env.local, overlaid by /Users/nathan/snowmoon/.env.rehearsal.local (its values are read here
  * and handed to the app, never printed), then the rehearsal's own:
  * - CHALLENGE_REHEARSAL=on (and its browser twin): the challenge `rehearsal-<yyyymmdd>`, open from the start of today
@@ -103,7 +106,7 @@ if (path.basename(process.argv[1] ?? '') === 'rehearsal.ts') {
   const next = path.join(ROOT, 'node_modules', 'next', 'dist', 'bin', 'next');
   if (!process.argv.includes('--no-build') || !existsSync(MARK)) {
     console.log('rehearsal: building the app for the rehearsal (a few minutes)…');
-    const b = spawnSync(process.execPath, [next, 'build'], { cwd: ROOT, env: { ...env, NODE_OPTIONS: '--max-old-space-size=3072' } as unknown as NodeJS.ProcessEnv, stdio: 'inherit' });
+    const b = spawnSync(process.execPath, [next, 'build'], { cwd: ROOT, env: { ...env, STUDIO_DATABASE_URL: '', NODE_OPTIONS: '--max-old-space-size=3072' } as unknown as NodeJS.ProcessEnv, stdio: 'inherit' });
     if (b.status !== 0) {
       console.error('rehearsal: the build failed.');
       process.exit(1);

@@ -69,7 +69,7 @@ let cost = 0;
 
 const next = path.join(ROOT, 'node_modules', 'next', 'dist', 'bin', 'next');
 if (!process.argv.includes('--no-build')) {
-  const b = spawnSync(process.execPath, [next, 'build'], { cwd: ROOT, env: { ...env, NODE_OPTIONS: '--max-old-space-size=3072' } as unknown as NodeJS.ProcessEnv, stdio: 'inherit' });
+  const b = spawnSync(process.execPath, [next, 'build'], { cwd: ROOT, env: { ...env, STUDIO_DATABASE_URL: '', NODE_OPTIONS: '--max-old-space-size=3072' } as unknown as NodeJS.ProcessEnv, stdio: 'inherit' });
   if (b.status !== 0) throw new Error('build failed');
   writeFileSync(path.join(ROOT, '.next', 'REHEARSAL_BUILD'), `rehearsal build (dress run), ${new Date().toISOString()}\n`);
 }
