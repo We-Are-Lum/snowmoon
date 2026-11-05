@@ -53,7 +53,9 @@ export async function POST(request: Request) {
   if (slot === 'sample' && !(Number.isInteger(index) && index >= 0 && index < SAMPLE_SUBJECTS.length)) return no('Bad request', 400);
   if (!(await hasConsented(fid))) return no('Agree to how your words are published first', 403, { reason: 'consent' });
   // The same gate as Generate, before anything is counted or reserved (invited FIDs pass it without a lookup).
-  const gate = await mayGenerate(sql, fid);
+  // Paying per person (PERSON_BALANCE): someone the free check refuses may still pay from their balance (paidOnly).
+  // The cheapest Generate's price here; reserve() checks this one's own price.
+  const gate = await mayGenerate(sql, fid, { reserveUsd: IMAGES.reserveUsd });
   if (!gate.ok) return no(gate.error, gate.status, { reason: gate.reason });
 
   // A view's style: a published style, at the version chosen.
@@ -87,6 +89,7 @@ export async function POST(request: Request) {
   const spend = edit ? { model: IMAGES.editModel, reserveUsd: IMAGES.editReserveUsd(1) } : undefined;
   const model = edit ? IMAGES.editModel : IMAGES.model;
   const paid = await paidPicture(sql, fid, request, {
+    paidOnly: gate.paidOnly,
     checkText: prompt,
     spend,
     // A sheet's view prompt is long (view line, style text, sheet text): the larger budget, as Remix's (owner, 2026-11-03).

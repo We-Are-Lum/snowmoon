@@ -4,7 +4,8 @@ import type postgres from 'postgres';
 import { IMAGES } from '../config';
 import { checkNeynar, shown } from './neynar';
 import { recheckAt } from '../checks/decisions';
-import { prepaidOpen } from '../wallet/credits';
+import { prepaidOpen, priceUsd } from '../wallet/credits';
+import { holdsPersonBalance, personBalanceOn, personBalanceUsd } from '../balance/person';
 import { IMAGE_WORDING } from './wording';
 import { isSocialPerson } from '../people';
 import { freeFor } from '../social/free';
@@ -40,7 +41,7 @@ export const GATE_WORDING = {
     `Image making is open to Farcaster accounts with a Neynar score of ${IMAGES.neynarMinScore} or more, to keep out spam accounts. Yours was below that when we last checked; we can check again in about ${Math.max(1, Math.ceil((recheck.getTime() - now.getTime()) / 3_600_000))} ${Math.max(1, Math.ceil((recheck.getTime() - now.getTime()) / 3_600_000)) === 1 ? 'hour' : 'hours'}. Reading, listening, saving cards and everything else still work.`,
 } as const;
 
-export type Gate = { ok: true } | { ok: false; status: 403 | 503; error: string; reason: 'not-open' | 'unreachable' | 'score' | 'prepaid-closed' | 'link-needed' | 'lens-not-open' | 'lens-score' | 'lens-unreachable' };
+export type Gate = { ok: true; paidOnly?: boolean } | { ok: false; status: 403 | 503; error: string; reason: 'not-open' | 'unreachable' | 'score' | 'prepaid-closed' | 'link-needed' | 'lens-not-open' | 'lens-score' | 'lens-unreachable' };
 
 /** The owner's launch order: both legal pages built, and the alert set. Names only in the log. */
 export function openToEveryone(): { open: boolean; missing: string[] } {
@@ -50,7 +51,21 @@ export function openToEveryone(): { open: boolean; missing: string[] } {
   return { open: missing.length === 0, missing };
 }
 
-export async function mayGenerate(sql: Sql, fid: number): Promise<Gate> {
+/**
+ * Who may press Generate. `orPay` (owner, 2026-11-04, paying per person; PERSON_BALANCE): for a Generate that can be
+ * paid from a person balance (Pictures, a sheet's views), a Farcaster, Lens or Bluesky person whom the free check
+ * refuses (the Neynar score, Neynar unreachable, the Lens score or the Bluesky check) may still go on with
+ * `paidOnly`, if their balance covers this Generate's price: paying never makes an entry, and wallet accounts already
+ * pay without a score. Free generations still need the check. The launch order applies to everyone.
+ */
+export async function mayGenerate(sql: Sql, fid: number, orPay?: { reserveUsd: number }): Promise<Gate> {
+  const g = await freeGate(sql, fid);
+  if (g.ok || !orPay || g.reason === 'not-open' || !personBalanceOn() || !holdsPersonBalance(fid)) return g;
+  const balance = await personBalanceUsd(sql, fid).catch(() => 0);
+  return balance >= priceUsd(orPay.reserveUsd) ? { ok: true, paidOnly: true } : g;
+}
+
+async function freeGate(sql: Sql, fid: number): Promise<Gate> {
   // Invited FIDs and admins (admin caps, owner 2026-10-29) skip the score.
   if (IMAGES.invited.includes(fid) || isAdmin(fid)) return { ok: true };
   const launch = openToEveryone();

@@ -490,6 +490,12 @@ ratings and likes and serves the totals.
   anyway. They are private (no public read; append-only for the app;
   `npm run test:wallet`). `studio.image_costs` still has no person in it: it now
   says only whether a day's costs were free or prepaid.
+- Paying per person (owner, 2026-11-04; branch person-balance, migration NEXT_person_balance, `PERSON_BALANCE`): a
+  Farcaster, Lens or Bluesky account's own prepaid balance is kept the same way, under its person number
+  (`studio.person_payments`, `person_debits`, `person_credits`), with which wallet addresses signed to pay for it and
+  when (`studio.person_pay_intents`). That links a wallet to the account privately; it is never shown on the site
+  (Privacy §4). One transaction is credited once across both kinds of balance (`studio.paid_transactions`). Private,
+  append-only for the app (`npm run test:person-balance`, `test:person-balance-code`).
 - Wallet ↔ Farcaster links (owner, 2026-10-22; migration 0026): which wallet account is linked to which FID, how
   ('verified' on Farcaster, or 'signed' with both sign-ins) and how a link ended ('person' or 'unverified') are kept
   privately (`studio.wallet_links`, append-only for the app except a link's one-time end). A linked wallet's work

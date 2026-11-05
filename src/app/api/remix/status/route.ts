@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { isSocialPerson } from '~/lib/people';
+import { holdsPersonBalance, personBalanceOn, personBalanceUsd } from '~/lib/balance/person';
 import { freeFor } from '~/lib/social/free';
 import { getPerson } from '~/lib/auth';
 import { db } from '~/lib/db';
@@ -56,11 +57,17 @@ export async function GET(request: Request) {
       shot ? myFrames(sql, person, version, shot.id) : Promise.resolve([]),
     ]);
     const mine = frames.map((f) => ({ id: f.id, url: f.imageUrl, words: f.ownWords, hidden: f.hidden, hiddenRole: f.hiddenRole, at: f.createdAt, page: `/remix/${f.id}` }));
+    // Paying per person (PERSON_BALANCE): a Farcaster, Lens or Bluesky person's own balance, and whether it lets them
+    // make frames the free check refuses (paidOnly; owner, 2026-11-04). Null while off or before the migration.
+    const own = personBalanceOn() && holdsPersonBalance(person) ? await personBalanceUsd(sql, person).catch(() => null) : null;
+    const personBalance = own === null ? undefined : { balanceUsd: own, priceUsd: priceUsd(reserveUsd), markup: IMAGES.prepaid.markup };
+    const paysWhenRefused = own !== null && own >= priceUsd(reserveUsd) && openToEveryone().open;
     if (isSocialPerson(person)) {
-      // A Lens or Bluesky account (not linked to a Farcaster account): free only as src/lib/social/free.ts decides; no balance.
+      // A Lens or Bluesky account (not linked to a Farcaster account): free only as src/lib/social/free.ts decides.
       // Never asks Lens here (variant B: only Generate does); with no decision yet, eligible is null until Generate.
       const d = await freeFor(sql, person, { lookUp: false });
-      return NextResponse.json({ ...base, signedIn: true, perDay: perDay(person), eligible: d ? d.free : null, refusal: d && !d.free ? d.error : undefined, consented, left, frames: mine, maintainer: false }, { headers: noStore });
+      const paidOnly = d !== null && !d.free && paysWhenRefused;
+      return NextResponse.json({ ...base, signedIn: true, perDay: perDay(person), eligible: paidOnly ? true : d ? d.free : null, paidOnly, refusal: d && !d.free ? d.error : undefined, consented, left, frames: mine, maintainer: false, personBalance }, { headers: noStore });
     }
     if (person < 0) {
       const open = prepaidOpen() && openToEveryone().open;
@@ -71,9 +78,10 @@ export async function GET(request: Request) {
       );
     }
     // The kept decision only (no score is kept, and none is asked for on a page load).
-    const eligible = invited ? true : kept === null ? null : kept.passed;
+    const paidOnly = !invited && kept !== null && !kept.passed && paysWhenRefused;
+    const eligible = invited ? true : kept === null ? null : kept.passed || paidOnly;
     const refusal = kept !== null && !kept.passed ? refusalFor({ score: null, decidedAt: kept.decidedAt }) : undefined;
-    return NextResponse.json({ ...base, signedIn: true, perDay: perDay(person), eligible, refusal, consented, left, frames: mine, maintainer: isAdmin(person) }, { headers: noStore });
+    return NextResponse.json({ ...base, signedIn: true, perDay: perDay(person), eligible, paidOnly, refusal, consented, left, frames: mine, maintainer: isAdmin(person), personBalance }, { headers: noStore });
   } catch (e) {
     console.error('remix status failed', (e as { code?: string }).code ?? (e as Error).name);
     return NextResponse.json({ ...base, ready: false, signedIn: true, eligible: invited ? true : null, consented: false, frames: [] }, { headers: noStore });

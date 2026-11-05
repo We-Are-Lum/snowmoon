@@ -92,7 +92,9 @@ export async function POST(request: Request) {
   if (!(await hasConsented(fid))) return no('Agree to how your words are published first', 403, { reason: 'consent' });
 
   // Who may generate, before anything is counted or reserved (decision 11). Invited FIDs skip it.
-  const gate = await mayGenerate(sql, fid);
+  // Paying per person (PERSON_BALANCE): someone the free check refuses may still pay from their balance (paidOnly).
+  // The cheapest Generate's price here; reserve() checks this one's own price.
+  const gate = await mayGenerate(sql, fid, { reserveUsd: IMAGES.reserveUsd });
   if (!gate.ok) return no(gate.error, gate.status, { reason: gate.reason });
 
   // The style: any published style (2026-10-14), at the version chosen. Sheets: only the person's own picks, still published.
@@ -141,6 +143,7 @@ export async function POST(request: Request) {
   // Counted from here, whatever happens next (decision 16: blocked attempts count). The whole prompt
   // as it will be sent (the person's words, any style, sheet and shorthand text) is checked.
   const paid = await paidPicture(sql, fid, request, {
+    paidOnly: gate.paidOnly,
     checkText: prompt,
     spend: pictures.length ? { model: IMAGES.editModel, reserveUsd: generateReserveUsd(pictures.length) } : undefined,
     make: () => (pictures.length ? makeEdit(prompt, pictures) : makeImage(prompt)),

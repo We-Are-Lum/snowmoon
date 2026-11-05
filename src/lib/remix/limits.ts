@@ -5,6 +5,7 @@ import { balanceUsd, debit, priceUsd } from '../wallet/credits';
 import { perDay as picturesPerDay } from '../images/limits';
 import { isSocialPerson, isWalletPerson } from '../people';
 import { freeFor } from '../social/free';
+import { payFromPersonBalance, personBalanceOn } from '../balance/person';
 
 /**
  * Remix's caps, the same shape as Pictures' (src/lib/images/limits.ts), in its own tables
@@ -44,9 +45,22 @@ export async function freeSpendToday(sql: Sql): Promise<number> {
   return t.usd;
 }
 
-export async function reserve(sql: Sql, person: number, spend: Spend): Promise<{ ok: true; left: number; debitId?: number } | { ok: false; refusal: Refusal }> {
+export async function reserve(
+  sql: Sql,
+  person: number,
+  spend: Spend,
+  /**
+   * Paying per person (PERSON_BALANCE): `personBalance` lets a Farcaster, Lens or Bluesky person's own balance pay when
+   * the free path refuses (the Remix route only; an agent's approved frame never does, Terms 6b); `paidOnly`: the gate
+   * refused free frames but let them pay, so only the balance pays.
+   */
+  opts: { personBalance?: boolean; paidOnly?: boolean } = {},
+): Promise<{ ok: true; left: number; debitId?: number; personDebitId?: number; funded?: Funded } | { ok: false; refusal: Refusal }> {
+  const mayPay = Boolean(opts.personBalance && personBalanceOn());
+  const paidOnly = mayPay && Boolean(opts.paidOnly);
   // A Lens or Bluesky account without free generations (src/lib/social/free.ts) gets none, whichever route asks.
-  if (isSocialPerson(person) && !(await freeFor(sql, person)).free) return { ok: false, refusal: 'no-free' };
+  const noFree = paidOnly || (isSocialPerson(person) && !(await freeFor(sql, person)).free);
+  if (noFree && !mayPay) return { ok: false, refusal: 'no-free' };
   return sql.begin(async (tx) => {
     await tx`select pg_advisory_xact_lock(hashtext('snowmoon.remix.spend'))`;
     await tx`select pg_advisory_xact_lock(hashtext('snowmoon.remix.person'), ${person}::int)`;
@@ -61,10 +75,24 @@ export async function reserve(sql: Sql, person: number, spend: Spend): Promise<{
       await addCost(t, 'prepaid', 'reserved', spend.model.id, '', '', 1, spend.reserveUsd);
       return { ok: true as const, left: Math.floor((balance - price) / price), debitId };
     }
-    if (!remixFreeOn()) return { ok: false as const, refusal: 'free-off' as const };
+    // Free first; when the free path refuses, a person's own balance pays if it covers the price (mayPay).
+    const orPay = async (refusal: 'limit' | 'spend' | 'no-free' | 'free-off') => {
+      const paid = mayPay
+        ? await payFromPersonBalance(t, person, spend.reserveUsd, async () => {
+            const [p] = await tx`select coalesce(sum(cost_usd), 0)::float8 as usd from studio.remix_costs where day = ${tx.unsafe(TODAY)} and funded = 'prepaid'`;
+            return p.usd;
+          })
+        : null;
+      if (!paid) return paidOnly && refusal === 'no-free' ? { ok: false as const, refusal: 'balance' as const } : { ok: false as const, refusal };
+      if (!paid.ok) return paid;
+      await addCost(t, 'prepaid', 'reserved', spend.model.id, '', '', 1, spend.reserveUsd);
+      return { ok: true as const, left: Math.floor(paid.balanceAfter / paid.price), personDebitId: paid.debitId, funded: 'prepaid' as const };
+    };
+    if (noFree) return orPay('no-free');
+    if (!remixFreeOn()) return orPay('free-off');
     const left = await generationsLeft(t, person, spend.reserveUsd);
-    if (left <= 0) return { ok: false as const, refusal: 'limit' as const };
-    if ((await freeSpendToday(t)) + spend.reserveUsd > REMIX.dailyFreeCapUsd) return { ok: false as const, refusal: 'spend' as const };
+    if (left <= 0) return orPay('limit');
+    if ((await freeSpendToday(t)) + spend.reserveUsd > REMIX.dailyFreeCapUsd) return orPay('spend');
     await tx`insert into studio.remix_asks (person) values (${person})`;
     await addCost(t, 'free', 'reserved', spend.model.id, '', '', 1, spend.reserveUsd);
     return { ok: true as const, left: left - 1 };
