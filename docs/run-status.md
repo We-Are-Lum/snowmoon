@@ -31,7 +31,26 @@ beyond the two named, no migrations on production, nothing published. Spending t
 
 ---
 
-# Run status: long run of 2026-11-04 (from about 16:15 PT; all five items done by about 18:25)
+# Run status: hour run of 2026-11-05 (from about 11:05 PT)
+
+The accounts session (snowmoon-9c). Pushed after each item. No secrets here. While the owner is away: no merges except
+the You page wording (the owner's word for that one merge), no migrations on production, nothing published, no image
+spending. Legal and consent lines go to the coordinator first.
+
+| # | Item | State |
+|---|------|-------|
+| 0 | Sign-in release (#117, fd632855) live checks | shipped, principles (P6d only), miniapp, snap-live pass; check:ui re-run at fd632855 queued (the first run used a stale local build) |
+| 1 | You page wording (+ 0035/0036 header fix): ship alone after check:ui passes | waiting for that check:ui (branch you-page-wording 2ed40c60) |
+| a | Assistant step 1 (switch off, tests, drafted lines, chat_calls migration if needed) | running (branch assistant-any-account) |
+| b | Linked accounts v2 build on linked-accounts (switch off, chain + takeover tests) | running |
+| c | Admin dashboard build on admin-activity | waiting (if time) |
+
+Contest session (snowmoon-d3) has its items: contest's owed checks, the Deluin b4 pointer, fund-page's P7c.
+
+---
+
+# Earlier: long run of 2026-11-04
+
 
 Kept by the coding agent (Claude, a closed model by Anthropic). Pushed after each item. No secrets here. Nothing is
 merged, applied to production or published during this run; legal lines go to the coordinator first.
