@@ -68,6 +68,13 @@ was set). P7c on fund-page couldn't load ethereum-rpc.publicnode.com from this n
 passing, re-run it from another network before merging fund-page. Every check caught its planted violation. M22: run by
 the Minpentai session (above).
 
+**3a. challenge-landing (done, 390ea1eb):** main merged in (merge commit; conflicts in 5 files resolved toward main's
+admin-only gate and the branch's landing). "First remixes by @naaate" is a heading over the row; first remixes are
+never entries (no badge, no count, not in any entry list). Deluin and Gladias have three bases each, shown in a fresh
+random order on each visit (P5g extended, with planted faults); "current default" wording only (a test now refuses
+"canonical"/"official" in the config). Typecheck passes; challenge tests 365/365; check:principles 58 pass, only P6a
+and P6d failing.
+
 **3. Lane A so far:** challenge-landing has main merged in (365 challenge tests pass). Branch `contest`: merges done;
 rehearsal switch, local rehearsal database (starts and seeds), one submission per Pacific day (migration
 NEXT_challenge_daily.sql, which replaces the SQL pack's NEXT_challenge_submit.sql); tests pass (challenge 510,
@@ -102,4 +109,9 @@ on localhost (HTTP 200) with the metadata link and "Sign in with my wallet". The
 - **Withdraw on the contest branch keeps the row** (marked withdrawn, so that day's submission isn't given back), so
   the approved Privacy §4 sentence "If you withdraw a submission, it is deleted" would be false there. Before/after
   drafts: docs/legal/contest-draft.md on `contest`, for your reread.
+- **Admins and the challenge sub-pages:** while the challenge is private, /challenge/rules and /challenge/remixes now
+  answer "not found" to everyone, admins included (only /challenge itself shows admins the landing). Say if admins
+  should see those two pages too.
+- **Recast bases are closed-model drafts** (Gemini): they can be bases only once the closed-model Terms/Privacy release
+  (closed-model-bases) is live. The rehearsal uses the open-model drafts as stand-ins.
 - **The three-looks proposal** for Zei, Bai, Seila and Mu, and a cap if you want them made.
