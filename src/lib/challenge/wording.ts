@@ -82,6 +82,13 @@ export const CHALLENGE_WORDING = {
   submitNote: () => 'A remix becomes an entry only when you submit it, with the link to your post about it on Farcaster, Bluesky or Lens; the post must be yours and link to this page. You can submit one remix a day (Pacific time).',
   submitLabel: 'Your post’s address (Farcaster, Bluesky or Lens)',
   submit: 'Submit',
+  // "Post it first" on Submit (overnight run 2026-11-05, item 4). DRAFT wording, for the owner's OK: the head, the note,
+  // the button labels and the post's words. Each button opens that network's own compose screen with the words and
+  // this page's link filled in; nothing is posted or stored by us, and the person pastes the post's link below.
+  submitPostHead: 'Post it first',
+  submitPostNote: 'Each button opens that network with a short post and this page’s link filled in. Post it there, then paste your post’s address below.',
+  submitPostOn: (network: string) => `Post on ${network}`,
+  submitPostText: (name: string) => `My remix of ${name}, for the Snowmoon Party remix challenge`,
   submitted: 'Submitted: this is now one of your entries.',
   submissionsLeft: (n: number) => (n > 0 ? 'You can submit one remix today.' : 'You’ve submitted today. You can submit again tomorrow (Pacific time).'),
   withdraw: 'Withdraw',

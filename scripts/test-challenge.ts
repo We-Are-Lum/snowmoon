@@ -513,7 +513,7 @@ function standIn(link: string) {
     }
     if (u.pathname.endsWith('resolveHandle')) return json({ did: DID });
     if (u.pathname.endsWith('getPosts')) return json({ posts: [{ uri: `at://${DID}/app.bsky.feed.post/3mz6hon3w6c2h`, author: { handle: 'someone.bsky.social', avatar: 'https://cdn.bsky.app/avatar.jpg', labels: [] }, record: { text: `Zei! ${link}`, createdAt: '2026-11-08T10:00:00Z', facets: [{ features: [{ $type: 'app.bsky.richtext.facet#link', uri: link }] }] }, indexedAt: '2026-11-08T10:00:01Z', labels: [], likeCount: 3 }] });
-    if (u.hostname === 'api.lens.xyz') return json({ data: { post: { __typename: 'Post', id: '2537194911', slug: '1q4tkta5f47sz8032wm', timestamp: '2026-11-09T10:00:00Z', author: { username: { localName: 'someone' } }, metadata: { __typename: 'TextOnlyMetadata', content: `Bai ${link}` } } } });
+    if (u.hostname === 'api.lens.xyz') return json({ data: { post: { __typename: 'Post', id: '2537194911', slug: '1q4tkta5f47sz8032wm', timestamp: '2026-11-09T10:00:00Z', author: { address: '0xAbCdEf0000000000000000000000000000c0de04', username: { localName: 'someone' } }, metadata: { __typename: 'TextOnlyMetadata', content: `Bai ${link}` } } } });
     return json({}, 404);
   };
   return { asked, f: f as (url: string, init?: RequestInit) => Promise<Response> };
@@ -583,20 +583,23 @@ proof('a matcher that only checks the path would take the look-alike host', `htt
   const [fc, sky, lens] = [await read3(pasted[0]), await read3(pasted[1]), await read3(pasted[2])];
   check('9.4 a cast\'s writer is its author FID, from Neynar', JSON.stringify(fc?.writer) === '{"fid":500}');
   check('9.4 a Bluesky post\'s writer is the DID in its at:// address', JSON.stringify(sky?.writer) === JSON.stringify({ did: DID }));
-  check('9.4 a Lens post\'s writer is not read (null)', lens !== null && lens.writer === null);
-  const me = (fid: number, blueskyDids: string[] = []) => ({ fid, blueskyDids });
+  check('9.4 a Lens post\'s writer is its author account, from Lens', lens !== null && lens.writer !== null && 'lens' in lens.writer && /^0x[0-9a-f]{40}$/.test(lens.writer.lens));
+  const LENS_AUTHOR = lens?.writer && 'lens' in lens.writer ? lens.writer.lens : '';
+  const me = (fid: number, blueskyDids: string[] = [], lensAccounts: string[] = []) => ({ fid, blueskyDids, lensAccounts });
   check('9.4 Farcaster: your own cast is accepted', L.writerCheck(fc!, me(500)) === 'ok');
   check('9.4 Farcaster: someone else\'s cast is refused', L.writerCheck(fc!, me(501)) === 'not-yours');
   check('9.4 Farcaster: a cast whose author Neynar didn\'t name is refused', L.writerCheck({ network: 'farcaster', writer: null }, me(500)) === 'not-yours');
   check('9.4 Farcaster: a wallet account (below zero) never matches', L.writerCheck({ network: 'farcaster', writer: { fid: -500 } }, me(-500)) === 'not-yours');
-  check('9.4 Bluesky: refused while no Bluesky account is known to be yours (as on this branch)', L.writerCheck(sky!, me(500)) === 'unknown');
+  check('9.4 Bluesky: refused unless signed in with that Bluesky account (no linking yet)', L.writerCheck(sky!, me(500)) === 'unknown');
   check('9.4 Bluesky: your known DID is accepted, another\'s refused', L.writerCheck(sky!, me(500, [DID])) === 'ok' && L.writerCheck(sky!, me(500, ['did:plc:zzzzzzzzzzzzzzzzzzzzzzzz'])) === 'not-yours');
-  check('9.4 Lens: not checked', L.writerCheck(lens!, me(501)) === 'ok');
+  check('9.4 Lens: refused unless signed in with that Lens account (no linking yet)', L.writerCheck(lens!, me(501)) === 'unknown');
+  check('9.4 Lens: the signed-in Lens account\'s own post is accepted (any capitals), another account\'s refused', L.writerCheck(lens!, me(0, [], [LENS_AUTHOR.toUpperCase().replace('0X', '0x')])) === 'ok' && L.writerCheck(lens!, me(0, [], ['0x' + '9'.repeat(40)])) === 'not-yours');
+  proof('9.4 a Lens check that ignored the author would take someone else\'s post', L.writerCheck({ network: 'lens', writer: { lens: '0x' + '8'.repeat(40) } }, me(0, [], [LENS_AUTHOR])) !== 'ok');
   proof('9.4 a check that only compares handles would take someone else\'s cast', fc!.handle === 'naaate' && L.writerCheck(fc!, me(501)) !== 'ok');
   const SW = (await import('../src/lib/challenge/entries')).SUBMIT_WORDING;
-  check('9.4 the refusals are short and say what to do', SW.notYourPost === 'That post isn’t from your account. Submit a post you wrote.' && /Farcaster/.test(SW.blueskyUnknown));
+  check('9.4 the refusals are short and say what to do', SW.notYourPost === 'That post isn’t from your account. Submit a post you wrote.' && /Sign in with that Bluesky account/.test(SW.blueskyUnknown) && /Sign in with that Lens account/.test(SW.lensUnknown));
   const route = read('src/app/api/challenge/submit/route.ts');
-  const checked = (src: string) => /if \(!got\.ok\) return no\(got\.why, got\.status\);[\s\S]{0,400}const mine = writerCheck\(got\.post, \{ fid, blueskyDids: \[\] \}\);\s*if \(mine === 'not-yours'\) return no\(SUBMIT_WORDING\.notYourPost, 403\);\s*if \(mine === 'unknown'\) return no\(SUBMIT_WORDING\.blueskyUnknown, 403\);\s*const r = await submitEntry\(/.test(src);
+  const checked = (src: string) => /if \(!got\.ok\) return no\(got\.why, got\.status\);[\s\S]{0,700}const mine = writerCheck\(got\.post, \{\s*fid: farcaster \?\? 0,\s*blueskyDids: social\?\.kind === 'bluesky' \? \[social\.subject\] : \[\],\s*lensAccounts: social\?\.kind === 'lens' \? \[social\.subject\] : \[\],\s*\}\);\s*if \(mine === 'not-yours'\) return no\(SUBMIT_WORDING\.notYourPost, 403\);\s*if \(mine === 'unknown'\) return no\(got\.post\.network === 'lens' \? SUBMIT_WORDING\.lensUnknown : SUBMIT_WORDING\.blueskyUnknown, 403\);\s*const r = await submitEntry\(/.test(src);
   check('9.4 the Submit route checks the writer before it keeps anything', checked(route));
   proof('9.4 a route that skips the check is caught', !checked(route.replace("if (mine === 'not-yours') return no(SUBMIT_WORDING.notYourPost, 403);", '')));
 }
@@ -787,6 +790,33 @@ check('stored at publish: an admin', dec(fAdmin.versionId)?.decision === 'admin'
 check('stored at publish: invited, no score asked', dec(f6852.versionId)?.decision === 'invited');
 check('stored at publish: Neynar down means unchecked (not eligible)', dec(f502.versionId)?.decision === 'unchecked' && dec(f502.versionId)?.eligible === false);
 check('a sheet made from scratch gets no decision (not an entry)', !dec(fScratch.versionId));
+{
+  // The Lens check at publish (overnight run 2026-11-05, item 4): a Lens account's remix gets its decision from the
+  // shared store (network 'lens', rule 'lens-score>=1000'), or Lens is asked once and only the decision is kept.
+  const { lensRule } = await import('../src/lib/social/lens-check');
+  const SSI = (await import('../src/lib/config')).SOCIAL_SIGN_IN;
+  const rule = lensRule(SSI.lens.minScore ?? 1000);
+  const mk = async (addr: string) => (await sql<{ id: number }[]>`insert into studio.social_accounts (kind, subject, handle) values ('lens', ${addr}, 'lens/madeup') returning id`)[0].id;
+  const [aPass, aFail, aNew] = ['0x' + 'a1'.repeat(20), '0x' + 'b2'.repeat(20), '0x' + 'c3'.repeat(20)];
+  const [pPass, pFail, pNew] = [await mk(aPass), await mk(aFail), await mk(aNew)].map((id) => -(1_000_000_000 + Number(id)));
+  await sql`insert into studio.check_decisions (network, account, threshold, passed) values ('lens', ${aPass}, ${rule}, true), ('lens', ${aFail}, ${rule}, false)`;
+  let asked = 0;
+  const score = async () => (asked++, 1500);
+  const pub = async (fid: number, n: number) => {
+    const out = await DS.makeDesign(S, { fid, mode: 'fork', kind: 'character', fromVersionId: baiStart.versionId, body: sheet(`Bai, by a Lens account ${n}`, 20 + n) });
+    const r = await Rec.recordEligibility(S, out.versionId, fid, new Date(), privacySaid, undefined, score);
+    const [row] = await sql<{ decision: string; eligible: boolean; account: string }[]>`select decision, eligible, account from studio.challenge_eligibility where version_id = ${out.versionId}`;
+    return { r, row };
+  };
+  const yes = await pub(pPass, 1);
+  const no = await pub(pFail, 2);
+  check('Lens at publish: a stored pass is eligible (account lens), without asking Lens', yes.r === 'stored' && yes.row?.decision === 'passed' && yes.row.eligible && yes.row.account === 'lens' && asked === 0, JSON.stringify(yes));
+  check('Lens at publish: a stored fail is below, not eligible', no.row?.decision === 'below' && no.row.eligible === false, JSON.stringify(no));
+  const fresh = await pub(pNew, 3);
+  const [kept] = await sql<{ passed: boolean; threshold: string }[]>`select passed, threshold from studio.check_decisions where network = 'lens' and account = ${aNew}`;
+  check('Lens at publish: no decision yet, Lens asked once; only the decision is kept, under lens-score>=1000', asked === 1 && fresh.row?.decision === 'passed' && kept?.passed === true && kept.threshold === 'lens-score>=1000', JSON.stringify({ asked, fresh, kept }));
+  proof('Lens at publish: a recorder that ignored the stored fail would make it eligible', no.row?.eligible !== true);
+}
 {
   const extra = await DS.makeDesign(S, { fid: 504, mode: 'fork', kind: 'character', fromVersionId: baiStart.versionId, body: sheet('Bai, before the reread', 11) });
   const unsaid = structuredClone(P0);
@@ -1169,11 +1199,24 @@ CHALLENGE.postsPerPersonPerDay = keepLimit;
   const [admPics] = await sql<{ n: number }[]>`select count(*)::int as n from studio.image_asks where fid = ${ADMINS[0]}`;
   const [admRemix] = await sql<{ n: number }[]>`select count(*)::int as n from studio.sheet_remix_asks where fid = ${ADMINS[0]}`;
   check('F9 an admin keeps their own picture limit: their views count as pictures, not remixes', adm.ok && admPics.n === 1 && admRemix.n === 0 && (await Lm.remixesLeftToday(S, ADMINS[0])) === null);
-  // A Bluesky account's remix (its number at or below -1,000,000,000) is counted as a remix, not charged as a wallet.
-  const sky = -1_000_000_007;
+  // A Bluesky account's remix (its number at or below -1,000,000,000) is counted as a remix, not charged as a wallet,
+  // once it passes the Bluesky check (signin-lens-bluesky and bluesky-check merged in, 2026-11-05: a Bluesky account
+  // that doesn't pass gets no free remixes, Terms §4). Made-up account; a pass planted in the decision store.
+  const SSI = (await import('../src/lib/config')).SOCIAL_SIGN_IN as unknown as { bluesky: { check: { on: boolean } } };
+  const wasOn = SSI.bluesky.check.on;
+  SSI.bluesky.check.on = true;
+  const { thresholdKey } = await import('../src/lib/social/bluesky-check');
+  const [skyAcc] = await sql<{ id: number }[]>`insert into studio.social_accounts (kind, subject, handle) values ('bluesky', 'did:plc:remixcountaaaaaaaaaa2345', 'remixcount.bsky.social') returning id`;
+  const [idleAcc] = await sql<{ id: number }[]>`insert into studio.social_accounts (kind, subject, handle) values ('bluesky', 'did:plc:remixidleaaaaaaaaaaa2345', 'remixidle.bsky.social') returning id`;
+  await sql`insert into studio.check_decisions (network, account, threshold, passed) values ('bluesky', 'did:plc:remixcountaaaaaaaaaa2345', ${thresholdKey()}, true), ('bluesky', 'did:plc:remixidleaaaaaaaaaaa2345', ${thresholdKey()}, false)`;
+  const sky = -(1_000_000_000 + Number(skyAcc.id));
+  const idle = -(1_000_000_000 + Number(idleAcc.id));
+  const idleR = await Lm.reserve(S, idle, spend(rid(24), true));
+  check('F9c a Bluesky account that didn\'t pass the Bluesky check gets no free remix', !idleR.ok && idleR.refusal === 'no-free', JSON.stringify(idleR));
   const skyR = await Lm.reserve(S, sky, spend(rid(22), true));
+  SSI.bluesky.check.on = wasOn;
   const [skyRemix] = await sql<{ n: number }[]>`select count(*)::int as n from studio.sheet_remix_asks where fid = ${sky}`;
-  check('F9b a Bluesky account\'s remix view counts as a remix (2 left), not a wallet\'s balance', skyR.ok && skyR.left === 2 && skyRemix.n === 1 && (await Lm.remixesLeftToday(S, sky)) === 2, JSON.stringify(skyR));
+  check('F9b a Bluesky account that passes: its remix view counts as a remix (2 left), not a wallet\'s balance', skyR.ok && skyR.left === 2 && skyRemix.n === 1 && (await Lm.remixesLeftToday(S, sky)) === 2, JSON.stringify(skyR));
   const wal = await Lm.reserve(S, -4242, spend(rid(23), true));
   check('F9b a wallet account\'s view still goes to its balance (none here: refused)', !wal.ok && wal.refusal === 'balance', JSON.stringify(wal));
   const inv = await Lm.reserve(S, 6852, spend(rid(21), true));
@@ -1296,7 +1339,7 @@ check('as committed, CHALLENGE.entries, posts and openSheets are on (owner\'s re
   proof('R8 a form that starts with no style is caught', !preselect(form.replace('remixDefaults(p.source ? { style: p.source.style } : null', 'remixDefaults(null'), newPage));
   // R9: after the close, a candidate's page still offered "Mark as my entry", which then said "Entries are closed."
   const vp = lines;
-  const closedNoButton = (src: string) => /standing\?\.kind === 'candidate'\)\s*lines\.push\(open \? line\(\{ text: CW\.candidateNote\(callName\), muted: true, submit: submitWords\(false\) \}\) : line\(\{ text: CW\.candidateClosedNote\(callName\), muted: true \}\)\);/.test(src) && /const open = challengeOpenNow\(now, pub\);/.test(src);
+  const closedNoButton = (src: string) => /standing\?\.kind === 'candidate'\)\s*lines\.push\(open \? line\(\{ text: CW\.candidateNote\(callName\), muted: true, submit: submitWords\(false, callName\) \}\) : line\(\{ text: CW\.candidateClosedNote\(callName\), muted: true \}\)\);/.test(src) && /const open = challengeOpenNow\(now, pub\);/.test(src);
   check('R9 after the close a candidate shows the closed note and no Submit', closedNoButton(vp) && /Entries are closed/.test(CW.candidateClosedNote('Bai')) && /Bai/.test(CW.candidateClosedNote('Bai')));
   proof('R9 a Submit offered after the close is caught', !closedNoButton(vp.replace('const open = challengeOpenNow(now, pub);', 'const open = true;')) && !closedNoButton(vp.replace('line({ text: CW.candidateClosedNote(callName), muted: true })', 'line({ text: CW.candidateClosedNote(callName), muted: true, submit: submitWords(false) })')));
 }

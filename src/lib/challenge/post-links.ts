@@ -132,7 +132,7 @@ export function bskyPostsRequest(did: string, rkey: string): string | null {
   return `${POST_APIS.bskyGetPosts}?${new URLSearchParams({ uris: `at://${did}/app.bsky.feed.post/${rkey}` })}`;
 }
 
-export const LENS_QUERY = `query($p: PostId!) { post(request: { post: $p }) { __typename ... on Post { id slug timestamp author { username { localName } } metadata { __typename ... on TextOnlyMetadata { content } ... on LinkMetadata { content sharingLink } ... on ImageMetadata { content } ... on VideoMetadata { content } ... on ArticleMetadata { content } } } } }`;
+export const LENS_QUERY = `query($p: PostId!) { post(request: { post: $p }) { __typename ... on Post { id slug timestamp author { address username { localName } } metadata { __typename ... on TextOnlyMetadata { content } ... on LinkMetadata { content sharingLink } ... on ImageMetadata { content } ... on VideoMetadata { content } ... on ArticleMetadata { content } } } } }`;
 
 export interface Post {
   network: Network;
@@ -147,31 +147,37 @@ export interface Post {
   /** Every link the post carries (its embeds, link cards and the addresses in its text). Not stored. */
   links: string[];
   /**
-   * Who wrote it, as its network names the account: a cast's author FID, a Bluesky post's DID (from its at:// URI).
-   * Null for Lens (the query reads the author's handle only). Used by Submit to check the post is the submitter's own
-   * (owner, 2026-11-04, answer 9.4); not stored.
+   * Who wrote it, as its network names the account: a cast's author FID, a Bluesky post's DID (from its at:// URI), a
+   * Lens post's author account address (lowercase). Used by Submit to check the post is the submitter's own (owner,
+   * 2026-11-04, answer 9.4); not stored.
    */
-  writer: { fid: number } | { did: string } | null;
+  writer: { fid: number } | { did: string } | { lens: string } | null;
 }
 
 /**
  * Submit's check that the post is the submitter's own (owner, 2026-11-04, answer 9.4: "a Submit's post must be the
- * submitter's own"), where the writer is known:
- * - Farcaster: the cast's author FID must be the submitter's FID.
- * - Bluesky: the post's DID must be one the site knows is the submitter's (`blueskyDids`). Nothing on this branch links
- *   a Bluesky account to a person yet (branches signin-lens-bluesky and bluesky-check will), so until then a Bluesky
- *   post is 'unknown' and refused.
- * - Lens: not checked (the writer's account isn't read). 'ok'.
+ * submitter's own"; overnight run 2026-11-05, item 4: Lens by its author, Bluesky by its DID, others refused until
+ * linked accounts exist):
+ * - Farcaster: the cast's author FID must be the submitter's FID (a Farcaster sign-in).
+ * - Bluesky: the post's DID must be the DID of the Bluesky account the submitter is signed in with now (`blueskyDids`).
+ *   Signed in another way, no Bluesky DID is known to be theirs: 'unknown', refused.
+ * - Lens: the post's author must be the Lens account the submitter is signed in with now (`lensAccounts`). Signed in
+ *   another way: 'unknown', refused.
  */
 export type WriterCheck = 'ok' | 'not-yours' | 'unknown';
-export function writerCheck(post: Pick<Post, 'network' | 'writer'>, submitter: { fid: number; blueskyDids: readonly string[] }): WriterCheck {
+export function writerCheck(
+  post: Pick<Post, 'network' | 'writer'>,
+  submitter: { fid: number; blueskyDids: readonly string[]; lensAccounts: readonly string[] },
+): WriterCheck {
   if (post.network === 'farcaster') return post.writer && 'fid' in post.writer && submitter.fid > 0 && post.writer.fid === submitter.fid ? 'ok' : 'not-yours';
   if (post.network === 'bluesky') {
     const did = post.writer && 'did' in post.writer ? post.writer.did : null;
     if (did && submitter.blueskyDids.includes(did)) return 'ok';
     return submitter.blueskyDids.length > 0 ? 'not-yours' : 'unknown';
   }
-  return 'ok';
+  const author = post.writer && 'lens' in post.writer ? post.writer.lens : null;
+  if (author && submitter.lensAccounts.some((a) => a.toLowerCase() === author)) return 'ok';
+  return submitter.lensAccounts.length > 0 ? 'not-yours' : 'unknown';
 }
 
 const isoOrNull = (v: unknown): string | null => {
@@ -243,11 +249,12 @@ export function parseLensPost(body: unknown, slug: string): Post | null {
   const id = typeof p.id === 'string' && /^[0-9a-z]{1,100}$/i.test(p.id) ? p.id : null;
   const s = typeof p.slug === 'string' ? p.slug.toLowerCase() : '';
   const handle = (p.author as { username?: { localName?: unknown } | null } | undefined)?.username?.localName;
+  const address = (p.author as { address?: unknown } | undefined)?.address;
   const at = isoOrNull(p.timestamp);
   if (!id || s !== slug || typeof handle !== 'string' || !USERNAME.test(handle) || !at) return null;
   const meta = (p.metadata ?? {}) as { content?: unknown; sharingLink?: unknown };
   const links = [...textLinks(meta.content), ...(typeof meta.sharingLink === 'string' ? [meta.sharingLink] : [])];
-  return { network: 'lens', id, handle: handle.toLowerCase(), at, url: `https://hey.xyz/posts/${s}`, links, writer: null };
+  return { network: 'lens', id, handle: handle.toLowerCase(), at, url: `https://hey.xyz/posts/${s}`, links, writer: typeof address === 'string' && /^0x[0-9a-fA-F]{40}$/.test(address) ? { lens: address.toLowerCase() } : null };
 }
 
 /** The path of a version's page. */

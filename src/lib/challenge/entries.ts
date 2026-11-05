@@ -7,7 +7,7 @@ import { CHALLENGE, WORK_ID } from '../config';
 import { challengeVisibleTo } from './visibility';
 import { bookCharacter } from '../images/designs';
 import { isSocialPerson } from '../people';
-import { chooseEntries, distinctSubmissions, entrantCounts, fromDecision, type Decision, inWindow, markKey, newestFirst, phase, shortDateText, submitRefusal, submittedToday, type Candidate, type Eligibility, type Submission } from './rules';
+import { chooseEntries, distinctSubmissions, entrantCounts, fromDecision, type Decision, inWindow, newestFirst, phase, shortDateText, submitRefusal, submittedToday, type Candidate, type Eligibility, type Submission } from './rules';
 import type { Post } from './post-links';
 
 /**
@@ -185,8 +185,12 @@ export const SUBMIT_WORDING = {
   needsPost: 'Add the link to a post about it on Farcaster, Bluesky or Lens first.',
   /** Draft wording (owner, 2026-11-04, answer 9.4: the post must be the submitter's own). */
   notYourPost: 'That post isn’t from your account. Submit a post you wrote.',
-  /** Draft wording: a Bluesky post, while no Bluesky account can be linked to a person (see writerCheck). */
-  blueskyUnknown: 'We can’t tell yet that this Bluesky post is yours. Submit a post from your Farcaster account instead.',
+  /** Draft wording: a Bluesky post from someone not signed in with that Bluesky account (see writerCheck). */
+  blueskyUnknown: 'We can’t tell that this Bluesky post is yours. Sign in with that Bluesky account to submit it, or submit a post from the account you’re signed in with.',
+  /** Draft wording (overnight run 2026-11-05): a Lens post from someone not signed in with that Lens account. */
+  lensUnknown: 'We can’t tell that this Lens post is yours. Sign in with that Lens account to submit it, or submit a post from the account you’re signed in with.',
+  /** Draft wording: a wallet account can't enter (only Farcaster, Lens and Bluesky accounts can). */
+  walletCantSubmit: 'Sign in with Farcaster, Lens or Bluesky to submit your remix.',
   already: 'You’ve already submitted this version.',
   /** Draft wording (branch contest, 2026-11-04): one submission per Pacific day. */
   today: 'You’ve already submitted a remix today. You can submit one each day (Pacific time), so come back tomorrow.',

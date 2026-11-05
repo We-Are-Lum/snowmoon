@@ -38,8 +38,13 @@ export interface SubmitWords {
   withdrawn: string;
   /** How many more today, for n = 0 … CHALLENGE.submissionsPerDay. */
   left: string[];
+  /** "Post it first": the head, the note, a label per network, and the post's words (DRAFT wording). */
+  postHead: string;
+  postNote: string;
+  postOn: { farcaster: string; bluesky: string; lens: string };
+  postText: string;
 }
-const submitWords = (submitted: boolean): SubmitWords => ({
+const submitWords = (submitted: boolean, name: string): SubmitWords => ({
   submitted,
   head: CW.submitHead,
   note: CW.submitNote(),
@@ -50,6 +55,10 @@ const submitWords = (submitted: boolean): SubmitWords => ({
   withdrawNote: CW.withdrawNote,
   withdrawn: CW.withdrawn,
   left: Array.from({ length: CHALLENGE.submissionsPerDay + 1 }, (_, n) => CW.submissionsLeft(n)),
+  postHead: CW.submitPostHead,
+  postNote: CW.submitPostNote,
+  postOn: { farcaster: CW.submitPostOn('Farcaster'), bluesky: CW.submitPostOn('Bluesky'), lens: CW.submitPostOn('Lens') },
+  postText: CW.submitPostText(name),
 });
 export interface SheetChallenge {
   lines: SheetLine[];
@@ -65,10 +74,10 @@ export async function sheetChallenge(sql: Sql, d: { kind: string; entity: string
   const lines: SheetLine[] = [];
   const open = challengeOpenNow(now, pub);
   // Its maker can withdraw it until entries close (owner, 2026-11-04).
-  if (standing?.kind === 'entry') lines.push(line({ badge: CW.badge, text: CW.badgeNote(callName), link: toChallenge, submit: open ? submitWords(true) : null }));
+  if (standing?.kind === 'entry') lines.push(line({ badge: CW.badge, text: CW.badgeNote(callName), link: toChallenge, submit: open ? submitWords(true, callName) : null }));
   // After the close Submit is refused, so nothing is offered (launch rehearsal, 2026-11-02).
   if (standing?.kind === 'candidate')
-    lines.push(open ? line({ text: CW.candidateNote(callName), muted: true, submit: submitWords(false) }) : line({ text: CW.candidateClosedNote(callName), muted: true }));
+    lines.push(open ? line({ text: CW.candidateNote(callName), muted: true, submit: submitWords(false, callName) }) : line({ text: CW.candidateClosedNote(callName), muted: true }));
   if (standing?.kind === 'admin') lines.push(line({ text: CW.adminNote, muted: true }));
   if (invite && !standing) lines.push(line({ text: CW.sheetInvite(callName), link: toChallenge }));
   return { lines, posts: posts.map(({ id, network, handle, at, url }) => ({ id, network, handle, at, url })) };
