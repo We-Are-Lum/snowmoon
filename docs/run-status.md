@@ -8,7 +8,7 @@ merged, applied to production or published during this run; legal lines go to th
 | 1 | Recast redo and views; Midjourney first remixes; contact sheet | done (Deluin b needs your words) |
 | 2 | Owed checks on changed branches (M22: the Minpentai session runs it) | waiting for the build lock |
 | 3 | Lane A: challenge-landing task; contest branch; rehearsal; dress run | running (after item 2) |
-| 4 | Lane B: paying per person (design, migration copy blocks, draft lines) | running (branch person-balance) |
+| 4 | Lane B: paying per person (design, migration copy blocks, draft lines) | done (branch person-balance; whole-project typecheck owed) |
 | 5 | Lens page: typecheck, running on localhost | waiting |
 
 ## How the run shares the Mac
@@ -34,6 +34,18 @@ check) at a time across both sessions, by a shared lock. M22 is run by the Minpe
   https://github.com/We-Are-Lum/snowmoon/blob/challenge-styles/docs/starting-sheet-drafts/three-looks-proposal.md
 - Recast sheet: https://github.com/We-Are-Lum/snowmoon/blob/challenge-styles/docs/starting-sheet-drafts/recast-contact-sheet.md
 
+**4. Paying per person** (branch `person-balance`, from signin-lens-bluesky; c53e4727; nothing merged or applied):
+- Design: docs/proposals/person-balance.md (Drive: "Snowmoon: Paying per person (design, DRAFT)"). A wallet signs a
+  statement naming your Farcaster, Lens or Bluesky account; a payment from that wallet within 24 hours is credited to
+  that account; no one can claim another person's transaction; one transaction is credited once, ever.
+- Migration copy blocks: supabase/migrations/NEXT_person_balance.sql (dry run, migration, read-back with realistic
+  inserts and deletes). Additive; safe with today's live code and after the SQL pack's five. Not safe to run twice (a
+  second run stops at its first step and changes nothing).
+- Tests: test:person-balance 84 checks with 21 planted faults, all caught; test:person-balance-code 34 checks; wallet,
+  images and sign-in suites still pass. Code is behind a switch, off; the browser side isn't built.
+- Terms and Privacy drafts: docs/legal/person-balance-draft.md (Drive: "Snowmoon: Paying per person, Terms and Privacy
+  lines (DRAFT)"), reviewed by the coordinator for the shortest-true rule; for the owner's reread.
+
 ## Blocked
 
 ## Needs the owner
@@ -43,4 +55,8 @@ check) at a time across both sessions, by a shared lock. M22 is run by the Minpe
   views (about $0.20), and Deluin's character file moves to b.
 - **First remixes' references:** what `--sref https://s.mj.run/YwM8K-xTQo0` and `--profile hu97rol rg1f6ql` are (your
   condition 3). And confirm the base each one remixes (proposed on the sheet).
+- **Paying per person, 7 questions** (docs/proposals/person-balance.md): can someone who fails the free check still
+  pay (Lens and Bluesky can in the draft; Farcaster still passes Neynar first)? Should the signed statement name the
+  account in words? Is 24 hours the right claim window? Remix frames aren't wired yet. A merge conflict with
+  remix-submit in one file. principles.md's prepaid exception needs an update when it ships. The browser side is next.
 - **The three-looks proposal** for Zei, Bai, Seila and Mu, and a cap if you want them made.
