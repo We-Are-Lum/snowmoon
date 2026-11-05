@@ -6,7 +6,7 @@ merged, applied to production or published during this run; legal lines go to th
 | # | Item | State |
 |---|------|-------|
 | 1 | Recast redo and views; Midjourney first remixes; contact sheet | done (Deluin b needs your words) |
-| 2 | Owed checks on changed branches (M22: the Minpentai session runs it) | 3 of 12 done; rest queued on the lock |
+| 2 | Owed checks on changed branches (M22: the Minpentai session runs it) | done (17:55) |
 | 3 | Lane A: challenge-landing task; contest branch; rehearsal; dress run | running (after item 2) |
 | 4 | Lane B: paying per person (design, migration copy blocks, draft lines) | done (branch person-balance; whole-project typecheck owed) |
 | 5 | Lens page: typecheck, running on localhost | done (ready for you to sign) |
@@ -46,11 +46,27 @@ check) at a time across both sessions, by a shared lock. M22 is run by the Minpe
 - Terms and Privacy drafts: docs/legal/person-balance-draft.md (Drive: "Snowmoon: Paying per person, Terms and Privacy
   lines (DRAFT)"), reviewed by the coordinator for the shortest-true rule; for the owner's reread.
 
-**2. Checks so far (17:12):** privacy-furthest-chapter, fund-page, check-decisions: check:principles shows only the
-expected P6a (localhost) and P6d (accepted). fund-page also fails P7c because ethereum-rpc.publicnode.com doesn't
-answer from this machine (curl times out; a network problem, not code). Light tests pass on check-decisions (44),
-remix-model-choice (17), signin-lens-bluesky (20/20), signin-reread-list (13/13), bluesky-check (64), sheet-help (127),
-find-a-moment (93).
+**2. Checks (done 17:55).** Each branch built and served on localhost; every check named its target.
+
+| Branch | check:principles | Fails | Tests | Extra |
+|---|---|---|---|---|
+| privacy-furthest-chapter | 58/60 | P6a, P6d | none in its diff | |
+| fund-page | 58/61 | P6a, P6d, P7c (network) | none | |
+| check-decisions | 58/60 | P6a, P6d | 44/44 | |
+| remix-landing | 58/60 | P6a, P6d | none | check:ui pass (59 pages); check:miniapp pass |
+| remix-submit | 59/61 | P6a, P6d | none | |
+| closed-model-bases | 56/60 | P6a, P6d, P6k, P6l (redrafts not reread) | none | |
+| remix-model-choice | 59/62 | P6a, P6d, P6k (redrafts not reread) | 17/17 | |
+| signin-lens-bluesky | 60/62 | P6a, P6d | 20/20, 44/44 | |
+| bluesky-check | 60/63 | P6a, P6d, P6k (redrafts not reread) | 64/64, 20/20, 44/44 | |
+| sheet-help | 56/58 | P6a, P6d | 127 | |
+| find-a-moment | 61/63 | P6a, P6d | 93, 127 | |
+| signin-reread-list | 56/58 | P6a, P6d | 13/13 | |
+
+P6a fails on localhost by design; P6d is the accepted open item; P6k/P6l wait for your reread of those redrafts (no key
+was set). P7c on fund-page couldn't load ethereum-rpc.publicnode.com from this network (base.org answers): not shown
+passing, re-run it from another network before merging fund-page. Every check caught its planted violation. M22: run by
+the Minpentai session (above).
 
 **3. Lane A so far:** challenge-landing has main merged in (365 challenge tests pass). Branch `contest`: merges done;
 rehearsal switch, local rehearsal database (starts and seeds), one submission per Pacific day (migration
