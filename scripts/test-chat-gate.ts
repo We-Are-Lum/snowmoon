@@ -313,7 +313,8 @@ sw(false);
   check('A8 neither route keeps the old Farcaster-only gate (fid < 0)', !/fid < 0/.test(ask) && !/fid < 0/.test(status));
   check('A8 both count the question under getPerson\'s person', /fid: person/.test(ask) && /usedToday\(sql, person\)/.test(status));
   const cfg = readFileSync(path.join(ROOT, 'src/lib/config.ts'), 'utf8');
-  check('A8 the switch is off in config (until the owner says otherwise), and there is no separate Farcaster switch', /anyAccount: false as boolean/.test(cfg) && !/checkFarcaster/.test(cfg));
+  // On since the owner's approval of the words (2026-11-05); P6ab holds it to the Privacy and notice lines.
+  check('A8 the switch is on in config (the owner, 2026-11-05), and there is no separate Farcaster switch', /anyAccount: true as boolean/.test(cfg) && !/checkFarcaster/.test(cfg));
 }
 
 await sql.end();

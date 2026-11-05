@@ -119,12 +119,14 @@ export const CHAT = {
  * decision; a Lens or Bluesky account not linked to a FID then asks under its own number, with the same free daily
  * limit. OFF (today): any FID (or account linked to one) asks with no check, and no one else can.
  * It is one switch because the Neynar check, like the Lens and Bluesky ones, may start only when Privacy says so: it
- * stays OFF until the owner's reread of docs/legal/assistant-any-account-step1.md, and check:principles P6ab refuses it
+ * was OFF until the owner's reread of docs/legal/assistant-any-account-step1.md, and check:principles P6ab refuses it
  * ON until Privacy §5 no longer counts questions only under a Farcaster ID and §7 says Neynar, Lens and Bluesky are
  * asked when someone asks the assistant. Wallet-only sign-ins can't ask either way (no payments for questions yet).
  */
 export const ASSISTANT = {
-  anyAccount: false as boolean,
+  // ON (2026-11-05): the owner's approval of docs/legal/assistant-any-account-step1.md, "reviewed by the coordinator,
+  // approved by the owner"; its words are in Privacy (uxou8g), the notice (1ijrpib) and About in this release.
+  anyAccount: true as boolean,
 };
 
 /** Moderation only: these FIDs may hide content. They never promote or rank anything. */
