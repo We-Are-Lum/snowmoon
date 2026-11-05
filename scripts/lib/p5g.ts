@@ -21,20 +21,46 @@
  * random order on each visit so none reads as the default), in src/components/challenge-bases.tsx only, on the
  * character's whole list of bases (`shuffleFresh(bases)`), and every submission's "Shuffled" order on
  * /challenge/entries, in src/components/challenge-entries-list.tsx only, on every entry shown (`shuffleFresh(all)`).
+ *
+ * The hub's cards (owner, 2026-11-05, branch challenge-moments): the random block is gone (answer 9); each card shows
+ * its bases in a fresh order (`shuffleFresh(c.bases)`) and a random three of its character's remixes per visit
+ * (`shuffleFresh(c.remixes)`, answer 8), in src/components/challenge-card.tsx only, on the card's whole lists; the
+ * page's data (src/lib/challenge/view.ts) hands every card all of its character's remixes (`remixes(sql)` or, with
+ * pictures, `challengePictures(sql)`, with no filter, limit or order).
+ *
+ * A fourth narrow exception (owner, 2026-11-05, answer 3): the curated moments, "Moments picked by @naaate"
+ * (src/lib/challenge/moments.ts), in the book's fixed order (chapter, then block; never sorted), and "Surprise me",
+ * which draws from that list only, unweighted: `shuffleFresh(MOMENTS.filter((m) => m.id !== moment))` in the remix
+ * screen (src/components/challenge-make.tsx) only, all fifteen but the one already chosen (answer 4).
  */
 export const CHALLENGE_FILES = /^src\/lib\/challenge\/|^src\/app\/challenge\/|^src\/app\/api\/challenge\/|^src\/components\/(challenge-[a-z-]+|posted-on|post-link-field)\.tsx$/;
 export const NOT_AN_ORDER = /\b(likes?|like_?count|likeCount|built_?on|builtOn|score|repost|recast|repl(y|ies)|followers?|cost|amount|usd|payment|paid|sponsor|donation)\b/i;
 const BASES_FILE = 'src/lib/challenge/entries.ts';
 const SHUFFLE_FILE = 'src/lib/challenge/shuffle.ts';
-const PICK_FILE = 'src/components/challenge-remix-pick.tsx';
-const BASES_PICK_FILE = 'src/components/challenge-bases.tsx';
 const ENTRIES_PICK_FILE = 'src/components/challenge-entries-list.tsx';
 const PAGE_FILE = 'src/lib/challenge/view.ts';
+const CARD_FILE = 'src/components/challenge-card.tsx';
+const MAKE_FILE = 'src/components/challenge-make.tsx';
+const MOMENTS_FILE = 'src/lib/challenge/moments.ts';
+const SURPRISE = 'MOMENTS.filter((m) => m.id !== moment)';
 const RANDOM = /Math\.random\b|getRandomValues\b|randomInt\b/;
 const WEIGHT = /\bweight|\bbias|\bboost|\bfeature[ds]?\b|\bpinned\b|\bcount\b|\bpopular/i;
 const RULES_FILE = 'src/lib/challenge/rules.ts';
 
 const stripComments = (text: string) => text.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:])\/\/.*$/gm, '$1');
+
+/** Every call of shuffleFresh in the code, with its whole argument text (balanced parentheses). */
+function shuffleCalls(code: string): { 1: string; index: number }[] {
+  const out: { 1: string; index: number }[] = [];
+  for (const m of code.matchAll(/shuffleFresh\(/g)) {
+    let depth = 1;
+    let i = m.index! + m[0].length;
+    const start = i;
+    for (; i < code.length && depth > 0; i++) depth += code[i] === '(' ? 1 : code[i] === ')' ? -1 : 0;
+    out.push({ 1: code.slice(start, i - 1), index: m.index! });
+  }
+  return out;
+}
 
 /** The text of a top-level function, from its declaration to the next top-level declaration (or the end). */
 function functionSpan(code: string, name: string): [number, number] | null {
@@ -67,20 +93,24 @@ export function p5gProblems(files: { file: string; text: string }[]): string[] {
       if (NOT_AN_ORDER.test(code) || WEIGHT.test(code)) problems.push(`${SHUFFLE_FILE}: the shuffle reads "${(code.match(NOT_AN_ORDER) ?? code.match(WEIGHT))![0]}": it must be unweighted`);
       if (/CHALLENGE\.|\.sort\(/.test(code)) problems.push(`${SHUFFLE_FILE}: the shuffle reads a setting or sorts: it must be a plain uniform shuffle`);
     }
-    for (const m of code.matchAll(/shuffleFresh\(([^)]*)\)/g)) {
+    for (const m of shuffleCalls(code)) {
       if (file === SHUFFLE_FILE) continue;
       if (file === ENTRIES_PICK_FILE) {
         if (m[1].trim() !== 'all') problems.push(`${file}: shuffles something other than every entry shown: shuffleFresh(${m[1].slice(0, 40)})`);
         continue;
       }
-      if (file === BASES_PICK_FILE) {
-        if (m[1].trim() !== 'bases') problems.push(`${file}: shuffles something other than the character's whole list of bases: shuffleFresh(${m[1].slice(0, 40)})`);
+      if (file === CARD_FILE) {
+        if (!['c.bases', 'c.remixes'].includes(m[1].trim())) problems.push(`${file}: shuffles something other than a card's whole list of bases or remixes: shuffleFresh(${m[1].slice(0, 40)})`);
         continue;
       }
-      if (file !== PICK_FILE) problems.push(`${file}: shuffles outside the random selection and the bases (only ${PICK_FILE} and ${BASES_PICK_FILE} may)`);
-      else if (m[1].trim() !== 'all') problems.push(`${file}: shuffles something other than the whole list: shuffleFresh(${m[1].slice(0, 40)})`);
+      if (file === MAKE_FILE) {
+        if (m[1].trim() !== SURPRISE) problems.push(`${file}: "Surprise me" draws from something other than the curated moments (all but the one chosen): shuffleFresh(${m[1].slice(0, 60)})`);
+        continue;
+      }
+      problems.push(`${file}: shuffles outside the cards, the entries' "Shuffled" order and "Surprise me" (only ${CARD_FILE}, ${ENTRIES_PICK_FILE} and ${MAKE_FILE} may)`);
     }
-    if (file === PAGE_FILE && !/await remixes\(sql\)/.test(code)) problems.push(`${PAGE_FILE}: the random selection isn't drawn from every remix (remixes(sql), with no filter, limit or order)`);
+    if (file === MOMENTS_FILE && /\bweight|\bscore|\bpopular|\blikes?\b|\bsort\(/i.test(code)) problems.push(`${MOMENTS_FILE}: the moments read or set an order other than the book's ("${code.match(/\bweight|\bscore|\bpopular|\blikes?\b|\bsort\(/i)![0]}")`);
+    if (file === PAGE_FILE && !/await (remixes|challengePictures)\(sql\)/.test(code)) problems.push(`${PAGE_FILE}: the cards' remixes aren't drawn from every remix (remixes(sql) or challengePictures(sql), with no filter, limit or order)`);
     if (file === RULES_FILE) {
       const s = functionSpan(code, 'baseStyleOrder');
       if (s) {
@@ -99,7 +129,7 @@ export function p5gProblems(files: { file: string; text: string }[]): string[] {
  * else. Reads the card, the random selection, the feed page and the remixes' server code (comments aside). A viewer's
  * "most remixed" sort may come back after entries close, by the owner's decision then.
  */
-export const P5I_FILES = ['src/components/challenge-remix-card.tsx', 'src/components/challenge-remix-pick.tsx', 'src/app/challenge/remixes/page.tsx', 'src/lib/challenge/remixes.ts', 'src/lib/challenge/remixes-view.ts', 'src/components/challenge-remixes-body.tsx', 'src/app/challenge/entries/page.tsx', 'src/components/challenge-entries-list.tsx', 'src/components/posted-on.tsx'];
+export const P5I_FILES = ['src/components/challenge-remix-card.tsx', 'src/components/challenge-card.tsx', 'src/app/challenge/remixes/page.tsx', 'src/lib/challenge/remixes.ts', 'src/lib/challenge/remixes-view.ts', 'src/components/challenge-remixes-body.tsx', 'src/app/challenge/entries/page.tsx', 'src/components/challenge-entries-list.tsx', 'src/components/posted-on.tsx'];
 const A_COUNT = /\bcount\s*\(|\b(likes?|like_?count|likeCount|built_?on|builtOn|remix_?count|remixCount|remixes_?count|versions|score|popular\w*|most[ _-]?remixed|mostRemixed|trending)\b/i;
 export function p5iProblems(files: { file: string; text: string }[]): string[] {
   const problems: string[] = [];

@@ -76,10 +76,12 @@
  *   deadline (in its one line), the "Rules" link, no sideways scroll; /challenge/rules (the short page's rules, owner
  *   2026-11-04): the floors, the deadline in Pacific time, who can enter, the rules, admins not eligible for rewards. As a landing page (owner,
  *   2026-11-04), on local data (scripts/fixtures/challenge-db.ts) at 390 light and dark, in the 424 × 695 Farcaster
- *   frame and at 1440: the characters in CHALLENGE.characters' order; Zei's row, its base and two first-remix slots side by side, Remix
- *   offered only once one is tapped and then opening that sheet's remix form; the empty states before the bases (and
- *   for a character with no sheet); the random selection, six remixes, none repeated, no counts, a different order
- *   over six visits; "See all", every remix newest first, the filter showing Bai's only, and Gladias' empty state.
+ *   frame and at 1440: the cards in CHALLENGE.characters' order (branch challenge-moments, 2026-11-05): Zei's big
+ *   picture with its AI label saying the look is this edition's, the line marked as this edition's summary (and
+ *   "Draft wording" until approved), facts opening the book's words with their block, "Moments picked by @naaate" with
+ *   "Ch N" on every chip, every picture opening its remix screen, a random three of Zei's remixes and "Show more", no
+ *   count, "More about Zei" opening with "May spoil later chapters." and "Where Zei appears" loading its passages; no
+ *   random block; the feed, every remix newest first, the filter showing Bai's only, and Gladias' empty state.
  *   While it is admin-only (CHALLENGE.public off; owner, 2026-11-04): signed out, status 404 with nothing of the
  *   challenge in the HTML or on screen; the landing checks on local data then wait for CHALLENGE.public.
  * - A remix page as a landing page (owner, 2026-11-04), on this checkout's build and the fixture database, at 390 (light,
@@ -1662,7 +1664,6 @@ async function checkChallengeLanding() {
       await new Promise((r) => setTimeout(r, 500));
     }
     const { CHALLENGE } = await import('../src/lib/config');
-    const remixIds = new Set(FX.remixes.map((r) => r.versionId));
     // /challenge is cached (revalidate 60), built from whatever database the build saw: the first request serves that
     // copy and renders a fresh one from the local data in the background. Wait for the fresh one.
     for (let i = 0; ; i++) {
@@ -1695,58 +1696,53 @@ async function checkChallengeLanding() {
       await checkFloors(page, `/challenge ${tag} (local data)`, scheme);
       if (await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)) fail(`/challenge ${tag}: scrolls sideways`);
       // The characters in CHALLENGE.characters' order, whatever it is.
-      const order = await page.locator('.ch-character').evaluateAll((els) => els.map((e) => e.getAttribute('data-character')));
+      const order = await page.locator('.cc-card').evaluateAll((els) => els.map((e) => e.getAttribute('data-character')));
       if (order.join() !== CHALLENGE.characters.join()) fail(`/challenge ${tag}: the characters read ${order.join()}, not CHALLENGE.characters (${CHALLENGE.characters.join()})`);
-      // Zei's row (owner, 2026-11-04, after the restart): the base (before it's picked, the newest sheet), then two slots
-      // for the owner's first remixes, empty until they exist; three side by side. Tap the base, then Remix opens its form.
-      const zei = page.locator('.ch-character[data-character="zei"] .ch-bases');
-      const tiles = zei.locator('button.ch-tile');
-      const ids = await tiles.evaluateAll((els) => els.map((e) => e.getAttribute('data-version')));
-      const firsts = CHALLENGE.firstRemixes.zei.length;
-      if (ids[0] !== FX.sheets.zei[0] || ids.length !== 1 + firsts) fail(`/challenge ${tag}: Zei's row starts with ${ids.join()}, not its newest sheet and ${firsts} first remixes`);
-      const empties = await zei.locator('.ch-slot-empty').count();
-      if (empties !== CHALLENGE.firstRemixesShown - firsts) fail(`/challenge ${tag}: Zei's row has ${empties} empty first-remix slots, not ${CHALLENGE.firstRemixesShown - firsts}`);
-      if (empties && !/First remix: not here yet/.test((await zei.locator('.ch-slot-empty').first().textContent()) ?? '')) fail(`/challenge ${tag}: an empty slot doesn't say so`);
-      const boxes = await zei.locator('.ch-tile').evaluateAll((els) => els.map((e) => e.getBoundingClientRect()).map((b) => ({ x: b.x, y: b.y, w: b.width })));
-      if (boxes.length !== 3 || !boxes.every((b, i) => i === 0 || (Math.abs(b.y - boxes[0].y) < 1 && b.x > boxes[i - 1].x))) fail(`/challenge ${tag}: Zei's base and two first-remix slots aren't side by side`);
-      if (!(await zei.locator('[data-ai="tag"]').count())) fail(`/challenge ${tag}: the triptych has no AI label`);
-      if (!(await zei.locator('button.ch-remix[disabled]').count())) fail(`/challenge ${tag}: Remix is offered before a base is tapped`);
-      await zei.scrollIntoViewIfNeeded();
-      await snap('triptych');
-      await tiles.nth(0).click();
-      if ((await tiles.nth(0).getAttribute('aria-pressed')) !== 'true') fail(`/challenge ${tag}: tapping the base doesn't pick it`);
-      const remix = zei.locator('a.ch-remix');
-      const href = await remix.getAttribute('href').catch(() => null);
-      if (href !== `/references/designs/new?from=${FX.sheets.zei[0]}`) fail(`/challenge ${tag}: Remix goes to ${href}, not the base's remix form`);
-      if ((await remix.textContent())?.trim() !== 'Remix') fail(`/challenge ${tag}: the button doesn't say Remix`);
-      await checkFloors(page, `/challenge ${tag} (a base picked)`, scheme);
-      await snap('triptych-picked');
-      // Before the bases are picked (CHALLENGE.bases empty): the page says so; a character with no sheet still reads well.
-      if (CHALLENGE.bases.zei.length === 0 && !/isn’t picked yet/.test((await page.locator('.ch-character[data-character="zei"] .ch-no-bases').textContent().catch(() => '')) ?? '')) fail(`/challenge ${tag}: no word that Zei's base isn't picked yet`);
-      const gl = page.locator('.ch-character[data-character="gladias"]');
-      if ((await gl.locator('.ch-tile').count()) || !/no sheet of Gladias is published yet/.test((await gl.textContent()) ?? '')) fail(`/challenge ${tag}: Gladias, with no sheet, doesn't say so`);
-      // The random selection: six remixes, all from the remixes, no repeats, no counts; a fresh order on each visit.
-      const seen: string[] = [];
-      for (let k = 0; k < 6; k++) {
-        if (k) await page.goto(LOCAL + '/challenge', { waitUntil: 'domcontentloaded' });
-        await page.waitForSelector('.ch-pick[data-shuffled="true"]', { timeout: 10000 }).catch(() => fail(`/challenge ${tag}: the random selection didn't show`));
-        const pick = await page.locator('.ch-pick .ch-card').evaluateAll((els) => els.map((e) => e.getAttribute('data-version') ?? ''));
-        if (pick.length !== Math.min(6, remixIds.size) || new Set(pick).size !== pick.length || !pick.every((v) => remixIds.has(v))) fail(`/challenge ${tag}: the random selection shows ${pick.join()}`);
-        seen.push(pick.join());
+      // The hub's cards (owner, 2026-11-05; branch challenge-moments): a big picture with its AI label, the name, one line
+      // with "This edition's summary" (and "Draft wording" until approved), facts that open the book's words with their
+      // block, "Moments picked by @naaate" with "Ch N" on each chip, the bases, a random three of the character's remixes
+      // (Show more for the rest), and "More about …", whose second layer says "May spoil later chapters." and whose
+      // "Where … appears" loads the book's passages. Tapping a picture opens its remix screen.
+      const zei = page.locator('.cc-card[data-character="zei"]');
+      if (!(await zei.locator('.cc-hero [data-ai="tag"]').count())) fail(`/challenge ${tag}: Zei's big picture has no AI label`);
+      const heroTip = (await zei.locator('.cc-hero [data-ai="tag"] .sr-only').textContent()) ?? '';
+      if (!/Look invented by this edition/.test(heroTip)) fail(`/challenge ${tag}: the big picture's label doesn't say the look is this edition's (${heroTip})`);
+      if (!/This edition’s summary/.test((await zei.locator('.cc-line').textContent()) ?? '')) fail(`/challenge ${tag}: Zei's line isn't marked as this edition's summary`);
+      if (!CHALLENGE.cardsApproved && !/Draft wording/.test((await zei.locator('.cc-line').textContent()) ?? '')) fail(`/challenge ${tag}: an unapproved card has no "Draft wording" mark`);
+      const facts = zei.locator('.cc-facts').first().locator('details');
+      if ((await facts.count()) < 2) fail(`/challenge ${tag}: Zei's card has fewer than two facts`);
+      await facts.first().locator('summary').click();
+      if (!/^c\d+-b\d+$/.test(((await facts.first().locator('.cc-block').textContent()) ?? '').trim()) || !(await facts.first().locator('blockquote a[href^="/chapter/"]').count())) fail(`/challenge ${tag}: a fact doesn't open the book's words with its block and "Read it"`);
+      const momentChips = await zei.locator('.cc-moments .cc-chip').allTextContents();
+      if (!momentChips.length || !momentChips.every((t) => /· Ch \d+$/.test(t.trim()))) fail(`/challenge ${tag}: a moment chip doesn't show its chapter (${momentChips.join(' | ')})`);
+      if (((await zei.locator('h3', { hasText: 'Moments picked by @naaate' }).count()) ?? 0) !== 1) fail(`/challenge ${tag}: the moments don't say whose list it is`);
+      const tileHrefs = await zei.locator('.cc-row a.cc-tile').evaluateAll((els) => els.map((e) => e.getAttribute('href') ?? ''));
+      if (!tileHrefs.length || !tileHrefs.every((h) => /^\/(challenge\/make\?from=|references\/designs\/new\?from=)[0-9a-f-]{36}/.test(h))) fail(`/challenge ${tag}: a picture doesn't open its remix screen (${tileHrefs.join()})`);
+      const zeiRemixes = FX.remixes.filter((r) => r.character === 'zei').map((r) => r.versionId);
+      const shownRemixes = await zei.locator('.cc-remixes a.cc-tile').evaluateAll((els) => els.map((e) => e.getAttribute('data-version') ?? ''));
+      if (shownRemixes.length !== Math.min(3, zeiRemixes.length) || !shownRemixes.every((v) => zeiRemixes.includes(v))) fail(`/challenge ${tag}: Zei's remixes show ${shownRemixes.join()}, not three of Zei's`);
+      if (zeiRemixes.length > 3) {
+        await zei.locator('.cc-show-more').click();
+        if ((await zei.locator('.cc-remixes a.cc-tile').count()) !== zeiRemixes.length) fail(`/challenge ${tag}: "Show more" doesn't show the rest of Zei's remixes`);
       }
-      if (new Set(seen).size < 2) fail(`/challenge ${tag}: the random selection is the same on six visits`);
-      const cardText = (await page.locator('.ch-pick').textContent()) ?? '';
-      if (/\d+\s*(likes?|remix(es)?|forks?|built on)\b/i.test(cardText)) fail(`/challenge ${tag}: a card shows a count: ${cardText.slice(0, 120)}`);
-      if ((await page.locator('.ch-pick .ch-card').count()) !== (await page.locator('.ch-pick .ch-card [data-ai="tag"]').count())) fail(`/challenge ${tag}: a remix card has no AI label`);
-      const seeAll = page.locator('.ch-see-all a');
-      if ((await seeAll.getAttribute('href')) !== '/challenge/remixes') fail(`/challenge ${tag}: no "See all"`);
-      await page.locator('.ch-remixes').scrollIntoViewIfNeeded();
-      await snap('random');
+      if (/\d+\s*(likes?|remix(es)?|forks?|built on)\b/i.test((await zei.textContent()) ?? '')) fail(`/challenge ${tag}: a card shows a count`);
+      await zei.scrollIntoViewIfNeeded();
+      await snap('card');
+      const more = zei.locator('button.cc-toggle').first();
+      if ((await more.getAttribute('aria-expanded')) !== 'false') fail(`/challenge ${tag}: "More about Zei" starts open`);
+      await more.click();
+      if ((await more.getAttribute('aria-expanded')) !== 'true' || ((await zei.locator('.cc-more .cc-spoil').textContent()) ?? '').trim() !== 'May spoil later chapters.') fail(`/challenge ${tag}: the second layer doesn't open with "May spoil later chapters."`);
+      await zei.locator('.cc-more button.cc-toggle').click();
+      await zei.locator('.cc-appears blockquote').first().waitFor({ timeout: 10000 }).catch(() => fail(`/challenge ${tag}: "Where Zei appears" didn't load`));
+      if (!(await zei.locator('.cc-appears blockquote[data-block] a[href^="/chapter/"]').count())) fail(`/challenge ${tag}: a passage has no "Read it"`);
+      await checkFloors(page, `/challenge ${tag} (Zei's layers open)`, scheme);
+      await snap('card-open');
+      if (await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)) fail(`/challenge ${tag}: scrolls sideways with a card open`);
+      // No random block on the hub (owner, 2026-11-05, answer 9); the feed is still one link away, on the rules page.
+      if (await page.locator('.ch-pick').count()) fail(`/challenge ${tag}: the old random block is still on the hub`);
       if (w === 390 && scheme === 'light') await snap('full', true);
+      await at('/challenge/remixes');
       // The feed: newest first; the filter shows one character's remixes only.
-      await seeAll.click();
-      await page.waitForURL('**/challenge/remixes');
-      await page.waitForLoadState('networkidle');
       await checkFloors(page, `/challenge/remixes ${tag}`, scheme);
       if (await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)) fail(`/challenge/remixes ${tag}: scrolls sideways`);
       const newest = FX.remixes.map((r) => r.versionId);

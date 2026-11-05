@@ -549,6 +549,25 @@ export const CHALLENGE = {
    * open sheets and the $15 cap are off and /challenge answers 404 to a non-admin.
    */
   public: false as boolean,
+  /**
+   * The six character cards on /challenge (src/lib/challenge/cards.ts: one line, three bullets, a fuller description
+   * and "Where they appear"), drafted by the coding agent (owner, 2026-11-05, answer 2), and the moments' titles and
+   * scene lines (src/lib/challenge/moments.ts), also drafted by it. They go to the owner in one pass (reviewed by the
+   * coordinator first); until he approves them, these stay false, and check:principles P2m refuses CHALLENGE.public
+   * on with either false. Only the owner sets them.
+   */
+  cardsApproved: false as boolean,
+  sceneLinesApproved: false as boolean,
+  /**
+   * Entries as pictures (owner, 2026-11-05; docs/proposals/challenge-moments.md, R2): one picture of a challenge
+   * character at one of the challenge's moments, remixed from one of its pictures on /challenge, counts as an entry
+   * (src/lib/challenge/pictures.ts); sheet remixes stop counting and sheets go back to invitation only. Off until the
+   * owner rereads the Terms §6e and Privacy lines that describe it (docs/legal/challenge-moments-draft.md): legal texts
+   * describe today, so check:principles P6ac refuses it on while Terms and Privacy don't say so. While off, the moments
+   * flow still makes and publishes pictures (the site's own image pipeline, as "Make an image"), but none is an entry,
+   * and sheet remixes count as before. The rehearsal switch turns it on, on this machine only.
+   */
+  pictureEntries: false as boolean,
   /** The characters, by their file in content/snowmoon/designs/characters, most named in the book first (owner, 2026-11-04; content/snowmoon/characters-by-mentions.json, checked by test:character-order and P5h). */
   characters: ['zei', 'gladias', 'bai', 'seila', 'deluin', 'mu'] as readonly string[],
   /**
@@ -620,18 +639,23 @@ export const CHALLENGE = {
    * Owner, 2026-10-31 (second update). A closing instant is the first that no longer counts.
    */
   dates: {
-    /** Entries open at the launch call: Fri 6 Nov 2026, 09:00 Pacific (owner, 2026-10-31). */
-    opens: '2026-11-06T17:00:00Z',
-    /** Entries close after Sun 22 Nov 2026, 23:59 Pacific: this is 00:00 Pacific on 23 Nov, the first instant that no longer counts. */
-    closes: '2026-11-23T08:00:00Z',
-    /** The shortlist vote and jurors: Tue 1 Dec 2026, 00:00 Pacific, to the end of Thu 3 Dec 2026 (23:59 Pacific). Not built; undefined in the plan. */
-    shortlistOpens: '2026-12-01T08:00:00Z',
-    shortlistCloses: '2026-12-04T08:00:00Z',
-    /** Results at the call: Fri 4 Dec 2026, 09:00 Pacific. */
-    results: '2026-12-04T17:00:00Z',
-    /** The mint opens Tue 8 Dec 2026, 09:00 Pacific, and closes at the Fri 18 Dec 2026 call, 09:00 Pacific. */
-    mintOpens: '2026-12-08T17:00:00Z',
-    mintCloses: '2026-12-18T17:00:00Z',
+    /**
+     * Entries open Tue 1 Dec 2026, 09:00 Pacific (owner, 2026-11-05, answer 11: "plan for Tue 1 Dec", decided finally
+     * after rehearsal 2; CHALLENGE.public stays off, so nothing opens by date alone). Every later date below moved by
+     * the same 25 days as the open (from Fri 6 Nov), as a placeholder until the owner sets them (branch
+     * challenge-moments): the close, the shortlist, the results and the mint keep their distance from the open.
+     */
+    opens: '2026-12-01T17:00:00Z',
+    /** Entries close after Thu 17 Dec 2026, 23:59 Pacific: this is 00:00 Pacific on 18 Dec, the first instant that no longer counts. */
+    closes: '2026-12-18T08:00:00Z',
+    /** The shortlist vote and jurors: Sat 26 Dec 2026, 00:00 Pacific, to the end of Mon 28 Dec 2026 (23:59 Pacific). Not built; undefined in the plan. */
+    shortlistOpens: '2026-12-26T08:00:00Z',
+    shortlistCloses: '2026-12-29T08:00:00Z',
+    /** Results: Tue 29 Dec 2026, 09:00 Pacific. */
+    results: '2026-12-29T17:00:00Z',
+    /** The mint opens Sat 2 Jan 2027, 09:00 Pacific, and closes Wed 13 Jan 2027, 09:00 Pacific. */
+    mintOpens: '2027-01-02T17:00:00Z',
+    mintCloses: '2027-01-13T17:00:00Z',
   },
   /** The time zone every date is shown in. */
   timeZone: 'America/Los_Angeles',
@@ -681,6 +705,9 @@ if (REHEARSAL.on) {
   CHALLENGE.public = true;
   // The rehearsal database's stand-in bases (scripts/rehearsal-db.ts), never the real ones.
   CHALLENGE.bases = REHEARSAL_BASE_IDS;
+  // Entries as pictures, on this machine only, for rehearsal 2 (branch challenge-moments): the legal lines that describe
+  // them are drafts (docs/legal/challenge-moments-draft.md), so production keeps it off (P6ac, P6w).
+  CHALLENGE.pictureEntries = true;
 }
 
 /**

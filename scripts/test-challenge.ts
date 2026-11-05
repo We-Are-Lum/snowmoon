@@ -62,7 +62,7 @@ const L = await import('../src/lib/challenge/post-links');
   const V = await import('../src/lib/challenge/visibility');
   const inside = new Date(Date.parse(CHALLENGE.dates.opens) + 3600_000);
   check('switch: CHALLENGE.public is off as committed (the owner opens it)', CHALLENGE.public === false);
-  check('switch: the dates are kept (opens Fri 6 Nov, 09:00 Pacific)', CHALLENGE.dates.opens === '2026-11-06T17:00:00Z');
+  check('switch: the dates are kept (opens Tue 1 Dec, 09:00 Pacific; owner, 2026-11-05)', CHALLENGE.dates.opens === '2026-12-01T17:00:00Z');
   check('switch off, inside the window: the free cap stays $2, not $15', C.imagesDailySpendCapUsd(inside) === IMAGES.dailySpendCapUsd && IMAGES.dailySpendCapUsd === 2);
   check('switch off, inside the window: sheets stay invited-only (Privacy describes the challenge)', O.privacyDescribesChallenge(PRIVACY) && !O.challengeSheetsOpen(inside, PRIVACY));
   check('switch off, inside the window: entries are not taken', !R.entriesOpen(inside) && !R.challengeOpenNow(inside));
@@ -105,7 +105,7 @@ const L = await import('../src/lib/challenge/post-links');
   const { navItems } = await import('../src/lib/nav');
   check('switch: the menu has no challenge item unless told to show it', !navItems(1, 0).some((i) => i.href === '/challenge') && navItems(1, 0, true).some((i) => i.href === '/challenge'));
   // Scripts everyone is served carry no challenge words: the share buttons, "Posted on", Submit, the fork form.
-  const clientFiles = ['src/components/challenge-share.tsx', 'src/components/posted-on.tsx', 'src/components/challenge-submit.tsx', 'src/components/design-form.tsx', 'src/components/challenge-admin.tsx', 'src/components/challenge-admin-sheet.tsx', 'src/components/challenge-body.tsx', 'src/components/challenge-lines.tsx', 'src/components/challenge-bases.tsx', 'src/components/challenge-remix-pick.tsx', 'src/components/challenge-remix-card.tsx', 'src/components/challenge-entries-list.tsx', 'src/components/challenge-rules-body.tsx', 'src/components/challenge-remixes-body.tsx'];
+  const clientFiles = ['src/components/challenge-share.tsx', 'src/components/posted-on.tsx', 'src/components/challenge-submit.tsx', 'src/components/design-form.tsx', 'src/components/challenge-admin.tsx', 'src/components/challenge-admin-sheet.tsx', 'src/components/challenge-body.tsx', 'src/components/challenge-lines.tsx', 'src/components/challenge-card.tsx', 'src/components/challenge-remix-card.tsx', 'src/components/challenge-entries-list.tsx', 'src/components/challenge-rules-body.tsx', 'src/components/challenge-remixes-body.tsx'];
   const wordy = clientFiles.filter((f) => /challenge\/(landing-)?wording'/.test(read(f)));
   check('switch: no script served to everyone imports the challenge\'s words', wordy.length === 0, wordy.join());
 }
@@ -132,23 +132,23 @@ proof('a wallet path let back in is caught', R.eligibility({ maker: -7, passed: 
 
 // --- The window, in Pacific time ---------------------------------------------------------------------------------
 const D0 = CHALLENGE.dates;
-check('opens at the launch call: Fri 6 Nov 2026, 09:00 Pacific', R.pacificWallTime(D0.opens) === '2026-11-06 09:00', R.pacificWallTime(D0.opens));
-check('the last minute is Sun 22 Nov 2026, 23:59 Pacific', R.pacificWallTime(new Date(Date.parse(D0.closes) - 60_000).toISOString()) === '2026-11-22 23:59');
-check('results: Fri 4 Dec 2026, 09:00 Pacific', R.pacificWallTime(D0.results) === '2026-12-04 09:00');
-check('the shortlist vote and jurors: Tue 1 Dec 2026, 00:00 Pacific', R.pacificWallTime(D0.shortlistOpens) === '2026-12-01 00:00');
-check('… to the end of Thu 3 Dec 2026 (its last minute 23:59 Pacific)', R.pacificWallTime(new Date(Date.parse(D0.shortlistCloses) - 60_000).toISOString()) === '2026-12-03 23:59');
-check('the mint opens Tue 8 Dec 2026, 09:00 Pacific', R.pacificWallTime(D0.mintOpens) === '2026-12-08 09:00');
-check('the mint closes at the Fri 18 Dec 2026 call, 09:00 Pacific', R.pacificWallTime(D0.mintCloses) === '2026-12-18 09:00');
-check('the mint close is shown as the call time, not a minute earlier', R.dateText('mintCloses', { time: true }) === 'Friday 18 December, 09:00 Pacific', R.dateText('mintCloses', { time: true }));
+check('opens Tue 1 Dec 2026, 09:00 Pacific (owner, 2026-11-05, answer 11)', R.pacificWallTime(D0.opens) === '2026-12-01 09:00', R.pacificWallTime(D0.opens));
+check('the last minute is Thu 17 Dec 2026, 23:59 Pacific (moved with the open)', R.pacificWallTime(new Date(Date.parse(D0.closes) - 60_000).toISOString()) === '2026-12-17 23:59');
+check('results: Tue 29 Dec 2026, 09:00 Pacific (moved with the open)', R.pacificWallTime(D0.results) === '2026-12-29 09:00');
+check('the shortlist vote and jurors: Sat 26 Dec 2026, 00:00 Pacific (moved with the open)', R.pacificWallTime(D0.shortlistOpens) === '2026-12-26 00:00');
+check('… to the end of Mon 28 Dec 2026 (its last minute 23:59 Pacific)', R.pacificWallTime(new Date(Date.parse(D0.shortlistCloses) - 60_000).toISOString()) === '2026-12-28 23:59');
+check('the mint opens Sat 2 Jan 2027, 09:00 Pacific (moved with the open)', R.pacificWallTime(D0.mintOpens) === '2027-01-02 09:00');
+check('the mint closes Wed 13 Jan 2027, 09:00 Pacific (moved with the open)', R.pacificWallTime(D0.mintCloses) === '2027-01-13 09:00');
+check('the mint close is shown as the call time, not a minute earlier', R.dateText('mintCloses', { time: true }) === 'Wednesday 13 January, 09:00 Pacific', R.dateText('mintCloses', { time: true }));
 check('the phases come in order', [D0.opens, D0.closes, D0.shortlistOpens, D0.shortlistCloses, D0.results, D0.mintOpens, D0.mintCloses].every((x, i, a) => i === 0 || Date.parse(a[i - 1]) <= Date.parse(x)));
 const at = (iso: string, deltaMs: number) => new Date(Date.parse(iso) + deltaMs);
 check('the opening instant is in', R.inWindow(at(D0.opens, 0)));
 check('a millisecond before opening is out', !R.inWindow(at(D0.opens, -1)));
 check('23:59:59.999 Pacific on the last day is in', R.inWindow(at(D0.closes, -1)));
 check('midnight Pacific after the last day is out', !R.inWindow(at(D0.closes, 0)));
-check('the window crosses no clock change (PST throughout): 23:59 Pacific is 07:59 UTC the next day', new Date(Date.parse(D0.closes) - 60_000).toISOString() === '2026-11-23T07:59:00.000Z');
-check('dateText builds the deadline from the config', R.dateText('closes', { time: true }) === 'Sunday 22 November, 23:59 Pacific', R.dateText('closes', { time: true }));
-check('windowText spans the window', R.windowText() === '6 to 22 November', R.windowText());
+check('the window crosses no clock change (PST throughout): 23:59 Pacific is 07:59 UTC the next day', new Date(Date.parse(D0.closes) - 60_000).toISOString() === '2026-12-18T07:59:00.000Z');
+check('dateText builds the deadline from the config', R.dateText('closes', { time: true }) === 'Thursday 17 December, 23:59 Pacific', R.dateText('closes', { time: true }));
+check('windowText spans the window', R.windowText() === '1 to 17 December', R.windowText());
 // The free spend cap: $15 inside the window, $2 outside, by itself (owner, 2026-10-31).
 {
   const C = await import('../src/lib/config');
@@ -412,15 +412,18 @@ proof('S4 a share counted per submission is caught', [...one, ...people].length 
   // P5g on the code: the exception holds, and every way past it fails.
   const files = walk('src').filter((f) => CHALLENGE_FILES.test(f)).map((f) => ({ file: f, text: read(f) }));
   const plantIn = (file: string, f: (x: string) => string) => files.map((x) => (x.file === file ? { ...x, text: f(x.text) } : x));
-  check('P5g passes with the random selection (shuffle.ts, used once, on every remix)', p5gProblems(files).length === 0, p5gProblems(files).join('; '));
-  check('the random selection really shuffles every remix in the browser', /shuffleFresh\(all\)/.test(read('src/components/challenge-remix-pick.tsx')) && /'use client'/.test(read('src/components/challenge-remix-pick.tsx')) && /await remixes\(sql\)/.test(read('src/lib/challenge/view.ts')));
-  check('a character\'s several bases are shuffled afresh in the browser, the whole list (owner, 2026-11-04)', /setOrder\(bases\.length > 1 \? shuffleFresh\(bases\) : bases\)/.test(read('src/components/challenge-bases.tsx')) && /'use client'/.test(read('src/components/challenge-bases.tsx')));
-  proof('P5g: shuffling only some of the bases fails', p5gProblems(plantIn('src/components/challenge-bases.tsx', (x) => x.replace('shuffleFresh(bases)', 'shuffleFresh(bases.slice(1))'))).length > 0);
-  proof('P5g: bases put in a fixed order by the page fails', p5gProblems(plantIn('src/components/challenge-bases.tsx', (x) => x.replace('shuffleFresh(bases)', '[...bases].sort((a, b) => a.title.localeCompare(b.title))'))).length > 0);
+  check('P5g passes with the cards\' shuffles (shuffle.ts, on each card\'s whole lists)', p5gProblems(files).length === 0, p5gProblems(files).join('; '));
+  // The hub's cards (owner, 2026-11-05, answers 8 and 9): each card shuffles its whole lists of bases and remixes in the
+  // browser; the page's data hands every card all of its character's remixes.
+  const card = read('src/components/challenge-card.tsx');
+  check('a card shuffles its bases and its remixes afresh in the browser, the whole lists (owner, 2026-11-05)', /setBases\(c\.bases\.length > 1 \? shuffleFresh\(c\.bases\) : c\.bases\)/.test(card) && /setRemixes\(shuffleFresh\(c\.remixes\)\)/.test(card) && /'use client'/.test(card) && /await (remixes|challengePictures)\(sql\)/.test(read('src/lib/challenge/view.ts')));
+  check('a card shows a random three of its remixes, then more on "Show more"', /const FIRST = 3;/.test(card) && /remixes\.slice\(0, shown\)/.test(card) && /setShown\(\(n\) => n \+ MORE\)/.test(card));
+  proof('P5g: shuffling only some of the bases fails', p5gProblems(plantIn('src/components/challenge-card.tsx', (x) => x.replace('shuffleFresh(c.bases)', 'shuffleFresh(c.bases.slice(1))'))).length > 0);
+  proof('P5g: bases put in a fixed order by the page fails', p5gProblems(plantIn('src/components/challenge-card.tsx', (x) => x.replace('shuffleFresh(c.bases)', '[...c.bases].sort((a, b) => a.title.localeCompare(b.title))'))).length > 0);
   proof('P5g: a weighted shuffle (it reads likes) fails', p5gProblems(plantIn('src/lib/challenge/shuffle.ts', (x) => x.replace('export function shuffleFresh<T>(items: readonly T[]', 'export function shuffleFresh<T extends { likes: number }>(items: readonly T[]').replace('const j = below(i + 1, random);', 'const j = below(Math.min(i + 1, 1 + out[i].likes), random);'))).length > 0);
   proof('P5g: a shuffle with weights fails', p5gProblems(plantIn('src/lib/challenge/shuffle.ts', (x) => x.replace('const j = below(i + 1, random);', 'const j = below(i + 1, () => random() ** weight);'))).length > 0);
   proof('P5g: a sort by chance on the page (outside the shuffle) fails', p5gProblems(plantIn('src/app/challenge/page.tsx', (x) => `${x}\nexport const planted = (e: number[]) => e.sort(() => Math.random() - 0.5);`)).length > 0);
-  proof('P5g: shuffling only some remixes (a featured few) fails', p5gProblems(plantIn('src/components/challenge-remix-pick.tsx', (x) => x.replace('shuffleFresh(all)', 'shuffleFresh(all.slice(0, 6))'))).length > 0);
+  proof('P5g: shuffling only some remixes (a featured few) fails', p5gProblems(plantIn('src/components/challenge-card.tsx', (x) => x.replace('shuffleFresh(c.remixes)', 'shuffleFresh(c.remixes.slice(0, 6))'))).length > 0);
   proof('P5g: the selection drawn from a limited list fails', p5gProblems(plantIn('src/lib/challenge/view.ts', (x) => x.replace('await remixes(sql)', 'await remixes(sql, { limit: 12 })'))).length > 0);
   proof('P5g: a shuffle elsewhere (the feed) fails', p5gProblems([...files, { file: 'src/app/challenge/remixes/page.tsx', text: `${read('src/app/challenge/remixes/page.tsx')}\nconst x = shuffleFresh(cards);` }].filter((f, i, a) => a.findIndex((y) => y.file === f.file) === i || f.text.includes('const x = shuffleFresh'))).length > 0);
   // P5i: no counts on cards, no "most remixed" sort.
@@ -1387,7 +1390,7 @@ check('as committed, CHALLENGE.entries, posts and openSheets are on (owner\'s re
   check('e3 in the window, a challenge sheet\'s share text mentions the challenge; outside it, as before', shareSwitch(share, vp) && /remix challenge/.test(CW.shareTextOpen('Bai: x')) && CW.shareTextOpen('Bai: x').startsWith('Bai: x, made on Snowmoon Party') && CW.shareText('Bai: x') === 'Bai: x, made on Snowmoon Party' && CW.shareTextOpen('x').includes(R.dateText('closes', { time: true })));
   proof('e3 a share text that ignores the window is caught', !shareSwitch(share, vp.replace('challengeOpenNow() ?', 'true ?')));
   // h. Before the open, from CHALLENGE.dates.
-  check('h "Entries open Fri 6 Nov, 09:00 PT", built from CHALLENGE.dates', E.SUBMIT_WORDING.opens() === 'Entries open Fri 6 Nov, 09:00 PT.' && R.shortDateText('opens', { ...CHALLENGE.dates, opens: '2026-11-13T17:00:00Z' }) === 'Fri 13 Nov, 09:00 PT', E.SUBMIT_WORDING.opens());
+  check('h "Entries open Tue 1 Dec, 09:00 PT", built from CHALLENGE.dates', E.SUBMIT_WORDING.opens() === 'Entries open Tue 1 Dec, 09:00 PT.' && R.shortDateText('opens', { ...CHALLENGE.dates, opens: '2026-11-13T17:00:00Z' }) === 'Fri 13 Nov, 09:00 PT', E.SUBMIT_WORDING.opens());
   // i. Neynar down: published, and told on the spot.
   check('i the unchecked line says it won\'t count, and why', /won’t count/.test(CW.publishedUnchecked('Zei')) && /Neynar/.test(CW.publishedUnchecked('Zei')) && /\{entry\?\.kind === 'unchecked' && \(\s*<p className="ic-error ch-unchecked" role="status">\s*\{entry\.text\}/.test(form));
   check('i the confirmation\'s new lines carry a Draft wording line', /\{entry && <p className="as-draft ic-draftline">\{IMAGE_WORDING\.draftLine\}<\/p>\}/.test(form));

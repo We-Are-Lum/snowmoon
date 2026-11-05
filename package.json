@@ -78,7 +78,7 @@
     "check:snap-live": "tsx scripts/check-snap-live.ts",
     "check:modal-vc": "tsx scripts/check-modal-vc.ts",
     "test:illustration-review": "tsx --conditions=react-server scripts/test-illustration-review.ts",
-    "test:challenge": "tsx --conditions=react-server scripts/test-challenge.ts",
+    "test:challenge": "tsx --conditions=react-server scripts/test-challenge.ts && tsx --conditions=react-server scripts/test-challenge-moments.ts",
     "test:challenge-daily-sql": "tsx scripts/test-challenge-daily-sql.ts",
     "test:rehearsal": "tsx --conditions=react-server scripts/test-rehearsal.ts",
     "rehearsal:db": "tsx scripts/rehearsal-db.ts",

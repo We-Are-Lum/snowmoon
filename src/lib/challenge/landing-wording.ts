@@ -13,10 +13,31 @@ export const LANDING_WORDING = {
   line: (now: ReturnType<typeof phase> = phase()) =>
     now === 'closed'
       ? `Entries closed ${shortDateText('closes')}. Every remix is below.`
-      : `Pick a character, tap its base or a first remix, then Remix to make it your own. Entries ${now === 'before' ? `open ${shortDateText('opens')} and ` : ''}close ${shortDateText('closes')}.`,
+      : `Pick a character. Tap a picture to remix it. Entries ${now === 'before' ? `open ${shortDateText('opens')} and ` : ''}close ${shortDateText('closes')}.`,
   rulesLink: 'Rules',
   rulesTitle: 'The rules',
   countsHead: 'Entrants so far',
+  // The hub's cards (branch challenge-moments, 2026-11-05; docs/proposals/challenge-moments.md §1.3). Draft wording.
+  cards: {
+    bases: 'Bases',
+    remixes: 'Remixes',
+    showMore: 'Show more',
+    /** P5g's fourth exception (owner, 2026-11-05, answer 3): the curated list says whose it is. */
+    moments: 'Moments picked by @naaate',
+    more: (name: string) => `More about ${name}`,
+    less: (name: string) => `Less about ${name}`,
+    /** The deeper layers' line (owner, 2026-11-05, answer 1). */
+    spoil: 'May spoil later chapters.',
+    summary: 'This edition’s summary',
+    look: 'Look invented by this edition: the book doesn’t describe it.',
+    appears: (name: string) => `Where ${name} appears in the book`,
+    appearsCount: '{n} passages, chapters {a} to {b}',
+    loading: 'Loading…',
+    failed: 'Couldn’t load the passages. Try again.',
+    readIt: 'Read it →',
+    chapter: 'Chapter {n}',
+    tapToRemix: 'Remix this picture',
+  },
   /** The base's tile when its style has no name. */
   baseLabel: 'Base',
   sheetLabel: 'Sheet',
@@ -61,4 +82,6 @@ export const LANDING_WORDING = {
   back: '← The remix challenge',
   untitled: (name: string) => `${name}, remixed`,
   pictureAlt: (name: string) => `AI-generated front view of ${name}, not by the author`,
+  /** A challenge picture or a card's picture (branch challenge-moments). */
+  pictureAltMoment: (name: string) => `AI-generated picture of ${name}, not by the author`,
 };

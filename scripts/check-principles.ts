@@ -38,6 +38,10 @@ import { p4aProblems } from './lib/p4a';
 import { CHALLENGE_FILES as P5G_FILES, NOT_AN_ORDER, P5I_FILES, p5gProblems, p5iProblems } from './lib/p5g';
 import { MODAL_VC_FILE, MODAL_VC_PLANTS, modalVcRun, modalVcStatic } from './lib/modal-vc';
 import { requireTarget } from './lib/target';
+import { p2mProblems, p6acProblems, p9gProblems } from './lib/challenge-moments';
+import { CARDS } from '../src/lib/challenge/cards';
+import { MOMENTS } from '../src/lib/challenge/moments';
+import { spoilerExceptionOn } from '../src/lib/challenge/spoilers';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const arg = (name: string) => process.argv.slice(2).find((a) => a.startsWith(`--${name}=`))?.split('=').slice(1).join('=');
@@ -1260,7 +1264,7 @@ add({
 add({
   id: 'P5g',
   principle: 5,
-  name: 'the remix challenge orders entries, sheets and "Posted on" by time only (never by likes, built-on, scores or payments); only "Bases to start from" may follow the bases\' fixed style order, and only /challenge\'s random selection may shuffle, unweighted, every remix',
+  name: 'the remix challenge orders entries, sheets and "Posted on" by time only (never by likes, built-on, scores or payments); only "Bases to start from" may follow the bases\' fixed style order; only the cards (their whole lists of bases and remixes), the entries\' "Shuffled" order and "Surprise me" (the curated moments, "Moments picked by @naaate", in book order) may shuffle, unweighted',
   load: async () => walk('src', /\.tsx?$/).filter((f) => P5G_FILES.test(f)).map((f) => ({ file: f, text: read(f) })),
   run: (files) => p5gProblems(files),
   plant: (files) => {
@@ -1282,6 +1286,45 @@ add({
     // A like count on the card.
     const i = files.findIndex((f: { file: string }) => f.file === 'src/components/challenge-remix-card.tsx');
     files[i] = { ...files[i], text: files[i].text.replace('<span className="ch-card-by">', '<span className="ch-card-likes">{r.likes} likes</span><span className="ch-card-by">') };
+  },
+});
+// P2m (branch challenge-moments, owner 2026-11-05, answer 2): the six character cards and the moments' titles and scene
+// lines are drafted by the coding agent; /challenge doesn't go public until the owner approves them (CHALLENGE.cardsApproved,
+// CHALLENGE.sceneLinesApproved), and until then every card carries the "Draft wording" mark.
+add({
+  id: 'P2m',
+  principle: 2,
+  name: 'the challenge\'s agent-drafted cards and scene lines are approved by the owner before /challenge goes public, and marked "Draft wording" until then',
+  load: async () => ({ c: { public: CHALLENGE.public as boolean, cardsApproved: CHALLENGE.cardsApproved as boolean, sceneLinesApproved: CHALLENGE.sceneLinesApproved as boolean }, files: [{ file: 'src/lib/challenge/view.ts', text: read('src/lib/challenge/view.ts') }] }),
+  run: ({ c, files }) => p2mProblems(c, files),
+  plant: (x) => {
+    x.c.public = true;
+    x.c.cardsApproved = false;
+  },
+});
+// P9g (branch challenge-moments, owner 2026-11-05, answer 1, approved): principle 9's recorded exception for the remix
+// challenge. /challenge and its remix screens may show the six cards and the curated moments from the whole book; the
+// first layer is written without major turns (its facts from chapters 1-14), the deeper layers say "May spoil later
+// chapters.", every moment chip shows its chapter, every quote is word for word, nothing else is shown, nothing outside
+// the challenge's pages uses these words, and it ends when entries close.
+add({
+  id: 'P9g',
+  principle: 9,
+  name: 'the remix challenge\'s spoiler exception stays narrow: only its six cards and curated moments, quoted word for word; the first layer from chapters 1-14; deeper layers marked "May spoil later chapters."; chapters on every moment chip; nowhere else; ended when entries close',
+  load: async () => ({
+    files: walk('src', /\.tsx?$/).map((f) => ({ file: f, text: read(f) })),
+    cards: clone(CARDS),
+    moments: clone(MOMENTS),
+    characters: [...CHALLENGE.characters],
+    blocks: Object.fromEntries(loadBlocks(ROOT)),
+    dates: { opens: CHALLENGE.dates.opens, closes: CHALLENGE.dates.closes },
+  }),
+  run: (c) => p9gProblems({ ...c, blocks: new Map(Object.entries(c.blocks)), on: spoilerExceptionOn }),
+  plant: (c) => {
+    // One word changed in a moment's quote, a first-layer fact from chapter 24, and the cards' words shown on a sheet page.
+    c.moments[2].quotes[0].text = c.moments[2].quotes[0].text.replace('shine', 'win');
+    c.cards[2].facts[0] = { text: 'Second place', block: 'c24-b48', quote: 'I got second place in the Pafogai Du Minpentai games' };
+    c.files.push({ file: 'src/app/references/designs/[id]/planted.tsx', text: "import { CARDS } from '~/lib/challenge/cards';" });
   },
 });
 // Character lists (owner, 2026-11-04: "list characters by how often they're named in the book, most first, everywhere
@@ -1972,6 +2015,20 @@ add({
     c.s4 = 'Quote cards you save, and your likes.';
     c.s7 = 'Neynar receives your Farcaster ID.';
     c.openSheets = 'export const challengeSheetsOpen = () => CHALLENGE.openSheets;';
+  },
+});
+
+// P6ac (branch challenge-moments, owner 2026-11-05): entries as pictures (CHALLENGE.pictureEntries) only while Terms §6e
+// and Privacy §4 describe them (docs/legal/challenge-moments-draft.md). Legal texts describe today. The id was free on
+// main and every remote branch (2026-11-05).
+add({
+  id: 'P6ac',
+  principle: 6,
+  name: 'entries as pictures of the challenge\'s characters (CHALLENGE.pictureEntries) are on only while Terms §6e and Privacy §4 say so',
+  load: async () => ({ on: CHALLENGE.pictureEntries as boolean, terms: clone(TERMS.sections), privacy: clone(PRIVACY.sections) }),
+  run: (c) => p6acProblems(c.on, c.terms, c.privacy),
+  plant: (c) => {
+    c.on = true;
   },
 });
 

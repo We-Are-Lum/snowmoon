@@ -1,14 +1,14 @@
 import Link from 'next/link';
 import type { ChallengeView } from '~/lib/challenge/view';
-import { ChallengeBases } from './challenge-bases';
-import { ChallengeRemixPick } from './challenge-remix-pick';
+import { ChallengeCard } from './challenge-card';
 
 /**
- * /challenge's page, the short landing (owner, 2026-11-04), drawn from its data (src/lib/challenge/view.ts), which
- * carries every word: the title and one line, "Rules" (/challenge/rules), each character in CHALLENGE.characters'
- * order with its bases and, under "First remixes by @naaate", the owner's first remixes, then a random few remixes
- * and "See all". Nothing is ordered by likes, payments or anything but time or chance (P5, P7). No hooks, so the
- * public page draws it on the server and the admins' view (challenge-admin.tsx) in the browser.
+ * /challenge's page, the hub (owner, 2026-11-05; docs/proposals/challenge-moments.md §1.3 S0), drawn from its data
+ * (src/lib/challenge/view.ts), which carries every word: the title and one line, "Rules" (/challenge/rules) and
+ * "Every entry", then one card per character in CHALLENGE.characters' order. Nothing else is on the hub (the random
+ * remixes block is gone, owner 2026-11-05). Nothing is ordered by likes, payments or anything but time or chance
+ * (P5, P7). No hooks, so the public page draws it on the server and the admins' view (challenge-admin.tsx) in the
+ * browser.
  */
 export function ChallengeBody({ v }: { v: ChallengeView }) {
   return (
@@ -26,20 +26,11 @@ export function ChallengeBody({ v }: { v: ChallengeView }) {
         </Link>
         <span className="as-draft ch-draft"> · {v.draftShort}</span>
       </p>
-
-      {v.characters.map((c) => (
-        <section key={c.slug} className="dz-section ch-character" aria-labelledby={`ch-${c.slug}`} data-character={c.slug}>
-          <h2 id={`ch-${c.slug}`}>{c.name}</h2>
-          {c.note && <p className="dz-muted ch-no-bases">{c.note}</p>}
-          {c.bases.length > 0 && <ChallengeBases slug={c.slug} name={c.callName} bases={c.bases} firsts={c.firsts} emptySlots={c.emptySlots} firstsHead={c.firstsHead} w={c.w} />}
-        </section>
-      ))}
-
-      <section className="dz-section ch-remixes" aria-labelledby="ch-remixes">
-        <h2 id="ch-remixes">{v.remixesHead}</h2>
-        {v.remixesNote && <p className="dz-note">{v.remixesNote}</p>}
-        <ChallengeRemixPick all={v.remixes} size={v.pickSize} w={v.pick} />
-      </section>
+      <div className="cc-list">
+        {v.cards.map(({ c, w }) => (
+          <ChallengeCard key={c.slug} c={c} w={w} />
+        ))}
+      </div>
       <p className="dz-note ch-foot">{v.notAffiliated}</p>
     </div>
   );
