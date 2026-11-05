@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation';
 import { CHALLENGE } from '~/lib/config';
 import { db } from '~/lib/db';
 import { bookCharacter } from '~/lib/images/designs';
-import { standing } from '~/lib/challenge/entries';
+import { entryHref, standing } from '~/lib/challenge/entries';
 import { CHALLENGE_WORDING as W } from '~/lib/challenge/wording';
 import { LANDING_WORDING as L } from '~/lib/challenge/landing-wording';
 import { ChallengeEntriesList } from '~/components/challenge-entries-list';
@@ -34,7 +34,7 @@ export default async function ChallengeEntries({ searchParams }: Props) {
   const sql = db();
   const st = sql ? await standing(sql).catch(() => null) : null;
   const all = (st?.entries ?? []).filter((e) => !character || e.character === character);
-  const cards: Record<string, RemixCardWords> = Object.fromEntries(chars.map((c) => [c.slug, { name: names[c.slug], untitled: L.untitled(names[c.slug]), alt: L.pictureAlt(names[c.slug]) }]));
+  const cards: Record<string, RemixCardWords> = Object.fromEntries(chars.map((c) => [c.slug, { name: names[c.slug], untitled: L.untitled(names[c.slug]), alt: CHALLENGE.pictureEntries ? L.pictureAltMoment(names[c.slug]) : L.pictureAlt(names[c.slug]) }]));
   const href = (c: string | null) => `/challenge/entries${c ? `?character=${c}` : ''}`;
   return (
     <div className="page prose ch-page ch-feed-page">
@@ -54,7 +54,7 @@ export default async function ChallengeEntries({ searchParams }: Props) {
         ))}
       </nav>
       {all.length ? (
-        <ChallengeEntriesList all={all.map((e) => ({ versionId: e.versionId, character: e.character, title: e.title, byName: e.byName, byFid: e.maker, thumb: e.thumb }))} w={{ newest: L.entriesNewest, shuffled: L.entriesShuffled, orderLabel: L.entriesOrderLabel, cards }} />
+        <ChallengeEntriesList all={all.map((e) => ({ versionId: e.versionId, character: e.character, title: e.title, byName: e.byName, byFid: e.maker, thumb: e.thumb, href: entryHref(e.versionId) }))} w={{ newest: L.entriesNewest, shuffled: L.entriesShuffled, orderLabel: L.entriesOrderLabel, cards }} />
       ) : (
         <p className="dz-muted ch-feed-none">{character ? L.entriesNoneFor(names[character]) : L.entriesNone}</p>
       )}

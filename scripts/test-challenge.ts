@@ -424,7 +424,7 @@ proof('S4 a share counted per submission is caught', [...one, ...people].length 
   proof('P5g: a shuffle with weights fails', p5gProblems(plantIn('src/lib/challenge/shuffle.ts', (x) => x.replace('const j = below(i + 1, random);', 'const j = below(i + 1, () => random() ** weight);'))).length > 0);
   proof('P5g: a sort by chance on the page (outside the shuffle) fails', p5gProblems(plantIn('src/app/challenge/page.tsx', (x) => `${x}\nexport const planted = (e: number[]) => e.sort(() => Math.random() - 0.5);`)).length > 0);
   proof('P5g: shuffling only some remixes (a featured few) fails', p5gProblems(plantIn('src/components/challenge-card.tsx', (x) => x.replace('shuffleFresh(c.remixes)', 'shuffleFresh(c.remixes.slice(0, 6))'))).length > 0);
-  proof('P5g: the selection drawn from a limited list fails', p5gProblems(plantIn('src/lib/challenge/view.ts', (x) => x.replace('await remixes(sql)', 'await remixes(sql, { limit: 12 })'))).length > 0);
+  proof('P5g: the cards\' remixes drawn from a limited list fails', p5gProblems(plantIn('src/lib/challenge/view.ts', (x) => x.replace('await challengePictures(sql)', 'await challengePictures(sql, { limit: 12 })'))).length > 0);
   proof('P5g: a shuffle elsewhere (the feed) fails', p5gProblems([...files, { file: 'src/app/challenge/remixes/page.tsx', text: `${read('src/app/challenge/remixes/page.tsx')}\nconst x = shuffleFresh(cards);` }].filter((f, i, a) => a.findIndex((y) => y.file === f.file) === i || f.text.includes('const x = shuffleFresh'))).length > 0);
   // P5i: no counts on cards, no "most remixed" sort.
   const p5i = P5I_FILES.map((f) => ({ file: f, text: read(f) }));

@@ -3,7 +3,7 @@ import type postgres from 'postgres';
 import { CHALLENGE } from '../config';
 import { designByline } from '../images/byline';
 import { bookCharacter } from '../images/designs';
-import { standing, type Standing } from './entries';
+import { entryHref, standing, type Standing } from './entries';
 import { entrantCounts, phase } from './rules';
 import { CHALLENGE_WORDING as W } from './wording';
 import { LANDING_WORDING as L } from './landing-wording';
@@ -74,11 +74,11 @@ export async function rulesView(sql: Sql | null, now: Date = new Date()): Promis
     entriesHead: W.entriesHead,
     entriesOff: CHALLENGE.entries ? null : W.entriesOff,
     entriesNote: CHALLENGE.entries && st.entries.length ? W.entriesOrder : null,
-    entries: st.entries.map((e) => ({ href: `/references/designs/${e.versionId}`, title: W.entryLabel(nameOf(e.character), e.title), meta: `${designByline(e.byName, e.maker)} · v${e.versionNo}`, thumb: e.thumb })),
+    entries: st.entries.map((e) => ({ href: entryHref(e.versionId), title: W.entryLabel(nameOf(e.character), e.title), meta: `${designByline(e.byName, e.maker)} · v${e.versionNo}`, thumb: e.thumb })),
     entriesNone: W.entriesNone,
     badge: W.badge,
     alt: 'AI-generated front view, not by the author',
     adminsHead: CHALLENGE.entries && st.byAdmins.length > 0 ? W.adminsHead : null,
-    byAdmins: st.byAdmins.map((v) => ({ href: `/references/designs/${v.versionId}`, text: `${W.entryLabel(nameOf(v.character), v.title)} · ${designByline(v.byName, v.maker)} · v${v.versionNo}` })),
+    byAdmins: st.byAdmins.map((v) => ({ href: entryHref(v.versionId), text: `${W.entryLabel(nameOf(v.character), v.title)} · ${designByline(v.byName, v.maker)} · v${v.versionNo}` })),
   };
 }

@@ -8,6 +8,7 @@ import { PRIVACY } from '../legal';
 import { privacyDescribesChallenge } from './open-sheets';
 import { refusedBases } from './bases';
 import { remixLines } from './lineage';
+import { challengePictures, picturesCount } from './pictures';
 import { eligibility, entriesOpen, inWindow, needsScore, remixOfBase } from './rules';
 import { isSocialPerson, socialAccountOf } from '../people';
 import { socialAccount } from '../social/accounts';
@@ -37,6 +38,14 @@ export async function recordEligibility(sql: Sql, versionId: string, fid: number
     if (!inWindow(now)) return 'not-a-candidate';
     // Nothing is recorded, and Neynar is not asked, until the owner opens the challenge (CHALLENGE.public; 2026-11-04).
     if (!entriesOpen(now)) return 'not-a-candidate';
+    // Entries as pictures (CHALLENGE.pictureEntries, branch challenge-moments): a challenge picture of the maker's,
+    // whose line reaches one of its character's bases (src/lib/challenge/pictures.ts); sheets no longer count.
+    if (CHALLENGE.pictureEntries) {
+      const [pic] = await challengePictures(sql, { versionId });
+      if (!pic || pic.byFid !== fid) return 'not-a-candidate';
+      if (!(await picturesCount(sql, [pic])).get(pic.versionId)) return 'not-a-candidate';
+      return await decide(sql, versionId, fid, now, bluesky, lensScore);
+    }
     const names = CHALLENGE.characters.map((s) => bookCharacter(s)?.name).filter((n): n is string => Boolean(n));
     const [v] = await sql`
       select e.created_by_fid, e.id as element_id, en.name
@@ -48,6 +57,16 @@ export async function recordEligibility(sql: Sql, versionId: string, fid: number
     const slug = CHALLENGE.characters.find((s) => bookCharacter(s)?.name === String(v.name)) ?? '';
     const line = (await remixLines(sql, [String(v.element_id)])).get(String(v.element_id)) ?? [];
     if (!remixOfBase(slug, line, CHALLENGE.bases, await refusedBases(sql))) return 'not-a-candidate';
+    return await decide(sql, versionId, fid, now, bluesky, lensScore);
+  } catch (e) {
+    console.error('challenge: eligibility not stored', (e as { code?: string }).code ?? (e as Error).name);
+    return 'not-stored';
+  }
+}
+
+/** The account's decision for a candidate version (a sheet remix, or with pictureEntries a challenge picture), stored once. */
+async function decide(sql: Sql, versionId: string, fid: number, now: Date, bluesky?: (did: string) => Promise<BlueskyFacts>, lensScore?: (account: string) => Promise<number | null>): Promise<'stored' | 'not-a-candidate' | 'not-stored'> {
+  try {
     let passed: boolean | null = null;
     if (fid > 0 && needsScore(fid)) {
       const r = await checkNeynar(sql, fid, CHALLENGE_LISTS.min);

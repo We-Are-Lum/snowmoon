@@ -260,9 +260,15 @@ export function parseLensPost(body: unknown, slug: string): Post | null {
 /** The path of a version's page. */
 export const versionPath = (versionId: string) => `/references/designs/${versionId.toLowerCase()}`;
 
-/** Does the post link to this version's page? Its host must be ours exactly, its path that page (a trailing / allowed). */
+/** A challenge picture's page (branch challenge-moments): /challenge/p/<id>, where its share buttons link. */
+export const picturePath = (versionId: string) => `/challenge/p/${versionId.toLowerCase()}`;
+
+/**
+ * Does the post link to this version's page? Its host must be ours exactly, its path that page (a trailing / allowed):
+ * a sheet's page, or a challenge picture's (/challenge/p/<id>, or the image's own page /image/<id>).
+ */
 export function linksToVersion(post: Pick<Post, 'links'>, versionId: string): boolean {
-  const want = versionPath(versionId);
+  const wants = [versionPath(versionId), picturePath(versionId), `/image/${versionId.toLowerCase()}`];
   return post.links.some((l) => {
     let u: URL;
     try {
@@ -270,6 +276,6 @@ export function linksToVersion(post: Pick<Post, 'links'>, versionId: string): bo
     } catch {
       return false;
     }
-    return isSite(u) && !u.username && !u.password && u.pathname.toLowerCase().replace(/\/+$/, '') === want;
+    return isSite(u) && !u.username && !u.password && wants.includes(u.pathname.toLowerCase().replace(/\/+$/, ''));
   });
 }

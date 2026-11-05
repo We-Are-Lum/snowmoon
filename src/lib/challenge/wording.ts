@@ -35,15 +35,20 @@ export const CHALLENGE_WORDING = {
   rules: () => [
     'Make your remix on snowmoon.party with the site’s tools. Every recipe is published.',
     // Draft wording (owner, 2026-11-04: one base per character, three for Deluin and Gladias; was three each, 2026-11-03).
-    'Only remixes count: for each character, start from one of its bases, or someone else’s remix. A new sheet made from scratch isn’t an entry.',
+    // Entries as pictures (branch challenge-moments, CHALLENGE.pictureEntries; draft wording, switched with it).
+    CHALLENGE.pictureEntries
+      ? 'Only remixes count: start from one of a character’s pictures on the challenge page and set it at one of the moments. A picture made from scratch isn’t an entry.'
+      : 'Only remixes count: for each character, start from one of its bases, or someone else’s remix. A new sheet made from scratch isn’t an entry.',
     // Draft wording (owner, 2026-11-04: Submit and the post link; branch contest, 2026-11-04: one a day, no total cap).
     'A remix becomes an entry only when you press Submit on its page, with a link to your own post about it on Farcaster, Bluesky or Lens. You can submit one remix a day (Pacific time), for any character, as many days as you like. Until entries close you can withdraw a submission; that day’s submission isn’t given back.',
     // Draft wording (owner, 2026-11-03: make it clear an account below the check can't remix; launch rehearsal item 3).
-    'To remix at all, sign in with a Farcaster account that passes the site’s check. An account below it can’t make the pictures, so it can’t remix or enter. It’s checked when you press Generate, and again when you publish.',
+    `To remix at all, sign in with a Farcaster account that passes the site’s check. An account below it can’t make the pictures, so it can’t remix or enter. It’s checked when you press ${CHALLENGE.pictureEntries ? 'Make it' : 'Generate'}, and again when you publish.`,
     // Draft wording (owner, 2026-11-04: the minimum is people who submitted, not submissions).
     `Each character needs at least ${numberWord(CHALLENGE.minEntrants)} different people who submitted an entry for it; several entries by one person count once. A character with fewer gets no final version, credit test or mint.`,
     // Draft wording (owner, 2026-11-04: free remixes count remixes, not pictures).
-    `Remixing is free: ${numberWord(IMAGES.designs.remixesPerDay)} remixes a day. A remix is one sheet’s three views; if one of them fails, make it again inside the same remix without using another.`,
+    CHALLENGE.pictureEntries
+      ? `Remixing is free: ${numberWord(IMAGES.generationsPerDay)} pictures a day.`
+      : `Remixing is free: ${numberWord(IMAGES.designs.remixesPerDay)} remixes a day. A remix is one sheet’s three views; if one of them fails, make it again inside the same remix without using another.`,
     'Entering is free. Minting isn’t needed for anything.',
     'Post your version anywhere with its link. If you’re remixing someone’s post, quote or reply to it.',
     `An account passes the site’s check with a Neynar score of at least ${CHALLENGE.neynarMinScore}, fixed for the whole challenge.`,

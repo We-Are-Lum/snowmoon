@@ -23,6 +23,8 @@ export const P9G_FILES = {
   appears: 'src/app/api/challenge/appears/route.ts',
   spoilers: 'src/lib/challenge/spoilers.ts',
   wording: 'src/lib/challenge/landing-wording.ts',
+  make: 'src/components/challenge-make.tsx',
+  makeApi: 'src/app/api/challenge/make/route.ts',
 };
 /** Where the cards' and moments' words may be imported: the challenge's own code only. */
 const MAY_IMPORT = /^src\/lib\/challenge\/|^src\/app\/challenge\/|^src\/app\/api\/challenge\/|^src\/components\/challenge-[a-z-]+\.tsx$/;
@@ -54,6 +56,10 @@ export function p9gProblems(p: {
   if (!/const toggleAppears = \(\) => \{[\s\S]*?[fF]etch\(`\/api\/challenge\/appears\?/.test(card) || toggle < more || card.lastIndexOf('toggleAppears') !== toggle + 'onClick={'.length) out.push(`${P9G_FILES.card}: "Where they appear" isn't fetched from inside the second layer when opened`);
   // Every moment chip shows its chapter.
   if (!/\{m\.title\} <span className="cc-chip-ch">· \{m\.chip\}<\/span>/.test(card)) out.push(`${P9G_FILES.card}: a moment chip doesn't show its chapter (m.chip)`);
+  const make = get(p.files, P9G_FILES.make);
+  if (make !== null && !/\{m\.title\} <span className="cc-chip-ch">· \{m\.chip\}<\/span>/.test(stripComments(make))) out.push(`${P9G_FILES.make}: a moment chip on the remix screen doesn't show its chapter (m.chip)`);
+  const makeApi = get(p.files, P9G_FILES.makeApi);
+  if (makeApi !== null && (stripComments(makeApi).match(/!spoilerExceptionOn\(\)/g) ?? []).length < 2) out.push(`${P9G_FILES.makeApi}: the remix screen's moments don't end with the exception (spoilerExceptionOn, GET and POST)`);
   const view = stripComments(get(p.files, P9G_FILES.view) ?? '');
   if (!/chip: chapterChip\(m\)/.test(view)) out.push(`${P9G_FILES.view}: the moments' chips aren't "Ch N" (chapterChip)`);
   // The exception ends when entries close: the view and the passages API ask spoilerExceptionOn.

@@ -20,7 +20,7 @@ import { PostLinkField } from './post-link-field';
  * page script, 2026-11-05). Plain links: no script or request of theirs on our page, no new sign-in scope, nothing
  * stored. The person then pastes their post's address, as before.
  */
-export function ChallengeSubmit({ versionId, byFid, words: W }: { versionId: string; byFid: number; words: SubmitWords }) {
+export function ChallengeSubmit({ versionId, byFid, words: W, path }: { versionId: string; byFid: number; words: SubmitWords; /** The page the post must link to (a challenge picture's: /challenge/p/<id>). */ path?: string }) {
   const auth = useAuth();
   const social = useSocialSession();
   const [person, setPerson] = useState<number | null>(null);
@@ -52,7 +52,7 @@ export function ChallengeSubmit({ versionId, byFid, words: W }: { versionId: str
   }, [signedIn, done]);
   if (!mine) return null;
 
-  const page = `${origin}/references/designs/${versionId}`;
+  const page = `${origin}${path ?? `/references/designs/${versionId}`}`;
   const farcaster = (() => {
     const u = new URL('https://farcaster.xyz/~/compose');
     u.searchParams.set('text', W.postText);

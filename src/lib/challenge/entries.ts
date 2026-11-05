@@ -9,6 +9,8 @@ import { bookCharacter } from '../images/designs';
 import { isSocialPerson } from '../people';
 import { chooseEntries, distinctSubmissions, entrantCounts, fromDecision, type Decision, inWindow, newestFirst, phase, shortDateText, submitRefusal, submittedToday, type Candidate, type Eligibility, type Submission } from './rules';
 import type { Post } from './post-links';
+import { challengePictures, picturesCount } from './pictures';
+import { momentById } from './moments';
 
 /**
  * The remix challenge's entries (owner, 2026-10-31; Submit, 2026-11-04), the server half. Reads published sheets, the
@@ -42,6 +44,9 @@ const slugOf = (name: string) => names().find((c) => c.name === name)?.slug ?? '
  * character has none yet, a fork of any sheet). Newest first.
  */
 export async function windowVersions(sql: Sql): Promise<ChallengeVersion[]> {
+  // Entries as pictures (CHALLENGE.pictureEntries, branch challenge-moments): the challenge's pictures made in the
+  // window, each counting when its line reaches one of its character's bases; sheet remixes no longer count.
+  if (CHALLENGE.pictureEntries) return windowPictures(sql);
   const chars = names().map((c) => c.name);
   if (!chars.length) return [];
   const rows = await sql`
@@ -68,6 +73,22 @@ export async function windowVersions(sql: Sql): Promise<ChallengeVersion[]> {
     .filter((v) => inWindow(v.createdAt) && !isFirstRemix(v))
     .sort(newestFirst);
 }
+
+/** The challenge's pictures made inside the window, as entry candidates (one version each), newest first. */
+export async function windowPictures(sql: Sql): Promise<ChallengeVersion[]> {
+  const pics = (await challengePictures(sql)).filter((p) => inWindow(p.createdAt) && !isFirstRemix(p));
+  const counts = await picturesCount(sql, pics);
+  return pics
+    .map((p) => ({
+      versionId: p.versionId, elementId: p.elementId, character: p.character, maker: p.byFid,
+      person: p.byFid > 0 || isSocialPerson(p.byFid) ? p.byFid : 0, createdAt: p.createdAt, forked: counts.get(p.versionId) === true,
+      versionNo: 1, title: momentById(p.moment)?.title ?? '', byName: p.byName, thumb: p.thumb,
+    }))
+    .sort(newestFirst);
+}
+
+/** A version's page in the challenge: a picture's own page while entries are pictures, the sheet's page otherwise. */
+export const entryHref = (versionId: string) => (CHALLENGE.pictureEntries ? `/challenge/p/${versionId}` : `/references/designs/${versionId}`);
 
 // The marks table may not exist yet: remembered for a minute, like src/lib/picks.ts.
 let missingUntil = 0;

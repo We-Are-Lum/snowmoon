@@ -11,6 +11,7 @@ import { putPublic, storageReady } from '~/lib/images/store';
 import { readTicket, recipeAssist } from '~/lib/images/ticket';
 import { bylineName } from '~/lib/names';
 import { shortAddress } from '~/lib/wallet/session';
+import { recordEligibility } from '~/lib/challenge/record';
 
 /**
  * Publish a draft (section 5): the device sends back the image and its signed record. The
@@ -45,7 +46,8 @@ export async function POST(request: Request) {
   if (createHash('sha256').update(bytes).digest('hex') !== t.sha256) return no('The image is not the one this draft describes', 400);
   // 'uses': the picked styles and sheets the signed record says were added (step 4), and any sent.
   const uses = [...new Set([...(t.designs ?? []).map((d) => d.versionId), ...(Array.isArray(body.uses) ? body.uses.filter(isId) : [])])].slice(0, 8);
-  const remixedFrom = Array.isArray(body.remixedFrom) ? body.remixedFrom.filter(isId).slice(0, 4) : [];
+  // A remix challenge picture (branch challenge-moments): what it was remixed from is the signed record's, not the body's.
+  const remixedFrom = t.challenge ? (t.challenge.fromKind === 'picture' ? [t.challenge.from] : []) : Array.isArray(body.remixedFrom) ? body.remixedFrom.filter(isId).slice(0, 4) : [];
   if (!(await hasConsented(fid))) return no('Agree to how your words are published first', 403);
   if ((await publishesLeft(sql, fid)) <= 0) return no(`You can publish ${IMAGES.publishesPerDay} images a day. More tomorrow (00:00 UTC).`, 429);
   const [dup] = await sql`select 1 from studio.element_versions where asset_sha256 = ${t.sha256} limit 1`;
@@ -90,6 +92,8 @@ export async function POST(request: Request) {
         ...(t.references?.length ? { references: t.references } : {}),
         // Sheets as text (2026-10-10): who is in the image and where, and the shorthand text added.
         ...(t.sheets ? { sheets: t.sheets } : {}),
+        // A remix challenge picture: the character remixed, the moment and its scene line, and what it started from.
+        ...(t.challenge ? { challenge: t.challenge } : {}),
       } as never),
       seed: t.seed,
       // The style text was drafted by the coding agent (content/snowmoon/designs/styles), so it says so.
@@ -107,5 +111,12 @@ export async function POST(request: Request) {
   });
   revalidatePath('/images');
   revalidatePath(`/image/${versionId}`);
+  if (t.challenge) {
+    // Whether it can count as an entry, decided once, now (stored; never on page view). Only while pictures are the
+    // entries (CHALLENGE.pictureEntries); otherwise it is 'not-a-candidate' and nothing is asked or kept.
+    await recordEligibility(sql, versionId, fid);
+    revalidatePath('/challenge');
+    return NextResponse.json({ versionId, url, page: `/challenge/p/${versionId}` });
+  }
   return NextResponse.json({ versionId, url, page: `/image/${versionId}` });
 }

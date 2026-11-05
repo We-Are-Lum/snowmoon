@@ -46,6 +46,21 @@ export interface Ticket {
    * project's shorthand text added for those without a picked sheet. Absent on older drafts.
    */
   sheets?: TicketSheets;
+  /**
+   * A remix challenge picture (branch challenge-moments, 2026-11-05), made on the remix screen (/challenge/make): the
+   * character remixed, the moment (its id, and the scene line sent, this edition's, drafted by the coding agent), and
+   * the version it started from (a base sheet, published as a 'uses' link through `designs`, or a challenge picture,
+   * published as a 'remixed_from' link). Recorded in the recipe's params.challenge. Absent on every other image.
+   */
+  challenge?: TicketChallenge;
+}
+
+export interface TicketChallenge {
+  character: string;
+  moment: string;
+  scene: string;
+  from: string;
+  fromKind: 'sheet' | 'picture';
 }
 
 export interface TicketSheets {
@@ -151,7 +166,7 @@ export function readSampleTicket(token: string): SampleTicket | null {
 }
 
 /** Which inputs a model drafted: the file style's text, a model-drafted design's text, the project's shorthand. */
-export function recipeAssist(t: Pick<Ticket, 'style' | 'designs' | 'sheets'>) {
+export function recipeAssist(t: Pick<Ticket, 'style' | 'designs' | 'sheets'> & { challenge?: TicketChallenge }) {
   const drafted: string[] = [];
   const sources: string[] = [];
   if (t.style) {
@@ -164,6 +179,11 @@ export function recipeAssist(t: Pick<Ticket, 'style' | 'designs' | 'sheets'>) {
   if (t.sheets?.added.length) {
     drafted.push('character and place shorthand');
     sources.push(SHORTHAND_ASSIST_SOURCE);
+  }
+  // A challenge picture's scene line: this edition's, drafted by the coding agent (src/lib/challenge/moments.ts).
+  if (t.challenge) {
+    drafted.push('moment scene line');
+    sources.push(`src/lib/challenge/moments.ts (${t.challenge.moment})`);
   }
   return drafted.length ? { model: 'claude-coding-agent', drafted, source: sources.join('; ') } : null;
 }

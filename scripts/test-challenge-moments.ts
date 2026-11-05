@@ -15,6 +15,10 @@
  */
 import path from 'node:path';
 import { readdirSync, readFileSync } from 'node:fs';
+import { randomUUID } from 'node:crypto';
+import { PGlite } from '@electric-sql/pglite';
+import { PGLiteSocketServer } from '@electric-sql/pglite-socket';
+import postgres from 'postgres';
 import { CHALLENGE } from '../src/lib/config';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
@@ -151,6 +155,178 @@ const momentQuotes = (ms: typeof MOMENTS) => ms.flatMap((m) => m.quotes.map((q) 
   CHALLENGE.public = false;
   check('appears: admins only while the challenge is admin-only', (await get('character=bai')).status === 404);
   CHALLENGE.public = pub;
+}
+
+// === R2: the moments remix flow, and entries as pictures =============================================================
+
+// --- "Surprise me" draws only from the curated list, unweighted (P5g's fourth exception) ---------------------------
+{
+  const { p5gProblems, CHALLENGE_FILES } = await import('./lib/p5g');
+  const files = walk('src').filter((f) => CHALLENGE_FILES.test(f)).map((f) => ({ file: f, text: read(f) }));
+  const plantIn = (file: string, f: (x: string) => string) => files.map((x) => (x.file === file ? { ...x, text: f(x.text) } : x));
+  check('P5g passes with "Surprise me" (all fifteen but the one chosen, unweighted)', p5gProblems(files).length === 0, p5gProblems(files).join('; '));
+  const make = read('src/components/challenge-make.tsx');
+  check('"Surprise me" is the P5g shuffle over the list the server sent, minus the moment chosen', /const next = shuffleFresh\(MOMENTS\.filter\(\(m\) => m\.id !== moment\)\)\[0\];/.test(make) && /const MOMENTS = view && view !== 'missing' \? view\.moments : \[\];/.test(make));
+  proof('P5g: "Surprise me" weighted toward early chapters fails', p5gProblems(plantIn('src/components/challenge-make.tsx', (x) => x.replace('const next = shuffleFresh(MOMENTS.filter((m) => m.id !== moment))', 'const next = shuffleFresh(MOMENTS.filter((m) => m.id !== moment && m.chip < "Ch 15"))'))).length > 0);
+  proof('P5g: "Surprise me" drawing from outside the list fails', p5gProblems(plantIn('src/components/challenge-make.tsx', (x) => x.replace('const next = shuffleFresh(MOMENTS.filter((m) => m.id !== moment))', 'const next = shuffleFresh(everyBlock)'))).length > 0);
+  proof('P5g: the moments sorted by popularity fail', p5gProblems(plantIn('src/lib/challenge/moments.ts', (x) => x.replace('export const momentById', 'export const byUse = (l: Moment[]) => [...l].sort((a, b) => a.chapter - b.chapter);\nexport const momentById'))).length > 0);
+  // The draw itself: over many draws, each of the other fourteen comes up about equally (the same shuffle, seeded).
+  const { shuffleFresh } = await import('../src/lib/challenge/shuffle');
+  let seed = 7;
+  const rnd = () => ((seed = (seed * 1103515245 + 12345) % 2 ** 31), seed / 2 ** 31);
+  const counts = new Map<string, number>();
+  const chosen = MOMENTS[0].id;
+  for (let i = 0; i < 28_000; i++) {
+    const next = shuffleFresh(MOMENTS.filter((m) => m.id !== chosen), rnd)[0];
+    counts.set(next.id, (counts.get(next.id) ?? 0) + 1);
+  }
+  const worst = Math.max(...[...counts.values()].map((c) => Math.abs(c / 28_000 - 1 / 14)));
+  check('"Surprise me": each of the other fourteen about equally often, never the one chosen, never outside the list', counts.size === 14 && !counts.has(chosen) && worst < 0.01, `worst ${worst.toFixed(4)}`);
+  check('the remix screen\'s data sends all fifteen, in the book\'s order', (await import('../src/lib/challenge/make')).momentChips().map((m) => m.id).join() === MOMENTS.map((m) => m.id).join());
+}
+
+// --- The prompt and the request ---------------------------------------------------------------------------------------
+{
+  const M = await import('../src/lib/challenge/make');
+  const m = MOMENTS.find((x) => x.id === 'c7-b49-toast')!;
+  const others = M.othersIn(m, 'bai');
+  const prompt = M.momentPrompt({ words: 'make her grin', name: 'Bai', scene: m.scene, others: (others?.added ?? []).map((a) => a.text) });
+  check('the prompt: the person\'s words first, the reference kept, the scene line, the others\' default looks, no lettering', prompt.startsWith('make her grin\n\nThe person in the reference picture is Bai') && prompt.includes(m.scene) && others!.added.map((a) => a.slug).join() === 'zei,mu' && prompt.endsWith('No text, no lettering, no signs with words.'));
+  check('the prompt never carries the moment\'s quote (shown, not sent)', !m.quotes.some((q) => prompt.includes(q.text)));
+  check('multi-character: it counts for the character remixed; the others come from their current default looks (answer 10)', others!.characters[0] === 'bai' && others!.added.every((a) => a.text.includes(':')));
+  check('a request needs a version, one of the fifteen moments and words', !M.readMake({}).ok && !M.readMake({ from: randomUUID(), moment: 'c99-b1-x', words: 'a' }).ok && !M.readMake({ from: randomUUID(), moment: m.id, words: '  ' }).ok && M.readMake({ from: randomUUID(), moment: m.id, words: 'a' }).ok);
+  proof('a moment outside the list is refused', !M.readMake({ from: randomUUID(), moment: 'c30-b47-dog', words: 'x' }).ok);
+}
+
+// --- Navigation (owner, 2026-11-05: one URL per step, back one step, ✕ to the card, words kept, publish replaces) -------
+{
+  const make = read('src/components/challenge-make.tsx');
+  const prev = read('src/components/challenge-preview.tsx');
+  const pic = read('src/components/challenge-picture.tsx');
+  const card = read('src/components/challenge-card.tsx');
+  check('nav: a picture on the hub opens its remix screen (/challenge/make?from=…), a remix keeps its moment', /export const remixHref = \(versionId: string, moment\?: string \| null\) => `\/challenge\/make\?from=\$\{versionId\}/.test(read('src/lib/challenge/view.ts')) && /href=\{t\.href\}/.test(card));
+  check('nav: choosing a moment replaces the URL (no history per tap)', /router\.replace\(`\/challenge\/make\?from=\$\{from\}&moment=/.test(make) && !/router\.push\(`\/challenge\/make\?from/.test(make));
+  check('nav: Make it pushes the preview, its own URL', /router\.push\(`\/challenge\/make\/\$\{draft\.id\}`\)/.test(make));
+  check('nav: ‹ Back is one step (the browser\'s back) on the remix screen and the preview', /onClick=\{\(\) => router\.back\(\)\}/.test(make) && /onClick=\{\(\) => router\.back\(\)\}/.test(prev));
+  check('nav: ✕ goes to the hub at the character\'s card, asking once on the preview when unpublished', /const hub = `\/challenge#\$\{view\.source\.character\}`/.test(make) && /window\.confirm\(w\.leave\)/.test(prev) && /const hub = `\/challenge#\$\{v\.character\}`/.test(pic) && /id=\{c\.slug\}/.test(card));
+  check('nav: the words are kept for the picture in this tab, and found again going back', /sessionStorage\.setItem\(flowKeys\(from\)\.words, words\)/.test(make) && /setWords\(sessionStorage\.getItem\(k\.words\) \?\? ''\)/.test(make));
+  check('nav: Publish replaces the preview with the published picture\'s page, and the remix screen then goes to the hub', /router\.replace\(`\/challenge\/p\/\$\{out\.versionId\}`\)/.test(prev) && /markPublished\(d, out\.versionId\)/.test(prev) && /sessionStorage\.getItem\(k\.published\)/.test(make));
+  check('nav: no crumb into References on the flow', ![make, prev, pic].some((x) => /\/references\/designs/.test(x)));
+  check('the remix screen\'s box is empty, with the placeholder, and carries the publication line (P1f)', /<PublishedTextField id="mk-words" label=\{w\.wordsLabel\} value=\{words\}/.test(make) && /placeholder=\{w\.wordsPlaceholder\}/.test(make) && /wordsPlaceholder: 'Describe what to change'/.test(read('src/lib/challenge/make-wording.ts')));
+  check('the remix screen names the model and its maker, with room for the model choice', /data-slot="model-choice"/.test(make) && /FLUX\.2 \[klein\] 4B · Black Forest Labs · open/.test((await import('../src/lib/challenge/make-wording')).MAKE_WORDING.modelChip));
+  check('no script served to everyone imports the flow\'s words', ![make, prev, pic, read('src/components/challenge-flow-gate.tsx')].some((x) => /challenge\/(make-|picture-|landing-)?wording'/.test(x)));
+}
+
+// --- Entries as pictures, in the database (PGlite; no migration: the challenge tables take any element version) -------
+{
+  const db = new PGlite();
+  await db.exec(`create role anon nologin; create role authenticated nologin; create role service_role nologin bypassrls;`);
+  for (const f of readdirSync(path.join(ROOT, 'supabase/migrations')).filter((f) => f.endsWith('.sql')).sort()) await db.exec(read(`supabase/migrations/${f}`));
+  await db.exec(`insert into studio.works values ('snowmoon','Snowmoon','GPL-3.0','x') on conflict do nothing`);
+  const PORT = 54378;
+  const server = new PGLiteSocketServer({ db, port: PORT, host: '127.0.0.1' });
+  await server.start();
+  const url = `postgres://postgres@127.0.0.1:${PORT}/postgres`;
+  const sql = postgres(url, { prepare: false, max: 1, onnotice: () => {} });
+  type Sql = postgres.Sql;
+  const S = sql as unknown as Sql;
+  const DS = await import('../src/lib/images/designs');
+  const pic = (n: number) => ({ url: `https://pictures.example/${n}.jpg`, sha256: String(n).repeat(64).slice(0, 64), recipe: { prompt: 'p', model: 'flux2-klein-4b-edit', endpoint: 'e', host: 'fal.ai', settings: {}, seed: 1, request_id: 'r', cost_usd: 0.003, made_at: new Date().toISOString(), width: 576, height: 768, checks: { prompt: { model: 'g', verdict: 'ok' as const }, host_safety_checker: 'passed' as const }, assist: null } });
+  const sheet = (text: string, n: number) => ({ title: '', text, samples: [], views: { front: pic(n) }, by_name: 'x', by_name_source: 'relay' as const, assist: null, role: null, style: null });
+  const base = await DS.makeDesign(S as never, { fid: 6786, mode: 'create', kind: 'character', character: DS.bookCharacter('bai')!, body: sheet('Bai base', 1) });
+  const otherSheet = await DS.makeDesign(S as never, { fid: 6786, mode: 'create', kind: 'character', character: DS.bookCharacter('bai')!, body: sheet('Bai, not a base', 2) });
+  const zeiBase = await DS.makeDesign(S as never, { fid: 6786, mode: 'create', kind: 'character', character: DS.bookCharacter('zei')!, body: sheet('Zei base', 3) });
+  const keep = { bases: CHALLENGE.bases, dates: { ...CHALLENGE.dates }, pub: CHALLENGE.public, pictures: CHALLENGE.pictureEntries, entries: CHALLENGE.entries };
+  CHALLENGE.bases = { ...CHALLENGE.bases, bai: [base.versionId], zei: [zeiBase.versionId] };
+  CHALLENGE.dates.opens = new Date(Date.now() - 60_000).toISOString();
+  CHALLENGE.dates.closes = new Date(Date.now() + 3_600_000).toISOString();
+  CHALLENGE.public = true;
+  CHALLENGE.entries = true;
+  CHALLENGE.pictureEntries = true;
+  await sql`insert into studio.check_decisions (network, account, threshold, passed) values ('farcaster', '500', 'neynar-score>=0.7', true), ('farcaster', '501', 'neynar-score>=0.7', true)`;
+  // A picture published as /api/images/publish writes one: recipe (params.challenge), element, version, anchor, links.
+  let n = 100;
+  async function picture(p: { fid: number; character: string; moment: string; from: string; uses?: string; remixedFrom?: string }) {
+    const m = MOMENTS.find((x) => x.id === p.moment);
+    const recipeId = randomUUID(), elementId = randomUUID(), versionId = randomUUID();
+    const sha = String(++n).padStart(64, '0');
+    await sql.begin(async (tx) => {
+      await tx`insert into studio.recipes ${tx({ id: recipeId, source: 'in_app', provider: 'fal.ai', model: 'flux2-klein-4b-edit', model_version: 'e', prompt: 'p', params: tx.json({ user_prompt: 'make it', by_name: `p${p.fid}`, anchor: { chapter: m?.chapter ?? 1, start: m?.start ?? 1, end: m?.end ?? 1 }, challenge: { character: p.character, moment: p.moment, scene: m?.scene ?? '', from: p.from, fromKind: p.uses ? 'sheet' : 'picture' } } as never), seed: 1, assist: null, cost_usd: 0.009, created_by_fid: p.fid })}`;
+      await tx`insert into studio.elements ${tx({ id: elementId, work_id: 'snowmoon', element_type: 'image', created_by_fid: p.fid })}`;
+      await tx`insert into studio.element_versions ${tx({ id: versionId, element_id: elementId, version_no: 1, body: tx.json({ lettering: [] } as never), asset_url: `https://media.example/${sha}.jpg`, asset_sha256: sha, recipe_id: recipeId })}`;
+      await tx`insert into studio.anchors ${tx({ version_id: versionId, work_id: 'snowmoon', chapter: m?.chapter ?? 1, start_idx: m?.start ?? 1, end_idx: m?.end ?? 1 })}`;
+      if (p.uses) await tx`insert into studio.links ${tx({ from_version_id: versionId, to_version_id: p.uses, kind: 'uses' })}`;
+      if (p.remixedFrom) await tx`insert into studio.links ${tx({ from_version_id: versionId, to_version_id: p.remixedFrom, kind: 'remixed_from' })}`;
+    });
+    const Rec = await import('../src/lib/challenge/record');
+    const r = await Rec.recordEligibility(sql, versionId, p.fid);
+    return { versionId, elementId, recorded: r };
+  }
+  const fromBase = await picture({ fid: 500, character: 'bai', moment: 'c4-b129-symbol', from: base.versionId, uses: base.versionId });
+  const fromRemix = await picture({ fid: 501, character: 'bai', moment: 'c31-b9-summit', from: fromBase.versionId, remixedFrom: fromBase.versionId });
+  const fromNotBase = await picture({ fid: 501, character: 'bai', moment: 'c5-b58-lunch', from: otherSheet.versionId, uses: otherSheet.versionId });
+  const scratch = await picture({ fid: 500, character: 'bai', moment: 'c4-b129-symbol', from: base.versionId });
+  const badMoment = await picture({ fid: 500, character: 'bai', moment: 'c30-b47-dog', from: base.versionId, uses: base.versionId });
+  const wrongBase = await picture({ fid: 500, character: 'bai', moment: 'c7-b49-toast', from: zeiBase.versionId, uses: zeiBase.versionId });
+  const P = await import('../src/lib/challenge/pictures');
+  const listed = await P.challengePictures(S);
+  check('pictures: only valid moments and characters are challenge pictures, newest first', listed.length === 5 && !listed.some((p) => p.versionId === badMoment.versionId) && listed[0].versionId === wrongBase.versionId, listed.map((p) => p.moment).join());
+  const counts = await P.picturesCount(S, listed);
+  check('a picture from a base counts', counts.get(fromBase.versionId) === true);
+  check('a picture remixed from a picture that counts, at another moment, counts', counts.get(fromRemix.versionId) === true);
+  check('a picture from a sheet that isn\'t a base doesn\'t count', counts.get(fromNotBase.versionId) === false);
+  check('a picture with no line (made from scratch) doesn\'t count', counts.get(scratch.versionId) === false);
+  proof('a picture of Bai from Zei\'s base doesn\'t count for Bai', counts.get(wrongBase.versionId) === false);
+  check('eligibility is decided once at publish, for counting pictures only', fromBase.recorded === 'stored' && fromRemix.recorded === 'stored' && fromNotBase.recorded === 'not-a-candidate' && scratch.recorded === 'not-a-candidate' && badMoment.recorded === 'not-a-candidate');
+  // A sheet remix doesn't count while pictures are the entries (a planted sheet fork must not count).
+  const fork = await DS.makeDesign(S as never, { fid: 500, mode: 'fork', kind: 'character', fromVersionId: base.versionId, body: sheet('Bai, a sheet remix', 9) });
+  const E = await import('../src/lib/challenge/entries');
+  const Rec = await import('../src/lib/challenge/record');
+  check('a sheet remix gets no decision and isn\'t a candidate while pictures are the entries', (await Rec.recordEligibility(sql, fork.versionId, 500)) === 'not-a-candidate' && !(await E.windowVersions(S)).some((v) => v.versionId === fork.versionId));
+  check('sheets go back to invitation only while pictures are the entries', !(await import('../src/lib/challenge/open-sheets')).challengeSheetsOpen());
+  const wv = await E.windowVersions(S);
+  check('the window\'s candidates are the pictures, with their moment as title', wv.length === 5 && wv.find((v) => v.versionId === fromBase.versionId)?.title === 'The quarterfinal' && wv.find((v) => v.versionId === fromBase.versionId)?.forked === true);
+  check('a candidate picture\'s standing is "candidate" before Submit', (await E.versionStanding(S, fromBase.versionId))?.kind === 'candidate');
+  // Submit, option B (the post's address pasted; the route reads it from its network and checks it links here).
+  const L = await import('../src/lib/challenge/post-links');
+  const post = (id: string, links: string[]) => ({ network: 'farcaster' as const, id: `0x${id.padEnd(40, '0')}`, handle: 'p500', at: new Date().toISOString(), url: `https://farcaster.xyz/p500/0x${id.padEnd(8, '0')}`, links, writer: { fid: 500 } });
+  check('Submit B: a post linking to the picture\'s page (/challenge/p/<id>) is accepted as linking to it', L.linksToVersion({ links: [`https://snowmoon.party/challenge/p/${fromBase.versionId}`] }, fromBase.versionId));
+  proof('Submit B: a post linking to another picture is refused', !L.linksToVersion({ links: [`https://snowmoon.party/challenge/p/${fromRemix.versionId}`] }, fromBase.versionId));
+  const ok = await E.submitEntry(S, 500, fromBase.versionId, post('a1', [`https://snowmoon.party/challenge/p/${fromBase.versionId}`]) as never);
+  check('Submit: the picture becomes an entry', ok.ok === true && (await E.versionStanding(S, fromBase.versionId))?.kind === 'entry', JSON.stringify(ok));
+  const second = await picture({ fid: 500, character: 'bai', moment: 'c7-b104-final', from: base.versionId, uses: base.versionId });
+  const again = await E.submitEntry(S, 500, second.versionId, post('a2', [`https://snowmoon.party/challenge/p/${second.versionId}`]) as never);
+  check('one a day, unchanged: a second picture the same Pacific day is refused', again.ok === false && /today/.test((again as { why: string }).why));
+  const notMine = await E.submitEntry(S, 501, second.versionId, post('a3', []) as never);
+  check('only its maker may submit a picture', notMine.ok === false);
+  const st = await E.standing(S);
+  check('the entries: Bai has one entrant, the picture by 500', st.entries.length === 1 && st.entries[0].versionId === fromBase.versionId && st.entrants.get('bai') === 1);
+  check('entries link to the picture\'s page', E.entryHref(fromBase.versionId) === `/challenge/p/${fromBase.versionId}`);
+  // The remix screen's sources: a base, or a challenge picture; nothing else.
+  check('sources: a base and a challenge picture can be remixed; a sheet that isn\'t a base, an unknown id and a hidden thing can\'t', (await P.sourceOf(S, base.versionId))?.kind === 'sheet' && (await P.sourceOf(S, fromRemix.versionId))?.kind === 'picture' && (await P.sourceOf(S, otherSheet.versionId)) === null && (await P.sourceOf(S, randomUUID())) === null);
+  // The picture's page data.
+  const V = await import('../src/lib/challenge/picture-view');
+  const pv = await V.pictureView(S, second.versionId);
+  check('a picture\'s page: its character and moment with its chapter, and Submit for its maker with the post text naming the moment', pv?.title === 'Bai · The championship final (Ch 7)' && pv.submit?.postText === 'Bai at The championship final, my remix for the Snowmoon Party remix challenge' && pv.w.signInLine === 'Sign in with Farcaster, Lens or Bluesky to enter.');
+  // The make API (GET): the screen's data for a base; 404 for anything else. POST without a sign-in: 401 (P4a). The app's
+  // own connection (db()) is a second one, and PGlite's socket server takes one at a time: this test's closes first.
+  await sql.end();
+  process.env.STUDIO_DATABASE_URL = url;
+  const route = await import('../src/app/api/challenge/make/route');
+  const g = await route.GET(new Request(`http://localhost/api/challenge/make?from=${base.versionId}`));
+  const gj = (await g.json()) as { moments: unknown[]; source: { kind: string; character: string } };
+  check('make API: the screen\'s data for a base (fifteen moments, Bai, a sheet)', g.status === 200 && gj.moments.length === 15 && gj.source.character === 'bai' && gj.source.kind === 'sheet');
+  check('make API: 404 for a sheet that isn\'t a base', (await route.GET(new Request(`http://localhost/api/challenge/make?from=${otherSheet.versionId}`))).status === 404);
+  check('make API: Make it without signing in is refused (401)', (await route.POST(new Request('http://localhost/api/challenge/make', { method: 'POST', body: '{}' }))).status === 401);
+  delete process.env.STUDIO_DATABASE_URL;
+  // Back as committed.
+  CHALLENGE.bases = keep.bases;
+  Object.assign(CHALLENGE.dates, keep.dates);
+  CHALLENGE.public = keep.pub;
+  CHALLENGE.entries = keep.entries;
+  CHALLENGE.pictureEntries = keep.pictures;
+  await (await import('../src/lib/db')).db()?.end();
+  await server.stop();
 }
 
 if (failures.length) {

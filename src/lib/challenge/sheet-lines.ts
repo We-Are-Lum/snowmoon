@@ -44,7 +44,7 @@ export interface SubmitWords {
   postOn: { farcaster: string; bluesky: string; lens: string };
   postText: string;
 }
-const submitWords = (submitted: boolean, name: string): SubmitWords => ({
+export const submitWords = (submitted: boolean, name: string): SubmitWords => ({
   submitted,
   head: CW.submitHead,
   note: CW.submitNote(),

@@ -118,6 +118,9 @@ export function ChallengeCard({ c, w }: { c: CardData; w: CardWords }) {
     setRemixes(shuffleFresh(c.remixes));
   }, [c.bases, c.remixes]);
   const big = bases?.[0] ?? null;
+  // A moment chip starts from the base shown big on this visit (a fresh random one when there are several), so no base
+  // reads as the default.
+  const momentHref = (href: string | null) => (href && big ? href.replace(/from=[^&]+/, `from=${big.versionId}`) : href);
 
   const toggleAppears = () => {
     const next = !appearsOpen;
@@ -200,8 +203,8 @@ export function ChallengeCard({ c, w }: { c: CardData; w: CardWords }) {
           <ul className="cc-moments" role="list">
             {c.moments.map((m) => (
               <li key={m.id} data-moment={m.id}>
-                {m.href ? (
-                  <Link className="cc-chip" href={m.href}>
+                {momentHref(m.href) ? (
+                  <Link className="cc-chip" href={momentHref(m.href)!}>
                     {m.title} <span className="cc-chip-ch">· {m.chip}</span>
                   </Link>
                 ) : (

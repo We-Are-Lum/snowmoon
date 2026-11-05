@@ -4,7 +4,7 @@ import { CHALLENGE } from '../config';
 import { bookCharacter } from '../images/designs';
 import type { CardData, CardFactView, CardTile, CardWords } from '~/components/challenge-card';
 import { startingSheets } from './entries';
-import { remixes } from './remixes';
+import { challengePictures } from './pictures';
 import { cardOf } from './cards';
 import { chapterChip, momentsWith, readerHref } from './moments';
 import { basesOf, baseCountOf, firstRemixesOf } from './rules';
@@ -43,8 +43,8 @@ export interface ChallengeView {
 
 const callName = (name: string) => name.split(' ')[0];
 
-/** Where tapping a picture goes. R1: today's remix form for that sheet (the moments remix screen comes in R2). */
-export const remixHref = (versionId: string) => `/references/designs/new?from=${versionId}`;
+/** Where tapping a picture goes: its remix screen (R2), with the moment kept when the picture has one. */
+export const remixHref = (versionId: string, moment?: string | null) => `/challenge/make?from=${versionId}${moment ? `&moment=${encodeURIComponent(moment)}` : ''}`;
 
 const fact = (f: { text: string; block: string; quote: string }): CardFactView => ({ ...f, href: readerHref(f.block) });
 
@@ -61,9 +61,9 @@ export function cardWords(name: string): CardWords {
 export async function challengeView(sql: Sql | null): Promise<ChallengeView> {
   const chars = CHALLENGE.characters.map((s) => bookCharacter(s)).filter((c): c is NonNullable<typeof c> => Boolean(c));
   const sheets = await Promise.all(chars.map(async (c) => ({ c, list: sql ? await startingSheets(sql, c.slug).catch(() => []) : [] })));
-  // Every published remix of the six (no filter, limit or order beyond the database's newest first): each card gets all
-  // of its character's, and the browser shuffles them (P5g).
-  const all = sql ? await remixes(sql).catch(() => []) : [];
+  // Every published challenge picture of the six (no filter, limit or order beyond the database's newest first): each
+  // card gets all of its character's, and the browser shuffles them (P5g). Since R2 a remix is a picture at a moment.
+  const all = sql ? await challengePictures(sql).catch(() => []) : [];
   // P9's challenge exception ends when entries close: no deeper layer and no moments after that (P9g).
   const spoilers = spoilerExceptionOn();
   return {
@@ -78,8 +78,8 @@ export async function challengeView(sql: Sql | null): Promise<ChallengeView> {
       const name = callName(c.name);
       const card = cardOf(c.slug);
       const picked = basesOf(c.slug).length > 0;
-      const tile = (r: { versionId: string; thumb: string | null; title: string; byName: string | null; byFid: number }, label: string | null): CardTile => ({
-        versionId: r.versionId, thumb: r.thumb, title: r.title, byName: r.byName, byFid: r.byFid, href: remixHref(r.versionId), label,
+      const tile = (r: { versionId: string; thumb: string | null; title?: string; byName: string | null; byFid: number }, label: string | null, moment?: string | null): CardTile => ({
+        versionId: r.versionId, thumb: r.thumb, title: r.title ?? '', byName: r.byName, byFid: r.byFid, href: remixHref(r.versionId, moment), label,
       });
       // The bases, every one of them (the browser shuffles them); before the picks, the newest published sheet.
       const bases = list.slice(0, picked ? baseCountOf(c.slug) : 1).map((s) => tile(s, picked ? s.style || L.baseLabel : L.sheetLabel));
@@ -87,7 +87,7 @@ export async function challengeView(sql: Sql | null): Promise<ChallengeView> {
       const mine = all.filter((r) => r.character === c.slug);
       const isFirst = (r: { versionId: string; elementId: string }) => firstIds.includes(r.versionId.toLowerCase()) || firstIds.includes(r.elementId.toLowerCase());
       // The owner's first remixes, in CHALLENGE.firstRemixes' order; one that isn't published is left out.
-      const firsts = firstIds.map((id) => mine.find((r) => r.versionId.toLowerCase() === id || r.elementId.toLowerCase() === id)).filter((r): r is NonNullable<typeof r> => Boolean(r)).map((r) => tile(r, null));
+      const firsts = firstIds.map((id) => mine.find((r) => r.versionId.toLowerCase() === id || r.elementId.toLowerCase() === id)).filter((r): r is NonNullable<typeof r> => Boolean(r)).map((r) => tile(r, null, r.moment));
       const data: CardData = {
         slug: c.slug,
         name,
@@ -95,11 +95,11 @@ export async function challengeView(sql: Sql | null): Promise<ChallengeView> {
         line: card?.line ?? '',
         facts: (card?.facts ?? []).map(fact),
         more: spoilers ? { description: card?.more.description ?? '', facts: (card?.more.facts ?? []).map(fact) } : null,
-        // R1: the moments are listed; the remix screen that takes one comes in R2.
-        moments: (spoilers ? momentsWith(c.slug) : []).map((m) => ({ id: m.id, title: m.title, chip: chapterChip(m), href: null })),
+        // A moment chip opens the remix screen for one of the character's bases at that moment.
+        moments: (spoilers ? momentsWith(c.slug) : []).map((m) => ({ id: m.id, title: m.title, chip: chapterChip(m), href: bases[0] ? remixHref(bases[0].versionId, m.id) : null })),
         bases,
         firsts,
-        remixes: mine.filter((r) => !isFirst(r)).map((r) => tile(r, null)),
+        remixes: mine.filter((r) => !isFirst(r)).map((r) => tile(r, null, r.moment)),
         note: picked ? null : bases.length ? L.noBasesYet(name) : L.noBasesNoSheet(name),
       };
       return { c: data, w: cardWords(name) };
