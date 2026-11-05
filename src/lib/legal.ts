@@ -153,7 +153,10 @@ export const LEGAL: {
     // docs/legal/signin-release-2026-11-05.md): Privacy §4's Bluesky check item (L12, reread pack 4.2) and §7's Bluesky
     // check item (L16, 4.1), approved as drafted; §4's challenge phrases (4.3, 4.4) were approved as drafted on
     // 2026-11-04. The words before were m0e1f7 (the approved words without L12 and L16).
-    privacy: { words: '1tllgm9', on: '2026-11-05', by: 'FID 6786' },
+    // 2026-11-05, Privacy §3 line approved by the owner 2026-11-05 (coordinator-reviewed): the device-storage list adds
+    // "the Bluesky handle you last signed in with, to fill it in next time" (the Bluesky handle box's prefill; merged from
+    // signin-lens-bluesky, where it is 19gyyjh), no other word changed. The words before were 1tllgm9.
+    privacy: { words: '9tvzf3', on: '2026-11-05', by: 'FID 6786' },
   },
 };
 
@@ -187,7 +190,7 @@ export const PRIVACY: LegalDoc = {
   sections: [
     { n: 1, head: 'Who we are.', body: ['Lum LLC, a Wyoming limited liability company, operates Snowmoon Party.'] },
     { n: 2, head: 'The short version.', body: ['You can read and listen without an account, and we keep nothing about you when you do. We use no advertising or analytics trackers and set no cookies. We do not sell data.'] },
-    { n: 3, head: 'Kept on your device only.', body: ['Your browser stores a few things so the site works: whether you have seen the introduction, your light or dark setting, where you stopped listening, the furthest chapter you have opened, your questions to the assistant and its answers, drafts of images you make until you publish them, a few other settings of yours, and, on the website, your sign-in, which lasts about an hour (a day for a wallet, Lens or Bluesky sign-in), a note of a Bluesky sign-in under way, kept in that tab for at most ten minutes, and a payment you have sent but not yet seen credited. These stay on your device, except that the assistant sends the furthest chapter, as a number (or another chapter you choose for a conversation), with each question and its search of the book, so that answers stay within it; it isn\'t kept. Clearing your browser\'s site data removes them. Frames you make in Remix are not drafts: they are saved by us as soon as they are made (section 4). So are the frames and video tests your agent makes when you approve them, but privately: only you can see them (section 4).'] },
+    { n: 3, head: 'Kept on your device only.', body: ['Your browser stores a few things so the site works: whether you have seen the introduction, your light or dark setting, where you stopped listening, the furthest chapter you have opened, your questions to the assistant and its answers, drafts of images you make until you publish them, a few other settings of yours, and, on the website, your sign-in, which lasts about an hour (a day for a wallet, Lens or Bluesky sign-in), a note of a Bluesky sign-in under way, kept in that tab for at most ten minutes, the Bluesky handle you last signed in with, to fill it in next time, and a payment you have sent but not yet seen credited. These stay on your device, except that the assistant sends the furthest chapter, as a number (or another chapter you choose for a conversation), with each question and its search of the book, so that answers stay within it; it isn\'t kept. Clearing your browser\'s site data removes them. Frames you make in Remix are not drafts: they are saved by us as soon as they are made (section 4). So are the frames and video tests your agent makes when you approve them, but privately: only you can see them (section 4).'] },
     {
       n: 4,
       head: 'Kept by us when you sign in.',

@@ -46,6 +46,7 @@ export async function POST(request: Request) {
   if (!sql) return no('Not available here', 503);
   const r = await linkSocial(sql, { id: me.account, kind: me.kind }, target);
   if (!r.ok) {
+    if (r.why === 'same-network') return no(LINK_WORDING.sameNetwork(r.kind), 409, r.why);
     if (r.why === 'wait') return NextResponse.json({ error: LINK_WORDING.wait(r.until), reason: r.why, until: r.until }, { status: 409, headers: noStore });
     return no(r.why === 'linked-elsewhere' ? LINK_WORDING.linkedElsewhere : r.why === 'not-yet' ? LINK_WORDING.notYet : LINK_WORDING.cannot, r.why === 'not-yet' ? 503 : 409, r.why);
   }

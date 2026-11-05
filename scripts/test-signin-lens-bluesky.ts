@@ -24,6 +24,9 @@
  *     signs in as the DID, with the handle that resolves back to it.
  *  B2 Bluesky: refused: a changed state, another issuer, a changed sealed state, a token for another DID, a DID whose
  *     PDS names another authorization server. A handle that doesn't resolve back is not kept.
+ *  B5 Bluesky from bsky.social (2026-11-05, no handle typed): the PAR goes to the entryway with no login_hint and asks
+ *     about nobody; an account on one of Bluesky's PDS hosts signs in, checked through its own DID document and PDS; an
+ *     account whose PDS names another server is refused; the handle box path still sends the handle as the hint.
  *  B3 Bluesky: the site's client metadata (https only), and no request to an IP literal or localhost.
  *  F1 Free generations: a Bluesky-only account gets none (gate, Pictures, Remix, the count), and no balance.
  *  F2 Linked: a Bluesky account linked to a Farcaster account signs in as that FID and gets its free count; unlinked,
@@ -31,6 +34,9 @@
  *  F3 Lens: no free generations while the threshold is null; with a threshold, at or above it yes, below it no; Lens
  *     unreachable, no.
  *  F4 Wallet accounts are unchanged: they pay from the balance, never the free count.
+ *  K4 One account per network in a linked group (A6): a second Bluesky to one FID, a Bluesky directly beside one through a
+ *     Lens account (both ways), a Lens account joining with its own Bluesky, a second Lens: refused ('same-network');
+ *     two links racing for one FID: one is made; unlink then another: as today (the 30-day wait for the unlinked one).
  *  M1 The migration: dry run, migration and read-back in one file run in order; the drafts are the same blocks; nothing
  *     is readable by anon or authenticated; a realistic row can be added and deleted.
  *  S1 Off: with Lens and Bluesky switched off (SIGN_IN_METHODS, no local test), every Lens and Bluesky route answers 404.
@@ -314,17 +320,25 @@ const DID2 = 'did:plc:' + 'zyxwvutsrqponmlkjihgfedc';
 const HANDLE = 'alice.example.com';
 const PDS = 'https://pds.example.com';
 const AS = 'https://auth.example.com';
+/** An account hosted by Bluesky: its PDS is one of Bluesky's hosts, which names the entryway (bsky.social) as its authorization server. */
+const DID3 = 'did:plc:' + 'carolcarolcarolcarolcaro';
+const HANDLE3 = 'carol.bsky.social';
+const BSKY_PDS = 'https://puffball.us-east.host.bsky.network';
+const ENTRYWAY = 'https://bsky.social';
 const world = {
   par: [] as Record<string, string>[],
+  /** Where each PAR went (its authorization server). */
+  parAt: [] as string[],
   codes: new Map<string, { challenge: string; clientId: string; redirectUri: string; jkt: string; sub: string }>(),
   nonce: 'n-1',
   /** The DID's document names this PDS; a second DID, another. */
-  pdsAuthServer: new Map<string, string>([[PDS, AS], ['https://pds2.example.com', 'https://other-auth.example.com']]),
+  pdsAuthServer: new Map<string, string>([[PDS, AS], ['https://pds2.example.com', 'https://other-auth.example.com'], [BSKY_PDS, ENTRYWAY]]),
   didDocs: new Map<string, { pds: string; handle: string | null }>([
     [DID, { pds: PDS, handle: HANDLE }],
     [DID2, { pds: 'https://pds2.example.com', handle: 'bob.example.com' }],
+    [DID3, { pds: BSKY_PDS, handle: HANDLE3 }],
   ]),
-  txt: new Map<string, string>([[`_atproto.${HANDLE}`, `did=${DID}`]]),
+  txt: new Map<string, string>([[`_atproto.${HANDLE}`, `did=${DID}`], [`_atproto.${HANDLE3}`, `did=${DID3}`]]),
   tokenSub: null as string | null,
   requested: [] as string[],
 };
@@ -379,6 +393,7 @@ at.ATPROTO_HTTP.fetch = (async (input: RequestInfo | URL, init?: RequestInit) =>
     if (!d.ok) return json({ error: 'invalid_dpop_proof' }, 400);
     if (d.nonce !== world.nonce) return json({ error: 'use_dpop_nonce' }, 400, { 'DPoP-Nonce': world.nonce });
     world.par.push(form);
+    world.parAt.push(u.origin);
     const code = `authcode-${world.par.length}`;
     world.codes.set(code, { challenge: form.code_challenge, clientId: form.client_id, redirectUri: form.redirect_uri, jkt: d.jkt!, sub: world.tokenSub ?? DID });
     return json({ request_uri: `urn:ietf:params:oauth:request_uri:req-${world.par.length}`, expires_in: 60 }, 201, { 'DPoP-Nonce': world.nonce });
@@ -487,6 +502,75 @@ add({
   run: ({ status, s }) => (status === 200 && s?.subject === DID && s.handle === null ? [] : [`gave ${status} with handle ${s?.handle}`]),
   plant: (c) => {
     c.s = { ...c.s!, handle: 'mallory.example.com' };
+  },
+});
+
+add({
+  id: 'B5',
+  name: 'Bluesky from bsky.social (no handle): PAR at the entryway with no login_hint; the DID checked through its own DID document and PDS',
+  load: async () => {
+    const entry = (body: unknown) => call('../src/app/api/auth/bluesky/start/route', 'POST', `${ORIGIN}/api/auth/bluesky/start`, body);
+    const finishAt = (start: { body: Record<string, any> }, iss: string) => blueskyFinish(start, (p) => ({ ...p, iss }));
+    const out: Record<string, any> = {};
+    // The stand-in server fixes the token's sub at the PAR, so each case sets it before its start.
+    world.tokenSub = DID3;
+    const before = world.requested.length;
+    const s = await entry({ entryway: true });
+    out.start = { status: s.status, url: s.body.url ?? null };
+    out.parAt = world.parAt.at(-1);
+    out.par = world.par.at(-1);
+    out.askedAtStart = world.requested.slice(before).filter((u) => !u.startsWith(ENTRYWAY));
+    // An account on one of Bluesky's PDS hosts signs in at bsky.social: checked through its DID document and its PDS.
+    const mid = world.requested.length;
+    const f = await finishAt(s, ENTRYWAY);
+    out.finish = { status: f.status, s: session.readSocialSession(f.body.token) };
+    out.askedAtFinish = world.requested.slice(mid);
+    // An account whose PDS names another authorization server, coming back from bsky.social: refused.
+    world.tokenSub = DID;
+    const w = await finishAt(await entry({ entryway: true }), ENTRYWAY);
+    out.wrongServer = { status: w.status, why: w.body.reason, token: w.body.token ?? null };
+    world.tokenSub = DID2;
+    const w2 = await finishAt(await entry({ entryway: true }), ENTRYWAY);
+    out.wrongServer2 = { status: w2.status, why: w2.body.reason, token: w2.body.token ?? null };
+    // Another issuer than the entryway, on an entryway start: refused.
+    world.tokenSub = DID3;
+    const w3 = await finishAt(await entry({ entryway: true }), AS);
+    out.otherIssuer = { status: w3.status, why: w3.body.reason };
+    // The handle box path, for the same account: its own PDS's server (bsky.social), with the handle as login_hint.
+    const h = await blueskyStart(HANDLE3);
+    out.handleParAt = world.parAt.at(-1);
+    out.handleHint = world.par.at(-1)?.login_hint ?? null;
+    const hf = await finishAt(h, ENTRYWAY);
+    world.tokenSub = null;
+    out.handleFinish = { status: hf.status, s: session.readSocialSession(hf.body.token) };
+    // The route: an entryway start is only { entryway: true } with no handle; nothing at all is a bad handle.
+    out.empty = (await entry({})).status;
+    out.both = world.par.length;
+    await entry({ entryway: true, handle: HANDLE });
+    out.bothParAt = world.parAt.at(-1);
+    out.bothHint = world.par.at(-1)?.login_hint ?? null;
+    return out;
+  },
+  run: (c) => {
+    const p: Problems = [];
+    if (c.start.status !== 200 || !String(c.start.url).startsWith(`${ENTRYWAY}/oauth/authorize?`)) p.push(`the start: ${JSON.stringify(c.start)}`);
+    if (c.parAt !== ENTRYWAY) p.push(`the PAR went to ${c.parAt}, not ${ENTRYWAY}`);
+    if (!c.par || 'login_hint' in c.par || c.par.code_challenge_method !== 'S256' || c.par.scope !== 'atproto') p.push(`the entryway PAR was ${JSON.stringify(c.par)}`);
+    if (c.askedAtStart.length) p.push(`the entryway start asked about someone: ${c.askedAtStart.join(', ')}`);
+    if (c.finish.status !== 200 || c.finish.s?.subject !== DID3 || c.finish.s?.handle !== HANDLE3) p.push(`the finish: ${c.finish.status} ${JSON.stringify(c.finish.s)}`);
+    for (const want of [`https://plc.directory/${DID3}`, `${BSKY_PDS}/.well-known/oauth-protected-resource`])
+      if (!c.askedAtFinish.includes(want)) p.push(`the finish didn't check ${want}`);
+    if (c.wrongServer.status < 400 || c.wrongServer.token || c.wrongServer.why !== 'wrong-server') p.push(`an account whose PDS names another server: ${JSON.stringify(c.wrongServer)}`);
+    if (c.wrongServer2.status < 400 || c.wrongServer2.token) p.push(`a second such account: ${JSON.stringify(c.wrongServer2)}`);
+    if (c.otherIssuer.status < 400 || c.otherIssuer.why !== 'bad-issuer') p.push(`another issuer on an entryway start: ${JSON.stringify(c.otherIssuer)}`);
+    if (c.handleParAt !== ENTRYWAY || c.handleHint !== HANDLE3) p.push(`the handle box path: PAR at ${c.handleParAt}, hint ${c.handleHint}`);
+    if (c.handleFinish.status !== 200 || c.handleFinish.s?.subject !== DID3) p.push(`the handle box path's finish: ${JSON.stringify(c.handleFinish)}`);
+    if (c.empty !== 400) p.push(`an empty start answered ${c.empty}`);
+    if (c.bothParAt !== AS || c.bothHint !== HANDLE) p.push(`{ entryway, handle } wasn't the handle path (PAR at ${c.bothParAt}, hint ${c.bothHint})`);
+    return p;
+  },
+  plant: (c) => {
+    c.wrongServer = { status: 200, why: undefined, token: 's1.x.y' };
   },
 });
 
@@ -1019,6 +1103,82 @@ add({
 });
 
 // ==================================================================================================================
+// ==================================================================================================================
+// One Farcaster, one Lens, one Bluesky per person (the linked-accounts rule A6; coordinator's pre-merge fix 2026-11-05).
+// ==================================================================================================================
+add({
+  id: 'K4',
+  name: 'Links: one account per network in a group (direct, through a Lens account, a Lens joining with its Bluesky), under a lock',
+  load: async () => {
+    const plc = (n: number) => 'did:plc:' + 'k4'.padEnd(20, 'a') + 'abc' + 'abcdefghijklmnopqrstuvwxyz234567'[n];
+    const lensAddr = (n: number) => '0x' + 'c4'.padEnd(38, '0') + n.toString(16).padStart(2, '0');
+    const bsky = async (n: number) => ({ id: await accounts.socialAccountFor(S, 'bluesky', plc(n), `k4-${n}.example.com`), kind: 'bluesky' as const });
+    const lensA = async (n: number) => ({ id: await accounts.socialAccountFor(S, 'lens', lensAddr(n), `lens/k4-${n}`), kind: 'lens' as const });
+    const why = (r: Awaited<ReturnType<typeof accounts.linkSocial>>) => (r.ok ? 'linked' : r.why === 'same-network' ? `same-network:${r.kind}` : r.why);
+    const out: Record<string, string> = {};
+    // Two Bluesky accounts to one FID.
+    const b1 = await bsky(1), b2 = await bsky(2);
+    out.b1 = why(await accounts.linkSocial(S, b1, { fid: 7001 }));
+    out.twoBluesky = why(await accounts.linkSocial(S, b2, { fid: 7001 }));
+    // A Bluesky through a Lens account, then a Bluesky directly (and the other way round: Bluesky to a Lens whose FID has one).
+    const l1 = await lensA(1), b3 = await bsky(3), b4 = await bsky(4), b5 = await bsky(5);
+    out.l1 = why(await accounts.linkSocial(S, l1, { fid: 7002 }));
+    out.b3 = why(await accounts.linkSocial(S, b3, { lensAccount: l1.id }));
+    out.viaLensThenDirect = why(await accounts.linkSocial(S, b4, { fid: 7002 }));
+    const b6 = await bsky(6), l2 = await lensA(2);
+    out.b6 = why(await accounts.linkSocial(S, b6, { fid: 7003 }));
+    out.l2 = why(await accounts.linkSocial(S, l2, { fid: 7003 }));
+    out.directThenViaLens = why(await accounts.linkSocial(S, b5, { lensAccount: l2.id }));
+    // A Lens account joining an FID with its own Bluesky, when the FID has a Bluesky already.
+    const l3 = await lensA(3), b7 = await bsky(7), b8 = await bsky(8);
+    out.b7 = why(await accounts.linkSocial(S, b7, { lensAccount: l3.id }));
+    out.b8 = why(await accounts.linkSocial(S, b8, { fid: 7004 }));
+    out.lensWithBluesky = why(await accounts.linkSocial(S, l3, { fid: 7004 }));
+    // Two Lens accounts to one FID.
+    const l4 = await lensA(4), l5 = await lensA(5);
+    out.l4 = why(await accounts.linkSocial(S, l4, { fid: 7005 }));
+    out.twoLens = why(await accounts.linkSocial(S, l5, { fid: 7005 }));
+    // Two links racing for one FID: exactly one is made.
+    const b9 = await bsky(9), b10 = await bsky(10);
+    out.race = (await Promise.all([accounts.linkSocial(S, b9, { fid: 7006 }), accounts.linkSocial(S, b10, { fid: 7006 })])).map(why).sort().join(' ');
+    const [cnt] = await S`select count(*)::int as n from studio.social_links where fid = 7006 and unlinked_at is null`;
+    out.raceRows = String(cnt.n);
+    // Unlink, then another of the same network: allowed (it has no wait of its own); the unlinked one still waits 30 days.
+    out.unlink = await accounts.unlinkSocial(S, b1.id);
+    out.afterUnlink = why(await accounts.linkSocial(S, b2, { fid: 7001 }));
+    out.unlinkedElsewhere = why(await accounts.linkSocial(S, b1, { fid: 7007 }));
+    // A different network in the same group is still fine.
+    const l6 = await lensA(6);
+    out.otherNetwork = why(await accounts.linkSocial(S, l6, { fid: 7001 }));
+    // The check and the insert are one transaction under the lock (read from the source; PGlite serves one connection,
+    // so the race above can't run truly in parallel here).
+    const src = readFileSync(path.join(ROOT, 'src/lib/social/accounts.ts'), 'utf8');
+    const body = src.slice(src.indexOf('export async function linkSocial'), src.indexOf('export async function linkedToMe'));
+    out.locked = String(/sql\.begin\(/.test(body) && /pg_advisory_xact_lock\(\$\{LINK_LOCK\.fid\}/.test(body) && body.indexOf('pg_advisory_xact_lock') < body.indexOf('insert into studio.social_links'));
+    out.routeWords = String(/same-network'\) return no\(LINK_WORDING\.sameNetwork/.test(readFileSync(path.join(ROOT, 'src/app/api/social-link/route.ts'), 'utf8')));
+    for (const a of [b2, b3, b6, l1, l2, l4, l6, b7, b8, b9, b10]) await accounts.unlinkSocial(S, a.id);
+    return out;
+  },
+  run: (c) => {
+    const p: Problems = [];
+    const want: Record<string, string> = {
+      b1: 'linked', twoBluesky: 'same-network:bluesky',
+      l1: 'linked', b3: 'linked', viaLensThenDirect: 'same-network:bluesky',
+      b6: 'linked', l2: 'linked', directThenViaLens: 'same-network:bluesky',
+      b7: 'linked', b8: 'linked', lensWithBluesky: 'same-network:bluesky',
+      l4: 'linked', twoLens: 'same-network:lens',
+      race: 'linked same-network:bluesky', raceRows: '1',
+      unlink: 'done', afterUnlink: 'linked', unlinkedElsewhere: 'wait', otherNetwork: 'linked',
+      locked: 'true', routeWords: 'true',
+    };
+    for (const [k, v] of Object.entries(want)) if (c[k] !== v) p.push(`${k}: ${c[k]}, want ${v}`);
+    return p;
+  },
+  plant: (c) => {
+    c.twoBluesky = 'linked';
+  },
+});
+
 let failed = 0;
 // L4: Lens's real message format (read from api.lens.xyz on 2026-11-05 with three origins). Its first line carries
 // the hostname only, never the port, and its URI line the whole origin. The page's check refused every Lens sign-in on

@@ -485,6 +485,9 @@ function SignedOut({ inApp: _inApp }: { inApp: boolean }) {
       <p className="as-label">Sign in to ask questions</p>
       <h1>Your questions need a name to be counted under</h1>
       <p className="as-body">Help with reading the book. It comments; it never writes for you.</p>
+      {/* Why Farcaster only, plainly, also when signed in with Lens, Bluesky or a wallet (2026-11-05). DRAFT wording
+          (coding agent), not the owner's: questions are counted per Farcaster account (src/app/api/chat/ask/route.ts). */}
+      <p className="as-body" data-wording="draft">Asking questions needs a Farcaster account.</p>
       {/* Owner, 2026-10-29: in view until the reader's first question (one saved on this device), then behind ⓘ. Same words. */}
       <PrivacyNote />
       {/* The same sign-in list as everywhere (owner, 2026-10-30). Farcaster only here: questions are counted per Farcaster

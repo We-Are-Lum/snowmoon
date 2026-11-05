@@ -92,6 +92,8 @@ export async function personForSocial(sql: Sql | null, s: Pick<SocialSession, 'a
 export type SocialLinkResult =
   | { ok: true; created: boolean }
   | { ok: false; why: 'not-yet' | 'linked-elsewhere' | 'lens-to-lens' | 'bad-target' }
+  /** One Farcaster, one Lens and one Bluesky account per person (A6): the group joined already has one of this kind. */
+  | { ok: false; why: 'same-network'; kind: SocialKind }
   /** The 30-day wait (owner, 2026-11-04): unlinked on `unlinkedAt`, it can be linked to a different account from `until`. */
   | { ok: false; why: 'wait'; unlinkedAt: string; until: string };
 
@@ -115,10 +117,36 @@ export async function relinkWait(sql: Sql, account: number): Promise<{ target: S
 }
 
 /**
+ * The advisory-lock keys for linking (pg_advisory_xact_lock(class, key)): one class for a Farcaster ID, one for a Lens
+ * account. Always taken in this order (FID first, then Lens accounts by number), so two links can't deadlock.
+ */
+export const LINK_LOCK = { fid: 0x534c4601, lens: 0x534c4c01 } as const;
+
+/**
+ * The kinds of the accounts in the group a link joins (one Farcaster, one Lens, one Bluesky per person; the owner's
+ * linked-accounts rule A6): the target (a Lens target counts as 'lens'), every account actively linked to it, and
+ * every account actively linked to a Lens account linked to it. A Lens target linked to a Farcaster ID is that FID's
+ * group. Read inside the link's transaction, after its locks.
+ */
+async function groupKinds(tx: Sql, root: SocialLinkTarget): Promise<SocialKind[]> {
+  const rows = 'fid' in root
+    ? await tx`select a.kind from studio.social_links l join studio.social_accounts a on a.id = l.account_id
+        where l.unlinked_at is null and (l.fid = ${root.fid} or l.lens_account_id in (
+          select account_id from studio.social_links where fid = ${root.fid} and unlinked_at is null))`
+    : await tx`select a.kind from studio.social_links l join studio.social_accounts a on a.id = l.account_id
+        where l.unlinked_at is null and l.lens_account_id = ${root.lensAccount}`;
+  return [...('lensAccount' in root ? (['lens'] as SocialKind[]) : []), ...rows.map((r) => r.kind as SocialKind)];
+}
+
+/**
  * Link, with both proofs already checked by the caller (src/app/api/social-link): the account's own sign-in, and the
  * Farcaster sign-in (fid) or the Lens sign-in (lensAccount) it is linked to. Only a Bluesky account links to a Lens
  * account. Linking again to the same target changes nothing; a different target needs an unlink first, and then the
- * 30-day wait (relinkWait).
+ * 30-day wait (relinkWait). The group joined may hold one account of each network (A6): a second Bluesky or a second
+ * Lens is refused ('same-network'), counting a Bluesky linked through a Lens account, and, for a Lens account joining
+ * a Farcaster ID, the Bluesky account already linked to that Lens account. The check and the insert are one
+ * transaction under advisory locks on the group's root (the FID, or the Lens account) and on a joining Lens account,
+ * so two links at once can't both pass.
  */
 export async function linkSocial(sql: Sql, account: { id: number; kind: SocialKind }, target: SocialLinkTarget): Promise<SocialLinkResult> {
   if ('fid' in target ? !Number.isInteger(target.fid) || target.fid <= 0 : !Number.isInteger(target.lensAccount) || target.lensAccount <= 0) return { ok: false, why: 'bad-target' };
@@ -128,13 +156,38 @@ export async function linkSocial(sql: Sql, account: { id: number; kind: SocialKi
     if (now) return sameTarget(now.target, target) ? { ok: true, created: false } : { ok: false, why: 'linked-elsewhere' };
     const wait = await relinkWait(sql, account.id);
     if (wait && !sameTarget(wait.target, target)) return { ok: false, why: 'wait', unlinkedAt: wait.unlinkedAt, until: wait.until };
-    if ('fid' in target) await sql`insert into studio.social_links (account_id, fid) values (${account.id}, ${target.fid})`;
-    else {
+    if ('lensAccount' in target) {
       const [lens] = await sql`select kind from studio.social_accounts where id = ${target.lensAccount}`;
       if (lens?.kind !== 'lens') return { ok: false, why: 'bad-target' };
-      await sql`insert into studio.social_links (account_id, lens_account_id) values (${account.id}, ${target.lensAccount})`;
     }
-    return { ok: true, created: true };
+    return (await sql.begin(async (t) => {
+      const tx = t as unknown as Sql;
+      // The group's root: the FID, or the Lens account (or the FID it is linked to). Read, locked, then read again.
+      const rootOf = async (): Promise<SocialLinkTarget> => {
+        if ('fid' in target) return target;
+        const [l] = await tx`select fid::int as fid from studio.social_links where account_id = ${target.lensAccount} and unlinked_at is null and fid is not null`;
+        return l ? { fid: l.fid } : target;
+      };
+      const root = await rootOf();
+      const fids = 'fid' in root ? [root.fid] : [];
+      const lenses = [...new Set(['lensAccount' in target ? target.lensAccount : null, account.kind === 'lens' ? account.id : null].filter((x): x is number => x !== null))].sort((a, b) => a - b);
+      for (const f of fids) await tx`select pg_advisory_xact_lock(${LINK_LOCK.fid}::int, ${f}::int)`;
+      for (const l of lenses) await tx`select pg_advisory_xact_lock(${LINK_LOCK.lens}::int, ${l}::int)`;
+      // Under the locks: the account still unlinked, the root unchanged (else nothing is linked; the page tries again).
+      const [still] = await tx`select 1 from studio.social_links where account_id = ${account.id} and unlinked_at is null`;
+      if (still) return { ok: false, why: 'linked-elsewhere' } as SocialLinkResult;
+      if (!sameTarget(await rootOf(), root)) return { ok: false, why: 'linked-elsewhere' } as SocialLinkResult;
+      const joining: SocialKind[] = [account.kind];
+      if (account.kind === 'lens')
+        for (const r of await tx`select a.kind from studio.social_links l join studio.social_accounts a on a.id = l.account_id
+            where l.lens_account_id = ${account.id} and l.unlinked_at is null`) joining.push(r.kind as SocialKind);
+      const have = await groupKinds(tx, root);
+      const clash = joining.find((k) => have.includes(k));
+      if (clash) return { ok: false, why: 'same-network', kind: clash } as SocialLinkResult;
+      if ('fid' in target) await tx`insert into studio.social_links (account_id, fid) values (${account.id}, ${target.fid})`;
+      else await tx`insert into studio.social_links (account_id, lens_account_id) values (${account.id}, ${target.lensAccount})`;
+      return { ok: true, created: true } as SocialLinkResult;
+    })) as SocialLinkResult;
   } catch (e) {
     if ((e as { code?: string }).code === '23505') return { ok: false, why: 'linked-elsewhere' };
     if (missing(e)) return { ok: false, why: 'not-yet' };
