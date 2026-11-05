@@ -1,6 +1,7 @@
--- NEXT_signin_lens_bluesky (numbered at merge). Branch signin-lens-bluesky, owner's item 5 of 2026-10-31: "Sign-in,
--- Phase 5": Lens (wallet-based, Lens's own authentication) and Bluesky (AT Protocol OAuth). DRAFT, NOT APPLIED: the
--- owner pastes it in the Supabase SQL Editor; nothing here is applied by the coding agent (Anthropic's Claude).
+-- 0035_signin_lens_bluesky (was NEXT_signin_lens_bluesky; numbered at merge, #117). Branch signin-lens-bluesky, owner's item 5 of 2026-10-31: "Sign-in,
+-- Phase 5": Lens (wallet-based, Lens's own authentication) and Bluesky (AT Protocol OAuth). APPLIED on production by
+-- the owner on 2026-11-05 in the Supabase SQL Editor (SQL pack 2A–2D: dry run clean, applied, read-back 12/12 true, 2D passed);
+-- nothing here is applied by the coding agent (Anthropic's Claude).
 --
 -- MUST RUN AS postgres (the role that owns the `studio` schema), in the Supabase SQL Editor. Requires 0001.
 -- Paste it whole, or block by block, in this order:

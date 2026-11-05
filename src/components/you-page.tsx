@@ -44,7 +44,8 @@ const W = {
   profileNote: 'Anyone can open it. It shows the scenes, remix frames and storyboards you have published here, and nothing you have hidden.',
   noProfile: 'Your public page needs a Farcaster name.',
   /** A Lens or Bluesky account has no /@ page (2026-11-05). DRAFT wording (coding agent). */
-  socialProfile: (kind: 'Lens' | 'Bluesky') => `Public pages come with a Farcaster account. Link this ${kind} account to yours, and what you make while it is linked shows on your Farcaster page.`,
+  // Owner, 2026-11-05 (draft wording): no push to link Farcaster; linked accounts v2 gives every Snowmoon account a public page.
+  socialProfile: (_kind: 'Lens' | 'Bluesky') => 'Public pages for Lens and Bluesky accounts aren\u2019t ready yet.',
   signOutFarcaster: 'Sign out',
   signOutWallet: 'Sign out of this wallet',
   bothWork: 'Signed in with Farcaster and a wallet on this device: the work of both accounts is listed together; each piece is hidden by its own account.',
