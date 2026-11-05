@@ -13,6 +13,7 @@
  * (the check-principles pattern): a rule whose plant passes is itself a failure.
  *
  * Rules:
+ *  L0 Lens: with no App set (SOCIAL_SIGN_IN.lens.app empty until the owner sends it), no challenge and no token.
  *  L1 Lens: a challenge signed by the wallet that owns the account signs in, as that account, with its username.
  *  L2 Lens: a manager's signature signs in as the account it manages (act.sub), not as the manager.
  *  L3 Lens: refused: another wallet's signature (Lens's WrongSignerError), an ID token signed by a key not in Lens's
@@ -95,6 +96,10 @@ await sql`set role studio_writer`;
 const config = await import('../src/lib/config');
 const { SOCIAL_SIGN_IN } = config;
 const lensCfg = SOCIAL_SIGN_IN.lens as { minScore: number | null; app: string };
+// The site's App is empty until the owner's is registered and verified (src/lib/config.ts); the tests stand in Lens's
+// own Test App, as the site did before.
+const TEST_APP = '0x8A5Cc31180c37078e1EbA2A23c861Acf351a97cE';
+lensCfg.app = TEST_APP;
 const session = await import('../src/lib/social/session');
 const lens = await import('../src/lib/social/lens');
 const at = await import('../src/lib/social/atproto');
@@ -203,6 +208,36 @@ async function lensSignIn(signer: typeof owner, signWith: typeof owner = signer,
   const v = await call('../src/app/api/auth/lens/verify/route', 'POST', `${ORIGIN}/api/auth/lens/verify`, { ticket: ticketEdit ? ticketEdit(c.body.ticket) : c.body.ticket, signature });
   return { status: v.status, body: v.body, stage: 'verify', text: c.body.text as string };
 }
+
+// L0 ---------------------------------------------------------------------------------------------------------------
+add({
+  id: 'L0',
+  name: 'Lens: with no App set (the config before the owner sends it), no challenge is given and no ID token is accepted',
+  load: async () => {
+    lensCfg.app = '';
+    try {
+      const c = await call('../src/app/api/auth/lens/challenge/route', 'POST', `${ORIGIN}/api/auth/lens/challenge`, { account: LENS_ACCOUNT, signer: owner.address });
+      // A challenge given while an App was set, then the App emptied, and Lens's token naming the empty App.
+      lensCfg.app = TEST_APP;
+      const c2 = await call('../src/app/api/auth/lens/challenge/route', 'POST', `${ORIGIN}/api/auth/lens/challenge`, { account: LENS_ACCOUNT, signer: owner.address });
+      const signature = await owner.signMessage({ message: c2.body.text });
+      lensCfg.app = '';
+      lensWorld.tamper = (claims) => ({ claims: { ...claims, aud: '' } });
+      const v = await call('../src/app/api/auth/lens/verify/route', 'POST', `${ORIGIN}/api/auth/lens/verify`, { ticket: c2.body.ticket, signature });
+      return { challenge: c.status, verify: v.status, token: v.body.token as string | undefined };
+    } finally {
+      lensWorld.tamper = null;
+      lensCfg.app = TEST_APP;
+    }
+  },
+  run: (o) => [
+    ...(o.challenge === 503 ? [] : [`with no App, the challenge answered ${o.challenge}, not 503`]),
+    ...(o.verify >= 400 && !o.token ? [] : [`with no App, a token naming the empty App was accepted (${o.verify})`]),
+  ],
+  plant: (o) => {
+    o.challenge = 200;
+  },
+});
 
 // L1 + L2 ----------------------------------------------------------------------------------------------------------
 add({

@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { signInOpen } from '~/lib/config';
-import { isAddress, lensChallenge, LensRefused } from '~/lib/social/lens';
+import { isAddress, lensChallenge, LensNotSetUp, LensRefused } from '~/lib/social/lens';
 import { signTicket } from '~/lib/social/session';
 import { noStore, refuse } from '~/lib/social/sign-in';
 
@@ -19,6 +19,7 @@ export async function POST(request: Request) {
     if (!ticket) return refuse('Lens sign-in is not set up on this deployment', 503);
     return NextResponse.json({ id: c.id, text: c.text, ticket }, { headers: noStore });
   } catch (e) {
+    if (e instanceof LensNotSetUp) return refuse('Lens sign-in is not set up on this deployment', 503);
     if (e instanceof LensRefused) return refuse('Lens has no such account.', 404, e.why);
     console.error('lens challenge: Lens did not answer', (e as Error).name);
     return refuse('Lens isn’t answering. Try again in a moment.', 502);

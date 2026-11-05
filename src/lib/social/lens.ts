@@ -64,6 +64,8 @@ export async function lensAccountsFor(wallet: string): Promise<LensAccountChoice
 
 /** A challenge for this account and the wallet that owns (or manages) it. Lens says which from its own records. */
 export async function lensChallenge(account: string, signer: string, origin: string): Promise<{ id: string; text: string }> {
+  // No App set (SOCIAL_SIGN_IN.lens.app is empty until the owner's App is registered and verified): no sign-in at all.
+  if (!isAddress(SOCIAL_SIGN_IN.lens.app)) throw new LensNotSetUp();
   if (!isAddress(account) || !isAddress(signer)) throw new Error('bad address');
   const a = await gql<{ account: { owner: string } | null }>('query($a: EvmAddress!) { account(request: { address: $a }) { owner } }', { a: account });
   if (!a.account) throw new LensRefused('no-account');
@@ -76,6 +78,13 @@ export async function lensChallenge(account: string, signer: string, origin: str
   );
   if (!/^[0-9a-f-]{36}$/i.test(d.challenge?.id ?? '') || typeof d.challenge.text !== 'string') throw new Error('lens: bad challenge');
   return d.challenge;
+}
+
+/** SOCIAL_SIGN_IN.lens.app is empty: Lens sign-in isn't set up on this deployment. */
+export class LensNotSetUp extends Error {
+  constructor() {
+    super('lens app not set');
+  }
 }
 
 export class LensRefused extends Error {
@@ -147,6 +156,7 @@ export async function verifyLensIdToken(token: string): Promise<LensClaims> {
   const role = claims['tag:lens.dev,2024:role'];
   if (
     claims.iss !== SOCIAL_SIGN_IN.lens.issuer ||
+    !isAddress(SOCIAL_SIGN_IN.lens.app) ||
     !aud.some((a) => typeof a === 'string' && a.toLowerCase() === SOCIAL_SIGN_IN.lens.app.toLowerCase()) ||
     !(claims.exp * 1000 > Date.now()) ||
     (role !== 'ACCOUNT_OWNER' && role !== 'ACCOUNT_MANAGER') ||

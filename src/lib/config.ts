@@ -416,11 +416,16 @@ export const SOCIAL_SIGN_IN = {
     jwks: 'https://api.lens.xyz/.well-known/jwks.json',
     issuer: 'https://api.lens.xyz',
     /**
-     * The Lens App the sign-in is for (the challenge's `app`, the ID token's `aud`). Lens's own mainnet test App
-     * (lens.xyz/docs/protocol/authentication, "Test App"), for local testing only. OWNER DECISION before turning Lens
-     * on: register this site's own Lens App on Lens Chain and put its address here.
+     * The Lens App the sign-in is for (the challenge's `app`, the ID token's `aud`): this site's own App on Lens Chain,
+     * registered by the owner at /admin/lens-app (docs/lens-app-registration.md). EMPTY until the owner sends its
+     * address (owner, 2026-11-05: "with the Lens App address set and verified"); while it is empty, Lens sign-in
+     * refuses (the challenge answers 503 and no ID token is accepted), even locally. Before setting it, run
+     * `npm run verify:lens-app -- --address=<App> --tx=<its creating transaction> --owner=<the owner's wallet>`
+     * (read-only: code on Lens Chain, made through the LensFactory in that transaction, owned by that wallet, metadata
+     * lens://a0001df5…99d4 with sha256 bddb0e3e…9d26). It was Lens's own Test App
+     * (0x8A5Cc31180c37078e1EbA2A23c861Acf351a97cE), which the tests still use as their stand-in.
      */
-    app: '0x8A5Cc31180c37078e1EbA2A23c861Acf351a97cE' as `0x${string}`,
+    app: '' as '' | `0x${string}`,
     /**
      * THE ONE PLACE the Lens score threshold lives (Lens's "Account Score", lens.xyz/docs/protocol/accounts/fetch;
      * 0 to about 10000 in the sample in docs/branch-reports/signin-lens-bluesky.md). Owner, 2026-11-04: "1,000 to
