@@ -1420,7 +1420,7 @@ add({
         insert into studio.version_posts (version_id, network, post_id, handle, posted_at, url, fid) values ('00000000-0000-0000-0000-0000000000f1', 'lens', '1', 'someone', now(), 'https://hey.xyz/posts/abc', 42);
         insert into studio.challenge_eligibility (version_id, challenge, fid, decision, eligible) values ('00000000-0000-0000-0000-0000000000f1', 'remix-2026-11', 42, 'passed', true);
       end if; end $$;
-      -- Check decisions (NEXT_check_decisions): FID 42 passed.
+      -- Check decisions (0034_check_decisions): FID 42 passed.
       do $$ begin if to_regclass('studio.check_decisions') is not null then
         insert into studio.check_decisions (network, account, threshold, passed) values ('farcaster', '42', 'neynar-score>=0.7', true);
       end if; end $$;`);
@@ -1538,7 +1538,7 @@ add({
         and (has_table_privilege('studio_writer', format('studio.%I', c.table_name), 'INSERT') or has_table_privilege('studio_writer', format('studio.%I', c.table_name), 'UPDATE'))`);
     for (const r of writable.rows) problems.push(`studio.${r.t}.${r.c}: the site (studio_writer) can store a score`);
     const store = await db.query<{ c: string; d: string }>(`select column_name as c, data_type as d from information_schema.columns where table_schema = 'studio' and table_name = 'check_decisions'`);
-    if (store.rows.length === 0) problems.push('studio.check_decisions is missing (NEXT_check_decisions)');
+    if (store.rows.length === 0) problems.push('studio.check_decisions is missing (0034_check_decisions)');
     for (const r of store.rows) if (/numeric|real|double|integer|bigint|smallint|json/.test(r.d)) problems.push(`studio.check_decisions.${r.c} (${r.d}) can hold a number`);
     await db.close();
     for (const { f, t } of code as { f: string; t: string }[]) {

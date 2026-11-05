@@ -1,6 +1,7 @@
--- NEXT_check_decisions.sql (numbered at merge; main ends at 0033). Branch check-decisions, owner 2026-11-04:
+-- 0034_check_decisions.sql (was NEXT_check_decisions; APPLIED by the owner on 2026-11-04, read-back (a) 13/13 true and (b)
+-- passed). Branch check-decisions, owner 2026-11-04:
 -- "look each account up as rarely as possible". DRAFT, written by a coding agent (Claude, a closed model made by
--- Anthropic); nothing here is applied by the agent. docs/legal/check-decisions-sql-for-owner.md has it in copy blocks:
+-- Anthropic); applied by the owner, never by the agent. docs/legal/check-decisions-sql-for-owner.md has it in copy blocks:
 -- dry run, migration, read-back (a), read-back (b).
 --
 -- MUST RUN AS postgres (the role that owns the `studio` schema), in the Supabase SQL Editor. Requires 0010
