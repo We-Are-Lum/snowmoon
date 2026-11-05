@@ -41,4 +41,4 @@ each visit. Look b is the **current default** for the site's own pictures until 
 - Character files and cast.json sheet jobs now hold b for both (Deluin's fixed description too, its old words kept in
   its history). The chapter re-render waits for the owner's overnight go.
 - Spending: recast $0.40329 of $0.44; views $2.67253 of $2.83 (Gemini 3.1 Flash Image, a closed model by Google, Vertex,
-  zero retention). Deluin b in the owner's words cost $0.20342 (front $0.06718, views $0.13776, checks included).
+  zero retention). Deluin b in the owner's words cost $0.20276 (front $0.06718, views $0.13558, checks included).
