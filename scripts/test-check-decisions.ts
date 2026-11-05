@@ -25,8 +25,9 @@ const check = (label: string, ok: boolean, detail = '') => (ok ? passed++ : fail
 const proof = (label: string, caught: boolean) => check(`proof: ${label}`, caught, 'the planted violation was not caught');
 const read = (f: string) => readFileSync(path.join(ROOT, f), 'utf8');
 
-const NUMBERED = readdirSync(path.join(ROOT, 'supabase/migrations')).filter((f) => /^\d{4}_.*\.sql$/.test(f)).sort();
-const MIGRATION = read('supabase/migrations/NEXT_check_decisions.sql');
+// Every numbered migration before this one: the test applies 0034 itself, after its dry run.
+const NUMBERED = readdirSync(path.join(ROOT, 'supabase/migrations')).filter((f) => /^\d{4}_.*\.sql$/.test(f) && f < '0034').sort();
+const MIGRATION = read('supabase/migrations/0034_check_decisions.sql');
 const DOC = read('docs/legal/check-decisions-sql-for-owner.md');
 const blocks = [...DOC.matchAll(/```sql\n([\s\S]*?)\n```/g)].map((m) => m[1]);
 check('the owner\'s doc has four sql blocks: dry run, migration, read-back (a), read-back (b)', blocks.length === 4, String(blocks.length));
