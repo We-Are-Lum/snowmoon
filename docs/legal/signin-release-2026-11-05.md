@@ -364,7 +364,7 @@ wording, except the Privacy §3 line (approved).
 - **Privacy §3 (approved line):** the device-storage list adds "the Bluesky handle you last signed in with, to fill it
   in next time" (owner's approval, coordinator-reviewed, 2026-11-05), fitted between "kept in that tab for at most ten
   minutes," and "and a payment you have sent", no other word changed. Recorded on signin-lens-bluesky as
-  `LEGAL.ownerReread.privacy` 19gyyjh (was m0e1f7); on bluesky-check after the merge, see its record (was 1tllgm9).
+  `LEGAL.ownerReread.privacy` 19gyyjh (was m0e1f7); on bluesky-check after the merge, 9tvzf3 (was 1tllgm9).
   `LEGAL.effective` unchanged.
 - **One account per network in a linked group (A6)** (`src/lib/social/accounts.ts` `linkSocial`): a link is refused
   ('same-network', 409) when the group it joins (the FID or Lens account, every account actively linked to it, and
