@@ -63,6 +63,13 @@ it", is unchanged.)
 | /challenge/entries (new) | — | "Every entry"; filter "All", then each character; order "Newest first" / "Shuffled"; "No entries yet." / "No entries for Zei yet." |
 | /challenge first remixes (branch challenge-landing) | "First remix" on each picture; empty slot "First remix: not here yet" | A heading over the row: "First remixes by @naaate"; empty slot "Not here yet" |
 
+## Migrations
+
+`supabase/migrations/NEXT_challenge_daily.sql` **supersedes `NEXT_challenge_submit.sql`** (the SQL pack's item 4,
+docs/legal/sql-pack-2026-11-04.md on branch sql-pack): withdrawing now sets `withdrawn_at` instead of deleting, so the
+delete grant is not needed, and running NEXT_challenge_submit.sql after it would revoke the withdraw grant. The contest
+branch removes NEXT_challenge_submit.sql; the SQL pack doc needs item 4 replaced by NEXT_challenge_daily.sql.
+
 ## Not changed, and why
 
 - **The rehearsal** (`CHALLENGE_REHEARSAL=on`): runs only on this machine against a local database, never on any
