@@ -40,6 +40,8 @@
     "test:wallet": "tsx --conditions=react-server scripts/test-wallet.ts",
     "test:person-balance": "tsx scripts/test-person-balance.ts",
     "test:person-balance-code": "tsx --conditions=react-server scripts/test-person-balance-code.ts",
+    "test:linked-accounts-sql": "tsx scripts/test-linked-accounts-sql.ts",
+    "test:linked-accounts": "tsx --conditions=react-server scripts/test-linked-accounts.ts",
     "test:signin-lens-bluesky": "tsx --conditions=react-server scripts/test-signin-lens-bluesky.ts",
     "verify:lens-app": "tsx scripts/verify-lens-app.ts",
     "seed:designs": "tsx --conditions=react-server --env-file-if-exists=.env.local scripts/seed-designs.ts",
