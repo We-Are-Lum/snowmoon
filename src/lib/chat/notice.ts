@@ -23,14 +23,16 @@ export const NOTICE_REVIEW: {
   /** Fingerprint of the chat's code, prompts and settings when the notice was last reread. */
   reviewedFor: '70a28a9c8ee48471',
   /** Who did that reread: the coding agent, or the owner. */
-  by: 'owner (FID 6786)',
+  by: 'agent',
   on: '2026-11-05',
   note:
-    'Reread by the owner (FID 6786) on 2026-11-05, "reviewed by the coordinator, approved by the owner", for branch ' +
-    'assistant-any-account (step 1; docs/legal/assistant-any-account-step1.md, N1, with the owner\'s last sentence "Cost ' +
-    'records aren\'t linked to your account."): item 4 now says questions are recorded with your account, since with ' +
-    'ASSISTANT.anyAccount on a Lens or Bluesky account not linked to a FID asks under its own account, and every account ' +
-    'passes its network\'s check (src/lib/chat/gate.ts). No new service receives questions. ' +
+    'Reviewed by the coding agent (Claude, a closed model by Anthropic) on 2026-11-05, for branch assistant-any-account ' +
+    '(step 1): the notice\'s new words match how the chat now works. The routes go through src/lib/chat/gate.ts with ' +
+    'ASSISTANT.anyAccount on: every account passes its network\'s check (Neynar, the Lens score, the Bluesky check), a ' +
+    'Lens or Bluesky account not linked to a FID asks under its own account, and questions are counted with that account ' +
+    '(item 4, "with your account"); cost records stay daily totals with no account (0007). No new service receives ' +
+    'questions. The words themselves are the owner\'s approval of 2026-11-05 (N1 of docs/legal/assistant-any-account-step1.md, ' +
+    'with the owner\'s last sentence; "reviewed by the coordinator, approved by the owner"), recorded in ownerReread (P6f). ' +
     'Before that: reread by the coding agent on 2026-11-05 (fingerprint 40720350e2e80a2b, words unchanged) for the gate with the switch off. ' +
     'Previous reread: Reread by the owner (FID 6786) on 2026-10-24 ("#36: stamp it"), words unchanged, for #36: the chat routes now take a ' +
     'wallet linked to a FID as that FID (getPerson) and answer an unlinked wallet 403. The notice still holds: questions are ' +
