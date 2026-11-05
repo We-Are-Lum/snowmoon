@@ -426,8 +426,8 @@ export const CHALLENGE = {
    * character (never more than CHALLENGE.maxBases). Deluin and Gladias have three each: their current default look,
    * recast a and recast b (drafts in branch challenge-styles, docs/starting-sheet-drafts/directions/*-recast-*.jpg);
    * the other four keep one for now (Zei's and Bai's MJ·GPT fronts, the others' Animated series fronts). No look is
-   * the "canonical" or "official" one: /challenge shows a character's bases in a fresh random order on each visit
-   * (the P5g shuffle), so none reads as the default. None is published yet, so every list stays empty. Each entry is
+   * set above the others (the word for the first is "current default", nothing stronger): /challenge shows a
+   * character's bases in a fresh random order on each visit (the P5g shuffle), so none reads as the default. None is published yet, so every list stays empty. Each entry is
    * a design's id: its element id (any version of it) or one version's id (the id in /references/designs/<id>).
    * Designs have no slugs. An entry is a fork of any base, or of a remix of one (src/lib/challenge/rules.ts,
    * remixOfBase); while a character's list is empty, a fork of any of its sheets counts, as before, so nothing breaks
