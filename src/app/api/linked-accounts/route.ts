@@ -39,7 +39,7 @@ async function addedAccount(request: Request): Promise<{ account: number; kind: 
 export async function GET(request: Request) {
   if (!LINKED_ACCOUNTS.enabled) return off();
   const me = await signedInAccount(request);
-  if (!me) return no('Sign in first', 401);
+  if (!me) return NextResponse.json({ error: 'Sign in first' }, { status: 401, headers: noStore });
   const sql = db();
   if (!sql) return no('Not available here', 503);
   const p = await personOf(sql, me.account, me.kind);
@@ -49,9 +49,9 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   if (!LINKED_ACCOUNTS.enabled) return off();
   const me = await signedInAccount(request);
-  if (!me) return no('Sign in first', 401);
+  if (!me) return NextResponse.json({ error: 'Sign in first' }, { status: 401, headers: noStore });
   const added = await addedAccount(request);
-  if (!added) return no('Sign in with the account to link too', 401);
+  if (!added) return NextResponse.json({ error: 'Sign in with the account to link too' }, { status: 401, headers: noStore });
   const body = (await request.json().catch(() => ({}))) as { account?: unknown };
   if (body.account !== added.account) return no('You are signed in with a different account now. Reload the page and check again.', 409, 'other-account');
   const sql = db();
@@ -67,7 +67,7 @@ export async function POST(request: Request) {
 export async function DELETE(request: Request) {
   if (!LINKED_ACCOUNTS.enabled) return off();
   const me = await signedInAccount(request);
-  if (!me) return no('Sign in first', 401);
+  if (!me) return NextResponse.json({ error: 'Sign in first' }, { status: 401, headers: noStore });
   const body = (await request.json().catch(() => ({}))) as { account?: unknown };
   if (!Number.isSafeInteger(body.account) || body.account === 0) return no('Bad request', 400);
   const sql = db();

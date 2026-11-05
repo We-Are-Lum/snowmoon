@@ -1,7 +1,6 @@
 import 'server-only';
 import type postgres from 'postgres';
 import { CHALLENGE, IMAGES, LINKED_ACCOUNTS, SOCIAL_SIGN_IN } from '../config';
-import { isAdmin } from '../admins';
 import { isFarcasterPerson, isSocialPerson, isWalletPerson, socialAccountOf } from '../people';
 import { anyCurrentPass, type Account } from '../checks/decisions';
 import { neynarRule } from '../images/neynar';
@@ -294,7 +293,7 @@ export async function checkAccounts(sql: Sql, members: readonly Member[], neynar
 
 /**
  * "A person passes if any linked account does" (owner, 2026-11-04), for free counts at Generate: true if any of the
- * person's accounts has a current stored pass (anyCurrentPass; no lookup here), or is an admin; false while any of
+ * person's accounts has a current stored pass (anyCurrentPass; no lookup here), or is invited; false while any of
  * them is in its 30-day wait (A2). Off: false (the gate decides as before).
  */
 export async function personPasses(sql: Sql, number: number): Promise<boolean> {
@@ -302,7 +301,8 @@ export async function personPasses(sql: Sql, number: number): Promise<boolean> {
   const p = await readPersonOf(sql, number);
   if (!p) return false;
   if (await blockedByWait(sql, number)) return false;
-  if (p.members.some((m) => m.kind === 'farcaster' && (isAdmin(m.account) || IMAGES.invited.includes(m.account)))) return true;
+  // Admins and invited FIDs pass at the gate already: a person with a Farcaster account always acts as it.
+  if (p.members.some((m) => m.kind === 'farcaster' && IMAGES.invited.includes(m.account))) return true;
   return anyCurrentPass(sql, await checkAccounts(sql, p.members));
 }
 

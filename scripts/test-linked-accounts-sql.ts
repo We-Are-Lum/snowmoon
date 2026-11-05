@@ -90,7 +90,7 @@ const mainList = gitShow('origin/main:supabase/migrations');
 if (mainList === null) log.push('skip: the numbered migrations against origin/main (git show unavailable)');
 else {
   const onMain = mainList.split('\n').filter((f) => /^\d{4}_.*\.sql$/.test(f)).sort();
-  check('this branch has exactly origin/main\'s numbered migrations (0001..0034)', onMain.join() === numbered.join() && numbered.at(-1)?.startsWith('0034'), `${onMain.length} on main, ${numbered.length} here`);
+  check('this branch has exactly origin/main\'s numbered migrations (0001..0034)', onMain.join() === numbered.join() && numbered.at(-1)?.startsWith('0034') === true, `${onMain.length} on main, ${numbered.length} here`);
   for (const f of numbered) {
     const m = gitShow(`origin/main:supabase/migrations/${f}`);
     if (m !== null && m !== readFileSync(path.join(ROOT, 'supabase/migrations', f), 'utf8')) check(`${f} is main's, word for word`, false);
