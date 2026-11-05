@@ -114,7 +114,15 @@ on localhost (HTTP 200) with the metadata link and "Sign in with my wallet". The
 - **Deluin b** in your words: front and views, $0.20276; his files moved to b. A green shoulder bag appeared (see the
   recast sheet).
 - **Lens page**: the empty-list bug fixed (f442aeaf).
-- Running: lane B, the paying-per-person browser side.
+- **Paying per person, browser side** (person-balance 4c4fae5b): your five answers built. Anyone signed in with
+  Farcaster, Lens or Bluesky can pay even if they fail the free check (free generations still need it); the signed
+  message names the account in words; 24 hours. The panel (balance, Add funds with USDC or ETH on Base, claim, add by
+  transaction) shows in Pictures, Remix and the You page. The approved Terms §4/§6a and Privacy §4/§7 lines are in,
+  reread keys set with your approval recorded. The switch is ON on this branch: its migration (NEXT_person_balance)
+  must be applied before it merges. Tests: person-balance 84 + 61, wallet 193, images, sign-in all pass; typecheck and
+  build clean; check:principles fails only P6a (localhost) and P6d. Not tried with a real browser wallet; the
+  Farcaster app's own wallet isn't supported yet. Its panel words are draft UI wording for your look
+  (src/lib/balance/wording.ts).
 
 ## Blocked
 
