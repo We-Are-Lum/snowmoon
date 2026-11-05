@@ -2,344 +2,367 @@
 
 **DRAFT. Drafted by a coding agent (Claude, a closed model by Anthropic)** for the coordinator (session snowmoon-9c),
 2026-11-05. Branch `designs-2026-11-05`. Design only: nothing is built, no SQL is written, and no legal words change.
-Legal lines are drafts for the coordinator and the owner's reread; they never go into `src/lib/legal.ts` from this
-branch. One line, Privacy §6, is approved (section 8).
+Every legal line here is a draft for the coordinator and the owner's reread. None goes into `src/lib/legal.ts` from
+this branch, and **nothing in this version is approved.**
 
-Builds on: the approved v1 rules A1–A8 (`docs/proposals/linked-accounts.md` on `signin-reread-list`), the v1 build
-(`origin/linked-accounts`, head 94833eda, off), paying per person (`origin/person-balance`), the contest
-(`origin/contest`: one submission a Pacific day) and the sign-in release (`signin-lens-bluesky` in `bluesky-check`;
-migration `NEXT_signin_lens_bluesky` applied on production).
+**This version follows the owner's model change of 2026-11-05.** The Snowmoon account owns everything; social
+accounts and wallets are ways in; there is a main sign-in. It replaces the per-account ownership model of the
+earlier copies (v3, v4). The Privacy §6 approved earlier today was written for that model, so it is superseded and
+needs a new approval (section 8).
 
-## Words (owner, 2026-11-05)
+Builds on: rules A1–A8 (`docs/proposals/linked-accounts.md` on `signin-reread-list`), the v1 build
+(`origin/linked-accounts`, 94833eda, off), paying per person (`origin/person-balance`), the contest
+(`origin/contest`), and the sign-in release (`signin-lens-bluesky` in `bluesky-check`, whose migration is applied).
 
-- **Snowmoon account:** the person's account here. It is one or more linked sign-ins with one chosen name.
+## Words
+
+- **Snowmoon account:** the person's account here. It owns their work, challenge entries, balance and chosen name.
+  Internally it is the "person id" (`studio.people`).
 - **Social account:** a Farcaster, Lens or Bluesky account.
 - **Wallet:** an Ethereum wallet sign-in. It is not a social account.
+- **Sign-in:** a social account or wallet linked to a Snowmoon account, as a way in.
+- **Main sign-in:** the one sign-in that manages the Snowmoon account.
 
-The site's words, Terms, Privacy and About use only these terms, never "person". Internally the design keeps "person
-id" (`studio.people`); a person id **is** a Snowmoon account's id.
+## Summary of the model (owner, 2026-11-05)
 
-## The owner's direction (2026-11-05)
+1. **The Snowmoon account owns** its work, challenge entries, balance and chosen name. Sign-ins are only ways in.
+   Unlinking one takes nothing away from the Snowmoon account.
+2. **Checks stay with the social account.** The Snowmoon account qualifies for free images, the challenge and the
+   linking bonus only while a linked social account has a current pass.
+3. **Any sign-in can make, spend and submit.** Only the **main sign-in** can:
+   - link or unlink sign-ins;
+   - choose another main sign-in;
+   - claim a prize and give its payout address.
 
-1. Nothing depends on Farcaster. Signing in with any linked social account or wallet signs you in to the whole
-   Snowmoon account.
-2. The Snowmoon account has one chosen name, and every name shows its network's icon (a wallet as its short
-   address). Bylines use the chosen name for work made with any linked social account or wallet, before and after
-   linking.
-3. Two social accounts or wallets that each have history are joined only by the owner of both signing in with both,
-   never by us by hand.
-4. Public pages are found by the chosen name. Other linked social accounts are listed only if the owner of the
-   Snowmoon account chooses.
-5. The challenge bonus: during the challenge window only, each extra linked social account that passes its own check
-   adds 1 free challenge remix a day, up to 5.
-6. **Balances:** a Snowmoon account may spend the balance of any of its linked social accounts or wallets. Each
-   balance stays owned by its own social account or wallet and leaves with it if it is unlinked.
-7. **Prizes:** a prize is claimed, and its payout address given, only by signing in with the social account that made
-   the entry.
-8. **Unlinking:** a social account or wallet can always unlink itself. Unlinking another one from the Snowmoon account
-   frees it for someone else only after 30 days.
-9. **You page:** shows recent link and unlink events.
+   The person chooses the main sign-in; the page suggests a wallet.
+4. **Lost main sign-in:** another sign-in can ask for a new main. It takes effect after 30 days, shows on the You page
+   meanwhile, and the main sign-in can cancel it.
+5. **An unlinked sign-in takes nothing with it.** It can join another Snowmoon account only after 30 days. It may
+   rejoin its own Snowmoon account at once.
+6. **Challenge:**
+   - Snowmoon accounts that shared a sign-in at any time while entries were open count as one maker.
+   - The record names the public id of the social account an entry was published with.
+   - The bonus counts the passes of the social accounts linked now.
+7. **Kept:**
+   - A6: one Farcaster, one Lens and one Bluesky account, and up to 3 wallets, per Snowmoon account.
+   - A2: the 30-day wait.
+   - A5: 2 moves in 365 days. It isn't moot; see section 6.
+   - A8: 10 link attempts a day.
 
-## The ownership rule (owner's words)
+## 1. Ownership and how today's rows map to it
 
-"Work, challenge entries, balances and check results belong to the social account or wallet they were made with; the
-Snowmoon account brings them together (one sign-in, one chosen name, combined limits)."
+- **Sign-in numbers stay as they are:** FID > 0; wallet −id; Lens/Bluesky −(10⁹ + id) (`src/lib/people.ts`). Each row
+  keeps the number of the sign-in that made it, which the challenge record needs.
+- **Each owned row also carries its owner:** the Snowmoon account id (`person_id`). This reverses v4, which dropped
+  v1's `person_id` columns; in this model they are the owner stamp.
+  - **New rows:** the owner is stamped when the row is written, from the signed-in number's Snowmoon account at that
+    moment.
+  - **Existing rows, at v2's migration:** every row of a number that is in a Snowmoon account belongs to that
+    Snowmoon account. The memberships come from v1's backfill of `wallet_links` and `social_links`. A number with rows
+    but no link gets a Snowmoon account of its own (`how = 'first'`), which owns its rows.
+  - **Rows of a number that later unlinks stay** with the Snowmoon account. Nothing is restamped on unlink.
+- **Rows written by old code during the rollout:** a `before insert` trigger fills `person_id` from the number's
+  current Snowmoon account when the code leaves it null. The migration is therefore safe with live code.
+- **The sign-in release window:** a linked Lens, Bluesky or wallet sign-in signs in as the Farcaster ID, so its work is
+  recorded under the FID. It therefore belongs to that FID's Snowmoon account. Unlinking moves nothing, so this model
+  needs no exception and no "except" clause.
+- **One change of meaning to note** (open question 1): today's live Privacy says that unlinking a wallet shows its
+  work "with the wallet's address again". From v2, a wallet linked at the migration has its earlier rows owned by the
+  Snowmoon account, and an unlink no longer returns them. The new §6 says so from the day v2 goes live. Links made
+  under the old words change meaning at that point.
 
-- No row is owned by, moved to or keyed by the Snowmoon account. Its id only groups social accounts and wallets.
-- Unlinking takes the social account's or wallet's own work, entries and balance with it, and its byline goes back to
-  its own name.
-- **The one exception:** in the sign-in release (before v2), a linked Lens, Bluesky or wallet sign-in signs in as the
-  Farcaster account. Work made that way is recorded under, and stays with, that social account. The approved Privacy
-  §6 covers it ("…except what it made while linked before {date}, which stays with the social account it signed in
-  as").
+### Table by table (owner = the Snowmoon account)
 
-## 1. The model
+| Today (keyed by sign-in number) | In v2 |
+|---|---|
+| `image_asks`, `remix_asks`, `sheet_remix_asks`, `chat_calls` | Owned and counted per Snowmoon account. The limit is one Snowmoon account's. Unlinking frees no count, because the rows stay. |
+| `check_decisions` | Stay with the social account (unchanged). The Snowmoon account passes while any linked social account has a current pass, and an unlinked one stops counting at once. |
+| Wallet balances, person balances | One balance per Snowmoon account: the ledger rows (payments, debits, credit-backs) are stamped with their Snowmoon account. At migration each number's ledger rows go to its Snowmoon account, so its balance is their sum. No money moves; this is only where the rows are counted. Any sign-in can spend it, and it stays when a sign-in leaves. |
+| `challenge_marks`, `challenge_eligibility` | Owned by the Snowmoon account; `fid` stays the sign-in it was published or submitted with (the public record names it). One a day per Snowmoon account. A prize is claimed by the main sign-in. |
+| `elements`, `recipes`, `remix_frames`, `storyboards`, designs | Owned by the Snowmoon account. The byline is its chosen name, drawn at render. The stored `by_name` is a fallback only. |
+| `agents`, agent keys | Owned by the Snowmoon account, 3 per account. Keys act for it. |
+| `AGENTS.people`, `ADMINS` (by sign-in) | Apply while a listed sign-in is linked. |
+| `likes`, `take_likes`, `ratings`, `picks` | Owned by the Snowmoon account. Totals count each Snowmoon account once. |
+| `contributor_consents` | Owned by the Snowmoon account, recorded with the sign-in that gave the consent. |
+| `mp_*`, `notes`, `suggestions`, `version_posts` | Owned by the Snowmoon account. |
 
-- **Snowmoon account** = a row in `studio.people` (v1). It is private: never shown, never in a URL or a public record.
-  It owns nothing.
-- **Social account or wallet** = what signs in, named by today's person number (`src/lib/people.ts`: FID > 0; wallet
-  −id; Lens/Bluesky −(10⁹ + id)). Today's numbers stay as they are. No row is renumbered or rewritten.
-- **Membership** = `studio.person_accounts` (v1): each social account or wallet is in one Snowmoon account at a time
-  (A1), with history. Limits per Snowmoon account: one Farcaster, one Lens, one Bluesky, up to 3 wallets (A6). A6 is
-  also what caps the bonus.
-- **Today's data.** v1's backfill copies `wallet_links` and `social_links` into memberships and changes neither table.
-  The sign-in release's `social_links` carry over unchanged, given the release-fix lane's refusal of a second social
-  account of one network per Snowmoon account.
-- **Writes record the real sign-in.** v1 wrote one "acting number" (Farcaster first). v2 writes the social account or
-  wallet that actually signed in, into the existing columns (`created_by_fid`, `image_asks.fid`, `remix_asks`,
-  `challenge_marks.fid` and the rest). No new columns are needed.
-- **v1's `person_id` row columns are dropped** before v1 is applied (on `image_asks`, `remix_asks`,
-  `challenge_eligibility`, `challenge_marks`). They would stamp rows with a Snowmoon account and break the ownership
-  rule after an unlink. Limits are counted from the sign-in columns plus membership history. `via`/`via_account` on
-  eligibility stay, because they name a social account.
+## 2. Name, icons and the main sign-in
 
-### Table by table
+- **Chosen name:** one of the linked sign-ins' names (Farcaster username; Lens `lens/name`; Bluesky handle only if it
+  resolves to its DID; a wallet's short address). It carries its network's icon, served from our own files, with
+  screen-reader text. The default (also set at migration, so no byline changes on day one) is the name shown today.
+  If the named sign-in is unlinked, the next linked one is used, and all the account's work shows under it.
+- **Main sign-in:** the person chooses it, and the page suggests a wallet ("A wallet can't be suspended by a
+  network"). The default at migration is the Farcaster ID of a linked group, else the oldest sign-in. A new Snowmoon
+  account starts with its first sign-in as main.
+- **Main-only actions:**
+  - link a sign-in;
+  - unlink another sign-in;
+  - choose another main;
+  - claim a prize and give or change its payout address;
+  - join another Snowmoon account (section 3).
+- **Any sign-in can:** make, publish, spend the balance, submit and withdraw entries, change the chosen name, list
+  sign-ins on the page, and ask for a new main sign-in.
+- **The main sign-in can't unlink itself.** It first chooses another main.
+- **A non-main sign-in may unlink itself** (open question 2). It takes nothing, and it frees someone whose social
+  account was taken over to leave without the main.
 
-| Today (keyed by sign-in number) | Owned by | The Snowmoon account's view |
-|---|---|---|
-| `image_asks`, `remix_asks`, `sheet_remix_asks` | The social account or wallet that asked | Used count = sum over its linked sign-ins' rows (see open question 3 for the day of an unlink); one limit, not a sum of limits. |
-| `check_decisions` | The social account (unchanged) | Passes while any linked social account has a current pass. An unlinked one stops counting at once. |
-| Wallet balances, person balances (`person-balance`) | The social account or wallet the payment was credited to | It may spend any linked sign-in's balance (section 4). Each debit and credit-back is recorded against the balance it touched. |
-| `chat_calls` | The sign-in that asked | Summed over linked sign-ins (`assistant-any-account.md`). |
-| `challenge_eligibility`, `challenge_marks` | The social account that published or submitted (`fid`; the IPFS record names it) | One-a-day is counted over linked sign-ins. "Three different" and the equal share group sign-ins by links (section 3). A prize is claimed only by that social account (section 5). |
-| `elements`, `recipes`, `remix_frames`, `storyboards`, designs | The sign-in that made it (the Farcaster account for sign-in-release work) | Byline drawn at render: sign-in, then its Snowmoon account now, then the chosen name. Unlinked: its own name. `by_name` is a fallback only. |
-| `agents`, agent keys | The sign-in that made them | 3 agents counted over linked sign-ins. They leave with their sign-in. |
-| `AGENTS.people`, `ADMINS` | The listed sign-ins | Applies while any listed sign-in is linked. Nothing carries over after an unlink. |
-| `likes`, `take_likes`, `ratings`, `picks` | The sign-in | Public totals count each Snowmoon account once. |
-| `contributor_consents` | The sign-in that gave it | Covers the Snowmoon account while linked. |
-| `mp_*`, `notes`, `suggestions`, `version_posts` | The sign-in | Listed together on the You page. |
-| Link events (`person_accounts` history) | — | Recent link and unlink events on the You page (section 6). |
+### Recovering a lost main sign-in
 
-## 2. The chosen name and icons
+- Any other sign-in can ask for a new main sign-in: itself or another linked sign-in. Only one request is pending at a
+  time.
+- The request takes effect **30 days** after it was made, at the same time of day, unless it is cancelled.
+- **Meanwhile:**
+  - A banner shows on the You page for every sign-in of the account: "@bea asked to become your main sign-in on 7 Nov.
+    It takes effect on 7 Dec unless your main sign-in cancels it."
+  - The current main keeps every power. It can cancel the request, or unlink the requester, which also cancels it.
+  - The requester can withdraw it.
+  - The requester gains nothing until the day it takes effect. In particular it can't claim a prize, give a payout
+    address, or link or unlink sign-ins.
+- **When it takes effect,** the new main has every main power, including unlinking the old one.
+- Every request, cancellation, withdrawal and change stays in the You page's events.
 
-- `display_account` per Snowmoon account: a linked social account, or a wallet if there is no social account.
-- **Default** (also set when v2 ships, so no byline changes on day one): the name shown today (Farcaster, else Lens,
-  else Bluesky, else wallet). For a new Snowmoon account: the first sign-in used.
-- **Names:** the Farcaster username (latest seen), the Lens username (`lens/name`), the Bluesky handle only if it
-  resolves back to its DID (else "a Bluesky account"), or the wallet address shortened.
-- **Icons:** every name, everywhere, carries its network's icon, or a wallet glyph beside the short address. Each has
-  screen-reader text ("on Bluesky"). Icons are served from our own files, single-colour, and used only to name the
-  network.
-- Changing the name changes it everywhere at once, past work included (bylines are drawn at render).
+## 3. Linking and joining
 
-## 3. Joining, rule by rule
+- **Linking a fresh sign-in:** the main sign-in and the new sign-in in one request (both proofs on the server). Refused
+  if it breaks A6, A8, A2 (the new sign-in is waiting to join a *different* Snowmoon account) or A5.
+- **Joining two Snowmoon accounts that each have history:** only with **the main sign-in of each**, in one request.
+  Never by us, and never through a non-main sign-in, because that would let a lesser key give away an account's work.
+  - The older account survives with its main. The other's sign-ins, rows, balance and entries all become the
+    survivor's.
+  - Rows keep their stamp and resolve through the join record (`person_joins`), so nothing is rewritten.
+  - It is final: unlinking afterwards moves nothing back.
+  - It is refused if it breaks A6, A2 or A5.
+  - **Today's counts add up** under one limit.
+  - **Any current pass counts.**
+  - **Balances add up** (the same ledger rows, now counted together).
+  - **Entries:** both stand, including two made today. From then on there is one a day.
+- **The automatic wallet link** (Farcaster lists the address) would add a sign-in without the main sign-in. v2 keeps
+  it only when that FID is the main sign-in, and only for a wallet with no history (open question 3).
+- **Races:** each link, unlink, join, main change and reserve locks each Snowmoon account involved, in ascending id
+  order, and checks again inside the transaction. The unique indexes are the backstop.
 
-- **How:** only by signing in with both in one request. Never by a moderator or the owner. The automatic wallet link
-  (Farcaster lists the address) stays only for a wallet with no history.
-- **Two Snowmoon accounts with history** become one: the older id survives, and the other's sign-ins are re-added
-  under it (`how = 'joined'`). No row changes owner. The join is refused if it breaks A6, A2 or A5.
-- **Daily counts:** today's counts add up, and the result is one limit. A join only ever leaves less.
-- **Free check:** any current pass counts. Joining never triggers a lookup.
-- **Balances:** each stays owned by its sign-in. After the join, the Snowmoon account may spend all of them.
-- **Challenge entries made before linking** stay with their social accounts. From the join on, they count as one
-  Snowmoon account: one submission a day; if both sides already submitted today, both stand. "At least three
-  different" and the equal share count each Snowmoon account once. To stop an unlink from splitting one maker into
-  two during the challenge, sign-ins that were linked at any time during the entry window count as one at close.
-- **Races:** each link, join, unlink and reserve locks each Snowmoon account involved, in ascending id order, and
-  checks again inside the transaction. The unique indexes are the backstop. The loser gets the refusal for the state
-  it finds.
-- **Linking never raises a cap,** except the bounded challenge bonus (section 5). Rotating sign-ins is blocked by A2
-  and A5.
+## 4. Balance
 
-## 4. Balances while linked (owner, 2026-11-05)
+- One balance per Snowmoon account. Any sign-in can spend it, and every debit records the sign-in that spent it.
+- A payment is credited to the Snowmoon account named in the wallet's signed statement. person-balance's approved
+  statement "Credit my payments to the Farcaster account @name (FID n) on snowmoon.party. Payments are final." changes
+  to name the Snowmoon account, for example "Credit my payments to the Snowmoon account of @name (FID n)…". This needs
+  a new approval (open question 4).
+- Unlinking a sign-in leaves the balance where it is. A wallet that leaves takes no balance; its later payments go to
+  whichever Snowmoon account it then signs in to.
+- A credit-back goes to the Snowmoon account that was debited.
+- **What changes in person-balance:**
+  - The balance is keyed by the Snowmoon account, not the sign-in number.
+  - "A linked wallet's balance isn't spent while linked" goes: there is one balance.
+  - The statement's words change (above).
+  - Payment rules, finality and the claim checks stay.
 
-- A Snowmoon account may spend the balance of any of its linked social accounts or wallets. The order is the
-  signed-in one's own balance first, then the others in the order they were linked. Every debit names the balance it
-  came from. A credit-back goes to that same balance, even if it has been unlinked since.
-- Each balance stays owned by its sign-in. When that sign-in is unlinked, whatever is left goes with it, and the
-  Snowmoon account can no longer spend it. Nothing is ever transferred between balances.
-- **What changes in person-balance** (`origin/person-balance`):
-  - Its design says a linked wallet's own balance "isn't spent while linked", and that a linked Lens/Bluesky
-    account's balance "isn't spent while it signs in as the FID". Both become "spendable by the Snowmoon account while
-    linked".
-  - Its spending code gains the order above and per-balance debits.
-  - Its approved Terms §6a and Privacy §4 sentence "A balance stays with the account it was paid to, including when
-    that account is linked to another." stays true but is no longer the whole truth. It is redrafted in section 8.
-  - Its signed statement ("Credit my payments to the Farcaster account @name (FID n)…") is unchanged: payments are
-    still credited to one social account.
+## 5. Challenge: entries, bonus, prizes
 
-## 5. The challenge bonus and prizes
+- **Who may remix:** a Snowmoon account with a linked social account that has a current pass. One submission a day
+  per Snowmoon account (Pacific day).
+- **Makers at close:** "three different" and the equal share count Snowmoon accounts. Two Snowmoon accounts that
+  shared a sign-in at any time while entries were open count as one maker.
+- **The record** names the public id of the social account the entry was published with. An entry published with a
+  wallet is open question 5.
+- **Bonus:** challenge remixes only, in the window: `min(5, 3 + max(0, passing − 1))`, where `passing` = the linked
+  Farcaster, Lens and Bluesky accounts *now* with a current stored pass. Nothing is looked up to grant it, and wallets
+  don't count. A6 makes 5 the ceiling.
+  - **Why it can't be farmed:**
+    - A passing social account that leaves drops out of the next count.
+    - It waits 30 days before it can lend its pass to another Snowmoon account, which is longer than the window.
+    - During that wait it gets no free counts on its own (A2).
+    - A5 caps how often it can move.
+    - A4: in one challenge, a pass that made one Snowmoon account's version eligible never makes another's eligible.
+- **Prizes:** claimed, and the payout address given, only with the Snowmoon account's main sign-in. Once given, the
+  address can be changed only by the main sign-in, and each change is logged. If a recovery request is pending, the
+  claim still needs the current main.
+- **Nudges** (DRAFT; each names only the networks not yet linked):
+  - Default:
+    - Doesn't pass: "Your Lens account doesn't qualify for free images yet. Link your Farcaster or Bluesky account: if
+      either passes, you get them."
+    - Passes: "Link your other accounts to sign in with any of them and keep all your work in one place."
+  - Challenge:
+    - Doesn't pass: "To remix for the challenge for free, link a Farcaster or Bluesky account that qualifies."
+    - Passes: "Link your other accounts: each one that also qualifies adds a free challenge remix a day, up to 5."
+  - With the main sign-in in this model, "Link" goes to a page that asks the main sign-in to confirm.
 
-**Bonus.** In the challenge window, for challenge remixes only, the free count a day =
-`min(5, 3 + max(0, passing − 1))`. Here `passing` = the linked Farcaster, Lens and Bluesky accounts with a current
-stored pass (today's rule, not expired, not withdrawn). Nothing is looked up to grant it, and wallets never count.
-With A6, 5 is also the structural ceiling. Outside the window nothing changes. Paid remixes are unchanged, one
-submission a day stays, and linking never adds an entry.
+## 6. Unlinking and the waits
 
-**Not farmable:**
-- Relinking to the same Snowmoon account gains nothing.
-- Joining another Snowmoon account waits 30 days (A2) with no pass meanwhile. The window is about 17 days.
-- One social account can't be in two Snowmoon accounts (A1), and in sequence A2, A5 and A4 block it.
-- An unlink drops the bonus from the next count.
-- A6 blocks two accounts of one network.
-- A payment never creates a pass.
+| Action | Who | Allowed | Then |
+|---|---|---|---|
+| Unlink another sign-in | Main sign-in | Unless it's the last sign-in | The sign-in leaves with nothing. **A2:** it can join a *different* Snowmoon account only after 30 days, with no free counts or passes on its own meanwhile. It may rejoin its own at once, which isn't a move. |
+| Unlink itself | A non-main sign-in (open question 2) | Always | The same as above. |
+| Unlink itself | The main sign-in | No: it chooses another main first | — |
+| Link or join | Main sign-in (and, for a join, the other account's main) | If A6, A8, A2 and A5 allow it | Joining a different Snowmoon account than its last counts as a move. |
+| Ask for a new main | Any non-main sign-in | One request at a time | Takes effect after 30 days unless cancelled. |
 
-**Prizes.** A prize for an entry is claimed, and its payout address given, only by signing in with the social account
-that made the entry. Signing in with another sign-in of the same Snowmoon account isn't enough. The claim page shows
-which social account to sign in with (by its public name and icon). The address is kept with that social account's
-claim.
-
-**Nudges** (DRAFT; each names only networks not yet linked; the examples are for a Lens sign-in):
-- Default (You page, sign-in, everyday images).
-  - Doesn't pass: "Your Lens account doesn't qualify for free images yet. Link your Farcaster or Bluesky account: if
-    either passes, you get them."
-  - Passes: "Link your other accounts to sign in with any of them and keep all your work in one place."
-- Challenge (/challenge, challenge remixes, its free-limit refusal).
-  - Doesn't pass: "To remix for the challenge for free, link a Farcaster or Bluesky account that qualifies."
-  - Passes: "Link your other accounts: each one that also qualifies adds a free challenge remix a day, up to 5."
-
-## 6. Unlinking, waits and the You page
-
-**Which wait applies to which action** (A2 = 30 days before joining a *different* Snowmoon account, with no free
-counts, passes or bonus meanwhile; A5 = at most 2 moves in 365 days, where a move is joining a different Snowmoon
-account than the last; both unchanged):
-
-| Action | Allowed | Then |
-|---|---|---|
-| **Self-unlink** (signed in with the sign-in being removed) | Always: even with an entry in an unpaid challenge, and even if others are linked | It is its own Snowmoon account at once and takes its own things. A2: it can join a *different* Snowmoon account only after 30 days. Rejoining the one it left is allowed any time and isn't a move. |
-| **Unlink another** (signed in with any other linked sign-in) | If it isn't the last sign-in and isn't held by A7 (an entry or eligible version in an unpaid challenge) | Same as self-unlink: freed for someone else only after 30 days (A2). |
-| **Link / join** | If A6, A8 (10 attempts a day), A2 (no wait for a *different* Snowmoon account) and A5 allow it | Joining a different Snowmoon account than the last one counts as a move. |
-
-This reads the owner's "unlinking another … frees it only after 30 days" as A2, unchanged, and applies the same wait
-to self-unlink. If self-unlink freed a sign-in at once, a passing social account could leave and join a second
-Snowmoon account on the same day, and its free counts and bonus would serve both (open question 1).
-
-**You page: recent events.** A list of the last 30 days of links and unlinks for this Snowmoon account, newest first.
-Each line has the date, the sign-in's name and icon, what happened, and which sign-in did it. Examples: "7 Nov · Linked
-lens/bea (by @alice)"; "11 Dec · lens/bea unlinked itself"; "13 Dec · @alice unlinked (by lens/cara); it can join
-another Snowmoon account from 12 Jan". A sign-in that left sees its own events on its own You page. Nothing in the list
-is public.
+- **A5 is not moot.** Ownership no longer moves, but a passing social account still lends its pass to whichever
+  Snowmoon account it is in. A5 caps how many Snowmoon accounts one pass can serve in a year, and A2 spaces them out.
+- **A7 (the challenge freeze) becomes moot.** Entries belong to the Snowmoon account and never leave with a sign-in.
+  The "shared a sign-in while entries were open" rule stops a split from adding a maker. A7 is dropped (open
+  question 6).
+- **You page events:** links, unlinks, main changes, and recovery requests with their outcome. Each shows the date,
+  the sign-in's name and icon, and which sign-in did it. They cover the last 90 days, newest first, and are never
+  public.
 
 ## 6a. Tests (to be built with the feature, in `test:linked-accounts`)
 
-Dates 2026–2027, at noon Pacific. The challenge `remix-2026-11` takes entries 6–22 Nov. A7 is lifted on 10 Dec
-(payout, by emptying `frozenChallenges`).
+Dates 2026–2027, noon Pacific. Entries are open 6–22 Nov; results are on 4 Dec.
 
-**T1. The A/B/C/D chain** (every step allowed as dated):
+**T1. The chain.** Which sign-in is main is shown at each step.
 
-| Date | Step | Rules | Result |
+| Date | Step | Main | Allowed because |
 |---|---|---|---|
-| 6 Nov | Farcaster **A** signs in (Snowmoon account P): Neynar pass, $2.00, a remix submitted as an entry | — | allowed |
-| 7 Nov | Lens **B** links to P: own Lens pass, $1.00; signed in as B, a remix submitted (P's entry for 7 Nov) | A6, B's move 1 | allowed |
-| 11 Dec | B unlinks itself | self-unlink | allowed; B's wait to 10 Jan |
-| 12 Dec | New Lens **C** links to P | A6, C's move 1 | allowed |
-| 13 Dec | C unlinks A (another) | A7 lifted; not the last | allowed; A's wait to 12 Jan |
-| 14 Dec | New Farcaster **D** links to P | A6, D's move 1 | allowed |
+| 6 Nov | Farcaster **A** signs in, making Snowmoon account S. A has a pass and pays $2.00 into S. A remixes and submits an entry. | A | — |
+| 7 Nov | A (main) links Lens **B**. B has its own pass. B pays $1.00 into S, remixes and submits S's 7 Nov entry. | A | A6; B's move 1 |
+| 11 Dec | A (main) unlinks B. | A | main; not the last sign-in |
+| 12 Dec | A (main) links a new Lens **C**. | A | A6 (B has gone); C's move 1 |
+| 13 Dec | A chooses C as main, then C (main) unlinks A. A's own unlink needs the main sign-in, and A can't unlink itself while it is main. | C | main |
+| 14 Dec | C (main) links a new Farcaster **D**. | C | A6 (A has gone); D's move 1 |
 
-After 14 Dec (P = {C, D}):
-- None of A's or B's work, entries, balance, check results or bylines belongs to or shows under P, C or D.
-- A shows under its Farcaster name and B under its Lens name, including B's 7 Nov remix made while linked.
-- A's and B's balances are unchanged by C and D.
-- P passes only on C's or D's own decisions.
-- A and B get no free counts until 12 Jan and 10 Jan.
-- A release-window fixture (made by B's sign-in before v2, recorded under A) stays A's throughout.
-- The You pages of P, A and B list exactly their own events.
+**After 14 Dec,** S = {C (main), D}:
+- S still owns everything A and B made: their work, both entries, the $3.00 less what was spent, and today's counts.
+  It all shows under S's chosen name, which is now C's or D's name.
+- A and B each own nothing. Their own Snowmoon accounts are empty: no work, entries or balance.
+- The challenge record still names A's FID and B's Lens address for their entries.
+- S passes only on C's or D's own checks. A's and B's passes count for nothing in S.
+- A has no free counts until 12 Jan and B none until 10 Jan (A2).
+- A release-window fixture (made by B's sign-in before v2, recorded under A's FID) belongs to S throughout.
+- **Planted faults** that must fail the test: work or balance leaving with A or B; a byline still showing A's name
+  after A left; S passing on A's check.
 
-**T1 planted refusals:**
-1. C links on 10 Dec while B is linked: A6.
-2. A unlinks B on 20 Nov: A7 (B's entry).
-3. D links on 12 Dec while A is linked: A6.
-4. B joins Q (Farcaster E) on 20 Dec: A2. On 11 Jan: allowed (move 2).
-5. B leaves Q on 1 Feb and joins R on 5 Mar (wait over on 3 Mar): A5 (a third move since 7 Nov 2026). On 8 Nov 2027:
-   allowed.
-6. B rejoins P on 20 Dec: not a move, no wait, but A6 (C). Variant without C: allowed, and B's moves stay 1.
-7. A rejoins P on 20 Dec: A6 (D).
-8. A asks for a free remix on 20 Dec: A2. On 13 Jan: allowed.
-9. Ownership faults, each of which must fail the test:
-   - bylines drawn from a Snowmoon account stamped on the row;
-   - counting by a row's `person_id`;
-   - C counting A's pass.
+**T2. Takeover through a non-main fails at every step.** At each date in T1, every sign-in that isn't main tries each
+of the following, and each is refused with "Only your main sign-in can do that":
+- link a new sign-in;
+- unlink another sign-in;
+- choose itself or another as main;
+- claim a prize;
+- give or change a payout address;
+- join S to another Snowmoon account, even together with that other account's main.
 
-**T2. Spending a linked balance.**
-- On 8 Nov, signed in as A with A's balance at $0, a paid remix is debited from B's $1.00, and the debit names B.
-- On 9 Nov a paid remix fails. The credit-back goes to B, even though it is processed after B self-unlinks on 9 Nov.
-- After B unlinks, signed in as A: a paid remix can't use B's balance (refused for lack of balance, if A's own
-  balance is $0). B keeps the rest.
-- Planted faults: a debit with no named balance; a transfer between balances; spending B's balance after the unlink.
-  Each must fail the test.
+The non-mains tested: B on 7 Nov–11 Dec; C on 12 Dec (when A is main); A after 13 Dec (no longer in S, so refused as
+not linked); D on 14 Dec. A non-main may make, spend and submit (allowed), and may unlink itself (allowed; open
+question 2).
 
-**T3. Prize claim.** B's 7 Nov entry wins.
-- Claiming signed in as A (same Snowmoon account, 7 Nov–11 Dec): refused, "Sign in with lens/bea to claim".
-- Claiming as C or D after 14 Dec: refused.
-- Claiming as B: allowed; the payout address is stored with B's claim.
-- Planted fault: a claim accepted from any linked sign-in must fail the test.
+**T3. Recovering the main sign-in.**
+- 8 Nov: B asks to become main. The banner shows for A and B, effective 8 Dec. On 9 Nov A cancels: B stays non-main
+  and the event list shows the request and the cancellation.
+- Variant: not cancelled. On 7 Dec B still can't unlink A, claim, or give an address. From 8 Dec noon B is main and A
+  is not; B may then unlink A.
+- Variant: A unlinks B on 20 Nov while the request is pending: the request is cancelled.
+- Variant: a second request while one is pending: refused.
+- Planted fault: a pending request treated as effective before day 30 must fail the test.
 
-**T4. Self-unlink always allowed.**
-- B unlinks itself on 20 Nov, with an entry in the unpaid challenge: allowed. The entry stays B's.
-- At close (22 Nov) A and B still count as one maker for "three different" and the equal share (linked during the
-  window).
-- B's wait runs to 20 Dec. B joining Q on 19 Dec is refused (A2); on 20 Dec it is allowed.
-- Self-unlink of P's last sign-in is a no-op, not an error.
+**T4. Balance.**
+- 8 Nov: B spends from S's $3.00, and the debit records B.
+- 11 Dec: after B is unlinked, S's balance is unchanged and B's own Snowmoon account has $0.
+- A credit-back for a generation that B started on 10 Dec and that fails after the unlink goes to S.
+- A payment B makes on 20 Dec, signed for B's own Snowmoon account, goes there, not to S.
+- Planted faults: the balance splitting by sign-in; a payment credited to S after B left.
 
-**T5. Unlinking another frees it only after 30 days.**
-- A unlinks B on 11 Dec: allowed. B joining Q on 10 Jan before noon is refused (A2); after 10 Jan noon it is allowed.
-- Unlinking another sign-in under A7 is refused; the same sign-in may still unlink itself (T4).
+**T5. Prize.**
+- B's 7 Nov entry wins on 4 Dec. On 5 Dec, B claims: refused (not main). A claims and gives the address: allowed.
+- On 14 Dec, C (now main) may change the address (logged). A, after leaving, can't.
+- The record still names B's Lens address.
 
-**T6. The bonus.**
-- On 8 Nov, P with A and B both passing: free challenge remixes = 4.
-- The test also covers:
-  - a third (Bluesky) passing account gives 5, and nothing gives 6;
+**T6. Bonus.**
+- 8 Nov: S with A and B passing gets 4 free challenge remixes.
+- Variant: A unlinks B on 10 Nov: the next count is 3. B, on its own, gets no free counts until 10 Dec. B's attempt
+  to join S2 on 15 Nov is refused (A2).
+- Also covered:
+  - three passing accounts give 5, and nothing gives 6;
   - a wallet adds nothing;
   - an expired or withdrawn pass adds nothing;
-  - after B self-unlinks, the next count is 3;
-  - outside the window, the count is unchanged by linking.
+  - outside the window, nothing changes.
+
+**T7. The 30 days and A5.**
+- B, unlinked on 11 Dec, joins Q on 20 Dec: refused (A2). On 11 Jan: allowed (move 2).
+- B rejoins S on 20 Dec: not a move and no wait, but refused (A6: C is there). In the variant without C, it is allowed.
+- B leaves Q on 1 Feb and joins R on 5 Mar: refused (A5: a third move). On 8 Nov 2027: allowed.
+
+**T8. Makers at close.** S (A, B) and S2 never shared a sign-in: two makers. A variant where B left S on 15 Nov and
+then (after a wait shortened in the test) joined S2 before 22 Nov: S and S2 count as one maker.
+
+**T9. Migration mapping.**
+- A fixture with a wallet linked to an FID, a Bluesky account linked to Lens and then to that FID, an ended link and
+  an unlinked number with rows.
+- After the backfill, every row of a linked number belongs to its group's Snowmoon account, and the ended-link and
+  unlinked numbers own theirs.
+- An insert by old code (owner null) is stamped by the trigger.
 
 ## 7. Public pages
 
-- **One page per Snowmoon account, at the chosen name's address:** `/@<fname>` (Farcaster; today's adaptation URLs
-  keep working), `/bsky/<handle>`, `/lens/<name>`, `/w/<0x…>`.
-- **Contents:** the chosen name with its icon, published work from every linked sign-in (newest first, P5g), and
-  other social accounts only if ticked ("Show on my page").
-- An unlisted sign-in's own address answers "not found" (a redirect would reveal the link).
-- Linking is still public through the work. The texts say so and never promise the link is hidden.
+There is one page per Snowmoon account, at its chosen name's address: `/@<fname>`, `/bsky/<handle>`, `/lens/<name>`,
+`/w/<0x…>`. It shows all the account's work, newest first, and other sign-ins only if ticked. An unlisted sign-in's
+own address answers "not found". Linking stays visible through the work, and the texts never promise it's hidden.
 
-## 8. Terms and Privacy (before and after)
+## 8. Terms, Privacy and About (DRAFT, before and after; nothing approved)
 
-"Before" lines are the approved linked-accounts and person-balance lines on `origin/linked-accounts` (Terms 2n41v2,
-Privacy io2dz) and, for §6e, `origin/contest`. "After" lines are DRAFT unless marked approved: shortest true
-sentences, no implementation details, no numbers that may change (except the 30 days, already in the approved text).
+The "before" lines are on `origin/linked-accounts` (Terms 2n41v2, Privacy io2dz) and, for §6e, `origin/contest`. The
+"after" lines are the shortest true sentences, with no implementation details and no changeable numbers beyond the
+30 days the texts already state.
 
-**Privacy §6: APPROVED** (reviewed by the coordinator, approved by the owner, 2026-11-05), in exactly these words:
-"If you link social accounts or wallets to your Snowmoon account, what you made with any of them, before and after
-linking, is shown under the one name you choose, so anyone can see that they are yours; if you unlink one, its work
-is shown under its own name again, except what it made while linked before {date}, which stays with the social account
-it signed in as." `{date}` = the day the v2 release goes live, filled in at merge.
-- Before (approved earlier, replaced): "If you link accounts, what you made with any of them, before and after
-  linking, is shown under one name (your Farcaster name if you linked one; otherwise your Lens username or your
-  Bluesky handle), so anyone can see that they are yours; if you unlink one, its work is shown under its own name
-  again."
-- The same section's bracket "(your Farcaster name; for a wallet account, its address shortened; for a Lens account,
-  its Lens username; for a Bluesky account, its handle; your Farcaster ID on quote cards)" becomes "(the name you
-  choose for your Snowmoon account, with its network's mark; a Farcaster ID on quote cards)".
-
-**Terms §4** (the account sentences).
+**Terms §4.**
 - Before: "Your account here is a Farcaster account, a wallet address, a Lens account or a Bluesky account. You can
   link several of them, each by signing in with it; linked accounts are one person here, so free daily images and
   frames, limits and the remix challenge count once for them all, and you pass the site's check if any of them does.
   An account belongs to one person at a time, we don't merge two people's accounts, and an account you unlink can be
   linked to someone else only after 30 days."
-- After: "You sign in with a social account (Farcaster, Lens or Bluesky) or a wallet. Your Snowmoon account is the
-  social accounts and wallets you link to it, each by signing in with it; signing in with any of them signs you in to
-  it. What you make, your challenge entries, balances and check results belong to the social account or wallet you
-  made them with; your Snowmoon account brings them together under one name, free daily images and frames, limits and
-  the remix challenge count once for it (except as section 6e says), and it passes the site's check if any of its
-  social accounts does. A social account or wallet is in one Snowmoon account at a time, and two are joined only when
-  you sign in with both, never by us. A social account or wallet can always unlink itself; once unlinked, it can join
-  another Snowmoon account only after 30 days."
-- The rest of §4 ("Free daily images and frames come with a Farcaster account, with a Lens account whose Lens score
-  is…") changes "account" only where it means a sign-in, which it already does. One edit: "You can prepay for
-  generations with any of these accounts (section 6a)" becomes "…with any social account or wallet (section 6a)".
+- After: "You sign in with a social account (Farcaster, Lens or Bluesky) or a wallet. Your Snowmoon account holds your
+  work, challenge entries, balance and name; each social account or wallet you link to it is a way in, and any of them
+  can make, spend and enter. One of them is your main sign-in: only it can link or unlink the others, choose another
+  main sign-in or claim a prize. If you lose it, another of your sign-ins can ask to become the main one; that takes
+  effect after 30 days unless your main sign-in cancels it. Your Snowmoon account gets free daily images and frames,
+  and can take part in the remix challenge, only while a linked social account passes the site's check, and these
+  count once for it (except as section 6e says). Two Snowmoon accounts are joined only when you sign in with the main
+  sign-in of each, never by us. A social account or wallet you unlink takes nothing with it, and can join another
+  Snowmoon account only after 30 days."
 
-**Terms §5** (the byline).
+**Terms §5** (byline).
 - Before: "Your name is shown with it: your Farcaster name; for a wallet account, its address shortened; for a Lens
   account, its Lens username; for a Bluesky account, its handle. Work made with a wallet that is linked to your
   Farcaster account is shown with your Farcaster name."
-- After: "Your name is shown with it: the name you choose for your Snowmoon account (a Farcaster name, a Lens username,
-  a Bluesky handle or a wallet's address shortened), with its network's mark, on work made with any of its social
-  accounts or wallets."
+- After: "Your name is shown with it: the name you choose for your Snowmoon account from its sign-ins (a Farcaster
+  name, a Lens username, a Bluesky handle or a wallet's address shortened), with its network's mark."
 
-**Terms §6a** (balances).
-- Before: "A balance stays with the account it was paid to, including when that account is linked to another."
-- After: "A balance belongs to the social account or wallet it was paid to; while that one is linked, your Snowmoon
-  account can spend it, and if it is unlinked, its balance goes with it."
+**Terms §6a** (person-balance sentences).
+- Before: "If you are signed in with Farcaster, Lens or Bluesky, your wallet first signs a message naming your
+  account, and a payment from that wallet made soon after is added to that account's balance." and "A balance stays
+  with the account it was paid to, including when that account is linked to another."
+- After: "Your wallet first signs a message naming your Snowmoon account, and a payment from that wallet made soon
+  after is added to its balance." and "Your balance belongs to your Snowmoon account: any of its sign-ins can spend
+  it, and it stays if one is unlinked."
 
-**Terms §6e** (the challenge).
-- Before (contest): "During the challenge, anyone signed in with a Farcaster account or a Bluesky account that passes
-  the site's check for it may remix its characters' sheets; making other sheets and styles stays by invitation."
-- After: "During the challenge, anyone whose Snowmoon account passes the site's check may remix its characters'
-  sheets; making other sheets and styles stays by invitation. Each further linked social account that passes its own
-  check adds free challenge remixes a day, up to the number the challenge page shows; it never adds an entry."
-- Before (contest): "Each person can submit one entry a day (Pacific time), for any character, and can withdraw any
-  of them until entries close; a withdrawn entry still uses its day. A character needs entries from at least three
+**Terms §6e** (challenge).
+- Before: "During the challenge, anyone signed in with a Farcaster account or a Bluesky account that passes the site's
+  check for it may remix its characters' sheets; making other sheets and styles stays by invitation."
+- After: "During the challenge, anyone whose Snowmoon account has a linked social account that passes the site's check
+  may remix its characters' sheets; making other sheets and styles stays by invitation. Each further linked social
+  account that passes its own check adds free challenge remixes a day, up to the number the challenge page shows; it
+  never adds an entry."
+- Before: "Each person can submit one entry a day (Pacific time)… A character needs entries from at least three
   different people to get a final version; several entries by one person count once."
-- After: "Each Snowmoon account can submit one entry a day (Pacific time), for any character, and can withdraw any of
-  them until entries close; a withdrawn entry still uses its day. A character needs entries from at least three
-  different Snowmoon accounts to get a final version; several entries from one count once, as do entries from social
-  accounts that were linked together at any time while entries were open."
-- New sentence (prizes): "A prize for an entry is claimed, and its payout address given, only by signing in with the
-  social account that made the entry."
-- In the IPFS record sentence: "its maker's Farcaster ID (or, for a Bluesky account, its DID)" becomes "the public id
-  of the social account it was made with (a Farcaster ID, a Lens address or a Bluesky DID)".
+- After: "Each Snowmoon account can submit one entry a day (Pacific time)… A character needs entries from at least
+  three different Snowmoon accounts to get a final version; several entries from one count once, and Snowmoon
+  accounts that shared a sign-in while entries were open count as one."
+- New: "A prize is claimed, and its payout address given, only with your Snowmoon account's main sign-in."
+- The record: "its maker's Farcaster ID (or, for a Bluesky account, its DID)" becomes "the public id of the social
+  account it was published with (a Farcaster ID, a Lens address or a Bluesky DID)".
+
+**Privacy §6.** The text approved earlier today, now **superseded and needing a new approval**: "If you link social
+accounts or wallets to your Snowmoon account, what you made with any of them, before and after linking, is shown
+under the one name you choose, so anyone can see that they are yours; if you unlink one, its work is shown under its
+own name again, except what it made while linked before {date}, which stays with the social account it signed in as."
+- After (DRAFT): "If you link social accounts or wallets to your Snowmoon account, what you made with any of them,
+  before and after linking, belongs to your Snowmoon account and is shown under the one name you choose, so anyone can
+  see that they are yours; unlinking one doesn't change that."
+- The "except" clause goes, because nothing moves on unlink. The bracket "(your Farcaster name; …; your Farcaster ID
+  on quote cards)" becomes "(the name you choose for your Snowmoon account, with its network's mark; a Farcaster ID on
+  quote cards)".
+- Today's live wallet sentence, "if you unlink it, that work is shown with the wallet's address again", is replaced
+  (open question 1).
 
 **Privacy §4** (the linking record).
 - Before: "If you link accounts (each by signing in with it, or, for a wallet, because Farcaster lists its address as
@@ -347,100 +370,102 @@ it signed in as." `{date}` = the day the v2 release goes live, filled in at merg
   accounts are one person here. You can unlink an account on your You page; it can be linked to someone else only
   after 30 days, and until then gets no free images or frames."
 - After: "If you link social accounts or wallets to your Snowmoon account (each by signing in with it, or, for a
-  wallet, because Farcaster lists its address as your account's): which are linked, how and when each was linked or
-  unlinked and by which of them, why a link ended, the name you chose to show, and which you chose to list on your
-  page. Your You page shows recent links and unlinks. A social account or wallet can always unlink itself; once
-  unlinked, it can join another Snowmoon account only after 30 days, and until then gets no free images or frames.
-  During the remix challenge, the stored check results of your linked social accounts decide your free challenge
-  remixes."
-- Prepaid paragraph. Before: "A balance stays with the account it was paid to, including when that account is linked
-  to another." After: "A balance belongs to the social account or wallet it was paid to; while that one is linked,
-  your Snowmoon account can spend it."
-- Challenge paragraph: "whether one of your linked accounts passed the site's check, and which one" becomes "whether
-  one of your linked social accounts passed the site's check, and which one". New: "If you claim a prize: the payout
-  address you give, kept with the social account that made the entry."
+  wallet, because Farcaster lists its address as your main sign-in's): which are linked, how and when each was linked
+  or unlinked and by which sign-in, why a link ended, which is your main sign-in and when it changed, any request for
+  a new main sign-in (which sign-in asked, when, and whether it was cancelled), the name you chose, and which sign-ins
+  you list on your page. Your You page shows these. A social account or wallet that is unlinked can join another
+  Snowmoon account only after 30 days, and until then gets no free images or frames."
+- Prepaid paragraph: "A balance stays with the account it was paid to, including when that account is linked to
+  another." becomes "Your balance belongs to your Snowmoon account."
+- Challenge paragraph: "…whether one of your linked social accounts passed the site's check, and which one…". New: "If
+  you claim a prize: the payout address your main sign-in gives." New: "During the remix challenge, the stored check
+  results of the social accounts linked to your Snowmoon account decide your free challenge remixes."
 
-**Privacy §7.** Unchanged in substance. "a current pass of any of your linked accounts counts" becomes "…of any of your
-linked social accounts counts".
+**About** ("Signing in").
+- Before (`bluesky-check`): "Reading needs no account. Saving cards and liking need a Farcaster sign-in, and the
+  assistant a Farcaster account or one linked to it. Making images needs a sign-in."
+- After: "Reading needs no account. To make images or ask the assistant, sign in with a social account (Farcaster,
+  Lens or Bluesky) or a wallet. Your Snowmoon account keeps your work and balance; you can link more ways in, and your
+  main sign-in manages them."
 
-**About** ("Signing in", before on `bluesky-check`): "Reading needs no account. Saving cards and liking need a
-Farcaster sign-in, and the assistant a Farcaster account or one linked to it. Making images needs a sign-in." After:
-"Reading needs no account. To make images or ask the assistant, sign in with a social account (Farcaster, Lens or
-Bluesky) or a wallet; link more of them to your Snowmoon account to sign in with any of them." (Saving cards and
-liking: if they stay Farcaster-only, add "Saving cards and liking need a Farcaster account in your Snowmoon
-account.")
+**Site words** (DRAFT): "Your Snowmoon account"; "Main sign-in" (with "Choose another"); "Other sign-ins"; "Link a
+social account or wallet (needs your main sign-in)"; "Ask to become the main sign-in"; and the recovery banner
+(section 2). Refusals:
+- "Only your main sign-in can do that. Sign in with lens/bea to continue."
+- "Your Snowmoon account already has a Lens account."
+- "lens/bea was unlinked on 11 Dec. It can join another Snowmoon account from 10 Jan."
+- "This account has moved between Snowmoon accounts twice this year. It can move again from 8 Nov 2027."
 
-**Site words** (DRAFT):
-- You page heading: "Your Snowmoon account". The list heading is "Signs in with", followed by each social account or
-  wallet with its icon.
-- Buttons: "Link a social account or wallet", "Unlink", "Unlink this one" (on the signed-in sign-in), "Show on my page".
-- Refusals:
-  - A6: "Your Snowmoon account already has a Lens account. Unlink it first."
-  - A2: "lens/bea was unlinked on 11 Dec. It can join another Snowmoon account from 10 Jan."
-  - A5: "This account has moved between Snowmoon accounts twice this year. It can move again from 8 Nov 2027."
-  - A7, unlinking another: "lens/bea has a challenge entry. It can unlink itself now, or you can unlink it after the
-    payout."
-  - Prize: "Sign in with lens/bea to claim this prize: the entry was made with it."
-- Balance panel: "Balances you can spend", listing each balance with its owner's name and icon.
+## 9. Migration outline (`NEXT_linked_accounts_v2.sql`, with v1's; not the SQL yet)
 
-## 9. Migration outline (`NEXT_linked_accounts_v2.sql`; not the SQL yet)
-
-Additive and safe with live code; nothing reads it until `LINKED_ACCOUNTS.enabled` is on. It assumes v1's
-`NEXT_linked_accounts`, edited first to remove its four `person_id` row columns.
-1. `studio.person_profile (person_id pk, display_account, updated_at)`. A trigger refuses a non-member.
-2. `studio.person_listed (person_id, account, listed_at)`. RLS on, no public read.
-3. `person_accounts`: `how` gains `'joined'` (a superset check); `ended_by` gains `'self'` and `'other'` (who
-   unlinked), plus `ended_via` (the sign-in that did it) for the You page events.
-4. `studio.person_joins (into_person, from_person, at)`, insert-only.
-5. Person balance: each debit and credit-back row names its balance's owner (already true per balance table), plus
-   `spent_by` (the sign-in that spent it).
-6. Prize claims: `(challenge, entry, account, payout_address, at)`, insert-only, with a check that `account` is the
-   entry's `fid`. It may land with the payout work instead.
-7. Read-back: a realistic insert and delete of each, with the planted refusals.
+Additive and safe with live code. Nothing reads it until `LINKED_ACCOUNTS.enabled` is on.
+1. v1's `people`, `person_accounts` and backfill, with the `person_id` columns kept (the owner stamp). Add the same
+   nullable `person_id` to the other owned tables:
+   - `elements`, `remix_frames`, `storyboards`;
+   - `chat_calls`, `agents`, `likes`, `take_likes`, `ratings`, `notes`, `suggestions`, `version_posts`, `mp_*`;
+   - the wallet and person-balance ledgers.
+2. Backfill `person_id` on every row: its number's Snowmoon account at migration, creating `first` accounts for numbers
+   that have rows and no link. Batched, and safe to run twice.
+3. A `before insert` trigger on each owned table fills a null `person_id` from the number's current Snowmoon account.
+4. `person_profile (person_id pk, display_account, main_account, updated_at)`. A trigger requires both to be active
+   members.
+5. `main_requests (id, person_id, requested_by, new_main, requested_at, effective_at, ended_at, ended_how ∈
+   {cancelled, withdrawn, unlinked, done})`, with one open request per Snowmoon account (partial unique index).
+6. `person_joins (into_person, from_person, at)`, insert-only. Ownership resolves through it.
+7. `person_accounts.ended_by` gains `'main'`, `'self'` and `'recovery'`, plus `ended_via`.
+8. Prize claims: `(challenge, entry, person_id, claimed_via, payout_address, at)`, insert-only, with `claimed_via` as the
+   main at the time. This may land with the payout work.
+9. A read-back with a realistic insert and delete of each, and the planted refusals.
 
 ## 10. Build order
 
-0. The release fix (same-network refusal).
-1. v1 on main's current state, without `person_id` row columns, writing the real sign-in, bylines at render.
-2. The chosen name, icons, You page with events.
-3. Joining with history, races, the waits table.
-4. Spending linked balances (person-balance changes).
-5. The bonus and nudges.
-6. Prize claim by the entry's social account (with the payout work).
-7. Public pages.
-8. The reread of section 8, check:principles, the switch.
+0. The release fix (one account per network).
+1. v1 with owner stamps, the backfill and the trigger.
+2. The main sign-in and main-only actions (T2).
+3. Recovery (T3).
+4. One balance per Snowmoon account (person-balance changes, T4).
+5. Name and icons, the You page and its events.
+6. Joining two accounts by both mains.
+7. The bonus and nudges (T6).
+8. Prizes with the payout work (T5).
+9. Public pages.
+10. The reread, check:principles, and the switch.
 
 ## 11. Open questions
 
-1. **Self-unlink and the 30 days.** As drafted, self-unlink waits 30 days before joining a different Snowmoon account,
-   like unlinking another. The owner's wording names the wait only for unlinking another. If self-unlink should free
-   at once, a passing social account could serve two Snowmoon accounts' free counts and bonus in one day. I recommend
-   keeping the wait for both.
-2. **Self-unlink during the challenge.** "Always" overrides the A7 freeze for self-unlink only. Entries stay with
-   their social account, and "linked at any time while entries were open counts as one" stops a split from adding a
-   maker. Confirm.
-3. **Same-day counts after an unlink.** Counting only sign-ins linked now lets a throwaway sign-in, using the
-   Snowmoon account's pass, reset the day's count when unlinked (up to A8's 10 a day). Proposal: count the rows of
-   every sign-in linked at any time that counting day.
-4. Adaptation URLs when the chosen name moves off Farcaster: new canonical URLs, old ones kept (recommended)?
-5. Quote cards: keep a Farcaster ID, or follow the chosen name?
-6. The bonus counts "beyond the first" passing social account: confirm that one passing plus one non-passing gives 3.
-7. Saving cards and liking: open to any sign-in in v2, or Farcaster-only (decides the About line)?
+1. **Wallets linked before v2:** the live text promises that unlinking returns the wallet's work to its address. Under
+   v2 the rows stamped at migration stay with the Snowmoon account. Accept, or, at migration, stamp a linked wallet's
+   *pre-link* rows to the wallet's own Snowmoon account? The second keeps the old promise for old work.
+2. **Self-unlink by a non-main sign-in:** allowed as drafted, since it takes nothing. Or main-only, as the owner's
+   words read strictly?
+3. **The automatic wallet link:** keep it only when the FID is the main sign-in (drafted), or drop it?
+4. **The person-balance statement's approved words** name a social account. They need new words naming the Snowmoon
+   account.
+5. **An entry published with a wallet:** may a wallet sign-in submit? If so, the record names the wallet's address,
+   which isn't a social account's public id. Or require a social account to submit?
+6. **Drop A7** (the challenge freeze) as moot in this model?
+7. **Only one sign-in, and it is lost:** recovery needs another sign-in. Nothing can be done by hand ("no manual
+   merges"). Say so on the You page and suggest a second sign-in?
+8. **Who may cancel a recovery request:** only the main (drafted)? Or also any sign-in other than the requester? The
+   real person may not use the main sign-in often enough to see the banner within 30 days.
+9. Carried over: adaptation URLs when the chosen name moves; quote cards; the bonus's "beyond the first" passing
+   account.
 
 ## Principles
 
 - **1 (public recipes):** not touched.
-- **2 (AI declared; words human):** pass. Work stays credited to the sign-in that made it.
+- **2 (AI declared; words human):** pass. Work is credited to the Snowmoon account's chosen name.
 - **3 (model allowlist):** not touched.
-- **4 (nothing published without a person's action):** pass. Joins need both sign-ins. Prizes need the entry's own
-  sign-in.
-- **5 (nothing canon):** pass. No manual merges. Pages and events are newest first. The bonus orders nothing.
-- **6 (no third-party requests; totals only; texts describe today):** pass, with concerns. Like totals must count each
-  Snowmoon account once. Icons must be our own files. Linking is described as public through the work. Privacy §6 is
-  approved, and the other lines are drafts.
-- **7 (payments never enter scoring or ordering):** pass. Spending a linked balance moves no money between owners.
-  Paying never creates a pass, a bonus or an entry. Prize claims are tied to the entry, not to payment.
+- **4 (nothing published without a person's action):** pass. Joins need both mains. Prizes and sign-in changes need
+  the main sign-in.
+- **5 (nothing canon):** pass. No manual merges or recoveries. Lists are newest first.
+- **6 (privacy; texts describe today):** concern. Every line is a draft. The approved §6 is superseded and needs a
+  new approval. Open question 1 changes a live promise for existing wallet links. Like totals count each Snowmoon
+  account once.
+- **7 (payments never enter scoring or ordering):** pass. One balance moves no money between people. Paying never
+  creates a pass, a bonus or an entry.
 - **8 (Minpentai):** not touched.
 - **Tensions:**
-  - The bonus is a deliberate, bounded exception to "linking never raises caps".
-  - "Self-unlink always" overrides the challenge freeze. It is mitigated by window-wide grouping (open question 2).
+  - Any sign-in can spend, so a stolen social account can spend the balance until the main unlinks it.
+  - The 30-day recovery is visible but could pass unseen if the person never signs in (open question 8).
+  - The bonus remains a bounded exception to "linking never raises caps".
