@@ -43,7 +43,8 @@ export function AdminActivity({ fallback }: { fallback: React.ReactNode }) {
         <section key={s.id} className="aa-section">
           <h2>{s.title}</h2>
           {s.note && <p className="aa-note">{s.note}</p>}
-          <div className="aa-scroll">
+          {s.metrics.length === 0 && <p className="aa-note">Nothing kept here yet.</p>}
+          {s.metrics.length > 0 && <div className="aa-scroll">
             <table>
               <thead>
                 <tr><th scope="col"></th><th scope="col">All time</th>{s.days && shown.map((d) => <th key={d} scope="col">{d.slice(5)}</th>)}</tr>
@@ -58,13 +59,14 @@ export function AdminActivity({ fallback }: { fallback: React.ReactNode }) {
                 ))}
               </tbody>
             </table>
-          </div>
-          {s.days && <p className="aa-note">Days: {s.days}.</p>}
+          </div>}
+          {s.days && s.metrics.length > 0 && <p className="aa-note">Days: {s.days}.</p>}
         </section>
       ); })}
       {view.lists.map((l) => (
         <section key={l.id} className="aa-section">
           <h2>{l.title}</h2>
+          {l.rows.length === 0 && <p className="aa-note">None yet.</p>}
           <ul className="aa-list">
             {l.rows.map((r, i) => (
               <li key={i}>

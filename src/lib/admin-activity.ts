@@ -104,7 +104,7 @@ async function readAll(tx: Sql, days: number, who: string | null): Promise<Read>
   const view: ActivityView = {
     days, dayList: dayList(days, TZ), dayListUtc: dayList(days, 'UTC'), generatedAt: new Date().toISOString(), who: maker === null ? null : who,
     // One person's view holds their public work only: no count at all, private or not.
-    sections: maker === null ? [...sections.values()].filter((s) => s.metrics.length) : [], lists, notHere,
+    sections: maker === null ? [...sections.values()] : [], lists, notHere,
   };
   return { view, bylines };
 }
