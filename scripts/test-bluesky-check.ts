@@ -1,6 +1,6 @@
 /**
  * The Bluesky check (owner, 2026-11-04; src/lib/social/bluesky-check.ts), on stand-ins: Bluesky's AppView is replaced
- * by planted accounts, and every migration (NEXT_signin_lens_bluesky and NEXT_social_bluesky_check included) runs in an
+ * by planted accounts, and every migration (0035_signin_lens_bluesky and 0036_social_bluesky_check included) runs in an
  * in-memory Postgres (PGlite), talked to as studio_writer. Never a production database, never the real AppView.
  *
  *   npm run test:bluesky-check
@@ -298,7 +298,7 @@ const realFacts = (did: string) => B.blueskyFacts(did);
 
 // --- K8 the migration -----------------------------------------------------------------------------------------------
 {
-  const file = readFileSync(path.join(ROOT, 'supabase/migrations/NEXT_social_bluesky_check.sql'), 'utf8');
+  const file = readFileSync(path.join(ROOT, 'supabase/migrations/0036_social_bluesky_check.sql'), 'utf8');
   const readBack = readFileSync(path.join(ROOT, 'supabase/drafts/READ-BACK-social_bluesky_check.sql'), 'utf8');
   const block = (s: string, from: string, to?: string) => s.slice(s.indexOf(from), to ? s.indexOf(to, s.indexOf(from)) : undefined);
   const a = block(file, '-- A. DRY RUN', '-- B. THE MIGRATION');
@@ -306,7 +306,7 @@ const realFacts = (did: string) => B.blueskyFacts(did);
   const body = (s: string) => s.slice(s.indexOf('begin;'), s.lastIndexOf(s.includes('commit;') ? 'commit;' : 'rollback;'));
   const f = new PGlite();
   await f.exec(`create role anon nologin; create role authenticated nologin; create role service_role nologin bypassrls;`).catch(() => {});
-  for (const m of migrations.filter((m) => m !== 'NEXT_social_bluesky_check.sql')) await f.exec(readFileSync(path.join(ROOT, 'supabase/migrations', m), 'utf8'));
+  for (const m of migrations.filter((m) => m !== '0036_social_bluesky_check.sql')) await f.exec(readFileSync(path.join(ROOT, 'supabase/migrations', m), 'utf8'));
   // Two realistic versions for the read-back's entry decisions and mark.
   await f.exec(`insert into studio.works values ('snowmoon','Snowmoon','GPL-3.0','x') on conflict do nothing;
     insert into studio.elements (id, work_id, element_type, created_by_fid) values ('71111111-1111-4111-8111-111111111111','snowmoon','text',6786);

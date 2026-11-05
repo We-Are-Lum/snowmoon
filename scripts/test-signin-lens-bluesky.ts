@@ -5,7 +5,7 @@
  *
  * No network and no spend: Lens's API, the DNS, plc.directory, the PDS and the Bluesky authorization server are
  * stand-ins written here (real crypto: a real RSA key signs Lens's ID tokens, real wallets sign Lens's challenges, the
- * DPoP proofs and PKCE are checked by the stand-in server as the spec says). Every migration, NEXT_signin_lens_bluesky
+ * DPoP proofs and PKCE are checked by the stand-in server as the spec says). Every migration, 0035_signin_lens_bluesky
  * included, runs in an in-memory Postgres (PGlite), talked to as studio_writer. Never a production database: the
  * database URL is set here, to the local one, before anything is imported.
  *
@@ -1019,8 +1019,8 @@ add({
   id: 'M1',
   name: 'Migration: dry run, migration and read-back in order; the drafts are the same; private; a real row fits',
   load: async () => {
-    const file = readFileSync(path.join(ROOT, 'supabase/migrations/NEXT_signin_lens_bluesky.sql'), 'utf8');
-    const dry = readFileSync(path.join(ROOT, 'supabase/drafts/NEXT_signin_lens_bluesky.DRY-RUN.sql'), 'utf8');
+    const file = readFileSync(path.join(ROOT, 'supabase/migrations/0035_signin_lens_bluesky.sql'), 'utf8');
+    const dry = readFileSync(path.join(ROOT, 'supabase/drafts/0035_signin_lens_bluesky.DRY-RUN.sql'), 'utf8');
     const rb = readFileSync(path.join(ROOT, 'supabase/drafts/READ-BACK-signin_lens_bluesky.sql'), 'utf8');
     const block = (s: string, from: string, to: string) => s.slice(s.indexOf(from), s.indexOf(to, s.indexOf(from)));
     const a = block(file, '-- A. DRY RUN', '-- B. THE MIGRATION');
@@ -1029,7 +1029,7 @@ add({
     // Fresh database: every migration but this one, then the dry run alone must leave nothing.
     const fresh = new PGlite();
     await fresh.exec(`create role anon nologin; create role authenticated nologin; create role service_role nologin bypassrls;`);
-    for (const f of migrations.filter((f) => !f.startsWith('NEXT_signin') && !f.startsWith('NEXT_social'))) await fresh.exec(readFileSync(path.join(ROOT, 'supabase/migrations', f), 'utf8'));
+    for (const f of migrations.filter((f) => !f.startsWith('0035_signin') && !f.startsWith('0036_social'))) await fresh.exec(readFileSync(path.join(ROOT, 'supabase/migrations', f), 'utf8'));
     await fresh.exec(a);
     const afterDry = (await fresh.query<{ n: number }>(`select count(*)::int as n from pg_tables where schemaname = 'studio' and tablename like 'social_%'`)).rows[0].n;
     await fresh.exec(b);

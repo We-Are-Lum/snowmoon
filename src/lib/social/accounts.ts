@@ -5,7 +5,7 @@ import { socialPerson } from '../people';
 import { subjectOk, type SocialKind, type SocialSession } from './session';
 
 /**
- * Lens and Bluesky accounts and their links (migration NEXT_signin_lens_bluesky.sql; branch signin-lens-bluesky).
+ * Lens and Bluesky accounts and their links (migration 0035_signin_lens_bluesky.sql; branch signin-lens-bluesky).
  *
  * studio.social_accounts: one row per Lens account (its address) or Bluesky account (its DID), with the handle seen at
  * the last sign-in. Made at the first sign-in, after the proof was checked.
