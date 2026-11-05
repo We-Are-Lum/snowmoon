@@ -39,6 +39,7 @@
     "test:agent-api": "tsx --conditions=react-server scripts/test-agent-api.ts",
     "test:wallet": "tsx --conditions=react-server scripts/test-wallet.ts",
     "test:signin-lens-bluesky": "tsx --conditions=react-server scripts/test-signin-lens-bluesky.ts",
+    "verify:lens-app": "tsx scripts/verify-lens-app.ts",
     "seed:designs": "tsx --conditions=react-server --env-file-if-exists=.env.local scripts/seed-designs.ts",
     "check:miniapp": "tsx scripts/check-miniapp.ts",
     "publish:podcast": "tsx --env-file-if-exists=.env.local scripts/publish-podcast.ts",

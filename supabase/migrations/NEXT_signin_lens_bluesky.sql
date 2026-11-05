@@ -162,7 +162,7 @@ commit;
 
 -- C. READ-BACK (after B), as postgres. Two parts, nothing is kept:
 --   (a) one read-only select: every row's ok should be true;
---   (b) one do block: a realistic Lens account, a Bluesky account, a sign-in again (the handle refreshed), a link to a
+--   (b) one do block: a made-up Lens account and Bluesky account (never real people's), a sign-in again (the handle refreshed), a link to a
 --       Farcaster ID, a second active link refused, then the link ended; each checked, then deleted. It ends with the
 --       notice "READ-BACK passed", or stops with "READ-BACK FAILED: …" (and keeps nothing either way).
 
@@ -208,17 +208,17 @@ declare
   n int;
   refused boolean := false;
 begin
-  insert into studio.social_accounts (kind, subject, handle) values ('lens', '0xad2c0beade60fb9f7ec5c87bde8e4c126145f6e7', 'lens/stani')
+  insert into studio.social_accounts (kind, subject, handle) values ('lens', '0x0000000000000000000000000000000000c0de02', 'lens/readback')
     returning id into lens_id;
-  insert into studio.social_accounts (kind, subject, handle) values ('bluesky', 'did:plc:z72i7hdynmk6r22z27h6tvur', 'bsky.app')
+  insert into studio.social_accounts (kind, subject, handle) values ('bluesky', 'did:plc:readbacksigninaaaaaa2345', 'readback.bsky.social')
     returning id into sky_id;
   -- A sign-in again: the handle refreshed, no second row.
-  insert into studio.social_accounts (kind, subject, handle) values ('bluesky', 'did:plc:z72i7hdynmk6r22z27h6tvur', 'bsky.app')
+  insert into studio.social_accounts (kind, subject, handle) values ('bluesky', 'did:plc:readbacksigninaaaaaa2345', 'readback.bsky.social')
     on conflict (kind, subject) do update set handle = excluded.handle, last_sign_in_at = now();
-  select count(*) into n from studio.social_accounts where subject in ('0xad2c0beade60fb9f7ec5c87bde8e4c126145f6e7', 'did:plc:z72i7hdynmk6r22z27h6tvur');
+  select count(*) into n from studio.social_accounts where subject in ('0x0000000000000000000000000000000000c0de02', 'did:plc:readbacksigninaaaaaa2345');
   if n <> 2 then raise exception 'READ-BACK FAILED: % account rows after a sign-in again, not 2', n; end if;
   -- A link to a Farcaster ID, then a second active link for the same account, which must be refused.
-  insert into studio.social_links (account_id, fid) values (sky_id, 6786);
+  insert into studio.social_links (account_id, fid) values (sky_id, 2147483646);
   begin
     insert into studio.social_links (account_id, lens_account_id) values (sky_id, lens_id);
   exception when unique_violation then refused := true;
