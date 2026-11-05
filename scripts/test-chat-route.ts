@@ -73,7 +73,7 @@ try { await complete(null, MODEL, msgs, opts); } catch (e) { none = e instanceof
 check('with no key and no token, nothing is sent', none && calls.length === 0);
 
 // Who may ask (owner, 2026-10-22: Luis, signed in with a wallet linked to his Farcaster account, was asked to sign in again):
-// a wallet linked to a FID asks as that FID; a wallet that isn't linked is minus its account (answered 403, so its session stays).
+// a wallet linked to a FID asks as that FID; a wallet that isn't linked is minus its account (refused 403 by src/lib/chat/gate.ts, so its session stays).
 {
   process.env.IMAGES_TICKET_SECRET ??= 'test-secret-for-the-chat-route-test-only-000000';
   delete process.env.STUDIO_DATABASE_URL;
@@ -89,7 +89,12 @@ check('with no key and no token, nothing is sent', none && calls.length === 0);
   const { readFileSync } = await import('node:fs');
   const route = (f: string) => readFileSync(f, 'utf8');
   const both = ['src/app/api/chat/ask/route.ts', 'src/app/api/chat/status/route.ts'].map(route);
-  check('both chat routes use the reader check, answering 403 to an unlinked wallet', both.every((t) => t.includes('await getPerson(request)') && /fid < 0\) return [^\n]*status: 403/.test(t) && !t.includes('getFid(')));
+  // Since step 1 of "the assistant for any account" (2026-11-05): who may ask is src/lib/chat/gate.ts (test:chat-gate);
+  // a refusal is 403 (or 503 when a check can't be reached), never 401, so the session stays.
+  check('both chat routes use the reader check and the assistant gate, answering a refusal 403', both.every((t) => t.includes('await getPerson(request)') && t.includes('mayAsk(') && /!gate\.ok\) return [^\n]*status: (403|gate\.status)/.test(t) && !t.includes('getFid(')));
+  const { mayAsk } = await import('../src/lib/chat/gate');
+  const w = await mayAsk(null, unlinked!, { lookUp: false, signedInAs: 'wallet' });
+  check('an unlinked wallet is refused 403 by the gate (no database needed)', !w.ok && w.status === 403 && w.account === 'wallet');
 }
 if (failures.length) {
   console.error(`chat route tests FAILED (${failures.length}):\n- ` + failures.join('\n- '));

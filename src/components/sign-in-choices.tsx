@@ -15,11 +15,12 @@ import { BlueskySignInButton, LensSignInButton } from './social-sign-in';
  *
  * `wallet` says whether this place offers the wallet (the caller's own rule, unchanged: signed out, not inside a
  * Farcaster app, and wallet sign-in open where the caller asks). The sign-in itself is the existing SignInButton and
- * WalletSignInButton: only the presentation is here.
+ * WalletSignInButton: only the presentation is here. `only` narrows the list to those ways (the assistant: the ways that
+ * can ask).
  */
-export function SignInChoices({ wallet, size = 'full', note = true }: { wallet: boolean; size?: 'full' | 'small'; note?: boolean }) {
+export function SignInChoices({ wallet, size = 'full', note = true, only }: { wallet: boolean; size?: 'full' | 'small'; note?: boolean; only?: readonly SignInMethod[] }) {
   // Lens and Bluesky, like the wallet, are for the website: not inside a Farcaster app (where `wallet` is false).
-  const shown = SIGN_IN_METHODS.filter((m) => (m.id === 'farcaster' ? m.on || SIGN_IN_ALL_FOUR : m.id === 'wallet' ? wallet : wallet && (m.on || SIGN_IN_ALL_FOUR))).map((m) => m.id as SignInMethod);
+  const shown = SIGN_IN_METHODS.filter((m) => (m.id === 'farcaster' ? m.on || SIGN_IN_ALL_FOUR : m.id === 'wallet' ? wallet : wallet && (m.on || SIGN_IN_ALL_FOUR))).map((m) => m.id as SignInMethod).filter((id) => !only || only.includes(id));
   const btn = `${size === 'small' ? 'ed-small' : 'menu-signin'} signin-choice-btn`;
   return (
     <div className={`signin-choices signin-choices-${size}`} data-count={shown.length}>

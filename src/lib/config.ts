@@ -110,6 +110,23 @@ export const CHAT = {
   questionMaxChars: 600,
 } as const;
 
+/**
+ * Who may ask the assistant (step 1 of "the assistant for any account", owner 2026-11-05;
+ * docs/proposals/assistant-any-account.md; the gate is src/lib/chat/gate.ts).
+ * `anyAccount` turns on the owner's one rule (2026-11-05: "Farcaster accounts must pass Neynar too, the same as Lens and
+ * Bluesky pass theirs"): everyone who asks passes their own network's check, the same stored decision images use (the
+ * Neynar score for a FID, the Lens score, the Bluesky check), looked up at a question only when there is no current
+ * decision; a Lens or Bluesky account not linked to a FID then asks under its own number, with the same free daily
+ * limit. OFF (today): any FID (or account linked to one) asks with no check, and no one else can.
+ * It is one switch because the Neynar check, like the Lens and Bluesky ones, may start only when Privacy says so: it
+ * stays OFF until the owner's reread of docs/legal/assistant-any-account-step1.md, and check:principles P6ab refuses it
+ * ON until Privacy §5 no longer counts questions only under a Farcaster ID and §7 says Neynar, Lens and Bluesky are
+ * asked when someone asks the assistant. Wallet-only sign-ins can't ask either way (no payments for questions yet).
+ */
+export const ASSISTANT = {
+  anyAccount: false as boolean,
+};
+
 /** Moderation only: these FIDs may hide content. They never promote or rank anything. */
 /**
  * Adaptations were out of view from 2026-10-08 (owner: image generation first). Back in view on

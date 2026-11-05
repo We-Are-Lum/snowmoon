@@ -449,6 +449,12 @@ only, through `studio.rating_totals`, `studio.like_totals` and
   and that may be true only while a Privacy paragraph about the bases and references names OpenAI and Google
   (docs/legal/closed-model-bases-draft.md, branch closed-model-bases). The id is free on main and every branch
   (P6p is social-read's, P6r is deep-funding's and sheet-help's).
+- `P6ab` (branch assistant-any-account, 2026-11-05, the owner's one rule): the assistant's switch
+  (`ASSISTANT.anyAccount`: everyone who asks passes their own network's check, Neynar, Lens or Bluesky, and Lens and
+  Bluesky accounts ask under their own number) is on only while Privacy §5 no longer counts questions only under a
+  Farcaster ID, §7's Neynar, Lens-score and Bluesky-check sentences each name the assistant, and the assistant's notice
+  no longer says "Farcaster ID" (docs/legal/assistant-any-account-step1.md). The id is free on main and every branch
+  (P6z is contest-rehearsal's, P6aa another branch's).
 - `P6n`: image making is open beyond the invited list (the gate looks up a
   Neynar score) only when `src/app/terms/page.tsx` and `src/app/privacy/page.tsx`
   both exist, and the Privacy page names Neynar (which receives the FID at
