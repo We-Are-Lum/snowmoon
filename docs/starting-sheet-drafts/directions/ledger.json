@@ -742,7 +742,7 @@
    "allow": true,
    "category": null,
    "provider": "groq",
-   "costUsd": 0.000074175,
+   "costUsd": 7.4175e-05,
    "worstUsd": 0.0015,
    "at": "2026-11-04T07:39:59.622Z"
   },
@@ -933,7 +933,7 @@
    "allow": true,
    "category": null,
    "provider": "groq",
-   "costUsd": 0.000063525,
+   "costUsd": 6.3525e-05,
    "worstUsd": 0.0015,
    "at": "2026-11-04T07:40:08.756Z"
   },
@@ -1124,7 +1124,7 @@
    "allow": true,
    "category": null,
    "provider": "groq",
-   "costUsd": 0.00009075,
+   "costUsd": 9.075e-05,
    "worstUsd": 0.0015,
    "at": "2026-11-04T07:40:18.249Z"
   },
@@ -1697,7 +1697,7 @@
    "allow": true,
    "category": null,
    "provider": "groq",
-   "costUsd": 0.00007365,
+   "costUsd": 7.365e-05,
    "worstUsd": 0.0015,
    "at": "2026-11-04T07:40:50.750Z"
   },
@@ -2047,7 +2047,7 @@
    "allow": true,
    "category": null,
    "provider": "groq",
-   "costUsd": 0.00009855,
+   "costUsd": 9.855e-05,
    "worstUsd": 0.0015,
    "at": "2026-11-04T07:41:32.525Z"
   },
@@ -2235,7 +2235,7 @@
    "allow": true,
    "category": null,
    "provider": "groq",
-   "costUsd": 0.000075,
+   "costUsd": 7.5e-05,
    "worstUsd": 0.0015,
    "at": "2026-11-04T19:10:32.814Z"
   },
@@ -2249,7 +2249,7 @@
    "allow": true,
    "category": null,
    "provider": "groq",
-   "costUsd": 0.0000816,
+   "costUsd": 8.16e-05,
    "worstUsd": 0.0015,
    "at": "2026-11-04T19:10:33.285Z"
   },
@@ -2263,7 +2263,7 @@
    "allow": true,
    "category": null,
    "provider": "groq",
-   "costUsd": 0.00007845,
+   "costUsd": 7.845e-05,
    "worstUsd": 0.0015,
    "at": "2026-11-04T19:10:33.747Z"
   },
@@ -2277,7 +2277,7 @@
    "allow": true,
    "category": null,
    "provider": "groq",
-   "costUsd": 0.00006585,
+   "costUsd": 6.585e-05,
    "worstUsd": 0.0015,
    "at": "2026-11-04T19:10:34.220Z"
   },
@@ -2291,7 +2291,7 @@
    "allow": true,
    "category": null,
    "provider": "groq",
-   "costUsd": 0.00008685,
+   "costUsd": 8.685e-05,
    "worstUsd": 0.0015,
    "at": "2026-11-04T19:10:34.768Z"
   },
@@ -2305,7 +2305,7 @@
    "allow": true,
    "category": null,
    "provider": "groq",
-   "costUsd": 0.00008565,
+   "costUsd": 8.565e-05,
    "worstUsd": 0.0015,
    "at": "2026-11-04T19:10:35.379Z"
   },
@@ -2319,7 +2319,7 @@
    "allow": true,
    "category": null,
    "provider": "groq",
-   "costUsd": 0.0000873,
+   "costUsd": 8.73e-05,
    "worstUsd": 0.0015,
    "at": "2026-11-04T19:10:35.888Z"
   },
@@ -2333,7 +2333,7 @@
    "allow": true,
    "category": null,
    "provider": "groq",
-   "costUsd": 0.000059625,
+   "costUsd": 5.9625e-05,
    "worstUsd": 0.0015,
    "at": "2026-11-04T19:10:36.286Z"
   },
@@ -4137,7 +4137,7 @@
    "allow": true,
    "category": null,
    "provider": "groq",
-   "costUsd": 0.000089175,
+   "costUsd": 8.9175e-05,
    "worstUsd": 0.0015,
    "at": "2026-11-04T19:43:07.870Z"
   },
@@ -5233,7 +5233,7 @@
    "allow": true,
    "category": null,
    "provider": "groq",
-   "costUsd": 0.00008145,
+   "costUsd": 8.145e-05,
    "worstUsd": 0.0015,
    "at": "2026-11-04T23:24:01.274Z"
   },
@@ -5657,7 +5657,7 @@
    "allow": true,
    "category": null,
    "provider": "groq",
-   "costUsd": 0.000069075,
+   "costUsd": 6.9075e-05,
    "worstUsd": 0.0015,
    "at": "2026-11-04T23:24:20.834Z"
   },
@@ -5867,7 +5867,7 @@
    "allow": true,
    "category": null,
    "provider": "groq",
-   "costUsd": 0.000086325,
+   "costUsd": 8.6325e-05,
    "worstUsd": 0.0015,
    "at": "2026-11-04T23:24:29.685Z"
   },
@@ -7097,7 +7097,7 @@
    "allow": true,
    "category": null,
    "provider": "groq",
-   "costUsd": 0.00008415,
+   "costUsd": 8.415e-05,
    "worstUsd": 0.0015,
    "at": "2026-11-05T00:09:05.058Z"
   },
@@ -7506,7 +7506,7 @@
    "allow": true,
    "category": null,
    "provider": "groq",
-   "costUsd": 0.00008955,
+   "costUsd": 8.955e-05,
    "worstUsd": 0.0015,
    "at": "2026-11-05T00:09:25.412Z"
   },
@@ -8335,7 +8335,7 @@
    "allow": true,
    "category": null,
    "provider": "groq",
-   "costUsd": 0.000099525,
+   "costUsd": 9.9525e-05,
    "worstUsd": 0.0015,
    "at": "2026-11-05T00:10:07.065Z"
   },
@@ -8767,7 +8767,7 @@
    "allow": true,
    "category": null,
    "provider": "groq",
-   "costUsd": 0.000087,
+   "costUsd": 8.7e-05,
    "worstUsd": 0.0015,
    "at": "2026-11-05T05:38:33.636Z"
   },
@@ -9386,7 +9386,7 @@
    "allow": true,
    "category": null,
    "provider": "groq",
-   "costUsd": 0.00007125,
+   "costUsd": 7.125e-05,
    "worstUsd": 0.0015,
    "at": "2026-11-05T16:26:20.313Z"
   },
@@ -9587,7 +9587,7 @@
    "allow": true,
    "category": null,
    "provider": "groq",
-   "costUsd": 0.00009855,
+   "costUsd": 9.855e-05,
    "worstUsd": 0.0015,
    "at": "2026-11-05T16:26:39.382Z"
   },
@@ -9800,7 +9800,7 @@
    "allow": true,
    "category": null,
    "provider": "groq",
-   "costUsd": 0.000089625,
+   "costUsd": 8.9625e-05,
    "worstUsd": 0.0015,
    "at": "2026-11-05T16:26:49.700Z"
   },
@@ -10858,7 +10858,7 @@
    "allow": true,
    "category": null,
    "provider": "groq",
-   "costUsd": 0.00008355,
+   "costUsd": 8.355e-05,
    "worstUsd": 0.0015,
    "at": "2026-11-05T21:11:19.577Z"
   },
@@ -11073,7 +11073,7 @@
    "allow": true,
    "category": null,
    "provider": "groq",
-   "costUsd": 0.000090075,
+   "costUsd": 9.0075e-05,
    "worstUsd": 0.0015,
    "at": "2026-11-05T21:11:30.997Z"
   },
@@ -11284,7 +11284,7 @@
    "allow": true,
    "category": null,
    "provider": "groq",
-   "costUsd": 0.00008655,
+   "costUsd": 8.655e-05,
    "worstUsd": 0.0015,
    "at": "2026-11-05T21:11:41.083Z"
   },
@@ -11495,7 +11495,7 @@
    "allow": true,
    "category": null,
    "provider": "groq",
-   "costUsd": 0.000069525,
+   "costUsd": 6.9525e-05,
    "worstUsd": 0.0015,
    "at": "2026-11-05T21:11:52.740Z"
   },
@@ -12377,8 +12377,8 @@
     "height": 674,
     "sha256": "0b394efb30fefcd0f02b84ac127fa6ba07b657bbd203818ddf4d0239f7bc9c86"
    },
-   "mismatch": "The file used here (uploaded by the owner, 2576 x 1438, sha256 b955b192ae0d6b7474bef82fb795996146c75fe3f205c61db7fd8e6375421e4f) is not the card's saved copy (1206 x 674, sha256 0b394efb…c9c86), though the card says nothing was paid or upscaled. It is used because it is what we have; the crop boxes are on it. The owner is asked whether it is an upscale or another export.",
-   "later_uses_context_only": "The card lists later uses (as --sref for Deluin sheets E1, F1, F2 and six PFP samples S1–S6); not part of this job."
+   "mismatch": "The file used here (uploaded by the owner, 2576 x 1438, sha256 b955b192ae0d6b7474bef82fb795996146c75fe3f205c61db7fd8e6375421e4f) is not the card's saved copy (1206 x 674, sha256 0b394efb\u2026c9c86), though the card says nothing was paid or upscaled. It is used because it is what we have; the crop boxes are on it. The owner is asked whether it is an upscale or another export.",
+   "later_uses_context_only": "The card lists later uses (as --sref for Deluin sheets E1, F1, F2 and six PFP samples S1\u2013S6); not part of this job."
   },
   "file_used": "an enlarged copy of unknown origin: the card's own file (FAV_bai_zei_flatcel.jpg, 1206 x 674, sha256 0b394efb30fefcd0f02b84ac127fa6ba07b657bbd203818ddf4d0239f7bc9c86) was searched for on 2026-11-04 (Spotlight, ~/Downloads, ~/Pictures, ~/Desktop, ~/Documents, ~/snowmoon*, the owner's Drive) and not found, so the owner's upload (2576 x 1438) is used; the crop boxes are on it"
  },
@@ -12402,6 +12402,7 @@
    },
    "sha256": "823b88c609d3040ea05bd738752786e877f5f3f71242504890b07f7d94e8053b",
    "note": "cropped at this box, resized to 1024 high, JPEG; no model"
-  }
+  },
+  "owner_confirmed": "owner, 2026-11-05: ~/Downloads/zei and bai.jpg (13:28) is Garance's edit, the Zei and Bai picture at the stone ledge with Bai's skin darkened; use it as described"
  }
 }
