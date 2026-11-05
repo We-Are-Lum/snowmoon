@@ -16,8 +16,9 @@ import type { PostedOnItem } from '~/components/posted-on';
 
 /**
  * A challenge picture's page, /challenge/p/<version> (owner, 2026-11-05; docs/proposals/challenge-moments.md §1.3
- * S4–S5): the picture, who made it, its character and moment, its words, and for its maker the share buttons and Submit
- * (one a day, unchanged; option B: paste the post's address). Plain data with its words written here, for the page's
+ * S4–S5), share first: the post buttons and the ready post (its words and this page's link) right under the picture,
+ * then for its maker Submit (one a day, unchanged; option B: paste the post's address), then its character and moment,
+ * who made it and their words. Plain data with its words written here, for the page's
  * component (src/components/challenge-picture.tsx). Read-only: never asks Neynar or anyone.
  */
 type Sql = postgres.Sql;
@@ -48,7 +49,7 @@ export async function pictureView(sql: Sql, versionId: string, now: Date = new D
     note: standing?.kind === 'admin' ? CW.adminNote : !CHALLENGE.pictureEntries ? P.notEntriesYet : null,
     submit,
     posts,
-    w: { close: P.close, published: P.published, wordsHead: P.wordsHead, recipe: P.recipe, every: L.entriesLink, another: P.another, signInLine: P.signInLine, rules: L.rulesLink, oneADay: P.oneADay, postText: P.postText(name, m.title), shareHead: P.shareHead, copy: P.copy, copied: P.copied, thenSubmit: P.thenSubmit },
+    w: { close: P.close, published: P.published, wordsHead: P.wordsHead, recipe: P.recipe, every: L.entriesLink, another: P.another, signInLine: P.signInLine, rules: L.rulesLink, oneADay: P.oneADay, postText: P.postText(name, m.title), shareHead: P.shareHead, copy: P.copy, copied: P.copied, thenSubmit: P.thenSubmit, on: { farcaster: CW.submitPostOn('Farcaster'), bluesky: CW.submitPostOn('Bluesky'), lens: CW.submitPostOn('Lens') } },
   };
 }
 export type PictureView = NonNullable<Awaited<ReturnType<typeof pictureView>>>;

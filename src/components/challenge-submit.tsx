@@ -20,7 +20,17 @@ import { PostLinkField } from './post-link-field';
  * page script, 2026-11-05). Plain links: no script or request of theirs on our page, no new sign-in scope, nothing
  * stored. The person then pastes their post's address, as before.
  */
-export function ChallengeSubmit({ versionId, byFid, words: W, path }: { versionId: string; byFid: number; words: SubmitWords; /** The page the post must link to (a challenge picture's: /challenge/p/<id>). */ path?: string }) {
+export function ChallengeSubmit({ versionId, byFid, words: W, path, compact = false, castHash: madeCast = null }: {
+  versionId: string;
+  byFid: number;
+  words: SubmitWords;
+  /** The page the post must link to (a challenge picture's: /challenge/p/<id>). */
+  path?: string;
+  /** Share first (a challenge picture's page): the post buttons are above, so only the address and Submit are here. */
+  compact?: boolean;
+  /** A cast just made by the share buttons above, in the Farcaster app: Submit sends it when no address is typed. */
+  castHash?: string | null;
+}) {
   const auth = useAuth();
   const social = useSocialSession();
   const [person, setPerson] = useState<number | null>(null);
@@ -40,6 +50,9 @@ export function ChallengeSubmit({ versionId, byFid, words: W, path }: { versionI
     sdk.isInMiniApp().then(setInApp).catch(() => setInApp(false));
     setOrigin(window.location.origin);
   }, []);
+  useEffect(() => {
+    if (madeCast) setCastHash(madeCast);
+  }, [madeCast]);
   useEffect(() => {
     if (!signedIn) return;
     authFetch('/api/challenge/submit')
@@ -100,27 +113,31 @@ export function ChallengeSubmit({ versionId, byFid, words: W, path }: { versionI
             if (address.trim() || castHash) void send('POST');
           }}
         >
-          <p className="dz-label">{W.head}</p>
-          <p className="dz-note">{W.note}</p>
-          <p className="dz-label">{W.postHead}</p>
-          <p className="dz-note">{W.postNote}</p>
-          <div className="ia-row">
-            {inApp ? (
-              <button type="button" className="ia-button" onClick={cast}>
-                {W.postOn.farcaster}
-              </button>
-            ) : (
-              <a className="ia-button" href={farcaster} target="_blank" rel="noopener noreferrer">
-                {W.postOn.farcaster}
+          {!compact && (
+            <>
+            <p className="dz-label">{W.head}</p>
+            <p className="dz-note">{W.note}</p>
+            <p className="dz-label">{W.postHead}</p>
+            <p className="dz-note">{W.postNote}</p>
+            <div className="ia-row">
+              {inApp ? (
+                <button type="button" className="ia-button" onClick={cast}>
+                  {W.postOn.farcaster}
+                </button>
+              ) : (
+                <a className="ia-button" href={farcaster} target="_blank" rel="noopener noreferrer">
+                  {W.postOn.farcaster}
+                </a>
+              )}
+              <a className="ia-button" href={bluesky} target="_blank" rel="noopener noreferrer">
+                {W.postOn.bluesky}
               </a>
-            )}
-            <a className="ia-button" href={bluesky} target="_blank" rel="noopener noreferrer">
-              {W.postOn.bluesky}
-            </a>
-            <a className="ia-button" href={lens} target="_blank" rel="noopener noreferrer">
-              {W.postOn.lens}
-            </a>
-          </div>
+              <a className="ia-button" href={lens} target="_blank" rel="noopener noreferrer">
+                {W.postOn.lens}
+              </a>
+            </div>
+            </>
+          )}
           <PostLinkField id={`submit-${versionId}`} label={W.label} value={address} onChange={setAddress} />
           <button type="submit" className="ic-primary" disabled={busy || !(address.trim() || castHash) || left === 0}>
             {W.submit}

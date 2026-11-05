@@ -3,22 +3,28 @@
 import Link from 'next/link';
 import NotFound from 'next/dist/client/components/builtin/not-found';
 import { useEffect, useState } from 'react';
-import { authFetch } from '~/lib/client-auth';
+import { authFetch, useAuth, useSocialSession } from '~/lib/client-auth';
 import type { PictureView } from '~/lib/challenge/picture-view';
 import { AiTag } from './ai-tag';
+import { ChallengeShareFirst } from './challenge-share-first';
 import { ChallengeSubmit } from './challenge-submit';
 import { PostedOn } from './posted-on';
 
 /**
- * A challenge picture's page, /challenge/p/<version> (owner, 2026-11-05; docs/proposals/challenge-moments.md §1.3
- * S4–S5): the picture with its AI label, its character and moment, who made it and their words; for its maker, Submit
- * (one a day; paste the post's address, option B) with the owner's one line and "Rules"; "Posted on"; and small links
- * to how it was made, every entry and making another. "✕" goes to the hub at the character's card. Publishing replaced
- * the preview with this page, so back never returns to a publish button. Every word comes from the server
- * (src/lib/challenge/picture-view.ts).
+ * A challenge picture's page, /challenge/p/<version>, share first (owner, 2026-11-05; docs/proposals/challenge-moments.md
+ * §1.3 S4–S5): the picture with its AI label; then, before anything else, the post buttons with the ready post (for its
+ * maker: "Published. Now post it:"); then "Then submit it as an entry · one a day" with Submit (paste the post's
+ * address, option B; a cast just made in the Farcaster app fills it), the owner's one line ("Sign in with Farcaster,
+ * Lens or Bluesky to enter.") and "Rules"; then the character and moment, who made it and their words, "Posted on", and
+ * small links to how it was made, every entry and making another. "✕" goes to the hub at the character's card.
+ * Publishing replaced the preview with this page, so back never returns to a publish button. Every word comes from the
+ * server (src/lib/challenge/picture-view.ts).
  */
 export function ChallengePicture({ id }: { id: string }) {
+  const auth = useAuth();
+  const social = useSocialSession();
   const [v, setV] = useState<PictureView | null | 'missing'>(null);
+  const [castHash, setCastHash] = useState<string | null>(null);
   useEffect(() => {
     authFetch(`/api/challenge/picture?id=${encodeURIComponent(id)}`)
       .then(async (r) => (r.ok ? ((await r.json()) as PictureView) : 'missing'))
@@ -28,6 +34,9 @@ export function ChallengePicture({ id }: { id: string }) {
   if (v === 'missing') return <NotFound />;
   if (!v) return <div className="mk-page" aria-busy="true" />;
   const hub = `/challenge#${v.character}`;
+  const path = `/challenge/p/${v.versionId}`;
+  const mine = auth.kind === 'signed-in' && auth.fid === v.byFid;
+  const signedIn = auth.kind === 'signed-in' || social !== null;
   return (
     <div className="mk-page" data-step="published">
       <nav className="mk-bar mk-bar-end">
@@ -42,6 +51,20 @@ export function ChallengePicture({ id }: { id: string }) {
           <AiTag /> {v.badge && <span className="ch-badge">{v.badge}</span>}
         </figcaption>
       </figure>
+      <ChallengeShareFirst path={path} w={{ head: mine ? v.w.published : v.w.shareHead, text: v.w.postText, copy: v.w.copy, copied: v.w.copied, on: v.w.on }} onCast={setCastHash} />
+      {v.submit && (
+        <section className="sf-submit" aria-labelledby="sf-submit-head">
+          <h2 id="sf-submit-head" className="sf-head">
+            {v.w.thenSubmit} <span className="dz-muted">· {v.w.oneADay}</span>
+          </h2>
+          <ChallengeSubmit versionId={v.versionId} byFid={v.byFid} words={v.submit} path={path} compact castHash={castHash} />
+        </section>
+      )}
+      {!signedIn && (
+        <p className="mk-signin-line">
+          {v.w.signInLine} <Link href="/challenge/rules">{v.w.rules}</Link>
+        </p>
+      )}
       <h1 className="mk-title">{v.title}</h1>
       <p className="dz-muted mk-by">{v.by}</p>
       {v.words && (
@@ -50,10 +73,6 @@ export function ChallengePicture({ id }: { id: string }) {
         </p>
       )}
       {v.note && <p className="dz-muted">{v.note}</p>}
-      {v.submit && <ChallengeSubmit versionId={v.versionId} byFid={v.byFid} words={v.submit} path={`/challenge/p/${v.versionId}`} />}
-      <p className="mk-signin-line">
-        {v.w.signInLine} <Link href="/challenge/rules">{v.w.rules}</Link>
-      </p>
       {v.posts.length > 0 && <PostedOn versionId={v.versionId} posts={v.posts} />}
       <p className="mk-links">
         <Link href={`/image/${v.versionId}`}>{v.w.recipe}</Link> · <Link href="/challenge/entries">{v.w.every}</Link> · <Link href={hub}>{v.w.another}</Link>

@@ -329,6 +329,24 @@ const momentQuotes = (ms: typeof MOMENTS) => ms.flatMap((m) => m.quotes.map((q) 
   await server.stop();
 }
 
+// === R3: share first on the published picture's page ==================================================================
+{
+  const pic = read('src/components/challenge-picture.tsx');
+  const sf = read('src/components/challenge-share-first.tsx');
+  const at = (x: string) => pic.indexOf(x);
+  check('share first: the post buttons come right after the picture, before Submit and before the picture\'s title', at('<ChallengeShareFirst') > at('</figure>') && at('<ChallengeShareFirst') < at('<ChallengeSubmit') && at('<ChallengeShareFirst') < at('<h1 className="mk-title">'));
+  check('share first: its maker sees "Published. Now post it:", others "Post it"', /head: mine \? v\.w\.published : v\.w\.shareHead/.test(pic));
+  check('share first: Farcaster (composeCast in the app), Bluesky, Lens and Copy link, each its network\'s own compose page', /sdk\.actions\.composeCast\(\{ text: w\.text, embeds: \[link\] \}\)/.test(sf) && /https:\/\/farcaster\.xyz\/~\/compose/.test(sf) && /https:\/\/bsky\.app\/intent\/compose/.test(sf) && /https:\/\/hey\.xyz\/\?/.test(sf) && /navigator\.clipboard\.writeText\(link\)/.test(sf));
+  check('share first: the ready post is shown as it will be filled in (the text and this page\'s link)', /“\{w\.text\}” <span className="sf-link">\{link\}<\/span>/.test(sf) && /const link = `\$\{origin\}\$\{path\}`/.test(sf));
+  check('share first: no script or request of the networks on our page (plain links; P6a)', !/<script|fetch\(/.test(sf));
+  check('Submit B on the page: only the address and Submit (the buttons are above), with a cast just made handed to it', /<ChallengeSubmit versionId=\{v\.versionId\} byFid=\{v\.byFid\} words=\{v\.submit\} path=\{path\} compact castHash=\{castHash\} \/>/.test(pic) && /\{!compact && \(/.test(read('src/components/challenge-submit.tsx')));
+  check('"Then submit it as an entry · one a day", and the owner\'s one line with "Rules" (no other rules text)', /\{v\.w\.thenSubmit\} <span className="dz-muted">· \{v\.w\.oneADay\}<\/span>/.test(pic) && /\{v\.w\.signInLine\} <Link href="\/challenge\/rules">\{v\.w\.rules\}<\/Link>/.test(pic));
+  const W = (await import('../src/lib/challenge/picture-wording')).PICTURE_WORDING;
+  check('the words: "Published. Now post it:", "Then submit it as an entry", "one a day", the sign-in line as the owner wrote it', W.published === 'Published. Now post it:' && W.thenSubmit === 'Then submit it as an entry' && W.oneADay === 'one a day' && W.signInLine === 'Sign in with Farcaster, Lens or Bluesky to enter.');
+  check('the ready post names the character and the moment', W.postText('Bai', 'The quarterfinal') === 'Bai at The quarterfinal, my remix for the Snowmoon Party remix challenge');
+  check('no script served to everyone imports the share words', !/challenge\/(picture-)?wording'/.test(sf + pic));
+}
+
 if (failures.length) {
   console.error(`CHALLENGE MOMENTS TESTS FAILED (${failures.length}):\n- ${failures.join('\n- ')}`);
   process.exit(1);

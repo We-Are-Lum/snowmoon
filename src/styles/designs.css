@@ -374,7 +374,7 @@ a.cc-chip:hover { border-color: var(--ink); text-decoration: none; }
 .mk-moment-head .cc-head, .ch-page h2.cc-head { margin: 0; font-size: var(--text-label); line-height: 16px; font-family: var(--label); }
 .mk-strip { list-style: none; margin: 6px 0 0; padding: 0 0 6px; display: flex; gap: 6px; overflow-x: auto; scroll-snap-type: x proximity; }
 .mk-strip li { flex: none; scroll-snap-align: start; }
-.mk-strip .cc-chip, .mk-surprise { background: transparent; font: inherit; font-size: 15px; cursor: pointer; white-space: nowrap; }
+.mk-strip .cc-chip, .mk-surprise { background: transparent; color: var(--ink); font: inherit; font-size: 15px; cursor: pointer; white-space: nowrap; }
 .mk-by { margin: 0; font-size: var(--text-small); }
 .mk-quotes .cc-quote { margin: 6px 0 0; }
 .mk-model { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 0; }
@@ -391,3 +391,14 @@ a.cc-chip:hover { border-color: var(--ink); text-decoration: none; }
 .mk-signin-line { margin: 0; }
 .mk-signin-line a, .mk-links a { display: inline-block; min-height: 44px; line-height: 44px; }
 .mk-links { margin: 0; }
+
+.mk-strip .cc-chip[aria-pressed='true'] { background: var(--btn); color: var(--btn-ink); border-color: var(--ink); }
+/* Share first on a challenge picture's page (R3). */
+.sf-share, .sf-submit { display: flex; flex-direction: column; gap: 8px; }
+.ch-page h2.sf-head { margin: 4px 0 0; font-size: 19px; line-height: 1.3; }
+.sf-buttons { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+@media (min-width: 640px) { .sf-buttons { grid-template-columns: repeat(4, max-content); } }
+.sf-button { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 16px; text-decoration: none; font: inherit; cursor: pointer; }
+.sf-ready { margin: 0; font-size: var(--text-small); color: var(--body); overflow-wrap: anywhere; }
+.sf-link { color: var(--muted); }
+.sf-submit .ch-add { margin-top: 0; }
