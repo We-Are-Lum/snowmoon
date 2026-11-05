@@ -1,7 +1,12 @@
 # Registering Snowmoon's own Lens App (DRAFT)
 
 For the owner, 2026-11-04 (your answer 4a). Drafted by the coding agent (Anthropic's Claude, a closed model). Branch
-`signin-lens-bluesky`. **Nothing has been sent, signed or uploaded.** The agent only read Lens's docs, Lens's public
+`signin-lens-bluesky`.
+
+**Status (2026-11-04, owner: "the metadata is approved as drafted"):** the metadata is uploaded to Grove as an
+immutable file (step 1, below). The admin page `/admin/lens-app` runs steps 2 to 4 in your browser with your wallet
+(`src/components/lens-app-register.tsx`); nothing is signed or sent until you use it. **Before:** nothing had been
+sent, signed or uploaded. The agent only read Lens's docs, Lens's public
 GraphQL schema (introspection) and Lens Chain's public RPC; `eth_estimateGas` is a read-only simulation.
 
 Today the site signs Lens users in to Lens's own **Test App** (`0x8A5Cc31180c37078e1EbA2A23c861Acf351a97cE`,
@@ -41,6 +46,12 @@ Lens's App metadata format (`$schema` `https://json-schemas.lens.dev/app/1.0.0.j
 }
 ```
 
+**Uploaded (2026-11-04):** `docs/lens-app-metadata.json`, byte for byte, sha256
+`bddb0e3e35ade9e28b884e7003f2663942ecf996196f809bf2ec2707f96e9d26`, by `POST https://api.grove.storage/?chain_id=232`
+(HTTP 201): uri **`lens://a0001df5cbdfdde5837b0896b0a4006eff7f614ff37dc240677b2508005499d4`**, gateway
+https://api.grove.storage/a0001df5cbdfdde5837b0896b0a4006eff7f614ff37dc240677b2508005499d4 (status "available"; its
+bytes hash to the same sha256). Immutable: a PUT to it without Grove's ACL token answers 401.
+
 - Required: `name`, `url`, `developer`, `platforms`. The rest are optional; `logo` can be dropped.
 - **Where it lives (the metadata URI):** upload it to Grove, Lens's storage, as an immutable file:
   `POST https://api.grove.storage/?chain_id=232` with the JSON as the body and `Content-Type: application/json`. The
@@ -57,7 +68,9 @@ Lens: "You MUST be authenticated as Builder to create an App." The Builder role 
 - Lens's API (`https://api.lens.xyz/graphql`) is asked for `challenge(request: { builder: { address: "<YOUR_WALLET>" } })`.
 - Your wallet signs the message it returns (a Sign-In with Ethereum message). That signature is the Builder sign-in.
   Then `authenticate(request: { id, signature })` returns Builder tokens, used only for step 3.
-- How: a short script with `@lens-protocol/client` (`client.login({ builder: { address }, signMessage })`), run on
+- **Built: the page `/admin/lens-app`** (owner, 2026-11-04), calling Lens's GraphQL API directly from your browser
+  (no new package; Lens's API allows any origin). It also re-checks the metadata's bytes on Grove. Was:
+  a short script with `@lens-protocol/client` (`client.login({ builder: { address }, signMessage })`), run on
   your computer with your wallet, or a page we build that runs it in your browser. Neither exists yet; say which.
 
 ## 3. Create the App (the `createApp` mutation)
@@ -96,7 +109,9 @@ The answer (`CreateAppResult`) is one of:
   It calls the AppFactory (`0xB3b7502C47E16a1E3c6d660b73006f45Ec327B0B`) to deploy the App. The function is
   LensFactory's App deploy (selector `0xec5c08c0` in every recent App deploy we found); the arguments are the
   ones in step 3, encoded by Lens's API into `raw.data`. Check before signing: `to` is the LensFactory, `value` is
-  0, `chainId` is 232.
+  0, `chainId` is 232. The page shows to, value and chainId (and from, gas and the data's first bytes) before you sign, and
+  won't offer to send unless `to` is the LensFactory, `value` is 0, `chainId` is 232 and `from` is your wallet; you
+  also tick that you checked them.
 - **From:** your wallet (the Builder), on **Lens Chain mainnet (232)**, gas paid in **GHO**.
 
 ### Gas estimate (2026-11-04)
