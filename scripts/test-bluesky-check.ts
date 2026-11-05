@@ -306,7 +306,7 @@ const realFacts = (did: string) => B.blueskyFacts(did);
   const body = (s: string) => s.slice(s.indexOf('begin;'), s.lastIndexOf(s.includes('commit;') ? 'commit;' : 'rollback;'));
   const f = new PGlite();
   await f.exec(`create role anon nologin; create role authenticated nologin; create role service_role nologin bypassrls;`).catch(() => {});
-  for (const m of migrations.filter((m) => m !== 'NEXT_social_bluesky_check.sql')) await f.exec(readFileSync(path.join(ROOT, 'supabase/migrations', m), 'utf8'));
+  for (const m of migrations.filter((m) => m !== 'NEXT_social_bluesky_check.sql' && m !== 'NEXT_social_lens_challenge.sql')) await f.exec(readFileSync(path.join(ROOT, 'supabase/migrations', m), 'utf8'));
   // Two realistic versions for the read-back's entry decisions and mark.
   await f.exec(`insert into studio.works values ('snowmoon','Snowmoon','GPL-3.0','x') on conflict do nothing;
     insert into studio.elements (id, work_id, element_type, created_by_fid) values ('71111111-1111-4111-8111-111111111111','snowmoon','text',6786);
