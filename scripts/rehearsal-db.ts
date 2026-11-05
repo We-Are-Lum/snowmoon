@@ -34,7 +34,9 @@ const HOME = path.join(os.homedir(), 'snowmoon-rehearsal-db');
 const DATA = path.join(HOME, 'data');
 const STORE = path.join(HOME, 'store');
 /** The unnumbered migrations the contest needs, in order (NEXT_challenge_submit.sql is not: the daily rule replaces its delete). */
-export const REHEARSAL_NEXT = ['NEXT_check_decisions.sql', 'NEXT_remix_count.sql', 'NEXT_challenge_daily.sql'];
+// NEXT_check_decisions is numbered 0034 on main (applied); 0035/0036 are numbered too. The SQL pack's order after them:
+// remix_count (3), challenge_daily (4), social_lens_challenge (6).
+export const REHEARSAL_NEXT = ['NEXT_remix_count.sql', 'NEXT_challenge_daily.sql', 'NEXT_social_lens_challenge.sql'];
 
 const port = Number(process.env.REHEARSAL_DB_PORT) || REHEARSAL_DB_PORT;
 if (process.argv.includes('--reset')) {
