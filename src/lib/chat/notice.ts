@@ -21,12 +21,17 @@ export const NOTICE_REVIEW: {
   ownerReread: { words: string; on: string } | null;
 } = {
   /** Fingerprint of the chat's code, prompts and settings when the notice was last reread. */
-  reviewedFor: '49f57678bb4d379f',
+  reviewedFor: '40720350e2e80a2b',
   /** Who did that reread: the coding agent, or the owner. */
-  by: 'owner (FID 6786)',
-  on: '2026-10-24',
+  by: 'agent',
+  on: '2026-11-05',
   note:
-    'Reread by the owner (FID 6786) on 2026-10-24 ("#36: stamp it"), words unchanged, for #36: the chat routes now take a ' +
+    'Reread by the coding agent (Claude, a closed model by Anthropic) on 2026-11-05, words unchanged, for branch ' +
+    'assistant-any-account (step 1): the chat routes go through src/lib/chat/gate.ts. With ASSISTANT.anyAccount off (this ' +
+    'build) who can ask is unchanged: a FID, or a wallet, Lens or Bluesky account linked to one, asks as that FID; nothing ' +
+    'new is sent or kept, so item 4 ("under your Farcaster ID") still holds. Turning the switch on needs the owner\'s new ' +
+    'words for item 4 (docs/legal/assistant-any-account-step1.md, N1) and their reread (P6f); P6ab refuses it until then. ' +
+    'Previous reread: Reread by the owner (FID 6786) on 2026-10-24 ("#36: stamp it"), words unchanged, for #36: the chat routes now take a ' +
     'wallet linked to a FID as that FID (getPerson) and answer an unlinked wallet 403. The notice still holds: questions are ' +
     'counted "under your Farcaster ID", which for a linked wallet is the FID it is linked to; nothing new is sent or kept. ' +
     'Previous reread: Reread by the owner (FID 6786) on 2026-10-14 ("Stamp it"), words unchanged, for the glossary pointers ' +
