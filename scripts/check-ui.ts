@@ -66,6 +66,13 @@
  *   Bluesky account" starts at bsky.social, its error shows once, and "Use another server or handle" opens the handle
  *   box filled in with the last handle; the assistant says "Asking questions needs a Farcaster account." Signed out,
  *   /you's rail and menu don't repeat the page's sign-in buttons.
+ * - The assistant's panel for each kind of sign-in (step 1 of "the assistant for any account", 2026-11-05), at 390,
+ *   light and dark, with /api/chat/status answered here as the server answers (src/lib/chat/gate.ts, following
+ *   ASSISTANT.anyAccount): signed out, the "Sign in to ask questions" heading and the line on who can ask; signed in
+ *   with Farcaster (and, switch on, Lens or Bluesky with no decision yet), the assistant's home and no "Sign in" heading;
+ *   refused (a wallet; switch off, Lens or Bluesky; switch on, a Lens account with a kept fail), no "Sign in" heading,
+ *   the gate's refusal (src/lib/chat/who-can-ask.ts) once, a link to the You page for Lens and Bluesky, and for a
+ *   wallet only the ways that can ask.
  * - The owner's image review (/you/illustrations, owner 2026-10-23) at 390, light and dark: signed out, the floors and
  *   the sign-in offer only; as the owner (API replayed from scripts/fixtures/illustration-review.json), worst first,
  *   in the owner's order (wrong, partly with a double, partly, matches, not checked), each item with its passage, its
@@ -86,8 +93,9 @@ import path from 'node:path';
 import { chromium, type Browser, type Page, type Route } from 'playwright-core';
 import QRCode from 'qrcode';
 import { BOOK_MENTIONS } from '../src/lib/character-order';
-import { CHALLENGE, SIGN_IN_METHODS, SUPPORT } from '../src/lib/config';
+import { ASSISTANT, CHALLENGE, SIGN_IN_METHODS, SUPPORT } from '../src/lib/config';
 import { SIGN_IN_CHOICES } from '../src/lib/sign-in-text';
+import { ASK_WORDING, type AccountKind } from '../src/lib/chat/who-can-ask';
 
 /** The ways to sign in that are on (SIGN_IN_METHODS, in order; the sign-in release of 2026-11-05 turns Lens and Bluesky on). */
 const SIGN_IN_ON = SIGN_IN_METHODS.filter((m) => m.on).map((m) => m.id);
@@ -339,7 +347,7 @@ const plantWallet = (address: string) => {
 async function plantWalletSession(page: Page) {
   const planted = `Bearer x.${btoa(JSON.stringify({ sub: 'w', exp: 4102444800 })).replace(/=+$/, '')}.y`;
   await page.route('**/api/chat/status', (r) =>
-    r.request().headers().authorization === planted ? r.fulfill({ status: 403, json: { error: 'Sign in with Farcaster to use the assistant' } }) : r.fallback(),
+    r.request().headers().authorization === planted ? r.fulfill(chatStatusFor('wallet')) : r.fallback(),
   );
   await page.evaluate(plantWallet, WALLET_ADDRESS);
 }
@@ -434,6 +442,87 @@ async function checkSignInEquals(page: Page, scope: string, where: string, want?
  * opens the handle box filled in with the handle last signed in with on this device. The assistant, signed in with
  * Lens, says plainly why it needs Farcaster.
  */
+/**
+ * /api/chat/status as the server answers each kind of sign-in today (src/app/api/chat/status/route.ts and
+ * src/lib/chat/gate.ts, ASSISTANT.anyAccount off): Farcaster ready; a wallet, and a Lens or Bluesky account not linked
+ * to a FID, 403 with the gate's words and the account's kind.
+ */
+function chatStatusFor(kind: AccountKind | 'lens-below') {
+  const ready = { json: { available: true, model: 'gpt-oss-120b', host: 'Vercel AI Gateway', provider: 'Groq', route: 'Groq', perDay: 30, left: 30 } };
+  if (kind === 'farcaster') return ready;
+  if (kind === 'wallet') return { status: 403, json: { error: ASK_WORDING.wallet(), reason: 'wallet', account: 'wallet' } };
+  // A Lens account whose kept decision is a fail (switch on): refused by the status route.
+  if (kind === 'lens-below') return { status: 403, json: { error: ASK_WORDING.lensBelow(), reason: 'lens-score', account: 'lens' } };
+  // Switch on: with no decision yet the status says it can ask (the question decides). Off: refused.
+  return ASSISTANT.anyAccount ? ready : { status: 403, json: { error: ASK_WORDING.socialOff, reason: 'social-off', account: kind } };
+}
+
+/** The assistant's panel for each kind of sign-in (2026-11-05): see the header. */
+async function checkAssistantPanels(page: Page, scheme: string) {
+  const b64 = (o: object) => Buffer.from(JSON.stringify(o)).toString('base64').replace(/=+$/, '');
+  const token = `x.${b64({ sub: 'fixture', exp: 4102444800 })}.y`;
+  const planted = `Bearer ${token}`;
+  let kind: AccountKind | 'lens-below' = 'farcaster';
+  const answer = async (r: Route) => {
+    const req = r.request();
+    if (req.headers().authorization !== planted) return r.fallback();
+    const u = new URL(req.url());
+    if (u.pathname === '/api/chat/status') return r.fulfill(chatStatusFor(kind));
+    if (u.pathname === '/api/you') return r.fulfill({ json: { work: YOU_EMPTY_WORK, maintainer: false, prices: null, wallet: null, link: null, linkedWallets: [], ...YOU_FIXTURES[kind === 'lens-below' ? 'lens' : kind] } });
+    return r.fulfill({ status: 404, json: { error: 'Not found' } });
+  };
+  const signInHeading = async () =>
+    page.locator('.as').first().evaluate((el) => [...el.querySelectorAll('h1, h2, .as-label')].some((e) => /^\s*Sign in\b/i.test(e.textContent ?? '')));
+  // Signed out: the heading and who can ask.
+  await page.evaluate(() => {
+    for (const key of ['snowmoon.signin', 'snowmoon.wallet', 'snowmoon.social']) localStorage.removeItem(key);
+  });
+  await open(page, '/assistant');
+  await page.waitForSelector('.as-signed-out', { timeout: 10000 }).catch(() => fail(`/assistant @390 (${scheme}, signed out): no signed-out screen`));
+  if (!(await signInHeading())) fail(`/assistant @390 (${scheme}, signed out): no "Sign in to ask questions" heading`);
+  if (!(await page.getByText(ASK_WORDING.who(), { exact: true }).count())) fail(`/assistant @390 (${scheme}, signed out): doesn't say "${ASK_WORDING.who()}"`);
+  await page.route('**/api/**', answer);
+  for (const k of ['farcaster', 'lens', 'bluesky', 'wallet', ...(ASSISTANT.anyAccount ? (['lens-below'] as const) : [])] as const) {
+    kind = k;
+    const asks = k === 'farcaster' || (ASSISTANT.anyAccount && (k === 'lens' || k === 'bluesky'));
+    const where = `/assistant @390 (${scheme}, ${k})`;
+    await page.evaluate(
+      ({ k, token, wallet }) => {
+        for (const key of ['snowmoon.signin', 'snowmoon.wallet', 'snowmoon.social', 'snowmoon.social.link']) localStorage.removeItem(key);
+        const exp = 4102444800;
+        if (k === 'farcaster') localStorage.setItem('snowmoon.signin', JSON.stringify({ token, fid: 4242, username: 'fixture', exp }));
+        else if (k === 'wallet') localStorage.setItem('snowmoon.wallet', JSON.stringify({ token, address: wallet, short: `${wallet.slice(0, 6)}…${wallet.slice(-4)}`, exp }));
+        else localStorage.setItem('snowmoon.social', JSON.stringify({ token, kind: k === 'bluesky' ? 'bluesky' : 'lens', name: k === 'bluesky' ? 'fixture.bsky.social' : 'lens/fixture', exp }));
+      },
+      { k, token, wallet: WALLET_ADDRESS },
+    );
+    await open(page, '/assistant');
+    const ready = await page.waitForSelector(asks ? '.as-start' : '.as-refused', { timeout: 10000 }).then(() => true, () => false);
+    if (!ready) {
+      fail(`${where}: ${asks ? "the assistant's home" : 'the refusal'} didn't show`);
+      continue;
+    }
+    if (await page.locator('.as-signed-out').count()) fail(`${where}: shows the signed-out screen to someone signed in`);
+    if (await signInHeading()) fail(`${where}: shows a "Sign in" heading to someone signed in`);
+    if (!asks) {
+      const want = (chatStatusFor(k).json as { error: string }).error;
+      const n = await page.getByText(want, { exact: true }).count();
+      if (n !== 1) fail(`${where}: the refusal "${want}" shows ${n} times (want once)`);
+      if (k === 'wallet') {
+        const ways = await page.locator('.as-refused .signin-choice').evaluateAll((els) => els.map((e) => e.getAttribute('data-method')));
+        const can = ASSISTANT.anyAccount ? SIGN_IN_ON.filter((m) => m === 'farcaster' || m === 'lens' || m === 'bluesky').join(',') : 'farcaster';
+        if (ways.join(',') !== can) fail(`${where}: offers ${ways.join(', ') || 'no'} sign-in (want only the ways that can ask: ${can})`);
+      } else if (!(await page.locator('.as-refused a[href="/you"]').count())) fail(`${where}: no link to the You page to link accounts`);
+    }
+    await checkFloors(page, where, scheme);
+    await shot(page, `phone-390-assistant-${k}`, scheme);
+  }
+  await page.unroute('**/api/**', answer);
+  await page.evaluate(() => {
+    for (const key of ['snowmoon.signin', 'snowmoon.wallet', 'snowmoon.social', 'snowmoon.social.link']) localStorage.removeItem(key);
+  });
+}
+
 const YOU_EMPTY_WORK = { stored: true, scenes: [], frames: [], boards: [], pictures: [] };
 const YOU_FIXTURES = {
   lens: {
@@ -477,7 +566,7 @@ async function checkYouSignedIn(page: Page, scheme: string) {
     if (u.pathname === '/api/you') return r.fulfill({ json: { work: YOU_EMPTY_WORK, maintainer: false, prices: null, wallet: null, link: null, linkedWallets: [], ...YOU_FIXTURES[kind] } });
     if (u.pathname === '/api/wallet/balance')
       return r.fulfill({ json: { address: WALLET_ADDRESS, balanceUsd: 1.5, priceUsd: 0.05, generations: 30, markup: 0.3, open: true, payTo: WALLET_ADDRESS, usdc: WALLET_ADDRESS, packsUsd: [5, 10], linkOffer: false } });
-    if (u.pathname === '/api/chat/status') return r.fulfill({ status: 403, json: { error: 'Sign in with Farcaster to use the assistant' } });
+    if (u.pathname === '/api/chat/status') return r.fulfill(chatStatusFor(kind));
     return r.fulfill({ status: 404, json: { error: 'Not found' } });
   };
   await page.route('**/api/**', answer);
@@ -552,10 +641,16 @@ async function checkYouSignedIn(page: Page, scheme: string) {
         await checkFloors(page, `${where} (handle box)`, scheme);
         await shot(page, 'phone-390-you-lens-handle', scheme);
       }
-      // The assistant, signed in with Lens: why it needs Farcaster, plainly.
+      // The assistant, signed in with Lens: with ASSISTANT.anyAccount on it opens (the question decides the Lens check);
+      // off, it says plainly why it needs Farcaster.
       await open(page, '/assistant');
-      const said = await page.getByText('Asking questions needs a Farcaster account.').first().waitFor({ timeout: 10000 }).then(() => true, () => false);
-      if (!said) fail(`/assistant @390 (${scheme}, lens): doesn't say "Asking questions needs a Farcaster account."`);
+      if (ASSISTANT.anyAccount) {
+        const opened = await page.locator('.as-start').first().waitFor({ timeout: 10000 }).then(() => true, () => false);
+        if (!opened) fail(`/assistant @390 (${scheme}, lens): the assistant doesn't open for a Lens account`);
+      } else {
+        const said = await page.getByText('Asking questions needs a Farcaster account.').first().waitFor({ timeout: 10000 }).then(() => true, () => false);
+        if (!said) fail(`/assistant @390 (${scheme}, lens): doesn't say "Asking questions needs a Farcaster account."`);
+      }
     }
   }
   await page.unroute('**/api/**', answer);
@@ -2195,14 +2290,15 @@ try {
         // Signed out: the assistant panel is there, with what it does and a sign-in button.
         await page.waitForSelector('.panel .as-signed-out button');
         // The panel's sign-in is the menu's button (owner, 2026-10-19; the same list since 2026-10-30): full width, at least 48px,
-        // the main font; Farcaster only (questions are counted per Farcaster account).
-        const pb = await page.locator('.panel .as-signed-out .as-signin button.menu-signin').evaluate((e) => {
+        // the main font; only the ways that can ask: Farcaster, and Lens and Bluesky once ASSISTANT.anyAccount is on (2026-11-05).
+        const pb = await page.locator('.panel .as-signed-out .as-signin button.menu-signin').first().evaluate((e) => {
           const r = e.getBoundingClientRect();
           const st = getComputedStyle(e);
           return { h: r.height, w: r.width, pw: (e.closest('.as-signin') as HTMLElement).clientWidth, font: st.fontFamily, upper: st.textTransform };
         });
-        const panelWays = await page.locator('.panel .as-signed-out .as-signin button').count();
-        if (panelWays !== 1) fail(`@${width}: the assistant panel offers ${panelWays} sign-in buttons (want Farcaster only)`);
+        const panelWays = await page.locator('.panel .as-signed-out .as-signin .signin-choice').evaluateAll((els) => els.map((e) => e.getAttribute('data-method')).join(','));
+        const askWays = ASSISTANT.anyAccount ? SIGN_IN_ON.filter((m) => m === 'farcaster' || m === 'lens' || m === 'bluesky').join(',') : 'farcaster';
+        if (panelWays !== askWays) fail(`@${width}: the assistant panel offers ${panelWays || 'no'} sign-in (want the ways that can ask: ${askWays})`);
         if (pb.h < 47.5 || pb.w < pb.pw - 1 || /mono/i.test(pb.font) || pb.upper === 'uppercase') fail(`@${width}: the assistant panel's sign-in is not the menu's button (${JSON.stringify(pb)})`);
         await shot(page, `desktop-${width}-chapter`, scheme);
         // Minpentai's pages start with the assistant closed (owner, 2026-10-20); opening it there isn't remembered.
@@ -2328,6 +2424,7 @@ try {
     if (await page.locator('.menu-sheet .signin-choice').count()) fail(`/you @390 (${scheme}): signed out, the menu repeats the page's sign-in buttons`);
     await page.keyboard.press('Escape');
     await checkYouSignedIn(page, scheme);
+    await checkAssistantPanels(page, scheme);
     await checkIllustrationReview(page, scheme);
     await checkAdmin(page, scheme);
     await checkImageZoom(page, scheme);
