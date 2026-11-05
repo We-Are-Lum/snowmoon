@@ -1,7 +1,8 @@
--- NEXT_social_bluesky_check (numbered at merge; named to sort after NEXT_signin_lens_bluesky). Branch bluesky-check,
+-- 0036_social_bluesky_check (was NEXT_social_bluesky_check; numbered at merge, #117, after 0035_signin_lens_bluesky). Branch bluesky-check,
 -- owner 2026-11-04: Bluesky accounts get an eligibility check, Bluesky's counterpart of Neynar's score
--- (src/lib/social/bluesky-check.ts). DRAFT, NOT APPLIED: the owner pastes it in the Supabase SQL Editor; nothing here
--- is applied by the coding agent (Anthropic's Claude).
+-- (src/lib/social/bluesky-check.ts). APPLIED on production by the owner on 2026-11-05 in the Supabase SQL
+-- Editor (SQL pack 5A–5D: dry run clean, applied, read-back 11/11 true, 5D passed); nothing here is applied by the coding
+-- agent (Anthropic's Claude).
 --
 -- MUST RUN AS postgres (the role that owns the `studio` schema), in the Supabase SQL Editor. One transaction. Safe to
 -- run twice. Requires, in this order: 0033_remix_challenge (challenge_eligibility, challenge_marks), NEXT_check_decisions
