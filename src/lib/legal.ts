@@ -8,7 +8,9 @@
  * prepaid generations, the adaptation pages, Remix: drafted by the coding agent, reread by the owner;
  * Terms section 2's last words are the owner's), 2026-11-01 (agent play: Terms section 6d, Privacy section 4;
  * docs/legal/minpentai-agent-play-draft.md), 2026-11-01 again (the remix challenge: Terms sections 6e and 7, Privacy
- * sections 4, 6 and 7; docs/legal/remix-challenge-draft.md). Only the owner changes the words.
+ * sections 4, 6 and 7; docs/legal/remix-challenge-draft.md), and 2026-11-04 (the furthest chapter sent with assistant
+ * questions: Privacy section 3; docs/legal/privacy-furthest-chapter-draft.md).
+ * Only the owner changes the words.
  *
  * Kept true by check:principles:
  * - P6g–P6j: the Privacy page, About, the assistant's notice and the image consent screen name
@@ -132,18 +134,26 @@ export const LEGAL: {
     // branch check-decisions; docs/legal/check-decisions-draft.md): §7's Neynar item keeps only the decision and when
     // (90 days a pass, a day a fail; sooner after a report or a moderator's hide, or a new threshold), and §4 adds the
     // decision as an item. The words before were 1wgu7z.
+    // 2026-11-04, reread pack item 1 (branch privacy-furthest-chapter; docs/legal/privacy-furthest-chapter-draft.md),
+    // reviewed by the coordinator, approved by the owner, 2026-11-04 (1.1: keep the parenthesis): §3's "These stay on
+    // your device." adds that the assistant sends the furthest chapter, as a number (or another chapter chosen for a
+    // conversation), with each question and its search of the book, so that answers stay within it, and that it isn't
+    // kept. The words before were 1rsayc0 (main, with check-decisions' item 2).
     // 2026-11-04, the reread pack ("reviewed by the coordinator, approved by the owner"): check-decisions (item 2, as
     // drafted: §7's Neynar item keeps only the decision and when; §4 adds the decision as an item) and Lens and Bluesky
     // sign-in (item 3: §7's Lens line and §4's 30-day sentence as drafted; §4's Lens check item from check-decisions,
     // with the Farcaster item's own sentence "A pass is removed sooner if your account is reported or one of your
     // pictures is hidden by a moderator.", 3.4). The earlier sign-in items 5–11 were approved as drafted
     // (docs/legal/signin-reread-list.md). The words before were 1rsayc0 (check-decisions alone). LEGAL.effective becomes the merge day.
+    // 2026-11-05, merging main's privacy-furthest-chapter (bv4cvf) with this branch's sign-in words (iqpiw8): both sets of
+    // lines were approved word for word, and §3 holds both unchanged (main's furthest-chapter clause, this branch's
+    // sign-in phrases), so the combined words are recorded as approved. The words before were iqpiw8 (this branch) and bv4cvf (main).
     // PENDING the owner's reread (branch bluesky-check, 2026-11-04): Privacy §7's Bluesky check item (4.1, the combined
     // line, redrafted for the rolling rule: 30 days old and 5 posts in the last 30 days, judged when we check) and §4's
     // Bluesky check item (4.2, redrafted with no numbers, plus the Farcaster item's early-removal sentence). §4's
     // challenge items (4.3, 4.4) are approved as drafted. Until the owner OKs 4.1 and 4.2, this record is of the
-    // words before them (iqpiw8), so P6l fails on this branch, as it should.
-    privacy: { words: 'iqpiw8', on: '2026-11-04', by: 'FID 6786' },
+    // words before them (m0e1f7 since main's privacy-furthest-chapter merged in, 2026-11-05; iqpiw8 before), so P6l fails on this branch, as it should.
+    privacy: { words: 'm0e1f7', on: '2026-11-04', by: 'FID 6786' },
   },
 };
 
@@ -177,7 +187,7 @@ export const PRIVACY: LegalDoc = {
   sections: [
     { n: 1, head: 'Who we are.', body: ['Lum LLC, a Wyoming limited liability company, operates Snowmoon Party.'] },
     { n: 2, head: 'The short version.', body: ['You can read and listen without an account, and we keep nothing about you when you do. We use no advertising or analytics trackers and set no cookies. We do not sell data.'] },
-    { n: 3, head: 'Kept on your device only.', body: ['Your browser stores a few things so the site works: whether you have seen the introduction, your light or dark setting, where you stopped listening, the furthest chapter you have opened, your questions to the assistant and its answers, drafts of images you make until you publish them, a few other settings of yours, and, on the website, your sign-in, which lasts about an hour (a day for a wallet, Lens or Bluesky sign-in), a note of a Bluesky sign-in under way, kept in that tab for at most ten minutes, and a payment you have sent but not yet seen credited. These stay on your device. Clearing your browser\'s site data removes them. Frames you make in Remix are not drafts: they are saved by us as soon as they are made (section 4). So are the frames and video tests your agent makes when you approve them, but privately: only you can see them (section 4).'] },
+    { n: 3, head: 'Kept on your device only.', body: ['Your browser stores a few things so the site works: whether you have seen the introduction, your light or dark setting, where you stopped listening, the furthest chapter you have opened, your questions to the assistant and its answers, drafts of images you make until you publish them, a few other settings of yours, and, on the website, your sign-in, which lasts about an hour (a day for a wallet, Lens or Bluesky sign-in), a note of a Bluesky sign-in under way, kept in that tab for at most ten minutes, and a payment you have sent but not yet seen credited. These stay on your device, except that the assistant sends the furthest chapter, as a number (or another chapter you choose for a conversation), with each question and its search of the book, so that answers stay within it; it isn\'t kept. Clearing your browser\'s site data removes them. Frames you make in Remix are not drafts: they are saved by us as soon as they are made (section 4). So are the frames and video tests your agent makes when you approve them, but privately: only you can see them (section 4).'] },
     {
       n: 4,
       head: 'Kept by us when you sign in.',
