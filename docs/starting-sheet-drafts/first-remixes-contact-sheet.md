@@ -18,6 +18,11 @@ links were not opened. Full recipes: `first-remixes/recipes.json`. Each will car
 - Two files were named for another character: `gladias2.png` and `gladias dif style.png` are Deluin (their prompts and
   pictures are his).
 
+**References (owner, 2026-11-05):** the style reference `--sref https://s.mj.run/YwM8K-xTQo0` is the owner's own
+picture, so the first remixes that use only it can be published (recorded in each recipe). The three that use
+`--profile hu97rol rg1f6ql` (Mu ink cape, Seila ink child, and the Deluin ledge draft) stay unpublished until those
+profiles are reported.
+
 **Your picks (2026-11-04):** two first remixes per character where you chose them (Gladias: the council table and the sunset
 with a goatee; Deluin: the arena game board and the hood with a mug), Mu and Seila two each, Zei one. The Deluin ledge
 picture stays a draft. Your Deluin pick's own prompt says "warm tan skin", the words I suggested for Deluin b.

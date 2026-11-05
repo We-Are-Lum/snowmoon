@@ -27,14 +27,16 @@
    "style_references_in_parameters": [
     "https://s.mj.run/YwM8K-xTQo0"
    ],
-   "what_they_are": "not reported (owner to say; the agent does not open midjourney.com or s.mj.run)",
+   "what_they_are": "the owner's own picture (owner, 2026-11-05)",
    "owner_condition": "only the owner's own pictures or the project's sheets (owner, 2026-11-04)",
-   "profiles_in_parameters": []
+   "profiles_in_parameters": [],
+   "style_reference_identified": {
+    "https://s.mj.run/YwM8K-xTQo0": "the owner's own picture (owner, 2026-11-05)"
+   }
   },
   "muse_agent_added": "nothing",
   "not_reported": [
-   "which base it remixes (agent proposal above, to confirm)",
-   "what each --sref and --profile reference is"
+   "which base it remixes (agent proposal above, to confirm)"
   ],
   "brought_in": "2026-11-04, copied byte for byte from the owner's Downloads by the coding agent; nothing published",
   "checks_against_owner_conditions": {
@@ -42,7 +44,8 @@
    "3_inputs": "the prompt is descriptive own words, no book passage; references not reported yet",
    "2_own_pictures_only": "not checkable from the file; owner to confirm"
   },
-  "use": "first remix (owner, 2026-11-04)"
+  "use": "first remix (owner, 2026-11-04)",
+  "publishable": "yes, as a first remix: its only reference is the owner's own picture (owner, 2026-11-05)"
  },
  {
   "file": "first-remixes/mu-ink-cape.png",
@@ -70,7 +73,7 @@
   },
   "references": {
    "style_references_in_parameters": [],
-   "what_they_are": "not reported (owner to say; the agent does not open midjourney.com or s.mj.run)",
+   "what_they_are": "profiles not reported yet (owner to say); the agent does not open midjourney.com",
    "owner_condition": "only the owner's own pictures or the project's sheets (owner, 2026-11-04)",
    "profiles_in_parameters": [
     "hu97rol rg1f6ql"
@@ -79,7 +82,7 @@
   "muse_agent_added": "nothing",
   "not_reported": [
    "which base it remixes (agent proposal above, to confirm)",
-   "what each --sref and --profile reference is"
+   "what the --profile references are"
   ],
   "brought_in": "2026-11-04, copied byte for byte from the owner's Downloads by the coding agent; nothing published",
   "checks_against_owner_conditions": {
@@ -87,7 +90,8 @@
    "3_inputs": "the prompt is descriptive own words, no book passage; references not reported yet",
    "2_own_pictures_only": "not checkable from the file; owner to confirm"
   },
-  "use": "first remix (owner, 2026-11-04)"
+  "use": "first remix (owner, 2026-11-04)",
+  "publishable": "not yet: its --profile references aren't reported"
  },
  {
   "file": "first-remixes/seila-ink-child.png",
@@ -115,7 +119,7 @@
   },
   "references": {
    "style_references_in_parameters": [],
-   "what_they_are": "not reported (owner to say; the agent does not open midjourney.com or s.mj.run)",
+   "what_they_are": "profiles not reported yet (owner to say); the agent does not open midjourney.com",
    "owner_condition": "only the owner's own pictures or the project's sheets (owner, 2026-11-04)",
    "profiles_in_parameters": [
     "hu97rol rg1f6ql"
@@ -124,7 +128,7 @@
   "muse_agent_added": "nothing",
   "not_reported": [
    "which base it remixes (agent proposal above, to confirm)",
-   "what each --sref and --profile reference is"
+   "what the --profile references are"
   ],
   "brought_in": "2026-11-04, copied byte for byte from the owner's Downloads by the coding agent; nothing published",
   "checks_against_owner_conditions": {
@@ -132,7 +136,8 @@
    "3_inputs": "the prompt is descriptive own words, no book passage; references not reported yet",
    "2_own_pictures_only": "not checkable from the file; owner to confirm"
   },
-  "use": "first remix (owner, 2026-11-04)"
+  "use": "first remix (owner, 2026-11-04)",
+  "publishable": "not yet: its --profile references aren't reported"
  },
  {
   "file": "first-remixes/seila-glowing-table.png",
@@ -162,14 +167,16 @@
    "style_references_in_parameters": [
     "https://s.mj.run/YwM8K-xTQo0"
    ],
-   "what_they_are": "not reported (owner to say; the agent does not open midjourney.com or s.mj.run)",
+   "what_they_are": "the owner's own picture (owner, 2026-11-05)",
    "owner_condition": "only the owner's own pictures or the project's sheets (owner, 2026-11-04)",
-   "profiles_in_parameters": []
+   "profiles_in_parameters": [],
+   "style_reference_identified": {
+    "https://s.mj.run/YwM8K-xTQo0": "the owner's own picture (owner, 2026-11-05)"
+   }
   },
   "muse_agent_added": "nothing",
   "not_reported": [
-   "which base it remixes (agent proposal above, to confirm)",
-   "what each --sref and --profile reference is"
+   "which base it remixes (agent proposal above, to confirm)"
   ],
   "brought_in": "2026-11-04, copied byte for byte from the owner's Downloads by the coding agent; nothing published",
   "checks_against_owner_conditions": {
@@ -177,7 +184,8 @@
    "3_inputs": "the prompt is descriptive own words, no book passage; references not reported yet",
    "2_own_pictures_only": "not checkable from the file; owner to confirm"
   },
-  "use": "first remix (owner, 2026-11-04)"
+  "use": "first remix (owner, 2026-11-04)",
+  "publishable": "yes, as a first remix: its only reference is the owner's own picture (owner, 2026-11-05)"
  },
  {
   "file": "first-remixes/deluin-game-board.png",
@@ -207,14 +215,16 @@
    "style_references_in_parameters": [
     "https://s.mj.run/YwM8K-xTQo0"
    ],
-   "what_they_are": "not reported (owner to say; the agent does not open midjourney.com or s.mj.run)",
+   "what_they_are": "the owner's own picture (owner, 2026-11-05)",
    "owner_condition": "only the owner's own pictures or the project's sheets (owner, 2026-11-04)",
-   "profiles_in_parameters": []
+   "profiles_in_parameters": [],
+   "style_reference_identified": {
+    "https://s.mj.run/YwM8K-xTQo0": "the owner's own picture (owner, 2026-11-05)"
+   }
   },
   "muse_agent_added": "nothing",
   "not_reported": [
-   "which base it remixes (agent proposal above, to confirm)",
-   "what each --sref and --profile reference is"
+   "which base it remixes (agent proposal above, to confirm)"
   ],
   "brought_in": "2026-11-04, copied byte for byte from the owner's Downloads by the coding agent; nothing published",
   "checks_against_owner_conditions": {
@@ -222,7 +232,8 @@
    "3_inputs": "the prompt is descriptive own words, no book passage; references not reported yet",
    "2_own_pictures_only": "not checkable from the file; owner to confirm"
   },
-  "use": "first remix (owner, 2026-11-04)"
+  "use": "first remix (owner, 2026-11-04)",
+  "publishable": "yes, as a first remix: its only reference is the owner's own picture (owner, 2026-11-05)"
  },
  {
   "file": "first-remixes/deluin-ink-ledge.png",
@@ -250,7 +261,7 @@
   },
   "references": {
    "style_references_in_parameters": [],
-   "what_they_are": "not reported (owner to say; the agent does not open midjourney.com or s.mj.run)",
+   "what_they_are": "profiles not reported yet (owner to say); the agent does not open midjourney.com",
    "owner_condition": "only the owner's own pictures or the project's sheets (owner, 2026-11-04)",
    "profiles_in_parameters": [
     "hu97rol rg1f6ql"
@@ -259,7 +270,7 @@
   "muse_agent_added": "nothing",
   "not_reported": [
    "which base it remixes (agent proposal above, to confirm)",
-   "what each --sref and --profile reference is"
+   "what the --profile references are"
   ],
   "brought_in": "2026-11-04, copied byte for byte from the owner's Downloads by the coding agent; nothing published",
   "checks_against_owner_conditions": {
@@ -267,7 +278,8 @@
    "3_inputs": "the prompt is descriptive own words, no book passage; references not reported yet",
    "2_own_pictures_only": "not checkable from the file; owner to confirm"
   },
-  "use": "draft only (owner, 2026-11-04)"
+  "use": "draft only (owner, 2026-11-04)",
+  "publishable": "not yet: its --profile references aren't reported"
  },
  {
   "file": "first-remixes/gladias-council.png",
@@ -297,14 +309,16 @@
    "style_references_in_parameters": [
     "https://s.mj.run/YwM8K-xTQo0"
    ],
-   "what_they_are": "not reported (owner to say; the agent does not open midjourney.com or s.mj.run)",
+   "what_they_are": "the owner's own picture (owner, 2026-11-05)",
    "owner_condition": "only the owner's own pictures or the project's sheets (owner, 2026-11-04)",
-   "profiles_in_parameters": []
+   "profiles_in_parameters": [],
+   "style_reference_identified": {
+    "https://s.mj.run/YwM8K-xTQo0": "the owner's own picture (owner, 2026-11-05)"
+   }
   },
   "muse_agent_added": "nothing",
   "not_reported": [
-   "which base it remixes (agent proposal above, to confirm)",
-   "what each --sref and --profile reference is"
+   "which base it remixes (agent proposal above, to confirm)"
   ],
   "brought_in": "2026-11-04, copied byte for byte from the owner's Downloads by the coding agent; nothing published",
   "checks_against_owner_conditions": {
@@ -312,7 +326,8 @@
    "3_inputs": "the prompt is descriptive own words, no book passage; references not reported yet",
    "2_own_pictures_only": "not checkable from the file; owner to confirm"
   },
-  "use": "first remix (owner, 2026-11-04)"
+  "use": "first remix (owner, 2026-11-04)",
+  "publishable": "yes, as a first remix: its only reference is the owner's own picture (owner, 2026-11-05)"
  },
  {
   "file": "first-remixes/zei-with-mu-snow.png",
@@ -342,14 +357,16 @@
    "style_references_in_parameters": [
     "https://s.mj.run/YwM8K-xTQo0"
    ],
-   "what_they_are": "not reported (owner to say; the agent does not open midjourney.com or s.mj.run)",
+   "what_they_are": "the owner's own picture (owner, 2026-11-05)",
    "owner_condition": "only the owner's own pictures or the project's sheets (owner, 2026-11-04)",
-   "profiles_in_parameters": []
+   "profiles_in_parameters": [],
+   "style_reference_identified": {
+    "https://s.mj.run/YwM8K-xTQo0": "the owner's own picture (owner, 2026-11-05)"
+   }
   },
   "muse_agent_added": "nothing",
   "not_reported": [
-   "which base it remixes (agent proposal above, to confirm)",
-   "what each --sref and --profile reference is"
+   "which base it remixes (agent proposal above, to confirm)"
   ],
   "brought_in": "2026-11-04, copied byte for byte from the owner's Downloads by the coding agent; nothing published",
   "checks_against_owner_conditions": {
@@ -357,7 +374,8 @@
    "3_inputs": "the prompt is descriptive own words, no book passage; references not reported yet",
    "2_own_pictures_only": "not checkable from the file; owner to confirm"
   },
-  "use": "first remix (owner, 2026-11-04)"
+  "use": "first remix (owner, 2026-11-04)",
+  "publishable": "yes, as a first remix: its only reference is the owner's own picture (owner, 2026-11-05)"
  },
  {
   "file": "first-remixes/gladias-sunset-goatee.png",
@@ -387,14 +405,16 @@
    "style_references_in_parameters": [
     "https://s.mj.run/YwM8K-xTQo0"
    ],
-   "what_they_are": "not reported (owner to say; the agent does not open midjourney.com or s.mj.run)",
+   "what_they_are": "the owner's own picture (owner, 2026-11-05)",
    "owner_condition": "only the owner's own pictures or the project's sheets (owner, 2026-11-04)",
-   "profiles_in_parameters": []
+   "profiles_in_parameters": [],
+   "style_reference_identified": {
+    "https://s.mj.run/YwM8K-xTQo0": "the owner's own picture (owner, 2026-11-05)"
+   }
   },
   "muse_agent_added": "nothing",
   "not_reported": [
-   "which base it remixes (agent proposal above, to confirm)",
-   "what each --sref and --profile reference is"
+   "which base it remixes (agent proposal above, to confirm)"
   ],
   "brought_in": "2026-11-04, copied byte for byte from the owner's Downloads by the coding agent; nothing published",
   "checks_against_owner_conditions": {
@@ -402,7 +422,8 @@
    "3_inputs": "the prompt is descriptive own words, no book passage; references not reported yet",
    "2_own_pictures_only": "not checkable from the file; owner to confirm"
   },
-  "use": "first remix (owner, 2026-11-04)"
+  "use": "first remix (owner, 2026-11-04)",
+  "publishable": "yes, as a first remix: its only reference is the owner's own picture (owner, 2026-11-05)"
  },
  {
   "file": "first-remixes/deluin-hood-mug.png",
@@ -432,14 +453,16 @@
    "style_references_in_parameters": [
     "https://s.mj.run/YwM8K-xTQo0"
    ],
-   "what_they_are": "not reported (owner to say; the agent does not open midjourney.com or s.mj.run)",
+   "what_they_are": "the owner's own picture (owner, 2026-11-05)",
    "owner_condition": "only the owner's own pictures or the project's sheets (owner, 2026-11-04)",
-   "profiles_in_parameters": []
+   "profiles_in_parameters": [],
+   "style_reference_identified": {
+    "https://s.mj.run/YwM8K-xTQo0": "the owner's own picture (owner, 2026-11-05)"
+   }
   },
   "muse_agent_added": "nothing",
   "not_reported": [
-   "which base it remixes (agent proposal above, to confirm)",
-   "what each --sref and --profile reference is"
+   "which base it remixes (agent proposal above, to confirm)"
   ],
   "brought_in": "2026-11-04, copied byte for byte from the owner's Downloads by the coding agent; nothing published",
   "checks_against_owner_conditions": {
@@ -447,6 +470,7 @@
    "3_inputs": "the prompt is descriptive own words, no book passage; references not reported yet",
    "2_own_pictures_only": "not checkable from the file; owner to confirm"
   },
-  "use": "first remix (owner, 2026-11-04)"
+  "use": "first remix (owner, 2026-11-04)",
+  "publishable": "yes, as a first remix: its only reference is the owner's own picture (owner, 2026-11-05)"
  }
 ]
