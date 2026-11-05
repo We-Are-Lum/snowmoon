@@ -432,7 +432,7 @@ for (const f of REST) {
 }
 await equal('RLS on every studio table after the last migration', 'postgres',
   `select count(*)::int as v from pg_tables where schemaname = 'studio' and not rowsecurity`, 0);
-// image_scores (0010): emptied by NEXT_check_decisions; the writer can no longer keep or change a score (owner, 2026-11-04).
+// image_scores (0010): emptied by 0034_check_decisions; the writer can no longer keep or change a score (owner, 2026-11-04).
 await denied('writer cannot keep a score', W, `insert into studio.image_scores (fid, score) values (7, 0.82)`, PERM);
 await equal('no score is kept', W, `select count(*)::int as v from studio.image_scores`, 0);
 await denied('writer cannot truncate scores', W, `truncate studio.image_scores`, PERM);
