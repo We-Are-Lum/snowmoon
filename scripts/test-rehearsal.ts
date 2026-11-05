@@ -74,7 +74,7 @@ check('every R2 write and read has the local branch first', (store.match(/if \(r
 {
   const { spawnSync } = await import('node:child_process');
   const probe = (env: Record<string, string>) => {
-    const r = spawnSync(process.execPath, ['--import', 'tsx', '--conditions=react-server', 'scripts/lib/rehearsal-probe.ts'], { env: { PATH: process.env.PATH ?? '', HOME: process.env.HOME ?? '', ...env }, encoding: 'utf8' });
+    const r = spawnSync(process.execPath, ['--import', 'tsx', '--conditions=react-server', 'scripts/lib/rehearsal-probe.ts'], { env: { PATH: process.env.PATH ?? '', HOME: process.env.HOME ?? '', ...env } as NodeJS.ProcessEnv, encoding: 'utf8' });
     try {
       return JSON.parse(r.stdout.trim().split('\n').pop() ?? '');
     } catch {

@@ -24,3 +24,4 @@ console.log(
     siteLink: linksToVersion({ links: [`https://snowmoon.party/references/designs/${v}`] }, v),
   }),
 );
+export {};
