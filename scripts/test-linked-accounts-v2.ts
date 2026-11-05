@@ -419,7 +419,7 @@ await pg.close();
   const banner = await v2.pendingRequest(d3, S3, D('2026-11-08'));
   check('T3 8 Nov: the banner shows for every sign-in of S (A and B read the same pending request)', banner?.requestedBy === J.B && (await v2.accountOf(d3, J.A)) === (await v2.accountOf(d3, J.B)));
   const v2src = readFileSync(path.join(ROOT, 'src/lib/linked/v2.ts'), 'utf8');
-  check('T3: no notification is built or sent (no network call in the module; no token table)', !/\bfetch\(|https?:\/\//.test(v2src.replace(/^\s*\*.*$/gm, '')) && (await pg3.query(`select to_regclass('studio.miniapp_tokens') as t`)).rows[0] && (await pg3.query<{ t: unknown }>(`select to_regclass('studio.miniapp_tokens') as t`)).rows[0].t === null);
+  check('T3: no notification is built or sent (no network call in the module; no token table)', !/\bfetch\(|https?:\/\//.test(v2src.replace(/^\s*\*.*$/gm, '')) && (await pg3.query<{ t: unknown }>(`select to_regclass('studio.miniapp_tokens') as t`)).rows[0].t === null);
   check('T3: a second request while one is pending: refused', why(await v2.requestMain(d3, { actor: J.B, now: D('2026-11-08') }, ON)) === 'pending');
   /** The variant: not cancelled. */
   const notCancelled = async () => {
