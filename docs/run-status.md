@@ -11,10 +11,10 @@ beyond the two named, no migrations on production, nothing published. Spending t
 | 2 | Split the sign-in release from model choice | A | in progress |
 | 3 | Sign-in release ready to merge (main in, checks, legal before/after, SQL items 2 and 5, morning checklist) | A | in progress |
 | 4 | contest: Lens check at publish; Lens and Bluesky own-post checks; "Post on …" buttons | A | waiting for 3 |
-| 5 | contest: §6e one entry a day; admins see rules/remixes; test sign-in moves to rehearsal-tools; item 4 = NEXT_challenge_daily | A | waiting |
-| 6 | Paying per person, browser side | B | in progress |
-| 7 | Linked accounts (migration copy blocks, code behind a switch, legal drafts) | B | waiting for 6 |
-| — | Deluin b front and two views ($0.25 cap) | styles | in progress |
+| 5 | contest: §6e one entry a day; admins see rules/remixes; test sign-in off contest; item 4 = NEXT_challenge_daily | A | **already done this evening** by the other session (contest a4e0c00d, 6f4901bd; stand-ins on `contest-rehearsal` bc4e5287; sql-pack 51272b02) |
+| 6 | Paying per person, browser side | B | **already done this evening** (person-balance 4c4fae5b; switch on; its migration must be applied before merge) |
+| 7 | Linked accounts (migration copy blocks, code behind a switch, legal drafts) | B | in progress |
+| — | Deluin b front and two views | styles | **already done this evening** ($0.20276; files moved to b; a green shoulder bag appeared, see the recast sheet). My duplicate was stopped before spending |
 | — | fund-page P7c from another network | — | blocked: this Mac's network can't reach ethereum-rpc.publicnode.com; left for the owner |
 
 ## Lens App: verified (2026-11-05, read-only)
