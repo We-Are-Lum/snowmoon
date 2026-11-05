@@ -17,6 +17,7 @@ shows as totals; per person, only what is public anyway (their name, published w
 | `src/app/admin/activity/not-found.tsx` | `<AdminActivity fallback={<NotFound />} />`, the `ChallengeAdmin` pattern (`src/components/challenge-admin.tsx`): a signed-in admin's browser fetches the data and draws it; everyone else keeps the usual 404 page. |
 | `src/app/api/admin/activity/route.ts` | `GET` only. Hands `getFid(request)` to `adminActivity`; answers with its status and `Cache-Control: private, no-store`. `dynamic = 'force-dynamic'`. |
 | `src/lib/admin-activity.ts` | The gate and every query, together: `adminActivity(sql, fid)` answers `404 {"error":"Not found"}` unless `isAdmin(fid)` (`src/lib/admins.ts`), before any query; then returns `ActivityView` (totals and public rows only). It sorts (by time), under the P5b exception below. |
+| `src/lib/admin-activity-defs.ts` | Every count as data (`defs()`): its category, aggregate, rows and day column, and `defProblems` (P6aa: a category names no person column; the number is an aggregate). No server code, so the checks read it without a database. |
 | `src/components/admin-activity.tsx` | Draws `ActivityView`: tables and plain bar rows, no chart library, no third-party request (P6a). No words of its own beyond labels. |
 
 **One read-only transaction.** `sql.begin('read only', async (tx) => { await tx\`set local statement_timeout = '5s'\`; … })`
@@ -279,3 +280,18 @@ dashboard branch's `legal.ts`, not here.
   (P7a).
 - **P1–P4, P8:** not touched (no publishing, no model call, no book text, no Minpentai).
 - **New tension:** admins seeing what is kept isn't stated in Privacy yet; the owner's line closes it in the release.
+
+## Built (2026-11-05, branch admin-activity)
+
+As designed above, with these specifics:
+
+- Each count returns `(day, key, n, total)` from one grouped query (`grouping sets`: per day in the window, and all
+  time). One person's view (`?who=`) returns their public lists only and no counts at all.
+- P5b now lives in `scripts/lib/p5b.ts`. Besides the owner's exception, "publishes" is now read as a write only (a
+  status set in SQL, given in a row, or assigned in code); a read that filters on `status = 'published'` no longer
+  counts as publishing. The old regex flagged the dashboard's read filters.
+- `npm run test:admin-activity`: PGlite with every migration, run as `studio_writer`; gate, read-only refusal,
+  optional tables added mid-test, Pacific/UTC days, totals, public rows only, a scan for private values, and the P5b
+  and P6aa planted faults.
+- Not built: the Privacy line (a draft for the owner); scene bylines show the stored name and skip the linked-wallet
+  credit that scene pages apply (an admin-only view, so a wallet-linked scene may show its address here).
