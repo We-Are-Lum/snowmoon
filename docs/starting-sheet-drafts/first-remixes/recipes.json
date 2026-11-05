@@ -41,7 +41,8 @@
    "1_by_hand": "Author \"naaate\" in the file; the owner says made by hand",
    "3_inputs": "the prompt is descriptive own words, no book passage; references not reported yet",
    "2_own_pictures_only": "not checkable from the file; owner to confirm"
-  }
+  },
+  "use": "first remix (owner, 2026-11-04)"
  },
  {
   "file": "first-remixes/mu-ink-cape.png",
@@ -85,7 +86,8 @@
    "1_by_hand": "Author \"naaate\" in the file; the owner says made by hand",
    "3_inputs": "the prompt is descriptive own words, no book passage; references not reported yet",
    "2_own_pictures_only": "not checkable from the file; owner to confirm"
-  }
+  },
+  "use": "first remix (owner, 2026-11-04)"
  },
  {
   "file": "first-remixes/seila-ink-child.png",
@@ -129,7 +131,8 @@
    "1_by_hand": "Author \"naaate\" in the file; the owner says made by hand",
    "3_inputs": "the prompt is descriptive own words, no book passage; references not reported yet",
    "2_own_pictures_only": "not checkable from the file; owner to confirm"
-  }
+  },
+  "use": "first remix (owner, 2026-11-04)"
  },
  {
   "file": "first-remixes/seila-glowing-table.png",
@@ -173,7 +176,8 @@
    "1_by_hand": "Author \"naaate\" in the file; the owner says made by hand",
    "3_inputs": "the prompt is descriptive own words, no book passage; references not reported yet",
    "2_own_pictures_only": "not checkable from the file; owner to confirm"
-  }
+  },
+  "use": "first remix (owner, 2026-11-04)"
  },
  {
   "file": "first-remixes/deluin-game-board.png",
@@ -217,7 +221,8 @@
    "1_by_hand": "Author \"naaate\" in the file; the owner says made by hand",
    "3_inputs": "the prompt is descriptive own words, no book passage; references not reported yet",
    "2_own_pictures_only": "not checkable from the file; owner to confirm"
-  }
+  },
+  "use": "first remix (owner, 2026-11-04)"
  },
  {
   "file": "first-remixes/deluin-ink-ledge.png",
@@ -261,7 +266,8 @@
    "1_by_hand": "Author \"naaate\" in the file; the owner says made by hand",
    "3_inputs": "the prompt is descriptive own words, no book passage; references not reported yet",
    "2_own_pictures_only": "not checkable from the file; owner to confirm"
-  }
+  },
+  "use": "draft only (owner, 2026-11-04)"
  },
  {
   "file": "first-remixes/gladias-council.png",
@@ -305,7 +311,8 @@
    "1_by_hand": "Author \"naaate\" in the file; the owner says made by hand",
    "3_inputs": "the prompt is descriptive own words, no book passage; references not reported yet",
    "2_own_pictures_only": "not checkable from the file; owner to confirm"
-  }
+  },
+  "use": "first remix (owner, 2026-11-04)"
  },
  {
   "file": "first-remixes/zei-with-mu-snow.png",
@@ -349,6 +356,97 @@
    "1_by_hand": "Author \"naaate\" in the file; the owner says made by hand",
    "3_inputs": "the prompt is descriptive own words, no book passage; references not reported yet",
    "2_own_pictures_only": "not checkable from the file; owner to confirm"
-  }
+  },
+  "use": "first remix (owner, 2026-11-04)"
+ },
+ {
+  "file": "first-remixes/gladias-sunset-goatee.png",
+  "sha256": "b289adcd7e837078186ed0cc79f401cfdfcbd293359e027f75dc7b3fc9489fcc",
+  "original_filename": "gladias b.png",
+  "size": [
+   1456,
+   816
+  ],
+  "character": "Gladias",
+  "remixes_base": {
+   "proposed_by_agent_from_the_look": "Gladias b, the current default (the prompt describes warm olive-brown skin and short black hair greying at the temples)",
+   "owner_confirmed": false
+  },
+  "made_by": "the owner (@naaate), by hand, with Midjourney (a closed model by Midjourney), outside the site",
+  "label": "Made with Midjourney, a closed model by Midjourney, outside the site · recipe reported by its maker; it can't be re-run exactly",
+  "from_the_file": {
+   "prompt": "a calm professional man with warm olive-brown skin, short black hair greying at the temples and a short neatly trimmed greying beard, impeccably groomed, wearing a silken band around his neck and a finely tailored green sleeveless tunic with a structured high collar over a crisp cream shirt, a tan sash tied neatly like a formal belt, well-fitted grey trousers and polished boots, standing midway on a sky bridge above a busy road in a future city with the composed bearing of a statesman, serene confident smile, whispering to the band at his neck, castle-like apartment towers and a tree-covered mountain beyond, flat cel-shaded illustration, bold dark outlines, flat colour blocks, muted teal-grey world with warm accents",
+   "parameters": "--no text, letters, numbers, logos, watermark, signature, teeth, photograph, 3d render --chaos 5 --ar 16:9 --seed 6081 --sref https://s.mj.run/YwM8K-xTQo0 --sw 250 --stylize 250 --v 7 --draft",
+   "job_id": "080217ce-0981-4d2e-85ea-fec2ccbe2598",
+   "xmp_DigImageGUID": "080217ce-0981-4d2e-85ea-fec2ccbe2598",
+   "author": "naaate",
+   "created": "Wed, 04 Nov 2026 23:59:36 GMT",
+   "xmp_DigitalSourceType": "trainedAlgorithmicMedia"
+  },
+  "references": {
+   "style_references_in_parameters": [
+    "https://s.mj.run/YwM8K-xTQo0"
+   ],
+   "what_they_are": "not reported (owner to say; the agent does not open midjourney.com or s.mj.run)",
+   "owner_condition": "only the owner's own pictures or the project's sheets (owner, 2026-11-04)",
+   "profiles_in_parameters": []
+  },
+  "muse_agent_added": "nothing",
+  "not_reported": [
+   "which base it remixes (agent proposal above, to confirm)",
+   "what each --sref and --profile reference is"
+  ],
+  "brought_in": "2026-11-04, copied byte for byte from the owner's Downloads by the coding agent; nothing published",
+  "checks_against_owner_conditions": {
+   "1_by_hand": "Author \"naaate\" in the file; the owner says made by hand",
+   "3_inputs": "the prompt is descriptive own words, no book passage; references not reported yet",
+   "2_own_pictures_only": "not checkable from the file; owner to confirm"
+  },
+  "use": "first remix (owner, 2026-11-04)"
+ },
+ {
+  "file": "first-remixes/deluin-hood-mug.png",
+  "sha256": "610d235e853183ce3d323be19166e44d6dbacd48290f6910bb4f186710fad0f0",
+  "original_filename": "deluin long black hair.png",
+  "size": [
+   1456,
+   816
+  ],
+  "character": "Deluin",
+  "remixes_base": {
+   "proposed_by_agent_from_the_look": "Deluin b (the prompt describes warm tan skin and long straight black hair)",
+   "owner_confirmed": false
+  },
+  "made_by": "the owner (@naaate), by hand, with Midjourney (a closed model by Midjourney), outside the site",
+  "label": "Made with Midjourney, a closed model by Midjourney, outside the site · recipe reported by its maker; it can't be re-run exactly",
+  "from_the_file": {
+   "prompt": "a young man with warm tan skin and long straight black hair falling past his shoulders, wearing a cream cable-knit hooded sweater, dark green trousers and brown boots, sitting cross-legged on the ground in a quiet stone courtyard drinking tea from a small cup, serene and quietly confident, relaxed brow and a faint calm knowing smile, completely at ease and in control, green hills and afternoon light beyond the wall, flat cel-shaded illustration, bold dark outlines, flat colour blocks, muted teal-grey world with warm accents",
+   "parameters": "--no text, letters, numbers, logos, watermark, signature, teeth, photograph, 3d render --chaos 5 --ar 16:9 --seed 6082 --sref https://s.mj.run/YwM8K-xTQo0 --sw 250 --stylize 250 --v 7 --draft",
+   "job_id": "26cd4c07-95f3-428d-a082-853fe35a67e3",
+   "xmp_DigImageGUID": "26cd4c07-95f3-428d-a082-853fe35a67e3",
+   "author": "naaate",
+   "created": "Thu, 05 Nov 2026 00:02:06 GMT",
+   "xmp_DigitalSourceType": "trainedAlgorithmicMedia"
+  },
+  "references": {
+   "style_references_in_parameters": [
+    "https://s.mj.run/YwM8K-xTQo0"
+   ],
+   "what_they_are": "not reported (owner to say; the agent does not open midjourney.com or s.mj.run)",
+   "owner_condition": "only the owner's own pictures or the project's sheets (owner, 2026-11-04)",
+   "profiles_in_parameters": []
+  },
+  "muse_agent_added": "nothing",
+  "not_reported": [
+   "which base it remixes (agent proposal above, to confirm)",
+   "what each --sref and --profile reference is"
+  ],
+  "brought_in": "2026-11-04, copied byte for byte from the owner's Downloads by the coding agent; nothing published",
+  "checks_against_owner_conditions": {
+   "1_by_hand": "Author \"naaate\" in the file; the owner says made by hand",
+   "3_inputs": "the prompt is descriptive own words, no book passage; references not reported yet",
+   "2_own_pictures_only": "not checkable from the file; owner to confirm"
+  },
+  "use": "first remix (owner, 2026-11-04)"
  }
 ]
