@@ -41,7 +41,7 @@ const other = privateKeyToAccount('0x5de4111afa1a4b94908f83103eb1f1706367c2e68ca
 const FID = 424242;
 const SKY = -1_000_000_042;
 const offline = { verifySiweMessage: async () => false } as unknown as PublicClient;
-const WORDS = (person: number) => (person > 0 ? `your Farcaster account @alice (FID ${person})` : person <= -1e9 ? 'your Bluesky account @alice.bsky.social' : 'a wallet');
+const WORDS = (person: number) => (person > 0 ? `the Farcaster account @alice (FID ${person})` : person <= -1e9 ? 'the Bluesky account @alice.bsky.social (did:plc:z72i7hdynmk6r22z27h6tvur)' : 'a wallet');
 const msg = (person: number, o: { domain?: string; nonce?: string; address?: `0x${string}`; words?: string } = {}) =>
   payMessage({ domain: o.domain ?? 'snowmoon.party', uri: 'https://snowmoon.party', address: o.address ?? me.address, person, words: o.words ?? WORDS(person), nonce: o.nonce ?? newNonce()! });
 
@@ -58,13 +58,22 @@ check('who holds a person balance: a Farcaster ID and a Bluesky account, never a
   const n = msg(FID, { nonce: 'a'.repeat(74) });
   check('a nonce we did not issue is refused', (await verifyPayIntent(n, await me.signMessage({ message: n }), 'snowmoon.party', FID, WORDS(FID), offline)) === null);
   check('someone else signing my address is refused', (await verifyPayIntent(m, await other.signMessage({ message: m }), 'snowmoon.party', FID, WORDS(FID), offline)) === null);
-  const plain = m.replace(/Add payments from this wallet[^\n]*/, 'Sign in to Snowmoon.');
+  const plain = m.replace(/Credit my payments to [^\n]*/, 'Sign in to Snowmoon.');
   check('a different statement (a plain sign-in) is refused', (await verifyPayIntent(plain, await me.signMessage({ message: plain }), 'snowmoon.party', FID, WORDS(FID), offline)) === null);
-  check('the statement names the account in words, and the request id by number', m.includes(statementFor(WORDS(FID))) && m.includes('@alice (FID 424242)') && m.includes('Request ID: person:424242'), m);
-  check('a statement whose words name another account (an old name) is refused', (await verifyPayIntent(m, await me.signMessage({ message: m }), 'snowmoon.party', FID, 'your Farcaster account @bob (FID 424242)', offline)) === null);
+  check('the statement is the owner\'s approved words (2026-11-05), with this account\'s name and number', m.includes('\nCredit my payments to the Farcaster account @alice (FID 424242) on snowmoon.party. Payments are final.\n') && statementFor(WORDS(FID)) === 'Credit my payments to the Farcaster account @alice (FID 424242) on snowmoon.party. Payments are final.' && m.includes('Request ID: person:424242'), m);
+  check('a statement whose words name another account (an old name) is refused', (await verifyPayIntent(m, await me.signMessage({ message: m }), 'snowmoon.party', FID, 'the Farcaster account @bob (FID 424242)', offline)) === null);
+  // Planted violations (owner, 2026-11-05): a statement naming another account, or the wrong number, signed for real.
+  const otherName = msg(FID, { words: 'the Farcaster account @mallory (FID 424242)' });
+  check('planted: a signed statement naming another account (another name, this number) is refused', (await verifyPayIntent(otherName, await me.signMessage({ message: otherName }), 'snowmoon.party', FID, WORDS(FID), offline)) === null);
+  const wrongNumber = msg(FID, { words: 'the Farcaster account @alice (FID 434343)' });
+  check('planted: a signed statement with this name but the wrong number is refused', (await verifyPayIntent(wrongNumber, await me.signMessage({ message: wrongNumber }), 'snowmoon.party', FID, WORDS(FID), offline)) === null);
+  const wrongNetwork = msg(FID, { words: 'the Bluesky account @alice (FID 424242)' });
+  check('planted: a signed statement naming another network is refused', (await verifyPayIntent(wrongNetwork, await me.signMessage({ message: wrongNetwork }), 'snowmoon.party', FID, WORDS(FID), offline)) === null);
+  const skyForFid = msg(FID, { words: WORDS(SKY) });
+  check('planted: a statement naming the Bluesky account, used for the Farcaster person, is refused', (await verifyPayIntent(skyForFid, await me.signMessage({ message: skyForFid }), 'snowmoon.party', FID, WORDS(FID), offline)) === null);
   check('no words for the account (a Lens or Bluesky account we don\'t have): refused', (await verifyPayIntent(m, await me.signMessage({ message: m }), 'snowmoon.party', FID, null, offline)) === null);
-  check('words: a Farcaster account with its name', (await accountWords(null, FID, async () => 'alice')) === 'your Farcaster account @alice (FID 424242)');
-  check('words: a Farcaster account whose name can\'t be read', (await accountWords(null, FID, async () => { throw new Error('down'); })) === 'your Farcaster account FID 424242');
+  check('words: a Farcaster account with its name', (await accountWords(null, FID, async () => 'alice')) === 'the Farcaster account @alice (FID 424242)');
+  check('words: a Farcaster account whose name can\'t be read', (await accountWords(null, FID, async () => { throw new Error('down'); })) === 'the Farcaster account (FID 424242)');
   check('words: none for a wallet account', (await accountWords(null, -5)) === null);
   const sky = msg(SKY);
   check('a Bluesky person\'s statement is accepted for that person', (await verifyPayIntent(sky, await me.signMessage({ message: sky }), 'snowmoon.party', SKY, WORDS(SKY), offline)) === me.address.toLowerCase());
@@ -150,9 +159,11 @@ check('a Bluesky person is credited too, to its own balance only', r2.ok && (awa
   const ids = (await sql`select id::int as id, kind, handle from studio.social_accounts order by id`) as unknown as { id: number; kind: string; handle: string | null }[];
   const { socialPerson } = await import('../src/lib/people');
   const [sky, lens, bare] = ids.map((r) => socialPerson(r.id));
-  check('words: a Bluesky account by its handle', (await accountWords(S, sky)) === 'your Bluesky account @alice.bsky.social');
-  check('words: a Lens account by its username', (await accountWords(S, lens)) === 'your Lens account lens/alice');
-  check('words: a Bluesky account without a handle, by its DID', (await accountWords(S, bare)) === 'your Bluesky account did:plc:abcdefghijklmnopqrstuvwx');
+  check('words: a Bluesky account by its handle and DID', (await accountWords(S, sky)) === 'the Bluesky account @alice.bsky.social (did:plc:z72i7hdynmk6r22z27h6tvur)');
+  check('words: a Lens account by its username and address', (await accountWords(S, lens)) === 'the Lens account lens/alice (0xad2c0beade60fb9f7ec5c87bde8e4c126145f6e7)');
+  check('words: a Bluesky account without a handle, by its DID', (await accountWords(S, bare)) === 'the Bluesky account (did:plc:abcdefghijklmnopqrstuvwx)');
+  check('the Lens statement is the approved form', statementFor((await accountWords(S, lens))!) === 'Credit my payments to the Lens account lens/alice (0xad2c0beade60fb9f7ec5c87bde8e4c126145f6e7) on snowmoon.party. Payments are final.');
+  check('the Bluesky statement is the approved form', statementFor((await accountWords(S, sky))!) === 'Credit my payments to the Bluesky account @alice.bsky.social (did:plc:z72i7hdynmk6r22z27h6tvur) on snowmoon.party. Payments are final.');
   check('words: none for a Lens or Bluesky account we don\'t have', (await accountWords(S, socialPerson(999))) === null);
 }
 let threw = false;

@@ -1,14 +1,21 @@
 import { IMAGE_WORDING } from '../images/wording';
 
 /**
- * Words for paying per person (a Farcaster, Lens or Bluesky sign-in's own prepaid balance; PERSON_BALANCE). DRAFT,
- * drafted by a coding agent (Claude, a closed model by Anthropic), for the owner's reread. No server-only imports: the
+ * Words for paying per person (a Farcaster, Lens or Bluesky sign-in's own prepaid balance; PERSON_BALANCE). The signed
+ * statement (`statement`) is the owner's, approved 2026-11-05 ("reviewed by the coordinator, approved by the owner").
+ * The panel's other words are DRAFT, drafted by a coding agent (Claude, a closed model by Anthropic), for the owner's reread. No server-only imports: the
  * panel uses them too. Where a wallet account's words already say it, they are reused.
  */
 const W = IMAGE_WORDING.prepaid;
 
 export const PERSON_WORDING = {
   title: 'Prepaid balance',
+  /**
+   * What the wallet signs (owner, 2026-11-05, approved, word for word): "Credit my payments to the Farcaster account
+   * @name (FID 6786) on snowmoon.party. Payments are final." and the same for Lens and Bluesky (src/lib/balance/person.ts,
+   * accountWords, fills in the account).
+   */
+  statement: (account: string) => `Credit my payments to ${account} on snowmoon.party. Payments are final.`,
   balance: W.balance,
   price: W.price,
   addFunds: W.addFunds,

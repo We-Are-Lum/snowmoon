@@ -9,6 +9,7 @@ import { socialAccount } from '../social/accounts';
 import { chain, readPayment, type Payment } from '../wallet/chain';
 import { nonceOk } from '../wallet/session';
 import { priceUsd, type CreditReason } from '../wallet/credits';
+import { PERSON_WORDING } from './wording';
 
 /**
  * Paying per person (owner, 2026-11-04; DRAFT; docs/proposals/person-balance.md; migration NEXT_person_balance).
@@ -35,24 +36,25 @@ export const personBalanceOn = () => Boolean(PERSON_BALANCE.enabled && IMAGES.pr
 const requestId = (person: number) => `person:${person}`;
 
 /**
- * The account a payment goes to, in words, for the statement the wallet shows (owner, 2026-11-04: "names the account
- * in words"): "your Farcaster account @name (FID n)", "your Lens account lens/name", "your Bluesky account @handle".
- * Without a name: the FID, the Lens account's address, or the Bluesky DID. Read again when the signature comes back,
- * and the two must match. Null: not a person balance, or a Lens or Bluesky account we don't have.
+ * The account a payment goes to, in words, for the statement the wallet shows (owner, 2026-11-05, approved: the
+ * network, the name and the number): "the Farcaster account @name (FID n)", "the Lens account lens/name (0x…address)",
+ * "the Bluesky account @handle (did:…)". Without a name, the number alone: "the Farcaster account (FID n)". Read again
+ * when the signature comes back, and the two must match. Null: not a person balance, or a Lens or Bluesky account we
+ * don't have.
  */
 export async function accountWords(sql: Sql | null, person: number, nameOf: (fid: number) => Promise<string | null> = lookupName): Promise<string | null> {
   if (isFarcasterPerson(person)) {
     const name = await nameOf(person).catch(() => null);
-    return name ? `your Farcaster account @${name} (FID ${person})` : `your Farcaster account FID ${person}`;
+    return name ? `the Farcaster account @${name} (FID ${person})` : `the Farcaster account (FID ${person})`;
   }
   if (!isSocialPerson(person) || !sql) return null;
   const a = await socialAccount(sql, socialAccountOf(person));
   if (!a) return null;
-  if (a.kind === 'lens') return `your Lens account ${a.handle ?? a.subject}`;
-  return a.handle ? `your Bluesky account @${a.handle}` : `your Bluesky account ${a.subject}`;
+  if (a.kind === 'lens') return a.handle ? `the Lens account ${a.handle} (${a.subject})` : `the Lens account (${a.subject})`;
+  return a.handle ? `the Bluesky account @${a.handle} (${a.subject})` : `the Bluesky account (${a.subject})`;
 }
-/** The statement for that account. DRAFT wording. One line (EIP-4361 statements have no line breaks). */
-export const statementFor = (words: string) => `Add payments from this wallet to the prepaid balance of ${words.replace(/[\r\n]+/g, ' ')} on Snowmoon. Payments are final.`;
+/** The statement for that account: the owner's approved words (2026-11-05). One line (EIP-4361 statements have no line breaks). */
+export const statementFor = (words: string) => PERSON_WORDING.statement(words.replace(/[\r\n]+/g, ' '));
 
 /** The message the wallet signs: our domain, Base, our nonce, and the account it pays for, in words and by number. */
 export function payMessage(o: { domain: string; uri: string; address: `0x${string}`; person: number; words: string; nonce: string; issuedAt?: Date }): string {

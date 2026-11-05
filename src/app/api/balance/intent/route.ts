@@ -8,7 +8,7 @@ import { newNonce } from '~/lib/wallet/session';
  * Paying per person (DRAFT, PERSON_BALANCE off; docs/proposals/person-balance.md). Drafted by a coding agent (Claude,
  * a closed model by Anthropic).
  * GET ?address=0x…: the message this wallet signs to pay for the signed-in Farcaster, Lens or Bluesky person, naming
- * the account in words ("your Farcaster account @name (FID n)") and by number.
+ * the account in words ("Credit my payments to the Farcaster account @name (FID n) on snowmoon.party. Payments are final.", the owner's approved words of 2026-11-05) and by number.
  * POST { message, signature }: checked (ours, current, naming this session's person in words and by number, signed by
  * that address), then kept as an intent. Wallet accounts use /api/wallet/claim instead. Off: 404, nothing kept.
  */

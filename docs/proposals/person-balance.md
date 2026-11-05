@@ -23,10 +23,10 @@ page first gets the wallet to sign a statement naming that person. The steps:
 
 1. **Intent (one signature).** The page asks us for the message to sign (`GET /api/balance/intent?address=…`): a
    Sign-In with Ethereum message (EIP-4361) for snowmoon.party on Base, with a fresh nonce (today's ten-minute signed
-   nonce, `src/lib/wallet/session.ts`), the wallet's address, the statement "Add payments from this wallet to the
-   prepaid balance of <the account in words> on Snowmoon. Payments are final." (DRAFT wording; the account is "your
-   Farcaster account @name (FID n)", "your Lens account lens/name" or "your Bluesky account @handle", owner
-   2026-11-04), and the request id `person:<person number>`. The wallet signs it.
+   nonce, `src/lib/wallet/session.ts`), the wallet's address, the statement "Credit my payments to <the account>
+   on snowmoon.party. Payments are final." (approved by the owner, 2026-11-05; the account is "the Farcaster account
+   @name (FID n)", "the Lens account lens/name (0x…address)" or "the Bluesky account @handle (did:…)"; without a
+   name, the number alone), and the request id `person:<person number>`. The wallet signs it.
 2. **The server checks it** (`POST /api/balance/intent`): the session's person is a Farcaster, Lens or Bluesky
    person (wallet accounts keep today's claim); the message is ours (domain, Base, our nonce, still current); the
    request id names *this session's* person, and the account in words, read again now, is the same; and the signature is the address's (an ordinary wallet's is checked

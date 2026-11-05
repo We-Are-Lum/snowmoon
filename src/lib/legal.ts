@@ -9,7 +9,8 @@
  * Terms section 2's last words are the owner's), 2026-11-01 (agent play: Terms section 6d, Privacy section 4;
  * docs/legal/minpentai-agent-play-draft.md), 2026-11-01 again (the remix challenge: Terms sections 6e and 7, Privacy
  * sections 4, 6 and 7; docs/legal/remix-challenge-draft.md), 2026-11-04 (paying per person: Terms sections 4 and 6a,
- * Privacy sections 4 and 7; docs/legal/person-balance-draft.md). Only the owner changes the words.
+ * Privacy sections 4 and 7; docs/legal/person-balance-draft.md) and 2026-11-04 again (the furthest chapter sent with
+ * assistant questions: Privacy section 3; docs/legal/privacy-furthest-chapter-draft.md). Only the owner changes the words.
  *
  * Kept true by check:principles:
  * - P6g–P6j: the Privacy page, About, the assistant's notice and the image consent screen name
@@ -145,7 +146,16 @@ export const LEGAL: {
     // ("reviewed by the coordinator, approved by the owner", 2026-11-04), to ship with the browser side: §4's prepaid
     // paragraph covers every account and the wallets that signed to pay for one; §7's Base line adds a smart wallet's
     // signed message. §3 is unchanged: the device keeps only a payment's hash, as before. The words before were iqpiw8.
-    privacy: { words: '1529cd5', on: '2026-11-04', by: 'FID 6786' },
+    // 2026-11-04, reread pack item 1 (branch privacy-furthest-chapter; docs/legal/privacy-furthest-chapter-draft.md),
+    // reviewed by the coordinator, approved by the owner, 2026-11-04 (1.1: keep the parenthesis): §3's "These stay on
+    // your device." adds that the assistant sends the furthest chapter, as a number (or another chapter chosen for a
+    // conversation), with each question and its search of the book, so that answers stay within it, and that it isn't
+    // kept. The words before were 1rsayc0 (main, with check-decisions' item 2).
+    // 2026-11-05, merging origin/main into person-balance: both sets of approved words combined word for word (§3:
+    // person-balance's sign-in sentence with main's furthest-chapter clause; nothing else changes), recorded as approved
+    // on the coordinator's word ("both sides are approved, so combine them word for word"). The words before were
+    // 1529cd5 (this branch) and bv4cvf (main); the combined words are yybsma.
+    privacy: { words: 'yybsma', on: '2026-11-05', by: 'FID 6786' },
   },
 };
 
@@ -179,7 +189,7 @@ export const PRIVACY: LegalDoc = {
   sections: [
     { n: 1, head: 'Who we are.', body: ['Lum LLC, a Wyoming limited liability company, operates Snowmoon Party.'] },
     { n: 2, head: 'The short version.', body: ['You can read and listen without an account, and we keep nothing about you when you do. We use no advertising or analytics trackers and set no cookies. We do not sell data.'] },
-    { n: 3, head: 'Kept on your device only.', body: ['Your browser stores a few things so the site works: whether you have seen the introduction, your light or dark setting, where you stopped listening, the furthest chapter you have opened, your questions to the assistant and its answers, drafts of images you make until you publish them, a few other settings of yours, and, on the website, your sign-in, which lasts about an hour (a day for a wallet, Lens or Bluesky sign-in), a note of a Bluesky sign-in under way, kept in that tab for at most ten minutes, and a payment you have sent but not yet seen credited. These stay on your device. Clearing your browser\'s site data removes them. Frames you make in Remix are not drafts: they are saved by us as soon as they are made (section 4). So are the frames and video tests your agent makes when you approve them, but privately: only you can see them (section 4).'] },
+    { n: 3, head: 'Kept on your device only.', body: ['Your browser stores a few things so the site works: whether you have seen the introduction, your light or dark setting, where you stopped listening, the furthest chapter you have opened, your questions to the assistant and its answers, drafts of images you make until you publish them, a few other settings of yours, and, on the website, your sign-in, which lasts about an hour (a day for a wallet, Lens or Bluesky sign-in), a note of a Bluesky sign-in under way, kept in that tab for at most ten minutes, and a payment you have sent but not yet seen credited. These stay on your device, except that the assistant sends the furthest chapter, as a number (or another chapter you choose for a conversation), with each question and its search of the book, so that answers stay within it; it isn\'t kept. Clearing your browser\'s site data removes them. Frames you make in Remix are not drafts: they are saved by us as soon as they are made (section 4). So are the frames and video tests your agent makes when you approve them, but privately: only you can see them (section 4).'] },
     {
       n: 4,
       head: 'Kept by us when you sign in.',
