@@ -7,9 +7,8 @@ io2dz, reread recorded 2026-11-05. The switch stays off. In the base's words, th
 wallet-link and the Lens/Bluesky link items in §4.
 
 Drafted by a coding agent (Claude, a closed model made by Anthropic) on the owner's overnight run of 2026-11-05,
-Lane B, item 7. Branch `linked-accounts`. **DRAFT: nothing here is in `src/lib/legal.ts`**, and nothing should be
-until the release that turns `LINKED_ACCOUNTS.enabled` on (legal texts describe today). For the coordinator's review,
-then the owner's reread.
+Lane B, item 7. Branch `linked-accounts`. (Before 2026-11-05 this was a draft for the coordinator's review and the
+owner's reread; both are done. The lines ship only in the release that turns `LINKED_ACCOUNTS.enabled` on.)
 
 **Before** is `origin/main` as it is now (5559f56e, Privacy words bv4cvf after #116). The sign-in release
 (`signin-lens-bluesky`, own-words-v5) changes several of the same sentences first; if it merges before this, each
