@@ -303,6 +303,20 @@ await refusedAsWriter('A2: the unlinked wallet starting a Snowmoon account of it
   check('anon: reading person_accounts is refused', typeof r === 'string' && /error/.test(r), String(r));
 }
 {
+  // A sign-in with rows made while off and no Snowmoon account: when it gets one, stamp_unowned stamps them.
+  const r = await asWriter(async () => {
+    await pg.query(`insert into studio.image_asks (fid) values (880666)`);
+    const [{ id: p }] = (await pg.query<{ id: number }>(`insert into studio.people default values returning id::int`)).rows;
+    await pg.query(`insert into studio.person_accounts (person_id, kind, account, how) values (${p}, 'farcaster', 880666, 'first')`);
+    await pg.query(`select studio.stamp_unowned(880666)`);
+    await pg.query(`select studio.stamp_unowned(880001)`);
+    const mine = (await pg.query<{ p: number }>(`select person_id::int as p from studio.image_asks where fid = 880666`)).rows[0].p === p;
+    const others = (await pg.query<{ n: number }>(`select count(*)::int as n from studio.image_asks where fid = 880001 and person_id <> (select person_id from studio.person_accounts where account = 880001 and unlinked_at is null)`)).rows[0].n;
+    return `${mine}/${others}`;
+  });
+  check('studio_writer: stamp_unowned stamps a new account\'s unstamped rows and restamps nothing', r === 'true/0', String(r));
+}
+{
   // Live code is unaffected: an old-style insert of a number whose stamp lookup fails still goes in.
   const r = await asWriter(async () => {
     await pg.query(`insert into studio.image_asks (fid) values (880555)`);
@@ -366,6 +380,8 @@ const PLANTS: [string, string][] = [
   ['the owner-stamp trigger dropped on image_asks', `drop trigger stamp_owner on studio.image_asks;`],
   ['the owner-stamp trigger points at the wrong column (wallet debits by id, not number)', `drop trigger stamp_owner on studio.wallet_debits; create trigger stamp_owner before insert on studio.wallet_debits for each row execute function studio.stamp_owner('account_id', '');`],
   ['the side-table trigger dropped on elements', `drop trigger stamp_row_owner on studio.elements;`],
+  ['stamp_unowned runs as its caller (security definer dropped)', `alter function studio.stamp_unowned(bigint) security invoker;`],
+  ['anyone may run stamp_unowned', `grant execute on function studio.stamp_unowned(bigint) to anon;`],
   ['the backfill missed a row (an image_asks stamp cleared)', `update studio.image_asks set person_id = null where fid = 880001;`],
   ['the backfill missed an element owner', `delete from studio.row_owners where tbl = 'elements';`],
   ['the backfill lost the active wallet link', `update studio.person_accounts set unlinked_at = now(), ended_by = 'self' where account = (select -account_id from studio.wallet_links where unlinked_at is null order by id limit 1) and unlinked_at is null;`],

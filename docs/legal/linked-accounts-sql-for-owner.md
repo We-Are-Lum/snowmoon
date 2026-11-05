@@ -408,6 +408,41 @@ exception when others then
 end $fn$;
 revoke all on function studio.stamp_row_owner() from public;
 
+-- The app's hook for rows made while the switch was off by a sign-in that had no Snowmoon account yet: when it gets
+-- one, its unstamped rows are stamped with it. Only null stamps are filled, and only with that sign-in's account now.
+create function studio.stamp_unowned(n bigint) returns void
+language plpgsql security definer set search_path = pg_catalog, pg_temp as $fn$
+declare
+  p bigint := studio.person_of(n);
+  t record;
+begin
+  if p is null then
+    return;
+  end if;
+  for t in select * from (values
+    ('image_asks', 'fid'), ('remix_asks', 'person'), ('chat_calls', 'fid'), ('remix_frames', 'person'), ('storyboards', 'person'),
+    ('agents', 'person'), ('likes', 'fid'), ('take_likes', 'fid'), ('ratings', 'fid'), ('picks', 'fid'), ('notes', 'person'),
+    ('suggestions', 'person'), ('version_posts', 'fid'), ('contributor_consents', 'fid'), ('challenge_marks', 'fid'),
+    ('challenge_eligibility', 'fid'), ('direction_notes', 'person'), ('line_rewrites', 'person'), ('mp_agent_matches', 'person'),
+    ('wallet_payments', '-account_id'), ('wallet_debits', '-account_id'), ('wallet_credits', '-account_id'),
+    ('person_pay_intents', 'person'), ('person_payments', 'person'), ('person_debits', 'person'), ('person_credits', 'person')
+  ) as x(tbl, num)
+  loop
+    continue when to_regclass('studio.' || t.tbl) is null;
+    execute format('update studio.%I set person_id = $1 where person_id is null and %s = $2', t.tbl,
+      case when t.num = '-account_id' then '-account_id' else quote_ident(t.num) end) using p, n;
+  end loop;
+  for t in select * from (values ('elements', 'created_by_fid'), ('recipes', 'created_by_fid'), ('takes', 'created_by_fid'),
+    ('adaptations', 'owner_person'), ('sheet_remix_asks', 'fid')) as x(tbl, num)
+  loop
+    continue when to_regclass('studio.' || t.tbl) is null;
+    execute format('insert into studio.row_owners (tbl, row_id, person_id) select %L, id::text, $1 from studio.%I where %I = $2 on conflict do nothing',
+      t.tbl, t.tbl, t.num) using p, n;
+  end loop;
+end $fn$;
+revoke all on function studio.stamp_unowned(bigint) from public;
+grant execute on function studio.stamp_unowned(bigint) to studio_writer;
+
 do $$
 declare
   t record;
@@ -1034,6 +1069,41 @@ exception when others then
 end $fn$;
 revoke all on function studio.stamp_row_owner() from public;
 
+-- The app's hook for rows made while the switch was off by a sign-in that had no Snowmoon account yet: when it gets
+-- one, its unstamped rows are stamped with it. Only null stamps are filled, and only with that sign-in's account now.
+create function studio.stamp_unowned(n bigint) returns void
+language plpgsql security definer set search_path = pg_catalog, pg_temp as $fn$
+declare
+  p bigint := studio.person_of(n);
+  t record;
+begin
+  if p is null then
+    return;
+  end if;
+  for t in select * from (values
+    ('image_asks', 'fid'), ('remix_asks', 'person'), ('chat_calls', 'fid'), ('remix_frames', 'person'), ('storyboards', 'person'),
+    ('agents', 'person'), ('likes', 'fid'), ('take_likes', 'fid'), ('ratings', 'fid'), ('picks', 'fid'), ('notes', 'person'),
+    ('suggestions', 'person'), ('version_posts', 'fid'), ('contributor_consents', 'fid'), ('challenge_marks', 'fid'),
+    ('challenge_eligibility', 'fid'), ('direction_notes', 'person'), ('line_rewrites', 'person'), ('mp_agent_matches', 'person'),
+    ('wallet_payments', '-account_id'), ('wallet_debits', '-account_id'), ('wallet_credits', '-account_id'),
+    ('person_pay_intents', 'person'), ('person_payments', 'person'), ('person_debits', 'person'), ('person_credits', 'person')
+  ) as x(tbl, num)
+  loop
+    continue when to_regclass('studio.' || t.tbl) is null;
+    execute format('update studio.%I set person_id = $1 where person_id is null and %s = $2', t.tbl,
+      case when t.num = '-account_id' then '-account_id' else quote_ident(t.num) end) using p, n;
+  end loop;
+  for t in select * from (values ('elements', 'created_by_fid'), ('recipes', 'created_by_fid'), ('takes', 'created_by_fid'),
+    ('adaptations', 'owner_person'), ('sheet_remix_asks', 'fid')) as x(tbl, num)
+  loop
+    continue when to_regclass('studio.' || t.tbl) is null;
+    execute format('insert into studio.row_owners (tbl, row_id, person_id) select %L, id::text, $1 from studio.%I where %I = $2 on conflict do nothing',
+      t.tbl, t.tbl, t.num) using p, n;
+  end loop;
+end $fn$;
+revoke all on function studio.stamp_unowned(bigint) from public;
+grant execute on function studio.stamp_unowned(bigint) to studio_writer;
+
 do $$
 declare
   t record;
@@ -1313,6 +1383,7 @@ select what, ok from (values
   ('the ending policies: only an active row is ended', (select count(*) = 3 from pg_policies where schemaname = 'studio' and cmd = 'UPDATE' and ((tablename = 'person_accounts' and policyname = 'writer_unlink') or (tablename = 'main_requests' and policyname = 'writer_end') or (tablename = 'person_notices' and policyname = 'writer_seen')))),
   ('anon and authenticated: nothing on the new tables', (select not bool_or(has_table_privilege(r, 'studio.' || t, 'select') or has_table_privilege(r, 'studio.' || t, 'insert')) from unnest(array['people', 'person_accounts', 'person_link_attempts', 'person_mains', 'person_names', 'main_requests', 'person_joins', 'prize_claims', 'person_notices', 'row_owners']) t, unnest(array['anon', 'authenticated']) r)),
   ('owner stamp: person_id (bigint) and its trigger on every owned table that exists', not exists (select 1 from unnest(array['image_asks', 'remix_asks', 'chat_calls', 'remix_frames', 'storyboards', 'agents', 'likes', 'take_likes', 'ratings', 'picks', 'notes', 'suggestions', 'version_posts', 'contributor_consents', 'challenge_marks', 'challenge_eligibility', 'direction_notes', 'line_rewrites', 'mp_agent_matches', 'wallet_payments', 'wallet_debits', 'wallet_credits', 'person_pay_intents', 'person_payments', 'person_debits', 'person_credits']) t where to_regclass('studio.' || t) is not null and (not exists (select 1 from information_schema.columns where table_schema = 'studio' and table_name = t and column_name = 'person_id' and data_type = 'bigint') or not exists (select 1 from pg_trigger where tgname = 'stamp_owner' and tgrelid = ('studio.' || t)::regclass and tgenabled = 'O')))),
+  ('owner stamp: stamp_unowned is a security definer with a fixed search_path, executable by studio_writer only', exists (select 1 from pg_proc where proname = 'stamp_unowned' and pronamespace = 'studio'::regnamespace and prosecdef and array_to_string(proconfig, ',') like '%search_path=pg_catalog, pg_temp%') and has_function_privilege('studio_writer', 'studio.stamp_unowned(bigint)', 'execute') and not has_function_privilege('anon', 'studio.stamp_unowned(bigint)', 'execute')),
   ('owner stamp: the public tables keep their owner in row_owners, by trigger', (select count(*) = 4 from pg_trigger where tgname = 'stamp_row_owner' and tgenabled = 'O' and tgrelid::regclass::text in ('studio.elements', 'studio.recipes', 'studio.takes', 'studio.adaptations'))),
   ('owner stamp: every existing row of a sign-in with a Snowmoon account is stamped (image_asks, likes, wallet_debits, elements)', not exists (select 1 from studio.image_asks t where t.person_id is null and studio.person_of(t.fid) is not null) and not exists (select 1 from studio.likes t where t.person_id is null and studio.person_of(t.fid) is not null) and not exists (select 1 from studio.wallet_debits t where t.person_id is null and studio.person_of(-t.account_id) is not null) and not exists (select 1 from studio.elements t where studio.person_of(t.created_by_fid) is not null and not exists (select 1 from studio.row_owners o where o.tbl = 'elements' and o.row_id = t.id::text))),
   ('no Snowmoon account id anywhere anon can read', not exists (select 1 from information_schema.columns c where c.table_schema = 'studio' and c.column_name in ('person_id', 'into_person', 'from_person') and has_table_privilege('anon', 'studio.' || c.table_name, 'select'))),
